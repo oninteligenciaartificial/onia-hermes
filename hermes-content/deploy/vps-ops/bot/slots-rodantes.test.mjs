@@ -151,6 +151,77 @@ test("siguenVigentes exige la anticipacion del MOTOR, no solo que sean futuros",
   assert.equal(siguenVigentes(spec, new Date("2026-09-17T15:00:00Z")), false);
 });
 
+// ---------------------------------------------------------------------------
+// «Vigente» no es «hay dos»: es «son los dos que corresponden»
+// ---------------------------------------------------------------------------
+// El caso de abajo es el spec que servia PRODUCCION el 2026-09-18 (leido de
+// /proc/<pid>/environ del webhook vivo). El cron de las 06:23 lo escribio bien
+// —"sábado 19, 11:00", 28,6 h de aviso— y a media manana ese sabado dejo de
+// llegar a las 24 h. Desde ahi el motor tenia DOS horarios que sostener (lunes y
+// martes), asi que `siguenVigentes` contestaba que si y este generador escribia
+// «VIGENTES, no toco nada» mientras el bot le ofrecia LUNES 21 a quien escribia
+// ese viernes, con el sabado 19 a las 12:00, 13:00 y 14:00 libres y con
+// "sáb 9:00-15:00" prometido en la coletilla del MISMO mensaje. Dos dias de
+// espera de mas, y la unica razon por la que se arreglo es que alguien lo miro.
+//
+// Es la misma familia que el caso de arriba, un nivel mas arriba: aquel media
+// el umbral («¿el motor los ofrece?») y este mide la SUFICIENCIA («¿hay dos?»).
+// Las dos preguntas se contestan que si teniendo un dia entero desperdiciado
+// delante. La que hay que hacer es la del prospecto: ¿me estan ofreciendo el
+// dia mas cercano al que podria venir?
+
+test("siguenVigentes pide renovar cuando el spec puesto esconde un dia que HOY se puede ofrecer", () => {
+  // El spec vivo de produccion, tal cual.
+  const spec = [
+    "sábado 19 de septiembre, 11:00@2026-09-19T15:00:00Z",
+    "lunes 21 de septiembre, 14:00@2026-09-21T18:00:00Z",
+    "martes 22 de septiembre, 14:00@2026-09-22T18:00:00Z",
+    "miércoles 23 de septiembre, 14:00@2026-09-23T18:00:00Z",
+    "jueves 24 de septiembre, 14:00@2026-09-24T18:00:00Z",
+  ].join("|");
+
+  // 06:23 La Paz: recien escrito. El sabado todavia llega a las 24 h -> no se toca.
+  assert.equal(siguenVigentes(spec, new Date("2026-09-18T10:23:00Z")), true);
+
+  // 12:00 La Paz: el sabado ya no llega, pero quedan lunes y martes, asi que
+  // "hay dos". El generador SI puede ofrecer el sabado (a las 14:00), o sea que
+  // lo puesto le esconde un dia entero al prospecto: hay que renovar.
+  const aMediaManana = new Date("2026-09-18T16:00:00Z");
+  // `parseSlotsSpec` ya ELIGE los dos que se sostienen: el sabado no llega a las
+  // 24 h, asi que se cayo de la oferta y el primero pasa a ser el lunes.
+  assert.deepEqual(
+    parseSlotsSpec(spec, { now: aMediaManana }).map((s) => s.label),
+    ["lunes 21 de septiembre, 14:00", "martes 22 de septiembre, 14:00"],
+    "premisa: el sabado ya se cayo de la oferta",
+  );
+  assert.equal(
+    proximosSlots(aMediaManana)[0].label,
+    "sábado 19 de septiembre, 14:00",
+    "premisa: el generador todavia alcanza ese sabado",
+  );
+  assert.equal(siguenVigentes(spec, aMediaManana), false);
+});
+
+test("siguenVigentes no manda renovar por la HORA: solo si se pierde el DIA", () => {
+  // Esta es la baranda del caso de arriba. Lo que se escribe se sirve 24 h y
+  // reescribirlo reinicia el webhook, asi que un criterio que pida que el spec
+  // sea identico a lo que se generaria ahora reiniciaria el bot en cada corrida
+  // —la hora elegida depende del instante— por cero horas ganadas.
+  for (const escrito of ["2026-09-18T10:23:00Z", "2026-09-19T10:23:00Z", "2026-09-21T10:23:00Z"]) {
+    const spec = comoSpec(proximosSlots(new Date(escrito)));
+    for (const horas of [3, 6, 12, 20]) {
+      const alLeer = new Date(new Date(escrito).getTime() + horas * 3600_000);
+      const propuesto = proximosSlots(alLeer)[0];
+      const ofrecible = (parseSlotsSpec(spec, { now: alLeer }) || []).find((s) => !s.pending);
+      // Mientras el dia mas cercano ofrecible sea el mismo, no se toca — aunque
+      // la hora del dia haya cambiado.
+      if (ofrecible && propuesto && propuesto.startAt.slice(0, 10) === ofrecible.startAt.slice(0, 10)) {
+        assert.equal(siguenVigentes(spec, alLeer), true, `renovaria por la hora: ${escrito} +${horas}h`);
+      }
+    }
+  }
+});
+
 test("lo que genera, el motor lo puede OFRECER durante toda su vigencia", () => {
   // Un miercoles a la manana, un viernes a la noche y un sabado: dias con forma
   // distinta (fin de semana en el medio, y el caso en que en La Paz todavia es

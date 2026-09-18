@@ -179,6 +179,18 @@ export function comoSpec(slots) {
  * es EXACTAMENTE el fallo que este archivo se escribio para evitar (ver la
  * cabecera). Un generador que se declara innecesario justo el dia que hace
  * falta no falla ruidoso: falla en su propio log, diciendo que todo esta bien.
+ *
+ * 🔴 Y «hay dos» no alcanza: tienen que ser los dos que CORRESPONDEN. Medido en
+ * produccion el 2026-09-18 — el cron de las 06:23 habia escrito "sábado 19,
+ * 11:00" (correcto al generarse) y a media manana ese sabado dejo de llegar a las
+ * 24 h. Desde ahi quedaban dos sostenibles (lunes y martes), asi que esto
+ * contestaba que si y el generador escribia «VIGENTES, no toco nada» mientras el
+ * bot le ofrecia LUNES 21 a quien escribia ese viernes, con el sabado 19 a las
+ * 12:00, 13:00 y 14:00 libres y con "sáb 9:00-15:00" prometido en la coletilla
+ * del MISMO mensaje. Dos dias de espera de mas, durante 5 h, y se arreglo porque
+ * alguien lo miro. Es la misma familia que el parrafo de arriba un nivel mas
+ * arriba: aquel media el umbral, este media la SUFICIENCIA, y las dos preguntas
+ * se contestan que si teniendo un dia entero desperdiciado delante.
  */
 export function siguenVigentes(spec, ahora = new Date()) {
   const partes = String(spec || "").split("|").filter(Boolean);
@@ -187,8 +199,27 @@ export function siguenVigentes(spec, ahora = new Date()) {
   // y `slotsPending` es lo que el guion consulta para decidir si ofrece. Reimplementar el
   // criterio aca es como nacio el bug de la cabecera — y desde que se generan candidatos
   // de mas, un `every` sobre TODOS pediria renovar por el primero que caduca, teniendo el
-  // par entero. La pregunta correcta es la del prospecto: ¿hay dos para ofrecerle ahora?
-  return !slotsPending({ slots: parseSlotsSpec(spec, { now: ahora }) || [] });
+  // par entero. Primera pregunta del prospecto: ¿hay dos para ofrecerle ahora?
+  const ofrecidos = parseSlotsSpec(spec, { now: ahora }) || [];
+  if (slotsPending({ slots: ofrecidos })) return false;
+
+  // Segunda pregunta, la que faltaba: de los dias a los que PODRIA venir, ¿le
+  // estan ofreciendo el mas cercano? Se compara por DIA y no por instante a
+  // proposito: lo escrito se sirve 24 h y reescribirlo reinicia el webhook, asi
+  // que pedir que el spec sea identico a lo que se generaria ahora lo reiniciaria
+  // en cada corrida —la hora elegida depende del instante— por cero horas
+  // ganadas. Perder el DIA si cuesta: el salto al siguiente habil, que un viernes
+  // son dos.
+  const propuesto = proximosSlots(ahora)[0];
+  const primero = ofrecidos.map((s) => s.startAt).filter(Boolean).sort()[0];
+  // Sin fecha de un lado no hay comparacion posible: no se toca lo que funciona.
+  if (!propuesto || !primero) return true;
+  return diaEnLaPaz(propuesto.startAt) >= diaEnLaPaz(primero);
+}
+
+/** El dia LOCAL (La Paz) de un instante UTC, comparable como texto. */
+function diaEnLaPaz(iso) {
+  return new Date(Date.parse(iso) - OFFSET_LA_PAZ * 3600_000).toISOString().slice(0, 10);
 }
 
 function main() {
