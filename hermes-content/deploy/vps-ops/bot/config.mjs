@@ -691,13 +691,25 @@ export const DEFAULT_CONFIG = Object.freeze({
     // 20 h, no 22 ni 24. La ventana de servicio de Meta se cuenta desde el ULTIMO MENSAJE
     // ENTRANTE (asi lo ancla followup-run.mjs, verificado). Con 22 quedaban 2 horas de colchon:
     // si el cron se atrasa, el mensaje cae fuera de la ventana y falla con 131047, y fuera de
-    // la ventana solo salen plantillas — que hoy no existen. Con 20 quedan 4.
+    // la ventana solo salen plantillas, que se PAGAN. Con 20 quedan 4. O sea que las 4 horas de
+    // colchon ya no compran "que el mensaje salga" —hoy sale igual, como plantilla— sino que
+    // salga GRATIS: cada atraso del cron que cruce las 24 h cuesta ~0,0740 USD en vez de 0,0113.
+    // (Decia "plantillas — que hoy no existen"; corregido el 2026-09-18, ver `windowClosesAtHours`.)
     afterHours: 20,
-    // TOPE DURO de la ventana de Meta. Sin esto la franja elegible iba de 20 h a `staleAfterDays`
-    // (7 dias): todo lo que pasara de 24 h se intentaba igual y Meta lo rechaza con 131047, porque
-    // fuera de la ventana SOLO salen plantillas — que hoy no existen y ademas no hay metodo de
-    // pago. Se descubrio al encender el barrido: tenia 2 conversaciones de 124 h y 131 h esperando,
-    // acumuladas porque el cron nunca existio. Si el mensaje no sale dentro de la ventana, no sale.
+    // Donde cierra la ventana de servicio de Meta, contada desde el ultimo mensaje ENTRANTE.
+    // NO es el tope de la franja elegible: ese es `staleAfterDays` (7 dias), y lo fija
+    // followup-run.test.mjs:151 ("piso: los 7 dias de staleAfterDays"). Lo que decide este
+    // numero es COMO sale el mensaje, no A QUIEN se le manda — adentro texto libre (gratis),
+    // afuera la plantilla `seguimiento_demo`, que se PAGA (~0,0740 USD contra 0,0113 del texto
+    // libre) y por eso el barrido la declara en `sendKind` en vez de esconderla en la factura.
+    //
+    // ⚠️ Esto decia "TOPE DURO … fuera de la ventana SOLO salen plantillas, que hoy no existen
+    // y ademas no hay metodo de pago" — corregido el 2026-09-18 contra el codigo. Era cierto
+    // cuando se escribio y dejo de serlo al aprobarse `seguimiento_demo` (followup-run.mjs:154
+    // lo dice: "antes … porque no habia plantilla; ahora la hay y el mensaje SALE"). Asi como
+    // estaba, afirmaba que este barrido no puede pasar de 24 h ni gastar un centavo, y las dos
+    // son falsas: entre 24 h y 7 dias manda plantilla paga. Un comentario que declara IMPOSIBLE
+    // un gasto que el codigo si hace es el que apaga la auditoria del proximo que lea.
     windowClosesAtHours: 24,
     staleAfterDays: 7,
     // HORA SILENCIOSA. A quien se le escribe lo elige el SILENCIO del prospecto, asi que la hora

@@ -4308,6 +4308,22 @@ archivos.**
 
 ## Cerrado — no rehacer
 
+- [x] **~~El config del follow-up declaraba IMPOSIBLE un gasto que el código sí hace~~** — cerrado
+      el 2026-09-18 (`hermes-content/deploy/vps-ops/bot/config.mjs`). Los dos comentarios de
+      `followUp` (`afterHours` y `windowClosesAtHours`) afirmaban que fuera de las 24 h de Meta
+      *"SOLO salen plantillas — que hoy no existen y además no hay método de pago"*, y que el 24
+      era un **«TOPE DURO»** de la franja elegible. Las dos cosas eran ciertas cuando se
+      escribieron y **dejaron de serlo** al aprobarse la plantilla `seguimiento_demo`: hoy el piso
+      de la franja es `staleAfterDays` (**7 días**, fijado por `followup-run.test.mjs:151`) y entre
+      24 h y 7 días el barrido **manda plantilla PAGA** (~0,0740 USD contra 0,0113 del texto
+      libre). El código está sano y gateado — lo que estaba roto era la afirmación de al lado, que
+      es la que un futuro lector usaría para "arreglar" el selector y recortarle 6 días de alcance
+      al follow-up, o para descartar que este barrido pueda gastar. **Medido contra producción ese
+      día:** los 3 barridos ya corren en `mode:emit`/`dryRun:false` (mi arreglo del bit de ejecución
+      llegó), con `scanned: 0` — la franja 20 h–7 días no tiene sujetos hoy, así que el primer
+      gasto todavía no ocurrió. El barrido ya declara el gasto en `sendKind` (`plantilla` /
+      `texto_libre`), así que cuando ocurra se ve en su salida y no en la factura de Meta.
+
 - [x] 🔴 **~~El watchdog del bot y dos barridos del embudo estaban MUERTOS en producción: viajaron
       sin el bit de ejecución~~** — cerrado el 2026-09-18 02:35 La Paz (`909cc75e`). A las
       **03:47:37 UTC** de ese día un deploy repisó `/opt/onia/bot` y dejó en **644** a
