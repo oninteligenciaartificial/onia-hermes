@@ -86,15 +86,15 @@ export default function Webs() {
         <Reveal>
           <Kicker>Servicios · Webs</Kicker>
           <h1 className={s.display}>
-            Tu web, con el precio y los requisitos <em>publicados</em> antes de
-            comprar.
+            Ves tu web antes de dejar <em>un solo dato</em>.
           </h1>
           <p className={s.lead}>
-            Contestás cuatro preguntas y ves tu web antes de pedirla. De cada
-            alcance decimos qué lleva, qué NO lleva y qué tenés que poner vos,
-            en «Más información» — porque una web se atrasa por el contenido,
-            casi nunca por el diseño. El dominio y el hosting van siempre a tu
-            nombre.
+            Una frase sobre tu negocio, o cuatro respuestas, y el preview se arma
+            con tu nombre, tu rubro y tus colores; nada se guarda hasta que la
+            pedís. De cada alcance decimos qué lleva, qué NO lleva y qué tenés
+            que poner vos, en «Más información» — porque una web se atrasa por
+            el contenido, casi nunca por el diseño. El precio está publicado y el
+            dominio y el hosting van siempre a tu nombre.
           </p>
         </Reveal>
       </Block>
