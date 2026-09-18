@@ -1,15 +1,16 @@
 # CARRUSEL «10 repos» — listo para pegar
 
-**Pieza:** `carousels/out/apple-repos-inter/` (6 láminas, 1080×1350). Paquete:
+**Pieza:** `carousels/out/apple-repos-inter/` (8 láminas, 1080×1350). Paquete:
 `6-IG-REPOS-para-publicar.zip` + `HOJA-6-IG-REPOS-para-publicar.png` para mirar antes.
 Patrón `apple-editorial`. Cuenta: **`@sergiourcullo`**.
 
 **Cuándo:** con la salida del **YT 05 «No escribas nada»** (sáb 19 según el calendario
 diario) — el carrusel es su trailer. Ese día reemplaza al b-roll.
 
-Estructura extraída de la referencia de @soyenriquerocha que mandó Sergio Urcullo el
-17-sep (3,1k likes en un día): portada statement → repos agrupados por tarea con nombre
-exacto → cierre con criterio. Identidad propia, cero copia visual.
+Estructura extraída de la referencia de @soyenriquerocha (17-sep, 3,1k likes en un
+día) + la corrección del mismo día: NADA de categorías abstractas como titular — cada
+lámina lleva EL NOMBRE del repo (layout R nuevo del generador) y un mock de terminal
+que MUESTRA el mecanismo. GitHub grande en portada.
 
 **Los 10 repos, re-verificados vivos el 2026-09-17** (API de GitHub, mismos nombres que
 el 10-sep). Sin estrellas en pantalla: envejecen.

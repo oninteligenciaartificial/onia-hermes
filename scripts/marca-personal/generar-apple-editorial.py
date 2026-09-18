@@ -789,6 +789,7 @@ ONIA_CUATRO = [
 REPOS = [
     {
         "layout": "D",
+        "marca": "github",
         "contexto": "Escribí 197 piezas para mi empresa.\nDespués aprendí a buscar primero:",
         "remate": "10 repos",
         "pie": "hacen casi todo lo que necesito. Cuestan",
@@ -796,42 +797,68 @@ REPOS = [
         "gancho": True,
     },
     {
-        "layout": "E",
-        "icono": "github",
-        "etiqueta": "1 · Por acá se empieza",
-        "nombre": "Lo oficial",
-        "desc": "anthropics/skills — el primero al que hay que ir.\nanthropics/claude-plugins-official — el directorio\noficial: desde acá se llega a casi todo lo demás.",
-        "precio": "$0",
+        "layout": "R",
+        "term_titulo": "es texto: se lee",
+        "term": ['<span class="p">&gt;</span> abrí una skill oficial',
+                 '<span class="g">instrucciones, en texto plano</span>',
+                 '<span class="ok">✓</span> la leíste ANTES de instalar'],
+        "own": "anthropics", "repo": "skills",
+        "linea": "Las skills oficiales de Anthropic.\nEl primero al que hay que ir.",
+        "etiqueta": "1 · oficial · por acá se empieza",
     },
     {
-        "layout": "E",
-        "icono": "github",
-        "etiqueta": "2 · Las publica el dueño",
-        "nombre": "Las empresas",
-        "desc": "cloudflare/skills — para construir sobre Cloudflare.\ngreensock/gsap-skills — animación, por GreenSock.\nSi usás una herramienta conocida, buscá la suya.",
-        "precio": "$0",
+        "layout": "R",
+        "term_titulo": "el directorio",
+        "term": ['<span class="p">&gt;</span> buscá "memoria"',
+                 '<span class="ok">✓</span> instalado en 10 segundos',
+                 '<span class="g">queda en todos tus proyectos</span>'],
+        "own": "anthropics", "repo": "claude-plugins-official",
+        "chico": True,
+        "linea": "El directorio oficial de plugins:" + chr(10) + "desde acá se llega a casi todo lo demás.",
+        "etiqueta": "1 · oficial",
     },
     {
-        "layout": "E",
-        "icono": "github",
-        "etiqueta": "3 · La comunidad · los uso yo",
-        "nombre": "Memoria y mapa",
-        "desc": "thedotmack/claude-mem — se acuerda de lo de ayer.\nEgonex-AI/Understand-Anything — un proyecto\nentero convertido en un mapa que se recorre.",
-        "precio": "$0",
+        "layout": "R",
+        "term_titulo": "la publica el dueño",
+        "term": ['<span class="p">&gt;</span> construí sobre Cloudflare',
+                 '<span class="ok">✓</span> sin inventarte la mitad'],
+        "own": "cloudflare", "repo": "skills",
+        "linea": "La escribió la empresa dueña de la herramienta.\nGreenSock hace igual: greensock/gsap-skills.",
+        "etiqueta": "2 · empresa dueña",
     },
     {
-        "layout": "E",
-        "icono": "github",
-        "etiqueta": "3 · La comunidad · leé antes de instalar",
-        "nombre": "Personalidad",
-        "desc": "DietrichGebert/ponytail — escribe menos código.\nJuliusBrussee/caveman — respuestas sin relleno.\nY dos más: andrej-karpathy-skills · affaan-m/ECC.",
-        "precio": "$0",
+        "layout": "R",
+        "term_titulo": "memoria",
+        "term": ['<span class="p">&gt;</span> ¿en qué quedamos ayer?',
+                 '<span class="ok">✓</span> se acuerda. De todo.'],
+        "own": "thedotmack", "repo": "claude-mem",
+        "linea": "Memoria entre sesiones: dejás de contarle\ntu proyecto cada vez que lo abrís.",
+        "etiqueta": "3 · comunidad · lo uso yo",
+    },
+    {
+        "layout": "R",
+        "term_titulo": "el mapa",
+        "term": ['<span class="p">&gt;</span> leete este proyecto entero',
+                 '<span class="ok">✓</span> mapa listo: recorrelo'],
+        "own": "Egonex-AI", "repo": "Understand-Anything",
+        "chico": True,
+        "linea": "Convierte un proyecto entero en un mapa que se recorre.\nPara entender código ajeno no conozco nada igual.",
+        "etiqueta": "3 · comunidad · lo uso yo",
+    },
+    {
+        "layout": "R",
+        "term_titulo": "personalidad",
+        "term": ['<span class="p">&gt;</span> antes: 200 líneas de código',
+                 '<span class="ok">✓</span> ahora: 20. Y funcionan.'],
+        "own": "DietrichGebert", "repo": "ponytail",
+        "linea": "Lo vuelve un senior vago: menos código, menos roturas.\nSu dupla: JuliusBrussee/caveman — respuestas sin relleno.",
+        "etiqueta": "3 · comunidad · uso los dos",
     },
     {
         "layout": "D",
         "contexto": "El orden ES el consejo:",
         "remate": "Buscá.\nDespués escribí.",
-        "sub": "Oficial → empresa dueña → comunidad.\nY leela antes de instalar: es texto plano.",
+        "sub": "Oficial → empresa dueña → comunidad.\nY dos más que uso: multica-ai/andrej-karpathy-skills\ny affaan-m/ECC. Leelos antes: son texto plano.",
         "cta_hl": "¿Cuál probás primero?",
         "cta_gris": "Respondo todos los comentarios.",
     },
@@ -926,6 +953,28 @@ body{{background:var(--bg);font-family:'{nombre}',sans-serif;font-weight:400;ove
    —mono, mayuscula, gris— para que lea como dato tecnico y no compita con el precio. */
 .etiqueta{{font-family:'OniaMono',monospace;font-size:25px;font-weight:500;
   letter-spacing:.08em;text-transform:uppercase;color:#A1A1A6;margin-top:24px}}
+/* Layout R (repo) — el term de los decks yt-* traido al carrusel: el mock MUESTRA el
+   mecanismo y el titular es el NOMBRE del repo (correccion 17-sep, tercera igual). */
+.term-r{{width:850px;border-radius:30px;background:#1D1D1F;overflow:hidden;text-align:left;
+  box-shadow:0 30px 60px rgba(0,0,0,.18)}}
+.term-r-barra{{height:64px;display:flex;align-items:center;gap:13px;padding:0 28px;
+  border-bottom:1px solid rgba(255,255,255,.12)}}
+.term-r-barra i{{width:16px;height:16px;border-radius:50%;background:rgba(255,255,255,.24);flex:none}}
+.term-r-barra em{{font-style:normal;font-family:'OniaMono',monospace;font-size:26px;
+  color:rgba(255,255,255,.52);margin-left:8px}}
+.term-r pre{{font-family:'OniaMono',monospace;font-size:42px;font-weight:600;line-height:1.55;
+  padding:34px 40px 40px;color:#F0EDE6;margin:0;white-space:pre-line}}
+.term-r .p{{color:#D97757}}
+.term-r .ok{{color:#3ECF6E}}
+.term-r .g{{color:rgba(255,255,255,.45);font-weight:400}}
+.repo-r{{display:flex;align-items:center;gap:22px;margin-top:56px;
+  font-family:'OniaMono',monospace;font-size:57px;font-weight:700;letter-spacing:-.02em}}
+.repo-r .gh-mark{{width:76px;height:76px;flex:none}}
+.repo-r .own{{color:#A1A1A6;font-weight:500}}
+.repo-r.chico{{font-size:36px}}
+.repo-r.chico .gh-mark{{width:60px;height:60px}}
+.linea-r{{font-size:33px;color:var(--muted);line-height:1.42;margin-top:24px;
+  white-space:pre-line;max-width:850px}}
 .sub{{font-size:38px;color:var(--muted);line-height:1.4;margin-top:30px;
   white-space:pre-line;letter-spacing:-.01em}}
 /* chip en su propia linea: en linea con el texto gris la frase se partia en dos y el
@@ -1204,6 +1253,21 @@ def markup(lamina):
             cuerpo += (f'<div class="cta"><span class="hl">{lamina["cta_hl"]}</span>'
                        f'<span class="cta-gris">{lamina["cta_gris"]}</span></div>')
         return cuerpo
+    if lamina["layout"] == "R":
+        # Layout R (repo) — correccion de Sergio Urcullo del 17-sep, la TERCERA igual:
+        # "en lugar de 'lo oficial' directo el nombre, y cosas que muestren de que se
+        # refieren; se ve muy simple". El titular es el NOMBRE del repo y arriba va un
+        # mock de terminal que MUESTRA el mecanismo (el mismo term de los decks yt-*).
+        lineas = "\n".join(lamina["term"])
+        return (
+            f'<div class="term-r"><div class="term-r-barra"><i></i><i></i><i></i>'
+            f'<em>{lamina["term_titulo"]}</em></div>'
+            f'<pre>{lineas}</pre></div>'
+            f'<div class="repo-r{" chico" if lamina.get("chico") else ""}"><svg class="gh-mark" viewBox="0 0 256 256">'
+            f'{_marca("github", "#1D1D1F")}</svg><span>'
+            f'<b class="own">{lamina["own"]}/</b>{lamina["repo"]}</span></div>'
+            f'<div class="linea-r">{lamina["linea"]}</div>'
+            f'<div class="etiqueta">{lamina["etiqueta"]}</div>')
     etiqueta = (f'<div class="etiqueta">{lamina["etiqueta"]}</div>'
                 if lamina.get("etiqueta") else "")
     return (f'<div class="obj">{ICONOS[lamina["icono"]]}</div>'
