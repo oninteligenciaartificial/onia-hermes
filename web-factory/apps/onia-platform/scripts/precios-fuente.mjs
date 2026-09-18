@@ -400,9 +400,132 @@ export function limitesDelProducto(fuente) {
       reportes: booleano(m[2], "reportsEnabled"),
       exportaCsv: booleano(m[2], "csvExportEnabled"),
       facturasRecurrentes: booleano(m[2], "recurringInvoicesEnabled"),
+      chatbot: booleano(m[2], "whatsappIncluded"),
+      coadministradores: booleano(m[2], "multiAdminIncluded"),
     };
   }
   return salida;
+}
+
+/**
+ * De que campo de `PlanLimits` sale cada capacidad que este cruce lee. Es el mapa que hace
+ * MEDIBLE la cobertura: sin el, "cuales booleanos cruzo" solo se puede contestar leyendo el
+ * cuerpo de `limitesDelProducto` a ojo.
+ */
+export const CAPACIDADES_CRUZADAS = {
+  agentes: "agentsIncluded",
+  reservas: "publicBookingIncluded",
+  reportes: "reportsEnabled",
+  exportaCsv: "csvExportEnabled",
+  facturasRecurrentes: "recurringInvoicesEnabled",
+  chatbot: "whatsappIncluded",
+  coadministradores: "multiAdminIncluded",
+};
+
+/**
+ * Booleanos de `PlanLimits` que a proposito NO se cruzan, cada uno con su motivo y su
+ * RE-MEDICION: `booleanosSinCruzar` exige que el campo siga existiendo (si no, la excusa sobra y
+ * queda pre-aprobando al proximo que se llame igual) y que ningun plan VENDIDO lo tenga en
+ * `true` — porque una capacidad que ningun plan trae no es una promesa que el sitio pueda estar
+ * escondiendo, y el dia que alguien la encienda la excusa se cae sola.
+ */
+export const BOOLEANOS_SIN_CRUCE = [
+  {
+    campo: "gatewayEnabled",
+    cuando: "ninguno",
+    porque:
+      "ningun plan lo trae encendido: la pasarela de pago propia no se vende hoy, asi que el sitio no tiene nada que publicar",
+  },
+  {
+    campo: "basicReportEnabled",
+    cuando: "todos",
+    porque:
+      "lo traen TODOS los planes vendidos: no es un escalon, y el `incluye` del Basico ya lo nombra sin tier que pueda mentir",
+  },
+  {
+    campo: "inventoryIncluded",
+    cuando: "todos",
+    porque:
+      "idem: encendido en todos los planes vendidos, el Basico lo nombra y no hay un 'desde X' que pueda salir mal",
+  },
+];
+
+/**
+ * Los campos `boolean` que el producto declara por plan, DERIVADOS de su interfaz publicada.
+ *
+ * Es la mitad que faltaba. `limitesDelProducto` deriva bien los PLANES del bloque, y despues
+ * elige los CAMPOS con una lista escrita a mano — la lista de inclusion de siempre, un escalon
+ * mas adentro. Medido el 2026-09-18: de los diez booleanos de `PlanLimits`, este cruce leia
+ * cinco, y `multiAdminIncluded` —que el producto ya APLICABA en produccion desde el 17-sep,
+ * DG-043— no era sujeto de nadie: el sitio podia no nombrarlo (y no lo nombraba) para siempre,
+ * con el gate en verde.
+ */
+export function booleanosDelProducto(fuente) {
+  const bloque = (fuente ?? "").match(
+    /interface\s+PlanLimits\s*\{([\s\S]*?)\n\}/,
+  )?.[1];
+  if (!bloque) return null; // ilegible: no se adivina, el llamador decide
+  return [
+    ...sinComentarios(bloque).matchAll(/^\s*(\w+)\s*:\s*boolean\s*;/gm),
+  ].map((m) => m[1]);
+}
+
+/**
+ * Los booleanos del producto que ni se cruzan ni estan excusados — y las excusas que ya no
+ * valen. Tri-estado: `null` cuando no se pudo leer la interfaz (no es lo mismo que "ninguno").
+ */
+export function booleanosSinCruzar(fuenteLimites) {
+  const campos = booleanosDelProducto(fuenteLimites);
+  if (!campos) return null;
+  const cruzados = new Set(Object.values(CAPACIDADES_CRUZADAS));
+  const excusados = new Map(BOOLEANOS_SIN_CRUCE.map((e) => [e.campo, e]));
+
+  const sinCruzar = campos.filter((c) => !cruzados.has(c) && !excusados.has(c));
+
+  const excusasMuertas = BOOLEANOS_SIN_CRUCE.filter(
+    (e) => !campos.includes(e.campo) || cruzados.has(e.campo),
+  ).map((e) => ({
+    ...e,
+    porqueSobra: campos.includes(e.campo)
+      ? "ya se cruza: la excusa pre-aprueba lo que el cruce ya mira"
+      : "el producto ya no declara ese campo",
+  }));
+
+  /**
+   * Cada excusa se re-mide contra el CATALOGO, no contra su propio texto: lo que la hace cierta
+   * es que la capacidad no distinga planes ("ninguno" la trae, o la traen "todos"). El dia que
+   * eso deje de valer —un plan la enciende, o deja de traerla— la excusa se cae sola y el campo
+   * vuelve a pedir cruce, sin que nadie se acuerde de tocar esta lista.
+   */
+  const excusasVencidas = BOOLEANOS_SIN_CRUCE.filter((e) => {
+    if (!campos.includes(e.campo)) return false; // ya sale por `excusasMuertas`
+    const valores = valoresPorPlan(fuenteLimites, e.campo);
+    if (valores.includes(null)) return true; // ilegible: la excusa no se puede sostener
+    return e.cuando === "ninguno"
+      ? valores.some((v) => v === true)
+      : !valores.every((v) => v === true);
+  }).map((e) => ({
+    ...e,
+    porqueSobra:
+      e.cuando === "ninguno"
+        ? "algun plan vendido ya lo trae encendido: pasa a ser un 'desde X' que el sitio puede estar escondiendo"
+        : "dejo de traerlo algun plan vendido: ahora distingue escalones y hay un tier que cruzar",
+  }));
+
+  return { sinCruzar, excusasMuertas, excusasVencidas };
+}
+
+/** El valor de ese campo en cada plan VENDIDO, leido del bloque (los campos sin cruce no viven
+ *  en el objeto aplanado de `limitesDelProducto`). `null` = no se pudo leer, nunca `false`. */
+function valoresPorPlan(fuente, campo) {
+  const bloque = bloqueExportado(fuente ?? "", "PLAN_LIMITS");
+  const porPlan = Object.fromEntries(
+    [...(bloque ?? "").matchAll(PLANES_QUE_DECLARA_EL_BLOQUE())].map((m) => [
+      m[1],
+      booleano(m[2], campo),
+    ]),
+  );
+  return PLANES_EN_ORDEN.map((p) => porPlan[p.producto] ?? null);
 }
 
 /**
@@ -459,6 +582,18 @@ export function cifrasDelProducto({ planes, addons, prueba, limites }) {
     "primer plan con reservas online incluidas · por campo": primerPlanCon(
       l,
       "reservas",
+    ),
+    "primer plan con más de un administrador": primerPlanCon(
+      l,
+      "coadministradores",
+    ),
+    "primer plan con más de un administrador · por campo": primerPlanCon(
+      l,
+      "coadministradores",
+    ),
+    "primer plan con el chatbot incluido · por campo": primerPlanCon(
+      l,
+      "chatbot",
     ),
     "primer plan con reportes completos": primerPlanCon(l, "reportes"),
     "primer plan que exporta en CSV": primerPlanCon(l, "exportaCsv"),
@@ -700,6 +835,17 @@ export function limitesDelSitio(fuente) {
        */
       agentesPorCampo: /agentesIncluidos:\s*true/.test(trozo) || null,
       reservasPorCampo: /reservasIncluidas:\s*true/.test(trozo) || null,
+      /**
+       * Los dos hermanos que entraron el 2026-09-18 con la cobertura de booleanos. El del chatbot
+       * ya existia como campo (`chatbotIncluido`) y nadie lo cruzaba ACA; el de administradores
+       * nacio ese dia, y es el que motivo todo: el producto lo aplicaba desde el 17-sep y el
+       * sitio no decia una palabra.
+       */
+      chatbotPorCampo: /chatbotIncluido:\s*true/.test(trozo) || null,
+      coadministradoresPorCampo:
+        /coadministradores:\s*true/.test(trozo) || null,
+      /** La PROSA del mismo hecho: la tarjeta del plan que lo trae lo dice con palabras. */
+      coadministradores: /m[aá]s\s+de\s+un\s+administrador/i.test(inc ?? "") || null,
       reportes: /Reportes\s+completos/i.test(inc ?? "") || null,
       /**
        * El Basico la nombra en su `sinEsto` («Reportes completos y facturas
@@ -965,6 +1111,18 @@ export function cifrasDelSitio({ precios, chatbot }) {
     ),
     "primer plan con reservas online incluidas · por campo":
       primerPlanDelSitioCon(ls, "reservasPorCampo"),
+    "primer plan con más de un administrador": primerPlanDelSitioCon(
+      ls,
+      "coadministradores",
+    ),
+    "primer plan con más de un administrador · por campo": primerPlanDelSitioCon(
+      ls,
+      "coadministradoresPorCampo",
+    ),
+    "primer plan con el chatbot incluido · por campo": primerPlanDelSitioCon(
+      ls,
+      "chatbotPorCampo",
+    ),
     "primer plan con reportes completos": primerPlanDelSitioCon(ls, "reportes"),
     "primer plan con facturas recurrentes": primerPlanDelSitioCon(
       ls,
@@ -1272,9 +1430,49 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
     process.exit(NO_PUDE_MEDIR);
   }
 
-  if (difieren.length === 0 && ciclos.difieren.length === 0 && nombres.difieren.length === 0) {
+  const cobertura = booleanosSinCruzar(limites);
+  if (!cobertura) {
+    console.error(
+      `NO PUDE MEDIR: no pude leer la interfaz \`PlanLimits\` de ${FUENTE_LIMITES} del producto, ` +
+        `asi que no se cuantas capacidades por plan declara ni cuales estoy cruzando. ` +
+        `Si cambio de forma, arreglar \`booleanosDelProducto\` ANTES de creerle a un verde.`,
+    );
+    process.exit(NO_PUDE_MEDIR);
+  }
+  const coberturaRota =
+    cobertura.sinCruzar.length > 0 ||
+    cobertura.excusasMuertas.length > 0 ||
+    cobertura.excusasVencidas.length > 0;
+  for (const campo of cobertura.sinCruzar) {
+    console.error(
+      `ROJO: el producto decide \`${campo}\` POR PLAN y este cruce no lo mira.\n` +
+        `  Mientras nadie lo cruce, el sitio puede estar escondiendo una capacidad que el cliente ` +
+        `paga —o prometiendo una que su plan no trae— con el gate en verde: fue exactamente lo que ` +
+        `paso con \`multiAdminIncluded\` (DG-043, 17-sep, aplicandose en produccion y sin una sola ` +
+        `palabra en el sitio).\n` +
+        `  Se cierra de una de dos formas: agregarlo a CAPACIDADES_CRUZADAS —con su lectura en ` +
+        `\`limitesDelProducto\`, su espejo en src/lib/pricing.ts y su par de claves en las dos ` +
+        `\`cifras…\`— o excusarlo en BOOLEANOS_SIN_CRUCE con su motivo y su \`cuando\`.`,
+    );
+  }
+  for (const e of [...cobertura.excusasMuertas, ...cobertura.excusasVencidas]) {
+    console.error(
+      `ROJO: la excusa de \`${e.campo}\` en BOOLEANOS_SIN_CRUCE ya no vale — ${e.porqueSobra}.\n` +
+        `  Decia: "${e.porque}". Una excusa que sobra pre-aprueba lo que nadie volvio a mirar: ` +
+        `se borra, o se convierte en cruce.`,
+    );
+  }
+
+  if (
+    difieren.length === 0 &&
+    ciclos.difieren.length === 0 &&
+    nombres.difieren.length === 0 &&
+    !coberturaRota
+  ) {
     console.log(
       `VERDE: las ${CIFRAS.length} cifras que publica el sitio son las que cobra el producto, ` +
+        `las ${Object.keys(CAPACIDADES_CRUZADAS).length} capacidades que el producto decide por plan ` +
+        `estan todas cruzadas o excusadas, ` +
         `las ${numerosPublicados(preciosSitio).length} del \`incluye\` de los planes estan todas cruzadas, ` +
         `los ${CICLOS_EQUIVALENCIA.length} planes comprables ofrecen los mismos ciclos en los dos lados ` +
         `y se llaman igual en las dos pantallas de la compra.`,
