@@ -77,6 +77,32 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Ahora — plan de features (revisado 2026-08-30, con Gate 1 corrido)
 
+- [ ] 🟠 **El ÚNICO camino para entregar `onia-platform` desde nodo-casa vive FUERA de git, en
+      un archivo suelto de `/root/tmp` del VPS. Medido el 2026-09-18 17:4x La Paz por `onia-cola`.**
+      Hoy la integración del carril del chatbot a `master` salió al primer intento con ese
+      script —5.704 tests verdes, publicado `5ed97b0`— y funciona bien: hace `fetch` +
+      `reset --hard origin/master` + merge + los CINCO gates + `git checkout -- .` (el build muta
+      4 archivos de iconos) + `push` con `ONIA_LOOP_ID`, todo en UN proceso remoto con bucle de 2
+      intentos, que es lo que evita que `master` se mueva entre gate y push.
+      **El agujero no es el método: es dónde vive.** Es una copia a mano, sin fuente versionada,
+      en un directorio temporal. Un reinicio del VPS, un `tmpreaper` o una limpieza de disco
+      —que este carril ya hizo dos veces— lo borran, y la próxima vuelta del integrador no tiene
+      cómo saber que existió: la memoria compartida describe la RECETA, no el archivo. Mientras
+      tanto, es el único camino a `master` desde la máquina donde corren los cuatro loops
+      (`onia-platform` no se pushea desde casa: su remoto está en `DESHABILITADO-NODO-DE-DESARROLLO`).
+      **Qué NO alcanza, para no repetirlo:** versionarlo y dejarlo ahí crea DOS copias del mismo
+      juicio, que es como nacen los desacuerdos de esta familia (ver el ítem de `publicar.sh` en
+      `hermes-content/deploy/`). La forma correcta es fuente en el repo + el invocador leyendo
+      del clon del VPS ya puesto al día (`ponerElEspejoAlDia` de `scripts/deploy_sin_pedido.mjs`
+      hace exactamente eso para los detectores), con `cmp` contra `git show origin/main:<ruta>`
+      antes de creerle.
+      **Reproducción en 30 segundos:** `ssh root@187.77.16.63 'cat /root/tmp/integrar-plat.sh'`
+      devuelve el script; `git log --oneline -1 -- scripts/ | cat` y un `grep -rl integrar-plat`
+      sobre el repo devuelven **cero**: no tiene fuente en ningún lado.
+      **Por qué no entró en la vuelta que lo encontró:** la vuelta ya había integrado cuatro
+      carriles y quedaban ~15 min; un script de ENTREGA a medias es peor que la copia a mano que
+      funciona, porque el que lo use después no sabe cuál de los dos corrió.
+
 - [x] 🔴 **`scripts/deploy_sin_pedido.mjs` absolvía un destino porque EXISTÍA un pedido, sin
       preguntar si ese pedido DESCRIBE lo que hoy publicaría — y el que los deja cortos es el
       integrador. Medido en vivo el 2026-09-18 ~11:5x La Paz por `onia-cola`. CERRADO el
