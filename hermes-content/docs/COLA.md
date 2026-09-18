@@ -77,6 +77,47 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Ahora — plan de features (revisado 2026-08-30, con Gate 1 corrido)
 
+- [x] 🟠 **El ÚNICO camino para entregar `onia-platform` desde nodo-casa vivía FUERA de git, en
+      un archivo suelto de `/root/tmp` del VPS. Medido y CERRADO el 2026-09-18 17:5x La Paz por
+      `onia-cola` (`2516f393`).**
+      **Cómo quedó:** la fuente única es `scripts/integrar-onia-platform.sh`, y la copia a mano
+      del VPS se retiró en la misma vuelta (renombrada a `.REEMPLAZADO-POR-…`, no borrada, para
+      que el que la busque encuentre el puntero y no un hueco). Se invoca **leyendo del clon del
+      VPS ya puesto al día** — `fetch` + `merge --ff-only origin/main` + `bash …/scripts/…` en
+      un solo comando remoto —, así que no hay que desplegar nada y sigue habiendo una sola copia.
+      Además viajaron tres cosas que antes estaban clavadas a mano: la rama es un **argumento**
+      (estaba fija en el carril del chatbot), el árbol se **prepara solo** (worktree, `node_modules`
+      por hardlink —un symlink mata el build con `[standalone-runtime] … invalid or linked`— y el
+      symlink a `onia-hermes`), y **`check:onia-core` en `SKIPPED` ahora es ROJO**: sin el hermano
+      ese gate sale 0 sin medir el espejo del core, que es el primer paso del CI.
+      **Probado en vivo, no razonado:** con `0` intentos (el modo que prepara el árbol y no corre
+      gates ni push) el invocador contestó `clon al dia: 2516f3931` + `NO PUBLICADO tras 0
+      intento(s)`, exit 5 — o sea el camino entero desde casa resuelve, y el texto del script es
+      el mismo que media hora antes publicó `5ed97b0` con 5.704 tests verdes al primer intento.
+      Hoy la integración del carril del chatbot a `master` salió al primer intento con ese
+      script —5.704 tests verdes, publicado `5ed97b0`— y funciona bien: hace `fetch` +
+      `reset --hard origin/master` + merge + los CINCO gates + `git checkout -- .` (el build muta
+      4 archivos de iconos) + `push` con `ONIA_LOOP_ID`, todo en UN proceso remoto con bucle de 2
+      intentos, que es lo que evita que `master` se mueva entre gate y push.
+      **El agujero no es el método: es dónde vive.** Es una copia a mano, sin fuente versionada,
+      en un directorio temporal. Un reinicio del VPS, un `tmpreaper` o una limpieza de disco
+      —que este carril ya hizo dos veces— lo borran, y la próxima vuelta del integrador no tiene
+      cómo saber que existió: la memoria compartida describe la RECETA, no el archivo. Mientras
+      tanto, es el único camino a `master` desde la máquina donde corren los cuatro loops
+      (`onia-platform` no se pushea desde casa: su remoto está en `DESHABILITADO-NODO-DE-DESARROLLO`).
+      **Qué NO alcanza, para no repetirlo:** versionarlo y dejarlo ahí crea DOS copias del mismo
+      juicio, que es como nacen los desacuerdos de esta familia (ver el ítem de `publicar.sh` en
+      `hermes-content/deploy/`). La forma correcta es fuente en el repo + el invocador leyendo
+      del clon del VPS ya puesto al día (`ponerElEspejoAlDia` de `scripts/deploy_sin_pedido.mjs`
+      hace exactamente eso para los detectores), con `cmp` contra `git show origin/main:<ruta>`
+      antes de creerle.
+      **Reproducción en 30 segundos:** `ssh root@187.77.16.63 'cat /root/tmp/integrar-plat.sh'`
+      devuelve el script; `git log --oneline -1 -- scripts/ | cat` y un `grep -rl integrar-plat`
+      sobre el repo devuelven **cero**: no tiene fuente en ningún lado.
+      **Por qué no entró en la vuelta que lo encontró:** la vuelta ya había integrado cuatro
+      carriles y quedaban ~15 min; un script de ENTREGA a medias es peor que la copia a mano que
+      funciona, porque el que lo use después no sabe cuál de los dos corrió.
+
 - [x] 🔴 **`scripts/deploy_sin_pedido.mjs` absolvía un destino porque EXISTÍA un pedido, sin
       preguntar si ese pedido DESCRIBE lo que hoy publicaría — y el que los deja cortos es el
       integrador. Medido en vivo el 2026-09-18 ~11:5x La Paz por `onia-cola`. CERRADO el
