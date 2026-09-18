@@ -22,6 +22,9 @@
  */
 import {
   DEFAULT_LAYOUT_BY_DIRECTION,
+  WEB_DIRECTIONS,
+  WEB_GOALS,
+  WEB_PALETTES,
   type WebDirectionId,
   type WebFontId,
   type WebGoalId,
@@ -177,6 +180,8 @@ export const ASSISTANT_COLORS: readonly WebPaletteId[] = [
 export type AssistantGoalId = "rubro" | WebGoalId;
 
 export interface AssistantAnswers {
+  /** «Contanos tu negocio en una frase»: de acá salen rubro, ciudad y la descripción del preview. */
+  readonly phrase: string;
   readonly businessName: string;
   readonly rubro: AssistantRubroId;
   readonly goal: AssistantGoalId;
@@ -185,6 +190,7 @@ export interface AssistantAnswers {
 }
 
 export const EMPTY_ASSISTANT_ANSWERS: AssistantAnswers = {
+  phrase: "",
   businessName: "",
   rubro: "otro",
   goal: "rubro",
@@ -204,6 +210,9 @@ export interface AssistantPlan {
     readonly industry: string;
     readonly offer: string;
     readonly services: string;
+    /** La frase del dueño, tal cual: es la bajada del hero del preview. */
+    readonly description: string;
+    readonly city: string;
   };
 }
 
@@ -218,6 +227,46 @@ const FONT_BY_DIRECTION: Record<WebDirectionId, WebFontId> = {
 
 export function findAssistantRubro(id: AssistantRubroId): AssistantRubro {
   return ASSISTANT_RUBROS.find((item) => item.id === id) ?? ASSISTANT_RUBROS[ASSISTANT_RUBROS.length - 1];
+}
+
+/**
+ * Una frase sobre el negocio elige el rubro sola. Durable, Hostinger, Wix y
+ * 10Web arrancan con UNA caja de texto, no con un formulario (mirados el
+ * 17-sep); acá se logra sin modelo: palabras clave por rubro, en orden de
+ * especificidad. «Tienda online» es ecommerce antes que comercio; «clínica
+ * dental estética» es dental antes que estética.
+ */
+const RUBRO_POR_PALABRA: ReadonlyArray<{ readonly id: AssistantRubroId; readonly re: RegExp }> = [
+  { id: "dental", re: /dental|dentist|odont|ortodonc|sonrisa/i },
+  { id: "ecommerce", re: /shopify|hotmart|whop|e-?commerce|tienda (online|virtual)|curso online|membres[ií]a|vend(o|er|emos) (por internet|online)/i },
+  { id: "estetica", re: /est[ée]tic|\bspa\b|belleza|masaj|depilaci|facial|barber|peluquer|u[ñn]as|cosm[ée]tic|manicur/i },
+  { id: "importadora", re: /import|distribui|mayorista|por mayor|repuesto/i },
+  { id: "comercio", re: /tienda|comercio|almac[ée]n|ferreter|librer|boutique|minimarket|mercado|ropa|zapat|vend(o|emos)\b/i },
+  { id: "servicios", re: /abogad|contad|contab|consultor|jur[ií]dic|asesor|arquitect|ingenier|notar|auditor/i },
+];
+
+export function inferRubro(phrase: string): AssistantRubroId | null {
+  return RUBRO_POR_PALABRA.find((item) => item.re.test(phrase))?.id ?? null;
+}
+
+/** «… en Santa Cruz de la Sierra, …» → «Santa Cruz de la Sierra». Sólo con mayúscula: «en la zona sur» no es una ciudad. */
+export function inferCity(phrase: string): string {
+  const m = /\ben ([A-ZÁÉÍÓÚÑ][\wáéíóúñ]*(?: (?:(?:de|del|la|el|los|las) )*[A-ZÁÉÍÓÚÑ][\wáéíóúñ]*)*)/.exec(phrase);
+  return m ? m[1] : "";
+}
+
+/**
+ * El brief, como lo muestra Wix antes de personalizar: lo que el asistente
+ * entendió, en una línea, para corregirlo antes de seguir.
+ */
+export function describeAssistantPlan(answers: AssistantAnswers, plan: AssistantPlan): string {
+  const rubro = findAssistantRubro(answers.rubro);
+  const goal = WEB_GOALS.find((item) => item.id === plan.goal)?.nombre ?? plan.goal;
+  const direction = WEB_DIRECTIONS.find((item) => item.id === plan.direction)?.nombre ?? plan.direction;
+  const palette = WEB_PALETTES.find((item) => item.id === plan.palette)?.nombre ?? plan.palette;
+  const que = rubro.id === "otro" ? plan.intake.businessName || "tu negocio" : rubro.label.toLowerCase();
+  const donde = plan.intake.city ? ` en ${plan.intake.city}` : "";
+  return `Entendí: ${que}${donde} · para ${goal.toLowerCase()} · estilo ${direction.toLowerCase()} · colores ${palette.toLowerCase()}.`;
 }
 
 /**
@@ -252,6 +301,8 @@ export function buildAssistantPlan(answers: AssistantAnswers): AssistantPlan {
       industry: rubro.industry,
       offer: rubro.offer,
       services: rubro.services,
+      description: answers.phrase.trim(),
+      city: inferCity(answers.phrase),
     },
   };
 }
