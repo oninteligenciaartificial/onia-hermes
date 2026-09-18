@@ -1,3 +1,9 @@
+> 🔴 **ARCHIVADO — NO es fuente de verdad. La fuente viva es `../ONIA_CLIENTE_IDEAL.md`.**
+> Este archivo es la foto del 27-jul-2026. Estuvo siete semanas siendo citado como fuente
+> desde `historial/`, que por regla no lo es. Lo que seguía vigente se portó al doc nuevo;
+> lo que venció está corregido ahí, en su §8, con el motivo de cada corrección.
+> No se edita más: si algo de acá hay que cambiar, se cambia en el doc vivo.
+
 # Onia — El enfoque, en una página
 
 > 2026-07-27. Sergio: *"quiero tenerlo claro: ¿plataforma para empresas, emprendimientos?
