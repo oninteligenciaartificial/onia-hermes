@@ -6,6 +6,7 @@ import {
   HUECO,
   FECHA_CONSULTA,
   TC_NOTA,
+  tituloDelCuadro,
   type Estado,
 } from "@/lib/proof";
 import { Block, Btn, Kicker } from "../ui";
@@ -79,7 +80,7 @@ export default function Comparativa() {
       <Block surface="paperDim" labelledBy="cuadro">
         <Reveal>
           <h2 id="cuadro" className={s.h2}>
-            Tres ejes. El que los cruza es uno solo.
+            {tituloDelCuadro()}
           </h2>
           <p className={s.note} style={{ marginTop: "1em" }}>
             Los ejes: {EJES.map((e) => e.label).join(" · ")}.
