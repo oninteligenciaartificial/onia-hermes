@@ -482,6 +482,16 @@ const sql = (q) =>
     timeout: 30_000,
   }).trim();
 
+/**
+ * La OTRA base: el estado del bot (`onia_center`) vive en `supabase-db`, no en la de Chatwoot.
+ * Son dos motores distintos, asi que no hay JOIN posible y el sello tiene que ir por separado.
+ */
+const sqlBot = (q) =>
+  execFileSync('docker', ['exec', process.env.ONIA_BOT_DB_CONTAINER || 'supabase-db', 'psql', '-U', 'postgres', '-tAc', q], {
+    encoding: 'utf8',
+    timeout: 30_000,
+  }).trim();
+
 /** La conversacion que le corresponde al token guardado, o null si todavia no existe. */
 function conversacionDelToken(token) {
   const sid = sourceIdDelToken(token);
@@ -758,12 +768,51 @@ function candidatasABarrer() {
     });
 }
 
-/** Le pone el nombre de la sonda al contacto de una conversacion que resulto ser un rastro. */
+/**
+ * Las DOS sentencias que sellan una conversacion como nuestra — una por cada base que guarda la
+ * identidad. Pura y exportada para que el caso pueda exigir las dos sin tocar produccion.
+ *
+ * LA IDENTIDAD VIVE EN DOS LADOS Y SOLO UNO LO MIRA EL PRODUCTO. Chatwoot tiene el nombre
+ * VIGENTE (`contacts.name`, mutable), pero los cuatro barridos del embudo deciden con
+ * `esConversacionNuestra()`, que lee `onia_center.bot_conversations.display_name` — una FOTO del
+ * nombre tomada cuando el bot creo la fila, y que nadie vuelve a tocar. Como esta sonda se
+ * renombra DESPUES de escribir sus mensajes, entre las dos cosas hay una carrera, y perderla deja
+ * una sonda indistinguible de un lead para el circuito que ACTUA.
+ *
+ * Ya se perdio DOS veces, medido el 2026-09-18 contra produccion: `chatwoot:48` y `chatwoot:50`
+ * eran "Sonda QA carril chatbot" en Chatwoot y `cold-pond-731` / `quiet-shape-612` del lado del
+ * bot. `contarColgadas` los reportaba como dos leads perdidos hace 15 dias — ruido que apaga el
+ * instrumento — y, con el circuito en `emit` desde el 2026-09-17, una sonda cuyo
+ * `last_inbound_at` cae dentro de la ventana de 20 h recibe el follow-up M3 en el inbox 4, el de
+ * leads REALES. No alcanza con sellar antes de trabajar: la fila del bot todavia no existe
+ * cuando la sonda arranca, asi que el sello llega siempre despues y tiene que alcanzar a las dos.
+ */
+export function sentenciasDeSellado(conversacionId, nombre = NOMBRE_SONDA) {
+  const id = Number(conversacionId);
+  const seguro = String(nombre).replace(/'/g, "''");
+  return [
+    {
+      base: 'chatwoot',
+      sql:
+        `update contacts set name = '${seguro}' where id = ` +
+        `(select contact_id from conversations where id = ${id});`,
+    },
+    {
+      // `conversation_key` es la clave con la que el bot cruza las dos bases (`chatwoot:<id>`).
+      base: 'bot',
+      sql:
+        `update onia_center.bot_conversations set display_name = '${seguro}' ` +
+        `where conversation_key = 'chatwoot:${id}' and coalesce(display_name, '') <> '${seguro}';`,
+    },
+  ];
+}
+
+/** Le pone el nombre de la sonda a una conversacion que resulto ser un rastro, en las DOS bases. */
 function marcarComoNuestra(conversacionId) {
-  sql(
-    `update contacts set name = '${NOMBRE_SONDA}' where id = ` +
-      `(select contact_id from conversations where id = ${Number(conversacionId)});`,
-  );
+  for (const { base, sql: q } of sentenciasDeSellado(conversacionId)) {
+    if (base === 'chatwoot') sql(q);
+    else sqlBot(q);
+  }
 }
 
 async function correr() {
@@ -1426,6 +1475,31 @@ async function selfCheck() {
   });
   caso('un guion vacio no convierte a todos en rastro', () => {
     assert.strictEqual(esRastroDeSonda([''], ['']), false);
+  });
+
+  caso('el sellado alcanza la tabla que lee el PRODUCTO, no solo la que ve el humano', () => {
+    // MEDIDO EL 2026-09-18 EN PRODUCCION, y es el motivo entero de este caso: renombrar el
+    // contacto SOLO en Chatwoot deja la identidad congelada del lado del bot. Las conversaciones
+    // 48 y 50 son sondas nuestras que Chatwoot ya llama "Sonda QA carril chatbot", y
+    // `onia_center.bot_conversations.display_name` seguia diciendo `cold-pond-731` y
+    // `quiet-shape-612` — la FOTO del nombre anonimo del instante en que nacio la fila.
+    // `esConversacionNuestra()` (el criterio del PRODUCTO) lee esa columna, asi que los cuatro
+    // barridos del embudo las tomaban por desconocidas: `contarColgadas` las reportaba como dos
+    // leads perdidos hace 15 dias, y con el circuito en `emit` desde el 2026-09-17 una sonda
+    // dentro de la ventana de 20 h recibe el follow-up M3 en el inbox de leads REALES.
+    const sentencias = sentenciasDeSellado(48, NOMBRE_SONDA);
+    const texto = sentencias.map((s) => `${s.base} ${s.sql}`).join(' | ');
+    assert.ok(
+      sentencias.some((s) => s.base === 'chatwoot' && /update\s+contacts/i.test(s.sql)),
+      `falta el sellado en Chatwoot: ${texto}`,
+    );
+    assert.ok(
+      sentencias.some((s) => s.base === 'bot' && /bot_conversations/i.test(s.sql) && /display_name/i.test(s.sql)),
+      `falta el sellado en la tabla que lee el producto: ${texto}`,
+    );
+    // El nombre sellado tiene que ser el que el criterio del producto reconoce, no uno cualquiera:
+    // `esConversacionNuestra()` decide con /\b(prueba|qa|test)\b/i sobre `display_name`.
+    for (const s of sentencias) assert.match(s.sql, /Sonda QA carril chatbot/, `sella otro nombre: ${s.sql}`);
   });
 
   caso('el barrido reclama el rastro anonimo y deja en paz al lead', () => {
