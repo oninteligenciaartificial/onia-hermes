@@ -12,16 +12,19 @@ Y cobra la promesa literal del cierre del video 2: *"lo que hace que trabaje sol
 
 ## 🔴 Todo medido, nada recordado
 
-Contado en la máquina de Sergio Urcullo el **2026-09-10**:
+**Recontado el 2026-09-17** (día de grabación). ⚠️ Dos números CAMBIARON desde el
+conteo del 10-sep y el deck ya está corregido: subagentes 4→**3** (el 4 contaba el
+`README.md` de la carpeta como agente) y conectores 7→**6** (n8n ya no está en la
+config del CLI; vive como conector de la app).
 
-| dato en pantalla | cómo se verificó |
+| dato en pantalla | cómo se verificó (17-sep) |
 |---|---|
-| 4 hooks | 3 en `~/.claude/settings.json` + el autosync en `.claude/settings.json` del repo |
-| 4 subagentes (+7 retirados) | `ls .claude/agents/*.md` |
-| 7 conectores MCP | nombres leídos de la config local, sin tocar ningún token |
-| 9 plugins | `ls -d ~/.claude/plugins/cache/*/` |
-| 4 trabajos por horario | los cron de `nodo-casa` (handoff `onia-dev-node-setup.md`) |
-| **4 conectores sin andar hoy** | 2 caídos (image-gen, postiz) + 2 sin autorización (cloudflare, meta) |
+| 4 hooks | 3 en `~/.claude/settings.json` (PreToolUse, PostToolUse, Stop) + el autosync en `.claude/settings.json` del repo |
+| **3** subagentes (+7 retirados) | `.claude/agents/`: onia-core-guardian, onia-creative-radar, onia-crm-prospeccion |
+| **6** conectores MCP | `~/.claude.json`: image-gen, stitch (globales) + meta_developer_tools, cloudflare, cloudflare-docs, postiz (proyecto) |
+| 9 plugins | `ls -d ~/.claude/plugins/cache/*/` → 9, misma lista del 10-sep |
+| 4 trabajos por horario | ⚠️ NO reconfirmado el 17-sep (cron del nodo-casa; vía `casa.sh` desde el VPS). Confirmar antes del tramo 8 o decir «cuatro» solo si el crontab lo muestra |
+| **4 conectores sin andar hoy** | reconfirmado 17-sep: 2 caídos (image-gen, postiz 502) + 2 sin autorización (cloudflare, meta) |
 
 **Los números se recuentan antes de grabar.** Ya pasó con el video 2: la versión de
 Claude Code cambió en tres días.
