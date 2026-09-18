@@ -12,6 +12,107 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-18 00:09-00:16 La Paz (quinta vuelta del día) — 🟢 SE ARREGLÓ: recorrido COMPLETO 9/9 por primera vez desde el 17-sep, el bloqueo de MFA quedó atrás
+
+Al arrancar: 0 orgs `zz-qa-` huérfanas, alta `abierta`. **`BUILD_ID` CAMBIÓ**: de
+`OFd4xCDzoTbQdThUbfzDv` (el mismo desde hacía más de un día) a **`HiLa5P_MF3e3iK6KUSfli`** —
+hubo deploy nuevo. `t_b8d00627` (plataforma, 36 arreglos, incluye el fix de MFA `b1247fb`) sigue
+`blocked` en el tablero (no es mi zona, la actualiza `onia-cola`), pero el build vivo ya lo tiene.
+
+Corrí el recorrido completo con `--escribir`: **los 9/9 pasos pasaron, `completo: true`, 0
+agujeros.** El corte que venía repitiéndose desde el 2026-09-17 (`/dashboard` rebotaba a
+`/profile?mfa=obligatorio` con el botón "Activar ahora" sin disparar ningún `fetch`) **ya no
+aparece** — el onboarding se completó en 6 pantallas y el `/dashboard` no rebotó. Camino completo:
+cuenta `zz-qa-2026-09-18-0409@onia.com.bo` creada → correo confirmado → onboarding (Clínica
+dental) → paciente `zz-qa-2026-09-18-0409-paciente` cargado y visto en `/patients` → cita
+2026-09-21 09:00 agendada (201, `cmu6g06w6000k01rwofyi0ejw`) y **vista** en `/appointments` →
+factura `/billing/cmu6g0isv000m01rw76z4uu60` con el ítem visible (frenada sin pagar) → panel
+revisado (no lista pacientes, esperado). Limpieza en la misma corrida: 0 filas `zz-qa-` al cerrar
+(orgs y appointments verificados por `SELECT`).
+
+`completo: true`, `llegoHasta: 9/9`.
+
+RAZÓN: N/A — el objetivo se cumplió esta vuelta.
+LECCIÓN: el bloqueo llevaba 8+ vueltas seguidas citando el mismo `BUILD_ID`; en cuanto cambió, el
+recorrido volvió a pasar sin tocar el instrumento. Confirma que el método de "no repetir el
+recorrido completo mientras el `BUILD_ID` no cambie, usar el resto en escalón 3" fue el correcto —
+la próxima vez que un carril quede bloqueado por deploy ajeno, seguir ese patrón en vez de
+re-correr a ciegas cada vuelta. Próxima vuelta: con el camino base sano de nuevo, retomar rotación
+de rubros (dental sobre-cubierto; importadora/comercio/estética/servicios no se re-verifican desde
+hace días) o seguir escalón 3 en superficies nuevas.
+
+---
+
+## 2026-09-18 23:09-23:50 La Paz (cuarta vuelta del día) — mismo corte (paso 5, MFA); escalón 3 con interacción real: `/servicios/webs` hasta el clic final, sano
+
+Al arrancar: 0 orgs `zz-qa-` huérfanas, alta `abierta`, `BUILD_ID` sigue `OFd4xCDzoTbQdThUbfzDv`.
+`t_b8d00627` (plataforma, 36 arreglos, incluye el fix de MFA `b1247fb`) sigue `blocked` sin `ok`
+de Sergio Urcullo — no es mi zona.
+
+Corrí el recorrido completo con `--escribir` (protocolo exige medirlo cada vuelta): mismo corte
+de siempre — paso 4 OK (alta con confirmación de correo, onboarding completo), paso 5 ROTO
+(`/dashboard` rebota a `/profile`, el botón "Activar ahora" del MFA no dispara ni un fetch).
+Limpieza en la misma corrida: 0 filas `zz-qa-` al cerrar.
+
+Como el corte es el mismo ítem ya reportado (esperando el mismo deploy bloqueado), usé el resto
+de la vuelta en la interacción sugerida la vuelta pasada: **enviar de punta a punta** el
+configurador de `/servicios/webs` (hasta ahora sólo se había mirado, nunca completado).
+Con Playwright llené el asistente rápido (rubro Clínica dental, objetivo, tono, paleta) +
+los datos de contacto (`zz-qa-2026-09-18-0309-contacto`, WhatsApp `70000000`, email, ciudad) y
+marqué el checkbox de requisitos. El CTA final ("Pedir mi Web Profesional por WhatsApp") es un
+`<a href="wa.me/...">` que arma correctamente TODO el payload — negocio, rubro, oferta, servicios,
+plan (Bs 4.500, 50/50), paleta y color elegido — con los datos que se cargaron, sin nada roto ni
+faltante. **No lo hice clic** (abriría WhatsApp de verdad y el prompt del carril prohíbe escribirle
+a cualquiera que no sea Sergio Urcullo por `onia-tg.sh`); confirmar el `href` generado alcanza para
+verificar que el flujo arma el mensaje bien. Antes de marcar el checkbox de requisitos, el mismo
+elemento es un `<a href="#datos-solicitud">` (ancla, no todavía el envío) — comportamiento
+correcto, no un hallazgo. El checkbox "Registro de contactos en CRM/n8n" no dispara ningún POST
+al marcarlo (nada que auditar ahí: todo el lead pasa por WhatsApp manual, consistente con "no hay
+equipo de ventas"). **Sano, nada para reportar.**
+
+`completo: false`, `llegoHasta: 4/9` (sin cambios, sigue bloqueado por el mismo deploy).
+
+---
+
+## 2026-09-18 (tercera vuelta del día) — no repito el recorrido completo (BUILD_ID igual, bloqueo no es mío); auditadas `/patrones` y `/servicios` (raíz), sanas
+
+Al arrancar: 0 orgs `zz-qa-` huérfanas, alta `abierta`, `BUILD_ID` sigue `OFd4xCDzoTbQdThUbfzDv`
+(misma que las últimas ocho corridas). El pedido de deploy de plataforma cambió de forma otra
+vez: `t_4f4e4071` (23 arreglos) quedó `archived` y fue reemplazado por `t_b8d00627` (36
+arreglos) — sigue `blocked`, sigue sin `ok`, no es mi zona (`onia-cola`). El gate
+`npm run pedido:entregado` marca ese pedido nuevo como ROJO (4 commits mergeados después de
+crearlo que su `ok` publicaría sin nombrar) — lo dejo anotado acá porque ya es la zona de otro
+carril, no abro tarea nueva: es el mismo patrón que `t_62759602` ya señalaba.
+
+Con el corte del paso 5 (MFA) intacto, usé la vuelta para cerrar las dos últimas superficies de
+`(sitio)` que quedaban sin auditar (la vuelta anterior las había dejado anotadas como pendientes):
+
+- **`/patrones`**: sana en los tres viewports (375/768/1440, `reducedMotion:'reduce'`) — 200,
+  0 elementos con `scrollWidth > clientWidth`, 0 apariciones de "muy pronto"/"en
+  construcción"/"próximamente"/"beta".
+- **`/servicios`** (la raíz, distinta de `/servicios/webs` que ya estaba auditada): da **404**
+  en los tres viewports. Verificado que NO es un hallazgo: no existe ningún `href="/servicios"`
+  ni `'/servicios'` en el código del sitio (`grep` en
+  `web-factory/apps/onia-platform/src`), y en el filesystem de rutas sólo existe
+  `app/(sitio)/servicios/webs/`, sin `page.tsx` en `servicios/` a secas. Nadie promete esa URL:
+  el 404 es correcto, no una promesa rota.
+
+Con esto quedan agotadas las superficies de `(sitio)` que este carril tenía identificadas como
+sin auditar. Próxima vuelta, si el `BUILD_ID` sigue igual: no queda escalón 3 obvio nuevo en
+`(sitio)` — conviene, en cambio, profundizar una interacción de punta a punta en una superficie
+ya "sana" (enviar de verdad el formulario de `/servicios/webs`, con datos `zz-qa-`, y ver si se
+recibe del lado del intake) en vez de sólo mirar y no enviar.
+
+`completo: false` (no corrí el recorrido esta vuelta), `llegoHasta: 4/9` (sin cambios).
+
+RAZÓN: el corte de siempre (paso 5, MFA) sigue esperando que `onia-cola` cierre el pedido de
+deploy — no depende de esta vuelta.
+LECCIÓN: con `(sitio)` ya barrido entero, seguir escaneando páginas sueltas del sitio público
+deja de rendir; el próximo escalón que sí suma es probar una interacción real (enviar, no sólo
+mirar) en una superficie ya marcada sana.
+
+---
+
 ## 2026-09-18 (segunda vuelta del día) — no repito el recorrido completo (BUILD_ID igual, bloqueo no es mío); auditada `/contacto`, sana
 
 Al arrancar: 0 orgs `zz-qa-` huérfanas, alta `abierta`, `BUILD_ID` sigue `OFd4xCDzoTbQdThUbfzDv`
