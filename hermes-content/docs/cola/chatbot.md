@@ -318,6 +318,73 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **~~El gate de anticipación medía sólo el PISO y firmaba `ok` sobre el defecto de
+      enfrente: el bot alejaba el turno tres días teniendo el sábado libre~~ — CERRADO el
+      2026-09-18.** Gate cableado (commit en la rama) **y el valor vivo ya curado en producción**.
+
+      **Cómo apareció.** No de la cola —estaba sin 🔴 abiertos— sino de mirar producción por el
+      eje que ningún gate mira: **qué horarios tiene cargados el proceso vivo, un viernes**.
+
+          ONIA_BOT_SLOTS = lunes 21 · martes 22 · miércoles 23 · jueves 24 · viernes 25
+
+      Cinco horarios, todos 14:00, **ni un sábado y ni una franja de 20:00-22:00**, un viernes a
+      las 10:13 — con el **sábado 19 entero libre** y la coletilla del **mismo mensaje**
+      prometiendo *"sáb 9:00-15:00"*. Quien escribiera ese día esperaba **tres días**.
+
+      **Por qué nada estaba rojo.** `anticipacion-viva.mjs` nació el 5-sep contra el defecto
+      opuesto (el bot ofreció una demo a 4 h 57 min) y quedó midiendo **un solo lado**: que el
+      aviso sea **≥ 24 h**. Sobre esto imprimía `ok — 75,8 h de aviso`. Un piso sin techo no es
+      una garantía, es la mitad barata de una — y es la mitad que **no pierde plata**. Es la clase
+      *direcciones simétricas* de la memoria: se cerró *"no promete de más"* y quedó abierta
+      *"no ofrece de menos"*.
+
+      **El arreglo.** `diasDesaprovechados()` en `anticipacion-viva.mjs`: los días de atención con
+      alguna hora **ofrecible** (dentro de franja y con la anticipación cumplida) **anteriores** al
+      primer horario que el prospecto puede tomar. Tres decisiones que costaron sus rojos:
+
+      - Se juzga **por día, no por hora**. El valor se escribe 1 vez/día y se sirve 24 h, así que
+        la hora del primer candidato se corre sola con el reloj: comparar instantes pondría el
+        gate rojo **por el mero paso del tiempo**. Un día entero saltado no lo explica ningún reloj.
+      - El corte es el **día local del turno ofrecido**: ofrecer el sábado 14:00 teniendo libre el
+        sábado 11:00 **no es alejar** (el generador da un horario por día a propósito). Primer
+        fixture en rojo por esto.
+      - El sujeto es el primer horario **sostenible**, no el primero de la lista: uno `pending` ya
+        lo cubre el piso, y medir el alejamiento contra un turno que el lead no puede tomar
+        mezclaría los dos diagnósticos.
+
+      El techo **se deriva de `VENTANAS_ATENCION`** (fuente única de cuándo está Sergio Urcullo),
+      con un caso que lo ata: agregarle el domingo a esa fuente hace que el gate lo exija solo.
+      Validado por **mutación**, las tres en rojo: esquivar el acumulador, sacar el techo del
+      veredicto, y clavar el mapa de ventanas en vez de recibirlo.
+
+      **Prueba.** Antes: `VEREDICTO: roto — el bot aleja el turno: 1 día(s) … El más temprano que
+      se dejó pasar: sábado 19, 11:00`. Después de curar el valor vivo:
+
+          ok   sábado 19 de septiembre, 11:00 — 24.7 h de aviso
+          ok   lunes 21 de septiembre, 14:00 — 75.7 h de aviso
+          VEREDICTO: ok — promete con un día de aviso y el corte lo respalda
+
+      Y el bot **sigue vivo en el segundo turno** tras el reinicio: `node scripts/sonda_widget.mjs`
+      → *"EL BOT CONTESTÓ LOS 2 — conversación 49"*.
+
+      **Lo que hay que saber para la próxima, y es lo más transferible.** El código del generador
+      ya estaba arreglado **y desplegado** (`/root/bin/onia-renovar-slots.py`, 09:44 La Paz) — el
+      defecto era el **valor servido**, calculado por la corrida de las **06:23**, o sea por el
+      código viejo. Un arreglo a algo que un cron produce **1 vez al día** no llega al cliente
+      hasta la próxima corrida, y las tres medidas canónicas de deploy **no lo ven**: todas
+      preguntan si el CÓDIGO está, ninguna si el ARTEFACTO se regeneró. Peor acá: el cron de
+      mañana 06:23 **tampoco** habría salvado el sábado (sábado 06:23 + 24 h → domingo, que no se
+      trabaja → lunes 21). La ventana que el arreglo compraba **se perdía entera**.
+
+      **Por qué se pudo curar sin pedir deploy.** El generador reinicia el bot, y `start`
+      re-sincroniza `/tmp/onia-bot` desde `/opt/onia/bot` — un **deploy encubierto** si el código
+      difiere. Se midió antes de correrlo, no se supuso:
+
+          stamp /opt = 4786e7de62a2 · stamp vivo = 4786e7de62a2  → IGUALES: el restart no cambia código
+
+      Con los stamps iguales el restart sólo recarga la variable. **Si difieren, no se corre: se
+      pide el deploy.**
+
 - [x] 🔴 **~~El bot le promete al prospecto que "Sergio te escribe AHORA" y a Sergio Urcullo le
       dice "DEMO AGENDADA — anotala": el aviso afirma lo contrario de lo que pasó~~ — CERRADO el
       2026-09-18 en el repo.** Commiteado, **NO desplegado** (el bot no toca fuente de precio,
