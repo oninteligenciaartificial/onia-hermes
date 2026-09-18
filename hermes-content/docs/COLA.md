@@ -77,8 +77,23 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Ahora — plan de features (revisado 2026-08-30, con Gate 1 corrido)
 
-- [ ] 🟠 **El ÚNICO camino para entregar `onia-platform` desde nodo-casa vive FUERA de git, en
-      un archivo suelto de `/root/tmp` del VPS. Medido el 2026-09-18 17:4x La Paz por `onia-cola`.**
+- [x] 🟠 **El ÚNICO camino para entregar `onia-platform` desde nodo-casa vivía FUERA de git, en
+      un archivo suelto de `/root/tmp` del VPS. Medido y CERRADO el 2026-09-18 17:5x La Paz por
+      `onia-cola` (`2516f393`).**
+      **Cómo quedó:** la fuente única es `scripts/integrar-onia-platform.sh`, y la copia a mano
+      del VPS se retiró en la misma vuelta (renombrada a `.REEMPLAZADO-POR-…`, no borrada, para
+      que el que la busque encuentre el puntero y no un hueco). Se invoca **leyendo del clon del
+      VPS ya puesto al día** — `fetch` + `merge --ff-only origin/main` + `bash …/scripts/…` en
+      un solo comando remoto —, así que no hay que desplegar nada y sigue habiendo una sola copia.
+      Además viajaron tres cosas que antes estaban clavadas a mano: la rama es un **argumento**
+      (estaba fija en el carril del chatbot), el árbol se **prepara solo** (worktree, `node_modules`
+      por hardlink —un symlink mata el build con `[standalone-runtime] … invalid or linked`— y el
+      symlink a `onia-hermes`), y **`check:onia-core` en `SKIPPED` ahora es ROJO**: sin el hermano
+      ese gate sale 0 sin medir el espejo del core, que es el primer paso del CI.
+      **Probado en vivo, no razonado:** con `0` intentos (el modo que prepara el árbol y no corre
+      gates ni push) el invocador contestó `clon al dia: 2516f3931` + `NO PUBLICADO tras 0
+      intento(s)`, exit 5 — o sea el camino entero desde casa resuelve, y el texto del script es
+      el mismo que media hora antes publicó `5ed97b0` con 5.704 tests verdes al primer intento.
       Hoy la integración del carril del chatbot a `master` salió al primer intento con ese
       script —5.704 tests verdes, publicado `5ed97b0`— y funciona bien: hace `fetch` +
       `reset --hard origin/master` + merge + los CINCO gates + `git checkout -- .` (el build muta
