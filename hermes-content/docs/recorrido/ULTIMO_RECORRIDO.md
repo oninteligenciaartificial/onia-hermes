@@ -2171,3 +2171,19 @@ dos fechas. Captura: `capturas/hallazgo-plazo-guia-facturacion.png`. No lo arreg
 zona (código del sitio, carril web-venta).
 
 `completo: false`, `llegoHasta: 4/9` (sin cambios, sigue bloqueado por el mismo deploy).
+
+## Reverificado 2026-09-18 07:09-07:20 La Paz — Estética y spa, 9/9 completo (deploy del bloqueo de MFA ya resuelto)
+
+El bloqueo de MFA obligatorio que cortaba el recorrido en el paso 5 desde el 17-sep ya se
+destrabó (ver corrida de las 00:14 La Paz: `BUILD_ID` cambió a `HiLa5P_MF3e3iK6KUSfli`). Con eso
+confirmado, corrí `RECORRIDO_RUBRO="Estética y spa" node scripts/recorrido_cliente.mjs --escribir`
+— era el único de los 6 rubros activos sin recheck reciente. **Los 9 pasos completos**: alta,
+onboarding (6 pantallas), paciente `zz-qa-2026-09-18-1109-paciente` cargado y visible, cita
+2026-09-21 09:00 agendada y VISTA en `/appointments`, factura con ítem visible en `/billing/...`
+(frenado ahí sin pagar), panel revisado. Limpieza verificada: `organizations`/`appointments` con
+`zz-qa-%` en 0 al cerrar.
+
+Con esto, **los 6 rubros activos del alta ya están cubiertos** (dental, comercio, importadora,
+estética, servicios profesionales — veterinaria no se ofrece en el alta). `completo: true`,
+`llegoHasta: 9/9`. Próxima vuelta: no repetir rubro — ir a escalón 3 en superficie nueva o
+verificar si algún pedido de deploy sigue esperando `ok`.
