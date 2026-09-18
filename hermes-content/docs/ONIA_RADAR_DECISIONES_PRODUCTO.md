@@ -2790,6 +2790,31 @@ aunque muera el disco. Se ve con:
 
 ---
 
+## 45. Tu rama de carruseles de marca personal lleva 6 h sin llegar a `main` (2026-09-18) — decisión de Sergio Urcullo
+
+**Qué es.** `claude/marca-personal-carruseles-dist-deadab` — **7 commits**, **63 archivos,
++948/−11, cero borrados**. Medido el 2026-09-18 05:40 La Paz: **52 de los 63 archivos son
+carruseles ya generados** (`hermes-content/carousels/out`), 6 son scripts nuevos de screencast
+(`scripts/marca-personal/rec_*.py`) y 3 son notas de cola. Último commit: anoche 23:35 La Paz.
+
+**Por qué no la mergeé yo — es el mismo motivo del ítem 43.** No es un carril de loop: no tiene
+línea en el `crontab` de nodo-casa ni fila propia en la tabla de activos de `loops.md`. Son
+láminas con tu cara y tu guion, y **el carril de contenido lo cerrás vos, por regla escrita**
+(`CLAUDE.md`). La guarda dura la pasa sin problema —**cero archivos borrados**—, así que **no hay
+riesgo técnico en mergearla**: lo que falta es que vos digas que esos carruseles ya están como
+los querés.
+
+| | Qué se hace | Qué pasa después |
+|---|---|---|
+| **A** | La mergeo a `main` en la próxima vuelta | Los carruseles y los scripts de screencast quedan en `main` y cualquier sesión los ve. Son +948 líneas y 52 imágenes: liviano al lado de los 761,7 MB de Lucía (ítem 38) |
+| **B** | La dejo donde está | Sigue viva y respaldada en GitHub, pero fuera de `main`: ninguna otra sesión la encuentra sola |
+
+**No hay urgencia ni nada roto**: está pusheada, así que no se pierde si muere una sesión. Se
+anota para que no quede invisible, que es como se varan las ramas. Se ve con:
+`git -C /root/loops/onia-hermes diff --shortstat origin/main...origin/claude/marca-personal-carruseles-dist-deadab`
+
+---
+
 ## La recarga del chatbot caduca a fin de mes: ¿se arrastra lo no usado?
 
 **Decidido el 2026-09-11 lo que era técnico; esto es lo que queda y es plata.** El add-on del
