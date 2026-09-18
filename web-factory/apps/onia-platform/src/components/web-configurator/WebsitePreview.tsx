@@ -254,7 +254,7 @@ function Products({ cards, direction, ecommerce }: { cards: readonly WebPreviewC
 function CheckoutBar() {
   return (
     <div className={styles.checkout}>
-      <span><b>Pago con tarjeta</b> y QR</span>
+      <span><b>Pago con tarjeta</b>, seguro</span>
       <span><b>Envío</b> a todo el país</span>
       <span><b>Suscripciones</b> y accesos</span>
       <span className={styles.platform}>Sobre Shopify · Hotmart · Whop</span>
@@ -267,7 +267,7 @@ function ActionBlock({ goal, content }: { goal: WebGoal; content: WebsitePreview
   if (goal.id === "reservas") {
     return (
       <section className={styles.actionBlock}>
-        <div><p className={styles.eyebrow}>Agenda</p><h4>Elegí un día y una hora.</h4><p>Queda reservado al instante y te llega la confirmación.</p></div>
+        <div><p className={styles.eyebrow}>Agenda</p><h4>Elegí un día y una hora.</h4><p>Queda reservado al instante, con confirmación en pantalla.</p></div>
         <div className={styles.agenda} aria-hidden="true">
           <div className={styles.agendaDays}><span>Lun</span><span className={styles.on}>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span></div>
           <div className={styles.agendaSlots}><span>09:00</span><span className={styles.on}>10:30</span><span>15:00</span><span>16:30</span></div>
