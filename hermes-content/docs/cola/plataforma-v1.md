@@ -63,6 +63,47 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 
 ## Ahora
 
+- [x] 🔴 **CERRADO el 2026-09-18 — el panel le reclamaba el pago a las cuentas de Onia, en
+      TODAS las pantallas** (`onia-platform` `36687657`, rama del carril; gates en el VPS
+      sobre el arbol con `origin/master` mergeado: tsc 0 · 5.698 tests · eslint 0 errores).
+
+      **Lo pidio Sergio Urcullo hoy** mirando /settings con la cuenta interna: *"yo no tengo
+      que pagar nada, sacalo"*. `7e275e29` saco «Mi plan» de esa pantalla para las cuentas que
+      no son clientes (`esCuentaQueNoEsCliente`) — y con eso cerro la puerta a la que el dueño
+      **VA**, dejando abiertas las TRES por las que el producto lo va a **buscar a el**, que se
+      deciden todas en `app/(dashboard)/layout.tsx` y se pintan en cada pantalla del panel:
+      la franja de estado de abajo (CTA «Ver mi plan»), la banda grande de renovacion y el
+      banner de solo lectura («Renovar mi plan»).
+
+      **MIRADO en produccion, no deducido.** `node scripts/mirar_bandeja_dueno.mjs --email
+      sergio@onia.com.bo --ruta /settings/addon-chatbot` (org `clinica-sergio-p2ljs`, cuenta
+      NUESTRA): la franja decia **«Profesional · prueba: 30 días»** con el enlace **«Ver mi
+      plan»**, o sea mandaba a la seccion que ese mismo commit le acababa de esconder. Contadas
+      en `supabase-db` ese dia hay **cinco** organizaciones y **ninguna es un cliente**, asi que
+      hoy ese reclamo solo lo puede leer Onia.
+
+      **No se apago la mitad OPERATIVA**, a proposito: que la cuenta esta en solo lectura le
+      importa igual a una cuenta nuestra —si no, el producto parece roto— y el texto de
+      `avisoSoloLectura` es operativo («podes consultar y exportar»). Lo que se calla es el
+      CARGO: el CTA y la banda. La pregunta viaja como parametro **OBLIGATORIO** (`esCliente`),
+      asi que `tsc` caza al panel que se olvide — encontro **cuatro** llamadores, uno el segundo
+      `LayoutShell` del propio layout.
+
+      **Gate:** `lib/subscription/a-una-cuenta-propia-no-se-le-cobra.test.ts`, universo derivado
+      del disco (quien llama a `dondeSeRenueva`), exencion nombrada y re-medida
+      (`aviso-de-pago-resuelto`: contesta un pago que el dueño YA hizo). Validado por mutacion
+      en tres direcciones; **la segunda paso VERDE con la primera version del gate**, que exigia
+      la MENCION de `esCliente` en vez de la LLAMADA a la fuente: `const esCliente = true` lo
+      dejaba conforme. Se cerro pidiendo la llamada y prohibiendo el literal y el shorthand JSX.
+
+      **Lo que NO cierra este item, medido:** esto apaga la venta en el PANEL. Falta barrer las
+      superficies que le hablan al dueño **fuera** del panel con el mismo criterio — el push y el
+      aviso in-app de vencimiento salen de `lib/subscription/vencimientos.ts`, que hoy solo
+      consume el cron de renovacion (ese SI filtra con `filtroPrismaSoloClientes`), asi que la
+      clase esta cubierta por ahora **por el filtro del cron y no por el aviso**: el dia que otro
+      llamador use `vencimientos.ts` nace mudo. El gate de este commit no lo ve, porque su
+      universo son los que llaman a `dondeSeRenueva`.
+
 - [x] 🔴 **CERRADO el 2026-09-18 — un negocio del plan más barato salía del alta con un
       administrador de más, gratis** (`onia-platform` `e25eadd6`, rama del carril; los tres gates
       verdes en el VPS sobre el árbol con `origin/master` ya mergeado: tsc 0 · 465 archivos de
