@@ -8,6 +8,7 @@
 import { PRUEBA, bs, cuantosPlanes, nombresConChatbot } from "@/lib/pricing";
 
 import { CHATBOT_PLAN, precioStack } from "@/content/chatbot-precios";
+import { CUANTOS_RUBROS } from "@/content/rubros";
 
 import {
   ALTA_VERBO_VOS,
@@ -64,7 +65,7 @@ export const FAQ = [
   {
     // (sitio)/rubros/page.tsx:78-80 y (sitio)/contacto/page.tsx:118-121.
     q: "¿Sirve para mi rubro si no está en la lista?",
-    a: "Onia no es un software distinto por industria: es el mismo núcleo con módulos y vocabulario propios. Hoy la cuenta se arma sola para los cinco rubros que ves en Rubros. ¿El tuyo es otro? Escribinos por WhatsApp y lo vemos con tu caso.",
+    a: `Onia no es un software distinto por industria: es el mismo núcleo con módulos y vocabulario propios. Hoy la cuenta se arma sola para los ${CUANTOS_RUBROS} rubros que ves en Rubros. ¿El tuyo es otro? Escribinos por WhatsApp y lo vemos con tu caso.`,
   },
   {
     q: "¿La factura al SIN ya funciona?",

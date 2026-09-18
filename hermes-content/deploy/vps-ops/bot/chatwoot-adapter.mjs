@@ -778,6 +778,9 @@ export async function runChatwootTurn(payload, deps = {}) {
     // por el canal de n8n, que es donde vive la credencial de Telegram (el plan VPS no soporta
     // $env en los nodos, asi que el token no puede vivir aca).
     notify: (turnResult && Array.isArray(turnResult.notify) ? turnResult.notify : []),
+    // Viaja pegado a `notify` porque es para el MISMO aviso: sin esto el webhook no puede
+    // decirle a Sergio Urcullo si lo que le llega es una sonda nuestra o un lead de verdad.
+    esNuestra: Boolean(turnResult && turnResult.esNuestra),
     dryRun: Boolean(turnResult && turnResult.dryRun),
     // null = no era un audio. `{transcribed:false}` = era y no se pudo: eso es lo que hay que
     // mirar si el bot vuelve a contestar "¿me lo escribís?" cuando no debería.

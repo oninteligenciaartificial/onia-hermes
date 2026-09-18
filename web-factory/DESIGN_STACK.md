@@ -54,6 +54,24 @@ instalado, para no volver a evaluarlos:
 motor, textos de un cliente sin material) se pasa por `humanizer`/`stop-slop`, y el gate
 `slop.test.ts` lo vigila en el repo.
 
+## Cruce con «Arma tu stack de galerías para aprender a crear webs» (IG reel `DdZZmsQtr2-`, visto 2026-09-18)
+
+Reel de 13 s, cinco sitios en pantalla («websites you need as a vibecoder»). Sin audio útil: lo que
+dice de cada uno se leyó de los subtítulos en los frames. Inventario contra lo instalado, para no
+volver a evaluarlos:
+
+| Sitio | Qué es (según el reel) | Estado en ONIA |
+|---|---|---|
+| `ui.watermelon.sh` (Watermelon UI) | bloques/componentes; abre y cierra el reel | ✅ ya en `gallery-reference-sources.json` y en §5b de SOURCES.md (licencia sin confirmar) |
+| `deck.gallery` | decks y slides curados «para no arrancar de un lienzo en blanco» | 🟢 **agregada 18-sep** como fuente de cosecha (`deck-gallery`, inspiration-only): tipografía, jerarquía y storytelling para propuestas, OG y `slides` — no para layout web |
+| `swishy.ai` | «AI motion designer»: texto → animación/motion graphics (MP4/GIF) | 🟡 diferida: la IA dibuja el visual, choca con «la interfaz nunca la dibuja la IA». Sirve solo para piezas de redes (carril marca-personal), no para UI de cliente |
+| `replit.com` | «What will you build?»: builder de apps por prompt | ⛔ descartada: es un builder, no una galería; el pipeline es Claude Code + Web Factory. Su caja única de entrada ya está medida en `hermes-content/research/competencia/configuradores-web-ia-2026-09-17.md` |
+| `motion.dev` | «450+ ejemplos copy-paste» React/JS/Vue | ✅ librería ya default de la casa (`motion-y-3d.md`); 🟢 **`/examples` agregada 18-sep** como fuente de cosecha (`motion-dev-examples`) para minar mecánica de microinteracciones |
+
+**Saldo:** de cinco, dos ya estaban, dos entran a la cosecha (deck.gallery, motion.dev/examples) y dos
+no son galerías (Swishy, Replit). El stack queda en 30 fuentes de galería; el reel no traía nada
+estructural que faltara.
+
 ## Active Skill
 
 `ui-ux-pro-max` is installed globally at `C:\Users\PC\.codex\skills\ui-ux-pro-max`.
@@ -373,3 +391,5 @@ Latest validation screenshots:
 - `DavidHDev/react-bits`: visually strong and high-star, but license was unclear in the audit, so it is inspiration-only until verified.
 - MUI and Chakra: strong design systems, but outside the current Tailwind/shadcn factory direction.
 - GPL/AGPL sources: rejected for client websites.
+- `swishy.ai` (reel 2026-09-18): motion graphics generados por IA. Fuera de la UI de cliente por la regla «la interfaz nunca la dibuja la IA»; candidata solo para piezas de redes.
+- `replit.com` (reel 2026-09-18): builder por prompt, no galería. No reemplaza Claude Code + Web Factory.

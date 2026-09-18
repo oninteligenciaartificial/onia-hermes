@@ -2,7 +2,7 @@ import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 
-import { RUBROS_EN_PROSA, RUBROS_VIVOS } from "@/content/rubros";
+import { CUANTOS_RUBROS, RUBROS_EN_PROSA, RUBROS_VIVOS, cardinalDe } from "@/content/rubros";
 import { rubrosDelSitio, SWITCHER } from "../../scripts/rubros-vivos.mjs";
 
 /**
@@ -313,6 +313,135 @@ describe("una enumeración de rubros que afirma cobertura los nombra a todos", (
       cortas.map((c) => `${c.archivo}:${c.linea} — falta ${c.faltan.join(", ")} · «…${c.frase}»`),
       "una enumeración cerrada afirma que esos son TODOS los rubros; si el alta entrega uno más, " +
         "su dueño lee que Onia no es para él. O se nombran todos, o la lista se deja abierta.",
+    ).toEqual([]);
+  });
+});
+
+/**
+ * LA TERCERA REPRESENTACIÓN: el CARDINAL — medido el 2026-09-18.
+ *
+ * El bloque de arriba cierra la pregunta "¿los nombra a todos?". Queda su
+ * hermana, que vive en el mismo hecho y no tenía dueño: **"¿cuántos dice que
+ * son?"**. El sitio afirmaba "cinco rubros" TIPEADO en seis textos de venta —
+ * la FAQ de la home (que además viaja al JSON-LD `FAQPage`, o sea al resultado
+ * de Google), la FAQ de la landing v1, `/rubros`, `/nosotros`, el `alt` de
+ * `how-it-works` y el cuadro comparativo de `proof.ts`.
+ *
+ * **Por qué ninguno de los gates de este carril lo veía.** El de enumeración
+ * (arriba) pregunta si la lista está completa, y las seis listas lo estaban.
+ * Los cruces de precio validan MONTOS, y una cantidad escrita en palabras no es
+ * un monto. Los barridos de obra y autobombo son listas de literales
+ * prohibidos, y "cinco" no es ninguno. Las tres familias miran para otro lado.
+ *
+ * **Y el costo ya está medido, dos veces en este mismo repo.** La portada
+ * enumeraba cuatro rubros con cinco vivos (2026-09-11, ver `content/rubros.ts`)
+ * y `v1/empezar/resultado.tsx` decía "para seis rubros" cuando el sitio vendía
+ * cinco. Dos instancias curadas de a una es la firma de una clase abierta. La
+ * hermana exacta —"en los TRES planes no cobramos implementación"— sobrevivió a
+ * la escalera C del 2026-09-12 en la portada, en `/precios` y en el JSON-LD,
+ * con todos los gates de precio en verde, hasta que se cerró por la FORMA.
+ *
+ * **Se prohíbe la FORMA, no el número viejo.** Un gate que buscara "cinco" se
+ * apaga solo el día que la respuesta correcta sea cinco — que es hoy. Lo que no
+ * envejece es que el cardinal esté TIPEADO: se deriva de `CUANTOS_RUBROS`, y
+ * entonces el sexto rubro se nombra solo en las seis superficies a la vez.
+ */
+const CARDINAL_DE_RUBROS =
+  /\b(dos|tres|cuatro|cinco|seis|siete|ocho|[2-9])\s+rubros\b/i;
+
+/**
+ * Se mide con `soloCopy`, el MISMO recorte que usa el bloque de arriba — no una
+ * copia propia. Hace las dos cosas que este caso necesita, y las dos importan:
+ *
+ * - **Blanquea los comentarios** conservando los saltos de línea. Sin eso, las
+ *   bitácoras que narran este defecto —que son varias, y son justo las que no
+ *   hay que borrar— dejarían el gate rojo para siempre.
+ * - **Blanquea las interpolaciones `${…}`**, que es lo que hace que la vía BUENA
+ *   salga del universo sola: un `${CUANTOS_RUBROS} rubros` ya no tiene cardinal
+ *   que cazar, y el gate no tiene que reconocer el arreglo por su nombre.
+ */
+
+/**
+ * La fuente está exenta con su motivo: es la que TIENE la tabla de cardinales,
+ * y exigirle que se derive de sí misma no tiene sentido. Va por ruta exacta —
+ * si el archivo se mueve o se renombra, la exención deja de aplicar y el gate
+ * lo dice, en vez de absolver a un vecino.
+ */
+const FUENTE_DEL_CARDINAL = join("content", "rubros.ts");
+
+describe("cuántos rubros son se cuenta, no se tipea", () => {
+  /**
+   * El cardinal que la tabla TODAVÍA NO produce — el caso inalcanzable.
+   *
+   * Con cinco rubros vivos, `CUANTOS_RUBROS` vale "cinco" tanto si se deriva
+   * como si alguien lo clavó a mano: los dos coinciden, y coincidirían para
+   * siempre. Comparar valor contra valor es por eso una tautología, y se midió
+   * como tal — la mutación que clavaba el literal pasó VERDE contra la primera
+   * versión de este caso. Lo único que puede romperse es preguntarle a la
+   * función por la cantidad que todavía no existe.
+   */
+  it("sabe nombrar el rubro que todavía no entró — es el caso que el valor de hoy no puede probar", () => {
+    expect(cardinalDe(RUBROS_VIVOS.length + 1)).toBe(
+      ["cero", "uno", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho"][
+        RUBROS_VIVOS.length + 1
+      ],
+    );
+    // Y nunca devuelve vacío: una frase muda es peor que un dígito.
+    expect(cardinalDe(99)).toBe("99");
+  });
+
+  /**
+   * Y que la constante se DERIVE, medido sobre la fuente y no sobre el valor:
+   * es la mitad que el caso de arriba no puede cubrir.
+   */
+  it("la constante se deriva de la tabla: no es un literal escrito a mano", () => {
+    const fuente = soloCopy(readFileSync(join(SRC, FUENTE_DEL_CARDINAL), "utf8"));
+    const asignacion = /export const CUANTOS_RUBROS[^=]*=\s*([^;]+);/.exec(fuente);
+
+    expect(asignacion, "no encontré la definición de CUANTOS_RUBROS").not.toBeNull();
+    expect(
+      asignacion?.[1],
+      "CUANTOS_RUBROS quedó asignado a un literal. Hoy vale lo mismo que el " +
+        "derivado, así que ningún caso que compare valores lo va a notar — y el " +
+        "día que entre el sexto rubro el sitio entero sigue diciendo el número " +
+        "viejo. Se deriva de RUBROS_VIVOS.length.",
+    ).toMatch(/RUBROS_VIVOS\.length/);
+
+    // Y que el valor publicado sea de verdad el de la tabla.
+    expect(CUANTOS_RUBROS).toBe(cardinalDe(RUBROS_VIVOS.length));
+  });
+
+  it("ninguna frase del sitio tipea cuántos rubros hay", () => {
+    const culpables: string[] = [];
+    let mirados = 0;
+
+    for (const archivo of fuentes(SRC)) {
+      const relativa = archivo.slice(APP.length);
+      if (relativa.endsWith(FUENTE_DEL_CARDINAL)) continue;
+      mirados += 1;
+
+      const codigo = soloCopy(readFileSync(archivo, "utf8"));
+      codigo.split("\n").forEach((linea, i) => {
+        const m = CARDINAL_DE_RUBROS.exec(linea);
+        if (m) culpables.push(`${relativa}:${i + 1} — «${m[0]}»`);
+      });
+    }
+
+    // Fail-closed, igual que su hermano de arriba: un barrido que deja de
+    // encontrar archivos diría "ninguna frase lo tipea" sin haber mirado nada.
+    expect(
+      mirados,
+      "el barrido no abrió NI UN archivo del sitio: eso no es un sitio sano, " +
+        "es un instrumento que dejó de medir.",
+    ).toBeGreaterThan(10);
+
+    expect(
+      culpables,
+      `Hoy el alta entrega ${RUBROS_VIVOS.length} rubros y estas frases lo ` +
+        `dicen TIPEADO, así que el día que entre el siguiente van a seguir ` +
+        `diciendo el número viejo sin que nada se ponga rojo: ` +
+        `${culpables.join(" · ")}. Se deriva con \`CUANTOS_RUBROS\` (o ` +
+        `\`CUANTOS_RUBROS_CAPITAL\` si abre la oración) de "@/content/rubros".`,
     ).toEqual([]);
   });
 });

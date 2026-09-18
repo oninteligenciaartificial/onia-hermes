@@ -523,6 +523,7 @@ async function procesarWebhook(request, deps, datos) {
     notify: result?.notify,
     conversationId: result?.conversationId,
     stageAfter: result?.stageAfter,
+    esNuestra: result?.esNuestra,
   });
 
   return { status: 200, body: result, n8nEvent, avisoTelegram, usoPlataforma };

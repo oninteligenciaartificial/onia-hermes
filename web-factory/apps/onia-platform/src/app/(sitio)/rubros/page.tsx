@@ -4,6 +4,7 @@ import { EMPEZAR_URL } from "../nav";
 import { CTA_ALTA } from "../alta";
 import { Block, Btn, Kicker } from "../ui";
 import { Switcher } from "../switcher";
+import { CUANTOS_RUBROS_CAPITAL } from "@/content/rubros";
 import s from "../sitio.module.css";
 
 export const metadata: Metadata = {
@@ -161,8 +162,8 @@ export default function Rubros() {
             ))}
           </div>
           <p className={s.note} style={{ marginTop: "2em" }}>
-            Cinco rubros vivos y vendibles hoy. ¿El tuyo es otro? Escribinos y lo
-            vemos con tu caso.
+            {CUANTOS_RUBROS_CAPITAL} rubros vivos y vendibles hoy. ¿El tuyo es
+            otro? Escribinos y lo vemos con tu caso.
           </p>
         </Reveal>
       </Block>
