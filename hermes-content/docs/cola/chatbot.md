@@ -318,6 +318,46 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **~~El prospecto que vuelve dos días después y NO elige recibía los horarios ya
+      vencidos en pantalla~~ — CERRADO el 2026-09-18.**
+      (`hermes-content/deploy/vps-ops/bot/bot-engine.mjs` `handleHorario`, suite 1157/1157)
+
+      **Es la mitad que faltaba de un defecto ya arreglado DOS veces en este archivo.** Se curó
+      al que ELIGE (`slotSostenible(chosen)`, 602fba40) y al mensaje DIFERIDO (`buildFollowUp`,
+      3622a447), y quedó libre el que sólo MIRA: volver dos días después y contestar cualquier
+      otra cosa —contar el negocio, la rama más común del guion— caía en `M0b`, que re-ofrece
+      `{{slot_a}}`/`{{slot_b}}` desde `activeSlots`, que prefiere la FOTO guardada. El prospecto
+      leía "**A)** martes 15, 14:00" tres días después de ese martes, elegía uno, y recién ahí el
+      arreglo del día anterior le contestaba que había caducado: **la promesa falsa llegaba
+      primero a la pantalla.**
+
+      **La firma, que se repite y conviene nombrar:** lo que DECIDE la rama se re-mide contra los
+      vigentes (`slotsPending(config)`) y lo que HABLA lee el estado guardado.
+
+      **Reproducido antes de tocar nada**, con el estado exacto que devuelve la base
+      (`slots_offered` con el `pending: false` congelado): el bot contestaba
+      `¿Cuál te va mejor? **A)** martes 15 de septiembre, 14:00 · **B)** martes 15 de
+      septiembre, 16:00`.
+
+      **La cura refresca sólo si la foto ya no se sostiene, no en cada turno** — dentro de la
+      misma charla el cron diario puede rotar los horarios y el "A" que la persona leyó hace tres
+      minutos no puede cambiarle bajo los pies. Y pisa el estado, que es obligatorio: sin eso el
+      texto ofrece los nuevos y el próximo "A" reserva el viejo.
+
+      ⚠️ **Dos falsos verdes PROPIOS que encontró la mutación, los dos corregidos en la misma
+      vuelta:** (1) la CONDICIÓN no tenía dueño — cambiarla por `true` dejaba las 1156 pruebas
+      del bot en verde, y ahora la sostiene el caso 6; (2) el comentario que escribí afirmaba que
+      adelantar el refresco "rompería" el camino de la elección, y la mutación lo refutó
+      (`ctx.slotChoice` ya viene resuelto desde `step()`). El comentario decía al revés y quedó
+      corregido, con la condición real bajo la que sí rompería.
+
+      **Validado por 4 mutaciones:** no pisar · esquivar la condición · pisar siempre · adelantar
+      el refresco. Las tres primeras en rojo nombrando su sujeto.
+
+      ⚠️ **Commiteado y pusheado en la rama del carril, NO desplegado:** lo mergea `onia-cola` y
+      el publicador automático del VPS lo toma solo (mide `bot: PUBLICADO` a las 05:50 y 11:50 La
+      Paz de hoy). No abrí pedido de deploy: el circuito ya lo cubre.
+
 - [x] 🔴 **~~El gate que vigila qué rubros ofrece el bot cruzaba dos lados del REPO, y el
       documento que producción SIRVE le gana al archivo~~ — CERRADO el 2026-09-18.**
       (`hermes-content/deploy/vps-ops/bot/rubros-vivos.mjs`)

@@ -17,6 +17,7 @@ import {
   joinEs,
   isOutsideBusinessHours,
   slotsPending,
+  slotSostenible,
 } from "./config.mjs";
 import { enforceGuardrails, normalize, SAFE_REPLY } from "./guardrails.mjs";
 import * as intents from "./intents.mjs";
@@ -768,6 +769,37 @@ function handleHorario(ctx, base) {
   // esta eligiendo el viernes, y leerlo como "no le sirve ninguno" tira una demo ya aceptada.
   const chosen = ctx.slotChoice;
   if (!chosen) {
+    // NO ELIGIO: acá abajo el guion vuelve a PONER los dos horarios sobre la mesa, y los saca de
+    // `activeSlots`, que prefiere `state.slotsOffered` — la FOTO del dia que nacio la charla.
+    //
+    // Es la mitad que faltaba de un defecto ya arreglado dos veces en este archivo: se curo al que
+    // ELIGE (`slotSostenible(chosen)`, abajo) y al mensaje DIFERIDO (`buildFollowUp`), y quedo
+    // libre el que solo MIRA. Volver dos dias despues y contestar cualquier otra cosa —contar el
+    // negocio es la rama mas comun del guion— le pintaba "**A)** martes 15, 14:00" tres dias
+    // despues de ese martes. Recien si elegia uno se enteraba de que habia caducado: la promesa
+    // falsa llegaba primero a la pantalla.
+    //
+    // La firma es siempre la misma y vale la pena nombrarla: lo que DECIDE la rama se re-mide
+    // contra los vigentes (`slotsPending(config)`, dos lineas mas abajo) y lo que HABLA lee el
+    // estado. Aca se igualan. Pisar el estado es obligatorio, no cosmetico: sin eso el texto
+    // ofrece los nuevos y el proximo "A" reserva el viejo.
+    //
+    // Va DENTRO de `!chosen` porque solo acá se RE-OFRECE. Lo que protege al camino de la
+    // eleccion no es esta posicion —`ctx.slotChoice` ya viene resuelto desde `step()`, que lee
+    // `activeSlots` con el estado sin pisar—, asi que adelantarlo no rompe nada hoy. Se anota
+    // porque la version anterior de este comentario afirmaba lo contrario y la mutacion lo
+    // refuto: quien mueva `slotChoice` adentro de este handler tiene que releer esto, o el "A"
+    // de la foto se mapeara al "A" de hoy, que es otro dia, y le confirmaria una reunion que
+    // nunca eligio — peor que el bug.
+    //
+    // El refresco cuelga de que la foto ya NO se sostenga, no de cada turno: dentro de la misma
+    // charla el cron puede rotar los horarios y el "A" que leyo hace tres minutos no puede
+    // cambiar bajo sus pies. Esa mitad la sostiene el caso 6 del test.
+    const ahora = msg.receivedAt ? Date.parse(msg.receivedAt) : Date.now();
+    if (slots.some((slot) => !slotSostenible(slot, ahora))) {
+      base = { ...base, slotsOffered: config.slots.map((slot) => ({ ...slot })) };
+    }
+
     if (intents.noSlotWorks(msg.norm)) return handoffResult(ctx, base, "ningun_horario_le_sirve");
     // Puso SU fecha/hora sobre la mesa sin elegir A ni B ("puedo el jueves a la 1", "el primero
     // de agosto viajo"): eso lo coordina un humano. Agendarle uno de los nuestros y decirle
@@ -800,6 +832,27 @@ function handleHorario(ctx, base) {
       return finalize(ctx, base, [reply], effects, ["repregunta:horario"]);
     }
     return offScriptResult(ctx, base);
+  }
+
+  // EL HORARIO ELEGIDO SE RE-MIDE EN ESTE INSTANTE, no en el que se ofrecio. `slots` puede venir
+  // de `state.slotsOffered`, que es una FOTO: la guarda `persistence.mjs` con el `pending` que el
+  // horario tenia aquel dia y ese booleano no se recalcula nunca, asi que un horario del pasado
+  // vuelve marcado como ofrecible y todo el camino lo acepta. Medido el 2026-09-18 en produccion:
+  // doce conversaciones en `esperando_horario` guardaban horarios ya vencidos. A las viejas las
+  // salva `conversacionVencida` (14 dias), pero la ventana normal no: el generador publica a
+  // 24-48 h de anticipacion, asi que alcanza con que la persona conteste dos dias despues para
+  // que "A" confirme una reunion de anteayer y dispare la reserva.
+  //
+  // No se le asigna en silencio uno de los vigentes: el "A" de hoy no es el "A" que el vio, y
+  // confirmarle una reunion que nunca eligio seria peor que el bug. Se le dice, se le ponen los
+  // de hoy sobre la mesa y elige de nuevo. `slotsOffered` se pisa con los vigentes — es la mitad
+  // que evita que el proximo "A" vuelva a reservar el viejo.
+  if (!slotSostenible(chosen, msg.receivedAt ? Date.parse(msg.receivedAt) : Date.now())) {
+    const reOfrecido = { ...base, slotsOffered: config.slots.map((slot) => ({ ...slot })) };
+    const reply = slotsPending(config)
+      ? say("PENDING_HORARIO_SIN_HORARIOS", reOfrecido, config)
+      : say("M0_HORARIO_CADUCO", reOfrecido, config, { slot_elegido: chosen.label });
+    return finalize(ctx, reOfrecido, [reply], [], ["horario_caduco"]);
   }
 
   const next = {
