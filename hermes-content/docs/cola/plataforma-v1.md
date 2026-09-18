@@ -63,6 +63,52 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 
 ## Ahora
 
+- [x] 🔴 **CERRADO el 2026-09-18 — el dueño que conectaba su Instagram o el chat de su web no
+      podía apagarlos nunca** (`onia-platform` `3a61c3ea`, rama del carril; los tres gates
+      verdes acá Y re-corridos en el VPS sobre el árbol con `origin/master` mergeado: tsc 0 ·
+      5587 tests · eslint 0 errores).
+
+      **La cura del día anterior no viajó a los hermanos.** El 17-sep se cerró el camino de
+      vuelta del canal de WhatsApp. `chatbot-canal-meta` y `chatbot-canal-web` están en el mismo
+      directorio, escritos con el mismo molde, y quedaron igual que antes: derivado del disco,
+      los dos exportan `POST` y **no** `DELETE`, y sus tarjetas del panel
+      (`CanalMetaCard.tsx`, `CanalWebCard.tsx`) sólo llaman al `POST` — mientras
+      `CanalWhatsappCard.tsx` ya tenía su botón.
+
+      **Qué costaba:** el dueño que conectaba su página quedaba con el bot contestándole a SUS
+      clientes en SU Instagram y Messenger, en nombre de su marca, sin más salida que
+      escribirnos. Es el agujero de seguridad y, a la vez, horas de soporte por cliente — el
+      techo del negocio (`ONIA_ESTRATEGIA_DE_EMPRESA.md` §9).
+
+      **Decisiones que el arreglo fija:** el apagado se gatea **sólo por el rol, nunca por el
+      add-on** (exigirlo le cerraría la salida justo al que dio de baja el add-on o se le venció
+      el plan); Meta suelta los **tres** campos (`chatwootMetaInboxId`, `metaPageId`,
+      `metaInstagramId`) porque los dos últimos son la huella de la cuenta del dueño y
+      `encenderCanalMeta` los lee para creerse vinculado; el botón del canal web va **fuera** del
+      ternario del snippet, porque si el código no se pudo leer el canal sigue atendiendo y
+      apagarlo es más urgente, no menos.
+
+      **Gates (cierran la CLASE, no la instancia):**
+      `lib/chatbot/todo-canal-se-puede-apagar.test.ts` camina el universo del **disco**
+      (`readdirSync`, no `git ls-files`: el canal nuevo es justo el archivo sin commitear), mide
+      con los comentarios en blanco para que este archivo no se absuelva solo, y exige las **dos**
+      mitades — API y pantalla —, que el `DELETE` no pregunte por el add-on y que el botón
+      confirme antes de cortar. `lib/chatbot/apagar-canal.test.ts` exige que los tres apagados no
+      se pisen entre sí (un `data` de más apaga un canal que el dueño no pidió apagar, que es la
+      dirección simétrica del bug del slot compartido que documenta `canal-whatsapp.test.ts`) y
+      que sean idempotentes; de paso `apagarCanalWhatsapp` tampoco tenía test propio.
+
+      **Validado por 5 mutaciones**, todas en rojo nombrando su sujeto: `DELETE` quitado · botón
+      quitado · add-on exigido en el `DELETE` · Meta soltando sólo el inbox · universo recortado
+      (el gate apagándose solo).
+
+      ⚠️ **Commiteado y publicado en la rama del carril, NO desplegado:** lo mergea `onia-cola` y
+      el pedido de deploy vivo es `t_b8d00627`, esperando el `ok` de Sergio Urcullo. **No se pudo
+      mirar renderizada en producción**: el bug de MFA vencido manda toda ruta del panel a
+      `/profile?mfa=obligatorio`, y su arreglo (`b1247fb`) está en `master` pero **no** en el
+      build vivo — medido el 2026-09-18: `BUILD_ID` vivo `OFd4xCDzoTbQdThUbfzDv` =
+      `build-f078373`, con **64** commits de `master` sin publicar.
+
 - [x] ✅ **CERRADO el 2026-09-17 — el negocio de cualquier plan podía crearse un segundo
       administrador gratis: la misma pantalla tenía DOS botones y sólo uno preguntaba el plan.**
 

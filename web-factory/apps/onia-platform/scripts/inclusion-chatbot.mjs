@@ -35,10 +35,22 @@
  *      promesa que el producto no cumple, que se descubre cobrando.
  *
  * La (3) y la mitad positiva de la (1) las contesta `promesa-inclusion.mjs`, el módulo puro que
- * el carril del bot escribió para su gemelo (`hermes-content/deploy/vps-ops/bot/`). Se IMPORTA, no
- * se copia: dos detectores hermanos que divergen —uno se arregla y el otro no— es la falla que
- * este repo ya pagó. Lo que se agrega acá es la (2), que el bot no necesita porque enumera planes
- * en cada frase y el sitio, en cambio, contesta preguntas generales.
+ * el carril del bot escribió para su gemelo (`hermes-content/deploy/vps-ops/bot/`). Lo que se
+ * agrega acá es la (2), que el bot no necesita porque enumera planes en cada frase y el sitio, en
+ * cambio, contesta preguntas generales.
+ *
+ * 🔴 ESE MODULO ES UN ESPEJO BYTE A BYTE, y acá decía «se IMPORTA, no se copia» — corregido el
+ * 2026-09-17, porque esa regla mandaba al revés. Importarlo con `../../../../hermes-content/...`
+ * es lo que estuvo escrito, y es imposible en producción: el publicador de la landing empaqueta
+ * con `git archive` SOLO el subárbol `web-factory/`, así que ese import resuelve en el repo y NO
+ * en el stage. La cadena y el CI pasaban verdes —acá el hermano existe— y la publicación de
+ * onia.com.bo murió dos corridas seguidas con `ERR_MODULE_NOT_FOUND`.
+ *
+ * El miedo que motivaba aquella regla es real y sigue cubierto, pero por un gate y no por una
+ * frase: dos detectores hermanos que divergen es la falla que este repo ya pagó, así que
+ * `promesa-inclusion-espejo.test.ts` exige que las dos copias sean idénticas y se pone rojo si
+ * alguien edita una sola. Y que ningún archivo de `web-factory/` vuelva a importar hacia afuera
+ * del subárbol lo sostiene `imports-que-viajan-al-stage.test.ts`, derivado del disco.
  *
  * POR QUE NO ES UN TEST DE `prebuild`. El producto es otro repositorio y no está en este worktree:
  * un test que lo exigiera se pondría rojo por AMBIENTE en toda máquina que no lo tenga, y el
@@ -63,7 +75,7 @@ import {
   mencionesDePlanes,
   normalizar,
   revisarPromesaDeInclusion,
-} from "../../../../hermes-content/deploy/vps-ops/bot/promesa-inclusion.mjs";
+} from "./promesa-inclusion.mjs";
 import {
   FUENTE_ADDONS,
   FUENTE_LIMITES,

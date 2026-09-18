@@ -1,0 +1,996 @@
+{
+ "ok": true,
+ "segments": [],
+ "words": [
+  {
+   "start": 0,
+   "end": 0.11,
+   "word": " A"
+  },
+  {
+   "start": 0.11,
+   "end": 0.21,
+   "word": " mi"
+  },
+  {
+   "start": 0.21,
+   "end": 0.55,
+   "word": " inteligencia"
+  },
+  {
+   "start": 0.55,
+   "end": 1.01,
+   "word": " artificial"
+  },
+  {
+   "start": 1.01,
+   "end": 1.29,
+   "word": " le"
+  },
+  {
+   "start": 1.29,
+   "end": 1.67,
+   "word": " enseñé"
+  },
+  {
+   "start": 1.67,
+   "end": 1.93,
+   "word": " una"
+  },
+  {
+   "start": 1.93,
+   "end": 2.15,
+   "word": " sola"
+  },
+  {
+   "start": 2.15,
+   "end": 2.33,
+   "word": " vez"
+  },
+  {
+   "start": 2.33,
+   "end": 2.49,
+   "word": " como"
+  },
+  {
+   "start": 2.49,
+   "end": 2.85,
+   "word": " trabajo,"
+  },
+  {
+   "start": 2.95,
+   "end": 3.07,
+   "word": " no"
+  },
+  {
+   "start": 3.07,
+   "end": 3.19,
+   "word": " se"
+  },
+  {
+   "start": 3.19,
+   "end": 3.27,
+   "word": " lo"
+  },
+  {
+   "start": 3.27,
+   "end": 3.37,
+   "word": " voy"
+  },
+  {
+   "start": 3.37,
+   "end": 3.49,
+   "word": " a"
+  },
+  {
+   "start": 3.49,
+   "end": 3.87,
+   "word": " repetir"
+  },
+  {
+   "start": 3.87,
+   "end": 4.17,
+   "word": " nunca"
+  },
+  {
+   "start": 4.17,
+   "end": 4.55,
+   "word": " mas."
+  },
+  {
+   "start": 4.58,
+   "end": 4.73,
+   "word": " Y"
+  },
+  {
+   "start": 4.73,
+   "end": 4.97,
+   "word": " esto"
+  },
+  {
+   "start": 4.97,
+   "end": 5.45,
+   "word": " no"
+  },
+  {
+   "start": 5.45,
+   "end": 5.55,
+   "word": " es"
+  },
+  {
+   "start": 5.55,
+   "end": 5.83,
+   "word": " magia,"
+  },
+  {
+   "start": 6.11,
+   "end": 6.23,
+   "word": " es"
+  },
+  {
+   "start": 6.23,
+   "end": 6.43,
+   "word": " solo"
+  },
+  {
+   "start": 6.43,
+   "end": 6.61,
+   "word": " un"
+  },
+  {
+   "start": 6.61,
+   "end": 6.93,
+   "word": " archivo"
+  },
+  {
+   "start": 6.93,
+   "end": 7.09,
+   "word": " de"
+  },
+  {
+   "start": 7.09,
+   "end": 7.29,
+   "word": " texto"
+  },
+  {
+   "start": 7.29,
+   "end": 7.47,
+   "word": " que"
+  },
+  {
+   "start": 7.47,
+   "end": 7.61,
+   "word": " se"
+  },
+  {
+   "start": 7.61,
+   "end": 7.79,
+   "word": " llama"
+  },
+  {
+   "start": 7.79,
+   "end": 8.29,
+   "word": " skills,"
+  },
+  {
+   "start": 8.39,
+   "end": 8.55,
+   "word": " se"
+  },
+  {
+   "start": 8.55,
+   "end": 8.67,
+   "word": " lo"
+  },
+  {
+   "start": 8.67,
+   "end": 8.89,
+   "word": " enviás"
+  },
+  {
+   "start": 8.89,
+   "end": 9.19,
+   "word": " a"
+  },
+  {
+   "start": 9.19,
+   "end": 9.43,
+   "word": " Claude"
+  },
+  {
+   "start": 9.43,
+   "end": 9.61,
+   "word": " Code"
+  },
+  {
+   "start": 9.61,
+   "end": 9.91,
+   "word": " y"
+  },
+  {
+   "start": 9.91,
+   "end": 9.99,
+   "word": " le"
+  },
+  {
+   "start": 9.99,
+   "end": 10.14,
+   "word": " decís"
+  },
+  {
+   "start": 10.31,
+   "end": 10.46,
+   "word": " que"
+  },
+  {
+   "start": 10.46,
+   "end": 10.68,
+   "word": " puede"
+  },
+  {
+   "start": 10.68,
+   "end": 11.0,
+   "word": " hacer,"
+  },
+  {
+   "start": 11.1,
+   "end": 11.16,
+   "word": " que"
+  },
+  {
+   "start": 11.16,
+   "end": 11.32,
+   "word": " está"
+  },
+  {
+   "start": 11.32,
+   "end": 11.84,
+   "word": " prohibido"
+  },
+  {
+   "start": 11.84,
+   "end": 12.14,
+   "word": " y"
+  },
+  {
+   "start": 12.14,
+   "end": 12.26,
+   "word": " que"
+  },
+  {
+   "start": 12.26,
+   "end": 12.56,
+   "word": " reglas"
+  },
+  {
+   "start": 12.56,
+   "end": 12.8,
+   "word": " tiene"
+  },
+  {
+   "start": 12.8,
+   "end": 12.96,
+   "word": " que"
+  },
+  {
+   "start": 12.96,
+   "end": 13.22,
+   "word": " seguir"
+  },
+  {
+   "start": 13.22,
+   "end": 13.48,
+   "word": " si"
+  },
+  {
+   "start": 13.48,
+   "end": 13.6,
+   "word": " o"
+  },
+  {
+   "start": 13.6,
+   "end": 13.74,
+   "word": " si"
+  },
+  {
+   "start": 13.74,
+   "end": 13.84,
+   "word": " al"
+  },
+  {
+   "start": 13.84,
+   "end": 14.22,
+   "word": " iniciar"
+  },
+  {
+   "start": 14.22,
+   "end": 14.34,
+   "word": " un"
+  },
+  {
+   "start": 14.34,
+   "end": 14.7,
+   "word": " proyecto"
+  },
+  {
+   "start": 14.7,
+   "end": 15.2,
+   "word": " o"
+  },
+  {
+   "start": 15.2,
+   "end": 15.3,
+   "word": " al"
+  },
+  {
+   "start": 15.3,
+   "end": 15.54,
+   "word": " hacer"
+  },
+  {
+   "start": 15.54,
+   "end": 15.88,
+   "word": " una"
+  },
+  {
+   "start": 15.88,
+   "end": 16.14,
+   "word": " tarea."
+  },
+  {
+   "start": 16.44,
+   "end": 16.59,
+   "word": " ejemplo,"
+  },
+  {
+   "start": 16.69,
+   "end": 16.81,
+   "word": " yo"
+  },
+  {
+   "start": 16.81,
+   "end": 17.01,
+   "word": " tengo"
+  },
+  {
+   "start": 17.01,
+   "end": 17.27,
+   "word": " una"
+  },
+  {
+   "start": 17.27,
+   "end": 17.47,
+   "word": " para"
+  },
+  {
+   "start": 17.47,
+   "end": 17.73,
+   "word": " enviar"
+  },
+  {
+   "start": 17.73,
+   "end": 18.39,
+   "word": " propuestas"
+  },
+  {
+   "start": 18.39,
+   "end": 18.61,
+   "word": " a"
+  },
+  {
+   "start": 18.61,
+   "end": 19.23,
+   "word": " cliente,"
+  },
+  {
+   "start": 19.39,
+   "end": 19.51,
+   "word": " el"
+  },
+  {
+   "start": 19.51,
+   "end": 19.81,
+   "word": " sabe"
+  },
+  {
+   "start": 19.81,
+   "end": 20.23,
+   "word": " que"
+  },
+  {
+   "start": 20.23,
+   "end": 20.57,
+   "word": " precios"
+  },
+  {
+   "start": 20.57,
+   "end": 20.93,
+   "word": " tengo,"
+  },
+  {
+   "start": 21.01,
+   "end": 21.25,
+   "word": " como"
+  },
+  {
+   "start": 21.25,
+   "end": 21.75,
+   "word": " le"
+  },
+  {
+   "start": 21.75,
+   "end": 22.03,
+   "word": " escribo"
+  },
+  {
+   "start": 22.03,
+   "end": 22.11,
+   "word": " a"
+  },
+  {
+   "start": 22.11,
+   "end": 22.21,
+   "word": " los"
+  },
+  {
+   "start": 22.21,
+   "end": 22.73,
+   "word": " clientes"
+  },
+  {
+   "start": 22.73,
+   "end": 22.87,
+   "word": " y"
+  },
+  {
+   "start": 22.87,
+   "end": 23.21,
+   "word": " simplemente"
+  },
+  {
+   "start": 23.21,
+   "end": 24.01,
+   "word": " le"
+  },
+  {
+   "start": 24.01,
+   "end": 24.19,
+   "word": " tengo"
+  },
+  {
+   "start": 24.19,
+   "end": 24.33,
+   "word": " que"
+  },
+  {
+   "start": 24.33,
+   "end": 24.59,
+   "word": " enviar"
+  },
+  {
+   "start": 24.59,
+   "end": 25.11,
+   "word": " el"
+  },
+  {
+   "start": 25.11,
+   "end": 25.25,
+   "word": " nuevo"
+  },
+  {
+   "start": 25.25,
+   "end": 25.57,
+   "word": " nombre"
+  },
+  {
+   "start": 25.57,
+   "end": 25.71,
+   "word": " del"
+  },
+  {
+   "start": 25.71,
+   "end": 26.31,
+   "word": " cliente"
+  },
+  {
+   "start": 26.31,
+   "end": 26.45,
+   "word": " y"
+  },
+  {
+   "start": 26.45,
+   "end": 26.63,
+   "word": " el"
+  },
+  {
+   "start": 26.63,
+   "end": 27.07,
+   "word": " ya"
+  },
+  {
+   "start": 27.07,
+   "end": 27.31,
+   "word": " sabe"
+  },
+  {
+   "start": 27.31,
+   "end": 27.53,
+   "word": " como"
+  },
+  {
+   "start": 27.53,
+   "end": 28.19,
+   "word": " desarrollar"
+  },
+  {
+   "start": 28.19,
+   "end": 28.43,
+   "word": " lo"
+  },
+  {
+   "start": 28.43,
+   "end": 28.69,
+   "word": " demás"
+  },
+  {
+   "start": 28.69,
+   "end": 29.13,
+   "word": " sin"
+  },
+  {
+   "start": 29.13,
+   "end": 29.23,
+   "word": " que"
+  },
+  {
+   "start": 29.23,
+   "end": 29.31,
+   "word": " se"
+  },
+  {
+   "start": 29.31,
+   "end": 29.43,
+   "word": " lo"
+  },
+  {
+   "start": 29.43,
+   "end": 29.57,
+   "word": " tenga"
+  },
+  {
+   "start": 29.57,
+   "end": 29.73,
+   "word": " que"
+  },
+  {
+   "start": 29.73,
+   "end": 29.93,
+   "word": " volver"
+  },
+  {
+   "start": 29.93,
+   "end": 30.07,
+   "word": " a"
+  },
+  {
+   "start": 30.07,
+   "end": 30.59,
+   "word": " repetir"
+  },
+  {
+   "start": 30.59,
+   "end": 30.73,
+   "word": " o"
+  },
+  {
+   "start": 30.73,
+   "end": 30.83,
+   "word": " a"
+  },
+  {
+   "start": 30.83,
+   "end": 30.98,
+   "word": " enseñar."
+  },
+  {
+   "start": 31.47,
+   "end": 31.62,
+   "word": " Y"
+  },
+  {
+   "start": 31.62,
+   "end": 31.88,
+   "word": " como"
+  },
+  {
+   "start": 31.88,
+   "end": 32.42,
+   "word": " se"
+  },
+  {
+   "start": 32.42,
+   "end": 32.78,
+   "word": " invocás"
+  },
+  {
+   "start": 32.78,
+   "end": 33.04,
+   "word": " este"
+  },
+  {
+   "start": 33.04,
+   "end": 33.32,
+   "word": " tipo"
+  },
+  {
+   "start": 33.32,
+   "end": 33.42,
+   "word": " de"
+  },
+  {
+   "start": 33.42,
+   "end": 33.64,
+   "word": " skills,"
+  },
+  {
+   "start": 33.74,
+   "end": 34.08,
+   "word": " simplemente"
+  },
+  {
+   "start": 34.08,
+   "end": 34.9,
+   "word": " escribís"
+  },
+  {
+   "start": 34.9,
+   "end": 35.44,
+   "word": " slash"
+  },
+  {
+   "start": 35.44,
+   "end": 35.78,
+   "word": " y"
+  },
+  {
+   "start": 35.78,
+   "end": 35.86,
+   "word": " el"
+  },
+  {
+   "start": 35.86,
+   "end": 36.12,
+   "word": " nombre"
+  },
+  {
+   "start": 36.12,
+   "end": 36.39,
+   "word": " de"
+  },
+  {
+   "start": 36.39,
+   "end": 36.49,
+   "word": " tu"
+  },
+  {
+   "start": 36.49,
+   "end": 36.75,
+   "word": " skill"
+  },
+  {
+   "start": 36.75,
+   "end": 37.05,
+   "word": " o"
+  },
+  {
+   "start": 37.05,
+   "end": 37.21,
+   "word": " a"
+  },
+  {
+   "start": 37.21,
+   "end": 37.29,
+   "word": " la"
+  },
+  {
+   "start": 37.29,
+   "end": 37.45,
+   "word": " hora"
+  },
+  {
+   "start": 37.45,
+   "end": 37.57,
+   "word": " de"
+  },
+  {
+   "start": 37.57,
+   "end": 37.63,
+   "word": " que"
+  },
+  {
+   "start": 37.63,
+   "end": 38.01,
+   "word": " escribas"
+  },
+  {
+   "start": 38.01,
+   "end": 38.45,
+   "word": " la"
+  },
+  {
+   "start": 38.45,
+   "end": 38.69,
+   "word": " palabra"
+  },
+  {
+   "start": 38.69,
+   "end": 39.37,
+   "word": " propuesta,"
+  },
+  {
+   "start": 39.45,
+   "end": 39.73,
+   "word": " Claude"
+  },
+  {
+   "start": 39.73,
+   "end": 39.91,
+   "word": " va"
+  },
+  {
+   "start": 39.91,
+   "end": 40.05,
+   "word": " a"
+  },
+  {
+   "start": 40.05,
+   "end": 40.41,
+   "word": " detectar"
+  },
+  {
+   "start": 40.41,
+   "end": 40.53,
+   "word": " que"
+  },
+  {
+   "start": 40.53,
+   "end": 40.75,
+   "word": " tiene"
+  },
+  {
+   "start": 40.75,
+   "end": 40.85,
+   "word": " que"
+  },
+  {
+   "start": 40.85,
+   "end": 41.07,
+   "word": " usar"
+  },
+  {
+   "start": 41.07,
+   "end": 41.55,
+   "word": " ese"
+  },
+  {
+   "start": 41.55,
+   "end": 41.85,
+   "word": " skill,"
+  },
+  {
+   "start": 41.95,
+   "end": 42.35,
+   "word": " Claude"
+  },
+  {
+   "start": 42.35,
+   "end": 42.93,
+   "word": " Codex,"
+  },
+  {
+   "start": 42.93,
+   "end": 43.27,
+   "word": " o"
+  },
+  {
+   "start": 43.27,
+   "end": 43.51,
+   "word": " el"
+  },
+  {
+   "start": 43.51,
+   "end": 43.81,
+   "word": " editor"
+  },
+  {
+   "start": 43.81,
+   "end": 44.01,
+   "word": " de"
+  },
+  {
+   "start": 44.01,
+   "end": 44.31,
+   "word": " código"
+  },
+  {
+   "start": 44.31,
+   "end": 44.85,
+   "word": " que"
+  },
+  {
+   "start": 44.85,
+   "end": 45.63,
+   "word": " utilices"
+  },
+  {
+   "start": 45.63,
+   "end": 45.81,
+   "word": " o"
+  },
+  {
+   "start": 45.81,
+   "end": 45.93,
+   "word": " el"
+  },
+  {
+   "start": 45.93,
+   "end": 46.15,
+   "word": " agente de"
+  },
+  {
+   "start": 46.15,
+   "end": 46.83,
+   "word": " inteligencia"
+  },
+  {
+   "start": 46.83,
+   "end": 47.33,
+   "word": " artificial"
+  },
+  {
+   "start": 47.33,
+   "end": 47.67,
+   "word": " que"
+  },
+  {
+   "start": 47.67,
+   "end": 47.89,
+   "word": " usés."
+  },
+  {
+   "start": 47.89,
+   "end": 48.04,
+   "word": " Y"
+  },
+  {
+   "start": 48.04,
+   "end": 48.12,
+   "word": " si"
+  },
+  {
+   "start": 48.12,
+   "end": 48.32,
+   "word": " quieres"
+  },
+  {
+   "start": 48.32,
+   "end": 48.62,
+   "word": " aprender"
+  },
+  {
+   "start": 48.62,
+   "end": 48.84,
+   "word": " a"
+  },
+  {
+   "start": 48.84,
+   "end": 49.1,
+   "word": " crear"
+  },
+  {
+   "start": 49.1,
+   "end": 49.46,
+   "word": " la"
+  },
+  {
+   "start": 49.46,
+   "end": 49.8,
+   "word": " tuya"
+  },
+  {
+   "start": 49.8,
+   "end": 50.74,
+   "word": " personalizada,"
+  },
+  {
+   "start": 50.84,
+   "end": 51.2,
+   "word": " comenta"
+  },
+  {
+   "start": 51.2,
+   "end": 51.68,
+   "word": " la"
+  },
+  {
+   "start": 51.68,
+   "end": 52.0,
+   "word": " palabra"
+  },
+  {
+   "start": 52.0,
+   "end": 52.52,
+   "word": " skill"
+  },
+  {
+   "start": 52.52,
+   "end": 53.06,
+   "word": " que"
+  },
+  {
+   "start": 53.06,
+   "end": 53.14,
+   "word": " en"
+  },
+  {
+   "start": 53.14,
+   "end": 53.24,
+   "word": " mi"
+  },
+  {
+   "start": 53.24,
+   "end": 53.52,
+   "word": " página"
+  },
+  {
+   "start": 53.52,
+   "end": 53.82,
+   "word": " web"
+  },
+  {
+   "start": 53.82,
+   "end": 54.12,
+   "word": " tengo"
+  },
+  {
+   "start": 54.12,
+   "end": 54.34,
+   "word": " una"
+  },
+  {
+   "start": 54.34,
+   "end": 54.58,
+   "word": " guía"
+  },
+  {
+   "start": 54.58,
+   "end": 54.88,
+   "word": " paso"
+  },
+  {
+   "start": 54.88,
+   "end": 55.0,
+   "word": " a"
+  },
+  {
+   "start": 55.0,
+   "end": 55.18,
+   "word": " paso"
+  },
+  {
+   "start": 55.18,
+   "end": 55.34,
+   "word": " de"
+  },
+  {
+   "start": 55.34,
+   "end": 55.48,
+   "word": " cómo"
+  },
+  {
+   "start": 55.48,
+   "end": 55.78,
+   "word": " hacerlo."
+  }
+ ]
+}

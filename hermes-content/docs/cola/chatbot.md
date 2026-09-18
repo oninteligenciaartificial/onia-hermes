@@ -318,6 +318,116 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **~~Un módulo del bot, importado por el sitio, trababa la publicación de onia.com.bo:
+      el import resuelve en el repo y NO en el stage~~ — CERRADO el 2026-09-17 en el repo
+      (`web-factory/apps/onia-platform/scripts/promesa-inclusion.mjs` + dos gates). Llega solo al
+      mergear a `main`: la landing la publica el cron `50 */3` del VPS, no hace falta pedir deploy.**
+
+      **Cómo apareció.** Midiendo producción al arrancar la vuelta, no leyendo la cola:
+      `/var/log/onia-publicar-solo.log` decía `landing: FALLO` en las dos últimas corridas
+      (17:50 y 20:50 La Paz del 17-sep). El `--dry-run` del publicador, en cambio, contestaba
+      *"YA ESTA PUBLICADO"* — la contradicción era la pista.
+
+      **La causa.** `scripts/inclusion-chatbot.mjs` (del carril `web-venta`) importaba, con cuatro
+      saltos de directorio hacia arriba, el archivo
+      `hermes-content/deploy/vps-ops/bot/promesa-inclusion.mjs`, que es **mío**
+      (`943735cb`). Pero el publicador arma el stage con
+      `git archive origin/main web-factory/apps web-factory/packages …`: al stage viaja **sólo**
+      el subárbol `web-factory/`. El import resuelve perfecto en el repo y no existe en el stage,
+      así que el `prebuild` moría con `ERR_MODULE_NOT_FOUND` y el publicador salía por
+      `ERR: el build falló, no publico`.
+
+      **Falla EN VERDE para todos los carriles**, que es lo caro: la cadena de `onia-hermes` y el
+      CI corren donde el hermano existe, así que nadie ve nada. El único testigo es una línea
+      `landing: FALLO` en un log del VPS que no escala a nadie — la misma forma en que el bot
+      estuvo cuatro días sin publicar.
+
+      **Lo que estaba escrito mandaba al revés.** El módulo del sitio decía, textual, *"Se IMPORTA,
+      no se copia: dos detectores hermanos que divergen es la falla que este repo ya pagó"*. El
+      miedo es real, pero el remedio elegido era imposible en producción. Corregido: el detector
+      es un **espejo byte a byte** dentro de `web-factory/`, y la divergencia la impide un gate en
+      vez de una frase.
+
+      **Reproducción en un comando** (sin `node_modules`, 3 s):
+      ```
+      rm -rf /tmp/s && mkdir -p /tmp/s && git archive --format=tar origin/main \
+        web-factory/apps/onia-platform/scripts web-factory/apps/onia-platform/src | tar -x -C /tmp/s
+      cd /tmp/s/web-factory/apps/onia-platform && node -e "import('./scripts/inclusion-chatbot.mjs')"
+      ```
+
+      **Prueba de que está cerrado.** El mismo `npm run prebuild` que corre el publicador, sobre un
+      stage armado con las rutas del `git archive` y **sin** `hermes-content`: `91 passed`,
+      `1322 passed | 4 skipped`, cero fallos. Antes, ahí, moría.
+
+      **Los dos gates, validados por mutación** (las tres dieron rojo, no ausencia de rojo):
+      - `promesa-inclusion-espejo.test.ts` — exige que las dos copias sean idénticas. Vive del lado
+        del espejo porque es el único lado que viaja al stage; donde no puede medir (falta el
+        subárbol hermano) lo dice, y la condición la deriva del disco, no de un env.
+      - `imports-que-viajan-al-stage.test.ts` — **cierra la clase**: ningún archivo de
+        `web-factory/` puede importar hacia afuera del subárbol. Universo caminado del disco
+        (`readdirSync`, no `git ls-files`: el archivo recién escrito y sin commitear es justo el
+        sujeto que hay que cazar). Mutación 2 lo confirmó sembrando un `.mjs` sin commitear.
+
+- [x] 🔴 **~~Un desconocido escribía, el bot lo atendía bien, y NADIE en Onia se enteraba de que
+      existió~~ — CERRADO el 2026-09-17, `scripts/vigia_sin_respuesta.mjs`, llega solo al
+      mergear a `main` (el cron del VPS lo lee del clon de main, no necesita deploy).**
+
+      **Cómo apareció.** Midiendo el objetivo del carril contra producción: `objetivo_visible.mjs`
+      listó una conversación que no estaba antes, la **58**, de HOY 18:50 La Paz. Es un lead
+      REAL: el texto (*"Hola, vengo de la web de Onia..."*) es el que la web pone en el link
+      `wa.me`, o sea alguien apretó el botón de WhatsApp en `onia.com.bo`. El bot le contestó
+      bien, en 2 s, y le ofreció dos horarios de demo.
+
+      **El agujero.** Ninguno de los dos vigías que ya existían puede ver esa conversación,
+      y los dos por el mismo motivo: **ambos exigen que el bot se haya CALLADO.**
+      `seleccionarColgados` descarta toda conversación cuyo último mensaje sea saliente
+      (`// ya le contestaron`), y `seleccionarEsperandoHumano` sólo mira las que traen la
+      promesa de `M5`. Una conversación donde el bot hizo bien su trabajo y la persona no
+      eligió ninguno de los dos horarios **no es sujeto de nadie**.
+
+      **La dirección del cambio es lo que lo vuelve grave: el bot apagó el único aviso de lead
+      nuevo que había.** Antes de que contestara, ese mismo desconocido quedaba sin respuesta
+      y disparaba el vigía. Ahora el bot contesta SIEMPRE, así que el vigía no se dispara
+      NUNCA. Una capacidad nueva se llevó puesta la cobertura de una superficie que ya estaba
+      cubierta, en silencio y con todo verde.
+
+      **Medido, no supuesto — y con DOS sujetos reales, cero falsos positivos.** Derivando el
+      universo de la base de Chatwoot (no de una lista a mano): de las 15 conversaciones de los
+      inboxes 4 y 5, las que caen acá son exactamente dos, y las dos son desconocidos:
+
+      - `conv 58` · WhatsApp · hace 3 h · `+59175755019` — entró por el botón `wa.me` de la web.
+      - `conv 38` · web · **hace 20 DÍAS** · `billowing-shadow-768` — escribió *"hola"* el 29-ago,
+        el bot le contestó, y **nadie supo nunca que esa persona existió**.
+
+      Las otras 13 quedan afuera solas: 5 ya las toma el vigía de arriba, 3 son sondas del
+      propio carril (`Sonda QA carril chatbot`), la 11 es Sergio Urcullo (teléfono propio), y
+      el resto no tiene un solo entrante.
+
+      **El arreglo.** Tercera mirada `seleccionarEsperandoDecision()`, pura, hermana de las dos
+      que ya estaban. Excluye por construcción lo que ya es de las otras (si la persona volvió a
+      escribir, o si el bot prometió un humano): *dos avisos por la misma conversación es como
+      se le deja de creer a un vigía*. El aviso va en su **propio bloque** — al que nadie
+      contestó hay que contestarle, al que espera un humano el bot ya se lo prometió, y a éste
+      no se le debe nada: lo único que pasa es que Sergio Urcullo no sabía que existía.
+
+      **La baranda contra el ruido, que es lo que apaga un vigía:** si una PERSONA de Onia ya
+      tomó la conversación, no se avisa. Eso no se adivina por `sender_id` (sería hardcodear el
+      agente): lo dice `human_took_over`, que escribe el motor en
+      `onia_center.bot_conversations` y es el único dato que sabe el hecho. Va **tri-estado** —
+      si no se pudo preguntar al motor, se avisa igual **con la salvedad escrita en la línea de
+      ese sujeto**, porque callarse por no haber podido medir es perder el lead, que es el lado
+      caro. Y una conversación sin fila en el motor es *"no se sabe"*, nunca *"nadie la tomó"*.
+
+      **Verificado en vivo, no sólo en test:** `node scripts/vigia_sin_respuesta.mjs` (seco)
+      pasó de `7 colgado(s) — 7 sin respuesta` a `5 sin respuesta · 0 esperando a un humano
+      prometido · 2 atendido(s) por el bot que nadie más vio`. Los 10 casos nuevos validados
+      **por mutación**: los cinco esquives (no correr la mirada, no filtrar por `humanoTomo`,
+      no excluir la promesa, no exigir un entrante, borrar la salvedad) dan `fail 1` cada uno.
+
+      **Hermano curado en la misma vuelta:** la salida del CLI se había quedado con dos
+      categorías y llamaba *"esperando respuesta"* a alguien a quien el bot SÍ le había
+      contestado — el mismo hecho falso que el aviso de Telegram evita a propósito.
+
 - [x] 🔴 **~~El dueño que conectaba su WhatsApp no tenía NINGUNA forma de desconectarlo~~ —
       CERRADO el 2026-09-17 en `onia-platform`, rama `claude/chatbots-platform-review-0d1d09`,
       PENDIENTE DE DESPLIEGUE de la plataforma.**
@@ -352,25 +462,63 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
       Gates: `npx tsc --noEmit` 0 · vitest de los dos archivos 36/36 · `eslint` 0.
 
-- [ ] **La misma salida falta en los otros DOS canales** (`chatbot-canal-web`,
-      `chatbot-canal-meta`) — la clase quedó cerrada en uno solo, a propósito, por tiempo de
-      vuelta.
+- [x] **~~La misma salida falta en los otros DOS canales~~ — LO CERRÓ OTRO CARRIL el
+      2026-09-18 (`onia-platform` `3a61c3ea`), y esta línea era un pendiente FANTASMA.**
 
-      Reproducción en 30 s, desde `/root/loops/onia-platform-chatbot`:
+      Contado, no supuesto — los TRES canales exportan `DELETE`, incluido
+      `onia-platform/app/api/chatbot-canal-web/route.ts`:
 
       ```bash
+      cd /root/loops/onia-platform-chatbot
       for f in app/api/chatbot-canal-*/route.ts; do echo "--- $f"; \
         grep -nE '^export async function (GET|POST|PATCH|DELETE|PUT)' "$f"; done
       ```
 
-      Hoy `canal-web` y `canal-meta` siguen sin `DELETE`. **No son urgentes como el de WhatsApp
-      y el motivo se mide, no se supone:** el de Meta está detrás de la bandera
-      `META_PAGES_PUBLIC`, apagada hasta el App Review (lo fija
-      `onia-platform/app/(dashboard)/settings/chatbot/canal-meta-bandera.test.ts`), así que hoy no se lo
-      muestra a ningún
-      cliente; el web es el widget del sitio del propio cliente. El patrón a copiar es
-      `apagarCanalWhatsapp` en `onia-platform/lib/chatbot/canal-whatsapp.ts` — incluida la baranda de no
-      preguntar por el add-on en la salida.
+      Copió también la baranda que era la mitad que importaba: el `DELETE` se gatea por el ROL
+      y **no** por el add-on, con el motivo escrito al lado.
+
+- [x] 🔴 **~~Una org se llevaba el inbox —y las conversaciones— que otra había APAGADO~~ —
+      CERRADO el 2026-09-18 en `onia-platform` `abe6a2c3` (rama
+      `claude/chatbots-platform-review-0d1d09`, pusheada), PENDIENTE DE DESPLIEGUE.**
+
+      **Cómo apareció.** Auditando el commit de arriba con la pregunta de esta clase: *cerrar
+      una mitad, ¿rompe a la otra?* El camino de vuelta es nuevo; el ENCENDIDO es viejo y fue
+      escrito **bajo una premisa que el apagado acababa de invalidar**, y que estaba escrita
+      en el propio código: adoptaba cualquier inbox homónimo *LIBRE* porque *«es, por
+      definición, el único que pudo haber quedado a medias para esta org»*. Cierto mientras la
+      única forma de que un inbox quedara suelto fuera un alta abortada.
+
+      **El defecto.** Apagar suelta `clinic_settings.chatwootInboxId` y deja el inbox vivo en
+      Chatwoot — a propósito, porque las conversaciones son del cliente. Queda **libre y con el
+      nombre del negocio**. La siguiente org homónima (*«Clinica Dental» hay muchas*, lo dice
+      el comentario del producto) lo adoptaba al encender el suyo: veía en su bandeja las
+      conversaciones de los clientes del otro, y el motor le resolvía a **ella** lo que entrara
+      por el widget que el primero todavía tiene pegado en su sitio. El `@@unique` de la
+      columna no protege: la fila quedó en `null`.
+
+      **La cura: la identidad del dueño viaja EN EL DATO.** El inbox nace sellado
+      (`<nombre> [onia:<orgId>]`) y sólo se adopta el que lleva **mi** sello → falla CERRADO.
+      Apagar sella el legado antes de soltarlo, y ese paso es *best-effort* a propósito: la
+      salida nunca depende de la red (si Chatwoot no contesta, el dueño queda desconectado
+      igual y sólo pierde recuperar ESA bandeja — campo `sellado`).
+
+      **Lo que se paga, dicho:** ya no se readopta un alta abortada anterior al sello. Cuesta
+      un inbox vacío huérfano, contra una fuga entre inquilinos. Y el nombre sellado no lo ve
+      nadie: el único lector es `canal-web.ts`.
+
+      Rojo primero por el motivo correcto (`expected 4 not to be 4`) y validado por mutación:
+      reponer `i.name === org.name` deja en rojo 1 caso, el de la fuga.
+      Gate: `onia-platform/lib/chatbot/inbox-apagado-no-se-lo-lleva-otra-org.test.ts`.
+      Gates: `tsc` 0 · vitest 5602 · `eslint` 0 errores.
+
+      **Hermano curado en la misma vuelta:** `onia-platform/lib/subscription/donde-esta-incluida-no-se-tipea.test.ts`
+      caminaba el disco y enumeraba la **siembra efímera de un gate vecino** (la carpeta
+      `__sonda-url-muerta__` que crea y borra
+      `onia-platform/lib/platform/no-mandamos-a-una-url-que-no-existe.test.ts`), leyéndola
+      después de que su `finally` la borró:
+      `ENOENT` intermitente, en rojo, sobre producto sano — y con la cadena trabando el merge
+      de TODOS los carriles. Un sujeto que desaparece mientras lo leés no es superficie de
+      cliente.
 
 - [x] 🔴 **~~El watchdog del bot declaraba «bot MUDO» con UN parpadeo de 5 s, y su log no sabía
       decir que se había recuperado~~ — CERRADO el 2026-09-17, commiteado y PENDIENTE DE
