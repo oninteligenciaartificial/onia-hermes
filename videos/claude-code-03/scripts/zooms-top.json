@@ -1,57 +1,8 @@
 {
  "zooms": [
   {
-   "start": 55.91,
-   "end": 62.63,
-   "from": 1,
-   "to": 1.26,
-   "anchor": "top"
-  },
-  {
-   "start": 62.64,
-   "end": 69.31,
-   "from": 1.26,
-   "to": 1,
-   "anchor": "top"
-  },
-  {
-   "start": 116.14,
-   "end": 124.64,
-   "from": 1,
-   "to": 1.24,
-   "anchor": "top"
-  },
-  {
-   "start": 124.65,
-   "end": 133.14,
-   "from": 1.24,
-   "to": 1,
-   "anchor": "top"
-  },
-  {
-   "start": 191.65,
-   "end": 197.76,
-   "from": 1,
-   "to": 1.22,
-   "anchor": "top"
-  },
-  {
-   "start": 197.77,
-   "end": 204.54,
-   "from": 1.22,
-   "to": 1,
-   "anchor": "top"
-  },
-  {
-   "start": 528.6,
-   "end": 543.35,
-   "from": 1,
-   "to": 1.14,
-   "anchor": "top"
-  },
-  {
-   "start": 560.05,
-   "end": 583.61,
+   "start": 515.95,
+   "end": 538.12,
    "from": 1.04,
    "to": 1.16,
    "anchor": "top"
