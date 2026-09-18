@@ -4392,6 +4392,26 @@ archivos.**
 
 ## Cerrado — no rehacer
 
+- [x] **~~El dueño que APAGABA su WhatsApp no podía reconectarlo nunca más~~** — cerrado el
+      2026-09-18, sha `21ac3e3` en `onia-platform` (`lib/chatbot/canal-whatsapp.ts`,
+      `lib/chatwoot.ts`). `apagarCanalWhatsapp` (17-sep) deja vivos el inbox y el historial **a
+      propósito** —una baja no puede costarle al cliente sus conversaciones— y suelta la columna;
+      pero el camino de ida no contemplaba esa segunda forma de que un inbox quede suelto, y
+      posteaba a Chatwoot **sin `inbox_id`**. Leído el código de Chatwoot v4.12.1 **en el
+      contenedor vivo**, eso no reautoriza:
+      `Whatsapp::EmbeddedSignupService#create_or_reauthorize_channel` bifurca por `inbox_id` —
+      con él va a `ReauthorizationService`, sin él a `ChannelCreationService`, que busca por
+      `phone_number` y **tira `phone_number_already_exists`**. O sea el add-on de Bs 390 quedaba
+      impagable de por vida para ese número, sin salida desde el panel. Misma clase que ya se pagó
+      en `canal-web.ts`: **al abrir una puerta de salida, preguntar quién invita a volver a
+      entrar**. Lo mantuvo invisible un **comentario que afirmaba la garantía al revés**
+      (*"idempotente del lado de Chatwoot: si el `phone_number_id` ya tiene canal, reautoriza el
+      existente"*) más un test que probaba esa creencia **mockeándola** en vez de medirla; los dos
+      corregidos. El inbox se reencuentra por `phone_number_id` —el dato que acaba de entregar
+      Meta, prueba de tenencia más fuerte que un sello propio— y **falla cerrado** si está
+      vinculado a otra org. Validado por mutación (esquive del `previo`: 1 test en rojo).
+      ⚠️ **Commiteado y en la rama, NO desplegado.**
+
 - [x] **~~El config del follow-up declaraba IMPOSIBLE un gasto que el código sí hace~~** — cerrado
       el 2026-09-18 (`hermes-content/deploy/vps-ops/bot/config.mjs`). Los dos comentarios de
       `followUp` (`afterHours` y `windowClosesAtHours`) afirmaban que fuera de las 24 h de Meta
