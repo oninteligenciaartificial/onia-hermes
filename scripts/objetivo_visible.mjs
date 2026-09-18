@@ -187,11 +187,55 @@ export function esNuestra(conversacion) {
 }
 
 /**
+ * ¿El corte lo hizo la PUERTA de la app, antes de que el pedido llegara a la bandeja?
+ *
+ * POR QUE EXISTE, con fecha (2026-09-18). `/api/bandeja` contestaba 403 y este gate lo
+ * diagnosticaba como «la sesion no esta llegando al producto: `getUser()` sin usuario», porque
+ * conocia DOS causas del 403 y las dos viven en `bandeja-auth.ts`. Medido en vivo ese dia con el
+ * MISMO tarro de cookies: `/api/bandeja` → 403 `MFA_ENROLLMENT_REQUIRED` y `/api/me` → **200**
+ * con el perfil entero (role SUPERADMIN, organizationId cargado). O sea que la sesion SI llegaba,
+ * el perfil SI tenia organizacion, y el mensaje mandaba a revisar cookies y BUILD_ID —  una caza
+ * inutil— acusando a un archivo sano.
+ *
+ * La causa era una TERCERA que el gate no conocia: `proxy.ts` corta las APIs del panel cuando la
+ * cuenta debe activar la 2FA. Y no hay que adivinarla: **el producto la publica**. El proxy
+ * contesta `{error, code, next}`; el handler de `/api/bandeja` contesta `{error:"No autorizado"}`
+ * SIN `code`. Esa diferencia es lo unico que separa «me corto la puerta» de «me corto la
+ * bandeja», y es la que decide a quien se acusa. Leerla cuesta dos lineas; adivinarla costo un
+ * diagnostico entero.
+ */
+export function corteDeLaPuerta(cuerpo) {
+  const code = typeof cuerpo?.code === 'string' ? cuerpo.code.trim() : '';
+  const next = typeof cuerpo?.next === 'string' ? cuerpo.next.trim() : '';
+  if (!code || !next) return null;
+  return { code, next, error: typeof cuerpo?.error === 'string' ? cuerpo.error.trim() : '' };
+}
+
+/**
  * El veredicto, separado de la red a proposito: es lo que se prueba sin docker, sin sesion y
  * sin produccion. `respuesta` es `{ status, cuerpo }` tal como sale de `/api/bandeja`.
  */
 export function juzgar(respuesta, { colgados, dueñoTieneOrg = null } = {}) {
   const { status, cuerpo } = respuesta ?? {};
+
+  // La puerta se pregunta ANTES que cualquier diagnostico de la bandeja, y para todo status que
+  // no sea 200: el mismo `proxy.ts` contesta 401 (sin sesion), 403 (2FA, correo sin confirmar,
+  // perfil ausente) y 503 (no pudo leer el estado). Todos cortan igual de lejos de la bandeja.
+  const puerta = status !== 200 ? corteDeLaPuerta(cuerpo) : null;
+  if (puerta) {
+    return {
+      codigo: 2,
+      sospechoso: 'puerta',
+      mensaje:
+        `NO MEDIDO — la PUERTA de la app corto el pedido ANTES de la bandeja: ${status} ` +
+        `\`${puerta.code}\`${puerta.error ? ` ("${puerta.error}")` : ''}, y manda a \`${puerta.next}\`. ` +
+        'Ese cuerpo con `code` lo escribe `proxy.ts`, no `/api/bandeja` (que contesta 403 SIN ' +
+        '`code`): la sesion llego y `bandeja-auth.ts` no es sospechoso de nada. El objetivo ' +
+        'TAMPOCO se ve mientras la puerta corte —el dueño rebota igual al abrir `/inbox`—, pero ' +
+        'lo que se destraba es lo que pide ese `code`, no la bandeja. Tambien se puede medir con ' +
+        'una cuenta que ya lo cumpla (`--email`).',
+    };
+  }
 
   if (status === 403) {
     const comun =
@@ -598,6 +642,61 @@ function selfCheck() {
   afirmar(
     sinSaber.mensaje.includes('bandeja-auth') && sinSaber.mensaje.toLowerCase().includes('sesion'),
     'y nombra LAS DOS causas en vez de elegir una',
+  );
+
+  // ── LA TERCERA CAUSA: el corte de la PUERTA ──────────────────────────────────────────────
+  //
+  // Las dos ramas de arriba se escribieron creyendo que el 403 SOLO puede venir de
+  // `bandeja-auth.ts`. La respuesta de abajo es la REAL de produccion del 2026-09-18, copiada
+  // del cuerpo que devolvio `/api/bandeja` con la sesion del dueño; en la misma corrida
+  // `/api/me` contesto 200 con el perfil entero, o sea que las dos ramas de arriba eran
+  // imposibles y el gate elegia igual una de ellas.
+  const puerta = {
+    status: 403,
+    cuerpo: {
+      error: 'Activá la verificación en dos pasos desde tu perfil para continuar.',
+      code: 'MFA_ENROLLMENT_REQUIRED',
+      next: '/profile?mfa=obligatorio',
+    },
+  };
+  // `dueñoTieneOrg: true` es el dato que hacia caer este caso en la rama "la sesion no llego".
+  const cortado = juzgar(puerta, { dueñoTieneOrg: true });
+  afirmar(cortado.codigo === 2, 'un corte de la puerta es NO MEDIDO, no un rojo del producto');
+  afirmar(cortado.sospechoso === 'puerta', 'y el sospechoso es la puerta, no la bandeja');
+  afirmar(cortado.mensaje.includes('MFA_ENROLLMENT_REQUIRED'), 'y nombra el `code` que el producto ya publica');
+  afirmar(cortado.mensaje.includes('/profile?mfa=obligatorio'), 'y el `next`, que es el camino de cura');
+  afirmar(
+    !/`?getUser\(\)`? sin usuario/.test(cortado.mensaje),
+    'y NO repite el diagnostico que `/api/me` refuta con la misma cookie',
+  );
+  afirmar(
+    !cortado.mensaje.toLowerCase().includes('no medir no es estar bien'),
+    'no cae en el "no medido" generico: ese no nombra la causa ni el camino',
+  );
+  // La puerta contesta con el MISMO cuerpo en 401 y 503, y los tres cortan igual de lejos.
+  afirmar(
+    juzgar({ status: 401, cuerpo: { error: 'Iniciá sesión', code: 'AUTH_REQUIRED', next: '/login' } }).sospechoso ===
+      'puerta',
+    'un 401 de la puerta tambien se reconoce',
+  );
+  afirmar(
+    juzgar({ status: 503, cuerpo: { error: 'x', code: 'MFA_STATE_UNAVAILABLE', next: '/profile' } }).sospechoso ===
+      'puerta',
+    'y un 503 de la puerta tambien',
+  );
+  // Y la mitad simetrica, que es la que evita que la cura tape el bug original: el 403 del
+  // HANDLER no trae `code`, asi que las dos ramas de `bandeja-auth` tienen que seguir vivas.
+  afirmar(
+    juzgar({ status: 403, cuerpo: { error: 'No autorizado' } }, { dueñoTieneOrg: false }).sospechoso === 'bandeja-auth',
+    'el 403 del handler (sin `code`) sigue acusando a `bandeja-auth.ts`',
+  );
+  afirmar(corteDeLaPuerta({ error: 'No autorizado' }) === null, 'un cuerpo sin `code` no es corte de la puerta');
+  afirmar(corteDeLaPuerta({ code: 'X' }) === null, 'ni uno con `code` pero sin `next`');
+  afirmar(corteDeLaPuerta(null) === null, 'ni un cuerpo que no se pudo leer');
+  // Un 200 nunca es corte: el cuerpo de la bandeja podria traer un campo `code` algun dia.
+  afirmar(
+    juzgar({ status: 200, cuerpo: { ok: true, sinCanal: true, conversaciones: [], code: 'X', next: '/y' } }).codigo === 1,
+    'un 200 se juzga como bandeja aunque el cuerpo traiga `code`',
   );
 
   // El dato que separa las causas NO puede salir del SQL que elige al dueño: ese entra por
