@@ -16,6 +16,11 @@ import {
   correrVigia,
   escalonDe,
   mensajeAvisado,
+  entregarComoDecision,
+  tareasViejasDelVigia,
+  tituloDelAviso,
+  estadoDeLaTarea,
+  MARCA_LEADS,
 } from './vigia_sin_respuesta.mjs';
 
 const AHORA = Date.parse('2026-09-03T12:00:00Z');
@@ -376,7 +381,7 @@ test('ANCLA: con todo inyectado el vigia SI avisa, y no repite en la segunda cor
   const deps = {
     leerFilas: async () => colgadoDeVerdad,
     enriquecer: enriquecerNoOp,
-    avisar: async (texto) => { avisos.push(texto); },
+    avisar: async (texto) => { avisos.push(texto); return { entregado: true }; },
   };
   const primera = await correrVigia({ emitir: true, ahoraMs: AHORA, estado }, deps);
   assert.equal(primera.nuevos.length, 1, 'el colgado tiene que salir como nuevo');
@@ -505,4 +510,102 @@ test('el aviso separa las tres miradas: cada una pide algo distinto de Sergio Ur
   assert.match(texto, /no lo sabia nadie/i, 'de este nadie se entero nunca');
   // Sumarlos bajo un mismo titulo diria algo falso de dos de los tres grupos.
   assert.equal(texto.split('🔴').length - 1, 3, 'tres bloques, no uno');
+});
+
+// ---------------------------------------------------------------------------
+// EL AVISO TIENE QUE LLEGARLE A SERGIO URCULLO, Y EL VIGIA TIENE QUE SABER SI LLEGO.
+//
+// Medido el 2026-09-18. Este vigia avisaba por `onia-tg.sh`, que por defecto NO manda
+// Telegram: crea una tarea `ready` y la dedupea por el TITULO con los digitos colapsados a
+// `N`. Dos consecuencias, las dos vivas ese dia:
+//
+//   1. La tarea del 18-sep (`t_3b9d0ded`, conv 58 hace 6 h y conv 38 hace 20 DIAS) quedo
+//      `ready` entre 262 tareas. `ready` es de donde los carriles sacan trabajo; contactar a
+//      un prospecto es decision de Sergio Urcullo, y la unica forma que la ve es
+//      `blocked --kind needs_input`. Nadie la miro.
+//   2. Mientras esa tarea siguiera viva, «3 escribieron» normaliza al MISMO titulo que
+//      «2 escribieron»: `TAREA-YA-EXISTE`, exit 0, aviso tirado en silencio. Y `correrVigia`
+//      escribia igual el estado «ya le avise», asi que el lead nuevo quedaba marcado como
+//      avisado sin que nadie lo hubiera visto nunca.
+//
+// Con cero clientes pagando, esos son los unicos leads que hay.
+
+/** Un tablero de mentira: anota lo que le pidieron y contesta lo que el caso le diga. */
+function tableroFalso({ vivas = [], estadoFinal = 'blocked', id = 't_abcd1234' } = {}) {
+  const llamadas = [];
+  const tablero = async (args) => {
+    llamadas.push(args);
+    if (args[0] === 'list') return JSON.stringify(vivas);
+    if (args[0] === 'create') return `Created task ${id}`;
+    if (args[0] === 'show') return `Task ${id}: x\n  status:    ${estadoFinal}\n  assignee:  -\n`;
+    return '';
+  };
+  return { tablero, llamadas };
+}
+
+test('las tareas viejas del vigia se buscan por MARCA y las terminadas no cuentan', () => {
+  const viejas = tareasViejasDelVigia([
+    { id: 't_11111111', title: `${MARCA_LEADS} 2 desconocido(s) esperando una respuesta tuya`, status: 'ready' },
+    { id: 't_22222222', title: `${MARCA_LEADS} 5 desconocido(s) esperando una respuesta tuya`, status: 'done' },
+    { id: 't_33333333', title: 'Otra cosa cualquiera del tablero', status: 'ready' },
+    { id: 't_44444444', title: `${MARCA_LEADS} 1 desconocido(s) esperando una respuesta tuya`, status: 'blocked' },
+  ]);
+  // La `done` no se toca; la `blocked` SI, porque es un aviso vivo que ya no describe a la
+  // gente de hoy — dejarla viva es lo que tapaba al lead nuevo.
+  assert.deepEqual(viejas, ['t_11111111', 't_44444444']);
+});
+
+test('el titulo del aviso lleva la MARCA, que es lo que lo hace encontrable', () => {
+  assert.match(tituloDelAviso([{}, {}]), /^\[leads-esperando\] 2 desconocido/);
+  assert.equal(estadoDeLaTarea('Task t_x: y\n  status:    blocked\n  assignee:  -'), 'blocked');
+});
+
+test('el aviso archiva el anterior, crea el de hoy y lo deja BLOCKED needs_input', async () => {
+  const { tablero, llamadas } = tableroFalso({
+    vivas: [{ id: 't_viejo111', title: `${MARCA_LEADS} 9 desconocido(s) esperando una respuesta tuya`, status: 'ready' }],
+  });
+  const entrega = await entregarComoDecision('cuerpo del aviso', [{}, {}], { tablero });
+
+  assert.equal(entrega.entregado, true, 'con el tablero contestando bien, el aviso se entrego');
+  assert.ok(llamadas.some((a) => a[0] === 'archive' && a[1] === 't_viejo111'),
+    'el aviso anterior se archiva: vivo, su titulo normalizado tapa al lead nuevo');
+
+  const bloqueo = llamadas.find((a) => a[0] === 'block');
+  assert.ok(bloqueo, 'la tarea se bloquea: `ready` no le llega a Sergio Urcullo');
+  // El motivo va ANTES de `--kind`. Con la opcion en el medio el tablero muere con
+  // `unrecognized arguments` y la tarea se queda `ready`, o sea sin avisarle a nadie.
+  assert.equal(bloqueo[1], 't_abcd1234');
+  assert.match(bloqueo[2], /Sergio Urcullo/, 'el motivo es el segundo posicional, no una opcion');
+  assert.deepEqual(bloqueo.slice(3), ['--kind', 'needs_input']);
+  assert.ok(llamadas.some((a) => a[0] === 'show'), 'y se MIRA el estado: `block` sale 0 sin bloquear');
+});
+
+test('si el bloqueo no prendio, el aviso NO se da por entregado', async () => {
+  // `block` devuelve 0 igual cuando el tablero detecta un bucle de bloqueos y no bloquea
+  // nada. Creerle al exit deja la tarea en `ready` y el lead invisible.
+  const { tablero } = tableroFalso({ estadoFinal: 'ready' });
+  const entrega = await entregarComoDecision('cuerpo', [{}], { tablero });
+  assert.equal(entrega.entregado, false);
+  assert.match(entrega.motivo, /ready/, 'el motivo dice en que estado quedo, para poder arreglarlo');
+});
+
+test('ANCLA: un aviso que NO llego no se anota como avisado — si no, el lead se pierde', async () => {
+  const estado = `/tmp/vigia-entrega-${process.pid}.json`;
+  rmSync(estado, { force: true });
+  let intentos = 0;
+  const deps = {
+    leerFilas: async () => colgadoDeVerdad,
+    enriquecer: enriquecerNoOp,
+    avisar: async () => { intentos += 1; return { entregado: false, motivo: 'el tablero lo tiro' }; },
+  };
+  const primera = await correrVigia({ emitir: true, ahoraMs: AHORA, estado }, deps);
+  assert.equal(primera.nuevos.length, 1, 'hay alguien esperando');
+  assert.equal(intentos, 1);
+
+  // La de verdad: la vuelta siguiente TIENE que volver a intentarlo. Antes se anotaba como
+  // avisado igual y esta persona no se nombraba nunca mas.
+  const segunda = await correrVigia({ emitir: true, ahoraMs: AHORA, estado }, deps);
+  assert.equal(segunda.nuevos.length, 1, 'no se entrego: sigue siendo nuevo');
+  assert.equal(intentos, 2, 'y se vuelve a intentar');
+  rmSync(estado, { force: true });
 });

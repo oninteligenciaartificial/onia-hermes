@@ -84,7 +84,7 @@ function bancoDePruebas() {
   stub(
     "docker",
     [
-      'if [ "$1" = "ps" ]; then echo onia-center; exit 0; fi',
+      'if [ "$1" = "ps" ]; then [ -f "$CTRL/sin-contenedor" ] || echo onia-center; exit 0; fi',
       'cmd="$*"',
       'case "$cmd" in',
       '  *health*) [ -f "$CTRL/health-falla" ] && exit 1; exit 0;;',
@@ -110,17 +110,35 @@ function bancoDePruebas() {
   return {
     raiz,
     ctrl,
-    /** Una corrida del watchdog. `chatwoot` false = la sonda falla esta vez. */
-    correr({ chatwoot = true, health = true } = {}) {
+    /**
+     * Una corrida del watchdog. `chatwoot` false = la sonda falla esta vez;
+     * `contenedor` false = `docker ps` no lo lista (el bot esta 100% mudo);
+     * `servidor` "sin-permiso"/"ausente" = el watchdog no puede reiniciar nada.
+     *
+     * La salida se devuelve TAMBIEN cuando el script sale != 0: una rama que
+     * termina con `exit 1` es justo la que hay que poder medir, y execFileSync
+     * tira en ese caso (se perderia el log de la corrida que mas importa).
+     */
+    correr({ chatwoot = true, health = true, contenedor = true, servidor = "ok" } = {}) {
       for (const [nombre, ok] of [
         ["chatwoot-falla", chatwoot],
         ["health-falla", health],
+        ["sin-contenedor", contenedor],
       ]) {
         const marca = join(ctrl, nombre);
         if (ok) rmSync(marca, { force: true });
         else writeFileSync(marca, "");
       }
-      return execFileSync("bash", [WATCHDOG], {
+
+      const servidorSh = join(botDir, "webhook-server.sh");
+      rmSync(servidorSh, { force: true });
+      if (servidor !== "ausente") {
+        writeFileSync(servidorSh, "#!/bin/sh\nexit 0\n");
+        // 644 es EXACTAMENTE lo que el deploy del 2026-09-18 dejo en los hermanos.
+        chmodSync(servidorSh, servidor === "sin-permiso" ? 0o644 : 0o755);
+      }
+
+      const opciones = {
         encoding: "utf8",
         env: {
           ...process.env,
@@ -130,7 +148,12 @@ function bancoDePruebas() {
           ONIA_WATCHDOG_ALERT_ENV: join(raiz, "alert.env"),
           ONIA_BOT_DIR: botDir,
         },
-      });
+      };
+      try {
+        return execFileSync("bash", [WATCHDOG], opciones);
+      } catch (e) {
+        return e.stdout ?? "";
+      }
     },
     /** Los avisos mandados hasta ahora, en orden. */
     avisos() {
@@ -247,6 +270,156 @@ test("la recuperacion del webhook tambien se escribe (la misma clase, otra rama)
     assert.notEqual(vuelta.trim(), "", "un incidente que se cierra solo tambien deja linea");
   } finally {
     banco.limpiar();
+  }
+});
+
+// --- El watchdog calla justo donde el bot esta MAS muerto --------------------
+//
+// Medido el 2026-09-18 leyendo /var/log/onia-bot-watchdog.log: 76 corridas
+// seguidas de "Permission denied" (2,5 h con el watchdog muerto) y NADIE se
+// entero — lo encontro un carril mirando el log por casualidad. Eso destapo que
+// las dos ramas donde el watchdog se rinde no avisan por Telegram:
+//
+//   a) el contenedor onia-center no esta corriendo -> el bot esta 100% mudo
+//      (widget Y WhatsApp) y el script escribia "el watchdog no puede hacer
+//      nada" y salia 0, que para el cron es exito.
+//   b) webhook-server.sh no es ejecutable -> el webhook YA no responde (solo se
+//      llega aca con /health caido) y el watchdog no lo puede levantar. Es
+//      exactamente lo que el deploy de las 03:47 UTC provoco en sus tres
+//      hermanos, dejandolos en 644.
+//
+// La asimetria: con el contenedor VIVO y el webhook caido sonaba la alarma 🚨,
+// y con el contenedor MUERTO -dano estrictamente mayor- habia silencio.
+
+test("el contenedor caido NO suena a la primera: un reinicio de docker no es una caida", () => {
+  const banco = bancoDePruebas();
+  try {
+    banco.correr({ contenedor: false });
+
+    assert.deepEqual(
+      banco.avisos(),
+      [],
+      "durante un reinicio de docker el contenedor desaparece unos segundos: eso no es un incidente",
+    );
+    assert.equal(banco.marcador("incidente-contenedor"), false);
+  } finally {
+    banco.limpiar();
+  }
+});
+
+test("el contenedor caido DOS corridas SI avisa: el bot esta mudo en widget Y WhatsApp", () => {
+  const banco = bancoDePruebas();
+  try {
+    banco.correr({ contenedor: false });
+    const segunda = banco.correr({ contenedor: false });
+    banco.correr({ contenedor: false });
+
+    const avisos = banco.avisos();
+    assert.equal(avisos.length, 1, `un incidente = UN aviso, salieron ${avisos.length}`);
+    assert.match(avisos[0], /🚨/);
+    assert.equal(banco.marcador("incidente-contenedor"), true);
+    assert.match(
+      segunda,
+      /ERROR:/,
+      "la corrida que declara el incidente tiene que gritarlo en el log, no llamarlo AVISO",
+    );
+  } finally {
+    banco.limpiar();
+  }
+});
+
+test("el contenedor que vuelve cierra su incidente, lo escribe y avisa el desenlace", () => {
+  const banco = bancoDePruebas();
+  try {
+    banco.correr({ contenedor: false });
+    banco.correr({ contenedor: false });
+    const vuelta = banco.correr({ contenedor: true });
+
+    assert.equal(banco.marcador("incidente-contenedor"), false, "el incidente se cierra");
+    assert.notEqual(vuelta.trim(), "", "un incidente que se cierra deja linea: el log es lo que se lee");
+    assert.equal(banco.avisos().length, 2, "sale el 🚨 y despues su ✅");
+  } finally {
+    banco.limpiar();
+  }
+});
+
+test("el incidente del contenedor NO lo cierra la recuperacion del webhook (marcadores propios)", () => {
+  const banco = bancoDePruebas();
+  try {
+    // Webhook caido y sin poder levantarlo: queda declarado `incidente`.
+    banco.correr({ health: false, servidor: "ausente" });
+    assert.equal(banco.marcador("incidente"), true);
+
+    // Ahora ademas se cae el contenedor, dos corridas: su propio incidente.
+    banco.correr({ contenedor: false });
+    banco.correr({ contenedor: false });
+    assert.equal(banco.marcador("incidente-contenedor"), true);
+
+    // Vuelve el contenedor y el webhook contesta: cada incidente se cierra solo.
+    banco.correr({ contenedor: true, health: true });
+    assert.equal(banco.marcador("incidente-contenedor"), false);
+    assert.equal(banco.marcador("incidente"), false, "un incidente no puede cerrar al del vecino");
+  } finally {
+    banco.limpiar();
+  }
+});
+
+test("si el watchdog no puede levantar el bot porque su script perdio el bit, AVISA", () => {
+  const banco = bancoDePruebas();
+  try {
+    const salida = banco.correr({ health: false, servidor: "sin-permiso" });
+
+    const avisos = banco.avisos();
+    assert.equal(
+      avisos.length,
+      1,
+      "el webhook esta caido y el watchdog no lo puede levantar: eso tiene que llegarle a alguien",
+    );
+    assert.match(avisos[0], /🚨/);
+    assert.match(salida, /ERROR:/);
+    assert.equal(banco.marcador("incidente"), true, "queda declarado: no re-avisa cada 2 min");
+  } finally {
+    banco.limpiar();
+  }
+});
+
+test("el script que falta se trata igual que el que no se puede ejecutar", () => {
+  const banco = bancoDePruebas();
+  try {
+    banco.correr({ health: false, servidor: "ausente" });
+
+    assert.equal(banco.avisos().length, 1, "falta el script: el bot sigue caido y nadie lo va a levantar");
+    assert.match(banco.avisos()[0], /🚨/);
+  } finally {
+    banco.limpiar();
+  }
+});
+
+// La direccion SIMETRICA del gate de recuperacion de mas abajo: aquel exige que
+// todo ✅ de Telegram escriba el log; este exige que todo ERROR del log llegue a
+// Telegram. La distincion la hace el propio script y tiene significado: ERROR =
+// el bot esta roto y Sergio Urcullo se entera; AVISO = observacion que no
+// escala (el parpadeo de una sonda, el firewall re-insertado). Por eso el sujeto
+// no lleva ni una exencion a mano: la rama que se escriba manana nace adentro.
+test("CLASE: todo ERROR del log llega a Telegram — sujetos derivados del script", () => {
+  const lineas = sinComentarios(readFileSync(WATCHDOG, "utf8")).split("\n");
+
+  const errores = lineas
+    .map((linea, i) => ({ linea, i }))
+    .filter(({ linea }) => /^\s*log\s+"ERROR:/.test(linea));
+
+  assert.ok(
+    errores.length >= 4,
+    `el watchdog declara al menos cuatro fallas duras; el gate encontro ${errores.length}`,
+  );
+
+  for (const { i, linea } of errores) {
+    const ventana = lineas.slice(Math.max(0, i - 2), i + 8);
+    assert.ok(
+      ventana.some((l) => /tg_error\s/.test(l)),
+      `el script grita un ERROR que no le llega a nadie (linea ${i + 1}):\n${linea}\n` +
+        `Un fallo que solo va al log es un fallo mudo: /var/log/onia-bot-watchdog.log no lo lee nadie.`,
+    );
   }
 });
 

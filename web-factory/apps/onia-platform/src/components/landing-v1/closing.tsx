@@ -22,6 +22,8 @@ export function Closing() {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/fotos/duena-telefono.webp"
+          srcSet="/fotos/duena-telefono-480.webp 480w, /fotos/duena-telefono-960.webp 960w, /fotos/duena-telefono.webp 1344w"
+          sizes="100vw"
           alt=""
           width={1344}
           height={768}
@@ -62,8 +64,9 @@ export function Closing() {
           <div>
             <h3>Sin tarjeta</h3>
             <p>
-              Entrás, elegís tu rubro y usás el sistema completo {PRUEBA.dias} días, sin
-              poner un peso ni dejar una tarjeta.
+              Entrás, elegís tu rubro y usás el plan {PRUEBA.planQueCorre}{" "}
+              completo {PRUEBA.dias} días, sin poner un peso ni dejar una
+              tarjeta.
             </p>
           </div>
           <div>

@@ -11,7 +11,7 @@ import {
   FALTA_COPY,
   tagDeFalta,
   NOTA_CUADERNO,
-  NOTA_DOWNSELL,
+  notaDownsell,
   NOTA_FACTURACION,
   PLAN_INCLUYE,
   PRECIO_COPY,
@@ -193,9 +193,15 @@ function VarianteDental({
         {rec.notas.includes("facturacion-incluida") ? (
           <p className={styles.planNote}>{NOTA_FACTURACION}</p>
         ) : null}
-        {rec.notas.includes("downsell-basico") ? (
-          <p className={styles.planNote}>{NOTA_DOWNSELL}</p>
-        ) : null}
+        {rec.notas.includes("downsell-basico") && rec.plan.id !== "grupo"
+          ? (() => {
+              // El texto se le pide AL PLAN RECOMENDADO: es él quien decide cuál es el
+              // escalón de abajo. `null` = el recomendado ya es el primero de la escalera,
+              // y entonces no hay downsell que ofrecer (no un párrafo vacío).
+              const nota = notaDownsell(rec.plan.id);
+              return nota ? <p className={styles.planNote}>{nota}</p> : null;
+            })()
+          : null}
         <p className={styles.planNote}>
           {/* /#v4-precios: la portada nueva no tiene id="precios" (A6). */}
           <a href="/#v4-precios">

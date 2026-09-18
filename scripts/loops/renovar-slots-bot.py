@@ -33,6 +33,12 @@ por el otro lado — se generan CUANTOS candidatos y el motor elige los 2 que si
 en pie —, asi que el peor momento queda igual de cubierto sin alejarle el turno a
 nadie. El piso volvio a ser ANTICIPACION_H a secas.
 
+Lo que si depende de la vigencia es QUE HORA del dia se elige, y no es lo mismo: el
+piso decide desde cuando, la vigencia decide cual de las horas que pasan el piso
+sobrevive hasta el final de lo publicado. Como va UN candidato por dia, elegir la mas
+temprana —que es la primera en caerse— hace que al caer se pierda el DIA ENTERO. Ver
+`_hora_del_dia`, con el caso de produccion del 2026-09-18 que lo midio.
+
 Es la solucion sin Cal.com. Cuando Cal.com este cargado con estas mismas ventanas,
 `resolveConfig()` lo prefiere solo (consulta Cal.com cuando NO hay ONIA_BOT_SLOTS),
 y este script se apaga borrando su linea de cron.
@@ -79,45 +85,80 @@ def proximos_slots(ahora_lapaz, cuantos=CUANTOS):
     Dias distintos a proposito: ofrecerle a alguien "hoy 14:00 o hoy 14:30" no es
     darle una opcion, es darle la misma. Dos dias separados es una eleccion real.
     """
-    # ANTICIPACION + VIGENCIA, no solo ANTICIPACION: estos horarios se sirven las
-    # VIGENCIA_H siguientes sin volver a calcularse, asi que el margen tiene que
-    # alcanzar hasta el ULTIMO prospecto que los lea, no solo el primero.
+    # El piso es ANTICIPACION_H a secas. La vigencia NO se le suma: quien cubre al
+    # ULTIMO prospecto del dia es el motor, que juzga antes de recortar.
     #
-    # ⚠️ ESE MARGEN YA NO HACE FALTA, y sigue aca a proposito UNA VUELTA MAS. Desde el
-    # 2026-09-17 el motor elige los 2 candidatos que se sostienen (`parseSlotsSpec` en
-    # config.mjs) en vez de cortar los 2 primeros a ciegas, asi que generar de MAS cubre
-    # el peor momento sin alejarle el turno a nadie — y el margen le cuesta a la venta un
-    # dia entero: medido ese dia 09:15 La Paz, el bot ofrecia "sábado 19, 09:00" teniendo
-    # libre el viernes 18 a las 14:00, con 28 h de aviso.
+    # Hasta el 2026-09-18 aca decia `ANTICIPACION_H + VIGENCIA_H`, con el motivo
+    # correcto para el motor VIEJO: ese cortaba los 2 primeros a ciegas, asi que la
+    # unica forma de que el par llegara entero al final de la vigencia era reservar
+    # margen aca. El 17-sep el motor paso a elegir los 2 que SE SOSTIENEN
+    # (`parseSlotsSpec` en config.mjs), y el margen quedo cobrandose sin comprar nada.
     #
-    # No se baja TODAVIA porque este archivo y el motor viajan por caminos DISTINTOS: a
-    # /root/bin lo copia scripts/loops/sincronizar.sh (cron 44 * * * *, desde origin/main)
-    # y al motor hay que desplegarlo aparte — y medido el 2026-09-17,
-    # /var/log/onia-publicar-solo.log dice "bot: NO publico solo, toca una fuente de
-    # precio", o sea espera un ok. Con el piso en 24 h y el motor viejo, el consumidor
-    # tomaria los 2 primeros sin filtrar, el primero caduca a los minutos y el bot le dice
-    # a TODO prospecto «justo ahora no tengo horarios libres»: el fallo que costo una
-    # semana. Bajarlo a ANTICIPACION_H es un cambio de una linea CUANDO el motor nuevo
-    # este vivo (docker exec onia-center grep -c "SE SOSTIENEN" /tmp/onia-bot/config.mjs).
-    desde = ahora_lapaz + dt.timedelta(hours=ANTICIPACION_H + VIGENCIA_H)
-    slots, dias_usados = [], set()
+    # Se baja recien hoy porque este archivo y el motor viajan por caminos DISTINTOS
+    # —a /root/bin lo copia scripts/loops/sincronizar.sh (cron 44, desde origin/main)
+    # y al motor hay que desplegarlo aparte—, asi que el margen se dejo puesto hasta
+    # poder VERIFICAR el consumidor vivo. La condicion de vencimiento estaba escrita
+    # aca y se corrio literal el 2026-09-18:
+    #
+    #     docker exec onia-center grep -c "SE SOSTIENEN" /tmp/onia-bot/config.mjs  -> 1
+    #
+    # Lo que costaba el margen, medido ese dia (viernes) sobre el proceso vivo:
+    # `ONIA_BOT_SLOTS` arrancaba en "lunes 21" con el sabado 19 libre. Tres dias de
+    # espera para quien escribia ese viernes, y ningun sabado en la lista mientras la
+    # coletilla del propio mensaje promete "sáb 9:00-15:00". Con el piso en 24 h el
+    # primero pasa a ser "sábado 19, 09:00".
+    #
+    # ⚠️ El piso NO es redundante con el filtro del motor, y su gate lo exige aparte
+    # (`test_el_generador_solo_tampoco_escribe_un_horario_a_minutos_vista`): el dia
+    # que el motor vuelva a una version sin filtro —deploy revertido, rsync viejo—
+    # esto es lo unico que queda entre el prospecto y un turno a minutos vista.
+    desde = ahora_lapaz + dt.timedelta(hours=ANTICIPACION_H)
+    hasta_el_final = desde + dt.timedelta(hours=VIGENCIA_H)
+    slots = []
     dia = desde.date()
     for _ in range(21):  # tres semanas de margen: suficiente para cualquier feriado
         if len(slots) >= cuantos:
             break
-        for h_ini, h_fin in VENTANAS.get(dia.weekday(), []):
-            if len(slots) >= cuantos or dia in dias_usados:
-                break
-            # Se ofrece el comienzo de la ventana; si ya pasó, la hora en punto siguiente
-            # que todavía entre con la demo completa adentro.
-            for hora in range(h_ini, h_fin):
-                cand = dt.datetime(dia.year, dia.month, dia.day, hora, 0, tzinfo=TZ_LAPAZ)
-                if cand >= desde:
-                    slots.append(cand)
-                    dias_usados.add(dia)
-                    break
+        cand = _hora_del_dia(dia, desde, hasta_el_final)
+        if cand is not None:
+            slots.append(cand)
         dia += dt.timedelta(days=1)
     return slots
+
+
+def _hora_del_dia(dia, desde, hasta_el_final):
+    """El horario de ese dia que el motor va a poder ofrecer durante MAS tiempo.
+
+    Como se manda UN candidato por dia, la hora elegida decide cuanto vive el DIA en
+    la oferta, y la mas temprana es tambien la primera en caerse: cuando se cae no se
+    pierde un horario, se pierde el dia entero y el prospecto salta al dia habil
+    siguiente. Medido en produccion el 2026-09-18 11:13 La Paz — este cron, a las
+    06:23, habia escrito "sábado 19, 11:00" (28,6 h de aviso, correcto al generarse);
+    cinco horas despues ya no llegaba a 24 h, el motor lo descartaba y el bot le
+    ofrecia LUNES 21 a quien escribia ese viernes, con el sabado 19 a las 12:00, 13:00
+    y 14:00 libres y con "sáb 9:00-15:00" prometido en la coletilla del MISMO mensaje.
+
+    Asi que se elige por VIDA UTIL, en dos pasos:
+      1. la hora mas TEMPRANA que aguanta toda la vigencia. Para los dias lejanos eso
+         es el comienzo de la ventana: no les cambia nada.
+      2. si ninguna aguanta —solo le pasa al dia mas cercano, el que cruza el borde de
+         la anticipacion—, la mas TARDIA que todavia entra, que es la que mantiene el
+         dia ofrecible mas horas.
+    El paso 2 mueve el horario dentro del dia (el sabado pasa de 11:00 a 14:00) y eso
+    es barato; perder el dia cuesta el salto al siguiente, que ese viernes eran DOS.
+    """
+    tardio = None
+    for h_ini, h_fin in VENTANAS.get(dia.weekday(), []):
+        # `h_fin` queda afuera a proposito: la hora en punto elegida tiene que entrar
+        # con la demo completa adentro de la ventana.
+        for hora in range(h_ini, h_fin):
+            cand = dt.datetime(dia.year, dia.month, dia.day, hora, 0, tzinfo=TZ_LAPAZ)
+            if cand < desde:
+                continue  # el motor no lo ofreceria
+            if cand >= hasta_el_final:
+                return cand  # aguanta toda la vigencia
+            tardio = cand  # todavia no: me quedo con el ultimo que entre
+    return tardio
 
 
 def etiqueta(d):

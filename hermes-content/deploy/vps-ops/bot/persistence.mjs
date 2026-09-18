@@ -229,6 +229,28 @@ export const INBOUND_BODY_PLACEHOLDER = "(entrante — texto no persistido)";
  */
 export const DELIVERY_STATUSES = Object.freeze(["simulated", "skipped", "sent", "failed", "reserved"]);
 
+/**
+ * QUE hace a una fila candidata al follow-up, sin la ventana de tiempo.
+ *
+ * Una sola vez, porque lo consumen DOS consultas que tienen que partir la misma poblacion en dos:
+ * las que estan a tiempo (`sweepFollowUpCandidates`) y las que se pasaron del piso
+ * (`sweepFollowUpVencidas`). Escrito dos veces, la primera condicion nueva que alguien agregue de
+ * un solo lado deja filas que no son de ninguna de las dos — invisibles para el envio Y para el
+ * conteo, que es el peor de los dos mundos.
+ */
+export const FILTROS_FOLLOWUP = Object.freeze([
+  "followup_step=eq.0",
+  "human_took_over=is.false",
+  "opt_out_at=is.null",
+  "bot_stage=in.(esperando_calificacion,esperando_horario)",
+]);
+
+/** El piso de rescate, en ISO: antes de esto ya no se escribe (`staleAfterDays`, hoy 7 dias). */
+export function pisoFollowUp(now, config = DEFAULT_CONFIG) {
+  const dias = config?.followUp?.staleAfterDays ?? DEFAULT_CONFIG.followUp.staleAfterDays;
+  return new Date(now - dias * 24 * 3600000).toISOString();
+}
+
 export function buildMessageRow(message, state, extra = {}) {
   const guardrail = message.guardrail || { ok: true, violations: [] };
   const direction = message.direction === "inbound" ? "inbound" : "outbound";
@@ -551,20 +573,41 @@ export function createStore(options = {}) {
   async function sweepFollowUpCandidates(nowIso, config = DEFAULT_CONFIG, limit = 50) {
     const now = Date.parse(nowIso);
     if (!Number.isFinite(now)) return warn("sweepFollowUpCandidates", `nowIso invalido: ${nowIso}`);
-    const staleHoras = (config.followUp.staleAfterDays ?? DEFAULT_CONFIG.followUp.staleAfterDays) * 24;
-    const from = new Date(now - staleHoras * 3600000).toISOString();
+    const from = pisoFollowUp(now, config);
     const to = new Date(now - config.followUp.afterHours * 3600000).toISOString();
     const filter = [
-      "followup_step=eq.0",
-      "human_took_over=is.false",
-      "opt_out_at=is.null",
-      "bot_stage=in.(esperando_calificacion,esperando_horario)",
+      ...FILTROS_FOLLOWUP,
       `last_inbound_at=gte.${from}`,
       `last_inbound_at=lte.${to}`,
       "order=last_inbound_at.asc",
       `limit=${Number(limit) || 50}`,
     ].join("&");
     return rest("sweepFollowUpCandidates", `bot_conversations?${filter}`);
+  }
+
+  /**
+   * Las que quedaron COLGADAS por encima del piso: mismo prospecto esperando, pero ya sin rescate.
+   *
+   * No se les escribe —a los 8 dias eso es spam y la decision esta tomada— pero tienen que SALIR
+   * CONTADAS. `skipReason` ya sabe llamarlas `conversacion_muerta`; el problema es que la consulta
+   * de arriba las recorta ANTES de que el runner pueda juzgarlas, asi que el log dice `scanned: 0`
+   * y esa es exactamente la misma cara que "no hay nadie a quien escribirle". Un tope que no habla
+   * con su cuenta convierte a un lead perdido en una linea que parece sana.
+   *
+   * Comparte el predicado con su hermana (`FILTROS_FOLLOWUP`) a proposito: difieren SOLO en la
+   * ventana. Si manana alguien agrega una condicion de elegibilidad y la escribe en un solo lado,
+   * las dos poblaciones dejan de ser complementarias y el conteo pasa a mentir en silencio.
+   */
+  async function sweepFollowUpVencidas(nowIso, config = DEFAULT_CONFIG, limit = 50) {
+    const now = Date.parse(nowIso);
+    if (!Number.isFinite(now)) return warn("sweepFollowUpVencidas", `nowIso invalido: ${nowIso}`);
+    const filter = [
+      ...FILTROS_FOLLOWUP,
+      `last_inbound_at=lt.${pisoFollowUp(now, config)}`,
+      "order=last_inbound_at.desc",
+      `limit=${Number(limit) || 50}`,
+    ].join("&");
+    return rest("sweepFollowUpVencidas", `bot_conversations?${filter}`);
   }
 
   /**
@@ -838,6 +881,7 @@ export function createStore(options = {}) {
     listOutboundMessages,
     reserveFollowUp,
     sweepFollowUpCandidates,
+    sweepFollowUpVencidas,
     sweepInsistenciaCandidates,
     sweepDemoReminders,
     sweepDemosTerminadas,

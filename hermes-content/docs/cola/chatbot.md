@@ -318,6 +318,450 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **~~El prospecto que vuelve dos días después y NO elige recibía los horarios ya
+      vencidos en pantalla~~ — CERRADO el 2026-09-18.**
+      (`hermes-content/deploy/vps-ops/bot/bot-engine.mjs` `handleHorario`, suite 1157/1157)
+
+      **Es la mitad que faltaba de un defecto ya arreglado DOS veces en este archivo.** Se curó
+      al que ELIGE (`slotSostenible(chosen)`, 602fba40) y al mensaje DIFERIDO (`buildFollowUp`,
+      3622a447), y quedó libre el que sólo MIRA: volver dos días después y contestar cualquier
+      otra cosa —contar el negocio, la rama más común del guion— caía en `M0b`, que re-ofrece
+      `{{slot_a}}`/`{{slot_b}}` desde `activeSlots`, que prefiere la FOTO guardada. El prospecto
+      leía "**A)** martes 15, 14:00" tres días después de ese martes, elegía uno, y recién ahí el
+      arreglo del día anterior le contestaba que había caducado: **la promesa falsa llegaba
+      primero a la pantalla.**
+
+      **La firma, que se repite y conviene nombrar:** lo que DECIDE la rama se re-mide contra los
+      vigentes (`slotsPending(config)`) y lo que HABLA lee el estado guardado.
+
+      **Reproducido antes de tocar nada**, con el estado exacto que devuelve la base
+      (`slots_offered` con el `pending: false` congelado): el bot contestaba
+      `¿Cuál te va mejor? **A)** martes 15 de septiembre, 14:00 · **B)** martes 15 de
+      septiembre, 16:00`.
+
+      **La cura refresca sólo si la foto ya no se sostiene, no en cada turno** — dentro de la
+      misma charla el cron diario puede rotar los horarios y el "A" que la persona leyó hace tres
+      minutos no puede cambiarle bajo los pies. Y pisa el estado, que es obligatorio: sin eso el
+      texto ofrece los nuevos y el próximo "A" reserva el viejo.
+
+      ⚠️ **Dos falsos verdes PROPIOS que encontró la mutación, los dos corregidos en la misma
+      vuelta:** (1) la CONDICIÓN no tenía dueño — cambiarla por `true` dejaba las 1156 pruebas
+      del bot en verde, y ahora la sostiene el caso 6; (2) el comentario que escribí afirmaba que
+      adelantar el refresco "rompería" el camino de la elección, y la mutación lo refutó
+      (`ctx.slotChoice` ya viene resuelto desde `step()`). El comentario decía al revés y quedó
+      corregido, con la condición real bajo la que sí rompería.
+
+      **Validado por 4 mutaciones:** no pisar · esquivar la condición · pisar siempre · adelantar
+      el refresco. Las tres primeras en rojo nombrando su sujeto.
+
+      ⚠️ **Commiteado y pusheado en la rama del carril, NO desplegado:** lo mergea `onia-cola` y
+      el publicador automático del VPS lo toma solo (mide `bot: PUBLICADO` a las 05:50 y 11:50 La
+      Paz de hoy). No abrí pedido de deploy: el circuito ya lo cubre.
+
+- [x] 🔴 **~~El gate que vigila qué rubros ofrece el bot cruzaba dos lados del REPO, y el
+      documento que producción SIRVE le gana al archivo~~ — CERRADO el 2026-09-18.**
+      (`hermes-content/deploy/vps-ops/bot/rubros-vivos.mjs`)
+
+      `rubros-vivos.mjs` existe porque el catálogo del bot ya se desincronizó del alta dos veces.
+      Comparaba `MODULOS_LISTOS` (`config.mjs`, repo) contra `RUBROS_ACTIVOS` (onia-platform,
+      repo) — **los dos lados del repo**, y nunca consultaba la capa `panel`, que es la que
+      producción sirve (`/health` del webhook: `source:"panel"`). Medido: `grep` de
+      `filaPublicada|panel|health|docker` en ese archivo daba **cero**.
+
+      **Por qué importaba.** `rubrosExtra` es el único campo del esquema que suma rubros
+      (`knowledge.mjs`: *"es A QUIEN le vendemos"*), se tipea desde el panel y **gana sobre el
+      archivo** para el inbox que lo tenga publicado. Su comentario declara que la capa editable
+      *"sólo se mueve en la dirección segura: agrega"* — cierto para disparadores, **falso para
+      rubros**: agregar uno es SOBREVENDER, o sea enganchar a un lead cuyo rubro el alta rechaza.
+      Hoy la fila trae `rubrosExtra` vacío, así que el gate acertaba **por casualidad** — la misma
+      forma que ya mordió el 2026-09-12 (el bot cotizando Bs 750/1.500 a leads reales con
+      `test:precios-bot` en verde, porque los dos lados leían el repo).
+
+      **Cómo se cerró.** El lector del documento vivo se **importa** de `precios-vivos.mjs`
+      (`filaPublicada`, `inboxesVivos`) en vez de copiarse — dos lectores del mismo hecho es como
+      uno queda verde solo. El universo de inboxes se deriva de Chatwoot, no de una lista a mano.
+      Tri-estado: `apagada`/`ausente` son respuestas ("ese inbox cae al archivo, que ya se mide"),
+      pero "no pude preguntar" sale **exit 2**, nunca verde.
+
+      **Prueba.** 8 casos nuevos en `--self-check` (14 en total, verde) y **validado por mutación
+      en las dos direcciones**, con el exit leído sin pipe (el de un pipe es el de `tail`):
+      ignorar `rubrosExtra` → `exit 1`, 1 FALLA; aplanar "no pude preguntar" a "no agrega nada"
+      → `exit 1`, FALLA en el caso del tri-estado. Medición viva contra producción: `exit 0` —
+      *"produccion vende 5 · el bot ofrece 5 · capa editable: 2 inbox(es) con fila publicada de 4"*,
+      ninguno agrega un rubro que el alta no acepte.
+
+- [x] 🔴 **~~Los horarios de demo NO le llegaban a los barridos: el follow-up salteaba a TODOS
+      los prospectos con `slots_sin_definir` — teniendo los cinco horarios vivos~~ — CERRADO el
+      2026-09-18 en el repo.** Commiteado, **NO desplegado**.
+
+      **Costo medido, con un desconocido real esperando.** `chatwoot:58` escribió por WhatsApp el
+      17-sep 22:50 UTC desde el botón de la web, el bot le contestó bien y no volvió. El rescate
+      (M3) le tocaba hoy 19:17 UTC, dentro de la ventana de 24 h de Meta. No iba a salir:
+
+      ```bash
+      # contra producción, en seco — el lead entra al barrido y se saltea:
+      bash /opt/onia/bot/followup-run.sh --dry-run --now 2026-09-18T19:17:01Z --json
+      #  -> "scanned":1, "skipped":[{"chatwoot:58","slots_sin_definir"}]
+
+      # el MISMO barrido con los horarios que ya viven en el entorno del bot (fuera de git):
+      export ONIA_BOT_SLOTS="$(sed -n 's/^ONIA_BOT_SLOTS=//p' /opt/onia/bot/webhook.env | head -n1 \
+        | sed -e 's/\r$//' -e 's/^"\(.*\)"$/\1/')"
+      bash /opt/onia/bot/followup-run.sh --dry-run --now 2026-09-18T19:17:01Z --json
+      #  -> "send":[{"chatwoot:58", templateKey "M3", sendKind "texto_libre"}]
+      ```
+
+      **La causa.** Los wrappers pasaban `-e ONIA_BOT_SLOTS="${ONIA_BOT_SLOTS:-}"`, o sea la
+      tomaban del entorno del que llama, y el cron los invoca **pelados**. El archivo de entorno
+      del bot vive **fuera de git** (no existe en este repo; se edita en el VPS). Es la misma clase que
+      `ONIA_BOT_DRY_RUN` tuvo hasta ayer —dos interruptores en serie, uno decorativo— y la cura
+      quedó a unas líneas de distancia **en el mismo archivo**, sin viajar al hermano. Por eso
+      encender los barridos ayer no alcanzó: pasaron a `mode: emit` y siguen sin rescatar a nadie,
+      ahora en verde.
+
+      **La cura.** Los cuatro wrappers que le pasan la variable al contenedor
+      (`hermes-content/deploy/vps-ops/bot/followup-run.sh`, `insistencia-run.sh`, `run-turn.sh`,
+      `chatwoot-adapter.sh`) la derivan de ese archivo —fuera de git— cuando el llamador no la trae. El lector **no puede** ser el de
+      `ONIA_BOT_DRY_RUN`: ese limpia con `tr -d` y el valor de los horarios **lleva
+      espacios** (`sábado 19 de septiembre, 14:00@...`), así que lo dejaría irreconocible.
+
+      **El gate EJECUTA, no lee**
+      (`hermes-content/deploy/vps-ops/bot/slots-viajan-al-barrido.test.mjs`): deriva el universo
+      del disco (`readdirSync`, no `git ls-files`: el wrapper nuevo sin commitear es justo el
+      sujeto) y corre cada wrapper contra un `docker` **falso** que graba sus argumentos, con el
+      entorno limpio, exigiendo que el valor llegue entero. Se satisface de dos maneras, las dos
+      mecánicas: cargar ese archivo entero (así hace
+      `hermes-content/deploy/vps-ops/bot/webhook-server.sh`) o pasar esa prueba.
+      Validado por mutación en las dos formas conocidas de romperlo —sacar la derivación y usar
+      el lector que come espacios—: `# fail 1` en las dos, y la primera **seguía nombrando**
+      `/opt/onia/bot/webhook.env` para el otro flag, o sea el gate no se esquiva nombrando el helper.
+
+- [x] 🔴 **~~El M3 ofrece un horario que el generador no publicó, y con menos aviso del que
+      promete~~ — CERRADO el 2026-09-18 en el repo.** Commiteado, **NO desplegado** (el bot no
+      toca fuente de precio, así que publica solo tras el merge del integrador).
+
+      **Medido contra producción, con un desconocido real esperando.** `chatwoot:58`:
+
+      ```bash
+      export ONIA_BOT_SLOTS="$(sed -n 's/^ONIA_BOT_SLOTS=//p' /opt/onia/bot/webhook.env | head -n1 \
+        | sed -e 's/\r$//' -e 's/^"\(.*\)"$/\1/')"
+      bash /opt/onia/bot/followup-run.sh --dry-run --now 2026-09-18T19:17:01Z --json
+      #  -> text: "Te dejo dos opciones nuevas ... **sábado 19 de septiembre, 09:00** o **lunes 21 ...**"
+      #  -> y ONIA_BOT_SLOTS trae el de las 14:00 de ese sábado, NO el de las 09:00
+      ```
+
+      Las 09:00 del sábado quedaban a **17,7 h** del viernes 19:17 UTC — debajo de las 24 h que el
+      propio `parseSlotsSpec` exige y que la coletilla del mismo mensaje promete. Y el horario **no
+      lo tenía reservado nadie**: si el prospecto lo elegía, se le agendaba algo que Sergio Urcullo
+      no tenía libre.
+
+      **La causa.** `activeSlots` (`reply-builder.mjs`) prefiere `state.slotsOffered` — correcto
+      para el turno en vivo, donde "A" tiene que seguir siendo la A que se ofreció hace tres
+      minutos, y exactamente al revés en el M3, que es el **único mensaje del guion que sale un día
+      después** del turno que lo originó, y en el medio corre el generador. El texto dice "dos
+      opciones **nuevas**" y eran las viejas.
+
+      **Por qué nada estaba rojo.** Era el mismo hecho con **dos fuentes dentro del mismo camino**:
+      el barrido ya decide si manda mirando los vigentes (`blocked = slotsPending(config)`,
+      `followup-run.mjs:351`) y después escribía el texto con los del estado. La fuente que
+      **decide** se re-mide en cada corrida; la que **habla**, no. Nunca se había visto porque
+      hasta ayer el barrido jamás llegó a construir un M3.
+
+      **La cura** (`bot-engine.mjs`, `buildFollowUp`): el estado del rescate se arma pisando
+      `slotsOffered` con `config.slots`. Cubre de una los **dos** caminos —texto libre y plantilla
+      paga de Meta, que leen los mismos horarios a propósito— y `simulate.mjs`, que también llama
+      ahí. La segunda mitad es la que evita que el arreglo sea peor que el bug: sin pisar el
+      estado, el texto ofrece los nuevos y la respuesta "A" reserva el **viejo**. Si no hay
+      vigentes quedan los `pending` y el guion cae solo a SIN_HORARIOS, que es lo que el barrido ya
+      espera (`slots_sin_definir`, sin quemar la reserva).
+
+      **Un test que defendía el defecto.** `followup-run.test.mjs` exigía que una conversación con
+      `slots_offered` placeholder **no recibiera rescate nunca**, ni con horarios ya publicados —
+      o sea un dato viejo de la fila le costaba el rescate a un prospecto real. Lo que se sostiene
+      es la **baranda** (que no salga un placeholder en una plantilla paga), no la prohibición; esa
+      baranda ya tiene su propio caso, que cuelga del `config`, la fuente que sí se re-mide.
+
+      **Prueba — tres mutaciones sobre la cura, las tres en rojo**, y ninguna mitad sobra:
+
+          M1 quitar el refresco (el defecto original) ........ fail 2
+          M2 refrescar el TEXTO y persistir los viejos ....... fail 2   ← lo caza el assert de persistencia
+          restaurado ........................................ pass 135 / fail 0
+
+      **El gate de clase** (`rescate-ofrece-horarios-vigentes.test.mjs`) impide que la clase vuelva
+      por otro barrido: cruza los `*-run.mjs` que llaman a `deliver(` contra las plantillas que de
+      verdad ofrecen un horario (las que llevan la marca `{{slot_…}}`, leída del guion, no del
+      nombre), y exige que quien ofrezca uno pase por `buildFollowUp`. Los dos lados se derivan del
+      disco. Validado por mutación: hacer que `R_SEGUIMIENTO` ofrezca un horario → `fail 2`, con el
+      mensaje nombrando `insistencia-run.mjs`; sacar el refresco → `fail 1`; universo vacío → lo
+      caza el caso ancla. Suite del bot **1163/1163**, y la cadena lo ejecuta de verdad (mutación
+      adentro del archivo nuevo → `npm run test:bot` = `fail 1`).
+
+- [x] 🔴 **~~La insistencia podía escribirle a los clientes de un cliente a las 3 de la mañana:
+      su única franja horaria vivía en el crontab del VPS, y el gate de ayer la citó como si
+      fuera la garantía~~ — CERRADO el 2026-09-18 en el repo.** Commiteado, **NO desplegado**
+      (el bot no toca fuente de precio, así que publica solo tras el merge del integrador).
+
+      **Cómo apareció.** No de la cola —no le quedaban 🔴 abiertos— sino de preguntarle a
+      producción **qué mandaron de verdad los cuatro barridos del embudo desde que los encendí
+      ayer**. Respuesta: nada, nunca (456 corridas de insistencia, `send: []` en todas). Pero al
+      mirar sus crons apareció la asimetría: los otros tres corren `* * * *` y se frenan **por
+      código**; `insistencia` corre `*/30 12-23` y **no se frena por ningún lado más**.
+
+          for f in *-run.mjs; do ... grep -c 'deliver(' / grep -c 'localHour'; done
+          followup-run.mjs      deliver:3  localHour:2
+          insistencia-run.mjs   deliver:3  localHour:0     ← el hueco
+          reminder-run.mjs      deliver:2  localHour:3
+
+      **Por qué nada estaba rojo, y es lo más transferible.** El gate que cerró este mismo defecto
+      ayer en el follow-up (`followup-no-escribe-de-madrugada`) **enumeró a sus dos hermanos a
+      mano** para explicar que el olvido era sólo suyo, y escribió que `insistencia` *"queda
+      acotado por la franja de SU cron"*. La frase **era cierta** y absolvió al sujeto equivocado.
+      Una enumeración de hermanos escrita en el comentario del propio arreglo es una **lista de
+      inclusión**, y el que la lee después la toma por verificada. Ese comentario ya está
+      corregido en su archivo, que es donde desactivaba la auditoría.
+
+      **Por qué un crontab no puede ser la guarda** (tres razones, y la tercera es la que manda):
+
+      1. Es una franja **de arranque, no de decisión**: `insistencia-run.sh` es ejecutable y se
+         corre a mano para depurar — a las 3 de la mañana manda igual.
+      2. Vive **fuera de git**, y su línea ya fue editada a mano (lleva el `--emit` escrito ahí),
+         así que perderla no deja ni una señal. Ese mismo modo de falla se cerró **ayer** para el
+         **modo** de estos barridos, derivándolo del interruptor versionado. Quedó la hora.
+      3. `insistencia` es el **único barrido multi-org**: le escribe a los clientes **del
+         cliente** (los pacientes de una clínica), y la hora decente es la del negocio. **Un
+         crontab sólo sabe decir UTC** — la hora local no se puede expresar ahí ni queriendo.
+
+      **Qué se pagaba.** Un WhatsApp de madrugada al paciente de una clínica lo paga **la clínica**
+      con el quality rating de SU línea, y la culpa es nuestra.
+
+      **El arreglo.** `config.insistencia.quietBeforeHour/quietAfterHour` (8–21) + la guarda en
+      `insistencia-run.mjs`, con `localHour`, **la misma pieza que usan sus dos hermanos**. Dos
+      decisiones:
+
+      - Va **última** y **antes del CAS**: el motivo es transitorio (la hora se arregla
+        esperando) y la reserva es de **un solo uso**, así que gastarla porque son las 3 AM
+        perdería la insistencia entera. Hay un caso que lo ata mirando el array de reservas.
+      - Los tres números salen de **un solo par de constantes** (`HORA_SILENCIOSA_DESDE` y
+        `HORA_SILENCIOSA_HASTA`, en `config.mjs`): tres pares sueltos serían tres políticas para
+        el mismo hecho, que es la trampa que ese archivo ya pagó con la duración de la demo.
+
+      **El gate de clase** (`barridos-no-escriben-de-madrugada.test.mjs`) **camina el disco** en
+      vez de citar la lista del comentario anterior: sujeto = todo `*-run.mjs` que llame a
+      `deliver(`. Con caso ancla que exige que los tres conocidos estén en el universo.
+
+      **Prueba — cuatro mutaciones, las cuatro en rojo**, y ninguna mitad sobra:
+
+          M1 quitar la guarda (el defecto original) ....... fail 5
+          M2 esquivar la condición (false &&) ............. fail 3   ← el gate de TEXTO pasa; caen los de comportamiento
+          M3 romper el predicado del universo ............. fail 1   ← lo caza el caso ancla
+          M4 sacar el bloque de config ................... fail 5
+          restaurado ..................................... pass 8 / fail 0
+
+      Suite entera del bot: **1151/1151**. Y la cadena lo ejecuta de verdad, confirmado por
+      mutación (`npm run test:bot` → 1152 tests, `fail 1`), no por mirar el glob.
+
+- [x] 🔴 **~~El gate de anticipación medía sólo el PISO y firmaba `ok` sobre el defecto de
+      enfrente: el bot alejaba el turno tres días teniendo el sábado libre~~ — CERRADO el
+      2026-09-18.** Gate cableado (commit en la rama) **y el valor vivo ya curado en producción**.
+
+      **Cómo apareció.** No de la cola —estaba sin 🔴 abiertos— sino de mirar producción por el
+      eje que ningún gate mira: **qué horarios tiene cargados el proceso vivo, un viernes**.
+
+          ONIA_BOT_SLOTS = lunes 21 · martes 22 · miércoles 23 · jueves 24 · viernes 25
+
+      Cinco horarios, todos 14:00, **ni un sábado y ni una franja de 20:00-22:00**, un viernes a
+      las 10:13 — con el **sábado 19 entero libre** y la coletilla del **mismo mensaje**
+      prometiendo *"sáb 9:00-15:00"*. Quien escribiera ese día esperaba **tres días**.
+
+      **Por qué nada estaba rojo.** `anticipacion-viva.mjs` nació el 5-sep contra el defecto
+      opuesto (el bot ofreció una demo a 4 h 57 min) y quedó midiendo **un solo lado**: que el
+      aviso sea **≥ 24 h**. Sobre esto imprimía `ok — 75,8 h de aviso`. Un piso sin techo no es
+      una garantía, es la mitad barata de una — y es la mitad que **no pierde plata**. Es la clase
+      *direcciones simétricas* de la memoria: se cerró *"no promete de más"* y quedó abierta
+      *"no ofrece de menos"*.
+
+      **El arreglo.** `diasDesaprovechados()` en `anticipacion-viva.mjs`: los días de atención con
+      alguna hora **ofrecible** (dentro de franja y con la anticipación cumplida) **anteriores** al
+      primer horario que el prospecto puede tomar. Tres decisiones que costaron sus rojos:
+
+      - Se juzga **por día, no por hora**. El valor se escribe 1 vez/día y se sirve 24 h, así que
+        la hora del primer candidato se corre sola con el reloj: comparar instantes pondría el
+        gate rojo **por el mero paso del tiempo**. Un día entero saltado no lo explica ningún reloj.
+      - El corte es el **día local del turno ofrecido**: ofrecer el sábado 14:00 teniendo libre el
+        sábado 11:00 **no es alejar** (el generador da un horario por día a propósito). Primer
+        fixture en rojo por esto.
+      - El sujeto es el primer horario **sostenible**, no el primero de la lista: uno `pending` ya
+        lo cubre el piso, y medir el alejamiento contra un turno que el lead no puede tomar
+        mezclaría los dos diagnósticos.
+
+      El techo **se deriva de `VENTANAS_ATENCION`** (fuente única de cuándo está Sergio Urcullo),
+      con un caso que lo ata: agregarle el domingo a esa fuente hace que el gate lo exija solo.
+      Validado por **mutación**, las tres en rojo: esquivar el acumulador, sacar el techo del
+      veredicto, y clavar el mapa de ventanas en vez de recibirlo.
+
+      **Prueba.** Antes: `VEREDICTO: roto — el bot aleja el turno: 1 día(s) … El más temprano que
+      se dejó pasar: sábado 19, 11:00`. Después de curar el valor vivo:
+
+          ok   sábado 19 de septiembre, 11:00 — 24.7 h de aviso
+          ok   lunes 21 de septiembre, 14:00 — 75.7 h de aviso
+          VEREDICTO: ok — promete con un día de aviso y el corte lo respalda
+
+      Y el bot **sigue vivo en el segundo turno** tras el reinicio: `node scripts/sonda_widget.mjs`
+      → *"EL BOT CONTESTÓ LOS 2 — conversación 49"*.
+
+      **Lo que hay que saber para la próxima, y es lo más transferible.** El código del generador
+      ya estaba arreglado **y desplegado** (`/root/bin/onia-renovar-slots.py`, 09:44 La Paz) — el
+      defecto era el **valor servido**, calculado por la corrida de las **06:23**, o sea por el
+      código viejo. Un arreglo a algo que un cron produce **1 vez al día** no llega al cliente
+      hasta la próxima corrida, y las tres medidas canónicas de deploy **no lo ven**: todas
+      preguntan si el CÓDIGO está, ninguna si el ARTEFACTO se regeneró. Peor acá: el cron de
+      mañana 06:23 **tampoco** habría salvado el sábado (sábado 06:23 + 24 h → domingo, que no se
+      trabaja → lunes 21). La ventana que el arreglo compraba **se perdía entera**.
+
+      **Por qué se pudo curar sin pedir deploy.** El generador reinicia el bot, y `start`
+      re-sincroniza `/tmp/onia-bot` desde `/opt/onia/bot` — un **deploy encubierto** si el código
+      difiere. Se midió antes de correrlo, no se supuso:
+
+          stamp /opt = 4786e7de62a2 · stamp vivo = 4786e7de62a2  → IGUALES: el restart no cambia código
+
+      Con los stamps iguales el restart sólo recarga la variable. **Si difieren, no se corre: se
+      pide el deploy.**
+
+- [x] 🔴 **~~El bot le promete al prospecto que "Sergio te escribe AHORA" y a Sergio Urcullo le
+      dice "DEMO AGENDADA — anotala": el aviso afirma lo contrario de lo que pasó~~ — CERRADO el
+      2026-09-18 en el repo.** Commiteado, **NO desplegado** (el bot no toca fuente de precio,
+      así que el publicador automático del VPS —fuente en `scripts/loops/extras/publicar-solo.sh`— lo
+      saca solo dentro de su ventana de 3 h).
+
+      **Cómo apareció.** Midiendo el embudo por el estado que el motor ESCRIBE, no por lo que
+      contesta: `select bot_stage, count(*), count(calendar_event_id) from
+      onia_center.bot_conversations` → **43 conversaciones, 0 con `calendar_event_id`**, y de
+      las que eligieron horario, 1 de 1 sin reserva. Eso es lo ESPERADO y ya está decidido
+      (opción (c), ver el bloque cerrado del 13-sep más arriba) — pero al tirar del hilo apareció
+      lo que la decisión NO cubre.
+
+      **El defecto.** `cierreDeReservaFallida` tiene DOS textos y sólo uno promete acción humana
+      inmediata: con `horario_tomado` (409, carrera real) el bot le dice al prospecto *"Sergio te
+      escribe ahora para acomodarlo"*. El único aviso que salía era el del motor —
+      `demo_agendada` → **"DEMO AGENDADA — anotala"** — o sea que a Sergio Urcullo se le pedía
+      anotar un horario **ocupado**, mandándolo a una reunión que choca. El comentario de
+      `run-turn.mjs` decía, al lado del código, *"se le agrega una línea honesta **y se deja el
+      aviso**"*: lo primero era cierto y lo segundo no — lo único que salía de ahí era un
+      `bookingWarnings.push(...)`, y los warnings **no son un efecto** (`construirAviso` se arma
+      de `notify`, que viene de los `deferred` del motor). Nadie los leía: `grep calcom` sobre el
+      log vivo de 2,7 MB dentro de `onia-center` da **0**.
+      Y el test hermano se llama *"solo el aviso honesto"* afirmando la misma garantía que
+      tampoco comprobaba: miraba el texto del prospecto y nada más.
+
+      **Arreglo** (`calcom-booking.mjs` `avisoDeReservaFallida` + `KIND_RESERVA_SIN_CONFIRMAR`,
+      `run-turn.mjs`, etiqueta en `aviso-telegram.mjs`): el fallo que CONTRADICE al aviso del
+      motor emite su propio `notify_sergio`, **después** del que corrige (`construirAviso` pega
+      las líneas en orden, así que al revés se lee la versión optimista y se para de leer). El
+      fallo **esperado** devuelve `null` a propósito: correr sin calendario ya está decidido y un
+      aviso por cada demo sería ruido en el canal que Sergio Urcullo pidió limpio. Las dos
+      direcciones tienen su caso y **las dos mutaciones caen en rojo, cada una en el suyo**.
+
+      **Y la clase, no sólo la instancia.** El gate de etiquetas
+      (`aviso-nombra-todo-lo-que-el-motor-emite.test.mjs`) derivaba su universo de **un solo
+      archivo** (`bot-engine.mjs`) y buscaba `kind: "literal"`: un aviso emitido desde otro
+      archivo, o con el kind en una constante, no era sujeto de nadie — la misma familia que ese
+      gate existe para cazar, un escalón más arriba. Ahora camina la carpeta y, para la forma con
+      constante, le pregunta a la **función que construye el payload** en vez de al texto.
+      Mutación: sin la línea de `ETIQUETAS`, rojo.
+
+      ⚠️ **Dos premisas vencidas corregidas en el camino** (`calcom-booking.mjs` y
+      `persistence.test.mjs`): los dos comentarios afirmaban que *"hoy no hay Cal.com en el VPS
+      (sin `CALCOM_BASE_URL`), así que `sin_config` es el 100% del tráfico real"*. Medido el
+      2026-09-18 en `/proc/<pid>/environ` dentro de `onia-center`: la config **sí está**
+      (`CALCOM_BASE_URL=http://calcom:3000`, `CALCOM_BOT_EVENT_TYPE_ID=5`), así que `sin_config`
+      es el **0%**; lo que no existe es el destino (`docker ps` no lista `calcom` ni parado, y el
+      hostname ni resuelve). El 100% real cae en `reason: "error"` tras agotar
+      `BOOKING_TIMEOUT_MS`. La cola ya lo había medido bien el 13-sep; los comentarios del código
+      nunca se enteraron, y mandaban a diagnosticar la rama que no se ejecuta.
+
+- [x] 🔴 **~~El watchdog del bot callaba justo en las dos situaciones donde el bot está MÁS
+      muerto~~ — CERRADO el 2026-09-18 en el repo** (`webhook-watchdog.sh` + 7 casos nuevos en
+      `webhook-watchdog.test.mjs`, validados por 3 mutaciones). Commiteado, **NO desplegado** —
+      el watchdog vivo sigue mudo en esas dos ramas hasta que se publique el bot.
+
+      **Cómo apareció.** Midiendo producción por un eje que ningún gate mira: el log
+      `/var/log/onia-bot-watchdog.log` del VPS tenía **76 líneas seguidas de `Permission
+      denied`** — 2,5 h con el watchdog muerto, y nadie se enteró. Lo curó el deploy de las
+      06:18 UTC (`ctime` de los tres `.sh`), no una persona. Eso destapó lo de abajo, que es
+      peor que la causa.
+
+      **Qué era.** Las dos ramas en las que el watchdog se rinde escribían el log y **no
+      avisaban a nadie**:
+
+      - **El contenedor `onia-center` no está corriendo** → `log "AVISO: …el watchdog no puede
+        hacer nada"` y `exit 0`, que para el cron es éxito. El bot está mudo en el widget **y**
+        en WhatsApp, y es el daño mayor: con el contenedor vivo y el webhook caído **sí** sonaba
+        la alarma 🚨. El peor caso era el único callado.
+      - **`webhook-server.sh` sin bit de ejecución** → `log "ERROR: falta …"` y `exit 1`. Se
+        llega ahí sólo con el `/health` ya caído, así que es el bot mudo sin nadie que lo
+        levante — y es exactamente el accidente que el deploy de las 03:47 UTC provocó en sus
+        tres hermanos ese mismo día.
+
+      **La cura.** Las dos ramas avisan por Telegram con el molde que el archivo ya usaba para
+      Chatwoot: **strike de una corrida** (un reinicio de docker hace desaparecer el contenedor
+      unos segundos y eso no es un incidente), marcador propio `incidente-contenedor` —para que
+      la recuperación de un incidente no cierre la del vecino— y su ✅ de desenlace escrito
+      también en el log. La rama del contenedor pasa de `AVISO:` a `ERROR:`, que es lo que
+      siempre fue.
+
+      **El gate cierra la clase, no la instancia.** `CLASE: todo ERROR del log llega a Telegram`
+      deriva sus sujetos del disco (cada `log "ERROR:` del script) y es la **dirección
+      simétrica** del gate que ya existía (`todo ✅ de Telegram escribe el log`). La distinción
+      `AVISO:`/`ERROR:` queda con significado real y sin una sola exención a mano: `ERROR` = el
+      bot está roto y Sergio Urcullo se entera; `AVISO` = observación que no escala (el parpadeo
+      de una sonda, el firewall re-insertado). La rama que se escriba mañana nace adentro.
+
+      **Prueba:** `npm run test:bot` → 1134/1134. Las 3 mutaciones (sacar el `tg_error` de cada
+      rama; hacer que los dos incidentes compartan marcador) ponen rojos 3, 3 y 2 casos.
+
+- [x] 🔴 **~~El barrido de rescate perdía un prospecto y el log decía lo mismo que un día
+      tranquilo: `scanned: 0`~~ — CERRADO el 2026-09-18 en el repo (`persistence.mjs` +
+      `followup-run.mjs` + gate `followup-cuenta-los-colgados.test.mjs`, 7 casos). Commiteado,
+      **NO desplegado** — el bot vivo sigue con el barrido viejo hasta que se publique.**
+
+      **Cómo apareció.** Midiendo producción, no leyendo la cola: los cuatro barridos del embudo
+      corren en `mode:emit` desde el 17-sep (`02505ade`) y las cuatro corridas del día decían
+      `scanned: 0`. La memoria del sistema avisa que *"un 0 repetido en un log se pregunta hasta
+      el final"*, así que se preguntó.
+
+      **Qué era.** `skipReason` YA sabe llamar `conversacion_muerta` a la conversación que se
+      pasó del piso de 7 días — pero esa rama es **inalcanzable desde el barrido real**: la
+      consulta SQL la descarta con `last_inbound_at=gte.<hoy-7d>` **antes** de que el runner
+      pueda juzgarla. El consumidor recorta antes de juzgar, y lo que queda en el log es
+      `scanned: 0`, que es exactamente la misma cara que *"no hay nadie a quien escribirle"*.
+
+      **Medido en la base (`onia_center.bot_conversations`):** NUEVE conversaciones en
+      `esperando_horario`, `followup_step=0`, sin opt-out y sin humano a cargo, colgadas por
+      encima del piso (de 8 a 54 días). Cruzadas contra Chatwoot una por una, las nueve son
+      **nuestras** — seis pruebas del inbox 3 (`ONIA Demo`), las dos sondas del carril
+      (conv 48 y 50) y la fila sintética `chatwoot:999999`. **O sea: hoy el número de leads
+      reales perdidos es CERO**, y eso se dice porque se contó, no porque el log estuviera en 0.
+
+      **Por qué se arregló igual.** El barrido corrió en dry-run hasta el 17-sep: el piso de 7
+      días **nunca se ejerció con un desconocido**. El día que un prospecto real quede colgado
+      se cae por el mismo agujero y el log dice lo mismo que hoy. Con cero clientes pagando, el
+      que pidió una demo y no eligió horario es el lead que más importa. Que se pierda está
+      decidido (a los 8 días escribir ya es spam, y **no se reabrió**: hay un caso que ata que
+      las vencidas NO entran al bucle de envío); que se pierda **en silencio** no lo decidió nadie.
+
+      **Qué cambió.** El tope ahora habla con su cuenta: `colgadas: {medido, total, desconocidas,
+      nuestras, quienes[]}` en el JSON y una línea en el texto que **nombra** al desconocido.
+      Tri-estado a propósito — sin dato es `medido:false`/`total:null`, nunca `0`: aplanarlos hace
+      que el barrido diga *"no se perdió ningún lead"* justo cuando está ciego, que es el lado caro.
+      Las dos consultas comparten `FILTROS_FOLLOWUP` y `pisoFollowUp()`: difieren **sólo** en la
+      ventana, así una condición nueva escrita de un solo lado no deja filas que no sean de
+      ninguna de las dos (ni enviadas ni contadas).
+
+      **Validado por mutación, tres veces:** aplanar el tri-estado a `0` → 1 rojo; dejar de separar
+      lo nuestro (`false &&`) → 2 rojos; volver a tipear el predicado en una sola consulta → 1 rojo.
+      Y el cableado a la cadena se probó **por mutación, no por grep** (`node --test <carpeta>` no
+      nombra los archivos que corre): con un assert falso, `npm run test:bot` dio `fail 1` sobre
+      1127. Restaurado: **1127/1127 verde**.
+
 - [x] 🔴 **~~Un módulo del bot, importado por el sitio, trababa la publicación de onia.com.bo:
       el import resuelve en el repo y NO en el stage~~ — CERRADO el 2026-09-17 en el repo
       (`web-factory/apps/onia-platform/scripts/promesa-inclusion.mjs` + dos gates). Llega solo al
@@ -562,6 +1006,61 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       (`fail 2`) y no limpiar el strike (`fail 1`). Entra a la cadena por `test:bot`, y que la
       cadena lo **ejecute** se comprobó por mutación también (un caso que falla apareció como
       `not ok 1097`), no por grep.
+
+- [x] 🔴 **~~La puerta que MANDA el WhatsApp le seguía escribiendo a los clientes de un negocio
+      con la cuenta vencida — y era la QUINTA, no la cuarta~~ — CERRADO el 2026-09-18 en
+      `onia-platform` (`5bf5f675`), commiteado y PENDIENTE DE MERGE + DESPLIEGUE.**
+
+      **Dónde:** `onia-platform/app/api/n8n/whatsapp/send/route.ts`, el proxy multi-tenant por el
+      que los workflows de n8n (`wf11-followup`, `wf05-birthday`) mandan WhatsApp a los clientes
+      del negocio. Preguntaba **sólo** por el add-on, nunca por la vigencia del plan.
+
+      **Por qué nadie lo veía — y es la lección, no el bug.** El cron de recordatorios
+      (`onia-platform/app/api/cron/appointment-reminders/route.ts`) cerró su caso el 11-sep y se
+      declaró en un comentario *«LA CUARTA PUERTA que escribe en nombre del negocio sin sesión del
+      dueño»*, enumerando las otras tres: el panel con `checkPlanExpiry`, la reserva pública y el
+      bot. Esa enumeración es una **lista escrita a mano**, y falló abierto justo en la puerta más
+      cara: la que efectivamente manda el mensaje. Su gate
+      (`onia-platform/app/api/cron/appointment-reminders/cuenta-viva.test.ts`) mira ESE archivo y
+      nada más, así que la clase quedó abierta con todo en verde.
+
+      **Por qué el add-on no alcanzaba.** `isWhatsAppAddonActive` colapsa dos fuentes, y una es
+      `organizations.whatsappAddon` — otorgamiento a mano **sin columna de fecha**, o sea que
+      devuelve `true` para siempre. Exactamente el mismo motivo del ítem de abajo.
+
+      **Alcanzable, medido en producción el 2026-09-18 12:16 UTC** (`docker exec supabase-db psql
+      -U postgres -d postgres -tAc 'select slug, plan, "whatsappAddon", "planEnd", "trialEnd" from
+      organizations;'`): `clinica-sergio-p2ljs` es la **única** org con el add-on, `whatsappAddon=t`,
+      `planEnd` vacío y `trialEnd` `2026-09-17 20:20` — con la gracia de un día, corta **hoy
+      20:20 UTC**. Cada mensaje suyo lleva plantilla de Meta pagada por nosotros, firma con el
+      nombre de un negocio que dejó de pagar, y lo invita a responderle a un bot que desde el
+      11-sep ya no atiende.
+
+      **El corte va ANTES de `reclamarEnvio`**: ese claim es un CAS de un solo uso, y cortar
+      después quemaría la clave idempotente — el cliente se quedaría sin el mensaje también el día
+      que el dueño renueve.
+
+      **Se cerró la CLASE, no la instancia.** Gate nuevo:
+      `onia-platform/app/api/puertas-sin-sesion-preguntan-si-la-cuenta-vive.test.ts`. Camina el
+      disco (no `git ls-files`: el sujeto que existe para no perder es el archivo nuevo sin
+      commitear) y exige el corte a toda puerta que autentica con secreto de servidor y despacha a
+      un tercero. Las dos exentas (`onia-platform/app/api/cron/trial-drip/route.ts` y
+      `onia-platform/app/api/cron/renewal-reminders/route.ts`) le escriben al
+      **dueño** sobre su propia cuenta — cortarlas apagaría el único aviso que lo recupera — y su
+      exención se **re-mide** cada corrida: si el archivo desaparece, o si algún día despacha
+      WhatsApp, vuelve a ser sujeto.
+
+      **Validado por mutación, y la primera mutación lo encontró falso verde:** nombrar
+      `isWriteBlocked` NO es tenerlo — con `false &&` delante, los cuatro casos de fuente seguían
+      verdes. Por eso el gate exige además que cada puerta tenga al lado una prueba que la
+      **ejecute** con una cuenta vencida. Las otras dos mutaciones (puerta nueva sembrada sin
+      commitear → 2 rojos; quitarle la prueba funcional a la puerta → 1 rojo) confirmadas por
+      `Tests N failed`, no por ausencia de `FAIL`.
+
+      ⚠️ **Un fixture pegado al vencimiento mide el reloj, no el corte.** El primer caso usó el
+      `trialEnd` real de producción (ayer 20:20) y dio rojo con el producto **sano**: esa cuenta
+      está en su día de gracia. Se fijó una fecha con margen y se agregó el caso contrario, que
+      prueba que dentro de la gracia todavía manda.
 
 - [x] 🔴 **~~El asistente seguía atendiendo a los clientes de un negocio con la cuenta VENCIDA:
       la puerta que alimenta al motor del VPS nunca preguntaba~~ — CERRADO el 2026-09-17 en
@@ -4307,6 +4806,90 @@ archivos.**
 ---
 
 ## Cerrado — no rehacer
+
+- [x] **~~El generador de respaldo de horarios no podía ofrecer un sábado NUNCA~~** — cerrado el
+      2026-09-18 (`hermes-content/deploy/vps-ops/bot/slots-rodantes.mjs`). Los horarios de demo
+      los escriben **dos** generadores en la MISMA variable (`ONIA_BOT_SLOTS`):
+      `scripts/loops/renovar-slots-bot.py` (06:23 La Paz) y este, el respaldo (07:41). El 13-sep
+      la disponibilidad se unificó en `ventanas-de-atencion.mjs` justo porque había dos copias
+      contradiciéndose — **y la cura no viajó hasta acá**: el respaldo seguía con días propios
+      (`knowledge.json` → `empresa.horario`) y la hora clavada en una constante, así que no podía
+      proponer ni el sábado 09:00-15:00 ni la franja nocturna 20:00-22:00, **que la coletilla del
+      mismo mensaje le promete al prospecto**. Y la premisa escrita al lado (*"es el mismo dato
+      que el bot ya usa"*) era una hipótesis **con fecha**, vencida dos veces: medido en el
+      knowledge VIVO, `empresa.horario` es **`null`**, o sea que la lectura caía siempre al
+      default `[1..5]` — fuente muerta con cara de viva. Medido corriendo los dos generadores
+      sobre los MISMOS 336 instantes (dos semanas, hora por hora): el primer horario difería en
+      **104**, hasta **3 días de más** (jueves 15:00 → ofrecible `viernes 18, 15:00`, ofrecía
+      `lunes 21, 14:00`). Ahora los dos derivan de `VENTANAS_ATENCION` y coinciden en **336/336**.
+      `diasHabiles()` y `HORA_LOCAL` **borrados**, no dejados "por si acaso": mientras siguieran
+      ahí, el próximo cambio los volvía a usar. El gate que lo tapaba se llamaba literalmente
+      `"nunca ofrece sabado ni domingo"` — **afirmaba el defecto**; lo que se sostiene es la
+      baranda (el domingo, que no tiene atención), no la prohibición del sábado. Validado por
+      mutación en las dos mitades: días propios → 1 rojo, hora clavada → 1 rojo.
+      ⚠️ **Commiteado y en la rama, NO desplegado** (`slots-rodantes.mjs` viaja con `deploy-bot.sh`).
+
+- [x] **~~El dueño que APAGABA su WhatsApp no podía reconectarlo nunca más~~** — cerrado el
+      2026-09-18, sha `21ac3e3` en `onia-platform` (`lib/chatbot/canal-whatsapp.ts`,
+      `lib/chatwoot.ts`). `apagarCanalWhatsapp` (17-sep) deja vivos el inbox y el historial **a
+      propósito** —una baja no puede costarle al cliente sus conversaciones— y suelta la columna;
+      pero el camino de ida no contemplaba esa segunda forma de que un inbox quede suelto, y
+      posteaba a Chatwoot **sin `inbox_id`**. Leído el código de Chatwoot v4.12.1 **en el
+      contenedor vivo**, eso no reautoriza:
+      `Whatsapp::EmbeddedSignupService#create_or_reauthorize_channel` bifurca por `inbox_id` —
+      con él va a `ReauthorizationService`, sin él a `ChannelCreationService`, que busca por
+      `phone_number` y **tira `phone_number_already_exists`**. O sea el add-on de Bs 390 quedaba
+      impagable de por vida para ese número, sin salida desde el panel. Misma clase que ya se pagó
+      en `canal-web.ts`: **al abrir una puerta de salida, preguntar quién invita a volver a
+      entrar**. Lo mantuvo invisible un **comentario que afirmaba la garantía al revés**
+      (*"idempotente del lado de Chatwoot: si el `phone_number_id` ya tiene canal, reautoriza el
+      existente"*) más un test que probaba esa creencia **mockeándola** en vez de medirla; los dos
+      corregidos. El inbox se reencuentra por `phone_number_id` —el dato que acaba de entregar
+      Meta, prueba de tenencia más fuerte que un sello propio— y **falla cerrado** si está
+      vinculado a otra org. Validado por mutación (esquive del `previo`: 1 test en rojo).
+      ⚠️ **Commiteado y en la rama, NO desplegado.**
+
+- [x] **~~El config del follow-up declaraba IMPOSIBLE un gasto que el código sí hace~~** — cerrado
+      el 2026-09-18 (`hermes-content/deploy/vps-ops/bot/config.mjs`). Los dos comentarios de
+      `followUp` (`afterHours` y `windowClosesAtHours`) afirmaban que fuera de las 24 h de Meta
+      *"SOLO salen plantillas — que hoy no existen y además no hay método de pago"*, y que el 24
+      era un **«TOPE DURO»** de la franja elegible. Las dos cosas eran ciertas cuando se
+      escribieron y **dejaron de serlo** al aprobarse la plantilla `seguimiento_demo`: hoy el piso
+      de la franja es `staleAfterDays` (**7 días**, fijado por `followup-run.test.mjs:151`) y entre
+      24 h y 7 días el barrido **manda plantilla PAGA** (~0,0740 USD contra 0,0113 del texto
+      libre). El código está sano y gateado — lo que estaba roto era la afirmación de al lado, que
+      es la que un futuro lector usaría para "arreglar" el selector y recortarle 6 días de alcance
+      al follow-up, o para descartar que este barrido pueda gastar. **Medido contra producción ese
+      día:** los 3 barridos ya corren en `mode:emit`/`dryRun:false` (mi arreglo del bit de ejecución
+      llegó), con `scanned: 0` — la franja 20 h–7 días no tiene sujetos hoy, así que el primer
+      gasto todavía no ocurrió. El barrido ya declara el gasto en `sendKind` (`plantilla` /
+      `texto_libre`), así que cuando ocurra se ve en su salida y no en la factura de Meta.
+
+- [x] 🔴 **~~El watchdog del bot y dos barridos del embudo estaban MUERTOS en producción: viajaron
+      sin el bit de ejecución~~** — cerrado el 2026-09-18 02:35 La Paz (`909cc75e`). A las
+      **03:47:37 UTC** de ese día un deploy repisó `/opt/onia/bot` y dejó en **644** a
+      `reminder-run.sh` (:32), `postdemo-run.sh` (:47) y `webhook-watchdog.sh` (cada 2 min). Los
+      tres pasaron a contestar `/bin/sh: 1: ...: Permission denied` en su log, **~2 h**, y nadie se
+      enteró. Lo caro no es el recordatorio de demo: es el **watchdog**, que es la red que avisa
+      cuando el bot deja de llegar a Chatwoot — el bot podía estar mudo sin que nadie lo supiera,
+      que es el fallo exacto que a este carril ya le costó una semana.
+      **Por qué sobrevivieron los otros dos:** `followup-run.sh` era el único `100755` en git, e
+      `insistencia-run.sh` **por accidente** — su línea de cron lo invoca con `bash <ruta>`, que no
+      necesita el bit.
+      **El sujeto es el modo EN GIT, no el del disco:** las dos vías de publicación copian el modo
+      del ORIGEN (`publicar.sh` usa `git archive origin/main | tar -x`, `deploy-bot.sh` usa
+      `cp -p`), así que lo que viaja al VPS es lo commiteado. Se arregla con
+      `git update-index --chmod=+x`, no con `chmod`. Los 13 `.sh` de la carpeta quedaron en
+      `100755`.
+      **Medido, no supuesto:** de los 37 scripts que el crontab del VPS invoca por ruta, los 4
+      rotos eran los de este carril; ninguno ajeno.
+      **Gate:** `hermes-content/deploy/vps-ops/bot/ejecutable-viaja-ejecutable.test.mjs`, universo
+      caminado del **disco** (`readdirSync`, no `git ls-files`: el sujeto que más importa es el
+      script NUEVO, que git todavía no ve) y caso ancla sobre los tres que murieron. Validado por
+      mutación **y contra la cadena**: con `git update-index --chmod=-x reminder-run.sh`,
+      `npm run test:bot` sale 1 con `fail 1` de 1114; restaurado, 1114/1114 verdes.
+      **Producción:** el bit se restauró a mano en `/opt/onia/bot` (`chmod`, sin publicar código);
+      sin eso el arreglo del repo no curaba nada hasta el próximo deploy.
 
 - [x] **El gate que define el «hecho» del carril firmaba VERDE con cinco personas sin contestar.**
       Cerrado el 2026-09-13 09:05 La Paz (`4c84ccf4`). `scripts/objetivo_visible.mjs` mide que la

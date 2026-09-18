@@ -19,8 +19,9 @@
 // el funnel de venta de Onia tiene SU propio followup y no pasa por aca.
 //
 //   node insistencia-run.mjs --now 2026-08-30T15:00:00Z [--emit] [--limit 50]
-import { createStore } from "./persistence.mjs";
-import { createBotConfig, DEFAULT_CONFIG, renderTemplate } from "./config.mjs";
+import { createStore, stateFromRow } from "./persistence.mjs";
+import { MOTIVO_NUESTRA, esConversacionNuestra } from "./es-nuestra.mjs";
+import { createBotConfig, DEFAULT_CONFIG, localHour, renderTemplate } from "./config.mjs";
 import { getOrgKnowledge } from "./knowledge.mjs";
 import { deliver, hoursBetween } from "./followup-run.mjs";
 
@@ -102,6 +103,15 @@ export async function runInsistenciaSweep(options = {}, deps = {}) {
 
   for (const row of rows) {
     const key = row.conversation_key;
+
+    // DEFINITIVO y primero: quien es el contacto no cambia esperando, y este es el UNICO barrido
+    // que ya corre con `--emit` en produccion (crontab `*/30 12-23`). Sin esta pregunta le insiste
+    // a nuestras propias sondas — y en el inbox de WhatsApp cada saliente lo cobra Meta.
+    if (esConversacionNuestra(stateFromRow(row))) {
+      result.skipped.push({ key, reason: MOTIVO_NUESTRA });
+      continue;
+    }
+
     const inboxId = row?.raw?.inboxId || null;
     if (!inboxId) {
       result.skipped.push({ key, reason: "sin_inbox" });
@@ -152,6 +162,24 @@ export async function runInsistenciaSweep(options = {}, deps = {}) {
     const elapsed = hoursBetween(row.last_inbound_at, nowIso);
     if (elapsed === null || elapsed < politica.horas) {
       result.skipped.push({ key, reason: `demasiado_pronto:${elapsed === null ? "s/fecha" : elapsed.toFixed(1) + "h"}` });
+      continue;
+    }
+
+    // HORA SILENCIOSA. TRANSITORIO, y por eso va ULTIMO: la hora se arregla esperando, y
+    // confundirla con un descarte definitivo haria que el barrido mire esta fila para siempre.
+    // Antes del CAS y antes del dry-run: la reserva es de UN SOLO USO, asi que gastarla porque
+    // son las 3 de la mañana pierde la insistencia entera.
+    //
+    // A quien se le insiste lo elige el SILENCIO del cliente, asi que la hora de salida es la
+    // de su ultimo mensaje corrida `politica.horas` — cualquier hora es alcanzable. Hasta hoy
+    // lo unico que lo frenaba era la franja de su cron (`*/30 12-23` UTC), fuera de git y
+    // ciega al huso: este es el unico barrido MULTI-ORG y le escribe a los clientes DEL
+    // CLIENTE. Ver config.insistencia.
+    const hora = localHour(nowIso, config);
+    const desde = config.insistencia?.quietBeforeHour ?? DEFAULT_CONFIG.insistencia.quietBeforeHour;
+    const hasta = config.insistencia?.quietAfterHour ?? DEFAULT_CONFIG.insistencia.quietAfterHour;
+    if (hora !== null && (hora < desde || hora >= hasta)) {
+      result.skipped.push({ key, reason: `horario_silencioso:${hora}h` });
       continue;
     }
 

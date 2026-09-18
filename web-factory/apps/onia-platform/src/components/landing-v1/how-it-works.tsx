@@ -98,6 +98,8 @@ export function HowItWorks() {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/fotos/ferreteria.webp"
+            srcSet="/fotos/ferreteria-480.webp 480w, /fotos/ferreteria-960.webp 960w, /fotos/ferreteria.webp 1280w"
+            sizes="(min-width: 1280px) 1180px, 94vw"
             alt="Dueño de una ferretería atendiendo el mostrador de su negocio con una tablet en la mano."
             width={1280}
             height={832}

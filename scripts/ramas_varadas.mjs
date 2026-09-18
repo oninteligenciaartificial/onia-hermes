@@ -34,6 +34,11 @@ export const NO_SON_MIAS = {
   'claude/carril-contenido': 'carril de contenido: lo cierra Sergio Urcullo en su propia sesión',
   'claude/ads-creatividades-publicos': 'ídem contenido (CLAUDE.md: "no toques el de contenido")',
   'claude/onia-core-adoption-sprint5': 'diverge 382 commits con 1 propio: decisión de Sergio (radar §26)',
+  // 2026-09-18: la rama del CARRIL marca-personal es `claude/marca-personal-loop` — la que declara
+  // el corredor (`RAMA=`, dos veces). Ésta lleva sufijo de sesión y ningún loop la mueve: el loop
+  // marca-personal no tiene línea activa ni en casa ni en el VPS. Es la sesión de Sergio Urcullo
+  // escribiendo sus carruseles, o sea MARCA, que él decide (CLAUDE.md: "no toques el de contenido").
+  'claude/marca-personal-carruseles-dist-deadab': 'marca personal: la mueve la sesión de Sergio Urcullo, no un loop',
 }
 
 /** Clasifica ramas ya medidas. Función pura: el self-check la ejercita sin tocar git. */
@@ -114,6 +119,9 @@ function informe(nombreRepo, res) {
   if (res.varadas.length === 0) l.push(`   OK: ninguna rama de carril activo varada +${HORAS_VARADA} h`)
   for (const v of res.varadas) l.push(`   VARADA ${v.nombre}: ${v.propios} commits, ${Math.round(v.horas)} h`)
   for (const a of res.alDia) l.push(`   al día ${a.nombre}: ${a.propios} commits, ${Math.round(a.horas)} h`)
+  // Una exclusión que además ESCONDE a su sujeto no se puede refutar: el que lee no se entera de
+  // que hay commits sin mergear ahí, ni con qué motivo se decidió no tocarlos. Se nombran.
+  for (const a of res.ajenas) l.push(`   ajena ${a.nombre}: ${a.propios} commits — ${a.motivo}`)
   if (res.huerfanas.length) {
     const c = res.huerfanas.reduce((s, h) => s + h.propios, 0)
     l.push(`   huérfanas (NO son varadas, decide Sergio Urcullo): ${res.huerfanas.length} ramas, ${c} commits`)
@@ -145,6 +153,8 @@ const CASOS = () => {
     // el caso que YA cumple: sin él, un detector que devuelva siempre [] pasa igual
     ['las huérfanas se NOMBRAN, no se descartan en silencio', r.huerfanas.length === 1],
     ['una rama de Sergio no es varada ni huérfana', n(r.ajenas).includes('claude/ads-creatividades-publicos') && !n(r.varadas).concat(n(r.huerfanas)).includes('claude/ads-creatividades-publicos')],
+    // una exclusión que no se IMPRIME esconde commits sin mergear: el que lee no puede refutarla
+    ['el informe NOMBRA a la ajena con su motivo', informe('x', r).includes('ajena claude/ads-creatividades-publicos') && informe('x', r).includes('ídem contenido')],
     ['una rama sin commits propios no se cuenta', ![...n(r.varadas), ...n(r.huerfanas), ...n(r.alDia)].includes('claude/ya-mergeada')],
     ['clasificar sigue sabiendo qué exclusión no tiene sujeto', clasificar([], [], ahora).excusasQueSobran.length === Object.keys(NO_SON_MIAS).length],
     ['una exclusión con sujeto en el remoto NO se denuncia', !clasificar([{ nombre: 'claude/carril-contenido', propios: 9, ultimoMs: ahora }], [], ahora).excusasQueSobran.includes('claude/carril-contenido')],

@@ -61,8 +61,8 @@
  */
 
 import { execFileSync } from 'node:child_process';
-import { existsSync } from 'node:fs';
-import { pathToFileURL } from 'node:url';
+import { existsSync, readFileSync } from 'node:fs';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 /**
  * Los inboxes por donde entra un desconocido: el widget web de `onia.com.bo` (4) y WhatsApp (5).
@@ -187,18 +187,93 @@ export function esNuestra(conversacion) {
 }
 
 /**
+ * ¿El corte lo hizo la PUERTA de la app, antes de que el pedido llegara a la bandeja?
+ *
+ * POR QUE EXISTE, con fecha (2026-09-18). `/api/bandeja` contestaba 403 y este gate lo
+ * diagnosticaba como «la sesion no esta llegando al producto: `getUser()` sin usuario», porque
+ * conocia DOS causas del 403 y las dos viven en `bandeja-auth.ts`. Medido en vivo ese dia con el
+ * MISMO tarro de cookies: `/api/bandeja` → 403 `MFA_ENROLLMENT_REQUIRED` y `/api/me` → **200**
+ * con el perfil entero (role SUPERADMIN, organizationId cargado). O sea que la sesion SI llegaba,
+ * el perfil SI tenia organizacion, y el mensaje mandaba a revisar cookies y BUILD_ID —  una caza
+ * inutil— acusando a un archivo sano.
+ *
+ * La causa era una TERCERA que el gate no conocia: `proxy.ts` corta las APIs del panel cuando la
+ * cuenta debe activar la 2FA. Y no hay que adivinarla: **el producto la publica**. El proxy
+ * contesta `{error, code, next}`; el handler de `/api/bandeja` contesta `{error:"No autorizado"}`
+ * SIN `code`. Esa diferencia es lo unico que separa «me corto la puerta» de «me corto la
+ * bandeja», y es la que decide a quien se acusa. Leerla cuesta dos lineas; adivinarla costo un
+ * diagnostico entero.
+ */
+export function corteDeLaPuerta(cuerpo) {
+  const code = typeof cuerpo?.code === 'string' ? cuerpo.code.trim() : '';
+  const next = typeof cuerpo?.next === 'string' ? cuerpo.next.trim() : '';
+  if (!code || !next) return null;
+  return { code, next, error: typeof cuerpo?.error === 'string' ? cuerpo.error.trim() : '' };
+}
+
+/**
  * El veredicto, separado de la red a proposito: es lo que se prueba sin docker, sin sesion y
  * sin produccion. `respuesta` es `{ status, cuerpo }` tal como sale de `/api/bandeja`.
  */
-export function juzgar(respuesta, { colgados } = {}) {
+export function juzgar(respuesta, { colgados, dueñoTieneOrg = null } = {}) {
   const { status, cuerpo } = respuesta ?? {};
 
+  // La puerta se pregunta ANTES que cualquier diagnostico de la bandeja, y para todo status que
+  // no sea 200: el mismo `proxy.ts` contesta 401 (sin sesion), 403 (2FA, correo sin confirmar,
+  // perfil ausente) y 503 (no pudo leer el estado). Todos cortan igual de lejos de la bandeja.
+  const puerta = status !== 200 ? corteDeLaPuerta(cuerpo) : null;
+  if (puerta) {
+    return {
+      codigo: 2,
+      sospechoso: 'puerta',
+      mensaje:
+        `NO MEDIDO — la PUERTA de la app corto el pedido ANTES de la bandeja: ${status} ` +
+        `\`${puerta.code}\`${puerta.error ? ` ("${puerta.error}")` : ''}, y manda a \`${puerta.next}\`. ` +
+        'Ese cuerpo con `code` lo escribe `proxy.ts`, no `/api/bandeja` (que contesta 403 SIN ' +
+        '`code`): la sesion llego y `bandeja-auth.ts` no es sospechoso de nada. El objetivo ' +
+        'TAMPOCO se ve mientras la puerta corte —el dueño rebota igual al abrir `/inbox`—, pero ' +
+        'lo que se destraba es lo que pide ese `code`, no la bandeja. Tambien se puede medir con ' +
+        'una cuenta que ya lo cumpla (`--email`).',
+    };
+  }
+
   if (status === 403) {
+    const comun =
+      'NO AUTORIZADO (403) — `/inbox` le muestra el mismo 403 al dueño, asi que el objetivo NO se ve. ';
+    // `bandejaProfile()` devuelve el MISMO `null` por dos causas: `getUser()` sin usuario (la
+    // sesion no llego al producto) y `!profile?.organization` (el dato). El status no las separa
+    // — las separa el perfil del dueño, que la base ya sabe.
+    if (dueñoTieneOrg === true) {
+      return {
+        codigo: 1,
+        sospechoso: 'sesion',
+        mensaje:
+          comun +
+          'La sesion no esta llegando al producto: el perfil del dueño SI tiene organizacion en la ' +
+          'base, o sea `!profile?.organization` es IMPOSIBLE y `bandeja-auth.ts` no es el sospechoso. ' +
+          'Queda la otra rama del mismo `null`: `getUser()` sin usuario. Mirar que cookie viaja y ' +
+          'que build corre produccion (`docker exec onia-platform cat /app/.next/BUILD_ID`).',
+      };
+    }
+    if (dueñoTieneOrg === false) {
+      return {
+        codigo: 1,
+        sospechoso: 'bandeja-auth',
+        mensaje:
+          comun +
+          'El perfil del dueño NO tiene organizacion en la base, asi que la sesion resuelve a un ' +
+          'perfil suelto. Mirar `lib/chatbot/bandeja-auth.ts`: `profile.organization` vino nulo.',
+      };
+    }
     return {
       codigo: 1,
+      sospechoso: null,
       mensaje:
-        'NO AUTORIZADO (403) — la sesion del dueño no resuelve a un perfil con org. `/inbox` le ' +
-        'muestra el mismo 403 a el. Mirar `lib/chatbot/bandeja-auth.ts`: `profile.organization` vino nulo.',
+        comun +
+        'NO se pudo distinguir cual de las dos causas es: `bandeja-auth.ts` devuelve el mismo `null` ' +
+        'si la sesion no llego (`getUser()` sin usuario) y si el perfil no tiene organizacion. ' +
+        'Correr `npm run inbox:tenencia`, o preguntarle a la base por el perfil del dueño, antes de ' +
+        'tocar codigo: acusar a uno de los dos sin este dato manda a arreglar un archivo sano.',
     };
   }
 
@@ -311,6 +386,43 @@ function leerDueño(contenedor) {
   return salida.trim().split('\n')[0]?.trim() || '';
 }
 
+/**
+ * El ESPEJO de lo que pregunta `bandejaProfile()`: del `auth.users` que la sesion resuelve al
+ * `profiles.userId`, y de ahi a `organizationId`.
+ *
+ * ⚠️ A proposito NO se deriva de `SQL_DUEÑO`. Ese entra por `clinic_settings` y hace JOIN con
+ * `profiles` POR `organizationId`, asi que todo perfil que salga de ahi tiene organizacion **por
+ * construccion**: preguntarle a el si el dueño tiene org es una tautologia que contesta `true`
+ * siempre, incluso el dia que el producto este roto. El camino que puede romperse es el del
+ * producto —`userId` → perfil→ org— y es el unico que sirve para absolver o acusar a
+ * `bandeja-auth.ts`.
+ */
+export function sqlPerfilDelDueño(email) {
+  return (
+    'select (p."organizationId" is not null) from public.profiles p ' +
+    'join auth.users u on u.id::text = p."userId" ' +
+    `where u.email = '${String(email).replace(/'/g, "''")}' limit 1;`
+  );
+}
+
+/** Tri-estado: `true`/`false` medido, `null` = no se pudo preguntar. Nunca se inventa. */
+function leerDueñoTieneOrg(contenedor, email) {
+  if (!email) return null;
+  try {
+    const salida = correr('docker', ['exec', '-i', contenedor, 'psql', '-U', 'postgres', '-d', 'postgres', '-t', '-A'], {
+      input: sqlPerfilDelDueño(email),
+    });
+    const fila = salida.trim().split('\n')[0]?.trim();
+    if (fila === 't') return true;
+    if (fila === 'f') return false;
+    // Sin fila, el `userId` de la sesion no tiene perfil: `getUser()` resuelve y el perfil no
+    // existe, que del lado de `bandejaProfile()` es el mismo `null` por el lado del DATO.
+    return fila === '' ? false : null;
+  } catch {
+    return null;
+  }
+}
+
 /** Una variable de entorno del contenedor que CORRE. Nunca se imprime. */
 function leerEnv(contenedor, nombre) {
   return correr('docker', ['exec', contenedor, 'printenv', nombre]).trim();
@@ -375,7 +487,9 @@ async function medir({ plataforma, base, appUrl, ssrDir }) {
   } catch {
     cuerpo = null;
   }
-  return { status: r.status, cuerpo, dueño };
+  // El perfil se pregunta SIEMPRE, no solo ante un 403: preguntarlo recien cuando ya hay rojo
+  // ata el dato a la rama que lo necesita y lo deja sin medir el dia que la rama cambie.
+  return { status: r.status, cuerpo, dueño, dueñoTieneOrg: leerDueñoTieneOrg(base, dueño) };
 }
 
 function afirmarFactory() {
@@ -493,7 +607,130 @@ function selfCheck() {
 
   // El 403 es la falla RUIDOSA: se distingue de las mudas y no se confunde con "no medido".
   afirmar(juzgar({ status: 403, cuerpo: { error: 'No autorizado' } }).codigo === 1, 'un 403 es ROJO');
-  afirmar(juzgar({ status: 403, cuerpo: {} }).mensaje.includes('bandeja-auth'), 'y apunta al archivo del gate de sesion');
+
+  // ⚠️ El 403 tiene DOS causas y `bandejaProfile()` las aplana en el mismo `null`:
+  // `getUser()` sin usuario (la sesion no llego) y `!profile?.organization` (el dato). Afirmar
+  // una sin poder distinguirlas manda a "arreglar" un archivo sano — medido el 2026-09-18, ver
+  // el comentario de `juzgar`. El dato que las separa es del DUEÑO, y se pregunta a la base.
+  const perfilConOrg = { status: 403, cuerpo: {} };
+  // El veredicto se afirma sobre `sospechoso`, que es un DATO: un assert sobre la prosa se
+  // apaga solo el dia que alguien reescriba el mensaje, y este gate existe justamente para que
+  // el mensaje no vuelva a acusar de mas.
+  const sinOrg = juzgar(perfilConOrg, { dueñoTieneOrg: false });
+  afirmar(sinOrg.codigo === 1, 'un 403 con el dueño SIN org es ROJO');
+  afirmar(sinOrg.sospechoso === 'bandeja-auth', 'y ahi si apunta al archivo del gate de sesion');
+  afirmar(sinOrg.mensaje.includes('bandeja-auth'), 'y lo nombra, para poder abrirlo');
+
+  const conOrg = juzgar(perfilConOrg, { dueñoTieneOrg: true });
+  afirmar(conOrg.codigo === 1, 'un 403 con el dueño CON org sigue siendo ROJO');
+  afirmar(
+    conOrg.sospechoso === 'sesion',
+    'pero NO acusa a `bandeja-auth.ts`: con el perfil ya resuelto esa causa es IMPOSIBLE',
+  );
+  afirmar(
+    !/organization.{0,3} vino nulo/.test(conOrg.mensaje),
+    'y no afirma el diagnostico que la base refuta',
+  );
+  afirmar(
+    !/mirar\s+`?lib\/chatbot\/bandeja-auth/i.test(conOrg.mensaje),
+    'y no manda a abrir el archivo sano (nombrarlo para ABSOLVERLO si vale)',
+  );
+
+  const sinSaber = juzgar(perfilConOrg);
+  afirmar(sinSaber.codigo === 1, 'sin el dato del dueño el 403 sigue siendo ROJO');
+  afirmar(sinSaber.sospechoso === null, 'y no elige sospechoso: no se pudo distinguir');
+  afirmar(
+    sinSaber.mensaje.includes('bandeja-auth') && sinSaber.mensaje.toLowerCase().includes('sesion'),
+    'y nombra LAS DOS causas en vez de elegir una',
+  );
+
+  // ── LA TERCERA CAUSA: el corte de la PUERTA ──────────────────────────────────────────────
+  //
+  // Las dos ramas de arriba se escribieron creyendo que el 403 SOLO puede venir de
+  // `bandeja-auth.ts`. La respuesta de abajo es la REAL de produccion del 2026-09-18, copiada
+  // del cuerpo que devolvio `/api/bandeja` con la sesion del dueño; en la misma corrida
+  // `/api/me` contesto 200 con el perfil entero, o sea que las dos ramas de arriba eran
+  // imposibles y el gate elegia igual una de ellas.
+  const puerta = {
+    status: 403,
+    cuerpo: {
+      error: 'Activá la verificación en dos pasos desde tu perfil para continuar.',
+      code: 'MFA_ENROLLMENT_REQUIRED',
+      next: '/profile?mfa=obligatorio',
+    },
+  };
+  // `dueñoTieneOrg: true` es el dato que hacia caer este caso en la rama "la sesion no llego".
+  const cortado = juzgar(puerta, { dueñoTieneOrg: true });
+  afirmar(cortado.codigo === 2, 'un corte de la puerta es NO MEDIDO, no un rojo del producto');
+  afirmar(cortado.sospechoso === 'puerta', 'y el sospechoso es la puerta, no la bandeja');
+  afirmar(cortado.mensaje.includes('MFA_ENROLLMENT_REQUIRED'), 'y nombra el `code` que el producto ya publica');
+  afirmar(cortado.mensaje.includes('/profile?mfa=obligatorio'), 'y el `next`, que es el camino de cura');
+  afirmar(
+    !/`?getUser\(\)`? sin usuario/.test(cortado.mensaje),
+    'y NO repite el diagnostico que `/api/me` refuta con la misma cookie',
+  );
+  afirmar(
+    !cortado.mensaje.toLowerCase().includes('no medir no es estar bien'),
+    'no cae en el "no medido" generico: ese no nombra la causa ni el camino',
+  );
+  // La puerta contesta con el MISMO cuerpo en 401 y 503, y los tres cortan igual de lejos.
+  afirmar(
+    juzgar({ status: 401, cuerpo: { error: 'Iniciá sesión', code: 'AUTH_REQUIRED', next: '/login' } }).sospechoso ===
+      'puerta',
+    'un 401 de la puerta tambien se reconoce',
+  );
+  afirmar(
+    juzgar({ status: 503, cuerpo: { error: 'x', code: 'MFA_STATE_UNAVAILABLE', next: '/profile' } }).sospechoso ===
+      'puerta',
+    'y un 503 de la puerta tambien',
+  );
+  // Y la mitad simetrica, que es la que evita que la cura tape el bug original: el 403 del
+  // HANDLER no trae `code`, asi que las dos ramas de `bandeja-auth` tienen que seguir vivas.
+  afirmar(
+    juzgar({ status: 403, cuerpo: { error: 'No autorizado' } }, { dueñoTieneOrg: false }).sospechoso === 'bandeja-auth',
+    'el 403 del handler (sin `code`) sigue acusando a `bandeja-auth.ts`',
+  );
+  afirmar(corteDeLaPuerta({ error: 'No autorizado' }) === null, 'un cuerpo sin `code` no es corte de la puerta');
+  afirmar(corteDeLaPuerta({ code: 'X' }) === null, 'ni uno con `code` pero sin `next`');
+  afirmar(corteDeLaPuerta(null) === null, 'ni un cuerpo que no se pudo leer');
+  // Un 200 nunca es corte: el cuerpo de la bandeja podria traer un campo `code` algun dia.
+  afirmar(
+    juzgar({ status: 200, cuerpo: { ok: true, sinCanal: true, conversaciones: [], code: 'X', next: '/y' } }).codigo === 1,
+    'un 200 se juzga como bandeja aunque el cuerpo traiga `code`',
+  );
+
+  // El dato que separa las causas NO puede salir del SQL que elige al dueño: ese entra por
+  // `clinic_settings` y hace JOIN por `organizationId`, asi que contestaria `true` siempre.
+  afirmar(/auth\.users/.test(sqlPerfilDelDueño('x@y.z')), 'el perfil del dueño se busca por el camino del producto');
+  afirmar(
+    /u\.email\s*=/.test(sqlPerfilDelDueño('x@y.z')) && !/clinic_settings/.test(sqlPerfilDelDueño('x@y.z')),
+    'y NO por `clinic_settings`, que lo volveria tautologico',
+  );
+  afirmar(
+    sqlPerfilDelDueño("o'brien@y.z").includes("o''brien@y.z"),
+    'y una comilla en el correo no parte la consulta',
+  );
+
+  // ⚠️ CABLEADO. Todo lo de arriba es puro, y por eso NO ve el esquive que importa: si el
+  // llamador de produccion deja de pasarle `dueñoTieneOrg` a `juzgar`, los 60 casos siguen
+  // verdes y el instrumento vuelve a no poder distinguir las dos causas — en silencio, que es
+  // como nacio este bug. Medido el 2026-09-18: esa mutacion pasaba con exit 0.
+  // Las cadenas van PARTIDAS porque el gate lee su propio archivo y si no se acusa solo.
+  const fuente = readFileSync(fileURLToPath(import.meta.url), 'utf8');
+  const llamadaViva = fuente.match(/const veredicto = juzgar\([^;]*\);/);
+  afirmar(Boolean(llamadaViva), 'la llamada de produccion a juzgar() sigue existiendo');
+  afirmar(
+    llamadaViva ? llamadaViva[0].includes('due' + 'ñoTieneOrg') : false,
+    'y le pasa el dato que separa las dos causas del 403',
+  );
+  // El sujeto es que el valor se DERIVE, no que la clave exista: `dueñoTieneOrg: null` deja la
+  // clave en su lugar y el dato sin medir para siempre. Medido: esa mutacion pasaba verde.
+  const returnDeMedir = fuente.match(/return \{ status: r\.status,[^;]*\};/);
+  afirmar(Boolean(returnDeMedir), '`medir()` sigue devolviendo la respuesta');
+  afirmar(
+    returnDeMedir ? /leerDue[^(]*\(base, dueño\)/.test(returnDeMedir[0]) : false,
+    'y DERIVA el dato del dueño ahi mismo, en vez de dejar la clave puesta en null',
+  );
 
   // Fallo conservador: lo que no se pudo medir no se declara bien.
   // ⚠️ Igual que arriba, `codigo === 2` solo no alcanza: sin la rama del status, un 502 cae en
@@ -651,7 +888,7 @@ async function main() {
     colgados = undefined;
   }
 
-  const veredicto = juzgar(respuesta, { colgados });
+  const veredicto = juzgar(respuesta, { colgados, dueñoTieneOrg: respuesta?.dueñoTieneOrg ?? null });
   console[veredicto.codigo === 0 ? 'log' : 'error'](`[dueño: ${respuesta.dueño}] ${veredicto.mensaje}`);
   return veredicto.codigo;
 }

@@ -37,8 +37,10 @@ export const metadata: Metadata = {
  * REGLA DE COPY (2026-08-15, pedido de Sergio): la página NO anuncia que la
  * empresa es nueva ni que todavía no hay clientes — eso contesta el miedo del
  * comprador («¿y si no funciona?») dándole la razón. Se contesta con lo
- * verificable y comprobable por él: 14 días con el sistema completo sin
- * tarjeta, sin permanencia, datos exportables en CSV. Sigue prohibido el
+ * verificable y comprobable por él: 14 días con el plan que corre la prueba
+ * completo, sin tarjeta, sin permanencia y con los datos exportables en CSV.
+ * («el sistema completo» hasta el 2026-09-18: ver `prueba-vs-plan.test.ts`.)
+ * Sigue prohibido el
  * camino opuesto: inventar clientes, logos, testimonios o métricas.
  * Cada garantía de acá está verificada contra src/lib/pricing.ts, que a su vez
  * sale del código que cobra. Los datos legales coinciden con el pie y con el
@@ -114,8 +116,8 @@ export default function Nosotros() {
             empresa grande — con inteligencia artificial de verdad, en
             bolivianos, y hablando su idioma. Somos OniaAgency, registrados en
             SEPREC y con NIT vigente, y el sistema ya corre en producción:
-            entrás, lo usás completo {PRUEBA.dias} días sin dejar una tarjeta, y recién
-            después decidís.
+            entrás, lo usás {PRUEBA.dias} días con el plan {PRUEBA.planQueCorre}{" "}
+            completo y sin dejar una tarjeta, y recién después decidís.
           </p>
         </Reveal>
       </Block>
@@ -150,7 +152,8 @@ export default function Nosotros() {
             Cinco rubros disponibles — clínicas dentales, comercios,
             importadoras, estéticas y servicios profesionales — y{" "}
             {SIAT_ESTADO_ONIA}. Lo probás tal como está hoy: {PRUEBA.dias} días con el
-            sistema completo, sin tarjeta y sin contrato de permanencia. Si no
+            plan {PRUEBA.planQueCorre} completo, sin tarjeta y sin contrato de
+            permanencia. Si no
             te sirve, no pagás nada y tus datos te los llevás en CSV cuando
             quieras.
           </p>

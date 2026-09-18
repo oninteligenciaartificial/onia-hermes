@@ -1,0 +1,297 @@
+#!/usr/bin/env node
+/**
+ * El freno de precio del publicador mide si cambio un MONTO, no que archivo se toco.
+ *
+ * POR QUE EXISTE, medido el 2026-09-17 (tarea t_189a6037). `onia-publicar-solo.sh`
+ * es el unico camino por el que un arreglo llega al cliente sin que Sergio Urcullo
+ * apriete nada, y se detiene cuando un commit varado toca una fuente de precio. Ese
+ * dia el criterio era el NOMBRE del archivo: `grep` sobre `git show --name-only`.
+ * Con eso, los TRES destinos llevaban dias detenidos y el unico cambio real en
+ * `lib/subscription-plans.ts` era `DEFAULT_PLAN_AMOUNTS[plan][cycle]` pasando a
+ * `[plan]?.[cycle]`, mas comentarios: la tabla de montos, identica linea por linea.
+ * Atras de ese freno esperaba el arreglo que dejaba afuera a todo cliente nuevo.
+ *
+ * QUE FIJA. Las dos direcciones, que es lo unico que hace util a este gate:
+ *   · aflojar de mas — un cambio REAL de monto tiene que seguir deteniendo el
+ *     destino, tambien cuando entra por un MERGE (un `git show` de un merge sale
+ *     VACIO si no se le pide `-m --first-parent`, y los medidores de varados
+ *     devuelven merges: el que trae la rama a main es un commit varado mas);
+ *   · apretar de mas — un `?.`, un renombre o un comentario que CITA un precio
+ *     viejo no son un monto nuevo y no pueden costarle la publicacion a nadie.
+ *
+ * COMO. No mira el texto del guion: lo EJECUTA (`--montos`) contra un repo git
+ * sembrado por corrida, que es la unica forma de que el sujeto sea la funcion real.
+ * Preguntar no publica nada y no necesita `/opt`, asi que el caso corre en cualquier
+ * maquina — la de los carriles no tiene `/opt`.
+ */
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { spawnSync } from "node:child_process";
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const AQUI = dirname(fileURLToPath(import.meta.url));
+const GUION = join(AQUI, "loops/extras/publicar-solo.sh");
+const ARCHIVO = "lib/subscription-plans.ts";
+
+/** La tabla de montos tal como la escribe el producto, para poder mutarla. */
+const tabla = (mensual, textoDelAddon) => `// Los montos de los planes. FUENTE UNICA: lo que valida el pago.
+export const DEFAULT_PLAN_AMOUNTS = {
+  basico: { monthly: ${mensual}, yearly: 7500 },
+};
+export const ADDON = { etiqueta: "Bs ${textoDelAddon}/mes" };
+export function getPlanAmount(plan, cycle) {
+  return DEFAULT_PLAN_AMOUNTS[plan][cycle];
+}
+`;
+
+function git(repo, ...args) {
+  const r = spawnSync("git", ["-C", repo, ...args], { encoding: "utf8" });
+  if (r.status !== 0) throw new Error(`git ${args.join(" ")}: ${r.stderr}`);
+  return (r.stdout ?? "").trim();
+}
+
+/** Un repo con un commit base y el archivo de precios adentro. */
+function repoSembrado() {
+  const dir = mkdtempSync(join(tmpdir(), "onia-freno-precio-"));
+  git(dir, "init", "--quiet", "-b", "main");
+  git(dir, "config", "user.email", "gate@onia.test");
+  git(dir, "config", "user.name", "gate");
+  spawnSync("mkdir", ["-p", join(dir, "lib")]);
+  writeFileSync(join(dir, ARCHIVO), tabla(320, "390"));
+  git(dir, "add", "-A");
+  git(dir, "commit", "--quiet", "-m", "base");
+  return dir;
+}
+
+function commitear(dir, contenido, mensaje) {
+  writeFileSync(join(dir, ARCHIVO), contenido);
+  git(dir, "add", "-A");
+  git(dir, "commit", "--quiet", "-m", mensaje);
+  return git(dir, "rev-parse", "HEAD");
+}
+
+/** Le pregunta al guion REAL si esos commits cambian algun monto. */
+function preguntar(repo, ...shas) {
+  const r = spawnSync("bash", [GUION, "--montos", repo, ARCHIVO, ...shas], {
+    encoding: "utf8",
+    timeout: 60_000,
+  });
+  return { codigo: r.status, salida: `${r.stdout ?? ""}${r.stderr ?? ""}`.trim() };
+}
+
+test("un `?.` y unos comentarios que CITAN precios no son un monto nuevo: publica", () => {
+  const dir = repoSembrado();
+  try {
+    const sha = commitear(
+      dir,
+      tabla(320, "390").replace(
+        "DEFAULT_PLAN_AMOUNTS[plan][cycle];",
+        "DEFAULT_PLAN_AMOUNTS[plan]?.[cycle];\n  // Antes cotizaba 890 y 1290 sin preguntar",
+      ),
+      "fix: getPlanAmount tiraba con un plan desconocido",
+    );
+    const r = preguntar(dir, sha);
+    assert.equal(
+      r.codigo,
+      0,
+      "detuvo la publicacion por un cambio que no toca ningun monto. Eso es el freno " +
+        "viejo (medir el NOMBRE del archivo) y dejo los tres destinos parados dias. " +
+        "Salida: " + r.salida,
+    );
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("un comentario de bloque que NARRA precios viejos tampoco detiene", () => {
+  // `lib/pricing.ts` tiene varios: parrafos `/** … */` que cuentan el bug de la
+  // escalera vieja y citan Bs 890 y Bs 1.290. Son historia, no una promesa nueva.
+  const dir = repoSembrado();
+  try {
+    const sha = commitear(
+      dir,
+      `/**\n * Hasta el 2026-09-12 esto cotizaba 890 y 1290.\n * La escalera C metio el Crece de 550 en el medio.\n */\n${tabla(320, "390")}`,
+      "docs: por que la tabla quedo asi",
+    );
+    const r = preguntar(dir, sha);
+    assert.equal(
+      r.codigo,
+      0,
+      "conto los precios citados en un comentario como montos nuevos: con eso, documentar " +
+        "por que un precio es el que es cuesta una publicacion. Salida: " + r.salida,
+    );
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("cambiar un monto de la tabla DETIENE, y el aviso dice QUE numero cambia", () => {
+  const dir = repoSembrado();
+  try {
+    const sha = commitear(dir, tabla(330, "390"), "el plan de entrada sube a 330");
+    const r = preguntar(dir, sha);
+    assert.equal(r.codigo, 1, "publico un cambio de precio sin la firma. Salida: " + r.salida);
+    assert.match(r.salida, /330/, "no nombro el monto nuevo: el aviso vuelve a ser 'toca una fuente de precio', que obliga a abrir el diff. Salida: " + r.salida);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("un monto que vive DENTRO de un texto tambien detiene", () => {
+  const dir = repoSembrado();
+  try {
+    const sha = commitear(dir, tabla(320, "420"), "el add-on pasa a Bs 420");
+    const r = preguntar(dir, sha);
+    assert.equal(r.codigo, 1, "el precio del add-on viaja en un string, no en la tabla: igual es plata. Salida: " + r.salida);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("un MERGE que trae el cambio de monto tambien detiene — un merge sin `-m --first-parent` sale VACIO", () => {
+  const dir = repoSembrado();
+  try {
+    git(dir, "checkout", "--quiet", "-b", "carril");
+    commitear(dir, tabla(330, "390"), "el plan de entrada sube a 330");
+    git(dir, "checkout", "--quiet", "main");
+    git(dir, "merge", "--quiet", "--no-ff", "--no-edit", "carril");
+    const merge = git(dir, "rev-parse", "HEAD");
+    const r = preguntar(dir, merge);
+    assert.equal(
+      r.codigo,
+      1,
+      "el merge se leyo como si no cambiara nada: asi entra un precio nuevo en verde, " +
+        "porque los medidores de varados devuelven merges. Salida: " + r.salida,
+    );
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("si no se puede mirar, NO dice que esta limpio: falla CERRADO", () => {
+  const dir = repoSembrado();
+  try {
+    for (const caso of [["deadbeefdeadbeef"], []]) {
+      const r = preguntar(dir, ...caso);
+      assert.equal(
+        r.codigo,
+        2,
+        `con ${caso.length ? "un sha ilegible" : "ningun sha"} contesto ${r.codigo} en vez de NO MEDIDO. ` +
+          "'No pude preguntar' no es 'me dijeron que no cambia': publicaria un precio sin mirarlo. " +
+          "Salida: " + r.salida,
+      );
+    }
+    const r = preguntar("/no/existe/este/repo", "deadbeef");
+    assert.equal(r.codigo, 2, "un repo que no existe tiene que salir NO MEDIDO. Salida: " + r.salida);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+/* -------------------------------------------------------------------------
+ * El VEREDICTO tiene que llegar con su CITA por el canal que alguien lee.
+ *
+ * Medido el 2026-09-18 (tarea t_c441fba9): el detalle —que numero cambia— se
+ * calculaba bien y salia UNICAMENTE por Telegram, un canal que no entrega
+ * (`/var/log/onia-tg.log`: 136 emisiones de "publicacion detenida a proposito",
+ * CERO con `OK message_id=`, sobre 1.403 entregas reales, o sea el log si
+ * distingue). El log del publicador, que es lo que se lee al arrancar cada
+ * vuelta, decia el motivo a secas. Con eso el freno no se puede refutar: otra
+ * sesion abrio esa tarea afirmando que contaba los numeros de los COMENTARIOS
+ * —que ya descarta— cuando lo que cambiaba eran `0` y `1`, los indices de un
+ * helper nuevo, y su cura propuesta ya estaba escrita hacia horas.
+ * ---------------------------------------------------------------------- */
+
+/**
+ * Le pregunta al guion REAL como queda el renglon del log cuando detiene.
+ *
+ * `ONIA_PUBLICAR_SECO` no es adorno: si el modo de consulta desapareciera, el
+ * guion seguiria de largo, y en el VPS eso publica los tres destinos de verdad.
+ * Un caso de prueba no puede tener ese final ni cuando falla.
+ */
+function correr(...args) {
+  const r = spawnSync("bash", [GUION, ...args], {
+    encoding: "utf8",
+    timeout: 60_000,
+    env: { ...process.env, ONIA_PUBLICAR_SECO: "1" },
+  });
+  return { codigo: r.status, salida: `${r.stdout ?? ""}${r.stderr ?? ""}`.trim() };
+}
+
+const renglon = (nombre, motivo, detalle) => correr("--renglon", nombre, motivo, detalle);
+
+test("el renglon del log NOMBRA el numero que cambia, no solo el motivo", () => {
+  const r = renglon("landing", "cambia un numero en una fuente de precio", `${ARCHIVO}: 330`);
+  assert.equal(r.codigo, 0, "el guion no sabe rendir el renglon del log. Salida: " + r.salida);
+  assert.match(
+    r.salida,
+    /330/,
+    "el renglon no dice QUE numero cambia, y ese detalle solo sale por un canal que no entrega: " +
+      "el que lee el log no puede distinguir un precio nuevo de un indice de array. Salida: " + r.salida,
+  );
+  assert.match(r.salida, /landing/, "el renglon no nombra el destino. Salida: " + r.salida);
+  assert.match(r.salida, new RegExp(ARCHIVO.replace(/[.]/g, "\\.")), "el renglon no nombra el archivo. Salida: " + r.salida);
+});
+
+test("el renglon del NO MEDIDO tambien nombra lo que no se pudo mirar", () => {
+  const r = renglon("bot", "toca una fuente de precio y no pude medir si cambia", ARCHIVO);
+  assert.equal(r.codigo, 0, "el guion no sabe rendir el renglon del NO MEDIDO. Salida: " + r.salida);
+  assert.match(
+    r.salida,
+    new RegExp(ARCHIVO.replace(/[.]/g, "\\.")),
+    "el NO MEDIDO no dice QUE archivo no se pudo mirar: los dos remedios son opuestos " +
+      "(mirar el repo vs mirar el acceso) y sin el nombre no se elige. Salida: " + r.salida,
+  );
+});
+
+test("sin detalle el renglon no inventa un `:` colgando", () => {
+  const r = renglon("bot", "toca una fuente de precio y no pude medir si cambia", "");
+  assert.equal(r.codigo, 0, "Salida: " + r.salida);
+  assert.doesNotMatch(
+    r.salida,
+    /:\s*$/,
+    "queda un dos puntos sin nada atras, que se lee como detalle perdido. Salida: " + r.salida,
+  );
+});
+
+test("un flag mal escrito NO cae en publicar de verdad: sale con error", () => {
+  // `--dryrun` es el typo que importa: hasta el 2026-09-18 este guion solo miraba
+  // `--dry-run` y cualquier otra cosa seguia de largo hasta publicar los tres
+  // destinos, sin decir una palabra.
+  const r = correr("--dryrun");
+  // El codigo 2 SOLO no alcanza y se midio por que: si el guion sigue de largo,
+  // en la maquina de los carriles termina en NO MEDIDO, que tambien es 2. Lo que
+  // distingue es QUIEN contesto — el uso, o el publicador arrancando su corrida.
+  assert.match(
+    r.salida,
+    /^uso: /m,
+    "un argumento que el guion no reconoce siguio de largo en vez de salir con el uso. " +
+      "En el VPS eso publica produccion por un typo. Salida: " + r.salida,
+  );
+  assert.doesNotMatch(
+    r.salida,
+    /La Paz ==/,
+    "el guion llego a arrancar su corrida con un flag que no reconoce. Salida: " + r.salida,
+  );
+  assert.equal(r.codigo, 2, "no salio con codigo de error. Salida: " + r.salida);
+});
+
+test("la frase del veredicto tiene UNA sola fuente: nadie la escribe por su cuenta", () => {
+  // Sobre el guion con los COMENTARIOS en blanco: esta misma explicacion la cita,
+  // y un gate que se acusa a si mismo por su propia documentacion es ruido.
+  const codigo = readFileSync(GUION, "utf8")
+    .split("\n")
+    .filter((l) => !/^\s*#/.test(l))
+    .join("\n");
+  const veces = codigo.split("NO publico solo").length - 1;
+  assert.equal(
+    veces,
+    1,
+    `la frase "NO publico solo" se arma en ${veces} lugares. Si un destino la escribe por su ` +
+      "cuenta vuelve a quedar sin cita, y este gate no lo vería: el renglon se rinde en un solo " +
+      "lugar para que agregar un destino no pueda perder el detalle.",
+  );
+});

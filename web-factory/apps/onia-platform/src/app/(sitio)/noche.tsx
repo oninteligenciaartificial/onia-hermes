@@ -16,30 +16,28 @@
 
 import { Reveal } from "@/motion";
 
-import { ALCANCE_CON_AGENDA } from "@/lib/pricing";
 import { Block, Kicker, PanelDibujado } from "./ui";
 import s from "./sitio.module.css";
 import v from "./portada.module.css";
 
 /**
- * Lo que pasa mientras el negocio esta cerrado. Son los tres momentos que la
- * home ya tiene aprobados, sin cambiarles el sentido.
+ * ⚠️ Esta seccion NO lleva la lista de los tres momentos (23:40 · Domingo ·
+ * 07:00). Los tenia, COPIADOS de la home — el comentario viejo de este archivo
+ * lo decia con todas las letras: "son los tres momentos que la home ya tiene
+ * aprobados". El problema es que la home TAMBIEN los muestra, mil pixeles mas
+ * arriba, en la linea del dia (`page.tsx` → MOMENTOS): mirada renderizada el
+ * 2026-09-18, la portada se los decia al lead DOS VECES, palabra por palabra,
+ * en las dos primeras secciones despues del hero.
  *
- * ⚠️ El tercero NO se toca: los agentes dejan el borrador en la cola de
- * aprobacion — no avisan, no mandan y no cobran solos (onia-core/contract.json
- * · app/api/cron/onia-agents, "SIN ningun envio externo"). La home avisa que
- * tres disenadores se equivocaron en esto antes.
+ * Nadie lo decidio: las dos piezas se aprobaron por separado (la noche con la
+ * v4 el 07-sep, la linea del dia el 11-sep). Aprobar dos piezas nunca es
+ * aprobar su suma. Quitada la lista, la seccion queda con lo que si es suyo
+ * —la foto y la conversacion de las 23:40— y la foto y la tarjeta siguen
+ * parejas (medido: 1.066 px → 877 px, las dos columnas alineadas).
+ *
+ * Lo cuida `no-decir-dos-veces-lo-mismo.test.ts`, que camina el grafo de la
+ * portada y se pone rojo si una oracion vuelve a vivir en dos archivos.
  */
-const MOMENTOS_NOCHE = [
-  { hora: "23:40", que: "Preguntan el precio. Contesta el asistente.", vos: null },
-  { hora: "Domingo", que: `Reservan solos por tu agenda pública, ${ALCANCE_CON_AGENDA}.`, vos: null },
-  {
-    hora: "07:00",
-    que: "Los recordatorios y los avisos de pago quedan escritos.",
-    vos: "Vos los aprobás.",
-  },
-] as const;
-
 export function NocheFoto() {
   return (
       <Block surface="paper" labelledBy="v4-noche">
@@ -61,6 +59,8 @@ export function NocheFoto() {
               {/* eslint-disable-next-line @next/next/no-img-element -- standalone sin sharp: next/image no optimiza en el VPS */}
               <img
                 src="/fotos/dueno-duerme.webp"
+                srcSet="/fotos/dueno-duerme-480.webp 480w, /fotos/dueno-duerme-960.webp 960w, /fotos/dueno-duerme.webp 1600w"
+                sizes="(min-width: 1024px) 501px, (min-width: 560px) 85vw, 75vw"
                 alt="El dueño de un negocio durmiendo de noche, con la luz de una lámpara encendida."
                 width={1600}
                 height={900}
@@ -77,17 +77,6 @@ export function NocheFoto() {
               <div className={v.capacidadArte}>
                 <PanelDibujado panel="chat" />
               </div>
-              <ul className={v.momentos}>
-                {MOMENTOS_NOCHE.map((m) => (
-                  <li key={m.hora}>
-                    <span className={v.momentoHora}>{m.hora}</span>
-                    <span className={v.momentoQue}>
-                      {m.que}
-                      {m.vos ? <> <span className={v.momentoVos}>{m.vos}</span></> : null}
-                    </span>
-                  </li>
-                ))}
-              </ul>
             </div>
           </div>
         </Reveal>

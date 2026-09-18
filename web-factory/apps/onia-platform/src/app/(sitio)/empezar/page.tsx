@@ -35,14 +35,16 @@ import s from "../sitio.module.css";
 
 export const metadata: Metadata = {
   title: `Prueba gratis de ${PRUEBA.dias} días — Onia, sin tarjeta`,
-  description: `${CTA_ALTA}, elegí tu rubro y usá el sistema completo ${PRUEBA.dias} días: clientes, caja, inventario, contabilidad Bolivia y agentes con IA —y agenda ${ALCANCE_CON_AGENDA}—. Sin tarjeta y sin permanencia.`,
+  description: `${CTA_ALTA}, elegí tu rubro y usá el plan ${PRUEBA.planQueCorre} completo ${PRUEBA.dias} días: clientes, caja, inventario, contabilidad Bolivia y agentes con IA —y agenda ${ALCANCE_CON_AGENDA}—. Sin tarjeta y sin permanencia.`,
   alternates: { canonical: "/empezar" },
   openGraph: {
     type: "website",
     locale: "es_BO",
     title: `Probá Onia gratis ${PRUEBA.dias} días`,
-    description:
-      "Sistema completo, sin tarjeta. Elegís tu rubro y te lo entregamos configurado.",
+    // El plan se DERIVA: «Sistema completo» nombraba sin querer el plan de
+    // arriba (Bs 1.290), y esto es lo que se pinta en el preview de WhatsApp,
+    // antes de que el lead abra la página.
+    description: `El plan ${PRUEBA.planQueCorre} completo, sin tarjeta. Elegís tu rubro y te lo entregamos configurado.`,
     url: "/empezar",
   },
 };

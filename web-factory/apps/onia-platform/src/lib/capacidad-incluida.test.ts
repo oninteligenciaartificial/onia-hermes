@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 import {
   CAPACIDADES_INCLUIDAS,
   PLANES,
+  nombresConChatbot,
   primerPlanCon,
   type CapacidadIncluida,
 } from "@/lib/pricing";
@@ -67,6 +68,16 @@ const COMO_SE_DICE: Record<CapacidadIncluida, RegExp> = {
   agentes: /\bagentes?\b|\bRecall\b|\bCobrador\b/i,
   reservas: /reservas?\s+online|link\s+p[úu]blico|agenda\s+p[úu]blica/i,
   chatbot: /\bchatbot\b|\brecepcionista\b/i,
+  /**
+   * El cuarto booleano, 2026-09-18 — el caso que esta bitácora anunció ("cuando el catálogo gane
+   * el cuarto booleano, el sujeto aparece solo") y que efectivamente apareció solo: agregar
+   * `coadministradores` a `CAPACIDADES_INCLUIDAS` no compiló hasta declararlo acá.
+   *
+   * Se nombra ancho a propósito —cualquier mención de un administrador—, no sólo la frase de hoy:
+   * lo que se prohíbe es tipear el plan junto a la afirmación, y una redacción nueva ("tu socio
+   * entra como administrador desde Completo") tiene que caer adentro igual.
+   */
+  coadministradores: /\badministrador(?:es|a)?\b|\bcoadmin/i,
 };
 
 /**
@@ -397,5 +408,127 @@ describe("desde qué plan viene una capacidad: se deriva, no se tipea", () => {
       )
       .join("");
     expect(hallazgos, `el plan desde el que viene una capacidad se DERIVA:${detalle}`).toEqual([]);
+  });
+});
+
+/**
+ * El hermano SIMÉTRICO del gate de arriba: no tipear el plan es media verdad; la otra mitad es
+ * no NEGARLO con un universal.
+ *
+ * 🔴 **POR QUE NINGUN GATE PODIA VER ESTO.** El gate de arriba prohíbe escribir el nombre de un
+ * plan junto a una capacidad, y `scripts/inclusion-chatbot.mjs` cruza el espejo contra el ref
+ * publicado del producto. Las dos preguntas se contestan sobre frases que NOMBRAN un plan. Una
+ * frase que dice «cualquier plan» no nombra ninguno: es invisible para los dos, y afirma lo
+ * contrario que el catálogo sin usar una sola palabra prohibida.
+ *
+ * Medido el 2026-09-18 MIRANDO `onia.com.bo` servida a 390 px:
+ *
+ *   - portada, sección del chatbot: «El asistente contesta al instante … Se suma a cualquier plan.»
+ *   - `lib/pricing.ts`, `copy` del add-on — el mismo texto que pinta `/precios` y `/chatbot`.
+ *   - portada y `/precios`, el kicker que rotula la sección de add-ons entera.
+ *
+ * …con `whatsappIncluded: true` en Full y Grupo desde la escalera C (12-sep). Al dueño de un
+ * Completo (Bs 1.290) le ofrecía pagar Bs 390 por lo que su plan ya trae, y al que evaluaba subir
+ * de Profesional (Bs 890) le escondía el mejor argumento de la escalera: subiendo Bs 400 deja de
+ * pagar 390.
+ *
+ * El gate pregunta por la FORMA, no por el texto viejo: «se suma / se agrega / se prende» + «a
+ * cualquier plan / a todos los planes». Prohibir el literal de hoy se apaga solo el día que
+ * alguien lo escriba con otras palabras.
+ */
+const SE_SUMA = /\bse\s+(?:suma|suman|agrega|agregan|a[ñn]ade|a[ñn]aden|prende|prenden|contrata|contratan)\b/i;
+
+/** «a cualquier plan», «en todos los planes», «sobre cualquiera de los planes». */
+const A_CUALQUIER_PLAN =
+  /\b(?:a|en|sobre|con)\s+(?:cualquier(?:a\s+de\s+los)?|todos?\s+los|cada\s+uno\s+de\s+los)\s+(?:plan|planes)\b/i;
+
+/** Cuánto texto ANTES del universal cuenta como la misma afirmación. */
+const VENTANA_UNIVERSAL = 90;
+
+/** `true` si al menos una capacidad del catálogo viene incluida en algún plan. */
+function hayInclusionPorPlan(planes: readonly (typeof PLANES)[number][] = PLANES): boolean {
+  return (Object.keys(CAPACIDADES_INCLUIDAS) as CapacidadIncluida[]).some(
+    (c) => primerPlanCon(c, planes) !== null,
+  );
+}
+
+/** Las frases que afirman que algo se suma a CUALQUIER plan. Vacío = ninguna. */
+function niegaLaInclusion(fuentes: readonly string[] = FUENTES): Hallazgo[] {
+  if (!hayInclusionPorPlan()) return [];
+  const hallazgos: Hallazgo[] = [];
+
+  for (const ruta of fuentes) {
+    const codigo = sinComentarios(readFileSync(ruta, "utf8"));
+    const buscador = new RegExp(A_CUALQUIER_PLAN.source, "gi");
+    let m: RegExpExecArray | null;
+    while ((m = buscador.exec(codigo)) !== null) {
+      const antes = codigo.slice(Math.max(0, m.index - VENTANA_UNIVERSAL), m.index + m[0].length);
+      if (!SE_SUMA.test(antes)) continue;
+      hallazgos.push({
+        archivo: relative(SRC, ruta),
+        linea: codigo.slice(0, m.index).split("\n").length,
+        capacidad: "chatbot",
+        plan: "cualquiera",
+        contexto: antes.replace(/\s+/g, " ").trim(),
+      });
+    }
+  }
+
+  return hallazgos;
+}
+
+describe("«se suma a cualquier plan»: el universal que la inclusión por plan vuelve falso", () => {
+  it("el detector caza la frase que estaba viva, y deja pasar la que sí es cierta", () => {
+    const viva = "y pasa a una persona lo que necesite decisión. Se suma a cualquier plan.";
+    const kicker = "<Kicker>Se suma a cualquier plan</Kicker>";
+    const otraForma = "El chatbot se agrega en todos los planes.";
+    // La que SÍ es cierta y vive hoy en `landing-v1/chatbot-cta.tsx`: gratis en todos no afirma
+    // que se sume. Sin esta dirección el gate se vuelve ruidoso y termina exento por archivo.
+    const legitima = "El botón de WhatsApp de tu web va gratis en cualquier plan.";
+    // Y la cura: nombra la inclusión y sólo después dice que se suma. No lleva universal.
+    const curada = "Viene incluido en Full y Grupo; sobre los demás planes se suma aparte.";
+
+    const caza = (texto: string) => {
+      const re = new RegExp(A_CUALQUIER_PLAN.source, "gi");
+      const m = re.exec(texto);
+      if (!m) return false;
+      return SE_SUMA.test(texto.slice(Math.max(0, m.index - VENTANA_UNIVERSAL), m.index + m[0].length));
+    };
+
+    expect(caza(viva), "la frase medida en producción tiene que ser sujeto").toBe(true);
+    expect(caza(kicker), "el kicker rotula la sección entera: también es sujeto").toBe(true);
+    expect(caza(otraForma), "el gate pregunta por la FORMA, no por el literal de hoy").toBe(true);
+    expect(caza(legitima), "«va gratis en cualquier plan» no afirma que se sume").toBe(false);
+    expect(caza(curada), "la cura derivada no puede acusarse a sí misma").toBe(false);
+  });
+
+  it("si ningún plan trae la capacidad adentro, el universal es cierto y el gate se apaga solo", () => {
+    // El modo de falla de esta familia: un gate que sigue rojo cuando la respuesta correcta pasó
+    // a ser la frase que prohíbe. La condición sale del catálogo, no de una fecha.
+    // Los campos se APAGAN derivados del mapa, no tipeados uno por uno: con los tres escritos a
+    // mano, el cuarto booleano (`coadministradores`, 2026-09-18) dejó este fixture representando
+    // un escenario que ya no era "ningún plan la trae" — y el caso se puso rojo con el gate sano.
+    // Un fixture con su propia lista de la misma cosa que el producto enumera envejece con él.
+    const sinInclusion = PLANES.map((p) => ({
+      ...p,
+      ...Object.fromEntries(
+        Object.values(CAPACIDADES_INCLUIDAS).map((campo) => [campo, false]),
+      ),
+    }));
+    expect(hayInclusionPorPlan(sinInclusion)).toBe(false);
+    expect(hayInclusionPorPlan()).toBe(true);
+  });
+
+  it("ninguna superficie dice que algo se suma a CUALQUIER plan", () => {
+    const hallazgos = niegaLaInclusion();
+    const detalle = hallazgos
+      .map(
+        (h) =>
+          `\n  ${h.archivo}:${h.linea} — el chatbot viene incluido en ${nombresConChatbot()}: ` +
+          `decírselo a «cualquier plan» le cobra de nuevo a quien ya lo paga.` +
+          `\n    …${h.contexto.slice(0, 190)}…`,
+      )
+      .join("");
+    expect(hallazgos, `lo que un plan ya trae adentro no «se suma»:${detalle}`).toEqual([]);
   });
 });

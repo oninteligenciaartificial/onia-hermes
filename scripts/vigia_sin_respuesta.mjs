@@ -473,15 +473,89 @@ function leerEstado(ruta) {
   }
 }
 
+/** Marcador propio de LA tarea de este vigia. Nunca el titulo: el titulo nombra a la gente. */
+export const MARCA_LEADS = '[leads-esperando]';
+
+const MOTIVO_BLOQUEO =
+  'Desconocidos esperando una respuesta. Contactar a un prospecto es decision de Sergio Urcullo.';
+
+/** Una tarea del tablero sigue viva mientras no haya terminado. */
+const ESTADOS_TERMINALES = new Set(['done', 'archived', 'cancelled', 'canceled']);
+
 /**
- * El aviso de verdad: Telegram por `onia-tg.sh`, que desde el 08-sep enruta los 🔴 al tablero
- * de donde los cuatro carriles sacan trabajo. Vive aca arriba y CON NOMBRE —en vez de ser un
- * closure adentro de `correrVigia`— para que la baranda se vea y para que un caso pueda
- * afirmar sobre ella sin ejecutarla.
+ * Las tareas que este vigia ya dejo y siguen vivas. Se buscan por MARCA y no por titulo
+ * porque el titulo nombra a la gente que esperaba ese dia — y eso es justo lo que cambia.
  */
-export async function avisarPorTelegramReal(texto) {
-  guardaDeEfectoReal('canal de avisos de Sergio Urcullo', 'Inyectale deps.avisar al vigia');
-  await run('/root/bin/onia-tg.sh', [texto]);
+export function tareasViejasDelVigia(tareas) {
+  return (Array.isArray(tareas) ? tareas : [])
+    .filter((t) => String(t?.title || '').includes(MARCA_LEADS))
+    .filter((t) => !ESTADOS_TERMINALES.has(String(t?.status || '').toLowerCase()))
+    .map((t) => String(t.id));
+}
+
+/** El titulo que ve Sergio Urcullo en el telefono: corto y con la cuenta de hoy. */
+export function tituloDelAviso(colgados) {
+  return `${MARCA_LEADS} ${(colgados || []).length} desconocido(s) esperando una respuesta tuya`;
+}
+
+/** El estado que el tablero declara para una tarea, leido de la salida de `show`. */
+export function estadoDeLaTarea(salida) {
+  const encontrado = String(salida || '').match(/^\s*status:\s*(\S+)/m);
+  return encontrado ? encontrado[1] : null;
+}
+
+/**
+ * El aviso de verdad. NO va por `onia-tg.sh`: ese enrutador crea la tarea en `ready` y la
+ * dedupea por el titulo con los DIGITOS COLAPSADOS A `N`. Las dos mitades hacen dano y las
+ * dos se midieron el 2026-09-18 con dos desconocidos reales esperando:
+ *
+ *   · `ready` es de donde los carriles sacan trabajo. Contactar a un prospecto NO es trabajo
+ *     de un carril, es decision de Sergio Urcullo, y lo unico que le llega como decision es
+ *     `blocked --kind needs_input`. La tarea `t_3b9d0ded` quedo `ready` entre 262.
+ *   · Mientras esa tarea siga viva, «3 escribieron» normaliza al mismo titulo que
+ *     «2 escribieron»: `TAREA-YA-EXISTE`, exit 0, aviso tirado en silencio. El lead nuevo
+ *     desaparece y el que llama no se entera.
+ *
+ * Por eso el vigia es dueño de su tarea: archiva la anterior, crea la de hoy y la bloquea.
+ * Devuelve SI se entrego, porque anotar «ya le avise» sobre un aviso que nadie recibio es
+ * como este vigia se apaga solo.
+ */
+export async function entregarComoDecision(texto, colgados, deps = {}) {
+  const tablero = deps.tablero || ejecutarTablero;
+  // La guarda va ACA, fuera del try: adentro se la come el catch que existe para no romper
+  // la vuelta cuando el tablero no contesta, y el vigia terminaria avisando de verdad.
+  if (!deps.tablero) {
+    guardaDeEfectoReal('canal de avisos de Sergio Urcullo', 'Inyectale deps.avisar al vigia');
+  }
+
+  let vivas;
+  try {
+    vivas = tareasViejasDelVigia(JSON.parse(await tablero(['list', '--json'])));
+  } catch (error) {
+    return { entregado: false, motivo: `no pude leer el tablero: ${String(error?.message || error)}` };
+  }
+  for (const id of vivas) await tablero(['archive', id]);
+
+  const salida = await tablero(['create', tituloDelAviso(colgados), '--body', texto, '--priority', '1']);
+  const id = (String(salida).match(/t_[0-9a-f]{8}/) || [])[0];
+  if (!id) return { entregado: false, motivo: 'el tablero no devolvio el id de la tarea' };
+
+  // El motivo va ANTES de `--kind`: con la opcion en el medio el tablero muere con
+  // `unrecognized arguments` y la tarea se queda `ready`, o sea sin avisarle a nadie.
+  await tablero(['block', id, MOTIVO_BLOQUEO, '--kind', 'needs_input']);
+
+  // `block` sale 0 SIN bloquear cuando el tablero detecta un bucle de bloqueos: el exit no
+  // prueba nada y el estado se MIRA.
+  const estado = estadoDeLaTarea(await tablero(['show', id]));
+  if (estado !== 'blocked') {
+    return { entregado: false, id, motivo: `la tarea quedo en "${estado}", no en blocked` };
+  }
+  return { entregado: true, id };
+}
+
+async function ejecutarTablero(args) {
+  const { stdout } = await run('/root/bin/onia-tablero.sh', args);
+  return stdout;
 }
 
 /**
@@ -503,7 +577,7 @@ export async function correrVigia(opciones = {}, deps = {}) {
   const ahoraMs = Number.isFinite(opciones.ahoraMs) ? opciones.ahoraMs : Date.now();
   const rutaEstado = rutaDeEstado(opciones.estado);
   const leerFilas = deps.leerFilas || leerFilasDeChatwoot;
-  const avisar = deps.avisar || avisarPorTelegramReal;
+  const avisar = deps.avisar || entregarComoDecision;
 
   const filas = await leerFilas();
   // Si el guion no se puede leer, el vigia sigue mirando a los que nadie contesto: perder una
@@ -531,12 +605,18 @@ export async function correrVigia(opciones = {}, deps = {}) {
   const estadoPrevio = leerEstado(rutaEstado);
   const nuevos = nuevosParaAvisar(colgados, estadoPrevio);
 
+  let entrega = null;
   if (opciones.emitir && nuevos.length) {
-    await avisar(armarAviso(nuevos));
-    mkdirSync(dirname(rutaEstado), { recursive: true });
-    writeFileSync(rutaEstado, JSON.stringify(armarEstado(estadoPrevio, nuevos), null, 2));
+    entrega = (await avisar(armarAviso(nuevos), nuevos)) || {};
+    // El estado dice «a este ya le avise». Anotarlo cuando el aviso NO llego es como este
+    // vigia se apaga solo: la persona queda marcada como avisada sin que nadie la haya
+    // visto, y no se la vuelve a nombrar hasta el escalon siguiente — o nunca.
+    if (entrega.entregado) {
+      mkdirSync(dirname(rutaEstado), { recursive: true });
+      writeFileSync(rutaEstado, JSON.stringify(armarEstado(estadoPrevio, nuevos), null, 2));
+    }
   }
-  return { colgados, nuevos };
+  return { colgados, nuevos, entrega };
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
@@ -550,7 +630,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
     emitir: argv.includes('--emit'),
     umbralMs: Number.isFinite(umbralMin) && umbralMin > 0 ? umbralMin * 60000 : undefined,
   })
-    .then(({ colgados, nuevos }) => {
+    .then(({ colgados, nuevos, entrega }) => {
       // La CLI dice lo MISMO que el Telegram, y con las mismas tres categorias. Cuando el
       // aviso gano la tercera mirada esta salida se quedo con dos y llamaba «esperando
       // respuesta» a alguien a quien el bot SI le habia contestado: quien lee la CLI para
@@ -565,6 +645,12 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
       const conHumano = colgados.filter((c) => c.esperandoHumano).length;
       const sinQueSepas = colgados.filter((c) => c.esperandoDecision).length;
       console.log(`${colgados.length} colgado(s) — ${colgados.length - conHumano - sinQueSepas} sin respuesta · ${conHumano} esperando a un humano prometido · ${sinQueSepas} atendido(s) por el bot que nadie mas vio · ${nuevos.length} sin avisar${argv.includes('--emit') ? '' : ' (SECO — agregar --emit)'}`);
+      // Un aviso que no llego es el fallo que este vigia existe para no tener: se dice, y con
+      // codigo distinto de 0, porque el cron lo unico que mira es el codigo.
+      if (entrega && !entrega.entregado) {
+        console.error(`vigia-sin-respuesta: NO pude avisarle a Sergio Urcullo — ${entrega.motivo}`);
+        process.exit(2);
+      }
       process.exit(0);
     })
     .catch((error) => {

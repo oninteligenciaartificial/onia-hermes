@@ -1,7 +1,16 @@
 import type { CSSProperties } from "react";
 import type { Metadata } from "next";
 import { Reveal } from "@/motion";
-import { PLANES, ADDONS, GRUPO, PRUEBA, ALCANCE_CON_AGENDA, bs, plan } from "@/lib/pricing";
+import {
+  PLANES,
+  ADDONS,
+  GRUPO,
+  PRUEBA,
+  ALCANCE_CON_AGENDA,
+  bs,
+  nombresConChatbot,
+  plan,
+} from "@/lib/pricing";
 import {
   CHATBOT_PLAN,
   precioStack,
@@ -381,7 +390,8 @@ export default function Portada() {
                 El asistente contesta al instante con la información que tu
                 negocio publicó. No improvisa precios ni promesas: lo que
                 requiere una decisión te llega con la conversación completa.
-                Se suma a cualquier plan.
+                Viene incluido en {nombresConChatbot()}; sobre los demás planes
+                se suma aparte.
               </p>
               <div className={s.actions}>
                 <Btn href={EMPEZAR_URL}>{CTA_ALTA}</Btn>
@@ -560,7 +570,11 @@ export default function Portada() {
           haber dos números del mismo servicio. */}
       <Block surface="ink" labelledBy="oferta">
         <Reveal>
-          <Kicker>Se suma a cualquier plan</Kicker>
+          {/* "Se suma a cualquier plan" hasta el 2026-09-18: rotulaba la sección entera con un
+              universal falso desde la escalera C —el chatbot viene ADENTRO de Full y Grupo, y la
+              agenda pública desde Crece—, así que a quien ya los paga en su plan le ofrecía
+              comprarlos de nuevo. "Uno por uno" dice lo mismo que el lead y es cierto siempre. */}
+          <Kicker>Uno por uno</Kicker>
           <h2 id="oferta" className={s.h2}>
             Sobre el plan encendés lo que te falta.
           </h2>

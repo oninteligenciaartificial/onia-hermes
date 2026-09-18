@@ -12,6 +12,274 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-18 17:09-17:17 La Paz — mismo BUILD_ID (`4AefpemDeSbQXrDmTbhoy`), pero había una org `zz-qa-` huérfana al arrancar: limpiada y dental 9/9 de nuevo
+
+Al arrancar: 1 org `zz-qa-` huérfana (`zz-qa-2026-09-18-1609-negocio`, creada 16:10, con 2
+`profiles` y 1 `organization_entitlements`, sin paciente ni cita — se cortó a mitad de una corrida
+anterior, entre el paso 4 y el 6). La borré a mano (entitlements → profiles → organization →
+auth.users) antes de correr el recorrido nuevo. Alta `abierta`. Corrí `--escribir` en dental
+(default): **9/9, `completo: true`**. Cuenta `zz-qa-2026-09-18-1709@onia.com.bo` creada → correo
+confirmado → onboarding (6 pantallas) → paciente `zz-qa-2026-09-18-1709-paciente` cargado y visto
+en `/patients` → cita 2026-09-21 09:00 agendada (201, `cmu77viis002s01rw9w4ewlui`) y vista en
+`/appointments` → factura con ítem visible en `/billing/cmu77vuo2002u01rwiq73qeu9` (frenada sin
+pagar) → panel revisado (no lista pacientes, esperado). 0 filas `zz-qa-` al cerrar (verificado por
+`SELECT`, las dos veces).
+
+`completo: true`, `llegoHasta: 9/9`.
+
+RAZÓN: BUILD_ID no cambió desde la vuelta anterior — esta corrida fue la medición obligatoria de
+arranque (`--escribir` va siempre), no una repetición elegida.
+LECCIÓN: el modo de falla "corrida cortada a mitad deja una org huérfana" sigue vivo aunque nadie
+lo repitió esta semana — el chequeo de conteo `zz-qa-` al ARRANCAR (antes de correr nada) sigue
+siendo obligatorio, no un caso aislado. Próxima vuelta: si el BUILD_ID sigue igual, escalón 3 en
+superficie no auditada, no repetir dental.
+
+---
+
+## 2026-09-18 11:09-11:17 La Paz — deploy nuevo (BUILD_ID `4AefpemDeSbQXrDmTbhoy`, antes `HiLa5P_MF3e3iK6KUSfli`): dental 9/9 de nuevo
+
+BUILD_ID cambió desde la vuelta anterior, así que tocaba re-correr el recorrido completo (no
+solo confiar en el resultado viejo). Al arrancar: 0 orgs `zz-qa-` huérfanas, alta `abierta`. Corrí
+`--escribir` en dental (default): **9/9, `completo: true`**. Cuenta
+`zz-qa-2026-09-18-1509@onia.com.bo` creada → correo confirmado → onboarding (6 pantallas) →
+paciente `zz-qa-2026-09-18-1509-paciente` cargado y visto en `/patients` → cita 2026-09-21 09:00
+agendada (201, `cmu73kxw5001h01rw0ahvacw0`) y vista en `/appointments` → factura con ítem visible
+en `/billing/cmu73l997001j01rwtedccemt` (frenada sin pagar) → panel revisado (no lista pacientes,
+esperado). El bloqueo de MFA que había frenado el recorrido el 17-sep sigue sin reaparecer. 0
+filas `zz-qa-` al cerrar (verificado por `SELECT`).
+
+`completo: true`, `llegoHasta: 9/9`.
+
+RAZÓN: la medida ya estaba en el techo (9/9); esta vuelta confirma que el deploy nuevo no rompió
+nada, que es la pregunta que un cambio de BUILD_ID obliga a hacer.
+LECCIÓN: ninguna nueva — el método "re-correr entero SOLO cuando cambia BUILD_ID, si no usar el
+resto en escalón 3" sigue siendo correcto. Próxima vuelta: si el BUILD_ID no cambió, ir directo a
+escalón 3 en superficie no auditada (o revisar si algún pedido de deploy sigue esperando el ok de
+Sergio Urcullo).
+
+---
+
+## 2026-09-18 08:09-08:16 La Paz (novena vuelta del día) — dental 9/9 (rutina); superficie del día agotada, se descarta `/ayuda`
+
+Al arrancar: 0 orgs `zz-qa-` huérfanas, alta `abierta`. Corrí el recorrido completo con
+`--escribir` en dental (default): **9/9, `completo: true`**. Cuenta
+`zz-qa-2026-09-18-1209@onia.com.bo` creada → correo confirmado → onboarding (6 pantallas) →
+paciente `zz-qa-2026-09-18-1209-paciente` cargado y visto en `/patients` → cita 2026-09-21 09:00
+agendada (201, `cmu6x547a002t01rwm59cpzfi`) y vista en `/appointments` → factura con ítem visible
+en `/billing/cmu6x5fha002v01rwras04vd5` (frenada sin pagar) → panel revisado (no lista pacientes,
+esperado). 0 filas `zz-qa-` al cerrar (verificado por `SELECT`).
+
+Con el resto de la vuelta: los 6 rubros activos y prácticamente todas las superficies de escalón
+3 ya fueron re-verificadas HOY (importadora, comercio, servicios profesionales, estética,
+`/servicios/webs`, `/contacto`, `/patrones`, `/servicios` raíz, `/agentes`, `/comparativa`,
+checkout, `/precios`, recuperación de contraseña). Probé una superficie nueva: `/ayuda` — da
+**404 limpio**, con nav y footer intactos y sin ningún texto engañoso. Antes de reportarlo como
+hallazgo, crucé el código fuente (`web-factory/apps/onia-platform/src`, que SÍ está en este
+worktree) buscando quién enlaza `/ayuda`: **cero coincidencias**. No es una promesa rota, es una
+ruta que nadie ofrece — descartado, no es hallazgo.
+
+`completo: true`, `llegoHasta: 9/9`.
+
+RAZÓN: N/A — objetivo cumplido.
+LECCIÓN: con los 6 rubros y prácticamente todas las superficies de escalón 3 conocidas ya
+re-verificadas en las últimas 24h, el rendimiento de seguir "buscando una superficie nueva al
+azar" cae (probé `/ayuda`, que resultó no ser sujeto de nada). La próxima vuelta rinde más si, en
+vez de escanear más URLs sueltas, verifica una promesa CONCRETA que otro carril ya reportó rota
+hoy en producción — por ejemplo la de "chatbot incluido en el plan Completo" que `chatbot-cola`
+dejó anotada en la memoria compartida (commit `5344eae`), abriendo una cuenta `zz-qa-` real con
+ese plan y mirando `/settings` como lo vería el dueño.
+
+---
+
+## 2026-09-18 06:09-06:22 La Paz (octava vuelta del día) — dental 9/9 (rutina) + rotación a Servicios profesionales, sana 9/9
+
+Al arrancar: 0 orgs `zz-qa-` huérfanas, alta `abierta`, `BUILD_ID` sigue en
+`HiLa5P_MF3e3iK6KUSfli` (sin cambios). Sin tareas nuevas en el tablero para esta zona.
+
+Corrí el recorrido completo con `--escribir` en dental (sin `RECORRIDO_RUBRO`, es el default):
+**9/9, `completo: true`**. Cuenta `zz-qa-2026-09-18-1009@onia.com.bo` creada → correo confirmado
+→ onboarding (6 pantallas) → paciente cargado y visto en `/patients` → cita 2026-09-21 09:00
+agendada (201, `cmu6suwqr000k01rwmtben889`) y vista en `/appointments` → factura con ítem
+visible en `/billing/cmu6sv8eq000m01rw...` (frenada sin pagar) → panel revisado (no lista
+pacientes, esperado).
+
+Con el resto de la vuelta, rotando según lo anotado la vuelta pasada: `RECORRIDO_RUBRO='Servicios
+profesionales'` (no se re-verificaba hace varios días). **Sano, 9/9.** Cuenta
+`zz-qa-2026-09-18-1013@onia.com.bo` creada → correo confirmado → onboarding (6 pantallas) →
+cliente `zz-qa-2026-09-18-1013-paciente` cargado en group Clientes y visto en `/patients` →
+cita 2026-09-21 09:00 agendada (201, `cmu6t0634001601rwz4fapv4t`) y vista en `/appointments` →
+pantalla de cobro (Caja) a la vista en `/comercio/caja`, frenada sin cobrar → panel revisado (no
+lista clientes, esperado).
+
+0 filas `zz-qa-` al cerrar en las dos corridas (orgs y appointments verificados por `SELECT`
+después de cada una).
+
+`completo: true`, `llegoHasta: 9/9` (Servicios profesionales, el resumen.json vigente).
+
+RAZÓN: N/A — objetivo cumplido, más rotación de rubro sana.
+LECCIÓN: con dental, comercio, importadora y ahora servicios profesionales reconfirmados sanos
+en los últimos días, sólo queda Estética y spa sin recheck reciente. Próxima vuelta: rotar a
+Estética, o si ya está fresca, volver a escalón 3 en superficie nueva.
+
+---
+
+## 2026-09-18 05:09-05:20 La Paz (séptima vuelta del día) — rotación de rubro: Importadora, sana 8/8 (paso 7 no aplica)
+
+Al arrancar encontré 1 org `zz-qa-` huérfana (`zz-qa-2026-09-18-0810-negocio`, de una corrida
+anterior que murió a mitad de camino — sin `patients` ni `appointments`, patrón ya conocido) y la
+borré (`organizations`, `profiles`, `organization_entitlements`, `auth.users`) antes de arrancar.
+Alta `abierta`, `BUILD_ID` sigue en `HiLa5P_MF3e3iK6KUSfli` (sin cambios desde la vuelta
+anterior; dental y comercio ya reconfirmados sanos dos veces cada uno).
+
+Rotando según lo anotado la vuelta pasada: `RECORRIDO_RUBRO=Importadora` con `--escribir`.
+**Sano: 8/8** (paso 7 — agendar cita — NO-APLICA: "Importadora" no vende agenda, coherente con
+su propia tarjeta de `/register` y su menú, que no tiene `/appointments`). Cuenta
+`zz-qa-2026-09-18-0910@onia.com.bo` creada → correo confirmado → onboarding (6 pantallas,
+`/dashboard` no rebotó) → producto `zz-qa-2026-09-18-0910-paciente` cargado en storefront
+Catálogo (`/comercio`) y visto de vuelta en la lista → pantalla de cobro (`/comercio/fiados`,
+Créditos) a la vista, frenada sin cobrar → panel revisado (no lista storefront catálogo, esperado
+— cada rubro muestra lo que le corresponde). 0 filas `zz-qa-` al cerrar (orgs y appointments
+verificados por `SELECT`).
+
+`completo: true`, `llegoHasta: 9/9` (resumen.json vigente, corrida de Importadora).
+
+RAZÓN: N/A — objetivo cumplido.
+LECCIÓN: ninguna nueva — Importadora ya llevaba varios días sin recheck y salió sana; quedan
+estética y servicios profesionales sin re-verificar hace días para la próxima rotación, o
+escalón 3 en superficie nueva si ya están frescos.
+
+---
+
+## 2026-09-18 02:09-02:16 La Paz (sexta vuelta del día) — recorrido completo sigue sano; reconfirmado también en Comercio
+
+Al arrancar: 0 orgs `zz-qa-` huérfanas, alta `abierta`, `BUILD_ID` sigue en
+`HiLa5P_MF3e3iK6KUSfli` (mismo build del arreglo de MFA de la vuelta anterior — no hay deploy
+nuevo). Corrí el recorrido completo con `--escribir` en dental: **9/9, `completo: true`, 0
+agujeros** — mismo resultado que la vuelta anterior, confirma que el arreglo del MFA sostiene, no
+fue casualidad de una sola corrida. Cuenta `zz-qa-2026-09-18-0609@onia.com.bo` creada → correo
+confirmado → onboarding (Clínica dental) → paciente cargado y visto → cita 2026-09-21 09:00
+agendada y vista en `/appointments` → factura frenada sin pagar → panel revisado. 0 filas
+`zz-qa-` al cerrar.
+
+Con el resto de la vuelta reconfirmé el rubro **Comercio** (`RECORRIDO_RUBRO=Comercio`), que no
+se re-verificaba desde hace varios días: **sano, 8/8** (el paso 7 — agendar cita — no aplica:
+"Comercio" no vende agenda, coherente con su propio menú y con `tieneAgenda()` de
+`rubros-activos.ts`). Onboarding completo, producto cargado en `/comercio` (storefront Catálogo),
+visto en la lista, pantalla de Caja (cobro) frenada sin cobrar, y el dato del paso 6 sí aparece
+en el panel esta vez (a diferencia de dental, donde el panel no lista pacientes — cada rubro
+muestra lo que le corresponde). 0 filas `zz-qa-` al cerrar (verificado con `SELECT`).
+
+`completo: true`, `llegoHasta: 9/9` (dental, el resumen.json vigente).
+
+RAZÓN: N/A — objetivo cumplido, más rotación de rubro sana.
+LECCIÓN: no hace falta re-correr dos veces el mismo rubro para confirmar que un arreglo sostiene
+si ya se confirmó una vez; el rendimiento mayor está en rotar a un rubro no verificado en días.
+Próxima vuelta: seguir rotando (importadora, estética o servicios profesionales llevan varios
+días sin re-chequeo) o volver a escalón 3 en una superficie nueva.
+
+---
+
+## 2026-09-18 00:09-00:16 La Paz (quinta vuelta del día) — 🟢 SE ARREGLÓ: recorrido COMPLETO 9/9 por primera vez desde el 17-sep, el bloqueo de MFA quedó atrás
+
+Al arrancar: 0 orgs `zz-qa-` huérfanas, alta `abierta`. **`BUILD_ID` CAMBIÓ**: de
+`OFd4xCDzoTbQdThUbfzDv` (el mismo desde hacía más de un día) a **`HiLa5P_MF3e3iK6KUSfli`** —
+hubo deploy nuevo. `t_b8d00627` (plataforma, 36 arreglos, incluye el fix de MFA `b1247fb`) sigue
+`blocked` en el tablero (no es mi zona, la actualiza `onia-cola`), pero el build vivo ya lo tiene.
+
+Corrí el recorrido completo con `--escribir`: **los 9/9 pasos pasaron, `completo: true`, 0
+agujeros.** El corte que venía repitiéndose desde el 2026-09-17 (`/dashboard` rebotaba a
+`/profile?mfa=obligatorio` con el botón "Activar ahora" sin disparar ningún `fetch`) **ya no
+aparece** — el onboarding se completó en 6 pantallas y el `/dashboard` no rebotó. Camino completo:
+cuenta `zz-qa-2026-09-18-0409@onia.com.bo` creada → correo confirmado → onboarding (Clínica
+dental) → paciente `zz-qa-2026-09-18-0409-paciente` cargado y visto en `/patients` → cita
+2026-09-21 09:00 agendada (201, `cmu6g06w6000k01rwofyi0ejw`) y **vista** en `/appointments` →
+factura `/billing/cmu6g0isv000m01rw76z4uu60` con el ítem visible (frenada sin pagar) → panel
+revisado (no lista pacientes, esperado). Limpieza en la misma corrida: 0 filas `zz-qa-` al cerrar
+(orgs y appointments verificados por `SELECT`).
+
+`completo: true`, `llegoHasta: 9/9`.
+
+RAZÓN: N/A — el objetivo se cumplió esta vuelta.
+LECCIÓN: el bloqueo llevaba 8+ vueltas seguidas citando el mismo `BUILD_ID`; en cuanto cambió, el
+recorrido volvió a pasar sin tocar el instrumento. Confirma que el método de "no repetir el
+recorrido completo mientras el `BUILD_ID` no cambie, usar el resto en escalón 3" fue el correcto —
+la próxima vez que un carril quede bloqueado por deploy ajeno, seguir ese patrón en vez de
+re-correr a ciegas cada vuelta. Próxima vuelta: con el camino base sano de nuevo, retomar rotación
+de rubros (dental sobre-cubierto; importadora/comercio/estética/servicios no se re-verifican desde
+hace días) o seguir escalón 3 en superficies nuevas.
+
+---
+
+## 2026-09-18 23:09-23:50 La Paz (cuarta vuelta del día) — mismo corte (paso 5, MFA); escalón 3 con interacción real: `/servicios/webs` hasta el clic final, sano
+
+Al arrancar: 0 orgs `zz-qa-` huérfanas, alta `abierta`, `BUILD_ID` sigue `OFd4xCDzoTbQdThUbfzDv`.
+`t_b8d00627` (plataforma, 36 arreglos, incluye el fix de MFA `b1247fb`) sigue `blocked` sin `ok`
+de Sergio Urcullo — no es mi zona.
+
+Corrí el recorrido completo con `--escribir` (protocolo exige medirlo cada vuelta): mismo corte
+de siempre — paso 4 OK (alta con confirmación de correo, onboarding completo), paso 5 ROTO
+(`/dashboard` rebota a `/profile`, el botón "Activar ahora" del MFA no dispara ni un fetch).
+Limpieza en la misma corrida: 0 filas `zz-qa-` al cerrar.
+
+Como el corte es el mismo ítem ya reportado (esperando el mismo deploy bloqueado), usé el resto
+de la vuelta en la interacción sugerida la vuelta pasada: **enviar de punta a punta** el
+configurador de `/servicios/webs` (hasta ahora sólo se había mirado, nunca completado).
+Con Playwright llené el asistente rápido (rubro Clínica dental, objetivo, tono, paleta) +
+los datos de contacto (`zz-qa-2026-09-18-0309-contacto`, WhatsApp `70000000`, email, ciudad) y
+marqué el checkbox de requisitos. El CTA final ("Pedir mi Web Profesional por WhatsApp") es un
+`<a href="wa.me/...">` que arma correctamente TODO el payload — negocio, rubro, oferta, servicios,
+plan (Bs 4.500, 50/50), paleta y color elegido — con los datos que se cargaron, sin nada roto ni
+faltante. **No lo hice clic** (abriría WhatsApp de verdad y el prompt del carril prohíbe escribirle
+a cualquiera que no sea Sergio Urcullo por `onia-tg.sh`); confirmar el `href` generado alcanza para
+verificar que el flujo arma el mensaje bien. Antes de marcar el checkbox de requisitos, el mismo
+elemento es un `<a href="#datos-solicitud">` (ancla, no todavía el envío) — comportamiento
+correcto, no un hallazgo. El checkbox "Registro de contactos en CRM/n8n" no dispara ningún POST
+al marcarlo (nada que auditar ahí: todo el lead pasa por WhatsApp manual, consistente con "no hay
+equipo de ventas"). **Sano, nada para reportar.**
+
+`completo: false`, `llegoHasta: 4/9` (sin cambios, sigue bloqueado por el mismo deploy).
+
+---
+
+## 2026-09-18 (tercera vuelta del día) — no repito el recorrido completo (BUILD_ID igual, bloqueo no es mío); auditadas `/patrones` y `/servicios` (raíz), sanas
+
+Al arrancar: 0 orgs `zz-qa-` huérfanas, alta `abierta`, `BUILD_ID` sigue `OFd4xCDzoTbQdThUbfzDv`
+(misma que las últimas ocho corridas). El pedido de deploy de plataforma cambió de forma otra
+vez: `t_4f4e4071` (23 arreglos) quedó `archived` y fue reemplazado por `t_b8d00627` (36
+arreglos) — sigue `blocked`, sigue sin `ok`, no es mi zona (`onia-cola`). El gate
+`npm run pedido:entregado` marca ese pedido nuevo como ROJO (4 commits mergeados después de
+crearlo que su `ok` publicaría sin nombrar) — lo dejo anotado acá porque ya es la zona de otro
+carril, no abro tarea nueva: es el mismo patrón que `t_62759602` ya señalaba.
+
+Con el corte del paso 5 (MFA) intacto, usé la vuelta para cerrar las dos últimas superficies de
+`(sitio)` que quedaban sin auditar (la vuelta anterior las había dejado anotadas como pendientes):
+
+- **`/patrones`**: sana en los tres viewports (375/768/1440, `reducedMotion:'reduce'`) — 200,
+  0 elementos con `scrollWidth > clientWidth`, 0 apariciones de "muy pronto"/"en
+  construcción"/"próximamente"/"beta".
+- **`/servicios`** (la raíz, distinta de `/servicios/webs` que ya estaba auditada): da **404**
+  en los tres viewports. Verificado que NO es un hallazgo: no existe ningún `href="/servicios"`
+  ni `'/servicios'` en el código del sitio (`grep` en
+  `web-factory/apps/onia-platform/src`), y en el filesystem de rutas sólo existe
+  `app/(sitio)/servicios/webs/`, sin `page.tsx` en `servicios/` a secas. Nadie promete esa URL:
+  el 404 es correcto, no una promesa rota.
+
+Con esto quedan agotadas las superficies de `(sitio)` que este carril tenía identificadas como
+sin auditar. Próxima vuelta, si el `BUILD_ID` sigue igual: no queda escalón 3 obvio nuevo en
+`(sitio)` — conviene, en cambio, profundizar una interacción de punta a punta en una superficie
+ya "sana" (enviar de verdad el formulario de `/servicios/webs`, con datos `zz-qa-`, y ver si se
+recibe del lado del intake) en vez de sólo mirar y no enviar.
+
+`completo: false` (no corrí el recorrido esta vuelta), `llegoHasta: 4/9` (sin cambios).
+
+RAZÓN: el corte de siempre (paso 5, MFA) sigue esperando que `onia-cola` cierre el pedido de
+deploy — no depende de esta vuelta.
+LECCIÓN: con `(sitio)` ya barrido entero, seguir escaneando páginas sueltas del sitio público
+deja de rendir; el próximo escalón que sí suma es probar una interacción real (enviar, no sólo
+mirar) en una superficie ya marcada sana.
+
+---
+
 ## 2026-09-18 (segunda vuelta del día) — no repito el recorrido completo (BUILD_ID igual, bloqueo no es mío); auditada `/contacto`, sana
 
 Al arrancar: 0 orgs `zz-qa-` huérfanas, alta `abierta`, `BUILD_ID` sigue `OFd4xCDzoTbQdThUbfzDv`
@@ -1982,3 +2250,90 @@ dos fechas. Captura: `capturas/hallazgo-plazo-guia-facturacion.png`. No lo arreg
 zona (código del sitio, carril web-venta).
 
 `completo: false`, `llegoHasta: 4/9` (sin cambios, sigue bloqueado por el mismo deploy).
+
+## Reverificado 2026-09-18 09:09-09:35 La Paz — dental 9/9, BUILD_ID nuevo tras los tres pedidos de deploy cerrados
+
+`BUILD_ID` cambió de nuevo (`HiLa5P_MF3e3iK6KUSfli` → `4AefpemDeSbQXrDmTbhoy`) y los tres pedidos
+de deploy que quedaban abiertos ya están `done`/`archived` (`t_4f4e4071` plataforma, `t_75f4fac3`
+landing, `t_234cfe6a` bot — ninguno sigue `blocked`). Con esa señal, repetí el recorrido completo
+en dental (`RECORRIDO_RUBRO` sin pasar = default): **9/9 pasos, `completo: true`**, cuenta →
+onboarding (6 pantallas) → paciente `zz-qa-2026-09-18-1309-paciente` guardado y visible → cita
+2026-09-21 09:00 agendada y VISTA en `/appointments` → factura con ítem visible en `/billing/...`
+(frenado sin pagar) → panel revisado. Limpieza verificada: `organizations`/`appointments` con
+`zz-qa-%` en 0 al cerrar (contados antes y después).
+
+Con eso confirmado, intenté escalón 3 en una superficie nueva: el formulario de
+`/servicios/webs` (wizard largo de una sola página: rubro, objetivo, plan, estilo, tipografía,
+color, contacto — con botón "Armar mi web →" `disabled` hasta completar todo). Enviarlo de
+punta a punta quedó **inconcluso**: el botón sigue habilitado=false tras llenar los campos de
+texto y algunas de las secciones de botones, y otras secciones (p. ej. "Minimalista") dejaron de
+encontrarse por selector — probablemente dependen de una elección anterior (plan/objetivo) para
+aparecer. No alcanza para reportar un hallazgo (no se descartó error propio del instrumento); lo
+dejo anotado en la cola para retomarlo con un mapeo paso a paso del formulario, no a ciegas.
+
+`completo: true`, `llegoHasta: 9/9`.
+
+## Reverificado 2026-09-18 07:09-07:20 La Paz — Estética y spa, 9/9 completo (deploy del bloqueo de MFA ya resuelto)
+
+El bloqueo de MFA obligatorio que cortaba el recorrido en el paso 5 desde el 17-sep ya se
+destrabó (ver corrida de las 00:14 La Paz: `BUILD_ID` cambió a `HiLa5P_MF3e3iK6KUSfli`). Con eso
+confirmado, corrí `RECORRIDO_RUBRO="Estética y spa" node scripts/recorrido_cliente.mjs --escribir`
+— era el único de los 6 rubros activos sin recheck reciente. **Los 9 pasos completos**: alta,
+onboarding (6 pantallas), paciente `zz-qa-2026-09-18-1109-paciente` cargado y visible, cita
+2026-09-21 09:00 agendada y VISTA en `/appointments`, factura con ítem visible en `/billing/...`
+(frenado ahí sin pagar), panel revisado. Limpieza verificada: `organizations`/`appointments` con
+`zz-qa-%` en 0 al cerrar.
+
+Con esto, **los 6 rubros activos del alta ya están cubiertos** (dental, comercio, importadora,
+estética, servicios profesionales — veterinaria no se ofrece en el alta). `completo: true`,
+`llegoHasta: 9/9`. Próxima vuelta: no repetir rubro — ir a escalón 3 en superficie nueva o
+verificar si algún pedido de deploy sigue esperando `ok`.
+
+## 2026-09-18 10:09-10:25 La Paz — `/servicios/webs` mapeado: era el instrumento, no el sitio
+
+`BUILD_ID` sin cambios (`4AefpemDeSbQXrDmTbhoy`, mismo que la reverificación de dental de las
+09:35), `zz-qa-` orgs en 0 al arrancar, sin pedidos de deploy bloqueados que me toquen. No repetí
+el recorrido completo (última medición con este mismo `BUILD_ID` ya dio 9/9 en dental y en
+Estética y spa).
+
+Retomé el pendiente propio de `/servicios/webs` (el botón "Armar mi web →" quedaba `disabled`).
+Mapeándolo paso a paso con Playwright: **era mi selector, no un bug del sitio**. Hay dos campos
+con placeholder parecido — el mini-asistente de arriba (`Ej. Clínica Amanecer`, es el que
+controla ese botón) y el formulario detallado de abajo, paso 01 (`Ej. Casa Norte`). Llenaba el
+segundo; el primero, que es el que valida el botón, quedaba vacío — de ahí el hint "Empezá por
+el nombre." correcto. Con el campo de arriba lleno, el botón habilita solo y el clic no manda
+nada a un backend (solo Cloudflare RUM) — el envío real es el link de WhatsApp de más abajo, que
+este carril no toca. Sin hallazgo; cerrado en la cola con la reproducción completa.
+
+`completo: true` (sin cambios desde la última corrida completa), `llegoHasta: 9/9`. Próxima
+vuelta: escalón 3 en `/precios` con `reducedMotion` (pendiente hace varias vueltas) o repetir el
+recorrido completo si cambia el `BUILD_ID`.
+
+## Reverificado 2026-09-18 14:09-14:20 La Paz — dental 9/9 con `BUILD_ID` sin cambios; `/precios` re-chequeado tras la escalera de precios
+
+`ONIA_ALTA_AUTOMATICA=abierta`, `zz-qa-` orgs en 0 al arrancar (chequeo obligatorio, sin
+huérfanas esta vez). Corrí el recorrido completo (`--escribir`) igual, porque es la medición de
+arranque obligatoria de este carril, no una repetición optativa: `BUILD_ID` resultó
+`4AefpemDeSbQXrDmTbhoy`, el mismo que ya venía sano desde la reverificación de las 09:35 del
+2026-09-18 — sin cambios de deploy.
+
+**Recorrido dental: 9/9, `completo: true`, `agujeros: []`.** Los 9 pasos completos (cuenta
+`zz-qa-2026-09-18-1809@onia.com.bo`, confirmación de correo real, onboarding, paciente cargado
+y encontrado, cita `2026-09-21 09:00` vista en `/appointments`, factura con ítem manual servida
+en `/billing/<id>` y frenada sin pagar, panel mirado). Las 6 filas propias (`auth.users`,
+`auth.identities`, `organizations`, `profiles`, `organization_entitlements`, `patients`) se
+imprimieron y se borraron en la misma corrida: 0 filas `zz-qa-` al cerrar.
+
+El pendiente propio de la nota anterior ("escalón 3 en `/precios`") ya estaba resuelto desde el
+2026-09-13 (`t_5ad92d30`, arreglado y desplegado el mismo día en `5501a3c4`), pero como la
+escalera de precios siguió moviéndose después (plan Crece, `whatsappIncluded` en Completo), lo
+re-chequeé en vivo contra `https://onia.com.bo/precios` con `reducedMotion:'reduce'`: la tarjeta
+de "Reservas online" hoy dice *"como add-on a Bs 150/mes, o incluidas desde Crece"* y la del
+chatbot de WhatsApp dice *"Completo ya lo trae incluido; acá va aparte, Bs 390/mes"` — las dos
+correctas, derivadas del catálogo, sin ningún plan tipeado a mano. Sin hallazgo.
+
+`completo: true`, `llegoHasta: 9/9`. Sin novedad de producto esta vuelta. Próxima vuelta: si
+`BUILD_ID` sigue igual, escalón 3 en una superficie todavía no auditada por este carril — el
+flujo de invitar/quitar un coadministrador desde `/settings` (equipo), que hoy el recorrido
+sólo toca en el onboarding (alta de un profesional del staff, sin invitar por correo) y que
+`onia-platform` cambió varias veces esta semana (DG-043).

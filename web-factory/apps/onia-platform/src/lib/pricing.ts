@@ -119,6 +119,27 @@ export interface Plan {
    * Espejo de `publicBookingIncluded` (`onia-platform/lib/plan-catalogo.ts`), que es la fuente.
    */
   reservasIncluidas: boolean;
+  /**
+   * ¿Este plan deja tener MÁS DE UN administrador?
+   *
+   * Espejo de `multiAdminIncluded` (`onia-platform/lib/plan-catalogo.ts`), que es la fuente.
+   *
+   * Nace el 2026-09-18 y es el cuarto hermano por la MISMA razón que los tres de arriba, con una
+   * diferencia que lo hace peor: los otros entraron al sitio el día que el producto los movió, y
+   * éste entró al PRODUCTO el 17-sep (DG-043, decisión de Sergio Urcullo: "más de dos
+   * administradores, pero en los paquetes caros") y al sitio nunca. Medido ese día contra
+   * producción —`build-597dd97`, el árbol del `BUILD_ID` vivo de `app.onia.com.bo`, con
+   * `multiAdminIncluded` ya adentro— el corte estaba APLICÁNDOSE y en todo `src/` no había una
+   * sola aparición de la palabra "administrador".
+   *
+   * O sea: la tarjeta del Profesional decía "Topes: 1.500 fichas · 5 usuarios", el lead con un
+   * equipo de 5 pagaba Bs 890 esperando cinco personas con acceso, invitaba a su socio como
+   * administrador y el producto le contestaba "Tu plan incluye un solo administrador". La
+   * sorpresa llegaba DESPUÉS de pagar, y costaba Bs 400/mes de diferencia. En la dirección
+   * contraria el precio es el mismo: Completo y Grupo SÍ lo traen, y eso —el motivo de subir
+   * para un "equipo grande", que es textualmente a quien apunta ese plan— no se vendía.
+   */
+  coadministradores: boolean;
   destacado?: boolean;
   cuando: string;
 }
@@ -164,6 +185,7 @@ export const CAPACIDADES_INCLUIDAS = {
   agentes: "agentesIncluidos",
   reservas: "reservasIncluidas",
   chatbot: "chatbotIncluido",
+  coadministradores: "coadministradores",
 } as const satisfies Record<string, keyof Plan>;
 
 export type CapacidadIncluida = keyof typeof CAPACIDADES_INCLUIDAS;
@@ -422,6 +444,7 @@ const ESCALERA: readonly Plan[] = [
     chatbotIncluido: false,
     agentesIncluidos: false,
     reservasIncluidas: false,
+    coadministradores: false,
     // El `sinEsto` del Básico se DERIVA más abajo: nombra los planes donde esas dos capacidades
     // sí están, y ese nombre no se tipea (ver `PLANES`).
     sinEsto: [],
@@ -447,6 +470,7 @@ const ESCALERA: readonly Plan[] = [
     chatbotIncluido: false,
     agentesIncluidos: true,
     reservasIncluidas: true,
+    coadministradores: false,
     sinEsto: [
       `Reportes completos, facturas recurrentes y contabilidad completa (${ALCANCE_CLINICO}) — vienen en ${NOMBRE_DE_PLAN.pro}`,
     ],
@@ -471,6 +495,7 @@ const ESCALERA: readonly Plan[] = [
     chatbotIncluido: false,
     agentesIncluidos: true,
     reservasIncluidas: true,
+    coadministradores: false,
     sinEsto: [
       `El chatbot de WhatsApp — ${NOMBRE_DE_PLAN.full} ya lo trae incluido; acá va aparte, Bs ${bs(CHATBOT_MENSUAL)}/mes`,
     ],
@@ -490,12 +515,20 @@ const ESCALERA: readonly Plan[] = [
     incluye: [
       `Chatbot de WhatsApp incluido (aparte vale Bs ${bs(CHATBOT_MENSUAL)}/mes)`,
       `Todo lo del ${NOMBRE_DE_PLAN.pro}, sin límites`,
-      "Fichas y usuarios sin tope; recordatorios por email sin tope mensual",
+      /**
+       * "Más de un administrador" va ACÁ, pegado a los usuarios sin tope, y no como quinta línea:
+       * la home renderiza `incluye.slice(0, 4)` (`precios-toggle.tsx`), así que una línea nueva al
+       * final nacería invisible en la pantalla donde el lead compara. Y es el renglón correcto por
+       * contenido: el tope de usuarios y quién puede administrar son la misma pregunta para el que
+       * arma un equipo.
+       */
+      "Fichas y usuarios sin tope, y más de un administrador; recordatorios por email sin tope mensual",
       "Te lo entregamos configurado para tu rubro",
     ],
     chatbotIncluido: true,
     agentesIncluidos: true,
     reservasIncluidas: true,
+    coadministradores: true,
     sinEsto: [],
     cuando: "Equipo grande, base de clientes que no entra en 1.500 fichas, o WhatsApp con movimiento.",
   },
@@ -508,17 +541,45 @@ const ESCALERA: readonly Plan[] = [
  * cazó el gate nuevo con un `Cannot access 'PLANES' before initialization`, no una revisión a
  * ojo). Se le pasa `ESCALERA`, que en este punto ya está inicializada.
  */
-export const PLANES: readonly Plan[] = ESCALERA.map((plan) =>
-  plan.id === "basico"
-    ? {
-        ...plan,
-        sinEsto: [
+export const PLANES: readonly Plan[] = ESCALERA.map((plan) => ({
+  ...plan,
+  sinEsto: [
+    ...plan.sinEsto,
+    ...(plan.id === "basico"
+      ? [
           `Agentes de IA (vienen desde ${primerPlanCon("agentes", ESCALERA)})`,
           `Reservas online — como add-on a Bs ${bs(AGENDA_ADDON.mensualAddon)}/mes, o incluidas desde ${primerPlanCon("reservas", ESCALERA)}`,
-        ],
-      }
-    : plan,
-);
+        ]
+      : []),
+    /**
+     * La restricción de administradores se escribe para TODO plan que no la traiga, derivada del
+     * propio campo — no plan por plan. Esa es la diferencia entre cerrar la instancia y cerrar la
+     * clase: el escalón que se agregue mañana nace diciéndolo, y el día que el producto le dé
+     * `multiAdminIncluded` a un plan más barato, esta línea desaparece sola de los que ya lo
+     * tengan y el "desde X" se mueve solo. Si ningún plan lo trajera, no hay nada que decir y la
+     * línea no se escribe (en vez de prometer "desde null").
+     */
+    ...lineaDeCoadministradores(plan),
+  ],
+}));
+
+/**
+ * Lo que este plan NO trae en administradores, o nada si lo trae (o si no lo trae ninguno).
+ *
+ * ⚠️ La línea NO nombra el plan desde el que sí viene, y no es por prudencia: el `sinEsto` de un
+ * plan lo reusa el DOWNSELL de `/v1/empezar` ("si te queda grande, el escalón de abajo es…"), y
+ * ahí nombrar un tercer plan es ofrecerlo. La primera versión decía "más de uno viene desde
+ * Completo" y puso rojo a `escalon-que-no-se-tipea.test.ts` en el caso Crece→Básico: al que
+ * bajaba al plan de Bs 320 se le nombraba el de Bs 1.290. El tier igual queda dicho, y en la
+ * forma más derivada que hay: la tarjeta que lo trae lo dice en su `incluye`, las que no, acá.
+ */
+function lineaDeCoadministradores(plan: Plan): string[] {
+  if (plan.coadministradores) return [];
+  // Si ningún plan lo trajera, esto no sería un escalón sino cómo funciona el producto, y
+  // anunciarlo como carencia sería mentir. La condición se lee del catálogo, no de una fecha.
+  if (!primerPlanCon("coadministradores", ESCALERA)) return [];
+  return ["Un solo administrador: el resto del equipo entra con acceso limitado"];
+}
 
 /**
  * Los planes que traen el chatbot pagado adentro, nombrados como los lee el cliente.
@@ -668,6 +729,29 @@ export function plan(id: PlanId): Plan {
   return encontrado;
 }
 
+/**
+ * El escalón inmediatamente ANTERIOR a un plan. `null` si es el primero.
+ *
+ * La jerarquía se deriva del PRECIO, no del orden del array ni del campo `paso`: un plan
+ * nuevo entra por lo que cuesta, y un array reordenado no puede cambiar quién está abajo
+ * de quién. Es la misma cura que `onia-platform/lib/subscription/escalon-de-plan.ts`.
+ *
+ * Existe desde el 2026-09-17: el downsell del wizard `/empezar` tenía el escalón de abajo
+ * TIPEADO en `basico` desde que había tres planes, y la escalera C (2026-09-12) metió el
+ * Crece en el medio. El lead al que le quedaba grande el Profesional (Bs 890) leía «hay un
+ * plan de entrada de Bs 320 … los agentes de IA no vienen ahí» y nunca se enteraba del
+ * escalón de Bs 550 que SÍ los trae. Ningún cruce de precios lo vio nunca: los dos montos
+ * salen de esta misma tabla, así que son legítimos — lo tipeado era el sujeto.
+ */
+export function escalonAnterior(id: PlanId): Plan | null {
+  const porPrecio = [...PLANES].sort((a, b) => a.mensual - b.mensual);
+  const i = porPrecio.findIndex((p) => p.id === id);
+  if (i === -1) {
+    throw new Error(`No existe el plan "${id}" en PLANES (lib/pricing.ts).`);
+  }
+  return i === 0 ? null : porPrecio[i - 1];
+}
+
 /* ---------- lo que se suma sobre la suscripcion ----------
  *
  * ⚠️ VUELVE "Web del negocio" (2026-08-22). El 2026-08-21 la habia sacado de
@@ -733,7 +817,11 @@ export interface AddOn {
 export const ADDONS: readonly AddOn[] = [
   {
     nombre: "Chatbot de WhatsApp",
-    copy: "Contesta al instante a cualquier hora con la información real de tu negocio, y pasa a una persona lo que necesite decisión. Se suma a cualquier plan.",
+    // "Se suma a cualquier plan" hasta el 2026-09-18: un universal que la escalera C volvió falso
+    // el 12-sep, cuando `whatsappIncluded` le dio el chatbot ADENTRO a Full y Grupo. Al dueño de un
+    // Completo (Bs 1.290) le cobraba Bs 390 por lo que ya paga, y al que evaluaba subir le escondía
+    // el mejor argumento: subiendo Bs 400 deja de pagar 390. El plan NO se tipea —sale del catálogo.
+    copy: `Contesta al instante a cualquier hora con la información real de tu negocio, y pasa a una persona lo que necesite decisión. Viene incluido en ${nombresConChatbot()}; sobre los demás planes se suma aparte.`,
     precio: precioAddonChatbot(),
     href: "/chatbot",
   },

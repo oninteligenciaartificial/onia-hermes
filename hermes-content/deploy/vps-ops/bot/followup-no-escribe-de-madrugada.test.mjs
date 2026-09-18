@@ -18,11 +18,20 @@
 // puede abrir la de al lado: el mensaje de madrugada se paga con lo unico que no
 // se repone, que es el quality rating de la linea de WhatsApp.
 //
-// SUS DOS HERMANOS YA LO SABIAN, y por eso esto es un olvido y no una decision:
+// SU HERMANO YA LO SABIA, y por eso esto es un olvido y no una decision:
 // `reminder` frena antes de las 08:00 con `reminder.quietBeforeHour` ("un
-// WhatsApp a esa hora molesta y castiga el quality rating", dice su config), e
-// `insistencia` queda acotado por la franja de SU cron (`*/30 12-23` UTC =
-// 08:00-19:59 de Bolivia). El follow-up era el unico de los tres sin ninguna.
+// WhatsApp a esa hora molesta y castiga el quality rating", dice su config).
+//
+// ⚠️ CORREGIDO el 2026-09-18. Aca decia ademas que `insistencia` "queda acotado
+// por la franja de SU cron (*/30 12-23 UTC = 08:00-19:59 de Bolivia)", y con eso
+// lo daba por cubierto. La frase era cierta y absolvio al sujeto equivocado:
+// medido al dia siguiente, `insistencia-run.mjs` no llamaba a `localHour` ni una
+// vez, y su unica franja vivia en el crontab del VPS — fuera de git, de arranque
+// y no de decision, y ciega al huso del negocio siendo el UNICO barrido
+// multi-org. Enumerar a los hermanos en el comentario del propio arreglo es
+// escribir una lista de INCLUSION, y el que la lee despues la toma por
+// verificada. La clase la cierra ahora `barridos-no-escriben-de-madrugada`, que
+// camina el disco en vez de citar esta lista.
 //
 // QUE CUESTA ESPERAR, dicho de frente: posponer puede cerrar la ventana de
 // servicio de 24 h de Meta, y entonces el mensaje sale por la plantilla aprobada

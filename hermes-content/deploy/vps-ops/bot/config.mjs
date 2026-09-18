@@ -45,6 +45,28 @@ export const DEMO_SLOTS = Object.freeze([
  */
 export const ANTICIPACION_MINIMA_MS = 24 * 60 * 60 * 1000;
 
+/**
+ * ¿Este horario todavia se puede OFRECER en este instante?
+ *
+ * Es una propiedad del INSTANTE, no del horario: por eso no se puede guardar. `slotsOffered`
+ * se persiste con el `pending` que el horario tenia el dia que se ofrecio, y al rehidratarlo
+ * un horario del pasado vuelve con `pending: false` — ofrecible para todo el motor. Esta
+ * funcion es la UNICA fuente de la regla, y la comparten los dos que la necesitan:
+ * `parseSlotsSpec`, que la aplica al publicar, y `handleHorario`, que la aplica al ACEPTAR.
+ * Mientras la regla vivio solo en el parseo, el camino interactivo agendaba lo caducado.
+ *
+ * Sin ISO no se puede verificar NI reservar, pero eso lo decide el que arma la cadena y ya
+ * era asi: se considera sostenible. Con ISO manda el reloj, y un ISO ilegible cuenta como no
+ * sostenible — la comparacion contra NaN da false sola, que es la direccion segura (antes
+ * callarse que prometer).
+ */
+export function slotSostenible(slot, now = Date.now()) {
+  const iso = slot?.startAt ?? null;
+  if (iso === null) return true;
+  const limite = (now instanceof Date ? now.getTime() : Number(now)) + ANTICIPACION_MINIMA_MS;
+  return Date.parse(iso) >= limite;
+}
+
 export function parseSlotsSpec(raw, { now = Date.now() } = {}) {
   const text = String(raw || "").trim();
   if (!text) return null;
@@ -55,15 +77,12 @@ export function parseSlotsSpec(raw, { now = Date.now() } = {}) {
   // Medido el 2026-09-05 04:03 La Paz: el bot vivo ofrecia "sábado 5, 09:00", a
   // 4 h 57 min. El generador ya reserva margen para toda su vigencia; esto es el
   // corte que sobrevive a que ese generador no haya corrido.
-  const limite = (now instanceof Date ? now.getTime() : Number(now)) + ANTICIPACION_MINIMA_MS;
   const candidatos = text.split("|").map((part) => {
     const [label, startAt] = part.split("@").map((piece) => (piece || "").trim());
     const iso = startAt || null;
-    // Sin ISO no se puede verificar NI reservar, pero eso ya era asi antes de este
-    // corte y lo decide el que arma la cadena: no se toca aca. Con ISO manda el
-    // reloj, y un ISO ilegible cuenta como no sostenible: la comparacion contra
-    // NaN da false sola, y esa es la direccion segura (antes callarse que prometer).
-    const sostenible = iso === null || Date.parse(iso) >= limite;
+    // La regla vive en `slotSostenible`, que es la misma que aplica el motor al ACEPTAR una
+    // eleccion. Reimplementarla aca fue lo que dejo agendar horarios ya caducados.
+    const sostenible = slotSostenible({ startAt: iso }, now);
     // `pending` y no un descarte: es el estado que el motor ya sabe contar
     // (slotsPending -> M0_SIN_HORARIOS) y que detectSlotChoice ya ignora. Un
     // horario que no se puede sostener es, para el guion, uno sin definir.
@@ -417,6 +436,19 @@ export const SCRIPT = Object.freeze({
   // (precio / SIAT / archivo) vuelve al embudo sin saltear la calificacion.
   PENDING_CALIFICACION: "Volviendo a lo nuestro: me falta {{dato_faltante}} — ¿me lo pasás?",
   PENDING_HORARIO: "¿Te reservo **{{slot_a}}** o **{{slot_b}}**?",
+  // Eligio un horario que ya no se puede sostener (paso, o dejo de dar el dia de aviso que le
+  // prometimos en ese mismo mensaje). No se le confirma, y tampoco se le asigna en silencio
+  // uno de los nuevos: el "A" de hoy no es el "A" que el vio. Se le dice y elige de nuevo.
+  M0_HORARIO_CADUCO: [
+    "Uy, **{{slot_elegido}}** ya no lo tengo disponible — pasó el tiempo desde que te lo ofrecí y no quiero confirmarte algo que no puedo sostener.",
+    "",
+    "Estos son los horarios que tengo ahora:",
+    "",
+    "**A)** {{slot_a}}",
+    "**B)** {{slot_b}}",
+    "",
+    "¿Cuál te sirve? (o escribime \"otro\" y lo coordinamos)",
+  ].join("\n"),
   // PENDING_HORARIO_SIN_HORARIOS — la misma re-pregunta cuando `slots` sigue en "pendiente de
   // definir". PENDING_HORARIO pide elegir entre {{slot_a}} y {{slot_b}}, y sin horarios reales eso
   // salio a produccion como "¿Te reservo HORARIO A (pendiente de definir) o HORARIO B (pendiente de
@@ -553,7 +585,7 @@ export const PRODUCTOS = Object.freeze([
  * Agregar un producto "en construccion" si es libre: eso no promete nada.
  */
 // 2026-08-13: pasa de {dental} a tres. Evidencia, no opinion: la app REAL en produccion
-// (app.onia.com.bo/registro) dice con todas las letras "Clinicas dentales · Comercios ·
+// (app.onia.com.bo/register) dice con todas las letras "Clinicas dentales · Comercios ·
 // Importadoras" y deja registrarse en los tres con 14 dias gratis. El bot estaba SUBVENDIENDO —
 // le decia "en construccion, sin humo" a dos rubros que el producto ya atiende, o sea que
 // regalaba dos de cada tres prospectos.
@@ -578,6 +610,24 @@ export const PRODUCTOS = Object.freeze([
 export const MODULOS_LISTOS = Object.freeze(
   new Set(["dental", "comercio", "proveedores", "servicios", "estetica"]),
 );
+
+/**
+ * HORA SILENCIOSA — un solo hecho, un solo par de numeros.
+ *
+ * Los TRES barridos que le mandan un mensaje a una persona (follow-up M3,
+ * recordatorio M9, insistencia) comparten la misma pregunta: a esta hora, ¿molesto?
+ * Cada uno la contesta en SU bloque de config, pero leyendo de aca: tres numeros
+ * sueltos serian tres politicas para el mismo hecho, que es la trampa que este
+ * archivo ya pago una vez con la duracion de la demo (15 en el texto / 45 en el
+ * calendario).
+ *
+ * El motivo es el mismo en los tres: un WhatsApp a las 5 de la mañana molesta y
+ * castiga el quality rating de la linea, que es lo unico que no se repone. Y no
+ * pierde el mensaje: el descarte es TRANSITORIO, la fila sigue elegible y sale en
+ * el primer barrido de la mañana.
+ */
+const HORA_SILENCIOSA_DESDE = 8;
+const HORA_SILENCIOSA_HASTA = 21;
 
 // ---------------------------------------------------------------------------
 // Config completa
@@ -691,13 +741,25 @@ export const DEFAULT_CONFIG = Object.freeze({
     // 20 h, no 22 ni 24. La ventana de servicio de Meta se cuenta desde el ULTIMO MENSAJE
     // ENTRANTE (asi lo ancla followup-run.mjs, verificado). Con 22 quedaban 2 horas de colchon:
     // si el cron se atrasa, el mensaje cae fuera de la ventana y falla con 131047, y fuera de
-    // la ventana solo salen plantillas — que hoy no existen. Con 20 quedan 4.
+    // la ventana solo salen plantillas, que se PAGAN. Con 20 quedan 4. O sea que las 4 horas de
+    // colchon ya no compran "que el mensaje salga" —hoy sale igual, como plantilla— sino que
+    // salga GRATIS: cada atraso del cron que cruce las 24 h cuesta ~0,0740 USD en vez de 0,0113.
+    // (Decia "plantillas — que hoy no existen"; corregido el 2026-09-18, ver `windowClosesAtHours`.)
     afterHours: 20,
-    // TOPE DURO de la ventana de Meta. Sin esto la franja elegible iba de 20 h a `staleAfterDays`
-    // (7 dias): todo lo que pasara de 24 h se intentaba igual y Meta lo rechaza con 131047, porque
-    // fuera de la ventana SOLO salen plantillas — que hoy no existen y ademas no hay metodo de
-    // pago. Se descubrio al encender el barrido: tenia 2 conversaciones de 124 h y 131 h esperando,
-    // acumuladas porque el cron nunca existio. Si el mensaje no sale dentro de la ventana, no sale.
+    // Donde cierra la ventana de servicio de Meta, contada desde el ultimo mensaje ENTRANTE.
+    // NO es el tope de la franja elegible: ese es `staleAfterDays` (7 dias), y lo fija
+    // followup-run.test.mjs:151 ("piso: los 7 dias de staleAfterDays"). Lo que decide este
+    // numero es COMO sale el mensaje, no A QUIEN se le manda — adentro texto libre (gratis),
+    // afuera la plantilla `seguimiento_demo`, que se PAGA (~0,0740 USD contra 0,0113 del texto
+    // libre) y por eso el barrido la declara en `sendKind` en vez de esconderla en la factura.
+    //
+    // ⚠️ Esto decia "TOPE DURO … fuera de la ventana SOLO salen plantillas, que hoy no existen
+    // y ademas no hay metodo de pago" — corregido el 2026-09-18 contra el codigo. Era cierto
+    // cuando se escribio y dejo de serlo al aprobarse `seguimiento_demo` (followup-run.mjs:154
+    // lo dice: "antes … porque no habia plantilla; ahora la hay y el mensaje SALE"). Asi como
+    // estaba, afirmaba que este barrido no puede pasar de 24 h ni gastar un centavo, y las dos
+    // son falsas: entre 24 h y 7 dias manda plantilla paga. Un comentario que declara IMPOSIBLE
+    // un gasto que el codigo si hace es el que apaga la auditoria del proximo que lea.
     windowClosesAtHours: 24,
     staleAfterDays: 7,
     // HORA SILENCIOSA. A quien se le escribe lo elige el SILENCIO del prospecto, asi que la hora
@@ -707,8 +769,8 @@ export const DEFAULT_CONFIG = Object.freeze({
     // aca la hora mala tambien puede ser la noche. Esperar no pierde el mensaje: la fila sigue
     // elegible y sale a las 08:00 — a lo sumo la ventana de Meta se cerro y sale la plantilla
     // `seguimiento_demo`, que cuesta ~0,074 USD. Escribirle a las 5 de la mañana cuesta la linea.
-    quietBeforeHour: 8,
-    quietAfterHour: 21,
+    quietBeforeHour: HORA_SILENCIOSA_DESDE,
+    quietAfterHour: HORA_SILENCIOSA_HASTA,
   }),
 
   // Recordatorio del dia de la demo (M9). La ventana de Meta NO se repite aca: es UN solo hecho
@@ -725,7 +787,26 @@ export const DEFAULT_CONFIG = Object.freeze({
     // Nunca antes de las 08:00 de Bolivia. Una demo a las 09:00 caeria en un barrido de las 05:00
     // y un WhatsApp a esa hora molesta y castiga el quality rating. No pierde el recordatorio: la
     // fila sigue elegible y sale en el barrido de las 08:00, todavia con una hora de antelacion.
-    quietBeforeHour: 8,
+    quietBeforeHour: HORA_SILENCIOSA_DESDE,
+  }),
+
+  // Insistencia del RECEPCIONISTA (el asistente de un cliente le insiste UNA vez a alguien
+  // que dejo de contestar). Su franja llego ultima, el 2026-09-18, y no por olvido: hasta
+  // hoy la unica que tenia era la de su linea de cron (`*/30 12-23` UTC), y el gate que cerro
+  // este mismo defecto en el follow-up la CITO como si fuera la garantia. Tres razones por las
+  // que un crontab no puede serlo:
+  //
+  //   1. Es una franja de ARRANQUE, no de decision: `insistencia-run.sh` se corre a mano para
+  //      depurar y a las 3 de la mañana manda igual.
+  //   2. Vive fuera de git —su linea ya fue editada a mano— asi que perderla no deja senal.
+  //   3. Y la de fondo: este es el UNICO barrido MULTI-ORG. Le escribe a los clientes DEL
+  //      CLIENTE, y la hora decente es la del negocio; un crontab solo sabe decir UTC.
+  //
+  // Techo ademas de piso, igual que el follow-up y por el mismo motivo: aca la hora mala
+  // tambien puede ser la noche. La franja del cron queda como segunda red, no como la unica.
+  insistencia: Object.freeze({
+    quietBeforeHour: HORA_SILENCIOSA_DESDE,
+    quietAfterHour: HORA_SILENCIOSA_HASTA,
   }),
 
   // Conversacion VENCIDA: si nadie (ni el prospecto, ni el bot, ni un humano) escribio en

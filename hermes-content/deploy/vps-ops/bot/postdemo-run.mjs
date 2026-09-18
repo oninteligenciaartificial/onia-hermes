@@ -55,6 +55,7 @@ import { pathToFileURL } from "node:url";
 import { DEFAULT_CONFIG, createBotConfig } from "./config.mjs";
 import { withKnowledge } from "./knowledge.mjs";
 import { createStore, stateFromRow } from "./persistence.mjs";
+import { MOTIVO_NUESTRA, esConversacionNuestra } from "./es-nuestra.mjs";
 import { industryLabel } from "./intents.mjs";
 import { formatSlotLabel } from "./calcom-availability.mjs";
 import { hoursBetween } from "./followup-run.mjs";
@@ -175,6 +176,9 @@ export function endedBefore(nowIso, config = DEFAULT_CONFIG) {
  */
 export function skipReason(state, nowIso, config = DEFAULT_CONFIG) {
   if (!state) return "fila_ilegible";
+  // DEFINITIVO: el cierre post-demo avisa a Sergio Urcullo por Telegram, asi que una demo contra
+  // nuestra propia sonda le manda un aviso por una reunion que no existe (ver `es-nuestra.mjs`).
+  if (esConversacionNuestra(state)) return MOTIVO_NUESTRA;
   if (state.humanTookOver) return "humano_a_cargo";
   if (state.optOutAt) return "opt_out";
   if (state.botStage !== OPEN_STAGE) return `estado_no_aplica:${state.botStage}`;

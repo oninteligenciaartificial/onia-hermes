@@ -27,10 +27,15 @@
 set -uo pipefail
 
 TG=${ONIA_TG:-/root/bin/onia-tg.sh}
-LOCK=/var/lock/onia-publicar-solo.lock
+# El lock se puede apuntar a otro lado SOLO para poder probar la rama de
+# "no consegui el lock" sin tocar el de produccion. El default es el de siempre.
+LOCK=${ONIA_PUBLICAR_LOCK:-/var/lock/onia-publicar-solo.lock}
 REPO_HERMES=${ONIA_LOOPS_REPO:-/root/loops/onia-hermes}
 REPO_PLATFORM=${ONIA_PLATFORM_REPO:-/root/loops/onia-platform}
-SECO=""
+# El modo seco tambien se puede forzar por entorno, y no es un lujo: es lo que
+# deja que un caso de prueba ejecute este guion sin que un flag mal escrito
+# termine publicando los tres destinos de verdad.
+SECO=${ONIA_PUBLICAR_SECO:-}
 [ "${1:-}" = "--dry-run" ] && SECO=1
 
 # Fuentes de precio. CLAUDE.md nombra DOS archivos y cada uno manda sobre lo
@@ -39,11 +44,142 @@ SECO=""
 # del bot lleva los precios que el bot dice en voz alta.
 FIRMA_HUMANA='lib/pricing\.ts|lib/subscription-plans\.ts|ONIA_CATALOGO_DE_VENTA\.md|knowledge\.onia\.json'
 
-# Un solo publicador a la vez. La leccion de los builds encimados que tumbaron el
-# VPS el 2026-08-22 (load 18, npm de 40 min) vale igual cuando el que encima los
-# builds es un cron y no una persona.
-exec 9>"$LOCK"
-flock -n 9 || { echo "ya hay una corrida en curso; salgo"; exit 0; }
+# ---------------------------------------------------------------------------
+# TOCAR UNA FUENTE DE PRECIO NO ES CAMBIAR UN PRECIO.
+#
+# Hasta el 2026-09-18 la guarda de arriba era todo el criterio: si un commit
+# varado NOMBRABA uno de esos archivos, el destino no salia. Medido ese dia
+# (tarea t_189a6037): los TRES destinos llevaban dias detenidos y el unico
+# cambio en `lib/subscription-plans.ts` era `DEFAULT_PLAN_AMOUNTS[plan][cycle]`
+# pasando a `[plan]?.[cycle]` mas comentarios — la tabla de montos, identica
+# linea por linea. Un `?.` no cambia lo que se le cobra a nadie, pero le pedia
+# la firma a Sergio Urcullo igual, y atras de ese freno esperaba el arreglo que
+# dejaba afuera a todo cliente nuevo.
+#
+# La pregunta correcta no es QUE ARCHIVO se toco sino SI ALGUN NUMERO CAMBIO.
+# Se contesta sobre el diff, con los comentarios afuera: un numero citado en un
+# comentario que narra el bug viejo (y `lib/pricing.ts` tiene varios) no es un
+# precio publicado. Si los numeros de los dos lados del diff son los MISMOS, no
+# hay monto nuevo y el destino sale solo.
+#
+# 🔴 Y falla CERRADO a proposito: cualquier numero que cambie detiene el destino,
+# aunque sea el `0` de un indice. No se intenta adivinar cual numero es plata —
+# esa lista se escribiria a mano y el dia que aparezca una clave nueva
+# (`tarifaBase: 320`) el guion publicaria un precio sin firma, que es la
+# direccion cara. Lo que si cambia es el AVISO: antes decia "toca una fuente de
+# precio" y ahora dice QUE numero cambia, asi Sergio Urcullo decide de un
+# vistazo en vez de tener que abrir el diff.
+# ---------------------------------------------------------------------------
+
+# Los numeros que unos commits CAMBIAN en un archivo, con los comentarios afuera.
+# Imprime una linea por numero, con el signo del lado del diff (`+320` / `-320`).
+numeros_del_diff() {  # $1=repo-del-codigo  $2=archivo  $3..=shas
+  local repo=$1 archivo=$2 sha
+  shift 2
+  for sha in "$@"; do
+    # `-m --first-parent` o el MERGE sale VACIO y un precio entra en verde: `git
+    # show` de un merge no imprime nada sin eso, y los medidores de varados
+    # devuelven merges (el que trajo la rama a main es un commit varado mas).
+    # Medido el 2026-09-18 con a6adee05 de onia-platform, que es justo el commit
+    # que la tarea t_189a6037 tomo como caso.
+    GIT_NO_LAZY_FETCH=1 git -C "$repo" show --format= --unified=0 -m --first-parent \
+      "$sha" -- "$archivo" 2>/dev/null
+  done | awk '
+    /^(\+\+\+|---)/ { next }
+    /^[+-]/ {
+      signo = substr($0, 1, 1); linea = substr($0, 2)
+      if (linea ~ /^[[:space:]]*(\/\/|\*|\/\*)/) next   # renglon de comentario
+      sub(/\/\/.*$/, "", linea)                          # comentario al final
+      while (match(linea, /[0-9][0-9.,]*/)) {
+        n = substr(linea, RSTART, RLENGTH); gsub(/[.,]/, "", n)
+        print signo n
+        linea = substr(linea, RSTART + RLENGTH)
+      }
+    }'
+}
+
+# ¿Cambia algun numero? Imprime los que entran y los que salen.
+#   0 = ninguno cambia (se puede publicar)   1 = cambia alguno (detener)
+#   2 = NO MEDIDO: no pude leer el repo o un sha (detener igual, pero diciendolo)
+montos_que_cambian() {  # $1=repo-del-codigo  $2=archivo  $3..=shas
+  local repo=$1 archivo=$2 sha entran salen
+  shift 2
+  [ "$#" -eq 0 ] && return 2
+  GIT_NO_LAZY_FETCH=1 git -C "$repo" rev-parse --git-dir >/dev/null 2>&1 || return 2
+  for sha in "$@"; do
+    GIT_NO_LAZY_FETCH=1 git -C "$repo" cat-file -e "${sha}^{commit}" 2>/dev/null || return 2
+  done
+  entran=$(numeros_del_diff "$repo" "$archivo" "$@" | grep '^+' | sed 's/^+//' | sort)
+  salen=$(numeros_del_diff "$repo" "$archivo" "$@" | grep '^-' | sed 's/^-//' | sort)
+  [ "$entran" = "$salen" ] && return 0
+  printf '%s' "$(comm -3 <(printf '%s\n' "$salen") <(printf '%s\n' "$entran") \
+    | tr -d '\t' | grep -v '^$' | sort -u | tr '\n' ' ')"
+  return 1
+}
+
+# El RENGLON del log cuando el freno detiene un destino. Lleva SU CITA —que
+# numero cambia, o que archivo no se pudo mirar—, no solo el motivo.
+#
+# Nace de la tarea t_c441fba9 (2026-09-18). El detalle se calculaba bien y salia
+# UNICAMENTE por Telegram, que para este aviso no entrega: medido ese dia sobre
+# /var/log/onia-tg.log hay 136 emisiones de "publicacion detenida a proposito" y
+# CERO con `OK message_id=`, sobre 1.403 entregas reales — o sea el log si
+# distingue, y este aviso no llego nunca. El unico canal que alguien lee es el
+# log del publicador, y decia el motivo a secas.
+#
+# Por que eso no es cosmetico: un veredicto sin cita NO SE PUEDE REFUTAR. Con esa
+# linea sola, otra sesion diagnostico que el freno contaba los numeros de los
+# COMENTARIOS —que ya descarta desde d9f6a303— y propuso como cura algo que ya
+# estaba escrito hacia horas; lo que de verdad cambiaba eran `0` y `1`, los
+# indices de un helper nuevo de `pricing.ts`. Con la cita al lado, eso se ve de
+# un vistazo y sin abrir el diff, que es justo lo que la cabecera promete.
+#
+# Se rinde en UN solo lugar a proposito: un destino que arme la frase por su
+# cuenta vuelve a quedar sin cita el dia que lo agreguen.
+renglon_detenido() {  # $1=nombre  $2=motivo  $3=detalle
+  local detalle motivo=$2
+  detalle=$(printf '%s' "$3" | tr '\n' ' ' | sed 's/[[:space:]]\{1,\}/ /g; s/^ //; s/ *$//')
+  # Sin detalle no se cuelga un `:` vacio, que se lee como cita perdida.
+  [ -n "$detalle" ] && motivo="$motivo: $detalle"
+  printf '  %s: NO publico solo — %s\n' "$1" "$motivo"
+}
+
+# Se puede preguntar desde afuera, que es la unica forma de PROBAR la decision:
+# adentro del guion entero hace falta /opt, y en la maquina donde corren los
+# carriles /opt no existe. Va ANTES del lock: preguntar no publica nada.
+if [ "${1:-}" = "--renglon" ]; then
+  shift
+  [ "$#" -ge 2 ] || { echo "uso: publicar-solo.sh --renglon <nombre> <motivo> [detalle]" >&2; exit 2; }
+  renglon_detenido "$1" "$2" "${3:-}"
+  exit 0
+fi
+
+if [ "${1:-}" = "--montos" ]; then
+  shift
+  [ "$#" -ge 2 ] || { echo "uso: publicar-solo.sh --montos <repo> <archivo> <sha>..." >&2; exit 2; }
+  MONTOS_REPO=$1; MONTOS_ARCHIVO=$2; shift 2
+  SALIDA_MONTOS=$(montos_que_cambian "$MONTOS_REPO" "$MONTOS_ARCHIVO" "$@")
+  case $? in
+    0) echo "ningun monto cambia"; exit 0 ;;
+    1) echo "cambian: $SALIDA_MONTOS"; exit 1 ;;
+    *) echo "NO MEDIDO: no pude leer el repo o alguno de los commits"; exit 2 ;;
+  esac
+fi
+
+# Un argumento que no se reconoce NO puede caer en "publicar de verdad". Hasta
+# hoy `--dry-run` era el unico que este guion miraba y cualquier otra cosa seguia
+# de largo: un typo (`--dryrun`), o un modo de consulta que alguien agregue
+# mañana y quede mal escrito en quien lo llama, publicaba los TRES destinos sin
+# decir una palabra. Los modos de consulta ya salieron mas arriba.
+case "${1:-}" in
+  ""|--dry-run) ;;
+  *)
+    echo "uso: publicar-solo.sh [--dry-run]" >&2
+    echo "     publicar-solo.sh --montos <repo> <archivo> <sha>..." >&2
+    echo "     publicar-solo.sh --renglon <nombre> <motivo> [detalle]" >&2
+    exit 2
+    ;;
+esac
 
 avisar() {
   if [ -n "$SECO" ]; then echo "  [seco] avisaria: $1"; return; fi
@@ -51,34 +187,103 @@ avisar() {
   "$TG" "$1" >/dev/null 2>&1 || true
 }
 
+# Un solo publicador a la vez. La leccion de los builds encimados que tumbaron el
+# VPS el 2026-08-22 (load 18, npm de 40 min) vale igual cuando el que encima los
+# builds es un cron y no una persona.
+#
+# 🔴 ESPERA, no se rinde — y el cron corre cada 3 HORAS, esa es toda la razon.
+# Hasta el 2026-09-18 aca decia `flock -n`, que se rinde en el acto: quien no
+# consigue el lock pierde la ventana ENTERA y los tres destinos se quedan sin
+# publicar 3 h mas. Medido ese dia: la corrida de las 06:50:01 UTC se salteo
+# completa porque un `--dry-run` de DOS SEGUNDOS, disparado a mano 66 s antes
+# para probar un pedido de deploy, todavia tenia tomado el lock por su deploy
+# en segundo plano. Nadie se entero: salia `exit 0`, o sea el cron lo leia como
+# exito, y la linea del log no llevaba FECHA, asi que en un log append-only no
+# se podia atribuir a ninguna corrida (hubo que deducirla por el mtime).
+# El que espera no encima nada: al entrar vuelve a MEDIR, y si el otro ya
+# publico lo que habia, este dice "al dia" y no toca nada.
+exec 9>"$LOCK"
+if ! flock -w "${ONIA_PUBLICAR_ESPERA:-900}" 9; then
+  # Aca ya no es una colision de segundos: algo lleva 15 min con el lock.
+  # Eso SI es anormal y se avisa, con fecha, para poder atribuirlo despues.
+  echo "== $(TZ=America/La_Paz date '+%F %H:%M') La Paz =="
+  echo "  me rendi: otra publicacion lleva mas de ${ONIA_PUBLICAR_ESPERA:-900}s con el lock ($LOCK)"
+  avisar "<b>Onia — publicacion salteada</b>
+El publicador automatico no pudo arrancar: otra publicacion lleva mas de ${ONIA_PUBLICAR_ESPERA:-900}s con el lock.
+Los tres destinos esperan hasta la proxima corrida (3 h)."
+  exit 0
+fi
+
 # Los archivos que tocan los commits varados de un destino. Se le PREGUNTA al
 # mismo medidor que usa el publicador: dos derivaciones distintas de "que falta"
 # se contradicen el dia que una cambia.
-archivos_varados() {  # $1=cwd  $2=modulo  $3=repo-del-codigo
-  local shas f
-  shas=$(cd "$1" && node "$2" --json 2>/dev/null \
-         | grep -oE '"sha": *"[0-9a-f]+"' | cut -d'"' -f4)
-  [ -z "$shas" ] && return 0
-  for f in $shas; do git -C "$3" show --name-only --format= "$f" 2>/dev/null; done
+shas_varados() {  # $1=cwd  $2=modulo
+  (cd "$1" && node "$2" --json 2>/dev/null \
+     | grep -oE '"sha": *"[0-9a-f]+"' | cut -d'"' -f4)
 }
 
-publicar_destino() {  # $1=nombre  $2=publicar.sh  $3=archivos-tocados
-  local nombre=$1 guion=$2 tocados=$3 riesgo
-  riesgo=$(printf '%s\n' "$tocados" | grep -aE "$FIRMA_HUMANA" | sort -u | head -3)
-  if [ -n "$riesgo" ]; then
-    echo "  $nombre: NO publico solo — toca una fuente de precio"
-    avisar "<b>Onia — publicacion detenida a proposito</b>
-<b>$nombre</b> tiene un arreglo que toca una fuente de PRECIO:
-<code>$riesgo</code>
+archivos_de() {  # $1=repo-del-codigo  $2..=shas
+  local repo=$1 f
+  shift
+  for f in "$@"; do
+    GIT_NO_LAZY_FETCH=1 git -C "$repo" show --name-only --format= "$f" 2>/dev/null
+  done
+}
+
+publicar_destino() {  # $1=nombre $2=publicar.sh $3=archivos-tocados $4=repo-del-codigo $5=shas
+  local nombre=$1 guion=$2 tocados=$3 repo=${4:-} shas=${5:-}
+  local precio arch detalle cambian nomedido salida nota=""
+  precio=$(printf '%s\n' "$tocados" | grep -aE "$FIRMA_HUMANA" | sort -u)
+  if [ -n "$precio" ]; then
+    cambian=""; nomedido=""
+    for arch in $precio; do
+      # shellcheck disable=SC2086   # los shas son hexadecimales: partirlos es lo que se quiere
+      salida=$(montos_que_cambian "$repo" "$arch" $shas)
+      case $? in
+        1) cambian="$cambian$arch: $salida
+" ;;
+        2) nomedido="$nomedido$arch
+" ;;
+      esac
+    done
+    if [ -n "$cambian" ]; then
+      detalle=$(printf '%s' "$cambian" | head -3)
+      # "un NUMERO", no "un monto": el freno detiene ante cualquier numero que
+      # cambie porque no adivina cual es plata (ver la cabecera). Decirle monto a
+      # un `0` de indice le haria creer al que lee el log que cambio un precio.
+      renglon_detenido "$nombre" "cambia un numero en una fuente de precio" "$detalle"
+      avisar "<b>Onia — publicacion detenida a proposito</b>
+<b>$nombre</b> tiene un arreglo que CAMBIA un numero en una fuente de PRECIO:
+<code>$detalle</code>
 Eso no sale sin tu firma. El resto se publico solo."
+      return 0
+    fi
+    if [ -n "$nomedido" ]; then
+      detalle=$(printf '%s' "$nomedido" | head -3)
+      renglon_detenido "$nombre" "toca una fuente de precio y no pude medir si cambia" "$detalle"
+      avisar "<b>Onia — publicacion detenida a proposito</b>
+<b>$nombre</b> toca una fuente de PRECIO y <b>no pude comprobar</b> si algun monto cambia:
+<code>$detalle</code>
+Eso no sale sin tu firma. El resto se publico solo."
+      return 0
+    fi
+    # Toco el archivo y NINGUN numero cambio: sale solo, pero se dice.
+    nota="
+Toco una fuente de precio y <b>ningun monto cambio</b> (por eso salio solo)."
+  fi
+  if [ -n "$SECO" ]; then
+    if [ -n "$precio" ]; then
+      echo "  $nombre: publicaria (toca una fuente de precio y ningun monto cambia)"
+    else
+      echo "  $nombre: publicaria (nada toca precio)"
+    fi
     return 0
   fi
-  if [ -n "$SECO" ]; then echo "  $nombre: publicaria (nada toca precio)"; return 0; fi
   if bash "$guion" >"/tmp/pub-$nombre.log" 2>&1; then
     echo "  $nombre: PUBLICADO"
     avisar "<b>Onia — publicado solo</b>
 <b>$nombre</b> quedo al dia.
-<code>$(tail -1 "/tmp/pub-$nombre.log" | head -c 160)</code>"
+<code>$(tail -1 "/tmp/pub-$nombre.log" | head -c 160)</code>$nota"
   else
     echo "  $nombre: FALLO"
     avisar "<b>Onia — la publicacion de $nombre FALLO</b>
@@ -120,8 +325,10 @@ puede_medir() {  # $1 = publicador, $2 = nombre del destino
 if puede_medir /opt/onia-platform/_deploy/publicar.sh plataforma; then
   SALIDA_PLAT=$(bash /opt/onia-platform/_deploy/publicar.sh --dry-run 2>&1) || true
   if hay_varados "$SALIDA_PLAT"; then
+    SHAS_PLAT=$(shas_varados "$REPO_HERMES" hermes-content/deploy/onia-platform/deploy-vivo.mjs)
+    # shellcheck disable=SC2086
     publicar_destino plataforma /opt/onia-platform/_deploy/publicar.sh \
-      "$(archivos_varados "$REPO_HERMES" hermes-content/deploy/onia-platform/deploy-vivo.mjs "$REPO_PLATFORM")"
+      "$(archivos_de "$REPO_PLATFORM" $SHAS_PLAT)" "$REPO_PLATFORM" "$SHAS_PLAT"
   else
     echo "  plataforma: al dia"
   fi
@@ -130,15 +337,20 @@ fi
 if puede_medir /opt/onia-landing/_deploy/publicar.sh landing; then
   SALIDA_LAND=$(bash /opt/onia-landing/_deploy/publicar.sh --dry-run 2>&1) || true
   if hay_varados "$SALIDA_LAND"; then
+    SHAS_LAND=$(shas_varados "$REPO_HERMES" web-factory/apps/onia-platform/scripts/deploy-vivo.mjs)
+    # shellcheck disable=SC2086
     publicar_destino landing /opt/onia-landing/_deploy/publicar.sh \
-      "$(archivos_varados "$REPO_HERMES" web-factory/apps/onia-platform/scripts/deploy-vivo.mjs "$REPO_HERMES")"
+      "$(archivos_de "$REPO_HERMES" $SHAS_LAND)" "$REPO_HERMES" "$SHAS_LAND"
   else
     echo "  landing: al dia"
   fi
 fi
 
 # El bot no tiene medidor por commits: su publicador lista los archivos que
-# cambian, asi que la guarda se aplica sobre esa lista tal cual.
+# cambian, asi que la guarda se aplica sobre esa lista tal cual. Sin shas no se
+# puede preguntar si cambio un numero, asi que cae en NO MEDIDO y el bot se
+# sigue deteniendo igual que antes del 2026-09-18 — fallar cerrado es la unica
+# direccion honesta cuando no se pudo mirar.
 if puede_medir /opt/onia/bot/_deploy/publicar.sh bot; then
   SALIDA_BOT=$(bash /opt/onia/bot/_deploy/publicar.sh --dry-run 2>&1)
   if echo "$SALIDA_BOT" | grep -q "nada que desplegar"; then

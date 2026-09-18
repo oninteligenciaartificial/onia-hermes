@@ -8,7 +8,15 @@ import { waLink } from "@/lib/site";
 import type { Equipo, PlanId, Precio, Rubro, Tiene } from "./recommend";
 import { precioStack } from "@/content/chatbot-precios";
 import { precioWebDesde } from "@/content/webs";
-import { bs, GRUPO, plan, PLANES, type Plan } from "@/lib/pricing";
+import {
+  bs,
+  escalonAnterior,
+  GRUPO,
+  plan,
+  PLANES,
+  type Plan,
+  type PlanId as PlanDelCatalogo,
+} from "@/lib/pricing";
 
 /**
  * Un rubro que el wizard OFRECE. Estar en la lista significa que se contrata
@@ -182,7 +190,35 @@ export const PLAN_INCLUYE: Record<Rubro, readonly string[]> = {
   ],
 } as const;
 
-export const NOTA_DOWNSELL = `Si te queda grande, hay un plan de entrada de Bs ${bs(plan("basico").mensual)}/mes (2 usuarios, hasta 300 fichas) que ordena las fichas y los cobros — los agentes de IA no vienen ahí.`;
+/** El nombre con el que la pantalla pide el downsell. Lo verifica `escalon-que-no-se-tipea`. */
+export const NOTA_DOWNSELL_PARA = "notaDownsell";
+
+/**
+ * El downsell: el escalón inmediatamente ANTERIOR al plan recomendado. `null` si no hay.
+ *
+ * ⚠️ Esto era una constante clavada en el Básico, y el monto SÍ se derivaba —por eso ningún
+ * cruce de precios lo vio nunca: Bs 320 es un monto legítimo de `pricing.ts`. Lo tipeado era
+ * el SUJETO. Con tres planes el Básico era el escalón de abajo del Profesional y la frase era
+ * cierta; la escalera C (2026-09-12) metió el Crece en el medio y la dejó mintiendo de dos
+ * maneras a la vez, sobre la pantalla de conversión y en producción (medido el 2026-09-17
+ * MIRANDO el resultado del wizard): le escondía al lead el escalón de Bs 550 y encima le
+ * decía «los agentes de IA no vienen ahí» —cierto del Básico, falso del Crece— justo abajo
+ * de la tarjeta que le acababa de vender «Agente IA que reprograma». La misma tarjeta enlaza
+ * «Ver los CUATRO planes» y la nota nombraba dos.
+ *
+ * Nada se tipea: el escalón sale de `escalonAnterior` (derivado del precio), el qué-hace de
+ * su `resultado` y el qué-le-falta de su `sinEsto`, que ya dice desde qué plan vienen las
+ * capacidades que no trae. La regla de venta (04-OBJECIONES §4: «el de abajo es downsell,
+ * nunca apertura») se conserva; lo que deja de estar clavado es CUÁL es el de abajo.
+ */
+export function notaDownsell(recomendado: PlanDelCatalogo): string | null {
+  const abajo = escalonAnterior(recomendado);
+  if (!abajo) return null;
+  const hace = abajo.resultado.charAt(0).toLowerCase() + abajo.resultado.slice(1);
+  const falta =
+    abajo.sinEsto.length > 0 ? ` Lo que no incluye: ${abajo.sinEsto.join("; ")}.` : "";
+  return `Si te queda grande, el escalón de abajo es el ${abajo.nombre} a Bs ${bs(abajo.mensual)}/mes — ${hace}${falta}`;
+}
 
 export const NOTA_CUADERNO =
   "El cuaderno se jubila: agenda digital con recordatorios, sin pasar nada en limpio.";

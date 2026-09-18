@@ -22,7 +22,7 @@ export const FAQS: { q: string; a: string }[] = [
     q: "¿Necesito tarjeta para probar?",
     // El paso del medio sale de `alta.ts`, no se tipea: el alta exige confirmar
     // el correo y esta enumeración lo salteaba, igual que su gemela de la home.
-    a: `No. La prueba de ${PRUEBA.dias} días no pide tarjeta ni pago. Te registrás, ${PASO_CONFIRMAR_CORREO} ${DE_DONDE_LLEGA_EL_ENLACE}, elegís tu rubro y usás el sistema completo.`,
+    a: `No. La prueba de ${PRUEBA.dias} días no pide tarjeta ni pago. Te registrás, ${PASO_CONFIRMAR_CORREO} ${DE_DONDE_LLEGA_EL_ENLACE}, elegís tu rubro y usás el plan ${PRUEBA.planQueCorre} completo.`,
   },
   {
     q: "¿Qué pasa cuando termina la prueba?",

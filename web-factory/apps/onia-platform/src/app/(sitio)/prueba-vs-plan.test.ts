@@ -224,4 +224,98 @@ describe("la prueba entrega un plan y la tarjeta vende otro: se dice antes de pa
   it("PRUEBA.copy nombra el plan con el que corre", () => {
     expect(PRUEBA.copy).toContain(PRUEBA.planQueCorre);
   });
+
+  /**
+   * Caso 6 — «el sistema completo» dejó de ser un adjetivo el 2026-09-12.
+   *
+   * Los cinco casos de arriba miran la TARJETA, donde el lead elige. Éste mira
+   * la PROSA, que es donde el mismo desajuste volvió a entrar por otra puerta.
+   *
+   * QUÉ PASÓ. La escalera C (2026-09-12) metió un cuarto escalón y lo llamó
+   * **Completo** (`NOMBRE_DE_PLAN.full`, Bs 1.290) — el único, con Empresa, que
+   * trae el chatbot de WhatsApp adentro (`whatsappIncluded`). Desde ese día,
+   * «usás el sistema completo esos 14 días» no es un adjetivo: nombra un plan,
+   * y nombra justo el que la prueba NO da. La prueba corre con
+   * `TRIAL_PLAN = "professional"` = Profesional (Bs 890), que lleva el chatbot
+   * APARTE, Bs 390/mes.
+   *
+   * POR QUÉ IMPORTA, medido el 2026-09-18 sobre onia.com.bo servida: la portada
+   * le dedica al chatbot una sección entera con su conversación de ejemplo y su
+   * H2 («Tu WhatsApp responde las 24 horas»), y dos preguntas más abajo la misma
+   * pantalla dice «Completo ya trae el chatbot incluido». El lead que lee
+   * «usás el sistema completo» arranca la prueba esperando lo más publicitado
+   * del sitio y no lo tiene. El hero de esa misma portada ya lo decía bien
+   * («con el plan Profesional»): la pantalla se contradecía sola.
+   *
+   * POR QUÉ NINGÚN GATE LO VEÍA, que es lo que lo hace una clase y no un typo:
+   *  - no cambia ninguna cifra → `precios-fuente.mjs` cruza 40 montos en verde;
+   *  - no TIPEA el nombre de un plan junto a una capacidad → invisible a
+   *    `capacidad-incluida.test.ts`, que prohíbe exactamente eso;
+   *  - «completo» es una palabra corriente del castellano, así que ningún
+   *    barrido de nombres de plan la mira;
+   *  - los casos 1-5 de este archivo preguntan por el par (plan, nota) de las
+   *    tarjetas, y esto vive en la prosa de otras seis pantallas.
+   *
+   * LA FORMA, no el texto viejo. Se prohíbe el alcance total pegado al
+   * SISTEMA; la forma honesta —«el plan <X> completo», que es la que
+   * `PRUEBA.copy` ya usaba— no matchea, así que el gate no se apaga solo el día
+   * que alguien reescriba la frase.
+   *
+   * EL ARTÍCULO NO ERA PARTE DE LA PROMESA — ampliado 2026-09-18, medido en
+   * `onia.com.bo` servida. Las tres formas de abajo nacieron exigiendo «**el**
+   * sistema completo», y un título de preview no lleva artículo: los dos
+   * `openGraph.description` del trial decían «**Sistema completo**, sin
+   * tarjeta» y el gate los daba por limpios el mismo día que se escribió para
+   * esa frase. La mitad que quedó abierta es la peor de las dos: el `<head>`
+   * no lo ve ninguna captura ni ningún barrido del cuerpo, y es exactamente lo
+   * que se pinta en el preview de WhatsApp —por donde en Bolivia se comparte
+   * todo— y en el resultado de Google. El lead lee «Sistema completo» ANTES de
+   * abrir la página, que es donde decide si la abre.
+   *
+   * Por eso el artículo es opcional: lo que promete de más es el sustantivo
+   * con su alcance, no el determinante que lo precede.
+   */
+  /**
+   * El tope se DERIVA del precio, no del orden del arreglo ni de un id a mano:
+   * es la misma lección que ya pagó `escalonAnterior` cuando entró el Crece.
+   */
+  const PLAN_TOPE = PLANES.reduce((a, b) => (b.mensual > a.mensual ? b : a));
+
+  const ALCANCE_TOTAL_DEL_SISTEMA = [
+    /\bsistema\s+(completo|entero)\b/i,
+    /\bplataforma\s+completa\b/i,
+    /\btodo\s+el\s+sistema\b/i,
+    /\blo\s+us[áa]s?\s+completo\b/i,
+  ];
+
+  it("ninguna pantalla promete «el sistema completo»: la prueba entrega un plan, no todos", () => {
+    const culpables = PANTALLAS.filter((ruta) => {
+      const codigo = sinComentarios(readFileSync(ruta, "utf8"));
+      return ALCANCE_TOTAL_DEL_SISTEMA.some((forma) => forma.test(codigo));
+    }).map((ruta) => relative(SRC, ruta));
+
+    expect(
+      culpables,
+      `Un plan se llama «${PLAN_TOPE.nombre}» y la prueba NO lo da: corre ` +
+        `con ${PRUEBA.planQueCorre}. Estas pantallas prometen el alcance total ` +
+        `del sistema sin decir de qué plan hablan, así que prometen el de ` +
+        `arriba: ${culpables.join(", ")}. La forma honesta es «el plan ` +
+        `\${PRUEBA.planQueCorre} completo» (la que usa PRUEBA.copy).`,
+    ).toEqual([]);
+  });
+
+  /**
+   * TRIPWIRE del caso 6 — la regla de arriba se apoya en dos hechos del
+   * producto, y los dos pueden cambiar. No se apaga sola en silencio: si
+   * cambian, este caso se pone rojo y alguien decide.
+   */
+  it("sigue habiendo un plan por encima del que corre la prueba", () => {
+    expect(
+      PLAN_TOPE.nombre,
+      "La prueba ya entrega el plan más caro. Si es a propósito, «el sistema " +
+        "completo» volvió a ser cierto y el caso 6 sobra: borralo con este " +
+        "comentario. Mientras no lo sea, dejarlo es lo que evita que la prosa " +
+        "prometa el nivel de arriba.",
+    ).not.toBe(PRUEBA.planQueCorre);
+  });
 });
