@@ -6,6 +6,7 @@ import { readFileSync, rmSync } from 'node:fs';
 import {
   seleccionarColgados,
   seleccionarEsperandoHumano,
+  seleccionarEsperandoDecision,
   frasePromesaHandoff,
   CONFIG_DEL_BOT,
   nuevosParaAvisar,
@@ -386,4 +387,122 @@ test('ANCLA: con todo inyectado el vigia SI avisa, y no repite en la segunda cor
   assert.equal(segunda.nuevos.length, 0, 'ya avisado: no se repite');
   assert.equal(avisos.length, 1, 'y no manda un segundo Telegram');
   rmSync(estado, { force: true });
+});
+
+// ---------------------------------------------------------------------------
+// LA TERCERA MIRADA: al bot le contestaron, la persona no volvio, y NADIE SE ENTERO.
+//
+// Medido el 2026-09-17 contra la base de Chatwoot, con DOS desconocidos reales que ninguno de
+// los dos vigias de arriba puede ver, porque los dos exigen que el bot se haya callado:
+//
+//   conv 58  WhatsApp  hace 3 h   "+59175755019"  entro por el boton wa.me de onia.com.bo
+//   conv 38  web       hace 20 d  "billowing-shadow-768"  escribio "hola" el 29-ago
+//
+// En las dos el bot contesto bien y ofrecio dos horarios de demo. La persona no eligio ninguno
+// y ahi murio: `seleccionarColgados` las descarta con `// ya le contestaron`, y
+// `seleccionarEsperandoHumano` tampoco las toma porque el bot nunca prometio un humano.
+//
+// EL BOT APAGO EL UNICO AVISO DE LEAD NUEVO QUE HABIA. Antes de que contestara, ese mismo
+// desconocido quedaba sin respuesta y disparaba el vigia. Ahora el bot contesta SIEMPRE, asi
+// que el vigia no se dispara NUNCA — y con cero clientes pagando, el unico que vende no se
+// entera de que alguien apreto el boton de WhatsApp en su web. La conv 38 lleva 20 dias asi.
+const conPromesa = frasePromesaHandoff(readFileSync(CONFIG_DEL_BOT, 'utf8'));
+
+/** El caso de la conv 58: la persona escribio, el bot ofrecio horarios, y no volvio. */
+const ofrecioYNoVolvio = () => [
+  fila({ conversationId: 58, messageId: 1, messageType: 0, createdAtMs: haceMin(200), content: 'Hola, vengo de la web de Onia' }),
+  fila({ conversationId: 58, messageId: 2, messageType: 1, createdAtMs: haceMin(199), senderId: 3, content: '¿Cual te va mejor? A) sabado 19 B) lunes 21' }),
+];
+
+test('el bot ofrecio horarios y la persona no volvio: queda esperando una decision', () => {
+  const esperando = seleccionarEsperandoDecision(ofrecioYNoVolvio(), { ahoraMs: AHORA, frase: conPromesa });
+  assert.equal(esperando.length, 1, 'ninguna de las otras dos miradas la ve: si esta no la toma, se pierde');
+  assert.equal(esperando[0].conversationId, 58);
+  assert.equal(esperando[0].esperandoDecision, true);
+});
+
+test('lo que se muestra es lo que dijo LA PERSONA, no la oferta del bot', () => {
+  // Sergio Urcullo necesita saber a que contestarle; su propio guion no se lo dice.
+  const [uno] = seleccionarEsperandoDecision(ofrecioYNoVolvio(), { ahoraMs: AHORA, frase: conPromesa });
+  assert.match(uno.content, /vengo de la web/);
+});
+
+test('sin un solo entrante NO es un lead: es un saliente que arrancamos nosotros', () => {
+  const soloSaliente = [fila({ conversationId: 59, messageId: 1, messageType: 1, createdAtMs: haceMin(200) })];
+  assert.deepEqual(seleccionarEsperandoDecision(soloSaliente, { ahoraMs: AHORA, frase: conPromesa }), []);
+});
+
+test('si la persona volvio a escribir NO es de esta mirada: es del vigia de arriba', () => {
+  // Dos avisos por la misma conversacion es como se le deja de creer a un vigia.
+  const volvio = [...ofrecioYNoVolvio(), fila({ conversationId: 58, messageId: 3, messageType: 0, createdAtMs: haceMin(150) })];
+  assert.deepEqual(seleccionarEsperandoDecision(volvio, { ahoraMs: AHORA, frase: conPromesa }), []);
+  assert.equal(seleccionarColgados(volvio, { ahoraMs: AHORA }).length, 1, 'y la otra mirada SI la toma');
+});
+
+test('si el bot prometio un humano NO es de esta mirada: es del vigia de al lado', () => {
+  const prometio = [
+    fila({ conversationId: 60, messageId: 1, messageType: 0, createdAtMs: haceMin(200) }),
+    fila({ conversationId: 60, messageId: 2, messageType: 1, createdAtMs: haceMin(199), senderId: 3, content: conPromesa }),
+  ];
+  assert.deepEqual(seleccionarEsperandoDecision(prometio, { ahoraMs: AHORA, frase: conPromesa }), []);
+  assert.equal(seleccionarEsperandoHumano(prometio, { ahoraMs: AHORA, frase: conPromesa }).length, 1, 'y la otra mirada SI la toma');
+});
+
+test('recien contestado no cuenta: la persona todavia lo esta leyendo', () => {
+  const recien = [
+    fila({ conversationId: 61, messageId: 1, messageType: 0, createdAtMs: AHORA - 120000 }),
+    fila({ conversationId: 61, messageId: 2, messageType: 1, createdAtMs: AHORA - 60000, senderId: 3 }),
+  ];
+  assert.deepEqual(seleccionarEsperandoDecision(recien, { ahoraMs: AHORA, frase: conPromesa }), []);
+});
+
+test('la sonda del propio carril no es un lead', () => {
+  const nuestra = ofrecioYNoVolvio().map((f) => ({ ...f, contacto: 'Sonda QA carril chatbot' }));
+  assert.deepEqual(seleccionarEsperandoDecision(nuestra, { ahoraMs: AHORA, frase: conPromesa }), []);
+});
+
+test('si YA le escribiste vos, no se avisa: el objetivo era que te enteraras', async () => {
+  // `human_took_over` lo escribe el motor y es el unico dato que sabe si una PERSONA de Onia
+  // tomo la conversacion. Sin el, el vigia le reclamaria a Sergio Urcullo un lead que el ya
+  // contesto — y a un vigia que grita mal no se lo corrige, se lo apaga.
+  const estado = `/tmp/vigia-decision-${process.pid}.json`;
+  rmSync(estado, { force: true });
+  const avisos = [];
+  const { nuevos } = await correrVigia({ emitir: true, ahoraMs: AHORA, estado }, {
+    leerFilas: async () => ofrecioYNoVolvio(),
+    enriquecer: async (cs) => cs.map((c) => ({ ...c, humanoTomo: true })),
+    avisar: async (t) => { avisos.push(t); },
+  });
+  assert.deepEqual(nuevos, [], 'ya lo tomo una persona: no hay nada que avisar');
+  assert.equal(avisos.length, 0);
+  rmSync(estado, { force: true });
+});
+
+test('si NO se pudo preguntarle al motor, avisa igual y lo DICE', async () => {
+  // Fallar callado seria perder el lead, que es lo caro. Se avisa, con la salvedad escrita:
+  // "no pude preguntar" nunca se imprime con las mismas palabras que "ya le contestaste".
+  const estado = `/tmp/vigia-decision-nm-${process.pid}.json`;
+  rmSync(estado, { force: true });
+  const avisos = [];
+  const { nuevos } = await correrVigia({ emitir: true, ahoraMs: AHORA, estado }, {
+    leerFilas: async () => ofrecioYNoVolvio(),
+    enriquecer: async (cs) => cs.map((c) => ({ ...c, humanoTomo: null })),
+    avisar: async (t) => { avisos.push(t); },
+  });
+  assert.equal(nuevos.length, 1, 'no medido no puede significar callarse');
+  assert.match(avisos[0], /no pude confirmar/i, 'la salvedad va escrita, pegada a la afirmacion');
+  rmSync(estado, { force: true });
+});
+
+test('el aviso separa las tres miradas: cada una pide algo distinto de Sergio Urcullo', () => {
+  const texto = armarAviso([
+    fila({ conversationId: 1, esperaMin: 600 }),
+    fila({ conversationId: 2, esperaMin: 600, esperandoHumano: true }),
+    fila({ conversationId: 3, esperaMin: 600, esperandoDecision: true }),
+  ]);
+  assert.match(texto, /nadie contesto/, 'a este hay que contestarle');
+  assert.match(texto, /el bot ya se lo prometio/, 'a este el bot ya le prometio una persona');
+  assert.match(texto, /no lo sabia nadie/i, 'de este nadie se entero nunca');
+  // Sumarlos bajo un mismo titulo diria algo falso de dos de los tres grupos.
+  assert.equal(texto.split('🔴').length - 1, 3, 'tres bloques, no uno');
 });

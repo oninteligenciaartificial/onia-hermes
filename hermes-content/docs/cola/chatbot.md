@@ -318,6 +318,66 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **~~Un desconocido escribía, el bot lo atendía bien, y NADIE en Onia se enteraba de que
+      existió~~ — CERRADO el 2026-09-17, `scripts/vigia_sin_respuesta.mjs`, llega solo al
+      mergear a `main` (el cron del VPS lo lee del clon de main, no necesita deploy).**
+
+      **Cómo apareció.** Midiendo el objetivo del carril contra producción: `objetivo_visible.mjs`
+      listó una conversación que no estaba antes, la **58**, de HOY 18:50 La Paz. Es un lead
+      REAL: el texto (*"Hola, vengo de la web de Onia..."*) es el que la web pone en el link
+      `wa.me`, o sea alguien apretó el botón de WhatsApp en `onia.com.bo`. El bot le contestó
+      bien, en 2 s, y le ofreció dos horarios de demo.
+
+      **El agujero.** Ninguno de los dos vigías que ya existían puede ver esa conversación,
+      y los dos por el mismo motivo: **ambos exigen que el bot se haya CALLADO.**
+      `seleccionarColgados` descarta toda conversación cuyo último mensaje sea saliente
+      (`// ya le contestaron`), y `seleccionarEsperandoHumano` sólo mira las que traen la
+      promesa de `M5`. Una conversación donde el bot hizo bien su trabajo y la persona no
+      eligió ninguno de los dos horarios **no es sujeto de nadie**.
+
+      **La dirección del cambio es lo que lo vuelve grave: el bot apagó el único aviso de lead
+      nuevo que había.** Antes de que contestara, ese mismo desconocido quedaba sin respuesta
+      y disparaba el vigía. Ahora el bot contesta SIEMPRE, así que el vigía no se dispara
+      NUNCA. Una capacidad nueva se llevó puesta la cobertura de una superficie que ya estaba
+      cubierta, en silencio y con todo verde.
+
+      **Medido, no supuesto — y con DOS sujetos reales, cero falsos positivos.** Derivando el
+      universo de la base de Chatwoot (no de una lista a mano): de las 15 conversaciones de los
+      inboxes 4 y 5, las que caen acá son exactamente dos, y las dos son desconocidos:
+
+      - `conv 58` · WhatsApp · hace 3 h · `+59175755019` — entró por el botón `wa.me` de la web.
+      - `conv 38` · web · **hace 20 DÍAS** · `billowing-shadow-768` — escribió *"hola"* el 29-ago,
+        el bot le contestó, y **nadie supo nunca que esa persona existió**.
+
+      Las otras 13 quedan afuera solas: 5 ya las toma el vigía de arriba, 3 son sondas del
+      propio carril (`Sonda QA carril chatbot`), la 11 es Sergio Urcullo (teléfono propio), y
+      el resto no tiene un solo entrante.
+
+      **El arreglo.** Tercera mirada `seleccionarEsperandoDecision()`, pura, hermana de las dos
+      que ya estaban. Excluye por construcción lo que ya es de las otras (si la persona volvió a
+      escribir, o si el bot prometió un humano): *dos avisos por la misma conversación es como
+      se le deja de creer a un vigía*. El aviso va en su **propio bloque** — al que nadie
+      contestó hay que contestarle, al que espera un humano el bot ya se lo prometió, y a éste
+      no se le debe nada: lo único que pasa es que Sergio Urcullo no sabía que existía.
+
+      **La baranda contra el ruido, que es lo que apaga un vigía:** si una PERSONA de Onia ya
+      tomó la conversación, no se avisa. Eso no se adivina por `sender_id` (sería hardcodear el
+      agente): lo dice `human_took_over`, que escribe el motor en
+      `onia_center.bot_conversations` y es el único dato que sabe el hecho. Va **tri-estado** —
+      si no se pudo preguntar al motor, se avisa igual **con la salvedad escrita en la línea de
+      ese sujeto**, porque callarse por no haber podido medir es perder el lead, que es el lado
+      caro. Y una conversación sin fila en el motor es *"no se sabe"*, nunca *"nadie la tomó"*.
+
+      **Verificado en vivo, no sólo en test:** `node scripts/vigia_sin_respuesta.mjs` (seco)
+      pasó de `7 colgado(s) — 7 sin respuesta` a `5 sin respuesta · 0 esperando a un humano
+      prometido · 2 atendido(s) por el bot que nadie más vio`. Los 10 casos nuevos validados
+      **por mutación**: los cinco esquives (no correr la mirada, no filtrar por `humanoTomo`,
+      no excluir la promesa, no exigir un entrante, borrar la salvedad) dan `fail 1` cada uno.
+
+      **Hermano curado en la misma vuelta:** la salida del CLI se había quedado con dos
+      categorías y llamaba *"esperando respuesta"* a alguien a quien el bot SÍ le había
+      contestado — el mismo hecho falso que el aviso de Telegram evita a propósito.
+
 - [x] 🔴 **~~El dueño que conectaba su WhatsApp no tenía NINGUNA forma de desconectarlo~~ —
       CERRADO el 2026-09-17 en `onia-platform`, rama `claude/chatbots-platform-review-0d1d09`,
       PENDIENTE DE DESPLIEGUE de la plataforma.**
