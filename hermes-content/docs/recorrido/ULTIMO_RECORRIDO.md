@@ -12,6 +12,37 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-18 23:09-23:50 La Paz (cuarta vuelta del día) — mismo corte (paso 5, MFA); escalón 3 con interacción real: `/servicios/webs` hasta el clic final, sano
+
+Al arrancar: 0 orgs `zz-qa-` huérfanas, alta `abierta`, `BUILD_ID` sigue `OFd4xCDzoTbQdThUbfzDv`.
+`t_b8d00627` (plataforma, 36 arreglos, incluye el fix de MFA `b1247fb`) sigue `blocked` sin `ok`
+de Sergio Urcullo — no es mi zona.
+
+Corrí el recorrido completo con `--escribir` (protocolo exige medirlo cada vuelta): mismo corte
+de siempre — paso 4 OK (alta con confirmación de correo, onboarding completo), paso 5 ROTO
+(`/dashboard` rebota a `/profile`, el botón "Activar ahora" del MFA no dispara ni un fetch).
+Limpieza en la misma corrida: 0 filas `zz-qa-` al cerrar.
+
+Como el corte es el mismo ítem ya reportado (esperando el mismo deploy bloqueado), usé el resto
+de la vuelta en la interacción sugerida la vuelta pasada: **enviar de punta a punta** el
+configurador de `/servicios/webs` (hasta ahora sólo se había mirado, nunca completado).
+Con Playwright llené el asistente rápido (rubro Clínica dental, objetivo, tono, paleta) +
+los datos de contacto (`zz-qa-2026-09-18-0309-contacto`, WhatsApp `70000000`, email, ciudad) y
+marqué el checkbox de requisitos. El CTA final ("Pedir mi Web Profesional por WhatsApp") es un
+`<a href="wa.me/...">` que arma correctamente TODO el payload — negocio, rubro, oferta, servicios,
+plan (Bs 4.500, 50/50), paleta y color elegido — con los datos que se cargaron, sin nada roto ni
+faltante. **No lo hice clic** (abriría WhatsApp de verdad y el prompt del carril prohíbe escribirle
+a cualquiera que no sea Sergio Urcullo por `onia-tg.sh`); confirmar el `href` generado alcanza para
+verificar que el flujo arma el mensaje bien. Antes de marcar el checkbox de requisitos, el mismo
+elemento es un `<a href="#datos-solicitud">` (ancla, no todavía el envío) — comportamiento
+correcto, no un hallazgo. El checkbox "Registro de contactos en CRM/n8n" no dispara ningún POST
+al marcarlo (nada que auditar ahí: todo el lead pasa por WhatsApp manual, consistente con "no hay
+equipo de ventas"). **Sano, nada para reportar.**
+
+`completo: false`, `llegoHasta: 4/9` (sin cambios, sigue bloqueado por el mismo deploy).
+
+---
+
 ## 2026-09-18 (tercera vuelta del día) — no repito el recorrido completo (BUILD_ID igual, bloqueo no es mío); auditadas `/patrones` y `/servicios` (raíz), sanas
 
 Al arrancar: 0 orgs `zz-qa-` huérfanas, alta `abierta`, `BUILD_ID` sigue `OFd4xCDzoTbQdThUbfzDv`
