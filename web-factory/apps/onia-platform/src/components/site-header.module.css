@@ -87,7 +87,12 @@
   font-size: 0.95rem;
   line-height: 1.2;
   text-decoration: none;
-  white-space: nowrap;
+  /* Tercer hermano del `.btn` de globals.css, curado en la misma vuelta: el
+     boton del cromo tampoco puede empujar la pagina de costado en un telefono
+     angosto. Ver el porque completo alla. */
+  max-width: 100%;
+  white-space: normal;
+  text-wrap: balance;
   transition:
     background-color 0.18s ease,
     border-color 0.18s ease;
