@@ -471,7 +471,26 @@ export function labelsDelProducto(fuente) {
 export function aliasDelSitio(planes = PLANES_EN_ORDEN) {
   /** @type {Record<string, string[]>} */
   const alias = {};
-  for (const p of planes) alias[p.producto] = [p.etiqueta];
+  // Además del nombre literal, las formas DERIVADAS con que el sitio lo pinta. El extractor deja
+  // cada `${…}` como «código» entre guillemets, así que acá llegan como texto.
+  //
+  // ⚠️ Sin esto el gate se pone rojo contra su propia cura, y empuja al arreglo contrario.
+  // Medido el 2026-09-18 sobre `origin/main`: `src/lib/pricing.ts:475` dice
+  // «El chatbot de WhatsApp — ${NOMBRE_DE_PLAN.full} ya lo trae incluido; acá va aparte, Bs 390»
+  // —correcto y derivado, la forma que `capacidad-incluida.test.ts` EXIGE— y este guión lo
+  // acusaba de «niega la inclusión sin nombrar a quién», con el veredicto DESALINEADO. Obedecerlo
+  // significaba tipear "Completo" a mano, que es justo lo que el gate hermano prohíbe: dos gates
+  // del mismo hecho pidiendo lo contrario, y el que manda es derivar.
+  for (const p of planes) {
+    alias[p.producto] = [
+      p.etiqueta,
+      `NOMBRE_DE_PLAN.${p.sitio}`,
+      `plan("${p.sitio}").nombre`,
+      // Nombra de una a TODOS los que traen el chatbot adentro: si el sitio lo llama así, el plan
+      // incluido queda dicho sin que nadie escriba su nombre.
+      "nombresConChatbot()",
+    ];
+  }
   return alias;
 }
 
