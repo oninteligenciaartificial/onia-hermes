@@ -118,6 +118,13 @@ que se le pide al cliente. Demo commiteada en `data/{intakes,clients}/clinica-am
 contraste WCAG medido) en cada `factory:build`; `generate/slop.test.ts` = gate en español para el
 copy generado (hoy 0 hallazgos). Inventario completo en `web-factory/DESIGN_STACK.md`.
 
+**Competencia mirada (17-sep, con el navegador):** Durable, Hostinger AI, Wix AI, 10Web, Squarespace.
+Informe y tabla en `hermes-content/research/competencia/configuradores-web-ia-2026-09-17.md`.
+Lo que pesa: todos arrancan con UNA frase (no un formulario); todos esconden el resultado detrás
+de crear cuenta (nosotros no, y no lo decimos); nadie cambia la web según el plan (nuestro alcance
+es único); Wix muestra «el brief» antes de personalizar; 10Web arranca desde una URL. Seis cambios
+propuestos con costo, ninguno hecho (esperan decisión).
+
 **Qué falta para que sea un circuito, en orden de valor/costo:**
 1. 🔴 **Bot: intent `lead_web`** (carril chatbot, ~30 líneas + test + `deploy-bot.sh`): si el
    texto empieza con «vengo del configurador de webs» → confirmar recepción nombrando el
