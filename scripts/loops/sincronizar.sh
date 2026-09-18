@@ -283,6 +283,17 @@ poner "$RAIZ/scripts/kanban/desplegar-en-segundo-plano.sh" "$DESTINO_BIN/onia-de
 # sin esta linea, un arreglo suyo se quedaria en el repo mientras el cron corre el fosil.
 poner "$FUENTE/extras/publicar-solo.sh"            "$DESTINO_BIN/onia-publicar-solo.sh"
 
+# Las dos herramientas del "cerebro", que entraron a main el 2026-09-18 con su destino
+# de /root/bin escrito en su propia cabecera y sin nadie que las copiara: el jarvis
+# matinal tiene cron VIVO en el VPS (`25 12 * * *`, 08:25 La Paz) y el refrescador del
+# panel esta pausado pero instalado. Lo destapo `npm run test:herramientas-desplegadas`
+# al mergear. Verificado el diff INVERSO antes de cablearlas —un deploy por lista blanca
+# revierte lo que solo existe en produccion—: las copias vivas del VPS y las del repo
+# tienen el MISMO md5 (0c23cb37 y 29108494), asi que esto no pisa nada hoy y evita que
+# manana el cron ejecute un fosil.
+poner "$FUENTE/extras/jarvis-voz.sh"               "$DESTINO_BIN/onia-jarvis-voz.sh"
+poner "$RAIZ/scripts/cerebro/onia-cerebro-datos.py" "$DESTINO_BIN/onia-cerebro-datos.py"
+
 # La memoria compartida: el corredor la inyecta y los loops le escriben por estos
 # dos. Si no se despliegan solos, el corredor de main llama a un script que no
 # existe en /root/bin y los 15 loops fallan mudos en la primera linea.
