@@ -4308,6 +4308,32 @@ archivos.**
 
 ## Cerrado — no rehacer
 
+- [x] 🔴 **~~El watchdog del bot y dos barridos del embudo estaban MUERTOS en producción: viajaron
+      sin el bit de ejecución~~** — cerrado el 2026-09-18 02:35 La Paz (`909cc75e`). A las
+      **03:47:37 UTC** de ese día un deploy repisó `/opt/onia/bot` y dejó en **644** a
+      `reminder-run.sh` (:32), `postdemo-run.sh` (:47) y `webhook-watchdog.sh` (cada 2 min). Los
+      tres pasaron a contestar `/bin/sh: 1: ...: Permission denied` en su log, **~2 h**, y nadie se
+      enteró. Lo caro no es el recordatorio de demo: es el **watchdog**, que es la red que avisa
+      cuando el bot deja de llegar a Chatwoot — el bot podía estar mudo sin que nadie lo supiera,
+      que es el fallo exacto que a este carril ya le costó una semana.
+      **Por qué sobrevivieron los otros dos:** `followup-run.sh` era el único `100755` en git, e
+      `insistencia-run.sh` **por accidente** — su línea de cron lo invoca con `bash <ruta>`, que no
+      necesita el bit.
+      **El sujeto es el modo EN GIT, no el del disco:** las dos vías de publicación copian el modo
+      del ORIGEN (`publicar.sh` usa `git archive origin/main | tar -x`, `deploy-bot.sh` usa
+      `cp -p`), así que lo que viaja al VPS es lo commiteado. Se arregla con
+      `git update-index --chmod=+x`, no con `chmod`. Los 13 `.sh` de la carpeta quedaron en
+      `100755`.
+      **Medido, no supuesto:** de los 37 scripts que el crontab del VPS invoca por ruta, los 4
+      rotos eran los de este carril; ninguno ajeno.
+      **Gate:** `hermes-content/deploy/vps-ops/bot/ejecutable-viaja-ejecutable.test.mjs`, universo
+      caminado del **disco** (`readdirSync`, no `git ls-files`: el sujeto que más importa es el
+      script NUEVO, que git todavía no ve) y caso ancla sobre los tres que murieron. Validado por
+      mutación **y contra la cadena**: con `git update-index --chmod=-x reminder-run.sh`,
+      `npm run test:bot` sale 1 con `fail 1` de 1114; restaurado, 1114/1114 verdes.
+      **Producción:** el bit se restauró a mano en `/opt/onia/bot` (`chmod`, sin publicar código);
+      sin eso el arreglo del repo no curaba nada hasta el próximo deploy.
+
 - [x] **El gate que define el «hecho» del carril firmaba VERDE con cinco personas sin contestar.**
       Cerrado el 2026-09-13 09:05 La Paz (`4c84ccf4`). `scripts/objetivo_visible.mjs` mide que la
       conversación de un desconocido SE VEA en la bandeja — y eso estaba bien. Lo que callaba es
