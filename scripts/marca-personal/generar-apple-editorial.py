@@ -892,6 +892,39 @@ DIA = [
     },
 ]
 
+# Variante FOUNDER de la pieza dia (pedida 17-sep: "similar, pero mas founder").
+# Mismo layout H; el angulo cambia: construir POCO y vender/decidir MUCHO. Bloques
+# reales: llamadas Cal (14-16 y 19-22), prospectos de WhatsApp (existen y esperan),
+# la 1.0 como objetivo vigente, grabacion en lote real. Los verdes: crons del deck 03.
+DIA_FOUNDER = [
+    {
+        "layout": "H",
+        "titulo": "«¿Cómo es ser founder a los 16?»",
+        "sub": "Construir · vender · contar. Lo repetido no me toca:",
+        "yo": [
+            (8, 9, "números y avisos de ayer", "#BFD7F2", False),
+            (9, 12, "producto: la 1.0", "#DCD3F2", False),
+            (12, 13, "prospectos de WhatsApp", "#D7E8F0", False),
+            (13, 14, "almuerzo", "#F2E2B8", False),
+            (14, 16, "llamadas con clientes", "#F2C9C4", False),
+            (16.5, 18.5, "contenido: el video del día", "#F2E2B8", False),
+            (19, 22, "llamadas y demos", "#F2C9C4", False),
+        ],
+        "sistema": [
+            (6, 6.8, "revisa web y docs", "", True),
+            (8, 8.8, "cola de tareas", "", True),
+            (10, 10.8, "prueba el producto", "", True),
+            (12, 12.8, "cola de tareas", "", True),
+            (14, 14.8, "vigila la web de venta", "", True),
+            (16, 16.8, "cola de tareas", "", True),
+            (18, 18.8, "prueba el producto", "", True),
+            (20, 20.8, "vigila la web de venta", "", True),
+            (22, 22.8, "cola de tareas", "", True),
+        ],
+        "rem": 'Los <span class="vd">verdes ✓</span> corren solos. Yo hago lo que no se delega: <b>vender y decidir</b>.',
+    },
+]
+
 PIEZAS = {
     "mi-stack": None,
     "fable": FABLE,
@@ -904,6 +937,7 @@ PIEZAS = {
     "onia-cuatro": ONIA_CUATRO,
     "repos": REPOS,
     "dia": DIA,
+    "dia-founder": DIA_FOUNDER,
 }  # mi-stack se resuelve a LAMINAS abajo
 
 # Piel por pieza: una clase extra en el lienzo que habilita el acento de esa marca.
