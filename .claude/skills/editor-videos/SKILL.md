@@ -98,6 +98,23 @@ HyperFrames (render + SFX), imagen barata. Validar la idea antes de generar.
   `videos/tiktok-20260917/assets/card-cc-wordmark.png`, SVG oficial al lado). La primera
   versión recreada en pixel-art fue rechazada con "poné la original".
 
+## 🔍 Auditoría contra el stack de Santiago Muñoz (18-sep, pedida por Sergio)
+Evidencia primaria: su reel `DdE7wYbxjPK` (frames mirados, ficha en video-intake) + su
+tutorial de 28 min que fundó esta skill.
+
+**SÍ usamos (fiel):** narración = timeline word-level · tipografía y marcos en CÓDIGO ·
+tabla de cortes + preview antes de aplicar · transcript como fuente de todo texto.
+
+**NO usamos aún (deuda real con el método):**
+1. **Su stack 2026 es agente + NLE real**: GPT-6 Astra manejando DaVinci Resolve por MCP.
+   Nosotros montamos con filter_complex artesanal — de ahí los reventones de memoria y
+   costuras frágiles de esta semana. Evaluar el MCP de DaVinci como motor de montaje.
+2. **"UNA instrucción completa" por video** (doc OBJETIVO / MATERIAL / ESTILO visible en su
+   pantalla): nosotros editamos a pedidos sueltos → el "dejás a medias" que reprochó
+   Sergio. Antes de editar el video 04: escribir ese doc y ejecutarlo entero.
+3. **Inventario del material como artefacto** (su CSV de crudos + hallazgos.md + plan):
+   nosotros improvisamos el inventario en cada sesión.
+
 ## Pipeline
 1. **Setup + NORMALIZAR el crudo** (pieza propia, PROBADA). `videos/<name>/` con `raw/ scripts/ renders/ final/`.
    `node scripts/normalize-source.mjs --video raw/IMG_xxxx.MOV --out raw/<n>.mp4`
