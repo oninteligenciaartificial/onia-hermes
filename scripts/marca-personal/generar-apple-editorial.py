@@ -789,7 +789,7 @@ ONIA_CUATRO = [
 F_QUIEN_SOY = {
     "layout": "F",
     "nombre": "Soy Sergio Urcullo,",
-    "sub": "y automatizo negocios bolivianos\npara que dejen de hacer todo a mano.",
+    "sub": "y automatizo negocios bolivianos\npara que dejen de hacer todo a mano.\nSeguime — publico esto todos los días.",
     "foto": "sergio-chroma.png",
 }
 
@@ -1076,12 +1076,11 @@ FALLA_SOLO = [
 # gratis; 72h gratis desde punto de acceso (anuncios). CADUCA: publicar ANTES del 1-oct.
 NOTICIA_WHATSAPP = [
     {
-        "layout": "D",
-        "contexto": "Si vend\u00e9s por WhatsApp, esto te toca:",
-        "remate": "1 de octubre",
-        "pie": "cambian los precios de",
-        "pie_hl": "WhatsApp Business",
-        "gancho": True,
+        "layout": "P",
+        "pill": "noticia \u00b7 rige el 1 oct",
+        "pill_color": "rojo",
+        "titulo": "WhatsApp<br>cambia sus<br><em>precios.</em>",
+        "obj_icono": "whatsapp",
     },
     {
         "layout": "R",
@@ -1129,12 +1128,12 @@ NOTICIA_WHATSAPP = [
 # CUADERNO-EXCEL: funcion que impresiona y se puede copiar HOY. El prompt es la pieza.
 CUADERNO_EXCEL = [
     {
-        "layout": "D",
-        "contexto": "Tu cuaderno de ventas, tal cual est\u00e1:",
-        "remate": "Sacale\nuna foto.",
-        "pie": "Claude lo convierte en",
-        "pie_hl": "una planilla",
-        "gancho": True,
+        "layout": "P",
+        "pill": "gratis \u00b7 2 minutos",
+        "titulo": "Tu cuaderno<br>ya es una<br><em>planilla.</em>",
+        "obj_term_titulo": "una foto alcanza",
+        "obj_term": ['<span class="ok">\u2713</span> tabla lista',
+                     '<span class="ok">\u2713</span> fiado: sumado'],
     },
     {
         "layout": "R",
@@ -1183,12 +1182,11 @@ CUADERNO_EXCEL = [
 # app de escritorio de Claude Code para macOS, Windows y Linux.
 APP_ESCRITORIO = [
     {
-        "layout": "D",
-        "contexto": "\u00abYo eso de la terminal no lo toco\u00bb",
-        "remate": "Ya no\nhace falta.",
-        "pie": "Claude Code tiene",
-        "pie_hl": "app de escritorio",
-        "gancho": True,
+        "layout": "P",
+        "pill": "sin terminal",
+        "pill_color": "naranja",
+        "titulo": "Claude Code,<br>sin pantalla<br><em>negra.</em>",
+        "obj_icono": "claude",
     },
     {
         "layout": "R",
@@ -1372,6 +1370,31 @@ body{{background:var(--bg);font-family:'{nombre}',sans-serif;font-weight:400;ove
 .h .rem-h .vd{{background:#2FBF71;color:#08210F;border-radius:12px;padding:2px 14px}}
 
 .repo-r.chico .gh-mark{{width:60px;height:60px}}
+/* Layout P (portada impact) — patron extraido de Pinterest el 17-sep: fondo de color
+   pleno (la grilla clara de IG hace que el oscuro FRENE), tipografia display gigante,
+   UN objeto con glow, badge de contexto y flecha de swipe. Portada oscura + interior
+   claro es el contraste que abre el carrusel. */
+.lienzo.p{{background:linear-gradient(155deg,#26221F 0%,#1B1815 52%,#131110 100%);
+  justify-content:center;text-align:left;align-items:flex-start;padding:96px 96px 170px}}
+.lienzo.p::after{{content:'';position:absolute;right:-220px;top:-220px;width:760px;height:760px;
+  border-radius:50%;background:radial-gradient(circle,rgba(217,119,87,.34) 0%,rgba(217,119,87,0) 68%)}}
+.p .pill-p{{display:inline-block;font-family:'OniaMono',monospace;font-size:26px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:#08210F;background:#3ECF6E;
+  border-radius:999px;padding:12px 28px;position:relative;z-index:2}}
+.p .pill-p.rojo{{background:#FF6B63;color:#2A0806}}
+.p .pill-p.naranja{{background:#FF8A5C;color:#2A1206}}
+.p .tit-p{{font-size:128px;font-weight:800;line-height:.98;letter-spacing:-.045em;color:#F5F1E8;
+  margin-top:44px;position:relative;z-index:2}}
+.p .tit-p em{{font-style:normal;color:#FF8A5C}}
+.p .obj-p{{margin-top:56px;position:relative;z-index:2;display:flex;align-items:center;gap:36px}}
+.p .obj-p svg{{width:230px;height:230px;
+  filter:drop-shadow(0 30px 56px rgba(0,0,0,.5)) drop-shadow(0 0 60px rgba(255,138,92,.4))}}
+.p .obj-p .term-r{{width:560px;margin:0}}
+.p .obj-p .term-r pre{{font-size:34px;padding:26px 32px 32px}}
+.p .swipe-p{{position:absolute;right:96px;bottom:150px;display:flex;align-items:center;gap:16px;
+  font-size:30px;font-weight:700;color:#F5F1E8;opacity:.85;z-index:2}}
+.p .swipe-p b{{font-size:44px;color:#FF8A5C}}
+.p .handle{{color:#F5F1E8;opacity:.55}}
 .tit-r{{font-size:64px;font-weight:800;letter-spacing:-.03em;margin-top:52px}}
 .linea-r{{font-size:33px;color:var(--muted);line-height:1.42;margin-top:24px;
   white-space:pre-line;max-width:850px}}
@@ -1549,7 +1572,7 @@ body{{background:var(--bg);font-family:'{nombre}',sans-serif;font-weight:400;ove
 def _clases(lamina):
     """Clases del lienzo: el layout (los que traen grilla propia) y el fondo de la pieza."""
     c = ["lienzo"]
-    if lamina["layout"] in ("A", "B", "C", "F", "G", "H"):
+    if lamina["layout"] in ("A", "B", "C", "F", "G", "H", "P"):
         c.append(lamina["layout"].lower())
     if lamina.get("fondo"):
         c.append(lamina["fondo"])
@@ -1652,6 +1675,20 @@ def markup(lamina):
         if lamina.get("cta_hl"):
             cuerpo += (f'<div class="cta"><span class="hl">{lamina["cta_hl"]}</span>'
                        f'<span class="cta-gris">{lamina["cta_gris"]}</span></div>')
+        return cuerpo
+    if lamina["layout"] == "P":
+        pill_clase = " " + lamina["pill_color"] if lamina.get("pill_color") else ""
+        cuerpo = f'<div class="pill-p{pill_clase}">{lamina["pill"]}</div>'
+        cuerpo += f'<div class="tit-p">{lamina["titulo"]}</div>'
+        if lamina.get("obj_icono"):
+            cuerpo += f'<div class="obj-p">{ICONOS[lamina["obj_icono"]]}</div>'
+        elif lamina.get("obj_term"):
+            lineas_p = "\n".join(lamina["obj_term"])
+            cuerpo += (f'<div class="obj-p"><div class="term-r">'
+                       f'<div class="term-r-barra"><i></i><i></i><i></i>'
+                       f'<em>{lamina.get("obj_term_titulo", "")}</em></div>'
+                       f'<pre>{lineas_p}</pre></div></div>')
+        cuerpo += '<div class="swipe-p">deslizá <b>&rarr;</b></div>'
         return cuerpo
     if lamina["layout"] == "H":
         def _col(bloques):
