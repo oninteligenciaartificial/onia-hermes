@@ -114,6 +114,17 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       estado propio `CUBIERTO_CORTO`. ⚠️ Igual que `CUBIERTO_VIEJO`, **no debe cambiar el código
       de salida**: sólo Sergio Urcullo destraba un pedido, y un rojo ahí trabaría el merge de
       todos los carriles hasta que apriete un botón — que es como esta familia de gates se muere.
+      **Medido el 2026-09-18 12:5x La Paz: el argumento caro NO hace falta, y eso abarata la cura
+      de «no entra en una vuelta» a «entra».** El seco de la landing, corrido en vivo, imprime
+      `== hay que publicar: 7 arreglo(s) que el cliente no ve ==` y **ni un sha** — o sea que
+      mudar `publicariaPlataforma` con su maquinaria de SSH + git (lo que decía el párrafo de
+      arriba) es el camino caro, no el único. El método vigente ya obliga a que el cuerpo **cite
+      textual ese recuento**, así que la quinta pregunta se contesta con dos números: el N citado
+      en `partirPedido(texto).cuerpo` (importado, no copiado) contra el N que el seco imprime HOY,
+      y la salida cruda ya la tiene `detectar()` — cero SSH extra. `seco > citado` ⇒
+      `CUBIERTO_CORTO`; `seco < citado` NO se acusa (ésa es la otra familia, `cuerpoVencido`);
+      cuerpo sin recuento ⇒ `null` con su causa, nunca rojo. Para `bot` y `siat` la pregunta ya
+      tiene dueño y es exacta: `cuerpoCortoArchivos` importado del hermano.
 
 - [x] 🔴 **El único gate que mira si producción corre el publicador que dice `main` llevaba DIEZ
       DÍAS salteándose en cada merge, porque el carril cambió de máquina. CERRADO el 2026-09-17
