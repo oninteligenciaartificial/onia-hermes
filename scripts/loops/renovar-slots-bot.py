@@ -33,6 +33,12 @@ por el otro lado — se generan CUANTOS candidatos y el motor elige los 2 que si
 en pie —, asi que el peor momento queda igual de cubierto sin alejarle el turno a
 nadie. El piso volvio a ser ANTICIPACION_H a secas.
 
+Lo que si depende de la vigencia es QUE HORA del dia se elige, y no es lo mismo: el
+piso decide desde cuando, la vigencia decide cual de las horas que pasan el piso
+sobrevive hasta el final de lo publicado. Como va UN candidato por dia, elegir la mas
+temprana —que es la primera en caerse— hace que al caer se pierda el DIA ENTERO. Ver
+`_hora_del_dia`, con el caso de produccion del 2026-09-18 que lo midio.
+
 Es la solucion sin Cal.com. Cuando Cal.com este cargado con estas mismas ventanas,
 `resolveConfig()` lo prefiere solo (consulta Cal.com cuando NO hay ONIA_BOT_SLOTS),
 y este script se apaga borrando su linea de cron.
@@ -107,24 +113,52 @@ def proximos_slots(ahora_lapaz, cuantos=CUANTOS):
     # que el motor vuelva a una version sin filtro —deploy revertido, rsync viejo—
     # esto es lo unico que queda entre el prospecto y un turno a minutos vista.
     desde = ahora_lapaz + dt.timedelta(hours=ANTICIPACION_H)
-    slots, dias_usados = [], set()
+    hasta_el_final = desde + dt.timedelta(hours=VIGENCIA_H)
+    slots = []
     dia = desde.date()
     for _ in range(21):  # tres semanas de margen: suficiente para cualquier feriado
         if len(slots) >= cuantos:
             break
-        for h_ini, h_fin in VENTANAS.get(dia.weekday(), []):
-            if len(slots) >= cuantos or dia in dias_usados:
-                break
-            # Se ofrece el comienzo de la ventana; si ya pasó, la hora en punto siguiente
-            # que todavía entre con la demo completa adentro.
-            for hora in range(h_ini, h_fin):
-                cand = dt.datetime(dia.year, dia.month, dia.day, hora, 0, tzinfo=TZ_LAPAZ)
-                if cand >= desde:
-                    slots.append(cand)
-                    dias_usados.add(dia)
-                    break
+        cand = _hora_del_dia(dia, desde, hasta_el_final)
+        if cand is not None:
+            slots.append(cand)
         dia += dt.timedelta(days=1)
     return slots
+
+
+def _hora_del_dia(dia, desde, hasta_el_final):
+    """El horario de ese dia que el motor va a poder ofrecer durante MAS tiempo.
+
+    Como se manda UN candidato por dia, la hora elegida decide cuanto vive el DIA en
+    la oferta, y la mas temprana es tambien la primera en caerse: cuando se cae no se
+    pierde un horario, se pierde el dia entero y el prospecto salta al dia habil
+    siguiente. Medido en produccion el 2026-09-18 11:13 La Paz — este cron, a las
+    06:23, habia escrito "sábado 19, 11:00" (28,6 h de aviso, correcto al generarse);
+    cinco horas despues ya no llegaba a 24 h, el motor lo descartaba y el bot le
+    ofrecia LUNES 21 a quien escribia ese viernes, con el sabado 19 a las 12:00, 13:00
+    y 14:00 libres y con "sáb 9:00-15:00" prometido en la coletilla del MISMO mensaje.
+
+    Asi que se elige por VIDA UTIL, en dos pasos:
+      1. la hora mas TEMPRANA que aguanta toda la vigencia. Para los dias lejanos eso
+         es el comienzo de la ventana: no les cambia nada.
+      2. si ninguna aguanta —solo le pasa al dia mas cercano, el que cruza el borde de
+         la anticipacion—, la mas TARDIA que todavia entra, que es la que mantiene el
+         dia ofrecible mas horas.
+    El paso 2 mueve el horario dentro del dia (el sabado pasa de 11:00 a 14:00) y eso
+    es barato; perder el dia cuesta el salto al siguiente, que ese viernes eran DOS.
+    """
+    tardio = None
+    for h_ini, h_fin in VENTANAS.get(dia.weekday(), []):
+        # `h_fin` queda afuera a proposito: la hora en punto elegida tiene que entrar
+        # con la demo completa adentro de la ventana.
+        for hora in range(h_ini, h_fin):
+            cand = dt.datetime(dia.year, dia.month, dia.day, hora, 0, tzinfo=TZ_LAPAZ)
+            if cand < desde:
+                continue  # el motor no lo ofreceria
+            if cand >= hasta_el_final:
+                return cand  # aguanta toda la vigencia
+            tardio = cand  # todavia no: me quedo con el ultimo que entre
+    return tardio
 
 
 def etiqueta(d):

@@ -70,14 +70,26 @@ test("la HORA sale de la franja, no de una constante", () => {
   // El dia tambien se puede perder por la hora: con las 14:00 clavadas —como estaba—
   // un dia cuya franja de tarde ya arranco, o que solo tiene la nocturna abierta, se
   // descarta ENTERO y el prospecto salta al siguiente.
+  //
+  // CUAL de las horas de la franja se elige lo decide la vida util del dia y no el
+  // orden (ver «el dia mas cercano no se pierde a mitad de la vigencia»), asi que los
+  // casos mezclan las dos ramas a proposito —la del dia cercano, que toma la ultima
+  // hora que todavia entra, y la del lejano, que toma el COMIENZO de su franja— y
+  // dan tres horas distintas: ninguna constante los pasa.
   const casos = [
-    // Jueves 15:30 La Paz -> el piso cae el viernes 15:30: 14:00 ya paso, 16:00 entra.
-    ["2026-09-17T19:30:00Z", "viernes 18 de septiembre, 16:00"],
-    // Jueves 17:30 -> el viernes ya cerro la franja de tarde (14-17); queda la de 20-22.
-    ["2026-09-17T21:30:00Z", "viernes 18 de septiembre, 20:00"],
+    // Jueves 15:30 La Paz -> el piso cae el viernes 15:30: las 14:00 ya pasaron.
+    // Ninguna hora del viernes aguanta la vigencia entera, asi que va la ultima que
+    // entra, que sale de la franja NOCTURNA (20-22).
+    ["2026-09-17T19:30:00Z", 0, "viernes 18 de septiembre, 21:00"],
+    // El mismo dia, el sabado siguiente: su franja es 09:00-15:00, o sea que la ultima
+    // hora que entra con la demo adentro son las 14:00 — ni 21:00 ni el comienzo.
+    ["2026-09-17T19:30:00Z", 1, "sábado 19 de septiembre, 14:00"],
+    // Jueves 17:30 -> el lunes ya esta lo bastante lejos como para aguantar toda la
+    // vigencia, y ahi si se ofrece el COMIENZO de la franja de tarde.
+    ["2026-09-17T21:30:00Z", 2, "lunes 21 de septiembre, 14:00"],
   ];
-  for (const [iso, esperado] of casos) {
-    assert.equal(proximosSlots(new Date(iso))[0].label, esperado, `desde ${iso}`);
+  for (const [iso, puesto, esperado] of casos) {
+    assert.equal(proximosSlots(new Date(iso))[puesto].label, esperado, `desde ${iso}, puesto ${puesto}`);
   }
 });
 
@@ -154,5 +166,63 @@ test("lo que genera, el motor lo puede OFRECER durante toda su vigencia", () => 
       }
     }
     assert.equal(siguenVigentes(spec, ahora), true, `recien generado y ya pide renovacion: ${spec}`);
+  }
+});
+
+/**
+ * Todas las horas que el motor OFRECERIA en un instante dado, derivadas de las
+ * FRANJAS y no del generador — que es justo lo que se esta midiendo.
+ */
+function ofreciblesAlLeer(alLeer, franjas) {
+  const desde = alLeer.getTime() + ANTICIPACION_MINIMA_MS;
+  const salida = [];
+  const cursor = new Date(alLeer.getTime() - 4 * 3600_000);
+  cursor.setUTCHours(0, 0, 0, 0);
+  for (let i = 0; i <= 21; i += 1) {
+    const local = new Date(cursor);
+    local.setUTCDate(local.getUTCDate() + i);
+    for (const [horaDesde, horaHasta] of franjas[local.getUTCDay()] || []) {
+      for (let hora = horaDesde; hora < horaHasta; hora += 1) {
+        const inicioUtc = Date.UTC(
+          local.getUTCFullYear(), local.getUTCMonth(), local.getUTCDate(), hora + 4, 0, 0,
+        );
+        if (inicioUtc >= desde) salida.push(new Date(inicioUtc).toISOString());
+      }
+    }
+  }
+  return salida.sort();
+}
+
+/** `2026-09-19` del lado LOCAL: comparar dias, no horas — el generador manda una por dia. */
+const fechaLocal = (iso) => new Date(new Date(iso).getTime() - 4 * 3600_000).toISOString().slice(0, 10);
+
+test("el dia mas cercano no se pierde a mitad de la vigencia", () => {
+  // El generador manda UN candidato por dia, asi que la hora que elige decide
+  // cuanto vive el DIA en la oferta: la mas temprana es tambien la primera en
+  // caerse, y cuando se cae no se pierde un horario — se pierde el dia entero.
+  //
+  // Medido en produccion el 2026-09-18 11:13 La Paz. El cron de las 06:23 habia
+  // escrito "sábado 19, 11:00" (28,6 h de aviso en ese momento, correcto), y a las
+  // 11:13 ese horario ya no llegaba a 24 h: el motor lo descartaba y el bot le
+  // ofrecia LUNES 21 a quien escribia ese viernes, con el sabado 19 a las 12:00,
+  // 13:00 y 14:00 libres y ofrecibles — y con la coletilla del mismo mensaje
+  // prometiendole "sáb 9:00-15:00". Dos dias de espera regalados.
+  const franjas = franjasDeAtencion();
+  // 06:23 La Paz = 10:23 UTC: la hora REAL a la que corre el cron del generador.
+  for (const generadoEn of ["2026-09-18T10:23:00Z", "2026-09-16T10:23:00Z", "2026-09-21T10:23:00Z"]) {
+    const ahora = new Date(generadoEn);
+    const spec = comoSpec(proximosSlots(ahora));
+    // A lo largo de la VIGENCIA: lo que se escribe se sirve hasta la corrida siguiente.
+    for (const horas of [0, 3, 6, 9, 12, 18, 23]) {
+      const alLeer = new Date(ahora.getTime() + horas * 3600_000);
+      const esperado = ofreciblesAlLeer(alLeer, franjas)[0];
+      const primero = (parseSlotsSpec(spec, { now: alLeer }) || [])[0];
+      const contexto = `generado ${generadoEn}, leido +${horas}h (${alLeer.toISOString()}) — spec ${spec}`;
+      assert.ok(primero && !primero.pending, `no ofrece ningun horario: ${contexto}`);
+      assert.equal(
+        fechaLocal(primero.startAt), fechaLocal(esperado),
+        `ofrece ${primero.label} teniendo libre ${esperado}: ${contexto}`,
+      );
+    }
   }
 });

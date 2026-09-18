@@ -132,6 +132,54 @@ class AnticipacionRealTest(unittest.TestCase):
             f"el prospecto de las 04:03 recibiria {aviso_h:.1f} h de aviso",
         )
 
+    def test_el_dia_mas_cercano_no_se_pierde_a_mitad_de_la_vigencia(self):
+        """Se manda UN candidato por dia: la hora elegida decide cuanto vive el DIA.
+
+        La mas temprana del dia es tambien la primera en caerse, y cuando se cae no se
+        pierde un horario: se pierde el dia entero y el prospecto salta al dia habil
+        siguiente. Medido en produccion el 2026-09-18 11:13 La Paz — el cron de las
+        06:23 habia escrito "sábado 19, 11:00" (28,6 h de aviso, correcto al generarse)
+        y cinco horas despues ya no llegaba a 24 h: el bot le ofrecia LUNES 21 a quien
+        escribia ese viernes, con el sabado 19 a las 12:00, 13:00 y 14:00 libres, y
+        prometiendole "sáb 9:00-15:00" en la coletilla del MISMO mensaje.
+
+        La propiedad se afirma contra las VENTANAS de Sergio Urcullo, no contra lo que
+        el generador devuelve: si a la hora de leer hay un dia ofrecible mas temprano
+        que el primero que se ofrece, es un dia regalado.
+        """
+        arranque = dt.datetime(2026, 9, 1, 6, 23, tzinfo=renovar.TZ_LAPAZ)
+        for dia in range(7):
+            genera = arranque + dt.timedelta(days=dia)
+            slots = renovar.proximos_slots(genera)
+            # A lo largo de la VIGENCIA: lo escrito se sirve hasta la corrida siguiente.
+            for h in range(0, renovar.VIGENCIA_H):
+                lee = genera + dt.timedelta(hours=h)
+                with self.subTest(genera=genera.isoformat(), lee=lee.isoformat()):
+                    ofrecidos = [
+                        s for s in slots
+                        if (s - lee).total_seconds() / 3600 >= renovar.ANTICIPACION_H
+                    ]
+                    self.assertTrue(ofrecidos, "no le ofrece ningun horario")
+                    libre = self._primer_dia_ofrecible(lee)
+                    self.assertEqual(
+                        ofrecidos[0].date(), libre,
+                        f"ofrece {renovar.etiqueta(ofrecidos[0])} teniendo libre el {libre}",
+                    )
+
+    def _primer_dia_ofrecible(self, lee):
+        """El primer dia con ALGUNA hora ofrecible, derivado de las VENTANAS."""
+        desde = lee + dt.timedelta(hours=renovar.ANTICIPACION_H)
+        dia = desde.date()
+        for _ in range(21):
+            for h_ini, h_fin in renovar.VENTANAS.get(dia.weekday(), []):
+                for hora in range(h_ini, h_fin):
+                    cand = dt.datetime(dia.year, dia.month, dia.day, hora, 0,
+                                       tzinfo=renovar.TZ_LAPAZ)
+                    if cand >= desde:
+                        return dia
+            dia += dt.timedelta(days=1)
+        raise AssertionError("no hay ningun dia ofrecible en tres semanas")
+
     def test_nunca_ofrece_domingo_ni_fuera_de_ventana(self):
         """La correccion no puede ganar anticipacion saliendose de las ventanas."""
         arranque = dt.datetime(2026, 9, 1, 0, 0, tzinfo=renovar.TZ_LAPAZ)
