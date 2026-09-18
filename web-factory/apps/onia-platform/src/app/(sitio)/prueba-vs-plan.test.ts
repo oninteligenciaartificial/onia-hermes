@@ -305,6 +305,62 @@ describe("la prueba entrega un plan y la tarjeta vende otro: se dice antes de pa
   });
 
   /**
+   * Caso 7 — la MISMA promesa, dicha sobre las PARTES en vez de sobre el todo.
+   *
+   * El caso 6 prohíbe el alcance total del SISTEMA («el sistema completo»,
+   * «toda la plataforma»). Su hermana se escribe cuantificando los PEDAZOS —
+   * «con todos los módulos encendidos»— y no matchea ninguna de sus cuatro
+   * formas: no dice «sistema», no dice «plataforma», no tipea un plan y no
+   * mueve una cifra. O sea que pasaba por el medio de las tres familias de
+   * gates de este sitio, igual que su hermana el día que se escribió el 6.
+   *
+   * MEDIDO el 2026-09-18 sobre producción. `onia.com.bo/empezar` —la última
+   * pantalla antes del registro— abría su párrafo principal con «No es una
+   * demo recortada: es tu cuenta real, con todos los módulos encendidos», y
+   * `/v1/prueba-gratis` repetía la frase palabra por palabra. La prueba corre
+   * con `TRIAL_PLAN = "professional"`, y en el catálogo publicado del producto
+   * (`onia-platform lib/plan-catalogo.ts`, leído de `origin/master`) ese plan
+   * tiene `whatsappIncluded: false` y `multiAdminIncluded: false`. Dos módulos
+   * apagados, y ninguno es menor: el chatbot es lo más publicitado del sitio
+   * —sección propia en la portada, página propia, Bs 390/mes aparte— y el
+   * segundo administrador es lo que el producto EMPEZÓ a cobrar por plan el
+   * 2026-09-17 (DG-043). El lead con equipo lee «todos los módulos
+   * encendidos», se registra, e invita a alguien: no puede.
+   *
+   * LA PANTALLA SE CONTRADECÍA SOLA, que es lo que lo vuelve barato de ver y
+   * caro de dejar: tres líneas más abajo, el mismo `/empezar` ya dice la
+   * versión honesta y ACOTADA —«Todo encendido: caja, inventario,
+   * contabilidad, la cola de agentes y la agenda …»—, que enumera y por eso no
+   * promete de más. El daño no es el adjetivo: es el cuantificador.
+   *
+   * LA FORMA, no el texto viejo. Se prohíbe el universal aplicado a las partes
+   * del sistema. Las dos salidas honestas siguen pasando: ENUMERAR lo que se
+   * enciende, o NOMBRAR el plan («el plan ${PRUEBA.planQueCorre} completo»).
+   * Por eso tampoco toca a `full`, cuyo salto de valor ES «Todo incluido»: ese
+   * plan sí los trae todos, y prohibir el texto viejo en vez de la forma
+   * apagaría el gate justo el día que la respuesta correcta sea esa.
+   */
+  const ALCANCE_TOTAL_DE_LAS_PARTES = [
+    /\btod[oa]s\s+l[oa]s\s+(m[oó]dulos|funciones|funcionalidades|herramientas|capacidades|add-?ons)\b/i,
+  ];
+
+  it("ninguna pantalla promete «todos los módulos»: la prueba enciende los de un plan", () => {
+    const culpables = PANTALLAS.filter((ruta) => {
+      const codigo = sinComentarios(readFileSync(ruta, "utf8"));
+      return ALCANCE_TOTAL_DE_LAS_PARTES.some((forma) => forma.test(codigo));
+    }).map((ruta) => relative(SRC, ruta));
+
+    expect(
+      culpables,
+      `La prueba corre con ${PRUEBA.planQueCorre}, que NO enciende todos los ` +
+        `módulos: el chatbot de WhatsApp y el segundo administrador los trae ` +
+        `${PLAN_TOPE.nombre}. Estas pantallas prometen el alcance total sobre ` +
+        `las partes: ${culpables.join(", ")}. Las dos salidas honestas son ` +
+        `ENUMERAR lo que se enciende, o nombrar el plan.`,
+    ).toEqual([]);
+  });
+
+  /**
    * TRIPWIRE del caso 6 — la regla de arriba se apoya en dos hechos del
    * producto, y los dos pueden cambiar. No se apaga sola en silencio: si
    * cambian, este caso se pone rojo y alguien decide.
