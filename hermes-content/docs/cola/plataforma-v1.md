@@ -63,6 +63,47 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 
 ## Ahora
 
+- [x] ✅ **CERRADO el 2026-09-17 — el negocio de cualquier plan podía crearse un segundo
+      administrador gratis: la misma pantalla tenía DOS botones y sólo uno preguntaba el plan.**
+
+      **Qué pasaba.** El 17-sep entró `multiAdminIncluded` (decisión de Sergio Urcullo: los
+      coadministradores vienen en los paquetes caros, dentro de un solo pago). Se cerraron tres
+      superficies — `POST /api/team`, `PATCH /api/admin/users/[id]` y el selector de `/settings` —
+      y quedó abierta la cuarta, que es justo la que el dueño usa: el modal de **Equipo**
+      (`app/(dashboard)/team/InviteModal.tsx`) ofrece el rol "Administrador" sin mirar el plan, y
+      tiene dos caminos con el MISMO selector: *crear con contraseña* postea a `/api/team` (403,
+      correcto) e *invitar por correo* postea a **`/api/admin/users`, que no preguntaba nada** y
+      devolvía 201 — con invitación real de Supabase, o sea el segundo admin podía entrar. La ruta
+      ya consultaba el plan para otras dos cosas (`checkPlanExpiry`, `checkUserLimit`): la pregunta
+      que faltaba era exactamente la que se cobra.
+
+      **Prueba.** Test en ROJO primero por el motivo correcto (`plan free: expected 201 to be 403`,
+      2 fallando de 7) en `app/api/admin/users/route.test.ts`, y verde después del arreglo; el caso
+      anti-tautología recorre `PLAN_IDS` del catálogo y exige `201 ⇔ multiAdminIncluido(plan)`, así
+      que la puerta no puede volver a decidir con una lista tipeada. Gates: `npx tsc --noEmit` 0
+      errores (los 4 que salían eran la carpeta de tipos generada de Next, stale, acusando la ruta
+      del webhook legado de WhatsApp que el commit `abf6cb5b` borró hoy — se curan borrando esa
+      carpeta generada), `eslint` limpio, `vitest` completo verde. Commit en `onia-platform`, rama
+      `claude/chatbots-platform-review-0d1d09`.
+
+      **Lo que NO cierra este ítem, con su reproducción exacta —** dos superficies más de la misma
+      clase, las dos SIN acceso real (por eso no bloquean): (1) `app/onboarding/pasos/paso-equipo.tsx`
+      ofrece "Administrador" en el paso 4 del alta sin filtrar por plan — recibe `vocabulario` por
+      prop y **no recibe el plan**, hay que pasárselo desde su llamador; (2) `POST /api/onboarding/aplicar`
+      (línea ~182, `role: equipo.rol`) crea esa ficha con rol ADMIN sin preguntar. La ficha nace con
+      `userId: pendiente-<uuid>`, así que **no puede loguear**: el daño aparecía al invitarla después,
+      y esa puerta ya quedó cerrada acá. Se ve con
+      `grep -n "rolesEquipo" app/onboarding/pasos/paso-equipo.tsx`.
+
+      **Y el gate que dejó la clase abierta está identificado:**
+      `lib/subscription/coadministradores.test.ts:72` exige el filtro nombrando **a mano** un solo
+      archivo (`SettingsClient.tsx`), así que ninguna otra pantalla que ofrezca `rolesEquipo` es
+      sujeto de nadie. Cerrarlo pide derivar el universo **caminando la carpeta** (`readdirSync`, no
+      `git ls-files`: el archivo nuevo sin commitear es justo el sujeto que se quiere cazar) y exigir
+      `rolesOfrecidosPorPlan` en cada pantalla que ofrezca esos roles. No se escribió en esta vuelta
+      porque saldría ROJO por `paso-equipo.tsx` y ese gate está en la cadena: trabaría el merge de
+      **todos** los carriles hasta que (1) esté arreglado. Los dos van juntos, en la misma vuelta.
+
 - [x] ✅ **CERRADO el 2026-09-17 — el tablero decía que `master` de `onia-platform` estaba roto
       y NO lo está: los cinco gates del CI, corridos a mano sobre el commit que el pedido de
       deploy pide publicar, están en verde** (medición, sin cambio de código).
@@ -5385,6 +5426,75 @@ y sin operar. Acá se opera, con verificación por ítem.
 - **No le escribe a un prospecto.** Regla del [`README.md`](README.md) de esta carpeta.
 
 ## Cerrado
+
+- [x] 🔴 **CERRADO el 2026-09-17: los avisos de vencimiento mandaban al dueño de un plan
+      Empresa a una pantalla que NO puede cobrarle.** ⚠️ COMMITEADO Y PUSHEADO (`c399caaa`,
+      rama `claude/chatbots-platform-review-0d1d09` de `onia-platform`), **falta mergear y
+      desplegar**.
+
+      El mismo día, `06036905` cerró el callejón de «Renovar Empresa» en `/settings`: el
+      checkout DESCARTA `enterprise` (`CHECKOUT_PLANS` no lo trae), así que el botón dejaba al
+      dueño en un selector de cuatro tarjetas donde la suya no está. Esa cura tapó la puerta a
+      la que el dueño VA y dejó abiertas las que el producto usa para ir a buscarlo a ÉL.
+
+      El barrido derivado del disco encontró **seis** superficies, no las cuatro que se ven a
+      ojo: la banda grande del panel (`components/AvisoRenovacion.tsx`), el banner de solo
+      lectura (`lib/subscription/aviso-solo-lectura.ts`), el aviso in-app/push
+      (`lib/subscription/vencimientos.ts`), el correo
+      (`onia-platform/app/api/cron/renewal-reminders/route.ts`) y —la que no estaba en la
+      lista escrita a mano— el aviso de pago **RECHAZADO**
+      (`lib/subscription/aviso-de-pago-resuelto.ts`), que mandaba a reintentar al mismo
+      callejón. La sexta (`trial-drip`) queda exenta con su motivo **re-medido**: el plan de la
+      prueba sí lo cobra el checkout, y si `TRIAL_PLAN` cambia el gate lo dice.
+
+      **Cura:** el destino se DERIVA de lo que el checkout puede cobrar
+      (`lib/subscription/donde-se-renueva.ts`), nunca de un `plan === "enterprise"` al lado.
+      El mensaje de WhatsApp reusa `ENTERPRISE_PLAN_PRICE.activationMessage` — la misma fuente
+      que `PlanClient`, para que el dueño no le escriba a Sergio Urcullo dos cosas distintas
+      según por dónde entró.
+
+      **Gate:** `lib/subscription/el-aviso-manda-donde-si-se-renueva.test.ts`, que cruza contra
+      `planesVendibles` —la que PINTA las tarjetas— y no contra `CHECKOUT_PLANS`, que es la
+      lista que el router ya lee (eso sería el espejo comparándose consigo mismo). Validado por
+      mutación en las dos mitades: reponer el hardcode en la banda → rojo nombrando el archivo;
+      hacer que el router deje de distinguir → rojo nombrando los 4 rubros × `enterprise`.
+
+      **Alcance, medido y dicho como es:** hoy **ninguna** org está en `enterprise`
+      (`select plan, count(*) from organizations` → 1 `free`, 3 `professional`), así que esto
+      no le muerde a nadie AÚN. Pero `PLANES_DEL_OPERADOR = PLAN_IDS` lo incluye y Sergio
+      Urcullo lo declaró vendible el 17-sep: el primer cliente de Empresa —el más caro,
+      Bs 2.900/mes— es el que se comía el callejón, y por el correo, que es el canal que
+      alcanza a quien no está mirando el panel.
+
+      Gates verdes en `/root/loops/onia-platform-chatbot`: `npx tsc --noEmit` (0),
+      `npx vitest run` (5.562 pasan), `npx eslint .` (0 errores).
+
+- [x] 🔴 **CERRADO el 2026-09-17: el dueño no podía quitarle el acceso de administrador a un
+      empleado que se fue.** ⚠️ COMMITEADO Y PUBLICADO (`9f103875`, rama
+      `claude/chatbots-platform-review-0d1d09` de `onia-platform`), **falta mergear y desplegar**.
+      El producto sabía COBRAR el segundo administrador —DG-043 cerró las dos puertas que lo
+      crean— y no tenía **ninguna** puerta para sacarlo. Las tres vías del cliente contestaban
+      403: `PATCH /api/admin/users/[id]` ("Superadmin access required for admin roles", encima en
+      inglés), `DELETE /api/admin/users/[id]` ("Cannot remove admin users") y `DELETE
+      /api/team/[id]` ("No podés eliminar administradores desde Equipo"); y la ficha del miembro
+      (`app/(dashboard)/team/[id]/UserActions.tsx`) **escondía** la zona de peligro cuando la
+      persona era `ADMIN`, así que el botón de eliminar ni aparecía y el de cambiar rol fallaba
+      siempre. Resultado: un empleado que renunciaba conservaba acceso total a la cuenta y el
+      dueño tenía que escribirle a Onia — agujero de seguridad **y** horas de soporte por
+      cliente, que es el techo real del negocio (`ONIA_ESTRATEGIA_DE_EMPRESA.md` §9).
+      Es la dirección simétrica de la clase cerrada cinco veces esta semana: **un permiso
+      concedido sin su CAMINO de vuelta.**
+      La decisión vive en UNA función pura (`lib/platform/quitar-administrador.ts`) porque son
+      tres puertas y una cura que no viaja a todas deja la clase abierta. Única baranda: la
+      organización nunca queda sin administrador; el conteo sale de la base en el momento y un
+      conteo que no se pudo hacer NO habilita. `SUPERADMIN` lo sigue administrando Onia.
+      **Intento fallido / trampa:** dos casos existentes (`"impide que un ADMIN cambie a otro
+      ADMIN"` y `"no deja borrar a otro ADMIN"`) eran fixtures que **defendían el defecto** —
+      obedecerlos habría cerrado la vuelta sin arreglar nada. Ahora sostienen la baranda.
+      Gate: `lib/platform/quitar-administrador.test.ts` ancla la **guarda**, no la mención del
+      helper, y exige que su índice sea MENOR que el de la escritura que protege; validado por
+      mutación (`false &&` en la condición → rojo, restaurado → verde). tsc y eslint limpios,
+      5.554 tests en verde (corridos también en el gemelo del VPS antes de publicar).
 
 - [x] 🔴 **CERRADO el 2026-09-17: los tres correos que convierten la prueba en cliente ofrecían
       Bs 890 como único precio, con Bs 320 disponible.** ⚠️ COMMITEADO Y PUBLICADO (`109ee15`,

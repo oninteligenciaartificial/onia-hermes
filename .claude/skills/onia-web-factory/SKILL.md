@@ -144,7 +144,11 @@ Reglas de motion que salieron de reconstruirlos, y que aplican a TODA web nueva:
 4. **Construcción:** para sitios de cliente = editar bloques/templates del generador.
    Para superficies Next (onia-center, onia-platform): `frontend-design` · `frontend-patterns` ·
    `react-components` · `shadcn-ui` · `ui-styling` · `nextjs-turbopack`.
-5. **Revisión:** `design-review` + preview en navegador (verificar en vivo, no pedirle a
+5. **Copy:** todo texto que generamos (titulares por rubro, bajadas de fallback, servicios sin
+   descripción) pasa por `humanizer` o `stop-slop` antes de quedar. `web-factory/generate/slop.test.ts`
+   vigila una lista en español. El motor escribe `data/clients/<slug>.DESIGN.md` (tokens con rol,
+   contraste medido, componentes, voz): es lo que lee cualquier agente para repetir el estilo.
+6. **Revisión:** `design-review` + preview en navegador (verificar en vivo, no pedirle a
    Sergio que revise a mano).
 
 ## Piso de calidad / benchmark

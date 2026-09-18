@@ -32,6 +32,28 @@ C:\Users\PC\.codex\design-stack
 
 Use these repositories as reference material. Do not paste third-party code into a client site until the implementation is reviewed, retokenized, and validated inside `web-factory`.
 
+## Cruce con «Stop AI slop» (Enrique Rocha, IG `p/DdXM8-Nmxey`, leído 2026-09-17)
+
+Carrusel de 10 repos «para que lo hecho con Claude no se vea genérico». Inventario contra lo
+instalado, para no volver a evaluarlos:
+
+| Repo | Para qué | Estado en ONIA |
+|---|---|---|
+| `nextlevelbuilder/ui-ux-pro-max-skill` | estilo, colores, tipografías | ✅ instalada (`ui-ux-pro-max`) |
+| `pbakaus/impeccable` | revisar y pulir interfaces | ✅ instalada |
+| `Leonxlnx/taste-skill` | diseño, animaciones, cantidad de contenido | ✅ instalada (`taste-skill`, ver abajo) |
+| `VoltAgent/awesome-design-md` | 73 DESIGN.md de marcas reales | 🟡 no instalado; **adoptado el formato**: el motor escribe `data/clients/<slug>.DESIGN.md` (`generate/design-md.ts`) |
+| `google-labs-code/design.md` | contraste del DESIGN.md | 🟡 no instalado; el contraste WCAG lo mide `design-md.ts` |
+| `blader/humanizer` | reescribe frases que suenan a IA | ✅ instalada 17-sep (global, MIT) — pasada de copy |
+| `hardikpandya/stop-slop` | reglas para escribir sin clichés | ✅ instalada 17-sep (global, MIT) — `generate/slop.test.ts` es su versión en español para el copy generado |
+| `zarazhangrui/frontend-slides` | presentaciones en el navegador | 🟡 no; tenemos `slides` |
+| `cathrynlavery/diagram-design` | diagramas | 🟡 no; tenemos `artifact-diagramming` |
+| `Egonex-AI/Understand-Anything` | mapa navegable del proyecto | ✅ plugin instalado |
+
+**Regla que queda:** antes de dar por bueno copy generado (titulares del asistente, bajadas del
+motor, textos de un cliente sin material) se pasa por `humanizer`/`stop-slop`, y el gate
+`slop.test.ts` lo vigila en el repo.
+
 ## Active Skill
 
 `ui-ux-pro-max` is installed globally at `C:\Users\PC\.codex\skills\ui-ux-pro-max`.
