@@ -335,7 +335,7 @@ if (!DRY) {
 
 const vf = `subtitles=${assName}:fontsdir=${FONTS_SUBDIR}`;
 const ffArgs = ["-y", "-hide_banner", "-i", VIDEO, "-vf", vf,
-  "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", "-pix_fmt", "yuv420p",
+  "-c:v", "libx264", "-preset", flag("preset", "veryfast"), "-crf", flag("crf", "20"), "-pix_fmt", "yuv420p",
   ...audioArgs, "-movflags", "+faststart", OUT];
 // Versión copy-paste (path del .ass escapado como lo quiere el filtro: / y \: )
 const assFilterPath = ASS_OUT.replace(/\\/g, "/").replace(/:/g, "\\:");
