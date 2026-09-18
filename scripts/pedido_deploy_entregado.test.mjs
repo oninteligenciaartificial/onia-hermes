@@ -7,9 +7,11 @@
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync, writeFileSync, rmSync } from 'node:fs';
+import { readFileSync, writeFileSync, rmSync, mkdtempSync, mkdirSync } from 'node:fs';
+import { join, dirname } from 'node:path';
+import { spawnSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
-import { archivosDelDryRun, archivosDelDryRunBot, archivosNombrados, secoDeProduccion, barrerTablero, creadoEnSegundos, barrerTableroJson, buildQueCorre, cadenaPorPedido, clasificarPedido, imprimirCadena, cuerpoCortoArchivos, cuerpoNoEjecuta, inmediblesSinDeclarar, publicariaPorCopia, shasDelTexto, shasPrometidos, soloLosQueViajan } from './pedido_deploy_entregado.mjs';
+import { archivosDelDryRun, archivosDelDryRunBot, archivosNombrados, secoDeProduccion, barrerTablero, creadoEnSegundos, barrerTableroJson, buildQueCorre, cadenaPorPedido, clasificarPedido, imprimirCadena, cuerpoCortoArchivos, cuerpoNoEjecuta, inmediblesSinDeclarar, publicariaLanding, publicariaPorCopia, shasDelTexto, shasPrometidos, soloLosQueViajan } from './pedido_deploy_entregado.mjs';
 import { DESTINOS, ESTADOS_VIVOS } from './kanban/publicar-aprobado.mjs';
 
 // El caso que me costo la vuelta del 2026-09-06: los 13 shas prometidos por t_0268567b
@@ -1365,5 +1367,83 @@ test('un control con un control de CUERPO debajo no manda a comentar', () => {
       `el remedio de ${nombre} manda a comentar, y debajo suyo en la cadena hay un control que `
       + `lee SOLO el cuerpo: comentar limpia este rojo y destapa aquel, con el remedio contrario. `
       + `Se cura rehaciendo el pedido y archivando el viejo en la misma vuelta.`);
+  }
+});
+
+// ── lo que el `ok` de la landing publicaria: ANCESTRIA, no fecha ───────────────────────────
+//
+// 🔴 Medido el 2026-09-18 con el pedido t_afd816af vivo: `publicariaLanding` devolvia VACIO
+// mientras `bash /opt/onia-landing/_deploy/publicar.sh --dry-run` —el que de verdad publica—
+// decia «hay que publicar: 1 arreglo(s)». Con la lista vacia, los DOS controles que verifican
+// que el cuerpo del pedido describa lo que el `ok` publica (`promesaCompleta` y `cuerpoCorto`)
+// salen NO_MEDIDO, y NO_MEDIDO no se pone rojo NUNCA: queda apagado justo el control que
+// impide que Sergio Urcullo apruebe codigo que el pedido no le mostro.
+//
+// La causa es la misma que `deploy-vivo.mjs` ya cerro el 2026-09-17 y que no viajo a este
+// hermano: filtrar por FECHA (`ct > epochBuild`) junto con `--no-merges`. Un commit de rama de
+// carril tiene fecha ANTERIOR al merge que lo trae, asi que queda fuera por viejo — y el merge
+// que lo hace visible queda fuera por merge. El sujeto se pierde para siempre, en verde.
+//
+// La pregunta correcta no es «que hay mas nuevo que el build» sino «que tiene main que el build
+// no contiene». La fecha se usa UNA vez, para elegir el punto de `--first-parent` por el que el
+// build paso (`baseDelBuild`), y de ahi manda el grafo.
+test('un arreglo que entra a main por un merge posterior al build NO se pierde', () => {
+  //  base ── merge(POSTERIOR al build) ── main
+  //      \── arreglo(ANTERIOR al build) ─┘
+  const BUILD_S = Math.floor(Date.parse('2026-09-18T21:06:00Z') / 1000);
+  const FECHA_BASE = '2026-09-18T18:00:00Z';
+  const FECHA_ARREGLO = '2026-09-18T20:55:10Z'; // ANTERIOR al build
+  const FECHA_MERGE = '2026-09-18T21:37:43Z'; //  POSTERIOR al build
+
+  // Siembra su propio sujeto y lo borra en el `finally`: un sujeto prestado del repo real deja
+  // de calificar el dia que alguien mergea, o muere en rojo acusando al producto.
+  const raiz = mkdtempSync(join(tmpdir(), 'pedido-ancestria-'));
+  const git = (args, fecha) => {
+    const r = spawnSync('git', args, {
+      cwd: raiz,
+      encoding: 'utf8',
+      env: fecha ? { ...process.env, GIT_AUTHOR_DATE: fecha, GIT_COMMITTER_DATE: fecha } : process.env,
+    });
+    // Sembrar es PREPARAR: si el escenario no se armo, el caso no puede concluir — se rompe
+    // aca, no se convierte en un rojo contra el producto.
+    if (r.status !== 0) throw new Error(`no pude sembrar (git ${args.join(' ')}): ${r.stderr}`);
+    return r.stdout.trim();
+  };
+  const escribir = (rel, texto) => {
+    mkdirSync(dirname(join(raiz, rel)), { recursive: true });
+    writeFileSync(join(raiz, rel), texto);
+  };
+
+  try {
+    git(['init', '--quiet', '--initial-branch=main']);
+    git(['config', 'user.email', 'gate@onia.test']);
+    git(['config', 'user.name', 'gate']);
+    git(['config', 'commit.gpgsign', 'false']);
+
+    escribir('README.md', 'base\n');
+    git(['add', '-A']);
+    git(['commit', '--quiet', '-m', 'base'], FECHA_BASE);
+
+    git(['checkout', '--quiet', '-b', 'claude/carril']);
+    // Un archivo que SI llega al cliente: si no, `soloLosQueViajan` lo descarta y el caso
+    // pasaria por el motivo equivocado.
+    escribir('web-factory/apps/onia-platform/src/app/(sitio)/page.tsx', 'export default () => null\n');
+    git(['add', '-A']);
+    git(['commit', '--quiet', '-m', 'fix(venta): el arreglo que el pedido tiene que nombrar'], FECHA_ARREGLO);
+
+    git(['checkout', '--quiet', 'main']);
+    git(['merge', '--quiet', '--no-ff', 'claude/carril', '-m', 'Merge carril'], FECHA_MERGE);
+
+    const r = publicariaLanding(BUILD_S, { cwd: raiz, ref: 'main' });
+
+    assert.notEqual(r, null, 'no pude medir el repo sembrado');
+    assert.equal(r.length, 1,
+      'el arreglo entro a main por un merge POSTERIOR al build y su propio commit es ANTERIOR: '
+      + 'filtrar por fecha lo descarta por viejo y --no-merges descarta al merge que lo trae, '
+      + 'asi que el ok publicaria un commit que el pedido no le nombro a nadie y los controles '
+      + 'de completitud salen NO_MEDIDO en vez de rojo');
+    assert.match(r[0].titulo, /el arreglo que el pedido tiene que nombrar/);
+  } finally {
+    rmSync(raiz, { recursive: true, force: true });
   }
 });
