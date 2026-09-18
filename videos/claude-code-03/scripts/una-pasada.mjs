@@ -8,7 +8,9 @@ import { zoomExpr, autoWindowsFromKeep, ANCHORS } from "file:///C:/dev/proyectos
 
 const SCRATCH = "C:/Users/PC/AppData/Local/Temp/claude/C--dev-proyectos-onia-hermes--claude-worktrees-video-editing-silence-removal-073acb/1b27764e-a5b2-4fe6-997b-aecc00d784a6/scratchpad/v03";
 const pieza = process.argv[2]; // "intro" | "main"
-const CRF = "13", PRESET = "slow", W = 1920, H = 1080, FPS = 30000 / 1001;
+// FPS = el REAL del crudo (ffprobe r_frame_rate=30/1). Hardcodear 29.97 sobre un
+// crudo de 30.00 estira el video 0.1% y la voz se desfasa ~0.6s en 10 min.
+const CRF = "13", PRESET = "slow", W = 1920, H = 1080, FPS = 30;
 
 const leer = (p) => JSON.parse(readFileSync(p, "utf8"));
 const sel = (keep) => keep.map((k) => `between(t,${k.start},${k.end})`).join("+");
