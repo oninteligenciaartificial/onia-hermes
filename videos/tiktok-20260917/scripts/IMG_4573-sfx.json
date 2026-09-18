@@ -1,0 +1,34 @@
+{
+ "sfx": [
+  {
+   "asset": "videos/claude-code-03/assets/sfx/pop.wav",
+   "at": 4.7,
+   "gain": 0.5,
+   "duck": true
+  },
+  {
+   "asset": "videos/claude-code-03/assets/sfx/pop.wav",
+   "at": 1.88,
+   "gain": 0.6,
+   "duck": true
+  },
+  {
+   "asset": "videos/claude-code-03/assets/sfx/whoosh.wav",
+   "at": 16.44,
+   "gain": 0.55,
+   "duck": true
+  },
+  {
+   "asset": "videos/claude-code-03/assets/sfx/whoosh.wav",
+   "at": 32.35,
+   "gain": 0.55,
+   "duck": true
+  },
+  {
+   "asset": "videos/claude-code-03/assets/sfx/pop.wav",
+   "at": 47.99,
+   "gain": 0.6,
+   "duck": true
+  }
+ ]
+}

@@ -85,6 +85,19 @@ Generación paga (Higgsfield, AssemblyAI, ElevenLabs) = **permiso explícito de 
 caso** ([[gasto-plataformas-validar-primero]]). Por defecto todo gratis: Speaches (transcripción),
 HyperFrames (render + SFX), imagen barata. Validar la idea antes de generar.
 
+## 🎛 Orquestación (Sergio, 18-sep: "mandá subagentes, dejás a medias cada video")
+- **UN subagente por pieza, pipeline COMPLETO de una vez** (comp → karaoke → SFX → master →
+  QA mirando frames → editado/). El orquestador prepara plantillas/configs y despacha en
+  paralelo; nunca edita las piezas en serie él mismo.
+- **SIN música de cama: la pone Sergio.** Entregar con voz + SFX solamente.
+- **El karaoke es el rail; lo IMPORTANTE se resalta ADEMÁS** con keyword grande en pantalla
+  (blanca 900 + subrayado naranja) cuando se dice — no basta transcribir.
+- **Mención hablada de una marca → su logo ORIGINAL en pantalla** (Sergio, 18-sep: "cuando
+  digo 'esto es Claude Code', colocá logos de Claude Code"). Nunca recrear el logo: bajarlo
+  de fuente oficial (Claude Code = criaturita pixel + wordmark; lockup listo en
+  `videos/tiktok-20260917/assets/card-cc-wordmark.png`, SVG oficial al lado). La primera
+  versión recreada en pixel-art fue rechazada con "poné la original".
+
 ## Pipeline
 1. **Setup + NORMALIZAR el crudo** (pieza propia, PROBADA). `videos/<name>/` con `raw/ scripts/ renders/ final/`.
    `node scripts/normalize-source.mjs --video raw/IMG_xxxx.MOV --out raw/<n>.mp4`

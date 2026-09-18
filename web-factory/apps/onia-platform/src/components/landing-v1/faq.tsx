@@ -2,6 +2,7 @@ import { SplitTextReveal, StaggerGrid, StaggerItem } from "@/motion";
 import { PRUEBA, nombresConChatbot } from "@/lib/pricing";
 import { WA_URL_LANDING } from "@/lib/site";
 import { precioStack } from "@/content/chatbot-precios";
+import { CUANTOS_RUBROS_CAPITAL } from "@/content/rubros";
 import { MEDIO_DE_PAGO } from "@/content/medio-de-pago";
 import { DE_DONDE_LLEGA_EL_ENLACE, PASO_CONFIRMAR_CORREO } from "@/app/(sitio)/alta";
 import styles from "./landing.module.css";
@@ -50,7 +51,7 @@ export const FAQS: { q: string; a: string }[] = [
   },
   {
     q: "¿Sirve para mi rubro?",
-    a: "Cinco rubros: clínicas dentales, comercios, importadoras, estéticas y servicios profesionales. Si tu negocio es otro, escribinos y lo vemos con vos.",
+    a: `${CUANTOS_RUBROS_CAPITAL} rubros: clínicas dentales, comercios, importadoras, estéticas y servicios profesionales. Si tu negocio es otro, escribinos y lo vemos con vos.`,
   },
   {
     q: "¿Cuánto tarda dejarlo andando?",
