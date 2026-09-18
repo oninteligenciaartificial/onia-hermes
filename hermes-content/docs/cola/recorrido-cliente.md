@@ -6,14 +6,22 @@ Instrumento: `scripts/recorrido_cliente.mjs`.
 > Antes de trabajar un ítem de acá, **reproducilo en vivo**. Medido en este repo: entre el 25 %
 > y el 46 % de lo que las colas declaraban pendiente ya no existía.
 
-## Pendiente propio (mapear, no reportar todavía)
+## Cerrado — era el instrumento, no el sitio
 
-- **`/servicios/webs`: mapear el wizard paso a paso** — el botón "Armar mi web →" queda
-  `disabled` incluso tras llenar los campos de texto visibles; algunas secciones de botones
-  (p. ej. "Minimalista") no se encuentran por selector en un primer intento, probablemente
-  condicionadas a una elección anterior (plan u objetivo). Intentado 2026-09-18 09:30 La Paz.
-  Antes de reportarlo como hallazgo hace falta un mapeo ordenado de qué sección habilita a
-  cuál, para descartar que el problema sea del instrumento (selector apurado) y no del sitio.
+- **`/servicios/webs`: el botón "Armar mi web →" quedaba `disabled`** — mapeado paso a paso
+  el 2026-09-18 10:15 La Paz. **Era mi selector, no un bug**: la página tiene DOS inputs con
+  placeholders parecidos — el mini-asistente de arriba ("¿Cómo se llama tu negocio?",
+  placeholder `Ej. Clínica Amanecer`, es el que controla ESE botón) y el formulario detallado
+  de más abajo, paso 01 ("Nombre del negocio *", placeholder `Ej. Casa Norte`). Llenaba el
+  segundo y el primero — que es el que el botón valida — quedaba vacío, así que el hint
+  "Empezá por el nombre." era correcto. Rellenando el campo de arriba (`Ej. Clínica Amanecer`)
+  con la elección de rubro por defecto ya puesta, el botón habilita solo:
+  `{disabled:false, hint:"Con esto alcanza. Podés contestar el resto o armarla ya."}`.
+  Confirmado además que el clic **no manda nada a un backend** (solo Cloudflare RUM):
+  el envío real queda para cuando el usuario abre el link de WhatsApp, que este carril no
+  toca. Sin hallazgo. Las secciones de abajo (objetivo, alcance/plan, estilo, tipografía,
+  color) ya vienen con un default `pressed=true` cada una — no hacía falta elegirlas para
+  habilitar el botón, así que "Minimalista" no encontrado por selector tampoco era un bug.
 
 ## Reportado a otro carril (nuevo)
 

@@ -2241,3 +2241,23 @@ Con esto, **los 6 rubros activos del alta ya están cubiertos** (dental, comerci
 estética, servicios profesionales — veterinaria no se ofrece en el alta). `completo: true`,
 `llegoHasta: 9/9`. Próxima vuelta: no repetir rubro — ir a escalón 3 en superficie nueva o
 verificar si algún pedido de deploy sigue esperando `ok`.
+
+## 2026-09-18 10:09-10:25 La Paz — `/servicios/webs` mapeado: era el instrumento, no el sitio
+
+`BUILD_ID` sin cambios (`4AefpemDeSbQXrDmTbhoy`, mismo que la reverificación de dental de las
+09:35), `zz-qa-` orgs en 0 al arrancar, sin pedidos de deploy bloqueados que me toquen. No repetí
+el recorrido completo (última medición con este mismo `BUILD_ID` ya dio 9/9 en dental y en
+Estética y spa).
+
+Retomé el pendiente propio de `/servicios/webs` (el botón "Armar mi web →" quedaba `disabled`).
+Mapeándolo paso a paso con Playwright: **era mi selector, no un bug del sitio**. Hay dos campos
+con placeholder parecido — el mini-asistente de arriba (`Ej. Clínica Amanecer`, es el que
+controla ese botón) y el formulario detallado de abajo, paso 01 (`Ej. Casa Norte`). Llenaba el
+segundo; el primero, que es el que valida el botón, quedaba vacío — de ahí el hint "Empezá por
+el nombre." correcto. Con el campo de arriba lleno, el botón habilita solo y el clic no manda
+nada a un backend (solo Cloudflare RUM) — el envío real es el link de WhatsApp de más abajo, que
+este carril no toca. Sin hallazgo; cerrado en la cola con la reproducción completa.
+
+`completo: true` (sin cambios desde la última corrida completa), `llegoHasta: 9/9`. Próxima
+vuelta: escalón 3 en `/precios` con `reducedMotion` (pendiente hace varias vueltas) o repetir el
+recorrido completo si cambia el `BUILD_ID`.
