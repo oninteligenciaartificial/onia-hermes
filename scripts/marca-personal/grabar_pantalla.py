@@ -40,20 +40,31 @@ CURSOR_JS = """
 
 
 class Grabador:
-    def __init__(self, salida, ancho=1920, alto=1080):
+    def __init__(self, salida, ancho=1920, alto=1080, perfil=None):
+        """perfil: nombre de una sesion guardada por abrir_sesion.py (n8n, higgsfield...)."""
         self.salida = Path(salida)
         self.ancho, self.alto = ancho, alto
         self._x, self._y = ancho // 2, alto // 2
+        self.perfil = perfil
 
     def __enter__(self):
         self._pw = sync_playwright().start()
-        self.browser = self._pw.chromium.launch(headless=True)
-        self.ctx = self.browser.new_context(
-            viewport={"width": self.ancho, "height": self.alto},
-            record_video_dir=str(self.salida.parent / "_crudo"),
-            record_video_size={"width": self.ancho, "height": self.alto},
-        )
-        self.page = self.ctx.new_page()
+        video = {
+            "record_video_dir": str(self.salida.parent / "_crudo"),
+            "record_video_size": {"width": self.ancho, "height": self.alto},
+        }
+        if self.perfil:
+            ruta = Path(r"E:\ONIA-YouTube\grabaciones\_perfiles") / self.perfil
+            self.browser = None
+            self.ctx = self._pw.chromium.launch_persistent_context(
+                str(ruta), headless=True,
+                viewport={"width": self.ancho, "height": self.alto}, **video)
+            self.page = self.ctx.pages[0] if self.ctx.pages else self.ctx.new_page()
+        else:
+            self.browser = self._pw.chromium.launch(headless=True)
+            self.ctx = self.browser.new_context(
+                viewport={"width": self.ancho, "height": self.alto}, **video)
+            self.page = self.ctx.new_page()
         # el cursor se reinyecta en cada navegacion
         self.page.add_init_script(CURSOR_JS)
         return self
@@ -62,7 +73,8 @@ class Grabador:
         video = self.page.video
         self.ctx.close()
         webm = video.path()
-        self.browser.close()
+        if self.browser:
+            self.browser.close()
         self._pw.stop()
         # webm -> mp4 (H.264, compatible con cualquier editor)
         self.salida.parent.mkdir(parents=True, exist_ok=True)
