@@ -191,7 +191,9 @@ export function clasificarCobertura({ destinos, pendiente, pedidos, seAutoPublic
         destino,
         estado: 'NO_MEDIDO',
         fuente: 'publicador',
-        motivo: 'le falta publicar y no pude preguntarle al publicador automatico si lo hace solo',
+        // NO dice «no pude preguntarle»: de los cuatro caminos hasta acá, TRES sí le
+        // preguntaron y les contestó. Cuál fue lo dice la línea `causa:`, no el motivo.
+        motivo: 'le falta publicar y el publicador automatico no dejo un veredicto que sirva',
         pedidos: [],
       });
       continue;
@@ -440,6 +442,51 @@ export function describirRespuestaIlegible(salida) {
 }
 
 /**
+ * PURA: por qué el publicador automático no dejó veredictos que sirvan, cuando SÍ contestó.
+ *
+ * ⚠️ MISMO AGUJERO QUE EL HERMANO `describirRespuestaIlegible`, y por eso se cura igual.
+ * `verdictosDelPublicadorSolo()` aplanaba a `null` TRES situaciones distintas —no se pudo
+ * ejecutar, contestó pero hace rato que no corre, contestó algo ilegible— y sólo la primera
+ * dejaba causa. Las otras dos salían MUDAS bajo un motivo que además **miente**: decía «no
+ * pude preguntarle al publicador automatico» cuando la verdad era que le preguntamos y nos
+ * contestó. Medido el 2026-09-18 04:34 La Paz: el publicador decía `plataforma: publicaria` y
+ * `bot: publicaria`, y este gate imprimió `NO MEDIDO` por los dos, sin una línea de causa.
+ *
+ * La dirección del daño es la de siempre: `NO_MEDIDO` es el veredicto que se usa para NO
+ * molestar a Sergio Urcullo, así que un publicador atrasado **calla dos pedidos de deploy**.
+ * Y los dos remedios son OPUESTOS: uno se arregla mirando el acceso, el otro mirando el cron.
+ *
+ * Toma `vigente` YA CALCULADO por `publicadorSoloVigente`: re-derivar acá la comparación
+ * sería una segunda fuente del mismo hecho, que es como se desincronizan.
+ */
+export function describirPublicadorMudo({ vigente, ultima, ahora } = {}) {
+  if (vigente === true) return null;
+  if (vigente === null || vigente === undefined) {
+    return `contesto, pero su log no dice cuando corrio por ultima vez (${LOG_SOLO})`;
+  }
+  const h = ultima && ahora ? ((ahora.getTime() - ultima.getTime()) / 3_600_000).toFixed(1) : '?';
+  return `contesto, pero hace ${h} h que no corre: se salteo su turno (cron 50 */3, ${LOG_SOLO})`;
+}
+
+/**
+ * PURA: el desacuerdo entre los dos instrumentos, dicho de frente.
+ *
+ * Nuestro detector dice que a ese destino le falta publicar y el publicador dice otra cosa.
+ * `seAutoPublicaSegun` ya devuelve `null` ahí —absolver sería creerle al que no mide el
+ * sujeto—, pero ese `null` también salía mudo, y es el más confuso de los tres: el gate
+ * funcionó perfecto y aun así no se puede saber a cuál de los dos creerle sin ir a mirar.
+ */
+export function describirDesacuerdo(destino, veredicto) {
+  if (!destino || !veredicto) return null;
+  return `nuestro detector dice que a ${destino} le falta publicar y el publicador automatico dice "${veredicto}": desacuerdo, no se absuelve a nadie`;
+}
+
+/** Anota una causa sin pisar una explicación mejor que ya esté puesta (igual que `detectar`). */
+function anotarCausa(clave, causa) {
+  if (causa && !CAUSAS.has(clave)) CAUSAS.set(clave, causa);
+}
+
+/**
  * Corre un detector y deja anotado POR QUÉ no se sabe, sea cual sea el motivo.
  *
  * `correr` es inyectable sólo para el self-check: la costura que de verdad se rompió es el
@@ -487,6 +534,28 @@ const MARCA_LOG = '___LOG_DEL_PUBLICADOR___';
  * de verdad está corriendo. Se pide UNA vez por corrida y sólo si hace falta: su `--dry-run`
  * corre los tres publicadores en seco y tarda.
  */
+/**
+ * La COSTURA entre leer la respuesta del publicador y anotar por qué no sirve. Separada de la
+ * caché y del `spawn` a propósito: lo que de verdad se rompió acá fue el cableado —tres
+ * caminos volviendo `null` y uno solo dejando causa—, y ningún caso sobre las funciones puras
+ * puede verlo. Con la salida y el reloj por parámetro, el self-check lo ejerce entero.
+ */
+export function _veredictosDesdeSalida(salida, ahora = new Date(), clave = 'publicador') {
+  // `null` acá es el único caso que NO hace falta explicar: el `catch` de `sh` ya dejó su
+  // causa con el código de salida y la stderr.
+  if (salida === null || salida === undefined) return null;
+  const [seco = '', log = ''] = String(salida).split(MARCA_LOG);
+  const vigente = publicadorSoloVigente(log, ahora);
+  if (vigente !== true) {
+    anotarCausa(clave, describirPublicadorMudo({ vigente, ultima: ultimaCorridaDelLog(log), ahora }));
+    return null;
+  }
+  const verdictos = leerPublicadorSolo(seco);
+  // Corrió hace poco y aun así no se le entiende («ya hay una corrida en curso; salgo»).
+  if (verdictos === null) anotarCausa(clave, describirRespuestaIlegible(seco));
+  return verdictos;
+}
+
 let verdictosCache;
 function verdictosDelPublicadorSolo() {
   if (verdictosCache !== undefined) return verdictosCache;
@@ -494,10 +563,7 @@ function verdictosDelPublicadorSolo() {
     `bash ${PUBLICADOR_SOLO} --dry-run 2>&1; echo "${MARCA_LOG}"; tail -60 ${LOG_SOLO} 2>/dev/null`,
     { clave: 'publicador' },
   );
-  if (salida === null) return (verdictosCache = null);
-  const [seco = '', log = ''] = String(salida).split(MARCA_LOG);
-  if (publicadorSoloVigente(log, new Date()) !== true) return (verdictosCache = null);
-  return (verdictosCache = leerPublicadorSolo(seco));
+  return (verdictosCache = _veredictosDesdeSalida(salida, new Date()));
 }
 
 /**
@@ -542,7 +608,14 @@ function medirEnVivo() {
     destinos,
     pedidos,
     pendiente: (d) => (DETECTORES[d] ? DETECTORES[d]() : null),
-    seAutoPublica: (d) => seAutoPublicaSegun(verdictosDelPublicadorSolo(), d),
+    seAutoPublica: (d) => {
+      const verdictos = verdictosDelPublicadorSolo();
+      const solo = seAutoPublicaSegun(verdictos, d);
+      // El CUARTO `null`, y el único que es por destino: los dos instrumentos contestaron y
+      // no coinciden. Va con su propia clave o el segundo destino pisaría la causa del primero.
+      if (solo === null && verdictos) anotarCausa(`publicador:${d}`, describirDesacuerdo(d, verdictos[d]));
+      return solo;
+    },
     ahora: Date.now(),
   });
 
@@ -554,7 +627,11 @@ function medirEnVivo() {
       console.log(`NO MEDIDO ${f.destino}: ${f.motivo}${quien}`);
       // `fuente` dice a cuál de los dos instrumentos preguntarle la causa. Sin esta línea,
       // el rojo es irreproducible: ya pasó una vez y costó la vuelta entera.
-      const causa = CAUSAS.get(f.fuente === 'publicador' ? 'publicador' : f.destino);
+      // La del destino primero: el desacuerdo es más preciso que el motivo global, y si lo
+      // hay, el global no aplica.
+      const causa = f.fuente === 'publicador'
+        ? (CAUSAS.get(`publicador:${f.destino}`) ?? CAUSAS.get('publicador'))
+        : CAUSAS.get(f.destino);
       if (causa) console.log(`  causa: ${causa}`);
     } else if (f.estado === 'AL_DIA') {
       console.log(`OK ${f.destino}: al dia, no hay nada que pedir${quien}`);
@@ -780,6 +857,70 @@ function selfCheck() {
   ok(publicadorSoloVigente(logSolo, new Date('2026-09-13T04:00:00Z')) === false, 'sin correr en 6 h, el publicador automatico no absuelve a nadie');
   ok(publicadorSoloVigente('', new Date('2026-09-12T22:30:00Z')) === null, 'sin log no se sabe si corre');
   ok(publicadorSoloVigente(logSolo, new Date('2026-09-12T21:55:00Z')) === true, 'la ultima corrida se lee en hora de La Paz (UTC-4), no como UTC');
+
+  // ── Los CUATRO `null` del publicador, del 2026-09-18 ────────────────────────────────────
+  // Medido a las 04:34 La Paz: el publicador contestaba `plataforma: publicaria` y `bot:
+  // publicaria`, su log no tenía corrida desde hacía 4,8 h, y este gate imprimió `NO MEDIDO`
+  // por los dos bajo el motivo «no pude preguntarle» y SIN línea de causa. Dos pedidos de
+  // deploy callados por un diagnóstico falso que además mandaba a mirar el lado equivocado.
+  ok(describirPublicadorMudo({ vigente: true }) === null, 'un publicador vigente no tiene nada que explicar');
+  const atrasado = describirPublicadorMudo({
+    vigente: false,
+    ultima: new Date('2026-09-18T03:50:00Z'),
+    ahora: new Date('2026-09-18T08:38:00Z'),
+  });
+  ok(/4\.8 h/.test(String(atrasado)), `la causa CITA hace cuanto que no corre, o no sirve para decidir: ${atrasado}`);
+  ok(/salteo su turno/.test(String(atrasado)), 'y dice QUE pasó, no solo que no se sabe');
+  ok(
+    !/no pude preguntar/.test(String(atrasado)),
+    'y sobre todo NO dice que no se pudo preguntar: le preguntamos y contesto — esa es la mentira que se esta curando',
+  );
+  ok(
+    /no dice cuando corrio/.test(String(describirPublicadorMudo({ vigente: null }))),
+    'sin fecha en el log la causa es otra, y tambien se nombra',
+  );
+  // El desacuerdo: los dos contestaron y no coinciden. Es el más confuso de los cuatro.
+  const desac = describirDesacuerdo('plataforma', 'AL_DIA');
+  ok(/plataforma/.test(String(desac)) && /AL_DIA/.test(String(desac)), `el desacuerdo nombra al destino y al veredicto ajeno: ${desac}`);
+  ok(describirDesacuerdo('plataforma', undefined) === null, 'sin veredicto ajeno no hay desacuerdo que contar');
+
+  // LA COSTURA, que es la parte que de verdad se rompió: que el lector ANOTE. Reproduce el
+  // caso vivo del 2026-09-18 — el publicador contesta perfecto y su log está atrasado.
+  const secoVivo = ['== 2026-09-18 04:34 La Paz ==', '  plataforma: publicaria (nada toca precio)', '  bot: publicaria (nada toca precio)'].join('\n');
+  const logViejo = '== 2026-09-17 23:50 La Paz ==\n  plataforma: al dia\n';
+  const vAtrasado = _veredictosDesdeSalida(`${secoVivo}\n${MARCA_LOG}\n${logViejo}`, new Date('2026-09-18T08:38:00Z'), 'zz_pub_atrasado');
+  ok(vAtrasado === null, 'un publicador atrasado no absuelve a nadie, por bien que conteste');
+  ok(
+    /no corre/.test(String(_causaParaPruebas('zz_pub_atrasado'))),
+    'y DEJA la causa: sin esto el NO MEDIDO sale mudo y se diagnostica el lado equivocado',
+  );
+  // El hermano: corrió recién y contestó algo ilegible.
+  const vIlegible = _veredictosDesdeSalida(
+    `ya hay una corrida en curso; salgo\n${MARCA_LOG}\n== 2026-09-18 04:20 La Paz ==\n  bot: al dia\n`,
+    new Date('2026-09-18T08:38:00Z'), 'zz_pub_ilegible',
+  );
+  ok(vIlegible === null, 'sin veredictos por destino no se absuelve a nadie');
+  ok(
+    /corrida en curso/.test(String(_causaParaPruebas('zz_pub_ilegible'))),
+    'y la causa CITA lo que contesto, que es lo unico que permite reproducirlo',
+  );
+  // Y el camino feliz no inventa causa.
+  const vSano = _veredictosDesdeSalida(
+    `${secoVivo}\n${MARCA_LOG}\n== 2026-09-18 04:20 La Paz ==\n  bot: al dia\n`,
+    new Date('2026-09-18T08:38:00Z'), 'zz_pub_sano',
+  );
+  ok(vSano && vSano.bot === 'SE_PUBLICA_SOLO', 'con el log fresco si se le cree al publicador');
+  ok(_causaParaPruebas('zz_pub_sano') === null, 'y no deja causa colgada: no hubo problema que explicar');
+
+  // El motivo que se imprime NO puede volver a afirmar que no se preguntó: tres de los
+  // cuatro caminos sí preguntaron. Si alguien lo revierte, este caso lo caza.
+  const noMedido = clasificarCobertura({
+    destinos: ['landing'], pedidos: [], pendiente: () => true, seAutoPublica: () => null, ahora: AHORA,
+  })[0];
+  ok(
+    !/no pude preguntarle/.test(noMedido.motivo),
+    `el motivo no puede afirmar que no se pregunto: ${noMedido.motivo}`,
+  );
 
   // El universo se deriva de la lista blanca, no se copia.
   ok(Object.keys(DESTINOS).length >= 3, 'la lista blanca tiene que traer los destinos');
