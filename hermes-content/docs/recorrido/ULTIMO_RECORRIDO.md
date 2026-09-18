@@ -12,6 +12,38 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-18 08:09-08:16 La Paz (novena vuelta del día) — dental 9/9 (rutina); superficie del día agotada, se descarta `/ayuda`
+
+Al arrancar: 0 orgs `zz-qa-` huérfanas, alta `abierta`. Corrí el recorrido completo con
+`--escribir` en dental (default): **9/9, `completo: true`**. Cuenta
+`zz-qa-2026-09-18-1209@onia.com.bo` creada → correo confirmado → onboarding (6 pantallas) →
+paciente `zz-qa-2026-09-18-1209-paciente` cargado y visto en `/patients` → cita 2026-09-21 09:00
+agendada (201, `cmu6x547a002t01rwm59cpzfi`) y vista en `/appointments` → factura con ítem visible
+en `/billing/cmu6x5fha002v01rwras04vd5` (frenada sin pagar) → panel revisado (no lista pacientes,
+esperado). 0 filas `zz-qa-` al cerrar (verificado por `SELECT`).
+
+Con el resto de la vuelta: los 6 rubros activos y prácticamente todas las superficies de escalón
+3 ya fueron re-verificadas HOY (importadora, comercio, servicios profesionales, estética,
+`/servicios/webs`, `/contacto`, `/patrones`, `/servicios` raíz, `/agentes`, `/comparativa`,
+checkout, `/precios`, recuperación de contraseña). Probé una superficie nueva: `/ayuda` — da
+**404 limpio**, con nav y footer intactos y sin ningún texto engañoso. Antes de reportarlo como
+hallazgo, crucé el código fuente (`web-factory/apps/onia-platform/src`, que SÍ está en este
+worktree) buscando quién enlaza `/ayuda`: **cero coincidencias**. No es una promesa rota, es una
+ruta que nadie ofrece — descartado, no es hallazgo.
+
+`completo: true`, `llegoHasta: 9/9`.
+
+RAZÓN: N/A — objetivo cumplido.
+LECCIÓN: con los 6 rubros y prácticamente todas las superficies de escalón 3 conocidas ya
+re-verificadas en las últimas 24h, el rendimiento de seguir "buscando una superficie nueva al
+azar" cae (probé `/ayuda`, que resultó no ser sujeto de nada). La próxima vuelta rinde más si, en
+vez de escanear más URLs sueltas, verifica una promesa CONCRETA que otro carril ya reportó rota
+hoy en producción — por ejemplo la de "chatbot incluido en el plan Completo" que `chatbot-cola`
+dejó anotada en la memoria compartida (commit `5344eae`), abriendo una cuenta `zz-qa-` real con
+ese plan y mirando `/settings` como lo vería el dueño.
+
+---
+
 ## 2026-09-18 06:09-06:22 La Paz (octava vuelta del día) — dental 9/9 (rutina) + rotación a Servicios profesionales, sana 9/9
 
 Al arrancar: 0 orgs `zz-qa-` huérfanas, alta `abierta`, `BUILD_ID` sigue en
