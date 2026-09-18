@@ -318,6 +318,45 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **~~El aviso a Sergio Urcullo no dice si la conversación somos NOSOTROS: la primera
+      demo REAL iba a llegar idéntica a las sondas~~ — CERRADO el 2026-09-18.**
+      (`hermes-content/deploy/vps-ops/bot/aviso-telegram.mjs`, gate
+      `hermes-content/deploy/vps-ops/bot/aviso-dice-si-somos-nosotros.test.mjs`, suite 1175/1175)
+
+      **Cómo apareció.** No de la cola —no le quedaban 🔴 abiertos— sino de correr
+      `npm run avisos:vivo` y leer el renglón que el gate ya imprimía y nadie había usado:
+      `de quien: leads 0 · nuestros 4`. O sea que los únicos avisos que Sergio Urcullo recibió
+      en su vida por este canal fueron por sondas y pruebas nuestras —incluido
+      `DEMO AGENDADA — anotala`, que le pide ANOTAR algo en su calendario— y ninguno lo decía.
+      Con **cero clientes pagando**, el aviso de la primera demo real es el evento más
+      importante del negocio, y venía envuelto igual que los que ya aprendió a ignorar.
+
+      **Por qué ningún gate lo vio.** `esConversacionNuestra()` (`es-nuestra.mjs`) se cableó el
+      mismo día a los CUATRO barridos del embudo (`48637b11`) porque le escriben al PROSPECTO.
+      El aviso le escribe a SERGIO, viaja por otro camino (motor → `run-turn.mjs` →
+      `chatwoot-adapter.mjs` → `webhook-server.mjs` → `aviso-telegram.mjs`) y quedó afuera: un
+      `grep` de `esNuestra` en esos cuatro archivos daba **cero**. La cura no viaja sola al
+      hermano. Y el gate que vigila el circuito (`avisos-vivo.mjs`) no podía verlo porque llama
+      a `construirAviso` con `conversationId: 4242` escrito a mano: probaba al redactor y nunca
+      al llamador real — una tautología con forma de cobertura.
+
+      **El sesgo se invierte respecto de los barridos, y por eso esto MARCA en vez de callar.**
+      En un barrido, confundir a un desconocido con nosotros deja a un prospecto real sin
+      seguimiento. Acá el error caro es el otro: marcar a un lead REAL como prueba lo vuelve
+      ignorable. Así que el aviso sale **siempre y completo**, la marca es aditiva
+      (`🧪 PRUEBA NUESTRA — no es un lead, no anotes nada`, arriba de todo para que se lea en la
+      notificación del celular sin abrirla) y `esNuestra` ausente o falso se trata como lead.
+      Falla hacia el lado barato. Viaja como **booleano y no como teléfono**: `n8n-event.mjs` se
+      arma del mismo resultado y manda analítica fuera del sistema.
+
+      **Validado por mutación, las tres:** quitar el `esNuestra` del webhook → rojo 3 y 5;
+      que el adapter se coma el dato → rojo 4; que `postdemo-run.mjs` deje de descartar las
+      nuestras → rojo 5. El universo del gate se camina del **disco** (no `git ls-files`: el
+      archivo nuevo sin commitear es justo el sujeto que caza) y son los que arman un aviso **y
+      lo mandan**, así el redactor y el medidor quedan fuera solos, sin lista a mano.
+
+      **En vuelo:** commiteado, **NO desplegado** — `/opt/onia/bot` no es un checkout de git.
+
 - [x] 🔴 **~~El prospecto que vuelve dos días después y NO elige recibía los horarios ya
       vencidos en pantalla~~ — CERRADO el 2026-09-18.**
       (`hermes-content/deploy/vps-ops/bot/bot-engine.mjs` `handleHorario`, suite 1157/1157)

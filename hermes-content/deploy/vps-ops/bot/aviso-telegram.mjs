@@ -47,6 +47,24 @@ export const AVISO_TIMEOUT_MS = 5000;
 export const AVISO_MAX_CHARS = 3500;
 
 /**
+ * La marca que separa una prueba nuestra de un lead de verdad.
+ *
+ * POR QUE MARCA Y NO CALLA (medido el 2026-09-18, `npm run avisos:vivo`): los avisos que Sergio
+ * Urcullo recibio en su vida por este canal son "leads 0 · nuestros 4". Con cero clientes
+ * pagando, el primer aviso REAL va a llegar igual que los que ya aprendio a ignorar. Pero el
+ * error caro es el otro: marcar a un lead real como prueba lo vuelve invisible, y ese lead es
+ * el negocio entero. Asi que el aviso sale SIEMPRE y completo, la marca es aditiva, y ante la
+ * duda no se marca.
+ *
+ * Es un regex a proposito: el gate lo importa en vez de tipear el texto, asi cambiar la frase
+ * no puede dejar al gate vigilando una marca que ya no existe.
+ */
+export const MARCA_PRUEBA = /PRUEBA NUESTRA/;
+
+/** El encabezado que lleva un aviso cuya conversacion somos nosotros. */
+const ENCABEZADO_PRUEBA = "🧪 <b>PRUEBA NUESTRA</b> — no es un lead, no anotes nada";
+
+/**
  * Motivos que el motor puede emitir, con la frase que le dice a Sergio QUE tiene que hacer.
  * Un motivo desconocido no se descarta: se manda igual con su nombre crudo. Un aviso que se
  * calla porque no reconoce una etiqueta es el mismo bug que este archivo viene a arreglar.
@@ -101,7 +119,7 @@ export function escaparHtml(valor) {
  * @returns {{texto:string, motivos:string[]}|null} `null` = no habia nada que avisar. Es la
  *          respuesta correcta para la enorme mayoria de los turnos: el bot contesta solo.
  */
-export function construirAviso({ notify, conversationId, stageAfter } = {}) {
+export function construirAviso({ notify, conversationId, stageAfter, esNuestra } = {}) {
   const efectos = Array.isArray(notify) ? notify.filter(Boolean) : [];
   if (efectos.length === 0) return null;
 
@@ -123,8 +141,12 @@ export function construirAviso({ notify, conversationId, stageAfter } = {}) {
   const cuerpo = lineas.join("\n\n");
   const recortado = cuerpo.length > AVISO_MAX_CHARS ? `${cuerpo.slice(0, AVISO_MAX_CHARS)}…` : cuerpo;
 
+  // La marca va ARRIBA de todo: si Sergio Urcullo lee la notificación del celular sin abrirla,
+  // lo primero que ve tiene que ser que no hay nada que hacer. `esNuestra` ausente => lead.
+  const cabecera = esNuestra === true ? `${ENCABEZADO_PRUEBA}\n` : "";
+
   return {
-    texto: `🔔 <b>Bot Onia</b> — ${ref}${etapa}\n\n${recortado}`,
+    texto: `${cabecera}🔔 <b>Bot Onia</b> — ${ref}${etapa}\n\n${recortado}`,
     motivos,
     // La conversacion viaja tambien FUERA del texto, y no es duplicar: el texto es lo que Sergio
     // lee cuando el aviso SALE, y esto es lo unico que queda cuando NO sale. El que lo manda

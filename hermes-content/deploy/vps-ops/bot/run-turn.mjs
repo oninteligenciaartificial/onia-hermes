@@ -45,6 +45,7 @@
 import { pathToFileURL } from "node:url";
 
 import { createBotConfig, DEFAULT_CONFIG, renderTemplate } from "./config.mjs";
+import { esConversacionNuestra } from "./es-nuestra.mjs";
 import { ensureKnowledge, withKnowledge } from "./knowledge.mjs";
 import { createState, step, markHumanTakeover,
   clearHumanTakeover, LLM_PENDING } from "./bot-engine.mjs";
@@ -302,6 +303,12 @@ function buildResponse({ state, stageBefore, config, replies, result, applied, s
     stageBefore,
     stageAfter: state.botStage,
     humanTookOver: state.humanTookOver,
+    // ¿Esta conversacion somos NOSOTROS? Se decide ACA porque este es el unico punto de la
+    // cadena que tiene el estado completo (`displayName`, `publicContact`), y viaja como
+    // BOOLEANO —no el telefono— porque `n8n-event.mjs` se arma de este mismo resultado y manda
+    // analitica fuera del sistema. Lo consume el aviso a Sergio Urcullo (`aviso-telegram.mjs`),
+    // que sin esto no puede distinguir una sonda de la primera demo real del negocio.
+    esNuestra: esConversacionNuestra(state),
     dryRun: Boolean(config.dryRun),
     send: replies.map((reply) => ({
       text: reply.text,
