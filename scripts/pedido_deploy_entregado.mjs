@@ -77,7 +77,7 @@ import { dirname, join } from 'node:path';
 // El criterio de «esto lo ve un lead» se IMPORTA del instrumento que ya lo tiene y que el
 // publicador de landing aplica. Reescribirlo acá sería una segunda copia del mismo juicio,
 // que es como el gate termina midiendo algo distinto de lo que el destino hace.
-import { llegaAlCliente } from '../web-factory/apps/onia-platform/scripts/deploy-vivo.mjs';
+import { baseDelBuild, llegaAlCliente } from '../web-factory/apps/onia-platform/scripts/deploy-vivo.mjs';
 // El BRAZO que ejecuta el `ok`. Se importa su decisión —pura, con guarda `import.meta.url`—
 // en vez de reimplementarla: dos derivaciones de «qué hace el ok» se contradicen el día que
 // una cambia, y este gate existe justamente para que el cuerpo y el botón digan lo mismo.
@@ -918,12 +918,35 @@ function shaVivoLanding() {
  *
  * @returns {Array<{sha:string,titulo:string,archivos:string[]}>|null} `null` si no se pudo medir.
  */
-function publicariaLanding(epochBuild) {
+export function publicariaLanding(epochBuild, { cwd = RAIZ, ref = 'origin/main' } = {}) {
   if (typeof epochBuild !== 'number') return null;
+
+  // ⚠️ Acá el conjunto se acotaba con `.filter((c) => c.ct > epochBuild)` —«lo posterior al
+  // build»— y eso perdía el sujeto EN VERDE y para siempre. Un commit de rama de carril tiene
+  // fecha ANTERIOR al merge que lo trae, así que el filtro lo descartaba por viejo y
+  // `--no-merges` descartaba al merge que lo hacía visible. Medido el 2026-09-18 con el pedido
+  // `t_afd816af` vivo: esta función devolvía VACÍO mientras el publicador en seco decía «hay que
+  // publicar: 1 arreglo(s)», y con la lista vacía `promesaCompleta` y `cuerpoCorto` salen los dos
+  // NO_MEDIDO — que no se pone rojo nunca. O sea el control que impide que Sergio Urcullo apruebe
+  // código que el pedido no le nombró quedaba apagado, en silencio.
+  //
+  // La pregunta correcta no es «¿qué hay más nuevo que el build?» sino «¿qué tiene `main` que el
+  // build no contiene?»: ANCESTRÍA, no tiempo. La fecha sigue siendo el único proxy disponible
+  // —la landing no deja escrito el sha que publicó— pero se usa UNA vez, para elegir el punto de
+  // `--first-parent` por el que el build pasó, y de ahí manda el grafo.
+  //
+  // `baseDelBuild` se IMPORTA de `deploy-vivo.mjs`, que es donde esta misma cura se escribió el
+  // 2026-09-17: son el mismo invariante sobre el mismo destino, y dos copias divergen — de hecho
+  // esta función es la mitad a la que la cura no había viajado.
+  const base = baseDelBuild(epochBuild * 1000, { cwd, ref });
+  if (base === null) return null;
+
   const RS = '\x1e';
   const salida = sh('git', [
-    '-C', RAIZ, 'log', '--no-merges', '--name-only',
-    `--format=${RS}%h%x1f%ct%x1f%s`, 'origin/main', '--', ZONA_LANDING,
+    '-C', cwd, 'log', '--no-merges', '--name-only',
+    `--format=${RS}%h%x1f%ct%x1f%s`,
+    base.sha ? `${base.sha}..${ref}` : ref,
+    '--', ZONA_LANDING,
   ]);
   if (salida === null) return null;
   return salida
@@ -933,11 +956,7 @@ function publicariaLanding(epochBuild) {
       const [cabecera, ...archivos] = bloque.split('\n');
       const [sha, ct, ...resto] = cabecera.split('\x1f');
       return { sha, ct: Number(ct), titulo: resto.join('\x1f'), archivos: archivos.filter(Boolean) };
-    })
-    // Posteriores al build: los mismos que `deploy-vivo.mjs` llama «varados». Sin ventana de
-    // gracia acá a propósito — la de `publicadoPorFecha` existe para no CERRAR un pedido vivo;
-    // acá el error barato es pedir que se nombre uno de más.
-    .filter((c) => Number.isFinite(c.ct) && c.ct > epochBuild);
+    });
 }
 
 /** Fecha de un commit de `onia-hermes` en epoch, o `null` si el sha no resuelve. */
