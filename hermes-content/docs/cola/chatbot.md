@@ -318,6 +318,64 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [ ] 🔴 **El bot de venta de Onia promete un horario que Sergio Urcullo NO atiende** — dato
+      del panel, no código, y por eso ningún gate de repo lo puede arreglar solo.
+      `npm run horario:vivo` (rojo, medido el 2026-09-18 18:4x La Paz): de los 2 documentos que
+      sirve producción, la **fila del panel de la org interna** pisa `businessHours` y dice
+      *«Lunes a viernes de 9:00 a 19:00, sábados de 9 a 13»* con `hasta: 19`, mientras la fuente
+      —`VENTANAS_ATENCION` en
+      `hermes-content/deploy/vps-ops/bot/ventanas-de-atencion.mjs`, citada textual de Sergio
+      Urcullo el 2026-09-02 y repetida en la memoria del sistema— es **lun-vie 14:00-17:00 y 20:00-22:00,
+      sáb 9:00-15:00**. O sea: un lead que escribe un martes a las 10:00 lee que le contestan y
+      Sergio recién empieza a las 14:00, y el sábado se le promete hasta las 13:00 cuando atiende
+      hasta las 15:00. **Es preexistente y ajeno al arreglo del motor de abajo**: `horario-vivo.mjs`
+      lee el documento CRUDO servido (línea 104), no pasa por `applyKnowledge`.
+      **Qué falta, y por qué no lo cierro yo:** la cura es editar la fila de `chatbot_knowledge`
+      de la org interna (o `knowledge.onia.json` + `webhook-server.sh knowledge`), o sea escribir
+      un dato de disponibilidad en producción. Cuál de los dos horarios es el vigente HOY lo dice
+      Sergio Urcullo, no la sesión: si cambió su disponibilidad, la que hay que corregir es la
+      fuente y no la fila.
+
+- [x] 🔴 **~~El bot del cliente decidía con el horario del cliente y DECÍA el de Onia~~ —
+      CERRADO el 2026-09-18** (motor: `applyKnowledge` en
+      `hermes-content/deploy/vps-ops/bot/knowledge.mjs`; **commiteado, NO desplegado**).
+      Es la mitad hermana del ítem de abajo, que cerró la herencia de **un extremo** del rango y
+      dejó viva la de la **frase**. En `/settings/chatbot` los días y las horas son campos
+      estructurados y la frase es un texto libre **opcional**
+      (`onia-platform/app/(dashboard)/settings/chatbot/ChatbotClient.tsx:317`:
+      `if (form.frase.trim()) horario.frase = …`), así que el camino normal —llenar los campos y
+      dejar el texto vacío— publicaba un documento sin frase y `businessHours.frase` se heredaba
+      del base, que son **los horarios de Sergio Urcullo**. Y esa frase es la que el bot
+      **pronuncia**: `{{horario_frase}}` viaja a `R_HORARIO` («Atendemos …»), a la coletilla `M7`
+      de fuera de horario y a los **cuatro** acuses de handoff (`config.mjs` 343/353/363/373/383/482).
+      Medido con el motor, no supuesto: `dias:[1..5], desde:8, hasta:20` sin frase daba
+      `startHour 8` (decide bien) y `frase: "lun-vie 14:00-17:00 y 20:00-22:00, sáb 9:00-15:00"`
+      (dice el horario de Onia) — y encima le promete sábado a un negocio cerrado el sábado.
+
+      **La mitad hermana, que el comentario del propio archivo ya declaraba cubierta y no lo
+      estaba:** la guarda que pone `franjas = null` miraba `dias`/`desde`/`hasta` y **no** `frase`,
+      así que declarar sólo la frase dejaba vivas las franjas de Sergio Urcullo, que deciden POR
+      ENCIMA del rango. El comentario decía textual que heredarlas *«le cerraría el negocio al
+      cliente a las 17:00 y se lo abriría a las 20:00»* — cierto, y la condición no lo evitaba.
+
+      **La cura no tipea nada:** la frase se **deriva** de lo que el bot va a hacer
+      (`fraseDeAtencion`, la misma función que arma la de Onia), así que mover el rango cambia la
+      promesa sola. Sigue mandando la del dueño si la escribe.
+
+      **Prueba.** Dos casos escritos primero y **en rojo por el motivo correcto** — el primero
+      falló con `expected` y `actual` idénticos (`'lun-vie 14:00-17:00 y 20:00-22:00, sáb
+      9:00-15:00'`), que es literalmente el bug: la frase «del cliente» era la de Onia. Validados
+      **por mutación en las dos direcciones**, cada una cazada por su caso y sólo por el suyo:
+      revertir la derivación de la frase deja rojo el 24; revertir la guarda de `franjas` deja
+      rojo el 25. `npm run test:bot` **1178/1178**, `npm run test:horario-instrumento` 29/29,
+      simulador 3/3.
+      **El espejo de `onia-platform` (`lib/chatbot/knowledge.ts`) NO necesita cambio**: es sólo el
+      validador, no tiene `applyKnowledge` (verificado con grep, no supuesto).
+      <sub>El fixture que lo escondía: el test hermano
+      («horario: cambia el texto del guion Y la ventana real») **siempre** pasaba `frase`
+      explícita, así que nunca ejercitaba la herencia — un fixture apoyado en el defecto que el
+      test dice cubrir.</sub>
+
 - [x] 🔴 **~~El formulario del chatbot deja tipear un horario al revés y el validador lo
       acepta~~ — CERRADO el 2026-09-18** (motor: `checkHorario` en
       `hermes-content/deploy/vps-ops/bot/knowledge.mjs`; espejo: `onia-platform`

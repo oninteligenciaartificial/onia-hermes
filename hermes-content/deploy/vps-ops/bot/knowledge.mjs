@@ -35,6 +35,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 import { DEFAULT_CONFIG, createBotConfig, demoDuration } from "./config.mjs";
 import { checkGuardrails, guardrailReason, normalize } from "./guardrails.mjs";
 import { MIN_LEXICON_WORD } from "./intents.mjs";
+import { fraseDeAtencion } from "./ventanas-de-atencion.mjs";
 
 /** Version del esquema. Un archivo con otra cadena se rechaza entero (no se "migra" solo). */
 export const KNOWLEDGE_SCHEMA = "onia.bot.knowledge/1";
@@ -1282,6 +1283,17 @@ export function faqVigente(item, nowIso) {
 }
 
 /**
+ * El horario de un cliente es UN tramo por dia (`dias` + `desde` + `hasta`); `fraseDeAtencion`
+ * habla el mapa `dia -> franjas`. Traducir aca —y no tipear la frase— es lo que hace que el texto
+ * y la decision no puedan separarse: los dos salen del mismo `businessHours`.
+ */
+function horarioComoVentanas({ days, startHour, endHour }) {
+  const ventanas = {};
+  for (const dia of days) ventanas[dia] = [[startHour, endHour]];
+  return ventanas;
+}
+
+/**
  * config + hechos = config. Puro: no lee archivos ni cachea.
  * Sin datos devuelve EL MISMO objeto (identidad), que es como degrada todo el modulo.
  */
@@ -1302,13 +1314,19 @@ export function applyKnowledge(base = DEFAULT_CONFIG, data = null, options = {})
     // `null` y no `delete`: `createBotConfig` fusiona con `{ ...base[key], ...value }`, asi que
     // una clave BORRADA del override vuelve a aparecer desde la base. La ausencia no se puede
     // expresar quitando: hay que escribirla.
-    if (Number.isInteger(horario.desde) || Number.isInteger(horario.hasta) || Array.isArray(horario.dias)) {
-      businessHours.franjas = null;
-    }
+    // La guarda mira TODO el objeto y no solo el rango: quien declara su horario aunque sea con
+    // una `frase` suelta tampoco puede quedarse con las franjas de Sergio Urcullo, que deciden
+    // POR ENCIMA del rango y le cierran el negocio de 17 a 20.
+    businessHours.franjas = null;
     if (Array.isArray(horario.dias)) businessHours.days = [...horario.dias];
     if (Number.isInteger(horario.desde)) businessHours.startHour = horario.desde;
     if (Number.isInteger(horario.hasta)) businessHours.endHour = horario.hasta;
-    if (horario.frase) businessHours.frase = horario.frase;
+    // La frase es lo que el bot PRONUNCIA ({{horario_frase}} -> R_HORARIO, la coletilla M7 y los
+    // cuatro acuses de handoff), y en el panel es un texto libre OPCIONAL al lado de los campos
+    // estructurados. Heredarla dejaba al bot del cliente decidiendo con el rango del cliente y
+    // diciendo el horario de ONIA. Se DERIVA de lo que el bot va a hacer, con la misma funcion
+    // que arma la de Onia, asi que mover el rango cambia la promesa sola.
+    businessHours.frase = horario.frase || fraseDeAtencion({ ...horarioComoVentanas(businessHours) });
     overrides.businessHours = businessHours;
   }
 

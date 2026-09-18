@@ -448,6 +448,51 @@ test("horario: cambia el texto del guion Y la ventana real, desde el mismo dato"
   assert.match(result.replies[0].text, /lun-sáb, 8:00-20:00/, "el guion dice lo que la config hace");
 });
 
+// El test de arriba SIEMPRE pasa `frase`, asi que nunca ejercita el caso en que el dueno NO la
+// escribe — y es el camino normal: en `/settings/chatbot` los dias y las horas son campos
+// estructurados y la frase es un texto libre opcional (`ChatbotClient.tsx`: `if (form.frase.trim())`).
+// Sin frase propia, `businessHours.frase` se heredaba del base, que son los horarios de ONIA, y esa
+// frase es la que el bot PRONUNCIA: viaja a `{{horario_frase}}`, o sea a `R_HORARIO` ("Atendemos
+// ..."), a la coletilla `M7` de fuera de horario y a los cuatro acuses de handoff. El bot del
+// cliente DECIDIA con el rango del cliente y DECIA el horario de Sergio Urcullo.
+test("el horario que el bot DICE sale del que declaro el dueno, no del de Onia", () => {
+  const sinFrase = valido({ empresa: { horario: { dias: [1, 2, 3, 4, 5], desde: 8, hasta: 20 } } });
+  const config = applyKnowledge(DEFAULT_CONFIG, sinFrase);
+
+  assert.equal(config.businessHours.startHour, 8, "decide con el rango del dueno");
+  assert.notEqual(
+    config.businessHours.frase,
+    DEFAULT_CONFIG.businessHours.frase,
+    "la frase de Onia no puede quedar como la del cliente",
+  );
+
+  // Mismo disparador que el test de arriba: el acuse del handoff es el camino ya probado hasta
+  // `{{horario_frase}}`. Preguntar "a que hora atienden" en el PRIMER turno cae en la bienvenida
+  // y mediria el camino de contingencia, no la plantilla.
+  const dicho = step(
+    createState({ channel: "sim", contactRef: "t" }),
+    { text: "quiero hablar con una persona", receivedAt: T0 },
+    { config },
+  )
+    .replies.map((reply) => reply.text)
+    .join("\n");
+
+  assert.doesNotMatch(dicho, /14:00-17:00|20:00-22:00/, "no puede decir las franjas de Sergio Urcullo");
+  assert.match(dicho, /8:00-20:00/, "dice el horario que el dueno declaro");
+});
+
+// La mitad hermana: declarar SOLO la frase dejaba vivas las `franjas` del base — las de Sergio
+// Urcullo (lun-vie 14-17 y 20-22) —, que deciden POR ENCIMA del rango. El comentario de
+// `applyKnowledge` ya decia que heredarlas "le cerraria el negocio al cliente a las 17:00 y se lo
+// abriria a las 20:00"; su guarda miraba `dias`/`desde`/`hasta` y no `frase`.
+test("quien declara su horario no se queda con las franjas de Onia, ni declarando solo la frase", () => {
+  const config = applyKnowledge(
+    DEFAULT_CONFIG,
+    valido({ empresa: { horario: { frase: "todos los dias, 8:00 a 20:00" } } }),
+  );
+  assert.equal(config.businessHours.franjas, null, "las franjas de Sergio Urcullo no deciden en el bot de un cliente");
+});
+
 test("identidad: el nombre del humano y del producto salen del archivo", () => {
   const config = applyKnowledge(DEFAULT_CONFIG, valido({ identity: { humanName: "Leslie", productName: "Onia" } }));
   const result = step(createState({ channel: "sim", contactRef: "t" }), { text: "cuanto sale?", receivedAt: T0 }, { config });
