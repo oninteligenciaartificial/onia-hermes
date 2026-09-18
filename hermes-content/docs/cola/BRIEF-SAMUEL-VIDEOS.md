@@ -86,11 +86,30 @@ Sergio levantó la regla del 11-sep («podemos higgsfield»). Condiciones que S�
 
 ---
 
-## Qué preparo yo (este carril) si Sergio da el ok
+## ✅ YA GRABADO — clips listos en `E:\ONIA-YouTube\grabaciones\samuel\`
 
-1. **Org demo de Onia Platform con datos de utilería** (citas, clientes, stock falsos)
-   lista para grabar los videos 1-2 sin exponer a nadie.
-2. **Los dos flujos n8n de demo** montados y andando para que Samuel solo grabe.
-3. **Capturas estáticas** de cada shot list como storyboard (con `onia-mirar.js`).
-La grabación de pantalla en video la hace Samuel (u OBS en la sesión de edición) —
-sobre los entornos ya preparados.
+Sergio pidió el 17-sep grabarlo todo por script, sin mano humana. Hecho con Playwright
+(`scripts/marca-personal/grabar_pantalla.py`): 1440×900, cursor visible, H.264.
+
+| Clip | Dura | Qué muestra | Para el video |
+|---|---|---|---|
+| `onia-1-registro.mp4` | 39 s | elegir rubro → crear cuenta | A (intro) |
+| `onia-3-onboarding.mp4` | 97 s | onboarding completo: datos, horarios, catálogo, equipo → «Tienda La Esquina ya está en Onia» | **A (el núcleo)** |
+| `onia-4-producto-y-venta.mp4` | 93 s | alta de producto con stock → Caja → **venta cobrada** con recibo y total del día | **A (el cierre)** |
+| `onia-5-panel-y-asistente.mp4` | 61 s | el panel con la venta reflejada + el asistente respondiendo en pasos | **B** |
+| `onia-2-login-panel.mp4` | 26 s | login → panel | relleno |
+| `llamadas-B-agendar.mp4` | 31 s | web → Cal → día/hora → formulario (SIN confirmar) | **7 · llamadas B** |
+| `web-claude-code.mp4` · `web-stack.mp4` | 20 s · 15 s | scroll editorial de las guías | 3 · skills |
+
+Credenciales de la org demo: `CREDENCIALES-DEMO.txt` en esa misma carpeta (fuera del repo).
+Todo con datos de utilería: ningún dato de cliente real aparece en cámara.
+
+🔴 **Tres hallazgos de producto salieron del rodaje** (el recorrido real se trabó dos
+veces): [`HALLAZGOS-RODAJE-ONIA-18-SEP.md`](HALLAZGOS-RODAJE-ONIA-18-SEP.md).
+
+## Pendiente de grabar (siguiente tanda)
+
+1. **n8n** — los 2 flujos (necesita sesión de la UI del VPS).
+2. **Terminal de Claude Code** — otro stack (captura de escritorio, no navegador).
+3. **Skills CON/SIN** — comparativa lado a lado.
+4. **Higgsfield / avatar** — plataforma externa con sesión propia.
