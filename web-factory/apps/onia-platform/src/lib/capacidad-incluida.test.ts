@@ -68,6 +68,16 @@ const COMO_SE_DICE: Record<CapacidadIncluida, RegExp> = {
   agentes: /\bagentes?\b|\bRecall\b|\bCobrador\b/i,
   reservas: /reservas?\s+online|link\s+p[úu]blico|agenda\s+p[úu]blica/i,
   chatbot: /\bchatbot\b|\brecepcionista\b/i,
+  /**
+   * El cuarto booleano, 2026-09-18 — el caso que esta bitácora anunció ("cuando el catálogo gane
+   * el cuarto booleano, el sujeto aparece solo") y que efectivamente apareció solo: agregar
+   * `coadministradores` a `CAPACIDADES_INCLUIDAS` no compiló hasta declararlo acá.
+   *
+   * Se nombra ancho a propósito —cualquier mención de un administrador—, no sólo la frase de hoy:
+   * lo que se prohíbe es tipear el plan junto a la afirmación, y una redacción nueva ("tu socio
+   * entra como administrador desde Completo") tiene que caer adentro igual.
+   */
+  coadministradores: /\badministrador(?:es|a)?\b|\bcoadmin/i,
 };
 
 /**
@@ -495,11 +505,15 @@ describe("«se suma a cualquier plan»: el universal que la inclusión por plan 
   it("si ningún plan trae la capacidad adentro, el universal es cierto y el gate se apaga solo", () => {
     // El modo de falla de esta familia: un gate que sigue rojo cuando la respuesta correcta pasó
     // a ser la frase que prohíbe. La condición sale del catálogo, no de una fecha.
+    // Los campos se APAGAN derivados del mapa, no tipeados uno por uno: con los tres escritos a
+    // mano, el cuarto booleano (`coadministradores`, 2026-09-18) dejó este fixture representando
+    // un escenario que ya no era "ningún plan la trae" — y el caso se puso rojo con el gate sano.
+    // Un fixture con su propia lista de la misma cosa que el producto enumera envejece con él.
     const sinInclusion = PLANES.map((p) => ({
       ...p,
-      chatbotIncluido: false,
-      agentesIncluidos: false,
-      reservasIncluidas: false,
+      ...Object.fromEntries(
+        Object.values(CAPACIDADES_INCLUIDAS).map((campo) => [campo, false]),
+      ),
     }));
     expect(hayInclusionPorPlan(sinInclusion)).toBe(false);
     expect(hayInclusionPorPlan()).toBe(true);

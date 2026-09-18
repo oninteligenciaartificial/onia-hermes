@@ -497,7 +497,21 @@ describe("el veredicto", () => {
  * (los 8 números vivos saldrían como huecos).
  */
 describe("ningún tope que el sitio publica queda fuera del cruce", () => {
-  const real = readFileSync(PRECIOS_SITIO, "utf8");
+  /**
+   * Entra por `leerDelSitio` y NO por `readFileSync` — que es como estaba, y es el agujero que
+   * la bitácora de más arriba describe con estas palabras: «un self-check puro pasaría igual el
+   * día que alguien vuelva a leer con `readFileSync` directo, que es como nació este agujero».
+   * Estaba vivo en el mismo archivo que lo advierte.
+   *
+   * Lo destapó el primer sujeto que le cayó encima (2026-09-18): un comentario dentro del
+   * `incluye` del plan Full —explicando por qué esa línea va tercera y no quinta, porque la home
+   * renderiza `incluye.slice(0, 4)`— hizo que este caso reportara «0» y «4» como cifras
+   * publicadas sin cruzar. El script NO las ve (lee con `leerDelSitio`, que limpia comentarios):
+   * o sea el gate acusaba al sitio por algo que en producción no pasa, y el remedio que imprime
+   * —«cruzala o excusala»— mandaba a documentar en `TOPES_SIN_CRUCE` un tope inexistente. Un
+   * gate que mide una fuente distinta de la que mide el producto no es estricto, es otro gate.
+   */
+  const real = leerDelSitio(PRECIOS_SITIO)!;
 
   /**
    * Ancla ESTRUCTURAL (el `incluye: [` del primer plan), no una frase. Las dos
