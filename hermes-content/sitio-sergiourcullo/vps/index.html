@@ -283,6 +283,37 @@ up 3 weeks, 3 days              <span class="c">Bs 220 al mes. Nunca se apaga.</
     </ol>
     <p>Lo que <strong>no</strong> está: modelos de IA corriendo en la máquina. Los probé y es
     el error 1. Para eso pago una API.</p>
+
+    <p class="rotulo">Ejemplos de lo que podés instalar</p>
+    <p>Todo esto es gratis y de código abierto, y se instala con un clic desde el panel.
+    Agrupado por lo que resuelve, no por lo técnico. La última columna dice si corre en el mío.</p>
+    <div class="tabla-scroll">
+    <table class="calculo">
+      <thead><tr><th>Para…</th><th>Herramienta</th><th>Qué hace</th><th>¿En el mío?</th></tr></thead>
+      <tbody>
+        <tr><td>automatizar</td><td><strong>n8n</strong></td><td>flujos que hacen solos el trabajo repetido: avisos, seguimientos, pasar datos de un lado a otro</td><td><span class="destaca">sí</span></td></tr>
+        <tr><td>atender</td><td><strong>Chatwoot</strong></td><td>bandeja de WhatsApp, Instagram y web en un solo lugar, con bot y con personas</td><td><span class="destaca">sí</span></td></tr>
+        <tr><td>atender</td><td><strong>Typebot</strong></td><td>armar un bot de preguntas y respuestas arrastrando bloques, sin programar</td><td>no</td></tr>
+        <tr><td>guardar datos</td><td><strong>Supabase</strong></td><td>base de datos y login para tu propio sistema, sin pagar la versión en la nube</td><td><span class="destaca">sí</span></td></tr>
+        <tr><td>guardar archivos</td><td><strong>Nextcloud</strong></td><td>tu propio Drive: archivos, fotos y carpetas compartidas en tu máquina</td><td>no</td></tr>
+        <tr><td>publicar</td><td><strong>WordPress</strong></td><td>la web o el blog de siempre, pero en un servidor tuyo y sin límite de plugins</td><td>no</td></tr>
+        <tr><td>publicar</td><td><strong>Ghost</strong></td><td>blog y newsletter con suscriptores, más liviano que WordPress</td><td>no</td></tr>
+        <tr><td>redes</td><td><strong>Postiz</strong></td><td>programar publicaciones en varias redes desde un solo lugar</td><td><span class="destaca">sí</span></td></tr>
+        <tr><td>medir</td><td><strong>Umami</strong></td><td>cuánta gente entra a tu web y de dónde, sin cookies ni Google</td><td>no</td></tr>
+        <tr><td>vigilar</td><td><strong>Uptime Kuma</strong></td><td>te avisa por WhatsApp o Telegram cuando algo tuyo se cae</td><td>no</td></tr>
+        <tr><td>contraseñas</td><td><strong>Vaultwarden</strong></td><td>gestor de contraseñas para vos y tu equipo, en tu máquina</td><td>no</td></tr>
+        <tr><td>correo</td><td><strong>Postfix</strong></td><td>mandar los avisos y correos desde tu propio dominio</td><td><span class="destaca">sí</span></td></tr>
+        <tr><td>IA</td><td><strong>LiteLLM</strong></td><td>una sola puerta a varias APIs de IA, con límite de gasto y registro de cada llamada</td><td><span class="destaca">sí</span></td></tr>
+        <tr><td>IA</td><td><strong>Ollama</strong></td><td>modelos de IA corriendo en la máquina. <em>No</em> en un VPS sin GPU: error 1</td><td>lo saqué</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="nota"><strong>La regla para decidir.</strong> Si viene como imagen de Docker,
+    corre con menos de 1 GB de memoria y le pega gente desde afuera (clientes, webhooks, tu
+    web), va en el VPS. Si pide GPU o va a estar al 100 % de CPU todo el día, no va: eso es
+    una API pagada o una máquina aparte. Y si sólo lo usás vos y no necesita dirección pública,
+    va en el <a href="/homelab">servidor de casa</a>, que es gratis.</div>
   </div>
 </article>
 
