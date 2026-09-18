@@ -1,0 +1,671 @@
+{
+ "ok": true,
+ "segments": [],
+ "words": [
+  {
+   "start": 0.05,
+   "end": 0.2,
+   "word": " Le"
+  },
+  {
+   "start": 0.2,
+   "end": 0.32,
+   "word": " pido"
+  },
+  {
+   "start": 0.32,
+   "end": 0.58,
+   "word": " cosas"
+  },
+  {
+   "start": 0.58,
+   "end": 0.78,
+   "word": " a"
+  },
+  {
+   "start": 0.78,
+   "end": 0.86,
+   "word": " mi"
+  },
+  {
+   "start": 0.86,
+   "end": 1.5,
+   "word": " computadora"
+  },
+  {
+   "start": 1.5,
+   "end": 1.82,
+   "word": " y"
+  },
+  {
+   "start": 1.82,
+   "end": 1.94,
+   "word": " lo"
+  },
+  {
+   "start": 1.94,
+   "end": 2.12,
+   "word": " hace"
+  },
+  {
+   "start": 2.12,
+   "end": 2.34,
+   "word": " por"
+  },
+  {
+   "start": 2.34,
+   "end": 2.5,
+   "word": " mí,"
+  },
+  {
+   "start": 2.63,
+   "end": 2.78,
+   "word": " así"
+  },
+  {
+   "start": 2.78,
+   "end": 3.2,
+   "word": " funciona"
+  },
+  {
+   "start": 3.2,
+   "end": 3.4,
+   "word": " por"
+  },
+  {
+   "start": 3.4,
+   "end": 3.66,
+   "word": " dentro."
+  },
+  {
+   "start": 3.75,
+   "end": 3.99,
+   "word": " Esto"
+  },
+  {
+   "start": 3.99,
+   "end": 4.29,
+   "word": " es,"
+  },
+  {
+   "start": 4.55,
+   "end": 4.85,
+   "word": " Claude"
+  },
+  {
+   "start": 4.85,
+   "end": 5.09,
+   "word": " Code."
+  },
+  {
+   "start": 5.18,
+   "end": 5.33,
+   "word": " Le"
+  },
+  {
+   "start": 5.33,
+   "end": 5.45,
+   "word": " digo"
+  },
+  {
+   "start": 5.45,
+   "end": 5.63,
+   "word": " por"
+  },
+  {
+   "start": 5.63,
+   "end": 5.95,
+   "word": " ejemplo,"
+  },
+  {
+   "start": 6.05,
+   "end": 6.41,
+   "word": " agregar"
+  },
+  {
+   "start": 6.41,
+   "end": 6.59,
+   "word": " los"
+  },
+  {
+   "start": 6.59,
+   "end": 6.75,
+   "word": " nuevos"
+  },
+  {
+   "start": 6.75,
+   "end": 7.13,
+   "word": " horarios"
+  },
+  {
+   "start": 7.13,
+   "end": 7.29,
+   "word": " a"
+  },
+  {
+   "start": 7.29,
+   "end": 7.37,
+   "word": " mi"
+  },
+  {
+   "start": 7.37,
+   "end": 7.59,
+   "word": " página"
+  },
+  {
+   "start": 7.59,
+   "end": 7.99,
+   "word": " web"
+  },
+  {
+   "start": 7.99,
+   "end": 8.18,
+   "word": " y"
+  },
+  {
+   "start": 8.18,
+   "end": 8.4,
+   "word": " antes"
+  },
+  {
+   "start": 8.4,
+   "end": 8.68,
+   "word": " de"
+  },
+  {
+   "start": 8.68,
+   "end": 9.02,
+   "word": " escribir"
+  },
+  {
+   "start": 9.02,
+   "end": 9.36,
+   "word": " cualquier"
+  },
+  {
+   "start": 9.36,
+   "end": 10.16,
+   "word": " línea"
+  },
+  {
+   "start": 10.16,
+   "end": 10.42,
+   "word": " de"
+  },
+  {
+   "start": 10.42,
+   "end": 10.64,
+   "word": " código,"
+  },
+  {
+   "start": 10.74,
+   "end": 10.9,
+   "word": " primero"
+  },
+  {
+   "start": 10.9,
+   "end": 11.44,
+   "word": " lee"
+  },
+  {
+   "start": 11.44,
+   "end": 11.62,
+   "word": " mis"
+  },
+  {
+   "start": 11.62,
+   "end": 12.04,
+   "word": " archivos"
+  },
+  {
+   "start": 12.04,
+   "end": 12.3,
+   "word": " y"
+  },
+  {
+   "start": 12.3,
+   "end": 12.74,
+   "word": " recién"
+  },
+  {
+   "start": 12.74,
+   "end": 13.18,
+   "word": " realiza"
+  },
+  {
+   "start": 13.18,
+   "end": 13.58,
+   "word": " acciones."
+  },
+  {
+   "start": 13.83,
+   "end": 13.98,
+   "word": " Después"
+  },
+  {
+   "start": 13.98,
+   "end": 14.42,
+   "word": " me"
+  },
+  {
+   "start": 14.42,
+   "end": 14.64,
+   "word": " muestra"
+  },
+  {
+   "start": 14.64,
+   "end": 14.76,
+   "word": " el"
+  },
+  {
+   "start": 14.76,
+   "end": 14.98,
+   "word": " cambio"
+  },
+  {
+   "start": 14.98,
+   "end": 15.58,
+   "word": " línea"
+  },
+  {
+   "start": 15.58,
+   "end": 15.88,
+   "word": " por"
+  },
+  {
+   "start": 15.88,
+   "end": 16.2,
+   "word": " línea,"
+  },
+  {
+   "start": 16.41,
+   "end": 16.56,
+   "word": " verde"
+  },
+  {
+   "start": 16.56,
+   "end": 17.0,
+   "word": " lo"
+  },
+  {
+   "start": 17.0,
+   "end": 17.16,
+   "word": " que"
+  },
+  {
+   "start": 17.16,
+   "end": 17.5,
+   "word": " entró,"
+  },
+  {
+   "start": 17.66,
+   "end": 17.96,
+   "word": " rojo"
+  },
+  {
+   "start": 17.96,
+   "end": 18.24,
+   "word": " lo"
+  },
+  {
+   "start": 18.24,
+   "end": 18.36,
+   "word": " que"
+  },
+  {
+   "start": 18.36,
+   "end": 18.7,
+   "word": " salió."
+  },
+  {
+   "start": 18.76,
+   "end": 18.9,
+   "word": " Y"
+  },
+  {
+   "start": 18.9,
+   "end": 19.0,
+   "word": " aquí"
+  },
+  {
+   "start": 19.0,
+   "end": 19.26,
+   "word": " está"
+  },
+  {
+   "start": 19.26,
+   "end": 19.56,
+   "word": " la"
+  },
+  {
+   "start": 19.56,
+   "end": 19.78,
+   "word": " parte"
+  },
+  {
+   "start": 19.78,
+   "end": 19.96,
+   "word": " que"
+  },
+  {
+   "start": 19.96,
+   "end": 20.16,
+   "word": " nadie"
+  },
+  {
+   "start": 20.16,
+   "end": 20.36,
+   "word": " te"
+  },
+  {
+   "start": 20.36,
+   "end": 20.6,
+   "word": " cuenta."
+  },
+  {
+   "start": 20.6,
+   "end": 20.83,
+   "word": " Él"
+  },
+  {
+   "start": 20.83,
+   "end": 20.99,
+   "word": " no"
+  },
+  {
+   "start": 20.99,
+   "end": 21.15,
+   "word": " toca"
+  },
+  {
+   "start": 21.15,
+   "end": 21.45,
+   "word": " nada"
+  },
+  {
+   "start": 21.45,
+   "end": 21.71,
+   "word": " sin"
+  },
+  {
+   "start": 21.71,
+   "end": 21.95,
+   "word": " que"
+  },
+  {
+   "start": 21.95,
+   "end": 22.21,
+   "word": " yo"
+  },
+  {
+   "start": 22.21,
+   "end": 22.51,
+   "word": " lo"
+  },
+  {
+   "start": 22.51,
+   "end": 22.87,
+   "word": " pruebe."
+  },
+  {
+   "start": 22.92,
+   "end": 23.07,
+   "word": " Cada"
+  },
+  {
+   "start": 23.07,
+   "end": 23.43,
+   "word": " cambio"
+  },
+  {
+   "start": 23.43,
+   "end": 23.89,
+   "word": " pasa"
+  },
+  {
+   "start": 23.89,
+   "end": 24.15,
+   "word": " por"
+  },
+  {
+   "start": 24.15,
+   "end": 24.31,
+   "word": " mi"
+  },
+  {
+   "start": 24.31,
+   "end": 24.99,
+   "word": " aprobación."
+  },
+  {
+   "start": 25.15,
+   "end": 25.21,
+   "word": " La"
+  },
+  {
+   "start": 25.21,
+   "end": 25.65,
+   "word": " inteligencia"
+  },
+  {
+   "start": 25.65,
+   "end": 26.05,
+   "word": " artificial"
+  },
+  {
+   "start": 26.05,
+   "end": 26.69,
+   "word": " propone,"
+  },
+  {
+   "start": 26.85,
+   "end": 27.05,
+   "word": " pero"
+  },
+  {
+   "start": 27.05,
+   "end": 27.29,
+   "word": " el"
+  },
+  {
+   "start": 27.29,
+   "end": 27.41,
+   "word": " que"
+  },
+  {
+   "start": 27.41,
+   "end": 27.71,
+   "word": " sigue"
+  },
+  {
+   "start": 27.91,
+   "end": 28.06,
+   "word": " teniendo"
+  },
+  {
+   "start": 28.06,
+   "end": 28.16,
+   "word": " el"
+  },
+  {
+   "start": 28.16,
+   "end": 28.52,
+   "word": " control"
+  },
+  {
+   "start": 28.52,
+   "end": 28.84,
+   "word": " de"
+  },
+  {
+   "start": 28.84,
+   "end": 28.94,
+   "word": " las"
+  },
+  {
+   "start": 28.94,
+   "end": 29.2,
+   "word": " toma"
+  },
+  {
+   "start": 29.2,
+   "end": 29.3,
+   "word": " de"
+  },
+  {
+   "start": 29.3,
+   "end": 29.88,
+   "word": " decisiones"
+  },
+  {
+   "start": 29.88,
+   "end": 30.1,
+   "word": " soy"
+  },
+  {
+   "start": 30.1,
+   "end": 30.3,
+   "word": " yo."
+  },
+  {
+   "start": 30.36,
+   "end": 30.51,
+   "word": " Hoy"
+  },
+  {
+   "start": 30.51,
+   "end": 30.81,
+   "word": " día"
+  },
+  {
+   "start": 30.81,
+   "end": 31.15,
+   "word": " te"
+  },
+  {
+   "start": 31.15,
+   "end": 31.39,
+   "word": " subí"
+  },
+  {
+   "start": 31.39,
+   "end": 31.51,
+   "word": " un"
+  },
+  {
+   "start": 31.51,
+   "end": 31.71,
+   "word": " video"
+  },
+  {
+   "start": 31.71,
+   "end": 31.87,
+   "word": " de"
+  },
+  {
+   "start": 31.87,
+   "end": 32.05,
+   "word": " como"
+  },
+  {
+   "start": 32.05,
+   "end": 32.21,
+   "word": " hago"
+  },
+  {
+   "start": 32.21,
+   "end": 32.33,
+   "word": " que"
+  },
+  {
+   "start": 32.33,
+   "end": 32.77,
+   "word": " trabaje"
+  },
+  {
+   "start": 32.77,
+   "end": 32.93,
+   "word": " por"
+  },
+  {
+   "start": 32.93,
+   "end": 33.15,
+   "word": " mí,"
+  },
+  {
+   "start": 33.31,
+   "end": 33.59,
+   "word": " en"
+  },
+  {
+   "start": 33.59,
+   "end": 33.69,
+   "word": " mi"
+  },
+  {
+   "start": 33.69,
+   "end": 34.31,
+   "word": " computadora"
+  },
+  {
+   "start": 34.31,
+   "end": 34.59,
+   "word": " o"
+  },
+  {
+   "start": 34.59,
+   "end": 34.67,
+   "word": " en"
+  },
+  {
+   "start": 34.67,
+   "end": 34.77,
+   "word": " mi"
+  },
+  {
+   "start": 34.77,
+   "end": 35.19,
+   "word": " servidor."
+  },
+  {
+   "start": 35.35,
+   "end": 35.73,
+   "word": " Comenta"
+  },
+  {
+   "start": 35.73,
+   "end": 36.19,
+   "word": " la"
+  },
+  {
+   "start": 36.19,
+   "end": 36.51,
+   "word": " palabra"
+  },
+  {
+   "start": 36.51,
+   "end": 37.01,
+   "word": " video"
+  },
+  {
+   "start": 37.01,
+   "end": 37.35,
+   "word": " y"
+  },
+  {
+   "start": 37.35,
+   "end": 37.45,
+   "word": " te"
+  },
+  {
+   "start": 37.45,
+   "end": 37.55,
+   "word": " lo"
+  },
+  {
+   "start": 37.55,
+   "end": 37.73,
+   "word": " paso."
+  }
+ ]
+}

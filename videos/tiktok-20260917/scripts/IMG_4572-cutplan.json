@@ -1,0 +1,220 @@
+{
+ "video": "C:/Users/PC/Downloads/IMG_4572.MP4",
+ "modo": "audio",
+ "noise": "-32dB",
+ "minSil": 0.4,
+ "pad": 0.06,
+ "origDur": 46.97,
+ "finalDur": 39.65,
+ "silences": [
+  {
+   "start": 0.153605,
+   "end": 0.58093
+  },
+  {
+   "start": 3.026009,
+   "end": 3.607619
+  },
+  {
+   "start": 4.637302,
+   "end": 5.385125
+  },
+  {
+   "start": 6.714014,
+   "end": 7.506961
+  },
+  {
+   "start": 10.629864,
+   "end": 11.038277
+  },
+  {
+   "start": 16.894195,
+   "end": 17.588798
+  },
+  {
+   "start": 20.125397,
+   "end": 20.720975
+  },
+  {
+   "start": 23.261315,
+   "end": 23.983673
+  },
+  {
+   "start": 25.789184,
+   "end": 26.415624
+  },
+  {
+   "start": 28.508163,
+   "end": 29.225283
+  },
+  {
+   "start": 34.629093,
+   "end": 35.375624
+  },
+  {
+   "start": 37.840862,
+   "end": 38.874354
+  },
+  {
+   "start": 46.474286,
+   "end": 46.972517
+  }
+ ],
+ "keep": [
+  {
+   "start": 0.52,
+   "end": 3.09
+  },
+  {
+   "start": 3.55,
+   "end": 4.7
+  },
+  {
+   "start": 5.33,
+   "end": 6.77
+  },
+  {
+   "start": 7.45,
+   "end": 8.29
+  },
+  {
+   "start": 8.63,
+   "end": 10.69
+  },
+  {
+   "start": 10.98,
+   "end": 13.61
+  },
+  {
+   "start": 13.99,
+   "end": 16.95
+  },
+  {
+   "start": 17.53,
+   "end": 20.16
+  },
+  {
+   "start": 20.66,
+   "end": 21.96
+  },
+  {
+   "start": 22.14,
+   "end": 23.32
+  },
+  {
+   "start": 23.92,
+   "end": 25.85
+  },
+  {
+   "start": 26.36,
+   "end": 28.57
+  },
+  {
+   "start": 29.17,
+   "end": 31.34
+  },
+  {
+   "start": 31.66,
+   "end": 33.36
+  },
+  {
+   "start": 33.56,
+   "end": 34.55
+  },
+  {
+   "start": 35.32,
+   "end": 37.9
+  },
+  {
+   "start": 38.81,
+   "end": 43.74
+  },
+  {
+   "start": 43.98,
+   "end": 46.53
+  }
+ ],
+ "ffmpeg": "ffmpeg -y -i \"C:/Users/PC/Downloads/IMG_4572.MP4\" -vf \"select='between(t,0.52,3.09)+between(t,3.55,4.7)+between(t,5.33,6.77)+between(t,7.45,10.69)+between(t,10.98,16.95)+between(t,17.53,20.19)+between(t,20.66,23.32)+between(t,23.92,25.85)+between(t,26.36,28.57)+between(t,29.17,34.69)+between(t,35.32,37.9)+between(t,38.81,46.53)',setpts=N/FRAME_RATE/TB\" -af \"aselect='between(t,0.52,3.09)+between(t,3.55,4.7)+between(t,5.33,6.77)+between(t,7.45,10.69)+between(t,10.98,16.95)+between(t,17.53,20.19)+between(t,20.66,23.32)+between(t,23.92,25.85)+between(t,26.36,28.57)+between(t,29.17,34.69)+between(t,35.32,37.9)+between(t,38.81,46.53)',asetpts=N/SR/TB\" \"renders/cut.mp4\"",
+ "rows": [
+  {
+   "i": 0,
+   "start": 0,
+   "end": 4.64,
+   "text": "Le pido cosas a mi computadora y lo hace por m\u00c3\u00ad, as\u00c3\u00ad funciona por dentro.",
+   "keep": true,
+   "reason": "contenido"
+  },
+  {
+   "i": 1,
+   "start": 5.36,
+   "end": 10.62,
+   "text": "Esto es, Claude Code. Le digo por ejemplo, agregar los nuevos horarios a mi p\u00c3\u00a1gina web",
+   "keep": true,
+   "reason": "contenido"
+  },
+  {
+   "i": 2,
+   "start": 10.62,
+   "end": 16.88,
+   "text": "y antes de escribir cualquier l\u00c3\u00adnea de c\u00c3\u00b3digo, primero lee mis archivos y reci\u00c3\u00a9n realiza acciones.",
+   "keep": true,
+   "reason": "contenido"
+  },
+  {
+   "i": 3,
+   "start": 17.5,
+   "end": 23.26,
+   "text": "Despu\u00c3\u00a9s me muestro el cambio l\u00c3\u00adnea por l\u00c3\u00adnea, verde lo que entr\u00c3\u00b3, rojo lo que sali\u00c3\u00b3.",
+   "keep": true,
+   "reason": "contenido"
+  },
+  {
+   "i": 4,
+   "start": 23.92,
+   "end": 25.76,
+   "text": "Y aqu\u00c3\u00ad est\u00c3\u00a1 la parte que nadie te cuenta.",
+   "keep": true,
+   "reason": "contenido"
+  },
+  {
+   "i": 5,
+   "start": 25.76,
+   "end": 28.54,
+   "text": "\u00c3\u2030l no toca nada sin que yo lo pruebe.",
+   "keep": true,
+   "reason": "contenido"
+  },
+  {
+   "i": 6,
+   "start": 29.02,
+   "end": 34.5,
+   "text": "Cada cambio pasa por mi aprobaci\u00c3\u00b3n. La inteligencia artificial propone, pero el que sigue",
+   "keep": true,
+   "reason": "contenido"
+  },
+  {
+   "i": 7,
+   "start": 35.08,
+   "end": 37.86,
+   "text": "teniendo el control de las tomas de decisiones soy yo.",
+   "keep": true,
+   "reason": "contenido"
+  },
+  {
+   "i": 8,
+   "start": 38.78,
+   "end": 43.66,
+   "text": "Hoy d\u00c3\u00ada te sub\u00c3\u00ad un video de como hago que trabajes por m\u00c3\u00ad, en mi computadora o en mi servidor.",
+   "keep": true,
+   "reason": "contenido"
+  },
+  {
+   "i": 9,
+   "start": 44.06,
+   "end": 46.44,
+   "text": "Comenta la palabra video y te lo paso.",
+   "keep": true,
+   "reason": "contenido"
+  }
+ ]
+}

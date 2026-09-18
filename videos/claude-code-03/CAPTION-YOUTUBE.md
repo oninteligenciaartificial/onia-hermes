@@ -26,17 +26,17 @@ https://cal.com/sergiourcullo/30min
 
 CAPÍTULOS
 0:00 Intro
-0:49 Los 4 escalones
-1:21 Hooks — cada vez que pase esto, hacé aquello
-2:12 Subagentes — le delega a otro
-3:48 Conectores — n8n, Cloudflare y Meta
-5:07 Plugins — todo eso, ya empaquetado
-5:47 Horarios — el único que no te necesita
-6:34 Mi caso real: 4 hooks, 3 subagentes, 6 conectores, 4 trabajos
-7:19 La parte honesta — lo que corre solo, falla solo
-8:38 3 reglas antes de automatizar
-9:41 En una línea
-10:14 En el próximo video
+0:48 Los 4 escalones
+1:18 Hooks — cada vez que pase esto, hacé aquello
+2:06 Subagentes — le delega a otro
+3:37 Conectores — n8n, Cloudflare y Meta
+4:52 Plugins — todo eso, ya empaquetado
+5:31 Horarios — el único que no te necesita
+6:18 Mi caso real: 4 hooks, 3 subagentes, 6 conectores, 4 trabajos
+7:00 La parte honesta — lo que corre solo, falla solo
+8:17 3 reglas antes de automatizar
+9:18 En una línea
+9:51 En el próximo video
 
 Todos los días publico algo:
 Instagram → https://www.instagram.com/sergiourcullo/

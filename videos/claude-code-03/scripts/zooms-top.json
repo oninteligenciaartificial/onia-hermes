@@ -1,1 +1,60 @@
-{"zooms": [{"start": 60.3, "end": 67.0, "from": 1.0, "to": 1.26, "anchor": "top"}, {"start": 67.01, "end": 73.6, "from": 1.26, "to": 1.0, "anchor": "top"}, {"start": 125.0, "end": 133.5, "from": 1.0, "to": 1.24, "anchor": "top"}, {"start": 133.51, "end": 141.3, "from": 1.24, "to": 1.0, "anchor": "top"}, {"start": 203.2, "end": 209.6, "from": 1.0, "to": 1.22, "anchor": "top"}, {"start": 209.61, "end": 215.7, "from": 1.22, "to": 1.0, "anchor": "top"}, {"start": 551.5, "end": 565.8, "from": 1.0, "to": 1.14, "anchor": "top"}, {"start": 583.56, "end": 607.3, "from": 1.04, "to": 1.16, "anchor": "top"}]}
+{
+ "zooms": [
+  {
+   "start": 55.91,
+   "end": 62.63,
+   "from": 1,
+   "to": 1.26,
+   "anchor": "top"
+  },
+  {
+   "start": 62.64,
+   "end": 69.31,
+   "from": 1.26,
+   "to": 1,
+   "anchor": "top"
+  },
+  {
+   "start": 116.14,
+   "end": 124.64,
+   "from": 1,
+   "to": 1.24,
+   "anchor": "top"
+  },
+  {
+   "start": 124.65,
+   "end": 133.14,
+   "from": 1.24,
+   "to": 1,
+   "anchor": "top"
+  },
+  {
+   "start": 191.65,
+   "end": 197.76,
+   "from": 1,
+   "to": 1.22,
+   "anchor": "top"
+  },
+  {
+   "start": 197.77,
+   "end": 204.54,
+   "from": 1.22,
+   "to": 1,
+   "anchor": "top"
+  },
+  {
+   "start": 528.6,
+   "end": 543.35,
+   "from": 1,
+   "to": 1.14,
+   "anchor": "top"
+  },
+  {
+   "start": 560.05,
+   "end": 583.61,
+   "from": 1.04,
+   "to": 1.16,
+   "anchor": "top"
+  }
+ ]
+}

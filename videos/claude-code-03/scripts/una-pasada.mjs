@@ -59,9 +59,23 @@ if (pieza === "intro") {
   mapaA = "aud";
   OUT = `${SCRATCH}/renders-intro/intro-1pasada.mp4`;
 } else {
-  const keep = leer(`${SCRATCH}/main-cutplan.json`).keep;
-  const top = leer(`${SCRATCH}/zooms-top.json`).zooms.map((z) => ({ ...z, animated: z.from !== z.to }));
-  const tl = leer(`${SCRATCH}/zooms-tl.json`).zooms.map((z) => ({ ...z, animated: z.from !== z.to }));
+  // main [i0] [i1] [sufijo]: renderiza el rango de bloques [i0,i1) — con >100 bloques
+  // el filter_complex entero revienta la memoria de ffmpeg ("Cannot allocate memory"),
+  // asi que se parte en mitades y se unen con concat demuxer (sin re-encode).
+  const todos = leer(`${SCRATCH}/main-cutplan.json`).keep;
+  const i0 = Number(process.argv[3] ?? 0), i1 = Number(process.argv[4] ?? todos.length);
+  const sufijo = process.argv[5] ?? "";
+  const keep = todos.slice(i0, i1);
+  // desplazamiento del tramo en el timeline de salida GLOBAL
+  const off = todos.slice(0, i0).reduce((s, k) => s + k.end - k.start, 0);
+  const durTramo = keep.reduce((s, k) => s + k.end - k.start, 0);
+  const recorta = (zs) => zs
+    .map((z) => ({ ...z, start: z.start - off, end: z.end - off }))
+    .map((z) => ({ ...z, start: Math.max(z.start, 0), end: Math.min(z.end, durTramo) }))
+    .filter((z) => z.end - z.start > 0.3)
+    .map((z) => ({ ...z, animated: z.from !== z.to }));
+  const top = recorta(leer(`${SCRATCH}/zooms-top.json`).zooms);
+  const tl = recorta(leer(`${SCRATCH}/zooms-tl.json`).zooms);
   const S = sel(keep);
   inputs = ["-i", "E:/ONIA-YouTube/grabaciones/ONIA-YT-2026-09-17-16-18-09.mp4"];
   const [axT, ayT] = ANCHORS.top;
@@ -74,7 +88,7 @@ if (pieza === "intro") {
   mapaV = "v";
   filtro.push(`[0:a]aselect='${S}',asetpts=N/SR/TB[aud]`);
   mapaA = "aud";
-  OUT = `${SCRATCH}/renders-main/main-1pasada.mp4`;
+  OUT = `${SCRATCH}/renders-main/main-1pasada${sufijo}.mp4`;
 }
 
 const args = [

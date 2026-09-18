@@ -1,0 +1,204 @@
+{
+ "video": "C:/Users/PC/Downloads/IMG_4595.MP4",
+ "modo": "audio",
+ "noise": "-32dB",
+ "minSil": 0.4,
+ "pad": 0.06,
+ "origDur": 73.77,
+ "finalDur": 55.44,
+ "silences": [
+  {
+   "start": 0,
+   "end": 0.442993
+  },
+  {
+   "start": 0.443061,
+   "end": 1.942245
+  },
+  {
+   "start": 7.14356,
+   "end": 9.959751
+  },
+  {
+   "start": 13.448277,
+   "end": 13.864467
+  },
+  {
+   "start": 18.153288,
+   "end": 20.319841
+  },
+  {
+   "start": 32.640181,
+   "end": 34.670522
+  },
+  {
+   "start": 35.054218,
+   "end": 35.839819
+  },
+  {
+   "start": 36.390839,
+   "end": 36.809048
+  },
+  {
+   "start": 40.648798,
+   "end": 41.074558
+  },
+  {
+   "start": 44.278571,
+   "end": 47.561701
+  },
+  {
+   "start": 51.418163,
+   "end": 51.867687
+  },
+  {
+   "start": 59.353243,
+   "end": 62.744694
+  },
+  {
+   "start": 72.243946,
+   "end": 73.768345
+  }
+ ],
+ "keep": [
+  {
+   "start": 1.88,
+   "end": 7.2
+  },
+  {
+   "start": 9.9,
+   "end": 13.48
+  },
+  {
+   "start": 13.82,
+   "end": 18.21
+  },
+  {
+   "start": 20.42,
+   "end": 24.71
+  },
+  {
+   "start": 24.91,
+   "end": 28.13
+  },
+  {
+   "start": 28.47,
+   "end": 32.7
+  },
+  {
+   "start": 34.66,
+   "end": 35.11
+  },
+  {
+   "start": 35.78,
+   "end": 36.45
+  },
+  {
+   "start": 36.75,
+   "end": 40.71
+  },
+  {
+   "start": 41.01,
+   "end": 44.34
+  },
+  {
+   "start": 47.5,
+   "end": 51.48
+  },
+  {
+   "start": 51.81,
+   "end": 59.41
+  },
+  {
+   "start": 62.68,
+   "end": 67.05
+  },
+  {
+   "start": 67.31,
+   "end": 72.3
+  }
+ ],
+ "ffmpeg": "ffmpeg -y -i \"C:/Users/PC/Downloads/IMG_4595.MP4\" -vf \"select='between(t,1.88,7.2)+between(t,9.9,13.51)+between(t,13.8,18.21)+between(t,20.26,32.7)+between(t,34.61,35.11)+between(t,35.78,36.45)+between(t,36.75,40.71)+between(t,41.01,44.34)+between(t,47.5,51.48)+between(t,51.81,59.41)+between(t,62.68,72.3)',setpts=N/FRAME_RATE/TB\" -af \"aselect='between(t,1.88,7.2)+between(t,9.9,13.51)+between(t,13.8,18.21)+between(t,20.26,32.7)+between(t,34.61,35.11)+between(t,35.78,36.45)+between(t,36.75,40.71)+between(t,41.01,44.34)+between(t,47.5,51.48)+between(t,51.81,59.41)+between(t,62.68,72.3)',asetpts=N/SR/TB\" \"renders/cut.mp4\"",
+ "rows": [
+  {
+   "i": 0,
+   "start": 1.54,
+   "end": 6.9,
+   "text": "Mi Claude Code tiene un contrato con tres reglas muy especificas que no puedes romper, te las",
+   "keep": true,
+   "reason": "contenido"
+  },
+  {
+   "i": 1,
+   "start": 6.9,
+   "end": 16.6,
+   "text": "leo. Por ejemplo, una vez que no puedes gastar ni tocar plata, yo apruebo y deneeo todos los",
+   "keep": true,
+   "reason": "contenido"
+  },
+  {
+   "i": 2,
+   "start": 16.6,
+   "end": 24.2,
+   "text": "gastos o cobros que la haga. A la hora de verificar si realmente hizo bien o no hizo",
+   "keep": true,
+   "reason": "contenido"
+  },
+  {
+   "i": 3,
+   "start": 24.28,
+   "end": 30.7,
+   "text": "bien algo, tiene que mirar la pantalla y verificar el c\u00c3\u00b3digo, con solo verlo por encima no es",
+   "keep": true,
+   "reason": "contenido"
+  },
+  {
+   "i": 4,
+   "start": 30.7,
+   "end": 38.6,
+   "text": "suficiente, tiene que adentrarse en el c\u00c3\u00b3digo. Y por ultimo, cada regla que cree tiene que",
+   "keep": true,
+   "reason": "contenido"
+  },
+  {
+   "i": 5,
+   "start": 38.6,
+   "end": 44.38,
+   "text": "tener la historia de por que se creo. Una regla sin historia se dejovedece muy facilmente.",
+   "keep": true,
+   "reason": "contenido"
+  },
+  {
+   "i": 6,
+   "start": 46.98,
+   "end": 53.52,
+   "text": "Y tiene que tener igual documentado por que sucedi\u00c3\u00b3 ese error. La inteligencia artificial no es",
+   "keep": true,
+   "reason": "contenido"
+  },
+  {
+   "i": 7,
+   "start": 53.52,
+   "end": 59.36,
+   "text": "super inteligente, tiene que saber por que sucedi\u00c3\u00b3 cada cosa, as\u00c3\u00ad que la regla n\u00c2\u00ba3 es esa tambien.",
+   "keep": true,
+   "reason": "contenido"
+  },
+  {
+   "i": 8,
+   "start": 62.52,
+   "end": 68.26,
+   "text": "Y todo este archivo se llama Claude.md y si queres ver como es el mio, comentad la palabra",
+   "keep": true,
+   "reason": "contenido"
+  },
+  {
+   "i": 9,
+   "start": 68.26,
+   "end": 72.24,
+   "text": "comunidad y te env\u00c3\u00ado un enlace a mi comunidad en donde dej\u00c3\u00a9 documentado todo esto.",
+   "keep": true,
+   "reason": "contenido"
+  }
+ ]
+}

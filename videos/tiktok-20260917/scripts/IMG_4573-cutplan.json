@@ -1,0 +1,252 @@
+{
+ "video": "C:/Users/PC/Downloads/IMG_4573.MP4",
+ "modo": "audio",
+ "noise": "-32dB",
+ "minSil": 0.4,
+ "pad": 0.06,
+ "origDur": 80.3,
+ "finalDur": 59.16,
+ "silences": [
+  {
+   "start": 0,
+   "end": 1.008662
+  },
+  {
+   "start": 1.008685,
+   "end": 1.432721
+  },
+  {
+   "start": 6.082472,
+   "end": 8.995374
+  },
+  {
+   "start": 16.596916,
+   "end": 17.034694
+  },
+  {
+   "start": 23.040113,
+   "end": 30.385261
+  },
+  {
+   "start": 35.250249,
+   "end": 35.707778
+  },
+  {
+   "start": 45.860431,
+   "end": 49.011202
+  },
+  {
+   "start": 51.485918,
+   "end": 51.929002
+  },
+  {
+   "start": 54.427415,
+   "end": 54.998095
+  },
+  {
+   "start": 55.492245,
+   "end": 55.948027
+  },
+  {
+   "start": 58.433878,
+   "end": 58.8878
+  },
+  {
+   "start": 67.526463,
+   "end": 70.635079
+  },
+  {
+   "start": 78.619705,
+   "end": 80.316372
+  }
+ ],
+ "keep": [
+  {
+   "start": 1.37,
+   "end": 4.27
+  },
+  {
+   "start": 4.45,
+   "end": 6.14
+  },
+  {
+   "start": 8.94,
+   "end": 9.7
+  },
+  {
+   "start": 11.26,
+   "end": 14.25
+  },
+  {
+   "start": 14.65,
+   "end": 16.66
+  },
+  {
+   "start": 16.97,
+   "end": 17.67
+  },
+  {
+   "start": 17.87,
+   "end": 23.04
+  },
+  {
+   "start": 30.33,
+   "end": 30.75
+  },
+  {
+   "start": 30.89,
+   "end": 35.23
+  },
+  {
+   "start": 35.65,
+   "end": 45.92
+  },
+  {
+   "start": 48.95,
+   "end": 51.39
+  },
+  {
+   "start": 51.89,
+   "end": 54.49
+  },
+  {
+   "start": 54.94,
+   "end": 55.55
+  },
+  {
+   "start": 55.89,
+   "end": 58.41
+  },
+  {
+   "start": 58.83,
+   "end": 61.31
+  },
+  {
+   "start": 61.55,
+   "end": 67.59
+  },
+  {
+   "start": 70.58,
+   "end": 73.43
+  },
+  {
+   "start": 73.59,
+   "end": 78.68
+  }
+ ],
+ "ffmpeg": "ffmpeg -y -i \"C:/Users/PC/Downloads/IMG_4573.MP4\" -vf \"select='between(t,1.37,6.14)+between(t,8.94,16.66)+between(t,16.97,23.1)+between(t,30.33,35.31)+between(t,35.65,45.92)+between(t,48.95,51.55)+between(t,51.87,54.49)+between(t,54.94,55.55)+between(t,55.89,58.49)+between(t,58.83,67.59)+between(t,70.58,78.68)',setpts=N/FRAME_RATE/TB\" -af \"aselect='between(t,1.37,6.14)+between(t,8.94,16.66)+between(t,16.97,23.1)+between(t,30.33,35.31)+between(t,35.65,45.92)+between(t,48.95,51.55)+between(t,51.87,54.49)+between(t,54.94,55.55)+between(t,55.89,58.49)+between(t,58.83,67.59)+between(t,70.58,78.68)',asetpts=N/SR/TB\" \"renders/cut.mp4\"",
+ "rows": [
+  {
+   "i": 0,
+   "start": 1,
+   "end": 5.42,
+   "text": "A mi inteligencia artificial le enseÃ±Ã© una sola vez como trabajo, no se lo voy a repetir",
+   "keep": true,
+   "reason": "contenido"
+  },
+  {
+   "i": 1,
+   "start": 5.42,
+   "end": 6.1,
+   "text": "nunca mas.",
+   "keep": true,
+   "reason": "contenido"
+  },
+  {
+   "i": 2,
+   "start": 8.6,
+   "end": 15.74,
+   "text": "Y esto no es magia, es solo un archivo de texto que se llama skills, se lo envÃ­as a Claude",
+   "keep": true,
+   "reason": "contenido"
+  },
+  {
+   "i": 3,
+   "start": 15.74,
+   "end": 21.04,
+   "text": "Code y le decÃ­s que pueda hacer, que esta prohibido y que reglas tiene que seguir si o si al iniciar",
+   "keep": true,
+   "reason": "contenido"
+  },
+  {
+   "i": 4,
+   "start": 21.04,
+   "end": 22.96,
+   "text": "un proyecto o al hacer una tarea.",
+   "keep": true,
+   "reason": "contenido"
+  },
+  {
+   "i": 5,
+   "start": 29.74,
+   "end": 35.92,
+   "text": "Por ejemplo, yo tengo una para enviar propuestas a cliente, el sabe que precios tengo, como",
+   "keep": true,
+   "reason": "contenido"
+  },
+  {
+   "i": 6,
+   "start": 35.92,
+   "end": 40.98,
+   "text": "le escribo a los clientes y simplemente le tengo que enviar el nuevo nombre del cliente",
+   "keep": true,
+   "reason": "contenido"
+  },
+  {
+   "i": 7,
+   "start": 40.98,
+   "end": 45.94,
+   "text": "y el ya sabe como desarrollar lo demÃ¡s sin que se lo tenga que volver a repetir o a enseÃ±ar.",
+   "keep": true,
+   "reason": "contenido"
+  },
+  {
+   "i": 8,
+   "start": 48.72,
+   "end": 56.2,
+   "text": "Y como se invocan este tipo de skills, simplemente escribÃ­s slash y el nombre de tu skill o a",
+   "keep": true,
+   "reason": "contenido"
+  },
+  {
+   "i": 9,
+   "start": 56.2,
+   "end": 60.96,
+   "text": "la hora de que escribas la palabra propuesta, Claude va a detectar que tiene que usar ese",
+   "keep": true,
+   "reason": "contenido"
+  },
+  {
+   "i": 10,
+   "start": 60.96,
+   "end": 66.98,
+   "text": "skill, Claude Codex o el editor de cÃ³digo que utilices o la gente inteligencia artificial",
+   "keep": true,
+   "reason": "contenido"
+  },
+  {
+   "i": 11,
+   "start": 66.98,
+   "end": 67.54,
+   "text": "que usas.",
+   "keep": true,
+   "reason": "contenido"
+  },
+  {
+   "i": 12,
+   "start": 70.08,
+   "end": 76.32,
+   "text": "Y si quieres aprender a crear la tuya personalizada, comenta la palabra skill que en mi pÃ¡gina",
+   "keep": true,
+   "reason": "contenido"
+  },
+  {
+   "i": 13,
+   "start": 76.32,
+   "end": 78.58,
+   "text": "web tengo una guÃ­a paso a paso de cÃ³mo hacerlo.",
+   "keep": true,
+   "reason": "contenido"
+  }
+ ]
+}
