@@ -208,3 +208,24 @@ fondos secundarios, regenerar con script propio si el asset es central.
 | Google Stitch (MCP) | **Adoptar** | Intake visual + variantes divergentes + preview de dirección. Nunca código final. |
 | 10x App Builder | **Descartar** (PolyForm NC, iOS-only) | Solo inspiración del loop plan→build→verify-screenshot. |
 | Haikei | **Inspirar** (cautela de licencia) | Fondos/divisores SVG recoloreados por tokens; migrar a script propio. |
+
+---
+
+## 4. Swishy.ai y Replit (reel IG `DdZZmsQtr2-`, 2026-09-18)
+
+**Swishy.ai** — «AI motion designer»: texto → motion graphics, tipografías animadas, export
+MP4/MOV/GIF (su galería: Instagram logo animation, Mario game, clock, scattered text, iOS
+notification). Veredicto **Diferir**: la IA dibuja el visual, y la regla de la casa es que la
+interfaz nunca la dibuja la IA. Único uso posible: piezas para redes del carril marca-personal,
+nunca UI de cliente.
+
+**Replit** — «What will you build? Turn ideas into apps in minutes». Builder agéntico por prompt
+(Website · Mobile · Design · Slides · Animation). Veredicto **Descartar**: no es galería ni fuente
+de diseño; el pipeline es Claude Code + Web Factory. Su caja única de entrada ya está medida
+contra Durable/Hostinger/Wix/10Web en
+`hermes-content/research/competencia/configuradores-web-ia-2026-09-17.md`.
+
+| Fuente | Veredicto | Rol en la factory |
+|---|---|---|
+| Swishy.ai | **Diferir** | Solo motion graphics para redes; fuera de UI de cliente. |
+| Replit | **Descartar** | Builder, no galería. |

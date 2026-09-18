@@ -176,3 +176,13 @@ se confirma, no se asume).
 (propuesta + catálogo). Si el flujo rinde en Windows, proponer la compra del tier
 Standard a Sergio (gasto = permiso explícito, regla vigente). No es fuente de código ni
 de patrones web — es herramienta de assets de marketing.
+
+---
+
+## Addendum 2026-09-18 — `/examples` entra a la cosecha
+
+El reel IG `DdZZmsQtr2-` («Arma tu stack de galerías») la nombra como «450+ ejemplos copy-paste».
+Ya estaba descrita arriba (Examples library, gratis); lo que faltaba era que el harvester la
+recorriera: agregada como `motion-dev-examples` en
+`data/references/design-sources/gallery-reference-sources.json`. Regla: los ejemplos free se
+retokenizan antes de usar; los marcados Motion+ no se copian.

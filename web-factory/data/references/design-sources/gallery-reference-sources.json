@@ -1,6 +1,6 @@
 {
   "name": "sergio-web-gallery-reference-sources",
-  "updatedAt": "2026-07-03",
+  "updatedAt": "2026-09-18",
   "purpose": "Deep gallery scraping for Web Factory design intelligence. Screenshots and structure are reference-only unless a source or linked repo has a compatible license.",
   "screenshotCacheRoot": "C:/Users/PC/.codex/design-stack/gallery-examples-full",
   "codeCacheRoot": "C:/Users/PC/.codex/design-stack/repos",
@@ -155,6 +155,19 @@
       "include": ["motion-primitives.com/docs"],
       "exclude": ["/pricing", "/login", "#"],
       "captureCode": true
+    },
+    {
+      "id": "motion-dev-examples",
+      "name": "Motion Examples",
+      "url": "https://motion.dev/examples",
+      "mode": "motion-example-gallery",
+      "licenseStatus": "mit-library-examples-free-and-motion-plus",
+      "usage": "450+ copy-paste animation snippets (React, JavaScript, Vue) on the Motion library we already ship by default. Mine microinteraction mechanics (springs, exit, timelines, scroll). Free examples are reusable after retokenizing; Motion+ examples are paid, do not copy.",
+      "maxItems": 30,
+      "maxDetailItems": 8,
+      "include": ["motion.dev/examples"],
+      "exclude": ["/pricing", "/login", "/sign", "/plus", "#"],
+      "captureCode": false
     },
     {
       "id": "shadcn-ui",
@@ -347,6 +360,19 @@
       "maxDetailItems": 4,
       "include": ["awwwards.com"],
       "exclude": ["/academy", "/jobs", "/submit", "/pricing", "/login", "/sign", "#"],
+      "captureCode": false
+    },
+    {
+      "id": "deck-gallery",
+      "name": "Deck.gallery",
+      "url": "https://deck.gallery/",
+      "mode": "deck-gallery",
+      "licenseStatus": "inspiration-only",
+      "usage": "Curated presentation decks, slides and brand guidelines. Typography scale, hierarchy and storytelling reference for propuestas, OG images and slides; not a web-layout source. Do not copy decks or proprietary assets.",
+      "maxItems": 24,
+      "maxDetailItems": 6,
+      "include": ["deck.gallery"],
+      "exclude": ["/submit", "/about", "/login", "/sign", "#"],
       "captureCode": false
     },
     {

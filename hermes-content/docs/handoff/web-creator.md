@@ -125,6 +125,14 @@ de crear cuenta (nosotros no, y no lo decimos); nadie cambia la web según el pl
 es único); Wix muestra «el brief» antes de personalizar; 10Web arranca desde una URL. Seis cambios
 propuestos con costo, ninguno hecho (esperan decisión).
 
+**Reel «Arma tu stack de galerías» (18-sep, IG `reel/DdZZmsQtr2-`):** cinco sitios leídos de los
+frames (Watermelon UI, deck.gallery, Swishy.ai, Replit, motion.dev). Cruce contra las 28 fuentes de
+`gallery-reference-sources.json`: dos ya estaban (Watermelon, motion.dev como librería), dos entran
+a la cosecha (`deck-gallery` para tipografía/jerarquía de propuestas y OG; `motion-dev-examples`,
+450+ snippets), dos no son galerías (Swishy = motion por IA, diferida; Replit = builder, descartada).
+Tabla en `web-factory/DESIGN_STACK.md` y §8 de `web-factory/SOURCES.md`; fichas en
+`data/references/design-sources/{motion-y-3d,herramientas-builders,inspiracion-landings}.md`.
+
 **Qué falta para que sea un circuito, en orden de valor/costo:**
 1. 🔴 **Bot: intent `lead_web`** (carril chatbot, ~30 líneas + test + `deploy-bot.sh`): si el
    texto empieza con «vengo del configurador de webs» → confirmar recepción nombrando el
@@ -171,6 +179,13 @@ hermes-content/sitio-sergiourcullo/**          (+ scripts/publicar-sitio.py, sin
   `MSYS_NO_PATHCONV=1`.
 - Codex reportó «Validación 18/20» y «build 22/22 rutas» sobre la rama VIEJA; nada de eso
   vale para `main`.
+- **Ver un reel de IG desde esta sesión (18-sep)**: `fetch-video.mjs` bajó el MP4 (desde el
+  checkout principal, donde vive la sesión de IG), pero `gemini-see-video.mjs`, el caption y
+  `transcribe.sh` (Speaches por SSH) fallaron con `fetch failed`; `text-frames.mjs` no existe.
+  Lo que sirvió: `ffmpeg -vf "fps=1,scale=720:-1"` y leer los frames con el Read tool (los
+  subtítulos quemados alcanzan). Además, el shell de esta sesión **mangla los escapes de barra**
+  (`\r\n` en un `node -e` llegó como saltos de línea reales): los scripts se escriben con el
+  Write tool y el CR/LF se arma con `String.fromCharCode`. Los .md y .json del stack son CRLF.
 
 ## 6 · Qué depende de Sergio Urcullo
 

@@ -165,6 +165,8 @@ Resumen del banco de galerias del 2026-06-15:
 | Aceternity UI | Motion premium, heroes, bento, canvas y parallax | Fuente mixta free/premium; captura visual por defecto, codigo solo con licencia clara. |
 | Shadcnblocks | Bloques shadcn, layouts y secciones | Fuente free/pro; no copiar pro sin licencia. |
 | Kibo UI | Componentes accesibles shadcn-compatible | Verificar repo/licencia antes de copiar. |
+| Deck.gallery | Decks/slides curados: tipografia, jerarquia, storytelling | Inspiracion solamente; para propuestas, OG y slides, no para layout web. Agregada 2026-09-18. |
+| Motion examples (motion.dev/examples) | 450+ snippets de animacion React/JS/Vue | Ejemplos free reutilizables tras retokenizar; los de Motion+ son pagos, no copiar. Agregada 2026-09-18. |
 
 ### Fuentes externas agregadas al pattern bank 2026-06-24
 
@@ -349,3 +351,15 @@ skill-uiux-y-movil). Síntesis: `docs/DESIGN_LEARNED_2026.md`.
   promise-state (jul-2026), calendar/sidebar/dashboard blocks, Base UI reemplazó a
   Radix como default (ojo mezcla de bases), registries desde GitHub (jun-2026) y MCP
   server oficial.
+
+## 8. Cosecha 2026-09-18 — reel «Arma tu stack de galerías» (IG `DdZZmsQtr2-`)
+
+Cinco sitios en 13 segundos; cruce completo en `DESIGN_STACK.md` («Cruce con “Arma tu stack de galerías”»).
+
+| Fuente | Para | Licencia | Veredicto |
+|---|---|---|---|
+| Watermelon UI (ui.watermelon.sh) | bloques/componentes | sin confirmar | Ya estaba (§5b) |
+| Deck.gallery | decks y slides curados | inspiration-only | Adoptar como referencia de tipografía/jerarquía para propuestas, OG y slides — agregada a `gallery-reference-sources.json` |
+| Motion examples (motion.dev/examples) | 450+ snippets de animación | MIT (librería); ejemplos free + Motion+ pago | Adoptar como fuente de cosecha — agregada a `gallery-reference-sources.json`; la librería ya era default |
+| Swishy.ai | motion graphics por IA (MP4/GIF) | SaaS pago | Diferir — la IA dibuja el visual; solo piezas de redes, nunca UI de cliente |
+| Replit | builder de apps por prompt | SaaS | Descartar — no es galería; el pipeline es Claude Code + Web Factory |

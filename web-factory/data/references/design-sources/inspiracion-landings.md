@@ -181,3 +181,18 @@ comercial libre, self-host permitido (preferible por performance y privacidad).
 **Veredicto: ADOPTAR** (unica de las tres con salida directa a produccion: el par
 elegido se instala tal cual; ya estaba como politica de una linea, ahora hay 10
 pares concretos mapeados a rubros).
+
+---
+
+## 4. Deck.gallery (reel IG `DdZZmsQtr2-`, 2026-09-18)
+
+**Que es.** Galeria curada de decks, slides, keynotes y brand guidelines «elegidos por su
+calidad de disenio» (reports de Lululemon, «The State of Influence», brand guidelines de VEJA).
+No son webs: es la unica fuente del stack que ensenia jerarquia y ritmo tipografico en 16:9.
+
+**Para que sirve aca.** Propuestas comerciales (generador `hermes-content/propuestas/`),
+imagenes OG (`scripts/marca-personal/generar-og.py`) y la skill `slides`: portadas con una
+sola frase grande, cifras a pagina completa, secuencia problema → solucion.
+
+**Regla.** Inspiration-only: se mira estructura y escala, no se copia deck ni asset.
+Agregada como `deck-gallery` en `gallery-reference-sources.json`.
