@@ -67,63 +67,90 @@ function excluidoPorSubarbol(rutaRelativa) {
  * ausente y reporta como huerfano un cableado que si esta).
  */
 export function testsFueraDeLaCadena({ raiz = RAIZ_POR_DEFECTO } = {}) {
-  const pkg = JSON.parse(readFileSync(path.join(raiz, 'package.json'), 'utf8'))
-  const scripts = pkg.scripts ?? {}
-
   const universo = caminar(raiz, raiz).filter((p) => !excluidoPorSubarbol(p)).sort()
 
   const ejecutados = new Set()
   const noEntendidos = []
   const vistos = new Set()
-  const pendientes = ['test']
+  // Cada pendiente viaja con SU directorio: un paso de la cadena puede vivir en
+  // otro package.json (`cd <dir> && npm run <x>`), que es como entra el gate del
+  // publicador del sitio. Resolver ese nombre contra la raiz lo reporta
+  // inexistente —un nombre fantasma que se lee como "este paso esta roto"— y deja
+  // invisible todo lo que ese paso corre.
+  const pendientes = [{ nombre: 'test', dir: '' }]
+
+  const paquetes = new Map()
+  const scriptsDe = (dir) => {
+    if (!paquetes.has(dir)) {
+      let leidos = null
+      try {
+        leidos = JSON.parse(readFileSync(path.join(raiz, dir, 'package.json'), 'utf8')).scripts ?? {}
+      } catch {
+        leidos = null // no hay package.json ahi: no es lo mismo que no tener scripts
+      }
+      paquetes.set(dir, leidos)
+    }
+    return paquetes.get(dir)
+  }
+  const etiqueta = (dir, nombre) => (dir ? `${dir}: ${nombre}` : nombre)
 
   while (pendientes.length > 0) {
-    const nombre = pendientes.pop()
-    if (vistos.has(nombre)) continue
-    vistos.add(nombre)
+    const { nombre, dir } = pendientes.pop()
+    const clave = `${dir}#${nombre}`
+    if (vistos.has(clave)) continue
+    vistos.add(clave)
 
-    const cmd = scripts[nombre]
-    if (typeof cmd !== 'string') {
-      if (nombre !== 'test') noEntendidos.push(`${nombre} (script inexistente)`)
+    const scripts = scriptsDe(dir)
+    if (scripts === null) {
+      noEntendidos.push(`${etiqueta(dir, nombre)} (no hay package.json en ${dir || '.'})`)
       continue
     }
 
-    for (const m of cmd.matchAll(/npm run ([\w:-]+)/g)) pendientes.push(m[1])
+    const cmd = scripts[nombre]
+    if (typeof cmd !== 'string') {
+      if (nombre !== 'test' || dir !== '') noEntendidos.push(`${etiqueta(dir, nombre)} (script inexistente)`)
+      continue
+    }
 
-    let vio = /npm run [\w:-]+/.test(cmd)
-    for (const token of cmd.split(/\s+/)) {
+    // El `cd` de adelante manda sobre TODO lo que sigue: el `npm run` y las rutas.
+    const cd = cmd.match(/^\s*cd\s+([\w./-]+)\s*&&\s*/)
+    const dirCmd = cd ? path.posix.join(dir, cd[1]) : dir
+    const resto = cd ? cmd.slice(cd[0].length) : cmd
+    const desdeLaRaiz = (rel) => (dirCmd ? path.posix.join(dirCmd, rel) : rel)
+
+    for (const m of resto.matchAll(/npm run ([\w:-]+)/g)) pendientes.push({ nombre: m[1], dir: dirCmd })
+
+    let vio = /npm run [\w:-]+/.test(resto)
+    for (const token of resto.split(/\s+/)) {
       if (token.startsWith('-') || !/[/.]/.test(token)) continue
       const limpio = token.replace(/^["']|["']$/g, '')
 
       if (limpio.includes('*')) {
-        for (const f of globSync(limpio, { cwd: raiz })) {
-          const rel = f.split(path.sep).join('/')
+        for (const f of globSync(limpio, { cwd: path.join(raiz, dirCmd) })) {
+          const rel = desdeLaRaiz(f.split(path.sep).join('/'))
           if (ES_TEST.test(rel)) ejecutados.add(rel)
         }
         vio = true
         continue
       }
 
-      const absoluto = path.join(raiz, limpio)
+      const absoluto = path.join(raiz, dirCmd, limpio)
       if (!existsSync(absoluto)) continue
       if (statSync(absoluto).isDirectory()) {
         for (const f of caminar(absoluto, raiz)) ejecutados.add(f)
       } else if (ES_TEST.test(limpio)) {
-        ejecutados.add(limpio.split(path.sep).join('/'))
+        ejecutados.add(desdeLaRaiz(limpio.split(path.sep).join('/')))
       }
       vio = true
     }
-    if (!vio) noEntendidos.push(nombre)
-  }
 
-  // `cd <dir> && node --test` corre la carpeta entera sin nombrar una ruta de test.
-  for (const nombre of vistos) {
-    const cmd = scripts[nombre]
-    if (typeof cmd !== 'string') continue
-    const m = cmd.match(/cd\s+([\w./-]+)\s*&&\s*node\s+--test/)
-    if (m && existsSync(path.join(raiz, m[1]))) {
-      for (const f of caminar(path.join(raiz, m[1]), raiz)) ejecutados.add(f)
+    // `cd <dir> && node --test` corre la carpeta entera sin nombrar una ruta de test.
+    if (cd && /^node\s+--test(\s|$)/.test(resto.trim()) && existsSync(path.join(raiz, dirCmd))) {
+      for (const f of caminar(path.join(raiz, dirCmd), raiz)) ejecutados.add(f)
+      vio = true
     }
+
+    if (!vio) noEntendidos.push(etiqueta(dir, nombre))
   }
 
   return {
