@@ -84,6 +84,10 @@ export function createState(input = {}) {
     leadKey: input.leadKey || null,
     ownerRoleKey: input.ownerRoleKey || "sergio",
     inboxId: input.inboxId || null,
+    // El MEDIO por el que entró (`channel_type` de Chatwoot), que es distinto del inbox: el id
+    // se renumera, el medio no. De acá sale `{{via_humano}}` — por qué vía promete el bot que
+    // le va a escribir el humano. Sin dato, `viaDelCanal` cae en la forma canal-agnóstica.
+    channelType: input.channelType || null,
     humanTookOver: Boolean(input.humanTookOver),
     humanTookOverAt: input.humanTookOverAt || null,
     // Cuando se ACUSO el primer inbound posterior a un handoff. `handoff_humano` no significa
