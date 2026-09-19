@@ -196,6 +196,18 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       `detectar()` guarda su salida cruda en `SALIDAS` y `quintaPregunta` la consume.
       `CUBIERTO_CORTO` le gana a `CUBIERTO_VIEJO` porque rehacer el pedido cura las dos cosas
       y esperar el `ok` no cura el cuerpo.
+      **Reverificado con datos REALES el 2026-09-18 20:5x La Paz por `onia-cola` (escalón 2,
+      auditar los `[x]`): el `[x]` resiste.** El caso volvió a ocurrir en vivo —mergeé tres
+      carriles sobre el pedido `t_4e0bb0b0`, que citaba `1`, y el seco de la landing pasó a
+      decir `2`— y `quintaPregunta('landing', [ese pedido], { salida: <seco de hoy> })` devuelve
+      `["t_4e0bb0b0"]` con la causa `el publicador en seco dice 2 arreglo(s) y el cuerpo cita
+      menos`. **Ojo con cómo casi lo desmarco, porque es la trampa de leer este ítem:** en esa
+      vuelta `node scripts/deploy_sin_pedido.mjs` imprimió `OK landing: falta publicar y ya hay
+      pedido` mientras `npm run pedido:entregado` decía ROJO, que es *literalmente* la
+      reproducción escrita más abajo — pero las dos corridas del primero fueron **antes** del
+      merge y **después** de rehacer el pedido, nunca en el medio. El gate no falló: no se lo
+      preguntó nadie en el único instante en que la respuesta cambia. Un `OK` de este gate sólo
+      vale por el estado del árbol **en el momento en que se corrió**.
       **Validado por mutación: 9 de 9.** La novena pasó **verde** al primer intento y vale
       anotarla — el caso del cableado anclaba la MENCIÓN (`/SALIDAS\.set\(/` sobre el propio
       fuente) y envolver esa línea en `if (false)` deja el literal intacto. Se cerró midiendo
