@@ -24,6 +24,11 @@
   ],
   "redirects": [
     {
+      "source": "/llamada",
+      "destination": "https://cal.com/sergiourcullo/20min",
+      "permanent": false
+    },
+    {
       "source": "/webs",
       "destination": "https://onia.com.bo/servicios/webs?origen=sergio",
       "permanent": false
