@@ -318,6 +318,52 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **CERRADO el 2026-09-19 — el bot le clavaba el género masculino a la persona que
+      atiende, que la carga el CLIENTE: «la Dra. Ana Ríos … te escribe él»**
+      (`hermes-content/deploy/vps-ops/bot/config.mjs`, 3 entradas; gate
+      `concordancia-con-el-humano.test.mjs`). `{{humano}}` sale de `identity.humanName`, que el
+      dueño tipea en el paso 2 del asistente del panel — y **los tres valores que el propio
+      sistema propone rompen la concordancia**: el panel propone «Dra. Ana Ríos»
+      (`AsistenteChatbot.tsx:105`, **mirado renderizado** en `app.onia.com.bo/settings/chatbot`),
+      el motor cae a «el equipo» cuando el dueño no carga a nadie (`knowledge.mjs:1432`) y el
+      simulador siembra «doña Marta». Las tres entradas decían **«Te escribe él»**, y las tres
+      son del **handoff** — el momento más caro del embudo, el único en que alguien pidió hablar
+      con una persona: `M5`, `M5_URGENTE` y `M0_SIN_HORARIOS`.
+
+      **Por qué no lo vio ningún gate.** No mueve una cifra, no nombra un plan, no promete una
+      capacidad y no ata un canal: ésas son las cuatro familias que los gates del bot ya
+      vigilan. El eje es **GÉNERO × TEXTO**. Y lo escondía el hermano sano: el default del
+      funnel de venta de Onia es `humanName: "Sergio"`, con el que la frase queda bien — y el
+      bot de Onia es el único que se prueba todos los días.
+
+      **Es la mitad que faltó de DOS curas anteriores, las dos en estas mismas líneas.** El
+      2026-08-29 se neutralizó el VALOR (de «Sergio» a «el equipo») y quedó el pronombre al
+      lado; el 2026-09-18 se derivó la VÍA (`{{via_humano}}`) y quedó el pronombre **a dos
+      palabras**. Por eso el sujeto del gate es la CLASE (todo el guion), no las tres entradas.
+
+      **La cura no es adivinar el género** —«el equipo», «Recepción», «Marta y Juan» no tienen
+      uno, y equivocarse es el mismo defecto al revés—: se quita el pronombre, que es la forma
+      cierta para todos. Mismo criterio con el que se cerró la vía: fallar hacia la promesa que
+      SIEMPRE se puede cumplir. Render vivo por el motor real:
+      *«Ya le pasé tu consulta … Te escribe por este mismo chat, en horario de oficina …»*.
+
+      ⚠️ **El gate pasó VERDE la primera vez, con las tres entradas rotas delante.** No era el
+      producto: en JavaScript `\b` se define sobre `[A-Za-z0-9_]`, así que `/\bél\b/` **nunca**
+      matchea «escribe él» — el espacio y la «é» son los dos *non-word* y ahí no hay frontera.
+      Los límites van con propiedades Unicode (`(?<![\p{L}\p{N}_])…`). Verificar el instrumento
+      antes que el producto valió el hallazgo entero.
+
+      **Pruebas.** Gate en ROJO primero nombrando las tres entradas; validado por mutación en
+      las dos direcciones (pronombre devuelto a UNA sola entrada → 2 rojos; universo vaciado →
+      el caso ancla lo caza, 1 rojo); `npm run test:bot` **1.246 verdes**; cableado a la cadena
+      confirmado con un centinela que salió rojo dentro de `npm run test:bot` (la salida de
+      `node --test` no nombra los archivos que corre). De paso, `entradasDelGuion` salió del
+      test hermano a `guion-del-bot.mjs`: encerrado en un test, el gate siguiente lo re-escribe
+      y las dos copias divergen.
+
+      **Commiteado, NO desplegado** — `/opt/onia/bot` sigue diciendo «te escribe él» hasta que
+      `onia-cola` publique.
+
 - [x] 🔴 **CERRADO el 2026-09-19 06:05 — el criterio «¿esta conversación somos NOSOTROS?» ya mira
       el INBOX: el banco de pruebas dejó de pasar como prospecto**
       (`hermes-content/deploy/vps-ops/bot/es-nuestra.mjs`, causa aditiva por tenencia;
@@ -893,7 +939,7 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 - [x] 🔴 **~~El asistente de 6 preguntas publicaba AL REVÉS el horario de un negocio
       nocturno~~ — CERRADO el 2026-09-18** (`onia-platform` `5bc7747f`, rama del carril;
-      falta merge de `onia-cola`). El asistente estrenado ese mismo día (master `f5e32220`,
+      falta merge de `onia-cola`; el validador vive en `onia-platform/lib/chatbot/knowledge.ts`). El asistente estrenado ese mismo día (master `f5e32220`,
       16:18) convierte el horario a `empresa.horario`, que es UN tramo `dias + desde + hasta`.
       Con *«Lunes a sábado de 18:00 a 02:00»* —un bar, una farmacia de turno, un comercio
       nocturno— `desde` salía del mínimo de los `abre` (18) y `hasta` del máximo de los
@@ -1804,7 +1850,8 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
       **Por qué nadie lo veía.** El eje VENCIDA estaba cerrado en la puerta HERMANA
       (`lib/whatsapp/atiende-el-bot.ts`, 11-sep), que gatea al bot que corre DENTRO de la
-      plataforma (`lib/whatsapp-bot.ts`) — y media familia cubierta se lee como familia cubierta.
+      plataforma (`lib/whatsapp-bot.ts`, que ya no existe: lo retiró `abf6cb5b`, DG-044) — y media
+      familia cubierta se lee como familia cubierta.
       Peor: el hermano sano vive en ESTE MISMO archivo. Dos líneas más abajo el slug de la agenda
       ya era fail-closed por vencimiento (`puedeRecibirReservasPublicas` → `isWriteBlocked`, desde
       el 08-sep), o sea que **media respuesta preguntaba y la otra media no**. Lo sostenía
@@ -3662,7 +3709,8 @@ La historia completa queda acá abajo para no perderla.
 
       <details><summary>El ítem como estaba escrito</summary>
 
-      Dos líneas más arriba del catálogo, `lib/whatsapp-bot.ts` hace
+      Dos líneas más arriba del catálogo, `lib/whatsapp-bot.ts` —archivo que ya no existe, lo
+      retiró `abf6cb5b` (DG-044)— hace
       `prisma.patient.findFirst({ where: { organizationId, phone: { contains: ... } } })`.
       Comercio e importadora guardan a sus clientes en `onia_core_business_partners`
       (`guardaClientesEnPatients()` da `false`), así que ahí **siempre** cae al genérico.
@@ -5106,6 +5154,77 @@ decisión de Sergio, no código.
       `config.mjs`, producción sigue mandando el cargo en minúscula.** El deploy lo hace
       `onia-cola` con OK de Sergio; se verifica con la misma reproducción de arriba, exigiendo
       `La encargada` en la conversación nueva.
+
+
+- [x] 🔴 **CERRADO el 2026-09-19 05:45 La Paz — el bot tiene la transcripción de notas de voz
+      ENCENDIDA contra un servicio que no existe, y degradaba MUDO. Instrumento nuevo:
+      `npm run destinos:vivos`.**
+
+      **Cómo apareció.** No de la cola —no le quedaban 🔴 abiertos en «Ahora»— sino de leer el log
+      vivo del bot buscando un eje que ningún gate mira. Los 2.803 stacks de
+      `ERR_MODULE_NOT_FOUND: audio-transcribe.mjs` resultaron historia de agosto (crash-loop ya
+      curado), pero mandaron a preguntar algo que nadie había preguntado: **a qué destino le habla
+      ese módulo, y si está vivo.**
+
+      **Medido en producción**, desde `onia-center`, que es la red por la que habla el bot:
+
+      ```
+      docker exec onia-center wget -qO- --timeout=12 http://speaches:8000/v1/models
+      → wget: bad address 'speaches:8000'
+      docker ps -a --format '{{.Names}}' | grep -i speach   → VACÍO
+      ```
+
+      …con el interruptor en **`ONIA_AUDIO_ENABLED=true`** y
+      `ONIA_AUDIO_STT_BASE_URL=http://speaches:8000/v1` leídos del `/proc/310902/environ` del
+      webhook vivo. **El contenedor Speaches no existe en el VPS.** Cada nota de voz cae a
+      `M_AUDIO_FAIL` («¿me lo escribís?») con el módulo entero construido y desplegado — el mismo
+      agujero que `audio-transcribe.mjs` dice en su cabecera que vino a cerrar, y que en Bolivia,
+      donde una parte enorme del WhatsApp son audios, es el más caro del bot.
+
+      **Por qué nadie podía saberlo, y es la parte transferible.** El módulo es *tolerante por
+      contrato*: no tira jamás, devuelve `{ok:false, reason}` y el llamador sigue. Esa decisión es
+      correcta —que se rompa el audio no puede dejar mudo al prospecto— pero **su costo es que la
+      capacidad degrada en silencio y el único testigo es el prospecto que se va.** Los seis
+      instrumentos del carril son ciegos a esto: simulador, sonda del widget, `precios:vivos`,
+      `horario:vivo`, `anticipacion:viva` y `rubros:vivos` **miran o escriben TEXTO**, y un audio
+      no aparece en ninguno. La única señal existía *después* del daño.
+
+      **El gate hace la pregunta de ANTES:** no «¿falló un audio?» sino «¿está vivo el destino al
+      que este bot le va a hablar cuando llegue uno?» — se puede preguntar hoy, gratis, sin que
+      ningún lead pague la respuesta. `hermes-content/deploy/vps-ops/bot/destinos-vivos.mjs`:
+
+      | capacidad | destino | hoy |
+      |---|---|---|
+      | nota de voz → el bot la entiende | `speaches:8000` | **ROTA — el host no resuelve** |
+      | foto → el bot la describe | LiteLLM | ok |
+      | el bot razona el turno | LiteLLM | ok |
+      | el bot entrega el mensaje | Chatwoot | ok |
+
+      **El universo se deriva del disco** (todo `.mjs` del bot que resuelve un destino desde una
+      env `*_BASE_URL`/`*_BASE`) y cada sujeto tiene que estar **decidido**: medido, o excusado con
+      motivo que se re-lee en cada corrida. Un destino nuevo sin decidir sale ROJO con su nombre —
+      es lo que cierra la clase, porque el defecto de hoy no fue un destino mal escrito sino **un
+      destino que nadie se acordó de preguntar**.
+
+      ⚠️ **Y el detector se derivó por el NOMBRE de la variable, no por su valor, a propósito:** el
+      sujeto que originó el gate cae del lado de enfrente, porque su defecto es una CONSTANTE
+      (`|| DEFAULT_BASE_URL`) y no un literal `|| "http…"`. Un barrido por el valor lo pierde justo
+      en el único caso conocido — y de paso encontró **dos sujetos más** que el grep a mano no vio
+      (`calcom-booking.mjs`, `chatwoot-onboard.mjs`).
+
+      **Validado por mutación**, las dos por su motivo correcto: (1) detector por el valor → *«el
+      universo del disco perdió audio-transcribe.mjs»*; (2) `false &&` al cierre de clase → *«un
+      destino externo nuevo sin decidir tiene que salir rojo nombrándolo»*. Tri-estado probado en
+      las dos direcciones: un `401` prueba que el servicio EXISTE (verde), un host que no resuelve
+      es un destino CAÍDO (rojo), y una salida que no se sabe leer es NO MEDIDO (2) — nunca «no
+      contesta». Self-check cableado a la cadena (`test:destinos-instrumento`).
+
+      **Lo que NO cierra esta vuelta, y de quién es.** Levantar Speaches es infra del VPS —
+      contenedor nuevo, no es mi carril y mi prompt lo prohíbe explícitamente. Va como tarea con la
+      reproducción de arriba. **No es plata: Speaches es whisper self-hosted gratis** (lo dice la
+      cabecera del módulo y por eso se eligió sobre una API paga). Alternativa si se decide no
+      levantarlo: apagar `ONIA_AUDIO_ENABLED` — el gate deja de dar rojo y pasa a decir «apagada a
+      propósito», que es honesto; hoy la capacidad *promete* y no puede.
 
 ## Después
 
