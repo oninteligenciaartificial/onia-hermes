@@ -102,10 +102,15 @@ export default function PruebaGratisPage() {
               {PRUEBA.dias} días con el plan {PRUEBA.planQueCorre} completo. Sin
               tarjeta.
             </h1>
+            {/* Acá decía «con todos los módulos encendidos», y es falso: la
+                prueba corre con PRUEBA.planQueCorre, sin el chatbot de
+                WhatsApp ni el segundo administrador. El h1 de arriba ya nombra
+                el plan, así que repetirlo sería decir dos veces lo mismo: lo
+                que queda es la promesa que el alta SÍ cumple. */}
             <p className="lead">
-              No es una demo recortada: es tu cuenta real, con todos los
-              módulos encendidos. Si al final no te sirve, no pagás nada — y
-              tus datos los exportás cuando quieras.
+              No es una demo recortada: es tu cuenta real, con tu rubro ya
+              configurado. Si al final no te sirve, no pagás nada — y tus datos
+              los exportás cuando quieras.
             </p>
             <p style={{ marginTop: "1.5rem", display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
               <a className="btn" href={REGISTRO_URL}>
