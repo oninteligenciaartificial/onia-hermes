@@ -357,7 +357,14 @@ export function leerPublicadorSolo(salida) {
     const m = linea.match(/^\s*([a-z][a-z0-9_-]*):\s*(\S.*?)\s*$/i);
     if (!m) continue;
     const [, destino, dice] = m;
-    if (/^NO\s+publico\s+solo/i.test(dice)) verdictos[destino] = 'NECESITA_FIRMA';
+    // ⚠️ «NO publico solo» tiene DOS causas y el remedio de cada una es el OPUESTO: si un
+    // monto cambió de verdad, la firma de Sergio Urcullo es el camino correcto; si el freno
+    // NO PUDO MEDIR, pedirle la firma es gastarla en una falla de instrumento. El freno las
+    // escribe distinto a propósito (`publicar-solo.sh`: «cambia un numero…» contra «…y no
+    // pude medir si cambia»), así que se leen separadas y no se aplanan acá.
+    if (/^NO\s+publico\s+solo/i.test(dice)) {
+      verdictos[destino] = /no\s+pude\s+(medir|comprobar)/i.test(dice) ? 'FRENO_SIN_MEDIR' : 'NECESITA_FIRMA';
+    }
     else if (/^publicaria\b/i.test(dice)) verdictos[destino] = 'SE_PUBLICA_SOLO';
     else if (/^PUBLICADO\b/.test(dice)) verdictos[destino] = 'SE_PUBLICA_SOLO';
     else if (/^FALLO\b/.test(dice)) verdictos[destino] = 'FALLO';
@@ -444,7 +451,33 @@ export function seAutoPublicaSegun(verdictos, destino) {
   if (v === undefined) return false;
   if (v === 'SE_PUBLICA_SOLO') return true;
   if (v === 'NECESITA_FIRMA' || v === 'FALLO') return false;
+  // FRENO_SIN_MEDIR cae acá a propósito: el freno contestó, pero lo que contestó es que no
+  // sabe. Devolver `false` lo convertiría en DESCUBIERTO y mandaría a pedir una firma que
+  // no decide nada; devolver `true` absolvería a un destino que puede estar varado.
   return null;
+}
+
+/**
+ * PURA: por qué el publicador automático retuvo un destino SIN haber podido medirlo.
+ *
+ * NACE DEL 2026-09-19. El freno de precio del publicador se arregló en `c52d9a56` para que
+ * pudiera medir el destino `bot`, y ese commit entró a `main` a las 15:44:22 UTC — el sync
+ * que copia las herramientas a `/root/bin` había corrido a las 15:44. Por segundos, la
+ * copia VIVA quedó vieja una hora, y el publicador de las 15:50 UTC retuvo los 14 archivos
+ * del bot escribiendo «no pude medir si cambia». Este gate lo leyó como NECESITA_FIRMA y
+ * cantó `DESCUBIERTO bot`, o sea: abrile un pedido y que Sergio Urcullo apriete un `ok`.
+ *
+ * Los dos remedios son opuestos y sólo uno cuesta su firma. Por eso la causa se dice, con
+ * el comando que distingue «la copia viva está vieja» de «el freno no sabe medir esto».
+ */
+export function describirFrenoCiego(verdictos, destino) {
+  if (!verdictos || verdictos[destino] !== 'FRENO_SIN_MEDIR') return null;
+  return (
+    `el publicador automatico retuvo ${destino} sin poder medir si cambia un monto: eso NO es una ` +
+    `firma pendiente de Sergio Urcullo, es el freno que no sabe medir ese destino. Comparar la copia ` +
+    `viva con la del repo (md5sum ${PUBLICADOR_SOLO} scripts/loops/extras/publicar-solo.sh): si difieren, ` +
+    `la copia viva esta vieja y el sync horario (:44) la actualiza sola`
+  );
 }
 
 /** PURA: la última corrida REAL que quedó escrita en el log del publicador automático. */
@@ -827,6 +860,11 @@ function medirEnVivo() {
     seAutoPublica: (d) => {
       const verdictos = verdictosDelPublicadorSolo();
       const solo = seAutoPublicaSegun(verdictos, d);
+      // El QUINTO `null`, y el más caro de confundir: el freno retuvo el destino SIN poder
+      // medirlo. Va ANTES del desacuerdo porque `anotarCausa` no pisa lo ya puesto y el
+      // desacuerdo lo describiría mal — acá los dos instrumentos coinciden en que falta
+      // publicar; lo que no se sabe es si hace falta una firma.
+      if (solo === null && verdictos) anotarCausa(`publicador:${d}`, describirFrenoCiego(verdictos, d));
       // El CUARTO `null`, y el único que es por destino: los dos instrumentos contestaron y
       // no coinciden. Va con su propia clave o el segundo destino pisaría la causa del primero.
       if (solo === null && verdictos) anotarCausa(`publicador:${d}`, describirDesacuerdo(d, verdictos[d]));
@@ -1210,6 +1248,25 @@ function selfCheck() {
   ok(leerPublicadorSolo('ya hay una corrida en curso; salgo') === null, 'si el publicador no llego a medir, no dice nada');
   ok(seAutoPublicaSegun(leerPublicadorSolo('  bot: FALLO'), 'bot') === false, 'un publicador que FALLO no absuelve a nadie');
   ok(seAutoPublicaSegun(leerPublicadorSolo('  bot: PUBLICADO'), 'bot') === true, 'PUBLICADO es la forma no-seca de "lo hace solo"');
+
+  // ── «no publico solo» tiene DOS causas y mandan a lugares OPUESTOS ───────────────────
+  // Medido en produccion el 2026-09-19 15:50 UTC, con el literal que el freno escribio:
+  // el bot quedo retenido no porque cambiara un monto, sino porque la copia VIVA del freno
+  // (/root/bin, que el sync copia al :44) todavia era la vieja que no sabia medir el bot.
+  // Aplanar las dos en NECESITA_FIRMA hace que este gate diga DESCUBIERTO y mande a gastar
+  // la firma de Sergio Urcullo en algo que se arregla solo a la hora siguiente.
+  const frenoCiego = leerPublicadorSolo(
+    '  bot: NO publico solo — toca una fuente de precio y no pude medir si cambia: CAMBIA knowledge.onia.json (2 lineas)',
+  );
+  ok(seAutoPublicaSegun(frenoCiego, 'bot') === null, 'un freno que NO PUDO MEDIR no es una firma pendiente: no se sabe');
+  const frenoMidio = leerPublicadorSolo(
+    '  landing: NO publico solo — cambia un numero en una fuente de precio: src/lib/pricing.ts: 320 550',
+  );
+  ok(seAutoPublicaSegun(frenoMidio, 'landing') === false, 'un monto que SI cambio sigue necesitando la firma');
+  ok(
+    describirFrenoCiego(frenoCiego, 'bot') !== null && describirFrenoCiego(frenoMidio, 'landing') === null,
+    'solo el freno que no pudo medir explica su causa; el que midio no tiene nada que explicar',
+  );
 
   // Que el guion exista no prueba que el cron lo corra: se exige una corrida reciente.
   const logSolo = '== 2026-09-12 14:50 La Paz ==\n  bot: al dia\n== 2026-09-12 17:50 La Paz ==\n  bot: al dia\n';
