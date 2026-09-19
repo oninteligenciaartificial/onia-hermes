@@ -12,6 +12,41 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-19 06:1x La Paz — escalón 3: coadministradores, hallazgo — DELETE bloquea sacar un ADMIN
+
+**`BUILD_ID` sin cambios (`Idvh9u4mdBzHBgE2penq4`)** — no se repitió el recorrido completo, sigue
+9/9. 0 huérfanas `zz-qa-` al arrancar. Superficie nueva: invitar/sacar un co-administrador en
+`/settings` → `/api/admin/users`, candidata anotada en varias vueltas anteriores.
+
+**Método:** instrumento nuevo `scripts/probar_coadministrador.mjs` — org `zz-qa-` sembrada por
+SQL directo con `plan='clinic'` (Completo, Bs 1.290 — el único junto a `enterprise` con
+`multiAdminIncluded:true`, no elegible desde el onboarding real), dueño ADMIN sembrado (mismo
+truco de `auth.users` con los campos de token en `''`), sesión acuñada con `acunarSesion()`.
+Contra `https://app.onia.com.bo` real: `POST /api/admin/users` invita un segundo ADMIN por
+correo → **201**. `GET /api/admin/users` → **2 usuarios**. `DELETE
+/api/admin/users/<id del segundo>` (con 2 ADMIN, sacar uno debería dar 200) → **403 "Cannot
+remove admin users"**.
+
+**HALLAZGO — reportado a `onia-cola`, `t_24758d5a`, prioridad 1:** DG-043 (17-sep) se declaró
+cerrado en los tres caminos de salida (PATCH y DELETE de `/api/admin/users/[id]`, DELETE de
+`/api/team/[id]`), pero el DELETE de `/api/admin/users/[id]` llama a
+`removeUserFromOrganization()` en `lib/auth.ts`, que tiene su **propio** bloqueo incondicional
+viejo (`if role === ADMIN || SUPERADMIN → throw "Cannot remove admin users"`) sin mirar cuántos
+ADMIN quedan — el `puedeQuitarAdministrador()` que la ruta ya calcula bien nunca llega a decidir
+nada, porque la función de abajo tira antes. `/api/team/[id]` DELETE (la tercera puerta) SÍ está
+sano: no pasa por `removeUserFromOrganization`.
+
+**Limpieza:** org, 2 `profiles`, 2 `auth.users` (+`identities`) — todo por id exacto, dentro del
+propio script, en la misma corrida (éxito o fallo). Verificado `organizations=0 auth.users=0` al
+cerrar.
+
+RAZÓN: N/A — la vuelta avanzó (escalón 3 nuevo, con hallazgo de producto).
+LECCIÓN: `psql -tAc` con `INSERT ... RETURNING` imprime la fila Y el tag de comando ("INSERT 0
+1") pegado debajo — a diferencia de `SELECT`, `-t` no lo suprime. Tomar sólo la primera línea es
+lo correcto para toda consulta de un solo valor.
+
+---
+
 ## 2026-09-19 05:1x La Paz — huérfana limpiada + escalón 3 cerrado: exportación CSV con plan `basic`
 
 **`BUILD_ID` sin cambios (`Idvh9u4mdBzHBgE2penq4`)** — no se repitió el recorrido completo
