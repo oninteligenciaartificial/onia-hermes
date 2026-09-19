@@ -29,6 +29,70 @@ contra producción (SSH al VPS, las dos bases, el motor corrido de verdad), no c
 
 ---
 
+## ✅ T8 — CERRADO el 2026-09-19: "está en `origin/main` y no está en producción" tiene TRES causas, y la tercera manda a romper un publicador sano
+
+**Cómo empezó.** Midiendo el bot VIVO, `npm run precios:vivos` cantó un defecto real y caro: al
+lead del plan **Empresa** (Bs 2.900, que ya trae el chatbot adentro) el bot le dice *"En **los
+otros planes** el chatbot va aparte, Bs 390 al mes"* — un universal sobre el complemento, que lo
+abarca por exclusión. El arreglo ya estaba escrito (`fb1f1480`, de la vuelta anterior): el repo
+dice *"En el Básico, el Crece y el Profesional…"*. O sea el arreglo existe y **no llega**.
+
+**La trampa, y es la lección.** Buscando por qué no llega aparecieron dos hechos que juntos
+acusan al publicador automático:
+
+| medición | resultado |
+|---|---|
+| `getFallbackConfig` (el respaldo de audio de T6) en `origin/main` | **2** apariciones |
+| el clon del VPS `/root/loops/onia-hermes` | `rev-list --count HEAD..origin/main` = **0** (al día) |
+| el mismo símbolo en `/opt/onia/bot/` y en `/tmp/onia-bot/` | **0** |
+| `/var/log/onia-publicar-solo.log`, últimas 3 corridas | `bot: PUBLICADO` las tres |
+| `bash /opt/onia/bot/_deploy/publicar.sh --dry-run` | **9 archivos sin publicar**, gate en verde |
+
+Leído así, el veredicto obvio es *"el publicador firma PUBLICADO con 9 arreglos varados"* — un
+falso verde en el canal que decide si hay que pedirle un deploy a Sergio Urcullo. **Y es falso.**
+
+**Lo que lo refutó es el log del propio publicador.** `/tmp/pub-bot.log` (que `publicar_destino`
+escribe en cada corrida real) termina en:
+
+```
+OK: 12 archivo(s) desplegados, conocimiento aplicado y el bot responde.
+OK: el bot corre lo que hay en origin/main (7239368b2).
+```
+
+La corrida de las **08:53 La Paz publicó bien** contra el `main` de ese momento (`7239368b2`);
+`origin/main` avanzó **después** a `df51e11ff`, y esos 9 archivos entran en la corrida siguiente.
+El publicador nunca mintió.
+
+**La regla, que corrige a la que ya estaba escrita.** La memoria decía *"un defecto en producción
+tiene DOS causas: el código está mal, o producción corre un build viejo"*. Son **tres**: el
+código está mal · producción corre un build viejo · **`main` se movió después de la última
+publicación**. Las tres se ven igual desde afuera —símbolo en `main`, ausente en producción— y la
+tercera manda al lado más caro: "arreglar" un publicador sano.
+
+Lo que las separa no es el reloj ni el conteo de varados, sino **contra qué sha publicó la última
+corrida**, y eso ya está escrito: `/tmp/pub-<destino>.log`, línea `el <destino> corre lo que hay
+en origin/main (<sha>)`. Si ese sha es ancestro de tu símbolo, el publicador todavía no lo vio.
+
+```bash
+# la pregunta correcta, en un comando
+ssh root@187.77.16.63 "grep -o 'origin/main ([0-9a-f]*)' /tmp/pub-bot.log | tail -1"
+git merge-base --is-ancestor <ese-sha> <tu-sha> && echo "main se movio despues: no es el publicador"
+```
+
+**Estado del defecto de precio que abrió el ítem.** `fb1f1480` está commiteado y pusheado a
+`claude/chatbots-platform-review-0d1d09`, y es el **único** commit de la rama sin mergear. No está
+en `origin/main`, así que el bot vivo sigue diciendo la frase vieja. **No es deuda de este carril:
+está entregado y espera al integrador.** Se verifica solo —sin abrir nada— con:
+
+```bash
+npm run precios:vivos   # hoy: "EL BOT VIVO PROMETE UNA INCLUSION QUE EL CATALOGO NO HACE"
+```
+
+Cuando `fb1f1480` entre a `main`, el publicador lo saca solo (el bot publicó las 6 corridas de
+hoy) y ese gate pasa a verde sin que nadie toque nada.
+
+---
+
 ## ✅ T7 — CERRADO el 2026-09-19: el arreglo de T6 dejó a la capacidad con DOS destinos, y el gate seguía preguntando por uno
 
 **El agujero lo abrió el arreglo del día anterior.** Al cablearle a la transcripción un
