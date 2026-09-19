@@ -602,9 +602,39 @@ export function step(state, incoming, options = {}) {
     return welcomeResult(ctx, reabierto, { reason: "reapertura_tras_opt_out", notes: ["reabierto_por_demo"] });
   }
 
-  // --- Audio sin transcripcion: el ejecutor debio transcribir antes (Speaches). Pedimos texto.
+  // --- Audio sin transcripcion. El ejecutor DEBIO transcribir antes (Speaches), pero ese
+  // contenedor no existe en el VPS (`npm run destinos:vivos`), asi que hoy esta rama no es el
+  // caso raro: es el UNICO caso, y en Bolivia la nota de voz es la forma normal de escribir.
+  //
+  // No podemos leerlo, que es exactamente un fallo de comprension: va al MISMO contador que los
+  // malentendidos, no a uno nuevo. Una vez se pide texto; si insiste con audio, el bot deja de
+  // insistir y lo pasa a la persona que SI lo puede escuchar (esta ahi, en Chatwoot). Antes esta
+  // rama hacia `finalize` pelado: el que no reescribia se perdia en silencio y nadie se enteraba
+  // de que habia existido — mientras su hermana de dos lineas mas abajo (el archivo adjunto, MUCHO
+  // menos frecuente) si derivaba. Derivar al PRIMER audio tampoco sirve: silenciaria al bot en casi
+  // toda conversacion de WhatsApp y subiria las horas de soporte, que son el techo del negocio.
   if (msg.kind === "voice" && !msg.hasText) {
-    return finalize(ctx, base, [say("M_AUDIO_FAIL", base, config)], [], ["audio_sin_transcripcion"]);
+    const count = base.offScriptCount + 1;
+    if (count >= config.offScript.maxBeforeHandoff) {
+      // Ya derivada: se le contesta igual (nunca silencio) pero SIN repetir los efectos — mismo
+      // criterio que la barrera de cuota agotada. Si no, quien manda seis audios seguidos genera
+      // seis avisos del mismo hecho, y asi se pierde el que importa.
+      if (base.botStage === "handoff_humano") {
+        return finalize(ctx, { ...base, offScriptCount: count }, [say("M_AUDIO_FAIL", base, config)], [], [
+          "audio_sin_transcripcion:ya_derivada",
+        ]);
+      }
+      return handoffResult(ctx, { ...base, offScriptCount: count }, "audio_que_no_podemos_oir", [
+        say("M_AUDIO_FAIL", base, config),
+      ]);
+    }
+    return finalize(
+      ctx,
+      { ...base, offScriptCount: count },
+      [say("M_AUDIO_FAIL", base, config)],
+      [],
+      ["audio_sin_transcripcion"],
+    );
   }
 
   // --- Imagen / documento: se reconoce y va a humano (el bot no lee archivos).

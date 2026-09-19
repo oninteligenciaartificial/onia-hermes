@@ -356,6 +356,68 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       freno de precio NO lo retiene: `bash /root/bin/onia-publicar-solo.sh --dry-run` →
       `bot: publicaria (nada toca precio)`. Nadie tiene que apretar nada.
 
+- [x] 🔴 **CERRADO el 2026-09-19 — quien mandaba una NOTA DE VOZ se perdía en silencio, y
+      nadie se enteraba de que había escrito** (`bot-engine.mjs` · `recepcionista.mjs` ·
+      `config.mjs`).
+
+      **Qué estaba mal.** Los dos motores resolvían el MISMO hecho —"me mandaron algo que no
+      puedo leer"— de dos maneras opuestas, con dos líneas de distancia:
+
+      ```
+      attachment && !hasText  ->  handoffResult(...)      el humano se entera y contesta
+      voice       && !hasText ->  finalize(M_AUDIO_FAIL)  nadie se entera; el lead queda solo
+      ```
+
+      La asimetría se sostenía en un comentario cierto el día que se escribió —*"el ejecutor
+      debió transcribir antes (Speaches)"*— y hoy falso: `npm run destinos:vivos` dice
+      `ONIA_AUDIO_ENABLED=true` contra `http://speaches:8000/v1`, **y ese contenedor no existe
+      en el VPS**. O sea que la rama del audio ilegible no era el caso raro: era el ÚNICO caso.
+      En Bolivia la nota de voz por WhatsApp es la forma normal de escribir, y esto vale
+      también para el asistente del CLIENTE, que es el add-on de Bs 390/mes.
+
+      Encima el texto MENTÍA: *"No me llegó bien el audio"* — llegó perfecto y está guardado en
+      Chatwoot. Le echaba la culpa a la conexión del prospecto y lo invitaba a reintentar el
+      mismo audio, que iba a fallar igual, para siempre.
+
+      **Lo que lo hace caro: el audio SÍ se puede escuchar.** Lo escucha una persona, que lo
+      tiene ahí. La capacidad existía; lo único que faltaba era avisarle.
+
+      **La cura, y por qué NO es derivar en el primer audio.** Derivar siempre silenciaría al
+      bot en casi toda conversación de WhatsApp y subiría las horas de soporte por cliente, que
+      son el techo del negocio (`ONIA_ESTRATEGIA_DE_EMPRESA.md` §9) — el arreglo habría sido
+      peor que el bug. No poder leer un audio **es** un fallo de comprensión, así que va al
+      contador que el bot YA tiene (`offScriptCount` / `offScript.maxBeforeHandoff`, el mismo de
+      "2 malentendidos → handoff"): se pide texto una vez, con la verdad, y si insiste con audio
+      lo escucha una persona. El que reescribe sigue con el bot, como siempre. Y si ya está
+      derivada, contesta igual pero **sin repetir el aviso** (seis audios seguidos no son seis
+      avisos del mismo hecho) — mismo criterio que la barrera de cuota agotada.
+
+      **Gate de CLASE**, no del audio: `lo-que-el-bot-no-puede-leer-va-a-un-humano.test.mjs`
+      (5 casos). El universo se camina del DISCO (no `git ls-files`: un motor nuevo sin
+      commitear es justo el sujeto que no se quiere perder) buscando la condición
+      `msg.kind === "<x>" && !msg.hasText`, así que un tipo nuevo —sticker, ubicación,
+      contacto— entra solo. Con caso ANCLA que exige que los 4 sujetos conocidos estén en el
+      universo: si el corte falla abierto, el ancla lo caza.
+
+      **Validado por mutación, las dos direcciones:** (1) el esquive
+      `if (false && count >= ...)`, que deja el literal `handoffResult` intacto → lo caza el
+      caso del EFECTO (corre el motor y mira `sideEffects.notify_sergio`), **no** el de texto —
+      por eso ese caso existe; (2) el recepcionista de vuelta a `finalize` pelado → rojo en el
+      caso 2. Suite del bot **1264/1264** con el arreglo puesto, y el simulador sigue 3/3.
+
+      ⚠️ **Commiteado, NO desplegado.** El bot vivo corre desde `/tmp/onia-bot/` dentro de
+      `onia-center`; esto llega al cliente recién cuando el publicador del bot corra (o con un
+      `DESPLEGAR: bot`). Hasta entonces el defecto sigue vivo en producción.
+
+      **Lo que queda abierto y NO es de este carril:** que el bot ENTIENDA los audios pide un
+      transcriptor. LiteLLM contesta pero sólo tiene modelos de chat (`gpt-5.1`, `gpt-5-mini`,
+      `gpt-4.1-mini`, `o4-mini`) — ninguno de transcripción — y todos rutean a OpenAI, **que está
+      sin crédito** (bloqueo de plata ya escalado, `t_ac3aa802`). Las env
+      `ONIA_AUDIO_STT_FALLBACK_PROVIDER=openai` / `..._FALLBACK_MODEL=gpt-4o-mini-transcribe` que
+      el proceso hereda **no las lee nadie del bot**: son de `web-factory/apps/site`
+      (onia-center), que está a oscuras. O sea que hoy no hay respaldo, aunque el entorno diga
+      que sí.
+
 - [x] 🔴 **CERRADO el 2026-09-19 — el único de los tres efectos del webhook que COBRA
       decidía sin saber quién escribe: el cupo del add-on contaba al dueño probando su
       propio bot** (`onia-platform` · commit `42eab9a8`).

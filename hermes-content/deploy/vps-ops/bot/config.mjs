@@ -431,7 +431,11 @@ export const SCRIPT = Object.freeze({
   ].join("\n"),
 
   // Audio que no se pudo transcribir (spec §2.3).
-  M_AUDIO_FAIL: "No me llegó bien el audio, ¿me lo escribís?",
+  // El audio LLEGO perfecto y esta guardado en Chatwoot: el que no puede oirlo es el bot
+  // (`npm run destinos:vivos`). Decirle "no me llego bien" le echa la culpa a su conexion y lo
+  // invita a reintentar el mismo audio, que va a fallar igual. Se dice la verdad y se pide texto
+  // UNA vez; si insiste con audio, offScriptCount lo lleva a un humano, que si lo puede escuchar.
+  M_AUDIO_FAIL: "Recibí tu audio, pero no lo puedo escuchar yo. ¿Me lo escribís?",
 
   // Imagen / documento (spec §2.3): se reconoce y se pasa a humano.
   M_ATTACH_BODY: "Recibí tu archivo. Lo mira {{humano}}, no lo puedo leer bien yo.",
@@ -536,6 +540,11 @@ export const SCRIPT = Object.freeze({
   R_NO_DATO: "Eso no lo tengo acá para confirmártelo — te lo confirma {{humano}} por este mismo chat.",
 
   R_ATTACH: "Recibí tu archivo. Se lo paso a {{humano}}, que te confirma por acá.",
+  // R_AUDIO — el paciente/cliente mando una nota de voz y no la podemos transcribir. Mismo molde
+  // que R_ATTACH: se acusa recibo sin culpar a nadie y se pide texto. Si vuelve a mandar audio,
+  // deja de insistir el bot y lo escucha una persona (ver la rama `voice` de recepcionista.mjs).
+  R_AUDIO: "Recibí tu audio, pero no lo puedo escuchar yo. ¿Me lo escribís?",
+  R_AUDIO_DERIVA: "Recibí tu audio. Se lo paso a {{humano}}, que lo escucha y te responde por acá.",
   // R_CUOTA_AGOTADA — la org agoto sus conversaciones automaticas del mes (lo dice /published).
   // Texto FIJO y honesto, cero LLM; {{producto}} es el nombre del negocio en modo recepcionista.
   R_CUOTA_AGOTADA: "Este mes ya atendimos el máximo de conversaciones automáticas de {{producto}}. Te responde una persona en breve.",
