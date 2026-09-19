@@ -187,6 +187,69 @@ export function esNuestra(conversacion) {
 }
 
 /**
+ * Las banderas que este programa sabe leer de verdad.
+ *
+ * POR QUE EXISTE, con fecha (2026-09-18). El mensaje de la rama «puerta» cerraba recomendando
+ * «tambien se puede medir con una cuenta que ya lo cumpla (`--email`)» y esa bandera **no
+ * existia**: el unico `process.argv` del archivo era el de `--self-check`. O sea que el gate
+ * imprimia un remedio INEJECUTABLE — el lector que lo obedecia veia el mismo veredicto, sin
+ * forma de refutarlo, y el objetivo del carril quedaba NO MEDIDO vuelta tras vuelta.
+ *
+ * El caso ancla del self-check no mira ESTA bandera: deriva de la ventana de `juzgar()` todas
+ * las que sus mensajes recomiendan y exige que el parser las conozca. Prohibir el literal viejo
+ * cerraria la instancia; lo que cierra la clase es que **todo remedio que se imprime se pueda
+ * tipear**.
+ */
+export const BANDERAS = ['--email', '--self-check'];
+
+/**
+ * El correo que el llamador pide medir, o `null` para derivarlo de la base como siempre.
+ *
+ * Acepta las dos formas (`--email x` y `--email=x`) porque las dos se tipean, y la segunda es la
+ * que sale de copiar el remedio de un renglon.
+ */
+export function dueñoPedido(argv = []) {
+  for (let i = 0; i < argv.length; i += 1) {
+    const arg = String(argv[i] ?? '');
+    if (arg === '--email') {
+      const valor = String(argv[i + 1] ?? '').trim();
+      return valor && !valor.startsWith('--') ? valor : null;
+    }
+    if (arg.startsWith('--email=')) {
+      const valor = arg.slice('--email='.length).trim();
+      return valor || null;
+    }
+  }
+  return null;
+}
+
+/**
+ * Las banderas que los mensajes de `juzgar()` RECOMIENDAN, derivadas de la fuente.
+ *
+ * Se acota a la ventana de esa funcion —y no al archivo entero— porque ahi viven los remedios
+ * que se imprimen; los comentarios de arriba hablan del bug y citan la bandera vieja a
+ * proposito. Una bandera nueva en una rama nueva entra sola: el universo es el disco, no una
+ * lista escrita a mano.
+ */
+export function banderasQueRecomienda(fuente) {
+  // ⚠️ La DEFINICION, anclada a inicio de linea — no la primera MENCION del nombre. Medido el
+  // 2026-09-18 escribiendo esto: `indexOf('export function juzgar(')` encontraba el literal que
+  // vive DENTRO de esta misma funcion (esta dos lineas mas abajo), asi que la ventana era el
+  // cuerpo de este gate y el universo salia de su propio regex. Quedaba verde y se auto-medía:
+  // la mutacion que ponia una bandera inexistente en el mensaje de `juzgar()` pasaba limpia.
+  const def = /^export function juzgar\(/m.exec(fuente);
+  if (!def) return null;
+  const desde = def.index;
+  const hasta = fuente.indexOf('\n/**', desde);
+  const ventana = fuente.slice(desde, hasta < 0 ? fuente.length : hasta);
+  // El placeholder del valor entra en el mismo par de backticks (`--email <correo>`), asi que la
+  // bandera se lee hasta el espacio o el `=` — pedirla pegada al backtick de cierre dejaba fuera
+  // justo a la forma que se escribe para que el lector la pueda copiar.
+  const marcas = ventana.match(/`(--[a-z][a-z-]*)(?:[ =][^`]*)?`/g) ?? [];
+  return [...new Set(marcas.map((m) => m.slice(1, -1).split(/[ =]/)[0]))];
+}
+
+/**
  * ¿El corte lo hizo la PUERTA de la app, antes de que el pedido llegara a la bandeja?
  *
  * POR QUE EXISTE, con fecha (2026-09-18). `/api/bandeja` contestaba 403 y este gate lo
@@ -215,7 +278,7 @@ export function corteDeLaPuerta(cuerpo) {
  * El veredicto, separado de la red a proposito: es lo que se prueba sin docker, sin sesion y
  * sin produccion. `respuesta` es `{ status, cuerpo }` tal como sale de `/api/bandeja`.
  */
-export function juzgar(respuesta, { colgados, dueñoTieneOrg = null } = {}) {
+export function juzgar(respuesta, { colgados, dueñoTieneOrg = null, rolDelDueño = null } = {}) {
   const { status, cuerpo } = respuesta ?? {};
 
   // La puerta se pregunta ANTES que cualquier diagnostico de la bandeja, y para todo status que
@@ -231,9 +294,12 @@ export function juzgar(respuesta, { colgados, dueñoTieneOrg = null } = {}) {
         `\`${puerta.code}\`${puerta.error ? ` ("${puerta.error}")` : ''}, y manda a \`${puerta.next}\`. ` +
         'Ese cuerpo con `code` lo escribe `proxy.ts`, no `/api/bandeja` (que contesta 403 SIN ' +
         '`code`): la sesion llego y `bandeja-auth.ts` no es sospechoso de nada. El objetivo ' +
-        'TAMPOCO se ve mientras la puerta corte —el dueño rebota igual al abrir `/inbox`—, pero ' +
-        'lo que se destraba es lo que pide ese `code`, no la bandeja. Tambien se puede medir con ' +
-        'una cuenta que ya lo cumpla (`--email`).',
+        'TAMPOCO se ve mientras la puerta corte, pero lo que se destraba es lo que pide ese ' +
+        `\`code\`, no la bandeja. A quien se le corto: el dueño DERIVADO de los inboxes ` +
+        `${INBOXES_DEL_OBJETIVO.join('/')}${rolDelDueño ? `, rol \`${rolDelDueño}\`` : ' (rol no medido)'}. ` +
+        'A QUIEN alcanza esa exigencia lo decide `MFA_REQUIRED_ROLES` de `lib/mfa/policy.ts` en ' +
+        '`onia-platform`, asi que este corte NO dice nada sobre las demas cuentas del panel: ' +
+        'medir otra con `--email <correo>` antes de concluir que ninguna entra.',
     };
   }
 
@@ -423,13 +489,52 @@ function leerDueñoTieneOrg(contenedor, email) {
   }
 }
 
+/**
+ * El rol del dueño, para que el veredicto de la puerta NOMBRE a quien se le corto en vez de
+ * generalizar. Tri-estado: `null` = no se pudo preguntar, y entonces el mensaje lo dice.
+ *
+ * Es una consulta aparte de `leerDueñoTieneOrg` a proposito: esa decide un veredicto ROJO y su
+ * forma esta anclada por el self-check; esta solo agrega contexto y no puede tumbar nada.
+ */
+export function sqlRolDelDueño(email) {
+  return (
+    'select p.role from public.profiles p ' +
+    'join auth.users u on u.id::text = p."userId" ' +
+    `where u.email = '${String(email).replace(/'/g, "''")}' limit 1;`
+  );
+}
+
+function leerRolDelDueño(contenedor, email) {
+  if (!email) return null;
+  try {
+    const salida = correr('docker', ['exec', '-i', contenedor, 'psql', '-U', 'postgres', '-d', 'postgres', '-t', '-A'], {
+      input: sqlRolDelDueño(email),
+    });
+    const fila = salida.trim().split('\n')[0]?.trim();
+    return fila || null;
+  } catch {
+    return null;
+  }
+}
+
 /** Una variable de entorno del contenedor que CORRE. Nunca se imprime. */
 function leerEnv(contenedor, nombre) {
   return correr('docker', ['exec', contenedor, 'printenv', nombre]).trim();
 }
 
-async function medir({ plataforma, base, appUrl, ssrDir }) {
-  const dueño = leerDueño(base);
+async function medir({ plataforma, base, appUrl, ssrDir, email = null }) {
+  // `--email` pisa la derivacion, que es lo que hace ejecutable el remedio que imprime la rama
+  // «puerta». Y se le exige el perfil ANTES de emitir nada: `generate_link` CREA la cuenta si el
+  // correo no existe y devuelve 200 igual, asi que un dedazo aca daria de alta un usuario en
+  // produccion y encima mediria una bandeja que no es la de nadie.
+  const pedido = email ?? dueñoPedido(process.argv.slice(2));
+  if (pedido && leerDueñoTieneOrg(base, pedido) === null) {
+    throw new Error(
+      `\`--email ${pedido}\` no tiene perfil en la base de produccion, o no se pudo preguntar. NO se ` +
+        'emite la sesion: `generate_link` CREARIA esa cuenta y devolveria 200 igual',
+    );
+  }
+  const dueño = pedido ?? leerDueño(base);
   if (!dueño) {
     throw new Error(
       `ninguna org tiene los inboxes ${INBOXES_DEL_OBJETIVO.join(' ni ')} en \`chatwootInboxId\` ni en ` +
@@ -489,7 +594,13 @@ async function medir({ plataforma, base, appUrl, ssrDir }) {
   }
   // El perfil se pregunta SIEMPRE, no solo ante un 403: preguntarlo recien cuando ya hay rojo
   // ata el dato a la rama que lo necesita y lo deja sin medir el dia que la rama cambie.
-  return { status: r.status, cuerpo, dueño, dueñoTieneOrg: leerDueñoTieneOrg(base, dueño) };
+  return {
+    status: r.status,
+    cuerpo,
+    dueño,
+    dueñoTieneOrg: leerDueñoTieneOrg(base, dueño),
+    rolDelDueño: leerRolDelDueño(base, dueño),
+  };
 }
 
 function afirmarFactory() {
@@ -725,11 +836,116 @@ function selfCheck() {
   );
   // El sujeto es que el valor se DERIVE, no que la clave exista: `dueñoTieneOrg: null` deja la
   // clave en su lugar y el dato sin medir para siempre. Medido: esa mutacion pasaba verde.
-  const returnDeMedir = fuente.match(/return \{ status: r\.status,[^;]*\};/);
+  // El `\s*` y no un espacio: el return crecio a varias lineas al sumarle el rol, y un ancla que
+  // se rompe con el formato deja de medir el cableado sin que nada lo diga.
+  const returnDeMedir = fuente.match(/return \{\s*status: r\.status,[^;]*\};/);
   afirmar(Boolean(returnDeMedir), '`medir()` sigue devolviendo la respuesta');
   afirmar(
     returnDeMedir ? /leerDue[^(]*\(base, dueño\)/.test(returnDeMedir[0]) : false,
     'y DERIVA el dato del dueño ahi mismo, en vez de dejar la clave puesta en null',
+  );
+
+  // ─── Un remedio que se imprime tiene que poder tipearse ────────────────────────────────────
+  //
+  // ⚠️ EL CASO DE CLASE, y el que dio origen a todo esto (2026-09-18). La rama «puerta» cerraba
+  // con «tambien se puede medir con una cuenta que ya lo cumpla (`--email`)» y esa bandera NO
+  // existia: el unico `process.argv` era el de `--self-check`. El lector que obedecia el remedio
+  // veia el MISMO veredicto y no tenia con que refutarlo, asi que el objetivo del carril quedo
+  // NO MEDIDO vuelta tras vuelta — y de ese texto salio una tarea que le pedia a Sergio Urcullo
+  // BAJARLE la 2FA a una cuenta que no tenia el problema.
+  //
+  // El universo se DERIVA de la ventana de `juzgar()`, no de una lista escrita a mano: una rama
+  // nueva que recomiende una bandera nueva entra sola. Prohibir el literal viejo habria cerrado
+  // la instancia; esto cierra la clase.
+  const recomendadas = banderasQueRecomienda(fuente);
+  afirmar(Array.isArray(recomendadas), 'se puede acotar la ventana de juzgar() para leer sus remedios');
+  afirmar(
+    (recomendadas ?? []).includes('--' + 'email'),
+    'el sujeto conocido sigue en el universo (si no, el gate se apago solo)',
+  );
+  // ⚠️ Y que el universo salga de `juzgar()` y NO de este gate. Medido al escribirlo: la ventana
+  // arrancaba en la MENCION del nombre que vive dentro de `banderasQueRecomienda`, asi que el
+  // `--email` que encontraba era el de su propio regex. Todos los casos en verde, midiendose a
+  // si mismo, y la mutacion que reintroduce el bug pasando limpia. El nombre va PARTIDO: el gate
+  // lee su propio archivo y si no se acusa solo.
+  const marcaDeJuzgar = 'la PUERTA de la app corto el pedido';
+  afirmar(
+    fuente.slice(fuente.search(/^export function juzgar\(/m)).includes(marcaDeJuzgar),
+    'la ventana arranca en la DEFINICION de juzgar(), no en una mencion de su nombre',
+  );
+  // La prueba directa de que no se auto-mide: si se le borra al MENSAJE su bandera, el universo
+  // se queda vacio. Mientras la ventana fue este mismo gate, seguia devolviendo `--email`.
+  afirmar(
+    banderasQueRecomienda(fuente.replace('`--email <correo>` antes de concluir', 'nada antes de concluir'))
+      ?.length === 0,
+    'el universo sale del MENSAJE de juzgar(), no del regex de este gate',
+  );
+  for (const bandera of recomendadas ?? []) {
+    afirmar(
+      BANDERAS.includes(bandera),
+      `el remedio \`${bandera}\` que imprime juzgar() es una bandera que el programa sabe leer`,
+    );
+  }
+
+  // Y que este en la lista no alcanza: el parser tiene que devolver el valor.
+  afirmar(dueñoPedido(['--email', 'a@b.co']) === 'a@b.co', '`--email x` se lee');
+  afirmar(dueñoPedido(['--email=a@b.co']) === 'a@b.co', 'y `--email=x` tambien, que es la que sale de copiar');
+  afirmar(dueñoPedido([]) === null, 'sin bandera se deriva el dueño de la base, como siempre');
+  afirmar(dueñoPedido(['--email']) === null, 'una bandera sin valor NO es un correo vacio');
+  afirmar(dueñoPedido(['--email', '--self-check']) === null, 'ni se come la bandera siguiente');
+
+  // ─── El veredicto de la puerta NOMBRA a quien se le corto ──────────────────────────────────
+  //
+  // Decia «el dueño rebota igual al abrir `/inbox`» sin saber el rol, y eso se leyo —con razon—
+  // como «ninguna cuenta entra». Medido ese dia: `sergio@onia.com.bo` (ADMIN) abria `/inbox` con
+  // HTTP 200 mientras el dueño DERIVADO de los inboxes 4/5 (SUPERADMIN) rebotaba. Las dos cosas
+  // eran ciertas a la vez; el mensaje solo conocia una.
+  const corte = { status: 403, cuerpo: { error: 'x', code: 'MFA_REQUIRED', next: '/login/2fa' } };
+  const conRol = juzgar(corte, { dueñoTieneOrg: true, rolDelDueño: 'SUPERADMIN' });
+  afirmar(conRol.codigo === 2 && conRol.sospechoso === 'puerta', 'el corte de la puerta sigue siendo NO MEDIDO');
+  afirmar(conRol.mensaje.includes('SUPERADMIN'), 'y NOMBRA el rol del dueño cuando la base lo contesto');
+  afirmar(
+    juzgar(corte, { dueñoTieneOrg: true }).mensaje.includes('rol no medido'),
+    'y dice que NO lo midio cuando no lo pudo preguntar, en vez de callarlo',
+  );
+  // La afirmacion que sobraba: el corte de ESTE dueño no es un veredicto sobre las demas cuentas.
+  afirmar(
+    !/rebota igual/.test(conRol.mensaje),
+    'y ya no generaliza el rebote a toda cuenta del panel (era falso para los ADMIN)',
+  );
+  afirmar(
+    /MFA_REQUIRED_ROLES/.test(conRol.mensaje),
+    'manda a la fuente que decide a quien alcanza, en vez de tipear la politica (se desincroniza)',
+  );
+
+  // ⚠️ CABLEADO de las dos mitades nuevas. Puras, las de arriba pasan aunque `medir()` no derive
+  // el rol ni respete la bandera — que es justo como nacio el bug que este bloque cierra.
+  afirmar(
+    returnDeMedir ? /rolDelDue[^:]*: leerRol[^(]*\(base, dueño\)/.test(returnDeMedir[0]) : false,
+    '`medir()` DERIVA el rol del dueño y lo devuelve',
+  );
+  afirmar(
+    llamadaViva ? llamadaViva[0].includes('rolDelDue' + 'ño') : false,
+    'y la llamada de produccion se lo pasa a juzgar()',
+  );
+  const cuerpoDeMedir = fuente.slice(
+    fuente.indexOf('async function medir('),
+    returnDeMedir ? fuente.indexOf(returnDeMedir[0]) : fuente.length,
+  );
+  afirmar(
+    /due[^=]*= pedido \?\? leerDue[^(]*\(base\)/.test(cuerpoDeMedir),
+    'la bandera PISA al dueño derivado (si no, se lee el argumento y se mide igual la otra cuenta)',
+  );
+  // La trampa que ya costo caro en `mirar_bandeja_dueno.mjs`: `generate_link` CREA la cuenta si
+  // el correo no existe y devuelve 200 igual. Un dedazo en la bandera daria de alta un usuario
+  // en produccion, asi que el perfil se exige ANTES de emitir.
+  // Se ancla a la RUTA de la admin API y no al nombre pelado: el comentario que explica la
+  // trampa nombra `generate_link` unas lineas ANTES de la guarda, asi que cortar por el nombre
+  // deja fuera justo lo que se quiere medir. Los comentarios acusan y absuelven.
+  const antesDeEmitir = cuerpoDeMedir.slice(0, cuerpoDeMedir.indexOf('/auth/v1/admin/'));
+  afirmar(
+    /if \(pedido && leerDue[^(]*\(base, pedido\) === null\)/.test(antesDeEmitir),
+    'y se le exige perfil en la base ANTES de emitir la sesion',
   );
 
   // Fallo conservador: lo que no se pudo medir no se declara bien.
@@ -888,7 +1104,11 @@ async function main() {
     colgados = undefined;
   }
 
-  const veredicto = juzgar(respuesta, { colgados, dueñoTieneOrg: respuesta?.dueñoTieneOrg ?? null });
+  const veredicto = juzgar(respuesta, {
+    colgados,
+    dueñoTieneOrg: respuesta?.dueñoTieneOrg ?? null,
+    rolDelDueño: respuesta?.rolDelDueño ?? null,
+  });
   console[veredicto.codigo === 0 ? 'log' : 'error'](`[dueño: ${respuesta.dueño}] ${veredicto.mensaje}`);
   return veredicto.codigo;
 }

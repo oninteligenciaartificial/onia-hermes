@@ -887,23 +887,88 @@ function epochBuildLanding() {
   return crudo && /^\d+$/.test(crudo.trim()) ? Number(crudo.trim()) : null;
 }
 
+export const RUTA_COMMIT_LANDING = '/opt/onia-landing/runtime-next/.commit';
+
+/** Lo que contesta el shell cuando PUDO mirar y el archivo no está. Ver `guionDelCommit`. */
+export const SIN_COMMIT = '__SIN_COMMIT__';
+
 /**
- * El sha del build que sirve `onia.com.bo`. Local si hay `/opt`, por SSH desde el nodo de casa
- * si no — misma degradación que `epochBuildLanding`, y `null` (NO MEDIDO) ante cualquier salida
- * que no sea un sha: una cita inventada manda a verificar contra un commit que no existe.
+ * El guion que separa «no pude preguntar» de «pregunté y no está»: un `cat` a secas falla igual
+ * en los dos casos —SSH caído y archivo ausente dan la misma salida vacía—, así que la ausencia
+ * queda muda. Con el centinela, el shell contesta y dice cuál de las dos es.
+ */
+export function guionDelCommit(ruta = RUTA_COMMIT_LANDING) {
+  return `if [ -f "${ruta}" ]; then cat "${ruta}"; else printf %s ${SIN_COMMIT}; fi`;
+}
+
+/**
+ * Le pregunta al runtime vivo por su `.commit`. Donde está `/opt/onia-landing` la respuesta es
+ * local y autoritativa; desde el nodo de casa va por el shim del VPS. `null` = no se pudo
+ * preguntar, y eso NO es lo mismo que `SIN_COMMIT`.
+ *
+ * ⚠️ La rama local se elige por el DIRECTORIO, no por el archivo: preguntando `existsSync(ruta)`
+ * —como hasta el 2026-09-18— el archivo ausente en la máquina que SÍ lo tiene se leía como «acá
+ * no es, preguntale al VPS», que es justo la confusión que este tri-estado existe para deshacer.
+ */
+function leerCommitDeLaLanding({ ruta = RUTA_COMMIT_LANDING, correr = sh } = {}) {
+  const guion = guionDelCommit(ruta);
+  if (existsSync('/opt/onia-landing')) return correr('bash', ['-lc', guion]);
+  if (existsSync(VPS)) return correr('bash', [VPS, 'bash', '-lc', guion], { timeout: 120_000 });
+  return null;
+}
+
+/**
+ * Los tres estados de la cita del build vivo de la landing. Puro, para poder probarlo.
+ *
+ * @returns {{estado:'MEDIDO'|'SIN_COMMIT'|'NO_MEDIDO', sha:string|null, motivo:string|null}}
+ */
+export function clasificarShaVivo(crudo) {
+  if (crudo === null || crudo === undefined) {
+    return { estado: 'NO_MEDIDO', sha: null, motivo: 'no pude preguntarle al runtime de la landing' };
+  }
+  const t = String(crudo).trim();
+  if (t === SIN_COMMIT) {
+    return { estado: 'SIN_COMMIT', sha: null, motivo: 'el runtime vivo no tiene .commit' };
+  }
+  if (/^[0-9a-f]{7,40}$/.test(t)) return { estado: 'MEDIDO', sha: t, motivo: null };
+  return {
+    estado: 'NO_MEDIDO',
+    sha: null,
+    motivo: t === '' ? 'el runtime contesto vacio' : `el runtime contesto algo que no es un sha: ${t.slice(0, 40)}`,
+  };
+}
+
+/**
+ * El sha del build que sirve `onia.com.bo`, TRI-ESTADO. Nunca un sha inventado: una cita falsa
+ * manda a verificar contra un commit que no existe.
  *
  * No sirve para decidir si un pedido está entregado —para eso está `epochBuildLanding`, porque
- * la landing se mide por FECHA— sino sólo para CITAR contra qué build se midió.
+ * la landing se mide por FECHA— sino para CITAR contra qué build se midió… y para NOTAR cuándo
+ * no se puede citar. Hasta el 2026-09-18 devolvía `null` pelado, así que el runtime publicado
+ * sin su `.commit` —medido ese día: `/opt/onia-landing/runtime-next/` sin él mientras los
+ * respaldos y los builds armados lo tienen— era indistinguible de un SSH caído, y la ausencia
+ * no la notaba nadie. Se cura sola en la próxima publicación; lo que faltaba era verla.
  */
-function shaVivoLanding() {
-  const ruta = '/opt/onia-landing/runtime-next/.commit';
-  const crudo = existsSync(ruta)
-    ? sh('cat', [ruta])
-    : existsSync(VPS)
-      ? sh('ssh', ['-o', 'BatchMode=yes', '-o', 'ConnectTimeout=20', 'root@187.77.16.63', `cat ${ruta}`], { timeout: 120_000 })
-      : null;
-  const sha = crudo && crudo.trim();
-  return sha && /^[0-9a-f]{7,40}$/.test(sha) ? sha : null;
+function shaVivoLanding(opciones = {}) {
+  return clasificarShaVivo(leerCommitDeLaLanding(opciones));
+}
+
+/**
+ * El aviso —nunca un rojo— de que el runtime corre sin su `.commit`.
+ *
+ * No cambia ningún veredicto a propósito: el de la landing lo da `epochBuildLanding` por FECHA,
+ * y esto se cura en la próxima publicación. Escribirlo a mano en producción sería inventar un
+ * sha que nadie derivó. Lo que se pierde mientras tanto es la CITA, que es la diferencia entre
+ * refutar un veredicto en dos segundos y volver a medirlo a mano.
+ */
+export function avisoDelCommitAusente(vivoLanding) {
+  if (!vivoLanding || vivoLanding.estado !== 'SIN_COMMIT') return null;
+  return [
+    'AVISO: el runtime vivo de la landing corre SIN .commit, asi que «que corre onia.com.bo»',
+    '  vuelve a ser a mano. No cambia ningun veredicto (se mide por FECHA) y se cura en la',
+    '  proxima publicacion; si vuelve a pasar DESPUES de publicar, el sospechoso es el stage:',
+    '  ssh root@187.77.16.63 \'ls -la /opt/onia-landing/runtime-next/; find /opt/onia-landing -maxdepth 3 -name .commit\'',
+  ].join('\n');
 }
 
 /**
@@ -1147,8 +1212,12 @@ export function cadenaPorPedido({ ids, acumuladores, correr }) {
  * Sin sha del destino la cita se OMITE: no se cae a la del vecino ni se inventa una. El
  * veredicto se imprime igual, que es lo único que el lector necesita para actuar.
  */
-function citaDelVivo(destino, vivoPorDestino) {
-  const sha = destino ? (vivoPorDestino ?? {})[destino] : null;
+export function citaDelVivo(destino, vivoPorDestino) {
+  const dato = destino ? (vivoPorDestino ?? {})[destino] : null;
+  // El de la plataforma es un sha pelado; el de la landing es tri-estado (`clasificarShaVivo`).
+  // `SIN_COMMIT` y `NO_MEDIDO` traen `sha: null`, así que la cita se omite igual: acá no se
+  // decide nada, se cita — el aviso de la ausencia lo da `avisoDelCommitAusente`, una sola vez.
+  const sha = dato && typeof dato === 'object' ? dato.sha : dato;
   return sha ? ` (produccion corre ${sha})` : '';
 }
 
@@ -1542,10 +1611,16 @@ async function medirEnVivo() {
   // Cada destino cita SU build. El de la landing se pide sólo si hay un pedido suyo —es un SSH—
   // y si no contesta queda `null`: la cita se omite, nunca se cae a la del vecino. Ver
   // `citaDelVivo`.
-  const vivoPorDestino = {
-    plataforma: vivo,
-    landing: entregados.some((e) => e.destino === 'landing') ? shaVivoLanding() : null,
-  };
+  //
+  // ⚠️ Se pregunta por TODO pedido de landing, no sólo por los `entregados` (que es el único
+  // camino que imprime cita). Acotarlo a ésos dejaba la ausencia del `.commit` invisible en el
+  // caso normal —un pedido VIGENTE, que es el 99 % de las corridas—, y la ausencia es
+  // justamente lo que este tri-estado existe para notar. Sigue siendo UN SSH por corrida.
+  const vivoLanding = pedidos.some((p) => p.destino === 'landing') ? shaVivoLanding() : null;
+  const vivoPorDestino = { plataforma: vivo, landing: vivoLanding };
+
+  const aviso = avisoDelCommitAusente(vivoLanding);
+  if (aviso) console.log(aviso);
 
   // La cadena de prioridad de `imprimirCadena` corre UNA VEZ POR PEDIDO. Correrla una sola vez
   // para todos —como hasta el 2026-09-12— hacía que el `return 1` del primer bloque con
