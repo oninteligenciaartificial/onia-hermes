@@ -60,6 +60,18 @@ etapa: el configurador vende y ordena; no se construye nada de entrega automáti
   la frase selecciona el chip, el brief aparece y «Corregir» lo saca, «Web actual» llega al
   mensaje, la pestaña muestra el pago único, 0 errores de consola. La web personal se publicó con
   `publicar-sitio.py` y sirve el mismo titular en el teaser (mirado a 390 y 1440).
+- **5º entrega, 18-sep ~20:10 La Paz — la llamada 1 a 1** (Sergio Urcullo: «quiero publicar la
+  nueva función de llamada a mis historias»). Antes de publicar se midió el destino: el botón
+  apuntaba a `cal.com/sergiourcullo/30min`, que devuelve **404**. El evento vivo es `/20min`
+  («Llamada 1 a 1», 20 minutos, Google Meet). Estaba roto en **7 enlaces de 5 páginas** y la
+  tarjeta anunciaba 30 minutos. Arreglado (commit `9fc910a2`), publicado con `publicar-sitio.py`
+  y verificado APRETANDO el botón en prod a 390px: cae en el calendario reservable. La tabla de
+  horarios no se tocó: medida contra cal.com con timezone La Paz, coincide exacto (sáb 10:00-17:00
+  con 21 cupos, lun-vie 14:00-16:00 y 19:00-22:00 con 15, domingo cerrado).
+  Piezas: 3 historias 9:16 en `hermes-content/carousels/out/historias-llamada/`, generador
+  `scripts/marca-personal/generar-historia-llamada.py`, gate de banda segura en verde.
+  **Falta sólo el paso de Sergio Urcullo**: subirlas y pegar el sticker de link a
+  `cal.com/sergiourcullo/20min` (el sticker no se puede poner por API).
 - `main` sigue a la rama por fast-forward (último: `0edd8b83`).
 
 **Receta que FUNCIONÓ para publicar la landing (la primera vez que el workflow da verde
@@ -217,6 +229,36 @@ hermes-content/sitio-sergiourcullo/**          (+ scripts/publicar-sitio.py, sin
   subtítulos quemados alcanzan). Además, el shell de esta sesión **mangla los escapes de barra**
   (`\r\n` en un `node -e` llegó como saltos de línea reales): los scripts se escriben con el
   Write tool y el CR/LF se arma con `String.fromCharCode`. Los .md y .json del stack son CRLF.
+
+## 5b · ¿Ya se pueden VENDER las webs? (auditoría 18-sep, motor corrido de verdad)
+
+**No todavía, y lo que traba no es el generador.** El motor anda: `from-configurador.ts
+<mensaje.txt> --build` sale exit 0 y produce el sitio en segundos (HTML estático, una página,
+4 archivos). El configurador está vivo en prod con los precios publicados.
+
+| Tramo | Estado |
+|---|---|
+| Configurador en producción | **VIVO** (200, 104 KB, 0,98 s) |
+| Mensaje de WhatsApp → intake | **VIVO** (corrido, exit 0, template `landing-clinic`) |
+| Intake → sitio generado | **VIVO**, HTML estático de una página |
+| Sitio generado → **publicado** | 🔴 **NO EXISTE**: el único consumidor de `out/<slug>` es un server que se declara «Not for production» (`web-factory/scripts/serve-out.mjs:2`); `deploy-web-cliente.sh` sólo acepta dos apps Next escritas a mano |
+| Cobro | VIVO pero manual (50/50 escrito en el mensaje; sin checkout). Factura: no medido |
+| Contenido del cliente | PARCIAL: el mensaje trae sólo el NOMBRE de cada servicio; beneficios, proceso, FAQs y productos quedan vacíos |
+
+**Configurabilidad: 28.800 combinaciones en el preview, 480 salidas distintas. 1,7%.**
+Llegan al entregable paleta, color, tipografía y objetivo. **Dirección y estructura NO**
+(mueren en `from-configurador.ts:209`): Minimalista/Esencial e Impacto/Gran impacto dan
+archivos byte-idénticos. **Landing, Profesional y Pro dan el MISMO archivo** para un rubro que
+no sea clínica. El motor tiene 7 plantillas; el configurador alcanza 3.
+
+**Los tres huecos, en orden de lo que cuesta no tenerlos:**
+1. **Publicar.** Es lo único entre «generado» y «vendido». nginx + el vhost de traefik que el
+   script ya imprime, o Cloudflare Pages. Media jornada.
+2. **La tienda sale con copy de otra marca**: `packages/templates/src/store.ts:81` hardcodea
+   `<h1>SKINCARE SIMPLE PARA COMPRAR MEJOR</h1>` en toda tienda generada, y el puente manda
+   `products: []` → 0 productos. Un par de horas.
+3. **Dirección y estructura son decorado**: 12 opciones que el cliente elige y no llegan al
+   entregable. Mapearlas cuesta un día; sacarlas del configurador, una hora.
 
 ## 6 · Qué depende de Sergio Urcullo
 
