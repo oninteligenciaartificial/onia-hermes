@@ -20,6 +20,7 @@ import {
   tareasViejasDelVigia,
   tituloDelAviso,
   estadoDeLaTarea,
+  quien,
   MARCA_LEADS,
 } from './vigia_sin_respuesta.mjs';
 
@@ -206,6 +207,59 @@ test('el aviso dice cuantos son, la conversacion y hace cuanto', () => {
   assert.match(aviso, /1/);
   assert.match(aviso, /100/);
   assert.match(aviso, /2 h|120/);
+});
+
+// ---------------------------------------------------------------------------------------------
+// EL AVISO LLEVA CON QUE CONTESTAR.
+//
+// Medido el 2026-09-19 contra produccion: los tres leads de WhatsApp colgados tienen su telefono
+// en `contacts.phone_number` (conv 35 `+59173232758` hace 24 d, conv 37 `+59173021804` hace 22 d,
+// conv 58 `+59175755019`), el vigia YA los LEE — `esNuestra({contacto, telefono})` es lo unico que
+// distingue a un desconocido de una sonda — y el texto que le pide a Sergio Urcullo que los
+// contacte salia sin el numero: `conv 58 (WhatsApp) — 11 h ... — .: Hola, vengo de la web`.
+// El contacto de esa conversacion se llama literalmente `.`, asi que el aviso no nombraba a nadie
+// con quien actuar.
+//
+// La clase, transferible: **un dato que el instrumento ya consulta para DECIDIR tiene que viajar
+// al texto que pide ACTUAR**. Y falla hacia el lado caro — el canal donde contestar es UN CLIC
+// (`wa.me`) es justo el que llegaba sin con que hacerlo.
+
+test('un lead de WhatsApp llega con su telefono: es lo unico con lo que se le contesta', () => {
+  const aviso = armarAviso(seleccionarColgados(
+    [fila({ inboxId: 5, contacto: '.', telefono: '+59175755019' })],
+    { ahoraMs: AHORA },
+  ));
+  assert.match(aviso, /\+59175755019/, 'sin el numero, un contacto llamado "." no se puede contestar');
+  assert.match(aviso, /wa\.me\/59175755019/, 'en WhatsApp contestar es un clic: el enlace va armado');
+});
+
+test('un lead de la web no inventa telefono ni ensucia la linea diciendo que no lo tiene', () => {
+  const aviso = armarAviso(seleccionarColgados(
+    [fila({ inboxId: 4, contacto: 'icy-lake-546', telefono: '' })],
+    { ahoraMs: AHORA },
+  ));
+  assert.equal(/wa\.me/.test(aviso), false, 'no hay telefono que enlazar');
+  assert.equal(/sin telefono|sin numero/i.test(aviso), false, 'decir lo que falta es ruido, no dato');
+});
+
+test('la CLI lleva el MISMO dato que el Telegram, y sin escapar: ahi nadie lee HTML', () => {
+  const c = { contacto: 'A<b>', telefono: '+59175755019' };
+  assert.match(quien(c), /&lt;b&gt;/, 'el aviso de Telegram escapa');
+  assert.ok(quien(c, (t) => t).includes('A<b>'), 'la CLI no escapa: ahi `&lt;` se leeria literal');
+  // Las dos vias tienen que traer el numero: el que diagnostica desde la consola tampoco puede
+  // contestarle a un contacto llamado `.` sin el telefono. El archivo declara el invariante
+  // («la CLI dice lo MISMO que el Telegram») y ya envejecio una vez por su cuenta.
+  for (const via of [quien(c), quien(c, (t) => t)]) {
+    assert.match(via, /wa\.me\/59175755019/, 'las dos vias derivan del mismo helper');
+  }
+});
+
+test('el telefono del aviso se escapa igual que el resto: viaja en HTML a Telegram', () => {
+  const aviso = armarAviso(seleccionarColgados(
+    [fila({ inboxId: 5, telefono: '+591<b>7' })],
+    { ahoraMs: AHORA },
+  ));
+  assert.equal(aviso.includes('+591<b>7'), false, 'un telefono con HTML rompe el mensaje entero');
 });
 
 // ---------------------------------------------------------------------------------------------

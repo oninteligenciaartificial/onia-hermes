@@ -353,6 +353,42 @@ function espera(min) {
  * Sumarlos bajo el mismo titulo ("escribieron y nadie contesto") diria algo falso de dos de los
  * tres grupos, y un vigia que grita mal no molesta: inutiliza.
  */
+/**
+ * Con QUE contestarle a esta persona.
+ *
+ * Medido el 2026-09-19 contra la base de Chatwoot: los tres leads de WhatsApp colgados tienen
+ * telefono (`conv 35 +59173232758` hace 24 d, `conv 37 +59173021804` hace 22 d, `conv 58
+ * +59175755019`) y el aviso salia sin el — el contacto de la 58 se llama literalmente `.`, asi que
+ * el mensaje que le pedia a Sergio Urcullo contestarle no nombraba a nadie con quien actuar.
+ * El dato ya estaba leido: `esNuestra({contacto, telefono})` es lo unico que separa a un
+ * desconocido de una sonda. **Un dato que ya se consulta para DECIDIR tiene que viajar al texto
+ * que pide ACTUAR** — y fallaba hacia el lado caro, porque WhatsApp es el canal donde contestar
+ * es UN CLIC y era justo el que llegaba sin con que hacerlo.
+ *
+ * El enlace va DESNUDO (`wa.me/<digitos>`) y no como `<a href>`: este texto viaja a Telegram en
+ * HTML y tambien al cuerpo de la tarea del tablero. Telegram lo autolinkea, el tablero lo muestra
+ * copiable, y ninguna de las dos puede romperse por el marcado — que es el modo de falla conocido
+ * de ese canal (un `<` suelto y el mensaje NO llega).
+ *
+ * Los digitos de la URL se DERIVAN del telefono, nunca se interpolan crudos: un numero con
+ * marcado adentro ensuciaria el enlace ademas del texto. Menos de 8 digitos no es un telefono
+ * con el que se pueda escribir, asi que se muestra el nombre y nada mas — inventar un enlace
+ * roto es peor que no ponerlo.
+ *
+ * El escapador se INYECTA porque hay DOS consumidores y uno solo es HTML: el aviso de Telegram
+ * escapa, la CLI no (escapar ahi imprimiria `&lt;` en la pantalla del que diagnostica). El
+ * archivo ya declara el invariante abajo — «la CLI dice lo MISMO que el Telegram» — y ya
+ * envejecio una vez por su cuenta: cuando el aviso gano la tercera categoria, la CLI se quedo
+ * con dos y llamaba «esperando respuesta» a alguien a quien el bot SI le habia contestado. Un
+ * helper compartido es lo unico que impide que las dos vias vuelvan a separarse.
+ */
+export function quien(c, esc = escapar) {
+  const nombre = esc(c.contacto || 'sin nombre');
+  const digitos = String(c.telefono || '').replace(/\D/g, '');
+  if (digitos.length < 8) return nombre;
+  return `${nombre} (${esc(c.telefono)} · wa.me/${digitos})`;
+}
+
 export function armarAviso(colgados) {
   const linea = (c) => {
     const canal = Number(c.inboxId) === 5 ? 'WhatsApp' : 'web';
@@ -364,7 +400,7 @@ export function armarAviso(colgados) {
     // La salvedad va PEGADA a la linea del sujeto que no se pudo medir, no en el titulo: una
     // salvedad suelta arriba absuelve al grupo entero y deja de decir de QUIEN no se sabe.
     const sinMedir = c.esperandoDecision && c.humanoTomo === null ? ' · no pude confirmar si ya le escribiste' : '';
-    return `conv ${c.conversationId} (${canal}${derivado}) — ${cuanto}${sinMedir} — ${escapar(c.contacto || 'sin nombre')}: ${escapar(String(c.content || '').slice(0, 70))}`;
+    return `conv ${c.conversationId} (${canal}${derivado}) — ${cuanto}${sinMedir} — ${quien(c)}: ${escapar(String(c.content || '').slice(0, 70))}`;
   };
 
   const sinRespuesta = (colgados || []).filter((c) => !c.esperandoHumano && !c.esperandoDecision);
@@ -640,7 +676,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
         const que = c.esperandoHumano ? 'esperando que le escriba una persona'
           : c.esperandoDecision ? 'atendido por el bot y no volvio — no lo sabe nadie'
             : 'esperando respuesta';
-        console.log(`conv ${c.conversationId} (${canal}) — ${espera(c.esperaMin)} ${que} — ${c.contacto || 'sin nombre'}: ${String(c.content || '').slice(0, 60)}`);
+        console.log(`conv ${c.conversationId} (${canal}) — ${espera(c.esperaMin)} ${que} — ${quien(c, (t) => t)}: ${String(c.content || '').slice(0, 60)}`);
       }
       const conHumano = colgados.filter((c) => c.esperandoHumano).length;
       const sinQueSepas = colgados.filter((c) => c.esperandoDecision).length;
