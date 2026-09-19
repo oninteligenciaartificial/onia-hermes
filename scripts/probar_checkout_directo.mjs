@@ -107,6 +107,37 @@ async function main() {
         console.log(`clinic: menciona WhatsApp incluido = ${mencionaWhatsapp}`);
       }
     }
+
+    // Escalón 3 nuevo: el selector de CICLO (weekly/monthly/annual). Fuente:
+    // DEFAULT_PLAN_AMOUNTS — crece SÍ tiene weekly (145), clinic NO (el "Full" no se
+    // fracciona, confirmado en subscription-plans.ts:42-43). El checkout tiene que
+    // deshabilitar/avisar "Solo mensual o anual" cuando el plan no ofrece ese ciclo,
+    // y mostrar el monto anual correcto cuando sí lo ofrece.
+    const CICLOS = [
+      { plan: "crece", cycle: "annual", monto: "5.500", archivo: "checkoutdir-03-crece-anual.png" },
+      { plan: "clinic", cycle: "annual", monto: "12.900", archivo: "checkoutdir-04-clinic-anual.png" },
+      { plan: "clinic", cycle: "weekly", monto: null, archivo: "checkoutdir-05-clinic-semanal.png" },
+    ];
+    for (const { plan, cycle, monto, archivo } of CICLOS) {
+      console.log(`\n--- /checkout?plan=${plan} → clic en ciclo ${cycle} ---`);
+      await pagina.goto(`${APP}/checkout?plan=${plan}`, { waitUntil: "load", timeout: 30_000 });
+      await pagina.waitForTimeout(800);
+      const boton = pagina.locator(`button:has-text("${cycle === "annual" ? "Anual" : cycle === "weekly" ? "Semanal" : "Mensual"}")`).first();
+      await boton.click({ timeout: 10_000 }).catch((e) => console.log(`  no pude clickear el botón de ciclo: ${e.message.split("\n")[0]}`));
+      await pagina.waitForTimeout(600);
+      await pagina.screenshot({ path: `hermes-content/docs/recorrido/capturas/${archivo}`, fullPage: true });
+      const texto2 = await pagina.locator("body").innerText();
+      if (monto) {
+        console.log(`plan=${plan} ciclo=${cycle}: monto '${monto}' presente=${texto2.includes(monto)}`);
+      } else {
+        // clinic + weekly: no debería ofrecer ese ciclo — buscamos el aviso o que haya
+        // quedado en mensual (Bs 1.290) en vez de fallar silenciosamente a otro monto.
+        const avisoSinCiclo = /solo mensual o anual/i.test(texto2);
+        const sigueEnMensual = texto2.includes("1.290");
+        console.log(`plan=clinic ciclo=weekly: aviso "solo mensual o anual"=${avisoSinCiclo}, sigue en monto mensual (1.290)=${sigueEnMensual}`);
+      }
+    }
+
     console.log("\nfallos de red (status>=400):", fallos.length ? fallos.join("; ") : "ninguno");
   } finally {
     await navegador.close();
