@@ -103,7 +103,31 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       documento 200, cero subrecursos ≥400, y el DOM pinta «Tratamientos en curso» / «La clienta
       que dejó el tratamiento a medias no se pierde», sin rastro de paquete ni sesiones.
 
-- [ ] 🟠 **El freno de precio del publicador decide por la FORMA del número y no por el campo:
+- [x] 🟠 **CERRADO el 2026-09-19 06:5x La Paz por `onia-cola`.** El corte pasó de la FORMA del
+      número a la **clave que lo recibe**, y el caso vivo quedó medido con el guion REAL contra el
+      diff real: `bash scripts/loops/extras/publicar-solo.sh --montos /root/loops/onia-hermes
+      web-factory/apps/onia-platform/src/lib/pricing.ts $(git log --format=%H
+      d56194544..origin/main -- web-factory/apps/onia-platform/src/lib/pricing.ts)` pasó de
+      `cambian: 0` (exit 1, detenía) a **`ningun monto cambia` (exit 0)**.
+      **Lo que escapaba, derivado del diff y no adivinado:** `asientosExtra: 0` —personas— y el
+      `0`/`1` de `frase.charAt(0)`/`frase.slice(1)`. Hubo un segundo hallazgo que ninguna lectura
+      del ítem anticipaba: el terminador `([^0-9.,]|$)` **excluía la coma**, así que
+      `asientosExtra: 0,` no matcheaba ni con el corte por clave puesto — el arreglo "obvio"
+      seguía deteniendo y sólo lo delató volver a correr el guion contra el diff real.
+      **Falla CERRADO, que es lo único que lo hace seguro:** la excusa se ancla al vocabulario de
+      CANTIDAD (`asiento|usuario|persona|cupo|ficha|conversacion|sesion|length|index`) y exige la
+      segunda mitad —que la clave **no** nombre plata—, así que `precioPorUsuario: 0` sigue
+      deteniendo aunque diga «usuario», y una clave que el guion no sabe nombrar detiene también.
+      La dirección del daño no es simétrica: detener de más cuesta una firma de Sergio Urcullo;
+      dejar pasar de menos publica un precio que nadie decidió.
+      **Gate:** `scripts/publicador-freno-de-precio.test.mjs`, 18/18, con los tres casos que
+      sostienen la cura (clave desconocida, clave de cantidad+plata, y el caso vivo).
+      **Validado por mutación 4/4** por `# fail N` + exit 1, restaurando con `cp` (nunca
+      `git checkout`): vocabulario que no reconoce `asiento` → cae sólo el caso vivo; guarda de
+      plata anulada → cae `precioPorUsuario`; métodos de posición fuera → caen 2; y el corte por
+      clave entero fuera → caen 8.
+
+- [~] ~~🟠 **El freno de precio del publicador decide por la FORMA del número y no por el campo:
       hoy detuvo la landing por `asientosExtra: 0`, que son personas, no plata.**
       **Medido el 2026-09-19 08:4x UTC**, con `2b12f50ae` esperando en `origin/main`:
       `bash /root/bin/onia-publicar-solo.sh --dry-run` contestó *«landing: NO publico solo —
@@ -127,7 +151,7 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       **Dónde:** `scripts/loops/extras/publicar-solo.sh` (`numeros_del_diff`), con su gate
       `scripts/publicador-freno-de-precio.test.mjs`. El caso que hay que sembrar es justamente
       éste: un diff que agrega `asientosExtra: 0` **no** detiene, y uno que agrega
-      `mensualAddon: 0` **sí**.
+      `mensualAddon: 0` **sí**.~~
 
 - [x] 🟠 **La portada le prometía al lead que ninguna capacidad exige subir de plan, y DOS lo
       exigen. Medido y CERRADO el 2026-09-18 20:5x La Paz por `web-venta` (`00ae5f63`).**

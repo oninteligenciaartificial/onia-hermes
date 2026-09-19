@@ -363,3 +363,114 @@ test("un monto ASIGNADO a 0 —un add-on que pasa a gratis— sigue deteniendo",
     rmSync(dir, { recursive: true, force: true });
   }
 });
+
+/**
+ * El corte NO es la forma del numero ni su valor: es si la CLAVE que lo recibe habla
+ * de plata. `asientosExtra: 0` son personas; `mensualAddon: 0` son Bs.
+ *
+ * Medido el 2026-09-19 06:39 La Paz, con `2b12f50ae` esperando en `origin/main`:
+ * `onia-publicar-solo.sh --dry-run` contestaba «landing: NO publico solo — cambia un
+ * numero en una fuente de precio: .../pricing.ts: 0 1» y NINGUN monto cambiaba —
+ * `Bs 70` seguia saliendo intacto de `USUARIO_EXTRA_ADDON`. Los numeros acusados eran
+ * `asientosExtra: 0` (cuantas personas extra vende un plan) y el `0`/`1` de
+ * `frase.charAt(0)` / `frase.slice(1)`, un helper que arma texto.
+ *
+ * Cada falso positivo le pide a Sergio Urcullo una firma por un cambio que no mueve un
+ * centavo, y esa es la unica firma que importa: gastarla en falsos la vuelve automatica.
+ */
+const cantidadesYTexto = `${tabla(320, "390")}
+export const PLANES = [
+  { id: "basico", asientosExtra: 0 },
+  { id: "pro", asientosExtra: null },
+];
+export function enMayuscula(frase) {
+  return \`\${frase.charAt(0).toUpperCase()}\${frase.slice(1)}.\`;
+}
+export function primero(nombres) {
+  return nombres[0];
+}
+`;
+
+test("una CANTIDAD asignada a 0 —personas, no plata— publica sola", () => {
+  const dir = repoSembrado();
+  try {
+    const sha = commitear(dir, cantidadesYTexto, "cuantas personas extra vende cada plan");
+    const r = preguntar(dir, sha);
+    assert.equal(
+      r.codigo,
+      0,
+      "conto `asientosExtra: 0` (personas) y las posiciones de un helper de texto como montos " +
+        "nuevos: con eso el destino entero se detiene y se le pide a Sergio Urcullo una firma por " +
+        "un cambio que no mueve un centavo. Salida: " + r.salida,
+    );
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+/**
+ * La direccion del dano NO es simetrica y por eso este caso es el que sostiene al de
+ * arriba: detener de mas cuesta una firma; dejar pasar de menos publica un precio nuevo
+ * sin que nadie lo decida. Por eso la excusa se ancla a un vocabulario de CANTIDAD y
+ * todo lo demas sigue deteniendo — una clave que el guion no sabe nombrar falla CERRADO.
+ */
+test("una clave que el guion NO sabe nombrar, asignada a 0, sigue deteniendo", () => {
+  const dir = repoSembrado();
+  try {
+    const sha = commitear(
+      dir,
+      `${tabla(320, "390")}\nexport const EXTRA = { recargoNocturno: 0 };\n`,
+      "clave desconocida a cero",
+    );
+    const r = preguntar(dir, sha);
+    assert.equal(
+      r.codigo,
+      1,
+      "una clave desconocida asignada a 0 se publico sola: la excusa por CAMPO falla ABIERTO, " +
+        "que es el lado caro — un add-on que pasa a gratis entra sin firma. Salida: " + r.salida,
+    );
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("un monto de plata asignado a 0 sigue deteniendo aunque la cura mire la clave", () => {
+  const dir = repoSembrado();
+  try {
+    const sha = commitear(
+      dir,
+      `${tabla(320, "390")}\nexport const ADDONS = { mensualAddon: 0 };\n`,
+      "el addon pasa a gratis",
+    );
+    const r = preguntar(dir, sha);
+    assert.equal(r.codigo, 1, "`mensualAddon: 0` es plata: cobrar 0 es una decision de plata. Salida: " + r.salida);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+/**
+ * La mitad que sostiene la excusa por CAMPO: una clave puede decir CANTIDAD y PLATA a
+ * la vez. `precioPorUsuario` nombra «usuario», asi que entra al vocabulario de
+ * cantidad — y es un precio. Sin esta segunda pregunta, la cura del falso positivo
+ * abriria la puerta que el freno existe para cerrar.
+ */
+test("una clave que dice cantidad Y plata a la vez detiene: manda la plata", () => {
+  const dir = repoSembrado();
+  try {
+    const sha = commitear(
+      dir,
+      `${tabla(320, "390")}\nexport const EXTRA = { precioPorUsuario: 0 };\n`,
+      "el usuario extra pasa a gratis",
+    );
+    const r = preguntar(dir, sha);
+    assert.equal(
+      r.codigo,
+      1,
+      "`precioPorUsuario: 0` se publico solo por nombrar «usuario»: un precio que pasa a cero " +
+        "entro sin firma. Salida: " + r.salida,
+    );
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
