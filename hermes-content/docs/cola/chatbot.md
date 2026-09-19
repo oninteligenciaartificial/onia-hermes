@@ -318,6 +318,74 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [ ] 🔴 **De los TRES consumidores del mismo mensaje entrante, el único que NO recibe la
+      identidad del que escribe es el que COBRA: el cupo del add-on cuenta al dueño probando
+      su propio bot y a nuestras sondas de QA** (`onia-platform` ·
+      `app/api/webhooks/chatwoot/route.ts:108-117` · `lib/chatbot/cupo.ts:217`).
+
+      **Medido en producción el 2026-09-19 07:40 La Paz**, en la fila viva del contador:
+
+      ```
+      docker exec supabase-db psql -U postgres -d postgres -tAc \
+        "select o.slug, u.mes, u.conversaciones, u.\"conversacionIds\"
+           from public.chatbot_uso_mensual u
+           join public.organizations o on o.id=u.\"organizationId\";"
+      → onia-interna|2026-09|4|{49,999999,11,58}
+      ```
+
+      **Tres de las cuatro conversaciones que consumieron cupo este mes somos nosotros**, y se
+      identifican cruzando contra Chatwoot (`select c.id, c.inbox_id, ct.name, ct.phone_number
+      from conversations c join contacts ct on ct.id=c.contact_id`):
+
+      - `49` — **`Sonda QA carril chatbot`**, inbox 4. Es la sonda de la definición de hecho de
+        este carril: corre en cada vuelta del loop (`13,43 * * * *`) y lleva **554 mensajes
+        entrantes y 549 respuestas**. Es la que explica los `491` de `mensajesEntrantes`.
+      - `999999` — fila **sintética**: no existe en `conversations` de Chatwoot.
+      - `11` — **el dueño** (`Sergio`, `+59171654992`, inbox 5) probando su propio bot.
+      - `58` — el **único** desconocido real (`+59175755019`, inbox 5, 17-sep).
+
+      **Por qué es plata del cliente y no cosmética.** `pricing.ts` vende el add-on como
+      *500 conversaciones/mes* (Bs 390) y al agotarlo el producto **apaga el asistente para los
+      clientes del cliente** y le ofrece la recarga de Bs 190 — que además CADUCA con el mes.
+      Lo primero que hace cualquiera que compra un bot es escribirle desde su teléfono para
+      probarlo; hoy eso le gasta el cupo que pagó para atender clientes. Y cada QA nuestro
+      sobre la instancia de un cliente se lo gasta también.
+
+      **La firma de la clase, que es lo que lo hace fácil de ver una vez que se mira.** El
+      webhook procesa `message_created` y dispara TRES efectos con el mismo evento
+      (`route.ts:108-124`). Los dos primeros reciben quién escribe y el tercero no:
+
+      | efecto | recibe la identidad |
+      |---|---|
+      | `notificarMensajeEntrante` | sí — `contactoNombre: body.sender?.name` |
+      | `registrarContactoEntrante` | sí — `sender: body.sender` |
+      | **`registrarMensajeEntrante`** (el cupo) | **no** — sólo `{inboxId, conversationId}` |
+
+      El dato está a mano en el mismo `body`: no hay que ir a buscarlo a ningún lado.
+
+      **LISTO =** el contador recibe el `sender` como sus dos hermanos y **no cuenta la
+      conversación cuando quien escribe es el dueño de esa organización** (un `profile` de la
+      org con ese teléfono o correo), con el caso en ROJO primero y los tres gates de
+      `onia-platform` verdes. Los helpers ya existen y se IMPORTAN, no se reescriben:
+      `datosDelContacto` (`lib/chatbot/contacto-desde-chatwoot.ts:54`), `claveDeTelefono`
+      (`:80`, compara por el FINAL del número) y el tipo `RemitenteChatwoot` (`:32`).
+
+      ⚠️ **Por qué no entró en la vuelta del 19-sep 07:15** (y qué esperar): el parámetro tiene
+      que ser **obligatorio** para que `tsc` persiga al llamador que lo olvide —un opcional con
+      default es el hueco conocido de esta familia—, y `grep -rn 'registrarMensajeEntrante('
+      --include=*.ts` da **28** sitios entre producto y tests. Es un cambio de la ruta que
+      cobra: no se empieza sin poder correr `npx tsc --noEmit` + `npx vitest run` (~5.700
+      tests) + `npx eslint .` enteros.
+
+      ⚠️ **La mitad hermana, que hay que decidir en el mismo arreglo:** la sonda `49` seguirá
+      sumando cupo a `onia-interna` en cada vuelta del loop mientras el criterio sea sólo «el
+      dueño». El repo ya tiene el criterio de conversación nuestra —`esConversacionNuestra`
+      (`hermes-content/deploy/vps-ops/bot/es-nuestra.mjs`), cableado a los cuatro barridos y al
+      aviso— pero vive en el OTRO repo y decide por nombre de inbox de Chatwoot; del lado del
+      producto el criterio hermano es `esCuentaQueNoEsCliente`
+      (`lib/platform/cuentas-que-no-son-clientes.ts`), que es por ORG y no por conversación.
+      Ninguno de los dos sirve tal cual: eso es parte del ítem, no un supuesto.
+
 - [x] 🔴 **CERRADO el 2026-09-19 — el bot le clavaba el género masculino a la persona que
       atiende, que la carga el CLIENTE: «la Dra. Ana Ríos … te escribe él»**
       (`hermes-content/deploy/vps-ops/bot/config.mjs`, 3 entradas; gate
@@ -5745,6 +5813,46 @@ archivos.**
 ---
 
 ## Cerrado — no rehacer
+
+- [x] **~~El criterio «¿esta conversación somos NOSOTROS?» corría CIEGO en el barrido
+      post-demo: era el único de los cuatro sin el insumo, y fallaba abierto~~** — cerrado el
+      2026-09-19 (`hermes-content/deploy/vps-ops/bot/postdemo-run.sh`, gate
+      `hermes-content/deploy/vps-ops/bot/el-criterio-de-identidad-viaja-al-barrido.test.mjs`).
+      **Medido en el log vivo**, `/var/log/onia-bot-postdemo.log`, **3 de 3 corridas** desde
+      que aterrizó el código nuevo (07:47, 08:47 y 09:47 UTC; las 7 anteriores del día no lo
+      tenían porque corrían el anterior):
+      `warnings: ["inboxes de prueba: no pude preguntarle a Chatwoot (sin CHATWOOT_API_TOKEN)"]`.
+      **No era un parpadeo de red: era el estado permanente de ese barrido.**
+      La causa: `es-nuestra.mjs` dejó de decidir por la FIRMA del contacto y pasó a derivar los
+      inboxes de prueba del NOMBRE que Chatwoot publica (`d35bf465`, ese mismo día), porque el
+      banco de pruebas llega con nombres anónimos (`purple-bush-931`). Esa consulta necesita
+      `CHATWOOT_API_TOKEN`. De los **cuatro** barridos que importan el criterio, **tres ya lo
+      pasaban** —lo necesitaban para postear— y `postdemo-run.sh` no, porque avisa por Telegram
+      y nunca había tenido motivo para hablar con Chatwoot. Y `cargarInboxesDePrueba` **falla
+      ABIERTO a propósito** (conjunto vacío), así que ese barrido volvía al criterio viejo: el
+      banco de pruebas pasaba como prospecto real y se llevaba el cierre post-demo. Hoy no
+      mordía (`scanned:0`), pero el tri-estado había quedado contestando SIEMPRE lo mismo, que
+      es un valor fijo con cara de medición.
+      **Por qué ningún gate lo vio, que es lo transferible:** ya había DOS de esta familia
+      (`slots-viajan-al-barrido`, `identidad-del-bot-viaja-al-barrido`) y fallaron por las dos
+      mismas razones — cada uno nombra SU variable tipeada a mano (la quinta necesitaría un
+      quinto gate), y los dos derivan su universo de *«los wrappers que ya pasan la variable»*,
+      una lista de inclusión que falla abierto justo en el único sujeto que importa: el que no
+      la pasa. El gate nuevo deriva el universo de **quién USA el criterio** (importa
+      `es-nuestra.mjs` → los cuatro) y el insumo de **lo que el criterio LEE**, agrupando
+      alternativas (`A || B` es un requisito con dos nombres) y salteando las que traen default
+      propio, para no exigir lo que el producto no pide.
+      **Validado por mutación (después de arreglar):** sacar el `-e` → rojo; no derivar de
+      `webhook.env` (que es como el cron lo invoca, pelado) → rojo; vaciar el universo → lo caza
+      el caso ancla. Restaurado, verde 8/8. **Corre en la cadena** (`test:bot`, 1271 verdes):
+      probado metiéndole un canario que tira → `# fail 1`, exit 1 — la salida de `node --test`
+      no nombra los archivos que corre, así que es la única prueba válida.
+      ⚠️ **Commiteado, NO desplegado:** `/opt/onia/bot` no es un checkout de git.
+      **Falso positivo descartado en el camino, para que nadie lo repita:** el harness de
+      `docker` falso devuelve stdout vacío, así que los wrappers que sacan el token con
+      `CW_TOKEN="$(docker exec … psql …)"` quedaban con la variable vacía y el gate acusaba a
+      `followup-run.sh`, que está sano. Se cura sembrando **las dos** fuentes legítimas
+      (`webhook.env` y la base) — parámetro `salidaDocker` del harness, vacío por defecto.
 
 - [x] **~~La sonda que define el «hecho» del carril blanqueaba la mitad del estado: los cinco
       campos del reinicio que viven en `raw` quedaban con el valor de la corrida anterior~~** —

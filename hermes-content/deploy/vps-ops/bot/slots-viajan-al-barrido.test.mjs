@@ -57,14 +57,20 @@ export function cargaElEnvEntero(texto) {
  * (b) Corre el wrapper de verdad con un `docker` falso y devuelve lo que ese docker recibio.
  * Nada toca produccion: el stub esta PRIMERO en el PATH, asi que el docker real nunca se invoca.
  */
-export function loQueRecibioDocker(wrapper, { env = {}, conEnvFile = true, envFile = null } = {}) {
+export function loQueRecibioDocker(wrapper, { env = {}, conEnvFile = true, envFile = null, salidaDocker = "" } = {}) {
   const caja = mkdtempSync(join(tmpdir(), "slots-gate-"));
   try {
     const bin = join(caja, "bin");
     const registro = join(caja, "docker.args");
     execFileSync("mkdir", ["-p", bin]);
     // El docker falso: graba lo que le pidieron y se calla. Cubre exec, cp y ps.
-    writeFileSync(join(bin, "docker"), `#!/bin/sh\nprintf '%s\\n' "$@" >> ${JSON.stringify(registro)}\nexit 0\n`);
+    //
+    // `salidaDocker` existe porque no todo insumo viaja por `webhook.env`: algunos wrappers lo
+    // LEEN de la base con `CW_TOKEN="$(docker exec … psql …)"`, y un docker falso mudo los deja
+    // con la variable vacia — lo que se lee igual que "el wrapper no la pasa" y acusa al
+    // wrapper equivocado. Vacio por defecto: los dos gates que ya usan este harness no cambian.
+    const eco = salidaDocker ? `printf '%s\\n' ${JSON.stringify(salidaDocker)}\n` : "";
+    writeFileSync(join(bin, "docker"), `#!/bin/sh\nprintf '%s\\n' "$@" >> ${JSON.stringify(registro)}\n${eco}exit 0\n`);
     chmodSync(join(bin, "docker"), 0o755);
 
     writeFileSync(join(caja, wrapper), readFileSync(join(AQUI, wrapper), "utf8"));
