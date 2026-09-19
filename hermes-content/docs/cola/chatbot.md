@@ -374,41 +374,105 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       recibieron su `M3`, o sea el filtro no estaba comprando nada y podía costar un lead. La
       condición honesta es la que describe el defecto: cupo gastado y sin `M3`.
 
-- [ ] **Reparar el reloj ya corrido de 16 conversaciones: `2f92eb70` curó al productor y no
-      tocó ni una fila** (`hermes-content/deploy/vps-ops/bot/reloj-del-prospecto-vivo.mjs` ·
-      `hermes-content/deploy/vps-ops/bot/bot-engine.mjs`; medido el 2026-09-19 con el
-      instrumento nuevo, `npm run reloj:vivo`).
+- [x] **~~Reparar el reloj ya corrido de 16 conversaciones: `2f92eb70` curó al productor y no
+      tocó ni una fila~~ — CERRADO el 2026-09-19** (`reloj-del-prospecto-vivo.mjs` ·
+      `bot-engine.mjs`; respaldo en `onia_center.respaldo_reloj_20260919`).
 
-      Curar al productor no repara lo ya escrito. `step()` ya no pisa `lastInboundAt` con un
-      turno que no es del prospecto, pero las filas que se corrieron **antes** siguen ahí, y ese
-      reloj es la ENTRADA de los tres consumidores que deciden a quién escribirle: la ventana de
-      24 h de Meta (`sweepInsistenciaCandidates`) y las dos del rescate.
+      `npm run reloj:vivo` → **exit 0**, «40 conversaciones cruzadas (sanas 40)». Antes: exit 1
+      con 16 adelantadas, la peor la **58**, el lead real de WhatsApp, +20,4 h.
 
-      Contado en producción — 40 conversaciones cruzadas, 24 sanas, **16 con el reloj adelantado**:
+      **La «causa segunda» de este ítem era FALSA y por eso se escribe acá: no hay ningún cron.**
+      El ítem mandaba a buscar al escritor de las horas redondas (`23:00:0X`, `12:00:0X`) dando
+      por hecho que era un cron distinto del caso 58. Lo refuta un cruce contra Chatwoot, al
+      segundo: `last_inbound_at` de la conv 52 era `09-04 12:00:06` y el `created_at` del
+      **saliente nuestro** (`message_type=1`, el `R_SEGUIMIENTO`) es `09-04 12:00:06`; la conv 57,
+      `17:00:05` contra `17:00:05`. La hora redonda es la hora a la que corría **el barrido**, y
+      el reloj quedaba pisado con el `receivedAt` de nuestro propio mensaje volviendo por webhook
+      como turno `author:"human"` — o sea **la MISMA causa que ya curó `2f92eb70`**, disparada
+      desde el barrido en vez de desde el widget. Una hora redonda no prueba un cron: prueba un
+      productor periódico, y el barrido lo es.
 
+      ```bash
+      # lo que lo probó (ids reales, sólo lectura)
+      docker exec <chatwoot-db> psql -U postgres -d onia-chatbot -tAc \
+        "select conversation_id, message_type, created_at from messages where conversation_id in (52,57) order by created_at;"
       ```
-      npm run reloj:vivo        # exit 1, imprime las 16 con su deriva
+
+      El escritor, entonces, ya estaba **cerrado con su test** antes de esta vuelta
+      (`reloj-del-prospecto-solo-lo-mueve-el-prospecto.test.mjs`) y —lo que faltaba comprobar—
+      **vivo en producción**: `docker exec onia-center grep -n delProspecto /tmp/onia-bot/bot-engine.mjs`
+      da las líneas 547/556. Por eso reparar hoy no era tirar el trabajo.
+
+      **La precondición de seguridad se midió, no se supuso.** El riesgo declarado era bajar el
+      reloj de más si un entrante llegó a Chatwoot y no quedó en `bot_messages`. Cruzados los dos
+      lados para las 14 convs reales: en **ninguna** Chatwoot tiene un entrante más nuevo
+      (52·54·56·57·58 coinciden 1 a 1 con ±2 s; 6 y 7 tienen *más* filas del lado del bot;
+      13–19 no tienen incoming en Chatwoot). El caso temido no existe en estos datos.
+
+      **La reparación derivó sus sujetos del defecto, no de los 16 nombres** — misma condición
+      que el instrumento (deriva > 120 s contra `max(created_at) filter (author='contact')`), en
+      una transacción con respaldo: `INSERT 0 16` + `UPDATE 16`. Reversión:
+
+      ```sql
+      update onia_center.bot_conversations c set last_inbound_at = r.last_inbound_at_viejo
+        from onia_center.respaldo_reloj_20260919 r where r.conversation_key = c.conversation_key;
       ```
 
-      | conv | reloj guardado | último del prospecto | deriva |
-      |---|---|---|---|
-      | **58** (lead real de WhatsApp) | 09-18 19:17:02 | 09-17 22:50:55 | **+20,4 h** |
-      | 57 · 56 · 54 · 52 | 09-04 17:00 / 12:00 | 09-04 03:39–14:38 | +2,4 a +8,3 h |
-      | 19 · 18 · 17 · 16 · 15 · 14 · 13 | 08-18 23:00 / 16:00 | 08-17/18 | +20,1 a +21,0 h |
+- [x] **~~El gate del reloj tiene UNA sola explicación para dos defectos opuestos, y el que no
+      nombra es el que mató al carril dos veces~~ — CERRADO el 2026-09-19**
+      (`hermes-content/deploy/vps-ops/bot/reloj-del-prospecto-vivo.mjs`).
 
-      ⚠️ **Y los datos traen una causa SEGUNDA, distinta de la que se arregló ayer, que hay que
-      medir antes de reparar:** los relojes corridos caen en **horas redondas** (`23:00:0X`,
-      `16:00:1X`, `12:00:0X`, `06:45:00`), o sea los escribió **un cron**, no el follow-up del
-      caso 58. Reparar sin encontrar a ese escritor deja el defecto vivo y las filas se vuelven
-      a correr. Primero: `grep` de quién escribe `lastInboundAt` fuera de `step()`.
+      El instrumento cruzaba `last_inbound_at` contra `bot_messages` y ante cualquier divergencia
+      decía siempre lo mismo: *el reloj está corrido, reparalo con un `update`*. Pero «el reloj
+      adelantado» y «el prospecto escribió y el bot NO procesó su mensaje» producen **exactamente
+      la misma resta**, y el remedio es opuesto: obedecer el diagnóstico único en el segundo caso
+      **borra la única evidencia** de que hubo un entrante sin atender — el bug del segundo turno.
 
-      **Antes de reparar** hace falta decidir el criterio de las filas que NO son juzgables por
-      esta vía (un entrante que llegó a Chatwoot y no quedó en `bot_messages` bajaría el reloj
-      indebidamente). Bajar de más falla hacia el silencio, que es el lado barato; subir de más
-      cuesta plata y quality rating. Y va con respaldo de la tabla antes de tocar nada.
+      **Lo que se hizo.** El gate le pregunta ahora a la TERCERA tabla, `messages` de Chatwoot
+      (`message_type = 0`, los entrantes de verdad), y cada caso sale con su causa y su remedio
+      pegados:
 
-      LISTO = el escritor de la hora redonda encontrado y cerrado con su test, las filas
-      reparadas con respaldo, y `npm run reloj:vivo` en exit 0.
+      | causa | qué la distingue | remedio |
+      |---|---|---|
+      | `reloj_corrido` | Chatwoot no tiene nada más nuevo que lo que el motor registró | el `update` |
+      | `entrante_sin_procesar` | Chatwoot tiene un entrante que el motor nunca registró | **ningún `update`** |
+      | `sin_distinguir` | no se pudo preguntar / esa conv no existe en Chatwoot | no tocar la fila |
+
+      **El default es asimétrico a propósito:** sin poder contrastar, el gate NO recomienda el
+      `update`. Fallar hacia «no toques nada» es barato; fallar hacia «reparalo» es irreversible.
+
+      **Dos cosas que aparecieron al medir y no estaban en el ítem:**
+
+      1. La clase se cierra entera, no la instancia: `entrante_sin_procesar` se detecta **también
+         en una fila que el reloj da por SANA**. El gate viejo era 100 % ciego ahí — contaba la
+         conversación entre las sanas y no miraba más — y es justo la forma pura del bug del
+         segundo turno.
+      2. El informe **declara su cobertura de contraste**. Sin esa línea, un Chatwoot caído
+         imprimía una salida **byte a byte idéntica** a la de un cruce completo (las sanas no
+         imprimen causa), o sea el gate podía perder su mitad nueva sin decir una palabra.
+
+      **Se comparan MARCAS DE TIEMPO, nunca cantidades.** Medido el 19-sep: el motor también
+      registra turnos sembrados, así que los conteos difieren en conversaciones sanas (conv 49:
+      532 entrantes en Chatwoot contra 531 del motor; convs 6-8: 1 contra 2). Un gate que
+      comparara cantidades acusaría a una conversación perfecta.
+
+      **PRUEBA.**
+
+      - Contra producción, `npm run reloj:vivo` → **exit 0**:
+        `conversaciones cruzadas: 40 (sanas 40)` ·
+        `contrastadas contra Chatwoot: 30 de 40 — 10 sin contrastar: Chatwoot no tiene ningun
+        entrante de la conversacion N (x10)` (son las convs 13-19, 990777-9 y 999999: existen en
+        el motor y no en Chatwoot). Chatwoot **nunca** está más nuevo que el motor hoy — sella
+        1-5 s antes de que el motor inserte su fila —, por eso el cruce no acusa a nadie.
+      - `npm run test:bot` → **1230/1230**, con 26 casos en
+        `reloj-del-prospecto-vivo.test.mjs` (eran 14).
+      - **Validado por mutación, cinco esquives, los cinco cazados** (`# fail` > 0 en cada uno):
+        la evidencia siempre «al día» (3 rojos) · la rama `mas_nuevo` con `false &&` (3) · el
+        SELECT sin `conversation_key` (1) · `medir()` sin pasarle las claves (1) · el informe sin
+        declarar la cobertura (1).
+      - El caso que sostiene la distinción usa **la misma fila del reloj** en los dos bloques y
+        sólo cambia lo que dice Chatwoot: si el gate contestara lo mismo, seguiría teniendo una
+        sola explicación.
 
 - [ ] **Dos escritores guardan el estado de la misma conversación en el mismo segundo, y gana el
       último — el traspaso humano puede perderse** (encontrado el 2026-09-18 midiendo la conv 58;
