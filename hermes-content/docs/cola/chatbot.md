@@ -5248,6 +5248,31 @@ archivos.**
 
 ## Cerrado — no rehacer
 
+- [x] **~~El bot le prometía al lead del widget web que le escriben «desde este mismo
+      número», y ese lead no tiene número~~** — cerrado el 2026-09-18
+      (`hermes-content/deploy/vps-ops/bot/config.mjs`, `reply-builder.mjs`, `bot-engine.mjs`,
+      `chatwoot-adapter.mjs`, `run-turn.mjs`; **commiteado, NO desplegado**).
+      Medido en la base de Chatwoot de producción: **inbox 4 (Onia Web) tiene 11
+      conversaciones y CERO con teléfono**; inbox 5 (WhatsApp), 4 de 4 con teléfono. Los
+      **tres** textos del handoff — `M5`, `M5_URGENTE`, `M8_SOPORTE`, o sea los que recibe
+      justo el que pidió hablar con una persona — tipeaban *"Te escribe él desde este mismo
+      número"*. Para el lead del widget es imposible de cumplir: cierra la pestaña esperando
+      un mensaje que no existe, y del otro lado Sergio Urcullo sólo puede contestarle por el
+      mismo widget. Una promesa rota encima de la única acción que pedía una persona real.
+      **Por qué ningún gate lo veía:** no mueve una cifra, no nombra un plan y no promete una
+      capacidad — las tres familias que el bot vigila. El eje es **canal × texto**, y el
+      catálogo de textos no sabía de canales (`grep -E 'inbox|canal|channel'` sobre la zona
+      del guion daba CERO). **Cura:** `viaDelCanal(channelType)` deriva la vía del
+      `channel_type` de Chatwoot — nunca del número de inbox, la regla que ya fija
+      `canal-whatsapp-vivo.test.mjs` —, el dato viaja desde el adapter hasta el motor, y el
+      default es la forma canal-agnóstica *"por este mismo chat"*, cierta en WhatsApp, el
+      widget, la API y el canal que se conecte mañana: **falla hacia la promesa que siempre
+      se puede cumplir**. En WhatsApp la frase del número se conserva, porque ahí es cierta y
+      además ubica. **Gate de clase:** `promesa-de-canal.test.mjs` deriva el universo del
+      disco (todas las entradas del guion, no las tres que hoy sabemos rotas) y prohíbe la
+      FORMA, no el texto viejo. Validado por mutación: con `viaDelCanal` clavado en el
+      número, 4 de 5 casos en rojo. Suite del bot 1215/1215.
+
 - [x] **~~Nuestro propio mensaje le movía el reloj al prospecto~~** — cerrado el 2026-09-18
       (`hermes-content/deploy/vps-ops/bot/bot-engine.mjs`, **commiteado, NO desplegado**).
       `last_inbound_at` dice cuándo habló **el prospecto**, y `step()` lo pisaba con el

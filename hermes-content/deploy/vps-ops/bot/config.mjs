@@ -336,11 +336,15 @@ export const SCRIPT = Object.freeze({
     "Lo que sí te adelanto: en la demo se hace la cuenta con TUS números — cuánto te cuesta hoy el trabajo que se hace a mano contra lo que cuesta el sistema. Si no cierra, te lo decimos ahí mismo.",
   ].join("\n"),
 
-  // M5 — handoff a humano.
+  // M5 — handoff a humano. La via ({{via_humano}}) se DERIVA del canal: ver `viaDelCanal`.
+  // Acá decía "desde este mismo número", y para el 100% de los leads del widget web eso es
+  // imposible de cumplir — llegan sin teléfono (medido en Chatwoot el 2026-09-18: inbox 4,
+  // 11 conversaciones, CERO con número). Justo en el mensaje que recibe el que pidió hablar
+  // con una persona.
   M5: [
     "Eso lo tiene que ver {{humano}}, no yo — soy un bot y no quiero inventarte una respuesta.",
     "",
-    "Ya le pasé tu consulta con todo lo que me contaste. Te escribe él desde este mismo número, en horario de oficina ({{horario_frase}}). Si es urgente, decime \"urgente\" y lo marco.",
+    "Ya le pasé tu consulta con todo lo que me contaste. Te escribe él {{via_humano}}, en horario de oficina ({{horario_frase}}). Si es urgente, decime \"urgente\" y lo marco.",
   ].join("\n"),
 
   // M5_ACUSE — el mensaje que llega DESPUES de haber derivado, mientras el humano todavia no
@@ -360,7 +364,7 @@ export const SCRIPT = Object.freeze({
   M5_URGENTE: [
     "Listo, lo marqué como urgente y {{humano}} ya lo tiene arriba de todo.",
     "",
-    "Te escribe él desde este mismo número. Si es fuera de horario de oficina ({{horario_frase}}), es lo primero que ve al abrir.",
+    "Te escribe él {{via_humano}}. Si es fuera de horario de oficina ({{horario_frase}}), es lo primero que ve al abrir.",
   ].join("\n"),
 
   // M8_SOPORTE — SEGUNDO CAMINO: el que escribe YA es cliente (o dice que ya tiene el sistema, o
@@ -370,7 +374,7 @@ export const SCRIPT = Object.freeze({
   M8_SOPORTE: [
     "Pará — si ya estás usando {{producto}}, esto no es una demo de venta: es soporte. Y el soporte no te lo puedo dar yo, que soy un bot.",
     "",
-    "Le paso tu mensaje a {{humano}} tal cual me lo contaste. Te responde desde este mismo número en horario de oficina ({{horario_frase}}) y, si hace falta, te coordina una llamada corta para dejarlo funcionando. Si te está frenando el trabajo ahora mismo, decime \"urgente\" y lo marco.",
+    "Le paso tu mensaje a {{humano}} tal cual me lo contaste. Te responde {{via_humano}} en horario de oficina ({{horario_frase}}) y, si hace falta, te coordina una llamada corta para dejarlo funcionando. Si te está frenando el trabajo ahora mismo, decime \"urgente\" y lo marco.",
   ].join("\n"),
 
   // M6 — opt-out.
@@ -923,6 +927,24 @@ function abreOracion(anterior) {
  * en la proxima plantilla que alguien escriba. Solo toca la primera letra si es minuscula, asi
  * que un nombre propio, una viñeta o un `**negrita**` pasan intactos.
  */
+/**
+ * Por qué vía le va a escribir el humano, DERIVADA del canal por el que entró la conversación.
+ *
+ * Se decide por el `channel_type` que manda Chatwoot y NUNCA por el número de inbox — la misma
+ * regla que ya fija `canal-whatsapp-vivo.test.mjs`: un id es un dato de instalación, se renumera
+ * al recrear un inbox y no dice nada del medio.
+ *
+ * El default es la forma canal-agnóstica, y esa es la mitad que importa: "por este mismo chat"
+ * es cierto en WhatsApp, en el widget, en la API y en el canal que se conecte mañana, así que
+ * un canal que no sabemos leer degrada a una promesa que igual se puede cumplir. Al revés
+ * —adivinar que hay teléfono— es prometerle un mensaje a alguien que no tiene dónde recibirlo.
+ */
+export function viaDelCanal(channelType) {
+  return /^Channel::Whatsapp$/i.test(String(channelType ?? "").trim())
+    ? "desde este mismo número"
+    : "por este mismo chat";
+}
+
 export function renderTemplate(text, vars = {}) {
   const plantilla = String(text ?? "");
   return plantilla.replace(/\{\{\s*([a-z0-9_]+)\s*\}\}/gi, (match, key, offset) => {

@@ -220,6 +220,9 @@ export function seedFrom(input) {
     pieceKey: input.piece_key || input.pieceKey || null,
     sourceCampaign: input.source_campaign || input.sourceCampaign || null,
     inboxId: String(input.inbox_id ?? input.inboxId ?? "").trim() || null,
+    // El MEDIO, aparte del inbox: de acá sale `{{via_humano}}`. Sin dato el motor cae en la
+    // forma canal-agnóstica, que es cierta en todos los canales.
+    channelType: String(input.channel_type ?? input.channelType ?? "").trim() || null,
     ownerRoleKey: input.owner_role_key || "sergio",
   };
 }

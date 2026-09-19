@@ -14,7 +14,7 @@
 //
 // Spec: hermes-content/docs/ONIA_CHATBOT_PROPIO_SPEC_20260725.md (§2 guion, §3 reglas)
 
-import { DEFAULT_CONFIG, MODULOS_LISTOS, branchFor, renderTemplate, joinEs } from "./config.mjs";
+import { DEFAULT_CONFIG, MODULOS_LISTOS, branchFor, renderTemplate, joinEs, viaDelCanal } from "./config.mjs";
 import * as intents from "./intents.mjs";
 
 /**
@@ -137,6 +137,9 @@ export function varsFor(state, config, extra = {}) {
     // ("Atendemos {{...}}", "en horario de oficina ({{...}})"): sin este strip salia
     // "Atendemos Atendemos de lunes..." — visto en produccion (conv 39, 2026-08-29).
     horario_frase: (horario.frase || DEFAULT_CONFIG.businessHours.frase).replace(/^\s*atendemos\s+/i, ""),
+    // Por qué vía le escribe el humano. Se DERIVA del canal (ver `viaDelCanal`): el widget web
+    // no tiene teléfono, así que prometerle "desde este mismo número" es imposible de cumplir.
+    via_humano: viaDelCanal(state.channelType),
     slot_a: slotLabel(slots, "A"),
     slot_b: slotLabel(slots, "B"),
     // Un solo bloque: modulos + servicios. Ver serviceList sobre por que no son dos variables.
