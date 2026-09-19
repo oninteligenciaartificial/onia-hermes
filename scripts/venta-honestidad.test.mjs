@@ -306,8 +306,179 @@ test("el detector del kit anda en las dos direcciones", () => {
   assert.ok(!prometeEmitirSiat("demo enfocada en orden + SIAT (posible Básico como downsell)"));
 });
 
+// ─────────────────────────────────────────────────────────────────────────────
+// "SIN LIMITE DE CHATS" — la promesa de VOLUMEN ilimitado sobre un add-on que topa.
+//
+// Origen (medido el 2026-09-19): el add-on corta a CONVERSACIONES_INCLUIDAS al mes y
+// cobra una recarga, y el material de venta de hermes-content seguia diciendo "IA
+// incluida sin limite de chats" en CUATRO lugares — incluido el CATALOGO, que
+// CLAUDE.md declara fuente unica de "que se vende", y el pitch de una frase que
+// Sergio Urcullo dice en una demo.
+//
+// No fue nunca una mentira escrita a proposito: era CIERTA hasta el 2026-09-11, el dia
+// que el cupo dejo de ser copy y paso a ser un corte aplicado (lo cuenta la cabecera de
+// content/chatbot-precios.ts). El barrido de esa promesa alcanzo al producto y al sitio
+// y NO a hermes-content/docs, que es de donde salen las propuestas y el pitch.
+//
+// Por que ningun gate lo veia: no mueve una cifra (los cruces de precio validan montos y
+// aca no hay ninguno), no tipea un nombre de plan junto a una capacidad, y no es un
+// alcance total sobre EL SISTEMA ni sobre SUS PARTES — es sobre el VOLUMEN.
+//
+// El gate se escribe contra la FORMA y se apaga solo el dia que el cupo desaparezca:
+// si nadie declara un tope, no hay nada que prometer de mas.
+const CHATBOT_PRECIOS = "web-factory/apps/onia-platform/src/content/chatbot-precios.ts";
+
+/** El cupo que el producto APLICA, o null si dejo de haber tope. */
+function cupoMensualDeLaFuente() {
+  const m = leer(CHATBOT_PRECIOS).match(/CONVERSACIONES_INCLUIDAS\s*=\s*(\d+)/);
+  return m ? Number(m[1]) : null;
+}
+
+/**
+ * Los .md que VENDEN: el primer nivel de docs/ y el kit. Quedan fuera por construccion
+ * las subcarpetas — `historial/` y `research/` son historia y competencia guardada
+ * (CLAUDE.md), y ahi describir el plan ilimitado de otro es correcto.
+ */
+function materialesDeVenta() {
+  const docs = readdirSync(path.join(RAIZ, "hermes-content/docs"))
+    .filter((e) => e.endsWith(".md"))
+    .map((e) => `hermes-content/docs/${e}`);
+  return [...docs, ...materialesVivosDelKit()];
+}
+
+const FORMA_SIN_TOPE =
+  /\b(sin\s+l[ií]mite\s*(artificial)?\s+de\s+(chat|conversac|mensaj)|(chat|conversacion|mensaje)e?s?\s+ilimitad)/i;
+
+/**
+ * La VENTANA a la que pertenece la promesa, que no es el renglon.
+ *
+ * Nace de un falso verde medido al escribir esto: el pitch de una frase —el sujeto mas
+ * caro, porque es lo que se dice en una demo— tiene "en Onia" y "sin limite de chats" en
+ * renglones distintos del mismo blockquote, asi que por linea quedaba sin sujeto y el
+ * gate lo absolvia. La ventana depende de la FORMA: en una tabla el sujeto es la FILA
+ * (la de Sendy y la nuestra son vecinas y dicen cosas opuestas), en prosa es el bloque.
+ */
+function ventanaDe(lineas, i) {
+  if (/^\s*\|/.test(lineas[i])) return lineas[i]; // tabla: la fila es el sujeto
+  const abre = (l) => l.trim() === "" || /^\s*\|/.test(l) || /^\s*#/.test(l) || /^\s*(\d+\.|[-*+])\s/.test(l);
+  let ini = i;
+  while (ini > 0 && !abre(lineas[ini])) ini--;
+  let fin = i;
+  while (fin + 1 < lineas.length && !abre(lineas[fin + 1])) fin++;
+  return lineas.slice(ini, fin + 1).join(" ");
+}
+
+/**
+ * Una ventana que nos atribuye a NOSOTROS volumen sin tope.
+ *
+ * La atribucion es la mitad que importa: media docena de lineas vivas describen el plan
+ * "chats ilimitados" de Sendy o de Cliengo, y esas son ciertas. Se acusa cuando la
+ * ventana nombra a Onia (o habla en primera persona), o cuando vive en el CATALOGO —
+ * donde toda fila es nuestra por construccion y por eso ninguna necesita decirlo.
+ *
+ * ⚠️ No se absuelve por COMILLAS. Parece que citar es de otro, y es al reves: nuestro
+ * pitch va entre comillas justamente porque es una frase para decir en voz alta.
+ */
+function prometeChatsSinTope(ventana, { esCatalogo }) {
+  if (!FORMA_SIN_TOPE.test(ventana)) return false;
+  const esNuestra = /\bOnia\b/i.test(ventana) || /\bnuestro\s+modelo\b/i.test(ventana);
+  if (!esCatalogo && !esNuestra) return false;                                   // es el plan de otro
+  if (/\bno\s+(es|son|hay|ofrece)\b[^.]*ilimitad|ilimitad\w*\s*:?\s*no\b/i.test(ventana)) return false; // lo niega
+  return !/\b\d{3,}\s*(conversacion|chat|mensaj)/i.test(ventana);                // ya dice el cupo: honesta
+}
+
+/** Los renglones ofensores de un documento, con la ventana ya resuelta. */
+function ofensoresEn(texto, opciones) {
+  const lineas = texto.split("\n");
+  const salida = [];
+  lineas.forEach((linea, i) => {
+    if (!FORMA_SIN_TOPE.test(linea)) return; // la forma entra por el renglon; el sujeto, por la ventana
+    if (prometeChatsSinTope(ventanaDe(lineas, i), opciones)) salida.push(i + 1);
+  });
+  return salida;
+}
+
+test("ningun material de venta promete chats ilimitados mientras el add-on tenga cupo", () => {
+  const cupo = cupoMensualDeLaFuente();
+  if (cupo === null) return; // el producto dejo de topar: la promesa seria cierta
+
+  const ofensores = [];
+  for (const rel of materialesDeVenta()) {
+    const texto = leer(rel);
+    const lineas = texto.split("\n");
+    for (const n of ofensoresEn(texto, { esCatalogo: rel === CATALOGO }))
+      ofensores.push(`${rel}:${n}  ${lineas[n - 1].trim().slice(0, 110)}`);
+  }
+  assert.deepEqual(
+    ofensores,
+    [],
+    `El material de venta promete chats sin tope y el producto corta a ${cupo}/mes\n` +
+      `(${CHATBOT_PRECIOS}: el cupo dejo de ser copy el 2026-09-11 y hoy lo aplica cupo.ts).\n` +
+      `Molde honesto, derivado: "atiende ${cupo} conversaciones al mes; si se agotan pasan a una\n` +
+      `persona de tu equipo y podes sumar mas con una recarga". Decir "sin limite" le garantiza\n` +
+      `al cliente justo lo que el producto le corta — y la derivacion nos la cobra en soporte.\n` +
+      ofensores.join("\n")
+  );
+});
+
+test("el detector de volumen anda en las dos direcciones", () => {
+  const nuestro = { esCatalogo: false };
+  const cat = { esCatalogo: true };
+  // ACUSA lo nuestro, en las formas que estaban vivas
+  assert.ok(prometeChatsSinTope("en Onia son Bs 390 con la IA adentro, sin límite de chats", nuestro));
+  assert.ok(prometeChatsSinTope("| **Onia** | la IA va adentro, **sin límite artificial de chats** |", nuestro));
+  assert.ok(prometeChatsSinTope("Incluida, sin límite de chats, con tope de gasto controlado por Onia", nuestro));
+  assert.ok(prometeChatsSinTope("IA incluida sin límite de chats | ✅ vivo", cat)); // el catalogo no dice "Onia"
+  assert.ok(prometeChatsSinTope("Onia da conversaciones ilimitadas", nuestro));
+  // ABSUELVE lo que es cierto
+  assert.ok(!prometeChatsSinTope("| **Sendy** | $39 USD/mes | **chats ilimitados** |", nuestro));
+  assert.ok(!prometeChatsSinTope("Cliengo Starter: 500 conversaciones; no ofrece conversaciones ilimitadas", nuestro));
+  assert.ok(!prometeChatsSinTope("Onia atiende 500 conversaciones al mes, no es ilimitado", nuestro));
+  assert.ok(!prometeChatsSinTope("Onia: el add-on trae 500 conversaciones por mes incluidas", nuestro));
+  assert.ok(!prometeChatsSinTope("El bot de Onia contesta 24/7 y deriva al humano", nuestro));
+});
+
+// El caso que el gate PERDIO en su primera version, y por eso existe: el sujeto y la
+// promesa viven en renglones distintos del mismo bloque. Sin esto, la forma mas cara
+// —la frase que se dice en una demo— pasaba verde.
+test("la ventana toma el bloque entero, no el renglon", () => {
+  const pitch = [
+    "## 4. El pitch de una frase contra Sendy",
+    "",
+    '> **"Sendy te alquila un vendedor que anota en un cuaderno aparte; en Onia son Bs 390',
+    "> con la IA adentro, sin límite de chats, y la bandeja adentro del mismo sistema.\"**",
+    "",
+  ].join("\n");
+  assert.deepEqual(ofensoresEn(pitch, { esCatalogo: false }), [4], "perdio el pitch multi-renglon");
+
+  // Y la direccion contraria: en una TABLA la ventana NO puede derramarse a la fila
+  // vecina, o la fila de Onia contagiaria a la de Sendy y al reves.
+  const tabla = [
+    "| Competidor | Plan |",
+    "|---|---|",
+    "| **Sendy** | $39/mes, chats ilimitados |",
+    "| **Onia — add-on** | Bs 390, atiende 500 conversaciones al mes |",
+  ].join("\n");
+  assert.deepEqual(ofensoresEn(tabla, { esCatalogo: false }), [], "la fila de Sendy se contagio de la nuestra");
+
+  // Un parrafo que refuta la promesa ajena y nombra nuestro tope no es un ofensor,
+  // aunque diga "Onia" y "ilimitado" en el mismo bloque.
+  const refutacion = [
+    '3. **"Chats ilimitados" / "sin pagar por mensaje".** Prometer ilimitado sobre un costo',
+    "   variable que sube es firmar un pasivo abierto. Nuestro modelo de 500 conversaciones",
+    "   + Meta al costo es más feo de vender y más honesto de sostener.",
+  ].join("\n");
+  assert.deepEqual(ofensoresEn(refutacion, { esCatalogo: false }), [], "acuso a la refutacion honesta");
+});
+
 test("los sujetos salen del disco y las exenciones no estan vencidas", () => {
   const vivos = materialesVivosDelKit();
+  // El universo de venta se camina del disco: un doc nuevo nace cubierto. Con el ancla de
+  // abajo, romper el recorrido se ve — sin ella, el barrido vacio firmaria verde.
+  const venta = materialesDeVenta();
+  assert.ok(venta.length > 50, `el barrido de venta encontro ${venta.length} archivos: se rompio`);
+  assert.ok(venta.includes(CATALOGO), "el catalogo salio del universo: es el sujeto que mas importa");
+  assert.ok(cupoMensualDeLaFuente() > 0, `no pude leer el cupo en ${CHATBOT_PRECIOS}: cambio de forma`);
   assert.ok(vivos.length >= 3, `el kit deberia tener material vivo, encontre ${vivos.length}`);
   assert.ok(
     vivos.some((r) => r.includes("03-SCRIPTS-WHATSAPP")),

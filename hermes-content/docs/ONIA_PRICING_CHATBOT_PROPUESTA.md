@@ -31,10 +31,10 @@ no-oficial de Sendy las evita — a cambio del riesgo de baneo del número.
 |---|---|---|---|
 | **Sendy** (mirado en vivo, cuenta de Sergio, 2026-08-30) | Plan 0 $19 = Bs 217. Pero la IA es **BYOK**: el cliente crea SU cuenta de OpenAI, pone tarjeta internacional en USD y paga su consumo aparte. Y el plan 0 topa a **150 chats IA/día**. El primer nivel sin límite es $39 = Bs 445. 21 niveles hasta ~$800 | **Bs 240–560+** (217 + consumo IA estimado Bs 25–115 + o saltar a 445 para sacarse el límite) | IA incluida (BYOK), canal web propio (es WhatsApp-only), sistema de gestión (su CRM es aparte del negocio), visión de fotos no vista, línea QR = no-oficial con riesgo de baneo, guardrails deterministas |
 | **Leadsales** (leadsales.io/en/pricing, oficial, 2026-08-30) | Basic $97/mes (3 usuarios, 5.000 conversaciones, SIN difusiones) = **Bs 1.106**. Professional $133 = Bs 1.516 | **Bs 1.106+** | Es CRM+bandeja con auto-respuestas (Leadbot), no un asistente IA que agenda; cero ERP (agenda, caja, inventario); usuario extra $13 = Bs 148 c/u |
-| **Cliengo** (cliengo.com/pricing, oficial, 2026-08-30) | Starter $45/mes (500 conversaciones, 2 usuarios) = **Bs 513** — y **SIN WhatsApp API**: la API oficial recién aparece en Business $259 = **Bs 2.953** | **Bs 513** solo-web con tope de 500 conv.; **Bs 2.953** si querés WhatsApp oficial | WhatsApp API en los planes accesibles; conversaciones ilimitadas; sistema de gestión; el alta de WhatsApp es asistida por ejecutivo (días) |
+| **Cliengo** (cliengo.com/pricing, oficial, 2026-08-30) | Starter $45/mes (500 conversaciones, 2 usuarios) = **Bs 513** — y **SIN WhatsApp API**: la API oficial recién aparece en Business $259 = **Bs 2.953** | **Bs 513** solo-web con tope de 500 conv.; **Bs 2.953** si querés WhatsApp oficial | WhatsApp API en los planes accesibles; sistema de gestión; el alta de WhatsApp es asistida por ejecutivo (días). ⚠️ El tope de 500 conv. NO se le reprocha: es el mismo que el nuestro |
 | **Treble.ai** | **Sin precio público** — venta por sales call. Terceros (review Hack'celeration 2026) reportan base SMB ~$399/mes = **Bs ~4.550** | **Bs ~4.550+** (no verificable en su web) | Precio transparente; foco es marketing masivo enterprise, no atención de un negocio chico; cero ERP |
 | **ManyChat** (manychat.com bloqueó el fetch directo; roundups 2026 consistentes: chatbot.com, flowgent.ai, setsmart.io) | Pro $39/mes mensual ($29 anual) con 2.500 contactos; WhatsApp exige Pro; **AI es add-on aparte: +$29/mes** | **Bs 775** (39+29 = $68) + recargos por contactos extra ($0,018–0,10 c/u) que crecen solos con la lista | Bandeja de equipo seria, IA en el precio base, soporte en español local, sistema de gestión; el costo real reportado a un año: $200–350/mes |
-| **Onia — add-on chatbot** | **Bs 390/mes** todo incluido (equiv. $34) | **Bs 390** — la IA va adentro (gpt-4.1-mini vía LiteLLM propio, costo medido: Bs 0,008/foto; centavos/chat), **sin límite artificial de chats** | Nada de lo de arriba falta. Lo que sí: el add-on vive sobre un plan del sistema (desde Bs 390, lanzamiento 320) — el total de un cliente nuevo con sistema + bot es Bs 780 (710 en lanzamiento), y eso incluye el ERP entero |
+| **Onia — add-on chatbot** | **Bs 390/mes** todo incluido (equiv. $34) | **Bs 390** — la IA va adentro (gpt-4.1-mini vía LiteLLM propio, costo medido: Bs 0,008/foto; centavos/chat), **500 conversaciones al mes incluidas** (recarga de 200 por Bs 190, vence con el mes) | Nada de lo de arriba falta. Lo que sí: el add-on vive sobre un plan del sistema (desde Bs 390, lanzamiento 320) — el total de un cliente nuevo con sistema + bot es Bs 780 (710 en lanzamiento), y eso incluye el ERP entero |
 
 **Lectura en una línea**: incluso sumando el plan base del sistema, Onia con chatbot
 (Bs 780) cuesta menos que Leadsales solo (Bs 1.106), que Cliengo con WhatsApp oficial
@@ -63,7 +63,7 @@ el chat** y alguien que lo conecte. Armar por partes lo que el add-on trae junto
 |---|---|---|
 | Una web donde viva el widget | Builder tipo Wix/Squarespace: ~$16–29/mes = **Bs 180–330/mes**, o pagar una web a un freelance (pago único variable, más el mantenimiento) | El canal web del bot es self-service: botón "Encender mi canal web" + snippet para pegar. Y si el cliente no tiene web, Onia se la vende como línea aparte (`ONIA_WEB_COMO_SE_VENDE.md`) |
 | La plataforma del bot | **Bs 217–1.106/mes** (tabla de arriba) | Incluida en el add-on |
-| La IA | BYOK estilo Sendy: cuenta OpenAI + **tarjeta internacional en USD** (fricción real para un dueño de negocio boliviano) + consumo variable estimado **Bs 25–115/mes** sin tope propio | Incluida, sin límite de chats, con tope de gasto controlado por Onia |
+| La IA | BYOK estilo Sendy: cuenta OpenAI + **tarjeta internacional en USD** (fricción real para un dueño de negocio boliviano) + consumo variable estimado **Bs 25–115/mes** sin tope propio | Incluida en el add-on, hasta 500 conversaciones al mes, con el gasto de IA controlado por Onia (sin tarjeta en USD del cliente) |
 | Conexión WhatsApp oficial | Verificación de negocio en Meta + configuración técnica: horas propias o pagadas; en Cliengo la API aparece recién a Bs 2.953/mes con alta asistida "de días" | Alta guiada (Embedded Signup); el cliente paga a Meta directo sus conversaciones, como en todos lados |
 | Bandeja para atender lo que el bot deriva | Incluida a medias (ManyChat básica) o en el plan caro | Bandeja nativa en el sistema, con candado bot-humano (el bot se aparta cuando contesta el dueño y vuelve al resolver) |
 | Alguien que lo configure y lo retoque | Cada cambio de horario, precio o guion = tocar flujos o pagarle a quien sepa | El dueño lo edita **conversando** ("atendé también los domingos") con validador que no deja publicar nada roto; guion visible en pasos numerados |
@@ -126,8 +126,15 @@ no antes.
 
 > **"Sendy te alquila un vendedor que anota en un cuaderno aparte y te hace pagar la
 > IA de tu bolsillo, en dólares y con tarjeta internacional; en Onia son Bs 390 con la
-> IA adentro, sin límite de chats, y la bandeja adentro del mismo sistema donde ya están
+> IA adentro y en bolivianos, y la bandeja adentro del mismo sistema donde ya están
 > tu agenda, tus fichas y tu caja."**
+
+⚠️ **El volumen NO es nuestro argumento y no se usa como tal: Sendy da chats ilimitados
+a $39 y nosotros atendemos 500 conversaciones al mes.** Si el prospecto lo pregunta, la
+respuesta honesta ya está escrita en el §3 de `ONIA_SENDYPRO_ANALISIS.md`: el 1-oct-2026
+Meta empieza a facturar también las respuestas, así que prometer ilimitado sobre un costo
+que sube es firmar un pasivo abierto — 500 + Meta al costo es más feo de vender y más
+honesto de sostener. Para dimensionar: 500 conversaciones/mes son ~16 por día.
 
 Variante corta para material de venta: *"Con otros, el bot atiende en una herramienta que
 pagás aparte. Con Onia, atiende adentro de tu sistema."*
