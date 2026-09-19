@@ -243,3 +243,60 @@ test("webhook.env.example documenta TODAS las variables que el aviso lee", async
       "Sin eso, rehacer el env desde la plantilla apaga el aviso en silencio.",
   );
 });
+
+// ---------------------------------------------------------------------------
+// De QUE CANAL entro — el dato con el que el bot PROMETE tiene que llegarle a quien cumple
+//
+// POR QUE EXISTE. `chatwoot-adapter.mjs` guarda `channel_type` en el turno con este comentario:
+// "El MEDIO, aparte del inbox: decide por que via promete el bot que escribe el humano". Con eso
+// el bot le dice al prospecto "te escribe desde este mismo numero" (WhatsApp) o "por este mismo
+// chat" (web). Pero el aviso que le pide a Sergio Urcullo que CUMPLA esa promesa no lo nombraba:
+// llegaba "conversacion 58 · handoff" y habia que ir a la bandeja a averiguar por donde contestar.
+// En WhatsApp contestar es UN CLIC y en el widget hay que abrir Chatwoot: es la diferencia entre
+// atender a un desconocido en un minuto o no atenderlo.
+//
+// Su hermano ya lo hacia: `postdemo-run.mjs:220` pone `· ${state.channel}` en el texto del aviso.
+// La cura no viajo al camino principal — el handoff EN VIVO, que es el que corre siempre.
+//
+// Y de paso cierra la mitad latente: el inbox es "de que cliente es esta conversacion" (lo dice
+// el mismo comentario del adapter). Hoy solo `onia-interna` tiene inbox (4 web / 5 WhatsApp,
+// medido el 2026-09-19 en `clinic_settings`), asi que todos los avisos son de Onia. El dia que un
+// cliente del add-on conecte SU WhatsApp, sus handoffs van a caer en el MISMO Telegram, y sin el
+// inbox a la vista serian indistinguibles de un lead propio.
+// ---------------------------------------------------------------------------
+
+test("el aviso dice por QUE CANAL entro: en WhatsApp contestar es un clic, en el widget no", () => {
+  const wa = construirAviso({
+    notify: [{ kind: "handoff", reason: "pidio_hablar_con_humano", text: "clinica dental" }],
+    conversationId: 58,
+    canal: "Channel::Whatsapp",
+  });
+  assert.match(wa.texto, /WhatsApp/i, "sin el canal, Sergio Urcullo no sabe si contestar por WhatsApp o abrir la bandeja");
+
+  const web = construirAviso({
+    notify: [{ kind: "handoff", reason: "pidio_hablar_con_humano", text: "clinica dental" }],
+    conversationId: 38,
+    canal: "Channel::WebWidget",
+  });
+  assert.match(web.texto, /web/i, "el widget tambien se nombra: es el que OBLIGA a abrir la bandeja");
+  assert.doesNotMatch(web.texto, /WhatsApp/i, "nombrar mal el canal es peor que no nombrarlo");
+});
+
+test("sin canal el aviso sale igual: un aviso que se calla por un dato de contexto es el bug de origen", () => {
+  const aviso = construirAviso({
+    notify: [{ kind: "handoff", reason: "pidio_hablar_con_humano", text: "clinica dental" }],
+    conversationId: 58,
+  });
+  assert.ok(aviso, "el aviso NUNCA se cae por no saber el canal");
+  assert.match(aviso.texto, /58/);
+});
+
+test("el inbox viaja: el dia que entre un tenant, su handoff no se confunde con un lead propio", () => {
+  const aviso = construirAviso({
+    notify: [{ kind: "handoff", reason: "pidio_hablar_con_humano", text: "consulta" }],
+    conversationId: 71,
+    canal: "Channel::Whatsapp",
+    inbox: 12,
+  });
+  assert.match(aviso.texto, /12/, "sin el inbox, dos negocios distintos mandan avisos identicos");
+});

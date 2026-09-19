@@ -149,6 +149,7 @@
     "tests:fuera-de-la-cadena": "node scripts/tests_fuera_de_la_cadena.mjs",
     "test:python": "for f in $(find scripts hermes-content -name '*.test.py' -not -path '*/node_modules/*' | sort); do echo \"-- $f\"; python3 \"$f\" || exit 1; done",
     "destinos:vivos": "node hermes-content/deploy/vps-ops/bot/destinos-vivos.mjs",
+    "validadores:cruzados": "node hermes-content/deploy/vps-ops/bot/validadores-cruzados.mjs",
     "test:destinos-instrumento": "node hermes-content/deploy/vps-ops/bot/destinos-vivos.mjs --self-check"
   },
   "devDependencies": {

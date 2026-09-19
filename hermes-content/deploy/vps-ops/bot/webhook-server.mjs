@@ -524,6 +524,11 @@ async function procesarWebhook(request, deps, datos) {
     conversationId: result?.conversationId,
     stageAfter: result?.stageAfter,
     esNuestra: result?.esNuestra,
+    // POR DONDE entro y DE QUIEN es. Salen del turno, que es donde el adapter los dejó
+    // justamente para esto: el bot los usa para PROMETERLE al prospecto por qué vía le escribe
+    // un humano, y hasta hoy no viajaban al aviso que le pide a ese humano que cumpla.
+    canal: parsed?.turn?.channel_type,
+    inbox: parsed?.turn?.inbox_id,
   });
 
   return { status: 200, body: result, n8nEvent, avisoTelegram, usoPlataforma };

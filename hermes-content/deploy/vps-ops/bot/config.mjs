@@ -939,8 +939,29 @@ function abreOracion(anterior) {
  * un canal que no sabemos leer degrada a una promesa que igual se puede cumplir. Al revés
  * —adivinar que hay teléfono— es prometerle un mensaje a alguien que no tiene dónde recibirlo.
  */
+/**
+ * Como se NOMBRA el canal cuando hay que decirle a un humano por donde contestar.
+ *
+ * Existe aparte de `viaDelCanal` porque son dos audiencias: `viaDelCanal` le habla al PROSPECTO
+ * ("desde este mismo número") y esto le habla a quien tiene que CUMPLIR esa promesa ("WhatsApp").
+ * Lo que NO puede haber son dos decisiones: las dos preguntan lo mismo, y por eso `viaDelCanal`
+ * se apoya en esta. Un segundo regex sería una copia benévola que acierta hasta que alguien
+ * cambie una sola de las dos.
+ *
+ * @returns {string|null} null = no vino el canal. Es distinto de "no lo reconozco".
+ */
+export function nombreDelCanal(channelType) {
+  const crudo = String(channelType ?? "").trim();
+  if (!crudo) return null;
+  if (/^Channel::Whatsapp$/i.test(crudo)) return "WhatsApp";
+  if (/^Channel::WebWidget$/i.test(crudo)) return "web";
+  // Un canal que no conocemos se nombra CRUDO y no se descarta: el aviso sirve igual, y el día
+  // que Chatwoot sume un canal el síntoma es un nombre feo, no un aviso mudo.
+  return crudo.replace(/^Channel::/i, "");
+}
+
 export function viaDelCanal(channelType) {
-  return /^Channel::Whatsapp$/i.test(String(channelType ?? "").trim())
+  return nombreDelCanal(channelType) === "WhatsApp"
     ? "desde este mismo número"
     : "por este mismo chat";
 }

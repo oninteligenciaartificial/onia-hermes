@@ -5286,20 +5286,37 @@ decisión de Sergio, no código.
       `hermes-content/deploy/vps-ops/bot/precios-publicos.test.mjs`, con `fetch` obligatorio y
       tri-estado (sin poder refrescar, NO MEDIDO, nunca verde). Anotado abajo como ítem propio.
 
-- [ ] **Nadie cruza los DOS validadores de conocimiento, y por eso `checkHorario` vivió un día
-      entero sólo en el motor.** Sale del ítem de arriba, ya arreglado en su instancia. El
-      invariante *"el espejo del producto acepta exactamente lo que el motor acepta"* hoy lo
-      sostiene una lista de casos escrita a mano en `onia-platform/lib/chatbot/knowledge.test.ts`,
-      que falla abierto en cada regla nueva.
-      **Sujeto del gate:** correr `validateKnowledge` (motor, `hermes-content/deploy/vps-ops/bot/
-      knowledge.mjs`) y `validarConocimiento` (producto, leído del **ref publicado** con
-      `git show origin/master:lib/chatbot/knowledge.ts`) sobre el MISMO corpus, y exigir el mismo
-      veredicto. El corpus se deriva del SHAPE — `camposQueElValidadorNombra()` ya hace esa
-      derivación y se puede reusar.
-      **Dos trampas medidas que este gate tiene que respetar:** (1) `origin/master` es una ref de
-      **disco** — sin `git fetch` mide un fósil y falla EN VERDE (lección del 2026-09-18); (2) el
-      universo de reglas se deriva contando las llamadas `check*` de CADA lado y comparándolas,
-      no enumerándolas, que es exactamente lo que falló acá.
+- [x] ✅ **CERRADO el 2026-09-19 05:55 La Paz — los dos validadores ya se cruzan, y el gate tiene
+      DOS mitades porque una sola dejaba la clase abierta.** El invariante *"el espejo del producto
+      acepta exactamente lo que el motor acepta"* lo sostenía una lista de casos escrita a mano en
+      `onia-platform/lib/chatbot/knowledge.test.ts`: lista de inclusión, que falla abierto en cada
+      regla nueva — por eso `checkHorario` vivió un día entero sólo en el motor.
+      **Gate:** `hermes-content/deploy/vps-ops/bot/validadores-cruzados.mjs` (`npm run
+      validadores:cruzados`). Lee el ref **publicado y fresco** de `onia-platform` con
+      `repoPlataforma()` + `git fetch`, materializa `lib/` con `git archive origin/master` (nunca
+      el working tree: dos fotos del mismo pasado coinciden siempre) y **ejecuta de verdad** el
+      validador del producto, bundleado con el `esbuild` del repo hermano. Tri-estado: sin repo,
+      sin fetch o sin esbuild → **NO MEDIDO (exit 2)**, nunca verde.
+      **A — mismas reglas:** el conjunto de `check*` que cada validador INVOCA (no el que declara:
+      una regla declarada que nadie llama no corre) tiene que coincidir. **B — mismo veredicto:**
+      los dos corren sobre el MISMO corpus derivado de `camposQueElValidadorNombra()` — 53 campos ×
+      17 sondas + el horario barrido de borde a borde = **936 casos**.
+      **Medido contra `origin/master` a8fd1dad:** las seis reglas iguales y 936/936 con el mismo
+      veredicto.
+      **Validado por mutación, y las dos mitades hacen falta:** quitarle `checkHorario(...)` al
+      motor → exit 1 por regla huérfana Y por 4+ casos; aflojarle el CUERPO (`<=` → `<`, dejando
+      la llamada intacta) → la mitad A queda **idéntica y verde** y sólo B lo caza (`9 -> 9`,
+      `18 -> 18`). Un gate que sólo comparara las reglas invocadas habría firmado sano.
+      ⚠️ **El instrumento me mintió a mí antes que al producto, y ésa es la trampa transferible:**
+      la primera versión de `cuerpoDeFuncion` se quedaba con el **tipo de retorno** de la firma
+      TypeScript (`): { ok: boolean; errores: ErrorDeCampo[] } {`) en vez del cuerpo, así que leía
+      cero llamadas y acusaba de huérfanas a las SEIS reglas sanas del producto. Obedecer ese rojo
+      era reescribir un espejo correcto. Un bloque precedido por `:` es una anotación, no un cuerpo.
+      **Self-check puro** (10 casos, en la cadena vía `test:bot`, que recorre la carpeta entera —
+      confirmado por mutación: `# fail 1`): `validadores-cruzados.test.mjs`, con caso ancla que
+      exige que las seis reglas conocidas del `knowledge.mjs` real estén en el universo. La
+      medición viva queda como alias suelto **a propósito**: necesita el repo hermano con sus
+      `node_modules` y en la cadena sería rojo por ambiente para todos los carriles.
 
 - [x] ✅ **CERRADO el 2026-09-17 18:45 UTC — el simulador ya no miente sobre el horario, y el
       agujero era el DOBLE de grande que lo anotado.** Lo anotado era el reloj del modo
