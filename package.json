@@ -59,6 +59,7 @@
     "test:oferta-bot": "node --test hermes-content/deploy/vps-ops/bot/oferta-sistema.test.mjs",
     "test:bot": "cd hermes-content/deploy/vps-ops/bot && node --test",
     "avisos:vivo": "node hermes-content/deploy/vps-ops/bot/avisos-vivo.mjs",
+    "reloj:vivo": "node hermes-content/deploy/vps-ops/bot/reloj-del-prospecto-vivo.mjs",
     "deploy:alcanzable": "node scripts/deploy_alcanzable.mjs hermes-content/docs/cola/chatbot.md",
     "test:deploy-alcanzable": "node scripts/deploy_alcanzable.mjs --self-check",
     "bloqueos:vencidos": "node scripts/bloqueos_vencidos.mjs hermes-content/docs/cola/chatbot.md",
