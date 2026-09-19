@@ -60,7 +60,19 @@ let d="";process.stdin.on("data",c=>d+=c);process.stdin.on("end",()=>{
   # ── 2. diagnostico con Claude Code, headless, solo lectura
   LOGS=$(docker logs onia-platform --since 30m 2>&1 | tail -80)
   OUT=$D/diagnosticos/$ID.md
-  cd /opt/onia-platform/build-src
+  # Resolver la fuente para el diagnostico. build-src NO existe: el deploy deja
+  # runtime-next (build compilado, sin app/ ni lib/) y los tarballs src-<sha>.tar.gz.
+  # Se rompio en algun deploy que limpio build-src y NADIE se entero, porque este
+  # script solo escribe en su log cuando falla. Corregido 2026-09-01.
+  SRC_TGZ=$(ls -t /opt/onia-platform/src-*.tar.gz 2>/dev/null | head -1)
+  SRC_SHA=$(basename "$SRC_TGZ" .tar.gz 2>/dev/null)
+  SRC_DIR=/opt/onia-platform/diag-$SRC_SHA
+  if [ -n "$SRC_TGZ" ] && [ ! -d "$SRC_DIR" ]; then
+    mkdir -p "$SRC_DIR" && tar xzf "$SRC_TGZ" -C "$SRC_DIR" 2>/dev/null
+    # dejar solo las 2 extracciones mas nuevas: cada una pesa y esto corre seguido
+    ls -dt /opt/onia-platform/diag-* 2>/dev/null | tail -n +3 | xargs -r rm -rf
+  fi
+  cd "$SRC_DIR" 2>/dev/null || cd /opt/onia-platform || true
   timeout 600 claude -p --model claude-sonnet-5 --max-turns 15 \
     --allowedTools "Read" "Grep" "Glob" \
     "Sos el guardian de produccion de Onia Platform (Next.js + Prisma + Supabase self-hosted).

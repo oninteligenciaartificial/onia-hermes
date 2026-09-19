@@ -79,7 +79,18 @@ export function destinosDeclarados (fuenteDelSincronizador) {
 // hermes-content/deploy/vps-ops/ y tiene OTRO dueno de deploy: tres rojos que
 // mandaban a "arreglar" un circuito sano, y encima aparecian porque esos scripts se
 // nombran a SI MISMOS en su propio encabezado de uso.
-const DUENO_DEL_DESPLIEGUE = 'scripts/'
+//
+// 2026-09-19 — deja de ser UN prefijo y pasa a ser una LISTA, porque sincronizar.sh
+// empezo a copiar fuera de scripts/ y el caso de abajo lo cazo, que es para lo que
+// estaba. La entrada nueva es un ARCHIVO y no la carpeta: nombrar
+// `hermes-content/deploy/vps-ops/` entero volveria agujeros a sus otros habitantes
+// (onia-mirar-cliente.sh y los dos hermanos del comentario de arriba), que es el rojo
+// falso que el recorte vino a evitar. Un archivo cableado se declara de a uno.
+const DUENO_DEL_DESPLIEGUE = [
+  'scripts/',
+  'hermes-content/deploy/vps-ops/chatwoot-brand-onia.sh'
+]
+const loDespliegaEsteCircuito = (fuente) => DUENO_DEL_DESPLIEGUE.some((z) => fuente.startsWith(z))
 
 /**
  * Un sujeto es un AGUJERO si el repo lo nombra, su fuente versionada esta en la zona
@@ -92,7 +103,7 @@ export function agujeros (nombradas, declarados, fuenteDe) {
     if (declarados.has(nombre)) continue
     const fuente = fuenteDe(nombre)
     if (!fuente) continue // sin fuente versionada no hay nada que desplegar (shims del nodo)
-    if (!fuente.startsWith(DUENO_DEL_DESPLIEGUE)) continue // lo despliega otro circuito
+    if (!loDespliegaEsteCircuito(fuente)) continue // lo despliega otro circuito
     fuera.push({ nombre, fuente, nombradaEn: [...archivos].sort() })
   }
   return fuera
@@ -225,9 +236,9 @@ test('sincronizar.sh sigue desplegando SOLO desde scripts/ (si no, este gate que
   )
   assert.ok(origenes.length >= 15, `solo ${origenes.length} lineas \`poner\` leidas: el patron no matchea`)
   assert.deepEqual(
-    origenes.filter((o) => !o.startsWith(DUENO_DEL_DESPLIEGUE)),
+    origenes.filter((o) => !loDespliegaEsteCircuito(o)),
     [],
-    'sincronizar.sh despliega desde fuera de scripts/: revisar DUENO_DEL_DESPLIEGUE, ' +
+    'sincronizar.sh despliega desde una zona que DUENO_DEL_DESPLIEGUE no declara, ' +
       'porque el barrido ya no cubre todo lo que este script publica'
   )
 })

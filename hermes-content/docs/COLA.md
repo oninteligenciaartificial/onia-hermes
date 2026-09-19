@@ -77,6 +77,62 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Ahora — plan de features (revisado 2026-08-30, con Gate 1 corrido)
 
+- [ ] 🔴 **El gate de herramientas desplegadas deriva su universo del PREFIJO del nombre
+      (`/root/bin/onia-*`), y las DOS herramientas que hoy están separadas de su fuente son
+      justo las dos que ese prefijo deja afuera.** Medido el 2026-09-19 17:3x UTC por
+      `onia-cola`, cruzando el **crontab del VPS** (quién EJECUTA) contra `/root/bin` y contra
+      el repo — no contra quién la nombra, que es lo que mira el gate.
+      **El recuento:** de las **29** herramientas que el cron del VPS invoca, sólo **11** tienen
+      línea `poner` en `scripts/loops/sincronizar.sh`. De las 18 restantes: **10** tienen fuente
+      versionada IDÉNTICA (corren de una copia a mano — latentes, el día que alguien arregle la
+      fuente producción sigue con el fósil), **2 ya se separaron**, y de **6 no existe fuente
+      versionada** —`backup-onia-db.sh`, `onia-siat-vigia.sh`, `run-onia-agents-cron.sh`,
+      `run-onia-appointment-reminders.sh`, `run-onia-renewal-reminders.sh` y
+      `run-onia-trial-drip.sh` no existe ninguna copia en este repo, sólo viven en el VPS, así
+      que un borrado se los lleva sin dejar rastro de que existieron.
+      **Las dos derivas van en direcciones OPUESTAS, y por eso no se curan igual:**
+      `chatwoot-brand-onia.sh` tenía el repo ADELANTE (curado en esta vuelta, abajo);
+      `claude-guardia.sh` tiene **producción adelante** — la copia viva trae el arreglo del
+      2026-09-01 (`build-src` no existe; extrae de `src-<sha>.tar.gz`) que el repo no tenía, así
+      que cablearlo sin más lo REVERTÍA. **Respaldado al repo en esta vuelta**; falta la línea
+      `poner`, que ahora ya es segura.
+      **Por qué el gate no puede verlas:** `scripts/herramientas-desplegadas.test.mjs` arma el
+      universo con `matchAll(/\/root\/bin\/(onia-[a-zA-Z0-9._-]*[a-zA-Z0-9])/g)`. Es una lista de
+      inclusión disfrazada de derivación: agrupa por la FORMA del nombre, y el hermano irregular
+      queda invisible por construcción. Ensancharlo a `/root/bin/<cualquiera>` suma **14**
+      sujetos de golpe (medido) y pondría roja la cadena de TODOS los carriles, así que la cura
+      no es el regex: **el universo tiene que salir del crontab del VPS**, que es quien EJECUTA,
+      con el resultado TRI-ESTADO (desde nodo-casa sin SSH sale `NO MEDIDO`, nunca verde).
+      Forma: self-check puro en la cadena `npm test`, medición viva como alias corrido en el
+      arranque del carril — un alias que no entra al arranque no lo corre nadie.
+      **Reproducción en 60 segundos:**
+
+          ssh root@187.77.16.63 'crontab -l | grep -vE "^\s*#" | grep -oE "/root/bin/[A-Za-z0-9_.-]+" | sort -u | while read f; do md5sum "$f"; done'
+          # y cruzar cada md5 contra:  git ls-files -z | xargs -0 md5sum
+
+- [x] 🔴 **Chatwoot le mostraba al cliente los términos y la privacidad de CHATWOOT: 6 de las 9
+      claves de marca estaban revertidas, y el arreglo llevaba 19 días en `main` sin que nada lo
+      copiara. Medido y CERRADO el 2026-09-19 por `onia-cola`.**
+      **El defecto, preguntado al contenedor vivo** (no un `grep`): `rails runner` sobre
+      `InstallationConfig` en `onia-chatbot_chatwoot.1` devolvió `BRAND_URL
+      https://www.chatwoot.com`, `TERMS_URL https://www.chatwoot.com/terms-of-service`,
+      `PRIVACY_URL https://www.chatwoot.com/privacy-policy` y los tres `LOGO` de fábrica. Las
+      tres URL viajan en el objeto de config que el front embebe en
+      `https://chat.onia.com.bo/app/login`.
+      **La causa no era el arreglo, que estaba bien:** `hermes-content/deploy/vps-ops/chatwoot-brand-onia.sh`
+      defiende las nueve desde el 2026-08-31 (el reconcile de Chatwoot restaura diez), y la copia
+      que el cron `17 * * * *` ejecutaba era la vieja de 14 líneas, que defiende tres —
+      `INSTALLATION_NAME`, `BRAND_NAME` y `WIDGET_BRAND_URL`, que son exactamente las tres que
+      estaban bien. **Nada copiaba ese archivo**: sin línea `poner`, el repo y producción son dos
+      archivos distintos que nadie compara.
+      **Probado antes de cablear, contra el contenedor vivo y sin escribir:** `bash <copia del
+      repo> --check` contestó `REVERTIDAS 6/9` y listó las seis. O sea que el guion del repo
+      corre ahí y su diagnóstico coincide con lo que la base dice.
+      **Cura:** línea `poner` en `scripts/loops/sincronizar.sh` (`hermes-content/deploy` ya está
+      en `RUTAS_SYNC`, así que el archivo viaja). El sync del `:44` deja la copia buena y el cron
+      de las `:17` repone las seis claves solo — sin pedirle nada a Sergio Urcullo.
+      **Lo que queda abierto es la CLASE, no esta instancia:** el ítem de arriba.
+
 - [x] 🔴 **La portada y `/rubros` le prometían a un centro de estética un PAQUETE con las
       sesiones hechas y las que faltan — un saldo que el producto no lleva.** Medido el
       2026-09-19 contra `origin/master` de `onia-platform` (ref fetcheada, no de disco):
