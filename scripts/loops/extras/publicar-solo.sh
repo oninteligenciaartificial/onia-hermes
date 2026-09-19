@@ -90,6 +90,15 @@ numeros_del_diff() {  # $1=repo-del-codigo  $2=archivo  $3..=shas
       signo = substr($0, 1, 1); linea = substr($0, 2)
       if (linea ~ /^[[:space:]]*(\/\/|\*|\/\*)/) next   # renglon de comentario
       sub(/\/\/.*$/, "", linea)                          # comentario al final
+      # Un `0` o un `1` en POSICION de comparacion o de indice no es plata. El
+      # corte no es el valor: es donde esta escrito. Un umbral de plata nunca se
+      # escribe `> 0` ni `> 1` (`total > 1500` sobrevive: el `1` viene seguido de
+      # otro digito), y un add-on que pasa a gratis se escribe `: 0`, que es una
+      # ASIGNACION y sigue deteniendo. Los tres patrones son las tres formas en
+      # que un helper cuenta cosas: comparar, indexar hacia atras, y `.at()`.
+      gsub(/(>=|<=|===|!==|==|!=|>|<)[ \t]*-?[01]([^0-9.,]|$)/, " ", linea)
+      gsub(/\[[^]]*[-+][ \t]*[01][ \t]*\]/, " ", linea)
+      gsub(/\.at\([ \t]*-?[01][ \t]*\)/, " ", linea)
       while (match(linea, /[0-9][0-9.,]*/)) {
         n = substr(linea, RSTART, RLENGTH); gsub(/[.,]/, "", n)
         print signo n

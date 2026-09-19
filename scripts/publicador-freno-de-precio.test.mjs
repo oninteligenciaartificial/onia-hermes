@@ -295,3 +295,71 @@ test("la frase del veredicto tiene UNA sola fuente: nadie la escribe por su cuen
       "lugar para que agregar un destino no pueda perder el detalle.",
   );
 });
+
+/**
+ * La tercera forma de apretar de mas, medida el 2026-09-19 sobre la landing.
+ *
+ * El freno contaba TODO digito de una linea que no fuera comentario, asi que los
+ * `0` y `1` de un helper nuevo —indices de array y comparaciones de cardinalidad—
+ * detuvieron `onia.com.bo` desde el 2026-09-18 23:50. Lo que retenia incluia
+ * `f9d932c7`, que corrige una tarjeta afirmando que "la cuenta gana" cuando PIERDE
+ * por Bs 10: el freno de precio manteniendo publicada una mentira de precio, y
+ * pidiendole a Sergio Urcullo una firma por un cambio que no mueve un centavo.
+ *
+ * El corte NO es el valor del numero: es su POSICION. Un umbral de plata nunca se
+ * escribe `> 0` ni `> 1`, y un add-on que pasa a ser gratis se escribe `: 0` —una
+ * asignacion—, no una comparacion. Por eso los dos casos van juntos: el que afloja
+ * sin el que aprieta es una puerta abierta.
+ */
+const helperConIndices = `${tabla(320, "390")}
+export function escalonAnterior(planes, i) {
+  const contra = i > 0 ? planes[i - 1] : null;
+  const ultimo = planes.filter((p) => p.chatbotIncluido).at(-1);
+  const verbo = planes.filter((p) => p.chatbotIncluido).length > 1 ? "traen" : "trae";
+  return contra === 0 ? { ultimo, verbo } : { ultimo, verbo, vacio: planes.length === 0 };
+}
+`;
+
+test("los `0` y `1` de indices y comparaciones no son plata: publica", () => {
+  const dir = repoSembrado();
+  try {
+    const sha = commitear(dir, helperConIndices, "helper que ordena la escalera");
+    const r = preguntar(dir, sha);
+    assert.equal(
+      r.codigo,
+      0,
+      "conto indices de array y comparaciones de cardinalidad como montos nuevos: con eso, " +
+        "escribir un helper en una fuente de precio cuesta la publicacion del destino entero, " +
+        "y la firma que se le pide a Sergio Urcullo no protege nada. Salida: " + r.salida,
+    );
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("un UMBRAL de plata comparado sigue deteniendo: aflojar no puede abrir esa puerta", () => {
+  const dir = repoSembrado();
+  try {
+    const sha = commitear(
+      dir,
+      `${tabla(320, "390")}\nexport const gratis = (total) => total > 1500;\n`,
+      "descuento a partir de 1500",
+    );
+    const r = preguntar(dir, sha);
+    assert.equal(r.codigo, 1, "un umbral de plata entro sin firma por estar a la derecha de un `>`. Salida: " + r.salida);
+    assert.match(r.salida, /1500/, "no nombro el umbral que cambia. Salida: " + r.salida);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("un monto ASIGNADO a 0 —un add-on que pasa a gratis— sigue deteniendo", () => {
+  const dir = repoSembrado();
+  try {
+    const sha = commitear(dir, tabla(320, "390").replace("yearly: 7500", "yearly: 0"), "el anual pasa a 0");
+    const r = preguntar(dir, sha);
+    assert.equal(r.codigo, 1, "un precio que pasa a CERO es un cambio de precio: cobrar 0 es una decision de plata. Salida: " + r.salida);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
