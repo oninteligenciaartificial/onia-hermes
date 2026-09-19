@@ -140,6 +140,39 @@ export interface Plan {
    * para un "equipo grande", que es textualmente a quien apunta ese plan— no se vendía.
    */
   coadministradores: boolean;
+  /**
+   * Cuántos usuarios EXTRA vende este plan a `USUARIO_EXTRA_ADDON.mensualAddon`.
+   * `null` = los que hagan falta, sin tope · `0` = no vende (no hace falta: sus usuarios
+   * no tienen tope).
+   *
+   * Espejo de `topeDe` / `maxAsientosExtra` (`onia-platform/lib/asientos.ts`), que es la fuente y
+   * lo que `checkUserLimit` APLICA: `effectiveLimit = PLAN_LIMITS[plan].users + extraUserSeats`,
+   * sin mirar el plan salvo para el tope del Básico.
+   *
+   * 🔴 POR QUE EXISTE. Medido el 2026-09-19 sobre `onia.com.bo/precios` SERVIDA. La carta de
+   * add-ons decía «Una persona más en el sistema. En Básico se pueden sumar hasta 3» — la ÚNICA
+   * frase de alcance del add-on, y nombraba un solo plan. El producto los vende en Crece y en
+   * Profesional también, y ahí SIN TOPE: la tabla que el dueño ve en `/settings` lo dice con
+   * todas las letras, «Bs 70/mes por persona, sin tope».
+   *
+   * O sea que el lead de Profesional (5 usuarios, Bs 890) que necesitaba una persona más leía que
+   * el add-on era cosa del Básico y concluía lo único que quedaba: subir al Completo, Bs 1.290.
+   * La verdad era Bs 890 + 70 = **Bs 960**, así que le costaba **Bs 330/mes de más** (Bs 3.960 al
+   * año); en Crece, Bs 270/mes. Y se desmentía sola tres renglones más arriba, en la misma
+   * pantalla: «Ninguno te obliga a saltar de plan para desbloquear una sola cosa».
+   *
+   * POR QUE NINGUN GATE LO VEIA, que es lo que hace nueva a esta clase: no es una cifra mal
+   * —Bs 70 sale de la fuente y `precios:fuente` firma verde con sus 43 cifras—, no es una
+   * afirmación de INCLUSION («viene desde X», que persigue `capacidad-incluida.test.ts`) sino de
+   * RESTRICCION, y no es un universal («todos», «cualquier plan») sino un PARTICULAR. Los gates
+   * de la casa persiguen prometer de MAS; esto ofrece de MENOS, y eso no lo mira ninguno.
+   *
+   * Los otros dos add-ons de la carta ya derivan su alcance del catálogo (el chatbot el 18-sep,
+   * las reservas el 13-sep). Éste era el tercer hermano, al que la cura no viajó.
+   *
+   * Obligatorio en el tipo a propósito: un plan nuevo no puede nacer sin contestarlo.
+   */
+  asientosExtra: number | null;
   destacado?: boolean;
   cuando: string;
 }
@@ -448,6 +481,11 @@ const ESCALERA: readonly Plan[] = [
     // El `sinEsto` del Básico se DERIVA más abajo: nombra los planes donde esas dos capacidades
     // sí están, y ese nombre no se tipea (ver `PLANES`).
     sinEsto: [],
+    // Va DESPUES de `sinEsto` a propósito: `numerosPublicados` (scripts/precios-fuente.mjs)
+    // cuenta como cifra publicada todo número entre `incluye:` y `sinEsto:`, y este es dato
+    // estructural, no una línea que el cliente lee. El único con tope: arriba de eso la respuesta
+    // es subir de plan, no seguir sumando cargos sueltos (`topeDe` de `onia-platform/lib/asientos.ts`).
+    asientosExtra: USUARIO_EXTRA_ADDON.maxEnBasico,
     cuando: "Negocio de 1 o 2 personas que hoy trabaja con cuaderno o Excel.",
   },
   {
@@ -474,6 +512,7 @@ const ESCALERA: readonly Plan[] = [
     sinEsto: [
       `Reportes completos, facturas recurrentes y contabilidad completa (${ALCANCE_CLINICO}) — vienen en ${NOMBRE_DE_PLAN.pro}`,
     ],
+    asientosExtra: null,
     cuando: "Ya tenés movimiento y se te escapan clientes por falta de seguimiento.",
   },
   {
@@ -497,6 +536,7 @@ const ESCALERA: readonly Plan[] = [
     reservasIncluidas: true,
     coadministradores: false,
     sinEsto: [],
+    asientosExtra: null,
     destacado: true,
     cuando: "El negocio ya factura todos los días y querés los números al día.",
   },
@@ -533,6 +573,9 @@ const ESCALERA: readonly Plan[] = [
     reservasIncluidas: true,
     coadministradores: true,
     sinEsto: [],
+    // No vende asientos porque no hace falta: sus usuarios no tienen tope (`ilimitado` en
+    // `cobroPorUsuarios`, que devuelve «Sin cargo: no hay tope de personas»).
+    asientosExtra: 0,
     cuando: "Equipo grande, base de clientes que no entra en 1.500 fichas, o WhatsApp con movimiento.",
   },
 ] as const;
@@ -680,11 +723,17 @@ type PlanConChatbot = { readonly nombre: string; readonly chatbotIncluido: boole
  * El dato existía desde antes (`GRUPO.chatbotIncluido`): lo que faltaba era que esta función lo
  * leyera.
  */
+/** «A», «A y B», «A, B y C» — el formato con el que se enumera una lista de planes en prosa. */
+export function unirConY(nombres: readonly string[]): string {
+  if (nombres.length === 0) return "";
+  if (nombres.length === 1) return nombres[0];
+  return `${nombres.slice(0, -1).join(", ")} y ${nombres[nombres.length - 1]}`;
+}
+
 export function nombresConChatbot(planes: readonly PlanConChatbot[] = planesPublicados()): string {
   const nombres = planes.filter((p) => p.chatbotIncluido).map((p) => p.nombre);
   if (nombres.length === 0) return "Ningún plan";
-  if (nombres.length === 1) return nombres[0];
-  return `${nombres.slice(0, -1).join(", ")} y ${nombres[nombres.length - 1]}`;
+  return unirConY(nombres);
 }
 
 /**
@@ -970,6 +1019,35 @@ export interface AddOn {
  *  el cruce se rompe en silencio el día que alguien renombre una sola. */
 export const CHATBOT_EN_LA_CARTA = "Chatbot de WhatsApp";
 
+/**
+ * En qué planes se puede sumar gente pagando, y hasta cuántos — DERIVADO de `asientosExtra`.
+ *
+ * Nombrar un solo plan es como nació el defecto (ver `asientosExtra`): la frase era «En Básico se
+ * pueden sumar hasta 3» y mandaba al de Profesional a pagar Bs 1.290 por algo que le costaba
+ * Bs 960. Acá los planes NO se tipean: si mañana el producto le pone tope al Crece o le saca el
+ * suyo al Básico, esta frase cambia sola.
+ *
+ * Los planes que no venden asientos (`0`) no se nombran: no es una carencia, es que sus usuarios
+ * no tienen tope, y eso ya lo dice su propia tarjeta.
+ */
+export function alcanceDelUsuarioExtra(planes: readonly Plan[] = PLANES): string {
+  const conTope = planes.filter((p) => typeof p.asientosExtra === "number" && p.asientosExtra > 0);
+  const sinTope = planes.filter((p) => p.asientosExtra === null);
+
+  const tramos = [
+    ...conTope.map((p) => `en ${p.nombre} se pueden sumar hasta ${p.asientosExtra}`),
+    sinTope.length > 0
+      ? `en ${unirConY(sinTope.map((p) => p.nombre))}, las que necesites`
+      : null,
+  ].filter((t): t is string => t !== null);
+
+  // Sin ningún plan que los venda, la frase honesta es que no se venden — nunca una lista vacía
+  // que se lea como "en , las que necesites".
+  if (tramos.length === 0) return "Se suma cuando el plan lo permite.";
+  const frase = tramos.join("; ");
+  return `${frase.charAt(0).toUpperCase()}${frase.slice(1)}.`;
+}
+
 export const ADDONS: readonly AddOn[] = [
   {
     nombre: CHATBOT_EN_LA_CARTA,
@@ -990,7 +1068,10 @@ export const ADDONS: readonly AddOn[] = [
   },
   {
     nombre: USUARIO_EXTRA_ADDON.nombre,
-    copy: `Una persona más en el sistema. En Básico se pueden sumar hasta ${USUARIO_EXTRA_ADDON.maxEnBasico}.`,
+    // "En Básico se pueden sumar hasta 3" hasta el 2026-09-19: la única frase de alcance del
+    // add-on nombraba UN plan, y el producto lo vende también en Crece y en Profesional, ahí sin
+    // tope. Los planes NO se tipean — salen de `asientosExtra` (ver su cabecera en `Plan`).
+    copy: `Una persona más en el sistema. ${alcanceDelUsuarioExtra()}`,
     precio: `Bs ${bs(USUARIO_EXTRA_ADDON.mensualAddon)}/mes por usuario`,
   },
   {
