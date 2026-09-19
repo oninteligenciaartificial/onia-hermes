@@ -318,6 +318,52 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **CERRADO el 2026-09-19 — el bot le clavaba el género masculino a la persona que
+      atiende, que la carga el CLIENTE: «la Dra. Ana Ríos … te escribe él»**
+      (`hermes-content/deploy/vps-ops/bot/config.mjs`, 3 entradas; gate
+      `concordancia-con-el-humano.test.mjs`). `{{humano}}` sale de `identity.humanName`, que el
+      dueño tipea en el paso 2 del asistente del panel — y **los tres valores que el propio
+      sistema propone rompen la concordancia**: el panel propone «Dra. Ana Ríos»
+      (`AsistenteChatbot.tsx:105`, **mirado renderizado** en `app.onia.com.bo/settings/chatbot`),
+      el motor cae a «el equipo» cuando el dueño no carga a nadie (`knowledge.mjs:1432`) y el
+      simulador siembra «doña Marta». Las tres entradas decían **«Te escribe él»**, y las tres
+      son del **handoff** — el momento más caro del embudo, el único en que alguien pidió hablar
+      con una persona: `M5`, `M5_URGENTE` y `M0_SIN_HORARIOS`.
+
+      **Por qué no lo vio ningún gate.** No mueve una cifra, no nombra un plan, no promete una
+      capacidad y no ata un canal: ésas son las cuatro familias que los gates del bot ya
+      vigilan. El eje es **GÉNERO × TEXTO**. Y lo escondía el hermano sano: el default del
+      funnel de venta de Onia es `humanName: "Sergio"`, con el que la frase queda bien — y el
+      bot de Onia es el único que se prueba todos los días.
+
+      **Es la mitad que faltó de DOS curas anteriores, las dos en estas mismas líneas.** El
+      2026-08-29 se neutralizó el VALOR (de «Sergio» a «el equipo») y quedó el pronombre al
+      lado; el 2026-09-18 se derivó la VÍA (`{{via_humano}}`) y quedó el pronombre **a dos
+      palabras**. Por eso el sujeto del gate es la CLASE (todo el guion), no las tres entradas.
+
+      **La cura no es adivinar el género** —«el equipo», «Recepción», «Marta y Juan» no tienen
+      uno, y equivocarse es el mismo defecto al revés—: se quita el pronombre, que es la forma
+      cierta para todos. Mismo criterio con el que se cerró la vía: fallar hacia la promesa que
+      SIEMPRE se puede cumplir. Render vivo por el motor real:
+      *«Ya le pasé tu consulta … Te escribe por este mismo chat, en horario de oficina …»*.
+
+      ⚠️ **El gate pasó VERDE la primera vez, con las tres entradas rotas delante.** No era el
+      producto: en JavaScript `\b` se define sobre `[A-Za-z0-9_]`, así que `/\bél\b/` **nunca**
+      matchea «escribe él» — el espacio y la «é» son los dos *non-word* y ahí no hay frontera.
+      Los límites van con propiedades Unicode (`(?<![\p{L}\p{N}_])…`). Verificar el instrumento
+      antes que el producto valió el hallazgo entero.
+
+      **Pruebas.** Gate en ROJO primero nombrando las tres entradas; validado por mutación en
+      las dos direcciones (pronombre devuelto a UNA sola entrada → 2 rojos; universo vaciado →
+      el caso ancla lo caza, 1 rojo); `npm run test:bot` **1.246 verdes**; cableado a la cadena
+      confirmado con un centinela que salió rojo dentro de `npm run test:bot` (la salida de
+      `node --test` no nombra los archivos que corre). De paso, `entradasDelGuion` salió del
+      test hermano a `guion-del-bot.mjs`: encerrado en un test, el gate siguiente lo re-escribe
+      y las dos copias divergen.
+
+      **Commiteado, NO desplegado** — `/opt/onia/bot` sigue diciendo «te escribe él» hasta que
+      `onia-cola` publique.
+
 - [x] 🔴 **CERRADO el 2026-09-19 06:05 — el criterio «¿esta conversación somos NOSOTROS?» ya mira
       el INBOX: el banco de pruebas dejó de pasar como prospecto**
       (`hermes-content/deploy/vps-ops/bot/es-nuestra.mjs`, causa aditiva por tenencia;

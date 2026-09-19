@@ -44,23 +44,18 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { DEFAULT_CONFIG, renderTemplate, viaDelCanal } from "./config.mjs";
 import { varsFor } from "./reply-builder.mjs";
+import { entradasDelGuion as entradasDelGuionDe } from "./guion-del-bot.mjs";
 
 /**
  * El universo se deriva del DISCO: TODAS las entradas del guion publicado, no una
  * lista de las tres que hoy sabemos rotas. Una lista a mano falla abierto en el
  * texto que alguien escriba manana.
+ *
+ * Vive en `guion-del-bot.mjs` porque `concordancia-con-el-humano.test.mjs` necesita
+ * el MISMO universo: encerrado aca, el gate hermano lo habria re-escrito y las dos
+ * copias se separan en el primer cambio de forma del guion.
  */
-function entradasDelGuion() {
-  return Object.entries(DEFAULT_CONFIG.script)
-    .flatMap(([clave, valor]) =>
-      typeof valor === "string"
-        ? [[clave, valor]]
-        : Array.isArray(valor)
-          ? valor.map((linea, i) => [`${clave}[${i}]`, String(linea)])
-          : [],
-    )
-    .filter(([, texto]) => texto.length > 0);
-}
+const entradasDelGuion = () => entradasDelGuionDe(DEFAULT_CONFIG.script);
 
 /**
  * Formas atadas a UN canal. "este mismo numero" solo es cierto donde hay numero;

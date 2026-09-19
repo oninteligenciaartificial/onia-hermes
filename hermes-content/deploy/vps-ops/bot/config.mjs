@@ -344,7 +344,7 @@ export const SCRIPT = Object.freeze({
   M5: [
     "Eso lo tiene que ver {{humano}}, no yo — soy un bot y no quiero inventarte una respuesta.",
     "",
-    "Ya le pasé tu consulta con todo lo que me contaste. Te escribe él {{via_humano}}, en horario de oficina ({{horario_frase}}). Si es urgente, decime \"urgente\" y lo marco.",
+    "Ya le pasé tu consulta con todo lo que me contaste. Te escribe {{via_humano}}, en horario de oficina ({{horario_frase}}). Si es urgente, decime \"urgente\" y lo marco.",
   ].join("\n"),
 
   // M5_ACUSE — el mensaje que llega DESPUES de haber derivado, mientras el humano todavia no
@@ -364,7 +364,7 @@ export const SCRIPT = Object.freeze({
   M5_URGENTE: [
     "Listo, lo marqué como urgente y {{humano}} ya lo tiene arriba de todo.",
     "",
-    "Te escribe él {{via_humano}}. Si es fuera de horario de oficina ({{horario_frase}}), es lo primero que ve al abrir.",
+    "Te escribe {{via_humano}}. Si es fuera de horario de oficina ({{horario_frase}}), es lo primero que ve al abrir.",
   ].join("\n"),
 
   // M8_SOPORTE — SEGUNDO CAMINO: el que escribe YA es cliente (o dice que ya tiene el sistema, o
@@ -413,7 +413,7 @@ export const SCRIPT = Object.freeze({
     "",
     "{{producto}} es una plataforma por módulos para que un negocio trabaje adentro: agenda, cobros, clientes.",
     "",
-    "Justo ahora no tengo horarios libres para ofrecerte, así que {{humano}} te coordina uno personalmente — te escribe él.",
+    "Justo ahora no tengo horarios libres para ofrecerte, así que {{humano}} te coordina uno personalmente — te escribe {{via_humano}}.",
     "",
     "Contame mientras: ¿a qué se dedica tu negocio?",
   ].join("\n"),
