@@ -843,7 +843,8 @@ const PRUEBA_DIAS = 14;
  * apriete. Si esto cambia allá, cambia acá — y `prueba-vs-plan.test.ts` obliga
  * a que las tres tarjetas se enteren.
  */
-const PRUEBA_PLAN = NOMBRE_DE_PLAN.pro;
+const PRUEBA_PLAN_ID: PlanId = "pro";
+const PRUEBA_PLAN = NOMBRE_DE_PLAN[PRUEBA_PLAN_ID];
 
 /**
  * La nota de prueba de CADA tarjeta, porque el botón de las tres arranca la
@@ -889,6 +890,13 @@ export const RETENCION = {
 export const PRUEBA = {
   dias: PRUEBA_DIAS,
   planQueCorre: PRUEBA_PLAN,
+  /**
+   * El mismo plan, por su id. Lo necesita toda pantalla que además de NOMBRARLO
+   * tenga que preguntarle al catálogo qué enciende — hoy el panel dibujado de
+   * /empezar, que muestra la cuenta de la prueba y por eso puede dibujar lo que
+   * el Pro trae y el plan de entrada no.
+   */
+  planQueCorreId: PRUEBA_PLAN_ID,
   copy: `${PRUEBA_DIAS} días de prueba sin poner tarjeta, corriendo con el plan ${PRUEBA_PLAN} completo. Al terminar, la cuenta queda en solo lectura: nada se borra de inmediato y tenés ${RETENCION.diasParaExportar} días para exportar tus datos.`,
   notaPorPlan: NOTA_PRUEBA_POR_PLAN,
 } as const;
@@ -949,6 +957,31 @@ export function escalonAnterior(id: PlanId): Plan | null {
     throw new Error(`No existe el plan "${id}" en PLANES (lib/pricing.ts).`);
   }
   return i === 0 ? null : porPrecio[i - 1];
+}
+
+/**
+ * El plan de ENTRADA: el más barato que se vende. Es el «desde Bs N al mes» del
+ * hero y, por lo tanto, el piso de lo que la portada puede prometer.
+ *
+ * Se deriva del PRECIO por el mismo motivo que `escalonAnterior`: el día que
+ * entre un escalón más abajo —la escalera C metió el Crece en el medio el
+ * 2026-09-12— un `"basico"` tipeado sigue compilando y queda anunciando el plan
+ * equivocado.
+ *
+ * Lo usa el hero para DOS cosas que tienen que hablar del mismo plan: el precio
+ * que cita y los módulos que dibuja al lado. Que discreparan es el defecto del
+ * 2026-09-19 (ver `(sitio)/modulos-de-la-cuenta.ts`): la línea decía Bs 320 y
+ * el panel de abajo dibujaba los agentes, que en ese plan están apagados.
+ */
+export function planDeEntrada(planes: readonly Plan[] = PLANES): Plan {
+  const masBarato = planes.reduce<Plan | null>(
+    (menor, p) => (menor === null || p.mensual < menor.mensual ? p : menor),
+    null,
+  );
+  if (!masBarato) {
+    throw new Error("No hay ningún plan en PLANES (lib/pricing.ts).");
+  }
+  return masBarato;
 }
 
 /* ---------- lo que se suma sobre la suscripcion ----------

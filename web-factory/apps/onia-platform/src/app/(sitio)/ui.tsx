@@ -8,6 +8,8 @@ import {
   LOGIN_URL,
 } from "./nav";
 import { CTA_ALTA } from "./alta";
+import { modulosEncendidosEn } from "./modulos-de-la-cuenta";
+import type { PlanId } from "@/lib/pricing";
 import { BarraSitio } from "./barra";
 import { MobileMenu } from "./menu";
 import s from "./sitio.module.css";
@@ -62,13 +64,15 @@ export type PanelId =
  * correcto, y dejarlo en la llamada era la forma segura de publicar uno vacío
  * — que es exactamente lo que pasaba con el `alt` de la captura.
  */
-const panelLabel: Record<PanelId, string> = {
+const panelLabel: Record<Exclude<PanelId, "cuenta">, string> = {
   agentes:
     "Pendientes de aprobación a las 03:12, con el negocio cerrado: tres propuestas que los agentes dejaron escritas de madrugada, cada una con su botón de aprobar. Nada se manda hasta que el dueño aprueba.",
   chat:
     "Conversación de WhatsApp a las 23:40: alguien pregunta si atienden el sábado y ya tiene la respuesta con el horario que el negocio publicó.",
-  cuenta:
-    "Una cuenta recién creada, con clientes, caja, inventario, contabilidad y agentes ya encendidos.",
+  // El de "cuenta" NO está acá: enumera los mismos módulos que dibuja, así que
+  // depende del plan igual que las pastillas. Lo arma `labelDe`, abajo — una
+  // cadena fija diría "y agentes ya encendidos" a quien usa lector de pantalla
+  // justo en el plan que los tiene apagados.
   dental:
     "Agenda del día de una clínica dental: cada paciente con su hora y su tratamiento, dos citas ya confirmadas y una marcada para llamar.",
   comercio:
@@ -82,26 +86,12 @@ const panelLabel: Record<PanelId, string> = {
 };
 
 /**
- * Los módulos del panel de cuenta. Son EXACTAMENTE los que nombra el copy que
- * queda al lado en /empezar ("Todo encendido: agenda, caja, inventario,
- * contabilidad y la cola de agentes") más "Clientes", que nombra la descripción
- * del sitio. Nada acá es una promesa nueva.
+ * Los módulos del panel de cuenta se DERIVAN del plan que el panel dibuja: la
+ * lista y su porqué viven en `./modulos-de-la-cuenta`.
  *
- * ⚠️ Acá decía "Facturación", y estaba mal por dos motivos a la vez. Primero,
- * la lista no coincidía con el párrafo pegado al costado —dos listas de módulos
- * distintas, lado a lado, en la misma pantalla, sin inventario ni contabilidad
- * y con una capacidad de más—. Segundo y peor: iba bajo el remate "Encendidos
- * desde el primer día" mientras la FAQ de la home dice que la homologación
- * sigue en trámite y que por ahora se factura en el Portal Web del SIN. La
- * ilustración prometía lo que el texto del mismo sitio tiene que desmentir.
+ * Acá estaban tipeados, los cinco, para cualquier plan — y uno de ellos
+ * ("Agentes") el plan de entrada lo tiene apagado. Ver ese archivo.
  */
-const MODULOS = [
-  "Clientes",
-  "Caja",
-  "Inventario",
-  "Contabilidad",
-  "Agentes",
-] as const;
 
 /** Lo que los agentes dejan escrito. Sin números ni nombres de cliente: un
  *  conteo inventado dentro de una interfaz creíble se lee como dato real, y no
@@ -192,7 +182,7 @@ function Fila({
   );
 }
 
-function PanelCuerpo({ panel }: { panel: PanelId }) {
+function PanelCuerpo({ panel, plan }: { panel: PanelId; plan?: PlanId }) {
   switch (panel) {
     case "agentes":
       return (
@@ -236,7 +226,7 @@ function PanelCuerpo({ panel }: { panel: PanelId }) {
         <>
           <Head titulo="Tu cuenta" />
           <div className={s.panelGrid}>
-            {MODULOS.map((m) => (
+            {modulosEncendidosEn(plan).map((m) => (
               <span key={m} className={s.panelPill}>
                 <span className={s.panelSq} />
                 <span className={s.panelPillTxt}>{m}</span>
@@ -373,10 +363,25 @@ function PanelCuerpo({ panel }: { panel: PanelId }) {
  * El panel solo, sin el mat de color: lo usa el conmutador de rubros, donde el
  * mat ES la ranura del rodillo y el color lo pone el rubro.
  */
-export function PanelDibujado({ panel }: { panel: PanelId }) {
+/**
+ * El rótulo accesible. El del panel de cuenta se DERIVA de los módulos que ese
+ * plan enciende, por el mismo motivo que las pastillas: es la misma lista dicha
+ * otra vez, y una lista tipeada al lado de una derivada es como esto se rompe.
+ */
+function labelDe(panel: PanelId, plan?: PlanId): string {
+  if (panel !== "cuenta") return panelLabel[panel];
+  const modulos = modulosEncendidosEn(plan).map((m) => m.toLowerCase());
+  const enumerados =
+    modulos.length > 1
+      ? `${modulos.slice(0, -1).join(", ")} y ${modulos.at(-1)}`
+      : modulos.join("");
+  return `Una cuenta recién creada, con ${enumerados} ya encendidos.`;
+}
+
+export function PanelDibujado({ panel, plan }: { panel: PanelId; plan?: PlanId }) {
   return (
-    <div className={s.panel} role="img" aria-label={panelLabel[panel]}>
-      <PanelCuerpo panel={panel} />
+    <div className={s.panel} role="img" aria-label={labelDe(panel, plan)}>
+      <PanelCuerpo panel={panel} plan={plan} />
     </div>
   );
 }
@@ -391,10 +396,18 @@ export function PanelDibujado({ panel }: { panel: PanelId }) {
  * `panel` es OBLIGATORIO y ya no existe una rama de imagen: la regresión
  * "volvamos a cablear la captura" no compila, que vale más que un test.
  */
-export function Shape({ panel, tone = "green" }: { panel: PanelId; tone?: Tone }) {
+export function Shape({
+  panel,
+  plan,
+  tone = "green",
+}: {
+  panel: PanelId;
+  plan?: PlanId;
+  tone?: Tone;
+}) {
   return (
     <div className={toneClass[tone]}>
-      <PanelDibujado panel={panel} />
+      <PanelDibujado panel={panel} plan={plan} />
     </div>
   );
 }
