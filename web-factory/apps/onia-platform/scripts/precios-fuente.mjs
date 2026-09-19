@@ -93,6 +93,14 @@ export const FUENTE_PRUEBA = "lib/subscription/plan-state.ts";
  * cruzaba; el tope no lo cruzaba nadie.
  */
 export const FUENTE_LIMITES = "lib/plan-catalogo.ts";
+/**
+ * QUIEN vende usuarios extra y hasta cuantos (`topeDe`). Es el eje que ni el monto ni el tope
+ * alcanzan: `basicMaxSeats` ya se cruzaba como cifra desde siempre, y aun asi el sitio publicaba
+ * el add-on como si fuera cosa del Basico — el producto lo vende tambien en Crece y Profesional,
+ * ahi SIN TOPE, y esa frase mandaba al de Profesional a pagar Bs 1.290 por algo que le costaba
+ * Bs 960. Un ALCANCE no es una cifra, asi que no lo miraba ningun cruce (2026-09-19).
+ */
+export const FUENTE_ASIENTOS = "lib/asientos.ts";
 
 /**
  * Los planes comprables, con el nombre que les da cada lado, DE BARATO A CARO
@@ -1218,6 +1226,80 @@ export const esPromesa = (cifra) =>
   /· fichas$|· usuarios$|· recordatorios por mes$|· conversaciones por mes$/.test(cifra) ||
   cifra.startsWith("primer plan con");
 
+/**
+ * A QUE PLANES les vende el producto usuarios extra, leido de `topeDe` (`lib/asientos.ts`).
+ *
+ * `topeDe` nombra las excepciones y deja al resto SIN TOPE, asi que el universo se deriva de sus
+ * ramas: la que suma asientos (`incluidos + ...`) ACOTA y vende; la que devuelve `incluidos` a
+ * secas NO vende. Lo que no nombra, vende sin tope — salvo los planes de usuarios ilimitados, que
+ * no necesitan comprar ninguno.
+ *
+ * `null` = no se pudo leer. Nunca `{}`, que se leeria como "ningun plan vende" y absolveria al
+ * sitio callado.
+ */
+export function alcanceDeAsientosDelProducto(fuente, limites) {
+  const cuerpo = (fuente ?? "").match(/function topeDe\s*\([^)]*\)[^{]*\{([\s\S]*?)\n\}/);
+  if (!cuerpo) return null;
+  const acotados = new Map();
+  const sinVenta = new Set();
+  for (const m of cuerpo[1].matchAll(/plan === "([a-z]+)"\)\s*return\s+([^;]+);/g)) {
+    if (/incluidos\s*\+/.test(m[2])) acotados.set(m[1], m[2].trim());
+    else sinVenta.add(m[1]);
+  }
+  if (acotados.size === 0 && sinVenta.size === 0) return null;
+
+  /** Cuantos asientos EXTRA vende ese plan: `0` = ninguno, `null` = sin tope. */
+  return (planProducto) => {
+    if (limites?.[planProducto]?.usuarios === -1) return 0; // ilimitado: no hace falta comprar
+    if (sinVenta.has(planProducto)) return 0;
+    if (acotados.has(planProducto)) return "acotado"; // el NUMERO ya se cruza como cifra
+    return null;
+  };
+}
+
+/** Lo que el sitio PUBLICA sobre quien puede sumar gente pagando (`asientosExtra` de cada plan). */
+export function alcanceDeAsientosDelSitio(fuente) {
+  const salida = {};
+  for (const { sitio } of PLANES_EN_ORDEN) {
+    const bloque = (fuente ?? "").match(
+      new RegExp(`id:\\s*"${sitio}"[\\s\\S]*?asientosExtra:\\s*([^,\\n]+)`),
+    );
+    if (!bloque) {
+      salida[sitio] = undefined;
+      continue;
+    }
+    const crudo = bloque[1].trim();
+    if (crudo === "null") salida[sitio] = null;
+    else if (/^\d+$/.test(crudo)) salida[sitio] = Number(crudo) === 0 ? 0 : "acotado";
+    else salida[sitio] = "acotado"; // interpolado (USUARIO_EXTRA_ADDON.maxEnBasico)
+  }
+  return salida;
+}
+
+/**
+ * Los planes donde el sitio y el producto no coinciden en QUIEN puede sumar gente pagando.
+ * Falla hacia el rojo: un lado ilegible se reporta, no se absuelve.
+ */
+export function asientosDesalineados(fuenteAsientos, limites, fuenteSitio) {
+  const delProducto = alcanceDeAsientosDelProducto(fuenteAsientos, limites);
+  if (!delProducto) return null;
+  const delSitio = alcanceDeAsientosDelSitio(fuenteSitio);
+  const problemas = [];
+  for (const { producto, sitio, etiqueta } of PLANES_EN_ORDEN) {
+    const esperado = delProducto(producto);
+    const publicado = delSitio[sitio];
+    if (publicado === undefined) {
+      problemas.push(`${etiqueta}: el sitio no declara \`asientosExtra\` (no se puede cruzar)`);
+    } else if (esperado !== publicado) {
+      const di = (v) => (v === null ? "sin tope" : v === 0 ? "no vende" : "con tope");
+      problemas.push(
+        `${etiqueta}: el producto ${di(esperado)} y el sitio publica ${di(publicado)}`,
+      );
+    }
+  }
+  return problemas;
+}
+
 /** Puro: sin red y sin disco, para poder probarlo con casos que hoy no existen. */
 export function comparar(delProducto, delSitio) {
   const ilegibles = CIFRAS.filter(
@@ -1487,10 +1569,34 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
     );
   }
 
+  const asientos = asientosDesalineados(
+    leerDelProducto(FUENTE_ASIENTOS),
+    limitesDelProducto(limites),
+    preciosSitio,
+  );
+  if (asientos === null) {
+    console.error(
+      `NO PUDE MEDIR: no pude leer \`topeDe\` de ${FUENTE_ASIENTOS} del producto, asi que no se ` +
+        `a que planes les vende usuarios extra. Si cambio de forma, arreglar ` +
+        `\`alcanceDeAsientosDelProducto\` ANTES de creerle a un verde.`,
+    );
+    process.exit(NO_PUDE_MEDIR);
+  }
+  for (const p of asientos) {
+    console.error(
+      `ROJO: usuarios extra — ${p}.\n` +
+        `  Publicar que un add-on es de UN plan cuando el producto lo vende en varios manda al ` +
+        `lead a subir de plan, que es mas caro: al de Profesional le costaba Bs 330/mes de mas ` +
+        `(1.290 en vez de 890 + 70). Manda el producto (CLAUDE.md): se corrige \`asientosExtra\` ` +
+        `del plan en src/lib/pricing.ts — la frase de la carta se deriva sola de ahi.`,
+    );
+  }
+
   if (
     difieren.length === 0 &&
     ciclos.difieren.length === 0 &&
     nombres.difieren.length === 0 &&
+    asientos.length === 0 &&
     !coberturaRota
   ) {
     console.log(
@@ -1498,6 +1604,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
         `las ${Object.keys(CAPACIDADES_CRUZADAS).length} capacidades que el producto decide por plan ` +
         `estan todas cruzadas o excusadas, ` +
         `las ${numerosPublicados(preciosSitio).length} del \`incluye\` de los planes estan todas cruzadas, ` +
+        `los ${PLANES_EN_ORDEN.length} planes comprables coinciden en quien puede sumar usuarios pagando, ` +
         `los ${CICLOS_EQUIVALENCIA.length} planes comprables ofrecen los mismos ciclos en los dos lados ` +
         `y se llaman igual en las dos pantallas de la compra.`,
     );
