@@ -2,8 +2,8 @@
 title: "Términos y Condiciones"
 slug: "terminos"
 status: "vigente"
-version: "1.0"
-updatedAt: "2026-09-08"
+version: "1.1"
+updatedAt: "2026-09-19"
 ---
 
 # Términos y Condiciones de Uso — Plataforma Onia
@@ -152,7 +152,8 @@ sin revisión mensaje por mensaje:
   desde **Configuración**, y el destinatario puede pedir que no le escribamos más.
 - **El asistente de WhatsApp** (add-on que se contrata aparte), que responde por
   su cuenta a quien escriba al número que conectaste, con la información que vos
-  publicaste, y pasa el caso a una persona cuando no sabe.
+  publicaste, y pasa el caso a una persona cuando no sabe. Qué le pasa a ese
+  número mientras esté conectado: **§6.5**.
 
 Estos envíos salen **a nombre de tu negocio**. Si no querés ninguno: no
 contratés el add-on y dejá los recordatorios pausados.
@@ -166,6 +167,25 @@ el consentimiento o la base legítima para contactar al destinatario.
 incompleta o desactualizada. Los resultados de IA son asistencia, no decisiones:
 verificalos antes de actuar, en especial montos, fechas, datos clínicos y
 cualquier contenido con efecto legal o tributario.
+
+6.5. **El número de WhatsApp que conectás.** El asistente del §6.2 atiende un
+número de WhatsApp que elegís vos, y para funcionar **ese número se vincula a la
+plataforma de mensajería de Meta**. El vínculo cambia cómo funciona ese número, y
+el alcance del cambio depende de por qué camino se conecte:
+
+- En ese número se **desactivan** las **listas de difusión**, los **mensajes
+  temporales** y **«ver una vez»**, y los **grupos no entran** al panel de Onia.
+- Según el camino de conexión, ese número **puede dejar de usarse en la app de
+  WhatsApp de tu teléfono**, y el **historial anterior puede no viajar** al
+  panel.
+- Podés conectar un **número nuevo** en vez del que usás hoy; el que ya usás
+  queda intacto.
+
+Antes de conectarlo te decimos cuál de esos caminos aplica a tu caso. Podés
+**desconectar** el número cuando quieras, desde tu cuenta o pidiéndolo por los
+canales del §14. Las condiciones que Meta impone sobre los números conectados a
+su plataforma son de Meta, pueden cambiar sin aviso nuestro, y no dependen de
+Onia.
 
 ## 7. Disponibilidad del servicio
 
