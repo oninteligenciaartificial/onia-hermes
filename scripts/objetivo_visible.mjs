@@ -278,7 +278,10 @@ export function corteDeLaPuerta(cuerpo) {
  * El veredicto, separado de la red a proposito: es lo que se prueba sin docker, sin sesion y
  * sin produccion. `respuesta` es `{ status, cuerpo }` tal como sale de `/api/bandeja`.
  */
-export function juzgar(respuesta, { colgados, dueñoTieneOrg = null, rolDelDueño = null } = {}) {
+export function juzgar(
+  respuesta,
+  { colgados, dueñoTieneOrg = null, rolDelDueño = null, otrosPerfilesDelDueño = null } = {},
+) {
   const { status, cuerpo } = respuesta ?? {};
 
   // La puerta se pregunta ANTES que cualquier diagnostico de la bandeja, y para todo status que
@@ -299,7 +302,17 @@ export function juzgar(respuesta, { colgados, dueñoTieneOrg = null, rolDelDueñ
         `${INBOXES_DEL_OBJETIVO.join('/')}${rolDelDueño ? `, rol \`${rolDelDueño}\`` : ' (rol no medido)'}. ` +
         'A QUIEN alcanza esa exigencia lo decide `MFA_REQUIRED_ROLES` de `lib/mfa/policy.ts` en ' +
         '`onia-platform`, asi que este corte NO dice nada sobre las demas cuentas del panel: ' +
-        'medir otra con `--email <correo>` antes de concluir que ninguna entra.',
+        // El remedio se ofrece SOLO si existe una cuenta que pueda tipearse ahi. La org dueña de
+        // los inboxes 4/5 (`onia-interna`) tiene UN solo perfil, medido el 2026-09-19, asi que
+        // recomendarlo a ciegas manda a buscar una cuenta que no existe.
+        (otrosPerfilesDelDueño === null
+          ? 'no se pudo contar cuantas OTRAS cuentas tiene esa organizacion, asi que no se sabe si ' +
+            'hay alguna que probar con `--email <correo>`.'
+          : otrosPerfilesDelDueño > 0
+            ? `esa organizacion tiene ${otrosPerfilesDelDueño} cuenta(s) mas: ` +
+              'medir otra con `--email <correo>` antes de concluir que ninguna entra.'
+            : 'y esa organizacion NO tiene ninguna otra cuenta, asi que `--email` no puede nombrar a ' +
+              'nadie: la unica salida es que ese dueño pase la 2FA (TOTP), que un loop no puede hacer.'),
     };
   }
 
@@ -517,6 +530,42 @@ function leerRolDelDueño(contenedor, email) {
   }
 }
 
+/**
+ * Cuantas OTRAS cuentas tiene la organizacion del dueño — las que el remedio `--email` podria
+ * probar. Se deriva de la base porque la rama «puerta» la recomienda a ciegas: medido el
+ * 2026-09-19, `onia-interna` (la org que tiene los inboxes 4/5) tiene UN solo perfil, el
+ * `SUPERADMIN` al que la puerta le exige 2FA, asi que «medir otra con `--email <correo>`» no
+ * nombra ninguna cuenta que exista y la vuelta siguiente la gasta buscandola.
+ */
+export function sqlOtrosPerfilesDelDueño(email) {
+  const correo = String(email).replace(/'/g, "''");
+  return (
+    'select count(*) from public.profiles otros ' +
+    'where otros."organizationId" = (' +
+    '  select p."organizationId" from public.profiles p ' +
+    '  join auth.users u on u.id::text = p."userId" ' +
+    `  where u.email = '${correo}' limit 1` +
+    ') and otros."userId" <> (' +
+    `  select u2.id::text from auth.users u2 where u2.email = '${correo}' limit 1` +
+    ');'
+  );
+}
+
+/** `number` (cuantas otras hay) o `null` si NO se pudo preguntar — nunca `0` inventado. */
+function leerOtrosPerfilesDelDueño(contenedor, email) {
+  if (!email) return null;
+  try {
+    const salida = correr('docker', ['exec', '-i', contenedor, 'psql', '-U', 'postgres', '-d', 'postgres', '-t', '-A'], {
+      input: sqlOtrosPerfilesDelDueño(email),
+    });
+    const fila = salida.trim().split('\n')[0]?.trim();
+    if (!/^\d+$/.test(fila ?? '')) return null;
+    return Number(fila);
+  } catch {
+    return null;
+  }
+}
+
 /** Una variable de entorno del contenedor que CORRE. Nunca se imprime. */
 function leerEnv(contenedor, nombre) {
   return correr('docker', ['exec', contenedor, 'printenv', nombre]).trim();
@@ -600,6 +649,7 @@ async function medir({ plataforma, base, appUrl, ssrDir, email = null }) {
     dueño,
     dueñoTieneOrg: leerDueñoTieneOrg(base, dueño),
     rolDelDueño: leerRolDelDueño(base, dueño),
+    otrosPerfilesDelDueño: leerOtrosPerfilesDelDueño(base, dueño),
   };
 }
 
@@ -875,9 +925,18 @@ function selfCheck() {
   );
   // La prueba directa de que no se auto-mide: si se le borra al MENSAJE su bandera, el universo
   // se queda vacio. Mientras la ventana fue este mismo gate, seguia devolviendo `--email`.
+  // ⚠️ La mutacion tiene que borrar TODAS las apariciones, no la primera: el 2026-09-19 la rama
+  // «puerta» paso a nombrar `--email` en dos de sus tres ramas y este caso se puso rojo con el
+  // gate sano — un `replace` de una sola ocurrencia deja viva la otra y ya no prueba nada.
+  // Se muta el TOKEN de la bandera, no una frase: la rama «puerta» la nombra en tres lugares y
+  // con tres redacciones distintas, asi que atar la mutacion a una de ellas deja vivas las otras.
+  const sinLaBandera = fuente.replaceAll('--' + 'email', 'nada');
   afirmar(
-    banderasQueRecomienda(fuente.replace('`--email <correo>` antes de concluir', 'nada antes de concluir'))
-      ?.length === 0,
+    !sinLaBandera.includes('--' + 'email'),
+    'la mutacion entro (si el literal cambia de forma, este caso deja de mutar y se apaga solo)',
+  );
+  afirmar(
+    banderasQueRecomienda(sinLaBandera)?.length === 0,
     'el universo sale del MENSAJE de juzgar(), no del regex de este gate',
   );
   for (const bandera of recomendadas ?? []) {
@@ -916,6 +975,44 @@ function selfCheck() {
   afirmar(
     /MFA_REQUIRED_ROLES/.test(conRol.mensaje),
     'manda a la fuente que decide a quien alcanza, en vez de tipear la politica (se desincroniza)',
+  );
+
+  // ─── El remedio `--email` solo se ofrece si hay una cuenta que nombrar ─────────────────────
+  //
+  // ⚠️ Medido el 2026-09-19 contra produccion: la rama «puerta» recomendaba `--email <correo>`
+  // SIEMPRE, y la org dueña de los inboxes 4/5 (`onia-interna`) tiene UN solo perfil — el
+  // `SUPERADMIN` al que la puerta le corta. O sea que el remedio era tipeable pero no podia
+  // nombrar a nadie, y la vuelta siguiente la gasta buscando la cuenta que no existe. Es la
+  // hermana del caso de clase de arriba: alla el remedio no se podia tipear, aca no se puede
+  // CUMPLIR. Las tres ramas hacen falta, y el `null` NO es `0`: no haber podido contar y haber
+  // contado cero mandan a lugares opuestos.
+  const sinOtras = juzgar(corte, { dueñoTieneOrg: true, rolDelDueño: 'SUPERADMIN', otrosPerfilesDelDueño: 0 });
+  afirmar(
+    !/medir otra con/.test(sinOtras.mensaje),
+    'con CERO cuentas mas, NO recomienda probar otra (no hay ninguna que nombrar)',
+  );
+  afirmar(
+    /2FA|TOTP/.test(sinOtras.mensaje),
+    'y nombra la unica salida real, en vez de dejar al lector sin nada que hacer',
+  );
+  const conOtras = juzgar(corte, { dueñoTieneOrg: true, rolDelDueño: 'SUPERADMIN', otrosPerfilesDelDueño: 2 });
+  afirmar(
+    /medir otra con/.test(conOtras.mensaje) && /2 cuenta/.test(conOtras.mensaje),
+    'con otras cuentas SI lo recomienda, y dice cuantas hay',
+  );
+  afirmar(
+    /no se pudo contar/.test(conRol.mensaje),
+    'y sin el dato lo dice (tri-estado): no haber contado no es haber contado cero',
+  );
+  // ⚠️ CABLEADO: las tres puras de arriba pasan aunque `medir()` nunca derive el dato y la
+  // llamada viva lo deje en `null` para siempre — que es exactamente como nace esta familia.
+  afirmar(
+    returnDeMedir ? /otrosPerfilesDelDue[^:]*: leerOtrosPerfiles[^(]*\(base, dueño\)/.test(returnDeMedir[0]) : false,
+    '`medir()` DERIVA cuantas otras cuentas hay y lo devuelve',
+  );
+  afirmar(
+    llamadaViva ? llamadaViva[0].includes('otrosPerfilesDelDue' + 'ño') : false,
+    'y la llamada de produccion se lo pasa a juzgar()',
   );
 
   // ⚠️ CABLEADO de las dos mitades nuevas. Puras, las de arriba pasan aunque `medir()` no derive
@@ -1108,6 +1205,7 @@ async function main() {
     colgados,
     dueñoTieneOrg: respuesta?.dueñoTieneOrg ?? null,
     rolDelDueño: respuesta?.rolDelDueño ?? null,
+    otrosPerfilesDelDueño: respuesta?.otrosPerfilesDelDueño ?? null,
   });
   console[veredicto.codigo === 0 ? 'log' : 'error'](`[dueño: ${respuesta.dueño}] ${veredicto.mensaje}`);
   return veredicto.codigo;

@@ -5548,6 +5548,38 @@ archivos.**
 
 ## Cerrado — no rehacer
 
+- [x] **~~El instrumento que mide el objetivo del carril recomendaba un remedio que NINGUNA
+      cuenta podía cumplir~~** — cerrado el 2026-09-19 (`scripts/objetivo_visible.mjs`).
+      Medido contra producción esa madrugada: `objetivo_visible.mjs` sale `NO MEDIDO` porque la
+      puerta de la app corta con `403 MFA_REQUIRED` al dueño **derivado** de los inboxes 4/5, y
+      cerraba diciendo *«medir otra con `--email <correo>` antes de concluir que ninguna
+      entra»*. Ese remedio es **tipeable pero incumplible**: la org dueña de esos inboxes
+      (`onia-interna`) tiene **UN solo perfil**, el propio `SUPERADMIN` al que la puerta corta
+      — verificado en `supabase-db` con un `join` de `organizations`/`clinic_settings`/
+      `profiles`. O sea que el remedio mandaba a la vuelta siguiente a buscar una cuenta que no
+      existe, y ya había producido una tarea pidiéndole a Sergio Urcullo que le BAJARA la 2FA a
+      una cuenta sana. **No es un 🔴 de negocio:** `superadmin@onia.com.bo` tiene TOTP
+      `verified` desde el 2026-09-18 19:21 UTC, así que Sergio Urcullo entra a la bandeja; el
+      que no puede es un loop.
+
+      Es la **hermana** del caso de clase que este mismo archivo ya cerraba el 18-sep («todo
+      remedio impreso tiene que poder tipearse», `14851e61`): allá el remedio no se podía
+      **tipear**, acá no se podía **cumplir**. Ahora el conteo de otras cuentas de la org se
+      **deriva** de la base (`sqlOtrosPerfilesDelDueño`) y la rama imprime las tres respuestas,
+      con el `null` separado del `0` — no haber podido contar y haber contado cero mandan a
+      lugares opuestos. Con cero, nombra la única salida real (TOTP, que un loop no puede
+      hacer) en vez de dejar al lector sin nada que hacer.
+
+      Validado por mutación en las dos mitades: restaurar el remedio incondicional deja **2
+      casos en rojo**, y el cableado (`medir()` deriva el dato · la llamada viva se lo pasa) va
+      aparte, porque los casos puros pasan aunque el llamador lo deje en `null` para siempre.
+      ⚠️ **Trampa que costó dos rojos y vale para todo el repo:** el caso que prueba que el
+      universo de banderas sale de `juzgar()` mutaba **una frase** (`` `--email <correo>` antes
+      de concluir ``); al pasar la rama a nombrar la bandera en **tres** redacciones distintas,
+      un `replace` de una sola ocurrencia dejó las otras vivas y el caso se puso rojo **con el
+      gate sano**. Se muta el **token** de la bandera, no una de sus frases.
+      Self-check: `npm run test:objetivo-visible` → **106 casos**, cableado a `npm test`.
+
 - [x] **~~El bot le prometía al lead del widget web que le escriben «desde este mismo
       número», y ese lead no tiene número~~** — cerrado el 2026-09-18
       (`hermes-content/deploy/vps-ops/bot/config.mjs`, `reply-builder.mjs`, `bot-engine.mjs`,
