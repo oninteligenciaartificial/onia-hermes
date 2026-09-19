@@ -44,6 +44,16 @@ function arg(nombre, porDefecto) {
   return i > 0 && process.argv[i + 1] ? process.argv[i + 1] : porDefecto;
 }
 
+// Todos los valores de una bandera que se puede repetir. `arg` se queda con el primero, y eso
+// alcanza para las que nombran UNA cosa (--ruta, --email); las que describen PASOS no.
+function args(nombre) {
+  const out = [];
+  for (let i = 0; i < process.argv.length; i++) {
+    if (process.argv[i] === `--${nombre}` && process.argv[i + 1]) out.push(process.argv[i + 1]);
+  }
+  return out;
+}
+
 const EMAIL = arg("email", "superadmin@onia.com.bo");
 const RUTA = arg("ruta", "/inbox");
 const SALIDA = arg("salida", "/root/bandeja-produccion.png");
@@ -60,7 +70,13 @@ const ANCLA = arg("ancla", "");
 // primer nivel — y los formularios, que es donde el cliente se traba, quedan sin instrumento.
 // Nace del 2026-09-06: "servicios profesionales no puede agendar" llevaba dos dias sin poder
 // resolverse porque el bloqueo esta dentro del modal de Nueva Cita, y nadie lo habia MIRADO.
-const CLICK = arg("click", "");
+// Se puede repetir: una pieza puede vivir detrás de DOS capas, y entonces un solo clic no
+// alcanza. Medido el 2026-09-18 sobre /dashboard en móvil: el asistente de configuración es un
+// `fixed inset-0 z-[60]` que INTERCEPTA el clic al menú «Más», así que el script moría con
+// TimeoutError nombrando al botón del menú — y eso se lee como "el menú no anda", un defecto
+// del producto, cuando lo que pasaba es que había una capa encima que el usuario cierra
+// primero. Los pasos se aprietan en orden y cada uno conserva su guarda de exit 2.
+const CLICKS = args("click");
 // --movil: el viewport era 1440x900 fijo, así que TODA pantalla mirada con este instrumento
 // quedaba mirada sólo en escritorio. No es un detalle de comodidad: el panel esconde la
 // botonera superior en móvil y deja el FAB flotante como única acción, o sea que las dos
@@ -153,25 +169,38 @@ if (rebotada.reboto) {
   process.exit(2);
 }
 
-if (CLICK) {
+for (const paso of CLICKS) {
   // Se busca el BOTON por su nombre accesible, no un nodo con ese texto: en esta app el rotulo
   // suele ser un <span> adentro del <button>, y clickear el span funciona por propagacion pero
   // falla mudo cuando el rotulo es una ligadura de Material Symbols. Y si no aparece se sale
   // con 2: una captura de la pantalla SIN el modal abierto tiene la misma cara que una buena.
-  const boton = pagina.getByRole("button", { name: CLICK }).first();
+  const boton = pagina.getByRole("button", { name: paso }).first();
   try {
     await boton.waitFor({ state: "visible", timeout: 20000 });
   } catch {
     console.error(
-      `El botón ${JSON.stringify(CLICK)} NO está en ${RUTA}. No se saca la captura: sería de la ` +
+      `El botón ${JSON.stringify(paso)} NO está en ${RUTA}. No se saca la captura: sería de la ` +
         `pantalla sin abrir y se leería como prueba de algo que no se vio.`
     );
     await navegador.close();
     process.exit(2);
   }
-  await boton.click();
+  // Un clic que NO llega porque otra capa lo intercepta tiene que decir QUÉ lo tapó: ese error
+  // nombra al botón que se pidió, así que sin esto se lee como "ese botón está roto".
+  try {
+    await boton.click({ timeout: 20000 });
+  } catch (e) {
+    const tapa = String(e?.message || e).match(/<(\w+)[^>]*>[^<]*<\/\1>\s*from\s*<[^>]+>/)?.[0];
+    console.error(
+      `El botón ${JSON.stringify(paso)} está en ${RUTA} pero el clic NO llegó: otra capa lo ` +
+        `intercepta${tapa ? ` (${tapa})` : ""}. No es que el botón esté roto — hay algo ENCIMA ` +
+        `que el usuario cierra primero; agregá ese paso con otro --click ANTES de éste.`
+    );
+    await navegador.close();
+    process.exit(2);
+  }
   await pagina.waitForTimeout(1500);
-  console.log(`click ${JSON.stringify(CLICK)}: apretado.`);
+  console.log(`click ${JSON.stringify(paso)}: apretado.`);
 }
 
 if (SCROLL > 0) {
