@@ -12,6 +12,40 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-19 17:11 La Paz — escalón 3 nuevo: `/checkout?plan=X` DIRECTO por URL, re-verificado
+
+`BUILD_ID` sin cambios (`AUiuQ9c0SmcJnuF37_qTo`, ya confirmado en la entrada de arriba con
+`origin/master` corrido hasta `faf78babd`): no correspondía re-correr el recorrido completo.
+
+`probar_cambio_de_plan.mjs` ya había documentado que `/settings` → "Mi plan" → `/checkout` es
+INALCANZABLE para cuentas `zz-qa-` por diseño (decisión de Sergio Urcullo del 18-sep: las
+cuentas de QA no ven la sección de venta). Pero `/checkout?plan=X` en sí **no está detrás de esa
+exclusión** — es una ruta aparte que cualquier sesión logueada puede abrir directo por URL, sin
+pasar por el link oculto. Este carril había mirado `/checkout` por última vez el 2026-09-13, seis
+días antes de varios cambios de precio/inclusión (whatsapp incluido en Completo, multiAdmin,
+ajustes de copy) que otros carriles hicieron en el medio.
+
+**Instrumento nuevo:** `scripts/probar_checkout_directo.mjs`. Siembra org `zz-qa-` plan `basic`,
+abre `/checkout?plan=crece` y `/checkout?plan=clinic` directo por URL (390×844, sesión real, sin
+pasar por "Mi plan"). Verificado contra `git show origin/master:lib/subscription-plans.ts`
+(`DEFAULT_PLAN_AMOUNTS`, 2026-09-19):
+
+- Las 4 tarjetas (Básico Bs 320, Crece Bs 550, Profesional Bs 890, Completo Bs 1.290) se ven
+  completas, sin "muy pronto" ni obra a la vista (captura `checkoutdir-01-crece.png`).
+- `plan=crece` → resumen "Plan Crece · Mensual", **Bs 550,00** — coincide.
+- `plan=clinic` → resumen "Plan Completo · Mensual", **Bs 1.290,00**, y el "Enciende" dice
+  literal *"Chatbot de WhatsApp incluido: 500 conversaciones/mes (comprado aparte vale Bs
+  390/mes)"* — coincide con `whatsappIncluded:true` de `plan-catalogo.ts` y con el precio del
+  add-on de `pricing.ts` (captura `checkoutdir-02-clinic.png`).
+
+**Sin hallazgo.** Sin fallos de red (`status>=400`: ninguno). Todo `zz-qa-` sembrado se borró en
+la misma corrida (`organizations=0` al cerrar).
+
+**Próxima vuelta:** si `BUILD_ID` sigue igual, otra superficie no auditada — el ciclo `weekly`/
+`annual` del checkout (sólo se miró `monthly`), o rotar de rubro.
+
+---
+
 ## 2026-09-19 12:14 La Paz — corrección: el BUILD_ID NO cambió + escalón 3 nuevo: coadministrador por UI
 
 ⚠️ **Corrijo la entrada de abajo.** Decía que `BUILD_ID` había cambiado a `Idvh9u4mdBzHBgE2penq4`
