@@ -23,7 +23,8 @@ lienzo verde.
 
 LA ZONA PUNTEADA ES PARA EL STICKER DE LINK, no para una encuesta: es el único
 camino clicable de una historia. Sergio lo pega encima al publicar, apuntando a
-https://cal.com/sergiourcullo/20min
+https://cal.com/sergiourcullo/20min — y va SOLO en la tercera (ver `CON_ZONA`):
+las dos primeras cuentan, la última pide la acción.
 
 Salida: hermes-content/carousels/out/historias-llamada/historia-0N.png
 Gate: python3 chequear-banda-segura-historias.py hermes-content/carousels/out/historias-llamada
@@ -81,6 +82,11 @@ body{{background:var(--verde);font-family:'Archivo',sans-serif;overflow:hidden}}
 .banda{{background:var(--ink);color:var(--verde);width:100%;border-radius:28px;padding:calc(46px*var(--s)) 40px;text-align:center;font-size:calc(84px*var(--s));font-weight:650;font-variation-settings:'wdth' 96;letter-spacing:-0.025em;line-height:1.06;position:relative}}
 .zona{{border:5px dashed rgba(0,0,0,.35);border-radius:36px;width:86%;flex:1;min-height:0;display:flex;align-items:center;justify-content:center}}
 .zona span{{font-family:'Geist Mono',monospace;font-size:30px;letter-spacing:.12em;color:rgba(0,0,0,.45)}}
+/* El mismo hueco que `.zona` pero sin dibujarlo. Va en las historias que NO
+   llevan sticker de link: sin él, el `flex:1` desaparece del lienzo y el bloque
+   se estira hacia abajo, o sea que quitar el recuadro movería la composición de
+   las tres. Este spacer deja el contenido exactamente donde está. */
+.aire{{flex:1;min-height:0}}
 .handle{{position:absolute;bottom:{SAFE_BOT + 12}px;left:0;right:0;text-align:center;font-family:'Geist Mono',monospace;font-size:28px;font-weight:500;letter-spacing:.08em;color:rgba(0,0,0,.55)}}
 .icono-flot{{position:absolute;object-fit:contain;filter:drop-shadow(0 14px 22px rgba(0,0,0,.28))}}
 .cinta{{position:absolute;width:190px;height:52px;background:rgba(255,255,255,.5);border:1px solid rgba(0,0,0,.05);box-shadow:0 3px 8px rgba(0,0,0,.06)}}
@@ -152,7 +158,13 @@ HISTORIAS = [
      "Elegí<br>tu horario"),
 ]
 
-ZONA = "LINK ACÁ ↓"   # sticker de link a cal.com/sergiourcullo/20min
+# El recuadro del sticker de link va SOLO en la última (Sergio Urcullo, 18-sep:
+# «que solo la final tenga el link, los otros no necesitan el recuadro»). Las dos
+# primeras cuentan; la tercera es la que pide la acción, y un recuadro repetido
+# tres veces deja de señalar dónde tocar. Las otras dos llevan el mismo hueco sin
+# dibujar, así la composición no se mueve.
+ZONA = "LINK ACÁ ↓"          # sticker de link a cal.com/sergiourcullo/20min
+CON_ZONA = [False, False, True]
 
 
 def main():
@@ -160,11 +172,13 @@ def main():
     tmp = Path(tempfile.mkdtemp(prefix="historia-llamada-"))
     for i, (tag, tarjeta, remate) in enumerate(HISTORIAS):
         capas_card, sticker = _capas(i)
+        hueco = (f'<div class="zona"><span>{ZONA}</span></div>' if CON_ZONA[i]
+                 else '<div class="aire"></div>')
         cuerpo = (f'<div class="lienzo">'
                   f'<div class="tag">{tag}</div>'
                   f'<div class="card">{capas_card}{tarjeta}</div>'
                   f'<div class="banda">{remate}{sticker}</div>'
-                  f'<div class="zona"><span>{ZONA}</span></div>'
+                  f'{hueco}'
                   f'<div class="handle">@sergiourcullo</div>'
                   f'</div>')
         n = i + 1
