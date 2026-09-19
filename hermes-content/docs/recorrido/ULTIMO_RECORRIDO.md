@@ -12,6 +12,51 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-19 00:1x La Paz — escalón 3 cerrado: invitar y quitar coadministrador, con plan `clinic`
+
+**`BUILD_ID` sin cambios (`NIRA4pNJ8fJVouaUsyu1E`)** — no se repitió el recorrido completo
+(sigue 9/9, `completo: true`, confirmado en la entrada anterior). Con el resto de la vuelta se
+terminó lo que la vuelta pasada dejó reconocido sin poder probar: el rol ADMIN del formulario
+"Agregar a alguien" no aparece con plan Profesional (`multiAdminIncluded: false`), así que hacía
+falta un plan con esa capacidad. `primerPlanCon("multiAdminIncluded")` = `clinic`.
+
+**Método:** una org `zz-qa-` sembrada por SQL directo (no por `/register`, que no deja elegir
+plan) con `plan='clinic'`, `onboardingCompletedAt` ya puesto y un profile `ADMIN` dueño; sesión
+minteada con el mismo mecanismo de `mirar_bandeja_dueno.mjs` (`acunarSesion`, magic link admin
+sin contraseña). Impreso ANTES de borrar (regla de la casa): la fila de `organizations` y de
+`profiles` quedaron logueadas más abajo en el commit de esta vuelta.
+
+**Resultado, EN VIVO contra `https://app.onia.com.bo/settings`, sin hallazgo de producto:**
+
+- Con plan `clinic`, el `<select>` de "Agregar a alguien" SÍ ofrece las tres opciones:
+  `Profesional`, `Recepción` y **`Administrador — Ve todo y configura el sistema`**.
+- Se completó el formulario con datos `zz-qa-` (nombre, correo, contraseña) y se apretó
+  **"Darle acceso"** de verdad: la tarjeta "Equipo" pasó a listar al coadministrador con la
+  etiqueta `Administrador`, y en la base quedaron **DOS** filas `profiles` con `role='ADMIN'`
+  para esa organización (antes: 1).
+- El camino de VUELTA (lo que la memoria compartida marcaba como agujero de seguridad hasta el
+  17-sep, `commit 9f103875`) también funciona: el botón con `aria-label="Quitar a <nombre>"`
+  dispara un `confirm()` nativo ("¿Eliminar a … ? Perderá acceso al sistema."), se aceptó, y el
+  segundo `profiles` desapareció de la base — sin ningún response `>=400` en el camino.
+- Sin hallazgo: la superficie que DG-043 gatea funciona de punta a punta, ida y vuelta, medida
+  con datos reales enviados (no solo mirada).
+
+**Limpieza:** `DELETE FROM organizations WHERE name LIKE 'zz-qa-%coadmin-probe%'` (cascada
+sobre `profiles`) + `DELETE FROM auth.users WHERE email LIKE 'zz-qa-20260919001518-%'`.
+Verificado 0/0/0 (`organizations`, `auth.users`, `profiles` con `zz-qa-%`) al cerrar.
+
+RAZÓN: la medida `9/9` no cambió porque el `BUILD_ID` no cambió — correcto no repetir el
+recorrido completo. El avance de esta vuelta es cerrar el escalón 3 (coadministrador) que
+quedaba reconocido pero no probado.
+LECCIÓN: cuando una capacidad está gateada por `plan` y el onboarding real no permite elegirlo,
+sembrar la org por SQL directo (con su plan de prueba) es más rápido y más preciso que forzar el
+camino de compra — mientras el dato se imprima antes de borrar y todo lleve `zz-qa-`. El
+`acunarSesion()` de `scripts/lib/sesion_dueno.mjs` sirve también para ESTE uso (no solo para
+`mirar_bandeja_dueno.mjs`): loguea sin contraseña una cuenta que recién se creó, incluso sin
+confirmar el correo.
+
+---
+
 ## 2026-09-18 23:0x-23:2x La Paz — reconfirmación redundante + reconocimiento de escalón 3 (equipo)
 
 **Corrección de método, no de dato.** Al arrancar leí el final del archivo (con `tail`) en vez
