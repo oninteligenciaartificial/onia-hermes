@@ -92,13 +92,66 @@ export const CAPACIDADES = [
  * ser cierto, se saca de acá y pasa a medirse. No se excusa por ruta ni por nombre parecido.
  */
 export const NO_SON_DESTINO_DEL_TURNO = [
-  { archivo: "es-nuestra.mjs", motivo: "mismo destino que chatwoot-adapter.mjs (CHATWOOT_BASE_URL): se mide una vez" },
-  { archivo: "editor-sugerir.mjs", motivo: "mismo destino que vision.mjs (LITELLM_BASE): se mide una vez" },
-  { archivo: "calcom-availability.mjs", motivo: "Cal.com no existe y la decision ya esta tomada (cola chatbot, 2026-09-13): el bot no reserva por ahi" },
-  { archivo: "calcom-booking.mjs", motivo: "mismo destino que calcom-availability.mjs (CALCOM_BASE_URL), y ademas su defecto es vacio: sin env no sale a ningun lado" },
-  { archivo: "chatwoot-onboard.mjs", motivo: "mismo destino que chatwoot-adapter.mjs (CHATWOOT_BASE_URL): se mide una vez" },
-  { archivo: "bcp-qr.mjs", motivo: "no hay QR para pagarle a Onia (se elimino el 2026-08-18): el bot no cobra" },
+  { archivo: "es-nuestra.mjs", clase: "duplicado", de: "chatwoot-adapter.mjs", motivo: "mismo destino que chatwoot-adapter.mjs (CHATWOOT_BASE_URL): se mide una vez" },
+  { archivo: "editor-sugerir.mjs", clase: "duplicado", de: "vision.mjs", motivo: "mismo destino que vision.mjs (LITELLM_BASE): se mide una vez" },
+  // Cal.com NO es una excusa "apagada": la env esta puesta y `run-turn.mjs` llama a la reserva
+  // cada vez que un prospecto elige horario, o sea SI sale a la red. Lo que esta decidido es el
+  // desenlace, no el silencio — ver la cola del chatbot, bloque del 2026-09-13.
+  { archivo: "calcom-availability.mjs", clase: "caido-por-decision", motivo: "Cal.com no existe y es la opcion (c) de Sergio Urcullo (tablero t_b18ca430): el aviso por Telegram alcanza hasta >1 demo/semana" },
+  { archivo: "calcom-booking.mjs", clase: "caido-por-decision", motivo: "mismo destino que calcom-availability.mjs (CALCOM_BASE_URL), opcion (c) del 2026-09-13; el prospecto recibe la salvedad 'Estoy confirmando ese horario con Sergio' y Sergio recibe el aviso — flujo degradado honesto, por diseno" },
+  { archivo: "chatwoot-onboard.mjs", clase: "duplicado", de: "chatwoot-adapter.mjs", motivo: "mismo destino que chatwoot-adapter.mjs (CHATWOOT_BASE_URL): se mide una vez" },
+  { archivo: "bcp-qr.mjs", clase: "apagada", motivo: "no hay QR para pagarle a Onia (se elimino el 2026-08-18): el bot no cobra" },
 ];
+
+/**
+ * Una excusa no se lee: se RE-MIDE, y cada clase se refuta distinto.
+ *
+ * - `apagada` AFIRMA que el modulo no sale a ningun lado. Esa premisa la contesta el PROCESO
+ *   VIVO: si la env que ese modulo lee esta puesta y no vacia, el modulo SI sale, la excusa
+ *   dejo de valer y el destino vuelve a medirse.
+ * - `duplicado` AFIRMA que otro sujeto mide el mismo destino. Si ese gemelo no esta en
+ *   CAPACIDADES, no lo mide nadie y la excusa tapa el agujero entero.
+ *
+ * Nace del 2026-09-19: `calcom-booking.mjs` estaba excusado con «su defecto es vacio: sin env no
+ * sale a ningun lado» mientras el proceso vivo corria con `CALCOM_BASE_URL=http://calcom:3000`,
+ * un host que no resuelve y sin contenedor detras. `run-turn.mjs` llama a la reserva CADA vez que
+ * un prospecto elige horario, asi que la unica accion del embudo que vale plata apuntaba a la
+ * nada — y este gate, que existe justamente para eso, la excusaba. Un motivo cierto el dia que se
+ * escribio es una hipotesis CON FECHA.
+ */
+export function excusasRefutadas({
+  excusas = NO_SON_DESTINO_DEL_TURNO,
+  sujetos = [],
+  env = {},
+  medidos = CAPACIDADES.map((c) => c.archivo),
+} = {}) {
+  const refutadas = [];
+  for (const e of excusas) {
+    if (e.clase === "duplicado") {
+      if (!medidos.includes(e.de)) {
+        refutadas.push({ ...e, porque: `dice que el destino lo mide ${e.de}, y ${e.de} no esta en CAPACIDADES: no lo mide nadie` });
+      }
+      continue;
+    }
+    // `caido-por-decision` declara que el destino NO esta y que el desenlace ya se eligio: tener
+    // la env puesta es su estado normal, no una contradiccion. Lo que la vencería es que el
+    // destino vuelva a contestar, y eso lo reporta `medir()` como una capacidad mas.
+    if (e.clase !== "apagada") continue;
+    const envsDelDisco = sujetos.find((s) => s.archivo === e.archivo)?.envs || [];
+    for (const nombre of envsDelDisco) {
+      const valor = String(env[nombre] ?? "").trim();
+      if (!valor) continue;
+      refutadas.push({
+        ...e,
+        env: nombre,
+        destino: valor.replace(/\/+$/, ""),
+        porque: `la excusa dice que no sale a ningun lado, y el proceso vivo tiene ${nombre}=${valor}`,
+      });
+      break;
+    }
+  }
+  return refutadas;
+}
 
 // ---------------------------------------------------------------------------
 // Universo: derivado del disco
@@ -134,7 +187,7 @@ export function destinosDelDisco(dir = AQUI, leerDir = readdirSync, leer = readF
  * @param {Array<object>} entrada.medidas  [{archivo, destino, encendida, contesta: true|false|null, motivo}]
  * @returns {{exit:number, veredicto:string, lineas:string[]}}
  */
-export function juzgar({ sujetos = [], medidas = [] } = {}) {
+export function juzgar({ sujetos = [], medidas = [], refutadas = [] } = {}) {
   const lineas = [];
   const decididos = new Set([
     ...CAPACIDADES.map((c) => c.archivo),
@@ -147,7 +200,7 @@ export function juzgar({ sujetos = [], medidas = [] } = {}) {
 
   for (const m of medidas) {
     const cap = CAPACIDADES.find((c) => c.archivo === m.archivo);
-    const que = cap ? cap.capacidad : m.archivo;
+    const que = cap ? cap.capacidad : m.capacidad || m.archivo;
     if (m.contesta === null || m.contesta === undefined) {
       noMedidas.push(m);
       lineas.push(`  NO MEDIDO  ${que} — ${m.destino}: ${m.motivo || "no se pudo preguntar"}`);
@@ -170,6 +223,11 @@ export function juzgar({ sujetos = [], medidas = [] } = {}) {
   for (const s of sinDecidir) {
     lineas.push(`  SIN DECIDIR ${s.archivo} enchufa un destino externo (${s.envs.join(", ")}) y nadie dijo si se mide`);
   }
+  for (const r of refutadas) {
+    lineas.push(`  EXCUSA FALSA ${r.archivo} sigue excusado y su premisa ya no es cierta`);
+    lineas.push(`             ${r.porque}`);
+    lineas.push(`             decidilo en CAPACIDADES (con que recibe el prospecto si el destino no esta) o corregi la excusa`);
+  }
 
   if (sinDecidir.length) {
     return {
@@ -182,6 +240,13 @@ export function juzgar({ sujetos = [], medidas = [] } = {}) {
     return {
       exit: 1,
       veredicto: `${rotas.length} CAPACIDAD(ES) ENCENDIDA(S) CONTRA UN DESTINO QUE NO EXISTE — el bot promete algo que no puede hacer`,
+      lineas,
+    };
+  }
+  if (refutadas.length) {
+    return {
+      exit: 1,
+      veredicto: `${refutadas.length} EXCUSA(S) DE ESTE GATE YA NO SON CIERTAS — un destino excusado con premisa falsa no lo mide nadie`,
       lineas,
     };
   }
@@ -271,10 +336,31 @@ function medir() {
   });
 
   const sujetos = destinosDelDisco();
-  const { exit, veredicto, lineas } = juzgar({ sujetos, medidas });
+
+  // Una excusa refutada vuelve a ser un destino: se MIDE, no se reimprime como excusada. Sin esto
+  // el gate diria "la premisa es falsa" y seguiria sin saber si el destino esta vivo.
+  const refutadas = excusasRefutadas({ sujetos, env: proceso.env });
+  for (const r of refutadas) {
+    if (!r.destino) continue;
+    if (!yaPreguntado.has(r.destino)) yaPreguntado.set(r.destino, destinoContesta(r.destino));
+    const resp = yaPreguntado.get(r.destino);
+    medidas.push({
+      archivo: r.archivo,
+      capacidad: `${r.archivo} (excusado como apagado, pero el proceso vivo lo tiene encendido)`,
+      destino: r.destino,
+      encendida: true,
+      contesta: resp.contesta,
+      motivo: resp.motivo,
+    });
+  }
+
+  const { exit, veredicto, lineas } = juzgar({ sujetos, medidas, refutadas });
   console.log(`proceso ${proceso.pid} en ${CONTENEDOR} — ${sujetos.length} modulo(s) del disco enchufan un destino externo`);
   for (const l of lineas) console.log(l);
-  for (const e of NO_SON_DESTINO_DEL_TURNO) console.log(`  (excusado) ${e.archivo}: ${e.motivo}`);
+  const refutados = new Set(refutadas.map((r) => r.archivo));
+  for (const e of NO_SON_DESTINO_DEL_TURNO) {
+    if (!refutados.has(e.archivo)) console.log(`  (excusado) ${e.archivo}: ${e.motivo}`);
+  }
   console.log(`VEREDICTO: ${veredicto}`);
   return exit;
 }
@@ -338,6 +424,86 @@ function selfCheck() {
   ok(destinoContesta("http://speaches:8000/v1/models", dns).contesta === false, "un host que no resuelve es un destino CAIDO, no un no-medido");
   const raro = () => "algo que nadie previo\n__rc=1";
   ok(destinoContesta("http://x", raro).contesta === null, "una salida que no se sabe leer es NO MEDIDO, nunca 'no contesta'");
+
+  // --- Las excusas se RE-MIDEN: una premisa vencida no puede seguir tapando un destino. ---
+
+  // Toda excusa declara su CLASE como dato. En prosa, «sin env no sale a ningun lado» era
+  // indistinguible de «lo mide el gemelo», y por eso nadie podia verificarla.
+  for (const e of NO_SON_DESTINO_DEL_TURNO) {
+    ok(
+      ["apagada", "duplicado", "caido-por-decision"].includes(e.clase),
+      `la excusa de ${e.archivo} no declara una clase verificable`,
+    );
+    ok(e.clase !== "duplicado" || Boolean(e.de), `la excusa duplicado de ${e.archivo} no nombra al sujeto que SI lo mide`);
+    // Una excusa que AFIRMA que el modulo no sale a la red no puede estar puesta sobre uno que si
+    // sale: es la premisa que el proceso vivo refuto el 2026-09-19 y que la cola ya habia
+    // corregido el 13-sep. Se prohibe la FORMA, no el texto viejo.
+    ok(
+      e.clase !== "apagada" || !/sin env|no sale a ningun lado|defecto es vacio/i.test(e.motivo),
+      `la excusa de ${e.archivo} afirma que no sale a la red: eso lo contesta el proceso vivo, no un motivo escrito`,
+    );
+  }
+
+  // `caido-por-decision` NO se refuta por tener la env puesta: justamente la tiene. Es la unica
+  // clase que declara un desenlace decidido, y por eso tiene que citar la decision.
+  for (const e of NO_SON_DESTINO_DEL_TURNO.filter((x) => x.clase === "caido-por-decision")) {
+    ok(/\bt_[0-9a-f]{6,}\b|\b20\d\d-\d\d-\d\d\b/.test(e.motivo), `la excusa de ${e.archivo} dice 'decidido' y no cita la decision (tarea o fecha)`);
+  }
+  ok(
+    excusasRefutadas({ sujetos, env: { CALCOM_BASE_URL: "http://calcom:3000" } }).every((r) => r.clase !== "caido-por-decision"),
+    "una excusa 'caido-por-decision' no se refuta por tener la env puesta: el desenlace ya esta decidido",
+  );
+
+  // ANCLA del defecto real del 2026-09-19: un modulo excusado como apagado mientras el proceso
+  // vivo corre con su env puesta apuntando a un host que no existe. Es la forma exacta que tenia
+  // la excusa de calcom-booking.mjs, reproducida acá con un sujeto propio para que el caso siga
+  // midiendo la CLASE aunque Cal.com se reclasifique.
+  const comoCalcom = [{ archivo: "x.mjs", clase: "apagada", motivo: "no sale a ningun lado" }];
+  const sujetoX = [{ archivo: "x.mjs", envs: ["X_BASE_URL"] }];
+  const conEnv = excusasRefutadas({ excusas: comoCalcom, sujetos: sujetoX, env: { X_BASE_URL: "http://x:3000" } });
+  ok(conEnv.length === 1, "con la env puesta en el proceso vivo, una excusa 'apagada' tiene que quedar REFUTADA");
+  ok(
+    /X_BASE_URL=http:\/\/x:3000/.test(conEnv[0]?.porque || ""),
+    "la refutacion tiene que CITAR la env y su valor vivo, no solo decir que la excusa es falsa",
+  );
+
+  // La mitad simetrica: sin esa env el modulo de verdad no sale, y la excusa sigue valiendo. Sin
+  // este caso el arreglo seria un gate que grita siempre, que es otra forma de apagarlo.
+  ok(
+    excusasRefutadas({ excusas: comoCalcom, sujetos: sujetoX, env: {} }).length === 0,
+    "sin la env en el proceso vivo, una excusa 'apagada' NO puede darse por refutada",
+  );
+  ok(
+    excusasRefutadas({ sujetos, env: {} }).every((r) => r.clase !== "apagada"),
+    "con el entorno vacio ninguna excusa 'apagada' real puede quedar refutada",
+  );
+
+  // Un `duplicado` cuyo gemelo no se mide tapa el agujero entero.
+  ok(
+    excusasRefutadas({
+      excusas: [{ archivo: "x.mjs", clase: "duplicado", de: "fantasma.mjs", motivo: "lo mide el gemelo" }],
+      sujetos: [{ archivo: "x.mjs", envs: ["X_BASE_URL"] }],
+      env: {},
+    }).length === 1,
+    "un duplicado que apunta a un gemelo que nadie mide tiene que quedar refutado",
+  );
+  ok(
+    excusasRefutadas({
+      excusas: [{ archivo: "x.mjs", clase: "duplicado", de: "vision.mjs", motivo: "lo mide vision" }],
+      sujetos: [{ archivo: "x.mjs", envs: ["LITELLM_BASE"] }],
+      env: { LITELLM_BASE: "http://litellm:4000/v1" },
+    }).length === 0,
+    "un duplicado cuyo gemelo SI se mide no es una excusa falsa: se mide una vez a proposito",
+  );
+
+  // Una excusa refutada nunca puede terminar en verde: si nadie mide ese destino, el gate no sabe.
+  const conRefutada = juzgar({
+    sujetos,
+    medidas: [{ archivo: "vision.mjs", destino: "http://x/v1", encendida: true, contesta: true }],
+    refutadas: [{ archivo: "calcom-booking.mjs", porque: "el proceso vivo tiene CALCOM_BASE_URL=http://calcom:3000" }],
+  });
+  ok(conRefutada.exit === 1, "con una excusa refutada el gate no puede salir verde");
+  ok(/calcom-booking\.mjs/.test(conRefutada.lineas.join("\n")), "el rojo de excusa falsa tiene que NOMBRAR el archivo excusado");
 
   for (const f of fallas) console.log(`  FALLA  ${f}`);
   console.log(fallas.length ? `self-check: ${fallas.length} falla(s)` : "self-check: ok");
