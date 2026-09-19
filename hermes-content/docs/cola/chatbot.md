@@ -479,6 +479,47 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **CERRADO el 2026-09-19 12:43-13:25 La Paz (commiteado; el instrumento no necesita deploy
+      para correr, pero sólo mide el respaldo cuando el respaldo esté desplegado) — la ÚNICA red
+      que le queda a una capacidad que vendemos estaba vigilada por un gate que no podía
+      reportarla rota nunca.**
+
+      **El defecto.** `hermes-content/deploy/vps-ops/bot/destinos-vivos.mjs` nació para cazar la
+      caída de Speaches, que es un contenedor de NUESTRA red, y su cabecera lo dice: *«un 401
+      prueba que hay alguien del otro lado, que es lo que este gate mide»*. Correcto para un
+      vecino de docker. **Falso para un tercero con credencial:** `api.openai.com` nunca se cae del
+      DNS y siempre contesta HTTP, así que el criterio viejo daba `ok` pasara lo que pasara.
+
+      Y ese tercero no es un destino cualquiera: es el **único respaldo** de *«el prospecto manda
+      una NOTA DE VOZ y el bot la entiende»*, cuyo primario (Speaches) está **muerto** —`wget`
+      desde `onia-center` contesta `bad address`, `docker ps -a | grep -i speach` vacío— mientras
+      `ONIA_CATALOGO_DE_VENTA.md` marca el chatbot ✅ vivo prometiendo que entiende audios. En
+      Bolivia el audio por WhatsApp es la forma normal de escribir.
+
+      **Que el modo de falla es real no hay que suponerlo:** la tarea `t_ac3aa802` lleva **200 h**
+      bloqueada pidiéndole plata a Sergio Urcullo por *«OpenAI SIN CREDITO desde el 9-sep»*.
+      Medido hoy contra producción, esa afirmación es **falsa**: la key del proceso vivo contesta
+      `http=200` en `/v1/models` y transcribe de verdad (POST a `/v1/audio/transcriptions` con
+      `gpt-4o-mini-transcribe`, 12 tokens facturados). Un gate que sabe preguntar esto contesta
+      solo en cada corrida, en vez de dejar una afirmación de plata congelada nueve días.
+
+      **El arreglo.** `destinoContesta(url, ejecutar, credencial)`: cuando la llave la aportamos
+      NOSOTROS, un **401/403** es `contesta:false` (*«existe y no nos autoriza»*) y un **429** es
+      `contesta:false` (*«nos rechaza por cuota»*) — porque para el prospecto eso es idéntico a
+      que el destino no exista. **La distinción no es el status, es quién tiene que aportar la
+      llave:** sin credencial declarada el criterio no se toca, o `litellm` y `chatwoot` —que
+      contestan 401 estando sanos— se reportarían rotos y el gate mandaría a levantar servicios
+      que andan. La llave sale de `getFallbackConfig`, la misma función del producto que la
+      resuelve para el turno real, y nunca vuelve en el motivo (el veredicto se pega en tableros).
+      La caché de `medir()` keyea por URL **+ si se preguntó con llave**: la misma URL y la misma
+      respuesta dan veredictos opuestos, así que una clave pelada le daría a uno el del otro.
+
+      **Prueba.** `hermes-content/deploy/vps-ops/bot/destino-de-tercero-se-mide-por-autorizacion.test.mjs`,
+      8 casos, **en rojo primero** (5 fail / 3 pass: los 3 que pasaban eran las barandas). Validado
+      por mutación en las dos direcciones: sin la clasificación por status caen 2 casos, sin el
+      header cae 1. Suite completa del bot **1289 pass / 0 fail**; `npm run destinos:vivos` contra
+      producción sigue dando el mismo veredicto (no rompió la medición de los destinos internos).
+
 - [x] 🔴 **CERRADO el 2026-09-19 12:20-13:05 La Paz (ARREGLADO EN PRODUCCIÓN, no espera deploy) —
       el bot le prometía al lead que la prueba trae TODO, y la prueba no trae el chatbot de
       WhatsApp, que es justo lo que ese bot le está vendiendo.**
