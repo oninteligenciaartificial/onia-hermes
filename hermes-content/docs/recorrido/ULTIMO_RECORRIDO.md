@@ -12,7 +12,44 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
-## 2026-09-19 15:20 La Paz — recorrido completo re-verificado (BUILD_ID nuevo) + escalón 3: cancelar cita, HALLAZGO
+## 2026-09-19 12:14 La Paz — corrección: el BUILD_ID NO cambió + escalón 3 nuevo: coadministrador por UI
+
+⚠️ **Corrijo la entrada de abajo.** Decía que `BUILD_ID` había cambiado a `Idvh9u4mdBzHBgE2penq4`
+"por los commits del bot" — eso ya era sospechoso (el bot no rebuildea la plataforma) y, medido
+de nuevo ahora (`docker exec onia-platform cat /app/.next/BUILD_ID`), el build vivo sigue siendo
+`AUiuQ9c0SmcJnuF37_qTo` (commit `a8fd1da`, el mismo de las vueltas de las 12:14/13:14/14:12 UTC
+de hoy — ver `/opt/onia-platform/build-a8fd1da`, no hay ningún build más nuevo en el VPS). La
+etiqueta "15:20 La Paz" de esa entrada también estaba mal: el commit que la originó es de
+`15:16:36 UTC` = `11:16 La Paz`, no `15:20 La Paz` — alguien escribió la hora UTC y la marcó como
+La Paz. Un dato heredado no se ejecuta sin contarlo de nuevo, tampoco el propio.
+
+**Consecuencia:** con el `BUILD_ID` real sin cambios, no correspondía re-correr el recorrido
+completo — seguí directo con el escalón 3 pendiente.
+
+**Escalón 3 nuevo — coadministrador por la UI real, no sólo por API.**
+`probar_coadministrador.mjs` (vuelta anterior) ya probaba las tres puertas de DG-043 contra HTTP
+pelado. Instrumento nuevo `scripts/probar_coadministrador_ui.mjs`: siembra org `zz-qa-` plan
+`clinic` (Completo, trae coadministradores), abre `/settings#equipo` con sesión real, hace clic
+en "Agregar a alguien", llena el formulario (nombre, correo, contraseña, rol "Administrador"),
+clic en **"Darle acceso"** — aparece en la lista (capturas
+`extra-coadminui-01-formulario-lleno.png` y `-02-agregado.png`), confirmado en la BASE (profile
+`ADMIN` real, no sólo el DOM) — y clic en **"Quitar a `<nombre>`"**, que dispara un
+`window.confirm()` nativo (aceptado por el script): la fila desaparece de la pantalla
+(`-03-quitado.png`) y el profile se borra de la base. **Sin hallazgo**: las dos puntas de
+DG-043 sostenidas también por clics reales, no sólo por la API. Todo `zz-qa-` sembrado se borró
+en la misma corrida (`organizations=0`, `auth.users=0` verificado al cerrar).
+
+**Próxima vuelta:** si el `BUILD_ID` sigue en `AUiuQ9c0SmcJnuF37_qTo`, otro escalón nuevo —
+checkout/cobro de punta a punta (llegar a la pantalla de pago, sin completar el pago real), o
+rotar de rubro con la variante `SALTAR_EQUIPO` que ya usó una vuelta anterior en dental.
+
+---
+
+## 2026-09-19 11:16 La Paz (corregido; decía "15:20 La Paz") — recorrido completo re-verificado (BUILD_ID nuevo, DATO FALSO) + escalón 3: cancelar cita, HALLAZGO
+
+⚠️ **La afirmación de "BUILD_ID cambió" en esta entrada es FALSA — ver la corrección arriba.**
+El resto de la entrada (el hallazgo de cancelar cita) sigue siendo válido: no dependía del
+BUILD_ID.
 
 `BUILD_ID` cambió (`AUiuQ9c0SmcJnuF37_qTo` → `Idvh9u4mdBzHBgE2penq4`) desde la vuelta anterior
 — por los commits del bot mergeados, no de la plataforma. Por las reglas del carril, correspondía
