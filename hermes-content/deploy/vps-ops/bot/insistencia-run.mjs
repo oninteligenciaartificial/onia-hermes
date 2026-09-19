@@ -12,14 +12,21 @@
 // auditoria del que lo lee. Ahora el caso se saltea con `politica_fuera_de_ventana`
 // y un warning que nombra los dos numeros.
 //
-// Reusa las piezas probadas del followup del funnel: el CAS reserveFollowUp
-// (followup_step 0→1: reintentar el barrido no duplica), deliver() para el
-// envio real y el dedup por message_key de insertOutbound. Solo toca
+// ⚠️ 2026-09-18: reservaba con el CAS del funnel (`reserveFollowUp`, followup_step
+// 0→1) y ese contador NO es suyo — tiene tope 1 y de el cuelga el M3 de rescate.
+// Un solo cupo para dos circuitos: el que llega primero apaga al otro, mudo. Peor,
+// `--emit` alcanzaba para quemarlo mientras `ONIA_BOT_DRY_RUN` se tragaba el envio,
+// asi que seis conversaciones de produccion quedaron dadas por insistidas sin haber
+// recibido nada (chatwoot:42,43,52,54,56,57 — cuatro de ellas desconocidos reales).
+// Ahora la reserva ES el insert, como en el recordatorio (M9).
+//
+// Reusa deliver() para el envio real y el dedup por message_key de
+// insertOutbound, que es tambien su reserva. Solo toca
 // conversaciones cuyo conocimiento resuelve POR INBOX a una org (source "db"):
 // el funnel de venta de Onia tiene SU propio followup y no pasa por aca.
 //
 //   node insistencia-run.mjs --now 2026-08-30T15:00:00Z [--emit] [--limit 50]
-import { createStore, stateFromRow } from "./persistence.mjs";
+import { createStore, stateFromRow, DELIVERY_STATUSES } from "./persistence.mjs";
 import { MOTIVO_NUESTRA, esConversacionNuestra } from "./es-nuestra.mjs";
 import { createBotConfig, DEFAULT_CONFIG, localHour, renderTemplate } from "./config.mjs";
 import { getOrgKnowledge } from "./knowledge.mjs";
@@ -186,27 +193,57 @@ export async function runInsistenciaSweep(options = {}, deps = {}) {
     const humano = String(estado.data?.identity?.humanName || "").trim() || "el equipo";
     const texto = renderTemplate(config.script.R_SEGUIMIENTO, { humano });
 
-    if (!emit) {
+    // LOS DOS INTERRUPTORES SE PREGUNTAN JUNTOS. `--emit` (del cron, escrito a mano) y
+    // `ONIA_BOT_DRY_RUN` (del entorno) contestan cosas distintas: hasta el 2026-09-18 el primero
+    // alcanzaba para RESERVAR y el segundo hacia que `deliver()` devolviera `simulated` sin mandar,
+    // asi que el barrido quemaba el cupo y se daba por hecho. Reservar cuelga de si se va a MANDAR,
+    // no de uno solo de los dos.
+    if (!emit || config.dryRun) {
       result.send.push({ key, mode: "dry-run", texto: texto.slice(0, 80) });
       continue;
     }
 
-    // CAS ANTES de mandar: si otra corrida ya reservo, esta no manda nada.
-    const reservado = await store.reserveFollowUp(key, 0);
-    if (reservado !== true) {
-      result.skipped.push({ key, reason: "cas_perdido" });
-      continue;
-    }
-
     const state = { channel: row.channel, contactRef: row.contact_ref };
-    // La cuota de ESTA org viaja al config del envio: asi la barrera de `deliver()` tambien
-    // protege a este barrido, que es el unico cuyo config de arranque no sabe de que org habla.
-    const envio = await deliver(state, texto, cuota ? { ...config, cuota } : config, deps);
-    await store.insertOutbound(
-      [{ templateKey: "R_SEGUIMIENTO", text: texto, messageKey: insistenciaMessageKey(key) }],
+    const messageKey = insistenciaMessageKey(key);
+
+    // LA RESERVA ES EL INSERT — el patron que este repo ya usa en el recordatorio (M9).
+    // `insertOutbound` va con `on_conflict=message_key` + `resolution=ignore-duplicates`: devuelve
+    // 1 si gano la carrera, 0 si ya estaba y null si la base no contesto. Sin reserva confirmada no
+    // se manda, igual que antes.
+    //
+    // Antes esto reservaba con `reserveFollowUp`, y ese es el bug: quema `followup_step`, el MISMO
+    // contador —tope 1, `followUp.maxSteps`, "UN follow-up y despues silencio"— del que cuelga el
+    // M3 de rescate del funnel. Un solo cupo para DOS circuitos: el que llega primero apaga al otro
+    // sin dejar rastro, porque el follow-up filtra `followup_step=eq.0` y la fila deja de aparecer
+    // tanto en el barrido como en el conteo.
+    //
+    // La politica no cambia: `insistenciaMessageKey` es determinista, asi que sigue siendo UNA
+    // insistencia por conversacion — lo que cambia es de que contador cuelga.
+    const reservado = await store.insertOutbound(
+      [{
+        templateKey: "R_SEGUIMIENTO",
+        text: texto,
+        messageKey,
+        deliveryStatus: "reserved",
+        stageBefore: row.bot_stage,
+        stageAfter: row.bot_stage, // la insistencia no mueve la maquina de estados
+      }],
       { conversationKey: key, channel: row.channel, contactRef: row.contact_ref, outboundSeq: (row?.raw?.outboundSeq || 0) + 1 },
       { raw: { barrido: "insistencia" } },
     );
+    if (reservado !== 1) {
+      result.skipped.push({ key, reason: reservado === null ? "reserva_fallida" : "cas_perdido" });
+      continue;
+    }
+
+    // La cuota de ESTA org viaja al config del envio: asi la barrera de `deliver()` tambien
+    // protege a este barrido, que es el unico cuyo config de arranque no sabe de que org habla.
+    const envio = await deliver(state, texto, cuota ? { ...config, cuota } : config, deps);
+    // EL DESENLACE, no un hecho nuevo: la fila ya existe como `reserved` y aca termina de contarse.
+    // Sin esto, una reserva ganada y un envio que nunca salio son indistinguibles en la tabla — que
+    // es exactamente como seis conversaciones de produccion quedaron dadas por insistidas sin haber
+    // recibido un solo mensaje.
+    await store.markMessageDelivered(messageKey, DELIVERY_STATUSES.includes(envio.status) ? envio.status : "failed");
     result.send.push({ key, mode: envio.status, ...(envio.warning ? { warning: envio.warning } : {}) });
   }
 

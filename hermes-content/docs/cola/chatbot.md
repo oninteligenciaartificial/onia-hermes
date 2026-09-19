@@ -318,6 +318,39 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [ ] **Devolverle el cupo de rescate a 6 conversaciones que la insistencia quemó sin mandar
+      nada** (`hermes-content/deploy/vps-ops/bot/insistencia-run.mjs` · tabla
+      `onia_center.bot_conversations`; medido el 2026-09-18). El código ya está
+      arreglado — la insistencia dejó de reservar con `followup_step` —, pero las filas que
+      quedaron marcadas siguen marcadas: son `chatwoot:42,43,52,54,56,57`, todas en `bot_stage
+      = nuevo` con `followup_step = 1` y sin un solo `M3`; sus salientes son
+      `R_SEGUIMIENTO:simulated`, o sea la reserva se gastó y el mensaje nunca salió. Cuatro son
+      desconocidos reales (`purple-bush-931`, `summer-shadow-163`, `icy-sunset-817` y
+      `chatwoot:57`). Mientras `followup_step` siga en 1, el día que avancen a
+      `esperando_horario` el follow-up no las va a ver: filtra `followup_step=eq.0`.
+      **Reproducción y comando exacto** (no lo corro yo: escribir en la base de producción no es
+      permiso de este carril):
+
+      ```sql
+      -- 1. MIRAR primero: tienen que ser 6, todas sin M3.
+      select c.conversation_key, c.bot_stage, c.followup_step
+        from onia_center.bot_conversations c
+       where c.followup_step > 0 and c.bot_stage = 'nuevo'
+         and not exists (select 1 from onia_center.bot_messages m
+                          where m.conversation_key = c.conversation_key
+                            and m.direction = 'outbound' and m.template_key like '%M3%');
+      -- 2. Devolver el cupo SOLO a esas (la condición es la misma, no una lista a mano).
+      update onia_center.bot_conversations c set followup_step = 0
+       where c.followup_step > 0 and c.bot_stage = 'nuevo'
+         and not exists (select 1 from onia_center.bot_messages m
+                          where m.conversation_key = c.conversation_key
+                            and m.direction = 'outbound' and m.template_key like '%M3%');
+      ```
+
+      ⚠️ El `update` deriva sus sujetos de la MISMA condición que el `select`, no de los seis
+      nombres: si entre medio aparece una séptima, entra sola; si una ya recibió su M3, no la
+      toca. Correrlo después del deploy del arreglo, o el barrido vuelve a quemarlas.
+
 - [ ] **Reparar el reloj ya corrido de 16 conversaciones: `2f92eb70` curó al productor y no
       tocó ni una fila** (`hermes-content/deploy/vps-ops/bot/reloj-del-prospecto-vivo.mjs` ·
       `hermes-content/deploy/vps-ops/bot/bot-engine.mjs`; medido el 2026-09-19 con el

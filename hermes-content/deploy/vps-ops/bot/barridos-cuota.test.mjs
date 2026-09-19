@@ -251,7 +251,10 @@ function storeInsistencia(reservas = []) {
       reservas.push(key);
       return true;
     },
-    insertOutbound: async () => true,
+    // La reserva de la insistencia ES el insert (2026-09-18): devuelve el NUMERO de filas — 1 si
+    // gano la carrera. Con `true` el CAS se leia como perdido y el barrido no mandaba nada.
+    insertOutbound: async (replies) => { reservas.push(replies?.[0]?.messageKey); return 1; },
+    markMessageDelivered: async () => true,
   };
 }
 

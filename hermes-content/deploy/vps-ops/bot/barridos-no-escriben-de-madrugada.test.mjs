@@ -99,7 +99,11 @@ function fakeStore(rows, reservas) {
     warnings: [],
     sweepInsistenciaCandidates: async () => rows,
     reserveFollowUp: async (key) => { reservas.push(key); return true; },
-    insertOutbound: async () => true,
+    // La reserva de la insistencia ES el insert (2026-09-18): devuelve el NUMERO de filas — 1 si
+    // gano la carrera. Se anota en `reservas` para que "la hora NO quema la reserva" siga midiendo
+    // lo que mide: que la guarda horaria corte ANTES de gastar el unico intento.
+    insertOutbound: async (replies) => { reservas.push(replies?.[0]?.messageKey); return 1; },
+    markMessageDelivered: async () => true,
   };
 }
 

@@ -24,7 +24,12 @@ function fakeStore(rows, { reservas = [] } = {}) {
     warnings: [],
     sweepInsistenciaCandidates: async () => rows,
     reserveFollowUp: async (key) => { reservas.push(key); return true; },
-    insertOutbound: async () => true,
+    // La reserva de este barrido ES el insert (2026-09-18): `insertOutbound` devuelve el NUMERO de
+    // filas escritas — 1 si gano la carrera, 0 si la clave ya estaba, null si la base no contesto.
+    // El fake devolvia `true`, que no es ninguno de los tres, y por eso dejaba pasar cualquier
+    // lectura del CAS. Se anota en `reservas` para que los casos que ya miraban ahi sigan valiendo.
+    insertOutbound: async (replies) => { reservas.push(replies?.[0]?.messageKey); return 1; },
+    markMessageDelivered: async () => true,
   };
 }
 
@@ -55,7 +60,9 @@ test("org con default: insiste 1 vez con el nombre del encargado, CAS antes de m
   });
   assert.equal(out.send.length, 1);
   assert.equal(out.send[0].mode, "sent");
-  assert.deepEqual(reservas, ["chatwoot:41"]);
+  // La reserva cuelga de la clave propia del barrido, no de `followup_step` (que es el cupo del
+  // M3 de rescate y tiene tope 1).
+  assert.deepEqual(reservas, ["insistencia:chatwoot:41"]);
   assert.match(enviados[0].texto, /Marta/);
   assert.match(enviados[0].texto, /no gracias/);
 });
@@ -97,13 +104,30 @@ test("sin inbox (funnel de Onia) o sin org mapeada: skip, jamas se insiste", asy
 
 test("CAS perdido (otra corrida gano): no manda", async () => {
   const store = fakeStore([fila()]);
-  store.reserveFollowUp = async () => false;
+  // El CAS es el insert: 0 filas = la clave ya estaba, o sea otra corrida gano la carrera.
+  store.insertOutbound = async () => 0;
   const out = await runInsistenciaSweep({ nowIso: NOW, emit: true }, {
     store,
+    config: { ...createBotConfig(), dryRun: false },
     knowledge: conocimientoDe(DOC),
   });
   assert.equal(out.send.length, 0);
   assert.equal(out.skipped[0].reason, "cas_perdido");
+});
+
+test("la base no contesta: sin reserva confirmada NO se manda", async () => {
+  const store = fakeStore([fila()]);
+  store.insertOutbound = async () => null;
+  const enviados = [];
+  const out = await runInsistenciaSweep({ nowIso: NOW, emit: true }, {
+    store,
+    config: { ...createBotConfig(), dryRun: false },
+    knowledge: conocimientoDe(DOC),
+    chatwoot: { enabled: true, warnings: [], sendMessage: async () => { enviados.push(1); return true; } },
+  });
+  assert.equal(out.send.length, 0);
+  assert.equal(out.skipped[0].reason, "reserva_fallida");
+  assert.equal(enviados.length, 0, "sin saber si la reserva entro, mandar es arriesgarse a duplicar");
 });
 
 test("dry-run: lista lo que mandaria sin reservar ni mandar", async () => {
