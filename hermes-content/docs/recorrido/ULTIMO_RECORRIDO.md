@@ -12,6 +12,45 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-19 08:1x La Paz — escalón 3 nuevo intentado (cambio de plan): estructuralmente
+inalcanzable para `zz-qa-`, no es un hallazgo
+
+`BUILD_ID` sin cambios (`HyMvkgxD68MORYYHikiG6`), 0 huérfanas `zz-qa-` al arrancar, sin tareas
+nuevas en el tablero. Se escribió `scripts/probar_cambio_de_plan.mjs` para recorrer, por primera
+vez con clic real y sesión real, el camino "dueño con plan `basic` aprieta 'Contratar Crece' en
+`/settings` → llega a `/checkout?plan=crece` con el precio correcto (Bs 550)".
+
+**Resultado: la pantalla "Mi plan" no existe para ninguna cuenta `zz-qa-`, por diseño.**
+`esCuentaQueNoEsCliente` (`lib/platform/cuentas-que-no-son-clientes.ts`) matchea el **slug** de
+la organización contra `QA_SLUG_PREFIXES = ["zz-qa-"]` — sin mirar el email — y
+`seccionesDeConfiguracion({cuentaInterna: true, ...})` en `SettingsClient.tsx` **omite el grupo
+"plan" entero** ("Mi plan", "Chatbot de WhatsApp", "Descargar mis planillas") para esas cuentas.
+Es una decisión de Sergio Urcullo del 2026-09-18: las cuentas de QA no ven la VENTA. Verificado
+en vivo: org `zz-qa-cambioplan-20260919081734` (plan `basic`, dueño ADMIN, sesión real) en
+`/settings` no tiene NINGÚN enlace a `/checkout` en toda la pantalla — 0 coincidencias.
+
+**No es un hallazgo — es un bloqueo estructural de la convención de este carril.** CLAUDE.md
+exige `zz-qa-` en todo lo que se crea (para que el borrado sea seguro); el producto exige que
+`zz-qa-` no vea la venta (para que un drip no le escriba precios a datos de prueba). Las dos
+reglas son correctas por separado y su intersección deja **la pantalla de cambio de plan
+(`/settings`→"Mi plan"→`/checkout`) fuera del alcance de este carril mientras ambas reglas
+sigan vigentes.** Ningún otro rubro de esta pantalla (comparativa, botones "Contratar" de cada
+plan, add-ons) se puede recorrer de punta a punta con sesión real bajo esta convención.
+
+Queda anotado para que ninguna vuelta futura vuelva a intentar esto pensando que es un bug del
+instrumento: `scripts/probar_cambio_de_plan.mjs` reproduce el bloqueo (falla con "No hay ningún
+`<a href="/checkout?plan=crece">`" y 0 enlaces a checkout) y lo documenta en su cabecera.
+
+RAZÓN: la brecha más grande del objetivo (recorrido completo) sigue en 9/9 sin cambios de
+`BUILD_ID`; el escalón 3 de coadministradores sigue bloqueado en el integrador (`t_24758d5a`,
+`52409f20` no mergeado a `origin/master` aún); este ítem nuevo resultó ser un no-hallazgo tras
+investigarlo, pero la investigación en sí vale (evita que otro carril lo intente de nuevo).
+LECCIÓN: antes de instrumentar un escalón 3 que involucre precios/checkout/venta, revisar si la
+convención `zz-qa-` choca con `esCuentaQueNoEsCliente` — desde el 18-sep, CUALQUIER superficie
+de venta filtrada por esa función es inalcanzable para este carril con su propia convención.
+
+---
+
 ## 2026-09-19 07:1x La Paz — `BUILD_ID` cambió otra vez (`HyMvkgxD68MORYYHikiG6`, antes
 `Idvh9u4mdBzHBgE2penq4`): recorrido completo repetido, 9/9 sin hallazgos nuevos
 
