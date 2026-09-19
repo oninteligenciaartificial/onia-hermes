@@ -29,6 +29,70 @@ contra producción (SSH al VPS, las dos bases, el motor corrido de verdad), no c
 
 ---
 
+## ✅ T8 — CERRADO el 2026-09-19: "está en `origin/main` y no está en producción" tiene TRES causas, y la tercera manda a romper un publicador sano
+
+**Cómo empezó.** Midiendo el bot VIVO, `npm run precios:vivos` cantó un defecto real y caro: al
+lead del plan **Empresa** (Bs 2.900, que ya trae el chatbot adentro) el bot le dice *"En **los
+otros planes** el chatbot va aparte, Bs 390 al mes"* — un universal sobre el complemento, que lo
+abarca por exclusión. El arreglo ya estaba escrito (`fb1f1480`, de la vuelta anterior): el repo
+dice *"En el Básico, el Crece y el Profesional…"*. O sea el arreglo existe y **no llega**.
+
+**La trampa, y es la lección.** Buscando por qué no llega aparecieron dos hechos que juntos
+acusan al publicador automático:
+
+| medición | resultado |
+|---|---|
+| `getFallbackConfig` (el respaldo de audio de T6) en `origin/main` | **2** apariciones |
+| el clon del VPS `/root/loops/onia-hermes` | `rev-list --count HEAD..origin/main` = **0** (al día) |
+| el mismo símbolo en `/opt/onia/bot/` y en `/tmp/onia-bot/` | **0** |
+| `/var/log/onia-publicar-solo.log`, últimas 3 corridas | `bot: PUBLICADO` las tres |
+| `bash /opt/onia/bot/_deploy/publicar.sh --dry-run` | **9 archivos sin publicar**, gate en verde |
+
+Leído así, el veredicto obvio es *"el publicador firma PUBLICADO con 9 arreglos varados"* — un
+falso verde en el canal que decide si hay que pedirle un deploy a Sergio Urcullo. **Y es falso.**
+
+**Lo que lo refutó es el log del propio publicador.** `/tmp/pub-bot.log` (que `publicar_destino`
+escribe en cada corrida real) termina en:
+
+```
+OK: 12 archivo(s) desplegados, conocimiento aplicado y el bot responde.
+OK: el bot corre lo que hay en origin/main (7239368b2).
+```
+
+La corrida de las **08:53 La Paz publicó bien** contra el `main` de ese momento (`7239368b2`);
+`origin/main` avanzó **después** a `df51e11ff`, y esos 9 archivos entran en la corrida siguiente.
+El publicador nunca mintió.
+
+**La regla, que corrige a la que ya estaba escrita.** La memoria decía *"un defecto en producción
+tiene DOS causas: el código está mal, o producción corre un build viejo"*. Son **tres**: el
+código está mal · producción corre un build viejo · **`main` se movió después de la última
+publicación**. Las tres se ven igual desde afuera —símbolo en `main`, ausente en producción— y la
+tercera manda al lado más caro: "arreglar" un publicador sano.
+
+Lo que las separa no es el reloj ni el conteo de varados, sino **contra qué sha publicó la última
+corrida**, y eso ya está escrito: `/tmp/pub-<destino>.log`, línea `el <destino> corre lo que hay
+en origin/main (<sha>)`. Si ese sha es ancestro de tu símbolo, el publicador todavía no lo vio.
+
+```bash
+# la pregunta correcta, en un comando
+ssh root@187.77.16.63 "grep -o 'origin/main ([0-9a-f]*)' /tmp/pub-bot.log | tail -1"
+git merge-base --is-ancestor <ese-sha> <tu-sha> && echo "main se movio despues: no es el publicador"
+```
+
+**Estado del defecto de precio que abrió el ítem.** `fb1f1480` está commiteado y pusheado a
+`claude/chatbots-platform-review-0d1d09`, y es el **único** commit de la rama sin mergear. No está
+en `origin/main`, así que el bot vivo sigue diciendo la frase vieja. **No es deuda de este carril:
+está entregado y espera al integrador.** Se verifica solo —sin abrir nada— con:
+
+```bash
+npm run precios:vivos   # hoy: "EL BOT VIVO PROMETE UNA INCLUSION QUE EL CATALOGO NO HACE"
+```
+
+Cuando `fb1f1480` entre a `main`, el publicador lo saca solo (el bot publicó las 6 corridas de
+hoy) y ese gate pasa a verde sin que nadie toque nada.
+
+---
+
 ## ✅ T7 — CERRADO el 2026-09-19: el arreglo de T6 dejó a la capacidad con DOS destinos, y el gate seguía preguntando por uno
 
 **El agujero lo abrió el arreglo del día anterior.** Al cablearle a la transcripción un
@@ -414,6 +478,68 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 ---
 
 ## Ahora
+
+- [x] 🔴 **CERRADO el 2026-09-19 10:43-11:25 La Paz (commiteado, NO desplegado) — el bot le
+      cobraba Bs 390/mes al lead del plan más caro por algo que su plan ya trae, y el gate que
+      vigila exactamente eso lo firmaba verde diciendo «no miente».**
+
+      **El defecto, medido contra producción.** `npm run precios:vivos` decía
+      `EL BOT VIVO COTIZA SOLO PRECIOS DE LA FUENTE UNICA — 17 montos vigentes` y al lado un
+      aviso: *«"Empresa" (enterprise) trae el chatbot incluido y el bot no lo nombra: no miente,
+      pero no lo está vendiendo»*. **Sí mentía.** El texto que el bot sirve enumeraba cuatro
+      planes y remataba: *«En los otros planes el chatbot va aparte, Bs 390 al mes.»* Desde la
+      escalera C son **DOS** los planes con `whatsappIncluded: true` — `clinic` (Completo,
+      Bs 1.290) y `enterprise` (Empresa, **Bs 2.900**) —, así que ese cierre universal **abarca
+      por exclusión** al plan que no nombró y le promete un cobro que no corresponde:
+      Bs 390/mes, Bs 4.680/año, al prospecto más grande que puede escribir.
+
+      **Por qué ningún gate lo veía, y es la clase transferible.** `revisarPromesaDeInclusion`
+      sólo juzgaba los planes **NOMBRADOS**; un plan no nombrado caía en un bucle de avisos cuya
+      premisa escrita era *«no lo cotiza»*. Eso confunde **CALLAR** con **ABARCAR**: un universal
+      sobre el complemento no nombra a nadie y sin embargo afirma sobre todos. Es invisible para
+      las tres familias de gates de venta — no mueve una cifra (Bs 390 sale de `pricing.ts`), no
+      tipea el nombre de un plan junto a la capacidad, y no es un universal sobre *el todo*
+      («todos los planes») sino sobre **el complemento**.
+
+      **Y el fixture defendía el defecto, dos veces.** El caso `"un plan incluido del que el bot
+      ni habla es AVISO"` usaba como «texto que calla» justamente el texto que **no** calla; y el
+      self-check de `precios-vivos.mjs` tenía su catálogo tipeado a mano **sin `enterprise`**, o
+      sea el cierre universal no tenía a quién mentirle y firmaba verde. Un fixture al que le
+      falta un sujeto no queda incompleto: queda **ratificando** el bug.
+
+      **Qué se arregló.**
+      - `promesa-inclusion.mjs`: `excluyeAlResto()` distingue callar de abarcar — cuantificador
+        de complemento («en los otros / los demás / el resto de los planes») **+** afirmación de
+        que se cobra aparte. Con eso, un plan incluido y no nombrado pasa de AVISO a **PROBLEMA**.
+        Se prohíbe la **FORMA**, no la redacción de hoy: prohibir la frase literal se apagaría
+        sola en cuanto alguien la reescriba. Y no acusa si el complemento no afirma nada de plata
+        («en los otros planes, consultanos»), porque la mentira la hace la exclusión.
+      - `knowledge.onia.json`: el cierre pasa a **enumerar** — *«En el Básico, el Crece y el
+        Profesional el chatbot va aparte, Bs 390 al mes»*. Enumerar falla del lado seguro: un
+        plan nuevo que no esté en la lista queda sin nombrar (AVISO, venta que no hacemos),
+        mientras que el universal lo **abarcaba** y le mentía.
+      - `precios-vivos.mjs`: el catálogo del self-check ahora nombra al Empresa, y se agregó el
+        caso ancla del cierre universal.
+
+      **Prueba.** `node --test promesa-inclusion.test.mjs` 13/13 (4 casos nuevos), los 2 nuevos
+      en ROJO antes del arreglo por el motivo correcto. **3 mutaciones, 3 rojos:** esquivar
+      `excluyeAlResto` (`if (true) return false`) → 2 rojos; devolver el texto al universal →
+      rojo el caso de la correa contra el knowledge real; `if (false && abarcaAlResto)` → 2
+      rojos. El self-check de `precios-vivos` pasó de 63/63 a **64/64**, y su caso nuevo muerde
+      (con la mutación puesta: `FAIL el cierre universal abarca al Empresa`). Cadena del bot
+      **1280/1280**.
+
+      ⚠️ **El instrumento mintió antes que el producto.** La raíz `includ` **no** matchea
+      «incluido» —es inclu-**i**-do—, así que «no viene incluido» pasaba mudo con sus tres casos
+      hermanos en verde. Lo delató el caso que exige las tres redacciones a la vez; sin él, el
+      detector nacía con un agujero del tamaño de la mitad de las formas que quería cazar.
+
+      🔴 **NO DESPLEGADO — y el texto necesita DOS pasos, no uno.** `npm run precios:vivos` sigue
+      acusando al bot vivo, y con razón: el proceso sirve la fuente `panel`, que hereda del
+      archivo instalado en `/tmp/onia-bot/`, no del repo. `DESPLEGAR: bot` **no lleva el texto**:
+      el install del conocimiento es aparte (`webhook-server.sh knowledge`). Hasta que eso pase,
+      el lead del plan Empresa sigue leyendo la frase vieja. El publicador en seco ya venía con
+      9 archivos del bot esperando (el respaldo de audio de T6/T7 entre ellos).
 
 - [x] **MEDIDO el 2026-09-19 08:13-08:45 La Paz — los cuatro ejes del objetivo en verde, y
       DOS hipótesis propias refutadas antes de anunciarlas.** Simulador **3/3** (escalera C:

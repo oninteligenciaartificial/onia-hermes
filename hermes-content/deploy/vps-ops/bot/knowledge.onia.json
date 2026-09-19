@@ -11,7 +11,7 @@
     {
       "id": "precios",
       "title": "Planes y precios",
-      "body": "Te los paso derecho, son públicos: el sistema arranca en Bs 320 al mes con el plan Básico, Bs 550 el Crece, Bs 890 el Profesional y Bs 1.290 el Completo, que ya trae el chatbot de WhatsApp adentro. En los otros planes el chatbot va aparte, Bs 390 al mes.\n\nCuál te sirve depende de cuántos son y de qué módulos actives, así que la lista completa y al día está en onia.com.bo/precios. Si querés, {{humano}} te lo muestra funcionando con TUS números en una demo.",
+      "body": "Te los paso derecho, son públicos: el sistema arranca en Bs 320 al mes con el plan Básico, Bs 550 el Crece, Bs 890 el Profesional y Bs 1.290 el Completo, que ya trae el chatbot de WhatsApp adentro. En el Básico, el Crece y el Profesional el chatbot va aparte, Bs 390 al mes.\n\nCuál te sirve depende de cuántos son y de qué módulos actives, así que la lista completa y al día está en onia.com.bo/precios. Si querés, {{humano}} te lo muestra funcionando con TUS números en una demo.",
       "status": "publicado",
       "tags": [
         "precio",
