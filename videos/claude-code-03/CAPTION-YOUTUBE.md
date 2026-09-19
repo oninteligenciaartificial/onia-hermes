@@ -22,7 +22,7 @@ https://sergiourcullo.vercel.app/claude-code
 https://chat.whatsapp.com/ENplPbR8GrbGsdMrGgLxzu
 
 📅 ¿Te trabaste? Llamada 1 a 1 conmigo:
-https://cal.com/sergiourcullo/30min
+https://cal.com/sergiourcullo/20min
 
 CAPÍTULOS
 0:00 Intro
