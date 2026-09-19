@@ -5548,6 +5548,34 @@ archivos.**
 
 ## Cerrado — no rehacer
 
+- [x] **~~La sonda que define el «hecho» del carril blanqueaba la mitad del estado: los cinco
+      campos del reinicio que viven en `raw` quedaban con el valor de la corrida anterior~~** —
+      cerrado el 2026-09-19 (`scripts/sonda_widget.mjs`,
+      `hermes-content/deploy/vps-ops/bot/bot-engine.mjs`).
+      **Medido en la fila viva de producción**, conversación 49 del inbox 4 (el de leads
+      reales): `raw` traía `scheduledLabel: "viernes 4 de septiembre, 14:00"` — una demo de
+      **dos semanas antes** — y la sonda firmaba `2/2` igual, vuelta tras vuelta.
+      La causa: `toConversationRow` manda seis campos de estado a `raw` por no tener columna
+      propia, y **cinco de ellos son parte de «volver al saludo»** (`scheduledLabel`,
+      `branchAsked`, `qualifyAsks`, `handoffAckAt`, `urgenteAvisadoAt`). Las **tres** listas de
+      la sonda enumeraban sólo columnas: el `SELECT` de `estadoDelBot`, el `UPDATE` de
+      `guionBlanqueo` y el chequeo de `esExtrano`. Con `handoffAckAt` o `branchAsked` sucios el
+      motor arranca creyendo que ya acusó el traspaso o que ya preguntó la rama — el falso
+      verde exacto que el arreglo del 3-sep cerró **sólo para las columnas**.
+      **Arreglo:** ninguna de las tres vuelve a enumerar nada. `planDeBlanqueo()` DERIVA el
+      universo de `reiniciarConversacionVencida` (la definición del producto, ahora exportada)
+      cruzada con `toConversationRow` (que ya sabe qué va a columna y qué a `raw`), así que un
+      campo de estado nuevo lo blanquea la sonda sola. `raw` se **mezcla** (`||`) y no se pisa:
+      `inboxId`, `publicContact` y `outboundSeq` no son del reinicio y se conservan.
+      **Prueba:** 4 casos nuevos en el `--self-check` (58/58), validados **por mutación en las
+      dos mitades** — sin el merge de `raw` el gate nombra los cinco campos faltantes; sin `raw`
+      en `esExtrano` cae el caso del `scheduledLabel` viejo. `npm run test:bot` 1.243 verdes.
+      En producción la fila quedó con `scheduledLabel: null` conservando `inboxId: "4"` y
+      `outboundSeq`.
+      ⚠️ **Queda anotado, no es de este ítem:** falta un caso que ancle al **lector**
+      (`estadoDelBot`), que hoy deriva sus claves del mismo plan pero no está exportado; su
+      mutación no se pudo correr aislada porque importar el módulo dispara la sonda real.
+
 - [x] **~~El instrumento que mide el objetivo del carril recomendaba un remedio que NINGUNA
       cuenta podía cumplir~~** — cerrado el 2026-09-19 (`scripts/objetivo_visible.mjs`).
       Medido contra producción esa madrugada: `objetivo_visible.mjs` sale `NO MEDIDO` porque la

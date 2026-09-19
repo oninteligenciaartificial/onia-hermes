@@ -189,7 +189,7 @@ export function conversacionVencida(state, receivedAt, config = DEFAULT_CONFIG) 
  * atribucion. `slotsOffered`/`scheduledAt` se limpian: una demo de hace un mes no es un
  * compromiso vigente.
  */
-function reiniciarConversacionVencida(state) {
+export function reiniciarConversacionVencida(state) {
   return {
     ...state,
     botStage: "nuevo",

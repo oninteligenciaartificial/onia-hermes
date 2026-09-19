@@ -86,6 +86,14 @@ import { fileURLToPath } from 'node:url';
 // contar desconocidos, la sonda la usa para no ensuciar esa cuenta— y dos copias del criterio es
 // exactamente como se separan.
 import { esNuestra } from './objetivo_visible.mjs';
+// El motor es la fuente de que significa "volver al saludo" y de que campo vive en `raw`.
+// Importarlo (en vez de copiar sus listas) es lo que hace que un campo de estado nuevo lo
+// blanquee la sonda sola: ver el comentario de `planDeBlanqueo`.
+import {
+  createState,
+  toConversationRow,
+  reiniciarConversacionVencida,
+} from '../hermes-content/deploy/vps-ops/bot/bot-engine.mjs';
 
 const HOST = process.env.ONIA_WIDGET_URL || 'https://onia-chatbot-chatwoot.hqdqgh.easypanel.host';
 const WEBSITE_TOKEN = process.env.ONIA_WIDGET_TOKEN || '9k5i7xnAgCbSse1EZwVChZLw';
@@ -305,33 +313,145 @@ export function necesitaDesarme(fila) {
 // el carril tiene escrito —"un test que mira el primer paso no ve un sistema que muere en el
 // segundo"— una vuelta mas adentro: un test que cuenta no ve un sistema que contesta cualquier cosa.
 
+// ────────── Y la mitad que faltaba: los campos de estado que NO tienen columna ──────────
+//
+// Medido el 2026-09-19 sobre la MISMA conversacion 49, esta vez leyendo la fila entera:
+//
+//   raw = {"inboxId":"4", "outboundSeq":539, "branchAsked":false, "qualifyAsks":0,
+//          "handoffAckAt":null, "urgenteAvisadoAt":null, "publicContact":null,
+//          "scheduledLabel":"viernes 4 de septiembre, 14:00"}   ← de hace DOS SEMANAS
+//
+// El arreglo del 3-sep cerro el embudo que vive en COLUMNAS y dejo abierto el que vive en
+// `raw`: `toConversationRow` (bot-engine.mjs) manda ahi seis campos de estado sin columna
+// propia, y de ellos CINCO son parte de "volver al saludo" — `scheduledLabel`, `branchAsked`,
+// `qualifyAsks`, `handoffAckAt`, `urgenteAvisadoAt`. Ninguna de las tres listas de esta sonda
+// los nombraba: ni el SELECT de `estadoDelBot`, ni el UPDATE de `guionBlanqueo`, ni el chequeo
+// de `esExtrano`. Con `handoffAckAt` o `branchAsked` sucios el motor arranca creyendo que ya
+// acuso el traspaso o que ya pregunto la rama, y la sonda firma 2/2 igual: el falso verde de
+// siempre, un carril mas adentro.
+//
+// Por eso ninguna de las tres vuelve a enumerar nada. El producto YA tiene la definicion de
+// "volver al saludo" —`reiniciarConversacionVencida`, la que corre sola a los 14 dias— y
+// `toConversationRow` YA sabe que campo va a columna y cual va dentro de `raw`. El plan se
+// DERIVA de esas dos: el dia que el motor gane un campo de estado, la sonda lo blanquea sin
+// que nadie la toque. Una lista a mano aca no falla ruidosa, falla en verde.
+
+/** Un estado con TODOS los campos del reinicio ensuciados, para que la resta los revele. */
+function estadoSucio() {
+  return createState({
+    conversationKey: 'chatwoot:0',
+    botStage: 'esperando_horario',
+    humanTookOver: true,
+    humanTookOverAt: '2026-09-04T18:00:00.000Z',
+    handoffAckAt: '2026-09-04T18:00:00.000Z',
+    urgenteAvisadoAt: '2026-09-04T18:00:00.000Z',
+    slotsOffered: [{ label: 'viernes 4 de septiembre, 14:00', startsAt: '2026-09-04T18:00:00.000Z' }],
+    scheduledAt: '2026-09-04T18:00:00.000Z',
+    scheduledLabel: 'viernes 4 de septiembre, 14:00',
+    calendarEventId: 'evt_viejo',
+    offScriptCount: 3,
+    qualifyAsks: 2,
+    followupStep: 1,
+    branchAsked: true,
+    optOutAt: '2026-09-04T18:00:00.000Z',
+    qualification: { city: 'La Paz', industry: 'odontologia', teamSize: '4' },
+  });
+}
+
+/**
+ * Que hay que dejar en su valor de desconocido, derivado del producto y NO enumerado aca.
+ *
+ * Son dos aportes y conviene no confundirlos:
+ *  - lo que `reiniciarConversacionVencida` limpia: la definicion del producto, la que manda;
+ *  - `qualification` y `optOutAt`, que el producto CONSERVA a proposito (el rubro de hace un
+ *    mes sigue siendo el rubro, y un "no me escribas" no se olvida nunca) y la sonda necesita
+ *    borrar igual, porque su sujeto no es un lead que vuelve sino uno que nunca escribio.
+ *    Es la unica diferencia legitima, y por eso va nombrada y aparte.
+ */
+export function planDeBlanqueo() {
+  const sucio = estadoSucio();
+  const limpio = { ...reiniciarConversacionVencida(sucio), qualification: {}, optOutAt: null };
+  const antes = toConversationRow(sucio);
+  const despues = toConversationRow(limpio);
+  const cambio = (a, b) => JSON.stringify(a) !== JSON.stringify(b);
+
+  const columnas = {};
+  for (const [col, valor] of Object.entries(despues)) {
+    if (col === 'raw') continue;
+    if (cambio(valor, antes[col])) columnas[col] = valor;
+  }
+  const raw = {};
+  for (const [clave, valor] of Object.entries(despues.raw)) {
+    if (cambio(valor, antes.raw[clave])) raw[clave] = valor;
+  }
+  return { columnas, raw };
+}
+
+/** Cita para SQL. Los valores del plan son nulos, booleanos, enteros o texto corto del motor. */
+function lit(valor) {
+  if (valor === null || valor === undefined) return 'null';
+  if (typeof valor === 'boolean') return valor ? 'true' : 'false';
+  if (typeof valor === 'number') return String(valor);
+  if (typeof valor === 'object') return `'${JSON.stringify(valor).replace(/'/g, "''")}'::jsonb`;
+  return `'${String(valor).replace(/'/g, "''")}'`;
+}
+
 /**
  * ¿Esta fila es la de alguien que escribe por PRIMERA vez?
  *
  * Es la precondicion de toda la medicion: la sonda dice medir "un desconocido escribe dos veces",
  * y si el motor ya sabe el rubro, el tamano y la ciudad, lo que se mide es otra cosa. Sin fila
  * es el caso mas extrano de todos (conversacion recien creada), no un error.
+ *
+ * Pregunta por los MISMOS campos que blanquea `guionBlanqueo` —los dos salen de `planDeBlanqueo`—
+ * porque un chequeo que mira menos que el blanqueo no puede ver que el blanqueo se quedo corto.
  */
 export function esExtrano(fila) {
   if (!fila) return true;
-  if (fila.humanTookOver === true) return false;
-  if (String(fila.botStage || 'nuevo') !== 'nuevo') return false;
-  if (Object.keys(fila.qualification || {}).length > 0) return false;
-  if ((fila.slotsOffered || []).length > 0) return false;
-  if (Number(fila.offScriptCount || 0) !== 0) return false;
-  if (fila.scheduledAt) return false;
-  if (fila.optOutAt) return false;
+  const { columnas, raw } = planDeBlanqueo();
+  const esperado = { ...columnas, ...raw };
+  for (const [campo, valorLimpio] of Object.entries(esperado)) {
+    if (campo === 'updated_at') continue;
+    const actual = fila[COLUMNA_A_ESTADO[campo] || campo];
+    if (actual === undefined) continue; // lo que el lector no trajo se juzga aparte, no se absuelve aca
+    const vacio = actual === null || actual === false || actual === 0 ||
+      (Array.isArray(actual) && actual.length === 0) ||
+      (actual && typeof actual === 'object' && !Array.isArray(actual) && Object.keys(actual).length === 0);
+    if (vacio && (valorLimpio === null || valorLimpio === false || valorLimpio === 0 ||
+      (Array.isArray(valorLimpio) && valorLimpio.length === 0) ||
+      (valorLimpio && typeof valorLimpio === 'object' && !Array.isArray(valorLimpio)))) continue;
+    if (JSON.stringify(actual) !== JSON.stringify(valorLimpio)) return false;
+  }
   return true;
 }
 
-/** Lo que hay que blanquear para que el motor vuelva a ver a un desconocido. */
+/** Nombre de columna → nombre del campo de estado, para leer la fila que trae `estadoDelBot`. */
+const COLUMNA_A_ESTADO = Object.freeze({
+  bot_stage: 'botStage',
+  human_took_over: 'humanTookOver',
+  human_took_over_at: 'humanTookOverAt',
+  slots_offered: 'slotsOffered',
+  scheduled_at: 'scheduledAt',
+  calendar_event_id: 'calendarEventId',
+  off_script_count: 'offScriptCount',
+  followup_step: 'followupStep',
+  opt_out_at: 'optOutAt',
+});
+
+/**
+ * Lo que hay que blanquear para que el motor vuelva a ver a un desconocido.
+ *
+ * `raw` se MEZCLA (`||`) en vez de pisarse: ahi viven tambien `inboxId`, `publicContact` y
+ * `outboundSeq`, que el producto conserva al reiniciar y que la sonda no tiene por que perder
+ * (el inbox y el telefono no cambian porque el lead vuelva a escribir).
+ */
 export function guionBlanqueo(conversacionId) {
+  const { columnas, raw } = planDeBlanqueo();
+  const sets = Object.entries(columnas).map(([col, valor]) => `${col} = ${lit(valor)}`);
+  if (Object.keys(raw).length > 0) sets.push(`raw = coalesce(raw, '{}'::jsonb) || ${lit(raw)}`);
+  sets.push('updated_at = now()');
   return (
-    'update onia_center.bot_conversations set ' +
-    "bot_stage = 'nuevo', human_took_over = false, human_took_over_at = null, " +
-    "qualification = '{}'::jsonb, slots_offered = '[]'::jsonb, scheduled_at = null, " +
-    'calendar_event_id = null, off_script_count = 0, followup_step = 0, opt_out_at = null, ' +
-    'updated_at = now() ' +
+    `update onia_center.bot_conversations set ${sets.join(', ')} ` +
     `where conversation_key = 'chatwoot:${Number(conversacionId)}';`
   );
 }
@@ -517,10 +637,19 @@ function psqlMotor(sql) {
 function estadoDelBot(conversacionId) {
   // Por JSON y no por `||'|'||`: `qualification` trae texto libre del prospecto (ciudad, rubro)
   // y cualquier separador que se elija puede aparecer adentro.
+  // Las claves las pide `planDeBlanqueo`, no una lista escrita aca: un lector que trae MENOS
+  // campos que los que el chequeo juzga lo deja absolviendo por ausencia, que es como
+  // `scheduledLabel` sobrevivio dos semanas dentro de `raw` sin que nada se pusiera rojo.
+  const { columnas, raw } = planDeBlanqueo();
+  const pares = [];
+  for (const col of Object.keys(columnas)) {
+    if (col === 'updated_at') continue;
+    pares.push(`'${COLUMNA_A_ESTADO[col] || col}', ${col}`);
+  }
+  for (const clave of Object.keys(raw)) pares.push(`'${clave}', raw -> '${clave}'`);
+  pares.push("'qualification', qualification");
   const fila = psqlMotor(
-    `select json_build_object('botStage', bot_stage, 'humanTookOver', human_took_over, ` +
-      `'qualification', qualification, 'slotsOffered', slots_offered, 'offScriptCount', off_script_count, ` +
-      `'scheduledAt', scheduled_at, 'optOutAt', opt_out_at)::text ` +
+    `select json_build_object(${pares.join(', ')})::text ` +
       `from onia_center.bot_conversations where conversation_key = 'chatwoot:${Number(conversacionId)}';`,
   );
   if (!fila) return null;
@@ -1354,6 +1483,58 @@ async function selfCheck() {
     ];
     const v = juzgar({ enviados: 2, mensajes: DERIVA_TARDE, conversacionId: 49 });
     assert.strictEqual(v.codigo, 0, `deberia ser 0 y fue ${v.codigo}: ${v.texto}`);
+  });
+
+  // ── el blanqueo alcanza a TODO lo que el producto llama "volver al saludo" ──
+  //
+  // EL BUG (medido el 2026-09-19 en la fila viva de la conversacion 49): las tres listas de la
+  // sonda enumeraban solo columnas, y cinco campos del reinicio viven dentro de `raw`. La fila
+  // llevaba `scheduledLabel:"viernes 4 de septiembre, 14:00"` de dos semanas antes y la sonda
+  // firmaba 2/2. El caso no fija una lista: le pregunta al motor cual es el universo.
+
+  caso('el blanqueo cubre TODO lo que el producto limpia al volver al saludo', () => {
+    const sucio = estadoSucio();
+    const limpio = reiniciarConversacionVencida(sucio);
+    const antes = toConversationRow(sucio);
+    const despues = toConversationRow(limpio);
+    const sql = guionBlanqueo(49);
+
+    const faltan = [];
+    for (const [col, valor] of Object.entries(despues)) {
+      if (col === 'raw') continue;
+      if (JSON.stringify(valor) !== JSON.stringify(antes[col]) && !sql.includes(`${col} =`)) faltan.push(col);
+    }
+    for (const [clave, valor] of Object.entries(despues.raw)) {
+      if (JSON.stringify(valor) !== JSON.stringify(antes.raw[clave]) && !sql.includes(clave)) faltan.push(`raw.${clave}`);
+    }
+    assert.deepStrictEqual(faltan, [], `el blanqueo no toca: ${faltan.join(', ')}`);
+  });
+
+  caso('los cinco campos de `raw` del reinicio son sujetos de verdad (si no, el caso de arriba es decorativo)', () => {
+    // Ancla: si el motor dejara de mandar estos campos a `raw`, el caso anterior seguiria verde
+    // sin medir nada. Esto exige que el universo NO este vacio y que incluya a los conocidos.
+    const { raw } = planDeBlanqueo();
+    for (const clave of ['scheduledLabel', 'branchAsked', 'qualifyAsks', 'handoffAckAt', 'urgenteAvisadoAt']) {
+      assert.ok(clave in raw, `${clave} tiene que entrar al plan de blanqueo`);
+    }
+  });
+
+  caso('`raw` se mezcla y no se pisa: el inbox y el telefono sobreviven', () => {
+    const sql = guionBlanqueo(49);
+    assert.ok(/raw = coalesce\(raw, '\{\}'::jsonb\) \|\|/.test(sql), `tiene que mezclar, no pisar: ${sql}`);
+    assert.ok(!sql.includes('inboxId') && !sql.includes('publicContact'), 'no toca lo que el producto conserva');
+  });
+
+  caso('una fila con `scheduledLabel` viejo NO es la de un desconocido', () => {
+    const base = { botStage: 'nuevo', humanTookOver: false, qualification: {}, slotsOffered: [], offScriptCount: 0 };
+    assert.strictEqual(esExtrano({ ...base }), true, 'la fila limpia si es de un desconocido');
+    assert.strictEqual(
+      esExtrano({ ...base, scheduledLabel: 'viernes 4 de septiembre, 14:00' }),
+      false,
+      'con una demo de otra semana en `raw` el motor no arranca como con un desconocido',
+    );
+    assert.strictEqual(esExtrano({ ...base, branchAsked: true }), false, 'ya pregunto la rama');
+    assert.strictEqual(esExtrano({ ...base, handoffAckAt: '2026-09-04T18:00:00.000Z' }), false, 'ya acuso el traspaso');
   });
 
   // ── devolver la bandeja: la sonda no puede quedarse arriba de los leads reales ──
