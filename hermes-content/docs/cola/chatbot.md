@@ -529,6 +529,77 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **CERRADO el 2026-09-19 15:15-16:05 La Paz (commiteado; son docs y un gate, no toca el
+      motor ni pide deploy) — el material de venta prometía "IA incluida sin límite de chats" y
+      el add-on corta a 500 conversaciones al mes.**
+
+      **Cómo apareció.** No de la cola: las dos mediciones de arranque daban verde (simulador
+      3/3, widget 2/2 — el bot contestó los dos turnos en la conv 49). Salió de leer
+      `ONIA_CATALOGO_DE_VENTA.md`, que mi propio objetivo cita como la autoridad de lo que el
+      bot puede prometer, y cruzar lo que AFIRMA contra lo que el producto aplica.
+
+      **Nunca fue una mentira escrita a propósito: era cierta hasta el 2026-09-11.** Lo cuenta
+      la cabecera de `web-factory/apps/onia-platform/src/content/chatbot-precios.ts`: hasta ese
+      día no había contador ni corte, así que no se prometía un cupo. Ese día el cupo pasó de
+      copy a condición aplicada (`lib/chatbot/cupo.ts` lo lee para cortar) y el barrido de la
+      promesa alcanzó al producto y al sitio — y **no** a `hermes-content/docs`, que es de donde
+      salen las propuestas y el pitch que Sergio Urcullo dice en una demo.
+
+      **Las cuatro superficies, todas vivas** (`CONVERSACIONES_INCLUIDAS = 500`, recarga de 200
+      por Bs 190 que vence con el mes):
+
+      - `ONIA_CATALOGO_DE_VENTA.md:153` — "IA incluida sin límite de chats", en la fuente única
+        de "qué se vende".
+      - `ONIA_PRICING_CHATBOT_PROPUESTA.md:37` — la fila de Onia decía "**sin límite artificial
+        de chats**", y es peor que un ilimitado suelto: afirma superioridad donde somos **más**
+        restrictivos (Sendy topa a 150 chats IA/día ≈ 4.500/mes; nosotros a 500/mes).
+      - `ONIA_PRICING_CHATBOT_PROPUESTA.md:66` — "Incluida, sin límite de chats".
+      - `ONIA_PRICING_CHATBOT_PROPUESTA.md:129` — **el pitch de una frase para decir en voz
+        alta**, el sujeto más caro de los cuatro.
+
+      **Y una quinta, de credibilidad:** la tabla comparativa listaba "conversaciones ilimitadas"
+      como carencia de **Cliengo**, cuyo Starter topa a **500 — exactamente el nuestro**. Un
+      prospecto que compara de verdad nos agarra el reproche. Se quitó de la lista de carencias
+      con la razón escrita al lado.
+
+      **Lo sabíamos, escrito por nosotros el 30-ago** y en el mismo repo: §3 de
+      `ONIA_SENDYPRO_ANALISIS.md` dice *"prometer ilimitado sobre un costo variable que sube es
+      firmar un pasivo abierto. Nuestro modelo de 500 conversaciones + Meta al costo es más feo
+      de vender y más honesto de sostener"*. El análisis del competidor era honesto y nuestro
+      propio catálogo decía lo contrario.
+
+      **Por qué ningún gate lo veía.** No mueve una cifra (los cruces de precio validan montos y
+      en la oración no hay ninguno), no tipea un nombre de plan junto a una capacidad, y no es un
+      alcance total sobre EL SISTEMA ("el sistema completo") ni sobre SUS PARTES ("todos los
+      módulos"), las dos formas que `web-venta` ya cerró. Es sobre el **VOLUMEN**.
+
+      **Lo que cuesta de verdad:** cuando el cupo se agota el producto **deriva a una persona**.
+      Prometer ilimitado no produce un reclamo de facturación — produce horas de soporte, que es
+      el techo del negocio (`ONIA_ESTRATEGIA_DE_EMPRESA.md` §9).
+
+      **Gate de clase, cableado y validado por mutación** (`scripts/venta-honestidad.test.mjs`,
+      ya en la cadena como `test:venta-honestidad`): universo caminado del disco (docs de primer
+      nivel + `sales-kit`; `historial/` y `research/` quedan fuera por construcción, ahí describir
+      el plan ilimitado de otro es correcto), cupo **derivado** de la fuente — si algún día no hay
+      tope, el gate se apaga solo en vez de defender un número viejo.
+
+      ⚠️ **Dos trampas que costaron un falso verde cada una, las dos del instrumento:**
+
+      1. **Detectar por renglón perdía el sujeto más caro.** En el pitch, `en Onia` y `sin límite
+         de chats` viven en renglones distintos del mismo blockquote: la primera versión cazaba
+         3 de 4 y absolvía justo la frase de demo. La ventana depende de la **forma** — en una
+         tabla es la FILA (la de Sendy y la nuestra son vecinas y dicen cosas opuestas), en prosa
+         es el bloque. El caso `la ventana toma el bloque entero, no el renglón` lo ancla en las
+         dos direcciones, incluida la contraria: que la ventana **no** se derrame entre filas.
+      2. **Absolver por COMILLAS parecía correcto y era al revés.** Citar entre comillas sugiere
+         que la promesa es de otro; nuestro pitch va entre comillas **porque es una frase para
+         decir en voz alta**. Ese criterio absolvía exactamente el sujeto que más importa. La
+         atribución se hace por quién se NOMBRA en la ventana, no por la puntuación.
+
+      Mutaciones cazadas (5/5, `exit 1` con `fail ≥ 1`; restaurado `pass 13 / fail 0`):
+      reintroducir la promesa en el catálogo · reintroducir el pitch multi-renglón · borrar la
+      atribución (absolvería a Sendy y Cliengo) · universo vacío · cupo ilegible.
+
 - [x] 🔴 **CERRADO el 2026-09-19 14:15-15:05 La Paz (commiteado, NO desplegado) — el único camino
       que tiene el dueño para devolverle una conversación al bot funciona, y el log lo escribía
       igual que si no hubiera pasado nada.**
