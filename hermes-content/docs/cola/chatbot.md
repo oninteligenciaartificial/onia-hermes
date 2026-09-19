@@ -529,6 +529,50 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **CERRADO el 2026-09-19 14:15-15:05 La Paz (commiteado, NO desplegado) — el único camino
+      que tiene el dueño para devolverle una conversación al bot funciona, y el log lo escribía
+      igual que si no hubiera pasado nada.**
+
+      **Cómo apareció.** No de la cola. Midiendo un eje que ningún gate mira: *el dueño contesta
+      desde `/inbox` y el bot se calla — ¿existe el camino de vuelta?* La pantalla lo promete
+      textual («**Resuelta — tu asistente atiende de nuevo**»,
+      `onia-platform/app/(dashboard)/inbox/InboxClient.tsx:288`), y esa promesa cruza DOS sistemas:
+      el botón pega en `toggle_status` de Chatwoot, Chatwoot emite un webhook, y el motor del bot
+      —que vive en otro repo y se instala a mano— tiene que desarmar el candado.
+
+      **Lo primero que medí estaba mal, y el instrumento era mío.** `grep -c takeover_desarmado`
+      sobre las 47.826 líneas del log vivo da **0**, con 120 `status_no_desarma:open` y **cero**
+      `resolved`. Leído de frente eso dice «el desarme no ocurrió jamás». Es falso: el log **nunca
+      imprime las notas del motor**, y el desarme corre con `send: []` y
+      `notes: ["takeover_desarmado"]`, así que su rastro no podía existir.
+
+      **La prueba de punta a punta (sobre la sonda QA propia, conv 49):** armar el candado a mano,
+      resolver por REST con el token de la plataforma —el camino exacto del botón— y volver a leer.
+
+      ```
+      update onia_center.bot_conversations set human_took_over=true where conversation_key='chatwoot:49';
+      # POST /api/v1/accounts/2/conversations/49/toggle_status {"status":"resolved"}  → success:true
+      select human_took_over from onia_center.bot_conversations where conversation_key='chatwoot:49';  → f
+      ```
+
+      **El producto está sano: el desarme funciona.** Lo que estaba roto es la capacidad de
+      saberlo. Ante *«marqué resuelta y el bot no volvió»* hay TRES causas con remedios opuestos
+      —el evento no llegó (suscripción de Chatwoot), llegó y desarmó (mirar otro lado), llegó y no
+      desarmó (bug del motor)— y la línea del log no distinguía ninguna: decía «evento sin mensaje
+      (conversation_status_changed): no hay nada que contestar», idéntica a un evento inerte.
+
+      **El arreglo** (`hermes-content/deploy/vps-ops/bot/webhook-server.mjs`, campo `hizo=`): el
+      log contesta las DOS preguntas que son distintas — qué **mandó** y qué **hizo**. Se deriva de
+      las notas del motor, no de una lista de notas «importantes», que fallaría abierta justo en la
+      que se agregue mañana. Gate: `webhook-server.test.mjs`, validado por mutación en las dos
+      direcciones (sin campo → rojo; campo decorativo que sale siempre → rojo, porque el caso
+      hermano exige que un evento SIN efecto no diga que hizo algo).
+
+      **Clase que cierra.** Es la hermana de `48dac281` (un motivo por DEFECTO vuelve
+      indistinguible el ruido de la señal): allá dos causas distintas compartían motivo, acá una
+      rama **con efecto** se veía igual que una sin él. Por cada rama que cambia el ESTADO sin
+      mandar un mensaje, preguntar si deja rastro — si el efecto no se mandó, para el log no pasó.
+
 - [x] 🔴 **CERRADO el 2026-09-19 13:45-14:25 La Paz (commiteado en `onia-platform`, NO desplegado)
       — la pantalla donde el dueño mira trabajar a su bot le prometía lo contrario de lo que le
       cobramos, al lado del único número que sí tiene tope.**
