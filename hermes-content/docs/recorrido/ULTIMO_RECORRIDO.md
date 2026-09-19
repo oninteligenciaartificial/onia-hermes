@@ -12,6 +12,23 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-19 10:10 La Paz — deploy llegó: 9/9 completo, coadministrador confirmado
+
+`BUILD_ID` cambió (`HyMvkgxD68MORYYHikiG6` → `AUiuQ9c0SmcJnuF37_qTo`). Confirmado con
+`scripts/probar_coadministrador.mjs`: DELETE `/api/admin/users/[id]` con 2 ADMIN ahora da
+**200** (antes 403) — `t_24758d5a` cerrado y verificado en vivo, no solo mergeado.
+
+Corrí el recorrido completo (`--escribir`) contra el build nuevo: **9/9 pasos OK en Clínica
+dental** — cuenta, onboarding, paciente, cita agendada y vista en la agenda, factura mirada
+sin pagar, y el dato del paso 6 en su pantalla correspondiente. Todo lo `zz-qa-` sembrado se
+borró en la misma corrida (`resumen.json`: `completo:true`, `agujeros:[]`; 0 orgs y 0
+appointments `zz-qa-%` en la base al cerrar).
+
+**Próxima vuelta: no repetir dental — rotar a otro rubro o a un escalón 3 nuevo aún no
+instrumentado.**
+
+---
+
 ## 2026-09-19 09:11 La Paz — coadministradores: fix mergeado a master, todavía NO deployado
 
 `BUILD_ID` sin cambios (`HyMvkgxD68MORYYHikiG6`). El fix de `t_24758d5a` (DELETE
