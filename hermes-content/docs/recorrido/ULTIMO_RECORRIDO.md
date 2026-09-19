@@ -12,6 +12,37 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-19 07:1x La Paz — `BUILD_ID` cambió otra vez (`HyMvkgxD68MORYYHikiG6`, antes
+`Idvh9u4mdBzHBgE2penq4`): recorrido completo repetido, 9/9 sin hallazgos nuevos
+
+Deploy nuevo detectado al arrancar → se corrió el recorrido entero (no la versión acotada).
+`resumen.json`: `llegoHasta 9 / 9, completo True, agujeros []`. Los 9 pasos en "Clínica dental",
+de punta a punta: registro con confirmación de correo real → onboarding (6 pantallas) → paciente
+`zz-qa-` cargado y visto en `/patients` → cita `zz-qa-` agendada (201) y vista en `/appointments`
+→ factura `zz-qa-` vista en su pantalla de cobro, frenado ahí sin pagar → panel revisado. Todo
+`zz-qa-` (cuenta, org, paciente, cita, factura) borrado en la misma corrida — `organizations=0`,
+`appointments zz-qa-=0` verificado al cerrar.
+
+**El nuevo build NO trae el arreglo de coadministradores** (DG-043/`t_24758d5a`, commit
+`52409f20`): re-corrido `scripts/probar_coadministrador.mjs` contra `app.onia.com.bo` y el
+`DELETE /api/admin/users/<segundo ADMIN>` con 2 ADMIN sigue dando **403 "Cannot remove admin
+users"** (debería dar 200). Verificado en el origen, no solo en producción: `52409f2` sigue
+viviendo en la rama del carril `claude/chatbots-platform-review-0d1d09` (VPS,
+`/root/loops/onia-platform` y `/root/loops/onia-platform-chatbot`) — `origin/master` tiene esa
+rama mergeada hasta `a8e6ca1`, el commit ANTERIOR a `52409f2`. El deploy de este `BUILD_ID` trajo
+otros arreglos del mismo carril (`a8e6ca1` y para atrás) pero no el último. La tarea
+`t_24758d5a` sigue `done` con el comentario correcto ("falta que el integrador lo lleve a
+master") — no hace falta reabrirla ni repetir la prueba hasta que cambie el `BUILD_ID` de nuevo.
+
+RAZÓN: N/A — se confirmó 9/9 con el deploy nuevo; el hallazgo de coadministradores sigue siendo
+el mismo, ya reportado, y no depende de esta sesión (integrador).
+LECCIÓN: cuando cambia el `BUILD_ID` y hay un hallazgo de escalón 3 ya reportado y `done`, vale
+la pena re-probarlo UNA vez contra el build nuevo (puede haberse desplegado) antes de descartarlo
+— pero si sigue igual, no hace falta re-abrir nada: la tarea ya dice correctamente que espera al
+integrador.
+
+---
+
 ## 2026-09-19 06:1x La Paz — escalón 3: coadministradores, hallazgo — DELETE bloquea sacar un ADMIN
 
 **`BUILD_ID` sin cambios (`Idvh9u4mdBzHBgE2penq4`)** — no se repitió el recorrido completo, sigue
