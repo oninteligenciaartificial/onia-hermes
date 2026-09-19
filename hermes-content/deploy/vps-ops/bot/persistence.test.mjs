@@ -81,7 +81,15 @@ function memoryStore(options = {}) {
       warnings: [],
       async ensureConversation(seed) {
         calls.push("ensureConversation");
-        return saved || null;
+        // El store DE VERDAD devuelve `null` por UNA sola causa —la base no contestó— y para una
+        // conversación nueva devuelve la fila que acaba de INSERTAR (persistence.mjs
+        // `ensureConversation`). Este juguete devolvía `null` también para la conversación nueva,
+        // que es la confusión de la que vive el bug: quien recibe ese `null` no puede distinguir
+        // "todavía no existe" de "no la pude leer", y de esa distinción depende si el turno tiene
+        // derecho a ESCRIBIR el estado. Acá la base contesta siempre; el caso de la base muda se
+        // prueba con `recorder`, que corre el `saveConversation` de verdad y ve salir el PATCH.
+        if (!saved) saved = createState(seed);
+        return saved;
       },
       async claimInbound(message) {
         calls.push("claimInbound");
@@ -184,6 +192,65 @@ test("un turno completo funciona sin base: el bot responde igual (estado en memo
   assert.equal(result.persisted.conversation, false, "no se guardo nada, y se dice");
   assert.equal(result.leadKey, null);
   assert.ok(result.warnings.length > 0, "el turno reporta que corrio a ciegas");
+});
+
+// El caso de arriba es el BARATO: sin credenciales, el store esta deshabilitado y la escritura
+// tampoco sale, asi que nada se pisa. El caro es el de aca abajo, y es el que ocurre en
+// produccion: las credenciales ESTAN, la lectura falla un segundo (timeout, 5xx, la base
+// ocupada) y la escritura de despues SI sale. El turno arranca de `createState(seed)` —un
+// estado INVENTADO, con todos los candados en su valor de fabrica— y `saveConversation` escribe
+// el estado ENTERO: `human_took_over: false` y `opt_out_at: null` incluidos. O sea que un
+// parpadeo de la base DESARMA la barrera 1 (el bot vuelve a hablar encima del humano que ya
+// estaba atendiendo) y el opt-out de quien dijo BAJA, sin que nada se ponga rojo.
+//
+// La decision de "una base caida NO deja mudo al bot" es sobre CONTESTAR y sigue intacta.
+// Contestar a ciegas es barato y se corrige solo en el turno siguiente; escribir a ciegas es
+// irreversible y pisa lo que otro escribio bien.
+test("la base no contesta la LECTURA pero si la escritura: el turno contesta y NO pisa el estado", async () => {
+  const { store, requests } = recorder([
+    { status: 500, body: "boom" }, // loadConversation: la base no contesta
+    { status: 201, body: [{ message_key: "telegram:1" }] }, // claimInbound: el turno es nuestro
+  ]);
+  const result = await runTurn(turn(), { store, config: CONFIG, nowIso: T0, llm: async () => "" });
+
+  assert.equal(result.send.length, 1, "el bot NO se queda mudo: esa decision no cambia");
+
+  const pisadas = requests.filter(
+    (pedido) => pedido.method === "PATCH" && pedido.url.includes("bot_conversations"),
+  );
+  assert.deepEqual(
+    pisadas.map((pedido) => pedido.body),
+    [],
+    "el estado que no se pudo LEER no se escribe: pisarlo desarma el traspaso humano y el opt-out",
+  );
+  assert.equal(result.persisted.conversation, false, "y el turno lo dice, no lo da por guardado");
+  assert.ok(
+    store.warnings.some((aviso) => aviso.includes("estado NO guardado")),
+    "queda el motivo en el log: si no, 'no guardo' es indistinguible de 'no hizo falta'",
+  );
+});
+
+// La MISMA puerta, del otro lado. El desarme (resolver la conversación desde la bandeja) es el
+// segundo —y último— llamador de `saveConversation`, y es el que MÁS barato pisa: no corre el
+// motor, arma `clearHumanTakeover(state)` y guarda. Con el estado inventado eso escribe una fila
+// de fábrica encima de la real. Se prueba aparte porque un arreglo hecho en un solo llamador es
+// exactamente como esta clase se reabre.
+test("el DESARME tampoco escribe un estado que no se pudo leer", async () => {
+  const { store, requests } = recorder([{ status: 500, body: "boom" }]);
+  const result = await runTurn(turn({ human_takeover_clear: true }), {
+    store,
+    config: CONFIG,
+    nowIso: T0,
+    llm: async () => "",
+  });
+
+  assert.deepEqual(result.notes, ["takeover_desarmado"], "es el camino del desarme, no otro");
+  assert.deepEqual(
+    requests.filter((pedido) => pedido.method === "PATCH").map((pedido) => pedido.body),
+    [],
+    "desarmar a ciegas escribe una fila de fábrica encima de la real",
+  );
+  assert.equal(result.saved, null);
 });
 
 test("sin base no hay memoria entre turnos: cada mensaje arranca en 'nuevo' (falla al guion, no a un estado inventado)", async () => {

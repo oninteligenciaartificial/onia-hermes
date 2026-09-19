@@ -318,6 +318,45 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **CERRADO el 2026-09-19 — un parpadeo de la base DESARMABA el traspaso humano y el
+      opt-out: el turno escribía encima un estado que nunca pudo leer**
+      (`hermes-content/deploy/vps-ops/bot/run-turn.mjs`, `guardarEstado`; 1.232/1.232 verdes).
+
+      **Cómo apareció.** Buscando el mecanismo del ítem de abajo (el candado perdido de
+      `chatwoot:58`) y **no aceptando la hipótesis que el ítem traía escrita**. Al derivar quién
+      escribe de verdad `human_took_over` quedan sólo dos llamadores, los dos en `run-turn.mjs`, y
+      el de arriba estaba sin guarda.
+
+      **El defecto.** `runTurn` arranca con `const loaded = await store.ensureConversation(seed)` y
+      sigue con `fillFromSeed(loaded || createState(seed), seed)` — decisión vieja y CORRECTA: *una
+      base caída no deja mudo al bot*. Pero al final el mismo turno llamaba
+      `store.saveConversation(nextState)`, y eso escribe la fila **entera**: `human_took_over`,
+      `opt_out_at`, `scheduled_at`, `calendar_event_id`, `followup_step`. O sea que si la LECTURA
+      falla un segundo (timeout, 5xx, la base ocupada) y la ESCRITURA de después sale, el turno
+      pisa la fila real con un estado de fábrica: **el bot vuelve a hablar encima del humano que
+      estaba atendiendo (barrera 1) y le vuelve a escribir a quien dijo BAJA (opt-out)**, sin que
+      nada se ponga rojo. `loadConversation` deja claro que `null` tiene una sola causa —la base no
+      contestó—: una conversación que no existe vuelve *creada*, no nula.
+
+      **La distinción que faltaba:** contestar a ciegas es barato y se corrige solo en el turno
+      siguiente; **escribir a ciegas no se deshace.** La decisión de no quedarse mudo es sobre
+      CONTESTAR y queda intacta — lo que se cierra es el PATCH.
+
+      **Las dos puertas, cerradas en la misma vuelta**, porque arreglar un solo llamador es como
+      esta clase se reabre: el guardado del turno (línea 535) y el **desarme**
+      (`human_takeover_clear`, línea 376), que es el que más barato pisa porque ni corre el motor.
+      Cada una con su caso, y **validado por mutación**: revertir sólo el desarme deja 1 pasa / 1
+      falla, o sea cada test sostiene su propia puerta.
+
+      **Y el fixture defendía el defecto.** Los dos `memoryStore` de las pruebas
+      (`persistence.test.mjs`, `chatwoot-adapter.test.mjs`) devolvían `null` en
+      `ensureConversation` **también para una conversación nueva** — la misma confusión de la que
+      vive el bug. Con la guarda puesta se pusieron rojos 14 tests sanos; los dos juguetes ahora
+      modelan el contrato real (para la conversación nueva devuelven la fila creada).
+
+      **Esto NO está en producción todavía**: commiteado en la rama del carril, el bot se despliega
+      aparte (`DESPLEGAR: bot`).
+
 - [ ] **Devolverle el cupo de rescate a 6 conversaciones que la insistencia quemó sin mandar
       nada** (`hermes-content/deploy/vps-ops/bot/insistencia-run.mjs` · tabla
       `onia_center.bot_conversations`; medido el 2026-09-18). El código ya está
@@ -482,8 +521,27 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       `chatwoot:58` **a las 19:17:03 los dos**. `run-turn.mjs` marca el traspaso antes de `step()`
       (línea 360) y persiste el estado al final (línea 532), así que el orden correcto deja
       `human_took_over = t`. En producción quedó **`f`**, con el traspaso igualmente registrado en
-      `onia_center.bot_messages` (`chatwoot:chatwoot:takeover:58:1437`, `author human`). La lectura
-      que encaja: el `nextState` del barrido —que no conoce el traspaso— se guardó último y lo pisó.
+      `onia_center.bot_messages` (`chatwoot:chatwoot:takeover:58:1437`, `author human`).
+
+      ⚠️ **La «lectura que encaja» que decía acá —«el `nextState` del barrido se guardó último y lo
+      pisó»— está REFUTADA, medido el 2026-09-19.** El barrido **no escribe el estado**: su única
+      aparición de `saveConversation` es el comentario de la línea 26 que dice que no lo llama, y
+      escribe una sola columna por CAS (`reserveFollowUp`). Y no es cosa del build viejo: `md5sum`
+      de `followup-run.mjs` y `persistence.mjs` da **idéntico** entre el repo y `/tmp/onia-bot` del
+      contenedor vivo. Los dos únicos llamadores de `saveConversation` están en `run-turn.mjs`, y
+      probado a mano, `step()` con el candado puesto devuelve `nextState.humanTookOver = true`
+      (`notes: ["silencio:humano_a_cargo"]`). **El mecanismo exacto de `chatwoot:58` sigue sin
+      reproducirse; lo que sí se cerró es el agujero de al lado, abajo.**
+
+      **El tamaño de la clase, medido** (2026-09-19, cruzando las dos tablas en producción): de las
+      **15** conversaciones con un mensaje `author = 'human'`, **tres** tienen el candado en `f` —
+      `chatwoot:11` y `chatwoot:39` (las dos en `handoff_humano`, consistentes con un desarme) y
+      `chatwoot:58`. Las otras 12 lo tienen bien.
+
+          select c.conversation_key, c.bot_stage, c.human_took_over, count(m.*), max(m.created_at)
+            from onia_center.bot_conversations c
+            join onia_center.bot_messages m on m.conversation_key = c.conversation_key
+           where m.author = 'human' group by 1,2,3 order by 5 desc;
 
       **Reproducción (30 s, sólo lectura):**
 
