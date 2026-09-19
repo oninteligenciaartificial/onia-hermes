@@ -337,6 +337,19 @@ export function formatearTraza(traza = {}) {
   // Publicados/producidos, no un total: `0/1` es el bot mudo hacia afuera con la boca sana.
   if (enviados.length > 0 || rama === "MUDO") campos.push(`enviados=${publicados}/${enviados.length}`);
   if (motivo) campos.push(`motivo=${unaSolaLinea(motivo, 140)}`);
+  // QUE HIZO el turno, aparte de QUE MANDO. Son dos preguntas distintas y hasta el 2026-09-19
+  // el log solo contestaba la segunda: un turno que cambia el ESTADO sin mandar un mensaje caia
+  // en `rama=MUDO` y quedaba escrito igual que uno que no hizo nada. El caso medido es el
+  // desarme del traspaso humano —el unico camino que tiene el dueño para devolverle una
+  // conversacion al bot, y que /inbox le vende como «Resuelta — tu asistente atiende de nuevo»—:
+  // corre con `send: []` y `notes: ["takeover_desarmado"]`, asi que `grep takeover_desarmado`
+  // daba 0 sobre 47.826 lineas con el desarme funcionando. Ante «marque resuelta y el bot no
+  // volvio» eso deja tres causas con remedios opuestos sin forma de separarse.
+  //
+  // Se deriva de las notas del motor —el vocabulario con el que ya declara lo que hizo— y no de
+  // una lista de notas "importantes", que fallaria abierta justo en la que se agregue mañana.
+  const hizo = (Array.isArray(cuerpo.notes) ? cuerpo.notes : []).filter(Boolean);
+  if (hizo.length > 0) campos.push(`hizo=${unaSolaLinea(hizo.join(","), 140)}`);
   // Un turno que SALIO BIEN puede haber salido bien de casualidad: el respaldo de la
   // transcripcion tapando un destino caido, la descarga con un reintento. Hasta el 2026-09-19
   // los avisos solo se leian cuando el bot se callaba, asi que la falla que no se nota —la mas

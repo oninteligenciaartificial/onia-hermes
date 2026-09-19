@@ -529,6 +529,96 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **CERRADO el 2026-09-19 14:15-15:05 La Paz (commiteado, NO desplegado) — el único camino
+      que tiene el dueño para devolverle una conversación al bot funciona, y el log lo escribía
+      igual que si no hubiera pasado nada.**
+
+      **Cómo apareció.** No de la cola. Midiendo un eje que ningún gate mira: *el dueño contesta
+      desde `/inbox` y el bot se calla — ¿existe el camino de vuelta?* La pantalla lo promete
+      textual («**Resuelta — tu asistente atiende de nuevo**»,
+      `onia-platform/app/(dashboard)/inbox/InboxClient.tsx:288`), y esa promesa cruza DOS sistemas:
+      el botón pega en `toggle_status` de Chatwoot, Chatwoot emite un webhook, y el motor del bot
+      —que vive en otro repo y se instala a mano— tiene que desarmar el candado.
+
+      **Lo primero que medí estaba mal, y el instrumento era mío.** `grep -c takeover_desarmado`
+      sobre las 47.826 líneas del log vivo da **0**, con 120 `status_no_desarma:open` y **cero**
+      `resolved`. Leído de frente eso dice «el desarme no ocurrió jamás». Es falso: el log **nunca
+      imprime las notas del motor**, y el desarme corre con `send: []` y
+      `notes: ["takeover_desarmado"]`, así que su rastro no podía existir.
+
+      **La prueba de punta a punta (sobre la sonda QA propia, conv 49):** armar el candado a mano,
+      resolver por REST con el token de la plataforma —el camino exacto del botón— y volver a leer.
+
+      ```
+      update onia_center.bot_conversations set human_took_over=true where conversation_key='chatwoot:49';
+      # POST /api/v1/accounts/2/conversations/49/toggle_status {"status":"resolved"}  → success:true
+      select human_took_over from onia_center.bot_conversations where conversation_key='chatwoot:49';  → f
+      ```
+
+      **El producto está sano: el desarme funciona.** Lo que estaba roto es la capacidad de
+      saberlo. Ante *«marqué resuelta y el bot no volvió»* hay TRES causas con remedios opuestos
+      —el evento no llegó (suscripción de Chatwoot), llegó y desarmó (mirar otro lado), llegó y no
+      desarmó (bug del motor)— y la línea del log no distinguía ninguna: decía «evento sin mensaje
+      (conversation_status_changed): no hay nada que contestar», idéntica a un evento inerte.
+
+      **El arreglo** (`hermes-content/deploy/vps-ops/bot/webhook-server.mjs`, campo `hizo=`): el
+      log contesta las DOS preguntas que son distintas — qué **mandó** y qué **hizo**. Se deriva de
+      las notas del motor, no de una lista de notas «importantes», que fallaría abierta justo en la
+      que se agregue mañana. Gate: `webhook-server.test.mjs`, validado por mutación en las dos
+      direcciones (sin campo → rojo; campo decorativo que sale siempre → rojo, porque el caso
+      hermano exige que un evento SIN efecto no diga que hizo algo).
+
+      **Clase que cierra.** Es la hermana de `48dac281` (un motivo por DEFECTO vuelve
+      indistinguible el ruido de la señal): allá dos causas distintas compartían motivo, acá una
+      rama **con efecto** se veía igual que una sin él. Por cada rama que cambia el ESTADO sin
+      mandar un mensaje, preguntar si deja rastro — si el efecto no se mandó, para el log no pasó.
+
+- [x] 🔴 **CERRADO el 2026-09-19 13:45-14:25 La Paz (commiteado en `onia-platform`, NO desplegado)
+      — la pantalla donde el dueño mira trabajar a su bot le prometía lo contrario de lo que le
+      cobramos, al lado del único número que sí tiene tope.**
+
+      **El defecto, vivo en producción.** La bandeja (`onia-platform/app/(dashboard)/inbox/InboxClient.tsx`)
+      pintaba, pegado al contador de chats del día: **«N conversaciones atendidas hoy · sin límite,
+      siempre»**. El producto NO es sin límite: `onia-platform/lib/chatbot/cupo.ts` (2026-09-03) trae
+      `WHATSAPP_ADDON.includedConversations` = **500 conversaciones/mes**, avisa al dueño al 80 %,
+      **CORTA** con `cuota.agotada` y vende la recarga (`RECARGA_CONVERSACIONES`: Bs 190 por 200 que
+      **caducan con el mes**). Medido vivo: `docker exec onia-platform grep -rl 'sin límite, siempre'
+      /app/.next/server` devuelve el bundle de la bandeja, con `BUILD_ID=AUiuQ9c0SmcJnuF37_qTo`.
+
+      **Por qué sobrevivió.** Lo defendía un comentario que AFIRMABA la garantía —*«Es transparencia
+      (lo que Sendy usa bien), nunca un limite: en Onia no hay tope»*—, cierto cuando se escribió
+      (v6.7) y falso desde el 3-sep. Y la clase ya estaba cerrada **en la otra pantalla**:
+      `onia-platform/app/(dashboard)/settings/PlanClient.estado-real.test.ts:121` exige desde antes
+      que los planes con el chatbot adentro *«limiten la promesa ilimitada y expliciten el cupo»*.
+      La cura no viajó a la bandeja, que es donde el dueño mira. El contrato, en cambio, ya decía la
+      verdad (`app/terms/page.tsx`: *«no incluyen uso ilimitado»*): la superficie mentía sola.
+
+      **La cura condiciona, no borra:** el texto pasa a **«… · tu asistente atiende 500
+      conversaciones al mes»**, con el 500 DERIVADO de `WHATSAPP_ADDON.includedConversations`
+      (plano para los seis planes: lo trae el add-on, no el plan). `lib/pricing.ts` es puro, así
+      que importarlo desde un `'use client'` no arrastra Prisma al navegador — verificado con
+      `onia-platform/lib/platform/cliente-no-arrastra-prisma-al-navegador.test.ts` en verde.
+
+      **Gate de clase, no de pantalla:** `onia-platform/app/(dashboard)/no-prometemos-conversaciones-sin-tope.test.ts`.
+      Camina el DISCO (no `git ls-files`: la pantalla nueva sin commitear es el sujeto a cazar),
+      mide el texto en el ORDEN en que se lee, y acusa la marca ABSOLUTA («sin límite, siempre»)
+      a ≤ 80 caracteres de las conversaciones, salvo que la pantalla nombre el cupo.
+
+      **Dos veces me mintió el instrumento antes que el producto**, y las dos las delató la
+      mutación, no releerlo:
+      1. colapsar las expresiones `{…}` quedándose sólo con los literales **se come el texto del
+         bug** (vive suelto dentro de un `{cond && (…)}`): el gate daba 3 falsos positivos y CERO
+         verdaderos — un gate apagado con cara de encendido;
+      2. `nombraElCupo` leía el fuente CRUDO, y **el comentario que explica este arreglo nombra
+         `includedConversations`**: la pantalla se absolvía sola y la mutación pasaba VERDE con el
+         defecto reintroducido. Se pregunta con los comentarios en blanco.
+
+      **Validación por mutación (después del arreglo):** restaurar `· sin límite, siempre` deja
+      `Tests 1 failed | 2 passed` nombrando `app/(dashboard)/inbox/InboxClient.tsx`. Restaurado con `cp`.
+
+      ⚠️ **NO DESPLEGADO.** Hasta que `onia-cola` publique `plataforma`, el dueño sigue leyendo
+      «sin límite, siempre» en producción.
+
 - [x] 🔴 **CERRADO el 2026-09-19 12:43-13:25 La Paz (commiteado; el instrumento no necesita deploy
       para correr, pero sólo mide el respaldo cuando el respaldo esté desplegado) — la ÚNICA red
       que le queda a una capacidad que vendemos estaba vigilada por un gate que no podía
