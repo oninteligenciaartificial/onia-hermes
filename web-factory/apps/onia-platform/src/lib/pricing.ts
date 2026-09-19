@@ -510,7 +510,23 @@ const ESCALERA: readonly Plan[] = [
     reservasIncluidas: true,
     coadministradores: false,
     sinEsto: [
-      `Reportes completos, facturas recurrentes y contabilidad completa (${ALCANCE_CLINICO}) — vienen en ${NOMBRE_DE_PLAN.pro}`,
+      /**
+       * El paréntesis cierra ANTES de la contabilidad, y ése es todo el arreglo.
+       *
+       * Hasta el 2026-09-19 la línea era «Reportes completos, facturas recurrentes y
+       * contabilidad completa (solo en clínicas dentales y estética)»: la salvedad de las
+       * dos primeras se derramaba sobre la tercera. Y la contabilidad NO está acotada por
+       * rubro — `/contabilidad` es segmento COMÚN del producto (medido contra
+       * `origin/master`: `lib/platform/contabilidad-transversal.test.ts` hace entrar a un
+       * tenant dental y a uno de comercio; el corte es por PLAN). Así que a comercio,
+       * importadora y servicios profesionales —3 de los 5 rubros del alta— se les decía
+       * que la contabilidad completa no les llega ni subiendo, borrándoles el motivo más
+       * caro del salto de Bs 550 a Bs 890; y el `incluye` del Pro, veinte líneas más
+       * abajo, ya la listaba sin alcance: la misma pantalla se desmentía sola.
+       * Lo vigila el caso «una salvedad de rubro no se derrama sobre la capacidad de al
+       * lado» de `app/(sitio)/capacidad-por-rubro.test.ts`.
+       */
+      `Reportes completos y facturas recurrentes (${ALCANCE_CLINICO}), y contabilidad completa — vienen en ${NOMBRE_DE_PLAN.pro}`,
     ],
     asientosExtra: null,
     cuando: "Ya tenés movimiento y se te escapan clientes por falta de seguimiento.",
