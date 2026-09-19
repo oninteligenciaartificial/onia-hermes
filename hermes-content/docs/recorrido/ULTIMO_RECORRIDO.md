@@ -12,6 +12,34 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-19 18:14 UTC — escalón 3 nuevo: ciclo weekly/annual del checkout
+
+`BUILD_ID` sin cambios (`AUiuQ9c0SmcJnuF37_qTo`): no correspondía re-correr el recorrido
+completo. Siguiendo lo anotado en la entrada de arriba ("el ciclo weekly/annual del checkout —
+sólo se miró monthly"), extendí `probar_checkout_directo.mjs` para clickear el selector de
+ciclo en `/checkout?plan=X` (no sólo mirar el default `monthly`).
+
+Fuente: `DEFAULT_PLAN_AMOUNTS` (`subscription-plans.ts`) — `crece` tiene `weekly:145`, `clinic`
+NO tiene `weekly` ("el Full no se fracciona"). Verificado contra producción con sesión real
+(390×844, org `zz-qa-` plan `basic`, borrada en la misma corrida):
+
+- `plan=crece`, clic en "Anual" → **Bs 5.500** (coincide con `annual:5500`).
+- `plan=clinic`, clic en "Anual" → **Bs 12.900** (coincide con `annual:12900`).
+- `plan=clinic`, clic en "Semanal" → la pantalla avisa **"Solo mensual o anual"** y se queda en
+  el monto mensual (Bs 1.290) — no ofrece un ciclo que el plan no tiene, y no cae a otro monto
+  por accidente. Esto es justo lo que `sinEsteCiclo`/`isSubscriptionCycle` +
+  `validateSubscriptionPaymentDetails` (server-side) prometen en el código; queda confirmado que
+  la UI lo respeta también, no sólo el backend.
+
+**Sin hallazgo.** Sin fallos de red. Capturas: `checkoutdir-03-crece-anual.png`,
+`checkoutdir-04-clinic-anual.png`, `checkoutdir-05-clinic-semanal.png`.
+
+**Próxima vuelta:** si `BUILD_ID` sigue igual, rotar de rubro para el recorrido completo (dental
+lleva muchas corridas seguidas sanas) o buscar otra superficie de escalón 3 no auditada aún
+(p.ej. el flujo de recarga del add-on chatbot al agotar cupo, o `/checkout` con `enterprise`).
+
+---
+
 ## 2026-09-19 17:11 La Paz — escalón 3 nuevo: `/checkout?plan=X` DIRECTO por URL, re-verificado
 
 `BUILD_ID` sin cambios (`AUiuQ9c0SmcJnuF37_qTo`, ya confirmado en la entrada de arriba con
