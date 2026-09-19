@@ -5746,6 +5746,46 @@ archivos.**
 
 ## Cerrado — no rehacer
 
+- [x] **~~El criterio «¿esta conversación somos NOSOTROS?» corría CIEGO en el barrido
+      post-demo: era el único de los cuatro sin el insumo, y fallaba abierto~~** — cerrado el
+      2026-09-19 (`hermes-content/deploy/vps-ops/bot/postdemo-run.sh`, gate
+      `hermes-content/deploy/vps-ops/bot/el-criterio-de-identidad-viaja-al-barrido.test.mjs`).
+      **Medido en el log vivo**, `/var/log/onia-bot-postdemo.log`, **3 de 3 corridas** desde
+      que aterrizó el código nuevo (07:47, 08:47 y 09:47 UTC; las 7 anteriores del día no lo
+      tenían porque corrían el anterior):
+      `warnings: ["inboxes de prueba: no pude preguntarle a Chatwoot (sin CHATWOOT_API_TOKEN)"]`.
+      **No era un parpadeo de red: era el estado permanente de ese barrido.**
+      La causa: `es-nuestra.mjs` dejó de decidir por la FIRMA del contacto y pasó a derivar los
+      inboxes de prueba del NOMBRE que Chatwoot publica (`d35bf465`, ese mismo día), porque el
+      banco de pruebas llega con nombres anónimos (`purple-bush-931`). Esa consulta necesita
+      `CHATWOOT_API_TOKEN`. De los **cuatro** barridos que importan el criterio, **tres ya lo
+      pasaban** —lo necesitaban para postear— y `postdemo-run.sh` no, porque avisa por Telegram
+      y nunca había tenido motivo para hablar con Chatwoot. Y `cargarInboxesDePrueba` **falla
+      ABIERTO a propósito** (conjunto vacío), así que ese barrido volvía al criterio viejo: el
+      banco de pruebas pasaba como prospecto real y se llevaba el cierre post-demo. Hoy no
+      mordía (`scanned:0`), pero el tri-estado había quedado contestando SIEMPRE lo mismo, que
+      es un valor fijo con cara de medición.
+      **Por qué ningún gate lo vio, que es lo transferible:** ya había DOS de esta familia
+      (`slots-viajan-al-barrido`, `identidad-del-bot-viaja-al-barrido`) y fallaron por las dos
+      mismas razones — cada uno nombra SU variable tipeada a mano (la quinta necesitaría un
+      quinto gate), y los dos derivan su universo de *«los wrappers que ya pasan la variable»*,
+      una lista de inclusión que falla abierto justo en el único sujeto que importa: el que no
+      la pasa. El gate nuevo deriva el universo de **quién USA el criterio** (importa
+      `es-nuestra.mjs` → los cuatro) y el insumo de **lo que el criterio LEE**, agrupando
+      alternativas (`A || B` es un requisito con dos nombres) y salteando las que traen default
+      propio, para no exigir lo que el producto no pide.
+      **Validado por mutación (después de arreglar):** sacar el `-e` → rojo; no derivar de
+      `webhook.env` (que es como el cron lo invoca, pelado) → rojo; vaciar el universo → lo caza
+      el caso ancla. Restaurado, verde 8/8. **Corre en la cadena** (`test:bot`, 1271 verdes):
+      probado metiéndole un canario que tira → `# fail 1`, exit 1 — la salida de `node --test`
+      no nombra los archivos que corre, así que es la única prueba válida.
+      ⚠️ **Commiteado, NO desplegado:** `/opt/onia/bot` no es un checkout de git.
+      **Falso positivo descartado en el camino, para que nadie lo repita:** el harness de
+      `docker` falso devuelve stdout vacío, así que los wrappers que sacan el token con
+      `CW_TOKEN="$(docker exec … psql …)"` quedaban con la variable vacía y el gate acusaba a
+      `followup-run.sh`, que está sano. Se cura sembrando **las dos** fuentes legítimas
+      (`webhook.env` y la base) — parámetro `salidaDocker` del harness, vacío por defecto.
+
 - [x] **~~La sonda que define el «hecho» del carril blanqueaba la mitad del estado: los cinco
       campos del reinicio que viven en `raw` quedaban con el valor de la corrida anterior~~** —
       cerrado el 2026-09-19 (`scripts/sonda_widget.mjs`,

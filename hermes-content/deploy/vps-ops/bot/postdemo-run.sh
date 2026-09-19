@@ -86,6 +86,34 @@ if [ -f "$TG_ENV_FILE" ]; then
   TG_CHAT_ID="${TG_CHAT_ID:-$(sed -n 's/^TG_CHAT_ID=//p' "$TG_ENV_FILE" | tr -d '\"'\''' | tr -d ' \t\r\n' || true)}"
 fi
 
+# CREDENCIALES DE CHATWOOT — no para postear (este barrido avisa por Telegram), sino para que el
+# criterio "¿esta conversacion somos NOSOTROS?" pueda contestar. `es-nuestra.mjs` dejo de decidir
+# por la FIRMA del contacto y ahora deriva los inboxes de prueba del NOMBRE que Chatwoot publica
+# (d35bf465), porque el banco de pruebas llega con nombres anonimos y daba "no somos nosotros".
+# Este wrapper era el UNICO de los cuatro sin estas lineas: sus tres hermanos ya las tenian por
+# otra razon (postean), asi que el insumo llego a la familia y este quedo afuera en silencio.
+# Medido el 2026-09-19 en /var/log/onia-bot-postdemo.log, 3 de 3 corridas desde que aterrizo el
+# codigo: warnings ["inboxes de prueba: no pude preguntarle a Chatwoot (sin CHATWOOT_API_TOKEN)"].
+# No es un parpadeo: `cargarInboxesDePrueba` falla ABIERTO (conjunto vacio) a proposito, asi que
+# el barrido volvia al criterio viejo y el banco de pruebas pasaba como prospecto real.
+#
+# Y se DERIVA de webhook.env, no del entorno del que llama: el cron (`47 * * * *`) invoca este
+# wrapper PELADO, asi que heredar la variable no alcanza. Es la misma clase que ONIA_BOT_DRY_RUN
+# unas lineas mas arriba, y la cuarta vez que muerde en estos mismos archivos.
+CWDB="$(docker ps -qf name=onia-chatbot_chatwoot-db | head -n1)"
+if [ -z "${CHATWOOT_BOT_AGENT_ID:-}" ] && [ -f "$BOT_DIR/webhook.env" ]; then
+  CHATWOOT_BOT_AGENT_ID="$(sed -n 's/^CHATWOOT_BOT_AGENT_ID=//p' "$BOT_DIR/webhook.env" | head -n1 | tr -d "\"' \r")"
+fi
+CW_AGENT_ID="${CHATWOOT_BOT_AGENT_ID:-}"
+CW_TOKEN="${CHATWOOT_API_TOKEN:-}"
+if [ -z "$CW_TOKEN" ] && [ -f "$BOT_DIR/webhook.env" ]; then
+  CW_TOKEN="$(sed -n 's/^CHATWOOT_API_TOKEN=//p' "$BOT_DIR/webhook.env" | head -n1 | tr -d "\"' \r")"
+fi
+if [ -z "$CW_TOKEN" ] && [ -n "$CWDB" ] && [ -n "$CW_AGENT_ID" ]; then
+  CW_TOKEN="$(docker exec "$CWDB" psql -U postgres -d 'onia-chatbot' -tAc \
+    "select token from access_tokens where owner_id=$CW_AGENT_ID order by created_at desc limit 1" 2>/dev/null | tr -d ' \t\n' || true)"
+fi
+
 # Si quien llama no fijó el instante, se sella acá y viaja como parámetro explícito.
 NOW_ARGS=()
 case " $* " in
@@ -98,6 +126,9 @@ docker exec \
   -e ONIA_BOT_TG_AVISO="$TG_AVISO" \
   -e TG_BOT_TOKEN="${TG_BOT_TOKEN:-}" \
   -e TG_CHAT_ID="${TG_CHAT_ID:-}" \
+  -e CHATWOOT_BASE_URL="${CHATWOOT_BASE_URL:-http://onia-chatbot_chatwoot:3000}" \
+  -e CHATWOOT_ACCOUNT_ID="${CHATWOOT_ACCOUNT_ID:-2}" \
+  -e CHATWOOT_API_TOKEN="$CW_TOKEN" \
   "$CONTAINER" node "$DEST/postdemo-run.mjs" ${NOW_ARGS[@]+"${NOW_ARGS[@]}"} ${EMIT_ARGS[@]+"${EMIT_ARGS[@]}"} "$@"
 
 exit 0
