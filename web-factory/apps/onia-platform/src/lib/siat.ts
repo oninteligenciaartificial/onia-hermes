@@ -59,7 +59,7 @@ export const SIAT_BLOQUES: readonly SiatBloque[] = [
   {
     titulo: "Dónde está Onia en este camino (dicho de frente)",
     texto:
-      "Nuestro sistema está registrado ante el SIN como proveedor de facturación y ya completó las pruebas técnicas de la Fase 1 en el ambiente de pruebas oficial: emisión individual y masiva, anulaciones, reversiones y operación sin internet. Quedan las etapas formales del trámite (inspección del SIN). Mientras la homologación concluye, Onia registra y ordena cada venta, arma tu contabilidad, y emitís por el portal gratuito — sin re-tipear tus números, porque el sistema te los da listos.",
+      "Nuestro sistema está registrado ante el SIN como proveedor de facturación y ya corre contra el ambiente de pruebas oficial: emisión individual y masiva, anulaciones, reversiones y operación sin internet. Falta que el SIN autorice el sistema. Mientras la homologación concluye, Onia registra y ordena cada venta, arma tu contabilidad, y emitís por el portal gratuito — sin re-tipear tus números, porque el sistema te los da listos.",
   },
 ] as const;
 
@@ -78,11 +78,28 @@ export const SIAT_BLOQUES: readonly SiatBloque[] = [
  * verificable que tenemos. Vigilado por `(sitio)/promesa-fiscal.test.ts`, que
  * exige las dos en este texto y en toda página que afirme el registro.
  *
+ * ⚠️ **El logro se escribe como una ACTIVIDAD que corre, nunca como una etapa
+ * COMPLETA** (2026-09-19). Hasta hoy los tres textos decían *"ya completó las
+ * pruebas técnicas de la Fase 1"* y *"quedan las etapas formales"*, y las dos
+ * mitades afirmaban más de lo que nadie midió: **quien cuenta la Fase 1 es el
+ * SIN**, y la última lectura de su Listado de Etapas —2026-08-27, en
+ * `hermes-content/docs/ONIA_SIAT_ESTADO_HOMOLOGACION.md` §4— dio **0 % general,
+ * ninguna etapa cerrada al 100 %** (1.424 de 5.732). Ese mismo doc registra que
+ * creer "Fase 1 completa" leyendo nuestro `fase1-state.json` local **ya fue un
+ * error una vez**, y que después del 13-sep el marcador del portal sigue sin
+ * cotejarse. Y lo que falta no es formal: §9 lo encabeza con *«Autorización del
+ * sistema (INICIADO → AUTORIZADO)»*, que es la decisión entera, no un sello.
+ *
+ * Lo que sí está medido —y es lo que ahora dice el texto— es que el emisor
+ * **emite, anula y revierte contra el ambiente de pruebas oficial**. Es la
+ * misma disciplina que el resto del sitio: se afirma lo que corre, no lo que
+ * un tercero todavía no declaró.
+ *
  * Se escribe en minúscula y sin punto final a propósito: entra como cláusula
  * dentro de una oración más larga, no como párrafo suelto.
  */
 export const SIAT_ESTADO_ONIA =
-  "nuestro emisor de facturación está registrado ante el SIN y ya completó las pruebas técnicas de la Fase 1; quedan las etapas formales del trámite, así que hasta que la homologación concluya emitís por el portal gratuito del SIN, con tus ventas ya cargadas y sin re-tipear";
+  "nuestro emisor de facturación está registrado ante el SIN y ya corre contra el ambiente de pruebas oficial; falta que el SIN autorice el sistema, así que hasta que la homologación concluya emitís por el portal gratuito del SIN, con tus ventas ya cargadas y sin re-tipear";
 
 export interface SiatFaq {
   q: string;
@@ -108,7 +125,7 @@ export const SIAT_FAQ: readonly SiatFaq[] = [
   },
   {
     q: "¿Y Onia ya puede emitir facturas en línea?",
-    a: "Estamos en trámite: nuestro sistema está registrado ante el SIN como proveedor y ya completó las pruebas técnicas de emisión, anulación y contingencia en el ambiente de pruebas del SIN (Fase 1). Faltan las etapas formales de inspección. Mientras tanto, con Onia tu venta queda registrada y lista, y emitís por el portal gratuito del SIN — te avisamos apenas la homologación concluya.",
+    a: "Estamos en trámite: nuestro sistema está registrado ante el SIN como proveedor y ya emite, anula y revierte contra el ambiente de pruebas del SIN, incluida la operación sin internet. Falta que el SIN autorice el sistema. Mientras tanto, con Onia tu venta queda registrada y lista, y emitís por el portal gratuito del SIN — te avisamos apenas la homologación concluya.",
   },
 ] as const;
 
