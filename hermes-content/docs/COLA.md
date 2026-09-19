@@ -77,6 +77,32 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Ahora — plan de features (revisado 2026-08-30, con Gate 1 corrido)
 
+- [ ] 🟠 **El freno de precio del publicador decide por la FORMA del número y no por el campo:
+      hoy detuvo la landing por `asientosExtra: 0`, que son personas, no plata.**
+      **Medido el 2026-09-19 08:4x UTC**, con `2b12f50ae` esperando en `origin/main`:
+      `bash /root/bin/onia-publicar-solo.sh --dry-run` contestó *«landing: NO publico solo —
+      cambia un numero en una fuente de precio: web-factory/apps/onia-platform/src/lib/pricing.ts:
+      0 1»*. Los números que acusa, leídos del diff contra el build vivo
+      (`git -C /root/loops/onia-hermes diff $(cat /opt/onia-landing/runtime-next/.commit)..origin/main
+      -- web-factory/apps/onia-platform/src/lib/pricing.ts`), son `asientosExtra: 0` —cuántas
+      personas extra vende un plan— y `nombres.length === 0` / `=== 1` dentro de `unirConY`, un
+      helper que arma una enumeración de texto. **Ningún monto cambia**: `Bs 70` sigue saliendo
+      de `USUARIO_EXTRA_ADDON`, intacto.
+      **Por qué no lo cerró la cura de ayer** (`d5619454`): ésa sacó las COMPARACIONES (`> 0`,
+      `> 1`) y dejó las ASIGNACIONES (`: 0`) deteniendo a propósito, con su motivo escrito —«un
+      add-on que pasa a gratis se escribe `: 0`»—, que sigue siendo cierto. Lo que faltaba es que
+      el freno mire **a qué campo** se asigna: `: 0` en `mensualAddon` es plata; en `asientosExtra`
+      es una cantidad de personas. El corte no es la forma del número ni su valor: es si la clave
+      que lo recibe (o el texto que lo rodea) habla de plata.
+      **Qué cuesta dejarlo así:** cada falso positivo le pide a Sergio Urcullo una firma por un
+      cambio que no mueve un centavo —hoy, el pedido `t_b535811a`— y esa es la única firma que
+      importa; gastarla en falsos la vuelve automática. Y mientras espera, el arreglo que SÍ le
+      ahorra Bs 330/mes a un lead de Profesional no está publicado.
+      **Dónde:** `scripts/loops/extras/publicar-solo.sh` (`numeros_del_diff`), con su gate
+      `scripts/publicador-freno-de-precio.test.mjs`. El caso que hay que sembrar es justamente
+      éste: un diff que agrega `asientosExtra: 0` **no** detiene, y uno que agrega
+      `mensualAddon: 0` **sí**.
+
 - [x] 🟠 **La portada le prometía al lead que ninguna capacidad exige subir de plan, y DOS lo
       exigen. Medido y CERRADO el 2026-09-18 20:5x La Paz por `web-venta` (`00ae5f63`).**
       **El defecto, MIRADO renderizado** (captura leída, no un `grep`): la sección de add-ons de
