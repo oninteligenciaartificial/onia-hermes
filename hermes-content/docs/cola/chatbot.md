@@ -600,6 +600,23 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       reintroducir la promesa en el catálogo · reintroducir el pitch multi-renglón · borrar la
       atribución (absolvería a Sendy y Cliengo) · universo vacío · cupo ilegible.
 
+      ⚠️ **Efecto colateral de ESTE commit, medido y nombrado (`t_beb73a77`): al entrar a `main`
+      detiene la publicación automática de los TRES destinos.** No se supuso — se corrió la
+      función real del freno (`numeros_con_signo` de `scripts/loops/extras/publicar-solo.sh`,
+      cargada del archivo, no copiada) contra el diff: entran `200 500`, salen nada, distintos ⇒
+      detiene. Los dos números son el **cupo** y la **recarga**, o sea una capacidad en prosa
+      markdown, no una asignación de plata; y `ONIA_CATALOGO_DE_VENTA.md` es el único de los
+      cuatro archivos de `FIRMA_HUMANA` que **ningún publicador lleva al cliente** (los otros tres
+      sí: `pricing.ts` y `subscription-plans.ts` con el build de `onia-platform`,
+      `knowledge.onia.json` con `deploy-bot.sh`). Queda para su dueño (`onia-cola`) porque el
+      freno no es de este carril y tiene dos remedios opuestos. Si la firma se considera legítima
+      —el cambio **sí** cambia lo que se le promete al cliente, de "ilimitado" a "500/mes"— no hay
+      nada que arreglar y esa tarea se cierra diciéndolo.
+
+      Cadena `npm test` de este repo: **2.255 ok**, y los **9 rojos son de AMBIENTE y ajenos** —
+      `video-factory/` no tiene `node_modules` en nodo-casa, así que sus 8 suites mueren con
+      `Cannot find package 'zod'`. Cero archivos míos ahí; nombrado en `t_9b83f746`.
+
 - [x] 🔴 **CERRADO el 2026-09-19 14:15-15:05 La Paz (commiteado, NO desplegado) — el único camino
       que tiene el dueño para devolverle una conversación al bot funciona, y el log lo escribía
       igual que si no hubiera pasado nada.**
