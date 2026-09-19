@@ -354,6 +354,42 @@ export function publicadoPorFecha({ epochCommit, epochBuild, ventanaSegundos = 2
 }
 
 /**
+ * PURA: el `publicado(sha)` de la landing, cruzando sus DOS instrumentos.
+ *
+ * 🔴 POR QUÉ, medido el 2026-09-19 en este carril con el pedido `t_c2fbda1e` vivo. La landing
+ * se venía juzgando SÓLO por fecha, y `publicadoPorFecha` contesta `null` dentro de los 20
+ * minutos previos al build — que es justo la ventana en la que caen los commits de una vuelta
+ * del integrador, porque el publicador automático corre minutos después del push. Ese día los
+ * TRES shas del pedido eran ancestros del build vivo (`.commit` = `862b8814f`, publicado a las
+ * 00:52 UTC) y el gate imprimió «sigue VIGENTE — 0 sin publicar, 1 sin resolver»: con un solo
+ * indeterminado el pedido no se puede cerrar, así que quedó pidiéndole a Sergio Urcullo un ok
+ * que no publicaba nada. Es exactamente el único modo de falla que este gate existe para cazar,
+ * fallando hacia el lado caro.
+ *
+ * Y el instrumento exacto YA ESTABA en este archivo: `shaVivoLanding()` lee
+ * `/opt/onia-landing/runtime-next/.commit`, que escribe `build-and-stage.sh` en el STAGE con el
+ * sha del que se armó el build. Lo que faltaba no era medir: era USARLO para decidir. El
+ * comentario de `shaVivoLanding` declaraba «no sirve para decidir si un pedido está entregado…
+ * la landing se mide por FECHA» — una hipótesis con fecha, cierta sólo mientras nadie leyera el
+ * `.commit`. Es la misma cura de ANCESTRÍA que `deploy-vivo.mjs` escribió el 2026-09-17 y que
+ * `publicariaLanding` ya importa: la mitad a la que no había viajado es ésta.
+ *
+ * Direcciones del daño, que NO son simétricas:
+ *   - `porAncestria === false` es exacto («no está en el build»): manda, y el peor caso posible
+ *     es un `.commit` viejo → sostener un pedido de más, que cuesta una vuelta.
+ *   - `porAncestria === true` con la fecha diciendo «el commit es POSTERIOR al artefacto» es una
+ *     contradicción entre dos instrumentos independientes: no se concluye (`null`). Cerrar un
+ *     pedido con los dos en desacuerdo es la única salida que borra el problema.
+ *   - sin ancestría (no hay `.commit`, o el clon no conoce alguno de los dos shas) se cae al
+ *     respaldo de siempre, la fecha, que nunca es más optimista que esto.
+ */
+export function publicadoEnLanding({ porAncestria, porFecha }) {
+  if (porAncestria === true) return porFecha === false ? null : true;
+  if (porAncestria === false) return false;
+  return porFecha === undefined ? null : porFecha;
+}
+
+/**
  * PURA: la dirección INVERSA de `clasificarPedido`, y la que ningún gate del proyecto medía.
  *
  * `clasificarPedido` caza el pedido que SOBRE-describe: promete arreglos que ya se publicaron.
@@ -942,9 +978,12 @@ export function clasificarShaVivo(crudo) {
  * El sha del build que sirve `onia.com.bo`, TRI-ESTADO. Nunca un sha inventado: una cita falsa
  * manda a verificar contra un commit que no existe.
  *
- * No sirve para decidir si un pedido está entregado —para eso está `epochBuildLanding`, porque
- * la landing se mide por FECHA— sino para CITAR contra qué build se midió… y para NOTAR cuándo
- * no se puede citar. Hasta el 2026-09-18 devolvía `null` pelado, así que el runtime publicado
+ * ⚠️ Hasta el 2026-09-19 acá decía «no sirve para decidir si un pedido está entregado: la
+ * landing se mide por FECHA», y esa frase es la que mantuvo el gate ciego (ver
+ * `publicadoEnLanding`): el `.commit` es el sha del que se armó el build, así que decide por
+ * ANCESTRÍA, que es exacto. La fecha quedó de respaldo. Sigue sirviendo además para CITAR
+ * contra qué build se midió… y para NOTAR cuándo no se puede citar. Hasta el 2026-09-18
+ * devolvía `null` pelado, así que el runtime publicado
  * sin su `.commit` —medido ese día: `/opt/onia-landing/runtime-next/` sin él mientras los
  * respaldos y los builds armados lo tienen— era indistinguible de un SSH caído, y la ausencia
  * no la notaba nadie. Se cura sola en la próxima publicación; lo que faltaba era verla.
@@ -956,10 +995,11 @@ function shaVivoLanding(opciones = {}) {
 /**
  * El aviso —nunca un rojo— de que el runtime corre sin su `.commit`.
  *
- * No cambia ningún veredicto a propósito: el de la landing lo da `epochBuildLanding` por FECHA,
- * y esto se cura en la próxima publicación. Escribirlo a mano en producción sería inventar un
- * sha que nadie derivó. Lo que se pierde mientras tanto es la CITA, que es la diferencia entre
- * refutar un veredicto en dos segundos y volver a medirlo a mano.
+ * Sigue sin ser rojo (se cura en la próxima publicación, y escribirlo a mano en producción
+ * sería inventar un sha que nadie derivó), pero desde el 2026-09-19 SÍ cuesta un veredicto: sin
+ * `.commit` la landing vuelve a juzgarse sólo por FECHA (`publicadoEnLanding` cae al respaldo),
+ * que no puede resolver los commits de la vuelta en curso. Lo otro que se pierde es la CITA,
+ * que es la diferencia entre refutar un veredicto en dos segundos y volver a medirlo a mano.
  */
 export function avisoDelCommitAusente(vivoLanding) {
   if (!vivoLanding || vivoLanding.estado !== 'SIN_COMMIT') return null;
@@ -1498,17 +1538,47 @@ async function medirEnVivo() {
   // (¿pide un ok por trabajo hecho?). Se deriva UNA vez, no por pedido: si el SSH no contesta
   // queda `null` y todos los pedidos de landing salen NO MEDIDO con su motivo.
   const buildLanding = pedidos.some((p) => p.destino === 'landing') ? epochBuildLanding() : null;
+  // El sha del build que sirve `onia.com.bo`. Se pide UNA vez —es un SSH— y se usa para las DOS
+  // cosas: decidir por ancestría acá abajo, y citar contra qué build se midió al final.
+  const vivoLanding = pedidos.some((p) => p.destino === 'landing') ? shaVivoLanding() : null;
+  const shaLanding = vivoLanding && vivoLanding.estado === 'MEDIDO' ? vivoLanding.sha : null;
+  /**
+   * ¿Es `sha` ancestro del build vivo de la landing? TRI-ESTADO, con las mismas dos guardas que
+   * la mitad de `plataforma`: los dos extremos tienen que EXISTIR en este clon antes de
+   * comparar, porque `merge-base --is-ancestor` sale 128 cuando no y el `catch` lo leería como
+   * «no es ancestro» — el veredicto invertido. `GIT_NO_LAZY_FETCH=1` para que `cat-file -e` no
+   * salga a buscarlo por red en un clon parcial: ahí la respuesta dependería de la red.
+   */
+  const ancestroDelBuildLanding = (sha) => {
+    if (shaLanding === null) return null;
+    const conoce = (s) => {
+      try {
+        execFileSync('git', ['-C', RAIZ, 'cat-file', '-e', `${s}^{commit}`],
+          { stdio: 'ignore', timeout: 15_000, env: { ...process.env, GIT_NO_LAZY_FETCH: '1' } });
+        return true;
+      } catch { return false; }
+    };
+    if (!conoce(sha) || !conoce(shaLanding)) return null;
+    try {
+      execFileSync('git', ['-C', RAIZ, 'merge-base', '--is-ancestor', sha, shaLanding],
+        { stdio: 'ignore', timeout: 15_000, env: { ...process.env, GIT_NO_LAZY_FETCH: '1' } });
+      return true;
+    } catch { return false; }
+  };
 
   for (const p of pedidos) {
     if (p.destino === 'landing') {
-      if (buildLanding === null) {
-        noMedidos.push(`${p.id} (landing): no pude leer la fecha del build vivo (¿SSH al VPS?)`);
+      if (buildLanding === null && shaLanding === null) {
+        noMedidos.push(`${p.id} (landing): no pude leer el build vivo, ni su sha ni su fecha (¿SSH al VPS?)`);
         continue;
       }
       const r = clasificarPedido({
         id: p.id,
         shas: shasPrometidos(p.texto),
-        publicado: (s) => publicadoPorFecha({ epochCommit: epochCommitHermes(s), epochBuild: buildLanding }),
+        publicado: (s) => publicadoEnLanding({
+          porAncestria: ancestroDelBuildLanding(s),
+          porFecha: publicadoPorFecha({ epochCommit: epochCommitHermes(s), epochBuild: buildLanding }),
+        }),
       });
       if (r.estado === 'ENTREGADO') entregados.push({ ...r, destino: 'landing' });
       else if (r.causa === 'SIN_DECLARAR') inmedibles.push({ id: p.id, destino: 'landing' });
@@ -1615,8 +1685,8 @@ async function medirEnVivo() {
   // ⚠️ Se pregunta por TODO pedido de landing, no sólo por los `entregados` (que es el único
   // camino que imprime cita). Acotarlo a ésos dejaba la ausencia del `.commit` invisible en el
   // caso normal —un pedido VIGENTE, que es el 99 % de las corridas—, y la ausencia es
-  // justamente lo que este tri-estado existe para notar. Sigue siendo UN SSH por corrida.
-  const vivoLanding = pedidos.some((p) => p.destino === 'landing') ? shaVivoLanding() : null;
+  // justamente lo que este tri-estado existe para notar. Sigue siendo UN SSH por corrida:
+  // `vivoLanding` se derivó arriba, donde también decide el veredicto por ancestría.
   const vivoPorDestino = { plataforma: vivo, landing: vivoLanding };
 
   const aviso = avisoDelCommitAusente(vivoLanding);
@@ -1711,6 +1781,21 @@ function selfCheck() {
     // daría por publicado y el pedido se cerraría estando vivo.
     ['landing: un commit dentro de la ventana del build es INDETERMINADO, no publicado',
       publicadoPorFecha({ epochCommit: 100_000 - 300, epochBuild: 100_000 }) === null],
+    // 🔴 El caso medido el 2026-09-19: los tres shas de `t_c2fbda1e` eran ancestros del build
+    // vivo y los tres cayeron DENTRO de la ventana de 20 min, así que por fecha sola el pedido
+    // no se podía cerrar nunca y le pedía a Sergio Urcullo un ok que no publicaba nada.
+    ['landing: dentro de la ventana, la ancestria decide -> publicado',
+      publicadoEnLanding({ porAncestria: true, porFecha: null }) === true],
+    ['landing: no es ancestro del build vivo -> sin publicar, aunque la fecha lo daria por viejo',
+      publicadoEnLanding({ porAncestria: false, porFecha: true }) === false],
+    // La contradiccion entre los dos instrumentos no se resuelve a favor del mas nuevo.
+    ['landing: ancestro pero POSTERIOR al artefacto -> no se sabe',
+      publicadoEnLanding({ porAncestria: true, porFecha: false }) === null],
+    // Los dos de anclaje del respaldo: sin ellos, devolver siempre `null` pasaria lo de arriba.
+    ['landing: sin .commit se cae a la fecha (publicado)',
+      publicadoEnLanding({ porAncestria: null, porFecha: true }) === true],
+    ['landing: sin .commit y sin fecha, no se decide',
+      publicadoEnLanding({ porAncestria: null, porFecha: null }) === null],
     ['landing: sin fecha de build no se decide nada',
       publicadoPorFecha({ epochCommit: 1000, epochBuild: null }) === null],
     ['landing: sin fecha de commit tampoco',

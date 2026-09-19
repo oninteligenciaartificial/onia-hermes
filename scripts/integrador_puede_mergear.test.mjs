@@ -24,6 +24,8 @@ import {
   urlDePush,
   viasDeclaradas,
   veredicto,
+  viaConFuente,
+  rutasCitadas,
 } from './integrador_puede_mergear.mjs';
 
 // --- leer la url de push de `git remote -v` ---------------------------------
@@ -103,10 +105,15 @@ test('ROJO: push deshabilitado y NINGUNA via declarada para esta maquina', () =>
 });
 
 test('con la via declarada para ESTA maquina, el mismo repo pasa a aviso', () => {
-  const vias = new Map([['onia-platform|casa', { comando: '/root/bin/onia-vps.sh bash -lc "..."' }]]);
+  const vias = new Map([
+    [
+      'onia-platform|casa',
+      { comando: '/root/bin/onia-vps.sh bash -lc "bash scripts/integrar-onia-platform.sh claude/x"' },
+    ],
+  ]);
   const v = veredicto(
     [{ nombre: 'onia-platform', varadas: 3, push: 'DESHABILITADO-NODO-DE-DESARROLLO' }],
-    { maquina: 'casa', vias },
+    { maquina: 'casa', vias, archivosDelRepo: ['scripts/integrar-onia-platform.sh'] },
   );
   assert.equal(v.codigo, 0);
   assert.equal(v.avisos.length, 1);
@@ -157,4 +164,130 @@ test('loops.md declara la via del integrador para onia-platform desde casa', asy
     true,
     'falta la marca VIA-INTEGRADOR de onia-platform para casa en hermes-content/docs/cola/loops.md',
   );
+});
+
+// --- la via declarada tiene que tener FUENTE en el repo ----------------------
+//
+// POR QUE, medido el 2026-09-19 por onia-cola auditando los [x] (escalon 2):
+// hasta hoy la marca VIA-INTEGRADOR era una cadena LIBRE: alcanzaba con que
+// existiera para que el gate firmara "via declarada OK". O sea el gate no medía
+// la via, medía que alguien la hubiera escrito alguna vez — y una via se vence.
+//
+// La que estaba escrita para `onia-platform|casa` era una receta INLINE
+// (`cd /root/loops/onia-platform && git merge ... && git push origin master`) y
+// estaba ROTA, medido en vivo ese dia: ese arbol del VPS esta en la rama
+// `claude/chatbots-platform-review-0d1d09` con 106 archivos sucios, o sea el
+// merge caeria sobre el carril en vuelo de `chatbot-cola` — el unico loop que
+// escribe en ese repo — y el `git push origin master` empujaria una rama local
+// que no es donde se mergeo. Ademas corre 3 de los 5 gates del CI y no tiene
+// reintento, asi que rebota si `master` se movio (rebotó DOS veces el 18-sep).
+//
+// La via que SI funciona quedo versionada el 18-sep en
+// `scripts/integrar-onia-platform.sh` (publico 5ed97b0 con 5.704 tests verdes),
+// y NADIE la nombraba: `grep -rl integrar-onia-platform` daba solo COLA.md y el
+// propio script. O sea la proxima vuelta del integrador, que arranca sin
+// memoria, leia la receta vencida y no tenia como enterarse de la buena.
+//
+// La regla es "al menos UNA ruta citada vive en el repo", no "todas": una via
+// legitima nombra tambien shims de `/root/bin` (`onia-vps.sh`), que no estan
+// versionados con ese nombre a proposito. Lo que tiene que ser imposible es una
+// via SIN una sola pieza auditable.
+
+test('rutasCitadas saca el script de una via con ruta absoluta del VPS', () => {
+  const rutas = rutasCitadas(
+    "/root/bin/onia-vps.sh bash -lc 'bash /root/loops/onia-hermes/scripts/integrar-onia-platform.sh claude/x'",
+  );
+  assert.equal(rutas.includes('/root/loops/onia-hermes/scripts/integrar-onia-platform.sh'), true);
+  // `claude/x` es una RAMA, no un archivo: no tiene extension y no se cuenta.
+  assert.equal(rutas.some((r) => r.includes('claude/x')), false);
+});
+
+test('ROJO: una via inline no nombra NINGUN script del repo', () => {
+  const vias = new Map([
+    [
+      'onia-platform|casa',
+      {
+        comando:
+          "/root/bin/onia-vps.sh bash -lc 'cd /root/loops/onia-platform && git merge --no-ff origin/<rama> && npx tsc --noEmit && git push origin master'",
+      },
+    ],
+  ]);
+  const v = veredicto(
+    [{ nombre: 'onia-platform', varadas: 2, push: 'DESHABILITADO-NODO-DE-DESARROLLO' }],
+    { maquina: 'casa', vias, archivosDelRepo: ['scripts/integrar-onia-platform.sh'] },
+  );
+  assert.equal(v.codigo, 1);
+  assert.match(v.rojos.join(' '), /sin fuente|no nombra/i);
+});
+
+test('ROJO: la via cita un script que NO existe en el repo', () => {
+  const vias = new Map([
+    ['onia-platform|casa', { comando: 'bash /root/loops/onia-hermes/scripts/borrado-hace-meses.sh' }],
+  ]);
+  const v = veredicto(
+    [{ nombre: 'onia-platform', varadas: 0, push: 'DESHABILITADO-NODO-DE-DESARROLLO' }],
+    { maquina: 'casa', vias, archivosDelRepo: ['scripts/integrar-onia-platform.sh'] },
+  );
+  assert.equal(v.codigo, 1);
+  assert.match(v.rojos.join(' '), /borrado-hace-meses\.sh/);
+});
+
+// El reciproco, que es lo que impide que cerrar el ruido afloje el gate: una via
+// que SI nombra su fuente sigue pasando, aunque cite ademas un shim sin versionar.
+test('una via que nombra su fuente versionada pasa, aunque cite tambien un shim', () => {
+  const vias = new Map([
+    [
+      'onia-platform|casa',
+      {
+        comando:
+          '/root/bin/onia-vps.sh bash -lc "bash /root/loops/onia-hermes/scripts/integrar-onia-platform.sh claude/x"',
+      },
+    ],
+  ]);
+  const v = veredicto(
+    [{ nombre: 'onia-platform', varadas: 3, push: 'DESHABILITADO-NODO-DE-DESARROLLO' }],
+    { maquina: 'casa', vias, archivosDelRepo: ['scripts/integrar-onia-platform.sh'] },
+  );
+  assert.equal(v.codigo, 0);
+  assert.equal(v.avisos.length, 1);
+});
+
+// Tri-estado: no poder listar el repo NO es "la via esta bien". Un gate que
+// confunde "no pude preguntar" con "me dijeron que si" falla al lado caro.
+test('sin poder listar el repo, la via sale NO MEDIDO (2), nunca verde', () => {
+  const vias = new Map([['onia-platform|casa', { comando: 'bash algo.sh' }]]);
+  const v = veredicto(
+    [{ nombre: 'onia-platform', varadas: 0, push: 'DESHABILITADO-NODO-DE-DESARROLLO' }],
+    { maquina: 'casa', vias, archivosDelRepo: null },
+  );
+  assert.equal(v.codigo, 2);
+});
+
+// EL CASO ANCLA: se prueba contra el doc REAL y el disco REAL, porque lo que este
+// gate custodia es justamente que el integrador de la proxima vuelta pueda
+// encontrar su camino. Un fixture no puede afirmar eso.
+test('la via viva de loops.md nombra un script que existe en el repo', async () => {
+  const { readFileSync, existsSync } = await import('node:fs');
+  const doc = readFileSync('hermes-content/docs/cola/loops.md', 'utf8');
+  const via = viasDeclaradas(doc).get('onia-platform|casa');
+  assert.ok(via, 'falta la marca VIA-INTEGRADOR de onia-platform para casa');
+  // El universo sale de git, que es justo lo que este caso afirma: la via tiene que
+  // apoyarse en algo VERSIONADO. Y se juzga con la funcion del PRODUCTO, no con una
+  // copia: un test con su propia copia de la regla nunca toca el producto.
+  const { execFileSync } = await import('node:child_process');
+  const archivos = execFileSync('git', ['ls-files'], { encoding: 'utf8' })
+    .split('\n')
+    .filter(Boolean);
+  const fuente = viaConFuente(via.comando, archivos);
+  assert.ok(
+    fuente.ok,
+    `la via declarada para onia-platform desde casa esta sin fuente: ${fuente.motivo}. ` +
+      'Una via sin script versionado no se puede auditar ni arreglar, y la proxima vuelta del ' +
+      'integrador no tiene como saber cual es el camino bueno.',
+  );
+  // Y el archivo que nombra tiene que existir DE VERDAD en el arbol, no solo en el indice.
+  for (const r of fuente.rutas) {
+    const rel = archivos.find((f) => r === f || r.endsWith(`/${f}`));
+    assert.equal(existsSync(rel), true, `${rel} esta en el indice pero no en el arbol`);
+  }
 });

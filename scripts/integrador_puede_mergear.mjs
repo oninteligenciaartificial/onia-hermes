@@ -23,11 +23,19 @@
 // varado: avisar recien entonces es avisar tarde.
 //
 // Y no se arregla re-habilitando el push: la url la deshabilito alguien a proposito y la
-// llave de deploy (`/root/.ssh/deploy_onia-platform`) solo existe en el VPS. La via que
-// SI funciona ya estaba ahi y nadie la habia medido: el clon del VPS esta en `master`,
-// limpio, y su `git push --dry-run` contesta "Everything up-to-date"; se lo alcanza con
+// llave de deploy (`/root/.ssh/deploy_onia-platform`) solo existe en el VPS. Se llega con
 // el shim `/root/bin/onia-vps.sh`. Este gate exige que esa via este ESCRITA en
 // hermes-content/docs/cola/loops.md, que es el doc donde ya vive el mapa maquina->loop.
+//
+// ⚠️ Y desde el 2026-09-19 exige algo mas, porque escrita no es lo mismo que CIERTA:
+// que la via NOMBRE un script versionado. Hasta ese dia la marca era una cadena libre,
+// asi que el gate no medía la via — medía que alguien la hubiera escrito alguna vez. La
+// que estaba decia "el clon del VPS esta en master, limpio": cierto el 2026-09-07 y falso
+// despues. Medido en vivo el 19-sep: `/root/loops/onia-platform` estaba en la rama
+// `claude/chatbots-platform-review-0d1d09` con 106 archivos sucios, o sea esa receta
+// mergeaba sobre el carril en vuelo de `chatbot-cola` y su `git push origin master`
+// empujaba una rama local que no era donde se habia mergeado. El camino bueno ya estaba
+// versionado (`scripts/integrar-onia-platform.sh`) y no lo nombraba NADIE.
 
 import { execFileSync } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
@@ -81,11 +89,52 @@ export function viasDeclaradas(markdown) {
   return vias;
 }
 
+// Una via declarada es un COMANDO, y un comando se vence. Para poder auditarla hace
+// falta que al menos una de sus piezas viva en el repo: si la via es una receta inline
+// no hay nada que leer, nada que arreglar y nada que el proximo integrador pueda
+// encontrar. Se piden rutas con extension de ejecutable; una rama (`claude/x`) no lo es.
+const EXT_EJECUTABLE = /\.(sh|mjs|js|py|ts)$/;
+
+/** Las rutas a ejecutables que un comando nombra. Sin duplicados, en orden. */
+export function rutasCitadas(comando) {
+  const vistas = new Set();
+  for (const crudo of String(comando || '').split(/[\s;|&]+/)) {
+    const token = crudo.replace(/^['"(]+/, '').replace(/['")]+$/, '');
+    if (!token.includes('/') || !EXT_EJECUTABLE.test(token)) continue;
+    vistas.add(token);
+  }
+  return [...vistas];
+}
+
+/**
+ * ¿La via tiene una pieza con fuente en el repo? `archivosDelRepo` son rutas relativas
+ * a la raiz. `null` = no se pudo listar: NO se juzga (tri-estado), porque confundir
+ * "no pude preguntar" con "me dijeron que si" falla al lado caro.
+ */
+export function viaConFuente(comando, archivosDelRepo) {
+  if (!Array.isArray(archivosDelRepo)) return { medido: false };
+  const rutas = rutasCitadas(comando);
+  // "al menos UNA", no "todas": una via legitima nombra tambien shims de /root/bin
+  // (onia-vps.sh), que a proposito no estan versionados con ese nombre.
+  const conFuente = rutas.filter((r) =>
+    archivosDelRepo.some((f) => r === f || r.endsWith(`/${f}`)),
+  );
+  if (conFuente.length) return { medido: true, ok: true, rutas: conFuente };
+  return {
+    medido: true,
+    ok: false,
+    rutas,
+    motivo: rutas.length
+      ? `cita ${rutas.join(', ')}, y ninguna existe en el repo`
+      : 'no nombra ningun script del repo: es una receta suelta, sin fuente que auditar',
+  };
+}
+
 /**
  * El veredicto. `repos` son `{nombre, varadas, push}`.
  * 0 = ok (con avisos), 1 = rojo, 2 = no medido.
  */
-export function veredicto(repos, { maquina, vias }) {
+export function veredicto(repos, { maquina, vias, archivosDelRepo }) {
   if (!maquina) {
     return { codigo: 2, rojos: [], avisos: [], nota: 'no se sabe que maquina es: NO se mide' };
   }
@@ -109,6 +158,24 @@ export function veredicto(repos, { maquina, vias }) {
     }
     const via = vias.get(`${r.nombre}|${maquina}`);
     if (via) {
+      const fuente = viaConFuente(via.comando, archivosDelRepo);
+      if (!fuente.medido) {
+        return {
+          codigo: 2,
+          rojos: [],
+          avisos: [],
+          nota: `no pude listar los archivos del repo para auditar la via de ${r.nombre}: NO se mide`,
+        };
+      }
+      if (!fuente.ok) {
+        rojos.push(
+          `${r.nombre}: la via declarada en ${DOC_VIAS} esta SIN FUENTE — ${fuente.motivo}. ` +
+            'Una via que no nombra un script del repo no se puede auditar ni corregir, y el ' +
+            'integrador de la proxima vuelta (que arranca sin memoria) no tiene como saber ' +
+            'cual es el camino bueno. Escribila como `bash <ruta del script versionado>`.',
+        );
+        continue;
+      }
       avisos.push(
         `${r.nombre}: este nodo (${maquina}) NO puede pushear (${r.push}); se mergea por la via declarada: ${via.comando}`,
       );
@@ -132,6 +199,18 @@ function git(ruta, args) {
 function medirVivo() {
   const maquina = maquinaActual();
   const vias = existsSync(DOC_VIAS) ? viasDeclaradas(readFileSync(DOC_VIAS, 'utf8')) : new Map();
+  // El universo para auditar la via sale de git: lo que se afirma es que la via se apoya
+  // en algo VERSIONADO. Si no se puede listar, queda null y el veredicto sale NO MEDIDO
+  // con su causa — nunca verde por omision.
+  let archivosDelRepo = null;
+  try {
+    archivosDelRepo = execFileSync('git', ['ls-files'], { encoding: 'utf8' })
+      .split('\n')
+      .filter(Boolean);
+  } catch (e) {
+    console.log(`NO MEDIDO: no pude correr 'git ls-files' (${String(e.message).split('\n')[0]})`);
+    return 2;
+  }
   const repos = [];
 
   for (const r of REPOS) {
@@ -152,7 +231,7 @@ function medirVivo() {
     repos.push({ nombre: r.nombre, varadas, push: urlDePush(git(r.ruta, ['remote', '-v'])) });
   }
 
-  const v = veredicto(repos, { maquina, vias });
+  const v = veredicto(repos, { maquina, vias, archivosDelRepo });
   for (const l of v.lineas || []) console.log(`  ${l}`);
   for (const a of v.avisos) console.log(`AVISO: ${a}`);
   for (const x of v.rojos) console.log(`ROJO: ${x}`);

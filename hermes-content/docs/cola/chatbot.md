@@ -318,6 +318,162 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [ ] **Devolverle el cupo de rescate a 6 conversaciones que la insistencia quemó sin mandar
+      nada** (`hermes-content/deploy/vps-ops/bot/insistencia-run.mjs` · tabla
+      `onia_center.bot_conversations`; medido el 2026-09-18). El código ya está
+      arreglado — la insistencia dejó de reservar con `followup_step` —, pero las filas que
+      quedaron marcadas siguen marcadas: son `chatwoot:42,43,52,54,56,57`, todas en `bot_stage
+      = nuevo` con `followup_step = 1` y sin un solo `M3`; sus salientes son
+      `R_SEGUIMIENTO:simulated`, o sea la reserva se gastó y el mensaje nunca salió. Cuatro son
+      desconocidos reales (`purple-bush-931`, `summer-shadow-163`, `icy-sunset-817` y
+      `chatwoot:57`). Mientras `followup_step` siga en 1, el día que avancen a
+      `esperando_horario` el follow-up no las va a ver: filtra `followup_step=eq.0`.
+      **Reproducción y comando exacto** (no lo corro yo: escribir en la base de producción no es
+      permiso de este carril):
+
+      **PRECONDICIÓN, y es verificable en un comando** (2026-09-18): el arreglo tiene que estar
+      VIVO en el bot, no sólo en `main`. Medido hoy con `docker exec`, el proceso todavía corre la
+      versión vieja — `reserveFollowUp` aparece 2 veces y `markMessageDelivered` cero — y
+      `publicar.sh --dry-run` del bot lista 7 archivos varados, `insistencia-run.mjs` entre ellos.
+      Correr el `update` antes de ese deploy es tirar el trabajo: el barrido vuelve a quemarlas.
+
+      ```bash
+      # VERDE = arreglo vivo (0 y 1). ROJO = todavía no: NO correr el update.
+      /root/bin/onia-vps.sh bash -lc "docker exec onia-center sh -c '
+        grep -c reserveFollowUp /tmp/onia-bot/insistencia-run.mjs;
+        grep -c markMessageDelivered /tmp/onia-bot/insistencia-run.mjs'"
+      ```
+
+      ```sql
+      -- 1. MIRAR primero: tienen que ser 6, todas sin M3.
+      select c.conversation_key, c.bot_stage, c.followup_step
+        from onia_center.bot_conversations c
+       where c.followup_step > 0
+         and not exists (select 1 from onia_center.bot_messages m
+                          where m.conversation_key = c.conversation_key
+                            and m.direction = 'outbound' and m.template_key like '%M3%');
+      -- 2. Devolver el cupo SOLO a esas (la condición es la misma, no una lista a mano).
+      update onia_center.bot_conversations c set followup_step = 0
+       where c.followup_step > 0
+         and not exists (select 1 from onia_center.bot_messages m
+                          where m.conversation_key = c.conversation_key
+                            and m.direction = 'outbound' and m.template_key like '%M3%');
+      ```
+
+      ⚠️ El `update` deriva sus sujetos de la MISMA condición que el `select`, no de los seis
+      nombres: si entre medio aparece una séptima, entra sola; si una ya recibió su M3, no la
+      toca.
+
+      ⚠️ **El filtro `bot_stage = 'nuevo'` estuvo acá hasta el 2026-09-18 y se sacó: era una lista
+      de inclusión que fallaba abierto justo en el caso que este ítem existe para prevenir.** Lo
+      que el ítem previene es que estas filas AVANCEN de estado con el cupo quemado («el día que
+      avancen a `esperando_horario` el follow-up no las va a ver»), así que anclar la reparación a
+      `bot_stage = 'nuevo'` la desactiva sola en cuanto ocurre lo que se teme: la fila se mueve, el
+      `update` deja de alcanzarla y pierde el rescate para siempre. Medido antes de sacarlo, con y
+      sin el filtro salen **las mismas 6 filas** — las de `esperando_horario` (13-19, 58) sí
+      recibieron su `M3`, o sea el filtro no estaba comprando nada y podía costar un lead. La
+      condición honesta es la que describe el defecto: cupo gastado y sin `M3`.
+
+- [x] **~~Reparar el reloj ya corrido de 16 conversaciones: `2f92eb70` curó al productor y no
+      tocó ni una fila~~ — CERRADO el 2026-09-19** (`reloj-del-prospecto-vivo.mjs` ·
+      `bot-engine.mjs`; respaldo en `onia_center.respaldo_reloj_20260919`).
+
+      `npm run reloj:vivo` → **exit 0**, «40 conversaciones cruzadas (sanas 40)». Antes: exit 1
+      con 16 adelantadas, la peor la **58**, el lead real de WhatsApp, +20,4 h.
+
+      **La «causa segunda» de este ítem era FALSA y por eso se escribe acá: no hay ningún cron.**
+      El ítem mandaba a buscar al escritor de las horas redondas (`23:00:0X`, `12:00:0X`) dando
+      por hecho que era un cron distinto del caso 58. Lo refuta un cruce contra Chatwoot, al
+      segundo: `last_inbound_at` de la conv 52 era `09-04 12:00:06` y el `created_at` del
+      **saliente nuestro** (`message_type=1`, el `R_SEGUIMIENTO`) es `09-04 12:00:06`; la conv 57,
+      `17:00:05` contra `17:00:05`. La hora redonda es la hora a la que corría **el barrido**, y
+      el reloj quedaba pisado con el `receivedAt` de nuestro propio mensaje volviendo por webhook
+      como turno `author:"human"` — o sea **la MISMA causa que ya curó `2f92eb70`**, disparada
+      desde el barrido en vez de desde el widget. Una hora redonda no prueba un cron: prueba un
+      productor periódico, y el barrido lo es.
+
+      ```bash
+      # lo que lo probó (ids reales, sólo lectura)
+      docker exec <chatwoot-db> psql -U postgres -d onia-chatbot -tAc \
+        "select conversation_id, message_type, created_at from messages where conversation_id in (52,57) order by created_at;"
+      ```
+
+      El escritor, entonces, ya estaba **cerrado con su test** antes de esta vuelta
+      (`reloj-del-prospecto-solo-lo-mueve-el-prospecto.test.mjs`) y —lo que faltaba comprobar—
+      **vivo en producción**: `docker exec onia-center grep -n delProspecto /tmp/onia-bot/bot-engine.mjs`
+      da las líneas 547/556. Por eso reparar hoy no era tirar el trabajo.
+
+      **La precondición de seguridad se midió, no se supuso.** El riesgo declarado era bajar el
+      reloj de más si un entrante llegó a Chatwoot y no quedó en `bot_messages`. Cruzados los dos
+      lados para las 14 convs reales: en **ninguna** Chatwoot tiene un entrante más nuevo
+      (52·54·56·57·58 coinciden 1 a 1 con ±2 s; 6 y 7 tienen *más* filas del lado del bot;
+      13–19 no tienen incoming en Chatwoot). El caso temido no existe en estos datos.
+
+      **La reparación derivó sus sujetos del defecto, no de los 16 nombres** — misma condición
+      que el instrumento (deriva > 120 s contra `max(created_at) filter (author='contact')`), en
+      una transacción con respaldo: `INSERT 0 16` + `UPDATE 16`. Reversión:
+
+      ```sql
+      update onia_center.bot_conversations c set last_inbound_at = r.last_inbound_at_viejo
+        from onia_center.respaldo_reloj_20260919 r where r.conversation_key = c.conversation_key;
+      ```
+
+- [x] **~~El gate del reloj tiene UNA sola explicación para dos defectos opuestos, y el que no
+      nombra es el que mató al carril dos veces~~ — CERRADO el 2026-09-19**
+      (`hermes-content/deploy/vps-ops/bot/reloj-del-prospecto-vivo.mjs`).
+
+      El instrumento cruzaba `last_inbound_at` contra `bot_messages` y ante cualquier divergencia
+      decía siempre lo mismo: *el reloj está corrido, reparalo con un `update`*. Pero «el reloj
+      adelantado» y «el prospecto escribió y el bot NO procesó su mensaje» producen **exactamente
+      la misma resta**, y el remedio es opuesto: obedecer el diagnóstico único en el segundo caso
+      **borra la única evidencia** de que hubo un entrante sin atender — el bug del segundo turno.
+
+      **Lo que se hizo.** El gate le pregunta ahora a la TERCERA tabla, `messages` de Chatwoot
+      (`message_type = 0`, los entrantes de verdad), y cada caso sale con su causa y su remedio
+      pegados:
+
+      | causa | qué la distingue | remedio |
+      |---|---|---|
+      | `reloj_corrido` | Chatwoot no tiene nada más nuevo que lo que el motor registró | el `update` |
+      | `entrante_sin_procesar` | Chatwoot tiene un entrante que el motor nunca registró | **ningún `update`** |
+      | `sin_distinguir` | no se pudo preguntar / esa conv no existe en Chatwoot | no tocar la fila |
+
+      **El default es asimétrico a propósito:** sin poder contrastar, el gate NO recomienda el
+      `update`. Fallar hacia «no toques nada» es barato; fallar hacia «reparalo» es irreversible.
+
+      **Dos cosas que aparecieron al medir y no estaban en el ítem:**
+
+      1. La clase se cierra entera, no la instancia: `entrante_sin_procesar` se detecta **también
+         en una fila que el reloj da por SANA**. El gate viejo era 100 % ciego ahí — contaba la
+         conversación entre las sanas y no miraba más — y es justo la forma pura del bug del
+         segundo turno.
+      2. El informe **declara su cobertura de contraste**. Sin esa línea, un Chatwoot caído
+         imprimía una salida **byte a byte idéntica** a la de un cruce completo (las sanas no
+         imprimen causa), o sea el gate podía perder su mitad nueva sin decir una palabra.
+
+      **Se comparan MARCAS DE TIEMPO, nunca cantidades.** Medido el 19-sep: el motor también
+      registra turnos sembrados, así que los conteos difieren en conversaciones sanas (conv 49:
+      532 entrantes en Chatwoot contra 531 del motor; convs 6-8: 1 contra 2). Un gate que
+      comparara cantidades acusaría a una conversación perfecta.
+
+      **PRUEBA.**
+
+      - Contra producción, `npm run reloj:vivo` → **exit 0**:
+        `conversaciones cruzadas: 40 (sanas 40)` ·
+        `contrastadas contra Chatwoot: 30 de 40 — 10 sin contrastar: Chatwoot no tiene ningun
+        entrante de la conversacion N (x10)` (son las convs 13-19, 990777-9 y 999999: existen en
+        el motor y no en Chatwoot). Chatwoot **nunca** está más nuevo que el motor hoy — sella
+        1-5 s antes de que el motor inserte su fila —, por eso el cruce no acusa a nadie.
+      - `npm run test:bot` → **1230/1230**, con 26 casos en
+        `reloj-del-prospecto-vivo.test.mjs` (eran 14).
+      - **Validado por mutación, cinco esquives, los cinco cazados** (`# fail` > 0 en cada uno):
+        la evidencia siempre «al día» (3 rojos) · la rama `mas_nuevo` con `false &&` (3) · el
+        SELECT sin `conversation_key` (1) · `medir()` sin pasarle las claves (1) · el informe sin
+        declarar la cobertura (1).
+      - El caso que sostiene la distinción usa **la misma fila del reloj** en los dos bloques y
+        sólo cambia lo que dice Chatwoot: si el gate contestara lo mismo, seguiría teniendo una
+        sola explicación.
+
 - [ ] **Dos escritores guardan el estado de la misma conversación en el mismo segundo, y gana el
       último — el traspaso humano puede perderse** (encontrado el 2026-09-18 midiendo la conv 58;
       **no es fantasma: los datos están abajo**).
@@ -5155,6 +5311,31 @@ archivos.**
 ---
 
 ## Cerrado — no rehacer
+
+- [x] **~~El bot le prometía al lead del widget web que le escriben «desde este mismo
+      número», y ese lead no tiene número~~** — cerrado el 2026-09-18
+      (`hermes-content/deploy/vps-ops/bot/config.mjs`, `reply-builder.mjs`, `bot-engine.mjs`,
+      `chatwoot-adapter.mjs`, `run-turn.mjs`; **commiteado, NO desplegado**).
+      Medido en la base de Chatwoot de producción: **inbox 4 (Onia Web) tiene 11
+      conversaciones y CERO con teléfono**; inbox 5 (WhatsApp), 4 de 4 con teléfono. Los
+      **tres** textos del handoff — `M5`, `M5_URGENTE`, `M8_SOPORTE`, o sea los que recibe
+      justo el que pidió hablar con una persona — tipeaban *"Te escribe él desde este mismo
+      número"*. Para el lead del widget es imposible de cumplir: cierra la pestaña esperando
+      un mensaje que no existe, y del otro lado Sergio Urcullo sólo puede contestarle por el
+      mismo widget. Una promesa rota encima de la única acción que pedía una persona real.
+      **Por qué ningún gate lo veía:** no mueve una cifra, no nombra un plan y no promete una
+      capacidad — las tres familias que el bot vigila. El eje es **canal × texto**, y el
+      catálogo de textos no sabía de canales (`grep -E 'inbox|canal|channel'` sobre la zona
+      del guion daba CERO). **Cura:** `viaDelCanal(channelType)` deriva la vía del
+      `channel_type` de Chatwoot — nunca del número de inbox, la regla que ya fija
+      `canal-whatsapp-vivo.test.mjs` —, el dato viaja desde el adapter hasta el motor, y el
+      default es la forma canal-agnóstica *"por este mismo chat"*, cierta en WhatsApp, el
+      widget, la API y el canal que se conecte mañana: **falla hacia la promesa que siempre
+      se puede cumplir**. En WhatsApp la frase del número se conserva, porque ahí es cierta y
+      además ubica. **Gate de clase:** `promesa-de-canal.test.mjs` deriva el universo del
+      disco (todas las entradas del guion, no las tres que hoy sabemos rotas) y prohíbe la
+      FORMA, no el texto viejo. Validado por mutación: con `viaDelCanal` clavado en el
+      número, 4 de 5 casos en rojo. Suite del bot 1215/1215.
 
 - [x] **~~Nuestro propio mensaje le movía el reloj al prospecto~~** — cerrado el 2026-09-18
       (`hermes-content/deploy/vps-ops/bot/bot-engine.mjs`, **commiteado, NO desplegado**).

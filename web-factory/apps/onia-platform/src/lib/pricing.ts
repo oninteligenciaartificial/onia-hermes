@@ -814,9 +814,15 @@ export interface AddOn {
  * escrito sin la raiz se lee como que lo vigila un gate de acá que no existe).
  * Detalle: ONIA_CATALOGO_DE_VENTA.md §5.
  */
+/** Cómo se llama el chatbot EN LA CARTA de add-ons (el nombre de producto, no el
+ *  resultado que titula su tarjeta). Vive en una constante porque además es el
+ *  puente con `ADDON_DE_LA_CAPACIDAD`, más abajo: dos copias del mismo nombre y
+ *  el cruce se rompe en silencio el día que alguien renombre una sola. */
+export const CHATBOT_EN_LA_CARTA = "Chatbot de WhatsApp";
+
 export const ADDONS: readonly AddOn[] = [
   {
-    nombre: "Chatbot de WhatsApp",
+    nombre: CHATBOT_EN_LA_CARTA,
     // "Se suma a cualquier plan" hasta el 2026-09-18: un universal que la escalera C volvió falso
     // el 12-sep, cuando `whatsappIncluded` le dio el chatbot ADENTRO a Full y Grupo. Al dueño de un
     // Completo (Bs 1.290) le cobraba Bs 390 por lo que ya paga, y al que evaluaba subir le escondía
@@ -844,6 +850,77 @@ export const ADDONS: readonly AddOn[] = [
     href: "/servicios/webs",
   },
 ] as const;
+
+/* ---------- qué se prende aparte y qué exige subir de plan ---------- */
+
+/**
+ * Con qué add-on de la carta se compra SUELTA cada capacidad incluida-por-plan, o
+ * `null` cuando esa capacidad **sólo** se consigue subiendo de plan.
+ *
+ * 🔴 **POR QUE EXISTE.** Medido el 2026-09-18 sobre `onia.com.bo` SERVIDA: la sección de
+ * add-ons de la portada rotulaba *«Sobre el plan encendés lo que te falta»* y debajo
+ * afirmaba **«No hay que saltar de plan para desbloquear una sola»** — un universal sobre
+ * el MECANISMO, y falso: de las cuatro capacidades de `CAPACIDADES_INCLUIDAS` sólo DOS se
+ * compran sueltas (chatbot y reservas). Los agentes exigen saltar al Crece (Bs 550) y el
+ * segundo administrador, al Completo (Bs 1.290) — no hay add-on de ninguno de los dos, y la
+ * escalera de la MISMA pantalla, tres secciones más arriba, lo dice con todas las letras
+ * («Todo lo del Básico + Agente Recall…», «más de un administrador»). O sea que la pantalla
+ * se contradecía sola y el lead que necesitaba una de esas dos elegía el plan equivocado.
+ *
+ * **Por qué ningún gate podía verlo.** Los cruces de precio validan MONTOS y acá no hay
+ * ninguno; `capacidad-incluida.test.ts` prohíbe TIPEAR un nombre de plan junto a la
+ * capacidad y esta frase no nombra ni un plan ni una capacidad: habla del mecanismo, en
+ * abstracto. Es la misma familia que «el sistema completo» y «todos los módulos», dicha una
+ * vez más de costado.
+ *
+ * **Se declara como Record completo a propósito:** una capacidad nueva en
+ * `CAPACIDADES_INCLUIDAS` no compila hasta que alguien conteste de qué lado está. Y el
+ * valor no se cree solo: `desbloqueo-que-no-se-tipea.test.ts` exige que todo nombre que se
+ * declare acá exista de verdad en `ADDONS`, así que marcar una capacidad como «se compra
+ * suelta» sin add-on publicado es rojo, no una absolución escrita a mano.
+ */
+export const ADDON_DE_LA_CAPACIDAD: Record<CapacidadIncluida, string | null> = {
+  agentes: null,
+  reservas: AGENDA_ADDON.nombre,
+  chatbot: CHATBOT_EN_LA_CARTA,
+  coadministradores: null,
+};
+
+/**
+ * Las capacidades que HOY sólo se consiguen cambiando de plan: no tienen add-on, y hay al
+ * menos un plan que no las trae. Si la lista queda vacía —porque todo se compra suelto, o
+ * porque todos los planes ya la traen— el universal vuelve a ser cierto y `sinSubirDePlan()`
+ * lo dice solo.
+ */
+export function capacidadesQueExigenSubirDePlan(
+  planes: readonly Plan[] = PLANES,
+  addonDe: Record<CapacidadIncluida, string | null> = ADDON_DE_LA_CAPACIDAD,
+): readonly CapacidadIncluida[] {
+  const capacidades = Object.keys(CAPACIDADES_INCLUIDAS) as CapacidadIncluida[];
+  return capacidades.filter((capacidad) => {
+    if (addonDe[capacidad] !== null) return false;
+    const campo = CAPACIDADES_INCLUIDAS[capacidad];
+    const laTraen = planes.filter((plan) => plan[campo] === true).length;
+    return laTraen > 0 && laTraen < planes.length;
+  });
+}
+
+/**
+ * La cláusula que la sección de add-ons dice sobre el mecanismo, DERIVADA del catálogo.
+ *
+ * Prohibir el literal viejo no habría servido: se apaga solo el día que la respuesta correcta
+ * vuelva a ser ese literal. Lo que se prohíbe es tipear la afirmación —la vigila
+ * `app/(sitio)/desbloqueo-que-no-se-tipea.test.ts`, caminando `src/` del disco—, y el texto
+ * sale de acá.
+ */
+export function sinSubirDePlan(
+  planes: readonly Plan[] = PLANES,
+  addonDe: Record<CapacidadIncluida, string | null> = ADDON_DE_LA_CAPACIDAD,
+): string {
+  return capacidadesQueExigenSubirDePlan(planes, addonDe).length === 0
+    ? "No hay que saltar de plan para desbloquear una sola."
+    : "Lo de acá abajo se suma sobre el plan que ya tenés.";
+}
 
 /* ---------- lo que NO esta en el precio ---------- */
 

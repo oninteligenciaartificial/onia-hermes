@@ -77,6 +77,52 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Ahora — plan de features (revisado 2026-08-30, con Gate 1 corrido)
 
+- [x] 🟠 **La portada le prometía al lead que ninguna capacidad exige subir de plan, y DOS lo
+      exigen. Medido y CERRADO el 2026-09-18 20:5x La Paz por `web-venta` (`00ae5f63`).**
+      **El defecto, MIRADO renderizado** (captura leída, no un `grep`): la sección de add-ons de
+      `onia.com.bo/` se rotula *«Sobre el plan encendés lo que te falta»* y debajo afirmaba
+      **«No hay que saltar de plan para desbloquear una sola»**. Es falso desde la escalera C: de
+      las cuatro capacidades de `CAPACIDADES_INCLUIDAS` sólo DOS se compran sueltas —chatbot
+      (Bs 390) y reservas (Bs 150 en Básico)—; los **agentes** exigen saltar al Crece (Bs 550) y
+      el **segundo administrador**, al Completo (Bs 1.290), y no hay add-on de ninguno de los dos
+      (`onia-platform/lib/plan-catalogo.ts`: `agentsIncluded`, `multiAdminIncluded`). La escalera
+      de la MISMA pantalla, tres secciones más arriba, lo dice con todas las letras («Todo lo del
+      Básico + Agente Recall…», «más de un administrador»): la pantalla se contradecía sola, y el
+      lead que necesitaba una de esas dos se iba al plan de entrada creyendo que después la
+      prendía aparte.
+      **Por qué ningún gate podía verlo** — es la tercera forma de la familia «alcance total» y
+      la más escurridiza: los cruces de precio validan MONTOS y acá no hay ninguno;
+      `src/lib/capacidad-incluida.test.ts` prohíbe TIPEAR un plan junto a la capacidad y esta
+      frase no nombra ni un plan ni una capacidad; `(sitio)/prueba-vs-plan.test.ts` cierra el
+      alcance dicho sobre el TODO («el sistema completo») y sobre las PARTES («todos los
+      módulos»). Ésta se dice sobre el **mecanismo**, en abstracto.
+      **Cómo quedó:** el texto lo DERIVA `sinSubirDePlan()`
+      (`web-factory/apps/onia-platform/src/lib/pricing.ts`) del catálogo, y lo que se prohíbe es
+      la FORMA, no el literal viejo — prohibir «saltar de plan» se apagaría solo el día que la
+      respuesta correcta vuelva a ser ésa, y el caso 5 del gate exige que el universal reaparezca
+      solo cuando todo se compre suelto. `ADDON_DE_LA_CAPACIDAD` es `Record` completo (una
+      capacidad nueva no compila hasta que alguien conteste de qué lado está) y **no se cree
+      solo**: el gate cruza cada nombre declarado contra `ADDONS`, la carta que el lead ve, así
+      que marcar una capacidad como «suelta» sin add-on publicado es rojo. De paso viajó a
+      `/precios`, que decía lo mismo **acotado** («Ninguno te obliga a…») y por eso era cierto —
+      y tipeado igual, que es como las dos se separan.
+      **Gate:** `web-factory/apps/onia-platform/src/app/(sitio)/desbloqueo-que-no-se-tipea.test.ts`
+      (sujetos caminados del disco: una pantalla nueva nace cubierta).
+      **Verificado:** `npm run prebuild` verde (tsc + 1.367 tests), `npm run build` 0,
+      `npm run precios:fuente` VERDE (43 cifras cruzadas), y la pieza servida desde el build
+      local ABIERTA Y MIRADA con `reducedMotion` — dice «Cada cosa se prende aparte y se paga
+      aparte. Lo de acá abajo se suma sobre el plan que ya tenés.»
+      **Validado por mutación 6/6**, restaurando con `cp` (nunca `git checkout`): reintroducir el
+      texto tipeado en la portada, absolver una capacidad con un add-on inexistente, clavar la
+      cláusula en el universal, vaciar el cálculo, borrarle a la dueña la rama universal, y dejar
+      al caminador sin llegar a `(sitio)`.
+      **Falta publicar:** vive en el pedido de landing `t_c2fbda1e`, que ya espera el ok de
+      Sergio Urcullo — comentado ahí una sola vez, para que el integrador rehaga el cuerpo con
+      los tres shas (el cuerpo de un pedido no se corrige comentando).
+      **Reproducción en 30 segundos:**
+
+          curl -sL https://onia.com.bo/ | grep -oE "[^<>]{0,60}saltar de plan[^<>]{0,60}"
+
 - [x] 🟠 **El runtime vivo de la landing perdió su `.commit`, así que «qué corre `onia.com.bo`»
       volvió a ser a mano — que es exactamente lo que su propio publicador dice haber curado el
       2026-09-03. Medido el 2026-09-18 18:3x La Paz por `onia-cola`. CERRADO el 2026-09-18 20:0x
@@ -181,6 +227,59 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       **Por qué no entró en la vuelta que lo encontró:** la vuelta ya había integrado cuatro
       carriles y quedaban ~15 min; un script de ENTREGA a medias es peor que la copia a mano que
       funciona, porque el que lo use después no sabe cuál de los dos corrió.
+
+- [x] 🔴 **La vía de entrega de `onia-platform` declarada en `loops.md` —la que lee un gate y la
+      que obedece el integrador de la vuelta siguiente— era una receta VENCIDA y rota, y el
+      script bueno no lo nombraba nadie. Medido y ARREGLADO el 2026-09-19 por `onia-cola`,
+      auditando los `[x]` (escalón 2).**
+      **Cómo se encontró:** auditando el `[x]` de arriba (el que versionó
+      `scripts/integrar-onia-platform.sh` el 18-sep). El archivo estaba, commiteado y correcto
+      — pero `grep -rn integrar-onia-platform` sobre todo el repo devolvía **dos** menciones: el
+      propio `COLA.md` y un comentario del script nombrándose a sí mismo. Ningún prompt, ningún
+      doc y ningún gate lo nombraban. O sea el ítem cerró la mitad *«dónde vive el archivo»* y
+      dejó abierta la que importa: **cómo lo encuentra el que lo necesita.**
+      **Lo que el próximo integrador leía, y por qué rompe** (medido en vivo, no heredado): la
+      marca `VIA-INTEGRADOR onia-platform casa` de `hermes-content/docs/cola/loops.md` decía
+      `cd /root/loops/onia-platform && git merge … && git push origin master`, apoyada en la
+      premisa *«el clon del VPS está en `master`, limpio»* — cierta el 2026-09-07, **falsa hoy**:
+      ese árbol está en `claude/chatbots-platform-review-0d1d09` con **106 archivos sucios**
+      (`git -C … status --porcelain | wc -l`). Esa receta (1) mergea sobre el carril **en vuelo**
+      de `chatbot-cola`, el único loop que escribe en ese repo; (2) su `git push origin master`
+      empuja una rama local que **no** es donde se hizo el merge; (3) corre **3 de los 5** gates
+      del CI (le faltan `check:onia-core` y `build`); y (4) no tiene reintento, así que rebota si
+      `master` se movió — rebotó **dos veces** el 18-sep.
+      **Por qué ningún gate lo veía, que es el punto del ítem:** `scripts/integrador_puede_mergear.mjs`
+      exigía que la marca **existiera**, y nada más. Una cadena libre: no medía la vía, medía que
+      alguien la hubiera escrito alguna vez. **Y una vía se vence** — es el mismo modo de falla que
+      este archivo ya guarda tres veces (un comentario que afirma una garantía es una hipótesis
+      **con fecha**).
+      **El arreglo, en sus dos mitades:** (a) la marca pasa a nombrar el script versionado; (b)
+      el gate exige que **toda** vía declarada nombre un archivo que existe en el repo — si no,
+      **ROJO** con el motivo. La regla es *«al menos UNA ruta citada vive en el repo»*, no
+      *«todas»*: una vía legítima nombra también shims de `/root/bin` como `onia-vps.sh`, que
+      **no existe** en este repo a propósito (vive suelto en la máquina, no versionado). Sin la mitad (b), mañana alguien vuelve a
+      escribir una receta inline y el gate firma verde igual.
+      **Tri-estado, no verde por omisión:** si no se puede listar el repo (`git ls-files`), la
+      vía sale **NO MEDIDO (2)** con su causa. Confundir *«no pude preguntar»* con *«me dijeron
+      que sí»* falla al lado caro, que acá es dejar al integrador sin camino y en silencio.
+      **Test primero, en ROJO por el motivo correcto:** el caso ancla falló contra el doc REAL
+      diciendo `la via declarada para onia-platform desde casa esta sin fuente: cita
+      /root/bin/onia-vps.sh, y ninguna existe en el repo`. Juzga con `viaConFuente` **del
+      producto**, no con una copia, y su universo sale de `git ls-files` — que es justo lo que
+      afirma: la vía se apoya en algo **versionado**.
+      **Validado por MUTACIÓN, las tres cazadas** (y la primera pasó verde hasta que se verificó
+      que la mutación había ENTRADO — el `replace` no coincidía): (1) la vía vuelve a la receta
+      inline → `fail 1` + el gate vivo imprime el ROJO; (2) el script versionado desaparece del
+      repo → `fail 1` + medición viva **exit 1**; (3) el producto esquiva la guarda
+      (`if (false && !fuente.ok)`) → `fail 2`.
+      **Y de paso, la bomba de tiempo del mismo archivo:** `scripts/integrar-onia-platform.sh`
+      estaba commiteado **100644**. Hoy no muerde porque se invoca con `bash <ruta>`, que es
+      exactamente cómo sobrevivió `insistencia-run.mjs` — por accidente. Puesto en `100755` con
+      `git update-index --chmod=+x` (un `chmod` en el worktree no viaja: el modo que viaja es el
+      de git).
+      **Medido al cerrar:** `node --test scripts/integrador_puede_mergear.test.mjs` → **20 casos
+      verdes**; `node scripts/integrador_puede_mergear.mjs` → **exit 0**, «el integrador alcanza
+      los 2 repos desde casa».
 
 - [x] 🔴 **`scripts/deploy_sin_pedido.mjs` absolvía un destino porque EXISTÍA un pedido, sin
       preguntar si ese pedido DESCRIBE lo que hoy publicaría — y el que los deja cortos es el
