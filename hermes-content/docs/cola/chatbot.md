@@ -5109,16 +5109,78 @@ decisión de Sergio, no código.
 
 ## Después
 
-- [ ] **`etiquetaDeCampo` traduce los errores del validador al castellano y no tiene gate: su
-      mapa es una lista de inclusión y falla abierto.** Anotado el 2026-09-18 al cerrar el 🔴 del
-      horario invertido. Vive dentro de `app/(dashboard)/settings/chatbot/ChatbotClient.tsx:136`,
-      no se exporta, y el fallback es `return campo` — así que cada campo nuevo que el validador
-      aprenda a rechazar le muestra al dueño la ruta cruda (`empresa.horario:`) en una pantalla
-      donde todo lo demás está en castellano. Hoy faltaba justo la fila del objeto `empresa.horario`
-      (la de `demo` sí estaba). **Sujeto del gate:** exportar la función y cruzar su universo contra
-      los `campo` que `validarConocimiento` puede emitir, derivados del SHAPE + las reglas cruzadas
-      (`checkHorario`, `checkDemo`, `checkProductos`, `checkRubros`, `checkFaqNegocio`) — no contra
-      una lista tipeada, que es el mismo modo de falla.
+- [x] ✅ **CERRADO el 2026-09-19 08:20 UTC — y al abrirlo apareció que el agujero era MUCHO
+      más grande: faltaba la REGLA, no sólo su etiqueta.** Lo anotado era que `etiquetaDeCampo`
+      es una lista de inclusión sin gate. Cierto. Pero al preguntar **por qué** faltaba justo la
+      fila de `empresa.horario`, la respuesta fue que **el producto nunca emite ese campo: no
+      tiene `checkHorario`**. El motor la ganó el 2026-09-18 (`knowledge.mjs:374`, llamada en la
+      485) y el espejo del producto no la copió.
+
+      **Medido el 2026-09-19 corriendo los DOS validadores sobre los mismos documentos** — el
+      producto aceptaba y **publicaba** tres que el motor rechaza al leer:
+
+      | documento | motor | producto (antes) |
+      |---|---|---|
+      | bar `18 -> 02` | RECHAZA | **acepta** |
+      | sólo `desde` (el otro extremo se hereda de Onia) | RECHAZA | **acepta** |
+      | iguales `9 -> 9` | RECHAZA | **acepta** |
+
+      O sea: el dueño de un negocio nocturno apretaba Publicar, leía *"guardado"*, y su bot
+      seguía contestándole a **sus** clientes el horario de Sergio Urcullo las 24 h — porque el
+      motor descarta el documento **entero** al leerlo.
+
+      **Lo dejó pasar un gate que declara el invariante correcto y lo verifica a mano.**
+      `lib/chatbot/knowledge.test.ts` abre diciendo *"el validador del producto tiene que ser
+      IDÉNTICO al del motor"* y lo comprueba caso por caso (FAQ de precios, campañas,
+      seguimiento): una lista de inclusión, que falla abierto justo en la regla que el motor
+      acaba de ganar. Es la clase ya conocida — *un gate que fija un invariante sobre una lista
+      escrita a mano termina defendiendo el hueco que existe para impedir*.
+
+      **Qué se hizo** (onia-platform `681bf4a3`, en la rama del carril):
+      - `checkHorario` portado al espejo y cableado en `validarConocimiento`.
+      - `empresa.horario` ganó su etiqueta. Con ella aparecieron **10 rutas más** sin etiqueta
+        (`campanas[N]`, `triggersExtra`, `empresa.horario.dias[N]`, los arrays pelados,
+        `faq[N].id/status/vigenteHasta`): todas cubiertas.
+      - El universo ya **no se enumera**: `camposQueElValidadorNombra()` lo DERIVA ejecutando el
+        validador sobre un documento roto por cada ruta del SHAPE más uno por regla cruzada. Una
+        lista tipeada ahí habría sido el mismo modo de falla que este ítem cierra.
+      - El fallback `return campo` **se queda a propósito**: una clave que el esquema no declara
+        la escribió el dueño, y nombrarla cruda es lo único honesto. El gate exige etiqueta sólo
+        para lo que el esquema sí declara.
+
+      **Gate:** `app/(dashboard)/settings/chatbot/etiqueta-de-campo-cubre-al-validador.test.ts`.
+      **Validado por mutación**, las tres formas de reintroducirlo, cada una cazada por su caso:
+      sacar la etiqueta → *"ninguna ruta se le muestra cruda"*; descablear `checkHorario` → los 3
+      casos de comportamiento + *"hay al menos un documento por regla"*; portar una regla nueva
+      sin documento que la dispare → *"ninguno de esos documentos es decorativo"*.
+
+      **Prueba del cruce, después del arreglo:** los cuatro casos coinciden motor↔producto, y la
+      pantalla dice `Horario de atención: cierra antes de abrir (18 -> 2)…` en vez de
+      `empresa.horario:`. Gates: `tsc` 0 · `eslint` 0 errores · **5.732 tests verdes** (corridos
+      también en el VPS con `origin/master` mergeado antes de publicar la rama).
+
+      ⚠️ **Lo que queda abierto, y es la mitad cara:** este arreglo cierra la instancia, no la
+      clase. **Ningún gate cruza los dos validadores**: el del producto vive en `onia-platform` y
+      el del motor en `onia-hermes`, y el que los compara no puede ir en la cadena de
+      `onia-platform` (rojo por ambiente: allá no existe el repo hermano). Va en `onia-hermes`
+      leyendo el **ref publicado y fresco** de `onia-platform` — patrón ya establecido en
+      `hermes-content/deploy/vps-ops/bot/precios-publicos.test.mjs`, con `fetch` obligatorio y
+      tri-estado (sin poder refrescar, NO MEDIDO, nunca verde). Anotado abajo como ítem propio.
+
+- [ ] **Nadie cruza los DOS validadores de conocimiento, y por eso `checkHorario` vivió un día
+      entero sólo en el motor.** Sale del ítem de arriba, ya arreglado en su instancia. El
+      invariante *"el espejo del producto acepta exactamente lo que el motor acepta"* hoy lo
+      sostiene una lista de casos escrita a mano en `onia-platform/lib/chatbot/knowledge.test.ts`,
+      que falla abierto en cada regla nueva.
+      **Sujeto del gate:** correr `validateKnowledge` (motor, `hermes-content/deploy/vps-ops/bot/
+      knowledge.mjs`) y `validarConocimiento` (producto, leído del **ref publicado** con
+      `git show origin/master:lib/chatbot/knowledge.ts`) sobre el MISMO corpus, y exigir el mismo
+      veredicto. El corpus se deriva del SHAPE — `camposQueElValidadorNombra()` ya hace esa
+      derivación y se puede reusar.
+      **Dos trampas medidas que este gate tiene que respetar:** (1) `origin/master` es una ref de
+      **disco** — sin `git fetch` mide un fósil y falla EN VERDE (lección del 2026-09-18); (2) el
+      universo de reglas se deriva contando las llamadas `check*` de CADA lado y comparándolas,
+      no enumerándolas, que es exactamente lo que falló acá.
 
 - [x] ✅ **CERRADO el 2026-09-17 18:45 UTC — el simulador ya no miente sobre el horario, y el
       agujero era el DOBLE de grande que lo anotado.** Lo anotado era el reloj del modo
