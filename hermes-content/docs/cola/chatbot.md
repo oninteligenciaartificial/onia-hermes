@@ -418,27 +418,61 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
         from onia_center.respaldo_reloj_20260919 r where r.conversation_key = c.conversation_key;
       ```
 
-- [ ] **El gate del reloj tiene UNA sola explicación para dos defectos opuestos, y el que no
-      nombra es el que mató al carril dos veces** (`reloj-del-prospecto-vivo.mjs`; notado el
-      2026-09-19 al reparar las 16, **no es fantasma: es la dirección simétrica, medida abajo**).
+- [x] **~~El gate del reloj tiene UNA sola explicación para dos defectos opuestos, y el que no
+      nombra es el que mató al carril dos veces~~ — CERRADO el 2026-09-19**
+      (`hermes-content/deploy/vps-ops/bot/reloj-del-prospecto-vivo.mjs`).
 
-      El instrumento cruza `last_inbound_at` contra `bot_messages` y ante una divergencia dice
-      siempre lo mismo: *el reloj está corrido, reparalo*. Pero «el reloj adelantado» y «el
-      prospecto escribió y el bot NO procesó su mensaje» producen **exactamente la misma
-      divergencia**, y el remedio es opuesto: uno se cura con un `update`, el otro es el bug del
-      segundo turno. Obedecer el diagnóstico único en el segundo caso **borra la evidencia** de
-      que hubo un entrante sin atender.
+      El instrumento cruzaba `last_inbound_at` contra `bot_messages` y ante cualquier divergencia
+      decía siempre lo mismo: *el reloj está corrido, reparalo con un `update`*. Pero «el reloj
+      adelantado» y «el prospecto escribió y el bot NO procesó su mensaje» producen **exactamente
+      la misma resta**, y el remedio es opuesto: obedecer el diagnóstico único en el segundo caso
+      **borra la única evidencia** de que hubo un entrante sin atender — el bug del segundo turno.
 
-      Hoy la confusión no se materializa —lo verifiqué para las 14 convs reales, arriba: los
-      conteos de incoming coinciden en los dos lados— y por eso es barato cerrarla ahora.
+      **Lo que se hizo.** El gate le pregunta ahora a la TERCERA tabla, `messages` de Chatwoot
+      (`message_type = 0`, los entrantes de verdad), y cada caso sale con su causa y su remedio
+      pegados:
 
-      La pregunta que sí distingue ya está escrita en el ítem de arriba: el lado de Chatwoot
-      (`messages`, `message_type = 0`). Si Chatwoot tiene un entrante **más nuevo** que el último
-      de `bot_messages`, el veredicto no es «reloj corrido» sino «entrante sin procesar», y ése
-      no se repara con un `update`.
+      | causa | qué la distingue | remedio |
+      |---|---|---|
+      | `reloj_corrido` | Chatwoot no tiene nada más nuevo que lo que el motor registró | el `update` |
+      | `entrante_sin_procesar` | Chatwoot tiene un entrante que el motor nunca registró | **ningún `update`** |
+      | `sin_distinguir` | no se pudo preguntar / esa conv no existe en Chatwoot | no tocar la fila |
 
-      LISTO = el gate distingue los dos casos con su motivo propio, validado por mutación (una
-      fila sembrada de cada clase), y sigue en exit 0 contra producción.
+      **El default es asimétrico a propósito:** sin poder contrastar, el gate NO recomienda el
+      `update`. Fallar hacia «no toques nada» es barato; fallar hacia «reparalo» es irreversible.
+
+      **Dos cosas que aparecieron al medir y no estaban en el ítem:**
+
+      1. La clase se cierra entera, no la instancia: `entrante_sin_procesar` se detecta **también
+         en una fila que el reloj da por SANA**. El gate viejo era 100 % ciego ahí — contaba la
+         conversación entre las sanas y no miraba más — y es justo la forma pura del bug del
+         segundo turno.
+      2. El informe **declara su cobertura de contraste**. Sin esa línea, un Chatwoot caído
+         imprimía una salida **byte a byte idéntica** a la de un cruce completo (las sanas no
+         imprimen causa), o sea el gate podía perder su mitad nueva sin decir una palabra.
+
+      **Se comparan MARCAS DE TIEMPO, nunca cantidades.** Medido el 19-sep: el motor también
+      registra turnos sembrados, así que los conteos difieren en conversaciones sanas (conv 49:
+      532 entrantes en Chatwoot contra 531 del motor; convs 6-8: 1 contra 2). Un gate que
+      comparara cantidades acusaría a una conversación perfecta.
+
+      **PRUEBA.**
+
+      - Contra producción, `npm run reloj:vivo` → **exit 0**:
+        `conversaciones cruzadas: 40 (sanas 40)` ·
+        `contrastadas contra Chatwoot: 30 de 40 — 10 sin contrastar: Chatwoot no tiene ningun
+        entrante de la conversacion N (x10)` (son las convs 13-19, 990777-9 y 999999: existen en
+        el motor y no en Chatwoot). Chatwoot **nunca** está más nuevo que el motor hoy — sella
+        1-5 s antes de que el motor inserte su fila —, por eso el cruce no acusa a nadie.
+      - `npm run test:bot` → **1230/1230**, con 26 casos en
+        `reloj-del-prospecto-vivo.test.mjs` (eran 14).
+      - **Validado por mutación, cinco esquives, los cinco cazados** (`# fail` > 0 en cada uno):
+        la evidencia siempre «al día» (3 rojos) · la rama `mas_nuevo` con `false &&` (3) · el
+        SELECT sin `conversation_key` (1) · `medir()` sin pasarle las claves (1) · el informe sin
+        declarar la cobertura (1).
+      - El caso que sostiene la distinción usa **la misma fila del reloj** en los dos bloques y
+        sólo cambia lo que dice Chatwoot: si el gate contestara lo mismo, seguiría teniendo una
+        sola explicación.
 
 - [ ] **Dos escritores guardan el estado de la misma conversación en el mismo segundo, y gana el
       último — el traspaso humano puede perderse** (encontrado el 2026-09-18 midiendo la conv 58;
