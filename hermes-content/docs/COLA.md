@@ -228,6 +228,59 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       carriles y quedaban ~15 min; un script de ENTREGA a medias es peor que la copia a mano que
       funciona, porque el que lo use después no sabe cuál de los dos corrió.
 
+- [x] 🔴 **La vía de entrega de `onia-platform` declarada en `loops.md` —la que lee un gate y la
+      que obedece el integrador de la vuelta siguiente— era una receta VENCIDA y rota, y el
+      script bueno no lo nombraba nadie. Medido y ARREGLADO el 2026-09-19 por `onia-cola`,
+      auditando los `[x]` (escalón 2).**
+      **Cómo se encontró:** auditando el `[x]` de arriba (el que versionó
+      `scripts/integrar-onia-platform.sh` el 18-sep). El archivo estaba, commiteado y correcto
+      — pero `grep -rn integrar-onia-platform` sobre todo el repo devolvía **dos** menciones: el
+      propio `COLA.md` y un comentario del script nombrándose a sí mismo. Ningún prompt, ningún
+      doc y ningún gate lo nombraban. O sea el ítem cerró la mitad *«dónde vive el archivo»* y
+      dejó abierta la que importa: **cómo lo encuentra el que lo necesita.**
+      **Lo que el próximo integrador leía, y por qué rompe** (medido en vivo, no heredado): la
+      marca `VIA-INTEGRADOR onia-platform casa` de `hermes-content/docs/cola/loops.md` decía
+      `cd /root/loops/onia-platform && git merge … && git push origin master`, apoyada en la
+      premisa *«el clon del VPS está en `master`, limpio»* — cierta el 2026-09-07, **falsa hoy**:
+      ese árbol está en `claude/chatbots-platform-review-0d1d09` con **106 archivos sucios**
+      (`git -C … status --porcelain | wc -l`). Esa receta (1) mergea sobre el carril **en vuelo**
+      de `chatbot-cola`, el único loop que escribe en ese repo; (2) su `git push origin master`
+      empuja una rama local que **no** es donde se hizo el merge; (3) corre **3 de los 5** gates
+      del CI (le faltan `check:onia-core` y `build`); y (4) no tiene reintento, así que rebota si
+      `master` se movió — rebotó **dos veces** el 18-sep.
+      **Por qué ningún gate lo veía, que es el punto del ítem:** `scripts/integrador_puede_mergear.mjs`
+      exigía que la marca **existiera**, y nada más. Una cadena libre: no medía la vía, medía que
+      alguien la hubiera escrito alguna vez. **Y una vía se vence** — es el mismo modo de falla que
+      este archivo ya guarda tres veces (un comentario que afirma una garantía es una hipótesis
+      **con fecha**).
+      **El arreglo, en sus dos mitades:** (a) la marca pasa a nombrar el script versionado; (b)
+      el gate exige que **toda** vía declarada nombre un archivo que existe en el repo — si no,
+      **ROJO** con el motivo. La regla es *«al menos UNA ruta citada vive en el repo»*, no
+      *«todas»*: una vía legítima nombra también shims de `/root/bin` como `onia-vps.sh`, que
+      **no existe** en este repo a propósito (vive suelto en la máquina, no versionado). Sin la mitad (b), mañana alguien vuelve a
+      escribir una receta inline y el gate firma verde igual.
+      **Tri-estado, no verde por omisión:** si no se puede listar el repo (`git ls-files`), la
+      vía sale **NO MEDIDO (2)** con su causa. Confundir *«no pude preguntar»* con *«me dijeron
+      que sí»* falla al lado caro, que acá es dejar al integrador sin camino y en silencio.
+      **Test primero, en ROJO por el motivo correcto:** el caso ancla falló contra el doc REAL
+      diciendo `la via declarada para onia-platform desde casa esta sin fuente: cita
+      /root/bin/onia-vps.sh, y ninguna existe en el repo`. Juzga con `viaConFuente` **del
+      producto**, no con una copia, y su universo sale de `git ls-files` — que es justo lo que
+      afirma: la vía se apoya en algo **versionado**.
+      **Validado por MUTACIÓN, las tres cazadas** (y la primera pasó verde hasta que se verificó
+      que la mutación había ENTRADO — el `replace` no coincidía): (1) la vía vuelve a la receta
+      inline → `fail 1` + el gate vivo imprime el ROJO; (2) el script versionado desaparece del
+      repo → `fail 1` + medición viva **exit 1**; (3) el producto esquiva la guarda
+      (`if (false && !fuente.ok)`) → `fail 2`.
+      **Y de paso, la bomba de tiempo del mismo archivo:** `scripts/integrar-onia-platform.sh`
+      estaba commiteado **100644**. Hoy no muerde porque se invoca con `bash <ruta>`, que es
+      exactamente cómo sobrevivió `insistencia-run.mjs` — por accidente. Puesto en `100755` con
+      `git update-index --chmod=+x` (un `chmod` en el worktree no viaja: el modo que viaja es el
+      de git).
+      **Medido al cerrar:** `node --test scripts/integrador_puede_mergear.test.mjs` → **20 casos
+      verdes**; `node scripts/integrador_puede_mergear.mjs` → **exit 0**, «el integrador alcanza
+      los 2 repos desde casa».
+
 - [x] 🔴 **`scripts/deploy_sin_pedido.mjs` absolvía un destino porque EXISTÍA un pedido, sin
       preguntar si ese pedido DESCRIBE lo que hoy publicaría — y el que los deja cortos es el
       integrador. Medido en vivo el 2026-09-18 ~11:5x La Paz por `onia-cola`. CERRADO el

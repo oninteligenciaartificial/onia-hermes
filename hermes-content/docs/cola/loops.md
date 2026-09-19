@@ -42,12 +42,24 @@ pone rojo; la única señal sería que las vueltas del integrador digan *«no pu
 se lee igual que *«no había nada que hacer»*.
 
 **No se arregla re-habilitando el push** (revierte un seguro ajeno, y sin la llave tampoco
-funcionaría). La vía que **sí** funciona ya estaba ahí y nadie la había medido: el clon del VPS
-está en `master`, limpio, y su `git push --dry-run` contesta *«Everything up-to-date»*. Se lo
-alcanza desde casa con el shim `/root/bin/onia-vps.sh`. La línea de abajo **la lee un gate**
-(`scripts/integrador_puede_mergear.mjs`): si se borra, `npm test` se pone rojo y nombra el repo.
+funcionaría). Se llega desde casa con el shim `/root/bin/onia-vps.sh`. La línea de abajo **la lee
+un gate** (`scripts/integrador_puede_mergear.mjs`): si se borra, o si deja de nombrar un script
+versionado, `npm test` se pone rojo y nombra el repo.
 
-VIA-INTEGRADOR onia-platform casa: /root/bin/onia-vps.sh bash -lc 'cd /root/loops/onia-platform && git fetch origin --quiet && git merge --no-ff --no-edit origin/<rama> && npx tsc --noEmit && npx vitest run && npm run lint && git push origin master'
+⚠️ **Acá había una receta escrita a mano — `cd /root/loops/onia-platform && git merge … && git
+push origin master` — y estaba ROTA. Corregida el 2026-09-19 por `onia-cola` auditando los `[x]`.**
+Decía que ese clon del VPS *«está en `master`, limpio»*: era cierto el 2026-09-07 y **hoy no**.
+Medido en vivo ese día: `/root/loops/onia-platform` está en la rama
+`claude/chatbots-platform-review-0d1d09` con **106 archivos sucios**, así que esa receta mergeaba
+sobre el carril en vuelo de `chatbot-cola` —el único loop que escribe en ese repo— y su
+`git push origin master` empujaba una rama local que no es donde se hizo el merge. Además corría
+**3 de los 5 gates** del CI y no tenía reintento, así que rebotaba si `master` se movía (rebotó
+dos veces el 18-sep). El camino bueno quedó versionado el 18-sep en
+`scripts/integrar-onia-platform.sh` —worktree propio, los CINCO gates, reintento— y **nadie lo
+nombraba**: un `grep -rl integrar-onia-platform` devolvía sólo `COLA.md` y el propio script, o sea
+el integrador de la vuelta siguiente, que arranca sin memoria, leía la receta vencida.
+
+VIA-INTEGRADOR onia-platform casa: /root/bin/onia-vps.sh bash -lc 'cd /root/loops/onia-hermes && git fetch origin --quiet && git merge --ff-only origin/main && bash /root/loops/onia-hermes/scripts/integrar-onia-platform.sh claude/<rama>'
 
 El nombre `nodo-casa` no se inventó acá: es con el que **ese nodo ya firma** los hechos que
 escribe en la memoria compartida. ⚠️ El valor de la columna *dónde corre* sigue siendo `casa`
