@@ -25,14 +25,7 @@ Instrumento: `scripts/recorrido_cliente.mjs`.
 
 ## Reportado a otro carril (nuevo)
 
-- **`DELETE /api/admin/users/[id]` sigue bloqueando sacar un ADMIN aunque haya 2** —
-  reportado el 2026-09-19 06:15 La Paz (`t_24758d5a`, prioridad 1, para `onia-cola`/producto).
-  Escalón 3 (coadministradores, `/settings`), la superficie que llevaba varias vueltas anotada
-  como candidata. DG-043 (2026-09-17) se declaró cerrado en los tres caminos de salida, pero
-  el DELETE de `/api/admin/users/[id]` delega en `removeUserFromOrganization` (`lib/auth.ts`),
-  que tiene su propio bloqueo incondicional viejo — el guard nuevo de la ruta nunca se llega a
-  ejecutar. Ver el cuerpo de la tarea para la reproducción completa (HTTP real, org `zz-qa-`
-  plan `clinic`, 201/200/**403** donde esperaba 200).
+
 
 
 
@@ -69,6 +62,12 @@ Instrumento: `scripts/recorrido_cliente.mjs`.
 > layout de escritorio.
 
 ## Cerrado
+
+- **`DELETE /api/admin/users/[id]` bloqueaba sacar un ADMIN aunque hubiera 2 — arreglado y
+  confirmado en vivo.** Reportado el 2026-09-19 06:15 La Paz (`t_24758d5a`). El fix
+  (`removeUserFromOrganization` en `lib/auth.ts`, DG-043) llegó a producción con `BUILD_ID`
+  `AUiuQ9c0SmcJnuF37_qTo` el 2026-09-19: `scripts/probar_coadministrador.mjs` contra
+  producción real da **200** donde antes daba 403. Cerrado y verificado, no solo mergeado.
 
 - **`/precios`: "Reservas online" dice "Incluida en Pro y Full" y omite Crece** — reportado el
   2026-09-13 14:20 La Paz al dueño del sitio (`t_5ad92d30`, prioridad 2). Verificado en vivo con
