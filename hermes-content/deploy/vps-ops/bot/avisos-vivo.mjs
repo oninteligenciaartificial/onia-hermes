@@ -493,7 +493,14 @@ export async function motorProduceAviso(dir) {
         continue;
       }
 
-      const aviso = construirAviso({ notify: deLaRama, conversationId: 4242, stageAfter: r.nextState?.botStage });
+      // El canal va porque este gate imprime "lo que recibiria Sergio": sin el, el ejemplo sale
+      // MAS POBRE que el aviso real y el instrumento deja de mostrar lo que mide.
+      const aviso = construirAviso({
+        notify: deLaRama,
+        conversationId: 4242,
+        stageAfter: r.nextState?.botStage,
+        canal: "Channel::WebWidget",
+      });
       // "Accionable" = nombra la conversacion. Sin eso Sergio recibe un timbre sin puerta.
       const accionable = Boolean(aviso?.texto?.includes("4242")) && aviso?.conversationId === 4242;
       ramas[kind] = { emite: true, accionable };

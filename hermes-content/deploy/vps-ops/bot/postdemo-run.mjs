@@ -290,7 +290,16 @@ async function sweepRow(row, ctx) {
   // puede reintentar sin arriesgar el doble aviso — asi que se registra con nombre propio y el
   // barrido lo sube a `warnings`, que es lo que mira un humano. Callarlo seria perder la demo.
   const entrega = await aviso.enviar(
-    construirAviso({ notify: [item], conversationId: item.conversationKey, stageAfter: item.stageAfter }),
+    // `canal` es el MEDIO (`channel_type` de Chatwoot: WhatsApp o web), NO `state.channel`, que es
+    // el canal del motor y vale "chatwoot" para los dos. El texto de `buildDemoDoneNotice` ya
+    // nombra `state.channel`, así que sin esto el aviso decía "chatwoot" y no por dónde contestar.
+    construirAviso({
+      notify: [item],
+      conversationId: item.conversationKey,
+      stageAfter: item.stageAfter,
+      canal: state?.channelType,
+      inbox: state?.inboxId,
+    }),
   );
 
   return {
