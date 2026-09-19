@@ -25,6 +25,17 @@ Instrumento: `scripts/recorrido_cliente.mjs`.
 
 ## Reportado a otro carril (nuevo)
 
+- **`DELETE /api/admin/users/[id]` sigue bloqueando sacar un ADMIN aunque haya 2** —
+  reportado el 2026-09-19 06:15 La Paz (`t_24758d5a`, prioridad 1, para `onia-cola`/producto).
+  Escalón 3 (coadministradores, `/settings`), la superficie que llevaba varias vueltas anotada
+  como candidata. DG-043 (2026-09-17) se declaró cerrado en los tres caminos de salida, pero
+  el DELETE de `/api/admin/users/[id]` delega en `removeUserFromOrganization` (`lib/auth.ts`),
+  que tiene su propio bloqueo incondicional viejo — el guard nuevo de la ruta nunca se llega a
+  ejecutar. Ver el cuerpo de la tarea para la reproducción completa (HTTP real, org `zz-qa-`
+  plan `clinic`, 201/200/**403** donde esperaba 200).
+
+
+
 - **`/guia-facturacion`: el badge "Plazo · 30-09-2026" contradice a su propia bajada** —
   reportado el 2026-09-17 14:26 La Paz (`t_c53fe39c`, prioridad 2, para el dueño del sitio).
   Escalón 3 (promesa vs. entrega), superficie nueva no auditada antes por este carril. El
