@@ -529,6 +529,52 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **CERRADO el 2026-09-19 13:45-14:25 La Paz (commiteado en `onia-platform`, NO desplegado)
+      — la pantalla donde el dueño mira trabajar a su bot le prometía lo contrario de lo que le
+      cobramos, al lado del único número que sí tiene tope.**
+
+      **El defecto, vivo en producción.** La bandeja (`onia-platform/app/(dashboard)/inbox/InboxClient.tsx`)
+      pintaba, pegado al contador de chats del día: **«N conversaciones atendidas hoy · sin límite,
+      siempre»**. El producto NO es sin límite: `onia-platform/lib/chatbot/cupo.ts` (2026-09-03) trae
+      `WHATSAPP_ADDON.includedConversations` = **500 conversaciones/mes**, avisa al dueño al 80 %,
+      **CORTA** con `cuota.agotada` y vende la recarga (`RECARGA_CONVERSACIONES`: Bs 190 por 200 que
+      **caducan con el mes**). Medido vivo: `docker exec onia-platform grep -rl 'sin límite, siempre'
+      /app/.next/server` devuelve el bundle de la bandeja, con `BUILD_ID=AUiuQ9c0SmcJnuF37_qTo`.
+
+      **Por qué sobrevivió.** Lo defendía un comentario que AFIRMABA la garantía —*«Es transparencia
+      (lo que Sendy usa bien), nunca un limite: en Onia no hay tope»*—, cierto cuando se escribió
+      (v6.7) y falso desde el 3-sep. Y la clase ya estaba cerrada **en la otra pantalla**:
+      `onia-platform/app/(dashboard)/settings/PlanClient.estado-real.test.ts:121` exige desde antes
+      que los planes con el chatbot adentro *«limiten la promesa ilimitada y expliciten el cupo»*.
+      La cura no viajó a la bandeja, que es donde el dueño mira. El contrato, en cambio, ya decía la
+      verdad (`app/terms/page.tsx`: *«no incluyen uso ilimitado»*): la superficie mentía sola.
+
+      **La cura condiciona, no borra:** el texto pasa a **«… · tu asistente atiende 500
+      conversaciones al mes»**, con el 500 DERIVADO de `WHATSAPP_ADDON.includedConversations`
+      (plano para los seis planes: lo trae el add-on, no el plan). `lib/pricing.ts` es puro, así
+      que importarlo desde un `'use client'` no arrastra Prisma al navegador — verificado con
+      `onia-platform/lib/platform/cliente-no-arrastra-prisma-al-navegador.test.ts` en verde.
+
+      **Gate de clase, no de pantalla:** `onia-platform/app/(dashboard)/no-prometemos-conversaciones-sin-tope.test.ts`.
+      Camina el DISCO (no `git ls-files`: la pantalla nueva sin commitear es el sujeto a cazar),
+      mide el texto en el ORDEN en que se lee, y acusa la marca ABSOLUTA («sin límite, siempre»)
+      a ≤ 80 caracteres de las conversaciones, salvo que la pantalla nombre el cupo.
+
+      **Dos veces me mintió el instrumento antes que el producto**, y las dos las delató la
+      mutación, no releerlo:
+      1. colapsar las expresiones `{…}` quedándose sólo con los literales **se come el texto del
+         bug** (vive suelto dentro de un `{cond && (…)}`): el gate daba 3 falsos positivos y CERO
+         verdaderos — un gate apagado con cara de encendido;
+      2. `nombraElCupo` leía el fuente CRUDO, y **el comentario que explica este arreglo nombra
+         `includedConversations`**: la pantalla se absolvía sola y la mutación pasaba VERDE con el
+         defecto reintroducido. Se pregunta con los comentarios en blanco.
+
+      **Validación por mutación (después del arreglo):** restaurar `· sin límite, siempre` deja
+      `Tests 1 failed | 2 passed` nombrando `app/(dashboard)/inbox/InboxClient.tsx`. Restaurado con `cp`.
+
+      ⚠️ **NO DESPLEGADO.** Hasta que `onia-cola` publique `plataforma`, el dueño sigue leyendo
+      «sin límite, siempre» en producción.
+
 - [x] 🔴 **CERRADO el 2026-09-19 12:43-13:25 La Paz (commiteado; el instrumento no necesita deploy
       para correr, pero sólo mide el respaldo cuando el respaldo esté desplegado) — la ÚNICA red
       que le queda a una capacidad que vendemos estaba vigilada por un gate que no podía
