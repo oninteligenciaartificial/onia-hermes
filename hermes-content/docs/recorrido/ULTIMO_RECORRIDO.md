@@ -12,6 +12,28 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-19 09:11 La Paz — coadministradores: fix mergeado a master, todavía NO deployado
+
+`BUILD_ID` sin cambios (`HyMvkgxD68MORYYHikiG6`). El fix de `t_24758d5a` (DELETE
+`/api/admin/users/[id]` bloqueaba sacar un ADMIN aunque hubiera 2) se mergeó a
+`origin/master` de `onia-platform` como `52409f20` (verificado:
+`git merge-base --is-ancestor 52409f20 origin/master` → exit 0). **Volví a correr
+`scripts/probar_coadministrador.mjs` contra producción real y el DELETE sigue dando 403** —
+el fix está en el árbol pero no en el build servido. No es un hallazgo nuevo: es la brecha
+normal de deploy, medida en vivo en vez de asumida.
+
+**No hace falta pedido de deploy.** `ssh root@187.77.16.63 'bash /opt/onia-platform/_deploy/publicar.sh --dry-run'`
+dice `hay que publicar: 2 arreglo(s)` y el destino se publica **solo** (no toca
+`pricing.ts`/`subscription-plans.ts`, así que no lo frena el freno de precio). El publicador
+automático (`onia-publicar-solo.sh`, corre cada 3h) lo va a levantar sin que Sergio Urcullo
+tenga que apretar nada.
+
+**Próxima vuelta: si `BUILD_ID` cambió, correr `probar_coadministrador.mjs` una vez para
+confirmar 200 y cerrar el tema; si no cambió, no repetir esta medición — ir a otra superficie
+(otro rubro, u otro escalón 3).**
+
+---
+
 ## 2026-09-19 08:1x La Paz — escalón 3 nuevo intentado (cambio de plan): estructuralmente
 inalcanzable para `zz-qa-`, no es un hallazgo
 
