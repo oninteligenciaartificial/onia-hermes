@@ -57,7 +57,7 @@ export function cargaElEnvEntero(texto) {
  * (b) Corre el wrapper de verdad con un `docker` falso y devuelve lo que ese docker recibio.
  * Nada toca produccion: el stub esta PRIMERO en el PATH, asi que el docker real nunca se invoca.
  */
-function loQueRecibioDocker(wrapper, { env = {}, conEnvFile = true } = {}) {
+export function loQueRecibioDocker(wrapper, { env = {}, conEnvFile = true, envFile = null } = {}) {
   const caja = mkdtempSync(join(tmpdir(), "slots-gate-"));
   try {
     const bin = join(caja, "bin");
@@ -70,7 +70,9 @@ function loQueRecibioDocker(wrapper, { env = {}, conEnvFile = true } = {}) {
     writeFileSync(join(caja, wrapper), readFileSync(join(AQUI, wrapper), "utf8"));
     // El wrapper exige su propio .mjs al lado o se va a /opt/onia/bot (que en nodo-casa no existe).
     writeFileSync(join(caja, wrapper.replace(/\.sh$/, ".mjs")), "// dummy\n");
-    if (conEnvFile) writeFileSync(join(caja, "webhook.env"), `ONIA_BOT_DRY_RUN=true\nONIA_BOT_SLOTS="${SLOTS}"\n`);
+    if (conEnvFile) {
+      writeFileSync(join(caja, "webhook.env"), envFile ?? `ONIA_BOT_DRY_RUN=true\nONIA_BOT_SLOTS="${SLOTS}"\n`);
+    }
 
     const limpio = { PATH: `${bin}:${process.env.PATH}`, HOME: caja, ...env };
     try {
