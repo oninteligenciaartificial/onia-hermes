@@ -318,73 +318,103 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
-- [ ] 🔴 **De los TRES consumidores del mismo mensaje entrante, el único que NO recibe la
-      identidad del que escribe es el que COBRA: el cupo del add-on cuenta al dueño probando
-      su propio bot y a nuestras sondas de QA** (`onia-platform` ·
-      `app/api/webhooks/chatwoot/route.ts:108-117` · `lib/chatbot/cupo.ts:217`).
+- [x] **MEDIDO el 2026-09-19 08:13-08:45 La Paz — los cuatro ejes del objetivo en verde, y
+      DOS hipótesis propias refutadas antes de anunciarlas.** Simulador **3/3** (escalera C:
+      320/550/890/1.290, Completo con el chatbot adentro; SIAT con «1 de octubre de 2026,
+      RND 102600000007»); widget real **2/2** (`scripts/sonda_widget.mjs`, conversación 49:
+      los dos mensajes contestados — el segundo turno, que es donde el bot murió dos veces);
+      `npm run avisos:vivo` → circuito **medido**, 6 controles ok, 3 enviados / 0 fallidos.
 
-      **Medido en producción el 2026-09-19 07:40 La Paz**, en la fila viva del contador:
+      ⚠️ **Trampa 1 — `cp -p` PRESERVA el mtime, así que la fecha de un archivo en `/opt`
+      NO es cuándo se copió, es cuándo se tocó en el clon.** Leyendo `ls -l` de
+      `/opt/onia/bot/` concluí que los `.mjs` de un commit habían viajado hoy y el `.sh` del
+      MISMO commit se había quedado dos días atrás — o sea un deploy que viaja a medias, que
+      habría sido un 🔴 grande. Falso: `deploy-bot.sh` copia con `cp -p` (línea 95). La
+      autoridad es el publicador en seco, que contó los DOS archivos como pendientes:
+      `bash /opt/onia/bot/_deploy/publicar.sh --dry-run` → `CAMBIA postdemo-run.mjs` +
+      `CAMBIA postdemo-run.sh`, 12 archivos en total, gate `# pass 1271 # fail 0`.
+      **Para medir si algo llegó a producción se le pregunta al publicador o se compara el
+      CONTENIDO (`cmp`), nunca la fecha.**
 
-      ```
-      docker exec supabase-db psql -U postgres -d postgres -tAc \
-        "select o.slug, u.mes, u.conversaciones, u.\"conversacionIds\"
-           from public.chatbot_uso_mensual u
-           join public.organizations o on o.id=u.\"organizationId\";"
-      → onia-interna|2026-09|4|{49,999999,11,58}
-      ```
+      ⚠️ **Trampa 2 — la fila con `conversation_key` vacío (`chatwoot:`, sin id) NO es
+      alcanzable hoy: es escombro.** La vi en `onia_center.bot_conversations` junto a
+      `chatwoot:10` y `chatwoot:990778` (las tres sin `last_inbound_at` ni nombre) y parecía
+      la clase «dos prospectos comparten un estado». Contado contra el código de hoy, las
+      **cuatro** ramas del adapter cortan antes: `chatwoot-adapter.mjs:318`, `:350`, `:368`
+      y `:412` hacen `if (!conversationId) return { skip: true, reason: "sin_conversation_id" }`,
+      y `createState` (`bot-engine.mjs:66`) además cae a `"sin-contacto"`. Lo que sí queda
+      anotado, por si alguna vez entra por otra puerta: `ensureConversation`
+      (`persistence.mjs:368-370`) guarda `contact_ref` con `|| "sin-contacto"` y **inserta
+      `conversation_key` crudo** — la guarda vive en el llamador, no en el que escribe.
 
-      **Tres de las cuatro conversaciones que consumieron cupo este mes somos nosotros**, y se
-      identifican cruzando contra Chatwoot (`select c.id, c.inbox_id, ct.name, ct.phone_number
-      from conversations c join contacts ct on ct.id=c.contact_id`):
+      **Estado transitorio, medido y con fecha de vencimiento propia:** `postdemo` corre
+      ahora mismo sin poder preguntarle a Chatwoot quién es quién
+      (`warnings: ["inboxes de prueba: no pude preguntarle a Chatwoot (sin CHATWOOT_API_TOKEN)"]`
+      en `/var/log/onia-bot-postdemo.log` desde las 07:47Z). No es un bug nuevo: es la mitad
+      honesta de `e3332d0e` ya viva y su cura (`postdemo-run.sh` pasando el token) entre los
+      12 pendientes. **Se cura sola en la corrida de las 08:50 La Paz** — verificado que el
+      freno de precio NO lo retiene: `bash /root/bin/onia-publicar-solo.sh --dry-run` →
+      `bot: publicaria (nada toca precio)`. Nadie tiene que apretar nada.
 
-      - `49` — **`Sonda QA carril chatbot`**, inbox 4. Es la sonda de la definición de hecho de
-        este carril: corre en cada vuelta del loop (`13,43 * * * *`) y lleva **554 mensajes
-        entrantes y 549 respuestas**. Es la que explica los `491` de `mensajesEntrantes`.
-      - `999999` — fila **sintética**: no existe en `conversations` de Chatwoot.
-      - `11` — **el dueño** (`Sergio`, `+59171654992`, inbox 5) probando su propio bot.
-      - `58` — el **único** desconocido real (`+59175755019`, inbox 5, 17-sep).
+- [x] 🔴 **CERRADO el 2026-09-19 — el único de los tres efectos del webhook que COBRA
+      decidía sin saber quién escribe: el cupo del add-on contaba al dueño probando su
+      propio bot** (`onia-platform` · commit `42eab9a8`).
 
-      **Por qué es plata del cliente y no cosmética.** `pricing.ts` vende el add-on como
-      *500 conversaciones/mes* (Bs 390) y al agotarlo el producto **apaga el asistente para los
-      clientes del cliente** y le ofrece la recarga de Bs 190 — que además CADUCA con el mes.
-      Lo primero que hace cualquiera que compra un bot es escribirle desde su teléfono para
-      probarlo; hoy eso le gasta el cupo que pagó para atender clientes. Y cada QA nuestro
-      sobre la instancia de un cliente se lo gasta también.
+      El webhook dispara TRES efectos con el mismo `message_created` y los dos que NO cobran
+      reciben la identidad; el tercero —`registrarMensajeEntrante`— recibía sólo
+      `{inboxId, conversationId}`, con el `sender` a mano en el mismo `body`. Es plata del
+      cliente: `pricing.ts` vende 500 conversaciones/mes (Bs 390) y al agotarlas el producto
+      **apaga el asistente para los clientes del cliente** y ofrece una recarga que caduca
+      con el mes.
 
-      **La firma de la clase, que es lo que lo hace fácil de ver una vez que se mira.** El
-      webhook procesa `message_created` y dispara TRES efectos con el mismo evento
-      (`route.ts:108-124`). Los dos primeros reciben quién escribe y el tercero no:
+      **Lo que se hizo.** La decisión vive en un módulo PURO
+      (`lib/chatbot/quien-escribe-es-la-casa.ts`) porque es la que se rompe en silencio:
+      cobrar de más no falla, no tira y no deja rastro. Compara contra lo que el producto YA
+      tiene cargado —`organizations.phone`, `contactPhone`, `email` y el correo de cada
+      `profile` de la org—, sin campo nuevo ni marca que alguien deba acordarse de poner. El
+      teléfono se compara por el FINAL (`claveDeTelefono`), que es lo único estable entre
+      `70000000` y `+59170000000`. **Falla hacia COBRAR:** sin datos cargados se cuenta como
+      hasta hoy — regalar una conversación cuesta una conversación, cobrarle al dueño las
+      suyas le apaga el asistente que paga.
 
-      | efecto | recibe la identidad |
-      |---|---|
-      | `notificarMensajeEntrante` | sí — `contactoNombre: body.sender?.name` |
-      | `registrarContactoEntrante` | sí — `sender: body.sender` |
-      | **`registrarMensajeEntrante`** (el cupo) | **no** — sólo `{inboxId, conversationId}` |
+      **Dos barandas, porque una sola deja el hueco conocido de esta familia.** El parámetro
+      es OBLIGATORIO para que `tsc` persiga al llamador que lo OLVIDE; y como eso deja libre
+      al que le pasa `null` para callarlo, va con
+      `lib/chatbot/el-cupo-sabe-quien-escribe.test.ts`, que camina el DISCO (no `git
+      ls-files`: un llamador nuevo sin commitear es justo el sujeto a cazar) y prohíbe que un
+      llamador de PRODUCTO lo acalle. **Validado por mutación en las tres direcciones:**
+      acallar con `null` → rojo nombrando el archivo; quitarlo → rojo en el gate Y en `tsc`;
+      recortar el universo del gate → rojo en el caso ancla.
 
-      El dato está a mano en el mismo `body`: no hay que ir a buscarlo a ningún lado.
+      Gates: `npx tsc --noEmit` 0 · `npx eslint .` 0 errores · `npx vitest run` **5745
+      passed**.
 
-      **LISTO =** el contador recibe el `sender` como sus dos hermanos y **no cuenta la
-      conversación cuando quien escribe es el dueño de esa organización** (un `profile` de la
-      org con ese teléfono o correo), con el caso en ROJO primero y los tres gates de
-      `onia-platform` verdes. Los helpers ya existen y se IMPORTAN, no se reescriben:
-      `datosDelContacto` (`lib/chatbot/contacto-desde-chatwoot.ts:54`), `claveDeTelefono`
-      (`:80`, compara por el FINAL del número) y el tipo `RemitenteChatwoot` (`:32`).
+      ⚠️ **Lo que el ítem pedía y NO se hizo, con su medición.** Decía resolverlo con "un
+      `profile` de la org con ese teléfono o correo" — pero **`Profile` no tiene teléfono**
+      (`prisma/schema.prisma:326`), y el caso que originó el ítem (conv `11`, el dueño,
+      `+59171654992`) entró por WhatsApp **con teléfono y sin correo**. Obedecerlo al pie de
+      la letra no habría cubierto su propio caso. Por eso la fuente del teléfono es la
+      ORGANIZACIÓN, no el perfil. Y aun así **la conv `11` se seguiría contando**: medido el
+      2026-09-19, `onia-interna` no tiene `phone` ni `contactPhone` cargados. No se inventó
+      una firma para taparlo — un número que el negocio no declaró no se distingue del de un
+      cliente, y adivinarlo dejaría de contar conversaciones que sí se cobran. Las orgs con
+      datos cargados (`clinica-sergio`, `tienda-la-esquina`, `zz-qa-bandeja-10`) sí quedan
+      cubiertas.
 
-      ⚠️ **Por qué no entró en la vuelta del 19-sep 07:15** (y qué esperar): el parámetro tiene
-      que ser **obligatorio** para que `tsc` persiga al llamador que lo olvide —un opcional con
-      default es el hueco conocido de esta familia—, y `grep -rn 'registrarMensajeEntrante('
-      --include=*.ts` da **28** sitios entre producto y tests. Es un cambio de la ruta que
-      cobra: no se empieza sin poder correr `npx tsc --noEmit` + `npx vitest run` (~5.700
-      tests) + `npx eslint .` enteros.
+      ⚠️ **Sigue abierta la mitad hermana: la sonda de QA (conv `49`) le suma cupo a
+      `onia-interna` en cada vuelta del loop** (`13,43 * * * *`, 554 mensajes). El criterio
+      "es la casa" no la alcanza: es un contacto anónimo del widget, sin teléfono ni correo.
+      El repo tiene `esConversacionNuestra` (`es-nuestra.mjs`, decide por nombre de inbox de
+      Chatwoot, vive en el OTRO repo) y `esCuentaQueNoEsCliente` (por ORG, no por
+      conversación). **Ninguno de los dos sirve tal cual** — y no es urgente como el anterior:
+      `onia-interna` no es un cliente que paga, así que eso ensucia la MEDICIÓN, no la plata
+      de nadie.
 
-      ⚠️ **La mitad hermana, que hay que decidir en el mismo arreglo:** la sonda `49` seguirá
-      sumando cupo a `onia-interna` en cada vuelta del loop mientras el criterio sea sólo «el
-      dueño». El repo ya tiene el criterio de conversación nuestra —`esConversacionNuestra`
-      (`hermes-content/deploy/vps-ops/bot/es-nuestra.mjs`), cableado a los cuatro barridos y al
-      aviso— pero vive en el OTRO repo y decide por nombre de inbox de Chatwoot; del lado del
-      producto el criterio hermano es `esCuentaQueNoEsCliente`
-      (`lib/platform/cuentas-que-no-son-clientes.ts`), que es por ORG y no por conversación.
-      Ninguno de los dos sirve tal cual: eso es parte del ítem, no un supuesto.
+      🔴 **EN VUELO, con su riesgo:** el commit `42eab9a8` está **sólo en el clon de casa**
+      (`/root/loops/onia-platform-chatbot`). Desde nodo-casa `onia-platform` **no se pushea**
+      (`git remote -v` → push `DESHABILITADO-NODO-DE-DESARROLLO`). Si esa máquina se pierde,
+      se pierde el arreglo. Lo entrega el integrador por
+      `scripts/integrar-onia-platform.sh`.
 
 - [x] 🔴 **CERRADO el 2026-09-19 — el bot le clavaba el género masculino a la persona que
       atiende, que la carga el CLIENTE: «la Dra. Ana Ríos … te escribe él»**
