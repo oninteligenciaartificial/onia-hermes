@@ -19,6 +19,7 @@ import {
   clasificarHerramienta,
   esperaAlSincronizador,
   herramientasQueElCronEjecuta,
+  shaQueElSincronizadorEjecuto,
 } from './herramientas-del-cron.mjs'
 
 // Recorte textual del crontab real del VPS, medido el 2026-09-19.
@@ -208,6 +209,34 @@ test('no haber podido preguntarle al grafo NO absuelve', () => {
     false,
     'sin saber qué vio el sync tampoco'
   )
+})
+
+test('el sincronizador se despliega A SÍ MISMO, así que su cambio tarda una corrida más', () => {
+  // Medido el 2026-09-19: la corrida del :44 leyó el main que ya traía la línea `poner`
+  // nueva y en esa vuelta sólo se actualizó a sí misma — el `poner` corre recién a la
+  // siguiente. Preguntar por el sha de la última corrida da «deriva» y manda a copiar a
+  // mano algo que se cura solo en una hora.
+  assert.equal(
+    shaQueElSincronizadorEjecuto({ shas: ['a', 'b', 'c'], elCambioTocaAlSincronizador: true }),
+    'b'
+  )
+})
+
+test('si el cambio NO toca al sincronizador, manda la última corrida', () => {
+  assert.equal(
+    shaQueElSincronizadorEjecuto({ shas: ['a', 'b', 'c'], elCambioTocaAlSincronizador: false }),
+    'c'
+  )
+})
+
+test('sin corrida anterior en el log no se inventa una', () => {
+  assert.equal(
+    shaQueElSincronizadorEjecuto({ shas: ['c'], elCambioTocaAlSincronizador: true }),
+    'c',
+    'preferimos un rojo temprano a citar una corrida que no existió'
+  )
+  assert.equal(shaQueElSincronizadorEjecuto({ shas: [], elCambioTocaAlSincronizador: true }), null)
+  assert.equal(shaQueElSincronizadorEjecuto({ elCambioTocaAlSincronizador: false }), null)
 })
 
 test('clasificar devuelve un veredicto por sujeto, sin perder ninguno', () => {

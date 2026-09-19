@@ -139,6 +139,28 @@ export function clasificarHerramienta (ev) {
 }
 
 /**
+ * Contra QUÉ sha hay que preguntar, que no siempre es el de la última corrida.
+ *
+ * `sincronizar.sh` se despliega A SÍ MISMO: la corrida del `:44` copia la versión nueva y
+ * recién la SIGUIENTE la ejecuta. Así que cuando lo que vuelve desplegable a una herramienta
+ * es un cambio en el propio sincronizador —una línea `poner` nueva—, la corrida más reciente
+ * todavía corría el binario viejo y no pudo aplicarlo: el sha que de verdad se ejecutó es el
+ * ANTERIOR. Medido el 2026-09-19: el sync de las 18:44 leyó `c4005cb2a` —que ya traía la
+ * línea `poner` de `chatwoot-brand-onia.sh`— y en esa corrida sólo se actualizó a sí mismo.
+ *
+ * Sin esta distinción el gate grita «deriva» durante la hora que tarda en aplicarse, y manda
+ * a copiar a producción a mano algo que se cura solo. Si el log no alcanza para saber cuál
+ * fue la corrida anterior se usa la última: preferimos un rojo temprano a inventar una
+ * corrida que no existió.
+ */
+export function shaQueElSincronizadorEjecuto ({ shas, elCambioTocaAlSincronizador }) {
+  const l = (shas ?? []).filter(Boolean)
+  if (l.length === 0) return null
+  if (!elCambioTocaAlSincronizador) return l[l.length - 1]
+  return l.length >= 2 ? l[l.length - 2] : l[l.length - 1]
+}
+
+/**
  * Una herramienta cableada puede diferir de su fuente por DOS motivos opuestos, y confundirlos
  * arruina el instrumento en las dos direcciones: o grita por algo que se cura solo, o calla una
  * deriva de verdad. `sincronizar.sh` copia desde `origin/main` una vez por hora (cron `:44`),
@@ -191,12 +213,11 @@ function md5 (buf) {
   return createHash('md5').update(buf).digest('hex')
 }
 
-/** El sha de `main` que leyó la última corrida de `sincronizar.sh`, o `null` si no se pudo. */
-function ultimoShaSincronizado () {
+/** Los shas de `main` que leyeron las corridas de `sincronizar.sh`, en orden. */
+function shasSincronizados () {
   const log = ssh('tail -n 200 /var/log/onia-loops-sync.log 2>/dev/null')
-  if (log?.error) return null
-  const shas = [...String(log).matchAll(/fuente:\s*origin\/main\s*\(([0-9a-f]{7,40})\)/g)]
-  return shas.length ? shas[shas.length - 1][1] : null
+  if (log?.error) return []
+  return [...String(log).matchAll(/fuente:\s*origin\/main\s*\(([0-9a-f]{7,40})\)/g)].map((m) => m[1])
 }
 
 /**
@@ -329,7 +350,7 @@ function medir () {
     readFileSync(path.join(RAIZ, 'scripts/loops/sincronizar.sh'), 'utf8')
   )
   const { porMd5, porNombre } = indiceDelRepo()
-  const shaDelUltimoSync = ultimoShaSincronizado()
+  const shasDelSync = shasSincronizados()
 
   const evidencias = vivas.map((ruta) => {
     const nombre = ruta.split('/').pop()
@@ -378,11 +399,13 @@ function medir () {
   const veredictos = clasificar(evidencias).map((v) => {
     if (v.veredicto !== 'CABLEADA_EN_DERIVA') return v
     const fuente = cableadas.get(v.nombre)
-    const pendiente = esperaAlSincronizador({
-      commitDeLaFuente: ultimoCommitDe(fuente, 'scripts/loops/sincronizar.sh'),
-      shaDelUltimoSync,
-      esAncestro,
+    const SINC = 'scripts/loops/sincronizar.sh'
+    const decisivo = ultimoCommitDe(fuente, SINC)
+    const shaDelUltimoSync = shaQueElSincronizadorEjecuto({
+      shas: shasDelSync,
+      elCambioTocaAlSincronizador: decisivo != null && decisivo === ultimoCommitDe(SINC),
     })
+    const pendiente = esperaAlSincronizador({ commitDeLaFuente: decisivo, shaDelUltimoSync, esAncestro })
     return pendiente
       ? {
           nombre: v.nombre,
