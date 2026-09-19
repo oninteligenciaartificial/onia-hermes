@@ -77,6 +77,147 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Ahora — plan de features (revisado 2026-08-30, con Gate 1 corrido)
 
+- [x] 🔴 **La portada y `/rubros` le prometían a un centro de estética un PAQUETE con las
+      sesiones hechas y las que faltan — un saldo que el producto no lleva.** Medido el
+      2026-09-19 contra `origin/master` de `onia-platform` (ref fetcheada, no de disco):
+      `prisma/schema.prisma` no declara paquete, bono ni saldo de sesiones (`PatientTreatment`
+      tiene `status`, no total contratado); `esteticagest-clinical` es un ESPEJO del pack dental
+      (`mirrorPack`) cuya nav (`navClinicaDe`) sólo renombra `/patients`→«Clientas» y
+      `/treatments`→«Tratamientos»; `lib/onboarding/vocabulario.ts` le dice a ese track
+      `servicios: "tratamientos"`. Lo único que el repo llama «bono» es el de antigüedad de la
+      planilla. El panel compartido además lo DIBUJABA: `<Sesiones hechas={3} total={6} />`.
+      **Por qué ningún gate lo vio:** no mueve una cifra, no tipea un nombre de plan junto a una
+      capacidad y no es un cuantificador universal — y lo sostenía una **cita circular**: el
+      comentario de la home se respaldaba en `rubros/page.tsx` y `rubros/page.tsx` en sí mismo,
+      el sitio comparándose consigo mismo. El panel hermano de al lado (servicios: IVA e IT)
+      tenía la cita bien hecha, al PRODUCTO.
+      **Cura:** la promesa se cambia por la verdadera, que es más fuerte y es el dolor de
+      entrada del cliente ideal — la clienta que dejó el tratamiento a medias y no volvió (el
+      Recall corre en ese rubro y dispara por `recallAfterDays`, o sea por tiempo sin volver).
+      Plantilla antes que instancias: `ui.tsx` (panel + `alt` + se BORRA el componente
+      `Sesiones` y su CSS huérfano), y después `switcher.tsx`, `rubros/page.tsx` y `page.tsx`.
+      Gate de clase `(sitio)/promesa-de-rubro-que-el-producto-no-modela.test.ts`: universo
+      derivado del conmutador, prohíbe la FORMA (agrupación con saldo + el contador dibujado),
+      validado por mutación con OTRAS palabras y en OTRO rubro («bono de 10 clases») y con caso
+      ancla que exige los 5 rubros vivos. Verificado renderizado en el build de esta rama:
+      documento 200, cero subrecursos ≥400, y el DOM pinta «Tratamientos en curso» / «La clienta
+      que dejó el tratamiento a medias no se pierde», sin rastro de paquete ni sesiones.
+
+- [x] 🟠 **CERRADO el 2026-09-19 06:5x La Paz por `onia-cola`.** El corte pasó de la FORMA del
+      número a la **clave que lo recibe**, y el caso vivo quedó medido con el guion REAL contra el
+      diff real: `bash scripts/loops/extras/publicar-solo.sh --montos /root/loops/onia-hermes
+      web-factory/apps/onia-platform/src/lib/pricing.ts $(git log --format=%H
+      d56194544..origin/main -- web-factory/apps/onia-platform/src/lib/pricing.ts)` pasó de
+      `cambian: 0` (exit 1, detenía) a **`ningun monto cambia` (exit 0)**.
+      **Lo que escapaba, derivado del diff y no adivinado:** `asientosExtra: 0` —personas— y el
+      `0`/`1` de `frase.charAt(0)`/`frase.slice(1)`. Hubo un segundo hallazgo que ninguna lectura
+      del ítem anticipaba: el terminador `([^0-9.,]|$)` **excluía la coma**, así que
+      `asientosExtra: 0,` no matcheaba ni con el corte por clave puesto — el arreglo "obvio"
+      seguía deteniendo y sólo lo delató volver a correr el guion contra el diff real.
+      **Falla CERRADO, que es lo único que lo hace seguro:** la excusa se ancla al vocabulario de
+      CANTIDAD (`asiento|usuario|persona|cupo|ficha|conversacion|sesion|length|index`) y exige la
+      segunda mitad —que la clave **no** nombre plata—, así que `precioPorUsuario: 0` sigue
+      deteniendo aunque diga «usuario», y una clave que el guion no sabe nombrar detiene también.
+      La dirección del daño no es simétrica: detener de más cuesta una firma de Sergio Urcullo;
+      dejar pasar de menos publica un precio que nadie decidió.
+      **Gate:** `scripts/publicador-freno-de-precio.test.mjs`, 18/18, con los tres casos que
+      sostienen la cura (clave desconocida, clave de cantidad+plata, y el caso vivo).
+      **Validado por mutación 4/4** por `# fail N` + exit 1, restaurando con `cp` (nunca
+      `git checkout`): vocabulario que no reconoce `asiento` → cae sólo el caso vivo; guarda de
+      plata anulada → cae `precioPorUsuario`; métodos de posición fuera → caen 2; y el corte por
+      clave entero fuera → caen 8.
+
+      **↑ Auditado en PRODUCCIÓN el 2026-09-19 11:44 UTC por `onia-cola` (escalón 2), y el `[x]`
+      estaba a medias: era cierto en el repo y falso en el VPS.** Este cierre midió el guion del
+      **repo**, y el que decide es `/root/bin/onia-publicar-solo.sh`, que viaja por OTRA cadena
+      —`sincronizar.sh`, cron `44 * * * *`, desde `origin/main`—. `b33f4c1c` entró a `main` a las
+      **10:44:19 UTC**, o sea **17 segundos después** del sync de las `10:44:02Z`: producción
+      siguió con la copia vieja una hora entera, con `md5` distinto (`1b209384…` vivo contra
+      `9909ccd3…` en el repo), y la corrida del publicador de las 09:50 UTC volvió a imprimir
+      textual `landing: NO publico solo — cambia un numero en una fuente de precio:
+      web-factory/apps/onia-platform/src/lib/pricing.ts: 0 1` — el bug que este ítem dice cerrado.
+      **Cerrado de verdad:** el sync de las `11:44:03Z` llevó el archivo (`sincronizados 1
+      archivo(s) desde main`, `md5` vivo ya igual al del repo) y el guion **VIVO del VPS**,
+      corrido contra el mismo commit real (`2b12f50a`), contesta **`ningun monto cambia`, exit 0**.
+      **La lección no es del arreglo, que estaba bien: es que una herramienta de producción con
+      cadena de despliegue propia no está arreglada cuando el test pasa, sino cuando su copia
+      VIVA contesta distinto** — y acá las dos cadencias no están alineadas (sync horario al `:44`
+      contra publicador `50 */3`), así que perder el sync por segundos puede costar la ventana
+      entera del publicador. Se comentó en `t_bec84ac0` para que nadie le pida a Sergio Urcullo un
+      `ok` por algo que el publicador ya saca solo.
+
+- [~] ~~🟠 **El freno de precio del publicador decide por la FORMA del número y no por el campo:
+      hoy detuvo la landing por `asientosExtra: 0`, que son personas, no plata.**
+      **Medido el 2026-09-19 08:4x UTC**, con `2b12f50ae` esperando en `origin/main`:
+      `bash /root/bin/onia-publicar-solo.sh --dry-run` contestó *«landing: NO publico solo —
+      cambia un numero en una fuente de precio: web-factory/apps/onia-platform/src/lib/pricing.ts:
+      0 1»*. Los números que acusa, leídos del diff contra el build vivo
+      (`git -C /root/loops/onia-hermes diff $(cat /opt/onia-landing/runtime-next/.commit)..origin/main
+      -- web-factory/apps/onia-platform/src/lib/pricing.ts`), son `asientosExtra: 0` —cuántas
+      personas extra vende un plan— y `nombres.length === 0` / `=== 1` dentro de `unirConY`, un
+      helper que arma una enumeración de texto. **Ningún monto cambia**: `Bs 70` sigue saliendo
+      de `USUARIO_EXTRA_ADDON`, intacto.
+      **Por qué no lo cerró la cura de ayer** (`d5619454`): ésa sacó las COMPARACIONES (`> 0`,
+      `> 1`) y dejó las ASIGNACIONES (`: 0`) deteniendo a propósito, con su motivo escrito —«un
+      add-on que pasa a gratis se escribe `: 0`»—, que sigue siendo cierto. Lo que faltaba es que
+      el freno mire **a qué campo** se asigna: `: 0` en `mensualAddon` es plata; en `asientosExtra`
+      es una cantidad de personas. El corte no es la forma del número ni su valor: es si la clave
+      que lo recibe (o el texto que lo rodea) habla de plata.
+      **Qué cuesta dejarlo así:** cada falso positivo le pide a Sergio Urcullo una firma por un
+      cambio que no mueve un centavo —hoy, el pedido `t_b535811a`— y esa es la única firma que
+      importa; gastarla en falsos la vuelve automática. Y mientras espera, el arreglo que SÍ le
+      ahorra Bs 330/mes a un lead de Profesional no está publicado.
+      **Dónde:** `scripts/loops/extras/publicar-solo.sh` (`numeros_del_diff`), con su gate
+      `scripts/publicador-freno-de-precio.test.mjs`. El caso que hay que sembrar es justamente
+      éste: un diff que agrega `asientosExtra: 0` **no** detiene, y uno que agrega
+      `mensualAddon: 0` **sí**.~~
+
+- [x] 🟠 **La portada le prometía al lead que ninguna capacidad exige subir de plan, y DOS lo
+      exigen. Medido y CERRADO el 2026-09-18 20:5x La Paz por `web-venta` (`00ae5f63`).**
+      **El defecto, MIRADO renderizado** (captura leída, no un `grep`): la sección de add-ons de
+      `onia.com.bo/` se rotula *«Sobre el plan encendés lo que te falta»* y debajo afirmaba
+      **«No hay que saltar de plan para desbloquear una sola»**. Es falso desde la escalera C: de
+      las cuatro capacidades de `CAPACIDADES_INCLUIDAS` sólo DOS se compran sueltas —chatbot
+      (Bs 390) y reservas (Bs 150 en Básico)—; los **agentes** exigen saltar al Crece (Bs 550) y
+      el **segundo administrador**, al Completo (Bs 1.290), y no hay add-on de ninguno de los dos
+      (`onia-platform/lib/plan-catalogo.ts`: `agentsIncluded`, `multiAdminIncluded`). La escalera
+      de la MISMA pantalla, tres secciones más arriba, lo dice con todas las letras («Todo lo del
+      Básico + Agente Recall…», «más de un administrador»): la pantalla se contradecía sola, y el
+      lead que necesitaba una de esas dos se iba al plan de entrada creyendo que después la
+      prendía aparte.
+      **Por qué ningún gate podía verlo** — es la tercera forma de la familia «alcance total» y
+      la más escurridiza: los cruces de precio validan MONTOS y acá no hay ninguno;
+      `src/lib/capacidad-incluida.test.ts` prohíbe TIPEAR un plan junto a la capacidad y esta
+      frase no nombra ni un plan ni una capacidad; `(sitio)/prueba-vs-plan.test.ts` cierra el
+      alcance dicho sobre el TODO («el sistema completo») y sobre las PARTES («todos los
+      módulos»). Ésta se dice sobre el **mecanismo**, en abstracto.
+      **Cómo quedó:** el texto lo DERIVA `sinSubirDePlan()`
+      (`web-factory/apps/onia-platform/src/lib/pricing.ts`) del catálogo, y lo que se prohíbe es
+      la FORMA, no el literal viejo — prohibir «saltar de plan» se apagaría solo el día que la
+      respuesta correcta vuelva a ser ésa, y el caso 5 del gate exige que el universal reaparezca
+      solo cuando todo se compre suelto. `ADDON_DE_LA_CAPACIDAD` es `Record` completo (una
+      capacidad nueva no compila hasta que alguien conteste de qué lado está) y **no se cree
+      solo**: el gate cruza cada nombre declarado contra `ADDONS`, la carta que el lead ve, así
+      que marcar una capacidad como «suelta» sin add-on publicado es rojo. De paso viajó a
+      `/precios`, que decía lo mismo **acotado** («Ninguno te obliga a…») y por eso era cierto —
+      y tipeado igual, que es como las dos se separan.
+      **Gate:** `web-factory/apps/onia-platform/src/app/(sitio)/desbloqueo-que-no-se-tipea.test.ts`
+      (sujetos caminados del disco: una pantalla nueva nace cubierta).
+      **Verificado:** `npm run prebuild` verde (tsc + 1.367 tests), `npm run build` 0,
+      `npm run precios:fuente` VERDE (43 cifras cruzadas), y la pieza servida desde el build
+      local ABIERTA Y MIRADA con `reducedMotion` — dice «Cada cosa se prende aparte y se paga
+      aparte. Lo de acá abajo se suma sobre el plan que ya tenés.»
+      **Validado por mutación 6/6**, restaurando con `cp` (nunca `git checkout`): reintroducir el
+      texto tipeado en la portada, absolver una capacidad con un add-on inexistente, clavar la
+      cláusula en el universal, vaciar el cálculo, borrarle a la dueña la rama universal, y dejar
+      al caminador sin llegar a `(sitio)`.
+      **Falta publicar:** vive en el pedido de landing `t_c2fbda1e`, que ya espera el ok de
+      Sergio Urcullo — comentado ahí una sola vez, para que el integrador rehaga el cuerpo con
+      los tres shas (el cuerpo de un pedido no se corrige comentando).
+      **Reproducción en 30 segundos:**
+
+          curl -sL https://onia.com.bo/ | grep -oE "[^<>]{0,60}saltar de plan[^<>]{0,60}"
+
 - [x] 🟠 **El runtime vivo de la landing perdió su `.commit`, así que «qué corre `onia.com.bo`»
       volvió a ser a mano — que es exactamente lo que su propio publicador dice haber curado el
       2026-09-03. Medido el 2026-09-18 18:3x La Paz por `onia-cola`. CERRADO el 2026-09-18 20:0x
@@ -182,6 +323,59 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       carriles y quedaban ~15 min; un script de ENTREGA a medias es peor que la copia a mano que
       funciona, porque el que lo use después no sabe cuál de los dos corrió.
 
+- [x] 🔴 **La vía de entrega de `onia-platform` declarada en `loops.md` —la que lee un gate y la
+      que obedece el integrador de la vuelta siguiente— era una receta VENCIDA y rota, y el
+      script bueno no lo nombraba nadie. Medido y ARREGLADO el 2026-09-19 por `onia-cola`,
+      auditando los `[x]` (escalón 2).**
+      **Cómo se encontró:** auditando el `[x]` de arriba (el que versionó
+      `scripts/integrar-onia-platform.sh` el 18-sep). El archivo estaba, commiteado y correcto
+      — pero `grep -rn integrar-onia-platform` sobre todo el repo devolvía **dos** menciones: el
+      propio `COLA.md` y un comentario del script nombrándose a sí mismo. Ningún prompt, ningún
+      doc y ningún gate lo nombraban. O sea el ítem cerró la mitad *«dónde vive el archivo»* y
+      dejó abierta la que importa: **cómo lo encuentra el que lo necesita.**
+      **Lo que el próximo integrador leía, y por qué rompe** (medido en vivo, no heredado): la
+      marca `VIA-INTEGRADOR onia-platform casa` de `hermes-content/docs/cola/loops.md` decía
+      `cd /root/loops/onia-platform && git merge … && git push origin master`, apoyada en la
+      premisa *«el clon del VPS está en `master`, limpio»* — cierta el 2026-09-07, **falsa hoy**:
+      ese árbol está en `claude/chatbots-platform-review-0d1d09` con **106 archivos sucios**
+      (`git -C … status --porcelain | wc -l`). Esa receta (1) mergea sobre el carril **en vuelo**
+      de `chatbot-cola`, el único loop que escribe en ese repo; (2) su `git push origin master`
+      empuja una rama local que **no** es donde se hizo el merge; (3) corre **3 de los 5** gates
+      del CI (le faltan `check:onia-core` y `build`); y (4) no tiene reintento, así que rebota si
+      `master` se movió — rebotó **dos veces** el 18-sep.
+      **Por qué ningún gate lo veía, que es el punto del ítem:** `scripts/integrador_puede_mergear.mjs`
+      exigía que la marca **existiera**, y nada más. Una cadena libre: no medía la vía, medía que
+      alguien la hubiera escrito alguna vez. **Y una vía se vence** — es el mismo modo de falla que
+      este archivo ya guarda tres veces (un comentario que afirma una garantía es una hipótesis
+      **con fecha**).
+      **El arreglo, en sus dos mitades:** (a) la marca pasa a nombrar el script versionado; (b)
+      el gate exige que **toda** vía declarada nombre un archivo que existe en el repo — si no,
+      **ROJO** con el motivo. La regla es *«al menos UNA ruta citada vive en el repo»*, no
+      *«todas»*: una vía legítima nombra también shims de `/root/bin` como `onia-vps.sh`, que
+      **no existe** en este repo a propósito (vive suelto en la máquina, no versionado). Sin la mitad (b), mañana alguien vuelve a
+      escribir una receta inline y el gate firma verde igual.
+      **Tri-estado, no verde por omisión:** si no se puede listar el repo (`git ls-files`), la
+      vía sale **NO MEDIDO (2)** con su causa. Confundir *«no pude preguntar»* con *«me dijeron
+      que sí»* falla al lado caro, que acá es dejar al integrador sin camino y en silencio.
+      **Test primero, en ROJO por el motivo correcto:** el caso ancla falló contra el doc REAL
+      diciendo `la via declarada para onia-platform desde casa esta sin fuente: cita
+      /root/bin/onia-vps.sh, y ninguna existe en el repo`. Juzga con `viaConFuente` **del
+      producto**, no con una copia, y su universo sale de `git ls-files` — que es justo lo que
+      afirma: la vía se apoya en algo **versionado**.
+      **Validado por MUTACIÓN, las tres cazadas** (y la primera pasó verde hasta que se verificó
+      que la mutación había ENTRADO — el `replace` no coincidía): (1) la vía vuelve a la receta
+      inline → `fail 1` + el gate vivo imprime el ROJO; (2) el script versionado desaparece del
+      repo → `fail 1` + medición viva **exit 1**; (3) el producto esquiva la guarda
+      (`if (false && !fuente.ok)`) → `fail 2`.
+      **Y de paso, la bomba de tiempo del mismo archivo:** `scripts/integrar-onia-platform.sh`
+      estaba commiteado **100644**. Hoy no muerde porque se invoca con `bash <ruta>`, que es
+      exactamente cómo sobrevivió `insistencia-run.mjs` — por accidente. Puesto en `100755` con
+      `git update-index --chmod=+x` (un `chmod` en el worktree no viaja: el modo que viaja es el
+      de git).
+      **Medido al cerrar:** `node --test scripts/integrador_puede_mergear.test.mjs` → **20 casos
+      verdes**; `node scripts/integrador_puede_mergear.mjs` → **exit 0**, «el integrador alcanza
+      los 2 repos desde casa».
+
 - [x] 🔴 **`scripts/deploy_sin_pedido.mjs` absolvía un destino porque EXISTÍA un pedido, sin
       preguntar si ese pedido DESCRIBE lo que hoy publicaría — y el que los deja cortos es el
       integrador. Medido en vivo el 2026-09-18 ~11:5x La Paz por `onia-cola`. CERRADO el
@@ -196,6 +390,18 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       `detectar()` guarda su salida cruda en `SALIDAS` y `quintaPregunta` la consume.
       `CUBIERTO_CORTO` le gana a `CUBIERTO_VIEJO` porque rehacer el pedido cura las dos cosas
       y esperar el `ok` no cura el cuerpo.
+      **Reverificado con datos REALES el 2026-09-18 20:5x La Paz por `onia-cola` (escalón 2,
+      auditar los `[x]`): el `[x]` resiste.** El caso volvió a ocurrir en vivo —mergeé tres
+      carriles sobre el pedido `t_4e0bb0b0`, que citaba `1`, y el seco de la landing pasó a
+      decir `2`— y `quintaPregunta('landing', [ese pedido], { salida: <seco de hoy> })` devuelve
+      `["t_4e0bb0b0"]` con la causa `el publicador en seco dice 2 arreglo(s) y el cuerpo cita
+      menos`. **Ojo con cómo casi lo desmarco, porque es la trampa de leer este ítem:** en esa
+      vuelta `node scripts/deploy_sin_pedido.mjs` imprimió `OK landing: falta publicar y ya hay
+      pedido` mientras `npm run pedido:entregado` decía ROJO, que es *literalmente* la
+      reproducción escrita más abajo — pero las dos corridas del primero fueron **antes** del
+      merge y **después** de rehacer el pedido, nunca en el medio. El gate no falló: no se lo
+      preguntó nadie en el único instante en que la respuesta cambia. Un `OK` de este gate sólo
+      vale por el estado del árbol **en el momento en que se corrió**.
       **Validado por mutación: 9 de 9.** La novena pasó **verde** al primer intento y vale
       anotarla — el caso del cableado anclaba la MENCIÓN (`/SALIDAS\.set\(/` sobre el propio
       fuente) y envolver esa línea en `if (false)` deja el literal intacto. Se cerró midiendo
@@ -246,6 +452,17 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       `CUBIERTO_CORTO`; `seco < citado` NO se acusa (ésa es la otra familia, `cuerpoVencido`);
       cuerpo sin recuento ⇒ `null` con su causa, nunca rojo. Para `bot` y `siat` la pregunta ya
       tiene dueño y es exacta: `cuerpoCortoArchivos` importado del hermano.
+      **Reverificado con el caso vivo el 2026-09-19 05:4x La Paz por `onia-cola`: el `[x]`
+      resiste, y con un dato que faltaba.** Volvió a ocurrir igual —mergeé tres carriles sobre
+      `t_b535811a`, que citaba `1`, y el seco pasó a decir `2`— y el gate hermano lo cazó. Lo
+      que NO estaba medido es la otra mitad: que el pedido *nuevo* pueda ser **juzgado**. El
+      cuerpo que escribí cita el recuento **sin los `==`** que traía el anterior
+      (`"hay que publicar: 2 arreglo(s) que el cliente no ve"`), y `deploy_sin_pedido.mjs`
+      imprimió `OK landing … ya hay pedido` **sin** el sufijo `— sin juzgar si el cuerpo lo
+      describe`, que es la única señal de un `cortos: null`. O sea `recuentoDeArreglos` no
+      depende de los `==`: un cuerpo que cite el recuento en prosa sigue siendo medible. Vale
+      anotarlo porque la forma de la cita la elige quien redacta el pedido, y si el lector
+      exigiera los `==` el pedido nacería inmedible **en verde** salvo por ese sufijo.
 
 - [x] 🔴 **El único gate que mira si producción corre el publicador que dice `main` llevaba DIEZ
       DÍAS salteándose en cada merge, porque el carril cambió de máquina. CERRADO el 2026-09-17

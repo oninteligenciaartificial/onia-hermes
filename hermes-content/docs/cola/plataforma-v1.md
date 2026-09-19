@@ -3939,7 +3939,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       el navegador del dueño, que ya está en su zona.
 
       ⚠️ **Y el primer instrumento mentía en las dos direcciones, así que ninguna de las dos
-      listas servía.** `grep -v timeZone` por LÍNEA acusaba a `crear-cita.ts` y `whatsapp-bot.ts`,
+      listas servía.** `grep -v timeZone` por LÍNEA acusaba a `crear-cita.ts` y al de WhatsApp (entonces whatsapp-bot.ts, que ya no existe),
       que están **sanos** (la opción baja de renglón) — se resolvió recorriendo la llamada con
       paréntesis balanceados. Y al revés: `toLocaleString` es **ambiguo** — `Number` tiene el suyo,
       y las tres de `app/(dashboard)/communications/page.tsx` son **números** (`monthTotal.toLocaleString`).
@@ -5621,6 +5621,40 @@ y sin operar. Acá se opera, con verificación por ítem.
 - **No le escribe a un prospecto.** Regla del [`README.md`](README.md) de esta carpeta.
 
 ## Cerrado
+
+- [x] 🔴 **CERRADO el 2026-09-19: el dueño no podía sacar a una coadministradora, y una CUARTA
+      puerta la borraba sin preguntar nada.** ⚠️ COMMITEADO Y PUSHEADO (`52409f20`, rama
+      `claude/chatbots-platform-review-0d1d09` de `onia-platform`), **falta mergear y desplegar**.
+
+      Lo reprodujo `recorrido-cliente` con HTTP real contra producción (tarea `t_24758d5a`): org
+      de plan `clinic` con DOS administradoras, `DELETE /api/admin/users/<la segunda>` devolvía
+      **403 `Cannot remove admin users`**. Con dos, sacar una tiene que dar 200 — queda una y la
+      cuenta no se queda sin ninguna.
+
+      **La causa no estaba donde miraba el gate.** La ruta ya contaba bien y preguntaba a
+      `puedeQuitarAdministrador`, pero después llamaba a `removeUserFromOrganization`
+      (`onia-platform/lib/auth.ts`), que **volvía a decidir lo mismo al revés** con un
+      `if (role === "ADMIN") throw` sin mirar cuántas quedan — y llegaba primero. La guarda de la
+      ruta era decorativa.
+
+      **La cura que traía la tarea escrita no se aplicó tal cual.** Decía «borrar el bloqueo de
+      `lib/auth.ts:185-187`», y eso dejaba a la función que ESCRIBE sin ninguna baranda, siendo
+      una función exportada de nombre genérico. La baranda se **mudó** a la fuente única: ahora
+      esa función llama a `puedeQuitarAdministrador` con el conteo real de la base.
+
+      **Y apareció la CUARTA puerta, que ninguna lista nombraba:** `DELETE /api/doctors/[id]`
+      borraba cualquier perfil de la organización sin leerle siquiera el rol (`select: { id: true }`).
+      Desde *Profesionales* se sacaba a la otra administradora —o a uno mismo— y la cuenta quedaba
+      sin ninguna. El gate de DG-043 enumeraba **tres** puertas a mano: lista de inclusión, falló
+      abierto con la cuarta.
+
+      **Prueba:** `tsc` 0 errores · **5.725 tests verdes** · `eslint` 0 errores, medidos en casa Y
+      re-medidos en el VPS sobre el sha publicado. Los dos gates nuevos están **validados por
+      mutación**: `lib/platform/quitar-administrador-lo-decide-una-sola-funcion.test.ts` (de
+      COMPORTAMIENTO: llama a la función que escribe; el esquive `false &&` deja 2 en rojo) y
+      `lib/platform/puertas-que-borran-un-perfil.test.ts` (deriva el universo **caminando el
+      disco**, gemelo del de las puertas que escriben un rol: una quinta puerta sembrada nace roja
+      sola; exención única y re-medida, el panel de operación de Onia, que corta por `SUPERADMIN`).
 
 - [x] 🔴 **CERRADO el 2026-09-17: los avisos de vencimiento mandaban al dueño de un plan
       Empresa a una pantalla que NO puede cobrarle.** ⚠️ COMMITEADO Y PUSHEADO (`c399caaa`,

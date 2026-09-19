@@ -93,10 +93,21 @@ esac
 CWDB="$(docker ps -qf name=onia-chatbot_chatwoot-db | head -n1)"
 # El bot postea con SU PROPIA identidad de Chatwoot (agente "Onia Bot"), no con la de Sergio:
 # es lo unico que permite saber quien escribio y callar al bot cuando el toma la conversacion.
-# Sin la variable cae al 2 (la cuenta de Sergio) = comportamiento de antes, nunca queda sin token.
-CW_AGENT_ID="${CHATWOOT_BOT_AGENT_ID:-2}"
+# LA IDENTIDAD TAMBIEN SE DERIVA DE webhook.env, no del entorno del que llama: misma clase que
+# ONIA_BOT_DRY_RUN y ONIA_BOT_SLOTS, en este mismo archivo. El cron invoca este wrapper PELADO, y
+# el default caia al 2, que NO es neutro: es `OnIA`, la cuenta HUMANA de Sergio Urcullo.
+if [ -z "${CHATWOOT_BOT_AGENT_ID:-}" ] && [ -f "$BOT_DIR/webhook.env" ]; then
+  CHATWOOT_BOT_AGENT_ID="$(sed -n 's/^CHATWOOT_BOT_AGENT_ID=//p' "$BOT_DIR/webhook.env" | head -n1 | tr -d "\"' \r")"
+fi
+# Sin fuente NO se inventa una identidad: sin agente no se busca token y el barrido no manda. Ese
+# es el fallo BARATO. Postear como una persona es el caro y NO se puede deshacer: el adapter lo lee
+# como "lo escribio un humano", prende human_takeover y el bot queda mudo para ese prospecto para
+# siempre (medido el 2026-09-18 en la conversacion 58, un desconocido real: el M3 salio como User 2
+# mientras el webhook corre con el 3). El comentario que estaba aca decia "nunca queda sin token"
+# como si fuera una virtud — conseguir el token de una persona era exactamente el defecto.
+CW_AGENT_ID="${CHATWOOT_BOT_AGENT_ID:-}"
 CW_TOKEN=""
-if [ -n "$CWDB" ]; then
+if [ -n "$CWDB" ] && [ -n "$CW_AGENT_ID" ]; then
   CW_TOKEN="$(docker exec "$CWDB" psql -U postgres -d 'onia-chatbot' -tAc \
     "select token from access_tokens where owner_id=$CW_AGENT_ID order by created_at desc limit 1" 2>/dev/null | tr -d ' \t\n' || true)"
 fi

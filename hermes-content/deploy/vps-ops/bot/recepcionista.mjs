@@ -190,8 +190,18 @@ export function recepcionistaStep(ctx, base, motor) {
     return finalize(ctx, base, [], [], ["silencio:handoff_en_curso"]);
   }
 
+  // Nota de voz que no podemos transcribir (Speaches no existe en el VPS: `npm run destinos:vivos`).
+  // Aca pesa mas que en el bot de venta: este es el asistente del CLIENTE, el add-on que se cobra,
+  // y quien manda el audio es SU cliente. No poder leerlo es un fallo de comprension, asi que usa
+  // el mismo contador que los malentendidos: se pide texto una vez y, si insiste con audio, lo
+  // escucha una persona del negocio — que si puede, porque el audio esta en Chatwoot. Antes esto
+  // era un `finalize` pelado y el negocio no se enteraba nunca de que alguien habia escrito.
   if (msg.kind === "voice" && !msg.hasText) {
-    return finalize(ctx, base, [say("M_AUDIO_FAIL", base, config)], [], ["audio_sin_transcripcion"]);
+    const count = base.offScriptCount + 1;
+    if (count >= config.offScript.maxBeforeHandoff) {
+      return handoffResult(ctx, { ...base, offScriptCount: count }, "audio_que_no_podemos_oir_recepcion", [], "R_AUDIO_DERIVA");
+    }
+    return finalize(ctx, { ...base, offScriptCount: count }, [say("R_AUDIO", base, config)], [], ["audio_sin_transcripcion"]);
   }
   if (msg.kind === "attachment" && !msg.hasText) {
     // COMPROBANTE DE PAGO detectado por vision (Sendy-parity, 2026-08-31): el bot

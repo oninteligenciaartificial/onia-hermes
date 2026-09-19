@@ -5,7 +5,7 @@
 // cifras — que se desincroniza en la primera edicion. Un dato que se muestra
 // en dos pantallas vive en un archivo, no en dos.
 
-import { PRUEBA, bs, cuantosPlanes, nombresConChatbot } from "@/lib/pricing";
+import { PRUEBA, bs, cuantosPlanes, nombresConChatbot, traeOTraen } from "@/lib/pricing";
 
 import { CHATBOT_PLAN, precioStack } from "@/content/chatbot-precios";
 import { CUANTOS_RUBROS } from "@/content/rubros";
@@ -76,7 +76,7 @@ export const FAQ = [
     // Depende del plan, y decir "no" a secas le cobraba Bs 390/mes al cliente de Full por algo que
     // su plan ya le da (`whatsappIncluded` en el catálogo del producto). Lo ata
     // `scripts/inclusion-chatbot.mjs`; quién lo trae NO se tipea acá.
-    a: `${nombresConChatbot()} ya trae el chatbot de WhatsApp incluido. En los demás planes va aparte, ${precioStack(CHATBOT_PLAN)}. El botón de WhatsApp de tu web sí va gratis.`,
+    a: `${nombresConChatbot()} ya ${traeOTraen()} el chatbot de WhatsApp incluido. En los demás planes va aparte, ${precioStack(CHATBOT_PLAN)}. El botón de WhatsApp de tu web sí va gratis.`,
   },
   {
     // El export integral NO se gatea por plan: `onia-platform`

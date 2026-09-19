@@ -55,7 +55,7 @@ import { pathToFileURL } from "node:url";
 import { DEFAULT_CONFIG, createBotConfig } from "./config.mjs";
 import { withKnowledge } from "./knowledge.mjs";
 import { createStore, stateFromRow } from "./persistence.mjs";
-import { MOTIVO_NUESTRA, esConversacionNuestra } from "./es-nuestra.mjs";
+import { MOTIVO_NUESTRA, cargarInboxesDePrueba, esConversacionNuestra } from "./es-nuestra.mjs";
 import { industryLabel } from "./intents.mjs";
 import { formatSlotLabel } from "./calcom-availability.mjs";
 import { hoursBetween } from "./followup-run.mjs";
@@ -290,7 +290,16 @@ async function sweepRow(row, ctx) {
   // puede reintentar sin arriesgar el doble aviso — asi que se registra con nombre propio y el
   // barrido lo sube a `warnings`, que es lo que mira un humano. Callarlo seria perder la demo.
   const entrega = await aviso.enviar(
-    construirAviso({ notify: [item], conversationId: item.conversationKey, stageAfter: item.stageAfter }),
+    // `canal` es el MEDIO (`channel_type` de Chatwoot: WhatsApp o web), NO `state.channel`, que es
+    // el canal del motor y vale "chatwoot" para los dos. El texto de `buildDemoDoneNotice` ya
+    // nombra `state.channel`, así que sin esto el aviso decía "chatwoot" y no por dónde contestar.
+    construirAviso({
+      notify: [item],
+      conversationId: item.conversationKey,
+      stageAfter: item.stageAfter,
+      canal: state?.channelType,
+      inbox: state?.inboxId,
+    }),
   );
 
   return {
@@ -357,6 +366,12 @@ export async function runPostDemoSweep(options = {}, deps = {}) {
     result.error = `sin canal para avisar, no se cierra ninguna demo: ${aviso.motivo || "motivo desconocido"}`;
     return result;
   }
+
+  // Quienes NO son de nadie, ANTES de elegir a quien escribirle: el banco de pruebas es un inbox
+  // entero y Chatwoot le pone nombre anonimo a su contacto (ver `es-nuestra.mjs`). Si no se pudo
+  // preguntar, el conjunto queda vacio y se avisa: nunca se falla hacia "es nuestra".
+  const inboxesQA = await cargarInboxesDePrueba(deps);
+  if (inboxesQA.warning) result.warnings.push(inboxesQA.warning);
 
   const rows = await store.sweepDemosTerminadas(endedBefore(nowIso, config), limit);
   if (!rows) {

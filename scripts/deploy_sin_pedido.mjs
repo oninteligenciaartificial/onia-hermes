@@ -285,9 +285,29 @@ export function clasificarCobertura({ destinos, pendiente, pedidos, seAutoPublic
       // el cuerpo corto intacto. Imprimir primero el que NO limpia al otro haría gastar la
       // vuelta siguiente, que es como esta cadena de controles ya falló una vez.
       const corto = Array.isArray(cortos) && cortos.length > 0;
+      // LA SEXTA PREGUNTA, del 2026-09-19: ¿este pedido SOBRA? Hasta hoy la cadena cortaba
+      // acá y no llegaba a preguntarlo: `seAutoPublica` vivía sólo en la rama SIN pedido, o
+      // sea que un destino cubierto jamás se preguntaba si el cron lo publica solo igual.
+      // Medido ese día: `t_bec84ac0` llevaba 2 h pidiéndole un `ok` a Sergio Urcullo por una
+      // landing que el publicador automático ya sacaba solo (el freno de precio que la
+      // detenía se había arreglado hacía una hora), y este gate imprimía «falta publicar y
+      // ya hay pedido» — cierto, y por eso nadie lo miraba. Peor: el gate hermano
+      // (`pedido:entregado`) lo veía CORTO y mandaba a REHACERLO, o sea a fabricar un pedido
+      // más prolijo para una pregunta que no hay que hacer.
+      //
+      // Gana a `corto` y a `viejo` por el mismo criterio que ya decide entre esos dos: se
+      // imprime el remedio que limpia a los otros. Archivar el pedido cura las tres cosas;
+      // rehacerlo deja uno nuevo que también sobra, y esperar el `ok` espera algo que no
+      // hace falta.
+      //
+      // `null` (no se pudo medir) NO absuelve: se cae a la clasificación de siempre. El
+      // daño no es simétrico — mantener un pedido que sobraba cuesta un `ok` de más;
+      // archivar uno que hacía falta deja el arreglo sin llegar al cliente y sin nadie
+      // mirando.
+      const sobra = seAutoPublica(destino) === true;
       filas.push({
         destino,
-        estado: corto ? 'CUBIERTO_CORTO' : viejo ? 'CUBIERTO_VIEJO' : 'CUBIERTO',
+        estado: sobra ? 'CUBIERTO_SOBRA' : corto ? 'CUBIERTO_CORTO' : viejo ? 'CUBIERTO_VIEJO' : 'CUBIERTO',
         pedidos: cubiertoPor,
         esperaH,
         // Tri-estado explícito para el que imprime: sin esto, «no pude juzgarlo» y «lo juzgué
@@ -384,6 +404,38 @@ export function describirFallo({ status, signal, stderr } = {}) {
   else if (Number.isInteger(status)) partes.push(`salio ${status}`);
   if (linea) partes.push(linea.slice(0, 160));
   return partes.length ? partes.join(': ') : null;
+}
+
+/**
+ * PURA: los veredictos del seco, pero marcando `FALLO` a todo destino cuya ÚLTIMA corrida REAL
+ * falló. Devuelve el mismo objeto si no hay nada que marcar (o si no hay veredictos).
+ *
+ * NACE DEL 2026-09-19. Las dos preguntas que este gate le hacía al publicador automático
+ * —«¿corrió hace poco?» y «¿qué dice que haría?»— son ciegas al que corre y FALLA:
+ * `publicadorSoloVigente` sólo mira la CABECERA de la corrida, que un publicador roto escribe
+ * igual cada 3 h; y los veredictos salen del `--dry-run`, que sólo sabe decir `al dia`,
+ * `publicaria` y `NO publico solo`. `FALLO` y `PUBLICADO` son formas que **sólo** existen en el
+ * log de las corridas reales, así que la rama que ya sabía leerlas nunca las veía llegar.
+ * Juntas absolvían para siempre: «OK <destino>: falta publicar, pero el publicador lo hace
+ * solo». El bot pasó CUATRO días exactamente así, con 17 arreglos varados en `main`.
+ *
+ * ⚠️ Se marca SÓLO con `FALLO`, no con `NO publico solo`: lo primero es la máquina rota (y el
+ * seco no lo puede saber), lo segundo es una DECISIÓN del freno de precio, y ahí el seco —que
+ * mide el árbol de ahora— está más fresco que cualquier corrida vieja del log.
+ *
+ * ⚠️ Y lo que cura un `FALLO` es un éxito POSTERIOR, no que alguien lo borre: el log es
+ * append-only y nadie lo rota, así que contar fallos históricos dejaría esto rojo para
+ * siempre. Se mira el ÚLTIMO veredicto de cada destino, que es lo que `leerPublicadorSolo` ya
+ * devuelve al recorrer las líneas en orden.
+ */
+export function conLoQueFalloDeVerdad(verdictos, log) {
+  const delLog = leerPublicadorSolo(log);
+  if (!verdictos || !delLog) return verdictos;
+  const rotos = Object.keys(delLog).filter((d) => delLog[d] === 'FALLO');
+  if (rotos.length === 0) return verdictos;
+  const salida = { ...verdictos };
+  for (const d of rotos) salida[d] = 'FALLO';
+  return salida;
 }
 
 export function seAutoPublicaSegun(verdictos, destino) {
@@ -715,7 +767,9 @@ export function _veredictosDesdeSalida(salida, ahora = new Date(), clave = 'publ
   const verdictos = leerPublicadorSolo(seco);
   // Corrió hace poco y aun así no se le entiende («ya hay una corrida en curso; salgo»).
   if (verdictos === null) anotarCausa(clave, describirRespuestaIlegible(seco));
-  return verdictos;
+  // El seco dice qué HARÍA; sólo el log dice qué le PASÓ. Un destino que viene fallando de
+  // verdad no lo absuelve ningún «publicaria» — ver `conLoQueFalloDeVerdad`.
+  return conLoQueFalloDeVerdad(verdictos, log);
 }
 
 let verdictosCache;
@@ -801,6 +855,10 @@ function medirEnVivo() {
       console.log(`OK ${f.destino}: al dia, no hay nada que pedir${quien}`);
     } else if (f.estado === 'SE_PUBLICA_SOLO') {
       console.log(`OK ${f.destino}: falta publicar, pero el publicador automatico lo hace solo (<=3 h) — no hay que pedir ok.`);
+    } else if (f.estado === 'CUBIERTO_SOBRA') {
+      console.log(`AVISO ${f.destino}: el pedido SOBRA — el publicador automatico lo saca solo (<=3 h)${quien}`);
+      console.log('  Le esta pidiendo un ok a Sergio Urcullo por trabajo que sale sin su firma.');
+      console.log('  Archivalo en esta vuelta (es accion tuya, no suya): onia-tablero.sh archive <id>.');
     } else if (f.estado === 'CUBIERTO_VIEJO') {
       console.log(`AVISO ${f.destino}: el pedido lleva ${f.esperaH} h sin resolver — el arreglo sigue sin llegar al cliente${quien}`);
       console.log('  No es un pedido que falte: es uno que nadie apreto. Abrir otro seria un duplicado.');
@@ -887,13 +945,22 @@ function selfCheck() {
     'falta publicar y sin pedido tiene que ser DESCUBIERTO',
   );
   // El caso que YA CUMPLE. Sin él, un gate que devolviera DESCUBIERTO siempre pasaría.
-  // Y con pedido vivo NO se le pregunta al publicador automático: ese `--dry-run` corre los
-  // tres publicadores en seco por SSH, y la respuesta no cambiaría el veredicto.
+  //
+  // ⚠️ Acá este caso exigía `preguntas.length === 0` —con pedido vivo NO preguntarle al
+  // publicador— y su motivo escrito tenía dos mitades: que el `--dry-run` cuesta SSH, y que
+  // «la respuesta no cambiaría el veredicto». La primera la cubre el caché
+  // (`verdictosDelPublicadorSolo` corre una sola vez por vuelta, sin importar cuántos
+  // destinos pregunten). La segunda era cierta el día que se escribió y dejó de serlo el
+  // 2026-09-19, cuando la respuesta pasó a decidir `CUBIERTO_SOBRA`: el caso defendía el
+  // hueco que tapaba, que es como esta familia de fixtures falla.
+  //
+  // Lo que se conserva es la propiedad que de verdad importaba: se le pregunta UNA vez por
+  // destino, no una por pedido — un destino con cinco pedidos vivos no multiplica nada.
   const preguntas = [];
   ok(
     clasificarCobertura({
       destinos: ['landing'],
-      pedidos: conLanding,
+      pedidos: [...conLanding, { id: 't_x2', destino: 'landing' }, { id: 't_x3', destino: 'landing' }],
       pendiente: () => true,
       seAutoPublica: (d) => { preguntas.push(d); return false; },
       describeLoQuePublica: nadieEstaCorto,
@@ -901,7 +968,10 @@ function selfCheck() {
     })[0].estado === 'CUBIERTO',
     'falta publicar y con pedido vivo NO puede ser DESCUBIERTO',
   );
-  ok(preguntas.length === 0, 'con pedido vivo no hay que ir a preguntarle al publicador automatico');
+  ok(
+    preguntas.length === 1 && preguntas[0] === 'landing',
+    `al publicador se le pregunta una vez por destino y por el propio: ${JSON.stringify(preguntas)}`,
+  );
   ok(
     clasificarCobertura({ destinos: ['landing'], pedidos: sinPedidos, pendiente: () => false, seAutoPublica: nadieLoPublicaSolo, describeLoQuePublica: nadieEstaCorto, ahora: AHORA })[0].estado === 'AL_DIA',
     'sin trabajo pendiente no hay nada que pedir',
@@ -991,6 +1061,39 @@ function selfCheck() {
     clasificarCobertura({ destinos: ['bot'], pedidos: sinPedidos, pendiente: () => true, seAutoPublica: () => null, describeLoQuePublica: nadieEstaCorto, ahora: AHORA })[0].estado === 'NO_MEDIDO',
     'sin saber si se publica solo NO puede salir ni DESCUBIERTO ni absuelto',
   );
+  // ── ¿y si el pedido SOBRA? (2026-09-19) ─────────────────────────────────────────────
+  // Falta publicar, HAY pedido, y el cron lo publica solo igual: ese `ok` no hace falta.
+  // Hasta hoy la cadena cortaba en «hay pedido» y nunca llegaba a preguntarlo, así que el
+  // caso salía como cobertura normal — cierto, y por eso invisible.
+  ok(
+    clasificarCobertura({ destinos: ['landing'], pedidos: conLanding, pendiente: () => true, seAutoPublica: () => true, describeLoQuePublica: nadieEstaCorto, ahora: AHORA })[0].estado === 'CUBIERTO_SOBRA',
+    'un pedido vivo que el publicador automatico vuelve innecesario tiene que salir como que SOBRA',
+  );
+  // El caso que YA CUMPLE. Sin él, un gate que devolviera CUBIERTO_SOBRA siempre pasaría.
+  ok(
+    clasificarCobertura({ destinos: ['landing'], pedidos: conLanding, pendiente: () => true, seAutoPublica: nadieLoPublicaSolo, describeLoQuePublica: nadieEstaCorto, ahora: AHORA })[0].estado === 'CUBIERTO',
+    'un pedido que el publicador automatico NO cubre sigue siendo cobertura normal',
+  );
+  // SOBRA gana a CORTO: el remedio del corto es REHACER el pedido, o sea fabricar otro que
+  // también sobra. Archivarlo cura los dos. Imprimir primero el que no limpia al otro es
+  // como esta misma cadena de controles ya falló una vez.
+  ok(
+    clasificarCobertura({ destinos: ['landing'], pedidos: conLanding, pendiente: () => true, seAutoPublica: () => true, describeLoQuePublica: () => ['t_x'], ahora: AHORA })[0].estado === 'CUBIERTO_SOBRA',
+    'un pedido corto que ademas sobra se archiva, no se rehace',
+  );
+  // Y gana al viejo por lo mismo: esperar un `ok` que no hace falta es esperar para siempre.
+  ok(
+    clasificarCobertura({ destinos: ['landing'], pedidos: cubrir(hace(96)), pendiente: () => true, seAutoPublica: () => true, describeLoQuePublica: nadieEstaCorto, ahora: AHORA })[0].estado === 'CUBIERTO_SOBRA',
+    'un pedido viejo que ademas sobra se archiva, no se espera',
+  );
+  // No poder preguntarle NO archiva nada. El daño no es simétrico: mantener un pedido que
+  // sobraba cuesta un `ok` de más; archivar uno que hacía falta deja el arreglo sin llegar
+  // al cliente y sin nadie mirando.
+  ok(
+    clasificarCobertura({ destinos: ['landing'], pedidos: conLanding, pendiente: () => true, seAutoPublica: () => null, describeLoQuePublica: nadieEstaCorto, ahora: AHORA })[0].estado === 'CUBIERTO',
+    'sin poder medir al publicador, un pedido vivo NO se declara sobrante',
+  );
+
   // La pregunta es OBLIGATORIA: un llamador que se la olvide tiene que romperse, no
   // heredar el veredicto viejo en silencio.
   // Cada una se prueba con la OTRA puesta: si al caso le faltan las dos, el `catch` se lo
@@ -1114,6 +1217,37 @@ function selfCheck() {
   ok(publicadorSoloVigente(logSolo, new Date('2026-09-13T04:00:00Z')) === false, 'sin correr en 6 h, el publicador automatico no absuelve a nadie');
   ok(publicadorSoloVigente('', new Date('2026-09-12T22:30:00Z')) === null, 'sin log no se sabe si corre');
   ok(publicadorSoloVigente(logSolo, new Date('2026-09-12T21:55:00Z')) === true, 'la ultima corrida se lee en hora de La Paz (UTC-4), no como UTC');
+
+  // ── El publicador que CORRE pero FALLA, del 2026-09-19 ──────────────────────────────────
+  // `vigente` sólo pregunta CUÁNDO corrió, y un publicador que falla en todas sus corridas
+  // escribe su cabecera igual cada 3 h: sigue leyéndose «vigente». Y los veredictos salían
+  // del `--dry-run`, que nunca imprime `FALLO` —sólo `al dia`/`publicaria`/`NO publico solo`—,
+  // así que las dos preguntas juntas absolvían para siempre a un destino que no publica nada.
+  // No es hipotético: el bot pasó CUATRO días así (17 arreglos en `main`, única señal
+  // `bot: FALLO` 8 veces por día en un log que no escala a nadie), y este log trae el
+  // `landing: FALLO` del 18-sep 17:50. Y falla hacia el lado caro: el verde de acá es lo que
+  // se usa para NO molestar a Sergio Urcullo, o sea que se calla el pedido que hacía falta.
+  const secoOptimista = ['  bot: publicaria (nada toca precio)', '  landing: publicaria (nada toca precio)'].join('\n');
+  const logQueFalla = [
+    '== 2026-09-19 02:50 La Paz ==',
+    '  bot: FALLO',
+    '  landing: FALLO',
+    '== 2026-09-19 05:50 La Paz ==',
+    '  bot: FALLO',
+    '  landing: PUBLICADO',
+  ].join('\n');
+  const ahoraLog = new Date('2026-09-19T10:30:00Z'); // 06:30 La Paz: la corrida de las 05:50 es vigente
+  const vReal = _veredictosDesdeSalida(`${secoOptimista}\n${MARCA_LOG}\n${logQueFalla}`, ahoraLog, 'prueba-fallo');
+  ok(
+    seAutoPublicaSegun(vReal, 'bot') === false,
+    'un destino cuya ULTIMA corrida real FALLO no se publica solo, por mas que el seco diga "publicaria"',
+  );
+  // El recíproco, que es lo que impide que esto quede rojo para siempre: el log es
+  // append-only y nadie lo rota, así que lo que cura un `FALLO` viejo es un éxito POSTERIOR.
+  ok(
+    seAutoPublicaSegun(vReal, 'landing') === true,
+    'y un FALLO ya curado por una corrida posterior NO deja al destino rojo para siempre',
+  );
 
   // ── Los CUATRO `null` del publicador, del 2026-09-18 ────────────────────────────────────
   // Medido a las 04:34 La Paz: el publicador contestaba `plataforma: publicaria` y `bot:

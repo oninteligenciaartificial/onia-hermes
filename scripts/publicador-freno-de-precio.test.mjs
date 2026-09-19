@@ -295,3 +295,308 @@ test("la frase del veredicto tiene UNA sola fuente: nadie la escribe por su cuen
       "lugar para que agregar un destino no pueda perder el detalle.",
   );
 });
+
+/**
+ * La tercera forma de apretar de mas, medida el 2026-09-19 sobre la landing.
+ *
+ * El freno contaba TODO digito de una linea que no fuera comentario, asi que los
+ * `0` y `1` de un helper nuevo —indices de array y comparaciones de cardinalidad—
+ * detuvieron `onia.com.bo` desde el 2026-09-18 23:50. Lo que retenia incluia
+ * `f9d932c7`, que corrige una tarjeta afirmando que "la cuenta gana" cuando PIERDE
+ * por Bs 10: el freno de precio manteniendo publicada una mentira de precio, y
+ * pidiendole a Sergio Urcullo una firma por un cambio que no mueve un centavo.
+ *
+ * El corte NO es el valor del numero: es su POSICION. Un umbral de plata nunca se
+ * escribe `> 0` ni `> 1`, y un add-on que pasa a ser gratis se escribe `: 0` —una
+ * asignacion—, no una comparacion. Por eso los dos casos van juntos: el que afloja
+ * sin el que aprieta es una puerta abierta.
+ */
+const helperConIndices = `${tabla(320, "390")}
+export function escalonAnterior(planes, i) {
+  const contra = i > 0 ? planes[i - 1] : null;
+  const ultimo = planes.filter((p) => p.chatbotIncluido).at(-1);
+  const verbo = planes.filter((p) => p.chatbotIncluido).length > 1 ? "traen" : "trae";
+  return contra === 0 ? { ultimo, verbo } : { ultimo, verbo, vacio: planes.length === 0 };
+}
+`;
+
+test("los `0` y `1` de indices y comparaciones no son plata: publica", () => {
+  const dir = repoSembrado();
+  try {
+    const sha = commitear(dir, helperConIndices, "helper que ordena la escalera");
+    const r = preguntar(dir, sha);
+    assert.equal(
+      r.codigo,
+      0,
+      "conto indices de array y comparaciones de cardinalidad como montos nuevos: con eso, " +
+        "escribir un helper en una fuente de precio cuesta la publicacion del destino entero, " +
+        "y la firma que se le pide a Sergio Urcullo no protege nada. Salida: " + r.salida,
+    );
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("un UMBRAL de plata comparado sigue deteniendo: aflojar no puede abrir esa puerta", () => {
+  const dir = repoSembrado();
+  try {
+    const sha = commitear(
+      dir,
+      `${tabla(320, "390")}\nexport const gratis = (total) => total > 1500;\n`,
+      "descuento a partir de 1500",
+    );
+    const r = preguntar(dir, sha);
+    assert.equal(r.codigo, 1, "un umbral de plata entro sin firma por estar a la derecha de un `>`. Salida: " + r.salida);
+    assert.match(r.salida, /1500/, "no nombro el umbral que cambia. Salida: " + r.salida);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("un monto ASIGNADO a 0 —un add-on que pasa a gratis— sigue deteniendo", () => {
+  const dir = repoSembrado();
+  try {
+    const sha = commitear(dir, tabla(320, "390").replace("yearly: 7500", "yearly: 0"), "el anual pasa a 0");
+    const r = preguntar(dir, sha);
+    assert.equal(r.codigo, 1, "un precio que pasa a CERO es un cambio de precio: cobrar 0 es una decision de plata. Salida: " + r.salida);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+/**
+ * El corte NO es la forma del numero ni su valor: es si la CLAVE que lo recibe habla
+ * de plata. `asientosExtra: 0` son personas; `mensualAddon: 0` son Bs.
+ *
+ * Medido el 2026-09-19 06:39 La Paz, con `2b12f50ae` esperando en `origin/main`:
+ * `onia-publicar-solo.sh --dry-run` contestaba «landing: NO publico solo — cambia un
+ * numero en una fuente de precio: .../pricing.ts: 0 1» y NINGUN monto cambiaba —
+ * `Bs 70` seguia saliendo intacto de `USUARIO_EXTRA_ADDON`. Los numeros acusados eran
+ * `asientosExtra: 0` (cuantas personas extra vende un plan) y el `0`/`1` de
+ * `frase.charAt(0)` / `frase.slice(1)`, un helper que arma texto.
+ *
+ * Cada falso positivo le pide a Sergio Urcullo una firma por un cambio que no mueve un
+ * centavo, y esa es la unica firma que importa: gastarla en falsos la vuelve automatica.
+ */
+const cantidadesYTexto = `${tabla(320, "390")}
+export const PLANES = [
+  { id: "basico", asientosExtra: 0 },
+  { id: "pro", asientosExtra: null },
+];
+export function enMayuscula(frase) {
+  return \`\${frase.charAt(0).toUpperCase()}\${frase.slice(1)}.\`;
+}
+export function primero(nombres) {
+  return nombres[0];
+}
+`;
+
+test("una CANTIDAD asignada a 0 —personas, no plata— publica sola", () => {
+  const dir = repoSembrado();
+  try {
+    const sha = commitear(dir, cantidadesYTexto, "cuantas personas extra vende cada plan");
+    const r = preguntar(dir, sha);
+    assert.equal(
+      r.codigo,
+      0,
+      "conto `asientosExtra: 0` (personas) y las posiciones de un helper de texto como montos " +
+        "nuevos: con eso el destino entero se detiene y se le pide a Sergio Urcullo una firma por " +
+        "un cambio que no mueve un centavo. Salida: " + r.salida,
+    );
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+/**
+ * La direccion del dano NO es simetrica y por eso este caso es el que sostiene al de
+ * arriba: detener de mas cuesta una firma; dejar pasar de menos publica un precio nuevo
+ * sin que nadie lo decida. Por eso la excusa se ancla a un vocabulario de CANTIDAD y
+ * todo lo demas sigue deteniendo — una clave que el guion no sabe nombrar falla CERRADO.
+ */
+test("una clave que el guion NO sabe nombrar, asignada a 0, sigue deteniendo", () => {
+  const dir = repoSembrado();
+  try {
+    const sha = commitear(
+      dir,
+      `${tabla(320, "390")}\nexport const EXTRA = { recargoNocturno: 0 };\n`,
+      "clave desconocida a cero",
+    );
+    const r = preguntar(dir, sha);
+    assert.equal(
+      r.codigo,
+      1,
+      "una clave desconocida asignada a 0 se publico sola: la excusa por CAMPO falla ABIERTO, " +
+        "que es el lado caro — un add-on que pasa a gratis entra sin firma. Salida: " + r.salida,
+    );
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("un monto de plata asignado a 0 sigue deteniendo aunque la cura mire la clave", () => {
+  const dir = repoSembrado();
+  try {
+    const sha = commitear(
+      dir,
+      `${tabla(320, "390")}\nexport const ADDONS = { mensualAddon: 0 };\n`,
+      "el addon pasa a gratis",
+    );
+    const r = preguntar(dir, sha);
+    assert.equal(r.codigo, 1, "`mensualAddon: 0` es plata: cobrar 0 es una decision de plata. Salida: " + r.salida);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+/**
+ * La mitad que sostiene la excusa por CAMPO: una clave puede decir CANTIDAD y PLATA a
+ * la vez. `precioPorUsuario` nombra «usuario», asi que entra al vocabulario de
+ * cantidad — y es un precio. Sin esta segunda pregunta, la cura del falso positivo
+ * abriria la puerta que el freno existe para cerrar.
+ */
+test("una clave que dice cantidad Y plata a la vez detiene: manda la plata", () => {
+  const dir = repoSembrado();
+  try {
+    const sha = commitear(
+      dir,
+      `${tabla(320, "390")}\nexport const EXTRA = { precioPorUsuario: 0 };\n`,
+      "el usuario extra pasa a gratis",
+    );
+    const r = preguntar(dir, sha);
+    assert.equal(
+      r.codigo,
+      1,
+      "`precioPorUsuario: 0` se publico solo por nombrar «usuario»: un precio que pasa a cero " +
+        "entro sin firma. Salida: " + r.salida,
+    );
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+// ---------------------------------------------------------------------------
+// El bot: un destino SIN medidor por commits
+//
+// Su publicador no lista shas, lista archivos, y hasta el 2026-09-19 esa salida
+// se le pasaba CRUDA a la guarda como si fuera una lista de nombres. Dos danos,
+// y el segundo es el caro: el sujeto que se media terminaba siendo la palabra
+// `CAMBIA`, asi que TODO toque a `knowledge.onia.json` —la fuente de precio que
+// el bot cotiza— caia en NO MEDIDO y detenia el lote entero, para siempre.
+//
+// Medido ese dia: el arreglo que le sacaba un cobro inventado de Bs 390/mes al
+// plan mas caro no mueve UN SOLO monto (320/550/890/1.290/390 identicos a los
+// dos lados; lo que cambia es a quienes alcanza la frase) y aun asi retuvo 13
+// archivos del bot, entre ellos el respaldo que hace que vuelvan a entenderse
+// las notas de voz — pidiendole a Sergio Urcullo una firma por cero centavos.
+// ---------------------------------------------------------------------------
+
+const DRY_RUN_DEL_BOT = `   destino: /opt/onia/bot
+   modo:   DRY-RUN (agrega --aplicar para desplegar de verdad)
+
+-- diferencias repo -> produccion
+   CAMBIA   bot-engine.mjs  (34 lineas)
+   NUEVO    lo-que-el-bot-no-puede-leer-va-a-un-humano.test.mjs
+   CAMBIA   knowledge.onia.json  (2 lineas)
+   total: 3 archivo(s)`;
+
+test("del renglon del publicador se saca el ARCHIVO, no la linea entera", () => {
+  const r = spawnSync("bash", [GUION, "--nombres"], {
+    input: DRY_RUN_DEL_BOT,
+    encoding: "utf8",
+    timeout: 60_000,
+  });
+  const nombres = (r.stdout ?? "").trim().split("\n").filter(Boolean);
+  assert.deepEqual(nombres, [
+    "bot-engine.mjs",
+    "lo-que-el-bot-no-puede-leer-va-a-un-humano.test.mjs",
+    "knowledge.onia.json",
+  ], "los nombres salen mal. Salida: " + (r.stdout ?? "") + (r.stderr ?? ""));
+  // La mitad que importa: ninguna palabra del adorno puede colarse como sujeto.
+  for (const ruido of ["CAMBIA", "NUEVO", "(2", "lineas)", "total:"]) {
+    assert.ok(
+      !nombres.includes(ruido),
+      `\`${ruido}\` entro como si fuera un archivo: es lo que hacia que el sujeto ` +
+        "medido fuera una palabra del renglon y el bot cayera en NO MEDIDO siempre",
+    );
+  }
+});
+
+/** Las dos copias de un archivo del bot: la viva y la del repo. */
+function dosCopias(enProduccion, enElRepo) {
+  const prod = mkdtempSync(join(tmpdir(), "bot-prod-"));
+  const repo = mkdtempSync(join(tmpdir(), "bot-repo-"));
+  if (enProduccion !== null) writeFileSync(join(prod, "knowledge.onia.json"), enProduccion);
+  if (enElRepo !== null) writeFileSync(join(repo, "knowledge.onia.json"), enElRepo);
+  return { prod, repo };
+}
+
+const copias = (prod, repo) => {
+  const r = spawnSync("bash", [GUION, "--montos-copias", prod, repo, "knowledge.onia.json"], {
+    encoding: "utf8",
+    timeout: 60_000,
+  });
+  return { codigo: r.status, salida: `${r.stdout ?? ""}${r.stderr ?? ""}`.trim() };
+};
+
+// El caso REAL del 2026-09-19, palabra por palabra: los cinco montos se repiten
+// a los dos lados y lo unico que cambia es a quienes alcanza la frase.
+const COTIZACION = (aQuienes) =>
+  `{"faq":[{"id":"precios","body":"el sistema arranca en Bs 320 al mes con el plan Basico, ` +
+  `Bs 550 el Crece, Bs 890 el Profesional y Bs 1.290 el Completo, que ya trae el chatbot ` +
+  `adentro. En ${aQuienes} el chatbot va aparte, Bs 390 al mes."}]}\n`;
+
+test("el bot publica solo cuando NINGUN monto cambia, aunque el texto cambie", () => {
+  const { prod, repo } = dosCopias(
+    COTIZACION("los otros planes"),
+    COTIZACION("el Basico, el Crece y el Profesional"),
+  );
+  try {
+    const r = copias(prod, repo);
+    assert.equal(
+      r.codigo,
+      0,
+      "detuvo un arreglo que no mueve un centavo: los cinco montos son identicos a los " +
+        "dos lados y solo cambia a quienes alcanza la frase. Salida: " + r.salida,
+    );
+  } finally {
+    rmSync(prod, { recursive: true, force: true });
+    rmSync(repo, { recursive: true, force: true });
+  }
+});
+
+test("un monto distinto entre las dos copias SI detiene, y dice cual", () => {
+  const { prod, repo } = dosCopias(
+    COTIZACION("los otros planes"),
+    COTIZACION("los otros planes").replace("Bs 390", "Bs 420"),
+  );
+  try {
+    const r = copias(prod, repo);
+    assert.equal(r.codigo, 1, "un precio nuevo del bot entro sin firma. Salida: " + r.salida);
+    assert.match(
+      r.salida,
+      /420/,
+      "detuvo, pero no nombra el numero que cambia: un veredicto sin cita no se puede " +
+        "refutar. Salida: " + r.salida,
+    );
+  } finally {
+    rmSync(prod, { recursive: true, force: true });
+    rmSync(repo, { recursive: true, force: true });
+  }
+});
+
+test("si el archivo no esta en el repo sigue siendo NO MEDIDO: falla CERRADO", () => {
+  const { prod, repo } = dosCopias(COTIZACION("los otros planes"), null);
+  try {
+    const r = copias(prod, repo);
+    assert.equal(
+      r.codigo,
+      2,
+      "sin poder mirar el repo dijo algo distinto de NO MEDIDO. Poder medir el caso " +
+        "normal no vuelve honesto decir 'limpio' cuando no se miro. Salida: " + r.salida,
+    );
+  } finally {
+    rmSync(prod, { recursive: true, force: true });
+    rmSync(repo, { recursive: true, force: true });
+  }
+});

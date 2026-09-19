@@ -84,6 +84,10 @@ export function createState(input = {}) {
     leadKey: input.leadKey || null,
     ownerRoleKey: input.ownerRoleKey || "sergio",
     inboxId: input.inboxId || null,
+    // El MEDIO por el que entró (`channel_type` de Chatwoot), que es distinto del inbox: el id
+    // se renumera, el medio no. De acá sale `{{via_humano}}` — por qué vía promete el bot que
+    // le va a escribir el humano. Sin dato, `viaDelCanal` cae en la forma canal-agnóstica.
+    channelType: input.channelType || null,
     humanTookOver: Boolean(input.humanTookOver),
     humanTookOverAt: input.humanTookOverAt || null,
     // Cuando se ACUSO el primer inbound posterior a un handoff. `handoff_humano` no significa
@@ -185,7 +189,7 @@ export function conversacionVencida(state, receivedAt, config = DEFAULT_CONFIG) 
  * atribucion. `slotsOffered`/`scheduledAt` se limpian: una demo de hace un mes no es un
  * compromiso vigente.
  */
-function reiniciarConversacionVencida(state) {
+export function reiniciarConversacionVencida(state) {
   return {
     ...state,
     botStage: "nuevo",
@@ -544,9 +548,16 @@ export function step(state, incoming, options = {}) {
   // un entrante real de un contacto: el candado de una prueba vieja (conv 11, human_took_over
   // del 13-ago) dejo mudo el "hola" real de Sergio el 10-sep. Solo para mensajes DEL contacto:
   // un traspaso humano (author "human") jamas dispara la bienvenida encima del humano.
-  const vencida = msg.author === "contact" && conversacionVencida(state, msg.receivedAt, config);
+  const delProspecto = msg.author === "contact";
+  const vencida = delProspecto && conversacionVencida(state, msg.receivedAt, config);
   const vivo = vencida ? reiniciarConversacionVencida(state) : state;
-  const base = { ...vivo, lastInboundAt: msg.receivedAt || vivo.lastInboundAt };
+  // `lastInboundAt` es el reloj DEL PROSPECTO y lo mueve EL, nadie mas — la MISMA pregunta que la
+  // barrera de arriba. Al motor tambien entra lo que sale de nuestro lado (el adapter convierte el
+  // saliente de un humano en un turno `author: "human"`), y pisar el reloj con esa hora le miente a
+  // los tres consumidores que deciden a quien escribirle: la ventana de 24 h de Meta —que Meta
+  // cuenta desde el ultimo mensaje DEL USUARIO— y las dos ventanas del rescate. Medido en la conv 58
+  // el 2026-09-18: un lead real quedo con el reloj 20,4 h adelantado por nuestro propio follow-up.
+  const base = { ...vivo, lastInboundAt: (delProspecto && msg.receivedAt) || vivo.lastInboundAt };
   const ctx = { config, prev, msg, options, vencida };
 
   // --- Barrera 1: un humano tomo la conversacion. El bot NO habla. Falla hacia el SILENCIO.
@@ -591,9 +602,39 @@ export function step(state, incoming, options = {}) {
     return welcomeResult(ctx, reabierto, { reason: "reapertura_tras_opt_out", notes: ["reabierto_por_demo"] });
   }
 
-  // --- Audio sin transcripcion: el ejecutor debio transcribir antes (Speaches). Pedimos texto.
+  // --- Audio sin transcripcion. El ejecutor DEBIO transcribir antes (Speaches), pero ese
+  // contenedor no existe en el VPS (`npm run destinos:vivos`), asi que hoy esta rama no es el
+  // caso raro: es el UNICO caso, y en Bolivia la nota de voz es la forma normal de escribir.
+  //
+  // No podemos leerlo, que es exactamente un fallo de comprension: va al MISMO contador que los
+  // malentendidos, no a uno nuevo. Una vez se pide texto; si insiste con audio, el bot deja de
+  // insistir y lo pasa a la persona que SI lo puede escuchar (esta ahi, en Chatwoot). Antes esta
+  // rama hacia `finalize` pelado: el que no reescribia se perdia en silencio y nadie se enteraba
+  // de que habia existido — mientras su hermana de dos lineas mas abajo (el archivo adjunto, MUCHO
+  // menos frecuente) si derivaba. Derivar al PRIMER audio tampoco sirve: silenciaria al bot en casi
+  // toda conversacion de WhatsApp y subiria las horas de soporte, que son el techo del negocio.
   if (msg.kind === "voice" && !msg.hasText) {
-    return finalize(ctx, base, [say("M_AUDIO_FAIL", base, config)], [], ["audio_sin_transcripcion"]);
+    const count = base.offScriptCount + 1;
+    if (count >= config.offScript.maxBeforeHandoff) {
+      // Ya derivada: se le contesta igual (nunca silencio) pero SIN repetir los efectos — mismo
+      // criterio que la barrera de cuota agotada. Si no, quien manda seis audios seguidos genera
+      // seis avisos del mismo hecho, y asi se pierde el que importa.
+      if (base.botStage === "handoff_humano") {
+        return finalize(ctx, { ...base, offScriptCount: count }, [say("M_AUDIO_FAIL", base, config)], [], [
+          "audio_sin_transcripcion:ya_derivada",
+        ]);
+      }
+      return handoffResult(ctx, { ...base, offScriptCount: count }, "audio_que_no_podemos_oir", [
+        say("M_AUDIO_FAIL", base, config),
+      ]);
+    }
+    return finalize(
+      ctx,
+      { ...base, offScriptCount: count },
+      [say("M_AUDIO_FAIL", base, config)],
+      [],
+      ["audio_sin_transcripcion"],
+    );
   }
 
   // --- Imagen / documento: se reconoce y va a humano (el bot no lee archivos).

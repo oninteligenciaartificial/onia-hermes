@@ -12,6 +12,420 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-19 15:20 La Paz — recorrido completo re-verificado (BUILD_ID nuevo) + escalón 3: cancelar cita, HALLAZGO
+
+`BUILD_ID` cambió (`AUiuQ9c0SmcJnuF37_qTo` → `Idvh9u4mdBzHBgE2penq4`) desde la vuelta anterior
+— por los commits del bot mergeados, no de la plataforma. Por las reglas del carril, correspondía
+re-correr el recorrido completo antes de seguir con escalones nuevos.
+
+**Recorrido completo:** `node scripts/recorrido_cliente.mjs --escribir` → **9/9, `completo:
+true`, sin agujeros.** Los 9 pasos de "Clínica dental" siguen sanos con el deploy nuevo. Todo lo
+`zz-qa-` que creó se borró en la misma corrida (`organizations=0`, `appointments zz-qa-=0`).
+
+**Escalón 3 nuevo — HALLAZGO: el portal del paciente no ofrece cancelar.** Siguiendo del escalón
+del portal (confirmar / mis citas), instrumenté lo que faltaba: ¿puede el paciente CANCELAR su
+cita desde el mismo enlace? `PATCH /api/booking/appointments` con `action:'cancel'` funciona de
+verdad (HTTP 200, `status` pasa de `PENDIENTE` a `CANCELADA` en la base — verificado, no sólo
+leído). Pero ni `/book/confirm/[token]` ni `/book/my-appointments/[token]` pintan un botón o link
+de cancelar: sólo "Confirmar asistencia", "Ver todas mis citas", "llamar" y "Agendar" (de nuevo).
+Un paciente que no puede asistir no tiene forma de avisar desde el enlace que se le manda; tiene
+que llamar al negocio. Reportado en el tablero (`t_7bb28d06`, prioridad 2, dueño: onia-cola) y en
+`cola/recorrido-cliente.md`. Instrumento nuevo: `scripts/probar_cancelar_cita.mjs`. Capturas:
+`capturas/extra-cancelarcita-00-confirm.png` y `capturas/extra-cancelarcita-01-my-appointments.png`.
+Todo `zz-qa-` sembrado se borró en la misma corrida (`orgs=0`, `citas=0` al cerrar).
+
+**Próxima vuelta:** si `BUILD_ID` sigue en `Idvh9u4mdBzHBgE2penq4`, seguir con otro escalón nuevo
+— invitar/quitar coadministrador desde la UI de `/settings` con Playwright (ya probado por API en
+`probar_coadministrador.mjs`, falta el camino de clics real), o rotar de rubro.
+
+---
+
+## 2026-09-19 14:12 La Paz — escalón 3 nuevo: el portal del paciente, `/book/confirm` y `/book/my-appointments`
+
+`BUILD_ID` sin cambios (`AUiuQ9c0SmcJnuF37_qTo`) desde la vuelta anterior: seguí directo de la de
+arriba, probando lo que pasa DESPUÉS del `bookingToken` que una reserva pública le da al paciente.
+
+**Instrumento nuevo:** `scripts/probar_portal_paciente.mjs`. Siembra su propia org `zz-qa-` (mismo
+patrón: plan `professional`, dental, ADMIN con horario) y reserva por API pública para conseguir un
+`bookingToken` real, sin repetir el escalón anterior. Con ese token, SIN sesión:
+
+- `/book/my-appointments/<token>` — la MIRA renderizada (captura
+  `extra-portalpaciente-00-mis-citas.png`): muestra el nombre del paciente, la fecha, la hora y el
+  motivo de la cita `zz-qa-`, con status "Pendiente". Sin subrecursos en error.
+- `/book/confirm/<token>` — la MIRA en estado pendiente, aprieta el botón **"Confirmar" de verdad**
+  (PATCH real a `/api/booking/appointments`, `action=confirm`) y **verifica en la BASE** que
+  `appointments.status` pasó de `PENDIENTE` a `CONFIRMADA` — no se conformó con que la pantalla
+  dijera "¡Cita Confirmada!" (capturas `01-confirmar-pendiente.png` y `02-confirmar-despues.png`).
+- Camino de fallo simétrico: un token inexistente (`zz-qa-token-inexistente-...`) da 404 en
+  `/api/booking/appointments` y la pantalla muestra "Enlace inválido / No se encontraron citas"
+  (captura `03-token-invalido.png`) — no una pantalla en blanco ni un 500.
+
+**Sin hallazgo.** Todo lo `zz-qa-` sembrado se borró en la misma corrida (`organizations=0`,
+`appointments zz-qa-=0` verificado al cerrar).
+
+**Próxima vuelta:** si `BUILD_ID` sigue igual, otro escalón nuevo — cancelar una cita desde el
+portal (`action=cancel`), o el flujo de invitar/quitar coadministrador en `/settings` (equipo),
+tocado varias veces por DG-043/DG-047 y todavía no cubierto por este carril.
+
+---
+
+## 2026-09-19 13:14 La Paz — escalón 3 nuevo: la agenda PÚBLICA `/book/<slug>`, de punta a punta
+
+`BUILD_ID` sin cambios (`AUiuQ9c0SmcJnuF37_qTo`) desde la vuelta anterior: en vez de repetir un
+rubro, instrumenté una superficie del producto que este carril NUNCA había recorrido —
+`/book/<orgSlug>`, la única pantalla que ve el cliente DEL cliente (un desconocido sin sesión,
+no un `zz-qa-` con login).
+
+**Instrumento nuevo:** `scripts/probar_reserva_publica.mjs`. Siembra por SQL una org `zz-qa-`
+con plan `professional` (trae `publicBookingIncluded`), rubro dental, un ADMIN con horario
+activo (`ADMIN` cuenta como profesional agendable — `ROLES_CON_AGENDA`), abre `/book/<slug>`
+SIN sesión y la MIRA renderizada (captura `extra-reservapublica-00-pantalla.png`, 390×844 —
+limpia, sin texto cortado), y recorre la API pública real: `GET /api/booking/doctors` → `GET
+/api/booking/slots` → `POST /api/booking/appointments` con un paciente `zz-qa-` y un teléfono
+boliviano real. **201, `bookingToken` real**, la cita quedó en la base con el paciente y
+horario correctos, y — la mitad que importa, no sólo que el desconocido reciba su
+confirmación — **el DUEÑO la vio en `/appointments`** con sesión real (captura
+`extra-reservapublica-01-agenda-del-dueno.png`: el 20 de septiembre muestra la cita en el
+calendario). **Sin hallazgo.** Todo lo `zz-qa-` sembrado se borró en la misma corrida
+(`organizations=0`, `appointments zz-qa-=0` verificado al cerrar).
+
+**Próxima vuelta:** si `BUILD_ID` sigue igual, otro escalón nuevo — el portal del paciente
+(`/book/confirm/[token]` y `/book/my-appointments/[token]`, que `probar_reserva_publica.mjs`
+ya deja con un `bookingToken` disponible antes de limpiar, si se quiere reusar) o el flujo de
+cancelar/confirmar una cita desde ahí.
+
+---
+
+## 2026-09-19 12:14 La Paz — rotado a Servicios profesionales: 9/9 completo, sin hallazgos
+
+Antes de arrancar: 1 org `zz-qa-` huérfana (`zz-qa-2026-09-19-1109-negocio`, de una corrida
+anterior cortada) — limpiada a mano (organizations, profiles, entitlements, patients,
+auth.users, auth.identities), verificada en 0 antes de correr.
+
+`RECORRIDO_RUBRO="Servicios profesionales" node scripts/recorrido_cliente.mjs --escribir`
+contra `BUILD_ID` `AUiuQ9c0SmcJnuF37_qTo` (el mismo del deploy de coadministrador): **9/9
+completo** — cuenta, confirmación de correo real, onboarding, cliente cargado en `/patients`,
+cita `2026-09-21 09:00` agendada (201) y vista en `/appointments`, pantalla de cobro (Caja)
+mirada y frenada, panel revisado. Todo `zz-qa-` sembrado se borró en la misma corrida (0 orgs,
+0 appointments `zz-qa-%` al cerrar). Sin hallazgos nuevos — el fix de coadministrador (DG-043 /
+`t_24758d5a`) no rompió nada fuera de dental.
+
+**Próxima vuelta: los 6 rubros activos ya están re-verificados contra el build actual. Ir a
+otro escalón 3 (checkout/cobro a fondo enviando de punta a punta, u otra superficie de
+promesa-vs-entrega) en vez de rotar rubro otra vez.**
+
+---
+
+## 2026-09-19 10:10 La Paz — deploy llegó: 9/9 completo, coadministrador confirmado
+
+`BUILD_ID` cambió (`HyMvkgxD68MORYYHikiG6` → `AUiuQ9c0SmcJnuF37_qTo`). Confirmado con
+`scripts/probar_coadministrador.mjs`: DELETE `/api/admin/users/[id]` con 2 ADMIN ahora da
+**200** (antes 403) — `t_24758d5a` cerrado y verificado en vivo, no solo mergeado.
+
+Corrí el recorrido completo (`--escribir`) contra el build nuevo: **9/9 pasos OK en Clínica
+dental** — cuenta, onboarding, paciente, cita agendada y vista en la agenda, factura mirada
+sin pagar, y el dato del paso 6 en su pantalla correspondiente. Todo lo `zz-qa-` sembrado se
+borró en la misma corrida (`resumen.json`: `completo:true`, `agujeros:[]`; 0 orgs y 0
+appointments `zz-qa-%` en la base al cerrar).
+
+**Próxima vuelta: no repetir dental — rotar a otro rubro o a un escalón 3 nuevo aún no
+instrumentado.**
+
+---
+
+## 2026-09-19 09:11 La Paz — coadministradores: fix mergeado a master, todavía NO deployado
+
+`BUILD_ID` sin cambios (`HyMvkgxD68MORYYHikiG6`). El fix de `t_24758d5a` (DELETE
+`/api/admin/users/[id]` bloqueaba sacar un ADMIN aunque hubiera 2) se mergeó a
+`origin/master` de `onia-platform` como `52409f20` (verificado:
+`git merge-base --is-ancestor 52409f20 origin/master` → exit 0). **Volví a correr
+`scripts/probar_coadministrador.mjs` contra producción real y el DELETE sigue dando 403** —
+el fix está en el árbol pero no en el build servido. No es un hallazgo nuevo: es la brecha
+normal de deploy, medida en vivo en vez de asumida.
+
+**No hace falta pedido de deploy.** `ssh root@187.77.16.63 'bash /opt/onia-platform/_deploy/publicar.sh --dry-run'`
+dice `hay que publicar: 2 arreglo(s)` y el destino se publica **solo** (no toca
+`pricing.ts`/`subscription-plans.ts`, así que no lo frena el freno de precio). El publicador
+automático (`onia-publicar-solo.sh`, corre cada 3h) lo va a levantar sin que Sergio Urcullo
+tenga que apretar nada.
+
+**Próxima vuelta: si `BUILD_ID` cambió, correr `probar_coadministrador.mjs` una vez para
+confirmar 200 y cerrar el tema; si no cambió, no repetir esta medición — ir a otra superficie
+(otro rubro, u otro escalón 3).**
+
+---
+
+## 2026-09-19 08:1x La Paz — escalón 3 nuevo intentado (cambio de plan): estructuralmente
+inalcanzable para `zz-qa-`, no es un hallazgo
+
+`BUILD_ID` sin cambios (`HyMvkgxD68MORYYHikiG6`), 0 huérfanas `zz-qa-` al arrancar, sin tareas
+nuevas en el tablero. Se escribió `scripts/probar_cambio_de_plan.mjs` para recorrer, por primera
+vez con clic real y sesión real, el camino "dueño con plan `basic` aprieta 'Contratar Crece' en
+`/settings` → llega a `/checkout?plan=crece` con el precio correcto (Bs 550)".
+
+**Resultado: la pantalla "Mi plan" no existe para ninguna cuenta `zz-qa-`, por diseño.**
+`esCuentaQueNoEsCliente` (`lib/platform/cuentas-que-no-son-clientes.ts`) matchea el **slug** de
+la organización contra `QA_SLUG_PREFIXES = ["zz-qa-"]` — sin mirar el email — y
+`seccionesDeConfiguracion({cuentaInterna: true, ...})` en `SettingsClient.tsx` **omite el grupo
+"plan" entero** ("Mi plan", "Chatbot de WhatsApp", "Descargar mis planillas") para esas cuentas.
+Es una decisión de Sergio Urcullo del 2026-09-18: las cuentas de QA no ven la VENTA. Verificado
+en vivo: org `zz-qa-cambioplan-20260919081734` (plan `basic`, dueño ADMIN, sesión real) en
+`/settings` no tiene NINGÚN enlace a `/checkout` en toda la pantalla — 0 coincidencias.
+
+**No es un hallazgo — es un bloqueo estructural de la convención de este carril.** CLAUDE.md
+exige `zz-qa-` en todo lo que se crea (para que el borrado sea seguro); el producto exige que
+`zz-qa-` no vea la venta (para que un drip no le escriba precios a datos de prueba). Las dos
+reglas son correctas por separado y su intersección deja **la pantalla de cambio de plan
+(`/settings`→"Mi plan"→`/checkout`) fuera del alcance de este carril mientras ambas reglas
+sigan vigentes.** Ningún otro rubro de esta pantalla (comparativa, botones "Contratar" de cada
+plan, add-ons) se puede recorrer de punta a punta con sesión real bajo esta convención.
+
+Queda anotado para que ninguna vuelta futura vuelva a intentar esto pensando que es un bug del
+instrumento: `scripts/probar_cambio_de_plan.mjs` reproduce el bloqueo (falla con "No hay ningún
+`<a href="/checkout?plan=crece">`" y 0 enlaces a checkout) y lo documenta en su cabecera.
+
+RAZÓN: la brecha más grande del objetivo (recorrido completo) sigue en 9/9 sin cambios de
+`BUILD_ID`; el escalón 3 de coadministradores sigue bloqueado en el integrador (`t_24758d5a`,
+`52409f20` no mergeado a `origin/master` aún); este ítem nuevo resultó ser un no-hallazgo tras
+investigarlo, pero la investigación en sí vale (evita que otro carril lo intente de nuevo).
+LECCIÓN: antes de instrumentar un escalón 3 que involucre precios/checkout/venta, revisar si la
+convención `zz-qa-` choca con `esCuentaQueNoEsCliente` — desde el 18-sep, CUALQUIER superficie
+de venta filtrada por esa función es inalcanzable para este carril con su propia convención.
+
+---
+
+## 2026-09-19 07:1x La Paz — `BUILD_ID` cambió otra vez (`HyMvkgxD68MORYYHikiG6`, antes
+`Idvh9u4mdBzHBgE2penq4`): recorrido completo repetido, 9/9 sin hallazgos nuevos
+
+Deploy nuevo detectado al arrancar → se corrió el recorrido entero (no la versión acotada).
+`resumen.json`: `llegoHasta 9 / 9, completo True, agujeros []`. Los 9 pasos en "Clínica dental",
+de punta a punta: registro con confirmación de correo real → onboarding (6 pantallas) → paciente
+`zz-qa-` cargado y visto en `/patients` → cita `zz-qa-` agendada (201) y vista en `/appointments`
+→ factura `zz-qa-` vista en su pantalla de cobro, frenado ahí sin pagar → panel revisado. Todo
+`zz-qa-` (cuenta, org, paciente, cita, factura) borrado en la misma corrida — `organizations=0`,
+`appointments zz-qa-=0` verificado al cerrar.
+
+**El nuevo build NO trae el arreglo de coadministradores** (DG-043/`t_24758d5a`, commit
+`52409f20`): re-corrido `scripts/probar_coadministrador.mjs` contra `app.onia.com.bo` y el
+`DELETE /api/admin/users/<segundo ADMIN>` con 2 ADMIN sigue dando **403 "Cannot remove admin
+users"** (debería dar 200). Verificado en el origen, no solo en producción: `52409f2` sigue
+viviendo en la rama del carril `claude/chatbots-platform-review-0d1d09` (VPS,
+`/root/loops/onia-platform` y `/root/loops/onia-platform-chatbot`) — `origin/master` tiene esa
+rama mergeada hasta `a8e6ca1`, el commit ANTERIOR a `52409f2`. El deploy de este `BUILD_ID` trajo
+otros arreglos del mismo carril (`a8e6ca1` y para atrás) pero no el último. La tarea
+`t_24758d5a` sigue `done` con el comentario correcto ("falta que el integrador lo lleve a
+master") — no hace falta reabrirla ni repetir la prueba hasta que cambie el `BUILD_ID` de nuevo.
+
+RAZÓN: N/A — se confirmó 9/9 con el deploy nuevo; el hallazgo de coadministradores sigue siendo
+el mismo, ya reportado, y no depende de esta sesión (integrador).
+LECCIÓN: cuando cambia el `BUILD_ID` y hay un hallazgo de escalón 3 ya reportado y `done`, vale
+la pena re-probarlo UNA vez contra el build nuevo (puede haberse desplegado) antes de descartarlo
+— pero si sigue igual, no hace falta re-abrir nada: la tarea ya dice correctamente que espera al
+integrador.
+
+---
+
+## 2026-09-19 06:1x La Paz — escalón 3: coadministradores, hallazgo — DELETE bloquea sacar un ADMIN
+
+**`BUILD_ID` sin cambios (`Idvh9u4mdBzHBgE2penq4`)** — no se repitió el recorrido completo, sigue
+9/9. 0 huérfanas `zz-qa-` al arrancar. Superficie nueva: invitar/sacar un co-administrador en
+`/settings` → `/api/admin/users`, candidata anotada en varias vueltas anteriores.
+
+**Método:** instrumento nuevo `scripts/probar_coadministrador.mjs` — org `zz-qa-` sembrada por
+SQL directo con `plan='clinic'` (Completo, Bs 1.290 — el único junto a `enterprise` con
+`multiAdminIncluded:true`, no elegible desde el onboarding real), dueño ADMIN sembrado (mismo
+truco de `auth.users` con los campos de token en `''`), sesión acuñada con `acunarSesion()`.
+Contra `https://app.onia.com.bo` real: `POST /api/admin/users` invita un segundo ADMIN por
+correo → **201**. `GET /api/admin/users` → **2 usuarios**. `DELETE
+/api/admin/users/<id del segundo>` (con 2 ADMIN, sacar uno debería dar 200) → **403 "Cannot
+remove admin users"**.
+
+**HALLAZGO — reportado a `onia-cola`, `t_24758d5a`, prioridad 1:** DG-043 (17-sep) se declaró
+cerrado en los tres caminos de salida (PATCH y DELETE de `/api/admin/users/[id]`, DELETE de
+`/api/team/[id]`), pero el DELETE de `/api/admin/users/[id]` llama a
+`removeUserFromOrganization()` en `lib/auth.ts`, que tiene su **propio** bloqueo incondicional
+viejo (`if role === ADMIN || SUPERADMIN → throw "Cannot remove admin users"`) sin mirar cuántos
+ADMIN quedan — el `puedeQuitarAdministrador()` que la ruta ya calcula bien nunca llega a decidir
+nada, porque la función de abajo tira antes. `/api/team/[id]` DELETE (la tercera puerta) SÍ está
+sano: no pasa por `removeUserFromOrganization`.
+
+**Limpieza:** org, 2 `profiles`, 2 `auth.users` (+`identities`) — todo por id exacto, dentro del
+propio script, en la misma corrida (éxito o fallo). Verificado `organizations=0 auth.users=0` al
+cerrar.
+
+RAZÓN: N/A — la vuelta avanzó (escalón 3 nuevo, con hallazgo de producto).
+LECCIÓN: `psql -tAc` con `INSERT ... RETURNING` imprime la fila Y el tag de comando ("INSERT 0
+1") pegado debajo — a diferencia de `SELECT`, `-t` no lo suprime. Tomar sólo la primera línea es
+lo correcto para toda consulta de un solo valor.
+
+---
+
+## 2026-09-19 05:1x La Paz — huérfana limpiada + escalón 3 cerrado: exportación CSV con plan `basic`
+
+**`BUILD_ID` sin cambios (`Idvh9u4mdBzHBgE2penq4`)** — no se repitió el recorrido completo
+(sigue 9/9, confirmado en la entrada anterior). Antes de empezar se encontró y limpió **1 org
+`zz-qa-` huérfana** (`zz-qa-2026-09-19-0414-negocio`, `onboardingCompletedAt` puesto, 2 `profiles`
+— ADMIN + DOCTOR pendiente —, 0 `patients`/`appointments`: corrida cortada por el timeout, el
+modo de falla ya conocido). Impresas antes de borrar: `organizations`, `profiles`,
+`organization_entitlements`, `auth.users`.
+
+**Escalón 3, superficie nueva:** la exportación de datos del cliente (`/api/settings/export`),
+citada en la memoria compartida como "derecho del titular, no feature de plan"
+(`csvExportEnabled` true desde `basic`) pero nunca antes probada de punta a punta por este
+carril con datos ENVIADOS.
+
+**Método:** org `zz-qa-` sembrada por SQL directo con `plan='basic'` (el más barato, para probar
+justo el caso límite de la promesa) y un paciente `zz-qa-`; sesión acuñada con
+`acunarSesion()` de `scripts/lib/sesion_dueno.mjs`. Trampa nueva encontrada y resuelta en el
+camino: `generate_link` fallaba con 500 "Database error finding user" — el `auth.users` sembrado
+a mano tenía `confirmation_token` y los otros campos de token en `NULL`, y el driver de GoTrue
+no sabe escanear `NULL` a `string` en esa columna (`converting NULL to string is unsupported`,
+visto en `docker logs supabase-auth2`). Se cura seteándolos a `''`. **Vale para cualquier carril
+que siembre `auth.users` a mano sin pasar por `/register`**: sin esos campos en `''`, todo
+`generate_link`/`acunarSesion` sobre esa fila devuelve 500 y parece un bug del producto.
+
+**Resultado, HTTP real contra `https://app.onia.com.bo/api/settings/export` con cookies de
+sesión:** `200`, `content-type: application/zip`, `content-disposition: attachment;
+filename="onia-datos-2026-09-19.zip"`, 1.601 bytes. El ZIP contiene `Resumen.csv` y
+`Pacientes.csv` con el registro `zz-qa-export-...-paciente` adentro. Sin hallazgo: la promesa de
+la memoria compartida se sostiene en producción, con el plan más barato, con datos reales.
+
+**Limpieza:** `patients`, `profiles`, `organizations`, `auth.identities`, `auth.users` — los 5
+por id exacto. Verificado 0/0/0 (`organizations`, `patients`, `auth.users` con `zz-qa-%`) al
+cerrar.
+
+RAZÓN: N/A — la vuelta avanzó (huérfana limpiada + escalón 3 nuevo cerrado con hallazgo de
+método, sin hallazgo de producto).
+LECCIÓN: sembrar `auth.users` a mano para probar un camino autenticado necesita también los
+campos de token en `''` (no `NULL`) — si no, `acunarSesion()` da un 500 que se lee como bug del
+producto y es del fixture. Ver `/tmp/probar_export.mjs` (no versionado; el fix real es el UPDATE
+de arriba, reproducible con cualquier sembrado a mano de `auth.users`).
+
+---
+
+## 2026-09-19 03:1x La Paz — `BUILD_ID` cambió, recorrido completo repetido: 9/9 sin hallazgos
+
+`BUILD_ID` pasó de `NIRA4pNJ8fJVouaUsyu1E` (última vuelta) a `Idvh9u4mdBzHBgE2penq4` — tocaba
+repetir el recorrido entero, no confiar en la medida vieja. Antes de correr, se encontraron y
+limpiaron **2 orgs `zz-qa-` huérfanas** de las dos vueltas anteriores (`zz-qa-2026-09-19-0109-negocio`
+y `zz-qa-2026-09-19-0209-negocio`, ambas con `onboardingCompletedAt` puesto pero 0 `appointments`
+— corridas cortadas por el timeout, el modo de falla ya conocido de este carril). Impresas antes de
+borrar: profiles ADMIN+DOCTOR, entitlements, auth.users — las 4 filas de `profiles`, las 2 de
+`organizations`, las 2 de `auth.users`.
+
+**Resultado del recorrido, `node scripts/recorrido_cliente.mjs --escribir` en Clínica dental:**
+los 9 pasos completos — cuenta creada (confirmación de correo requerida antes del primer login,
+como al cliente real), onboarding en 6 pantallas, paciente `zz-qa-` cargado y visto en `/patients`,
+cita `zz-qa-` agendada (201) y **VISTA en `/appointments`**, factura con ítem `zz-qa-` vista en su
+pantalla de cobro (frenado ahí, sin pagar), y el dato del paso 6 confirmado como guardado (el panel
+`/dashboard` no lista pacientes — es lo que muestra, no un fallo). `completo: true`, 0 agujeros.
+
+Limpieza de esta corrida: 0 filas `zz-qa-` en `organizations`, `appointments` ni `auth.users` al
+cerrar (confirmado por SQL, no supuesto).
+
+**Además se cerró una tarea del tablero** (`t_e23278c6`, notificación auto de 2026-09-12, ya
+superada por corridas posteriores) que seguía `ready` sin reclamar.
+
+RAZÓN: N/A — la vuelta avanzó (recorrido completo repetido con éxito tras cambio de `BUILD_ID`,
+más limpieza de huérfanas y una tarea vieja cerrada).
+LECCIÓN: el chequeo de huérfanas `zz-qa-` al arrancar siguió dando trabajo real — sigue siendo
+obligatorio cada vuelta, no es un caso aislado.
+
+---
+
+## 2026-09-19 00:1x La Paz — escalón 3 cerrado: invitar y quitar coadministrador, con plan `clinic`
+
+**`BUILD_ID` sin cambios (`NIRA4pNJ8fJVouaUsyu1E`)** — no se repitió el recorrido completo
+(sigue 9/9, `completo: true`, confirmado en la entrada anterior). Con el resto de la vuelta se
+terminó lo que la vuelta pasada dejó reconocido sin poder probar: el rol ADMIN del formulario
+"Agregar a alguien" no aparece con plan Profesional (`multiAdminIncluded: false`), así que hacía
+falta un plan con esa capacidad. `primerPlanCon("multiAdminIncluded")` = `clinic`.
+
+**Método:** una org `zz-qa-` sembrada por SQL directo (no por `/register`, que no deja elegir
+plan) con `plan='clinic'`, `onboardingCompletedAt` ya puesto y un profile `ADMIN` dueño; sesión
+minteada con el mismo mecanismo de `mirar_bandeja_dueno.mjs` (`acunarSesion`, magic link admin
+sin contraseña). Impreso ANTES de borrar (regla de la casa): la fila de `organizations` y de
+`profiles` quedaron logueadas más abajo en el commit de esta vuelta.
+
+**Resultado, EN VIVO contra `https://app.onia.com.bo/settings`, sin hallazgo de producto:**
+
+- Con plan `clinic`, el `<select>` de "Agregar a alguien" SÍ ofrece las tres opciones:
+  `Profesional`, `Recepción` y **`Administrador — Ve todo y configura el sistema`**.
+- Se completó el formulario con datos `zz-qa-` (nombre, correo, contraseña) y se apretó
+  **"Darle acceso"** de verdad: la tarjeta "Equipo" pasó a listar al coadministrador con la
+  etiqueta `Administrador`, y en la base quedaron **DOS** filas `profiles` con `role='ADMIN'`
+  para esa organización (antes: 1).
+- El camino de VUELTA (lo que la memoria compartida marcaba como agujero de seguridad hasta el
+  17-sep, `commit 9f103875`) también funciona: el botón con `aria-label="Quitar a <nombre>"`
+  dispara un `confirm()` nativo ("¿Eliminar a … ? Perderá acceso al sistema."), se aceptó, y el
+  segundo `profiles` desapareció de la base — sin ningún response `>=400` en el camino.
+- Sin hallazgo: la superficie que DG-043 gatea funciona de punta a punta, ida y vuelta, medida
+  con datos reales enviados (no solo mirada).
+
+**Limpieza:** `DELETE FROM organizations WHERE name LIKE 'zz-qa-%coadmin-probe%'` (cascada
+sobre `profiles`) + `DELETE FROM auth.users WHERE email LIKE 'zz-qa-20260919001518-%'`.
+Verificado 0/0/0 (`organizations`, `auth.users`, `profiles` con `zz-qa-%`) al cerrar.
+
+RAZÓN: la medida `9/9` no cambió porque el `BUILD_ID` no cambió — correcto no repetir el
+recorrido completo. El avance de esta vuelta es cerrar el escalón 3 (coadministrador) que
+quedaba reconocido pero no probado.
+LECCIÓN: cuando una capacidad está gateada por `plan` y el onboarding real no permite elegirlo,
+sembrar la org por SQL directo (con su plan de prueba) es más rápido y más preciso que forzar el
+camino de compra — mientras el dato se imprima antes de borrar y todo lleve `zz-qa-`. El
+`acunarSesion()` de `scripts/lib/sesion_dueno.mjs` sirve también para ESTE uso (no solo para
+`mirar_bandeja_dueno.mjs`): loguea sin contraseña una cuenta que recién se creó, incluso sin
+confirmar el correo.
+
+---
+
+## 2026-09-18 23:0x-23:2x La Paz — reconfirmación redundante + reconocimiento de escalón 3 (equipo)
+
+**Corrección de método, no de dato.** Al arrancar leí el final del archivo (con `tail`) en vez
+del tope, y con eso pensé que el `BUILD_ID` anterior medido era `4AefpemDeSbQXrDmTbhoy` (una
+entrada vieja). El tope real ya tenía `NIRA4pNJ8fJVouaUsyu1E` confirmado por la vuelta anterior
+(commit `486742c0`) — el mismo que acabo de medir de nuevo. Corrí el recorrido completo entero
+otra vez sin que hiciera falta: **9/9, `completo: true`, `agujeros: []`**, 0 filas `zz-qa-` al
+cerrar — mismo resultado sano, repetido. Dato correcto, vuelta parcialmente desperdiciada por no
+mirar el TOPE del archivo antes de decidir.
+
+**Con el resto de la vuelta, until 3 de la lección de la vuelta anterior (invitar/quitar
+coadministrador desde `/settings`).** Reconocimiento SIN escribir nada, con la sesión real de
+`sergio@onia.com.bo` (solo lectura — nunca se apretó "Darle acceso"):
+
+- `/settings/equipo` no existe (404). El camino real es `/settings` → tarjeta "Equipo — Quién
+  entra al sistema" → botón **"Agregar a alguien"** (`getByRole('button', {name:'Agregar a
+  alguien'})`), que despliega un formulario INLINE (no modal, no ruta nueva): Nombre completo,
+  Correo electrónico, Contraseña (min. 8 caract.) y un `<select>` de rol.
+- El `<select>` de rol en el plan **Profesional** de Sergio sólo ofrece dos opciones:
+  `DOCTOR` ("Profesional — Atiende y tiene agenda propia") y `STAFF` ("Recepción — Agenda y
+  cobra, no atiende"). **No hay opción ADMIN visible en este formulario/plan** — consistente
+  con la memoria compartida sobre DG-043 (`multiAdminIncluded` en falso para `professional`).
+  Esto es la MISMA pantalla que el paso "equipo" del onboarding ya toca (carga un profesional
+  sin invitar por correo); no alcanza para probar el camino de co-administrador que DG-043
+  gatea, que aparentemente vive en otra superficie o requiere un plan con `multiAdminIncluded`.
+- No se probó el camino de invitación por correo (`/api/admin/users`, el que la memoria dice que
+  crea un ADMIN real) porque no apareció en esta pantalla con este plan: hace falta un rubro/plan
+  con `multiAdminIncluded` para verlo, o localizar la ruta exacta antes de automatizarlo.
+
+**Sin hallazgo de producto esta vuelta.** El escalón 3 queda con selectores concretos para
+armarlo la próxima vez, en vez del "pendiente por costo de armar el probe" de las últimas
+vueltas: falta decidir con qué rubro/plan de prueba se ve el rol ADMIN antes de escribir el
+paso automatizado, para no automatizar a ciegas sobre una pantalla que no muestra lo que se
+quiere probar.
+
+`completo: true`, `llegoHasta: 9/9` (sin cambios).
+
+RAZÓN: no avanzó la medida porque el `BUILD_ID` no había cambiado de verdad (error de lectura
+propio, corregido arriba) — la vuelta se gastó en una reconfirmación innecesaria y en
+reconocimiento de escalón 3.
+LECCIÓN: antes de decidir "hay que re-medir", leer el TOPE de `ULTIMO_RECORRIDO.md` (las
+entradas más nuevas van arriba), no el final con `tail`. Y para escalón 3: el rol ADMIN/
+co-administrador no aparece en el formulario de "Agregar a alguien" con el plan Profesional —
+antes de automatizar el probe, crear (o encontrar) una cuenta `zz-qa-` con un plan/rubro que
+tenga `multiAdminIncluded` para ver la superficie real que DG-043 gatea.
+
+---
+
 ## 2026-09-18 22:09-22:1x La Paz — deploy nuevo (BUILD_ID `NIRA4pNJ8fJVouaUsyu1E`, antes `zMQBlf7IEQ_xT2qTWyMmQ`): dental 9/9 de nuevo
 
 Al arrancar: alta `abierta`, 0 orgs `zz-qa-` huérfanas, 0 citas `zz-qa-` huérfanas, sin tareas

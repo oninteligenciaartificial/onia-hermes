@@ -62,13 +62,34 @@ FIRMA_HUMANA='lib/pricing\.ts|lib/subscription-plans\.ts|ONIA_CATALOGO_DE_VENTA\
 # precio publicado. Si los numeros de los dos lados del diff son los MISMOS, no
 # hay monto nuevo y el destino sale solo.
 #
-# 🔴 Y falla CERRADO a proposito: cualquier numero que cambie detiene el destino,
-# aunque sea el `0` de un indice. No se intenta adivinar cual numero es plata —
-# esa lista se escribiria a mano y el dia que aparezca una clave nueva
+# 🔴 Y falla CERRADO a proposito: un numero que cambia detiene el destino SALVO
+# que se pueda mostrar que no es plata. Nunca al reves. No hay lista de "claves
+# de plata": esa se escribiria a mano y el dia que aparezca una nueva
 # (`tarifaBase: 320`) el guion publicaria un precio sin firma, que es la
 # direccion cara. Lo que si cambia es el AVISO: antes decia "toca una fuente de
 # precio" y ahora dice QUE numero cambia, asi Sergio Urcullo decide de un
 # vistazo en vez de tener que abrir el diff.
+#
+# EL CORTE NO ES LA FORMA DEL NUMERO NI SU VALOR: ES LA CLAVE QUE LO RECIBE.
+# Medido el 2026-09-19 06:39 La Paz con `2b12f50ae` esperando en `origin/main`:
+# el freno contestaba «landing: NO publico solo — cambia un numero en una fuente
+# de precio: .../pricing.ts: 0 1» y NINGUN monto cambiaba (`Bs 70` salia intacto
+# de `USUARIO_EXTRA_ADDON`). Lo que acusaba era `asientosExtra: 0` —cuantas
+# PERSONAS extra vende un plan— y el `0`/`1` de `frase.charAt(0)`/`frase.slice(1)`,
+# un helper que arma texto. La cura del 2026-09-18 (`d5619454`) habia sacado las
+# COMPARACIONES (`> 0`) y dejado las ASIGNACIONES (`: 0`) deteniendo con su motivo
+# escrito —«un add-on que pasa a gratis se escribe `: 0`»—, que sigue siendo
+# cierto: lo que faltaba es mirar A QUE CAMPO se asigna. `: 0` en `mensualAddon`
+# es plata; en `asientosExtra` es una cantidad de personas.
+#
+# Por que la excusa se ancla al vocabulario de CANTIDAD y no al de plata: la
+# direccion del dano no es simetrica. Detener de mas cuesta una firma de Sergio
+# Urcullo —y esa es la unica firma que importa: gastarla en falsos la vuelve
+# automatica—; dejar pasar de menos publica un precio que nadie decidio. Por eso
+# la clave tiene que decir CANTIDAD **y ademas** no nombrar plata: una clave que
+# el guion no sabe nombrar sigue deteniendo, que es fallar cerrado. Lo ancla el
+# caso «una clave que el guion NO sabe nombrar, asignada a 0, sigue deteniendo»
+# de `scripts/publicador-freno-de-precio.test.mjs`.
 # ---------------------------------------------------------------------------
 
 # Los numeros que unos commits CAMBIAN en un archivo, con los comentarios afuera.
@@ -84,12 +105,49 @@ numeros_del_diff() {  # $1=repo-del-codigo  $2=archivo  $3..=shas
     # que la tarea t_189a6037 tomo como caso.
     GIT_NO_LAZY_FETCH=1 git -C "$repo" show --format= --unified=0 -m --first-parent \
       "$sha" -- "$archivo" 2>/dev/null
-  done | awk '
+  done | numeros_con_signo
+}
+
+# El FILTRO, solo. Lee un diff unificado por stdin y deja los numeros con su
+# signo. Vive aparte porque hay DOS formas de conseguir ese diff —`git show` de
+# unos commits, y `diff` entre dos copias del archivo— y las dos tienen que
+# juzgar con el MISMO criterio: una segunda copia del filtro coincidiria con
+# esta mientras la realidad les diera la razon a las dos, que es como un gate
+# pasa a defender el bug que existe para impedir.
+numeros_con_signo() {
+  awk '
     /^(\+\+\+|---)/ { next }
     /^[+-]/ {
       signo = substr($0, 1, 1); linea = substr($0, 2)
       if (linea ~ /^[[:space:]]*(\/\/|\*|\/\*)/) next   # renglon de comentario
       sub(/\/\/.*$/, "", linea)                          # comentario al final
+      # Un `0` o un `1` en POSICION de comparacion o de indice no es plata. El
+      # corte no es el valor: es donde esta escrito. Un umbral de plata nunca se
+      # escribe `> 0` ni `> 1` (`total > 1500` sobrevive: el `1` viene seguido de
+      # otro digito), y un add-on que pasa a gratis se escribe `: 0`, que es una
+      # ASIGNACION y sigue deteniendo. Los tres patrones son las tres formas en
+      # que un helper cuenta cosas: comparar, indexar hacia atras, y `.at()`.
+      gsub(/(>=|<=|===|!==|==|!=|>|<)[ \t]*-?[01]([^0-9.,]|$)/, " ", linea)
+      gsub(/\[[^]]*[-+][ \t]*[01][ \t]*\]/, " ", linea)
+      gsub(/\[[ \t]*-?[01][ \t]*\]/, " ", linea)
+      # El argumento de un metodo de POSICION es un indice, no un monto: ninguno
+      # de estos recibe plata. Se nombran de a uno en vez de aceptar cualquier
+      # `.f(0)`, porque `precioDe(0)` si podria serlo.
+      gsub(/\.(at|charAt|charCodeAt|codePointAt|slice|splice|substring|substr|indexOf|lastIndexOf|padStart|padEnd|repeat)\([ \t]*-?[01][ \t]*(,[ \t]*-?[01][ \t]*)?\)/, " ", linea)
+      # Una asignacion `clave: 0|1` donde la CLAVE cuenta cosas. Se exigen las DOS
+      # mitades: que nombre una cantidad Y que no nombre plata, para que
+      # `precioPorUsuario: 0` —que las dos veces dice «usuario»— siga deteniendo.
+      # `tolower` no cambia el largo, asi que RSTART/RLENGTH valen sobre el original.
+      bajo = tolower(linea)
+      # El terminador admite la coma que cierra la propiedad (`asientosExtra: 0,`)
+      # pero NO la que separa decimales (`monto: 1,50`), que tiene que seguir
+      # contando como numero entero.
+      while (match(bajo, /[a-z0-9_$]*(asiento|usuario|persona|cupo|ficha|conversacion|sesion|length|index|indice)[a-z0-9_$]*[ \t]*:[ \t]*-?[01](,[^0-9]|,$|[^0-9.,]|$)/)) {
+        clave = substr(bajo, RSTART, RLENGTH)
+        if (clave ~ /precio|monto|tarifa|abono|costo|cost|price|amount|pago|mensual|anual|yearly|monthly|bs/) break
+        linea = substr(linea, 1, RSTART - 1) " " substr(linea, RSTART + RLENGTH)
+        bajo  = substr(bajo,  1, RSTART - 1) " " substr(bajo,  RSTART + RLENGTH)
+      }
       while (match(linea, /[0-9][0-9.,]*/)) {
         n = substr(linea, RSTART, RLENGTH); gsub(/[.,]/, "", n)
         print signo n
@@ -115,6 +173,47 @@ montos_que_cambian() {  # $1=repo-del-codigo  $2=archivo  $3..=shas
   printf '%s' "$(comm -3 <(printf '%s\n' "$salen") <(printf '%s\n' "$entran") \
     | tr -d '\t' | grep -v '^$' | sort -u | tr '\n' ' ')"
   return 1
+}
+
+# Lo mismo, para un destino que NO se mide por commits: compara la copia que
+# corre en produccion contra la del repo. Mismos codigos de salida y mismo
+# filtro que `montos_que_cambian`.
+#
+# Aca decia —en un comentario, al lado del codigo del bot— que «sin shas no se
+# puede preguntar si cambio un numero, asi que cae en NO MEDIDO». Era una
+# hipotesis con fecha, y es falsa: el bot tiene el archivo en las DOS puntas
+# (`/opt/onia/bot/<x>` y el repo), que es exactamente lo que un diff necesita.
+# Su costo, medido el 2026-09-19: el arreglo que le sacaba un cobro inventado de
+# Bs 390/mes al plan mas caro toca `knowledge.onia.json` sin mover un solo
+# monto —320/550/890/1.290/390 identicos a los dos lados, cambia a QUIENES
+# alcanza la frase— y aun asi detenia el lote ENTERO del bot (13 archivos, entre
+# ellos el respaldo que hace que vuelvan a entenderse las notas de voz),
+# pidiendole a Sergio Urcullo una firma por algo que no mueve un centavo.
+montos_que_cambian_copias() {  # $1=dir-en-produccion  $2=dir-en-el-repo  $3=archivo
+  local prod=$1/$3 repo=$2/$3 entran salen diff
+  # Un archivo NUEVO no tiene lado viejo: su contenido entero cuenta como que
+  # entra, y `diff` con /dev/null es justamente eso.
+  [ -f "$repo" ] || return 2
+  [ -f "$prod" ] || prod=/dev/null
+  diff=$(diff -U0 -- "$prod" "$repo" 2>/dev/null) || true
+  entran=$(printf '%s\n' "$diff" | numeros_con_signo | grep '^+' | sed 's/^+//' | sort)
+  salen=$(printf '%s\n' "$diff" | numeros_con_signo | grep '^-' | sed 's/^-//' | sort)
+  [ "$entran" = "$salen" ] && return 0
+  printf '%s' "$(comm -3 <(printf '%s\n' "$salen") <(printf '%s\n' "$entran") \
+    | tr -d '\t' | grep -v '^$' | sort -u | tr '\n' ' ')"
+  return 1
+}
+
+# Los NOMBRES de archivo que lista el publicador del bot en seco. Sus renglones
+# son `   CAMBIA   <archivo>  (N lineas)` y `   NUEVO    <archivo>`.
+#
+# Hasta hoy esa salida se le pasaba CRUDA a la guarda como si fuera una lista de
+# archivos: el `grep` de la firma matcheaba el renglon entero y el `for` lo
+# partia en palabras, asi que el sujeto que se media terminaba siendo `CAMBIA` y
+# el detalle del log salia `CAMBIA knowledge.onia.json (2` — tres palabras de un
+# renglon, que es la firma de este defecto y lo que lo delato.
+nombres_del_dryrun() {
+  sed -n 's/^[[:space:]]*\(CAMBIA\|NUEVO\)[[:space:]]\{1,\}\([^[:space:]]\{1,\}\).*/\2/p'
 }
 
 # El RENGLON del log cuando el freno detiene un destino. Lleva SU CITA —que
@@ -152,6 +251,22 @@ if [ "${1:-}" = "--renglon" ]; then
   [ "$#" -ge 2 ] || { echo "uso: publicar-solo.sh --renglon <nombre> <motivo> [detalle]" >&2; exit 2; }
   renglon_detenido "$1" "$2" "${3:-}"
   exit 0
+fi
+
+if [ "${1:-}" = "--nombres" ]; then
+  nombres_del_dryrun
+  exit 0
+fi
+
+if [ "${1:-}" = "--montos-copias" ]; then
+  shift
+  [ "$#" -eq 3 ] || { echo "uso: publicar-solo.sh --montos-copias <dir-prod> <dir-repo> <archivo>" >&2; exit 2; }
+  SALIDA_MONTOS=$(montos_que_cambian_copias "$1" "$2" "$3")
+  case $? in
+    0) echo "ningun monto cambia"; exit 0 ;;
+    1) echo "cambian: $SALIDA_MONTOS"; exit 1 ;;
+    *) echo "NO MEDIDO"; exit 2 ;;
+  esac
 fi
 
 if [ "${1:-}" = "--montos" ]; then
@@ -230,15 +345,20 @@ archivos_de() {  # $1=repo-del-codigo  $2..=shas
   done
 }
 
-publicar_destino() {  # $1=nombre $2=publicar.sh $3=archivos-tocados $4=repo-del-codigo $5=shas
-  local nombre=$1 guion=$2 tocados=$3 repo=${4:-} shas=${5:-}
+publicar_destino() {  # $1=nombre $2=publicar.sh $3=archivos-tocados $4=repo-del-codigo $5=shas $6=dir-en-produccion
+  local nombre=$1 guion=$2 tocados=$3 repo=${4:-} shas=${5:-} prod=${6:-}
   local precio arch detalle cambian nomedido salida nota=""
   precio=$(printf '%s\n' "$tocados" | grep -aE "$FIRMA_HUMANA" | sort -u)
   if [ -n "$precio" ]; then
     cambian=""; nomedido=""
     for arch in $precio; do
-      # shellcheck disable=SC2086   # los shas son hexadecimales: partirlos es lo que se quiere
-      salida=$(montos_que_cambian "$repo" "$arch" $shas)
+      if [ -n "$prod" ]; then
+        # Destino sin medidor por commits: se compara copia contra copia.
+        salida=$(montos_que_cambian_copias "$prod" "$repo" "$arch")
+      else
+        # shellcheck disable=SC2086   # los shas son hexadecimales: partirlos es lo que se quiere
+        salida=$(montos_que_cambian "$repo" "$arch" $shas)
+      fi
       case $? in
         1) cambian="$cambian$arch: $salida
 " ;;
@@ -347,16 +467,19 @@ if puede_medir /opt/onia-landing/_deploy/publicar.sh landing; then
 fi
 
 # El bot no tiene medidor por commits: su publicador lista los archivos que
-# cambian, asi que la guarda se aplica sobre esa lista tal cual. Sin shas no se
-# puede preguntar si cambio un numero, asi que cae en NO MEDIDO y el bot se
-# sigue deteniendo igual que antes del 2026-09-18 — fallar cerrado es la unica
-# direccion honesta cuando no se pudo mirar.
+# cambian. De esa lista se sacan los NOMBRES (el renglon entero no es un archivo)
+# y se pregunta si cambia un monto comparando la copia VIVA contra la del repo.
+# Si el archivo no esta en el repo la respuesta sigue siendo NO MEDIDO y el bot
+# se detiene: fallar cerrado es la unica direccion honesta cuando no se pudo
+# mirar, pero "no pude" tiene que ser cierto y hasta hoy no lo era.
 if puede_medir /opt/onia/bot/_deploy/publicar.sh bot; then
   SALIDA_BOT=$(bash /opt/onia/bot/_deploy/publicar.sh --dry-run 2>&1)
   if echo "$SALIDA_BOT" | grep -q "nada que desplegar"; then
     echo "  bot: al dia"
   else
-    publicar_destino bot /opt/onia/bot/_deploy/publicar.sh "$SALIDA_BOT"
+    publicar_destino bot /opt/onia/bot/_deploy/publicar.sh \
+      "$(printf '%s\n' "$SALIDA_BOT" | nombres_del_dryrun)" \
+      "$REPO_HERMES/hermes-content/deploy/vps-ops/bot" "" /opt/onia/bot
   fi
 fi
 

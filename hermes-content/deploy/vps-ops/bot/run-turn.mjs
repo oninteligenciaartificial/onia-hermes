@@ -220,6 +220,9 @@ export function seedFrom(input) {
     pieceKey: input.piece_key || input.pieceKey || null,
     sourceCampaign: input.source_campaign || input.sourceCampaign || null,
     inboxId: String(input.inbox_id ?? input.inboxId ?? "").trim() || null,
+    // El MEDIO, aparte del inbox: de acá sale `{{via_humano}}`. Sin dato el motor cae en la
+    // forma canal-agnóstica, que es cierta en todos los canales.
+    channelType: String(input.channel_type ?? input.channelType ?? "").trim() || null,
     ownerRoleKey: input.owner_role_key || "sergio",
   };
 }
@@ -342,6 +345,44 @@ function buildResponse({ state, stageBefore, config, replies, result, applied, s
 }
 
 /**
+ * Guarda el estado — pero SOLO si este turno pudo LEERLO.
+ *
+ * `saveConversation` escribe la fila ENTERA: `human_took_over`, `opt_out_at`, `scheduled_at`,
+ * `calendar_event_id`, `followup_step`. Cuando la base no contestó la lectura, el turno corre con
+ * `createState(seed)` —todos los candados en su valor de fábrica— y escribir eso no es "guardar el
+ * turno": es DESARMAR lo que otro escribió bien. Un parpadeo de la base de un segundo dejaba al
+ * bot hablando encima del humano que ya estaba atendiendo (barrera 1) y le devolvía la palabra a
+ * quien había dicho BAJA (opt-out), sin que nada se pusiera rojo.
+ *
+ * Medido el 2026-09-18 en producción: de las 15 conversaciones con un traspaso humano registrado
+ * en `bot_messages`, TRES tenían `bot_conversations.human_took_over = f` — el candado que el
+ * traspaso tenía que dejar puesto (`chatwoot:11`, `chatwoot:39`, `chatwoot:58`).
+ *
+ * Lo que NO cambia: el bot contesta igual con el estado en memoria. Contestar a ciegas se corrige
+ * solo en el turno siguiente; escribir a ciegas no se deshace.
+ *
+ * `leido` es la fila TAL COMO VINO DE LA BASE al empezar este turno, y viaja hasta el PATCH: en
+ * el medio corre `step()` con su llamada al LLM, así que otro escritor puede haber subido un
+ * candado mientras tanto. Con `leido`, `saveConversation` omite las columnas que ESTE turno no
+ * cambió y deja vivo lo que el otro escribió. Sin él, escribe la fila entera y las pisa.
+ */
+async function guardarEstado(store, estado, estadoEnMemoria, leido) {
+  // Baranda: acá `leido` NO puede faltar. `estadoEnMemoria` es `!loaded`, así que si vamos a
+  // escribir es porque la base contestó y `loaded` es un objeto. Un llamador que se lo olvide
+  // —o que lo calle con `null` para que compile— devuelve el pisotone entero en silencio, y
+  // .mjs no tiene compilador que lo persiga: la única baranda es que reviente acá. Tira, no
+  // avisa: un warning más en `store.warnings` no lo lee nadie.
+  if (!estadoEnMemoria && !leido) {
+    throw new Error("guardarEstado sin el estado LEÍDO: escribir la fila entera pisa los candados (ver saveConversation)");
+  }
+  if (!estadoEnMemoria) return store.saveConversation(estado, {}, leido);
+  if (store.enabled) {
+    store.warnings.push("estado NO guardado: la conversación no se pudo leer y escribirla pisaría los candados");
+  }
+  return null;
+}
+
+/**
  * Corre UN turno completo.
  * @param {object} input   payload del canal (ver cabecera)
  * @param {object} [deps]  { store, llm, nowIso } — inyectables para test
@@ -355,8 +396,12 @@ export async function runTurn(input, deps = {}) {
 
   // 1. Estado: base primero, memoria si la base no contesta (el bot NO se queda mudo).
   const loaded = await store.ensureConversation(seed);
+  // `null` quiere decir UNA sola cosa (ver loadConversation): la base no contestó. Una
+  // conversación que todavía no existe vuelve creada, no nula. Así que de acá en adelante
+  // `estadoEnMemoria` es "lo que sigue es un estado INVENTADO", no "una conversación nueva".
+  const estadoEnMemoria = !loaded;
   let state = fillFromSeed(loaded || createState(seed), seed);
-  if (!loaded && store.enabled) store.warnings.push("estado en memoria: la conversación no se pudo cargar");
+  if (estadoEnMemoria && store.enabled) store.warnings.push("estado en memoria: la conversación no se pudo cargar");
   if (input.human_takeover === true && !state.humanTookOver) state = markHumanTakeover(state, nowIso);
   // CADA mensaje del humano refresca lastOutboundAt (el traspaso se guarda como outbound
   // nuestro): es la marca con la que conversacionVencida decide si nuestro lado esta vivo.
@@ -370,7 +415,7 @@ export async function runTurn(input, deps = {}) {
   // guardar y salir. No es un mensaje — no corre step, no crea filas, no manda.
   if (input.human_takeover_clear === true) {
     const limpio = clearHumanTakeover(state);
-    const saved = await store.saveConversation(limpio);
+    const saved = await guardarEstado(store, limpio, estadoEnMemoria, loaded);
     return {
       ok: true,
       duplicate: false,
@@ -529,7 +574,7 @@ export async function runTurn(input, deps = {}) {
   }
 
   // 7. Bitacora + estado.
-  const saved = await store.saveConversation(nextState);
+  const saved = await guardarEstado(store, nextState, estadoEnMemoria, loaded);
   const wrote = await store.insertOutbound(replies, nextState, { raw: { notes: result.notes } });
 
   return buildResponse({

@@ -148,12 +148,6 @@ function referenciasAUnPlan(plan: (typeof PLANES)[number]): RegExp[] {
  * termina bendiciendo lo que ya no existe.
  */
 const EXENTOS: ReadonlyArray<{ archivo: string; fragmento: string; motivo: string }> = [
-  {
-    archivo: join("lib", "pricing.ts"),
-    fragmento: "El chatbot de WhatsApp — ${NOMBRE_DE_PLAN.full} ya lo trae incluido",
-    motivo:
-      "es el `sinEsto` del Profesional y lo deriva `nombresConChatbot()` en las superficies que contestan la pregunta; acá el nombre está en la línea que el propio plan declara con `chatbotIncluido`",
-  },
 ];
 
 /**

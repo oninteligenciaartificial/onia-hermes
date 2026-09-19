@@ -8,6 +8,8 @@ import {
   LOGIN_URL,
 } from "./nav";
 import { CTA_ALTA } from "./alta";
+import { modulosEncendidosEn } from "./modulos-de-la-cuenta";
+import type { PlanId } from "@/lib/pricing";
 import { BarraSitio } from "./barra";
 import { MobileMenu } from "./menu";
 import s from "./sitio.module.css";
@@ -38,7 +40,7 @@ const toneClass: Record<Tone, string> = {
  * otro título: cada uno dibuja lo que gana ESE negocio, con las palabras que el
  * sistema le pone delante — el dentista ve tratamientos con hora, la ferretería
  * ve la caja cortada por método de pago, la importadora ve qué cotización sigue
- * viva, la estética ve las sesiones que faltan del paquete y el estudio ve el
+ * viva, la estética ve a la clienta que no volvió y el estudio ve el
  * IVA y el IT del mes. El vocabulario no se inventa acá: sale de
  * onia-platform/lib/onboarding/vocabulario.ts, y el resultado, de lo que este
  * mismo sitio ya publica rubro por rubro en (sitio)/rubros/page.tsx.
@@ -62,13 +64,15 @@ export type PanelId =
  * correcto, y dejarlo en la llamada era la forma segura de publicar uno vacío
  * — que es exactamente lo que pasaba con el `alt` de la captura.
  */
-const panelLabel: Record<PanelId, string> = {
+const panelLabel: Record<Exclude<PanelId, "cuenta">, string> = {
   agentes:
     "Pendientes de aprobación a las 03:12, con el negocio cerrado: tres propuestas que los agentes dejaron escritas de madrugada, cada una con su botón de aprobar. Nada se manda hasta que el dueño aprueba.",
   chat:
     "Conversación de WhatsApp a las 23:40: alguien pregunta si atienden el sábado y ya tiene la respuesta con el horario que el negocio publicó.",
-  cuenta:
-    "Una cuenta recién creada, con clientes, caja, inventario, contabilidad y agentes ya encendidos.",
+  // El de "cuenta" NO está acá: enumera los mismos módulos que dibuja, así que
+  // depende del plan igual que las pastillas. Lo arma `labelDe`, abajo — una
+  // cadena fija diría "y agentes ya encendidos" a quien usa lector de pantalla
+  // justo en el plan que los tiene apagados.
   dental:
     "Agenda del día de una clínica dental: cada paciente con su hora y su tratamiento, dos citas ya confirmadas y una marcada para llamar.",
   comercio:
@@ -76,32 +80,18 @@ const panelLabel: Record<PanelId, string> = {
   importadora:
     "Cotizaciones de una importadora eléctrica: una aprobada, una enviada y una esperando respuesta.",
   estetica:
-    "Paquetes en curso de un centro de estética: cada tratamiento con las sesiones ya hechas y las que faltan, y el control post-tratamiento ya puesto en la agenda.",
+    "Tratamientos en curso de un centro de estética: uno al día, otro de una clienta que no volvió, y el control post-tratamiento ya puesto en la agenda.",
   servicios:
     "Cierre de mes de un estudio profesional: el IVA y el IT del mes ya armados, y el reporte del mes esperando revisión.",
 };
 
 /**
- * Los módulos del panel de cuenta. Son EXACTAMENTE los que nombra el copy que
- * queda al lado en /empezar ("Todo encendido: agenda, caja, inventario,
- * contabilidad y la cola de agentes") más "Clientes", que nombra la descripción
- * del sitio. Nada acá es una promesa nueva.
+ * Los módulos del panel de cuenta se DERIVAN del plan que el panel dibuja: la
+ * lista y su porqué viven en `./modulos-de-la-cuenta`.
  *
- * ⚠️ Acá decía "Facturación", y estaba mal por dos motivos a la vez. Primero,
- * la lista no coincidía con el párrafo pegado al costado —dos listas de módulos
- * distintas, lado a lado, en la misma pantalla, sin inventario ni contabilidad
- * y con una capacidad de más—. Segundo y peor: iba bajo el remate "Encendidos
- * desde el primer día" mientras la FAQ de la home dice que la homologación
- * sigue en trámite y que por ahora se factura en el Portal Web del SIN. La
- * ilustración prometía lo que el texto del mismo sitio tiene que desmentir.
+ * Acá estaban tipeados, los cinco, para cualquier plan — y uno de ellos
+ * ("Agentes") el plan de entrada lo tiene apagado. Ver ese archivo.
  */
-const MODULOS = [
-  "Clientes",
-  "Caja",
-  "Inventario",
-  "Contabilidad",
-  "Agentes",
-] as const;
 
 /** Lo que los agentes dejan escrito. Sin números ni nombres de cliente: un
  *  conteo inventado dentro de una interfaz creíble se lee como dato real, y no
@@ -192,22 +182,7 @@ function Fila({
   );
 }
 
-/** Sesiones del paquete: lleno lo que ya se hizo. Es un dibujo y no un "3 de
- *  6" por la misma razón por la que las barras de la caja no llevan monto. */
-function Sesiones({ hechas, total }: { hechas: number; total: number }) {
-  return (
-    <span className={s.panelDots}>
-      {Array.from({ length: total }, (_, i) => (
-        <span
-          key={i}
-          className={i < hechas ? `${s.panelDot} ${s.panelDotOn}` : s.panelDot}
-        />
-      ))}
-    </span>
-  );
-}
-
-function PanelCuerpo({ panel }: { panel: PanelId }) {
+function PanelCuerpo({ panel, plan }: { panel: PanelId; plan?: PlanId }) {
   switch (panel) {
     case "agentes":
       return (
@@ -251,7 +226,7 @@ function PanelCuerpo({ panel }: { panel: PanelId }) {
         <>
           <Head titulo="Tu cuenta" />
           <div className={s.panelGrid}>
-            {MODULOS.map((m) => (
+            {modulosEncendidosEn(plan).map((m) => (
               <span key={m} className={s.panelPill}>
                 <span className={s.panelSq} />
                 <span className={s.panelPillTxt}>{m}</span>
@@ -312,25 +287,28 @@ function PanelCuerpo({ panel }: { panel: PanelId }) {
         </>
       );
 
+    /* Lo que este panel dibuja SON los tratamientos del producto, y sale de
+       `origin/master` de onia-platform medido el 2026-09-19 —no de otra
+       pantalla de este mismo sitio—: `esteticagest-clinical` es el pack
+       clínico con `navClinicaDe`, que renombra `/patients` a «Clientas» y
+       `/treatments` a «Tratamientos» (`lib/platform/vertical-pack.ts`), y el
+       Recall corre en ese rubro (`guardaClientesEnPatients` + `tieneAgenda`,
+       `lib/onia-core/modules/agents-por-rubro.ts`) disparando por
+       `recallAfterDays`: por TIEMPO SIN VOLVER. Antes decía «Paquetes en
+       curso» con un contador de sesiones hechas y faltantes, y ese saldo el
+       producto no lo lleva — `PatientTreatment` tiene estado, no total
+       contratado. */
     case "estetica":
       return (
         <>
-          <Head titulo="Paquetes en curso" sello="Estética" />
+          <Head titulo="Tratamientos en curso" sello="Estética" />
           <ul className={s.panelRows}>
-            <li className={s.panelRow}>
-              <span className={s.panelSq} />
-              <span className={s.panelTxt}>Limpieza facial</span>
-              <Sesiones hechas={3} total={6} />
-            </li>
-            <li className={s.panelRow}>
-              <span className={s.panelSq} />
-              <span className={s.panelTxt}>Depilación láser</span>
-              <Sesiones hechas={5} total={6} />
-            </li>
+            <Fila txt="Limpieza facial" pill="Al día" hecho />
+            <Fila txt="Depilación láser" pill="No volvió" />
             <Fila txt="Control post-tratamiento" pill="En agenda" hecho />
           </ul>
           <p className={s.panelFoot}>
-            Ninguna sesión del paquete queda en el aire.
+            La clienta que dejó el tratamiento a medias no se pierde.
           </p>
         </>
       );
@@ -385,10 +363,25 @@ function PanelCuerpo({ panel }: { panel: PanelId }) {
  * El panel solo, sin el mat de color: lo usa el conmutador de rubros, donde el
  * mat ES la ranura del rodillo y el color lo pone el rubro.
  */
-export function PanelDibujado({ panel }: { panel: PanelId }) {
+/**
+ * El rótulo accesible. El del panel de cuenta se DERIVA de los módulos que ese
+ * plan enciende, por el mismo motivo que las pastillas: es la misma lista dicha
+ * otra vez, y una lista tipeada al lado de una derivada es como esto se rompe.
+ */
+function labelDe(panel: PanelId, plan?: PlanId): string {
+  if (panel !== "cuenta") return panelLabel[panel];
+  const modulos = modulosEncendidosEn(plan).map((m) => m.toLowerCase());
+  const enumerados =
+    modulos.length > 1
+      ? `${modulos.slice(0, -1).join(", ")} y ${modulos.at(-1)}`
+      : modulos.join("");
+  return `Una cuenta recién creada, con ${enumerados} ya encendidos.`;
+}
+
+export function PanelDibujado({ panel, plan }: { panel: PanelId; plan?: PlanId }) {
   return (
-    <div className={s.panel} role="img" aria-label={panelLabel[panel]}>
-      <PanelCuerpo panel={panel} />
+    <div className={s.panel} role="img" aria-label={labelDe(panel, plan)}>
+      <PanelCuerpo panel={panel} plan={plan} />
     </div>
   );
 }
@@ -403,10 +396,18 @@ export function PanelDibujado({ panel }: { panel: PanelId }) {
  * `panel` es OBLIGATORIO y ya no existe una rama de imagen: la regresión
  * "volvamos a cablear la captura" no compila, que vale más que un test.
  */
-export function Shape({ panel, tone = "green" }: { panel: PanelId; tone?: Tone }) {
+export function Shape({
+  panel,
+  plan,
+  tone = "green",
+}: {
+  panel: PanelId;
+  plan?: PlanId;
+  tone?: Tone;
+}) {
   return (
     <div className={toneClass[tone]}>
-      <PanelDibujado panel={panel} />
+      <PanelDibujado panel={panel} plan={plan} />
     </div>
   );
 }

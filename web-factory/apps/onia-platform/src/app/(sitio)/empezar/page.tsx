@@ -107,10 +107,15 @@ export default function Empezar() {
               <h1 className={s.display}>
                 {CTA_ALTA} y usalo <em>de verdad</em> {PRUEBA.dias} días.
               </h1>
+              {/* Acá decía «con todos los módulos encendidos». La prueba corre
+                  con PRUEBA.planQueCorre, que NO los enciende todos: el
+                  chatbot de WhatsApp y el segundo administrador los trae el
+                  plan de arriba. Se nombra el plan —la misma forma que usa
+                  PRUEBA.copy— en vez de cuantificar las partes. */}
               <p className={s.lead}>
-                No es una demo recortada: es tu cuenta real, con todos los
-                módulos encendidos. Si al final no te sirve, no pagás nada — y
-                tus datos los exportás cuando quieras.
+                No es una demo recortada: es tu cuenta real, con el plan{" "}
+                {PRUEBA.planQueCorre} completo. Si al final no te sirve, no
+                pagás nada — y tus datos los exportás cuando quieras.
               </p>
               <div className={s.actions}>
                 <Btn href={REGISTRO_URL}>{CTA_ALTA}</Btn>
@@ -130,7 +135,11 @@ export default function Empezar() {
                 mal, coloca cosas referenciales". El panel muestra lo que el
                 copy de al lado promete —los módulos ya encendidos— sin atar
                 la pieza a las cifras de un negocio que no existe. */}
-            <Shape tone="green" panel="cuenta" />
+            {/* Acá el panel SÍ dibuja el plan de la prueba: esta página habla de la
+                prueba y lo dice tres líneas más arriba ("es tu cuenta real, con el
+                plan Profesional"). En la portada, donde el precio a la vista es el
+                de entrada, dibuja ese. */}
+            <Shape tone="green" panel="cuenta" plan={PRUEBA.planQueCorreId} />
           </Reveal>
         </div>
       </Block>

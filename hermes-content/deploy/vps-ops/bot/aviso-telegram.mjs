@@ -40,6 +40,9 @@
 // El `kind` se IMPORTA de donde se emite en vez de tipearlo: la unica forma de que la etiqueta
 // y la emision se desincronicen es que sean dos literales distintos.
 import { KIND_RESERVA_SIN_CONFIRMAR } from "./calcom-booking.mjs";
+// El nombre del canal se IMPORTA de donde se decide la via que el bot le PROMETE al prospecto.
+// Reimplementarlo acá haría que el aviso pudiera nombrar un canal distinto del que se prometió.
+import { nombreDelCanal } from "./config.mjs";
 
 export const AVISO_TIMEOUT_MS = 5000;
 
@@ -119,7 +122,7 @@ export function escaparHtml(valor) {
  * @returns {{texto:string, motivos:string[]}|null} `null` = no habia nada que avisar. Es la
  *          respuesta correcta para la enorme mayoria de los turnos: el bot contesta solo.
  */
-export function construirAviso({ notify, conversationId, stageAfter, esNuestra } = {}) {
+export function construirAviso({ notify, conversationId, stageAfter, esNuestra, canal, inbox } = {}) {
   const efectos = Array.isArray(notify) ? notify.filter(Boolean) : [];
   if (efectos.length === 0) return null;
 
@@ -137,6 +140,23 @@ export function construirAviso({ notify, conversationId, stageAfter, esNuestra }
   // Sergio abre la bandeja y contesta. Un aviso que no dice a quien contestarle no sirve.
   const ref = conversationId ? `conversacion ${escaparHtml(conversationId)}` : "conversacion sin id";
   const etapa = stageAfter ? ` · ${escaparHtml(stageAfter)}` : "";
+  // POR DONDE contestar. El bot ya usa este mismo dato para prometerle al prospecto por que via
+  // le escribe un humano (`viaDelCanal`); sin el, quien tiene que CUMPLIR esa promesa no sabe si
+  // le alcanza un clic en WhatsApp o tiene que abrir la bandeja. Ausente => se omite, nunca se
+  // inventa: un canal equivocado manda a contestar por donde el prospecto no escribio.
+  const nombreCanal = nombreDelCanal(canal);
+  // El inbox es "de que cliente es esta conversacion" (lo dice el adapter donde lo guarda). Con un
+  // solo dueno es ruido util; con dos es lo unico que separa un lead propio del cliente de un
+  // cliente. Se nombra siempre que venga, para que el dia que entre el segundo no haya que
+  // acordarse de encenderlo.
+  const hayInbox = inbox !== undefined && inbox !== null && String(inbox) !== "";
+  const via = [
+    nombreCanal ? escaparHtml(nombreCanal) : null,
+    hayInbox ? `inbox ${escaparHtml(inbox)}` : null,
+  ]
+    .filter(Boolean)
+    .join(" · ");
+  const canalTexto = via ? ` · ${via}` : "";
 
   const cuerpo = lineas.join("\n\n");
   const recortado = cuerpo.length > AVISO_MAX_CHARS ? `${cuerpo.slice(0, AVISO_MAX_CHARS)}…` : cuerpo;
@@ -146,7 +166,7 @@ export function construirAviso({ notify, conversationId, stageAfter, esNuestra }
   const cabecera = esNuestra === true ? `${ENCABEZADO_PRUEBA}\n` : "";
 
   return {
-    texto: `${cabecera}🔔 <b>Bot Onia</b> — ${ref}${etapa}\n\n${recortado}`,
+    texto: `${cabecera}🔔 <b>Bot Onia</b> — ${ref}${canalTexto}${etapa}\n\n${recortado}`,
     motivos,
     // La conversacion viaja tambien FUERA del texto, y no es duplicar: el texto es lo que Sergio
     // lee cuando el aviso SALE, y esto es lo unico que queda cuando NO sale. El que lo manda

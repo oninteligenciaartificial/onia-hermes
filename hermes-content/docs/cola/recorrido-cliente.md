@@ -25,6 +25,10 @@ Instrumento: `scripts/recorrido_cliente.mjs`.
 
 ## Reportado a otro carril (nuevo)
 
+
+
+
+
 - **`/guia-facturacion`: el badge "Plazo · 30-09-2026" contradice a su propia bajada** —
   reportado el 2026-09-17 14:26 La Paz (`t_c53fe39c`, prioridad 2, para el dueño del sitio).
   Escalón 3 (promesa vs. entrega), superficie nueva no auditada antes por este carril. El
@@ -57,7 +61,23 @@ Instrumento: `scripts/recorrido_cliente.mjs`.
 > limpios, ver `ULTIMO_RECORRIDO.md`. No apareció ningún selector del script que asumiera el
 > layout de escritorio.
 
+## Abierto
+
+- **Portal del paciente: no hay forma de cancelar una cita, sólo confirmar.** Reportado
+  2026-09-19 (`t_7bb28d06`, prioridad 2, dueño: onia-cola). `PATCH /api/booking/appointments`
+  con `action:'cancel'` SÍ funciona (200, status pasa a `CANCELADA` en la base — verificado con
+  HTTP real), pero ni `/book/confirm/[token]` ni `/book/my-appointments/[token]` pintan un botón
+  o link de cancelar — sólo "Confirmar asistencia", "llamar" y "reservar de nuevo". Reproducido
+  con `scripts/probar_cancelar_cita.mjs`. Capturas: `capturas/extra-cancelarcita-00-confirm.png`
+  y `capturas/extra-cancelarcita-01-my-appointments.png`.
+
 ## Cerrado
+
+- **`DELETE /api/admin/users/[id]` bloqueaba sacar un ADMIN aunque hubiera 2 — arreglado y
+  confirmado en vivo.** Reportado el 2026-09-19 06:15 La Paz (`t_24758d5a`). El fix
+  (`removeUserFromOrganization` en `lib/auth.ts`, DG-043) llegó a producción con `BUILD_ID`
+  `AUiuQ9c0SmcJnuF37_qTo` el 2026-09-19: `scripts/probar_coadministrador.mjs` contra
+  producción real da **200** donde antes daba 403. Cerrado y verificado, no solo mergeado.
 
 - **`/precios`: "Reservas online" dice "Incluida en Pro y Full" y omite Crece** — reportado el
   2026-09-13 14:20 La Paz al dueño del sitio (`t_5ad92d30`, prioridad 2). Verificado en vivo con

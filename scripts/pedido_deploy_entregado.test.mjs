@@ -11,7 +11,7 @@ import { readFileSync, writeFileSync, rmSync, mkdtempSync, mkdirSync } from 'nod
 import { join, dirname } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
-import { archivosDelDryRun, archivosDelDryRunBot, archivosNombrados, secoDeProduccion, barrerTablero, creadoEnSegundos, barrerTableroJson, buildQueCorre, cadenaPorPedido, clasificarPedido, imprimirCadena, cuerpoCortoArchivos, cuerpoNoEjecuta, inmediblesSinDeclarar, publicariaLanding, publicariaPorCopia, shasDelTexto, shasPrometidos, soloLosQueViajan } from './pedido_deploy_entregado.mjs';
+import { publicadoEnLanding, publicadoPorFecha, archivosDelDryRun, archivosDelDryRunBot, archivosNombrados, secoDeProduccion, barrerTablero, creadoEnSegundos, barrerTableroJson, buildQueCorre, cadenaPorPedido, clasificarPedido, imprimirCadena, cuerpoCortoArchivos, cuerpoNoEjecuta, inmediblesSinDeclarar, publicariaLanding, publicariaPorCopia, shasDelTexto, shasPrometidos, soloLosQueViajan } from './pedido_deploy_entregado.mjs';
 import { DESTINOS, ESTADOS_VIVOS } from './kanban/publicar-aprobado.mjs';
 
 // El caso que me costo la vuelta del 2026-09-06: los 13 shas prometidos por t_0268567b
@@ -1549,4 +1549,55 @@ test('el guion distingue en un shell de verdad: con archivo y sin archivo', () =
   } finally {
     rmSync(raiz, { recursive: true, force: true });
   }
+});
+
+// ── landing: el veredicto lo da la ANCESTRIA, no la fecha ──────────────────────────────
+//
+// 🔴 El caso que costo la vuelta del 2026-09-19, con `t_c2fbda1e` vivo: la landing se juzgaba
+// SOLO por fecha, y `publicadoPorFecha` contesta `null` dentro de los 20 min previos al build.
+// Esa ventana es justo donde caen los commits de una vuelta del integrador, porque el
+// publicador automatico corre minutos despues del push. Los TRES shas del pedido eran
+// ancestros del build vivo (`.commit` = 862b8814f, publicado 00:52 UTC) y el gate imprimio
+// «sigue VIGENTE — 0 sin publicar, 1 sin resolver»: basta UN indeterminado para no poder
+// cerrar, asi que el pedido quedo pidiendole a Sergio Urcullo un ok que no publicaba nada —
+// el unico modo de falla que este gate existe para cazar.
+test('landing: dentro de la ventana del build, la ancestria decide y el pedido se puede cerrar', () => {
+  assert.equal(publicadoPorFecha({ epochCommit: 100_000 - 300, epochBuild: 100_000 }), null,
+    'la fecha sola no puede: por eso hacia falta el segundo instrumento');
+  assert.equal(publicadoEnLanding({ porAncestria: true, porFecha: null }), true);
+
+  // Y el efecto que importa: el pedido entero pasa a ENTREGADO, que es lo que imprime la cura.
+  const r = clasificarPedido({
+    id: 't_c2fbda1e',
+    shas: ['f601f01c', '05b0ca125', '78a819938'],
+    publicado: (s) => publicadoEnLanding({
+      porAncestria: ['f601f01c', '05b0ca125', '78a819938'].includes(s),
+      porFecha: s === 'f601f01c' ? null : true,   // el tercero cayo dentro de la ventana
+    }),
+  });
+  assert.equal(r.estado, 'ENTREGADO');
+});
+
+// La direccion cara: la ancestria dice que NO esta en el build. Eso es exacto y manda sobre la
+// fecha, que con un commit viejo lo daria por publicado y CERRARIA un pedido vivo.
+test('landing: no es ancestro del build vivo -> sin publicar, aunque la fecha lo de por viejo', () => {
+  assert.equal(publicadoEnLanding({ porAncestria: false, porFecha: true }), false);
+  assert.equal(
+    clasificarPedido({ id: 'x', shas: ['1111111'], publicado: () => publicadoEnLanding({ porAncestria: false, porFecha: true }) }).estado,
+    'VIGENTE');
+});
+
+// Dos instrumentos independientes que se contradicen no se resuelven a favor de ninguno: el
+// commit no puede ser ancestro de un build que TERMINO antes que el. Sin este caso, un
+// `.commit` adelantado (o un reloj corrido) cerraria pedidos vivos.
+test('landing: ancestro pero POSTERIOR al artefacto -> no se sabe', () => {
+  assert.equal(publicadoEnLanding({ porAncestria: true, porFecha: false }), null);
+});
+
+// Los dos de anclaje del respaldo. Sin ellos, devolver siempre `null` pasaria los de arriba y
+// el gate no podria cerrar NINGUN pedido: el runtime sin `.commit` existe (medido 2026-09-18).
+test('landing: sin .commit se cae a la fecha, que es el respaldo de siempre', () => {
+  assert.equal(publicadoEnLanding({ porAncestria: null, porFecha: true }), true);
+  assert.equal(publicadoEnLanding({ porAncestria: null, porFecha: false }), false);
+  assert.equal(publicadoEnLanding({ porAncestria: null, porFecha: null }), null);
 });

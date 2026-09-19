@@ -67,7 +67,7 @@ const RUBROS: readonly Rubro[] = [
     id: "estetica",
     palabra: "Estética",
     bg: "var(--verde-500)",
-    linea: "Cada paquete con las sesiones ya hechas y las que faltan, control incluido.",
+    linea: "La clienta que dejó el tratamiento a medias y no volvió, con el control ya en la agenda.",
   },
   {
     id: "servicios",

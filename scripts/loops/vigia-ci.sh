@@ -136,6 +136,39 @@ No se toco ninguna marca: no se puede declarar verde lo que no se pudo mirar."
     CLAVE=$(printf '%s-%s' "$REPO" "$WF" | tr -c 'A-Za-z0-9._-' '-')
     MARCA="$MARCA_DIR/onia-ci-$CLAVE.rojo"
 
+    # LA RESPUESTA DE LA API NO PUEDE RETROCEDER EN EL TIEMPO.
+    #
+    # Medido el 2026-09-19 en /var/log/onia-tg.log: 45 avisos «CI en ROJO» y 45
+    # «CI recuperado», ALTERNADOS, cada verde exactamente una corrida del cron
+    # (10 min) despues de su rojo, con el CI de master verde todo el tiempo. El
+    # vigia oscilaba: `actions/runs` es eventualmente consistente y cada tanto
+    # contesta una pagina donde la corrida completa mas reciente de un workflow
+    # es una VIEJA — la del 5-sep, `failure` de verdad y curada el 6. Se le
+    # creia, se avisaba rojo y se dejaba la marca; diez minutos despues la API
+    # contestaba bien, se leia como «recuperado» y SE BORRABA LA PROPIA MARCA.
+    # Por eso `/var/lib` nunca tuvo una marca y el aviso renacia para siempre,
+    # y como el rojo crea TAREA y el verde sale informativo, cada oscilacion
+    # dejaba una tarea roja viva que nadie cerraba (tres en un solo dia).
+    #
+    # `created_at` de un workflow solo AVANZA. Si lo que llega es mas viejo que
+    # lo ultimo ya juzgado, la respuesta esta stale: no se toca NADA — ni aviso,
+    # ni marca —, la misma politica que rige arriba para `__ERROR__`. Sin fecha
+    # legible no hay con que comparar y se juzga igual: un campo ausente no es
+    # una respuesta stale, y callarse ahi apagaria el vigia entero.
+    VISTO="$MARCA_DIR/onia-ci-$CLAVE.visto"
+    T_ESTE=""
+    [ -n "${CREADO:-}" ] && T_ESTE=$(date -u -d "$CREADO" +%s 2>/dev/null || true)
+    if [ -n "$T_ESTE" ] && [ -s "$VISTO" ]; then
+      T_VISTO=$(cat "$VISTO" 2>/dev/null || true)
+      case "${T_VISTO:-x}" in
+        *[!0-9]*) T_VISTO="" ;;    # marca ilegible: no sirve para comparar
+      esac
+      if [ -n "$T_VISTO" ] && [ "$T_ESTE" -lt "$T_VISTO" ]; then
+        continue
+      fi
+    fi
+    [ -n "$T_ESTE" ] && printf '%s' "$T_ESTE" > "$VISTO"
+
     if [ "$CONCL" = "success" ]; then
       if [ -f "$MARCA" ]; then
         avisar "🟢 <b>CI recuperado</b> — <code>$REPO</code> · <b>$WF</b>

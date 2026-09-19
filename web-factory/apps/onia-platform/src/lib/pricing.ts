@@ -140,6 +140,39 @@ export interface Plan {
    * para un "equipo grande", que es textualmente a quien apunta ese plan— no se vendía.
    */
   coadministradores: boolean;
+  /**
+   * Cuántos usuarios EXTRA vende este plan a `USUARIO_EXTRA_ADDON.mensualAddon`.
+   * `null` = los que hagan falta, sin tope · `0` = no vende (no hace falta: sus usuarios
+   * no tienen tope).
+   *
+   * Espejo de `topeDe` / `maxAsientosExtra` (`onia-platform/lib/asientos.ts`), que es la fuente y
+   * lo que `checkUserLimit` APLICA: `effectiveLimit = PLAN_LIMITS[plan].users + extraUserSeats`,
+   * sin mirar el plan salvo para el tope del Básico.
+   *
+   * 🔴 POR QUE EXISTE. Medido el 2026-09-19 sobre `onia.com.bo/precios` SERVIDA. La carta de
+   * add-ons decía «Una persona más en el sistema. En Básico se pueden sumar hasta 3» — la ÚNICA
+   * frase de alcance del add-on, y nombraba un solo plan. El producto los vende en Crece y en
+   * Profesional también, y ahí SIN TOPE: la tabla que el dueño ve en `/settings` lo dice con
+   * todas las letras, «Bs 70/mes por persona, sin tope».
+   *
+   * O sea que el lead de Profesional (5 usuarios, Bs 890) que necesitaba una persona más leía que
+   * el add-on era cosa del Básico y concluía lo único que quedaba: subir al Completo, Bs 1.290.
+   * La verdad era Bs 890 + 70 = **Bs 960**, así que le costaba **Bs 330/mes de más** (Bs 3.960 al
+   * año); en Crece, Bs 270/mes. Y se desmentía sola tres renglones más arriba, en la misma
+   * pantalla: «Ninguno te obliga a saltar de plan para desbloquear una sola cosa».
+   *
+   * POR QUE NINGUN GATE LO VEIA, que es lo que hace nueva a esta clase: no es una cifra mal
+   * —Bs 70 sale de la fuente y `precios:fuente` firma verde con sus 43 cifras—, no es una
+   * afirmación de INCLUSION («viene desde X», que persigue `capacidad-incluida.test.ts`) sino de
+   * RESTRICCION, y no es un universal («todos», «cualquier plan») sino un PARTICULAR. Los gates
+   * de la casa persiguen prometer de MAS; esto ofrece de MENOS, y eso no lo mira ninguno.
+   *
+   * Los otros dos add-ons de la carta ya derivan su alcance del catálogo (el chatbot el 18-sep,
+   * las reservas el 13-sep). Éste era el tercer hermano, al que la cura no viajó.
+   *
+   * Obligatorio en el tipo a propósito: un plan nuevo no puede nacer sin contestarlo.
+   */
+  asientosExtra: number | null;
   destacado?: boolean;
   cuando: string;
 }
@@ -448,6 +481,11 @@ const ESCALERA: readonly Plan[] = [
     // El `sinEsto` del Básico se DERIVA más abajo: nombra los planes donde esas dos capacidades
     // sí están, y ese nombre no se tipea (ver `PLANES`).
     sinEsto: [],
+    // Va DESPUES de `sinEsto` a propósito: `numerosPublicados` (scripts/precios-fuente.mjs)
+    // cuenta como cifra publicada todo número entre `incluye:` y `sinEsto:`, y este es dato
+    // estructural, no una línea que el cliente lee. El único con tope: arriba de eso la respuesta
+    // es subir de plan, no seguir sumando cargos sueltos (`topeDe` de `onia-platform/lib/asientos.ts`).
+    asientosExtra: USUARIO_EXTRA_ADDON.maxEnBasico,
     cuando: "Negocio de 1 o 2 personas que hoy trabaja con cuaderno o Excel.",
   },
   {
@@ -472,8 +510,25 @@ const ESCALERA: readonly Plan[] = [
     reservasIncluidas: true,
     coadministradores: false,
     sinEsto: [
-      `Reportes completos, facturas recurrentes y contabilidad completa (${ALCANCE_CLINICO}) — vienen en ${NOMBRE_DE_PLAN.pro}`,
+      /**
+       * El paréntesis cierra ANTES de la contabilidad, y ése es todo el arreglo.
+       *
+       * Hasta el 2026-09-19 la línea era «Reportes completos, facturas recurrentes y
+       * contabilidad completa (solo en clínicas dentales y estética)»: la salvedad de las
+       * dos primeras se derramaba sobre la tercera. Y la contabilidad NO está acotada por
+       * rubro — `/contabilidad` es segmento COMÚN del producto (medido contra
+       * `origin/master`: `lib/platform/contabilidad-transversal.test.ts` hace entrar a un
+       * tenant dental y a uno de comercio; el corte es por PLAN). Así que a comercio,
+       * importadora y servicios profesionales —3 de los 5 rubros del alta— se les decía
+       * que la contabilidad completa no les llega ni subiendo, borrándoles el motivo más
+       * caro del salto de Bs 550 a Bs 890; y el `incluye` del Pro, veinte líneas más
+       * abajo, ya la listaba sin alcance: la misma pantalla se desmentía sola.
+       * Lo vigila el caso «una salvedad de rubro no se derrama sobre la capacidad de al
+       * lado» de `app/(sitio)/capacidad-por-rubro.test.ts`.
+       */
+      `Reportes completos y facturas recurrentes (${ALCANCE_CLINICO}), y contabilidad completa — vienen en ${NOMBRE_DE_PLAN.pro}`,
     ],
+    asientosExtra: null,
     cuando: "Ya tenés movimiento y se te escapan clientes por falta de seguimiento.",
   },
   {
@@ -496,9 +551,8 @@ const ESCALERA: readonly Plan[] = [
     agentesIncluidos: true,
     reservasIncluidas: true,
     coadministradores: false,
-    sinEsto: [
-      `El chatbot de WhatsApp — ${NOMBRE_DE_PLAN.full} ya lo trae incluido; acá va aparte, Bs ${bs(CHATBOT_MENSUAL)}/mes`,
-    ],
+    sinEsto: [],
+    asientosExtra: null,
     destacado: true,
     cuando: "El negocio ya factura todos los días y querés los números al día.",
   },
@@ -507,8 +561,13 @@ const ESCALERA: readonly Plan[] = [
     paso: "04",
     nombre: NOMBRE_DE_PLAN.full,
     salto: "Todo incluido",
-    resultado:
-      `Sin techos y con el chatbot de WhatsApp incluido: la cuenta gana comparada con ${NOMBRE_DE_PLAN.pro} más el add-on.`,
+    /**
+     * Sin comparación de precio: comparar contra «el escalón de abajo + el add-on» es una CUENTA
+     * sobre el catálogo, y se deriva en `PLANES` (`cuentaVsAddon`). Acá queda sólo lo que es
+     * cierto sin hacer ninguna cuenta, para que el peor caso —que la derivación no encuentre
+     * sujeto— sea copy honesto en vez de una cifra tipeada que envejece sola.
+     */
+    resultado: "Sin techos y con el chatbot de WhatsApp incluido.",
     mensual: 1290,
     semanal: null,
     anual: 12900,
@@ -530,38 +589,13 @@ const ESCALERA: readonly Plan[] = [
     reservasIncluidas: true,
     coadministradores: true,
     sinEsto: [],
+    // No vende asientos porque no hace falta: sus usuarios no tienen tope (`ilimitado` en
+    // `cobroPorUsuarios`, que devuelve «Sin cargo: no hay tope de personas»).
+    asientosExtra: 0,
     cuando: "Equipo grande, base de clientes que no entra en 1.500 fichas, o WhatsApp con movimiento.",
   },
 ] as const;
 
-/**
- * La escalera publicada. El `sinEsto` del Básico se arma ACA y no adentro del literal por una
- * razón concreta: nombra el plan desde el que esas capacidades sí vienen, y ese nombre se deriva
- * de la propia escalera — pedírselo a `PLANES` mientras `PLANES` se construye es un ciclo (lo
- * cazó el gate nuevo con un `Cannot access 'PLANES' before initialization`, no una revisión a
- * ojo). Se le pasa `ESCALERA`, que en este punto ya está inicializada.
- */
-export const PLANES: readonly Plan[] = ESCALERA.map((plan) => ({
-  ...plan,
-  sinEsto: [
-    ...plan.sinEsto,
-    ...(plan.id === "basico"
-      ? [
-          `Agentes de IA (vienen desde ${primerPlanCon("agentes", ESCALERA)})`,
-          `Reservas online — como add-on a Bs ${bs(AGENDA_ADDON.mensualAddon)}/mes, o incluidas desde ${primerPlanCon("reservas", ESCALERA)}`,
-        ]
-      : []),
-    /**
-     * La restricción de administradores se escribe para TODO plan que no la traiga, derivada del
-     * propio campo — no plan por plan. Esa es la diferencia entre cerrar la instancia y cerrar la
-     * clase: el escalón que se agregue mañana nace diciéndolo, y el día que el producto le dé
-     * `multiAdminIncluded` a un plan más barato, esta línea desaparece sola de los que ya lo
-     * tengan y el "desde X" se mueve solo. Si ningún plan lo trajera, no hay nada que decir y la
-     * línea no se escribe (en vez de prometer "desde null").
-     */
-    ...lineaDeCoadministradores(plan),
-  ],
-}));
 
 /**
  * Lo que este plan NO trae en administradores, o nada si lo trae (o si no lo trae ninguno).
@@ -573,6 +607,36 @@ export const PLANES: readonly Plan[] = ESCALERA.map((plan) => ({
  * bajaba al plan de Bs 320 se le nombraba el de Bs 1.290. El tier igual queda dicho, y en la
  * forma más derivada que hay: la tarjeta que lo trae lo dice en su `incluye`, las que no, acá.
  */
+/**
+ * Lo que este plan NO trae en chatbot de WhatsApp, y quién sí lo trae.
+ *
+ * Se escribe UNA vez, en el escalón más caro que no lo trae: es el que se compara contra el que
+ * sí (Profesional + add-on cuesta más que Completo, y esa cuenta es la que decide la compra).
+ * Repetirla en cada tarjeta subiría el add-on al mismo rango que el sistema, que es justo lo que
+ * no vendemos.
+ *
+ * 🔴 Los nombres se DERIVAN, y el universo incluye a `GRUPO`. Estaba escrito dentro del literal
+ * de la tarjeta como «${NOMBRE_DE_PLAN.full} ya lo trae incluido; acá va aparte», y esa cláusula
+ * —medida el 2026-09-19— le niega el chatbot a Grupo / Empresarial, que lo trae pagado adentro
+ * (`whatsappIncluded: true` en el catálogo publicado). Vive acá y no adentro del literal por la
+ * misma razón que la línea de administradores: preguntarle a la escalera mientras la escalera se
+ * construye es un ciclo, así que se le pasa `ESCALERA`, que en este punto ya está inicializada.
+ */
+function lineaDelChatbot(plan: Plan): string[] {
+  if (plan.chatbotIncluido) return [];
+  const universo = [...ESCALERA, GRUPO];
+  const ultimoSinChatbot = ESCALERA.filter((p) => !p.chatbotIncluido).at(-1);
+  if (plan.id !== ultimoSinChatbot?.id) return [];
+  // Si NINGUN plan lo trajera adentro, esto no sería un escalón sino cómo se vende el add-on, y
+  // anunciarlo como carencia sería mentir. La condición se lee del catálogo, no de una fecha.
+  if (!universo.some((p) => p.chatbotIncluido)) return [];
+  // Una sola plantilla, aunque sea larga: partirla en dos literales parte la ORACION, y el gate
+  // que la vigila lee literal por literal — con el corte puesto, «acá va aparte» quedaba en un
+  // pedazo sin sujeto y se acusaba solo (medido: DESALINEADO con el texto correcto).
+  // prettier-ignore
+  return [`El chatbot de WhatsApp — ${nombresConChatbot(universo)} ya lo ${traeOTraen(universo)} incluido; acá va aparte, Bs ${bs(CHATBOT_MENSUAL)}/mes`];
+}
+
 function lineaDeCoadministradores(plan: Plan): string[] {
   if (plan.coadministradores) return [];
   // Si ningún plan lo trajera, esto no sería un escalón sino cómo funciona el producto, y
@@ -582,18 +646,137 @@ function lineaDeCoadministradores(plan: Plan): string[] {
 }
 
 /**
+ * La CUENTA del plan que trae el chatbot adentro contra el escalón de abajo comprándolo aparte.
+ *
+ * 🔴 **EL DEFECTO, medido el 2026-09-19 sobre `onia.com.bo/precios` SERVIDA** (texto renderizado
+ * y leído, no un `grep`). La tarjeta del Completo decía *«la cuenta gana comparada con
+ * Profesional más el add-on»* — y la cuenta **pierde**: Profesional Bs 890 + chatbot Bs 390 son
+ * **Bs 1.280**, y el Completo sale **Bs 1.290**. Diez bolivianos MÁS por mes, cien más por año
+ * (8.900 + 3.900 = 12.800 contra 12.900). Lo afirmaba la página cuyo título es «PRECIOS CLAROS».
+ *
+ * 🔴 **POR QUE NINGUN GATE PODIA VERLO.** Es una familia nueva: la afirmación no es un monto, ni
+ * un nombre de plan, ni una capacidad — es el **RESULTADO DE UNA CUENTA** entre montos legítimos.
+ *
+ *   - los cruces de precio (`scripts/precios-fuente.mjs`, `npm run precios:vivos`) validan que
+ *     cada cifra salga de la fuente: 890, 390 y 1.290 salen de la fuente, las tres. Verde;
+ *   - `lib/capacidad-incluida.test.ts` prohíbe tipear un nombre de plan junto a una capacidad, y
+ *     acá el nombre ya venía interpolado de `NOMBRE_DE_PLAN.pro`. Verde;
+ *   - `(sitio)/desbloqueo-que-no-se-tipea.test.ts` y `prueba-vs-plan.test.ts` cierran el
+ *     universal y el alcance total. Esta oración no afirma ninguno de los dos. Verde.
+ *
+ * O sea: los tres sumandos eran correctos y la suma estaba mal, y ningún instrumento suma.
+ *
+ * DOS DECISIONES QUE LO HACEN CLASE Y NO INSTANCIA:
+ *
+ *  1. **No se prohíbe el literal viejo.** «No digas *la cuenta gana*» se apagaría solo el día que
+ *     la cuenta efectivamente gane (y puede ganar: basta que el Completo baje o que el add-on
+ *     suba). Lo que se prohíbe es TIPEAR el resultado: sale de acá, y las tres direcciones
+ *     —más caro, igual, más barato— las dice la aritmética.
+ *  2. **El sujeto se DERIVA del catálogo**, no es «el Completo»: es todo plan que traiga el
+ *     chatbot adentro teniendo debajo uno que no. El escalón que se agregue mañana nace con la
+ *     cuenta bien hecha, y si el de abajo también lo trae, la comparación desaparece sola.
+ */
+export interface CuentaVsAddon {
+  /** El escalón de abajo: el que tiene que comprar el add-on aparte. */
+  readonly contra: Plan;
+  /** Lo que sale armarlo abajo: mensual del de abajo + el add-on. */
+  readonly armado: number;
+  /** Lo que cuesta de MÁS el plan que lo trae adentro. Negativo = sale más barato. */
+  readonly deMas: number;
+}
+
+export function cuentaVsAddon(
+  plan: Plan,
+  planes: readonly Plan[] = ESCALERA,
+  addonMensual: number = CHATBOT_MENSUAL,
+): CuentaVsAddon | null {
+  if (!plan.chatbotIncluido) return null;
+  const i = planes.findIndex((p) => p.id === plan.id);
+  // Sin escalón debajo, o con uno que también lo trae adentro, no hay contra qué comparar: la
+  // oración no se escribe, en vez de compararse contra sí misma.
+  const contra = i > 0 ? planes[i - 1] : null;
+  if (!contra || contra.chatbotIncluido) return null;
+  const armado = contra.mensual + addonMensual;
+  return { contra, armado, deMas: plan.mensual - armado };
+}
+
+/** La cuenta, dicha. Las tres direcciones salen del signo, nunca de un literal elegido a mano. */
+export function cuentaEnPalabras(cuenta: CuentaVsAddon): string {
+  const cola =
+    cuenta.deMas > 0
+      ? `Bs ${bs(cuenta.deMas)} más al mes que ${cuenta.contra.nombre} con el add-on aparte`
+      : cuenta.deMas === 0
+        ? `lo mismo que ${cuenta.contra.nombre} con el add-on aparte`
+        : `Bs ${bs(-cuenta.deMas)} menos al mes que ${cuenta.contra.nombre} con el add-on aparte`;
+  return `Sin techos y con el chatbot de WhatsApp incluido: ${cola}.`;
+}
+
+/** El `resultado` de la tarjeta: derivado si hay cuenta que hacer, y si no el de la escalera. */
+function resultadoDelPlan(plan: Plan): string {
+  const cuenta = cuentaVsAddon(plan);
+  return cuenta ? cuentaEnPalabras(cuenta) : plan.resultado;
+}
+
+/** Lo mínimo que hace falta para contestar «¿este plan trae el chatbot adentro?». */
+type PlanConChatbot = { readonly nombre: string; readonly chatbotIncluido: boolean };
+
+/**
  * Los planes que traen el chatbot pagado adentro, nombrados como los lee el cliente.
  *
  * Existe para que ninguna pantalla tipee "Full" a mano al contestar si el chatbot está incluido:
  * ése es el dato que se mueve (`whatsappIncluded` en el producto) y el que, tipeado, deja la
  * respuesta vieja cobrándole el add-on a quien ya lo tiene. Devuelve la frase armada porque el día
  * que sean dos planes hay que decir "Full y Grupo", no "Full".
+ *
+ * 🔴 El universo es `planesPublicados()` —la escalera MAS Grupo / Empresarial— y no `PLANES`.
+ * Medido el 2026-09-19 contra onia.com.bo: `enterprise` trae `whatsappIncluded: true` en el
+ * catálogo publicado igual que `clinic`, y el sitio lo publica CON SU PRECIO (Bs 2.900/mes, una
+ * sección entera en `/precios`, una línea en la home, y el recomendador de `/v1/empezar` se lo
+ * propone a todo equipo de 15+). Con el universo puesto en `PLANES` esta función contestaba
+ * "Completo" a secas, así que las cuatro superficies que la interpolan remataban con «en los
+ * demás planes va aparte, Bs 390/mes» — y Grupo es uno de "los demás". Al que le vendemos el
+ * plan más caro le cobrábamos otra vez lo que ya paga adentro, también en el JSON-LD de la home.
+ * El dato existía desde antes (`GRUPO.chatbotIncluido`): lo que faltaba era que esta función lo
+ * leyera.
  */
-export function nombresConChatbot(planes: readonly Plan[] = PLANES): string {
-  const nombres = planes.filter((p) => p.chatbotIncluido).map((p) => p.nombre);
-  if (nombres.length === 0) return "Ningún plan";
+/** «A», «A y B», «A, B y C» — el formato con el que se enumera una lista de planes en prosa. */
+export function unirConY(nombres: readonly string[]): string {
+  if (nombres.length === 0) return "";
   if (nombres.length === 1) return nombres[0];
   return `${nombres.slice(0, -1).join(", ")} y ${nombres[nombres.length - 1]}`;
+}
+
+export function nombresConChatbot(planes: readonly PlanConChatbot[] = planesPublicados()): string {
+  const nombres = planes.filter((p) => p.chatbotIncluido).map((p) => p.nombre);
+  if (nombres.length === 0) return "Ningún plan";
+  return unirConY(nombres);
+}
+
+/**
+ * «trae» o «traen», según cuántos planes nombre `nombresConChatbot()`.
+ *
+ * Va aparte y no adentro de la frase porque cada superficie la redacta distinto ("X ya trae el
+ * chatbot", "Viene incluido en X"), pero las dos leen LA MISMA lista: un sujeto plural con el
+ * verbo en singular no es sólo mala gramática — deja ambiguo si el segundo plan también lo trae,
+ * que es justo el dato que se está contestando.
+ */
+export function traeOTraen(planes: readonly PlanConChatbot[] = planesPublicados()): string {
+  return planes.filter((p) => p.chatbotIncluido).length > 1 ? "traen" : "trae";
+}
+
+/**
+ * Todo plan que este sitio PUBLICA con su precio: la escalera comprable y Grupo / Empresarial.
+ *
+ * `PLANES` es "lo que se compra en línea", que es más chico: Grupo se cotiza por WhatsApp, pero se
+ * publica con monto y es tan plan como los otros para cualquier pregunta sobre qué trae adentro.
+ * Toda respuesta del tipo "en los demás planes…" tiene que mirar ESTE universo, o le habla a un
+ * plan que vendemos como si no existiera.
+ *
+ * Es una función y no una constante porque `GRUPO` se declara más abajo: así el orden de
+ * inicialización del módulo no decide el resultado.
+ */
+export function planesPublicados(): readonly PlanConChatbot[] {
+  return [...PLANES, GRUPO];
 }
 
 /** Numerales en palabras, para escribir la cantidad sin tipear el dígito. */
@@ -616,6 +799,7 @@ export function cuantosPlanes(planes: readonly Plan[] = PLANES): string {
   return NUMERAL[planes.length] ?? String(planes.length);
 }
 
+
 /**
  * Grupo / Empresarial (`enterprise` en el codigo). Existe y tiene precio, pero
  * queda FUERA del checkout (CHECKOUT_PLANS = basic, professional, clinic, crece): se
@@ -634,6 +818,37 @@ export const GRUPO = {
     `Para varias razones sociales o un grupo de negocios: mismos límites del ${NOMBRE_DE_PLAN.full} más una implementación acompañada. No se compra en línea — se cotiza con tu caso.`,
 } as const;
 
+/**
+ * La escalera publicada. El `sinEsto` del Básico se arma ACA y no adentro del literal por una
+ * razón concreta: nombra el plan desde el que esas capacidades sí vienen, y ese nombre se deriva
+ * de la propia escalera — pedírselo a `PLANES` mientras `PLANES` se construye es un ciclo (lo
+ * cazó el gate nuevo con un `Cannot access 'PLANES' before initialization`, no una revisión a
+ * ojo). Se le pasa `ESCALERA`, que en este punto ya está inicializada.
+ */
+export const PLANES: readonly Plan[] = ESCALERA.map((plan) => ({
+  ...plan,
+  resultado: resultadoDelPlan(plan),
+  sinEsto: [
+    ...plan.sinEsto,
+    ...(plan.id === "basico"
+      ? [
+          `Agentes de IA (vienen desde ${primerPlanCon("agentes", ESCALERA)})`,
+          `Reservas online — como add-on a Bs ${bs(AGENDA_ADDON.mensualAddon)}/mes, o incluidas desde ${primerPlanCon("reservas", ESCALERA)}`,
+        ]
+      : []),
+    /**
+     * La restricción de administradores se escribe para TODO plan que no la traiga, derivada del
+     * propio campo — no plan por plan. Esa es la diferencia entre cerrar la instancia y cerrar la
+     * clase: el escalón que se agregue mañana nace diciéndolo, y el día que el producto le dé
+     * `multiAdminIncluded` a un plan más barato, esta línea desaparece sola de los que ya lo
+     * tengan y el "desde X" se mueve solo. Si ningún plan lo trajera, no hay nada que decir y la
+     * línea no se escribe (en vez de prometer "desde null").
+     */
+    ...lineaDelChatbot(plan),
+    ...lineaDeCoadministradores(plan),
+  ],
+}));
+
 /** Prueba gratis: lib/subscription/plan-state.ts (TRIAL_DAYS / TRIAL_PLAN). */
 const PRUEBA_DIAS = 14;
 
@@ -644,7 +859,8 @@ const PRUEBA_DIAS = 14;
  * apriete. Si esto cambia allá, cambia acá — y `prueba-vs-plan.test.ts` obliga
  * a que las tres tarjetas se enteren.
  */
-const PRUEBA_PLAN = NOMBRE_DE_PLAN.pro;
+const PRUEBA_PLAN_ID: PlanId = "pro";
+const PRUEBA_PLAN = NOMBRE_DE_PLAN[PRUEBA_PLAN_ID];
 
 /**
  * La nota de prueba de CADA tarjeta, porque el botón de las tres arranca la
@@ -690,6 +906,13 @@ export const RETENCION = {
 export const PRUEBA = {
   dias: PRUEBA_DIAS,
   planQueCorre: PRUEBA_PLAN,
+  /**
+   * El mismo plan, por su id. Lo necesita toda pantalla que además de NOMBRARLO
+   * tenga que preguntarle al catálogo qué enciende — hoy el panel dibujado de
+   * /empezar, que muestra la cuenta de la prueba y por eso puede dibujar lo que
+   * el Pro trae y el plan de entrada no.
+   */
+  planQueCorreId: PRUEBA_PLAN_ID,
   copy: `${PRUEBA_DIAS} días de prueba sin poner tarjeta, corriendo con el plan ${PRUEBA_PLAN} completo. Al terminar, la cuenta queda en solo lectura: nada se borra de inmediato y tenés ${RETENCION.diasParaExportar} días para exportar tus datos.`,
   notaPorPlan: NOTA_PRUEBA_POR_PLAN,
 } as const;
@@ -750,6 +973,31 @@ export function escalonAnterior(id: PlanId): Plan | null {
     throw new Error(`No existe el plan "${id}" en PLANES (lib/pricing.ts).`);
   }
   return i === 0 ? null : porPrecio[i - 1];
+}
+
+/**
+ * El plan de ENTRADA: el más barato que se vende. Es el «desde Bs N al mes» del
+ * hero y, por lo tanto, el piso de lo que la portada puede prometer.
+ *
+ * Se deriva del PRECIO por el mismo motivo que `escalonAnterior`: el día que
+ * entre un escalón más abajo —la escalera C metió el Crece en el medio el
+ * 2026-09-12— un `"basico"` tipeado sigue compilando y queda anunciando el plan
+ * equivocado.
+ *
+ * Lo usa el hero para DOS cosas que tienen que hablar del mismo plan: el precio
+ * que cita y los módulos que dibuja al lado. Que discreparan es el defecto del
+ * 2026-09-19 (ver `(sitio)/modulos-de-la-cuenta.ts`): la línea decía Bs 320 y
+ * el panel de abajo dibujaba los agentes, que en ese plan están apagados.
+ */
+export function planDeEntrada(planes: readonly Plan[] = PLANES): Plan {
+  const masBarato = planes.reduce<Plan | null>(
+    (menor, p) => (menor === null || p.mensual < menor.mensual ? p : menor),
+    null,
+  );
+  if (!masBarato) {
+    throw new Error("No hay ningún plan en PLANES (lib/pricing.ts).");
+  }
+  return masBarato;
 }
 
 /* ---------- lo que se suma sobre la suscripcion ----------
@@ -814,9 +1062,44 @@ export interface AddOn {
  * escrito sin la raiz se lee como que lo vigila un gate de acá que no existe).
  * Detalle: ONIA_CATALOGO_DE_VENTA.md §5.
  */
+/** Cómo se llama el chatbot EN LA CARTA de add-ons (el nombre de producto, no el
+ *  resultado que titula su tarjeta). Vive en una constante porque además es el
+ *  puente con `ADDON_DE_LA_CAPACIDAD`, más abajo: dos copias del mismo nombre y
+ *  el cruce se rompe en silencio el día que alguien renombre una sola. */
+export const CHATBOT_EN_LA_CARTA = "Chatbot de WhatsApp";
+
+/**
+ * En qué planes se puede sumar gente pagando, y hasta cuántos — DERIVADO de `asientosExtra`.
+ *
+ * Nombrar un solo plan es como nació el defecto (ver `asientosExtra`): la frase era «En Básico se
+ * pueden sumar hasta 3» y mandaba al de Profesional a pagar Bs 1.290 por algo que le costaba
+ * Bs 960. Acá los planes NO se tipean: si mañana el producto le pone tope al Crece o le saca el
+ * suyo al Básico, esta frase cambia sola.
+ *
+ * Los planes que no venden asientos (`0`) no se nombran: no es una carencia, es que sus usuarios
+ * no tienen tope, y eso ya lo dice su propia tarjeta.
+ */
+export function alcanceDelUsuarioExtra(planes: readonly Plan[] = PLANES): string {
+  const conTope = planes.filter((p) => typeof p.asientosExtra === "number" && p.asientosExtra > 0);
+  const sinTope = planes.filter((p) => p.asientosExtra === null);
+
+  const tramos = [
+    ...conTope.map((p) => `en ${p.nombre} se pueden sumar hasta ${p.asientosExtra}`),
+    sinTope.length > 0
+      ? `en ${unirConY(sinTope.map((p) => p.nombre))}, las que necesites`
+      : null,
+  ].filter((t): t is string => t !== null);
+
+  // Sin ningún plan que los venda, la frase honesta es que no se venden — nunca una lista vacía
+  // que se lea como "en , las que necesites".
+  if (tramos.length === 0) return "Se suma cuando el plan lo permite.";
+  const frase = tramos.join("; ");
+  return `${frase.charAt(0).toUpperCase()}${frase.slice(1)}.`;
+}
+
 export const ADDONS: readonly AddOn[] = [
   {
-    nombre: "Chatbot de WhatsApp",
+    nombre: CHATBOT_EN_LA_CARTA,
     // "Se suma a cualquier plan" hasta el 2026-09-18: un universal que la escalera C volvió falso
     // el 12-sep, cuando `whatsappIncluded` le dio el chatbot ADENTRO a Full y Grupo. Al dueño de un
     // Completo (Bs 1.290) le cobraba Bs 390 por lo que ya paga, y al que evaluaba subir le escondía
@@ -834,7 +1117,10 @@ export const ADDONS: readonly AddOn[] = [
   },
   {
     nombre: USUARIO_EXTRA_ADDON.nombre,
-    copy: `Una persona más en el sistema. En Básico se pueden sumar hasta ${USUARIO_EXTRA_ADDON.maxEnBasico}.`,
+    // "En Básico se pueden sumar hasta 3" hasta el 2026-09-19: la única frase de alcance del
+    // add-on nombraba UN plan, y el producto lo vende también en Crece y en Profesional, ahí sin
+    // tope. Los planes NO se tipean — salen de `asientosExtra` (ver su cabecera en `Plan`).
+    copy: `Una persona más en el sistema. ${alcanceDelUsuarioExtra()}`,
     precio: `Bs ${bs(USUARIO_EXTRA_ADDON.mensualAddon)}/mes por usuario`,
   },
   {
@@ -844,6 +1130,77 @@ export const ADDONS: readonly AddOn[] = [
     href: "/servicios/webs",
   },
 ] as const;
+
+/* ---------- qué se prende aparte y qué exige subir de plan ---------- */
+
+/**
+ * Con qué add-on de la carta se compra SUELTA cada capacidad incluida-por-plan, o
+ * `null` cuando esa capacidad **sólo** se consigue subiendo de plan.
+ *
+ * 🔴 **POR QUE EXISTE.** Medido el 2026-09-18 sobre `onia.com.bo` SERVIDA: la sección de
+ * add-ons de la portada rotulaba *«Sobre el plan encendés lo que te falta»* y debajo
+ * afirmaba **«No hay que saltar de plan para desbloquear una sola»** — un universal sobre
+ * el MECANISMO, y falso: de las cuatro capacidades de `CAPACIDADES_INCLUIDAS` sólo DOS se
+ * compran sueltas (chatbot y reservas). Los agentes exigen saltar al Crece (Bs 550) y el
+ * segundo administrador, al Completo (Bs 1.290) — no hay add-on de ninguno de los dos, y la
+ * escalera de la MISMA pantalla, tres secciones más arriba, lo dice con todas las letras
+ * («Todo lo del Básico + Agente Recall…», «más de un administrador»). O sea que la pantalla
+ * se contradecía sola y el lead que necesitaba una de esas dos elegía el plan equivocado.
+ *
+ * **Por qué ningún gate podía verlo.** Los cruces de precio validan MONTOS y acá no hay
+ * ninguno; `capacidad-incluida.test.ts` prohíbe TIPEAR un nombre de plan junto a la
+ * capacidad y esta frase no nombra ni un plan ni una capacidad: habla del mecanismo, en
+ * abstracto. Es la misma familia que «el sistema completo» y «todos los módulos», dicha una
+ * vez más de costado.
+ *
+ * **Se declara como Record completo a propósito:** una capacidad nueva en
+ * `CAPACIDADES_INCLUIDAS` no compila hasta que alguien conteste de qué lado está. Y el
+ * valor no se cree solo: `desbloqueo-que-no-se-tipea.test.ts` exige que todo nombre que se
+ * declare acá exista de verdad en `ADDONS`, así que marcar una capacidad como «se compra
+ * suelta» sin add-on publicado es rojo, no una absolución escrita a mano.
+ */
+export const ADDON_DE_LA_CAPACIDAD: Record<CapacidadIncluida, string | null> = {
+  agentes: null,
+  reservas: AGENDA_ADDON.nombre,
+  chatbot: CHATBOT_EN_LA_CARTA,
+  coadministradores: null,
+};
+
+/**
+ * Las capacidades que HOY sólo se consiguen cambiando de plan: no tienen add-on, y hay al
+ * menos un plan que no las trae. Si la lista queda vacía —porque todo se compra suelto, o
+ * porque todos los planes ya la traen— el universal vuelve a ser cierto y `sinSubirDePlan()`
+ * lo dice solo.
+ */
+export function capacidadesQueExigenSubirDePlan(
+  planes: readonly Plan[] = PLANES,
+  addonDe: Record<CapacidadIncluida, string | null> = ADDON_DE_LA_CAPACIDAD,
+): readonly CapacidadIncluida[] {
+  const capacidades = Object.keys(CAPACIDADES_INCLUIDAS) as CapacidadIncluida[];
+  return capacidades.filter((capacidad) => {
+    if (addonDe[capacidad] !== null) return false;
+    const campo = CAPACIDADES_INCLUIDAS[capacidad];
+    const laTraen = planes.filter((plan) => plan[campo] === true).length;
+    return laTraen > 0 && laTraen < planes.length;
+  });
+}
+
+/**
+ * La cláusula que la sección de add-ons dice sobre el mecanismo, DERIVADA del catálogo.
+ *
+ * Prohibir el literal viejo no habría servido: se apaga solo el día que la respuesta correcta
+ * vuelva a ser ese literal. Lo que se prohíbe es tipear la afirmación —la vigila
+ * `app/(sitio)/desbloqueo-que-no-se-tipea.test.ts`, caminando `src/` del disco—, y el texto
+ * sale de acá.
+ */
+export function sinSubirDePlan(
+  planes: readonly Plan[] = PLANES,
+  addonDe: Record<CapacidadIncluida, string | null> = ADDON_DE_LA_CAPACIDAD,
+): string {
+  return capacidadesQueExigenSubirDePlan(planes, addonDe).length === 0
+    ? "No hay que saltar de plan para desbloquear una sola."
+    : "Lo de acá abajo se suma sobre el plan que ya tenés.";
+}
 
 /* ---------- lo que NO esta en el precio ---------- */
 

@@ -9,6 +9,10 @@
  *     "...Bs 1.290 el Completo, que ya trae el chatbot de WhatsApp adentro.
  *      En los otros planes el chatbot va aparte, Bs 390 al mes."
  *
+ * Esa ultima frase era la mentira: un universal sobre el COMPLEMENTO abarca al Empresa
+ * (Bs 2.900), que trae el chatbot adentro igual que el Completo. Corregida el 2026-09-19 —
+ * ahora el texto ENUMERA a quienes se les cobra, que falla del lado seguro.
+ *
  * y esa frase no está atada a NADA. `precios-publicos.test.mjs` ata las CIFRAS (cada monto se
  * relee de `pricing.ts` / `subscription-plans.ts` y salta si cambió), pero la inclusión no es una
  * cifra: es un booleano. El día que ese booleano se mueva —agregarle el chatbot al Profesional es
@@ -65,6 +69,43 @@ const MARCAS_DE_INCLUSION = [
   { marca: "de regalo", plural: false },
   { marca: "bonificad", plural: false },
 ];
+
+/**
+ * Cuantificadores que hablan del COMPLEMENTO: los planes que el texto no nombró.
+ *
+ * No alcanza con reconocerlos: un complemento sólo miente si además AFIRMA que la capacidad se
+ * cobra aparte. "En los otros planes, consultanos" no le promete de más a nadie.
+ */
+const COMPLEMENTO = /(?:en|para|con)\s+(?:los\s+|el\s+)?(?:otros?|demas|resto)(?:\s+de\s+(?:los\s+)?planes)?(?:\s+planes)?/;
+// Ojo con la raíz: "incluido" NO empieza con "includ" —es inclu-i-do—, y escribirla así dejó el
+// detector mudo ante "no viene incluido" con los tres casos hermanos en verde. La raíz es `inclu`.
+const SE_COBRA_APARTE =
+  /\b(?:va|van|se\s+suma|se\s+suman|se\s+agrega|se\s+cobra|se\s+cobran|se\s+paga|se\s+pagan|cuesta|cuestan)\b[^.;\n]*\b(?:aparte|adicional|por\s+bs|bs\.?\s*\d)|\baparte\b|\bno\s+(?:vienen?|estan?)\s+inclu(?:id|y)/;
+
+/**
+ * ¿El texto afirma que en los planes que NO nombró la capacidad se paga aparte?
+ *
+ * Es la diferencia entre CALLAR y ABARCAR, y no es sutil: un plan del que el bot no habla no es
+ * una mentira, pero uno al que la frase de cierre alcanza por exclusión sí lo es. Medido en
+ * producción el 2026-09-19: el bot enumeraba cuatro planes y remataba "En los otros planes el
+ * chatbot va aparte, Bs 390 al mes" con el Empresa (Bs 2.900) trayéndolo adentro — Bs 390/mes
+ * cobrados de más al lead más grande, con el gate en verde porque sólo miraba los NOMBRADOS.
+ *
+ * La ventana es la cláusula del cuantificador (corta en la puntuación fuerte) por el mismo
+ * motivo que en `planesDadosPorIncluidos`: una ventana más ancha deja que la marca de otra
+ * oración absuelva o acuse a quien no corresponde.
+ *
+ * @param {string} texto
+ * @returns {boolean}
+ */
+export function excluyeAlResto(texto) {
+  const plano = normalizar(texto);
+  for (const oracion of plano.split(/[.;\n]/)) {
+    const m = COMPLEMENTO.exec(oracion);
+    if (m && SE_COBRA_APARTE.test(oracion.slice(m.index))) return true;
+  }
+  return false;
+}
 
 /** Sin tildes y en minúsculas: el knowledge se edita a mano y "Básico"/"basico" conviven. */
 export function normalizar(texto) {
@@ -188,10 +229,29 @@ export function revisarPromesaDeInclusion({ incluidoPorPlan, labels, texto }) {
     }
   }
 
-  // Un plan que trae el chatbot y del que el bot ni habla no es una mentira —no lo cotiza—, pero
-  // sí es venta que se deja sobre la mesa, así que se dice sin pintar rojo.
+  // Un plan que trae el chatbot y del que el bot CALLA no es una mentira —no lo cotiza—, pero sí
+  // es venta que se deja sobre la mesa, así que se dice sin pintar rojo.
+  //
+  // Salvo que el texto no calle: si remata con un universal sobre el complemento ("en los otros
+  // planes va aparte"), ese plan no nombrado queda ABARCADO por una afirmación falsa, y eso se
+  // descubre cobrando. Callar y abarcar se veían igual desde acá, y por eso el aviso decía "no
+  // miente" sobre una mentira viva.
+  // Y sólo se puede acusar si el texto ANCLA por literal a quién SÍ lo trae: sin ancla no se
+  // sabe quiénes son "los demás". El sitio deriva esos nombres de un helper
+  // (`nombresConChatbot()`), así que ahí no hay literal que matchear y `segunElTexto` sale
+  // vacío — acusar igual convertía en rojo a la forma DERIVADA, que es justo la que el gate
+  // hermano del sitio EXIGE. Un detector que empuja al arreglo contrario es peor que no tenerlo.
+  const abarcaAlResto = segunElTexto.size > 0 && excluyeAlResto(texto);
   for (const [plan, loTrae] of Object.entries(incluidoPorPlan)) {
-    if (loTrae && !nombrados.includes(plan)) {
+    if (!loTrae || nombrados.includes(plan)) continue;
+
+    if (abarcaAlResto) {
+      problemas.push(
+        `el catálogo dice que "${labels[plan] ?? plan}" (${plan}) YA TRAE el chatbot incluido: ` +
+          `el texto no lo nombra y la frase de cierre lo abarca por exclusión, así que le está ` +
+          `cobrando el add-on aparte a un cliente que ya lo tiene en su plan.`,
+      );
+    } else {
       avisos.push(
         `"${labels[plan] ?? plan}" (${plan}) trae el chatbot incluido y el bot no lo nombra: ` +
           `no miente, pero no lo está vendiendo.`,

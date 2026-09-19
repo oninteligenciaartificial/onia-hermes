@@ -381,8 +381,60 @@ export function createStore(options = {}) {
     return retry?.state || null;
   }
 
-  /** UPDATE del estado completo. `raw` se MERGEA con lo que ya habia (no se pisa). */
-  async function saveConversation(state, previousRaw = {}) {
+  /**
+   * UPDATE del estado completo. `raw` se MERGEA con lo que ya habia (no se pisa).
+   *
+   * `leido` es el estado TAL COMO VINO DE LA BASE al empezar el turno, y no es opcional
+   * por gusto: entre esa lectura y este PATCH corre `step()`, que llama al LLM — segundos
+   * enteros en los que otro escritor puede subir un candado. Como el PATCH manda la fila
+   * ENTERA, ese candado queda pisado: un lost-update de manual, y lo que se pierde es
+   * justo lo que CALLA al bot.
+   *
+   * Medido el 2026-09-18 en produccion (conv 58): el traspaso humano quedo registrado en
+   * `bot_messages` (author human) y `human_took_over` en `f`; de las 15 conversaciones con
+   * mensaje de humano, TRES tenian el candado caido. Con el orden inverso, un humano
+   * contesta desde la bandeja, el turno lento pisa el flag y el bot sigue hablando encima
+   * — el modo de falla que la Barrera 1 existe para impedir.
+   *
+   * La regla: una columna-candado viaja SOLO si este turno la cambio respecto de lo que
+   * leyo. Si el turno no la toco, se omite y sobrevive lo que otro escribio bien. Falla
+   * hacia el SILENCIO. Los tres caminos que SI deciden (takeover, desarme, reinicio) la
+   * cambian y por eso la escriben — omitir de mas dejaria el candado sin poder subir nunca.
+   */
+  async function saveConversation(state, previousRaw = {}, leido = null) {
+    // Columnas cuyo valor puede venir de OTRO escritor. Las agrupadas viajan juntas: el
+    // flag y su fecha son un solo hecho, y mandar uno sin el otro deja la fila mintiendo.
+    const CANDADOS = [
+      { campos: ["humanTookOver", "humanTookOverAt"], columnas: ["human_took_over", "human_took_over_at"] },
+      { campos: ["optOutAt"], columnas: ["opt_out_at"] },
+      { campos: ["optInAt", "optInSource"], columnas: ["opt_in_at", "opt_in_source"] },
+      // El CAS del barrido (`reserveFollowUp`) reserva el cupo de rescate moviendo esta
+      // columna: pisarla con el valor viejo devuelve un cupo ya gastado, o gasta uno vivo.
+      { campos: ["followupStep"], columnas: ["followup_step"] },
+    ];
+    const valorDeColumna = {
+      human_took_over: Boolean(state.humanTookOver),
+      human_took_over_at: state.humanTookOverAt || null,
+      opt_out_at: state.optOutAt || null,
+      opt_in_at: state.optInAt || null,
+      opt_in_source: state.optInSource || null,
+      followup_step: state.followupStep || 0,
+    };
+    // Normalizado de los dos lados: `undefined` contra `false` (o contra `null`) no es un
+    // cambio, y contarlo como tal devolveria el pisotone entero por la puerta de atras.
+    const igual = (campo) => {
+      const a = state[campo], b = leido[campo];
+      if (campo === "humanTookOver") return Boolean(a) === Boolean(b);
+      if (campo === "followupStep") return (a || 0) === (b || 0);
+      return (a || null) === (b || null);
+    };
+    const candados = {};
+    for (const { campos, columnas } of CANDADOS) {
+      // Sin estado leido no hay con que comparar: se escribe todo, que es lo de siempre.
+      if (leido && campos.every(igual)) continue;
+      for (const columna of columnas) candados[columna] = valorDeColumna[columna];
+    }
+
     const patch = {
       channel: safeChannel(state.channel),
       contact_ref: state.contactRef,
@@ -396,12 +448,7 @@ export function createStore(options = {}) {
       calendar_event_id: state.calendarEventId || null,
       lead_key: state.leadKey || null,
       owner_role_key: state.ownerRoleKey || "sergio",
-      human_took_over: Boolean(state.humanTookOver),
-      human_took_over_at: state.humanTookOverAt || null,
-      opt_in_at: state.optInAt || null,
-      opt_in_source: state.optInSource || null,
-      opt_out_at: state.optOutAt || null,
-      followup_step: state.followupStep || 0,
+      ...candados,
       off_script_count: state.offScriptCount || 0,
       last_inbound_at: state.lastInboundAt || null,
       last_outbound_at: state.lastOutboundAt || null,

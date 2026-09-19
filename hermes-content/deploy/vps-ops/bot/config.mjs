@@ -336,11 +336,15 @@ export const SCRIPT = Object.freeze({
     "Lo que sí te adelanto: en la demo se hace la cuenta con TUS números — cuánto te cuesta hoy el trabajo que se hace a mano contra lo que cuesta el sistema. Si no cierra, te lo decimos ahí mismo.",
   ].join("\n"),
 
-  // M5 — handoff a humano.
+  // M5 — handoff a humano. La via ({{via_humano}}) se DERIVA del canal: ver `viaDelCanal`.
+  // Acá decía "desde este mismo número", y para el 100% de los leads del widget web eso es
+  // imposible de cumplir — llegan sin teléfono (medido en Chatwoot el 2026-09-18: inbox 4,
+  // 11 conversaciones, CERO con número). Justo en el mensaje que recibe el que pidió hablar
+  // con una persona.
   M5: [
     "Eso lo tiene que ver {{humano}}, no yo — soy un bot y no quiero inventarte una respuesta.",
     "",
-    "Ya le pasé tu consulta con todo lo que me contaste. Te escribe él desde este mismo número, en horario de oficina ({{horario_frase}}). Si es urgente, decime \"urgente\" y lo marco.",
+    "Ya le pasé tu consulta con todo lo que me contaste. Te escribe {{via_humano}}, en horario de oficina ({{horario_frase}}). Si es urgente, decime \"urgente\" y lo marco.",
   ].join("\n"),
 
   // M5_ACUSE — el mensaje que llega DESPUES de haber derivado, mientras el humano todavia no
@@ -360,7 +364,7 @@ export const SCRIPT = Object.freeze({
   M5_URGENTE: [
     "Listo, lo marqué como urgente y {{humano}} ya lo tiene arriba de todo.",
     "",
-    "Te escribe él desde este mismo número. Si es fuera de horario de oficina ({{horario_frase}}), es lo primero que ve al abrir.",
+    "Te escribe {{via_humano}}. Si es fuera de horario de oficina ({{horario_frase}}), es lo primero que ve al abrir.",
   ].join("\n"),
 
   // M8_SOPORTE — SEGUNDO CAMINO: el que escribe YA es cliente (o dice que ya tiene el sistema, o
@@ -370,7 +374,7 @@ export const SCRIPT = Object.freeze({
   M8_SOPORTE: [
     "Pará — si ya estás usando {{producto}}, esto no es una demo de venta: es soporte. Y el soporte no te lo puedo dar yo, que soy un bot.",
     "",
-    "Le paso tu mensaje a {{humano}} tal cual me lo contaste. Te responde desde este mismo número en horario de oficina ({{horario_frase}}) y, si hace falta, te coordina una llamada corta para dejarlo funcionando. Si te está frenando el trabajo ahora mismo, decime \"urgente\" y lo marco.",
+    "Le paso tu mensaje a {{humano}} tal cual me lo contaste. Te responde {{via_humano}} en horario de oficina ({{horario_frase}}) y, si hace falta, te coordina una llamada corta para dejarlo funcionando. Si te está frenando el trabajo ahora mismo, decime \"urgente\" y lo marco.",
   ].join("\n"),
 
   // M6 — opt-out.
@@ -409,7 +413,7 @@ export const SCRIPT = Object.freeze({
     "",
     "{{producto}} es una plataforma por módulos para que un negocio trabaje adentro: agenda, cobros, clientes.",
     "",
-    "Justo ahora no tengo horarios libres para ofrecerte, así que {{humano}} te coordina uno personalmente — te escribe él.",
+    "Justo ahora no tengo horarios libres para ofrecerte, así que {{humano}} te coordina uno personalmente — te escribe {{via_humano}}.",
     "",
     "Contame mientras: ¿a qué se dedica tu negocio?",
   ].join("\n"),
@@ -427,7 +431,11 @@ export const SCRIPT = Object.freeze({
   ].join("\n"),
 
   // Audio que no se pudo transcribir (spec §2.3).
-  M_AUDIO_FAIL: "No me llegó bien el audio, ¿me lo escribís?",
+  // El audio LLEGO perfecto y esta guardado en Chatwoot: el que no puede oirlo es el bot
+  // (`npm run destinos:vivos`). Decirle "no me llego bien" le echa la culpa a su conexion y lo
+  // invita a reintentar el mismo audio, que va a fallar igual. Se dice la verdad y se pide texto
+  // UNA vez; si insiste con audio, offScriptCount lo lleva a un humano, que si lo puede escuchar.
+  M_AUDIO_FAIL: "Recibí tu audio, pero no lo puedo escuchar yo. ¿Me lo escribís?",
 
   // Imagen / documento (spec §2.3): se reconoce y se pasa a humano.
   M_ATTACH_BODY: "Recibí tu archivo. Lo mira {{humano}}, no lo puedo leer bien yo.",
@@ -532,6 +540,11 @@ export const SCRIPT = Object.freeze({
   R_NO_DATO: "Eso no lo tengo acá para confirmártelo — te lo confirma {{humano}} por este mismo chat.",
 
   R_ATTACH: "Recibí tu archivo. Se lo paso a {{humano}}, que te confirma por acá.",
+  // R_AUDIO — el paciente/cliente mando una nota de voz y no la podemos transcribir. Mismo molde
+  // que R_ATTACH: se acusa recibo sin culpar a nadie y se pide texto. Si vuelve a mandar audio,
+  // deja de insistir el bot y lo escucha una persona (ver la rama `voice` de recepcionista.mjs).
+  R_AUDIO: "Recibí tu audio, pero no lo puedo escuchar yo. ¿Me lo escribís?",
+  R_AUDIO_DERIVA: "Recibí tu audio. Se lo paso a {{humano}}, que lo escucha y te responde por acá.",
   // R_CUOTA_AGOTADA — la org agoto sus conversaciones automaticas del mes (lo dice /published).
   // Texto FIJO y honesto, cero LLM; {{producto}} es el nombre del negocio en modo recepcionista.
   R_CUOTA_AGOTADA: "Este mes ya atendimos el máximo de conversaciones automáticas de {{producto}}. Te responde una persona en breve.",
@@ -923,6 +936,45 @@ function abreOracion(anterior) {
  * en la proxima plantilla que alguien escriba. Solo toca la primera letra si es minuscula, asi
  * que un nombre propio, una viñeta o un `**negrita**` pasan intactos.
  */
+/**
+ * Por qué vía le va a escribir el humano, DERIVADA del canal por el que entró la conversación.
+ *
+ * Se decide por el `channel_type` que manda Chatwoot y NUNCA por el número de inbox — la misma
+ * regla que ya fija `canal-whatsapp-vivo.test.mjs`: un id es un dato de instalación, se renumera
+ * al recrear un inbox y no dice nada del medio.
+ *
+ * El default es la forma canal-agnóstica, y esa es la mitad que importa: "por este mismo chat"
+ * es cierto en WhatsApp, en el widget, en la API y en el canal que se conecte mañana, así que
+ * un canal que no sabemos leer degrada a una promesa que igual se puede cumplir. Al revés
+ * —adivinar que hay teléfono— es prometerle un mensaje a alguien que no tiene dónde recibirlo.
+ */
+/**
+ * Como se NOMBRA el canal cuando hay que decirle a un humano por donde contestar.
+ *
+ * Existe aparte de `viaDelCanal` porque son dos audiencias: `viaDelCanal` le habla al PROSPECTO
+ * ("desde este mismo número") y esto le habla a quien tiene que CUMPLIR esa promesa ("WhatsApp").
+ * Lo que NO puede haber son dos decisiones: las dos preguntan lo mismo, y por eso `viaDelCanal`
+ * se apoya en esta. Un segundo regex sería una copia benévola que acierta hasta que alguien
+ * cambie una sola de las dos.
+ *
+ * @returns {string|null} null = no vino el canal. Es distinto de "no lo reconozco".
+ */
+export function nombreDelCanal(channelType) {
+  const crudo = String(channelType ?? "").trim();
+  if (!crudo) return null;
+  if (/^Channel::Whatsapp$/i.test(crudo)) return "WhatsApp";
+  if (/^Channel::WebWidget$/i.test(crudo)) return "web";
+  // Un canal que no conocemos se nombra CRUDO y no se descarta: el aviso sirve igual, y el día
+  // que Chatwoot sume un canal el síntoma es un nombre feo, no un aviso mudo.
+  return crudo.replace(/^Channel::/i, "");
+}
+
+export function viaDelCanal(channelType) {
+  return nombreDelCanal(channelType) === "WhatsApp"
+    ? "desde este mismo número"
+    : "por este mismo chat";
+}
+
 export function renderTemplate(text, vars = {}) {
   const plantilla = String(text ?? "");
   return plantilla.replace(/\{\{\s*([a-z0-9_]+)\s*\}\}/gi, (match, key, offset) => {

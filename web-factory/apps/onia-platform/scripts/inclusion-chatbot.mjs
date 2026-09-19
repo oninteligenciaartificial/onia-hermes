@@ -80,6 +80,7 @@ import {
   FUENTE_ADDONS,
   FUENTE_LIMITES,
   PLANES_EN_ORDEN,
+  PLAN_COTIZADO,
   leerDelRef,
   refreshRef,
 } from "./precios-fuente.mjs";
@@ -294,11 +295,19 @@ export function revisarSitio({ incluidoPorPlan, labels, alias = {}, espejo = {},
   const juegos = juegosDeNombres(labels, alias);
 
   /**
-   * Los planes que ESTE SITIO vende, que no son todos los del producto. `enterprise` existe en el
-   * catálogo y la tabla de precios no lo publica; peor, su nombre —"Empresa"— es una palabra común
-   * del castellano, así que buscarlo en la prosa lo da por nombrado en cualquier página que hable
-   * de "tu empresa" y lo mete en acusaciones que no le corresponden. Quién se vende sale de la
-   * misma tabla de equivalencias que los montos, no de una lista nueva.
+   * Los planes que ESTE SITIO vende, que no son todos los del producto.
+   *
+   * 🔴 Acá decía que `enterprise` «existe en el catálogo y la tabla de precios no lo publica», y
+   * esa frase —cierta cuando se escribió, falsa el 2026-09-19— es lo que absolvió el defecto:
+   * con `enterprise` fuera de esta lista, `incluidosQueElSitioVende` quedaba en `["clinic"]`, la
+   * pregunta 2 daba por completa una frase que remata en «en los demás planes va aparte, Bs 390»
+   * y la pregunta 1 lo degradaba a AVISO («no miente, pero no lo está vendiendo»). El sitio SI lo
+   * publica: Bs 2.900/mes en una sección entera de `/precios`, una línea en la home, y el
+   * recomendador de `/v1/empezar` se lo propone a todo equipo de 15+. Lo que era cierto es la
+   * otra mitad —el nombre del PRODUCTO, "Empresa", es palabra corriente y no sirve para buscarlo
+   * en la prosa—, y por eso `PLAN_COTIZADO` declara el nombre con que lo publica el SITIO.
+   *
+   * Quién se vende sale de la tabla de equivalencias, no de una lista nueva.
    */
   const vendidos = Object.keys(alias);
   const incluidosQueElSitioVende = Object.entries(incluidoPorPlan)
@@ -316,7 +325,14 @@ export function revisarSitio({ incluidoPorPlan, labels, alias = {}, espejo = {},
    // que la pregunta 0 ata al booleano del producto. Es más fuerte que escribir "Full" a mano —el
    // día que el booleano se mueva, la frase se mueve sola—, así que cuenta como dicho.
    if (/\u00ab[^\u00bb]*nombresConChatbot[^\u00bb]*\u00bb/.test(texto)) {
-     for (const p of Object.keys(espejo).filter((k) => espejo[k] === true)) dichosAca.add(p);
+     // Cuenta también para la COBERTURA (pregunta 1), no sólo para la salvedad de este texto: el
+     // sitio dejó de tipear "Completo" el 2026-09-19 —ahora lo deriva en las cinco superficies— y
+     // sin esto la pregunta 1 lo daba por no dicho y pedía volver a escribirlo a mano, que es
+     // exactamente el arreglo contrario al que este archivo existe para empujar.
+     for (const p of Object.keys(espejo).filter((k) => espejo[k] === true)) {
+       dichosAca.add(p);
+       dichos.add(p);
+     }
    }
    const yaDijoQuienLoTrae =
      incluidosQueElSitioVende.length > 0 && incluidosQueElSitioVende.every((p) => dichosAca.has(p));
@@ -468,7 +484,7 @@ export function labelsDelProducto(fuente) {
  * montos. El plan que entre mañana entra solo — el mismo motivo por el que esa tabla dejó de estar
  * tipeada a mano cuando `crece` nació mudo.
  */
-export function aliasDelSitio(planes = PLANES_EN_ORDEN) {
+export function aliasDelSitio(planes = [...PLANES_EN_ORDEN, PLAN_COTIZADO]) {
   /** @type {Record<string, string[]>} */
   const alias = {};
   // Además del nombre literal, las formas DERIVADAS con que el sitio lo pinta. El extractor deja
@@ -500,7 +516,7 @@ export function aliasDelSitio(planes = PLANES_EN_ORDEN) {
  * Se lee del texto y no se importa el módulo porque este guión es `.mjs` y el espejo es TypeScript
  * con alias de paths: cargarlo exigiría el build. La equivalencia de ids sale de `PLANES_EN_ORDEN`.
  */
-export function espejoDelSitio(fuente, planes = PLANES_EN_ORDEN) {
+export function espejoDelSitio(fuente, planes = PLANES_EN_ORDEN, cotizado = PLAN_COTIZADO) {
   const porIdDelSitio = {};
   for (const m of fuente.matchAll(/\bid: "(\w+)",[\s\S]*?\bchatbotIncluido: (true|false),/g)) {
     porIdDelSitio[m[1]] = m[2] === "true";
@@ -509,7 +525,15 @@ export function espejoDelSitio(fuente, planes = PLANES_EN_ORDEN) {
   for (const p of planes) {
     if (p.sitio in porIdDelSitio) espejo[p.producto] = porIdDelSitio[p.sitio];
   }
-  return Object.keys(espejo).length >= planes.length ? espejo : null;
+  if (Object.keys(espejo).length < planes.length) return null;
+
+  // El plan cotizado no es una tarjeta de la escalera: no tiene `id:`, es una constante con
+  // nombre propio (`GRUPO`). Se lee aparte o queda fuera del espejo, y entonces la pregunta 0 no
+  // lo cruza contra el producto y la salvedad de `nombresConChatbot()` no lo cuenta como dicho.
+  // Su ausencia NO invalida la medición de los otros cuatro: se declara si está.
+  const suyo = new RegExp(`export const ${cotizado.sitio} = \\{[\\s\\S]*?\\bchatbotIncluido: (true|false),`).exec(fuente);
+  if (suyo) espejo[cotizado.producto] = suyo[1] === "true";
+  return espejo;
 }
 
 /** Los archivos del sitio que le pueden hablar a un lead. Derivados del DISCO, no de una lista. */

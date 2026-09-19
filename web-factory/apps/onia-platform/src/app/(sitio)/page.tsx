@@ -10,7 +10,17 @@ import {
   bs,
   nombresConChatbot,
   plan,
+  planDeEntrada,
+  sinSubirDePlan,
 } from "@/lib/pricing";
+
+/**
+ * El plan de ENTRADA, una sola vez: la línea de precio del hero y el panel que
+ * va debajo tienen que hablar del MISMO plan. Que discreparan es el defecto del
+ * 2026-09-19 — la línea decía Bs 320 y el panel dibujaba los agentes, que ese
+ * plan no enciende.
+ */
+const PLAN_DE_ENTRADA = planDeEntrada();
 import {
   CHATBOT_PLAN,
   precioStack,
@@ -158,8 +168,14 @@ const PCT_SALARIO = pctDelSalarioMinimo();
  *   · mañana → panel "dental" de ui.tsx (agenda del día: hora y tratamiento)
  *   · tarde  → panel "comercio" de ui.tsx (la caja cortada por método de pago)
  *              + rubros/page.tsx:39 (fiados)
- *   · noche  → rubros/page.tsx:41 (paquetes y sesiones) + la sección 5 de
- *              este mismo archivo (el borrador que espera tu aprobación)
+ *   · noche  → el Recall del producto (`lib/onia-core/modules/agents-por-rubro.ts`:
+ *              corre en estética y dispara por `recallAfterDays`) + la sección 5
+ *              de este mismo archivo (el borrador que espera tu aprobación)
+ *
+ * ⚠️ La cita de cada línea va al PRODUCTO, nunca a otra pantalla de este sitio.
+ * Acá la de la noche citaba `rubros/page.tsx` y `rubros/page.tsx` se citaba a sí
+ * mismo: el sitio comparándose consigo mismo. Así sobrevivió «el paquete que
+ * quedó por la mitad», un saldo que el producto no lleva (2026-09-19).
  */
 const DIA = [
   {
@@ -180,7 +196,7 @@ const DIA = [
     id: "estetica",
     momento: "De noche",
     texto:
-      "Bajás la persiana y el paquete que quedó por la mitad no se pierde: a la mañana te espera el borrador de a quién llamar, para que lo aprobés.",
+      "Bajás la persiana y la clienta que dejó el tratamiento a medias no se pierde: a la mañana te espera el borrador de a quién llamar, para que lo aprobés.",
     alt: "Dueña de un centro de estética junto a la camilla vacía con papel nuevo puesto, con el celular en la mano.",
   },
 ] as const;
@@ -287,6 +303,10 @@ const MOMENTOS = [
 const CAPACIDADES = [
   {
     panel: "cuenta" as const,
+    // La portada dibuja el plan de ENTRADA, que es el único que puede prometer
+    // sin mentirle a nadie: el que paga el más caro también lo tiene. Ver
+    // `modulos-de-la-cuenta.ts`.
+    plan: PLAN_DE_ENTRADA.id,
     nombre: "El día entero, en una pantalla",
     texto:
       "Lo que entró, lo que falta cobrar y lo que viene después. No hay que abrir un reporte para saber cómo va el negocio: es lo primero que ves al entrar.",
@@ -344,14 +364,14 @@ export default function Portada() {
             </div>
             <p className={p.heroNota}>
               {PRUEBA.dias} días de prueba con el plan {PRUEBA.planQueCorre}, sin tarjeta.
-              Después, desde Bs {bs(plan("basico").mensual)} al mes.
+              Después, desde Bs {bs(PLAN_DE_ENTRADA.mensual)} al mes.
             </p>
 
             {/* La escena que la referencia arma con mockups de su app. Acá va
                 el panel DIBUJADO — nunca una captura del sistema. */}
             <div className={p.escena}>
               <div className={p.escenaPanel}>
-                <PanelDibujado panel="cuenta" />
+                <PanelDibujado panel="cuenta" plan={PLAN_DE_ENTRADA.id} />
               </div>
               <span className={`${p.nodo} ${p.nodoA}`} aria-hidden="true">
                 ✓
@@ -466,7 +486,7 @@ export default function Portada() {
             {CAPACIDADES.map((c) => (
               <article className={p.capacidad} key={c.panel}>
                 <div className={p.capacidadArte}>
-                  <PanelDibujado panel={c.panel} />
+                  <PanelDibujado panel={c.panel} plan={"plan" in c ? c.plan : undefined} />
                 </div>
                 <h3 className={p.capacidadNombre}>{c.nombre}</h3>
                 <p className={p.capacidadTexto}>{c.texto}</p>
@@ -578,9 +598,12 @@ export default function Portada() {
           <h2 id="oferta" className={s.h2}>
             Sobre el plan encendés lo que te falta.
           </h2>
+          {/* La segunda oración decía «No hay que saltar de plan para desbloquear una sola»
+              hasta el 2026-09-18: un universal sobre el MECANISMO, falso desde que los agentes
+              (Crece) y el segundo administrador (Completo) vienen ADENTRO del plan y no existen
+              como add-on. Ahora sale de `sinSubirDePlan()`, que lo deriva del catálogo. */}
           <p className={s.lead}>
-            Cada cosa se prende aparte y se paga aparte. No hay que saltar de
-            plan para desbloquear una sola.
+            Cada cosa se prende aparte y se paga aparte. {sinSubirDePlan()}
           </p>
         </Reveal>
 

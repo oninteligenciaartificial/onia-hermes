@@ -187,7 +187,25 @@ export function inboxDelPayload(payload) {
   return crudo === undefined || crudo === null || crudo === "" ? null : String(crudo);
 }
 
-function buildTurn({ conversationId, messageId, content, attachments, sender, createdAtIso, conversation, inboxId }) {
+/**
+ * El MEDIO por el que entro la conversacion (`Channel::Whatsapp`, `Channel::WebWidget`, ...).
+ *
+ * Es distinto del inbox y no se deriva de el: el id es un dato de instalacion y se renumera al
+ * recrear un inbox, el medio no. De aca sale `{{via_humano}}` — si el bot puede prometerle al
+ * prospecto que le escriben "desde este mismo numero" o tiene que decir "por este mismo chat".
+ * Mismo orden de respaldo que `inboxDelPayload`, por las mismas tres formas de payload.
+ */
+export function canalDelPayload(payload) {
+  const crudo =
+    payload?.inbox?.channel_type ??
+    payload?.channel_type ??
+    payload?.conversation?.channel_type ??
+    payload?.conversation?.inbox?.channel_type ??
+    null;
+  return crudo === undefined || crudo === null || crudo === "" ? null : String(crudo);
+}
+
+function buildTurn({ conversationId, messageId, content, attachments, sender, createdAtIso, conversation, inboxId, channelType }) {
   const text = String(content || "").trim();
   const atribucion = attributionFrom(conversation);
   return {
@@ -201,6 +219,8 @@ function buildTurn({ conversationId, messageId, content, attachments, sender, cr
       // cargador de knowledge keyea por inbox y el producto lo traduce a organización).
       // null = comportamiento de siempre (conocimiento de Onia, archivo/código).
       inbox_id: inboxId,
+      // El MEDIO, aparte del inbox: decide por que via promete el bot que escribe el humano.
+      channel_type: channelType,
       public_contact: phoneOf(sender),
       display_name: displayNameOf(sender),
       kind: kindOf(text, attachments),
@@ -315,6 +335,7 @@ function fromMessageCreated(payload) {
     // este nivel es del mensaje (campaign_id / template_params de Chatwoot) y no sirve para esto.
     conversation: payload.conversation,
     inboxId: inboxDelPayload(payload),
+    channelType: canalDelPayload(payload),
   });
 }
 
@@ -366,6 +387,7 @@ function fromConversationCreated(payload) {
     conversation: payload,
     // ... y el inbox es el de la conversación misma (`inbox_id` plano en push_event_data).
     inboxId: inboxDelPayload(payload),
+    channelType: canalDelPayload(payload),
   });
 }
 
@@ -409,6 +431,7 @@ function fromMessageUpdated(payload) {
       channel: "chatwoot",
       contact_ref: String(conversationId),
       inbox_id: inboxId,
+      channel_type: canalDelPayload(payload),
       kind: "text",
       text: texto,
       message_key: `chatwoot:${conversationId}:${payload.id}:select:${String(eleccion.value || eleccion.title).slice(0, 100)}`,

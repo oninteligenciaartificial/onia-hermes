@@ -57,20 +57,28 @@ export function cargaElEnvEntero(texto) {
  * (b) Corre el wrapper de verdad con un `docker` falso y devuelve lo que ese docker recibio.
  * Nada toca produccion: el stub esta PRIMERO en el PATH, asi que el docker real nunca se invoca.
  */
-function loQueRecibioDocker(wrapper, { env = {}, conEnvFile = true } = {}) {
+export function loQueRecibioDocker(wrapper, { env = {}, conEnvFile = true, envFile = null, salidaDocker = "" } = {}) {
   const caja = mkdtempSync(join(tmpdir(), "slots-gate-"));
   try {
     const bin = join(caja, "bin");
     const registro = join(caja, "docker.args");
     execFileSync("mkdir", ["-p", bin]);
     // El docker falso: graba lo que le pidieron y se calla. Cubre exec, cp y ps.
-    writeFileSync(join(bin, "docker"), `#!/bin/sh\nprintf '%s\\n' "$@" >> ${JSON.stringify(registro)}\nexit 0\n`);
+    //
+    // `salidaDocker` existe porque no todo insumo viaja por `webhook.env`: algunos wrappers lo
+    // LEEN de la base con `CW_TOKEN="$(docker exec … psql …)"`, y un docker falso mudo los deja
+    // con la variable vacia — lo que se lee igual que "el wrapper no la pasa" y acusa al
+    // wrapper equivocado. Vacio por defecto: los dos gates que ya usan este harness no cambian.
+    const eco = salidaDocker ? `printf '%s\\n' ${JSON.stringify(salidaDocker)}\n` : "";
+    writeFileSync(join(bin, "docker"), `#!/bin/sh\nprintf '%s\\n' "$@" >> ${JSON.stringify(registro)}\n${eco}exit 0\n`);
     chmodSync(join(bin, "docker"), 0o755);
 
     writeFileSync(join(caja, wrapper), readFileSync(join(AQUI, wrapper), "utf8"));
     // El wrapper exige su propio .mjs al lado o se va a /opt/onia/bot (que en nodo-casa no existe).
     writeFileSync(join(caja, wrapper.replace(/\.sh$/, ".mjs")), "// dummy\n");
-    if (conEnvFile) writeFileSync(join(caja, "webhook.env"), `ONIA_BOT_DRY_RUN=true\nONIA_BOT_SLOTS="${SLOTS}"\n`);
+    if (conEnvFile) {
+      writeFileSync(join(caja, "webhook.env"), envFile ?? `ONIA_BOT_DRY_RUN=true\nONIA_BOT_SLOTS="${SLOTS}"\n`);
+    }
 
     const limpio = { PATH: `${bin}:${process.env.PATH}`, HOME: caja, ...env };
     try {

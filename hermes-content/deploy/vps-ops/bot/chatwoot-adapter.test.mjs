@@ -34,6 +34,7 @@ import {
   toIsoFlexible,
   whatsappTemplate,
 } from "./chatwoot-adapter.mjs";
+import { createState } from "./bot-engine.mjs";
 import { createBotConfig } from "./config.mjs";
 import { createStore, leadKeyFor } from "./persistence.mjs";
 // El medidor entra en estas pruebas a proposito: el traspaso solo esta arreglado si la fila que
@@ -874,8 +875,12 @@ function memoryStore() {
     store: {
       enabled: true,
       warnings: [],
-      async ensureConversation() {
-        return saved || null;
+      async ensureConversation(seed) {
+        // Mismo contrato que persistence.mjs: para una conversación NUEVA se devuelve la fila
+        // recién insertada, y `null` significa una sola cosa — la base no contestó. El turno usa
+        // esa diferencia para decidir si puede ESCRIBIR el estado (run-turn.mjs `guardarEstado`).
+        if (!saved) saved = createState(seed);
+        return saved;
       },
       async claimInbound(message) {
         if (seenMessageKeys.has(message.messageKey)) return false;

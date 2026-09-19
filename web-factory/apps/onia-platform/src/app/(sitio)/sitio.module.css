@@ -605,22 +605,6 @@
   background: var(--verde-500);
 }
 
-/* ---- sesiones del paquete (panel "estética") ---- */
-.panelDots {
-  flex: none;
-  display: flex;
-  gap: 0.25em;
-}
-.panelDot {
-  width: 0.5em;
-  height: 0.5em;
-  border-radius: var(--r-pill);
-  background: color-mix(in srgb, var(--panel-ink) 15%, transparent);
-}
-.panelDotOn {
-  background: var(--verde-500);
-}
-
 /* ---- conversación (panel "chat") ---- */
 .panelChat {
   display: flex;

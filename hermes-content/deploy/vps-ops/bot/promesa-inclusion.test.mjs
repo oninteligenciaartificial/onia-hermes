@@ -35,17 +35,29 @@ const LABELS = {
   enterprise: "Empresa",
 };
 
-// El texto REAL del bot al 2026-09-12, palabra por palabra. Es el caso ancla: nombra los cuatro
-// planes en UNA sola oración y la marca de inclusión aplica sólo al último. Un detector que
-// juzgue por oración marca los cuatro y acusa a tres planes sanos — por eso la ventana es la
-// cláusula, y por eso este caso está clavado acá.
-const TEXTO_REAL =
+// El texto del bot entre el 2026-09-12 y el 2026-09-19, palabra por palabra. Sigue clavado acá
+// por DOS motivos distintos:
+//
+//  1. Es el caso ancla del detector de cláusula: nombra los cuatro planes en UNA sola oración y
+//     la marca de inclusión aplica sólo al último. Un detector que juzgue por oración marca los
+//     cuatro y acusa a tres planes sanos — por eso la ventana es la cláusula.
+//  2. Es el caso ancla del defecto que se cerró el 19-sep: su cierre universal ("En los otros
+//     planes...") abarca al Empresa, que trae el chatbot adentro. Si vuelve esa forma, rojo.
+const TEXTO_CON_COMPLEMENTO =
   "Te los paso derecho, son públicos: el sistema arranca en Bs 320 al mes con el plan Básico, " +
   "Bs 550 el Crece, Bs 890 el Profesional y Bs 1.290 el Completo, que ya trae el chatbot de " +
   "WhatsApp adentro. En los otros planes el chatbot va aparte, Bs 390 al mes.";
 
+// La redacción vigente: enumera a quiénes se les cobra en vez de hablar del complemento. Elegida
+// así porque falla del lado seguro — un plan nuevo que no esté en la lista queda sin nombrar
+// (AVISO: no lo vendemos), mientras que el universal lo abarcaba y le mentía.
+const TEXTO_HOY =
+  "Te los paso derecho, son públicos: el sistema arranca en Bs 320 al mes con el plan Básico, " +
+  "Bs 550 el Crece, Bs 890 el Profesional y Bs 1.290 el Completo, que ya trae el chatbot de " +
+  "WhatsApp adentro. En el Básico, el Crece y el Profesional el chatbot va aparte, Bs 390 al mes.";
+
 test("la marca de inclusión aplica al plan que tiene al lado, no a los cuatro de la enumeración", () => {
-  const dados = planesDadosPorIncluidos(TEXTO_REAL, LABELS);
+  const dados = planesDadosPorIncluidos(TEXTO_CON_COMPLEMENTO, LABELS);
   assert.deepEqual([...dados].sort(), ["clinic"], "sólo el Completo está dado por incluido");
 });
 
@@ -72,7 +84,7 @@ test("con el catálogo de hoy, el texto de hoy no tiene un solo problema", () =>
   const { problemas } = revisarPromesaDeInclusion({
     incluidoPorPlan: HOY,
     labels: LABELS,
-    texto: TEXTO_REAL,
+    texto: TEXTO_HOY,
   });
   assert.deepEqual(problemas, []);
 });
@@ -83,7 +95,7 @@ test("ROJO si el producto le da el chatbot a un plan y el bot le sigue cobrando 
   const { problemas } = revisarPromesaDeInclusion({
     incluidoPorPlan: conProfesional,
     labels: LABELS,
-    texto: TEXTO_REAL,
+    texto: TEXTO_HOY,
   });
   assert.equal(problemas.length, 1, `esperaba un problema, hubo ${problemas.length}`);
   assert.match(problemas[0], /Profesional/);
@@ -95,7 +107,7 @@ test("ROJO en la dirección simétrica: el bot regala lo que el producto cobra",
   const { problemas } = revisarPromesaDeInclusion({
     incluidoPorPlan: sinNinguno,
     labels: LABELS,
-    texto: TEXTO_REAL,
+    texto: TEXTO_CON_COMPLEMENTO,
   });
   assert.equal(problemas.length, 1);
   assert.match(problemas[0], /Completo/);
@@ -116,15 +128,90 @@ test("una redacción que el detector NO reconoce acusa, no absuelve", () => {
   assert.match(problemas[0], /YA TRAE el chatbot incluido, y el texto/);
 });
 
-test("un plan incluido del que el bot ni habla es AVISO, no rojo — no miente, no lo vende", () => {
+test("un plan incluido del que el bot CALLA es AVISO, no rojo — no miente, no lo vende", () => {
+  // Ojo con el fixture: el texto tiene que callar DE VERDAD. `TEXTO_CON_COMPLEMENTO` no calla —remata con
+  // "En los otros planes..."— y usarlo acá era lo que defendía el defecto de abajo.
+  const calla =
+    "Te los paso derecho: el sistema arranca en Bs 320 al mes con el plan Básico, Bs 550 el " +
+    "Crece, Bs 890 el Profesional y Bs 1.290 el Completo, que ya trae el chatbot adentro.";
   const { problemas, avisos } = revisarPromesaDeInclusion({
     incluidoPorPlan: HOY,
     labels: LABELS,
-    texto: TEXTO_REAL,
+    texto: calla,
   });
   assert.deepEqual(problemas, []);
   assert.equal(avisos.length, 1);
   assert.match(avisos[0], /Empresa/);
+});
+
+test("ROJO: el texto no CALLA sobre el plan que no nombró — lo abarca con «en los otros planes»", () => {
+  // El defecto que esto cierra, medido en producción el 2026-09-19: el bot enumeraba cuatro
+  // planes y remataba "En los otros planes el chatbot va aparte, Bs 390 al mes", con el Empresa
+  // (Bs 2.900) trayéndolo adentro desde la escalera C. O sea le cobraba Bs 390/mes al lead más
+  // grande. El gate lo daba por AVISO —"no miente, pero no lo está vendiendo"— porque sólo
+  // juzgaba los planes NOMBRADOS, y un universal sobre el complemento no nombra a nadie.
+  const { problemas } = revisarPromesaDeInclusion({
+    incluidoPorPlan: HOY,
+    labels: LABELS,
+    texto: TEXTO_CON_COMPLEMENTO,
+  });
+  assert.equal(problemas.length, 1, `esperaba un problema, hubo ${problemas.length}`);
+  assert.match(problemas[0], /Empresa/);
+  assert.match(problemas[0], /no lo nombra y la frase .* lo abarca/);
+});
+
+test("el complemento acusa por la FORMA, no por el texto viejo: «en los demás planes se cobra»", () => {
+  // Se prohíbe la forma (cuantificador de complemento + marca de que se cobra aparte) y no la
+  // redacción de hoy: prohibir la frase literal se apaga sola en cuanto alguien la reescriba.
+  for (const cierre of [
+    "En los demás planes se cobra aparte.",
+    "En el resto de los planes el chatbot no viene incluido.",
+    "Para los otros planes el asistente se suma por Bs 390.",
+  ]) {
+    const { problemas } = revisarPromesaDeInclusion({
+      incluidoPorPlan: HOY,
+      labels: LABELS,
+      texto: `Bs 1.290 el Completo, que ya trae el chatbot adentro. ${cierre}`,
+    });
+    assert.equal(problemas.length, 1, `no acusó con el cierre «${cierre}»`);
+    assert.match(problemas[0], /Empresa/);
+  }
+});
+
+test("el complemento NO acusa si no afirma que se cobra: «en los otros planes, consultanos»", () => {
+  // La mentira la hace la EXCLUSIÓN, no el cuantificador: un complemento que no afirma nada
+  // sobre el precio del add-on no le promete de más a nadie.
+  const { problemas } = revisarPromesaDeInclusion({
+    incluidoPorPlan: HOY,
+    labels: LABELS,
+    texto: "Bs 1.290 el Completo, que ya trae el chatbot adentro. En los otros planes, consultanos.",
+  });
+  assert.deepEqual(problemas, []);
+});
+
+test("el complemento NO acusa a un texto que DERIVA los nombres: sin ancla literal no hay «los demás»", () => {
+  // El caso del sitio (`inclusion-chatbot.test.ts`), que comparte este módulo por el espejo: la
+  // FAQ escribe «nombresConChatbot() ya trae el chatbot incluido. En los demás planes va aparte»
+  // — derivado del dato, que es exactamente la forma que el gate hermano EXIGE. Sin esta
+  // pregunta el detector la pintaba roja y empujaba a TIPEAR los nombres, el arreglo contrario.
+  const { problemas } = revisarPromesaDeInclusion({
+    incluidoPorPlan: HOY,
+    labels: LABELS,
+    texto: "«nombresConChatbot()» ya trae el chatbot de WhatsApp incluido. En los demás planes va aparte, Bs 390/mes.",
+  });
+  assert.deepEqual(problemas, []);
+});
+
+test("el complemento deja de acusar solo cuando ningún plan callado trae la capacidad", () => {
+  // Que el gate se apague por la razón correcta: si el Empresa dejara de traerlo, la frase
+  // universal vuelve a ser cierta y no hay nada que reportar.
+  const soloClinic = { ...HOY, enterprise: false };
+  const { problemas } = revisarPromesaDeInclusion({
+    incluidoPorPlan: soloClinic,
+    labels: LABELS,
+    texto: TEXTO_CON_COMPLEMENTO,
+  });
+  assert.deepEqual(problemas, []);
 });
 
 // ---------------------------------------------------------------------------
