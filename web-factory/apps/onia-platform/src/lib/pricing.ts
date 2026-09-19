@@ -496,9 +496,7 @@ const ESCALERA: readonly Plan[] = [
     agentesIncluidos: true,
     reservasIncluidas: true,
     coadministradores: false,
-    sinEsto: [
-      `El chatbot de WhatsApp — ${NOMBRE_DE_PLAN.full} ya lo trae incluido; acá va aparte, Bs ${bs(CHATBOT_MENSUAL)}/mes`,
-    ],
+    sinEsto: [],
     destacado: true,
     cuando: "El negocio ya factura todos los días y querés los números al día.",
   },
@@ -534,6 +532,150 @@ const ESCALERA: readonly Plan[] = [
   },
 ] as const;
 
+
+/**
+ * Lo que este plan NO trae en administradores, o nada si lo trae (o si no lo trae ninguno).
+ *
+ * ⚠️ La línea NO nombra el plan desde el que sí viene, y no es por prudencia: el `sinEsto` de un
+ * plan lo reusa el DOWNSELL de `/v1/empezar` ("si te queda grande, el escalón de abajo es…"), y
+ * ahí nombrar un tercer plan es ofrecerlo. La primera versión decía "más de uno viene desde
+ * Completo" y puso rojo a `escalon-que-no-se-tipea.test.ts` en el caso Crece→Básico: al que
+ * bajaba al plan de Bs 320 se le nombraba el de Bs 1.290. El tier igual queda dicho, y en la
+ * forma más derivada que hay: la tarjeta que lo trae lo dice en su `incluye`, las que no, acá.
+ */
+/**
+ * Lo que este plan NO trae en chatbot de WhatsApp, y quién sí lo trae.
+ *
+ * Se escribe UNA vez, en el escalón más caro que no lo trae: es el que se compara contra el que
+ * sí (Profesional + add-on cuesta más que Completo, y esa cuenta es la que decide la compra).
+ * Repetirla en cada tarjeta subiría el add-on al mismo rango que el sistema, que es justo lo que
+ * no vendemos.
+ *
+ * 🔴 Los nombres se DERIVAN, y el universo incluye a `GRUPO`. Estaba escrito dentro del literal
+ * de la tarjeta como «${NOMBRE_DE_PLAN.full} ya lo trae incluido; acá va aparte», y esa cláusula
+ * —medida el 2026-09-19— le niega el chatbot a Grupo / Empresarial, que lo trae pagado adentro
+ * (`whatsappIncluded: true` en el catálogo publicado). Vive acá y no adentro del literal por la
+ * misma razón que la línea de administradores: preguntarle a la escalera mientras la escalera se
+ * construye es un ciclo, así que se le pasa `ESCALERA`, que en este punto ya está inicializada.
+ */
+function lineaDelChatbot(plan: Plan): string[] {
+  if (plan.chatbotIncluido) return [];
+  const universo = [...ESCALERA, GRUPO];
+  const ultimoSinChatbot = ESCALERA.filter((p) => !p.chatbotIncluido).at(-1);
+  if (plan.id !== ultimoSinChatbot?.id) return [];
+  // Si NINGUN plan lo trajera adentro, esto no sería un escalón sino cómo se vende el add-on, y
+  // anunciarlo como carencia sería mentir. La condición se lee del catálogo, no de una fecha.
+  if (!universo.some((p) => p.chatbotIncluido)) return [];
+  // Una sola plantilla, aunque sea larga: partirla en dos literales parte la ORACION, y el gate
+  // que la vigila lee literal por literal — con el corte puesto, «acá va aparte» quedaba en un
+  // pedazo sin sujeto y se acusaba solo (medido: DESALINEADO con el texto correcto).
+  // prettier-ignore
+  return [`El chatbot de WhatsApp — ${nombresConChatbot(universo)} ya lo ${traeOTraen(universo)} incluido; acá va aparte, Bs ${bs(CHATBOT_MENSUAL)}/mes`];
+}
+
+function lineaDeCoadministradores(plan: Plan): string[] {
+  if (plan.coadministradores) return [];
+  // Si ningún plan lo trajera, esto no sería un escalón sino cómo funciona el producto, y
+  // anunciarlo como carencia sería mentir. La condición se lee del catálogo, no de una fecha.
+  if (!primerPlanCon("coadministradores", ESCALERA)) return [];
+  return ["Un solo administrador: el resto del equipo entra con acceso limitado"];
+}
+
+/** Lo mínimo que hace falta para contestar «¿este plan trae el chatbot adentro?». */
+type PlanConChatbot = { readonly nombre: string; readonly chatbotIncluido: boolean };
+
+/**
+ * Los planes que traen el chatbot pagado adentro, nombrados como los lee el cliente.
+ *
+ * Existe para que ninguna pantalla tipee "Full" a mano al contestar si el chatbot está incluido:
+ * ése es el dato que se mueve (`whatsappIncluded` en el producto) y el que, tipeado, deja la
+ * respuesta vieja cobrándole el add-on a quien ya lo tiene. Devuelve la frase armada porque el día
+ * que sean dos planes hay que decir "Full y Grupo", no "Full".
+ *
+ * 🔴 El universo es `planesPublicados()` —la escalera MAS Grupo / Empresarial— y no `PLANES`.
+ * Medido el 2026-09-19 contra onia.com.bo: `enterprise` trae `whatsappIncluded: true` en el
+ * catálogo publicado igual que `clinic`, y el sitio lo publica CON SU PRECIO (Bs 2.900/mes, una
+ * sección entera en `/precios`, una línea en la home, y el recomendador de `/v1/empezar` se lo
+ * propone a todo equipo de 15+). Con el universo puesto en `PLANES` esta función contestaba
+ * "Completo" a secas, así que las cuatro superficies que la interpolan remataban con «en los
+ * demás planes va aparte, Bs 390/mes» — y Grupo es uno de "los demás". Al que le vendemos el
+ * plan más caro le cobrábamos otra vez lo que ya paga adentro, también en el JSON-LD de la home.
+ * El dato existía desde antes (`GRUPO.chatbotIncluido`): lo que faltaba era que esta función lo
+ * leyera.
+ */
+export function nombresConChatbot(planes: readonly PlanConChatbot[] = planesPublicados()): string {
+  const nombres = planes.filter((p) => p.chatbotIncluido).map((p) => p.nombre);
+  if (nombres.length === 0) return "Ningún plan";
+  if (nombres.length === 1) return nombres[0];
+  return `${nombres.slice(0, -1).join(", ")} y ${nombres[nombres.length - 1]}`;
+}
+
+/**
+ * «trae» o «traen», según cuántos planes nombre `nombresConChatbot()`.
+ *
+ * Va aparte y no adentro de la frase porque cada superficie la redacta distinto ("X ya trae el
+ * chatbot", "Viene incluido en X"), pero las dos leen LA MISMA lista: un sujeto plural con el
+ * verbo en singular no es sólo mala gramática — deja ambiguo si el segundo plan también lo trae,
+ * que es justo el dato que se está contestando.
+ */
+export function traeOTraen(planes: readonly PlanConChatbot[] = planesPublicados()): string {
+  return planes.filter((p) => p.chatbotIncluido).length > 1 ? "traen" : "trae";
+}
+
+/**
+ * Todo plan que este sitio PUBLICA con su precio: la escalera comprable y Grupo / Empresarial.
+ *
+ * `PLANES` es "lo que se compra en línea", que es más chico: Grupo se cotiza por WhatsApp, pero se
+ * publica con monto y es tan plan como los otros para cualquier pregunta sobre qué trae adentro.
+ * Toda respuesta del tipo "en los demás planes…" tiene que mirar ESTE universo, o le habla a un
+ * plan que vendemos como si no existiera.
+ *
+ * Es una función y no una constante porque `GRUPO` se declara más abajo: así el orden de
+ * inicialización del módulo no decide el resultado.
+ */
+export function planesPublicados(): readonly PlanConChatbot[] {
+  return [...PLANES, GRUPO];
+}
+
+/** Numerales en palabras, para escribir la cantidad sin tipear el dígito. */
+const NUMERAL = ["cero", "un", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho"] as const;
+
+/**
+ * Cuántos planes se compran en línea, en palabras: "los ${cuantosPlanes()} planes".
+ *
+ * Existe porque el sitio afirmaba "en los TRES planes no cobramos implementación" en cuatro
+ * lugares —la FAQ de la home, la letra chica de `/precios` y dos pantallas de `/v1`— mientras la
+ * escalera C (2026-09-12) sumaba el plan Crece y dejaba CUATRO tarjetas comprables a la vista.
+ * La promesa es de plata y la contaba mal: el lead parado en el Crece de Bs 550 leía una
+ * enumeración que no lo incluía, justo debajo de las cuatro tarjetas.
+ *
+ * La cantidad de planes es un dato DERIVADO del catálogo, igual que los montos: ninguna frase la
+ * tipea, la lee. Y se devuelve en palabras porque es lo que la prosa necesita — con el dígito
+ * suelto el gate que lo vigila no podría distinguir la cura de la recaída.
+ */
+export function cuantosPlanes(planes: readonly Plan[] = PLANES): string {
+  return NUMERAL[planes.length] ?? String(planes.length);
+}
+
+
+/**
+ * Grupo / Empresarial (`enterprise` en el codigo). Existe y tiene precio, pero
+ * queda FUERA del checkout (CHECKOUT_PLANS = basic, professional, clinic, crece): se
+ * cotiza. No se publica como una tarjeta comprable más.
+ */
+export const GRUPO = {
+  nombre: "Grupo / Empresarial",
+  // `enterprise` también trae el chatbot pagado adentro (`whatsappIncluded` en el catálogo del
+  // producto). Se declara acá porque el recomendador puede proponer Grupo, y sin el dato la
+  // pantalla le vendía el add-on aparte a quien ya lo tiene.
+  chatbotIncluido: true,
+  mensual: 2900,
+  anual: 29000,
+  implementacionDesde: 3500,
+  copy:
+    `Para varias razones sociales o un grupo de negocios: mismos límites del ${NOMBRE_DE_PLAN.full} más una implementación acompañada. No se compra en línea — se cotiza con tu caso.`,
+} as const;
+
 /**
  * La escalera publicada. El `sinEsto` del Básico se arma ACA y no adentro del literal por una
  * razón concreta: nombra el plan desde el que esas capacidades sí vienen, y ese nombre se deriva
@@ -559,80 +701,10 @@ export const PLANES: readonly Plan[] = ESCALERA.map((plan) => ({
      * tengan y el "desde X" se mueve solo. Si ningún plan lo trajera, no hay nada que decir y la
      * línea no se escribe (en vez de prometer "desde null").
      */
+    ...lineaDelChatbot(plan),
     ...lineaDeCoadministradores(plan),
   ],
 }));
-
-/**
- * Lo que este plan NO trae en administradores, o nada si lo trae (o si no lo trae ninguno).
- *
- * ⚠️ La línea NO nombra el plan desde el que sí viene, y no es por prudencia: el `sinEsto` de un
- * plan lo reusa el DOWNSELL de `/v1/empezar` ("si te queda grande, el escalón de abajo es…"), y
- * ahí nombrar un tercer plan es ofrecerlo. La primera versión decía "más de uno viene desde
- * Completo" y puso rojo a `escalon-que-no-se-tipea.test.ts` en el caso Crece→Básico: al que
- * bajaba al plan de Bs 320 se le nombraba el de Bs 1.290. El tier igual queda dicho, y en la
- * forma más derivada que hay: la tarjeta que lo trae lo dice en su `incluye`, las que no, acá.
- */
-function lineaDeCoadministradores(plan: Plan): string[] {
-  if (plan.coadministradores) return [];
-  // Si ningún plan lo trajera, esto no sería un escalón sino cómo funciona el producto, y
-  // anunciarlo como carencia sería mentir. La condición se lee del catálogo, no de una fecha.
-  if (!primerPlanCon("coadministradores", ESCALERA)) return [];
-  return ["Un solo administrador: el resto del equipo entra con acceso limitado"];
-}
-
-/**
- * Los planes que traen el chatbot pagado adentro, nombrados como los lee el cliente.
- *
- * Existe para que ninguna pantalla tipee "Full" a mano al contestar si el chatbot está incluido:
- * ése es el dato que se mueve (`whatsappIncluded` en el producto) y el que, tipeado, deja la
- * respuesta vieja cobrándole el add-on a quien ya lo tiene. Devuelve la frase armada porque el día
- * que sean dos planes hay que decir "Full y Grupo", no "Full".
- */
-export function nombresConChatbot(planes: readonly Plan[] = PLANES): string {
-  const nombres = planes.filter((p) => p.chatbotIncluido).map((p) => p.nombre);
-  if (nombres.length === 0) return "Ningún plan";
-  if (nombres.length === 1) return nombres[0];
-  return `${nombres.slice(0, -1).join(", ")} y ${nombres[nombres.length - 1]}`;
-}
-
-/** Numerales en palabras, para escribir la cantidad sin tipear el dígito. */
-const NUMERAL = ["cero", "un", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho"] as const;
-
-/**
- * Cuántos planes se compran en línea, en palabras: "los ${cuantosPlanes()} planes".
- *
- * Existe porque el sitio afirmaba "en los TRES planes no cobramos implementación" en cuatro
- * lugares —la FAQ de la home, la letra chica de `/precios` y dos pantallas de `/v1`— mientras la
- * escalera C (2026-09-12) sumaba el plan Crece y dejaba CUATRO tarjetas comprables a la vista.
- * La promesa es de plata y la contaba mal: el lead parado en el Crece de Bs 550 leía una
- * enumeración que no lo incluía, justo debajo de las cuatro tarjetas.
- *
- * La cantidad de planes es un dato DERIVADO del catálogo, igual que los montos: ninguna frase la
- * tipea, la lee. Y se devuelve en palabras porque es lo que la prosa necesita — con el dígito
- * suelto el gate que lo vigila no podría distinguir la cura de la recaída.
- */
-export function cuantosPlanes(planes: readonly Plan[] = PLANES): string {
-  return NUMERAL[planes.length] ?? String(planes.length);
-}
-
-/**
- * Grupo / Empresarial (`enterprise` en el codigo). Existe y tiene precio, pero
- * queda FUERA del checkout (CHECKOUT_PLANS = basic, professional, clinic, crece): se
- * cotiza. No se publica como una tarjeta comprable más.
- */
-export const GRUPO = {
-  nombre: "Grupo / Empresarial",
-  // `enterprise` también trae el chatbot pagado adentro (`whatsappIncluded` en el catálogo del
-  // producto). Se declara acá porque el recomendador puede proponer Grupo, y sin el dato la
-  // pantalla le vendía el add-on aparte a quien ya lo tiene.
-  chatbotIncluido: true,
-  mensual: 2900,
-  anual: 29000,
-  implementacionDesde: 3500,
-  copy:
-    `Para varias razones sociales o un grupo de negocios: mismos límites del ${NOMBRE_DE_PLAN.full} más una implementación acompañada. No se compra en línea — se cotiza con tu caso.`,
-} as const;
 
 /** Prueba gratis: lib/subscription/plan-state.ts (TRIAL_DAYS / TRIAL_PLAN). */
 const PRUEBA_DIAS = 14;
