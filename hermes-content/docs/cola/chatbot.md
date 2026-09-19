@@ -479,6 +479,60 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **CERRADO el 2026-09-19 12:20-13:05 La Paz (ARREGLADO EN PRODUCCIÓN, no espera deploy) —
+      el bot le prometía al lead que la prueba trae TODO, y la prueba no trae el chatbot de
+      WhatsApp, que es justo lo que ese bot le está vendiendo.**
+
+      **El defecto, medido contra producción.** Los inboxes **4** (widget de `onia.com.bo`) y
+      **5** (WhatsApp) —los dos de leads REALES— servían esta FAQ, publicada desde el panel el
+      18-sep 21:51 y disparada por los tags `probar`/`pagar`/`semanas`, que son la pregunta más
+      común del embudo:
+
+      > «Sí: tenés dos semanas de prueba con **todo el sistema**, sin tarjeta.»
+
+      Y no es cierto: `TRIAL_PLAN` es `professional` (`onia-platform
+      lib/subscription/plan-state.ts:29`), que en `PLAN_LIMITS` declara `whatsappIncluded: false`
+      y `multiAdminIncluded: false`. El comentario del propio producto ya lo decía en otras
+      palabras — *«se entrega el nivel intermedio completo»*, intermedio, no todo.
+
+      **Por qué ningún gate lo veía, que es la parte que se repite.** La frase **no está en el
+      repo**: `grep -oiE "todo el sistema|todas las funciones|todos los módulos|sistema completo"`
+      sobre `knowledge.onia.json` y `config.mjs` da **cero**. Vivía sólo en la **capa editable**
+      —una fila de `public.chatbot_knowledge` que el panel escribe y que gana sobre el archivo por
+      id (`mergePanelKnowledge`)—, así que todo gate de repo firma verde para siempre. Y tampoco
+      la ven las otras dos familias: **no mueve una cifra** (los cruces de precio firman verde) y
+      **no tipea un nombre de plan junto a una capacidad** (los gates de atribución, también).
+      El hermano de esta clase ya estaba cerrado **en el sitio** por `web-venta`
+      (`(sitio)/prueba-vs-plan.test.ts`, casos 6 y 7) y su lección terminaba con *«vale para el
+      bot, las propuestas y el panel»*. Nadie la había cerrado en el bot.
+
+      **El arreglo, en las dos mitades.**
+      1. **El texto vivo**, con backup (`/root/backup-chatbot-knowledge-20260919.json`, 1.243 B):
+         `UPDATE 1` acotado por id de FAQ **y** por el texto viejo —si otro ya lo había cambiado,
+         no pisa nada—, `version` 4 → 5. Ahora dice «dos semanas de prueba con **el plan
+         Profesional completo**, sin tarjeta»: se **nombra el plan**, que es la forma honesta.
+      2. **El gate que lo hace visible**, `hermes-content/deploy/vps-ops/bot/prueba-vs-plan-vivo.mjs`
+         (`npm run prueba:vivo`; self-check cableado a la cadena como `test:prueba-instrumento`,
+         al lado de su hermano `test:puerta-alta`). Lee los documentos **SERVIDOS** importando
+         `documentosServidos()` de `puerta-del-alta.mjs` —no lo copia— y deriva del catálogo
+         publicado qué `*Included` **no** trae el trial. **Se apaga solo** el día que el trial los
+         traiga todos: prohibir el texto viejo, en cambio, se apaga el día que ese texto sea la
+         respuesta correcta.
+
+      **Verificado mirando, no deducido.** Antes: `exit 1` nombrando las **tres** superficies
+      (fila panel, inbox 4, inbox 5). Después: `NINGUN TEXTO SERVIDO PROMETE QUE LA PRUEBA TRAE
+      TODO — 4 documento(s) mirados`, `exit 0`.
+
+      **Lo que el instrumento me enseñó de sí mismo (7 mutaciones con el ancla verificada).**
+      Tres huecos que la lectura no mostraba: (a) el caso de la forma honesta **no probaba la
+      absolución** —«Profesional completo» no matchea ninguna forma prohibida, así que quitarla
+      pasaba verde—; (b) **la ventana-oración no estaba probada**: moverla al documento entero
+      pasaba verde; (c) el guardia de `documentos` vacío estaba **tapado por su hermano** de
+      abajo (`mirados.length === 0`), y el único caso que sólo él ve es el **no-array**. Además,
+      dos mutaciones se leían como `exit 1` pero eran un `TypeError`: un caso que indexa `[0]`
+      sobre lista vacía **mata al reportero**, así que la mutación no se distinguía de un gate
+      roto. Los cuatro, corregidos y re-validados.
+
 - [x] 🔴 **CERRADO el 2026-09-19 10:43-11:25 La Paz (commiteado, NO desplegado) — el bot le
       cobraba Bs 390/mes al lead del plan más caro por algo que su plan ya trae, y el gate que
       vigila exactamente eso lo firmaba verde diciendo «no miente».**
