@@ -77,6 +77,52 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Ahora — plan de features (revisado 2026-08-30, con Gate 1 corrido)
 
+- [x] 🟠 **La portada le prometía al lead que ninguna capacidad exige subir de plan, y DOS lo
+      exigen. Medido y CERRADO el 2026-09-18 20:5x La Paz por `web-venta` (`00ae5f63`).**
+      **El defecto, MIRADO renderizado** (captura leída, no un `grep`): la sección de add-ons de
+      `onia.com.bo/` se rotula *«Sobre el plan encendés lo que te falta»* y debajo afirmaba
+      **«No hay que saltar de plan para desbloquear una sola»**. Es falso desde la escalera C: de
+      las cuatro capacidades de `CAPACIDADES_INCLUIDAS` sólo DOS se compran sueltas —chatbot
+      (Bs 390) y reservas (Bs 150 en Básico)—; los **agentes** exigen saltar al Crece (Bs 550) y
+      el **segundo administrador**, al Completo (Bs 1.290), y no hay add-on de ninguno de los dos
+      (`onia-platform/lib/plan-catalogo.ts`: `agentsIncluded`, `multiAdminIncluded`). La escalera
+      de la MISMA pantalla, tres secciones más arriba, lo dice con todas las letras («Todo lo del
+      Básico + Agente Recall…», «más de un administrador»): la pantalla se contradecía sola, y el
+      lead que necesitaba una de esas dos se iba al plan de entrada creyendo que después la
+      prendía aparte.
+      **Por qué ningún gate podía verlo** — es la tercera forma de la familia «alcance total» y
+      la más escurridiza: los cruces de precio validan MONTOS y acá no hay ninguno;
+      `src/lib/capacidad-incluida.test.ts` prohíbe TIPEAR un plan junto a la capacidad y esta
+      frase no nombra ni un plan ni una capacidad; `(sitio)/prueba-vs-plan.test.ts` cierra el
+      alcance dicho sobre el TODO («el sistema completo») y sobre las PARTES («todos los
+      módulos»). Ésta se dice sobre el **mecanismo**, en abstracto.
+      **Cómo quedó:** el texto lo DERIVA `sinSubirDePlan()`
+      (`web-factory/apps/onia-platform/src/lib/pricing.ts`) del catálogo, y lo que se prohíbe es
+      la FORMA, no el literal viejo — prohibir «saltar de plan» se apagaría solo el día que la
+      respuesta correcta vuelva a ser ésa, y el caso 5 del gate exige que el universal reaparezca
+      solo cuando todo se compre suelto. `ADDON_DE_LA_CAPACIDAD` es `Record` completo (una
+      capacidad nueva no compila hasta que alguien conteste de qué lado está) y **no se cree
+      solo**: el gate cruza cada nombre declarado contra `ADDONS`, la carta que el lead ve, así
+      que marcar una capacidad como «suelta» sin add-on publicado es rojo. De paso viajó a
+      `/precios`, que decía lo mismo **acotado** («Ninguno te obliga a…») y por eso era cierto —
+      y tipeado igual, que es como las dos se separan.
+      **Gate:** `web-factory/apps/onia-platform/src/app/(sitio)/desbloqueo-que-no-se-tipea.test.ts`
+      (sujetos caminados del disco: una pantalla nueva nace cubierta).
+      **Verificado:** `npm run prebuild` verde (tsc + 1.367 tests), `npm run build` 0,
+      `npm run precios:fuente` VERDE (43 cifras cruzadas), y la pieza servida desde el build
+      local ABIERTA Y MIRADA con `reducedMotion` — dice «Cada cosa se prende aparte y se paga
+      aparte. Lo de acá abajo se suma sobre el plan que ya tenés.»
+      **Validado por mutación 6/6**, restaurando con `cp` (nunca `git checkout`): reintroducir el
+      texto tipeado en la portada, absolver una capacidad con un add-on inexistente, clavar la
+      cláusula en el universal, vaciar el cálculo, borrarle a la dueña la rama universal, y dejar
+      al caminador sin llegar a `(sitio)`.
+      **Falta publicar:** vive en el pedido de landing `t_c2fbda1e`, que ya espera el ok de
+      Sergio Urcullo — comentado ahí una sola vez, para que el integrador rehaga el cuerpo con
+      los tres shas (el cuerpo de un pedido no se corrige comentando).
+      **Reproducción en 30 segundos:**
+
+          curl -sL https://onia.com.bo/ | grep -oE "[^<>]{0,60}saltar de plan[^<>]{0,60}"
+
 - [x] 🟠 **El runtime vivo de la landing perdió su `.commit`, así que «qué corre `onia.com.bo`»
       volvió a ser a mano — que es exactamente lo que su propio publicador dice haber curado el
       2026-09-03. Medido el 2026-09-18 18:3x La Paz por `onia-cola`. CERRADO el 2026-09-18 20:0x

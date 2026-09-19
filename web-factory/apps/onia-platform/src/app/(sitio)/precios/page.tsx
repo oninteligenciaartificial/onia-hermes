@@ -9,6 +9,7 @@ import {
   CONDICIONES,
   NOTA_FISCAL,
   bs,
+  sinSubirDePlan,
 } from "@/lib/pricing";
 import {
   CHATBOT_PLAN,
@@ -249,10 +250,10 @@ export default function Precios() {
           <h2 id="addons" className={s.h2}>
             Lo que le sumás al plan, con su precio.
           </h2>
-          <p className={s.lead}>
-            Se prende y se paga aparte. Ninguno te obliga a saltar de plan para
-            desbloquear una sola cosa.
-          </p>
+          {/* Hermana de la portada: acá el sujeto SÍ estaba acotado («Ninguno…»), así que la
+              frase era cierta — y tipeada igual, que es como las dos se separan. Las dos leen
+              ahora la misma cláusula derivada del catálogo. */}
+          <p className={s.lead}>Se prende y se paga aparte. {sinSubirDePlan()}</p>
         </Reveal>
 
         <Reveal delay={0.06}>
