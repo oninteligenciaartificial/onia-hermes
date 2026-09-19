@@ -64,6 +64,10 @@ const SALTAR_EQUIPO = process.env.RECORRIDO_SALTAR_EQUIPO === '1';
 // cierra ese hueco reusando el mismo patrón que confirmarComoElCliente() — leer el token de la
 // base con un SELECT acotado a zz-qa- y abrir el enlace real, nunca escribir la columna a mano.
 const PROBAR_RECOVERY = process.env.RECORRIDO_PROBAR_RECOVERY === '1';
+// Escalón 3: invitar y sacar a un coadministrador desde /team (ver `probarCoadministrador`).
+// Sube el plan de la org zz-qa- a `clinic` por SQL para poder ejercer una capacidad que el
+// onboarding real no deja elegir — opt-in, corre DESPUÉS del recorrido de 9 pasos.
+const PROBAR_COADMIN = process.env.RECORRIDO_PROBAR_COADMIN === '1';
 
 /**
  * La ruta con la que se REPORTA una captura en `resumen.json`, relativa a la raíz del repo.
@@ -557,6 +561,148 @@ async function probarRecuperacionDeContrasena(navegador, email, passwordOriginal
       // seguir con los pasos 5-9.
       nuevaPass,
       contrasenaCambiada: true,
+    };
+  } finally {
+    await contexto.close().catch(() => {});
+  }
+}
+
+/**
+ * Escalón 3, nunca probado por este carril: invitar y sacar a un coadministrador desde
+ * `/team`. DG-043 (2026-09-17) empezó a cobrar el rol ADMIN por plan
+ * (`multiAdminIncluido`, `lib/subscription/coadministradores.ts`) — sin un plan que lo
+ * traiga, el modal ni ofrece esa opción. El onboarding real no deja elegir un plan que
+ * gatea una capacidad (`TRIAL_PLAN='professional'`, que no la trae), así que primero se
+ * sube el plan de la organización `zz-qa-` a `clinic` por SQL directo — no es fingir el
+ * paso que se mide, es poner al sujeto en la posición donde SÍ debería poder medirse — y
+ * recién ahí se invita, se confirma en pantalla, y se vuelve a sacar: el camino de vuelta
+ * que hasta el 2026-09-17 no existía para NINGÚN rol (`t_...` quitar-administrador).
+ *
+ * Corre en un CONTEXTO APARTE, igual que `probarRecuperacionDeContrasena`: si algo rompe
+ * acá no se lleva puesto el resto del recorrido, que ya terminó cuando esto corre.
+ */
+async function probarCoadministrador(navegador, email, password, negocio) {
+  if (!negocio.startsWith('zz-qa-') || !negocio.endsWith('-negocio')) {
+    return { ok: false, detalle: 'sólo se prueba con una organización zz-qa-...-negocio' };
+  }
+  const sello = negocio.replace(/^zz-qa-/, '').replace(/-negocio$/, '');
+  // El correo lleva la forma `zz-qa-<fecha>-<hora>-coadmin`, la MISMA que `limpiarProduccion()`
+  // reconoce como propia (`MIO`): si el sufijo fuera al revés (`zz-qa-coadmin-<sello>`) el
+  // `auth.users` de la invitación sobreviviría a la limpieza sin que nada avisara.
+  const nombreCoadmin = `zz-qa-${sello}-coadmin`;
+  const emailCoadmin = `zz-qa-${sello}-coadmin@onia.com.bo`;
+
+  let orgId = '';
+  try {
+    orgId = execFileSync('docker', [
+      'exec', '-i', 'supabase-db', 'psql', '-U', 'postgres', '-d', 'postgres', '-tAc',
+      `SELECT id FROM organizations WHERE name = '${negocio}' AND name LIKE 'zz-qa-%'`,
+    ], { encoding: 'utf8', timeout: 20_000 }).trim();
+  } catch (e) {
+    return { ok: false, detalle: `no se pudo leer el id de la organización: ${e.message}` };
+  }
+  if (!orgId) return { ok: false, detalle: 'no se encontró la organización zz-qa- por nombre' };
+
+  try {
+    execFileSync('docker', [
+      'exec', '-i', 'supabase-db', 'psql', '-U', 'postgres', '-d', 'postgres', '-v', 'ON_ERROR_STOP=1', '-tAc',
+      `UPDATE organizations SET plan = 'clinic' WHERE id = '${orgId}' AND name LIKE 'zz-qa-%'`,
+    ], { encoding: 'utf8', timeout: 20_000 });
+  } catch (e) {
+    return { ok: false, detalle: `no se pudo subir el plan a 'clinic' (el que trae multiAdminIncluido): ${e.message}` };
+  }
+
+  const contexto = await navegador.newContext({ viewport: VIEWPORT, locale: 'es-BO' });
+  const page = await contexto.newPage();
+  try {
+    await ir(page, `${APP}/login`);
+    await page.fill('input[type=email], input[name=email]', email).catch(() => {});
+    await page.fill('input[type=password], input[name=password]', password).catch(() => {});
+    await page.click('button[type=submit]').catch(() => {});
+    await page.waitForTimeout(5000);
+    if (/\/login\b/.test(page.url())) {
+      return { ok: false, detalle: `no se pudo volver a entrar para probar /team (quedó en ${page.url()})`, emailCoadmin };
+    }
+
+    await ir(page, `${APP}/team`);
+    await mirar(page, 'extra-coadmin-00-team.png');
+
+    const abrir = page.getByRole('button', { name: /invitar/i }).first();
+    if (!(await abrir.count())) return { ok: false, detalle: 'no se encontró el botón "Invitar" en /team', emailCoadmin };
+    await abrir.click().catch(() => {});
+    await page.waitForTimeout(500);
+
+    const radioAdmin = page.locator('input[type=radio][name=role][value=ADMIN]');
+    if (!(await radioAdmin.count())) {
+      await mirar(page, 'extra-coadmin-01-sin-admin.png');
+      return {
+        ok: false,
+        detalle: 'con el plan "clinic" (multiAdminIncluido) el modal de /team NO ofrece el rol Administrador — la puerta de ENTRADA no reconoce la capacidad recién habilitada',
+        emailCoadmin,
+      };
+    }
+    await radioAdmin.check().catch(() => {});
+    await page.fill('input[type=text][required]', nombreCoadmin).catch(() => {});
+    await page.fill('input[type=email][required]', emailCoadmin).catch(() => {});
+    await mirar(page, 'extra-coadmin-02-formulario.png');
+    await page.click('button[type=submit]').catch(() => {});
+    await page.waitForTimeout(3000);
+    await mirar(page, 'extra-coadmin-03-invitado.png');
+
+    const cuerpoTrasEnviar = (await page.locator('body').innerText().catch(() => '')).replace(/\s+/g, ' ');
+    if (!/invitaci[oó]n enviada/i.test(cuerpoTrasEnviar)) {
+      return { ok: false, detalle: `la invitación no se confirmó en pantalla: "${cuerpoTrasEnviar.slice(0, 200)}"`, emailCoadmin };
+    }
+
+    await page.waitForTimeout(3000); // el modal se cierra solo con router.refresh(), tras 2.5s
+    await ir(page, `${APP}/team`);
+    await mirar(page, 'extra-coadmin-04-team-con-coadmin.png');
+
+    const fila = page.getByText(nombreCoadmin, { exact: false }).first();
+    if (!(await fila.count())) {
+      return { ok: false, detalle: `la invitación se confirmó pero "${nombreCoadmin}" no aparece en la lista de /team`, emailCoadmin };
+    }
+    let idCoadmin = '';
+    const enlace = fila.locator('xpath=ancestor::a[1]');
+    if (await enlace.count()) {
+      const href = (await enlace.first().getAttribute('href').catch(() => '')) || '';
+      idCoadmin = href.split('/team/')[1] || '';
+    }
+    if (!idCoadmin) {
+      return { ok: false, detalle: `"${nombreCoadmin}" aparece en /team pero no se pudo seguir su enlace a /team/[id]`, emailCoadmin };
+    }
+
+    await ir(page, `${APP}/team/${idCoadmin}`);
+    await mirar(page, 'extra-coadmin-05-ficha.png');
+    const botonEliminar = page.getByRole('button', { name: /eliminar.*del equipo/i }).first();
+    if (!(await botonEliminar.count())) {
+      return {
+        ok: false,
+        detalle: `"${nombreCoadmin}" quedó como ADMIN y su ficha no tiene botón para sacarlo del equipo — el camino de VUELTA de un coadministrador está cerrado`,
+        emailCoadmin,
+        idCoadmin,
+      };
+    }
+    await botonEliminar.click().catch(() => {});
+    await page.waitForTimeout(300);
+    await page.getByRole('button', { name: /s[ií], eliminar/i }).first().click().catch(() => {});
+    await page.waitForTimeout(3000);
+    await mirar(page, 'extra-coadmin-06-eliminado.png');
+
+    const volvioATeam = /\/team$/.test(new URL(page.url()).pathname);
+    const siguePresente = volvioATeam
+      ? await page.getByText(nombreCoadmin, { exact: false }).first().count().then((n) => n > 0)
+      : true;
+
+    return {
+      ok: volvioATeam && !siguePresente,
+      detalle: !volvioATeam
+        ? `tras "Sí, eliminar" no volvió a /team: quedó en ${page.url()}`
+        : siguePresente
+          ? `se apretó "Sí, eliminar" pero "${nombreCoadmin}" sigue en la lista de /team`
+          : `invitado como Administrador (plan "clinic"), confirmado en /team, y sacado del equipo de punta a punta`,
+      emailCoadmin,
+      idCoadmin,
     };
   } finally {
     await contexto.close().catch(() => {});
@@ -2112,6 +2258,12 @@ async function main() {
   // que se deduce.
   const tapados = agujeros.filter((a) => resultados.some((r) => r.estado === 'ok' && r.n > a.n));
 
+  let coadminProbado = null;
+  if (PROBAR_COADMIN && ESCRIBIR && ctx.conSesion) {
+    const passwordVigente = ctx.recoveryProbado?.contrasenaCambiada ? ctx.recoveryProbado.nuevaPass : QA.password;
+    coadminProbado = await probarCoadministrador(navegador, QA.email, passwordVigente, QA.negocio);
+  }
+
   await navegador.close();
 
   // Lo creado se borra en la MISMA corrida, y se cuenta lo que queda: el 0 es parte del informe.
@@ -2127,6 +2279,7 @@ async function main() {
     escribio: ESCRIBIR,
     saltoEquipo: SALTAR_EQUIPO,
     recoveryProbado: ctx.recoveryProbado || null,
+    coadminProbado,
     borrado,
     zzQaRestantes: borrado ? (borrado.restantes ?? null) : 0,
     // Filas con el prefijo `zz-qa-` que NO son de este carril. Van al resumen para que el
