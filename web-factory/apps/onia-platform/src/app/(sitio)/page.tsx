@@ -159,8 +159,14 @@ const PCT_SALARIO = pctDelSalarioMinimo();
  *   · mañana → panel "dental" de ui.tsx (agenda del día: hora y tratamiento)
  *   · tarde  → panel "comercio" de ui.tsx (la caja cortada por método de pago)
  *              + rubros/page.tsx:39 (fiados)
- *   · noche  → rubros/page.tsx:41 (paquetes y sesiones) + la sección 5 de
- *              este mismo archivo (el borrador que espera tu aprobación)
+ *   · noche  → el Recall del producto (`lib/onia-core/modules/agents-por-rubro.ts`:
+ *              corre en estética y dispara por `recallAfterDays`) + la sección 5
+ *              de este mismo archivo (el borrador que espera tu aprobación)
+ *
+ * ⚠️ La cita de cada línea va al PRODUCTO, nunca a otra pantalla de este sitio.
+ * Acá la de la noche citaba `rubros/page.tsx` y `rubros/page.tsx` se citaba a sí
+ * mismo: el sitio comparándose consigo mismo. Así sobrevivió «el paquete que
+ * quedó por la mitad», un saldo que el producto no lleva (2026-09-19).
  */
 const DIA = [
   {
@@ -181,7 +187,7 @@ const DIA = [
     id: "estetica",
     momento: "De noche",
     texto:
-      "Bajás la persiana y el paquete que quedó por la mitad no se pierde: a la mañana te espera el borrador de a quién llamar, para que lo aprobés.",
+      "Bajás la persiana y la clienta que dejó el tratamiento a medias no se pierde: a la mañana te espera el borrador de a quién llamar, para que lo aprobés.",
     alt: "Dueña de un centro de estética junto a la camilla vacía con papel nuevo puesto, con el celular en la mano.",
   },
 ] as const;
