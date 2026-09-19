@@ -318,6 +318,56 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [ ] 🔴 **El criterio «¿esta conversación somos NOSOTROS?» no mira el INBOX, así que el banco de
+      pruebas entero pasa como prospecto** (`hermes-content/deploy/vps-ops/bot/es-nuestra.mjs`;
+      medido contra producción el 2026-09-19 04:45).
+
+      **El defecto.** `esConversacionNuestra(state)` contesta con una FIRMA DEL CONTACTO: teléfono
+      en `NUESTROS_TELEFONOS`, o `displayName` que matchee `/\b(prueba|qa|test)\b/i`. Pero a las
+      conversaciones del inbox 7 (`ZZ QA Clinica Chatbot`, el banco de pruebas) Chatwoot les pone
+      nombre anónimo, así que **5 de 6 dan `false`** y los cuatro barridos del embudo las tratan
+      como prospectos. Es la misma clase que ya está en la memoria de la casa: *una firma sólo
+      reconoce lo que marcamos al sembrar*, y acá lo que hay que reconocer es **tenencia**, no
+      nombre — el banco de pruebas es un inbox entero.
+
+      | fila | inbox | `displayName` | criterio dice |
+      |---|---|---|---|
+      | `chatwoot:52` | 7 (ZZ QA) | `purple-bush-931` | **LEAD** ❌ |
+      | `chatwoot:54` | 7 (ZZ QA) | `summer-shadow-163` | **LEAD** ❌ |
+      | `chatwoot:56` | 7 (ZZ QA) | `icy-sunset-817` | **LEAD** ❌ |
+      | `chatwoot:42` | 7 (ZZ QA) | `Cliente Insistencia Dos` | **LEAD** ❌ |
+      | `chatwoot:57` | 7 (ZZ QA) | `zz-qa-deploy-…` | nuestra ✅ (por el nombre, de casualidad) |
+
+      **Daño hoy: CERO, medido.** `bash /opt/onia/bot/followup-run.sh --dry-run --json` da
+      `"scanned":0,"send":[]` — `FILTROS_FOLLOWUP` exige `bot_stage in (esperando_calificacion,
+      esperando_horario)` y las seis están en `nuevo`. **Latente**, no activo: el día que avancen
+      de etapa entran, y el `UPDATE 6` de arriba acaba de devolverles el cupo justamente para eso.
+
+      **Lo que NO hay que hacer, y es la trampa:** una lista de inboxes propios escrita a mano.
+      Falla abierto con el inbox 8 de QA que se cree mañana, y la memoria ya lo tiene medido en la
+      dirección contraria (*el dueño prueba desde el inbox 5, el de los leads REALES*). La marca
+      tiene que **derivarse**.
+
+      **La cura, y por qué va en `persistence.mjs`:** los cuatro barridos llaman a
+      `esConversacionNuestra(state)` y `state.inboxId` ya viaja (lo hidrata `stateFromRow` desde
+      `raw.inboxId`; `insistencia-run.mjs:122` ya lo usa). Y el punto único por el que pasan los
+      cuatro son los `sweep*Candidates` de `persistence.mjs` — ahí se carga UNA vez por corrida el
+      conjunto de inboxes cuya **org dueña es una cuenta de prueba** (`organizations.slug like
+      'zz-qa-%'` vía `clinic_settings`, el mismo criterio con dueño que
+      `onia-platform/lib/platform/cuentas-que-no-son-clientes.ts`), y `esConversacionNuestra` lo
+      consulta como causa **aditiva**. Así no cambia la firma de ninguna función ni hace falta
+      tocar los cuatro `*-run.mjs`.
+
+      ⚠️ **El sesgo es asimétrico y el default tiene que respetarlo** (lo dice el propio
+      `es-nuestra.mjs`): si el conjunto no se pudo cargar queda VACÍO y se comporta como hoy —
+      confundir a un prospecto real con una sonda lo deja sin seguimiento, que es el fallo exacto
+      que este carril existe para evitar. Nunca falla hacia «es nuestra».
+
+      **LISTO =** el `node -e` de la corrección de arriba devuelve `true` para las cuatro filas del
+      inbox 7 con el conjunto cargado, `false` sin él; gate con el universo derivado del disco (los
+      `*-run.mjs` que llaman a un `sweep*`) validado por mutación; y el dry-run de los cuatro
+      barridos sigue dando `send: []` sin ninguna fila real salteada.
+
 - [x] 🔴 **CERRADO el 2026-09-19 — un parpadeo de la base DESARMABA el traspaso humano y el
       opt-out: el turno escribía encima un estado que nunca pudo leer**
       (`hermes-content/deploy/vps-ops/bot/run-turn.mjs`, `guardarEstado`; 1.232/1.232 verdes).
@@ -358,12 +408,45 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       aparte (`DESPLEGAR: bot`).
 
 - [x] **EJECUTADO el 2026-09-19 03:57 UTC — `UPDATE 6`, las seis conversaciones recuperaron su
-      cupo de rescate.** Devueltas: `chatwoot:42,43,52,54,56,57` (las cuatro reales son
-      `purple-bush-931`, `summer-shadow-163`, `icy-sunset-817` y `chatwoot:57`; las otras dos son
-      sondas nuestras). Corrido con la MISMA condición derivada de abajo —no una lista a mano— y
-      con `returning`. Verificado después: la consulta de control da **0** filas con cupo quemado
-      sin `M3`, y las cuatro reales quedaron en `bot_stage = nuevo · followup_step = 0`, o sea que
-      el día que avancen a `esperando_horario` el barrido SÍ las va a ver.
+      cupo de rescate.** Devueltas: `chatwoot:42,43,52,54,56,57`. Corrido con la MISMA condición
+      derivada de abajo —no una lista a mano— y con `returning`. Verificado después: la consulta
+      de control da **0** filas con cupo quemado sin `M3`, y quedaron en `bot_stage = nuevo ·
+      followup_step = 0`.
+
+      ⚠️ **CORREGIDO el 2026-09-19 04:45 — acá decía que «las cuatro reales son `purple-bush-931`,
+      `summer-shadow-163`, `icy-sunset-817` y `chatwoot:57`», y es FALSO: las SEIS son del inbox 7,
+      el banco de pruebas.** Medido cruzando contra Chatwoot, que es el lado que sabe de quién es
+      cada conversación:
+
+      ```sql
+      select c.id, c.inbox_id, i.name, ct.name from conversations c
+        join inboxes i on i.id = c.inbox_id
+        left join contacts ct on ct.id = c.contact_id where c.id in (42,43,52,54,56,57);
+      -- las 6 → inbox 7 | ZZ QA Clinica Chatbot. `chatwoot:57` se llama `zz-qa-deploy-2026-09-04-1438`.
+      ```
+
+      El único desconocido real vivo es **`chatwoot:58`** (inbox 5, Onia WhatsApp, `+59175755019`,
+      entró el 17-sep 22:50 por el botón de la web) — y ése ya tiene su `followup_step = 1`, o sea
+      recibió su rescate y NO estaba entre las seis.
+
+      **Por qué me equivoqué, que es lo que importa:** `esConversacionNuestra` (`es-nuestra.mjs`)
+      decide con una FIRMA DEL CONTACTO —teléfono propio, o nombre con `prueba|qa|test`— y a las
+      conversaciones del banco de pruebas Chatwoot les pone nombre anónimo (`purple-bush-931`). O
+      sea que **el banco de pruebas es una propiedad del INBOX y el criterio no mira el inbox**.
+      Reproducible en 5 segundos, sin base:
+
+      ```bash
+      cd hermes-content/deploy/vps-ops/bot && node --input-type=module -e "
+      import { esConversacionNuestra } from './es-nuestra.mjs';
+      console.log(esConversacionNuestra({displayName:'purple-bush-931', publicContact:null}));  // false — y es del inbox 7
+      "
+      ```
+
+      **El daño de HOY es CERO y está medido, no supuesto** — no lo anuncio como activo:
+      `bash /opt/onia/bot/followup-run.sh --dry-run --json` contra producción da `"scanned":0,
+      "send":[]`, porque `FILTROS_FOLLOWUP` exige `bot_stage in (esperando_calificacion,
+      esperando_horario)` y las seis están en `nuevo`. Es un defecto **latente**: el día que
+      avancen de etapa entran como prospectos. Sigue abierto abajo, con su cura.
 
       **La precondición se cumplió mientras corría esta vuelta, y su forma de medirla estaba mal.**
       A las 02:50 UTC el contenedor todavía no tenía el arreglo; a las 03:55 sí — el publicador
