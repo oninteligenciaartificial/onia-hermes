@@ -357,8 +357,28 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       **Esto NO está en producción todavía**: commiteado en la rama del carril, el bot se despliega
       aparte (`DESPLEGAR: bot`).
 
-- [ ] **Devolverle el cupo de rescate a 6 conversaciones que la insistencia quemó sin mandar
-      nada** (`hermes-content/deploy/vps-ops/bot/insistencia-run.mjs` · tabla
+- [x] **EJECUTADO el 2026-09-19 03:57 UTC — `UPDATE 6`, las seis conversaciones recuperaron su
+      cupo de rescate.** Devueltas: `chatwoot:42,43,52,54,56,57` (las cuatro reales son
+      `purple-bush-931`, `summer-shadow-163`, `icy-sunset-817` y `chatwoot:57`; las otras dos son
+      sondas nuestras). Corrido con la MISMA condición derivada de abajo —no una lista a mano— y
+      con `returning`. Verificado después: la consulta de control da **0** filas con cupo quemado
+      sin `M3`, y las cuatro reales quedaron en `bot_stage = nuevo · followup_step = 0`, o sea que
+      el día que avancen a `esperando_horario` el barrido SÍ las va a ver.
+
+      **La precondición se cumplió mientras corría esta vuelta, y su forma de medirla estaba mal.**
+      A las 02:50 UTC el contenedor todavía no tenía el arreglo; a las 03:55 sí — el publicador
+      automático del VPS pasó en el medio. Pero el criterio escrito acá abajo («VERDE = 0 y 1»)
+      era **inalcanzable**: `main` tiene `reserveFollowUp` 2 veces y `markMessageDelivered` 1, así
+      que ese conteo nunca iba a dar `0 y 1` y el ítem quedaba bloqueado para siempre contra un
+      arreglo ya vivo. Lo que sí contesta es comparar el archivo vivo con el ref publicado:
+      `git show origin/main:<ruta> | md5sum` contra `docker exec onia-center md5sum
+      /tmp/onia-bot/insistencia-run.mjs` — dieron **idénticos** (`51b38373…`).
+
+      **El diagnóstico original, que se cumplió tal cual** (`insistencia-run.mjs` · tabla
+      `onia_center.bot_conversations`; medido el 2026-09-18):
+
+      ~~Devolverle el cupo de rescate a 6 conversaciones que la insistencia quemó sin mandar
+      nada~~ (`hermes-content/deploy/vps-ops/bot/insistencia-run.mjs` · tabla
       `onia_center.bot_conversations`; medido el 2026-09-18). El código ya está
       arreglado — la insistencia dejó de reservar con `followup_step` —, pero las filas que
       quedaron marcadas siguen marcadas: son `chatwoot:42,43,52,54,56,57`, todas en `bot_stage
