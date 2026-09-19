@@ -318,6 +318,32 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [ ] **Dos escritores guardan el estado de la misma conversación en el mismo segundo, y gana el
+      último — el traspaso humano puede perderse** (encontrado el 2026-09-18 midiendo la conv 58;
+      **no es fantasma: los datos están abajo**).
+
+      El barrido del follow-up y el webhook del traspaso escribieron `bot_conversations` de
+      `chatwoot:58` **a las 19:17:03 los dos**. `run-turn.mjs` marca el traspaso antes de `step()`
+      (línea 360) y persiste el estado al final (línea 532), así que el orden correcto deja
+      `human_took_over = t`. En producción quedó **`f`**, con el traspaso igualmente registrado en
+      `onia_center.bot_messages` (`chatwoot:chatwoot:takeover:58:1437`, `author human`). La lectura
+      que encaja: el `nextState` del barrido —que no conoce el traspaso— se guardó último y lo pisó.
+
+      **Reproducción (30 s, sólo lectura):**
+
+          docker exec supabase-db psql -U postgres -d postgres -tAc "select human_took_over, last_inbound_at from onia_center.bot_conversations where conversation_key='chatwoot:58';"
+          docker exec supabase-db psql -U postgres -d postgres -tAc "select direction, author, message_key, created_at from onia_center.bot_messages where conversation_key='chatwoot:58' order by created_at;"
+
+      **Por qué importa, y por qué NO es urgente hoy:** en este caso el flag perdido fue el
+      resultado *bueno* (el lead no quedó mudo). Con el orden inverso, un humano contesta desde la
+      bandeja, el barrido pisa el flag y **el bot sigue hablando encima del humano** — el modo de
+      falla que la Barrera 1 existe para impedir. Hoy la carrera necesita que barrido y traspaso
+      caigan en el mismo segundo, que es justo lo que pasa cuando el que dispara el traspaso **es**
+      el barrido; con `e3b70f48` desplegado esa coincidencia deja de fabricarse sola.
+
+      **Lo que NO hay que volver a medir:** el reloj `last_inbound_at` ya está arreglado y probado
+      (ver «Cerrado», `bot-engine.mjs`); esto es sólo el flag.
+
 - [x] 🔴 **~~El instrumento que mide la DEFINICIÓN DE HECHO del carril imprimía un remedio que
       no se podía tipear — y de ese texto salió una pregunta falsa a Sergio Urcullo~~ — CERRADO
       el 2026-09-18** (`scripts/objetivo_visible.mjs`, commit `14851e61`).
@@ -5129,6 +5155,40 @@ archivos.**
 ---
 
 ## Cerrado — no rehacer
+
+- [x] **~~Nuestro propio mensaje le movía el reloj al prospecto~~** — cerrado el 2026-09-18
+      (`hermes-content/deploy/vps-ops/bot/bot-engine.mjs`, **commiteado, NO desplegado**).
+      `last_inbound_at` dice cuándo habló **el prospecto**, y `step()` lo pisaba con el
+      `receivedAt` de cualquier mensaje que entrara al motor — sin preguntar quién lo escribió.
+      Al motor también entra lo que sale de **nuestro** lado: cuando alguien contesta desde la
+      bandeja, Chatwoot reenvía ese saliente y el adapter lo convierte en un turno con
+      `author: "human"` (`chatwoot-adapter.mjs`, `takeoverTurn`). La línea de arriba, la que decide
+      si la conversación venció, **sí** preguntaba (`msg.author === "contact"`); la del reloj no.
+
+      **Medido en producción, sobre el único lead real vivo de WhatsApp** (conv 58, +59175755019):
+      `messages` de Chatwoot tiene **un solo** mensaje entrante suyo, del 17-sep 22:50:55Z; el
+      18-sep 19:17:02Z le salió el follow-up M3, y `bot_conversations` quedó con
+      `last_inbound_at = 2026-09-18 19:17:02.925+00`. El prospecto no había vuelto a escribir: su
+      reloj se corrió **20,4 h solo**. El traspaso está en `onia_center.bot_messages` como
+      `outbound / author human / chatwoot:chatwoot:takeover:58:1437`.
+
+      **Por qué importa** — los tres consumidores del reloj deciden **a quién escribirle**:
+      `sweepInsistenciaCandidates` lo usa como **la ventana de 24 h de Meta**, que Meta cuenta
+      desde el último mensaje *del usuario* (ése es el barrido multi-tenant: con el reloj corrido
+      el bot cree abierta una ventana ya cerrada y el envío se rechaza o se cobra como plantilla,
+      y lo paga el cliente del cliente con el quality rating de SU línea); y
+      `sweepFollowUpCandidates` / `sweepFollowUpVencidas` eligen por el silencio del prospecto, así
+      que un lead que calla se ve «recién hablado» y se cae de la ventana de rescate.
+
+      **Prueba:** `reloj-del-prospecto-solo-lo-mueve-el-prospecto.test.mjs` (4 casos, rojo 3/4 antes
+      del arreglo, validado por mutación con el esquive —dejar la constante y no usarla—: 3/4 rojo
+      otra vez). `npm run test:bot`: **1195/1195**.
+
+      ⚠️ **Dos capas, y hacen falta las dos.** `e3b70f48` (vuelta anterior) cierra la *causa* de
+      este caso: los barridos posteaban con la cuenta **humana** de Sergio Urcullo, así que el bot
+      se leía a sí mismo como un humano. Esto cierra la *clase* en el motor — un humano **de
+      verdad** contestando desde la bandeja también le movía el reloj al prospecto, y eso
+      `e3b70f48` no lo tocaba. Ninguna de las dos está en `origin/main` todavía.
 
 - [x] **~~El asistente de configuración aplanaba el horario del dueño sin decírselo~~** — cerrado el
       2026-09-18 (`onia-platform` 9c509b3c, rama del carril; **commiteado, NO desplegado**).

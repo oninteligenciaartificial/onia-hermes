@@ -544,9 +544,16 @@ export function step(state, incoming, options = {}) {
   // un entrante real de un contacto: el candado de una prueba vieja (conv 11, human_took_over
   // del 13-ago) dejo mudo el "hola" real de Sergio el 10-sep. Solo para mensajes DEL contacto:
   // un traspaso humano (author "human") jamas dispara la bienvenida encima del humano.
-  const vencida = msg.author === "contact" && conversacionVencida(state, msg.receivedAt, config);
+  const delProspecto = msg.author === "contact";
+  const vencida = delProspecto && conversacionVencida(state, msg.receivedAt, config);
   const vivo = vencida ? reiniciarConversacionVencida(state) : state;
-  const base = { ...vivo, lastInboundAt: msg.receivedAt || vivo.lastInboundAt };
+  // `lastInboundAt` es el reloj DEL PROSPECTO y lo mueve EL, nadie mas — la MISMA pregunta que la
+  // barrera de arriba. Al motor tambien entra lo que sale de nuestro lado (el adapter convierte el
+  // saliente de un humano en un turno `author: "human"`), y pisar el reloj con esa hora le miente a
+  // los tres consumidores que deciden a quien escribirle: la ventana de 24 h de Meta —que Meta
+  // cuenta desde el ultimo mensaje DEL USUARIO— y las dos ventanas del rescate. Medido en la conv 58
+  // el 2026-09-18: un lead real quedo con el reloj 20,4 h adelantado por nuestro propio follow-up.
+  const base = { ...vivo, lastInboundAt: (delProspecto && msg.receivedAt) || vivo.lastInboundAt };
   const ctx = { config, prev, msg, options, vencida };
 
   // --- Barrera 1: un humano tomo la conversacion. El bot NO habla. Falla hacia el SILENCIO.
