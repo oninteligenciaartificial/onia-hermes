@@ -29,6 +29,48 @@ contra producción (SSH al VPS, las dos bases, el motor corrido de verdad), no c
 
 ---
 
+## ✅ T7 — CERRADO el 2026-09-19: el arreglo de T6 dejó a la capacidad con DOS destinos, y el gate seguía preguntando por uno
+
+**El agujero lo abrió el arreglo del día anterior.** Al cablearle a la transcripción un
+respaldo contra OpenAI (T6), la nota de voz pasó a tener **dos** destinos: `speaches`
+(primario, muerto a propósito) y `api.openai.com` (respaldo). `destinos-vivos.mjs` deriva su
+universo preguntando por el **nombre de la variable** (`env.*_BASE_URL` / `*_BASE`), y el
+respaldo **no sale de una env**: lo resuelve un mapa congelado (`PROVEEDORES_DE_RESPALDO`).
+Resultado: el destino que iba a atender el **100 %** de las notas de voz no lo medía nadie.
+
+**Los dos lados equivocados a la vez.** El gate imprimía `ROTA · cae a M_AUDIO_FAIL` —que con
+el respaldo vivo sería falso— y a la vez era ciego al caso que hace **volver** el bug: el
+primario aguantando y la red caída, en silencio y con todo verde.
+
+**Qué se arregló** (`hermes-content/deploy/vps-ops/bot/destinos-vivos.mjs`):
+
+- **Se juzga la CADENA, no el eslabón.** Una capacidad está ROTA sólo si **ningún** destino
+  contesta. Primario muerto + respaldo vivo = `degradada` (se entrega, y se dice). Primario
+  vivo + respaldo muerto = `AVISO`: perder la red no es rojo hoy, pero es cómo vuelve el bug.
+- **El respaldo se resuelve con la función DEL PRODUCTO** (`getFallbackConfig`), no con un
+  literal copiado: el día que alguien agregue un proveedor, el gate lo sigue solo.
+- **La red cuelga del DEPLOY, no del commit.** Un respaldo que está en el repo y no en
+  `/tmp/onia-bot/` no atiende a nadie: se le pregunta al bot vivo y, si no se pudo preguntar,
+  **no** se cuenta (falla cerrado). Sin esto el gate habría salido verde sobre un prospecto que
+  hoy recibe `M_AUDIO_FAIL` — el verde falso que ya costó una vuelta el 2026-09-18.
+- **Cierre de clase:** `respaldosSinDeclarar()` deriva del disco qué módulo expone un resolutor
+  de respaldo sin declararlo. Si mañana la visión o el modelo del turno ganan uno, el gate se
+  pone **rojo con su nombre** hasta que alguien lo decida.
+
+**Prueba.** 6 mutaciones, 6 rojos por el motivo correcto (sacarle el `respaldo` a la capacidad ·
+que la cadena lo ignore · no avisar del respaldo caído · volver a "cualquier eslabón caído =
+ROTA" · contar un respaldo sin desplegar · aplanar "no pude preguntar" en "no está"), árbol
+restaurado con `cp` y verificado idéntico. `npm run test:destinos-instrumento` en verde y
+`npm run test:bot` **1288/1288**. Contra producción el gate ahora dice la verdad de hoy:
+`ROTA` + `AVISO … el respaldo existe en el repo y NO en el bot vivo
+(/tmp/onia-bot/audio-transcribe.mjs no tiene getFallbackConfig): no se cuenta como red hasta
+desplegarlo` — medido con `docker exec onia-center grep -c getFallbackConfig …` → `0`.
+
+**Lo que queda, y no es mío:** T6 + T7 están **commiteados y NO desplegados**. La nota de voz
+sigue cayendo a `M_AUDIO_FAIL` para todo prospecto hasta que se publique el bot.
+
+---
+
 ## ✅ T6 — CERRADO el 2026-09-19 (commiteado, **NO desplegado**): el catálogo vende "entiende audios" y el bot no entendía ninguno
 
 **Lo que veía el prospecto.** `ONIA_CATALOGO_DE_VENTA.md:153` —la fuente única de QUÉ se
