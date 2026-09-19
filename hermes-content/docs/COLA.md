@@ -409,6 +409,17 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       `CUBIERTO_CORTO`; `seco < citado` NO se acusa (ésa es la otra familia, `cuerpoVencido`);
       cuerpo sin recuento ⇒ `null` con su causa, nunca rojo. Para `bot` y `siat` la pregunta ya
       tiene dueño y es exacta: `cuerpoCortoArchivos` importado del hermano.
+      **Reverificado con el caso vivo el 2026-09-19 05:4x La Paz por `onia-cola`: el `[x]`
+      resiste, y con un dato que faltaba.** Volvió a ocurrir igual —mergeé tres carriles sobre
+      `t_b535811a`, que citaba `1`, y el seco pasó a decir `2`— y el gate hermano lo cazó. Lo
+      que NO estaba medido es la otra mitad: que el pedido *nuevo* pueda ser **juzgado**. El
+      cuerpo que escribí cita el recuento **sin los `==`** que traía el anterior
+      (`"hay que publicar: 2 arreglo(s) que el cliente no ve"`), y `deploy_sin_pedido.mjs`
+      imprimió `OK landing … ya hay pedido` **sin** el sufijo `— sin juzgar si el cuerpo lo
+      describe`, que es la única señal de un `cortos: null`. O sea `recuentoDeArreglos` no
+      depende de los `==`: un cuerpo que cite el recuento en prosa sigue siendo medible. Vale
+      anotarlo porque la forma de la cita la elige quien redacta el pedido, y si el lector
+      exigiera los `==` el pedido nacería inmedible **en verde** salvo por ese sufijo.
 
 - [x] 🔴 **El único gate que mira si producción corre el publicador que dice `main` llevaba DIEZ
       DÍAS salteándose en cada merge, porque el carril cambió de máquina. CERRADO el 2026-09-17
