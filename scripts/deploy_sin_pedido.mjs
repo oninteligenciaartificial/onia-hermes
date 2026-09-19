@@ -406,6 +406,38 @@ export function describirFallo({ status, signal, stderr } = {}) {
   return partes.length ? partes.join(': ') : null;
 }
 
+/**
+ * PURA: los veredictos del seco, pero marcando `FALLO` a todo destino cuya ÚLTIMA corrida REAL
+ * falló. Devuelve el mismo objeto si no hay nada que marcar (o si no hay veredictos).
+ *
+ * NACE DEL 2026-09-19. Las dos preguntas que este gate le hacía al publicador automático
+ * —«¿corrió hace poco?» y «¿qué dice que haría?»— son ciegas al que corre y FALLA:
+ * `publicadorSoloVigente` sólo mira la CABECERA de la corrida, que un publicador roto escribe
+ * igual cada 3 h; y los veredictos salen del `--dry-run`, que sólo sabe decir `al dia`,
+ * `publicaria` y `NO publico solo`. `FALLO` y `PUBLICADO` son formas que **sólo** existen en el
+ * log de las corridas reales, así que la rama que ya sabía leerlas nunca las veía llegar.
+ * Juntas absolvían para siempre: «OK <destino>: falta publicar, pero el publicador lo hace
+ * solo». El bot pasó CUATRO días exactamente así, con 17 arreglos varados en `main`.
+ *
+ * ⚠️ Se marca SÓLO con `FALLO`, no con `NO publico solo`: lo primero es la máquina rota (y el
+ * seco no lo puede saber), lo segundo es una DECISIÓN del freno de precio, y ahí el seco —que
+ * mide el árbol de ahora— está más fresco que cualquier corrida vieja del log.
+ *
+ * ⚠️ Y lo que cura un `FALLO` es un éxito POSTERIOR, no que alguien lo borre: el log es
+ * append-only y nadie lo rota, así que contar fallos históricos dejaría esto rojo para
+ * siempre. Se mira el ÚLTIMO veredicto de cada destino, que es lo que `leerPublicadorSolo` ya
+ * devuelve al recorrer las líneas en orden.
+ */
+export function conLoQueFalloDeVerdad(verdictos, log) {
+  const delLog = leerPublicadorSolo(log);
+  if (!verdictos || !delLog) return verdictos;
+  const rotos = Object.keys(delLog).filter((d) => delLog[d] === 'FALLO');
+  if (rotos.length === 0) return verdictos;
+  const salida = { ...verdictos };
+  for (const d of rotos) salida[d] = 'FALLO';
+  return salida;
+}
+
 export function seAutoPublicaSegun(verdictos, destino) {
   if (!verdictos) return null;
   const v = verdictos[destino];
@@ -735,7 +767,9 @@ export function _veredictosDesdeSalida(salida, ahora = new Date(), clave = 'publ
   const verdictos = leerPublicadorSolo(seco);
   // Corrió hace poco y aun así no se le entiende («ya hay una corrida en curso; salgo»).
   if (verdictos === null) anotarCausa(clave, describirRespuestaIlegible(seco));
-  return verdictos;
+  // El seco dice qué HARÍA; sólo el log dice qué le PASÓ. Un destino que viene fallando de
+  // verdad no lo absuelve ningún «publicaria» — ver `conLoQueFalloDeVerdad`.
+  return conLoQueFalloDeVerdad(verdictos, log);
 }
 
 let verdictosCache;
@@ -1183,6 +1217,37 @@ function selfCheck() {
   ok(publicadorSoloVigente(logSolo, new Date('2026-09-13T04:00:00Z')) === false, 'sin correr en 6 h, el publicador automatico no absuelve a nadie');
   ok(publicadorSoloVigente('', new Date('2026-09-12T22:30:00Z')) === null, 'sin log no se sabe si corre');
   ok(publicadorSoloVigente(logSolo, new Date('2026-09-12T21:55:00Z')) === true, 'la ultima corrida se lee en hora de La Paz (UTC-4), no como UTC');
+
+  // ── El publicador que CORRE pero FALLA, del 2026-09-19 ──────────────────────────────────
+  // `vigente` sólo pregunta CUÁNDO corrió, y un publicador que falla en todas sus corridas
+  // escribe su cabecera igual cada 3 h: sigue leyéndose «vigente». Y los veredictos salían
+  // del `--dry-run`, que nunca imprime `FALLO` —sólo `al dia`/`publicaria`/`NO publico solo`—,
+  // así que las dos preguntas juntas absolvían para siempre a un destino que no publica nada.
+  // No es hipotético: el bot pasó CUATRO días así (17 arreglos en `main`, única señal
+  // `bot: FALLO` 8 veces por día en un log que no escala a nadie), y este log trae el
+  // `landing: FALLO` del 18-sep 17:50. Y falla hacia el lado caro: el verde de acá es lo que
+  // se usa para NO molestar a Sergio Urcullo, o sea que se calla el pedido que hacía falta.
+  const secoOptimista = ['  bot: publicaria (nada toca precio)', '  landing: publicaria (nada toca precio)'].join('\n');
+  const logQueFalla = [
+    '== 2026-09-19 02:50 La Paz ==',
+    '  bot: FALLO',
+    '  landing: FALLO',
+    '== 2026-09-19 05:50 La Paz ==',
+    '  bot: FALLO',
+    '  landing: PUBLICADO',
+  ].join('\n');
+  const ahoraLog = new Date('2026-09-19T10:30:00Z'); // 06:30 La Paz: la corrida de las 05:50 es vigente
+  const vReal = _veredictosDesdeSalida(`${secoOptimista}\n${MARCA_LOG}\n${logQueFalla}`, ahoraLog, 'prueba-fallo');
+  ok(
+    seAutoPublicaSegun(vReal, 'bot') === false,
+    'un destino cuya ULTIMA corrida real FALLO no se publica solo, por mas que el seco diga "publicaria"',
+  );
+  // El recíproco, que es lo que impide que esto quede rojo para siempre: el log es
+  // append-only y nadie lo rota, así que lo que cura un `FALLO` viejo es un éxito POSTERIOR.
+  ok(
+    seAutoPublicaSegun(vReal, 'landing') === true,
+    'y un FALLO ya curado por una corrida posterior NO deja al destino rojo para siempre',
+  );
 
   // ── Los CUATRO `null` del publicador, del 2026-09-18 ────────────────────────────────────
   // Medido a las 04:34 La Paz: el publicador contestaba `plataforma: publicaria` y `bot:
