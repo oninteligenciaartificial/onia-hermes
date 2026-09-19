@@ -29,6 +29,56 @@ contra producción (SSH al VPS, las dos bases, el motor corrido de verdad), no c
 
 ---
 
+## ✅ T9 — CERRADO el 2026-09-19 (commiteado, **NO desplegado** — es un medidor, no toca el motor): todo el carril cuenta "el bot contestó" por una fila que existe, y nadie mira si el mensaje LLEGÓ
+
+**El eje.** La definición de hecho de este carril —*"el bot contestó los DOS"*— se mide contando
+filas en `messages` de Chatwoot. El simulador imprime el texto. El adapter sólo mira que el POST
+devuelva 2xx. **Ninguno de los tres prueba que el prospecto haya recibido algo:** un 2xx dice
+"Chatwoot lo aceptó", y el veredicto de Meta llega DESPUÉS, por webhook asíncrono, a
+`messages.status` + `content_attributes.external_error`. `grep` de esa columna en `scripts/` y en
+`hermes-content/deploy/vps-ops/bot/`: **nadie la leía**.
+
+**Lo que había ahí.** Medido el 2026-09-19 en la base de Chatwoot: **5 salientes en `failed`**,
+3 de ellos en el inbox 5 —el de leads reales— con
+`131042: Business eligibility payment issue`, que es el error de Meta **por falta de método de
+pago**. Los cinco son nuestros y de agosto, y el canal volvió a entregar después (conv 58, 17-sep),
+así que **hoy no muerde**. Muerde el **1-oct-2026**: desde esa fecha Meta cobra la respuesta dentro
+de la ventana de 24 h, el método de pago sigue sin cargarse (tablero `t_ac3aa802`) y ese día **todo
+saliente de WhatsApp vuelve `failed` con el sistema entero reportando verde**, porque la fila existe.
+
+**La hipótesis del código que resultó refutable.** La cabecera de `usage-run.mjs` ya declara la
+mitad honesta (*"nuestra fila quedó diciendo `sent` para siempre"*) y cierra con *"con lo que hay
+guardado hoy ese caso es INDISTINGUIBLE"*. Es cierto de NUESTRA tabla (`onia_center.bot_messages`,
+append-only, escrita en el momento del POST) y **falso del sistema**: Chatwoot lo guarda. Un
+comentario que afirma una imposibilidad es una hipótesis **con fecha**.
+
+**Lo que se construyó.** `hermes-content/deploy/vps-ops/bot/entrega-viva.mjs` — `npm run
+entrega:viva`. Lectura pura (ni un INSERT), tri-estado (`0` ok · `1` no llegó · `2` NO MEDIDO), y
+el sujeto es **el ÚLTIMO saliente de cada conversación**: lo que deja a alguien colgado es que no
+le haya llegado lo último que le dijimos. Test: `entrega-viva.test.mjs`, 18 casos con los códigos
+de error REALES, ya en la cadena (`test:bot` lo corre — **confirmado por mutación**, 1319/1).
+
+**Las tres trampas que costaron su vuelta, y cómo se cerraron:**
+- **El lector mentía primero.** `content_attributes->>'external_error'` devuelve vacío **siempre**:
+  la columna guarda una *cadena* JSON, no un objeto — hay que desanidar con `#>> '{}'` antes de
+  castear. Con el error vacío, `causaEsGlobal` contesta "por sujeto" y el gate se pone rojo a
+  ciegas. Verificar el instrumento antes que el producto.
+- **Rojo para siempre.** La tabla no la rota nadie, así que contar fallidos históricos apaga el
+  gate. Se cura preguntando si hubo un **éxito POSTERIOR**, y sólo para causas **GLOBALES** del
+  canal (pago, plantilla, credencial, 404): un fallo propio de UN destinatario no lo cura que otro
+  haya recibido después. El default de un error desconocido es "por sujeto" = rojo: falla hacia avisar.
+- **"En desuso" y "acaba de romperse" se ven igual** si sólo se pregunta *¿hubo algo después?* —
+  los dos tienen cero salientes posteriores. Lo único que los separa es el reloj
+  (`DIAS_PARA_DESUSO`), y sin esa baranda el caso del 1-oct quedaba absuelto.
+
+**Veredicto vivo hoy:** `ok — la última respuesta de cada conversación llegó a destino`
+(26 conversaciones; el 404 del inbox 3 sale como *canal en desuso*, que es la verdad: quieto desde
+el 1-ago). **Regla transferible:** por cada circuito que declara "entregado", preguntar **quién
+escribe ese veredicto y cuándo** — si lo escribe el emisor en el momento de emitir, no es entrega,
+es intención.
+
+---
+
 ## ✅ T8 — CERRADO el 2026-09-19: "está en `origin/main` y no está en producción" tiene TRES causas, y la tercera manda a romper un publicador sano
 
 **Cómo empezó.** Midiendo el bot VIVO, `npm run precios:vivos` cantó un defecto real y caro: al
