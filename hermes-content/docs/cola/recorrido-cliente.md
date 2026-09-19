@@ -61,6 +61,16 @@ Instrumento: `scripts/recorrido_cliente.mjs`.
 > limpios, ver `ULTIMO_RECORRIDO.md`. No apareció ningún selector del script que asumiera el
 > layout de escritorio.
 
+## Abierto
+
+- **Portal del paciente: no hay forma de cancelar una cita, sólo confirmar.** Reportado
+  2026-09-19 (`t_7bb28d06`, prioridad 2, dueño: onia-cola). `PATCH /api/booking/appointments`
+  con `action:'cancel'` SÍ funciona (200, status pasa a `CANCELADA` en la base — verificado con
+  HTTP real), pero ni `/book/confirm/[token]` ni `/book/my-appointments/[token]` pintan un botón
+  o link de cancelar — sólo "Confirmar asistencia", "llamar" y "reservar de nuevo". Reproducido
+  con `scripts/probar_cancelar_cita.mjs`. Capturas: `capturas/extra-cancelarcita-00-confirm.png`
+  y `capturas/extra-cancelarcita-01-my-appointments.png`.
+
 ## Cerrado
 
 - **`DELETE /api/admin/users/[id]` bloqueaba sacar un ADMIN aunque hubiera 2 — arreglado y

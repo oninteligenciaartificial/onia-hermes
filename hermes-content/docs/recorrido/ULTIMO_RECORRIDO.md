@@ -12,6 +12,34 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-19 15:20 La Paz — recorrido completo re-verificado (BUILD_ID nuevo) + escalón 3: cancelar cita, HALLAZGO
+
+`BUILD_ID` cambió (`AUiuQ9c0SmcJnuF37_qTo` → `Idvh9u4mdBzHBgE2penq4`) desde la vuelta anterior
+— por los commits del bot mergeados, no de la plataforma. Por las reglas del carril, correspondía
+re-correr el recorrido completo antes de seguir con escalones nuevos.
+
+**Recorrido completo:** `node scripts/recorrido_cliente.mjs --escribir` → **9/9, `completo:
+true`, sin agujeros.** Los 9 pasos de "Clínica dental" siguen sanos con el deploy nuevo. Todo lo
+`zz-qa-` que creó se borró en la misma corrida (`organizations=0`, `appointments zz-qa-=0`).
+
+**Escalón 3 nuevo — HALLAZGO: el portal del paciente no ofrece cancelar.** Siguiendo del escalón
+del portal (confirmar / mis citas), instrumenté lo que faltaba: ¿puede el paciente CANCELAR su
+cita desde el mismo enlace? `PATCH /api/booking/appointments` con `action:'cancel'` funciona de
+verdad (HTTP 200, `status` pasa de `PENDIENTE` a `CANCELADA` en la base — verificado, no sólo
+leído). Pero ni `/book/confirm/[token]` ni `/book/my-appointments/[token]` pintan un botón o link
+de cancelar: sólo "Confirmar asistencia", "Ver todas mis citas", "llamar" y "Agendar" (de nuevo).
+Un paciente que no puede asistir no tiene forma de avisar desde el enlace que se le manda; tiene
+que llamar al negocio. Reportado en el tablero (`t_7bb28d06`, prioridad 2, dueño: onia-cola) y en
+`cola/recorrido-cliente.md`. Instrumento nuevo: `scripts/probar_cancelar_cita.mjs`. Capturas:
+`capturas/extra-cancelarcita-00-confirm.png` y `capturas/extra-cancelarcita-01-my-appointments.png`.
+Todo `zz-qa-` sembrado se borró en la misma corrida (`orgs=0`, `citas=0` al cerrar).
+
+**Próxima vuelta:** si `BUILD_ID` sigue en `Idvh9u4mdBzHBgE2penq4`, seguir con otro escalón nuevo
+— invitar/quitar coadministrador desde la UI de `/settings` con Playwright (ya probado por API en
+`probar_coadministrador.mjs`, falta el camino de clics real), o rotar de rubro.
+
+---
+
 ## 2026-09-19 14:12 La Paz — escalón 3 nuevo: el portal del paciente, `/book/confirm` y `/book/my-appointments`
 
 `BUILD_ID` sin cambios (`AUiuQ9c0SmcJnuF37_qTo`) desde la vuelta anterior: seguí directo de la de
