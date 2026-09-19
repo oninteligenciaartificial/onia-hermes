@@ -45,7 +45,7 @@ import { pathToFileURL } from "node:url";
 import { DEFAULT_CONFIG, createBotConfig, localHour, renderTemplate } from "./config.mjs";
 import { cuotaAgotada, withKnowledge } from "./knowledge.mjs";
 import { createStore, stateFromRow } from "./persistence.mjs";
-import { MOTIVO_NUESTRA, esConversacionNuestra } from "./es-nuestra.mjs";
+import { MOTIVO_NUESTRA, cargarInboxesDePrueba, esConversacionNuestra } from "./es-nuestra.mjs";
 import { whatsappTemplate } from "./chatwoot-adapter.mjs";
 import { meetingLink } from "./calcom-booking.mjs";
 import { formatSlotLabel } from "./calcom-availability.mjs";
@@ -388,6 +388,12 @@ export async function runReminderSweep(options = {}, deps = {}) {
     result.error = `--now invalido o ausente: ${String(nowIso)}`;
     return result;
   }
+
+  // Quienes NO son de nadie, ANTES de elegir a quien escribirle: el banco de pruebas es un inbox
+  // entero y Chatwoot le pone nombre anonimo a su contacto (ver `es-nuestra.mjs`). Si no se pudo
+  // preguntar, el conjunto queda vacio y se avisa: nunca se falla hacia "es nuestra".
+  const inboxesQA = await cargarInboxesDePrueba(deps);
+  if (inboxesQA.warning) result.warnings.push(inboxesQA.warning);
 
   const rows = await store.sweepDemoReminders(nowIso, config, limit);
   if (!rows) {

@@ -27,7 +27,7 @@
 //
 //   node insistencia-run.mjs --now 2026-08-30T15:00:00Z [--emit] [--limit 50]
 import { createStore, stateFromRow, DELIVERY_STATUSES } from "./persistence.mjs";
-import { MOTIVO_NUESTRA, esConversacionNuestra } from "./es-nuestra.mjs";
+import { MOTIVO_NUESTRA, cargarInboxesDePrueba, esConversacionNuestra } from "./es-nuestra.mjs";
 import { createBotConfig, DEFAULT_CONFIG, localHour, renderTemplate } from "./config.mjs";
 import { getOrgKnowledge } from "./knowledge.mjs";
 import { deliver, hoursBetween } from "./followup-run.mjs";
@@ -100,6 +100,12 @@ export async function runInsistenciaSweep(options = {}, deps = {}) {
     result.error = `--now invalido o ausente: ${String(nowIso)}`;
     return result;
   }
+
+  // Quienes NO son de nadie, ANTES de elegir a quien escribirle: el banco de pruebas es un inbox
+  // entero y Chatwoot le pone nombre anonimo a su contacto (ver `es-nuestra.mjs`). Si no se pudo
+  // preguntar, el conjunto queda vacio y se avisa: nunca se falla hacia "es nuestra".
+  const inboxesQA = await cargarInboxesDePrueba(deps);
+  if (inboxesQA.warning) result.warnings.push(inboxesQA.warning);
 
   const rows = await store.sweepInsistenciaCandidates(nowIso, config, limit);
   if (!rows) {

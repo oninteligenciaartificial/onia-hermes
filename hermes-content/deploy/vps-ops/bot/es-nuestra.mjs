@@ -41,15 +41,103 @@ export const NUESTROS_TELEFONOS = ["+59171654992"];
 /** Los contactos de prueba se reconocen por el nombre (`Sonda QA …`, `QA Prueba`, `… Test`). */
 export const NOMBRE_DE_PRUEBA = /\b(prueba|qa|test)\b/i;
 
+// ---------------------------------------------------------------------------
+// TENENCIA: el banco de pruebas es un INBOX entero, no un nombre de contacto.
+//
+// Medido contra produccion el 2026-09-19: una FIRMA DEL CONTACTO solo reconoce lo que marcamos
+// al sembrar, y a las conversaciones que abre una sonda Chatwoot les pone nombre anonimo
+// (`purple-bush-931`, `icy-sunset-817`, …). Por eso DIEZ filas del inbox 7 —`ZZ QA Clinica
+// Chatbot`, el banco de pruebas— daban `false` y los cuatro barridos las tomaban por prospectos.
+//
+// POR QUE NO CUELGA DE `organizations.slug like 'zz-qa-%'`: medido FALSO el mismo dia. En
+// produccion `clinic_settings` tiene UNA sola fila con inbox (la de `onia-interna`, inboxes 4 y
+// 5); el inbox 7 no cuelga de NINGUNA org. Ese conjunto saldria vacio y el defecto quedaria vivo
+// con el gate en verde. El dato con dueño es el NOMBRE del inbox, que lo escribimos nosotros.
+
 /**
- * ¿Esta conversacion somos nosotros? Se contesta con lo que el ESTADO ya trae —`displayName` y
- * `publicContact`, las dos columnas que `stateFromRow` hidrata— asi que ningun barrido necesita
- * una consulta extra a Chatwoot para preguntarlo.
+ * La marca de un inbox que es banco de pruebas. Es la MISMA convencion de siembra que el resto
+ * del repo (`zz-qa-…`), y por eso `qa` suelto no alcanza: un negocio llamado "QA Consultores"
+ * recibiria ese slug y quedaria mudo — ya esta medido en `cuentas-que-no-son-clientes.ts`.
+ */
+export const MARCA_INBOX_DE_PRUEBA = /\bzz[\s_-]*qa\b/i;
+
+/**
+ * Los inboxes que NO atienden a nadie. Arranca VACIO a proposito: sin dato, el criterio se
+ * comporta exactamente como antes de que esto existiera. Ver el aviso de sesgo de arriba.
+ */
+let INBOXES_DE_PRUEBA = new Set();
+
+const comoId = (v) => (v === null || v === undefined || v === "" ? null : String(v));
+
+/** Fija el conjunto de la corrida. Sin argumento o con basura, lo VACIA (nunca lo deja a medias). */
+export function fijarInboxesDePrueba(ids) {
+  INBOXES_DE_PRUEBA = new Set((Array.isArray(ids) ? ids : []).map(comoId).filter(Boolean));
+  return INBOXES_DE_PRUEBA;
+}
+
+/** Lo que el proceso tiene cargado ahora. Para que un gate pueda mirarlo sin adivinar. */
+export function inboxesDePruebaActuales() {
+  return new Set(INBOXES_DE_PRUEBA);
+}
+
+/** ¿Este inbox es banco de pruebas? Falso mientras no se haya podido cargar el conjunto. */
+export function esInboxDePrueba(inboxId) {
+  const id = comoId(inboxId);
+  return Boolean(id && INBOXES_DE_PRUEBA.has(id));
+}
+
+/** Le pregunta a Chatwoot por sus inboxes. Aislado para que el test no necesite red. */
+async function listarInboxesDeChatwoot() {
+  const baseUrl = String(process.env.CHATWOOT_BASE_URL || "https://onia-chatbot-chatwoot.hqdqgh.easypanel.host").replace(/\/+$/, "");
+  const accountId = String(process.env.CHATWOOT_ACCOUNT_ID || "2");
+  const token = String(process.env.CHATWOOT_API_TOKEN || process.env.CHATWOOT_TOKEN || "");
+  if (!token) throw new Error("sin CHATWOOT_API_TOKEN");
+  const res = await fetch(`${baseUrl}/api/v1/accounts/${accountId}/inboxes`, {
+    headers: { api_access_token: token },
+    signal: AbortSignal.timeout ? AbortSignal.timeout(8000) : undefined,
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const body = await res.json();
+  return Array.isArray(body?.payload) ? body.payload : null;
+}
+
+/**
+ * Carga UNA vez por corrida el conjunto de inboxes de prueba, DERIVADO del nombre que Chatwoot
+ * publica. Tri-estado: `medido:false` es "no pude preguntar", que NO es "no hay ninguno" — y en
+ * los dos casos el conjunto queda vacio, porque el error caro es el otro.
+ *
+ * @returns {Promise<{medido: boolean, ids: Set<string>, warning: string|null}>}
+ */
+export async function cargarInboxesDePrueba(deps = {}) {
+  const listar = typeof deps.listarInboxes === "function" ? deps.listarInboxes : listarInboxesDeChatwoot;
+  let lista;
+  try {
+    lista = await listar();
+  } catch (error) {
+    fijarInboxesDePrueba([]);
+    return { medido: false, ids: new Set(), warning: `inboxes de prueba: no pude preguntarle a Chatwoot (${String(error?.message || error).slice(0, 120)})` };
+  }
+  if (!Array.isArray(lista)) {
+    fijarInboxesDePrueba([]);
+    return { medido: false, ids: new Set(), warning: "inboxes de prueba: Chatwoot no devolvio una lista legible" };
+  }
+  const ids = lista.filter((i) => MARCA_INBOX_DE_PRUEBA.test(String(i?.name ?? ""))).map((i) => i?.id);
+  return { medido: true, ids: fijarInboxesDePrueba(ids), warning: null };
+}
+
+/**
+ * ¿Esta conversacion somos nosotros? Se contesta con lo que el ESTADO ya trae —`displayName`,
+ * `publicContact` e `inboxId`, que `stateFromRow` hidrata— asi que ningun barrido necesita una
+ * consulta extra POR FILA: el conjunto de inboxes se carga una sola vez por corrida.
+ *
+ * Las causas son ADITIVAS y ninguna puede apagar a otra: el contacto (telefono o nombre) o la
+ * TENENCIA del inbox.
  */
 export function esConversacionNuestra(state) {
   if (!state) return false;
   const tel = normalizarTelefono(state.publicContact);
   if (tel && NUESTROS_TELEFONOS.some((n) => normalizarTelefono(n) === tel)) return true;
+  if (esInboxDePrueba(state.inboxId)) return true;
   return NOMBRE_DE_PRUEBA.test(String(state.displayName ?? ""));
 }
 
