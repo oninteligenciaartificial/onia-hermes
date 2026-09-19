@@ -12,6 +12,33 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-19 13:14 La Paz — escalón 3 nuevo: la agenda PÚBLICA `/book/<slug>`, de punta a punta
+
+`BUILD_ID` sin cambios (`AUiuQ9c0SmcJnuF37_qTo`) desde la vuelta anterior: en vez de repetir un
+rubro, instrumenté una superficie del producto que este carril NUNCA había recorrido —
+`/book/<orgSlug>`, la única pantalla que ve el cliente DEL cliente (un desconocido sin sesión,
+no un `zz-qa-` con login).
+
+**Instrumento nuevo:** `scripts/probar_reserva_publica.mjs`. Siembra por SQL una org `zz-qa-`
+con plan `professional` (trae `publicBookingIncluded`), rubro dental, un ADMIN con horario
+activo (`ADMIN` cuenta como profesional agendable — `ROLES_CON_AGENDA`), abre `/book/<slug>`
+SIN sesión y la MIRA renderizada (captura `extra-reservapublica-00-pantalla.png`, 390×844 —
+limpia, sin texto cortado), y recorre la API pública real: `GET /api/booking/doctors` → `GET
+/api/booking/slots` → `POST /api/booking/appointments` con un paciente `zz-qa-` y un teléfono
+boliviano real. **201, `bookingToken` real**, la cita quedó en la base con el paciente y
+horario correctos, y — la mitad que importa, no sólo que el desconocido reciba su
+confirmación — **el DUEÑO la vio en `/appointments`** con sesión real (captura
+`extra-reservapublica-01-agenda-del-dueno.png`: el 20 de septiembre muestra la cita en el
+calendario). **Sin hallazgo.** Todo lo `zz-qa-` sembrado se borró en la misma corrida
+(`organizations=0`, `appointments zz-qa-=0` verificado al cerrar).
+
+**Próxima vuelta:** si `BUILD_ID` sigue igual, otro escalón nuevo — el portal del paciente
+(`/book/confirm/[token]` y `/book/my-appointments/[token]`, que `probar_reserva_publica.mjs`
+ya deja con un `bookingToken` disponible antes de limpiar, si se quiere reusar) o el flujo de
+cancelar/confirmar una cita desde ahí.
+
+---
+
 ## 2026-09-19 12:14 La Paz — rotado a Servicios profesionales: 9/9 completo, sin hallazgos
 
 Antes de arrancar: 1 org `zz-qa-` huérfana (`zz-qa-2026-09-19-1109-negocio`, de una corrida
