@@ -10,6 +10,7 @@ import {
   bs,
   nombresConChatbot,
   plan,
+  sinSubirDePlan,
 } from "@/lib/pricing";
 import {
   CHATBOT_PLAN,
@@ -578,9 +579,12 @@ export default function Portada() {
           <h2 id="oferta" className={s.h2}>
             Sobre el plan encendés lo que te falta.
           </h2>
+          {/* La segunda oración decía «No hay que saltar de plan para desbloquear una sola»
+              hasta el 2026-09-18: un universal sobre el MECANISMO, falso desde que los agentes
+              (Crece) y el segundo administrador (Completo) vienen ADENTRO del plan y no existen
+              como add-on. Ahora sale de `sinSubirDePlan()`, que lo deriva del catálogo. */}
           <p className={s.lead}>
-            Cada cosa se prende aparte y se paga aparte. No hay que saltar de
-            plan para desbloquear una sola.
+            Cada cosa se prende aparte y se paga aparte. {sinSubirDePlan()}
           </p>
         </Reveal>
 
