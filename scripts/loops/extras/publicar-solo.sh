@@ -105,7 +105,17 @@ numeros_del_diff() {  # $1=repo-del-codigo  $2=archivo  $3..=shas
     # que la tarea t_189a6037 tomo como caso.
     GIT_NO_LAZY_FETCH=1 git -C "$repo" show --format= --unified=0 -m --first-parent \
       "$sha" -- "$archivo" 2>/dev/null
-  done | awk '
+  done | numeros_con_signo
+}
+
+# El FILTRO, solo. Lee un diff unificado por stdin y deja los numeros con su
+# signo. Vive aparte porque hay DOS formas de conseguir ese diff —`git show` de
+# unos commits, y `diff` entre dos copias del archivo— y las dos tienen que
+# juzgar con el MISMO criterio: una segunda copia del filtro coincidiria con
+# esta mientras la realidad les diera la razon a las dos, que es como un gate
+# pasa a defender el bug que existe para impedir.
+numeros_con_signo() {
+  awk '
     /^(\+\+\+|---)/ { next }
     /^[+-]/ {
       signo = substr($0, 1, 1); linea = substr($0, 2)
@@ -165,6 +175,47 @@ montos_que_cambian() {  # $1=repo-del-codigo  $2=archivo  $3..=shas
   return 1
 }
 
+# Lo mismo, para un destino que NO se mide por commits: compara la copia que
+# corre en produccion contra la del repo. Mismos codigos de salida y mismo
+# filtro que `montos_que_cambian`.
+#
+# Aca decia —en un comentario, al lado del codigo del bot— que «sin shas no se
+# puede preguntar si cambio un numero, asi que cae en NO MEDIDO». Era una
+# hipotesis con fecha, y es falsa: el bot tiene el archivo en las DOS puntas
+# (`/opt/onia/bot/<x>` y el repo), que es exactamente lo que un diff necesita.
+# Su costo, medido el 2026-09-19: el arreglo que le sacaba un cobro inventado de
+# Bs 390/mes al plan mas caro toca `knowledge.onia.json` sin mover un solo
+# monto —320/550/890/1.290/390 identicos a los dos lados, cambia a QUIENES
+# alcanza la frase— y aun asi detenia el lote ENTERO del bot (13 archivos, entre
+# ellos el respaldo que hace que vuelvan a entenderse las notas de voz),
+# pidiendole a Sergio Urcullo una firma por algo que no mueve un centavo.
+montos_que_cambian_copias() {  # $1=dir-en-produccion  $2=dir-en-el-repo  $3=archivo
+  local prod=$1/$3 repo=$2/$3 entran salen diff
+  # Un archivo NUEVO no tiene lado viejo: su contenido entero cuenta como que
+  # entra, y `diff` con /dev/null es justamente eso.
+  [ -f "$repo" ] || return 2
+  [ -f "$prod" ] || prod=/dev/null
+  diff=$(diff -U0 -- "$prod" "$repo" 2>/dev/null) || true
+  entran=$(printf '%s\n' "$diff" | numeros_con_signo | grep '^+' | sed 's/^+//' | sort)
+  salen=$(printf '%s\n' "$diff" | numeros_con_signo | grep '^-' | sed 's/^-//' | sort)
+  [ "$entran" = "$salen" ] && return 0
+  printf '%s' "$(comm -3 <(printf '%s\n' "$salen") <(printf '%s\n' "$entran") \
+    | tr -d '\t' | grep -v '^$' | sort -u | tr '\n' ' ')"
+  return 1
+}
+
+# Los NOMBRES de archivo que lista el publicador del bot en seco. Sus renglones
+# son `   CAMBIA   <archivo>  (N lineas)` y `   NUEVO    <archivo>`.
+#
+# Hasta hoy esa salida se le pasaba CRUDA a la guarda como si fuera una lista de
+# archivos: el `grep` de la firma matcheaba el renglon entero y el `for` lo
+# partia en palabras, asi que el sujeto que se media terminaba siendo `CAMBIA` y
+# el detalle del log salia `CAMBIA knowledge.onia.json (2` — tres palabras de un
+# renglon, que es la firma de este defecto y lo que lo delato.
+nombres_del_dryrun() {
+  sed -n 's/^[[:space:]]*\(CAMBIA\|NUEVO\)[[:space:]]\{1,\}\([^[:space:]]\{1,\}\).*/\2/p'
+}
+
 # El RENGLON del log cuando el freno detiene un destino. Lleva SU CITA —que
 # numero cambia, o que archivo no se pudo mirar—, no solo el motivo.
 #
@@ -200,6 +251,22 @@ if [ "${1:-}" = "--renglon" ]; then
   [ "$#" -ge 2 ] || { echo "uso: publicar-solo.sh --renglon <nombre> <motivo> [detalle]" >&2; exit 2; }
   renglon_detenido "$1" "$2" "${3:-}"
   exit 0
+fi
+
+if [ "${1:-}" = "--nombres" ]; then
+  nombres_del_dryrun
+  exit 0
+fi
+
+if [ "${1:-}" = "--montos-copias" ]; then
+  shift
+  [ "$#" -eq 3 ] || { echo "uso: publicar-solo.sh --montos-copias <dir-prod> <dir-repo> <archivo>" >&2; exit 2; }
+  SALIDA_MONTOS=$(montos_que_cambian_copias "$1" "$2" "$3")
+  case $? in
+    0) echo "ningun monto cambia"; exit 0 ;;
+    1) echo "cambian: $SALIDA_MONTOS"; exit 1 ;;
+    *) echo "NO MEDIDO"; exit 2 ;;
+  esac
 fi
 
 if [ "${1:-}" = "--montos" ]; then
@@ -278,15 +345,20 @@ archivos_de() {  # $1=repo-del-codigo  $2..=shas
   done
 }
 
-publicar_destino() {  # $1=nombre $2=publicar.sh $3=archivos-tocados $4=repo-del-codigo $5=shas
-  local nombre=$1 guion=$2 tocados=$3 repo=${4:-} shas=${5:-}
+publicar_destino() {  # $1=nombre $2=publicar.sh $3=archivos-tocados $4=repo-del-codigo $5=shas $6=dir-en-produccion
+  local nombre=$1 guion=$2 tocados=$3 repo=${4:-} shas=${5:-} prod=${6:-}
   local precio arch detalle cambian nomedido salida nota=""
   precio=$(printf '%s\n' "$tocados" | grep -aE "$FIRMA_HUMANA" | sort -u)
   if [ -n "$precio" ]; then
     cambian=""; nomedido=""
     for arch in $precio; do
-      # shellcheck disable=SC2086   # los shas son hexadecimales: partirlos es lo que se quiere
-      salida=$(montos_que_cambian "$repo" "$arch" $shas)
+      if [ -n "$prod" ]; then
+        # Destino sin medidor por commits: se compara copia contra copia.
+        salida=$(montos_que_cambian_copias "$prod" "$repo" "$arch")
+      else
+        # shellcheck disable=SC2086   # los shas son hexadecimales: partirlos es lo que se quiere
+        salida=$(montos_que_cambian "$repo" "$arch" $shas)
+      fi
       case $? in
         1) cambian="$cambian$arch: $salida
 " ;;
@@ -395,16 +467,19 @@ if puede_medir /opt/onia-landing/_deploy/publicar.sh landing; then
 fi
 
 # El bot no tiene medidor por commits: su publicador lista los archivos que
-# cambian, asi que la guarda se aplica sobre esa lista tal cual. Sin shas no se
-# puede preguntar si cambio un numero, asi que cae en NO MEDIDO y el bot se
-# sigue deteniendo igual que antes del 2026-09-18 — fallar cerrado es la unica
-# direccion honesta cuando no se pudo mirar.
+# cambian. De esa lista se sacan los NOMBRES (el renglon entero no es un archivo)
+# y se pregunta si cambia un monto comparando la copia VIVA contra la del repo.
+# Si el archivo no esta en el repo la respuesta sigue siendo NO MEDIDO y el bot
+# se detiene: fallar cerrado es la unica direccion honesta cuando no se pudo
+# mirar, pero "no pude" tiene que ser cierto y hasta hoy no lo era.
 if puede_medir /opt/onia/bot/_deploy/publicar.sh bot; then
   SALIDA_BOT=$(bash /opt/onia/bot/_deploy/publicar.sh --dry-run 2>&1)
   if echo "$SALIDA_BOT" | grep -q "nada que desplegar"; then
     echo "  bot: al dia"
   else
-    publicar_destino bot /opt/onia/bot/_deploy/publicar.sh "$SALIDA_BOT"
+    publicar_destino bot /opt/onia/bot/_deploy/publicar.sh \
+      "$(printf '%s\n' "$SALIDA_BOT" | nombres_del_dryrun)" \
+      "$REPO_HERMES/hermes-content/deploy/vps-ops/bot" "" /opt/onia/bot
   fi
 fi
 

@@ -474,3 +474,129 @@ test("una clave que dice cantidad Y plata a la vez detiene: manda la plata", () 
     rmSync(dir, { recursive: true, force: true });
   }
 });
+
+// ---------------------------------------------------------------------------
+// El bot: un destino SIN medidor por commits
+//
+// Su publicador no lista shas, lista archivos, y hasta el 2026-09-19 esa salida
+// se le pasaba CRUDA a la guarda como si fuera una lista de nombres. Dos danos,
+// y el segundo es el caro: el sujeto que se media terminaba siendo la palabra
+// `CAMBIA`, asi que TODO toque a `knowledge.onia.json` —la fuente de precio que
+// el bot cotiza— caia en NO MEDIDO y detenia el lote entero, para siempre.
+//
+// Medido ese dia: el arreglo que le sacaba un cobro inventado de Bs 390/mes al
+// plan mas caro no mueve UN SOLO monto (320/550/890/1.290/390 identicos a los
+// dos lados; lo que cambia es a quienes alcanza la frase) y aun asi retuvo 13
+// archivos del bot, entre ellos el respaldo que hace que vuelvan a entenderse
+// las notas de voz — pidiendole a Sergio Urcullo una firma por cero centavos.
+// ---------------------------------------------------------------------------
+
+const DRY_RUN_DEL_BOT = `   destino: /opt/onia/bot
+   modo:   DRY-RUN (agrega --aplicar para desplegar de verdad)
+
+-- diferencias repo -> produccion
+   CAMBIA   bot-engine.mjs  (34 lineas)
+   NUEVO    lo-que-el-bot-no-puede-leer-va-a-un-humano.test.mjs
+   CAMBIA   knowledge.onia.json  (2 lineas)
+   total: 3 archivo(s)`;
+
+test("del renglon del publicador se saca el ARCHIVO, no la linea entera", () => {
+  const r = spawnSync("bash", [GUION, "--nombres"], {
+    input: DRY_RUN_DEL_BOT,
+    encoding: "utf8",
+    timeout: 60_000,
+  });
+  const nombres = (r.stdout ?? "").trim().split("\n").filter(Boolean);
+  assert.deepEqual(nombres, [
+    "bot-engine.mjs",
+    "lo-que-el-bot-no-puede-leer-va-a-un-humano.test.mjs",
+    "knowledge.onia.json",
+  ], "los nombres salen mal. Salida: " + (r.stdout ?? "") + (r.stderr ?? ""));
+  // La mitad que importa: ninguna palabra del adorno puede colarse como sujeto.
+  for (const ruido of ["CAMBIA", "NUEVO", "(2", "lineas)", "total:"]) {
+    assert.ok(
+      !nombres.includes(ruido),
+      `\`${ruido}\` entro como si fuera un archivo: es lo que hacia que el sujeto ` +
+        "medido fuera una palabra del renglon y el bot cayera en NO MEDIDO siempre",
+    );
+  }
+});
+
+/** Las dos copias de un archivo del bot: la viva y la del repo. */
+function dosCopias(enProduccion, enElRepo) {
+  const prod = mkdtempSync(join(tmpdir(), "bot-prod-"));
+  const repo = mkdtempSync(join(tmpdir(), "bot-repo-"));
+  if (enProduccion !== null) writeFileSync(join(prod, "knowledge.onia.json"), enProduccion);
+  if (enElRepo !== null) writeFileSync(join(repo, "knowledge.onia.json"), enElRepo);
+  return { prod, repo };
+}
+
+const copias = (prod, repo) => {
+  const r = spawnSync("bash", [GUION, "--montos-copias", prod, repo, "knowledge.onia.json"], {
+    encoding: "utf8",
+    timeout: 60_000,
+  });
+  return { codigo: r.status, salida: `${r.stdout ?? ""}${r.stderr ?? ""}`.trim() };
+};
+
+// El caso REAL del 2026-09-19, palabra por palabra: los cinco montos se repiten
+// a los dos lados y lo unico que cambia es a quienes alcanza la frase.
+const COTIZACION = (aQuienes) =>
+  `{"faq":[{"id":"precios","body":"el sistema arranca en Bs 320 al mes con el plan Basico, ` +
+  `Bs 550 el Crece, Bs 890 el Profesional y Bs 1.290 el Completo, que ya trae el chatbot ` +
+  `adentro. En ${aQuienes} el chatbot va aparte, Bs 390 al mes."}]}\n`;
+
+test("el bot publica solo cuando NINGUN monto cambia, aunque el texto cambie", () => {
+  const { prod, repo } = dosCopias(
+    COTIZACION("los otros planes"),
+    COTIZACION("el Basico, el Crece y el Profesional"),
+  );
+  try {
+    const r = copias(prod, repo);
+    assert.equal(
+      r.codigo,
+      0,
+      "detuvo un arreglo que no mueve un centavo: los cinco montos son identicos a los " +
+        "dos lados y solo cambia a quienes alcanza la frase. Salida: " + r.salida,
+    );
+  } finally {
+    rmSync(prod, { recursive: true, force: true });
+    rmSync(repo, { recursive: true, force: true });
+  }
+});
+
+test("un monto distinto entre las dos copias SI detiene, y dice cual", () => {
+  const { prod, repo } = dosCopias(
+    COTIZACION("los otros planes"),
+    COTIZACION("los otros planes").replace("Bs 390", "Bs 420"),
+  );
+  try {
+    const r = copias(prod, repo);
+    assert.equal(r.codigo, 1, "un precio nuevo del bot entro sin firma. Salida: " + r.salida);
+    assert.match(
+      r.salida,
+      /420/,
+      "detuvo, pero no nombra el numero que cambia: un veredicto sin cita no se puede " +
+        "refutar. Salida: " + r.salida,
+    );
+  } finally {
+    rmSync(prod, { recursive: true, force: true });
+    rmSync(repo, { recursive: true, force: true });
+  }
+});
+
+test("si el archivo no esta en el repo sigue siendo NO MEDIDO: falla CERRADO", () => {
+  const { prod, repo } = dosCopias(COTIZACION("los otros planes"), null);
+  try {
+    const r = copias(prod, repo);
+    assert.equal(
+      r.codigo,
+      2,
+      "sin poder mirar el repo dijo algo distinto de NO MEDIDO. Poder medir el caso " +
+        "normal no vuelve honesto decir 'limpio' cuando no se miro. Salida: " + r.salida,
+    );
+  } finally {
+    rmSync(prod, { recursive: true, force: true });
+    rmSync(repo, { recursive: true, force: true });
+  }
+});
