@@ -29,6 +29,18 @@
    "at": 47.99,
    "gain": 0.6,
    "duck": true
+  },
+  {
+   "asset": "videos/claude-code-03/assets/sfx/pop.wav",
+   "at": 7.94,
+   "gain": 0.5,
+   "duck": true
+  },
+  {
+   "asset": "videos/claude-code-03/assets/sfx/pop.wav",
+   "at": 10.43,
+   "gain": 0.5,
+   "duck": true
   }
  ]
 }

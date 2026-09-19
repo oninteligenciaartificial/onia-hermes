@@ -35,6 +35,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 import { DEFAULT_CONFIG, createBotConfig, demoDuration } from "./config.mjs";
 import { checkGuardrails, guardrailReason, normalize } from "./guardrails.mjs";
 import { MIN_LEXICON_WORD } from "./intents.mjs";
+import { fraseDeAtencion } from "./ventanas-de-atencion.mjs";
 
 /** Version del esquema. Un archivo con otra cadena se rechaza entero (no se "migra" solo). */
 export const KNOWLEDGE_SCHEMA = "onia.bot.knowledge/1";
@@ -358,6 +359,40 @@ function checkObject(value, fields, path, errors, opciones = {}) {
 }
 
 /**
+ * El horario del negocio es un RANGO, y un rango se valida cruzando sus extremos. El SHAPE los
+ * mira de a uno (`desde` 0..23, `hasta` 1..24) y asi entraba 18 -> 02: `applyKnowledge` lo copia
+ * a `startHour: 18, endHour: 2`, que para el motor es un rango VACIO — el bot del cliente contesta
+ * lo contrario de su horario las 24 h, y el dueño no tiene forma de enterarse.
+ *
+ * Los dos extremos van JUNTOS por la misma razon que `duracionMinutos`/`duracionFrase`: declarar
+ * uno solo hereda el otro del base (`startHour: 9, endHour: 22`, que son los de Sergio Urcullo),
+ * asi que `desde: 23` a secas produce el mismo rango vacio sin traer el campo que lo delataria.
+ *
+ * Cruzar la medianoche es un horario legitimo (un bar, una farmacia de turno) y el motor todavia
+ * no sabe representarlo: mientras no sepa, se RECHAZA en vez de guardarse al reves.
+ */
+function checkHorario(empresa, errors) {
+  if (!isPlainObject(empresa)) return;
+  const horario = empresa.horario;
+  if (!isPlainObject(horario)) return;
+  const tieneDesde = horario.desde !== undefined;
+  const tieneHasta = horario.hasta !== undefined;
+  if (!tieneDesde && !tieneHasta) return;
+  if (!tieneDesde || !tieneHasta) {
+    errors.push(
+      "empresa.horario: `desde` y `hasta` van juntos — declarar uno solo hereda el otro del horario de Onia y te deja un horario que no es el tuyo",
+    );
+    return;
+  }
+  if (!Number.isInteger(horario.desde) || !Number.isInteger(horario.hasta)) return; // ya lo dijo el SHAPE
+  if (horario.hasta <= horario.desde) {
+    errors.push(
+      `empresa.horario: cierra antes de abrir (${horario.desde} -> ${horario.hasta}), asi no atiende ninguna hora del dia. Un horario que cruza la medianoche todavia no se puede cargar: parti el dia o escribilo en \`frase\`.`,
+    );
+  }
+}
+
+/**
  * La duracion no puede volver a decir dos cosas. Si el archivo toca la duracion, tiene que traer
  * los DOS campos y decir el mismo numero: asi la capa editable no puede prometer 15 minutos
  * mientras reserva 45.
@@ -447,6 +482,7 @@ export function validateKnowledge(data) {
   try {
     if (!isPlainObject(data)) return { ok: false, errors: ["el archivo no es un objeto JSON"] };
     checkObject(data, SHAPE, "", errors);
+    checkHorario(data.empresa, errors);
     checkDemo(data.demo, errors);
     checkProductos(data.productos, errors);
     checkRubros(data.rubrosExtra, errors);
@@ -973,11 +1009,27 @@ export function sanitizePanelKnowledge(data) {
  * `triggersExtra`) dejo al bot sin precios y sin los 9 disparadores del archivo — el lead
  * preguntaba "¿cuanto cuesta?" y recibia el M4 default sin cifras. Reglas:
  *   - campo simple / lista plana: el panel manda SI lo trae; si no, queda el del archivo;
- *   - objetos (identity, demo, empresa.horario, seguimiento): por sub-campo;
+ *   - objetos (identity, demo, seguimiento): por sub-campo;
+ *   - `empresa.horario`: NO — ver abajo, es el unico campo que el panel no puede mover;
  *   - `triggersExtra.demo`: UNION (la direccion segura: agregar si, sacar no);
  *   - `faq`: por ID — el panel manda sobre los ids que trae; los que no trae (precios, siat)
  *     se conservan del archivo, que es de donde salen las cifras.
- * Puro: no lee caches ni archivos. Los DOS docs ya pasaron su validador.
+ * Los DOS docs ya pasaron su validador. No lee caches ni archivos (el unico efecto es el aviso
+ * de abajo, que existe para que un descarte no sea invisible).
+ *
+ * ⚠️ `empresa.horario` NO SE MERGEA, y es a proposito (2026-09-18). Los dos lados de este merge
+ * hablan EN NOMBRE DE ONIA, asi que el horario de aca es la disponibilidad de Sergio Urcullo — y
+ * esa ya tiene dueno: `VENTANAS_ATENCION` en `ventanas-de-atencion.mjs`, la MISMA constante de la
+ * que `renovar-slots-bot.py` saca los horarios de demo que el bot OFRECE. Dejar que el panel
+ * moviera solo la mitad PROMETIDA es como se separaron la primera vez: hasta el 13-sep el bot
+ * ofrecia un sabado a las 14:00 y prometia "lun-vie 9:00-18:00" en el mismo mensaje. Medido vivo
+ * el 2026-09-18 (`npm run horario:vivo`): la fila del panel decia `hasta: 19` y "Lunes a viernes
+ * de 9:00 a 19:00, sabados de 9 a 13", o sea le prometia atencion a las 10:00 de un martes a un
+ * lead que Sergio recien atiende a las 14:00. Mover la disponibilidad se hace en la constante,
+ * donde mueve las dos mitades juntas.
+ *
+ * Esto NO le toca el horario a un CLIENTE: su fila llega por `fetchOrgKnowledge` (por org) y se
+ * aplica sin pasar por aca, que es el camino exclusivo del documento de venta de Onia.
  */
 export function mergePanelKnowledge(archivo, panel) {
   if (!archivo) return panel;
@@ -986,10 +1038,18 @@ export function mergePanelKnowledge(archivo, panel) {
   for (const key of ["identity", "demo", "seguimiento"]) {
     if (isPlainObject(archivo[key]) && isPlainObject(panel[key])) out[key] = { ...archivo[key], ...panel[key] };
   }
-  if (isPlainObject(archivo.empresa) && isPlainObject(panel.empresa)) {
-    out.empresa = { ...archivo.empresa, ...panel.empresa };
-    if (isPlainObject(archivo.empresa.horario) && isPlainObject(panel.empresa.horario)) {
-      out.empresa.horario = { ...archivo.empresa.horario, ...panel.empresa.horario };
+  if (isPlainObject(archivo.empresa) || isPlainObject(panel.empresa)) {
+    out.empresa = { ...(archivo.empresa || {}), ...(panel.empresa || {}) };
+    // El horario del ARCHIVO se conserva (es del repo, y hoy no lo declara: hereda del codigo);
+    // el del PANEL se descarta con constancia. Un descarte mudo es como esta familia se esconde.
+    if (isPlainObject(panel.empresa?.horario)) {
+      console.warn(
+        "[knowledge:panel] ignoro `empresa.horario` de la fila del panel: la disponibilidad de " +
+          "Onia la manda ventanas-de-atencion.mjs (es la misma de la que salen los horarios de " +
+          "demo que el bot ofrece). Para cambiarla, se edita esa constante.",
+      );
+      if (isPlainObject(archivo.empresa?.horario)) out.empresa.horario = archivo.empresa.horario;
+      else delete out.empresa.horario;
     }
   }
   const demoArchivo = Array.isArray(archivo.triggersExtra?.demo) ? archivo.triggersExtra.demo : [];
@@ -1247,6 +1307,17 @@ export function faqVigente(item, nowIso) {
 }
 
 /**
+ * El horario de un cliente es UN tramo por dia (`dias` + `desde` + `hasta`); `fraseDeAtencion`
+ * habla el mapa `dia -> franjas`. Traducir aca —y no tipear la frase— es lo que hace que el texto
+ * y la decision no puedan separarse: los dos salen del mismo `businessHours`.
+ */
+function horarioComoVentanas({ days, startHour, endHour }) {
+  const ventanas = {};
+  for (const dia of days) ventanas[dia] = [[startHour, endHour]];
+  return ventanas;
+}
+
+/**
  * config + hechos = config. Puro: no lee archivos ni cachea.
  * Sin datos devuelve EL MISMO objeto (identidad), que es como degrada todo el modulo.
  */
@@ -1267,13 +1338,19 @@ export function applyKnowledge(base = DEFAULT_CONFIG, data = null, options = {})
     // `null` y no `delete`: `createBotConfig` fusiona con `{ ...base[key], ...value }`, asi que
     // una clave BORRADA del override vuelve a aparecer desde la base. La ausencia no se puede
     // expresar quitando: hay que escribirla.
-    if (Number.isInteger(horario.desde) || Number.isInteger(horario.hasta) || Array.isArray(horario.dias)) {
-      businessHours.franjas = null;
-    }
+    // La guarda mira TODO el objeto y no solo el rango: quien declara su horario aunque sea con
+    // una `frase` suelta tampoco puede quedarse con las franjas de Sergio Urcullo, que deciden
+    // POR ENCIMA del rango y le cierran el negocio de 17 a 20.
+    businessHours.franjas = null;
     if (Array.isArray(horario.dias)) businessHours.days = [...horario.dias];
     if (Number.isInteger(horario.desde)) businessHours.startHour = horario.desde;
     if (Number.isInteger(horario.hasta)) businessHours.endHour = horario.hasta;
-    if (horario.frase) businessHours.frase = horario.frase;
+    // La frase es lo que el bot PRONUNCIA ({{horario_frase}} -> R_HORARIO, la coletilla M7 y los
+    // cuatro acuses de handoff), y en el panel es un texto libre OPCIONAL al lado de los campos
+    // estructurados. Heredarla dejaba al bot del cliente decidiendo con el rango del cliente y
+    // diciendo el horario de ONIA. Se DERIVA de lo que el bot va a hacer, con la misma funcion
+    // que arma la de Onia, asi que mover el rango cambia la promesa sola.
+    businessHours.frase = horario.frase || fraseDeAtencion({ ...horarioComoVentanas(businessHours) });
     overrides.businessHours = businessHours;
   }
 

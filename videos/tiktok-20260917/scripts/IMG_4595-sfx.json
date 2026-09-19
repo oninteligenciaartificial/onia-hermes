@@ -35,6 +35,12 @@
    "at": 48.89,
    "gain": 0.6,
    "duck": true
+  },
+  {
+   "asset": "C:/dev/proyectos/onia-hermes/.claude/worktrees/video-editing-silence-removal-073acb/videos/claude-code-03/assets/sfx/pop.wav",
+   "at": 0.05,
+   "gain": 0.5,
+   "duck": true
   }
  ]
 }

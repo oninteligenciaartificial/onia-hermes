@@ -77,6 +77,111 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Ahora — plan de features (revisado 2026-08-30, con Gate 1 corrido)
 
+- [x] 🟠 **El runtime vivo de la landing perdió su `.commit`, así que «qué corre `onia.com.bo`»
+      volvió a ser a mano — que es exactamente lo que su propio publicador dice haber curado el
+      2026-09-03. Medido el 2026-09-18 18:3x La Paz por `onia-cola`. CERRADO el 2026-09-18 20:0x
+      La Paz por `onia-cola`: el gate ya lo nota.**
+      **Cómo quedó:** `shaVivoLanding()` es TRI-ESTADO (`clasificarShaVivo`, pura y exportada):
+      `MEDIDO` con su sha, `SIN_COMMIT` cuando el runtime contestó y el archivo no está, y
+      `NO_MEDIDO` cuando no se pudo preguntar. La distinción no la puede hacer un `cat` —falla
+      igual con el archivo ausente y con el SSH caído—, así que vive en el guion
+      (`guionDelCommit`: `if [ -f … ]; then cat …; else printf __SIN_COMMIT__; fi`), y eso se
+      prueba corriéndolo en un shell de verdad contra un directorio sembrado, no leyéndolo.
+      El aviso (`avisoDelCommitAusente`) es **AVISO, nunca rojo**: no cambia ningún veredicto
+      —el de la landing lo da `epochBuildLanding` por FECHA— ni el código de salida, porque un
+      rojo acá trabaría el merge de todos los carriles por algo que se cura solo en la próxima
+      publicación. **Y la mitad que lo hace útil:** ahora se le pregunta por TODO pedido de
+      landing y no sólo por los `entregados` —el único camino que imprime cita—, que era lo que
+      dejaba la ausencia invisible en el caso normal (un pedido VIGENTE, casi toda corrida).
+      **Probado en vivo, no razonado:** `npm run pedido:entregado` imprime `OK t_4e0bb0b0
+      (landing): sigue VIGENTE` y debajo el `AVISO: el runtime vivo de la landing corre SIN
+      .commit`, con exit 0.
+      **Validado por mutación: 8 de 8**, cada una restaurando con `cp` (nunca `git checkout`,
+      que se lleva el arreglo sin commitear del mismo archivo). Las dos que importan: aplanar la
+      ausencia en `NO_MEDIDO` —el bug— deja 3 casos en rojo, y volver a acotar la pregunta a
+      `entregados` deja 1, que es el que no existía antes de esta vuelta.
+      **De paso, un rojo del propio instrumento:** el gate de cableado anclaba en
+      `/landing:\s*(.*)/` sobre el fuente y lo acusaba cualquier PROSA que dijera «landing: …
+      vivo …» —el texto del aviso nuevo lo puso rojo con el producto intacto—, y además se
+      quedaba con la primera aparición del archivo, que es de OTRO mapa (los publicadores en
+      seco). Ahora blanquea las cadenas además de los comentarios y nombra a `vivoPorDestino`.
+      **Qué se midió, y contra qué:** `ls -la /opt/onia-landing/runtime-next/` devuelve sólo
+      `apps`, `node_modules` y `package.json` — **sin `.commit`** —, mientras
+      `find /opt/onia-landing -maxdepth 3 -name .commit` lo encuentra en los respaldos
+      (`/opt/onia-landing/runtime-next.bak-deploy-20260917210756`) y en los builds armados
+      (`/opt/onia-landing/_deploy/build-20260918005015`). El runtime que corre HOY es el único sin él.
+      `hermes-content/deploy/onia-landing/build-and-stage.sh:77-80` lo dice con todas las letras:
+      *«El .commit va en el STAGE (lo que se publica), no solo en $BUILD, que se borra al final:
+      medido 2026-09-03, el runtime vivo quedaba "sin .commit" y saber que corre volvia a ser a
+      mano.»* La cura está escrita y volvió a pasar.
+      **No es que la fuente se haya desviado, y eso descarta la sospecha barata:** los tres
+      publicadores de `/opt/onia-landing/_deploy/` coinciden **byte a byte** con
+      `hermes-content/deploy/onia-landing/` (mismo `md5sum` en los tres), y
+      `grep -c "STAGE/.commit" /opt/onia-landing/_deploy/build-and-stage.sh` da `1`. El swap
+      tampoco filtra: `swap-and-verify.sh:19-20` mueve el **directorio entero**
+      (`mv "$STAGE" "$ROOT/runtime-next"`), así que un stage con `.commit` lo conserva. Queda que
+      el stage que entró a las **20:08 UTC** ya venía sin él — o que ese `mv` fue el rollback de
+      `swap-and-verify.sh:36-37`, que restaura un runtime anterior.
+      **Qué NO cuesta, para no inflarlo:** `shaVivoLanding()`
+      (`scripts/pedido_deploy_entregado.mjs`) no decide nada — sólo sirve para CITAR, y el
+      veredicto lo da `epochBuildLanding` por FECHA. Así que ningún pedido se decide mal por
+      esto: lo que se pierde es la cita, que es la diferencia entre refutar un veredicto en dos
+      segundos y volver a medirlo a mano. *(Devolvía `null` pelado y eso se leía como
+      «correcto»; lo era para el veredicto y no para el diagnóstico: `null` decía a la vez «no
+      pude preguntar» y «pregunté y no está», que se arreglan en lugares opuestos.)*
+      **Reproducción en 30 segundos:**
+
+          ssh root@187.77.16.63 'ls -la /opt/onia-landing/runtime-next/; find /opt/onia-landing -maxdepth 3 -name .commit | head'
+
+      **Qué NO se tocó, y por qué:** la ausencia en producción **no se arregla a mano** — se cura
+      sola en la próxima publicación (el stage siguiente trae su `.commit`), y escribir ese
+      archivo a mano sería inventar un sha que nadie derivó, el anti-patrón de esta familia. Lo
+      que faltaba era verla. **Queda vivo el porqué**, que este gate ahora deja a la vista cada
+      vez que vuelva a pasar: o el stage que entró a las 20:08 UTC ya venía sin él, o ese `mv`
+      fue el rollback de `swap-and-verify.sh:36-37`. Si el aviso reaparece DESPUÉS de una
+      publicación limpia, ahí hay un segundo ítem — y esta vez con fecha y testigo.
+
+- [x] 🟠 **El ÚNICO camino para entregar `onia-platform` desde nodo-casa vivía FUERA de git, en
+      un archivo suelto de `/root/tmp` del VPS. Medido y CERRADO el 2026-09-18 17:5x La Paz por
+      `onia-cola` (`2516f393`).**
+      **Cómo quedó:** la fuente única es `scripts/integrar-onia-platform.sh`, y la copia a mano
+      del VPS se retiró en la misma vuelta (renombrada a `.REEMPLAZADO-POR-…`, no borrada, para
+      que el que la busque encuentre el puntero y no un hueco). Se invoca **leyendo del clon del
+      VPS ya puesto al día** — `fetch` + `merge --ff-only origin/main` + `bash …/scripts/…` en
+      un solo comando remoto —, así que no hay que desplegar nada y sigue habiendo una sola copia.
+      Además viajaron tres cosas que antes estaban clavadas a mano: la rama es un **argumento**
+      (estaba fija en el carril del chatbot), el árbol se **prepara solo** (worktree, `node_modules`
+      por hardlink —un symlink mata el build con `[standalone-runtime] … invalid or linked`— y el
+      symlink a `onia-hermes`), y **`check:onia-core` en `SKIPPED` ahora es ROJO**: sin el hermano
+      ese gate sale 0 sin medir el espejo del core, que es el primer paso del CI.
+      **Probado en vivo, no razonado:** con `0` intentos (el modo que prepara el árbol y no corre
+      gates ni push) el invocador contestó `clon al dia: 2516f3931` + `NO PUBLICADO tras 0
+      intento(s)`, exit 5 — o sea el camino entero desde casa resuelve, y el texto del script es
+      el mismo que media hora antes publicó `5ed97b0` con 5.704 tests verdes al primer intento.
+      Hoy la integración del carril del chatbot a `master` salió al primer intento con ese
+      script —5.704 tests verdes, publicado `5ed97b0`— y funciona bien: hace `fetch` +
+      `reset --hard origin/master` + merge + los CINCO gates + `git checkout -- .` (el build muta
+      4 archivos de iconos) + `push` con `ONIA_LOOP_ID`, todo en UN proceso remoto con bucle de 2
+      intentos, que es lo que evita que `master` se mueva entre gate y push.
+      **El agujero no es el método: es dónde vive.** Es una copia a mano, sin fuente versionada,
+      en un directorio temporal. Un reinicio del VPS, un `tmpreaper` o una limpieza de disco
+      —que este carril ya hizo dos veces— lo borran, y la próxima vuelta del integrador no tiene
+      cómo saber que existió: la memoria compartida describe la RECETA, no el archivo. Mientras
+      tanto, es el único camino a `master` desde la máquina donde corren los cuatro loops
+      (`onia-platform` no se pushea desde casa: su remoto está en `DESHABILITADO-NODO-DE-DESARROLLO`).
+      **Qué NO alcanza, para no repetirlo:** versionarlo y dejarlo ahí crea DOS copias del mismo
+      juicio, que es como nacen los desacuerdos de esta familia (ver el ítem de `publicar.sh` en
+      `hermes-content/deploy/`). La forma correcta es fuente en el repo + el invocador leyendo
+      del clon del VPS ya puesto al día (`ponerElEspejoAlDia` de `scripts/deploy_sin_pedido.mjs`
+      hace exactamente eso para los detectores), con `cmp` contra `git show origin/main:<ruta>`
+      antes de creerle.
+      **Reproducción en 30 segundos:** `ssh root@187.77.16.63 'cat /root/tmp/integrar-plat.sh'`
+      devuelve el script; `git log --oneline -1 -- scripts/ | cat` y un `grep -rl integrar-plat`
+      sobre el repo devuelven **cero**: no tiene fuente en ningún lado.
+      **Por qué no entró en la vuelta que lo encontró:** la vuelta ya había integrado cuatro
+      carriles y quedaban ~15 min; un script de ENTREGA a medias es peor que la copia a mano que
+      funciona, porque el que lo use después no sabe cuál de los dos corrió.
+
 - [x] 🔴 **`scripts/deploy_sin_pedido.mjs` absolvía un destino porque EXISTÍA un pedido, sin
       preguntar si ese pedido DESCRIBE lo que hoy publicaría — y el que los deja cortos es el
       integrador. Medido en vivo el 2026-09-18 ~11:5x La Paz por `onia-cola`. CERRADO el

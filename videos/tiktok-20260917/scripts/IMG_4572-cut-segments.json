@@ -284,11 +284,11 @@
   },
   {
    "start": 16.56,
-   "end": 17.0,
+   "end": 17,
    "word": " lo"
   },
   {
-   "start": 17.0,
+   "start": 17,
    "end": 17.16,
    "word": " que"
   },
@@ -324,11 +324,11 @@
   },
   {
    "start": 18.9,
-   "end": 19.0,
+   "end": 19,
    "word": " aquí"
   },
   {
-   "start": 19.0,
+   "start": 19,
    "end": 19.26,
    "word": " está"
   },
@@ -565,7 +565,7 @@
   {
    "start": 31.87,
    "end": 32.05,
-   "word": " como"
+   "word": " cómo"
   },
   {
    "start": 32.05,

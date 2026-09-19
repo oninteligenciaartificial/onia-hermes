@@ -318,9 +318,207 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
-- [ ] 🔴 **El guardia que impide que dos orgs reclamen el mismo inbox mira UNA columna, y el
-      que lee mira TRES: el conflicto se crea con un solo número mal tipeado.** Medido el
-      2026-09-18 leyendo la fuente, no supuesto:
+- [x] 🔴 **~~El instrumento que mide la DEFINICIÓN DE HECHO del carril imprimía un remedio que
+      no se podía tipear — y de ese texto salió una pregunta falsa a Sergio Urcullo~~ — CERRADO
+      el 2026-09-18** (`scripts/objetivo_visible.mjs`, commit `14851e61`).
+
+      **Cómo apareció.** No de la cola —no le quedaban 🔴 abiertos— sino de correr la definición
+      de hecho del carril y **no aceptar su `NO MEDIDO`**. El veredicto cerraba así:
+
+          El objetivo TAMPOCO se ve mientras la puerta corte —el dueño rebota igual al abrir
+          `/inbox`—. Tambien se puede medir con una cuenta que ya lo cumpla (`--email`).
+
+      Las dos mitades de esa frase estaban mal. **`--email` no existía**: el único
+      `process.argv` del archivo era el de `--self-check`. Quien obedecía el remedio veía el
+      mismo veredicto, sin nada con que refutarlo — por eso el objetivo quedó `NO MEDIDO` vuelta
+      tras vuelta. Y **«el dueño rebota igual» generalizaba**: medido hoy contra producción son
+      dos hechos distintos y los dos ciertos a la vez —
+
+      | cuenta | rol | `/inbox` |
+      |---|---|---|
+      | `superadmin@onia.com.bo` (dueño DERIVADO de los inboxes 4/5) | `SUPERADMIN` | cortado |
+      | `sergio@onia.com.bo` | `ADMIN` | **HTTP 200**, captura mirada |
+
+      `MFA_REQUIRED_ROLES` es `["SUPERADMIN"]` desde la decisión de Sergio Urcullo del 17/18-sep,
+      así que el corte es **correcto por diseño** y no dice nada de las demás cuentas.
+
+      **Lo que costó.** De ese texto salió `t_3bb6b9ee`, bloqueada esperándolo, afirmando que su
+      cuenta personal tampoco entraba y ofreciéndole una **opción B: «te la sacamos a vos, y tu
+      panel queda con una sola llave»** — bajarle la seguridad a una cuenta que no tenía el
+      problema. Rehecha como `t_15d4855d` (sin esa opción) y la vieja archivada; verificado que
+      queda **una sola** pregunta viva del tema. La org `onia-interna` tiene **un solo perfil** y
+      es SUPERADMIN (medido), así que no hay salida técnica: la 2FA de esa cuenta es suya.
+
+      **El arreglo.** `--email <correo>` existe de verdad (las dos formas), y se le exige perfil
+      en la base **antes de emitir**: `generate_link` crea la cuenta si el correo no existe y
+      devuelve 200 igual, así que un dedazo daría de alta un usuario en producción. El veredicto
+      **nombra el rol** del dueño cortado —o dice que no lo midió— y manda a la fuente que decide
+      a quién alcanza, en vez de tipear la política.
+
+      **El caso ancla es de CLASE:** toda bandera que los mensajes de `juzgar()` recomienden
+      tiene que estar implementada, con el universo derivado del disco. Prohibir el literal viejo
+      cerraba la instancia.
+
+      ⚠️ **Y el gate nació midiéndose A SÍ MISMO**, que es lo que hay que contar: la ventana
+      arrancaba en `indexOf('export function juzgar(')`, que encuentra primero **la mención
+      dentro del propio gate**, así que el `--email` del universo salía de su propio regex. 97
+      casos en verde y **la mutación que reintroduce el bug pasando limpia**. Se ancla a la
+      DEFINICIÓN (`/^export function juzgar\(/m`) y un caso nuevo exige que borrarle la bandera
+      al MENSAJE vacíe el universo. Validado por mutación (7), todas en rojo.
+
+      En vivo: sin bandera nombra `rol SUPERADMIN`; con `--email sergio@onia.com.bo` pasa de 403
+      de puerta a 200 con veredicto de bandeja (`sinCanal:true` — esa org no tiene los inboxes).
+
+- [x] 🔴 **~~El bot de venta de Onia promete un horario que Sergio Urcullo NO atiende~~ —
+      CERRADO el 2026-09-18** (`mergePanelKnowledge` en
+      `hermes-content/deploy/vps-ops/bot/knowledge.mjs`; **commiteado, NO desplegado**).
+      **No era una decisión de Sergio Urcullo**, y por eso el bloqueo anterior estaba mal puesto:
+      la disponibilidad de Onia ya tiene dueño en el repo —`VENTANAS_ATENCION` en
+      `ventanas-de-atencion.mjs`, citada textual de él el 2026-09-02 y repetida en la memoria del
+      sistema— y es la **misma** constante de la que `renovar-slots-bot.py` saca los horarios de
+      demo que el bot OFRECE. Lo que estaba roto no era *cuál* de los dos valores vale: era que el
+      panel pudiera mover **sólo la mitad prometida**, que es exactamente cómo se separaron la
+      primera vez (hasta el 13-sep el bot ofrecía un sábado y prometía "lun-vie 9:00-18:00").
+      Pedirle que arbitrara dos valores le habría pedido una decisión que ya tomó.
+      **La cura:** el documento de venta de Onia deja de aceptar `empresa.horario` del panel —lo
+      descarta con un `console.warn`, no en silencio— y hereda el del código. El horario de un
+      **cliente** no se toca: llega por `fetchOrgKnowledge` (fila por org) y sigue ganando, que es
+      lo correcto; hay un caso que se pone rojo si esa cura se va de tema.
+      Test: `panel-no-mueve-la-disponibilidad-de-onia.test.mjs` (5 casos; estaba en ROJO por el
+      ancla y por el descarte mudo antes del arreglo). Suite del bot 1183/1183.
+      ⚠️ **Y el gate se arregló en la misma vuelta, porque se volvía un verde falso.**
+      `horario-vivo.mjs` juzgaba el campo crudo de la fila; con la cura puesta habría firmado
+      *«ninguno lo contradice»* mientras producción —que todavía corre el código viejo— le sigue
+      prometiendo 9:00-19:00 a un lead. Ahora la exención cuelga del **deploy**, no del repo:
+      pregunta al bot vivo (`docker exec onia-center grep … /tmp/onia-bot/knowledge.mjs`) si la
+      guarda está corriendo, y si no puede preguntar **no exime** (fail-closed). Medido después
+      del arreglo: sigue **rojo** con su motivo, y se pone verde solo cuando el deploy llegue.
+      Self-check 43/43.
+
+- [x] 🔴 **~~El bot del cliente decidía con el horario del cliente y DECÍA el de Onia~~ —
+      CERRADO el 2026-09-18** (motor: `applyKnowledge` en
+      `hermes-content/deploy/vps-ops/bot/knowledge.mjs`; **commiteado, NO desplegado**).
+      Es la mitad hermana del ítem de abajo, que cerró la herencia de **un extremo** del rango y
+      dejó viva la de la **frase**. En `/settings/chatbot` los días y las horas son campos
+      estructurados y la frase es un texto libre **opcional**
+      (`onia-platform/app/(dashboard)/settings/chatbot/ChatbotClient.tsx:317`:
+      `if (form.frase.trim()) horario.frase = …`), así que el camino normal —llenar los campos y
+      dejar el texto vacío— publicaba un documento sin frase y `businessHours.frase` se heredaba
+      del base, que son **los horarios de Sergio Urcullo**. Y esa frase es la que el bot
+      **pronuncia**: `{{horario_frase}}` viaja a `R_HORARIO` («Atendemos …»), a la coletilla `M7`
+      de fuera de horario y a los **cuatro** acuses de handoff (`config.mjs` 343/353/363/373/383/482).
+      Medido con el motor, no supuesto: `dias:[1..5], desde:8, hasta:20` sin frase daba
+      `startHour 8` (decide bien) y `frase: "lun-vie 14:00-17:00 y 20:00-22:00, sáb 9:00-15:00"`
+      (dice el horario de Onia) — y encima le promete sábado a un negocio cerrado el sábado.
+
+      **La mitad hermana, que el comentario del propio archivo ya declaraba cubierta y no lo
+      estaba:** la guarda que pone `franjas = null` miraba `dias`/`desde`/`hasta` y **no** `frase`,
+      así que declarar sólo la frase dejaba vivas las franjas de Sergio Urcullo, que deciden POR
+      ENCIMA del rango. El comentario decía textual que heredarlas *«le cerraría el negocio al
+      cliente a las 17:00 y se lo abriría a las 20:00»* — cierto, y la condición no lo evitaba.
+
+      **La cura no tipea nada:** la frase se **deriva** de lo que el bot va a hacer
+      (`fraseDeAtencion`, la misma función que arma la de Onia), así que mover el rango cambia la
+      promesa sola. Sigue mandando la del dueño si la escribe.
+
+      **Prueba.** Dos casos escritos primero y **en rojo por el motivo correcto** — el primero
+      falló con `expected` y `actual` idénticos (`'lun-vie 14:00-17:00 y 20:00-22:00, sáb
+      9:00-15:00'`), que es literalmente el bug: la frase «del cliente» era la de Onia. Validados
+      **por mutación en las dos direcciones**, cada una cazada por su caso y sólo por el suyo:
+      revertir la derivación de la frase deja rojo el 24; revertir la guarda de `franjas` deja
+      rojo el 25. `npm run test:bot` **1178/1178**, `npm run test:horario-instrumento` 29/29,
+      simulador 3/3.
+      **El espejo de `onia-platform` (`lib/chatbot/knowledge.ts`) NO necesita cambio**: es sólo el
+      validador, no tiene `applyKnowledge` (verificado con grep, no supuesto).
+      <sub>El fixture que lo escondía: el test hermano
+      («horario: cambia el texto del guion Y la ventana real») **siempre** pasaba `frase`
+      explícita, así que nunca ejercitaba la herencia — un fixture apoyado en el defecto que el
+      test dice cubrir.</sub>
+
+- [x] 🔴 **~~El formulario del chatbot deja tipear un horario al revés y el validador lo
+      acepta~~ — CERRADO el 2026-09-18** (motor: `checkHorario` en
+      `hermes-content/deploy/vps-ops/bot/knowledge.mjs`; espejo: `onia-platform`
+      `lib/chatbot/knowledge.ts`, rama del carril, **falta merge de `onia-cola` y deploy del
+      bot**). El asistente de 6 preguntas ya estaba tapado (`5bc7747f`), pero el **formulario**
+      de `/settings/chatbot` tiene `desde` y `hasta` como dos campos numéricos libres y
+      `validarConocimiento` los validaba **por separado** (`desde: int 0..23`, `hasta: int
+      1..24`) sin cruzarlos nunca. `applyKnowledge` copia eso a `startHour: 18, endHour: 2` —
+      un rango **vacío**: el bot del dueño contesta lo contrario de su horario las 24 h.
+
+      **La mitad hermana, que no estaba en el ítem y es peor porque no se ve:** declarar UN
+      solo extremo hereda el otro del base, que son los horarios de **Onia**
+      (`DEFAULT_CONFIG.businessHours` = `startHour: 9, endHour: 22`, medido). Así `desde: 23`
+      a secas también da un rango vacío, y el documento ni siquiera trae el campo que lo
+      delataría. Por eso la regla quedó igual que `checkDemo`: **los dos extremos van juntos**
+      y `hasta > desde`.
+
+      **Riesgo de endurecer un validador que también corre AL LEER, medido antes de tocar
+      nada** (no supuesto): `select "organizationId", status, (data->'empresa'->'horario')` en
+      `chatbot_knowledge` de `supabase-db` devuelve **una sola fila publicada y SIN horario**,
+      así que ningún documento legado deja de cargar.
+
+      **Prueba.** Tests escritos primero y en rojo por el motivo correcto (`18 -> 02` pasaba:
+      `true !== false`), y los dos gates validados **por mutación** — con
+      `if (false) checkHorario(...)` el del motor cae 1/1 y el de la plataforma 3 de 28; con la
+      cura, `npm run test:bot` 1176/1176, `npx vitest run` 5708/5708, `npx tsc --noEmit` 0,
+      `eslint` 0 errores. Gates: `knowledge.test.mjs` («el horario del negocio se valida
+      CRUZANDO sus extremos, no de a uno») y `lib/chatbot/knowledge.test.ts` (4 casos), los dos
+      con el caso ancla del horario corriente 9→18 y el de tocar **sólo los días**, que sigue
+      pasando porque no declara ningún extremo.
+
+      **Y la mitad que el dueño ve:** el error del rango llega como `campo: "empresa.horario"`
+      —el objeto entero, igual que `demo`—, y el mapa de etiquetas de `ChatbotClient.tsx` sólo
+      tenía los subcampos, así que caía al fallback `return campo` y le mostraba
+      «empresa.horario:» en una pantalla que traduce todo lo demás al castellano. Agregada su
+      fila («Horario de atención»). `etiquetaDeCampo` no está exportada y no tiene gate propio:
+      queda anotado abajo, en «Después».
+
+- [x] 🔴 **~~El asistente de 6 preguntas publicaba AL REVÉS el horario de un negocio
+      nocturno~~ — CERRADO el 2026-09-18** (`onia-platform` `5bc7747f`, rama del carril;
+      falta merge de `onia-cola`). El asistente estrenado ese mismo día (master `f5e32220`,
+      16:18) convierte el horario a `empresa.horario`, que es UN tramo `dias + desde + hasta`.
+      Con *«Lunes a sábado de 18:00 a 02:00»* —un bar, una farmacia de turno, un comercio
+      nocturno— `desde` salía del mínimo de los `abre` (18) y `hasta` del máximo de los
+      `cierra` (2): publicaba `desde: 18, hasta: 2`. Medido con el test en rojo antes del
+      arreglo: `Received: {"dias":[1,2,3,4,5,6],"desde":18,"hasta":2,…}`.
+      **No es el aplanamiento que el archivo ya avisa** (ahí el rango es cierto y más ancho):
+      acá sale invertido, así que no se publica nada y se dice por qué — la rama `sinEntender`
+      que la UI ya sabe pintar. Caso en `asistente-respuestas.test.ts`
+      (`el horario que cruza la medianoche no se publica al reves`), validado por mutación:
+      sin `cruzaLaMedianoche` queda rojo, y el ANCLA (9:00–18:00, sin avisos) sigue verde.
+      **Cómo apareció.** No de la cola —no le quedaban 🔴 abiertos— sino de auditar lo que
+      otro carril mergeó a `master` **hoy** contra la clase que este carril ya cerró cinco
+      veces: una pantalla que le pide un dato al dueño, le dice «listo» y publica otra cosa.
+
+- [x] 🔴 **~~El guardia que impide que dos orgs reclamen el mismo inbox mira UNA columna, y el
+      que lee mira TRES: el conflicto se crea con un solo número mal tipeado~~ — CERRADO el
+      2026-09-18** (`onia-platform` `0c360387`, rama del carril; falta merge de `onia-cola`).
+      La pregunta se centralizó en `onia-platform/lib/chatbot/otra-org-reclama.ts` —plural,
+      porque el alta web evalúa varios candidatos de una— y los CUATRO guardias quedaron
+      cableados ahí. Devuelve **quién** lo reclama, así el 409 nombra al dueño ajeno: un error
+      que dice de quién es el inbox se resuelve solo, uno que dice "ocupado" es un ticket.
+
+      **Prueba.** El gate nuevo
+      `onia-platform/lib/chatbot/ningun-guardia-mira-una-sola-columna.test.ts` estuvo **en rojo
+      primero por el motivo correcto**: el PATCH del superadmin devolvía `200` donde debe dar
+      `409`, y `encenderCanalWeb` **adoptaba el inbox 5** que otra org tenía como WhatsApp.
+      Validado por mutación en tres direcciones, las tres rojas: recortar el helper a una
+      columna, revertir el cableado del guardia admin, y sacarle la guarda al alta web.
+      Gates verdes en las dos máquinas (`tsc` 0 · `vitest` 5664 · `eslint` 0), re-medidos
+      después de mergear `origin/master` — que se había movido y tocaba estos mismos archivos.
+
+      **Dos gates vecinos se tocaron en la misma vuelta, y por qué:** `route.test.ts` clavaba la
+      forma INTERNA de la consulta (se pasó a afirmar lo que le importa al llamador), y
+      `todo-canal-se-puede-volver-a-encender.test.ts` detectaba la guarda por su forma literal
+      — se le enseñó la vía nueva, porque si no se apagaba **en silencio** el día que un canal
+      se cablea al helper, que es justo el arreglo bueno. Se verificó que sigue vivo: la
+      mutación que le saca la guarda al alta web lo deja rojo a él también.
+
+      Lo que sigue midiendo el universo es el disco (`readdirSync`, no `git ls-files`): el
+      guardia nuevo es justamente el archivo que todavía no está commiteado.
+
+      <sub>Lo de abajo es el diagnóstico original, que quedó fiel:</sub>
+      Medido el 2026-09-18 leyendo la fuente, no supuesto:
       `onia-platform/app/api/admin/organizations/[id]/whatsapp/route.ts` pregunta
       `where: { chatwootInboxId, organizationId: { not: id } }` — sólo el slot WEB — mientras
       `onia-platform/lib/chatbot/org-del-inbox.ts` resuelve por los tres
@@ -4493,6 +4691,17 @@ decisión de Sergio, no código.
 
 ## Después
 
+- [ ] **`etiquetaDeCampo` traduce los errores del validador al castellano y no tiene gate: su
+      mapa es una lista de inclusión y falla abierto.** Anotado el 2026-09-18 al cerrar el 🔴 del
+      horario invertido. Vive dentro de `app/(dashboard)/settings/chatbot/ChatbotClient.tsx:136`,
+      no se exporta, y el fallback es `return campo` — así que cada campo nuevo que el validador
+      aprenda a rechazar le muestra al dueño la ruta cruda (`empresa.horario:`) en una pantalla
+      donde todo lo demás está en castellano. Hoy faltaba justo la fila del objeto `empresa.horario`
+      (la de `demo` sí estaba). **Sujeto del gate:** exportar la función y cruzar su universo contra
+      los `campo` que `validarConocimiento` puede emitir, derivados del SHAPE + las reglas cruzadas
+      (`checkHorario`, `checkDemo`, `checkProductos`, `checkRubros`, `checkFaqNegocio`) — no contra
+      una lista tipeada, que es el mismo modo de falla.
+
 - [x] ✅ **CERRADO el 2026-09-17 18:45 UTC — el simulador ya no miente sobre el horario, y el
       agujero era el DOBLE de grande que lo anotado.** Lo anotado era el reloj del modo
       interactivo; contado de nuevo antes de tocar nada, los **once** guiones de `--all` estaban
@@ -4920,6 +5129,27 @@ archivos.**
 ---
 
 ## Cerrado — no rehacer
+
+- [x] **~~El asistente de configuración aplanaba el horario del dueño sin decírselo~~** — cerrado el
+      2026-09-18 (`onia-platform` 9c509b3c, rama del carril; **commiteado, NO desplegado**).
+      El wizard de 6 preguntas de `/settings/chatbot` nació ese mismo día (`f5e32220`, 20 min
+      antes de esta vuelta) y es la superficie nueva por donde el dueño carga lo que su bot le
+      dice a SUS clientes. El esquema del bot (`empresa.horario`) sólo sabe de **un** rango
+      (`dias + desde + hasta`), así que el corte del mediodía y el sábado con horario propio no
+      se pueden expresar y el asistente los aplana — eso está bien; hacerlo **mudo** no.
+      Medido corriendo `aplicarRespuestas` con lo que escribe un dueño boliviano de verdad —
+      *«Lunes a viernes de 8:00 a 12:00 y de 14:00 a 18:30, sábados de 9 a 13»*— sale
+      `dias [1..6], desde 8, hasta 19` y **`avisos: []`**: el dueño lee que quedó listo y su bot
+      le dice al cliente que el sábado atiende de 8:00 a 19:00 y que al mediodía está abierto.
+      Cerrar al mediodía es lo normal acá, no el borde. Ahora el aviso dice el rango que quedó y
+      la causa **derivada del dato** (no inventa el corte si no lo hay), y el ancla del test
+      exige que un horario que entra entero **no avise nada** — sobre-avisar apaga el aviso.
+      ⚠️ **Y cerrar esa mitad casi rompe la otra:** la pantalla decidía *«No se entendió — queda
+      el de antes»* con `avisos.some(a => a.includes('horario'))`, así que el aviso nuevo le
+      habría pintado *«Todavía no lo entiendo»* en rojo con el horario ya guardado. La causa
+      ahora se **declara** (`sinEntender`), no se deduce del texto de un aviso.
+      Gates: `tsc` 0 · `vitest` 5703 · `eslint` 0 errores, y validado por mutación en las dos
+      direcciones (no avisar nunca → 3 rojos; avisar siempre → cae el ancla).
 
 - [x] **~~El generador de respaldo de horarios no podía ofrecer un sábado NUNCA~~** — cerrado el
       2026-09-18 (`hermes-content/deploy/vps-ops/bot/slots-rodantes.mjs`). Los horarios de demo
