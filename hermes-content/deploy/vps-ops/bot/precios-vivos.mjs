@@ -589,7 +589,8 @@ function selfCheck() {
         body:
           "Te los paso derecho, son públicos: el sistema arranca en Bs 320 al mes con el plan " +
           "Básico, Bs 550 el Crece, Bs 890 el Profesional y Bs 1.290 el Completo, que ya trae " +
-          "el chatbot de WhatsApp adentro. En los otros planes el chatbot va aparte, Bs 390 al mes.",
+          "el chatbot de WhatsApp adentro. En el Básico, el Crece y el Profesional el chatbot " +
+          "va aparte, Bs 390 al mes.",
       },
     ],
   };
@@ -792,22 +793,36 @@ function selfCheck() {
   // -------------------------------------------------------------------------
   // La INCLUSION del chatbot sobre el texto VIVO. Puro: el catalogo se inyecta.
   // -------------------------------------------------------------------------
-  const LABELS = { basic: "Básico", crece: "Crece", professional: "Profesional", clinic: "Completo" };
+  // Ojo: `enterprise` va en los DOS. Este fixture lo omitia, y omitir un plan del catalogo no
+  // deja al caso incompleto: lo deja RATIFICANDO el defecto. El Empresa (Bs 2.900) trae el
+  // chatbot adentro desde la escalera C, y sin el en la tabla el cierre universal del texto
+  // viejo ("En los otros planes...") no tenia a quien mentirle y el self-check firmaba verde
+  // sobre la frase que en produccion le cobraba Bs 390/mes de mas al lead mas grande.
+  const LABELS = { basic: "Básico", crece: "Crece", professional: "Profesional", clinic: "Completo", enterprise: "Empresa" };
   const cat = (incluidoPorPlan) => ({ incluidoPorPlan, labels: LABELS, motivo: null });
-  // Textual del bot vivo. El Completo lo trae adentro y los otros tres no: el catalogo de hoy.
+  // Textual del bot vivo desde el 2026-09-19: enumera a quienes se les cobra, en vez de hablar
+  // del complemento. El de antes queda abajo como caso ancla del defecto.
   const M4_VIVO =
     "el sistema arranca en Bs 320 al mes con el plan Básico, Bs 550 el Crece, Bs 890 el " +
     "Profesional y Bs 1.290 el Completo, que ya trae el chatbot de WhatsApp adentro. " +
+    "En el Básico, el Crece y el Profesional el chatbot va aparte, Bs 390 al mes.";
+  const M4_CON_COMPLEMENTO =
+    "el sistema arranca en Bs 320 al mes con el plan Básico, Bs 550 el Crece, Bs 890 el " +
+    "Profesional y Bs 1.290 el Completo, que ya trae el chatbot de WhatsApp adentro. " +
     "En los otros planes el chatbot va aparte, Bs 390 al mes.";
-  const catHoy = cat({ basic: false, crece: false, professional: false, clinic: true });
+  const catHoy = cat({ basic: false, crece: false, professional: false, clinic: true, enterprise: true });
 
   ok(juzgarInclusion(M4_VIVO, catHoy).codigo === 0, "el texto vivo contra el catalogo de hoy: verde");
   ok(
-    juzgarInclusion(M4_VIVO, cat({ basic: false, crece: false, professional: true, clinic: true })).codigo === 1,
+    juzgarInclusion(M4_CON_COMPLEMENTO, catHoy).codigo === 1,
+    "el cierre universal abarca al Empresa, que ya lo trae adentro: ROJO",
+  );
+  ok(
+    juzgarInclusion(M4_VIVO, cat({ basic: false, crece: false, professional: true, clinic: true, enterprise: true })).codigo === 1,
     "si el Profesional pasa a traerlo adentro, el texto vivo le sigue cobrando Bs 390: ROJO",
   );
   ok(
-    juzgarInclusion(M4_VIVO, cat({ basic: false, crece: false, professional: false, clinic: false })).codigo === 1,
+    juzgarInclusion(M4_VIVO, cat({ basic: false, crece: false, professional: false, clinic: false, enterprise: false })).codigo === 1,
     "si el Completo deja de traerlo, el texto vivo promete algo que el producto no da: ROJO",
   );
   ok(

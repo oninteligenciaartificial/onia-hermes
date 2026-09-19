@@ -415,6 +415,68 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **CERRADO el 2026-09-19 10:43-11:25 La Paz (commiteado, NO desplegado) — el bot le
+      cobraba Bs 390/mes al lead del plan más caro por algo que su plan ya trae, y el gate que
+      vigila exactamente eso lo firmaba verde diciendo «no miente».**
+
+      **El defecto, medido contra producción.** `npm run precios:vivos` decía
+      `EL BOT VIVO COTIZA SOLO PRECIOS DE LA FUENTE UNICA — 17 montos vigentes` y al lado un
+      aviso: *«"Empresa" (enterprise) trae el chatbot incluido y el bot no lo nombra: no miente,
+      pero no lo está vendiendo»*. **Sí mentía.** El texto que el bot sirve enumeraba cuatro
+      planes y remataba: *«En los otros planes el chatbot va aparte, Bs 390 al mes.»* Desde la
+      escalera C son **DOS** los planes con `whatsappIncluded: true` — `clinic` (Completo,
+      Bs 1.290) y `enterprise` (Empresa, **Bs 2.900**) —, así que ese cierre universal **abarca
+      por exclusión** al plan que no nombró y le promete un cobro que no corresponde:
+      Bs 390/mes, Bs 4.680/año, al prospecto más grande que puede escribir.
+
+      **Por qué ningún gate lo veía, y es la clase transferible.** `revisarPromesaDeInclusion`
+      sólo juzgaba los planes **NOMBRADOS**; un plan no nombrado caía en un bucle de avisos cuya
+      premisa escrita era *«no lo cotiza»*. Eso confunde **CALLAR** con **ABARCAR**: un universal
+      sobre el complemento no nombra a nadie y sin embargo afirma sobre todos. Es invisible para
+      las tres familias de gates de venta — no mueve una cifra (Bs 390 sale de `pricing.ts`), no
+      tipea el nombre de un plan junto a la capacidad, y no es un universal sobre *el todo*
+      («todos los planes») sino sobre **el complemento**.
+
+      **Y el fixture defendía el defecto, dos veces.** El caso `"un plan incluido del que el bot
+      ni habla es AVISO"` usaba como «texto que calla» justamente el texto que **no** calla; y el
+      self-check de `precios-vivos.mjs` tenía su catálogo tipeado a mano **sin `enterprise`**, o
+      sea el cierre universal no tenía a quién mentirle y firmaba verde. Un fixture al que le
+      falta un sujeto no queda incompleto: queda **ratificando** el bug.
+
+      **Qué se arregló.**
+      - `promesa-inclusion.mjs`: `excluyeAlResto()` distingue callar de abarcar — cuantificador
+        de complemento («en los otros / los demás / el resto de los planes») **+** afirmación de
+        que se cobra aparte. Con eso, un plan incluido y no nombrado pasa de AVISO a **PROBLEMA**.
+        Se prohíbe la **FORMA**, no la redacción de hoy: prohibir la frase literal se apagaría
+        sola en cuanto alguien la reescriba. Y no acusa si el complemento no afirma nada de plata
+        («en los otros planes, consultanos»), porque la mentira la hace la exclusión.
+      - `knowledge.onia.json`: el cierre pasa a **enumerar** — *«En el Básico, el Crece y el
+        Profesional el chatbot va aparte, Bs 390 al mes»*. Enumerar falla del lado seguro: un
+        plan nuevo que no esté en la lista queda sin nombrar (AVISO, venta que no hacemos),
+        mientras que el universal lo **abarcaba** y le mentía.
+      - `precios-vivos.mjs`: el catálogo del self-check ahora nombra al Empresa, y se agregó el
+        caso ancla del cierre universal.
+
+      **Prueba.** `node --test promesa-inclusion.test.mjs` 13/13 (4 casos nuevos), los 2 nuevos
+      en ROJO antes del arreglo por el motivo correcto. **3 mutaciones, 3 rojos:** esquivar
+      `excluyeAlResto` (`if (true) return false`) → 2 rojos; devolver el texto al universal →
+      rojo el caso de la correa contra el knowledge real; `if (false && abarcaAlResto)` → 2
+      rojos. El self-check de `precios-vivos` pasó de 63/63 a **64/64**, y su caso nuevo muerde
+      (con la mutación puesta: `FAIL el cierre universal abarca al Empresa`). Cadena del bot
+      **1280/1280**.
+
+      ⚠️ **El instrumento mintió antes que el producto.** La raíz `includ` **no** matchea
+      «incluido» —es inclu-**i**-do—, así que «no viene incluido» pasaba mudo con sus tres casos
+      hermanos en verde. Lo delató el caso que exige las tres redacciones a la vez; sin él, el
+      detector nacía con un agujero del tamaño de la mitad de las formas que quería cazar.
+
+      🔴 **NO DESPLEGADO — y el texto necesita DOS pasos, no uno.** `npm run precios:vivos` sigue
+      acusando al bot vivo, y con razón: el proceso sirve la fuente `panel`, que hereda del
+      archivo instalado en `/tmp/onia-bot/`, no del repo. `DESPLEGAR: bot` **no lleva el texto**:
+      el install del conocimiento es aparte (`webhook-server.sh knowledge`). Hasta que eso pase,
+      el lead del plan Empresa sigue leyendo la frase vieja. El publicador en seco ya venía con
+      9 archivos del bot esperando (el respaldo de audio de T6/T7 entre ellos).
+
 - [x] **MEDIDO el 2026-09-19 08:13-08:45 La Paz — los cuatro ejes del objetivo en verde, y
       DOS hipótesis propias refutadas antes de anunciarlas.** Simulador **3/3** (escalera C:
       320/550/890/1.290, Completo con el chatbot adentro; SIAT con «1 de octubre de 2026,
