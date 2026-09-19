@@ -994,3 +994,120 @@ test("TODO campo que el motor guarda en raw sobrevive el viaje completo (la clas
     assert.deepEqual(vuelto[campo], state[campo], `stateFromRow NO restaura ${campo} (la mitad de branchAsked)`);
   }
 });
+
+// ---------------------------------------------------------------------------
+// La CARRERA de dos escritores sobre la misma fila (conv 58, 2026-09-18)
+// ---------------------------------------------------------------------------
+
+test("saveConversation NO baja un candado que este turno no decidio bajar", async () => {
+  // `saveConversation` hace un PATCH con la fila ENTERA a partir de un estado que se
+  // leyo SEGUNDOS antes — en el medio corre step(), que llama al LLM. Cualquier
+  // escritor que haya subido un candado mientras tanto queda pisado: es un
+  // lost-update de manual, y el candado que se pierde es el que CALLA al bot.
+  //
+  // Medido el 2026-09-18 en produccion (conv 58): el traspaso humano quedo
+  // registrado en `bot_messages` (author human) y `bot_conversations.human_took_over`
+  // en `f`. De las 15 conversaciones con un mensaje de humano, TRES tenian el
+  // candado caido (chatwoot:11, chatwoot:39, chatwoot:58).
+  //
+  // La regla: una columna-candado viaja en el PATCH SOLO si este turno la cambio
+  // respecto de lo que leyo. Si el turno no la toco, se omite — y entonces lo que
+  // otro escribio bien sobrevive. Falla hacia el SILENCIO, igual que la barrera 1.
+  const leido = {
+    ...createState({ channel: "chatwoot", contactRef: "58" }),
+    botStage: "esperando_horario",
+    humanTookOver: false,
+    optOutAt: null,
+    followupStep: 0,
+  };
+  // El turno del prospecto no toca ningun candado: solo avanza la etapa.
+  const nextState = { ...leido, botStage: "demo_agendada" };
+
+  const { requests, store } = recorder([{ status: 200, body: [{ conversation_key: leido.conversationKey }] }]);
+  await store.saveConversation(nextState, {}, leido);
+  const patch = requests[0].body;
+
+  for (const columna of ["human_took_over", "human_took_over_at", "opt_out_at", "followup_step"]) {
+    assert.ok(
+      !(columna in patch),
+      `saveConversation manda ${columna} sin que el turno la haya cambiado: pisa al escritor concurrente`,
+    );
+  }
+  // Lo que el turno SI cambio tiene que viajar, o no se guardo nada.
+  assert.equal(patch.bot_stage, "demo_agendada");
+});
+
+test("el turno que SI decide sobre un candado lo escribe (takeover, desarme y reinicio)", async () => {
+  // La direccion simetrica: omitir de mas dejaria el candado sin poder subir NUNCA,
+  // que es peor que el bug. Los tres caminos que deciden de verdad tienen que escribir.
+  const base = { ...createState({ channel: "chatwoot", contactRef: "58" }), botStage: "esperando_horario" };
+
+  // 1. El humano toma la conversacion: false -> true.
+  const leidoA = { ...base, humanTookOver: false, humanTookOverAt: null };
+  const tomada = { ...base, humanTookOver: true, humanTookOverAt: "2026-09-18T19:17:03.000Z" };
+  const a = recorder([{ status: 200, body: [{}] }]);
+  await a.store.saveConversation(tomada, {}, leidoA);
+  assert.equal(a.requests[0].body.human_took_over, true, "el traspaso humano TIENE que escribir el candado");
+  assert.equal(a.requests[0].body.human_took_over_at, "2026-09-18T19:17:03.000Z");
+
+  // 2. El desarme (conversacion resuelta desde la bandeja): true -> false.
+  const leidoB = { ...base, humanTookOver: true, humanTookOverAt: "2026-09-18T19:17:03.000Z" };
+  const limpia = { ...base, humanTookOver: false, humanTookOverAt: null };
+  const b = recorder([{ status: 200, body: [{}] }]);
+  await b.store.saveConversation(limpia, {}, leidoB);
+  assert.equal(b.requests[0].body.human_took_over, false, "el desarme TIENE que poder bajar el candado");
+  assert.equal(b.requests[0].body.human_took_over_at, null);
+
+  // 3. El opt-out y el reinicio del contador del embudo.
+  const leidoC = { ...base, optOutAt: null, followupStep: 2 };
+  const dioBaja = { ...base, optOutAt: "2026-09-18T20:00:00.000Z", followupStep: 0 };
+  const c = recorder([{ status: 200, body: [{}] }]);
+  await c.store.saveConversation(dioBaja, {}, leidoC);
+  assert.equal(c.requests[0].body.opt_out_at, "2026-09-18T20:00:00.000Z", "el BAJA TIENE que escribirse");
+  assert.equal(c.requests[0].body.followup_step, 0, "el reinicio del embudo TIENE que escribirse");
+});
+
+test("sin estado leido, saveConversation escribe la fila entera (no hay con que comparar)", async () => {
+  // Un llamador que no puede decir que leyo no puede reclamar que "no cambio nada":
+  // ahi el comportamiento seguro es el viejo, escribir todo. La baranda contra el
+  // llamador distraido es el gate de abajo, que camina el disco.
+  const state = { ...createState({ channel: "chatwoot", contactRef: "58" }), humanTookOver: true };
+  const { requests, store } = recorder([{ status: 200, body: [{}] }]);
+  await store.saveConversation(state);
+  assert.equal(requests[0].body.human_took_over, true);
+  assert.ok("opt_out_at" in requests[0].body);
+});
+
+test("un turno REAL le pasa a saveConversation el estado leido (la baranda de la carrera)", async () => {
+  // El gate que miraba el DISCO buscando `.saveConversation(` con tres argumentos daba
+  // FALSO VERDE, y lo delato la mutacion: la llamada de produccion vive dentro de
+  // `guardarEstado`, que absorbe el argumento en su propio parametro — sacarselo al
+  // llamador de arriba no cambia una letra de esa linea. Lo unico que distingue es correr
+  // el turno y mirar QUE LE LLEGO al store.
+  const recibidos = [];
+  const leidoEnLaBase = {
+    ...createState({ channel: "chatwoot", contactRef: "58" }),
+    botStage: "esperando_horario",
+    humanTookOver: false,
+  };
+  const store = {
+    enabled: true,
+    warnings: [],
+    async ensureConversation() { return { ...leidoEnLaBase }; },
+    async claimInbound() { return true; },
+    async applySideEffects() { return { leadKey: null, reviewKeys: [], auditKeys: [], deferred: [], failed: [] }; },
+    async saveConversation(state, previousRaw, leido) { recibidos.push({ state, leido }); return {}; },
+    async insertOutbound(rows) { return rows.length; },
+  };
+
+  await runTurn(turn({ channel: "chatwoot", contact_ref: "58", text: "A", message_key: "chatwoot:1" }), {
+    store, config: CONFIG, nowIso: T0, llm: async () => "ok",
+  });
+
+  assert.equal(recibidos.length, 1, "el turno tiene que haber guardado una vez");
+  assert.ok(
+    recibidos[0].leido && typeof recibidos[0].leido === "object",
+    "saveConversation NO recibio el estado LEIDO: escribe la fila entera y pisa los candados del escritor concurrente",
+  );
+  assert.equal(recibidos[0].leido.humanTookOver, false, "el estado leido tiene que ser el de la BASE, no el del turno");
+});

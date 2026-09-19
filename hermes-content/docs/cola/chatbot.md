@@ -533,9 +533,43 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
         sólo cambia lo que dice Chatwoot: si el gate contestara lo mismo, seguiría teniendo una
         sola explicación.
 
-- [ ] **Dos escritores guardan el estado de la misma conversación en el mismo segundo, y gana el
-      último — el traspaso humano puede perderse** (encontrado el 2026-09-18 midiendo la conv 58;
-      **no es fantasma: los datos están abajo**).
+- [x] 🔴 **~~Dos escritores guardan el estado de la misma conversación en el mismo segundo, y gana
+      el último — el traspaso humano puede perderse~~ — CERRADO el 2026-09-19** (`persistence.mjs`
+      `saveConversation` + `run-turn.mjs` `guardarEstado`).
+
+      **La causa, y por qué no se reproducía buscándola en el barrido.** No hay dos escritores
+      peleando dentro de un turno: el escritor es UNO y escribe TARDE. `saveConversation` hace un
+      PATCH con la fila **entera** a partir de un estado que se leyó en la línea 385, y entre esa
+      lectura y el PATCH de la línea 569 corre `step()` — **con su llamada al LLM, o sea segundos**.
+      Cualquier candado que otro haya subido en el medio queda pisado. Es un *lost-update* de
+      manual, y lo que se pierde es justo lo que CALLA al bot. Por eso `chatwoot:58` mostraba las
+      dos escrituras «a las 19:17:03»: no es que coincidieran, es que la lenta arrancó antes.
+
+      **El arreglo.** Una columna-candado viaja en el PATCH **sólo si este turno la cambió respecto
+      de lo que leyó**; si no la tocó, se omite y sobrevive lo que el otro escribió. Falla hacia el
+      SILENCIO, igual que la Barrera 1. Cubre `human_took_over(_at)`, `opt_out_at`, `opt_in_at/
+      _source` y `followup_step` — esta última es el CAS del barrido (`reserveFollowUp`), así que
+      el mismo pisotón devolvía un cupo de rescate ya gastado o gastaba uno vivo.
+      Los tres caminos que SÍ deciden (takeover, desarme, reinicio de conversación vencida) lo
+      cambian y por eso siguen escribiéndolo: omitir de más dejaría el candado sin poder subir nunca.
+
+      ⚠️ **El primer gate que escribí para esto daba FALSO VERDE, y lo delató la mutación.** Miraba
+      el disco buscando `.saveConversation(` con tres argumentos — pero la llamada de producción
+      vive **dentro** de `guardarEstado`, que absorbe el argumento en su propio parámetro: sacárselo
+      al llamador de arriba no cambia una letra de esa línea. Las dos mutaciones que importaban
+      (quitar el argumento, y callarlo con `null`) pasaban limpias. Lo que sí mide es **correr el
+      turno y mirar qué le llegó al store**. Más la baranda en el producto: `guardarEstado` **tira**
+      si va a escribir sin el estado leído — `.mjs` no tiene compilador que persiga al llamador
+      distraído, así que la única red es que reviente.
+
+      **Prueba:** `persistence.test.mjs` — 3 casos nuevos (el candado que no se pisa · los tres
+      caminos que sí deciden · el turno real que pasa el estado leído), validados por mutación en
+      las dos direcciones: sin el arreglo el primero cae, y con el argumento quitado el conductual
+      cae **solo**, sin depender de la baranda. Suite del bot **1224/1224**.
+
+      **NO desplegado**: commiteado en la rama del carril. `/opt/onia/bot` sigue con el código viejo.
+
+      <details><summary>La medición original (2026-09-18/19) — no rehacer</summary>
 
       El barrido del follow-up y el webhook del traspaso escribieron `bot_conversations` de
       `chatwoot:58` **a las 19:17:03 los dos**. `run-turn.mjs` marca el traspaso antes de `step()`
@@ -577,6 +611,8 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
       **Lo que NO hay que volver a medir:** el reloj `last_inbound_at` ya está arreglado y probado
       (ver «Cerrado», `bot-engine.mjs`); esto es sólo el flag.
+
+      </details>
 
 - [x] 🔴 **~~El instrumento que mide la DEFINICIÓN DE HECHO del carril imprimía un remedio que
       no se podía tipear — y de ese texto salió una pregunta falsa a Sergio Urcullo~~ — CERRADO
