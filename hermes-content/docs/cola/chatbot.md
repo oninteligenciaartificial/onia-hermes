@@ -318,6 +318,44 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] **MEDIDO el 2026-09-19 08:13-08:45 La Paz — los cuatro ejes del objetivo en verde, y
+      DOS hipótesis propias refutadas antes de anunciarlas.** Simulador **3/3** (escalera C:
+      320/550/890/1.290, Completo con el chatbot adentro; SIAT con «1 de octubre de 2026,
+      RND 102600000007»); widget real **2/2** (`scripts/sonda_widget.mjs`, conversación 49:
+      los dos mensajes contestados — el segundo turno, que es donde el bot murió dos veces);
+      `npm run avisos:vivo` → circuito **medido**, 6 controles ok, 3 enviados / 0 fallidos.
+
+      ⚠️ **Trampa 1 — `cp -p` PRESERVA el mtime, así que la fecha de un archivo en `/opt`
+      NO es cuándo se copió, es cuándo se tocó en el clon.** Leyendo `ls -l` de
+      `/opt/onia/bot/` concluí que los `.mjs` de un commit habían viajado hoy y el `.sh` del
+      MISMO commit se había quedado dos días atrás — o sea un deploy que viaja a medias, que
+      habría sido un 🔴 grande. Falso: `deploy-bot.sh` copia con `cp -p` (línea 95). La
+      autoridad es el publicador en seco, que contó los DOS archivos como pendientes:
+      `bash /opt/onia/bot/_deploy/publicar.sh --dry-run` → `CAMBIA postdemo-run.mjs` +
+      `CAMBIA postdemo-run.sh`, 12 archivos en total, gate `# pass 1271 # fail 0`.
+      **Para medir si algo llegó a producción se le pregunta al publicador o se compara el
+      CONTENIDO (`cmp`), nunca la fecha.**
+
+      ⚠️ **Trampa 2 — la fila con `conversation_key` vacío (`chatwoot:`, sin id) NO es
+      alcanzable hoy: es escombro.** La vi en `onia_center.bot_conversations` junto a
+      `chatwoot:10` y `chatwoot:990778` (las tres sin `last_inbound_at` ni nombre) y parecía
+      la clase «dos prospectos comparten un estado». Contado contra el código de hoy, las
+      **cuatro** ramas del adapter cortan antes: `chatwoot-adapter.mjs:318`, `:350`, `:368`
+      y `:412` hacen `if (!conversationId) return { skip: true, reason: "sin_conversation_id" }`,
+      y `createState` (`bot-engine.mjs:66`) además cae a `"sin-contacto"`. Lo que sí queda
+      anotado, por si alguna vez entra por otra puerta: `ensureConversation`
+      (`persistence.mjs:368-370`) guarda `contact_ref` con `|| "sin-contacto"` y **inserta
+      `conversation_key` crudo** — la guarda vive en el llamador, no en el que escribe.
+
+      **Estado transitorio, medido y con fecha de vencimiento propia:** `postdemo` corre
+      ahora mismo sin poder preguntarle a Chatwoot quién es quién
+      (`warnings: ["inboxes de prueba: no pude preguntarle a Chatwoot (sin CHATWOOT_API_TOKEN)"]`
+      en `/var/log/onia-bot-postdemo.log` desde las 07:47Z). No es un bug nuevo: es la mitad
+      honesta de `e3332d0e` ya viva y su cura (`postdemo-run.sh` pasando el token) entre los
+      12 pendientes. **Se cura sola en la corrida de las 08:50 La Paz** — verificado que el
+      freno de precio NO lo retiene: `bash /root/bin/onia-publicar-solo.sh --dry-run` →
+      `bot: publicaria (nada toca precio)`. Nadie tiene que apretar nada.
+
 - [x] 🔴 **CERRADO el 2026-09-19 — el único de los tres efectos del webhook que COBRA
       decidía sin saber quién escribe: el cupo del add-on contaba al dueño probando su
       propio bot** (`onia-platform` · commit `42eab9a8`).
