@@ -357,10 +357,32 @@ function valorResuelto(trozo, clave, archivo, { texto = false } = {}) {
   const porMapa = archivo?.match(
     new RegExp(`\\bconst\\s+${porNombre[1]}\\s*=\\s*([A-Za-z_$][\\w$]*)\\.([A-Za-z_$][\\w$]*)`),
   );
-  if (!porMapa) return null;
-  const valor = mapaLiteral(archivo, porMapa[1])[porMapa[2]];
-  if (valor === undefined) return null;
-  return texto ? valor : Number(valor);
+  if (porMapa) {
+    const valor = mapaLiteral(archivo, porMapa[1])[porMapa[2]];
+    if (valor === undefined) return null;
+    return texto ? valor : Number(valor);
+  }
+
+  // Tercer salto: `const PRUEBA_PLAN = NOMBRE_DE_PLAN[PRUEBA_PLAN_ID]`, con la clave en otra
+  // const. Entro el 2026-09-19, cuando el id del plan de la prueba dejo de estar tipeado dos
+  // veces (el nombre lo necesitaba el copy y el id lo necesita el panel dibujado de /empezar,
+  // que pregunta al catalogo que enciende ese plan). Es el MISMO modo de falla que trajo los
+  // dos saltos de arriba, y la tercera vez seguida: este lector se rompe por la FORMA del
+  // archivo, no por el dato. Sin el salto devuelve null y el cruce sale NO PUDE MEDIR justo
+  // en la cifra que dice con que plan corre la prueba.
+  const porMapaIndexado = archivo?.match(
+    new RegExp(
+      `\\bconst\\s+${porNombre[1]}\\s*=\\s*([A-Za-z_$][\\w$]*)\\[\\s*([A-Za-z_$][\\w$]*)\\s*\\]`,
+    ),
+  );
+  if (!porMapaIndexado) return null;
+  const claveDeclarada = archivo?.match(
+    new RegExp(`\\bconst\\s+${porMapaIndexado[2]}\\b[^=]*=\\s*"([^"]+)"`),
+  );
+  if (!claveDeclarada) return null;
+  const valorIndexado = mapaLiteral(archivo, porMapaIndexado[1])[claveDeclarada[1]];
+  if (valorIndexado === undefined) return null;
+  return texto ? valorIndexado : Number(valorIndexado);
 }
 
 /**

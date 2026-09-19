@@ -127,10 +127,21 @@ describe("el hero de la portada se DIBUJA, no se captura", () => {
    *
    * Interpolado, nunca tipeado: `precios.test.ts` prohíbe el literal en toda
    * la app, y acá se exige además que el hero SÍ traiga el número.
+   *
+   * Y el plan tampoco se tipea. Acá se exigía `plan("basico").mensual`, que es
+   * el mismo defecto un escalón más adentro: la escalera C metió el Crece entre
+   * Básico y Pro el 2026-09-12, y un id escrito a mano sobrevive a eso
+   * compilando y anunciando el plan equivocado. Desde el 2026-09-19 el hero
+   * deriva el plan de entrada del PRECIO (`planDeEntrada`, lib/pricing.ts) —
+   * y no es cosmético: ese mismo valor es el que decide qué módulos dibuja el
+   * panel de abajo, así que la línea y el dibujo no pueden discrepar, que es
+   * justo lo que estaban haciendo.
    */
-  it("el hero publica el precio de entrada, leído de lib/pricing", () => {
+  it("el hero publica el precio de entrada, derivado de lib/pricing", () => {
     const hero = seccionHero(PORTADA);
-    expect(hero).toMatch(/plan\("basico"\)\.mensual/);
+    expect(hero).toMatch(/PLAN_DE_ENTRADA\.mensual/);
+    expect(hero).not.toMatch(/plan\(\s*"[a-z]+"\s*\)\.mensual/);
+    expect(PORTADA).toMatch(/const\s+PLAN_DE_ENTRADA\s*=\s*planDeEntrada\(\)/);
     expect(hero).toMatch(/PRUEBA\.dias/);
   });
 

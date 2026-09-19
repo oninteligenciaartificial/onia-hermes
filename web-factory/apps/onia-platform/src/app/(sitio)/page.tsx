@@ -10,8 +10,17 @@ import {
   bs,
   nombresConChatbot,
   plan,
+  planDeEntrada,
   sinSubirDePlan,
 } from "@/lib/pricing";
+
+/**
+ * El plan de ENTRADA, una sola vez: la línea de precio del hero y el panel que
+ * va debajo tienen que hablar del MISMO plan. Que discreparan es el defecto del
+ * 2026-09-19 — la línea decía Bs 320 y el panel dibujaba los agentes, que ese
+ * plan no enciende.
+ */
+const PLAN_DE_ENTRADA = planDeEntrada();
 import {
   CHATBOT_PLAN,
   precioStack,
@@ -294,6 +303,10 @@ const MOMENTOS = [
 const CAPACIDADES = [
   {
     panel: "cuenta" as const,
+    // La portada dibuja el plan de ENTRADA, que es el único que puede prometer
+    // sin mentirle a nadie: el que paga el más caro también lo tiene. Ver
+    // `modulos-de-la-cuenta.ts`.
+    plan: PLAN_DE_ENTRADA.id,
     nombre: "El día entero, en una pantalla",
     texto:
       "Lo que entró, lo que falta cobrar y lo que viene después. No hay que abrir un reporte para saber cómo va el negocio: es lo primero que ves al entrar.",
@@ -351,14 +364,14 @@ export default function Portada() {
             </div>
             <p className={p.heroNota}>
               {PRUEBA.dias} días de prueba con el plan {PRUEBA.planQueCorre}, sin tarjeta.
-              Después, desde Bs {bs(plan("basico").mensual)} al mes.
+              Después, desde Bs {bs(PLAN_DE_ENTRADA.mensual)} al mes.
             </p>
 
             {/* La escena que la referencia arma con mockups de su app. Acá va
                 el panel DIBUJADO — nunca una captura del sistema. */}
             <div className={p.escena}>
               <div className={p.escenaPanel}>
-                <PanelDibujado panel="cuenta" />
+                <PanelDibujado panel="cuenta" plan={PLAN_DE_ENTRADA.id} />
               </div>
               <span className={`${p.nodo} ${p.nodoA}`} aria-hidden="true">
                 ✓
@@ -473,7 +486,7 @@ export default function Portada() {
             {CAPACIDADES.map((c) => (
               <article className={p.capacidad} key={c.panel}>
                 <div className={p.capacidadArte}>
-                  <PanelDibujado panel={c.panel} />
+                  <PanelDibujado panel={c.panel} plan={"plan" in c ? c.plan : undefined} />
                 </div>
                 <h3 className={p.capacidadNombre}>{c.nombre}</h3>
                 <p className={p.capacidadTexto}>{c.texto}</p>

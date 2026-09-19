@@ -135,7 +135,11 @@ export default function Empezar() {
                 mal, coloca cosas referenciales". El panel muestra lo que el
                 copy de al lado promete —los módulos ya encendidos— sin atar
                 la pieza a las cifras de un negocio que no existe. */}
-            <Shape tone="green" panel="cuenta" />
+            {/* Acá el panel SÍ dibuja el plan de la prueba: esta página habla de la
+                prueba y lo dice tres líneas más arriba ("es tu cuenta real, con el
+                plan Profesional"). En la portada, donde el precio a la vista es el
+                de entrada, dibuja ese. */}
+            <Shape tone="green" panel="cuenta" plan={PRUEBA.planQueCorreId} />
           </Reveal>
         </div>
       </Block>
