@@ -331,17 +331,30 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       **Reproducción y comando exacto** (no lo corro yo: escribir en la base de producción no es
       permiso de este carril):
 
+      **PRECONDICIÓN, y es verificable en un comando** (2026-09-18): el arreglo tiene que estar
+      VIVO en el bot, no sólo en `main`. Medido hoy con `docker exec`, el proceso todavía corre la
+      versión vieja — `reserveFollowUp` aparece 2 veces y `markMessageDelivered` cero — y
+      `publicar.sh --dry-run` del bot lista 7 archivos varados, `insistencia-run.mjs` entre ellos.
+      Correr el `update` antes de ese deploy es tirar el trabajo: el barrido vuelve a quemarlas.
+
+      ```bash
+      # VERDE = arreglo vivo (0 y 1). ROJO = todavía no: NO correr el update.
+      /root/bin/onia-vps.sh bash -lc "docker exec onia-center sh -c '
+        grep -c reserveFollowUp /tmp/onia-bot/insistencia-run.mjs;
+        grep -c markMessageDelivered /tmp/onia-bot/insistencia-run.mjs'"
+      ```
+
       ```sql
       -- 1. MIRAR primero: tienen que ser 6, todas sin M3.
       select c.conversation_key, c.bot_stage, c.followup_step
         from onia_center.bot_conversations c
-       where c.followup_step > 0 and c.bot_stage = 'nuevo'
+       where c.followup_step > 0
          and not exists (select 1 from onia_center.bot_messages m
                           where m.conversation_key = c.conversation_key
                             and m.direction = 'outbound' and m.template_key like '%M3%');
       -- 2. Devolver el cupo SOLO a esas (la condición es la misma, no una lista a mano).
       update onia_center.bot_conversations c set followup_step = 0
-       where c.followup_step > 0 and c.bot_stage = 'nuevo'
+       where c.followup_step > 0
          and not exists (select 1 from onia_center.bot_messages m
                           where m.conversation_key = c.conversation_key
                             and m.direction = 'outbound' and m.template_key like '%M3%');
@@ -349,7 +362,17 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
       ⚠️ El `update` deriva sus sujetos de la MISMA condición que el `select`, no de los seis
       nombres: si entre medio aparece una séptima, entra sola; si una ya recibió su M3, no la
-      toca. Correrlo después del deploy del arreglo, o el barrido vuelve a quemarlas.
+      toca.
+
+      ⚠️ **El filtro `bot_stage = 'nuevo'` estuvo acá hasta el 2026-09-18 y se sacó: era una lista
+      de inclusión que fallaba abierto justo en el caso que este ítem existe para prevenir.** Lo
+      que el ítem previene es que estas filas AVANCEN de estado con el cupo quemado («el día que
+      avancen a `esperando_horario` el follow-up no las va a ver»), así que anclar la reparación a
+      `bot_stage = 'nuevo'` la desactiva sola en cuanto ocurre lo que se teme: la fila se mueve, el
+      `update` deja de alcanzarla y pierde el rescate para siempre. Medido antes de sacarlo, con y
+      sin el filtro salen **las mismas 6 filas** — las de `esperando_horario` (13-19, 58) sí
+      recibieron su `M3`, o sea el filtro no estaba comprando nada y podía costar un lead. La
+      condición honesta es la que describe el defecto: cupo gastado y sin `M3`.
 
 - [ ] **Reparar el reloj ya corrido de 16 conversaciones: `2f92eb70` curó al productor y no
       tocó ni una fila** (`hermes-content/deploy/vps-ops/bot/reloj-del-prospecto-vivo.mjs` ·
