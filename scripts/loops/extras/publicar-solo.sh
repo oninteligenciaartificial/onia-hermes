@@ -62,13 +62,34 @@ FIRMA_HUMANA='lib/pricing\.ts|lib/subscription-plans\.ts|ONIA_CATALOGO_DE_VENTA\
 # precio publicado. Si los numeros de los dos lados del diff son los MISMOS, no
 # hay monto nuevo y el destino sale solo.
 #
-# 🔴 Y falla CERRADO a proposito: cualquier numero que cambie detiene el destino,
-# aunque sea el `0` de un indice. No se intenta adivinar cual numero es plata —
-# esa lista se escribiria a mano y el dia que aparezca una clave nueva
+# 🔴 Y falla CERRADO a proposito: un numero que cambia detiene el destino SALVO
+# que se pueda mostrar que no es plata. Nunca al reves. No hay lista de "claves
+# de plata": esa se escribiria a mano y el dia que aparezca una nueva
 # (`tarifaBase: 320`) el guion publicaria un precio sin firma, que es la
 # direccion cara. Lo que si cambia es el AVISO: antes decia "toca una fuente de
 # precio" y ahora dice QUE numero cambia, asi Sergio Urcullo decide de un
 # vistazo en vez de tener que abrir el diff.
+#
+# EL CORTE NO ES LA FORMA DEL NUMERO NI SU VALOR: ES LA CLAVE QUE LO RECIBE.
+# Medido el 2026-09-19 06:39 La Paz con `2b12f50ae` esperando en `origin/main`:
+# el freno contestaba «landing: NO publico solo — cambia un numero en una fuente
+# de precio: .../pricing.ts: 0 1» y NINGUN monto cambiaba (`Bs 70` salia intacto
+# de `USUARIO_EXTRA_ADDON`). Lo que acusaba era `asientosExtra: 0` —cuantas
+# PERSONAS extra vende un plan— y el `0`/`1` de `frase.charAt(0)`/`frase.slice(1)`,
+# un helper que arma texto. La cura del 2026-09-18 (`d5619454`) habia sacado las
+# COMPARACIONES (`> 0`) y dejado las ASIGNACIONES (`: 0`) deteniendo con su motivo
+# escrito —«un add-on que pasa a gratis se escribe `: 0`»—, que sigue siendo
+# cierto: lo que faltaba es mirar A QUE CAMPO se asigna. `: 0` en `mensualAddon`
+# es plata; en `asientosExtra` es una cantidad de personas.
+#
+# Por que la excusa se ancla al vocabulario de CANTIDAD y no al de plata: la
+# direccion del dano no es simetrica. Detener de mas cuesta una firma de Sergio
+# Urcullo —y esa es la unica firma que importa: gastarla en falsos la vuelve
+# automatica—; dejar pasar de menos publica un precio que nadie decidio. Por eso
+# la clave tiene que decir CANTIDAD **y ademas** no nombrar plata: una clave que
+# el guion no sabe nombrar sigue deteniendo, que es fallar cerrado. Lo ancla el
+# caso «una clave que el guion NO sabe nombrar, asignada a 0, sigue deteniendo»
+# de `scripts/publicador-freno-de-precio.test.mjs`.
 # ---------------------------------------------------------------------------
 
 # Los numeros que unos commits CAMBIAN en un archivo, con los comentarios afuera.
@@ -98,7 +119,25 @@ numeros_del_diff() {  # $1=repo-del-codigo  $2=archivo  $3..=shas
       # que un helper cuenta cosas: comparar, indexar hacia atras, y `.at()`.
       gsub(/(>=|<=|===|!==|==|!=|>|<)[ \t]*-?[01]([^0-9.,]|$)/, " ", linea)
       gsub(/\[[^]]*[-+][ \t]*[01][ \t]*\]/, " ", linea)
-      gsub(/\.at\([ \t]*-?[01][ \t]*\)/, " ", linea)
+      gsub(/\[[ \t]*-?[01][ \t]*\]/, " ", linea)
+      # El argumento de un metodo de POSICION es un indice, no un monto: ninguno
+      # de estos recibe plata. Se nombran de a uno en vez de aceptar cualquier
+      # `.f(0)`, porque `precioDe(0)` si podria serlo.
+      gsub(/\.(at|charAt|charCodeAt|codePointAt|slice|splice|substring|substr|indexOf|lastIndexOf|padStart|padEnd|repeat)\([ \t]*-?[01][ \t]*(,[ \t]*-?[01][ \t]*)?\)/, " ", linea)
+      # Una asignacion `clave: 0|1` donde la CLAVE cuenta cosas. Se exigen las DOS
+      # mitades: que nombre una cantidad Y que no nombre plata, para que
+      # `precioPorUsuario: 0` —que las dos veces dice «usuario»— siga deteniendo.
+      # `tolower` no cambia el largo, asi que RSTART/RLENGTH valen sobre el original.
+      bajo = tolower(linea)
+      # El terminador admite la coma que cierra la propiedad (`asientosExtra: 0,`)
+      # pero NO la que separa decimales (`monto: 1,50`), que tiene que seguir
+      # contando como numero entero.
+      while (match(bajo, /[a-z0-9_$]*(asiento|usuario|persona|cupo|ficha|conversacion|sesion|length|index|indice)[a-z0-9_$]*[ \t]*:[ \t]*-?[01](,[^0-9]|,$|[^0-9.,]|$)/)) {
+        clave = substr(bajo, RSTART, RLENGTH)
+        if (clave ~ /precio|monto|tarifa|abono|costo|cost|price|amount|pago|mensual|anual|yearly|monthly|bs/) break
+        linea = substr(linea, 1, RSTART - 1) " " substr(linea, RSTART + RLENGTH)
+        bajo  = substr(bajo,  1, RSTART - 1) " " substr(bajo,  RSTART + RLENGTH)
+      }
       while (match(linea, /[0-9][0-9.,]*/)) {
         n = substr(linea, RSTART, RLENGTH); gsub(/[.,]/, "", n)
         print signo n
