@@ -102,7 +102,11 @@ TMP_MENSAJES="$TMP/mensajes.txt" ONIA_TG="$TMP/tg.sh" ONIA_CI_MARCA_DIR="$TMP" \
 # minutos de uno de hace trece dias — y el 17-sep un carril gasto una vuelta
 # ENTERA corriendo los cinco gates a mano para terminar escribiendo que igual no
 # podia juzgarlo. Un aviso sin fecha convierte cada lectura en una investigacion.
-rm -f "$TMP"/onia-ci-*.rojo
+#
+# Se borra TODO el historial, no solo la marca roja: este caso es «la primera vez
+# que miro este workflow», y ahi un rojo viejo SI se avisa — puede llevar trece
+# dias roto. Lo que el caso 12 prohibe es RETROCEDER sobre algo ya juzgado.
+rm -f "$TMP"/onia-ci-*
 VIEJA=$(date -u -d "-13 days" +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || date -u -v-13d +%Y-%m-%dT%H:%M:%SZ)
 fixture "$(corridas failure completed "$VIEJA")"; run
 case "$MSGS" in
@@ -127,6 +131,64 @@ case "$MSGS" in
   *"hace "*" d"*) falla "rojo reciente" "sin antiguedad" "$MSGS" ;;
   *) ok "rojo de hoy: no agrega antiguedad" ;;
 esac
+
+# ── 12-14. LA RESPUESTA DE LA API NO PUEDE RETROCEDER EN EL TIEMPO ──────────
+#
+# Medido el 2026-09-19 en /var/log/onia-tg.log del VPS: **45 avisos «CI en ROJO»
+# y 45 «CI recuperado»**, alternados, cada verde exactamente UNA corrida del cron
+# (10 min) despues de su rojo, con el CI de `master` VERDE todo el tiempo (la API
+# da `success` en las 30 corridas mas recientes). O sea el vigia OSCILA.
+#
+# La causa: `actions/runs` es eventualmente consistente y cada tanto contesta una
+# pagina donde la corrida completa mas reciente de un workflow es una VIEJA — la
+# del 5-sep, que fue `failure` de verdad y se curo el 6. El vigia le creia,
+# avisaba rojo y dejaba su marca; diez minutos despues la API contestaba bien, lo
+# leia como «recuperado» y BORRABA SU PROPIA MARCA. Por eso `/var/lib` nunca tuvo
+# una marca `onia-ci-*.rojo` y el mismo aviso renacia para siempre.
+#
+# Y el daño no es simetrico: el rojo CREA TAREA y el verde sale «INFORMATIVO (sin
+# tarea)», asi que cada oscilacion deja una tarea roja viva que nadie cierra —
+# tres en un solo dia (t_2d47c3aa, t_8e76db40, t_24519a2b). El 17-sep un carril
+# gasto una vuelta ENTERA corriendo los cinco gates a mano por creerle a una.
+#
+# `created_at` de un workflow solo AVANZA. Si la corrida que llega es mas vieja
+# que la ultima ya juzgada, la respuesta esta stale y no se toca NADA — ni aviso,
+# ni marca —, la misma politica que ya rige para `__ERROR__`.
+AHORA=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+ANTIGUA=$(date -u -d "-14 days" +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || date -u -v-14d +%Y-%m-%dT%H:%M:%SZ)
+
+# 12. Verde ya juzgado y despues la API retrocede a un rojo viejo: no avisa nada.
+rm -f "$TMP"/onia-ci-*
+fixture "$(corridas success completed "$AHORA")"; run
+fixture "$(corridas failure completed "$ANTIGUA")"; run
+[ -z "$MSGS" ] && ok "API stale con un rojo VIEJO: no avisa" || falla "rojo stale" "(nada)" "$MSGS"
+ls "$TMP"/onia-ci-*.rojo >/dev/null 2>&1 && falla "marca por rojo stale" "sin .rojo" "dejo la marca" || ok "rojo stale: tampoco deja marca"
+
+# 13. La direccion SIMETRICA, que es la que borraba la marca: un verde stale NO
+# puede declarar «recuperado» sobre un rojo vigente ni limpiar su marca.
+rm -f "$TMP"/onia-ci-*
+fixture "$(corridas failure completed "$AHORA")"; run
+case "$MSGS" in *"CI en ROJO"*) ok "rojo de verdad: avisa" ;; *) falla "rojo real" "CI en ROJO" "$MSGS" ;; esac
+fixture "$(corridas success completed "$ANTIGUA")"; run
+case "$MSGS" in *"recuperado"*) falla "verde stale" "(nada)" "$MSGS" ;; *) ok "API stale con un verde VIEJO: no dice recuperado" ;; esac
+ls "$TMP"/onia-ci-*.rojo >/dev/null 2>&1 && ok "verde stale: NO borra la marca roja" || falla "marca tras verde stale" "la marca sigue" "se borro"
+
+# 14. Y la red sigue viva: un rojo POSTERIOR al ultimo verde se avisa igual.
+# Sin este caso, negarse a mirar siempre pasaria el 12 y el 13, y el vigia
+# quedaria apagado con cara de arreglado — que es peor que el oscilador.
+rm -f "$TMP"/onia-ci-*
+POSTERIOR=$(date -u -d "+1 hour" +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || date -u -v+1H +%Y-%m-%dT%H:%M:%SZ)
+fixture "$(corridas success completed "$AHORA")"; run
+fixture "$(corridas failure completed "$POSTERIOR")"; run
+case "$MSGS" in *"CI en ROJO"*) ok "rojo mas NUEVO que el ultimo verde: avisa" ;; *) falla "rojo nuevo" "CI en ROJO" "$MSGS" ;; esac
+
+# 15. Sin `created_at` no se puede comparar: se juzga, no se calla.
+# Un campo ausente no es una respuesta stale, y callarse ahi apagaria el vigia
+# entero el dia que GitHub deje de mandar la fecha.
+rm -f "$TMP"/onia-ci-*
+fixture '{"workflow_runs":[{"name":"CI","status":"completed","conclusion":"success","head_sha":"0c54d65abc","html_url":"https://x/1"}]}'; run
+fixture '{"workflow_runs":[{"name":"CI","status":"completed","conclusion":"failure","head_sha":"0c54d65abc","html_url":"https://x/1"}]}'; run
+case "$MSGS" in *"CI en ROJO"*) ok "sin fecha: juzga igual (no apaga la red)" ;; *) falla "sin created_at" "CI en ROJO" "$MSGS" ;; esac
 
 echo
 if [ "$FALLOS" = "0" ]; then echo "vigia-ci: TODO VERDE"; exit 0; fi
