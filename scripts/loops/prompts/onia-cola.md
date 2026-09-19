@@ -14,6 +14,7 @@ for r in "/root/loops/onia-hermes origin/main" "/root/loops/onia-platform origin
 V=$(docker exec onia-platform cat /app/.next/BUILD_ID); for d in /opt/onia-platform/build-*/; do [ "$(cat $d/.next/standalone/.next/BUILD_ID 2>/dev/null)" = "$V" ] && echo "plataforma CORRE $(basename $d)"; done; git -C /root/loops/onia-platform log -1 --format='%ci %h %s' origin/master   # sin desplegar = los commits POSTERIORES al sha que corre
 stat -c '%y' /opt/onia-landing/runtime-next/apps/onia-platform/.next/BUILD_ID; git -C /root/loops/onia-hermes log -1 --format='%ci %h' origin/main -- web-factory/apps/onia-platform   # landing: ídem
 /root/bin/onia-tablero.sh list | grep -iE "deploy|publicar"                                                                                      # ¿ya hay pedido? se comenta ahí, no se abre otro
+npm run herramientas:vivas   # ¿la herramienta que el cron del VPS EJECUTA es la que este repo versiona? Tri-estado: exit 2 = NO MEDIDO (sin SSH), nunca verde. Un rojo acá es producción corriendo un fósil.
 ```
 
 ⚠️ **`docker inspect --format '{{.Created}}'` NO mide si la plataforma está desplegada, y hasta el

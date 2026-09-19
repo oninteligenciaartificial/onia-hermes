@@ -77,38 +77,39 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Ahora — plan de features (revisado 2026-08-30, con Gate 1 corrido)
 
-- [ ] 🔴 **El gate de herramientas desplegadas deriva su universo del PREFIJO del nombre
-      (`/root/bin/onia-*`), y las DOS herramientas que hoy están separadas de su fuente son
-      justo las dos que ese prefijo deja afuera.** Medido el 2026-09-19 17:3x UTC por
-      `onia-cola`, cruzando el **crontab del VPS** (quién EJECUTA) contra `/root/bin` y contra
-      el repo — no contra quién la nombra, que es lo que mira el gate.
-      **El recuento:** de las **29** herramientas que el cron del VPS invoca, sólo **11** tienen
-      línea `poner` en `scripts/loops/sincronizar.sh`. De las 18 restantes: **10** tienen fuente
-      versionada IDÉNTICA (corren de una copia a mano — latentes, el día que alguien arregle la
-      fuente producción sigue con el fósil), **2 ya se separaron**, y de **6 no existe fuente
-      versionada** —`backup-onia-db.sh`, `onia-siat-vigia.sh`, `run-onia-agents-cron.sh`,
-      `run-onia-appointment-reminders.sh`, `run-onia-renewal-reminders.sh` y
-      `run-onia-trial-drip.sh` no existe ninguna copia en este repo, sólo viven en el VPS, así
-      que un borrado se los lleva sin dejar rastro de que existieron.
-      **Las dos derivas van en direcciones OPUESTAS, y por eso no se curan igual:**
-      `chatwoot-brand-onia.sh` tenía el repo ADELANTE (curado en esta vuelta, abajo);
-      `claude-guardia.sh` tiene **producción adelante** — la copia viva trae el arreglo del
-      2026-09-01 (`build-src` no existe; extrae de `src-<sha>.tar.gz`) que el repo no tenía, así
-      que cablearlo sin más lo REVERTÍA. **Respaldado al repo en esta vuelta**; falta la línea
-      `poner`, que ahora ya es segura.
-      **Por qué el gate no puede verlas:** `scripts/herramientas-desplegadas.test.mjs` arma el
-      universo con `matchAll(/\/root\/bin\/(onia-[a-zA-Z0-9._-]*[a-zA-Z0-9])/g)`. Es una lista de
-      inclusión disfrazada de derivación: agrupa por la FORMA del nombre, y el hermano irregular
-      queda invisible por construcción. Ensancharlo a `/root/bin/<cualquiera>` suma **14**
-      sujetos de golpe (medido) y pondría roja la cadena de TODOS los carriles, así que la cura
-      no es el regex: **el universo tiene que salir del crontab del VPS**, que es quien EJECUTA,
-      con el resultado TRI-ESTADO (desde nodo-casa sin SSH sale `NO MEDIDO`, nunca verde).
-      Forma: self-check puro en la cadena `npm test`, medición viva como alias corrido en el
-      arranque del carril — un alias que no entra al arranque no lo corre nadie.
-      **Reproducción en 60 segundos:**
-
-          ssh root@187.77.16.63 'crontab -l | grep -vE "^\s*#" | grep -oE "/root/bin/[A-Za-z0-9_.-]+" | sort -u | while read f; do md5sum "$f"; done'
-          # y cruzar cada md5 contra:  git ls-files -z | xargs -0 md5sum
+- [x] 🔴 **CERRADO el 2026-09-19 por `onia-cola`: el universo ahora sale del CRONTAB del VPS,
+      que es quien EJECUTA.** Instrumento nuevo `scripts/herramientas-del-cron.mjs` —self-check
+      puro en la cadena (`test:herramientas-del-cron`, 17 casos, validado por 7 mutaciones) y
+      medición viva en `npm run herramientas:vivas`, que corre en el arranque de este carril.
+      Pasó de **8 rojos a CERO**, y tres de esos ocho eran defectos **del instrumento**, no del
+      sistema —vale la pena nombrarlos porque son la clase:
+      **(1)** `CABLEADA_EN_DERIVA` no distinguía deriva real de la **ventana normal del sync**:
+      `sincronizar.sh` copia desde `origin/main` al `:44`, así que un commit que entra al `:47`
+      corre con el código viejo una hora. Ahora hay estado `ESPERANDO_SYNC`, y lo que decide no
+      es el commit de la fuente sino **el más nuevo entre la fuente y el cable** — el caso que
+      lo destapó (`chatwoot-brand-onia.sh`) tenía la fuente arreglada hacía 19 días y lo que
+      había cambiado era la línea `poner`.
+      **(2)** Onia son DOS repos y el índice miraba uno: `run-onia-appointment-reminders.sh` y
+      `run-onia-renewal-reminders.sh` salían «sin fuente» estando versionados en la
+      carpeta de crons del repo hermano. Obedecer ese rojo creaba la segunda fuente de verdad que
+      `CLAUDE.md` prohíbe. Se cruza contra la ref **publicada y fresca** del hermano (fetch
+      primero; si no se puede, `NO MEDIDO`, nunca `SIN_FUENTE`).
+      **(3)** El cruce por nombre de archivo inventaba huérfanas, porque el sincronizador
+      **renombra** al desplegar (el sincronizador llega a `/root/bin` con otro nombre). Se cruza por
+      CONTENIDO.
+      **Lo que sí era real y se arregló en la misma vuelta:** cuatro herramientas de producción
+      existían ÚNICAMENTE en el VPS y un borrado se las llevaba sin rastro —entre ellas
+      `backup-onia-db.sh`, el respaldo diario de la base de producción—. Respaldadas con modo
+      `100755` (el bit de ejecución viaja en git, no en un `chmod` del worktree):
+      `hermes-content/infra/vps-db/scripts/backup-onia-db.sh`,
+      `hermes-content/infra/vps-ops/crons/run-onia-agents-cron.sh`,
+      `.../run-onia-trial-drip.sh` y `hermes-content/deploy/vps-ops/onia-siat-vigia.sh`.
+      **Lo que queda abierto, y NO se hace a ciegas:** 19 herramientas son `COPIA_A_MANO` —hoy
+      corren lo correcto, pero nada las copia, así que el día que alguien arregle la fuente
+      producción sigue con el fósil—. Cablearlas de una es lo que NO hay que hacer:
+      `claude-guardia.sh` tiene **producción adelante** (trae un arreglo del 2026-09-01 que el
+      repo no tenía), así que un `poner` sin mirar el diff inverso lo REVIERTE. Se cablean de a
+      una, mirando el diff en las dos direcciones. Reproducción: `npm run herramientas:vivas`.
 
 - [x] 🔴 **Chatwoot le mostraba al cliente los términos y la privacidad de CHATWOOT: 6 de las 9
       claves de marca estaban revertidas, y el arreglo llevaba 19 días en `main` sin que nada lo
