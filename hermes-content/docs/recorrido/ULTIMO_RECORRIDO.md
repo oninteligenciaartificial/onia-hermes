@@ -12,6 +12,36 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-19 03:1x La Paz — `BUILD_ID` cambió, recorrido completo repetido: 9/9 sin hallazgos
+
+`BUILD_ID` pasó de `NIRA4pNJ8fJVouaUsyu1E` (última vuelta) a `Idvh9u4mdBzHBgE2penq4` — tocaba
+repetir el recorrido entero, no confiar en la medida vieja. Antes de correr, se encontraron y
+limpiaron **2 orgs `zz-qa-` huérfanas** de las dos vueltas anteriores (`zz-qa-2026-09-19-0109-negocio`
+y `zz-qa-2026-09-19-0209-negocio`, ambas con `onboardingCompletedAt` puesto pero 0 `appointments`
+— corridas cortadas por el timeout, el modo de falla ya conocido de este carril). Impresas antes de
+borrar: profiles ADMIN+DOCTOR, entitlements, auth.users — las 4 filas de `profiles`, las 2 de
+`organizations`, las 2 de `auth.users`.
+
+**Resultado del recorrido, `node scripts/recorrido_cliente.mjs --escribir` en Clínica dental:**
+los 9 pasos completos — cuenta creada (confirmación de correo requerida antes del primer login,
+como al cliente real), onboarding en 6 pantallas, paciente `zz-qa-` cargado y visto en `/patients`,
+cita `zz-qa-` agendada (201) y **VISTA en `/appointments`**, factura con ítem `zz-qa-` vista en su
+pantalla de cobro (frenado ahí, sin pagar), y el dato del paso 6 confirmado como guardado (el panel
+`/dashboard` no lista pacientes — es lo que muestra, no un fallo). `completo: true`, 0 agujeros.
+
+Limpieza de esta corrida: 0 filas `zz-qa-` en `organizations`, `appointments` ni `auth.users` al
+cerrar (confirmado por SQL, no supuesto).
+
+**Además se cerró una tarea del tablero** (`t_e23278c6`, notificación auto de 2026-09-12, ya
+superada por corridas posteriores) que seguía `ready` sin reclamar.
+
+RAZÓN: N/A — la vuelta avanzó (recorrido completo repetido con éxito tras cambio de `BUILD_ID`,
+más limpieza de huérfanas y una tarea vieja cerrada).
+LECCIÓN: el chequeo de huérfanas `zz-qa-` al arrancar siguió dando trabajo real — sigue siendo
+obligatorio cada vuelta, no es un caso aislado.
+
+---
+
 ## 2026-09-19 00:1x La Paz — escalón 3 cerrado: invitar y quitar coadministrador, con plan `clinic`
 
 **`BUILD_ID` sin cambios (`NIRA4pNJ8fJVouaUsyu1E`)** — no se repitió el recorrido completo
