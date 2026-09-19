@@ -91,12 +91,15 @@ const RUBROS: readonly {
     h: 874,
   },
   {
-    // panel "estetica" (ui.tsx) — sesiones del paquete y el control en agenda.
+    // panel "estetica" (ui.tsx) — el tratamiento a medias y el control en
+    // agenda. Las palabras salen del vocabulario del PRODUCTO para este track
+    // (`lib/onboarding/vocabulario.ts`: clientas, tratamientos), no de otra
+    // pantalla de este sitio.
     id: "estetica",
     nombre: "Estética",
     resultado:
-      "Ninguna sesión del paquete queda en el aire: el control post-tratamiento entra en la agenda como una cita más.",
-    ve: "Clientes, sesiones, paquetes y recordatorios.",
+      "La clienta que dejó el tratamiento a medias no se pierde: el control post-tratamiento entra en la agenda como una cita más.",
+    ve: "Clientas, tratamientos, agenda y recordatorios.",
     alt: "Dueña de un centro de estética junto a la camilla vacía con papel nuevo puesto, con el celular en la mano.",
     w: 1280,
     h: 960,

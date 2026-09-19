@@ -77,6 +77,32 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Ahora — plan de features (revisado 2026-08-30, con Gate 1 corrido)
 
+- [x] 🔴 **La portada y `/rubros` le prometían a un centro de estética un PAQUETE con las
+      sesiones hechas y las que faltan — un saldo que el producto no lleva.** Medido el
+      2026-09-19 contra `origin/master` de `onia-platform` (ref fetcheada, no de disco):
+      `prisma/schema.prisma` no declara paquete, bono ni saldo de sesiones (`PatientTreatment`
+      tiene `status`, no total contratado); `esteticagest-clinical` es un ESPEJO del pack dental
+      (`mirrorPack`) cuya nav (`navClinicaDe`) sólo renombra `/patients`→«Clientas» y
+      `/treatments`→«Tratamientos»; `lib/onboarding/vocabulario.ts` le dice a ese track
+      `servicios: "tratamientos"`. Lo único que el repo llama «bono» es el de antigüedad de la
+      planilla. El panel compartido además lo DIBUJABA: `<Sesiones hechas={3} total={6} />`.
+      **Por qué ningún gate lo vio:** no mueve una cifra, no tipea un nombre de plan junto a una
+      capacidad y no es un cuantificador universal — y lo sostenía una **cita circular**: el
+      comentario de la home se respaldaba en `rubros/page.tsx` y `rubros/page.tsx` en sí mismo,
+      el sitio comparándose consigo mismo. El panel hermano de al lado (servicios: IVA e IT)
+      tenía la cita bien hecha, al PRODUCTO.
+      **Cura:** la promesa se cambia por la verdadera, que es más fuerte y es el dolor de
+      entrada del cliente ideal — la clienta que dejó el tratamiento a medias y no volvió (el
+      Recall corre en ese rubro y dispara por `recallAfterDays`, o sea por tiempo sin volver).
+      Plantilla antes que instancias: `ui.tsx` (panel + `alt` + se BORRA el componente
+      `Sesiones` y su CSS huérfano), y después `switcher.tsx`, `rubros/page.tsx` y `page.tsx`.
+      Gate de clase `(sitio)/promesa-de-rubro-que-el-producto-no-modela.test.ts`: universo
+      derivado del conmutador, prohíbe la FORMA (agrupación con saldo + el contador dibujado),
+      validado por mutación con OTRAS palabras y en OTRO rubro («bono de 10 clases») y con caso
+      ancla que exige los 5 rubros vivos. Verificado renderizado en el build de esta rama:
+      documento 200, cero subrecursos ≥400, y el DOM pinta «Tratamientos en curso» / «La clienta
+      que dejó el tratamiento a medias no se pierde», sin rastro de paquete ni sesiones.
+
 - [ ] 🟠 **El freno de precio del publicador decide por la FORMA del número y no por el campo:
       hoy detuvo la landing por `asientosExtra: 0`, que son personas, no plata.**
       **Medido el 2026-09-19 08:4x UTC**, con `2b12f50ae` esperando en `origin/main`:

@@ -38,7 +38,7 @@ const toneClass: Record<Tone, string> = {
  * otro título: cada uno dibuja lo que gana ESE negocio, con las palabras que el
  * sistema le pone delante — el dentista ve tratamientos con hora, la ferretería
  * ve la caja cortada por método de pago, la importadora ve qué cotización sigue
- * viva, la estética ve las sesiones que faltan del paquete y el estudio ve el
+ * viva, la estética ve a la clienta que no volvió y el estudio ve el
  * IVA y el IT del mes. El vocabulario no se inventa acá: sale de
  * onia-platform/lib/onboarding/vocabulario.ts, y el resultado, de lo que este
  * mismo sitio ya publica rubro por rubro en (sitio)/rubros/page.tsx.
@@ -76,7 +76,7 @@ const panelLabel: Record<PanelId, string> = {
   importadora:
     "Cotizaciones de una importadora eléctrica: una aprobada, una enviada y una esperando respuesta.",
   estetica:
-    "Paquetes en curso de un centro de estética: cada tratamiento con las sesiones ya hechas y las que faltan, y el control post-tratamiento ya puesto en la agenda.",
+    "Tratamientos en curso de un centro de estética: uno al día, otro de una clienta que no volvió, y el control post-tratamiento ya puesto en la agenda.",
   servicios:
     "Cierre de mes de un estudio profesional: el IVA y el IT del mes ya armados, y el reporte del mes esperando revisión.",
 };
@@ -192,21 +192,6 @@ function Fila({
   );
 }
 
-/** Sesiones del paquete: lleno lo que ya se hizo. Es un dibujo y no un "3 de
- *  6" por la misma razón por la que las barras de la caja no llevan monto. */
-function Sesiones({ hechas, total }: { hechas: number; total: number }) {
-  return (
-    <span className={s.panelDots}>
-      {Array.from({ length: total }, (_, i) => (
-        <span
-          key={i}
-          className={i < hechas ? `${s.panelDot} ${s.panelDotOn}` : s.panelDot}
-        />
-      ))}
-    </span>
-  );
-}
-
 function PanelCuerpo({ panel }: { panel: PanelId }) {
   switch (panel) {
     case "agentes":
@@ -312,25 +297,28 @@ function PanelCuerpo({ panel }: { panel: PanelId }) {
         </>
       );
 
+    /* Lo que este panel dibuja SON los tratamientos del producto, y sale de
+       `origin/master` de onia-platform medido el 2026-09-19 —no de otra
+       pantalla de este mismo sitio—: `esteticagest-clinical` es el pack
+       clínico con `navClinicaDe`, que renombra `/patients` a «Clientas» y
+       `/treatments` a «Tratamientos» (`lib/platform/vertical-pack.ts`), y el
+       Recall corre en ese rubro (`guardaClientesEnPatients` + `tieneAgenda`,
+       `lib/onia-core/modules/agents-por-rubro.ts`) disparando por
+       `recallAfterDays`: por TIEMPO SIN VOLVER. Antes decía «Paquetes en
+       curso» con un contador de sesiones hechas y faltantes, y ese saldo el
+       producto no lo lleva — `PatientTreatment` tiene estado, no total
+       contratado. */
     case "estetica":
       return (
         <>
-          <Head titulo="Paquetes en curso" sello="Estética" />
+          <Head titulo="Tratamientos en curso" sello="Estética" />
           <ul className={s.panelRows}>
-            <li className={s.panelRow}>
-              <span className={s.panelSq} />
-              <span className={s.panelTxt}>Limpieza facial</span>
-              <Sesiones hechas={3} total={6} />
-            </li>
-            <li className={s.panelRow}>
-              <span className={s.panelSq} />
-              <span className={s.panelTxt}>Depilación láser</span>
-              <Sesiones hechas={5} total={6} />
-            </li>
+            <Fila txt="Limpieza facial" pill="Al día" hecho />
+            <Fila txt="Depilación láser" pill="No volvió" />
             <Fila txt="Control post-tratamiento" pill="En agenda" hecho />
           </ul>
           <p className={s.panelFoot}>
-            Ninguna sesión del paquete queda en el aire.
+            La clienta que dejó el tratamiento a medias no se pierde.
           </p>
         </>
       );
