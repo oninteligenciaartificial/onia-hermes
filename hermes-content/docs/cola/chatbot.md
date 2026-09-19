@@ -318,9 +318,46 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
-- [ ] 🔴 **El criterio «¿esta conversación somos NOSOTROS?» no mira el INBOX, así que el banco de
-      pruebas entero pasa como prospecto** (`hermes-content/deploy/vps-ops/bot/es-nuestra.mjs`;
-      medido contra producción el 2026-09-19 04:45).
+- [x] 🔴 **CERRADO el 2026-09-19 06:05 — el criterio «¿esta conversación somos NOSOTROS?» ya mira
+      el INBOX: el banco de pruebas dejó de pasar como prospecto**
+      (`hermes-content/deploy/vps-ops/bot/es-nuestra.mjs`, causa aditiva por tenencia;
+      1.243/1.243 verdes). **Commiteado, NO desplegado** — `/opt/onia/bot` sigue con el criterio
+      viejo hasta que `onia-cola` publique.
+
+      ⚠️ **Las dos premisas que traía escritas este ítem estaban MEDIDAS MAL, y obedecerlas habría
+      dejado el gate verde con el defecto vivo.** Es el punto ciego que una tarea con su arreglo ya
+      redactado le traslada al que la ejecuta:
+
+      1. **«derivar el conjunto de `organizations.slug like 'zz-qa-%'` vía `clinic_settings`» →
+         FALSO.** En producción `clinic_settings` tiene UNA sola fila con inbox (la de
+         `onia-interna`, inboxes 4 y 5): **el inbox 7 no cuelga de NINGUNA org**, ni siquiera de la
+         cuenta `zz-qa-bandeja-10`, que lo tiene en `null`. Ese conjunto sale **vacío**.
+      2. **«son 5 de 6 filas» → son DIEZ**, y la tabla del ítem estaba vieja: además de las que
+         listaba, `chatwoot:28`, `43`, `53`, `55` y `57` también dan `false`. La evidencia de una
+         tarea se congela; se recuenta antes de obedecerla.
+
+      **Lo que sí tiene dueño es el NOMBRE DEL INBOX en Chatwoot** — lo escribimos nosotros al
+      crearlo. `MARCA_INBOX_DE_PRUEBA` es la misma convención de siembra del repo (`zz-qa`), no
+      `qa` suelto: un negocio llamado «QA Consultores» recibiría ese slug y quedaría mudo, que ya
+      está medido en `cuentas-que-no-son-clientes.ts`. Un inbox 8 de QA que se cree mañana entra
+      **solo**, sin tocar código.
+
+      **El sesgo asimétrico se respetó:** el conjunto arranca VACÍO y si no se pudo preguntar queda
+      vacío **y avisa** (tri-estado) — el criterio se comporta exactamente como antes. Nunca falla
+      hacia «es nuestra», porque ese error deja a un prospecto real sin seguimiento y mudo.
+
+      **Trampa del instrumento, y la delató el caso ancla:** el gate de cableado derivaba su
+      universo con `sweep\w*Candidates` y eso **sólo veía 2 de los 4 barridos** —
+      `sweepDemosTerminadas` y `sweepDemoReminders` son los hermanos irregulares. Con ese
+      predicado el gate firmaba verde sobre la mitad del circuito. El universo se deriva ahora de
+      la llamada al store (`store.sweep…`). Validado por mutación en las dos direcciones: sacarle
+      la carga a un barrido → rojo; sacar la causa aditiva → rojo.
+
+      **Daño: latente, no activo — medido, no supuesto.** `followup-run.sh --dry-run --json` da
+      `"scanned":0,"desconocidas":0`: las diez están en `nuevo`/`handoff_humano` y el follow-up
+      pide `esperando_calificacion|esperando_horario`. Entraban el día que avanzaran de etapa.
+
+      <details><summary>El ítem como estaba escrito</summary>
 
       **El defecto.** `esConversacionNuestra(state)` contesta con una FIRMA DEL CONTACTO: teléfono
       en `NUESTROS_TELEFONOS`, o `displayName` que matchee `/\b(prueba|qa|test)\b/i`. Pero a las
@@ -367,6 +404,8 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       inbox 7 con el conjunto cargado, `false` sin él; gate con el universo derivado del disco (los
       `*-run.mjs` que llaman a un `sweep*`) validado por mutación; y el dry-run de los cuatro
       barridos sigue dando `send: []` sin ninguna fila real salteada.
+
+      </details>
 
 - [x] 🔴 **CERRADO el 2026-09-19 — un parpadeo de la base DESARMABA el traspaso humano y el
       opt-out: el turno escribía encima un estado que nunca pudo leer**

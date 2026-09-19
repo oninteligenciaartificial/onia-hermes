@@ -527,6 +527,9 @@ test("'sent' solo si SE MANDO: el estado guardado no puede volver a ser una prom
       config: enVivo,
       store: real.store,
       chatwoot: { enabled: true, warnings: [], sendMessage: (id, text) => { enviados.push({ id, text }); return { id: 1 }; } },
+      // El camino feliz incluye saber QUE inboxes son banco de pruebas (ver `es-nuestra.mjs`): sin
+      // esto el barrido avisa —con razon— que no pudo preguntar, y este caso afirma cero warnings.
+      listarInboxes: async () => [{ id: 4, name: "Onia Web" }, { id: 7, name: "ZZ QA Clinica Chatbot" }],
     },
   );
   assert.equal(real.outbound[0].deliveryStatus, "sent");
