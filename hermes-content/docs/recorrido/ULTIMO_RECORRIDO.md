@@ -12,6 +12,35 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-19 14:12 La Paz — escalón 3 nuevo: el portal del paciente, `/book/confirm` y `/book/my-appointments`
+
+`BUILD_ID` sin cambios (`AUiuQ9c0SmcJnuF37_qTo`) desde la vuelta anterior: seguí directo de la de
+arriba, probando lo que pasa DESPUÉS del `bookingToken` que una reserva pública le da al paciente.
+
+**Instrumento nuevo:** `scripts/probar_portal_paciente.mjs`. Siembra su propia org `zz-qa-` (mismo
+patrón: plan `professional`, dental, ADMIN con horario) y reserva por API pública para conseguir un
+`bookingToken` real, sin repetir el escalón anterior. Con ese token, SIN sesión:
+
+- `/book/my-appointments/<token>` — la MIRA renderizada (captura
+  `extra-portalpaciente-00-mis-citas.png`): muestra el nombre del paciente, la fecha, la hora y el
+  motivo de la cita `zz-qa-`, con status "Pendiente". Sin subrecursos en error.
+- `/book/confirm/<token>` — la MIRA en estado pendiente, aprieta el botón **"Confirmar" de verdad**
+  (PATCH real a `/api/booking/appointments`, `action=confirm`) y **verifica en la BASE** que
+  `appointments.status` pasó de `PENDIENTE` a `CONFIRMADA` — no se conformó con que la pantalla
+  dijera "¡Cita Confirmada!" (capturas `01-confirmar-pendiente.png` y `02-confirmar-despues.png`).
+- Camino de fallo simétrico: un token inexistente (`zz-qa-token-inexistente-...`) da 404 en
+  `/api/booking/appointments` y la pantalla muestra "Enlace inválido / No se encontraron citas"
+  (captura `03-token-invalido.png`) — no una pantalla en blanco ni un 500.
+
+**Sin hallazgo.** Todo lo `zz-qa-` sembrado se borró en la misma corrida (`organizations=0`,
+`appointments zz-qa-=0` verificado al cerrar).
+
+**Próxima vuelta:** si `BUILD_ID` sigue igual, otro escalón nuevo — cancelar una cita desde el
+portal (`action=cancel`), o el flujo de invitar/quitar coadministrador en `/settings` (equipo),
+tocado varias veces por DG-043/DG-047 y todavía no cubierto por este carril.
+
+---
+
 ## 2026-09-19 13:14 La Paz — escalón 3 nuevo: la agenda PÚBLICA `/book/<slug>`, de punta a punta
 
 `BUILD_ID` sin cambios (`AUiuQ9c0SmcJnuF37_qTo`) desde la vuelta anterior: en vez de repetir un
