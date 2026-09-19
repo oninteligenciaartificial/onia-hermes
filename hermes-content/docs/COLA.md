@@ -127,6 +127,25 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       plata anulada → cae `precioPorUsuario`; métodos de posición fuera → caen 2; y el corte por
       clave entero fuera → caen 8.
 
+      **↑ Auditado en PRODUCCIÓN el 2026-09-19 11:44 UTC por `onia-cola` (escalón 2), y el `[x]`
+      estaba a medias: era cierto en el repo y falso en el VPS.** Este cierre midió el guion del
+      **repo**, y el que decide es `/root/bin/onia-publicar-solo.sh`, que viaja por OTRA cadena
+      —`sincronizar.sh`, cron `44 * * * *`, desde `origin/main`—. `b33f4c1c` entró a `main` a las
+      **10:44:19 UTC**, o sea **17 segundos después** del sync de las `10:44:02Z`: producción
+      siguió con la copia vieja una hora entera, con `md5` distinto (`1b209384…` vivo contra
+      `9909ccd3…` en el repo), y la corrida del publicador de las 09:50 UTC volvió a imprimir
+      textual `landing: NO publico solo — cambia un numero en una fuente de precio:
+      web-factory/apps/onia-platform/src/lib/pricing.ts: 0 1` — el bug que este ítem dice cerrado.
+      **Cerrado de verdad:** el sync de las `11:44:03Z` llevó el archivo (`sincronizados 1
+      archivo(s) desde main`, `md5` vivo ya igual al del repo) y el guion **VIVO del VPS**,
+      corrido contra el mismo commit real (`2b12f50a`), contesta **`ningun monto cambia`, exit 0**.
+      **La lección no es del arreglo, que estaba bien: es que una herramienta de producción con
+      cadena de despliegue propia no está arreglada cuando el test pasa, sino cuando su copia
+      VIVA contesta distinto** — y acá las dos cadencias no están alineadas (sync horario al `:44`
+      contra publicador `50 */3`), así que perder el sync por segundos puede costar la ventana
+      entera del publicador. Se comentó en `t_bec84ac0` para que nadie le pida a Sergio Urcullo un
+      `ok` por algo que el publicador ya saca solo.
+
 - [~] ~~🟠 **El freno de precio del publicador decide por la FORMA del número y no por el campo:
       hoy detuvo la landing por `asientosExtra: 0`, que son personas, no plata.**
       **Medido el 2026-09-19 08:4x UTC**, con `2b12f50ae` esperando en `origin/main`:
