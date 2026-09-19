@@ -12,6 +12,49 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-19 05:1x La Paz — huérfana limpiada + escalón 3 cerrado: exportación CSV con plan `basic`
+
+**`BUILD_ID` sin cambios (`Idvh9u4mdBzHBgE2penq4`)** — no se repitió el recorrido completo
+(sigue 9/9, confirmado en la entrada anterior). Antes de empezar se encontró y limpió **1 org
+`zz-qa-` huérfana** (`zz-qa-2026-09-19-0414-negocio`, `onboardingCompletedAt` puesto, 2 `profiles`
+— ADMIN + DOCTOR pendiente —, 0 `patients`/`appointments`: corrida cortada por el timeout, el
+modo de falla ya conocido). Impresas antes de borrar: `organizations`, `profiles`,
+`organization_entitlements`, `auth.users`.
+
+**Escalón 3, superficie nueva:** la exportación de datos del cliente (`/api/settings/export`),
+citada en la memoria compartida como "derecho del titular, no feature de plan"
+(`csvExportEnabled` true desde `basic`) pero nunca antes probada de punta a punta por este
+carril con datos ENVIADOS.
+
+**Método:** org `zz-qa-` sembrada por SQL directo con `plan='basic'` (el más barato, para probar
+justo el caso límite de la promesa) y un paciente `zz-qa-`; sesión acuñada con
+`acunarSesion()` de `scripts/lib/sesion_dueno.mjs`. Trampa nueva encontrada y resuelta en el
+camino: `generate_link` fallaba con 500 "Database error finding user" — el `auth.users` sembrado
+a mano tenía `confirmation_token` y los otros campos de token en `NULL`, y el driver de GoTrue
+no sabe escanear `NULL` a `string` en esa columna (`converting NULL to string is unsupported`,
+visto en `docker logs supabase-auth2`). Se cura seteándolos a `''`. **Vale para cualquier carril
+que siembre `auth.users` a mano sin pasar por `/register`**: sin esos campos en `''`, todo
+`generate_link`/`acunarSesion` sobre esa fila devuelve 500 y parece un bug del producto.
+
+**Resultado, HTTP real contra `https://app.onia.com.bo/api/settings/export` con cookies de
+sesión:** `200`, `content-type: application/zip`, `content-disposition: attachment;
+filename="onia-datos-2026-09-19.zip"`, 1.601 bytes. El ZIP contiene `Resumen.csv` y
+`Pacientes.csv` con el registro `zz-qa-export-...-paciente` adentro. Sin hallazgo: la promesa de
+la memoria compartida se sostiene en producción, con el plan más barato, con datos reales.
+
+**Limpieza:** `patients`, `profiles`, `organizations`, `auth.identities`, `auth.users` — los 5
+por id exacto. Verificado 0/0/0 (`organizations`, `patients`, `auth.users` con `zz-qa-%`) al
+cerrar.
+
+RAZÓN: N/A — la vuelta avanzó (huérfana limpiada + escalón 3 nuevo cerrado con hallazgo de
+método, sin hallazgo de producto).
+LECCIÓN: sembrar `auth.users` a mano para probar un camino autenticado necesita también los
+campos de token en `''` (no `NULL`) — si no, `acunarSesion()` da un 500 que se lee como bug del
+producto y es del fixture. Ver `/tmp/probar_export.mjs` (no versionado; el fix real es el UPDATE
+de arriba, reproducible con cualquier sembrado a mano de `auth.users`).
+
+---
+
 ## 2026-09-19 03:1x La Paz — `BUILD_ID` cambió, recorrido completo repetido: 9/9 sin hallazgos
 
 `BUILD_ID` pasó de `NIRA4pNJ8fJVouaUsyu1E` (última vuelta) a `Idvh9u4mdBzHBgE2penq4` — tocaba
