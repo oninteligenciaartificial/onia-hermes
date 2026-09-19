@@ -29,6 +29,103 @@ contra producción (SSH al VPS, las dos bases, el motor corrido de verdad), no c
 
 ---
 
+## ✅ T7 — CERRADO el 2026-09-19: el arreglo de T6 dejó a la capacidad con DOS destinos, y el gate seguía preguntando por uno
+
+**El agujero lo abrió el arreglo del día anterior.** Al cablearle a la transcripción un
+respaldo contra OpenAI (T6), la nota de voz pasó a tener **dos** destinos: `speaches`
+(primario, muerto a propósito) y `api.openai.com` (respaldo). `destinos-vivos.mjs` deriva su
+universo preguntando por el **nombre de la variable** (`env.*_BASE_URL` / `*_BASE`), y el
+respaldo **no sale de una env**: lo resuelve un mapa congelado (`PROVEEDORES_DE_RESPALDO`).
+Resultado: el destino que iba a atender el **100 %** de las notas de voz no lo medía nadie.
+
+**Los dos lados equivocados a la vez.** El gate imprimía `ROTA · cae a M_AUDIO_FAIL` —que con
+el respaldo vivo sería falso— y a la vez era ciego al caso que hace **volver** el bug: el
+primario aguantando y la red caída, en silencio y con todo verde.
+
+**Qué se arregló** (`hermes-content/deploy/vps-ops/bot/destinos-vivos.mjs`):
+
+- **Se juzga la CADENA, no el eslabón.** Una capacidad está ROTA sólo si **ningún** destino
+  contesta. Primario muerto + respaldo vivo = `degradada` (se entrega, y se dice). Primario
+  vivo + respaldo muerto = `AVISO`: perder la red no es rojo hoy, pero es cómo vuelve el bug.
+- **El respaldo se resuelve con la función DEL PRODUCTO** (`getFallbackConfig`), no con un
+  literal copiado: el día que alguien agregue un proveedor, el gate lo sigue solo.
+- **La red cuelga del DEPLOY, no del commit.** Un respaldo que está en el repo y no en
+  `/tmp/onia-bot/` no atiende a nadie: se le pregunta al bot vivo y, si no se pudo preguntar,
+  **no** se cuenta (falla cerrado). Sin esto el gate habría salido verde sobre un prospecto que
+  hoy recibe `M_AUDIO_FAIL` — el verde falso que ya costó una vuelta el 2026-09-18.
+- **Cierre de clase:** `respaldosSinDeclarar()` deriva del disco qué módulo expone un resolutor
+  de respaldo sin declararlo. Si mañana la visión o el modelo del turno ganan uno, el gate se
+  pone **rojo con su nombre** hasta que alguien lo decida.
+
+**Prueba.** 6 mutaciones, 6 rojos por el motivo correcto (sacarle el `respaldo` a la capacidad ·
+que la cadena lo ignore · no avisar del respaldo caído · volver a "cualquier eslabón caído =
+ROTA" · contar un respaldo sin desplegar · aplanar "no pude preguntar" en "no está"), árbol
+restaurado con `cp` y verificado idéntico. `npm run test:destinos-instrumento` en verde y
+`npm run test:bot` **1288/1288**. Contra producción el gate ahora dice la verdad de hoy:
+`ROTA` + `AVISO … el respaldo existe en el repo y NO en el bot vivo
+(/tmp/onia-bot/audio-transcribe.mjs no tiene getFallbackConfig): no se cuenta como red hasta
+desplegarlo` — medido con `docker exec onia-center grep -c getFallbackConfig …` → `0`.
+
+**Lo que queda, y no es mío:** T6 + T7 están **commiteados y NO desplegados**. La nota de voz
+sigue cayendo a `M_AUDIO_FAIL` para todo prospecto hasta que se publique el bot.
+
+---
+
+## ✅ T6 — CERRADO el 2026-09-19 (commiteado, **NO desplegado**): el catálogo vende "entiende audios" y el bot no entendía ninguno
+
+**Lo que veía el prospecto.** `ONIA_CATALOGO_DE_VENTA.md:153` —la fuente única de QUÉ se
+vende— marca el chatbot ✅ **vivo** prometiendo que *"entiende FOTOS y audios"*. La foto sí
+anda; el audio no: `speaches` **no existe en la red del VPS**, así que TODA nota de voz caía a
+`M_AUDIO_FAIL` y el bot le pedía al prospecto que reescribiera lo que acababa de decir. En
+Bolivia mandar un audio por WhatsApp es la forma normal de escribir.
+
+**Medido en vivo el 2026-09-19, no heredado:**
+
+- `docker exec onia-center wget -qO- http://speaches:8000/v1/models` → `bad address` ·
+  `npm run destinos:vivos` → `ROTA … el prospecto manda una NOTA DE VOZ y el bot la entiende`
+  (y `ok` la foto, vía LiteLLM, que sí contesta).
+- **El proceso vivo YA declaraba el respaldo y ninguna línea lo leía:**
+  `ONIA_AUDIO_STT_FALLBACK_PROVIDER=openai` y
+  `ONIA_AUDIO_STT_FALLBACK_MODEL=gpt-4o-mini-transcribe` están en `/proc/<pid>/environ` del
+  webhook, y `grep -c FALLBACK_PROVIDER audio-transcribe.mjs` daba **0**. Un interruptor que
+  nadie lee es peor que no tenerlo: el que lo configuró cree que hay red debajo.
+
+**La promesa no se borró, se cumplió.** OpenAI habla el MISMO endpoint multipart que Speaches
+(`POST /audio/transcriptions`), así que el respaldo es la misma función con otra `baseUrl` y la
+key en el header. El gasto ya estaba decidido (Sergio Urcullo, 2026-08-30: *"pagamos api nomás
+de modelo barato"*) y contemplado en el modelo de costos de `onia-platform/lib/pricing.ts`;
+lo que faltaba era **dónde vive**, que es técnico.
+
+- Falla **cerrado** en las tres formas de estar a medias: sin proveedor, con un proveedor que
+  no sabemos hablar (lista blanca `PROVEEDORES_DE_RESPALDO`), o sin key → no hay respaldo y el
+  comportamiento es el de hoy. Nunca se inventa un destino.
+- Se paga **sólo cuando el primario CAE** (`stt_fallido`). Un `stt_sin_texto` es el primario
+  contestando que no hay nada: preguntarle lo mismo a otro cuesta plata y devuelve el mismo vacío.
+- La key viaja en el header, **nunca** en la URL ni en el multipart, y no se loguea.
+- **El turno degradado deja línea.** Los avisos sólo se leían cuando el bot se callaba: en
+  `rama=respondio` morían en el aire, así que el respaldo iba a tapar el destino caído y nadie
+  se enteraría de que cada nota de voz factura. `formatearTraza` ahora imprime `aviso=` cuando
+  el turno salió bien y trae avisos (y no lo repite cuando el `motivo=` ya lo dijo).
+
+**Prueba viva de que el respaldo llega** (no es decorativo): desde la red del contenedor,
+`POST https://api.openai.com/v1/audio/transcriptions` con la key del proceso y
+`gpt-4o-mini-transcribe` → **HTTP 200** con `{"text":"", "usage":{…}}` (era un tono, no voz:
+lo que se probó es que acepta la key y el modelo — 401/404 eran los fallos posibles).
+
+Gates: `audio-transcribe.test.mjs` 43/43 y `webhook-server.test.mjs` 41/41, suite del bot
+1288/1288. **Validado por mutación**, 9 mutaciones y las 9 en rojo: el esquive (llamar al
+respaldo y tirar su resultado), reintentar el silencio, aceptar un proveedor desconocido,
+sacar el header `Authorization`, declarar respaldo sin key, no imprimir `aviso=`, imprimirlo
+vacío, repetirlo en la rama MUDA y ponerlo en todo turno sano.
+
+⚠️ **Commiteado, NO desplegado.** Hasta que `/opt/onia/bot` reciba este código, la promesa del
+catálogo sigue siendo falsa en producción y `npm run destinos:vivos` sigue diciendo `ROTA` —
+y ese veredicto es CORRECTO mientras tanto: la exención cuelga del deploy, no del repo.
+Se publica con `DESPLEGAR: bot` (el publicador automático lo saca solo si el lote no toca una
+fuente de precio).
+
+---
+
 ## ✅ T4 — CERRADO el 2026-09-10 23:00: el acuse del handoff se repetia en CADA mensaje
 
 **Deployado y probado en prod** (backup deploy-20260910T225929Z): conversacion QA en

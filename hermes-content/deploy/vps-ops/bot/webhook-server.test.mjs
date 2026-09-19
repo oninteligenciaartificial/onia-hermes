@@ -1032,3 +1032,58 @@ test("HTTP REAL: el aviso que NO sale dice DE QUIEN era (sin eso no se puede rec
     await once(server, "close");
   }
 });
+
+// ---------------------------------------------------------------------------
+// UN CIRCUITO DEGRADADO QUE CONTESTA BIEN — 2026-09-19.
+//
+// Los avisos solo salian a la luz cuando el bot se callaba (`MUDO` / `NO_ENTREGADO`): en
+// `rama=respondio` el campo `motivo` queda sin definir y los warnings morian en el aire. Eso
+// tapa justo la falla mas cara de detectar — la que NO se nota. El caso real: con Speaches
+// caido, el respaldo de OpenAI salva el turno, el prospecto recibe su respuesta correcta y
+// nadie se entera de que el destino barato esta muerto ni de que cada nota de voz factura.
+// Un circuito degradado que no se ve se vuelve normal.
+// ---------------------------------------------------------------------------
+
+test("TRAZA: contesto BIEN pero degradado -> el aviso se ve igual", () => {
+  const linea = formatearTraza({
+    conversacion: "58",
+    mensaje: "1437",
+    inbox: "5",
+    estado: 200,
+    cuerpo: {
+      ok: true,
+      stageBefore: "nuevo",
+      stageAfter: "esperando_horario",
+      sent: [{ text: "¡Hola!", posted: true }],
+      warnings: [
+        "audio: Speaches no respondio: getaddrinfo ENOTFOUND speaches",
+        "audio: contesto el respaldo openai (gpt-4o-mini-transcribe) — el primario esta caido",
+      ],
+    },
+  });
+
+  assert.match(linea, /rama=respondio/, "el turno SI salio bien: la rama no se toca");
+  assert.match(linea, /aviso=/, "un turno degradado que no deja linea se vuelve el estado normal");
+  assert.match(linea, /respaldo openai/, "y tiene que decir QUIEN contesto, o nadie arregla el primario");
+});
+
+test("TRAZA: un turno sano no ensucia el log con un campo vacio", () => {
+  const linea = formatearTraza({
+    conversacion: "58",
+    estado: 200,
+    cuerpo: { ok: true, sent: [{ text: "hola", posted: true }], warnings: [] },
+  });
+  assert.match(linea, /rama=respondio/);
+  assert.ok(!/aviso=/.test(linea), "sin avisos no hay campo: 47.000 lineas con un `aviso=` vacio es ruido");
+});
+
+test("TRAZA: la rama MUDA sigue explicandose con su motivo, no con el campo nuevo", () => {
+  const linea = formatearTraza({
+    conversacion: "58",
+    estado: 200,
+    cuerpo: { ok: true, sent: [], warnings: ["audio: sin transcripción (stt_fallido)"] },
+  });
+  assert.match(linea, /rama=MUDO/);
+  assert.match(linea, /motivo=audio: sin transcripción/, "el motivo del silencio manda: es lo primero que se lee");
+  assert.ok(!/aviso=/.test(linea), "no se dice dos veces lo mismo en la misma linea");
+});

@@ -40,6 +40,8 @@ import { readdirSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
+import { getFallbackConfig } from "./audio-transcribe.mjs";
+
 const AQUI = dirname(fileURLToPath(import.meta.url));
 const CONTENEDOR = "onia-center";
 
@@ -57,6 +59,11 @@ export const CAPACIDADES = [
     interruptor: { env: "ONIA_AUDIO_ENABLED", apagadoSi: "false" },
     probe: "/models",
     caida: "cae a M_AUDIO_FAIL: le pide al prospecto que reescriba lo que acaba de decir",
+    // El respaldo NO sale de una env: `audio-transcribe.mjs` lo resuelve de un mapa congelado
+    // (`PROVEEDORES_DE_RESPALDO`), asi que el detector de `destinosDelDisco` —que pregunta por el
+    // NOMBRE de la variable— es ciego a el. Se resuelve llamando a la funcion DEL PRODUCTO con el
+    // entorno vivo: si manana alguien agrega un proveedor, el gate lo sigue sin tocar una linea.
+    respaldo: { resuelve: "getFallbackConfig", con: getFallbackConfig, probe: "/models" },
   },
   {
     archivo: "vision.mjs",
@@ -177,6 +184,79 @@ export function destinosDelDisco(dir = AQUI, leerDir = readdirSync, leer = readF
   return encontrados;
 }
 
+/**
+ * Los modulos que EXPONEN un respaldo (un segundo destino para la misma capacidad) y no lo
+ * declararon en CAPACIDADES.
+ *
+ * Nace del 2026-09-19, y es el agujero que abrio el arreglo del dia anterior: al cablearle a la
+ * transcripcion un respaldo contra OpenAI, la capacidad paso a tener DOS destinos y este gate
+ * seguia preguntando por uno solo — justo por el que esta muerto a proposito. O sea que el destino
+ * que hoy atiende el 100% de las notas de voz no lo medía nadie, y el gate imprimia "ROTA · cae a
+ * M_AUDIO_FAIL" sobre una capacidad que SI se entrega. Los dos lados equivocados a la vez.
+ *
+ * Se deriva del DISCO leyendo el fuente, no de una lista: el dia que alguien le ponga respaldo a
+ * la vision o al modelo del turno, este gate se pone rojo con su nombre hasta que se decida.
+ */
+export function respaldosSinDeclarar(capacidades = CAPACIDADES, dir = AQUI, leer = readFileSync) {
+  const sinDeclarar = [];
+  for (const cap of capacidades) {
+    if (cap.respaldo) continue;
+    let texto = "";
+    try {
+      texto = String(leer(join(dir, cap.archivo), "utf8"));
+    } catch {
+      continue; // no poder leer el fuente no es "no tiene respaldo": no se inventa un veredicto
+    }
+    const m = texto.match(/export function (get\w*[Ff]allback\w*Config)\s*\(/);
+    if (m) sinDeclarar.push({ archivo: cap.archivo, funcion: m[1] });
+  }
+  return sinDeclarar;
+}
+
+/**
+ * La cadena de destinos de UNA capacidad, en el orden en que el producto los intenta.
+ *
+ * Un solo destino cuando no hay respaldo. Cuando lo hay, el respaldo se RESUELVE con la funcion
+ * del producto y el entorno vivo: si esa funcion devuelve `null` (sin proveedor, sin key) no hay
+ * segundo destino y la cadena vuelve a ser de uno — que es la verdad, y es lo que hay que medir.
+ */
+export function cadenaDeDestinos(cap, env = {}, desplegado = true) {
+  const primario = String(env[cap.env] || cap.defecto).replace(/\/+$/, "");
+  const cadena = [{ rol: "primario", url: `${primario}${cap.probe}`, destino: primario }];
+  if (!cap.respaldo || typeof cap.respaldo.con !== "function") return cadena;
+
+  // Un respaldo que esta en el REPO y no en el bot vivo no atiende a nadie. Contarlo daria
+  // "degradada, la sirve el respaldo" sobre un prospecto que hoy recibe M_AUDIO_FAIL — el verde
+  // falso que ya costo una vuelta el 2026-09-18: la exencion cuelga del DEPLOY, no del repo.
+  // `null` (no se pudo preguntar) tampoco cuenta: sin saberlo, no se le promete red a nadie.
+  if (desplegado !== true) return cadena;
+
+  let conf = null;
+  try {
+    conf = cap.respaldo.con(env);
+  } catch {
+    conf = null;
+  }
+  const base = String(conf?.baseUrl || "").replace(/\/+$/, "");
+  if (!base) return cadena;
+  return [...cadena, { rol: "respaldo", url: `${base}${cap.respaldo.probe}`, destino: base }];
+}
+
+/**
+ * Si el respaldo declarado esta CORRIENDO (no solo commiteado). Tri-estado: `null` cuando no se
+ * pudo preguntar — que no es lo mismo que "no esta", y por eso tampoco se cuenta como red.
+ */
+export function respaldoDesplegado(cap, ejecutar = sh) {
+  if (!cap.respaldo) return false;
+  try {
+    const salida = ejecutar(`grep -c '${cap.respaldo.resuelve}' /tmp/onia-bot/${cap.archivo} 2>/dev/null; echo "__rc=$?"`);
+    const n = Number((salida.match(/^\s*(\d+)/m) || [])[1]);
+    return Number.isFinite(n) ? n > 0 : null;
+  } catch {
+    return null;
+  }
+}
+
 // ---------------------------------------------------------------------------
 // Veredicto — puro
 // ---------------------------------------------------------------------------
@@ -187,7 +267,7 @@ export function destinosDelDisco(dir = AQUI, leerDir = readdirSync, leer = readF
  * @param {Array<object>} entrada.medidas  [{archivo, destino, encendida, contesta: true|false|null, motivo}]
  * @returns {{exit:number, veredicto:string, lineas:string[]}}
  */
-export function juzgar({ sujetos = [], medidas = [], refutadas = [] } = {}) {
+export function juzgar({ sujetos = [], medidas = [], refutadas = [], respaldosOcultos = [] } = {}) {
   const lineas = [];
   const decididos = new Set([
     ...CAPACIDADES.map((c) => c.archivo),
@@ -198,25 +278,58 @@ export function juzgar({ sujetos = [], medidas = [], refutadas = [] } = {}) {
   const rotas = [];
   const noMedidas = [];
 
+  // Se juzga por CAPACIDAD y no por destino: una capacidad con respaldo esta rota solo cuando NO
+  // contesta NINGUNO de sus destinos. Medir eslabon por eslabon daba "ROTA" sobre una capacidad
+  // que se entrega — y callaba el caso inverso, que es el que hace volver el bug: el respaldo
+  // muerto mientras el primario aguanta.
+  const porCapacidad = new Map();
   for (const m of medidas) {
-    const cap = CAPACIDADES.find((c) => c.archivo === m.archivo);
-    const que = cap ? cap.capacidad : m.capacidad || m.archivo;
-    if (m.contesta === null || m.contesta === undefined) {
+    if (!porCapacidad.has(m.archivo)) porCapacidad.set(m.archivo, []);
+    porCapacidad.get(m.archivo).push({ ...m, rol: m.rol || "primario" });
+  }
+
+  for (const [archivo, eslabones] of porCapacidad) {
+    const cap = CAPACIDADES.find((c) => c.archivo === archivo);
+    const que = cap ? cap.capacidad : eslabones[0]?.capacidad || archivo;
+    const primario = eslabones.find((e) => e.rol === "primario") || eslabones[0];
+    const respaldo = eslabones.find((e) => e.rol === "respaldo");
+    const sirve = eslabones.find((e) => e.contesta === true);
+
+    if (!sirve && eslabones.some((e) => e.contesta === null || e.contesta === undefined)) {
+      const m = eslabones.find((e) => e.contesta === null || e.contesta === undefined);
       noMedidas.push(m);
       lineas.push(`  NO MEDIDO  ${que} — ${m.destino}: ${m.motivo || "no se pudo preguntar"}`);
       continue;
     }
-    if (m.contesta) {
-      lineas.push(`  ok         ${que} — ${m.destino} contesta`);
+
+    if (sirve) {
+      if (sirve.rol === "respaldo") {
+        lineas.push(`  degradada  ${que} — el primario ${primario.destino} NO contesta (${primario.motivo || "sin respuesta"})`);
+        lineas.push(`             la sirve el RESPALDO ${sirve.destino}, que contesta: el prospecto SI recibe la capacidad`);
+      } else {
+        lineas.push(`  ok         ${que} — ${sirve.destino} contesta`);
+      }
+      // El primario vivo no absuelve al respaldo muerto: perder la red es como vuelve el bug, en
+      // silencio y con todo verde. No es rojo (hoy se entrega), pero se dice.
+      if (respaldo && respaldo.contesta === false) {
+        lineas.push(`  AVISO      ${que} — el RESPALDO ${respaldo.destino} no contesta (${respaldo.motivo || "sin respuesta"}): hoy se entrega, pero sin red`);
+      }
+      if (respaldo && (respaldo.contesta === null || respaldo.contesta === undefined)) {
+        lineas.push(`  AVISO      ${que} — no se pudo preguntar por el RESPALDO ${respaldo.destino}: ${respaldo.motivo || "sin respuesta"}`);
+      }
       continue;
     }
-    if (m.encendida === false) {
-      lineas.push(`  apagada    ${que} — ${m.destino} no contesta, pero la capacidad esta APAGADA a proposito`);
+
+    if (primario.encendida === false) {
+      lineas.push(`  apagada    ${que} — ${primario.destino} no contesta, pero la capacidad esta APAGADA a proposito`);
       continue;
     }
-    rotas.push({ ...m, cap });
+
+    rotas.push({ ...primario, cap });
     lineas.push(`  ROTA       ${que}`);
-    lineas.push(`             destino ${m.destino} NO contesta (${m.motivo || "sin respuesta"})`);
+    for (const e of eslabones) {
+      lineas.push(`             destino ${e.destino} (${e.rol}) NO contesta (${e.motivo || "sin respuesta"})`);
+    }
     if (cap) lineas.push(`             lo que recibe el prospecto: ${cap.caida}`);
   }
 
@@ -229,10 +342,22 @@ export function juzgar({ sujetos = [], medidas = [], refutadas = [] } = {}) {
     lineas.push(`             decidilo en CAPACIDADES (con que recibe el prospecto si el destino no esta) o corregi la excusa`);
   }
 
+  for (const r of respaldosOcultos) {
+    lineas.push(`  RESPALDO SIN DECLARAR ${r.archivo} expone ${r.funcion}() y su capacidad no declara 'respaldo'`);
+    lineas.push(`             esa capacidad tiene DOS destinos y este gate pregunta por uno: el otro no lo mide nadie`);
+  }
+
   if (sinDecidir.length) {
     return {
       exit: 1,
       veredicto: `HAY ${sinDecidir.length} DESTINO(S) QUE NADIE DECIDIO SI SE MIDEN — declaralos en CAPACIDADES o en NO_SON_DESTINO_DEL_TURNO`,
+      lineas,
+    };
+  }
+  if (respaldosOcultos.length) {
+    return {
+      exit: 1,
+      veredicto: `${respaldosOcultos.length} CAPACIDAD(ES) TIENEN UN RESPALDO QUE ESTE GATE NO MIDE — declaralo con 'respaldo' en CAPACIDADES`,
       lineas,
     };
   }
@@ -324,16 +449,33 @@ function medir() {
   }
 
   const yaPreguntado = new Map();
-  const medidas = CAPACIDADES.map((cap) => {
-    const destino = (proceso.env[cap.env] || cap.defecto).replace(/\/+$/, "");
+  const medidas = [];
+  const avisosDeRespaldo = [];
+  for (const cap of CAPACIDADES) {
     const encendida = cap.interruptor
       ? String(proceso.env[cap.interruptor.env] ?? "").trim().toLowerCase() !== cap.interruptor.apagadoSi
       : true;
-    const url = `${destino}${cap.probe}`;
-    if (!yaPreguntado.has(url)) yaPreguntado.set(url, destinoContesta(url));
-    const r = yaPreguntado.get(url);
-    return { archivo: cap.archivo, destino, encendida, contesta: r.contesta, motivo: r.motivo };
-  });
+    const vivo = cap.respaldo ? respaldoDesplegado(cap) : true;
+    if (cap.respaldo && vivo !== true) {
+      avisosDeRespaldo.push(
+        vivo === false
+          ? `  AVISO      ${cap.capacidad} — el respaldo existe en el repo y NO en el bot vivo (/tmp/onia-bot/${cap.archivo} no tiene ${cap.respaldo.resuelve}): no se cuenta como red hasta desplegarlo`
+          : `  AVISO      ${cap.capacidad} — no se pudo preguntarle al bot vivo si tiene el respaldo: no se cuenta como red`,
+      );
+    }
+    for (const eslabon of cadenaDeDestinos(cap, proceso.env, vivo)) {
+      if (!yaPreguntado.has(eslabon.url)) yaPreguntado.set(eslabon.url, destinoContesta(eslabon.url));
+      const r = yaPreguntado.get(eslabon.url);
+      medidas.push({
+        archivo: cap.archivo,
+        rol: eslabon.rol,
+        destino: eslabon.destino,
+        encendida,
+        contesta: r.contesta,
+        motivo: r.motivo,
+      });
+    }
+  }
 
   const sujetos = destinosDelDisco();
 
@@ -354,9 +496,10 @@ function medir() {
     });
   }
 
-  const { exit, veredicto, lineas } = juzgar({ sujetos, medidas, refutadas });
+  const { exit, veredicto, lineas } = juzgar({ sujetos, medidas, refutadas, respaldosOcultos: respaldosSinDeclarar() });
   console.log(`proceso ${proceso.pid} en ${CONTENEDOR} — ${sujetos.length} modulo(s) del disco enchufan un destino externo`);
   for (const l of lineas) console.log(l);
+  for (const l of avisosDeRespaldo) console.log(l);
   const refutados = new Set(refutadas.map((r) => r.archivo));
   for (const e of NO_SON_DESTINO_DEL_TURNO) {
     if (!refutados.has(e.archivo)) console.log(`  (excusado) ${e.archivo}: ${e.motivo}`);
@@ -415,6 +558,85 @@ function selfCheck() {
   ok(
     juzgar({ sujetos, medidas: [{ archivo: "vision.mjs", destino: "http://x/v1", encendida: true, contesta: true }] }).exit === 0,
     "con todos los destinos contestando tiene que salir verde",
+  );
+
+  // --- La CADENA de destinos: una capacidad puede tener respaldo y se juzga entera. ---
+
+  // ANCLA DE LA CLASE (2026-09-19): el respaldo de la transcripcion NO sale de una env, asi que
+  // `destinosDelDisco` es ciego a el. Si alguien le saca el `respaldo` a la capacidad, el gate
+  // vuelve a preguntar por un solo destino y este caso es lo unico que lo delata.
+  const capAudio = CAPACIDADES.find((c) => c.archivo === "audio-transcribe.mjs");
+  ok(capAudio?.respaldo, "la transcripcion perdio la declaracion de su respaldo: su segundo destino deja de medirse");
+  const envVivoFalso = {
+    ONIA_AUDIO_STT_BASE_URL: "http://speaches:8000/v1",
+    ONIA_AUDIO_STT_FALLBACK_PROVIDER: "openai",
+    OPENAI_ONIA_CENTER_API_KEY: "sk-de-prueba",
+  };
+  const cadena = cadenaDeDestinos(capAudio, envVivoFalso);
+  ok(cadena.length === 2, `con proveedor y key la cadena tiene que traer DOS destinos, trajo ${cadena.length}`);
+  ok(cadena[1]?.rol === "respaldo" && /api\.openai\.com/.test(cadena[1]?.url || ""),
+    "el segundo destino tiene que ser el respaldo REAL que resuelve el producto, no un literal copiado acá");
+
+  // El respaldo que esta SOLO en el repo no atiende a nadie: contarlo es el verde falso que ya
+  // costo una vuelta (2026-09-18). La red cuelga del DEPLOY, no del commit.
+  ok(cadenaDeDestinos(capAudio, envVivoFalso, false).length === 1,
+    "un respaldo commiteado y NO desplegado no puede contarse como red: el prospecto recibe la caida igual");
+  ok(cadenaDeDestinos(capAudio, envVivoFalso, null).length === 1,
+    "no haber podido preguntar si el respaldo esta desplegado tampoco cuenta como red (falla cerrado)");
+  ok(respaldoDesplegado(capAudio, () => "0\n__rc=1") === false, "grep en 0 es un NO desplegado, no un 'no pude preguntar'");
+  ok(respaldoDesplegado(capAudio, () => "3\n__rc=0") === true, "grep con coincidencias prueba que el respaldo esta corriendo");
+  ok(respaldoDesplegado(capAudio, () => { throw new Error("sin docker"); }) === null,
+    "no poder hablar con el contenedor es NO MEDIDO, nunca 'no esta desplegado'");
+
+  // Sin key no hay respaldo: la cadena vuelve a ser de uno, que es la verdad que hay que medir.
+  ok(cadenaDeDestinos(capAudio, { ONIA_AUDIO_STT_FALLBACK_PROVIDER: "openai" }).length === 1,
+    "sin key el producto NO tiene respaldo: inventarle un segundo destino mediria algo que no existe");
+
+  // El defecto que este arreglo cierra: primario muerto + respaldo vivo NO es una capacidad rota.
+  const degradada = juzgar({
+    sujetos,
+    medidas: [
+      { archivo: "audio-transcribe.mjs", rol: "primario", destino: "http://speaches:8000/v1", encendida: true, contesta: false, motivo: "el host no resuelve" },
+      { archivo: "audio-transcribe.mjs", rol: "respaldo", destino: "https://api.openai.com/v1", encendida: true, contesta: true },
+    ],
+  });
+  ok(degradada.exit === 0, "primario muerto con el respaldo vivo NO puede salir rojo: el prospecto SI recibe la capacidad");
+  ok(/degradada/.test(degradada.lineas.join("\n")) && !/M_AUDIO_FAIL/.test(degradada.lineas.join("\n")),
+    "con el respaldo vivo el gate no puede seguir diciendo que el prospecto recibe la caida del primario");
+
+  // La direccion simetrica, que es como vuelve el bug: el primario aguanta y la red se cayo.
+  const sinRed = juzgar({
+    sujetos,
+    medidas: [
+      { archivo: "audio-transcribe.mjs", rol: "primario", destino: "http://speaches:8000/v1", encendida: true, contesta: true },
+      { archivo: "audio-transcribe.mjs", rol: "respaldo", destino: "https://api.openai.com/v1", encendida: true, contesta: false, motivo: "timeout" },
+    ],
+  });
+  ok(sinRed.exit === 0, "con el primario vivo la capacidad se entrega: el respaldo caido no es rojo");
+  ok(/AVISO/.test(sinRed.lineas.join("\n")), "un respaldo caido tiene que DECIRSE: perder la red es como vuelve el bug en silencio");
+
+  // Los DOS destinos muertos sí es rojo, y nombra los dos.
+  const dosMuertos = juzgar({
+    sujetos,
+    medidas: [
+      { archivo: "audio-transcribe.mjs", rol: "primario", destino: "http://speaches:8000/v1", encendida: true, contesta: false, motivo: "el host no resuelve" },
+      { archivo: "audio-transcribe.mjs", rol: "respaldo", destino: "https://api.openai.com/v1", encendida: true, contesta: false, motivo: "timeout" },
+    ],
+  });
+  ok(dosMuertos.exit === 1, "con TODA la cadena muerta la capacidad esta rota");
+  ok(/speaches/.test(dosMuertos.lineas.join("\n")) && /api\.openai\.com/.test(dosMuertos.lineas.join("\n")),
+    "el rojo de una cadena muerta tiene que nombrar los DOS destinos, no solo el primero");
+
+  // Cierre de clase: un modulo que expone un respaldo y no lo declara es ROJO con su nombre.
+  ok(respaldosSinDeclarar().length === 0,
+    `hay capacidades con respaldo sin declarar: ${respaldosSinDeclarar().map((r) => r.archivo).join(", ")}`);
+  const oculto = juzgar({ sujetos, medidas: [], respaldosOcultos: [{ archivo: "vision.mjs", funcion: "getFallbackConfig" }] });
+  ok(oculto.exit === 1 && /vision\.mjs/.test(oculto.lineas.join("\n")),
+    "un respaldo nuevo sin declarar tiene que salir rojo nombrando el archivo");
+  // Y el detector tiene que VER el caso conocido: sin esto el ancla de arriba pasa por vacia.
+  ok(
+    respaldosSinDeclarar([{ archivo: "audio-transcribe.mjs" }]).some((r) => r.archivo === "audio-transcribe.mjs"),
+    "el detector del disco no reconoce el respaldo de audio-transcribe.mjs: el ancla estaria pasando en vacio",
   );
 
   // Un HTTP 401 prueba que el servicio EXISTE: es lo que este gate mide.
