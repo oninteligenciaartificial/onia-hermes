@@ -505,8 +505,13 @@ const ESCALERA: readonly Plan[] = [
     paso: "04",
     nombre: NOMBRE_DE_PLAN.full,
     salto: "Todo incluido",
-    resultado:
-      `Sin techos y con el chatbot de WhatsApp incluido: la cuenta gana comparada con ${NOMBRE_DE_PLAN.pro} más el add-on.`,
+    /**
+     * Sin comparación de precio: comparar contra «el escalón de abajo + el add-on» es una CUENTA
+     * sobre el catálogo, y se deriva en `PLANES` (`cuentaVsAddon`). Acá queda sólo lo que es
+     * cierto sin hacer ninguna cuenta, para que el peor caso —que la derivación no encuentre
+     * sujeto— sea copy honesto en vez de una cifra tipeada que envejece sola.
+     */
+    resultado: "Sin techos y con el chatbot de WhatsApp incluido.",
     mensual: 1290,
     semanal: null,
     anual: 12900,
@@ -579,6 +584,78 @@ function lineaDeCoadministradores(plan: Plan): string[] {
   // anunciarlo como carencia sería mentir. La condición se lee del catálogo, no de una fecha.
   if (!primerPlanCon("coadministradores", ESCALERA)) return [];
   return ["Un solo administrador: el resto del equipo entra con acceso limitado"];
+}
+
+/**
+ * La CUENTA del plan que trae el chatbot adentro contra el escalón de abajo comprándolo aparte.
+ *
+ * 🔴 **EL DEFECTO, medido el 2026-09-19 sobre `onia.com.bo/precios` SERVIDA** (texto renderizado
+ * y leído, no un `grep`). La tarjeta del Completo decía *«la cuenta gana comparada con
+ * Profesional más el add-on»* — y la cuenta **pierde**: Profesional Bs 890 + chatbot Bs 390 son
+ * **Bs 1.280**, y el Completo sale **Bs 1.290**. Diez bolivianos MÁS por mes, cien más por año
+ * (8.900 + 3.900 = 12.800 contra 12.900). Lo afirmaba la página cuyo título es «PRECIOS CLAROS».
+ *
+ * 🔴 **POR QUE NINGUN GATE PODIA VERLO.** Es una familia nueva: la afirmación no es un monto, ni
+ * un nombre de plan, ni una capacidad — es el **RESULTADO DE UNA CUENTA** entre montos legítimos.
+ *
+ *   - los cruces de precio (`scripts/precios-fuente.mjs`, `npm run precios:vivos`) validan que
+ *     cada cifra salga de la fuente: 890, 390 y 1.290 salen de la fuente, las tres. Verde;
+ *   - `lib/capacidad-incluida.test.ts` prohíbe tipear un nombre de plan junto a una capacidad, y
+ *     acá el nombre ya venía interpolado de `NOMBRE_DE_PLAN.pro`. Verde;
+ *   - `(sitio)/desbloqueo-que-no-se-tipea.test.ts` y `prueba-vs-plan.test.ts` cierran el
+ *     universal y el alcance total. Esta oración no afirma ninguno de los dos. Verde.
+ *
+ * O sea: los tres sumandos eran correctos y la suma estaba mal, y ningún instrumento suma.
+ *
+ * DOS DECISIONES QUE LO HACEN CLASE Y NO INSTANCIA:
+ *
+ *  1. **No se prohíbe el literal viejo.** «No digas *la cuenta gana*» se apagaría solo el día que
+ *     la cuenta efectivamente gane (y puede ganar: basta que el Completo baje o que el add-on
+ *     suba). Lo que se prohíbe es TIPEAR el resultado: sale de acá, y las tres direcciones
+ *     —más caro, igual, más barato— las dice la aritmética.
+ *  2. **El sujeto se DERIVA del catálogo**, no es «el Completo»: es todo plan que traiga el
+ *     chatbot adentro teniendo debajo uno que no. El escalón que se agregue mañana nace con la
+ *     cuenta bien hecha, y si el de abajo también lo trae, la comparación desaparece sola.
+ */
+export interface CuentaVsAddon {
+  /** El escalón de abajo: el que tiene que comprar el add-on aparte. */
+  readonly contra: Plan;
+  /** Lo que sale armarlo abajo: mensual del de abajo + el add-on. */
+  readonly armado: number;
+  /** Lo que cuesta de MÁS el plan que lo trae adentro. Negativo = sale más barato. */
+  readonly deMas: number;
+}
+
+export function cuentaVsAddon(
+  plan: Plan,
+  planes: readonly Plan[] = ESCALERA,
+  addonMensual: number = CHATBOT_MENSUAL,
+): CuentaVsAddon | null {
+  if (!plan.chatbotIncluido) return null;
+  const i = planes.findIndex((p) => p.id === plan.id);
+  // Sin escalón debajo, o con uno que también lo trae adentro, no hay contra qué comparar: la
+  // oración no se escribe, en vez de compararse contra sí misma.
+  const contra = i > 0 ? planes[i - 1] : null;
+  if (!contra || contra.chatbotIncluido) return null;
+  const armado = contra.mensual + addonMensual;
+  return { contra, armado, deMas: plan.mensual - armado };
+}
+
+/** La cuenta, dicha. Las tres direcciones salen del signo, nunca de un literal elegido a mano. */
+export function cuentaEnPalabras(cuenta: CuentaVsAddon): string {
+  const cola =
+    cuenta.deMas > 0
+      ? `Bs ${bs(cuenta.deMas)} más al mes que ${cuenta.contra.nombre} con el add-on aparte`
+      : cuenta.deMas === 0
+        ? `lo mismo que ${cuenta.contra.nombre} con el add-on aparte`
+        : `Bs ${bs(-cuenta.deMas)} menos al mes que ${cuenta.contra.nombre} con el add-on aparte`;
+  return `Sin techos y con el chatbot de WhatsApp incluido: ${cola}.`;
+}
+
+/** El `resultado` de la tarjeta: derivado si hay cuenta que hacer, y si no el de la escalera. */
+function resultadoDelPlan(plan: Plan): string {
+  const cuenta = cuentaVsAddon(plan);
+  return cuenta ? cuentaEnPalabras(cuenta) : plan.resultado;
 }
 
 /** Lo mínimo que hace falta para contestar «¿este plan trae el chatbot adentro?». */
@@ -685,6 +762,7 @@ export const GRUPO = {
  */
 export const PLANES: readonly Plan[] = ESCALERA.map((plan) => ({
   ...plan,
+  resultado: resultadoDelPlan(plan),
   sinEsto: [
     ...plan.sinEsto,
     ...(plan.id === "basico"
