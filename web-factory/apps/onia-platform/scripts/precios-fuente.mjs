@@ -116,6 +116,30 @@ export const PLANES_EN_ORDEN = [
 ];
 
 /**
+ * El quinto plan: el que el sitio publica CON PRECIO pero no vende en linea.
+ *
+ * Va aparte de `PLANES_EN_ORDEN` porque no es una tarjeta de la escalera —no tiene `id:` en
+ * `src/lib/pricing.ts`, es la constante `GRUPO`— y meterlo en esa lista rompe los tres regex
+ * que derivan de ella (`IDS_DEL_SITIO` buscaria `id: "grupo"`, que no existe). Pero existe para
+ * el cliente: Bs 2.900/mes y Bs 29.000 al anio, una seccion entera de `/precios`, una linea en
+ * la home, y el recomendador de `/v1/empezar` se lo propone a todo equipo de 15+.
+ *
+ * 🔴 Que no estuviera declarado en ningun lado es lo que dejo pasar el defecto del 2026-09-19:
+ * `inclusion-chatbot.mjs` daba por «plan que el sitio no vende» a `enterprise` —con el motivo
+ * escrito, y sonaba cierto— y por eso degradaba a AVISO que el sitio le dijera «en los demas
+ * planes va aparte, Bs 390/mes» a un plan que trae el chatbot pagado adentro.
+ *
+ * La `etiqueta` es como lo llama EL SITIO, no el producto: el producto lo llama «Empresa», que
+ * es palabra corriente del castellano y buscarla en la prosa lo da por nombrado en cualquier
+ * pagina que hable de «tu empresa».
+ */
+export const PLAN_COTIZADO = {
+  producto: "enterprise",
+  sitio: "GRUPO",
+  etiqueta: "Grupo / Empresarial",
+};
+
+/**
  * El `id:"..."` con que `src/lib/pricing.ts` abre cada plan, derivado de la
  * lista de arriba. Se construye uno nuevo en cada llamada: un `RegExp` con `g`
  * guarda `lastIndex`, y compartir la instancia entre `matchAll` haria que la
