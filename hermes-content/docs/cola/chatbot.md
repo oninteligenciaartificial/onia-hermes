@@ -318,6 +318,42 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [ ] **Reparar el reloj ya corrido de 16 conversaciones: `2f92eb70` curó al productor y no
+      tocó ni una fila** (`hermes-content/deploy/vps-ops/bot/reloj-del-prospecto-vivo.mjs` ·
+      `hermes-content/deploy/vps-ops/bot/bot-engine.mjs`; medido el 2026-09-19 con el
+      instrumento nuevo, `npm run reloj:vivo`).
+
+      Curar al productor no repara lo ya escrito. `step()` ya no pisa `lastInboundAt` con un
+      turno que no es del prospecto, pero las filas que se corrieron **antes** siguen ahí, y ese
+      reloj es la ENTRADA de los tres consumidores que deciden a quién escribirle: la ventana de
+      24 h de Meta (`sweepInsistenciaCandidates`) y las dos del rescate.
+
+      Contado en producción — 40 conversaciones cruzadas, 24 sanas, **16 con el reloj adelantado**:
+
+      ```
+      npm run reloj:vivo        # exit 1, imprime las 16 con su deriva
+      ```
+
+      | conv | reloj guardado | último del prospecto | deriva |
+      |---|---|---|---|
+      | **58** (lead real de WhatsApp) | 09-18 19:17:02 | 09-17 22:50:55 | **+20,4 h** |
+      | 57 · 56 · 54 · 52 | 09-04 17:00 / 12:00 | 09-04 03:39–14:38 | +2,4 a +8,3 h |
+      | 19 · 18 · 17 · 16 · 15 · 14 · 13 | 08-18 23:00 / 16:00 | 08-17/18 | +20,1 a +21,0 h |
+
+      ⚠️ **Y los datos traen una causa SEGUNDA, distinta de la que se arregló ayer, que hay que
+      medir antes de reparar:** los relojes corridos caen en **horas redondas** (`23:00:0X`,
+      `16:00:1X`, `12:00:0X`, `06:45:00`), o sea los escribió **un cron**, no el follow-up del
+      caso 58. Reparar sin encontrar a ese escritor deja el defecto vivo y las filas se vuelven
+      a correr. Primero: `grep` de quién escribe `lastInboundAt` fuera de `step()`.
+
+      **Antes de reparar** hace falta decidir el criterio de las filas que NO son juzgables por
+      esta vía (un entrante que llegó a Chatwoot y no quedó en `bot_messages` bajaría el reloj
+      indebidamente). Bajar de más falla hacia el silencio, que es el lado barato; subir de más
+      cuesta plata y quality rating. Y va con respaldo de la tabla antes de tocar nada.
+
+      LISTO = el escritor de la hora redonda encontrado y cerrado con su test, las filas
+      reparadas con respaldo, y `npm run reloj:vivo` en exit 0.
+
 - [ ] **Dos escritores guardan el estado de la misma conversación en el mismo segundo, y gana el
       último — el traspaso humano puede perderse** (encontrado el 2026-09-18 midiendo la conv 58;
       **no es fantasma: los datos están abajo**).
