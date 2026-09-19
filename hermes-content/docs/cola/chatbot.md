@@ -29,6 +29,56 @@ contra producción (SSH al VPS, las dos bases, el motor corrido de verdad), no c
 
 ---
 
+## ✅ T9 — CERRADO el 2026-09-19 (commiteado, **NO desplegado** — es un medidor, no toca el motor): todo el carril cuenta "el bot contestó" por una fila que existe, y nadie mira si el mensaje LLEGÓ
+
+**El eje.** La definición de hecho de este carril —*"el bot contestó los DOS"*— se mide contando
+filas en `messages` de Chatwoot. El simulador imprime el texto. El adapter sólo mira que el POST
+devuelva 2xx. **Ninguno de los tres prueba que el prospecto haya recibido algo:** un 2xx dice
+"Chatwoot lo aceptó", y el veredicto de Meta llega DESPUÉS, por webhook asíncrono, a
+`messages.status` + `content_attributes.external_error`. `grep` de esa columna en `scripts/` y en
+`hermes-content/deploy/vps-ops/bot/`: **nadie la leía**.
+
+**Lo que había ahí.** Medido el 2026-09-19 en la base de Chatwoot: **5 salientes en `failed`**,
+3 de ellos en el inbox 5 —el de leads reales— con
+`131042: Business eligibility payment issue`, que es el error de Meta **por falta de método de
+pago**. Los cinco son nuestros y de agosto, y el canal volvió a entregar después (conv 58, 17-sep),
+así que **hoy no muerde**. Muerde el **1-oct-2026**: desde esa fecha Meta cobra la respuesta dentro
+de la ventana de 24 h, el método de pago sigue sin cargarse (tablero `t_ac3aa802`) y ese día **todo
+saliente de WhatsApp vuelve `failed` con el sistema entero reportando verde**, porque la fila existe.
+
+**La hipótesis del código que resultó refutable.** La cabecera de `usage-run.mjs` ya declara la
+mitad honesta (*"nuestra fila quedó diciendo `sent` para siempre"*) y cierra con *"con lo que hay
+guardado hoy ese caso es INDISTINGUIBLE"*. Es cierto de NUESTRA tabla (`onia_center.bot_messages`,
+append-only, escrita en el momento del POST) y **falso del sistema**: Chatwoot lo guarda. Un
+comentario que afirma una imposibilidad es una hipótesis **con fecha**.
+
+**Lo que se construyó.** `hermes-content/deploy/vps-ops/bot/entrega-viva.mjs` — `npm run
+entrega:viva`. Lectura pura (ni un INSERT), tri-estado (`0` ok · `1` no llegó · `2` NO MEDIDO), y
+el sujeto es **el ÚLTIMO saliente de cada conversación**: lo que deja a alguien colgado es que no
+le haya llegado lo último que le dijimos. Test: `entrega-viva.test.mjs`, 18 casos con los códigos
+de error REALES, ya en la cadena (`test:bot` lo corre — **confirmado por mutación**, 1319/1).
+
+**Las tres trampas que costaron su vuelta, y cómo se cerraron:**
+- **El lector mentía primero.** `content_attributes->>'external_error'` devuelve vacío **siempre**:
+  la columna guarda una *cadena* JSON, no un objeto — hay que desanidar con `#>> '{}'` antes de
+  castear. Con el error vacío, `causaEsGlobal` contesta "por sujeto" y el gate se pone rojo a
+  ciegas. Verificar el instrumento antes que el producto.
+- **Rojo para siempre.** La tabla no la rota nadie, así que contar fallidos históricos apaga el
+  gate. Se cura preguntando si hubo un **éxito POSTERIOR**, y sólo para causas **GLOBALES** del
+  canal (pago, plantilla, credencial, 404): un fallo propio de UN destinatario no lo cura que otro
+  haya recibido después. El default de un error desconocido es "por sujeto" = rojo: falla hacia avisar.
+- **"En desuso" y "acaba de romperse" se ven igual** si sólo se pregunta *¿hubo algo después?* —
+  los dos tienen cero salientes posteriores. Lo único que los separa es el reloj
+  (`DIAS_PARA_DESUSO`), y sin esa baranda el caso del 1-oct quedaba absuelto.
+
+**Veredicto vivo hoy:** `ok — la última respuesta de cada conversación llegó a destino`
+(26 conversaciones; el 404 del inbox 3 sale como *canal en desuso*, que es la verdad: quieto desde
+el 1-ago). **Regla transferible:** por cada circuito que declara "entregado", preguntar **quién
+escribe ese veredicto y cuándo** — si lo escribe el emisor en el momento de emitir, no es entrega,
+es intención.
+
+---
+
 ## ✅ T8 — CERRADO el 2026-09-19: "está en `origin/main` y no está en producción" tiene TRES causas, y la tercera manda a romper un publicador sano
 
 **Cómo empezó.** Midiendo el bot VIVO, `npm run precios:vivos` cantó un defecto real y caro: al
@@ -478,6 +528,47 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 ---
 
 ## Ahora
+
+- [x] 🔴 **CERRADO el 2026-09-19 12:43-13:25 La Paz (commiteado; el instrumento no necesita deploy
+      para correr, pero sólo mide el respaldo cuando el respaldo esté desplegado) — la ÚNICA red
+      que le queda a una capacidad que vendemos estaba vigilada por un gate que no podía
+      reportarla rota nunca.**
+
+      **El defecto.** `hermes-content/deploy/vps-ops/bot/destinos-vivos.mjs` nació para cazar la
+      caída de Speaches, que es un contenedor de NUESTRA red, y su cabecera lo dice: *«un 401
+      prueba que hay alguien del otro lado, que es lo que este gate mide»*. Correcto para un
+      vecino de docker. **Falso para un tercero con credencial:** `api.openai.com` nunca se cae del
+      DNS y siempre contesta HTTP, así que el criterio viejo daba `ok` pasara lo que pasara.
+
+      Y ese tercero no es un destino cualquiera: es el **único respaldo** de *«el prospecto manda
+      una NOTA DE VOZ y el bot la entiende»*, cuyo primario (Speaches) está **muerto** —`wget`
+      desde `onia-center` contesta `bad address`, `docker ps -a | grep -i speach` vacío— mientras
+      `ONIA_CATALOGO_DE_VENTA.md` marca el chatbot ✅ vivo prometiendo que entiende audios. En
+      Bolivia el audio por WhatsApp es la forma normal de escribir.
+
+      **Que el modo de falla es real no hay que suponerlo:** la tarea `t_ac3aa802` lleva **200 h**
+      bloqueada pidiéndole plata a Sergio Urcullo por *«OpenAI SIN CREDITO desde el 9-sep»*.
+      Medido hoy contra producción, esa afirmación es **falsa**: la key del proceso vivo contesta
+      `http=200` en `/v1/models` y transcribe de verdad (POST a `/v1/audio/transcriptions` con
+      `gpt-4o-mini-transcribe`, 12 tokens facturados). Un gate que sabe preguntar esto contesta
+      solo en cada corrida, en vez de dejar una afirmación de plata congelada nueve días.
+
+      **El arreglo.** `destinoContesta(url, ejecutar, credencial)`: cuando la llave la aportamos
+      NOSOTROS, un **401/403** es `contesta:false` (*«existe y no nos autoriza»*) y un **429** es
+      `contesta:false` (*«nos rechaza por cuota»*) — porque para el prospecto eso es idéntico a
+      que el destino no exista. **La distinción no es el status, es quién tiene que aportar la
+      llave:** sin credencial declarada el criterio no se toca, o `litellm` y `chatwoot` —que
+      contestan 401 estando sanos— se reportarían rotos y el gate mandaría a levantar servicios
+      que andan. La llave sale de `getFallbackConfig`, la misma función del producto que la
+      resuelve para el turno real, y nunca vuelve en el motivo (el veredicto se pega en tableros).
+      La caché de `medir()` keyea por URL **+ si se preguntó con llave**: la misma URL y la misma
+      respuesta dan veredictos opuestos, así que una clave pelada le daría a uno el del otro.
+
+      **Prueba.** `hermes-content/deploy/vps-ops/bot/destino-de-tercero-se-mide-por-autorizacion.test.mjs`,
+      8 casos, **en rojo primero** (5 fail / 3 pass: los 3 que pasaban eran las barandas). Validado
+      por mutación en las dos direcciones: sin la clasificación por status caen 2 casos, sin el
+      header cae 1. Suite completa del bot **1289 pass / 0 fail**; `npm run destinos:vivos` contra
+      producción sigue dando el mismo veredicto (no rompió la medición de los destinos internos).
 
 - [x] 🔴 **CERRADO el 2026-09-19 12:20-13:05 La Paz (ARREGLADO EN PRODUCCIÓN, no espera deploy) —
       el bot le prometía al lead que la prueba trae TODO, y la prueba no trae el chatbot de
