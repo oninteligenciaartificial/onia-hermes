@@ -12,6 +12,25 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-19 19:11 La Paz — recorrido completo, rubro dental, `BUILD_ID` nuevo
+
+`BUILD_ID` cambió (`AUiuQ9c0SmcJnuF37_qTo` → `Df2rH9P_zIOujNXHs0ist`), así que correspondía
+re-correr el recorrido entero en vez de seguir en escalón 3.
+
+`node scripts/recorrido_cliente.mjs --escribir`, rubro dental (default): **9 de 9, RECORRIDO
+COMPLETO.** Alta con confirmación de correo real (abrió el enlace del mail, no escribió
+`email_confirmed_at` a mano), onboarding de 6 pantallas, paciente `zz-qa-` cargado y encontrado
+de vuelta, cita agendada (201) y VISTA en `/appointments`, factura con su ítem visible en
+`/billing` (frenado ahí, sin marcar pagada), panel `/dashboard` no lista pacientes (esperado,
+no es un fallo). Sin hallazgos. Limpieza verificada: `organizations where name like 'zz-qa-%'` →
+0, `appointments` con notas/razón `zz-qa-` → 0.
+
+**Próxima vuelta:** si `BUILD_ID` sigue en `Df2rH9P_zIOujNXHs0ist`, no repetir dental — seguir
+escalón 3 en superficie no auditada (invitar/quitar coadministrador en `/settings`, o la recarga
+del add-on chatbot al agotar cupo).
+
+---
+
 ## 2026-09-19 18:14 UTC — escalón 3 nuevo: ciclo weekly/annual del checkout
 
 `BUILD_ID` sin cambios (`AUiuQ9c0SmcJnuF37_qTo`): no correspondía re-correr el recorrido
