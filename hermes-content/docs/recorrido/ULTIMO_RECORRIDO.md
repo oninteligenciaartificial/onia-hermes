@@ -12,6 +12,26 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-19 12:14 La Paz — rotado a Servicios profesionales: 9/9 completo, sin hallazgos
+
+Antes de arrancar: 1 org `zz-qa-` huérfana (`zz-qa-2026-09-19-1109-negocio`, de una corrida
+anterior cortada) — limpiada a mano (organizations, profiles, entitlements, patients,
+auth.users, auth.identities), verificada en 0 antes de correr.
+
+`RECORRIDO_RUBRO="Servicios profesionales" node scripts/recorrido_cliente.mjs --escribir`
+contra `BUILD_ID` `AUiuQ9c0SmcJnuF37_qTo` (el mismo del deploy de coadministrador): **9/9
+completo** — cuenta, confirmación de correo real, onboarding, cliente cargado en `/patients`,
+cita `2026-09-21 09:00` agendada (201) y vista en `/appointments`, pantalla de cobro (Caja)
+mirada y frenada, panel revisado. Todo `zz-qa-` sembrado se borró en la misma corrida (0 orgs,
+0 appointments `zz-qa-%` al cerrar). Sin hallazgos nuevos — el fix de coadministrador (DG-043 /
+`t_24758d5a`) no rompió nada fuera de dental.
+
+**Próxima vuelta: los 6 rubros activos ya están re-verificados contra el build actual. Ir a
+otro escalón 3 (checkout/cobro a fondo enviando de punta a punta, u otra superficie de
+promesa-vs-entrega) en vez de rotar rubro otra vez.**
+
+---
+
 ## 2026-09-19 10:10 La Paz — deploy llegó: 9/9 completo, coadministrador confirmado
 
 `BUILD_ID` cambió (`HyMvkgxD68MORYYHikiG6` → `AUiuQ9c0SmcJnuF37_qTo`). Confirmado con
