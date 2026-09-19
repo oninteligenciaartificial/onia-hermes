@@ -600,3 +600,167 @@ test("si el archivo no esta en el repo sigue siendo NO MEDIDO: falla CERRADO", (
     rmSync(repo, { recursive: true, force: true });
   }
 });
+
+// ---------------------------------------------------------------------------
+// UN ARCHIVO QUE NO VIAJA A UN DESTINO NO PUEDE PUBLICARLE UN PRECIO.
+//
+// Medido el 2026-09-19 (tarea t_beb73a77) con `3ed8fdaa` esperando en su rama:
+// `hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md` entraba al freno con `+500` y
+// `+200` —el cupo de conversaciones del add-on, escrito en PROSA markdown— y
+// detenia la landing. Pero la landing se arma con `git archive origin/main
+// web-factory/apps web-factory/packages ...`: ese archivo no esta en ningun
+// subarbol que viaje, asi que ningun numero suyo le llega a un cliente por ahi.
+// Una firma pedida por un archivo que el destino no publica es una firma falsa,
+// y gastarlas vuelve automatica la unica firma que importa (t_189a6037).
+//
+// Las dos direcciones, que es lo unico que hace util a este gate:
+//   · aflojar de mas — la fuente de precio que SI viaja tiene que seguir
+//     deteniendo, y las tres formas de "no se" tienen que seguir deteniendo;
+//   · apretar de mas — lo que el destino no publica no cuesta una firma.
+const armadorSembrado = (cuerpo) => {
+  const dir = mkdtempSync(join(tmpdir(), "onia-armador-"));
+  const f = join(dir, "build-and-stage.sh");
+  writeFileSync(f, cuerpo);
+  return { dir, f };
+};
+
+/** Le pregunta al guion REAL si ese archivo viaja a ese destino. */
+function viaja(armador, archivo) {
+  const r = spawnSync("bash", [GUION, "--viaja", armador, archivo], {
+    encoding: "utf8",
+    timeout: 60_000,
+  });
+  return { codigo: r.status, salida: `${r.stdout ?? ""}${r.stderr ?? ""}`.trim() };
+}
+
+/** Un armador como el de la landing: archiva unos pocos subarboles. */
+const ARMA_SUBARBOLES = `#!/usr/bin/env bash
+set -uo pipefail
+[ -d "$REPO" ] || { echo "ERR"; exit 2; }
+  git -C "$REPO" archive --format=tar "$REF" \\
+    web-factory/apps web-factory/packages web-factory/package.json \\
+    | gzip > "$TARBALL.new" && mv -f "$TARBALL.new" "$TARBALL"
+`;
+
+/** Un armador como el de la plataforma: archiva el repo entero, sin rutas. */
+const ARMA_TODO = `#!/usr/bin/env bash
+git -C "$REPO" archive --format=tar "$SHA" | tar -x -C "$D" || { echo "FATAL: git archive fallo"; exit 1; }
+`;
+
+test("lo que el destino NO publica no le cuesta una firma a nadie", () => {
+  const { dir, f } = armadorSembrado(ARMA_SUBARBOLES);
+  try {
+    const r = viaja(f, "hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md");
+    assert.equal(
+      r.codigo,
+      1,
+      "un archivo que ese destino no archiva sigue deteniendolo: es una firma " +
+        "falsa, y gastarlas vuelve automatica la que importa. Salida: " + r.salida,
+    );
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("la fuente de precio que SI viaja sigue deteniendo", () => {
+  const { dir, f } = armadorSembrado(ARMA_SUBARBOLES);
+  try {
+    const r = viaja(f, "web-factory/apps/onia-platform/src/lib/pricing.ts");
+    assert.equal(
+      r.codigo,
+      0,
+      "el pricing.ts que el sitio SI publica dejo de detener: por ahi entra un " +
+        "precio que nadie firmo. Salida: " + r.salida,
+    );
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("un armador SIN rutas archiva el repo entero, y entonces todo viaja", () => {
+  const { dir, f } = armadorSembrado(ARMA_TODO);
+  try {
+    const r = viaja(f, "lib/subscription-plans.ts");
+    assert.equal(
+      r.codigo,
+      0,
+      "el destino archiva el repo entero y aun asi dijo que su fuente de precio " +
+        "no viaja: eso publica un monto sin firma. Salida: " + r.salida,
+    );
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+// Este caso ancla un bug REAL que paso verde en las dos primeras escrituras de la
+// cura: `sub(/^.*archive/,"")` es GOLOSO y se quedaba con la SEGUNDA aparicion de
+// la palabra —la del mensaje de error del `||`—, devolviendo `fallo";` como si
+// fuera un subarbol publicado. Con eso el armador de la plataforma contestaba "no
+// viaja" para `lib/subscription-plans.ts`: fallaba ABIERTO, que es el lado caro.
+test("el mensaje de error de un `||` no se confunde con un subarbol publicado", () => {
+  const { dir, f } = armadorSembrado(ARMA_TODO);
+  try {
+    const r = viaja(f, "fallo");
+    assert.equal(
+      r.codigo,
+      0,
+      "leyo el `git archive` del mensaje de error en vez del de verdad. Con eso " +
+        "las rutas publicadas salen mal y una fuente de precio deja de detener. " +
+        "Salida: " + r.salida,
+    );
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+// Y este ancla el segundo: con el corte del cano guardado como estado que se
+// ACUMULA, el `||` de cualquier renglon anterior del armador lo dejaba prendido
+// y el parseo salia en el primer renglon, devolviendo la lista VACIA — que el
+// guion lee como "archiva el repo entero", o sea el freno volvia a detener por
+// archivos que el destino no publica. Se ve con un armador que tenga un `||`
+// ARRIBA del `git archive`, que es lo normal.
+test("un `||` en un renglon ANTERIOR no deja el parseo sin subarboles", () => {
+  const { dir, f } = armadorSembrado(ARMA_SUBARBOLES);
+  try {
+    assert.equal(
+      viaja(f, "hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md").codigo,
+      1,
+      "devolvio la lista de subarboles vacia: perdio las rutas del `git archive` " +
+        "por culpa de un `||` de mas arriba, y entonces no filtra nada.",
+    );
+    assert.equal(
+      viaja(f, "web-factory/packages/ui/precio.ts").codigo,
+      0,
+      "perdio un subarbol que el destino SI publica.",
+    );
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("una lista de subarboles armada con variables no se adivina: todo viaja", () => {
+  const { dir, f } = armadorSembrado(`#!/usr/bin/env bash
+git -C "$REPO" archive --format=tar "$REF" web-factory/apps $EXTRA | gzip > "$T"
+`);
+  try {
+    const r = viaja(f, "hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md");
+    assert.equal(
+      r.codigo,
+      0,
+      "la lista se arma con una variable que aca no se puede resolver y aun asi " +
+        "dijo que no viaja. No se puede saber: se detiene. Salida: " + r.salida,
+    );
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("si no se puede leer el armador, todo viaja: falla CERRADO", () => {
+  const r = viaja(join(tmpdir(), "no-existe-onia", "build-and-stage.sh"), "lib/pricing.ts");
+  assert.equal(
+    r.codigo,
+    0,
+    "sin poder mirar que publica el destino contesto 'no viaja'. No haber podido " +
+      "mirar nunca es permiso para publicar. Salida: " + r.salida,
+  );
+});
