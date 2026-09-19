@@ -13,6 +13,7 @@ import {
   DEFAULT_LANGUAGE,
   DEFAULT_MAX_BYTES,
   DEFAULT_MODEL,
+  DEFAULT_FALLBACK_BASE_URL,
   DEFAULT_STT_TIMEOUT_MS,
   downloadAudio,
   filenameFor,
@@ -372,4 +373,149 @@ test("CONTRATO: pase lo que pase devuelve {ok,text,reason,warnings} y NUNCA tira
     assert.equal(typeof r.reason, "string");
     assert.ok(Array.isArray(r.warnings));
   }
+});
+
+// ---------------------------------------------------------------------------
+// EL RESPALDO — nace del 2026-09-19.
+//
+// Medido ese dia contra produccion: `speaches` NO EXISTE en la red del VPS (`wget` desde
+// onia-center: "bad address"), asi que TODA nota de voz caia a M_AUDIO_FAIL — y el catalogo
+// de venta, que es la fuente unica de QUE se vende, marca el chatbot ✅ vivo prometiendo que
+// "entiende FOTOS y audios". La foto SI anda (LiteLLM contesta); el audio no.
+//
+// Lo que mas duele: el proceso vivo YA TRAIA declarado el respaldo
+// (`ONIA_AUDIO_STT_FALLBACK_PROVIDER=openai`, `ONIA_AUDIO_STT_FALLBACK_MODEL=gpt-4o-mini-transcribe`)
+// y NINGUNA linea de este modulo lo leia. Un interruptor que nadie lee es peor que no tenerlo:
+// el que lo configuro cree que hay red debajo.
+//
+// La promesa no se borra, se CUMPLE: OpenAI habla el mismo endpoint multipart que Speaches
+// (`POST /audio/transcriptions`), asi que el respaldo es la MISMA funcion con otra baseUrl y
+// una key en el header. El gasto ya estaba decidido (Sergio Urcullo, 2026-08-30: "pagamos api
+// nomas de modelo barato") y contemplado en el modelo de costos de `lib/pricing.ts`.
+// ---------------------------------------------------------------------------
+
+test("getTranscribeConfig: LEE el respaldo que el proceso vivo ya declara", () => {
+  const c = getTranscribeConfig({
+    ONIA_AUDIO_STT_FALLBACK_PROVIDER: "openai",
+    ONIA_AUDIO_STT_FALLBACK_MODEL: "gpt-4o-mini-transcribe",
+    OPENAI_ONIA_CENTER_API_KEY: "sk-vive-en-el-proceso",
+  });
+  assert.equal(c.fallback?.baseUrl, DEFAULT_FALLBACK_BASE_URL);
+  assert.equal(c.fallback?.model, "gpt-4o-mini-transcribe");
+  assert.equal(c.fallback?.apiKey, "sk-vive-en-el-proceso");
+});
+
+test("getTranscribeConfig: SIN proveedor declarado no se inventa un destino", () => {
+  assert.equal(getTranscribeConfig({ OPENAI_ONIA_CENTER_API_KEY: "sk-hay-key" }).fallback, null);
+});
+
+test("getTranscribeConfig: proveedor declarado SIN key no es respaldo (falla cerrado)", () => {
+  assert.equal(getTranscribeConfig({ ONIA_AUDIO_STT_FALLBACK_PROVIDER: "openai" }).fallback, null);
+});
+
+test("getTranscribeConfig: un proveedor que no sabemos hablar NO se intenta a ciegas", () => {
+  const c = getTranscribeConfig({
+    ONIA_AUDIO_STT_FALLBACK_PROVIDER: "el-primo-de-un-amigo",
+    OPENAI_ONIA_CENTER_API_KEY: "sk-hay-key",
+  });
+  assert.equal(c.fallback, null);
+});
+
+test("EL CASO DE PRODUCCION: Speaches no resuelve y el prospecto IGUAL es entendido", async () => {
+  const f = fetchMock([
+    res({ body: audioBytes(), headers: { "content-type": "audio/ogg" } }),
+    new Error("getaddrinfo ENOTFOUND speaches"),
+    res({ json: { text: "hola, quiero una demo, tengo una clínica dental" } }),
+  ]);
+  const r = await transcribeChatwootAudio(
+    { attachments: [{ file_type: "audio", data_url: BLOB, extension: "oga" }], token: "tok", chatwootBaseUrl: CHATWOOT },
+    {
+      fetch: f,
+      env: {
+        ONIA_AUDIO_STT_FALLBACK_PROVIDER: "openai",
+        ONIA_AUDIO_STT_FALLBACK_MODEL: "gpt-4o-mini-transcribe",
+        OPENAI_ONIA_CENTER_API_KEY: "sk-de-onia",
+      },
+    },
+  );
+
+  assert.equal(r.ok, true, "con el respaldo declarado, un destino muerto YA NO deja mudo al prospecto");
+  assert.match(r.text, /clínica dental/);
+  assert.equal(f.llamadas.length, 3, "descarga + primario caido + respaldo");
+  assert.ok(String(f.llamadas[2].url).startsWith(DEFAULT_FALLBACK_BASE_URL), "el respaldo va al destino declarado");
+  assert.equal(f.llamadas[2].init.body.get("model"), "gpt-4o-mini-transcribe");
+  assert.ok(
+    r.warnings.some((w) => /respaldo/i.test(w)),
+    "que la respuesta venga del respaldo TIENE que verse en el log: si no, nadie arregla el primario",
+  );
+});
+
+test("el respaldo manda la key en el HEADER — nunca en el form ni en la URL", async () => {
+  const f = fetchMock([res({ json: { text: "listo" } })]);
+  await transcribeBuffer(
+    audioBytes(),
+    { baseUrl: DEFAULT_FALLBACK_BASE_URL, model: "gpt-4o-mini-transcribe", apiKey: "sk-secreta" },
+    { fetch: f },
+  );
+  const { url, init } = f.llamadas[0];
+  assert.equal(init.headers?.Authorization, "Bearer sk-secreta");
+  assert.ok(!String(url).includes("sk-secreta"), "la key no viaja en la URL (queda en logs de proxy)");
+  assert.equal(init.body.get("api_key"), null, "ni en el multipart");
+});
+
+test("SIN respaldo declarado el comportamiento es el de hoy: una sola llamada y M_AUDIO_FAIL", async () => {
+  const f = fetchMock([
+    res({ body: audioBytes(), headers: { "content-type": "audio/ogg" } }),
+    new Error("getaddrinfo ENOTFOUND speaches"),
+  ]);
+  const r = await transcribeChatwootAudio(
+    { attachments: [{ file_type: "audio", data_url: BLOB }], chatwootBaseUrl: CHATWOOT },
+    { fetch: f, env: {} },
+  );
+  assert.equal(r.ok, false);
+  assert.equal(r.reason, "stt_fallido");
+  assert.equal(f.llamadas.length, 2, "sin respaldo no se inventa una segunda llamada");
+});
+
+test("SILENCIO no se reintenta: el primario ya contesto, gastar el respaldo no cambia nada", async () => {
+  const f = fetchMock([
+    res({ body: audioBytes(), headers: { "content-type": "audio/ogg" } }),
+    res({ json: { text: "   " } }),
+    res({ json: { text: "no deberia llegar aca" } }),
+  ]);
+  const r = await transcribeChatwootAudio(
+    { attachments: [{ file_type: "audio", data_url: BLOB }], chatwootBaseUrl: CHATWOOT },
+    {
+      fetch: f,
+      env: {
+        ONIA_AUDIO_STT_FALLBACK_PROVIDER: "openai",
+        OPENAI_ONIA_CENTER_API_KEY: "sk-de-onia",
+      },
+    },
+  );
+  assert.equal(r.reason, "stt_sin_texto");
+  assert.equal(f.llamadas.length, 2, "un silencio no es un destino caido: reintentarlo es pagar por el mismo vacio");
+});
+
+test("si TAMBIEN falla el respaldo, el contrato se respeta y los dos motivos se ven", async () => {
+  const f = fetchMock([
+    res({ body: audioBytes(), headers: { "content-type": "audio/ogg" } }),
+    new Error("ENOTFOUND speaches"),
+    res({ ok: false, status: 401, body: "invalid api key" }),
+  ]);
+  const r = await transcribeChatwootAudio(
+    { attachments: [{ file_type: "audio", data_url: BLOB }], chatwootBaseUrl: CHATWOOT },
+    {
+      fetch: f,
+      env: {
+        ONIA_AUDIO_STT_FALLBACK_PROVIDER: "openai",
+        OPENAI_ONIA_CENTER_API_KEY: "sk-vencida",
+      },
+    },
+  );
+  assert.equal(r.ok, false);
+  assert.equal(r.text, "");
+  assert.ok(r.warnings.some((w) => /ENOTFOUND/.test(w)), "el fallo del primario no se pierde al reintentar");
+  assert.ok(r.warnings.some((w) => /401/.test(w)), "y el del respaldo tampoco");
+  assert.ok(!r.warnings.some((w) => /sk-vencida/.test(w)), "la key NUNCA se loguea");
 });

@@ -42,8 +42,34 @@
 //   ONIA_AUDIO_STT_TIMEOUT_MS      default 45000
 //   ONIA_AUDIO_ENABLED             "false" apaga la transcripcion (vuelve al M_AUDIO_FAIL de antes)
 // Secreto (se recibe por parametro, NUNCA se loguea): el token de la API de Chatwoot.
+//
+// EL RESPALDO (2026-09-19). Speaches DEJO DE EXISTIR en la red del VPS —`wget` desde onia-center
+// contesta "bad address"— y con el se fue la capacidad entera: toda nota de voz caia a
+// M_AUDIO_FAIL mientras `ONIA_CATALOGO_DE_VENTA.md`, que es la fuente unica de QUE se vende,
+// marca el chatbot ✅ vivo prometiendo que "entiende FOTOS y audios". La foto si anda.
+// Y el proceso vivo YA declaraba el respaldo (`ONIA_AUDIO_STT_FALLBACK_PROVIDER=openai`,
+// `ONIA_AUDIO_STT_FALLBACK_MODEL=gpt-4o-mini-transcribe`) sin que NINGUNA linea lo leyera: un
+// interruptor que nadie lee es peor que no tenerlo, porque el que lo configuro cree que hay red
+// debajo. La promesa no se borra, se cumple — OpenAI habla el MISMO endpoint multipart, asi que
+// el respaldo es esta misma funcion con otra baseUrl y una key en el header.
+//   ONIA_AUDIO_STT_FALLBACK_PROVIDER  "openai" enciende el respaldo; vacio = como antes
+//   ONIA_AUDIO_STT_FALLBACK_MODEL     default "gpt-4o-mini-transcribe"
+//   OPENAI_ONIA_CENTER_API_KEY        (o OPENAI_API_KEY) la key; SIN key no hay respaldo
+// Se paga solo cuando el primario CAE, y nunca cuando el primario contesta vacio.
 
 export const DEFAULT_BASE_URL = "http://speaches:8000/v1";
+
+/**
+ * Proveedores de respaldo que sabemos hablar. Es lista BLANCA a proposito: un nombre que no
+ * esta aca no se intenta a ciegas — mandarle un multipart a un destino que no habla esta API
+ * es gastar el timeout del prospecto para nada.
+ */
+export const PROVEEDORES_DE_RESPALDO = Object.freeze({ openai: "https://api.openai.com/v1" });
+
+export const DEFAULT_FALLBACK_BASE_URL = PROVEEDORES_DE_RESPALDO.openai;
+
+/** El barato de OpenAI para esto. El caro no transcribe mejor una nota de voz de WhatsApp. */
+export const DEFAULT_FALLBACK_MODEL = "gpt-4o-mini-transcribe";
 
 /** Multilingüe a proposito. Los `faster-distil-*` son English-only y TRADUCEN el español. */
 export const DEFAULT_MODEL = "Systran/faster-whisper-small";
@@ -84,8 +110,31 @@ export function safeModel(candidate) {
   return /distil/i.test(model) ? DEFAULT_MODEL : model;
 }
 
+/**
+ * El respaldo DECLARADO, o `null`. Falla CERRADO en las tres formas de estar a medias: sin
+ * proveedor, con un proveedor que no sabemos hablar, o sin key. Ninguna de las tres inventa un
+ * destino: el prospecto prefiere el M_AUDIO_FAIL de siempre antes que 45 s de espera contra
+ * una maquina que no nos va a contestar.
+ */
+export function getFallbackConfig(env = process.env) {
+  const proveedor = String(env.ONIA_AUDIO_STT_FALLBACK_PROVIDER || "").trim().toLowerCase();
+  const baseUrl = PROVEEDORES_DE_RESPALDO[proveedor];
+  if (!baseUrl) return null;
+
+  const apiKey = String(env.OPENAI_ONIA_CENTER_API_KEY || env.OPENAI_API_KEY || "").trim();
+  if (!apiKey) return null;
+
+  return {
+    proveedor,
+    baseUrl,
+    model: String(env.ONIA_AUDIO_STT_FALLBACK_MODEL || DEFAULT_FALLBACK_MODEL).trim() || DEFAULT_FALLBACK_MODEL,
+    apiKey,
+  };
+}
+
 export function getTranscribeConfig(env = process.env) {
   return {
+    fallback: getFallbackConfig(env),
     baseUrl: String(env.ONIA_AUDIO_STT_BASE_URL || DEFAULT_BASE_URL).replace(/\/+$/, ""),
     model: safeModel(env.ONIA_AUDIO_STT_MODEL),
     language: String(env.ONIA_AUDIO_STT_LANGUAGE || DEFAULT_LANGUAGE),
@@ -257,6 +306,12 @@ export async function transcribeBuffer(bytes, options = {}, deps = {}) {
   const model = String(options.model || DEFAULT_MODEL);
   const language = String(options.language || DEFAULT_LANGUAGE);
   const timeoutMs = positiveNumber(options.timeoutMs, DEFAULT_STT_TIMEOUT_MS);
+  // Quien habla, para que el warning diga a QUIEN se le pregunto. Con dos destinos posibles,
+  // "no respondio" sin sujeto manda a mirar la maquina equivocada.
+  const quien = String(options.etiqueta || "Speaches");
+  // Speaches no pide auth (es de la red interna); el respaldo si. La key va SOLO en el header:
+  // en la URL queda en los logs de cualquier proxy del camino.
+  const apiKey = String(options.apiKey || "");
 
   const form = new FormData();
   form.append("file", new Blob([bytes], { type: options.contentType || "application/octet-stream" }), options.filename || "nota-de-voz.ogg");
@@ -271,30 +326,31 @@ export async function transcribeBuffer(bytes, options = {}, deps = {}) {
     response = await doFetch(`${baseUrl}/audio/transcriptions`, {
       method: "POST",
       body: form,
+      ...(apiKey ? { headers: { Authorization: `Bearer ${apiKey}` } } : {}),
       signal: AbortSignal.timeout ? AbortSignal.timeout(timeoutMs) : undefined,
     });
   } catch (error) {
     // Aca cae el timeout. Es el caso que evita que un audio largo cuelgue el webhook para siempre.
-    return fail("stt_fallido", [`audio: Speaches no respondio: ${String(error?.message || error).slice(0, 200)}`]);
+    return fail("stt_fallido", [`audio: ${quien} no respondio: ${String(error?.message || error).slice(0, 200)}`]);
   }
 
   if (!response || response.ok === false) {
     let detail = "";
     try { detail = String(await response.text()).slice(0, 200); } catch { /* el status ya dice lo importante */ }
-    return fail("stt_fallido", [`audio: Speaches HTTP ${response?.status ?? "?"} ${detail}`]);
+    return fail("stt_fallido", [`audio: ${quien} HTTP ${response?.status ?? "?"} ${detail}`]);
   }
 
   let body;
   try {
     body = await response.json();
   } catch (error) {
-    return fail("stt_fallido", [`audio: Speaches no devolvio JSON: ${String(error?.message || error).slice(0, 200)}`]);
+    return fail("stt_fallido", [`audio: ${quien} no devolvio JSON: ${String(error?.message || error).slice(0, 200)}`]);
   }
 
   const text = String(body?.text ?? "").trim();
   // Un audio de puro silencio transcribe a "". Eso NO es un exito: si se dejara pasar, el motor
   // recibiria un texto vacio y se quedaria mudo. Mejor caer al M_AUDIO_FAIL, que al menos pide algo.
-  if (!text) return fail("stt_sin_texto", ["audio: Speaches transcribio vacio (¿silencio?)"]);
+  if (!text) return fail("stt_sin_texto", [`audio: ${quien} transcribio vacio (¿silencio?)`]);
 
   return { ok: true, text, reason: "transcrito", warnings: [] };
 }
@@ -337,18 +393,52 @@ export async function transcribeChatwootAudio(options = {}, deps = {}) {
     return { ok: false, text: "", reason: downloaded.reason, warnings: downloaded.warnings || [] };
   }
 
+  const comunes = {
+    language: config.language,
+    timeoutMs: config.sttTimeoutMs,
+    contentType: downloaded.contentType,
+    filename: filenameFor(url, attachment.extension),
+  };
+
   const result = await transcribeBuffer(
     downloaded.bytes,
+    { ...comunes, baseUrl: config.baseUrl, model: config.model },
+    deps,
+  );
+
+  // El respaldo se paga SOLO cuando el destino se cayo (`stt_fallido`). Un `stt_sin_texto` es el
+  // primario CONTESTANDO que no hay nada que transcribir: preguntarle lo mismo a otro cuesta plata
+  // y devuelve el mismo vacio. Y sin respaldo declarado no hay segunda llamada: es el de antes.
+  if (result.ok || result.reason !== "stt_fallido" || !config.fallback) {
+    return { ...result, warnings: [...(downloaded.warnings || []), ...(result.warnings || [])] };
+  }
+
+  const respaldo = await transcribeBuffer(
+    downloaded.bytes,
     {
-      baseUrl: config.baseUrl,
-      model: config.model,
-      language: config.language,
-      timeoutMs: config.sttTimeoutMs,
-      contentType: downloaded.contentType,
-      filename: filenameFor(url, attachment.extension),
+      ...comunes,
+      baseUrl: config.fallback.baseUrl,
+      model: config.fallback.model,
+      apiKey: config.fallback.apiKey,
+      etiqueta: `respaldo ${config.fallback.proveedor}`,
     },
     deps,
   );
 
-  return { ...result, warnings: [...(downloaded.warnings || []), ...(result.warnings || [])] };
+  // Los warnings del primario NO se tiran aunque el respaldo salve el turno: si se perdieran,
+  // nadie se entera de que el destino barato esta caido y esto factura para siempre. Por lo mismo
+  // el exito del respaldo TAMBIEN deja linea: un circuito degradado que no se ve se vuelve normal.
+  const usado = respaldo.ok
+    ? [`audio: contesto el respaldo ${config.fallback.proveedor} (${config.fallback.model}) — el primario esta caido`]
+    : [];
+
+  return {
+    ...respaldo,
+    warnings: [
+      ...(downloaded.warnings || []),
+      ...(result.warnings || []),
+      ...(respaldo.warnings || []),
+      ...usado,
+    ],
+  };
 }

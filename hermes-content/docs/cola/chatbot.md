@@ -29,6 +29,61 @@ contra producción (SSH al VPS, las dos bases, el motor corrido de verdad), no c
 
 ---
 
+## ✅ T6 — CERRADO el 2026-09-19 (commiteado, **NO desplegado**): el catálogo vende "entiende audios" y el bot no entendía ninguno
+
+**Lo que veía el prospecto.** `ONIA_CATALOGO_DE_VENTA.md:153` —la fuente única de QUÉ se
+vende— marca el chatbot ✅ **vivo** prometiendo que *"entiende FOTOS y audios"*. La foto sí
+anda; el audio no: `speaches` **no existe en la red del VPS**, así que TODA nota de voz caía a
+`M_AUDIO_FAIL` y el bot le pedía al prospecto que reescribiera lo que acababa de decir. En
+Bolivia mandar un audio por WhatsApp es la forma normal de escribir.
+
+**Medido en vivo el 2026-09-19, no heredado:**
+
+- `docker exec onia-center wget -qO- http://speaches:8000/v1/models` → `bad address` ·
+  `npm run destinos:vivos` → `ROTA … el prospecto manda una NOTA DE VOZ y el bot la entiende`
+  (y `ok` la foto, vía LiteLLM, que sí contesta).
+- **El proceso vivo YA declaraba el respaldo y ninguna línea lo leía:**
+  `ONIA_AUDIO_STT_FALLBACK_PROVIDER=openai` y
+  `ONIA_AUDIO_STT_FALLBACK_MODEL=gpt-4o-mini-transcribe` están en `/proc/<pid>/environ` del
+  webhook, y `grep -c FALLBACK_PROVIDER audio-transcribe.mjs` daba **0**. Un interruptor que
+  nadie lee es peor que no tenerlo: el que lo configuró cree que hay red debajo.
+
+**La promesa no se borró, se cumplió.** OpenAI habla el MISMO endpoint multipart que Speaches
+(`POST /audio/transcriptions`), así que el respaldo es la misma función con otra `baseUrl` y la
+key en el header. El gasto ya estaba decidido (Sergio Urcullo, 2026-08-30: *"pagamos api nomás
+de modelo barato"*) y contemplado en el modelo de costos de `onia-platform/lib/pricing.ts`;
+lo que faltaba era **dónde vive**, que es técnico.
+
+- Falla **cerrado** en las tres formas de estar a medias: sin proveedor, con un proveedor que
+  no sabemos hablar (lista blanca `PROVEEDORES_DE_RESPALDO`), o sin key → no hay respaldo y el
+  comportamiento es el de hoy. Nunca se inventa un destino.
+- Se paga **sólo cuando el primario CAE** (`stt_fallido`). Un `stt_sin_texto` es el primario
+  contestando que no hay nada: preguntarle lo mismo a otro cuesta plata y devuelve el mismo vacío.
+- La key viaja en el header, **nunca** en la URL ni en el multipart, y no se loguea.
+- **El turno degradado deja línea.** Los avisos sólo se leían cuando el bot se callaba: en
+  `rama=respondio` morían en el aire, así que el respaldo iba a tapar el destino caído y nadie
+  se enteraría de que cada nota de voz factura. `formatearTraza` ahora imprime `aviso=` cuando
+  el turno salió bien y trae avisos (y no lo repite cuando el `motivo=` ya lo dijo).
+
+**Prueba viva de que el respaldo llega** (no es decorativo): desde la red del contenedor,
+`POST https://api.openai.com/v1/audio/transcriptions` con la key del proceso y
+`gpt-4o-mini-transcribe` → **HTTP 200** con `{"text":"", "usage":{…}}` (era un tono, no voz:
+lo que se probó es que acepta la key y el modelo — 401/404 eran los fallos posibles).
+
+Gates: `audio-transcribe.test.mjs` 43/43 y `webhook-server.test.mjs` 41/41, suite del bot
+1288/1288. **Validado por mutación**, 9 mutaciones y las 9 en rojo: el esquive (llamar al
+respaldo y tirar su resultado), reintentar el silencio, aceptar un proveedor desconocido,
+sacar el header `Authorization`, declarar respaldo sin key, no imprimir `aviso=`, imprimirlo
+vacío, repetirlo en la rama MUDA y ponerlo en todo turno sano.
+
+⚠️ **Commiteado, NO desplegado.** Hasta que `/opt/onia/bot` reciba este código, la promesa del
+catálogo sigue siendo falsa en producción y `npm run destinos:vivos` sigue diciendo `ROTA` —
+y ese veredicto es CORRECTO mientras tanto: la exención cuelga del deploy, no del repo.
+Se publica con `DESPLEGAR: bot` (el publicador automático lo saca solo si el lote no toca una
+fuente de precio).
+
+---
+
 ## ✅ T4 — CERRADO el 2026-09-10 23:00: el acuse del handoff se repetia en CADA mensaje
 
 **Deployado y probado en prod** (backup deploy-20260910T225929Z): conversacion QA en

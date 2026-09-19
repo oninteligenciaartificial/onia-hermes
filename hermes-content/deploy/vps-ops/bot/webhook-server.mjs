@@ -337,6 +337,12 @@ export function formatearTraza(traza = {}) {
   // Publicados/producidos, no un total: `0/1` es el bot mudo hacia afuera con la boca sana.
   if (enviados.length > 0 || rama === "MUDO") campos.push(`enviados=${publicados}/${enviados.length}`);
   if (motivo) campos.push(`motivo=${unaSolaLinea(motivo, 140)}`);
+  // Un turno que SALIO BIEN puede haber salido bien de casualidad: el respaldo de la
+  // transcripcion tapando un destino caido, la descarga con un reintento. Hasta el 2026-09-19
+  // los avisos solo se leian cuando el bot se callaba, asi que la falla que no se nota —la mas
+  // cara— no dejaba ni una linea, y un circuito degradado que no se ve se vuelve el normal.
+  // Va DESPUES del motivo y solo si el motivo no los dijo ya: no se repite lo mismo dos veces.
+  if (!motivo && avisos.length > 0) campos.push(`aviso=${unaSolaLinea(avisos.join(" · "), 200)}`);
   if (traza.entrada) campos.push(`entrada="${unaSolaLinea(traza.entrada)}"`);
   return campos.join(" ");
 }
