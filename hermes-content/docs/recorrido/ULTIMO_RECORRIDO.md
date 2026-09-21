@@ -12,6 +12,87 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-19 19:11 La Paz — recorrido completo, rubro dental, `BUILD_ID` nuevo
+
+`BUILD_ID` cambió (`AUiuQ9c0SmcJnuF37_qTo` → `Df2rH9P_zIOujNXHs0ist`), así que correspondía
+re-correr el recorrido entero en vez de seguir en escalón 3.
+
+`node scripts/recorrido_cliente.mjs --escribir`, rubro dental (default): **9 de 9, RECORRIDO
+COMPLETO.** Alta con confirmación de correo real (abrió el enlace del mail, no escribió
+`email_confirmed_at` a mano), onboarding de 6 pantallas, paciente `zz-qa-` cargado y encontrado
+de vuelta, cita agendada (201) y VISTA en `/appointments`, factura con su ítem visible en
+`/billing` (frenado ahí, sin marcar pagada), panel `/dashboard` no lista pacientes (esperado,
+no es un fallo). Sin hallazgos. Limpieza verificada: `organizations where name like 'zz-qa-%'` →
+0, `appointments` con notas/razón `zz-qa-` → 0.
+
+**Próxima vuelta:** si `BUILD_ID` sigue en `Df2rH9P_zIOujNXHs0ist`, no repetir dental — seguir
+escalón 3 en superficie no auditada (invitar/quitar coadministrador en `/settings`, o la recarga
+del add-on chatbot al agotar cupo).
+
+---
+
+## 2026-09-19 18:14 UTC — escalón 3 nuevo: ciclo weekly/annual del checkout
+
+`BUILD_ID` sin cambios (`AUiuQ9c0SmcJnuF37_qTo`): no correspondía re-correr el recorrido
+completo. Siguiendo lo anotado en la entrada de arriba ("el ciclo weekly/annual del checkout —
+sólo se miró monthly"), extendí `probar_checkout_directo.mjs` para clickear el selector de
+ciclo en `/checkout?plan=X` (no sólo mirar el default `monthly`).
+
+Fuente: `DEFAULT_PLAN_AMOUNTS` (`subscription-plans.ts`) — `crece` tiene `weekly:145`, `clinic`
+NO tiene `weekly` ("el Full no se fracciona"). Verificado contra producción con sesión real
+(390×844, org `zz-qa-` plan `basic`, borrada en la misma corrida):
+
+- `plan=crece`, clic en "Anual" → **Bs 5.500** (coincide con `annual:5500`).
+- `plan=clinic`, clic en "Anual" → **Bs 12.900** (coincide con `annual:12900`).
+- `plan=clinic`, clic en "Semanal" → la pantalla avisa **"Solo mensual o anual"** y se queda en
+  el monto mensual (Bs 1.290) — no ofrece un ciclo que el plan no tiene, y no cae a otro monto
+  por accidente. Esto es justo lo que `sinEsteCiclo`/`isSubscriptionCycle` +
+  `validateSubscriptionPaymentDetails` (server-side) prometen en el código; queda confirmado que
+  la UI lo respeta también, no sólo el backend.
+
+**Sin hallazgo.** Sin fallos de red. Capturas: `checkoutdir-03-crece-anual.png`,
+`checkoutdir-04-clinic-anual.png`, `checkoutdir-05-clinic-semanal.png`.
+
+**Próxima vuelta:** si `BUILD_ID` sigue igual, rotar de rubro para el recorrido completo (dental
+lleva muchas corridas seguidas sanas) o buscar otra superficie de escalón 3 no auditada aún
+(p.ej. el flujo de recarga del add-on chatbot al agotar cupo, o `/checkout` con `enterprise`).
+
+---
+
+## 2026-09-19 17:11 La Paz — escalón 3 nuevo: `/checkout?plan=X` DIRECTO por URL, re-verificado
+
+`BUILD_ID` sin cambios (`AUiuQ9c0SmcJnuF37_qTo`, ya confirmado en la entrada de arriba con
+`origin/master` corrido hasta `faf78babd`): no correspondía re-correr el recorrido completo.
+
+`probar_cambio_de_plan.mjs` ya había documentado que `/settings` → "Mi plan" → `/checkout` es
+INALCANZABLE para cuentas `zz-qa-` por diseño (decisión de Sergio Urcullo del 18-sep: las
+cuentas de QA no ven la sección de venta). Pero `/checkout?plan=X` en sí **no está detrás de esa
+exclusión** — es una ruta aparte que cualquier sesión logueada puede abrir directo por URL, sin
+pasar por el link oculto. Este carril había mirado `/checkout` por última vez el 2026-09-13, seis
+días antes de varios cambios de precio/inclusión (whatsapp incluido en Completo, multiAdmin,
+ajustes de copy) que otros carriles hicieron en el medio.
+
+**Instrumento nuevo:** `scripts/probar_checkout_directo.mjs`. Siembra org `zz-qa-` plan `basic`,
+abre `/checkout?plan=crece` y `/checkout?plan=clinic` directo por URL (390×844, sesión real, sin
+pasar por "Mi plan"). Verificado contra `git show origin/master:lib/subscription-plans.ts`
+(`DEFAULT_PLAN_AMOUNTS`, 2026-09-19):
+
+- Las 4 tarjetas (Básico Bs 320, Crece Bs 550, Profesional Bs 890, Completo Bs 1.290) se ven
+  completas, sin "muy pronto" ni obra a la vista (captura `checkoutdir-01-crece.png`).
+- `plan=crece` → resumen "Plan Crece · Mensual", **Bs 550,00** — coincide.
+- `plan=clinic` → resumen "Plan Completo · Mensual", **Bs 1.290,00**, y el "Enciende" dice
+  literal *"Chatbot de WhatsApp incluido: 500 conversaciones/mes (comprado aparte vale Bs
+  390/mes)"* — coincide con `whatsappIncluded:true` de `plan-catalogo.ts` y con el precio del
+  add-on de `pricing.ts` (captura `checkoutdir-02-clinic.png`).
+
+**Sin hallazgo.** Sin fallos de red (`status>=400`: ninguno). Todo `zz-qa-` sembrado se borró en
+la misma corrida (`organizations=0` al cerrar).
+
+**Próxima vuelta:** si `BUILD_ID` sigue igual, otra superficie no auditada — el ciclo `weekly`/
+`annual` del checkout (sólo se miró `monthly`), o rotar de rubro.
+
+---
+
 ## 2026-09-19 12:14 La Paz — corrección: el BUILD_ID NO cambió + escalón 3 nuevo: coadministrador por UI
 
 ⚠️ **Corrijo la entrada de abajo.** Decía que `BUILD_ID` había cambiado a `Idvh9u4mdBzHBgE2penq4`

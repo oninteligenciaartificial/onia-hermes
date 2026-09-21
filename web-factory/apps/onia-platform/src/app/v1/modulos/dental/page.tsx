@@ -78,7 +78,14 @@ const FAQ_DENTAL = [
   },
   {
     q: "¿Puedo migrar mis pacientes desde Excel?",
-    a: "Sí, hay importación por CSV con asistente de columnas. Y si tenés los datos en otro sistema, escribinos y te ayudamos con la migración.",
+    // Decía «y si tenés los datos en otro sistema, escribinos y te ayudamos con
+    // la migración»: trabajo manual nuestro, gratis y de arrastre, que nadie del
+    // otro lado iba a hacer —es la misma promesa que el hero ya había borrado
+    // («Migramos tus datos», ver `landing-v1/hero.tsx`)—. Lo que existe de
+    // verdad es la pantalla de importación, y la hace el lead:
+    // `app/(dashboard)/patients/import` detecta las columnas y deja corregir el
+    // mapeo. Gate: `app/promesa-humana.test.ts`, patrón E.
+    a: "Sí, hay importación por CSV con asistente de columnas: subís el archivo y el sistema te propone qué columna es cada cosa, y vos corregís lo que haga falta. Si tus datos están en otro sistema, exportalos a CSV desde ahí y entran por el mismo camino.",
   },
   {
     q: "¿La historia clínica es privada?",

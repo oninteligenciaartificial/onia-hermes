@@ -907,6 +907,47 @@ test("TRAZA: la linea dice POR QUE CANAL entro, incluso cuando el evento se igno
   );
 });
 
+test("TRAZA: un turno que no manda nada pero CAMBIA el estado dice QUE hizo, no solo por que callo", () => {
+  // Medido el 2026-09-19 contra produccion. El dueño tiene UN solo camino para devolverle una
+  // conversacion al bot despues de contestar el mismo: "Marcar resuelta" en /inbox, que la
+  // pantalla vende textual como «Resuelta — tu asistente atiende de nuevo». Ese desarme corre
+  // sin mandar un mensaje (`send: []`, `notes: ["takeover_desarmado"]`), asi que cae en la rama
+  // MUDO y se escribia IDENTICO a un evento que no hizo nada: «evento sin mensaje
+  // (conversation_status_changed): no hay nada que contestar».
+  //
+  // Por que no es cosmetico: ante «marque resuelta y el bot no volvio» hay TRES causas con
+  // remedios opuestos —el evento no llego (suscripcion de Chatwoot), llego y desarmo (el
+  // producto esta sano, mirar otro lado), o llego y no desarmo (bug del motor)— y esa linea no
+  // distingue ninguna. Con 47.826 lineas de log delante, `grep -c takeover_desarmado` da 0
+  // aunque el desarme funcione, que es lo que se midio: el log nunca imprimia las notas. Es la
+  // hermana de `48dac281` (un motivo por DEFECTO vuelve indistinguible el ruido de la señal):
+  // alla dos causas distintas compartian motivo, aca una rama CON efecto se ve como una sin el.
+  //
+  // El campo se deriva de las notas del motor —el vocabulario con el que ya declara lo que
+  // hizo— y no de una lista de notas "importantes": una lista a mano falla abierta en la nota
+  // que se agregue mañana, que es justo la que nadie va a poder diagnosticar.
+  const desarmo = formatearTraza({
+    conversacion: "49",
+    estado: 200,
+    eventoSinMensaje: "conversation_status_changed",
+    cuerpo: { ok: true, sent: [], warnings: [], notes: ["takeover_desarmado"] },
+  });
+  assert.match(desarmo, /rama=MUDO/, "sigue siendo MUDO: el turno corrio y no mando nada");
+  assert.match(desarmo, /takeover_desarmado/, "la linea tiene que nombrar el efecto que tuvo");
+
+  // La MITAD que hace util al campo: el mismo evento SIN efecto no puede decir que hizo algo,
+  // o `hizo=` se vuelve decoracion y volvemos a no poder distinguir las dos.
+  const sinEfecto = formatearTraza({
+    conversacion: "49",
+    estado: 200,
+    eventoSinMensaje: "conversation_status_changed",
+    cuerpo: { ok: true, sent: [], warnings: [], notes: [] },
+  });
+  assert.doesNotMatch(sinEfecto, /hizo=/, "sin notas del motor no se inventa un efecto");
+  assert.match(sinEfecto, /no hay nada que contestar/, "y conserva el motivo que ya explicaba el silencio");
+  assert.notEqual(desarmo, sinEfecto, "las dos lineas tienen que poder distinguirse");
+});
+
 test("TRAZA: la entrada va en UNA linea y acotada (un log multilinea no se puede grepear)", () => {
   const linea = formatearTraza({
     conversacion: "77",

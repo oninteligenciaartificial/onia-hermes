@@ -137,6 +137,41 @@ const SERVICIO_MANUAL_NUESTRO =
   "\\b(?:te (?:lo |la |los |las )?(?:capacitamos|instalamos|configuramos|migramos|cargamos|explicamos)|" +
   "(?:capacitamos|instalamos|configuramos|migramos|cargamos)\\s+(?:a\\s+)?(?:tus?|el|la|los|las)\\s+\\w+)\\b";
 
+/**
+ * El mismo trabajo, NOMINALIZADO. Es el agujero que dejaban los cuatro de
+ * arriba, medido el 2026-09-19 en `/v1/modulos/dental` (viva en producción):
+ *
+ * > «Sí, hay importación por CSV con asistente de columnas. Y si tenés los
+ * > datos en otro sistema, escribinos y **te ayudamos con la migración**.»
+ *
+ * Es palabra por palabra la promesa que el hero ya había borrado por falsa
+ * —«Migramos tus datos», ver `landing-v1/hero.tsx`: una migración hecha por
+ * nosotros, sin nadie que la haga ni circuito que la arranque—, sobreviviendo
+ * en la pantalla de al lado. Arreglar la instancia no cerró la clase.
+ *
+ * **Por qué los cuatro patrones anteriores son ciegos**: todos persiguen el
+ * trabajo como VERBO conjugado (`migramos`, `cargamos`, `configuramos`). Acá
+ * el trabajo viaja como SUSTANTIVO (`la migración`) y el verbo que queda es
+ * uno de ayuda genérico. No nombra un plazo, no nombra un equipo, no nombra
+ * una persona: no entra por ninguna de las cuatro puertas.
+ *
+ * Y es de las caras: el techo del negocio no es técnico, son **horas de
+ * soporte por cliente** (`ONIA_ESTRATEGIA_DE_EMPRESA.md` §9). Una promesa de
+ * trabajo manual gratis en la FAQ escala con cada cliente que entra.
+ *
+ * ⚠️ **`implementación` queda FUERA de la lista, a propósito.** El sitio
+ * vende implementación acompañada de verdad: es PAGA, sólo Grupo / Empresarial
+ * la lleva y se cotiza aparte (`lib/pricing.ts`). Firmarla acá obligaría a
+ * borrar copy sano, que es como se desactiva un gate. La firma del defecto es
+ * prometer GRATIS, de arrastre, trabajo manual que nadie va a hacer.
+ */
+const AYUDA_NUESTRA =
+  "\\b(?:te (?:lo |la |los |las )?(?:ayudamos|asistimos)|te damos una mano|" +
+  "nos encargamos|nos ocupamos)\\b";
+const TRABAJO_NOMINAL =
+  "\\b(?:la|el|tu|tus|una|el)\\s+(?:migraci[oó]n|mudanza|traspaso|carga|" +
+  "importaci[oó]n|configuraci[oó]n|instalaci[oó]n|capacitaci[oó]n|puesta en marcha)\\b";
+
 /** A) Una persona nuestra le hace un trabajo al lead. */
 const TRABAJO_HUMANO = oracionCon(GENTE_NUESTRA, ACCION_AL_LEAD);
 /** B) Nos comprometemos nosotros, con plazo. */
@@ -145,12 +180,18 @@ const PLAZO_COMPROMETIDO = oracionCon(COMPROMISO_NUESTRO, PLAZO);
 const PERSONA_PROMETIDA = oracionCon(PERSONA_SIN_DUEÑO, TE_LO_HACE);
 /** D) Nosotros, a mano, sobre lo del lead. */
 const MANO_DE_OBRA = new RegExp(SERVICIO_MANUAL_NUESTRO, "i");
+/** E) El mismo trabajo, dicho como sustantivo detrás de un verbo de ayuda. */
+const TRABAJO_NOMINALIZADO = oracionCon(AYUDA_NUESTRA, TRABAJO_NOMINAL);
 
 const PROMESA = [
   { patron: TRABAJO_HUMANO, que: "promete que una persona nuestra le hace un trabajo" },
   { patron: PLAZO_COMPROMETIDO, que: "le pone un plazo a algo que hacemos nosotros" },
   { patron: PERSONA_PROMETIDA, que: "promete una persona que le explica o le arma algo" },
   { patron: MANO_DE_OBRA, que: "promete mano de obra nuestra sobre los datos del lead" },
+  {
+    patron: TRABAJO_NOMINALIZADO,
+    que: "promete ayuda nuestra con un trabajo manual del lead (dicho como sustantivo)",
+  },
 ];
 
 describe("ninguna página promete trabajo humano que nadie va a hacer", () => {
@@ -178,6 +219,10 @@ describe("ninguna página promete trabajo humano que nadie va a hacer", () => {
       // Las dos que este gate NO veía, tal como estaban servidas el 2026-09-07.
       "Sin instalación ni proyecto de meses: te entregamos el sistema con la configuración de tu rubro puesta y alguien que te la explica.",
       "Te lo dejamos andando nosotros: cargamos tus datos y capacitamos a tu equipo.",
+      // La nominalizada, tal como estaba servida en /v1/modulos/dental el 2026-09-19.
+      "Y si tenés los datos en otro sistema, escribinos y te ayudamos con la migración.",
+      "Nos encargamos de la carga de tus pacientes.",
+      "Te damos una mano con la configuración.",
     ]) {
       expect(
         PROMESA.some((p) => p.patron.test(vivo)),
@@ -223,6 +268,14 @@ describe("ninguna página promete trabajo humano que nadie va a hacer", () => {
       [
         "Dominio: lo comprás vos con tu tarjeta, a tu nombre. Te acompañamos en el trámite pero nunca tocamos tu medio de pago.",
         "es un servicio PAGO (los stacks de webs) que Sergio Urcullo sí hace, y acompañar no es hacerle el trabajo",
+      ],
+      [
+        "Para varias razones sociales o un grupo de negocios: mismos límites más una implementación acompañada. No se compra en línea — se cotiza con tu caso.",
+        "la implementación de Grupo / Empresarial es PAGA y cotizada: firmarla obliga a borrar copy sano",
+      ],
+      [
+        "Hay importación por CSV con asistente de columnas: subís el archivo y el sistema te va diciendo qué columna es cada cosa.",
+        "la importación la hace el LEAD con una pantalla que existe, no nosotros a mano",
       ],
     ] as const) {
       expect(

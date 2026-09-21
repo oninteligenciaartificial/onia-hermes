@@ -29,6 +29,56 @@ contra producción (SSH al VPS, las dos bases, el motor corrido de verdad), no c
 
 ---
 
+## ✅ T9 — CERRADO el 2026-09-19 (commiteado, **NO desplegado** — es un medidor, no toca el motor): todo el carril cuenta "el bot contestó" por una fila que existe, y nadie mira si el mensaje LLEGÓ
+
+**El eje.** La definición de hecho de este carril —*"el bot contestó los DOS"*— se mide contando
+filas en `messages` de Chatwoot. El simulador imprime el texto. El adapter sólo mira que el POST
+devuelva 2xx. **Ninguno de los tres prueba que el prospecto haya recibido algo:** un 2xx dice
+"Chatwoot lo aceptó", y el veredicto de Meta llega DESPUÉS, por webhook asíncrono, a
+`messages.status` + `content_attributes.external_error`. `grep` de esa columna en `scripts/` y en
+`hermes-content/deploy/vps-ops/bot/`: **nadie la leía**.
+
+**Lo que había ahí.** Medido el 2026-09-19 en la base de Chatwoot: **5 salientes en `failed`**,
+3 de ellos en el inbox 5 —el de leads reales— con
+`131042: Business eligibility payment issue`, que es el error de Meta **por falta de método de
+pago**. Los cinco son nuestros y de agosto, y el canal volvió a entregar después (conv 58, 17-sep),
+así que **hoy no muerde**. Muerde el **1-oct-2026**: desde esa fecha Meta cobra la respuesta dentro
+de la ventana de 24 h, el método de pago sigue sin cargarse (tablero `t_ac3aa802`) y ese día **todo
+saliente de WhatsApp vuelve `failed` con el sistema entero reportando verde**, porque la fila existe.
+
+**La hipótesis del código que resultó refutable.** La cabecera de `usage-run.mjs` ya declara la
+mitad honesta (*"nuestra fila quedó diciendo `sent` para siempre"*) y cierra con *"con lo que hay
+guardado hoy ese caso es INDISTINGUIBLE"*. Es cierto de NUESTRA tabla (`onia_center.bot_messages`,
+append-only, escrita en el momento del POST) y **falso del sistema**: Chatwoot lo guarda. Un
+comentario que afirma una imposibilidad es una hipótesis **con fecha**.
+
+**Lo que se construyó.** `hermes-content/deploy/vps-ops/bot/entrega-viva.mjs` — `npm run
+entrega:viva`. Lectura pura (ni un INSERT), tri-estado (`0` ok · `1` no llegó · `2` NO MEDIDO), y
+el sujeto es **el ÚLTIMO saliente de cada conversación**: lo que deja a alguien colgado es que no
+le haya llegado lo último que le dijimos. Test: `entrega-viva.test.mjs`, 18 casos con los códigos
+de error REALES, ya en la cadena (`test:bot` lo corre — **confirmado por mutación**, 1319/1).
+
+**Las tres trampas que costaron su vuelta, y cómo se cerraron:**
+- **El lector mentía primero.** `content_attributes->>'external_error'` devuelve vacío **siempre**:
+  la columna guarda una *cadena* JSON, no un objeto — hay que desanidar con `#>> '{}'` antes de
+  castear. Con el error vacío, `causaEsGlobal` contesta "por sujeto" y el gate se pone rojo a
+  ciegas. Verificar el instrumento antes que el producto.
+- **Rojo para siempre.** La tabla no la rota nadie, así que contar fallidos históricos apaga el
+  gate. Se cura preguntando si hubo un **éxito POSTERIOR**, y sólo para causas **GLOBALES** del
+  canal (pago, plantilla, credencial, 404): un fallo propio de UN destinatario no lo cura que otro
+  haya recibido después. El default de un error desconocido es "por sujeto" = rojo: falla hacia avisar.
+- **"En desuso" y "acaba de romperse" se ven igual** si sólo se pregunta *¿hubo algo después?* —
+  los dos tienen cero salientes posteriores. Lo único que los separa es el reloj
+  (`DIAS_PARA_DESUSO`), y sin esa baranda el caso del 1-oct quedaba absuelto.
+
+**Veredicto vivo hoy:** `ok — la última respuesta de cada conversación llegó a destino`
+(26 conversaciones; el 404 del inbox 3 sale como *canal en desuso*, que es la verdad: quieto desde
+el 1-ago). **Regla transferible:** por cada circuito que declara "entregado", preguntar **quién
+escribe ese veredicto y cuándo** — si lo escribe el emisor en el momento de emitir, no es entrega,
+es intención.
+
+---
+
 ## ✅ T8 — CERRADO el 2026-09-19: "está en `origin/main` y no está en producción" tiene TRES causas, y la tercera manda a romper un publicador sano
 
 **Cómo empezó.** Midiendo el bot VIVO, `npm run precios:vivos` cantó un defecto real y caro: al
@@ -478,6 +528,225 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 ---
 
 ## Ahora
+
+- [x] 🔴 **CERRADO el 2026-09-19 15:15-16:05 La Paz (commiteado; son docs y un gate, no toca el
+      motor ni pide deploy) — el material de venta prometía "IA incluida sin límite de chats" y
+      el add-on corta a 500 conversaciones al mes.**
+
+      **Cómo apareció.** No de la cola: las dos mediciones de arranque daban verde (simulador
+      3/3, widget 2/2 — el bot contestó los dos turnos en la conv 49). Salió de leer
+      `ONIA_CATALOGO_DE_VENTA.md`, que mi propio objetivo cita como la autoridad de lo que el
+      bot puede prometer, y cruzar lo que AFIRMA contra lo que el producto aplica.
+
+      **Nunca fue una mentira escrita a propósito: era cierta hasta el 2026-09-11.** Lo cuenta
+      la cabecera de `web-factory/apps/onia-platform/src/content/chatbot-precios.ts`: hasta ese
+      día no había contador ni corte, así que no se prometía un cupo. Ese día el cupo pasó de
+      copy a condición aplicada (`lib/chatbot/cupo.ts` lo lee para cortar) y el barrido de la
+      promesa alcanzó al producto y al sitio — y **no** a `hermes-content/docs`, que es de donde
+      salen las propuestas y el pitch que Sergio Urcullo dice en una demo.
+
+      **Las cuatro superficies, todas vivas** (`CONVERSACIONES_INCLUIDAS = 500`, recarga de 200
+      por Bs 190 que vence con el mes):
+
+      - `ONIA_CATALOGO_DE_VENTA.md:153` — "IA incluida sin límite de chats", en la fuente única
+        de "qué se vende".
+      - `ONIA_PRICING_CHATBOT_PROPUESTA.md:37` — la fila de Onia decía "**sin límite artificial
+        de chats**", y es peor que un ilimitado suelto: afirma superioridad donde somos **más**
+        restrictivos (Sendy topa a 150 chats IA/día ≈ 4.500/mes; nosotros a 500/mes).
+      - `ONIA_PRICING_CHATBOT_PROPUESTA.md:66` — "Incluida, sin límite de chats".
+      - `ONIA_PRICING_CHATBOT_PROPUESTA.md:129` — **el pitch de una frase para decir en voz
+        alta**, el sujeto más caro de los cuatro.
+
+      **Y una quinta, de credibilidad:** la tabla comparativa listaba "conversaciones ilimitadas"
+      como carencia de **Cliengo**, cuyo Starter topa a **500 — exactamente el nuestro**. Un
+      prospecto que compara de verdad nos agarra el reproche. Se quitó de la lista de carencias
+      con la razón escrita al lado.
+
+      **Lo sabíamos, escrito por nosotros el 30-ago** y en el mismo repo: §3 de
+      `ONIA_SENDYPRO_ANALISIS.md` dice *"prometer ilimitado sobre un costo variable que sube es
+      firmar un pasivo abierto. Nuestro modelo de 500 conversaciones + Meta al costo es más feo
+      de vender y más honesto de sostener"*. El análisis del competidor era honesto y nuestro
+      propio catálogo decía lo contrario.
+
+      **Por qué ningún gate lo veía.** No mueve una cifra (los cruces de precio validan montos y
+      en la oración no hay ninguno), no tipea un nombre de plan junto a una capacidad, y no es un
+      alcance total sobre EL SISTEMA ("el sistema completo") ni sobre SUS PARTES ("todos los
+      módulos"), las dos formas que `web-venta` ya cerró. Es sobre el **VOLUMEN**.
+
+      **Lo que cuesta de verdad:** cuando el cupo se agota el producto **deriva a una persona**.
+      Prometer ilimitado no produce un reclamo de facturación — produce horas de soporte, que es
+      el techo del negocio (`ONIA_ESTRATEGIA_DE_EMPRESA.md` §9).
+
+      **Gate de clase, cableado y validado por mutación** (`scripts/venta-honestidad.test.mjs`,
+      ya en la cadena como `test:venta-honestidad`): universo caminado del disco (docs de primer
+      nivel + `sales-kit`; `historial/` y `research/` quedan fuera por construcción, ahí describir
+      el plan ilimitado de otro es correcto), cupo **derivado** de la fuente — si algún día no hay
+      tope, el gate se apaga solo en vez de defender un número viejo.
+
+      ⚠️ **Dos trampas que costaron un falso verde cada una, las dos del instrumento:**
+
+      1. **Detectar por renglón perdía el sujeto más caro.** En el pitch, `en Onia` y `sin límite
+         de chats` viven en renglones distintos del mismo blockquote: la primera versión cazaba
+         3 de 4 y absolvía justo la frase de demo. La ventana depende de la **forma** — en una
+         tabla es la FILA (la de Sendy y la nuestra son vecinas y dicen cosas opuestas), en prosa
+         es el bloque. El caso `la ventana toma el bloque entero, no el renglón` lo ancla en las
+         dos direcciones, incluida la contraria: que la ventana **no** se derrame entre filas.
+      2. **Absolver por COMILLAS parecía correcto y era al revés.** Citar entre comillas sugiere
+         que la promesa es de otro; nuestro pitch va entre comillas **porque es una frase para
+         decir en voz alta**. Ese criterio absolvía exactamente el sujeto que más importa. La
+         atribución se hace por quién se NOMBRA en la ventana, no por la puntuación.
+
+      Mutaciones cazadas (5/5, `exit 1` con `fail ≥ 1`; restaurado `pass 13 / fail 0`):
+      reintroducir la promesa en el catálogo · reintroducir el pitch multi-renglón · borrar la
+      atribución (absolvería a Sendy y Cliengo) · universo vacío · cupo ilegible.
+
+      ⚠️ **Efecto colateral de ESTE commit, medido y nombrado (`t_beb73a77`): al entrar a `main`
+      detiene la publicación automática de los TRES destinos.** No se supuso — se corrió la
+      función real del freno (`numeros_con_signo` de `scripts/loops/extras/publicar-solo.sh`,
+      cargada del archivo, no copiada) contra el diff: entran `200 500`, salen nada, distintos ⇒
+      detiene. Los dos números son el **cupo** y la **recarga**, o sea una capacidad en prosa
+      markdown, no una asignación de plata; y `ONIA_CATALOGO_DE_VENTA.md` es el único de los
+      cuatro archivos de `FIRMA_HUMANA` que **ningún publicador lleva al cliente** (los otros tres
+      sí: `pricing.ts` y `subscription-plans.ts` con el build de `onia-platform`,
+      `knowledge.onia.json` con `deploy-bot.sh`). Queda para su dueño (`onia-cola`) porque el
+      freno no es de este carril y tiene dos remedios opuestos. Si la firma se considera legítima
+      —el cambio **sí** cambia lo que se le promete al cliente, de "ilimitado" a "500/mes"— no hay
+      nada que arreglar y esa tarea se cierra diciéndolo.
+
+      Cadena `npm test` de este repo: **2.255 ok**, y los **9 rojos son de AMBIENTE y ajenos** —
+      `video-factory/` no tiene `node_modules` en nodo-casa, así que sus 8 suites mueren con
+      `Cannot find package 'zod'`. Cero archivos míos ahí; nombrado en `t_9b83f746`.
+
+- [x] 🔴 **CERRADO el 2026-09-19 14:15-15:05 La Paz (commiteado, NO desplegado) — el único camino
+      que tiene el dueño para devolverle una conversación al bot funciona, y el log lo escribía
+      igual que si no hubiera pasado nada.**
+
+      **Cómo apareció.** No de la cola. Midiendo un eje que ningún gate mira: *el dueño contesta
+      desde `/inbox` y el bot se calla — ¿existe el camino de vuelta?* La pantalla lo promete
+      textual («**Resuelta — tu asistente atiende de nuevo**»,
+      `onia-platform/app/(dashboard)/inbox/InboxClient.tsx:288`), y esa promesa cruza DOS sistemas:
+      el botón pega en `toggle_status` de Chatwoot, Chatwoot emite un webhook, y el motor del bot
+      —que vive en otro repo y se instala a mano— tiene que desarmar el candado.
+
+      **Lo primero que medí estaba mal, y el instrumento era mío.** `grep -c takeover_desarmado`
+      sobre las 47.826 líneas del log vivo da **0**, con 120 `status_no_desarma:open` y **cero**
+      `resolved`. Leído de frente eso dice «el desarme no ocurrió jamás». Es falso: el log **nunca
+      imprime las notas del motor**, y el desarme corre con `send: []` y
+      `notes: ["takeover_desarmado"]`, así que su rastro no podía existir.
+
+      **La prueba de punta a punta (sobre la sonda QA propia, conv 49):** armar el candado a mano,
+      resolver por REST con el token de la plataforma —el camino exacto del botón— y volver a leer.
+
+      ```
+      update onia_center.bot_conversations set human_took_over=true where conversation_key='chatwoot:49';
+      # POST /api/v1/accounts/2/conversations/49/toggle_status {"status":"resolved"}  → success:true
+      select human_took_over from onia_center.bot_conversations where conversation_key='chatwoot:49';  → f
+      ```
+
+      **El producto está sano: el desarme funciona.** Lo que estaba roto es la capacidad de
+      saberlo. Ante *«marqué resuelta y el bot no volvió»* hay TRES causas con remedios opuestos
+      —el evento no llegó (suscripción de Chatwoot), llegó y desarmó (mirar otro lado), llegó y no
+      desarmó (bug del motor)— y la línea del log no distinguía ninguna: decía «evento sin mensaje
+      (conversation_status_changed): no hay nada que contestar», idéntica a un evento inerte.
+
+      **El arreglo** (`hermes-content/deploy/vps-ops/bot/webhook-server.mjs`, campo `hizo=`): el
+      log contesta las DOS preguntas que son distintas — qué **mandó** y qué **hizo**. Se deriva de
+      las notas del motor, no de una lista de notas «importantes», que fallaría abierta justo en la
+      que se agregue mañana. Gate: `webhook-server.test.mjs`, validado por mutación en las dos
+      direcciones (sin campo → rojo; campo decorativo que sale siempre → rojo, porque el caso
+      hermano exige que un evento SIN efecto no diga que hizo algo).
+
+      **Clase que cierra.** Es la hermana de `48dac281` (un motivo por DEFECTO vuelve
+      indistinguible el ruido de la señal): allá dos causas distintas compartían motivo, acá una
+      rama **con efecto** se veía igual que una sin él. Por cada rama que cambia el ESTADO sin
+      mandar un mensaje, preguntar si deja rastro — si el efecto no se mandó, para el log no pasó.
+
+- [x] 🔴 **CERRADO el 2026-09-19 13:45-14:25 La Paz (commiteado en `onia-platform`, NO desplegado)
+      — la pantalla donde el dueño mira trabajar a su bot le prometía lo contrario de lo que le
+      cobramos, al lado del único número que sí tiene tope.**
+
+      **El defecto, vivo en producción.** La bandeja (`onia-platform/app/(dashboard)/inbox/InboxClient.tsx`)
+      pintaba, pegado al contador de chats del día: **«N conversaciones atendidas hoy · sin límite,
+      siempre»**. El producto NO es sin límite: `onia-platform/lib/chatbot/cupo.ts` (2026-09-03) trae
+      `WHATSAPP_ADDON.includedConversations` = **500 conversaciones/mes**, avisa al dueño al 80 %,
+      **CORTA** con `cuota.agotada` y vende la recarga (`RECARGA_CONVERSACIONES`: Bs 190 por 200 que
+      **caducan con el mes**). Medido vivo: `docker exec onia-platform grep -rl 'sin límite, siempre'
+      /app/.next/server` devuelve el bundle de la bandeja, con `BUILD_ID=AUiuQ9c0SmcJnuF37_qTo`.
+
+      **Por qué sobrevivió.** Lo defendía un comentario que AFIRMABA la garantía —*«Es transparencia
+      (lo que Sendy usa bien), nunca un limite: en Onia no hay tope»*—, cierto cuando se escribió
+      (v6.7) y falso desde el 3-sep. Y la clase ya estaba cerrada **en la otra pantalla**:
+      `onia-platform/app/(dashboard)/settings/PlanClient.estado-real.test.ts:121` exige desde antes
+      que los planes con el chatbot adentro *«limiten la promesa ilimitada y expliciten el cupo»*.
+      La cura no viajó a la bandeja, que es donde el dueño mira. El contrato, en cambio, ya decía la
+      verdad (`app/terms/page.tsx`: *«no incluyen uso ilimitado»*): la superficie mentía sola.
+
+      **La cura condiciona, no borra:** el texto pasa a **«… · tu asistente atiende 500
+      conversaciones al mes»**, con el 500 DERIVADO de `WHATSAPP_ADDON.includedConversations`
+      (plano para los seis planes: lo trae el add-on, no el plan). `lib/pricing.ts` es puro, así
+      que importarlo desde un `'use client'` no arrastra Prisma al navegador — verificado con
+      `onia-platform/lib/platform/cliente-no-arrastra-prisma-al-navegador.test.ts` en verde.
+
+      **Gate de clase, no de pantalla:** `onia-platform/app/(dashboard)/no-prometemos-conversaciones-sin-tope.test.ts`.
+      Camina el DISCO (no `git ls-files`: la pantalla nueva sin commitear es el sujeto a cazar),
+      mide el texto en el ORDEN en que se lee, y acusa la marca ABSOLUTA («sin límite, siempre»)
+      a ≤ 80 caracteres de las conversaciones, salvo que la pantalla nombre el cupo.
+
+      **Dos veces me mintió el instrumento antes que el producto**, y las dos las delató la
+      mutación, no releerlo:
+      1. colapsar las expresiones `{…}` quedándose sólo con los literales **se come el texto del
+         bug** (vive suelto dentro de un `{cond && (…)}`): el gate daba 3 falsos positivos y CERO
+         verdaderos — un gate apagado con cara de encendido;
+      2. `nombraElCupo` leía el fuente CRUDO, y **el comentario que explica este arreglo nombra
+         `includedConversations`**: la pantalla se absolvía sola y la mutación pasaba VERDE con el
+         defecto reintroducido. Se pregunta con los comentarios en blanco.
+
+      **Validación por mutación (después del arreglo):** restaurar `· sin límite, siempre` deja
+      `Tests 1 failed | 2 passed` nombrando `app/(dashboard)/inbox/InboxClient.tsx`. Restaurado con `cp`.
+
+      ⚠️ **NO DESPLEGADO.** Hasta que `onia-cola` publique `plataforma`, el dueño sigue leyendo
+      «sin límite, siempre» en producción.
+
+- [x] 🔴 **CERRADO el 2026-09-19 12:43-13:25 La Paz (commiteado; el instrumento no necesita deploy
+      para correr, pero sólo mide el respaldo cuando el respaldo esté desplegado) — la ÚNICA red
+      que le queda a una capacidad que vendemos estaba vigilada por un gate que no podía
+      reportarla rota nunca.**
+
+      **El defecto.** `hermes-content/deploy/vps-ops/bot/destinos-vivos.mjs` nació para cazar la
+      caída de Speaches, que es un contenedor de NUESTRA red, y su cabecera lo dice: *«un 401
+      prueba que hay alguien del otro lado, que es lo que este gate mide»*. Correcto para un
+      vecino de docker. **Falso para un tercero con credencial:** `api.openai.com` nunca se cae del
+      DNS y siempre contesta HTTP, así que el criterio viejo daba `ok` pasara lo que pasara.
+
+      Y ese tercero no es un destino cualquiera: es el **único respaldo** de *«el prospecto manda
+      una NOTA DE VOZ y el bot la entiende»*, cuyo primario (Speaches) está **muerto** —`wget`
+      desde `onia-center` contesta `bad address`, `docker ps -a | grep -i speach` vacío— mientras
+      `ONIA_CATALOGO_DE_VENTA.md` marca el chatbot ✅ vivo prometiendo que entiende audios. En
+      Bolivia el audio por WhatsApp es la forma normal de escribir.
+
+      **Que el modo de falla es real no hay que suponerlo:** la tarea `t_ac3aa802` lleva **200 h**
+      bloqueada pidiéndole plata a Sergio Urcullo por *«OpenAI SIN CREDITO desde el 9-sep»*.
+      Medido hoy contra producción, esa afirmación es **falsa**: la key del proceso vivo contesta
+      `http=200` en `/v1/models` y transcribe de verdad (POST a `/v1/audio/transcriptions` con
+      `gpt-4o-mini-transcribe`, 12 tokens facturados). Un gate que sabe preguntar esto contesta
+      solo en cada corrida, en vez de dejar una afirmación de plata congelada nueve días.
+
+      **El arreglo.** `destinoContesta(url, ejecutar, credencial)`: cuando la llave la aportamos
+      NOSOTROS, un **401/403** es `contesta:false` (*«existe y no nos autoriza»*) y un **429** es
+      `contesta:false` (*«nos rechaza por cuota»*) — porque para el prospecto eso es idéntico a
+      que el destino no exista. **La distinción no es el status, es quién tiene que aportar la
+      llave:** sin credencial declarada el criterio no se toca, o `litellm` y `chatwoot` —que
+      contestan 401 estando sanos— se reportarían rotos y el gate mandaría a levantar servicios
+      que andan. La llave sale de `getFallbackConfig`, la misma función del producto que la
+      resuelve para el turno real, y nunca vuelve en el motivo (el veredicto se pega en tableros).
+      La caché de `medir()` keyea por URL **+ si se preguntó con llave**: la misma URL y la misma
+      respuesta dan veredictos opuestos, así que una clave pelada le daría a uno el del otro.
+
+      **Prueba.** `hermes-content/deploy/vps-ops/bot/destino-de-tercero-se-mide-por-autorizacion.test.mjs`,
+      8 casos, **en rojo primero** (5 fail / 3 pass: los 3 que pasaban eran las barandas). Validado
+      por mutación en las dos direcciones: sin la clasificación por status caen 2 casos, sin el
+      header cae 1. Suite completa del bot **1289 pass / 0 fail**; `npm run destinos:vivos` contra
+      producción sigue dando el mismo veredicto (no rompió la medición de los destinos internos).
 
 - [x] 🔴 **CERRADO el 2026-09-19 12:20-13:05 La Paz (ARREGLADO EN PRODUCCIÓN, no espera deploy) —
       el bot le prometía al lead que la prueba trae TODO, y la prueba no trae el chatbot de

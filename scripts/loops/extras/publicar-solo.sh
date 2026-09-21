@@ -258,6 +258,114 @@ if [ "${1:-}" = "--nombres" ]; then
   exit 0
 fi
 
+# ---------------------------------------------------------------------------
+# UN ARCHIVO QUE NO VIAJA A UN DESTINO NO PUEDE PUBLICARLE UN PRECIO.
+#
+# `FIRMA_HUMANA` nombra los archivos que pueden llevar un precio al cliente,
+# pero el freno los buscaba en TODO lo que tocan los commits varados, sin
+# preguntar si ese destino los publica. Medido el 2026-09-19 (tarea t_beb73a77)
+# con `3ed8fdaa` esperando: `hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md`
+# entraba con `+500` y `+200` —el cupo de conversaciones del add-on, escrito en
+# prosa markdown— y detenia la LANDING. Y la landing se arma con
+# `git archive origin/main web-factory/apps web-factory/packages ...`: ese
+# archivo no esta en ningun subarbol que viaje, asi que ningun numero suyo le
+# llega jamas a un cliente por ahi. Una firma pedida por un archivo que el
+# destino no publica es una firma falsa, y ya esta medido que gastarlas vuelve
+# automatica la unica firma que importa (t_189a6037).
+#
+# Los subarboles NO se escriben aca: se leen del `git archive` del armador del
+# propio destino. Una lista a mano se separaria del stage el dia que el stage
+# cambie, y entonces el freno dejaria pasar un precio — la direccion cara.
+#
+# 🔴 Falla CERRADO en las tres formas de no saber: si no se puede leer el
+# armador, si no nombra ningun subarbol (archiva el repo entero, que es lo que
+# hace la plataforma) o si la lista se arma con variables que aca no se pueden
+# resolver, la respuesta es "viaja" y el destino se detiene igual.
+# El armador de un destino. Primero el que DE VERDAD arma el stage (`/opt`), y
+# si no se puede leer, la copia versionada — el gate `test:publicadores` las
+# mantiene iguales. Si no hay ninguna, `subarboles_publicados` sale 2 y todo
+# viaja, que es el lado cerrado.
+armador() {  # $1 = carpeta del destino en /opt y en hermes-content/deploy
+  local vivo="/opt/$1/_deploy/build-and-stage.sh"
+  [ -r "$vivo" ] && { printf '%s\n' "$vivo"; return 0; }
+  printf '%s\n' "$REPO_HERMES/hermes-content/deploy/$1/build-and-stage.sh"
+}
+
+subarboles_publicados() {  # $1 = build-and-stage.sh del destino
+  [ -r "$1" ] || return 2
+  awk '
+    # Emite las rutas de un renglon. Opciones, redirecciones y variables no son
+    # rutas; pero una VARIABLE DESPUES de la primera ruta significa que la lista
+    # se arma sola, y eso aca no se puede resolver: se dice y no se adivina.
+    function emitir(linea,   n, t, i, tok) {
+      n = split(linea, t, /[ \t]+/)
+      for (i = 1; i <= n; i++) {
+        tok = t[i]
+        if (tok == "" || tok == "\\") continue
+        if (tok ~ /^[-"$&><]/) { if (vistas > 0) { print "DINAMICO"; salir = 1; return } ; continue }
+        print tok; vistas++
+      }
+    }
+    # El cano se corta ANTES de buscar la palabra, y no despues: el mensaje de
+    # error de un `|| { echo "FATAL: git archive fallo"; }` la repite, y con un
+    # `sub(/^.*archive/,"")` —que es GOLOSO— el parseo se quedaba con la segunda
+    # y devolvia `fallo";` como si fuera un subarbol publicado. Medido el
+    # 2026-09-19 contra el armador de la plataforma: daba "no viaja" para
+    # `lib/subscription-plans.ts`, o sea fallaba ABIERTO, que es el lado caro.
+    !dentro { if ($0 !~ /git[^|]*archive/) next; dentro = 1 }
+    dentro {
+      # Los tres se calculan DE NUEVO en cada renglon. Escritos como estado que
+      # se acumula, el `||` de cualquier linea anterior del armador dejaba
+      # `corta` prendido para siempre y el parseo salia en el primer renglon,
+      # devolviendo VACIO — que este guion lee como "archiva el repo entero", o
+      # sea el freno volvia a detener por archivos que el destino no publica.
+      linea = $0
+      sigue = ($0 ~ /\\[ \t]*$/)
+      corta = 0
+      if (linea ~ /\|/) { sub(/\|.*$/, "", linea); corta = 1 }
+      if (!arrancado) {
+        arrancado = 1
+        p = index(linea, "archive")
+        if (p == 0) exit
+        linea = substr(linea, p + 7)
+      }
+      emitir(linea)
+      if (salir || corta || !sigue) exit
+    }
+  ' "$1"
+}
+
+# ¿Ese archivo le llega al cliente por ESTE destino?
+viaja_al_destino() {  # $1 = build-and-stage.sh   $2 = archivo
+  local subarboles sub
+  subarboles=$(subarboles_publicados "$1") || return 0
+  case "$subarboles" in *DINAMICO*) return 0 ;; esac
+  # Sin rutas en el `git archive`, el destino archiva el repo entero.
+  [ -z "$subarboles" ] && return 0
+  for sub in $subarboles; do
+    case "$2" in "$sub"|"$sub"/*) return 0 ;; esac
+  done
+  return 1
+}
+
+# Deja pasar, de la lista que llega por stdin, solo los que ese destino publica.
+solo_los_que_viajan() {  # $1 = build-and-stage.sh del destino
+  local arch
+  while IFS= read -r arch; do
+    [ -n "$arch" ] || continue
+    viaja_al_destino "$1" "$arch" && printf '%s\n' "$arch"
+  done
+}
+
+# Se puede preguntar desde afuera: el sujeto del gate tiene que ser esta funcion
+# y no una copia suya, que coincidiria con ella mientras la realidad les diera la
+# razon a las dos. Va ANTES del lock: preguntar no publica nada.
+if [ "${1:-}" = "--viaja" ]; then
+  shift
+  [ "$#" -eq 2 ] || { echo "uso: publicar-solo.sh --viaja <build-and-stage.sh> <archivo>" >&2; exit 2; }
+  if viaja_al_destino "$1" "$2"; then echo "viaja"; exit 0; else echo "no viaja"; exit 1; fi
+fi
+
 if [ "${1:-}" = "--montos-copias" ]; then
   shift
   [ "$#" -eq 3 ] || { echo "uso: publicar-solo.sh --montos-copias <dir-prod> <dir-repo> <archivo>" >&2; exit 2; }
@@ -447,8 +555,11 @@ if puede_medir /opt/onia-platform/_deploy/publicar.sh plataforma; then
   if hay_varados "$SALIDA_PLAT"; then
     SHAS_PLAT=$(shas_varados "$REPO_HERMES" hermes-content/deploy/onia-platform/deploy-vivo.mjs)
     # shellcheck disable=SC2086
+    # Hoy su armador hace `git archive` del repo entero, asi que esto no filtra
+    # nada — va igual para que el dia que ese stage se acote, el freno se entere.
     publicar_destino plataforma /opt/onia-platform/_deploy/publicar.sh \
-      "$(archivos_de "$REPO_PLATFORM" $SHAS_PLAT)" "$REPO_PLATFORM" "$SHAS_PLAT"
+      "$(archivos_de "$REPO_PLATFORM" $SHAS_PLAT | solo_los_que_viajan "$(armador onia-platform)")" \
+      "$REPO_PLATFORM" "$SHAS_PLAT"
   else
     echo "  plataforma: al dia"
   fi
@@ -459,8 +570,11 @@ if puede_medir /opt/onia-landing/_deploy/publicar.sh landing; then
   if hay_varados "$SALIDA_LAND"; then
     SHAS_LAND=$(shas_varados "$REPO_HERMES" web-factory/apps/onia-platform/scripts/deploy-vivo.mjs)
     # shellcheck disable=SC2086
+    # Los varados de la landing salen del repo ENTERO, y la landing publica un
+    # puñado de subarboles: lo que no viaja no puede publicarle un precio a nadie.
     publicar_destino landing /opt/onia-landing/_deploy/publicar.sh \
-      "$(archivos_de "$REPO_HERMES" $SHAS_LAND)" "$REPO_HERMES" "$SHAS_LAND"
+      "$(archivos_de "$REPO_HERMES" $SHAS_LAND | solo_los_que_viajan "$(armador onia-landing)")" \
+      "$REPO_HERMES" "$SHAS_LAND"
   else
     echo "  landing: al dia"
   fi

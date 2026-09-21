@@ -222,7 +222,10 @@ export function respaldosSinDeclarar(capacidades = CAPACIDADES, dir = AQUI, leer
  */
 export function cadenaDeDestinos(cap, env = {}, desplegado = true) {
   const primario = String(env[cap.env] || cap.defecto).replace(/\/+$/, "");
-  const cadena = [{ rol: "primario", url: `${primario}${cap.probe}`, destino: primario }];
+  // Los primarios de hoy son vecinos de la red de docker: no les aportamos llave, asi que su
+  // criterio sigue siendo "hay alguien del otro lado". El dia que uno sea de un tercero, su
+  // credencial se declara aca igual que la del respaldo.
+  const cadena = [{ rol: "primario", url: `${primario}${cap.probe}`, destino: primario, credencial: null }];
   if (!cap.respaldo || typeof cap.respaldo.con !== "function") return cadena;
 
   // Un respaldo que esta en el REPO y no en el bot vivo no atiende a nadie. Contarlo daria
@@ -239,7 +242,10 @@ export function cadenaDeDestinos(cap, env = {}, desplegado = true) {
   }
   const base = String(conf?.baseUrl || "").replace(/\/+$/, "");
   if (!base) return cadena;
-  return [...cadena, { rol: "respaldo", url: `${base}${cap.respaldo.probe}`, destino: base }];
+  // La llave sale de la MISMA funcion del producto que la resuelve para el turno real
+  // (`getFallbackConfig`), no de una copia: preguntarle a OpenAI sin ella daria 401 siempre y el
+  // gate llamaria roto a un respaldo sano.
+  return [...cadena, { rol: "respaldo", url: `${base}${cap.respaldo.probe}`, destino: base, credencial: conf?.apiKey || null }];
 }
 
 /**
@@ -418,15 +424,36 @@ export function entornoDelProceso(ejecutar = sh) {
  * Le pregunta al destino DESDE LA RED DEL BOT. Devuelve `true` si alguien contesta HTTP (un 401
  * tambien: prueba que el servicio existe), `false` si el host no resuelve o la conexion se niega,
  * y `null` si no se pudo ni preguntar.
+ *
+ * CON `credencial`, la pregunta CAMBIA y por eso el veredicto tambien. Un destino de TERCERO cuya
+ * llave aportamos nosotros (hoy: el respaldo de transcripcion en api.openai.com) no se puede medir
+ * por "hay alguien del otro lado": eso es cierto para siempre y vuelve al gate incapaz de
+ * reportarlo roto. Lo unico que puede fallar ahi es la AUTORIZACION —llave revocada, sin permisos,
+ * sin cuota— y para el prospecto eso es identico a que el destino no exista. Sin credencial
+ * declarada NO se toca el criterio: litellm y chatwoot contestan 401 estando sanos.
+ *
+ * La llave viaja en el header y NUNCA vuelve en el motivo: este veredicto se pega en tareas y logs.
  */
-export function destinoContesta(url, ejecutar = sh) {
+export function destinoContesta(url, ejecutar = sh, credencial = null) {
+  const llave = String(credencial || "").trim();
+  const auth = llave ? `--header='Authorization: Bearer ${llave}' ` : "";
   let salida = "";
   try {
-    salida = ejecutar(`wget -q -S -O /dev/null --timeout=12 --tries=1 '${url}' 2>&1; echo "__rc=$?"`);
+    salida = ejecutar(`wget -q -S -O /dev/null ${auth}--timeout=12 --tries=1 '${url}' 2>&1; echo "__rc=$?"`);
   } catch {
     return { contesta: null, motivo: "no se pudo correr wget en el contenedor" };
   }
-  if (/HTTP\//.test(salida)) return { contesta: true, motivo: (salida.match(/HTTP\/[\d.]+ \d+[^\n]*/) || [""])[0].trim() };
+  if (/HTTP\//.test(salida)) {
+    const linea = (salida.match(/HTTP\/[\d.]+ \d+[^\n]*/) || [""])[0].trim();
+    const codigo = Number((linea.match(/HTTP\/[\d.]+ (\d+)/) || [])[1]);
+    if (llave && (codigo === 401 || codigo === 403)) {
+      return { contesta: false, motivo: `el destino existe pero NO nos autoriza (HTTP ${codigo}): la credencial esta revocada, vencida o sin permisos` };
+    }
+    if (llave && codigo === 429) {
+      return { contesta: false, motivo: "el destino nos rechaza por cuota o limite (HTTP 429): hay que recargar o esperar" };
+    }
+    return { contesta: true, motivo: linea };
+  }
   if (/bad address|Name or service not known|unable to resolve/i.test(salida)) {
     return { contesta: false, motivo: "el host no resuelve — ese servicio no existe en esta red" };
   }
@@ -464,8 +491,12 @@ function medir() {
       );
     }
     for (const eslabon of cadenaDeDestinos(cap, proceso.env, vivo)) {
-      if (!yaPreguntado.has(eslabon.url)) yaPreguntado.set(eslabon.url, destinoContesta(eslabon.url));
-      const r = yaPreguntado.get(eslabon.url);
+      // La clave lleva SI se pregunto con llave: la misma URL y la misma respuesta dan veredictos
+      // opuestos segun quien tenga que autorizar, asi que una cache por URL pelada le daria a uno
+      // el veredicto del otro.
+      const clave = `${eslabon.url}${eslabon.credencial ? " +credencial" : ""}`;
+      if (!yaPreguntado.has(clave)) yaPreguntado.set(clave, destinoContesta(eslabon.url, sh, eslabon.credencial));
+      const r = yaPreguntado.get(clave);
       medidas.push({
         archivo: cap.archivo,
         rol: eslabon.rol,

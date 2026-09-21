@@ -294,6 +294,25 @@ poner "$FUENTE/extras/publicar-solo.sh"            "$DESTINO_BIN/onia-publicar-s
 poner "$FUENTE/extras/jarvis-voz.sh"               "$DESTINO_BIN/onia-jarvis-voz.sh"
 poner "$RAIZ/scripts/cerebro/onia-cerebro-datos.py" "$DESTINO_BIN/onia-cerebro-datos.py"
 
+# La marca de Onia sobre Chatwoot. Cron VIVO en el VPS (`17 * * * *`) y NADIE lo copiaba:
+# la copia que ejecutaba era la de 14 lineas que defiende 3 claves, y el arreglo del
+# 2026-08-31 —que defiende NUEVE, porque el reconcile de Chatwoot restaura diez— entro a
+# main y se quedo ahi 19 dias.
+#
+# Aca el diff INVERSO da al reves que en los dos bloques de arriba, y por eso esta linea
+# no es prevencion sino cura: produccion corre el FOSIL y el repo tiene el arreglo. Medido
+# el 2026-09-19 preguntandole al contenedor vivo (`bash <copia del repo> --check`, que no
+# escribe): `REVERTIDAS 6/9` — BRAND_URL, TERMS_URL y PRIVACY_URL en `www.chatwoot.com`, y
+# los tres LOGO de fabrica. Las tres URL viajan en el objeto de config que el front embebe
+# en https://chat.onia.com.bo/app/login, o sea que la pantalla por la que se atiende a un
+# cliente enlaza a los terminos y la privacidad de Chatwoot.
+#
+# Que lo mantuvo invisible: `test:herramientas-desplegadas` deriva su universo con el regex
+# `/root/bin/(onia-[...])`, asi que una herramienta que no empieza con `onia-` no es sujeto
+# suyo POR CONSTRUCCION — y las dos que hoy estan separadas de su fuente (esta y
+# claude-guardia.sh) son justo las dos que el prefijo deja afuera.
+poner "$RAIZ/hermes-content/deploy/vps-ops/chatwoot-brand-onia.sh" "$DESTINO_BIN/chatwoot-brand-onia.sh"
+
 # La memoria compartida: el corredor la inyecta y los loops le escriben por estos
 # dos. Si no se despliegan solos, el corredor de main llama a un script que no
 # existe en /root/bin y los 15 loops fallan mudos en la primera linea.
