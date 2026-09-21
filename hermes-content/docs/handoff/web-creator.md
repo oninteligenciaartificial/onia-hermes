@@ -1,9 +1,18 @@
 # Handoff — carril `web-creator` (configurador de webs + web personal)
 
 > Formato: `hermes-content/docs/handoff/README.md`. Se sobrescribe; es el estado ACTUAL.
-> Última escritura: **2026-09-17 (2ª pasada, con el asistente)**, rama `claude/web-creator-personal-site-eed2f3`, worktree
-> `.claude/worktrees/web-creator-personal-site-eed2f3`. Puertos locales: 3011 (sitio Onia),
+> Última escritura: **2026-09-21**, rama `claude/web-creator-personal-site-eed2f3`, worktree
+> `.claude/worktrees/web-creator-personal-site-eed2f3`. Puertos locales: 3011/3320 (sitio Onia),
 > 8099 (web personal).
+>
+> 🔁 **El carril SIGUE EN CODEX desde el 21-sep** (se acabaron los créditos de Claude). Entrada
+> para quien llega: **§8**, que es lo único que hace falta leer para empezar a trabajar. El
+> resto es historia y evidencia.
+>
+> **Estado al cerrar, medido el 21-sep:** la rama está **0 ahead / 27 behind** de `origin/main`
+> — o sea que **todo lo de este carril ya está en `main`** y no hay nada en vuelo ni sin
+> commitear. Producción verificada: `sergiourcullo.vercel.app` 200, `/llamada` → 307 a
+> `cal.com/sergiourcullo/20min`, y `onia.com.bo/servicios/webs` sirve las seis ideas.
 >
 > Nace de la sesión de Codex «Ubica y ajusta llamadas 1:1» (14-sep, id `01a0a1ab…`), que dejó
 > el configurador SIN commitear (lo commiteó el auto-sync del 17-sep en la rama
@@ -85,7 +94,7 @@ desde el 1-sep):**
    (la ruta sale del log del run: `STAGED_ONLY=`). Backup + restart + healthcheck + rollback.
 4. Verificar por TEXTO exacto del cambio, nunca por 200.
 
-## 3 · Qué quedó a medias, y dónde (todo en esta rama, SIN pushear al cerrar el turno — el
+## 3 · Qué quedó a medias (histórico del 17-sep; al 21-sep NO queda nada a medias — el
 auto-sync lo pushea)
 
 | Qué | Dónde | Estado |
@@ -270,19 +279,96 @@ no sea clínica. El motor tiene 7 plantillas; el configurador alcanza 3.
 | 🟡 La propuesta de Codex «Página Base Conectada» incluida en planes ANUALES (Profesional/Completo) — es una decisión de packaging; no se implementó. | nada hoy |
 | 🟡 Confirmar que `WA_PHONE` de `src/lib/site.ts` es el WhatsApp comercial definitivo. | el envío real |
 
-## 7 · Próximos pasos (en orden)
+## 7 · Próximos pasos, ordenados por lo que cuesta NO tenerlos
 
-1. ~~Precio~~ · ~~tarjetas vs configurador~~ · ~~suite en Linux~~ · ~~deploy~~ · ~~web personal~~ ·
-   ~~las seis ideas de la competencia~~: todo hecho y en producción (§2, 4º deploy).
-2. **Intent `lead_web` en el bot** (memoria `web-lead-bot-lo-trata-como-pregunta-precio`): el
-   pedido del configurador llega a WhatsApp y el bot le contesta con el pitch del chatbot. Es del
-   carril chatbot (tiene dueño activo); coordinar, no tocar desde acá.
-3. **Registrar el pedido en la plataforma antes de abrir WhatsApp** (server-side): con eso
-   aparecen el link compartible del preview y el prellenado desde «Web actual» con
-   `scripts/alta-por-extraccion.py` (hoy el link sólo viaja en el mensaje y lo corre una persona).
-4. Fotos del preview por rubro (hoy por dirección visual): una dental «premium» sale con foto de
-   boutique. Regla de la casa: la interfaz nunca la dibuja la IA; la foto de contexto sí puede.
-5. `/vps` de la web personal: enlazar el video cuando Sergio Urcullo pase el link.
-6. Borrar `PedirWeb.tsx` + `webs.module.css` cuando los tests dejen de nombrarlos.
-7. Si el runner vuelve a quedarse sin disco: `df -h` como primer paso del job y revisar qué
-   entró pesado a `.git` (§5).
+Hecho y en producción: precio · tarjetas vs configurador · suite en Linux · deploy · web
+personal · las seis ideas de la competencia · la llamada 1 a 1. Queda esto:
+
+| # | Qué | Por qué está acá arriba | Costo |
+|---|---|---|---|
+| **1** | **Publicar lo que el motor genera** (§5b hueco 1) | 🔴 **El configurador YA vende con precios publicados y no hay cómo entregar.** Si entra un pedido real, el sitio se genera y muere en `out/<slug>`: su único consumidor se declara «Not for production». Es el único tramo que separa «generado» de «vendido» | media jornada |
+| **2** | **La tienda sale con el titular de otra marca** (§5b hueco 2) | 🔴 `packages/templates/src/store.ts:81` hardcodea `<h1>SKINCARE SIMPLE PARA COMPRAR MEJOR</h1>` en TODA tienda generada, y el puente manda `products: []` → 0 productos. Entregar eso a un cliente es peor que no entregar | 2 h |
+| **3** | **Decidir qué pasa con dirección y estructura** (§5b hueco 3) | 🟡 12 opciones que el cliente elige y **no llegan al entregable**: minimalista e impacto dan archivos byte-idénticos. Hoy el configurador promete una elección que no existe. **Es una decisión de Sergio Urcullo**: mapearlas (1 día) o sacarlas del configurador (1 h) | 1 h ó 1 día |
+| **4** | **Intent `lead_web` en el bot** | 🟡 El pedido del configurador llega a WhatsApp y el bot responde con el pitch del chatbot, no con el de la web. **Es del carril chatbot, que tiene dueño activo: coordinar, NO tocar desde acá** | del otro carril |
+| **5** | Registrar el pedido en la plataforma antes de abrir WhatsApp (server-side) | Desbloquea el link compartible del preview y el prellenado desde «Web actual» con `scripts/alta-por-extraccion.py`. Hoy el link viaja en el mensaje y lo corre una persona | 1 día |
+| **6** | Fotos del preview por rubro (hoy por dirección visual) | Una dental «premium» sale con foto de boutique. Regla: la interfaz nunca la dibuja la IA; la foto de contexto sí puede | 3 h |
+| **7** | Borrar `PedirWeb.tsx` + `webs.module.css` | Muertos: nadie los importa. Bloqueado porque 9 tests los nombran por ruta | 1 h |
+
+⚠️ **Lo de arriba sirve al carril, no necesariamente a la etapa vigente.** `ONIA_ESTRATEGIA_DE_EMPRESA.md`
+§10 dice que la web **falla el test de las tres preguntas** (no se entrega sin horas de Sergio
+Urcullo por cliente). Si hay que elegir entre esto y mover Onia Platform + chatbot, gana el
+producto. Este carril existe porque hay un prospecto real y el configurador ya está publicado.
+
+## 8 · Para quien sigue en Codex — EMPEZAR ACÁ
+
+**El carril en una frase:** el configurador de webs vive en `onia.com.bo/servicios/webs`, vende
+con precios publicados, y la web personal de Sergio Urcullo lo enlaza. Lo que **no** existe es
+la entrega: ver §5b.
+
+### Dónde y cómo entrar
+
+```bash
+cd C:/dev/proyectos/onia-hermes/.claude/worktrees/web-creator-personal-site-eed2f3
+git branch --show-current          # claude/web-creator-personal-site-eed2f3
+git fetch origin && git merge --no-edit origin/main   # al 21-sep estaba 27 behind
+```
+
+Todo lo del carril ya está en `main`. **No hay nada a medias.** Si algo no compila, vino de otro
+carril, no de acá.
+
+### Los comandos que FUNCIONAN (probados, no copiados de un README)
+
+```bash
+# tipos del sitio de venta
+cd web-factory/apps/onia-platform && npx tsc --noEmit -p tsconfig.json
+
+# tests: en Windows corren SOLO llamando a vitest directo, y sólo los unitarios
+MSYS_NO_PATHCONV=1 npx vitest run src/content/web-assistant.test.ts
+
+# el sitio local, para mirarlo
+pnpm --dir web-factory/apps/onia-platform dev --port 3320
+
+# mensaje de WhatsApp del configurador -> intake -> sitio generado
+cd web-factory && npx tsx generate/from-configurador.ts <mensaje.txt> --build
+
+# publicar la web personal (canónico -> buzón -> Vercel)
+python scripts/publicar-sitio.py -m "mensaje"
+```
+
+**Deploy de `onia.com.bo` (la receta que funciona, §2):** `gh workflow run
+deploy-onia-center.yml --ref <rama> -f swap=false` → con el run verde, FF de `main` → `ssh` y
+`bash /opt/onia-landing/_deploy/swap-and-verify.sh /opt/onia-landing/runtime-next.new-<TS>`
+(el TS sale del log, línea `STAGED_ONLY=`). Verificar por TEXTO exacto, nunca por 200.
+
+### Las cinco trampas que ya se pagaron acá
+
+1. **La suite completa NO corre en Windows**: 20 archivos en rojo por rutas POSIX (`\` vs `/`).
+   Los unitarios sí, llamando a `npx vitest run <archivo>`. La suite entera es del CI.
+2. **`main` se mueve DEBAJO tuyo**: entraron 28 commits en un día y 27 en dos. Antes de
+   promover un build: `git rev-list --count HEAD..origin/main` y
+   `git diff --name-only HEAD...origin/main` (TRES puntos; con dos lista tus propios archivos).
+3. **El runner de GitHub se quedó sin disco dos veces**: `.git` pesa 11 GB. Ya está el
+   `filter: blob:none` en el checkout; si vuelve, `df -h` como primer paso del job.
+4. **Un CTA se verifica APRETÁNDOLO.** El botón de la llamada tenía el `href` bien escrito y
+   apuntaba a un 404 durante días. Ahora la web enlaza `/llamada`, un redirect propio en
+   `sitio-sergiourcullo/vercel.json`: **si el evento de cal.com cambia, se edita UNA línea**.
+5. **El gate `rubros-del-alta` lee las PALABRAS del código**, no sólo los chips: «farmacia» en
+   una regex de sinónimos lo puso en rojo. Los rubros ajenos (veterinaria, farmacia,
+   restaurante, hotel, gimnasio, inmobiliaria) no pueden aparecer ni como sinónimo.
+
+### Qué NO tocar desde este carril
+
+- El **bot / chatbot** (tiene dueño activo). El `lead_web` del paso 4 se coordina, no se toca.
+- Los **4 archivos raíz de `web-factory`** sin avisar (`COORDINATION_MANIFEST.md`).
+- El **buzón de deploy** `C:/dev/proyectos/sergiourcullo-deploy`: **no es fuente**, el script de
+  publicación lo sobrescribe. Editar siempre `hermes-content/sitio-sergiourcullo/`.
+
+### Lo que está esperando a Sergio Urcullo (§6 + lo nuevo)
+
+- **Subir las 3 historias** de `hermes-content/carousels/out/historias-llamada/` y pegarles el
+  sticker de link a `sergiourcullo.vercel.app/llamada` (sólo la tercera lo lleva).
+- **Revisar el 2º enlace de su bio de Instagram**: no se ve sin login y es el último candidato a
+  «el enlace que no funciona» del 19-sep. Que apunte a `sergiourcullo.vercel.app/llamada`.
+- **Decidir el punto 3** de §7 (dirección y estructura: mapearlas o sacarlas).
+- Mirar el asistente y aprobar rubros y defaults · confirmar `WA_PHONE` de `src/lib/site.ts` ·
+  pasar el link del video para `/vps`.
