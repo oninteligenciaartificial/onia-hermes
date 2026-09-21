@@ -4,6 +4,8 @@
   "hashtags": ["#mcp", "#claudecode", "#notion", "#agentesia", "#ia", "#desarrollosoftware"],
   "comment_trigger": "Comentá MCP",
   "cta": "Comentá MCP",
+  "serie": "IA PRÁCTICA",
+  "episodio": "03",
   "slides": [
     {
       "number": 1,
@@ -12,6 +14,7 @@
       "headline": "MCP es un contrato de herramientas",
       "body": "Conectá Notion sin darle permiso para todo.",
       "callout": "Guardá el comando",
+      "bg": "hermes-content/references/marca-personal-sergio/fondos/cuaderno-02.png",
       "save_worthy": false,
       "alt_text": "MCP no es un modelo, es un contrato de herramientas"
     },
@@ -22,6 +25,16 @@
       "headline": "Claude Code necesita una interfaz externa",
       "body": "MCP define herramientas, recursos y prompts para conectar un cliente con un servidor sin inventar una integración distinta para cada modelo.",
       "callout": "Conexión estandarizada",
+      "visual": {
+        "type": "flow",
+        "label": "ARQUITECTURA",
+        "nodes": [
+          {"name": "Claude Code", "detail": "cliente"},
+          {"name": "MCP server", "detail": "contrato"},
+          {"name": "Notion", "detail": "herramientas"}
+        ],
+        "note": "El protocolo separa al cliente del servicio."
+      },
       "save_worthy": false,
       "alt_text": "MCP conecta Claude Code con servicios externos"
     },
@@ -32,6 +45,15 @@
       "headline": "Agregá el servidor HTTP de Notion",
       "body": "`claude mcp add --transport http notion https://mcp.notion.com/mcp`",
       "callout": "No pegues tokens en el video",
+      "visual": {
+        "type": "terminal",
+        "label": "CLAUDE CODE",
+        "lines": [
+          {"value": "$ claude mcp add --transport http", "kind": "command"},
+          {"value": "  notion https://mcp.notion.com/mcp", "kind": "command"},
+          {"value": "server added: notion", "kind": "comment"}
+        ]
+      },
       "save_worthy": false,
       "alt_text": "Comando claude mcp add para Notion"
     },
@@ -42,6 +64,16 @@
       "headline": "Comprobá qué servidores tiene Claude Code",
       "body": "En la terminal ejecutá `claude mcp list`. Dentro de Claude Code usá `/mcp` para autenticar, revisar el estado o limpiar el acceso.",
       "callout": "Listar antes de usar",
+      "visual": {
+        "type": "terminal",
+        "label": "VERIFICACIÓN",
+        "lines": [
+          {"value": "$ claude mcp list", "kind": "command"},
+          {"value": "notion · http · connected", "kind": "comment"},
+          {"value": "> /mcp", "kind": "command"},
+          {"value": "auth · status · remove", "kind": "comment"}
+        ]
+      },
       "save_worthy": false,
       "alt_text": "claude mcp list y slash mcp"
     },
@@ -52,6 +84,13 @@
       "headline": "Definí input, output y permisos",
       "body": "Ejemplo: `get_lead_by_id` recibe `lead_id`, devuelve `name`, `status` y `source`, y solo tiene permiso `read`.",
       "callout": "Lectura antes que escritura",
+      "visual": {
+        "type": "contract",
+        "label": "TOOL CONTRACT",
+        "input": "lead_id",
+        "output": "name · status · source",
+        "permissions": "read only"
+      },
       "save_worthy": false,
       "alt_text": "Contrato MCP con input output y permisos"
     },
@@ -62,6 +101,15 @@
       "headline": "MCP no reemplaza tus permisos",
       "body": "Primero lectura. Después validación. Luego aprobación humana para escribir, borrar, cobrar o enviar mensajes.",
       "callout": "Guardá esto ↗",
+      "visual": {
+        "type": "matrix",
+        "label": "PERMISOS MÍNIMOS",
+        "items": [
+          {"title": "1 · leer", "body": "Conocer el contexto."},
+          {"title": "2 · validar", "body": "Revisar la salida."},
+          {"title": "3 · aprobar", "body": "Humano antes de escribir."}
+        ]
+      },
       "save_worthy": true,
       "alt_text": "MCP no reemplaza permisos ni aprobación humana"
     },

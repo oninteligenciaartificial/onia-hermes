@@ -4,6 +4,8 @@
   "hashtags": ["#n8n", "#automatizacion", "#ia", "#negocios", "#pymes", "#bolivia"],
   "comment_trigger": "Comentá MAPA",
   "cta": "Comentá MAPA",
+  "serie": "IA PRÁCTICA",
+  "episodio": "01",
   "slides": [
     {
       "number": 1,
@@ -12,6 +14,7 @@
       "headline": "Antes de usar *n8n*, elegí qué automatizar",
       "body": "La herramienta viene después del proceso.",
       "callout": "Guardá este mapa",
+      "bg": "hermes-content/references/marca-personal-sergio/fondos/desk-01.png",
       "save_worthy": false,
       "alt_text": "Antes de usar n8n, elegí qué automatizar"
     },
@@ -22,6 +25,12 @@
       "headline": "Sin proceso, n8n acelera el desorden",
       "body": "Si no definís qué entra, qué se valida y qué debe quedar hecho, n8n no sabe qué proceso estás intentando mejorar.",
       "callout": "No empieces conectando apps",
+      "visual": {
+        "type": "note",
+        "label": "LA REGLA",
+        "value": "Entrada → regla → salida",
+        "detail": "Si no podés dibujar las tres, todavía no tenés un workflow."
+      },
       "save_worthy": false,
       "alt_text": "Una automatización mal pensada acelera el desorden"
     },
@@ -32,6 +41,15 @@
       "headline": "El trigger debe tener un nombre concreto",
       "body": "Usá `Webhook` para un formulario o API; `Telegram Trigger` para un mensaje; `Google Sheets Trigger` para una fila nueva. No digas simplemente “entra información”.",
       "callout": "Ejemplo: POST /demo-lead",
+      "visual": {
+        "type": "flow",
+        "label": "ENTRADA",
+        "nodes": [
+          {"name": "Webhook", "detail": "POST /demo-lead"},
+          {"name": "payload", "detail": "name · phone · service · source"}
+        ],
+        "note": "El trigger tiene que describir un evento real."
+      },
       "save_worthy": false,
       "alt_text": "El trigger debe tener un nombre concreto en n8n"
     },
@@ -42,6 +60,15 @@
       "headline": "`IF` convierte la regla en dos caminos",
       "body": "Condición: `phone is not empty` AND `service is not empty`. True continúa. False pide el dato faltante y no registra el lead como completo.",
       "callout": "Probá true y false",
+      "visual": {
+        "type": "matrix",
+        "label": "DECISIÓN",
+        "items": [
+          {"title": "phone no está vacío", "body": "La información mínima existe."},
+          {"title": "service no está vacío", "body": "La solicitud se puede enrutar."},
+          {"title": "true / false", "body": "El flujo sabe qué hacer en ambos casos."}
+        ]
+      },
       "save_worthy": false,
       "alt_text": "El nodo IF de n8n convierte una decisión en dos caminos"
     },
@@ -52,6 +79,16 @@
       "headline": "La salida tiene que dejar evidencia",
       "body": "`Google Sheets / Append Row` guarda `name`, `phone`, `service` y `source`. Después `Telegram / Send Message` avisa al responsable. Eso se puede verificar.",
       "callout": "Guardar + avisar",
+      "visual": {
+        "type": "flow",
+        "label": "EVIDENCIA",
+        "nodes": [
+          {"name": "name + phone", "detail": "datos del lead"},
+          {"name": "Append Row", "detail": "Google Sheets"},
+          {"name": "Send Message", "detail": "Telegram"}
+        ],
+        "note": "Un workflow útil deja registro y avisa a alguien."
+      },
       "save_worthy": false,
       "alt_text": "Google Sheets Append Row y Telegram Send Message dejan evidencia"
     },
@@ -62,6 +99,18 @@
       "headline": "Copiá esta arquitectura antes de abrir n8n",
       "body": "Entrada: Webhook → Regla: IF → Registro: Google Sheets / Append Row → Aviso: Telegram / Send Message → Excepción: pedir el campo faltante.",
       "callout": "Guardá esto ↗",
+      "visual": {
+        "type": "table",
+        "label": "MAPA GUARDABLE",
+        "left": "PIEZA",
+        "right": "FUNCIÓN",
+        "rows": [
+          {"left": "Webhook", "right": "recibir"},
+          {"left": "IF", "right": "decidir"},
+          {"left": "Append Row", "right": "registrar"},
+          {"left": "Send Message", "right": "avisar"}
+        ]
+      },
       "save_worthy": true,
       "alt_text": "Plantilla de arquitectura n8n Webhook IF Google Sheets Telegram"
     },
@@ -72,6 +121,14 @@
       "headline": "Primero hacé funcionar el flujo determinista",
       "body": "Si las reglas son fijas, `IF` es suficiente. Recién después evaluá `AI Agent + OpenAI Chat Model` para clasificar lenguaje ambiguo.",
       "callout": "Reglas primero",
+      "visual": {
+        "type": "matrix",
+        "label": "CUÁNDO SUMAR IA",
+        "items": [
+          {"title": "Regla fija → IF", "body": "No uses un modelo para comparar un campo vacío."},
+          {"title": "Lenguaje ambiguo → AI Agent", "body": "Ahí sí necesitás interpretación."}
+        ]
+      },
       "save_worthy": false,
       "alt_text": "Primero usa IF en n8n y después evalúa un AI Agent"
     },

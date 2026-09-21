@@ -110,9 +110,9 @@ node scripts/carousel_render.js \
 
 | Pack | Look | Uso |
 |------|------|-----|
-| `typographic` (default) | tipográfico, off-white/ink, Space Grotesk | rápido, sin assets |
+| `community-editorial` (default) | portada editorial + tarjetas de conocimiento + diagramas | marca personal y educación técnica |
 | `dark-product` | negro+verde, Archivo Black, **curva verde continua entre slides**, pills/badges, callout-cards, slot de objeto 3D (`--object`) | feed premium estilo Solaris. **El recomendado para ONIA.** |
-| `editorial-photo` | foto a sangre + scrim + grano, Archivo Black con acento *serif italic* (Fraunces) verde, pill caption | cuentas personales (Sergio/Arthur) con foto propia (`--bg`). Estilo Mobile Editing Club / Asterisk. |
+| `editorial-photo` | foto a sangre + scrim + grano, Archivo Black con acento *serif italic* (Fraunces) verde, pill caption | compatibilidad histórica; para Sergio usar `community-editorial`. |
 | `bright-retail` | claro/multicolor, fondo crema/acento, Inter 900, keyword en color de acento rotativo, pills suaves, logo de marca | marcas retail/amigables (ej. **Nuvia** `@nuvia.bo`). Lee brand kit de `BRANDS` en el render. |
 
 Cuentas: `onia`, `arthur`, `sergio`, `nuvia`. Brand kits no-ONIA en `BRANDS`

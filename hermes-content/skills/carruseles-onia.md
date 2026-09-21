@@ -24,19 +24,20 @@ Cuenta IG ONIA: `17841423363059652` con token Meta default. Las cuentas
 personales de Arthur/Sergio NO tienen credenciales Meta: no intentar publicar ahi.
 
 ## Packs visuales disponibles (`carousel_render.js`)
-- `dark-product` — estilo Solaris. **Preferido por Sergio, usar por defecto.**
+- `dark-product` — estilo Solaris. **Preferido para piezas de ONIA/producto.**
 - `dark-neon` — glow + grid, estilo Perfluence.
-- `typographic` — tipografico limpio.
-- `editorial-photo` — foto editorial.
+- `community-editorial` — portada editorial, tarjetas de conocimiento y diagramas funcionales.
+- `editorial-photo` — foto editorial histórica; no usar como default para Sergio.
 
 ## Reglas de diseno de Sergio (obligatorias)
-- **NO** mostrar el pill "ONIA" ni el numero de slide ("01/05") en la parte
-  superior. La marca va SOLO en el footer `@oniahq`.
+- **NO** mostrar el pill "ONIA" ni un contador grande tipo "PASO 02 / 08" en la parte
+  superior. La marca y el episodio van en una barra editorial discreta.
 - Titulares y objetos con tamano reducido: todo debe entrar con margen seguro,
   los callouts no se cortan en los bordes.
 - ONIA green como acento, nunca como paleta completa.
-- Layouts B2B profesionales: jerarquia clara, espacio en blanco, diagramas
-  simples, procesos y ejemplos concretos.
+- Layouts profesionales: jerarquia clara, espacio util, tarjetas de prueba,
+  diagramas simples, procesos y ejemplos concretos. Un slide sin visual de apoyo
+  se considera incompleto.
 
 ## Assets e imagenes
 - Objeto 3D on-brand reusable: `hermes-content/assets/onia/automation-node-clean-3d.png`

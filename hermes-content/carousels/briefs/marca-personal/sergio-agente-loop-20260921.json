@@ -4,6 +4,8 @@
   "hashtags": ["#n8n", "#agentesia", "#loops", "#automatizacion", "#ia", "#negocios"],
   "comment_trigger": "Comentá ARQUITECTURA",
   "cta": "Comentá ARQUITECTURA",
+  "serie": "IA PRÁCTICA",
+  "episodio": "02",
   "slides": [
     {
       "number": 1,
@@ -12,6 +14,7 @@
       "headline": "Automatización, *AI Agent* o loop",
       "body": "No son sinónimos. Elegí por el tipo de problema.",
       "callout": "Guardá la matriz",
+      "bg": "hermes-content/references/marca-personal-sergio/fondos/laptop-03.png",
       "save_worthy": false,
       "alt_text": "Automatización, AI Agent o loop"
     },
@@ -22,6 +25,16 @@
       "headline": "Usá `IF` cuando las reglas son fijas",
       "body": "Ejemplo n8n: `Webhook` recibe un lead → `IF` valida `phone` → `Google Sheets / Append Row` registra → `Telegram / Send Message` avisa.",
       "callout": "Salida predecible",
+      "visual": {
+        "type": "flow",
+        "label": "REGLAS FIJAS",
+        "nodes": [
+          {"name": "Webhook", "detail": "recibir"},
+          {"name": "IF", "detail": "validar"},
+          {"name": "Append Row", "detail": "registrar"},
+          {"name": "Send Message", "detail": "avisar"}
+        ]
+      },
       "save_worthy": false,
       "alt_text": "Usa IF cuando las reglas son fijas"
     },
@@ -32,6 +45,13 @@
       "headline": "Usá un agente para interpretar lenguaje",
       "body": "`AI Agent + OpenAI Chat Model` puede clasificar una consulta en `web`, `automatización` u `otro`; devolvé JSON con `categoria`, `urgencia` y `requiere_humano`.",
       "callout": "La IA clasifica",
+      "visual": {
+        "type": "contract",
+        "label": "SALIDA DEL AGENTE",
+        "input": "mensaje libre",
+        "output": "categoria · urgencia",
+        "permissions": "requiere_humano"
+      },
       "save_worthy": false,
       "alt_text": "AI Agent y OpenAI Chat Model clasifican lenguaje"
     },
@@ -42,6 +62,16 @@
       "headline": "El agente no debe decidir todo el proceso",
       "body": "Después del `AI Agent`, usá `IF` para revisar `requiere_humano = true`. Si es true, `Telegram` avisa; si es false, `Google Sheets` registra.",
       "callout": "La ruta la controla el workflow",
+      "visual": {
+        "type": "flow",
+        "label": "CONTROL HUMANO",
+        "nodes": [
+          {"name": "AI Agent", "detail": "clasificar"},
+          {"name": "IF", "detail": "requiere_humano"},
+          {"name": "Telegram", "detail": "escalar"}
+        ],
+        "note": "El agente interpreta; el workflow decide el siguiente paso."
+      },
       "save_worthy": false,
       "alt_text": "IF controla la salida de un AI Agent"
     },
@@ -52,6 +82,17 @@
       "headline": "Usá un loop cuando el estado cambia",
       "body": "`Schedule Trigger` inicia → `HTTP Request` consulta una API → `IF` revisa `status = paid` → `Wait` espera 10 minutos → vuelve a consultar.",
       "callout": "Esperar también es lógica",
+      "visual": {
+        "type": "flow",
+        "label": "ESTADO QUE CAMBIA",
+        "nodes": [
+          {"name": "Schedule Trigger", "detail": "iniciar"},
+          {"name": "HTTP Request", "detail": "consultar"},
+          {"name": "IF", "detail": "status = paid"},
+          {"name": "Wait", "detail": "10 minutos"}
+        ],
+        "note": "El último paso vuelve al segundo: eso es un loop."
+      },
       "save_worthy": false,
       "alt_text": "Schedule Trigger HTTP Request IF y Wait forman un loop"
     },
@@ -62,6 +103,15 @@
       "headline": "Elegí con esta regla de tres líneas",
       "body": "Reglas fijas → `IF`. Lenguaje ambiguo → `AI Agent`. Revisión repetida → `Schedule Trigger + HTTP Request + IF + Wait`.",
       "callout": "Guardá esto ↗",
+      "visual": {
+        "type": "matrix",
+        "label": "MATRIZ DE ELECCIÓN",
+        "items": [
+          {"title": "IF", "body": "reglas fijas"},
+          {"title": "AI Agent", "body": "lenguaje ambiguo"},
+          {"title": "Loop", "body": "estado que cambia"}
+        ]
+      },
       "save_worthy": true,
       "alt_text": "Matriz para elegir automatización AI Agent o loop"
     },

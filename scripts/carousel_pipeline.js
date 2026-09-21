@@ -29,7 +29,7 @@ const OUTROOT = path.join(ROOT, 'hermes-content', 'carousels', 'out');
 const ACCOUNTS = ['onia', 'arthur', 'sergio', 'nuvia'];
 
 function parseArgs(argv) {
-  const a = { account: 'onia', slides: '6', audience: '', references: '', bg: '', pack: 'typographic', object: '', publish: false };
+  const a = { account: 'onia', slides: '6', audience: '', references: '', bg: '', pack: 'community-editorial', object: '', publish: false };
   for (let i = 0; i < argv.length; i++) {
     const k = argv[i];
     if (k === '--topic') a.topic = argv[++i];

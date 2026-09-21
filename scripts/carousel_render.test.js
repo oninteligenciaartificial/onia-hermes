@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /* Tests for the carousel render engine. Run: node scripts/carousel_render.test.js */
 const assert = require('node:assert');
-const { roleFor, slideHtml, darkProductHtml, darkNeonHtml, editorialPhotoHtml, editorialCleanHtml, brightRetailHtml, bloqueSolidoHtml, emph, ACCOUNTS, BRANDS, PACKS, FORMATS, setFormat } = require('./carousel_render');
+const { roleFor, slideHtml, communityEditorialHtml, darkProductHtml, darkNeonHtml, editorialPhotoHtml, editorialCleanHtml, brightRetailHtml, bloqueSolidoHtml, emph, ACCOUNTS, BRANDS, PACKS, FORMATS, setFormat } = require('./carousel_render');
 
 let passed = 0;
 function test(name, fn) {
@@ -73,7 +73,7 @@ test('packs list includes all packs (incl. bloque-solido)', () => {
   // Volvio a pasar el 2026-09-02, con CUATRO packs de una: el merge del carril de Lucia
   // los agrego al motor y no toco esta linea. Ver el test de abajo: esta comparacion sola
   // no alcanzaba — es un changelog, no un guard.
-  assert.deepStrictEqual(PACKS, ['typographic', 'dark-product', 'dark-neon', 'editorial-photo', 'editorial-clean', 'bright-retail', 'bloque-solido']);
+  assert.deepStrictEqual(PACKS, ['community-editorial', 'dark-product', 'dark-neon', 'editorial-photo', 'editorial-clean', 'bright-retail', 'bloque-solido']);
 });
 test('todo pack listado RENDERIZA (no solo figura en la lista)', () => {
   // El guard que faltaba. La comparacion de arriba mira el PRIMER paso —que el nombre
@@ -84,7 +84,7 @@ test('todo pack listado RENDERIZA (no solo figura en la lista)', () => {
   // para reventar recien al renderar: "Pack no disponible". Los packs se cargan PEREZOSO,
   // asi que solo llamarlos lo destapa — importar el motor no basta.
   const RENDER = {
-    'typographic': (s, i, n, a) => slideHtml(s, i, n, a, ''),
+    'community-editorial': communityEditorialHtml,
     'dark-product': darkProductHtml,
     'dark-neon': darkNeonHtml,
     'editorial-photo': editorialPhotoHtml,
