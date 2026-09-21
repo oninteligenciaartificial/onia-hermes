@@ -522,6 +522,26 @@ reponía y nada avisaba — el modo de falla más silencioso que tiene el sistem
 desplegado en el VPS como `/root/bin/onia-vigia-loops-remotos.sh` y en cron `4,34 * * * *`.
 Mide el último `ARRANCA` de cada loop mudado y avisa si pasaron más de **dos cadencias**.
 
+🔴 **La línea de cron LLEVA `ONIA_TG_DIRECTO=1`, y no es un detalle — sin eso el vigía es
+decorativo.** Corregido en vivo el 2026-09-21 después de pagarlo: desde que `onia-tg.sh`
+cambió (2026-09-08) su camino por defecto **no manda a Telegram, crea una tarea del
+tablero**, y el tablero **lo leen los loops**. O sea que el aviso de *«los loops están
+muertos»* se le entregaba a los loops muertos. El 19-sep a las 21:34 UTC el vigía detectó
+bien la caída, dejó sus tres avisos… y nadie los vio durante 48 h. La línea correcta es:
+
+```
+4,34 * * * * ONIA_TG_DIRECTO=1 ONIA_LOG_DIR=/var/log/homelab /root/bin/onia-vigia-loops-remotos.sh >> /var/log/onia-vigia-loops-remotos.log 2>&1
+17,47 * * * * ONIA_TG_DIRECTO=1 ONIA_LOOPS_REMOTOS=/root/.config/onia/loops-vps.txt ONIA_VIGIA_ESTADO=/var/lib/onia-vigia-vps ONIA_VIGIA_MAQUINA="el VPS" /root/bin/onia-vigia-loops-remotos.sh >> /var/log/onia-vigia-vps.log 2>&1
+```
+
+**La regla general, que aplica a cualquier vigía que se escriba después:** un aviso se
+convierte en tarea del tablero **sólo si un loop puede arreglarlo**. «La máquina que corre
+los loops está muerta» no lo puede arreglar ningún loop — eso va DIRECTO, siempre.
+
+⚠️ Y el log de este script **está en 0 bytes cuando todo funciona**: no escribe a stdout en
+el camino feliz. Un log vacío acá NO prueba que no corrió — para eso se miran sus marcas en
+`/var/lib/onia-vigia-remotos/` y el registro `/var/log/onia-tg.log`.
+
 - **La lista es explícita**, en `/root/.config/onia/loops-remotos.txt` (`<id> <cadencia-en-minutos>`).
   Sin archivo o con todo comentado —que es como quedó hoy— **no hace nada y sale 0**. Se
   descomenta la línea de cada loop el día que sale del crontab del VPS, en el paso 10.
