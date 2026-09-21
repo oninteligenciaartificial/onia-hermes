@@ -7,10 +7,11 @@ sólo explica cómo se instala y se apaga lo de acá.
 
 ## Memoria y alertas: correcciones de continuidad del 21-sep
 
-Integración aislada en `codex/infra-producto-integracion-20260921`. Sergio aprobó
-commit/push y aplicación de solo tres scripts, con respaldo y rollback, sin
-reinicios ni reactivar loops. El [handoff](../../hermes-content/docs/handoff/infra-cerebro-loops.md)
-registra la evidencia de despliegue; no confundir pruebas locales con producción.
+Integradas en `main` (`063e5e54`) y aplicadas al VPS el 21-sep a las 20:40 UTC,
+con aprobación de Sergio, respaldo privado y rollback. Solo tres scripts; sin
+reinicios, cambios de cron ni reactivar loops. El
+[handoff](../../hermes-content/docs/handoff/infra-cerebro-loops.md) registra hashes,
+respaldo y evidencia. La entrega real de alertas no se certifica con mocks.
 
 - `consolidar-memoria.sh` limita sus incorporaciones a `MEMORY.md` a **65.536 bytes**
   (`ONIA_MEMORIA_MAX_BYTES`). Cuenta UTF-8, separadores y el puntero al archivo.

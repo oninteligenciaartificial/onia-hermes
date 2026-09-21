@@ -13,12 +13,13 @@ pasos del cierre anterior. El historial de Claude de abajo se conserva como evid
    de casa siguen fechados 19-sep. Platform, Supabase, SMTP, n8n y Chatwoot figuran
    levantados; login Platform, Chatwoot y landing respondieron HTTP 200 (0,124 / 0,337 /
    0,093 s en esa muestra). Esto no certifica un flujo autenticado ni restore de DB.
-   **Medición previa al despliegue aprobado; resultado final pendiente de registrar.**
+   **Despliegue aprobado completado a las 20:40:24 UTC**, sin reinicios ni cambios de cron.
 3. **Integración:** rama `codex/infra-producto-integracion-20260921`, sobre `90769552`
    (`origin/main`), worktree `C:/dev/proyectos/onia-hermes-infra-integracion`.
    Se transfieren únicamente los tres scripts, sus pruebas y documentación. El origen
    `codex/infra-producto-20260921` sobre `7d76b79d` queda preservado en el worktree de
    Claude, incluidos sus temporales no versionados. NO se mergea toda aquella rama.
+   Commit integrado/pusheado a `origin/main`: `063e5e54e2543791c0e0a1117dad6a01e2d76a8c`.
 4. **Cambios y pruebas:** límite por bytes en `consolidar-memoria.sh` con archivo
    íntegro/dedup, error honesto ante tablero inaccesible en `parte-diario.sh`, reintento
    de notificaciones fallidas en `vigia-loops-remotos.sh`. 12 pruebas de memoria y
@@ -35,11 +36,46 @@ pasos del cierre anterior. El historial de Claude de abajo se conserva como evid
    estos tres scripts al VPS con respaldo y rollback. No incluye reinicios, cambio de
    cron, mensajes de prueba, migraciones ni reactivar loops. Los loops invocan `claude -p`: moverlos de
    máquina no resuelve el agotamiento de cuota. No se configuró un scheduler Codex nuevo.
-7. **Siguiente orden:** integrar/aplicar la tanda validada; revisar backup de Hermes
+7. **Siguiente orden:** tanda integrada y aplicada; revisar backup de Hermes
    (fallback inseguro de SQLite a `cp` y copia de memoria vacía antes de validarla);
    recuperar nodo-casa y comprobar una vuelta real con ejecutor disponible; verificar
    dos corridas de Hermes sin error TPM. El desarrollo interactivo en Codex puede seguir
    sin esperar a Claude. No afirmar que los loops quedaron reactivados.
+
+### Evidencia de aplicación — 21-sep, 20:40 UTC
+
+- Instalados únicamente `/root/bin/onia-consolidar-memoria.sh`,
+  `/root/bin/onia-parte-diario.sh` y `/root/bin/onia-vigia-loops-remotos.sh`,
+  `root:root`, modo 755; hashes y `bash -n` verificados antes/después.
+- Respaldo privado modo 700: `/root/backups/onia-infra-20260921T203640Z/`.
+  Contiene originales, hashes originales/nuevos, commit fuente y estados de
+  contenedores/gateway/cron antes y después. Rollback preparado:
+  `bash /root/backups/onia-infra-20260921T203640Z/rollback.sh`.
+  NO fue necesario ejecutarlo en producción; restauración real no ensayada aquí.
+- El instalador validó los hashes vivos previos para no pisar cambios concurrentes,
+  respaldó antes de cambiar, usó rename por archivo y rollback ante fallo o señales
+  HUP/INT/TERM. No ejecutó ninguno de los jobs ni mandó mensajes de prueba.
+- Cron idéntico por SHA-256; contenedores sin cambios de inicio/reinicios/estado;
+  `hermes-gateway.service` conserva estado e inicio. `hermes` NO es el nombre
+  de esa unidad: consultar el nombre corto devolvió `inactive`, no una caída.
+- Smoke posterior: Platform login HTTP 200 / 0,130 s, Chatwoot 200 / 0,292 s,
+  landing 200 / 0,098 s; 0 coincidencias `error|fatal` en los últimos 5 min del
+  log de Platform. Solo una muestra, no prueba E2E de auth/DB ni SLA.
+- Memoria aún 49.298 bytes; ningún cambio manual de contenido. Cero entradas
+  activas `onia-loop.sh` en cron del VPS; túnel `:2222` sigue ausente. La entrega
+  real de alertas y el procesamiento por cron quedan pendientes de observación
+  natural: los 39 checks locales usaron archivos temporales/Telegram simulado.
+- `package.json` incluye también la prueba de parte diario; las nuevas pruebas
+  Python se descubren en la cadena existente. No se ejecutó el `npm test` global.
+- Para rollback duradero hay que reconciliar también la fuente de sincronización;
+  restaurar solo runtime permite que un sync posterior vuelva a instalar lo nuevo.
+  Nunca restaurar una MEMORY antigua sobre aprendizajes nuevos.
+
+| Runtime | SHA-256 instalado |
+| --- | --- |
+| `onia-consolidar-memoria.sh` | `890fc9559a497189271937c301983b734c821a553241f2b90adc3007ad50d21f` |
+| `onia-parte-diario.sh` | `4d8c272b0f99905760d56d1ef9a3330a6b6e40357475ac28bd7364933bb8a940` |
+| `onia-vigia-loops-remotos.sh` | `440d5fc065d14c315e57f9b44939aa61805d47725c6e9689ead0606713bf8c18` |
 
 Skills utilizadas: `onia-router`, `onia-infra`, `debugging-and-error-recovery`,
 recuperación `claude-mem:mem-search` y revisión de arquitectura con

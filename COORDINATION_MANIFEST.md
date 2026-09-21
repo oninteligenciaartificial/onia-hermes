@@ -16,6 +16,8 @@ Sergio aprobó integrar/pushear y aplicar SOLO esos tres scripts al VPS con resp
 y rollback; NO reinicios, cambios de cron, migraciones, mensajes de prueba ni loops.
 El worktree original y sus temporales se preservan. No se integran los otros commits
 de Claude por arrastre. El handoff registra el resultado final del despliegue.
+Aplicación completada 21-sep 20:40 UTC desde `063e5e54`: hashes verificados,
+respaldo privado y cron/contenedores/gateway sin cambios. Loops no reactivados.
 La tabla de agosto de abajo es historial, no evidencia de escritores activos hoy.
 
 ## ⚠️ Carriles VIVOS (2026-08-23) — AUTORIDAD ACTUAL
