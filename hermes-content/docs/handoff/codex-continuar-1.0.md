@@ -70,6 +70,96 @@ docker exec onia-center sh -c "cp -a /tmp/onia-bot/bot/. /tmp/onia-bot/ && rm -r
 
 ---
 
+## 3.bis — Inventario del 21-sep: qué falta REALMENTE para lanzar
+
+Tres inventarios verificados contra el código y contra producción. Ordenados por lo que
+cuesta la venta.
+
+### 🔴 BLOQUEANTE 1 — el cliente que conecta su WhatsApp **recibe pero no envía con su número**
+
+El Embedded Signup de Meta funciona y está montado sin flag en la pantalla del cliente
+(`app/(dashboard)/settings/chatbot/CanalWhatsappCard.tsx:163`, API en
+`app/api/chatbot-canal-whatsapp/route.ts`, canje en `lib/chatbot/canal-whatsapp.ts:79`),
+con `META_APP_ID` y `META_CONFIG_ID` **cargados en producción** (verificado en el contenedor).
+
+**Pero escribe SOLO `clinic_settings.chatwootWhatsappInboxId` (`canal-whatsapp.ts:92`) y
+NUNCA `whatsappPhoneNumberId` / `whatsappAccessToken`.** Esas dos únicamente las escribe el
+backoffice de superadmin (`app/api/admin/organizations/[id]/whatsapp/route.ts:63-64`).
+
+Medido en la base de producción el 21-sep:
+```
+inbox por signup = 1     credenciales salientes = 0     inbox web = 1
+```
+**Consecuencia real**: el chatbot ENTRANTE contesta bien, pero todo lo SALIENTE —
+recordatorios de cita, `/api/n8n/whatsapp/send`, despacho de agentes, relay agente→cliente —
+cae al fallback global del número de Onia (`lib/whatsapp.ts:28-33`, comentado ahí mismo como
+*"testing only — not for production with real clinics"*) o falla con 422.
+
+*Listo cuando*: conectar por Embedded Signup deja también las credenciales de envío de esa
+org, y un recordatorio de prueba sale **desde el número del cliente**. Es el trabajo más
+importante de la cola: sin esto, cada cliente nuevo exige que un superadmin le pegue las
+credenciales a mano.
+
+### 🔴 BLOQUEANTE 2 — no hay checkout del add-on; cada alta la aprueba Sergio Urcullo a mano
+
+El cliente pide los datos por WhatsApp (`AddonChatbotClient.tsx:416`), transfiere, sube el
+comprobante, y **un SUPERADMIN aprueba** en `/api/admin/subscription-payments` para que
+`isWhatsAppAddonActive` pase a `true`. Hasta entonces el POST de conexión da 403. Lo mismo
+con las recargas de conversaciones (`/api/admin/organizations/[id]/recarga-chatbot`, **sin
+test**). Se destraba con el API QR del BCP (§6.2): mientras no llegue, cada venta lleva un
+clic tuyo — aceptable con los primeros clientes, no a escala.
+
+### 🟡 El sistema de diseño está escrito y **nadie lo usa** (riesgo de venta ALTO)
+
+`DESIGN.md` fija la dirección y `app/globals.css` tiene los tokens buenos (`font-label` en
+`:793`, `--shadow-card`/`--shadow-raised` en `:785-786`). Pero:
+- `components/ui/card.tsx` → **0 importadores**. `StatCard` → 0. `button.tsx` → 1.
+- `--shadow-card` como clase → **0 usos**; `shadow-raised` → 8, y 6 escritos a mano.
+- La superficie de tarjeta se sigue copiando a mano: **108 ocurrencias en 42 archivos**.
+- **8 valores distintos de `inputClass` en 28 archivos** (`px-3 py-2 rounded-lg` vs
+  `px-4 py-3 rounded-xl`, dos fondos distintos). Un prospecto que pasa de Configuración a
+  Facturas ve tres alturas de campo: eso se lee como "no está terminado".
+- **`app/(dashboard)/dashboard/` — la primera pantalla después del login — corre con su
+  propio CSS** (`dashboard-v2.css`, tokens `--dv2-*` propios), fuera del sistema. Igual
+  `app/checkout/checkout.css`.
+- Kicker de zona: **9 de 24 rutas** lo tienen. Y hay 105 `uppercase tracking` improvisados en
+  41 archivos contra 38 usos de `font-label`.
+- `tailwind.config.ts` es **decorativo** y lo admite en su encabezado: en Tailwind 4 no se
+  carga. Quien vaya a tocar tipografía ahí no cambia nada.
+
+**Lo que SÍ salió limpio**: el vocabulario por rubro. 46 archivos lo consumen, la lista
+`DEUDA` del test está vacía, y ninguna pantalla de cliente le dice "paciente" a un comercio.
+
+### 🟢 Vivo y funcionando en producción (verificado el 21-sep)
+
+- **Agentes ENCENDIDOS y trabajando**: `AGENTS_RUNTIME=1` y `PLATFORM_LAYER=1` en el
+  contenedor; **93 corridas** en `onia_agents_runs`, la última el 21-sep 11:00 UTC. Seis
+  agentes (`recall`, `cobrador`, `captador`, `reponedor`, `confirmador`, `seguidor`); los que
+  contactan a un tercero pasan siempre por aprobación humana en `/pending`. Planes que los
+  habilitan: crece/professional/clinic/enterprise.
+  ⚠️ Solo **1 acción** generada en 93 corridas — corren, pero casi no tienen de qué hablar:
+  hay 2 orgs con add-on y poca data real. No es un bug, es falta de clientes.
+- **Alta automática ABIERTA** (`ONIA_ALTA_AUTOMATICA=abierta`): el registro crea la cuenta solo.
+- **Cupo del chatbot**: 500 conversaciones/mes del add-on (`lib/pricing.ts:96`), conteo
+  idempotente por conversación única, avisos al 80% y al agotarse, y `cuota.agotada` viajando
+  al motor (fail-open: si el cupo no se puede leer, el bot sigue contestando).
+- **Bandeja nativa**: el dueño ve y responde sin entrar a Chatwoot.
+- **Editor de conocimiento**: publica y el motor lo sirve (`source:"panel"`, v4).
+
+### Apagado a propósito (no bloquea, pero conviene saberlo)
+
+- `META_PAGES_PUBLIC` ausente → Instagram/Messenger no se ofrece (espera App Review de Meta).
+- `AGENT_RUNTIME_SECRET` ausente → el feed y las acciones para un runtime **externo** de
+  agentes dan 503. El módulo interno funciona igual.
+- `BCP_QR_*` ausentes → el cobro automático no se ofrece (§6.2).
+
+### Sin test (deuda anotada)
+
+`app/api/bandeja/[id]/route.ts` (responder y cerrar — la superficie que el dueño más toca),
+`recarga-chatbot`, y las tres rutas del runtime de agentes.
+
+---
+
 ## 4. Archivos y cambios que importan para retomar
 
 **Producto** (`onia-platform`, branch `master`):
