@@ -416,7 +416,11 @@ test("CLASE: todo ERROR del log llega a Telegram — sujetos derivados del scrip
   for (const { i, linea } of errores) {
     const ventana = lineas.slice(Math.max(0, i - 2), i + 8);
     assert.ok(
-      ventana.some((l) => /tg_error\s/.test(l)),
+      // `avisar_caida` cuenta porque TERMINA en tg_error: es tg_error mas la escalada (re-avisa
+      // a los 15 min, 1 h, 6 h y despues por dia). Se agrego el 2026-09-21 y sin nombrarla aca
+      // el gate se volvia ciego justo al refactor que lo hace mas fuerte — o sea, rojo por el
+      // motivo contrario al que existe.
+      ventana.some((l) => /(tg_error|avisar_caida)\s/.test(l)),
       `el script grita un ERROR que no le llega a nadie (linea ${i + 1}):\n${linea}\n` +
         `Un fallo que solo va al log es un fallo mudo: /var/log/onia-bot-watchdog.log no lo lee nadie.`,
     );
@@ -428,7 +432,10 @@ test("CLASE: toda rama de recuperacion escribe el log — sujetos derivados del 
 
   const recuperaciones = lineas
     .map((linea, i) => ({ linea, i }))
-    .filter(({ linea }) => /tg_error\s+"✅/.test(linea));
+    // Las tres ramas pasan por `avisar_recuperacion "$MARCADOR" "✅ ..."`, que borra el marcador
+    // y avisa diciendo cuanto duro. La forma con `tg_error "✅` sigue contemplada para que el
+    // gate no dependa de que nadie vuelva a llamarlo directo.
+    .filter(({ linea }) => /(tg_error|avisar_recuperacion\s+\S+)\s+"✅/.test(linea));
 
   assert.ok(
     recuperaciones.length >= 3,

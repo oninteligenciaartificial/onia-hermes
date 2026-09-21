@@ -15,7 +15,7 @@
 
 import assert from "node:assert/strict";
 import test from "node:test";
-import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { spawnSync } from "node:child_process";
@@ -26,7 +26,7 @@ import { cierreDeReservaFallida } from "./calcom-booking.mjs";
 import { DEFAULT_CONFIG } from "./config.mjs";
 import { createState, step } from "./bot-engine.mjs";
 import { MONTOS_PERMITIDOS } from "./precios-publicos.mjs";
-import { buildConfig, cargarConocimientoPublicado, configParaGuion, CONOCIMIENTO_PUBLICADO, WEBHOOK_ENV_DESPLEGADO } from "./simulate.mjs";
+import { buildConfig, cargarConocimientoPublicado, configParaGuion, resolverLlaveVps, CONOCIMIENTO_PUBLICADO, WEBHOOK_ENV_DESPLEGADO } from "./simulate.mjs";
 
 const RECIBIDO = "2026-09-04T18:00:00.000Z";
 
@@ -415,5 +415,80 @@ test("y el modo INTERACTIVO tambien — es el que usa la medicion de arranque de
   assert.ok(
     corrida.stdout.includes(salvedad),
     "el modo interactivo imprimio el 'Listo, agendado' sin la salvedad que el bot SI le manda al prospecto",
+  );
+});
+
+// ---------------------------------------------------------------------------------------------
+// LA LLAVE DEL ESCALON REMOTO NO PUEDE SER UNA RUTA FIJA — tercera vuelta del mismo bug.
+//
+// El escalon que le pregunta al VPS nacio el 2026-09-07 para arreglar «un instrumento atado a la
+// ruta absoluta de UNA maquina deja de medir cuando su loop se muda»... y se cableo a OTRA ruta
+// absoluta: `/root/.ssh/onia_hermes_vps_ed25519`, la de nodo-casa (WSL, como root).
+//
+// El 2026-09-21 el carril se abrio en Windows, donde la llave vive en `C:\Users\<usuario>\.ssh\`.
+// `leerDelEnvRemoto` envuelve el `spawnSync` en try/catch para sobrevivir a un ssh ausente, asi
+// que el fallo fue SILENCIOSO: devolvia null, el simulador caia en `M0_SIN_HORARIOS` y el "3/3"
+// del carril volvia a certificar un guion que ningun prospecto ve. Exactamente el falso verde
+// que la cabecera de este archivo describe, por tercera vez y por el mismo mecanismo.
+//
+// La regla que fijan estos casos: la llave se RESUELVE preguntando donde esta. Arreglar una ruta
+// fija escribiendo otra ruta fija solo corre la fecha en que vuelve a romperse.
+// ---------------------------------------------------------------------------------------------
+
+test("ONIA_VPS_KEY manda sobre todo lo demas: es la escotilla para una maquina rara", () => {
+  const llave = resolverLlaveVps({
+    env: { ONIA_VPS_KEY: "/ruta/elegida/a/mano" },
+    home: "/casa",
+    existsSync: () => true,
+  });
+  assert.equal(llave, "/ruta/elegida/a/mano");
+});
+
+test("sin variable, usa la llave del HOME de esta maquina (Windows, mac o Linux de usuario)", () => {
+  const vistas = [];
+  const llave = resolverLlaveVps({
+    env: {},
+    home: join("/casa", "usuario"),
+    existsSync: (p) => {
+      vistas.push(p);
+      return p.includes("casa");
+    },
+  });
+  assert.match(String(llave), /onia_hermes_vps_ed25519$/);
+  assert.ok(String(llave).includes("casa"), `se esperaba la del HOME y salio ${llave}`);
+  assert.ok(vistas.length >= 1, "la guarda no probo ninguna ruta: estaria devolviendo una fija");
+});
+
+test("cae a /root/.ssh (nodo-casa) solo si el HOME no la tiene", () => {
+  const llave = resolverLlaveVps({
+    env: {},
+    home: "/casa",
+    existsSync: (p) => p.startsWith("/root/"),
+  });
+  assert.equal(llave, "/root/.ssh/onia_hermes_vps_ed25519");
+});
+
+test("sin ninguna llave devuelve null — y eso NO puede significar rendirse", () => {
+  assert.equal(resolverLlaveVps({ env: {}, home: "/casa", existsSync: () => false }), null);
+
+  // La otra mitad: con null igual se sale a preguntar, sin `-i`, para que ssh use su config o su
+  // agente. Si en vez de eso abandonara, volveriamos al silencio que este escalon vino a romper.
+  const fuente = readFileSync(fileURLToPath(new URL("./simulate.mjs", import.meta.url)), "utf8");
+  const remoto = fuente.slice(fuente.indexOf("function leerDelEnvRemoto"));
+  assert.match(remoto.slice(0, 900), /if \(llave\) args\.push\("-i", llave\)/, "el `-i` tiene que ser condicional");
+});
+
+test("no queda ninguna ruta de llave escrita a mano fuera de la lista que las resuelve", () => {
+  const fuente = readFileSync(fileURLToPath(new URL("./simulate.mjs", import.meta.url)), "utf8");
+  const codigo = fuente
+    .split("\n")
+    .filter((l) => !l.trim().startsWith("*") && !l.trim().startsWith("//") && !l.trim().startsWith("/*"))
+    .join("\n");
+  const dentroDeLaLista = codigo.slice(codigo.indexOf("export function rutasDeLlaveVps"), codigo.indexOf("export function resolverLlaveVps"));
+  const fuera = codigo.split(dentroDeLaLista).join("");
+  assert.equal(
+    /\.ssh\/onia_hermes|\.ssh\\onia_hermes/.test(fuera),
+    false,
+    "hay una ruta de llave fija fuera de rutasDeLlaveVps: es el bug que ya volvio tres veces",
   );
 });
