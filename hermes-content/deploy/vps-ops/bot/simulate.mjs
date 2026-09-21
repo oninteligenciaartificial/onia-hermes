@@ -27,7 +27,9 @@
 
 import readline from "node:readline";
 import { spawnSync } from "node:child_process";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
+import { homedir } from "node:os";
+import nodePath from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { createBotConfig, DEFAULT_CONFIG, parseSlotsSpec } from "./config.mjs";
 import { createState, step, markHumanTakeover, buildFollowUp, LLM_PENDING } from "./bot-engine.mjs";
@@ -218,7 +220,51 @@ export const WEBHOOK_ENV_DESPLEGADO = "/opt/onia/bot/webhook.env";
 
 /** La maquina donde vive ese archivo. Se pregunta por SSH cuando el disco local no lo tiene. */
 export const VPS_DEL_BOT = "root@187.77.16.63";
-const LLAVE_VPS = "/root/.ssh/onia_hermes_vps_ed25519";
+
+/** El nombre de la llave. El DIRECTORIO cambia segun la maquina; el nombre no. */
+export const NOMBRE_LLAVE_VPS = "onia_hermes_vps_ed25519";
+
+/**
+ * Donde buscar la llave, en orden. NO es una ruta fija, y esa es toda la gracia.
+ *
+ * Este escalon remoto nacio el 2026-09-07 para arreglar «el instrumento atado a una ruta
+ * absoluta deja de medir cuando el carril se muda de maquina»... y se cableo a OTRA ruta
+ * absoluta: `/root/.ssh/`, que es donde vive la llave en nodo-casa (WSL, como root). El
+ * 2026-09-21 el carril se abrio en Windows, donde la llave esta en `C:\\Users\\PC\\.ssh\\`,
+ * y el mismo bug volvio por TERCERA vez: el simulador cayo en `M0_SIN_HORARIOS` mientras
+ * produccion servia dos horarios, y dos casos de `simulate.test.mjs` se pusieron rojos —
+ * con el agravante de que el gate de `deploy-bot.sh` corre `node --test`, asi que un
+ * instrumento que no puede leer su entrada BLOQUEA el despliegue del bot.
+ *
+ * La leccion, que es la que esta lista codifica: arreglar una ruta absoluta escribiendo otra
+ * ruta absoluta no arregla nada, solo mueve el dia en que vuelve a romperse. Lo que corta la
+ * cadena es preguntar donde esta, no declarar donde deberia estar.
+ */
+export function rutasDeLlaveVps(env = process.env, home = homedir()) {
+  const rutas = [];
+  if (env && env.ONIA_VPS_KEY) rutas.push(env.ONIA_VPS_KEY);
+  if (home) rutas.push(nodePath.join(home, ".ssh", NOMBRE_LLAVE_VPS));
+  rutas.push(`/root/.ssh/${NOMBRE_LLAVE_VPS}`); // nodo-casa (WSL, root)
+  return rutas;
+}
+
+/**
+ * La primera ruta de `rutasDeLlaveVps` que EXISTE, o null. Null no es un fracaso: se sale a
+ * preguntar sin `-i` y ssh resuelve por su config o su agente — que es lo que hace cualquiera
+ * en una maquina bien configurada.
+ */
+export function resolverLlaveVps(deps = {}) {
+  const existe = deps.existsSync || existsSync;
+  const home = Object.prototype.hasOwnProperty.call(deps, "home") ? deps.home : homedir();
+  for (const ruta of rutasDeLlaveVps(deps.env || process.env, home)) {
+    try {
+      if (existe(ruta)) return ruta;
+    } catch {
+      /* una ruta ilegible es una ruta que no sirve: seguir con la siguiente */
+    }
+  }
+  return null;
+}
 
 /**
  * Saca UNA variable del texto de un `webhook.env`: es `CLAVE=valor` por linea, con el valor
@@ -259,13 +305,15 @@ function leerDelEnvDesplegado(path, clave, deps = {}) {
  */
 function leerDelEnvRemoto(path, clave, deps = {}) {
   const correr = deps.spawnSync || spawnSync;
+  const llave = resolverLlaveVps(deps);
+  // Sin llave en disco NO se abandona: se sale sin `-i` y ssh usa su config o su agente. Abandonar
+  // aca es justo lo que dejaba al simulador midiendo la rama equivocada en silencio.
+  const args = ["-o", "BatchMode=yes", "-o", "ConnectTimeout=15"];
+  if (llave) args.push("-i", llave);
+  args.push(VPS_DEL_BOT, `cat ${path}`);
   let r;
   try {
-    r = correr(
-      "ssh",
-      ["-o", "BatchMode=yes", "-o", "ConnectTimeout=15", "-i", LLAVE_VPS, VPS_DEL_BOT, `cat ${path}`],
-      { encoding: "utf8", timeout: 30_000 },
-    );
+    r = correr("ssh", args, { encoding: "utf8", timeout: 30_000 });
   } catch {
     return null;
   }

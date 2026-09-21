@@ -15,7 +15,7 @@
 
 import assert from "node:assert/strict";
 import test from "node:test";
-import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { spawnSync } from "node:child_process";
@@ -359,6 +359,73 @@ test("una ruta que NO es la desplegada nunca sale a la red", () => {
 // rojo tambien si alguien saca el cableado de uno de los dos llamadores de `step()`.
 // ---------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------------------------
+// LOS HORARIOS DEL CASO NO PUEDEN SER FECHAS ESCRITAS A MANO.
+//
+// Estos dos casos nacieron con `ONIA_BOT_SLOTS="lun 14:00@2026-09-14T18:00:00Z|mar 14:00@...15..."`.
+// El motor descarta los horarios que ya pasaron —bien, es lo que tiene que hacer— asi que el
+// 2026-09-15 los dos casos se pusieron ROJOS solos, sin que nadie tocara una linea: el simulador
+// caia en `M0_SIN_HORARIOS` y el assert de "Listo, agendado" no podia cumplirse nunca mas.
+//
+// Y el dano no se queda en el tablero: `deploy-bot.sh` corre `node --test` como gate ANTES de
+// desplegar, asi que una fecha vencida en un test de instrumento BLOQUEA el despliegue del bot
+// vivo. Se descubrio el 2026-09-21, seis dias despues, desplegando otra cosa.
+//
+// La regla: en un caso que depende de "todavia no paso", la fecha se CALCULA desde el reloj.
+// Una fecha literal en el futuro es una bomba con temporizador y la unica duda es cuando suena.
+// ---------------------------------------------------------------------------------------------
+
+/** Dos horarios siempre por delante del reloj, en el formato `label@ISO` que lee `parseSlotsSpec`. */
+export function slotsSiempreFuturos(ahora = new Date()) {
+  const enDias = (d) => new Date(ahora.getTime() + d * 86_400_000).toISOString().replace(/\.\d{3}Z$/, "Z");
+  return `horario A@${enDias(7)}|horario B@${enDias(8)}`;
+}
+
+test("los horarios de los casos de abajo estan SIEMPRE en el futuro", () => {
+  // Guarda del instrumento: si alguien vuelve a escribir una fecha a mano, se entera hoy y no
+  // el dia que caduque — que es el dia en que el gate del deploy se pone rojo sin motivo visible.
+  const spec = slotsSiempreFuturos();
+  for (const parte of spec.split("|")) {
+    const iso = parte.split("@")[1];
+    assert.ok(iso, `el horario "${parte}" no trae fecha ISO`);
+    assert.ok(
+      new Date(iso).getTime() > Date.now(),
+      `el horario "${parte}" ya paso: el motor lo descarta y el caso mide la rama sin horarios`,
+    );
+  }
+});
+
+test("ningun caso de este archivo fija los horarios con una fecha literal", () => {
+  const fuente = readFileSync(fileURLToPath(new URL("./simulate.test.mjs", import.meta.url)), "utf8");
+  // Se miran SOLO las asignaciones `env.ONIA_BOT_SLOTS = "..."`, que son las que alimentan al
+  // simulador de verdad en un proceso hijo — o sea las unicas que dependen de "todavia no paso".
+  // Las otras fechas literales del archivo son deliberadas y tienen que quedar: los comentarios
+  // guardan la historia del bug, y los casos de precedencia (entorno vs archivo) y de `pending`
+  // miden el PARSEO, que no mira el reloj. Una guarda que las barriera tambien se volveria ruido
+  // y terminaria desactivada, que es como mueren las guardas.
+  // Las lineas de comentario quedan afuera: la primera version de esta guarda se conto A SI MISMA
+  // (el comentario de arriba nombra el patron) y dio 3 donde hay 2 asignaciones de verdad.
+  const asignaciones = fuente
+    .split("\n")
+    .map((l) => l.trim())
+    .filter((l) => !l.startsWith("//") && !l.startsWith("*"))
+    .filter((l) => /env\.ONIA_BOT_SLOTS\s*=/.test(l));
+  // Que la guarda no pueda quedar HUECA: si el patron deja de encontrar las asignaciones —porque
+  // alguien renombro la variable o cambio la forma— el test pasaria en verde sin mirar nada, que
+  // es peor que no tenerlo. Son dos casos y los dos tienen que estar.
+  assert.equal(
+    asignaciones.length,
+    2,
+    "la guarda dejo de encontrar las asignaciones que vigila: revisar el patron, no borrar el caso",
+  );
+  for (const a of asignaciones) {
+    assert.ok(
+      !/\d{4}-\d{2}-\d{2}/.test(a),
+      `hay una fecha literal en ${a} — usa slotsSiempreFuturos(), que se calcula desde el reloj`,
+    );
+  }
+});
+
 test("el guion feliz del simulador cierra con la MISMA salvedad que recibe el prospecto", () => {
   const simulador = fileURLToPath(new URL("./simulate.mjs", import.meta.url));
   // Ambiente explicito: sin Cal.com configurado, que es produccion HOY. Si alguna vez se
@@ -366,7 +433,7 @@ test("el guion feliz del simulador cierra con la MISMA salvedad que recibe el pr
   const env = { ...process.env };
   delete env.CALCOM_BASE_URL;
   delete env.CALCOM_BOT_EVENT_TYPE_ID;
-  env.ONIA_BOT_SLOTS = "lun 14:00@2026-09-14T18:00:00Z|mar 14:00@2026-09-15T18:00:00Z";
+  env.ONIA_BOT_SLOTS = slotsSiempreFuturos();
 
   const corrida = spawnSync(process.execPath, [simulador, "--script", "1-feliz"], {
     encoding: "utf8",
@@ -394,7 +461,7 @@ test("y el modo INTERACTIVO tambien — es el que usa la medicion de arranque de
   const env = { ...process.env };
   delete env.CALCOM_BASE_URL;
   delete env.CALCOM_BOT_EVENT_TYPE_ID;
-  env.ONIA_BOT_SLOTS = "lun 14:00@2026-09-14T18:00:00Z|mar 14:00@2026-09-15T18:00:00Z";
+  env.ONIA_BOT_SLOTS = slotsSiempreFuturos();
 
   const corrida = spawnSync(process.execPath, [simulador], {
     encoding: "utf8",

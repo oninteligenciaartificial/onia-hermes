@@ -45,8 +45,12 @@ fi
 STAMP="$(cat "$BOT_DIR"/*.mjs "$BOT_DIR"/*.json 2>/dev/null | md5sum | cut -c1-12)"
 CURRENT="$(docker exec "$CONTAINER" cat "$DEST/.stamp" 2>/dev/null || true)"
 if [ "$CURRENT" != "$STAMP" ]; then
-  docker exec "$CONTAINER" rm -rf "$DEST" >/dev/null 2>&1
-  if ! docker cp "$BOT_DIR" "$CONTAINER:$DEST" >/dev/null 2>&1; then
+  # `mkdir -p` + `cp origen/.` en vez de `rm -rf` + `cp origen`: con el destino ya creado,
+  # `docker cp origen destino` anida (/tmp/onia-bot/bot/) y mata el bot con MODULE_NOT_FOUND.
+  # Pasa cuando dos de los 8 scripts que comparten este bloque sincronizan a la vez (los crons
+  # se solapan con el restart del watchdog). El porque largo esta en webhook-server.sh.
+  docker exec "$CONTAINER" mkdir -p "$DEST" >/dev/null 2>&1
+  if ! docker cp "$BOT_DIR/." "$CONTAINER:$DEST" >/dev/null 2>&1; then
     echo '{"ok":false,"send":[],"error":"no se pudo copiar el bot al contenedor"}'
     exit 0
   fi

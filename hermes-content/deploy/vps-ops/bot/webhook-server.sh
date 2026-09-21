@@ -23,7 +23,7 @@ set -uo pipefail
 CONTAINER="${ONIA_BOT_CONTAINER:-onia-center}"
 DEST="/tmp/onia-bot"
 PORT="${ONIA_WEBHOOK_PORT:-3020}"
-# El PID y el log viven FUERA de $DEST a proposito: el sync hace `rm -rf $DEST` y se los llevaba
+# El PID y el log viven FUERA de $DEST a proposito: el sync borraba $DEST y se los llevaba
 # puestos. Sin PID, `stop` no mataba nada, el proceso viejo se quedaba con el puerto, el `node`
 # nuevo moria al no poder escuchar... y el servidor seguia contestando /health con el CODIGO VIEJO.
 # Un despliegue que no surte efecto y encima responde ok:true. (Diagnosticado 2026-08-06.)
@@ -144,8 +144,25 @@ esac
 STAMP="$(cat "$BOT_DIR"/*.mjs "$BOT_DIR"/*.json 2>/dev/null | md5sum | cut -c1-12)"
 CURRENT="$(docker exec "$CONTAINER" cat "$DEST/.stamp" 2>/dev/null || true)"
 if [ "$CURRENT" != "$STAMP" ]; then
-  docker exec "$CONTAINER" rm -rf "$DEST" >/dev/null 2>&1
-  if ! docker cp "$BOT_DIR" "$CONTAINER:$DEST" >/dev/null 2>&1; then
+  # NO se usa `rm -rf $DEST` + `docker cp $BOT_DIR ...`, y la diferencia costo DOS DIAS de bot
+  # mudo (19-sep 19:00 UTC -> 21-sep 19:34). Ese par de lineas vive DUPLICADO en 8 scripts
+  # (este, chatwoot-adapter, run-turn, reminder-run, usage-run, followup-run, insistencia-run,
+  # postdemo-run) y varios corren por cron a la misma hora: followup :17, reminder :32,
+  # postdemo :47, insistencia cada 30 min, y el watchdog cada 2 min hace `restart` -> sync.
+  #
+  # LA CARRERA: dos syncs solapados. A hace `rm -rf $DEST`; B tambien (no-op); A copia y
+  # `docker cp origen destino` CREA el destino -> /tmp/onia-bot/*.mjs, bien; B copia con el
+  # destino YA EXISTENTE -> docker cp mete la carpeta ADENTRO: /tmp/onia-bot/bot/*.mjs.
+  # El arranque muere con MODULE_NOT_FOUND. Y como los dos escriben el .stamp correcto,
+  # nadie vuelve a copiar nunca: el watchdog reintento el mismo arranque roto 1.440 veces.
+  #
+  # EL ARREGLO: `mkdir -p` + `docker cp origen/. destino` copia el CONTENIDO dentro de un
+  # destino que ya existe. Es idempotente y NO puede anidar, corra como corra la carrera.
+  # Lo que se pierde es el borrado de archivos obsoletos: un .mjs renombrado deja su version
+  # vieja en el contenedor, y eso es inofensivo porque nadie la importa. La limpieza completa
+  # la hace `deploy-bot.sh --aplicar`, que es explicito y no compite con ningun cron.
+  docker exec "$CONTAINER" mkdir -p "$DEST" >/dev/null 2>&1
+  if ! docker cp "$BOT_DIR/." "$CONTAINER:$DEST" >/dev/null 2>&1; then
     echo "ERROR: no se pudo copiar el bot al contenedor" >&2
     exit 1
   fi
