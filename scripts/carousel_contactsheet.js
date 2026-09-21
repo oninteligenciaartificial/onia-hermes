@@ -13,9 +13,12 @@ const path = require('path');
 const { execFileSync } = require('child_process');
 
 const BROWSER_CANDIDATES = [
+  // Chrome va primero: Edge headless puede devolver una captura de
+  // ERR_FILE_NOT_FOUND aunque el HTML temporal exista (mismo criterio que el
+  // renderer principal).
+  'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
   'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
   'C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe',
-  'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
   '/usr/bin/google-chrome',
   '/usr/bin/chromium',
 ];

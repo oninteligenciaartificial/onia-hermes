@@ -1,0 +1,15 @@
+{
+  "title": "ONIA Platform Dental — WhatsApp no es agenda",
+  "caption": "WhatsApp sirve para conversar. Tu clínica necesita un sistema para operar. Reuní agenda, pacientes, tratamientos y cobros en ONIA Platform.",
+  "slides": [
+    {
+      "role": "cover",
+      "pill": "Clínicas dentales",
+      "headline": "WHATSAPP NO ES *TU AGENDA*",
+      "body": "Agenda, pacientes, tratamientos y cobros en un solo lugar. Probá ONIA 14 días sin tarjeta.",
+      "object": "hermes-content/docs/recorrido/capturas/paso-07d-cita-en-agenda.png",
+      "object_fit": "bleed"
+    }
+  ],
+  "cta": "Creá tu cuenta"
+}

@@ -1,0 +1,46 @@
+{
+  "title": "ONIA Platform Dental — tres lugares",
+  "caption": "Agenda, pacientes, tratamientos y cobros no deberían vivir en herramientas separadas. Ordená la operación de tu clínica con ONIA Platform. Probala 14 días sin tarjeta.",
+  "hashtags": ["#OniaPlatform", "#ClinicasDentales", "#Bolivia"],
+  "slides": [
+    {
+      "role": "cover",
+      "pill": "Clínicas dentales",
+      "headline": "TU CLÍNICA VIVE EN *3 LUGARES*",
+      "body": "Por eso confirmar una cita, encontrar una ficha o revisar un cobro toma más de lo necesario."
+    },
+    {
+      "role": "stakes",
+      "pill": "Lugar 1",
+      "headline": "LA CONVERSACIÓN QUEDA EN *WHATSAPP*",
+      "body": "Hasta que el mensaje importante se pierde entre chats."
+    },
+    {
+      "role": "point",
+      "pill": "Lugar 2",
+      "headline": "LA CITA QUEDA EN UN *CUADERNO*",
+      "body": "Hasta que alguien cambia el horario y el resto del equipo no se entera."
+    },
+    {
+      "role": "point",
+      "pill": "Lugar 3",
+      "headline": "EL COBRO QUEDA EN *EXCEL*",
+      "body": "Si todos recuerdan cargar lo mismo, en el mismo archivo."
+    },
+    {
+      "role": "point",
+      "pill": "Con ONIA",
+      "headline": "TODO EL EQUIPO VE *LA MISMA INFORMACIÓN*",
+      "body": "Agenda, pacientes, tratamientos y cobros en un solo sistema.",
+      "object": "hermes-content/docs/recorrido/capturas/paso-07d-cita-en-agenda.png",
+      "object_fit": "bleed"
+    },
+    {
+      "role": "cta",
+      "pill": "Empezá hoy",
+      "headline": "PROBÁ ONIA *14 DÍAS*",
+      "body": "Sin tarjeta. Desde Bs 320 al mes. Creá tu cuenta en onia.com.bo."
+    }
+  ],
+  "cta": "Creá tu cuenta"
+}
