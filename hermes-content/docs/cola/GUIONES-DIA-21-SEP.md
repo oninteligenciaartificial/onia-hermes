@@ -4,6 +4,16 @@
 > Formato de rodaje (HABLA / EN PANTALLA / OVERLAY) copiado de
 > [`GUIONES-RODAJE-17-20-SEP.md`](GUIONES-RODAJE-17-20-SEP.md). **Hoy toca carrusel: el
 > carrusel REEMPLAZA al b-roll**, así que el feed es pilar + video normal de IA + carrusel.
+>
+> 🎬 **Si venís a grabar y nada más: andá derecho a [«Para grabar hoy»](#-para-grabar-hoy)**,
+> al final. Ahí está el orden, qué pantalla abrir para cada pieza y los bloqueos. Este archivo
+> se basta solo: no hace falta abrir ningún otro doc para grabar.
+>
+> ✅ **Revisado el 21-sep contra las fuentes.** Se cayeron **dos datos centrales** que estaban
+> en líneas habladas —«18 errores en UNA sesión» (son 4) y «la di por buena tres veces» (son
+> **dos instrumentos**, y no hay cuenta de veces)— más tres arrastres menores. Cada corrección
+> queda escrita al pie de su guion con el comando que la prueba. Ninguna línea hablada de este
+> doc dice hoy un número que no se haya recontado.
 
 ## De dónde salió cada pieza
 
@@ -37,8 +47,8 @@ giro honesto → cierre.
 | **T4** | Yap: el matiz del AGENTS.md, leído del changelog | Trial · yap | **Samuel** | `/claude-code` | comunidad |
 | **V1** | «La regla que se desobedece» | Trial v2 | Sergio Urcullo | — (la regla es el contenido) | comentario |
 | **V2** | «Terminar no es lograr» | Trial v2 | Sergio Urcullo | comunidad | comunidad |
-| **V3** | «El número que repetí cinco veces» | Trial v2 | Sergio Urcullo | **YouTube 03** (`youtu.be/8iMRBo7ppac`) | comentario |
-| **V4** | «18 errores, y los 18 los encontró él» | Trial v2 | Sergio Urcullo | comunidad | comunidad |
+| **V3** | «El número que nunca volví a contar» | Trial v2 | Sergio Urcullo | **YouTube 03** (`youtu.be/8iMRBo7ppac`) | comentario |
+| **V4** | «18 anotados, y sólo 4 de una sesión» | Trial v2 | Sergio Urcullo | comunidad | comunidad |
 
 **La cuenta: Feed 3 + Trial 4 (F1+F2+F3+T4) + Trial v2 4 = 11 piezas.** Dentro del rango 10-13.
 Alternancia de cierre: comentario → comunidad → comentario → comunidad → comentario →
@@ -110,7 +120,7 @@ versión que no hace lo que el video dice.
 |---|---|---|---|
 | 0-4 | «Si usás dos agentes de IA, hasta la semana pasada escribías tus reglas dos veces. Eso se acabó, pero lo van a contar mal.» | dos terminales abiertas al lado | `LO VAN A CONTAR MAL` |
 | 4-18 | «Te explico el problema primero. Claude Code lee tus reglas de un archivo que se llama CLAUDE punto eme de. Codex, Cursor y Copilot leen otro: AGENTS punto eme de. Mismas reglas, dos archivos — y uno de los dos siempre quedaba viejo.» | los dos archivos lado a lado, uno con fecha vieja | `2 ARCHIVOS · 1 VIEJO` |
-| 18-32 | «Desde la versión 2.1.277, Claude Code también lee AGENTS punto eme de. Era el pedido número uno de su repositorio: **[Recontar el día: 5.270]** personas lo pidieron. Pero acá está la parte que importa —» | el changelog en pantalla, la línea resaltada | `2.1.277` |
+| 18-32 | «Desde la versión 2.1.277, Claude Code también lee AGENTS punto eme de. Era uno de los pedidos más votados de su repositorio: **[Recontar el día: 5.270]** personas lo pidieron. Pero acá está la parte que importa —» | el changelog en pantalla, la línea resaltada | `2.1.277` |
 | 32-48 | «lo lee SOLO si tu proyecto no tiene CLAUDE punto eme de. Si tenés los dos, gana CLAUDE y el otro se ignora entero. O sea: si ahora creás un AGENTS punto eme de al lado del que ya tenías, no lo va a leer nunca, y vas a estar seguro de que sí.» | los dos archivos, el AGENTS tachado | `SOLO SI NO HAY CLAUDE.md` |
 | 48-62 | «Qué hacés hoy, dos caminos y los dos son cortos. Si arrancás de cero: escribí solo AGENTS punto eme de y te sirve para los cuatro programas. Si ya tenés CLAUDE punto eme de andando: no lo borres — metele adentro una línea que diga arroba AGENTS punto eme de, y lo trae.» | la línea `@AGENTS.md` escribiéndose dentro del CLAUDE.md | `@AGENTS.md` |
 | 62-75 | «Qué va adentro: cómo escribís, qué no se toca, dónde va cada cosa. Lo que hoy le explicás de nuevo en cada chat. El paso a paso de cómo armarlo está en la guía de mi web. ¿Vos ya tenés uno escrito, o se lo explicás todo de nuevo cada vez? Contame.» | `/claude-code` scrolleando en el teléfono | `sergiourcullo.vercel.app/claude-code` |
@@ -118,6 +128,14 @@ versión que no hace lo que el video dice.
 **Cierre:** recurso = `/claude-code` + **pedido de comentario**.
 **No decir:** que «ahora funcionan igual los dos» — no es cierto, hay precedencia. Y nada
 de «pronto lo van a arreglar»: se cuenta lo que hace hoy.
+
+✅ **El matiz está verificado hoy contra el changelog oficial**, textual: *«in a project with
+no CLAUDE.md, Claude Code reads AGENTS.md instead»*. Se puede decir con total seguridad.
+🔴 **El «pedido número uno» NO está verificado.** El changelog no dice ranking ni reacciones;
+el 5.270 sale del handoff del 18-sep. Por eso la línea ya dice «uno de los pedidos más
+votados» en vez de «el número uno». **Si no se abre el issue y se lee el número de hoy, se
+corta la frase entera** —«Era uno de los pedidos más votados de su repositorio: 5.270 personas
+lo pidieron»— y el guion sigue derecho de «2.1.277» a «Pero acá está la parte que importa».
 
 ---
 
@@ -166,9 +184,13 @@ al correrla.
 
 **Por qué este y no otro de los cinco:** es noticia y la noticia se vence — Fable 5.1 (1-sep)
 y GPT-6 Astra (3-sep, por defecto en Codex el 4-sep) son de hace tres semanas. Los otros
-cuatro briefs son casos y reglas: aguantan la semana. Los tres ángulos del día que
+cuatro briefs son casos y reglas: aguantan la semana. Los **cuatro** ángulos del día que
 comparten espina (verificación) ya están cubiertos por F2, V1, V2 y V4 con historias
 distintas, así que el carrusel abre un frente nuevo en vez de repetir.
+
+⚠️ **Las fechas de este carrusel (1-sep · 3-sep · 4-sep) son heredadas del handoff del
+18-sep y no se reverificaron hoy.** No bloquean: van impresas en las láminas ya renderizadas
+y **no se dicen en cámara**. Si alguna vez se llevan a un guion hablado, se recuentan antes.
 
 ---
 
@@ -226,7 +248,7 @@ estuvo rota** — es la misma invención que se sacó de F2. El resto del guion 
 `handoff/onia-dev-node-setup.md` §5, item 11. Si se prefiere no nombrarlo, se corta esa
 frase y el guion queda en 30 s.
 
-## V3 · «El número que repetí cinco veces» — NUEVO
+## V3 · «El número que nunca volví a contar» — NUEVO
 
 *Ángulo del brief `sergio-dato-heredado`. Lo que el espectador no sabe: el dato falso no
 se rompió — **nunca fue cierto**, y se blindó solo a fuerza de repetirse.*
@@ -235,39 +257,67 @@ se rompió — **nunca fue cierto**, y se blindó solo a fuerza de repetirse.*
 nodo de casa. Hoy dicen **40** y **0** (medidos el 18-sep). Si cambiaron, se dice el número
 nuevo — la pieza es sobre esto exactamente.
 
+🔴 **Corregido hoy:** el título y el gancho decían «**cinco veces**». Ese cinco **no se puede
+contar hoy** `[SIN FUENTE]`: de todos los lugares donde vivió el dato falso, ya se corrigieron
+todos menos uno (`yt-claude-code-automatizacion/GUION.md:69`). La **cadena** sí está
+documentada —documento → guion → lámina → cámara— y es mejor gancho que un número que la
+pieza misma no puede probar. Un video sobre no heredar números no puede abrir heredando uno.
+
 | Seg | HABLA (literal) | EN PANTALLA | OVERLAY |
 |---|---|---|---|
-| 0-3 | «Repetí un número cinco veces. Nadie lo tocó nunca. Y estaba mal desde el principio.» | cara a cámara | `5 VECES` |
-| 3-13 | «Yo decía que tenía cuatro tareas automáticas corriendo, en una computadora de mi casa. Lo escribí en un documento, lo copié a un guion, lo puse en una lámina, y estaba por decirlo en cámara.» | cara a cámara | `"4, EN MI CASA"` |
+| 0-3 | «Repetí un número hasta que me sonó a verdad. Nunca lo volví a contar. Estaba mal desde el principio.» | cara a cámara | `NUNCA LO RECONTÉ` |
+| 3-13 | «Yo decía que tenía cuatro tareas automáticas corriendo, en una computadora de mi casa. Lo escribí en un documento, de ahí lo copié al guion de un video, de ahí a una lámina, y estaba por decirlo en cámara.» | cara a cámara | `"4, EN MI CASA"` |
 | 13-24 | «Fui a contarlas de nuevo. Son **[Recontar: 40]**, y no están en mi casa: están en un servidor que pago. En la de mi casa hay **[Recontar: cero]**, porque se apaga sola. No era un número viejo: nunca fue el que yo creía.» | cara a cámara | `40 · Y 0 EN CASA` |
-| 24-33 | «Lo peor: arriba de ese archivo estaba escrito, por mí, "estos números no cambian, no hace falta recontarlos". Esa frase fue el error. Cómo quedaron armadas esas tareas lo conté entero en mi canal, link en el perfil. ¿Cuál es el dato que repetís sin haberlo vuelto a medir? Contame.» | cara a cámara | `¿LO CONTASTE HOY?` |
+| 24-33 | «Lo peor: en el guion del video siguiente yo había escrito, arriba de todo, "los números de este video no cambian, no hace falta recontarlos". Esa frase fue el error, y me lo hizo dos veces seguidas. Cómo quedaron armadas esas tareas lo conté entero en mi canal, link en el perfil. ¿Cuál es el dato que repetís sin haberlo vuelto a medir? Contame.» | cara a cámara | `¿LO CONTASTE HOY?` |
 
 **Cierre:** recurso = YouTube 03 («Hago que la IA trabaje mientras duermo», verificado vivo
-hoy) + pedido de comentario.
+hoy: `oembed` responde con ese título y el canal `@sergiourcullo`) + pedido de comentario.
+
+🔴 **Corregido hoy, segundo dato:** la frase «estos números no cambian» **no estaba arriba del
+archivo del cron**: estaba de cabecera **en el guion del video 04**
+(`carousels/out/yt-04-verificar/README.md:41`, y `handoff/yt-serie-claude-code.md:147`). El
+número falso del cron era del **03**. Eran dos casos distintos pegados en una sola frase.
+Contados por separado quedan mejor: **dos videos seguidos, el mismo error**.
 
 ⚠️ **Decisión de Sergio Urcullo antes de grabar:** existe una versión más filosa —decir que
 el número equivocado salió *en ese mismo video ya publicado*— que es cierta y sería la
 prueba más honesta de la pieza. **No la escribo como opción por defecto porque es su video
 publicado y la decisión es suya.** Si dice que sí, la frase de 24-33 pasa a: «Y lo dije así
 en el video que tengo publicado. Ahí está, no lo voy a borrar.»
+**Antes de decirla, confirmar una cosa que esta sesión no puede confirmar:** está verificado
+que el número falso estaba **en el guion** (`yt-claude-code-automatizacion/GUION.md:69`), pero
+**nadie escuchó el audio publicado para confirmar que salió dicho así**. Eso lo confirma él en
+30 segundos abriendo su propio video — y si no lo confirma, no se dice.
 
-## V4 · «18 errores, y los 18 los encontró él» — NUEVO
+## V4 · «18 anotados, y sólo 4 de una sesión» — NUEVO
 
 *Ángulo del brief `sergio-18-errores`. Lo que el espectador no sabe: se corrige mucho más
 de lo que la gente cree, y lo que muerde no es lo que revisó mal — es lo que nadie revisó.*
 
-*Número verificado hoy: 18 items numerados en `handoff/onia-dev-node-setup.md` §5.*
+🔴 **Corregido hoy — este era el dato falso más caro del doc.** Decía «**18 errores en UNA
+sesión**». Recontado a mano en `handoff/onia-dev-node-setup.md` §5: **§5.1 se titula «De esta
+sesión» y tiene CUATRO** (items 1-4). Los otros 14 son §5.2 «Trampas de máquina» (9) y §5.3
+«Hipótesis que resultaron falsas» (5), acumulados en días sobre el mismo carril. **El dato
+corregido es mejor gancho, no peor**: «18 anotados, y sólo 4 de una sesión» dice lo mismo que
+quería decir la pieza (se autocorrige mucho) sin una exageración de 4,5× que cualquiera
+desarma abriendo el archivo. Segunda corrección: **«los encontró él» → «los anotó él»** — el
+§5 es su propio parte, escrito en primera persona, y ahí eso se prueba; «encontró» no.
 
 | Seg | HABLA (literal) | EN PANTALLA | OVERLAY |
 |---|---|---|---|
-| 0-3 | «Conté los errores que quedaron anotados en UNA sesión de trabajo con la IA. Dieciocho.» | cara a cámara | `18` |
-| 3-13 | «Antes de que saques conclusiones: los dieciocho los encontró él. Revisando lo que él mismo había escrito. Uno era una comprobación que decía que un programa estaba instalado y no lo estaba. La encontró él y la arregló él.» | cara a cámara | `18 DE 18` |
-| 13-24 | «El que me mordió fue otro, y no estaba en esa lista de dieciocho: una pantalla que nadie abrió nunca. Ni él ni yo. Ese llegó al cliente.» | cara a cámara | `EL QUE NADIE REVISÓ` |
+| 0-3 | «Mi IA lleva la lista de sus propios errores. Tiene dieciocho anotados. Y el que me costó plata no está en la lista.» | cara a cámara | `18 ANOTADOS` |
+| 3-13 | «Los dieciocho los anotó él, revisando su propio trabajo. Sólo cuatro son de una sola sesión; los otros catorce los fue juntando en días. Uno decía "el servidor se ahoga de procesador" — fue a medir de nuevo y era el disco. Se corrigió solo, sin que yo mirara.» | cara a cámara | `SÓLO 4 DE UNA SESIÓN` |
+| 13-24 | «El que me mordió no está en esos dieciocho: una pantalla que nadie abrió nunca. Ni él ni yo. Ese llegó al cliente.» | cara a cámara | `EL QUE NADIE REVISÓ` |
 | 24-33 | «Entonces la lección no es desconfiar de todo — lo que él revisa está bastante bien. Es saber dónde mirar: lo que muerde es lo que nadie miró. Cómo armo esa lista de "qué mirar sí o sí" lo comparto en mi comunidad. Link en el perfil.» | cara a cámara | `LO QUE NADIE MIRÓ` |
 
 **Cierre:** recurso = comunidad.
-**No decir:** «la IA se equivoca 18 veces por sesión» — el dato es de UNA sesión de infra
-concreta y documentada, no un promedio. Redondearlo a una regla general lo vuelve falso.
+**No decir:**
+- «la IA se equivoca 18 veces por sesión» — son **4** en la sesión; los 18 son el acumulado
+  de un carril entero. Redondearlo a una regla general lo vuelve falso.
+- «una comprobación decía que un programa estaba instalado y no lo estaba» — **estaba al
+  revés**. El item 10 es `command -v docker` dando **rojo permanente con todo funcionando**
+  (comparaba una ruta cruda contra un symlink). Si se quiere ese caso, se cuenta así; si no,
+  se usa el del disco, que ya está en la línea 3-13 y es más claro en voz.
 
 ---
 
@@ -304,11 +354,89 @@ carril.** Orden sugerido, con una sola restricción de choque:
 
 ### Pendientes que salieron al escribir esto (no se persiguen desde este carril)
 
-1. 🔴 **`cal.com/sergiourcullo/30min` da 404** (verificado hoy). Sigue escrito así en
-   `BRIEF-SAMUEL-VIDEOS.md` §6-7. El link vivo es `sergiourcullo.vercel.app/llamada` →
-   `cal.com/sergiourcullo/20min`. Si Samuel graba el video de «cómo agendar» con el brief
-   en la mano, graba un 404.
+1. 🔴 **`cal.com/sergiourcullo/30min` da 404** (recontado hoy con `curl`: `/llamada` **200**,
+   `/20min` **200**, `/30min` **404**). Sigue escrito así en **dos** archivos:
+   `docs/cola/BRIEF-SAMUEL-VIDEOS.md:44` y `docs/comunidad/ESTADO_COMUNIDAD.md:41`. El link
+   vivo es `sergiourcullo.vercel.app/llamada` → `cal.com/sergiourcullo/20min`. Si Samuel
+   graba el video de «cómo agendar» con el brief en la mano, graba un 404.
 2. 🔴 **La máquina de rodaje tiene Claude Code 2.1.267**; F1 y T4 muestran una función de
-   2.1.277. Actualizar antes de grabar pantalla.
+   2.1.277. Actualizar antes de grabar pantalla (hoy el changelog ya va por **2.1.278**).
 3. El **video 04 no está grabado** (deck y guion listos). Hoy ninguna pieza lo promete —
    el único YouTube que se nombra es el 03, que está vivo y verificado hoy.
+4. 🔴 **Los dos números falsos que este doc corrigió siguen vivos en material ya renderizado
+   de `carousels/**`, que lleva OTRA sesión.** No se tocan desde este carril — se anotan:
+   - `briefs/sergio-18-errores-20260921.json` + su carrusel: el título, la caption y las
+     láminas 1, 3 y 4 dicen «**18 en una sola sesión**» y «**los 18 los encontró él**».
+     **Está agendado para el jue 24** → hay tres días para rehacerlo con «18 anotados, 4 de
+     una sesión». Si no se rehace, el jueves sale el mismo dato que hoy se sacó de cámara.
+   - `briefs/sergio-dato-heredado-20260921.json` (lámina 2 y caption): «lo repetí **cinco
+     veces**», sin fuente contable. Agendado mié 23.
+   - `out/yt-04-verificar/demo-falso-verde/demo.sh` (comentario de cabecera) y
+     `out/yt-04-verificar/README.md:37`: dicen «**los tres verdes**». Son **dos** verdes; la
+     tercera prueba es abrirla y mirarla — el cuerpo del propio script ya lo dice bien.
+   - `handoff/yt-serie-claude-code.md:131`: la fila «Errores en una sesión: **18**, los 18
+     autodetectados» es de donde se heredó todo esto. Su propia celda trae el desglose
+     `(4+9+5)` que la contradice.
+
+---
+
+# 🎬 Para grabar hoy
+
+*Todo lo necesario está en este archivo. No hace falta abrir ningún otro para grabar.*
+
+## Antes de prender la cámara — 3 cosas, 10 minutos
+
+1. **Actualizar Claude Code** en la máquina de rodaje: hoy tiene **2.1.267** y F1/T4 muestran
+   una función de **2.1.277**. `claude update`, y confirmar con `claude --version`.
+   🔴 **Si no se actualiza, F1 y T4 se graban igual pero SIN la pantalla del changelog**
+   (cara a cámara sola) y la pantalla se agrega en edición después. Lo que **no** se hace es
+   filmar la terminal de 2.1.267 haciendo de cuenta que hace lo que el video dice.
+2. **Recontar los dos números de V3**: `crontab -l` en el VPS y en el nodo de casa. Hoy el
+   guion dice **40** y **0** (medidos el 18-sep). Si cambiaron, se dice el número nuevo.
+3. **Decidir las dos frases que dependen de Sergio Urcullo** (están marcadas en su guion):
+   - V3: ¿se admite en cámara que el número falso salió en el video 03 ya publicado?
+     Si sí, abrir el video y confirmar que está en el audio antes de decirlo.
+   - F1/T4: ¿se abre el issue de GitHub para recontar las **5.270** reacciones? Si no se
+     recuenta, esa frase se corta y el guion sigue igual de bien.
+
+## Orden de rodaje — una sola sentada, misma ropa, misma luz
+
+El orden no es por número de pieza: es **por lo que hay que abrir en pantalla**. Todo lo de
+cara a cámara va junto y primero, así la única parada del día es cuando cambia el decorado.
+
+| # | Orden | Pieza | Qué hay que tener abierto | Nota |
+|---|---|---|---|---|
+| 1 | **Bloque cara a cámara** (Sergio Urcullo) | **V1** «La regla que se desobedece» | nada | el más corto y el más fácil: sirve de calentamiento |
+| 2 | ↳ | **V2** «Terminar no es lograr» | nada | |
+| 3 | ↳ | **V4** «18 anotados, y sólo 4 de una sesión» | nada | **el número corregido: 18 anotados, 4 de una sesión.** No decir «18 en una sesión» |
+| 4 | ↳ | **V3** «El número que nunca volví a contar» | nada | **va último del bloque**: necesita el reconteo del punto 2 ya hecho |
+| 5 | **Bloque con pantalla** (Sergio Urcullo) | **F2** «El verde que miente» | `carousels/out/yt-04-verificar/demo-falso-verde/` — correr `demo.sh`, y tener abierta `prueba3-mirala.png` | **dos verdes, no tres.** La terminal se graba corriendo la demo entera |
+| 6 | **Bloque Samuel** | **F1** pilar «Un archivo de reglas» | el changelog de 2.1.277 + un `CLAUDE.md` y un `AGENTS.md` lado a lado + `/claude-code` en el teléfono | ⛔ gate de versión (punto 1) |
+| 7 | ↳ | **T4** yap, réplica de F1 | el changelog abierto, nada más | misma sentada que F1, misma ropa: es el mismo tema con otra edición |
+| — | **No se graba** | **F3** carrusel | — | ya renderizado: `out/sergio-mismo-precio-20260921/` (7 láminas) + la caption del brief, tal cual |
+
+**Por qué este orden:** V1-V4 son cuatro piezas sin una sola pantalla — se graban seguidas en
+diez minutos. F2 es la única de Sergio Urcullo que necesita terminal, así que va cuando ya
+está todo lo de cara hecho. F1 y T4 son de Samuel y comparten exactamente el mismo material
+en pantalla: se graban pegadas o se pierde el armado dos veces.
+
+## Pantallas a abrir, en una lista
+
+- `carousels/out/yt-04-verificar/demo-falso-verde/demo.sh` → **F2** (correr en terminal)
+- `carousels/out/yt-04-verificar/demo-falso-verde/prueba3-mirala.png` → **F2** (el zoom al
+  `credit_card_off`)
+- changelog de Claude Code 2.1.277 → **F1, T4**
+- un `CLAUDE.md` y un `AGENTS.md` abiertos lado a lado → **F1**
+- `sergiourcullo.vercel.app/claude-code` en el teléfono → **F1** (verificado hoy: **200**)
+
+## Los bloqueos reales, dichos sin vueltas
+
+| Bloqueo | Estado | Qué hacer hoy |
+|---|---|---|
+| 🔴 Claude Code **2.1.267** en la máquina; F1/T4 muestran **2.1.277** | **bloquea sólo la pantalla**, no el habla | actualizar, o grabar F1/T4 cara a cámara y poner la pantalla en edición |
+| 🔴 `cal.com/sergiourcullo/30min` → **404** | **vivo y roto** | ninguna pieza de hoy lo nombra. **No improvisar «agendá una llamada» en cámara**: el único link vivo es `/llamada` → `/20min` |
+| 🔴 Carrusel `18-errores` del **jue 24** con el dato viejo | otra sesión | no es de hoy, pero si llega el jueves sin rehacerse, contradice a V4 delante del mismo público |
+| ⚠️ **5.270** reacciones · **40/0** del cron | heredados del 18-sep | recontar o cortar la frase. Están marcados en el guion donde se dicen |
+
+**La cuenta del día al cerrar:** 8 piezas distintas (F1, F2, F3, T4, V1, V2, V3, V4) → 11
+publicaciones. **Se graban 7**; F3 ya está renderizada.
