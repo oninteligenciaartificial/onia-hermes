@@ -1221,6 +1221,291 @@ APP_ESCRITORIO = [
     F_QUIEN_SOY,
 ]
 
+# ---------------------------------------------------------------------------------
+# SEMANA DEL 21-SEP · 5 piezas. Copy portado de los briefs `sergio-*-20260921.json`,
+# que se habian rendido con el motor de PRODUCTO (carousel_render.js --pack
+# typographic). Ese motor no dibuja el `callout` del brief — ocho datos se perdian en
+# silencio — y no tiene lamina F. Marca personal se rinde con este patron.
+#
+# Todo numero sale de la tabla verificada del handoff `yt-serie-claude-code.md`
+# (medida el 18-sep). Ninguno se hereda sin su fuente.
+
+# 1 · AGENTS.md — noticia. Claude Code 2.1.277 lee AGENTS.md, pero SOLO si no hay
+# CLAUDE.md. Era el pedido #1 del repo (5.270 reacciones).
+AGENTS_MD = [
+    {
+        "layout": "P",
+        "pill": "novedad · 2.1.277",
+        "pill_color": "naranja",
+        "titulo": "Un archivo<br>de reglas.<br><em>Los dos.</em>",
+        "obj_icono": "claude",
+    },
+    {
+        "layout": "R",
+        "term_titulo": "antes · dos archivos",
+        "badge": "",
+        "term": ['<span class="p">&gt;</span> CLAUDE.md → Claude Code',
+                 '<span class="p">&gt;</span> AGENTS.md → Codex, Cursor',
+                 '<span class="no">✗</span> las mismas reglas, 2 veces'],
+        "titular": "Escribías todo dos veces.",
+        "linea": "Y también Copilot. Las mismas reglas en dos\narchivos: cambiabas uno y el otro mentía.",
+        "etiqueta": "el problema",
+    },
+    {
+        "layout": "R",
+        "term_titulo": "ahora · versión 2.1.277",
+        "badge": "nuevo",
+        "term": ['<span class="ok">✓</span> Claude Code lee AGENTS.md',
+                 '<span class="g">5.270 personas lo pidieron</span>',
+                 '<span class="g">era el pedido #1 del repo</span>'],
+        "titular": "Era el pedido número uno.",
+        "linea": "El archivo que ya usaban Codex, Cursor y Copilot\nahora también lo lee Claude Code.",
+        "etiqueta": "changelog oficial · leído 18-sep",
+    },
+    {
+        "layout": "R",
+        "term_titulo": "la letra chica",
+        "badge": "",
+        "term": ['<span class="p">&gt;</span> ¿el proyecto tiene CLAUDE.md?',
+                 '<span class="no">✗</span> sí → AGENTS.md se ignora',
+                 '<span class="ok">✓</span> no → recién ahí lo lee'],
+        "titular": "Lo van a contar mal.",
+        "linea": "No los lee a los dos. Si están los dos, gana\nCLAUDE.md y el otro no existe.",
+        "etiqueta": "el detalle que casi nadie dice",
+    },
+    {
+        "layout": "D",
+        "contexto": "Qué hacés hoy, según dónde estés:",
+        "remate": "Una línea\nalcanza.",
+        "sub": "Arrancás de cero: escribí solo AGENTS.md y\nte sirve para los cuatro programas.\nYa tenés CLAUDE.md andando: no lo borres —\nmetele adentro la línea @AGENTS.md.",
+        "cta_hl": "¿Ya tenés tus reglas escritas?",
+        "cta_gris": "¿O se las explicás de nuevo en cada chat? Contame.",
+    },
+    F_QUIEN_SOY,
+]
+
+# 2 · MISMO PRECIO — Fable 5.1 (Anthropic, 1-sep) y GPT-6 Astra (OpenAI, 3-sep;
+# default en Codex el 4-sep) cuestan lo mismo por token.
+MISMO_PRECIO = [
+    {
+        "layout": "P",
+        "pill": "septiembre 2026",
+        "titulo": "El precio<br>ya <em>no</em><br>decide.",
+        "obj_term_titulo": "frontera contra frontera",
+        "obj_term": ['<span class="ok">✓</span> Fable 5.1 · 1-sep',
+                     '<span class="ok">✓</span> GPT-6 Astra · 3-sep',
+                     '<span class="g">mismo precio por token</span>'],
+    },
+    {
+        "layout": "R",
+        "term_titulo": "dos lanzamientos, tres días",
+        "badge": "",
+        "term": ['<span class="p">&gt;</span> 1-sep · Fable 5.1',
+                 '<span class="p">&gt;</span> 3-sep · GPT-6 Astra',
+                 '<span class="p">&gt;</span> 4-sep · default en Codex'],
+        "titular": "Se cerró la brecha.",
+        "linea": "Anthropic el 1, OpenAI el 3, y el 4 ya era el\ndefault de Codex. El precio por token empata.",
+        "etiqueta": "el dato",
+    },
+    {
+        "layout": "R",
+        "term_titulo": "criterio 1 · dónde vivís vos",
+        "badge": "",
+        "term": ['<span class="ok">✓</span> Claude Code: terminal, reglas',
+                 '<span class="ok">✓</span> Codex: si ya usás OpenAI'],
+        "titular": "Elegís por costumbre.",
+        "linea": "La herramienta que ya está donde trabajás te va\na doler menos que la que puntúa mejor.",
+        "etiqueta": "no es una pelea de puntajes",
+    },
+    {
+        "layout": "R",
+        "term_titulo": "criterio 2 · quién revisa",
+        "badge": "",
+        "term": ['<span class="p">&gt;</span> los dos reparten en agentes',
+                 '<span class="p">&gt;</span> ¿cuál te MUESTRA qué hizo?'],
+        "titular": "Vas a vivir ahí adentro.",
+        "linea": "Lo que se usa todos los días no es el modelo:\nes la pantalla donde revisás su trabajo.",
+        "etiqueta": "lo que nadie compara",
+    },
+    {
+        "layout": "D",
+        "contexto": "Criterio 3, y es el único que no se discute:",
+        "remate": "Misma tarea.\nLos dos.",
+        "sub": "No los compares leyendo comparativas.\nDales la misma tarea real una semana\ny mirá cuál te hizo corregir menos.",
+        "tira": ["claude", "chatgpt"],
+        "cta_hl": "¿Cuál usás vos, y por qué?",
+        "cta_gris": "Leo todos los comentarios.",
+    },
+    F_QUIEN_SOY,
+]
+
+# 3 · INSTRUMENTO ROTO — el caso real del 2026-08-15 (CLAUDE.md §«Verificar es MIRAR»):
+# la pantalla de login mostraba los nombres de los iconos como texto, en produccion.
+INSTRUMENTO_ROTO = [
+    {
+        "layout": "P",
+        "pill": "la regla que más uso",
+        "pill_color": "rojo",
+        "titulo": "Si da verde<br>con la cosa<br><em>rota…</em>",
+        "obj_term_titulo": "dos verdes seguidos",
+        "obj_term": ['<span class="ok">✓</span> los textos están',
+                     '<span class="ok">✓</span> el servidor responde',
+                     '<span class="no">✗</span> nunca la abrí'],
+    },
+    {
+        "layout": "R",
+        "term_titulo": "verde 1 · busqué los textos",
+        "badge": "",
+        "term": ['<span class="p">&gt;</span> grep "Iniciar sesión" *.tsx',
+                 '<span class="ok">✓</span> está en el archivo'],
+        "titular": "Buscar no confirma nada.",
+        "linea": "Una búsqueda sirve para DESCARTAR. Que el texto\nesté en el archivo no dice cómo se ve.",
+        "etiqueta": "verde, y no medía nada",
+    },
+    {
+        "layout": "R",
+        "term_titulo": "verde 2 · ¿responde la página?",
+        "badge": "",
+        "term": ['<span class="p">&gt;</span> curl -w "%{http_code}" URL',
+                 '<span class="ok">✓</span> 200'],
+        "titular": "Doscientos. Verde.",
+        "linea": "Una página puede responder perfecto y verse rota.\nEl 200 mide el servidor, no la pantalla.",
+        "etiqueta": "verde, y tampoco medía nada",
+    },
+    {
+        "layout": "R",
+        "term_titulo": "lo que el cliente veía",
+        "badge": "producción",
+        "term": ['<span class="no">✗</span> credit_card_off',
+                 '<span class="no">✗</span> verified_user',
+                 '<span class="g">donde iba el ícono, su NOMBRE</span>'],
+        "titular": "En producción. Lo vio otro.",
+        "linea": "En la pantalla de entrar. La di por buena con esas\ndos medidas, sin abrirla una sola vez.",
+        "etiqueta": "encontrado el 15-ago",
+    },
+    {
+        "layout": "D",
+        "contexto": "De ahí salió la regla:",
+        "remate": "Medí la cosa,\nno su sombra.",
+        "sub": "Si tu comprobación puede dar verde\ncon todo roto, no es una comprobación:\nes un instrumento roto.\nAbrilo. Miralo. Después decí listo.",
+        "cta_hl": "¿Qué «verde» tenés hoy que nunca abriste?",
+        "cta_gris": "Contame cuál y te digo cómo lo miraría.",
+    },
+    F_QUIEN_SOY,
+]
+
+# 4 · DATO HEREDADO — el numero era 4 y son 40 (crons del VPS, `crontab -l`, 18-sep).
+# El archivo tenia escrito arriba, por mi, «estos numeros no cambian».
+DATO_HEREDADO = [
+    {
+        "layout": "P",
+        "pill": "me pasó esta semana",
+        "titulo": "Un dato viejo<br><em>no</em> es<br>un dato.",
+        "obj_term_titulo": "lo que tenía anotado",
+        "obj_term": ['<span class="p">&gt;</span> decía: 4 tareas',
+                     '<span class="g">repetido 5 veces</span>',
+                     '<span class="no">✗</span> jamás recontado'],
+    },
+    {
+        "layout": "R",
+        "term_titulo": "estaba por decirlo en cámara",
+        "badge": "",
+        "term": ['<span class="p">&gt;</span> lo puse en un guion',
+                 '<span class="p">&gt;</span> lo puse en un documento',
+                 '<span class="p">&gt;</span> lo puse en una lámina'],
+        "titular": "Se volvió cierto solo.",
+        "linea": "Cada vez que copiás un dato de tu propio documento\nse siente más cierto. No lo volviste a medir.",
+        "etiqueta": "así se fabrica una certeza falsa",
+    },
+    {
+        "layout": "R",
+        "term_titulo": "fui a contarlo de nuevo",
+        "badge": "2 minutos",
+        "term": ['<span class="p">&gt;</span> crontab -l | wc -l',
+                 '<span class="no">✗</span> decía 4',
+                 '<span class="ok">✓</span> son 40'],
+        "titular": "Diez veces más.",
+        "linea": "Nadie lo había tocado. Simplemente nunca fue\nel número que yo creía que era.",
+        "etiqueta": "contado el 18-sep, en la máquina",
+    },
+    {
+        "layout": "R",
+        "term_titulo": "lo peor del asunto",
+        "badge": "",
+        "term": ['<span class="g">« estos números no cambian,</span>',
+                 '<span class="g">  no hace falta recontarlos »</span>',
+                 '<span class="no">✗</span> lo escribí yo, ahí arriba'],
+        "titular": "Me avisé a mí mismo.",
+        "linea": "Esa frase no era un ahorro de tiempo: era el error,\nescrito con letra grande y firmado.",
+        "etiqueta": "y aun así lo heredé",
+    },
+    {
+        "layout": "D",
+        "contexto": "La regla, y cuesta dos minutos:",
+        "remate": "Recontá antes\nde afirmarlo.",
+        "sub": "Sobre todo si lo vas a decir en público,\ncobrar por eso, o decidir algo con eso.\nRepetir no es saber.",
+        "cta_hl": "¿Ese número tuyo lo contaste HOY?",
+        "cta_gris": "Si la respuesta es «lo tenía anotado», andá a contarlo.",
+    },
+    F_QUIEN_SOY,
+]
+
+# 5 · 18 ERRORES — contados en las 6 versiones de handoff/onia-dev-node-setup.md §5
+# (4+9+5). Los 18 autodetectados. ⚠️ material viejo decia «12, y 11 los encontro el»:
+# ese 12 no sale de ningun lado.
+ERRORES_18 = [
+    {
+        "layout": "P",
+        "pill": "mi caso · números reales",
+        "titulo": "Conté mis<br>errores. Los<br><em>anoté todos.</em>",
+        "obj_term_titulo": "lo que anoté",
+        "obj_term": ['<span class="p">&gt;</span> anotados: 18',
+                     '<span class="p">&gt;</span> de una sesión: 4',
+                     '<span class="no">✗</span> el que se escapó: 1'],
+    },
+    {
+        "layout": "R",
+        "term_titulo": "la pregunta de siempre",
+        "badge": "",
+        "term": ['<span class="p">&gt;</span> «¿y si la IA se equivoca?»',
+                 '<span class="g">corta: se equivoca. bastante.</span>',
+                 '<span class="g">la larga es más útil</span>'],
+        "titular": "Sí, se equivoca.",
+        "linea": "Es lo que todos preguntan antes de empezar,\ny el número real ayuda más que la opinión.",
+        "etiqueta": "el miedo",
+    },
+    {
+        "layout": "R",
+        "term_titulo": "el número",
+        "badge": "18",
+        "term": ['<span class="p">&gt;</span> diagnósticos equivocados',
+                 '<span class="p">&gt;</span> comprobaciones que no prueban',
+                 '<span class="p">&gt;</span> datos viejos sin recontar'],
+        "titular": "Dieciocho anotados.",
+        "linea": "Cuatro salieron de una sola sesión. El resto, de\ndías sobre lo mismo. Uno por uno, con su causa.",
+        "etiqueta": "contados a mano el 21-sep, en el archivo",
+    },
+    {
+        "layout": "R",
+        "term_titulo": "lo que no me esperaba",
+        "badge": "18 de 18",
+        "term": ['<span class="ok">✓</span> los 18 los encontró él',
+                 '<span class="g">revisando su propio trabajo</span>'],
+        "titular": "Se corrige más de lo que creés.",
+        "linea": "Ninguno lo cacé yo. Quedaron escritos por él,\nrevisando su propio trabajo.",
+        "etiqueta": "el dato que cambia el miedo",
+    },
+    {
+        "layout": "D",
+        "contexto": "Y el que se le escapó llegó al cliente:",
+        "remate": "Lo que nadie\nrevisó.",
+        "sub": "La lección no es desconfiar de todo:\nlo que él revisa está bastante bien.\nLo que te muerde es lo que NADIE miró —\nni él, ni vos.",
+        "cta_hl": "¿Cuántos «listo» diste por buenos sin abrirlos?",
+        "cta_gris": "Contame abajo. Yo di tres seguidos.",
+    },
+    F_QUIEN_SOY,
+]
+
 PIEZAS = {
     "mi-stack": None,
     "fable": FABLE,
@@ -1240,6 +1525,11 @@ PIEZAS = {
     "noticia-whatsapp": NOTICIA_WHATSAPP,
     "cuaderno-excel": CUADERNO_EXCEL,
     "app-escritorio": APP_ESCRITORIO,
+    "agents-md": AGENTS_MD,
+    "mismo-precio": MISMO_PRECIO,
+    "instrumento-roto": INSTRUMENTO_ROTO,
+    "dato-heredado": DATO_HEREDADO,
+    "errores-18": ERRORES_18,
 }  # mi-stack se resuelve a LAMINAS abajo
 
 # Piel por pieza: una clase extra en el lienzo que habilita el acento de esa marca.
@@ -1389,12 +1679,19 @@ body{{background:var(--bg);font-family:'{nombre}',sans-serif;font-weight:400;ove
 .p .obj-p{{margin-top:56px;position:relative;z-index:2;display:flex;align-items:center;gap:36px}}
 .p .obj-p svg{{width:230px;height:230px;
   filter:drop-shadow(0 30px 56px rgba(0,0,0,.5)) drop-shadow(0 0 60px rgba(255,138,92,.4))}}
+/* 560px + fuente 34px = ~22 caracteres por linea, NO los ~31 del layout R.
+   Una linea mas larga envuelve y deja la palabra huerfana contra el margen
+   izquierdo. Ninguno de los dos gates lo ve: no hay desborde, hay un salto
+   feo. Visto el 21-sep en las portadas de dato-heredado y errores-18. */
 .p .obj-p .term-r{{width:560px;margin:0}}
 .p .obj-p .term-r pre{{font-size:34px;padding:26px 32px 32px}}
 .p .swipe-p{{position:absolute;right:96px;bottom:150px;display:flex;align-items:center;gap:16px;
   font-size:30px;font-weight:700;color:#F5F1E8;opacity:.85;z-index:2}}
 .p .swipe-p b{{font-size:44px;color:#FF8A5C}}
-.p .handle{{color:#F5F1E8;opacity:.55}}
+/* left:96px — el handle heredaba `left:0` y la arroba quedaba PEGADA al borde
+   del lienzo (visto mirando la portada, el gate no mide margenes). 96px es el
+   mismo canal que usa la pildora de arriba, asi la firma se alinea con ella. */
+.p .handle{{left:96px;right:auto;text-align:left;color:#F5F1E8;opacity:.55}}
 .tit-r{{font-size:64px;font-weight:800;letter-spacing:-.03em;margin-top:52px}}
 .linea-r{{font-size:33px;color:var(--muted);line-height:1.42;margin-top:24px;
   white-space:pre-line;max-width:850px}}
