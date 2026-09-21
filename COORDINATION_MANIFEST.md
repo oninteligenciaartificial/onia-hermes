@@ -5,6 +5,19 @@ This file prevents duplicate work while two Codex/Hermes sessions run at the sam
 
 Use this as the source of truth before creating new files, skills, docs, or scripts.
 
+## Infra retomada en Codex — 2026-09-21
+
+Sergio Urcullo trasladó el carril de Claude a la tarea Codex de ONIA Platform.
+Integración aislada: rama `codex/infra-producto-integracion-20260921`, worktree
+`C:/dev/proyectos/onia-hermes-infra-integracion`, sobre `origin/main` (`90769552`).
+Alcance: `scripts/loops/{consolidar-memoria,parte-diario,vigia-loops-remotos}.sh`,
+sus pruebas, README y handoff `infra-cerebro-loops.md`. Un subagente revisó sin editar.
+Sergio aprobó integrar/pushear y aplicar SOLO esos tres scripts al VPS con respaldo
+y rollback; NO reinicios, cambios de cron, migraciones, mensajes de prueba ni loops.
+El worktree original y sus temporales se preservan. No se integran los otros commits
+de Claude por arrastre. El handoff registra el resultado final del despliegue.
+La tabla de agosto de abajo es historial, no evidencia de escritores activos hoy.
+
 ## ⚠️ Carriles VIVOS (2026-08-23) — AUTORIDAD ACTUAL
 
 **Esto reemplaza al modelo de 2026-07-05 de más abajo**, que se conserva por referencia. Ese

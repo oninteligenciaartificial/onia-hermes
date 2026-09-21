@@ -5,6 +5,69 @@ Código de herramienta de los loops de carril mudados de Windows al VPS el 2026-
 [`hermes-content/docs/cola/loops.md`](../../hermes-content/docs/cola/loops.md)** — este README
 sólo explica cómo se instala y se apaga lo de acá.
 
+## Memoria y alertas: correcciones de continuidad del 21-sep
+
+Integración aislada en `codex/infra-producto-integracion-20260921`. Sergio aprobó
+commit/push y aplicación de solo tres scripts, con respaldo y rollback, sin
+reinicios ni reactivar loops. El [handoff](../../hermes-content/docs/handoff/infra-cerebro-loops.md)
+registra la evidencia de despliegue; no confundir pruebas locales con producción.
+
+- `consolidar-memoria.sh` limita sus incorporaciones a `MEMORY.md` a **65.536 bytes**
+  (`ONIA_MEMORIA_MAX_BYTES`). Cuenta UTF-8, separadores y el puntero al archivo.
+  Lo que no cabe se conserva íntegro en `archivo-aprendizajes/<sha256>.md`, con
+  deduplicación entre ejecuciones y permisos 600. `procesados/` puede rotar sin
+  perder ese archivo. Buscarlo con `grep -R -- 'tema' archivo-aprendizajes/`.
+- No resume ni elimina reglas existentes. Si la memoria ya excedía el límite,
+  lo informa y archiva nuevas entradas. El límite cubre **este escritor**:
+  `memory tool` de Hermes y editores externos no toman su `flock` y pueden
+  excederlo. No se reemplaza MEMORY con una copia anterior. Un fallo de escritura
+  conserva inbox para reintento; el archivo se publica por rename antes de reconocerlo.
+- `parte-diario.sh` distingue tablero inaccesible de tablero vacío; el primero
+  devuelve error y comunica que no se pudo verificar el estado.
+- `vigia-loops-remotos.sh` envía las incidencias directamente y modifica las
+  marcas de notificación solo después de una entrega exitosa; si falla, reintenta
+  en la siguiente ejecución. No reactiva loops ni modifica su cron.
+
+Pruebas **Linux/WSL**, con archivos temporales y Telegram simulado:
+
+```bash
+python3 scripts/loops/consolidar-memoria.test.py
+python3 scripts/loops/alertas-infra.test.py
+bash scripts/loops/parte-diario.test.sh
+bash scripts/loops/vigia-loops-remotos.test.sh
+```
+
+Las dos nuevas pruebas Python entran en la cadena existente `npm test` mediante
+`test:python`. Esta tanda no requiere librerías, modelos ni investigación externa:
+usa Bash y herramientas existentes, contrastadas con los scripts vivos por SHA-256.
+
+### Procedimiento de aplicación y rollback
+
+1. Revisar/commitear/integrar únicamente estos cambios cuando se autorice. No
+   ejecutar `sincronizar.sh` entero para aplicar una tanda de tres archivos.
+   La fuente de `origin/main` debe contener los cambios antes de instalarlos,
+   para que el sincronizador no restaure la versión anterior.
+2. Volver a comprobar hashes y cambios concurrentes en `/root/bin/`; crear un
+   directorio privado fechado bajo `/root/backups/` y guardar los tres scripts
+   originales con sus modos y hashes. Registrar commit y hashes del candidato.
+3. Validar `bash -n` y finales LF en staging. Instalar individualmente, mediante
+   archivo temporal y rename, `consolidar-memoria.sh` → `onia-consolidar-memoria.sh`,
+   `parte-diario.sh` → `onia-parte-diario.sh` y `vigia-loops-remotos.sh` →
+   `onia-vigia-loops-remotos.sh`. No reiniciar servicios, tocar datos de ONIA,
+   ejecutar el consolidador manualmente ni enviar mensajes de prueba.
+4. Verificar hashes, permisos, próxima ejecución normal y códigos de salida;
+   conservar evidencia de entrega real cuando ocurra un aviso legítimo. Las
+   pruebas con mocks no certifican entrega a Telegram.
+5. Rollback: restaurar solo esos tres scripts desde el respaldo, verificar sus
+   hashes y reconciliar la fuente del sincronizador con el cambio revertido.
+   Conservar `archivo-aprendizajes/` y la memoria viva; no restaurar memoria antigua
+   sobre aprendizajes nuevos. La versión anterior vuelve a crecer sin límite,
+   por lo que no deben reactivarse loops hasta corregir o aprobar otra solución.
+
+Pendientes de otro bloque: escritura de memoria por herramientas de Hermes;
+backup SQLite consistente (no sustituir `.backup` fallido por `cp` del DB vivo);
+recuperación del nodo de casa y selección de ejecutor cuando Claude no tiene cuota.
+
 ## Por qué se mudaron
 
 Las tareas programadas viven dentro de la app de Claude Code en Windows y **sólo disparan cuando

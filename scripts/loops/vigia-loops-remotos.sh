@@ -44,7 +44,15 @@ CICLOS=${ONIA_VIGIA_CICLOS:-2}          # cuantas cadencias de silencio se toler
 
 [ -s "$LISTA" ] || exit 0
 
-mkdir -p "$ESTADO" || exit 0
+mkdir -p "$ESTADO" || exit 1
+# El aviso de que los loops dejaron de correr debe llegar sin depender de esos
+# loops. Una entrega fallida conserva las marcas para reintentar en el proximo
+# cron; nunca se registra como notificada solo porque se intento enviar.
+notificar() {
+  if ONIA_TG_DIRECTO=1 "$TG" "$1" >/dev/null 2>&1; then return 0; fi
+  echo "No se entrego el aviso del vigia; se reintentara en la proxima ejecucion" >&2
+  return 1
+}
 AHORA=$(date +%s)
 TOTAL=0; MUDOS=""; VIVOS=""; DETALLE=""
 
@@ -106,25 +114,25 @@ APAGON="$ESTADO/_apagon"
 # Caso 1 — TODOS callados a la vez: no son cinco loops rotos, es la maquina. Un
 # solo mensaje. Cinco avisos identicos logran que nadie lea el sexto.
 if [ "$N_MUDOS" = "$TOTAL" ] && [ "$TOTAL" -gt 1 ] && [ ! -f "$APAGON" ]; then
-  "$TG" "🔴 <b>$MAQUINA no da senales</b> — sus $TOTAL loops estan callados a la vez.
+  notificar "🔴 <b>$MAQUINA no da senales</b> — sus $TOTAL loops estan callados a la vez.
 
 Eso es la maquina o el corredor, no un loop suelto.
 $DETALLE
 
-Desde aca no se distingue 'esta caida' de 'corre y no deja registro'. Hay que mirar $MAQUINA." >/dev/null 2>&1 || true
-  touch "$APAGON"
-  for id in $MUDOS; do touch "$ESTADO/$id"; done
+Desde aca no se distingue 'esta caida' de 'corre y no deja registro'. Hay que mirar $MAQUINA." || exit 1
+  touch "$APAGON" || exit 1
+  for id in $MUDOS; do touch "$ESTADO/$id" || exit 1; done
   exit 0
 fi
 
 # Caso 1b — volvio a aparecer alguna senal despues de un apagon.
 if [ -f "$APAGON" ] && [ -n "$VIVOS" ]; then
-  rm -f "$APAGON"
-  "$TG" "🟢 <b>$MAQUINA volvio</b> — llegan registros de: <code>$(echo $VIVOS | sed 's/ /<\/code>, <code>/g')</code>." >/dev/null 2>&1 || true
+  notificar "🟢 <b>$MAQUINA volvio</b> — llegan registros de: <code>$(echo $VIVOS | sed 's/ /<\/code>, <code>/g')</code>." || exit 1
+  rm -f "$APAGON" || exit 1
   # Este mensaje YA nombra los que volvieron: si ademas se dispara el "recuperado"
   # de mas abajo por cada uno, un apagon de cinco loops manda seis mensajes que
   # dicen lo mismo. Se limpian sus marcas aca y el bloque de abajo los saltea.
-  for id in $VIVOS; do rm -f "$ESTADO/$id"; done
+  for id in $VIVOS; do rm -f "$ESTADO/$id" || exit 1; done
 fi
 
 # Caso 2 — uno solo callado: ese loop. Un aviso por episodio, no uno por vuelta
@@ -132,20 +140,20 @@ fi
 for id in $MUDOS; do
   [ -f "$ESTADO/$id" ] && continue
   CAD=$(awk -v i="$id" '$1==i{print $2}' "$LISTA")
-  "$TG" "🔴 <b>Loop callado</b>: <code>$id</code> — en $MAQUINA
+  notificar "🔴 <b>Loop callado</b>: <code>$id</code> — en $MAQUINA
 
 Hace mas de $CICLOS cadencias que no deja un ARRANCA nuevo (cadencia ${CAD} min).
 Puede estar caido, o correr y no dejar registro. Desde aca no se distingue.
 
-Los otros loops de $MAQUINA si estan llegando, asi que la maquina esta viva." >/dev/null 2>&1 || true
-  touch "$ESTADO/$id"
+Los otros loops de $MAQUINA si estan llegando, asi que la maquina esta viva." || exit 1
+  touch "$ESTADO/$id" || exit 1
 done
 
 # Caso 3 — recuperado. Corto: lo importante era el rojo.
 for id in $VIVOS; do
   [ -f "$ESTADO/$id" ] || continue
-  rm -f "$ESTADO/$id"
-  "$TG" "🟢 <b>Loop recuperado</b>: <code>$id</code> volvio a arrancar en $MAQUINA." >/dev/null 2>&1 || true
+  notificar "🟢 <b>Loop recuperado</b>: <code>$id</code> volvio a arrancar en $MAQUINA." || exit 1
+  rm -f "$ESTADO/$id" || exit 1
 done
 
 exit 0

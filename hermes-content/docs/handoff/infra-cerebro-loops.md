@@ -1,5 +1,54 @@
 # Handoff — carril `infra-cerebro-loops`
 
+## Estado vigente — continuidad en Codex, 21-sep-2026
+
+Esta sección sustituye las afirmaciones de rama limpia/mergeada y los próximos
+pasos del cierre anterior. El historial de Claude de abajo se conserva como evidencia.
+
+1. **Objetivo:** sostener la infraestructura que permite desarrollar y operar ONIA
+   Platform. Sergio Urcullo trasladó el carril de Claude a esta tarea de Codex.
+2. **Producción medida por Codex a las 20:18–20:25 UTC:** gateway Hermes `active`,
+   memoria 49.298 bytes y archivo histórico 339.462 bytes; túnel VPS `:2222` sin
+   listener; cron VPS con cero entradas activas `onia-loop.sh`. Los logs sincronizados
+   de casa siguen fechados 19-sep. Platform, Supabase, SMTP, n8n y Chatwoot figuran
+   levantados; login Platform, Chatwoot y landing respondieron HTTP 200 (0,124 / 0,337 /
+   0,093 s en esa muestra). Esto no certifica un flujo autenticado ni restore de DB.
+   **Medición previa al despliegue aprobado; resultado final pendiente de registrar.**
+3. **Integración:** rama `codex/infra-producto-integracion-20260921`, sobre `90769552`
+   (`origin/main`), worktree `C:/dev/proyectos/onia-hermes-infra-integracion`.
+   Se transfieren únicamente los tres scripts, sus pruebas y documentación. El origen
+   `codex/infra-producto-20260921` sobre `7d76b79d` queda preservado en el worktree de
+   Claude, incluidos sus temporales no versionados. NO se mergea toda aquella rama.
+4. **Cambios y pruebas:** límite por bytes en `consolidar-memoria.sh` con archivo
+   íntegro/dedup, error honesto ante tablero inaccesible en `parte-diario.sh`, reintento
+   de notificaciones fallidas en `vigia-loops-remotos.sh`. 12 pruebas de memoria y
+   4 de alertas pasan en WSL Linux; las suites shell existentes de parte/vigía también.
+   Se reprodujeron primero los fallos. Un revisor independiente detectó el efecto de
+   `set -e` ante bloques vacíos; corregido y cubierto. README contiene aplicación y rollback.
+5. **Límites e intentos fallidos:** el handoff del checkout principal de Hermes estaba
+   atrasado frente al último transcript y rama de Claude; leer la sesión y `7d76b79d`
+   evitó repetir sus arreglos. `claude-mem` no devolvió las observaciones recientes del
+   producto; se recuperó la conversación local directamente. No usar el checkout sucio
+   `onia-platform/claude/f2-f3-panel` como base. El límite nuevo no controla escrituras
+   directas del memory tool de Hermes; el archivo por hash no compacta memoria existente.
+6. **Autorización:** Sergio Urcullo aprobó explícitamente integrar/pushear y aplicar
+   estos tres scripts al VPS con respaldo y rollback. No incluye reinicios, cambio de
+   cron, mensajes de prueba, migraciones ni reactivar loops. Los loops invocan `claude -p`: moverlos de
+   máquina no resuelve el agotamiento de cuota. No se configuró un scheduler Codex nuevo.
+7. **Siguiente orden:** integrar/aplicar la tanda validada; revisar backup de Hermes
+   (fallback inseguro de SQLite a `cp` y copia de memoria vacía antes de validarla);
+   recuperar nodo-casa y comprobar una vuelta real con ejecutor disponible; verificar
+   dos corridas de Hermes sin error TPM. El desarrollo interactivo en Codex puede seguir
+   sin esperar a Claude. No afirmar que los loops quedaron reactivados.
+
+Skills utilizadas: `onia-router`, `onia-infra`, `debugging-and-error-recovery`,
+recuperación `claude-mem:mem-search` y revisión de arquitectura con
+`codebase-onboarding`. Sin nuevas dependencias ni consultas a APIs de pago.
+
+---
+
+## Historial de Claude (anterior a la continuidad de Codex)
+
 > Rama `claude/infra-loops-revision-3fc7b1` (ya **mergeada a `main`**, nada suelto).
 > Escrito 2026-09-21 15:30 La Paz. Sesiones del 17-sep (Claude) → continúa en **Codex**.
 > Medido en vivo hoy, no leído de docs.
@@ -45,6 +94,40 @@ nadie lo levanta.
 **Y el vigía no avisó**: `/var/log/onia-vigia-loops-remotos.log` está mudo. Eso es lo que
 hay que arreglar, más que los loops.
 
+⚠️ **CORREGIDO 2026-09-21 19:50 UTC, medido: el vigía SÍ detectó y SÍ avisó. Lo que falla
+es a QUIÉN le avisa.** El log está en 0 bytes porque el script no escribe a stdout cuando
+tiene éxito — no porque no haya corrido. La prueba está en sus marcas de estado y en el
+registro del enrutador:
+
+```
+/var/lib/onia-vigia-remotos/_apagon        2026-09-20 01:34   (lo tocó al declarar el apagón)
+onia-tg.log 2026-09-19T21:34Z  TAREA t_9b20c3cc  🔴 Loop callado: chatbot-cola
+onia-tg.log 2026-09-19T23:04Z  TAREA t_27f3d756  🔴 Loop callado: web-venta
+onia-tg.log 2026-09-20T01:34Z  TAREA t_c6f54fcb  🔴 la PC de casa no da senales — sus 4 loops callados
+```
+
+**El defecto real, y es de diseño:** la línea del cron llama a `onia-tg.sh` SIN
+`ONIA_TG_DIRECTO=1`, así que desde el 2026-09-08 el aviso no sale a Telegram: **se convierte
+en una tarea del tablero**. Y el tablero lo leen **los loops**. O sea: *el aviso de que los
+loops están muertos se le entrega a los loops muertos*. Es una carta al buzón del difunto.
+
+**Y el parte diario lo tapó, no lo destapó.** `onia-parte-diario.sh` nombra sólo las 5 tareas
+`[auto:]` más viejas y cuenta el resto. La tarea del apagón es la **#16 de 16** — la más
+nueva —, así que las mañanas del 20 y del 21 el único mensaje del día listó drops faltantes
+del 9 y 10 de septiembre y resumió la caída real como *«… y 11 más en el tablero»*.
+Los dos mensajes salieron con 661 bytes idénticos (`onia-tg.log`: `OK message_id=6718`,
+`message_id=6749`).
+
+**Arreglo de una línea** (`crontab -e`, y el gemelo de `onia-vigia-vps.log` tiene el mismo
+agujero):
+
+```
+4,34 * * * * ONIA_TG_DIRECTO=1 ONIA_LOG_DIR=/var/log/homelab /root/bin/onia-vigia-loops-remotos.sh >> /var/log/onia-vigia-loops-remotos.log 2>&1
+```
+
+Y el parte diario tiene que ordenar por gravedad/novedad antes de recortar a 5, o su recorte
+va a seguir escondiendo justo lo que acaba de romperse.
+
 ```bash
 # comprobar desde el VPS
 ssh -i ~/.ssh/onia_hermes_vps_ed25519 root@187.77.16.63 'ss -tln | grep 2222 || echo CAIDO'
@@ -52,12 +135,69 @@ ssh -i ~/.ssh/onia_hermes_vps_ed25519 root@187.77.16.63 '/root/bin/casa.sh "upti
 ```
 Reparar exige a Sergio Urcullo encender WSL en esa PC (no hay sudo remoto).
 
+⚠️ **CORREGIDO 2026-09-21, medido: recuperar los loops NO exige tocar esa PC.** Lo que exige
+esa PC es recuperarlos *ahí*. El VPS está **entero y listo** para correrlos hoy — se contó en
+vivo, no se supuso:
+
+| pieza | estado en el VPS |
+|---|---|
+| corredor `/root/bin/onia-loop.sh` | existe, 33 KB, 8-sep |
+| prompts `/root/bin/loops/*.md` | **17 desplegados**, los 4 caídos incluidos |
+| worktrees `/root/loops/` | `onia-hermes`, `onia-platform` + 6 espejos de carril |
+| `claude` CLI | `/usr/bin/claude` **2.1.197**, autenticado — `claude -p` contesta |
+| líneas de cron `onia-loop.sh` | **CERO** |
+
+Lo único que falta son las líneas del cron. Es decir: **la máquina que no se puede prender
+sola es la única que corre los loops, teniendo al lado una que está prendida hace 28 días.**
+Eso no es una avería, es la arquitectura — y es lo que hay que decidir, no parchar.
+
+⚠️ Mudarlos de vuelta **no es sólo descomentar**: `scripts/loops_registrados.mjs` compara en
+las dos direcciones contra `hermes-content/docs/cola/loops.md`, así que las filas tienen que
+pasar de `casa` a `VPS` **en el mismo movimiento** o `main` se pone roja para todos los
+carriles. El orden y la trampa están escritos en ese mismo archivo.
+
 ### ⚠️ Dos jobs de Hermes fallando hoy
 - `onia-ordenador-tablero`: `RateLimitError ... TPM Limit 200000, Used 56050, Requested
   144473` — **3 fallos seguidos**. El prompt manda demasiado contexto de una; el techo ya
   no es el saldo, es tokens-por-minuto del tier.
 - `hermes-daily-content-video-plan`: `Interrupted by shutdown before terminal completion`
   (hoy 08:12). Una sola vez, no es patrón todavía.
+
+### 🔴 Lo que costaron esas 48 h sin loops (medido 2026-09-21 19:50 UTC)
+
+Los loops no son "trabajo extra": son **lo único que arregla lo que se rompe solo**. Sin
+ellos el sistema no se detiene — se degrada en silencio y sigue reportando normalidad.
+
+1. **El chatbot de ventas estuvo mudo ~33 horas.** `/var/log/onia-bot-watchdog.log`:
+   **408 ciclos fallidos el 20-sep + 587 el 21-sep**, uno cada 2 min, con el watchdog
+   reiniciándolo y escribiendo *«sigue caido despues del reinicio»* cada vez. Se recuperó
+   solo a las **19:34 UTC de hoy**. Arrancó el día siguiente a la muerte de los loops.
+   El watchdog **sí** avisó por Telegram (va directo, no por el enrutador), pero avisa
+   **una vez por incidente** y después calla: 33 h de caída = 1 mensaje.
+2. **5 prospectos reales colgados hace 23-28 días** (`onia-vigia-sin-respuesta.log`), dos
+   de ellos WhatsApp con intención explícita — uno dice literalmente que *está evaluando un
+   sistema de gestión para una clínica*, que es el cliente ideal del doc de estrategia. Más
+   2 atendidos por el bot que no volvieron y nadie miró. El vigía los cuenta cada 2 h desde
+   hace semanas; su aviso también se convierte en tarea del tablero que nadie lee.
+3. **Y mientras tanto el parte diario dijo que todo estaba bajo control.** Ver la corrección
+   de §3: la caída era la tarea #16 de 16 y quedó fuera del recorte de 5.
+
+**La conclusión incómoda, en una línea:** el cerebro tiene ojos (los vigías miden bien),
+tiene manos (los loops arreglan de verdad) y tiene boca (Telegram) — pero desde el 08-sep
+**la boca está conectada a las manos y no a Sergio Urcullo**, así que cuando las manos se
+mueren nadie se entera.
+
+### 🔴 Y el precio del ruido: el repo pesa 11 GB
+
+- `.git` del monorepo: **11 GB en disco, 3,75 GiB de pack**.
+- Causa medida: `hermes-content/docs/recorrido/` son **124 PNG (25 MB)** que el loop
+  `recorrido-cliente` **recommitea enteros cada vuelta** — **202 commits en 14 días** tocando
+  esa carpeta, **2.320 de los ~4.700 toques de archivo del período (≈49%)**.
+- Del total de 14 días: **1.178 commits de `root` (los loops)** vs 309 de Sergio Urcullo, y
+  por tipo **369 `docs:` contra 128 `feat:`**. La mayor parte del trabajo autónomo se está
+  yendo en documentar el sistema y en versionar capturas, no en producto.
+- Capturas de verificación: son evidencia, no fuente. Van a `.gitignore` + artefacto de CI,
+  o el repo se duplica cada mes.
 
 ### Sin commitear
 **Nada.** Árbol limpio y la rama ya está en `origin/main`.
@@ -101,6 +241,54 @@ Reparar exige a Sergio Urcullo encender WSL en esa PC (no hay sudo remoto).
   en Spam).
 - Decidir si los **12 jobs `hermes-*` pausados** (kickoff de lunes, finanzas del viernes,
   cierre del domingo) se reviven o se borran.
+
+## 6.b 🔴 LA CAUSA RAÍZ DEL HARNESS: la memoria de Hermes entraba entera en cada llamada
+
+Medido el 2026-09-21 con `hermes prompt-size`. No es un job mal escrito: es el sistema
+entero pagando el mismo peaje en cada request.
+
+```
+ANTES                                  DESPUÉS
+system prompt   425.692 B (~106k tok)  87.419 B (~22k tok)     −79 %
+  memoria       387.907 B               49.634 B
+```
+
+**Dentro de la memoria, UNA sección se comía el 90 %:** «Método: gates», **336 KB y 469 de
+las 563 entradas** — lecciones que los loops fueron dejando con `onia-aprender.sh`. Todo lo
+demás junto (producto, precios, infra, loops, bot, fiscal, git, verificación) son **39 KB**.
+
+**Y crecía.** De los respaldos de 6 h:
+
+| cuándo | MEMORY.md |
+|---|---|
+| 18-sep 18:17 | 281.174 B |
+| 19-sep 06:17 | 328.739 B |
+| 19-sep 18:17 | 381.206 B |
+| 20-sep 00:17 | 387.569 B |
+
+**+106 KB en 30 h (~3,5 KB/hora, ~85 KB/día) mientras los loops corrían.** Dejó de crecer
+sólo porque los loops se murieron el 19-sep 19:33. Es decir: **el harness se estaba
+estrangulando solo, y lo único que lo frenó fue romperse.** Cada vuelta de cada loop le
+sumaba contexto a todos los jobs y a cada mensaje que Sergio Urcullo le manda por Telegram.
+
+**Eso es lo que reventaba `onia-ordenador-tablero`**: pedía 133.899 tokens por llamada con
+un techo de 200.000 TPM, sin haber leído todavía un solo archivo. Los `Requested 144473` no
+salían de los docs: salían de arrancar con la memoria encima.
+
+⚠️ **`memory_char_limit: 48000` YA estaba en `/root/.hermes/config.yaml` y esta versión de
+Hermes NO lo aplica**: inyecta el archivo completo. No confiar en ese parámetro.
+
+**Lo hecho (reversible):** la sección «Método: gates» se movió entera a
+`/root/.hermes/memories/ARCHIVO-metodo-gates.md` (339 KB, `grep`-eable) y en su lugar quedó
+un puntero que dice cómo buscarla y que lo que sea REGLA vuelve a su sección. **No se
+resumió ni se reescribió nada** — justo lo que `consolidar-memoria.sh` advierte que no hay
+que hacer, porque pedirle a un modelo que compacte le hace tirar reglas. Backup en
+`MEMORY.md.bak-20260921-2007-aligerar` y respaldos cada 6 h en `/root/backups/hermes-memory/`.
+
+🔴 **Lo que falta, y es lo que hace que esto no se repita:** `onia-aprender.sh` escribe en
+una memoria que no tiene techo. Mientras los loops estén apagados no crece; **el día que
+vuelvan, vuelve a subir ~85 KB por día**. Antes de encender los loops hay que ponerle un
+tope a esa sección (rotar a archivo al pasar de X KB, igual que se rota un log).
 
 ## 7. Próximos pasos (en orden, con «hecho» medible)
 
