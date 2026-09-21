@@ -45,6 +45,40 @@ nadie lo levanta.
 **Y el vigía no avisó**: `/var/log/onia-vigia-loops-remotos.log` está mudo. Eso es lo que
 hay que arreglar, más que los loops.
 
+⚠️ **CORREGIDO 2026-09-21 19:50 UTC, medido: el vigía SÍ detectó y SÍ avisó. Lo que falla
+es a QUIÉN le avisa.** El log está en 0 bytes porque el script no escribe a stdout cuando
+tiene éxito — no porque no haya corrido. La prueba está en sus marcas de estado y en el
+registro del enrutador:
+
+```
+/var/lib/onia-vigia-remotos/_apagon        2026-09-20 01:34   (lo tocó al declarar el apagón)
+onia-tg.log 2026-09-19T21:34Z  TAREA t_9b20c3cc  🔴 Loop callado: chatbot-cola
+onia-tg.log 2026-09-19T23:04Z  TAREA t_27f3d756  🔴 Loop callado: web-venta
+onia-tg.log 2026-09-20T01:34Z  TAREA t_c6f54fcb  🔴 la PC de casa no da senales — sus 4 loops callados
+```
+
+**El defecto real, y es de diseño:** la línea del cron llama a `onia-tg.sh` SIN
+`ONIA_TG_DIRECTO=1`, así que desde el 2026-09-08 el aviso no sale a Telegram: **se convierte
+en una tarea del tablero**. Y el tablero lo leen **los loops**. O sea: *el aviso de que los
+loops están muertos se le entrega a los loops muertos*. Es una carta al buzón del difunto.
+
+**Y el parte diario lo tapó, no lo destapó.** `onia-parte-diario.sh` nombra sólo las 5 tareas
+`[auto:]` más viejas y cuenta el resto. La tarea del apagón es la **#16 de 16** — la más
+nueva —, así que las mañanas del 20 y del 21 el único mensaje del día listó drops faltantes
+del 9 y 10 de septiembre y resumió la caída real como *«… y 11 más en el tablero»*.
+Los dos mensajes salieron con 661 bytes idénticos (`onia-tg.log`: `OK message_id=6718`,
+`message_id=6749`).
+
+**Arreglo de una línea** (`crontab -e`, y el gemelo de `onia-vigia-vps.log` tiene el mismo
+agujero):
+
+```
+4,34 * * * * ONIA_TG_DIRECTO=1 ONIA_LOG_DIR=/var/log/homelab /root/bin/onia-vigia-loops-remotos.sh >> /var/log/onia-vigia-loops-remotos.log 2>&1
+```
+
+Y el parte diario tiene que ordenar por gravedad/novedad antes de recortar a 5, o su recorte
+va a seguir escondiendo justo lo que acaba de romperse.
+
 ```bash
 # comprobar desde el VPS
 ssh -i ~/.ssh/onia_hermes_vps_ed25519 root@187.77.16.63 'ss -tln | grep 2222 || echo CAIDO'
@@ -52,12 +86,69 @@ ssh -i ~/.ssh/onia_hermes_vps_ed25519 root@187.77.16.63 '/root/bin/casa.sh "upti
 ```
 Reparar exige a Sergio Urcullo encender WSL en esa PC (no hay sudo remoto).
 
+⚠️ **CORREGIDO 2026-09-21, medido: recuperar los loops NO exige tocar esa PC.** Lo que exige
+esa PC es recuperarlos *ahí*. El VPS está **entero y listo** para correrlos hoy — se contó en
+vivo, no se supuso:
+
+| pieza | estado en el VPS |
+|---|---|
+| corredor `/root/bin/onia-loop.sh` | existe, 33 KB, 8-sep |
+| prompts `/root/bin/loops/*.md` | **17 desplegados**, los 4 caídos incluidos |
+| worktrees `/root/loops/` | `onia-hermes`, `onia-platform` + 6 espejos de carril |
+| `claude` CLI | `/usr/bin/claude` **2.1.197**, autenticado — `claude -p` contesta |
+| líneas de cron `onia-loop.sh` | **CERO** |
+
+Lo único que falta son las líneas del cron. Es decir: **la máquina que no se puede prender
+sola es la única que corre los loops, teniendo al lado una que está prendida hace 28 días.**
+Eso no es una avería, es la arquitectura — y es lo que hay que decidir, no parchar.
+
+⚠️ Mudarlos de vuelta **no es sólo descomentar**: `scripts/loops_registrados.mjs` compara en
+las dos direcciones contra `hermes-content/docs/cola/loops.md`, así que las filas tienen que
+pasar de `casa` a `VPS` **en el mismo movimiento** o `main` se pone roja para todos los
+carriles. El orden y la trampa están escritos en ese mismo archivo.
+
 ### ⚠️ Dos jobs de Hermes fallando hoy
 - `onia-ordenador-tablero`: `RateLimitError ... TPM Limit 200000, Used 56050, Requested
   144473` — **3 fallos seguidos**. El prompt manda demasiado contexto de una; el techo ya
   no es el saldo, es tokens-por-minuto del tier.
 - `hermes-daily-content-video-plan`: `Interrupted by shutdown before terminal completion`
   (hoy 08:12). Una sola vez, no es patrón todavía.
+
+### 🔴 Lo que costaron esas 48 h sin loops (medido 2026-09-21 19:50 UTC)
+
+Los loops no son "trabajo extra": son **lo único que arregla lo que se rompe solo**. Sin
+ellos el sistema no se detiene — se degrada en silencio y sigue reportando normalidad.
+
+1. **El chatbot de ventas estuvo mudo ~33 horas.** `/var/log/onia-bot-watchdog.log`:
+   **408 ciclos fallidos el 20-sep + 587 el 21-sep**, uno cada 2 min, con el watchdog
+   reiniciándolo y escribiendo *«sigue caido despues del reinicio»* cada vez. Se recuperó
+   solo a las **19:34 UTC de hoy**. Arrancó el día siguiente a la muerte de los loops.
+   El watchdog **sí** avisó por Telegram (va directo, no por el enrutador), pero avisa
+   **una vez por incidente** y después calla: 33 h de caída = 1 mensaje.
+2. **5 prospectos reales colgados hace 23-28 días** (`onia-vigia-sin-respuesta.log`), dos
+   de ellos WhatsApp con intención explícita — uno dice literalmente que *está evaluando un
+   sistema de gestión para una clínica*, que es el cliente ideal del doc de estrategia. Más
+   2 atendidos por el bot que no volvieron y nadie miró. El vigía los cuenta cada 2 h desde
+   hace semanas; su aviso también se convierte en tarea del tablero que nadie lee.
+3. **Y mientras tanto el parte diario dijo que todo estaba bajo control.** Ver la corrección
+   de §3: la caída era la tarea #16 de 16 y quedó fuera del recorte de 5.
+
+**La conclusión incómoda, en una línea:** el cerebro tiene ojos (los vigías miden bien),
+tiene manos (los loops arreglan de verdad) y tiene boca (Telegram) — pero desde el 08-sep
+**la boca está conectada a las manos y no a Sergio Urcullo**, así que cuando las manos se
+mueren nadie se entera.
+
+### 🔴 Y el precio del ruido: el repo pesa 11 GB
+
+- `.git` del monorepo: **11 GB en disco, 3,75 GiB de pack**.
+- Causa medida: `hermes-content/docs/recorrido/` son **124 PNG (25 MB)** que el loop
+  `recorrido-cliente` **recommitea enteros cada vuelta** — **202 commits en 14 días** tocando
+  esa carpeta, **2.320 de los ~4.700 toques de archivo del período (≈49%)**.
+- Del total de 14 días: **1.178 commits de `root` (los loops)** vs 309 de Sergio Urcullo, y
+  por tipo **369 `docs:` contra 128 `feat:`**. La mayor parte del trabajo autónomo se está
+  yendo en documentar el sistema y en versionar capturas, no en producto.
+- Capturas de verificación: son evidencia, no fuente. Van a `.gitignore` + artefacto de CI,
+  o el repo se duplica cada mes.
 
 ### Sin commitear
 **Nada.** Árbol limpio y la rama ya está en `origin/main`.
