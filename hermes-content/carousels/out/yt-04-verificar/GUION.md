@@ -2,15 +2,37 @@
 
 11 láminas · ≈ 8:00 · se graba acapela mirando el deck (tecla **N** apaga las chuletas).
 
-⚠️ **RECONTADO EL 18-SEP, Y EL NÚMERO ESTABA MAL.** Acá decía *"los números de este video
-no cambian, no hace falta recontarlos"* — y por no recontarlos, el dato central del video
-era falso. Los errores de esa sesión (`handoff/onia-dev-node-setup.md` §5) son **18**, no
-12: 4 en §5.1 + 9 en §5.2 + 5 en §5.3. Contados en las **seis** versiones del archivo:
-siempre fueron 18. El «12» no sale de ninguna parte.
+⚠️ **RECONTADO TRES VECES, Y LAS TRES VECES APARECIÓ ALGO MAL.** Este bloque es el
+historial, no adorno: se lee antes de grabar.
 
-**Y el reparto también estaba mal.** Los 18 los encontró él revisando su propio trabajo;
-en §5 no hay ni uno atribuido a Sergio Urcullo. El que encontró Sergio Urcullo es **el de
-la pantalla de entrar** — otra sesión, otro día, y el único que llegó a producción.
+1. **La primera cabecera decía** *"los números de este video no cambian, no hace falta
+   recontarlos"*. Por no recontarlos, el dato central era falso: decía **12 errores**.
+2. **El 18-sep se recontó y salió 18** — correcto, y sigue siendo correcto: `§5` de
+   `hermes-content/docs/handoff/onia-dev-node-setup.md` tiene **18** ítems numerados
+   (4 en §5.1 + 9 en §5.2 + 5 en §5.3), y **ninguno** atribuido a Sergio Urcullo.
+   Recontado hoy, 21-sep:
+   `awk '/^## 5\./{f=1} /^## 6\./{f=0} f' <archivo> | grep -cE '^[0-9]+\. '` → **18**.
+3. **Pero esa corrección metió DOS errores nuevos, y son los que se arreglan hoy:**
+   - ❌ *"El «12» no sale de ninguna parte."* **Sí sale.** La versión del **2026-09-06**
+     de ese MISMO archivo abre §5 diciendo, textual: *«Doce. Once los agarré verificando;
+     el primero lo agarró Sergio Urcullo.»* — o sea el «12, y 11 revisando» del material
+     viejo estaba bien sacado, sólo que de una versión vieja.
+     `git show 1726b799:hermes-content/docs/handoff/onia-dev-node-setup.md`
+   - ❌ *"Contados en las seis versiones del archivo."* **No son seis: son 25 commits**, y
+     el conteo NO fue siempre 18 — las versiones del 5 y 6 de septiembre tienen 12, 6 y 5
+     ítems bajo otro título. El 18 es sólo de las versiones del **8 de septiembre**.
+     `git log --oneline -- <archivo> | wc -l` → **25**.
+
+🔴 **Y el hallazgo que obliga a cambiar el guion: los 18 NO son de una sola sesión.** El
+propio §5.1 se titula *«De esta sesión»* y tiene **4** ítems; los otros 14 se acumularon a
+lo largo del carril. Los commits de ese archivo van del **2026-09-04 al 2026-09-08** —
+**cinco días** — y **10 de los 18** están palabra por palabra ya en la versión del 06-sep
+(esa versión tenía exactamente **12** ítems, de ahí salía el número viejo).
+**En cámara se dice «cinco días», no «una sola sesión».**
+
+**El reparto sí estaba bien:** en la versión de HOY de §5 no hay ni un error atribuido a
+Sergio Urcullo. El que encontró Sergio Urcullo es **el de la pantalla de entrar** — otro
+carril, otro día, y el único que llegó a producción.
 
 ---
 
@@ -21,17 +43,16 @@ la pantalla de entrar** — otra sesión, otro día, y el único que llegó a pr
 
 **2 · El caso (0:25–1:25)** — *contalo con vergüenza, no con distancia*
 > Tenía una pantalla en producción. La pantalla donde la gente entra al sistema.
-> La di por buena tres veces.
+> La di por buena dos veces.
 > La primera: respondía bien, sin un solo error. Verde.
 > La segunda: busqué las palabras adentro del archivo, y ahí estaban todas.
-> La tercera: pregunté si estaba bien, y me dijeron que sí.
 > Nunca la abrí.
-> Cuando alguien la abrió, los íconos se veían como palabras sueltas. En la pantalla de entrar. En producción. Días.
+> Cuando por fin la abrí, los íconos se veían como palabras sueltas. En la pantalla de entrar. En producción.
 >
 > *[DEMO EN VIVO — `demo-falso-verde/demo.sh`. Corrés las tres pruebas en pantalla:
 > el grep encuentra los cuatro textos → verde. La página responde 200 → verde.
 > Y al abrirla dice «credit_card_off» donde va un candado.]*
-> Mirá. Los dos primeros me dijeron que estaba bien. Ninguno de los dos la había mirado.
+> Mirá. Los dos me dijeron que estaba bien. Ninguno de los dos la había mirado.
 
 **3 · Por qué pasa (1:25–2:15)**
 > ¿Y por qué pasa esto? Porque terminar y lograr no son lo mismo.
@@ -63,7 +84,7 @@ la pantalla de entrar** — otra sesión, otro día, y el único que llegó a pr
 
 **7 · La idea más útil (4:25–5:15)**
 > Le falta el porqué.
-> Mirá la diferencia. La misma regla, pero con lo que pasó cuando no se cumplió: la pantalla de entrar mostró los nombres de los íconos como texto durante días, y yo la había dado por buena tres veces sin abrirla nunca.
+> Mirá la diferencia. La misma regla, pero con lo que pasó cuando no se cumplió: la pantalla de entrar mostró los nombres de los íconos como texto, en producción, y yo la había dado por buena dos veces sin abrirla nunca.
 > Esa segunda mitad es la que hace que se cumpla.
 > **Una regla sin su historia se desobedece.** Con el caso real que la originó, no.
 > Y esto no es sólo para la IA. Funciona igual con las personas.
@@ -77,10 +98,10 @@ la pantalla de entrar** — otra sesión, otro día, y el único que llegó a pr
 
 **9 · Mi caso (6:05–6:40)**
 > Te doy el número, y es incómodo.
-> En una sola sesión de trabajo mía quedaron anotados dieciocho errores.
+> En cinco días trabajando sobre una misma cosa quedaron anotados dieciocho errores suyos.
 > Y acá está lo que no me esperaba: los dieciocho los encontró él. Revisando su propio trabajo, solo.
 > Se corrige muchísimo más de lo que la gente cree.
-> Pero el de la pantalla de entrar no está en esa lista. Ese se le escapó, y lo encontré yo — en producción, días después.
+> Pero el de la pantalla de entrar no está en esa lista. Ese se le escapó, y lo encontré yo, abriéndola — en producción.
 > Y ese es todo el punto: el que se le escapa es justo el que llega al cliente.
 > Casi ninguno era un error de código. Eran comprobaciones que no comprobaban nada.
 >
