@@ -20,6 +20,21 @@ terminar el video.
 
 Total: **3 Feed + 4 Trial + 5 Trial v2 = 12 piezas**.
 
+## Frentes cubiertos hoy
+
+| Frente | Pieza concreta | Herramientas/nombres que deben aparecer |
+|---|---|---|
+| Marca personal Sergio | Feed normal + 5 videos a cámara | `n8n`, `Webhook`, `IF`, `Google Sheets`, `Telegram`, `AI Agent`, `OpenAI Chat Model`, `Claude Code`, `GitHub`, `MCP`, `Notion`, `Loop Over Items`, `Wait` |
+| Comunidad WhatsApp | Drop con ejercicio ejecutable | `Webhook → IF → Google Sheets → Telegram` + plantilla JSON |
+| TikTok / Instagram Reels | Recortes de 30–45 s | Un resultado visible por video; nombres de nodos en pantalla |
+| YouTube | 3 videos largos derivados | workflow n8n completo; Claude Code + GitHub; MCP/agentes/loops |
+| Samuel | Pilar y yap | Samuel decide y graba; esta cola no le pone palabras en la boca |
+| Edición | Primer corte del Feed normal | pantalla principal, subtítulos rail-first, overlays `ENTRADA / REGLA / SALIDA` |
+
+Regla de especificidad: cada video debe mostrar una herramienta, un nodo, un campo,
+un comando o una decisión concreta. Si no se puede pausar la pantalla y copiar algo,
+el video todavía está demasiado abstracto.
+
 ---
 
 ## Feed · carrusel educativo
@@ -79,36 +94,51 @@ Comentá una tarea repetida de tu negocio y te digo cómo la mapearía.
 
 ### Título
 
-**Cómo diseñar tu primera automatización en tres nodos**
+**n8n: Webhook → IF → Google Sheets → Telegram para no perder leads**
 
 ### Qué se muestra
 
-Un workflow de prueba, sin datos reales: `Webhook → IF → Telegram`.
+Un workflow de prueba en n8n, sin datos reales:
+`Webhook → IF → Google Sheets → Telegram`.
+
+Payload ficticio para pegar en el test del `Webhook`:
+
+```json
+{
+  "name": "Ana Demo",
+  "phone": "+59170000000",
+  "service": "landing page",
+  "source": "instagram"
+}
+```
 
 ### Guion hablado
 
 > Si querés diseñar tu primera automatización, no empieces conectando veinte aplicaciones.
-> Dibujá tres nodos.
+> En n8n, empezá con cuatro pasos que puedas probar.
 >
-> Primero: el disparador. Por ejemplo, entra un formulario de contacto.
+> Primero, `Webhook`: recibe `name`, `phone`, `service` y `source`.
 >
-> Segundo: una decisión. Si faltan datos importantes, el flujo pide completarlos. Si el
-> formulario está completo, continúa.
+> Segundo, `IF`: comprobá que `phone` y `service` no estén vacíos.
 >
-> Tercero: una salida. Guarda el registro y avisa por Telegram a la persona responsable.
+> En la salida verdadera, `Google Sheets` usa `Append Row` para guardar el lead.
+> Después, `Telegram` usa `Send Message` para avisarle al responsable.
 >
-> Eso ya es una automatización útil: entrada, regla y resultado verificable.
+> En la salida falsa, no guardes un lead incompleto: mandá un mensaje pidiendo el campo
+> que falta.
 >
-> El error es agregar IA antes de tener claro qué pasa en cada camino. Si no podés explicar
-> tus tres nodos, todavía no necesitás un agente. Necesitás dibujar mejor el proceso.
+> Eso ya es una automatización funcional: recibe, valida, registra y avisa.
+> No agregues `AI Agent` todavía. Primero hacé que el flujo determinista funcione.
 >
 > Comentá una tarea repetitiva y la convertimos en estos tres nodos.
 
 ### En pantalla
 
-- Mostrar el flujo de prueba con datos ficticios.
-- Abrir el nodo de decisión y enseñar las dos salidas.
-- Terminar con `ENTRADA → REGLA → SALIDA`.
+- En `Webhook`, mostrar el JSON ficticio.
+- En `IF`, mostrar las condiciones `phone is not empty` y `service is not empty`.
+- En `Google Sheets`, mostrar `Append Row` y el mapeo `name`, `phone`, `service`, `source`.
+- En `Telegram`, mostrar `Send Message` con texto de prueba.
+- Terminar con `ENTRADA → VALIDACIÓN → REGISTRO → AVISO`.
 
 ---
 
@@ -116,22 +146,23 @@ Un workflow de prueba, sin datos reales: `Webhook → IF → Telegram`.
 
 ### Título
 
-**Mapeá cualquier proceso con esta plantilla de 60 segundos**
+**n8n: cómo mapear un lead con Webhook, IF, Google Sheets y Telegram**
 
 ### Guion hablado
 
-> Para entender si una tarea se puede automatizar, escribí solo tres bloques.
+> Antes de abrir n8n, escribí estos cuatro campos.
 >
-> Uno: qué entra. “Un cliente manda un mensaje preguntando por un servicio”.
+> Entrada: un formulario manda `name`, `phone`, `service` y `source` al `Webhook`.
 >
-> Dos: qué decisión tomás. “Si pregunta precio, le mando la información aprobada; si
-> pide algo fuera de catálogo, lo paso a una persona”.
+> Decisión: el nodo `IF` revisa que `phone` y `service` existan.
 >
-> Tres: qué tiene que quedar hecho. “El mensaje registrado, la respuesta enviada y la
-> excepción asignada”.
+> Salida: `Google Sheets` hace `Append Row` y `Telegram` hace `Send Message` al equipo.
 >
-> Si no podés llenar esos tres bloques, no automatices todavía. Si podés, ya tenés el
-> primer borrador del workflow.
+> Excepción: si falta `phone`, la rama falsa manda un mensaje para pedirlo y no registra
+> el lead como completo.
+>
+> Copiá esta estructura antes de construir cualquier workflow. Te evita conectar nodos
+> sin saber qué problema resuelven.
 
 ### Texto en pantalla
 
@@ -142,35 +173,52 @@ SALIDA:
 EXCEPCIÓN:
 ```
 
+En pantalla, escribir debajo: `Webhook → IF → Google Sheets → Telegram`.
+
 ---
 
 ## Guion 3 · Trial v2
 
 ### Título
 
-**El flujo de n8n que todo negocio debería entender**
+**n8n AI Agent: clasificá leads sin dejar que la IA responda sola**
 
 ### Guion hablado
 
-> Este es el patrón más simple que tenés que entender en n8n.
+> Un `AI Agent` de n8n no debería recibir permiso para hacer todo.
 >
-> El primer nodo recibe el evento: un formulario, un mensaje o un archivo.
+> Primero, `Webhook` recibe el mensaje del formulario.
 >
-> El segundo valida una condición: ¿hay datos suficientes para continuar?
+> Después, `AI Agent` usa `OpenAI Chat Model` para clasificarlo en `web`, `automatización`
+> o `otro`.
 >
-> El tercero ejecuta una acción: guardar, avisar o crear una tarea.
+> Pedile una salida estructurada con tres campos: `categoria`, `urgencia` y
+> `requiere_humano`.
 >
-> En pseudocódigo queda así: “cuando entra X, si cumple Y, hacé Z; si no, pedí lo que
-> falta”.
+> Luego, `IF` comprueba `requiere_humano = true`.
 >
-> Probalo con datos ficticios y agregá una salida visible para cada camino. Si solo
-> probás el camino feliz, la primera excepción te rompe el flujo.
+> Si es verdadero, `Telegram` avisa a una persona. Si es falso, `Google Sheets` guarda la
+> clasificación para revisarla después.
+>
+> La IA clasifica. El nodo `IF` decide la ruta. El humano confirma la respuesta.
+> Esa separación es más segura que darle al agente permiso para enviar mensajes.
 
 ### En pantalla
 
 ```text
-TRIGGER → VALIDAR → ACCIÓN
-             ↘ FALTA DATO → PEDIR DATO
+Webhook → AI Agent + OpenAI Chat Model → IF
+                                      ↘ Telegram: revisión humana
+                                      ↘ Google Sheets: registro
+```
+
+Salida JSON para mostrar en pantalla:
+
+```json
+{
+  "categoria": "web",
+  "urgencia": "normal",
+  "requiere_humano": true
+}
 ```
 
 ---
@@ -179,31 +227,32 @@ TRIGGER → VALIDAR → ACCIÓN
 
 ### Título
 
-**Automatización, agente o loop: elegí con este árbol**
+**Automatización, AI Agent o loop: elegí con herramientas reales**
 
 ### Guion hablado
 
-> No todo problema necesita un agente. Usá este árbol.
+> No todo problema necesita un agente. Elegí según la forma del problema.
 >
-> Si las reglas son fijas y la salida es predecible, usá una automatización.
+> Si las reglas son fijas, usá n8n con `IF`, `Google Sheets` y `Telegram`.
 >
-> Si el sistema tiene que leer lenguaje, comparar opciones y decidir entre caminos,
-> evaluá un agente, pero dale herramientas limitadas y una salida estructurada.
+> Si tiene que leer lenguaje y clasificar una consulta, usá `AI Agent` con `OpenAI Chat
+> Model`, salida JSON y solo las herramientas que necesita.
 >
-> Si el trabajo se repite por horario, tiene una verificación y puede volver a intentar,
-> eso es un loop.
+> Si tiene que revisar lo mismo cada cierto tiempo, usá `Schedule Trigger`, `HTTP Request`,
+> `IF` y `Wait`, con un límite de intentos.
 >
-> Ejemplo: registrar un formulario es automatización. Clasificar una consulta complicada
-> puede usar un agente. Revisar cada hora si una web responde es un loop.
+> Ejemplo: registrar un formulario es automatización. Clasificar un mensaje es un agente.
+> Revisar cada diez minutos si una API responde es un loop.
 >
 > Elegir la arquitectura correcta te ahorra más que elegir el modelo de moda.
 
 ### En pantalla
 
 ```text
-REGLAS FIJAS       → AUTOMATIZACIÓN
-DECISIÓN AMBIGUA   → AGENTE
-REVISIÓN REPETIDA  → LOOP
+IF + Google Sheets + Telegram       → AUTOMATIZACIÓN
+AI Agent + OpenAI Chat Model        → AGENTE
+Schedule Trigger + HTTP Request
++ IF + Wait                         → LOOP
 ```
 
 ---
@@ -212,34 +261,39 @@ REVISIÓN REPETIDA  → LOOP
 
 ### Título
 
-**MCP: primero diseñá el contrato de la herramienta**
+**MCP en Claude Code: conectá Notion sin darle permiso para todo**
 
 ### Guion hablado
 
-> Antes de conectar una herramienta con MCP, diseñá su contrato.
+> MCP no es un modelo y tampoco es magia. Es el contrato que permite que un cliente como
+> `Claude Code` use herramientas de un servidor.
 >
-> Escribí cuatro cosas: nombre de la herramienta, entradas permitidas, salida esperada
-> y permisos.
+> Para probar un servidor remoto de Notion, el comando es:
+> `claude mcp add --transport http notion https://mcp.notion.com/mcp`.
 >
-> Por ejemplo: `consultar_estado_pedido` recibe un `pedido_id`, devuelve estado y fecha,
-> y solo puede leer. No puede cambiar el pedido ni enviar mensajes.
+> Después ejecutás `claude mcp list` y en Claude Code abrís `/mcp` para autenticarlo.
 >
-> Ese contrato te dice si realmente necesitás MCP. Si es una herramienta local para un
-> solo flujo, probablemente alcanza con una integración directa. Si varios agentes o
-> clientes necesitan la misma conexión gobernada, MCP empieza a tener sentido.
+> Antes de usarlo, definí el contrato: qué herramienta llamás, qué input acepta, qué
+> devuelve y si es lectura o escritura.
 >
-> MCP estandariza el acceso. No reemplaza el diseño del proceso.
+> Un ejemplo seguro sería `get_lead_by_id`, que recibe `lead_id` y devuelve nombre,
+> estado y fuente. Solo lectura. No puede borrar el lead ni enviar mensajes.
+>
+> MCP estandariza el acceso; no reemplaza los permisos, la validación ni el proceso.
 
 ### En pantalla
 
 ```json
 {
-  "tool": "consultar_estado_pedido",
-  "input": { "pedido_id": "string" },
-  "output": { "estado": "string", "fecha": "string" },
+  "tool": "get_lead_by_id",
+  "input": { "lead_id": "string" },
+  "output": { "name": "string", "status": "string", "source": "string" },
   "permissions": ["read"]
 }
 ```
+
+No mostrar tokens ni credenciales. Si el servidor no está conectado, grabar el comando
+como explicación y enseñar `claude mcp list` con una configuración de prueba.
 
 ---
 
@@ -247,33 +301,32 @@ REVISIÓN REPETIDA  → LOOP
 
 ### Título
 
-**Cómo construir un loop que sepa cuándo terminó**
+**n8n: cómo construir un loop con Wait, IF y límite de intentos**
 
 ### Guion hablado
 
-> Un loop útil no empieza con tres agentes. Empieza escribiendo qué significa terminado.
+> Un loop útil en n8n no empieza con tres agentes. Empieza con una condición de salida.
 >
-> Por ejemplo: “todos los archivos pasan el test, no hay errores en consola y el reporte
-> incluye los cambios realizados”. Esa frase es tu criterio de aceptación.
+> Ejemplo: consultás una API de pagos y querés esperar hasta que el estado sea `paid`.
 >
-> Después separás tres funciones: el planeador propone los pasos, el ejecutador hace el
-> trabajo y el evaluador revisa solo el resultado contra ese criterio.
+> Usá `Schedule Trigger` para iniciar, `HTTP Request` para consultar el estado, `IF` para
+> comparar `status = paid` y `Wait` para esperar diez minutos antes de volver a consultar.
 >
-> Si el evaluador rechaza, devuelve el motivo exacto al ejecutador. Poné un máximo de dos
-> vueltas. Si no está verde después de eso, el loop avisa y se detiene.
+> Guardá `attempt` en el dato del workflow y cortá cuando llegue a tres intentos.
+> Si llega a `paid`, `Telegram` avisa que terminó. Si llega a tres intentos sin éxito,
+> `Telegram` avisa que necesita una persona.
 >
-> Sin criterio de aceptación, límite y aviso, no tenés autonomía. Tenés un proceso que
-> puede gastar tokens sin saber cuándo parar.
+> Sin condición de salida, límite y aviso, no tenés autonomía. Tenés un workflow que puede
+> consultar para siempre.
 
 ### En pantalla
 
 ```text
-PLANEAR → EJECUTAR → EVALUAR
-              ↑          │
-              └── corregir si falla
+Schedule Trigger → HTTP Request → IF status = paid → Telegram: terminado
+                         ↑              │
+                         └── Wait 10 min
 
-SALIR: aprobado | detener y avisar
-TOPE: 2 vueltas
+attempt >= 3 → Telegram: revisión humana
 ```
 
 ---
@@ -292,26 +345,50 @@ No vuelvas a grabar los tres contenidos del Feed para Trial.
 
 > Hoy vamos a elegir qué automatizar primero.
 >
-> Copiá esta plantilla con una tarea real de tu negocio:
+> Copiá esta plantilla con una tarea real de tu negocio y elegí nombres concretos:
 >
 > `Entrada:` ¿qué dispara el proceso?
 >
-> `Decisión:` ¿qué regla aplicás?
+> `Herramienta:` ¿entra por `Webhook`, `Telegram Trigger` o `Google Sheets Trigger`?
+>
+> `Decisión:` ¿qué valida el nodo `IF`?
 >
 > `Salida:` ¿qué tiene que quedar hecho?
 >
 > `Excepción:` ¿cuándo debe intervenir una persona?
 >
-> Ejemplo: formulario → validar datos → registrar y avisar → si falta información,
-> pedirla. Compartí tu ejemplo en General y vemos si necesita automatización, agente o
-> simplemente una regla mejor escrita.
+> Ejemplo funcional: `Webhook` recibe `name`, `phone`, `service` y `source` → `IF` valida
+> `phone` y `service` → `Google Sheets / Append Row` registra → `Telegram / Send Message`
+> avisa → si falta `phone`, se detiene y pide el dato.
+>
+> Compartí tu ejemplo en General. Te decimos si conviene `IF`, `AI Agent` o un loop con
+> `Wait`. No empieces por el modelo: empezá por la entrada y la salida.
+
+## Aperturas para YouTube
+
+Estos cortos no se quedan en clips sueltos. Cada uno abre un video largo con una promesa
+demostrable:
+
+1. **Construí un sistema de leads en n8n desde cero** — `Webhook`, `IF`, `Google Sheets`,
+   `Telegram`, manejo de datos faltantes y prueba con JSON ficticio.
+2. **Claude Code para construir una automatización sin perder el control** —
+   `npm install -g @anthropic-ai/claude-code`, `claude`, lectura del repo, cambios pequeños,
+   `git diff`, `git status` y revisión humana antes del commit.
+3. **MCP, AI Agent y loops: qué problema resuelve cada uno** — `claude mcp add`,
+   `claude mcp list`, `/mcp`, `AI Agent + OpenAI Chat Model`, `HTTP Request`, `IF` y `Wait`.
+
+Estructura de cada video largo: problema real → arquitectura → construcción en pantalla →
+prueba con datos ficticios → error que apareció → criterio para saber si funciona → recurso
+exclusivo para la comunidad.
 
 ## Orden de rodaje
 
-1. Guiones 2–6, todos a cámara, sin cambiar set.
-2. Guion 1 con el workflow de prueba y datos ficticios.
-3. Carrusel.
-4. Samuel graba su pilar y su yap.
+1. Grabar guiones 2–6 a cámara, sin cambiar set; cada uno debe nombrar la herramienta y
+   mostrar su diagrama o JSON.
+2. Grabar guion 1 con n8n abierto y el workflow `Webhook → IF → Google Sheets → Telegram`.
+3. Grabar un plano limpio de cada nodo y de cada error/exception para los cortes.
+4. Crear el carrusel con la matriz de nodos y herramientas.
+5. Samuel graba su pilar y su yap; no se mezclan con los guiones de Sergio.
 
 Cada video tiene una sola enseñanza. Si no podés mostrar la plantilla, el diagrama o el
 contrato en pantalla, no lo publiques todavía.

@@ -10,9 +10,11 @@ procesar las siguientes piezas sin publicar nada automáticamente.
 ## Fuente de verdad
 
 - Guiones del día: `hermes-content/docs/cola/GUIONES-DIA-2026-09-21.md`
-- Pieza prioritaria: **Guion 1 — Cómo diseñar tu primera automatización en tres nodos**
-- Enseñanza: diseñar un flujo mínimo `Webhook → IF → Telegram`, mostrando entrada,
-  regla, dos caminos y salida verificable.
+- Pieza prioritaria: **Guion 1 — n8n: Webhook → IF → Google Sheets → Telegram para no
+  perder leads**
+- Enseñanza: diseñar un flujo mínimo que recibe `name`, `phone`, `service` y `source`,
+  valida `phone` y `service` con `IF`, guarda con `Google Sheets / Append Row` y avisa
+  con `Telegram / Send Message`; la rama falsa pide el dato faltante.
 
 ## Primer entregable
 
@@ -23,7 +25,7 @@ Nombre de trabajo: `01-feed-3-nodos`
 - Fuente principal: grabación de pantalla del workflow de prueba.
 - Cámara: usar talking head de Sergio solo si existe un bruto limpio; si no, pantalla
   más voz mantienen el video válido.
-- Texto de pantalla: `ENTRADA`, `REGLA`, `SALIDA`; una idea visible por beat.
+- Texto de pantalla: `ENTRADA`, `VALIDACIÓN`, `REGISTRO`, `AVISO`; una idea visible por beat.
 - Subtítulos: quemados, legibles y en rail lateral/espacio libre; no crear una franja
   inferior que empuje el contenido hacia arriba.
 - Audio: limpiar pausas y errores, conservar la explicación y normalizar al final.
@@ -41,7 +43,8 @@ Convención sugerida:
 - `01-feed-3-nodos-camera.mp4` (opcional)
 - `01-feed-3-nodos-voice.wav` (opcional)
 
-El workflow debe usar datos ficticios y enseñar ambas ramas del `IF`. Si todavía no
+El workflow debe usar datos ficticios y enseñar ambas ramas del `IF`, además del mapeo de
+`name`, `phone`, `service` y `source` a `Google Sheets / Append Row`. Si todavía no
 existe el bruto, no crear un render de relleno ni marcar la pieza como terminada.
 
 ## Salida esperada
