@@ -26,6 +26,47 @@ SITIOS = {
 PERFILES = Path(r"E:\ONIA-YouTube\grabaciones\_perfiles")
 
 
+def _abrir_ventana(pw, perfil):
+    """Abre la ventana con el primer navegador que arranque de verdad.
+
+    El 2026-09-21 esto reventó en la terminal de Sergio Urcullo con
+    `Executable doesn't exist at ...ms-playwright\\chromium-1234\\chrome-win64\\chrome.exe`:
+    Playwright se actualizó y el binario CON ventana todavía no estaba bajado (el
+    headless shell sí). El mensaje que imprime Playwright («run playwright install»)
+    manda a descargar ~150 MB para algo que esta máquina ya tiene: **Chrome está
+    instalado**, y el generador de carruseles lo viene usando desde agosto.
+
+    Por eso el orden: Chrome del sistema primero (`channel`), el Chromium de
+    Playwright después. Así una actualización de Playwright no vuelve a bloquear un
+    login que no tiene nada que ver con Playwright.
+    """
+    intentos = [
+        ("Chrome del sistema", {"channel": "chrome"}),
+        ("Edge del sistema", {"channel": "msedge"}),
+        ("Chromium de Playwright", {}),
+    ]
+    errores = []
+    for nombre, extra in intentos:
+        try:
+            ctx = pw.chromium.launch_persistent_context(
+                str(perfil),
+                headless=False,
+                viewport={"width": 1440, "height": 900},
+                args=["--start-maximized"],
+                **extra,
+            )
+            print(f"  (abierto con: {nombre})")
+            return ctx
+        except Exception as e:
+            errores.append(f"    - {nombre}: {str(e).splitlines()[0][:120]}")
+    print("\n  No pude abrir ninguna ventana. Lo que falló, en orden:")
+    print("\n".join(errores))
+    sys.exit(
+        "\n  Si fallaron los tres, corré una vez:  python -m playwright install chromium\n"
+        "  (y si estás en una sesión sin escritorio, esto no va a andar: necesita ventana)"
+    )
+
+
 def main():
     if len(sys.argv) < 2 or sys.argv[1] not in SITIOS:
         sys.exit(f"Uso: python abrir_sesion.py [{' | '.join(SITIOS)}]")
@@ -37,12 +78,7 @@ def main():
     print("  Cuando el sitio ya este adentro, CERRA la ventana: la sesion queda guardada.\n")
 
     with sync_playwright() as pw:
-        ctx = pw.chromium.launch_persistent_context(
-            str(perfil),
-            headless=False,
-            viewport={"width": 1440, "height": 900},
-            args=["--start-maximized"],
-        )
+        ctx = _abrir_ventana(pw, perfil)
         page = ctx.pages[0] if ctx.pages else ctx.new_page()
         page.goto(SITIOS[sitio])
         # espera hasta que se cierre la ventana (o 20 min de guarda)
