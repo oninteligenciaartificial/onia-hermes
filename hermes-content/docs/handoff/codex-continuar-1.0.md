@@ -57,16 +57,32 @@ docker exec onia-center sh -c "cp -a /tmp/onia-bot/bot/. /tmp/onia-bot/ && rm -r
 /opt/onia/bot/webhook-server.sh start
 ```
 
+**El watchdog existía, detectó la caída, y no alcanzó.** Hay un cron cada 2 minutos
+(`*/2 * * * * /opt/onia/bot/webhook-watchdog.sh`). Durante dos días escribió, cada 2 minutos:
+
+```
+[…] el webhook NO responde en :3020 — reiniciando
+[…] ERROR: el webhook sigue caido despues del reinicio — mirar ./webhook-server.sh logs
+```
+
+**800 KB de log gritando en una habitación vacía.** Reiniciar no arregla un archivo que no
+está, y el watchdog **no avisa a nadie**: no manda Telegram, no abre incidente, solo escribe
+en `/var/log/onia-bot-watchdog.log`. A las 19:34 del 21-sep, apenas se corrigió el
+anidamiento, su siguiente ciclo levantó el servicio y cerró el incidente solo.
+
 **⚠️ LO QUE FALTA — TAREA PARA CODEX (alta prioridad):**
-1. **Encontrar qué sync anidó la carpeta** y arreglarlo en la fuente. Sospechoso principal:
-   `deploy-bot.sh` o el bloque de sync de `webhook-server.sh` (usa `docker cp` con `$DEST`;
-   `docker cp origen/. destino` vs `docker cp origen destino` es exactamente la diferencia
-   que produce el anidamiento). Fuente del bot: `hermes-content/deploy/vps-ops/bot/` en
-   `onia-hermes`, se deploya desde el checkout `/root/loops/onia-hermes`.
-2. **Poner una sonda que avise**: el bot puede morir y nadie se entera. Hay n8n con Telegram
-   a Sergio Urcullo ya funcionando (workflow `AooUOwSMSAaFLQnA`): agregarle un check horario
-   de `webhook-server.sh status` que avise SOLO si `ok:false`. Sin esto, el próximo silencio
-   de dos días se repite.
+1. **Que el watchdog AVISE cuando no puede arreglarlo.** Es el hueco real: no falta una sonda,
+   falta la alerta. Tras N ciclos fallidos seguidos (3 ya es de sobra), que mande Telegram a
+   Sergio Urcullo — el bot `TELEGRAM_BOT_TOKEN` ya vive en el contenedor de n8n y hay
+   workflows usándolo. *Listo cuando*: se rompe el bot a propósito y llega el aviso en <10 min.
+2. **Encontrar qué sync anidó la carpeta** y arreglarlo en la fuente. Sospechoso principal:
+   `deploy-bot.sh` o el bloque de sync de `webhook-server.sh` (`docker cp origen/. destino`
+   vs `docker cp origen destino` es exactamente la diferencia que produce el anidamiento).
+   Fuente del bot: `hermes-content/deploy/vps-ops/bot/` en `onia-hermes`, se deploya desde el
+   checkout `/root/loops/onia-hermes`.
+3. **Que el watchdog distinga "no responde" de "no arranca"**: ante `MODULE_NOT_FOUND` debería
+   forzar un re-sync completo (borrar el `.stamp` y `$DEST`) en vez de reintentar el mismo
+   arranque roto 1.440 veces.
 
 ---
 
@@ -229,22 +245,30 @@ clic tuyo — aceptable con los primeros clientes, no a escala.
 
 Cada uno con su criterio de "listo". **No abrir el siguiente sin cerrar el anterior.**
 
-1. **Arreglar la causa del bot caído** (§3). *Listo cuando*: un `deploy-bot.sh --aplicar`
-   desde cero deja los archivos en `/tmp/onia-bot/` sin anidar, y `webhook-server.sh status`
-   da `ok:true` después.
-2. **Sonda del bot en n8n con aviso a Telegram** (§3). *Listo cuando*: se apaga el bot a
-   propósito y llega el aviso en la hora siguiente.
-3. **Limpiar el VPS**: hay un contenedor `onia-platform-qa` (staging) levantado hace 3 días y
-   builds/tarballs viejos; el disco está al **75% (144G de 193G)**. *Listo cuando*: el disco
-   baja de 70% y solo quedan el build vivo + 2 backups.
-4. **Portar WF-05 y WF-11 al patrón SSH e importarlos a n8n** (hoy sus nodos de Postgres
+1. **Que el watchdog avise cuando no puede arreglarlo** (§3.1). Es lo más barato y lo que
+   habría ahorrado los dos días de silencio.
+2. **WhatsApp saliente por cliente** (§3.bis, BLOQUEANTE 1): que el Embedded Signup deje
+   también `whatsappPhoneNumberId`/`whatsappAccessToken` de esa org. Sin esto, cada cliente
+   nuevo exige que un superadmin pegue credenciales a mano, y mientras tanto los recordatorios
+   salen del número de Onia.
+3. **Arreglar la causa del anidado del bot** (§3.2). *Listo cuando*: un `deploy-bot.sh
+   --aplicar` desde cero deja los archivos en `/tmp/onia-bot/` sin anidar.
+4. **Adoptar el sistema de diseño que ya existe** (§3.bis): portar las 42 pantallas a la
+   primitiva `Card`, unificar los 8 `inputClass` en un form kit, y meter
+   `app/(dashboard)/dashboard/` dentro del sistema (hoy tiene CSS propio y es la PRIMERA
+   pantalla que ve un prospecto en la demo). *Listo cuando*: `grep -c "rounded-xl border
+   border-outline-variant"` baja de 108 a cerca de 0 y hay un solo estilo de campo.
+5. **Limpiar el VPS**: disco al **78% (151G de 193G)** y subiendo; hay un contenedor
+   `onia-platform-qa` (staging) levantado hace días, builds y tarballs viejos, y un log de
+   watchdog de 800 KB. *Listo cuando*: el disco baja de 70%.
+6. **Portar WF-05 y WF-11 al patrón SSH e importarlos a n8n** (hoy sus nodos de Postgres
    apuntan a hosts muertos; los JSON del repo ya llevan `idempotencyKey` y los nodos de Resend
    deshabilitados, commit `51328d91`). *Listo cuando*: importados y **dejados INACTIVOS** hasta
    que exista el primer cliente con `whatsappPhoneNumberId`.
-5. **Tandas de UI que siguen abiertas** (del doc comparativo): form kit (Input/Field/Select —
+7. **Tandas de UI que siguen abiertas** (del doc comparativo): form kit (Input/Field/Select —
    la mayor inconsistencia que queda), skeletons, DataTable, y breadcrumbs en las pantallas
    hondas del panel.
-6. **Flakies locales de vitest en Windows** (rotativas: backup-onia-postgres, rango-gitleaks,
+8. **Flakies locales de vitest en Windows** (rotativas: backup-onia-postgres, rango-gitleaks,
    cuentas-que-no-son-clientes, fechas-de-calendario). Verdes aisladas; **el CI de Linux es el
    árbitro**. No perseguirlas sin datos nuevos.
 
