@@ -63,6 +63,54 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 
 ## Ahora
 
+- [ ] 🟡 **El bot le contesta al lead de UNA WEB con el pitch del CHATBOT** — llega del carril
+      `web-creator`, y es **lo único de ese carril que se resuelve desde la plataforma**.
+
+      **Qué pasa, medido el 2026-09-17** (memoria `web-lead-bot-lo-trata-como-pregunta-precio`):
+      el configurador de `onia.com.bo/servicios/webs` está VIVO y su pedido sale por WhatsApp con
+      todo escrito (negocio, rubro, alcance, precio, diseño elegido). Ese WhatsApp entra al bot,
+      que lo clasifica como `pregunta_precio` y responde ofreciendo el **chatbot** — o sea que a
+      alguien que acaba de armar su web y pidió precio, el bot le habla de otro producto.
+
+      **Por qué es de la plataforma y no de web-factory:** el conocimiento del bot **ya se edita
+      desde el panel** (`/settings/chatbot`), sin tocar código ni desplegar: el 18-sep se publicó
+      la v4 desde ahí y el motor vivo la sirvió (`source:panel`, memoria
+      `chatbot-onia-knowledge-se-publica-a-mano`). Así que esto se arregla **escribiendo**, no
+      programando.
+
+      **Qué hay que dejar escrito en el conocimiento**, con la fuente de cada dato para no
+      inventar precios:
+      · qué se vende: Landing **Bs 2.000** y Web Profesional **Bs 4.500**, pago único;
+        Pro, Tienda y Ecommerce **«lo vemos en una llamada»** (fuente única:
+        `web-factory/apps/onia-platform/src/content/webs.ts`, NO se tipea de memoria);
+      · que el dominio y el hosting van **a nombre del cliente** y se pagan aparte;
+      · que el Cuidado Web mensual es **opcional**;
+      · qué tiene que poner el cliente (textos, fotos, dominio) — está publicado en la pestaña
+        «Más información» del configurador;
+      · y el límite dicho de frente: **la entrega todavía no está automatizada** (ver abajo), así
+        que el bot NO promete plazos: deriva a Sergio Urcullo.
+
+      **Cómo se reconoce el lead:** el mensaje del configurador SIEMPRE trae la línea
+      `Negocio: …` junto con `Nivel: …` y `Dirección visual: …`. Es nuestro propio formato
+      (`web-factory/generate/from-configurador.ts` lo parsea por esas etiquetas), así que
+      distinguirlo de una pregunta de precio del sistema es barato.
+
+      ⚠️ **Lo que este ítem NO habilita:** no se toca `addon.web`. Esa puerta se cerró el
+      2026-09-05 «por una tercera vía» (la clave se queda, la ruta rechaza con 409 y el botón
+      está apagado) y el catálogo dice que la web **no tiene ni debería tener pantalla en la
+      plataforma**. Acá sólo se le enseña al bot a hablar de una línea que ya se vende afuera.
+
+      **El resto del carril `web-creator` NO es de este repo, medido el 2026-09-21** — no lo
+      tome esta cola: publicar lo que genera el motor, la tienda que sale con el `<h1>` de otra
+      marca, dirección y estructura que no llegan al entregable, las fotos por rubro y el código
+      muerto viven todos en `onia-hermes/web-factory/**`. Estado, orden y comandos en
+      `hermes-content/docs/handoff/web-creator.md` §7 y §8.
+
+      ⚠️ **Antes de prometer la web en el bot, leer `handoff/web-creator.md` §5b:** hoy el motor
+      genera el sitio pero **no existe camino a un dominio publicado**. Se vende con precio
+      publicado y se entrega a mano. Si el bot promete entrega automática, miente.
+
+
 - [x] 🔴 **CERRADO el 2026-09-18 — el panel le reclamaba el pago a las cuentas de Onia, en
       TODAS las pantallas** (`onia-platform` `36687657`, rama del carril; gates en el VPS
       sobre el arbol con `origin/master` mergeado: tsc 0 · 5.698 tests · eslint 0 errores).
