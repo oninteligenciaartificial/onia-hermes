@@ -1,0 +1,92 @@
+{
+  "title": "El dato que nunca volviste a contar",
+  "caption": "Tenía un número anotado, lo repetí como cinco veces y estaba por decirlo en cámara. Fui a contarlo de nuevo: estaba mal, y no por poco. Lo peor es que yo mismo había escrito arriba del archivo «estos números no cambian, no hace falta recontarlos». Un dato viejo no es un dato: es una suposición con cara de dato.",
+  "hashtags": [
+    "#negocios",
+    "#datos",
+    "#ia",
+    "#emprender",
+    "#bolivia"
+  ],
+  "slides": [
+    {
+      "number": 1,
+      "role": "cover",
+      "pill": "La trampa",
+      "headline": "Un dato viejo *no* es un dato",
+      "body": "Es una suposición con cara de dato.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "",
+      "alt_text": "Un dato viejo no es un dato"
+    },
+    {
+      "number": 2,
+      "role": "stakes",
+      "pill": "Lo que hice",
+      "headline": "Lo repetí cinco veces",
+      "body": "Un número anotado hace dos semanas. Lo puse en un guion, en un documento, en una lámina. Estaba por decirlo en cámara.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "",
+      "alt_text": "Lo que hice"
+    },
+    {
+      "number": 3,
+      "role": "point",
+      "pill": "El chequeo",
+      "headline": "Fui a contarlo de nuevo",
+      "body": "Estaba mal. Y no por poco: era otro número. Nadie lo había tocado — simplemente nunca fue el que yo creía.",
+      "callout": "Contalo hoy",
+      "save_worthy": true,
+      "visual_prompt": "",
+      "alt_text": "El chequeo"
+    },
+    {
+      "number": 4,
+      "role": "point",
+      "pill": "Lo peor",
+      "headline": "Yo mismo me había avisado",
+      "body": "Arriba de ese archivo estaba escrito, por mí: «estos números no cambian, no hace falta recontarlos». Esa frase fue el error.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "",
+      "alt_text": "Lo peor"
+    },
+    {
+      "number": 5,
+      "role": "point",
+      "pill": "Por qué pasa",
+      "headline": "Repetir se siente como saber",
+      "body": "Cada vez que copiás un dato de tu propio documento, se siente más cierto. Pero no lo volviste a medir ni una sola vez.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "",
+      "alt_text": "Por qué pasa"
+    },
+    {
+      "number": 6,
+      "role": "point",
+      "pill": "La regla",
+      "headline": "Recontá antes de afirmarlo",
+      "body": "Sobre todo si lo vas a decir en público, cobrar por eso, o tomar una decisión. Son dos minutos.",
+      "callout": "2 minutos",
+      "save_worthy": true,
+      "visual_prompt": "",
+      "alt_text": "La regla"
+    },
+    {
+      "number": 7,
+      "role": "cta",
+      "pill": "En una línea",
+      "headline": "¿Lo contaste *hoy*?",
+      "body": "Si la respuesta es «lo tenía anotado», andá a contarlo.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "",
+      "alt_text": "En una línea"
+    }
+  ],
+  "comment_trigger": "",
+  "cta": ""
+}
