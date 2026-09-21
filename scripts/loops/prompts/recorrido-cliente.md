@@ -296,9 +296,22 @@ shell te devuelve solo al directorio primario entre comandos y no te vas a dar c
 
     scripts/recorrido_cliente.mjs                      ← tu instrumento
     hermes-content/docs/recorrido/ULTIMO_RECORRIDO.md  ← el estado, SIN fecha: se EDITA
-    hermes-content/docs/recorrido/capturas/            ← las pruebas
+    hermes-content/docs/recorrido/capturas/            ← las pruebas (los .png NO se commitean)
     hermes-content/docs/cola/recorrido-cliente.md      ← tu cola
     hermes-content/docs/cola/<carril>.md               ← SOLO agregar ítems, ver abajo
+
+🔴 **Los `.png` de `capturas/` están en `.gitignore` desde el 2026-09-21. No los commitees,
+y no "arregles" el `.gitignore`.** Medido ese día: eran 124 PNG (25 MB) que vos
+recommiteabas ENTEROS cada vuelta — **202 commits en 14 días**, el **49 % de todos los
+toques de archivo del repo** en ese período, y un `.git` de **11 GB**. Se regeneran solas
+con `node scripts/recorrido_cliente.mjs` en 3 minutos, así que versionarlas no conservaba
+nada: sólo hacía más lento cada clon y cada vuelta de los otros catorce carriles.
+
+**Lo que sí sigue versionado es lo que alguien LEE**: `capturas/**/resumen.json` (de ahí
+saca el estado el loop `canario-visual`, desde otra rama) y `ULTIMO_RECORRIDO.md`. Tu
+medición va en texto, en esos dos archivos. Si una captura es la prueba de algo que hay que
+mirar, **adjuntala a la tarea del tablero** (`hermes kanban attach`), que es donde alguien
+la va a abrir — no al repo, donde nadie la abre y todos la pagan.
 
 **Lo que NO es tuyo, aunque te muera de ganas de arreglarlo:**
 
