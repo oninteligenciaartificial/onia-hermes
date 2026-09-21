@@ -41,7 +41,13 @@ los nodos de credencial se muestran ya configurados, nunca abiertos.
 ## 6-7 · Llamadas 1 a 1 (2 videos) — ✅ DEFINIDO (Sergio, 17-sep)
 
 «Roadmap 1-1» = las llamadas uno a uno con Sergio (la oferta real: 30 min, gratis,
-cal.com/sergiourcullo/30min, con 3 h de anticipación).
+cal.com/sergiourcullo/**20min**, con 3 h de anticipación).
+
+🔴 **Corregido el 21-sep, y hay que corregirlo donde se copió:** acá decía
+`cal.com/sergiourcullo/30min`, que **devuelve 404** (verificado con curl el 21-sep;
+`/20min` da 200). Samuel habría grabado en cámara una página de error. **El link que se
+enlaza y se muestra es el redirect propio `sergiourcullo.vercel.app/llamada`** (200):
+es un solo lugar y sobrevive a que el evento de Cal cambie de nombre otra vez.
 
 | Video | Ángulo | Shot list |
 |---|---|---|
@@ -107,9 +113,23 @@ Todo con datos de utilería: ningún dato de cliente real aparece en cámara.
 🔴 **Tres hallazgos de producto salieron del rodaje** (el recorrido real se trabó dos
 veces): [`HALLAZGOS-RODAJE-ONIA-18-SEP.md`](HALLAZGOS-RODAJE-ONIA-18-SEP.md).
 
-## Pendiente de grabar (siguiente tanda)
+## Pendiente de grabar — estado al 21-sep, con el bloqueo exacto
 
-1. **n8n** — los 2 flujos (necesita sesión de la UI del VPS).
-2. **Terminal de Claude Code** — otro stack (captura de escritorio, no navegador).
-3. **Skills CON/SIN** — comparativa lado a lado.
-4. **Higgsfield / avatar** — plataforma externa con sesión propia.
+Los perfiles persistentes de navegador **existen y están VACÍOS**: verificado hoy,
+`E:\ONIA-YouTube\grabaciones\_perfiles\n8n\` y `...\higgsfield\` no tienen ni un archivo.
+Sin cookie no hay sesión, y sin sesión no hay grabación.
+
+| # | Qué falta | Por qué no lo puedo hacer yo | Cómo se desbloquea |
+|---|---|---|---|
+| 1 | **n8n** · los 2 flujos | Probado hoy con Chromium limpio contra `n8n-sergio-n8n.hqdqgh.easypanel.host`: la página carga **en blanco** sin sesión. Y yo no escribo contraseñas en un formulario | `python scripts/marca-personal/abrir_sesion.py n8n` **en la terminal de Sergio Urcullo** (Playwright con ventana no abre en este entorno: `spawn UNKNOWN`). Entrar a mano y cerrar la ventana |
+| 2 | **Higgsfield / avatar** | Mismo caso: sesión propia, login suyo | `python scripts/marca-personal/abrir_sesion.py higgsfield`, igual |
+| 3 | **Terminal de Claude Code** | Es captura de escritorio, no de navegador: otro stack | Pendiente de decidir herramienta |
+| 4 | **Skills CON/SIN** | Se puede grabar sin sesión externa | No está bloqueado: es el siguiente que sale solo |
+
+⚠️ **El video 1-2 de Onia Platform tiene un bloqueo propio, y es de contenido:** el
+recorrido real se trabó dos veces
+([`HALLAZGOS-RODAJE-ONIA-18-SEP.md`](HALLAZGOS-RODAJE-ONIA-18-SEP.md)). El onboarding
+carga los productos con **stock 0** y Caja responde `Stock insuficiente` justo en el paso
+que el propio checklist pide hacer. Los clips ya grabados esquivan eso porque el producto
+se cargó a mano desde Catálogo. **Si Samuel graba el recorrido tal cual sale, filma el
+error.** Eso se arregla en el carril del producto, no acá.
