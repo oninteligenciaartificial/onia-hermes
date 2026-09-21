@@ -54,7 +54,8 @@ personales de Arthur/Sergio NO tienen credenciales Meta: no intentar publicar ah
 - Entre 3 y 10 slides (default 6).
 - Slide 1: hook claro que detenga el scroll.
 - Slides intermedios: problema -> insight -> solucion -> ejemplo concreto.
-- Ultimo slide: CTA unico y especifico.
+- Último slide: CTA único y específico. Para Sergio debe incluir palabra para comentar,
+  recurso publicado de la Bóveda, firma/posición personal y motivo concreto para seguirlo.
 - Lenguaje claro para empresas bolivianas, sin jerga tecnica innecesaria.
 
 ## Checklist de calidad antes de publicar

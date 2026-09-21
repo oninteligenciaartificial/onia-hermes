@@ -149,12 +149,14 @@ de imágenes/objetos: `ASSET_GENERATION_OPTIONS.md`.
 | 2. Slide 2 confirma hook / sube lo que está en juego | `role=stakes` | problema + stakes, alto contraste |
 | 3. Cada slide = screenshot suelto, 1 idea, máx 2 fuentes | `role=point` + `tokens.css` | una idea, Space Grotesk + Inter, numeración `01/07` |
 | 4. Slide guardable | `role=save`, `save_worthy=true` | tarjeta FRAMEWORK + barra "Guardá esto ↗" |
-| 5. Caption = 2º post, CTA con comment trigger | `caption` + `comment_trigger` + `role=cta` | caption repite idea + trigger; CTA sin "sígueme para más" |
+| 5. CTA = comentario + recurso + identidad | `caption` + `comment_trigger` + `resource` + `identity` + `follow_cta` + `role=cta` | Para Sergio, una palabra sólo existe si el recurso ya está publicado. El cierre nombra a Sergio, explica qué comparte e invita a seguirlo. |
 
 ## Cuentas
 
 - **onia**: voz de marca, sin foto (diseño tipográfico ONIA).
-- **arthur / sergio**: mismo motor, voz de fundador en primera persona, foto propia
+- **arthur / sergio**: mismo motor, voz de fundador en primera persona, foto propia.
+  En `community-editorial` para Sergio son obligatorios `comment_trigger`,
+  `resource.title`, `resource.url`, `identity` y `follow_cta`; el render corta si falta uno.
   de fondo (`--bg`) con scrim oscuro para legibilidad.
 
 ## Publicación: credenciales por cuenta (pendiente para personales)

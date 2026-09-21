@@ -292,3 +292,16 @@ test('chip de dato: {{x}} se vuelve span.dato, y convive con *verde*', () => {
 test('chip de dato: escapa el HTML antes de convertir', () => {
   assert.ok(emph('{{<b>5</b>}}').includes('&lt;b&gt;5&lt;/b&gt;'), 'no debe inyectar HTML');
 });
+
+test('cierre editorial de Sergio muestra comentario, Bóveda y firma', () => {
+  const html = communityEditorialHtml({
+    role: 'cta', headline: 'H', body: 'B', comment_trigger: 'Comentá MAPA',
+    resource: { title: 'Elegí qué automatizar primero', url: 'https://sergiourcullo.vercel.app/automatizar' },
+    identity: 'Soy Sergio Urcullo.', follow_cta: 'Seguime para el próximo sistema.',
+  }, 6, 7, 'sergio', {});
+  assert.ok(html.includes('Comentá'));
+  assert.ok(html.includes('Elegí qué automatizar primero'));
+  assert.ok(html.includes('https://sergiourcullo.vercel.app/automatizar'));
+  assert.ok(html.includes('Soy Sergio Urcullo.'));
+  assert.ok(html.includes('Seguime para el próximo sistema.'));
+});

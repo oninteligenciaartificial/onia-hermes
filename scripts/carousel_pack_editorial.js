@@ -138,8 +138,15 @@ function crear({ esc, emph, roleFor, ACCOUNTS, BRAND, getFmt }) {
     const visual = visualHtml(slide);
     const rawTrigger = text(slide.comment_trigger || slide.cta || 'GUÍA').trim();
     const trigger = rawTrigger.replace(/^coment(?:á|a)\s+/i, '').trim() || 'GUÍA';
+    const resource = slide.resource || {};
+    const resourceTitle = text(resource.title || 'Recurso en la Bóveda').trim();
+    const resourceUrl = text(resource.url || '').trim();
+    const identity = text(slide.identity || 'Soy Sergio Urcullo. Comparto sistemas de IA que funcionan en negocios reales.').trim();
+    const follow = text(slide.follow_cta || 'Seguime para el próximo sistema.').trim();
     const cta = role === 'cta'
-      ? `<div class="cta-line"><span>Comentá</span><b>${esc(trigger)}</b></div>`
+      ? `<div class="cta-line"><span>Comentá</span><b>${esc(trigger)}</b></div>
+         <p class="cta-resource"><span>RECURSO EN LA BÓVEDA</span><strong>${esc(resourceTitle)}</strong>${resourceUrl ? `<small>${esc(resourceUrl)}</small>` : ''}</p>
+         <p class="cta-signature">${esc(identity)} <b>${esc(follow)}</b></p>`
       : '';
     const coverBrand = `<div class="brandline"><span class="brand-dot"></span><span>SERGIO URCULLO</span><span class="brand-rule"></span><span>${esc(serie)}</span></div>`;
     const interiorBrand = `<div class="interior-top"><span class="brand-dot"></span><span>SERGIO / ${esc(serie)}</span><span class="top-kicker">${esc(kicker)}</span></div>`;
@@ -204,7 +211,7 @@ body{font-family:'DM Sans',Inter,system-ui,sans-serif;background:#f7f5ef;color:#
 .visual-contract{background:#16231e;color:#f7f5ef;border-color:#16231e}.visual-contract .visual-label{color:#83cda4}.contract-row{padding:20px 0;border-top:1px solid rgba(255,255,255,.16);display:grid;grid-template-columns:130px 1fr;gap:18px}.contract-row span{font-family:'DM Mono',monospace;font-size:14px;color:#83cda4;letter-spacing:1px}.contract-row b{font-size:23px;line-height:1.2;font-weight:500}
 .visual-note-card{position:relative;min-height:370px;background:#fff1d7;border-color:#efd8ac}.visual-note-card .note-mark{position:absolute;right:26px;top:22px;font-size:52px;color:#f19a33}.visual-note-card strong{font-family:'Instrument Serif',Georgia,serif;font-size:60px;line-height:1.02;font-weight:400;color:#1b1d1b;max-width:85%}.visual-note-card strong .g{color:#0b8a52}.visual-note-card p{font-size:21px;line-height:1.35;margin-top:24px;color:#59625d}
 .save .interior-main{grid-template-columns:38% 62%}.save .headline{font-size:68px}.save .visual{min-height:460px}
-.cta{background:#0e1713;color:#f7f5ef;padding-top:80px}.cta .interior-top{color:#dce8e1}.cta .top-kicker{color:#13c978}.cta .interior-main{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;max-width:900px}.cta .headline{font-size:90px;max-width:900px}.cta .headline .g{color:#13c978;background:none}.cta .body{color:#c3d0c8;max-width:700px}.cta-line{display:inline-flex;align-items:center;gap:18px;margin-top:38px;border-radius:999px;background:#13c978;color:#0e1713;padding:18px 28px;font-size:28px}.cta-line span{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:32px}.cta-line b{font-family:'DM Mono',monospace;font-size:23px;letter-spacing:1px}.cta .footer{color:#c3d0c8}.cta .visual{display:none}
+.cta{background:#0e1713;color:#f7f5ef;padding-top:80px}.cta .interior-top{color:#dce8e1}.cta .top-kicker{color:#13c978}.cta .interior-main{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;max-width:900px}.cta .headline{font-size:82px;max-width:900px}.cta .headline .g{color:#13c978;background:none}.cta .body{color:#c3d0c8;max-width:700px}.cta-line{display:inline-flex;align-items:center;gap:18px;margin-top:30px;border-radius:999px;background:#13c978;color:#0e1713;padding:15px 24px;font-size:26px}.cta-line span{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:30px}.cta-line b{font-family:'DM Mono',monospace;font-size:22px;letter-spacing:1px}.cta-resource{margin:22px 0 0;display:flex;flex-direction:column;gap:3px}.cta-resource span{font:500 13px 'DM Mono',monospace;letter-spacing:1.4px;color:#83cda4}.cta-resource strong{font:500 25px/1.1 'Instrument Serif',Georgia,serif;color:#f7f5ef}.cta-resource small{font:500 13px 'DM Mono',monospace;color:#aabbb1}.cta-signature{max-width:660px;margin:21px 0 0;color:#c3d0c8;font-size:17px;line-height:1.35}.cta-signature b{color:#13c978;font-weight:600}.cta .footer{color:#c3d0c8}.cta .visual{display:none}
 </style></head><body>
 <div class="slide ${role === 'cover' ? 'cover' : role === 'cta' ? 'cta' : `interior ${role}`}${hasPhoto ? ' has-photo' : ''}">
   ${role === 'cover' || role === 'cta' ? photo : paper}

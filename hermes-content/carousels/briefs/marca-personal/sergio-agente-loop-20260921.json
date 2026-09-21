@@ -4,6 +4,12 @@
   "hashtags": ["#n8n", "#agentesia", "#loops", "#automatizacion", "#ia", "#negocios"],
   "comment_trigger": "Comentá ARQUITECTURA",
   "cta": "Comentá ARQUITECTURA",
+  "resource": {
+    "title": "Automatización, agente o loop",
+    "url": "https://sergiourcullo.vercel.app/agentes"
+  },
+  "identity": "Soy Sergio Urcullo. Comparto sistemas de IA que funcionan en negocios reales.",
+  "follow_cta": "Seguime para el próximo sistema.",
   "serie": "IA PRÁCTICA",
   "episodio": "02",
   "slides": [
