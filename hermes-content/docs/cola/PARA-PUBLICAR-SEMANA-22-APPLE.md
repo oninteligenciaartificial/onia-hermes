@@ -32,10 +32,34 @@ acá con su fuente para que nadie las vuelva a heredar:
 | Decía | Es | Fuente, contada a mano el 21-sep |
 |---|---|---|
 | «18 errores en **una** sesión» | **18 anotados**, de los cuales **4** son de una sola sesión | `docs/handoff/onia-dev-node-setup.md` §5: §5.1 se titula «De esta sesión» y tiene 4; §5.2 tiene 9 y §5.3 tiene 5 |
+| «los 18 los **encontró** él» | los **anotó** él | `grep -i "sergio\|lo encontr"` dentro de §5 da **cero**: la lista es su propio parte, en primera persona. «Anotó» se prueba; «encontró» no |
 | «la di por buena **tres veces**» · «durante **días**» | **dos instrumentos** (grep + HTTP 200). La duración **no tiene fuente** y se sacó | `CLAUDE.md` §«Verificar es MIRAR»: *«lo había verificado varias veces con HTTP 200 y grep»*. No dice cuánto duró |
+| «lo **encontró otra persona**» | en la voz de Sergio Urcullo, **lo encontró él mismo** al abrirla | `CLAUDE.md`: *«Lo encontró Sergio»*. Lo que no lo encontró fue ninguna de las dos pruebas — y ésa es justo la moraleja |
+| «lo repetí **cinco veces**» | **no se puede contar hoy** | De los lugares donde vivió el dato falso ya sólo queda uno. Va la cadena documentada (documento → guion → lámina), que sí se prueba |
+| «**5.270** reacciones» · «el **pedido #1** del repo» | **fuera** | El changelog oficial (leído hoy) confirma la función y el matiz **al pie de la letra**, pero no trae ranking ni reacciones; la búsqueda de issues devuelve varios hilos de AGENTS.md, ninguno con esa cifra |
 
 Es exactamente el error que denuncia la pieza del jueves. Si la pieza miente sobre
 mentir, no se publica.
+
+## 🔴 La regla del titular, dictada el 21-sep
+
+> Sergio Urcullo, sobre la primera versión: *«cambia los títulos que digan literalmente a
+> qué te referís; decís cosas como "conté mis errores, los anoté todos" — no estás
+> diciendo nada. Hacelos enseñando cosas de verdad»*.
+
+**El titular ES el hallazgo, no su anuncio.** Prueba rápida: si el titular se puede poner
+en una pieza de otro tema, está mal escrito.
+
+| Antes (no dice nada) | Ahora (enseña) |
+|---|---|
+| «Conté mis errores. Los anoté todos» | **«18 errores. Los 18 los anotó él»** |
+| «Un dato viejo no es un dato» | **«Decía 4. Fui a contarlo: eran 40»** |
+| «Si da verde con la cosa rota…» | **«Dos verdes. Y la pantalla estaba rota»** |
+| «El precio ya no decide» | **«Fable 5.1 y GPT-6 Astra cuestan igual»** |
+| «Un archivo de reglas. Los dos» | **«Claude Code ya lee el archivo de Codex»** |
+
+Vale igual para los titulares de adentro: «Lo van a contar mal» → **«Sólo si NO tenés
+CLAUDE.md»**; «Me avisé a mí mismo» → **«"No hace falta recontarlos"»**.
 
 ---
 
@@ -68,8 +92,7 @@ empata, elegís por otra cosa. Los tres que uso yo:
 Si usabas Claude Code y Codex, escribías tus reglas dos veces.
 
 Se acabó: Claude Code ya lee AGENTS.md, el archivo que usan
-Codex, Cursor y Copilot. Era el pedido número uno del
-repositorio.
+Codex, Cursor y Copilot. Un archivo, los cuatro programas.
 
 Pero lo van a contar mal, así que te lo digo derecho: lo lee
 SOLO si tu proyecto no tiene CLAUDE.md. Si están los dos, gana
@@ -98,7 +121,8 @@ respondía 200: verde. Dos medidas en verde.
 
 La pantalla estaba rota. Donde iba un candado decía
 «credit_card_off» — el NOMBRE del ícono, como texto. En la
-pantalla de entrar. En producción. Lo encontró otra persona.
+pantalla de entrar, en producción. No lo encontró ninguna de
+las dos pruebas: lo vi cuando por fin la abrí.
 
 Los dos verdes medían un sustituto, no la cosa. Buscar sirve
 para descartar, nunca para confirmar. Y una página puede
@@ -115,9 +139,9 @@ digo cómo lo miraría.
 
 ### jue 25 · DATO-HEREDADO
 
-Tenía un número anotado. Lo repetí como cinco veces —en un
-guion, en un documento, en una lámina— y estaba por decirlo
-en cámara.
+Tenía un número anotado. Lo escribí en un documento, lo copié
+a un guion, lo copié a una lámina, y estaba por decirlo en
+cámara.
 
 Fui a contarlo de nuevo. Estaba mal, y no por poco: era diez
 veces más grande. Nadie lo había tocado. Simplemente nunca fue
@@ -149,8 +173,9 @@ Code: dieciocho. Cuatro de una sola sesión; el resto, de días
 sobre lo mismo. Diagnósticos equivocados, comprobaciones que no
 comprobaban nada, datos viejos repetidos sin recontar.
 
-Lo que no me esperaba: los dieciocho los encontró él, revisando
-su propio trabajo. Ninguno lo cacé yo.
+Lo que no me esperaba: los dieciocho los anotó él, en primera
+persona, mientras revisaba lo que él mismo había hecho. Ninguno
+lo cacé yo.
 
 Y el único que se le escapó fue justo el que llegó al cliente
 —porque no estaba en su lista, ni en la mía.

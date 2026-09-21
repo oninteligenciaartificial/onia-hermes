@@ -318,3 +318,28 @@ aparte y deja el A/B mirable.
    **Un rojo del gate en la lámina 01 de una pieza con portada P no significa rota**; esa
    lámina se verifica MIRÁNDOLA. Control para comprobarlo: `--pieza noticia-whatsapp
    --check` falla idéntico y esa pieza está aprobada.
+
+23. 🔴 **El titular ES el hallazgo, no su anuncio.** Sergio Urcullo rechazó la portada
+   «Conté mis errores. Los anoté todos» el 21-sep: *«no estás diciendo nada, hacelos
+   enseñando cosas de verdad»*. Un titular que teasea obliga a deslizar para averiguar si
+   vale la pena, y **el que desliza ya decidió que no**.
+
+   **Prueba rápida, de un segundo: si el titular se puede poner en una pieza de OTRO
+   tema, está mal escrito.** «Un dato viejo no es un dato» pasa esa prueba y por eso está
+   mal; «Decía 4. Fui a contarlo: eran 40» no pasa, y por eso enseña desde la portada.
+
+   | Aforismo (no dice nada) | Hallazgo (enseña) |
+   |---|---|
+   | «Conté mis errores. Los anoté todos» | «18 errores. Los 18 los anotó él» |
+   | «Un dato viejo no es un dato» | «Decía 4. Fui a contarlo: eran 40» |
+   | «Si da verde con la cosa rota…» | «Dos verdes. Y la pantalla estaba rota» |
+   | «El precio ya no decide» | «Fable 5.1 y GPT-6 Astra cuestan igual» |
+   | «Lo van a contar mal» | «Sólo si NO tenés CLAUDE.md» |
+
+   Aplica a **los titulares de adentro también** (`titular` del layout R, `remate` del D),
+   no sólo a la portada. Un remate como «Medí la cosa, no su sombra» suena bien y no dice
+   qué hacer; «Abrila y mirala» sí.
+
+   Es la hermana de la regla del 10-sep («si el carrusel no tiene UNA cosa que el lector
+   no sabía, no se hace»): aquélla pide que la PIEZA enseñe, ésta pide que el TITULAR lo
+   haga. Una pieza con buen dato y titular de aforismo se pierde en el scroll igual.
