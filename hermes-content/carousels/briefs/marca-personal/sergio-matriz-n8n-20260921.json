@@ -1,0 +1,90 @@
+{
+  "title": "Antes de usar n8n, elegí qué automatizar",
+  "caption": "La mayoría empieza por la herramienta: n8n, Zapier, Make o un agente. El orden correcto es otro: entrada, regla, salida y excepción.\n\nEjemplo funcional: Webhook recibe name, phone, service y source; IF valida phone y service; Google Sheets hace Append Row; Telegram hace Send Message. Si falta un dato, la rama falsa pide completarlo.\n\nGuardá este mapa antes de construir tu próximo workflow. Comentá MAPA y te digo qué arquitectura usaría para tu proceso.",
+  "hashtags": ["#n8n", "#automatizacion", "#ia", "#negocios", "#pymes", "#bolivia"],
+  "comment_trigger": "Comentá MAPA",
+  "cta": "Comentá MAPA",
+  "slides": [
+    {
+      "number": 1,
+      "role": "cover",
+      "pill": "Marca personal · n8n",
+      "headline": "Antes de usar *n8n*, elegí qué automatizar",
+      "body": "La herramienta viene después del proceso.",
+      "callout": "Guardá este mapa",
+      "save_worthy": false,
+      "alt_text": "Antes de usar n8n, elegí qué automatizar"
+    },
+    {
+      "number": 2,
+      "role": "stakes",
+      "pill": "El error",
+      "headline": "Sin proceso, n8n acelera el desorden",
+      "body": "Si no definís qué entra, qué se valida y qué debe quedar hecho, n8n no sabe qué proceso estás intentando mejorar.",
+      "callout": "No empieces conectando apps",
+      "save_worthy": false,
+      "alt_text": "Una automatización mal pensada acelera el desorden"
+    },
+    {
+      "number": 3,
+      "role": "point",
+      "pill": "Paso 1 · Entrada",
+      "headline": "El trigger debe tener un nombre concreto",
+      "body": "Usá `Webhook` para un formulario o API; `Telegram Trigger` para un mensaje; `Google Sheets Trigger` para una fila nueva. No digas simplemente “entra información”.",
+      "callout": "Ejemplo: POST /demo-lead",
+      "save_worthy": false,
+      "alt_text": "El trigger debe tener un nombre concreto en n8n"
+    },
+    {
+      "number": 4,
+      "role": "point",
+      "pill": "Paso 2 · Regla",
+      "headline": "`IF` convierte la regla en dos caminos",
+      "body": "Condición: `phone is not empty` AND `service is not empty`. True continúa. False pide el dato faltante y no registra el lead como completo.",
+      "callout": "Probá true y false",
+      "save_worthy": false,
+      "alt_text": "El nodo IF de n8n convierte una decisión en dos caminos"
+    },
+    {
+      "number": 5,
+      "role": "point",
+      "pill": "Paso 3 · Salida",
+      "headline": "La salida tiene que dejar evidencia",
+      "body": "`Google Sheets / Append Row` guarda `name`, `phone`, `service` y `source`. Después `Telegram / Send Message` avisa al responsable. Eso se puede verificar.",
+      "callout": "Guardar + avisar",
+      "save_worthy": false,
+      "alt_text": "Google Sheets Append Row y Telegram Send Message dejan evidencia"
+    },
+    {
+      "number": 6,
+      "role": "save",
+      "pill": "Plantilla guardable",
+      "headline": "Copiá esta arquitectura antes de abrir n8n",
+      "body": "Entrada: Webhook → Regla: IF → Registro: Google Sheets / Append Row → Aviso: Telegram / Send Message → Excepción: pedir el campo faltante.",
+      "callout": "Guardá esto ↗",
+      "save_worthy": true,
+      "alt_text": "Plantilla de arquitectura n8n Webhook IF Google Sheets Telegram"
+    },
+    {
+      "number": 7,
+      "role": "point",
+      "pill": "No agregues IA todavía",
+      "headline": "Primero hacé funcionar el flujo determinista",
+      "body": "Si las reglas son fijas, `IF` es suficiente. Recién después evaluá `AI Agent + OpenAI Chat Model` para clasificar lenguaje ambiguo.",
+      "callout": "Reglas primero",
+      "save_worthy": false,
+      "alt_text": "Primero usa IF en n8n y después evalúa un AI Agent"
+    },
+    {
+      "number": 8,
+      "role": "cta",
+      "pill": "Aplicalo hoy",
+      "headline": "Tu primer workflow puede ser pequeño y útil",
+      "body": "Comentá *MAPA* y te digo qué entrada, regla y salida usaría para una tarea real de tu negocio.",
+      "callout": "",
+      "save_worthy": false,
+      "alt_text": "Comentá MAPA para elegir tu primer workflow"
+    }
+  ],
+  "job": "education"
+}

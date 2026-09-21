@@ -1,0 +1,80 @@
+{
+  "title": "MCP en Claude Code: conectá Notion con permisos",
+  "caption": "MCP no es un modelo. Es un protocolo para que un cliente como Claude Code use herramientas de un servidor con un contrato claro.\n\nComando de ejemplo para Notion:\nclaude mcp add --transport http notion https://mcp.notion.com/mcp\n\nDespués verificás con `claude mcp list` y autenticás desde `/mcp`. Antes de usarlo, definí herramienta, input, output y permisos. Un agente puede leer un lead; no debería borrar registros ni enviar mensajes solo porque tiene acceso.\n\nComentá MCP si querés que el próximo video muestre el contrato completo de una herramienta.",
+  "hashtags": ["#mcp", "#claudecode", "#notion", "#agentesia", "#ia", "#desarrollosoftware"],
+  "comment_trigger": "Comentá MCP",
+  "cta": "Comentá MCP",
+  "slides": [
+    {
+      "number": 1,
+      "role": "cover",
+      "pill": "Claude Code · MCP",
+      "headline": "MCP es un contrato de herramientas",
+      "body": "Conectá Notion sin darle permiso para todo.",
+      "callout": "Guardá el comando",
+      "save_worthy": false,
+      "alt_text": "MCP no es un modelo, es un contrato de herramientas"
+    },
+    {
+      "number": 2,
+      "role": "stakes",
+      "pill": "Qué resuelve",
+      "headline": "Claude Code necesita una interfaz externa",
+      "body": "MCP define herramientas, recursos y prompts para conectar un cliente con un servidor sin inventar una integración distinta para cada modelo.",
+      "callout": "Conexión estandarizada",
+      "save_worthy": false,
+      "alt_text": "MCP conecta Claude Code con servicios externos"
+    },
+    {
+      "number": 3,
+      "role": "point",
+      "pill": "Comando literal",
+      "headline": "Agregá el servidor HTTP de Notion",
+      "body": "`claude mcp add --transport http notion https://mcp.notion.com/mcp`",
+      "callout": "No pegues tokens en el video",
+      "save_worthy": false,
+      "alt_text": "Comando claude mcp add para Notion"
+    },
+    {
+      "number": 4,
+      "role": "point",
+      "pill": "Verificación",
+      "headline": "Comprobá qué servidores tiene Claude Code",
+      "body": "En la terminal ejecutá `claude mcp list`. Dentro de Claude Code usá `/mcp` para autenticar, revisar el estado o limpiar el acceso.",
+      "callout": "Listar antes de usar",
+      "save_worthy": false,
+      "alt_text": "claude mcp list y slash mcp"
+    },
+    {
+      "number": 5,
+      "role": "point",
+      "pill": "Contrato",
+      "headline": "Definí input, output y permisos",
+      "body": "Ejemplo: `get_lead_by_id` recibe `lead_id`, devuelve `name`, `status` y `source`, y solo tiene permiso `read`.",
+      "callout": "Lectura antes que escritura",
+      "save_worthy": false,
+      "alt_text": "Contrato MCP con input output y permisos"
+    },
+    {
+      "number": 6,
+      "role": "save",
+      "pill": "Regla de seguridad",
+      "headline": "MCP no reemplaza tus permisos",
+      "body": "Primero lectura. Después validación. Luego aprobación humana para escribir, borrar, cobrar o enviar mensajes.",
+      "callout": "Guardá esto ↗",
+      "save_worthy": true,
+      "alt_text": "MCP no reemplaza permisos ni aprobación humana"
+    },
+    {
+      "number": 7,
+      "role": "cta",
+      "pill": "Siguiente tutorial",
+      "headline": "Construí una herramienta pequeña",
+      "body": "Comentá *MCP* y te muestro cómo escribir el contrato antes de conectarlo.",
+      "callout": "",
+      "save_worthy": false,
+      "alt_text": "Comentá MCP para el próximo tutorial"
+    }
+  ],
+  "job": "education"
+}
