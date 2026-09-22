@@ -410,6 +410,35 @@ Si no sabés dónde va, **preguntá** antes de inventar carpeta.
   plantillas) → **skill `onia-propuestas`** + fuente
   `hermes-content/skills/propuestas-comerciales-onia.md`.
 
+## Publicidad que no parezca hecha por IA (REGLA)
+
+> Origen: corrección de Sergio Urcullo, 2026-09-21. Una plantilla prolija no es una
+> idea y una pieza que sólo “se ve ONIA” no necesariamente vende.
+
+- **Una pieza tiene un trabajo de venta.** Debe mostrar dolor exacto del rubro,
+  consecuencia económica, mecanismo comprobable y un solo CTA. Si se puede cambiar
+  “clínica dental” por cualquier negocio y el copy sigue igual, se rechaza.
+- **Prohibido el carrusel de afiches repetidos:** seis fondos iguales, titulares
+  genéricos en mayúsculas y verde decorativo no cuentan como narrativa. Cada slide
+  debe aportar una prueba visual distinta: interfaz real, proceso, tabla, decisión,
+  objeto del trabajo o contexto humano.
+- Para ONIA, el piso editorial es el pack aprobado en la sesión de marca personal
+  (`community-editorial`, commit `e9b80e22`): portada humana/fotográfica, interiores
+  claros, jerarquía editorial, acento verde restringido y CTA diseñado. No se copia
+  el contenido; se copia el estándar de dirección.
+- **Producto visible o no sale.** En pauta de software, al menos una parte central
+  de la pieza debe enseñar UI real o una demostración verificable. No fabricar
+  pantallas con IA ni reemplazar prueba por mockups decorativos.
+- **UGC de IA significa presentador IA original**, si Sergio lo pide así. No cambiar
+  silenciosamente a founder u operador real. El presentador explica y demuestra;
+  nunca se hace pasar por cliente, odontólogo ni testimonio. Debe conservar
+  imperfecciones naturales, continuidad de identidad, subtítulos y pantalla real.
+- Antes de cerrar una creatividad, mirarla completa. Si sólo está “bonita” pero no
+  permite reconocer el problema, entender el mecanismo y saber qué hacer después,
+  se rehace.
+
+Detalle operativo: skills `carruseles-onia` y `ugc-empresas-higgsfield`.
+
 ## Video — sin editores humanos (REGLA)
 
 - **REGLA DE ORO: la tabla de cortes + preview 360p SIEMPRE se muestran a Sergio ANTES

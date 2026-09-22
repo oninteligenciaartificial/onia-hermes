@@ -24,9 +24,12 @@ Cuenta IG ONIA: `17841423363059652` con token Meta default. Las cuentas
 personales de Arthur/Sergio NO tienen credenciales Meta: no intentar publicar ahi.
 
 ## Packs visuales disponibles (`carousel_render.js`)
-- `dark-product` — estilo Solaris. **Preferido para piezas de ONIA/producto.**
+- `community-editorial` — **default para ONIA, educación y producto**. Portada
+  humana/editorial, interiores claros, tarjetas de conocimiento, diagramas y UI real.
+- `dark-product` — estilo Solaris. Usar sólo cuando el concepto publicitario pida
+  deliberadamente una pieza oscura de performance; no usarlo como default para un
+  carrusel completo.
 - `dark-neon` — glow + grid, estilo Perfluence.
-- `community-editorial` — portada editorial, tarjetas de conocimiento y diagramas funcionales.
 - `editorial-photo` — foto editorial histórica; no usar como default para Sergio.
 
 ## Reglas de diseno de Sergio (obligatorias)
@@ -38,6 +41,24 @@ personales de Arthur/Sergio NO tienen credenciales Meta: no intentar publicar ah
 - Layouts profesionales: jerarquia clara, espacio util, tarjetas de prueba,
   diagramas simples, procesos y ejemplos concretos. Un slide sin visual de apoyo
   se considera incompleto.
+
+## Gate anti-plantilla y de venta (obligatorio)
+
+Origen: corrección de Sergio Urcullo del 2026-09-21 después de una campaña de ONIA
+que se veía generada por IA y no desarrollaba un argumento de venta.
+
+- Una plantilla no es una idea. Repetir fondo negro, verde, mayúsculas y la misma
+  composición en todas las láminas se rechaza aunque esté bien renderizado.
+- Cada slide debe cumplir una función diferente y tener un objeto visual propio:
+  foto humana, interfaz real, flujo, tabla, contrato de decisión o evidencia.
+- La secuencia mínima para pauta es: dolor exacto del rubro → plata en juego → causa
+  operativa → producto real → mecanismo → control humano/prueba → oferta y CTA.
+- Para software, incluir capturas reales del tenant demo. Nunca inventar UI con un
+  generador de imágenes. Revisar que no haya datos personales antes de renderizar.
+- Usar como piso de calidad el pack editorial de la sesión de marca personal
+  (`community-editorial`, commit `e9b80e22`), adaptado a ONIA; no copiar su copy.
+- La pieza se rechaza si: el rubro puede reemplazarse sin cambiar el texto, el dolor
+  no termina en dinero, no aparece el producto, o el CTA compite con otro CTA.
 
 ## Assets e imagenes
 - Objeto 3D on-brand reusable: `hermes-content/assets/onia/automation-node-clean-3d.png`
@@ -51,9 +72,10 @@ personales de Arthur/Sergio NO tienen credenciales Meta: no intentar publicar ah
   notas de estilo via skill `referencias-pinterest`.
 
 ## Estructura narrativa
-- Entre 3 y 10 slides (default 6).
+- Entre 3 y 10 slides (default 8 para pauta; 6 para orgánico breve).
 - Slide 1: hook claro que detenga el scroll.
-- Slides intermedios: problema -> insight -> solucion -> ejemplo concreto.
+- Slide 2: costo o consecuencia económica sin inventar cifras.
+- Slides intermedios: causa -> producto real -> mecanismo -> prueba/control.
 - Ultimo slide: CTA unico y especifico.
 - Lenguaje claro para empresas bolivianas, sin jerga tecnica innecesaria.
 
@@ -61,6 +83,9 @@ personales de Arthur/Sergio NO tienen credenciales Meta: no intentar publicar ah
 - [ ] Sin pill ONIA ni numero de slide arriba; footer `@oniahq` presente.
 - [ ] Ningun texto o callout cortado; margen seguro respetado.
 - [ ] Hook del slide 1 concreto (numero, error, resultado), no generico.
+- [ ] Cada slide tiene una prueba visual distinta; no es una serie de afiches.
+- [ ] El producto aparece en UI real y sin datos personales.
+- [ ] Dolor del rubro -> dinero -> mecanismo -> oferta, sin claims inventados.
 - [ ] Caption con primera linea fuerte + CTA.
 - [ ] Hashtags relevantes a Bolivia/B2B, sin listas infladas.
 - [ ] Prompts visuales originales, sin copiar referencias.

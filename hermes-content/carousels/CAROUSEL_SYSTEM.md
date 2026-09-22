@@ -28,6 +28,10 @@ con la marca ONIA, y publica vía `ig-publish` en el VPS.
      vende en los seis rubros. Sin agente, la placa dice lo que hay.
 
    Origen y las 6 placas aplicadas: [`../docs/ONIA_KIT_VENTA_POR_RUBRO_20260815.md`](../docs/ONIA_KIT_VENTA_POR_RUBRO_20260815.md).
+5. **Gate anti-plantilla — cada slide debe demostrar algo distinto.** Un carrusel
+   no es una colección de afiches con el mismo fondo. Para pauta, la secuencia debe
+   incluir contexto humano y producto real, y cada interior debe usar una evidencia
+   propia (UI, flujo, tabla, contrato o decisión). Si sólo cambia el titular, no sale.
 
 ## Formatos de salida (`--format`)
 
@@ -110,8 +114,8 @@ node scripts/carousel_render.js \
 
 | Pack | Look | Uso |
 |------|------|-----|
-| `community-editorial` (default) | portada editorial + tarjetas de conocimiento + diagramas | marca personal y educación técnica |
-| `dark-product` | negro+verde, Archivo Black, **curva verde continua entre slides**, pills/badges, callout-cards, slot de objeto 3D (`--object`) | feed premium estilo Solaris. **El recomendado para ONIA.** |
+| `community-editorial` (default) | portada humana/editorial + interiores claros + diagramas + UI real | ONIA, marca personal, educación y producto. **Default también para pauta.** |
+| `dark-product` | negro+verde, Archivo Black, curva continua, pills/badges y slot de objeto 3D (`--object`) | test oscuro deliberado; **no** default para carruseles ONIA. |
 | `editorial-photo` | foto a sangre + scrim + grano, Archivo Black con acento *serif italic* (Fraunces) verde, pill caption | compatibilidad histórica; para Sergio usar `community-editorial`. |
 | `bright-retail` | claro/multicolor, fondo crema/acento, Inter 900, keyword en color de acento rotativo, pills suaves, logo de marca | marcas retail/amigables (ej. **Nuvia** `@nuvia.bo`). Lee brand kit de `BRANDS` en el render. |
 

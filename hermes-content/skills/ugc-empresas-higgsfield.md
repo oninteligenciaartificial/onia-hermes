@@ -51,6 +51,16 @@ Return 3 angles:
 - caption
 - next approval command
 
+When Sergio explicitly asks for **UGC de IA**, the output must also include:
+
+- an original AI presenter identity anchor;
+- at least one continuity frame with the same identity;
+- the presenter's declared role: presenter/explainer, never customer;
+- real product inserts and exact edit points;
+- identity, motion, voice and negative prompts as separate blocks.
+
+Do not silently reroute an AI-presenter request to Sergio, a founder or an operator.
+
 ## Claim Safety
 
 Never invent:
@@ -69,6 +79,26 @@ If proof is missing, use soft language:
 - "can help"
 - "ask for a demo"
 
+## AI UGC that sells (mandatory)
+
+Origin: correction from Sergio Urcullo on 2026-09-21. A generic avatar reading a
+feature list is not a developed UGC ad.
+
+- The AI person is an original ONIA presenter, not a fabricated client, employee,
+  dentist or testimonial. Write in explainer language: "te muestro", never "desde
+  que lo uso" or "en mi clínica".
+- The first two seconds name a vertical-specific pain with a money consequence.
+- The presenter creates recognition; the product proves the claim. Show real UI for
+  at least eight accumulated seconds in a 25–30 second ad.
+- Preserve one identity across shots: face, age, hair, clothing, location and light.
+  Keep ordinary smartphone flaws; reject beauty-influencer, glossy stock and
+  synthetic-avatar aesthetics.
+- Burn readable subtitles, cut every 1.5–2.5 seconds and use one CTA.
+- Never generate product UI in the image/video model. Composite approved ONIA demo
+  captures in post and remove personal data.
+- Prepare the complete production package before spend. Query the live Higgsfield
+  cost and obtain explicit case-by-case approval before generating video.
+
 ## Higgsfield MCP
 
 When the MCP is connected:
@@ -78,6 +108,11 @@ When the MCP is connected:
 3. Generate one draft first, not ten.
 4. Save generated URL and metadata to Video Lab.
 5. Ask for review before delivery or publish.
+
+If the MCP is not connected, use the authenticated Higgsfield CLI on the VPS. If
+neither route can return a live cost, stop only the paid generation: finish the
+script, presenter anchors, shot list, prompts and edit map, and record the exact
+authentication blocker. Never estimate a cost and present it as current.
 
 ## n8n Reference Router
 

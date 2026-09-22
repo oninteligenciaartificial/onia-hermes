@@ -99,6 +99,28 @@ test('todo pack listado RENDERIZA (no solo figura en la lista)', () => {
     assert.ok(html && html.includes('</html>'), `${pack} no devolvio HTML completo`);
   }
 });
+test('community-editorial usa la cuenta elegida y CTA directo para pauta', () => {
+  const html = communityEditorialHtml({
+    role: 'cta',
+    headline: 'Probá ONIA',
+    cta: 'CREÁ TU CUENTA',
+  }, 0, 1, 'onia', { serie: 'DENTAL' });
+  assert.ok(html.includes('ONIA / DENTAL'));
+  assert.ok(!html.includes('SERGIO URCULLO'));
+  assert.ok(html.includes('cta-line cta-direct'));
+  assert.ok(!html.includes('Comentá'));
+  assert.ok(!html.includes('01 / 01'));
+});
+test('community-editorial puede incrustar una captura real', () => {
+  const html = communityEditorialHtml({
+    role: 'point',
+    headline: 'Producto real',
+    visual: { type: 'screenshot', file: __filename, label: 'TENANT DEMO', fit: 'cover' },
+  }, 1, 3, 'onia', { serie: 'DENTAL' });
+  assert.ok(html.includes('visual-screenshot'));
+  assert.ok(html.includes('data:image/png;base64,'));
+  assert.ok(html.includes('class="fit-cover"'));
+});
 test('nuvia account + brand kit configured', () => {
   assert.strictEqual(ACCOUNTS.nuvia.handle, '@nuvia.bo');
   assert.ok(BRANDS.nuvia.accents.length >= 3);

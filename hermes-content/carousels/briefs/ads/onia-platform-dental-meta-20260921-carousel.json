@@ -1,45 +1,108 @@
 {
-  "title": "ONIA Platform Dental — tres lugares",
-  "caption": "Agenda, pacientes, tratamientos y cobros no deberían vivir en herramientas separadas. Ordená la operación de tu clínica con ONIA Platform. Probala 14 días sin tarjeta.",
+  "title": "ONIA Platform Dental — tratamientos a medias",
+  "serie": "CLÍNICAS DENTALES",
+  "caption": "¿Cuántos tratamientos quedaron a medias este mes? ONIA te ayuda a ver quién no volvió y qué seguimiento falta, con agenda, pacientes y cobros en el mismo sistema. Probalo 14 días sin tarjeta.",
   "hashtags": ["#OniaPlatform", "#ClinicasDentales", "#Bolivia"],
   "slides": [
     {
       "role": "cover",
-      "pill": "Clínicas dentales",
-      "headline": "TU CLÍNICA VIVE EN *3 LUGARES*",
-      "body": "Por eso confirmar una cita, encontrar una ficha o revisar un cobro toma más de lo necesario."
+      "pill": "La pregunta incómoda",
+      "headline": "¿CUÁNTOS TRATAMIENTOS QUEDARON *A MEDIAS?*",
+      "body": "El problema no siempre es conseguir pacientes. A veces es saber quién no volvió.",
+      "bg": "web-factory/apps/onia-platform/public/contexto/dental.webp"
     },
     {
       "role": "stakes",
-      "pill": "Lugar 1",
-      "headline": "LA CONVERSACIÓN QUEDA EN *WHATSAPP*",
-      "body": "Hasta que el mensaje importante se pierde entre chats."
+      "pill": "La plata quieta",
+      "headline": "CADA CASO PENDIENTE FRENA *UN COBRO*",
+      "body": "Hacé la cuenta con tus propios números. No hace falta inventar porcentajes.",
+      "visual": {
+        "type": "table",
+        "label": "SEGUÍ EL RASTRO",
+        "left": "QUEDA PENDIENTE",
+        "right": "QUÉ SE FRENA",
+        "rows": [
+          {"left": "Tratamiento iniciado", "right": "Saldo por cobrar"},
+          {"left": "Paciente sin volver", "right": "Próximo turno"},
+          {"left": "Seguimiento olvidado", "right": "Decisión del paciente"}
+        ]
+      }
     },
     {
       "role": "point",
-      "pill": "Lugar 2",
-      "headline": "LA CITA QUEDA EN UN *CUADERNO*",
-      "body": "Hasta que alguien cambia el horario y el resto del equipo no se entera."
+      "pill": "Dónde se corta",
+      "headline": "LA CITA TERMINA. *EL SEGUIMIENTO TAMBIÉN.*",
+      "body": "La recepción vuelve al WhatsApp, al cuaderno y a recordar de memoria.",
+      "visual": {
+        "type": "flow",
+        "label": "EL HUECO OPERATIVO",
+        "nodes": [
+          {"name": "Cita atendida"},
+          {"name": "Tratamiento pendiente"},
+          {"name": "Nadie revisa a quién llamar"},
+          {"name": "El paciente no vuelve"}
+        ],
+        "note": "El problema no es la intención. Es no tener *un sistema que lo muestre*."
+      }
     },
     {
       "role": "point",
-      "pill": "Lugar 3",
-      "headline": "EL COBRO QUEDA EN *EXCEL*",
-      "body": "Si todos recuerdan cargar lo mismo, en el mismo archivo."
+      "pill": "Producto real",
+      "headline": "PRIMERO: UNA AGENDA QUE *TODO EL EQUIPO VE*",
+      "body": "Sin buscar el turno en tres lugares.",
+      "visual": {
+        "type": "screenshot",
+        "label": "ONIA · TENANT DEMO",
+        "file": "hermes-content/docs/recorrido/capturas/paso-07d-cita-en-agenda.png",
+        "fit": "cover",
+        "caption": "Calendario de citas en ONIA Platform."
+      }
     },
     {
       "role": "point",
-      "pill": "Con ONIA",
-      "headline": "TODO EL EQUIPO VE *LA MISMA INFORMACIÓN*",
-      "body": "Agenda, pacientes, tratamientos y cobros en un solo sistema.",
-      "object": "hermes-content/docs/recorrido/capturas/paso-07d-cita-en-agenda.png",
-      "object_fit": "bleed"
+      "pill": "Sin cortar el flujo",
+      "headline": "SI FALTA LA FICHA, *LA CREÁS SIN SALIR*",
+      "body": "La recepción puede cargar al paciente mientras agenda la cita.",
+      "visual": {
+        "type": "screenshot",
+        "label": "ALTA DESDE LA CITA",
+        "file": "hermes-content/docs/recorrido/capturas/alta-inline-en-el-modal-de-cita.png",
+        "caption": "Paciente, profesional, fecha y motivo en un solo flujo."
+      }
+    },
+    {
+      "role": "point",
+      "pill": "La plata visible",
+      "headline": "EL COBRO NO QUEDA *EN OTRO ARCHIVO*",
+      "body": "Cobrado y por cobrar se revisan desde el mismo lugar.",
+      "visual": {
+        "type": "screenshot",
+        "label": "COBROS EN ONIA",
+        "file": "hermes-content/docs/recorrido/capturas/paso-08-cobro.png",
+        "fit": "cover",
+        "caption": "Vista real del módulo de cobros del tenant demo."
+      }
+    },
+    {
+      "role": "save",
+      "pill": "IA con control",
+      "headline": "RECALL PREPARA. *TU EQUIPO DECIDE.*",
+      "body": "La IA ayuda a detectar seguimientos; una persona revisa antes de contactar.",
+      "visual": {
+        "type": "contract",
+        "label": "CONTROL HUMANO",
+        "input": "Pacientes sin volver",
+        "output": "Propuesta de seguimiento",
+        "permissions": "La persona aprueba el contacto"
+      }
     },
     {
       "role": "cta",
-      "pill": "Empezá hoy",
-      "headline": "PROBÁ ONIA *14 DÍAS*",
-      "body": "Sin tarjeta. Desde Bs 320 al mes. Creá tu cuenta en onia.com.bo."
+      "pill": "Empezá por lo visible",
+      "headline": "SABÉ *QUIÉN NO VOLVIÓ*",
+      "body": "Probá ONIA 14 días sin tarjeta. Desde Bs 320/mes.",
+      "cta": "CREÁ TU CUENTA",
+      "bg": "web-factory/apps/onia-platform/public/contexto/dental.webp"
     }
   ],
   "cta": "Creá tu cuenta"

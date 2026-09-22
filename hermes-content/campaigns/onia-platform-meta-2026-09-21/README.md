@@ -10,11 +10,11 @@ Audiencia: dueños y administradores de clínicas dentales con 2–5 personas en
 
 ## Decisión
 
-La primera campaña no debe vender “IA para cualquier negocio”. Debe vender una
-solución concreta para un problema reconocible:
+La primera campaña no debe vender “IA para cualquier negocio” ni una lista de
+módulos. Debe abrir con una pregunta que una clínica pueda contestar con nombres:
 
-> Tu clínica vive en WhatsApp, un cuaderno y Excel. ONIA reúne agenda, pacientes,
-> tratamientos y cobros en un solo lugar.
+> ¿Cuántos tratamientos quedaron a medias este mes? ONIA ayuda a ver quién no
+> volvió y qué seguimiento falta.
 
 La especialización dental hace que el anuncio sea entendible en menos de tres
 segundos y permite mostrar producto real. Otros rubros deben ir en conjuntos de
@@ -36,9 +36,9 @@ Lead Form y no optimizar una campaña a un evento ciego.
 
 | Pieza | Trabajo | Ángulo | CTA |
 |---|---|---|---|
-| UGC 9:16, 25–30 s | Detener el scroll y lograr identificación | “Abrís tres lugares para confirmar una cita” | Probá ONIA 14 días |
-| Carrusel 4:5, 6 láminas | Hacer autodiagnóstico y explicar el mecanismo | WhatsApp + cuaderno + Excel → un solo sistema | Creá tu cuenta |
-| Estático 4:5 y 9:16 | Fijar una idea memorable | “WhatsApp no es tu agenda” | Probá 14 días |
+| UGC IA 9:16, 27 s | Detener el scroll y demostrar | “¿Cuántos tratamientos quedaron a medias?” | Probá ONIA 14 días |
+| Carrusel 4:5, 8 láminas | Dolor → dinero → causa → UI → mecanismo | El seguimiento se corta después de la cita | Creá tu cuenta |
+| Estático 4:5 y 9:16 | Instalar una pregunta que abra conversación | “¿Cuántos tratamientos quedaron a medias?” | Probá ONIA |
 
 Los tres anuncios prueban conceptos distintos. No son el mismo texto acomodado en
 tres formatos.
@@ -68,20 +68,20 @@ producto visible y oferta de baja fricción.
 
 ### UGC
 
-- Texto principal: `Si para confirmar una cita abrís WhatsApp, un cuaderno y Excel, no te falta esfuerzo: te falta un solo lugar. Conocé ONIA Platform.`
-- Titular: `Tu clínica, en un solo lugar`
+- Texto principal: `¿Cuántos tratamientos quedaron a medias este mes? ONIA te ayuda a ver quién no volvió y qué seguimiento falta.`
+- Titular: `Recuperá el seguimiento`
 - Descripción: `14 días gratis, sin tarjeta`
 
 ### Carrusel
 
-- Texto principal: `Agenda, pacientes, tratamientos y cobros no deberían vivir en herramientas separadas. Ordená la operación de tu clínica con ONIA.`
-- Titular: `De tres lugares a uno`
+- Texto principal: `Un tratamiento iniciado que queda sin seguimiento también frena un próximo turno o un cobro. Mirá cómo ONIA ordena ese recorrido.`
+- Titular: `Sabé quién no volvió`
 - Descripción: `Desde Bs 320 al mes`
 
 ### Estático
 
-- Texto principal: `WhatsApp sirve para conversar. Tu clínica necesita un sistema para operar. Reuní agenda, pacientes, tratamientos y cobros en ONIA.`
-- Titular: `WhatsApp no es tu agenda`
+- Texto principal: `¿Cuántos tratamientos quedaron a medias este mes? ONIA te ayuda a ver quién no volvió y qué seguimiento falta.`
+- Titular: `Tratamientos a medias`
 - Descripción: `Probá 14 días sin tarjeta`
 
 ## Claims autorizados para estas piezas
@@ -110,11 +110,24 @@ producto visible y oferta de baja fricción.
 
 ## Archivos
 
-- UGC: `ugc-dental-30s.md`
+- UGC IA: `ugc-dental-30s.md`
+- Presentadora, ancla selfie: `assets/ugc-ai-presenter-selfie-v1.png`
+- Presentadora, continuidad: `assets/ugc-ai-presenter-desk-v1.png`
 - Carrusel: `../../carousels/briefs/ads/onia-platform-dental-meta-20260921-carousel.json`
 - Estático: `../../carousels/briefs/ads/onia-platform-dental-meta-20260921-static.json`
 - Captura usada: `../../docs/recorrido/capturas/paso-07d-cita-en-agenda.png`
 
-La captura corresponde a una vista demo con información ficticia. Antes de pauta,
-revisar visualmente que no contenga información personal ni un estado antiguo del
-producto.
+Las capturas corresponden a un tenant demo con información ficticia. Antes de
+pauta, revisar visualmente que no contengan información personal ni un estado
+antiguo del producto.
+
+## Corrección de dirección creativa — 2026-09-21
+
+La primera versión negra/verde quedó rechazada: repetía el mismo afiche, parecía
+generada por IA y no construía un argumento de venta. La versión vigente usa el
+estándar editorial aprobado en la sesión de marca personal: portada humana,
+interiores claros, un objeto de prueba distinto por slide, UI real y CTA diseñado.
+
+No se generó el video pago porque no fue posible consultar el costo vivo de
+Higgsfield desde una sesión autenticada. Guion, identidad, prompts, edición y assets
+sí quedaron terminados; el gasto sigue bloqueado hasta cotización y aprobación.
