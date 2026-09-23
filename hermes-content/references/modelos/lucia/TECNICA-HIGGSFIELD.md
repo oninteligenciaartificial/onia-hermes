@@ -1,12 +1,31 @@
 # Técnica de Higgsfield — lo que funciona, probado en la web
 
+> ## Autoridad operativa vigente — 2026-09-22
+>
+> Este archivo conserva la bitacora y los hallazgos cronologicos; **ya no decide por si solo el
+> canal de ejecucion**. La politica vigente esta en
+> [`../../../docs/HIGGSFIELD_VIDEO_SYSTEM.md`](../../../docs/HIGGSFIELD_VIDEO_SYSTEM.md) y el
+> estado de identidad en [`LUCIA-HIGGSFIELD-IDENTITY.json`](LUCIA-HIGGSFIELD-IDENTITY.json).
+>
+> - CLI oficial + skills: produccion reproducible para Codex, Claude Code y VPS.
+> - Navegador local: Element `@lucia-skin-v1`, Marketing Studio y QA visual manual.
+> - MCP oficial: agentes de chat/exploracion; no motor productivo por defecto.
+> - API: futura automatizacion de volumen con facturacion separada.
+> - Playwright en VPS: no se usa para generar ni comprar; la UI es fragil y no da un contrato
+>   estable para costos, defaults o recuperacion de jobs.
+>
+> Todo costo, modelo, default y sesion descrito mas abajo es evidencia historica hasta que se
+> vuelva a consultar en vivo. Usar el comando completo `higgsfield`; en Windows `hf` apunta a
+> Hugging Face.
+
 > **Objetivo de este archivo:** que generar una imagen de Lucía que salga bien no dependa de
 > acordarse de nada. Todo lo de acá se probó en la cuenta de Sergio el 2026-08-28, mirando el
 > resultado. Lo que no se probó, dice que no se probó.
 >
-> 🔴 **Higgsfield se opera SOLO por navegador.** Sergio, 2026-08-28: *"no usarás MCP, harás todo
-> desde el navegador a mi cuenta, cometes muchos errores por MCP"*. Tenía razón: el MCP pedía
-> `nano_banana_2` y el servidor resolvía a `nano_banana_flash` sin avisar.
+> **Contexto historico del 2026-08-28:** en esa fecha se ordeno operar por navegador debido a
+> una confusion entre nombre comercial y `job_type`. La investigacion posterior de este mismo
+> archivo (§10) corrigio esa causa. La orden actual distingue CLI, navegador y MCP como indica el
+> bloque superior.
 
 ---
 
@@ -1398,15 +1417,16 @@ respondiendo gratis aunque el `create` esté bloqueado — medir no cuenta contr
 ### ⚠️ 2026-09-03 — hay un SEGUNDO bloqueo, distinto: la sesión del CLI expira
 
 `higgsfield account status` (y cualquier `generate`) devolvió `Error: Session expired. Hint: Run:
-hf auth login`. **No es el cupo diario** — es la sesión de auth del CLI que caducó. La diferencia
+hf auth login`. Ese `hf` es un hint historico y en Windows puede abrir Hugging Face: usar
+**`higgsfield auth login`**. **No es el cupo diario** — es la sesión de auth del CLI que caducó. La diferencia
 importa para la regla 0:
 
 | Bloqueo | Qué lo cura | Se reintenta al día siguiente? |
 |---|---|---|
 | `grace_daily_limit_reached` | esperar al reset diario | **sí** — otra fecha, se reintenta |
-| `Session expired` (auth) | `hf auth login` **interactivo** | **no** por sí solo — necesita un login humano |
+| `Session expired` (auth) | `higgsfield auth login` **interactivo** | **no** por sí solo — necesita un login humano |
 
-🔴 En una sesión de loop **no interactiva** el `hf auth login` no se puede correr (abre flujo OAuth),
+🔴 En una sesión de loop **no interactiva** el `higgsfield auth login` no se puede correr (abre flujo OAuth),
 y el balance por MCP (`mcp__…higgsfield__balance`) pide un permiso que la sesión headless no puede
 conceder. O sea: con la sesión expirada, **generar y hasta medir el saldo quedan bloqueados de raíz**
 hasta que un turno interactivo re-loguee. Igual que el cupo diario: se anota, se hace la tarea de 0

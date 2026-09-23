@@ -178,7 +178,8 @@ marketing de las tres cuentas escrito como fuente de verdad.
   del VPS para transcribir.
 - **Soul `LUCIA-SINTETICA-v3` NO le gana al Element ancla.** Probado A/B con el mismo prompt:
   ignora el "mirando a cámara", atenúa las pecas y corre la estructura de la cara. Mejora al
-  Soul viejo (sin piel roja, sin deuda de consentimiento) pero **queda de respaldo**.
+  Soul viejo (sin piel roja; la deuda de consentimiento del linaje sigue sin resolver), pero
+  **queda rechazado como principal**.
   Confirma la regla: la identidad se sostiene en LA REFERENCIA, no en el entrenamiento.
 - **Facebook en Postiz: el App Secret no era el problema.** Leído en
   `facebook.provider.js:184`, Postiz arma el OAuth **clásico** (`client_id` + `scope`); la app

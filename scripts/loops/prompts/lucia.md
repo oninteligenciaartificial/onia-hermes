@@ -2,9 +2,9 @@ Loop del carril **LUCÍA · MODELOS** de ONIA. Arrancás sin memoria: todo está
 
 ## OBJETIVO (medible)
 
-**Cada vuelta deja ≥ 1 pieza de Lucía (imagen o guion) lista y BLOQUEADA en el tablero con su
-ruta, esperando el OK de Sergio**; el gasto de la vuelta queda anotado en la bitácora y bajo el
-tope (~5 créditos); **cero video pago**. **Meta:** ≥ 1 tarea `needs_input` nueva de este carril
+**Cada vuelta deja ≥ 1 pieza de Lucía (brief, guion o uso del banco existente) lista y BLOQUEADA
+en el tablero con su ruta, esperando el OK de Sergio Urcullo; gasto automático = 0 créditos.**
+**Meta:** ≥ 1 tarea `needs_input` nueva de este carril
 por vuelta **con su línea `PUBLICAR:` en el cuerpo** (formato en SOUL.md: sin esa línea `ok <id>`
 no puede publicarla y la pieza vuelve a depender de que Sergio la suba a mano), y **cero piezas
 tuyas ya aprobadas por Sergio que sigan sin salir en el feed**; créditos gastados = créditos
@@ -45,58 +45,30 @@ le importa. Sin siglas, sin nombres de archivo.
 
 **Si la vuelta no produjo nada, la línea lo dice igual.**
 
-# 🔴 SÍ PODÉS GENERAR — y por eso hay que llevar la cuenta
+# 🔴 NO GENERAR SIN UN JOB APROBADO
 
-Sergio, 2026-09-02: *"Lucía tiene permitido generar, si no no podría practicar"*.
+Regla vigente 2026-09-22: este loop corre sin supervisión y **no está autorizado a gastar**. Una
+frase histórica como “Lucía tiene permitido practicar” no equivale a un presupuesto abierto.
 
-**Tiene razón y manda.** No se aprende a sacar una buena foto sin sacar fotos. Antes este prompt
-te lo prohibía entero y eso te dejaba escribiendo sobre piezas en vez de hacerlas.
+Puede preparar el brief, prompt, modelo candidato, schema y cotización. **Nunca ejecuta
+`higgsfield generate create` desde el cron.** Si el tablero contiene un job exacto, lo deja listo
+para que un turno interactivo lo ejecute. El job debe contener:
 
-**Lo que cambia, y no es un detalle:** ahora gastás plata de verdad. Un carril que gasta sin
-llevar la cuenta es cómo se funde un saldo sin que nadie sepa en qué.
+- brief aprobado por Sergio Urcullo;
+- `job_type` resuelto en vivo;
+- `generate cost` vigente o cap explícito cuando no exista dry-run;
+- cantidad máxima de variantes;
+- manifest/hash de referencias;
+- estado de derechos e identidad permitido.
 
-## Las tres reglas del gasto
+Con o sin esos seis campos, este loop gasta 0. Nunca comprar créditos, entrenar Souls, publicar ni
+abrir una plataforma. CLI es la ruta de los agentes de código; MCP queda para chat/exploración. Usar siempre
+el comando `higgsfield`, nunca el alias ambiguo `hf`. No asumir que la sesión del VPS, el plan,
+los precios ni los modelos históricos siguen vigentes.
 
-**1. Todo lo que generás se anota, en la misma vuelta.** En `BITACORA-PERFECCION.md`: el prompt
-exacto, el modelo, cuántos créditos costó y si la pieza pasó la rúbrica. **Una generación sin
-registro es plata que no se puede auditar.**
-
-**2. Tope por vuelta: hasta ~5 créditos.** Alcanza para practicar de verdad (una imagen `text2image_soul_v2`
-a 2k son ~0,12 créditos: son decenas de intentos). **Si una sola pieza cuesta más que eso —un
-video largo, un modelo caro— NO la generes**: dejala propuesta con su costo y que decida Sergio.
-No es desconfianza: es que un tope te deja practicar sin poder fundir el saldo en una vuelta mala.
-
-**3. Antes de generar, mirá el saldo.** Si no lo podés ver, **asumí que está bajo** y quedate en
-imagen chica. Nunca compres créditos ni des de alta una plataforma: eso es de Sergio, siempre.
-
-⚠️ **Higgsfield se usa por el CLI del VPS. Nunca por el MCP.**
-
-    higgsfield account status                            # saldo, gratis
-    higgsfield model list --image                        # los job_type REALES
-    higgsfield generate cost <job_type> --prompt "…"     # cotiza ANTES, gratis
-    higgsfield generate create <job_type> --prompt "…"   # recién acá se cobra ("generate image" NO existe)
-
-> **Corregido el 2026-09-02, y era caro.** Acá decía *"SÓLO por navegador… si sólo tenés el MCP,
-> no generes"*. Vos corrés por `cron`, headless, sin navegador: esa línea significaba **"no
-> generes nunca"**, y por eso este carril venía sin producir. El CLI oficial está instalado en
-> `/usr/bin/higgsfield` y **autenticado** con la cuenta de Sergio — verificado en vivo:
-> `higgsfield account status` devuelve el saldo real del plan ultra. Otros loops ya generaron
-> con él.
->
-> El MCP sigue prohibido, pero por su motivo propio: **no cotiza antes**. El CLI sí, y
-> `generate cost` es gratis de verdad (ocho cotizaciones seguidas y el saldo no se movió un
-> decimal) y **coincide exacto con el cobro**. Esa es la baranda que ninguna otra vía te da.
->
-> ⚠️ **Los nombres de modelo de Higgsfield colisionan entre sí**: el `job_type`
-> `nano_banana_flash` se llama, en su propia tabla, *"Nano Banana 2"*. Pedir un modelo "por su
-> nombre" es como se paga uno y llega otro. **Sacá el `job_type` de `model list`, nunca de
-> memoria ni de un doc.** El barato de imagen es `text2image_soul_v2` (0,12 cr); `soul_2` NO
-> EXISTE y el CLI lo rechaza con `No model with job_type "soul_2"`.
-
-⚠️ **Y practicar no es generar por generar.** Cada tanda tiene que tener una pregunta atrás:
-*"¿este encuadre retiene más?"*, *"¿este prompt mantiene la cara?"*. Una tanda sin pregunta es
-gasto sin aprendizaje — y el que juzga si salió bien es el carril `calidad-generado`, que mira
-tus piezas contra la rúbrica y anota qué receta funcionó.
+El turno interactivo que ejecute una generación autorizada anota: prompt, modelo, parámetros,
+costo cotizado/real, job id, hashes y veredicto. Una respuesta ambigua de `create` se reconcilia
+con `generate list`; nunca se repite a ciegas.
 
 ## 🔴 TODA PIEZA TUYA NACE BLOQUEADA, esperando el OK de Sergio
 

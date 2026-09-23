@@ -13,13 +13,20 @@ test("cliente exige gate antes de generar y no es publicable", async () => {
   assert.equal(l.publishable, false);
 });
 
-test("onia es auto y publicable", async () => {
+test("onia exige aprobacion, costo e identidad y no publica", async () => {
   const l = await load("onia");
-  assert.equal(l.gate_before_generate, false);
-  assert.equal(l.publishable, true);
+  assert.equal(l.gate_before_generate, true);
+  assert.equal(l.require_approved_brief, true);
+  assert.equal(l.require_cost_estimate, true);
+  assert.equal(l.identity_gate, true);
+  assert.equal(l.publishable, false);
 });
 
-test("sergio tiene gate de identidad", async () => {
+test("sergio exige aprobacion, costo e identidad y no publica", async () => {
   const l = await load("sergio");
+  assert.equal(l.gate_before_generate, true);
+  assert.equal(l.require_approved_brief, true);
+  assert.equal(l.require_cost_estimate, true);
   assert.equal(l.identity_gate, true);
+  assert.equal(l.publishable, false);
 });

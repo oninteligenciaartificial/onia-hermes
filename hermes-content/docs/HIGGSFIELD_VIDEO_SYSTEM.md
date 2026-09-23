@@ -3,7 +3,76 @@
 Hermes uses Higgsfield as a replaceable video generation engine. Hermes keeps
 strategy, approvals, publishing decisions and memory.
 
-## Source Of Truth
+> **Estado vigente: 2026-09-22.** Este bloque reemplaza cualquier afirmación más
+> abajo que declare MCP como ruta por defecto, fije una versión vieja de la CLI o
+> trate costos/modelos/saldos históricos como actuales.
+
+## Arquitectura vigente
+
+| Superficie | Uso en ONIA | Decisión |
+|---|---|---|
+| **CLI + Skills oficiales** | Codex, Claude Code, jobs reproducibles, costo previo y metadatos | **Ruta principal** |
+| **Web manual** | entrenar/revisar identidad, Elements, selección visual y QA | Manual; no fábrica headless |
+| **MCP** | Claude web/desktop y otros agentes conversacionales | Secundario; no necesario para agentes de código |
+| **API** | workers, colas, webhooks y volumen con presupuesto propio en USD | Fase posterior |
+| **Playwright sobre la web** | inspección visual puntual | No usar para producción ni descargas automatizadas |
+
+Higgsfield recomienda CLI + Skills para agentes de código porque reduce el
+overhead de tokens y estructura el trabajo; MCP expone el esquema completo y se
+orienta a agentes de chat. CLI y MCP usan los créditos del plan. La API es otro
+producto, con saldo en USD y catálogo potencialmente distinto.
+
+Skills instaladas en este repo para ambos agentes:
+
+```text
+.agents/skills/higgsfield-generate
+.agents/skills/higgsfield-soul-id
+.claude/skills/higgsfield-generate
+.claude/skills/higgsfield-soul-id
+```
+
+La política ONIA manda sobre el default de terceros: aunque la Skill oficial no
+pre-cotiza salvo que se lo pidan, ONIA **siempre** ejecuta `generate cost`, registra
+la cotización y obtiene aprobación antes de generar cualquier imagen o video pago.
+
+## Jerarquía de identidad de Lucía
+
+```text
+derechos/consentimiento resueltos
+-> banco sintético coherente y aprobado
+-> Soul ID candidato
+-> A/B contra Elements vigentes
+-> still aprobado
+-> image-to-video / reference-to-video
+-> QA de primer, medio y último frame
+```
+
+- Un prompt no es identidad.
+- Una sola imagen de referencia puede servir para una toma, pero deriva al escalar.
+- Soul ID produce stills reutilizables desde CLI/web. El Element vigente de Lucía funciona como
+  ancla de alta fidelidad solo en la web y no es portable por la CLI actual.
+- El video parte de un still aprobado. Text-to-video puro no es la ruta de Lucía.
+- El Soul sintético v3 de seis imágenes es evidencia de un entrenamiento débil,
+  no una prueba de que Soul ID sea inútil. La web actual recomienda 20 o más
+  imágenes; la CLI instalada admite 5–20.
+- No entrenar un nuevo Soul ni publicar a Lucía hasta cerrar el origen de derechos
+  documentado en [`LUCIA.md`](../references/modelos/lucia/LUCIA.md).
+
+Estado machine-readable:
+`../references/modelos/lucia/LUCIA-HIGGSFIELD-IDENTITY.json`.
+
+## Flujo de gasto obligatorio
+
+```text
+brief -> modelo/params resueltos en vivo -> cost preflight -> aprobación
+-> una generación -> QA -> recién entonces variantes
+```
+
+Registrar por job: versión CLI, modelo técnico, parámetros, referencias, costo
+previsto, costo real, request/job id, artefacto, decisión QA y responsable de
+aprobación. Nunca imprimir `higgsfield auth token`.
+
+## Fuentes actuales
 
 Current public Higgsfield MCP endpoint:
 
@@ -13,16 +82,19 @@ https://mcp.higgsfield.ai/mcp
 
 Official notes from Higgsfield:
 
-- Hosted MCP uses OAuth with a Higgsfield account.
-- No API key is required for the hosted MCP connector.
-- The platform exposes image generation, video creation, character training,
-  video analyzer, marketing video generator, viral clip generator and virality
-  prediction.
-- Video jobs are asynchronous, so Hermes should poll or wait for results.
+- CLI oficial para agentes de código: `npm i -g @higgsfield/cli`.
+- Skills: `npx skills add higgsfield-ai/skills`.
+- MCP alojado usa OAuth y no requiere API key.
+- API usa credenciales y saldo separados del plan.
+- Los jobs son asíncronos; CLI puede esperar o reanudar por job id.
 
 Sources:
 
-- https://higgsfield.ai/mcp
+- https://higgsfield.ai/creator-hub/help-center/integrations/how-do-i-access-higgsfield-via-cli
+- https://higgsfield.ai/creator-hub/help-center/ai-models/how-do-i-create-and-use-a-soul-id-character
+- https://higgsfield.ai/creator-hub/help-center/integrations/what-is-the-higgsfield-api
+- https://github.com/higgsfield-ai/cli
+- https://github.com/higgsfield-ai/skills
 - https://docs.higgsfield.ai/
 
 ## Hermes Rule
@@ -84,15 +156,17 @@ Aprobar video <job_id>
 Current mode:
 
 - Hermes creates the approved brief.
-- Sergio/Codex opens Higgsfield or uses the authenticated CLI.
+- Codex/Claude Code uses the authenticated CLI; el navegador queda para Element/Marketing Studio
+  y QA visual manual.
 - Copy `higgsfield_prompt`, script and scenes from the job.
-- Generate 1-3 variants.
+- Resolve live schema, run `higgsfield generate cost`, record approval and generate one first
+  candidate. Variants only after QA justifies them.
 - Export or obtain a public MP4 URL.
 
-When Higgsfield MCP tools are available in Codex, Hermes should call the MCP
-tool directly with the same job fields and save output URLs/costs to the job.
+When Higgsfield MCP tools are available in a conversational agent, they may be used for discovery
+or an explicitly approved operation. They do not replace CLI preflight, ledger or recovery rules.
 
-### Sergio Soul ID runbook
+### Sergio Soul ID runbook — historical snapshot 2026-06-04
 
 Validated on 2026-06-04:
 

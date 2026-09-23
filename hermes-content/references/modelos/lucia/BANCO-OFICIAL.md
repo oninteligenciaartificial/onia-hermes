@@ -13,7 +13,21 @@
 
 ---
 
-## Cómo se genera — SOLO por navegador
+## Cómo se genera — ruta vigente 2026-09-22
+
+> Este archivo controla **que imagen puede usarse**, no toda la arquitectura de Higgsfield. La
+> politica de superficies vive en
+> [`../../../docs/HIGGSFIELD_VIDEO_SYSTEM.md`](../../../docs/HIGGSFIELD_VIDEO_SYSTEM.md) y los
+> IDs/estados legibles por maquina en
+> [`LUCIA-HIGGSFIELD-IDENTITY.json`](LUCIA-HIGGSFIELD-IDENTITY.json).
+>
+> - **Element-lock / imagen protagonista:** navegador local con `@lucia-skin-v1` y QA manual.
+> - **Produccion reproducible:** CLI con referencias permitidas y costo aprobado.
+> - **Soul-lock:** no esta promovido; requiere dataset sintetico limpio y ganar un A/B fijo.
+> - **MCP:** chat/exploracion, no backbone productivo.
+> - **Playwright en VPS:** no generar ni comprar por clicks automatizados.
+
+### Regla historica que originó el carril navegador
 
 > 🔴 **Sergio, 2026-08-28: *"a partir de ahora no usarás MCP, harás todo desde el navegador a
 > mi cuenta de Higgsfield, cometes muchos errores por MCP"*.**
@@ -25,7 +39,7 @@
 > `Unlimited`. **Es falso.** Ese toggle abre una venta de $5 a $23 por día o semana, aparte del
 > plan. Generar por web cuesta los mismos 2 créditos. No tocar el toggle sin permiso.
 
-**El flujo, probado en vivo:**
+**El flujo Element-lock, probado en vivo:**
 
 1. `higgsfield.ai` → **Image** → **Create Image**.
 2. En el prompt escribir `@` + el nombre: **`@lucia`** autocompleta a **`@lucia-skin-v1`**.
@@ -42,7 +56,9 @@ Moodboard, Canvas, Relight.
 
 ## La cara
 
-**No se genera con Soul. Se genera con el Element-ancla.**
+**Hoy se genera con el Element-ancla cuando la fidelidad facial es critica.** Un nuevo Soul
+completamente sintetico solo puede sustituirlo despues de superar el A/B y los gates de derechos,
+identidad, costo y QA. El Soul v3 existente no cumple esos gates.
 
 | Rol | Qué | ID |
 |---|---|---|
@@ -369,8 +385,9 @@ Tira en `docs/research/calidad-generado/evidencia-posts-20260807/TIRA-6-caras.pn
 pieza por pieza y salvedades de ángulo/gesto en `BITACORA-PERFECCION.md` (P7).
 
 ⚠️ **Consecuencia para este archivo:** *"qué piezas hay"* no es lo mismo que *"qué piezas sirven"*.
-El inventario de §1 cuenta 76 imágenes; **las que se pueden publicar hoy son P1 y P6**. Todo lo
-demás es material de prueba, descarte o pieza sin juzgar.
+El inventario de §1 cuenta 76 imágenes; **P1 y P6 son las únicas que pasan el filtro visual de
+ese lote**. Eso no autoriza publicación: el gate de procedencia/derechos del manifest sigue
+bloqueado. Todo lo demás es material de prueba, descarte o pieza sin juzgar.
 
 ⚠️ **Y la deriva no empezó donde decía §3.** Acá se leía que la deriva estaba *"ya el 13/08"*, en
 el test que eligió el método. Con la tira, **el 07/08 el lote ya traía dos caras** — seis días

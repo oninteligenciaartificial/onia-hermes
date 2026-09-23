@@ -5,13 +5,33 @@ Definir que funciones de Higgsfield debe usar Onia primero para crear contenido 
 
 Este documento es operativo: sirve para decidir modelo, flujo, comandos, limites de seguridad y plan de arranque.
 
-## Estado actual
+> ## Estado vigente — 2026-09-22
+>
+> La decision actual no es "una herramienta para todo":
+>
+> | Superficie | Rol ONIA | Estado |
+> |---|---|---|
+> | CLI oficial + skills | Cotizar y ejecutar desde Codex, Claude Code y VPS | **Principal** |
+> | Navegador local | Crear/ajustar Elements, Marketing Studio y hacer QA visual | **Complementario manual** |
+> | MCP oficial | Explorar y operar desde agentes de chat cuando este conectado | **Opcional; no backbone** |
+> | API | Workers y volumen con presupuesto separado | **Futuro** |
+> | Playwright en VPS | Automatizar clicks de la web | **No usar para produccion** |
+>
+> El endpoint MCP oficial sigue siendo `https://mcp.higgsfield.ai/mcp`, pero Higgsfield recomienda
+> CLI + skills para Claude Code y Codex por su menor overhead de contexto. En ONIA, **toda**
+> generacion paga debe pasar por schema vivo, cotizacion viva y aprobacion registrada. Nunca usar
+> precios, defaults o nombres de modelo recordados de este archivo.
+>
+> El bloque "Estado actual" siguiente queda conservado como **snapshot historico del 2026-08-06**.
+> Saldo, plan, catalogo, Souls y conexiones pueden haber cambiado y no son evidencia vigente.
 
-**Verificado el 2026-08-06 por MCP nativo** (reemplaza la validacion por CLI del 2026-06-01):
+## Estado historico — snapshot 2026-08-06
+
+**Verificado el 2026-08-06 por MCP nativo** (reemplazaba la validacion por CLI del 2026-06-01):
 
 - Cuenta: `oninteligenciaartificial@gmail.com` · Plan: `ultra` · Creditos: **2.993,73**
-- **Ruta vigente: MCP** (`https://mcp.higgsfield.ai/mcp`), ya conectado a esta sesion. La CLI
-  pasa a ser respaldo, no la ruta principal.
+- **Ruta de esa sesion: MCP** (`https://mcp.higgsfield.ai/mcp`). Ya no define la arquitectura
+  vigente; ver la matriz superior.
 - Souls `ready`: `LUCIA-REAL-v2-clean` (`36305a9b-…`), `Mara BO v2` (`6c94bbf0-…`),
   `Sergio Onia` + 3 variantes historicas de Sergio.
 - Costo medido: **imagen Soul 2k = 0,12 cr**. Video segun modelo (cotizar con `get_cost:true`).
@@ -32,7 +52,8 @@ Fuentes: MCP `balance`, `show_characters`, `models_explore`, `get_workflow_instr
 ## Inventario de funciones
 
 ### CLI y MCP
-La CLI es la ruta que Hermes puede operar hoy desde el workspace.
+La CLI oficial es la ruta principal para agentes de codigo. El MCP es una interfaz valida para
+agentes conversacionales, pero no debe asumirse conectado ni usarse como motor automatico.
 
 Comandos principales:
 
@@ -45,7 +66,7 @@ higgsfield model get <job_set_type> --json
 higgsfield generate cost <job_set_type> --prompt "<prompt>"
 higgsfield generate create <job_set_type> --prompt "<prompt>" --wait
 higgsfield upload create <file>
-higgsfield soul-id create --name <name> --image <id1> --image <id2> --image <id3>
+higgsfield soul-id create --name <name> --image <id1> --image <id2> --image <id3> --image <id4> --image <id5>
 ```
 
 Capacidades:
@@ -56,14 +77,16 @@ Capacidades:
 - `model`: listar modelos y ver parametros.
 - `generate`: estimar costo, crear, esperar, obtener y listar jobs.
 - `upload`: subir imagenes, videos o audio para usarlos como input.
-- `soul-id`: entrenar identidad consistente con 3-5 referencias.
+- `soul-id`: entrenar identidad consistente. El CLI actual acepta **5-20** imagenes; la guia web
+  recomienda **20-80**. Resolver el carril antes de preparar el dataset.
 - `marketing-studio`: gestionar avatars, hooks, products, brand kits y formatos.
 - `product-photoshoot`: generar fotos de producto con prompt mejorado.
 - `marketplace-cards`: generar imagenes tipo marketplace y modulos de producto.
 
-### MCP — la superficie real (verificado 2026-08-06)
+### MCP — snapshot de capacidades observado el 2026-08-06
 
-Endpoint: `https://mcp.higgsfield.ai/mcp`. Ya conectado. Es la ruta por defecto.
+Endpoint: `https://mcp.higgsfield.ai/mcp`. Su disponibilidad debe verificarse por sesion. No es la
+ruta productiva por defecto de ONIA.
 
 **Herramientas nucleo**
 

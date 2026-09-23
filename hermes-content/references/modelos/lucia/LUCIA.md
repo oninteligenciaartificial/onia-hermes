@@ -1,5 +1,23 @@
 # LUCÍA — archivo único
 
+> ## Estado operativo vigente — 2026-09-22
+>
+> Este archivo sigue siendo la biblia de **personaje, voz, estetica y limites comerciales**.
+> Los IDs, derechos, referencias y gates ejecutables viven en
+> [`LUCIA-HIGGSFIELD-IDENTITY.json`](LUCIA-HIGGSFIELD-IDENTITY.json); el flujo tecnico vive en
+> [`TECNICA-HIGGSFIELD.md`](TECNICA-HIGGSFIELD.md).
+>
+> - `@lucia-skin-v1` es el **baseline operativo**, no un ganador A/B demostrado frente al backup.
+> - El Soul sintetico v3 se entreno con 6 imagenes. Su derrota no prueba que Soul ID sea inviable;
+>   prueba que esa version no debe escalarse.
+> - Marketing Studio mantiene un avatar separado; no existe hoy una identidad portable que una
+>   Element, CLI, Soul y Marketing Studio.
+> - Todo video parte de un still aprobado. No intentar recuperar la identidad con texto-a-video.
+> - Antes de entrenar, generar o publicar una nueva version debe resolverse el linaje de las
+>   referencias: consentimiento documentado o reconstruccion completamente sintetica.
+> - No gastar creditos sin costo/cap registrado y aprobacion explicita. El entrenamiento Soul del
+>   CLI no expone `cost` ni dry-run: requiere precio confirmado por otra superficie o cap aprobado.
+
 > ## 🔴 LA CARA — el único dato que hay que copiar
 >
 > **Element canónico: `lucia-skin-v1` · `58bbd635-9b90-4bd2-b08a-1cd4915bd563`**
@@ -32,8 +50,9 @@
 > 28-ago se produjeron dos carruseles con fotos descartadas justamente por eso. `BANCO-OFICIAL.md`
 > es una pantalla, dice qué carpeta sí y cuál no, y el gate lo hace cumplir.
 
-> **Este archivo manda.** Todo lo que se decide sobre Lucía se escribe acá. Si otro doc dice
-> algo distinto, gana este. Última edición: 2026-08-20.
+> **Autoridad acotada:** este archivo manda sobre personaje, voz, estética y límites comerciales.
+> Para IDs, procedencia, derechos, entrenamiento y gates ejecutables manda
+> `LUCIA-HIGGSFIELD-IDENTITY.json`. Última revisión operativa: 2026-09-22.
 >
 > Las decisiones abiertas están marcadas 🟡 con opciones numeradas. Cuando Sergio elige, se
 > reemplaza el bloque por la elegida y se marca ✅ con la fecha.
@@ -106,14 +125,14 @@ carruseles se pasaron a terracota. Sergio lo revirtió. La paleta de arriba sigu
 los PROMPTS de imagen — piel, pelo, vestuario, locación — que es de lo que trata esta sección;
 lo que no vale es extenderla al color de marca de las piezas.
 
-## 2. ✅ DECIDIDO — El ancla de la cara (Sergio, 2026-08-15)
+## 2. ✅ Baseline operativo — El ancla de la cara (corregido 2026-09-22)
 
 **Mirá `INVENTARIO-caras.jpg`, acá al lado.** Son las 6 caras de Lucía que hay en la cuenta,
 en ese orden.
 
 | Pos. | Element ID | Nombre | Qué es | Veredicto |
 |---|---|---|---|---|
-| **1** | `58bbd635-9b90-4bd2-b08a-1cd4915bd563` | `lucia-skin-v1` | **7 ángulos** (28-ago). ⚠️ Antes decía `lucia-ancla-2026-08` / «selfie de espejo»: era la descripción VIEJA pegada al UUID NUEVO. Ver de espejo, argolla de oro. Generada | ✅ **Ganó la prueba del 13-ago: 1er y 2do puesto** de 5 |
+| **1** | `58bbd635-9b90-4bd2-b08a-1cd4915bd563` | `lucia-skin-v1` | **7 ángulos** (28-ago). ⚠️ Antes decía `lucia-ancla-2026-08` / «selfie de espejo»: era la descripción VIEJA pegada al UUID NUEVO. Ver de espejo, argolla de oro. Generada | ✅ **Baseline vigente. No existía el 13-ago y nunca fue comparado A/B contra `902eeebb…`.** |
 | **2** | `902eeebb-89e9-4477-8426-c555b20f7ecc` | `lucia-surgical-anchor` | Photoshoot fondo blanco, sonrisa | ✅ La aprobaste el 7-jul. Salió 3ra |
 | **3** | `ced20cc2-3388-4d98-92ee-b0fcd961aa62` | `lucia-face-real-anchor` | Frame REAL del video, escalado 2K | ✅ **Verdad de terreno para QA.** No generar con ella |
 | 4 | `d5e323ef-4d0e-41bf-863e-ec30aede20ae` | `LUCIA-REAL-v2-clean` | Otro frame del MISMO video | ⛔ **FUERA** |
@@ -135,7 +154,7 @@ estaba usando como tal. **Son tres roles separados y ninguno reemplaza al otro:*
 | Rol | Qué es | Dónde vive |
 |---|---|---|
 | **RASGOS** — qué cara es | Photoshoot de **10 ángulos** sobre fondo blanco: frontal neutro, media sonrisa, sonrisa completa, 2 perfiles, 2 tres cuartos, detalle de nariz, detalle de oreja, cuerpo entero | `STACK-rasgos-10-angulos.jpg` · fuente en `references/models/lucia-surgical-shoot-20260707/` |
-| **ANCLA** — con qué se genera | El Element que va en el prompt | `58bbd635-9b90-4bd2-b08a-1cd4915bd563` (ganó la prueba del 13-ago) |
+| **ANCLA** — con qué se genera | El Element que va en el prompt | `58bbd635-9b90-4bd2-b08a-1cd4915bd563` (baseline operativo; A/B pendiente) |
 | **RESPALDO** | Si el ancla falla en un encuadre | `902eeebb` (sale del shot 03 de ese mismo stack) |
 
 **El stack NO se usa para generar.** Se usa para responder "¿es ella?" cuando se aprueba una
@@ -547,7 +566,7 @@ generada, que es **la luz demasiado perfecta y la óptica demasiado limpia.**
 | **R3 UGC** | lo que parece grabado con celular | `taken by a friend standing close to her, mid-sentence talking, available window light only, slightly imperfect handheld framing, everyday vertical phone photo` |
 | **R4 Beauty** | primer plano | `Extreme close-up, her head and shoulders fill the whole frame; background is a smooth <color> wall completely out of focus. 85mm f/2` |
 
-**Ejemplo armado, el que ganó la prueba:**
+**Ejemplo operativo actual (no demuestra el A/B pendiente):**
 ```
 <<<58bbd635-9b90-4bd2-b08a-1cd4915bd563>>> A casual candid snapshot of this exact woman taken
 by a friend standing close to her in a bright tropical cafe in Santa Cruz de la Sierra,
@@ -666,7 +685,8 @@ para cuando un lugar tiene que salir EXACTO (el local de un cliente).
 
 ## 11. Índice de archivos de Lucía — qué es cada uno
 
-Este archivo manda. Los de abajo se conservan porque **cada uno tiene algo que no está acá**.
+Este archivo manda sobre personaje, voz y estética. Para identidad técnica y derechos manda el
+manifest. Los de abajo se conservan porque **cada uno tiene algo que no está acá**.
 
 | Archivo | Lo único que tiene | Estado |
 |---|---|---|
@@ -963,7 +983,7 @@ funciona"* — buscar referencias espectaculares es lo que hace que el UGC se ve
 | Soul | id | Estado |
 |---|---|---|
 | `LUCIA-REAL-v2-clean` | `36305a9b-af24-4390-959b-885082dddd5d` | ⛔ **NO USAR.** Dos motivos: sale con la **piel roja** e **ignora el atuendo pedido** (§2), y fue entrenado con frames de **una persona real sin permiso documentado** |
-| **`LUCIA-SINTETICA-v3`** | `e6d8703c-ea48-4d37-9e66-afae59ebe84a` | 🟡 **RESPALDO, no principal** — ver veredicto abajo. Entrenado con 6 imágenes 100% GENERADAS desde el ancla: rooftop, oficina, café, gimnasio, playa y selfie UGC. Identidad sintética pura — sin deuda de consentimiento |
+| **`LUCIA-SINTETICA-v3`** | `e6d8703c-ea48-4d37-9e66-afae59ebe84a` | 🟡 **RECHAZADO como principal** — ver veredicto abajo. Entrenado con 6 imágenes generadas desde el ancla: rooftop, oficina, café, gimnasio, playa y selfie UGC. Que las salidas sean generadas no demuestra un linaje libre de deuda; derechos/procedencia siguen sin resolver. |
 
 ⚠️ Un Soul solo corre en `text2image_soul_v2` y `soul_cinema_studio`. Para nano_banana / gpt_image /
 kling / seedance sigue siendo el **Element ancla** el que manda.
@@ -1014,10 +1034,9 @@ Misma escena, mismo prompt, dos vías. Resultado mirado, no supuesto
 | Estructura de cara | más angulosa, se corre del canon | ✅ fiel |
 | Media sonrisa característica | sonrisa amplia genérica | ✅ la suya |
 
-**Conclusión: el ANCLA sigue siendo la vía principal.** El Soul v3 mejora al viejo
-(`36305a9b`: adiós piel roja y adiós deuda de consentimiento) pero **no le gana al Element**
-en fidelidad ni en obediencia al prompt. Queda como respaldo para cuando algo exija
-`text2image_soul_v2` sí o sí.
+**Conclusión: el ANCLA sigue siendo la vía principal.** El Soul v3 mejora visualmente al viejo
+(`36305a9b`: adiós piel roja), pero **no le gana al Element** en fidelidad ni en obediencia al
+prompt. No se declara libre de deuda de consentimiento y no se escala.
 
 Esto confirma el patrón que el archivo ya tenía escrito: **la identidad se sostiene en LA
 REFERENCIA, no en el entrenamiento.** Un Soul promedia; un Element se copia.

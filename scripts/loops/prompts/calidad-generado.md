@@ -52,25 +52,21 @@ sin nadie mirando **no puede darse ese permiso**.
 
 **PROHIBIDO dar de alta plataformas nuevas o comprar créditos.**
 
-⚠️ **Higgsfield se usa por el CLI del VPS. Nunca por el MCP.**
+⚠️ **Si hace falta inspección técnica, los agentes de código usan la CLI; MCP queda para chat y
+exploración. Este carril no ejecuta `generate create`.**
 
     higgsfield account status                            # saldo, gratis
     higgsfield model list --image                        # los job_type REALES
     higgsfield generate cost <job_type> --prompt "…"     # cotiza ANTES, gratis
-    higgsfield generate create <job_type> --prompt "…"   # recién acá se cobra ("generate image" NO existe)
+    # NO ejecutar generate create desde este carril
 
-> **Corregido el 2026-09-02, y bloqueaba dos cosas a la vez.** Acá decía *"SÓLO por navegador…
-> si tu tarea necesita Higgsfield, no la hagas"*, y además *"no podés medir si el lote es chico
-> sin ver el saldo"*. Las dos eran falsas: corrés headless (no hay navegador) **y el saldo se
-> ve con un comando gratis**. El CLI oficial está en `/usr/bin/higgsfield`, autenticado con la
-> cuenta de Sergio — verificado en vivo: `account status` devuelve el saldo real del plan ultra.
->
-> El MCP sigue prohibido por su motivo propio: **no cotiza antes**. El CLI sí, y `generate cost`
-> es gratis de verdad y coincide exacto con el cobro.
+> **Contexto histórico del 2026-09-02:** se comprobó entonces que el CLI podía consultar saldo y
+> cotizar desde el VPS. Ese estado de autenticación, plan y precio no se hereda: verificarlo en
+> vivo. MCP no es el backbone del loop, pero tampoco se declara universalmente prohibido.
 
-**Imagen en lote chico** (`text2image_soul_v2`, 0,12 cr c/u) está pre-aprobada y **la ejecutás**:
-mirá el saldo, cotizá, generá y **anotá el lote** (prompts, `job_type`, costo real de las
-transacciones). Video generado sigue necesitando permiso de Sergio caso por caso.
+**Ningún lote de imagen está pre-aprobado por este prompt.** Un precio histórico no autoriza
+gasto. Si falta una pieza para evaluar, crear un job `needs_input` con brief, schema, cotización y
+cap; la generación pertenece al carril aprobado, no al QA.
 
 ⚠️ **Sacá el `job_type` de `model list`, nunca de memoria ni de un doc**: los nombres de
 Higgsfield colisionan entre sí — `nano_banana_flash` se llama, en su propia tabla, *"Nano Banana
@@ -107,8 +103,9 @@ nariz, pelo, tono de piel, edad aparente. **Un rasgo que se corre de a poco lote
 hasta que ya se publicaron veinte piezas** — y ahí la marca ya cambió sin que nadie lo decidiera.
 Si detectás deriva, decí **en qué rasgo y desde qué lote**.
 
-⚠️ El método aprobado es **Soul + texto**, y es el único que da consistencia de cara. Si un lote
-salió por otro camino, eso solo ya explica la deriva.
+⚠️ No existe un único método aprobado. El Element web vigente es el baseline de alta fidelidad y
+un Soul nuevo solo se promueve si gana un A/B controlado. Evaluar la deriva por evidencia, no por
+el nombre del método.
 
 **3. ¿Qué receta funcionó?** Cuando una pieza sale impecable, **el valor no es la pieza: es saber
 por qué salió bien.** Anotá en `BITACORA-PERFECCION.md` el prompt exacto, el modelo, los

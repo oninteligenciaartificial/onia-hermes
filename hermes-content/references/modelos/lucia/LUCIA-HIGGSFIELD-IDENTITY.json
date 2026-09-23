@@ -1,0 +1,175 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "schema_version": 1,
+  "updated_at": "2026-09-22",
+  "owner": "ONIA",
+  "subject": "Lucia",
+  "status": "migration_required",
+  "authority": {
+    "character_and_voice": "LUCIA.md",
+    "visual_whitelist": "BANCO-OFICIAL.md",
+    "technical_runbook": "TECNICA-HIGGSFIELD.md",
+    "global_higgsfield_policy": "../../../docs/HIGGSFIELD_VIDEO_SYSTEM.md"
+  },
+  "rights_gate": {
+    "status": "unresolved",
+    "reason": "El repo reconoce referencias derivadas de frames de una persona real sin consentimiento documentado; no esta demostrado que todo el linaje posterior sea legalmente limpio.",
+    "required_resolution": [
+      "Documentar consentimiento y alcance de uso de todas las fuentes humanas",
+      "o reconstruir Lucia desde un canon completamente sintetico con procedencia registrada"
+    ],
+    "new_training": "blocked",
+    "public_campaign": "requires_rights_resolution_and_explicit_approval",
+    "existing_assets": "internal_draft_only_until_resolved"
+  },
+  "training_rights_gate": {
+    "status": "unresolved",
+    "reason": "Un output sintetico no concede automaticamente permiso para entrenar o fine-tunear otra identidad/modelo.",
+    "policy_source": "https://higgsfield.ai/terms-of-use-agreement",
+    "required_per_reference": [
+      "source_model",
+      "source_asset_or_job_id",
+      "license_or_written_permission",
+      "training_rights_status"
+    ],
+    "new_soul_training": "blocked_until_license_is_confirmed"
+  },
+  "identity_surfaces": {
+    "element_lock": {
+      "role": "baseline_operativo_para_rostro_y_hero",
+      "surface": "higgsfield_web_manual",
+      "primary": {
+        "name": "lucia-skin-v1",
+        "id": "58bbd635-9b90-4bd2-b08a-1cd4915bd563",
+        "status": "active_baseline",
+        "training_images_reported": 7,
+        "comparison_with_backup": "not_run"
+      },
+      "backup": {
+        "name": "lucia-surgical-anchor",
+        "id": "902eeebb-89e9-4477-8426-c555b20f7ecc",
+        "status": "approved_backup",
+        "comparison_with_primary": "not_run"
+      },
+      "cli_portable": false
+    },
+    "soul_lock": {
+      "role": "candidate_for_repeatable_cli_scale",
+      "surface": "higgsfield_cli_or_web",
+      "promotion_status": "not_approved",
+      "souls": [
+        {
+          "name": "LUCIA-REAL-v2-clean",
+          "id": "36305a9b-af24-4390-959b-885082dddd5d",
+          "status": "prohibited",
+          "reasons": [
+            "identity_drift",
+            "red_skin",
+            "outfit_noncompliance",
+            "undocumented_real_person_consent"
+          ]
+        },
+        {
+          "name": "LUCIA-SINTETICA-v3",
+          "id": "e6d8703c-ea48-4d37-9e66-afae59ebe84a",
+          "status": "rejected_as_primary",
+          "training_images_reported": 6,
+          "reasons": [
+            "lost_previous_visual_comparison",
+            "eye_color_drift",
+            "dataset_below_current_web_guidance"
+          ]
+        }
+      ]
+    },
+    "marketing_studio": {
+      "name": "Lucia ONIA v4 FINAL",
+      "id": "a1e334f3-5316-4132-b454-ddd9dcc06943",
+      "status": "isolated_identity_system",
+      "portable_to_element_or_soul": false,
+      "requires_revalidation": true
+    }
+  },
+  "canonical_reference_files": [
+    {
+      "path": "canon/01-rooftop.jpg",
+      "sha256": "5cd09b4e8633091eb49fdb606328f1d7a0683ebd3b7027fea25c87d874e738bd",
+      "bytes": 558141,
+      "rights_status": "unresolved",
+      "source_model": "unknown",
+      "training_rights_status": "unresolved"
+    },
+    {
+      "path": "canon/02-rooftop.jpg",
+      "sha256": "0a539c57aa10253084eec2db41be220ec14f477ed7d8228509a00c5215c324f7",
+      "bytes": 393641,
+      "rights_status": "unresolved",
+      "source_model": "unknown",
+      "training_rights_status": "unresolved"
+    },
+    {
+      "path": "canon/03-cafe.jpg",
+      "sha256": "9747f9e9f0512773ce13d9e0d1681fce4eb2de5a8904b25cc93aa43c97ec3e85",
+      "bytes": 629852,
+      "rights_status": "unresolved",
+      "source_model": "unknown",
+      "training_rights_status": "unresolved"
+    },
+    {
+      "path": "canon/04-cafe-celular.jpg",
+      "sha256": "3b2a03f8f5aecba42a2dbaa6c475d9377ae09915e1651137c71f07fda49811a2",
+      "bytes": 1016387,
+      "rights_status": "unresolved",
+      "source_model": "unknown",
+      "training_rights_status": "unresolved"
+    },
+    {
+      "path": "canon/05-profile.jpg",
+      "sha256": "a668db0ba3962427723a46c190fecec583bd49143ecafc5dc6932b47a5cbfc81",
+      "bytes": 297744,
+      "rights_status": "unresolved",
+      "source_model": "unknown",
+      "training_rights_status": "unresolved"
+    }
+  ],
+  "dataset_status": {
+    "declared_target_count": 7,
+    "files_present": 5,
+    "complete": false,
+    "missing": "No existe un manifest previo que identifique las dos referencias restantes ni sus hashes.",
+    "web_soul_guidance": "20-80 varied photos",
+    "cli_soul_limit": "5-20 images"
+  },
+  "target_v4": {
+    "status": "not_started",
+    "identity_origin": "fully_synthetic_rights_clear_canon",
+    "strategy": "two_lane_element_lock_and_soul_lock",
+    "video_rule": "animate_only_an_approved_still",
+    "promotion_gates": [
+      "rights_clear",
+      "training_license_clear",
+      "dataset_manifest_complete",
+      "fixed_prompt_ab_against_primary_and_backup_elements",
+      "identity_qa_pass",
+      "commercial_qa_pass",
+      "live_cost_or_explicit_training_cap_approved",
+      "sergio_final_approval"
+    ]
+  },
+  "execution_policy": {
+    "coding_agents": "higgsfield_cli_with_official_skills",
+    "chat_agents": "official_mcp_optional",
+    "identity_calibration": "local_web_manual",
+    "high_volume_future": "official_api_with_separate_budget",
+    "n8n": "approval_queue_polling_ledger_notifications_only",
+    "vps_playwright_generation": "prohibited",
+    "paid_generation_requires": [
+      "live_model_schema",
+      "live_cost_quote_or_explicit_cap_when_no_quote_exists",
+      "recorded_approval",
+      "input_hash",
+      "job_reconciliation_before_retry"
+    ],
+    "command": "Always use higgsfield; never use the ambiguous hf alias on Windows."
+  }
+}

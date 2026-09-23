@@ -5,6 +5,13 @@ Antes de ejecutar cualquier cambio relevante en Hermes, planear primero y dividi
 
 El objetivo es usar la mayor capacidad disponible sin perder control: pensar por frentes, delegar lo que pueda revisarse en paralelo y validar antes de cerrar.
 
+## Regla de modelo y contexto
+
+Usar `hermes-content/docs/AI_MODEL_ROUTING_2026.md` como politica compartida con Claude.
+Reservar el modelo mas fuerte para decisiones ambiguas, de alto riesgo o entregables finales;
+usar modelos mas livianos solo en tareas cerradas, verificables y con contrato claro. Ahorrar
+tokens eliminando exploracion y contexto irrelevante, no reduciendo el umbral de calidad.
+
 ## Regla data-first
 Antes de pedir datos al usuario, revisar primero las fuentes disponibles. El agente
 debe buscar en archivos canonicos del repo, registros financieros, CRM/prospeccion,

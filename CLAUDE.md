@@ -65,6 +65,11 @@ Instrucciones de proyecto. Override sobre defaults.
   solo se autolistan en sesiones abiertas DENTRO de ese repo.
 - Al aprender una trampa nueva: **editar la skill que corresponda**, no crear doc suelto.
   Skill pública instalada que sirva: usarla, no reinventar.
+- **Enrutamiento de modelos y contexto:** leer
+  `hermes-content/docs/AI_MODEL_ROUTING_2026.md`. Astra decide lo ambiguo y de alto riesgo; Sol
+  ejecuta el trabajo cotidiano con juicio; Luna hace tareas cerradas y verificables. No bajar
+  calidad en estrategia/identidad para ahorrar tokens ni cargar documentos largos cuando existe
+  un manifest compacto.
 
 ## Canario: se le dice **Sergio Urcullo** (REGLA)
 
@@ -441,20 +446,33 @@ Detalle operativo: skills `carruseles-onia` y `ugc-empresas-higgsfield`.
 
 ## Video — sin editores humanos (REGLA)
 
+### Higgsfield — superficie, identidad y gasto (REGLA DURA)
+
+- Fuente operativa: `hermes-content/docs/HIGGSFIELD_VIDEO_SYSTEM.md`. Para Lucía se
+  leen además `hermes-content/references/modelos/lucia/LUCIA.md`,
+  `BANCO-OFICIAL.md` y `LUCIA-HIGGSFIELD-IDENTITY.json`.
+- **Claude Code y Codex usan la CLI oficial + Skills.** El MCP de Higgsfield queda
+  para agentes de chat; la web se usa manualmente para administración visual de
+  identidad y QA. No automatizar la web con Playwright desde el VPS para producir.
+- La API queda para una fábrica futura con cola, presupuesto en USD, webhooks y
+  claves por proyecto. No mezclar el saldo de API con los créditos del plan.
+- Para Lucía no alcanza repetir un prompt ni encadenar una sola foto. Flujo:
+  derechos/consentimiento resueltos -> banco coherente -> Soul candidato -> A/B
+  contra Elements vigentes -> still aprobado -> image-to-video -> QA de identidad.
+- **ONIA sobreescribe el default de la Skill oficial:** siempre ejecutar
+  `higgsfield generate cost` antes de `generate create`, guardar modelo/params/costo
+  y pedir aprobación explícita para cada generación de video. Nunca llamar
+  `higgsfield auth token` en logs, chats o scripts.
+- IDs, modelos, precios y saldos se resuelven en vivo. Lo escrito en bitácoras
+  antiguas es evidencia histórica, no autorización ni catálogo vigente.
+
 - **REGLA DE ORO: la tabla de cortes + preview 360p SIEMPRE se muestran a Sergio ANTES
   de aplicar el corte.** Nunca cortar a ciegas.
-- **Gasto — imagen y video NO son el mismo permiso:**
-  - **VIDEO generado (Higgsfield, ElevenLabs, fal.ai): permiso explícito caso por caso**,
-    cotizado con `get_cost:true` ANTES de generar. Por defecto gratis (Speaches, HyperFrames).
-  - **IMAGEN en lote chico: gasto trivial, ya validado.** `text2image_soul_v2` a 2k son ~0,12 créditos;
-    un lote de 6 fotos cuesta menos de 1 crédito de un pool de ~2.100. Se genera y se
-    **registra el lote** (prompts, modelo, costo). Sigue haciendo falta permiso para un
-    volumen grande o para dar de alta una plataforma nueva.
-
-  ⚠️ **Corregido 2026-08-23.** Acá decía "generación paga = permiso caso por caso" a secas,
-  metiendo imagen y video en la misma bolsa. Con eso, una sesión que ya tenía el pedido
-  ("las capturas hazlas con higgsfield") se frenaba a pedir permiso por 0,7 créditos. El
-  permiso caro es el del video; el de imagen chica ya estaba dado y la regla no lo decía.
+- **Gasto — regla vigente 2026-09-22:** toda generación paga necesita un job o lote con brief,
+  costo/cap, cantidad y aprobación explícita. Una aprobación de lote cubre sus imágenes y evita
+  microconfirmaciones; no queda como permiso abierto para futuros loops. Los precios y saldos
+  históricos no autorizan gasto. Video y entrenamiento Soul siempre requieren aprobación
+  específica porque su costo y riesgo de deriva son mayores.
 - Cómo se ve un video, se transcribe, se corta, se subtitula y se rinde →
   **skills `ver-videos` y `editor-videos`** (HyperFrames vive en `.agents/skills/`:
   revisarlo ANTES de codear video).

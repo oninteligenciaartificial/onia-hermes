@@ -1,5 +1,12 @@
 # Video Factory — Implementation Plan (MVP)
 
+> **ARCHIVADO / NO EJECUTAR — 2026-09-22.** Este plan describe el esqueleto de julio que ya
+> existe y conserva decisiones superadas (MCP como runtime, costos hardcodeados y ONIA/Sergio
+> automáticos). La política vigente está en `HIGGSFIELD_VIDEO_SYSTEM.md`, la spec reevaluada en
+> `VIDEO_FACTORY_DESIGN.md` y el estado en
+> `handoff/HIGGSFIELD-LUCIA-SYSTEM-2026-09-22.md`. La siguiente implementación real debe usar
+> CLI + cotización viva + aprobación + reconciliación; no ejecutar las tareas de este archivo.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Montar el esqueleto declarativo de `video-factory/` (contratos, formatos, lanes, engine base, radar) que produce planes de video validados y los registra en el Video Lab, sin generar todavía.
@@ -78,7 +85,7 @@ Todos los comandos se corren con la Bash tool (POSIX) desde `video-factory/`.
 # ONIA Video Factory
 
 Fábrica de video para ONIA. Convierte un brief en un plan de pieza validado y lo
-registra en el Video Lab del brain. Motor: Higgsfield (MCP + Skills), reemplazable.
+registra en el Video Lab del brain. Motor objetivo: Higgsfield CLI + Skills, reemplazable.
 
 ## Frontera (CRÍTICO)
 
@@ -90,14 +97,14 @@ registra en el Video Lab del brain. Motor: Higgsfield (MCP + Skills), reemplazab
 ## Uso
 
 1. Crear `data/intakes/<slug>.json` (validado por `contracts/intake.schema.mjs`).
-2. `node cli.mjs plan --intake data/intakes/<slug>.json` → imprime el plan + costo estimado.
-3. La generación real (fase 2) corre vía el adapter Higgsfield con runtime MCP.
+2. `node cli.mjs plan --intake data/intakes/<slug>.json` → imprime un plan; su costo histórico no autoriza gasto.
+3. La generación real queda bloqueada hasta implementar wrapper CLI, cotización viva y aprobación.
 
 ## Lanes
 
 - cliente: gate antes de generar (brief + costo). No publicable sin OK.
-- onia: auto hasta preview.
-- sergio: auto hasta still + gate de identidad (cara siempre requiere aprobación).
+- onia: gate de brief + costo + identidad; no publicable.
+- sergio: gate de brief + costo + identidad; no publicable.
 
 Ver `../hermes-content/docs/VIDEO_FACTORY_DESIGN.md` para el diseño completo.
 ```
@@ -1228,7 +1235,7 @@ git commit -m "feat(video-factory): CLI plan/radar + demo intake"
 
 ## Fuera de alcance (Fase 2)
 
-- `generate.mjs` con runtime MCP real + polling async.
+- Wrapper CLI real `doctor/quote/submit/poll/reconcile/download/qa` con ledger.
 - Formatos: `explainer`, `viral-preset`, `clip-from-long`, `product-showcase`.
 - Panel: galería Video Lab en Onia Center + botones Telegram.
 - n8n: recordatorios, polling, botones de aprobación; CLI fallback desatendido.

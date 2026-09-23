@@ -1,8 +1,8 @@
 {
   "id": "onia",
-  "gate_before_generate": false,
-  "require_approved_brief": false,
-  "require_cost_estimate": false,
-  "identity_gate": false,
-  "publishable": true
+  "gate_before_generate": true,
+  "require_approved_brief": true,
+  "require_cost_estimate": true,
+  "identity_gate": true,
+  "publishable": false
 }

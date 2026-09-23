@@ -4,6 +4,12 @@
 > Extiende: `HIGGSFIELD_VIDEO_SYSTEM.md` y `HIGGSFIELD_FULL_CAPABILITIES_MAP.md`
 > Molde: `web-factory/` (misma idea, output = media en vez de código web)
 
+> **Reevaluado 2026-09-22:** este documento es una spec histórica y `video-factory/` sigue siendo
+> un esqueleto sin runtime. La arquitectura vigente usa CLI + skills como motor de agentes de
+> código, web manual para identidad, MCP opcional para chat y n8n como control plane. ONIA/Sergio
+> ya no son lanes autónomas de gasto o publicación. Ver `HIGGSFIELD_VIDEO_SYSTEM.md` y el handoff
+> `handoff/HIGGSFIELD-LUCIA-SYSTEM-2026-09-22.md`.
+
 ## 1. Objetivo
 
 Fábrica de video para Onia: convierte un brief en una pieza lista para revisar,
@@ -11,8 +17,8 @@ usando Higgsfield como motor reemplazable. Produce en tres lanes paralelas
 (Cliente / Onia / Sergio) con distinta autonomía, registra estado en el
 Video Lab del brain y **nunca publica sin aprobación**.
 
-No reinventa la generación: **envuelve el MCP + las Skills oficiales de
-Higgsfield** y les agrega lanes, gates, data por cliente y tracking.
+No reinventa la generación: la versión futura envuelve **CLI + Skills oficiales de Higgsfield**
+y agrega lanes, gates, data por cliente y tracking.
 
 ## 2. Decisiones ancla
 
@@ -20,8 +26,8 @@ Higgsfield** y les agrega lanes, gates, data por cliente y tracking.
 |---|---|---|---|
 | 1 | Enfoque | Lanes paralelas (Cliente / Onia / Sergio) | Cubre ingreso (ads) y contenido propio desde el arranque |
 | 2 | Arquitectura | Híbrido: `video-factory/` produce, Video Lab trackea | Una sola fuente de estado, sin duplicar tracking |
-| 3 | Autonomía | Por lane | Cliente gate antes de gastar; ONIA/Sergio auto hasta preview |
-| 4 | Motor | MCP Higgsfield + Skills oficiales (CLI fallback) | Ya conectado; Skills hechas para Claude Code. Freepik descartado (sin API) |
+| 3 | Autonomía | Gate común | Cliente/ONIA/Sergio exigen brief, costo, identidad cuando aplique y preview |
+| 4 | Motor | CLI Higgsfield + Skills oficiales | Ruta auditable para Claude Code/Codex; MCP queda opcional para chat |
 | 5 | Panel | Telegram + galería Video Lab en Onia Center | Aprobación rápida + "Freepik propio" visual |
 
 ### Por qué no Freepik ni el chat del Supercomputer
@@ -30,9 +36,9 @@ Higgsfield** y les agrega lanes, gates, data por cliente y tracking.
   regla "autónomo, nada local".
 - **Chat del Supercomputer**: potente (Connectors/Memory/Files/Skills) pero es
   *su* UI. No operamos dentro de otra herramienta.
-- **Higgsfield MCP + Skills** (`higgsfield-generate`, `higgsfield-soul-id`,
-  `higgsfield-product-photoshoot`, `higgsfield-marketplace-cards`): misma
-  potencia del Supercomputer, instalable en este entorno. Es la ruta.
+- **Higgsfield CLI + Skills** (`higgsfield-generate`, `higgsfield-soul-id`):
+  instalable en este entorno y auditable. Es la ruta de los agentes de código;
+  MCP queda como superficie opcional para agentes de chat.
 
 ## 3. Arquitectura — 3 capas
 
@@ -40,8 +46,8 @@ Higgsfield** y les agrega lanes, gates, data por cliente y tracking.
    y galería Video Lab en Onia Center (`web-factory/apps/site`).
 2. **Fábrica (lógica)**: `video-factory/` declarativa — formatos, lanes, data,
    radar, engine.
-3. **Motor + orquestación pesada**: MCP Higgsfield + Skills oficiales +
-   `get_workflow_instructions`. CLI `@higgsfield/cli` como fallback n8n.
+3. **Motor + orquestación pesada**: CLI `@higgsfield/cli` + Skills oficiales. n8n administra
+   aprobación/estado; MCP puede ayudar a un agente de chat, pero no reemplaza el wrapper.
 
 Frontera (igual que web-factory): la fábrica produce media y **escribe el job al
 Video Lab del brain**; no toca CRM/finanzas, no publica.
@@ -67,16 +73,16 @@ video-factory/
 │   └── clip-from-long.json
 ├── lanes/
 │   ├── cliente.json            # gate: brief + costo antes de generar
-│   ├── onia.json               # auto → preview
-│   └── sergio.json             # auto + gate identidad
+│   ├── onia.json               # brief + costo + identidad; no publicable
+│   └── sergio.json             # brief + costo + identidad; no publicable
 ├── data/
 │   ├── clients/                # <slug>.json (marca, oferta) — leído por referencia
 │   └── intakes/                # briefs de entrada
 ├── engine/
 │   ├── plan.mjs                # brief + formato + lane → plan + costo estimado
-│   ├── generate.mjs            # ejecuta vía MCP/Skills (idempotente, no doble gasto)
+│   ├── generate.mjs            # futuro wrapper CLI (idempotente, no doble gasto)
 │   ├── track.mjs               # ÚNICA escritura de estado → .hermes/video-lab/
-│   └── higgsfield/             # adapter del motor (MCP + CLI fallback + mapa modelo)
+│   └── higgsfield/             # adapter del motor (CLI + schema vivo + mapa modelo)
 ├── radar/
 │   ├── snapshots/              # models_explore + presets_show fechados (JSON)
 │   └── refresh.mjs             # refresca snapshot, marca novedades
@@ -121,12 +127,10 @@ prompt seguro por defecto (ver §10).
 - **cliente**: `gate_before_generate: true`, `require_approved_brief: true`,
   `require_cost_estimate: true`, `identity_gate: false`, `publishable: false`
   (entregable solo con OK).
-- **onia**: `gate_before_generate: false` (auto → preview),
-  `require_cost_estimate: false`, `identity_gate: false`, `publishable: true`
-  (tras gates de revisión y publicación).
-- **sergio**: `gate_before_generate: false` (auto hasta still),
-  `identity_gate: true` (cara requiere aprobación humana SIEMPRE),
-  `publishable: true` tras gates.
+- **onia**: `gate_before_generate: true`, `require_approved_brief: true`,
+  `require_cost_estimate: true`, `identity_gate: true`, `publishable: false`.
+- **sergio**: `gate_before_generate: true`, `require_approved_brief: true`,
+  `require_cost_estimate: true`, `identity_gate: true`, `publishable: false`.
 
 ## 8. Pipeline (reusa estados del Video Lab)
 
@@ -136,10 +140,10 @@ generated → approved_for_publish → published`. Para Sergio se usan además
 
 - **Cliente**: intake → plan(costo) → **gate: approved_for_generation** →
   generating → generated → **gate revisión** → entrega/approved_for_publish.
-- **Onia**: intake → plan → generating (auto) → generated → **gate revisión** →
-  approved_for_publish → published.
-- **Sergio**: intake → plan → still (auto) → **gate identidad** → motion →
-  generated → **gate revisión** → approved_for_publish → published.
+- **Onia**: intake → plan/cotización → **gate generación** → generated → **gate revisión** →
+  approved_for_publish → publicación separada.
+- **Sergio**: intake → plan/cotización → **gate generación + identidad** → still → motion →
+  generated → **gate revisión** → approved_for_publish → publicación separada.
 
 Publicación fuera de la fábrica: `ig-publish reel_publish` solo tras aprobación.
 
@@ -151,9 +155,8 @@ los adapters de onia-core):
 - `mapModel(format, lane)` → modelo + params (usa la matriz de decisión de
   `HIGGSFIELD_FULL_CAPABILITIES_MAP.md` + el radar).
 - `estimateCost(job)` → créditos estimados (gate cliente).
-- `generate(job)` → ejecuta. Primaria: MCP (`generate_video`, `generate_image`,
-  `show_marketing_studio`, `personal_clipper_create`, `get_workflow_instructions`).
-  Fallback: CLI `@higgsfield/cli` para n8n desatendido.
+- `generate(job)` → futuro wrapper CLI con schema/costo vivos, aprobación ligada al input y
+  reconciliación antes de retry. MCP puede asistir a un agente de chat, no es la ruta primaria.
 - `getStatus(jobId)` → polling async (Higgsfield es asíncrono).
 
 Si cambia el proveedor, solo se toca el adapter + `formats/`.
