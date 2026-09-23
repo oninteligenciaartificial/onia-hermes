@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "schema_version": 1,
-  "updated_at": "2026-09-22",
+  "updated_at": "2026-09-23",
   "owner": "ONIA",
   "subject": "Lucia",
   "status": "migration_required",
@@ -138,10 +138,22 @@
     "complete": false,
     "missing": "No existe un manifest previo que identifique las dos referencias restantes ni sus hashes.",
     "web_soul_guidance": "20-80 varied photos",
-    "cli_soul_limit": "5-20 images"
+    "cli_soul_limit": "5-20 images",
+    "visual_audit_2026_09_23": {
+      "training_ready": false,
+      "summary": "Las cinco imagenes sirven como direccion visual, no como dataset: repiten escenas y genealogias, carecen de perfiles y cuerpo entero, una tiene seis dedos y muestran deriva menor de estructura, pecas, ojos y edad aparente.",
+      "master_candidate": "canon/03-cafe.jpg",
+      "excluded_until_reconciled": [
+        "canon/02-rooftop.jpg",
+        "canon/04-cafe-celular.jpg",
+        "canon/05-profile.jpg"
+      ],
+      "required_target": 20,
+      "plan": "LUCIA-V4-PERFECTION-PLAN.md"
+    }
   },
   "target_v4": {
-    "status": "not_started",
+    "status": "plan_ready_no_spend",
     "identity_origin": "fully_synthetic_rights_clear_canon",
     "strategy": "two_lane_element_lock_and_soul_lock",
     "video_rule": "animate_only_an_approved_still",
