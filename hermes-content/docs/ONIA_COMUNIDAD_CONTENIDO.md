@@ -109,6 +109,26 @@ se mide durante los cuatro pilotos antes de fijar una promesa permanente.
 - Cada drop: útil en <2 min, aplicable HOY, cierra con una pregunta o mini-tarea.
 - Los drops alimentan los videos (lo que más reaccione en la comunidad = próximo reel).
 
+### Activación inmediata · 22–28 de septiembre
+
+Esta semana no se abre un curso ni una membresía. Se usa la serie de sistemas con IA para
+entregar recursos, medir preguntas y preparar el primer piloto presencial.
+
+| Día | Drop | Entrega real | Señal que se registra |
+|---|---|---|---|
+| mar 22 | Workflow, modelo, agente, loop y MCP no son lo mismo | árbol de decisión `MAPA` | caso que más confunden |
+| mié 23 | Reto: dibujá una tarea repetitiva en cinco cajas | plantilla `ENTRADA → REGLA → ACCIÓN → REGISTRO → HUMANO` | tareas repetidas |
+| jue 24 | Antes de conectar una tool | checklist de permisos y aprobación | tools que quieren conectar |
+| vie 25 | Revisión de diagramas de miembros | feedback a 3 casos, sin vender | personas que ejecutaron |
+| sáb 26 | n8n sin agente para clasificar leads | mapa de nodos + prompt + schema | rubro que pide el workflow |
+| dom 27 | Audio de cierre de 5–8 minutos | errores y preguntas de la grabación | próximo tema votado |
+| lun 28 | Encuesta del piloto de Santa Cruz | dos franjas horarias + tipo de sede | intención real de asistir |
+
+El formulario o encuesta del lunes mide **día, horario, zona, tema y permiso de imagen**.
+No se anuncia sede ni fecha cerrada hasta tener autorización del lugar y un mínimo de
+personas que confirmen asistencia. La primera sesión mantiene la agenda de 120 minutos de
+este documento.
+
 ### Calendario vigente — corregido 2026-09-10 tras el reparto de piezas
 
 > ⚠️ La versión anterior (03-sep, opción B, `t_f5b868da`) decía que el lunes 14 arrancaba

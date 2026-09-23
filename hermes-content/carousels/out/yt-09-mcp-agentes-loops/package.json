@@ -1,0 +1,9 @@
+{
+  "name": "yt-09-mcp-agentes-loops",
+  "private": true,
+  "scripts": {
+    "dev": "hyperframes present .",
+    "lint": "hyperframes lint .",
+    "check": "hyperframes check . --snapshots"
+  }
+}

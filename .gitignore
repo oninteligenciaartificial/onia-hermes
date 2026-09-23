@@ -50,5 +50,8 @@ n8n-mcp-server/node_modules/
 .tmp/
 test-results/
 
+# Capturas de QA regenerables de HyperFrames; los decks HTML sí se versionan.
+hermes-content/carousels/out/yt-*/snapshots/
+
 # salida de trabajo del canario visual (las baselines si se versionan)
 .canario-out/

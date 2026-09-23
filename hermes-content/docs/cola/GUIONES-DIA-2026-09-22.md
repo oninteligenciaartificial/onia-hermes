@@ -14,13 +14,26 @@ pueda mirar una automatización y decidir qué arquitectura necesita.
 | Feed | B-roll Sergio, formato nuevo | Guion 1: Sergio a cámara con pantalla/B-roll superpuesto |
 | Feed | Video normal Sergio | Guion 2: explicación con un workflow real o recreado en n8n |
 | Trial | Reutilización | Los 3 contenidos del Feed + 1 yap de Samuel |
-| Trial v2 | Cámara directa | Guiones 3–7: cinco videos de Sergio, edición mínima |
-| YouTube | Video largo | Guion 8: una grabación de 10–14 minutos que abre la serie |
+| Trial v2 | Cámara directa | Guiones 3–8: seis videos de Sergio; hoy se suma Opus 5.5 |
+| YouTube | Video largo | Guion 9: una grabación de 10–14 minutos que abre la serie |
 
-Total diario: **3 Feed + 4 Trial + 5 Trial v2 = 12 publicaciones**.
+Total diario: **3 Feed + 4 Trial + 6 Trial v2 = 13 publicaciones**.
 
-Material original que Sergio graba hoy: **7 verticales + 1 video largo**. Los contenidos
+Material original que Sergio graba hoy: **8 verticales + 1 video largo**. Los contenidos
 del Feed se reutilizan en Trial; no se vuelven a grabar.
+
+### Estado de rodaje
+
+- [x] Guion 1 grabado; falta localizar el archivo para enviarlo a edición.
+- [x] Guion 2 grabado; falta localizar el archivo para enviarlo a edición.
+- [ ] Guion 8: grabar primero por vigencia; tiene captura oficial y cálculo reproducible.
+- [ ] Guiones 3–7: siguiente bloque de grabación.
+- [ ] Guion 9: se expande a tres clases con decks específicos de HyperFrames, n8n y
+  MCP/agentes/loops; este guion sigue siendo la base de la tercera. No se graban las tres
+  el mismo día si baja la claridad.
+
+Regla: un video marcado como grabado todavía no está aprobado. Debe pasar contenido,
+exactitud, montaje y revisión final antes de publicarse.
 
 ---
 
@@ -67,7 +80,8 @@ la identidad del creador.
 
 ### Guion hablado
 
-> Si tu IA solamente responde preguntas, todavía no construiste un agente.
+> Si tu sistema solamente genera una respuesta y no puede elegir ni ejecutar acciones,
+> no tenés un agente operativo: tenés una llamada al modelo.
 >
 > Un agente útil necesita cinco piezas.
 >
@@ -83,9 +97,9 @@ la identidad del creador.
 > Cinco: un límite. Máximo tres intentos, nada de enviar precios y revisión humana antes
 > de cualquier mensaje externo.
 >
-> MCP estandariza la conexión con las herramientas. n8n ejecuta, registra y controla el
-> proceso. Pero el agente aparece cuando el modelo elige qué acción tomar según lo que
-> observa.
+> MCP puede estandarizar el acceso a `tools`, `resources` y `prompts`. n8n puede
+> orquestar, registrar y limitar el proceso. Ninguno convierte por sí solo un workflow en
+> agente: eso ocurre cuando el modelo observa el resultado y elige la siguiente acción.
 >
 > Comentá cuál de estas cinco piezas querés que construya en el próximo video.
 
@@ -121,9 +135,13 @@ Frase hero amarilla: **CONECTA ≠ DECIDE**.
 > `OpenAI Chat Model`, devuelve tres campos: `categoria`, `urgencia` y
 > `requiere_humano`.
 >
-> `Structured Output Parser` obliga a respetar ese JSON. Después, `Switch` manda el lead
-> a `web`, `automatización` u `otro`. `Google Sheets` registra y `Telegram` avisa al
-> responsable.
+> `Structured Output Parser` valida la salida contra un `JSON Schema`. Si no cumple la
+> estructura, el nodo falla; si cumple, todavía puede estar mal clasificada. Por eso
+> después probamos casos reales y revisamos el resultado.
+>
+> Luego `Google Sheets` registra el lead. `Switch` revisa primero
+> `requiere_humano = true`; si no, lo manda a `web`, `automatización` u `otro`. `Telegram`
+> avisa solamente en la ruta que necesita una persona.
 >
 > Esto es un workflow con IA, no un agente, porque la ruta ya está definida.
 >
@@ -139,12 +157,13 @@ Frase hero amarilla: **CONECTA ≠ DECIDE**.
 Webhook
   → Basic LLM Chain + OpenAI Chat Model
   → Structured Output Parser
+  → Google Sheets
   → Switch
+      ↘ requiere_humano → Telegram
       ↘ web
       ↘ automatización
       ↘ otro
-  → Google Sheets
-  → Telegram
+      ↘ fallback
 ```
 
 JSON ficticio:
@@ -169,21 +188,37 @@ No mostrar teléfonos, correos, tokens ni nombres reales.
 
 ### Guion hablado
 
-> MCP no vuelve inteligente a tu sistema. Estandariza cómo una aplicación de IA se
-> conecta con herramientas y datos externos.
+> MCP es un protocolo para que una aplicación host se conecte con servidores que exponen
+> `tools`, `resources` y `prompts`. No convierte el sistema en agente.
 >
-> Antes de instalar un servidor MCP, revisá cuatro cosas.
+> Antes de conectar un servidor revisá cinco cosas.
 >
-> Uno: qué herramientas expone. Dos: cuáles solo leen y cuáles escriben. Tres: qué datos
-> recibe y devuelve cada herramienta. Cuatro: qué acción necesita aprobación humana.
+> En Claude Code corré `claude mcp list`. Elegí el servidor y corré
+> `claude mcp get NOMBRE`. Ahí verificá comando o URL, alcance y variables configuradas,
+> sin mostrar sus valores.
+>
+> Después abrí `/mcp` y clasificá cada tool en una tabla: `lee`, `escribe`, `borra` o
+> `sale a internet`. Si no podés explicar qué hace una tool, no la apruebes.
 >
 > Por ejemplo, `get_lead_by_id` puede ser de solo lectura. `send_email` cambia el mundo
-> externo y debería pedir confirmación.
+> externo y debe pedir confirmación. Si un servidor mezcla lectura de datos privados con
+> envío externo, separá permisos o sacá una de esas capacidades de la sesión.
 >
-> Si conectás un MCP sin revisar esos permisos, no creaste un mejor agente. Solo le diste
-> más alcance al mismo modelo.
+> Una annotation como `readOnlyHint` es una pista para el cliente, no una barrera de
+> seguridad. Los permisos reales se aplican en el host, las credenciales y el servidor.
 >
-> Guardá este checklist antes de conectar tu próximo servidor.
+> Conectar un MCP sin revisar esto es como entregarle las llaves de tu negocio a una IA.
+> Comentá `MCP` y te paso el checklist de seguridad.
+
+### Demostración que debe verse
+
+```powershell
+claude mcp list
+claude mcp get nombre-del-servidor
+```
+
+La captura debe mostrar un servidor ficticio o saneado. Tapar valores de entorno, rutas
+personales, tokens y nombres de clientes.
 
 ### Texto en pantalla
 
@@ -192,6 +227,7 @@ TOOLS
 READ / WRITE
 INPUT / OUTPUT
 APPROVAL
+OWNER / CREDENTIALS
 ```
 
 ---
@@ -200,23 +236,32 @@ APPROVAL
 
 ### Título
 
-**El loop mínimo para que un agente no se quede trabajando para siempre**
+**El loop mínimo en n8n para no repetir para siempre**
 
 ### Guion hablado
 
-> Un agente no es solo un prompt. Es un loop: planifica, actúa, observa y ajusta.
+> Este loop puede quedarse gastando dinero mientras dormís.
 >
-> Pero si no definís una salida, ese loop puede gastar dinero o repetir errores.
+> No todo loop es un agente. `HTTP Request → IF → Wait` es un loop determinista porque
+> las reglas ya decidieron qué ocurre.
 >
-> Para consultar un pago, por ejemplo, definí: `done` cuando `status` sea `paid`;
-> `maxAttempts` igual a tres; una espera de diez minutos; y una salida humana si el estado
-> sigue pendiente.
+> Un loop agentivo aparece cuando el modelo observa el resultado y elige la siguiente
+> herramienta.
 >
-> En n8n eso puede verse como `HTTP Request → IF → Wait` y volver a consultar. Al tercer
-> intento, corta y manda una alerta por `Telegram`.
+> Para construirlo, empezá con un nodo `Edit Fields` y creá `attempt = 0`. Después
+> `HTTP Request` consulta el pago. Un `IF` comprueba
+> `{{ $json.status === 'paid' }}`. La salida verdadera termina.
 >
-> Loop sin condición de éxito, límite y escalamiento no es autonomía. Es una deuda que se
-> ejecuta sola.
+> En la salida falsa, incrementá `attempt`. Otro `IF` comprueba
+> `{{ $json.attempt < 3 }}`. Si todavía puede reintentar, `Wait` espera diez minutos y
+> vuelve a consultar. Si llega a tres, `Telegram` alerta a una persona y el flujo termina.
+>
+> Probalo con tres respuestas ficticias: `pending`, `pending`, `paid`. Después probalo con
+> tres `pending` y verificá que envíe una sola alerta, no que vuelva a empezar.
+>
+> Repetir no es autonomía. Saber qué observar, qué decidir y cuándo detenerse sí.
+>
+> Comentá `LOOP` y te paso el esquema completo de n8n.
 
 ### Texto en pantalla
 
@@ -226,8 +271,12 @@ PLAN → ACT → OBSERVE → ADJUST
 done = status === "paid"
 maxAttempts = 3
 wait = 10 min
+timeout = 35 min
 fallback = human
 ```
+
+La implementación real debe conservar `attempt` entre consultas; si `HTTP Request`
+reemplaza el JSON de entrada, combinar la respuesta con el estado antes de evaluar.
 
 ---
 
@@ -239,33 +288,58 @@ fallback = human
 
 ### Guion hablado
 
-> Si tu agente usa la herramienta equivocada, el problema puede no ser el modelo. Puede
-> ser el contrato de la tool.
+> Tu agente quizá no se está equivocando: tus herramientas están mal escritas.
 >
 > Una tool necesita un nombre específico, una descripción que diga cuándo usarla, un
 > input validable, un output predecible y efectos secundarios explícitos.
 >
 > En vez de llamar una herramienta `buscar`, llamala `get_lead_by_id`. Recibe `lead_id`,
-> devuelve `name`, `status` y `source`, y declara `read_only: true`.
+> devuelve `name`, `status` y `source`, y declara `readOnlyHint: true`.
 >
-> Después separá otra tool para actualizar. Así el agente no confunde consultar con
-> modificar.
+> Después hacé dos pruebas. Mandá `{}`: tiene que fallar porque `lead_id` es obligatorio.
+> Mandá `{"lead_id":"lead_demo_001"}`: tiene que devolver solamente `name`, `status` y
+> `source`. Si acepta campos extra, falta `additionalProperties: false`.
+>
+> Separá otra tool para actualizar. Así el agente no confunde consultar con modificar y
+> la aprobación aparece sólo cuando hay un efecto externo.
 >
 > Antes de cambiar de modelo, revisá el contrato de tus herramientas. Un agente solo puede
 > decidir bien entre opciones que están bien definidas.
+>
+> `readOnlyHint` describe la intención de la tool, pero no impide por sí mismo que un
+> servidor malicioso modifique algo. La seguridad real sigue dependiendo del servidor y
+> sus permisos.
+>
+> Comentá `TOOL` y te paso la plantilla del contrato.
 
 ### Overlay para copiar
 
 ```json
 {
   "name": "get_lead_by_id",
-  "input": { "lead_id": "string" },
-  "output": {
-    "name": "string",
-    "status": "string",
-    "source": "string"
+  "description": "Lee un lead usando su ID exacto. No busca por nombre ni modifica datos.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "lead_id": {
+        "type": "string",
+        "description": "ID exacto del lead en el CRM"
+      }
+    },
+    "required": ["lead_id"],
+    "additionalProperties": false
   },
-  "read_only": true
+  "outputSchema": {
+    "type": "object",
+    "properties": {
+      "name": { "type": "string" },
+      "status": { "type": "string" },
+      "source": { "type": "string" }
+    },
+    "required": ["name", "status", "source"],
+    "additionalProperties": false
+  },
+  "annotations": { "readOnlyHint": true }
 }
 ```
 
@@ -279,20 +353,26 @@ fallback = human
 
 ### Guion hablado
 
-> Opinión incómoda: mucho de lo que se vende como “agente de IA” es un workflow con una
-> llamada a un modelo en el medio.
+> Si tu automatización siempre sigue A, B y C, probablemente no tenés un agente. Te
+> vendieron un workflow con otro nombre.
 >
-> Hacé esta prueba. Si los pasos siempre son `A → B → C`, es un workflow. Si un modelo
-> clasifica texto pero después un `Switch` decide la ruta, es un workflow con IA.
+> Hacé esta auditoría en veinte segundos. Pausá el diagrama y marcá con rojo cada punto de
+> decisión. Si todas las decisiones son `IF`, `Switch` o reglas que vos escribiste, tenés
+> un workflow. Si un modelo sólo clasifica texto y después `Switch` decide la ruta, tenés
+> un workflow con IA.
 >
 > Es un agente cuando el modelo observa el resultado, elige entre varias herramientas y
-> decide el siguiente paso dentro de límites definidos.
+> decide el siguiente paso dentro de límites definidos. Pedí ver tres cosas: la lista de
+> tools, la condición de salida y el máximo de iteraciones. Si no pueden mostrarlas, la
+> palabra agente no describe la arquitectura.
 >
 > Y esto no hace inferior al workflow. Para facturación, registro de leads o avisos, lo
 > predecible suele ser mejor.
 >
 > No compres la palabra “agente”. Pedí que te muestren quién toma la decisión, qué tools
 > puede usar y cómo se detiene.
+>
+> ¿Te vendieron un workflow como agente? Contame qué hacía.
 
 ### Texto hero
 
@@ -308,7 +388,7 @@ fallback = human
 
 ### Guion hablado
 
-> Las redes te pueden hacer sentir productivo mientras solamente acumulás conceptos.
+> Guardé cientos de videos de inteligencia artificial y aun así no había construido nada.
 >
 > Ves MCP, agentes, RAG, n8n y pensás que necesitás aprenderlo todo antes de construir.
 > Yo estoy usando otra regla: construir, romper, documentar y recién después explicar.
@@ -320,8 +400,12 @@ fallback = human
 > No necesitás saber toda la IA. Necesitás terminar un sistema pequeño que resuelva un
 > problema real y aprender del error que aparece.
 >
-> Hoy elegí una tarea, construí una versión mínima y guardá el primer error. Ese error vale
-> más que otros veinte videos guardados.
+> Hoy hacé esta versión mínima: en n8n creá `Manual Trigger → Edit Fields`. Agregá
+> `tarea = responder_lead` y `estado = pendiente`. Ejecutalo y guardá el JSON de salida.
+> Después cambiá `estado` a `listo` con un `IF`. Ya construiste entrada, transformación y
+> comprobación. Guardá también el primer error: vale más que otros veinte videos guardados.
+>
+> Comentá `HECHO` cuando termines hoy un sistema pequeño.
 
 ### B-roll simple
 
@@ -332,7 +416,78 @@ fallback = human
 
 ---
 
-## Guion 8 · YouTube
+## Guion 8 · Trial v2 · noticia con demostración
+
+### Título
+
+**Claude Opus 5.5 salió hoy: así decidís si migrar con números**
+
+### Resultado que aprende la persona
+
+Calcular el costo de una carga real, detectar dos incompatibilidades de migración y medir
+`costo por tarea exitosa` en vez de repetir benchmarks.
+
+### Guion hablado
+
+> Anthropic lanzó hoy Claude Opus 5.5. No te voy a decir solamente que es “más potente”:
+> te enseño a decidir si realmente te conviene migrar.
+>
+> El modelo de API es `claude-opus-5-5`. La entrada cuesta cuatro dólares por millón de
+> tokens, la salida veinte y la lectura de caché veinte centavos.
+>
+> Probemos una carga concreta: doscientos mil tokens nuevos, cincuenta mil de salida y
+> cinco millones leídos de caché. En Opus 5.5 pagás ochenta centavos de entrada, un dólar
+> de salida y un dólar de caché: **dos dólares con ochenta**.
+>
+> Con las tarifas de Opus 5, la misma mezcla cuesta **cuatro dólares con setenta y cinco**.
+> Ahí el ahorro es 41,1 %. Pero no digas que siempre es 40 % más barato: sin caché, entrada
+> y salida bajaron 20 % por token. El resultado depende de tu mezcla real.
+>
+> Y migrar no es sólo cambiar el nombre. En 5.5 el thinking no se puede desactivar ni usar
+> con un presupuesto fijo; además `tool_choice: any` o forzar una tool concreta deja de
+> funcionar. Tenés que usar thinking adaptativo, effort y tools estrictas con elección
+> automática.
+>
+> Hacé una prueba A/B con veinte tareas reales. Guardá éxito o fallo, tokens, latencia,
+> cantidad de tool calls y costo total. La métrica es `costo total / tareas exitosas`.
+> Migrá sólo si baja ese número o si la mejora de éxito justifica el costo.
+>
+> Comentá `OPUS` y te paso la tabla para hacer el A/B sin inventar conclusiones.
+
+### Pantalla literal
+
+```text
+MODELO            INPUT    OUTPUT   CACHE READ
+Opus 5.5 / 1M     $4.00    $20.00   $0.20
+Opus 5   / 1M     $5.00    $25.00   $0.50
+
+CARGA: 0.2M input + 0.05M output + 5M cache read
+5.5 = 0.2×4 + 0.05×20 + 5×0.20 = $2.80
+5   = 0.2×5 + 0.05×25 + 5×0.50 = $4.75
+ahorro de esta carga = 41.1%
+```
+
+Código de migración que se muestra, no se ejecuta con credenciales:
+
+```python
+model="claude-opus-5-5"
+thinking={"type": "adaptive"}
+output_config={"effort": "medium"}
+tool_choice={"type": "auto"}
+```
+
+### Prueba y límite obligatorios en edición
+
+- Captura Playwright de la página oficial, con fecha `22 SEP 2026` y modelo
+  `claude-opus-5-5` visibles.
+- Captura del bloque oficial de precios y disponibilidad.
+- Tarjeta “**claim de Anthropic, no benchmark independiente**” cuando se mencione
+  rendimiento, velocidad, seguridad o 40 % para cargas típicas.
+- No mostrar una llamada de API inventada ni afirmar que todas las cargas ahorran 40 %.
+
+---
+
+## Guion 9 · YouTube
 
 ### Título principal
 
@@ -430,10 +585,12 @@ Mostrar los contratos de las tres tools. Explicar para cada una:
 
 ### Bloque 4 · El loop y sus límites · 7:30–9:30
 
-> El agente entra en un ciclo: interpreta el objetivo, elige una tool, observa el resultado
-> y decide qué hacer después. Ese loop necesita tres frenos.
+> Un loop de n8n puede ser determinista: `HTTP Request → IF → Wait` repite una ruta que ya
+> definimos. El loop se vuelve agentivo cuando el modelo observa el resultado y elige la
+> siguiente tool.
 >
-> Primero, condición de éxito. Segundo, máximo de intentos. Tercero, escalamiento humano.
+> Ambos necesitan condición de éxito, máximo de pasos, tiempo límite, presupuesto, permiso
+> explícito para escrituras y una salida humana.
 >
 > Para un pago: éxito cuando `status = paid`; máximo tres consultas; espera de diez
 > minutos; y alerta por Telegram si sigue pendiente. Sin esos frenos, el sistema puede
@@ -483,8 +640,10 @@ Mostrar documentación y una lista de tools; nunca mostrar tokens o credenciales
 
 1. Guion 1 frontal, con pausas de un segundo donde entrarán los overlays.
 2. Guion 2 frontal, dejando espacio visual a la izquierda para el workflow.
-3. Guiones 3–7 en una sola sesión; cambiar encuadre o posición cada dos videos.
-4. Repetir solamente los hooks y CTA en una segunda toma.
+3. Guion 8 primero: noticia vigente, cálculo y dos advertencias de migración.
+4. Guiones 7 → 6 → 4 → 3 → 5 en una sola sesión: empezar humano, subir con polémica y
+   terminar con las piezas técnicas. Cambiar encuadre o posición cada dos videos.
+5. Repetir solamente los hooks y CTA en una segunda toma.
 
 ### Bloque B · 25 minutos · B-roll
 
@@ -499,6 +658,7 @@ credenciales, datos de clientes, conversaciones ni notificaciones personales.
 4. Contrato JSON de `get_lead_by_id`.
 5. Diagrama del loop.
 6. Página oficial de MCP.
+7. Página oficial de Opus 5.5: hero, precios, disponibilidad/model ID y migración.
 
 ### Bloque D · 60–90 minutos · YouTube
 
@@ -510,22 +670,44 @@ se corrige aporta más valor que esconderlo.
 
 ## Instrucciones para edición
 
-- Prioridad 1: Guion 1, formato nuevo.
-- Prioridad 2: Guion 2, Feed normal.
-- Prioridad 3: Guiones 3–7 con cortes mínimos y subtítulos.
-- Prioridad 4: ensamblar YouTube con el mismo material de pantalla.
+- Prioridad 1: Guion 8, por vigencia; usar sólo capturas oficiales y cálculo visible.
+- Prioridad 2: Guion 1, formato nuevo.
+- Prioridad 3: Guion 2, Feed normal.
+- Prioridad 4: Guiones 3–7 con cortes mínimos y subtítulos.
+- Prioridad 5: ensamblar YouTube con el mismo material de pantalla.
 - No usar B-roll genérico de robots, cerebros brillantes o código falso.
 - Los overlays deben probar la frase hablada; si no agregan evidencia, se eliminan.
 - Mantener continuidad de mirada y manos entre cortes.
 - Entregar un master limpio y una versión con subtítulos incrustados.
 
-## Fuentes verificadas para los conceptos
+## Control de calidad y fuentes verificadas
 
-- Anthropic, *Building effective agents*: diferencia entre workflows con rutas
-  predefinidas y agentes que dirigen dinámicamente el proceso y las herramientas.
-- Anthropic, *Trustworthy agents in practice*: ciclo de planificación, acción,
-  observación y ajuste.
-- Anthropic, documentación de MCP: protocolo abierto para conectar aplicaciones de IA
-  con herramientas y datos externos.
-- n8n Docs: workflows, herramientas de IA y revisión humana para llamadas sensibles.
+Estado después de revisión técnica:
 
+- Guiones 1–3: **aprobados con correcciones incorporadas**.
+- Guiones 4–5: **reescritos** para separar loop determinista, loop agentivo y schema MCP.
+- Guiones 6–7: **aprobados**.
+- Guion 8: **aprobado condicionado** a capturas Playwright y a mantener atribuidos los
+  claims de Anthropic.
+- YouTube: grabar solamente con deck y pantallas reales; no afirmar que el parser valida
+  verdad ni que `readOnlyHint` aplica permisos.
+
+Fuentes:
+
+- [Anthropic · Building effective agents](https://www.anthropic.com/engineering/building-effective-agents):
+  diferencia entre workflows con rutas predefinidas y agentes que dirigen dinámicamente
+  el proceso y las herramientas.
+- [MCP · Architecture](https://modelcontextprotocol.io/specification/2025-11-25/architecture):
+  hosts, clients, servers, tools, resources y prompts.
+- [MCP · Tools](https://modelcontextprotocol.io/specification/2025-11-25/server/tools):
+  `inputSchema`, `outputSchema`, annotations y límites de `readOnlyHint`.
+- [n8n · Structured Output Parser](https://docs.n8n.io/integrations/builtin/cluster-nodes/sub-nodes/n8n-nodes-langchain.outputparserstructured/):
+  validación estructural mediante JSON Schema.
+- [n8n · Switch](https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.switch/):
+  rutas por reglas y fallback.
+- [Anthropic · Claude Opus 5.5](https://www.anthropic.com/claude-opus-5-5): fecha,
+  disponibilidad, modelo y claims del lanzamiento.
+- [Anthropic · Pricing](https://platform.claude.com/docs/en/about-claude/pricing): tarifas
+  estándar, caché, Batch y Fast mode.
+- [Anthropic · Migration guide](https://platform.claude.com/docs/en/models/opus-5-5/migration-guide):
+  thinking adaptativo, effort, tool choice, computer use y cambios incompatibles.
