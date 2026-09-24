@@ -3057,3 +3057,30 @@ correctas, derivadas del catálogo, sin ningún plan tipeado a mano. Sin hallazg
 flujo de invitar/quitar un coadministrador desde `/settings` (equipo), que hoy el recorrido
 sólo toca en el onboarding (alta de un profesional del staff, sin invitar por correo) y que
 `onia-platform` cambió varias veces esta semana (DG-043).
+
+## 2026-09-24 07:09-07:13 La Paz — `BUILD_ID` sin cambios (dental no repetido, siguiendo la lección de ayer); cerrado un fantasma del tablero y un falso "hallazgo" del propio instrumento
+
+`ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado ANTES de decidir nada: `9tuk1Qk2BjQ2j2HdJcL8u`,
+igual al citado en la entrada de las 10:09-10:14 de ayer — no correspondía repetir dental (método
+nuevo aplicado, primera vez que funciona).
+
+**Tablero:** dos tareas `ready` de recorrido-cliente eran fantasmas — `t_2d0dde23` (el loop no
+pudo correr en el VPS, 2026-09-21) y `t_32ba759c` (límite semanal vencido "resets Sep 24, 8am
+UTC"). Ambas de cuando el loop corría en el VPS; hoy corre en nodo-casa y esta misma vuelta ya
+probaba que arranca. Cerradas con nota.
+
+**Cola:** `t_7bb28d06` ("portal del paciente sin forma de cancelar") figuraba `done` en el
+tablero (arreglada el 19-sep en `a5be7d45`) pero seguía en la sección "Abierto" de
+`cola/recorrido-cliente.md`. Gate 1 — reproducido en vivo con `scripts/probar_cancelar_cita.mjs`:
+la API cancela (200, `CANCELADA`) y las dos pantallas del portal (`/book/confirm/[token]`,
+`/book/my-appointments/[token]`) YA muestran el botón "No voy a poder ir". El script seguía
+marcando "HALLAZGO" porque su regex de detección sólo buscaba la palabra literal "cancel" en el
+texto del botón, y el producto lo dice en español — nunca iba a matchear. Corregido el regex a
+`/cancel|no voy a poder|no podr[eé]/i` en `scripts/probar_cancelar_cita.mjs`; corrida limpia:
+`RESULTADO: la API cancela y/o el portal ya ofrece cancelar — sin hallazgo nuevo`, exit 0, 0 filas
+`zz-qa-` al cerrar (verificado con SELECT antes/después de borrar). Cola movida a "Cerrado — era
+el instrumento, no el sitio".
+
+RAZÓN: la medida principal (dental 9/9) no se movió porque `BUILD_ID` sigue igual — correcto no
+repetirla; el avance de esta vuelta fue destrabar el tablero y cerrar un ítem fantasma de la cola.
+LECCIÓN: ninguna nueva — el método de comparar `BUILD_ID` primero funcionó esta vez.
