@@ -12,6 +12,43 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-24 16:11 La Paz — `BUILD_ID` sin cambios (no se repitió dental); escalón 3b: `/agents` con agentes YA sembrados y una corrida real
+
+`ONIA_ALTA_AUTOMATICA=abierta`, `zz-qa-` en 0 al arrancar. `BUILD_ID` sigue
+`9tuk1Qk2BjQ2j2HdJcL8u` — no correspondía repetir dental.
+
+**Sigue el pendiente que dejó la entrada de arriba**: la vez anterior probó `/agents` con la
+org recién sembrada y **0 agentes** (rama `agents.length === 0` de `agents-view.tsx`), y quedó
+anotado que faltaba la rama con agentes reales — `RUN_STATUS_LABELS` y el estado de una acción
+`pending_approval` nunca se habían mirado renderizados. Instrumento nuevo:
+`scripts/probar_agentes_con_corrida.mjs`. Sembré por SQL, sobre una org `zz-qa-`
+professional/dental vigente: un agente `onia_agents_agents` real (rol `recall`, habilitado), una
+corrida `onia_agents_runs` en `completed` con `summary`, y una acción `onia_agents_actions` en
+`pending_approval` con `payload.suggestedMessage`. Con sesión real (magic link + cookies,
+390×844) contra `/agents`:
+
+- **Equipo de agentes** ya NO lista el catálogo genérico: lista el agente real, "Recall —
+  reactivación de pacientes", "Activo · corre todos los días", con su última corrida rotulada
+  **"Completada"** (`RUN_STATUS_LABELS.completed`) y el `summary` sembrado a la vista.
+- **Acciones propuestas y aprobadas · 1 esperando aprobación** — el contador de
+  `pendingCount` cuenta bien la única acción `pending_approval`.
+- La acción se lista con su título, el badge **"Esperando aprobación"**, el **borrador del
+  mensaje** (`payload.suggestedMessage`) visible bajo "Borrador:", y "se aprueba en Pendientes"
+  al pie — exactamente lo que `estadoVisibleDeAccion` promete para este estado (no necesita
+  despacho: eso sólo lo mira para `executed`/`auto_executed`).
+- Captura `extra-agentes-corrida-00-pantalla.png` — limpia, sin texto cortado, sin "muy pronto".
+
+**Sin hallazgo.** Limpieza verificada por fuera del propio script:
+`organizations`/`auth.users` con `zz-qa-%` → 0, y además `onia_agents_actions` de la org → 0
+(las tres tablas de agentes se borran por FK lógica antes que `organizations`).
+
+**Próxima vuelta:** si `BUILD_ID` sigue igual, los escalones que quedan del área agentes son
+`/pending` (aprobar o rechazar una propuesta real y ver el efecto en `/agents`), o volver a
+"invitar/quitar coadministrador desde `/settings`" (pendiente desde el 2026-09-18), o rotar de
+rubro.
+
+---
+
 ## 2026-09-24 15:12 La Paz — `BUILD_ID` sin cambios (no se repitió dental); escalón 3 nuevo: `/agents` ("Agentes"), nunca antes probado por este carril
 
 `ONIA_ALTA_AUTOMATICA=abierta`, `zz-qa-` en 0 al arrancar. `docker exec onia-platform cat
