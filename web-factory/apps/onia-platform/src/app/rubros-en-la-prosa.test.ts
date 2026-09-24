@@ -16,7 +16,9 @@ import { rubrosDelSitio, SWITCHER } from "../../scripts/rubros-vivos.mjs";
  * título de la sección que existe para venderle los módulos y concluía que Onia
  * no era para él. Y no es un caso suelto — las otras CUATRO superficies del
  * sitio que enumeran rubros (la FAQ, los dos textos de `how-it-works` y
- * `/nosotros`) decían "cinco" y los nombraban a los cinco.
+ * `/nosotros`) decían "cinco" y los nombraban a los cinco. (Uno de esos dos
+ * textos de `how-it-works` era el `alt` de una captura: se fue el 2026-09-24
+ * con la captura, y hoy la frase se deriva de `RUBROS_EN_PROSA`.)
  *
  * **Por qué ningún instrumento del carril lo veía.** Es la parte que lo vuelve
  * una clase, y no un typo:
@@ -303,11 +305,22 @@ describe("una enumeración de rubros que afirma cobertura los nombra a todos", (
     // Fail-closed: si el barrido deja de encontrar sujetos, "ninguna queda
     // corta" se leería como sitio sano. Ya pasó dos veces en este carril (el
     // gate que sacaba sus sujetos del sitemap; el de las cuatro raíces a mano).
+    //
+    // ⚠️ Bajó de 3 a 2 el 2026-09-24, y el motivo importa porque un piso que
+    // se afloja para que pase la suite es justo como muere un ancla: NO se
+    // rompió el barrido, se fue un sujeto A PROPÓSITO. El `alt` de la captura
+    // de `how-it-works` tipeaba la enumeración a mano; al reemplazar la captura
+    // por markup, esa frase pasó a derivarse de `RUBROS_EN_PROSA`, que no
+    // puede quedar corta por construcción. O sea que el sujeto no desapareció:
+    // se volvió imposible de romper, que es mejor que vigilado.
+    //
+    // Si este piso vuelve a bajar, la pregunta antes de tocarlo es cuál sujeto
+    // se fue y si se derivó o se borró. Borrado → el piso no se toca.
     expect(
       cerradas,
       "el barrido no encontró NI UNA enumeración cerrada de rubros en todo el sitio: " +
         "eso no es un sitio sano, es un instrumento que dejó de medir.",
-    ).toBeGreaterThanOrEqual(3);
+    ).toBeGreaterThanOrEqual(2);
 
     expect(
       cortas.map((c) => `${c.archivo}:${c.linea} — falta ${c.faltan.join(", ")} · «…${c.frase}»`),
@@ -325,7 +338,8 @@ describe("una enumeración de rubros que afirma cobertura los nombra a todos", (
  * son?"**. El sitio afirmaba "cinco rubros" TIPEADO en seis textos de venta —
  * la FAQ de la home (que además viaja al JSON-LD `FAQPage`, o sea al resultado
  * de Google), la FAQ de la landing v1, `/rubros`, `/nosotros`, el `alt` de
- * `how-it-works` y el cuadro comparativo de `proof.ts`.
+ * `how-it-works` (ese `alt` ya no existe: se fue el 2026-09-24 con la captura
+ * que describía) y el cuadro comparativo de `proof.ts`.
  *
  * **Por qué ninguno de los gates de este carril lo veía.** El de enumeración
  * (arriba) pregunta si la lista está completa, y las seis listas lo estaban.

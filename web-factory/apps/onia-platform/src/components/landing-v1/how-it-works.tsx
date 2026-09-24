@@ -1,8 +1,13 @@
 import { Reveal, SplitTextReveal } from "@/motion";
 import { PRUEBA, ALCANCE_CON_AGENDA } from "@/lib/pricing";
 import { WA_URL_LANDING } from "@/lib/site";
-import { CUANTOS_RUBROS } from "@/content/rubros";
-import { Row, Shot, ShotImage } from "./shot";
+import {
+  CUANTOS_RUBROS,
+  CUANTOS_RUBROS_CAPITAL,
+  RUBROS_EN_PROSA,
+  RUBROS_VIVOS,
+} from "@/content/rubros";
+import { Row, Shot } from "./shot";
 import { ModulesDemo } from "./modules-demo";
 import styles from "./landing.module.css";
 
@@ -11,9 +16,23 @@ import styles from "./landing.module.css";
  * Cada paso: numeral editorial (fino y grande, sobre su hairline), titulo de
  * 3 palabras, UNA frase y una imagen grande.
  *
- * El paso 01 lleva la CAPTURA REAL del selector de rubro de app.onia.com.bo:
- * es la pantalla que prueba el multirubro, y es publica (no hace falta cuenta).
- * El paso 03 se TOCA: los interruptores de modulos son reales (ModulesDemo).
+ * Los TRES pasos se construyen con markup, ninguno es una foto de la app.
+ * El paso 03 ademas se TOCA: los interruptores de modulos son reales
+ * (ModulesDemo).
+ *
+ * EL PASO 01 LLEVABA UNA CAPTURA, y por que ya no — medido el 2026-09-24 en
+ * produccion. Era `/capturas/rubros-onia.webp`, servida en `/v1`, y adentro
+ * tenia dibujada la banda «MUY PRONTO» y SEIS rubros con Veterinaria, que
+ * salio del alta el 13-ago. El parrafo de al lado, el `alt` y `CUANTOS_RUBROS`
+ * decian cinco: el texto y los pixeles se contradecian y solo el texto tenia
+ * gate. Ningun instrumento de este repo lee un `.webp`, asi que rompia dos
+ * reglas de Sergio Urcullo —nada de capturas literales (2026-09-01), la venta
+ * nunca exhibe obra (2026-08-20)— en VERDE.
+ *
+ * Por eso ahora los rubros salen de `RUBROS_VIVOS`: la afirmacion volvio a ser
+ * TEXTO, y con eso cae bajo `rubros-en-la-prosa.test.ts`, `obra-literal.test.ts`
+ * y el alias `rubros:vivos`, que ya existian. La guarda de la clase entera vive
+ * en `app/imagen-sin-obra.test.ts`.
  */
 export function HowItWorks() {
   return (
@@ -39,14 +58,19 @@ export function HowItWorks() {
             </p>
           </Reveal>
           <Reveal delay={0.1} className={styles.stepVisual}>
-            <Shot title="app.onia.com.bo · crear cuenta" bodyless>
-              <ShotImage
-                src="/capturas/rubros-onia.webp"
-                alt={`Pantalla real de Onia al crear una cuenta: elegís el tipo de negocio entre ${CUANTOS_RUBROS} rubros disponibles — clínica dental, comercio o tienda, importadora, estética y spa, y servicios profesionales.`}
-                width={1200}
-                height={824}
-              />
-            </Shot>
+            <div
+              role="img"
+              aria-label={`Alta de Onia: se elige el tipo de negocio entre ${CUANTOS_RUBROS} rubros — ${RUBROS_EN_PROSA}.`}
+            >
+              <Shot
+                title="Crear cuenta · tu rubro"
+                tag={`${CUANTOS_RUBROS_CAPITAL} rubros`}
+              >
+                {RUBROS_VIVOS.map((rubro) => (
+                  <Row key={rubro.chip} name={rubro.chip} />
+                ))}
+              </Shot>
+            </div>
           </Reveal>
         </article>
 
