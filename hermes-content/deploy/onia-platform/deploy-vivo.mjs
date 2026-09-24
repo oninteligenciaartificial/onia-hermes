@@ -35,6 +35,15 @@
  * rojos: se lee como «el ambiental de siempre» y se saltea, y con él se saltea
  * la única pregunta que este gate existe para contestar.
  *
+ * DESDE EL 2026-09-24 PRODUCCIÓN ES UNA IMAGEN. El contenedor corre
+ * `onia-platform:release-<sha8>` (Node 22, sin bind mount) y lo armado vive en
+ * `/opt/onia-platform/releases/<sha8>-<yyyymmdd>/`, con `BUILD_ID` y `SHA` que escribe
+ * `build-and-stage.sh`. El BUILD_ID vivo se casa primero contra esos releases, después
+ * contra los `build-<sha>` de la receta vieja (fallback), y si ninguno casa, el sha sale
+ * del NOMBRE de la imagen que corre el contenedor — así se reconoce el release de ese día,
+ * armado a mano sin BUILD_ID ni SHA. Sólo un release puede ser el STAGED: el swap por
+ * imagen no sabe publicar un `build-<sha>`.
+ *
  * NO se usa `docker inspect --format '{{.Created}}'`. El swap reemplaza el
  * runtime y REINICIA el contenedor, no lo recrea, así que `Created` queda
  * anclado al día que se levantó y se aleja del último commit para siempre
@@ -107,12 +116,34 @@ export function llegaAlCliente(archivos) {
   return archivos.some((a) => !NO_VIAJA.some((re) => re.test(a)));
 }
 
-/** El BUILD_ID vivo, casado contra los build-<sha> del disco. null = no se sabe. */
-export function shaQueCorre({ buildIdVivo, builds }) {
+/** La etiqueta de la imagen de un sha: la MISMA regla en build, swap y medidor. */
+export const etiquetaDe = (sha) => `${CONTENEDOR}:release-${String(sha).slice(0, 8)}`;
+
+/** El sha que nombra una imagen `onia-platform:release-<sha>`. Cualquier otra: null. */
+export function shaDeImagen(imagen) {
+  const m = /^onia-platform:release-([0-9a-f]{7,40})$/.exec(imagen ?? '');
+  return m ? m[1] : null;
+}
+
+/** Dos abreviaturas del mismo commit (git abrevia a 7 u 8 según el repo). */
+export const mismoSha = (a, b) => Boolean(a) && Boolean(b) && (a.startsWith(b) || b.startsWith(a));
+
+/**
+ * El sha que corre. null = no se sabe.
+ * 1) el BUILD_ID vivo casado contra releases y build-<sha> del disco;
+ * 2) si no casa, el nombre de la imagen del contenedor vivo (`release-<sha8>`).
+ * Sin poder listar el disco no se mide: `builds` null sigue siendo NO_PUDE_MEDIR.
+ */
+export function shaQueCorre({ buildIdVivo, builds, imagenViva = null }) {
   if (!buildIdVivo) return null;
   if (!Array.isArray(builds)) return null;
   const hit = builds.find((b) => b && b.buildId && b.buildId === buildIdVivo);
-  return hit ? hit.sha : null;
+  return hit ? hit.sha : shaDeImagen(imagenViva);
+}
+
+/** El staged del HEAD: sólo un RELEASE, porque el swap publica imágenes. */
+export function stagedPara(builds, headSha) {
+  return (builds ?? []).find((b) => b && b.tipo === 'release' && mismoSha(b.sha, headSha)) ?? null;
 }
 
 /**
@@ -188,13 +219,13 @@ export function diagnosticar({ shaVivo, headSha, varados, desciende, motivoSinSh
 
 export function evaluarStaged({ staged, headSha }) {
   if (!staged) return { estado: NINGUNO, motivo: 'no hay ningún build armado en disco' };
-  if (staged.sha !== headSha) {
+  if (!mismoSha(staged.sha, headSha)) {
     return { estado: VIEJO, motivo: `el build armado es de ${staged.sha} y el HEAD es ${headSha}` };
   }
   if (!staged.integro) {
-    return { estado: VIEJO, motivo: `el build de ${staged.sha} está incompleto: el swap dejaría producción sin server.js` };
+    return { estado: VIEJO, motivo: `el build de ${staged.sha} está incompleto (sin BUILD_ID, sin imagen o sin standalone): no se publica` };
   }
-  return { estado: CUBRE, motivo: `el build de ${staged.sha} está armado e íntegro`, ruta: staged.ruta ?? `${BASE}/build-${staged.sha}` };
+  return { estado: CUBRE, motivo: `el build de ${staged.sha} está armado e íntegro`, ruta: staged.ruta ?? null };
 }
 
 // ── lectura del mundo real (nada de esto corre al importar) ─────────────────
@@ -211,26 +242,44 @@ export function buildIdVivo(contenedor = CONTENEDOR) {
   return corre('docker', ['exec', contenedor, 'cat', '/app/.next/BUILD_ID']) || null;
 }
 
-/**
- * La imagen con la que se creó el contenedor vivo (`onia-platform:release-<sha>`).
- *
- * Es `.Config.Image`, no `.Created`: la fecha no sirve para nada acá (ver la
- * cabecera), pero el NOMBRE de la imagen lleva el commit adentro y no se mueve
- * cuando el contenedor se reinicia.
- */
+/** La imagen con la que se creó el contenedor vivo (`onia-platform:release-<sha8>`). */
 export function imagenViva(contenedor = CONTENEDOR) {
-  return corre('docker', ['inspect', contenedor, '--format', '{{.Config.Image}}']) || null;
+  return corre('docker', ['inspect', '--format', '{{.Config.Image}}', contenedor]) || null;
 }
 
-/** Los build-<sha> del disco con su BUILD_ID y si el standalone está íntegro. */
-export function buildsEnDisco(base = BASE) {
+const leer = (ruta) => {
+  try {
+    return readFileSync(ruta, 'utf8').trim() || null;
+  } catch {
+    return null;
+  }
+};
+
+/**
+ * Los releases (receta por imagen) y los build-<sha> (receta vieja) del disco. `null` =
+ * no existe `base` (nodo-casa). Un release está íntegro con BUILD_ID escrito —que
+ * build-and-stage.sh escribe DESPUÉS de pasar los gates— y su imagen presente.
+ */
+export function buildsEnDisco(base = BASE, { imagenExiste = (tag) => corre('docker', ['image', 'inspect', '--format', '{{.Id}}', tag]) !== null } = {}) {
   let dirs;
   try {
     dirs = readdirSync(base).filter((d) => d.startsWith('build-') && !d.endsWith('.log') && !d.endsWith('.sh'));
   } catch {
     return null;
   }
-  return dirs.map((d) => {
+  let rels = [];
+  try {
+    rels = readdirSync(`${base}/releases`).filter((d) => /^[0-9a-f]{7,40}-/.test(d));
+  } catch {
+    /* sin releases todavía: sólo la receta vieja */
+  }
+  const releases = rels.map((d) => {
+    const ruta = `${base}/releases/${d}`;
+    const sha = (leer(`${ruta}/SHA`) ?? d.split('-')[0]).slice(0, 8);
+    const buildId = leer(`${ruta}/BUILD_ID`);
+    return { sha, buildId, tipo: 'release', integro: Boolean(buildId) && imagenExiste(etiquetaDe(sha)), ruta };
+  });
+  return [...releases, ...dirs.map((d) => {
     const sha = d.slice('build-'.length);
     const nb = `${base}/${d}/.next/standalone`;
     let id = null;
@@ -242,10 +291,11 @@ export function buildsEnDisco(base = BASE) {
     return {
       sha,
       buildId: id,
+      tipo: 'legacy',
       ruta: `${base}/${d}`,
       integro: Boolean(id) && existsSync(`${nb}/server.js`) && existsSync(`${nb}/node_modules`) && existsSync(`${nb}/.next/static`),
     };
-  });
+  })];
 }
 
 /**
@@ -265,16 +315,30 @@ export function parsearBuildsSsh(salida, base = BASE) {
     .map((l) => l.trim())
     .filter(Boolean)
     .map((linea) => {
-      const [sha, buildId, integro] = linea.split('|');
-      return { sha, buildId: buildId || null, ruta: `${base}/build-${sha}`, integro: integro === 'si' };
+      // `sha|buildId|integro` (build-<sha>) o `sha|buildId|integro|release|<dir>`.
+      const [sha, buildId, integro, tipo, dir] = linea.split('|');
+      const release = tipo === 'release';
+      return {
+        sha,
+        buildId: buildId || null,
+        ruta: release ? `${base}/releases/${dir}` : `${base}/build-${sha}`,
+        integro: integro === 'si',
+        tipo: release ? 'release' : 'legacy',
+      };
     })
     .filter((b) => b.sha);
 }
 
+/** El guion que lista releases y build-<sha> allá, en el formato de `parsearBuildsSsh`. */
+export function guionBuildsSsh(base = BASE) {
+  const releases =`for d in ${base}/releases/*/; do [ -d "$d" ] || continue; n=$(basename "$d"); s=$(tr -d "[:space:]" < "$d/SHA" 2>/dev/null); [ -n "$s" ] || s=\${n%%-*}; s=$(printf %.8s "$s"); id=$(tr -d "[:space:]" < "$d/BUILD_ID" 2>/dev/null); integro=no; if [ -n "$id" ] && docker image inspect "${CONTENEDOR}:release-$s" >/dev/null 2>&1; then integro=si; fi; printf '%s|%s|%s|release|%s\\n' "$s" "$id" "$integro" "$n"; done; `;
+  const guion = `${releases}for d in ${base}/build-*/; do [ -d "$d" ] || continue; n=$(basename "$d"); case "$n" in *.log|*.sh) continue;; esac; nb="$d.next/standalone"; id=$(tr -d "[:space:]" < "$nb/.next/BUILD_ID" 2>/dev/null); integro=no; if [ -n "$id" ] && [ -f "$nb/server.js" ] && [ -d "$nb/node_modules" ] && [ -d "$nb/.next/static" ]; then integro=si; fi; printf '%s|%s|%s\\n' "\${n#build-}" "$id" "$integro"; done`;
+  return guion;
+}
+
 /** Los builds del VPS. `null` = no pude preguntar; `[]` = pregunté y no hay ninguno. */
 export function buildsPorSsh(base = BASE, destino = VPS) {
-  const guion = `for d in ${base}/build-*/; do [ -d "$d" ] || continue; n=$(basename "$d"); case "$n" in *.log|*.sh) continue;; esac; nb="$d.next/standalone"; id=$(tr -d "[:space:]" < "$nb/.next/BUILD_ID" 2>/dev/null); integro=no; if [ -n "$id" ] && [ -f "$nb/server.js" ] && [ -d "$nb/node_modules" ] && [ -d "$nb/.next/static" ]; then integro=si; fi; printf '%s|%s|%s\\n' "\${n#build-}" "$id" "$integro"; done`;
-  const r = spawnSync('ssh', [...SSH_ARGS, destino, guion], { encoding: 'utf8', timeout: 60_000 });
+  const r = spawnSync('ssh', [...SSH_ARGS, destino, guionBuildsSsh(base)], { encoding: 'utf8', timeout: 60_000 });
   if (r.error || r.status !== 0) return null;
   return parsearBuildsSsh(r.stdout, base);
 }
@@ -352,16 +416,30 @@ export function varadosDesde(shaVivo, repo = REPO) {
   return out;
 }
 
-export function medir() {
-  const builds = buildsDeProduccion()?.builds ?? null;
-  const shaBuildId = shaQueCorre({ buildIdVivo: buildIdVivo(), builds });
-  const shaEtiqueta = shaDeEtiqueta(imagenViva());
+const LECTORES = {
+  builds: () => buildsDeProduccion()?.builds ?? null,
+  buildIdVivo,
+  imagenViva,
+  headDeploy,
+  varadosDesde,
+  desciendeDe,
+};
+
+/**
+ * Los lectores se inyectan para que los tests midan medir() sin docker ni git.
+ * El sha vivo sale de conciliar las DOS vias (etiqueta de la imagen y BUILD_ID
+ * casado contra releases/ o build-<sha>): si discrepan, no se elige ninguna.
+ */
+export function medir(lectores = {}) {
+  const l = { ...LECTORES, ...lectores };
+  const builds = l.builds();
+  const shaBuildId = shaQueCorre({ buildIdVivo: l.buildIdVivo(), builds });
+  const shaEtiqueta = shaDeEtiqueta(l.imagenViva());
   const { sha: shaVivo, motivo: motivoSinSha } = shaVivoConciliado({ shaEtiqueta, shaBuildId });
-  const headSha = headDeploy();
-  const varados = varadosDesde(shaVivo);
-  const d = diagnosticar({ shaVivo, headSha, varados, desciende: desciendeDe(shaVivo, headSha), motivoSinSha });
-  const staged = (builds ?? []).find((b) => b.sha === headSha) ?? null;
-  return { ...d, shaVivo, headSha, staged: evaluarStaged({ staged, headSha }) };
+  const headSha = l.headDeploy();
+  const varados = l.varadosDesde(shaVivo);
+  const d = diagnosticar({ shaVivo, headSha, varados, desciende: l.desciendeDe(shaVivo, headSha), motivoSinSha });
+  return { ...d, shaVivo, headSha, staged: evaluarStaged({ staged: stagedPara(builds, headSha), headSha }) };
 }
 
 function principal() {

@@ -98,7 +98,7 @@
     "test:sitio-venta": "cd web-factory/apps/onia-platform && npm run prebuild",
     "test:cadena-publicador": "node --test scripts/cadena-corre-el-gate-del-publicador.test.mjs",
     "deploy:plataforma-vivo": "node hermes-content/deploy/onia-platform/deploy-vivo.mjs",
-    "test:deploy-plataforma": "node --test hermes-content/deploy/onia-platform/deploy-vivo.test.mjs",
+    "test:deploy-plataforma": "node --test hermes-content/deploy/onia-platform/deploy-vivo.test.mjs hermes-content/deploy/onia-platform/deploy-imagen.test.mjs",
     "test:postiz-healthcheck": "node --test hermes-content/deploy/postiz/healthcheck.test.mjs",
     "test:deploy-simulacro": "bash scripts/kanban/desplegar-en-segundo-plano.sh --autotest",
     "test:rubros-vendibles": "node --test hermes-content/deploy/vps-ops/bot/rubros-vendibles.test.mjs",

@@ -2,8 +2,8 @@
 # Publica app.onia.com.bo. UN comando, SIN argumentos, que no caduca nunca.
 #
 # POR QUÉ EXISTE. El runbook de la casa es `build-and-stage.sh <sha>` y después
-# `deploy-gates-swap.sh <sha>`. Quien pide el deploy mide ese sha, lo escribe en
-# la tarea del tablero, y ahí se queda quieto — mientras `master` avanza. Cuando
+# `swap-imagen.sh <sha>` (hasta el 2026-09-24, `deploy-gates-swap.sh <sha>`).
+# Quien pide el deploy mide ese sha, lo escribe en la tarea del tablero, y ahí se queda quieto — mientras `master` avanza. Cuando
 # Sergio Urcullo contesta «ok», el comando publica el código de ayer con cara de
 # nuevo, y en el peor caso RETROCEDE producción: el 2026-09-04 la tarea
 # t_18ea4aff pedía publicar `build-a4b1d97` cuando ya corría `build-b5e23d4`,
@@ -78,23 +78,25 @@ if [ "$STAGED" != "CUBRE" ]; then
 fi
 
 # ── publicar ────────────────────────────────────────────────────────────────
-# El swap tiene sus propios 5 gates (build limpio, standalone íntegro, BUILD_ID
-# nuevo distinto del vivo, env horneado, cero 127.0.0.1 nuevo) y hace el backup
-# solo. Acá no se repiten: se le pasa el sha DERIVADO, que es lo único que este
-# script agrega.
+# Desde el 2026-09-24 producción es una IMAGEN (onia-platform:release-<sha8>).
+# Los gates de la imagen (BUILD_ID, node 22, cero .env, URL pública y anon key
+# horneadas, cero valores QA) los corrió build-and-stage.sh; swap-imagen.sh hace el
+# canario, el swap con el viejo RENOMBRADO, la verificación contra lo vivo y el
+# rollback automático. Acá no se repiten: se le pasa el sha DERIVADO, que es lo
+# único que este script agrega.
 if [ -n "$DRY" ]; then
-  echo "[dry-run] publicaría: bash $BASE/deploy-gates-swap.sh $HEAD"
+  echo "[dry-run] publicaría: bash $BASE/swap-imagen.sh $HEAD"
   echo "[dry-run] producción NO se tocó."
   exit 0
 fi
 
 echo "== swap -> $HEAD =="
-bash "$BASE/deploy-gates-swap.sh" "$HEAD"
+bash "$BASE/swap-imagen.sh" "$HEAD"
 SWAP=$?
-[ $SWAP -ne 0 ] && { echo "ERR: el swap no salió bien (código $SWAP). Mirá arriba: los gates cortan ANTES de tocar producción."; exit 1; }
+[ $SWAP -ne 0 ] && { echo "ERR: el swap no salió bien (código $SWAP). Mirá arriba: el canario corta ANTES de tocar producción y el swap revierte solo."; exit 1; }
 
 # ── verificar que el cliente lo ve ──────────────────────────────────────────
-# Un «SWAP OK» sólo dice que el rsync anduvo. Que lo varado haya llegado se
+# Un «SWAP OK» sólo dice que el contenedor nuevo sirve su build. Que lo varado haya llegado se
 # comprueba volviendo a medir: es el mismo instrumento, sin fe de por medio.
 echo "== verifico contra la plataforma viva =="
 sleep 5
