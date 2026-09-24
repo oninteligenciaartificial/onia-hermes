@@ -12,6 +12,35 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-24 19:12 La Paz — `BUILD_ID` cambió (deploy nuevo: `9tuk1Qk2BjQ2j2HdJcL8u` → `VREeqNSncIqDIOTMbfLTQ`); recorrido dental completo, 9/9
+
+`ONIA_ALTA_AUTOMATICA=abierta`. Al arrancar había **una fila residual** de la vuelta anterior
+sin limpiar: `organizations.name='zz-qa-2026-09-24-1809-negocio'` (creada 18:10, sin pacientes ni
+citas). Se limpió antes de correr el recorrido (perfil → `auth.identities` → `auth.users` →
+`organizations`, en ese orden) e imprimí la fila antes de borrarla — ver el comando en el
+historial de esta vuelta. **Lección: una vuelta anterior no cerró su limpieza** (posible corte
+por el tope de tiempo antes del borrado); a partir de ahora, el chequeo de arranque
+(`count(*) from organizations where name like 'zz-qa-%'`) es lo primero que se corre, no solo
+antes de escribir.
+
+Con el `BUILD_ID` nuevo correspondía repetir dental (regla de la lección anterior: comparar
+`BUILD_ID` antes de decidir). `node scripts/recorrido_cliente.mjs --escribir`:
+
+- **Los 9 pasos, OK.** Cuenta creada (`zz-qa-2026-09-24-1910@onia.com.bo`), confirmar correo
+  antes del primer login, onboarding en 6 pantallas (pregunta → negocio → horarios → servicios
+  → equipo → listo), `/dashboard` sin rebote, paciente `zz-qa-2026-09-24-1910-paciente` cargado
+  y visto en `/patients`, cita `2026-09-25 09:00` agendada (201) y VISTA en `/appointments`
+  (id `cmufwtv3d000k01rxl23r2tzj`), factura creada con el ítem visible en `/billing/...` —
+  frenado ahí sin pagar.
+- `resumen.json`: `llegoHasta 9 / 9`, `completo: true`, `agujeros: []`.
+- Limpieza verificada por fuera del propio script: `organizations`/`appointments` con
+  `zz-qa-%` → **0** al cerrar.
+
+**Sin hallazgo de producto.** El único hallazgo fue de proceso (la fila residual, ya corregida
+arriba).
+
+---
+
 ## 2026-09-24 17:12 La Paz — `BUILD_ID` sin cambios (no se repitió dental); escalón 3c: `/pending` con una propuesta REAL de agente, rechazarla y ver el efecto en `/agents`
 
 `ONIA_ALTA_AUTOMATICA=abierta`, `zz-qa-` en 0 al arrancar. `BUILD_ID` sigue
