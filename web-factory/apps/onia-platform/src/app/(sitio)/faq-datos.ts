@@ -57,10 +57,9 @@ export const FAQ = [
     a: "Nadie instala nada ni arranca un proyecto de meses: la cuenta llega con la configuración de tu rubro puesta y el sistema te lleva paso a paso por la puesta en marcha. Si te trabás después, escribinos por WhatsApp.",
   },
   {
-    // content/legal/terminos.md:83 (sin permanencia) y §3.4 (mora: gracia →
-    // suspensión con datos intactos, nunca borrado inmediato) + pricing.ts:284.
+    // plan-state.ts del producto: gracia sólo trial; plan pagado vencido en lectura.
     q: "¿Y si dejo de pagar, pierdo todo?",
-    a: "No. No hay contrato de permanencia: podés no renovar, sin penalidad. Si un pago no entra, primero hay un período de gracia con el servicio activo y avisos; después el acceso se suspende, pero tus datos se conservan intactos — la suspensión nunca implica borrarlos. Y los exportás en CSV cuando quieras, sin importar el plan.",
+    a: `No. Podés no renovar, sin penalidad. Al vencer tu plan pagado, la cuenta queda en solo lectura: podés consultar tus datos y el administrador puede exportarlos, pero no registrar cambios. Tus datos no se borran de entrada. La prueba tiene ${PRUEBA.dias} días y ${PRUEBA.diasDeGracia} día adicional de gracia antes de pasar a solo lectura.`,
   },
   {
     // (sitio)/rubros/page.tsx:78-80 y (sitio)/contacto/page.tsx:118-121.

@@ -61,7 +61,7 @@
  * cobro (`gatewayEnabled: false` en los cinco planes).
  */
 
-import { CHATBOT_PLAN, precioAddonChatbot } from "@/content/chatbot-precios";
+import { CHATBOT_PLAN, CONVERSACIONES_INCLUIDAS, precioAddonChatbot } from "@/content/chatbot-precios";
 
 /**
  * El mensual del chatbot para las tarjetas de plan (la cuenta "Pro + add-on
@@ -469,7 +469,7 @@ const ESCALERA: readonly Plan[] = [
     anual: 3200,
     incluye: [
       `Fichas, caja y cobros en un solo lugar, y agenda ${ALCANCE_CON_AGENDA}`,
-      "Inventario con existencias, costo, proveedor y aviso de stock mínimo",
+      "Inventario con existencias, costo, proveedor y aviso de stock mínimo en dental, estética, comercio e importadora",
       "Reporte básico y contabilidad básica de compras y ventas",
       "Exportás tus datos en CSV cuando quieras",
       `Topes: 300 fichas · 2 usuarios (hasta ${USUARIO_EXTRA_ADDON.maxEnBasico} más a Bs ${bs(USUARIO_EXTRA_ADDON.mensualAddon)}/mes) · 200 recordatorios por email/mes`,
@@ -567,13 +567,13 @@ const ESCALERA: readonly Plan[] = [
      * cierto sin hacer ninguna cuenta, para que el peor caso —que la derivación no encuentre
      * sujeto— sea copy honesto en vez de una cifra tipeada que envejece sola.
      */
-    resultado: "Sin techos y con el chatbot de WhatsApp incluido.",
+    resultado: "Fichas y usuarios sin tope, con el chatbot de WhatsApp incluido.",
     mensual: 1290,
     semanal: null,
     anual: 12900,
     incluye: [
-      `Chatbot de WhatsApp incluido (aparte vale Bs ${bs(CHATBOT_MENSUAL)}/mes)`,
-      `Todo lo del ${NOMBRE_DE_PLAN.pro}, sin límites`,
+      `Chatbot de WhatsApp incluido: ${CONVERSACIONES_INCLUIDAS} conversaciones/mes (aparte vale Bs ${bs(CHATBOT_MENSUAL)}/mes)`,
+      `Todo lo del ${NOMBRE_DE_PLAN.pro}`,
       /**
        * "Más de un administrador" va ACÁ, pegado a los usuarios sin tope, y no como quinta línea:
        * la home renderiza `incluye.slice(0, 4)` (`precios-toggle.tsx`), así que una línea nueva al
@@ -708,7 +708,7 @@ export function cuentaEnPalabras(cuenta: CuentaVsAddon): string {
       : cuenta.deMas === 0
         ? `lo mismo que ${cuenta.contra.nombre} con el add-on aparte`
         : `Bs ${bs(-cuenta.deMas)} menos al mes que ${cuenta.contra.nombre} con el add-on aparte`;
-  return `Sin techos y con el chatbot de WhatsApp incluido: ${cola}.`;
+  return `Chatbot de WhatsApp incluido (${CONVERSACIONES_INCLUIDAS} conversaciones/mes): ${cola}.`;
 }
 
 /** El `resultado` de la tarjeta: derivado si hay cuenta que hacer, y si no el de la escalera. */
@@ -851,6 +851,8 @@ export const PLANES: readonly Plan[] = ESCALERA.map((plan) => ({
 
 /** Prueba gratis: lib/subscription/plan-state.ts (TRIAL_DAYS / TRIAL_PLAN). */
 const PRUEBA_DIAS = 14;
+// Espejo de GRACE_PERIOD_DAYS en el producto: sólo se aplica al trial.
+const PRUEBA_GRACIA_DIAS = 1;
 
 /**
  * Con qué plan corre la prueba. NO es el plan que el lead eligió: el producto
@@ -879,7 +881,7 @@ const NOTA_PRUEBA_POR_PLAN: Record<string, string> = {
   basico: `${PRUEBA_DIAS} días de prueba sin tarjeta, con el plan ${PRUEBA_PLAN} completo. Al pasar a Básico quedás con lo de esta tarjeta.`,
   crece: `${PRUEBA_DIAS} días de prueba sin tarjeta, con el plan ${PRUEBA_PLAN} completo. Al pasar a Crece quedás con lo de esta tarjeta.`,
   pro: `${PRUEBA_DIAS} días de prueba sin tarjeta, corriendo con este mismo plan.`,
-  full: `${PRUEBA_DIAS} días de prueba sin tarjeta, con el plan ${PRUEBA_PLAN}. Al pasar a ${NOMBRE_DE_PLAN.full} se van los topes.`,
+  full: `${PRUEBA_DIAS} días de prueba sin tarjeta, con el plan ${PRUEBA_PLAN}. Al pasar a ${NOMBRE_DE_PLAN.full}, fichas y usuarios sin tope.`,
 };
 
 /**
@@ -905,6 +907,7 @@ export const RETENCION = {
 
 export const PRUEBA = {
   dias: PRUEBA_DIAS,
+  diasDeGracia: PRUEBA_GRACIA_DIAS,
   planQueCorre: PRUEBA_PLAN,
   /**
    * El mismo plan, por su id. Lo necesita toda pantalla que además de NOMBRARLO
@@ -913,7 +916,7 @@ export const PRUEBA = {
    * el Pro trae y el plan de entrada no.
    */
   planQueCorreId: PRUEBA_PLAN_ID,
-  copy: `${PRUEBA_DIAS} días de prueba sin poner tarjeta, corriendo con el plan ${PRUEBA_PLAN} completo. Al terminar, la cuenta queda en solo lectura: nada se borra de inmediato y tenés ${RETENCION.diasParaExportar} días para exportar tus datos.`,
+  copy: `${PRUEBA_DIAS} días de prueba sin poner tarjeta, corriendo con el plan ${PRUEBA_PLAN} completo. Tras ${PRUEBA_GRACIA_DIAS} día adicional de gracia, la cuenta queda en solo lectura: nada se borra de inmediato y tenés ${RETENCION.diasParaExportar} días para exportar tus datos.`,
   notaPorPlan: NOTA_PRUEBA_POR_PLAN,
 } as const;
 
@@ -1245,7 +1248,7 @@ export const CONDICIONES: readonly string[] = [
   // archivo. El cruce contra el producto (scripts/precios-fuente.mjs) valida
   // las CONSTANTES, no las copias, así que el día que el trial cambie esta
   // frase sigue en verde diciendo el número viejo.
-  `${PRUEBA_DIAS} días de prueba sin tarjeta, con el ${PRUEBA_PLAN} completo. Al vencer, la cuenta queda en solo lectura: nada se borra de inmediato y tenés ${RETENCION.diasParaExportar} días para exportar tus datos.`,
+  `${PRUEBA_DIAS} días de prueba sin tarjeta, con el ${PRUEBA_PLAN} completo. Tras ${PRUEBA_GRACIA_DIAS} día adicional de gracia, la cuenta queda en solo lectura: nada se borra de inmediato y tenés ${RETENCION.diasParaExportar} días para exportar tus datos.`,
   // Mismo caso que las dos líneas de arriba, y no viajó: la cantidad de planes también estaba
   // tipeada ("los tres planes") teniendo el catálogo dos pantallas más arriba. La escalera C
   // sumó el Crece y esta frase siguió enumerando tres.
