@@ -59,6 +59,18 @@
 >   `/root/backups/restore-test-20260924/`. Contenedor de prueba borrado.
 > - **Respaldo de comprobantes (Storage):** `onia-backup-storage.sh` (hermes `b3f621cc`), cron 07:10
 >   UTC, últimas 30 copias en `/root/backups/onia-storage-v1/`; primera copia OK (2 archivos).
+> - **Tercer release del día, 22:48 UTC, por el PUBLICADOR OFICIAL migrado (primera corrida real):**
+>   platform `39234c89` (BUILD `1fCNCDEJaOeFVV1KczGHP`): código muerto de OpenAI borrado + «Enséñale
+>   conversando» con error honesto y Sentry. `OPENAI_API_KEY` fuera de `app.env` (backup
+>   `app.env.bak-pre-sin-openai-20260924`). Build + 9 gates + canario + swap + verificación, solo.
+> - **IA con tope:** claves LiteLLM `onia-platform-agentes` (US$5/30 d) y `onia-bot-motor` (US$10/30 d),
+>   solo gpt-4.1-mini, en `/root/.config/onia/litellm-*.key`. El bot las usa recién con el próximo
+>   deploy del bot (verifica la clave al arrancar y cae a la maestra si no sirve). Vigía de crédito de
+>   IA cada 15 min (Telegram directo).
+> - **Diseño del agente de cada negocio:** `hermes-content/docs/platform/ONIA_AGENTE_DEL_NEGOCIO.md`
+>   (decisiones D1-D4 de Sergio; D5 = número del WhatsApp del dueño, pendiente). La redacción mensaje por
+>   mensaje (`claude/v1-agentes-llm-20260924`, `56752b95`+`6292f750`) NO se publica: D2 la reemplaza por
+>   plantilla por negocio; su cliente, validación y topes se reusan.
 > - **Bot: fuga de procesos zombie cortada (21:21 UTC).** `onia-center` tenía 13.559 zombies (pids
 >   13.581/19.092, +720/día): el `timeout` de busybox que el watchdog corría DENTRO del contenedor dejaba
 >   un hijo huérfano por corrida que el PID 1 (`node`) nunca recoge; en ~7 días el bot no podía crear
