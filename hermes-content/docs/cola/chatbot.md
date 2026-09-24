@@ -595,6 +595,48 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [ ] 🔴 **El bot NUNCA agendó una demo — ni una, en toda su historia — y el motivo está medido:
+      de los 5 horarios que el cron publica a diario, sólo 2 se pueden elegir. Los otros 3 están
+      libres en la agenda de Sergio Urcullo, pero quien los nombra se va a la cola humana.**
+
+  **La cuenta, contada el 2026-09-24 contra producción (no heredada):**
+
+  ```
+  docker exec supabase-db psql -U postgres -tAc "select bot_stage, count(*), count(calendar_event_id) from onia_center.bot_conversations group by bot_stage;"
+  # esperando_horario|18|0   handoff_humano|12|0   nuevo|12|0   esperando_calificacion|1|0
+  docker exec supabase-db psql -U postgres -tAc "select count(*) from onia_center.bot_conversations where calendar_event_id is not null;"
+  # 0  ← cero reservas reales en 43 conversaciones
+  ```
+
+  **Reproducción en 30 segundos** (con los slots del proceso vivo, 5 horarios):
+
+  ```
+  cd hermes-content/deploy/vps-ops/bot
+  export ONIA_BOT_SLOTS="$(docker exec onia-center sh -c "tr '\0' '\n' < /proc/\$(pgrep -f webhook-server.mjs | head -1)/environ | grep '^ONIA_BOT_SLOTS=' | cut -d= -f2-")"
+  printf '%s\n' "Hola, quiero una demo" "el lunes 28 a las 14:00" "/salir" | node simulate.mjs
+  # → [M5] "Ya le pasé tu consulta a Sergio"  ·  [notas] handoff:propone_otro_horario
+  #   …y el lunes 28 a las 14:00 ESTÁ en ONIA_BOT_SLOTS, libre.
+  ```
+
+  **Causa exacta:** `config.mjs` → `parseSlotsSpec` termina en `elegidos.slice(0, 2)`. El corte a
+  dos es deliberado y correcto para **ofrecer** (el guion pone `{{slot_a}}` y `{{slot_b}}` en la
+  misma frase), pero los candidatos 3-5 —pensados como margen de reemplazo— quedan fuera del
+  array, así que `detectSlotChoice` no los ve, el mensaje cae en `intents.proposesOwnTime` y
+  `bot-engine.mjs:848` lo deriva a un humano. Verificado que el matcher NO es el culpable:
+  `detectSlotChoice` acierta "el lunes 28 a las 14:00" cuando el slot está en la lista.
+
+  **Arreglo listo, probado y con su test en rojo primero:** `cola/arreglo-slots-elegibles.patch`.
+  Separa *ofrecer* de *aceptar* — devuelve el par A/B intacto y suma los sostenibles restantes con
+  `key: null` (sin letra a propósito: una letra reasignada confirmaría un día que nadie eligió).
+
+  **Por qué NO se commiteó el arreglo (2026-09-24, tope de vuelta):** deja DOS tests de
+  `slots-rodantes.test.mjs` en rojo, y son los que afirman el comportamiento viejo
+  (`expected: 2, actual: 5`). Uno es un ajuste de fixture; el otro es `siguenVigentes`, que decide
+  **si el cron renueva los horarios** (`slots-rodantes.mjs:203` le pregunta a `parseSlotsSpec`).
+  Tocado mal, el bot serviría horarios vencidos — peor que el bug que cierra. **La próxima vuelta
+  arranca ahí:** aplicar el patch y hacer que `siguenVigentes` cuente sólo los ofrecidos
+  (`.filter((s) => s.key)`), con su caso propio. El árbol quedó VERDE: 1336/1336.
+
 - [x] 🔴 **CERRADO el 2026-09-24 (commiteado, NO desplegado): las 9 campañas estaban en un
       archivo que NINGÚN deploy copiaba. Ya viven en el que se publica solo.**
 
