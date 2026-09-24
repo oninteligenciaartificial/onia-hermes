@@ -203,13 +203,49 @@ fi
 # creo el archivo, para que este cambio no pueda dejar al bot sin IA. Se dice cual se uso —la
 # clase, nunca el valor— en la salida y en el log del proceso (el watchdog descarta la salida).
 LLM_KEY_FILE="${ONIA_LITELLM_BOT_KEY_FILE:-/root/.config/onia/litellm-bot.key}"
+LLM_BASE="${LITELLM_BASE:-http://onia_selfhosted-litellm-1:4000/v1}"
+LLM_MODEL="${ONIA_BOT_MODEL:-gpt-4o-mini}"
 LLM_KEY=""
+LLM_RECHAZO=""
 [ -r "$LLM_KEY_FILE" ] && LLM_KEY="$(tr -d ' \t\r\n' < "$LLM_KEY_FILE")"
 if [ -n "$LLM_KEY" ]; then
-  LLM_KEY_CLASE="virtual ($LLM_KEY_FILE)"
-else
+  # Una clave PRESENTE no es una clave que SIRVE. Revocada, regenerada, pegada con basura, o
+  # restringida a otro modelo (la del bot solo puede gpt-4.1-mini, y el default de aca es
+  # gpt-4o-mini): LiteLLM contesta 401, run-turn.mjs hace `if (!res.ok) return ""` y el bot
+  # contesta TEXTO FIJO con /health en verde. Ni el watchdog ni el vigia de credito (que calla
+  # los 401 del proxy a proposito) lo ven. Por eso se pregunta ANTES: GET /models con la clave,
+  # que es gratis y devuelve solo los modelos que esa clave puede usar. Corre adentro del
+  # contenedor del bot porque es el que esta en la red de LiteLLM. La clave viaja por el
+  # entorno (`-e K` sin valor), nunca en argv. Si LiteLLM no contesta, la virtual se queda: la
+  # master tampoco pasaria, y LiteLLM caido lo ve vps-healthcheck.
+  # ponytail: se prueba al ARRANCAR; una clave revocada con el proceso vivo se ve en el proximo restart.
+  VEREDICTO="$(K="$LLM_KEY" docker exec -e K -e M="$LLM_MODEL" -e U="$LLM_BASE/models" "$CONTAINER" node -e '
+    (async () => {
+      try {
+        const r = await fetch(process.env.U, { headers: { Authorization: "Bearer " + process.env.K }, signal: AbortSignal.timeout(8000) });
+        if (r.status === 401 || r.status === 403) return console.log("rechazada " + r.status);
+        if (!r.ok) return console.log("http " + r.status);
+        const ids = ((await r.json()).data || []).map((m) => m.id);
+        console.log(ids.includes(process.env.M) ? "ok" : "sin-modelo " + process.env.M);
+      } catch (e) { console.log("error " + e.name); }
+    })()' 2>/dev/null | tail -n 1 | tr -cd 'A-Za-z0-9 ._:/-')"
+  case "$VEREDICTO" in
+    ok) LLM_KEY_CLASE="virtual ($LLM_KEY_FILE)" ;;
+    rechazada*|sin-modelo*) LLM_RECHAZO="$VEREDICTO"; LLM_KEY="" ;;
+    *) LLM_KEY_CLASE="virtual ($LLM_KEY_FILE, sin verificar: ${VEREDICTO:-LiteLLM no contesto})" ;;
+  esac
+fi
+if [ -z "$LLM_KEY" ]; then
   LLM_KEY="$(docker exec onia_selfhosted-litellm-1 printenv LITELLM_MASTER_KEY 2>/dev/null || true)"
-  LLM_KEY_CLASE="MASTER (sin $LLM_KEY_FILE o vacio: el bot gasta sin su tope)"
+  if [ -n "$LLM_RECHAZO" ]; then
+    LLM_KEY_CLASE="MASTER (la virtual de $LLM_KEY_FILE no sirve: $LLM_RECHAZO con $LLM_MODEL; el bot gasta sin su tope)"
+    # Al tablero, no directo: el bot sigue con IA; lo que se perdio es el tope, y eso es trabajo.
+    ONIA_TG="${ONIA_TG:-/root/bin/onia-tg.sh}"
+    [ -x "$ONIA_TG" ] && "$ONIA_TG" "⚠️ Bot: la clave virtual de LiteLLM no sirve ($LLM_RECHAZO con $LLM_MODEL): contesta con la MASTER, sin su tope
+Revisar $LLM_KEY_FILE contra la key onia-bot-motor de LiteLLM (existe, no revocada, models incluye $LLM_MODEL) y ONIA_BOT_MODEL en /opt/onia/bot/webhook.env. Despues: webhook-server.sh restart." >/dev/null 2>&1
+  else
+    LLM_KEY_CLASE="MASTER (sin $LLM_KEY_FILE o vacio: el bot gasta sin su tope)"
+  fi
   echo "AVISO: LiteLLM con la $LLM_KEY_CLASE." >&2
 fi
 echo "LiteLLM: clave $LLM_KEY_CLASE"
