@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { fileURLToPath } from 'node:url';
-import { dirname, join } from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+import { dirname, join, delimiter } from 'node:path';
 
 import {
   AL_DIA,
@@ -19,11 +19,186 @@ import {
   varadosDesde,
   parsearBuildsSsh,
   buildsDeProduccion,
+  buildsEnDisco,
+  guionBuildsSsh,
+  shaDeImagen,
+  stagedPara,
   REPO,
   RAMA_DEPLOY,
 } from './deploy-vivo.mjs';
+import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 
 const AQUI = dirname(fileURLToPath(import.meta.url));
+
+// ── la receta por IMAGEN (2026-09-24) ───────────────────────────────────────
+// Desde el 24-sep producción es una imagen autocontenida `onia-platform:release-<sha8>`
+// y lo armado vive en `/opt/onia-platform/releases/<sha8>-<yyyymmdd>/` con sus archivos
+// BUILD_ID y SHA. Sin esto el medidor sólo conocía los `build-<sha>` y el publicador
+// salía cerrado con «BUILD_ID vivo sin par en disco» — honesto, pero sin publicar nunca.
+
+test('casa el BUILD_ID vivo contra un release (receta por imagen)', () => {
+  const builds = [
+    { sha: 'abcdef12', buildId: 'IdDelRelease', tipo: 'release', integro: true },
+    { sha: 'b54a148', buildId: 'IdViejo', tipo: 'legacy', integro: true },
+  ];
+  assert.equal(shaQueCorre({ buildIdVivo: 'IdDelRelease', builds }), 'abcdef12');
+});
+
+// El par de HOY: el release 7bcd0a83-20260924 se armó a mano y no tiene BUILD_ID ni SHA
+// escritos. El sha sale del nombre de la imagen que corre el contenedor vivo.
+test('el par del 24-sep: FU8j… corre la imagen release-7bcd0a83 aunque su release no tenga BUILD_ID', () => {
+  const builds = [
+    { sha: '7bcd0a83', buildId: null, tipo: 'release', integro: false },
+    { sha: 'b54a148', buildId: 'sNMW9rcT8D15GNP2qKYlm', tipo: 'legacy', integro: true },
+  ];
+  const sha = shaQueCorre({
+    buildIdVivo: 'FU8j_OHPyRH1XCCr6-0uY',
+    builds,
+    imagenViva: 'onia-platform:release-7bcd0a83',
+  });
+  assert.equal(sha, '7bcd0a83');
+});
+
+test('el nombre de la imagen sólo dice un sha si es un release de onia-platform', () => {
+  assert.equal(shaDeImagen('onia-platform:release-7bcd0a83'), '7bcd0a83');
+  assert.equal(shaDeImagen('node:20-alpine'), null);
+  assert.equal(shaDeImagen('sha256:0123456789abcdef'), null);
+  assert.equal(shaDeImagen('otra-app:release-7bcd0a83'), null);
+  assert.equal(shaDeImagen(null), null);
+});
+
+// La receta vieja: node:20-alpine con el bind de runtime-next. Su imagen no dice nada, y
+// el sha sale —como siempre— de casar el BUILD_ID contra los build-<sha>.
+test('fallback legado: contenedor node:20 casa por BUILD_ID contra build-<sha>', () => {
+  const builds = [{ sha: 'b54a148', buildId: 'sNMW9rcT8D15GNP2qKYlm', tipo: 'legacy', integro: true }];
+  assert.equal(
+    shaQueCorre({ buildIdVivo: 'sNMW9rcT8D15GNP2qKYlm', builds, imagenViva: 'node:20-alpine' }),
+    'b54a148',
+  );
+});
+
+test('sin par en disco y con una imagen que no es release: null, jamás un sha inventado', () => {
+  const builds = [{ sha: 'b54a148', buildId: 'otro', tipo: 'legacy', integro: true }];
+  assert.equal(shaQueCorre({ buildIdVivo: 'X', builds, imagenViva: 'node:20-alpine' }), null);
+});
+
+test('sin poder listar el disco (builds null) no se mide por el nombre de la imagen', () => {
+  assert.equal(shaQueCorre({ buildIdVivo: 'X', builds: null, imagenViva: 'onia-platform:release-7bcd0a83' }), null);
+});
+
+// El swap nuevo necesita una IMAGEN. Un build-<sha> legado del HEAD, aunque esté íntegro,
+// no se puede publicar: contarlo como staged deja al publicador llamando al swap para
+// siempre sin imagen, en rojo cada 3 horas.
+test('un build-<sha> legado del HEAD NO es staged: el swap por imagen no lo puede publicar', () => {
+  const builds = [{ sha: '0db6549', buildId: 'x', tipo: 'legacy', integro: true }];
+  assert.equal(stagedPara(builds, '0db6549'), null);
+  assert.equal(evaluarStaged({ staged: stagedPara(builds, '0db6549'), headSha: '0db6549' }).estado, NINGUNO);
+});
+
+test('el release del HEAD sí es staged, aunque git abrevie el HEAD a 7 y el release use 8', () => {
+  const rel = { sha: '0db6549a', buildId: 'x', tipo: 'release', integro: true, ruta: '/opt/onia-platform/releases/0db6549a-20260925' };
+  assert.equal(stagedPara([rel], '0db6549'), rel);
+  assert.equal(evaluarStaged({ staged: rel, headSha: '0db6549' }).estado, CUBRE);
+});
+
+test('un release del HEAD sin imagen o sin BUILD_ID (integro=false) NO cubre', () => {
+  const rel = { sha: '0db6549a', buildId: null, tipo: 'release', integro: false };
+  assert.notEqual(evaluarStaged({ staged: stagedPara([rel], '0db6549a'), headSha: '0db6549a' }).estado, CUBRE);
+});
+
+test('lee releases y build-<sha> del disco, con su sha, BUILD_ID e integridad', () => {
+  const base = mkdtempSync(join(tmpdir(), 'onia-releases-'));
+  try {
+    mkdirSync(join(base, 'releases', '7bcd0a83-20260924', 'src'), { recursive: true });
+    const nuevo = join(base, 'releases', 'abcdef12-20260925');
+    mkdirSync(nuevo, { recursive: true });
+    writeFileSync(join(nuevo, 'SHA'), 'abcdef1234567890abcdef1234567890abcdef12\n');
+    writeFileSync(join(nuevo, 'BUILD_ID'), 'IdNuevo\n');
+    const sinImagen = join(base, 'releases', '11112222-20260925');
+    mkdirSync(sinImagen, { recursive: true });
+    writeFileSync(join(sinImagen, 'SHA'), '1111222233334444555566667777888899990000\n');
+    writeFileSync(join(sinImagen, 'BUILD_ID'), 'IdSinImagen\n');
+    const legado = join(base, 'build-b54a148', '.next', 'standalone');
+    mkdirSync(join(legado, '.next', 'static'), { recursive: true });
+    mkdirSync(join(legado, 'node_modules'), { recursive: true });
+    writeFileSync(join(legado, '.next', 'BUILD_ID'), 'sNMW9rcT8D15GNP2qKYlm');
+    writeFileSync(join(legado, 'server.js'), '');
+
+    const preguntadas = [];
+    const builds = buildsEnDisco(base, {
+      imagenExiste: (tag) => {
+        preguntadas.push(tag);
+        return tag !== 'onia-platform:release-11112222';
+      },
+    });
+    const por = Object.fromEntries(builds.map((b) => [b.sha, b]));
+
+    const { ruta, ...hoy } = por['7bcd0a83'];
+    assert.deepEqual(hoy, { sha: '7bcd0a83', buildId: null, tipo: 'release', integro: false });
+    assert.match(ruta, /releases\/7bcd0a83-20260924$/);
+    assert.equal(por.abcdef12.buildId, 'IdNuevo');
+    assert.equal(por.abcdef12.integro, true);
+    assert.equal(por['11112222'].integro, false, 'sin la imagen no se puede publicar: no está íntegro');
+    assert.equal(por.b54a148.tipo, 'legacy');
+    assert.equal(por.b54a148.integro, true);
+    assert.ok(preguntadas.includes('onia-platform:release-abcdef12'));
+
+    // Y el par de hoy, contra lo leído del disco.
+    assert.equal(shaQueCorre({ buildIdVivo: 'IdNuevo', builds }), 'abcdef12');
+    assert.equal(shaQueCorre({ buildIdVivo: 'FU8j_OHPyRH1XCCr6-0uY', builds, imagenViva: 'onia-platform:release-7bcd0a83' }), '7bcd0a83');
+    assert.equal(shaQueCorre({ buildIdVivo: 'sNMW9rcT8D15GNP2qKYlm', builds, imagenViva: 'node:20-alpine' }), 'b54a148');
+  } finally {
+    rmSync(base, { recursive: true, force: true });
+  }
+});
+
+// El guion que corre ALLÁ se ejecuta de verdad acá, contra un disco de mentira y con un
+// `docker` falso en el PATH: un guion remoto que no se ejecuta en ningún test se rompe
+// en silencio y el medidor queda ciego por SSH.
+test('el guion remoto lista releases y build-<sha> en el formato que se parsea', () => {
+  const base = mkdtempSync(join(tmpdir(), 'onia-guion-')).replaceAll('\\', '/');
+  try {
+    mkdirSync(`${base}/releases/7bcd0a83-20260924/src`, { recursive: true });
+    mkdirSync(`${base}/releases/abcdef12-20260925`, { recursive: true });
+    writeFileSync(`${base}/releases/abcdef12-20260925/SHA`, 'abcdef1234567890abcdef1234567890abcdef12\n');
+    writeFileSync(`${base}/releases/abcdef12-20260925/BUILD_ID`, 'IdNuevo\n');
+    mkdirSync(`${base}/build-b54a148/.next/standalone/.next/static`, { recursive: true });
+    mkdirSync(`${base}/build-b54a148/.next/standalone/node_modules`, { recursive: true });
+    writeFileSync(`${base}/build-b54a148/.next/standalone/.next/BUILD_ID`, 'sNMW9');
+    writeFileSync(`${base}/build-b54a148/.next/standalone/server.js`, '');
+    mkdirSync(`${base}/bin`);
+    // Sólo la imagen de abcdef12 existe.
+    writeFileSync(`${base}/bin/docker`, '#!/usr/bin/env bash\n[ "$*" = "image inspect onia-platform:release-abcdef12" ]\n', { mode: 0o755 });
+
+    const salida = execFileSync('bash', ['-c', guionBuildsSsh(base)], {
+      encoding: 'utf8',
+      env: { ...process.env, PATH: `${join(base, 'bin')}${delimiter}${process.env.PATH}` },
+    });
+    const por = Object.fromEntries(parsearBuildsSsh(salida, base).map((b) => [b.sha, b]));
+    assert.deepEqual(
+      [por['7bcd0a83']?.tipo, por['7bcd0a83']?.buildId, por['7bcd0a83']?.integro],
+      ['release', null, false],
+    );
+    assert.deepEqual([por.abcdef12?.buildId, por.abcdef12?.integro], ['IdNuevo', true]);
+    assert.deepEqual([por.b54a148?.tipo, por.b54a148?.integro], ['legacy', true]);
+  } finally {
+    rmSync(base, { recursive: true, force: true });
+  }
+});
+
+test('el VPS contesta un release por SSH con la misma forma que el disco', () => {
+  const builds = parsearBuildsSsh(
+    '7bcd0a83||no|release|7bcd0a83-20260924\nabcdef12|IdNuevo|si|release|abcdef12-20260925\nb54a148|sNMW9|si\n',
+    '/opt/onia-platform',
+  );
+  assert.deepEqual(builds[0], {
+    sha: '7bcd0a83', buildId: null, integro: false, tipo: 'release', ruta: '/opt/onia-platform/releases/7bcd0a83-20260924',
+  });
+  assert.equal(builds[1].integro, true);
+  assert.equal(builds[2].tipo, 'legacy');
+  assert.equal(stagedPara(builds, 'abcdef12').sha, 'abcdef12');
+});
 
 // ── qué sha corre ───────────────────────────────────────────────────────────
 // El BUILD_ID vivo se casa contra los build-<sha> del disco. Es la ÚNICA forma
@@ -175,6 +350,7 @@ test('parsea los builds que contestó el VPS a la misma forma que los del disco'
     buildId: 'sNMW9rcT8D15GNP2qKYlm',
     ruta: '/opt/onia-platform/build-b54a148',
     integro: true,
+    tipo: 'legacy',
   });
   // Y sirve para lo único que importa: saber qué sha corre.
   assert.equal(shaQueCorre({ buildIdVivo: 'sNMW9rcT8D15GNP2qKYlm', builds }), 'b54a148');
@@ -331,7 +507,7 @@ test('no devuelve ni un merge, así que el pedido no cuenta dos veces el mismo a
 test('importar el módulo NO mide contra producción ni sale del proceso', () => {
   const salida = execFileSync(
     process.execPath,
-    ['--input-type=module', '-e', `await import(${JSON.stringify(join(AQUI, 'deploy-vivo.mjs'))}); console.log('VIVO');`],
+    ['--input-type=module', '-e', `await import(${JSON.stringify(pathToFileURL(join(AQUI, 'deploy-vivo.mjs')).href)}); console.log('VIVO');`],
     { encoding: 'utf8', timeout: 20000 },
   );
   assert.match(salida, /VIVO/);

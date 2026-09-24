@@ -407,11 +407,20 @@ fi
 # BUILD no. Habia un build-<sha>.sh suelto por deploy (copias identicas salvo el
 # sha) y el deploy del 2026-09-03 se hizo entero a mano, sin dejar script. Un
 # paso a mano en el medio de la cadena es por que un commit verde pasa dias sin
-# llegar al cliente. deploy-gates-swap.sh NO se sincroniza: sigue siendo el
-# unico paso que pide OK de Sergio, y se edita en el VPS a proposito.
+# llegar al cliente.
+#
+# Desde el 2026-09-24 produccion es una IMAGEN (onia-platform:release-<sha8>) y el
+# swap es swap-imagen.sh, que ahora SI se sincroniza. El viejo deploy-gates-swap.sh
+# se editaba en el VPS a proposito "porque pide OK de Sergio", pero quien lo llama
+# es publicar.sh, y a publicar.sh ya lo disparan el `ok <id>` (publicar-aprobado) y
+# el cron publicar-solo con su freno de precio: la firma vive ahi, no en el swap.
+# Un swap sin versionar al lado de un publicador versionado es la copia que se
+# desincroniza. Y el viejo copia a runtime-next, que el contenedor por imagen ya
+# no monta: no hay que correrlo.
 if [ -d /opt/onia-platform ]; then
   mkdir -p /opt/onia-platform/_deploy
   poner "$RAIZ/hermes-content/deploy/onia-platform/build-and-stage.sh"    /opt/onia-platform/build-and-stage.sh
+  poner "$RAIZ/hermes-content/deploy/onia-platform/swap-imagen.sh"        /opt/onia-platform/swap-imagen.sh
   poner "$RAIZ/hermes-content/deploy/onia-platform/recreate-container.sh" /opt/onia-platform/recreate-container.sh
   poner "$RAIZ/hermes-content/deploy/onia-platform/publicar.sh"           /opt/onia-platform/_deploy/publicar.sh
 fi

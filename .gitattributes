@@ -15,3 +15,8 @@ scripts/** text=auto eol=lf
 # mergear ese carril NUNCA. La regla de scripts/** llego el 2026-09-01 y dejo los
 # docs afuera; esto cierra el mismo agujero en la otra carpeta.
 *.md text=auto eol=lf
+
+# Y los guiones de deploy: corren en el VPS y los EJECUTAN los tests de la cadena (con
+# docker/curl de mentira en el PATH). Con autocrlf=true en Windows salian en CRLF y bash
+# moria en la primera linea — el test del pipeline por imagen (2026-09-24) no corria ahi.
+hermes-content/deploy/**/*.sh text=auto eol=lf
