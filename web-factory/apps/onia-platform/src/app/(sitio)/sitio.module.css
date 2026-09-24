@@ -1477,8 +1477,16 @@
   background: var(--green-deep);
   border-bottom-color: transparent;
 }
+/* `.burger` va en la MISMA lista que los otros controles, y no es un detalle:
+   `.nav` esta en display:none hasta 940px, asi que en telefono el boton de menu
+   es la UNICA navegacion que existe. Quedo afuera de esta inversion hasta el
+   2026-09-24 y se pintaba con `var(--ink)` (#141A17) sobre `--green-deep`
+   (#013925): 1,36:1 contra el minimo 4,5 de WCAG — clickeable, del tamano
+   correcto e ilegible. Lo cuida `barra-sobre-hero-se-lee.test.ts`, que deriva
+   los sujetos del markup para que el proximo control nazca exigido. */
 .headerSobreHero .navLink,
-.headerSobreHero .headerLogin {
+.headerSobreHero .headerLogin,
+.headerSobreHero .burger {
   color: color-mix(in srgb, #eafaf1 86%, transparent);
 }
 .headerSobreHero .navLink:hover,
