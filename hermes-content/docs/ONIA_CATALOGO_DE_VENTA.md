@@ -144,6 +144,29 @@ cruza cada ruta declarada contra `app/(dashboard)/` y exige que §4 no contradig
 
 ---
 
+## 4.1 Lo que trabaja sin pantalla
+
+§4 lista **lo que tiene pantalla propia**. Esto no la tiene —y por eso se caía del catálogo—,
+pero es lo que el cliente más nota: corre solo, de noche, sin que nadie abra el sistema.
+
+| Capacidad | De dónde sale | Estado |
+|---|---|---|
+| **Recordatorios de cita por correo** (24 h y 2 h antes) | cron `*/15`, `run-onia-appointment-reminders.sh` | 🟡 **se nombra en la venta.** Medido de punta a punta el 2026-09-24: el cron evalúa la cita (`evaluadas:1, enviados24Email:1, fallidos:0`), el motor escribe `reminder24hSentAt` y **Gmail acepta el correo** (`dsn=2.0.0`, `250 2.0.0 OK`). Es 🟡 y no 🟢 sólo porque ningún cliente real agendó todavía. Sólo en los rubros con agenda (`tieneAgenda()`) |
+
+Se remide a demanda —no se hereda— con `npm run recordatorio:vivo`: siembra su propia cita,
+corre el cron de verdad, exige las tres pruebas por separado (el cron la ve · el motor la
+anota · el correo sale con `status=sent`) y borra su dato al terminar.
+
+⚠️ **Esta capacidad estuvo 18 días sin poder nombrarse por una pregunta mal dirigida.** El
+2026-09-06 se midió entera y se dejó bloqueada esperando que Sergio Urcullo decidiera «¿vuelve
+la frase al material de venta?». Esa no es de las tres que se le preguntan —plata, marca,
+contactar personas—: la regla de la casa ya la tenía contestada (*se habla sólo de lo vivo*, y
+🟡 se vende mostrándolo). Lo que la trababa antes —«se confirma con la primera cita real»—
+ataba una capacidad viva a un cliente que todavía no existe; lo que faltaba eran **citas**, y
+el gate siembra la suya.
+
+---
+
 ## 5. Add-ons
 
 Se venden **después del primer cierre**, sobre cualquier plan. Precios: `lib/pricing.ts`.
