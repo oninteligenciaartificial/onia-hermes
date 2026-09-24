@@ -118,7 +118,13 @@ import { existsSync, readFileSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 
 import { DESTINOS } from './kanban/publicar-aprobado.mjs';
-import { barrerTablero, barrerTableroJson, partirPedido } from './pedido_deploy_entregado.mjs';
+import {
+  archivosDelDryRunBot,
+  barrerTablero,
+  barrerTableroJson,
+  cuerpoCortoArchivos,
+  partirPedido,
+} from './pedido_deploy_entregado.mjs';
 
 const TABLERO = '/root/bin/onia-tablero.sh';
 /** El nodo de casa no tiene `/opt`, pero sí llega al VPS por SSH. Ver `pendienteEnVivo`. */
@@ -529,6 +535,85 @@ export function leerPendienteDelEspejo(salida) {
   return null;
 }
 
+/**
+ * PURA: los ARCHIVOS que el `ok` del bot publicaría, leídos del espejo.
+ *
+ * 🔴 POR QUÉ EXISTE — el punto ciego medido el 2026-09-24. La quinta pregunta saca su sujeto
+ * de `recuentoDeArreglos`, que busca el literal «hay que publicar: N arreglo(s)». Landing,
+ * plataforma y SIAT lo imprimen; el bot NO, porque su detector es el espejo. Así que el ÚNICO
+ * destino que en la práctica necesita un pedido a mano —lo frena `FIRMA_HUMANA`— era justo el
+ * que esa pregunta nunca podía contestar, y salía `OK ... sin juzgar si el cuerpo lo describe`.
+ * Un NO MEDIDO permanente se lee como el ambiental de siempre, y éste además abre con «OK».
+ *
+ * El espejo no imprime recuento, pero imprime algo MEJOR: los NOMBRES. Por eso el bot no se
+ * juzga por cantidad sino por nombre, con las funciones del hermano (`cuerpoCortoArchivos`),
+ * que ya resuelven esa comparación para los destinos que se publican por copia.
+ *
+ * ⚠️ EL SUJETO NO ES TODO LO QUE EL ESPEJO IMPRIME. `SOBRAN EN EL VPS` son archivos que están
+ * en producción y NO en el repo: el espejo quedó atrás al revés, y el `ok` no los publica.
+ * Meterlos en lo que el cuerpo «tiene que nombrar» haría rehacer —y archivar— pedidos sanos,
+ * que es el único daño caro de este control. Cuentan `DISTINTOS` (el VPS corre otra versión) y
+ * `FALTAN EN EL VPS` (deploy a medias): esos dos son lo que la copia va a escribir.
+ *
+ * 🔴 Y ESTO ES UN **PISO**, NO LA LISTA — medido el 2026-09-24, contando los dos lados. Contra
+ * el estado real de ese día el espejo dio 34 archivos y el `--dry-run` del publicador 35, y el
+ * que faltaba era exactamente `knowledge.onia.json`: el espejo lo manda a su línea «no son
+ * código, no cuentan» (correcto para lo que ÉL mide, que son acoples de código) y el publicador
+ * lo copia igual. Es el peor archivo posible para perder — **es el que dispara `FIRMA_HUMANA`**,
+ * o sea la razón por la que el bot necesita un `ok` a mano. Un cuerpo que no lo nombrara habría
+ * salido «completo».
+ *
+ * Por eso esta función NO absuelve a nadie: `quintaPregunta` la usa sólo para ACUSAR (si falta
+ * un nombre que seguro se publica, el defecto es real) y saca la lista de verdad del `--dry-run`
+ * del propio publicador, con el parser del hermano. Un piso prueba «corto»; no prueba «completo».
+ *
+ * TRI-ESTADO, igual que sus hermanas: `null` = no pude leer · `[]` = al día · lista = piso de lo
+ * que publicaría. Un `DESINCRONIZADO` del que no se saca ni un nombre sale `null` y NO `[]`: el
+ * espejo está desincronizado, así que «al día» sería la única lectura que falla EN VERDE.
+ *
+ * @param {string|null} salida  stdout de `espejo-check.mjs`
+ * @returns {string[]|null}
+ */
+export function archivosDelEspejo(salida) {
+  const t = String(salida ?? '');
+  if (!t.trim()) return null;
+  if (/ESPEJO\s+OK/i.test(t)) return [];
+  // `SIN VEREDICTO` es su propia marca y ya dice que el árbol está dudoso: no es un drift.
+  if (!/ESPEJO\s+DESINCRONIZADO/i.test(t)) return null;
+  const archivos = [];
+  for (const l of t.split('\n')) {
+    const m = /^\s*(?:DISTINTOS|FALTAN EN EL VPS)\b[^:]*:\s*(.+)$/.exec(l);
+    if (!m) continue;
+    for (const a of m[1].split(',')) {
+      const nombre = a.trim();
+      if (nombre) archivos.push(nombre);
+    }
+  }
+  return archivos.length > 0 ? archivos : null;
+}
+
+/**
+ * PURA: el veredicto de la quinta pregunta para un destino que se juzga por NOMBRES.
+ *
+ * La gemela exacta de `pedidosQueDescribenDeMenos` y con la misma agregación —basta que UNO
+ * esté corto, todos ilegibles ⇒ `null`—, porque el botón que Sergio Urcullo aprieta puede ser
+ * justo ése y su `ok` publica el universo entero igual. Lo único que cambia es la vara:
+ * `cuerpoCortoArchivos` se IMPORTA del hermano, no se copia, para que la definición de «el
+ * cuerpo lo nombra» no tenga dos versiones que divergen.
+ */
+export function pedidosQueNombranDeMenos(pedidosDelDestino, publicaria) {
+  const cortos = [];
+  let algunoLegible = false;
+  for (const p of pedidosDelDestino || []) {
+    const v = cuerpoCortoArchivos({ texto: p?.texto, publicaria });
+    if (v.estado === 'NO_MEDIDO') continue;
+    algunoLegible = true;
+    if (v.estado === 'SUB_DESCRIBE') cortos.push(p.id);
+  }
+  if (!algunoLegible) return null;
+  return cortos;
+}
+
 // ── medición viva ──────────────────────────────────────────────────────────────────────
 
 /**
@@ -737,13 +822,44 @@ export function _salidaParaPruebas(clave) {
  * dejaría sin sujeto. Devuelve lo que `clasificarCobertura` espera: `null` = no se pudo
  * juzgar, `[]` = el cuerpo alcanza, ids = pedidos que describen de menos.
  */
-export function quintaPregunta(destino, delDestino, { salida, anotar = anotarCausa } = {}) {
+export function quintaPregunta(destino, delDestino, { salida, anotar = anotarCausa, correr = dondeVive } = {}) {
   const seco = recuentoDeArreglos(salida);
   if (seco === null) {
-    // El bot no entra por acá: su detector es el espejo, que no imprime recuento. Decirlo con
+    // ── LA RAMA POR NOMBRES, del 2026-09-24 ────────────────────────────────────────────
+    // Acá se volvía `null` para todo detector sin recuento, y el único que cae en ese caso es
+    // el bot — el único destino que de verdad necesita el `ok` a mano. Ver `archivosDelEspejo`.
+    //
+    // La lista se le pide al PUBLICADOR, que es quien copia, y se lee con el parser del hermano
+    // (`archivosDelDryRunBot`, importado y no copiado): es la única fuente que incluye lo que no
+    // es código y se publica igual —`knowledge.onia.json`, el que dispara `FIRMA_HUMANA`—, y el
+    // espejo lo omite por diseño. Cuesta un SSH y sólo se paga cuando hay un pedido que juzgar.
+    const publicaria = archivosDelDryRunBot(correr(`bash ${DESTINOS[destino]} --dry-run 2>&1`, { clave: `cuerpo:${destino}` }));
+    if (Array.isArray(publicaria) && publicaria.length > 0) {
+      const mudos = pedidosQueNombranDeMenos(delDestino, publicaria);
+      if (mudos === null) {
+        anotar(`cuerpo:${destino}`, `ningun pedido vivo nombra los archivos que su ok publica (hoy: ${publicaria.length})`);
+        return null;
+      }
+      if (mudos.length > 0) anotar(`cuerpo:${destino}`, `su ok publica ${publicaria.length} archivo(s) y el cuerpo no los nombra todos`);
+      return mudos;
+    }
+    // Sin el publicador, el espejo es un PISO: alcanza para ACUSAR a un cuerpo que se saltea un
+    // archivo que seguro se publica, y NO alcanza para absolverlo (le falta lo que el espejo no
+    // cuenta como código). Aprobar con un piso es la única salida de acá que falla EN VERDE.
+    const piso = archivosDelEspejo(salida);
+    if (piso !== null && piso.length > 0) {
+      const mudos = pedidosQueNombranDeMenos(delDestino, piso);
+      if (mudos !== null && mudos.length > 0) {
+        anotar(`cuerpo:${destino}`, `sin el publicador, el espejo ya muestra ${piso.length} archivo(s) y el cuerpo no los nombra todos`);
+        return mudos;
+      }
+      anotar(`cuerpo:${destino}`, `no pude correr su publicador en seco; el espejo es un PISO (${piso.length} archivo(s)) y no alcanza para dar el cuerpo por completo`);
+      return null;
+    }
+    // Y si TAMPOCO se pueden sacar nombres, sigue siendo NO MEDIDO con su causa: decirlo con
     // el nombre del destino es lo que impide que «no sé preguntarle» se lea como «lo pregunté
     // y está bien» — la distinción que sostiene todo este archivo.
-    anotar(`cuerpo:${destino}`, 'su detector no imprime "hay que publicar: N arreglo(s)", asi que no hay con que comparar el cuerpo');
+    anotar(`cuerpo:${destino}`, 'su detector no imprime "hay que publicar: N arreglo(s)" ni nombres de archivo, asi que no hay con que comparar el cuerpo');
     return null;
   }
   const cortos = pedidosQueDescribenDeMenos(delDestino, seco);
@@ -1219,9 +1335,56 @@ function selfCheck() {
     'la quinta pregunta saca su recuento de la salida CRUDA del detector, no de otro lado',
   );
   ok(/dice 7 arreglo/.test(String(causasQuinta.get('cuerpo:landing'))), 'y deja la causa con el numero que midio');
+  // ── EL BOT SE JUZGA POR NOMBRES, del 2026-09-24 ───────────────────────────────────────
+  // Acá vivían dos casos que EXIGÍAN el punto ciego: que el bot saliera `null` y que su causa
+  // dijera «no imprime recuento». Eran ciertos como descripción y falsos como regla — el bot
+  // es el ÚNICO destino que en la práctica necesita un `ok` a mano (lo frena `FIRMA_HUMANA`),
+  // así que dejarlo permanentemente NO MEDIDO deja sin medir justo lo que este gate existe
+  // para medir. El espejo no imprime recuento, pero imprime algo MEJOR: los nombres.
+  const ESPEJO_2 = [
+    'ESPEJO DESINCRONIZADO — hermes-content/deploy/vps-ops/bot vs 187.77.16.63:/opt/onia/bot',
+    '  DISTINTOS (el VPS corre otra version): run-turn.mjs, config.mjs',
+    '  SOBRAN EN EL VPS (el espejo quedo atras): viejo.mjs',
+    '  (no son codigo, no cuentan: knowledge.onia.json)',
+  ].join('\n');
+  const cuerpoBot = (txt) => [{ id: 't_b', destino: 'bot', texto: `DESPLEGAR: bot\n${txt}`, creado: hace(1) }];
+  /** El publicador en seco: la fuente AUTORITATIVA, la única que ve `knowledge.onia.json`. */
+  const SECO_BOT = ['  CAMBIA run-turn.mjs', '  CAMBIA config.mjs', '  CAMBIA knowledge.onia.json', 'total: 3 archivo(s)'].join('\n');
+  const conSeco = (s) => () => s;
+  const quintaBot = (txt, seco = SECO_BOT) => quintaPregunta('bot', cuerpoBot(txt), { salida: ESPEJO_2, anotar, correr: conSeco(seco) });
+  ok(quintaBot('arreglé run-turn.mjs').join() === 't_b', 'el bot SI se juzga: un cuerpo que nombra 1 de los 3 archivos que su ok publica sale corto');
   ok(
-    quintaPregunta('bot', conCuerpo(cuerpoCon(6)), { salida: 'ESPEJO DESINCRONIZADO — 28 archivos', anotar }) === null,
-    'un detector sin recuento (el espejo del bot) no se puede juzgar: null, no aprobado',
+    quintaBot('arreglé run-turn.mjs, config.mjs y knowledge.onia.json').length === 0,
+    'y el cuerpo que los nombra TODOS cumple: lista vacia, no null',
+  );
+  // 🔴 EL CASO QUE ME COSTÓ EL ARREGLO ENTERO, medido contra los dos lados el 2026-09-24: el
+  // espejo daba 34 archivos y el publicador 35, y el que faltaba era `knowledge.onia.json` —el
+  // que dispara `FIRMA_HUMANA`, o sea la razón de que el pedido exista—. Juzgando por el espejo
+  // este cuerpo salía «completo» sin nombrar nunca lo único que obliga a un `ok` a mano.
+  ok(
+    quintaBot('arreglé run-turn.mjs y config.mjs').join() === 't_b',
+    'un cuerpo que nombra todo lo que el espejo ve pero NO knowledge.onia.json sale corto igual',
+  );
+  ok(
+    !archivosDelEspejo(ESPEJO_2).includes('knowledge.onia.json'),
+    'porque el espejo NO lo cuenta (va a su linea "no son codigo"): por eso es un piso, no la lista',
+  );
+  // La trampa que haría rehacer pedidos sanos: «SOBRAN EN EL VPS» no lo publica el `ok`.
+  ok(
+    archivosDelEspejo(ESPEJO_2).join() === 'run-turn.mjs,config.mjs',
+    'SOBRAN EN EL VPS no entra en lo que el cuerpo tiene que nombrar: el espejo quedo atras al reves',
+  );
+  ok(archivosDelEspejo('ESPEJO OK — el codigo es el que corre').length === 0, 'espejo al dia: lista vacia, no null');
+  ok(archivosDelEspejo('ESPEJO SIN VEREDICTO — arbol dudoso') === null, 'sin veredicto sigue siendo NO MEDIDO');
+  ok(archivosDelEspejo('ESPEJO DESINCRONIZADO — sin una sola linea de archivos') === null, 'desincronizado sin nombres tampoco se juzga: null, no aprobado');
+  // Sin el publicador, el piso ACUSA pero no ABSUELVE. Las dos mitades, porque aprobar con un
+  // piso es la única salida de acá que falla en verde.
+  ok(quintaBot('arreglé run-turn.mjs', null).join() === 't_b', 'sin publicador en seco, el piso del espejo todavia ACUSA al cuerpo que se saltea un archivo');
+  ok(quintaBot('arreglé run-turn.mjs y config.mjs', null) === null, 'pero NO absuelve: nombrar todo el piso no prueba que el cuerpo este completo');
+  ok(/PISO/.test(String(causasQuinta.get('cuerpo:bot'))), 'y lo dice con su causa, para que ese NO MEDIDO no se lea como un OK');
+  ok(
+    quintaPregunta('bot', cuerpoBot('lo arreglé'), { salida: 'ESPEJO DESINCRONIZADO — 28 archivos', anotar, correr: conSeco(null) }) === null,
+    'un espejo del que no se pueden sacar nombres sigue siendo NO MEDIDO',
   );
   ok(/no imprime/.test(String(causasQuinta.get('cuerpo:bot'))), 'y ese null tambien dice por que, o el rojo seria irreproducible');
   ok(
