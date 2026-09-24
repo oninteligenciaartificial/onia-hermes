@@ -11,12 +11,27 @@
 # Va por Telegram DIRECTO (ONIA_TG_DIRECTO=1), no al tablero: aprobar un pago es una
 # decision de Sergio Urcullo, no trabajo que un loop pueda arreglar solo.
 #
+# QUE AVISA — plata que entro y un plan que no se activo solo:
+#   - `comprobante`: PENDING con comprobante subido (`receiptPath`). Es el flujo manual,
+#     que SIEMPRE sube la imagen. No se mira solo PENDING: el QR del BCP crea su fila
+#     PENDING al GENERAR el QR, antes de que nadie pague (app/api/subscription-payment/
+#     bcp-qr), y cada QR regenerado es otra fila. Eso no es un pago.
+#   - `qr`: fila del QR del BCP que el webhook dejo PENDING con "requiere revision humana"
+#     (el banco confirmo la plata pero el monto/plan/referencia no cuadra).
+#   - `qr-viejo`: pagaron un QR que ya habiamos reemplazado; el webhook lo deja REJECTED
+#     con "Revisar y acreditar a mano". Queda REJECTED aunque se acredite: por eso tiene
+#     UN aviso y no entra al recordatorio (seria para siempre).
+#   Las marcas salen de lib/gateway/bcp-qr.ts y app/api/webhooks/bcp/route.ts: 🔴 si
+#   cambian alla, cambian aca (la prueba las compara con el fuente).
+#
 # QUE HACE (cron cada 10 min):
-#   - UN aviso por cada pago PENDING nuevo: negocio, plan, ciclo, monto, cuanto lleva
-#     esperando y el enlace al panel. La marca es el id del pago en $ESTADO/avisados,
-#     y se escribe SOLO si Telegram confirmo: si el envio falla, reintenta en 10 min.
+#   - UN aviso por cada pago nuevo: negocio, plan, ciclo, monto, cuanto lleva esperando
+#     y el enlace al panel. La marca es el id del pago en $ESTADO/avisados, y se
+#     escribe SOLO si Telegram confirmo: si el envio falla, reintenta en 10 min.
 #   - UN recordatorio al dia (desde las $HORA hs de La Paz) con los PENDING de mas de
 #     24 h. Un dia entero sin revisar es un cliente que pago y sigue sin plan.
+#   - Una vuelta a la vez (flock) y docker con timeout: con el daemon colgado (pasa en
+#     este VPS) no se apilan copias que despues avisan el mismo pago N veces.
 #   - Si no puede leer la base lo dice UNA vez (tarea del tablero, es un problema del
 #     sistema) y avisa cuando vuelve, cerrando esa tarea. Un vigia que falla callado
 #     es exactamente el agujero que vino a tapar.
@@ -49,6 +64,8 @@ SIN_BASE="$ESTADO/sin-base.avisado"       # incidente abierto; guarda el id de s
 mkdir -p "$ESTADO" && touch "$AVISADOS" || { echo "$(date -u +%FT%TZ) FALLO: no puedo escribir $ESTADO"; exit 1; }
 
 log() { printf '%s %s\n' "$(date -u +%FT%TZ)" "$*"; }
+exec 9>"$ESTADO/lock"
+if ! flock -n 9; then log "la vuelta anterior sigue corriendo: salgo"; exit 0; fi
 esc() { sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g'; }
 directo() { ONIA_TG_DIRECTO=1 "$TG" "$1" >/dev/null 2>&1; }
 espera() {  # minutos -> texto corto
@@ -65,6 +82,7 @@ NO_CLIENTE="starts_with(o.slug, 'demo-') or starts_with(o.slug, 'zz-qa-') or sta
   or $EMAIL like '%@onia.com.bo'
   or $EMAIL in ('sergio.urcullo.m@gmail.com', 'oninteligenciaartificial@gmail.com')"
 SQL="select sp.id,
+  case when sp.\"receiptPath\" is not null then 'comprobante' when sp.status = 'PENDING' then 'qr' else 'qr-viejo' end,
   regexp_replace(o.name, '[[:cntrl:]]+', ' ', 'g'),
   case sp.plan when 'whatsapp_addon' then 'Add-on Chatbot WhatsApp' else sp.plan end,
   case sp.cycle when 'monthly' then 'mensual' when 'annual' then 'anual' else sp.cycle end,
@@ -72,12 +90,15 @@ SQL="select sp.id,
   greatest(0, floor(extract(epoch from (now() at time zone 'utc') - sp.\"createdAt\") / 60))::int
 from subscription_payments sp
 join organizations o on o.id = sp.\"organizationId\"
-where sp.status = 'PENDING' and not ($NO_CLIENTE)
+where not ($NO_CLIENTE)
+  and ((sp.status = 'PENDING' and sp.\"receiptPath\" is not null)
+    or (sp.\"bankName\" = 'BCP QR dinamico' and sp.status in ('PENDING', 'REJECTED')
+      and (sp.\"adminNotes\" like '%requiere revision humana%' or sp.\"adminNotes\" like '%Revisar y acreditar a mano%')))
 order by sp.\"createdAt\""
 
 ERR=$(mktemp)
 trap 'rm -f "$ERR"' EXIT
-FILAS=$(docker exec supabase-db psql -U postgres -d postgres -AtqX -v ON_ERROR_STOP=1 -F $'\t' -c "$SQL" 2>"$ERR" | esc)
+FILAS=$(timeout 60 docker exec supabase-db psql -U postgres -d postgres -AtqX -v ON_ERROR_STOP=1 -F $'\t' -c "$SQL" 2>"$ERR" | esc)
 RC=$?
 
 # ── La base no contesta: un aviso por incidente, al tablero ──────────────────
@@ -105,21 +126,26 @@ fi
 
 # ── Un aviso por pago nuevo; juntar los de mas de 24 h ──────────────────────
 VIEJOS=""
-while IFS=$'\t' read -r ID NEGOCIO PLAN CICLO MONTO MIN; do
+while IFS=$'\t' read -r ID TIPO NEGOCIO PLAN CICLO MONTO MIN; do
   [ -n "${ID:-}" ] || continue
+  case "$TIPO" in
+    qr)       TITULO="Pago por QR del BCP para revisar: la plata entro y el plan NO se activo solo"; ACCION="Ver la nota del pago y aprobar" ;;
+    qr-viejo) TITULO="Pago por QR del BCP sobre un QR ya reemplazado: la plata entro y el plan NO se activo"; ACCION="Acreditar a mano" ;;
+    *)        TITULO="Comprobante nuevo: un cliente PAGO y espera su plan"; ACCION="Revisar y aprobar" ;;
+  esac
   if ! grep -qxF "$ID" "$AVISADOS"; then
-    if directo "💰 <b>Comprobante nuevo: un cliente PAGO y espera su plan</b>
+    if directo "💰 <b>$TITULO</b>
 <b>$NEGOCIO</b>
 $PLAN · $CICLO · <b>Bs $MONTO</b>
 Esperando hace $(espera "$MIN").
-Revisar y aprobar: $PANEL"; then
+$ACCION: $PANEL"; then
       echo "$ID" >> "$AVISADOS"
       log "avisado $ID"
     else
       log "FALLO Telegram con $ID (se reintenta en la proxima vuelta)"
     fi
   fi
-  [ "$MIN" -ge 1440 ] && VIEJOS+="• <b>$NEGOCIO</b> · $PLAN · Bs $MONTO · hace $(espera "$MIN")"$'\n'
+  [ "$TIPO" != qr-viejo ] && [ "$MIN" -ge 1440 ] && VIEJOS+="• <b>$NEGOCIO</b> · $PLAN · Bs $MONTO · hace $(espera "$MIN")"$'\n'
 done <<< "$FILAS"
 
 # ── Recordatorio diario ─────────────────────────────────────────────────────
@@ -128,7 +154,7 @@ HOY=$(date -u -d '-4 hours' +%F)
 AHORA_H=$(date -u -d '-4 hours' +%H)
 if [ -n "$VIEJOS" ] && [ "$(cat "$ESTADO/recordatorio.dia" 2>/dev/null)" != "$HOY" ] && [ "$((10#$AHORA_H))" -ge "$HORA" ]; then
   N=$(printf '%s' "$VIEJOS" | grep -c .)
-  if directo "⏰ <b>$N comprobante(s) sin revisar hace mas de 24 h</b> — clientes que pagaron y siguen sin plan:
+  if directo "⏰ <b>$N pago(s) sin revisar hace mas de 24 h</b> — clientes que pagaron y siguen sin plan:
 $VIEJOS
 $PANEL"; then
     echo "$HOY" > "$ESTADO/recordatorio.dia"

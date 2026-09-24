@@ -8,6 +8,7 @@ set -uo pipefail
 
 DIR=$(cd "$(dirname "$0")" && pwd)
 SUT="$DIR/security-watch.sh"
+TIMEOUT_REAL=$(command -v timeout)
 TMP=$(mktemp -d)
 trap 'rm -rf "$TMP"' EXIT
 mkdir -p "$TMP/bin" "$TMP/estado"
@@ -21,6 +22,7 @@ falla() { printf '  FALLA - %s\n     esperaba: %s\n     obtuvo:   %s\n' "$1" "$2
 cat > "$TMP/bin/docker" <<'FIN'
 #!/usr/bin/env bash
 if [ "$1" = inspect ]; then
+  [ "${INSPECT_CUELGA:-0}" = 1 ] && exec sleep 30   # el daemon colgado: no contesta nunca
   [ "${REST_FALLA:-0}" = 1 ] && { echo "Error: No such object: $2" >&2; exit 1; }
   printf 'PATH=/usr/bin\nPGRST_DB_SCHEMAS=%s\nPGRST_JWT_SECRET=no-se-lee\n' "${REST_ESQUEMAS-public,storage,graphql_public,onia_center}"
   exit 0
@@ -32,6 +34,14 @@ if [ "$2" != supabase-db ] || [ "${SIN_CONTENEDOR:-0}" = 1 ]; then
   echo "Error response from daemon: No such container: $2 ${RUIDO:-}" >&2; exit 1
 fi
 cat "$TMP_FILAS"
+FIN
+# timeout falso: anota QUE envuelve y corre el de verdad con un plazo corto.
+cat > "$TMP/bin/timeout" <<'FIN'
+#!/usr/bin/env bash
+printf '%s
+' "$*" >> "$TMP_TIMEOUT"
+shift
+exec "$TIMEOUT_REAL" "${TIMEOUT_PRUEBA:-20}" "$@"
 FIN
 cat > "$TMP/bin/ufw" <<'FIN'
 #!/usr/bin/env bash
@@ -67,8 +77,8 @@ fila() { printf '%s\t%s\t%s\n' "$@"; }   # tipo nombre roles
 SANA="$(fila total 82 '')"
 
 run() {
-  : > "$TMP/mensajes.txt"
-  PATH="$TMP/bin:$PATH" \
+  : > "$TMP/mensajes.txt"; : > "$TMP/timeout.txt"
+  PATH="$TMP/bin:$PATH" TIMEOUT_REAL="$TIMEOUT_REAL" TMP_TIMEOUT="$TMP/timeout.txt" \
   TMP_SQL="$TMP/sql.txt" TMP_ARGS="$TMP/args.txt" TMP_FILAS="$TMP/filas.txt" TMP_MENSAJES="$TMP/mensajes.txt" \
   ONIA_TG="$TMP/tg.sh" ONIA_SECWATCH_ESTADO="$TMP/estado" \
   bash "$SUT" > "$TMP/log.txt" 2>&1
@@ -86,16 +96,34 @@ case "$(cat "$TMP/args.txt")" in "exec supabase-db psql"*) ok "consulta el conte
 grep -q 'SSH fallidos 24h: 1 | IPs bloqueadas ahora: 2 (total 7)' "$TMP/log.txt" && ok "el resumen de accesos queda en el log, sin '0 0'" || falla "resumen" "SSH fallidos 24h: 1 | IPs ... 2 (total 7)" "$(cat "$TMP/log.txt")"
 grep -q 'no-se-lee' "$TMP/log.txt" && falla "secretos" "el env de supabase-rest no se imprime" "aparecio en el log" || ok "no imprime el resto del env de supabase-rest"
 
-# La consulta: solo lectura y la clase entera.
+# La consulta ES el chequeo, y aca no hay Postgres para correrla: se fija TEXTUAL. Un
+# `not` de mas o un `and false` la dejan ciega sin romper nada (la revision lo probo
+# contra la version anterior de esta prueba, que solo buscaba pedazos). Cambiarla es a
+# proposito: se cambia aca Y se corre de verdad, solo lectura, contra supabase-db.
 SQL=$(cat "$TMP/sql.txt")
-case "$SQL" in with*select*) ok "la consulta es un SELECT" ;; *) falla "select" "with ... select" "$SQL" ;; esac
-if printf '%s' "$SQL" | grep -qiE '\b(insert into|update [a-z_]+ set|delete from|drop|alter|truncate [a-z]|grant|revoke|create)\b'; then falla "solo lectura" "sin escrituras" "$SQL"; else ok "no escribe nada"; fi
-for pieza in "relrowsecurity" "has_table_privilege('anon'" "has_table_privilege('authenticated'" "has_any_column_privilege('anon'" \
-             "has_schema_privilege('anon'" "'v', 'm'" "security_invoker" \
-             "not rls and (anon or auth)" "not invoker and (anon or auth)" \
-             "array['public','storage','graphql_public','onia_center']"; do
-  case "$SQL" in *"$pieza"*) ok "la consulta cubre: $pieza" ;; *) falla "clase" "$pieza" "(falta)" ;; esac
-done
+norm() { tr -s '[:space:]' ' ' | sed 's/^ //; s/ $//'; }
+read -r -d '' ESPERADO <<'SQL'
+with rel as (
+  select n.nspname as esquema, c.relname, c.relkind in ('r', 'p') as es_tabla, c.relrowsecurity as rls,
+    coalesce(array_to_string(c.reloptions, ','), '') ~* 'security_invoker=(true|on|yes|1)' as invoker,
+    has_schema_privilege('anon', n.oid, 'USAGE') and (has_table_privilege('anon', c.oid, 'SELECT,INSERT,UPDATE,DELETE,TRUNCATE,REFERENCES,TRIGGER')
+      or has_any_column_privilege('anon', c.oid, 'SELECT,INSERT,UPDATE,REFERENCES')) as anon,
+    has_schema_privilege('authenticated', n.oid, 'USAGE') and (has_table_privilege('authenticated', c.oid, 'SELECT,INSERT,UPDATE,DELETE,TRUNCATE,REFERENCES,TRIGGER')
+      or has_any_column_privilege('authenticated', c.oid, 'SELECT,INSERT,UPDATE,REFERENCES')) as auth
+  from pg_class c join pg_namespace n on n.oid = c.relnamespace
+  where n.nspname = any (array['public','storage','graphql_public','onia_center']) and c.relkind in ('r', 'p', 'v', 'm')
+)
+select 'total', count(*)::text, '' from rel where es_tabla and esquema = 'public'
+union all
+select 'tabla', esquema || '.' || relname, concat_ws(', ', case when anon then 'anon' end, case when auth then 'authenticated' end)
+  from rel where es_tabla and not rls and (anon or auth)
+union all
+select 'vista', esquema || '.' || relname, concat_ws(', ', case when anon then 'anon' end, case when auth then 'authenticated' end)
+  from rel where not es_tabla and not invoker and (anon or auth)
+SQL
+[ "$(printf '%s' "$SQL" | norm)" = "$(printf '%s' "$ESPERADO" | norm)" ] && ok "la consulta es exactamente la fijada (solo lectura, la clase entera)"   || falla "consulta" "$(printf '%s' "$ESPERADO" | norm)" "$(printf '%s' "$SQL" | norm)"
+grep -q '^120 docker exec supabase-db psql' "$TMP/timeout.txt" && ok "docker exec va con timeout" || falla "timeout exec" "120 docker exec supabase-db psql" "$(cat "$TMP/timeout.txt")"
+grep -q '^60 docker inspect supabase-rest' "$TMP/timeout.txt" && ok "docker inspect va con timeout" || falla "timeout inspect" "60 docker inspect supabase-rest" "$(cat "$TMP/timeout.txt")"
 
 # 2. Una tabla SIN RLS que anon puede tocar: UN aviso, DIRECTO, con el nombre.
 filas "$SANA
@@ -175,6 +203,14 @@ run
 REST_ESQUEMAS="public,x');drop table y;--" run
 case "$(cat "$TMP/sql.txt")" in *drop*) falla "inyeccion" "el esquema raro fuera del SQL" "entro" ;; *) ok "esquema con nombre raro: fuera del SQL" ;; esac
 case "$MSGS" in *"nombre inesperado"*) ok "y lo avisa" ;; *) falla "esquema raro" "nombre inesperado" "${MSGS:-(nada)}" ;; esac
+
+# 11. Docker colgado en el `inspect` (lo primero que toca): no se queda ciego esperando.
+filas "$SANA"; run   # arranca sano
+INICIO=$SECONDS
+INSPECT_CUELGA=1 TIMEOUT_PRUEBA=2 run
+DURO=$((SECONDS - INICIO))
+[ "$DURO" -lt 15 ] && ok "inspect colgado: corta en ${DURO}s, no espera" || falla "inspect colgado" "< 15 s" "${DURO}s"
+case "$MSGS" in *"NO PUDE leer que esquemas sirve la API"*) ok "inspect colgado: lo avisa" ;; *) falla "inspect colgado" "NO PUDE leer que esquemas" "${MSGS:-(nada)}" ;; esac
 
 echo
 if [ "$FALLOS" = "0" ]; then echo "security-watch: TODO VERDE"; exit 0; fi

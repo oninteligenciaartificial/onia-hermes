@@ -70,7 +70,9 @@ systemctl is-active --quiet fail2ban || PROBLEMAS+=("fail2ban NO esta corriendo"
 
 # ── 2 y 3. La base: que expone la API ───────────────────────────────────────
 ESQUEMAS="public"
-DE_LA_API=$(docker inspect "$REST" --format '{{range .Config.Env}}{{println .}}{{end}}' 2>/dev/null \
+# timeout en TODA llamada a docker: con el daemon colgado (pasa en este VPS) un vigia sin
+# plazo se queda esperando para siempre, que es estar ciego otra vez.
+DE_LA_API=$(timeout 60 docker inspect "$REST" --format '{{range .Config.Env}}{{println .}}{{end}}' 2>/dev/null \
   | sed -n 's/^PGRST_DB_SCHEMAS=//p' | head -1)
 if [ -z "$DE_LA_API" ]; then
   PROBLEMAS+=("NO PUDE leer que esquemas sirve la API (PGRST_DB_SCHEMAS de $REST): miro solo public")
@@ -108,7 +110,7 @@ select 'vista', esquema || '.' || relname, concat_ws(', ', case when anon then '
 
 ERR=$(mktemp)
 trap 'rm -f "$ERR"' EXIT
-# timeout: una base colgada es una base que no se pudo mirar, no un cron trabado para siempre.
+# Una base colgada es una base que no se pudo mirar, no un cron trabado para siempre.
 SALIDA=$(timeout 120 docker exec "$DB" psql -U postgres -d postgres -AtqX -v ON_ERROR_STOP=1 -F $'\t' -c "$SQL" 2>"$ERR")
 RC=$?
 TOTAL=""
