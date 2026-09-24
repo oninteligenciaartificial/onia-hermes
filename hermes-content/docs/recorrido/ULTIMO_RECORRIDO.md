@@ -12,6 +12,45 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-24 15:12 La Paz — `BUILD_ID` sin cambios (no se repitió dental); escalón 3 nuevo: `/agents` ("Agentes"), nunca antes probado por este carril
+
+`ONIA_ALTA_AUTOMATICA=abierta`, `zz-qa-` en 0 al arrancar. `docker exec onia-platform cat
+/app/.next/BUILD_ID` → `9tuk1Qk2BjQ2j2HdJcL8u`, **igual** al citado en la entrada de arriba (y en
+las tres anteriores) — no correspondía repetir dental.
+
+**Escalón 3 — la pantalla `/agents` ("Agentes"), nunca antes tocada por este carril** (no
+existía `probar_*.mjs` para esta superficie). `module.agents` entra por PLAN (Pro+,
+`agentsIncluded` — `lib/platform/entitlements.ts:52` de `onia-platform`), no por entitlement
+sembrado a mano; los flags `AGENTS_RUNTIME=1` y `PLATFORM_LAYER=1` ya están activos en el
+contenedor (verificado antes de escribir el instrumento, para no perseguir un `redirect` que en
+realidad fuera un flag apagado). Instrumento nuevo: `scripts/probar_agentes.mjs`. Org `zz-qa-`
+sembrada por SQL, plan `professional`, rubro dental, `trialEnd`/`planEnd` a un año (org vigente,
+no vencida — la memoria compartida advierte que una org vencida da `agents_runtime_disabled` y
+eso mide otra cosa), ADMIN dueño con `clinic_settings`, **sin agentes sembrados** (lista vacía
+real, no un fixture). Con sesión real (magic link + cookies, 390×844):
+
+- `/agents` abre sin redirigir a `/dashboard` ni a `/login` (lo que pasaría si
+  `requireFeature("module.agents")` rechazara la org) y sin ningún `>=400` en la carga.
+- **Equipo de agentes** en el vocabulario correcto de dental: "Recall — reactivación de
+  **pacientes**", "Cobrador — saldos vencidos", "Confirmador — citas de mañana" — los tres roles
+  que `rolCorreEnTrack` habilita para un track con `patient`+`appointment`. **El Captador NO
+  aparece** (gateado por `addon.captador`, que esta org no compró) — la pantalla no promete un
+  rol que el runtime tampoco correría.
+- **Acciones propuestas y aprobadas**: el texto es el de siempre ("Todavía no hay propuestas...",
+  `TEXTO_NUNCA_PROPUSIERON`) — correcto porque la org recién sembrada tiene 0 corridas, no el
+  texto condicionado que usaría si hubiera propuestas rechazadas/descartadas.
+- La promesa "Nada se envía solo" y el link a **Pendientes** (`/pending`) están a la vista.
+  Captura `extra-agentes-00-pantalla.png` — limpia, sin texto cortado, sin "muy pronto".
+
+**Sin hallazgo.** Limpieza verificada: `organizations`/`auth.users` con `zz-qa-%` → 0 al cerrar.
+
+**Próxima vuelta:** si `BUILD_ID` sigue en `9tuk1Qk2BjQ2j2HdJcL8u`, otro escalón nuevo — `/agents`
+con agentes YA sembrados y una corrida real (para ver la rama `agents.length > 0` y el estado
+`RUN_STATUS_LABELS`, que este instrumento no ejercitó porque sembró la org vacía a propósito), o
+`/pending` (aprobar/rechazar una propuesta real), o rotar de rubro.
+
+---
+
 ## 2026-09-24 14:09-14:20 La Paz — huérfano de la vuelta anterior limpiado a mano; recorrido dental 9/9 de nuevo
 
 `ONIA_ALTA_AUTOMATICA=abierta`. Antes de tocar nada: `select count(*) from organizations where
