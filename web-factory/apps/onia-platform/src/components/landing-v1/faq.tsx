@@ -30,7 +30,7 @@ export const FAQS: { q: string; a: string }[] = [
     // El medio de pago NO se tipea: lo dice `@/content/medio-de-pago`, que sigue
     // a la capacidad que producción tiene encendida. Acá decía «pagás por QR» y
     // no existe ningún QR — ver el encabezado de ese módulo.
-    a: `${MEDIO_DE_PAGO.alTerminarLaPrueba} Si no pagás, tu cuenta se pausa pero tus datos no se borran de entrada: podés exportarlos o volver cuando quieras.`,
+    a: `${MEDIO_DE_PAGO.alTerminarLaPrueba} La prueba dura ${PRUEBA.dias} días y tiene ${PRUEBA.diasDeGracia} día adicional de gracia. Después, si no activás un plan, tu cuenta queda en solo lectura: podés consultar tus datos y el administrador puede exportarlos, pero no registrar cambios. Tus datos no se borran de inmediato.`,
   },
   {
     q: "¿La factura al SIN ya funciona?",
