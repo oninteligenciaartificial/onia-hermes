@@ -321,8 +321,15 @@ export function nuevosParaAvisar(colgados, estadoPrevio) {
   return nuevos;
 }
 
-/** El estado nuevo, conservando lo que ya habia de otras conversaciones. */
-export function armarEstado(estadoPrevio, colgados) {
+/**
+ * El estado nuevo, conservando lo que ya habia de otras conversaciones.
+ *
+ * `idTarea` es la tarea que el aviso acaba de dejar viva. Se anota porque el barrido de la
+ * corrida siguiente la tiene que poder encontrar aunque para entonces el titulo se escriba de
+ * otra forma: el id es lo unico del aviso que no cambia. Las anteriores ya se archivaron en
+ * esta misma corrida, asi que la lista queda con una sola.
+ */
+export function armarEstado(estadoPrevio, colgados, idTarea) {
   const avisados = { ...(estadoPrevio?.avisados || {}) };
   for (const c of colgados || []) {
     avisados[String(c.conversationId)] = {
@@ -330,7 +337,8 @@ export function armarEstado(estadoPrevio, colgados) {
       escalon: escalonDe(c.esperaMin),
     };
   }
-  return { ...(estadoPrevio || {}), avisados };
+  const tareas = idTarea ? [String(idTarea)] : estadoPrevio?.tareas;
+  return { ...(estadoPrevio || {}), avisados, ...(tareas ? { tareas } : {}) };
 }
 
 /** Telegram va en HTML (`onia-tg.sh`), asi que el texto de la persona se escapa siempre. */
@@ -519,12 +527,22 @@ const MOTIVO_BLOQUEO =
 const ESTADOS_TERMINALES = new Set(['done', 'archived', 'cancelled', 'canceled']);
 
 /**
- * Las tareas que este vigia ya dejo y siguen vivas. Se buscan por MARCA y no por titulo
- * porque el titulo nombra a la gente que esperaba ese dia — y eso es justo lo que cambia.
+ * Las tareas que este vigia ya dejo y siguen vivas. Se buscan por dos caminos, y hacen falta
+ * los dos:
+ *
+ *   · la MARCA en el titulo, que alcanza a lo que cualquier corrida haya creado;
+ *   · los ids que el vigia ANOTO al crearlos (`estado.tareas`), que es lo unico que sobrevive
+ *     a un cambio de titulo.
+ *
+ * El segundo camino nace de un caso medido el 2026-09-24: cuatro tareas sobre las MISMAS siete
+ * personas seguian vivas con cuentas de hace 11 dias, dos de ellas creadas antes de que
+ * existiera la MARCA. Una clave puesta sobre el titulo se rompe sola el dia que el titulo
+ * cambia, y el que la cambia no se entera — la tarea vieja no falla, simplemente se queda.
  */
-export function tareasViejasDelVigia(tareas) {
+export function tareasViejasDelVigia(tareas, idsRecordados = []) {
+  const recordados = new Set((idsRecordados || []).map((id) => String(id)));
   return (Array.isArray(tareas) ? tareas : [])
-    .filter((t) => String(t?.title || '').includes(MARCA_LEADS))
+    .filter((t) => String(t?.title || '').includes(MARCA_LEADS) || recordados.has(String(t?.id)))
     .filter((t) => !ESTADOS_TERMINALES.has(String(t?.status || '').toLowerCase()))
     .map((t) => String(t.id));
 }
@@ -556,7 +574,7 @@ export function estadoDeLaTarea(salida) {
  * Devuelve SI se entrego, porque anotar «ya le avise» sobre un aviso que nadie recibio es
  * como este vigia se apaga solo.
  */
-export async function entregarComoDecision(texto, colgados, deps = {}) {
+export async function entregarComoDecision(texto, colgados, deps = {}, opciones = {}) {
   const tablero = deps.tablero || ejecutarTablero;
   // La guarda va ACA, fuera del try: adentro se la come el catch que existe para no romper
   // la vuelta cuando el tablero no contesta, y el vigia terminaria avisando de verdad.
@@ -566,7 +584,7 @@ export async function entregarComoDecision(texto, colgados, deps = {}) {
 
   let vivas;
   try {
-    vivas = tareasViejasDelVigia(JSON.parse(await tablero(['list', '--json'])));
+    vivas = tareasViejasDelVigia(JSON.parse(await tablero(['list', '--json'])), opciones.tareasPrevias);
   } catch (error) {
     return { entregado: false, motivo: `no pude leer el tablero: ${String(error?.message || error)}` };
   }
@@ -643,13 +661,17 @@ export async function correrVigia(opciones = {}, deps = {}) {
 
   let entrega = null;
   if (opciones.emitir && nuevos.length) {
-    entrega = (await avisar(armarAviso(nuevos), nuevos)) || {};
+    // `tareasPrevias` es lo que este vigia recuerda haber creado: sin eso, el barrido solo
+    // reconoce sus avisos por el titulo y una tarea vieja sobrevive para siempre en la hoja de
+    // decisiones que Sergio Urcullo recibe cada manana.
+    entrega =
+      (await avisar(armarAviso(nuevos), nuevos, {}, { tareasPrevias: estadoPrevio?.tareas || [] })) || {};
     // El estado dice «a este ya le avise». Anotarlo cuando el aviso NO llego es como este
     // vigia se apaga solo: la persona queda marcada como avisada sin que nadie la haya
     // visto, y no se la vuelve a nombrar hasta el escalon siguiente — o nunca.
     if (entrega.entregado) {
       mkdirSync(dirname(rutaEstado), { recursive: true });
-      writeFileSync(rutaEstado, JSON.stringify(armarEstado(estadoPrevio, nuevos), null, 2));
+      writeFileSync(rutaEstado, JSON.stringify(armarEstado(estadoPrevio, nuevos, entrega.id), null, 2));
     }
   }
   return { colgados, nuevos, entrega };
