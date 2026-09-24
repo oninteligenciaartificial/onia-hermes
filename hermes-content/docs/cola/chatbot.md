@@ -595,6 +595,56 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **CERRADO el 2026-09-24 (medición, sin cambio de código): el embudo del carril se estaba
+      contando con `calendar_event_id`, que por la decisión (c) NO PUEDE subir nunca — así que
+      toda vuelta futura iba a leer «0 demos agendadas» como un bug y diagnosticar de nuevo una
+      causa ya arreglada.** Ayer yo mismo conté ese cero y diagnostiqué el `slice(0,2)` de
+      `parseEnvSlots`. El diagnóstico era correcto y el arreglo entró (`504ebf25`, en
+      `origin/main`), pero **la medida no se va a mover con él**, y sin esta nota la próxima
+      vuelta vuelve a abrir el mismo caso.
+
+      **Por qué ese contador está muerto por diseño, re-medido HOY (no heredado del 13-sep):**
+      Cal.com no existe en el VPS, verificado de tres formas independientes —
+      `docker ps -a --format '{{.Names}}' | grep -i cal` → **vacío, ni un contenedor parado**;
+      `docker exec onia-center getent hosts calcom` → **NO RESUELVE**; y
+      `curl -o /dev/null -w '%{redirect_url}' https://cal.onia.com.bo/` → **302 a
+      `onia.com.bo/empezar`** (un subdominio propio muerto no da 404: redirige). La config del
+      proceso vivo SÍ está (`CALCOM_BASE_URL=http://calcom:3000`, `CALCOM_BOT_EVENT_TYPE_ID=5`,
+      leídos de `/proc/<pid>/environ` dentro de `onia-center`), o sea que la rama que corre no es
+      `sin_config` sino la que sale a la red contra un host inexistente. **Esto ratifica el bloque
+      «✅ CERRADO 2026-09-13» de más abajo: sigue vigente palabra por palabra, y la decisión (c)
+      ya la tomó Sergio Urcullo el 3-sep. No se le vuelve a preguntar.**
+
+      **La medida correcta del embudo es `bot_stage`/`scheduled_at`, no `calendar_event_id`** — lo
+      que depende de nosotros es que el bot CIERRE el horario; que quede en un calendario depende
+      de un servicio que está apagado a propósito. Contado hoy en
+      `onia_center.bot_conversations` (43 filas):
+
+      | estado | filas | qué significa |
+      |---|---|---|
+      | `esperando_horario` | **18** | eligieron horario y el bot no lo reconoció ← lo que arregla `504ebf25` |
+      | `handoff_humano` | 12 | derivadas a persona (el flujo honesto) |
+      | `nuevo` | 12 | no pasaron del saludo |
+      | `esperando_calificacion` | 1 | |
+      | `demo_agendada` | **0** | ninguna cerró horario todavía |
+
+      Con `scheduled_at` hay **1** fila (`chatwoot:11`, del 6-ago, horario para el 12-sep) y
+      terminó en `handoff_humano`. **Los 18 de `esperando_horario` son la prueba de que el bug del
+      `slice(0,2)` era real y caro: 18 personas que eligieron y no fueron escuchadas.**
+
+      🔴 **Pendiente que NO es de este carril:** el arreglo espera el `ok` de Sergio Urcullo en
+      `t_2508295d` (`DESPLEGAR: bot`). El bot vivo todavía corre el código viejo — verificado hoy:
+      `docker exec onia-center grep -c 'slice(0, *2)' /tmp/onia-bot/run-turn.mjs` → **1**. Le
+      comenté a esa tarea que su punto 2 («el bot va a poder agendar demos») prometía de más: va a
+      ACEPTAR los cinco horarios, que es la mejora real, pero `calendar_event_id` va a seguir en
+      cero y eso no será un deploy fallido.
+
+      ⚠️ **No toqué el motor en esta vuelta a propósito**, aunque la regla del carril diga
+      «arreglalo en la misma vuelta»: `t_2508295d` ya está esperando firma con su recuento de 24
+      archivos y su sha derivados del `--dry-run`, y un commit nuevo sobre `calcom-booking.mjs` o
+      `run-turn.mjs` dejaría ese cuerpo describiendo algo distinto de lo que el `ok` publica.
+      Cerrar antes de abrir.
+
 - [x] 🔴 **CERRADO el 2026-09-24 (medición, sin cambio de código): la TERCERA pata del objetivo
       del carril —«cada demo agendada o handoff le llega a Sergio Urcullo»— llevaba vueltas sin
       medirse, y el comando que el prompt manda usar para medirla NO PUEDE dar otra cosa que 0.**
@@ -652,7 +702,8 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
   **Las tres cosas que el conteo pelado tenía mal, y por qué ninguna se veía:**
 
-  1. **Contaba nuestras propias sondas como prospectos.** `chatwoot:48/49/50` son
+  1. **Contaba nuestras propias sondas como prospectos.** `chatwoot:48`, `chatwoot:49` y
+     `chatwoot:50` son
      *«Sonda QA carril chatbot»* y `chatwoot:11` es el celular de Sergio Urcullo. El repo ya
      tenía el criterio (`esNuestra()` de `scripts/objetivo_visible.mjs`, con seis consumidores)
      y el conteo del embudo no lo llamaba. El instrumento nuevo lo **importa**, no lo copia.
