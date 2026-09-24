@@ -17,7 +17,9 @@
 #     n8n viaja como header desde el server y en n8n se valida con una credencial "Header Auth".
 #   - Token de la API de Chatwoot -> se lee de SU PROPIA base en cada arranque (igual que
 #     chatwoot-adapter.sh). Si rota desde la UI, se levanta solo al reiniciar.
-#   - Master key de LiteLLM -> se lee de su propio contenedor.
+#   - Clave de LiteLLM -> la VIRTUAL del bot (alias onia-bot-motor, tope US$10/30d) desde
+#     /root/.config/onia/litellm-bot.key (root, chmod 600). Si ese archivo no existe o esta
+#     vacio, la master key, leida de su propio contenedor (el comportamiento de antes).
 set -uo pipefail
 
 CONTAINER="${ONIA_BOT_CONTAINER:-onia-center}"
@@ -195,7 +197,58 @@ else
   echo "       Copia webhook.env.example, completalo y chmod 600." >&2
 fi
 
-MK="$(docker exec onia_selfhosted-litellm-1 printenv LITELLM_MASTER_KEY 2>/dev/null || true)"
+# LiteLLM con la clave VIRTUAL del bot, no con la master. Con la master el motor salteaba su
+# propio tope (US$10 cada 30 dias en LiteLLM): un bucle o un abuso gastaba contra la cuenta
+# entera de OpenAI sin que nada lo frenara. La master queda SOLO como respaldo si ops todavia no
+# creo el archivo, para que este cambio no pueda dejar al bot sin IA. Se dice cual se uso —la
+# clase, nunca el valor— en la salida y en el log del proceso (el watchdog descarta la salida).
+LLM_KEY_FILE="${ONIA_LITELLM_BOT_KEY_FILE:-/root/.config/onia/litellm-bot.key}"
+LLM_BASE="${LITELLM_BASE:-http://onia_selfhosted-litellm-1:4000/v1}"
+LLM_MODEL="${ONIA_BOT_MODEL:-gpt-4o-mini}"
+LLM_KEY=""
+LLM_RECHAZO=""
+[ -r "$LLM_KEY_FILE" ] && LLM_KEY="$(tr -d ' \t\r\n' < "$LLM_KEY_FILE")"
+if [ -n "$LLM_KEY" ]; then
+  # Una clave PRESENTE no es una clave que SIRVE. Revocada, regenerada, pegada con basura, o
+  # restringida a otro modelo (la del bot solo puede gpt-4.1-mini, y el default de aca es
+  # gpt-4o-mini): LiteLLM contesta 401, run-turn.mjs hace `if (!res.ok) return ""` y el bot
+  # contesta TEXTO FIJO con /health en verde. Ni el watchdog ni el vigia de credito (que calla
+  # los 401 del proxy a proposito) lo ven. Por eso se pregunta ANTES: GET /models con la clave,
+  # que es gratis y devuelve solo los modelos que esa clave puede usar. Corre adentro del
+  # contenedor del bot porque es el que esta en la red de LiteLLM. La clave viaja por el
+  # entorno (`-e K` sin valor), nunca en argv. Si LiteLLM no contesta, la virtual se queda: la
+  # master tampoco pasaria, y LiteLLM caido lo ve vps-healthcheck.
+  # ponytail: se prueba al ARRANCAR; una clave revocada con el proceso vivo se ve en el proximo restart.
+  VEREDICTO="$(K="$LLM_KEY" docker exec -e K -e M="$LLM_MODEL" -e U="$LLM_BASE/models" "$CONTAINER" node -e '
+    (async () => {
+      try {
+        const r = await fetch(process.env.U, { headers: { Authorization: "Bearer " + process.env.K }, signal: AbortSignal.timeout(8000) });
+        if (r.status === 401 || r.status === 403) return console.log("rechazada " + r.status);
+        if (!r.ok) return console.log("http " + r.status);
+        const ids = ((await r.json()).data || []).map((m) => m.id);
+        console.log(ids.includes(process.env.M) ? "ok" : "sin-modelo " + process.env.M);
+      } catch (e) { console.log("error " + e.name); }
+    })()' 2>/dev/null | tail -n 1 | tr -cd 'A-Za-z0-9 ._:/-')"
+  case "$VEREDICTO" in
+    ok) LLM_KEY_CLASE="virtual ($LLM_KEY_FILE)" ;;
+    rechazada*|sin-modelo*) LLM_RECHAZO="$VEREDICTO"; LLM_KEY="" ;;
+    *) LLM_KEY_CLASE="virtual ($LLM_KEY_FILE, sin verificar: ${VEREDICTO:-LiteLLM no contesto})" ;;
+  esac
+fi
+if [ -z "$LLM_KEY" ]; then
+  LLM_KEY="$(docker exec onia_selfhosted-litellm-1 printenv LITELLM_MASTER_KEY 2>/dev/null || true)"
+  if [ -n "$LLM_RECHAZO" ]; then
+    LLM_KEY_CLASE="MASTER (la virtual de $LLM_KEY_FILE no sirve: $LLM_RECHAZO con $LLM_MODEL; el bot gasta sin su tope)"
+    # Al tablero, no directo: el bot sigue con IA; lo que se perdio es el tope, y eso es trabajo.
+    ONIA_TG="${ONIA_TG:-/root/bin/onia-tg.sh}"
+    [ -x "$ONIA_TG" ] && "$ONIA_TG" "⚠️ Bot: la clave virtual de LiteLLM no sirve ($LLM_RECHAZO con $LLM_MODEL): contesta con la MASTER, sin su tope
+Revisar $LLM_KEY_FILE contra la key onia-bot-motor de LiteLLM (existe, no revocada, models incluye $LLM_MODEL) y ONIA_BOT_MODEL en /opt/onia/bot/webhook.env. Despues: webhook-server.sh restart." >/dev/null 2>&1
+  else
+    LLM_KEY_CLASE="MASTER (sin $LLM_KEY_FILE o vacio: el bot gasta sin su tope)"
+  fi
+  echo "AVISO: LiteLLM con la $LLM_KEY_CLASE." >&2
+fi
+echo "LiteLLM: clave $LLM_KEY_CLASE"
 
 # Aviso a Sergio por Telegram (aviso-telegram.mjs). El token y el chat NO son credencial nueva:
 # son los que `webhook-watchdog.sh` —el script de al lado, por cron cada 2 minutos— ya lee de
@@ -257,7 +310,7 @@ docker exec -d \
   -e ONIA_PLATFORM_URL="${ONIA_PLATFORM_URL:-}" \
   -e CHATWOOT_WEBHOOK_SECRET="${CHATWOOT_WEBHOOK_SECRET:-}" \
   -e LITELLM_BASE="${LITELLM_BASE:-http://onia_selfhosted-litellm-1:4000/v1}" \
-  -e LITELLM_KEY="$MK" \
+  -e LITELLM_KEY="$LLM_KEY" \
   -e ONIA_BOT_MODEL="${ONIA_BOT_MODEL:-gpt-4o-mini}" \
   -e ONIA_BOT_DRY_RUN="${ONIA_BOT_DRY_RUN:-true}" \
   -e ONIA_BOT_SLOTS="${ONIA_BOT_SLOTS:-}" \
@@ -287,7 +340,7 @@ docker exec -d \
   -e CHATWOOT_ACCOUNT_ID="${CHATWOOT_ACCOUNT_ID:-2}" \
   -e CHATWOOT_API_TOKEN="$CW_TOKEN" \
   -e CHATWOOT_BOT_AGENT_ID="$CW_AGENT_ID" \
-  "$CONTAINER" sh -c "node $DEST/webhook-server.mjs >> $LOGFILE 2>&1 & echo \$! > $PIDFILE"
+  "$CONTAINER" sh -c "echo '[arranque] LiteLLM: clave $LLM_KEY_CLASE' >> $LOGFILE; node $DEST/webhook-server.mjs >> $LOGFILE 2>&1 & echo \$! > $PIDFILE"
 
 # No alcanza con lanzarlo: hay que ESPERAR a que conteste. Si el puerto estaba ocupado, el node
 # nuevo muere en silencio y quien contesta es otro proceso — que es justo lo que hay que detectar.

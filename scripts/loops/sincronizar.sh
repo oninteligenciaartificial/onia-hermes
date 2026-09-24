@@ -397,6 +397,9 @@ poner "$RAIZ/hermes-content/deploy/vps-ops/vigia-comprobantes.sh"         "$DEST
 poner "$RAIZ/hermes-content/deploy/vps-ops/security-watch.sh"             "$DESTINO_BIN/onia-security-watch.sh"
 # Respaldo diario de Storage (comprobantes de pago), 2026-09-24: la base guarda la fila, no la imagen.
 poner "$RAIZ/hermes-content/deploy/vps-ops/backup-storage.sh"             "$DESTINO_BIN/onia-backup-storage.sh"
+# Vigia del credito de IA (2026-09-24): del 9 al 17-sep OpenAI estuvo sin credito y el bot
+# contesto con texto fijo sin que nadie se enterara. Nace cableado, como sus hermanos.
+poner "$RAIZ/hermes-content/deploy/vps-ops/vigia-credito-ia.sh"           "$DESTINO_BIN/onia-vigia-credito-ia.sh"
 poner "$FUENTE/extras/onia-drop-recordatorio.sh"  "$DESTINO_BIN/onia-drop-recordatorio.sh"
 poner "$FUENTE/extras/onia-leads-vigia.sh"        "$DESTINO_BIN/onia-leads-vigia.sh"
 poner "$FUENTE/extras/onia-vigia-embudo.sh"       "$DESTINO_BIN/onia-vigia-embudo.sh"

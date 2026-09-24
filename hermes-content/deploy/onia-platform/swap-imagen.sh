@@ -28,6 +28,10 @@ URL=${ONIA_PLATFORM_URL:-https://app.onia.com.bo}
 PAUSA=${ONIA_SWAP_PAUSA:-1}          # segundos entre reintentos (los tests usan 0)
 NAME=onia-platform
 RED_PRINCIPAL=supabase_default                       # donde viven auth, db y kong
+# La red de LiteLLM (onia_selfhosted_onia_internal) NO va aca todavia: es de otro stack, ningun
+# release lee AGENTS_LLM_* (2026-09-24) y sumarla haria abortar cualquier deploy o hotfix en el
+# canario si esa red no existe. Entra CON el release que la use, y con ella
+# `nc -z onia_selfhosted-litellm-1 4000` en la verificacion de abajo (ver deploy-imagen.test.mjs).
 REDES_EXTRA=(easypanel dentalgest-staging-supabase_default)
 CANARIO_PUERTO=127.0.0.1:3101                        # loopback: Traefik no lo ve
 PREV_A_GUARDAR=2

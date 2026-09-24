@@ -14,7 +14,7 @@
 #
 # El trabajo lo hace swap-imagen.sh --recrear, el mismo camino que un deploy:
 # canario con el env-file nuevo ANTES de tocar produccion (un app.env roto se
-# descubre ahi), el viejo RENOMBRADO y no borrado, las tres redes conectadas y
+# descubre ahi), el viejo RENOMBRADO y no borrado, todas las redes (REDES_EXTRA) conectadas y
 # verificadas con nc (recrear a mano tumbo prod 3 veces por eso: crear con
 # --network pone UNA sola red), y rollback automatico si algo falla.
 #
