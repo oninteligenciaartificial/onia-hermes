@@ -53,8 +53,8 @@ interface ModuloDeLaCuenta {
   nombre: string;
   /**
    * La capacidad del catálogo que lo enciende, o `null` si es núcleo y viene en
-   * TODOS los planes (clientes, caja, inventario y contabilidad básica entran
-   * desde el Básico: lo dice su propia tarjeta en `lib/pricing.ts`).
+   * TODOS los planes (clientes, caja y contabilidad básica entran desde el
+   * Básico: lo dice su propia tarjeta en `lib/pricing.ts`).
    *
    * Obligatorio a propósito: un módulo nuevo no puede nacer sin contestar quién
    * lo enciende, que es exactamente como entró «Agentes» acá.
@@ -63,10 +63,15 @@ interface ModuloDeLaCuenta {
 }
 
 /**
- * Los módulos del panel de cuenta. Son EXACTAMENTE los que nombra el copy que
- * queda al lado en /empezar («Todo encendido: caja, inventario, contabilidad,
- * la cola de agentes y la agenda…») más «Clientes», que nombra la descripción
- * del sitio. Nada acá es una promesa nueva.
+ * Los módulos del panel de cuenta. Son los que nombra sin salvedad el copy que
+ * queda al lado en /empezar («Todo encendido: caja, contabilidad, la cola de
+ * agentes…») más «Clientes», que nombra la descripción del sitio. Nada acá es
+ * una promesa nueva.
+ *
+ * ⚠️ «Inventario» salió el 2026-09-24, por el mismo motivo que la agenda nunca
+ * estuvo: el panel no es de ningún rubro y servicios profesionales no tiene
+ * pantalla de inventario (`ALCANCE_POR_INVENTARIO` en lib/pricing.ts). Una
+ * pastilla no tiene dónde decir «si manejás stock».
  *
  * ⚠️ Acá hubo «Facturación», y estaba mal por dos motivos a la vez. Primero, la
  * lista no coincidía con el párrafo pegado al costado —dos listas de módulos
@@ -83,7 +88,6 @@ interface ModuloDeLaCuenta {
 export const MODULOS_DE_LA_CUENTA: readonly ModuloDeLaCuenta[] = [
   { nombre: "Clientes", exige: null },
   { nombre: "Caja", exige: null },
-  { nombre: "Inventario", exige: null },
   { nombre: "Contabilidad", exige: null },
   { nombre: "Agentes", exige: "agentes" },
 ];

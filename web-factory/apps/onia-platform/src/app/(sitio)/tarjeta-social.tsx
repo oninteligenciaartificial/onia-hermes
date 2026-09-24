@@ -33,7 +33,7 @@ import { bs, plan, PRUEBA } from "@/lib/pricing";
  * cargue y la ÚNICA que ve el que nunca abre el link — el canal por el que
  * Sergio manda onia.com.bo a un lead. Ninguna captura del sitio la mira.
  *
- * Ahora dibuja lo que el hero promete: las cinco piezas del negocio, hoy
+ * Ahora dibuja lo que el hero promete: las piezas del negocio, hoy
  * sueltas, dentro de una sola pantalla. El precio se INTERPOLA de
  * `lib/pricing.ts` — una cifra a mano acá se comparte por WhatsApp durante
  * meses sin que ninguna pantalla la muestre. Lo vigila `hero.test.ts`.
@@ -61,7 +61,7 @@ import { bs, plan, PRUEBA } from "@/lib/pricing";
  */
 
 export const alt =
-  "Onia — Todo el negocio, en una pantalla. Clientes, caja, cobros, inventario y contabilidad dibujados como cinco piezas sueltas que entran en un solo sistema.";
+  "Onia — Todo el negocio, en una pantalla. Clientes, caja, cobros y contabilidad dibujados como cuatro piezas sueltas que entran en un solo sistema.";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -76,8 +76,13 @@ const LINEA = "#D4D9D6";
  * Las piezas del negocio, en el mismo orden y con las mismas palabras que el
  * hero y la `description`: si acá dijeran otra cosa, la tarjeta prometería un
  * sistema distinto del que abre al hacer clic.
+ *
+ * Sólo piezas que tienen los CINCO rubros del alta. «Inventario» salió el
+ * 2026-09-24: servicios profesionales no tiene esa pantalla
+ * (`ALCANCE_POR_INVENTARIO` en lib/pricing.ts), y una pieza suelta en un
+ * dibujo no tiene dónde decir su alcance.
  */
-const PIEZAS = ["Clientes", "Caja", "Cobros", "Inventario", "Contabilidad"];
+const PIEZAS = ["Clientes", "Caja", "Cobros", "Contabilidad"];
 
 /**
  * La bajada se arma como UN string y no se interpola dentro del JSX.
@@ -139,7 +144,7 @@ export function dibujarTarjeta(): ImageResponse {
           </div>
         </div>
 
-        {/* Las cinco piezas, dentro de UN marco: eso es "en una pantalla".
+        {/* Las piezas, dentro de UN marco: eso es "en una pantalla".
             El marco se escapa por el borde derecho igual que se escapaba el
             verde del día — el sistema sigue, no se acaba en la tarjeta. */}
         <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>

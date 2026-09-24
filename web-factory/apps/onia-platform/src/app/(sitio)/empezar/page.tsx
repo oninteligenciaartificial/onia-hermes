@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Reveal } from "@/motion";
-import { PRUEBA, ALCANCE_CON_AGENDA } from "@/lib/pricing";
+import { PRUEBA, ALCANCE_CON_AGENDA, ALCANCE_CON_INVENTARIO } from "@/lib/pricing";
 import { WA_URL_LANDING, SITE_URL } from "@/lib/site";
 import { MEDIO_DE_PAGO } from "@/content/medio-de-pago";
 import { REGISTRO_URL } from "../nav";
@@ -35,7 +35,7 @@ import s from "../sitio.module.css";
 
 export const metadata: Metadata = {
   title: `Prueba gratis de ${PRUEBA.dias} días — Onia, sin tarjeta`,
-  description: `${CTA_ALTA}, elegí tu rubro y usá el plan ${PRUEBA.planQueCorre} completo ${PRUEBA.dias} días: clientes, caja, inventario, contabilidad Bolivia y agentes con IA —y agenda ${ALCANCE_CON_AGENDA}—. Sin tarjeta y sin permanencia.`,
+  description: `${CTA_ALTA}, elegí tu rubro y usá el plan ${PRUEBA.planQueCorre} completo ${PRUEBA.dias} días: clientes, caja, contabilidad Bolivia y agentes con IA —más inventario ${ALCANCE_CON_INVENTARIO} y agenda ${ALCANCE_CON_AGENDA}—. Sin tarjeta y sin permanencia.`,
   alternates: { canonical: "/empezar" },
   openGraph: {
     type: "website",
@@ -91,7 +91,7 @@ const PASOS: readonly { titulo: string; detalle: string }[] = [
     titulo: `Usalo de verdad ${PRUEBA.dias} días`,
     // El medio de pago lo dice `@/content/medio-de-pago`, no esta pantalla: acá
     // decía «pagás por QR» y no existe ningún QR.
-    detalle: `Todo encendido: caja, inventario, contabilidad, la cola de agentes y la agenda ${ALCANCE_CON_AGENDA}. ${MEDIO_DE_PAGO.siTeSirve}`,
+    detalle: `Todo encendido: caja, contabilidad, la cola de agentes, el inventario ${ALCANCE_CON_INVENTARIO} y la agenda ${ALCANCE_CON_AGENDA}. ${MEDIO_DE_PAGO.siTeSirve}`,
   },
 ];
 
@@ -167,13 +167,15 @@ export default function Empezar() {
         </Reveal>
       </Block>
 
-      {/* Qué pasa al día 15 — la letra chica, dicha fuerte */}
+      {/* Qué pasa al terminar la prueba — la letra chica, dicha fuerte. El h2 no
+          fecha el corte: lo fecha PRUEBA.copy justo debajo (con su día de
+          gracia). «Al vencer, solo lectura» encima de «tras 1 día de gracia»
+          eran dos fechas en el mismo bloque. */}
       <Block surface="ink" labelledBy="al-final">
         <Reveal>
           <Kicker>Cuando se termina</Kicker>
           <p id="al-final" className={s.h2} style={{ maxWidth: "24ch" }}>
-            Al vencer, la cuenta queda en solo lectura. Nada se borra de
-            inmediato.
+            La cuenta queda en solo lectura. Nada se borra de inmediato.
           </p>
           <p className={s.body} style={{ maxWidth: "48em" }}>
             {PRUEBA.copy}

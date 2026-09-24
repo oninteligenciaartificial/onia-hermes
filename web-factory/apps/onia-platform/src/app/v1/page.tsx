@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { PLANES, bs, plan, primerPlanCon, PRUEBA, ALCANCE_CON_AGENDA } from "@/lib/pricing";
+import { PLANES, bs, plan, primerPlanCon, PRUEBA, ALCANCE_CON_AGENDA, ALCANCE_CON_INVENTARIO } from "@/lib/pricing";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Hero } from "@/components/landing-v1/hero";
@@ -95,7 +95,7 @@ const JSON_LD = {
       // Misma corrección que en la portada de `(sitio)`: la factura sale de la
       // enumeración mientras el emisor esté en trámite ante el SIN.
       description:
-        `Sistema de gestión con IA para negocios en Bolivia: clientes, cobros, inventario y agentes con aprobación humana —y agenda ${ALCANCE_CON_AGENDA}—.`,
+        `Sistema de gestión con IA para negocios en Bolivia: clientes, cobros y agentes con aprobación humana —más inventario ${ALCANCE_CON_INVENTARIO} y agenda ${ALCANCE_CON_AGENDA}—.`,
       // Los montos NO se escriben acá. Estaban tipeados a mano ("320", "750",
       // "1500") y el gate de precios no los veía: busca el número pegado a
       // «Bs», y en el JSON-LD el precio viaja desnudo, con la moneda en otra

@@ -3,7 +3,12 @@ import { readdirSync, readFileSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { ALCANCE_CON_AGENDA, ALCANCE_POR_AGENDA } from "@/lib/pricing";
+import {
+  ALCANCE_CON_AGENDA,
+  ALCANCE_CON_INVENTARIO,
+  ALCANCE_POR_AGENDA,
+  ALCANCE_POR_INVENTARIO,
+} from "@/lib/pricing";
 
 /**
  * Cuando la venta ENUMERA lo que trae el sistema, la capacidad que el producto
@@ -56,13 +61,17 @@ const SRC = join(AQUI, "..");
  * y estética lo llaman Cobros (`/billing`) y comercio, importadora y servicios
  * lo llaman Caja (`/comercio/caja`), que es la misma función con dos nombres y
  * NO un rubro al que le falte algo.
+ *
+ * ⚠️ «inventario» estuvo en esta lista y era FALSO: `SERVICIOS_NAV_ITEMS` no
+ * tiene `/inventory` ni `/comercio/inventario` (re-medido 2026-09-24). Contarlo
+ * como universal hacía que el gate lo usara para DETECTAR listas en vez de
+ * vigilarlo — el mismo agujero que dejó pasar la agenda. Ahora es acotada.
  */
 const UNIVERSALES = [
   /\bclient[ae]s\b/i,
   /\bfichas?\b/i,
   /\bcaja\b/i,
   /\bcobros?\b/i,
-  /\binventario\b/i,
   /\bcontabilidad\b/i,
   /\bagentes\b/i,
 ];
@@ -70,15 +79,32 @@ const UNIVERSALES = [
 /** Cuántas capacidades universales al lado convierten la mención en enumeración. */
 const MINIMO_PARA_SER_LISTA = 2;
 
-/** La capacidad acotada, con la forma en que el copy la nombra. */
-const ACOTADAS = ALCANCE_POR_AGENDA.map((c) => ({
-  capacidad: c.capacidad,
-  porque: c.porque,
-  patron:
-    c.capacidad === "agenda"
-      ? /\bagenda\b/i
-      : /\breservas? online\b|\bagenda p[úu]blica\b/i,
-}));
+/** La capacidad acotada, con la forma en que el copy la nombra y su salvedad. */
+const ACOTADAS: ReadonlyArray<{
+  capacidad: string;
+  porque: string;
+  patron: RegExp;
+  alcance: string;
+  constante: string;
+}> = [
+  ...ALCANCE_POR_AGENDA.map((c) => ({
+    capacidad: c.capacidad,
+    porque: c.porque,
+    patron:
+      c.capacidad === "agenda"
+        ? /\bagenda\b/i
+        : /\breservas? online\b|\bagenda p[úu]blica\b/i,
+    alcance: ALCANCE_CON_AGENDA,
+    constante: "ALCANCE_CON_AGENDA",
+  })),
+  {
+    capacidad: ALCANCE_POR_INVENTARIO.capacidad,
+    porque: ALCANCE_POR_INVENTARIO.porque,
+    patron: /\binventario\b/i,
+    alcance: ALCANCE_CON_INVENTARIO,
+    constante: "ALCANCE_CON_INVENTARIO",
+  },
+];
 
 /**
  * Enumeraciones exentas, cada una con su motivo. Se RE-MIDE: si el fragmento
@@ -221,7 +247,7 @@ function esEnumeracion(texto: string): boolean {
   return UNIVERSALES.filter((re) => re.test(texto)).length >= MINIMO_PARA_SER_LISTA;
 }
 
-type Hallazgo = { archivo: string; capacidad: string; texto: string };
+type Hallazgo = { archivo: string; capacidad: string; porque: string; texto: string };
 
 /** Enumeraciones que nombran una capacidad acotada y NO dicen su alcance. */
 export function enumeracionesSinAlcance(trozos: Trozo[]): Hallazgo[] {
@@ -229,13 +255,18 @@ export function enumeracionesSinAlcance(trozos: Trozo[]): Hallazgo[] {
 
   for (const { archivo, texto } of trozos) {
     if (!esEnumeracion(texto)) continue;
-    if (texto.includes("ALCANCE_CON_AGENDA") || texto.includes(ALCANCE_CON_AGENDA)) continue;
     if (PAGINAS_DE_UN_RUBRO.some((p) => archivo.startsWith(p.prefijo))) continue;
     if (EXENTOS.some((e) => e.archivo === archivo && texto.includes(e.fragmento))) continue;
 
     for (const acotada of ACOTADAS) {
       if (!acotada.patron.test(texto)) continue;
-      salida.push({ archivo, capacidad: acotada.capacidad, texto: texto.slice(0, 180) });
+      if (texto.includes(acotada.constante) || texto.includes(acotada.alcance)) continue;
+      salida.push({
+        archivo,
+        capacidad: acotada.capacidad,
+        porque: acotada.porque,
+        texto: texto.slice(0, 180),
+      });
     }
   }
 
@@ -250,7 +281,7 @@ describe("una enumeración de lo que trae el sistema dice el alcance de lo acota
     expect(trozos.filter((t) => esEnumeracion(t.texto)).length).toBeGreaterThan(10);
   });
 
-  it("ninguna enumeración promete la agenda sin decir a quién le llega", () => {
+  it("ninguna enumeración promete la agenda ni el inventario sin decir a quién le llega", () => {
     const sinAlcance = enumeracionesSinAlcance(trozos);
 
     expect(
@@ -259,7 +290,7 @@ describe("una enumeración de lo que trae el sistema dice el alcance de lo acota
         .map(
           (h) =>
             `${h.archivo} enumera «${h.capacidad}» entre lo que trae el sistema y no dice su alcance ` +
-            `(${ALCANCE_POR_AGENDA.find((c) => c.capacidad === h.capacidad)?.porque}): ${h.texto}`,
+            `(${h.porque}): ${h.texto}`,
         )
         .join("\n"),
     ).toEqual([]);
@@ -314,9 +345,8 @@ describe("una enumeración de lo que trae el sistema dice el alcance de lo acota
     // llegó a haber cuatro precios vivos del mismo chatbot.
     const tipeada = trozosDeCopy().filter(
       (t) =>
-        !t.archivo.startsWith("lib/pricing") &&
-        t.texto.includes(ALCANCE_CON_AGENDA) &&
-        !t.texto.includes("ALCANCE_CON_AGENDA"),
+        !t.archivo.startsWith(join("lib", "pricing")) &&
+        ACOTADAS.some((a) => t.texto.includes(a.alcance) && !t.texto.includes(a.constante)),
     );
     expect(tipeada.map((t) => `${t.archivo}: ${t.texto.slice(0, 120)}`)).toEqual([]);
   });
@@ -331,7 +361,12 @@ describe("una enumeración de lo que trae el sistema dice el alcance de lo acota
       // La reserva pública cuelga del mismo `tieneAgenda`.
       { archivo: "lib/pricing.ts", texto: '"Reservas online incluidas, clientes y cobros en un solo lugar"' },
     ];
-    expect(enumeracionesSinAlcance(comoEstabaLaHome).map((h) => h.archivo)).toEqual([
+    // Esas cuatro anclas son de la AGENDA; varias enumeran también el inventario
+    // plano, que se mide abajo con sus propias anclas.
+    const deAgenda = enumeracionesSinAlcance(comoEstabaLaHome).filter(
+      (h) => h.capacidad !== ALCANCE_POR_INVENTARIO.capacidad,
+    );
+    expect(deAgenda.map((h) => h.archivo)).toEqual([
       "app/(sitio)/page.tsx",
       "components/landing-v1/how-it-works.tsx",
       "app/(sitio)/tarjeta-social.tsx",
@@ -345,9 +380,26 @@ describe("una enumeración de lo que trae el sistema dice el alcance de lo acota
       { archivo: "app/v1/empezar/data.ts", texto: '"Agenda en cuaderno o Excel"' },
       {
         archivo: "app/(sitio)/page.tsx",
-        texto: `"clientes, caja, cobros e inventario —y agenda ${ALCANCE_CON_AGENDA}—"`,
+        texto: `"clientes, caja y cobros —más inventario ${ALCANCE_CON_INVENTARIO} y agenda ${ALCANCE_CON_AGENDA}—"`,
       },
     ];
     expect(enumeracionesSinAlcance(sanos)).toEqual([]);
+
+    // El inventario, en las dos formas en que se vendía plano hasta el
+    // 2026-09-24: la lista de /empezar y las piezas de la tarjeta social.
+    const inventarioPlano = [
+      {
+        archivo: "app/(sitio)/empezar/page.tsx",
+        texto: `"Todo encendido: caja, inventario, contabilidad, la cola de agentes y la agenda ${ALCANCE_CON_AGENDA}."`,
+      },
+      {
+        archivo: "app/(sitio)/tarjeta-social.tsx",
+        texto: '["Clientes", "Caja", "Cobros", "Inventario", "Contabilidad"]',
+      },
+    ];
+    expect(enumeracionesSinAlcance(inventarioPlano).map((h) => h.capacidad)).toEqual([
+      "inventario",
+      "inventario",
+    ]);
   });
 });

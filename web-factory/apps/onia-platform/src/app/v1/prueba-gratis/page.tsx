@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { PRUEBA, ALCANCE_CON_AGENDA } from "@/lib/pricing";
+import { PRUEBA, ALCANCE_CON_AGENDA, ALCANCE_CON_INVENTARIO } from "@/lib/pricing";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { APP_URL, WA_URL_LANDING } from "@/lib/site";
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   // uso del sistema como si fueran seguidos, y el producto exige confirmar el
   // correo en el medio. Es la copia que además se lee en el buscador.
   description:
-    `Registrate en minutos, ${PASO_CONFIRMAR_CORREO_IMPERATIVO}, elegí tu rubro y usá el plan ${PRUEBA.planQueCorre} completo ${PRUEBA.dias} días: clientes, caja, inventario, contabilidad Bolivia y agentes con IA —y agenda ${ALCANCE_CON_AGENDA}—. Sin tarjeta y sin permanencia.`,
+    `Registrate en minutos, ${PASO_CONFIRMAR_CORREO_IMPERATIVO}, elegí tu rubro y usá el plan ${PRUEBA.planQueCorre} completo ${PRUEBA.dias} días: clientes, caja, contabilidad Bolivia y agentes con IA —más inventario ${ALCANCE_CON_INVENTARIO} y agenda ${ALCANCE_CON_AGENDA}—. Sin tarjeta y sin permanencia.`,
   alternates: { canonical: "/prueba-gratis" },
   openGraph: {
     type: "website",
@@ -62,7 +62,7 @@ const PASOS = [
     titulo: `Usalo de verdad ${PRUEBA.dias} días`,
     // El medio de pago lo dice `@/content/medio-de-pago`, no esta pantalla: acá
     // decía «pagás por QR» y no existe ningún QR.
-    detalle: `Todo encendido: caja, inventario, contabilidad, la cola de agentes y la agenda ${ALCANCE_CON_AGENDA}. ${MEDIO_DE_PAGO.siTeSirve}`,
+    detalle: `Todo encendido: caja, contabilidad, la cola de agentes, el inventario ${ALCANCE_CON_INVENTARIO} y la agenda ${ALCANCE_CON_AGENDA}. ${MEDIO_DE_PAGO.siTeSirve}`,
   },
 ] as const;
 

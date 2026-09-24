@@ -417,6 +417,22 @@ export const RUBROS_CON_AGENDA = ["dental", "estética", "servicios profesionale
  */
 export const ALCANCE_CON_AGENDA = "si trabajás con citas";
 
+/**
+ * El inventario es la misma clase que la agenda: acotado por RUBRO, no por plan.
+ * Medido 2026-09-24 contra `origin/master` de `onia-platform`
+ * (`lib/platform/vertical-pack.ts`): dental y estética navegan a `/inventory`,
+ * comercio e importadora a `/comercio/inventario`, y `SERVICIOS_NAV_ITEMS` no
+ * tiene ninguna de las dos — `llevaInventario()` da false y la lista blanca de
+ * rutas se deriva del nav. La venta lo enumeraba plano para los cinco rubros.
+ */
+export const ALCANCE_POR_INVENTARIO = {
+  capacidad: "inventario",
+  porque: "servicios profesionales no tiene pantalla de inventario en su pack (`llevaInventario`)",
+} as const;
+
+/** Cómo se dice ese alcance en una línea de venta: por lo que el rubro HACE. */
+export const ALCANCE_CON_INVENTARIO = "si manejás stock";
+
 export const USUARIO_EXTRA_ADDON = {
   nombre: "Usuario adicional",
   mensualAddon: 70,
