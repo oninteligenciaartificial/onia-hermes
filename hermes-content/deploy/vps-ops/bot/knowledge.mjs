@@ -1031,6 +1031,24 @@ export function sanitizePanelKnowledge(data) {
  * Esto NO le toca el horario a un CLIENTE: su fila llega por `fetchOrgKnowledge` (por org) y se
  * aplica sin pasar por aca, que es el camino exclusivo del documento de venta de Onia.
  */
+/**
+ * Descartes del panel ya avisados, por VALOR. `mergePanelKnowledge` corre en cada carga del
+ * conocimiento y la fila del panel trae `empresa.horario` siempre: avisar en cada pasada repite
+ * una condicion PERMANENTE como si fuera un evento. Medido el 2026-09-24 en el bot vivo: 3.541
+ * copias de la misma linea en /tmp/onia-bot-webhook.log, ocupando la COLA ENTERA del log — los 27
+ * eventos de demo/handoff que habia adentro no se veian con `tail`. Un log ahogado es tan ciego
+ * como un log vacio, y esa ceguera ya costo una semana de bot mudo en septiembre.
+ *
+ * Se guarda el valor y no un booleano a proposito: si Sergio Urcullo edita el panel y escribe OTRO
+ * horario, ese descarte es nuevo y vuelve a dejar su linea.
+ */
+const avisosDePanelYaDados = new Set();
+
+/** Vacia la memoria de avisos ya dados. Para tests; en el bot vivo el reinicio hace lo mismo. */
+export function resetAvisosDePanel() {
+  avisosDePanelYaDados.clear();
+}
+
 export function mergePanelKnowledge(archivo, panel) {
   if (!archivo) return panel;
   if (!panel) return archivo;
@@ -1043,11 +1061,22 @@ export function mergePanelKnowledge(archivo, panel) {
     // El horario del ARCHIVO se conserva (es del repo, y hoy no lo declara: hereda del codigo);
     // el del PANEL se descarta con constancia. Un descarte mudo es como esta familia se esconde.
     if (isPlainObject(panel.empresa?.horario)) {
-      console.warn(
-        "[knowledge:panel] ignoro `empresa.horario` de la fila del panel: la disponibilidad de " +
-          "Onia la manda ventanas-de-atencion.mjs (es la misma de la que salen los horarios de " +
-          "demo que el bot ofrece). Para cambiarla, se edita esa constante.",
-      );
+      // El DESCARTE es incondicional; lo que se dice una sola vez es el AVISO. Separarlos importa:
+      // callar no puede ser aceptar (caso "callar no es aceptar" en el test de este archivo).
+      let clave;
+      try {
+        clave = JSON.stringify(panel.empresa.horario);
+      } catch {
+        clave = null; // un horario no serializable (ciclos) avisa siempre: es peor callarlo
+      }
+      if (clave === null || !avisosDePanelYaDados.has(clave)) {
+        if (clave !== null) avisosDePanelYaDados.add(clave);
+        console.warn(
+          "[knowledge:panel] ignoro `empresa.horario` de la fila del panel: la disponibilidad de " +
+            "Onia la manda ventanas-de-atencion.mjs (es la misma de la que salen los horarios de " +
+            "demo que el bot ofrece). Para cambiarla, se edita esa constante.",
+        );
+      }
       if (isPlainObject(archivo.empresa?.horario)) out.empresa.horario = archivo.empresa.horario;
       else delete out.empresa.horario;
     }

@@ -29,6 +29,62 @@ contra producción (SSH al VPS, las dos bases, el motor corrido de verdad), no c
 
 ---
 
+## ✅ T10 — CERRADO el 2026-09-24 (commiteado, **NO desplegado**): el log del bot estaba ahogado por UNA línea repetida, y por eso la medición de este carril salía vacía teniendo los datos adentro
+
+**Cómo apareció.** No lo trajo la cola: lo trajo el chequeo de arranque. El comando con el que este
+carril mide su propio objetivo —`webhook-server.sh logs | tail -80 | grep -E
+"demo_agendada|handoff_humano"`— devolvió **vacío**. La lectura fácil era "no hubo demos ni
+handoffs". Era falsa: el log **tiene 27** de esos eventos.
+
+**Lo medido** (contenedor `onia-center`, `/tmp/onia-bot-webhook.log`, 4,2 MB, 70.221 líneas):
+
+| qué | cuánto |
+|---|---|
+| copias de `[knowledge:panel] ignoro empresa.horario…` | **3.541** |
+| líneas reales del webhook (`[onia-webhook]`) | 2.224 |
+| eventos `demo_agendada` / `handoff_humano` | 27 |
+| de esos 27, cuántos caen en las últimas 80 líneas | **0** |
+
+La cola entera del log era esa línea. `tail` —que es como se mira un log— no veía **nada**.
+
+**La causa, y por qué es un defecto de diseño y no un descuido.** `mergePanelKnowledge`
+(`knowledge.mjs`) descarta a propósito el `empresa.horario` de la fila del panel, porque la
+disponibilidad de Sergio Urcullo tiene dueño en `ventanas-de-atencion.mjs` (eso es T-18-sep y está
+bien). Para no descartar en silencio, avisaba por `console.warn` — pero la función corre en **cada
+carga** del conocimiento y la fila del panel trae ese campo **siempre**. O sea: avisaba de una
+condición **permanente** como si fuera un evento nuevo, para siempre.
+
+**El arreglo.** El *descarte* sigue siendo incondicional; lo que se dice una sola vez es el
+*aviso*, y se recuerda **por valor** (`JSON.stringify` del horario descartado): si Sergio Urcullo
+edita el panel y escribe otro horario, ese descarte **sí** es noticia y vuelve a dejar su línea.
+
+**Los cuatro casos** (`panel-no-mueve-la-disponibilidad-de-onia.test.mjs`), el nuevo en ROJO antes
+por el motivo correcto (*"50 cargas … salieron 50"*, no por un import faltante):
+
+- 50 cargas con la misma fila → **1** línea.
+- un horario **distinto** → vuelve a avisar (silencio por valor, no para siempre).
+- **callar no es aceptar**: en la 2.ª pasada, que ya no avisa, el horario del panel **sigue sin
+  colarse** y el bot sigue prometiendo la frase de la constante. Ese caso es la guarda de que la
+  cura no silenció el descarte junto con el aviso.
+- el caso viejo (*"no se descarta en silencio"*) queda intacto: el aviso **tiene** que salir una vez.
+
+`node --test knowledge.test.mjs panel-no-mueve-la-disponibilidad-de-onia.test.mjs
+catalogo-inclusion.test.mjs` → **99 pass / 0 fail**.
+
+⚠️ **Está commiteado y NO desplegado.** El bot vivo sigue escribiendo la línea repetida hasta que
+el publicador automático pase (`/root/bin/onia-publicar-solo.sh`, cron `50 */3`). **No hace falta
+pedido de deploy ni `ok` de nadie** — sale solo. Se verifica después de la ventana con:
+`docker exec onia-center sh -c "tail -80 /tmp/onia-bot-webhook.log | grep -c knowledge:panel"`,
+que tiene que bajar de 80 a ~0 a medida que entren líneas nuevas.
+
+**La lección, que no es sobre este bug.** Un log ahogado en ruido es exactamente tan ciego como un
+log vacío — y ésa es la ceguera que dejó al bot mudo una semana en septiembre. La diferencia es que
+el log vacío se nota y el ahogado **contesta**: devuelve 80 líneas y cero señal, que se lee como
+"no pasó nada". **Toda línea que se emite en un camino caliente tiene que corresponder a un EVENTO;
+una CONDICIÓN permanente se dice una vez.**
+
+---
+
 ## ✅ T9 — CERRADO el 2026-09-19 (commiteado, **NO desplegado** — es un medidor, no toca el motor): todo el carril cuenta "el bot contestó" por una fila que existe, y nadie mira si el mensaje LLEGÓ
 
 **El eje.** La definición de hecho de este carril —*"el bot contestó los DOS"*— se mide contando
