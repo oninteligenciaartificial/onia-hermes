@@ -12,6 +12,47 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-24 14:09-14:20 La Paz — huérfano de la vuelta anterior limpiado a mano; recorrido dental 9/9 de nuevo
+
+`ONIA_ALTA_AUTOMATICA=abierta`. Antes de tocar nada: `select count(*) from organizations where
+name like 'zz-qa-%'` dio **1**, no 0 — violaba el chequeo obligatorio de arranque.
+
+**Origen del huérfano:** la vuelta anterior (rama `claude/recorrido-cliente`, commit
+`d0720d6e`) corrió el recorrido, llegó hasta el paso 06 (capturas `paso-05b`, `paso-05c` y
+`paso-06-menu.png` quedaron modificadas y sin commitear) y se cortó ahí — sin log propio en este
+archivo, sin `resumen.json` actualizado, y sin limpiar. Quedó viva la organización
+`zz-qa-2026-09-24-1310` (id `cmufjv48h004701rwice34ya1`, rubro `gestios-servicios-profesionales`),
+su cuenta `zz-qa-2026-09-24-1310@onia.com.bo` (`auth.users` + `auth.identities`), un perfil STAFF
+sin correo (alta del profesional en el onboarding) y una fila en `organization_entitlements`
+(`module.agents`, trial). Cero `patients`/`appointments` — no llegó tan lejos.
+
+**Limpiado a mano esta vuelta**, imprimiendo antes de borrar (fila completa arriba) y borrando en
+orden por FK (`organization_entitlements` → `profiles` → `organizations` →
+`auth.identities` → `auth.users`, todo por id exacto, nunca por rango). Confirmado después:
+`organizations` y `auth.users` con `zz-qa-%` en 0. También corrí `--solo-limpiar` (la póliza que
+ya existe en el script para este caso exacto, comentario en `recorrido_cliente.mjs:2348-2354`,
+nacida de `t_f52601e2`) y confirmó 0 antes de arrancar el recorrido nuevo.
+
+**Recorrido dental completo después de la limpieza:** `BUILD_ID` sigue `9tuk1Qk2BjQ2j2HdJcL8u`
+(sin cambios de deploy desde la entrada de las 12:09). `node scripts/recorrido_cliente.mjs
+--escribir`: **9/9, `completo: true`, `agujeros: []`.** Cuenta
+`zz-qa-2026-09-24-1411@onia.com.bo` con confirmación de correo real, onboarding de 6 pantallas,
+paciente `zz-qa-2026-09-24-1411-paciente` cargado y encontrado, cita `2026-09-25 09:00` con
+**201** y VISTA en `/appointments` (id `cmufm5oxe005g01rwvuc16ilw`), factura con ítem visible en
+`/billing/cmufm6023005i01rwrpkxmzlg` (frenada sin pagar), panel mirado. `zz-qa-` en 0 al cerrar
+(`organizations` y `appointments` verificados después).
+
+**Sin hallazgo de producto.** El hallazgo es de proceso: una vuelta puede soltar el turno a mitad
+del recorrido (timeout del corredor) sin dejar rastro legible acá — el único indicio fue el
+`select count(*)` de arranque. La póliza `--solo-limpiar` ya cubre el dato (borra lo mío sin
+depender de que el recorrido entero termine); lo que faltó fue CORRERLA, y documentar el corte
+cuando pasa. Si vuelve a pasar, correr `--solo-limpiar` primero es la respuesta, no investigar de
+cero.
+
+`completo: true`, `llegoHasta: 9/9`. Próxima vuelta: si `BUILD_ID` sigue igual, no repetir dental
+— seguir con el escalón de "invitar/quitar coadministrador desde `/settings`" que quedó pendiente
+en la entrada del 2026-09-18 14:09, o revisar si el pedido de deploy sigue esperando `ok`.
+
 ## 2026-09-24 12:09-12:20 La Paz — `BUILD_ID` sin cambios (no se repitió dental); escalón 5 nuevo: "Descargar planillas" con plan 'basic', probado en vivo
 
 `ONIA_ALTA_AUTOMATICA=abierta`, `zz-qa-` orgs en 0 al arrancar (chequeo obligatorio). Primer
