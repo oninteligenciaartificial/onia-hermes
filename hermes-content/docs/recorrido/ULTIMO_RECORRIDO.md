@@ -12,6 +12,32 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-24 21:09 La Paz — `RECORRIDO_RUBRO="Estética y spa"` completo, 9/9 (`BUILD_ID` sin cambios)
+
+`ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` seguía `VREeqNSncIqDIOTMbfLTQ` (igual a las dos
+entradas de abajo, dental y comercio, ya corridas contra este mismo build) — no correspondía
+repetirlas. Siguiente rubro sin re-verificar este ciclo: `RECORRIDO_RUBRO="Estética y spa" node
+scripts/recorrido_cliente.mjs --escribir`.
+
+- Los 9 pasos OK. Cuenta `zz-qa-2026-09-24-2109@onia.com.bo`, confirmación de correo real antes
+  del primer login, onboarding en 6 pantallas (vocabulario "Clientas"/"¿Qué hacés y a cuánto?"),
+  `/dashboard` sin rebote.
+- Paso 6: `zz-qa-2026-09-24-2109-paciente` cargado en Clientas (`/patients`) y visto de vuelta.
+- Paso 7: cita `2026-09-25 09:00` agendada (201, `cmug13f80002f01rxyct6zvsi`) y VISTA en
+  `/appointments`.
+- Paso 8: factura creada con el ítem visible en `/billing/cmug13py3002h01rxxe7yp2bk` — frenado
+  ahí sin pagar.
+- Paso 9: el dato del paso 6 no figura en `/dashboard` (esperado — el panel no lista clientas,
+  igual que dental no lista pacientes).
+- Limpieza verificada: `organizations`/`appointments` con `zz-qa-%` → **0** al cerrar.
+
+**Sin hallazgo de producto.** Con esto, en este mismo `BUILD_ID` ya quedaron re-verificados
+dental (9/9), comercio (8/8) y estética (9/9). Próxima vuelta: si `BUILD_ID` sigue igual, rotar
+a importadora o servicios profesionales para cerrar el ciclo de los 5 rubros activos, o seguir
+con un escalón 3 no auditado.
+
+---
+
 ## 2026-09-24 20:14 La Paz — `RECORRIDO_RUBRO="Comercio / tienda"` completo, 8/8 (paso 7 no aplica: rubro coherente)
 
 Escalón siguiente tras dental sin hallazgo: `RECORRIDO_RUBRO="Comercio / tienda" node
