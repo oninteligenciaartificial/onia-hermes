@@ -12,6 +12,52 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-24 09:16-09:19 La Paz — `BUILD_ID` sin cambios, dental repetido innecesariamente + escalón 3 nuevo: cupo del chatbot con uso real, sin hallazgo
+
+Al arrancar: `BUILD_ID` seguía en `9tuk1Qk2BjQ2j2HdJcL8u` (igual que la entrada de abajo) — no
+correspondía re-correr dental. Lo corrí igual antes de comparar (**9/9, `completo: true`**,
+0 filas `zz-qa-` al cerrar) — dato correcto pero vuelta parcialmente redundante: la entrada de
+abajo ya decía explícitamente "si `BUILD_ID` sigue igual, no repetir dental — rotar rubro o
+escalón 3 no auditado". Lección aparte al final.
+
+**Escalón 3 nuevo — `CupoConversacionesCard` (`/settings/chatbot`) con USO REAL sembrado en la
+base**, nunca antes probado por este carril contra producción (sólo existía el render-test
+`CupoConversacionesCard.render.test.ts`, que fabrica el `EstadoCupo` a mano en vez de leerlo de
+una fila real). Instrumento nuevo: `scripts/probar_cupo_chatbot.mjs`. Org `zz-qa-` sembrada por
+SQL con `plan='professional'`, `whatsappAddon=true`, dueño ADMIN y `clinic_settings`; fila de
+`chatbot_uso_mensual` del mes en curso sembrada dos veces en la misma corrida:
+
+- **400/500 (80%, el umbral de aviso):** la barra pasa a ámbar (`bg-amber-500`), aparece el
+  botón **"Sumar 200 conversaciones"** y el link `wa.me` real menciona el precio correcto —
+  *"...quiero sumar 200 conversaciones al chatbot (Bs 190, valen hasta fin de mes). ¿Cómo
+  procedemos?"* — coincide con `RECARGA_CONVERSACIONES` de `pricing.ts` (200 conv., Bs 190,
+  con la vigencia dicha). Captura `extra-cupochatbot-01-80pct.png`.
+- **500/500 (agotado):** la barra pasa a roja (`bg-error`) y el texto avisa la derivación a una
+  persona. Captura `extra-cupochatbot-02-100pct-agotado.png`.
+
+**Sin hallazgo**: la promesa de la memoria compartida ("el producto avisa al 80% Y al aplicarse
+el corte, y con cupo agotado deriva a una persona") se sostiene también en la PANTALLA del
+dueño con datos reales, no sólo en el motor del bot. **Trampa de método encontrada y corregida
+en el propio instrumento**: el primer intento usaba el selector `[role="progressbar"]` sin
+filtrar por `aria-label`, y agarraba un progressbar de carga de página ajeno a la tarjeta
+(`aria-valuenow=1` fijo) — el selector correcto ancla por
+`[aria-label="Conversaciones usadas este mes"]` antes de leer nada adentro. Limpieza verificada:
+`organizations where name like 'zz-qa-%'` → 0 (el único huérfano de `chatbot_uso_mensual`
+encontrado en la base, `cmtml12hr...`, es de un `organizationId` con formato `cuid` — no mío,
+que siembro con `gen_random_uuid()`).
+
+RAZÓN: la medida `9/9` no se movió porque el `BUILD_ID` no cambió — correcto no repetirla dos
+veces, pero la corrí una vez de más antes de comparar. El avance real de la vuelta es el
+escalón 3 nuevo, cerrado sin hallazgo.
+LECCIÓN: comparar el `BUILD_ID` contra la última entrada ANTES de correr el recorrido completo,
+no después — la entrada anterior ya traía la instrucción explícita de no repetir dental. Y para
+cualquier probe nuevo con Playwright: un selector de rol ARIA genérico (`[role="progressbar"]`,
+`[role="dialog"]`, etc.) sin su `aria-label`/filtro específico puede agarrar un elemento de la
+UI del framework (indicador de carga) en vez del que se quiere medir — ancla siempre por el
+atributo que lo identifica antes de leer nada adentro.
+
+---
+
 ## 2026-09-24 08:14 La Paz — recorrido completo, rubro dental, `BUILD_ID` nuevo
 
 `BUILD_ID` cambió (`Df2rH9P_zIOujNXHs0ist` → `9tuk1Qk2BjQ2j2HdJcL8u`), correspondía re-correr
