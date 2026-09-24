@@ -602,10 +602,21 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
       ⛔ **NO HAY NADA QUE TRABAJAR ACÁ — 2026-09-24 14:55 La Paz. El código está HECHO, verde y
       en `origin/main`; lo único que falta es la FIRMA del deploy, y es de Sergio Urcullo:
-      tarea `t_0836a42f` (`DESPLEGAR: bot`), `blocked`, con los 32 archivos ya derivados del
-      `--dry-run` corrido después del último merge.** Queda como `- [ ]` porque el cliente
+      un pedido `DESPLEGAR: bot` en `blocked`, con los archivos ya derivados del `--dry-run`
+      corrido después del último merge.** Queda como `- [ ]` porque el cliente
       todavía no lo tiene, pero **una vuelta que entre acá a buscar trabajo pierde la vuelta**:
       se salta y se toma la brecha siguiente (es la fila **S12** de «Bloqueado en Sergio»).
+
+      🔴 **El ID del pedido NO se copia de acá: se DERIVA, y por eso este párrafo ya no nombra
+      ninguno.** Medido el 2026-09-24 17:40 La Paz: `t_0836a42f` —que este mismo ítem citaba
+      como vivo— está **archivado**, y el pedido vigente es otro, creado a las 20:45 UTC con el
+      mismo título. Un ID escrito a mano caduca en las dos direcciones y manda a mirar una tarea
+      muerta para concluir que el deploy no está pedido. El comando, que no caduca:
+
+      ```bash
+      /root/bin/onia-tablero.sh list --status blocked | grep -i 'Publicar el bot'
+      ```
+
       Verificado hoy que el pedido cubre estos commits —`813c5fa3` y `055713e4` son ancestros de
       `origin/main` y el punto 3 de su cuerpo los nombra—, así que **no hay que rehacerlo ni
       crear otro**: dos pedidos del mismo destino es el bug que ya archivó a `t_2508295d`.
@@ -829,8 +840,9 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       ✅ **2026-09-24 17:30 La Paz — esa precondición SE CUMPLIÓ. Corrido hoy, da `LISTO`:**
       `5a7d1224` ya es ancestro de `origin/main`, así que el `ok` publica las dos mitades juntas
       y el modo de falla descrito arriba (marcar al lead como avisado sin que Telegram salga)
-      **ya no puede pasar**. El pedido `t_0836a42f` queda sin objeciones técnicas: sólo espera la
-      firma. Anotado también como comentario en la tarea, que es donde lo va a leer quien ejecute.
+      **ya no puede pasar**. El pedido queda sin objeciones técnicas: sólo espera la firma — y el
+      pedido VIGENTE (rehecho a las 20:45 UTC; `t_0836a42f` quedó archivado) ya lleva esa nota
+      del orden en su propio cuerpo, así que no hace falta comentarlo ni rehacerlo.
 
 - [x] 🔴 **CERRADO el 2026-09-24 17:15-17:45 La Paz (commiteado, NO desplegado — el bot vivo
       corre `/tmp/onia-bot/`): un handoff que NADIE tomó dejaba a la persona escribiéndole a
@@ -870,8 +882,12 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       bot **1376/1376** (`npm run test:bot`). Simulador **3/3** después del cambio.
       Archivos: `bot-engine.mjs`, `persistence.mjs`, `aviso-telegram.mjs` + el test.
 
-      ⚠️ **Viaja en el pedido de deploy que ya existe (`t_0836a42f`, `DESPLEGAR: bot`), no en uno
-      nuevo** — dos pedidos del mismo destino es el bug que archivó a `t_2508295d`.
+      ⚠️ **Viaja en el pedido `DESPLEGAR: bot` que ya existe, no en uno nuevo** — dos pedidos del
+      mismo destino es el bug que archivó a `t_2508295d`. El publicador copia lo que `origin/main`
+      tenga **en el momento del `ok`**: si este commit llega a `main` antes (lo mergea el
+      integrador, no este carril), viaja gratis en el mismo `ok` porque `bot-engine.mjs` ya está
+      en su lista; si no llega, **el pedido sigue siendo válido tal cual está** para sus 4 puntos.
+      En ninguno de los dos casos hay que rehacerlo.
 
 - [x] 🔴 **CERRADO el 2026-09-24 12:45-13:20 La Paz (commiteado; el instrumento no necesita
       deploy): la definición de hecho del carril se había vuelto IMPOSIBLE de medir, y no por el
