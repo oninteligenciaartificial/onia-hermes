@@ -322,6 +322,13 @@ poner "$FUENTE/consolidar-memoria.sh"  "$DESTINO_BIN/onia-consolidar-memoria.sh"
 # `aprender.sh` sabe ESCRIBIR una leccion; sin esto, nadie sabe QUE leccion hace
 # falta, porque nadie compara una vuelta con la anterior. Lo corre el supervisor.
 poner "$FUENTE/extraer-fallos.sh"      "$DESTINO_BIN/onia-extraer-fallos.sh"
+# El parte diario: el UNICO mensaje que le sale a Sergio Urcullo por Telegram sin que
+# el pregunte (todo lo demas de onia-tg.sh se vuelve tarea del tablero). Le faltaba su
+# `poner` desde que nacio: el 2026-09-24 el vivo y el versionado coincidian por md5 pero
+# NADIE los sincronizaba — alguien lo habia copiado a mano el 21-sep. Un arreglo al canal
+# de salida del negocio que no viaja vale cero, y peor: la copia a mano se lee como
+# "desplegado" en el proximo md5sum.
+poner "$FUENTE/parte-diario.sh"            "$DESTINO_BIN/onia-parte-diario.sh"
 # Los vigias y el renovador de horarios, por la misma razon: existian solo en
 # /root/bin y una reinstalacion desde el repo los borraba sin avisar.
 poner "$FUENTE/vigia-disco.sh"             "$DESTINO_BIN/onia-vigia-disco.sh"
