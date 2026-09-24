@@ -395,6 +395,8 @@ poner "$RAIZ/hermes-content/deploy/vps-ops/vigia-comprobantes.sh"         "$DEST
 # copiado a mano, y estuvo ~41 dias mirando un contenedor que ya no existia sin que nadie
 # lo supiera. Nace en /root/bin y cableado; el crontab se muda a esta ruta (no se pisa /opt).
 poner "$RAIZ/hermes-content/deploy/vps-ops/security-watch.sh"             "$DESTINO_BIN/onia-security-watch.sh"
+# Respaldo diario de Storage (comprobantes de pago), 2026-09-24: la base guarda la fila, no la imagen.
+poner "$RAIZ/hermes-content/deploy/vps-ops/backup-storage.sh"             "$DESTINO_BIN/onia-backup-storage.sh"
 poner "$FUENTE/extras/onia-drop-recordatorio.sh"  "$DESTINO_BIN/onia-drop-recordatorio.sh"
 poner "$FUENTE/extras/onia-leads-vigia.sh"        "$DESTINO_BIN/onia-leads-vigia.sh"
 poner "$FUENTE/extras/onia-vigia-embudo.sh"       "$DESTINO_BIN/onia-vigia-embudo.sh"
