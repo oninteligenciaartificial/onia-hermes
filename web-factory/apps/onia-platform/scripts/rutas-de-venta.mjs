@@ -21,6 +21,14 @@
  * La regla que queda: **una ruta se exime por su NOMBRE y con su motivo, nunca por
  * una categoría** (noindex, disallow, "es archivo viejo"). Una categoría tapa un
  * árbol entero la próxima vez, y el gate sale verde igual.
+ *
+ * ⚠️ Esto NO es un gate y por eso no tiene alias en `package.json`. Hasta el
+ * 2026-09-24 lo tuvo (`npm run rutas:venta`): como acá no hay efectos, ejecutarlo
+ * imprimía NADA y salía 0 — un verde mudo indistinguible de una medición que pasó,
+ * en la lista de gates del carril de venta. Lo que hay que probar de este archivo
+ * ya lo prueban `enlaces-vivos.test.ts` y `precios-vivos.test.ts`, y lo que hay que
+ * medir lo miden sus tres consumidores (`enlaces-vivos`, `precios-vivos`,
+ * `mirar-venta`). Un alias que corre un módulo puro no mide: tranquiliza.
  */
 
 import { readdirSync } from "node:fs";

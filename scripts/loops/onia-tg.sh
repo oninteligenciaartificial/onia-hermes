@@ -108,9 +108,27 @@ if [ "${ONIA_TG_DIRECTO:-0}" != "1" ]; then
   # dicho SIEMPRE "no existe" y este script crearia 144 tareas iguales por dia — el
   # mismo ruido que vino a sacar, mudado de Telegram al tablero.
   # `grep -c` no corta al primer match, asi que no hay SIGPIPE.
-  PENDIENTES=$("$TABLERO" list 2>/dev/null | grep -F "$MARCA" | grep -cv '^✓' || true)
-  if [ "${PENDIENTES:-0}" -gt 0 ]; then
-    printf '%s TAREA-YA-EXISTE clave=%s titulo=%s\n' "$(date -u +%FT%TZ)" "$CLAVE" "$TITULO" >> "$LOG"
+  # EL ID DE LA TAREA SE LE DEVUELVE AL QUE LLAMA, no solo al log.
+  #
+  # Sin esto, el que avisa el rojo no se entera de QUE tarea lo representa, asi que
+  # cuando la cosa se recupera no tiene como cerrarla: manda un mensaje nuevo de
+  # "recuperado" y deja viva la tarea roja que ya no es cierta. Medido el 2026-09-10
+  # (t_c8a2d7d5 afirmaba "master esta roto" con el CI verde desde hacia ~21 h) y el
+  # 2026-09-24 (cuatro tareas "Loop callado en la PC de casa" del 19-sep, con los
+  # cuatro loops corriendo). El tablero es de donde los carriles sacan trabajo ANTES
+  # que su cola, asi que una tarea roja falsa no es ruido: es trabajo inventado.
+  #
+  # Va a stdout en UNA linea estable `TAREA <id>`, para que el llamador la capture
+  # con `$(...)`. El log sigue igual: esto es aditivo, y quien no mire stdout —que
+  # es casi todo el mundo, con `>/dev/null`— no cambia en nada.
+  PENDIENTES=$("$TABLERO" list 2>/dev/null | grep -F "$MARCA" | grep -v '^✓' || true)
+  if [ -n "$PENDIENTES" ]; then
+    # Ya hay una tarea abierta con esta clave: no se duplica, pero se devuelve SU id.
+    # Un episodio que vuelve a avisar mientras su tarea sigue viva tiene que poder
+    # adoptarla; si no, la marca queda sin id y el verde no cierra nada.
+    YA=$(printf '%s' "$PENDIENTES" | grep -oE 't_[0-9a-f]{8}' | head -1)
+    printf '%s TAREA-YA-EXISTE %s clave=%s titulo=%s\n' "$(date -u +%FT%TZ)" "${YA:-?}" "$CLAVE" "$TITULO" >> "$LOG"
+    [ -n "$YA" ] && printf 'TAREA %s\n' "$YA"
     exit 0
   fi
 
@@ -118,6 +136,7 @@ if [ "${ONIA_TG_DIRECTO:-0}" != "1" ]; then
   if printf '%s' "$SALIDA" | grep -qE 't_[0-9a-f]{8}'; then
     ID=$(printf '%s' "$SALIDA" | grep -oE 't_[0-9a-f]{8}' | head -1)
     printf '%s TAREA %s clave=%s titulo=%s\n' "$(date -u +%FT%TZ)" "$ID" "$CLAVE" "$TITULO" >> "$LOG"
+    printf 'TAREA %s\n' "$ID"
     exit 0
   fi
 
