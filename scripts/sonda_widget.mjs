@@ -275,10 +275,17 @@ export const MARCA_BOOTSTRAP = 'ONIA_SONDA_TOKEN=';
 // que se da la razon a si mismo.
 //
 // El desarme NO es un truco: es la semantica que el propio producto define. `clearHumanTakeover`
-// (bot-engine.mjs:117) dice "resolver significa termine" y devuelve `handoff_humano` a `nuevo`.
-// Resolvemos por Rails para que el camino real se ejecute entero — Chatwoot emite
-// `conversation_status_changed`, el adapter lo traduce y el estado vuelve. Efecto de borde
-// deseado: cada vuelta verifica ademas que ese desarme sigue vivo.
+// dice "resolver significa termine". Resolvemos por Rails para que el camino real se ejecute
+// entero — Chatwoot emite `conversation_status_changed`, el adapter lo traduce y el candado se
+// suelta. Efecto de borde deseado: cada vuelta verifica ademas que ese desarme sigue vivo.
+//
+// ⚠️ CORREGIDO el 2026-09-24. Aca decia que `clearHumanTakeover` "devuelve `handoff_humano` a
+// `nuevo`", y eso dejo de ser cierto: el producto lo APRETO a proposito (bot-engine.mjs:152 —
+// "el stage solo se libera cuando un humano REALMENTE escribio"), porque `handoff_humano` lo
+// prende el BOT al derivar y olvidarlo seria perderle el hilo a un lead que nadie atendio.
+// La sonda siguio esperando el efecto viejo y se colgo sola: ver el caso del INTERBLOQUEO en el
+// self-check. Una premisa del producto citada en un instrumento caduca sin avisar, y un
+// instrumento que espera un efecto que ya nadie promete no falla ruidoso: deja de medir.
 
 /** Estados del motor en los que el bot calla por diseno. Medir ahi no mide al bot. */
 export const ESTADOS_QUE_CALLAN = new Set(['handoff_humano']);
@@ -292,6 +299,22 @@ export function necesitaDesarme(fila) {
   if (!fila) return false;
   if (fila.humanTookOver === true) return true;
   return ESTADOS_QUE_CALLAN.has(String(fila.botStage || ''));
+}
+
+/**
+ * ¿Queda algo que el desarme por Rails PUEDA deshacer?
+ *
+ * Es una pregunta DISTINTA de `necesitaDesarme`, y colapsarlas colgo esta sonda. Una decide si
+ * vale la pena tocar ("¿el bot calla aca?"); esta decide si el desarme FUNCIONO, y para eso solo
+ * puede exigir lo que el producto promete: soltar el candado del humano (`humanTookOver`).
+ *
+ * `bot_stage` queda deliberadamente afuera. Si el handoff lo prendio el bot al derivar,
+ * `clearHumanTakeover` NO lo mueve —y hace bien—, asi que esperarlo es esperar para siempre.
+ * Eso se limpia con `guionBlanqueo`, que es el otro paso y no depende de este.
+ */
+export function desarmePendiente(fila) {
+  if (!fila) return false;
+  return fila.humanTookOver === true;
 }
 
 // ────────────── Y por que el desarme SOLO no alcanzaba: la sonda seguia envenenada ──────────────
@@ -669,10 +692,21 @@ function estadoDelBot(conversacionId) {
  * Blanquear DESPUES del desarme y no antes: resolver viaja por Sidekiq y el adapter reescribe
  * la fila al llegar, asi que un blanqueo previo se lo lleva puesto.
  */
-function dejarComoExtrano(conversacionId) {
-  if (necesitaDesarme(estadoDelBot(conversacionId)) && !desarmar(conversacionId)) return false;
-  psqlMotor(guionBlanqueo(conversacionId));
-  return esExtrano(estadoDelBot(conversacionId));
+export function dejarComoExtrano(conversacionId, deps) {
+  const falta = ['leer', 'resolver', 'blanquear'].filter((k) => typeof deps?.[k] !== 'function');
+  if (falta.length) {
+    // Misma doctrina que `cerrarSujeto`: sin default, porque el default de una dep inyectable es
+    // el efecto real y un caso que se la olvide correria `rails runner` contra produccion EN VERDE.
+    throw new Error(`dejarComoExtrano exige { leer, resolver, blanquear }; falta: ${falta.join(', ')}`);
+  }
+  // El desarme se INTENTA, pero su resultado no puede saltearse el blanqueo: el blanqueo es el
+  // UNICO que saca del `handoff_humano` que prendio el bot. Con esto detras de un `&&`, la sonda
+  // paso a "NO SE PUDO MEDIR" en cada vuelta y encima acusaba al blanqueo, que nunca corria.
+  const desarmado = !necesitaDesarme(deps.leer(conversacionId)) || deps.resolver(conversacionId);
+  deps.blanquear(conversacionId);
+  // El veredicto sale de la fila DESPUES del blanqueo, no de si el desarme anduvo: lo que
+  // habilita la medicion es que el sujeto sea un desconocido, venga por donde venga.
+  return desarmado && esExtrano(deps.leer(conversacionId));
 }
 
 /**
@@ -705,10 +739,12 @@ function desarmar(conversacionId) {
     ],
     { encoding: 'utf8', timeout: 180_000 },
   );
-  // El webhook viaja por Sidekiq: es rapido pero no instantaneo. Se espera al EFECTO
-  // (`bot_stage` de vuelta en algo que habla), no a un plazo fijo.
+  // El webhook viaja por Sidekiq: es rapido pero no instantaneo. Se espera al EFECTO, no a un
+  // plazo fijo — y el efecto es el que el producto promete (`desarmePendiente`: soltar el candado
+  // del humano), NO que el stage vuelva a hablar. Esperar el stage era esperar lo que
+  // `clearHumanTakeover` decidio no hacer, y agotaba las 10 vueltas para devolver false.
   for (let i = 0; i < 10; i += 1) {
-    if (!necesitaDesarme(estadoDelBot(conversacionId))) return true;
+    if (!desarmePendiente(estadoDelBot(conversacionId))) return true;
     execFileSync('sleep', ['2']);
   }
   return false;
@@ -975,7 +1011,13 @@ async function correr() {
   // ahi no mide al bot — grita que esta mudo con el bot sano, una vez por hora, para siempre.
   try {
     const previa = conversacionDelToken(estado.cw_conversation);
-    if (previa && !dejarComoExtrano(previa)) {
+    const comoExtrano = (id) =>
+      dejarComoExtrano(id, {
+        leer: estadoDelBot,
+        resolver: desarmar,
+        blanquear: (n) => psqlMotor(guionBlanqueo(n)),
+      });
+    if (previa && !comoExtrano(previa)) {
       // Fallar hacia "no se pudo medir" (2) y NUNCA hacia "el bot esta mudo" (1): no medir
       // no es estar roto, y confundirlos es como este carril perdio una vuelta entera.
       const fila = estadoDelBot(previa);
@@ -983,9 +1025,11 @@ async function correr() {
         codigo: 2,
         texto:
           `NO SE PUDO MEDIR — la conversacion ${previa} no quedo como la de un desconocido: ` +
-          `${JSON.stringify(fila)}. Si sigue en "handoff_humano", revisar que Chatwoot emita ` +
-          '`conversation_status_changed` y que el adapter lo traduzca; si lo que quedo cargado es ' +
-          'el embudo (`qualification`, `slots_offered`), revisar `guionBlanqueo`.',
+          `${JSON.stringify(fila)}. El blanqueo YA corrio (desde el 2026-09-24 corre aunque el ` +
+          'desarme falle), asi que lo que sobrevivio lo esta REESCRIBIENDO alguien: mirar si el ' +
+          'webhook del `resolved!` llego tarde y piso la fila, y si `planDeBlanqueo` cubre el ' +
+          'campo que quedo cargado (deriva de `reiniciarConversacionVencida`: un campo de estado ' +
+          'que el producto no reinicie no lo blanquea nadie).',
       };
     }
   } catch (e) {
@@ -1377,6 +1421,51 @@ async function selfCheck() {
 
   caso('sin fila todavia no hay nada que desarmar', () => {
     assert.strictEqual(necesitaDesarme(null), false);
+  });
+
+  // ── El INTERBLOQUEO: la sonda esperaba un efecto que el producto ya no promete ──────────
+  // Medido el 2026-09-24 sobre la conversacion 49: `NO SE PUDO MEDIR` en cada vuelta, con el
+  // bot sano y con el blanqueo sano — porque el blanqueo NUNCA CORRIA.
+  //
+  // `clearHumanTakeover` se APRETO a proposito (bot-engine.mjs:152, "el stage solo se libera
+  // cuando un humano REALMENTE escribio"): si el handoff lo prendio el BOT al derivar,
+  // `humanTookOver` es false y `bot_stage` se queda en `handoff_humano` para siempre. Pero
+  // `desarmar` seguia esperando el efecto viejo —`necesitaDesarme` en false, que incluye el
+  // stage— asi que agotaba sus 10 vueltas de 2 s y devolvia false; y `dejarComoExtrano` tenia
+  // ese false detrás de un `&&`, asi que salia ANTES del blanqueo. El mensaje de error remataba
+  // mandando a "revisar `guionBlanqueo`", que era lo unico que no habia corrido.
+  //
+  // Son dos preguntas distintas y estaban colapsadas en una: "¿el bot calla aca?" (para decidir
+  // si vale la pena tocar) NO es "¿que promete deshacer el desarme?" (para decidir si funciono).
+  caso('el desarme por Rails solo promete lo que clearHumanTakeover promete', () => {
+    // Lo que el producto SI deshace al resolver: el candado del humano.
+    assert.strictEqual(desarmePendiente({ botStage: 'calificando', humanTookOver: true }), true);
+    // Lo que el producto deliberadamente NO deshace: el stage que prendio el bot al derivar.
+    // Exigirlo es esperar para siempre, que es como esta sonda se colgo.
+    assert.strictEqual(desarmePendiente({ botStage: 'handoff_humano', humanTookOver: false }), false);
+    assert.strictEqual(desarmePendiente(null), false);
+  });
+
+  caso('el blanqueo corre AUNQUE el desarme falle: es el unico que limpia el stage', () => {
+    // `guionBlanqueo` deriva de `reiniciarConversacionVencida`, que pone `botStage: "nuevo"` sin
+    // condicion. Es el unico camino que saca del `handoff_humano` que prendio el bot, asi que un
+    // desarme fallido no puede saltearlo: ahi se pierde la medicion entera.
+    const llamadas = [];
+    const sucia = { botStage: 'handoff_humano', humanTookOver: false, qualification: { city: 'Santa Cruz' } };
+    const veredicto = dejarComoExtrano(49, {
+      leer: () => sucia,
+      resolver: () => { llamadas.push('resolver'); return false; },
+      blanquear: () => { llamadas.push('blanquear'); },
+    });
+    assert.ok(llamadas.includes('blanquear'), 'el blanqueo tiene que correr aunque el desarme falle');
+    assert.strictEqual(veredicto, false, 'con la fila todavia sucia el veredicto es "no se pudo medir"');
+  });
+
+  caso('dejarComoExtrano exige sus deps: un default aca escribe en produccion', () => {
+    // Misma doctrina que `cerrarSujeto`: el default de una dep inyectable es el efecto real, y un
+    // caso que se la olvide correria `docker exec … rails runner` contra produccion EN VERDE.
+    assert.throws(() => dejarComoExtrano(49), /exige/);
+    assert.throws(() => dejarComoExtrano(49, { leer: () => null }), /exige/);
   });
 
   // ── El desarme NO alcanzaba, y la sonda lo tapaba contando ────────────────────────────

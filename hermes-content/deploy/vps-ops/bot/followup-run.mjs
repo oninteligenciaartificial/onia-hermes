@@ -53,6 +53,13 @@ import { createStore, stateFromRow } from "./persistence.mjs";
 import { MOTIVO_NUESTRA, cargarInboxesDePrueba, esConversacionNuestra } from "./es-nuestra.mjs";
 import { createChatwootClient, whatsappTemplate } from "./chatwoot-adapter.mjs";
 import { getAvailableSlots as getAvailableSlotsFromCalcom } from "./calcom-availability.mjs";
+import {
+  KIND_LEAD_FRIO,
+  construirAviso,
+  enviarAvisoTelegram,
+  getAvisoTelegramConfig,
+} from "./aviso-telegram.mjs";
+import { crearGuardaDeEfectoReal, crearMarcasEnDisco } from "./marcas-en-disco.mjs";
 
 /** Estados donde el follow-up tiene sentido (mismos que el barrido en SQL). */
 export const FOLLOWUP_STAGES = Object.freeze(["esperando_calificacion", "esperando_horario"]);
@@ -289,6 +296,17 @@ async function contarColgadas(result, store, nowIso, config, limit) {
       displayName: state?.displayName || null,
       botStage: state?.botStage || null,
       silentHours: silentHours === null ? null : Math.round(silentHours),
+      // Los tres que el AVISO necesita y el conteo no usaba. `lastInboundAt` ademas es la mitad
+      // de la clave de la marca: sin el, "ya avise" valdria para la persona en vez de para este
+      // silencio, y el que vuelve a escribir y se va otra vez quedaria mudo para siempre.
+      lastInboundAt: state?.lastInboundAt || row?.last_inbound_at || null,
+      contacto: state?.publicContact || state?.contactRef || null,
+      inboxId: state?.inboxId ?? null,
+      // El MEDIO (`Channel::Whatsapp` / `Channel::WebWidget`) llega en el payload del webhook y
+      // la FILA no lo guarda, asi que desde un barrido sale null y `construirAviso` lo omite —
+      // nunca lo inventa. Quien identifica la via hoy es el `inbox` (4 web / 5 WhatsApp), que va
+      // en el aviso. Se pasa igual para que el dia que la columna exista, el aviso lo diga solo.
+      channelType: state?.channelType ?? null,
     });
   }
 
@@ -298,8 +316,140 @@ async function contarColgadas(result, store, nowIso, config, limit) {
     desconocidas: quienes.length,
     nuestras,
     quienes,
+    avisados: [],
   };
   if (quienes.length > 0) result.notes.push("colgadas_sin_rescate");
+}
+
+// ---------------------------------------------------------------------------
+// EL AVISO DE LA COLGADA — que Sergio Urcullo se entere del lead que se enfrio.
+// ---------------------------------------------------------------------------
+
+/**
+ * Donde viven las marcas en el VPS. Mismo patron que `/var/lib/onia-rescate-avisado` y que
+ * `/var/lib/onia-vigia-remotos/<id>`.
+ */
+export const DIR_COLGADAS_POR_DEFECTO = "/var/lib/onia-colgada-avisado";
+
+const guardaDeMarcasReales = crearGuardaDeEfectoReal(
+  "hermetismo: un test llego a las marcas REALES de las colgadas. Pasale `deps.marcas` al " +
+    "barrido (o un directorio propio a crearMarcasEnDisco): una marca escrita desde la suite " +
+    "silencia para siempre el aviso de un lead de verdad.",
+);
+
+/**
+ * La clave lleva la conversacion Y el ultimo entrante.
+ *
+ * POR QUE NO ALCANZA LA CONVERSACION SOLA: "ya avise" vale para ESTE silencio, no para la
+ * persona. Si el lead vuelve a escribir y se enfria otra vez, eso es un lead perdido nuevo y
+ * tiene que volver a sonar; con una clave por conversacion se quedaria mudo para siempre.
+ *
+ * Se VALIDA entero en vez de sanearse: un id contaminado que "se limpia" produce una clave que
+ * colisiona con la de otro lead y lo silencia. Es mas seguro no tener marca —y avisar de mas—
+ * que tener la marca equivocada. Sin alguna de las dos partes devuelve `null` y NO se inventa
+ * una clave parcial.
+ */
+export function claveDeColgada({ conversationKey, lastInboundAt } = {}) {
+  const conv = String(conversationKey ?? "");
+  const desde = String(lastInboundAt ?? "");
+  // La clave es el NOMBRE de un archivo: `/` la sacaria del directorio de marcas y `.` sola
+  // apuntaria al directorio mismo. `:` es legal en Linux y es lo que separa `chatwoot:58`.
+  const legal = /^[0-9A-Za-z_.:+-]+$/;
+  if (!legal.test(conv) || !legal.test(desde)) return null;
+  if (conv.includes("..") || desde.includes("..")) return null;
+  return `colgada-${conv}-${desde}`;
+}
+
+/**
+ * El canal real. Se arma con las piezas de `aviso-telegram.mjs` —que es donde vive el token y
+ * el escapado de HTML— y no con las de otro barrido: el aviso de las colgadas tiene que ser el
+ * MISMO aviso que Sergio Urcullo ya recibe cuando el bot deriva o agenda, o son dos canales.
+ */
+export function canalDeAvisoColgadas(env = process.env) {
+  const config = getAvisoTelegramConfig(env);
+  return { config, enviar: (aviso) => enviarAvisoTelegram(aviso, config) };
+}
+
+/** Cuantos dias enteros lleva callado. Es lo que ordena a cual rescatar primero. */
+function diasCallado(silentHours) {
+  return silentHours === null || silentHours === undefined ? null : Math.floor(silentHours / 24);
+}
+
+/**
+ * Avisa por cada desconocido que se enfrio, UNA sola vez.
+ *
+ * POR QUE "UNA VEZ" NO ES UN ADORNO: las colgadas no se vacian nunca —una conversacion por
+ * encima del piso de rescate se queda ahi para siempre—, asi que un aviso por corrida seria el
+ * mismo lead repetido todos los dias hasta que Sergio Urcullo aprenda a no leer estos avisos.
+ * Eso se lleva puesto tambien al aviso que SI importaba.
+ *
+ * Y POR QUE NO SE PURGAN LAS MARCAS, al reves que en el rescate: alla la ventana del huerfano
+ * dura 12 h y pasado eso la marca ya no puede silenciar nada. Aca el silencio del lead NO
+ * vence, asi que purgar seria volver a avisar de alguien de hace meses. El directorio crece de
+ * a un archivo por lead perdido, que es una cuenta que ya quisieramos tener grande.
+ */
+async function avisarColgadas(result, nowIso, deps) {
+  const quienes = result.colgadas?.quienes || [];
+  if (quienes.length === 0) return;
+
+  const marcas = deps.marcas || crearMarcasEnDisco({
+    envVar: "ONIA_COLGADAS_MARCAS",
+    porDefecto: DIR_COLGADAS_POR_DEFECTO,
+    guarda: guardaDeMarcasReales,
+  });
+  const aviso = deps.aviso || canalDeAvisoColgadas();
+
+  for (const quien of quienes) {
+    const clave = claveDeColgada(quien);
+    // `null` = no pude recordar. NO es `false`: mandar sin reserva confirmada es arriesgarse a
+    // repetir el aviso en cada corrida, que es el ruido que apaga el canal. Se dice y se sigue.
+    const reserva = await marcas.reservar(clave);
+    if (reserva === false) continue;
+    if (reserva !== true) {
+      result.warnings.push(
+        `${quien.conversationKey}: no se pudo recordar el aviso de la colgada, no se manda`,
+      );
+      continue;
+    }
+
+    const dias = diasCallado(quien.silentHours);
+    const contacto = quien.contacto || quien.displayName || "sin contacto";
+    const texto = construirAviso({
+      notify: [
+        {
+          kind: KIND_LEAD_FRIO,
+          reason: KIND_LEAD_FRIO,
+          // Lo que se puede ACTUAR sin abrir la base. "Lo ultimo que dijo" NO esta, a proposito:
+          // el entrante no se persiste (`INBOUND_BODY_PLACEHOLDER`, persistence.mjs), y un aviso
+          // que lo inventara seria peor que uno que no lo trae.
+          text:
+            `${contacto} — callado hace ${dias === null ? "?" : dias} días.\n` +
+            "El bot lo atendió y ya le insistió una vez. Pasados los 7 días no se le escribe " +
+            "más solo: si lo querés rescatar, lo abrís vos desde la bandeja.",
+        },
+      ],
+      conversationId: quien.conversationKey,
+      stageAfter: quien.botStage,
+      canal: quien.channelType,
+      // `esNuestra` no se pasa: `contarColgadas` ya saco lo nuestro con el mismo criterio que
+      // usa el barrido para no escribirse solo. Lo que llega aca es un lead.
+      inbox: quien.inboxId,
+    });
+
+    try {
+      await aviso.enviar(texto);
+      (result.colgadas.avisados ||= []).push(quien.conversationKey);
+    } catch (error) {
+      if (error?.hermetismo) throw error; // un test sin `deps.aviso` se entera, no se silencia
+      // La marca existe para no repetir un aviso ENTREGADO. Si Telegram se cayo, este lead no se
+      // anuncio NUNCA: se suelta para que el barrido siguiente lo reintente, o la reserva dejaria
+      // de evitar ruido y pasaria a tragarse al unico aviso que importaba.
+      await marcas.liberar?.(clave);
+      result.warnings.push(
+        `${quien.conversationKey}: el aviso de la colgada NO salio (${String(error?.message || error).slice(0, 120)}) — se reintenta en el proximo barrido`,
+      );
+    }
+  }
 }
 
 export async function runFollowUpSweep(options = {}, deps = {}) {
@@ -322,7 +472,9 @@ export async function runFollowUpSweep(options = {}, deps = {}) {
     // Tri-estado a proposito: `null` es "nadie pudo preguntar", `0` es "mire y no hay ninguna".
     // Aplanarlos en 0 hace que el barrido diga "no se perdio ningun lead" justo cuando esta ciego,
     // y falla hacia el lado caro: el que calla el aviso.
-    colgadas: { medido: false, total: null, desconocidas: null, nuestras: null, quienes: [] },
+    // `avisados` es lo unico que prueba que el lead perdido SALIO del sistema hacia una persona.
+    // Vacio en dry-run y vacio cuando ya se habia avisado: las dos cosas son correctas.
+    colgadas: { medido: false, total: null, desconocidas: null, nuestras: null, quienes: [], avisados: [] },
     warnings: store.warnings,
   };
 
@@ -350,6 +502,12 @@ export async function runFollowUpSweep(options = {}, deps = {}) {
   // alcanza. Si la base esta caida el sweep de arriba ya corto, y entonces esto queda en NO MEDIDO,
   // que es la verdad — no habria con que contar.
   await contarColgadas(result, store, nowIso, config, limit);
+
+  // Y CONTAR NO ES AVISAR. Hasta el 2026-09-24 el lead perdido quedaba nombrado en una linea de
+  // la salida del cron y nadie la leia: `conv 58` —un lead de WhatsApp llegado desde la web,
+  // atendido bien— estuvo seis dias tibio sin que Sergio Urcullo supiera que existia. Solo en
+  // `emit`: mirar el barrido no puede gastar el unico aviso del lead.
+  if (emit) await avisarColgadas(result, nowIso, deps);
 
   // Sergio todavia no definio los 2 bloques de demo: M3 saldria con "HORARIO A (pendiente de
   // definir)". Se bloquea el envio ANTES del CAS (no se quema la unica reserva) y se dice quien

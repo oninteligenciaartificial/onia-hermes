@@ -736,8 +736,18 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       El 11-sep también entró la dieta de la sección de add-ons (`e12b740f`: tarjetas con
       precio en píldora, ancla del salario en una línea, copys cortos en la fuente única).
 
-- [ ] 🔴 **ESCALERA C IMPLEMENTADA el 2026-09-12 ("tenés permiso de los precios") — REGLA DE
-      DESPLIEGUE: los DOS deploys salen JUNTOS o ninguno.** Producto en `master`
+- [x] 🔴 **CERRADO el 2026-09-24: el checkbox estaba abierto y el cuerpo entero ya decía ✅.**
+      Re-medido en producción HOY, no heredado:
+      `docker exec onia-platform grep -rhoE 'monthly:[0-9]+' /app/.next/server | sort -u` →
+      `320 550 890 1290` + add-ons `70 150 390 2900`, **sin rastro de 750 ni 1500**. O sea que la
+      regla de despliegue que este ítem custodiaba (*"los DOS deploys salen JUNTOS o ninguno"*)
+      ya se cumplió el 12-sep y sigue cumplida doce días después. Se queda en la cola como
+      historia —el texto de abajo explica por qué la advertencia vieja hace frenar deploys que no
+      hay que frenar— pero **deja de contar como trabajo pendiente**: un `- [ ]` que ningún turno
+      puede trabajar hace releer 30 líneas por vuelta y esconde lo que sí está abierto.
+
+      ESCALERA C IMPLEMENTADA el 2026-09-12 ("tenés permiso de los precios") — REGLA DE
+      DESPLIEGUE: los DOS deploys salen JUNTOS o ninguno. Producto en `master`
       (`4bff903d`): plan `crece` 550/145/5.500, Pro 890/229/8.900, Full 1.290/12.900 CON
       chatbot incluido (`whatsappIncluded` en `onia-platform/lib/plan-catalogo.ts`, ejecutado
       por `onia-platform/lib/plan-limits.ts` como cuarta fuente de `addonHabilitado` con la
@@ -2527,84 +2537,6 @@ y sin operar. Acá se opera, con verificación por ítem.
       (`hermes-content/deploy/vps-ops/bot/run-turn.mjs` askLiteLLM lee env; pasaría a leer
       del knowledge de la org). No construir antes de que exista el pedido real.
 
-- [ ] 🔴 **LOTE AUDITORÍA 11-sep (velocidad + diseño vs Lety/Dapta, pedido de Sergio
-      Urcullo) — medido con Lighthouse + Playwright + curl, capturas en el chat de la sesión.**
-      ⚠️ **DERIVADO el 2026-09-11: no lo ejecuta este carril, y por eso no se puede cerrar acá.**
-      Los nueve puntos viven en `web-factory/apps/onia-platform/src/app/(sitio)/`, que es zona de
-      `web-venta` — medido, no supuesto: los últimos 12 commits de esa carpeta en `origin/main`
-      son todos suyos (`fix(venta):`). Quedó repartido así, y este carril no lo vuelve a mirar:
-      · **(a)-(d), velocidad** → tarea `t_c38481ac` del tablero, asignada a `carril-web-venta`,
-        `ready` (verificado con `show`, no con el exit de `assign`). Es mecánica invisible: no
-        cambia lo que el cliente LEE, así que va sin que Sergio Urcullo mire nada.
-      · **(e)-(i), diseño** → ya estaban preguntadas: `t_54ff72b5`, `t_781090e0` y `t_a0644214`,
-        las dos últimas `blocked` esperándolo a él. Crear una cuarta era repetirle una decisión
-        que ya tiene sobre la mesa.
-      Lo bueno medido: Onia carga MÁS RÁPIDO que ambas referencias (load 494 ms vs Lety
-      12.913 ms y Dapta 9.493 ms desktop), precio visible en el fold (ninguna referencia lo
-      tiene), 1 clic a /register, 0 render-blocking, 0 imágenes sin dimensiones. Lo que
-      falla, por impacto:
-      ✅ (a)+(b)+(c) CERRADOS el 2026-09-11 (commits `b1004df6` + sin-fade, PUBLICADOS en
-      onia.com.bo y re-medidos con Lighthouse desde el VPS — instrumento estable para
-      futuras mediciones): peso total **1.491 → 434 KB (−71%)**, requests 43 → 26, Chatwoot
-      **0 KB** en carga inicial, hero pinta sin esperar
-      JS y SIN fade (lección medida: un texto en opacity 0 no cuenta como pintado — el fade
-      de entrada en el fold cuesta LCP venga de JS o de CSS), polyfills eliminados por
-      browserslist moderno. Score 86, FCP 2,1 s, **LCP 3,8 s — mejor pero aún > 2,5**: lo que
-      queda es (d) TTFB ~740 ms (regla de caché de HTML en Cloudflare — la decide Sergio
-      Urcullo en su panel CF o autorizando el conector) y ~680 ms de render delay del h1
-      (revisar font-display de la fuente de titulares). El detalle de (a), que es el que
-      trajo el ahorro y la lección:
-      (a) ✅ **CERRADO 2026-09-11 (`3927d847`)** VELOCIDAD — el widget de Chatwoot era el
-      **71% del peso** de la landing (1.062 KB de 1.491 KB, 18 requests) y lo descargaba toda
-      visita. Ahora espera al primer gesto de una persona o 12 s (`src/lib/chat-diferido.ts`,
-      gate `chat-diferido.test.ts`, medición viva `scripts/chat-diferido-vivo.mjs`). Medido
-      sobre la portada buildeada: **0 pedidos y 0 KB al chat sin tocar nada**. Sin launcher
-      propio: la burbuja es la misma y no hubo cambio visual que aprobar. ⚠️ Y la trampa que
-      costó la vuelta: con `scroll` y `mousemove` en la lista de gestos el SDK salía pedido a
-      los **176 ms** sin que nadie tocara nada —la página dispara `scroll` sola— con el gate
-      de unidad en verde. Sólo lo vio abrir la página y escuchar lo que pide;
-      ⚠️ **El «o 5 s» que decía el resumen del lote era del snippet VIEJO** (inline en
-      `layout.tsx`, con `scroll` adentro): lo reemplazó este módulo al integrar, y la espera
-      vigente es **12 s**. Se corrigió acá al mergear para que el resumen no contradiga al
-      código que corre;
-      (b) ⚠️ **CORREGIDO 2026-09-18: la primera mitad de este ítem era FALSA y su remedio una
-      regresión.** Decía *"LCP móvil 3,1 s: `dueno-duerme.webp` está lazy — pasar a
-      fetchpriority=high"*. Medido contra `onia.com.bo` con Playwright + `PerformanceObserver`
-      (`largest-contentful-paint`, `buffered:true`, `reducedMotion:'reduce'`): **el elemento LCP
-      es TEXTO del hero en los dos viewports** — `<P>` a 1.256 ms en móvil 390×844, `<H1>` a
-      896 ms en escritorio 1440×900 —, y esa foto está a **3.109 px** de scroll en móvil (2.602
-      en escritorio), o sea casi cuatro pantallas abajo: **no puede ser el LCP por definición**.
-      Ponerle `fetchpriority=high` a 104 KB que nadie ve todavía sólo los pone a competir por
-      ancho de banda contra el hero, que sí es el LCP; el `loading=lazy` de ahí es correcto y se
-      deja. **La segunda mitad (srcset 800w) sí era cierta**: está escrita en `claude/web-venta`
-      (`0df2a089`, gate validado por mutación, 104 → 31 KB) pero **todavía NO publicada** — el
-      `img` vivo de hoy trae `srcset` vacío. Medición y porqué en la cabecera de
-      `web-factory/apps/onia-platform/src/fotos-de-venta-con-srcset.test.ts`; tarea `t_21723822`.
-      ⚠️ El presupuesto de LCP del **LISTO** sigue abierto, pero se persigue por (d) TTFB y el
-      render delay del h1, **no por esta foto**;
-      (c) 🟡 JS propio 197,7 KB gz (> presupuesto 150): el chunk de polyfills legacy (39,6 KB gz)
-      se elimina fijando browserslist moderno;
-      (d) 🟡 TTFB 0,5-1,05 s en páginas estáticas de venta: cache de HTML en Cloudflare/ISR
-      (Lety: 0,36 s);
-      (e) 🔴 DISEÑO — el h1 "Todo el negocio, en una pantalla." describe la UI; el de Lety
-      ("Sell AI. To dentists. Get paid every month.") nombra comprador y resultado. Rotar el
-      rubro en el titular con el vocabulario que ya existe (`web-factory/apps/onia-platform/src/app/(sitio)/page.tsx`
-      h1 + TITULO/DESCRIPCION/OG + guard `hero.test.ts`);
-      (f) 🔴 el panel del hero vende SUSTANTIVOS (6 pastillas sin un número); Lety vende
-      NÚMEROS ($13.300/mo con curva). Dibujar un "día simulado" en Bs (14 citas · Bs 2.340
-      cobrados · 9 recordatorios) — sigue siendo panel dibujado (regla 1-sep), etiquetado
-      "ejemplo"; archivos `(sitio)/ui.tsx` PanelDibujado;
-      (g) 🟡 cero señal de confianza en el fold (sin inventar: integraciones reales WhatsApp/
-      QR bancos/SIAT + "Hecho en Bolivia" + "14 días sin tarjeta" como fila compacta);
-      (h) 🟡 hero centrado deja el fold sin evidencia: split copy-izquierda/panel-derecha
-      (patrón Lety) en `(sitio)/portada.module.css`;
-      (i) 🟡 CTA verde sobre hero verde (tres verdes idénticos compitiendo) + burbuja de chat
-      tapa el panel en móvil + eyebrow duplica el claim del h1.
-      ⚠️ (e)-(i) tocan la pieza APROBADA del 1-sep: el rediseño se muestra renderizado a
-      Sergio Urcullo ANTES de publicar (regla "una superficie viva no se reemplaza sin que la
-      VEA"). (a)-(d) son mecánica invisible: van directo.
-      **LISTO =** LCP < 2,5 s y peso total < 500 KB medidos con Lighthouse, y el hero nuevo
-      aprobado por Sergio Urcullo mirándolo.
 
 - [x] ✅ **T-nueva — CERRADO el 2026-09-10 23:45 UTC: su LISTO se cumple hoy.** Contado en
       `supabase-db`, no deducido: `public.organizations` tiene **3 filas** (`onia-interna`,
@@ -5785,6 +5717,120 @@ y sin operar. Acá se opera, con verificación por ítem.
 - **No despliega.** El deploy de `onia-platform` tiene su propio runbook y su propio dueño
   (`onia-platform/.claude/skills/onia-deploy/`).
 - **No le escribe a un prospecto.** Regla del [`README.md`](README.md) de esta carpeta.
+
+- **No ejecuta el LOTE AUDITORÍA del 11-sep** (velocidad + diseño vs Lety/Dapta). Se derivó a
+  `web-venta` ese mismo día —los nueve puntos viven en
+  `web-factory/apps/onia-platform/src/app/(sitio)/`, su zona— pero **se quedó 13 días en
+  «Ahora» igual**, y ahí un ítem que este carril no puede cerrar se relee y se saltea en cada
+  vuelta. Por eso baja acá entero, con sus nueve puntos, que a `web-venta` le sirven.
+
+  ⚠️ **Y lo que decía de sus tareas era FALSO — medido hoy 2026-09-24 con `onia-tablero.sh
+  show`, no con el exit de un `assign`.** Afirmaba *«`t_54ff72b5`, `t_781090e0` y
+  `t_a0644214`, las dos últimas `blocked` esperándolo a él»*. Hoy:
+
+  | tarea | la cola decía | está |
+  |---|---|---|
+  | `t_a0644214` | `blocked` esperando a Sergio Urcullo | **`done`** — cerrada el 18-sep por **bloqueo VENCIDO**: el hero ya estaba publicado |
+  | `t_54ff72b5` | `blocked` esperando a Sergio Urcullo | **`todo`** — viva y **sin dueño** (`claim_rejected: parents_not_done`) |
+  | `t_781090e0` | `blocked` | `blocked` ✔ la única que sí lo espera |
+  | `t_c38481ac` | `ready` en `carril-web-venta` | **`done`** |
+
+  **La diferencia no es de prolijidad: cambia quién tiene que actuar.** Este carril leía «está
+  en manos de Sergio Urcullo» y lo salteaba, cuando en el tablero **no lo tenía nadie**: el
+  punto (e) estaba huérfano, no bloqueado. Es la misma clase de error que la regla de
+  `CLAUDE.md` persigue al revés —«depende de Sergio Urcullo» escrito en un `.md` no existe para
+  nadie—: acá el `.md` inventaba una espera que el tablero no tenía, y una espera inventada
+  para el trabajo exactamente igual que una real.
+
+  **Lo que sí sigue siendo cierto, medido en producción hoy** (`curl https://onia.com.bo/`,
+  200 en 1,13 s, 119.663 bytes): el h1 vivo es `Todo el negocio, en una pantalla.` — que es el
+  hero **aprobado y publicado el 18-sep**, no el viejo que (e) describe. Abajo del botón ya
+  dice «14 días … sin tarjeta … desde Bs 320 al mes», así que **(g) ya tiene su señal de
+  "sin tarjeta"**; de (g) faltan «Hecho en Bolivia» y SIAT (**0 apariciones** de ambos en la
+  home; la factura entra al nav como «Facturación»). (f), (h) e (i) no se miden por HTML y
+  quedan como estaban, para quien abra la pieza y la MIRE.
+
+  Se le comentó lo medido a `t_54ff72b5`, que es la que quedó sin dueño. **Este carril no lo
+  vuelve a mirar.**
+  - **LOTE AUDITORÍA 11-sep (velocidad + diseño vs Lety/Dapta, pedido de Sergio
+        Urcullo) — medido con Lighthouse + Playwright + curl, capturas en el chat de la sesión.**
+        ⚠️ **DERIVADO el 2026-09-11: no lo ejecuta este carril, y por eso no se puede cerrar acá.**
+        Los nueve puntos viven en `web-factory/apps/onia-platform/src/app/(sitio)/`, que es zona de
+        `web-venta` — medido, no supuesto: los últimos 12 commits de esa carpeta en `origin/main`
+        son todos suyos (`fix(venta):`). Quedó repartido así, y este carril no lo vuelve a mirar:
+        · **(a)-(d), velocidad** → tarea `t_c38481ac` del tablero, asignada a `carril-web-venta`,
+          `ready` (verificado con `show`, no con el exit de `assign`). Es mecánica invisible: no
+          cambia lo que el cliente LEE, así que va sin que Sergio Urcullo mire nada.
+        · **(e)-(i), diseño** → ya estaban preguntadas: `t_54ff72b5`, `t_781090e0` y `t_a0644214`,
+          las dos últimas `blocked` esperándolo a él. Crear una cuarta era repetirle una decisión
+          que ya tiene sobre la mesa.
+        Lo bueno medido: Onia carga MÁS RÁPIDO que ambas referencias (load 494 ms vs Lety
+        12.913 ms y Dapta 9.493 ms desktop), precio visible en el fold (ninguna referencia lo
+        tiene), 1 clic a /register, 0 render-blocking, 0 imágenes sin dimensiones. Lo que
+        falla, por impacto:
+        ✅ (a)+(b)+(c) CERRADOS el 2026-09-11 (commits `b1004df6` + sin-fade, PUBLICADOS en
+        onia.com.bo y re-medidos con Lighthouse desde el VPS — instrumento estable para
+        futuras mediciones): peso total **1.491 → 434 KB (−71%)**, requests 43 → 26, Chatwoot
+        **0 KB** en carga inicial, hero pinta sin esperar
+        JS y SIN fade (lección medida: un texto en opacity 0 no cuenta como pintado — el fade
+        de entrada en el fold cuesta LCP venga de JS o de CSS), polyfills eliminados por
+        browserslist moderno. Score 86, FCP 2,1 s, **LCP 3,8 s — mejor pero aún > 2,5**: lo que
+        queda es (d) TTFB ~740 ms (regla de caché de HTML en Cloudflare — la decide Sergio
+        Urcullo en su panel CF o autorizando el conector) y ~680 ms de render delay del h1
+        (revisar font-display de la fuente de titulares). El detalle de (a), que es el que
+        trajo el ahorro y la lección:
+        (a) ✅ **CERRADO 2026-09-11 (`3927d847`)** VELOCIDAD — el widget de Chatwoot era el
+        **71% del peso** de la landing (1.062 KB de 1.491 KB, 18 requests) y lo descargaba toda
+        visita. Ahora espera al primer gesto de una persona o 12 s (`src/lib/chat-diferido.ts`,
+        gate `chat-diferido.test.ts`, medición viva `scripts/chat-diferido-vivo.mjs`). Medido
+        sobre la portada buildeada: **0 pedidos y 0 KB al chat sin tocar nada**. Sin launcher
+        propio: la burbuja es la misma y no hubo cambio visual que aprobar. ⚠️ Y la trampa que
+        costó la vuelta: con `scroll` y `mousemove` en la lista de gestos el SDK salía pedido a
+        los **176 ms** sin que nadie tocara nada —la página dispara `scroll` sola— con el gate
+        de unidad en verde. Sólo lo vio abrir la página y escuchar lo que pide;
+        ⚠️ **El «o 5 s» que decía el resumen del lote era del snippet VIEJO** (inline en
+        `layout.tsx`, con `scroll` adentro): lo reemplazó este módulo al integrar, y la espera
+        vigente es **12 s**. Se corrigió acá al mergear para que el resumen no contradiga al
+        código que corre;
+        (b) ⚠️ **CORREGIDO 2026-09-18: la primera mitad de este ítem era FALSA y su remedio una
+        regresión.** Decía *"LCP móvil 3,1 s: `dueno-duerme.webp` está lazy — pasar a
+        fetchpriority=high"*. Medido contra `onia.com.bo` con Playwright + `PerformanceObserver`
+        (`largest-contentful-paint`, `buffered:true`, `reducedMotion:'reduce'`): **el elemento LCP
+        es TEXTO del hero en los dos viewports** — `<P>` a 1.256 ms en móvil 390×844, `<H1>` a
+        896 ms en escritorio 1440×900 —, y esa foto está a **3.109 px** de scroll en móvil (2.602
+        en escritorio), o sea casi cuatro pantallas abajo: **no puede ser el LCP por definición**.
+        Ponerle `fetchpriority=high` a 104 KB que nadie ve todavía sólo los pone a competir por
+        ancho de banda contra el hero, que sí es el LCP; el `loading=lazy` de ahí es correcto y se
+        deja. **La segunda mitad (srcset 800w) sí era cierta**: está escrita en `claude/web-venta`
+        (`0df2a089`, gate validado por mutación, 104 → 31 KB) pero **todavía NO publicada** — el
+        `img` vivo de hoy trae `srcset` vacío. Medición y porqué en la cabecera de
+        `web-factory/apps/onia-platform/src/fotos-de-venta-con-srcset.test.ts`; tarea `t_21723822`.
+        ⚠️ El presupuesto de LCP del **LISTO** sigue abierto, pero se persigue por (d) TTFB y el
+        render delay del h1, **no por esta foto**;
+        (c) 🟡 JS propio 197,7 KB gz (> presupuesto 150): el chunk de polyfills legacy (39,6 KB gz)
+        se elimina fijando browserslist moderno;
+        (d) 🟡 TTFB 0,5-1,05 s en páginas estáticas de venta: cache de HTML en Cloudflare/ISR
+        (Lety: 0,36 s);
+        (e) 🔴 DISEÑO — el h1 "Todo el negocio, en una pantalla." describe la UI; el de Lety
+        ("Sell AI. To dentists. Get paid every month.") nombra comprador y resultado. Rotar el
+        rubro en el titular con el vocabulario que ya existe (`web-factory/apps/onia-platform/src/app/(sitio)/page.tsx`
+        h1 + TITULO/DESCRIPCION/OG + guard `hero.test.ts`);
+        (f) 🔴 el panel del hero vende SUSTANTIVOS (6 pastillas sin un número); Lety vende
+        NÚMEROS ($13.300/mo con curva). Dibujar un "día simulado" en Bs (14 citas · Bs 2.340
+        cobrados · 9 recordatorios) — sigue siendo panel dibujado (regla 1-sep), etiquetado
+        "ejemplo"; archivos `(sitio)/ui.tsx` PanelDibujado;
+        (g) 🟡 cero señal de confianza en el fold (sin inventar: integraciones reales WhatsApp/
+        QR bancos/SIAT + "Hecho en Bolivia" + "14 días sin tarjeta" como fila compacta);
+        (h) 🟡 hero centrado deja el fold sin evidencia: split copy-izquierda/panel-derecha
+        (patrón Lety) en `(sitio)/portada.module.css`;
+        (i) 🟡 CTA verde sobre hero verde (tres verdes idénticos compitiendo) + burbuja de chat
+        tapa el panel en móvil + eyebrow duplica el claim del h1.
+        ⚠️ (e)-(i) tocan la pieza APROBADA del 1-sep: el rediseño se muestra renderizado a
+        Sergio Urcullo ANTES de publicar (regla "una superficie viva no se reemplaza sin que la
+        VEA"). (a)-(d) son mecánica invisible: van directo.
+        **LISTO =** LCP < 2,5 s y peso total < 500 KB medidos con Lighthouse, y el hero nuevo
+        aprobado por Sergio Urcullo mirándolo.
+
 
 ## Cerrado
 

@@ -37,6 +37,11 @@
 //
 //   node rescate-run.mjs [--emit] [--limit 20] [--now 2026-09-03T00:10:00Z]
 
+// El unico import del archivo, y es de un HERMANO del mismo directorio: `deploy-bot.sh` copia
+// por glob (`*.mjs`), asi que viaja con el resto. Lo que no se puede importar acá es algo de
+// `scripts/`, que no existe en `/opt/onia/bot` — ver `escaparHtml` mas abajo.
+import { crearMarcasEnDisco as crearMarcas } from "./marcas-en-disco.mjs";
+
 /** Por debajo de esto el webhook en vivo todavia puede estar contestando. 3 min. */
 export const MIN_EDAD_MS = 3 * 60 * 1000;
 
@@ -427,51 +432,18 @@ export function claveDeMarca({ conversationId, messageId } = {}) {
  * llevan a decisiones distintas.
  */
 export function crearMarcasEnDisco(dir) {
-  const elegido = dir || process.env.ONIA_RESCATE_MARCAS;
-  // Un directorio propio (o `ONIA_RESCATE_MARCAS`) es hermetico y se deja pasar: la baranda
-  // no puede volver intesteable a la parte que SI hay que probar. Lo que no se deja pasar es
-  // caer al directorio de produccion desde la suite.
-  if (!elegido) guardaDeEfectoReal("marcas");
-  const destino = elegido || DIR_MARCAS_POR_DEFECTO;
-  const fs = () => import("node:fs");
-  return {
-    async reservar(clave) {
-      if (!clave) return null;
-      try {
-        const { mkdirSync, openSync, closeSync } = await fs();
-        const { join } = await import("node:path");
-        mkdirSync(destino, { recursive: true });
-        closeSync(openSync(join(destino, clave), "wx"));
-        return true;
-      } catch (error) {
-        if (error && error.code === "EEXIST") return false;
-        return null;
-      }
-    },
-    async liberar(clave) {
-      if (!clave) return;
-      try {
-        const { rmSync } = await fs();
-        const { join } = await import("node:path");
-        rmSync(join(destino, clave), { force: true });
-      } catch {
-        // Soltar la marca es best-effort: si falla, el peor caso es un aviso que no se repite.
-      }
-    },
-    async purgar(antesDeMs) {
-      try {
-        const { readdirSync, statSync, rmSync } = await fs();
-        const { join } = await import("node:path");
-        for (const nombre of readdirSync(destino)) {
-          const ruta = join(destino, nombre);
-          if (statSync(ruta).mtimeMs < antesDeMs) rmSync(ruta, { force: true });
-        }
-      } catch {
-        // Que no se pueda limpiar no puede tumbar un barrido: a lo sumo queda un archivo de
-        // mas. Lo que no se hace es tratar el fallo como "no habia marcas".
-      }
-    },
-  };
+  // EL CUERPO SE MUDO a `marcas-en-disco.mjs` el 2026-09-24, cuando el segundo barrido (las
+  // colgadas de `followup-run.mjs`) necesito el mismo candado. Esta firma no cambio y por eso
+  // ningun caso de `rescate-run.test.mjs` se toco: el rescate sigue nombrando SU directorio,
+  // SU variable de entorno y SU baranda. Copiar el cuerpo era la salida barata y es el error
+  // que este bot ya pago con los dos armadores de config hermanos: se arregla uno y el camino
+  // vivo sigue roto, en verde.
+  return crearMarcas({
+    dir,
+    envVar: "ONIA_RESCATE_MARCAS",
+    porDefecto: DIR_MARCAS_POR_DEFECTO,
+    guarda: () => guardaDeEfectoReal("marcas"),
+  });
 }
 
 export async function runRescateSweep(options = {}, deps = {}) {

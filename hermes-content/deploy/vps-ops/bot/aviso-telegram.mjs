@@ -44,6 +44,18 @@ import { KIND_RESERVA_SIN_CONFIRMAR } from "./calcom-booking.mjs";
 // Reimplementarlo acá haría que el aviso pudiera nombrar un canal distinto del que se prometió.
 import { nombreDelCanal } from "./config.mjs";
 
+/**
+ * Lo emite el BARRIDO DE FOLLOW-UP (`followup-run.mjs`), no el motor: un lead que el bot
+ * atendio bien, al que ya se le insistio una vez, y que igual se apago. "Se quedo callado" no
+ * es ni `handoff` ni `demo_agendada`, asi que hasta el 2026-09-24 no producia NINGUN aviso —
+ * medido con `conv 58`, un lead de WhatsApp llegado desde la web que quedo tibio seis dias sin
+ * que el unico que podia rescatarlo supiera que existia.
+ *
+ * Vive ACA y no en el barrido para que no haya dos literales: `ETIQUETAS` se arma en este
+ * archivo y un kind tipeado dos veces es como una etiqueta se desincroniza de su emision.
+ */
+export const KIND_LEAD_FRIO = "lead_frio";
+
 export const AVISO_TIMEOUT_MS = 5000;
 
 /** Telegram corta en 4096; dejamos aire para el encabezado y el pie. */
@@ -87,6 +99,9 @@ export const ETIQUETAS = Object.freeze({
   // Lo emite el EJECUTOR DEL TURNO (`run-turn.mjs`), no el motor, y es el unico de esta lista
   // que existe para DESDECIR a otro: viaja en el mismo aviso que `demo_agendada`, debajo.
   [KIND_RESERVA_SIN_CONFIRMAR]: "⚠️ NO quedó agendada de verdad — acomodala vos",
+  // El unico de la lista que no habla de algo que acaba de pasar, sino de algo que dejo de
+  // pasar. Por eso la etiqueta dice que se pierde: sin esa palabra se lee como un informe.
+  [KIND_LEAD_FRIO]: "🥶 SE ENFRIÓ — rescatalo vos o se pierde",
 });
 
 export function getAvisoTelegramConfig(env = process.env) {
