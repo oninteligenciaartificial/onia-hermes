@@ -919,6 +919,52 @@ nunca acusado — acusar una línea del bot con la frontera del panel sería el 
       ítem de la próxima vuelta, con las dos opciones (tope por corrida, o un solo mensaje resumen
       con las 5 filas que él pide) ya nombradas.
 
+      ✅ **2026-09-24 19:15-19:45 La Paz — ESO YA ESTÁ ARREGLADO: la ráfaga de 22 es UN mensaje de
+      5 filas. Commiteado, NO desplegado** (viaja en el mismo pedido `DESPLEGAR: bot`, sin rehacerlo:
+      `followup-run.mjs` y `aviso-telegram.mjs` ya están en su lista).
+
+      **No hizo falta preguntarle nada: la decisión ya estaba tomada y con fecha.** *"cuando me
+      mandes una tabla por telegram, máximo 5 filas, si hay más me pierdo"* (2026-09-03, textual, en
+      la memoria compartida). Llevarle a decidir entre las dos opciones habría sido repetirle una
+      decisión que ya tomó — que es peor que no preguntar. Se eligió el **resumen**, no el tope.
+
+      **Y el tope POSPONE, no descarta — que es toda la diferencia** y la razón por la que la vuelta
+      anterior no lo hizo a las apuradas: las marcas de colgada no se purgan a propósito (el
+      silencio de un lead no vence), así que marcar a quien no se nombró lo silencia **para
+      siempre**. Sólo se reserva la marca de los 5 que viajan en el mensaje; los otros 17 **no se
+      tocan**, vuelven al conteo y salen en el barrido siguiente, de a 5, hasta drenar. Y van
+      **los más viejos primero**: ordenar por el más reciente deja al de 28 días esperando detrás de
+      cada lead nuevo que se enfría — inanición, justo para el que menos rescate le queda.
+
+      **El mensaje, renderizado y MIRADO** (no supuesto — 844 caracteres, 5 filas):
+
+      ```
+      🥶 22 leads se enfriaron — rescatalos vos o se pierden
+
+      1. +59175755019 — callado hace 28 días
+          conversacion chatwoot:11 · esperando_horario · inbox 5
+      ... (5 filas)
+
+      Te muestro 5 de 22, los que llevan más tiempo callados. El resto sale en los próximos
+      barridos, de a 5.
+      ```
+
+      El **total** va siempre que sea mayor que los que viajan: un mensaje que muestra cinco sin
+      decir que hay veintidós miente por omisión — se lee como *"tengo cinco leads fríos"*, y la
+      decisión que se toma con ese número es otra.
+
+      **Gates:** `colgadas-entran-en-un-solo-aviso.test.mjs`, 5 casos, **en ROJO antes por el motivo
+      correcto** (`expected: 1, actual: 22` — no por un import faltante: la constante se exportó
+      primero, sola, justo para que el rojo fuera del comportamiento y no del módulo). Suite del bot
+      completa: **1393/1393**. Simulador 3/3 después del cambio.
+
+      ⚠️ **Dos tests hermanos se pusieron rojos y tenían razón** —`aviso-de-colgada-llega-al-proceso`
+      y `colgada-avisa-una-sola-vez`—: exigen que el warning de un aviso que no salió **nombre al
+      lead**, y el mensaje de lote lo había reducido a *"5 colgada(s)"*. Un warning que cuenta y no
+      nombra deja al lead perdido en silencio, que es el bug original de este ítem. Se corrigió el
+      código, no el test: ahora los nombra a todos (el log es interno; el tope de cinco filas es del
+      canal de Telegram, no del log).
+
 - [x] 🔴 **CERRADO el 2026-09-24 17:15-17:45 La Paz (commiteado, NO desplegado — el bot vivo
       corre `/tmp/onia-bot/`): un handoff que NADIE tomó dejaba a la persona escribiéndole a
       nadie, en silencio para los DOS lados.** Medido en el simulador con el guion de hoy, no
