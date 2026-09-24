@@ -391,6 +391,10 @@ poner "$RAIZ/hermes-content/deploy/vps-ops/onia-vigia-sin-respuesta.sh"   "$DEST
 # generaba un correo; si se perdia, el cliente que PAGO se quedaba sin plan. Nace cableado,
 # no copiado a mano: la copia a mano es la que despues se atrasa sin avisar.
 poner "$RAIZ/hermes-content/deploy/vps-ops/vigia-comprobantes.sh"         "$DESTINO_BIN/onia-vigia-comprobantes.sh"
+# El vigia de seguridad (2026-09-24). El viejo vivia solo en /opt/onia/security-watch.sh,
+# copiado a mano, y estuvo ~41 dias mirando un contenedor que ya no existia sin que nadie
+# lo supiera. Nace en /root/bin y cableado; el crontab se muda a esta ruta (no se pisa /opt).
+poner "$RAIZ/hermes-content/deploy/vps-ops/security-watch.sh"             "$DESTINO_BIN/onia-security-watch.sh"
 poner "$FUENTE/extras/onia-drop-recordatorio.sh"  "$DESTINO_BIN/onia-drop-recordatorio.sh"
 poner "$FUENTE/extras/onia-leads-vigia.sh"        "$DESTINO_BIN/onia-leads-vigia.sh"
 poner "$FUENTE/extras/onia-vigia-embudo.sh"       "$DESTINO_BIN/onia-vigia-embudo.sh"
