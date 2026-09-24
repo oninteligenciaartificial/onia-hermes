@@ -127,15 +127,25 @@
 /* ---------------------------------------------------------------------- */
 
 .kicker {
-  display: inline-flex;
-  /* `flex-start` y no `center`: cuando el rotulo parte en DOS lineas — pasa en
-     telefono con los kickers largos, y la portada centrada lo hizo visible en
-     la primera pantalla — `center` deja el punto flotando solo a la izquierda,
-     a media altura entre ambas lineas. Con flex-start + el margen de abajo
-     queda pegado a la primera linea, que es donde se lo espera. Con una sola
-     linea el resultado es el mismo de antes. */
-  align-items: flex-start;
-  gap: 0.6em;
+  /* `inline-block` y NO `inline-flex`, que es como estuvo hasta el 2026-09-24.
+     Siendo flex, el punto era un item HERMANO del texto: cuando el rotulo parte
+     en dos lineas dentro de un bloque centrado —pasa en telefono con los
+     rotulos largos, y la portada lo hizo visible en la primera pantalla— el
+     texto se centra dentro de SU caja y el punto se queda contra el borde
+     izquierdo. Medido en produccion con 390 px de ancho: 43,8 px de vacio entre
+     el punto y "UN SOLO SISTEMA PARA TODO EL NEGOCIO".
+
+     Esto ya se habia intentado arreglar en el eje VERTICAL (`flex-start` mas un
+     margen, para que el punto no flotara a media altura entre las dos lineas).
+     Era el mismo defecto visto de costado: mientras el punto fuera un item
+     flex, habia que corregirle la posicion a mano en los dos ejes. Dentro del
+     flujo del texto viaja con la primera palabra y se centra con ella, sin
+     correcciones. `inline-block` conserva la caja que encoge al contenido, que
+     es como se centraba antes.
+
+     La medicion vive en scripts/mirar-primera-pantalla.mjs y corre cada vuelta
+     del carril: ver SEPARACION_MAXIMA_DEL_PUNTO. */
+  display: inline-block;
   font-family: var(--font-mono), monospace;
   font-size: 0.8em;
   font-weight: 500;
@@ -145,16 +155,20 @@
   margin: 0 0 1.4em;
 }
 
-.kicker::before {
-  content: "";
+.kickerDot {
+  display: inline-block;
   width: 0.5em;
   height: 0.5em;
-  /* (altura de linea − alto del punto) / 2, para que quede centrado en la
-     PRIMERA linea en vez de en el bloque entero. */
-  margin-top: 0.35em;
+  /* La separacion que el gate da por buena (SEPARACION_MAXIMA_DEL_PUNTO la
+     perdona hasta el doble). Era `gap` cuando esto era flex. */
+  margin-right: 0.6em;
+  /* El rotulo va en MAYUSCULAS, asi que el centro optico de la linea no es el
+     de la x-height sino el de la altura de caja (~0.72em): apoyado en la linea
+     base el punto queda bajo, y 0.11em lo sube justo al medio. `middle` lo
+     centraria con las minusculas, que aca no hay. */
+  vertical-align: 0.11em;
   border-radius: 50%;
   background: var(--signal);
-  flex: none;
 }
 
 /* el kicker sobre bloques oscuros: el punto sigue verde, el texto aclara */
@@ -165,7 +179,7 @@
 .signalBlock .kicker {
   color: color-mix(in srgb, var(--tinta) 78%, transparent);
 }
-.signalBlock .kicker::before {
+.signalBlock .kickerDot {
   background: var(--tinta);
 }
 

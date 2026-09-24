@@ -693,6 +693,10 @@ export function cifrasDelProducto({ planes, addons, prueba, limites }) {
       prueba?.match(/TRIAL_DAYS\s*=\s*(\d+)/)?.[1] ?? NaN,
     ) || null,
     "prueba gratis · plan que corre": trial ? trial[1] : null,
+    /** La gracia es SOLO del trial (`graceDeadline`): el sitio la publica en el copy de la prueba. */
+    "prueba gratis · días de gracia": Number(
+      prueba?.match(/GRACE_PERIOD_DAYS\s*=\s*(\d+)/)?.[1] ?? NaN,
+    ) || null,
   };
 }
 
@@ -968,6 +972,8 @@ export const CONSTANTES_CRUZADAS = [
   "AGENDA_ADDON",
   "USUARIO_EXTRA_ADDON",
   "PRUEBA",
+  // Leída de chatbot-precios.ts y cruzada con includedConversations del producto.
+  "CONVERSACIONES_INCLUIDAS",
 ];
 
 /**
@@ -1209,6 +1215,7 @@ export function cifrasDelSitio({ precios, chatbot }) {
     "add-on usuario extra · mensual": num(usuario, "mensualAddon"),
     "add-on usuario extra · máximo en Básico": num(usuario, "maxEnBasico"),
     "prueba gratis · días": valorResuelto(prueba, "dias", precios),
+    "prueba gratis · días de gracia": valorResuelto(prueba, "diasDeGracia", precios),
     /**
      * El producto lo nombra `professional`; el sitio, por su etiqueta. La
      * equivalencia se DERIVA de `PLANES_EN_ORDEN`: escrita a mano se quedaba

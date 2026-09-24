@@ -471,8 +471,34 @@ export function Btn({
   );
 }
 
+/**
+ * El rotulo chico sobre el titular, con su punto verde.
+ *
+ * El punto es un `<span>` de verdad y no un `::before`, por dos motivos que se
+ * descubrieron juntos el 2026-09-24 mirando la portada en telefono:
+ *
+ *  1. Como pseudo-elemento era un ITEM FLEX hermano del texto, asi que cuando
+ *     el rotulo parte en dos lineas dentro de un bloque centrado, el texto se
+ *     centra DENTRO de su propia caja y el punto se queda solo contra el borde
+ *     izquierdo — en la portada quedaban 44 px de vacio entre el punto y su
+ *     etiqueta, en la PRIMERA pantalla que ve un lead. Siendo parte del flujo
+ *     del texto, el punto viaja con la primera palabra y se centra con ella.
+ *  2. Un `::before` no tiene caja consultable: `getBoundingClientRect` no lo
+ *     alcanza, asi que NINGUN gate podia medir esa distancia. El defecto se
+ *     arreglo dos veces en el eje vertical (ver `.kicker` en el CSS) y las dos
+ *     veces lo encontro un ojo, no un gate. Con un nodo real, la distancia
+ *     punto-texto la mide `scripts/mirar-primera-pantalla.mjs` en cada vuelta.
+ *
+ * `data-kicker-dot` es el ancla del gate: sobrevive al hash de CSS Modules,
+ * que cambia con cada build y no sirve para agarrarse.
+ */
 export function Kicker({ children }: { children: ReactNode }) {
-  return <p className={s.kicker}>{children}</p>;
+  return (
+    <p className={s.kicker} data-kicker="">
+      <span className={s.kickerDot} data-kicker-dot="" aria-hidden="true" />
+      {children}
+    </p>
+  );
 }
 
 /* ---------- datos estructurados ----------------------------------------- */
