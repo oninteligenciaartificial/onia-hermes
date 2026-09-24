@@ -230,7 +230,7 @@ export const INBOUND_BODY_PLACEHOLDER = "(entrante — texto no persistido)";
 export const DELIVERY_STATUSES = Object.freeze(["simulated", "skipped", "sent", "failed", "reserved"]);
 
 /**
- * QUE hace a una fila candidata al follow-up, sin la ventana de tiempo.
+ * QUE hace que una conversacion siga siendo del bot, sin la ventana de tiempo y sin elegibilidad.
  *
  * Una sola vez, porque lo consumen DOS consultas que tienen que partir la misma poblacion en dos:
  * las que estan a tiempo (`sweepFollowUpCandidates`) y las que se pasaron del piso
@@ -238,12 +238,32 @@ export const DELIVERY_STATUSES = Object.freeze(["simulated", "skipped", "sent", 
  * un solo lado deja filas que no son de ninguna de las dos — invisibles para el envio Y para el
  * conteo, que es el peor de los dos mundos.
  */
-export const FILTROS_FOLLOWUP = Object.freeze([
-  "followup_step=eq.0",
+export const FILTROS_FOLLOWUP_BASE = Object.freeze([
   "human_took_over=is.false",
   "opt_out_at=is.null",
   "bot_stage=in.(esperando_calificacion,esperando_horario)",
 ]);
+
+/**
+ * A QUIEN SE LE PUEDE ESCRIBIR: la base + el cupo de rescate sin gastar (regla N7, UN follow-up).
+ *
+ * `followup_step=eq.0` vive SOLO aca, y ese reparto es el arreglo del 2026-09-24. Estaba en la
+ * base, asi que el conteo de perdidos lo heredaba y contestaba la pregunta equivocada: en cuanto
+ * el M3 salia, `followup_step` pasaba a 1 y la conversacion desaparecia del conteo. El barrido se
+ * olvidaba del lead JUSTO DESPUES de trabajarlo. Ver `FILTROS_COLGADAS`.
+ */
+export const FILTROS_FOLLOWUP = Object.freeze(["followup_step=eq.0", ...FILTROS_FOLLOWUP_BASE]);
+
+/**
+ * A QUIEN SE PERDIO: la base y nada mas.
+ *
+ * Son DOS preguntas distintas y por eso son dos listas. "¿Le puedo escribir?" mira el cupo de
+ * rescate; "¿lo perdi?" no — una conversacion que ya recibio su follow-up y aun asi se enfrio es
+ * MAS perdida, no menos. Medido el 2026-09-24 en produccion: con el filtro de envio la consulta
+ * devolvia 9 filas y `chatwoot:990777` (`followup_step=1`, callada desde el 18-ago) no estaba;
+ * sin el, 10 y si esta.
+ */
+export const FILTROS_COLGADAS = FILTROS_FOLLOWUP_BASE;
 
 /** El piso de rescate, en ISO: antes de esto ya no se escribe (`staleAfterDays`, hoy 7 dias). */
 export function pisoFollowUp(now, config = DEFAULT_CONFIG) {
@@ -641,15 +661,20 @@ export function createStore(options = {}) {
    * y esa es exactamente la misma cara que "no hay nadie a quien escribirle". Un tope que no habla
    * con su cuenta convierte a un lead perdido en una linea que parece sana.
    *
-   * Comparte el predicado con su hermana (`FILTROS_FOLLOWUP`) a proposito: difieren SOLO en la
-   * ventana. Si manana alguien agrega una condicion de elegibilidad y la escribe en un solo lado,
-   * las dos poblaciones dejan de ser complementarias y el conteo pasa a mentir en silencio.
+   * Comparte con su hermana la BASE (`FILTROS_FOLLOWUP_BASE`) a proposito: si manana alguien
+   * agrega una condicion de pertenencia y la escribe en un solo lado, las dos poblaciones dejan de
+   * ser complementarias y el conteo pasa a mentir en silencio.
+   *
+   * Lo que NO comparte, y es el arreglo del 2026-09-24: la elegibilidad `followup_step=eq.0`.
+   * Contesta "¿le puedo escribir?", no "¿lo perdi?". Heredada aca borraba del conteo justo a la
+   * conversacion mas perdida — la que el bot atendio Y a la que el barrido ya insistio. Medido en
+   * produccion ese dia: `chatwoot:990777` (`followup_step=1`, callada desde el 18-ago) no salia.
    */
   async function sweepFollowUpVencidas(nowIso, config = DEFAULT_CONFIG, limit = 50) {
     const now = Date.parse(nowIso);
     if (!Number.isFinite(now)) return warn("sweepFollowUpVencidas", `nowIso invalido: ${nowIso}`);
     const filter = [
-      ...FILTROS_FOLLOWUP,
+      ...FILTROS_COLGADAS,
       `last_inbound_at=lt.${pisoFollowUp(now, config)}`,
       "order=last_inbound_at.desc",
       `limit=${Number(limit) || 50}`,
