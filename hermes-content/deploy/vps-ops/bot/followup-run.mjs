@@ -54,8 +54,7 @@ import { MOTIVO_NUESTRA, cargarInboxesDePrueba, esConversacionNuestra } from "./
 import { createChatwootClient, whatsappTemplate } from "./chatwoot-adapter.mjs";
 import { getAvailableSlots as getAvailableSlotsFromCalcom } from "./calcom-availability.mjs";
 import {
-  KIND_LEAD_FRIO,
-  construirAviso,
+  construirAvisoDeColgadas,
   enviarAvisoTelegram,
   getAvisoTelegramConfig,
 } from "./aviso-telegram.mjs";
@@ -331,6 +330,18 @@ async function contarColgadas(result, store, nowIso, config, limit) {
  */
 export const DIR_COLGADAS_POR_DEFECTO = "/var/lib/onia-colgada-avisado";
 
+/**
+ * CUANTOS LEADS FRIOS ENTRAN EN UN AVISO. Es el numero que pidio Sergio Urcullo, textual y con
+ * fecha (2026-09-03): "cuando me mandes una tabla por telegram, maximo 5 filas, si hay mas me
+ * pierdo".
+ *
+ * NO ES UN LIMITE DE CUANTOS SE AVISAN, es de cuantos entran POR MENSAJE: los que no entran no se
+ * descartan ni se marcan — vuelven al conteo y salen en el barrido siguiente. Esa distincion es
+ * todo el asunto: las marcas de colgada no se purgan a proposito (el silencio de un lead no
+ * vence), asi que marcar a quien no se nombro lo silencia PARA SIEMPRE, que es peor que el ruido.
+ */
+export const TOPE_COLGADAS_POR_AVISO = 5;
+
 const guardaDeMarcasReales = crearGuardaDeEfectoReal(
   "hermetismo: un test llego a las marcas REALES de las colgadas. Pasale `deps.marcas` al " +
     "barrido (o un directorio propio a crearMarcasEnDisco): una marca escrita desde la suite " +
@@ -399,7 +410,17 @@ async function avisarColgadas(result, nowIso, deps) {
   });
   const aviso = deps.aviso || canalDeAvisoColgadas();
 
-  for (const quien of quienes) {
+  // LOS MAS VIEJOS PRIMERO, y no es una preferencia: es lo unico que hace DRENAR la cola. Con el
+  // tope por mensaje, ordenar por el mas reciente deja al de 37 dias esperando detras de cada
+  // lead nuevo que se enfria — inanicion, justo para el que menos tiempo le queda de rescate.
+  const porAntiguedad = [...quienes].sort((a, b) => (b?.silentHours ?? -1) - (a?.silentHours ?? -1));
+
+  // Se reserva ANTES de armar el mensaje y solo hasta el tope: la reserva es lo que decide quien
+  // viaja. A quien no se reserva no se le toca la marca, asi que vuelve al conteo y sale en el
+  // barrido siguiente — el tope pospone, no descarta.
+  const elegidos = [];
+  for (const quien of porAntiguedad) {
+    if (elegidos.length >= TOPE_COLGADAS_POR_AVISO) break;
     const clave = claveDeColgada(quien);
     // `null` = no pude recordar. NO es `false`: mandar sin reserva confirmada es arriesgarse a
     // repetir el aviso en cada corrida, que es el ruido que apaga el canal. Se dice y se sigue.
@@ -411,32 +432,25 @@ async function avisarColgadas(result, nowIso, deps) {
       );
       continue;
     }
+    elegidos.push({ quien, clave });
+  }
+  if (elegidos.length === 0) return;
 
-    const dias = diasCallado(quien.silentHours);
-    const contacto = quien.contacto || quien.displayName || "sin contacto";
-    const texto = construirAviso({
-      notify: [
-        {
-          kind: KIND_LEAD_FRIO,
-          reason: KIND_LEAD_FRIO,
-          // Lo que se puede ACTUAR sin abrir la base. "Lo ultimo que dijo" NO esta, a proposito:
-          // el entrante no se persiste (`INBOUND_BODY_PLACEHOLDER`, persistence.mjs), y un aviso
-          // que lo inventara seria peor que uno que no lo trae.
-          text:
-            `${contacto} — callado hace ${dias === null ? "?" : dias} días.\n` +
-            "El bot lo atendió y ya le insistió una vez. Pasados los 7 días no se le escribe " +
-            "más solo: si lo querés rescatar, lo abrís vos desde la bandeja.",
-        },
-      ],
-      conversationId: quien.conversationKey,
-      stageAfter: quien.botStage,
-      canal: quien.channelType,
-      // `esNuestra` no se pasa: `contarColgadas` ya saco lo nuestro con el mismo criterio que
-      // usa el barrido para no escribirse solo. Lo que llega aca es un lead.
-      inbox: quien.inboxId,
-    });
+  const texto = construirAvisoDeColgadas({
+    leads: elegidos.map(({ quien }) => ({
+      conversationKey: quien.conversationKey,
+      contacto: quien.contacto || quien.displayName || null,
+      botStage: quien.botStage,
+      inboxId: quien.inboxId,
+      dias: diasCallado(quien.silentHours),
+    })),
+    // El TOTAL de leads frios, no los que viajan: es lo que le dice cuanto hay en juego. Sale de
+    // `desconocidas` —lo nuestro ya quedo afuera con el mismo criterio que usa el barrido para no
+    // escribirse solo—, nunca de `total`, que incluye nuestras propias pruebas.
+    total: result.colgadas?.desconocidas ?? elegidos.length,
+  });
 
-    try {
+  try {
       // EL VEREDICTO ES EL `status`, NO LA AUSENCIA DE EXCEPCION. `enviarAvisoTelegram` casi
       // nunca tira: devuelve `{status:"sent"|"skipped"|"failed"}`. "skipped" es el canal apagado
       // (`ONIA_BOT_TG_AVISO`) y "failed" es encendido sin credencial — los dos estados en los que
@@ -449,18 +463,25 @@ async function avisarColgadas(result, nowIso, deps) {
       if (status && status !== "sent") {
         throw Object.assign(new Error(veredicto?.reason || `aviso ${status}`), { noEntregado: true });
       }
+    for (const { quien } of elegidos) {
       (result.colgadas.avisados ||= []).push(quien.conversationKey);
-    } catch (error) {
-      if (error?.hermetismo) throw error; // un test sin `deps.aviso` se entera, no se silencia
-      // La marca existe para no repetir un aviso ENTREGADO. Si Telegram se cayo —o si el canal
-      // contesto que no lo mando—, este lead no se anuncio NUNCA: se suelta para que el barrido
-      // siguiente lo reintente, o la reserva dejaria de evitar ruido y pasaria a tragarse al
-      // unico aviso que importaba.
-      await marcas.liberar?.(clave);
-      result.warnings.push(
-        `${quien.conversationKey}: el aviso de la colgada NO salio (${String(error?.message || error).slice(0, 120)}) — se reintenta en el proximo barrido`,
-      );
     }
+  } catch (error) {
+    if (error?.hermetismo) throw error; // un test sin `deps.aviso` se entera, no se silencia
+    // La marca existe para no repetir un aviso ENTREGADO. Si Telegram se cayo —o si el canal
+    // contesto que no lo mando—, estos leads no se anunciaron NUNCA: se sueltan TODOS para que el
+    // barrido siguiente los reintente, o la reserva dejaria de evitar ruido y pasaria a tragarse
+    // al unico aviso que importaba. Es un solo envio para cinco: o se sueltan los cinco, o se
+    // pierden los cinco — y las marcas de colgada no se purgan, asi que "perderse" es para
+    // siempre.
+    for (const { clave } of elegidos) await marcas.liberar?.(clave);
+    // Los NOMBRA a todos, no los cuenta: un warning que dice "5 colgadas" y no cuales deja al
+    // lead perdido en silencio, que es el bug original. El log es interno — aca no rige el tope
+    // de cinco filas, que es del canal de Telegram.
+    result.warnings.push(
+      `${elegidos.map(({ quien }) => quien.conversationKey).join(", ")}: el aviso de la colgada NO salio ` +
+        `(${String(error?.message || error).slice(0, 120)}) — se reintenta en el proximo barrido`,
+    );
   }
 }
 

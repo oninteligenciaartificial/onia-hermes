@@ -135,6 +135,75 @@ export function escaparHtml(valor) {
 }
 
 /**
+ * EL AVISO DE LOS LEADS FRIOS VA EN LOTE, no de a uno.
+ *
+ * Es el unico aviso del sistema que nace con un BULTO: los demas los emite un turno (pasa una
+ * cosa, sale un mensaje), y este lo emite un BARRIDO que mira la tabla entera. Cuando se estrene
+ * en produccion habra 22 leads colgados esperando, y 22 Telegram seguidos apagan el canal — con
+ * el se apaga tambien el aviso que si importaba, el de la demo agendada.
+ *
+ * El formato es el que pidio Sergio Urcullo, textual y con fecha (2026-09-03): "cuando me mandes
+ * una tabla por telegram, maximo 5 filas, si hay mas me pierdo". Quien recorta a cinco es
+ * `avisarColgadas` (ahi vive el tope, junto a las marcas que deciden a quien se pospone); aca
+ * solo se arma lo que ya se eligio.
+ *
+ * `total` es cuantos hay EN TOTAL, y se nombra siempre que sea mayor que los que viajan: un
+ * mensaje que muestra cinco sin decir que hay veintidos miente por omision — se lee como "tengo
+ * cinco leads frios" y la decision que toma con ese numero es otra.
+ *
+ * @returns {{texto:string, motivos:string[], conversationId:null}|null} `null` = no habia a quien
+ *          nombrar, que es lo normal en un barrido sin colgadas nuevas.
+ */
+export function construirAvisoDeColgadas({ leads, total } = {}) {
+  const filas = Array.isArray(leads) ? leads.filter(Boolean) : [];
+  if (filas.length === 0) return null;
+
+  const lineas = filas.map((lead, i) => {
+    const contacto = lead?.contacto || lead?.displayName || "sin contacto";
+    const dias = lead?.dias === null || lead?.dias === undefined ? "?" : lead.dias;
+    // La conversacion y el inbox son con lo que ABRE la bandeja; sin ellos el aviso dice que hay
+    // un problema y no a quien atender. La etapa dice en que quedo la charla.
+    const detalle = [
+      `conversacion ${escaparHtml(lead?.conversationKey ?? "sin id")}`,
+      lead?.botStage ? escaparHtml(lead.botStage) : null,
+      lead?.inboxId !== undefined && lead?.inboxId !== null && String(lead.inboxId) !== ""
+        ? `inbox ${escaparHtml(lead.inboxId)}`
+        : null,
+    ]
+      .filter(Boolean)
+      .join(" · ");
+    return `${i + 1}. <b>${escaparHtml(contacto)}</b> — callado hace ${escaparHtml(dias)} días\n    ${detalle}`;
+  });
+
+  const hayCola = Number.isFinite(total) && total > filas.length;
+  const cuantos = Number.isFinite(total) ? total : filas.length;
+  const uno = cuantos === 1;
+  const cabecera = uno
+    ? "🥶 <b>Un lead se enfrió</b> — rescatalo vos o se pierde"
+    : `🥶 <b>${escaparHtml(cuantos)} leads se enfriaron</b> — rescatalos vos o se pierden`;
+  const pie = hayCola
+    ? `\n\nTe muestro ${filas.length} de ${escaparHtml(total)}, los que llevan más tiempo callados. ` +
+      `El resto sale en los próximos barridos, de a ${filas.length}.`
+    : "";
+  // Por que no se les escribe solo: es la regla N7 (UN follow-up y despues silencio). Sin esta
+  // linea el aviso parece un reporte; con ella dice que la unica via que queda es que entre el.
+  const nota =
+    "\n\nEl bot los atendió y ya les insistió una vez. Pasados los 7 días no se les escribe " +
+    "más solo: si los querés rescatar, los abrís vos desde la bandeja.";
+
+  const cuerpo = `${cabecera}\n\n${lineas.join("\n")}${pie}${nota}`;
+  const recortado = cuerpo.length > AVISO_MAX_CHARS ? `${cuerpo.slice(0, AVISO_MAX_CHARS)}…` : cuerpo;
+
+  return {
+    texto: recortado,
+    motivos: filas.map(() => KIND_LEAD_FRIO),
+    // Un lote no tiene UNA conversacion. Se dice `null` en vez de elegir la primera: el log del
+    // aviso perdido tiene que decir "eran cinco", no senalar a uno y esconder a los otros cuatro.
+    conversationId: null,
+  };
+}
+
+/**
  * Arma el aviso a partir de los efectos `notify_sergio` del turno.
  *
  * @returns {{texto:string, motivos:string[]}|null} `null` = no habia nada que avisar. Es la
