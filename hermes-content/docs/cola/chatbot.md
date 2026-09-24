@@ -595,6 +595,45 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **CERRADO el 2026-09-24 (medición, sin cambio de código): la TERCERA pata del objetivo
+      del carril —«cada demo agendada o handoff le llega a Sergio Urcullo»— llevaba vueltas sin
+      medirse, y el comando que el prompt manda usar para medirla NO PUEDE dar otra cosa que 0.**
+
+      El prompt mide los avisos con `bash webhook-server.sh logs | tail -80 | grep -E
+      "demo_agendada|handoff_humano|\[n8n\]"`. Medido hoy contra el log del proceso vivo
+      (`docker exec onia-center … /tmp/onia-bot-webhook.log`, 70.516 líneas): ese comando
+      devuelve **0**, y el log entero tiene **5 `demo_agendada` y 23 `handoff_humano`**. La causa
+      no es que falten eventos: es que **2.439 de las últimas 5.000 líneas (48,8%) son la MISMA
+      línea** (`[knowledge:panel] ignoro empresa.horario…`, una condición PERMANENTE escrita en
+      cada carga), así que en `tail -80` entran **9 líneas distintas** y ninguna es un evento.
+      Un instrumento que sólo puede dar 0 no mide: decora. Por eso esa pata faltaba en las
+      líneas `OBJETIVO:` de las últimas vueltas — no se omitió, **no era medible**.
+
+      **El instrumento correcto ya existía y nadie lo corría:**
+      `hermes-content/deploy/vps-ops/bot/avisos-vivo.mjs`. Corrido hoy, verde y con el desglose
+      que el `grep` no puede dar: `circuito: medido` con los **cuatro** eslabones ok
+      (`flagEncendido` · `credencialesOk` · `motorEmiteNotify` · `textoAccionable`) y **las dos
+      ramas** (`handoff`, `demo_agendada`); `eventos: 5 avisos (enviados 3 · salteados 2 · fallidos
+      0)`. Separa «0 porque el circuito está roto» de «0 porque no hubo handoffs», que es
+      exactamente lo que el `tail | grep` confunde. **Desde hoy la pata de avisos de la línea
+      `OBJETIVO:` se mide con `node avisos-vivo.mjs`, no con el `tail`.**
+
+      ⚠️ **Lo que ese gate dice y conviene no perder:** *«circuito sano, pero NINGÚN aviso es de un
+      lead: 4 nuestro(s) — nunca se probó con un desconocido»*. El circuito está entero; lo que
+      falta es un desconocido real que lo recorra, y eso no lo fabrica este carril.
+
+      **Tres alarmas del log auditadas hoy y las TRES resultaron históricas** — se anotan porque
+      la próxima vuelta las va a volver a ver y son caras de re-investigar:
+      · `ERR_MODULE_NOT_FOUND: audio-transcribe.mjs` ×2.803 → el archivo existe desde el 19-sep
+        14:40; última ocurrencia en la línea 50.531 de 70.516 (≈20.000 líneas antes del final).
+      · `Cannot find module webhook-server.mjs` ×998 → es la caída del **19-sep 19:44 → 21-sep
+        19:34 UTC** (48 h de bot muerto), ya diagnosticada y arreglada en el propio
+        `webhook-watchdog.sh` (re-aviso escalado a 15 min / 1 h / 6 h / diario).
+      · `Permission denied` sobre el watchdog ×76 → hoy es `-rwxr-xr-x`, última ocurrencia en la
+        línea 6.382 de 8.376 de su log. **Watchdog vivo y `/health` en `ok:true` ahora mismo.**
+      La regla que las tres confirman: **toda alarma de un log sin timestamp se fecha por
+      POSICIÓN antes de creerle** — si no, se arregla tres veces lo que ya está arreglado.
+
 - [x] 🔴 **CERRADO el 2026-09-24 (instrumento, NO toca el bot ni necesita deploy): el número con
       el que este carril describe su propio embudo —«43 conversaciones, 0 agendadas, 18 paradas»—
       estaba compuesto en un ~93% por datos NUESTROS, y así entró en la memoria compartida, en la
