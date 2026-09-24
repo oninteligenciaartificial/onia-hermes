@@ -595,6 +595,48 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [ ] 🔴 **Un lead REAL puede escribir, ser atendido, enfriarse y que Sergio Urcullo no se
+      entere nunca: el aviso sólo dispara en `handoff_humano` y `demo_agendada`, y «se quedó
+      callado» no es ninguno de los dos.** Medido el 2026-09-24 en el log del bot vivo, no
+      heredado.
+
+      **El caso, con nombre y fecha.** `conv 58`, `inbox=5` (WhatsApp, leads reales), número
+      `+59175755019`. El 2026-09-17 22:50 UTC escribió *"Hola, vengo de la web de Onia. Quiero
+      saber si me sirve para mi negocio."* El bot contestó bien (`rama=respondio`,
+      `etapa=nuevo->esperando_horario`, un mensaje enviado de un intento), al día siguiente el barrido le insistió
+      con los dos horarios, y la persona no volvió más. **Nunca hubo una línea `[aviso]` para
+      `conv=58`** — o sea que un prospecto de WhatsApp que llegó desde la web quedó tibio seis
+      días y el único que podía rescatarlo no supo que existía.
+
+      **Por qué pasa, en una línea:** el aviso a Sergio Urcullo (`aviso-telegram.mjs`) cuelga de
+      `notify_sergio`, y el motor lo emite al derivar a un humano o al agendar. Una conversación
+      que queda en `esperando_horario` y se apaga no emite nada. No es un fallo del circuito —
+      `npm run avisos:vivo` da `circuito: medido`, 4 enviados, 0 fallidos — es un caso que nadie
+      le pidió que cubriera.
+
+      **Reproducción (30 segundos, no hace falta re-investigar):**
+
+      ```
+      /root/bin/onia-vps.sh bash -lc 'docker exec onia-center sh -c "grep -an conv=58 /tmp/onia-bot-webhook.log"'
+      /root/bin/onia-vps.sh bash -lc 'docker exec onia-center sh -c "grep -ac \"\[aviso\].*conv=58\" /tmp/onia-bot-webhook.log"'   # → 0
+      ```
+
+      **Ojo con la confusión que ya se coló una vez:** `npm run avisos:vivo` cierra con *"NINGUN
+      aviso es de un lead: 5 nuestro(s) — nunca se probo con un desconocido"*, y eso se lee como
+      «ningún desconocido escribió nunca». Falso: escribieron **siete** (tarea `t_e57e3376`, y
+      cinco de ellos llevan 26-31 días sin respuesta). Lo que el instrumento dice de verdad es
+      que ningún aviso ENVIADO correspondió a un lead — que es otra cosa, y peor.
+
+      **Listo =** una conversación de un desconocido que el bot atiende y que se enfría le
+      produce a Sergio Urcullo un aviso con el número, lo último que dijo y cuántos días lleva,
+      **una sola vez** (no en cada barrido), con el mismo criterio de «es nuestra» que ya usa
+      `es-nuestra.mjs` para no avisarle de nuestras pruebas. La maquinaria que los cuenta ya
+      existe: `followup-cuenta-los-colgados.test.mjs` / `followup-run.mjs`.
+
+      ⚠️ **Esto NO es «contactar a un prospecto»** —eso sí es decisión de Sergio Urcullo y ya
+      está pedido en `t_e57e3376`—: es avisarle A ÉL de algo que pasó en su propio sistema.
+      Confundir las dos cosas es lo que dejó a `conv 58` sin dueño seis días.
+
 - [x] 🔴 **CERRADO el 2026-09-24 12:45-13:20 La Paz (commiteado; el instrumento no necesita
       deploy): la definición de hecho del carril se había vuelto IMPOSIBLE de medir, y no por el
       bot — la sonda se colgaba esperando un efecto que el producto decidió no producir.**

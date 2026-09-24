@@ -736,8 +736,18 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       El 11-sep también entró la dieta de la sección de add-ons (`e12b740f`: tarjetas con
       precio en píldora, ancla del salario en una línea, copys cortos en la fuente única).
 
-- [ ] 🔴 **ESCALERA C IMPLEMENTADA el 2026-09-12 ("tenés permiso de los precios") — REGLA DE
-      DESPLIEGUE: los DOS deploys salen JUNTOS o ninguno.** Producto en `master`
+- [x] 🔴 **CERRADO el 2026-09-24: el checkbox estaba abierto y el cuerpo entero ya decía ✅.**
+      Re-medido en producción HOY, no heredado:
+      `docker exec onia-platform grep -rhoE 'monthly:[0-9]+' /app/.next/server | sort -u` →
+      `320 550 890 1290` + add-ons `70 150 390 2900`, **sin rastro de 750 ni 1500**. O sea que la
+      regla de despliegue que este ítem custodiaba (*"los DOS deploys salen JUNTOS o ninguno"*)
+      ya se cumplió el 12-sep y sigue cumplida doce días después. Se queda en la cola como
+      historia —el texto de abajo explica por qué la advertencia vieja hace frenar deploys que no
+      hay que frenar— pero **deja de contar como trabajo pendiente**: un `- [ ]` que ningún turno
+      puede trabajar hace releer 30 líneas por vuelta y esconde lo que sí está abierto.
+
+      ESCALERA C IMPLEMENTADA el 2026-09-12 ("tenés permiso de los precios") — REGLA DE
+      DESPLIEGUE: los DOS deploys salen JUNTOS o ninguno. Producto en `master`
       (`4bff903d`): plan `crece` 550/145/5.500, Pro 890/229/8.900, Full 1.290/12.900 CON
       chatbot incluido (`whatsappIncluded` en `onia-platform/lib/plan-catalogo.ts`, ejecutado
       por `onia-platform/lib/plan-limits.ts` como cuarta fuente de `addonHabilitado` con la
