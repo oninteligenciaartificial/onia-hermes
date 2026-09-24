@@ -59,6 +59,16 @@
 >   `/root/backups/restore-test-20260924/`. Contenedor de prueba borrado.
 > - **Respaldo de comprobantes (Storage):** `onia-backup-storage.sh` (hermes `b3f621cc`), cron 07:10
 >   UTC, últimas 30 copias en `/root/backups/onia-storage-v1/`; primera copia OK (2 archivos).
+> - **Bot: fuga de procesos zombie cortada (21:21 UTC).** `onia-center` tenía 13.559 zombies (pids
+>   13.581/19.092, +720/día): el `timeout` de busybox que el watchdog corría DENTRO del contenedor dejaba
+>   un hijo huérfano por corrida que el PID 1 (`node`) nunca recoge; en ~7 días el bot no podía crear
+>   procesos. Arreglo en `main` (`5dd54711`, test de clase), hotfix del watchdog instalado solo, contenedor
+>   reiniciado: zombies 0, pids 22, bot sano y de vuelta en el conocimiento del panel (v4) en 20 s.
+>   Pendiente de clase: recrear `onia-center` con `--init` junto con el próximo deploy del bot.
+> - **Auditoría de IA (24-sep):** los 6 agentes NO usan ningún LLM (reglas + plantillas; se venden como
+>   «Agentes con IA»). IA real = gpt-4.1-mini vía LiteLLM (reformular en el bot, fotos, «Enséñale
+>   conversando») y gpt-4o-mini-transcribe directo (audios). Gasto IA 30 días: US$12,20, de los cuales
+>   US$11,93 es Hermes (interno). Del 9 al 17-sep OpenAI sin crédito y nadie se enteró.
 > - **PC:** 14 worktrees viejos de `onia-platform` archivados (ramas intactas; las 4 que solo vivían
 >   en la PC, en GitHub como `archivo/*`; scripts sueltos en `E:/onia-wt/archivo-worktrees-20260924/`).
 >   C: de 5,2 → 16,5 GB libres (+ cachés npm/pip). Queda compactar `docker_data.vhdx` (31 GB, necesita
