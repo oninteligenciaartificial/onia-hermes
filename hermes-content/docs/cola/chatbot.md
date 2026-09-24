@@ -595,6 +595,66 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **CERRADO el 2026-09-24 16:18-16:20 La Paz (medición en PRODUCCIÓN, sin cambio de
+      código): el objetivo entero del carril se recorrió DE PUNTA A PUNTA por primera vez —
+      desconocido escribe en el widget real → pide un humano → el aviso sale. Las tres patas
+      medidas el mismo día y con el mismo hilo, que es lo que nunca había pasado.**
+
+      Hasta hoy cada pata se medía por separado y la tercera se declaraba con eventos **del
+      pasado**: `avisos-vivo.mjs` contesta «circuito sano» leyendo el log, pero **nunca EJERCE el
+      circuito**. Con eso, el día que se rompa, el instrumento sigue diciendo `ok` con los avisos
+      viejos hasta que se pierda un lead de verdad. Se ejerció a mano y anduvo:
+
+      · **Simulador 3/3** — precio de la escalera C correcto y leído de la fuente (320 / 550 /
+        890 / 1.290 con el chatbot incluido en el Completo, add-on Bs 390 en los otros tres);
+        SIAT con la fecha buena (**1 de octubre de 2026**, RND 102600000007), no «30 de
+        septiembre»; y ofrece los dos horarios de demo.
+      · **Widget real 2/2** — `node scripts/sonda_widget.mjs` → exit 0, *«EL BOT CONTESTO LOS 2 —
+        conversacion 49»*. **Primera vez que esta pata entra medida en una línea `OBJETIVO:`**:
+        las vueltas anteriores la declaraban «no medida esta vuelta».
+      · **Tercera pata, EJERCIDA** — con la costura del guion, tres turnos hasta el handoff:
+
+            ONIA_SONDA_GUION='Hola, quiero informacion sobre el sistema|Tengo una clinica dental en Santa Cruz, somos 4 personas|quiero hablar con una persona de verdad por favor' node scripts/sonda_widget.mjs
+
+        → exit 0, *«EL BOT CONTESTO LOS 3»*, y en el log del proceso vivo
+        (`docker exec onia-center … /tmp/onia-bot-webhook.log`):
+
+            conv=49 rama=respondio etapa=esperando_horario->handoff_humano enviados=1/1
+            [aviso] sent conv=49 (pidio_hablar_con_humano): aviso enviado
+
+        `avisos-vivo.mjs` subió de **3 a 4 enviados** entre antes y después, con los cuatro
+        eslabones y las dos ramas en `ok`. O sea: el motor cambia de etapa, **cumple lo que le
+        promete al prospecto** («Ya le pasé tu consulta») y el aviso sale — el trío completo.
+
+      ✅ **Y se verificó lo que esta medición podía ROMPER, antes de darla por buena: que la
+      sonda no le disparara a Sergio Urcullo una alarma falsa de lead.** No lo hizo, y la
+      defensa es del producto, no de la suerte: `select display_name from
+      onia_center.bot_conversations where conversation_key='chatwoot:49'` → `Sonda QA carril
+      chatbot`, que `NOMBRE_DE_PRUEBA` (`es-nuestra.mjs`) reconoce, así que el aviso viaja con
+      `🧪 PRUEBA NUESTRA — no es un lead, no anotes nada` arriba de todo. El nombre lo pone el
+      **bootstrap** del widget (`sonda_widget.mjs:847`), antes del primer mensaje, no al final:
+      por eso la marca ya está puesta cuando se dispara el handoff. `es-nuestra.mjs` está **en
+      producción** (`/tmp/onia-bot/`, 19-sep 06:37) y `run-turn.mjs:48` lo importa.
+
+      ⚠️ **Lo que sigue siendo cierto y no lo arregla este carril:** `leads 0 · nuestros 5`. El
+      circuito está entero, pero **ningún aviso es de un desconocido real todavía** — y eso no lo
+      fabrica una sonda. Lo que cambió hoy es que ya no hay duda de si el camino funciona: si
+      mañana llega uno, llega.
+
+      ⚠️ **Y por qué el aviso de esta clase NO va en el guion por defecto de la sonda** (se
+      evaluó y se descartó en la misma vuelta): la sonda corre cada 30 min, así que meter el
+      turno de handoff en el default serían ~48 avisos diarios a Sergio Urcullo, marcados de
+      prueba pero igual de ruidosos — justo lo que pidió ordenar el 2026-09-05. La costura
+      `ONIA_SONDA_GUION` existe para correrlo **a mano**, y así queda: el comando de arriba es
+      la forma de ejercer la tercera pata cuando se quiera confirmar que el circuito vive.
+
+      **Tres alarmas del log auditadas y las TRES históricas otra vez** (se re-encontraron en
+      esta vuelta y se fecharon por POSICIÓN antes de escalarlas, que es la regla que las
+      cierra): `ERR_MODULE_NOT_FOUND: audio-transcribe.mjs` ×2.803 — el archivo existe en
+      `/tmp/onia-bot/` desde el 19-sep 14:40 y la última ocurrencia está en la línea **50.540 de
+      70.614**, ~20.000 líneas antes del final; el `[knowledge:panel]` repetido ×3.870 sigue
+      vivo porque **T10 está commiteado y NO desplegado**, no porque el arreglo falle.
+
 - [x] 🔴 **CERRADO el 2026-09-24 (medición, sin cambio de código): el embudo del carril se estaba
       contando con `calendar_event_id`, que por la decisión (c) NO PUEDE subir nunca — así que
       toda vuelta futura iba a leer «0 demos agendadas» como un bug y diagnosticar de nuevo una
