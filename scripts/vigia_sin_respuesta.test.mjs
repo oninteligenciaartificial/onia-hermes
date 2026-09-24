@@ -609,6 +609,46 @@ test('las tareas viejas del vigia se buscan por MARCA y las terminadas no cuenta
   assert.deepEqual(viejas, ['t_11111111', 't_44444444']);
 });
 
+// Medido el 2026-09-24: el barrido por MARCA dejo vivas CUATRO tareas sobre las mismas siete
+// personas — dos `[auto:]` del formato anterior a la marca (t_13f09d9a, t_3b9d0ded) y dos
+// escritas a mano (t_c3b9aa8f, t_706b8369) — con cuentas congeladas de hace 11 dias (decian 5,
+// 2, 5 y 1 colgados; hoy son 7, y las esperas pasaron de 15-20 d a 26-31 d). Desde el arreglo
+// del parte diario (79014865) TODA tarea blocked le llega a Sergio Urcullo cada manana, y el
+// pidio maximo 5 filas por mensaje: el mismo grupo le llegaba cinco veces con cuatro cuentas
+// distintas. La MARCA es una clave sobre el TITULO, o sea se rompe sola el dia que el titulo
+// cambia — y ya cambio una vez. El ID que el vigia creo no cambia nunca.
+test('el barrido alcanza la tarea que el vigia RECUERDA por id, aunque su titulo no lleve la MARCA', () => {
+  const viejas = tareasViejasDelVigia(
+    [
+      { id: 't_11111111', title: '🔴 5 desconocido(s) escribieron y nadie contesto', status: 'blocked' },
+      { id: 't_22222222', title: 'Una tarea ajena que el vigia nunca creo', status: 'blocked' },
+      { id: 't_33333333', title: `${MARCA_LEADS} 1 desconocido(s) esperando una respuesta tuya`, status: 'ready' },
+    ],
+    ['t_11111111', 't_99999999'],
+  );
+  // La ajena no se toca (archivar por las dudas es peor que el ruido que evita) y la que ya
+  // no existe en el tablero tampoco aparece: el recuerdo no inventa sujetos.
+  assert.deepEqual(viejas, ['t_11111111', 't_33333333']);
+});
+
+test('el vigia ANOTA el id que acaba de crear: es la memoria que hace al barrido independiente del titulo', () => {
+  const estado = armarEstado({ avisados: { 7: { mensaje: 1, escalon: 0 } } }, [], 't_nueva123');
+  assert.deepEqual(estado.tareas, ['t_nueva123']);
+  assert.ok(estado.avisados[7], 'y no se lleva puesto lo que ya sabia de cada conversacion');
+});
+
+test('el aviso archiva tambien lo que recuerda, no solo lo que reconoce por el titulo', async () => {
+  const { tablero, llamadas } = tableroFalso({
+    vivas: [{ id: 't_viejo222', title: '🔴 2 escribio(eron), el bot lo(s) atendio', status: 'blocked' }],
+  });
+  const entrega = await entregarComoDecision('cuerpo', [{}], { tablero }, { tareasPrevias: ['t_viejo222'] });
+  assert.equal(entrega.entregado, true);
+  assert.ok(
+    llamadas.some((a) => a[0] === 'archive' && a[1] === 't_viejo222'),
+    'sin esto, cada cambio de titulo deja una tarea vieja viva para siempre en la hoja de Sergio Urcullo',
+  );
+});
+
 test('el titulo del aviso lleva la MARCA, que es lo que lo hace encontrable', () => {
   assert.match(tituloDelAviso([{}, {}]), /^\[leads-esperando\] 2 desconocido/);
   assert.equal(estadoDeLaTarea('Task t_x: y\n  status:    blocked\n  assignee:  -'), 'blocked');

@@ -27,13 +27,13 @@
 | Exportar todo en CSV | vivo |
 | Portal de requerimientos (onboarding del cliente) | vivo |
 | **App instalable en el celular** (PWA) | vivo desde hoy — ícono en la pantalla de inicio, sin pasar por ninguna tienda |
+| **Recordatorios de cita por email** (24 h y 2 h antes) | vivo — el cron evalúa la cita, el motor escribe la marca y **Gmail acepta el correo**. Se remide a demanda con `npm run recordatorio:vivo` |
 | 5 rubros | dental · comercio · importadora · estética · servicios |
 
 ### Construido y encendido hoy, todavía sin uso real
 
 | Capacidad | Qué falta para poder afirmarla |
 |---|---|
-| **Recordatorios de cita por email** (24 h y 2 h antes) | El cron corre desde hoy, pero producción no tenía citas cuando se probó. Se confirma con la primera cita real. |
 | Correo transaccional (bienvenida, drip, factura) | ✅ **Entrega confirmada** — Gmail acepto un envio a las 00:22 UTC del 22-ago. Queda el SPF pendiente (no bloquea, pero lastra) |
 
 ### Lo que NO se nombra en v1.0
@@ -95,8 +95,14 @@ te llega el correo -> los activas acompanado.
    `v=spf1 ip4:187.77.16.63 include:_spf.mx.cloudflare.net ~all`. **Pendiente de Sergio.**
 3. 🟡 **Dos numeros de WhatsApp conviven**: la web usa +591 75414930 y `/register` muestra
    +591 78491375. Hay que decidir cual es el bueno.
-4. 🟡 **Los recordatorios nunca corrieron contra una cita real** (produccion tenia 0 citas).
-   Se confirman con el primer cliente que agende.
+4. ✅ **CERRADO el 2026-09-24: los recordatorios SÍ corren contra una cita real.** Acá decía
+   que «nunca corrieron (produccion tenia 0 citas)» y que se confirmaban «con el primer
+   cliente que agende» — eso ataba una capacidad viva a un cliente que no existe, así que se
+   quedó sin confirmar **18 días después de estar probada**. Lo que faltaba no era un cliente:
+   eran **citas**. `npm run recordatorio:vivo` siembra la suya, corre el cron de verdad y
+   exige las tres pruebas por separado — medido hoy: `evaluadas:1, enviados24Email:1,
+   fallidos:0`, `reminder24hSentAt` escrito en la base, y **Gmail aceptó el correo**
+   (`dsn=2.0.0`, `250 2.0.0 OK ... gsmtp`). El dato se remide en 2 s; no se hereda.
 
 ⚠️ Nota de topologia, aprendida a los golpes: `onia.com.bo` **NO lo sirve Vercel** — lo sirve
 el contenedor `onia-landing` del VPS. Pushear a main no publica nada; hay que buildear y
