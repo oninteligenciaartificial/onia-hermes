@@ -24,7 +24,6 @@
     "medio-de-pago:vivo": "node scripts/medio-de-pago-vivo.mjs",
     "recursos:vivos": "node scripts/recursos-vivos.mjs",
     "capacidad:por-rubro": "node scripts/capacidad-por-rubro.mjs",
-    "rutas:venta": "node scripts/rutas-de-venta.mjs",
     "guia:facturacion": "node scripts/verificar-guia-facturacion.mjs",
     "mirar:portada": "node scripts/mirar-primera-pantalla.mjs",
     "mirar:venta": "node scripts/mirar-venta.mjs",
