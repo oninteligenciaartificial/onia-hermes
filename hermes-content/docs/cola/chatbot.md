@@ -595,6 +595,51 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **CERRADO el 2026-09-24 (instrumento, NO toca el bot ni necesita deploy): el número con
+      el que este carril describe su propio embudo —«43 conversaciones, 0 agendadas, 18 paradas»—
+      estaba compuesto en un ~93% por datos NUESTROS, y así entró en la memoria compartida, en la
+      cola y en el cuerpo del pedido de deploy que espera el `ok` de Sergio Urcullo.**
+
+  Medido el 2026-09-24 con `npm run embudo:bot` (`scripts/embudo_del_bot.mjs`), contra las dos
+  bases vivas:
+
+  ```
+  EMBUDO DEL BOT — 3 desconocido(s) real(es) de 43 fila(s) del motor.
+    etapas: handoff_humano 1 · nuevo 1 · esperando_horario 1
+    eligieron horario: 0
+    esperando algo nuestro: 2 (chatwoot:38, chatwoot:58)
+    descartadas: 8 nuestras · 12 sinteticas (sin conversacion en Chatwoot) · 20 fuera de los inboxes 4/5
+  ```
+
+  **Las tres cosas que el conteo pelado tenía mal, y por qué ninguna se veía:**
+
+  1. **Contaba nuestras propias sondas como prospectos.** `chatwoot:48/49/50` son
+     *«Sonda QA carril chatbot»* y `chatwoot:11` es el celular de Sergio Urcullo. El repo ya
+     tenía el criterio (`esNuestra()` de `scripts/objetivo_visible.mjs`, con seis consumidores)
+     y el conteo del embudo no lo llamaba. El instrumento nuevo lo **importa**, no lo copia.
+  2. **Contaba filas sin conversación detrás.** `chatwoot:999999`, `chatwoot:990777` y
+     `chatwoot:13..19` no existen en Chatwoot. `esNuestra()` reconoce por nombre y teléfono, y
+     de una fila sintética no hay ni nombre ni teléfono que mirar: **caía del lado "real"**. Por
+     eso la ausencia ahora se clasifica explícitamente en vez de caer al default, con caso ancla.
+  3. **Medía el éxito por `calendar_event_id`, que queda NULL POR DISEÑO.** Sergio Urcullo ya
+     decidió la opción sin calendario (tablero `t_b18ca430`, 2026-09-03: *«Telegram YA, y Cal.com
+     cuando moleste anotar a mano»*). Contar demos por esa columna da **cero para siempre** contra
+     un mecanismo que se descartó a propósito — y manda a cada vuelta a "arreglar" un bot que hace
+     lo que se le pidió. El evento que esa decisión sí produce es `scheduled_at`, que es además el
+     contador que esta misma cola fijó como condición de vencimiento de la decisión.
+
+  ⚠️ **Corrección al ítem de abajo: «el bot NUNCA agendó una demo» es FALSO.** Agendó una:
+  `chatwoot:11`, `scheduled_at = 2026-09-12 13:00Z`, escrita el 10-sep. Lo que es cierto es que
+  hoy **ninguna** conversación está en `bot_stage='demo_agendada'` y que **ningún desconocido real
+  eligió horario todavía**. La frase absoluta salió de leer la columna equivocada.
+
+  ⚠️ **Y el gate nuevo casi entra sin poder fallar.** Su `selfCheck` hacía
+  `const { afirmar, ...caja } = afirmarFactory()`: el rest-spread copia el **valor** del getter
+  `fallas` (0) en vez de la propiedad viva, así que imprimía sus `✗` y salía `0` igual. Lo cazó la
+  validación por mutación, no la lectura. Validado en rojo por el motivo correcto en **dos**
+  puntos: ausencia-cuenta-como-real (4 casos) y éxito-anclado-en-`calendar_event_id` (2 casos).
+  Cableado: `npm run test:embudo-bot` en la cadena de `npm test`; medición viva `npm run embudo:bot`.
+
 - [x] 🔴 **CERRADO el 2026-09-24 (commiteado, NO desplegado): el bot NUNCA agendó una demo — ni
       una, en toda su historia — porque de los 5 horarios que el cron publica a diario sólo 2 se
       podían elegir. Los otros 3 estaban libres en la agenda de Sergio Urcullo y quien los
