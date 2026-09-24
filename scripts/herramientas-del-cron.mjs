@@ -45,7 +45,14 @@ export function herramientasQueElCronEjecuta (textoCrontab) {
   const encontradas = new Set()
   for (const linea of String(textoCrontab ?? '').split('\n')) {
     if (/^\s*#/.test(linea)) continue
-    for (const m of linea.matchAll(/\/root\/bin\/[A-Za-z0-9_.-]+/g)) encontradas.add(m[0])
+    // Los segmentos extra son obligatorios: el cron ejecuta ejecutables ANIDADOS
+    // (`/root/bin/onia-backup-v2/backup-onia-postgres-daily.sh`, el respaldo diario de la base).
+    // Sin ellos el recorte devolvía la CARPETA, `md5sum` contestaba «Is a directory» y el
+    // ejecutable real quedaba fuera del universo — invisible, no rojo. El `*` final no se vuelve
+    // codicioso de más porque la clase no incluye espacios ni `>`.
+    for (const m of linea.matchAll(/\/root\/bin\/[A-Za-z0-9_.-]+(?:\/[A-Za-z0-9_.-]+)*/g)) {
+      encontradas.add(m[0])
+    }
   }
   return [...encontradas].sort()
 }
@@ -367,6 +374,9 @@ function medir () {
     const gemelo = h ? porMd5.get(h) ?? null : null
     return {
       nombre,
+      // La RUTA viaja aparte del nombre: con ejecutables anidados las dos dejaron de ser lo
+      // mismo, y `/root/bin/<nombre>` ya no resuelve. Reconstruirla es lo que falla.
+      ruta,
       md5: h,
       fuenteCableada,
       md5Fuente,
@@ -387,7 +397,7 @@ function medir () {
         e.hermanoNoMedido = hermano.motivo
         continue
       }
-      const contenido = ssh(`cat -- /root/bin/${e.nombre}`)
+      const contenido = ssh(`cat -- ${e.ruta}`)
       if (contenido?.error) {
         e.hermanoNoMedido = `no pude bajar la copia viva: ${contenido.error}`
         continue
