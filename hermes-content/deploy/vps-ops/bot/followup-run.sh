@@ -86,6 +86,26 @@ case " $* " in
     ;;
 esac
 
+# CREDENCIALES DEL AVISO DEL LEAD FRIO. Mismo patrón, mismo archivo y mismo motivo que
+# `postdemo-run.sh` y `webhook-server.sh`: el secreto vive donde ya vivía y nadie lo copia a mano.
+# Hace falta acá porque `docker exec` hereda el entorno del CONTENEDOR, no el del webhook —
+# `onia-center` no tiene `TG_BOT_TOKEN`; lo tiene el PROCESO del webhook porque su lanzador se lo
+# pasó con `-e`.
+#
+# POR QUE ESTABA FALTANDO, que es lo que hay que no repetir: este barrido empezó a avisar el
+# 2026-09-24 (`avisarColgadas`, el lead que se enfría) y el emisor nuevo nació en el único de los
+# tres lanzadores que no pasaba estas variables. Sin ellas `enviarAvisoTelegram` devuelve
+# `status:"skipped"` — ni una excepción, ni una línea roja: el barrido corre entero, el lead se
+# cuenta, y a Sergio Urcullo no le llega nada. Gate: `aviso-de-colgada-llega-al-proceso.test.mjs`,
+# que deriva los sujetos de quién IMPORTA `aviso-telegram.mjs` para que el próximo emisor nazca
+# cubierto en vez de mudo.
+TG_AVISO="${ONIA_BOT_TG_AVISO:-true}"
+TG_ENV_FILE="${ONIA_TG_ENV_FILE:-/root/.config/onia/backup.env}"
+if [ -f "$TG_ENV_FILE" ]; then
+  TG_BOT_TOKEN="${TG_BOT_TOKEN:-$(sed -n 's/^TG_BOT_TOKEN=//p' "$TG_ENV_FILE" | tr -d '\"'\''' | tr -d ' \t\r\n' || true)}"
+  TG_CHAT_ID="${TG_CHAT_ID:-$(sed -n 's/^TG_CHAT_ID=//p' "$TG_ENV_FILE" | tr -d '\"'\''' | tr -d ' \t\r\n' || true)}"
+fi
+
 # Token de Chatwoot — el barrido MANDA el mensaje, no solo lo reserva. Sale de la base de Chatwoot
 # igual que en webhook-server.sh: nunca se escribe en un archivo ni viaja a n8n.
 CWDB="$(docker ps -qf name=onia-chatbot_chatwoot-db | head -n1)"
@@ -125,6 +145,9 @@ fi
 docker exec \
   -e ONIA_BOT_DRY_RUN="${ONIA_BOT_DRY_RUN:-true}" \
   -e ONIA_BOT_SLOTS="${ONIA_BOT_SLOTS:-}" \
+  -e ONIA_BOT_TG_AVISO="$TG_AVISO" \
+  -e TG_BOT_TOKEN="${TG_BOT_TOKEN:-}" \
+  -e TG_CHAT_ID="${TG_CHAT_ID:-}" \
   -e CHATWOOT_BASE_URL="${CHATWOOT_BASE_URL:-http://onia-chatbot_chatwoot:3000}" \
   -e CHATWOOT_ACCOUNT_ID="${CHATWOOT_ACCOUNT_ID:-2}" \
   -e CHATWOOT_API_TOKEN="$CW_TOKEN" \

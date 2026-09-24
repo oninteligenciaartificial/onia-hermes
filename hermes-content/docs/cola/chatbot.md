@@ -733,6 +733,39 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
       ---
 
+      🔴 **2026-09-24 15:45-16:15 La Paz — el aviso estaba escrito, verde y CABLEADO A NINGÚN
+      LADO: publicado tal cual, no habría llegado NUNCA, y encima se habría comido al lead para
+      siempre.** Encontrado auditando el punto 3 del pedido `t_0836a42f` contra el camino vivo —
+      no re-leyendo la cola. **Dos defectos, una sola causa: el emisor nuevo nació en el único de
+      los tres lanzadores que no pasa las credenciales del aviso.**
+
+      1. **`followup-run.sh` arranca el barrido con `docker exec` y una LISTA BLANCA de `-e`, y la
+         suya no tenía ninguna variable de Telegram.** Los hermanos que emiten el MISMO aviso sí:
+         `postdemo-run.sh` y `webhook-server.sh` pasan `ONIA_BOT_TG_AVISO`, `TG_BOT_TOKEN` y
+         `TG_CHAT_ID`. Medido lado a lado sobre los seis lanzadores. Es la misma clase de agujero
+         que `lanzador-pasa-env.test.mjs` tapó el 2026-09-04 — **y esa lección no viajó al barrido
+         porque su gate mira UN archivo por nombre.**
+      2. **`avisarColgadas` leía el `throw`, no el veredicto.** `enviarAvisoTelegram` casi nunca
+         tira: **devuelve** `{status:"sent"|"skipped"|"failed"}` — `skipped` es el canal apagado,
+         `failed` es encendido sin credencial. O sea, exactamente los dos estados que produce el
+         defecto 1. El código daba por ENTREGADO lo que nunca salió: se quedaba con la marca en
+         disco y anotaba el lead en `avisados`. Y como **las marcas de colgada no se purgan a
+         propósito** (el silencio del lead no vence), ese lead quedaba silenciado **PARA SIEMPRE,
+         incluso después de arreglar el entorno**. El defecto 1 se volvía permanente.
+
+      **Por qué los 8 casos verdes no lo vieron:** su canal de mentira devuelve siempre
+      `status:"sent"`, y el único caso de fallo *tira* una excepción. Un fixture que sólo sabe
+      salir bien —o fallar de la única forma que el código ya maneja— no puede ver esta rama.
+
+      **Gate nuevo:** `aviso-de-colgada-llega-al-proceso.test.mjs`, 5 casos, **3 en ROJO antes por
+      el motivo correcto** (el del lanzador nombró `followup-run.sh` y la variable que faltaba).
+      Sus sujetos **se derivan del disco** —quién importa `aviso-telegram.mjs`, y qué variables lee
+      ese módulo—, no de una lista a mano: una lista a mano falla ABIERTO y el próximo emisor
+      nacería mudo igual. Suite del bot completa: **1360/1360**. Commiteado, **NO desplegado** —
+      viaja en el mismo pedido `t_0836a42f`, que ya está `blocked` esperando el `ok`.
+
+      ---
+
       **Lo que se creía que FALTABA, y por qué la lista estaba incompleta.** El aviso necesita un
       candado de «una sola vez». Los cuatro candidatos se miraron con el código delante y **los
       cuatro tienen costo** — ninguno de los cuatro se usó, pero la derivación queda porque es lo

@@ -437,13 +437,25 @@ async function avisarColgadas(result, nowIso, deps) {
     });
 
     try {
-      await aviso.enviar(texto);
+      // EL VEREDICTO ES EL `status`, NO LA AUSENCIA DE EXCEPCION. `enviarAvisoTelegram` casi
+      // nunca tira: devuelve `{status:"sent"|"skipped"|"failed"}`. "skipped" es el canal apagado
+      // (`ONIA_BOT_TG_AVISO`) y "failed" es encendido sin credencial — los dos estados en los que
+      // el lanzador del barrido no le paso el entorno, que es como este aviso nacio mudo. Mirar
+      // solo el `throw` daba por ENTREGADO lo que nunca salio, y como las marcas de colgada no se
+      // purgan (el silencio del lead no vence) ese lead quedaba silenciado PARA SIEMPRE, incluso
+      // despues de arreglar el entorno: el defecto de configuracion se volvia permanente.
+      const veredicto = await aviso.enviar(texto);
+      const status = veredicto?.status;
+      if (status && status !== "sent") {
+        throw Object.assign(new Error(veredicto?.reason || `aviso ${status}`), { noEntregado: true });
+      }
       (result.colgadas.avisados ||= []).push(quien.conversationKey);
     } catch (error) {
       if (error?.hermetismo) throw error; // un test sin `deps.aviso` se entera, no se silencia
-      // La marca existe para no repetir un aviso ENTREGADO. Si Telegram se cayo, este lead no se
-      // anuncio NUNCA: se suelta para que el barrido siguiente lo reintente, o la reserva dejaria
-      // de evitar ruido y pasaria a tragarse al unico aviso que importaba.
+      // La marca existe para no repetir un aviso ENTREGADO. Si Telegram se cayo —o si el canal
+      // contesto que no lo mando—, este lead no se anuncio NUNCA: se suelta para que el barrido
+      // siguiente lo reintente, o la reserva dejaria de evitar ruido y pasaria a tragarse al
+      // unico aviso que importaba.
       await marcas.liberar?.(clave);
       result.warnings.push(
         `${quien.conversationKey}: el aviso de la colgada NO salio (${String(error?.message || error).slice(0, 120)}) — se reintenta en el proximo barrido`,
