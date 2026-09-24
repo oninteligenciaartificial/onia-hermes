@@ -8,6 +8,17 @@ Instrumento: `scripts/recorrido_cliente.mjs`.
 
 ## Cerrado — era el instrumento, no el sitio
 
+- **Portal del paciente ya SÍ deja cancelar una cita — era mi instrumento, no el producto.**
+  Reportado 2026-09-19 (`t_7bb28d06`, dueño onia-cola); arreglado ese mismo día (duplicada de
+  `t_69a580c9`, commit `a5be7d45`). Reverificado en vivo el 2026-09-24 07:12 La Paz: tanto
+  `/book/confirm/[token]` como `/book/my-appointments/[token]` ya muestran el botón "No voy a
+  poder ir", y `PATCH .../api/booking/appointments action:cancel` sigue devolviendo 200 con la
+  fila en `CANCELADA`. Mi `scripts/probar_cancelar_cita.mjs` seguía marcando "hallazgo" porque su
+  regex sólo buscaba la palabra literal "cancel" en el texto del botón — el producto lo dice en
+  español ("No voy a poder ir"), nunca iba a matchear. Arreglado el regex
+  (`/cancel|no voy a poder|no podr[eé]/i`); corrida limpia da `RESULTADO: ... sin hallazgo`,
+  exit 0, 0 filas `zz-qa-` al cerrar.
+
 - **`/servicios/webs`: el botón "Armar mi web →" quedaba `disabled`** — mapeado paso a paso
   el 2026-09-18 10:15 La Paz. **Era mi selector, no un bug**: la página tiene DOS inputs con
   placeholders parecidos — el mini-asistente de arriba ("¿Cómo se llama tu negocio?",
@@ -60,16 +71,6 @@ Instrumento: `scripts/recorrido_cliente.mjs`.
 > `RUBROS_ACTIVOS` (dental, comercio, estética, importadora, servicios profesionales) — todos
 > limpios, ver `ULTIMO_RECORRIDO.md`. No apareció ningún selector del script que asumiera el
 > layout de escritorio.
-
-## Abierto
-
-- **Portal del paciente: no hay forma de cancelar una cita, sólo confirmar.** Reportado
-  2026-09-19 (`t_7bb28d06`, prioridad 2, dueño: onia-cola). `PATCH /api/booking/appointments`
-  con `action:'cancel'` SÍ funciona (200, status pasa a `CANCELADA` en la base — verificado con
-  HTTP real), pero ni `/book/confirm/[token]` ni `/book/my-appointments/[token]` pintan un botón
-  o link de cancelar — sólo "Confirmar asistencia", "llamar" y "reservar de nuevo". Reproducido
-  con `scripts/probar_cancelar_cita.mjs`. Capturas: `capturas/extra-cancelarcita-00-confirm.png`
-  y `capturas/extra-cancelarcita-01-my-appointments.png`.
 
 ## Cerrado
 
