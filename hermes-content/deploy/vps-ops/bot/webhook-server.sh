@@ -152,9 +152,20 @@ CURRENT="$(docker exec "$CONTAINER" cat "$DEST/.stamp" 2>/dev/null || true)"
 # estaba borrado y el proceso vivo se quedaba sin archivos, con el script saliendo en error.
 # Asi la ventana pasa de durar el `cp` entero a durar dos `mv` (el rename no es atomico entre los
 # dos, pero son microsegundos), y un `cp` fallido NO toca lo que esta sirviendo.
+#
+# Y se copia `"$BOT_DIR/."` (el CONTENIDO) sobre un destino creado con `mkdir -p`, nunca
+# `"$BOT_DIR"` (la carpeta). `docker cp ORIGEN DESTINO` se comporta distinto segun exista o no el
+# destino: si ya existe, mete la carpeta ADENTRO — /tmp/onia-bot/bot/webhook-server.mjs — y el
+# arranque muere con MODULE_NOT_FOUND mientras el .stamp miente que esta sincronizado. Eso mato al
+# bot dos dias enteros (19-sep 19:00 UTC -> 21-sep 19:34). El `rm -rf "$DEST.new"` de aca abajo NO
+# alcanza para evitarlo: dos corridas solapadas de este mismo script (el watchdog reinicia cada 2
+# min y un deploy a mano puede caer encima) hacen que la segunda encuentre el `.new` que creo la
+# primera. Copiar el contenido es idempotente y no puede anidar, corra como corra la carrera.
+# Lo congela sync-no-anida.test.mjs, que exige el mismo idioma en los 8 scripts que sincronizan.
 if [ "$CURRENT" != "$STAMP" ]; then
   docker exec "$CONTAINER" rm -rf "$DEST.new" "$DEST.old" >/dev/null 2>&1
-  if ! docker cp "$BOT_DIR" "$CONTAINER:$DEST.new" >/dev/null 2>&1; then
+  docker exec "$CONTAINER" mkdir -p "$DEST.new" >/dev/null 2>&1
+  if ! docker cp "$BOT_DIR/." "$CONTAINER:$DEST.new" >/dev/null 2>&1; then
     docker exec "$CONTAINER" rm -rf "$DEST.new" >/dev/null 2>&1
     echo "ERROR: no se pudo copiar el bot al contenedor (lo que estaba sirviendo quedo intacto)" >&2
     exit 1
