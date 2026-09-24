@@ -12,6 +12,103 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-24 10:09-10:14 La Paz — `BUILD_ID` sin cambios (dental repetido de nuevo) + escalón 4 nuevo: rubro "Comercio / tienda", 8/8 completo
+
+Repetí el mismo error que la entrada de abajo ya advertía: corrí dental (`RECORRIDO_RUBRO`
+default) ANTES de comparar `BUILD_ID` contra la última entrada — seguía en `9tuk1Qk2BjQ2j2HdJcL8u`,
+sin cambios. **9/9, `completo: true`**, 0 filas `zz-qa-` al cerrar: dato correcto, vuelta
+redundante otra vez. Ver LECCIÓN abajo — esta vez sí se actuó: el resto de la vuelta fue el
+rubro nuevo.
+
+**Escalón 4 — primer recorrido completo con `RECORRIDO_RUBRO="Comercio / tienda"`** (nunca antes
+probado por este carril; `tieneAgenda()=false` según la memoria compartida). `node
+scripts/recorrido_cliente.mjs --escribir` con esa env var: alta con confirmación de correo,
+onboarding de 6 pantallas (con el copy correcto del rubro — "¿Qué vendés y a cuánto?" en vez de
+"¿Qué hacés y a cuánto?"), dato cargado en `/comercio` (Catálogo) y encontrado de vuelta,
+**paso 7 (agendar cita) correctamente NO-APLICA** — la tarjeta de `/register` de este rubro
+promete "Catálogo, inventario, caja y clientes" y su menú real no trae agenda: coincide con la
+promesa de venta, no es un agujero. Caja (`/comercio/caja`) es la pantalla de cobro, mirada y
+frenada sin marcar pagada. Panel `/dashboard` esta vez SÍ lista el dato del paso 6 (a diferencia
+de dental, donde el panel no lista pacientes) — diferencia esperada por rubro, no un fallo.
+Limpieza verificada: `organizations where name like 'zz-qa-%'` → 0, `appointments` con
+notas/razón `zz-qa-` → 0.
+
+RAZÓN: la medida `9/9` de dental no se movió (`BUILD_ID` sin cambios) — correcto no reportarla
+como avance, pero se volvió a correr sin necesidad antes de mirar el dato.
+LECCIÓN (segunda vez seguida con el mismo síntoma — cambio de método): dejar de confiar en
+"comparar BUILD_ID antes de correr" como paso mental — se olvida bajo presión de arrancar rápido.
+Próxima vuelta: el PRIMER comando después del chequeo de ALTA es
+`docker exec onia-platform cat /app/.next/BUILD_ID` comparado con el valor citado en la entrada
+más reciente de este archivo (`grep -m1 BUILD_ID` de este archivo mismo), y sólo si difiere se
+corre dental de nuevo — nunca dental "por costumbre" antes de decidir el escalón de la vuelta.
+
+---
+
+## 2026-09-24 09:16-09:19 La Paz — `BUILD_ID` sin cambios, dental repetido innecesariamente + escalón 3 nuevo: cupo del chatbot con uso real, sin hallazgo
+
+Al arrancar: `BUILD_ID` seguía en `9tuk1Qk2BjQ2j2HdJcL8u` (igual que la entrada de abajo) — no
+correspondía re-correr dental. Lo corrí igual antes de comparar (**9/9, `completo: true`**,
+0 filas `zz-qa-` al cerrar) — dato correcto pero vuelta parcialmente redundante: la entrada de
+abajo ya decía explícitamente "si `BUILD_ID` sigue igual, no repetir dental — rotar rubro o
+escalón 3 no auditado". Lección aparte al final.
+
+**Escalón 3 nuevo — `CupoConversacionesCard` (`/settings/chatbot`) con USO REAL sembrado en la
+base**, nunca antes probado por este carril contra producción (sólo existía el render-test
+`CupoConversacionesCard.render.test.ts`, que fabrica el `EstadoCupo` a mano en vez de leerlo de
+una fila real). Instrumento nuevo: `scripts/probar_cupo_chatbot.mjs`. Org `zz-qa-` sembrada por
+SQL con `plan='professional'`, `whatsappAddon=true`, dueño ADMIN y `clinic_settings`; fila de
+`chatbot_uso_mensual` del mes en curso sembrada dos veces en la misma corrida:
+
+- **400/500 (80%, el umbral de aviso):** la barra pasa a ámbar (`bg-amber-500`), aparece el
+  botón **"Sumar 200 conversaciones"** y el link `wa.me` real menciona el precio correcto —
+  *"...quiero sumar 200 conversaciones al chatbot (Bs 190, valen hasta fin de mes). ¿Cómo
+  procedemos?"* — coincide con `RECARGA_CONVERSACIONES` de `pricing.ts` (200 conv., Bs 190,
+  con la vigencia dicha). Captura `extra-cupochatbot-01-80pct.png`.
+- **500/500 (agotado):** la barra pasa a roja (`bg-error`) y el texto avisa la derivación a una
+  persona. Captura `extra-cupochatbot-02-100pct-agotado.png`.
+
+**Sin hallazgo**: la promesa de la memoria compartida ("el producto avisa al 80% Y al aplicarse
+el corte, y con cupo agotado deriva a una persona") se sostiene también en la PANTALLA del
+dueño con datos reales, no sólo en el motor del bot. **Trampa de método encontrada y corregida
+en el propio instrumento**: el primer intento usaba el selector `[role="progressbar"]` sin
+filtrar por `aria-label`, y agarraba un progressbar de carga de página ajeno a la tarjeta
+(`aria-valuenow=1` fijo) — el selector correcto ancla por
+`[aria-label="Conversaciones usadas este mes"]` antes de leer nada adentro. Limpieza verificada:
+`organizations where name like 'zz-qa-%'` → 0 (el único huérfano de `chatbot_uso_mensual`
+encontrado en la base, `cmtml12hr...`, es de un `organizationId` con formato `cuid` — no mío,
+que siembro con `gen_random_uuid()`).
+
+RAZÓN: la medida `9/9` no se movió porque el `BUILD_ID` no cambió — correcto no repetirla dos
+veces, pero la corrí una vez de más antes de comparar. El avance real de la vuelta es el
+escalón 3 nuevo, cerrado sin hallazgo.
+LECCIÓN: comparar el `BUILD_ID` contra la última entrada ANTES de correr el recorrido completo,
+no después — la entrada anterior ya traía la instrucción explícita de no repetir dental. Y para
+cualquier probe nuevo con Playwright: un selector de rol ARIA genérico (`[role="progressbar"]`,
+`[role="dialog"]`, etc.) sin su `aria-label`/filtro específico puede agarrar un elemento de la
+UI del framework (indicador de carga) en vez del que se quiere medir — ancla siempre por el
+atributo que lo identifica antes de leer nada adentro.
+
+---
+
+## 2026-09-24 08:14 La Paz — recorrido completo, rubro dental, `BUILD_ID` nuevo
+
+`BUILD_ID` cambió (`Df2rH9P_zIOujNXHs0ist` → `9tuk1Qk2BjQ2j2HdJcL8u`), correspondía re-correr
+entero. `node scripts/recorrido_cliente.mjs --escribir`, rubro dental (default): **9 de 9,
+RECORRIDO COMPLETO.** Alta con confirmación de correo real, onboarding de 6 pantallas, paciente
+`zz-qa-2026-09-24-0811-paciente` cargado y encontrado de vuelta, cita 2026-09-25 09:00 agendada
+(201, `cmuf99r9l001m01rwzrib20o0`) y VISTA en `/appointments` (captura
+`paso-07d-cita-en-agenda.png`), factura #2026-0001 con ítem `zz-qa-2026-09-24-0811-item` visible
+en `/billing/...` (captura `paso-08c-factura-creada.png`, frenado ahí sin marcar pagada), panel
+`/dashboard` no lista pacientes (esperado, ya conocido). Sin hallazgos nuevos. Limpieza
+verificada: `organizations where name like 'zz-qa-%'` → 0, `appointments` con notas/razón
+`zz-qa-` → 0.
+
+**Próxima vuelta:** si `BUILD_ID` sigue en `9tuk1Qk2BjQ2j2HdJcL8u`, no repetir dental — seguir
+escalón 3 en superficie no auditada (otro rubro, o invitar/quitar coadministrador en `/settings`,
+o la recarga del add-on chatbot al agotar cupo).
+
+---
+
 ## 2026-09-19 19:11 La Paz — recorrido completo, rubro dental, `BUILD_ID` nuevo
 
 `BUILD_ID` cambió (`AUiuQ9c0SmcJnuF37_qTo` → `Df2rH9P_zIOujNXHs0ist`), así que correspondía
