@@ -12,6 +12,63 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-24 17:12 La Paz — `BUILD_ID` sin cambios (no se repitió dental); escalón 3c: `/pending` con una propuesta REAL de agente, rechazarla y ver el efecto en `/agents`
+
+`ONIA_ALTA_AUTOMATICA=abierta`, `zz-qa-` en 0 al arrancar. `BUILD_ID` sigue
+`9tuk1Qk2BjQ2j2HdJcL8u` — no correspondía repetir dental.
+
+**Siguió el pendiente que dejó la entrada de arriba**: probar `/pending` aprobando o
+rechazando una propuesta real y mirar el efecto en `/agents`. Instrumento nuevo:
+`scripts/probar_agentes_pending.mjs`.
+
+⚠️ **Sólo se tocó "Rechazar", nunca "Aprobar y enviar".** `app/api/onia-core/approvals/route.ts`
+documenta que aprobar **ejecuta el envío de verdad** (WhatsApp al destinatario del sobre); este
+carril tiene prohibido escribirle a nadie que no sea Sergio, así que aprobar con canal real
+quedó fuera de alcance. El código mismo dice que rechazar "no manda nada" — ese es el botón
+seguro de medir.
+
+También se aprendió que `/agents` (tabla `onia_agents_actions`, sembrada directo por SQL en la
+entrada anterior) y `/pending` (tabla `onia_core_approval_requests`) son **dos tablas
+distintas**, unidas por `onia_agents_actions.approvalRequestId` ↔
+`onia_core_approval_requests.metadata.agentActionId` — así arma la cadena real
+`agents-runtime.ts`. Sembrar solo la primera (como hizo el escalón 3b) nunca aparece en
+`/pending`; para este escalón se sembraron las dos, con el mismo enlace que usa el runtime.
+
+Sembrado por SQL: org `zz-qa-` professional/dental vigente, un agente `Recall` real, una
+corrida `completed` con `itemsProduced=1`, una acción `send_message` en `pending_approval`, y
+su `oniaCoreApprovalRequest` (`requestType='agent_action'`, `metadata.agentActionId` apuntando a
+la acción, `metadata.dispatch` con canal WhatsApp a un teléfono `zz-qa-` inventado). Con sesión
+real (magic link + cookies, 390×844):
+
+- **`/pending` → "Aprobaciones pendientes"**: "Propuesta de Recall" (nombre del agente, no la
+  clave `agent_action`), "Pedido por ZZ QA Owner · Recontactar a paciente sin volver hace 4
+  meses", el sobre completo — "Se envía por WhatsApp a ZZ QA Paciente (59100000000)" y el texto
+  exacto del mensaje — y los tres botones (Aprobar y enviar / Enviar yo mismo por WhatsApp /
+  Rechazar). Captura `extra-pending-00-antes.png`.
+- **Clic en "Rechazar"** → `PATCH /api/onia-core/approvals` 200, notice **"Rechazado. No se
+  envío nada."**, la tarjeta desaparece de la lista. Captura `extra-pending-01-rechazado.png`.
+- **Base**: `onia_core_approval_requests.status='rejected'`, `onia_agents_actions.status`
+  también `'rejected'` (el enlace por `agentActionId` sí transicionó la acción hermana), **0
+  filas en `onia_core_dispatches`** para esa aprobación — nada se envió de verdad.
+- **`/agents` después**: ya NO cuenta "esperando aprobación", y la sección de acciones muestra
+  el texto HONESTO — *"Tus agentes ya propusieron 1 acción en sus últimas corridas, y ninguna
+  sigue en esta lista: lo que aprobaste, lo que rechazaste y lo que el agente descartó no vuelve
+  a mostrarse acá"* — no el texto viejo ("Todavía no hay propuestas") que motivó el arreglo
+  `textoListaVacia` del 2026-09-13. Captura `extra-pending-02-agents-despues.png`.
+
+**Sin hallazgo.** Limpieza verificada por fuera del propio script:
+`organizations`/`auth.users` con `zz-qa-%` → 0, `onia_core_approval_requests` de la org → 0.
+
+**Próxima vuelta:** si `BUILD_ID` sigue igual, queda por probar "invitar/quitar
+coadministrador desde `/settings`" (pendiente desde el 2026-09-18), o rotar de rubro con
+`/agents`/`/pending` (comercio/importadora no tienen agenda — ver si el catálogo de roles de
+agente cambia con el rubro), o volver a `/agents` con "Aprobar y enviar" usando SOLO el botón
+"Enviar yo mismo por WhatsApp" (`canal:"manual"`) contra un teléfono `zz-qa-` que no es de nadie
+real — ese camino prepara un link `wa.me` pero el propio código dice que "el sistema NO lo
+envía", así que no rompería la regla de no escribirle a un prospecto; medirlo con cuidado igual.
+
+---
+
 ## 2026-09-24 16:11 La Paz — `BUILD_ID` sin cambios (no se repitió dental); escalón 3b: `/agents` con agentes YA sembrados y una corrida real
 
 `ONIA_ALTA_AUTOMATICA=abierta`, `zz-qa-` en 0 al arrancar. `BUILD_ID` sigue
