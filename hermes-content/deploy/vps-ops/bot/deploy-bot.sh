@@ -96,6 +96,30 @@ for f in "${CAMBIOS[@]}"; do
   echo "   ok  $f"
 done
 
+# --- 4.bis Limpiar el arbol DENTRO del contenedor antes de re-sincronizar ---------------------
+#
+# Los 8 scripts de runtime (webhook-server, chatwoot-adapter, run-turn y los cuatro *-run.sh)
+# sincronizan con `mkdir -p` + `docker cp "$BOT_DIR/." ...`, que copia ENCIMA y no borra lo que
+# ya no existe en el repo. Eso es a proposito: cualquiera de ellos puede arrancar mientras otro
+# esta copiando —los crons se solapan (:17, :32, :47, cada 30 min) y el watchdog reinicia cada
+# 2 minutos— y la version con `rm -rf` abria una ventana en la que el segundo `docker cp` veia
+# el destino ya creado y metia la carpeta ADENTRO (/tmp/onia-bot/bot/). Eso mato al bot dos dias
+# enteros, del 19-sep 19:00 UTC al 21-sep 19:34, con el .stamp mintiendo que estaba sincronizado.
+#
+# El costo de no borrar es que un archivo renombrado deja su version vieja en el contenedor.
+# Es inofensivo mientras nadie la importe, pero no queremos que se acumule para siempre: la
+# limpieza va ACA, en el deploy explicito, que lo corre una persona y no compite con ningun cron.
+# Borrar tambien se lleva el .stamp, asi que el restart de abajo re-copia todo de cero.
+CONTENEDOR="${ONIA_BOT_CONTAINER:-onia-center}"
+CONTENEDOR_DEST="${ONIA_BOT_CONTENEDOR_DEST:-/tmp/onia-bot}"
+echo
+echo "-- limpiando el arbol del contenedor ($CONTENEDOR:$CONTENEDOR_DEST)"
+if docker ps --format '{{.Names}}' | grep -qx "$CONTENEDOR"; then
+  docker exec "$CONTENEDOR" rm -rf "$CONTENEDOR_DEST" >/dev/null 2>&1     && echo "   ok  borrado; el restart lo re-sincroniza de cero"     || echo "   AVISO: no se pudo borrar $CONTENEDOR_DEST (sigo igual: el sync copia encima)"
+else
+  echo "   AVISO: el contenedor $CONTENEDOR no esta corriendo — me salteo la limpieza"
+fi
+
 # --- 5. Reiniciar. webhook-server.sh es el que sincroniza /opt/onia/bot hacia el contenedor ----
 echo
 echo "-- reinicio del webhook"
