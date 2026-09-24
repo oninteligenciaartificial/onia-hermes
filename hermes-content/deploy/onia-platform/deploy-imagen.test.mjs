@@ -38,6 +38,7 @@ const STUB_DOCKER = `#!/usr/bin/env bash
 S="$STUB_ESTADO"
 echo "$*" >> "$S/docker.log"
 ultimo=\${@: -1}
+CONF_OK='nextjs|/app|["node","server.js"]'
 case "$1" in
   inspect)
     case "$*" in
@@ -48,12 +49,17 @@ case "$1" in
   image)
     case "$2" in
       inspect) [ -n "\${STUB_SIN_IMAGEN:-}" ] && exit 1
+               # Si en este mundo se armó algo, sólo existen las etiquetas que se armaron.
+               [ -f "$S/imagenes" ] && ! grep -qxF -- "$ultimo" "$S/imagenes" && exit 1
                case "$*" in
                  *"{{.Id}}"*) echo "sha256:vivo" ;;
-                 *"{{.Config.User}}"*) echo 'nextjs|/app|["node","server.js"]' ;;
+                 *"{{.Config.User}}"*) echo "\${STUB_CONF:-$CONF_OK}" ;;
                esac ;;
+      rm) [ -f "$S/imagenes" ] && { grep -vxF -- "$ultimo" "$S/imagenes" > "$S/imagenes.t"; mv "$S/imagenes.t" "$S/imagenes"; } ;;
     esac ;;
-  build) exit "\${STUB_BUILD_FALLA:-0}" ;;
+  build) [ "\${STUB_BUILD_FALLA:-0}" = 0 ] || exit "$STUB_BUILD_FALLA"
+         p=""; for a in "$@"; do [ "$p" = --tag ] && echo "$a" >> "$S/imagenes"; p=$a; done ;;
+  tag) echo "$3" >> "$S/imagenes" ;;
   exec)
     shift 2
     case "$*" in
@@ -63,10 +69,12 @@ case "$1" in
     esac ;;
   run)
     case "$*" in
-      *"--entrypoint sh"*) printf '%s\\n' "build=$STUB_BUILD_NUEVO" node=v22.11.0 server=ok node_modules=ok static=40 envfiles=0 publica=3 anon=3 "qa=\${STUB_QA:-0}" ;;
+      *"--entrypoint sh"*) printf '%s\\n' "build=$STUB_BUILD_NUEVO" "node=\${STUB_NODE:-v22.11.0}" server=ok node_modules=ok static=40 \\
+        "envfiles=\${STUB_ENVFILES:-0}" "publica=\${STUB_PUBLICA:-3}" "anon=\${STUB_ANON:-3}" "qa=\${STUB_QA:-0}" ;;
       *--rm*) echo "$STUB_BUILD_NUEVO" ;;
       *) touch "$S/nuevo" ;;
     esac ;;
+  network) [ "$2" = connect ] && [ "$3" = "\${STUB_RED_FALLA:-}" ] && [ "$4" = onia-platform ] && exit 1 ;;
   create) p=""; for a in "$@"; do [ "$p" = --name ] && echo "$a" >> "$S/creados"; p=$a; done ;;
   rm) [ "$ultimo" = onia-platform ] && rm -f "$S/nuevo"
       [ -f "$S/creados" ] && { grep -vx -- "$ultimo" "$S/creados" > "$S/creados.t"; mv "$S/creados.t" "$S/creados"; } ;;
@@ -85,7 +93,8 @@ while [ $# -gt 0 ]; do
 done
 echo "curl $url" >> "$S/docker.log"
 case "$url" in
-  *127.0.0.1:3101*) b=$STUB_BUILD_NUEVO; c=200; [ "\${STUB_FALLA:-}" = canario_login ] && c=500 ;;
+  *127.0.0.1:3101*) b=$STUB_BUILD_NUEVO; c=200; [ "\${STUB_FALLA:-}" = canario_login ] && c=500
+                    [ "\${STUB_FALLA:-}" = canario_build ] && b=$STUB_BUILD_VIVO ;;
   *) b=$STUB_BUILD_VIVO; [ -f "$S/nuevo" ] && b=$STUB_BUILD_NUEVO; c=200
      [ "\${STUB_FALLA:-}" = publico ] && b=$STUB_BUILD_VIVO ;;
 esac
@@ -266,8 +275,13 @@ test('build real: release con SHA, código sin lo excluido, docker build sin val
     const build = r.llamadas.find((l) => l.startsWith('build '));
     assert.match(
       build,
-      new RegExp(`--tag onia-platform:release-${m.sha8} --build-arg NEXT_PUBLIC_SUPABASE_URL --build-arg NEXT_PUBLIC_SUPABASE_ANON_KEY --build-arg NEXT_PUBLIC_APP_URL`),
+      new RegExp(`--tag onia-platform:candidato-${m.sha8} --build-arg NEXT_PUBLIC_SUPABASE_URL --build-arg NEXT_PUBLIC_SUPABASE_ANON_KEY --build-arg NEXT_PUBLIC_APP_URL`),
     );
+    // La etiqueta release-<sha8> es la que publica el swap: nace DESPUÉS de los gates.
+    const i = (re) => r.llamadas.findIndex((l) => re.test(l));
+    const etiqueta = i(new RegExp(`^tag onia-platform:candidato-${m.sha8} onia-platform:release-${m.sha8}$`));
+    assert.ok(etiqueta > i(/--entrypoint sh/), 'etiquetó release antes de correr los gates');
+    assert.ok(i(new RegExp(`^image rm onia-platform:candidato-${m.sha8}$`)) > etiqueta, 'dejó el candidato colgado');
     assert.ok(!r.log.includes(ANON) && !r.log.includes(SRK), 'un valor de app.env viajó en la línea de comando');
     assert.ok(!r.salida.includes(ANON) && !r.salida.includes(SRK));
     assert.match(r.salida, /STAGED_OK/);
@@ -276,14 +290,55 @@ test('build real: release con SHA, código sin lo excluido, docker build sin val
   }
 });
 
-test('build real: una imagen con valores de QA horneados NO queda staged (sin BUILD_ID)', () => {
+// Cada gate, roto de a uno. Un gate que se borra tiene que poner algo rojo acá.
+const GATES_ROTOS = [
+  [{ STUB_QA: '2' }, /valores-QA=2/],
+  [{ STUB_NODE: 'v20.18.0' }, /node=v20\.18\.0/],
+  [{ STUB_ENVFILES: '1' }, /envfiles=1/],
+  [{ STUB_ANON: '0' }, /anon-key-no-horneada/],
+  [{ STUB_PUBLICA: '0' }, /url-publica-no-horneada/],
+  [{ STUB_CONF: 'root|/|["npm","start"]' }, /config de la imagen inesperada/],
+];
+
+for (const [stubs, motivo] of GATES_ROTOS) {
+  test(`build real: con ${Object.entries(stubs)[0].join('=')} NO queda staged ni etiquetada release`, () => {
+    const m = mundo();
+    try {
+      const r = correr(m, BUILD, [m.sha], stubs);
+      assert.equal(r.codigo, 1, r.salida);
+      assert.match(r.salida, motivo);
+      assert.ok(!r.salida.includes('STAGED_OK'));
+      assert.equal(existsSync(`${m.base}/releases/${m.sha8}-${hoy()}/BUILD_ID`), false);
+      assert.ok(!r.llamadas.some((l) => /^tag .*:release-/.test(l)), 'etiquetó release una imagen rechazada');
+      assert.ok(r.llamadas.includes(`image rm onia-platform:candidato-${m.sha8}`), 'dejó el candidato rechazado');
+    } finally {
+      limpiar(m);
+    }
+  });
+}
+
+// El atajo del runbook: build-and-stage dice «siguiente paso: swap-imagen.sh <sha8>».
+// Si el build fue rechazado, ese swap no puede encontrar nada que publicar.
+test('una imagen que no pasó los gates no se puede publicar con swap-imagen.sh', () => {
   const m = mundo();
   try {
-    const r = correr(m, BUILD, [m.sha], { STUB_QA: '2' });
-    assert.equal(r.codigo, 1);
-    assert.match(r.salida, /valores-QA=2/);
-    assert.ok(!r.salida.includes('STAGED_OK'));
-    assert.equal(existsSync(`${m.base}/releases/${m.sha8}-${hoy()}/BUILD_ID`), false);
+    assert.equal(correr(m, BUILD, [m.sha], { STUB_QA: '2' }).codigo, 1);
+    const r = correr(m, SWAP, [m.sha]);
+    assert.equal(r.codigo, 1, r.salida);
+    assert.match(r.salida, /no existe la imagen onia-platform:release-/);
+    assert.ok(!r.llamadas.some((l) => l === 'stop onia-platform'), 'paró producción por una imagen rechazada');
+  } finally {
+    limpiar(m);
+  }
+});
+
+test('una imagen que pasó los gates sí la encuentra el swap', () => {
+  const m = mundo();
+  try {
+    assert.equal(correr(m, BUILD, [m.sha]).codigo, 0);
+    const r = correr(m, SWAP, [m.sha]);
+    assert.equal(r.codigo, 0, r.salida);
+    assert.match(r.salida, /SWAP OK/);
   } finally {
     limpiar(m);
   }
@@ -360,6 +415,32 @@ test('swap: el canario sin login 200 corta ANTES de parar producción', () => {
     const r = correr(m, SWAP, [m.sha], { STUB_FALLA: 'canario_login' });
     assert.equal(r.codigo, 1);
     assert.ok(!r.llamadas.some((l) => l === 'stop onia-platform'));
+  } finally {
+    limpiar(m);
+  }
+});
+
+test('swap: el canario que sirve OTRO build (no el de la imagen) corta ANTES de parar producción', () => {
+  const m = mundo();
+  try {
+    const r = correr(m, SWAP, [m.sha], { STUB_FALLA: 'canario_build' });
+    assert.equal(r.codigo, 1);
+    assert.match(r.salida, /canario: \/login no sirve el build/);
+    assert.ok(!r.llamadas.some((l) => l === 'stop onia-platform'));
+  } finally {
+    limpiar(m);
+  }
+});
+
+// Crear con --network pone UNA red: sin easypanel no hay Traefik. Así se tumbó prod 3 veces.
+test('swap: si no puede conectar easypanel al contenedor nuevo, ROLLBACK', () => {
+  const m = mundo();
+  try {
+    const r = correr(m, SWAP, [m.sha], { STUB_RED_FALLA: 'easypanel' });
+    assert.equal(r.codigo, 1);
+    assert.match(r.salida, /ROLLBACK: no pude conectar la red easypanel/);
+    assert.ok(r.llamadas.some((l) => /^rename onia-platform-prev-\S+ onia-platform$/.test(l)));
+    assert.ok(r.llamadas.includes('start onia-platform'));
   } finally {
     limpiar(m);
   }
@@ -469,6 +550,18 @@ test('recreate se niega si el vivo todavía monta /app (receta vieja): lo dejar�
     const r = correr(m, RECREAR, ['--si-estoy-seguro'], { STUB_MONTAJES: '/app', STUB_BUILD_NUEVO: VIVO });
     assert.equal(r.codigo, 1);
     assert.match(r.salida, /monta \/app/);
+    assert.deepEqual(r.llamadas.filter(muta), []);
+  } finally {
+    limpiar(m);
+  }
+});
+
+test('recreate se niega si el vivo sirve otro build que la imagen que dice correr', () => {
+  const m = mundo();
+  try {
+    const r = correr(m, RECREAR, ['--si-estoy-seguro']);
+    assert.equal(r.codigo, 1);
+    assert.match(r.salida, /no es la misma/);
     assert.deepEqual(r.llamadas.filter(muta), []);
   } finally {
     limpiar(m);

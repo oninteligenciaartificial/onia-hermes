@@ -23,6 +23,7 @@ import {
   guionBuildsSsh,
   shaDeImagen,
   stagedPara,
+  medir,
   REPO,
   RAMA_DEPLOY,
 } from './deploy-vivo.mjs';
@@ -105,6 +106,43 @@ test('el release del HEAD sí es staged, aunque git abrevie el HEAD a 7 y el rel
 test('un release del HEAD sin imagen o sin BUILD_ID (integro=false) NO cubre', () => {
   const rel = { sha: '0db6549a', buildId: null, tipo: 'release', integro: false };
   assert.notEqual(evaluarStaged({ staged: stagedPara([rel], '0db6549a'), headSha: '0db6549a' }).estado, CUBRE);
+});
+
+// medir() es lo que corre publicar.sh. Probar sus piezas sueltas no alcanza: si medir()
+// deja de pasarle la imagen viva a shaQueCorre, el par de hoy sale NO_PUDE_MEDIR, el
+// publicador se corta ANTES de armar un release con BUILD_ID y queda trabado para
+// siempre con la suite en verde. Los lectores se inyectan: nada toca docker ni git.
+const mundoMedir = (extra = {}) => ({
+  builds: () => [
+    { sha: '7bcd0a83', buildId: null, tipo: 'release', integro: false, ruta: '/opt/onia-platform/releases/7bcd0a83-20260924' },
+  ],
+  buildIdVivo: () => 'FU8j_OHPyRH1XCCr6-0uY',
+  imagenViva: () => 'onia-platform:release-7bcd0a83',
+  headDeploy: () => '7bcd0a8',
+  varadosDesde: () => [],
+  desciendeDe: () => true,
+  ...extra,
+});
+
+test('medir(): el par de hoy (FU8j… sobre release-7bcd0a83 sin BUILD_ID) corre 7bcd0a83 y está al día', () => {
+  const r = medir(mundoMedir());
+  assert.equal(r.shaVivo, '7bcd0a83');
+  assert.equal(r.codigo, AL_DIA, r.motivo);
+});
+
+test('medir(): el staged es el release de 8 del HEAD de 7, no un build-<sha> legado que casa exacto', () => {
+  const release = { sha: 'abcdef12', buildId: 'IdNuevo', tipo: 'release', integro: true, ruta: '/opt/onia-platform/releases/abcdef12-20260925' };
+  const legado = { sha: 'abcdef1', buildId: 'IdLegado', tipo: 'legacy', integro: true, ruta: '/opt/onia-platform/build-abcdef1' };
+  const r = medir(
+    mundoMedir({
+      builds: () => [release, legado],
+      headDeploy: () => 'abcdef1',
+      varadosDesde: () => [{ sha: 'abcdef1', asunto: 'fix: algo que el cliente ve' }],
+    }),
+  );
+  assert.equal(r.codigo, ARREGLOS_VARADOS, r.motivo);
+  assert.equal(r.staged.estado, CUBRE, r.staged.motivo);
+  assert.equal(r.staged.ruta, release.ruta);
 });
 
 test('lee releases y build-<sha> del disco, con su sha, BUILD_ID e integridad', () => {

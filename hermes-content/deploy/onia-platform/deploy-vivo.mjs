@@ -358,12 +358,23 @@ export function varadosDesde(shaVivo, repo = REPO) {
   return out;
 }
 
-export function medir() {
-  const builds = buildsDeProduccion()?.builds ?? null;
-  const shaVivo = shaQueCorre({ buildIdVivo: buildIdVivo(), builds, imagenViva: imagenViva() });
-  const headSha = headDeploy();
-  const varados = varadosDesde(shaVivo);
-  const d = diagnosticar({ shaVivo, headSha, varados, desciende: desciendeDe(shaVivo, headSha) });
+const LECTORES = {
+  builds: () => buildsDeProduccion()?.builds ?? null,
+  buildIdVivo,
+  imagenViva,
+  headDeploy,
+  varadosDesde,
+  desciendeDe,
+};
+
+/** Los lectores se inyectan para que los tests midan medir() sin docker ni git. */
+export function medir(lectores = {}) {
+  const l = { ...LECTORES, ...lectores };
+  const builds = l.builds();
+  const shaVivo = shaQueCorre({ buildIdVivo: l.buildIdVivo(), builds, imagenViva: l.imagenViva() });
+  const headSha = l.headDeploy();
+  const varados = l.varadosDesde(shaVivo);
+  const d = diagnosticar({ shaVivo, headSha, varados, desciende: l.desciendeDe(shaVivo, headSha) });
   return { ...d, shaVivo, headSha, staged: evaluarStaged({ staged: stagedPara(builds, headSha), headSha }) };
 }
 

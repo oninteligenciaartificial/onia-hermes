@@ -78,6 +78,11 @@ git -C "$REPO" fetch --quiet origin 2>/dev/null || echo "aviso: fetch fallo, uso
 SHA=$(git -C "$REPO" rev-parse --verify --quiet "$REF^{commit}") || fatal "ref desconocida: $REF"
 SHA8=${SHA:0:8}
 TAG=$CONTENEDOR:release-$SHA8
+# Se arma como CANDIDATO y recien tras los gates pasa a release-<sha8>: swap-imagen.sh
+# publica cualquier release-<sha8> que exista, asi que esa etiqueta tiene que significar
+# "paso los gates". Antes se etiquetaba release primero y una imagen rechazada (QA
+# horneado, 127.0.0.1, sin anon key) quedaba lista para un swap a mano.
+CAND=$CONTENEDOR:candidato-$SHA8
 R=$BASE/releases/$SHA8-$(date +%Y%m%d)
 
 # La imagen que corre produccion no se vuelve a etiquetar encima: el rollback y el
@@ -104,8 +109,9 @@ fi
 if [ -n "$DRY" ]; then
   echo "[dry-run] armaria $TAG desde $SHA"
   echo "[dry-run]   release: $R (SHA, source.tar.gz, src/ sin n8n-mcp-server/node_modules .agents .obsidian .opencode .claude)"
-  echo "[dry-run]   docker build --tag $TAG con los 3 NEXT_PUBLIC_* de $ENVFILE (sin mostrarlos)"
+  echo "[dry-run]   docker build --tag $CAND con los 3 NEXT_PUBLIC_* de $ENVFILE (sin mostrarlos)"
   echo "[dry-run]   gates: BUILD_ID, node 22, server.js, 0 .env, URL publica + anon key horneadas, 0 valores QA"
+  echo "[dry-run]   solo si pasan: docker tag $CAND $TAG"
   echo "[dry-run] no arme nada."
   exit 0
 fi
@@ -128,8 +134,11 @@ MALOS=$(find "$R/src" -maxdepth 1 -name '.env*' ! -name '*.example' -printf '%f 
 # `--build-arg NOMBRE` sin valor lo toma del entorno: los valores no aparecen en
 # la linea de comando (ps) ni en este log.
 say "docker build (log: $R/build.log)"
+# El candidato se suelta al salir por cualquier camino. Si paso, ya tiene la etiqueta
+# release y esto solo la desetiqueta; si no, la imagen rechazada queda sin nombre.
+trap 'docker image rm "$CAND" >/dev/null 2>&1' EXIT
 INICIO=$(date +%s)
-docker build --pull=false --progress=plain --tag "$TAG" \
+docker build --pull=false --progress=plain --tag "$CAND" \
   --build-arg NEXT_PUBLIC_SUPABASE_URL --build-arg NEXT_PUBLIC_SUPABASE_ANON_KEY --build-arg NEXT_PUBLIC_APP_URL \
   "$R/src" > "$R/build.log" 2>&1
 CODIGO=$?
@@ -137,10 +146,10 @@ echo "$CODIGO $(( $(date +%s) - INICIO ))s" > "$R/build.exit"
 if [ "$CODIGO" != 0 ]; then tail -20 "$R/build.log"; fatal "docker build fallo ($CODIGO)"; fi
 
 # ── [7/7] gates sobre la IMAGEN, sin red ─────────────────────────────────────
-CONF=$(docker image inspect --format '{{.Config.User}}|{{.Config.WorkingDir}}|{{json .Config.Cmd}}' "$TAG" 2>/dev/null)
+CONF=$(docker image inspect --format '{{.Config.User}}|{{.Config.WorkingDir}}|{{json .Config.Cmd}}' "$CAND" 2>/dev/null)
 [ "$CONF" = 'nextjs|/app|["node","server.js"]' ] || fatal "config de la imagen inesperada: $CONF"
 G=$(K="$NEXT_PUBLIC_SUPABASE_ANON_KEY" U="$NEXT_PUBLIC_SUPABASE_URL" \
-  docker run --rm --network none -e K -e U --entrypoint sh "$TAG" -c '
+  docker run --rm --network none -e K -e U --entrypoint sh "$CAND" -c '
     echo "build=$(cat .next/BUILD_ID 2>/dev/null)"
     echo "node=$(node --version)"
     test -f server.js && echo server=ok || echo server=falta
@@ -164,7 +173,8 @@ case "$(g node)" in v22.*) ;; *) FALLA="$FALLA node=$(g node)" ;; esac
 [ "$(g publica)" -gt 0 ] 2>/dev/null || FALLA="$FALLA url-publica-no-horneada"
 [ "$(g anon)" -gt 0 ] 2>/dev/null || FALLA="$FALLA anon-key-no-horneada"
 [ "$(g qa)" = 0 ] || FALLA="$FALLA valores-QA=$(g qa)"
-[ -z "$FALLA" ] || fatal "la imagen $TAG NO pasa los gates:$FALLA"
+[ -z "$FALLA" ] || fatal "la imagen $CAND NO pasa los gates:$FALLA"
+docker tag "$CAND" "$TAG" || fatal "no pude etiquetar $TAG"
 
 # El BUILD_ID es lo ULTIMO que se escribe: sin el, deploy-vivo.mjs no da este
 # release por staged, asi que un build cortado a la mitad nunca se publica.
