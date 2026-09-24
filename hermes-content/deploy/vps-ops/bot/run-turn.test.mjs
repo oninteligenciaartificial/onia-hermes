@@ -191,3 +191,71 @@ test("el prompt del LLM sigue exportado — si se inlinea, los evals dejan de co
   assert.ok(prompt.length > 0, "vacio tampoco sirve: los evals miden tokens sobre este texto");
   assert.match(prompt, /PROHIBIDO: dar precios/, "es el prompt con los guardrails, no cualquier string");
 });
+
+// ---------------------------------------------------------------------------
+// EL CAMINO VIVO: de los 5 horarios que publica el cron, el bot solo podia aceptar 2
+// ---------------------------------------------------------------------------
+// Medido en produccion el 2026-09-24: `onia_center.bot_conversations` tiene 43 conversaciones,
+// 18 en `esperando_horario` y CERO con `calendar_event_id` — el bot nunca agendo una demo. El
+// cron escribe CINCO candidatos en ONIA_BOT_SLOTS (uno por dia) y este archivo se quedaba con
+// los dos primeros, asi que "el lunes 28 a las 14:00" —libre en la agenda— caia en
+// `proposesOwnTime` y se iba a la cola humana.
+//
+// Este test mira el camino de PRODUCCION, no el del simulador: son dos `buildConfig` distintos
+// (este y el de simulate.mjs) y hasta hoy parseaban el spec cada uno a su manera. Arreglar el
+// del simulador y creer que producción quedo curada es exactamente el error que este carril ya
+// pago una vez.
+const SPEC_VIVO = [
+  "viernes 25 de septiembre, 21:00@2026-09-26T01:00:00Z",
+  "sábado 26 de septiembre, 09:00@2026-09-26T13:00:00Z",
+  "lunes 28 de septiembre, 14:00@2026-09-28T18:00:00Z",
+  "martes 29 de septiembre, 14:00@2026-09-29T18:00:00Z",
+  "miércoles 30 de septiembre, 14:00@2026-09-30T18:00:00Z",
+].join("|"); // leido de /proc/<pid>/environ del webhook vivo el 2026-09-24
+
+test("buildConfig: el par A/B se OFRECE y los otros 3 horarios libres se pueden ELEGIR", () => {
+  process.env.ONIA_BOT_SLOTS = SPEC_VIVO;
+  try {
+    const config = buildConfig({ received_at: "2026-09-24T15:00:00Z" });
+    assert.deepEqual(
+      config.slots.map((slot) => `${slot.key}:${slot.label}`),
+      ["A:viernes 25 de septiembre, 21:00", "B:sábado 26 de septiembre, 09:00"],
+      "el guion sigue nombrando DOS: {{slot_a}} y {{slot_b}} van en la misma frase",
+    );
+    assert.deepEqual(
+      config.slotsElegibles.map((slot) => slot.label),
+      [
+        "lunes 28 de septiembre, 14:00",
+        "martes 29 de septiembre, 14:00",
+        "miércoles 30 de septiembre, 14:00",
+      ],
+      "y los tres que el cron dejo libres dejan de ser inalcanzables",
+    );
+    assert.ok(config.slotsElegibles.every((slot) => slot.key === null), "sin letra: 'A' no se reasigna");
+  } finally {
+    delete process.env.ONIA_BOT_SLOTS;
+  }
+});
+
+test("buildConfig: un horario que ya no da la anticipacion NO se ofrece como si estuviera vivo", () => {
+  // La regla de anticipacion vivia en `parseSlotsSpec` y este archivo la reimplementaba con un
+  // `pending: false` fijo: el bot vivo ofrecia el candidato 1 aunque hubiera caducado, mientras
+  // el simulador —que si usa `parseSlotsSpec`— mostraba otra cosa. Un instrumento que no mide lo
+  // que corre es peor que no tener instrumento.
+  process.env.ONIA_BOT_SLOTS = [
+    "jueves 24 de septiembre, 18:00@2026-09-24T22:00:00Z", // a 7 h: no llega a la anticipacion
+    "lunes 28 de septiembre, 14:00@2026-09-28T18:00:00Z",
+    "martes 29 de septiembre, 14:00@2026-09-29T18:00:00Z",
+  ].join("|");
+  try {
+    const config = buildConfig({ received_at: "2026-09-24T15:00:00Z" });
+    assert.deepEqual(
+      config.slots.map((slot) => slot.label),
+      ["lunes 28 de septiembre, 14:00", "martes 29 de septiembre, 14:00"],
+      "el que no llega se cae de la oferta, igual que en el simulador",
+    );
+    assert.equal(slotsPending(config), false, "y el par que queda es ofrecible de verdad");
+  } finally {
+    delete process.env.ONIA_BOT_SLOTS;
+  }
+});
