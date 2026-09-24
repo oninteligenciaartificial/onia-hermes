@@ -12,6 +12,123 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-24 16:11 La Paz — `BUILD_ID` sin cambios (no se repitió dental); escalón 3b: `/agents` con agentes YA sembrados y una corrida real
+
+`ONIA_ALTA_AUTOMATICA=abierta`, `zz-qa-` en 0 al arrancar. `BUILD_ID` sigue
+`9tuk1Qk2BjQ2j2HdJcL8u` — no correspondía repetir dental.
+
+**Sigue el pendiente que dejó la entrada de arriba**: la vez anterior probó `/agents` con la
+org recién sembrada y **0 agentes** (rama `agents.length === 0` de `agents-view.tsx`), y quedó
+anotado que faltaba la rama con agentes reales — `RUN_STATUS_LABELS` y el estado de una acción
+`pending_approval` nunca se habían mirado renderizados. Instrumento nuevo:
+`scripts/probar_agentes_con_corrida.mjs`. Sembré por SQL, sobre una org `zz-qa-`
+professional/dental vigente: un agente `onia_agents_agents` real (rol `recall`, habilitado), una
+corrida `onia_agents_runs` en `completed` con `summary`, y una acción `onia_agents_actions` en
+`pending_approval` con `payload.suggestedMessage`. Con sesión real (magic link + cookies,
+390×844) contra `/agents`:
+
+- **Equipo de agentes** ya NO lista el catálogo genérico: lista el agente real, "Recall —
+  reactivación de pacientes", "Activo · corre todos los días", con su última corrida rotulada
+  **"Completada"** (`RUN_STATUS_LABELS.completed`) y el `summary` sembrado a la vista.
+- **Acciones propuestas y aprobadas · 1 esperando aprobación** — el contador de
+  `pendingCount` cuenta bien la única acción `pending_approval`.
+- La acción se lista con su título, el badge **"Esperando aprobación"**, el **borrador del
+  mensaje** (`payload.suggestedMessage`) visible bajo "Borrador:", y "se aprueba en Pendientes"
+  al pie — exactamente lo que `estadoVisibleDeAccion` promete para este estado (no necesita
+  despacho: eso sólo lo mira para `executed`/`auto_executed`).
+- Captura `extra-agentes-corrida-00-pantalla.png` — limpia, sin texto cortado, sin "muy pronto".
+
+**Sin hallazgo.** Limpieza verificada por fuera del propio script:
+`organizations`/`auth.users` con `zz-qa-%` → 0, y además `onia_agents_actions` de la org → 0
+(las tres tablas de agentes se borran por FK lógica antes que `organizations`).
+
+**Próxima vuelta:** si `BUILD_ID` sigue igual, los escalones que quedan del área agentes son
+`/pending` (aprobar o rechazar una propuesta real y ver el efecto en `/agents`), o volver a
+"invitar/quitar coadministrador desde `/settings`" (pendiente desde el 2026-09-18), o rotar de
+rubro.
+
+---
+
+## 2026-09-24 15:12 La Paz — `BUILD_ID` sin cambios (no se repitió dental); escalón 3 nuevo: `/agents` ("Agentes"), nunca antes probado por este carril
+
+`ONIA_ALTA_AUTOMATICA=abierta`, `zz-qa-` en 0 al arrancar. `docker exec onia-platform cat
+/app/.next/BUILD_ID` → `9tuk1Qk2BjQ2j2HdJcL8u`, **igual** al citado en la entrada de arriba (y en
+las tres anteriores) — no correspondía repetir dental.
+
+**Escalón 3 — la pantalla `/agents` ("Agentes"), nunca antes tocada por este carril** (no
+existía `probar_*.mjs` para esta superficie). `module.agents` entra por PLAN (Pro+,
+`agentsIncluded` — `lib/platform/entitlements.ts:52` de `onia-platform`), no por entitlement
+sembrado a mano; los flags `AGENTS_RUNTIME=1` y `PLATFORM_LAYER=1` ya están activos en el
+contenedor (verificado antes de escribir el instrumento, para no perseguir un `redirect` que en
+realidad fuera un flag apagado). Instrumento nuevo: `scripts/probar_agentes.mjs`. Org `zz-qa-`
+sembrada por SQL, plan `professional`, rubro dental, `trialEnd`/`planEnd` a un año (org vigente,
+no vencida — la memoria compartida advierte que una org vencida da `agents_runtime_disabled` y
+eso mide otra cosa), ADMIN dueño con `clinic_settings`, **sin agentes sembrados** (lista vacía
+real, no un fixture). Con sesión real (magic link + cookies, 390×844):
+
+- `/agents` abre sin redirigir a `/dashboard` ni a `/login` (lo que pasaría si
+  `requireFeature("module.agents")` rechazara la org) y sin ningún `>=400` en la carga.
+- **Equipo de agentes** en el vocabulario correcto de dental: "Recall — reactivación de
+  **pacientes**", "Cobrador — saldos vencidos", "Confirmador — citas de mañana" — los tres roles
+  que `rolCorreEnTrack` habilita para un track con `patient`+`appointment`. **El Captador NO
+  aparece** (gateado por `addon.captador`, que esta org no compró) — la pantalla no promete un
+  rol que el runtime tampoco correría.
+- **Acciones propuestas y aprobadas**: el texto es el de siempre ("Todavía no hay propuestas...",
+  `TEXTO_NUNCA_PROPUSIERON`) — correcto porque la org recién sembrada tiene 0 corridas, no el
+  texto condicionado que usaría si hubiera propuestas rechazadas/descartadas.
+- La promesa "Nada se envía solo" y el link a **Pendientes** (`/pending`) están a la vista.
+  Captura `extra-agentes-00-pantalla.png` — limpia, sin texto cortado, sin "muy pronto".
+
+**Sin hallazgo.** Limpieza verificada: `organizations`/`auth.users` con `zz-qa-%` → 0 al cerrar.
+
+**Próxima vuelta:** si `BUILD_ID` sigue en `9tuk1Qk2BjQ2j2HdJcL8u`, otro escalón nuevo — `/agents`
+con agentes YA sembrados y una corrida real (para ver la rama `agents.length > 0` y el estado
+`RUN_STATUS_LABELS`, que este instrumento no ejercitó porque sembró la org vacía a propósito), o
+`/pending` (aprobar/rechazar una propuesta real), o rotar de rubro.
+
+---
+
+## 2026-09-24 14:09-14:20 La Paz — huérfano de la vuelta anterior limpiado a mano; recorrido dental 9/9 de nuevo
+
+`ONIA_ALTA_AUTOMATICA=abierta`. Antes de tocar nada: `select count(*) from organizations where
+name like 'zz-qa-%'` dio **1**, no 0 — violaba el chequeo obligatorio de arranque.
+
+**Origen del huérfano:** la vuelta anterior (rama `claude/recorrido-cliente`, commit
+`d0720d6e`) corrió el recorrido, llegó hasta el paso 06 (capturas `paso-05b`, `paso-05c` y
+`paso-06-menu.png` quedaron modificadas y sin commitear) y se cortó ahí — sin log propio en este
+archivo, sin `resumen.json` actualizado, y sin limpiar. Quedó viva la organización
+`zz-qa-2026-09-24-1310` (id `cmufjv48h004701rwice34ya1`, rubro `gestios-servicios-profesionales`),
+su cuenta `zz-qa-2026-09-24-1310@onia.com.bo` (`auth.users` + `auth.identities`), un perfil STAFF
+sin correo (alta del profesional en el onboarding) y una fila en `organization_entitlements`
+(`module.agents`, trial). Cero `patients`/`appointments` — no llegó tan lejos.
+
+**Limpiado a mano esta vuelta**, imprimiendo antes de borrar (fila completa arriba) y borrando en
+orden por FK (`organization_entitlements` → `profiles` → `organizations` →
+`auth.identities` → `auth.users`, todo por id exacto, nunca por rango). Confirmado después:
+`organizations` y `auth.users` con `zz-qa-%` en 0. También corrí `--solo-limpiar` (la póliza que
+ya existe en el script para este caso exacto, comentario en `recorrido_cliente.mjs:2348-2354`,
+nacida de `t_f52601e2`) y confirmó 0 antes de arrancar el recorrido nuevo.
+
+**Recorrido dental completo después de la limpieza:** `BUILD_ID` sigue `9tuk1Qk2BjQ2j2HdJcL8u`
+(sin cambios de deploy desde la entrada de las 12:09). `node scripts/recorrido_cliente.mjs
+--escribir`: **9/9, `completo: true`, `agujeros: []`.** Cuenta
+`zz-qa-2026-09-24-1411@onia.com.bo` con confirmación de correo real, onboarding de 6 pantallas,
+paciente `zz-qa-2026-09-24-1411-paciente` cargado y encontrado, cita `2026-09-25 09:00` con
+**201** y VISTA en `/appointments` (id `cmufm5oxe005g01rwvuc16ilw`), factura con ítem visible en
+`/billing/cmufm6023005i01rwrpkxmzlg` (frenada sin pagar), panel mirado. `zz-qa-` en 0 al cerrar
+(`organizations` y `appointments` verificados después).
+
+**Sin hallazgo de producto.** El hallazgo es de proceso: una vuelta puede soltar el turno a mitad
+del recorrido (timeout del corredor) sin dejar rastro legible acá — el único indicio fue el
+`select count(*)` de arranque. La póliza `--solo-limpiar` ya cubre el dato (borra lo mío sin
+depender de que el recorrido entero termine); lo que faltó fue CORRERLA, y documentar el corte
+cuando pasa. Si vuelve a pasar, correr `--solo-limpiar` primero es la respuesta, no investigar de
+cero.
+
+`completo: true`, `llegoHasta: 9/9`. Próxima vuelta: si `BUILD_ID` sigue igual, no repetir dental
+— seguir con el escalón de "invitar/quitar coadministrador desde `/settings`" que quedó pendiente
+en la entrada del 2026-09-18 14:09, o revisar si el pedido de deploy sigue esperando `ok`.
+
 ## 2026-09-24 12:09-12:20 La Paz — `BUILD_ID` sin cambios (no se repitió dental); escalón 5 nuevo: "Descargar planillas" con plan 'basic', probado en vivo
 
 `ONIA_ALTA_AUTOMATICA=abierta`, `zz-qa-` orgs en 0 al arrancar (chequeo obligatorio). Primer
