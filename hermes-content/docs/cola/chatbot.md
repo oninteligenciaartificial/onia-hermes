@@ -645,6 +645,29 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       `run-turn.mjs` dejaría ese cuerpo describiendo algo distinto de lo que el `ok` publica.
       Cerrar antes de abrir.
 
+      🔴 **Lo que quedó SIN barrer y sí es del carril (visto el 2026-09-24 11:40 La Paz): el
+      TÍTULO de `t_2508295d` sigue diciendo «que pueda agendar demos (43 conversaciones, 0
+      agendadas)».** El comentario de ayer corrigió el *cuerpo*, pero el título promete
+      exactamente el contador que no puede subir, y **el título es lo que viaja**: el parte
+      diario es el único mensaje que le llega por Telegram sin que pregunte, y lista las
+      decisiones con `ok <id>` por línea. O sea que Sergio Urcullo iba a firmar mirando una
+      promesa falsa, publicar, ver el cero intacto y concluir que el arreglo no sirvió — el peor
+      desenlace posible para un deploy que sí vale la pena. Se le agregó a la tarea un comentario
+      que abre corrigiendo el título y separa lo que el deploy SÍ entrega (las 9 campanas, los
+      cinco horarios, el arreglo del sync) de lo que no va a moverse, y dónde se ve el resultado
+      de verdad: en los avisos «DEMO AGENDADA — anotala» de Telegram y en que las 18
+      conversaciones paradas dejen de quedar mudas.
+      ⚠️ **El título no se pudo arreglar en su origen**: `onia-tablero.sh edit` sólo toca tareas
+      **ya completadas**, y ésta está `blocked` esperando la firma. Rehacerla perdería el pedido
+      vivo y su recuento. Queda como límite medido del tablero, no como olvido.
+
+      **La lección transferible, que es la de `CLAUDE.md` en una superficie que nadie barre:**
+      una promesa que cambia se barre en TODA la superficie — y **las tareas del tablero son
+      superficie de cliente**, porque son lo único que Sergio Urcullo lee antes de firmar. Un
+      hallazgo escrito impecablemente en la cola no alcanza si la pantalla donde se decide sigue
+      diciendo lo contrario. Ayer este mismo ítem quedó correcto en el repo **y falso en el
+      tablero** durante tres horas.
+
 - [x] 🔴 **CERRADO el 2026-09-24 (medición, sin cambio de código): la TERCERA pata del objetivo
       del carril —«cada demo agendada o handoff le llega a Sergio Urcullo»— llevaba vueltas sin
       medirse, y el comando que el prompt manda usar para medirla NO PUEDE dar otra cosa que 0.**
