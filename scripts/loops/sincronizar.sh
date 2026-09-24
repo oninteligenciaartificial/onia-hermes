@@ -387,6 +387,10 @@ poner "$RAIZ/hermes-content/deploy/vps-ops/onia-mirar-cliente-prueba.sh"  "$DEST
 poner "$RAIZ/hermes-content/deploy/vps-ops/onia-rescate-mensaje-perdido.sh" "$DESTINO_BIN/onia-rescate-mensaje-perdido.sh"
 poner "$RAIZ/hermes-content/deploy/vps-ops/onia-siat-vigia.sh"            "$DESTINO_BIN/onia-siat-vigia.sh"
 poner "$RAIZ/hermes-content/deploy/vps-ops/onia-vigia-sin-respuesta.sh"   "$DESTINO_BIN/onia-vigia-sin-respuesta.sh"
+# El vigia de comprobantes de pago (2026-09-24): un cliente que sube su comprobante solo
+# generaba un correo; si se perdia, el cliente que PAGO se quedaba sin plan. Nace cableado,
+# no copiado a mano: la copia a mano es la que despues se atrasa sin avisar.
+poner "$RAIZ/hermes-content/deploy/vps-ops/vigia-comprobantes.sh"         "$DESTINO_BIN/onia-vigia-comprobantes.sh"
 poner "$FUENTE/extras/onia-drop-recordatorio.sh"  "$DESTINO_BIN/onia-drop-recordatorio.sh"
 poner "$FUENTE/extras/onia-leads-vigia.sh"        "$DESTINO_BIN/onia-leads-vigia.sh"
 poner "$FUENTE/extras/onia-vigia-embudo.sh"       "$DESTINO_BIN/onia-vigia-embudo.sh"
