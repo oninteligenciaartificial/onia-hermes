@@ -52,6 +52,17 @@
 > - **Todas las cuentas de producción son de PRUEBA** (Sergio Urcullo): §11 = 0/5.
 > - ⚠️ El integrador `onia-cola` mergea solo a `main` toda rama `claude/*` que se empuje: no empujar
 >   ramas a medias.
+> - **Restauración PROBADA (puerta 9), 20:58 UTC:** el respaldo real de las 17:30 restaurado en un
+>   contenedor aislado (misma imagen `supabase/postgres:15.8.1.085`, red none): 171 tablas, 0
+>   faltantes, 164 idénticas; las 7 que difieren son actividad posterior (prod tiene MÁS). Políticas y
+>   RLS difieren exactamente en los cierres de seguridad posteriores al volcado. Evidencia:
+>   `/root/backups/restore-test-20260924/`. Contenedor de prueba borrado.
+> - **Respaldo de comprobantes (Storage):** `onia-backup-storage.sh` (hermes `b3f621cc`), cron 07:10
+>   UTC, últimas 30 copias en `/root/backups/onia-storage-v1/`; primera copia OK (2 archivos).
+> - **PC:** 14 worktrees viejos de `onia-platform` archivados (ramas intactas; las 4 que solo vivían
+>   en la PC, en GitHub como `archivo/*`; scripts sueltos en `E:/onia-wt/archivo-worktrees-20260924/`).
+>   C: de 5,2 → 16,5 GB libres (+ cachés npm/pip). Queda compactar `docker_data.vhdx` (31 GB, necesita
+>   admin + Docker apagado).
 
 > ### Cola que sigue (autónomo), en orden
 > 1. Checkout: QR estático + datos de la cuenta BCP (cuando llegue la imagen) — bloquea «paga».
