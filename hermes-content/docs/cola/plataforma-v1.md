@@ -61,6 +61,38 @@ reconstruir doce módulos que ya funcionan — y eso no acerca un cierre, lo ale
 **Hecho de esta cola =** los cinco rubros de arriba se recorren de punta a punta sin que el
 camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace.
 
+## 🔴 ANTES DE CREERLE A UN «falta mergear» O UN «NO desplegado» DE ESTE ARCHIVO
+
+**Medido el 2026-09-24 22:20 UTC: `origin/master` de `onia-platform` está DESPLEGADO ENTERO.**
+Producción corre **`3986b807`**, y los únicos dos commits posteriores en `master` son de `docs:`.
+Tres medidas independientes, no heredadas:
+
+1. **qué corre** — `docker inspect onia-platform --format '{{.Config.Image}}'` →
+   `onia-platform:release-3986b807`;
+2. **cuándo** — el `BUILD_ID` del contenedor es del 24-sep 19:01 UTC, posterior al commit frontera;
+3. **vivo** — `grep -rl sin_whatsapp_propio /app/.next/server` da 2 archivos, y esa cadena la
+   introdujo justamente `3986b807`.
+
+⚠️ **Por eso las líneas «falta mergear y desplegar» / «Commiteado, NO desplegado» de más abajo
+CADUCARON.** El 24-sep eran **97** en las dos colas y **ninguna** correspondía a código pendiente.
+No es un detalle de prolijidad: este carril ya midió que ésa es su forma más cara de pendiente
+fantasma — *mandan a pedir un deploy que ya ocurrió*, y le prestan su motivo falso al pedido que
+sí espera la firma de Sergio Urcullo.
+
+🔴 **La lista exacta NO se copia acá: se DERIVA, y por eso este bloque no nombra ninguna línea.**
+Un listado escrito a mano caduca en las dos direcciones — igual que los IDs de tarea. El comando,
+que no caduca y vuelve a medir producción cada vez:
+
+```bash
+npm run deploy:ya-ocurrio     # exit 0 = nadie miente · 1 = lista file:línea · 2 = NO MEDIDO
+```
+
+Sale de `scripts/deploy_ya_ocurrio.mjs`, que deriva el sha que corre de la **etiqueta de imagen**
+(desde el 24-sep producción se publica por imagen, así que casar `BUILD_ID` contra
+`/opt/onia-platform/build-*` ya no encuentra par y se lee como «nadie desplegó»). Su `--self-check`
+está en la cadena; la medición viva es alias suelto a propósito, porque un rojo de ambiente
+trabaría el merge de todos los carriles.
+
 ## Ahora
 
 - [x] 🟡 **HECHO el 2026-09-24 en el carril `chatbot` (commiteado, NO publicado) — el detalle,

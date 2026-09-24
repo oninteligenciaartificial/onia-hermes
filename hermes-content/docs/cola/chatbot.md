@@ -593,6 +593,28 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ---
 
+## 🔴 ANTES DE CREERLE A UN «NO desplegado» DE ESTE ARCHIVO — y ojo, acá conviven DOS deploys
+
+**El panel del chatbot vive en `onia-platform` y el MOTOR vive en `/opt/onia/bot`. Son dos
+publicadores, dos fronteras y dos firmas.** Una línea de esta cola puede ser falsa para uno y
+cierta para el otro, así que el estado se pregunta por separado:
+
+- **Panel (`onia-platform`)** — medido el 2026-09-24 22:20 UTC: **desplegado entero**, producción
+  corre `3986b807` (etiqueta de imagen del contenedor). De las líneas «NO desplegado» de este
+  archivo, **20 se referían al panel y las 20 estaban caducadas**.
+- **Motor (el bot)** — sigue esperando la firma de un `DESPLEGAR: bot`. Ese pedido **no se cita
+  por ID**, se deriva:
+  `/root/bin/onia-tablero.sh list --status blocked | grep -i 'Publicar el bot'`.
+
+🔴 **La lista de líneas caducadas se DERIVA, no se copia:**
+
+```bash
+npm run deploy:ya-ocurrio     # exit 0 = nadie miente · 1 = lista file:línea · 2 = NO MEDIDO
+```
+
+Sólo juzga la PLATAFORMA: un sha que no existe en el clon de `onia-platform` sale **NO MEDIDO**,
+nunca acusado — acusar una línea del bot con la frontera del panel sería el mismo error al revés.
+
 ## Ahora
 
 - [ ] 🔴 **Un lead REAL puede escribir, ser atendido, enfriarse y que Sergio Urcullo no se
