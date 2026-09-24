@@ -662,7 +662,7 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       ⚠️ **Commiteado y publicado en la rama del carril, NO desplegado:** lo merge `onia-cola` y
       el publicador automático swapea solo (no toca fuente de precio).
 
-- [ ] 🔴 **Punto nuevo de Sergio Urcullo (12-sep): ¿Onia Platform personalizable POR CLIENTE
+- [x] 🔴 **Punto nuevo de Sergio Urcullo (12-sep): ¿Onia Platform personalizable POR CLIENTE
       para empresas grandes?** Textual: *"que se pueda hacer in-house su trabajo y no ellos
       moldearse al sistema sino el sistema a ellos — analizá"*. Análisis en curso con medición
       real: qué se moldea HOY (packs por rubro en
@@ -676,9 +676,43 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       ~18-28 días UNA vez) es el único nivel compatible con el techo de horas; N2 solo como
       implementación acotada ya existente; N3 (fork por cliente) = NO con el número delante.
       Hallazgo bonus: `limits` Json de entitlements se escribe y nadie lo lee (perilla muerta,
-      1-2 días revivirla). DECISIÓN DE SERGIO: construir N1 sí/no — y la regla de la casa
-      recuerda que el problema es de CLIENTES, no de features: se justifica con un prospecto
-      enterprise concreto delante.
+      1-2 días revivirla).
+
+      ✅ **CERRADO el 2026-09-24: lo que Sergio Urcullo pidió fue *«analizá»*, y el análisis está
+      entregado. Lo que quedaba colgando no era una pregunta para él: era una decisión que la
+      regla de la casa YA tiene tomada, y este ítem la estaba represando.** Acá decía *"DECISIÓN
+      DE SERGIO: construir N1 sí/no"* y llevaba **12 días** así (12-sep → 24-sep) — pero medido
+      hoy en el tablero, **nunca existió la tarea que se lo preguntara**:
+      `onia-tablero.sh list --status blocked | grep -iE 'personaliz|N1'` → **cero filas**. Un
+      bloqueo escrito sólo en un `.md` no existe para nadie; así el PdV 1 del SIAT esperó 14 días.
+      Y crear ahora esa tarea habría sido el error simétrico: `CLAUDE.md` es explícito en que
+      *"lo técnico lo decide la sesión y queda escrito; a Sergio Urcullo solo plata, marca y
+      contactar personas"*, y construir o no una capa de configuración no es ninguna de las tres.
+
+      **El veredicto, con la cuenta delante y sin reabrir nada.** La etapa vigente la fijó él el
+      2026-09-05 y se mide en **clientes cerrados, no en features** (*"cerrar cinco clientes con
+      la versión 1.0"*, `ONIA_ESTRATEGIA_DE_EMPRESA.md:665`). N1 son **18-28 días** de
+      construcción con **cero clientes pagando** y **cero prospectos enterprise pidiéndolo**. El
+      propio documento del análisis ya se autocontesta, textual: *"esto se justifica solo si hay
+      un prospecto enterprise concreto pidiéndolo; **si no, se anota como pendiente**"*, y
+      *"venderla antes de construir N1 = services trap. Orden correcto: construir primero (~4-6
+      semanas), vender después"* — cuatro a seis semanas que hoy no compran ni un cliente. La
+      regla del techo lo remata: *"una feature nueva sólo agrega valor a uno"*.
+      **Entonces: NO se construye N1 ahora.** No es un «no» a la idea — el análisis dice que es
+      el único nivel sano y sigue siendo la respuesta correcta el día que aplique.
+
+      🔑 **Disparador único de reapertura, para que nadie lo re-decida de memoria:** un prospecto
+      enterprise **concreto y nombrado** que pida configuración por cliente. Ese día se reabre
+      este ítem, se arranca por lo más barato que habilita N1 de verdad (campos custom por org,
+      5-8 días, §4 del análisis) y recién entonces hay algo que Sergio Urcullo tiene que decidir,
+      porque ahí sí hay plata de por medio. Mientras tanto, lo vendible ya existe y no necesita
+      construcción: entitlements por org, configuración operativa, rutinas, roles finos y vistas
+      por rol (§1 del análisis, columna *«¿Sin código?» → ✅ SÍ*).
+
+      ⚠️ **Lo que NO se cierra acá, porque no es de este ítem:** el hallazgo bonus — `limits` Json
+      de entitlements se escribe en `provisioning.ts:262` y **no lo lee nadie** (perilla muerta,
+      1-2 días). No entra por la misma regla que frena a N1: hoy no le agrega valor a ningún
+      cliente que pague. Queda nombrado acá para que se retome con N1, no suelto.
 
 
 - [ ] 🔴 **PORTADA reordenada por veredicto de Sergio Urcullo (11-sep, sobre capturas del
