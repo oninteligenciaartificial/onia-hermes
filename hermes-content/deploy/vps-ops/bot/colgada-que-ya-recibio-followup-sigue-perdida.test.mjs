@@ -95,9 +95,95 @@ test("las dos listas se derivan de la BASE, no se re-escriben", () => {
     assert.ok(FILTROS_FOLLOWUP.includes(condicion), `el filtro de ENVIO perdio la condicion base "${condicion}"`);
     assert.ok(FILTROS_COLGADAS.includes(condicion), `el filtro de CONTEO perdio la condicion base "${condicion}"`);
   }
+  // OJO: aca decia `deepEqual(extras, [])` — "el conteo es la BASE y nada mas". Su MOTIVO es
+  // correcto y sigue vivo (una condicion propia del conteo vuelve a esconder leads perdidos); su
+  // conclusion era ancha de mas, y el 2026-09-24 prohibia el arreglo que destapa `handoff_humano`.
+  // Lo que hace dano no es que el conteo tenga condiciones propias: es que las suyas ANGOSTEN la
+  // poblacion. Ensanchar etapas es justamente como se cuenta a un lead que hoy no ve nadie.
+  // El motivo queda protegido, con su medicion, en "el conteo nunca es mas ANGOSTO que el envio".
   assert.deepEqual(
-    FILTROS_COLGADAS.filter((c) => !FILTROS_FOLLOWUP_BASE.includes(c)),
+    FILTROS_COLGADAS.filter((c) => !FILTROS_FOLLOWUP_BASE.includes(c) && !String(c).startsWith("bot_stage=in.")),
     [],
-    "el conteo es la BASE y nada mas: toda condicion extra ahi vuelve a esconder leads perdidos",
+    "el conteo agrego una condicion que no es ni la BASE ni un ensanche de etapas: eso esconde leads",
   );
+});
+
+/**
+ * LA MISMA CLASE, UN NIVEL MAS ARRIBA — medido el 2026-09-24 en produccion, despues de arreglar
+ * `followup_step`. El reparto de arriba dejo intacta OTRA condicion de envio viviendo en la BASE:
+ *
+ *   bot_stage=in.(esperando_calificacion,esperando_horario)
+ *
+ * Esa lista contesta "¿a que etapas les puedo MANDAR un M3?" — y es correcta para eso: a alguien
+ * derivado a un humano no se le escribe, porque el bot se convierte en un loro que tapa a Sergio
+ * Urcullo cuando entre. Reusada para CONTAR, contesta otra vez la pregunta equivocada y esconde
+ * la pila mas grande de leads abandonados que hay.
+ *
+ * La medicion, sobre `onia_center.bot_conversations` (supabase-db):
+ *
+ *   bot_stage=handoff_humano, human_took_over=false ..... 12 filas, de 14 a 37 dias calladas
+ *   de esas, vistas por algun barrido ................... 0
+ *
+ * `handoff_humano` no lo barre NADIE (`followup` mira las dos etapas de arriba, `insistencia`
+ * mira `nuevo`, `postdemo` mira `demo_agendada`), y el aviso `handoff_sin_humano` que se agrego
+ * el mismo dia solo dispara cuando la persona VUELVE a escribir. Estas doce dejaron de escribir
+ * hace semanas: son justo las que nunca van a disparar nada. El aviso de "se enfrio" nace ciego
+ * precisamente donde mas leads hay.
+ *
+ * QUE SE COMPARTE Y QUE NO, despues de este arreglo. La BASE queda con la PERTENENCIA pura (no lo
+ * tomo un humano, no pidio que lo dejen en paz); la etapa pasa a ser de cada lado, porque "a quien
+ * le escribo" y "a quien perdi" no son la misma poblacion. Y el conteo no puede ser mas ANGOSTO
+ * que el envio: eso volveria a dejar filas invisibles para los dos, que es el motivo original.
+ */
+
+/** Las etapas que declara un predicado, sacadas de su condicion `bot_stage=in.(...)`. */
+function etapasDe(filtros, comoSeLlama) {
+  const condicion = filtros.find((c) => String(c).startsWith("bot_stage=in."));
+  assert.ok(condicion, `${comoSeLlama} no declara etapas con bot_stage=in.(...)`);
+  return String(condicion)
+    .replace(/^bot_stage=in\.\(/, "")
+    .replace(/\)$/, "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+}
+
+test("contar los perdidos NO puede heredar las etapas a las que se le PUEDE escribir", () => {
+  // El corazon del bug: 12 conversaciones en handoff_humano que nadie tomo y ningun barrido ve.
+  assert.ok(
+    etapasDe(FILTROS_COLGADAS, "FILTROS_COLGADAS").includes("handoff_humano"),
+    "el conteo de perdidos ignora handoff_humano: medido en produccion, 12 conversaciones que " +
+      "nadie tomo, de 14 a 37 dias calladas, invisibles para el unico instrumento que cuenta leads perdidos",
+  );
+  // La otra mitad, y la cara: si el ENVIO gana esa etapa, el bot le escribe a alguien que pidio
+  // una persona. Eso es el loro que tapa a Sergio Urcullo cuando entra, peor que el silencio.
+  assert.ok(
+    !etapasDe(FILTROS_FOLLOWUP, "FILTROS_FOLLOWUP").includes("handoff_humano"),
+    "el filtro del ENVIO no puede incluir handoff_humano: a quien pidio una persona no se le " +
+      "manda un follow-up automatico",
+  );
+  // La etapa es de cada lado, asi que no puede seguir tipeada en la BASE compartida.
+  assert.ok(
+    !FILTROS_FOLLOWUP_BASE.some((c) => String(c).startsWith("bot_stage=in.")),
+    "la etapa es elegibilidad de cada pregunta: no puede vivir en la BASE compartida",
+  );
+});
+
+test("el conteo nunca es mas ANGOSTO que el envio: ahi es donde se pierden las filas", () => {
+  // El motivo del `deepEqual` viejo, preservado sobre el reparto nuevo. Lo que hacia dano no era
+  // que el conteo tuviera condiciones propias: era que las suyas ESCONDIERAN gente. Ensanchar es
+  // legitimo; angostar es el bug que este archivo existe para cerrar.
+  const envio = etapasDe(FILTROS_FOLLOWUP, "FILTROS_FOLLOWUP");
+  const conteo = etapasDe(FILTROS_COLGADAS, "FILTROS_COLGADAS");
+  for (const etapa of envio) {
+    assert.ok(conteo.includes(etapa), `el conteo perdio la etapa "${etapa}" que el envio si trabaja`);
+  }
+  for (const condicion of FILTROS_COLGADAS) {
+    if (String(condicion).startsWith("bot_stage=in.")) continue;
+    assert.ok(
+      FILTROS_FOLLOWUP_BASE.includes(condicion),
+      `el conteo agrego "${condicion}" fuera de la BASE: toda condicion que no ensanche etapas ` +
+        "vuelve a esconder leads perdidos",
+    );
+  }
 });

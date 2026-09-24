@@ -242,8 +242,28 @@ export const DELIVERY_STATUSES = Object.freeze(["simulated", "skipped", "sent", 
 export const FILTROS_FOLLOWUP_BASE = Object.freeze([
   "human_took_over=is.false",
   "opt_out_at=is.null",
-  "bot_stage=in.(esperando_calificacion,esperando_horario)",
 ]);
+
+/**
+ * LAS ETAPAS SON DE CADA PREGUNTA, no de la base — arreglo del 2026-09-24, hermano del de
+ * `followup_step` de abajo y por la misma causa: una condicion que contesta "¿le puedo escribir?"
+ * viviendo en el predicado que tambien contesta "¿lo perdi?".
+ *
+ * A quien esta en `handoff_humano` NO se le escribe: pidio una persona, y un follow-up automatico
+ * ahi es un loro que tapa a Sergio Urcullo cuando entre. Pero SI se perdio, y hasta hoy no lo
+ * contaba nadie. Medido en produccion (`onia_center.bot_conversations`): 12 conversaciones en esa
+ * etapa con `human_took_over=false`, de 14 a 37 dias calladas, y CERO barridos que las miren
+ * (`followup` mira las dos de abajo, `insistencia` mira `nuevo`, `postdemo` mira `demo_agendada`).
+ * El aviso `handoff_sin_humano` tampoco las alcanza: ese dispara cuando la persona vuelve a
+ * escribir, y estas son justamente las que dejaron de escribir.
+ *
+ * El conteo se DERIVA del envio (`...ETAPAS_QUE_SE_TRABAJAN`) en vez de re-escribirse: asi es un
+ * superconjunto por construccion. Angostarlo es el unico movimiento que vuelve a esconder leads,
+ * y de esta forma no se puede hacer sin querer.
+ */
+const ETAPAS_QUE_SE_TRABAJAN = Object.freeze(["esperando_calificacion", "esperando_horario"]);
+const ETAPAS_QUE_SE_PIERDEN = Object.freeze([...ETAPAS_QUE_SE_TRABAJAN, "handoff_humano"]);
+const enEtapas = (etapas) => `bot_stage=in.(${etapas.join(",")})`;
 
 /**
  * A QUIEN SE LE PUEDE ESCRIBIR: la base + el cupo de rescate sin gastar (regla N7, UN follow-up).
@@ -253,18 +273,26 @@ export const FILTROS_FOLLOWUP_BASE = Object.freeze([
  * el M3 salia, `followup_step` pasaba a 1 y la conversacion desaparecia del conteo. El barrido se
  * olvidaba del lead JUSTO DESPUES de trabajarlo. Ver `FILTROS_COLGADAS`.
  */
-export const FILTROS_FOLLOWUP = Object.freeze(["followup_step=eq.0", ...FILTROS_FOLLOWUP_BASE]);
+export const FILTROS_FOLLOWUP = Object.freeze([
+  "followup_step=eq.0",
+  enEtapas(ETAPAS_QUE_SE_TRABAJAN),
+  ...FILTROS_FOLLOWUP_BASE,
+]);
 
 /**
- * A QUIEN SE PERDIO: la base y nada mas.
+ * A QUIEN SE PERDIO: la base, y las etapas donde un lead se pierde.
  *
  * Son DOS preguntas distintas y por eso son dos listas. "¿Le puedo escribir?" mira el cupo de
  * rescate; "¿lo perdi?" no — una conversacion que ya recibio su follow-up y aun asi se enfrio es
  * MAS perdida, no menos. Medido el 2026-09-24 en produccion: con el filtro de envio la consulta
  * devolvia 9 filas y `chatwoot:990777` (`followup_step=1`, callada desde el 18-ago) no estaba;
  * sin el, 10 y si esta.
+ *
+ * Lo mismo vale para la ETAPA, y por eso el conteo trae la suya: `ETAPAS_QUE_SE_PIERDEN` suma
+ * `handoff_humano`, donde el mismo dia habia 12 conversaciones que nadie tomo —de 14 a 37 dias
+ * calladas— y a las que no llegaba ningun barrido ni el aviso de `handoff_sin_humano`.
  */
-export const FILTROS_COLGADAS = FILTROS_FOLLOWUP_BASE;
+export const FILTROS_COLGADAS = Object.freeze([enEtapas(ETAPAS_QUE_SE_PIERDEN), ...FILTROS_FOLLOWUP_BASE]);
 
 /** El piso de rescate, en ISO: antes de esto ya no se escribe (`staleAfterDays`, hoy 7 dias). */
 export function pisoFollowUp(now, config = DEFAULT_CONFIG) {
