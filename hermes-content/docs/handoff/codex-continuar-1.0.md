@@ -28,20 +28,26 @@
 > **QR estático** del banco (falta que él pase la imagen y el titular) · **quitar** el cartel
 > «Documento base operativo» de Términos.
 >
-> ### 🔴 Trampa abierta hasta que el carril D mergee
-> `recreate-container.sh` y el publicador automático (`onia-publicar-solo`) siguen con la receta
-> VIEJA (node:20 + `runtime-next`). Hoy el publicador falla cerrado («BUILD_ID vivo sin par en
-> disco»), pero **correr `recreate-container.sh` vuelve producción al build del 19-sep**. Deploy
-> manual mientras tanto: ver memoria `prod-imagen-node22-24-sep` y
-> `/opt/onia-platform/releases/7bcd0a83-20260924/`.
->
-> ### En vuelo (workflow de la sesión, 24-sep)
-> - **Carril A** (platform, rama `claude/v1-goal-a-20260924` en `C:/dev/proyectos/onia-platform-v1-20260921`):
->   cartel de Términos · guard de solo lectura como CLASE · fiado anulado que cuenta como deuda
->   (`3d2efb54`) · vencimientos sin cuentas propias · «Aprobar y enviar» sin WhatsApp propio ·
->   copy «Bs 0,00/mes» de Equipo. Se publica con rebuild+canario+swap, no solo.
-> - **Carril D** (hermes, rama `claude/deploy-imagen-node22`): publicador + recreate a la imagen.
->
+> ### ✅ Segundo release del día + publicador migrado (19:05-19:11 UTC)
+> - Carril A en prod: platform `3986b807` (BUILD `VREeqNSncIqDIOTMbfLTQ`) — cartel de Términos fuera,
+>   **guard de solo lectura como clase** en `proxy.ts` (canario: org QA vencida → POST/PUT 403
+>   `PLAN_READ_ONLY`, GET 200), fiado anulado ya no cuenta como deuda, vencimientos sin cuentas
+>   propias, «Aprobar y enviar» no se ofrece ni consume sin WhatsApp propio/cupo, Equipo sin
+>   «Bs 0,00/mes». Suite 6.374/0. Rollback: `onia-platform-prev-FU8j-20260924`.
+> - Carril D en `main` (`3a3677f4`, conciliado con el arreglo del loop `908057a6`): publicador,
+>   `build-and-stage.sh`, `swap-imagen.sh` y `recreate-container.sh` sobre la IMAGEN; sincronizados
+>   al VPS. Dry-run: «YA ESTA PUBLICADO — producción corre 3986b807». La trampa de la receta vieja
+>   quedó cerrada. Skill `onia-deploy` actualizada (platform `99a403dc`).
+
+> ### En vuelo (tanda 2, solo construir; nada se instala sin OK de Sergio Urcullo)
+> - Rama `claude/vigias-cobro-seguridad`: vigía de comprobantes PENDING → Telegram; `security-watch.sh`
+>   reparado + alerta de clase «tabla en `public` sin RLS con permisos de anon».
+> - Rama `claude/web-dg072`: DG-072 portado desde el checkout sucio (la web publica sola al llegar a
+>   `main`, con el freno de precio).
+> - Decisiones del 24-sep, 2ª tanda: bot → Sergio quiere ver el diff antes (las 9 campañas incluyen
+>   consultoría y marketing con IA, líneas congeladas); **SIAT → no se declara 1.0 hasta la
+>   autorización del SIN**; offsite → Cloudflare R2 (falta su token); C: → solo cachés (hecho, +1,6 GB).
+
 > ### Cola que sigue (autónomo), en orden
 > 1. Checkout: QR estático + datos de la cuenta BCP (cuando llegue la imagen) — bloquea «paga».
 > 2. Vigía de comprobantes PENDING → Telegram (hoy el único aviso es un correo).
