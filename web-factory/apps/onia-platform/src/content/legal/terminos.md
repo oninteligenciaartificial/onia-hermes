@@ -84,12 +84,12 @@ período; **no hay penalidad por no renovar**. No hay contrato de permanencia:
 lo pagado cubre el período en curso y no se reembolsa de forma anticipada,
 salvo el caso de discontinuación del servicio previsto en §10.2.
 
-3.4. **Mora y suspensión — nunca borrado inmediato.** Si el pago de renovación no
+3.4. **Mora y solo lectura — nunca borrado inmediato.** Si el pago de renovación no
 se confirma al vencimiento:
 
-- Primero hay un **período de gracia** con el servicio activo y recordatorios.
-- Después, Onia puede **suspender el acceso**: el servicio se bloquea, pero **tus
-  datos se conservan intactos**. La suspensión nunca implica borrar datos.
+- La cuenta pasa a **solo lectura**: podés ver y exportar tus datos, pero no cargar
+  nuevos. Apenas se verifica el pago, vuelve el acceso completo.
+- **Tus datos se conservan intactos**: la mora nunca implica borrarlos de inmediato.
 - Si la mora se prolonga, Onia puede dar por terminado el contrato. Antes de
   eliminar cualquier dato aplican el derecho de exportación (§4.2) y los plazos
   de retención de la Política de Privacidad.

@@ -148,8 +148,8 @@ lo que se sepa del alcance y las medidas tomadas.
 ## 8. Retención y eliminación
 
 - **Durante el servicio:** los datos se conservan mientras la cuenta esté
-  activa. La suspensión por falta de pago bloquea el acceso pero **no borra
-  datos**.
+  activa. Si un pago no se confirma, la cuenta pasa a solo lectura (se consulta y
+  se exporta) y **no se borran datos de inmediato**.
 - **Al terminar el contrato:** podés exportar tus datos (formato CSV/JSON)
   dentro de los **30 días** posteriores a la terminación. Transcurridos **90
   días** desde la terminación, Onia elimina tus datos de los sistemas activos.
