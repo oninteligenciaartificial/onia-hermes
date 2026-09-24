@@ -633,6 +633,71 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       `es-nuestra.mjs` para no avisarle de nuestras pruebas. La maquinaria que los cuenta ya
       existe: `followup-cuenta-los-colgados.test.mjs` / `followup-run.mjs`.
 
+      ---
+
+      ⚠️ **2026-09-24 13:43-14:00 La Paz — la mitad de abajo está HECHA (commiteada, NO
+      desplegada) y la de arriba NO. El ítem sigue 🔴.** Y al medirlo apareció que la frase
+      «la maquinaria que los cuenta ya existe» era **falsa justo para este caso**.
+
+      **Lo que estaba roto debajo del aviso: el contador no podía VER al lead que importa.**
+      `sweepFollowUpVencidas` —el único instrumento que cuenta leads perdidos— derivaba
+      `FILTROS_FOLLOWUP`, y ahí adentro viajaba `followup_step=eq.0`. Esa condición contesta
+      *«¿a quién le puedo escribir?»* (regla N7: UN follow-up y después silencio). Reusada para
+      contar, contesta otra pregunta —*«¿a quién perdí?»*— y la contesta **al revés**: apenas sale
+      el M3, `followup_step` pasa a 1 y la fila **desaparece del conteo**. O sea que el barrido se
+      olvidaba del lead **justo después de haberlo trabajado**, que es el lead más caro que hay.
+
+      **Medido en producción** (`supabase-db`, `onia_center.bot_conversations`), los dos filtros
+      lado a lado sobre la misma tabla:
+
+      | filtro | filas | ¿está `chatwoot:990777`? |
+      |---|---|---|
+      | el de antes (con `followup_step=eq.0`) | 9 | **NO** |
+      | el corregido | 10 | **SÍ** — 38 días callado, `followup_step=1` |
+
+      **Y `conv 58` iba al mismo agujero:** tiene `followup_step=1` y cruza el piso de 7 días
+      **hoy** (su último entrante es del 17-sep 22:50 UTC). Con el código viejo no habría
+      aparecido nunca; con éste aparece en el barrido de las próximas horas — es la verificación
+      barata de la próxima vuelta, con el mismo `select` de arriba.
+
+      **El arreglo.** `FILTROS_FOLLOWUP_BASE` (pertenencia: no lo tomó un humano, no hay opt-out,
+      la etapa sigue en juego) se separó de la elegibilidad. El envío usa `FILTROS_FOLLOWUP` =
+      `followup_step=eq.0` + BASE; el conteo usa `FILTROS_COLGADAS` = BASE y nada más.
+
+      ⚠️ **Un test viejo DEFENDÍA el bug y hubo que corregirlo, no borrarlo.**
+      `followup-cuenta-los-colgados.test.mjs` exigía que las dos consultas compartieran el
+      predicado **completo**. Su motivo es correcto y quedó intacto (una condición agregada de un
+      solo lado deja filas invisibles para el envío Y para el conteo); su conclusión era ancha de
+      más. Hoy exige compartir la **BASE**, que es lo que protege ese motivo. Gates:
+      `colgada-que-ya-recibio-followup-sigue-perdida.test.mjs` (4 casos, el nuevo en ROJO antes por
+      el motivo correcto — *«sweepFollowUpVencidas deriva el filtro del ENVIO»*, no por un import
+      faltante) y las 109 pruebas de los cinco barridos hermanos en verde.
+
+      **Lo que FALTA, que es el aviso — y por qué no se improvisa.** El aviso necesita un candado
+      de «una sola vez». Los cuatro candidatos se miraron con el código delante y **los cuatro
+      tienen costo**; ésta es la parte que la próxima vuelta no tiene que volver a derivar:
+
+      1. **`followup_step` como centinela** → ❌ `insistencia-run.mjs:220` ya documenta este bug
+         exacto: quemar un contador compartido con otro circuito apaga al otro sin dejar rastro.
+      2. **Mover `bot_stage` a `descartado`** (el patrón de `reserveDemoDone`) → ❌ `descartado`
+         afirma un desenlace comercial que el bot no conoce: `bot-engine.mjs:491` le pone
+         `pipelineStatus.descartado` al lead. Un prospecto que no contestó no dijo que no.
+      3. **`insertOutbound` con `messageKey` determinista** (el patrón de la insistencia) → ❌
+         contamina la plata: `ESTADOS_COBRABLES = ["sent","reserved"]` y `contable()` cuenta todo
+         lo que no sea `inbound`, así que un aviso al Telegram de Sergio Urcullo se le cobraría al
+         cliente como mensaje del bot.
+      4. **Columna nueva** (`cold_notified_at`, espejo exacto de `reserveDemoDone`) → ✅ es la
+         limpia, ❌ pero necesita una migración en `onia_center` y **este carril no despliega**.
+
+      Hay además una quinta salida sin estado: disparar sólo cuando `last_inbound_at` cae en la
+      franja de una hora que cruza el piso. Es elegante y **falla hacia el silencio** — si el cron
+      se saltea una corrida, el lead se pierde para siempre. Por eso no se eligió sola.
+
+      **Y un dato que cambia el texto del aviso:** *«lo último que dijo»* **no lo tenemos**. El
+      entrante no se persiste a propósito (`INBOUND_BODY_PLACEHOLDER = "(entrante — texto no
+      persistido)"`, `persistence.mjs:219`). El aviso honesto lleva contacto, etapa, días callado y
+      **por dónde abrir la conversación** — que es lo que `construirAviso` ya arma.
+
       ⚠️ **Esto NO es «contactar a un prospecto»** —eso sí es decisión de Sergio Urcullo y ya
       está pedido en `t_e57e3376`—: es avisarle A ÉL de algo que pasó en su propio sistema.
       Confundir las dos cosas es lo que dejó a `conv 58` sin dueño seis días.

@@ -22,7 +22,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 
 import { runFollowUpSweep, renderHuman } from "./followup-run.mjs";
-import { FILTROS_FOLLOWUP } from "./persistence.mjs";
+import { FILTROS_FOLLOWUP_BASE } from "./persistence.mjs";
 
 const AHORA = "2026-09-18T14:00:00Z";
 
@@ -143,10 +143,16 @@ test("lo que no se pudo leer NO es cero: sin dato, medido:false y total null", a
   }
 });
 
-test("las dos consultas parten la MISMA poblacion: el predicado no se tipea dos veces", async () => {
-  // La clase, no la instancia. Elegibles y colgadas tienen que diferir SOLO en la ventana de
-  // tiempo; el dia que alguien agregue una condicion en un solo lado, quedan filas que no son de
-  // ninguna de las dos — ni se les escribe ni se las cuenta, que es el peor de los dos mundos.
+test("las dos consultas parten la MISMA poblacion: la BASE no se tipea dos veces", async () => {
+  // La clase, no la instancia. El dia que alguien agregue una condicion de PERTENENCIA en un solo
+  // lado, quedan filas que no son de ninguna de las dos — ni se les escribe ni se las cuenta, que
+  // es el peor de los dos mundos. Ese motivo sigue vivo y es lo que este caso ata.
+  //
+  // ⚠️ Corregido el 2026-09-24: hasta hoy esto exigia el predicado COMPLETO, y esa exigencia
+  // DEFENDIA un bug. `followup_step=eq.0` no es pertenencia, es elegibilidad para escribir; metida
+  // en lo compartido, borraba del conteo justo a la conversacion mas perdida (la que ya recibio su
+  // follow-up). Lo compartido ahora es la BASE; el porque, con la medicion en produccion que lo
+  // probo, esta en `colgada-que-ya-recibio-followup-sigue-perdida.test.mjs`.
   const fuente = await readFile(new URL("./persistence.mjs", import.meta.url), "utf8");
   const cuerpo = (nombre) => {
     const desde = fuente.indexOf(`async function ${nombre}(`);
@@ -156,12 +162,12 @@ test("las dos consultas parten la MISMA poblacion: el predicado no se tipea dos 
 
   for (const nombre of ["sweepFollowUpCandidates", "sweepFollowUpVencidas"]) {
     const src = cuerpo(nombre);
-    assert.match(src, /\.\.\.FILTROS_FOLLOWUP/, `${nombre} tiene que DERIVAR el predicado compartido`);
+    assert.match(src, /\.\.\.FILTROS_(FOLLOWUP|COLGADAS)\b/, `${nombre} tiene que DERIVAR un predicado compartido`);
     assert.match(src, /pisoFollowUp\(/, `${nombre} tiene que derivar el piso, no recalcularlo`);
-    for (const tipeado of FILTROS_FOLLOWUP) {
+    for (const tipeado of FILTROS_FOLLOWUP_BASE) {
       assert.ok(
         !src.includes(`"${tipeado}"`),
-        `${nombre} tipea "${tipeado}" a mano en vez de tomarlo de FILTROS_FOLLOWUP`,
+        `${nombre} tipea "${tipeado}" a mano en vez de tomarlo de FILTROS_FOLLOWUP_BASE`,
       );
     }
   }
