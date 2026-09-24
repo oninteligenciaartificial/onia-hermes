@@ -74,7 +74,8 @@ case "$1" in
       *--rm*) echo "$STUB_BUILD_NUEVO" ;;
       *) touch "$S/nuevo" ;;
     esac ;;
-  network) [ "$2" = connect ] && [ "$3" = "\${STUB_RED_FALLA:-}" ] && [ "$4" = onia-platform ] && exit 1 ;;
+  network) [ "$2" = connect ] && [ "$3" = "\${STUB_RED_FALLA:-}" ] && [ "$4" = onia-platform ] && exit 1
+           [ "$2" = connect ] && [ "$3" = "\${STUB_RED_NO_EXISTE:-}" ] && exit 1 ;;
   create) p=""; for a in "$@"; do [ "$p" = --name ] && echo "$a" >> "$S/creados"; p=$a; done ;;
   rm) [ "$ultimo" = onia-platform ] && rm -f "$S/nuevo"
       [ -f "$S/creados" ] && { grep -vx -- "$ultimo" "$S/creados" > "$S/creados.t"; mv "$S/creados.t" "$S/creados"; } ;;
@@ -366,7 +367,7 @@ test('swap en seco: plan completo (canario, rename a prev, run, redes) y producc
     assert.equal(r.codigo, 0, r.salida);
     assert.match(r.salida, new RegExp(`docker rename onia-platform onia-platform-prev-${VIVO.slice(0, 8)}-\\d{8}-\\d{6}`));
     assert.match(r.salida, /-p 127\.0\.0\.1:3101:3000/);
-    assert.match(r.salida, /network connect easypanel dentalgest-staging-supabase_default onia_selfhosted_onia_internal/);
+    assert.match(r.salida, /network connect easypanel dentalgest-staging-supabase_default$/m);
     assert.deepEqual(r.llamadas.filter(muta), []);
   } finally {
     limpiar(m);
@@ -446,7 +447,7 @@ test('swap: si no puede conectar easypanel al contenedor nuevo, ROLLBACK', () =>
   }
 });
 
-test('swap feliz: canario, rename a prev, imagen nueva con las 4 redes, verifica lo público y poda a 2 prev', () => {
+test('swap feliz: canario, rename a prev, imagen nueva con las 3 redes, verifica lo público y poda a 2 prev', () => {
   const m = mundo();
   try {
     const r = correr(m, SWAP, [m.sha], {
@@ -460,7 +461,6 @@ test('swap feliz: canario, rename a prev, imagen nueva con las 4 redes, verifica
     assert.ok(i(/^create --name onia-platform-canary-/) >= 0, 'sin canario');
     assert.ok(L.some((l) => /^create .*-p 127\.0\.0\.1:3101:3000/.test(l) && !/easypanel/.test(l)));
     assert.ok(!L.some((l) => /^network connect easypanel onia-platform-canary/.test(l)), 'el canario no va por Traefik');
-    assert.ok(L.some((l) => /^network connect onia_selfhosted_onia_internal onia-platform-canary-/.test(l)), 'el canario no ve LiteLLM');
     assert.ok(i(/^stop onia-platform$/) > i(/^exec onia-platform-canary-.* sh -c/), 'paró producción antes de probar el canario');
     assert.ok(i(/^rename onia-platform onia-platform-prev-/) > i(/^stop onia-platform$/));
     const run = L.find((l) => /^run -d --name onia-platform /.test(l));
@@ -472,7 +472,6 @@ test('swap feliz: canario, rename a prev, imagen nueva con las 4 redes, verifica
     assert.ok(!/-v |runtime-next|node:20/.test(run), 'volvió a la receta vieja');
     assert.ok(L.includes('network connect easypanel onia-platform'));
     assert.ok(L.includes('network connect dentalgest-staging-supabase_default onia-platform'));
-    assert.ok(L.includes('network connect onia_selfhosted_onia_internal onia-platform'), 'sin la red de LiteLLM los agentes caen mudos');
     assert.ok(L.includes('exec onia-platform nc -z kong 8000'));
     assert.ok(L.some((l) => /^curl https:\/\/app\.onia\.com\.bo\/login\?cb=/.test(l)), 'no verificó contra lo público');
     assert.ok(L.includes('rm onia-platform-prev-cccc'), 'no podó el prev viejo');
@@ -486,17 +485,21 @@ test('swap feliz: canario, rename a prev, imagen nueva con las 4 redes, verifica
   }
 });
 
-// La red de LiteLLM es igual de obligatoria: sin ella `onia_selfhosted-litellm-1` no resuelve y
-// el agente no falla fuerte, contesta sin IA. Mejor el rollback que un deploy "sano" a medias.
-test('swap: si no puede conectar la red de LiteLLM al contenedor nuevo, ROLLBACK', () => {
-  const m = mundo();
-  try {
-    const r = correr(m, SWAP, [m.sha], { STUB_RED_FALLA: 'onia_selfhosted_onia_internal' });
-    assert.equal(r.codigo, 1);
-    assert.match(r.salida, /ROLLBACK: no pude conectar la red onia_selfhosted_onia_internal/);
-    assert.ok(r.llamadas.some((l) => /^rename onia-platform-prev-\S+ onia-platform$/.test(l)));
-  } finally {
-    limpiar(m);
+// La red de LiteLLM (onia_selfhosted_onia_internal) NO es de este stack: la levanta y la baja el
+// compose de /opt/onia-selfhosted. Mientras ningun release lea AGENTS_LLM_* (ni release-3986b807
+// ni origin/master, 2026-09-24), atar el deploy a ella solo agrega una forma de que un hotfix
+// aborte en el canario, y deja :3000 abierto a todo ese bridge sin pasar por Traefik. Entra CON
+// el release que la use, junto con `nc -z onia_selfhosted-litellm-1 4000` en la verificacion.
+test('swap y recreate no dependen de la red de LiteLLM: si no existe, el deploy sale igual', () => {
+  for (const [script, args, env] of [[SWAP, null, {}], [RECREAR, ['--si-estoy-seguro'], { STUB_BUILD_NUEVO: VIVO }]]) {
+    const m = mundo();
+    try {
+      const r = correr(m, script, args ?? [m.sha], { ...env, STUB_RED_NO_EXISTE: 'onia_selfhosted_onia_internal' });
+      assert.equal(r.codigo, 0, r.salida);
+      assert.ok(!r.llamadas.some((l) => /onia_selfhosted_onia_internal/.test(l)), 'el deploy toca la red de LiteLLM');
+    } finally {
+      limpiar(m);
+    }
   }
 });
 
@@ -584,14 +587,14 @@ test('recreate se niega si el vivo sirve otro build que la imagen que dice corre
   }
 });
 
-test('recreate feliz: stop, rename a prev, run con la misma imagen y las 4 redes', () => {
+test('recreate feliz: stop, rename a prev, run con la misma imagen y las 3 redes', () => {
   const m = mundo();
   try {
     const r = correr(m, RECREAR, ['--si-estoy-seguro'], { STUB_BUILD_NUEVO: VIVO });
     assert.equal(r.codigo, 0, r.salida);
     const run = r.llamadas.find((l) => /^run -d --name onia-platform /.test(l));
     assert.ok(run?.endsWith('onia-platform:release-7bcd0a83'), run);
-    for (const red of ['easypanel', 'dentalgest-staging-supabase_default', 'onia_selfhosted_onia_internal']) {
+    for (const red of ['easypanel', 'dentalgest-staging-supabase_default']) {
       assert.ok(r.llamadas.includes(`network connect ${red} onia-platform`), `recrear perdió la red ${red}`);
     }
   } finally {

@@ -28,12 +28,11 @@ URL=${ONIA_PLATFORM_URL:-https://app.onia.com.bo}
 PAUSA=${ONIA_SWAP_PAUSA:-1}          # segundos entre reintentos (los tests usan 0)
 NAME=onia-platform
 RED_PRINCIPAL=supabase_default                       # donde viven auth, db y kong
-# onia_selfhosted_onia_internal: donde vive LiteLLM (onia_selfhosted-litellm-1:4000). Los
-# agentes de la plataforma le hablan con SU clave virtual (tope propio), no con la master ni
-# con una OPENAI_API_KEY en app.env. Sin esta red el nombre no resuelve y el agente cae mudo.
-# Verificado 2026-09-24: en esa red solo hay litellm, litellm-db y onia-center; ningun alias
-# pisa auth/db/kong de supabase_default.
-REDES_EXTRA=(easypanel dentalgest-staging-supabase_default onia_selfhosted_onia_internal)
+# La red de LiteLLM (onia_selfhosted_onia_internal) NO va aca todavia: es de otro stack, ningun
+# release lee AGENTS_LLM_* (2026-09-24) y sumarla haria abortar cualquier deploy o hotfix en el
+# canario si esa red no existe. Entra CON el release que la use, y con ella
+# `nc -z onia_selfhosted-litellm-1 4000` en la verificacion de abajo (ver deploy-imagen.test.mjs).
+REDES_EXTRA=(easypanel dentalgest-staging-supabase_default)
 CANARIO_PUERTO=127.0.0.1:3101                        # loopback: Traefik no lo ve
 PREV_A_GUARDAR=2
 IMAGENES_A_GUARDAR=3
