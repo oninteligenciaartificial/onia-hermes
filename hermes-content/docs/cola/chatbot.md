@@ -595,6 +595,79 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **CERRADO el 2026-09-24 (commiteado, NO desplegado): el bot NUNCA agendó una demo — ni
+      una, en toda su historia — porque de los 5 horarios que el cron publica a diario sólo 2 se
+      podían elegir. Los otros 3 estaban libres en la agenda de Sergio Urcullo y quien los
+      nombraba se iba a la cola humana. Ahora los cinco se agendan.**
+
+  **La cuenta, contada el 2026-09-24 contra producción (no heredada):**
+
+  ```
+  docker exec supabase-db psql -U postgres -tAc "select bot_stage, count(*), count(calendar_event_id) from onia_center.bot_conversations group by bot_stage;"
+  # esperando_horario|18|0   handoff_humano|12|0   nuevo|12|0   esperando_calificacion|1|0
+  docker exec supabase-db psql -U postgres -tAc "select count(*) from onia_center.bot_conversations where calendar_event_id is not null;"
+  # 0  ← cero reservas reales en 43 conversaciones
+  ```
+
+  **Reproducción en 30 segundos** (con los slots del proceso vivo, 5 horarios):
+
+  ```
+  cd hermes-content/deploy/vps-ops/bot
+  export ONIA_BOT_SLOTS="$(docker exec onia-center sh -c "tr '\0' '\n' < /proc/\$(pgrep -f webhook-server.mjs | head -1)/environ | grep '^ONIA_BOT_SLOTS=' | cut -d= -f2-")"
+  printf '%s\n' "Hola, quiero una demo" "el lunes 28 a las 14:00" "/salir" | node simulate.mjs
+  # → [M5] "Ya le pasé tu consulta a Sergio"  ·  [notas] handoff:propone_otro_horario
+  #   …y el lunes 28 a las 14:00 ESTÁ en ONIA_BOT_SLOTS, libre.
+  ```
+
+  **Causa exacta:** `config.mjs` → `parseSlotsSpec` termina en `elegidos.slice(0, 2)`. El corte a
+  dos es deliberado y correcto para **ofrecer** (el guion pone `{{slot_a}}` y `{{slot_b}}` en la
+  misma frase), pero los candidatos 3-5 —pensados como margen de reemplazo— quedan fuera del
+  array, así que `detectSlotChoice` no los ve, el mensaje cae en `intents.proposesOwnTime` y
+  `bot-engine.mjs:848` lo deriva a un humano. Verificado que el matcher NO es el culpable:
+  `detectSlotChoice` acierta "el lunes 28 a las 14:00" cuando el slot está en la lista.
+
+  **El patch de la vuelta anterior estaba MAL y por eso ponía rojo a `slots-rodantes`.** Sumaba
+  los extras al valor que devuelve `parseSlotsSpec`, que es —y los tests lo dicen con todas las
+  letras— *«el par A/B, no los candidatos crudos»*: el guion ofrece de a dos y `siguenVigentes`
+  (`slots-rodantes.mjs:203`, el que decide si el cron **renueva** los horarios) le pregunta a esa
+  misma función. Los dos rojos eran correctos. Se descartó el patch (borrado) y se separaron las
+  dos preguntas, que es lo que el bug pedía desde el principio:
+
+  · `parseSlotsSpec` **no cambió**: sigue devolviendo el par que el guion sabe nombrar.
+  · `slotsElegibles(raw)` (config.mjs) devuelve los sostenibles que el par no incluye, con
+    `key: null` — sin letra a propósito: una "A" reasignada le confirmaría a alguien un día que
+    nunca eligió, peor que el bug que cierra.
+  · `elegibleSlots(state, config)` (reply-builder.mjs) une la FOTO de lo que vio con los libres de
+    hoy, deduplicando por `claveDeSlot` — dos copias del mismo día hacen que `detectSlotChoice` lo
+    lea como ambiguo y lo derive a un humano, o sea el mismo bug por la puerta de atrás.
+  · `bot-engine.mjs` matchea contra esa unión, y la foto que guarda marca al elegido por identidad
+    y no por letra (un horario sin letra quedaba guardado como si nadie hubiera elegido nada).
+
+  **Y el camino VIVO no pasaba por ahí: `run-turn.mjs` tenía su propio parseo.** `parseEnvSlots()`
+  cortaba `slice(0, 2)` con `pending: false` fijo, así que arreglar sólo `config.mjs` habría curado
+  el simulador y dejado producción igual — el error que este carril ya pagó una vez. Ahora el
+  turno vivo usa `parseSlotsSpec` + `slotsElegibles` con el reloj del MENSAJE, que de paso le
+  devuelve la regla de anticipación: hasta hoy el bot vivo podía ofrecer un horario ya caducado
+  como si estuviera bueno, cosa que el simulador no mostraba nunca.
+
+  **Prueba, con los horarios del proceso vivo** (los mismos 5 de la reproducción de arriba):
+
+  ```
+  "el lunes 28 a las 14:00"   → [notas] demo_agendada   (antes: handoff:propone_otro_horario)
+  "el martes 29 a las 14:00"  → [notas] demo_agendada
+  "miércoles 30, 14:00"       → [notas] demo_agendada
+  "el domingo 27 a las 10:00" → [notas] handoff:propone_otro_horario  ← ese no lo tenemos: sigue yendo a un humano
+  "A"                         → viernes 25, 21:00                     ← la letra no se reasigna
+  ```
+
+  Tests en rojo primero, por el motivo correcto (`+ 'handoff_humano' - 'demo_agendada'`):
+  `bot-engine.test.mjs` (los 3 casos de arriba), `run-turn.test.mjs` (el camino vivo, con el
+  `ONIA_BOT_SLOTS` real) y `config.test.mjs`. Árbol verde: **1355/1355**.
+
+  ⚠️ **Falta el deploy.** El bot vivo corre desde `/tmp/onia-bot/` dentro de `onia-center`; esto
+  está commiteado y **no llega solo**. Se destraba con la tarea del tablero que ya existe
+  (`t_fca27a62`, línea `DESPLEGAR: bot`) y un `ok` de Sergio Urcullo.
+
 - [x] 🔴 **CERRADO el 2026-09-24 (commiteado, NO desplegado): las 9 campañas estaban en un
       archivo que NINGÚN deploy copiaba. Ya viven en el que se publica solo.**
 
@@ -3140,14 +3213,20 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       política viva pone en rojo *"fecha absoluta ya vencida => el recién llegado choca contra el
       muro"* (37/38). Restaurado con `cp`, nunca con `git checkout`.
 
-      ⚠️ **El arreglo del PRODUCTO ya está en `master`** (`onia-platform` `b1247fb`, de esta misma
-      mañana: la gracia cuelga del alta de cada cuenta, con el piso viejo para no acortarle nada a
-      las que ya estaban). **No está desplegado:** producción corre el build `f078373` del 13-sep
-      —casado por `BUILD_ID` `OFd4xCDzoTbQdThUbfzDv`— con **21 commits de `master` sin publicar**.
-      Hay pedido de deploy vivo (`t_db98ee26`, `blocked`, encabezado por ese mismo arreglo) y el
-      publicador automático se niega por diseño (`/var/log/onia-publicar-solo.log`: *"plataforma:
-      NO publico solo — toca una fuente de precio"*, todos los días desde el 15-sep). **Este gate
-      se pone en verde sobre esa puerta solo, el día del swap** — no hay nada más que escribir.
+      ⚠️ **El arreglo del PRODUCTO ya está en `master`** (`onia-platform` `b1247fb`, del 17-sep:
+      la gracia cuelga del alta de cada cuenta, con el piso viejo para no acortarle nada a las que
+      ya estaban).
+
+      ✅ **Y YA ESTÁ DESPLEGADO — recontado el 2026-09-24 05:52 La Paz.** Producción corre
+      `BUILD_ID 9tuk1Qk2BjQ2j2HdJcL8u` = `/opt/onia-platform/build-251f64c/`, y
+      `git merge-base --is-ancestor b1247fb 251f64c` sale **0**: el arreglo es ancestro del build
+      servido. El pedido `t_db98ee26` está **`archived`**, no `blocked`. El swap ocurrió el
+      17-sep; este párrafo se quedó siete días diciendo `f078373` y *"no está desplegado"*.
+
+      ⚠️ **La trampa, para el próximo que escriba una línea así:** «producción corre el build X»
+      es un dato **perecedero** —el VPS swapea solo tras los merges— y sin embargo se lee como
+      permanente, porque va escrito en indicativo y con su medición al lado. El `BUILD_ID` se
+      relee **justo antes de cada veredicto**; citarlo de un párrafo es repetir sin verificar.
 
 - [x] 🔴 **~~Contestarle a un lead de WhatsApp fuera de las 24 h se perdía EN SILENCIO: el dueño
       veía su respuesta enviada y el prospecto no recibía nada~~ — CERRADO el 2026-09-17**
@@ -6414,6 +6493,7 @@ decisión de Sergio, no código.
 | S13 | **Encender el aviso `notify_sergio`** — hoy el bot pide un humano y no se entera nadie. ⚠️ **NO es "poner `ONIA_N8N_ENABLED=true`"**: `ONIA_N8N_EVENT_URL` está **vacío** y **no existe ningún workflow de n8n** que reciba el evento (listados los 44). Con la variable en `true` y sin URL el envío devuelve `failed` y **nadie se entera**, porque es fire-and-forget a propósito. **Decidir el camino:** (a) Telegram directo desde el bot, reusando el `TG_BOT_TOKEN` que `hermes-content/deploy/vps-ops/bot/webhook-watchdog.sh` ya usa en el VPS — sin workflow, sin URL, sin secreto nuevo; (b) crear el workflow de n8n y cargar la URL. Recomendación: **(a)** | Escribe en el VPS. El código lo escribe este carril; la decisión y el deploy son suyos | El ítem 2 de Ahora. Gate barato antes de mirar el celular: `"configurado":true` en el `/health` del bot |
 | S14 | **De quién es la bandeja del widget (inbox 4)** — hoy no tiene org, y por ahí entraron **SEIS** conversaciones de desconocidos (34, 36, 38, 40, 45, 46), dos de ellas del 01-sep. **Cinco de las seis no dejaron teléfono ni correo**: sólo se les puede contestar desde adentro del widget, que es exactamente lo que el inbox huérfano impide — o sea que un inbox sin dueño no es una demora, es una pérdida. ⚠️ **A diferencia de S8, no alcanza con dos clicks:** está cerrado en esta cola que **una org sólo puede tener UN inbox** (`clinic_settings.chatwootInboxId`, `prisma/schema.prisma:1002`), y `Onia (interna)` ya gastó el suyo en el 5. ⚠️ **Corregido el 2026-09-02:** acá decía que esa columna era *"un `Int?` **único**"* y es falso — medido, no leído: no tiene `@unique` ni hay `@@unique` en `ClinicSettings`. Lo cierto de la frase es la mitad que importa para esta decisión (una org tiene UN inbox, porque es una columna escalar); lo que NO garantiza nadie es el otro sentido — **la base acepta que dos orgs reclamen el mismo inbox**, y el 409 que lo impide vive sólo en el PATCH de superadmin. No cambia las tres opciones de abajo, pero sí descarta "la base no me deja" como argumento. Desde hoy lo vigila `npm run inbox:tenencia`. **Opciones ya cotizadas en `ONIA_RADAR_DECISIONES_PRODUCTO.md` §9:** (a) darle el inbox 4 a otra org existente — cero código, pero mezcla el widget de Onia con una org que no es Onia; (b) crear una org `Onia (web)` sólo para el widget — cero código, ~10 min, agrega una org fantasma; (c) extender `clinic_settings` a N inboxes, que es código del producto y de otro carril. Recomendación: **(b)**. 🔁 **Fusionada el 2026-09-02 con la fila que la tabla listaba aparte bajo un SEGUNDO `S12`** (*"¿sigue en pie la opción 1 de §9?"*): era la **misma decisión preguntada dos veces**, con dos números distintos y uno de ellos ya usado por los horarios de demo. Lo destapó `npm run bloqueos:vencidos` al imprimir `S12, S12` — el gate nombra las filas por su id, así que un id repetido lo vuelve ambiguo. El dato fresco que aportaba esa fila (seis conversaciones, cinco sin contacto) es justo el que le faltaba a la condición de §9 *"hasta que la limitación moleste"*, y ya vive acá. **Y el `5 de las 9` que esta fila decía estaba viejo**: eran seis. | Es decidir en qué bandeja aterrizan los desconocidos de la web | **La otra mitad del objetivo del carril.** Hecho = se abre `/inbox` y se ve la conversación 45 (*"tengo una ferreteria"*) |
 | S15 | **Una credencial de sólo lectura para que el canario ENTRE al panel del chatbot** — un usuario del producto (correo + contraseña) que sólo mire. Se enchufa como `ONIA_CANARIO_USER` / `ONIA_CANARIO_PASS` en el entorno del loop `canario-visual`; **no hay una línea de código pendiente**: `requiereSesion` y `iniciarSesion()` ya están en `scripts/canario_visual.mjs` y entran por el formulario real de `/login`. Sin ella el canario NO miente (desde hoy dice `NO MEDIDA` con el motivo), pero **la pantalla que un cliente usa para editar su conocimiento sigue sin que nadie la mire nunca**. ⚠️ La otra opción que el ítem original proponía —una ruta de vista previa pública— **se descarta**: expone configuración de cliente sin sesión, y es agregar una superficie viva | Es un alta de usuario en producción, y una contraseña | Que `/settings/chatbot` entre a la ronda del canario como las otras diez. Hecho = el canario imprime `panel-chatbot … sin disparo mecanico` y su baseline se crea con `urlFinal` = `/settings/chatbot` |
+| S17 | **Firmar el deploy del bot: el número que el freno acusa es el TELÉFONO de Onia, no un precio.** Medido el 2026-09-24 06:22 La Paz. Hay **7** commits del bot en `origin/main` sin publicar (los 5 de hoy más los 2 de `cobro-e2e` que entraron con `2c126fd9`), y entre ellos los que le contestan bien al lead: `82831cc4` (las 9 campañas que `onia.com.bo` enlaza por `wa.me`), `46de060e` (le daba los precios del SISTEMA al lead que armó su web) y `184ed525` (el warn que ahogaba el log). El publicador automático los encontró y **se detuvo a propósito** a las 05:50: `bot: NO publico solo — cambia un numero en una fuente de precio: knowledge.onia.json: 022 20 241 45`. Ese `022 20 241 45` es la **línea fija de Onia**, que entró con las campañas — `knowledge.onia.json` está en `FIRMA_HUMANA` (`scripts/loops/extras/publicar-solo.sh:45`) y el freno falla CERRADO por diseño, así que no adivina que es un teléfono. ⚠️ **El freno NO está roto y no se toca:** su propia cabecera dice que gastar esta firma en falsos la vuelve automática, y ésa es la dirección cara. Lo que corresponde es la firma, y de paso anotar que la excusa se ancla a la CLAVE que recibe el número (hoy no distingue `telefono` de un monto). ⚠️ **Tampoco mintió el `bot: al dia` de los 7 días previos**, y se verificó antes de acusarlo con el método de T8: la última publicación real fue `82e8f0204` (19-sep 18:57 UTC, `/tmp/pub-bot.log`) y los 7 commits entraron a `main` DESPUÉS — es la causa 3, no un falso verde. **Ya le llegó el aviso** por el Telegram del propio freno a las 05:50: no se duplica. | Es un deploy y toca una fuente de precio: el freno pide su firma por diseño | Que los 7 arreglos del bot lleguen al lead. Hecho = `tail -1 /var/log/onia-publicar-solo.log` dice `bot: PUBLICADO` y `docker exec onia-center grep -c avisosDePanelYaDados /tmp/onia-bot/knowledge.mjs` da ≥1 (hoy da **0**) |
 | ~~S16~~ | ✅ **VENCIDO el 2026-09-02 — Sergio no decide nada: la decisión ya se tomó y el trabajo ya llegó.** Pedía elegir entre cambiar el procedimiento del integrador, mergear a mano, o dejarlo. Pasaron **las dos primeras**: el integrador arregló su Paso 1 (`d26444c1` de `onia-hermes`, *"contaba las ramas contra el repo equivocado"*) y mergeó el carril a `master` de `onia-platform` (`503af44`, 12:38 UTC). Verificado con `git fetch` fresco y `merge-base --is-ancestor`: **los cuatro** commits declarados (`22fd088`, `675541b`, `d62beeb`, `e644c85`) llegan a `origin/master`; `npm run deploy:alcanzable` sale **0**. El radar §23 ya figuraba **RESUELTO** — sólo esta fila seguía pidiendo la decisión. Detalle en el primer ítem de "Cerrado". | — | — |
 | S6 | **Proyecto Supabase cloud `Dental-gest` (`kvepqgikokjlacxngkiw`) sigue ACTIVE_HEALTHY** — decidir pausar o borrar. Y si algún día se reactiva `Gesti-Os` (`jafxylfocvvlflpqfsix`), **rotar su `service_role` primero**: estuvo expuesto en los JSON de n8n que se redactaron el 29-ago | Es plata y es borrado de datos | Cerrar la cola del saneamiento de secretos |
 

@@ -34,6 +34,7 @@ const CRONTAB = `
 33 * * * * /root/bin/onia-loop.sh onia-cola
 # 9 * * * * /root/bin/onia-vigia-congelado.sh   <- CONGELADO 2026-09-05
 50 */3 * * * /root/bin/onia-publicar-solo.sh
+0 7 * * * /root/bin/onia-backup-v2/backup-onia-postgres-daily.sh >> /var/log/onia-db-backup.log 2>&1
 `
 
 // Los once nombres del crontab real que NO empiezan con `onia-`: el punto ciego del gate
@@ -54,6 +55,35 @@ test('ANCLA: el universo incluye las herramientas que NO empiezan con onia-', ()
       `${nombre} tiene que ser sujeto: el cron la ejecuta y no empieza con onia-`
     )
   }
+})
+
+// Medido en el VPS el 2026-09-24: el cron ejecuta
+// `/root/bin/onia-backup-v2/backup-onia-postgres-daily.sh` —el respaldo diario de la base de
+// producción, creado el 23-sep— y el extractor devolvía `/root/bin/onia-backup-v2`, que es el
+// DIRECTORIO. `md5sum` contestaba «Is a directory», la herramienta caía en NO MEDIDO y los tres
+// ejecutables de adentro quedaban fuera del universo: nadie veía que no están versionados en
+// ningún repo. Un sujeto mal recortado no sale rojo, sale INVISIBLE — y de paso deja el gate en
+// exit 2 permanente, que es como un instrumento se vuelve decorativo.
+test('una herramienta dentro de un subdirectorio de /root/bin es sujeto, no su carpeta', () => {
+  const vivas = herramientasQueElCronEjecuta(CRONTAB)
+  assert.ok(
+    vivas.includes('/root/bin/onia-backup-v2/backup-onia-postgres-daily.sh'),
+    'el sujeto es el EJECUTABLE que el cron corre, con su subdirectorio'
+  )
+  assert.ok(
+    !vivas.includes('/root/bin/onia-backup-v2'),
+    'el directorio contenedor no se ejecuta: medirlo da «Is a directory» y tapa al ejecutable'
+  )
+})
+
+// Recíproco: el recorte no puede tragarse el resto de la línea. Si se lo tragara, el `md5sum`
+// remoto recibiría basura y toda la medición saldría AUSENTE en vez de medir.
+test('el recorte termina en el ejecutable y no arrastra la redirección del log', () => {
+  const vivas = herramientasQueElCronEjecuta(CRONTAB)
+  assert.ok(
+    vivas.every((r) => !r.includes('>') && !r.includes('var/log') && !r.endsWith('/')),
+    `alguna ruta arrastró el resto de la línea: ${vivas.join(' · ')}`
+  )
 })
 
 test('una línea comentada no ejecuta nada, así que no es sujeto', () => {

@@ -44,7 +44,7 @@
 
 import { pathToFileURL } from "node:url";
 
-import { createBotConfig, DEFAULT_CONFIG, renderTemplate } from "./config.mjs";
+import { createBotConfig, DEFAULT_CONFIG, parseSlotsSpec, renderTemplate, slotsElegibles } from "./config.mjs";
 import { esConversacionNuestra } from "./es-nuestra.mjs";
 import { ensureKnowledge, withKnowledge } from "./knowledge.mjs";
 import { createState, step, markHumanTakeover,
@@ -111,26 +111,40 @@ export function buildConfig(input) {
   else if (envDry === "false") overrides.dryRun = false;
   else if (envDry === "true") overrides.dryRun = true;
 
-  const slots = Array.isArray(input.slots) && input.slots.length ? input.slots : parseEnvSlots();
-  if (slots) {
-    overrides.slots = slots.slice(0, 2).map((slot, index) => ({
+  const delTurno = Array.isArray(input.slots) && input.slots.length ? input.slots : null;
+  if (delTurno) {
+    overrides.slots = delTurno.slice(0, 2).map((slot, index) => ({
       key: slot.key || (index === 0 ? "A" : "B"),
       label: String(slot.label || "").trim() || `opción ${index === 0 ? "A" : "B"}`,
       startAt: slot.startAt || slot.start_at || null,
       pending: false,
     }));
+  } else {
+    // El spec del entorno lo parsea `config.mjs`, NO este archivo. Tenia su propia copia —
+    // `slice(0, 2)` con `pending: false` fijo— y eso costaba dos cosas a la vez: el bot vivo
+    // ofrecia un horario ya caducado como si estuviera bueno (la regla de anticipacion vivia
+    // solo en `parseSlotsSpec`, o sea en el simulador), y los candidatos 3 a 5 que el cron deja
+    // LIBRES eran inalcanzables — medido el 2026-09-24: 43 conversaciones, CERO con
+    // `calendar_event_id`. Dos parseos del mismo dato es un instrumento que no mide lo que corre.
+    const raw = String(process.env.ONIA_BOT_SLOTS || "").trim();
+    if (raw) {
+      const now = relojDelTurno(input);
+      overrides.slots = parseSlotsSpec(raw, { now });
+      overrides.slotsElegibles = slotsElegibles(raw, { now });
+    }
   }
   return withKnowledge(Object.keys(overrides).length ? createBotConfig(overrides) : DEFAULT_CONFIG, knowledgeOptions(input));
 }
 
-/** ONIA_BOT_SLOTS="jueves 15:00@2026-07-30T19:00:00Z|viernes 10:00@2026-07-31T14:00:00Z" */
-function parseEnvSlots() {
-  const raw = String(process.env.ONIA_BOT_SLOTS || "").trim();
-  if (!raw) return null;
-  return raw.split("|").map((part) => {
-    const [label, startAt] = part.split("@").map((piece) => (piece || "").trim());
-    return { label, startAt: startAt || null };
-  });
+/**
+ * El "ahora" con el que se juzga un horario es el del MENSAJE, no el de la maquina: es el mismo
+ * instante con el que `handleHorario` re-mide la eleccion (`msg.receivedAt`). Sin fecha legible en
+ * el turno se cae al reloj, que es lo unico que queda.
+ */
+function relojDelTurno(input) {
+  const iso = input?.received_at || input?.receivedAt || null;
+  const t = iso ? Date.parse(iso) : NaN;
+  return Number.isFinite(t) ? t : Date.now();
 }
 
 /**

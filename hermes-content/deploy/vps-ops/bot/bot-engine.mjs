@@ -13,6 +13,7 @@
 
 import {
   DEFAULT_CONFIG,
+  claveDeSlot,
   renderTemplate,
   joinEs,
   isOutsideBusinessHours,
@@ -27,6 +28,7 @@ import {
   ESPERA_HORARIO_STAGES,
   activeSlots,
   capturedLabels,
+  elegibleSlots,
   missingFields,
   pendingAsk,
   pendingBranch,
@@ -647,8 +649,12 @@ export function step(state, incoming, options = {}) {
   // --- La ELECCION DE HORARIO se resuelve antes que nada: esperando el horario, un "2" pelado es
   // la opcion B, no un equipo de 2 personas. Sin este orden el bot inventa el dato con el que
   // despues habla (viola la regla de oro §2.1).
+  // Se le ofrecen DOS y se le aceptan TODOS los que tenemos libres: `elegibleSlots` suma a la
+  // foto los horarios vivos que el guion no nombra. Mientras el motor miro solo el par, tres de
+  // los cinco que publica el cron eran inalcanzables y el que elegia uno terminaba en la cola
+  // humana — 43 conversaciones sin una sola reserva (medido el 2026-09-24).
   ctx.slotChoice = base.botStage === "esperando_horario"
-    ? intents.detectSlotChoice(msg.norm, activeSlots(base, config))
+    ? intents.detectSlotChoice(msg.norm, elegibleSlots(base, config))
     : null;
 
   // --- Captura ANTES de rutear (regla de oro §2.1). Un mensaje real trae las respuestas y una
@@ -901,7 +907,13 @@ function handleHorario(ctx, base) {
     botStage: "demo_agendada",
     scheduledAt: chosen.startAt || null,
     scheduledLabel: chosen.label,
-    slotsOffered: slots.map((slot) => ({ ...slot, chosen: slot.key === chosen.key })),
+    // La foto guarda TODO lo que se le pudo elegir —el par que vio mas los libres que no se le
+    // nombraron— y marca cual eligio. Se marcaba comparando `key`, y un horario que no es A ni B
+    // no tiene letra: la conversacion quedaba guardada como si nadie hubiera elegido nada.
+    slotsOffered: elegibleSlots(base, config).map((slot) => ({
+      ...slot,
+      chosen: claveDeSlot(slot) === claveDeSlot(chosen),
+    })),
   };
   const effects = [
     stageEffect(prev, next, "demo_agendada"),

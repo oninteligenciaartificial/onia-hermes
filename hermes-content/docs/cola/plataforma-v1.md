@@ -279,6 +279,11 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       build vivo — medido el 2026-09-18: `BUILD_ID` vivo `OFd4xCDzoTbQdThUbfzDv` =
       `build-f078373`, con **64** commits de `master` sin publicar.
 
+      ✅ **Eso ya NO aplica (recontado el 2026-09-24): el panel SE PUEDE mirar renderizado.** El
+      build vivo es `251f64c` y `b1247fb` es ancestro suyo, así que la puerta de MFA no manda
+      toda ruta a `/profile`. Si una vuelta futura lee el párrafo de arriba y da por imposible
+      mirar producción, está heredando un `BUILD_ID` de hace seis días: se relee, no se cita.
+
 - [x] ✅ **CERRADO el 2026-09-17 — el negocio de cualquier plan podía crearse un segundo
       administrador gratis: la misma pantalla tenía DOS botones y sólo uno preguntaba el plan.**
 
@@ -1402,8 +1407,19 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       **Los TRES quedaron construidos; lo único que les falta a los tres es el mismo paso:
       mergear y desplegar.**
 
+      ⚠️ **ESO YA NO ES CIERTO — medido el 2026-09-24 por `chatbot-cola`. Los tres están
+      MERGEADOS y DESPLEGADOS.** Las tres medidas del deploy, corridas hoy y no heredadas:
+      (1) `git merge-base --is-ancestor` → `82d34b5`, `0376b07` y `42ab871` los TRES en
+      `origin/master`; (2) build vivo `docker exec onia-platform cat /app/.next/BUILD_ID` →
+      `9tuk1Qk2BjQ2j2HdJcL8u`; (3) `grep -rl` en `/app/.next/server` (ruta DENTRO del contenedor
+      `onia-platform`, no del repo) encuentra los tres símbolos `confirmador`, `seguidor` y
+      `reponedor` en un mismo chunk del build servido. **Las líneas «falta mergear y desplegar» de
+      abajo quedaron congeladas en pasado y se leían como presente** — es el modo de falla que
+      este carril ya tiene medido (el 46 % de sus pendientes heredados eran fantasma), y
+      repetirlo manda a pedir un deploy que ya ocurrió.
+
       ✅ **(1) HECHO: agente `confirmador`** (`onia-platform`, rama
-      `claude/chatbots-platform-review-0d1d09`, `82d34b5` — **falta mergear y desplegar**). Gate nuevo
+      `claude/chatbots-platform-review-0d1d09`, `82d34b5` — **mergeado y DESPLEGADO**, verificado 2026-09-24). Gate nuevo
       `lib/onia-core/modules/agents-confirmador.test.ts` (17 casos), validado **por mutación en
       dos puntos**: contar «mañana» en UTC en vez de la zona del negocio → rojo; sacarle la
       puerta de rubro → rojo.
@@ -1433,7 +1449,7 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       del VPS, que no es de este carril.
 
       ✅ **(2) HECHO: agente `seguidor`** (`onia-platform` `0376b07`, rama
-      `claude/chatbots-platform-review-0d1d09` — pusheado, **falta mergear y desplegar**).
+      `claude/chatbots-platform-review-0d1d09` — **mergeado y DESPLEGADO**, verificado 2026-09-24).
       ⚠️ El sha se DERIVA de `origin`, no del clon de casa: desde el nodo de casa no se pushea
       `onia-platform`, la entrega va por `format-patch | ssh … git am`, y **`git am` regenera el
       sha** — el local decía `4d94cdf`, que no existe en ningún remoto. Gates re-corridos **en
@@ -1469,7 +1485,7 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       produce es el gate, no la base.
 
       ✅ **(3) HECHO: agente `reponedor`** (`onia-platform` `42ab871`, rama
-      `claude/chatbots-platform-review-0d1d09` — pusheado, **falta mergear y desplegar**).
+      `claude/chatbots-platform-review-0d1d09` — **mergeado y DESPLEGADO**, verificado 2026-09-24).
       Gates en el VPS: `tsc` limpio, **4.749 tests verdes**, `eslint` limpio, `check:onia-core`
       OK. Gate nuevo `lib/onia-core/modules/agents-reponedor.test.ts` (10 casos), **validado por
       mutación en tres puntos**: predicado propio en vez de `isBelowReorder` → rojo en el borde
@@ -7425,7 +7441,7 @@ y sin operar. Acá se opera, con verificación por ítem.
 
 *(vacío — esta cola se abrió el 2026-09-05)*
 
-## 🔴 Bug crítico en producción — bloquea a TODO cliente nuevo desde 2026-09-17 (tarea t_82251f19)
+## ✅ CERRADO — bug crítico que bloqueaba a todo cliente nuevo (17 al 24-sep, tarea t_82251f19)
 
 Encontrado por `recorrido-cliente`, 2026-09-17 08:12 UTC. `lib/mfa/policy.ts:16`:
 `MFA_ENFORCE_FROM` es una fecha ABSOLUTA fija (`2026-09-17T04:00:00Z`, escrita el 03-sep como
@@ -7455,10 +7471,23 @@ la que cuenta los días del banner—, y eso lo sostiene `lib/mfa/gracia-cuelga-
 Una cuenta creada hoy queda exigida el 1-oct, y **las que ya cayeron en la trampa se destraban
 solas con el deploy** (su `max` las manda a alta + 14).
 
-🔴 **Pero el defecto SIGUE VIVO PARA EL CLIENTE**, y eso es lo que hay que leer acá: producción
-corre el build `f078373`, anterior al arreglo — medido el 17-sep 07:30 La Paz casando `BUILD_ID`
-(`docker exec onia-platform cat /app/.next/BUILD_ID` → `OFd4xCDzoTbQdThUbfzDv` =
-`/opt/onia-platform/build-f078373/…`), y en ese árbol `grep -c fechaExigenciaMfa
-lib/mfa/policy.ts` da **0**. El pedido de deploy ya existe y está `blocked` esperando el `ok` de
-Sergio Urcullo (*«Publicar app.onia.com.bo: 13 arreglos…»*, `t_db98ee26`). **Ningún carril lo
-destraba**: no se abre otro pedido ni se despliega a mano.
+✅ **PUBLICADO. El defecto ya NO está vivo para el cliente — recontado el 2026-09-24 05:52 La Paz**
+(`chatbot-cola`), con las tres medidas del deploy:
+
+1. **Qué corre**: `docker exec onia-platform cat /app/.next/BUILD_ID` → `9tuk1Qk2BjQ2j2HdJcL8u`,
+   que casa contra `/opt/onia-platform/build-251f64c/`. Ya **no** es `f078373`.
+2. **Mergeado**: `git merge-base --is-ancestor b1247fb 251f64c` → **0**, el arreglo es ancestro
+   del build que se está sirviendo.
+3. **Vivo**: `fechaExigenciaMfa` aparece en el build servido (`/app/.next/server/**/*.js.map`,
+   entre ellos `app/(dashboard)/profile/page.js.map`). En los `.js` no se ve porque va
+   minificado — por eso la medida que manda es la 2, no un `grep` del bundle.
+
+El pedido de deploy `t_db98ee26` está **`archived`** (o sea: Sergio Urcullo ya dio el `ok` y se
+ejecutó) y la tarea del bug `t_82251f19` está **`done`** desde el 2026-09-17 10:38.
+
+⚠️ **Por qué esto quedó escrito siete días al revés, que es la lección que vale:** el párrafo de
+arriba era CIERTO cuando se escribió (17-sep 07:30) y envejeció mal — producción swapeó sola esa
+misma mañana. Un 🔴 que dice *«el defecto sigue vivo»* y *«ningún carril lo destraba»* no es un
+pendiente inofensivo: **congela el tema** y le atribuye a Sergio Urcullo una decisión pendiente
+**que ya había tomado**. Un estado de producción se re-deriva al leerlo, nunca se hereda del
+párrafo — y menos cuando el párrafo mismo dice que espera un `ok`.
