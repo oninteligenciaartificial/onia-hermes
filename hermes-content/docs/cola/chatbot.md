@@ -796,6 +796,36 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       está pedido en `t_e57e3376`—: es avisarle A ÉL de algo que pasó en su propio sistema.
       Confundir las dos cosas es lo que dejó a `conv 58` sin dueño seis días.
 
+      ---
+
+      🔴 **2026-09-24 16:50 La Paz — el pedido de deploy tiene un ORDEN, y nada lo verifica.
+      Medido contra `origin/main`, no heredado.** El punto 3 de `t_0836a42f` promete que el
+      aviso del lead frío LLEGA. La mitad que lo emite ya está en `main` (`813c5fa3`,
+      `055713e4` son ancestros); **la mitad que lo hace SALIR de la máquina no**:
+
+      ```
+      git show origin/main:hermes-content/deploy/vps-ops/bot/followup-run.mjs | grep -c 'veredicto?.status'  # → 0
+      git show origin/main:hermes-content/deploy/vps-ops/bot/followup-run.sh  | grep -c 'TG_BOT_TOKEN'       # → 3 en la rama, 0 en main
+      ```
+
+      Vive en `5a7d1224`, ya pusheado a la rama de este carril en `origin` y todavía **fuera de
+      `main`** (lo mergea el integrador, no este carril).
+
+      **Por qué el orden importa y no es un detalle:** el publicador copia lo que `origin/main`
+      tenga **en el momento del `ok`**. Si el `ok` corre antes del merge, el bot publicado
+      escribe la marca en disco y anota al lead en `avisados` **aunque Telegram nunca lo haya
+      mandado** —el lanzador no le pasa las credenciales—, y esas marcas **no se purgan a
+      propósito** (el silencio del lead no vence). El lead queda mudo **para siempre**, incluso
+      después de arreglar el entorno. O sea: **publicar en ese orden es peor que no publicar**,
+      porque hoy producción no tiene el aviso de colgada, no escribe marcas y no silencia a
+      nadie.
+
+      **No hay que rehacer el pedido** —los 32 archivos son los mismos, `followup-run.mjs` y
+      `followup-run.sh` ya están en la lista—: sólo cambia el orden. Anotado como comentario en
+      `t_0836a42f` (no una tarea nueva: dos pedidos del mismo destino es el bug que archivó a
+      `t_2508295d`). Antes de ejecutar el `ok`:
+      `git merge-base --is-ancestor 5a7d1224 origin/main && echo LISTO || echo FALTA-MERGE`.
+
 - [x] 🔴 **CERRADO el 2026-09-24 12:45-13:20 La Paz (commiteado; el instrumento no necesita
       deploy): la definición de hecho del carril se había vuelto IMPOSIBLE de medir, y no por el
       bot — la sonda se colgaba esperando un efecto que el producto decidió no producir.**
