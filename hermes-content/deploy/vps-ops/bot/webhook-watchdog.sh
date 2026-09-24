@@ -157,7 +157,10 @@ if docker exec "$CONTAINER" sh -c "wget -qO- --timeout=5 http://127.0.0.1:$PORT/
   # los falsos positivos al unico canal por el que avisamos algo grave.
   INCIDENTE_CW="$ESTADO.incidente-chatwoot"
   STRIKE_CW="$ESTADO.strike-chatwoot"
-  if docker exec "$CONTAINER" sh -c "timeout 5 wget -qO- http://onia-chatbot_chatwoot:3000/ >/dev/null 2>&1"; then
+  # El tope va del lado del HOST: `timeout` de busybox DENTRO del contenedor deja un hijo
+  # vigia huerfano que el PID 1 (node) nunca recoge -> 1 zombie por corrida (13.559 el
+  # 2026-09-24, 71% del limite de pids). Ver watchdog-sin-zombies.test.mjs.
+  if timeout 8 docker exec "$CONTAINER" wget -qO- -T 5 http://onia-chatbot_chatwoot:3000/ >/dev/null 2>&1; then
     # El strike no se acumula entre parpadeos lejanos: un exito lo borra.
     rm -f "$STRIKE_CW"
     if [ -f "$INCIDENTE_CW" ]; then

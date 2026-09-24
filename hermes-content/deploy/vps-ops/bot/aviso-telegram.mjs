@@ -89,6 +89,9 @@ export const ETIQUETAS = Object.freeze({
   // Sin etiqueta propia, `construirAviso` cae al motivo crudo y Sergio Urcullo recibe el slug
   // interno ("quiere_comprar") en vez de una linea que le diga que hacer.
   handoff_urgente: "🔥 URGENTE — contestá esto primero",
+  // El unico que avisa de un SILENCIO: la persona sigue escribiendo y nadie tomo la
+  // conversacion, asi que el bot esta callado por una razon que dejo de ser cierta.
+  handoff_sin_humano: "⏳ TE SIGUE ESCRIBIENDO y nadie lo tomó — entrá vos",
   demo_agendada: "DEMO AGENDADA — anotala",
   descarte_tras_agendar: "se cayo una demo ya agendada — liberá el horario",
   sin_horarios: "no habia horario que ofrecerle",
