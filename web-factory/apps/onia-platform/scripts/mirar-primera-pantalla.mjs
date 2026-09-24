@@ -83,6 +83,26 @@ export const OPACIDAD_PINTADA = 0.99;
  */
 export const ESTADO_DE_LIMITE = 429;
 
+/**
+ * Cuanto puede separarse el punto verde del rotulo de su etiqueta, medido en
+ * multiplos del tamano de fuente DEL ROTULO (no en px: el rotulo es 0.8em del
+ * bloque y cambia entre pantallas).
+ *
+ * El CSS pide `0.6em` de separacion. El tope es el doble, asi que un cambio de
+ * espaciado razonable no pinta rojo y el defecto real —44 px sobre una fuente
+ * de 12,8 px, o sea 3.4em— queda muy afuera.
+ *
+ * POR QUE EXISTE. La portada centra su rotulo, y el punto era un `::before`,
+ * o sea un item flex hermano del texto: cuando "UN SOLO SISTEMA PARA TODO EL
+ * NEGOCIO" parte en dos lineas en telefono, el texto se centraba dentro de su
+ * caja y el punto se quedaba contra el borde izquierdo, a 44 px de su propia
+ * etiqueta, en la primera pantalla que ve un lead. Un `::before` no tiene caja
+ * consultable, asi que esto no lo podia medir NINGUN gate: el mismo rotulo ya
+ * se habia arreglado antes en el eje vertical, y las dos veces lo encontro un
+ * ojo. Por eso el punto es hoy un `<span data-kicker-dot>`.
+ */
+export const SEPARACION_MAXIMA_DEL_PUNTO = 1.2;
+
 /** Si el recurso sale del mismo origen que la pagina que estamos mirando. */
 export function esNuestro(url, base) {
   try {
@@ -135,7 +155,7 @@ export function veredicto(informe, base = "https://onia.com.bo") {
 
   for (const r of informe) {
     lineas.push(
-      `${r.pantalla.padEnd(10)} ${r.ruta.padEnd(10)} opacidad=${r.opacidadH1} 4xx/5xx=${r.fallidas.length} h1="${r.h1}"`,
+      `${r.pantalla.padEnd(10)} ${r.ruta.padEnd(10)} opacidad=${r.opacidadH1} 4xx/5xx=${r.fallidas.length} punto=${r.kicker ? (r.kicker.medible ? `${r.kicker.dx}px` : "sin caja") : "sin rotulo"} h1="${r.h1}"`,
     );
     for (const f of r.fallidas) {
       const marca = esDefecto(f, base) ? "" : "  (limite de un tercero, no atribuible)";
@@ -173,6 +193,51 @@ export function veredicto(informe, base = "https://onia.com.bo") {
     );
   }
 
+  // El punto del rotulo, pegado a su etiqueta. Ver SEPARACION_MAXIMA_DEL_PUNTO.
+  // Tres estados y no dos, a proposito: "no pude medirlo" no es "esta bien".
+  const puntoLejos = informe.filter(
+    (r) => r.kicker?.medible && r.kicker.dx > r.kicker.fontSize * SEPARACION_MAXIMA_DEL_PUNTO,
+  );
+  if (puntoLejos.length > 0) {
+    codigo = 1;
+    lineas.push(
+      "",
+      `ROJO: en ${puntoLejos.length} pantallas el punto del rotulo quedo suelto, lejos de su etiqueta.`,
+      ...puntoLejos.map(
+        (r) =>
+          `  ${r.pantalla} ${r.ruta} -> ${r.kicker.dx} px de hueco (tope ${Math.round(r.kicker.fontSize * SEPARACION_MAXIMA_DEL_PUNTO)} px) en "${r.kicker.texto}"`,
+      ),
+    );
+  }
+
+  // `null` es "esta pantalla no tiene rotulo" y se acepta; `undefined` es "no
+  // se pregunto", que es como esta familia de gates falla abierto: el campo se
+  // cae de la medicion y el juicio sigue dando verde sobre un dato que no
+  // existe. Por eso se separan.
+  const sinPreguntar = informe.filter((r) => r.kicker === undefined);
+  if (sinPreguntar.length > 0) {
+    codigo = 1;
+    lineas.push(
+      "",
+      `ROJO: ${sinPreguntar.length} pantallas llegaron sin la medicion del rotulo.`,
+      "  No es el sitio: es este instrumento, que dejo de preguntar y seguiria",
+      "  dando verde sobre un dato que no tomo.",
+    );
+  }
+
+  const sinMedirPunto = informe.filter((r) => r.kicker && r.kicker.medible === false);
+  if (sinMedirPunto.length > 0 && codigo === 0) codigo = 2;
+  if (sinMedirPunto.length > 0) {
+    lineas.push(
+      "",
+      `NO MEDIDO: en ${sinMedirPunto.length} pantallas no hay punto con caja que medir.`,
+      "  La causa esperada es que ahi corre un build anterior al 2026-09-24, donde el",
+      "  punto era un `::before` y `getBoundingClientRect` no lo alcanza. Para",
+      "  distinguirlo de un rotulo roto, mirar si el punto esta pintado en la captura:",
+      ...sinMedirPunto.map((r) => `  ${r.pantalla} ${r.ruta} -> ${r.archivo}`),
+    );
+  }
+
   const sinPintar = informe.filter((r) => !(r.opacidadH1 >= OPACIDAD_PINTADA));
   if (sinPintar.length > 0) {
     codigo = 1;
@@ -195,11 +260,44 @@ export function veredicto(informe, base = "https://onia.com.bo") {
   if (codigo === 0) {
     lineas.push(
       "",
-      `Las ${informe.length} pantallas pintaron y no pidieron nada roto. Las capturas siguen necesitando ojo.`,
+      `Las ${informe.length} pantallas pintaron, no pidieron nada roto y el punto de los ${informe.filter((r) => r.kicker?.medible).length} rotulos esta pegado a su etiqueta. Las capturas siguen necesitando ojo.`,
     );
   }
   return { codigo, lineas };
 }
+
+/**
+ * La distancia horizontal entre el punto del rotulo y la primera linea de su
+ * etiqueta. Se agarra de `data-kicker`, no de la clase: el hash de CSS Modules
+ * cambia en cada build.
+ *
+ * Devuelve `null` si la pantalla no tiene rotulo, y `{medible:false}` si lo
+ * tiene pero sin punto consultable (el `::before` de los builds viejos). Los
+ * dos casos los separa `veredicto`: uno no se juzga, el otro sale NO MEDIDO.
+ */
+const PUNTO_DEL_ROTULO = `() => {
+  const p = document.querySelector('[data-kicker]');
+  if (!p) return null;
+  const punto = p.querySelector('[data-kicker-dot]');
+  const texto = (p.innerText || '').replace(/\\s+/g, ' ').trim();
+  const fontSize = parseFloat(getComputedStyle(p).fontSize);
+  if (!punto) return { medible: false, texto, fontSize };
+  const nodos = [...p.childNodes].filter((n) => n !== punto);
+  if (nodos.length === 0) return { medible: false, texto, fontSize };
+  const rango = document.createRange();
+  rango.setStartBefore(nodos[0]);
+  rango.setEndAfter(nodos[nodos.length - 1]);
+  const lineas = [...rango.getClientRects()].filter((r) => r.width > 0);
+  if (lineas.length === 0) return { medible: false, texto, fontSize };
+  const caja = punto.getBoundingClientRect();
+  return {
+    medible: true,
+    texto,
+    fontSize,
+    lineas: lineas.length,
+    dx: Math.round((lineas[0].left - caja.right) * 10) / 10,
+  };
+}`;
 
 /** La opacidad EFECTIVA de un elemento: el minimo de su cadena hasta body. */
 const OPACIDAD_HEREDADA = `(sel) => {
@@ -270,6 +368,7 @@ async function mirar(base, out) {
 
       const archivo = `${out}/${ruta.id}-${pantalla.id}.png`;
       await pagina.screenshot({ path: archivo });
+      const kicker = await pagina.evaluate(`(${PUNTO_DEL_ROTULO})()`);
       const h1 = await pagina
         .locator("h1")
         .first()
@@ -281,6 +380,7 @@ async function mirar(base, out) {
         archivo,
         h1: h1.replace(/\s+/g, " ").trim(),
         opacidadH1: opacidad,
+        kicker,
         fallidas,
       });
       await pagina.close();
