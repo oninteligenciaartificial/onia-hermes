@@ -31,7 +31,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { homedir } from "node:os";
 import nodePath from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import { createBotConfig, DEFAULT_CONFIG, parseSlotsSpec } from "./config.mjs";
+import { createBotConfig, DEFAULT_CONFIG, parseSlotsSpec, slotsElegibles } from "./config.mjs";
 import { createState, step, markHumanTakeover, buildFollowUp, LLM_PENDING } from "./bot-engine.mjs";
 import { applyKnowledge, asRecepcionista, readKnowledgeFile } from "./knowledge.mjs";
 import { cierreSinReservar } from "./calcom-booking.mjs";
@@ -357,14 +357,18 @@ export function cargarSlotsPublicados(args = {}, deps = {}) {
       aviso: `⚠️ sin horarios (ni --slots, ni ONIA_BOT_SLOTS, ni ${donde}) — si produccion los tiene cargados, esta es OTRA rama del guion`,
     };
   }
-  return { slots: parseSlotsSpec(raw), aviso: null };
+  // Los `elegibles` viajan al lado del par porque el motor acepta MAS de lo que ofrece: el cron
+  // publica cinco horarios y el guion nombra dos. Si el simulador cargara solo el par mediria una
+  // conversacion que produccion no tiene — y este carril ya pago una vez el instrumento que no
+  // mide lo que corre.
+  return { slots: parseSlotsSpec(raw), elegibles: slotsElegibles(raw), aviso: null };
 }
 
 export function buildConfig(args = {}, deps = {}) {
   let base = DEFAULT_CONFIG;
-  const { slots, aviso: avisoSlots } = cargarSlotsPublicados(args, deps);
+  const { slots, elegibles, aviso: avisoSlots } = cargarSlotsPublicados(args, deps);
   if (avisoSlots) (deps.warn || console.error)(avisoSlots);
-  if (slots) base = createBotConfig({ slots });
+  if (slots) base = createBotConfig({ slots, slotsElegibles: elegibles || [] });
   if (args.sinConocimiento) return base;
 
   const { data, aviso } = cargarConocimientoPublicado(deps);

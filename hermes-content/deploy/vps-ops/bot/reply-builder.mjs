@@ -14,7 +14,7 @@
 //
 // Spec: hermes-content/docs/ONIA_CHATBOT_PROPIO_SPEC_20260725.md (§2 guion, §3 reglas)
 
-import { DEFAULT_CONFIG, MODULOS_LISTOS, branchFor, renderTemplate, joinEs, viaDelCanal } from "./config.mjs";
+import { DEFAULT_CONFIG, MODULOS_LISTOS, branchFor, claveDeSlot, renderTemplate, joinEs, viaDelCanal } from "./config.mjs";
 import * as intents from "./intents.mjs";
 
 /**
@@ -40,6 +40,27 @@ export function activeSlots(state, config) {
   // No se toca para tapar el placeholder — eso se resuelve en `hayHorarioReal`, que mira el flag
   // `pending`, que es la señal de verdad. Cambiarlo aca movia una ruta de plantillas PAGAS.
   return state.slotsOffered && state.slotsOffered.length ? state.slotsOffered : config.slots;
+}
+
+/**
+ * Lo que el prospecto puede ELEGIR: los que vio (la foto de `activeSlots`) MAS los que tenemos
+ * libres hoy y el guion no nombra (`config.slotsElegibles`, ver config.mjs).
+ *
+ * Son dos preguntas distintas y estaban contestadas con una sola lista: el guion ofrece de a dos
+ * porque `{{slot_a}}` y `{{slot_b}}` caen en la misma frase, y de ahi salia tambien lo unico que
+ * el motor sabia aceptar. Con cinco horarios publicados por dia, tres quedaban inalcanzables:
+ * quien los nombraba caia en `proposesOwnTime` y se iba a la cola humana. Medido el 2026-09-24:
+ * 43 conversaciones, CERO con `calendar_event_id`.
+ *
+ * Se deduplica por `claveDeSlot` porque la foto y los de hoy pueden ser EL MISMO horario, y dos
+ * copias de un mismo dia hacen que `detectSlotChoice` lo lea como ambiguo (`accepted.length === 1`)
+ * y lo mande a un humano — el bug que esto cierra, otra vez, por la puerta de atras.
+ */
+export function elegibleSlots(state, config) {
+  const vistos = (activeSlots(state, config) || []).filter(Boolean);
+  const claves = new Set(vistos.map(claveDeSlot));
+  const extras = (config.slotsElegibles || []).filter((slot) => slot && !claves.has(claveDeSlot(slot)));
+  return [...vistos, ...extras];
 }
 
 /**

@@ -595,9 +595,10 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
-- [ ] 🔴 **El bot NUNCA agendó una demo — ni una, en toda su historia — y el motivo está medido:
-      de los 5 horarios que el cron publica a diario, sólo 2 se pueden elegir. Los otros 3 están
-      libres en la agenda de Sergio Urcullo, pero quien los nombra se va a la cola humana.**
+- [x] 🔴 **CERRADO el 2026-09-24 (commiteado, NO desplegado): el bot NUNCA agendó una demo — ni
+      una, en toda su historia — porque de los 5 horarios que el cron publica a diario sólo 2 se
+      podían elegir. Los otros 3 estaban libres en la agenda de Sergio Urcullo y quien los
+      nombraba se iba a la cola humana. Ahora los cinco se agendan.**
 
   **La cuenta, contada el 2026-09-24 contra producción (no heredada):**
 
@@ -625,17 +626,47 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
   `bot-engine.mjs:848` lo deriva a un humano. Verificado que el matcher NO es el culpable:
   `detectSlotChoice` acierta "el lunes 28 a las 14:00" cuando el slot está en la lista.
 
-  **Arreglo listo, probado y con su test en rojo primero:** `cola/arreglo-slots-elegibles.patch`.
-  Separa *ofrecer* de *aceptar* — devuelve el par A/B intacto y suma los sostenibles restantes con
-  `key: null` (sin letra a propósito: una letra reasignada confirmaría un día que nadie eligió).
+  **El patch de la vuelta anterior estaba MAL y por eso ponía rojo a `slots-rodantes`.** Sumaba
+  los extras al valor que devuelve `parseSlotsSpec`, que es —y los tests lo dicen con todas las
+  letras— *«el par A/B, no los candidatos crudos»*: el guion ofrece de a dos y `siguenVigentes`
+  (`slots-rodantes.mjs:203`, el que decide si el cron **renueva** los horarios) le pregunta a esa
+  misma función. Los dos rojos eran correctos. Se descartó el patch (borrado) y se separaron las
+  dos preguntas, que es lo que el bug pedía desde el principio:
 
-  **Por qué NO se commiteó el arreglo (2026-09-24, tope de vuelta):** deja DOS tests de
-  `slots-rodantes.test.mjs` en rojo, y son los que afirman el comportamiento viejo
-  (`expected: 2, actual: 5`). Uno es un ajuste de fixture; el otro es `siguenVigentes`, que decide
-  **si el cron renueva los horarios** (`slots-rodantes.mjs:203` le pregunta a `parseSlotsSpec`).
-  Tocado mal, el bot serviría horarios vencidos — peor que el bug que cierra. **La próxima vuelta
-  arranca ahí:** aplicar el patch y hacer que `siguenVigentes` cuente sólo los ofrecidos
-  (`.filter((s) => s.key)`), con su caso propio. El árbol quedó VERDE: 1336/1336.
+  · `parseSlotsSpec` **no cambió**: sigue devolviendo el par que el guion sabe nombrar.
+  · `slotsElegibles(raw)` (config.mjs) devuelve los sostenibles que el par no incluye, con
+    `key: null` — sin letra a propósito: una "A" reasignada le confirmaría a alguien un día que
+    nunca eligió, peor que el bug que cierra.
+  · `elegibleSlots(state, config)` (reply-builder.mjs) une la FOTO de lo que vio con los libres de
+    hoy, deduplicando por `claveDeSlot` — dos copias del mismo día hacen que `detectSlotChoice` lo
+    lea como ambiguo y lo derive a un humano, o sea el mismo bug por la puerta de atrás.
+  · `bot-engine.mjs` matchea contra esa unión, y la foto que guarda marca al elegido por identidad
+    y no por letra (un horario sin letra quedaba guardado como si nadie hubiera elegido nada).
+
+  **Y el camino VIVO no pasaba por ahí: `run-turn.mjs` tenía su propio parseo.** `parseEnvSlots()`
+  cortaba `slice(0, 2)` con `pending: false` fijo, así que arreglar sólo `config.mjs` habría curado
+  el simulador y dejado producción igual — el error que este carril ya pagó una vez. Ahora el
+  turno vivo usa `parseSlotsSpec` + `slotsElegibles` con el reloj del MENSAJE, que de paso le
+  devuelve la regla de anticipación: hasta hoy el bot vivo podía ofrecer un horario ya caducado
+  como si estuviera bueno, cosa que el simulador no mostraba nunca.
+
+  **Prueba, con los horarios del proceso vivo** (los mismos 5 de la reproducción de arriba):
+
+  ```
+  "el lunes 28 a las 14:00"   → [notas] demo_agendada   (antes: handoff:propone_otro_horario)
+  "el martes 29 a las 14:00"  → [notas] demo_agendada
+  "miércoles 30, 14:00"       → [notas] demo_agendada
+  "el domingo 27 a las 10:00" → [notas] handoff:propone_otro_horario  ← ese no lo tenemos: sigue yendo a un humano
+  "A"                         → viernes 25, 21:00                     ← la letra no se reasigna
+  ```
+
+  Tests en rojo primero, por el motivo correcto (`+ 'handoff_humano' - 'demo_agendada'`):
+  `bot-engine.test.mjs` (los 3 casos de arriba), `run-turn.test.mjs` (el camino vivo, con el
+  `ONIA_BOT_SLOTS` real) y `config.test.mjs`. Árbol verde: **1355/1355**.
+
+  ⚠️ **Falta el deploy.** El bot vivo corre desde `/tmp/onia-bot/` dentro de `onia-center`; esto
+  está commiteado y **no llega solo**. Se destraba con la tarea del tablero que ya existe
+  (`t_fca27a62`, línea `DESPLEGAR: bot`) y un `ok` de Sergio Urcullo.
 
 - [x] 🔴 **CERRADO el 2026-09-24 (commiteado, NO desplegado): las 9 campañas estaban en un
       archivo que NINGÚN deploy copiaba. Ya viven en el que se publica solo.**

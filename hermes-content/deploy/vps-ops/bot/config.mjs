@@ -67,17 +67,19 @@ export function slotSostenible(slot, now = Date.now()) {
   return Date.parse(iso) >= limite;
 }
 
-export function parseSlotsSpec(raw, { now = Date.now() } = {}) {
-  const text = String(raw || "").trim();
-  if (!text) return null;
-  // El horario se juzga cuando se va a OFRECER, no cuando se genero. Estos valores
-  // los escribe un cron diario (scripts/loops/renovar-slots-bot.py) y se sirven las
-  // 24 h siguientes, asi que el aviso se gasta solo mientras estan publicados; si
-  // ademas el cron no corre, lo que queda en webhook.env envejece hasta el pasado.
-  // Medido el 2026-09-05 04:03 La Paz: el bot vivo ofrecia "sábado 5, 09:00", a
-  // 4 h 57 min. El generador ya reserva margen para toda su vigencia; esto es el
-  // corte que sobrevive a que ese generador no haya corrido.
-  const candidatos = text.split("|").map((part) => {
+/**
+ * Los candidatos del spec, ya juzgados contra el reloj. Uno solo por cada copia del parseo: cada
+ * reimplementacion de esta regla fue un bug (ver `slotSostenible` y `run-turn.mjs`).
+ *
+ * El horario se juzga cuando se va a OFRECER, no cuando se genero. Estos valores los escribe un
+ * cron diario (scripts/loops/renovar-slots-bot.py) y se sirven las 24 h siguientes, asi que el
+ * aviso se gasta solo mientras estan publicados; si ademas el cron no corre, lo que queda en
+ * webhook.env envejece hasta el pasado. Medido el 2026-09-05 04:03 La Paz: el bot vivo ofrecia
+ * "sábado 5, 09:00", a 4 h 57 min. El generador ya reserva margen para toda su vigencia; esto es
+ * el corte que sobrevive a que ese generador no haya corrido.
+ */
+function candidatosDelSpec(text, now) {
+  return text.split("|").map((part) => {
     const [label, startAt] = part.split("@").map((piece) => (piece || "").trim());
     const iso = startAt || null;
     // La regla vive en `slotSostenible`, que es la misma que aplica el motor al ACEPTAR una
@@ -88,6 +90,17 @@ export function parseSlotsSpec(raw, { now = Date.now() } = {}) {
     // horario que no se puede sostener es, para el guion, uno sin definir.
     return { label, startAt: iso, pending: !sostenible };
   });
+}
+
+/** Identidad de un horario para compararlo entre listas (la foto de la charla y los de hoy). */
+export function claveDeSlot(slot) {
+  return `${slot?.startAt || ""}@@${String(slot?.label || "").trim()}`;
+}
+
+export function parseSlotsSpec(raw, { now = Date.now() } = {}) {
+  const text = String(raw || "").trim();
+  if (!text) return null;
+  const candidatos = candidatosDelSpec(text, now);
 
   // Se eligen los 2 que SE SOSTIENEN, no los 2 primeros: el recorte va DESPUES del
   // juicio. Mientras fue al reves, los candidatos 3 y 4 no se miraban nunca, asi que la
@@ -116,6 +129,30 @@ export function parseSlotsSpec(raw, { now = Date.now() } = {}) {
     startAt: slot.startAt,
     pending: slot.pending,
   }));
+}
+
+/**
+ * Los horarios que el prospecto puede ELEGIR y el guion NO nombra.
+ *
+ * OFRECER es de a dos porque el guion pone `{{slot_a}}` y `{{slot_b}}` en la misma frase.
+ * ACEPTAR no tiene por que serlo: el cron publica cinco candidatos (uno por dia) y los tres que
+ * no salieron sorteados siguen LIBRES en la agenda. Mientras esta pregunta no existio, quien
+ * escribia "el lunes 28 a las 14:00" —nuestro, libre, y dentro de la franja que la coletilla del
+ * MISMO mensaje le prometia— no matcheaba ningun slot, caia en `intents.proposesOwnTime` y se
+ * iba a la cola humana. Medido el 2026-09-24 en `onia_center.bot_conversations`: 43
+ * conversaciones, 18 paradas en `esperando_horario` y CERO con `calendar_event_id`.
+ *
+ * Salen SIN `key` a proposito: `detectSlotChoice` resuelve "A"/"B" por letra contra el par que
+ * el prospecto vio, y una letra reasignada le confirmaria un dia que nunca eligio — peor que el
+ * bug que esto cierra. Se matchean nombrando el dia y la hora, que es como llegan de verdad.
+ */
+export function slotsElegibles(raw, { now = Date.now() } = {}) {
+  const text = String(raw || "").trim();
+  if (!text) return [];
+  const yaOfrecidos = new Set((parseSlotsSpec(text, { now }) || []).map(claveDeSlot));
+  return candidatosDelSpec(text, now)
+    .filter((slot) => !slot.pending && slot.label && !yaOfrecidos.has(claveDeSlot(slot)))
+    .map((slot) => ({ key: null, label: slot.label, startAt: slot.startAt, pending: false }));
 }
 
 // ---------------------------------------------------------------------------
@@ -699,6 +736,9 @@ export const DEFAULT_CONFIG = Object.freeze({
   }),
 
   slots: DEMO_SLOTS,
+  // Los que se pueden ACEPTAR sin estar en el par ofrecido (ver `slotsElegibles`). Vacio por
+  // defecto: sin spec publicado no hay ningun horario extra que prometer.
+  slotsElegibles: Object.freeze([]),
 
   handoff: Object.freeze({
     ownerRoleKey: "sergio",
