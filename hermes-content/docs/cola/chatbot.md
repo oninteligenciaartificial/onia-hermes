@@ -71,9 +71,19 @@ por el motivo correcto (*"50 cargas … salieron 50"*, no por un import faltante
 `node --test knowledge.test.mjs panel-no-mueve-la-disponibilidad-de-onia.test.mjs
 catalogo-inclusion.test.mjs` → **99 pass / 0 fail**.
 
-⚠️ **Está commiteado y NO desplegado.** El bot vivo sigue escribiendo la línea repetida hasta que
-el publicador automático pase (`/root/bin/onia-publicar-solo.sh`, cron `50 */3`). **No hace falta
-pedido de deploy ni `ok` de nadie** — sale solo. Se verifica después de la ventana con:
+⚠️ **Está commiteado y pusheado a la rama del carril (`184ed525`), NO en `main` ni en producción.**
+El bot vivo sigue escribiendo la línea repetida. **Faltan DOS pasos, y el segundo no es mío:**
+
+1. **el merge a `main`**, que lo hace `onia-cola` — sin eso no pasa nada más;
+2. después, el publicador automático (`/root/bin/onia-publicar-solo.sh`, cron `50 */3`) lo lleva
+   solo, **sin pedido de deploy ni `ok` de nadie**.
+
+⚠️ **No confundir el paso 2 con "ya está en camino".** Medido hoy tras pushear:
+`bash /root/bin/onia-publicar-solo.sh --dry-run` contesta **`bot: al dia`** — y es cierto, porque
+ese publicador compara contra `main`, donde el arreglo todavía no está. Leer ese "al día" como
+"ya sale solo" es el error: dice que main y producción coinciden, **no** que tu rama vaya a viajar.
+
+Se verifica después de la ventana siguiente al merge:
 `docker exec onia-center sh -c "tail -80 /tmp/onia-bot-webhook.log | grep -c knowledge:panel"`,
 que tiene que bajar de 80 a ~0 a medida que entren líneas nuevas.
 
