@@ -844,6 +844,59 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       pedido VIGENTE (rehecho a las 20:45 UTC; `t_0836a42f` quedó archivado) ya lleva esa nota
       del orden en su propio cuerpo, así que no hace falta comentarlo ni rehacerlo.
 
+      ---
+
+      🔴 **2026-09-24 17:55-18:25 La Paz — el aviso de «se enfrió» nacía CIEGO justo donde más
+      leads hay: 12 de 22, escondidos por la misma causa que se arregló esta mañana un nivel más
+      abajo.** Encontrado midiendo el embudo en la base, no releyendo la cola. Arreglado en
+      `5c70df18`, **commiteado y NO desplegado**.
+
+      El reparto de hoy sacó `followup_step` de la BASE porque contestaba *«¿le puedo escribir?»*
+      dentro del predicado que también contesta *«¿lo perdí?»*. Quedó adentro **otra** condición
+      con el defecto idéntico: `bot_stage=in.(esperando_calificacion,esperando_horario)`. Es
+      correcta para el envío —a quien pidió una persona no se le manda un follow-up, eso es el
+      loro que tapa a Sergio Urcullo cuando entre— y al revés para el conteo.
+
+      **Medido en producción**, los dos filtros lado a lado sobre `onia_center.bot_conversations`:
+
+      | filtro | filas |
+      |---|---|
+      | el de antes (sólo las 2 etapas del envío) | 10 |
+      | el corregido (+ `handoff_humano`) | **22** |
+
+      Son **12 conversaciones en `handoff_humano` con `human_took_over=false`, de 14 a 37 días
+      calladas**, que no miraba NADIE: `followup` barre las dos etapas de arriba, `insistencia`
+      barre `nuevo`, `postdemo` barre `demo_agendada`. **Y el aviso `handoff_sin_humano` que se
+      escribió hoy tampoco las alcanza**, porque dispara cuando la persona VUELVE a escribir —
+      éstas son justo las que dejaron de escribir. Las dos mitades del trabajo de hoy se cruzaban
+      dejando un hueco en el medio.
+
+      El conteo ahora **deriva** sus etapas del envío (`...ETAPAS_QUE_SE_TRABAJAN`), así que es un
+      superconjunto por construcción: angostarlo ya no se puede hacer sin querer.
+
+      ⚠️ **Un test viejo DEFENDÍA el límite y se corrigió, no se borró** —el mismo patrón que esta
+      mañana—: `deepEqual(extras, [])` exigía que el conteo fuera la BASE *y nada más*. Su motivo
+      es correcto (una condición propia del conteo esconde leads) y quedó protegido por el caso
+      nuevo *«el conteo nunca es más ANGOSTO que el envío»*; su conclusión era ancha de más y
+      **prohibía este arreglo**. Gates: 1368/1368 del bot en verde, el caso nuevo en ROJO antes
+      por el motivo correcto.
+
+      **No hay que rehacer el pedido:** los dos archivos tocados (`persistence.mjs` y
+      `colgada-que-ya-recibio-followup-sigue-perdida.test.mjs`) **ya están en su lista de 35**, así
+      que el cuerpo sigue describiendo exactos los archivos que viaja el `ok`. Lo que cambia es el
+      beneficio, y va como comentario.
+
+      ⚠️ **Lo que el `ok` va a producir, dicho antes y no después:** el barrido manda **un
+      Telegram por lead frío**, una sola vez cada uno. Hoy producción no tiene el aviso, así que
+      la primera corrida después del swap dispara **hasta 22 mensajes seguidos** (eran 10 antes de
+      este arreglo — el bulto no lo crea este cambio, lo crea el estreno de la función). Son 22
+      leads reales que nadie está mirando, así que el aviso es correcto; pero el canal ya le llega
+      saturado a Sergio Urcullo y **22 de una es exactamente cómo se apaga un canal**. Si hay que
+      escalonarlo, es una decisión sobre SU canal, no un bug del barrido: **no se arregló acá a
+      propósito** —un tope mal puesto descarta leads, que es peor que el ruido— y queda como el
+      ítem de la próxima vuelta, con las dos opciones (tope por corrida, o un solo mensaje resumen
+      con las 5 filas que él pide) ya nombradas.
+
 - [x] 🔴 **CERRADO el 2026-09-24 17:15-17:45 La Paz (commiteado, NO desplegado — el bot vivo
       corre `/tmp/onia-bot/`): un handoff que NADIE tomó dejaba a la persona escribiéndole a
       nadie, en silencio para los DOS lados.** Medido en el simulador con el guion de hoy, no
