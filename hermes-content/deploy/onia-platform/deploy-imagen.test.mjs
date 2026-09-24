@@ -366,7 +366,7 @@ test('swap en seco: plan completo (canario, rename a prev, run, redes) y producc
     assert.equal(r.codigo, 0, r.salida);
     assert.match(r.salida, new RegExp(`docker rename onia-platform onia-platform-prev-${VIVO.slice(0, 8)}-\\d{8}-\\d{6}`));
     assert.match(r.salida, /-p 127\.0\.0\.1:3101:3000/);
-    assert.match(r.salida, /network connect easypanel dentalgest-staging-supabase_default/);
+    assert.match(r.salida, /network connect easypanel dentalgest-staging-supabase_default onia_selfhosted_onia_internal/);
     assert.deepEqual(r.llamadas.filter(muta), []);
   } finally {
     limpiar(m);
@@ -446,7 +446,7 @@ test('swap: si no puede conectar easypanel al contenedor nuevo, ROLLBACK', () =>
   }
 });
 
-test('swap feliz: canario, rename a prev, imagen nueva con las 3 redes, verifica lo público y poda a 2 prev', () => {
+test('swap feliz: canario, rename a prev, imagen nueva con las 4 redes, verifica lo público y poda a 2 prev', () => {
   const m = mundo();
   try {
     const r = correr(m, SWAP, [m.sha], {
@@ -460,6 +460,7 @@ test('swap feliz: canario, rename a prev, imagen nueva con las 3 redes, verifica
     assert.ok(i(/^create --name onia-platform-canary-/) >= 0, 'sin canario');
     assert.ok(L.some((l) => /^create .*-p 127\.0\.0\.1:3101:3000/.test(l) && !/easypanel/.test(l)));
     assert.ok(!L.some((l) => /^network connect easypanel onia-platform-canary/.test(l)), 'el canario no va por Traefik');
+    assert.ok(L.some((l) => /^network connect onia_selfhosted_onia_internal onia-platform-canary-/.test(l)), 'el canario no ve LiteLLM');
     assert.ok(i(/^stop onia-platform$/) > i(/^exec onia-platform-canary-.* sh -c/), 'paró producción antes de probar el canario');
     assert.ok(i(/^rename onia-platform onia-platform-prev-/) > i(/^stop onia-platform$/));
     const run = L.find((l) => /^run -d --name onia-platform /.test(l));
@@ -471,6 +472,7 @@ test('swap feliz: canario, rename a prev, imagen nueva con las 3 redes, verifica
     assert.ok(!/-v |runtime-next|node:20/.test(run), 'volvió a la receta vieja');
     assert.ok(L.includes('network connect easypanel onia-platform'));
     assert.ok(L.includes('network connect dentalgest-staging-supabase_default onia-platform'));
+    assert.ok(L.includes('network connect onia_selfhosted_onia_internal onia-platform'), 'sin la red de LiteLLM los agentes caen mudos');
     assert.ok(L.includes('exec onia-platform nc -z kong 8000'));
     assert.ok(L.some((l) => /^curl https:\/\/app\.onia\.com\.bo\/login\?cb=/.test(l)), 'no verificó contra lo público');
     assert.ok(L.includes('rm onia-platform-prev-cccc'), 'no podó el prev viejo');
@@ -479,6 +481,20 @@ test('swap feliz: canario, rename a prev, imagen nueva con las 3 redes, verifica
     assert.ok(!L.some((l) => /^image rm .*release-(7bcd0a83|11111111)/.test(l) || l === `image rm ${tag}`));
     assert.ok(L.some((l) => l === 'rm -f onia-platform-canary-viejo'), 'no barrió el canario viejo');
     assert.ok(!L.some((l) => /^image rm -f|^rm -f onia-platform-prev/.test(l)), 'forzó un borrado que un rollback necesita');
+  } finally {
+    limpiar(m);
+  }
+});
+
+// La red de LiteLLM es igual de obligatoria: sin ella `onia_selfhosted-litellm-1` no resuelve y
+// el agente no falla fuerte, contesta sin IA. Mejor el rollback que un deploy "sano" a medias.
+test('swap: si no puede conectar la red de LiteLLM al contenedor nuevo, ROLLBACK', () => {
+  const m = mundo();
+  try {
+    const r = correr(m, SWAP, [m.sha], { STUB_RED_FALLA: 'onia_selfhosted_onia_internal' });
+    assert.equal(r.codigo, 1);
+    assert.match(r.salida, /ROLLBACK: no pude conectar la red onia_selfhosted_onia_internal/);
+    assert.ok(r.llamadas.some((l) => /^rename onia-platform-prev-\S+ onia-platform$/.test(l)));
   } finally {
     limpiar(m);
   }
@@ -568,14 +584,16 @@ test('recreate se niega si el vivo sirve otro build que la imagen que dice corre
   }
 });
 
-test('recreate feliz: stop, rename a prev, run con la misma imagen y las 3 redes', () => {
+test('recreate feliz: stop, rename a prev, run con la misma imagen y las 4 redes', () => {
   const m = mundo();
   try {
     const r = correr(m, RECREAR, ['--si-estoy-seguro'], { STUB_BUILD_NUEVO: VIVO });
     assert.equal(r.codigo, 0, r.salida);
     const run = r.llamadas.find((l) => /^run -d --name onia-platform /.test(l));
     assert.ok(run?.endsWith('onia-platform:release-7bcd0a83'), run);
-    assert.ok(r.llamadas.includes('network connect easypanel onia-platform'));
+    for (const red of ['easypanel', 'dentalgest-staging-supabase_default', 'onia_selfhosted_onia_internal']) {
+      assert.ok(r.llamadas.includes(`network connect ${red} onia-platform`), `recrear perdió la red ${red}`);
+    }
   } finally {
     limpiar(m);
   }
