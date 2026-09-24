@@ -600,6 +600,16 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       callado» no es ninguno de los dos.** Medido el 2026-09-24 en el log del bot vivo, no
       heredado.
 
+      ⛔ **NO HAY NADA QUE TRABAJAR ACÁ — 2026-09-24 14:55 La Paz. El código está HECHO, verde y
+      en `origin/main`; lo único que falta es la FIRMA del deploy, y es de Sergio Urcullo:
+      tarea `t_0836a42f` (`DESPLEGAR: bot`), `blocked`, con los 32 archivos ya derivados del
+      `--dry-run` corrido después del último merge.** Queda como `- [ ]` porque el cliente
+      todavía no lo tiene, pero **una vuelta que entre acá a buscar trabajo pierde la vuelta**:
+      se salta y se toma la brecha siguiente (es la fila **S12** de «Bloqueado en Sergio»).
+      Verificado hoy que el pedido cubre estos commits —`813c5fa3` y `055713e4` son ancestros de
+      `origin/main` y el punto 3 de su cuerpo los nombra—, así que **no hay que rehacerlo ni
+      crear otro**: dos pedidos del mismo destino es el bug que ya archivó a `t_2508295d`.
+
       **El caso, con nombre y fecha.** `conv 58`, `inbox=5` (WhatsApp, leads reales), número
       `+59175755019`. El 2026-09-17 22:50 UTC escribió *"Hola, vengo de la web de Onia. Quiero
       saber si me sirve para mi negocio."* El bot contestó bien (`rama=respondio`,
@@ -893,22 +903,46 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       terminó en `handoff_humano`. **Los 18 de `esperando_horario` son la prueba de que el bug del
       `slice(0,2)` era real y caro: 18 personas que eligieron y no fueron escuchadas.**
 
-      🔴 **Pendiente que NO es de este carril:** el arreglo espera el `ok` de Sergio Urcullo en
-      `t_2508295d` (`DESPLEGAR: bot`). El bot vivo todavía corre el código viejo — verificado hoy:
+      ✅ **EJERCIDO POR PRIMERA VEZ el 2026-09-24 14:52 La Paz — el arreglo estaba commiteado y
+      NADIE había recorrido el camino.** Con los 5 slots del proceso vivo (leídos de
+      `/proc/<pid>/environ`, no del `.env`) y eligiendo el **cuarto** horario —el que antes caía
+      en la cola humana—: el bot contesta `[M2] Listo, agendado: martes 29 de septiembre, 14:00`
+      y la fila queda con `scheduledAt: 2026-09-29T18:00:00Z` + nota `demo_agendada`. Y se
+      comprobó que **no promete de más**: el cierre sale con la salvedad honesta *«Estoy
+      confirmando ese horario con Sergio»*, porque `simulate.mjs` sí aplica `cierreSinReservar`
+      (línea 425) — o sea que el instrumento NO tiene el «Listo, agendado» pelado que fue el 🔴
+      original. `calendarEventId: null` ahí es correcto y esperado: la reserva vive en
+      `run-turn.mjs:508` y en seco no se escribe en el calendario a propósito.
+
+      🔴 **Pendiente que NO es de este carril:** el arreglo espera el `ok` de Sergio Urcullo.
+      ⚠️ **El pedido es `t_0836a42f`, NO `t_2508295d`** — esa quedó **archivada** el 2026-09-24
+      porque su cuerpo describía 24 archivos y el merge del carril sumó 8 (van 32). Un ID de
+      tarea copiado caduca: el pedido vivo se **deriva** (`onia-tablero.sh list --status blocked`
+      filtrando por la línea `DESPLEGAR:`), nunca se cita de memoria.
+      El bot vivo todavía corre el código viejo — verificado hoy:
       `docker exec onia-center grep -c 'slice(0, *2)' /tmp/onia-bot/run-turn.mjs` → **1**. Le
       comenté a esa tarea que su punto 2 («el bot va a poder agendar demos») prometía de más: va a
       ACEPTAR los cinco horarios, que es la mejora real, pero `calendar_event_id` va a seguir en
       cero y eso no será un deploy fallido.
 
-      ⚠️ **No toqué el motor en esta vuelta a propósito**, aunque la regla del carril diga
-      «arreglalo en la misma vuelta»: `t_2508295d` ya está esperando firma con su recuento de 24
+      ⚠️ **HISTORIA — vale por el criterio, no por la tarea que nombra** (`t_2508295d` se archivó
+      después; el pedido vigente es `t_0836a42f`). No toqué el motor en esa vuelta a propósito,
+      aunque la regla del carril diga
+      «arreglalo en la misma vuelta»: `t_2508295d` ya estaba esperando firma con su recuento de 24
       archivos y su sha derivados del `--dry-run`, y un commit nuevo sobre `calcom-booking.mjs` o
       `run-turn.mjs` dejaría ese cuerpo describiendo algo distinto de lo que el `ok` publica.
       Cerrar antes de abrir.
 
-      🔴 **Lo que quedó SIN barrer y sí es del carril (visto el 2026-09-24 11:40 La Paz): el
+      ✅ **RESUELTO el 2026-09-24 14:58 La Paz al rehacerse el pedido.** El título vigente de
+      `t_0836a42f` es *«Publicar el bot: las campanas de la web, que pueda agendar demos y que te
+      llegue el lead que se enfria»* — **ya no lleva el contador «43 conversaciones, 0
+      agendadas»**, que era lo que prometía de más, y el punto 2 de su cuerpo dice la mejora real
+      («solo ACEPTABA los dos que nombra. Ahora acepta los cinco»). Leído de la tarea con
+      `onia-tablero.sh show`, no de memoria. Lo de abajo es el análisis que llevó a rehacerlo.
+
+      ~~🔴 **Lo que quedó SIN barrer y sí es del carril (visto el 2026-09-24 11:40 La Paz): el
       TÍTULO de `t_2508295d` sigue diciendo «que pueda agendar demos (43 conversaciones, 0
-      agendadas)».** El comentario de ayer corrigió el *cuerpo*, pero el título promete
+      agendadas)».**~~ El comentario de ayer corrigió el *cuerpo*, pero el título promete
       exactamente el contador que no puede subir, y **el título es lo que viaja**: el parte
       diario es el único mensaje que le llega por Telegram sin que pregunte, y lista las
       decisiones con `ok <id>` por línea. O sea que Sergio Urcullo iba a firmar mirando una
@@ -6898,6 +6932,7 @@ decisión de Sergio, no código.
 | S2 | **Credenciales del BCP + certificado mTLS (`.pfx`)** | Trámite bancario | El botón "Cobrar con QR" en la conversación. Sin banco no hay código que lo destrabe |
 | S3 | **Traslado del 75414930 a coexistencia** — OK explícito ("vamos con A") + ventana acordada + el PIN de dos pasos a mano | El número queda MUDO 30-60 min y el rollback depende de un PIN que sólo él tiene. Runbook completo: `hermes-content/docs/ONIA_RUNBOOK_COEXISTENCIA_75414930.md` | Que Sergio siga usando su app de WhatsApp en el mismo número que atiende el bot |
 | S4 | **Verificar el push "te escribieron" en su celular** (suscribirse y recibir) | Hace falta un dispositivo real | El circuito está testeado 95/95 y deployado; sólo falta la prueba física |
+| S12 | **Publicar el bot — `ok t_0836a42f`.** Pedido vivo, `blocked`, con la línea `DESPLEGAR: bot` y los 32 archivos derivados del `--dry-run` corrido DESPUÉS del último merge (`main 5d28ca88`). No hace falta ningún `scp`: el circuito ya está cableado y el dry-run lo recorrió entero con código 0 | El publicador automático se frena solo porque `knowledge.onia.json` es fuente de precio (`FIRMA_HUMANA`), y ese freno pide su firma a propósito | **Tres cosas que hoy el cliente no tiene, las tres ya verdes en `main`:** las 9 campañas de los enlaces de WhatsApp de onia.com.bo · que el bot ACEPTE los 5 horarios y no sólo los 2 que nombra (hoy: 43 conversaciones, **cero** demos agendadas) · el aviso del lead que se enfría, una sola vez. **Verificador post-swap:** `docker exec onia-center sh -c "grep -ac '\[aviso\].*conv=58' /tmp/onia-bot-webhook.log"` → ≥1 |
 | S5 | **¿Silenciar el Telegram de los agentes n8n que sí trabajan?** (Vendedor, Contenido, Finanzas, Prospector, Radar IA, Web Factory Radar) + los recordatorios de agenda cada 30 min | Es su canal y su umbral de ruido. No se apagan los workflows: hacen trabajo — hay que editar el nodo de aviso de cada uno | Que Telegram vuelva a ser sólo errores, que es la regla que ya se aplicó al resto |
 | S7 | **Contestar (o descartar) a los cuatro desconocidos que escribieron y nadie respondió** — conv 35 (+591 73232758, clínica dental de 4 doctores, 25-ago), 37 (+591 73021804, 28-ago), 36 (`Saguilera@ds-santacruz.bo`, 27-ago) y 34 (widget, sin dato de contacto) | Vende Sergio, y son personas reales esperando desde hace 3-6 días. Un bot no puede retomar una conversación fría de hace una semana sin que suene a spam | El primer lead atendido del carril. Dos tienen número de WhatsApp y uno correo: tres de los cuatro son alcanzables hoy |
 | ~~S8~~ | ✅ **CERRADO el 2026-08-31: `Onia (interna)` → inbox 5.** Verificado en la base y MIRADO en `/inbox`. **Podado el 01-sep:** esta fila arrastraba el análisis completo de seis vueltas y seguía leyéndose como bloqueo vivo — S8 se nombra **17 veces** en este archivo, casi todas dentro de párrafos viejos que ya no aplican. Lo que quedaba abierto NO era S8 sino el **inbox 4**, y ahora tiene su propio ítem (3 de "Ahora") y su propio bloqueo (**S14**). | — | — |
