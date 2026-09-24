@@ -1846,6 +1846,48 @@ trabaría el merge de todos los carriles.
       primario/secundario y color semántico; se le MUESTRAN y él elige. Nada se aplica al
       producto sin su OK.
 
+      ✅ **LAS DOS MAQUETAS ESTÁN HECHAS — 2026-09-24 18:52 La Paz, commit `9d6d7bc6` en
+      `onia-platform`, rama `claude/chatbots-platform-review-0d1d09`. Falta SU elección
+      (A o B) y el deploy.** Viven en **`/admin/diseno`**, dentro del grupo que ya está
+      cerrado a SUPERADMIN, así que se renderizan sobre el shell REAL del panel y ningún
+      cliente puede llegar: no exhibe obra. No cambia una sola pantalla viva — cada recuadro
+      pisa sus tokens sólo adentro suyo.
+
+      **La causa de su queja, medida y no deducida** — es el dato que faltaba y el que hace
+      que las dos direcciones ataquen lo correcto:
+
+      ```bash
+      grep -rhoE 'className="[^"]*bg-primary[^"]*"' app components | sort -u | wc -l   # → 187
+      ```
+
+      187 variantes distintas del mismo verde primario. Los botones no son feos: son **todos
+      primarios**, y cuando todo resalta nada resalta. Eso es literalmente *"no hay botones
+      que resalten, que se diferencien"*.
+
+      | | idea | qué cuesta |
+      |---|---|---|
+      | **A** | El verde no se toca; cambia el PESO: **una** sola acción llena por pantalla, el resto en verde suave / contorno / texto | Cero riesgo de marca. La más barata; arregla "no se diferencian" pero no agrega brillo |
+      | **B** | Verde para navegar, **ámbar** para actuar: el botón que hay que apretar usa un color que no aparece en ningún otro lado del panel | Un color nuevo en la identidad; hay que revisar que no choque con el amarillo de avisos |
+
+      **Gate** (`app/(dashboard)/admin/diseno/dos-direcciones-comparables.test.ts`, 8 casos,
+      validado por mutación): exactamente dos direcciones, **una sola primaria en cada una**
+      —repetir el defecto adentro de la maqueta no probaría nada—, los cuatro roles cubiertos
+      en ambas para que se comparen parejas, y **cada token que la maqueta pisa tiene que
+      existir en `globals.css`**: si la maqueta pintara con un hex inventado, él elegiría
+      sobre algo que el producto no puede reproducir.
+      Gates: `tsc` 0 · `eslint` 0 · `vitest` 49/49 (incluye `route-access` e
+      `iconos-en-la-fuente` — el icono de la barra es `tune`, que YA está en la fuente
+      subseteada; estrenar uno pinta su NOMBRE en letras gigantes).
+
+      ⚠️ **NO está en producción y no se pushea desde nodo-casa** (el remoto de
+      `onia-platform` está en `DESHABILITADO-NODO-DE-DESARROLLO` a propósito y la llave de
+      deploy sólo existe en el VPS). Entrega por el camino versionado:
+      `scripts/integrar-onia-platform.sh` vía `/root/bin/onia-vps.sh`.
+
+      **Pendiente de este ítem, ahora en este orden:** (1) entregar el commit al VPS;
+      (2) que Sergio Urcullo abra `/admin/diseno` y conteste **A** o **B**; (3) recién ahí se
+      aplica al panel.
+
 - [x] ✅ **CERRADO el 2026-09-11 (`c14db84`, rama `claude/chatbots-platform-review-0d1d09`
       de onia-platform — falta mergear a `master` y desplegar; pedido `t_cba4fa74`): el
       cliente que se arrepintió de la baja del asistente y VOLVIÓ A PAGAR no recibía un solo
