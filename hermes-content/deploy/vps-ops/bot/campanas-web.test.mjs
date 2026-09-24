@@ -14,6 +14,22 @@
 // `waServiciosLink(UNA_CONSTANTE)` o un texto armado por codigo (`buildWaText`) es invisible aca —
 // y esta bien, porque un texto armado por codigo tampoco puede ser una campaña de match exacto.
 //
+// 🔴 LO QUE ESTE GATE **NO** PRUEBA — medido el 2026-09-24, leelo antes de creerle al verde.
+// Este archivo valida el DOCUMENTO `campanas-onia.knowledge.json` del repo. Produccion NO lo
+// carga: el bot vivo resuelve su conocimiento de la FILA DEL PANEL (se lee `[knowledge:panel]` en
+// /tmp/onia-bot-webhook.log), y esa fila —`public.chatbot_knowledge`, version 5, status
+// `publicado`— no tiene ni la clave `campanas`:
+//
+//   docker exec supabase-db psql -U postgres -tAc \
+//     "select version, status, (data ? 'campanas') from public.chatbot_knowledge;"   → 5|publicado|f
+//
+// O sea que hoy las campañas estan al 100% en verde ACA y al 0% vivas para un lead: las cuatro
+// frases que onia.com.bo enlaza por wa.me incluidas. Este gate cuida que el documento sea
+// correcto y siga matcheando; que ese documento LLEGUE al bot es publicarlo desde
+// /settings/chatbot, y eso no lo mide ningun test de la cadena (necesita el VPS, y un gate que
+// necesita el repo hermano se pone rojo por ambiente y traba a todos los carriles).
+// Estado y proximo paso: hermes-content/docs/cola/chatbot.md, item "las campañas no estan vivas".
+//
 // Correr:  node --test "hermes-content/deploy/vps-ops/bot/*.test.mjs"
 
 import test from "node:test";
@@ -25,8 +41,13 @@ import { fileURLToPath } from "node:url";
 import { campanaExacta } from "./recepcionista.mjs";
 import { normalize } from "./guardrails.mjs";
 import { validateKnowledge } from "./knowledge.mjs";
+import { createBotConfig } from "./config.mjs";
+import { createState, step } from "./bot-engine.mjs";
 
 const WEB_SRC = fileURLToPath(new URL("../../../../web-factory/apps/onia-platform/src/", import.meta.url));
+const CONFIGURADOR_SRC = fileURLToPath(
+  new URL("../../../../web-factory/apps/onia-platform/src/components/web-configurator/WebConfigurator.tsx", import.meta.url),
+);
 const DOC_PATH = fileURLToPath(new URL("../../../docs/chatbot/campanas-onia.knowledge.json", import.meta.url));
 
 /**
@@ -89,6 +110,49 @@ function frasesDeLaWeb(dir = WEB_SRC) {
   return encontradas;
 }
 
+/**
+ * Las APERTURAS del configurador de webs — el otro camino por el que la web manda un WhatsApp.
+ *
+ * POR QUE NO LAS VE `frasesDeLaWeb`: el configurador no escribe el texto adentro de `waLink("…")`;
+ * arma un `const mensaje = [...].join("\n")` con los datos que cargó la persona. Eso es
+ * exactamente el "texto armado por codigo" que la cabecera de este archivo declara punto ciego
+ * — y el motivo escrito ahi ("tampoco puede ser una campaña de match exacto") dejo de ser cierto
+ * el 31-ago, cuando las campañas pudieron declarar `prefijo: true`. La PRIMERA linea del mensaje
+ * SI es un literal fijo, asi que es un prefijo perfectamente matcheable.
+ *
+ * Lo que costaba el punto ciego, medido el 2026-09-24 con el mensaje real del configurador: el
+ * lead que armo su web entera y ya vio su precio entraba como `pregunta_precio` y el bot le
+ * contestaba los planes del SISTEMA y el add-on del chatbot — otro producto.
+ *
+ * Se planta si no encuentra nada: un Set vacio aprobaria la falta de campaña en verde.
+ */
+function aperturasDelConfigurador(archivo = CONFIGURADOR_SRC) {
+  let src;
+  try {
+    src = readFileSync(archivo, "utf8");
+  } catch (err) {
+    if (err?.code === "ENOENT") throw new Error(`${archivo} no existe — ${ARBOL_INCOMPLETO}`);
+    throw err;
+  }
+  const bloque = /const mensaje = \[([\s\S]*?)\]\.join\(/.exec(src);
+  if (!bloque) {
+    throw new Error(
+      `${archivo} ya no arma su WhatsApp con \`const mensaje = [...].join(\` — ${ARBOL_INCOMPLETO}`,
+    );
+  }
+  // Las aperturas son los literales del PRIMER elemento (un ternario con/sin precio estimado).
+  // Los demas elementos son plantillas con backtick, que este regex no toca a proposito.
+  const aperturas = [...bloque[1].matchAll(/"([^"]*\?*[^"]*)"/g)]
+    .map((m) => m[1])
+    .filter((texto) => /^Hola,/.test(texto));
+  if (aperturas.length === 0) {
+    throw new Error(
+      `${archivo} arma el mensaje pero ninguna linea abre con "Hola," — ${ARBOL_INCOMPLETO}`,
+    );
+  }
+  return new Set(aperturas);
+}
+
 const doc = JSON.parse(readFileSync(DOC_PATH, "utf8"));
 const campanas = doc.campanas ?? [];
 
@@ -114,8 +178,18 @@ test("cada frase que la web manda tiene su campaña — o un motivo escrito de p
 });
 
 test("ninguna campaña quedo huerfana: si la web dejo de mandar la frase, la campaña sobra", () => {
-  const deLaWeb = frasesDeLaWeb();
-  const huerfanas = campanas.map((c) => c.frase).filter((f) => !deLaWeb.has(f));
+  // Todo lo que la web manda HOY: los links wa.me tal cual, y el mensaje COMPLETO del
+  // configurador (apertura + cuerpo), que es como llega de verdad.
+  //
+  // Se le pregunta al MOTOR, no a la igualdad de cadenas: una campaña de `prefijo` jamas es igual
+  // al mensaje que contesta, asi que con `deLaWeb.has(frase)` toda campaña de prefijo nueva nace
+  // "huerfana" aunque este atendiendo al lead mas caliente de la web. Y de paso el gate se vuelve
+  // mas fuerte: ahora caza tambien la campaña cuya frase derivo hasta dejar de matchear nada.
+  const vivas = [...frasesDeLaWeb(), ...[...aperturasDelConfigurador()].map(mensajeDelConfigurador)];
+  const alcanzadas = new Set(
+    vivas.map((viva) => campanaExacta(doc, normalize(viva))?.frase).filter(Boolean),
+  );
+  const huerfanas = campanas.map((c) => c.frase).filter((f) => !alcanzadas.has(f));
   assert.deepEqual(
     huerfanas,
     [],
@@ -190,6 +264,102 @@ test("SIN `prefijo` el match sigue siendo del mensaje ENTERO — una campaña no
 test("PREFIJO no matchea a medias: un mensaje que solo comparte el arranque cae al flujo normal", () => {
   assert.equal(campanaExacta(doc, normalize("Hola, mi rubro")), null);
   assert.equal(campanaExacta(doc, normalize("Hola, mi rubro no está en la lista")), null);
+});
+
+// ---------------------------------------------------------------------------
+// El lead del CONFIGURADOR DE WEBS — el que más declaró y el que peor se atendía
+// ---------------------------------------------------------------------------
+// `onia.com.bo/servicios/webs` deja armar la web entera (nivel, precio, paleta, estructura) y
+// manda un WhatsApp con TODO adentro. Medido el 2026-09-24 contra el motor: ese mensaje entraba
+// como `pregunta_precio` y el bot contestaba los planes del sistema (Bs 320/550/890/1.290) y el
+// add-on del chatbot. O sea que a quien acaba de pedir una WEB con su precio ya a la vista, el
+// bot le hablaba de OTRO producto — el peor cruce posible, y en el lead más caliente que produce
+// la web.
+//
+// El arreglo es una campaña de PREFIJO sobre la primera línea, que es literal y fija. No lleva
+// cifras a propósito: el precio de la web (webs.ts) NO está en `MONTOS_PERMITIDOS` —que sale de
+// subscription-plans.ts y pricing.ts— así que una respuesta con "Bs 4.500" adentro hace que
+// `validateKnowledge` rechace el documento ENTERO y el bot se quede sin ninguna campaña. Y no
+// hace falta: el precio ya viaja en el mensaje que la persona acaba de mandar.
+
+/** Un mensaje del configurador de verdad: la apertura + el cuerpo que arma el componente. */
+const cuerpoDelConfigurador = [
+  "DATOS DEL NEGOCIO",
+  "Contacto: Marcela Rojas.",
+  "Negocio: Estudio Rojas.",
+  "Rubro y ciudad: Arquitectura, Santa Cruz.",
+  "WhatsApp: 70011223.",
+  "Oferta principal: Diseño de casas.",
+  "Fotografías: Las tengo yo.",
+  "",
+  "ALCANCE Y PRECIO",
+  "Nivel: Completa, Web Profesional.",
+  "Precio base: Bs 4.500.",
+  "Estimado de construcción: Bs 4.500.",
+  "Cuidado web: sin plan mensual por ahora.",
+  "",
+  "DISEÑO ELEGIDO",
+  "Dirección visual: Editorial serena.",
+  "Objetivo principal: Que me escriban por WhatsApp.",
+].join("\n");
+
+const mensajeDelConfigurador = (apertura) => `${apertura}\n${cuerpoDelConfigurador}`;
+
+test("el configurador manda sus aperturas y se leen del CÓDIGO de la web, no de una copia", () => {
+  const aperturas = [...aperturasDelConfigurador()];
+  assert.ok(aperturas.length >= 1, "no se extrajo ninguna apertura del configurador");
+  for (const apertura of aperturas) {
+    assert.match(apertura, /^Hola,/, `apertura rara: ${apertura}`);
+  }
+});
+
+test("CADA apertura del configurador tiene campaña — con el cuerpo real del pedido atrás", () => {
+  for (const apertura of aperturasDelConfigurador()) {
+    const campana = campanaExacta(doc, normalize(mensajeDelConfigurador(apertura)));
+    assert.ok(
+      campana,
+      `el configurador manda "${apertura}" y ninguna campaña lo contesta: el lead cae al flujo ` +
+        "genérico y el bot le ofrece el sistema en vez de su web.",
+    );
+    assert.equal(campana.prefijo, true, "el mensaje sigue con los datos del negocio: sin `prefijo` no puede matchear nunca");
+  }
+});
+
+test("la respuesta al lead de la web NO le vende el sistema ni el chatbot", () => {
+  const apertura = [...aperturasDelConfigurador()][0];
+  const campana = campanaExacta(doc, normalize(mensajeDelConfigurador(apertura)));
+  assert.ok(campana, "sin campaña no hay nada que medir");
+  const norm = normalize(campana.respuesta);
+  assert.ok(!/\bchatbot\b/.test(norm), `la respuesta al lead de una WEB le habla del chatbot: ${campana.respuesta}`);
+  assert.ok(
+    !/\d+(?:[.,]\d+)?\s*(bs\b|bolivianos?\b)/.test(norm),
+    `la respuesta trae una cifra: el precio de la web no está en MONTOS_PERMITIDOS y tumba el documento entero: ${campana.respuesta}`,
+  );
+});
+
+test("EN EL MOTOR: el lead del configurador no sale por `pregunta_precio`", () => {
+  const config = createBotConfig({ campanas: doc.campanas }, undefined);
+  for (const apertura of aperturasDelConfigurador()) {
+    const state = createState({ channel: "sim", contactRef: "configurador" });
+    const result = step(
+      state,
+      { text: mensajeDelConfigurador(apertura), receivedAt: "2026-07-27T14:05:00Z" },
+      { config },
+    );
+    const keys = result.replies.map((reply) => reply.templateKey);
+    assert.ok(
+      keys.includes("R_CAMPANA"),
+      `el motor contestó ${JSON.stringify(keys)} en vez de la campaña de la web`,
+    );
+    assert.ok(
+      !keys.includes("M4_BODY"),
+      "el motor le contestó con los precios del SISTEMA a quien pidió una WEB",
+    );
+    assert.ok(
+      !result.notes?.includes("pregunta_precio"),
+      `clasificado como pregunta_precio: ${JSON.stringify(result.notes)}`,
+    );
+  }
 });
 
 // ---------------------------------------------------------------------------

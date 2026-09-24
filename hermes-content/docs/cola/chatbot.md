@@ -595,6 +595,90 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [ ] 🔴 **Las campañas NO están vivas: el bot vivo no carga el documento que todos los gates
+      cuidan.** Medido el 2026-09-24, no deducido.
+
+      **Qué se midió.** El bot de producción resuelve su conocimiento de la **fila del panel**,
+      no del archivo del repo — se lee en su propio log:
+      `docker exec onia-center grep '\[knowledge:panel\]' /tmp/onia-bot-webhook.log`. Y esa fila
+      no tiene ni la clave:
+
+      ```
+      docker exec supabase-db psql -U postgres -tAc \
+        "select version, status, (data ? 'campanas') from public.chatbot_knowledge;"
+      → 5|publicado|f
+      ```
+
+      El archivo que el simulador carga (`knowledge.onia.json`, 1826 bytes, 19-sep, el mismo que
+      corre en `/tmp/onia-bot/`) también trae **cero** campañas.
+
+      **Qué cuesta.** Las **9** campañas del documento están muertas para un lead real — entre
+      ellas las **cuatro frases que `onia.com.bo` enlaza por `wa.me`**, que son el CTA de la web.
+      Quien clickea recibe el saludo genérico, que es exactamente el agujero que las campañas
+      vinieron a tapar. `campanas-web.test.mjs` da **17/17 verde** sobre esto: el gate cuida que
+      el documento sea correcto, no que LLEGUE.
+
+      **Por qué ningún test lo caza, y por qué no se arregla con un test.** Medirlo necesita el
+      VPS y la base; un gate así se pone rojo por ambiente y traba el merge de **todos** los
+      carriles (regla ya escrita: self-check puro en la cadena, medición viva como alias suelto).
+      Queda dicho en la cabecera de `campanas-web.test.mjs` para que nadie lea ese verde como
+      "las campañas andan".
+
+      **Qué lo destraba:** publicar el documento desde `/settings/chatbot` (es el camino que ya
+      se usó el 18-sep para la v4, `source:panel`). No lo hace este carril: escribe en la
+      superficie viva del bot y pisa la fila `publicado` v5 que hoy sirve a los leads.
+
+- [x] 🟡 **CERRADO el 2026-09-24 (commiteado, NO publicado — ver el ítem de arriba): al lead que
+      armó su web entera el bot le contestaba los precios del SISTEMA.**
+
+      **Reproducido antes de tocar nada**, con el mensaje real que arma
+      `web-factory/apps/onia-platform/src/components/web-configurator/WebConfigurator.tsx:195`:
+      la persona dice *"vengo del configurador de webs de ONIA"*, manda su negocio, su nivel y su
+      precio (Bs 4.500) — y el motor lo clasificaba `pregunta_precio` y contestaba `M4_BODY`:
+      los planes del sistema (320/550/890/1.290) y el add-on del chatbot. **Otro producto**, en
+      el lead más caliente que produce la web.
+
+      **Por qué nadie lo veía.** `campanas-web.test.mjs` extrae las frases de la web de los
+      literales dentro de `waLink("…")`. El configurador no usa uno: arma
+      `const mensaje = [...].join("\n")` con los datos cargados. Eso estaba declarado **punto
+      ciego a propósito**, con este motivo escrito: *"un texto armado por codigo tampoco puede
+      ser una campaña de match exacto"*. Era cierto hasta el **31-ago**, cuando las campañas
+      pudieron declarar `prefijo: true` — y la PRIMERA línea del mensaje sí es un literal fijo.
+      **Un motivo que dejó de ser cierto siguió tapando el agujero tres semanas.**
+
+      **Arreglo:** campaña de prefijo `"Hola, vengo del configurador de webs de ONIA"` en
+      `hermes-content/docs/chatbot/campanas-onia.knowledge.json` (v `2026-09-24.1`), que el
+      router mira **antes** de `isPriceQuestion` (`bot-engine.mjs:683`).
+
+      **Sin cifras, a propósito, y esto corrige el plan que traía el ítem.** El ítem original
+      (cola `plataforma-v1.md`) mandaba escribir en el conocimiento *"Landing Bs 2.000 y Web
+      Profesional Bs 4.500"*. **Eso no se puede ejecutar:** el precio de la web sale de
+      `webs.ts`, que no es fuente de precio del bot — `MONTOS_PERMITIDOS`
+      (`precios-publicos.mjs`) sale de `subscription-plans.ts` y `pricing.ts`. Una cifra ahí hace
+      que `validateKnowledge` rechace el **documento entero** y el bot se quede sin **ninguna**
+      campaña. Y no hace falta: el precio ya viaja en el mensaje que la persona acaba de mandar.
+      La campaña acusa recibo, dice qué pone el cliente (textos, fotos, dominio a su nombre,
+      cuidado mensual opcional), **no promete plazos** y deriva a Sergio Urcullo.
+
+      **Gates nuevos** (los 3 primeros fallaron en ROJO antes, por el motivo correcto — el del
+      motor decía `el motor contestó ["M0_SIN_HORARIOS","M4_BODY"]`):
+      · las aperturas se **derivan de `WebConfigurator.tsx`**, no se copian: si la web cambia el
+        copy, el gate se pone rojo (y si no encuentra ninguna, se planta en vez de aprobar);
+      · cada apertura, con el cuerpo real del pedido atrás, tiene campaña;
+      · la respuesta no nombra el chatbot ni trae cifras;
+      · **en el motor**, el lead sale por `R_CAMPANA` y no por `pregunta_precio`.
+      Y el test de huérfanas dejó de comparar cadenas y **le pregunta al motor**: con igualdad,
+      toda campaña de prefijo nueva nacía "huérfana" aunque estuviera atendiendo.
+
+      **Verde:** `campanas-web.test.mjs` 17/17 · toda la batería del bot **1330/1330**.
+
+      ⚠️ **Lo que sigue sin ser verdad para el cliente:** nada de esto llega hasta que las
+      campañas se publiquen (ítem de arriba). Y aun publicado, el lead recibe **primero** `M0`
+      —la bienvenida con el pitch del sistema y los horarios de demo— y **después** la respuesta
+      de su web: es el diseño de `composeWithFunnel` (M0 es lo que declara al bot como bot y lo
+      que dispara `lead_upsert`), no un olvido. Si se quiere un M0 propio para el lead de web,
+      es otro ítem y toca el motor.
+
 - [x] 🔴 **CERRADO el 2026-09-19 15:15-16:05 La Paz (commiteado; son docs y un gate, no toca el
       motor ni pide deploy) — el material de venta prometía "IA incluida sin límite de chats" y
       el add-on corta a 500 conversaciones al mes.**

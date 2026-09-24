@@ -63,7 +63,33 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 
 ## Ahora
 
-- [ ] 🟡 **El bot le contesta al lead de UNA WEB con el pitch del CHATBOT** — llega del carril
+- [x] 🟡 **HECHO el 2026-09-24 en el carril `chatbot` (commiteado, NO publicado) — el detalle,
+      los gates y lo que falta viven en `hermes-content/docs/cola/chatbot.md`, "Ahora".**
+
+      Resumen: reproducido con el mensaje real del configurador (el bot contestaba `M4_BODY`,
+      los planes del sistema, a quien pidió una web), arreglado con una campaña de prefijo que
+      el router mira antes de `isPriceQuestion`, y cubierto con 4 gates nuevos que **derivan la
+      frase de `WebConfigurator.tsx`** en vez de copiarla. 17/17 en el gate, 1330/1330 en la
+      batería del bot.
+
+      🔴 **Dos correcciones al plan que este ítem traía escrito, las dos medidas:**
+      1. **Los precios de la web NO pueden ir en el conocimiento.** `MONTOS_PERMITIDOS`
+         (`precios-publicos.mjs`) sale de `subscription-plans.ts` y `pricing.ts`; `webs.ts` no es
+         fuente de precio del bot. Una cifra de `webs.ts` ahí hace que `validateKnowledge`
+         rechace el documento **entero** y el bot se quede sin ninguna campaña. No hace falta: el
+         precio ya viaja en el mensaje que la persona manda.
+      2. **"Se arregla escribiendo, sin desplegar" era sólo media verdad.** Es cierto que no hay
+         que programar el motor — pero el documento del repo **no es** lo que el bot carga: el
+         bot vivo lee la fila del panel (`[knowledge:panel]`) y esa fila **no tiene la clave
+         `campanas`** (`select version,status,(data ? 'campanas') from public.chatbot_knowledge`
+         → `5|publicado|f`). O sea que hoy **ninguna** campaña está viva, ni las cuatro que
+         `onia.com.bo` enlaza por `wa.me`. Ese agujero es ahora un ítem propio en la cola del
+         chatbot.
+
+      <details><summary>El análisis original del ítem — ya ejecutado, y corregido en los dos
+      puntos de arriba. Se conserva porque explica el circuito, no porque quede trabajo.</summary>
+
+      **El bot le contesta al lead de UNA WEB con el pitch del CHATBOT** — llega del carril
       `web-creator`, y es **lo único de ese carril que se resuelve desde la plataforma**.
 
       **Qué pasa, medido el 2026-09-17** (memoria `web-lead-bot-lo-trata-como-pregunta-precio`):
@@ -109,6 +135,8 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       ⚠️ **Antes de prometer la web en el bot, leer `handoff/web-creator.md` §5b:** hoy el motor
       genera el sitio pero **no existe camino a un dominio publicado**. Se vende con precio
       publicado y se entrega a mano. Si el bot promete entrega automática, miente.
+
+      </details>
 
 
 - [x] 🔴 **CERRADO el 2026-09-18 — el panel le reclamaba el pago a las cuentas de Onia, en
