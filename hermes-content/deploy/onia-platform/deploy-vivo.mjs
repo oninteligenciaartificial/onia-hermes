@@ -15,10 +15,25 @@
  *
  * QUÉ MIDE, y por qué así. La pregunta no es «¿hubo algún deploy?» sino «¿hay
  * trabajo mío que el cliente todavía no ve?». Acá se contesta con SHAS, no con
- * fechas: el `BUILD_ID` que sirve el contenedor se casa contra los
- * `/opt/onia-platform/build-<sha>/` del disco, y eso dice exactamente qué
- * commit corre. Los varados son los commits de `origin/master` posteriores a
- * ése que además VIAJAN al navegador.
+ * fechas. Los varados son los commits de `origin/master` posteriores al que
+ * corre y que además VIAJAN al navegador.
+ *
+ * DE DÓNDE SALE EL SHA QUE CORRE — y por qué son dos vías. La primera es la
+ * ETIQUETA de la imagen del contenedor (`onia-platform:release-<sha>`): el
+ * publicador estampa ahí el commit, así que basta leer el nombre. La segunda,
+ * de respaldo, es la vieja: casar el `BUILD_ID` que sirve el contenedor contra
+ * los `/opt/onia-platform/build-<sha>/` del disco. Si las dos contestan y
+ * discrepan no se elige ninguna (ver `shaVivoConciliado`).
+ *
+ * La vía del disco dejó de alcanzar sola, y no por un fallo: el deploy cambió
+ * de forma —construye una imagen en vez de swapear `runtime-next`— y encima los
+ * `build-<sha>` de staging se BORRAN a propósito para liberar disco
+ * (`limpiar-builds-staging.sh` se llevó 92 de una vez). Medido el 2026-09-24:
+ * producción corría `release-7bcd0a83`, que es el HEAD exacto de `master` —o
+ * sea AL DIA— y este gate decía NO PUDE MEDIR porque su `BUILD_ID` no casaba
+ * contra ningún directorio. Un NO PUDE MEDIR permanente es el peor de los
+ * rojos: se lee como «el ambiental de siempre» y se saltea, y con él se saltea
+ * la única pregunta que este gate existe para contestar.
  *
  * DESDE EL 2026-09-24 PRODUCCIÓN ES UNA IMAGEN. El contenedor corre
  * `onia-platform:release-<sha8>` (Node 22, sin bind mount) y lo armado vive en
@@ -131,9 +146,52 @@ export function stagedPara(builds, headSha) {
   return (builds ?? []).find((b) => b && b.tipo === 'release' && mismoSha(b.sha, headSha)) ?? null;
 }
 
-export function diagnosticar({ shaVivo, headSha, varados, desciende }) {
+/**
+ * El sha que el deploy le estampó a la imagen del contenedor.
+ *
+ * Es la vía VIGENTE, y no depende de que sobreviva nada en disco: el publicador
+ * construye `onia-platform:release-<sha>` y levanta el contenedor con ella, así
+ * que el commit que corre viaja en el nombre. `latest`, un tag sin sha o algo
+ * que no sea hexadecimal devuelven `null` — un nombre que no nombra un commit
+ * no se fuerza a parecerlo.
+ */
+export function shaDeEtiqueta(imagen) {
+  if (typeof imagen !== 'string') return null;
+  const m = imagen.match(/:release-([0-9a-f]{7,40})$/i);
+  return m ? m[1].toLowerCase() : null;
+}
+
+/** ¿Dos nombres del mismo commit? La etiqueta trae 8 dígitos y el disco 7. */
+function mismoCommit(a, b) {
+  const n = Math.min(a.length, b.length);
+  return a.slice(0, n) === b.slice(0, n);
+}
+
+/**
+ * Concilia las DOS vías que pueden decir qué corre, y devuelve `{ sha, motivo }`.
+ *
+ * Manda la etiqueta porque es lo que el deploy ESCRIBE hoy; el BUILD_ID casado
+ * contra `build-<sha>` queda de respaldo para los swaps viejos. Si las dos
+ * contestan y discrepan NO se elige ninguna: el veredicto de este gate publica
+ * o retiene producción, y ahí «no sé» es un dato, no un empate a resolver.
+ */
+export function shaVivoConciliado({ shaEtiqueta, shaBuildId }) {
+  if (shaEtiqueta && shaBuildId && !mismoCommit(shaEtiqueta, shaBuildId)) {
+    return { sha: null, motivo: `la imagen dice ${shaEtiqueta} y el BUILD_ID casa con ${shaBuildId}: no elijo` };
+  }
+  const sha = shaEtiqueta || shaBuildId || null;
+  if (!sha) {
+    return { sha: null, motivo: 'ni la etiqueta de la imagen ni el BUILD_ID dicen qué commit corre' };
+  }
+  return { sha, motivo: null };
+}
+
+export function diagnosticar({ shaVivo, headSha, varados, desciende, motivoSinSha }) {
   if (!shaVivo) {
-    return { codigo: NO_PUDE_MEDIR, motivo: 'no sé qué build corre (BUILD_ID vivo sin par en disco)', varados: [] };
+    // El motivo lo trae quien intentó averiguarlo: dar por sentada la causa
+    // ("BUILD_ID sin par en disco") mandaba a buscar el problema donde no está
+    // el día que el deploy cambió de forma.
+    return { codigo: NO_PUDE_MEDIR, motivo: motivoSinSha || 'no sé qué commit corre en producción', varados: [] };
   }
   if (!headSha) {
     return { codigo: NO_PUDE_MEDIR, motivo: `no pude leer el HEAD de ${RAMA_DEPLOY}`, varados: [] };
@@ -367,14 +425,20 @@ const LECTORES = {
   desciendeDe,
 };
 
-/** Los lectores se inyectan para que los tests midan medir() sin docker ni git. */
+/**
+ * Los lectores se inyectan para que los tests midan medir() sin docker ni git.
+ * El sha vivo sale de conciliar las DOS vias (etiqueta de la imagen y BUILD_ID
+ * casado contra releases/ o build-<sha>): si discrepan, no se elige ninguna.
+ */
 export function medir(lectores = {}) {
   const l = { ...LECTORES, ...lectores };
   const builds = l.builds();
-  const shaVivo = shaQueCorre({ buildIdVivo: l.buildIdVivo(), builds, imagenViva: l.imagenViva() });
+  const shaBuildId = shaQueCorre({ buildIdVivo: l.buildIdVivo(), builds });
+  const shaEtiqueta = shaDeEtiqueta(l.imagenViva());
+  const { sha: shaVivo, motivo: motivoSinSha } = shaVivoConciliado({ shaEtiqueta, shaBuildId });
   const headSha = l.headDeploy();
   const varados = l.varadosDesde(shaVivo);
-  const d = diagnosticar({ shaVivo, headSha, varados, desciende: l.desciendeDe(shaVivo, headSha) });
+  const d = diagnosticar({ shaVivo, headSha, varados, desciende: l.desciendeDe(shaVivo, headSha), motivoSinSha });
   return { ...d, shaVivo, headSha, staged: evaluarStaged({ staged: stagedPara(builds, headSha), headSha }) };
 }
 

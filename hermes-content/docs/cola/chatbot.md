@@ -595,6 +595,340 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [ ] 🔴 **Un lead REAL puede escribir, ser atendido, enfriarse y que Sergio Urcullo no se
+      entere nunca: el aviso sólo dispara en `handoff_humano` y `demo_agendada`, y «se quedó
+      callado» no es ninguno de los dos.** Medido el 2026-09-24 en el log del bot vivo, no
+      heredado.
+
+      **El caso, con nombre y fecha.** `conv 58`, `inbox=5` (WhatsApp, leads reales), número
+      `+59175755019`. El 2026-09-17 22:50 UTC escribió *"Hola, vengo de la web de Onia. Quiero
+      saber si me sirve para mi negocio."* El bot contestó bien (`rama=respondio`,
+      `etapa=nuevo->esperando_horario`, un mensaje enviado de un intento), al día siguiente el barrido le insistió
+      con los dos horarios, y la persona no volvió más. **Nunca hubo una línea `[aviso]` para
+      `conv=58`** — o sea que un prospecto de WhatsApp que llegó desde la web quedó tibio seis
+      días y el único que podía rescatarlo no supo que existía.
+
+      **Por qué pasa, en una línea:** el aviso a Sergio Urcullo (`aviso-telegram.mjs`) cuelga de
+      `notify_sergio`, y el motor lo emite al derivar a un humano o al agendar. Una conversación
+      que queda en `esperando_horario` y se apaga no emite nada. No es un fallo del circuito —
+      `npm run avisos:vivo` da `circuito: medido`, 4 enviados, 0 fallidos — es un caso que nadie
+      le pidió que cubriera.
+
+      **Reproducción (30 segundos, no hace falta re-investigar):**
+
+      ```
+      /root/bin/onia-vps.sh bash -lc 'docker exec onia-center sh -c "grep -an conv=58 /tmp/onia-bot-webhook.log"'
+      /root/bin/onia-vps.sh bash -lc 'docker exec onia-center sh -c "grep -ac \"\[aviso\].*conv=58\" /tmp/onia-bot-webhook.log"'   # → 0
+      ```
+
+      **Ojo con la confusión que ya se coló una vez:** `npm run avisos:vivo` cierra con *"NINGUN
+      aviso es de un lead: 5 nuestro(s) — nunca se probo con un desconocido"*, y eso se lee como
+      «ningún desconocido escribió nunca». Falso: escribieron **siete** (tarea `t_e57e3376`, y
+      cinco de ellos llevan 26-31 días sin respuesta). Lo que el instrumento dice de verdad es
+      que ningún aviso ENVIADO correspondió a un lead — que es otra cosa, y peor.
+
+      **Listo =** una conversación de un desconocido que el bot atiende y que se enfría le
+      produce a Sergio Urcullo un aviso con el número, lo último que dijo y cuántos días lleva,
+      **una sola vez** (no en cada barrido), con el mismo criterio de «es nuestra» que ya usa
+      `es-nuestra.mjs` para no avisarle de nuestras pruebas. La maquinaria que los cuenta ya
+      existe: `followup-cuenta-los-colgados.test.mjs` / `followup-run.mjs`.
+
+      ---
+
+      ⚠️ **2026-09-24 13:43-14:00 La Paz — la mitad de abajo está HECHA (commiteada, NO
+      desplegada) y la de arriba NO. El ítem sigue 🔴.** Y al medirlo apareció que la frase
+      «la maquinaria que los cuenta ya existe» era **falsa justo para este caso**.
+
+      **Lo que estaba roto debajo del aviso: el contador no podía VER al lead que importa.**
+      `sweepFollowUpVencidas` —el único instrumento que cuenta leads perdidos— derivaba
+      `FILTROS_FOLLOWUP`, y ahí adentro viajaba `followup_step=eq.0`. Esa condición contesta
+      *«¿a quién le puedo escribir?»* (regla N7: UN follow-up y después silencio). Reusada para
+      contar, contesta otra pregunta —*«¿a quién perdí?»*— y la contesta **al revés**: apenas sale
+      el M3, `followup_step` pasa a 1 y la fila **desaparece del conteo**. O sea que el barrido se
+      olvidaba del lead **justo después de haberlo trabajado**, que es el lead más caro que hay.
+
+      **Medido en producción** (`supabase-db`, `onia_center.bot_conversations`), los dos filtros
+      lado a lado sobre la misma tabla:
+
+      | filtro | filas | ¿está `chatwoot:990777`? |
+      |---|---|---|
+      | el de antes (con `followup_step=eq.0`) | 9 | **NO** |
+      | el corregido | 10 | **SÍ** — 38 días callado, `followup_step=1` |
+
+      **Y `conv 58` iba al mismo agujero:** tiene `followup_step=1` y cruza el piso de 7 días
+      **hoy** (su último entrante es del 17-sep 22:50 UTC). Con el código viejo no habría
+      aparecido nunca; con éste aparece en el barrido de las próximas horas — es la verificación
+      barata de la próxima vuelta, con el mismo `select` de arriba.
+
+      **El arreglo.** `FILTROS_FOLLOWUP_BASE` (pertenencia: no lo tomó un humano, no hay opt-out,
+      la etapa sigue en juego) se separó de la elegibilidad. El envío usa `FILTROS_FOLLOWUP` =
+      `followup_step=eq.0` + BASE; el conteo usa `FILTROS_COLGADAS` = BASE y nada más.
+
+      ⚠️ **Un test viejo DEFENDÍA el bug y hubo que corregirlo, no borrarlo.**
+      `followup-cuenta-los-colgados.test.mjs` exigía que las dos consultas compartieran el
+      predicado **completo**. Su motivo es correcto y quedó intacto (una condición agregada de un
+      solo lado deja filas invisibles para el envío Y para el conteo); su conclusión era ancha de
+      más. Hoy exige compartir la **BASE**, que es lo que protege ese motivo. Gates:
+      `colgada-que-ya-recibio-followup-sigue-perdida.test.mjs` (4 casos, el nuevo en ROJO antes por
+      el motivo correcto — *«sweepFollowUpVencidas deriva el filtro del ENVIO»*, no por un import
+      faltante) y las 109 pruebas de los cinco barridos hermanos en verde.
+
+      ---
+
+      ✅ **2026-09-24 14:13-14:30 La Paz — EL AVISO ESTÁ ESCRITO Y EN VERDE. Commiteado, NO
+      desplegado.** El ítem sigue 🔴 **sólo por el deploy**: el bot vivo corre `/tmp/onia-bot/`
+      dentro de `onia-center` y este carril no despliega. Lo que falta es un `ok` de Sergio
+      Urcullo sobre un pedido con la línea `DESPLEGAR: bot` — y ojo, ese destino está detrás de
+      `FIRMA_HUMANA` sólo si se toca `knowledge.onia.json`, que esta vuelta **no se tocó**.
+
+      **El candado que la vuelta anterior dejó sin elegir ya existía en este mismo repo, y por
+      eso ninguno de los cuatro costos aplica.** `rescate-run.mjs` guarda desde el 2026-09-11 un
+      quinto patrón que la lista no miraba: **un archivo por sujeto con `openSync` en `wx`**
+      (`EEXIST` = ya estaba), el mismo de `/var/lib/onia-vigia-remotos/<id>`. No quema un contador
+      ajeno, no afirma un desenlace comercial, no entra en `ESTADOS_COBRABLES` y **no pide
+      migración** — se crea solo la primera vez que hay algo que recordar. Se **extrajo** a
+      `marcas-en-disco.mjs` en vez de copiarse: el bot ya pagó una vez el precio de tener dos
+      armadores de config hermanos, donde se arregla uno y el camino vivo sigue roto en verde.
+      `rescate-run.mjs` lo importa con su firma intacta y sus 51 casos sin tocar.
+
+      **Qué recibe Sergio Urcullo**, por el MISMO canal que ya usa (`construirAviso` +
+      `enviarAvisoTelegram`, no un canal nuevo): `🥶 SE ENFRIÓ — rescatalo vos o se pierde`, con
+      la conversación, el inbox, la etapa, el contacto y cuántos días lleva callado. *«Lo último
+      que dijo»* no va, y es deliberado: el entrante no se persiste
+      (`INBOUND_BODY_PLACEHOLDER`), y un aviso que lo inventara sería peor que uno que no lo trae.
+
+      **La clave de la marca lleva `last_inbound_at`, no sólo la conversación.** «Ya avisé» vale
+      para ESTE silencio, no para la persona: si el lead vuelve a escribir y se enfría otra vez,
+      eso es un lead perdido nuevo y tiene que volver a sonar. Y **las marcas de colgada no se
+      purgan** —al revés que las del rescate—: allá la ventana del huérfano dura 12 h y una marca
+      vieja ya no puede silenciar nada; acá el silencio del lead **no vence**, así que purgar
+      sería volver a avisar de alguien de hace meses.
+
+      **Gates:** `colgada-avisa-una-sola-vez.test.mjs`, 8 casos. El del candado se verificó en
+      ROJO por el motivo correcto **mutando el candado** (que `EEXIST` devuelva `true` en vez de
+      `false`): con eso cae *«la segunda corrida no vuelve a avisar»* y sólo ése. Ojo con el falso
+      rojo que engañó a mitad de vuelta: mutar el `if (reserva === false)` **no** pone rojo nada,
+      porque el `if (reserva !== true)` de abajo lo absorbe — un gate se prueba rompiendo el
+      **dato**, no la rama que lo lee. Suite del bot completa: **1367/1367**.
+
+      **Y un caso viejo tuvo que inyectar sus dependencias**, no por capricho: con el aviso
+      cableado, `followup-cuenta-los-colgados.test.mjs` corría `emit: true` contra el directorio
+      REAL de marcas y dejaba puesta la marca de un lead de verdad — la que silencia su aviso.
+      La baranda de hermetismo lo cortó en rojo, que es exactamente para lo que está.
+
+      **Lo que queda para la próxima vuelta, en orden:** (1) pedido de deploy `DESPLEGAR: bot`;
+      (2) después del swap, verificar en el log del bot vivo que `conv 58` —que cruzó el piso de
+      7 días hoy— produce su línea de aviso:
+      `/root/bin/onia-vps.sh bash -lc 'docker exec onia-center sh -c "grep -ac \"\[aviso\].*conv=58\" /tmp/onia-bot-webhook.log"'`
+
+      ---
+
+      **Lo que se creía que FALTABA, y por qué la lista estaba incompleta.** El aviso necesita un
+      candado de «una sola vez». Los cuatro candidatos se miraron con el código delante y **los
+      cuatro tienen costo** — ninguno de los cuatro se usó, pero la derivación queda porque es lo
+      que explica por qué el quinto camino es el correcto:
+
+      1. **`followup_step` como centinela** → ❌ `insistencia-run.mjs:220` ya documenta este bug
+         exacto: quemar un contador compartido con otro circuito apaga al otro sin dejar rastro.
+      2. **Mover `bot_stage` a `descartado`** (el patrón de `reserveDemoDone`) → ❌ `descartado`
+         afirma un desenlace comercial que el bot no conoce: `bot-engine.mjs:491` le pone
+         `pipelineStatus.descartado` al lead. Un prospecto que no contestó no dijo que no.
+      3. **`insertOutbound` con `messageKey` determinista** (el patrón de la insistencia) → ❌
+         contamina la plata: `ESTADOS_COBRABLES = ["sent","reserved"]` y `contable()` cuenta todo
+         lo que no sea `inbound`, así que un aviso al Telegram de Sergio Urcullo se le cobraría al
+         cliente como mensaje del bot.
+      4. **Columna nueva** (`cold_notified_at`, espejo exacto de `reserveDemoDone`) → ✅ es la
+         limpia, ❌ pero necesita una migración en `onia_center` y **este carril no despliega**.
+
+      Hay además una quinta salida sin estado: disparar sólo cuando `last_inbound_at` cae en la
+      franja de una hora que cruza el piso. Es elegante y **falla hacia el silencio** — si el cron
+      se saltea una corrida, el lead se pierde para siempre. Por eso no se eligió sola.
+
+      **Y un dato que cambia el texto del aviso:** *«lo último que dijo»* **no lo tenemos**. El
+      entrante no se persiste a propósito (`INBOUND_BODY_PLACEHOLDER = "(entrante — texto no
+      persistido)"`, `persistence.mjs:219`). El aviso honesto lleva contacto, etapa, días callado y
+      **por dónde abrir la conversación** — que es lo que `construirAviso` ya arma.
+
+      ⚠️ **Esto NO es «contactar a un prospecto»** —eso sí es decisión de Sergio Urcullo y ya
+      está pedido en `t_e57e3376`—: es avisarle A ÉL de algo que pasó en su propio sistema.
+      Confundir las dos cosas es lo que dejó a `conv 58` sin dueño seis días.
+
+- [x] 🔴 **CERRADO el 2026-09-24 12:45-13:20 La Paz (commiteado; el instrumento no necesita
+      deploy): la definición de hecho del carril se había vuelto IMPOSIBLE de medir, y no por el
+      bot — la sonda se colgaba esperando un efecto que el producto decidió no producir.**
+
+      **Síntoma.** `node scripts/sonda_widget.mjs` devolvía `NO SE PUDO MEDIR — la conversacion 49
+      no quedo como la de un desconocido`, con el bot **sano** (simulador 3/3 la misma vuelta) y
+      con el blanqueo **sano**. O sea: la pata «widget 2/2» del objetivo estaba muerta y la
+      anterior la había dado por 2/2, así que el carril medía con un instrumento fundido.
+
+      **Causa, medida.** `clearHumanTakeover` (`bot-engine.mjs:152`) se APRETÓ a propósito: el
+      stage sólo se libera *«cuando un humano REALMENTE escribió»*, porque `handoff_humano` lo
+      prende el BOT al derivar y olvidarlo sería perderle el hilo a un lead que nadie atendió.
+      En prod eso es el caso NORMAL, no el raro: de 43 conversaciones, **13 están en
+      `handoff_humano` con `human_took_over = false`** y ninguna fila del sistema tiene las dos
+      cosas juntas. La sonda seguía esperando el efecto viejo:
+
+      - `desarmar()` esperaba `!necesitaDesarme(...)`, que incluye el **stage** → agotaba sus 10
+        vueltas de 2 s y devolvía `false`, siempre;
+      - `dejarComoExtrano` tenía ese `false` detrás de un `&&`, así que salía **antes** de
+        `guionBlanqueo` — el único paso que saca del `handoff_humano` del bot (deriva de
+        `reiniciarConversacionVencida`, que pone `botStage:"nuevo"` sin condición);
+      - y el mensaje de error remataba mandando a *«revisar `guionBlanqueo`»*, que era justo lo
+        único que no había corrido. Un instrumento que acusa al paso que nunca ejecutó.
+
+      **Arreglo.** Se separaron las dos preguntas que estaban colapsadas en una: *«¿el bot calla
+      acá?»* (`necesitaDesarme`, para decidir si vale la pena tocar) **no** es *«¿qué promete
+      deshacer el desarme?»* (`desarmePendiente`, nuevo, para decidir si funcionó — sólo el
+      candado `humanTookOver`, que es lo único que `clearHumanTakeover` promete). Y el blanqueo
+      corre **aunque el desarme falle**; el veredicto sale de la fila de después, no de si el
+      desarme anduvo. `dejarComoExtrano` pasó a exigir sus deps inyectadas sin default, misma
+      doctrina que `cerrarSujeto` (un default ahí corre `rails runner` contra producción en verde).
+
+      **Prueba.** Los 3 casos nuevos del self-check en ROJO primero y por el motivo correcto
+      (`el blanqueo tiene que correr aunque el desarme falle`), después `61/61 casos en verde`; y
+      la corrida real contra producción, con el exit leído **sin pipe** (`tail` devuelve el suyo):
+      `EXIT_REAL=0` · `EL BOT CONTESTO LOS 2 — conversacion 49: #1 → 1 respuesta(s) · #2 → 1
+      respuesta(s)`. Archivo: `scripts/sonda_widget.mjs`.
+
+      **Lo que NO era, y se probó antes de anunciarlo:** que los 13 `handoff_humano` sin humano
+      fueran leads con el bot mudo. No lo son — el silencio lo gobierna `humanTookOver`
+      (`bot-engine.mjs:566`), y el `case "handoff_humano"` sigue acusando recibo y dejando pasar
+      «urgente» y «quiero comprar». El motor está bien; lo que estaba roto era el medidor.
+
+- [x] 🔴 **CERRADO el 2026-09-24 16:18-16:20 La Paz (medición en PRODUCCIÓN, sin cambio de
+      código): el objetivo entero del carril se recorrió DE PUNTA A PUNTA por primera vez —
+      desconocido escribe en el widget real → pide un humano → el aviso sale. Las tres patas
+      medidas el mismo día y con el mismo hilo, que es lo que nunca había pasado.**
+
+      Hasta hoy cada pata se medía por separado y la tercera se declaraba con eventos **del
+      pasado**: `avisos-vivo.mjs` contesta «circuito sano» leyendo el log, pero **nunca EJERCE el
+      circuito**. Con eso, el día que se rompa, el instrumento sigue diciendo `ok` con los avisos
+      viejos hasta que se pierda un lead de verdad. Se ejerció a mano y anduvo:
+
+      · **Simulador 3/3** — precio de la escalera C correcto y leído de la fuente (320 / 550 /
+        890 / 1.290 con el chatbot incluido en el Completo, add-on Bs 390 en los otros tres);
+        SIAT con la fecha buena (**1 de octubre de 2026**, RND 102600000007), no «30 de
+        septiembre»; y ofrece los dos horarios de demo.
+      · **Widget real 2/2** — `node scripts/sonda_widget.mjs` → exit 0, *«EL BOT CONTESTO LOS 2 —
+        conversacion 49»*. **Primera vez que esta pata entra medida en una línea `OBJETIVO:`**:
+        las vueltas anteriores la declaraban «no medida esta vuelta».
+      · **Tercera pata, EJERCIDA** — con la costura del guion, tres turnos hasta el handoff:
+
+            ONIA_SONDA_GUION='Hola, quiero informacion sobre el sistema|Tengo una clinica dental en Santa Cruz, somos 4 personas|quiero hablar con una persona de verdad por favor' node scripts/sonda_widget.mjs
+
+        → exit 0, *«EL BOT CONTESTO LOS 3»*, y en el log del proceso vivo
+        (`docker exec onia-center … /tmp/onia-bot-webhook.log`):
+
+            conv=49 rama=respondio etapa=esperando_horario->handoff_humano enviados=1/1
+            [aviso] sent conv=49 (pidio_hablar_con_humano): aviso enviado
+
+        `avisos-vivo.mjs` subió de **3 a 4 enviados** entre antes y después, con los cuatro
+        eslabones y las dos ramas en `ok`. O sea: el motor cambia de etapa, **cumple lo que le
+        promete al prospecto** («Ya le pasé tu consulta») y el aviso sale — el trío completo.
+
+      ✅ **Y se verificó lo que esta medición podía ROMPER, antes de darla por buena: que la
+      sonda no le disparara a Sergio Urcullo una alarma falsa de lead.** No lo hizo, y la
+      defensa es del producto, no de la suerte: `select display_name from
+      onia_center.bot_conversations where conversation_key='chatwoot:49'` → `Sonda QA carril
+      chatbot`, que `NOMBRE_DE_PRUEBA` (`es-nuestra.mjs`) reconoce, así que el aviso viaja con
+      `🧪 PRUEBA NUESTRA — no es un lead, no anotes nada` arriba de todo. El nombre lo pone el
+      **bootstrap** del widget (`sonda_widget.mjs:847`), antes del primer mensaje, no al final:
+      por eso la marca ya está puesta cuando se dispara el handoff. `es-nuestra.mjs` está **en
+      producción** (`/tmp/onia-bot/`, 19-sep 06:37) y `run-turn.mjs:48` lo importa.
+
+      ⚠️ **Lo que sigue siendo cierto y no lo arregla este carril:** `leads 0 · nuestros 5`. El
+      circuito está entero, pero **ningún aviso es de un desconocido real todavía** — y eso no lo
+      fabrica una sonda. Lo que cambió hoy es que ya no hay duda de si el camino funciona: si
+      mañana llega uno, llega.
+
+      ⚠️ **Y por qué el aviso de esta clase NO va en el guion por defecto de la sonda** (se
+      evaluó y se descartó en la misma vuelta): la sonda corre cada 30 min, así que meter el
+      turno de handoff en el default serían ~48 avisos diarios a Sergio Urcullo, marcados de
+      prueba pero igual de ruidosos — justo lo que pidió ordenar el 2026-09-05. La costura
+      `ONIA_SONDA_GUION` existe para correrlo **a mano**, y así queda: el comando de arriba es
+      la forma de ejercer la tercera pata cuando se quiera confirmar que el circuito vive.
+
+      **Tres alarmas del log auditadas y las TRES históricas otra vez** (se re-encontraron en
+      esta vuelta y se fecharon por POSICIÓN antes de escalarlas, que es la regla que las
+      cierra): `ERR_MODULE_NOT_FOUND: audio-transcribe.mjs` ×2.803 — el archivo existe en
+      `/tmp/onia-bot/` desde el 19-sep 14:40 y la última ocurrencia está en la línea **50.540 de
+      70.614**, ~20.000 líneas antes del final; el `[knowledge:panel]` repetido ×3.870 sigue
+      vivo porque **T10 está commiteado y NO desplegado**, no porque el arreglo falle.
+
+- [x] 🔴 **CERRADO el 2026-09-24 (medición, sin cambio de código): el embudo del carril se estaba
+      contando con `calendar_event_id`, que por la decisión (c) NO PUEDE subir nunca — así que
+      toda vuelta futura iba a leer «0 demos agendadas» como un bug y diagnosticar de nuevo una
+      causa ya arreglada.** Ayer yo mismo conté ese cero y diagnostiqué el `slice(0,2)` de
+      `parseEnvSlots`. El diagnóstico era correcto y el arreglo entró (`504ebf25`, en
+      `origin/main`), pero **la medida no se va a mover con él**, y sin esta nota la próxima
+      vuelta vuelve a abrir el mismo caso.
+
+      **Por qué ese contador está muerto por diseño, re-medido HOY (no heredado del 13-sep):**
+      Cal.com no existe en el VPS, verificado de tres formas independientes —
+      `docker ps -a --format '{{.Names}}' | grep -i cal` → **vacío, ni un contenedor parado**;
+      `docker exec onia-center getent hosts calcom` → **NO RESUELVE**; y
+      `curl -o /dev/null -w '%{redirect_url}' https://cal.onia.com.bo/` → **302 a
+      `onia.com.bo/empezar`** (un subdominio propio muerto no da 404: redirige). La config del
+      proceso vivo SÍ está (`CALCOM_BASE_URL=http://calcom:3000`, `CALCOM_BOT_EVENT_TYPE_ID=5`,
+      leídos de `/proc/<pid>/environ` dentro de `onia-center`), o sea que la rama que corre no es
+      `sin_config` sino la que sale a la red contra un host inexistente. **Esto ratifica el bloque
+      «✅ CERRADO 2026-09-13» de más abajo: sigue vigente palabra por palabra, y la decisión (c)
+      ya la tomó Sergio Urcullo el 3-sep. No se le vuelve a preguntar.**
+
+      **La medida correcta del embudo es `bot_stage`/`scheduled_at`, no `calendar_event_id`** — lo
+      que depende de nosotros es que el bot CIERRE el horario; que quede en un calendario depende
+      de un servicio que está apagado a propósito. Contado hoy en
+      `onia_center.bot_conversations` (43 filas):
+
+      | estado | filas | qué significa |
+      |---|---|---|
+      | `esperando_horario` | **18** | eligieron horario y el bot no lo reconoció ← lo que arregla `504ebf25` |
+      | `handoff_humano` | 12 | derivadas a persona (el flujo honesto) |
+      | `nuevo` | 12 | no pasaron del saludo |
+      | `esperando_calificacion` | 1 | |
+      | `demo_agendada` | **0** | ninguna cerró horario todavía |
+
+      Con `scheduled_at` hay **1** fila (`chatwoot:11`, del 6-ago, horario para el 12-sep) y
+      terminó en `handoff_humano`. **Los 18 de `esperando_horario` son la prueba de que el bug del
+      `slice(0,2)` era real y caro: 18 personas que eligieron y no fueron escuchadas.**
+
+      🔴 **Pendiente que NO es de este carril:** el arreglo espera el `ok` de Sergio Urcullo en
+      `t_2508295d` (`DESPLEGAR: bot`). El bot vivo todavía corre el código viejo — verificado hoy:
+      `docker exec onia-center grep -c 'slice(0, *2)' /tmp/onia-bot/run-turn.mjs` → **1**. Le
+      comenté a esa tarea que su punto 2 («el bot va a poder agendar demos») prometía de más: va a
+      ACEPTAR los cinco horarios, que es la mejora real, pero `calendar_event_id` va a seguir en
+      cero y eso no será un deploy fallido.
+
+      ⚠️ **No toqué el motor en esta vuelta a propósito**, aunque la regla del carril diga
+      «arreglalo en la misma vuelta»: `t_2508295d` ya está esperando firma con su recuento de 24
+      archivos y su sha derivados del `--dry-run`, y un commit nuevo sobre `calcom-booking.mjs` o
+      `run-turn.mjs` dejaría ese cuerpo describiendo algo distinto de lo que el `ok` publica.
+      Cerrar antes de abrir.
+
+      🔴 **Lo que quedó SIN barrer y sí es del carril (visto el 2026-09-24 11:40 La Paz): el
+      TÍTULO de `t_2508295d` sigue diciendo «que pueda agendar demos (43 conversaciones, 0
+      agendadas)».** El comentario de ayer corrigió el *cuerpo*, pero el título promete
+      exactamente el contador que no puede subir, y **el título es lo que viaja**: el parte
+      diario es el único mensaje que le llega por Telegram sin que pregunte, y lista las
+      decisiones con `ok <id>` por línea. O sea que Sergio Urcullo iba a firmar mirando una
+      promesa falsa, publicar, ver el cero intacto y concluir que el arreglo no sirvió — el peor
+      desenlace posible para un deploy que sí vale la pena. Se le agregó a la tarea un comentario
+      que abre corrigiendo el título y separa lo que el deploy SÍ entrega (las 9 campanas, los
+      cinco horarios, el arreglo del sync) de lo que no va a moverse, y dónde se ve el resultado
+      de verdad: en los avisos «DEMO AGENDADA — anotala» de Telegram y en que las 18
+      conversaciones paradas dejen de quedar mudas.
+      ⚠️ **El título no se pudo arreglar en su origen**: `onia-tablero.sh edit` sólo toca tareas
+      **ya completadas**, y ésta está `blocked` esperando la firma. Rehacerla perdería el pedido
+      vivo y su recuento. Queda como límite medido del tablero, no como olvido.
+
+      **La lección transferible, que es la de `CLAUDE.md` en una superficie que nadie barre:**
+      una promesa que cambia se barre en TODA la superficie — y **las tareas del tablero son
+      superficie de cliente**, porque son lo único que Sergio Urcullo lee antes de firmar. Un
+      hallazgo escrito impecablemente en la cola no alcanza si la pantalla donde se decide sigue
+      diciendo lo contrario. Ayer este mismo ítem quedó correcto en el repo **y falso en el
+      tablero** durante tres horas.
+
 - [x] 🔴 **CERRADO el 2026-09-24 (medición, sin cambio de código): la TERCERA pata del objetivo
       del carril —«cada demo agendada o handoff le llega a Sergio Urcullo»— llevaba vueltas sin
       medirse, y el comando que el prompt manda usar para medirla NO PUEDE dar otra cosa que 0.**
@@ -652,7 +986,8 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
   **Las tres cosas que el conteo pelado tenía mal, y por qué ninguna se veía:**
 
-  1. **Contaba nuestras propias sondas como prospectos.** `chatwoot:48/49/50` son
+  1. **Contaba nuestras propias sondas como prospectos.** `chatwoot:48`, `chatwoot:49` y
+     `chatwoot:50` son
      *«Sonda QA carril chatbot»* y `chatwoot:11` es el celular de Sergio Urcullo. El repo ya
      tenía el criterio (`esNuestra()` de `scripts/objetivo_visible.mjs`, con seis consumidores)
      y el conteo del embudo no lo llamaba. El instrumento nuevo lo **importa**, no lo copia.

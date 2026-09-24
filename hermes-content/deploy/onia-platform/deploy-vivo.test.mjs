@@ -13,6 +13,8 @@ import {
   VIEJO,
   NINGUNO,
   shaQueCorre,
+  shaDeEtiqueta,
+  shaVivoConciliado,
   llegaAlCliente,
   diagnosticar,
   evaluarStaged,
@@ -549,4 +551,77 @@ test('importar el módulo NO mide contra producción ni sale del proceso', () =>
     { encoding: 'utf8', timeout: 20000 },
   );
   assert.match(salida, /VIVO/);
+});
+
+// ── el deploy cambió de forma: ahora el sha viaja en la ETIQUETA de la imagen ─
+// Medido el 2026-09-24 13:45 La Paz. El contenedor corría
+// `onia-platform:release-7bcd0a83` —el HEAD exacto de origin/master, o sea AL
+// DIA— y este módulo decía NO PUDE MEDIR: su BUILD_ID (FU8j_OHPyRH1XCCr6-0uY)
+// no casaba contra NINGUN /opt/onia-platform/build-*/ porque el deploy dejó de
+// swapear runtime-next y pasó a construir una imagen `release-<sha>`. Los
+// build-<sha> de staging además se BORRAN a propósito (limpiar-builds-staging.sh
+// se llevó 92 para liberar disco), así que la vía vieja no es que falle hoy:
+// se apaga sola cada vez que alguien limpia.
+//
+// Un NO PUDE MEDIR permanente es el peor de los rojos: se lee como "el
+// ambiental de siempre" y se saltea, y con él se saltea la única pregunta que
+// este gate existe para contestar.
+
+test('saca el sha del commit de la etiqueta release-<sha> de la imagen', () => {
+  assert.equal(shaDeEtiqueta('onia-platform:release-7bcd0a83'), '7bcd0a83');
+  assert.equal(shaDeEtiqueta('onia-platform:release-3606c46'), '3606c46');
+});
+
+test('una etiqueta que no nombra un commit no inventa uno', () => {
+  for (const imagen of ['onia-platform:latest', 'onia-platform', 'onia-platform:release-', 'onia-platform:release-zzzz', null, undefined, 42]) {
+    assert.equal(shaDeEtiqueta(imagen), null, `${imagen} no nombra ningún commit y salió un sha igual`);
+  }
+});
+
+// La etiqueta manda porque es lo que el deploy ESCRIBE hoy; el BUILD_ID queda
+// de respaldo para los swaps viejos que todavía puedan quedar en disco.
+test('con la etiqueta viva, ya no hace falta que sobreviva el build en disco', () => {
+  const r = shaVivoConciliado({ shaEtiqueta: '7bcd0a83', shaBuildId: null });
+  assert.equal(r.sha, '7bcd0a83');
+  assert.equal(r.motivo, null);
+});
+
+test('sin etiqueta, sigue valiendo el BUILD_ID casado contra el disco', () => {
+  assert.equal(shaVivoConciliado({ shaEtiqueta: null, shaBuildId: '443e3e7' }).sha, '443e3e7');
+});
+
+// Los dos largos conviven: la etiqueta trae 8 caracteres y los build-<sha> de
+// disco 7. Compararlos crudos haría discrepar a dos nombres del MISMO commit.
+test('la etiqueta y el BUILD_ID del mismo commit no se pelean por el largo', () => {
+  assert.equal(shaVivoConciliado({ shaEtiqueta: '7bcd0a83', shaBuildId: '7bcd0a8' }).sha, '7bcd0a83');
+});
+
+// Si las dos vías contestan cosas distintas, NO se elige la que nos gusta: no
+// saber es un dato, y un veredicto inventado acá publica o retiene producción.
+test('si la etiqueta y el BUILD_ID discrepan, no se elige ninguna', () => {
+  const r = shaVivoConciliado({ shaEtiqueta: '7bcd0a83', shaBuildId: 'b5e23d4' });
+  assert.equal(r.sha, null);
+  assert.match(r.motivo, /7bcd0a83/);
+  assert.match(r.motivo, /b5e23d4/);
+});
+
+test('sin ninguna de las dos vías, el motivo lo dice y no hay sha', () => {
+  const r = shaVivoConciliado({ shaEtiqueta: null, shaBuildId: null });
+  assert.equal(r.sha, null);
+  assert.match(r.motivo, /etiqueta|BUILD_ID/);
+});
+
+// El motivo del NO PUDE MEDIR tiene que nombrar la causa REAL. El que había
+// decía siempre "BUILD_ID vivo sin par en disco", que hoy es falso y manda a
+// buscar el problema donde no está.
+test('diagnosticar cuenta POR QUÉ no sabe qué corre, sin suponer la causa', () => {
+  const d = diagnosticar({
+    shaVivo: null,
+    headSha: '7bcd0a83',
+    varados: [],
+    desciende: true,
+    motivoSinSha: 'la imagen dice 7bcd0a83 y el BUILD_ID casa con b5e23d4: no elijo',
+  });
+  assert.equal(d.codigo, NO_PUDE_MEDIR);
+  assert.match(d.motivo, /no elijo/);
 });
