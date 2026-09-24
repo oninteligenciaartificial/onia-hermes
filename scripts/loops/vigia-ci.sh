@@ -46,7 +46,34 @@ TG="${ONIA_TG:-/root/bin/onia-tg.sh}"
 # Para el autotest: si apunta a un archivo, se usa en vez de llamar a la API.
 FIXTURE="${ONIA_CI_FIXTURE:-}"
 
-avisar() { "$TG" "$1" >/dev/null 2>&1 || true; }
+TABLERO="${ONIA_TABLERO:-/root/bin/onia-tablero.sh}"
+
+# Devuelve por stdout el id de la tarea que el enrutador creo para este aviso
+# (linea `TAREA t_xxxxxxxx`), o vacio si el aviso no genero tarea — que es lo
+# normal para los informativos y los verdes.
+avisar() {
+  local salida
+  salida=$("$TG" "$1" 2>/dev/null || true)
+  printf '%s' "$salida" | grep -oE 't_[0-9a-f]{8}' | head -1
+}
+
+# CERRAR LA TAREA QUE CREO EL ROJO ES PARTE DE RECUPERARSE.
+#
+# Hasta el 2026-09-24 la rama `success` avisaba "recuperado" y borraba la marca,
+# pero el aviso de recuperacion es un mensaje NUEVO: nadie cerraba la tarea que
+# habia creado el rojo. Medido el 2026-09-10: `t_c8a2d7d5` afirmaba "master esta
+# roto y el deploy va a fallar" con el CI verde desde hacia ~21 h. Los carriles
+# leen el tablero ANTES que su cola, asi que una tarea roja que ya no es cierta
+# no es ruido: manda a un carril a arreglar algo que ya esta arreglado.
+#
+# Falla en silencio a proposito: si el tablero no esta (nodo sin shim, prueba con
+# el binario sustituido), el vigia igual tiene que poder avisar y borrar su marca.
+cerrar_tarea() {  # cerrar_tarea <id> <motivo>
+  [ -n "${1:-}" ] || return 0
+  [ -x "$TABLERO" ] || return 0
+  "$TABLERO" comment "$1" "$2" >/dev/null 2>&1 || true
+  "$TABLERO" complete "$1" >/dev/null 2>&1 || true
+}
 
 # ── El token ────────────────────────────────────────────────────────────────
 if [ -z "$FIXTURE" ]; then
@@ -171,8 +198,12 @@ No se toco ninguna marca: no se puede declarar verde lo que no se pudo mirar."
 
     if [ "$CONCL" = "success" ]; then
       if [ -f "$MARCA" ]; then
+        # La marca guarda el id de la tarea que abrio este episodio (puede estar
+        # vacia: marcas viejas, o un rojo que no llego a crear tarea).
+        TAREA_ROJA=$(grep -oE 't_[0-9a-f]{8}' "$MARCA" 2>/dev/null | head -1 || true)
         avisar "🟢 <b>CI recuperado</b> — <code>$REPO</code> · <b>$WF</b>
-Verde en <code>$SHA</code>."
+Verde en <code>$SHA</code>." >/dev/null
+        cerrar_tarea "$TAREA_ROJA" "Cerrada por el vigia de CI: $REPO · $WF volvio a verde en $SHA. El rojo que abrio esta tarea ya no es cierto."
         rm -f "$MARCA"
       fi
       continue
@@ -205,12 +236,15 @@ Corrida del <code>${CREADO%%T*}</code>"
       CUANDO="$CUANDO."
     fi
 
-    avisar "🔴 <b>CI en ROJO</b> — <code>$REPO</code> · <b>$WF</b>
+    # La marca guarda el ID de la tarea, no solo su existencia: es lo unico que
+    # le permite al verde de mañana cerrar el rojo de hoy. Si el aviso no genero
+    # tarea, la marca queda vacia y el episodio se comporta como antes.
+    ID_TAREA=$(avisar "🔴 <b>CI en ROJO</b> — <code>$REPO</code> · <b>$WF</b>
 Resultado: <code>$CONCL</code> en <code>$SHA</code> (rama <code>$RAMA</code>).$CUANDO
 
 Mientras siga asi, <code>$RAMA</code> esta roto y el deploy va a fallar.
-$URL"
-    touch "$MARCA"
+$URL")
+    printf '%s' "$ID_TAREA" > "$MARCA"
   done <<< "$SALIDA"
 done
 

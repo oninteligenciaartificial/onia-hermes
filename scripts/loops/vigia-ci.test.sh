@@ -18,18 +18,32 @@ ok()    { printf '  ok   — %s\n' "$1"; }
 falla() { printf '  FALLA — %s\n     esperaba: %s\n     obtuvo:   %s\n' "$1" "$2" "$3"; FALLOS=$((FALLOS+1)); }
 
 # Telegram falso: escribe lo que le mandan, no manda nada.
+#
+# Imita al enrutador de verdad en lo unico que importa aca: un aviso de PROBLEMA
+# se convierte en tarea del tablero y devuelve `TAREA <id>` por stdout; uno verde
+# sale informativo y no devuelve nada.
 cat > "$TMP/tg.sh" <<'FIN'
 #!/usr/bin/env bash
 printf '%s\n---\n' "$1" >> "$TMP_MENSAJES"
+case "$1" in *🔴*|*⚠️*) printf 'TAREA t_deadbeef\n' ;; esac
 FIN
 chmod 755 "$TMP/tg.sh"
+
+# Tablero falso: no cierra nada, solo deja constancia de que se lo pidieron.
+cat > "$TMP/tablero.sh" <<'FIN'
+#!/usr/bin/env bash
+printf '%s %s\n' "$1" "${2:-}" >> "$TMP_TABLERO"
+FIN
+chmod 755 "$TMP/tablero.sh"
 
 fixture() { printf '%s' "$1" > "$TMP/fx.json"; }
 
 run() {
   : > "$TMP/mensajes.txt"
   TMP_MENSAJES="$TMP/mensajes.txt" \
+  TMP_TABLERO="$TMP/tablero.txt" \
   ONIA_TG="$TMP/tg.sh" \
+  ONIA_TABLERO="$TMP/tablero.sh" \
   ONIA_CI_MARCA_DIR="$TMP" \
   ONIA_CI_FIXTURE="$TMP/fx.json" \
   ONIA_CI_OBJETIVOS="oninteligenciaartificial/onia-platform:master" \
@@ -189,6 +203,31 @@ rm -f "$TMP"/onia-ci-*
 fixture '{"workflow_runs":[{"name":"CI","status":"completed","conclusion":"success","head_sha":"0c54d65abc","html_url":"https://x/1"}]}'; run
 fixture '{"workflow_runs":[{"name":"CI","status":"completed","conclusion":"failure","head_sha":"0c54d65abc","html_url":"https://x/1"}]}'; run
 case "$MSGS" in *"CI en ROJO"*) ok "sin fecha: juzga igual (no apaga la red)" ;; *) falla "sin created_at" "CI en ROJO" "$MSGS" ;; esac
+
+# 16. RECUPERARSE INCLUYE CERRAR LA TAREA QUE ABRIO EL ROJO.
+#
+# El caso que faltaba, y el mas caro: hasta el 2026-09-24 el verde avisaba
+# «recuperado» y borraba la marca, pero la TAREA que el rojo habia creado seguia
+# viva afirmando que master estaba roto. Los carriles leen el tablero antes que su
+# cola, asi que eso manda a arreglar algo ya arreglado (medido: t_c8a2d7d5, con el
+# CI verde desde hacia ~21 h).
+rm -f "$TMP"/onia-ci-*; : > "$TMP/tablero.txt"
+fixture "$(corridas failure completed "$AHORA")"; run
+MARCA_ROJA=$(cat "$TMP"/onia-ci-*.rojo 2>/dev/null)
+case "$MARCA_ROJA" in *t_deadbeef*) ok "el rojo guarda el id de su tarea en la marca" ;; *) falla "marca con id" "t_deadbeef" "${MARCA_ROJA:-(vacia)}" ;; esac
+
+MAS_TARDE=$(date -u -d "+2 hours" +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || date -u -v+2H +%Y-%m-%dT%H:%M:%SZ)
+fixture "$(corridas success completed "$MAS_TARDE")"; run
+TAB=$(cat "$TMP/tablero.txt" 2>/dev/null)
+case "$TAB" in *"complete t_deadbeef"*) ok "el verde CIERRA la tarea que abrio el rojo" ;; *) falla "cierre de la tarea" "complete t_deadbeef" "${TAB:-(no se llamo al tablero)}" ;; esac
+case "$TAB" in *"comment t_deadbeef"*) ok "y deja el motivo escrito en la tarea" ;; *) falla "motivo del cierre" "comment t_deadbeef" "${TAB:-(nada)}" ;; esac
+
+# 17. Un verde SIN rojo previo no cierra nada: no hay tarea que cerrar, y llamar
+# al tablero con una marca vacia seria pedirle que cierre "".
+rm -f "$TMP"/onia-ci-*; : > "$TMP/tablero.txt"
+fixture "$(corridas success completed "$AHORA")"; run
+TAB=$(cat "$TMP/tablero.txt" 2>/dev/null)
+[ -z "$TAB" ] && ok "verde sin rojo previo: no toca el tablero" || falla "verde solo" "(nada)" "$TAB"
 
 echo
 if [ "$FALLOS" = "0" ]; then echo "vigia-ci: TODO VERDE"; exit 0; fi
