@@ -1245,7 +1245,15 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       **suba de plan**, que es el día que menos ganas hay de descubrirlo.
       **Falta mergear y desplegar** para que el cliente lo vea.
 
-- [ ] 🔴 **Estado real de los agentes IA del producto** (Sergio Urcullo, 11-sep: *"mira también
+- [x] 🔴 **Estado real de los agentes IA del producto** — ✅ **CERRADO el 2026-09-24.** Lo único
+      que le quedaba abierto era lo que él mismo admitía dos veces: *"NO se miró renderizada,
+      falta esa foto cuando haya un borrador vivo"*. Ya existe, y las **seis** piezas del ítem
+      ((a)…(c) + las fricciones (i)…(v)) están construidas, **desplegadas** (las tres medidas
+      corridas hoy, no heredadas) y **miradas en producción**. Detalle y capturas: abajo.
+      ⚠️ Cuatro líneas de este mismo ítem decían *"Commiteado, NO desplegado"* sobre código que
+      **ya estaba vivo hacía días** — el 46 % de pendientes fantasma de este carril, en su forma
+      más cara: mandan a pedir un deploy que ya ocurrió. Quedaron corregidas con su medición al
+      lado, no borradas. (Sergio Urcullo, 11-sep: *"mira también
       cómo están los agentes ai"*). **MEDIDO el 2026-09-11 en la base de prod** (supabase-db,
       tablas `onia_agents_*`): 4 agentes definidos, el cron corre y completa (22 corridas
       `completed`, 14 en los últimos 7 días, última hoy 11:00 UTC) — pero
@@ -1336,10 +1344,22 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       constante → 3 rojos de unidad.
       Commit `9aa0cd5` (`onia-platform`, rama `claude/chatbots-platform-review-0d1d09`),
       gates re-corridos EN EL VPS antes de publicar la rama: `tsc` 0, **4.849 tests verdes**.
-      ⚠️ **COMMITEADO, NO DESPLEGADO, y NO se miró renderizado** — por lo mismo que (ii)/(iii):
-      el banco `/dev/demo` pide base local sembrada + `next dev`, y en producción no hay hoy
-      ningún approval pendiente que mirar (los `e2e-agentes2-*` se purgaron en la vuelta
-      anterior). Falta esa foto cuando haya un borrador vivo.
+      ✅ **DESPLEGADO y MIRADO RENDERIZADO en producción el 2026-09-24** — las dos cosas que
+      esta línea daba por faltantes. Decía *"COMMITEADO, NO DESPLEGADO, y NO se miró
+      renderizado"* y quedó congelada en pasado: medido hoy, `9aa0cd5` está en `origin/master`
+      y el símbolo vive en el build servido (`docker exec onia-platform grep -rl "Propuesta de "
+      /app/.next/server` → `/app/.next/server/chunks/4212.js` — ruta DENTRO del contenedor, no
+      del repo; BUILD_ID `9tuk1Qk2BjQ2j2HdJcL8u`).
+      **La foto que faltaba ya existe.** Se sembró el borrador vivo que la línea pedía: factura
+      `VENCIDA` Bs 370 vencida hace 12 días en `clinica-sergio-p2ljs` (ids `e2e-rotulo-*`) →
+      se destrabó la cadencia borrando la corrida del cobrador de hoy (respaldo en
+      `/root/respaldos/e2e-rotulo-run-20260924.json`) → cron → `pendingApproval: 1`, con
+      `metadata.agentName = "Cobrador — saldos vencidos"`. Abierto `/pending` como
+      `sergio@onia.com.bo` y **MIRADO**: la tarjeta dice **«Propuesta de Cobrador — Bs 370,00»**,
+      no el genérico *"Propuesta de agente"*, y debajo el sobre completo
+      (*"Se envía por WhatsApp a Paciente E2E Rotulo (+59170000001)"* + el texto íntegro).
+      Purgado con respaldo (`/root/respaldos/e2e-rotulo-purga-20260924.json`) y re-auditoría
+      en cero (acciones, despachos, approval, factura y paciente: `0|0|0|0|0`).
 
       <details><summary>Lo que se midió antes de tocar nada — la mitad cara ya estaba bien</summary>
 
@@ -1389,11 +1409,26 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       diccionario de la pantalla). **Visto en ROJO antes**, nombrando `agents-view.tsx`; 20
       casos de unidad validados **por mutación en dos puntos** (esquive del despacho → 2
       rojos; puerta de estado del despacho → 2 rojos). `tsc` limpio, `eslint` 0 errores.
-      ⚠️ **NO se miró renderizada:** el banco `/dev/demo` necesita base local sembrada
-      (`prisma/seed-demo.ts`) y un `next dev`, que no entraban en la vuelta. Falta esa foto
-      antes de darla por mirada. **Commiteado, NO desplegado.**
+      ✅ **DESPLEGADA y MIRADA RENDERIZADA el 2026-09-24.** Esta línea decía *"NO se miró
+      renderizada / Commiteado, NO desplegado"* y las dos mitades eran falsas hoy: `0dae2042`
+      está en `origin/master` y el literal vive en el build servido
+      (`grep -rl "Falta que la env" /app/.next/server` → `/app/.next/server/chunks/4212.js` y
+      `/app/.next/server/app/(dashboard)/agents/page.js` — rutas DENTRO del contenedor
+      `onia-platform`, no del repo; BUILD_ID `9tuk1Qk2BjQ2j2HdJcL8u`).
+      **Y se reprodujo el escenario exacto que el arreglo existe para cubrir**, no uno parecido:
+      con el borrador vivo del Cobrador se apretó **"Enviar yo mismo por WhatsApp"** —el canal
+      `manual`— tras verificar EN EL CÓDIGO, antes de apretar, que `manualAdapter.send`
+      (`lib/onia-core/dispatch/channels.ts:109-132`) sólo arma el link `wa.me` y **no toca la
+      red** (el hermano "Aprobar y enviar" sí dispara WhatsApp Cloud API real). Estado
+      resultante en base: acción `executed`, despacho `sent`, `pendienteDeEnvioHumano=true` —
+      **el trío que antes se leía como un envío real**. Abierto `/agents` y **MIRADO**: la
+      tarjeta lleva el rótulo **«Falta que la envíes»**, no "Ejecutada", y debajo
+      *"Onia preparó el mensaje, pero todavía no salió: sale cuando lo mandás vos ·
+      **Abrir WhatsApp y enviarlo**"* con el link persistente EN la tarjeta (que era justo lo
+      que (iii) arreglaba: antes vivía en un aviso que se borraba al navegar).
       (b) ✅ **purgadas el 2026-09-12**, las 12 filas, con respaldo y re-auditoría en cero;
-      (c) construir los 3 agentes nuevos de abajo.
+      (c) ✅ **HECHO** — los 3 agentes nuevos están construidos, mergeados y desplegados
+      (verificado el 2026-09-24 con las tres medidas, ver el ⚠️ de más arriba).
 
       ✅ **(v) CERRADA el 2026-09-13 — la misma pantalla se contradecía a sí misma, y se
       ve HOY en la cuenta real de Sergio Urcullo.** No estaba en la lista de fricciones:
@@ -1426,7 +1461,12 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       de apagarse solo— más el cableado (la pantalla no puede volver a tener su propio
       párrafo). **Visto en ROJO antes** (3 casos), y **validado por mutación en dos puntos
       después del arreglo**: esquive de la condición → 2 rojos; descableado de la pantalla
-      → 1 rojo. `tsc` limpio, `eslint` 0 errores. **Commiteado, NO desplegado.**
+      → 1 rojo. `tsc` limpio, `eslint` 0 errores.
+      ✅ **DESPLEGADO — medido el 2026-09-24**, no heredado: `b86ad03c` está en `origin/master`
+      y el literal de la rama condicionada vive en el build servido
+      (`docker exec onia-platform grep -c "corrida, lo que detecten aparece de nuevo"
+      "/app/.next/server/app/(dashboard)/agents/page.js"` → `1`). La línea decía
+      *"Commiteado, NO desplegado"* y era otra congelada en pasado.
 
       **DECIDIDO por Sergio Urcullo (11-sep, eligió las 4 opciones) y TODAVÍA SIN CONSTRUIR:
       los TRES agentes nuevos** (nota del merge del 12-sep: dos carriles reescribieron este
