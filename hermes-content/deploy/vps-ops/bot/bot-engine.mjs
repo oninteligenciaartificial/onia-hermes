@@ -100,6 +100,10 @@ export function createState(input = {}) {
     // quiere comprar). Una sola vez por conversacion: el aviso ya le llega a Sergio Urcullo por
     // un canal saturado, y repetirlo es apagarlo. Vive en `raw`, como handoffAckAt: sin DDL.
     urgenteAvisadoAt: input.urgenteAvisadoAt || null,
+    // Cuando se aviso que la persona sigue escribiendo en un handoff que NADIE tomo. El bot se
+    // calla para no pisar al humano; si ese humano no existe, el silencio ademas es invisible.
+    // Una sola vez, por el mismo canal saturado. Vive en `raw`, como los dos de arriba: sin DDL.
+    handoffMudoAvisadoAt: input.handoffMudoAvisadoAt || null,
     optInAt: input.optInAt || null,
     optInSource: input.optInSource || null,
     optOutAt: input.optOutAt || null,
@@ -199,6 +203,7 @@ export function reiniciarConversacionVencida(state) {
     humanTookOverAt: null,
     handoffAckAt: null,
     urgenteAvisadoAt: null,
+    handoffMudoAvisadoAt: null,
     slotsOffered: [],
     scheduledAt: null,
     scheduledLabel: null,
@@ -243,6 +248,7 @@ export function toConversationRow(state) {
       branchAsked: state.branchAsked,
       handoffAckAt: state.handoffAckAt,
       urgenteAvisadoAt: state.urgenteAvisadoAt,
+      handoffMudoAvisadoAt: state.handoffMudoAvisadoAt,
     },
   };
 }
@@ -793,7 +799,30 @@ export function step(state, incoming, options = {}) {
         );
       }
       // UNA sola vez: acusar cada mensaje seria spam, y encima taparia a Sergio cuando entre.
-      if (base.handoffAckAt) return finalize(ctx, base, [], [], ["silencio:handoff_en_curso"]);
+      if (base.handoffAckAt) {
+        // El silencio de abajo asume que hay un humano del otro lado. Cuando NADIE tomo la
+        // conversacion (`humanTookOver === false`) esa premisa es falsa: el bot se calla, el
+        // aviso del handoff ya se gasto en el primer turno, y ningun barrido mira
+        // `handoff_humano` (followup/insistencia/postdemo miran otras etapas). La persona queda
+        // escribiendole a nadie sin que nadie se entere — medido el 2026-09-24 en `chatwoot:11`,
+        // 14 dias asi. Se le sigue sin contestar (contestar cada insistencia es un loro que tapa
+        // a Sergio Urcullo cuando entre), pero el silencio AVISA una vez.
+        // `urgenteAvisadoAt` cuenta como avisado: si ya salio el aviso urgente por ESTA
+        // conversacion, Sergio Urcullo ya sabe que esta caliente y un segundo aviso es el ruido
+        // que apaga el canal. El caso que se rescata es el otro — el que insiste SIN decir la
+        // palabra que el guion le pidio, que es el que nadie estaba viendo.
+        if (!base.humanTookOver && !base.handoffMudoAvisadoAt && !base.urgenteAvisadoAt) {
+          const marcado = { ...base, handoffMudoAvisadoAt: msg.receivedAt || new Date().toISOString() };
+          return finalize(
+            ctx,
+            marcado,
+            [],
+            [{ type: "notify_sergio", payload: { kind: "handoff_sin_humano", reason: "handoff_sin_humano", conversationKey: marcado.conversationKey, text: summarize(marcado, msg, "handoff_sin_humano", config) } }],
+            ["silencio:handoff_en_curso"],
+          );
+        }
+        return finalize(ctx, base, [], [], ["silencio:handoff_en_curso"]);
+      }
       const acusado = { ...base, handoffAckAt: msg.receivedAt || new Date().toISOString() };
       // Cero efectos: el aviso a Sergio y la cola de revision ya salieron con el handoff. Este
       // turno es solo decirle a la persona que su mensaje llego.
