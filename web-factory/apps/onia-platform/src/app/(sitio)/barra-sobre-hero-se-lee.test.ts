@@ -1,8 +1,17 @@
-import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { describe, expect, it } from "vitest";
+
+import {
+  CSS_GLOBAL,
+  CSS_SITIO,
+  contraste,
+  declaracion,
+  leer,
+  resolverColor,
+  tablaDeVariables,
+} from "./contraste-css";
 
 /**
  * Arriba del todo, la barra se pinta del verde del hero. Todo lo que queda
@@ -35,8 +44,6 @@ import { describe, expect, it } from "vitest";
  */
 
 const AQUI = dirname(fileURLToPath(import.meta.url));
-const CSS_SITIO = join(AQUI, "sitio.module.css");
-const CSS_GLOBAL = join(AQUI, "..", "globals.css");
 const BARRA = join(AQUI, "barra.tsx");
 const MENU = join(AQUI, "menu.tsx");
 
@@ -59,108 +66,23 @@ const MINIMO_SUJETOS = 5;
 /** Clases que la barra renderiza pero que NO pintan texto ni borde propio. */
 const SIN_TINTA_PROPIA = new Set(["logoImg", "logoTinta", "logoClaro"]);
 
-function leer(ruta: string): string {
-  return readFileSync(ruta, "utf8");
-}
-
-/** `#abc` / `#aabbcc` → [r,g,b]. */
-function hexARgb(hex: string): [number, number, number] | null {
-  const h = hex.trim().replace(/^#/, "");
-  if (h.length === 3) {
-    return [
-      parseInt(h[0] + h[0], 16),
-      parseInt(h[1] + h[1], 16),
-      parseInt(h[2] + h[2], 16),
-    ];
-  }
-  if (h.length === 6) {
-    return [
-      parseInt(h.slice(0, 2), 16),
-      parseInt(h.slice(2, 4), 16),
-      parseInt(h.slice(4, 6), 16),
-    ];
-  }
-  return null;
-}
-
 /**
- * Tabla de variables del TEMA CLARO — el `:root` de `globals.css` más el bloque
- * de tokens de `sitio.module.css`. El tema oscuro (`:root[data-theme="dark"]`)
- * se excluye a propósito: redefine `--ink` a un color claro, así que mezclarlo
- * taparía justo el caso que se mide. Playwright y un teléfono recién sacado de la
- * caja piden el claro.
+ * La tinta y el fondo se resuelven con las MISMAS reglas que el gate del bloque
+ * de precios (`contraste-css.ts`): dos copias de un resolvedor de color se
+ * desincronizan, y la que no se toca sigue midiendo con las reglas viejas y
+ * firma verde. La tabla se arma sólo con las dos hojas que tocan a la barra.
  */
-function tablaDeVariables(): Map<string, string> {
-  const tabla = new Map<string, string>();
-  for (const archivo of [CSS_GLOBAL, CSS_SITIO]) {
-    const texto = leer(archivo);
-    // Cortamos en el primer bloque de tema oscuro para no pisar el tema claro.
-    const claro = texto.split(/:root\s*\[\s*data-theme\s*=\s*"dark"\s*\]/)[0];
-    for (const m of claro.matchAll(/(--[a-z0-9-]+)\s*:\s*([^;]+);/gi)) {
-      tabla.set(m[1], m[2].trim());
-    }
-  }
-  return tabla;
+const VARIABLES = [CSS_GLOBAL, CSS_SITIO];
+
+/** Último `color:` de un selector cuyo sujeto es la clase, sin las reglas que ya
+ * está calificadas por `.headerSobreHero` (ésas son justamente la cobertura). */
+function colorBase(css: string, clase: string): string | null {
+  return declaracion(css, clase, "color", { excluyendo: /headerSobreHero/ });
 }
 
-/**
- * Resuelve un valor de color a [r,g,b]: sigue cadenas de `var(--x)` y evalúa el
- * único `color-mix(in srgb, C N%, transparent)` que usa esta hoja, que es una
- * mezcla con el fondo (alfa sobre opaco), no con otro color.
- */
-function resolverColor(
-  valor: string,
-  tabla: Map<string, string>,
-  fondo: [number, number, number],
-  saltos = 0,
-): [number, number, number] | null {
-  if (saltos > 10) return null;
-  const v = valor.trim();
-
-  const mix = v.match(
-    /color-mix\(\s*in\s+srgb\s*,\s*(.+?)\s+([\d.]+)%\s*,\s*transparent\s*\)/i,
-  );
-  if (mix) {
-    const base = resolverColor(mix[1], tabla, fondo, saltos + 1);
-    if (!base) return null;
-    const a = Number(mix[2]) / 100;
-    return [0, 1, 2].map((i) =>
-      Math.round(base[i] * a + fondo[i] * (1 - a)),
-    ) as [number, number, number];
-  }
-
-  const ref = v.match(/^var\(\s*(--[a-z0-9-]+)\s*(?:,(.*))?\)$/i);
-  if (ref) {
-    const apuntado = tabla.get(ref[1]);
-    if (apuntado) return resolverColor(apuntado, tabla, fondo, saltos + 1);
-    if (ref[2]) return resolverColor(ref[2], tabla, fondo, saltos + 1);
-    return null;
-  }
-
-  if (v.startsWith("#")) return hexARgb(v.split(/\s+/)[0]);
-
-  const rgb = v.match(/rgba?\(\s*(\d+)[\s,]+(\d+)[\s,]+(\d+)/i);
-  if (rgb) return [Number(rgb[1]), Number(rgb[2]), Number(rgb[3])];
-
-  if (/^(#fff|white)$/i.test(v)) return [255, 255, 255];
-  return null;
-}
-
-/** Luminancia relativa de WCAG 2.1. */
-function luminancia([r, g, b]: [number, number, number]): number {
-  const canal = (c: number) => {
-    const x = c / 255;
-    return x <= 0.04045 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4);
-  };
-  return 0.2126 * canal(r) + 0.7152 * canal(g) + 0.0722 * canal(b);
-}
-
-export function contraste(
-  a: [number, number, number],
-  b: [number, number, number],
-): number {
-  const [alto, bajo] = [luminancia(a), luminancia(b)].sort((x, y) => y - x);
-  return (alto + 0.05) / (bajo + 0.05);
+/** `color:` que `.headerSobreHero` le pone a una clase, si se lo pone. */
+function colorSobreHero(css: string, clase: string): string | null {
+  return declaracion(css, clase, "color", { exigiendo: /headerSobreHero/ });
 }
 
 /**
@@ -191,42 +113,9 @@ export function controlesDeLaBarra(barra: string, menu: string): string[] {
   return [...clases].sort();
 }
 
-/**
- * Último `color:` declarado para un selector de clase, ignorando las reglas que
- * ya están calificadas por `.headerSobreHero` (ésas son justamente la cobertura).
- */
-function colorBase(css: string, clase: string): string | null {
-  let encontrado: string | null = null;
-  const re = new RegExp(
-    `(^|[},])\\s*([^{}]*\\.${clase}\\b[^{}]*)\\{([^}]*)\\}`,
-    "g",
-  );
-  for (const m of css.matchAll(re)) {
-    const selector = m[2];
-    if (/headerSobreHero/.test(selector)) continue;
-    const decl = m[3].match(/(?:^|;)\s*color\s*:\s*([^;]+)/);
-    if (decl) encontrado = decl[1].trim();
-  }
-  return encontrado;
-}
-
-/** `color:` que `.headerSobreHero` le pone a una clase, si se lo pone. */
-function colorSobreHero(css: string, clase: string): string | null {
-  let encontrado: string | null = null;
-  const re = new RegExp(
-    `(^|[},])\\s*([^{}]*\\.headerSobreHero\\b[^{}]*\\.${clase}\\b[^{}]*)\\{([^}]*)\\}`,
-    "g",
-  );
-  for (const m of css.matchAll(re)) {
-    const decl = m[3].match(/(?:^|;)\s*color\s*:\s*([^;]+)/);
-    if (decl) encontrado = decl[1].trim();
-  }
-  return encontrado;
-}
-
 describe("la barra sobre el hero se lee", () => {
   const css = leer(CSS_SITIO);
-  const tabla = tablaDeVariables();
+  const tabla = tablaDeVariables(VARIABLES);
   const controles = controlesDeLaBarra(leer(BARRA), leer(MENU));
 
   it("encuentra los controles de la barra en el markup", () => {
