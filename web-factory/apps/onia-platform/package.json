@@ -22,6 +22,7 @@
     "enlaces:vivos": "node scripts/enlaces-vivos.mjs",
     "rubros:vivos": "node scripts/rubros-vivos.mjs",
     "medio-de-pago:vivo": "node scripts/medio-de-pago-vivo.mjs",
+    "intake:vivo": "node scripts/intake-vivo.mjs",
     "recursos:vivos": "node scripts/recursos-vivos.mjs",
     "capacidad:por-rubro": "node scripts/capacidad-por-rubro.mjs",
     "guia:facturacion": "node scripts/verificar-guia-facturacion.mjs",

@@ -52,6 +52,7 @@ describe("mirar-primera-pantalla: el veredicto", () => {
     archivo: "/tmp/x.png",
     h1: "Cerrás vos. El negocio no.",
     opacidadH1: 1,
+    kicker: { medible: true, texto: "UN SOLO SISTEMA", fontSize: 12.8, lineas: 1, dx: 7.7 },
     fallidas: [] as Fallida[],
     ...extra,
   });
@@ -173,6 +174,80 @@ describe("mirar-primera-pantalla: el veredicto", () => {
    * se lee como éxito. Un recorrido que se corta es instrumento roto, no sitio
    * sano.
    */
+  /**
+   * El defecto real del 2026-09-24, medido en producción con teléfono de 390 px:
+   * el rótulo de la portada —"UN SOLO SISTEMA PARA TODO EL NEGOCIO"— parte en
+   * dos líneas dentro de un bloque centrado, y el punto verde se quedaba contra
+   * el borde izquierdo mientras el texto se centraba: **44 px de vacío** entre
+   * el punto y su propia etiqueta, en la PRIMERA pantalla que ve un lead.
+   *
+   * Los cuatro números del objetivo del carril daban verde ese día (prohibidos
+   * 0, precios fuera de fuente 0, CTA rotos 0, favicon 200) y los tests de copy
+   * también: `hero.test.ts` lee el TEXTO del titular, y este defecto no cambia
+   * una letra. Sólo lo ve quien mide la geometría de lo pintado.
+   */
+  it("da ROJO cuando el punto del rótulo quedó lejos de su etiqueta", () => {
+    const r = veredicto([
+      pantalla({
+        pantalla: "telefono",
+        kicker: {
+          medible: true,
+          texto: "UN SOLO SISTEMA PARA TODO EL NEGOCIO",
+          fontSize: 12.8,
+          lineas: 2,
+          dx: 44,
+        },
+      }),
+    ]);
+    expect(r.codigo).toBe(1);
+    expect(r.lineas.join("\n")).toContain("punto del rotulo quedo suelto");
+    expect(r.lineas.join("\n")).toContain("44 px de hueco");
+  });
+
+  /**
+   * El tope es generoso a propósito: `0.6em` pide el CSS y se perdona hasta el
+   * doble, así que un ajuste de espaciado no pinta rojo. Lo que no se perdona
+   * es un hueco que se vea.
+   */
+  it("no pinta rojo por un espaciado apenas distinto del que pide el CSS", () => {
+    const r = veredicto(
+      cuatroSanas.map((p) => ({
+        ...p,
+        kicker: { medible: true, texto: "EMPEZÁ", fontSize: 12.8, lineas: 1, dx: 12 },
+      })),
+    );
+    expect(r.codigo).toBe(0);
+  });
+
+  /**
+   * Producción corre un build anterior al `<span>`: ahí el punto es un
+   * `::before` y `getBoundingClientRect` no lo alcanza. Eso NO es verde —el
+   * defecto puede estar vivo— ni rojo —no se midió nada—: sale 2, que es el
+   * código con el que el resto de los gates del carril dice NO MEDIDO.
+   */
+  it("sale NO MEDIDO (2), no verde, cuando el punto no tiene caja que medir", () => {
+    const r = veredicto(
+      cuatroSanas.map((p) => ({
+        ...p,
+        kicker: { medible: false, texto: "UN SOLO SISTEMA", fontSize: 12.8 },
+      })),
+    );
+    expect(r.codigo).toBe(2);
+    expect(r.lineas.join("\n")).toContain("NO MEDIDO");
+  });
+
+  /**
+   * `null` es una respuesta ("esta pantalla no tiene rótulo"); que el campo no
+   * llegue es que el instrumento dejó de preguntar, y ese es el modo en que
+   * este gate fallaría abierto: seguiría dando verde sobre un dato que no tomó.
+   */
+  it("distingue una pantalla sin rótulo de una medición que no se hizo", () => {
+    expect(veredicto(cuatroSanas.map((p) => ({ ...p, kicker: null }))).codigo).toBe(0);
+    const sinPreguntar = veredicto(cuatroSanas.map((p) => ({ ...p, kicker: undefined })));
+    expect(sinPreguntar.codigo).toBe(1);
+    expect(sinPreguntar.lineas.join("\n")).toContain("sin la medicion del rotulo");
+  });
+
   it("da ROJO con un informe vacío en vez de leer el silencio como éxito", () => {
     expect(veredicto([]).codigo).not.toBe(0);
   });
@@ -232,6 +307,7 @@ describe("mirar-primera-pantalla: el umbral de pintado", () => {
         archivo: "",
         h1: "x",
         opacidadH1: n,
+        kicker: null,
         fallidas: [] as Fallida[],
       }));
     // Justo en el umbral pasa; un pelo por debajo, no.
