@@ -1,7 +1,47 @@
 {
   "schema": "onia.bot.knowledge/1",
-  "version": "2026-09-02.2",
-  "updatedBy": "carril-chatbot",
+  "version": "2026-09-24.1",
+  "updatedBy": "carril-chatbot-cola",
+  "campanas": [
+    {
+      "frase": "Hola, quiero conocer Onia",
+      "respuesta": "¡Hola! Soy el asistente automático de Onia. Onia es una plataforma por módulos: tu negocio trabaja adentro (agenda, clientes, ventas, cobros) y hay agentes que contestan por WhatsApp, como te estoy contestando yo. Contame de qué es tu negocio y te digo qué parte te sirve; si querés verlo con tus datos, te coordino una demo con Sergio."
+    },
+    {
+      "frase": "Hola, vengo de la web de Onia. Quiero saber si me sirve para mi negocio.",
+      "respuesta": "¡Hola! Soy el asistente automático de Onia. Para decirte si te sirve necesito dos cosas: de qué es tu negocio y cuánta gente trabaja con vos. Con eso te digo qué módulo te toca y qué resuelve, sin vueltas. Y si preferís verlo funcionando con tus datos, te coordino una demo con Sergio."
+    },
+    {
+      "frase": "Hola, vengo de la web de Onia. Quiero consultoría/capacitación en IA para mi empresa.",
+      "respuesta": "¡Hola! Soy el asistente automático de Onia. La consultoría y las capacitaciones en IA las da Sergio, no un bot: se arman sobre lo que tu empresa ya hace hoy. Contame el rubro, cuánta gente son y qué proceso te está costando más tiempo — con eso te coordino la reunión y él llega con el diagnóstico empezado."
+    },
+    {
+      "frase": "Hola, vengo de la web de Onia. Quiero una propuesta de marketing con IA para mi negocio.",
+      "respuesta": "¡Hola! Soy el asistente automático de Onia. Para la propuesta de marketing con IA — contenido, videos e influencers con IA, y la publicación en redes — necesito saber de qué es tu negocio, en qué redes estás hoy y qué querés lograr: más consultas, más ventas o que más gente te conozca. Me lo pasás y Sergio te la arma con eso adentro."
+    },
+    {
+      "frase": "Hola, mi rubro no está en la lista de Onia. Mi negocio es: ",
+      "prefijo": true,
+      "respuesta": "¡Hola! Soy el asistente automático de Onia. Que tu rubro no esté en la lista no lo deja afuera: el motor es el mismo y los módulos —agenda, clientes, ventas, cobros— se arman con vos sobre lo que ya corre. Contame qué hacés y cuánta gente trabaja con vos, y con eso Sergio te muestra en la demo qué parte te sirve."
+    },
+    {
+      "frase": "Hola, vengo de la página del chatbot de Onia. Tengo una consulta antes de elegir el stack.",
+      "respuesta": "¡Hola! Soy el asistente automático de Onia — de hecho, soy el mismo tipo de asistente que estarías contratando. Preguntá tranquilo: si es algo que sé, te lo contesto acá mismo; si es una decisión técnica de tu caso, te la responde Sergio y te coordino la charla. ¿Qué querés saber antes de elegir?"
+    },
+    {
+      "frase": "Hola, vengo de la web de Onia. Quiero agendar la consulta comercial de 20 minutos.",
+      "respuesta": "¡Hola! Soy el asistente automático de Onia. La consulta de 20 minutos la da Sergio y sirve para una cosa concreta: decirte qué módulo te toca y qué resuelve en tu negocio, sin vueltas. Para que esos 20 minutos rindan, contame de qué es tu negocio y cuánta gente trabaja con vos. Con eso te confirmo el horario acá mismo."
+    },
+    {
+      "frase": "Hola, vengo de la web de Onia. Quiero agendar la demo de 45 minutos con mi caso.",
+      "respuesta": "¡Hola! Soy el asistente automático de Onia. La demo de 45 minutos la hace Sergio sobre TU caso: se ve el sistema funcionando con tus datos, no una presentación. Contame de qué es tu negocio y qué proceso te está costando más tiempo hoy — agenda, clientes, ventas o cobros — así llega preparado. Con eso te confirmo el horario acá mismo."
+    },
+    {
+      "frase": "Hola, vengo del configurador de webs de ONIA",
+      "prefijo": true,
+      "respuesta": "¡Hola! Soy el asistente automático de Onia. Me llegó tu pedido de web con todo lo que armaste: el nivel, la estructura y el diseño que elegiste. Eso lo revisa Sergio y te confirma el alcance con vos. De tu lado hacen falta los textos, las fotos y el dominio, que queda a tu nombre y se paga aparte; el cuidado mensual es opcional. ¿Te escribe por acá o preferís que te llame?"
+    }
+  ],
   "identity": {
     "productName": "Onia",
     "humanName": "Sergio",
