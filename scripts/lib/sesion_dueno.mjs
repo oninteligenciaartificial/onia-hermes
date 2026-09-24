@@ -18,6 +18,9 @@ import { createRequire } from "node:module";
 // El navegador se elige por el que ARRANCA, no por el primer node_modules que exista: ver
 // playwright-que-arranca.mjs (nodo-casa quedó ciego un día entero por eso).
 import { cargarPlaywright } from "./playwright-que-arranca.mjs";
+// El magiclink del admin API entra en `aal1`. Toda cuenta con 2FA verificado rebota a
+// `/login/2fa` y el instrumento sale con exit 2 — ver `elevarSegundoFactor` abajo.
+import { codigoTotp, segundosHastaLaProximaVentana } from "./totp.mjs";
 
 /**
  * Ni playwright ni @supabase/ssr viven en el repo onia-hermes: se resuelven por lista de
@@ -87,6 +90,73 @@ export function exigirCuentaConPerfil(email) {
 }
 
 /**
+ * Sube la sesion de `aal1` a `aal2` cuando la cuenta tiene segundo factor verificado.
+ *
+ * Sin esto, `superadmin@onia.com.bo` —la UNICA cuenta de `onia-interna`, que es la unica org
+ * con los inboxes reales y con conversaciones de desconocidos— no se puede mirar: el guard de
+ * `proxy.ts` lee el `aal` del JWT y manda toda pantalla a `/login/2fa`. Medido el 2026-09-24:
+ * `--ruta /inbox` terminaba en `URL final: https://app.onia.com.bo/login/2fa`, exit 2.
+ *
+ * El 2FA NO se toca y el secreto NO se copia a ningun lado: se lee en vivo de la misma base
+ * que este modulo ya consulta (`exigirCuentaConPerfil` no corre sin `docker exec supabase-db`).
+ * El porque esto no amplia el alcance de nadie esta escrito en `totp.mjs`.
+ *
+ * Devuelve una linea para el log. Sale con 2 —nunca en silencio— si no puede elevar: una
+ * sesion aal1 sacando la captura de `/login/2fa` tiene la misma cara que una captura buena.
+ */
+export async function elevarSegundoFactor(cliente) {
+  const { data, error } = await cliente.auth.mfa.listFactors();
+  if (error) {
+    console.error(`No se pudieron listar los factores de la cuenta: ${error.message}`);
+    process.exit(2);
+  }
+  const factor = (data?.totp ?? []).find((f) => f.status === "verified");
+  if (!factor) return "la cuenta no tiene segundo factor: la sesión aal1 alcanza";
+
+  const secreto = psql(
+    `select secret from auth.mfa_factors where id = '${factor.id}' and status = 'verified'`
+  );
+  if (!secreto) {
+    console.error(
+      `El factor ${factor.id} existe pero auth.mfa_factors no devolvió su clave. ` +
+        `Sin eso no se puede completar el segundo paso y la captura sería de /login/2fa.`
+    );
+    process.exit(2);
+  }
+
+  // Dos intentos, por la protección de repetición del TOTP: si GoTrue rechaza un código ya
+  // usado, la SEGUNDA corrida del instrumento dentro de los mismos 30 s falla — y ese fallo
+  // tiene la misma cara que una clave mal leída. Esperar la ventana siguiente es la salida.
+  // ⚠️ Medido el 2026-09-24 contra este GoTrue: tres mints en 26 s pasaron los tres, o sea
+  // que HOY acá no rechaza la repetición (cada `challenge` es nuevo). Se deja igual porque el
+  // reintento no cuesta nada y ese comportamiento cambia con una actualización, no con un
+  // despliegue nuestro; si alguna vez se dispara, la línea de abajo lo dice en el log.
+  for (const intento of [1, 2]) {
+    const { data: desafio, error: errorDesafio } = await cliente.auth.mfa.challenge({ factorId: factor.id });
+    if (errorDesafio) {
+      console.error(`GoTrue no emitió el desafío del segundo factor: ${errorDesafio.message}`);
+      process.exit(2);
+    }
+    const { error: errorVerificar } = await cliente.auth.mfa.verify({
+      factorId: factor.id,
+      challengeId: desafio.id,
+      code: codigoTotp(secreto),
+    });
+    if (!errorVerificar) return `segundo factor verificado (factor ${factor.id.slice(0, 8)}…) — sesión aal2`;
+    if (intento === 2) {
+      console.error(`GoTrue rechazó el segundo factor dos veces seguidas: ${errorVerificar.message}`);
+      process.exit(2);
+    }
+    const espera = segundosHastaLaProximaVentana();
+    console.log(
+      `el segundo factor rechazó el código (GoTrue no acepta dos veces el mismo): ` +
+        `espero ${espera}s a la ventana siguiente y reintento.`
+    );
+    await new Promise((resolver) => setTimeout(resolver, (espera + 1) * 1000));
+  }
+}
+
+/**
  * Magiclink de un solo uso -> cookies, canjeado con la libreria que lee el servidor.
  *
  * El canje NO se hace a mano: `/auth/callback` de la app solo entiende `code` de PKCE, y
@@ -131,6 +201,10 @@ export async function acunarSesion(email) {
   for (const tipo of ["magiclink", "email"]) {
     const { data, error } = await cliente.auth.verifyOtp({ token_hash: tokenHash, type: tipo });
     if (!error && data?.session) {
+      // El segundo paso va ANTES de leer el tarro: `mfa.verify` reemplaza la sesión por una
+      // `aal2`, y las cookies que valen son las de DESPUÉS. Leerlas antes se lleva el JWT
+      // `aal1` y la captura sale de /login/2fa con exit 0.
+      console.log(`segundo factor: ${await elevarSegundoFactor(cliente)}`);
       const cookies = [...tarro].map(([name, value]) => ({ name, value }));
       if (!cookies.length) {
         console.error("La librería no escribió ni una cookie: sin eso el servidor no ve la sesión.");

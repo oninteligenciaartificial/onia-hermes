@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { DEFAULT_CONFIG, renderTemplate } from "./config.mjs";
+import { DEFAULT_CONFIG, parseSlotsSpec, renderTemplate, slotsElegibles } from "./config.mjs";
 
 // ---------------------------------------------------------------------------
 // EL BUG QUE ESTOS CASOS CIERRAN
@@ -108,4 +108,69 @@ test("M_SIAT_BODY tiene {{humano}} a mitad de frase y sigue en minuscula", () =>
     producto: "Onia",
   });
   assert.ok(texto.includes("lo ve la encargada en la demo"), texto);
+});
+
+// ---------------------------------------------------------------------------
+// OFRECER es de a dos; ACEPTAR no tiene por que serlo
+// ---------------------------------------------------------------------------
+// Medido en produccion el 2026-09-24: de 43 conversaciones, 18 llegaron a `esperando_horario`
+// y CERO a `demo_agendada` — 0 filas con `calendar_event_id` en toda la historia de
+// `onia_center.bot_conversations`. El cron publica CINCO horarios por dia y el guion nombra
+// dos ({{slot_a}} y {{slot_b}} en la misma frase): los otros tres seguian LIBRES en la agenda,
+// pero para el motor no existian. Quien escribia "el lunes 28 a las 14:00" —un horario nuestro,
+// libre y dentro de la franja que la coletilla del MISMO mensaje le prometia— no matcheaba
+// ningun slot, caia en `intents.proposesOwnTime` y se iba a la cola humana.
+//
+// `parseSlotsSpec` NO cambia: sigue devolviendo el par A/B, que es lo que el guion sabe decir.
+// Lo que se agrega es la otra pregunta, que nadie estaba haciendo: que MAS podemos aceptar.
+const SPEC_CINCO = [
+  "viernes 25 de septiembre, 21:00@2026-09-26T01:00:00Z",
+  "sábado 26 de septiembre, 09:00@2026-09-26T13:00:00Z",
+  "lunes 28 de septiembre, 14:00@2026-09-28T18:00:00Z",
+  "martes 29 de septiembre, 14:00@2026-09-29T18:00:00Z",
+  "miércoles 30 de septiembre, 14:00@2026-09-30T18:00:00Z",
+].join("|"); // el ONIA_BOT_SLOTS del proceso vivo, leido de /proc/<pid>/environ el 2026-09-24
+
+test("slotsElegibles: los horarios libres que el guion no nombra siguen siendo elegibles", () => {
+  const ahora = Date.parse("2026-09-24T15:00:00Z");
+  const ofrecidos = parseSlotsSpec(SPEC_CINCO, { now: ahora });
+  assert.deepEqual(
+    ofrecidos.map((slot) => slot.label),
+    ["viernes 25 de septiembre, 21:00", "sábado 26 de septiembre, 09:00"],
+    "premisa: el guion sigue ofreciendo DOS, ni uno mas",
+  );
+
+  const extras = slotsElegibles(SPEC_CINCO, { now: ahora });
+  assert.deepEqual(
+    extras.map((slot) => slot.label),
+    [
+      "lunes 28 de septiembre, 14:00",
+      "martes 29 de septiembre, 14:00",
+      "miércoles 30 de septiembre, 14:00",
+    ],
+    "los tres que quedaron fuera del par se pueden ACEPTAR",
+  );
+  assert.ok(
+    extras.every((slot) => slot.key === null),
+    "sin letra a proposito: un 'A' reasignado le confirmaria a alguien un dia que nunca eligio",
+  );
+  assert.ok(extras.every((slot) => slot.pending === false && slot.startAt), "vivos y reservables");
+});
+
+test("slotsElegibles: ni el par ofrecido ni lo que ya caduco se cuelan", () => {
+  const ahora = Date.parse("2026-09-24T15:00:00Z");
+  const spec = [
+    "jueves 24 de septiembre, 18:00@2026-09-24T22:00:00Z", // no llega a la anticipacion minima
+    "viernes 25 de septiembre, 21:00@2026-09-26T01:00:00Z",
+    "sábado 26 de septiembre, 09:00@2026-09-26T13:00:00Z",
+    "lunes 28 de septiembre, 14:00@2026-09-28T18:00:00Z",
+  ].join("|");
+
+  const extras = slotsElegibles(spec, { now: ahora });
+  assert.deepEqual(
+    extras.map((slot) => slot.label),
+    ["lunes 28 de septiembre, 14:00"],
+    "el caducado no es elegible y el par ofrecido no se duplica",
+  );
+  assert.deepEqual(slotsElegibles("", { now: ahora }), [], "sin spec no se inventa ninguno");
 });

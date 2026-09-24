@@ -1229,3 +1229,62 @@ test("conversacionVencida: bordes deterministas", () => {
   );
   assert.equal(conversacionVencida({ ...base, botStage: "nuevo" }, UN_MES_DESPUES, CONFIG), false, "en 'nuevo' no hay nada que reiniciar");
 });
+
+// ---------------------------------------------------------------------------
+// EL BOT NUNCA AGENDO UNA DEMO: 3 de los 5 horarios libres eran inalcanzables
+// ---------------------------------------------------------------------------
+// Contado en produccion el 2026-09-24, no heredado: `onia_center.bot_conversations` tiene 43
+// conversaciones, 18 paradas en `esperando_horario` y CERO con `calendar_event_id`. El cron
+// publica CINCO horarios por dia y el guion nombra dos ({{slot_a}} y {{slot_b}} caen en la
+// misma frase); los otros tres quedaban fuera del array que mira `detectSlotChoice`, asi que
+// quien elegia uno de ELLOS —nuestro, libre, y dentro de la franja que la coletilla del mismo
+// mensaje le promete— caia en `proposesOwnTime` y se iba a la cola humana, que ese dia tenia
+// leads esperando hace 15-20 dias.
+//
+// OFRECER sigue siendo de a dos. Lo que cambia es ACEPTAR.
+const CONFIG_CINCO = createBotConfig({
+  slots: [
+    { key: "A", label: "viernes 25 de septiembre, 21:00", startAt: "2026-09-26T01:00:00Z", pending: false },
+    { key: "B", label: "sábado 26 de septiembre, 09:00", startAt: "2026-09-26T13:00:00Z", pending: false },
+  ],
+  slotsElegibles: [
+    { key: null, label: "lunes 28 de septiembre, 14:00", startAt: "2026-09-28T18:00:00Z", pending: false },
+    { key: null, label: "martes 29 de septiembre, 14:00", startAt: "2026-09-29T18:00:00Z", pending: false },
+  ],
+});
+const ESPERANDO = { ...createState({ channel: "sim", contactRef: "lead-real" }), botStage: "esperando_horario" };
+const AHORA_CINCO = "2026-09-24T15:00:00Z";
+
+test("elige un horario nuestro que el guion no nombro: se AGENDA, no se deriva a un humano", () => {
+  const out = step(ESPERANDO, { text: "el lunes 28 a las 14:00", receivedAt: AHORA_CINCO }, { config: CONFIG_CINCO });
+
+  assert.equal(out.nextState.botStage, "demo_agendada", "antes caia en handoff_humano con el horario libre");
+  assert.equal(out.nextState.scheduledAt, "2026-09-28T18:00:00Z", "reserva el instante que eligio, no el de A");
+  assert.equal(out.nextState.scheduledLabel, "lunes 28 de septiembre, 14:00");
+
+  const evento = out.sideEffects.find((effect) => effect.type === "calendar_event");
+  assert.ok(evento, "sin efecto de calendario no hay reserva: 'Listo, agendado' seria mentira");
+  assert.equal(evento.payload.startAt, "2026-09-28T18:00:00Z");
+
+  // La FOTO tiene que incluir al elegido y marcarlo. Se marcaba comparando `key`, y un horario
+  // que no es A ni B no tiene letra: sin esto la conversacion quedaba guardada como si nadie
+  // hubiera elegido nada.
+  const marcados = (out.nextState.slotsOffered || []).filter((slot) => slot.chosen);
+  assert.deepEqual(marcados.map((slot) => slot.label), ["lunes 28 de septiembre, 14:00"]);
+});
+
+test("las letras siguen siendo del par ofrecido: 'A' nunca se reasigna a un horario extra", () => {
+  const out = step(ESPERANDO, { text: "A", receivedAt: AHORA_CINCO }, { config: CONFIG_CINCO });
+  assert.equal(out.nextState.botStage, "demo_agendada");
+  assert.equal(out.nextState.scheduledLabel, "viernes 25 de septiembre, 21:00", "la A es la A de siempre");
+});
+
+test("un horario que NO tenemos sigue yendo a un humano (no se le asigna uno parecido)", () => {
+  const out = step(
+    ESPERANDO,
+    { text: "mejor el domingo 27 a las 10 de la mañana", receivedAt: AHORA_CINCO },
+    { config: CONFIG_CINCO },
+  );
+  assert.equal(out.nextState.botStage, "handoff_humano", "ese domingo no existe en la agenda");
+  assert.ok(out.notes.includes("handoff:propone_otro_horario"), JSON.stringify(out.notes));
+});

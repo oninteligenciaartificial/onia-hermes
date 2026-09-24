@@ -118,6 +118,65 @@ case "$MSG" in
   *) falla "la vinieta arranca en el titulo, sin id ni estado" "obtuvo: $MSG" ;;
 esac
 
+# ── 8. LA SEGUNDA REGRESION (2026-09-24): lo que ESPERA SU DECISION se nombra ──
+# El filtro de este script era `grep -F '[auto:'`, o sea solo lo que el propio sistema
+# creo. Medido ese dia: 19 tareas blocked esperaban a Sergio Urcullo y solo 4 llevaban
+# esa marca, asi que el unico mensaje del dia no nombro ninguna de las otras 15 — entre
+# ellas «HOY vence el VPS: renovalo o se apaga TODO» y el pedido para publicar el bot.
+# La regla del sistema dice que una tarea `blocked --kind needs_input` le avisa; era
+# falso, y por eso un bloqueo del SIAT espero 14 dias.
+{
+  echo "⊘ t_539598e3  blocked   (unassigned)          🔴 HOY vence el VPS (24-sep): renovalo o se apaga TODO"
+  echo "▶ t_0000040  ready     (unassigned)          [auto:555555] ⚠️ algo menor"
+} > "$TMP/tablero.txt"
+MSG=$(correr)
+case "$MSG" in
+  *"vence el VPS"*) ok "un bloqueo SIN marca [auto:] se nombra igual" ;;
+  *) falla "un bloqueo SIN marca [auto:] se nombra igual" \
+           "quedo fuera: el unico mensaje del dia no dice que hoy se apaga todo. Mensaje: $MSG" ;;
+esac
+# Sin el id no puede contestar: el circuito de deploy y de decisiones es `ok <id>`.
+case "$MSG" in
+  *"t_539598e3"*) ok "el bloqueo trae su id, que es lo que el tiene que escribir" ;;
+  *) falla "el bloqueo trae su id, que es lo que el tiene que escribir" "obtuvo: $MSG" ;;
+esac
+# Este caso NACE DE MIRAR el mensaje renderizado con el tablero real: las 11 pruebas
+# estaban en verde y la linea decia «• (unassigned) 🔴 HOY vence el VPS». El awk vaciaba
+# tres campos y el dueno es el CUARTO. Un test que solo pregunta si el titulo aparece
+# no ve la basura que aparece junto al titulo.
+case "$MSG" in
+  *"(unassigned)"*) falla "la vinieta del bloqueo no arrastra el dueno" \
+                          "el dueno se colo delante del titulo: $MSG" ;;
+  *) ok "la vinieta del bloqueo no arrastra el dueno" ;;
+esac
+# Y el contador va en SU renglon: pegado al ultimo id se lee como parte del comando.
+{
+  for n in 1 2 3 4 5 6; do
+    echo "⊘ t_000060$n  blocked   (unassigned)          decision numero $n"
+  done
+} > "$TMP/tablero.txt"
+MSG=$(correr)
+case "$MSG" in
+  *"</code>… y"*) falla "«… y N mas» arranca en su propio renglon" \
+                        "quedo pegado al comando a copiar: $MSG" ;;
+  *"… y 1 mas esperando"*) ok "«… y N mas» arranca en su propio renglon" ;;
+  *) falla "«… y N mas» arranca en su propio renglon" "obtuvo: $MSG" ;;
+esac
+
+# ── 9. Nada roto pero algo esperando NO es «todo en orden» ───────────────────
+# Este es el modo de falla peor: el sistema se declara sano mientras el negocio
+# espera una firma que nadie le pidio.
+{
+  echo "⊘ t_2508295d  blocked   (unassigned)          Publicar el bot: hoy no agenda ninguna demo"
+} > "$TMP/tablero.txt"
+MSG=$(correr)
+case "$MSG" in
+  *"Todo en orden"*) falla "un pedido esperando NO se reporta como «todo en orden»" \
+                           "se declaro sano con un deploy esperando su firma: $MSG" ;;
+  *"Publicar el bot"*) ok "un pedido esperando NO se reporta como «todo en orden»" ;;
+  *) falla "un pedido esperando NO se reporta como «todo en orden»" "obtuvo: $MSG" ;;
+esac
+
 if [ "$FALLOS" -gt 0 ]; then
   printf '\nparte-diario: %d prueba(s) FALLARON\n' "$FALLOS"
   exit 1
