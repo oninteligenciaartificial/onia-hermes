@@ -602,10 +602,21 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
       ⛔ **NO HAY NADA QUE TRABAJAR ACÁ — 2026-09-24 14:55 La Paz. El código está HECHO, verde y
       en `origin/main`; lo único que falta es la FIRMA del deploy, y es de Sergio Urcullo:
-      tarea `t_0836a42f` (`DESPLEGAR: bot`), `blocked`, con los 32 archivos ya derivados del
-      `--dry-run` corrido después del último merge.** Queda como `- [ ]` porque el cliente
+      un pedido `DESPLEGAR: bot` en `blocked`, con los archivos ya derivados del `--dry-run`
+      corrido después del último merge.** Queda como `- [ ]` porque el cliente
       todavía no lo tiene, pero **una vuelta que entre acá a buscar trabajo pierde la vuelta**:
       se salta y se toma la brecha siguiente (es la fila **S12** de «Bloqueado en Sergio»).
+
+      🔴 **El ID del pedido NO se copia de acá: se DERIVA, y por eso este párrafo ya no nombra
+      ninguno.** Medido el 2026-09-24 17:40 La Paz: `t_0836a42f` —que este mismo ítem citaba
+      como vivo— está **archivado**, y el pedido vigente es otro, creado a las 20:45 UTC con el
+      mismo título. Un ID escrito a mano caduca en las dos direcciones y manda a mirar una tarea
+      muerta para concluir que el deploy no está pedido. El comando, que no caduca:
+
+      ```bash
+      /root/bin/onia-tablero.sh list --status blocked | grep -i 'Publicar el bot'
+      ```
+
       Verificado hoy que el pedido cubre estos commits —`813c5fa3` y `055713e4` son ancestros de
       `origin/main` y el punto 3 de su cuerpo los nombra—, así que **no hay que rehacerlo ni
       crear otro**: dos pedidos del mismo destino es el bug que ya archivó a `t_2508295d`.
@@ -825,6 +836,58 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       `t_0836a42f` (no una tarea nueva: dos pedidos del mismo destino es el bug que archivó a
       `t_2508295d`). Antes de ejecutar el `ok`:
       `git merge-base --is-ancestor 5a7d1224 origin/main && echo LISTO || echo FALTA-MERGE`.
+
+      ✅ **2026-09-24 17:30 La Paz — esa precondición SE CUMPLIÓ. Corrido hoy, da `LISTO`:**
+      `5a7d1224` ya es ancestro de `origin/main`, así que el `ok` publica las dos mitades juntas
+      y el modo de falla descrito arriba (marcar al lead como avisado sin que Telegram salga)
+      **ya no puede pasar**. El pedido queda sin objeciones técnicas: sólo espera la firma — y el
+      pedido VIGENTE (rehecho a las 20:45 UTC; `t_0836a42f` quedó archivado) ya lleva esa nota
+      del orden en su propio cuerpo, así que no hace falta comentarlo ni rehacerlo.
+
+- [x] 🔴 **CERRADO el 2026-09-24 17:15-17:45 La Paz (commiteado, NO desplegado — el bot vivo
+      corre `/tmp/onia-bot/`): un handoff que NADIE tomó dejaba a la persona escribiéndole a
+      nadie, en silencio para los DOS lados.** Medido en el simulador con el guion de hoy, no
+      heredado:
+
+      ```
+      vos > quiero hablar con una persona de verdad → [M5] "Ya le pasé tu consulta a Sergio"
+      vos > hola? sigo esperando                     → [M5_ACUSE] "Te leo..."   (UNA vez)
+      vos > alguien me lee?                          → (el bot NO responde)  [silencio:handoff_en_curso]
+      ```
+
+      ...con `humanTookOver: false`. El bot se calla **a propósito** para no pisar al humano —
+      pero no hay humano. Y el aviso del handoff ya se había gastado en el primer turno, así que
+      **el silencio tampoco le llegaba a Sergio Urcullo**. Ningún barrido lo rescata:
+      `followup` mira `(esperando_calificacion, esperando_horario)`, `insistencia` mira `nuevo` y
+      `postdemo` mira `demo_agendada` (`persistence.mjs:244,708,737`) — **`handoff_humano` no lo
+      barre NADIE**. En producción: `chatwoot:11` llevaba **14 días** en `handoff_humano` con
+      `human_took_over=false`, y las tres patas del objetivo del carril daban verde igual.
+
+      **Qué cambió:** en la rama del silencio, si `humanTookOver === false` y no se avisó antes,
+      sale **un** `notify_sergio` con kind propio `handoff_sin_humano`
+      (⏳ *"TE SIGUE ESCRIBIENDO y nadie lo tomó — entrá vos"*). Al cliente **se le sigue sin
+      contestar**: contestar cada insistencia es un loro que tapa a Sergio Urcullo cuando entre.
+      Lo que se arregla es que el silencio deje de ser **invisible**, no el silencio.
+
+      **Anti-spam, que es la mitad difícil:** una sola vez por conversación
+      (`handoffMudoAvisadoAt`, en `raw` como `handoffAckAt`/`urgenteAvisadoAt` — **sin DDL**), y
+      **`urgenteAvisadoAt` también cuenta como avisado**: si ya salió el aviso urgente, Sergio ya
+      sabe que está caliente y un segundo aviso apaga un canal que le llega saturado. Eso último
+      no lo pensé yo: lo puso rojo el test hermano `urgencia-en-el-handoff.test.mjs:101` cuando
+      la primera versión avisaba dos veces.
+
+      **Prueba:** `handoff-sin-humano-no-es-silencio.test.mjs` (4 casos) estuvo **en ROJO por el
+      motivo correcto** —*"insistió en un handoff sin humano y no se enteró nadie"*, 0 avisos— y
+      el caso «con humano a cargo NO avisa» ya pasaba antes, que es la precondición. Suite del
+      bot **1376/1376** (`npm run test:bot`). Simulador **3/3** después del cambio.
+      Archivos: `bot-engine.mjs`, `persistence.mjs`, `aviso-telegram.mjs` + el test.
+
+      ⚠️ **Viaja en el pedido `DESPLEGAR: bot` que ya existe, no en uno nuevo** — dos pedidos del
+      mismo destino es el bug que archivó a `t_2508295d`. El publicador copia lo que `origin/main`
+      tenga **en el momento del `ok`**: si este commit llega a `main` antes (lo mergea el
+      integrador, no este carril), viaja gratis en el mismo `ok` porque `bot-engine.mjs` ya está
+      en su lista; si no llega, **el pedido sigue siendo válido tal cual está** para sus 4 puntos.
+      En ninguno de los dos casos hay que rehacerlo.
 
 - [x] 🔴 **CERRADO el 2026-09-24 12:45-13:20 La Paz (commiteado; el instrumento no necesita
       deploy): la definición de hecho del carril se había vuelto IMPOSIBLE de medir, y no por el

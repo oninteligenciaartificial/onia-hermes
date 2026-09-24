@@ -3304,6 +3304,17 @@ y sin operar. Acá se opera, con verificación por ítem.
         el mismo IP desde el que Postfix entregó, o sea SPF alineado) ·
         `DMARC: v=DMARC1; p=none; rua=mailto:business@onia.com.bo; fo=1` ·
         `DKIM mail._domainkey.onia.com.bo: v=DKIM1;h=sha256;k=rsa;p=MIIBIjANBg…` (resuelve).
+
+        ⚠️ **«Resuelve» no confirmaba nada, y era el único pilar sin medir — corregido el
+        2026-09-24 17:10 La Paz.** Que el TXT exista prueba que hay UNA clave publicada, no que
+        sea **la que firma**: si rotan una de las dos y no la otra, cada correo sale con una
+        llave que no abre, Gmail lo manda a Spam, y Postfix sigue logueando `250 OK` — porque el
+        250 es del RECIBO, no del veredicto. Es un fallo mudo que mata el alta entera.
+        Medido ahora, las dos puntas lado a lado: el `p=` publicado contra la pública derivada de
+        `/etc/opendkim/keys/onia.com.bo.private` dentro de `onia-mail`
+        (`openssl rsa -pubout`). **Coinciden byte a byte** (ambas terminan en
+        `…jUNH3lKE8Iz+vQIDAQAB`). O sea que el pilar de autenticación está entero y **el
+        veredicto de Gmail, sea cual sea, no se explica por DKIM**.
       - **El enlace que VIAJA en el correo funciona, y en OTRO navegador.** La plantilla
         (`app.onia.com.bo/correos-auth/confirmacion.html`, la que GoTrue descarga) arma
         `{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=signup`; el token real de
@@ -3326,6 +3337,17 @@ y sin operar. Acá se opera, con verificación por ítem.
         que no puede medir lo dice, no sale verde.
       - **Producción quedó limpia:** la org, su perfil y el usuario de Auth borrados (0/0/0), y
         las **5** organizaciones `zz-qa%` de otros carriles intactas.
+      - **Instrumento de los tres pilares (2026-09-24):** `npm run correo:llega`
+        (`scripts/correo_que_llega.mjs`), hermano de `alta_correo_confirma.mjs` y con otra
+        pregunta — aquél mide «si el correo llega, ¿el enlace deja entrar?» leyendo el token de
+        la base, así que da verde aunque el mail no salga nunca. Éste mide lo de antes: si tiene
+        **con qué** llegar. Los tres pilares en una corrida, tri-estado (`2` = no medí, nunca un
+        verde a medias), y el que importa es la comparación publicada↔que-firma. Su `--self-check`
+        (28 casos) va cableado a `npm test` como `test:correo-llega`; la medición viva queda
+        aparte porque necesita el contenedor de correo. Validado por mutación: con `mismaClave`
+        siempre en verde, `exit 1` y los **4** casos de DKIM en rojo por su motivo, ninguno por
+        ruido. Descarta el fallo de autenticación; **no** prueba Recibidos — eso sigue siendo la
+        mirada de abajo.
 
       🔴 **Lo único que falta, y no lo puede hacer este carril: mirar si Gmail lo puso en
       Recibidos o en Spam.** El `250 OK` es aceptación, no bandeja, y el conector de Gmail pide

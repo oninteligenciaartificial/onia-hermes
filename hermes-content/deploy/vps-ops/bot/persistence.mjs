@@ -102,6 +102,7 @@ export function stateFromRow(row) {
     publicContact: raw.publicContact || null,
     handoffAckAt: raw.handoffAckAt || null,
     urgenteAvisadoAt: raw.urgenteAvisadoAt || null,
+    handoffMudoAvisadoAt: raw.handoffMudoAvisadoAt || null,
     branchAsked: Boolean(raw.branchAsked),
     inboxId: raw.inboxId || null,
     displayName: row.display_name,
@@ -488,6 +489,7 @@ export function createStore(options = {}) {
         inboxId: state.inboxId || null,
         handoffAckAt: state.handoffAckAt || null,
         urgenteAvisadoAt: state.urgenteAvisadoAt || null,
+        handoffMudoAvisadoAt: state.handoffMudoAvisadoAt || null,
         branchAsked: Boolean(state.branchAsked),
       },
     };
