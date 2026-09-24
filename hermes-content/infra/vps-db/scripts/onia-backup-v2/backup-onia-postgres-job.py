@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """Linux cron entrypoint: bounded local PostgreSQL export, never full recovery.
 
-No pruning, scheduler changes or notifications. A retained job lock requires an
-operator to establish that Docker's exec/dump has ended before removing it.
+No pruning, scheduler changes or notifications (daily.sh alerts on failure).
+A lock kept after the exporter started is reclaimed by a later run only once it
+is older than --stale-lock-seconds, which must exceed the whole child bound plus
+a margin: by then the in-container timeout has ended every remote dump.
 """
 import argparse
 import hashlib
@@ -25,6 +27,8 @@ except ImportError:  # The CLI must still fail safely on non-Linux hosts.
 MIB = 1024 * 1024
 LOCK_NAME = ".onia-postgres-job.lock"
 STATUS_NAME = "postgres-export-job.status.json"
+EXPORT_LOCK_NAME = ".onia-postgres-export.lock"
+STALE_LOCK_MARGIN_SECONDS = 600
 EXPORTER = Path(__file__).resolve().with_name("backup-onia-postgres.sh")
 CHILD_ENV = {"PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
              "LANG": "C", "LC_ALL": "C", "TZ": "UTC"}
@@ -39,14 +43,22 @@ class SafeParser(argparse.ArgumentParser):
         raise JobError("arguments")
 
 
+def child_timeout(args):
+    # Two bounded dumps (each dump timeout + kill-after) plus local work.
+    return 2 * (args.dump_timeout_seconds + 5) + 120
+
+
 def parse_args(argv):
     parser = SafeParser(description=__doc__, allow_abbrev=False)
     parser.add_argument("--execute", action="store_true")
-    for name in ("container-name", "expected-image-id", "database", "username", "output-dir"):
+    for name in ("container-name", "database", "username", "output-dir"):
         parser.add_argument("--" + name, required=True)
+    parser.add_argument("--expected-image-id")  # Optional legacy exact pin.
+    parser.add_argument("--expected-image-repo", default="supabase/postgres")
     parser.add_argument("--port", type=int, required=True)
     for name, default in (("max-bytes", 256 * MIB), ("storage-budget-bytes", 2048 * MIB),
-                          ("min-free-bytes", 5120 * MIB), ("dump-timeout-seconds", 300)):
+                          ("min-free-bytes", 5120 * MIB), ("dump-timeout-seconds", 300),
+                          ("stale-lock-seconds", 7200)):
         parser.add_argument("--" + name, type=int, default=default)
     flags = [a.split("=", 1)[0] for a in argv if a.startswith("--")]
     if len(flags) != len(set(flags)):
@@ -56,7 +68,11 @@ def parse_args(argv):
         raise JobError("execute_required")
     if not re.fullmatch(r"[a-zA-Z0-9][a-zA-Z0-9_.-]{0,127}", args.container_name):
         raise JobError("arguments")
-    if not re.fullmatch(r"sha256:[a-f0-9]{64}", args.expected_image_id):
+    if (args.expected_image_id is not None
+            and not re.fullmatch(r"sha256:[a-f0-9]{64}", args.expected_image_id)):
+        raise JobError("arguments")
+    if (len(args.expected_image_repo) > 255
+            or not re.fullmatch(r"[a-z0-9]+(?:[._/-][a-z0-9]+)*", args.expected_image_repo)):
         raise JobError("arguments")
     if any(not re.fullmatch(r"[a-zA-Z_][a-zA-Z0-9_]{0,62}", value)
            for value in (args.database, args.username)):
@@ -65,6 +81,9 @@ def parse_args(argv):
         raise JobError("arguments")
     if any(not 1 <= value <= 9007199254740991 for value in
            (args.max_bytes, args.storage_budget_bytes, args.min_free_bytes)):
+        raise JobError("arguments")
+    # A lock younger than a genuine run's whole bound must never be taken over.
+    if args.stale_lock_seconds <= child_timeout(args) + STALE_LOCK_MARGIN_SECONDS:
         raise JobError("arguments")
     path = Path(args.output_dir)
     if not path.is_absolute() or path == Path("/") or ".." in path.parts:
@@ -97,19 +116,45 @@ def usage_bytes(path):
 
 
 def inspect_container(args):
-    # Only these four non-secret fields leave Docker. Never inspect Config.Env.
+    # Only these five non-secret fields leave Docker. Never inspect Config.Env.
     result = subprocess.run(
         ["docker", "--host", "unix:///var/run/docker.sock", "inspect", "--type", "container",
-         "--format", "{{.Id}} {{.State.Running}} {{.Image}} {{.Name}}", args.container_name],
+         "--format", "{{.Id}} {{.State.Running}} {{.Image}} {{.Name}} {{.Config.Image}}",
+         args.container_name],
         stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
         timeout=15, env=CHILD_ENV, check=False)
     if result.returncode != 0 or len(result.stdout) > 512:
         raise JobError("container_identity")
     fields = result.stdout.decode("ascii").strip().split()
-    if (len(fields) != 4 or not re.fullmatch(r"[a-f0-9]{64}", fields[0])
-            or fields[1:] != ["true", args.expected_image_id, "/" + args.container_name]):
+    # Repository matched exactly (tag and/or digest after it): an upgrade of the
+    # same image keeps working, a lookalike repository never does.
+    digest = r"@sha256:[a-f0-9]{64}"
+    reference = (re.escape(args.expected_image_repo)
+                 + r"(?::[A-Za-z0-9_][A-Za-z0-9_.-]{0,127}(?:" + digest + ")?|" + digest + ")")
+    if (len(fields) != 5 or not re.fullmatch(r"[a-f0-9]{64}", fields[0])
+            or fields[1] != "true" or fields[3] != "/" + args.container_name
+            or not re.fullmatch(r"sha256:[a-f0-9]{64}", fields[2])
+            or args.expected_image_id not in (None, fields[2])
+            or not re.fullmatch(reference, fields[4])):
         raise JobError("container_identity")
-    return fields[0]
+    return fields[0], fields[2], fields[4]
+
+
+def reclaim_stale_lock(path, max_age):
+    """Remove an abandoned lock: only a real, empty directory of ours, older
+    than max_age. Any doubt keeps it and the caller fails closed."""
+    info = path.lstat()
+    if (not stat.S_ISDIR(info.st_mode) or info.st_uid != os.geteuid()
+            or time.time() - info.st_mtime <= max_age):
+        return False
+    # ponytail: check-then-rmdir is not atomic against a second job reclaiming in
+    # the same instant; the exporter's own mkdir mutex still forbids two dumps.
+    # flock the output directory if concurrent manual runs ever become real.
+    try:
+        path.rmdir()  # Never recursive: anything inside keeps the lock.
+    except OSError:
+        return False
+    return True
 
 
 def child_file_limit(max_bytes):
@@ -223,7 +268,13 @@ def run_job(args):
         stage = "output_permissions"
         private_output(output)
         stage = "job_lock"
-        lock.mkdir(mode=0o700)
+        try:
+            lock.mkdir(mode=0o700)
+        except FileExistsError:
+            if not reclaim_stale_lock(lock, args.stale_lock_seconds):
+                raise JobError("job_lock")
+            report["staleLockRecovered"] = True
+            lock.mkdir(mode=0o700)
         owned = True
         stage = "storage_budget"
         used = usage_bytes(output)
@@ -234,17 +285,24 @@ def run_job(args):
         if free < args.min_free_bytes + reserve:
             raise JobError("free_space")
         stage = "container_identity"
-        cid = inspect_container(args)
+        cid, report["imageId"], report["imageReference"] = inspect_container(args)
         stage = "exporter_file"
         if not EXPORTER.is_file() or EXPORTER.is_symlink():
             raise JobError("exporter_file")
+        stage = "exporter_lock"
+        # Only an abandoned exporter mutex (e.g. SIGKILL/power loss) is reclaimed;
+        # a live one fails here, before any child starts, so our lock is released.
+        if os.path.lexists(output / EXPORT_LOCK_NAME):
+            if not reclaim_stale_lock(output / EXPORT_LOCK_NAME, args.stale_lock_seconds):
+                raise JobError("exporter_lock")
+            report["staleExporterLockRecovered"] = True
         before = {p.name for p in output.iterdir()}
         argv = ["bash", str(EXPORTER), "--execute", "--container-id", cid,
                 "--database", args.database, "--username", args.username,
                 "--port", str(args.port), "--output-dir", str(output),
                 "--max-bytes", str(args.max_bytes),
                 "--dump-timeout-seconds", str(args.dump_timeout_seconds)]
-        timeout = 2 * (args.dump_timeout_seconds + 5) + 120
+        timeout = child_timeout(args)
         deadline = time.monotonic() + timeout
         stage = "exporter_spawn"
         # Conservative even if Popen itself is interrupted: never assume no exec ran.
@@ -260,7 +318,7 @@ def run_job(args):
         evidence = validate_export(output, before, args, cid, deadline)
         report.update(evidence)
         # A completed child must also leave the exporter's own mutex released.
-        if (output / ".onia-postgres-export.lock").exists():
+        if (output / EXPORT_LOCK_NAME).exists():
             raise JobError("exporter_lock")
         if time.monotonic() > deadline:
             raise JobError("total_timeout")
@@ -289,8 +347,9 @@ def run_job(args):
     report.update(status="postgres_job_failed", stage=stage, lockRetained=owned and child_started,
                   finishedAtUtc=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
                   elapsedSeconds=round(time.monotonic() - started, 3))
-    # Do not overwrite the state of another invocation that owns the mutex.
-    if owned:
+    # A held lock is reported (the owner's final status replaces it later); any
+    # other failure of a non-owner never overwrites the owner's state.
+    if owned or stage == "job_lock":
         try:
             write_status(output, report)
         except Exception:
