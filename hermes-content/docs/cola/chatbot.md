@@ -733,6 +733,39 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
       ---
 
+      🔴 **2026-09-24 15:45-16:15 La Paz — el aviso estaba escrito, verde y CABLEADO A NINGÚN
+      LADO: publicado tal cual, no habría llegado NUNCA, y encima se habría comido al lead para
+      siempre.** Encontrado auditando el punto 3 del pedido `t_0836a42f` contra el camino vivo —
+      no re-leyendo la cola. **Dos defectos, una sola causa: el emisor nuevo nació en el único de
+      los tres lanzadores que no pasa las credenciales del aviso.**
+
+      1. **`followup-run.sh` arranca el barrido con `docker exec` y una LISTA BLANCA de `-e`, y la
+         suya no tenía ninguna variable de Telegram.** Los hermanos que emiten el MISMO aviso sí:
+         `postdemo-run.sh` y `webhook-server.sh` pasan `ONIA_BOT_TG_AVISO`, `TG_BOT_TOKEN` y
+         `TG_CHAT_ID`. Medido lado a lado sobre los seis lanzadores. Es la misma clase de agujero
+         que `lanzador-pasa-env.test.mjs` tapó el 2026-09-04 — **y esa lección no viajó al barrido
+         porque su gate mira UN archivo por nombre.**
+      2. **`avisarColgadas` leía el `throw`, no el veredicto.** `enviarAvisoTelegram` casi nunca
+         tira: **devuelve** `{status:"sent"|"skipped"|"failed"}` — `skipped` es el canal apagado,
+         `failed` es encendido sin credencial. O sea, exactamente los dos estados que produce el
+         defecto 1. El código daba por ENTREGADO lo que nunca salió: se quedaba con la marca en
+         disco y anotaba el lead en `avisados`. Y como **las marcas de colgada no se purgan a
+         propósito** (el silencio del lead no vence), ese lead quedaba silenciado **PARA SIEMPRE,
+         incluso después de arreglar el entorno**. El defecto 1 se volvía permanente.
+
+      **Por qué los 8 casos verdes no lo vieron:** su canal de mentira devuelve siempre
+      `status:"sent"`, y el único caso de fallo *tira* una excepción. Un fixture que sólo sabe
+      salir bien —o fallar de la única forma que el código ya maneja— no puede ver esta rama.
+
+      **Gate nuevo:** `aviso-de-colgada-llega-al-proceso.test.mjs`, 5 casos, **3 en ROJO antes por
+      el motivo correcto** (el del lanzador nombró `followup-run.sh` y la variable que faltaba).
+      Sus sujetos **se derivan del disco** —quién importa `aviso-telegram.mjs`, y qué variables lee
+      ese módulo—, no de una lista a mano: una lista a mano falla ABIERTO y el próximo emisor
+      nacería mudo igual. Suite del bot completa: **1360/1360**. Commiteado, **NO desplegado** —
+      viaja en el mismo pedido `t_0836a42f`, que ya está `blocked` esperando el `ok`.
+
+      ---
+
       **Lo que se creía que FALTABA, y por qué la lista estaba incompleta.** El aviso necesita un
       candado de «una sola vez». Los cuatro candidatos se miraron con el código delante y **los
       cuatro tienen costo** — ninguno de los cuatro se usó, pero la derivación queda porque es lo
@@ -762,6 +795,36 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       ⚠️ **Esto NO es «contactar a un prospecto»** —eso sí es decisión de Sergio Urcullo y ya
       está pedido en `t_e57e3376`—: es avisarle A ÉL de algo que pasó en su propio sistema.
       Confundir las dos cosas es lo que dejó a `conv 58` sin dueño seis días.
+
+      ---
+
+      🔴 **2026-09-24 16:50 La Paz — el pedido de deploy tiene un ORDEN, y nada lo verifica.
+      Medido contra `origin/main`, no heredado.** El punto 3 de `t_0836a42f` promete que el
+      aviso del lead frío LLEGA. La mitad que lo emite ya está en `main` (`813c5fa3`,
+      `055713e4` son ancestros); **la mitad que lo hace SALIR de la máquina no**:
+
+      ```
+      git show origin/main:hermes-content/deploy/vps-ops/bot/followup-run.mjs | grep -c 'veredicto?.status'  # → 0
+      git show origin/main:hermes-content/deploy/vps-ops/bot/followup-run.sh  | grep -c 'TG_BOT_TOKEN'       # → 3 en la rama, 0 en main
+      ```
+
+      Vive en `5a7d1224`, ya pusheado a la rama de este carril en `origin` y todavía **fuera de
+      `main`** (lo mergea el integrador, no este carril).
+
+      **Por qué el orden importa y no es un detalle:** el publicador copia lo que `origin/main`
+      tenga **en el momento del `ok`**. Si el `ok` corre antes del merge, el bot publicado
+      escribe la marca en disco y anota al lead en `avisados` **aunque Telegram nunca lo haya
+      mandado** —el lanzador no le pasa las credenciales—, y esas marcas **no se purgan a
+      propósito** (el silencio del lead no vence). El lead queda mudo **para siempre**, incluso
+      después de arreglar el entorno. O sea: **publicar en ese orden es peor que no publicar**,
+      porque hoy producción no tiene el aviso de colgada, no escribe marcas y no silencia a
+      nadie.
+
+      **No hay que rehacer el pedido** —los 32 archivos son los mismos, `followup-run.mjs` y
+      `followup-run.sh` ya están en la lista—: sólo cambia el orden. Anotado como comentario en
+      `t_0836a42f` (no una tarea nueva: dos pedidos del mismo destino es el bug que archivó a
+      `t_2508295d`). Antes de ejecutar el `ok`:
+      `git merge-base --is-ancestor 5a7d1224 origin/main && echo LISTO || echo FALTA-MERGE`.
 
 - [x] 🔴 **CERRADO el 2026-09-24 12:45-13:20 La Paz (commiteado; el instrumento no necesita
       deploy): la definición de hecho del carril se había vuelto IMPOSIBLE de medir, y no por el
