@@ -12,6 +12,25 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-24 08:14 La Paz — recorrido completo, rubro dental, `BUILD_ID` nuevo
+
+`BUILD_ID` cambió (`Df2rH9P_zIOujNXHs0ist` → `9tuk1Qk2BjQ2j2HdJcL8u`), correspondía re-correr
+entero. `node scripts/recorrido_cliente.mjs --escribir`, rubro dental (default): **9 de 9,
+RECORRIDO COMPLETO.** Alta con confirmación de correo real, onboarding de 6 pantallas, paciente
+`zz-qa-2026-09-24-0811-paciente` cargado y encontrado de vuelta, cita 2026-09-25 09:00 agendada
+(201, `cmuf99r9l001m01rwzrib20o0`) y VISTA en `/appointments` (captura
+`paso-07d-cita-en-agenda.png`), factura #2026-0001 con ítem `zz-qa-2026-09-24-0811-item` visible
+en `/billing/...` (captura `paso-08c-factura-creada.png`, frenado ahí sin marcar pagada), panel
+`/dashboard` no lista pacientes (esperado, ya conocido). Sin hallazgos nuevos. Limpieza
+verificada: `organizations where name like 'zz-qa-%'` → 0, `appointments` con notas/razón
+`zz-qa-` → 0.
+
+**Próxima vuelta:** si `BUILD_ID` sigue en `9tuk1Qk2BjQ2j2HdJcL8u`, no repetir dental — seguir
+escalón 3 en superficie no auditada (otro rubro, o invitar/quitar coadministrador en `/settings`,
+o la recarga del add-on chatbot al agotar cupo).
+
+---
+
 ## 2026-09-19 19:11 La Paz — recorrido completo, rubro dental, `BUILD_ID` nuevo
 
 `BUILD_ID` cambió (`AUiuQ9c0SmcJnuF37_qTo` → `Df2rH9P_zIOujNXHs0ist`), así que correspondía
