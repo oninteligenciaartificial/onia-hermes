@@ -595,6 +595,90 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **CERRADO el 2026-09-24 (medición, sin cambio de código): la TERCERA pata del objetivo
+      del carril —«cada demo agendada o handoff le llega a Sergio Urcullo»— llevaba vueltas sin
+      medirse, y el comando que el prompt manda usar para medirla NO PUEDE dar otra cosa que 0.**
+
+      El prompt mide los avisos con `bash webhook-server.sh logs | tail -80 | grep -E
+      "demo_agendada|handoff_humano|\[n8n\]"`. Medido hoy contra el log del proceso vivo
+      (`docker exec onia-center … /tmp/onia-bot-webhook.log`, 70.516 líneas): ese comando
+      devuelve **0**, y el log entero tiene **5 `demo_agendada` y 23 `handoff_humano`**. La causa
+      no es que falten eventos: es que **2.439 de las últimas 5.000 líneas (48,8%) son la MISMA
+      línea** (`[knowledge:panel] ignoro empresa.horario…`, una condición PERMANENTE escrita en
+      cada carga), así que en `tail -80` entran **9 líneas distintas** y ninguna es un evento.
+      Un instrumento que sólo puede dar 0 no mide: decora. Por eso esa pata faltaba en las
+      líneas `OBJETIVO:` de las últimas vueltas — no se omitió, **no era medible**.
+
+      **El instrumento correcto ya existía y nadie lo corría:**
+      `hermes-content/deploy/vps-ops/bot/avisos-vivo.mjs`. Corrido hoy, verde y con el desglose
+      que el `grep` no puede dar: `circuito: medido` con los **cuatro** eslabones ok
+      (`flagEncendido` · `credencialesOk` · `motorEmiteNotify` · `textoAccionable`) y **las dos
+      ramas** (`handoff`, `demo_agendada`); `eventos: 5 avisos (enviados 3 · salteados 2 · fallidos
+      0)`. Separa «0 porque el circuito está roto» de «0 porque no hubo handoffs», que es
+      exactamente lo que el `tail | grep` confunde. **Desde hoy la pata de avisos de la línea
+      `OBJETIVO:` se mide con `node avisos-vivo.mjs`, no con el `tail`.**
+
+      ⚠️ **Lo que ese gate dice y conviene no perder:** *«circuito sano, pero NINGÚN aviso es de un
+      lead: 4 nuestro(s) — nunca se probó con un desconocido»*. El circuito está entero; lo que
+      falta es un desconocido real que lo recorra, y eso no lo fabrica este carril.
+
+      **Tres alarmas del log auditadas hoy y las TRES resultaron históricas** — se anotan porque
+      la próxima vuelta las va a volver a ver y son caras de re-investigar:
+      · `ERR_MODULE_NOT_FOUND: audio-transcribe.mjs` ×2.803 → el archivo existe desde el 19-sep
+        14:40; última ocurrencia en la línea 50.531 de 70.516 (≈20.000 líneas antes del final).
+      · `Cannot find module webhook-server.mjs` ×998 → es la caída del **19-sep 19:44 → 21-sep
+        19:34 UTC** (48 h de bot muerto), ya diagnosticada y arreglada en el propio
+        `webhook-watchdog.sh` (re-aviso escalado a 15 min / 1 h / 6 h / diario).
+      · `Permission denied` sobre el watchdog ×76 → hoy es `-rwxr-xr-x`, última ocurrencia en la
+        línea 6.382 de 8.376 de su log. **Watchdog vivo y `/health` en `ok:true` ahora mismo.**
+      La regla que las tres confirman: **toda alarma de un log sin timestamp se fecha por
+      POSICIÓN antes de creerle** — si no, se arregla tres veces lo que ya está arreglado.
+
+- [x] 🔴 **CERRADO el 2026-09-24 (instrumento, NO toca el bot ni necesita deploy): el número con
+      el que este carril describe su propio embudo —«43 conversaciones, 0 agendadas, 18 paradas»—
+      estaba compuesto en un ~93% por datos NUESTROS, y así entró en la memoria compartida, en la
+      cola y en el cuerpo del pedido de deploy que espera el `ok` de Sergio Urcullo.**
+
+  Medido el 2026-09-24 con `npm run embudo:bot` (`scripts/embudo_del_bot.mjs`), contra las dos
+  bases vivas:
+
+  ```
+  EMBUDO DEL BOT — 3 desconocido(s) real(es) de 43 fila(s) del motor.
+    etapas: handoff_humano 1 · nuevo 1 · esperando_horario 1
+    eligieron horario: 0
+    esperando algo nuestro: 2 (chatwoot:38, chatwoot:58)
+    descartadas: 8 nuestras · 12 sinteticas (sin conversacion en Chatwoot) · 20 fuera de los inboxes 4/5
+  ```
+
+  **Las tres cosas que el conteo pelado tenía mal, y por qué ninguna se veía:**
+
+  1. **Contaba nuestras propias sondas como prospectos.** `chatwoot:48/49/50` son
+     *«Sonda QA carril chatbot»* y `chatwoot:11` es el celular de Sergio Urcullo. El repo ya
+     tenía el criterio (`esNuestra()` de `scripts/objetivo_visible.mjs`, con seis consumidores)
+     y el conteo del embudo no lo llamaba. El instrumento nuevo lo **importa**, no lo copia.
+  2. **Contaba filas sin conversación detrás.** `chatwoot:999999`, `chatwoot:990777` y
+     `chatwoot:13..19` no existen en Chatwoot. `esNuestra()` reconoce por nombre y teléfono, y
+     de una fila sintética no hay ni nombre ni teléfono que mirar: **caía del lado "real"**. Por
+     eso la ausencia ahora se clasifica explícitamente en vez de caer al default, con caso ancla.
+  3. **Medía el éxito por `calendar_event_id`, que queda NULL POR DISEÑO.** Sergio Urcullo ya
+     decidió la opción sin calendario (tablero `t_b18ca430`, 2026-09-03: *«Telegram YA, y Cal.com
+     cuando moleste anotar a mano»*). Contar demos por esa columna da **cero para siempre** contra
+     un mecanismo que se descartó a propósito — y manda a cada vuelta a "arreglar" un bot que hace
+     lo que se le pidió. El evento que esa decisión sí produce es `scheduled_at`, que es además el
+     contador que esta misma cola fijó como condición de vencimiento de la decisión.
+
+  ⚠️ **Corrección al ítem de abajo: «el bot NUNCA agendó una demo» es FALSO.** Agendó una:
+  `chatwoot:11`, `scheduled_at = 2026-09-12 13:00Z`, escrita el 10-sep. Lo que es cierto es que
+  hoy **ninguna** conversación está en `bot_stage='demo_agendada'` y que **ningún desconocido real
+  eligió horario todavía**. La frase absoluta salió de leer la columna equivocada.
+
+  ⚠️ **Y el gate nuevo casi entra sin poder fallar.** Su `selfCheck` hacía
+  `const { afirmar, ...caja } = afirmarFactory()`: el rest-spread copia el **valor** del getter
+  `fallas` (0) en vez de la propiedad viva, así que imprimía sus `✗` y salía `0` igual. Lo cazó la
+  validación por mutación, no la lectura. Validado en rojo por el motivo correcto en **dos**
+  puntos: ausencia-cuenta-como-real (4 casos) y éxito-anclado-en-`calendar_event_id` (2 casos).
+  Cableado: `npm run test:embudo-bot` en la cadena de `npm test`; medición viva `npm run embudo:bot`.
+
 - [x] 🔴 **CERRADO el 2026-09-24 (commiteado, NO desplegado): el bot NUNCA agendó una demo — ni
       una, en toda su historia — porque de los 5 horarios que el cron publica a diario sólo 2 se
       podían elegir. Los otros 3 estaban libres en la agenda de Sergio Urcullo y quien los
