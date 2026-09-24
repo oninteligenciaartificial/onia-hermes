@@ -595,6 +595,49 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **CERRADO el 2026-09-24 12:45-13:20 La Paz (commiteado; el instrumento no necesita
+      deploy): la definición de hecho del carril se había vuelto IMPOSIBLE de medir, y no por el
+      bot — la sonda se colgaba esperando un efecto que el producto decidió no producir.**
+
+      **Síntoma.** `node scripts/sonda_widget.mjs` devolvía `NO SE PUDO MEDIR — la conversacion 49
+      no quedo como la de un desconocido`, con el bot **sano** (simulador 3/3 la misma vuelta) y
+      con el blanqueo **sano**. O sea: la pata «widget 2/2» del objetivo estaba muerta y la
+      anterior la había dado por 2/2, así que el carril medía con un instrumento fundido.
+
+      **Causa, medida.** `clearHumanTakeover` (`bot-engine.mjs:152`) se APRETÓ a propósito: el
+      stage sólo se libera *«cuando un humano REALMENTE escribió»*, porque `handoff_humano` lo
+      prende el BOT al derivar y olvidarlo sería perderle el hilo a un lead que nadie atendió.
+      En prod eso es el caso NORMAL, no el raro: de 43 conversaciones, **13 están en
+      `handoff_humano` con `human_took_over = false`** y ninguna fila del sistema tiene las dos
+      cosas juntas. La sonda seguía esperando el efecto viejo:
+
+      - `desarmar()` esperaba `!necesitaDesarme(...)`, que incluye el **stage** → agotaba sus 10
+        vueltas de 2 s y devolvía `false`, siempre;
+      - `dejarComoExtrano` tenía ese `false` detrás de un `&&`, así que salía **antes** de
+        `guionBlanqueo` — el único paso que saca del `handoff_humano` del bot (deriva de
+        `reiniciarConversacionVencida`, que pone `botStage:"nuevo"` sin condición);
+      - y el mensaje de error remataba mandando a *«revisar `guionBlanqueo`»*, que era justo lo
+        único que no había corrido. Un instrumento que acusa al paso que nunca ejecutó.
+
+      **Arreglo.** Se separaron las dos preguntas que estaban colapsadas en una: *«¿el bot calla
+      acá?»* (`necesitaDesarme`, para decidir si vale la pena tocar) **no** es *«¿qué promete
+      deshacer el desarme?»* (`desarmePendiente`, nuevo, para decidir si funcionó — sólo el
+      candado `humanTookOver`, que es lo único que `clearHumanTakeover` promete). Y el blanqueo
+      corre **aunque el desarme falle**; el veredicto sale de la fila de después, no de si el
+      desarme anduvo. `dejarComoExtrano` pasó a exigir sus deps inyectadas sin default, misma
+      doctrina que `cerrarSujeto` (un default ahí corre `rails runner` contra producción en verde).
+
+      **Prueba.** Los 3 casos nuevos del self-check en ROJO primero y por el motivo correcto
+      (`el blanqueo tiene que correr aunque el desarme falle`), después `61/61 casos en verde`; y
+      la corrida real contra producción, con el exit leído **sin pipe** (`tail` devuelve el suyo):
+      `EXIT_REAL=0` · `EL BOT CONTESTO LOS 2 — conversacion 49: #1 → 1 respuesta(s) · #2 → 1
+      respuesta(s)`. Archivo: `scripts/sonda_widget.mjs`.
+
+      **Lo que NO era, y se probó antes de anunciarlo:** que los 13 `handoff_humano` sin humano
+      fueran leads con el bot mudo. No lo son — el silencio lo gobierna `humanTookOver`
+      (`bot-engine.mjs:566`), y el `case "handoff_humano"` sigue acusando recibo y dejando pasar
+      «urgente» y «quiero comprar». El motor está bien; lo que estaba roto era el medidor.
+
 - [x] 🔴 **CERRADO el 2026-09-24 16:18-16:20 La Paz (medición en PRODUCCIÓN, sin cambio de
       código): el objetivo entero del carril se recorrió DE PUNTA A PUNTA por primera vez —
       desconocido escribe en el widget real → pide un humano → el aviso sale. Las tres patas
