@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 
 import { DEFAULT_CONFIG } from "./config.mjs";
-import { applyKnowledge, mergePanelKnowledge } from "./knowledge.mjs";
+import { applyKnowledge, mergePanelKnowledge, resetAvisosDePanel } from "./knowledge.mjs";
 import { VENTANAS_ATENCION, fraseDeAtencion, envolventeDeAtencion } from "./ventanas-de-atencion.mjs";
 
 // ---------------------------------------------------------------------------
@@ -121,19 +121,87 @@ test("SIMETRICA: el horario de un CLIENTE sigue ganando — no viene por este me
   assert.equal(config.businessHours.franjas, null, "el cliente no hereda las franjas de Sergio Urcullo");
 });
 
-test("no se descarta en silencio: un horario tipeado en el panel deja constancia", () => {
+/** Captura lo que sale por `console.warn` mientras corre `fn`. */
+function avisosDe(fn) {
   const avisos = [];
   const original = console.warn;
   console.warn = (msg) => avisos.push(String(msg));
   try {
-    mergePanelKnowledge(archivoDeOnia(), filaDelPanelComoEstaEnProduccion());
+    fn();
   } finally {
     console.warn = original;
   }
+  return avisos;
+}
+
+test("no se descarta en silencio: un horario tipeado en el panel deja constancia", () => {
+  resetAvisosDePanel();
+  const avisos = avisosDe(() => mergePanelKnowledge(archivoDeOnia(), filaDelPanelComoEstaEnProduccion()));
   assert.equal(avisos.length, 1, "tiene que avisar exactamente una vez que ignoro el horario del panel");
   assert.match(
     avisos[0],
     /horario/i,
     "el aviso tiene que nombrar el campo ignorado para que se pueda buscar en el log",
+  );
+});
+
+// ---------------------------------------------------------------------------
+// EL SEGUNDO BUG, MEDIDO EN PRODUCCION EL 2026-09-24
+//
+// El aviso de arriba es correcto y tiene que quedar — pero `mergePanelKnowledge` corre en CADA
+// carga del conocimiento, y la fila del panel trae `empresa.horario` SIEMPRE. O sea que avisaba
+// de una condicion PERMANENTE como si fuera un evento nuevo, y el aviso se repetia para siempre.
+//
+// Medido en el bot vivo (contenedor onia-center, /tmp/onia-bot-webhook.log, 4,2 MB): 3.541 copias
+// de esta misma linea, y —lo que cuesta— la COLA ENTERA del log era esa linea. El comando con el
+// que este carril mide su propio objetivo (`webhook-server.sh logs | tail -80 | grep
+// demo_agendada|handoff_humano`) devolvia VACIO teniendo 27 eventos de demo/handoff adentro: no
+// habia ninguno en las ultimas 80 lineas porque el aviso los habia empujado fuera.
+//
+// Un log ahogado en ruido es tan ciego como un log que no existe, y esa ceguera ya costo una
+// semana de bot mudo en septiembre. La constancia se deja UNA vez por valor descartado: si Sergio
+// Urcullo edita el panel y pone otro horario, eso SI es noticia y vuelve a avisar.
+// ---------------------------------------------------------------------------
+
+test("el aviso no se repite en cada carga: un log ahogado es un log ciego", () => {
+  resetAvisosDePanel();
+  const avisos = avisosDe(() => {
+    for (let i = 0; i < 50; i += 1) mergePanelKnowledge(archivoDeOnia(), filaDelPanelComoEstaEnProduccion());
+  });
+  assert.equal(
+    avisos.length,
+    1,
+    `50 cargas con la MISMA fila tienen que dejar 1 sola linea, no 50 (salieron ${avisos.length}). ` +
+      "Repetir una condicion permanente empuja los eventos reales fuera de la cola del log.",
+  );
+});
+
+test("un horario NUEVO en el panel si vuelve a avisar: el silencio es por valor, no para siempre", () => {
+  resetAvisosDePanel();
+  const avisos = avisosDe(() => {
+    mergePanelKnowledge(archivoDeOnia(), filaDelPanelComoEstaEnProduccion());
+    mergePanelKnowledge(archivoDeOnia(), filaDelPanelComoEstaEnProduccion());
+    const otra = filaDelPanelComoEstaEnProduccion();
+    otra.empresa.horario = { dias: [1, 2, 3], desde: 7, hasta: 11, frase: "lun-mié 7:00-11:00" };
+    mergePanelKnowledge(archivoDeOnia(), otra);
+  });
+  assert.equal(
+    avisos.length,
+    2,
+    "un descarte que cambia de valor es noticia y tiene que dejar su propia linea",
+  );
+});
+
+test("el horario se descarta igual aunque el aviso ya no salga: callar no es aceptar", () => {
+  resetAvisosDePanel();
+  mergePanelKnowledge(archivoDeOnia(), filaDelPanelComoEstaEnProduccion());
+  // La segunda pasada es la que ya no avisa: lo que NO puede pasar es que ademas deje pasar el
+  // horario del panel. Si este caso se pone rojo, la cura silencio el aviso Y el descarte.
+  const merged = mergePanelKnowledge(archivoDeOnia(), filaDelPanelComoEstaEnProduccion());
+  assert.equal(merged.empresa?.horario ?? null, null, "el horario del panel no puede colarse");
+  assert.equal(
+    applyKnowledge(DEFAULT_CONFIG, merged).businessHours.frase,
+    fraseDeAtencion(VENTANAS_ATENCION),
+    "el bot sigue prometiendo la disponibilidad de la constante",
   );
 });

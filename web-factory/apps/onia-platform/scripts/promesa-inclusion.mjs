@@ -122,13 +122,32 @@ export function normalizar(texto) {
  * palabra para que "Crece" no matchee dentro de "crecer" ni "Básico" dentro de otra palabra —
  * el mismo cuidado que en los montos, donde 790 matcheaba dentro de 7900.
  */
+/**
+ * Un posesivo delante degrada al label a palabra corriente. Nace de un label que además es una
+ * palabra del castellano: "Empresa" (enterprise). Medido el 2026-09-24, la frase que la web manda
+ * por wa.me —"Quiero consultoría/capacitación en IA para mi empresa"— se leía como una mención
+ * del plan y el gate acusaba que le cobramos el add-on a un cliente que ya lo tiene incluido,
+ * sobre un texto que no habla de planes.
+ *
+ * Arreglarlo por el lado del texto era imposible: esa frase es la COPIA EXACTA de la que precarga
+ * el link y `campanaExacta` compara el mensaje entero — cambiarle una palabra rompe el match.
+ *
+ * La exclusión es ESTRECHA a propósito: sólo el posesivo, que en castellano no puede introducir
+ * el nombre de un plan. "el Empresa", "plan Empresa" y "Empresa" suelto siguen contando, y hay
+ * test que lo exige — si no, esto apagaría el gate en vez de afinarlo.
+ */
+const POSESIVO = String.raw`\b(?:tu|tus|mi|mis|su|sus|nuestra|nuestras|vuestra|vuestras)\s`;
+
 export function mencionesDePlanes(texto, labels) {
   const plano = normalizar(texto);
   const menciones = [];
   for (const [plan, label] of Object.entries(labels)) {
     const aguja = normalizar(label);
     if (!aguja) continue;
-    const re = new RegExp(String.raw`(?<![\p{L}\p{N}])${escapar(aguja)}(?![\p{L}\p{N}])`, "gu");
+    const re = new RegExp(
+      String.raw`(?<!${POSESIVO})(?<![\p{L}\p{N}])${escapar(aguja)}(?![\p{L}\p{N}])`,
+      "gu",
+    );
     for (const m of plano.matchAll(re)) {
       menciones.push({ plan, desde: m.index, hasta: m.index + aguja.length });
     }

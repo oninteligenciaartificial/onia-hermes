@@ -31,7 +31,11 @@ export const PAGINAS = [
   "/servicios/consultoria", "/servicios/marketing-ia",
 ];
 
-export const DOC_PATH = fileURLToPath(new URL("../../docs/chatbot/campanas-onia.knowledge.json", import.meta.url));
+// El documento que el DEPLOY publica. Hasta el 2026-09-24 esto apuntaba a
+// `docs/chatbot/campanas-onia.knowledge.json`, un archivo hermano que ningun deploy copiaba: las
+// 9 campañas estaban 100% verdes aca y 0% vivas para un lead. `knowledge.onia.json` es el que
+// `deploy-bot.sh` instala en el contenedor como `knowledge.json`.
+export const DOC_PATH = fileURLToPath(new URL("./bot/knowledge.onia.json", import.meta.url));
 
 /**
  * Clase POSITIVA a proposito: exactamente lo que produce `encodeURIComponent` (alfanumerico,
@@ -103,7 +107,7 @@ if (process.argv[1]?.endsWith("campanas-vivas.mjs")) {
     } else {
       console.error(`[campanas-vivas] SIN CAMPAÑA ${sinCampana.length}/${vivas.size} — el desconocido recibe el saludo generico:`);
       for (const { frase, paginas } of sinCampana) console.error(`[campanas-vivas]   ${JSON.stringify(frase)}  <- ${paginas.join(", ")}`);
-      console.error(`[campanas-vivas] agregala a ${DOC_PATH} y republica (S9).`);
+      console.error(`[campanas-vivas] agregala a ${DOC_PATH} y desplega el bot (DESPLEGAR: bot).`);
       process.exitCode = 1;
     }
   } catch (e) {
