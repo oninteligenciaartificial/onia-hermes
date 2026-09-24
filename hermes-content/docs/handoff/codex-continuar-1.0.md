@@ -39,14 +39,19 @@
 >   al VPS. Dry-run: «YA ESTA PUBLICADO — producción corre 3986b807». La trampa de la receta vieja
 >   quedó cerrada. Skill `onia-deploy` actualizada (platform `99a403dc`).
 
-> ### En vuelo (tanda 2, solo construir; nada se instala sin OK de Sergio Urcullo)
-> - Rama `claude/vigias-cobro-seguridad`: vigía de comprobantes PENDING → Telegram; `security-watch.sh`
->   reparado + alerta de clase «tabla en `public` sin RLS con permisos de anon».
-> - Rama `claude/web-dg072`: DG-072 portado desde el checkout sucio (la web publica sola al llegar a
->   `main`, con el freno de precio).
-> - Decisiones del 24-sep, 2ª tanda: bot → Sergio quiere ver el diff antes (las 9 campañas incluyen
->   consultoría y marketing con IA, líneas congeladas); **SIAT → no se declara 1.0 hasta la
->   autorización del SIN**; offsite → Cloudflare R2 (falta su token); C: → solo cachés (hecho, +1,6 GB).
+> ### ✅ Tanda 2 instalada y publicada (24-sep, 20:15-20:36 UTC, con OK de Sergio Urcullo)
+> - **Seguridad 2:** 5 tablas de `onia_center` (`cost_items`, `ai_radar_items`, `respaldo_reloj_20260919`,
+>   `finance_entries`, `calcom_bookings`) que CUALQUIER usuario registrado podía leer/borrar por la
+>   API → RLS + política `is_sergio()` como sus hermanas; respaldo revocado. Simulado: extraño ve 0,
+>   borra 0. Copia `/root/backups/security-20260924/onia-center-5-tables.sql.gz`.
+> - **Vigías:** comprobantes pendientes → Telegram cada 10 min (cron nuevo); `security-watch` reparado
+>   y con alerta de CLASE (tabla sin RLS en esquema servido por la API). Corridos a mano: limpios.
+> - **Web:** DG-072 + Términos §3.4 y Privacidad alineados con el producto (plan vencido = solo
+>   lectura, nada se borra de inmediato; Completo = 500 conversaciones/mes). Gate de precios VERDE
+>   (44 cifras), gate de privacidad OK. Publicado y verificado en onia.com.bo 20:28 UTC, mirado.
+> - **Todas las cuentas de producción son de PRUEBA** (Sergio Urcullo): §11 = 0/5.
+> - ⚠️ El integrador `onia-cola` mergea solo a `main` toda rama `claude/*` que se empuje: no empujar
+>   ramas a medias.
 
 > ### Cola que sigue (autónomo), en orden
 > 1. Checkout: QR estático + datos de la cuenta BCP (cuando llegue la imagen) — bloquea «paga».
