@@ -1407,8 +1407,19 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       **Los TRES quedaron construidos; lo único que les falta a los tres es el mismo paso:
       mergear y desplegar.**
 
+      ⚠️ **ESO YA NO ES CIERTO — medido el 2026-09-24 por `chatbot-cola`. Los tres están
+      MERGEADOS y DESPLEGADOS.** Las tres medidas del deploy, corridas hoy y no heredadas:
+      (1) `git merge-base --is-ancestor` → `82d34b5`, `0376b07` y `42ab871` los TRES en
+      `origin/master`; (2) build vivo `docker exec onia-platform cat /app/.next/BUILD_ID` →
+      `9tuk1Qk2BjQ2j2HdJcL8u`; (3) `grep -rl` en `/app/.next/server` (ruta DENTRO del contenedor
+      `onia-platform`, no del repo) encuentra los tres símbolos `confirmador`, `seguidor` y
+      `reponedor` en un mismo chunk del build servido. **Las líneas «falta mergear y desplegar» de
+      abajo quedaron congeladas en pasado y se leían como presente** — es el modo de falla que
+      este carril ya tiene medido (el 46 % de sus pendientes heredados eran fantasma), y
+      repetirlo manda a pedir un deploy que ya ocurrió.
+
       ✅ **(1) HECHO: agente `confirmador`** (`onia-platform`, rama
-      `claude/chatbots-platform-review-0d1d09`, `82d34b5` — **falta mergear y desplegar**). Gate nuevo
+      `claude/chatbots-platform-review-0d1d09`, `82d34b5` — **mergeado y DESPLEGADO**, verificado 2026-09-24). Gate nuevo
       `lib/onia-core/modules/agents-confirmador.test.ts` (17 casos), validado **por mutación en
       dos puntos**: contar «mañana» en UTC en vez de la zona del negocio → rojo; sacarle la
       puerta de rubro → rojo.
@@ -1438,7 +1449,7 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       del VPS, que no es de este carril.
 
       ✅ **(2) HECHO: agente `seguidor`** (`onia-platform` `0376b07`, rama
-      `claude/chatbots-platform-review-0d1d09` — pusheado, **falta mergear y desplegar**).
+      `claude/chatbots-platform-review-0d1d09` — **mergeado y DESPLEGADO**, verificado 2026-09-24).
       ⚠️ El sha se DERIVA de `origin`, no del clon de casa: desde el nodo de casa no se pushea
       `onia-platform`, la entrega va por `format-patch | ssh … git am`, y **`git am` regenera el
       sha** — el local decía `4d94cdf`, que no existe en ningún remoto. Gates re-corridos **en
@@ -1474,7 +1485,7 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       produce es el gate, no la base.
 
       ✅ **(3) HECHO: agente `reponedor`** (`onia-platform` `42ab871`, rama
-      `claude/chatbots-platform-review-0d1d09` — pusheado, **falta mergear y desplegar**).
+      `claude/chatbots-platform-review-0d1d09` — **mergeado y DESPLEGADO**, verificado 2026-09-24).
       Gates en el VPS: `tsc` limpio, **4.749 tests verdes**, `eslint` limpio, `check:onia-core`
       OK. Gate nuevo `lib/onia-core/modules/agents-reponedor.test.ts` (10 casos), **validado por
       mutación en tres puntos**: predicado propio en vez de `isBelowReorder` → rojo en el borde
