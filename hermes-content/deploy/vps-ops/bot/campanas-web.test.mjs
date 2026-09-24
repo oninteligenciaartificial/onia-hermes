@@ -14,21 +14,25 @@
 // `waServiciosLink(UNA_CONSTANTE)` o un texto armado por codigo (`buildWaText`) es invisible aca —
 // y esta bien, porque un texto armado por codigo tampoco puede ser una campaña de match exacto.
 //
-// 🔴 LO QUE ESTE GATE **NO** PRUEBA — medido el 2026-09-24, leelo antes de creerle al verde.
-// Este archivo valida el DOCUMENTO `campanas-onia.knowledge.json` del repo. Produccion NO lo
-// carga: el bot vivo resuelve su conocimiento de la FILA DEL PANEL (se lee `[knowledge:panel]` en
-// /tmp/onia-bot-webhook.log), y esa fila —`public.chatbot_knowledge`, version 5, status
-// `publicado`— no tiene ni la clave `campanas`:
+// 🔴 QUE ARCHIVO VALIDA ESTE GATE, Y POR QUE ESE — corregido el 2026-09-24.
+// Hasta hoy validaba `docs/chatbot/campanas-onia.knowledge.json`: un documento hermano que
+// **ningun deploy copiaba a ninguna parte**. Las 9 campañas estaban al 100% verde aca y al 0%
+// vivas para un lead —las cuatro frases que onia.com.bo enlaza por wa.me incluidas—, y el ítem
+// que lo destrababa llevaba 24 dias esperando un `scp` a mano que nadie iba a correr.
 //
-//   docker exec supabase-db psql -U postgres -tAc \
-//     "select version, status, (data ? 'campanas') from public.chatbot_knowledge;"   → 5|publicado|f
+// Ahora valida `knowledge.onia.json`, que es el que el circuito de deploy YA publica solo:
+// `deploy-bot.sh` lo lista en PATRONES y despues corre `webhook-server.sh knowledge`, que lo
+// instala en el contenedor como `knowledge.json` (deploy-bot.sh:170). Es ademas el archivo que
+// `evals.test.mjs` llama "el conocimiento que produccion PUBLICA de verdad".
 //
-// O sea que hoy las campañas estan al 100% en verde ACA y al 0% vivas para un lead: las cuatro
-// frases que onia.com.bo enlaza por wa.me incluidas. Este gate cuida que el documento sea
-// correcto y siga matcheando; que ese documento LLEGUE al bot es publicarlo desde
-// /settings/chatbot, y eso no lo mide ningun test de la cadena (necesita el VPS, y un gate que
-// necesita el repo hermano se pone rojo por ambiente y traba a todos los carriles).
-// Estado y proximo paso: hermes-content/docs/cola/chatbot.md, item "las campañas no estan vivas".
+// Sobre la fila del panel: `mergePanelKnowledge` hace `{...archivo, ...panel}`, o sea que el
+// panel pisa CLAVE POR CLAVE. Medido el 2026-09-24, `public.chatbot_knowledge` v5 `publicado` no
+// tiene la clave `campanas` (`select (data ? 'campanas') ...` → f), asi que las campañas del
+// archivo sobreviven al merge. Si algun dia el panel publica campañas propias, gana el panel.
+//
+// Lo que este gate sigue SIN probar: que el deploy del bot haya CORRIDO. Un documento correcto y
+// commiteado no es un documento vivo; eso se mide con `docker exec onia-center grep -c campanas
+// /tmp/onia-bot/knowledge.json`, que necesita el VPS y por eso no entra en la cadena.
 //
 // Correr:  node --test "hermes-content/deploy/vps-ops/bot/*.test.mjs"
 
@@ -48,7 +52,10 @@ const WEB_SRC = fileURLToPath(new URL("../../../../web-factory/apps/onia-platfor
 const CONFIGURADOR_SRC = fileURLToPath(
   new URL("../../../../web-factory/apps/onia-platform/src/components/web-configurator/WebConfigurator.tsx", import.meta.url),
 );
-const DOC_PATH = fileURLToPath(new URL("../../../docs/chatbot/campanas-onia.knowledge.json", import.meta.url));
+// El documento que el DEPLOY publica, no una copia hermana. Ver la cabecera: hasta el 2026-09-24
+// las campañas vivian en `docs/chatbot/campanas-onia.knowledge.json`, que no viaja a ninguna
+// parte. `knowledge.onia.json` es el que `deploy-bot.sh` instala como `knowledge.json`.
+const DOC_PATH = fileURLToPath(new URL("./knowledge.onia.json", import.meta.url));
 
 /**
  * Textos que la web manda pero que NO pueden ser campaña de match exacto, con el motivo.
@@ -169,7 +176,7 @@ test("cada frase que la web manda tiene su campaña — o un motivo escrito de p
     sinCubrir,
     [],
     "la web manda estas frases y nadie las contesta con su respuesta propia: agregalas a " +
-      "hermes-content/docs/chatbot/campanas-onia.knowledge.json o declaralas en NO_MATCHEABLES.\n" +
+      "hermes-content/deploy/vps-ops/bot/knowledge.onia.json o declaralas en NO_MATCHEABLES.\n" +
       "ANTES DE ESCALAR ESTE ROJO: `git merge origin/main` y volvé a correrlo. Este cruce toma la " +
       "web de un carril y el documento de otro, asi que un worktree con el JSON viejo da este " +
       "mismo error con main VERDE — ya paso el 2026-09-03 (t_86264535, escalado como 'main roto " +

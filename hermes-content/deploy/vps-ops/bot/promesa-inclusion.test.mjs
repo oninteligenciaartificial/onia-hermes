@@ -266,3 +266,37 @@ test("lo que el bot dice de la inclusión coincide con el catálogo PUBLICADO de
       "Si los planes se renombraron, este gate dejó de mirar lo que cree mirar.",
   );
 });
+
+// ---------------------------------------------------------------------------
+// 4. "Empresa" es el nombre de un plan Y una palabra corriente del castellano
+//
+// Medido el 2026-09-24 al traer las campañas de la web al documento que el deploy publica: la
+// frase que onia.com.bo manda por wa.me dice "Quiero consultoría/capacitación en IA para mi
+// empresa", y el gate la leyó como una mención del plan `enterprise` (label "Empresa"). Acusó
+// que le cobramos el add-on a un cliente que ya lo tiene incluido — sobre un texto que no habla
+// de planes en absoluto.
+//
+// No se podía arreglar por el lado del texto: esa frase es una COPIA EXACTA de la que la web
+// precarga en el link, y `campanaExacta` compara el mensaje entero. Cambiarle una palabra al
+// documento rompe el match y el desconocido vuelve al saludo genérico.
+//
+// La regla que se aplica es del castellano, y es estrecha a propósito: un POSESIVO delante
+// ("tu/mi/su empresa") sólo puede ser la palabra corriente. El plan se nombra "el Empresa" o
+// "plan Empresa", y esos siguen contando.
+// ---------------------------------------------------------------------------
+test("un posesivo delante convierte al label en palabra corriente, no en el nombre del plan", () => {
+  const vivo = "La consultoría la da Sergio: se arma sobre lo que tu empresa ya hace hoy.";
+  assert.deepEqual(mencionesDePlanes(vivo, LABELS), [], "«tu empresa» no nombra ningún plan");
+  assert.deepEqual(mencionesDePlanes("Quiero capacitación en IA para mi empresa", LABELS), []);
+  assert.deepEqual(mencionesDePlanes("su empresa ya factura en línea", LABELS), []);
+});
+
+test("sin posesivo el plan SIGUE contando — la exclusión no puede apagar el gate", () => {
+  for (const texto of ["el Empresa ya trae el chatbot", "el plan Empresa lo incluye", "Empresa lo trae"]) {
+    assert.deepEqual(
+      mencionesDePlanes(texto, LABELS).map((m) => m.plan),
+      ["enterprise"],
+      `"${texto}" sí nombra el plan`,
+    );
+  }
+});

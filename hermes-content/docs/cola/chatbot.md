@@ -595,38 +595,60 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
-- [ ] 🔴 **Las campañas NO están vivas: el bot vivo no carga el documento que todos los gates
-      cuidan.** Medido el 2026-09-24, no deducido.
+- [x] 🔴 **CERRADO el 2026-09-24 (commiteado, NO desplegado): las 9 campañas estaban en un
+      archivo que NINGÚN deploy copiaba. Ya viven en el que se publica solo.**
 
-      **Qué se midió.** El bot de producción resuelve su conocimiento de la **fila del panel**,
-      no del archivo del repo — se lee en su propio log:
-      `docker exec onia-center grep '\[knowledge:panel\]' /tmp/onia-bot-webhook.log`. Y esa fila
-      no tiene ni la clave:
+      **La causa, que no era la que decía este ítem.** Había **dos** documentos de conocimiento
+      hermanos en el repo, y sólo uno viaja:
+      · `hermes-content/deploy/vps-ops/bot/knowledge.onia.json` — el que `deploy-bot.sh` lista en
+        `PATRONES` y después instala en el contenedor vía `webhook-server.sh knowledge`
+        (`deploy-bot.sh:170`). Tenía **cero** campañas.
+      · `hermes-content/docs/chatbot/campanas-onia.knowledge.json` — las **9** campañas, los 3
+        gates y todo el cuidado, y **nadie lo desplegaba jamás** (ya no existe: se borró en este
+        mismo arreglo).
+      Eso es exactamente lo que `CLAUDE.md` §2 prohíbe: dos fuentes de verdad del mismo tema. El
+      gate daba 17/17 verde sobre el archivo que no viaja.
 
-      ```
-      docker exec supabase-db psql -U postgres -tAc \
-        "select version, status, (data ? 'campanas') from public.chatbot_knowledge;"
-      → 5|publicado|f
-      ```
+      **Por eso S9 llevaba 24 días esperando a Sergio Urcullo, y pedía lo que no era.** S9 manda
+      un `scp` a mano del documento sobre `/opt/onia/bot/knowledge.json`. El circuito automático
+      ya existía y hacía ese trabajo — sobre el archivo equivocado.
 
-      El archivo que el simulador carga (`knowledge.onia.json`, 1826 bytes, 19-sep, el mismo que
-      corre en `/tmp/onia-bot/`) también trae **cero** campañas.
+      **Arreglo:** las 9 campañas se mudaron a `knowledge.onia.json` (v `2026-09-24.1`) y el
+      documento hermano **se borró**: una sola fuente. Los 3 lectores (`campanas-vivas.mjs`,
+      `campanas-web.test.mjs`, `evals.test.mjs`) apuntan al que viaja.
 
-      **Qué cuesta.** Las **9** campañas del documento están muertas para un lead real — entre
-      ellas las **cuatro frases que `onia.com.bo` enlaza por `wa.me`**, que son el CTA de la web.
-      Quien clickea recibe el saludo genérico, que es exactamente el agujero que las campañas
-      vinieron a tapar. `campanas-web.test.mjs` da **17/17 verde** sobre esto: el gate cuida que
-      el documento sea correcto, no que LLEGUE.
+      **Se llevó SÓLO `campanas`, y esto es deliberado.** El hermano era más viejo en todo lo
+      demás y traerlo entero habría *perdido* lo vigente: su `faq` tiene 1 entrada (con el texto
+      viejo del SIAT) contra las 2 del desplegado (precios de 4 escalones + SIAT vigente); su
+      `triggersExtra.demo` está vacío contra 9 palabras. Y su `empresa.horario` (lun-vie 9-18)
+      **no** es el horario de demos (L-V 14-17 y 20-22, sáb 9-15): meterlo rompía el aviso de
+      fuera de horario que hoy sale bien.
 
-      **Por qué ningún test lo caza, y por qué no se arregla con un test.** Medirlo necesita el
-      VPS y la base; un gate así se pone rojo por ambiente y traba el merge de **todos** los
-      carriles (regla ya escrita: self-check puro en la cadena, medición viva como alias suelto).
-      Queda dicho en la cabecera de `campanas-web.test.mjs` para que nadie lea ese verde como
-      "las campañas andan".
+      **La fila del panel no lo pisa, medido:** `mergePanelKnowledge` hace `{...archivo,
+      ...panel}` — pisa clave por clave. `public.chatbot_knowledge` v5 `publicado` no tiene la
+      clave `campanas` (`select (data ? 'campanas')` → `f`), así que las del archivo sobreviven.
 
-      **Qué lo destraba:** publicar el documento desde `/settings/chatbot` (es el camino que ya
-      se usó el 18-sep para la v4, `source:panel`). No lo hace este carril: escribe en la
-      superficie viva del bot y pisa la fila `publicado` v5 que hoy sirve a los leads.
+      **Un gate se puso rojo al traer las campañas, y tenía un falso positivo real.**
+      `promesa-inclusion` leyó *"capacitación en IA para mi empresa"* —frase que la web manda por
+      `wa.me`— como una mención del **plan** "Empresa" (`enterprise`), y acusó que le cobramos el
+      add-on a un cliente que ya lo tiene incluido, sobre un texto que no habla de planes. **No
+      se podía arreglar por el texto:** esa frase es la copia exacta del link y `campanaExacta`
+      compara el mensaje entero — cambiarle una palabra rompe el match. Se arregló en el gate:
+      un **posesivo** delante (`tu/mi/su…`) degrada el label a palabra corriente. La exclusión es
+      estrecha y hay test que lo exige: `el Empresa`, `plan Empresa` y `Empresa` suelto siguen
+      contando, o esto apagaría el gate en vez de afinarlo.
+
+      **Gates** (los dos nuevos fallaron en ROJO antes, por el motivo correcto — el de campañas
+      decía `el documento no tiene ni una campaña` y `el motor contestó ["M0_SIN_HORARIOS",
+      "M4_BODY"] en vez de la campaña de la web`):
+      · batería completa del bot **1355/1355**;
+      · `campanas-vivas` contra `onia.com.bo` **en vivo**: *7 frases vivas, 7 con campaña*.
+
+      ⚠️ **NO está vivo todavía, y esto no se cuenta como cerrado para el cliente.** Falta que
+      corra el deploy del bot (`DESPLEGAR: bot`, con el ok de Sergio Urcullo — no lo hace este
+      carril). Se verifica así, en el motor que CORRE, no en el host:
+      `docker exec onia-center grep -c campanas /tmp/onia-bot/knowledge.json` → hoy **0**, tiene
+      que dar **≥1**.
 
 - [x] 🟡 **CERRADO el 2026-09-24 (commiteado, NO publicado — ver el ítem de arriba): al lead que
       armó su web entera el bot le contestaba los precios del SISTEMA.**
@@ -647,7 +669,9 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       **Un motivo que dejó de ser cierto siguió tapando el agujero tres semanas.**
 
       **Arreglo:** campaña de prefijo `"Hola, vengo del configurador de webs de ONIA"` en
-      `hermes-content/docs/chatbot/campanas-onia.knowledge.json` (v `2026-09-24.1`), que el
+      `hermes-content/deploy/vps-ops/bot/knowledge.onia.json` (v `2026-09-24.1`; el 24-sep se mudó ahí
+      desde `docs/chatbot/campanas-onia.knowledge.json`, que ya no existe porque no viajaba a ninguna
+      parte — ver el ítem de arriba), que el
       router mira **antes** de `isPriceQuestion` (`bot-engine.mjs:683`).
 
       **Sin cifras, a propósito, y esto corrige el plan que traía el ítem.** El ítem original
@@ -6379,7 +6403,7 @@ decisión de Sergio, no código.
 | S5 | **¿Silenciar el Telegram de los agentes n8n que sí trabajan?** (Vendedor, Contenido, Finanzas, Prospector, Radar IA, Web Factory Radar) + los recordatorios de agenda cada 30 min | Es su canal y su umbral de ruido. No se apagan los workflows: hacen trabajo — hay que editar el nodo de aviso de cada uno | Que Telegram vuelva a ser sólo errores, que es la regla que ya se aplicó al resto |
 | S7 | **Contestar (o descartar) a los cuatro desconocidos que escribieron y nadie respondió** — conv 35 (+591 73232758, clínica dental de 4 doctores, 25-ago), 37 (+591 73021804, 28-ago), 36 (`Saguilera@ds-santacruz.bo`, 27-ago) y 34 (widget, sin dato de contacto) | Vende Sergio, y son personas reales esperando desde hace 3-6 días. Un bot no puede retomar una conversación fría de hace una semana sin que suene a spam | El primer lead atendido del carril. Dos tienen número de WhatsApp y uno correo: tres de los cuatro son alcanzables hoy |
 | ~~S8~~ | ✅ **CERRADO el 2026-08-31: `Onia (interna)` → inbox 5.** Verificado en la base y MIRADO en `/inbox`. **Podado el 01-sep:** esta fila arrastraba el análisis completo de seis vueltas y seguía leyéndose como bloqueo vivo — S8 se nombra **17 veces** en este archivo, casi todas dentro de párrafos viejos que ya no aplican. Lo que quedaba abierto NO era S8 sino el **inbox 4**, y ahora tiene su propio ítem (3 de "Ahora") y su propio bloqueo (**S14**). | — | — |
-| S9 | **Publicar las campañas en el VPS — y son CUATRO archivos, no uno.** 🔴 **Corregido el 31-ago (3ª vuelta): tal como estaba escrito, esto NO encendía nada.** Decía copiar sólo `campanas-onia.knowledge.json` a `/opt/onia/bot/knowledge.json` porque daba el motor por desplegado; medido con md5, el VPS está **un commit atrás** (`3e3841aa`, sin `994eb42d`) y su `bot-engine.mjs` tiene **cero `campanaExacta`** — habría ignorado las campañas en silencio. Lo que tiene que viajar: **`bot-engine.mjs` + `knowledge.mjs` + `run-turn.mjs`** (del espejo `hermes-content/deploy/vps-ops/bot/`) **+ `knowledge.json`** (desde `hermes-content/docs/chatbot/campanas-onia.knowledge.json`), y después **reiniciar** — `webhook-server.sh` sólo recopia al contenedor si cambia su STAMP. Verificar con `node hermes-content/deploy/vps-ops/bot/espejo-check.mjs` (tiene que salir 0) | Escribe en el VPS, y la regla dice que ningún deploy sale sin su OK | **El ítem 2 entero.** El motor del repo ya las lee en modo venta (**647/647 verde**, probado con este mismo documento); falta que el VPS TENGA ese motor y que el archivo del número traiga las campañas. ⚠️ **Sumado el 31-ago (4ª vuelta): `run-turn.mjs`**, que volvió a exportar `LLM_SYSTEM_PROMPT` para revivir los 12 evals. Corrido hoy contra producción, `espejo-check.mjs` sale **1**: DISTINTOS `bot-engine.mjs`, `bot-engine.test.mjs`, `knowledge.mjs`, `run-turn.mjs`, `run-turn.test.mjs`; FALTAN `campanas-web.test.mjs`, `espejo-check.mjs`, `espejo-check.test.mjs`, `recepcionista.test.mjs`. Sin esto las 4 frases vivas de onia.com.bo siguen recibiendo el saludo genérico. ✅ **Gate 1 del 31-ago (5ª vuelta): EL CÓDIGO YA VIAJÓ — S9 se achicó a UN archivo de datos.** Medido, no leído: `espejo-check.mjs` sale **0** (`ESPEJO OK`), o sea que `bot-engine.mjs`, `knowledge.mjs` y `run-turn.mjs` ya son los del repo. Y confirmado en el motor que **CORRE**, no en el host: `docker exec onia-center grep -c campanaExacta /tmp/onia-bot/bot-engine.mjs` → **2** (era 0). Lo único que falta es el documento: `/opt/onia/bot/knowledge.json` sigue en **904 bytes del 6-ago, con cero `campanas`** — dentro y fuera del contenedor. **S9 hoy = copiar `hermes-content/docs/chatbot/campanas-onia.knowledge.json` a `/opt/onia/bot/knowledge.json` y reiniciar.** 🔴 **CORREGIDO el 31-ago (9ª vuelta): ya NO alcanza el JSON solo — son TRES archivos, y hacerlo con uno EMPEORA producción.** El documento nuevo trae `prefijo` (la campaña del CTA de `/v1/empezar`), y el esquema del validador **rechaza claves desconocidas**: `parseKnowledge` devuelve `data: null`, o sea que el documento **no carga a medias, no carga nada**. Medido con el `knowledge.mjs` que HOY corre en el VPS, bajado por `scp`: `ok=false`, `campanas[4].prefijo: clave desconocida`. Copiando sólo el JSON no quedan 5 campañas de 6 — quedan **cero**, y encima se pierden la FAQ `siat` y el horario que hoy sí están vivos. **Lo que tiene que viajar junto:** `hermes-content/deploy/vps-ops/bot/knowledge.mjs` + `hermes-content/deploy/vps-ops/bot/recepcionista.mjs` + el documento a `/opt/onia/bot/knowledge.json`, y reiniciar. Verificación previa: `node hermes-content/deploy/vps-ops/bot/espejo-check.mjs` hoy sale **1** y nombra `knowledge.mjs` y `recepcionista.mjs` entre los DISTINTOS — después del `scp` tiene que salir **0**. ✅ **Sumado el 31-ago (6ª vuelta) — verificado que la copia es SEGURA, que era un riesgo sin medir.** La instrucción manda a **sobrescribir un archivo de datos vivo en producción** y nadie había comparado los dos lados: si el documento nuevo no traía algo que el viejo sí, el `scp` lo borraba en silencio. Bajado el vivo del VPS y diffeado campo por campo contra el del repo: `identity`, `empresa` (el horario lun-vie 9-18) y `triggersExtra` son **idénticos**, y la única FAQ (`siat`) es **byte a byte la misma**. El nuevo sólo agrega `campanas` (5) y sube `version` de `2026-08-06.1` a `2026-08-31.1`. Es un **superset estricto**: no se pierde nada. **Y cómo se comprueba DESPUÉS del scp** — porque este carril ya dio dos deploys por hechos sin mirarlos, y hay que medirlo en el motor que CORRE, no en el host:
+| S9 | ✅ **SIN OBJETO desde el 2026-09-24 — no le pidan esto a Sergio Urcullo.** S9 mandaba un `scp` a mano del documento sobre `/opt/onia/bot/knowledge.json`, y esperó **24 días**. La causa real era otra: las campañas vivían en `docs/chatbot/campanas-onia.knowledge.json`, un archivo que ningún deploy copiaba, mientras el circuito automático ya publicaba `bot/knowledge.onia.json` (`deploy-bot.sh:170`). Las campañas se mudaron al archivo que viaja y el hermano se borró. **Lo que queda no es un `scp`: es el deploy del bot normal (`DESPLEGAR: bot`).** Lo de abajo es historia de cómo se llegó acá. ~~**Publicar las campañas en el VPS — y son CUATRO archivos, no uno.**~~ 🔴 **Corregido el 31-ago (3ª vuelta): tal como estaba escrito, esto NO encendía nada.** Decía copiar sólo `campanas-onia.knowledge.json` a `/opt/onia/bot/knowledge.json` porque daba el motor por desplegado; medido con md5, el VPS está **un commit atrás** (`3e3841aa`, sin `994eb42d`) y su `bot-engine.mjs` tiene **cero `campanaExacta`** — habría ignorado las campañas en silencio. Lo que tiene que viajar: **`bot-engine.mjs` + `knowledge.mjs` + `run-turn.mjs`** (del espejo `hermes-content/deploy/vps-ops/bot/`) **+ `knowledge.json`** (desde `hermes-content/docs/chatbot/campanas-onia.knowledge.json`), y después **reiniciar** — `webhook-server.sh` sólo recopia al contenedor si cambia su STAMP. Verificar con `node hermes-content/deploy/vps-ops/bot/espejo-check.mjs` (tiene que salir 0) | Escribe en el VPS, y la regla dice que ningún deploy sale sin su OK | **El ítem 2 entero.** El motor del repo ya las lee en modo venta (**647/647 verde**, probado con este mismo documento); falta que el VPS TENGA ese motor y que el archivo del número traiga las campañas. ⚠️ **Sumado el 31-ago (4ª vuelta): `run-turn.mjs`**, que volvió a exportar `LLM_SYSTEM_PROMPT` para revivir los 12 evals. Corrido hoy contra producción, `espejo-check.mjs` sale **1**: DISTINTOS `bot-engine.mjs`, `bot-engine.test.mjs`, `knowledge.mjs`, `run-turn.mjs`, `run-turn.test.mjs`; FALTAN `campanas-web.test.mjs`, `espejo-check.mjs`, `espejo-check.test.mjs`, `recepcionista.test.mjs`. Sin esto las 4 frases vivas de onia.com.bo siguen recibiendo el saludo genérico. ✅ **Gate 1 del 31-ago (5ª vuelta): EL CÓDIGO YA VIAJÓ — S9 se achicó a UN archivo de datos.** Medido, no leído: `espejo-check.mjs` sale **0** (`ESPEJO OK`), o sea que `bot-engine.mjs`, `knowledge.mjs` y `run-turn.mjs` ya son los del repo. Y confirmado en el motor que **CORRE**, no en el host: `docker exec onia-center grep -c campanaExacta /tmp/onia-bot/bot-engine.mjs` → **2** (era 0). Lo único que falta es el documento: `/opt/onia/bot/knowledge.json` sigue en **904 bytes del 6-ago, con cero `campanas`** — dentro y fuera del contenedor. **S9 hoy = copiar `hermes-content/docs/chatbot/campanas-onia.knowledge.json` a `/opt/onia/bot/knowledge.json` y reiniciar.** 🔴 **CORREGIDO el 31-ago (9ª vuelta): ya NO alcanza el JSON solo — son TRES archivos, y hacerlo con uno EMPEORA producción.** El documento nuevo trae `prefijo` (la campaña del CTA de `/v1/empezar`), y el esquema del validador **rechaza claves desconocidas**: `parseKnowledge` devuelve `data: null`, o sea que el documento **no carga a medias, no carga nada**. Medido con el `knowledge.mjs` que HOY corre en el VPS, bajado por `scp`: `ok=false`, `campanas[4].prefijo: clave desconocida`. Copiando sólo el JSON no quedan 5 campañas de 6 — quedan **cero**, y encima se pierden la FAQ `siat` y el horario que hoy sí están vivos. **Lo que tiene que viajar junto:** `hermes-content/deploy/vps-ops/bot/knowledge.mjs` + `hermes-content/deploy/vps-ops/bot/recepcionista.mjs` + el documento a `/opt/onia/bot/knowledge.json`, y reiniciar. Verificación previa: `node hermes-content/deploy/vps-ops/bot/espejo-check.mjs` hoy sale **1** y nombra `knowledge.mjs` y `recepcionista.mjs` entre los DISTINTOS — después del `scp` tiene que salir **0**. ✅ **Sumado el 31-ago (6ª vuelta) — verificado que la copia es SEGURA, que era un riesgo sin medir.** La instrucción manda a **sobrescribir un archivo de datos vivo en producción** y nadie había comparado los dos lados: si el documento nuevo no traía algo que el viejo sí, el `scp` lo borraba en silencio. Bajado el vivo del VPS y diffeado campo por campo contra el del repo: `identity`, `empresa` (el horario lun-vie 9-18) y `triggersExtra` son **idénticos**, y la única FAQ (`siat`) es **byte a byte la misma**. El nuevo sólo agrega `campanas` (5) y sube `version` de `2026-08-06.1` a `2026-08-31.1`. Es un **superset estricto**: no se pierde nada. **Y cómo se comprueba DESPUÉS del scp** — porque este carril ya dio dos deploys por hechos sin mirarlos, y hay que medirlo en el motor que CORRE, no en el host:
   ```bash
   ssh root@187.77.16.63 "docker exec onia-center sh -c 'grep -c campanas /tmp/onia-bot/knowledge.json'"
   ```
