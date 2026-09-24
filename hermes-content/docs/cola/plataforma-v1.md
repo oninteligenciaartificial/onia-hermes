@@ -279,6 +279,11 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       build vivo — medido el 2026-09-18: `BUILD_ID` vivo `OFd4xCDzoTbQdThUbfzDv` =
       `build-f078373`, con **64** commits de `master` sin publicar.
 
+      ✅ **Eso ya NO aplica (recontado el 2026-09-24): el panel SE PUEDE mirar renderizado.** El
+      build vivo es `251f64c` y `b1247fb` es ancestro suyo, así que la puerta de MFA no manda
+      toda ruta a `/profile`. Si una vuelta futura lee el párrafo de arriba y da por imposible
+      mirar producción, está heredando un `BUILD_ID` de hace seis días: se relee, no se cita.
+
 - [x] ✅ **CERRADO el 2026-09-17 — el negocio de cualquier plan podía crearse un segundo
       administrador gratis: la misma pantalla tenía DOS botones y sólo uno preguntaba el plan.**
 
@@ -7425,7 +7430,7 @@ y sin operar. Acá se opera, con verificación por ítem.
 
 *(vacío — esta cola se abrió el 2026-09-05)*
 
-## 🔴 Bug crítico en producción — bloquea a TODO cliente nuevo desde 2026-09-17 (tarea t_82251f19)
+## ✅ CERRADO — bug crítico que bloqueaba a todo cliente nuevo (17 al 24-sep, tarea t_82251f19)
 
 Encontrado por `recorrido-cliente`, 2026-09-17 08:12 UTC. `lib/mfa/policy.ts:16`:
 `MFA_ENFORCE_FROM` es una fecha ABSOLUTA fija (`2026-09-17T04:00:00Z`, escrita el 03-sep como
@@ -7455,10 +7460,23 @@ la que cuenta los días del banner—, y eso lo sostiene `lib/mfa/gracia-cuelga-
 Una cuenta creada hoy queda exigida el 1-oct, y **las que ya cayeron en la trampa se destraban
 solas con el deploy** (su `max` las manda a alta + 14).
 
-🔴 **Pero el defecto SIGUE VIVO PARA EL CLIENTE**, y eso es lo que hay que leer acá: producción
-corre el build `f078373`, anterior al arreglo — medido el 17-sep 07:30 La Paz casando `BUILD_ID`
-(`docker exec onia-platform cat /app/.next/BUILD_ID` → `OFd4xCDzoTbQdThUbfzDv` =
-`/opt/onia-platform/build-f078373/…`), y en ese árbol `grep -c fechaExigenciaMfa
-lib/mfa/policy.ts` da **0**. El pedido de deploy ya existe y está `blocked` esperando el `ok` de
-Sergio Urcullo (*«Publicar app.onia.com.bo: 13 arreglos…»*, `t_db98ee26`). **Ningún carril lo
-destraba**: no se abre otro pedido ni se despliega a mano.
+✅ **PUBLICADO. El defecto ya NO está vivo para el cliente — recontado el 2026-09-24 05:52 La Paz**
+(`chatbot-cola`), con las tres medidas del deploy:
+
+1. **Qué corre**: `docker exec onia-platform cat /app/.next/BUILD_ID` → `9tuk1Qk2BjQ2j2HdJcL8u`,
+   que casa contra `/opt/onia-platform/build-251f64c/`. Ya **no** es `f078373`.
+2. **Mergeado**: `git merge-base --is-ancestor b1247fb 251f64c` → **0**, el arreglo es ancestro
+   del build que se está sirviendo.
+3. **Vivo**: `fechaExigenciaMfa` aparece en el build servido (`/app/.next/server/**/*.js.map`,
+   entre ellos `app/(dashboard)/profile/page.js.map`). En los `.js` no se ve porque va
+   minificado — por eso la medida que manda es la 2, no un `grep` del bundle.
+
+El pedido de deploy `t_db98ee26` está **`archived`** (o sea: Sergio Urcullo ya dio el `ok` y se
+ejecutó) y la tarea del bug `t_82251f19` está **`done`** desde el 2026-09-17 10:38.
+
+⚠️ **Por qué esto quedó escrito siete días al revés, que es la lección que vale:** el párrafo de
+arriba era CIERTO cuando se escribió (17-sep 07:30) y envejeció mal — producción swapeó sola esa
+misma mañana. Un 🔴 que dice *«el defecto sigue vivo»* y *«ningún carril lo destraba»* no es un
+pendiente inofensivo: **congela el tema** y le atribuye a Sergio Urcullo una decisión pendiente
+**que ya había tomado**. Un estado de producción se re-deriva al leerlo, nunca se hereda del
+párrafo — y menos cuando el párrafo mismo dice que espera un `ok`.

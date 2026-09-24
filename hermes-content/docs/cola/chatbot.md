@@ -3140,14 +3140,20 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       política viva pone en rojo *"fecha absoluta ya vencida => el recién llegado choca contra el
       muro"* (37/38). Restaurado con `cp`, nunca con `git checkout`.
 
-      ⚠️ **El arreglo del PRODUCTO ya está en `master`** (`onia-platform` `b1247fb`, de esta misma
-      mañana: la gracia cuelga del alta de cada cuenta, con el piso viejo para no acortarle nada a
-      las que ya estaban). **No está desplegado:** producción corre el build `f078373` del 13-sep
-      —casado por `BUILD_ID` `OFd4xCDzoTbQdThUbfzDv`— con **21 commits de `master` sin publicar**.
-      Hay pedido de deploy vivo (`t_db98ee26`, `blocked`, encabezado por ese mismo arreglo) y el
-      publicador automático se niega por diseño (`/var/log/onia-publicar-solo.log`: *"plataforma:
-      NO publico solo — toca una fuente de precio"*, todos los días desde el 15-sep). **Este gate
-      se pone en verde sobre esa puerta solo, el día del swap** — no hay nada más que escribir.
+      ⚠️ **El arreglo del PRODUCTO ya está en `master`** (`onia-platform` `b1247fb`, del 17-sep:
+      la gracia cuelga del alta de cada cuenta, con el piso viejo para no acortarle nada a las que
+      ya estaban).
+
+      ✅ **Y YA ESTÁ DESPLEGADO — recontado el 2026-09-24 05:52 La Paz.** Producción corre
+      `BUILD_ID 9tuk1Qk2BjQ2j2HdJcL8u` = `/opt/onia-platform/build-251f64c/`, y
+      `git merge-base --is-ancestor b1247fb 251f64c` sale **0**: el arreglo es ancestro del build
+      servido. El pedido `t_db98ee26` está **`archived`**, no `blocked`. El swap ocurrió el
+      17-sep; este párrafo se quedó siete días diciendo `f078373` y *"no está desplegado"*.
+
+      ⚠️ **La trampa, para el próximo que escriba una línea así:** «producción corre el build X»
+      es un dato **perecedero** —el VPS swapea solo tras los merges— y sin embargo se lee como
+      permanente, porque va escrito en indicativo y con su medición al lado. El `BUILD_ID` se
+      relee **justo antes de cada veredicto**; citarlo de un párrafo es repetir sin verificar.
 
 - [x] 🔴 **~~Contestarle a un lead de WhatsApp fuera de las 24 h se perdía EN SILENCIO: el dueño
       veía su respuesta enviada y el prospecto no recibía nada~~ — CERRADO el 2026-09-17**
