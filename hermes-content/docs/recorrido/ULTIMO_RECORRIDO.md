@@ -12,6 +12,38 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-24 10:09-10:14 La Paz — `BUILD_ID` sin cambios (dental repetido de nuevo) + escalón 4 nuevo: rubro "Comercio / tienda", 8/8 completo
+
+Repetí el mismo error que la entrada de abajo ya advertía: corrí dental (`RECORRIDO_RUBRO`
+default) ANTES de comparar `BUILD_ID` contra la última entrada — seguía en `9tuk1Qk2BjQ2j2HdJcL8u`,
+sin cambios. **9/9, `completo: true`**, 0 filas `zz-qa-` al cerrar: dato correcto, vuelta
+redundante otra vez. Ver LECCIÓN abajo — esta vez sí se actuó: el resto de la vuelta fue el
+rubro nuevo.
+
+**Escalón 4 — primer recorrido completo con `RECORRIDO_RUBRO="Comercio / tienda"`** (nunca antes
+probado por este carril; `tieneAgenda()=false` según la memoria compartida). `node
+scripts/recorrido_cliente.mjs --escribir` con esa env var: alta con confirmación de correo,
+onboarding de 6 pantallas (con el copy correcto del rubro — "¿Qué vendés y a cuánto?" en vez de
+"¿Qué hacés y a cuánto?"), dato cargado en `/comercio` (Catálogo) y encontrado de vuelta,
+**paso 7 (agendar cita) correctamente NO-APLICA** — la tarjeta de `/register` de este rubro
+promete "Catálogo, inventario, caja y clientes" y su menú real no trae agenda: coincide con la
+promesa de venta, no es un agujero. Caja (`/comercio/caja`) es la pantalla de cobro, mirada y
+frenada sin marcar pagada. Panel `/dashboard` esta vez SÍ lista el dato del paso 6 (a diferencia
+de dental, donde el panel no lista pacientes) — diferencia esperada por rubro, no un fallo.
+Limpieza verificada: `organizations where name like 'zz-qa-%'` → 0, `appointments` con
+notas/razón `zz-qa-` → 0.
+
+RAZÓN: la medida `9/9` de dental no se movió (`BUILD_ID` sin cambios) — correcto no reportarla
+como avance, pero se volvió a correr sin necesidad antes de mirar el dato.
+LECCIÓN (segunda vez seguida con el mismo síntoma — cambio de método): dejar de confiar en
+"comparar BUILD_ID antes de correr" como paso mental — se olvida bajo presión de arrancar rápido.
+Próxima vuelta: el PRIMER comando después del chequeo de ALTA es
+`docker exec onia-platform cat /app/.next/BUILD_ID` comparado con el valor citado en la entrada
+más reciente de este archivo (`grep -m1 BUILD_ID` de este archivo mismo), y sólo si difiere se
+corre dental de nuevo — nunca dental "por costumbre" antes de decidir el escalón de la vuelta.
+
+---
+
 ## 2026-09-24 09:16-09:19 La Paz — `BUILD_ID` sin cambios, dental repetido innecesariamente + escalón 3 nuevo: cupo del chatbot con uso real, sin hallazgo
 
 Al arrancar: `BUILD_ID` seguía en `9tuk1Qk2BjQ2j2HdJcL8u` (igual que la entrada de abajo) — no
