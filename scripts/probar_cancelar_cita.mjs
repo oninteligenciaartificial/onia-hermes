@@ -172,7 +172,8 @@ async function main() {
   const linksConfirm = await pageConfirm.getByRole("link").allTextContents().catch(() => []);
   console.log("confirm — botones visibles:", JSON.stringify(botonesConfirm));
   console.log("confirm — links visibles:", JSON.stringify(linksConfirm));
-  const ofreceCancelarEnConfirm = [...botonesConfirm, ...linksConfirm].some((t) => /cancel/i.test(t));
+  const RE_CANCELAR = /cancel|no voy a poder|no podr[eé]/i;
+  const ofreceCancelarEnConfirm = [...botonesConfirm, ...linksConfirm].some((t) => RE_CANCELAR.test(t));
   await pageConfirm.close().catch(() => {});
 
   const pageMy = await contexto.newPage();
@@ -185,7 +186,7 @@ async function main() {
   const linksMy = await pageMy.getByRole("link").allTextContents().catch(() => []);
   console.log("my-appointments — botones visibles:", JSON.stringify(botonesMy));
   console.log("my-appointments — links visibles:", JSON.stringify(linksMy));
-  const ofreceCancelarEnMy = [...botonesMy, ...linksMy].some((t) => /cancel/i.test(t));
+  const ofreceCancelarEnMy = [...botonesMy, ...linksMy].some((t) => RE_CANCELAR.test(t));
   await pageMy.close().catch(() => {});
   await navegador.close().catch(() => {});
 

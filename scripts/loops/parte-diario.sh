@@ -45,15 +45,51 @@ if ! ESTADO_TABLERO=$("$TABLERO" list 2>/dev/null); then
 El tablero no respondió. El parte diario no puede confirmar que todo esté en orden." || true
   exit 1
 fi
-ABIERTAS=$(printf '%s\n' "$ESTADO_TABLERO" | grep -F '[auto:' | grep -v '^✓' \
+ABIERTAS=$(printf '%s\n' "$ESTADO_TABLERO" | grep -F '[auto:' | grep -vE '^[✓⊘]' \
   | awk '{ p = index($0, "🔴") ? 0 : 1; printf "%d\t%09d\t%s\n", p, NR, $0 }' \
   | sort -k1,1n -k2,2r | cut -f3- || true)
 CUANTAS=$(printf '%s' "$ABIERTAS" | grep -c . || true)
 
-if [ "${CUANTAS:-0}" -eq 0 ]; then
+# 🔴 LA SEGUNDA SECCION: lo que ESPERA SU DECISION (2026-09-24).
+# El filtro de arriba es `grep -F '[auto:'`, o sea SOLO lo que el propio sistema creo.
+# Medido ese dia: 19 tareas `blocked` esperaban a Sergio Urcullo y apenas 4 llevaban esa
+# marca, asi que el unico mensaje del dia no nombro ninguna de las otras 15 — entre ellas
+# «HOY vence el VPS (24-sep): renovalo o se apaga TODO» y el pedido para publicar el bot
+# (43 conversaciones, 0 demos agendadas). El sistema decia "todo en orden" esa misma
+# manana. La regla escrita en los prompts —«solo una tarea blocked --kind needs_input le
+# avisa»— era FALSA: un bloqueo sin marca [auto:] no salia por ningun canal, y asi el
+# Punto de Venta del SIAT espero 14 dias.
+# Van PRIMERO porque son lo unico que no avanza sin el, y CON su id, porque el id es
+# literalmente lo que tiene que escribir para contestar.
+ESPERAN=$(printf '%s\n' "$ESTADO_TABLERO" | grep -E '^⊘' \
+  | awk '{ p = index($0, "🔴") ? 0 : 1; printf "%d\t%09d\t%s\n", p, NR, $0 }' \
+  | sort -k1,1n -k2,2r | cut -f3- || true)
+CUANTAS_ESPERAN=$(printf '%s' "$ESPERAN" | grep -c . || true)
+
+HOJA=""
+if [ "${CUANTAS_ESPERAN:-0}" -gt 0 ]; then
+  # Del renglon del tablero («⊘ id estado dueno titulo») se tira todo menos el titulo,
+  # igual que abajo, y el id se reengancha en su propia linea como el comando a copiar.
+  FILAS=$(printf '%s\n' "$ESPERAN" | head -"$MAX" \
+    | awk '{ id=$2; $1=$2=$3=$4=""; sub(/^ +/, ""); sub(/\[auto:[0-9a-f]*\] */, "");
+             t=$0; if (length(t) > 72) t = substr(t, 1, 69) "…";
+             printf "• %s\n   → <code>ok %s</code>\n", t, id }')
+  HOJA="🙋 <b>$CUANTAS_ESPERAN esperan tu ok</b>
+
+$FILAS"
+  RESTO_E=$((CUANTAS_ESPERAN - MAX))
+  [ "$RESTO_E" -gt 0 ] && HOJA="$HOJA
+… y $RESTO_E mas esperando en el tablero."
+fi
+
+if [ "${CUANTAS:-0}" -eq 0 ] && [ "${CUANTAS_ESPERAN:-0}" -eq 0 ]; then
   MSG="✅ <b>Todo en orden.</b>
 
 Nada roto que el sistema no haya arreglado solo."
+elif [ "${CUANTAS:-0}" -eq 0 ]; then
+  # Nada roto, pero algo espera su firma. Decir "todo en orden" aca seria el peor modo
+  # de falla del canal: el sistema declarandose sano mientras el negocio espera.
+  MSG="$HOJA"
 else
   # Se corta TODO lo anterior a la marca [auto:xxxxxx] —que siempre esta, porque es
   # por lo que se filtro—, no solo el simbolo de estado. El sed viejo (`s/^[^ ]* *//`)
@@ -70,6 +106,11 @@ $LISTA"
   [ "$RESTO" -gt 0 ] && MSG="$MSG
 
 … y $RESTO mas en el tablero."
+  # La hoja de decisiones va ARRIBA de lo roto: lo roto lo arregla el sistema en su
+  # proxima vuelta, esto no avanza sin el.
+  [ -n "$HOJA" ] && MSG="$HOJA
+
+$MSG"
 fi
 
 MSG="$MSG
