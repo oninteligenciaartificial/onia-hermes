@@ -320,9 +320,15 @@ const CAPACIDADES = [
   },
   {
     panel: "agentes" as const,
-    nombre: "Trabajan de noche, no deciden solos",
+    // ⚠️ Acá decía «Trabajan de noche, no deciden solos», palabra por palabra el
+    // titular de la sección 5, que cae 518 px más abajo: las dos entraban en un
+    // mismo viewport de 1440×900 (medido el 2026-09-24 sobre onia.com.bo). Esta
+    // tarjeta aporta lo que la 5 NO dice —QUÉ detecta el agente—; la 5 aporta
+    // CUÁNDO trabaja y QUIÉN decide. El rótulo nombra lo que su propio cuerpo ya
+    // promete, así que no agrega superficie: la saca.
+    nombre: "El que no volvió, no se te pierde",
     texto:
-      "Los agentes preparan el mensaje, detectan al cliente que no volvió y arman el seguimiento. Vos aprobás. Nada sale sin que lo mires.",
+      "Los agentes detectan al cliente que dejó de venir, preparan el mensaje y arman el seguimiento.",
   },
 ] as const;
 

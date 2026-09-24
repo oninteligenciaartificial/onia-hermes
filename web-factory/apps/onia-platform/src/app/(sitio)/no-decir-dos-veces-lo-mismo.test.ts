@@ -96,6 +96,82 @@ function oracionesDe(fuente: string): Set<string> {
  */
 const REPETICIONES_CON_MOTIVO: { frase: string; motivo: string }[] = [];
 
+/**
+ * LOS TITULARES, que es por donde el defecto volvió a entrar.
+ *
+ * Medido el 2026-09-24 MIRANDO `onia.com.bo/` renderizada a 1440×900: la
+ * tarjeta «Trabajan de noche, no deciden solos» (3.793 px) y el titular de la
+ * sección de abajo «Trabajan de noche. No *deciden* solos.» (4.311 px) caen a
+ * 518 px — o sea DENTRO DEL MISMO VIEWPORT, sin scrollear. Las dos dibujan
+ * además el mismo panel (`panel: "agentes"`), y entre las dos el lead lee la
+ * misma salvaguarda cinco veces («Vos aprobás» · «Nada sale sin que lo mires» ·
+ * «aprobás lo que sirve» · «La decisión sigue siendo tuya» · «Nada se manda
+ * hasta que lo aprobás»).
+ *
+ * EL GATE DE ARRIBA ESTABA VERDE, y por TRES cegueras independientes —vale
+ * nombrarlas porque son la clase, no este par:
+ *  1. Cruza `archivos.length > 1`: dos copias en el MISMO archivo no se ven.
+ *     Acá las dos viven en `page.tsx` (líneas 323 y 507).
+ *  2. Sólo mira literales entre comillas o backticks. Un titular JSX es texto
+ *     desnudo y encima partido por `<em>` — no es un literal, es invisible.
+ *  3. Compara por igualdad exacta: «…, no deciden solos» y «…. No deciden
+ *     solos.» son cadenas distintas. Una coma esconde la repetición entera.
+ *
+ * Por eso este sujeto es OTRO —los titulares— y se compara por ESQUELETO (sin
+ * puntuación ni tildes ni caso), que es lo que un lead reconoce como "ya leí
+ * esto". Derivado del disco, igual que el grafo: un titular nuevo entra solo.
+ */
+
+/** Colapsa `{…}` aunque venga anidado, hasta que no queden llaves. */
+function sinInterpolaciones(jsx: string): string {
+  let previo = jsx;
+  for (let i = 0; i < 10; i++) {
+    const paso = previo.replace(/\{[^{}]*\}/g, "·");
+    if (paso === previo) break;
+    previo = paso;
+  }
+  return previo;
+}
+
+/**
+ * Los titulares de un archivo: los `<h1>`/`<h2>`/`<h3>` y los `nombre:` de los
+ * arrays de contenido, que la portada renderiza COMO titular de tarjeta
+ * (`<h3>{c.nombre}</h3>`). Sin las dos formas el gate ve media página.
+ */
+function titularesDe(fuente: string): string[] {
+  const sinComentarios = fuente
+    .replace(/\/\*[\s\S]*?\*\//g, " ")
+    .replace(/^\s*\/\/.*$/gm, " ");
+
+  const out: string[] = [];
+  for (const m of sinComentarios.matchAll(
+    /<h([123])\b[^>]*>([\s\S]*?)<\/h\1>/g,
+  )) {
+    out.push(sinInterpolaciones(m[2]).replace(/<[^>]+>/g, ""));
+  }
+  for (const m of sinComentarios.matchAll(/\bnombre:\s*"([^"\\]{8,140})"/g)) {
+    out.push(m[1]);
+  }
+
+  return out
+    .map((t) => t.replace(/\s+/g, " ").trim())
+    .filter((t) => /[a-záéíóúñ]/i.test(t.replace(/·/g, "")));
+}
+
+/** Lo que el lead reconoce como "ya leí esto": sin puntuación, tildes ni caso. */
+function esqueletoDeTitular(titular: string): string {
+  return titular
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9ñ·\s]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+/** Más corto que esto es un rótulo suelto, no un titular que se pueda repetir. */
+const LARGO_DE_TITULAR = 12;
+
 describe("la portada no le dice dos veces lo mismo al lead", () => {
   const grafo = grafoDeLaPortada();
 
@@ -121,6 +197,38 @@ describe("la portada no le dice dos veces lo mismo al lead", () => {
       .map(([frase, archivos]) => `«${frase}» en ${archivos.join(" + ")}`);
 
     expect(repetidas).toEqual([]);
+  });
+
+  it("el sujeto de los titulares no está vacío ni recortado", () => {
+    // Caso ancla, igual que el del grafo: un extractor que devuelve cero
+    // titulares —una etiqueta renombrada, un `<Titulo>` propio— deja el gate
+    // mudo firmando verde, que es el modo en que este archivo ya falló.
+    const titulares = [...grafo.values()].flatMap(titularesDe);
+    expect(titulares.length).toBeGreaterThan(8);
+    // Las DOS formas tienen que estar vivas: el `<h2>` de una sección y el
+    // `nombre:` de una tarjeta. Si una se cae, el gate ve media página.
+    expect(titulares).toContain("Todo el negocio, en una pantalla.");
+    expect(titulares).toContain("Los mensajes no se pierden");
+  });
+
+  it("ningún titular repite a otro, ni siquiera dentro del mismo archivo", () => {
+    const dondeVive = new Map<string, string[]>();
+    for (const [archivo, fuente] of grafo) {
+      for (const titular of titularesDe(fuente)) {
+        const clave = esqueletoDeTitular(titular);
+        if (clave.replace(/·/g, "").trim().length < LARGO_DE_TITULAR) continue;
+        dondeVive.set(clave, [
+          ...(dondeVive.get(clave) ?? []),
+          `«${titular}» (${archivo})`,
+        ]);
+      }
+    }
+
+    const repetidos = [...dondeVive.values()]
+      .filter((apariciones) => apariciones.length > 1)
+      .map((apariciones) => apariciones.join(" == "));
+
+    expect(repetidos).toEqual([]);
   });
 
   it("las repeticiones exentas siguen existiendo (una excusa no sobrevive a su causa)", () => {
