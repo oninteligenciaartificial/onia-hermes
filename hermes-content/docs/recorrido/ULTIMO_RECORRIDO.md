@@ -12,6 +12,52 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-24 20:14 La Paz — `RECORRIDO_RUBRO="Comercio / tienda"` completo, 8/8 (paso 7 no aplica: rubro coherente)
+
+Escalón siguiente tras dental sin hallazgo: `RECORRIDO_RUBRO="Comercio / tienda" node
+scripts/recorrido_cliente.mjs --escribir`.
+
+- Cuenta `zz-qa-2026-09-24-2014@onia.com.bo`, onboarding en 6 pantallas, `/dashboard` sin
+  rebote (agenda no se pudo leer — coherente: este rubro no tiene).
+- Paso 6: `zz-qa-2026-09-24-2014-paciente` cargado en `/comercio` (Catálogo) y visto de vuelta.
+- **Paso 7: NO-APLICA, no roto.** "Comercio / tienda" no vende agenda ni en su tarjeta de
+  `/register` ("Catálogo, inventario, caja y clientes") ni en su menú real (Conversaciones ·
+  Catálogo · Inventario · Caja · Fiados · Clientes · Gastos · Contabilidad · Planilla ·
+  Agentes · Requerimientos · Equipo · Configuración). El script ya sabe distinguir "el rubro no
+  tiene esto" de "el rubro lo tiene y está roto" (confirma memoria del sistema:
+  `guardaClientesEnPatients`/`tieneAgenda` en falso para comercio).
+- Paso 8: pantalla de cobro (`Caja`, `/comercio/caja`) vista, frenado sin pagar.
+- Paso 9: el dato del paso 6 SÍ aparece en `/dashboard` acá (a diferencia de dental, donde no
+  lista pacientes — es la diferencia esperada de vocabulario/paneles por rubro).
+- Limpieza verificada: `organizations`/`patients` con `zz-qa-%` → **0** al cerrar.
+
+**Sin hallazgo de producto.**
+
+---
+
+## 2026-09-24 20:09 La Paz — `BUILD_ID` sin cambios (`VREeqNSncIqDIOTMbfLTQ`, mismo que la vuelta anterior); recorrido dental completo, 9/9
+
+`ONIA_ALTA_AUTOMATICA=abierta`. Al arrancar, `zz-qa-` en **0** en `organizations`/`appointments`
+(la lección de la vuelta anterior — contar residuales ANTES de nada, no solo antes de
+escribir — esta vez no hizo falta actuar: la vuelta anterior sí cerró su limpieza).
+
+`node scripts/recorrido_cliente.mjs --escribir`:
+
+- **Los 9 pasos, OK.** Cuenta `zz-qa-2026-09-24-2009@onia.com.bo`, confirmar correo antes del
+  primer login, onboarding en 6 pantallas, `/dashboard` sin rebote, paciente
+  `zz-qa-2026-09-24-2009-paciente` cargado y visto en `/patients`, cita `2026-09-25 09:00`
+  agendada (201) y VISTA en `/appointments` (id `cmufyxh0a001901rxigz90wk0`), factura creada con
+  el ítem visible en `/billing/cmufyxrry001b01rxsarotr1q` — frenado ahí sin pagar.
+- `resumen.json`: `llegoHasta 9 / 9`, `completo: true`, `agujeros: []`.
+- Limpieza verificada por fuera del propio script: `organizations`, `appointments`, `patients`,
+  `invoices` con `zz-qa-%` → **0** al cerrar.
+
+**Sin hallazgo de producto.** `BUILD_ID` no cambió desde la vuelta anterior, así que no
+correspondía repetir dental por esa regla — se corrió igual porque correr `--escribir` cada
+vuelta ES la definición de hecho del carril, no un repetido opcional.
+
+---
+
 ## 2026-09-24 19:12 La Paz — `BUILD_ID` cambió (deploy nuevo: `9tuk1Qk2BjQ2j2HdJcL8u` → `VREeqNSncIqDIOTMbfLTQ`); recorrido dental completo, 9/9
 
 `ONIA_ALTA_AUTOMATICA=abierta`. Al arrancar había **una fila residual** de la vuelta anterior
