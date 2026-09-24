@@ -135,7 +135,14 @@
 
 .cicloOn {
   background: var(--accent);
-  color: #fff;
+  /* Tinta OSCURA, no blanca, y es el mismo patron que el CTA principal del
+     sitio (verde brillante con texto oscuro). Blanco sobre `--accent` daba
+     3,68:1 —medido en produccion a 390 y 1440 px el 2026-09-24— contra el 4,5
+     que pide WCAG para texto normal. Oscurecer el FONDO tambien lo arreglaba en
+     el tema claro, pero en el oscuro `--accent` es `--verde-400` y ahi el
+     blanco cae a 2,34:1: cambiar la tinta arregla los dos temas a la vez
+     (5,15:1 en claro, 8,11:1 en oscuro). */
+  color: var(--tinta);
 }
 
 .cicloTag {
@@ -148,14 +155,22 @@
 }
 
 .cicloOn .cicloTag {
+  /* El velo claro se queda: sobre el se lee la misma tinta oscura del boton
+     (6,96:1 en tema claro, 9,87:1 en oscuro). Si la etiqueta hubiera quedado en
+     blanco, el unico texto ilegible del control seria justo el del descuento. */
   background: rgb(255 255 255 / 0.22);
-  color: #fff;
+  color: var(--tinta);
 }
 
 .planEquivale {
   margin: 0.35rem 0 0;
   font-size: 0.84rem;
-  color: var(--ink-faint);
+  /* `--ink-faint` se eligio contra el fondo CLARO —su comentario en globals.css
+     dice «4,83:1 sobre --bg»— y esta linea tambien se pinta dentro de la tarjeta
+     destacada, que es oscura: ahi daba 3,78:1. Heredar la tinta de la tarjeta
+     resuelve las dos (4,95:1 clara, 6,87:1 oscura) con el mismo 62 % que ya usa
+     `.planStep` por esta misma razon. */
+  color: color-mix(in srgb, currentColor 62%, transparent);
 }
 
 /* ── TARJETAS GRANDES DE CAPACIDAD ──────────────────────────────────────────
