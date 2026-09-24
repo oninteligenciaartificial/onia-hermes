@@ -1,5 +1,66 @@
 # Handoff — continuar la 1.0 en Codex
 
+> ## 🎯 GOAL VIGENTE (24-sep-2026) — «terminar la 1.0» — leer esto primero
+>
+> **Pedido de Sergio Urcullo, 24-sep:** *"corre un goal de finalizar la versión 1.0: agentes AI,
+> chatbots, sistema, SIAT… anota, sigue tu claude.md, subagentes, hooks, loops, revisa"*.
+> Lo ejecuta una sesión de Claude Code (orquestador + subagentes por carril).
+>
+> **Objetivo medible:** las 9 puertas de `cola/plataforma-v1.md` en verde medidas en vivo, y el
+> criterio de cierre de `ONIA_ESTRATEGIA_DE_EMPRESA.md` §11 (un cliente real de los 5 rubros se
+> registra solo, carga datos, usa un día real, paga y vuelve a paga). **Hoy §11 = 0/5**: 4 orgs en
+> prod, ninguna cliente, 0 pagos. Las condiciones 2-5 NO las cierra el código: necesitan clientes;
+> el código solo saca lo que haría fallar a ese cliente. Fecha mínima de cierre: ~30 días después
+> del primer pago (condición 5).
+>
+> ### Hecho y verificado EN PRODUCCIÓN el 24-sep
+> | Qué | Evidencia |
+> |---|---|
+> | Lote Codex (DG-055..085) + revisión Claude **commiteado y en `master`** | platform `9497a1a0`, `8c87aba4`, `7bcd0a83`; CI + Security verdes |
+> | **Swap a la imagen Node 22** (`onia-platform:release-7bcd0a83`, BUILD `FU8j_OHPyRH1XCCr6-0uY`) | canario sin tráfico con cuenta ZZ QA: alta por pantalla → onboarding 5 pasos → 8 pantallas 200, 0 errores; post-swap mismo recorrido en `app.onia.com.bo` 200/0 errores; QA borrada 0/0/0. Rollback: contenedor `onia-platform-prev-9tuk-20260924` |
+> | Respaldo diario v3 (alerta Telegram, candado viejo recuperado con aviso, identidad por repo) | copia supervisada 17:30Z exit 0, 1,97 MB, gzip OK; cron sin cambios |
+> | 🔒 4 tablas `backup_*_20260904` que `anon` podía leer/modificar/borrar por la API pública | REVOKE + RLS; API ahora 401; copia root-only `/root/backups/security-20260924/` |
+> | DG-085 (artefacto mirado en navegador aislado) | r3 pasa 8 vistas/12 capturas; la r1 de Codex había fallado sin registrarse (bug del arnés) |
+>
+> ### Decisiones de Sergio Urcullo del 24-sep (no se vuelven a pedir)
+> VPS renovado · commit+push+merge del lote Codex · rebuild+canario+swap · instalar respaldo v3 ·
+> cerrar las tablas expuestas · **receta de deploy ÚNICA = imagen Docker Node 22** · checkout con
+> **QR estático** del banco (falta que él pase la imagen y el titular) · **quitar** el cartel
+> «Documento base operativo» de Términos.
+>
+> ### 🔴 Trampa abierta hasta que el carril D mergee
+> `recreate-container.sh` y el publicador automático (`onia-publicar-solo`) siguen con la receta
+> VIEJA (node:20 + `runtime-next`). Hoy el publicador falla cerrado («BUILD_ID vivo sin par en
+> disco»), pero **correr `recreate-container.sh` vuelve producción al build del 19-sep**. Deploy
+> manual mientras tanto: ver memoria `prod-imagen-node22-24-sep` y
+> `/opt/onia-platform/releases/7bcd0a83-20260924/`.
+>
+> ### En vuelo (workflow de la sesión, 24-sep)
+> - **Carril A** (platform, rama `claude/v1-goal-a-20260924` en `C:/dev/proyectos/onia-platform-v1-20260921`):
+>   cartel de Términos · guard de solo lectura como CLASE · fiado anulado que cuenta como deuda
+>   (`3d2efb54`) · vencimientos sin cuentas propias · «Aprobar y enviar» sin WhatsApp propio ·
+>   copy «Bs 0,00/mes» de Equipo. Se publica con rebuild+canario+swap, no solo.
+> - **Carril D** (hermes, rama `claude/deploy-imagen-node22`): publicador + recreate a la imagen.
+>
+> ### Cola que sigue (autónomo), en orden
+> 1. Checkout: QR estático + datos de la cuenta BCP (cuando llegue la imagen) — bloquea «paga».
+> 2. Vigía de comprobantes PENDING → Telegram (hoy el único aviso es un correo).
+> 3. `security-watch.sh` ciego hace 41 días + alerta de clase «tabla en `public` sin RLS».
+> 4. Backup de Storage (comprobantes) al respaldo diario; copia offsite (necesita token R2 de Sergio).
+> 5. DG-072 (web pública: gracia real, «sin techos», inventario por rubro) portado desde el checkout
+>    sucio de `onia-hermes` a una rama limpia de `main`.
+> 6. Web: «Agentes con IA» (los agentes no llaman a ningún LLM) — decisión de Sergio.
+> **No tocar (lo llevan loops):** recorridos de estética/importadora/servicios y trial vencido en
+> prod (`recorrido-cliente`), publicación y embudo del bot (`chatbot-cola`), /terminos de la web
+> (`web-venta`).
+>
+> ### Depende de Sergio Urcullo (lo que quedó sin respuesta)
+> Imagen del QR + titular exacto de la cuenta · firma S17 para publicar el bot (el «precio» que lo
+> frena es el teléfono fijo) · marcador del SIN y pedir Fase 2 antes del 04/11 · método de pago de
+> Meta antes del 1-oct · probar Embedded Signup con un +591 · token R2 para offsite · decisión
+> «facturar la suscripción a mano por el Portal Web mientras el SIN no autoriza» · y lo único que
+> cierra §11: **clientes**.
+
 > ## ACTUALIZACIÓN 2026-09-21 (tarde) — leer esto primero
 >
 > **Este archivo no estaba en `main`.** Vivía solo en la rama `claude/cobro-e2e-punto-1-25ba65`,
