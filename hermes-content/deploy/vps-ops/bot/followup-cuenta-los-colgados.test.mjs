@@ -176,12 +176,18 @@ test("las dos consultas parten la MISMA poblacion: la BASE no se tipea dos veces
 test("contar las colgadas no le escribe a ninguna: a los 8 dias ya no se manda", async () => {
   // La decision de no escribirles esta tomada y no se reabre aca. Este caso la ata: si alguien
   // hace que las vencidas entren al bucle de envio, el barrido se convierte en spam a 48 dias.
+  // `marcas` y `aviso` van inyectados desde el 2026-09-24, cuando la colgada dejo de solo
+  // contarse y paso a AVISARLE a Sergio Urcullo: con `emit` este caso caeria al candado real
+  // (`/var/lib/onia-colgada-avisado`) y dejaria puesta la marca de un lead de verdad, que es
+  // justo la que silencia su aviso. La baranda de `marcas-en-disco.mjs` lo corta en rojo.
   const resultado = await runFollowUpSweep(
     { nowIso: AHORA, emit: true },
     {
       store: store({
         vencidas: [fila({ key: "chatwoot:61", nombre: "Marcela", dias: 9 })],
       }),
+      marcas: { async reservar() { return true; }, async liberar() {} },
+      aviso: { async enviar() { return { ok: true, status: "sent", reason: "" }; } },
     },
   );
   assert.equal(resultado.send.length, 0);

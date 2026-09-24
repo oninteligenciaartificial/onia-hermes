@@ -673,9 +673,60 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       el motivo correcto — *«sweepFollowUpVencidas deriva el filtro del ENVIO»*, no por un import
       faltante) y las 109 pruebas de los cinco barridos hermanos en verde.
 
-      **Lo que FALTA, que es el aviso — y por qué no se improvisa.** El aviso necesita un candado
-      de «una sola vez». Los cuatro candidatos se miraron con el código delante y **los cuatro
-      tienen costo**; ésta es la parte que la próxima vuelta no tiene que volver a derivar:
+      ---
+
+      ✅ **2026-09-24 14:13-14:30 La Paz — EL AVISO ESTÁ ESCRITO Y EN VERDE. Commiteado, NO
+      desplegado.** El ítem sigue 🔴 **sólo por el deploy**: el bot vivo corre `/tmp/onia-bot/`
+      dentro de `onia-center` y este carril no despliega. Lo que falta es un `ok` de Sergio
+      Urcullo sobre un pedido con la línea `DESPLEGAR: bot` — y ojo, ese destino está detrás de
+      `FIRMA_HUMANA` sólo si se toca `knowledge.onia.json`, que esta vuelta **no se tocó**.
+
+      **El candado que la vuelta anterior dejó sin elegir ya existía en este mismo repo, y por
+      eso ninguno de los cuatro costos aplica.** `rescate-run.mjs` guarda desde el 2026-09-11 un
+      quinto patrón que la lista no miraba: **un archivo por sujeto con `openSync` en `wx`**
+      (`EEXIST` = ya estaba), el mismo de `/var/lib/onia-vigia-remotos/<id>`. No quema un contador
+      ajeno, no afirma un desenlace comercial, no entra en `ESTADOS_COBRABLES` y **no pide
+      migración** — se crea solo la primera vez que hay algo que recordar. Se **extrajo** a
+      `marcas-en-disco.mjs` en vez de copiarse: el bot ya pagó una vez el precio de tener dos
+      armadores de config hermanos, donde se arregla uno y el camino vivo sigue roto en verde.
+      `rescate-run.mjs` lo importa con su firma intacta y sus 51 casos sin tocar.
+
+      **Qué recibe Sergio Urcullo**, por el MISMO canal que ya usa (`construirAviso` +
+      `enviarAvisoTelegram`, no un canal nuevo): `🥶 SE ENFRIÓ — rescatalo vos o se pierde`, con
+      la conversación, el inbox, la etapa, el contacto y cuántos días lleva callado. *«Lo último
+      que dijo»* no va, y es deliberado: el entrante no se persiste
+      (`INBOUND_BODY_PLACEHOLDER`), y un aviso que lo inventara sería peor que uno que no lo trae.
+
+      **La clave de la marca lleva `last_inbound_at`, no sólo la conversación.** «Ya avisé» vale
+      para ESTE silencio, no para la persona: si el lead vuelve a escribir y se enfría otra vez,
+      eso es un lead perdido nuevo y tiene que volver a sonar. Y **las marcas de colgada no se
+      purgan** —al revés que las del rescate—: allá la ventana del huérfano dura 12 h y una marca
+      vieja ya no puede silenciar nada; acá el silencio del lead **no vence**, así que purgar
+      sería volver a avisar de alguien de hace meses.
+
+      **Gates:** `colgada-avisa-una-sola-vez.test.mjs`, 8 casos. El del candado se verificó en
+      ROJO por el motivo correcto **mutando el candado** (que `EEXIST` devuelva `true` en vez de
+      `false`): con eso cae *«la segunda corrida no vuelve a avisar»* y sólo ése. Ojo con el falso
+      rojo que engañó a mitad de vuelta: mutar el `if (reserva === false)` **no** pone rojo nada,
+      porque el `if (reserva !== true)` de abajo lo absorbe — un gate se prueba rompiendo el
+      **dato**, no la rama que lo lee. Suite del bot completa: **1367/1367**.
+
+      **Y un caso viejo tuvo que inyectar sus dependencias**, no por capricho: con el aviso
+      cableado, `followup-cuenta-los-colgados.test.mjs` corría `emit: true` contra el directorio
+      REAL de marcas y dejaba puesta la marca de un lead de verdad — la que silencia su aviso.
+      La baranda de hermetismo lo cortó en rojo, que es exactamente para lo que está.
+
+      **Lo que queda para la próxima vuelta, en orden:** (1) pedido de deploy `DESPLEGAR: bot`;
+      (2) después del swap, verificar en el log del bot vivo que `conv 58` —que cruzó el piso de
+      7 días hoy— produce su línea de aviso:
+      `/root/bin/onia-vps.sh bash -lc 'docker exec onia-center sh -c "grep -ac \"\[aviso\].*conv=58\" /tmp/onia-bot-webhook.log"'`
+
+      ---
+
+      **Lo que se creía que FALTABA, y por qué la lista estaba incompleta.** El aviso necesita un
+      candado de «una sola vez». Los cuatro candidatos se miraron con el código delante y **los
+      cuatro tienen costo** — ninguno de los cuatro se usó, pero la derivación queda porque es lo
+      que explica por qué el quinto camino es el correcto:
 
       1. **`followup_step` como centinela** → ❌ `insistencia-run.mjs:220` ya documenta este bug
          exacto: quemar un contador compartido con otro circuito apaga al otro sin dejar rastro.
