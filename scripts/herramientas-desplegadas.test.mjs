@@ -86,9 +86,19 @@ export function destinosDeclarados (fuenteDelSincronizador) {
 // `hermes-content/deploy/vps-ops/` entero volveria agujeros a sus otros habitantes
 // (onia-mirar-cliente.sh y los dos hermanos del comentario de arriba), que es el rojo
 // falso que el recorte vino a evitar. Un archivo cableado se declara de a uno.
+// El 2026-09-24 esta lista decia `hermes-content/deploy/vps-ops/chatwoot-brand-onia.sh`:
+// UN archivo, porque hasta ese dia era la unica excepcion. Al cablear las otras cinco
+// herramientas de esa misma carpeta (claude-guardia, onia-mirar-cliente,
+// onia-rescate-mensaje-perdido, onia-siat-vigia, onia-vigia-sin-respuesta) el tripwire de
+// mas abajo salio en rojo, que es exactamente para lo que estaba puesto.
+//
+// Se declara la CARPETA y no los seis archivos: una lista de inclusion archivo por archivo
+// vuelve a quedarse corta el dia que alguien agregue el septimo, y se queda corta EN VERDE
+// —el modo de falla que este gate existe para cerrar—. Con la zona declarada, una
+// herramienta nueva ahi nace como agujero hasta que tenga su linea `poner`.
 const DUENO_DEL_DESPLIEGUE = [
   'scripts/',
-  'hermes-content/deploy/vps-ops/chatwoot-brand-onia.sh'
+  'hermes-content/deploy/vps-ops/'
 ]
 const loDespliegaEsteCircuito = (fuente) => DUENO_DEL_DESPLIEGUE.some((z) => fuente.startsWith(z))
 

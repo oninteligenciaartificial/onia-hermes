@@ -358,6 +358,39 @@ poner "$FUENTE/hermes-gateway-restart.sh"  "$DESTINO_BIN/hermes-gateway-restart.
 poner "$FUENTE/hf-login-start.sh"          "$DESTINO_BIN/hf-login-start.sh"
 poner "$FUENTE/hf-login-finish.sh"         "$DESTINO_BIN/hf-login-finish.sh"
 
+# Ocho herramientas que el cron del VPS EJECUTA y que nadie copiaba — la misma
+# pantomima que ya habia mordido a `parte-diario.sh` aca arriba: el vivo y el
+# versionado coinciden por md5, asi que el proximo md5sum las lee como
+# "desplegadas", pero la coincidencia es de alguien que copio a mano una vez.
+# El dia que alguien arregle la fuente, produccion sigue con el fosil y el
+# arreglo vale cero.
+#
+# Medido el 2026-09-24 antes de cablearlas, en las DOS direcciones (que es la
+# unica forma de que un `poner` nuevo no REVIERTA lo que solo existe en el VPS):
+# los 8 md5 de `origin/main` y los 8 de /root/bin son identicos, uno a uno. O sea
+# que hoy cablearlas no cambia ni un byte en produccion — por eso es el momento
+# seguro de hacerlo, y por eso no hay que esperar a que diverjan.
+#
+# `hermes-content/deploy` y `scripts/loops` ya estan en RUTAS_SYNC, asi que los
+# archivos viajan. Las OTRAS 6 de `npm run herramientas:vivas` (los respaldos y
+# los crons del producto) viven en `hermes-content/infra`, que NO esta en
+# RUTAS_SYNC: esas no se arreglan con una linea y quedan anotadas, no a medias.
+poner "$RAIZ/hermes-content/deploy/vps-ops/claude-guardia.sh"             "$DESTINO_BIN/claude-guardia.sh"
+poner "$RAIZ/hermes-content/deploy/vps-ops/onia-mirar-cliente.sh"         "$DESTINO_BIN/onia-mirar-cliente.sh"
+# El .sh de arriba es un envoltorio de tres lineas: su trabajo real es `node
+# /root/bin/onia-mirar-cliente.mjs`. Cablear el envoltorio y NO el modulo que ejecuta
+# deja el agujero donde esta el codigo — y este es el monitor que mira la pantalla de
+# login del cliente. El -prueba.sh es su sonda a mano, y declara /root/bin en su propia
+# cabecera. Los dos aparecieron al declarar la carpeta entera en herramientas-desplegadas.
+poner "$RAIZ/hermes-content/deploy/vps-ops/onia-mirar-cliente.mjs"        "$DESTINO_BIN/onia-mirar-cliente.mjs"
+poner "$RAIZ/hermes-content/deploy/vps-ops/onia-mirar-cliente-prueba.sh"  "$DESTINO_BIN/onia-mirar-cliente-prueba.sh"
+poner "$RAIZ/hermes-content/deploy/vps-ops/onia-rescate-mensaje-perdido.sh" "$DESTINO_BIN/onia-rescate-mensaje-perdido.sh"
+poner "$RAIZ/hermes-content/deploy/vps-ops/onia-siat-vigia.sh"            "$DESTINO_BIN/onia-siat-vigia.sh"
+poner "$RAIZ/hermes-content/deploy/vps-ops/onia-vigia-sin-respuesta.sh"   "$DESTINO_BIN/onia-vigia-sin-respuesta.sh"
+poner "$FUENTE/extras/onia-drop-recordatorio.sh"  "$DESTINO_BIN/onia-drop-recordatorio.sh"
+poner "$FUENTE/extras/onia-leads-vigia.sh"        "$DESTINO_BIN/onia-leads-vigia.sh"
+poner "$FUENTE/extras/onia-vigia-embudo.sh"       "$DESTINO_BIN/onia-vigia-embudo.sh"
+
 # El runbook de deploy de la LANDING (onia.com.bo). Vivia solo en
 # /opt/onia-landing/_deploy: build-and-stage.sh sin versionar, y
 # swap-and-verify.sh con el bit de ejecucion perdido ("Permission denied" el

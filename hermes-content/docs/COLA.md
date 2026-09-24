@@ -104,12 +104,22 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       `hermes-content/infra/vps-db/scripts/backup-onia-db.sh`,
       `hermes-content/infra/vps-ops/crons/run-onia-agents-cron.sh`,
       `.../run-onia-trial-drip.sh` y `hermes-content/deploy/vps-ops/onia-siat-vigia.sh`.
-      **Lo que queda abierto, y NO se hace a ciegas:** 19 herramientas son `COPIA_A_MANO` —hoy
-      corren lo correcto, pero nada las copia, así que el día que alguien arregle la fuente
-      producción sigue con el fósil—. Cablearlas de una es lo que NO hay que hacer:
-      `claude-guardia.sh` tiene **producción adelante** (trae un arreglo del 2026-09-01 que el
-      repo no tenía), así que un `poner` sin mirar el diff inverso lo REVIERTE. Se cablean de a
-      una, mirando el diff en las dos direcciones. Reproducción: `npm run herramientas:vivas`.
+      **Lo que queda abierto, y NO se hace a ciegas — recontado el 2026-09-24 por `onia-cola`,
+      quedan 6, no 19.** Se cablearon 10 en `7a37489c` (las 8 de entonces que vivían en rutas ya
+      sincronizadas, más `onia-mirar-cliente.mjs` y su sonda, que el instrumento no podía ver).
+      `npm run herramientas:vivas` pasó de **12 cableadas / 17 copia a mano** a **21 / 8**, con
+      cero a arreglar.
+      **Las 6 que faltan no se arreglan con una línea** y por eso no se tocaron: viven en
+      `hermes-content/infra/` (los dos respaldos y los cuatro crons del producto), y esa carpeta
+      **no está en `RUTAS_SYNC`**, así que el archivo ni siquiera viaja. Agregar un árbol nuevo al
+      `git archive` del sincronizador es un cambio aparte, con su propia medición.
+      ⚠️ **La advertencia de que `claude-guardia.sh` tenía «producción adelante» está VENCIDA.**
+      Era cierta el 2026-09-19; medida de nuevo hoy en las dos direcciones, el md5 de `origin/main`
+      y el de `/root/bin` son **idénticos**, y lo mismo las otras nueve — por eso cablearlas no
+      revirtió ni un byte. Obedecer hoy esa advertencia era dejar el agujero abierto por un motivo
+      que ya no existe. **El método sigue en pie**: se cablean mirando el diff en las dos
+      direcciones, y la coincidencia de md5 es lo que hace seguro el momento, no lo que lo hace
+      innecesario. Reproducción: `npm run herramientas:vivas`.
 
 - [x] 🔴 **Chatwoot le mostraba al cliente los términos y la privacidad de CHATWOOT: 6 de las 9
       claves de marca estaban revertidas, y el arreglo llevaba 19 días en `main` sin que nada lo
