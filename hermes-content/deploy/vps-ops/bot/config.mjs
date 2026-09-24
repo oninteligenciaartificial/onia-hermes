@@ -140,7 +140,13 @@ export function parseSlotsSpec(raw, { now = Date.now() } = {}) {
  * escribia "el lunes 28 a las 14:00" —nuestro, libre, y dentro de la franja que la coletilla del
  * MISMO mensaje le prometia— no matcheaba ningun slot, caia en `intents.proposesOwnTime` y se
  * iba a la cola humana. Medido el 2026-09-24 en `onia_center.bot_conversations`: 43
- * conversaciones, 18 paradas en `esperando_horario` y CERO con `calendar_event_id`.
+ * conversaciones y 18 paradas en `esperando_horario`.
+ *
+ * OJO con la evidencia que NO sirve: esas filas tienen CERO `calendar_event_id`, pero eso no
+ * prueba nada de este bug — Cal.com no existe en el VPS POR DECISION (opcion (c) del tablero
+ * `t_b18ca430`, 2026-09-03: aviso por Telegram ya, calendario despues), asi que esa columna
+ * seguiria en cero aunque los cinco candidatos se aceptaran. Citarla como consecuencia manda a
+ * la proxima vuelta a buscar un bug decidido. La consecuencia real es la cola humana.
  *
  * Salen SIN `key` a proposito: `detectSlotChoice` resuelve "A"/"B" por letra contra el par que
  * el prospecto vio, y una letra reasignada le confirmaria un dia que nunca eligio — peor que el

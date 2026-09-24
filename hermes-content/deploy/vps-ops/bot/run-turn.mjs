@@ -124,8 +124,10 @@ export function buildConfig(input) {
     // `slice(0, 2)` con `pending: false` fijo— y eso costaba dos cosas a la vez: el bot vivo
     // ofrecia un horario ya caducado como si estuviera bueno (la regla de anticipacion vivia
     // solo en `parseSlotsSpec`, o sea en el simulador), y los candidatos 3 a 5 que el cron deja
-    // LIBRES eran inalcanzables — medido el 2026-09-24: 43 conversaciones, CERO con
-    // `calendar_event_id`. Dos parseos del mismo dato es un instrumento que no mide lo que corre.
+    // LIBRES eran inalcanzables, asi que quien los nombraba terminaba en la cola humana —
+    // medido el 2026-09-24: 43 conversaciones, 18 paradas en `esperando_horario`. (El CERO de
+    // `calendar_event_id` NO es evidencia de esto: no hay Cal.com en el VPS por decision,
+    // tablero `t_b18ca430`.) Dos parseos del mismo dato es un instrumento que no mide lo que corre.
     const raw = String(process.env.ONIA_BOT_SLOTS || "").trim();
     if (raw) {
       const now = relojDelTurno(input);

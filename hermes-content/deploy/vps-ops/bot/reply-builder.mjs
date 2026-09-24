@@ -50,7 +50,9 @@ export function activeSlots(state, config) {
  * porque `{{slot_a}}` y `{{slot_b}}` caen en la misma frase, y de ahi salia tambien lo unico que
  * el motor sabia aceptar. Con cinco horarios publicados por dia, tres quedaban inalcanzables:
  * quien los nombraba caia en `proposesOwnTime` y se iba a la cola humana. Medido el 2026-09-24:
- * 43 conversaciones, CERO con `calendar_event_id`.
+ * 43 conversaciones, 18 paradas en `esperando_horario`. (No se cita `calendar_event_id`: esta en
+ * cero por decision —no hay Cal.com en el VPS, tablero `t_b18ca430`— y lo estaria igual sin este
+ * bug; ver el detalle en `config.mjs`, sobre `slotsElegibles`.)
  *
  * Se deduplica por `claveDeSlot` porque la foto y los de hoy pueden ser EL MISMO horario, y dos
  * copias de un mismo dia hacen que `detectSlotChoice` lo lea como ambiguo (`accepted.length === 1`)
