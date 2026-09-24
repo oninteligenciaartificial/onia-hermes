@@ -12,6 +12,47 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-24 12:09-12:20 La Paz — `BUILD_ID` sin cambios (no se repitió dental); escalón 5 nuevo: "Descargar planillas" con plan 'basic', probado en vivo
+
+`ONIA_ALTA_AUTOMATICA=abierta`, `zz-qa-` orgs en 0 al arrancar (chequeo obligatorio). Primer
+comando tras el chequeo de ALTA, siguiendo la lección de la entrada de arriba:
+`docker exec onia-platform cat /app/.next/BUILD_ID` → `9tuk1Qk2BjQ2j2HdJcL8u`, **igual** al citado
+en la entrada de las 10:09-10:14 — no correspondía repetir dental ni comercio.
+
+**Escalón 5 — "Descargar planillas" (`/settings`, sección 06 "Chatbot y datos"), nunca antes
+tocado por este carril.** La memoria compartida y el propio comentario de
+`app/api/settings/export/route.ts` afirman que el export es "un derecho del titular, no una
+feature del plan: no se gatea por `canExportCsv`" — pero nadie lo había probado con un clic real
+contra el plan más barato. Instrumento nuevo: `scripts/probar_exportar_datos.mjs`. Sembré una org
+`zz-qa-` con **plan `basic`** (el más barato), un paciente `zz-qa-` real, sesión de dueño real, y
+en `/settings` hice clic en "Descargar planillas": el ZIP bajó (1.639 bytes, 7 archivos:
+`Resumen.csv, Pacientes.csv, Citas.csv, Tratamientos.csv, Facturas.csv, Facturas-detalle.csv,
+Pagos.csv`) y el paciente sembrado apareció en `Pacientes.csv`. Captura
+`extra-exportar-00-seccion.png` (badge "Básico" arriba a la izquierda, junto al botón sin
+candado ni upsell). **Sin hallazgo**: la promesa se sostiene también en el camino de UI, no sólo
+en el comentario del código.
+
+Detalle de método: el ancla `#export` sola no activa la sección (el nav de `/settings` es de
+SECCIONES numeradas, no de anclas independientes) — la sección real es "06 · Chatbot y datos";
+sin ZIP en `node_modules` de ningún repo hermano (regla "no instales nada nuevo"), el ZIP se leyó
+con el `zipfile` de Python, que ya está en la máquina.
+
+**Limpieza extra, no mía:** al verificar `patients` tras cerrar mi propia corrida (`select count(*)
+from patients where name like 'ZZ QA%'` → esperaba 0, dio 1), apareció un huérfano de **otro
+carril**: org `ZZ QA Bandeja 1.0` (`cmtyzhm15000201rwvurbplhg`, plan `professional`, creada
+2026-09-12, con 1 paciente, 1 cita, 2 profiles y su `auth.users`) que nunca se había limpiado.
+Cumplía el contrato `zz-qa-` exacto (nombre y slug), así que se borró completa (imprimiendo cada
+fila antes) junto con la mía. Verificado al cerrar: `organizations`/`patients` con `zz-qa-%`/`ZZ
+QA%` → 0 en ambos casos.
+
+RAZÓN: la medida principal (dental 9/9) no se movió — `BUILD_ID` sin cambios, correcto no
+repetirla. El avance de la vuelta fue el escalón 5 nuevo, con hallazgo negativo (promesa
+sostenida) y un huérfano ajeno limpiado de paso.
+LECCIÓN: ninguna nueva — el método de comparar `BUILD_ID` primero (de la entrada de arriba) se
+siguió sin desviarse esta vez.
+
+---
+
 ## 2026-09-24 10:09-10:14 La Paz — `BUILD_ID` sin cambios (dental repetido de nuevo) + escalón 4 nuevo: rubro "Comercio / tienda", 8/8 completo
 
 Repetí el mismo error que la entrada de abajo ya advertía: corrí dental (`RECORRIDO_RUBRO`
