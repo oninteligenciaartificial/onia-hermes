@@ -174,6 +174,16 @@ logs 20m "$SANO"; run
 [ "$RC" != 0 ] && ok "logs vacios: sale con error" || falla "rc logs vacios" "!= 0" "$RC"
 case "$MSGS" in DIRECTO=0*"ni una linea en 20 min"*) ok "logs vacios: avisa por el tablero que esta ciego" ;; *) falla "logs vacios" "ni una linea en 20 min" "${MSGS:-(nada)}" ;; esac
 
+# 13. Ciego y el tablero NO acepto la tarea (onia-tg.sh sale 1, sin id): no queda por avisado.
+#     Si la marca se escribiera igual, el vigia quedaria ciego para siempre sin que nadie lo sepa.
+logs 20m "$SANO"; run
+DOCKER_RC=1 TG_FALLA=1 run
+[ -f "$TMP/estado/sin-logs.avisado" ] && falla "ciego + tablero fallo" "sin marca" "quedo marcado" || ok "ciego y el aviso fallo: no lo da por avisado"
+DOCKER_RC=1 run
+case "$MSGS" in *"no puedo leer los logs de LiteLLM"*) ok "ciego: la vuelta siguiente reintenta el aviso" ;; *) falla "reintento ciego" "no puedo leer los logs" "${MSGS:-(nada)}" ;; esac
+[ "$(grep -oE 't_[0-9a-f]{8}' "$TMP/estado/sin-logs.avisado" 2>/dev/null)" = t_c0ffee01 ] \
+  && ok "ciego: guarda el id de la tarea que si se creo" || falla "id de la tarea" "t_c0ffee01" "$(cat "$TMP/estado/sin-logs.avisado" 2>/dev/null || echo '(sin marca)')"
+
 echo
 if [ "$FALLOS" = "0" ]; then echo "vigia-credito-ia: TODO VERDE"; exit 0; fi
 echo "vigia-credito-ia: $FALLOS fallo(s)"; exit 1

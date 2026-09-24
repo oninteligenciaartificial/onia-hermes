@@ -72,11 +72,19 @@ if [ "$RC" -ne 0 ] || [ -z "$LOGS" ]; then
   if [ "$RC" -eq 124 ]; then POR="docker no contesta en 60 s"
   elif [ "$RC" -ne 0 ]; then POR="docker logs fallo (rc=$RC)"
   else POR="ni una linea en 20 min: LiteLLM parado?"; fi
+  # La marca se escribe SOLO si el tablero devolvio la tarea: si onia-tg.sh falla (sale 1, sin
+  # id) y se marcara igual, el vigia quedaria ciego para siempre sin que nadie lo sepa.
   if [ ! -f "$SIN_LOGS" ]; then
-    ID=$("$TG" "🔴 <b>Vigia de credito de IA: no puedo leer los logs de LiteLLM</b>
+    SALIDA=$("$TG" "🔴 <b>Vigia de credito de IA: no puedo leer los logs de LiteLLM</b>
 <code>$C</code>: $POR.
-Mientras siga asi, si OpenAI se queda sin credito nadie se entera (paso del 9 al 17-sep)." 2>/dev/null | grep -oE 't_[0-9a-f]{8}' | head -1)
-    printf '%s' "$ID" > "$SIN_LOGS"
+Mientras siga asi, si OpenAI se queda sin credito nadie se entera (paso del 9 al 17-sep)." 2>/dev/null)
+    TG_RC=$?
+    ID=$(printf '%s\n' "$SALIDA" | grep -oE 't_[0-9a-f]{8}' | head -1)
+    if [ "$TG_RC" -eq 0 ] && [ -n "$ID" ]; then
+      printf '%s' "$ID" > "$SIN_LOGS"
+    else
+      log "FALLO el aviso de ceguera (rc=$TG_RC, sin tarea): se reintenta en la proxima vuelta"
+    fi
   fi
   log "FALLO leyendo los logs de $C: $POR"
   exit 1
