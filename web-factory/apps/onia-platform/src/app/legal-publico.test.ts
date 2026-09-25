@@ -71,6 +71,13 @@ describe("la privacidad declara a quien de verdad recibe los datos", () => {
     expect(seccion(PRIVACIDAD_CRUDA, 13)).toMatch(/OpenAI/);
   });
 
+  it("nombra a Telegram, por donde el bot avisa a Onia con tu último mensaje", () => {
+    // aviso-telegram.mjs manda sin redactar rubro, tamaño, ciudad y los
+    // últimos 200 caracteres del prospecto al derivar, agendar o enfriarse.
+    expect(seccion(PRIVACIDAD_CRUDA, 5)).toMatch(/Telegram/);
+    expect(seccion(PRIVACIDAD_CRUDA, 13)).toMatch(/Telegram/);
+  });
+
   it("no promete que el audio no sale ni que nadie más recibe los datos", () => {
     expect(PRIVACIDAD).not.toMatch(/nadie m[aá]s recibe/i);
     expect(PRIVACIDAD).not.toMatch(/no se env[ií]a a servicios de transcripci[oó]n/i);

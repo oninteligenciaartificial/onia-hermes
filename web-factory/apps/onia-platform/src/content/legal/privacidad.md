@@ -105,6 +105,7 @@ y bajo sus propios compromisos de confidencialidad y seguridad:
 | Proveedor del servidor donde Onia aloja la plataforma (hoy en Estados Unidos) | Prestar la infraestructura física donde corren la base y los agentes | El proveedor no administra ni consulta los datos: la base la opera Onia sobre ese servidor |
 | **OpenAI** (Estados Unidos), vía su API | Transcribir notas de voz, leer imágenes y redactar respuestas del asistente de WhatsApp (el de Onia, §13, y el que contratás como add-on), y generar borradores y sugerencias | Solo por API, modalidad que **no entrena** con los datos enviados; se envía el mínimo contexto necesario. Los pedidos salen desde el servidor de Onia |
 | WhatsApp (Meta) | Mensajería con tus clientes cuando activás ese canal | Los mensajes pasan por la infraestructura de Meta bajo sus propios términos |
+| **Telegram** | Avisos internos a una persona de Onia: cuando alguien pide acceso o la carga inicial de sus datos en la plataforma, y cuando una conversación con el asistente de WhatsApp de Onia (§13) necesita a una persona | Llevan un resumen: en la plataforma, nombre, negocio y contacto; en el asistente, rubro, tamaño del equipo, ciudad y el último mensaje. Van a un chat privado de Onia |
 
 Onia mantendrá esta lista actualizada y avisará ante cambios de subprocesadores
 que traten datos de tus clientes: el aviso se envía al correo de contacto de la
@@ -251,9 +252,12 @@ sea o no cliente de Onia:
   datos descrita en el §4, que Onia opera en ese mismo servidor.
 - **Terceros que participan:** **Meta (WhatsApp)** transporta los mensajes por
   su infraestructura y bajo sus propios términos, y **OpenAI** procesa lo
-  descrito arriba. La coordinación de una reunión la hacen el bot y una persona
-  de Onia por este mismo canal, sin pasar tus datos a un servicio de calendarios
-  de terceros.
+  descrito arriba. Cuando la conversación necesita a una persona de Onia
+  (porque lo pediste, para coordinar una reunión o porque dejaste de responder
+  después del seguimiento), un resumen —rubro, tamaño del equipo, ciudad y tu
+  último mensaje— le llega a esa persona por **Telegram**. La coordinación de
+  una reunión la hacen el bot y una persona de Onia por este mismo canal, sin
+  pasar tus datos a un servicio de calendarios de terceros.
 - **Cuánto los guardamos:** las conversaciones y los datos del contacto se
   conservan hasta **24 meses después de tu última interacción**, o hasta que
   pidas su eliminación (§14) — lo que ocurra primero. El registro de una baja
