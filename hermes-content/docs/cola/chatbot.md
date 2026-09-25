@@ -632,23 +632,37 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 publicadores, dos fronteras y dos firmas.** Una línea de esta cola puede ser falsa para uno y
 cierta para el otro, así que el estado se pregunta por separado:
 
-- **Panel (`onia-platform`)** — medido el 2026-09-24 22:20 UTC: **desplegado entero**, producción
-  corre `3986b807` (etiqueta de imagen del contenedor). De las líneas «NO desplegado» de este
-  archivo, **20 se referían al panel y las 20 estaban caducadas**.
-- **Motor (el bot)** — ✅ **DESPLEGADO el 2026-09-25: Sergio Urcullo firmó y el swap corrió.**
-  Acá decía *«sigue esperando la firma de un `DESPLEGAR: bot`»* y quedó vencido ese mismo día.
-  Medido, no leído: `espejo-check.mjs` → **exit 0** (`ESPEJO OK`, el código del repo ES el que
-  corre en `/opt/onia/bot`); el `md5sum` de `knowledge.onia.json` da `06a15715…` **idéntico**
-  dentro del contenedor; y el proceso que atiende arrancó **después** de la copia
-  (`ps -eo pid,etime,args` → `1h36` contra un archivo del 24-sep), que es lo único que prueba
-  que la cargó: Node cachea módulos, así que copiar sin reiniciar no cambia nada. Funcional, no
-  sólo de archivo: la frase del configurador de webs devuelve `[R_CAMPANA]` con el texto de
-  **web**, no el pitch del chatbot. El estado se deriva, nunca se copia de acá:
+- **Panel (`onia-platform`)** — el estado NO está escrito acá: se deriva con
+  `npm run deploy:ya-ocurrio`, que resuelve los shas contra el clon de `onia-platform` y nombra
+  las líneas caducadas con su `archivo:línea`. Historia que sigue siendo cierta: en la pasada del
+  2026-09-24, de las líneas «NO desplegado» de este archivo, **20 se referían al panel y las 20
+  estaban caducadas** — o sea que el modo de falla por defecto de este archivo es afirmar que algo
+  falta cuando ya está vivo.
+- **Motor (el bot)** — el estado tampoco está escrito acá, y son **dos preguntas distintas**: si
+  el ARCHIVO que corre es el del repo, y si el PROCESO arrancó después de la copia (Node cachea
+  módulos: copiar sin reiniciar no cambia nada, así que un espejo idéntico todavía puede estar
+  contestando con el código viejo).
 
   ```bash
-  node hermes-content/deploy/vps-ops/bot/espejo-check.mjs                       # 0 = el motor corre lo del repo
+  node hermes-content/deploy/vps-ops/bot/espejo-check.mjs                       # ¿los archivos de /opt/onia/bot son los del repo?
+  node scripts/bot_vivo_tiene_el_codigo.mjs                                     # ¿el PROCESO de /tmp/onia-bot corre eso? (0 al día · 1 desfasado · 2 no medido)
   /root/bin/onia-tablero.sh list --status blocked | grep -i 'Publicar el bot'   # vacío = no hay firma pendiente
   ```
+
+  ⚠️ **Acá hubo un veredicto escrito TRES veces y las tres caducó, en las dos direcciones — y
+  por eso ahora hay un gate que prohíbe volver a escribirlo** (`npm run test:frontera-derivada`,
+  puro, en la cadena). El 24-sep decía *«sigue esperando la firma de un `DESPLEGAR: bot`»* con la
+  firma ya dada, y mandaba a pedirle a Sergio Urcullo algo que ya había hecho. El 25-sep se
+  corrigió a *«✅ DESPLEGADO: Sergio Urcullo firmó y el swap corrió»*, cierto ese momento. **Cinco
+  horas después ya era falso al revés**, que es el sentido caro: medido el 2026-09-25 19:50 La Paz,
+  `espejo-check.mjs` → 1 (`followup-run.mjs` y `marcas-en-disco.mjs` distintos, dos tests sin
+  viajar) y `bot_vivo_tiene_el_codigo.mjs` → 1 (**3 archivos viejos corriendo**), con el pedido
+  `t_a464b8c0` esperando firma. Y los archivos desfasados son los del aviso de los leads colgados
+  — justo *«cada handoff le llega a Sergio Urcullo»*, el objetivo de este carril. Este bloque es el
+  que cada vuelta lee ANTES de creerle a un «NO desplegado»: mientras afirmó «desplegado entero»,
+  **el bloque que existe para desmentir los ocho `- [x] … NO desplegado` los daba por vivos**.
+  La lección ya estaba escrita doce líneas más abajo y no se aplicó a sí misma: *un encabezado
+  congelado envejece; un comando que se corre, no.*
 
   ⚠️ **Por qué la corrección va acá y no en los 8 encabezados sueltos.** Este bloque es el que
   cada vuelta lee ANTES de creerle a un «NO desplegado»; mientras dijera que el motor espera
