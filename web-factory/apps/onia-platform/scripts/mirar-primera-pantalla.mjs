@@ -383,6 +383,13 @@ async function mirar(base, out) {
         kicker,
         fallidas,
       });
+      // El barrido HABLA mientras barre. Mudo no se distingue de colgado, y un
+      // barrido que se mata deja la pantalla SIN MIRAR con la linea `OBJETIVO:`
+      // igual de verde. Ver scripts/barrido-que-habla.test.ts (2026-09-25).
+      process.stderr.write(
+        `[${pantalla.id}] ${ruta.path} — h1 "${h1.replace(/\s+/g, " ").trim().slice(0, 40)}"` +
+          `${fallidas.length ? ` · ${fallidas.length} pedido(s) fallido(s)` : ""}\n`,
+      );
       await pagina.close();
     }
     await contexto.close();
