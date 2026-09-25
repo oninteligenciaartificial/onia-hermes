@@ -635,9 +635,27 @@ cierta para el otro, así que el estado se pregunta por separado:
 - **Panel (`onia-platform`)** — medido el 2026-09-24 22:20 UTC: **desplegado entero**, producción
   corre `3986b807` (etiqueta de imagen del contenedor). De las líneas «NO desplegado» de este
   archivo, **20 se referían al panel y las 20 estaban caducadas**.
-- **Motor (el bot)** — sigue esperando la firma de un `DESPLEGAR: bot`. Ese pedido **no se cita
-  por ID**, se deriva:
-  `/root/bin/onia-tablero.sh list --status blocked | grep -i 'Publicar el bot'`.
+- **Motor (el bot)** — ✅ **DESPLEGADO el 2026-09-25: Sergio Urcullo firmó y el swap corrió.**
+  Acá decía *«sigue esperando la firma de un `DESPLEGAR: bot`»* y quedó vencido ese mismo día.
+  Medido, no leído: `espejo-check.mjs` → **exit 0** (`ESPEJO OK`, el código del repo ES el que
+  corre en `/opt/onia/bot`); el `md5sum` de `knowledge.onia.json` da `06a15715…` **idéntico**
+  dentro del contenedor; y el proceso que atiende arrancó **después** de la copia
+  (`ps -eo pid,etime,args` → `1h36` contra un archivo del 24-sep), que es lo único que prueba
+  que la cargó: Node cachea módulos, así que copiar sin reiniciar no cambia nada. Funcional, no
+  sólo de archivo: la frase del configurador de webs devuelve `[R_CAMPANA]` con el texto de
+  **web**, no el pitch del chatbot. El estado se deriva, nunca se copia de acá:
+
+  ```bash
+  node hermes-content/deploy/vps-ops/bot/espejo-check.mjs                       # 0 = el motor corre lo del repo
+  /root/bin/onia-tablero.sh list --status blocked | grep -i 'Publicar el bot'   # vacío = no hay firma pendiente
+  ```
+
+  ⚠️ **Por qué la corrección va acá y no en los 8 encabezados sueltos.** Este bloque es el que
+  cada vuelta lee ANTES de creerle a un «NO desplegado»; mientras dijera que el motor espera
+  firma, los ocho `- [x] … (commiteado, NO desplegado)` de abajo se leían como presentes **y el
+  bloque que existe para desmentirlos los confirmaba**. Peor que trabajo fantasma: mandaba a
+  pedirle a Sergio Urcullo una firma **que ya dio**, que es lo que S18 llama *«peor que un
+  pendiente fantasma»*. Un encabezado congelado envejece; un comando que se corre, no.
 
 🔴 **La lista de líneas caducadas se DERIVA, no se copia:**
 
