@@ -82,7 +82,7 @@ curso»). Lo que se sigue de ahí, para este archivo:
 - **Una pieza de la marca personal no se reusa en @oniahq ni en la pauta** sin pasar la prueba
   del vendedor (§2).
 - No confundir con §10 de la estrategia: ahí «Contenido / ads» falla el test de tres preguntas
-  **como servicio que se le vende a un cliente** (`ONIA_ESTRATEGIA_DE_EMPRESA.md:365`). Esto es
+  **como servicio que se le vende a un cliente** (`ONIA_ESTRATEGIA_DE_EMPRESA.md:379`). Esto es
   otra cosa: la publicidad **propia** de ONIA para conseguir los clientes que faltan — el
   producto no tiene problema de rentabilidad, tiene problema de clientes (`CLAUDE.md` §1).
 
@@ -108,7 +108,7 @@ noticias, «top 10 herramientas», consejo fiscal presentado como obligación.
 
 | La regla decía | Hoy | Por qué |
 |---|---|---|
-| «…no va en @oniahq. **Va en Lucía.**» (`README:52-53`) | La pieza que falla la prueba **no va en @oniahq ni en la pauta**. Dónde va, si va a algún lado, lo decide `ONIA_DONDE_VA_CADA_COSA.md` | Lucía está congelada: la Etapa 1 congela todo lo que no sea Platform + chatbot (`ESTRATEGIA:219`) y el influencer IA es «otro producto entero» (`:364`) |
+| «…no va en @oniahq. **Va en Lucía.**» (`README:52-53`) | La pieza que falla la prueba **no va en @oniahq ni en la pauta**. Dónde va, si va a algún lado, lo decide `ONIA_DONDE_VA_CADA_COSA.md` | Lucía está congelada: la Etapa 1 congela todo lo que no sea Platform + chatbot (`ESTRATEGIA:219`) y el influencer IA es «otro producto entero» (`:378`) |
 | «somos una agencia y solo vendemos el producto» (`README:5`) | Se conserva **«solo vendemos el producto»** | Hay UN solo producto (`CLAUDE.md` §3). «Agencia» quedó viejo |
 | «dueño de negocio formal que ya tiene el problema» (`README:44`) | La clínica del cliente ideal (§1) | `ONIA_CLIENTE_IDEAL.md` es del 18-sep y angosta el perfil |
 | — | **Sólo módulos 🟢 del catálogo, cero cifras inventadas, cero obra** (`ONIA_DONDE_VA_CADA_COSA.md:51`) | «La venta nunca exhibe obra» y «no fabricar» (`CLAUDE.md` §3 y §5): cero clientes pagando |

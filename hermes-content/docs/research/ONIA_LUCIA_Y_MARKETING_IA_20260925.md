@@ -444,7 +444,9 @@ Todas fallan el test (`ESTRATEGIA:377-379`) o están marcadas como congeladas
 1. Las dos anclas de la presentadora del 21-sep no parecen la misma mujer (§2.3 e.1).
 2. Las capturas del producto que usa el guion UGC no están en este repo (§2.3 e.4).
 3. `MARCA_ONIA.md:111` cita la fila del influencer como `ESTRATEGIA:364`, pero hoy está en `:378`:
-   la excepción IA Lab de hoy corrió 14 líneas.
+   la excepción IA Lab de hoy corrió 14 líneas. **Corregido el mismo 25-sep**, junto con las otras
+   tres citas que había corrido (`MARCA_ONIA.md:85`, `cola/plataforma-v1.md:804` y
+   `ONIA_STACK_GENERACION_ALTERNATIVAS_20260925.md:468`).
 4. `contenido/LUCIA.md:52` tiene un pilar *«Vida de dueña de negocio»* que choca con
    `LUCIA.md:88-89`, donde Lucía no cuenta que tiene un negocio. Ése es el camino al testimonio
    fingido.

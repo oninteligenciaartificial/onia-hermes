@@ -465,7 +465,7 @@ que no sea Onia Platform + chatbot").
 **b) Si es una HERRAMIENTA INTERNA** (para el contenido de ONIA): el test de add-on no aplica, pero
 **el filtro de la etapa sí**. ¿Acerca los 5 clientes pagando? **No.** El cuello de botella es vender
 (leads sin contestar, soporte), no el costo de generar. El contenido vigente no usa video generado,
-Lucía está congelada (influencer IA = "otro producto entero", `ONIA_ESTRATEGIA_DE_EMPRESA.md:364`) y
+Lucía está congelada (influencer IA = "otro producto entero", `ONIA_ESTRATEGIA_DE_EMPRESA.md:378`) y
 el ahorro se consigue **sin** construir. **No se construye ahora: queda anotado con su disparador.**
 
 **Disparadores para reabrirlo** (hacen falta todos):

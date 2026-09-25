@@ -801,7 +801,7 @@ trabaría el merge de todos los carriles.
 
       **El veredicto, con la cuenta delante y sin reabrir nada.** La etapa vigente la fijó él el
       2026-09-05 y se mide en **clientes cerrados, no en features** (*"cerrar cinco clientes con
-      la versión 1.0"*, `ONIA_ESTRATEGIA_DE_EMPRESA.md:665`). N1 son **18-28 días** de
+      la versión 1.0"*, `ONIA_ESTRATEGIA_DE_EMPRESA.md:679`). N1 son **18-28 días** de
       construcción con **cero clientes pagando** y **cero prospectos enterprise pidiéndolo**. El
       propio documento del análisis ya se autocontesta, textual: *"esto se justifica solo si hay
       un prospecto enterprise concreto pidiéndolo; **si no, se anota como pendiente**"*, y
