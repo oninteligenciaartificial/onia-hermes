@@ -31,6 +31,10 @@ const ANON = 'anon-SECRETO-de-prueba';
 const SRK = 'srk-NO-SE-MUESTRA';
 const VIVO = 'FU8j_OHPyRH1XCCr6-0uY';
 const NUEVO = 'NuevoBuildIdDeLaImagen';
+const VAPID = 'BVapid-publica-DE-PRUEBA';
+const VAPID_PRIVADA = 'vapid-privada-NO-SE-MUESTRA';
+// El Dockerfile de la plataforma desde 617631d5: declara el ARG de la clave de push.
+const DOCKERFILE_CON_PUSH = 'FROM scratch\nARG NEXT_PUBLIC_VAPID_PUBLIC_KEY\n';
 
 const barra = (p) => p.replaceAll('\\', '/');
 
@@ -58,6 +62,8 @@ case "$1" in
       rm) [ -f "$S/imagenes" ] && { grep -vxF -- "$ultimo" "$S/imagenes" > "$S/imagenes.t"; mv "$S/imagenes.t" "$S/imagenes"; } ;;
     esac ;;
   build) [ "\${STUB_BUILD_FALLA:-0}" = 0 ] || exit "$STUB_BUILD_FALLA"
+         # Si la clave de push llegó al entorno del build (sin escribirla en ningún lado).
+         if [ "\${NEXT_PUBLIC_VAPID_PUBLIC_KEY:-}" = "$STUB_VAPID_ESPERADA" ]; then echo ok > "$S/vapid-en-build"; else echo otra > "$S/vapid-en-build"; fi
          p=""; for a in "$@"; do [ "$p" = --tag ] && echo "$a" >> "$S/imagenes"; p=$a; done ;;
   tag) echo "$3" >> "$S/imagenes" ;;
   exec)
@@ -70,7 +76,7 @@ case "$1" in
   run)
     case "$*" in
       *"--entrypoint sh"*) printf '%s\\n' "build=$STUB_BUILD_NUEVO" "node=\${STUB_NODE:-v22.11.0}" server=ok node_modules=ok static=40 \\
-        "envfiles=\${STUB_ENVFILES:-0}" "publica=\${STUB_PUBLICA:-3}" "anon=\${STUB_ANON:-3}" "qa=\${STUB_QA:-0}" ;;
+        "envfiles=\${STUB_ENVFILES:-0}" "publica=\${STUB_PUBLICA:-3}" "anon=\${STUB_ANON:-3}" "vapid=\${STUB_VAPID:-3}" "qa=\${STUB_QA:-0}" ;;
       *--rm*) echo "$STUB_BUILD_NUEVO" ;;
       *) touch "$S/nuevo" ;;
     esac ;;
@@ -120,19 +126,21 @@ function mundo(extra = {}) {
   stub('df', '#!/usr/bin/env bash\necho "Filesystem 1024-blocks Used Available Capacity Mounted on"\necho "/dev/sda1 999999999 1 $(( ${STUB_DISCO_GB:-100} * 1048576 )) 1% /"\n');
   stub('flock', '#!/usr/bin/env bash\nexit 0\n');
   writeFileSync(`${t}/meminfo`, `MemTotal: 33554432 kB\nMemAvailable: ${(extra.ramGb ?? 16) * 1048576} kB\n`);
-  writeFileSync(
-    `${base}/app.env`,
-    [
-      `NEXT_PUBLIC_APP_URL=${extra.appUrl ?? 'https://app.onia.com.bo'}`,
-      'NEXT_PUBLIC_SUPABASE_URL=https://app.onia.com.bo/supabase',
-      `NEXT_PUBLIC_SUPABASE_ANON_KEY=${ANON}`,
-      `SUPABASE_SERVICE_ROLE_KEY=${SRK}`,
-      '',
-    ].join('\n'),
-  );
+  const env = [
+    `NEXT_PUBLIC_APP_URL=${extra.appUrl ?? 'https://app.onia.com.bo'}`,
+    'NEXT_PUBLIC_SUPABASE_URL=https://app.onia.com.bo/supabase',
+    `NEXT_PUBLIC_SUPABASE_ANON_KEY=${ANON}`,
+    `SUPABASE_SERVICE_ROLE_KEY=${SRK}`,
+  ];
+  // null = la línea no está en app.env.
+  if (extra.vapid !== null) env.push(`NEXT_PUBLIC_VAPID_PUBLIC_KEY=${extra.vapid ?? VAPID}`);
+  if (extra.vapidServidor !== null) env.push(`VAPID_PUBLIC_KEY=${extra.vapidServidor ?? VAPID}`);
+  if (extra.vapidPrivada !== null) env.push(`VAPID_PRIVATE_KEY=${extra.vapidPrivada ?? VAPID_PRIVADA}`);
+  if (extra.vapidContacto !== null) env.push(`VAPID_CONTACT=${extra.vapidContacto ?? 'mailto:avisos@onia.com.bo'}`);
+  writeFileSync(`${base}/app.env`, [...env, ''].join('\n'));
   const git = (...a) => execFileSync('git', ['-C', repo, '-c', 'user.name=t', '-c', 'user.email=t@t', ...a], { encoding: 'utf8' });
   git('init', '-q');
-  writeFileSync(`${repo}/Dockerfile`, 'FROM scratch\n');
+  writeFileSync(`${repo}/Dockerfile`, extra.dockerfile ?? DOCKERFILE_CON_PUSH);
   for (const d of ['.claude', 'n8n-mcp-server/node_modules', 'lib']) mkdirSync(`${repo}/${d}`, { recursive: true });
   writeFileSync(`${repo}/.claude/settings.json`, '{}');
   writeFileSync(`${repo}/n8n-mcp-server/node_modules/pesado.js`, '');
@@ -156,6 +164,7 @@ function correr(m, guion, args, stubs = {}) {
     STUB_BUILD_VIVO: VIVO,
     STUB_BUILD_NUEVO: NUEVO,
     STUB_IMAGEN_VIVA: 'onia-platform:release-7bcd0a83',
+    STUB_VAPID_ESPERADA: VAPID,
     ...stubs,
   };
   const r = spawnSync('bash', [guion, ...args], { encoding: 'utf8', env, timeout: 60_000 });
@@ -252,6 +261,86 @@ test('build: un app.env con la URL pública equivocada no se hornea, y no se mue
   }
 });
 
+// La clave pública de push (2026-09-24): sin ella horneada, "Activar notificaciones
+// push" no hace nada y push_subscriptions queda en 0 filas. Tiene que ser la MISMA
+// con la que firma el servidor (VAPID_PUBLIC_KEY): si difieren, cada suscripción
+// nace rota.
+test('build: sin clave pública de push en app.env se niega, y no muestra nada', () => {
+  const m = mundo({ vapid: null, vapidServidor: null });
+  try {
+    const r = correr(m, BUILD, [m.sha, '--dry-run']);
+    assert.equal(r.codigo, 1);
+    assert.match(r.salida, /clave publica de push/);
+    assert.ok(!r.salida.includes(ANON) && !r.salida.includes(SRK));
+  } finally {
+    limpiar(m);
+  }
+});
+
+test('build: si app.env solo trae VAPID_PUBLIC_KEY, esa es la que llega al build', () => {
+  const m = mundo({ vapid: null });
+  try {
+    const r = correr(m, BUILD, [m.sha]);
+    assert.equal(r.codigo, 0, r.salida);
+    assert.equal(readFileSync(`${m.estado}/vapid-en-build`, 'utf8').trim(), 'ok');
+  } finally {
+    limpiar(m);
+  }
+});
+
+// lib/push.ts no manda NADA si falta cualquiera de las tres (VAPID_PUBLIC_KEY,
+// VAPID_PRIVATE_KEY, VAPID_CONTACT), y calla: ni log ni Sentry. Con sólo la pública
+// la imagen pasaba todos los gates, la gente se suscribía y no llegaba ni un push.
+for (const [falta, extra] of [
+  ['VAPID_PRIVATE_KEY', { vapidPrivada: null }],
+  ['VAPID_CONTACT', { vapidContacto: null }],
+  ['VAPID_CONTACT (línea vacía)', { vapidContacto: '' }],
+]) {
+  test(`build: con la clave pública pero sin ${falta} se niega, y no muestra ninguna clave`, () => {
+    const m = mundo(extra);
+    try {
+      const r = correr(m, BUILD, [m.sha, '--dry-run']);
+      assert.equal(r.codigo, 1, r.salida);
+      assert.match(r.salida, new RegExp(falta.split(' ')[0]));
+      assert.ok(!r.salida.includes(VAPID) && !r.salida.includes(VAPID_PRIVADA), 'mostró una clave de push');
+    } finally {
+      limpiar(m);
+    }
+  });
+}
+
+// El publicador arma origin/master solo. Si este guion llegaba al VPS antes que el ARG
+// al Dockerfile de la plataforma, docker ignoraba el build-arg, no se horneaba nada y
+// vapid-no-horneada frenaba TODOS los releases. Un commit que no declara el ARG se
+// arma como antes: ni se le exige la clave ni se le pasa.
+test('build real: un commit cuyo Dockerfile no declara la clave de push se arma igual, sin exigirla ni pasarla', () => {
+  const m = mundo({ dockerfile: 'FROM scratch\n', vapid: null, vapidServidor: null, vapidPrivada: null, vapidContacto: null });
+  try {
+    const seco = correr(m, BUILD, [m.sha, '--dry-run']);
+    assert.equal(seco.codigo, 0, seco.salida);
+    const r = correr(m, BUILD, [m.sha], { STUB_VAPID: '0' });
+    assert.equal(r.codigo, 0, r.salida);
+    assert.match(r.salida, /STAGED_OK/);
+    assert.match(r.salida, /no declara ARG NEXT_PUBLIC_VAPID_PUBLIC_KEY/);
+    const build = r.llamadas.find((l) => l.startsWith('build '));
+    assert.ok(!/NEXT_PUBLIC_VAPID_PUBLIC_KEY/.test(build), 'pasó la clave de push a un Dockerfile que no la lee');
+  } finally {
+    limpiar(m);
+  }
+});
+
+test('build: si la clave del navegador no es la del servidor se niega, sin mostrar ninguna', () => {
+  const m = mundo({ vapid: 'BOtra-clave-distinta' });
+  try {
+    const r = correr(m, BUILD, [m.sha, '--dry-run']);
+    assert.equal(r.codigo, 1);
+    assert.match(r.salida, /no coinciden/);
+    assert.ok(!r.salida.includes('BOtra-clave-distinta') && !r.salida.includes(VAPID));
+  } finally {
+    limpiar(m);
+  }
+});
+
 // La corrida REAL (sin --dry-run) contra el docker de mentira: lo que tiene que quedar
 // en el release y en qué orden. El BUILD_ID va último porque es lo que deploy-vivo.mjs
 // lee para dar el release por publicable.
@@ -285,6 +374,10 @@ test('build real: release con SHA, código sin lo excluido, docker build sin val
     assert.ok(i(new RegExp(`^image rm onia-platform:candidato-${m.sha8}$`)) > etiqueta, 'dejó el candidato colgado');
     assert.ok(!r.log.includes(ANON) && !r.log.includes(SRK), 'un valor de app.env viajó en la línea de comando');
     assert.ok(!r.salida.includes(ANON) && !r.salida.includes(SRK));
+    assert.match(build, /--build-arg NEXT_PUBLIC_APP_URL --build-arg NEXT_PUBLIC_VAPID_PUBLIC_KEY /);
+    assert.equal(readFileSync(`${m.estado}/vapid-en-build`, 'utf8').trim(), 'ok', 'la clave de push no llegó al build');
+    assert.ok(!r.log.includes(VAPID) && !r.salida.includes(VAPID), 'la clave de push viajó en argv o se mostró');
+    assert.ok(!r.log.includes(VAPID_PRIVADA) && !r.salida.includes(VAPID_PRIVADA), 'la clave privada de push viajó o se mostró');
     assert.match(r.salida, /STAGED_OK/);
   } finally {
     limpiar(m);
@@ -297,6 +390,7 @@ const GATES_ROTOS = [
   [{ STUB_NODE: 'v20.18.0' }, /node=v20\.18\.0/],
   [{ STUB_ENVFILES: '1' }, /envfiles=1/],
   [{ STUB_ANON: '0' }, /anon-key-no-horneada/],
+  [{ STUB_VAPID: '0' }, /vapid-no-horneada/],
   [{ STUB_PUBLICA: '0' }, /url-publica-no-horneada/],
   [{ STUB_CONF: 'root|/|["npm","start"]' }, /config de la imagen inesperada/],
 ];
