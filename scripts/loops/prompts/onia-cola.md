@@ -531,6 +531,23 @@ Antes de mergear CUALQUIER rama, corré:
 **Si borra más de 200 archivos, NO la mergees.** Anotalo y avisá. Un merge así no se razona: se
 para.
 
+⚠️ **Ese diff de TRES puntos no mide el merge cuando hay más de una base: mide contra UNA sola,
+y cuenta como entrante lo que `main` ya tiene.** Si git avisa `multiple merge bases, using <sha>`,
+el recuento no es el del merge y hay que rehacerlo con el instrumento honesto:
+
+    git merge-tree --write-tree origin/main origin/<rama>        # imprime el árbol resultante
+    git diff --shortstat origin/main <ese-árbol>                 # lo que el merge REALMENTE aplica
+    git diff --name-only --diff-filter=D origin/main <ese-árbol> | wc -l   # los borrados de verdad
+
+Medido el 2026-09-25 con `claude/web-venta`, que tenía **dos** bases: el diff de tres puntos dijo
+**5 archivos, +568/−2** y el merge aplicó **1 archivo, +173**. `merge-tree` lo predijo exacto
+(1 archivo, +173, cero borrados). De los 4 archivos sobrantes, dos eran idénticos a `main` y en
+**dos la versión de `main` era la MÁS NUEVA** — el diff los contaba como si entraran.
+
+**Por qué importa acá y no en cualquier diff:** el umbral de esta guarda es *cantidad de archivos
+borrados*, así que un recuento que no es el del merge rompe justo la decisión que la guarda existe
+para tomar. Sobre-reportar frena un merge sano; el error simétrico deja pasar el que hay que parar.
+
 Nace de un caso medido el 2026-09-01: el hook de auto-sync commiteó `901d9f1c` — **1.437 archivos
 borrados, 55.792 líneas** — en la rama del carril de contenido. `web-factory/` tiene **3.386**
 archivos en `main`, **1.713** en `claude/ads-creatividades-publicos` y **CERO** en
