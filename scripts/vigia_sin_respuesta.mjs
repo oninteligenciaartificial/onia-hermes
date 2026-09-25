@@ -322,6 +322,30 @@ export function nuevosParaAvisar(colgados, estadoPrevio) {
 }
 
 /**
+ * La lista que VIAJA en el aviso: TODOS los que siguen esperando, con `reaviso` puesto en los
+ * que ya se avisaron antes.
+ *
+ * Es distinta de `nuevosParaAvisar`, y la diferencia costo un aviso que decidia por Sergio
+ * Urcullo. Esa funcion contesta «¿hay algo nuevo que justifique molestarlo?» y esta contesta
+ * «¿cuanta gente esta esperando?». Hasta el 2026-09-25 el titulo y el cuerpo se armaban con la
+ * primera: el vigia firmaba «7 colgado(s) — 5 sin respuesta» en su salida y la tarea que le
+ * dejaba en el tablero se titulaba «1 desconocido(s) esperando una respuesta tuya», nombrando
+ * UNA conversacion. El numero de la hoja de decisiones era el de los que cambiaron desde el
+ * ultimo aviso, que es un dato interno del vigia, no el de las personas esperando.
+ *
+ * El disparo NO cambia: sin novedad no se avisa, asi que esto no repite Telegram. Lo que cambia
+ * es que cuando el aviso sale, sale con el total — y `armarAviso` ya sabia presentarlo, porque
+ * su campo `reaviso` nacio para que el que lleva 20 dias no se lea como uno que entro recien.
+ */
+export function colgadosDelAviso(colgados, estadoPrevio) {
+  const avisados = estadoPrevio?.avisados || {};
+  return (colgados || []).map((c) => {
+    const previo = avisados[String(c.conversationId)];
+    return previo !== undefined && previo !== null ? { ...c, reaviso: true } : c;
+  });
+}
+
+/**
  * El estado nuevo, conservando lo que ya habia de otras conversaciones.
  *
  * `idTarea` es la tarea que el aviso acaba de dejar viva. Se anota porque el barrido de la
@@ -659,19 +683,26 @@ export async function correrVigia(opciones = {}, deps = {}) {
   const estadoPrevio = leerEstado(rutaEstado);
   const nuevos = nuevosParaAvisar(colgados, estadoPrevio);
 
+  // El aviso SE DISPARA por novedad y se ESCRIBE con el total: dos preguntas distintas, y
+  // mezclarlas hacia que la hoja de decisiones dijera «1» sobre siete personas esperando.
+  const delAviso = colgadosDelAviso(colgados, estadoPrevio);
+
   let entrega = null;
   if (opciones.emitir && nuevos.length) {
     // `tareasPrevias` es lo que este vigia recuerda haber creado: sin eso, el barrido solo
     // reconoce sus avisos por el titulo y una tarea vieja sobrevive para siempre en la hoja de
     // decisiones que Sergio Urcullo recibe cada manana.
     entrega =
-      (await avisar(armarAviso(nuevos), nuevos, {}, { tareasPrevias: estadoPrevio?.tareas || [] })) || {};
+      (await avisar(armarAviso(delAviso), delAviso, {}, { tareasPrevias: estadoPrevio?.tareas || [] })) || {};
     // El estado dice «a este ya le avise». Anotarlo cuando el aviso NO llego es como este
     // vigia se apaga solo: la persona queda marcada como avisada sin que nadie la haya
     // visto, y no se la vuelve a nombrar hasta el escalon siguiente — o nunca.
+    // Se anota lo que el aviso NOMBRO, no solo lo que lo disparo: el cuerpo ya conto a cada uno
+    // con su antiguedad de hoy, asi que volver a avisar por un escalon ya comunicado seria
+    // ruido — y el ruido en esta hoja es lo que hace que se deje de leer.
     if (entrega.entregado) {
       mkdirSync(dirname(rutaEstado), { recursive: true });
-      writeFileSync(rutaEstado, JSON.stringify(armarEstado(estadoPrevio, nuevos, entrega.id), null, 2));
+      writeFileSync(rutaEstado, JSON.stringify(armarEstado(estadoPrevio, delAviso, entrega.id), null, 2));
     }
   }
   return { colgados, nuevos, entrega };
