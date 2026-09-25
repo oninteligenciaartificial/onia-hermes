@@ -1,5 +1,21 @@
 # Empezá acá
 
+> 🗺 **Mapa por dominio — 2026-09-25.** Tres sesiones escriben en este repo, y cada dominio
+> tiene su puerta de entrada. Empezá por la del tuyo:
+>
+> | Dominio | Qué cubre | Por dónde se entra |
+> |---|---|---|
+> | **PLATFORM** | producto, chatbot, venta de la plataforma, SIAT y cobro | [`ONIA_V1_ALCANCE.md`](ONIA_V1_ALCANCE.md) (qué entra en la 1.0) y [`COLA.md`](COLA.md) (qué se hace ahora); las colas de cada carril, en [`cola/README.md`](cola/README.md) |
+> | **CEREBRO** | estrategia, reglas, infra, loops, plata, fiscal propio y legal | **esta hoja** (docs) y [`CLAUDE.md`](../../CLAUDE.md) (reglas); la etapa vigente manda desde [`ONIA_ESTRATEGIA_DE_EMPRESA.md`](ONIA_ESTRATEGIA_DE_EMPRESA.md) |
+> | **CONTENIDO** | marca personal de Sergio Urcullo, comunidad, YouTube, producción, distribución y marca ONIA | [`ONIA_CIRCUITO_DE_CONTENIDO.md`](ONIA_CIRCUITO_DE_CONTENIDO.md) |
+> | **HISTORIA** | fotos de un día: **no son fuente** | [`historial/`](historial/) |
+>
+> ⚠️ **Corregido el 2026-09-25.** Abajo dice «390 documentos». Contado ese día en `main`
+> (`ea6e6677`): `hermes-content/docs/` tiene **540 `.md`** (658 archivos en total), 287 de ellos
+> sueltos en el nivel superior y 119 en `historial/`; el repo entero, 1.966 `.md`. El inventario
+> completo, con el dominio de cada doc, está en
+> [`historial/MAPA_DOCS_20260925.md`](historial/MAPA_DOCS_20260925.md).
+
 > **390 documentos.** Casi ninguno hace falta para decidir hoy. Esta hoja dice cuáles sí.
 > Si estás perdido, leé los de acá y ninguno más.
 >
@@ -29,6 +45,14 @@ Hoy: **Básico Bs 320 · Profesional Bs 750 · Completo Bs 1.500 · Empresa Bs 2
 10 meses) · **chatbot de WhatsApp Bs 390/mes, sin cargo inicial**. Si leés otra cosa en
 cualquier lado, el otro lado está roto.
 
+> ⚠️ **Corregido el 2026-09-25.** El párrafo de arriba escribe cifras y dice que, si otro lado
+> dice otra cosa, el roto es el otro. No: si una cifra difiere, manda el código y no esta hoja,
+> por esta misma sección y por `CLAUDE.md` §2: **los precios se leen SOLO de `onia-platform/lib/subscription-plans.ts`**
+> (`DEFAULT_PLAN_AMOUNTS`, los planes) **y de `onia-platform/lib/pricing.ts`** (los add-ons).
+> Las cifras de arriba **no están verificadas contra el código**: el repo `onia-platform` no
+> estaba en la sesión que revisó esta hoja, y otros docs ya citan una escalera de planes
+> distinta (`ONIA_VENDER_MIENTRAS_SE_DESARROLLA.md`). No las copies: abrí el código.
+
 🔴 **Excepción, y hay que respetarla:** **webs, consultoría y automatización NO llevan lista
 de precios.** Se cotizan caso por caso (decisión del 2026-08-24, `ONIA_WEB_COMO_SE_VENDE.md`).
 `pricing.ts` **no cubre** esa línea: "corregir" un precio de web contra ese archivo es
@@ -48,16 +72,21 @@ reglas comerciales; no por sus cifras.
 | `ONIA_CATALOGO_DE_VENTA.md` | Qué existe por rubro: vivo / construido sin probar / futuro |
 | `ONIA_PLAN_DESARROLLO_Y_VENTA.md` | Qué se construye, en qué orden, y por qué ese orden lo dicta la venta |
 | `ONIA_PLAN_DE_VERSIONES.md` | Qué se vende ya y qué entra por parche |
-| `ONIA_PENDIENTES_PARA_LANZAR.md` | Qué está a medias y en qué orden se mata |
-| `ONIA_PUEDO_VENDER_HOY.md` | Estado verificado: qué se puede prometer sin mentir |
+| `ONIA_PENDIENTES_PARA_LANZAR.md` ⚠️ **foto del 22-ago** | Qué está a medias y en qué orden se mata |
+| `ONIA_PUEDO_VENDER_HOY.md` ⚠️ **foto del 18-ago** | Estado verificado: qué se puede prometer sin mentir |
 | `ONIA_WEB_COMO_SE_VENDE.md` | La línea de webs — y por qué no tiene lista de precios |
+
+> ⚠️ **Corregido el 2026-09-25.** `ONIA_PENDIENTES_PARA_LANZAR.md` y `ONIA_PUEDO_VENDER_HOY.md`
+> figuraban entre «los que mandan» sin aviso. Medido en sus propias cabeceras: el primero es la
+> cola de terminación del 22-ago y el segundo se verificó el 18-ago. Son fotos de esos días: se
+> leen como historia. Qué se hace hoy en el producto: [`COLA.md`](COLA.md).
 
 ## 2. Los que mandan — plata, fiscal y legal
 
 | Doc | Responde |
 |---|---|
 | `ONIA_FECHAS_CRITICAS_PLAN.md` | Las fechas que corren solas (Meta 1-oct, SIAT, runway) |
-| `ONIA_FACTURACION_ESTADO_REAL.md` | Facturación: qué emite de verdad y qué es mock |
+| `ONIA_FACTURACION_ESTADO_REAL.md` ⚠️ **foto del 18-ago** | Facturación: qué emite de verdad y qué es mock. *Corregido el 25-sep: figuraba como vigente; es la auditoría de ese día (lo dice su cierre)* |
 | `ONIA_LEGAL_BOLIVIA_ESTADO.md` | Estado legal: SEPREC, NIT, marca |
 | `ONIA_AGENTES_COSTO_API.md` | Cuánto cuesta de API cada agente y chatbot, y dónde está el margen real |
 | `ONIA_PSICOLOGIA_PRECIOS_COMPETENCIA.md` | Qué hace la competencia con sus precios y qué copiamos |
