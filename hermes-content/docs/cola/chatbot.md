@@ -1442,7 +1442,7 @@ abrirlas y decidir a qué deploy se refieren. Se derivan con el comando, nunca d
   que el aviso a Sergio Urcullo sobrevive ese `null`.
 
   **Lo que NO era cierto: «`run-turn.mjs` tenía su propio parseo» se arregló en una sola de sus
-  DOS ramas.** `buildConfig` tiene un `if/else`, y el arreglo sacó la copia del `else` (los
+  DOS ramas.** `buildConfig` tiene un `if` con su `else`, y el arreglo sacó la copia del `else` (los
   horarios del entorno) dejando **la copia idéntica ocho líneas más arriba**, la del `if` (los
   horarios que trae el turno): mismo `slice(0, 2)`, mismo `pending: false` fijo, y sin
   `slotsElegibles`. O sea el bug entero —candidatos 3-5 inalcanzables **y** horario caducado
