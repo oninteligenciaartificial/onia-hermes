@@ -12,6 +12,29 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-25 21:09-21:11 UTC (17:09-17:11 La Paz) — dental, 9/9, sin hallazgo
+
+`ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado primero: cambió de `UgtwNYIEjS-DSK0umjqc8`
+(vuelta anterior) a `4FWMcecd4jRBGUVwStDQb` — hubo deploy nuevo, corresponde re-rotar desde
+dental (regla de la propia entrada anterior). Tablero revisado (`scripts/kanban/tablero.sh
+list`): nada en la zona `recorrido-cliente` sin reclamar.
+
+`node scripts/recorrido_cliente.mjs --escribir`: **recorrido completo, los 9 pasos, sin
+agujeros.** Cuenta `zz-qa-2026-09-25-2109@onia.com.bo`, confirmación de correo antes del primer
+login, onboarding en 6 pantallas, paciente `zz-qa-2026-09-25-2109-paciente` cargado y visto en
+`/patients`, cita 2026-09-28 09:00 agendada (201, `cmuhgiu2b003h01r28la1z4uw`) y VISTA en
+`/appointments`, factura con ítem `zz-qa-2026-09-25-2109-item` vista en `/billing/...` — frenado
+ahí sin marcar pago. El dato del paso 6 no aparece en `/dashboard` (esperado: el panel no lista
+el group Pacientes). `resumen.json`: `llegoHasta 9/9`, `completo: true`, `agujeros: []`.
+`organizations`/`appointments` con `zz-qa-%` → **0** al cerrar, verificado.
+
+**Sin hallazgo de producto.** Próxima vuelta: comparar `BUILD_ID` primero; si cambió, re-rotar
+rubros desde dental; si sigue igual, seguir con superficies de promesa-vs-entrega aún no
+auditadas (`/agentes`, `/comparativa`, `/facturacion`).
+
+RAZÓN: N/A — avanzó (recorrido re-verificado entero tras deploy nuevo, sin hallazgo).
+LECCIÓN: ninguna nueva.
+
 ## 2026-09-25 20:09-20:11 UTC (16:09-16:11 La Paz) — dental, 9/9, sin hallazgo
 
 `ONIA_ALTA_AUTOMATICA=abierta`. Tablero revisado primero (`scripts/kanban/tablero.sh list`):
