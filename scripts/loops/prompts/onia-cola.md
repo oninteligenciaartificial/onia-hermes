@@ -10,24 +10,41 @@ commits verdes en `main`/`master` sin desplegar que no tengan un pedido de deplo
 ## CÓMO SE MIDE al arrancar
 
 ```
-for r in "/root/loops/onia-hermes origin/main" "/root/loops/onia-platform origin/master"; do set -- $r; git -C $1 fetch --quiet --prune; for b in $(git -C $1 branch -r --list 'origin/claude/*' --no-merged $2 | grep -vE 'carril-contenido|ads-creatividades-publicos|onia-core-adoption-sprint5'); do echo "$1 $b: $(git -C $1 rev-list --count $2..$b) commits, último $(git -C $1 log -1 --format=%cr $b)"; done; done
-V=$(docker exec onia-platform cat /app/.next/BUILD_ID); for d in /opt/onia-platform/build-*/; do [ "$(cat $d/.next/standalone/.next/BUILD_ID 2>/dev/null)" = "$V" ] && echo "plataforma CORRE $(basename $d)"; done; git -C /root/loops/onia-platform log -1 --format='%ci %h %s' origin/master   # sin desplegar = los commits POSTERIORES al sha que corre
-stat -c '%y' /opt/onia-landing/runtime-next/apps/onia-platform/.next/BUILD_ID; git -C /root/loops/onia-hermes log -1 --format='%ci %h' origin/main -- web-factory/apps/onia-platform   # landing: ídem
-/root/bin/onia-tablero.sh list | grep -iE "deploy|publicar"                                                                                      # ¿ya hay pedido? se comenta ahí, no se abre otro
-npm run herramientas:vivas   # ¿la herramienta que el cron del VPS EJECUTA es la que este repo versiona? Tri-estado: exit 2 = NO MEDIDO (sin SSH), nunca verde. Un rojo acá es producción corriendo un fósil.
+npm run ramas:varadas          # los DOS repos, clasificado: carril activo (cuenta) · ajena · huérfana. Nombra lo excluido.
+npm run deploy:plataforma-vivo # qué sha corre app.onia.com.bo y si algo posterior cambia lo que el cliente ve
+npm run deploy:sin-pedido      # los 4 destinos (landing · plataforma · bot · siat): al día, o falta publicar Y si ya hay pedido
+npm run herramientas:vivas     # ¿la herramienta que el cron del VPS EJECUTA es la que este repo versiona? Tri-estado: exit 2 = NO MEDIDO (sin SSH), nunca verde. Un rojo acá es producción corriendo un fósil.
+/root/bin/onia-tablero.sh list | grep -E '^[⊘▶]'   # SOLO lo vivo: ¿hay tarea de tu zona sin reclamar?
 ```
 
-⚠️ **`docker inspect --format '{{.Created}}'` NO mide si la plataforma está desplegada, y hasta el
-2026-09-04 esta sección mandaba usarlo.** El swap reemplaza el runtime y **reinicia** el contenedor:
-no lo recrea, así que `Created` queda anclado al día que se levantó. Medido esa tarde: `Created`
-06:27 UTC contra un último commit de las 18:08 — por esa regla, "17 commits sin desplegar"; casando
-el `BUILD_ID` vivo contra los `build-*` del disco, corría `build-3606c46`, que **es** el HEAD de
-`master`. Cero. Un instrumento que inventa trabajo urgente hace abrir pedidos de deploy que no
-existen, y a Sergio le llegan igual que los de verdad.
+⚠️ **Los cuatro son alias versionados a propósito: este bloque tenía los comandos escritos a mano
+y los tres que medían deploy estaban rotos.** Medidos en vivo el 2026-09-25 04:40 desde nodo-casa:
 
-La línea `OBJETIVO:` es `ramas varadas N (la más vieja: X h) · commits sin desplegar: plataforma
-A, landing B · pedido de deploy: <id>`. Las ramas de contenido y la de `onia-core-adoption` NO
-entran: son de Sergio, y están explicadas más abajo.
+| lo que decía este bloque | qué devolvió de verdad |
+|---|---|
+| casar `BUILD_ID` vivo contra `/opt/onia-platform/build-*/` | **cero líneas** — el deploy ya no publica desde `build-<sha>`, arma la imagen `onia-platform:release-<sha8>` |
+| `stat` del `BUILD_ID` de `/opt/onia-landing/…` | `No such file or directory` — **`/opt` no existe en nodo-casa**, y los loops corren ahí desde el 07-sep |
+| `tablero list \| grep -iE "deploy\|publicar"` | **51 líneas, 1 viva** — la lista sale con las `done` primero, así que el único pedido vivo queda sepultado bajo 50 cerradas |
+
+**Una salida vacía se lee igual que "no hay nada que reportar", y ése es el modo de falla más
+caro de un instrumento**: no avisa, confirma. Costó dos mediciones extra a mano antes de saber
+que la plataforma estaba al día. Los alias contestan en segundos, traen su veredicto en
+castellano y **fallan ruidoso**: `deploy-vivo.mjs` usa la etiqueta de la imagen como fuente
+primaria y deja el casado de `BUILD_ID` como respaldo.
+
+⚠️ **Y antes de eso, hasta el 2026-09-04, este bloque mandaba usar `docker inspect --format
+'{{.Created}}'`, que es la MISMA falla con el signo cambiado.** El swap reemplaza el runtime y
+**reinicia** el contenedor: no lo recrea, así que `Created` queda anclado al día que se levantó.
+Medido esa tarde: `Created` 06:27 UTC contra un último commit de las 18:08 — por esa regla, "17
+commits sin desplegar"; contados bien, **cero**. Un instrumento que inventa trabajo urgente hace
+abrir pedidos de deploy que no existen, y a Sergio Urcullo le llegan igual que los de verdad.
+**Uno inventa trabajo, el otro lo esconde; los dos median otra cosa que la que decían medir.**
+
+La línea `OBJETIVO:` es `ramas varadas N (la más vieja: X h) · destinos sin desplegar y sin
+pedido: N · pedido vivo: <id>`, copiando los veredictos de los alias. Las ramas de contenido y
+la de `onia-core-adoption` NO entran: son de Sergio Urcullo, `ramas:varadas` ya las separa como
+**ajenas** y las nombra una por una — si aparece una ajena que no reconocés, está explicada más
+abajo, y si no está explicada, es un carril nuevo (ver el `--no-merged`).
 
 en los archivos.
 
