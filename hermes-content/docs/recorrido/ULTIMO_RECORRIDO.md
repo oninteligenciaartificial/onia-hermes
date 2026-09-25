@@ -12,6 +12,32 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-25 22:09-22:10 La Paz — `BUILD_ID` sin cambios, rotado a Comercio: primer rubro re-verificado contra el build nuevo, 8/8 sin hallazgo
+
+`ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado primero: `4FWMcecd4jRBGUVwStDQb`, igual al
+de las tres vueltas anteriores (todas dental) — no correspondía repetir dental. Tablero revisado:
+nada `ready` sin reclamar en la zona `recorrido-cliente`. Cola revisada: la sección "Abierto" no
+trae ítems Gate-1-listos, y las tres superficies de promesa-vs-entrega que las últimas entradas
+venían citando como "próxima vuelta" (`/agentes`, `/comparativa`, `/facturacion`) ya están
+auditadas y sanas desde el 17-sep — esa frase quedó recic­lada sin chequear freshness. Lo que sí
+faltaba: desde que este `BUILD_ID` entró en producción (15:09 La Paz de hoy), sólo dental se había
+vuelto a correr contra él; los otros 4 rubros seguían verificados contra el build anterior.
+
+`RECORRIDO_RUBRO='Comercio / tienda' node scripts/recorrido_cliente.mjs --escribir`: **8/8 pasos
+que le corresponden, sin hallazgo** (el paso 7 sale NO-APLICA: el storefront de Comercio no vende
+agenda, ni la promete en `/register` ni la tiene en el menú — coherente). Cuenta
+`zz-qa-2026-09-25-2210@onia.com.bo`, confirmación de correo antes del primer login, onboarding en
+6 pantallas, dato cargado y encontrado en el storefront Catálogo, pantalla de cobro (Caja) vista y
+frenada sin pagar, dato del paso 6 visto en `/dashboard`. Todo lo `zz-qa-` borrado en la misma
+corrida: `organizations`/`appointments` con `zz-qa-%` → 0, verificado con `SELECT` después de
+borrar.
+
+RAZÓN: N/A — avanzó (Comercio queda re-verificado contra el `BUILD_ID` vigente, sin hallazgo).
+LECCIÓN: el texto "próxima vuelta: /agentes, /comparativa, /facturacion" se venía copiando de
+entrada en entrada sin comprobar si seguía siendo cierto — esas tres ya estaban auditadas hace
+más de una semana. Próxima vuelta: si el `BUILD_ID` sigue igual, seguir rotando (estética,
+importadora, servicios profesionales) contra este mismo build antes de volver a dental.
+
 ## 2026-09-25 21:09-21:11 UTC (17:09-17:11 La Paz) — dental, 9/9, sin hallazgo
 
 `ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado primero: cambió de `UgtwNYIEjS-DSK0umjqc8`
