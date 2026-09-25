@@ -2684,8 +2684,15 @@ y sin operar. Acá se opera, con verificación por ítem.
       push; UNA vez POR CICLO — la clave única lleva el planEnd del ciclo, renovar abre los
       pasos del ciclo nuevo solos), tabla `onia_renewal_reminder_sends` (RLS, migración
       aplicada en prod con registro), plantilla `sendRenewalReminderEmail` (sin datos
-      bancarios a propósito), script `onia-platform/scripts/cron/run-onia-renewal-reminders.sh`
-      instalado en el crontab del VPS (08:05 La Paz). **PROBADO E2E en prod**: org QA con
+      bancarios a propósito), y el disparador **en el VPS**: `/root/bin/run-onia-renewal-reminders.sh`
+      con su línea de crontab `5 12 * * *` UTC (08:05 La Paz).
+      ⚠️ **Corregido el 2026-09-25: acá decía `onia-platform/scripts/cron/run-onia-renewal-reminders.sh`
+      y ese archivo NO existe** — `onia-platform` no tiene ni la carpeta `scripts/cron/`, ni en el
+      worktree ni en `origin/master`. El lanzador vive sólo en el VPS (medido:
+      `crontab -l | grep renewal` allá) y lo versionado es el endpoint,
+      `app/api/cron/renewal-reminders/route.ts`. La ruta fantasma ponía ROJA la cadena `npm test`
+      de todo el repo (`test:colas-vivas`), o sea que trababa el merge de TODOS los carriles por
+      una cita mal escrita en un ítem ya cerrado. **PROBADO E2E en prod**: org QA con
       vencimiento a 3 días → corrida 1 `sent:1 paso 3` (correo real entregado a
       sergio@onia.com.bo), corrida 2 `sent:0` (idempotencia); revertido después. Tests 6/6
       (`onia-platform/lib/subscription/renewal-reminders.test.ts`) + suite subscription
