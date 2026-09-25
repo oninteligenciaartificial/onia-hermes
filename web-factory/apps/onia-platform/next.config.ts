@@ -1,9 +1,59 @@
 import type { NextConfig } from "next";
 import path from "node:path";
 
+import { CHATWOOT_BASE_URL } from "./src/lib/chat-diferido";
+
 // Raiz del monorepo. La usan dos cosas distintas: turbopack en desarrollo y el
 // trazado de archivos del build standalone.
 const monorepoRoot = path.resolve(process.cwd(), "../..");
+
+/**
+ * El único tercero de la landing: Chatwoot, self-hosted. El origen se DERIVA de
+ * `chat-diferido.ts` —la fuente única del snippet que inyecta el SDK— porque si
+ * ese host se mueve, la CSP tiene que moverse con él o el widget muere mudo.
+ */
+const CHATWOOT_WS = CHATWOOT_BASE_URL.replace(/^https:/, "wss:");
+
+/**
+ * CSP de onia.com.bo, derivada de lo que esta landing carga DE VERDAD.
+ *
+ * No es la de `app.onia.com.bo`: esa corre `frame-src 'none'` y pide los dos
+ * orígenes de Google Fonts. Copiarla acá apagaría el widget que capta los leads
+ * (la burbuja de Chatwoot es un iframe) y regalaría permisos que esta app no
+ * usa (las tipografías entran por `next/font/google`, que las auto-hospeda en
+ * el build y las sirve desde `/_next/static/media/…`).
+ *
+ * Renglón por renglón, con el sujeto que lo obliga:
+ *
+ *  - `'unsafe-inline'` en `script-src`: `layout.tsx` cuelga dos `<script>`
+ *    inline —el tema antes del primer paint y el diferido del chat— y ninguno
+ *    puede pasar a archivo sin perder justamente la propiedad de correr antes
+ *    del bundle. No va `'unsafe-eval'`: se midió y nada lo pide.
+ *  - `'unsafe-inline'` en `style-src`: Next inyecta estilos críticos inline, y
+ *    el SDK de Chatwoot se dibuja con estilos propios.
+ *  - `img-src ... data: blob:` + Chatwoot: los SVG de marca viajan como `data:`
+ *    y los adjuntos/avatares del chat salen de su origen.
+ *  - `connect-src` con `https:` Y `wss:`: la conversación se mantiene viva por
+ *    ActionCable; `wss:` no se hereda de `https:`.
+ *  - `frame-src` con Chatwoot: el widget ES un iframe de su propio origen.
+ *  - `media-src` con Chatwoot: el sonido de mensaje nuevo.
+ *  - `object-src 'none'` y `base-uri 'self'`: las dos que `default-src` no
+ *    cubre en la práctica.
+ *  - `form-action 'self'`: los formularios de contacto postean acá y nada más.
+ */
+const CSP_DE_LA_LANDING = [
+  "default-src 'self'",
+  `script-src 'self' 'unsafe-inline' ${CHATWOOT_BASE_URL}`,
+  "style-src 'self' 'unsafe-inline'",
+  `img-src 'self' data: blob: ${CHATWOOT_BASE_URL}`,
+  "font-src 'self' data:",
+  `connect-src 'self' ${CHATWOOT_BASE_URL} ${CHATWOOT_WS}`,
+  `frame-src ${CHATWOOT_BASE_URL}`,
+  `media-src 'self' ${CHATWOOT_BASE_URL}`,
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+].join("; ");
 
 const nextConfig: NextConfig = {
   turbopack: {
@@ -54,9 +104,13 @@ const nextConfig: NextConfig = {
   /**
    * Headers de seguridad EN LA APP (auditoría 2026-09-11: no había ninguno; si
    * Cloudflare agrega los suyos, eso no vive en este repo y no se ve en
-   * local/staging). CSP queda a propósito para una pasada MEDIDA aparte: hay
+   * local/staging).
+   *
+   * La CSP se sumó el 2026-09-25, y hasta entonces faltaba a propósito: *"hay
    * dos scripts inline y el SDK de Chatwoot, y una CSP escrita a ciegas rompe
-   * el sitio en silencio.
+   * el sitio en silencio"*. El motivo seguía siendo bueno; lo que cambió es que
+   * los sujetos están medidos uno por uno en `CSP_DE_LA_LANDING`, y el gate
+   * `src/lib/csp-de-la-landing.test.ts` los vuelve a cruzar en cada corrida.
    */
   async headers() {
     return [
@@ -69,12 +123,15 @@ const nextConfig: NextConfig = {
           },
           { key: "X-Content-Type-Options", value: "nosniff" },
           // DENY y no SAMEORIGIN: nada del sitio se embebe en iframes, ni propios.
+          // Ojo: gobierna quién nos embebe a NOSOTROS. A quién embebemos lo
+          // decide `frame-src` de la CSP, y ahí Chatwoot SÍ entra.
           { key: "X-Frame-Options", value: "DENY" },
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
           {
             key: "Permissions-Policy",
             value: "camera=(), microphone=(), geolocation=()",
           },
+          { key: "Content-Security-Policy", value: CSP_DE_LA_LANDING },
         ],
       },
     ];
