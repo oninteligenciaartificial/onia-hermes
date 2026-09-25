@@ -711,6 +711,99 @@ abrirlas y decidir a qué deploy se refieren. Se derivan con el comando, nunca d
 
 ## Ahora
 
+- [x] 🔴 **MEDIDO el 2026-09-25 14:13-14:45 La Paz (sin cambio de motor — el arreglo ya está
+      commiteado desde el 24-sep y lo único que falta es publicar): el bot vivo no sólo ofrece
+      turnos por debajo del día de aviso; sirve horarios **del pasado**. Probado ejecutando el
+      armador del contenedor con un spec cuyo primer horario es de AYER: lo devolvió igual como
+      opción A.**
+
+      **Cómo se encontró** (escalón 2, auditar los `[x]`: las dos colas tenían «Ahora» sin ítems
+      abiertos y los dos de «Después» están diferidos a propósito —la data QA es evidencia de
+      cuatro ítems cerrados— o esperando credenciales del BCP). Se auditó el `[x]` del
+      instrumento de anticipación corriéndolo contra producción:
+
+          npm run anticipacion:viva     # exit 1
+
+          proceso 8748 en onia-center — ofrece 2 horario(s)
+            CORTO sábado 26 de septiembre, 14:00 — 23.7 h de aviso
+            ok    lunes 28 de septiembre, 14:00 — 71.7 h de aviso
+            DISTINTO el codigo desplegado arma otro par que el de la rama:
+              lo que OFRECE el contenedor: sábado 26, 14:00 · lunes 28, 14:00
+              lo que elegiria la rama:     lunes 28, 14:00 · martes 29, 14:00
+
+      **El dato nuevo, y es el que cambia el tamaño del defecto.** Que el armador desplegado
+      recorte `slice(0, 2)` sin consultar `slotSostenible` ya estaba medido; lo que nadie había
+      preguntado es **qué pasa cuando el primer candidato vence**. Se le pasó al binario del
+      contenedor un spec con el jueves 24 (ayer) adelante:
+
+          node -e 'import { leerParVivo } from ".../anticipacion-viva.mjs"' \
+            con raw = "jueves 24 de septiembre, 14:00@2026-09-24T18:00:00Z|lunes 28…|martes 29…"
+          → el armador VIVO ofrece: A) jueves 24 de septiembre, 14:00 · B) lunes 28 de septiembre, 14:00
+
+      No filtra: devuelve los dos primeros del spec, vencidos o no. Y el spec se reescribe **una
+      vez al día** (`23 10 * * * /root/bin/onia-renovar-slots.py`, o sea 06:23 La Paz; hay un
+      segundo generador a las 07:41 con `slots-run.sh`). O sea que desde que un horario vence
+      hasta el cron siguiente, el prospecto que escribe recibe *«¿te reservo el sábado 26 a las
+      14:00?»* con el sábado ya pasado. Es la peor cara posible de las dos que este carril
+      persigue: no es que el bot no conteste, es que contesta mal con toda confianza.
+
+      **No se arregla acá y no se arregla en el productor.** El motor de la rama ya corta (por eso
+      el gate muestra la divergencia), y `slots-rodantes.mjs` dice en su propio comentario que el
+      margen de vigencia en el generador **ya se probó y le costaba un día de espera al
+      prospecto**: el diseño manda 5 candidatos justamente para que el consumidor elija los que se
+      sostienen. Lo que falta es que el consumidor desplegado sea el que corta. **Falta publicar
+      el bot; el pedido existe y es `t_24fa76aa` (blocked).** Se le comentó el costo con estos
+      números, no se duplicó.
+
+- [x] 🔴 **CERRADO el 2026-09-25 13:43-14:25 La Paz (commiteado; es el MISMO instrumento
+      —`scripts/bot_vivo_tiene_el_codigo.mjs`—, no toca el motor y no necesita deploy):
+      auditando el `[x]` de la vuelta anterior apareció que el gate miraba `*.mjs` y el deploy
+      instala cinco patrones. `knowledge.onia.json` —lo que el bot RECITA, con las 9 campanas de
+      onia.com.bo adentro— estaba desfasado en producción y el gate no lo nombraba. No estaba
+      rojo: estaba INVISIBLE.**
+
+      **Cómo se encontró** (escalón 2, auditar los `[x]`, no una tarea inventada): las dos colas
+      tenían «Ahora» sin ítems abiertos, así que tocaba auditar lo cerrado. El `[x]` de hace una
+      vuelta afirma *«13 de los 57 archivos del bot vivo NO son los del repo»*. Los 57 salen de
+      `sujetosDelRepo()`, que filtraba `.endsWith(".mjs")`. Pero `deploy-bot.sh:33` dice
+      `PATRONES=("*.mjs" "*.sh" "knowledge.example.json" "knowledge.onia.json"
+      "plantillas-humo.json")` — el gate era **más angosto que el deploy que audita**, y 16
+      archivos que el deploy instala no eran sujetos de nadie.
+
+      **El rojo, antes de arreglar nada** (filtro viejo contra los patrones del deploy):
+      `*.sh` → 13 archivos sin mirar · `knowledge.onia.json` → 1 · `knowledge.example.json` → 1 ·
+      `plantillas-humo.json` → 1. Y `sujetosDelRepo().includes("knowledge.onia.json")` → `false`.
+
+      **Lo que tapaba, medido en el contenedor.** `/tmp/onia-bot/knowledge.json` y
+      `/tmp/onia-bot/knowledge.onia.json` son del **19-sep 15:38** y sus claves son
+      `schema,version,updatedBy,identity,faq,triggersExtra`: **sin `campanas`**. El repo trae
+      `campanas: 9`. O sea que el punto 1 del pedido de deploy `t_24fa76aa` —*«los 4 enlaces de
+      WhatsApp de onia.com.bo; hoy quien hace clic recibe el saludo genérico»*— sigue siendo
+      cierto, y el único instrumento que le pregunta al proceso vivo no lo veía. También estaban
+      desfasados `webhook-server.sh` (el servidor), `webhook-watchdog.sh`, `run-turn.sh`,
+      `followup-run.sh`, `insistencia-run.sh`, `postdemo-run.sh`, `reminder-run.sh`,
+      `chatwoot-adapter.sh` y `usage-run.sh`.
+
+      **El arreglo no es agregar los patrones a mano: es DERIVARLOS del guion de deploy.**
+      `patronesDelDeploy()` lee `PATRONES=(...)` de `deploy-bot.sh`, y si no lo encuentra **tira**
+      (el llamador lo vuelve NO MEDIDO — nunca una lista por defecto, que es volver a curar a mano
+      lo que se vino a derivar). El self-check exige, patrón por patrón, que el gate no mire menos
+      archivos que los que el deploy instala: agregar un patrón allá arrastra el gate solo.
+
+      **Antes → después, medido:** `npm run bot:vivo-al-dia` pasó de `57 archivo(s) mirado(s) —
+      13 desfasados` a **`73 archivo(s) mirado(s) — 24 desfasados`**. `npm run
+      test:bot-vivo-al-dia` verde.
+
+      ⚠️ **De paso, un comentario que era falso y defendía el agujero.** El código justificaba
+      excluir los `.test.mjs` diciendo *«el deploy no los instala»* — los instala: `*.mjs` los
+      matchea, y el 2026-09-03 se midieron tres viajando. Siguen excluidos, pero por el motivo
+      verdadero: un test no le contesta a ningún prospecto. Una exclusión correcta con la razón
+      equivocada es la que se extiende mal a la siguiente pregunta, y acá se extendió a todo un
+      patrón.
+
+      **Sigue esperando publicación; el pedido ya existe: `t_24fa76aa` (blocked).** No se duplica
+      y no se despliega a mano.
+
 - [x] 🔴 **CERRADO el 2026-09-25 13:13-14:05 La Paz (commiteado; es un INSTRUMENTO nuevo
       —`scripts/bot_vivo_tiene_el_codigo.mjs`—, no toca el motor y no necesita deploy): los dos
       gates de deploy del bot razonan por COMMITS y ninguno le pregunta al proceso que atiende al
