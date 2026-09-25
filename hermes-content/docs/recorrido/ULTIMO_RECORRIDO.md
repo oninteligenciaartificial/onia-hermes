@@ -12,6 +12,36 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-25 06:09-06:14 La Paz — `BUILD_ID` nuevo otra vez (`p2O3qK8ejw4RQGq9y0CgH` → `TnvycZvMqHGZrzO9EziLL`); dental re-verificado, 9/9
+
+`ONIA_ALTA_AUTOMATICA=abierta`. `grep -m1 BUILD_ID` de este archivo comparado ANTES de correr
+nada (primer comando de la vuelta): cambió, así que correspondía repetir dental antes de seguir
+el ciclo de rotación de rubros. Chequeo de arranque de residuales `zz-qa-%` en `organizations` y
+`appointments`: **0** las dos — nada que limpiar de una vuelta anterior.
+
+`node scripts/recorrido_cliente.mjs --escribir`:
+
+- **Los 9 pasos, OK.** Cuenta `zz-qa-2026-09-25-0609@onia.com.bo`, confirmación de correo real
+  antes del primer login, onboarding en 6 pantallas, `/dashboard` sin rebote.
+- Paso 6: `zz-qa-2026-09-25-0609-paciente` cargado en Pacientes (`/patients`) y visto de vuelta.
+- Paso 7: cita `2026-09-28 09:00` agendada (201, `cmugkdrra000o01rr2h3o74q7`) y VISTA en
+  `/appointments`.
+- Paso 8: factura creada con el ítem `zz-qa-2026-09-25-0609-item` visible en
+  `/billing/cmugke2i5000q01rrxy4i0ucm` — frenado ahí sin marcarla pagada.
+- Paso 9: el dato del paso 6 no figura en `/dashboard` (esperado, ya conocido en este rubro).
+- Limpieza verificada: `organizations`/`appointments` con `zz-qa-%` → **0** al cerrar.
+
+**Sin hallazgo de producto.** Próxima vuelta: comparar `BUILD_ID` primero, siempre; si sigue en
+`TnvycZvMqHGZrzO9EziLL`, no repetir dental — seguir el ciclo de rotación por rubro (comercio) o
+un escalón nuevo no auditado.
+
+RAZÓN: la medida (9/9, `completo: true`) ya estaba en el techo — el avance real fue re-verificar
+dental contra el deploy nuevo, sin hallazgos ni residuales que limpiar.
+LECCIÓN: comparar `BUILD_ID` primero siguió siendo el método correcto; esta vez el chequeo de
+residuales dio 0 de entrada, sin nada que documentar.
+
+---
+
 ## 2026-09-25 05:09-05:13 La Paz — `BUILD_ID` nuevo (deploy: `1fCNCDEJaOeFVV1KczGHP` → `p2O3qK8ejw4RQGq9y0CgH`); dental re-verificado, 9/9
 
 `ONIA_ALTA_AUTOMATICA=abierta`. Al arrancar había **dos filas residuales** de vueltas sin log
