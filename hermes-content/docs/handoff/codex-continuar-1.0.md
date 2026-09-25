@@ -107,6 +107,11 @@
 >   del stack admite 12 servicios que verían el :3000 sin Traefik). `app.env` con `AGENTS_LLM=1`,
 >   `AGENTS_LLM_BASE_URL`, `AGENTS_LLM_KEY` (clave virtual US$5/30 d; backup
 >   `app.env.bak-pre-agents-llm-20260925`). Suite completa A+C: 517 archivos / 6.478 tests, 0 fallas.
+>   **EN PROD: `release-2075575f`** (publicador oficial, 23:03 La Paz). `onia_llm` = solo
+>   `onia-platform` + `onia_selfhosted-litellm-1`; `nc` a LiteLLM OK. **Mirado en `/agents`**:
+>   «Proponer un texto» (Recall, Clínica Sergio de prueba) devolvió un texto real de gpt-4.1-mini, vista
+>   previa con el nombre de muestra fijo, contador «1 de 150», descartado después; campana en oscuro
+>   legible; logs sin errores.
 > - **EN VUELO — plan B (correa):** worktree `E:/onia-wt/platform-b`, rama LOCAL
 >   `wip/v1-correa-20260925` (desde `2075575f`, sin empujar). Si muere la sesión, los commits hechos
 >   quedan en el repo `C:\dev\proyectos\onia-platform`; se retoma leyendo el plan desde la primera
