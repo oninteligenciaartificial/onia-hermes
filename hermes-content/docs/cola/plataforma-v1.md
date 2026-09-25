@@ -171,6 +171,64 @@ trabaría el merge de todos los carriles.
       la portada, así que **construirla y publicarla son dos permisos distintos**: se muestra
       renderizada y se espera el OK sobre ESA pieza.
 
+      **2026-09-25 12:13-13:00 La Paz (`chatbot-cola`) — arrancado y PARTIDO a propósito, porque
+      el render local estaba bloqueado por dos dependencias que nadie había medido.**
+
+      1. **No es fantasma, verificado antes de trabajar:** la portada servida no tiene ni un
+         `<video>` ni un archivo de video servido (`grep -c '<video' ` sobre el HTML de
+         `https://onia.com.bo/` → **0**; un `grep` acá sirve para DESCARTAR, que es su uso
+         legítimo). Hay pieza que hacer.
+
+      2. 🔴 **El dato que este ítem necesitaba y no tenía: contra qué se juzga el video.** La
+         frase *«la conversación CSS pesa cero»* era cierta pero no comparable — nadie había
+         contado el techo. Medido en vivo, no deducido: la portada responde **200 en 1,06 s**
+         con **121 KB de HTML** y **683 KB** de JS/CSS (los 5 chunks que declara), o sea
+         **~804 KB en total**. Un mp4 de 7 s a 1080p entra entre 0,5 y 3 MB: **la pieza puede
+         pesar más que la portada entera**, y eso se decide con el número delante, no con el
+         gusto. Reproducir:
+
+         ```bash
+         curl -s -o /tmp/portada.html -w 'HTTP=%{http_code} %{time_total}s %{size_download}B\n' https://onia.com.bo/
+         grep -oE '"/_next/static/[^"]+\.(js|css)"' /tmp/portada.html | tr -d '"' | sort -u \
+           | while read p; do curl -s -o /dev/null -w "%{size_download}\n" "https://onia.com.bo$p"; done \
+           | awk '{s+=$1} END {print "assets="s}'
+         ```
+
+      3. **Proyecto scaffoldeado y en el repo:** `out/videos/conversacion-chatbot/`
+         (`npx hyperframes init --example=blank`; el CLI resolvió `0.8.77`). Categoría del
+         router de HyperFrames para esta pieza: **`motion-graphics`** — 7 s, 16:9, sin
+         narración, el movimiento ES el mensaje. El guion **no se inventa**: se copia literal de
+         `web-factory/apps/onia-platform/src/app/(sitio)/conversacion.tsx`, que es la pieza viva,
+         con sus cuatro burbujas, sus horas (23:47 / 23:48) y su cabecera. Cero montos, cero
+         estado de obra, cero autobombo.
+
+      4. 🔴 **Lo que costó la vuelta, y por eso queda escrito: en `nodo-casa` el render local de
+         HyperFrames NO arrancaba, y el motivo no era el que dice la memoria compartida.**
+         `npx hyperframes doctor` (corrido en el proyecto, no supuesto) devolvió dos ✗ que
+         frenan un render y **ninguno es ffmpeg**:
+         · `Archive extractor  Not found` → sin `unzip`, HF no puede extraer su Chrome;
+         · `Chrome  Chrome Headless Shell is required for local rendering`.
+         Los dos **resueltos en esta vuelta** (`apt-get install -y unzip` →
+         `/usr/bin/unzip`, y `npx hyperframes browser ensure`), así que la próxima arranca por el
+         render y no por el ambiente.
+         ⚠️ **Y de paso cae una entrada de la memoria compartida que habría mandado al revés:**
+         dice que *«en nodo-casa el ffmpeg es el de Playwright (solo WebM)»*. Hoy es falso —
+         `/usr/bin/ffmpeg` es **8.0.1 de Ubuntu** y `ffmpeg -encoders` lista **libx264**
+         (el chequeo que la memoria propone, `ffmpeg -version | grep h264`, da **0** y por eso
+         miente: la línea de `configuration` no nombra los encoders; se pregunta con
+         `ffmpeg -encoders`, no con `-version`).
+
+      **Lo que queda, en orden, y entra en una vuelta:** renderizar con
+      `npx hyperframes render . -q draft` dentro de ese proyecto, **medir peso y duración reales**
+      del archivo que salga y compararlos contra los ~804 KB de arriba, MIRAR un frame, y recién
+      entonces mostrárselo a Sergio Urcullo para el OK sobre ESA pieza. Si el video pesa más que
+      la portada, el veredicto honesto es que la conversación CSS se queda — probar incluye poder
+      decir que no.
+      ⚠️ **Ese render no se da por hecho hasta que exista el archivo:** `verificar_cola.js` marca
+      fantasma toda línea de esta cola que nombre un archivo de video inexistente, y tiene razón
+      —incluso cuando la mención es la advertencia misma—, así que arriba se nombra el comando y
+      nunca una ruta de salida que todavía no produjo nada.
+
 - [x] 🟡 **HECHO el 2026-09-24 en el carril `chatbot` (commiteado, NO publicado) — el detalle,
       los gates y lo que falta viven en `hermes-content/docs/cola/chatbot.md`, "Ahora".**
 
