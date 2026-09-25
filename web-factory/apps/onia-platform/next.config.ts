@@ -8,14 +8,44 @@ import { CHATWOOT_BASE_URL } from "./src/lib/chat-diferido";
 const monorepoRoot = path.resolve(process.cwd(), "../..");
 
 /**
- * El único tercero de la landing: Chatwoot, self-hosted. El origen se DERIVA de
- * `chat-diferido.ts` —la fuente única del snippet que inyecta el SDK— porque si
- * ese host se mueve, la CSP tiene que moverse con él o el widget muere mudo.
+ * El único tercero de la landing **que el código carga**: Chatwoot,
+ * self-hosted. El origen se DERIVA de `chat-diferido.ts` —la fuente única del
+ * snippet que inyecta el SDK— porque si ese host se mueve, la CSP tiene que
+ * moverse con él o el widget muere mudo.
  */
 const CHATWOOT_WS = CHATWOOT_BASE_URL.replace(/^https:/, "wss:");
 
 /**
- * CSP de onia.com.bo, derivada de lo que esta landing carga DE VERDAD.
+ * El otro tercero: el que **no** carga el código, sino Cloudflare.
+ *
+ * `onia.com.bo` no va del contenedor al navegador — pasa por el proxy de
+ * Cloudflare, que le inyecta su Web Analytics DESPUÉS de que el build terminó.
+ * No hay import ni `<script>` que derivar: para este repositorio el beacon no
+ * existe, y por eso una CSP escrita mirando sólo lo que el código pide lo deja
+ * afuera **sin que nada se ponga rojo**.
+ *
+ * Y lo deja afuera de la peor manera: la portada sigue cargando perfecta, así
+ * que ninguna captura lo ve; lo que se pierde es la analítica de la única
+ * página que capta leads, más un error de CSP en la consola de cada visitante.
+ *
+ * Medido el 2026-09-25 con Chromium contra el dominio vivo (los dos únicos
+ * orígenes de tercero en toda la portada fueron Chatwoot y éste):
+ *
+ *     GET  script https://static.cloudflareinsights.com/beacon.min.js/v31edd…
+ *     POST xhr    https://onia.com.bo/cdn-cgi/rum?
+ *
+ * El `POST` del beacon sale al MISMO origen, así que `connect-src 'self'` ya lo
+ * cubre: acá sólo hace falta abrir `script-src`.
+ */
+const CLOUDFLARE_INSIGHTS = "https://static.cloudflareinsights.com";
+
+/**
+ * CSP de onia.com.bo, derivada de lo que el NAVEGADOR carga de verdad.
+ *
+ * No es lo mismo que "lo que el código carga", y la diferencia ya mordió una
+ * vez: entre el contenedor y el visitante está Cloudflare, que suma un script
+ * propio (ver `CLOUDFLARE_INSIGHTS`). Cada vez que se toque esta lista, los
+ * sujetos se cuentan abriendo el dominio vivo, no grepeando el repositorio.
  *
  * No es la de `app.onia.com.bo`: esa corre `frame-src 'none'` y pide los dos
  * orígenes de Google Fonts. Copiarla acá apagaría el widget que capta los leads
@@ -29,6 +59,9 @@ const CHATWOOT_WS = CHATWOOT_BASE_URL.replace(/^https:/, "wss:");
  *    inline —el tema antes del primer paint y el diferido del chat— y ninguno
  *    puede pasar a archivo sin perder justamente la propiedad de correr antes
  *    del bundle. No va `'unsafe-eval'`: se midió y nada lo pide.
+ *  - `static.cloudflareinsights.com` en `script-src`: el beacon que inyecta el
+ *    proxy. Es el único origen de esta lista que no sale del código, así que es
+ *    también el único que un `grep` no puede defender: ver `CLOUDFLARE_INSIGHTS`.
  *  - `'unsafe-inline'` en `style-src`: Next inyecta estilos críticos inline, y
  *    el SDK de Chatwoot se dibuja con estilos propios.
  *  - `img-src ... data: blob:` + Chatwoot: los SVG de marca viajan como `data:`
@@ -43,7 +76,7 @@ const CHATWOOT_WS = CHATWOOT_BASE_URL.replace(/^https:/, "wss:");
  */
 const CSP_DE_LA_LANDING = [
   "default-src 'self'",
-  `script-src 'self' 'unsafe-inline' ${CHATWOOT_BASE_URL}`,
+  `script-src 'self' 'unsafe-inline' ${CHATWOOT_BASE_URL} ${CLOUDFLARE_INSIGHTS}`,
   "style-src 'self' 'unsafe-inline'",
   `img-src 'self' data: blob: ${CHATWOOT_BASE_URL}`,
   "font-src 'self' data:",

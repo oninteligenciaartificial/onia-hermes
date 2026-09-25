@@ -113,6 +113,41 @@ describe("la CSP de la landing", () => {
     expect(conexiones).toContain(CHATWOOT_BASE_URL.replace(/^https:/, "wss:"));
   });
 
+  it("deja correr el script que Cloudflare INYECTA en el borde", async () => {
+    const directivas = await directivasDeLaCsp();
+
+    /* El único sujeto de esta CSP que NO se puede derivar del repositorio.
+     *
+     * `onia.com.bo` no sale del contenedor al navegador: pasa por Cloudflare,
+     * que le inyecta su Web Analytics DESPUÉS de que el build terminó. O sea
+     * que no hay import, ni `<script>`, ni snippet que grepear: para el código
+     * este tercero no existe, y una CSP derivada sólo de lo que el código carga
+     * lo deja afuera sin que nada se ponga rojo.
+     *
+     * Medido el 2026-09-25 con Chromium contra el dominio vivo, listando el
+     * origen de cada pedido de la portada — los DOS únicos de tercero fueron
+     * Chatwoot y éste:
+     *
+     *     GET script https://static.cloudflareinsights.com/beacon.min.js/v31edd…
+     *     POST xhr   https://onia.com.bo/cdn-cgi/rum?
+     *
+     * Con `script-src` sin este origen, el beacon queda bloqueado: la portada
+     * se sigue viendo perfecta —por eso no lo caza ninguna captura— pero Onia
+     * pierde la analítica de su única página de captación y cada visitante se
+     * come un error de CSP en consola.
+     *
+     * El `POST` de arriba sale al MISMO origen (`/cdn-cgi/rum`), así que
+     * `connect-src 'self'` ya lo cubre y no hace falta abrir nada más.
+     *
+     * ⚠️ Si algún día se apaga Web Analytics en el panel de Cloudflare, esta
+     * línea sobra — pero se saca DESPUÉS de volver a medir el dominio vivo, no
+     * porque un `grep` del repo no la encuentre: acá nunca la va a encontrar. */
+    expect(
+      directivas.get("script-src"),
+      "la CSP bloquearía el beacon que Cloudflare inyecta en onia.com.bo",
+    ).toContain("https://static.cloudflareinsights.com");
+  });
+
   it("deja al widget dibujarse: frame-src no puede ser 'none'", async () => {
     const directivas = await directivasDeLaCsp();
     const marcos = directivas.get("frame-src") ?? [];
