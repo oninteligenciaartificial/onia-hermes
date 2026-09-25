@@ -1,0 +1,3 @@
+# Los frames sueltos los regenera el CLI (npx hyperframes snapshot); el contact-sheet
+# se versiona porque es la prueba que se MIRA, y el mp4 porque es el entregable.
+snapshots/frame-*.png
