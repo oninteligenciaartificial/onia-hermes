@@ -711,6 +711,55 @@ abrirlas y decidir a qué deploy se refieren. Se derivan con el comando, nunca d
 
 ## Ahora
 
+- [x] 🔴 **CERRADO el 2026-09-25 13:43-14:25 La Paz (commiteado; es el MISMO instrumento
+      —`scripts/bot_vivo_tiene_el_codigo.mjs`—, no toca el motor y no necesita deploy):
+      auditando el `[x]` de la vuelta anterior apareció que el gate miraba `*.mjs` y el deploy
+      instala cinco patrones. `knowledge.onia.json` —lo que el bot RECITA, con las 9 campanas de
+      onia.com.bo adentro— estaba desfasado en producción y el gate no lo nombraba. No estaba
+      rojo: estaba INVISIBLE.**
+
+      **Cómo se encontró** (escalón 2, auditar los `[x]`, no una tarea inventada): las dos colas
+      tenían «Ahora» sin ítems abiertos, así que tocaba auditar lo cerrado. El `[x]` de hace una
+      vuelta afirma *«13 de los 57 archivos del bot vivo NO son los del repo»*. Los 57 salen de
+      `sujetosDelRepo()`, que filtraba `.endsWith(".mjs")`. Pero `deploy-bot.sh:33` dice
+      `PATRONES=("*.mjs" "*.sh" "knowledge.example.json" "knowledge.onia.json"
+      "plantillas-humo.json")` — el gate era **más angosto que el deploy que audita**, y 16
+      archivos que el deploy instala no eran sujetos de nadie.
+
+      **El rojo, antes de arreglar nada** (filtro viejo contra los patrones del deploy):
+      `*.sh` → 13 archivos sin mirar · `knowledge.onia.json` → 1 · `knowledge.example.json` → 1 ·
+      `plantillas-humo.json` → 1. Y `sujetosDelRepo().includes("knowledge.onia.json")` → `false`.
+
+      **Lo que tapaba, medido en el contenedor.** `/tmp/onia-bot/knowledge.json` y
+      `/tmp/onia-bot/knowledge.onia.json` son del **19-sep 15:38** y sus claves son
+      `schema,version,updatedBy,identity,faq,triggersExtra`: **sin `campanas`**. El repo trae
+      `campanas: 9`. O sea que el punto 1 del pedido de deploy `t_24fa76aa` —*«los 4 enlaces de
+      WhatsApp de onia.com.bo; hoy quien hace clic recibe el saludo genérico»*— sigue siendo
+      cierto, y el único instrumento que le pregunta al proceso vivo no lo veía. También estaban
+      desfasados `webhook-server.sh` (el servidor), `webhook-watchdog.sh`, `run-turn.sh`,
+      `followup-run.sh`, `insistencia-run.sh`, `postdemo-run.sh`, `reminder-run.sh`,
+      `chatwoot-adapter.sh` y `usage-run.sh`.
+
+      **El arreglo no es agregar los patrones a mano: es DERIVARLOS del guion de deploy.**
+      `patronesDelDeploy()` lee `PATRONES=(...)` de `deploy-bot.sh`, y si no lo encuentra **tira**
+      (el llamador lo vuelve NO MEDIDO — nunca una lista por defecto, que es volver a curar a mano
+      lo que se vino a derivar). El self-check exige, patrón por patrón, que el gate no mire menos
+      archivos que los que el deploy instala: agregar un patrón allá arrastra el gate solo.
+
+      **Antes → después, medido:** `npm run bot:vivo-al-dia` pasó de `57 archivo(s) mirado(s) —
+      13 desfasados` a **`73 archivo(s) mirado(s) — 24 desfasados`**. `npm run
+      test:bot-vivo-al-dia` verde.
+
+      ⚠️ **De paso, un comentario que era falso y defendía el agujero.** El código justificaba
+      excluir los `.test.mjs` diciendo *«el deploy no los instala»* — los instala: `*.mjs` los
+      matchea, y el 2026-09-03 se midieron tres viajando. Siguen excluidos, pero por el motivo
+      verdadero: un test no le contesta a ningún prospecto. Una exclusión correcta con la razón
+      equivocada es la que se extiende mal a la siguiente pregunta, y acá se extendió a todo un
+      patrón.
+
+      **Sigue esperando publicación; el pedido ya existe: `t_24fa76aa` (blocked).** No se duplica
+      y no se despliega a mano.
+
 - [x] 🔴 **CERRADO el 2026-09-25 13:13-14:05 La Paz (commiteado; es un INSTRUMENTO nuevo
       —`scripts/bot_vivo_tiene_el_codigo.mjs`—, no toca el motor y no necesita deploy): los dos
       gates de deploy del bot razonan por COMMITS y ninguno le pregunta al proceso que atiende al

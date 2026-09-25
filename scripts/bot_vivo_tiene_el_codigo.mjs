@@ -119,15 +119,45 @@ export function hashDeContenido(texto) {
   return crypto.createHash("md5").update(String(texto).replace(/\r/g, "")).digest("hex");
 }
 
+/** Un patrón de la lista blanca del deploy (`*.mjs`, `knowledge.onia.json`) a RegExp. */
+export function globAregex(patron) {
+  return new RegExp(`^${patron.replace(/[.+^${}()|[\]\\]/g, "\\$&").replace(/\*/g, ".*")}$`);
+}
+
 /**
- * Los sujetos se DERIVAN del disco, no de una lista escrita: una lista se queda corta el día que
- * alguien agrega un módulo, y justo ese módulo nuevo es el que no viajó. Los `.test.mjs` quedan
- * afuera porque el deploy no los instala.
+ * QUÉ instala el deploy — leído de `deploy-bot.sh`, nunca copiado acá.
+ *
+ * Nace de un agujero medido el 2026-09-25: este gate miraba `*.mjs` y el deploy instala además
+ * `*.sh` y tres `.json`. Entre esos `.json` está `knowledge.onia.json`, que es lo que el bot
+ * RECITA. En producción le faltaba la clave `campanas` —las 9 respuestas de los enlaces de
+ * WhatsApp de onia.com.bo— y este gate, que salía rojo por otros 13 archivos, no lo nombró
+ * nunca: no estaba rojo, estaba INVISIBLE, que es el modo de falla que más caro sale.
+ *
+ * Si no se puede leer el guion, TIRA: el que llama lo convierte en NO MEDIDO. Devolver una
+ * lista por defecto sería volver a curar a mano lo que este cambio vino a derivar.
+ */
+export function patronesDelDeploy(guion = path.join(DIR_REPO, "deploy-bot.sh")) {
+  const linea = fs.readFileSync(guion, "utf8").match(/^PATRONES=\(([^)]*)\)/m);
+  if (!linea) throw new Error(`no encontré la lista blanca PATRONES=(...) en ${guion}`);
+  const patrones = [...linea[1].matchAll(/"([^"]+)"/g)].map((m) => m[1]);
+  if (patrones.length === 0) throw new Error(`la lista blanca de ${guion} salió vacía`);
+  return patrones;
+}
+
+/**
+ * Los sujetos se DERIVAN del disco y de la lista blanca del deploy, no de una lista escrita acá:
+ * una lista se queda corta el día que alguien agrega un módulo —o un patrón—, y justo ése es el
+ * que no viajó.
+ *
+ * Los `.test.mjs` quedan afuera a propósito, y el motivo NO es que el deploy no los instale
+ * (los instala: `*.mjs` los matchea, y el 2026-09-03 se midieron tres viajando). Es que un test
+ * no le contesta a ningún prospecto: su desfase no cambia una coma de lo que el bot dice.
  */
 export function sujetosDelRepo(dir = DIR_REPO) {
+  const patrones = patronesDelDeploy().map(globAregex);
   return fs
     .readdirSync(dir)
-    .filter((n) => n.endsWith(".mjs") && !n.endsWith(".test.mjs"))
+    .filter((n) => !n.endsWith(".test.mjs") && patrones.some((re) => re.test(n)))
     .sort();
 }
 
@@ -136,9 +166,12 @@ function medirVivo() {
   const archivos = [];
   let arranqueProceso = null;
 
-  // Un solo `docker exec`: cada uno desde casa es un SSH, y 40 archivos serían 40 viajes.
+  // Un solo `docker exec`: cada uno desde casa es un SSH, y 70 archivos serían 70 viajes.
+  // El `[ -f ]` no es de adorno: un patrón sin match queda LITERAL en sh y `sed` sobre él
+  // hashearía vacío — un archivo ausente se leería como uno presente y distinto.
+  const globs = patronesDelDeploy().map((p) => `${DIR_VIVO}/${p}`).join(" ");
   const salida = enElContenedor(
-    `for f in ${DIR_VIVO}/*.mjs; do printf '%s\\t%s\\n' "$f" "$(stat -c %Y "$f" 2>/dev/null)"; sed 's/\\r//' "$f" | md5sum | cut -d' ' -f1; done`,
+    `for f in ${globs}; do [ -f "$f" ] || continue; printf '%s\\t%s\\n' "$f" "$(stat -c %Y "$f" 2>/dev/null)"; sed 's/\\r//' "$f" | md5sum | cut -d' ' -f1; done`,
   );
   const vivo = new Map();
   const lineas = salida.split("\n");
@@ -198,7 +231,25 @@ function selfCheck() {
   // Normalizar CRLF no es cosmético: sin esto un tar de Windows pinta rojo todo el bot.
   ok(hashDeContenido("a\r\nb") === hashDeContenido("a\nb"), "CRLF y LF tienen que hashear igual");
   ok(sujetosDelRepo().includes("run-turn.mjs"), "los sujetos se derivan del disco y run-turn.mjs es uno");
-  ok(!sujetosDelRepo().some((n) => n.endsWith(".test.mjs")), "los tests no los instala el deploy: no son sujetos");
+  ok(!sujetosDelRepo().some((n) => n.endsWith(".test.mjs")), "un .test.mjs no le contesta a nadie: no es sujeto");
+
+  // EL CASO QUE ABRIÓ EL AGUJERO (2026-09-25): mirar sólo `*.mjs` dejaba fuera el archivo que
+  // CONTIENE lo que el bot dice. `knowledge.onia.json` viaja en el deploy y en producción no
+  // tiene la clave `campanas` — las 9 respuestas de los enlaces de onia.com.bo — y el gate
+  // salía rojo por otros 13 archivos sin nombrar NUNCA a éste.
+  ok(sujetosDelRepo().includes("knowledge.onia.json"), "el conocimiento que el bot RECITA es sujeto, no sólo el código que lo lee");
+  ok(sujetosDelRepo().includes("webhook-server.sh"), "los .sh son el runtime del bot: el deploy los instala y son sujetos");
+
+  // Y la propiedad que impide que el agujero vuelva: los sujetos NO pueden ser menos que lo que
+  // el deploy instala. Se deriva del propio `deploy-bot.sh`, así que agregar un patrón allá
+  // arrastra el gate solo. Una lista copiada a mano es como nació este bug.
+  const patrones = patronesDelDeploy();
+  ok(patrones.length > 0, "los patrones se leen de deploy-bot.sh, no se escriben acá");
+  for (const patron of patrones) {
+    const enElRepo = fs.readdirSync(DIR_REPO).filter((n) => !n.endsWith(".test.mjs") && globAregex(patron).test(n));
+    const cubiertos = enElRepo.filter((n) => sujetosDelRepo().includes(n));
+    ok(cubiertos.length === enElRepo.length, `el deploy instala "${patron}" y el gate no mira ${enElRepo.length - cubiertos.length} de esos archivos`);
+  }
 
   if (!process.exitCode) console.log("self-check OK — la lógica distingue desfasado, copiado-sin-reiniciar y NO MEDIDO");
 }
