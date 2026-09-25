@@ -107,6 +107,52 @@ class AnticipacionRealTest(unittest.TestCase):
                         f"escribio un horario a {aviso_h:.1f} h de su propio calculo",
                     )
 
+    def test_ningun_horario_publicado_baja_de_24h_en_todo_su_vigencia(self):
+        """El par lo elige un consumidor que NO filtra: toma los dos primeros crudos.
+
+        Medido el 2026-09-25 05:55 La Paz contra el proceso vivo (`/proc/30/environ`
+        en el contenedor `onia-center`), con el armador que de verdad corre:
+
+            ONIA_BOT_SLOTS=viernes 25 de septiembre, 21:00@... | sábado 26 ... | ...
+            lo que OFRECE el contenedor: viernes 25 de septiembre, 21:00 (15.3 h) · ...
+            lo que elegiria la rama:     sábado 26 de septiembre, 09:00 · lunes 28 ...
+
+        O sea: la opcion **A** que un desconocido lee es un turno a 15 h vista, el que
+        la regla de Sergio Urcullo («que se agenden un dia antes para tener espacio y
+        tiempo para cancelar») existe para impedir.
+
+        Por que el gate no lo veia. Las dos propiedades de arriba se apoyan en que el
+        motor descarta los caducados ANTES de recortar (`parseSlotsSpec`), y esa
+        premisa se dio por verificada el 2026-09-18 con
+
+            docker exec onia-center grep -c "SE SOSTIENEN" /tmp/onia-bot/config.mjs -> 1
+
+        que es un `grep` usado para CONFIRMAR. Confirmo el archivo equivocado: el
+        camino caliente es `/tmp/onia-bot/run-turn.mjs`, que arma `overrides.slots`
+        con un `parseEnvSlots()` propio —`slice(0, 2)` y `pending: false` fijo— y
+        **nunca llama a `parseSlotsSpec`**. El filtro estaba desplegado en un modulo
+        que ese camino no toca.
+
+        Asi que mientras el consumidor vivo no filtre, la unica propiedad que protege
+        al prospecto es la fuerte: **todos** los horarios publicados aguantan las 24 h
+        durante toda su vigencia, no solo los dos que sobrevivan. Vence el dia que
+        `anticipacion-viva.mjs` salga verde y sin `divergencia` —ese instrumento
+        EJECUTA `buildConfig` dentro del contenedor, no lo greppea— y no antes.
+        """
+        arranque = dt.datetime(2026, 9, 1, 0, 0, tzinfo=renovar.TZ_LAPAZ)
+        for h in range(7 * 24):
+            ahora = arranque + dt.timedelta(hours=h)
+            # El peor momento: el valor lleva toda su vigencia publicado y no se movio.
+            lee = ahora + dt.timedelta(hours=renovar.VIGENCIA_H)
+            with self.subTest(ahora=ahora.isoformat()):
+                for s in renovar.proximos_slots(ahora):
+                    aviso_h = (s - lee).total_seconds() / 3600
+                    self.assertGreaterEqual(
+                        aviso_h, renovar.ANTICIPACION_H,
+                        f"publico {renovar.etiqueta(s)}, que al final de su vigencia "
+                        f"le llega al prospecto con {aviso_h:.1f} h de aviso",
+                    )
+
     def test_el_caso_medido_en_produccion(self):
         # Reproduce el defecto exacto: el cron del 4-sep 06:23 publico "sábado 5,
         # 09:00" y a las 04:03 del 5-sep seguia ofreciendolo, a 4 h 57 min vista.
@@ -144,13 +190,24 @@ class AnticipacionRealTest(unittest.TestCase):
         prometiendole "sáb 9:00-15:00" en la coletilla del MISMO mensaje.
 
         La propiedad se afirma contra las VENTANAS de Sergio Urcullo, no contra lo que
-        el generador devuelve: si a la hora de leer hay un dia ofrecible mas temprano
-        que el primero que se ofrece, es un dia regalado.
+        el generador devuelve: si hay un dia ofrecible mas temprano que el primero que
+        se ofrece, es un dia regalado.
+
+        ⚠️ **Corregido el 2026-09-25: el dia de referencia se deriva del momento de
+        GENERAR, no del de leer.** Hasta hoy se derivaba de `lee` con el piso de 24 h,
+        y eso exigia ofrecer el dia mas cercano aunque cayera por debajo de las 24 h a
+        mitad de la vigencia — una exigencia que solo es sana si el consumidor vivo
+        descarta los caducados antes de recortar. No los descarta: `run-turn.mjs` de
+        `/tmp/onia-bot` toma los dos primeros CRUDOS (ver el test hermano
+        `test_ningun_horario_publicado_baja_de_24h_en_todo_su_vigencia`), asi que ese
+        dia "no regalado" llegaba al prospecto con 15 h de aviso. Lo que se sigue
+        exigiendo es que no se regale un dia que SI se podia sostener entero.
         """
         arranque = dt.datetime(2026, 9, 1, 6, 23, tzinfo=renovar.TZ_LAPAZ)
         for dia in range(7):
             genera = arranque + dt.timedelta(days=dia)
             slots = renovar.proximos_slots(genera)
+            sostenible = self._primer_dia_sostenible(genera)
             # A lo largo de la VIGENCIA: lo escrito se sirve hasta la corrida siguiente.
             for h in range(0, renovar.VIGENCIA_H):
                 lee = genera + dt.timedelta(hours=h)
@@ -160,15 +217,15 @@ class AnticipacionRealTest(unittest.TestCase):
                         if (s - lee).total_seconds() / 3600 >= renovar.ANTICIPACION_H
                     ]
                     self.assertTrue(ofrecidos, "no le ofrece ningun horario")
-                    libre = self._primer_dia_ofrecible(lee)
                     self.assertEqual(
-                        ofrecidos[0].date(), libre,
-                        f"ofrece {renovar.etiqueta(ofrecidos[0])} teniendo libre el {libre}",
+                        ofrecidos[0].date(), sostenible,
+                        f"ofrece {renovar.etiqueta(ofrecidos[0])} teniendo libre "
+                        f"—y sostenible toda la vigencia— el {sostenible}",
                     )
 
-    def _primer_dia_ofrecible(self, lee):
-        """El primer dia con ALGUNA hora ofrecible, derivado de las VENTANAS."""
-        desde = lee + dt.timedelta(hours=renovar.ANTICIPACION_H)
+    def _primer_dia_sostenible(self, genera):
+        """El primer dia con ALGUNA hora que aguante toda la vigencia, de las VENTANAS."""
+        desde = genera + dt.timedelta(hours=renovar.ANTICIPACION_H + renovar.VIGENCIA_H)
         dia = desde.date()
         for _ in range(21):
             for h_ini, h_fin in renovar.VENTANAS.get(dia.weekday(), []):

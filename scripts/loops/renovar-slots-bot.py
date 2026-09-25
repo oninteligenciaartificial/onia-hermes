@@ -85,34 +85,47 @@ def proximos_slots(ahora_lapaz, cuantos=CUANTOS):
     Dias distintos a proposito: ofrecerle a alguien "hoy 14:00 o hoy 14:30" no es
     darle una opcion, es darle la misma. Dos dias separados es una eleccion real.
     """
-    # El piso es ANTICIPACION_H a secas. La vigencia NO se le suma: quien cubre al
-    # ULTIMO prospecto del dia es el motor, que juzga antes de recortar.
+    # El piso SUMA la vigencia: lo que se escribe se sirve `VIGENCIA_H` sin volver a
+    # calcularse, asi que garantizar `ANTICIPACION_H` en el peor momento —el instante
+    # justo antes de la renovacion siguiente— cuesta reservar ese margen aca.
     #
-    # Hasta el 2026-09-18 aca decia `ANTICIPACION_H + VIGENCIA_H`, con el motivo
-    # correcto para el motor VIEJO: ese cortaba los 2 primeros a ciegas, asi que la
-    # unica forma de que el par llegara entero al final de la vigencia era reservar
-    # margen aca. El 17-sep el motor paso a elegir los 2 que SE SOSTIENEN
-    # (`parseSlotsSpec` en config.mjs), y el margen quedo cobrandose sin comprar nada.
-    #
-    # Se baja recien hoy porque este archivo y el motor viajan por caminos DISTINTOS
-    # —a /root/bin lo copia scripts/loops/sincronizar.sh (cron 44, desde origin/main)
-    # y al motor hay que desplegarlo aparte—, asi que el margen se dejo puesto hasta
-    # poder VERIFICAR el consumidor vivo. La condicion de vencimiento estaba escrita
-    # aca y se corrio literal el 2026-09-18:
+    # ⚠️ El 2026-09-18 esto se bajo a `ANTICIPACION_H` a secas, porque el 17-sep el
+    # motor paso a elegir los 2 que SE SOSTIENEN (`parseSlotsSpec`) y el margen
+    # parecia cobrarse sin comprar nada. La premisa se dio por verificada asi:
     #
     #     docker exec onia-center grep -c "SE SOSTIENEN" /tmp/onia-bot/config.mjs  -> 1
     #
-    # Lo que costaba el margen, medido ese dia (viernes) sobre el proceso vivo:
-    # `ONIA_BOT_SLOTS` arrancaba en "lunes 21" con el sabado 19 libre. Tres dias de
-    # espera para quien escribia ese viernes, y ningun sabado en la lista mientras la
-    # coletilla del propio mensaje promete "sáb 9:00-15:00". Con el piso en 24 h el
-    # primero pasa a ser "sábado 19, 09:00".
+    # que es un `grep` usado para CONFIRMAR, y confirmo el archivo equivocado. El
+    # camino caliente es `/tmp/onia-bot/run-turn.mjs`: arma `overrides.slots` con un
+    # `parseEnvSlots()` propio —`slice(0, 2)` y `pending: false` fijo— y NUNCA llama a
+    # `parseSlotsSpec`. El filtro existia en un modulo que ese camino no toca, asi que
+    # el consumidor vivo siguio tomando los dos primeros CRUDOS.
     #
-    # ⚠️ El piso NO es redundante con el filtro del motor, y su gate lo exige aparte
-    # (`test_el_generador_solo_tampoco_escribe_un_horario_a_minutos_vista`): el dia
-    # que el motor vuelva a una version sin filtro —deploy revertido, rsync viejo—
-    # esto es lo unico que queda entre el prospecto y un turno a minutos vista.
-    desde = ahora_lapaz + dt.timedelta(hours=ANTICIPACION_H)
+    # Lo que costo, medido el 2026-09-25 05:55 La Paz sobre el proceso vivo
+    # (`anticipacion-viva.mjs`, que EJECUTA buildConfig dentro del contenedor):
+    #
+    #     lo que OFRECE el contenedor: viernes 25 de septiembre, 21:00 — 15.3 h · ...
+    #     VEREDICTO: roto — 1 horario(s) a menos de 24 h; un prospecto no llega a cancelar
+    #
+    # o sea la opcion A que leia un desconocido era un turno a 15 h vista, justo lo que
+    # la regla de Sergio Urcullo («que se agenden un dia antes para tener espacio y
+    # tiempo para cancelar») existe para impedir.
+    #
+    # LO QUE CUESTA EL MARGEN, dicho de frente: el dia mas cercano se cae de la lista.
+    # Un viernes 06:23 el par pasa de "sábado 26 · lunes 28" a "lunes 28 · martes 29",
+    # y la coletilla del propio mensaje sigue prometiendo "sáb 9:00-15:00". Es caro y
+    # se paga igual: ofrecer un horario que el prospecto no llega a cancelar es peor
+    # que ofrecerle el dia siguiente.
+    #
+    # VENCE —y se vuelve a `ANTICIPACION_H` a secas— cuando el consumidor vivo filtre
+    # de verdad. La condicion NO es un grep: es que
+    #
+    #     node hermes-content/deploy/vps-ops/bot/anticipacion-viva.mjs
+    #
+    # salga VEREDICTO ok y SIN `divergencia` (ese instrumento ejecuta el armador del
+    # contenedor y compara su par contra el de la rama). Hoy sale rojo y dice
+    # "FALTA DESPLEGAR el bot": el deploy espera el `ok` de Sergio Urcullo.
+    desde = ahora_lapaz + dt.timedelta(hours=ANTICIPACION_H + VIGENCIA_H)
     hasta_el_final = desde + dt.timedelta(hours=VIGENCIA_H)
     slots = []
     dia = desde.date()

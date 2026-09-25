@@ -678,6 +678,76 @@ abrirlas y decidir a qué deploy se refieren. Se derivan con el comando, nunca d
 
 ## Ahora
 
+- [x] 🔴 **CERRADO el 2026-09-25 05:43-06:10 La Paz: el bot vivo ofrecía un turno a 15 h vista
+      y el arreglo NO necesitaba desplegar el bot — el que publicaba ese horario es el cron, y
+      ése sí viaja solo.** El instrumento de ayer (`anticipacion-viva.mjs`) ya decía ROJO; lo
+      que faltaba era mirar del lado del **productor**.
+
+      **Medido sobre el proceso vivo, 05:55 La Paz** (`/proc/30/environ` en `onia-center`):
+
+      ```
+      ONIA_BOT_SLOTS=viernes 25 de septiembre, 21:00@… | sábado 26, 09:00@… | lunes 28, 14:00@… | …
+      CORTO viernes 25 de septiembre, 21:00 — 15.3 h de aviso
+      VEREDICTO: roto — 1 horario(s) a menos de 24 h; un prospecto no llega a cancelar
+      ```
+
+      **Por qué estaba roto, y por qué el gate del productor lo aprobaba.** El 2026-09-18 el
+      piso de `scripts/loops/renovar-slots-bot.py` se bajó de `ANTICIPACION_H + VIGENCIA_H` a
+      `ANTICIPACION_H` a secas, con un motivo correcto **para un consumidor que no es el que
+      corre**: "el motor descarta los caducados antes de recortar (`parseSlotsSpec`)". La
+      premisa se dio por verificada con
+
+      ```
+      docker exec onia-center grep -c "SE SOSTIENEN" /tmp/onia-bot/config.mjs  -> 1
+      ```
+
+      — un `grep` usado para **confirmar**, y encima sobre el archivo equivocado: el camino
+      caliente es `/tmp/onia-bot/run-turn.mjs`, que arma `overrides.slots` con un
+      `parseEnvSlots()` propio (`slice(0, 2)`, `pending: false` fijo) y **nunca llama a
+      `parseSlotsSpec`**. El filtro estaba desplegado en un módulo que ese camino no toca. Como
+      el valor se escribe una vez al día y se sirve 24 h, el margen que sostenía la promesa se
+      gastaba solo: el último prospecto del día recibía hasta **0 h** de aviso.
+
+      **Qué cambió.** El piso vuelve a sumar la vigencia (`desde = ahora + ANTICIPACION_H +
+      VIGENCIA_H`), así que **todos** los horarios publicados aguantan las 24 h durante toda su
+      vigencia, no sólo los que un filtro inexistente dejaría pasar. Gate nuevo, en ROJO antes
+      por el motivo correcto (`publico miércoles 2 de septiembre, 21:00, que al final de su
+      vigencia le llega al prospecto con 21.0 h de aviso`) y verde después:
+      `test_ningun_horario_publicado_baja_de_24h_en_todo_su_vigencia`. 7/7 en
+      `python3 scripts/loops/renovar-slots-bot.test.py`.
+
+      Se corrigió además el test hermano que **defendía el defecto**
+      (`test_el_dia_mas_cercano_no_se_pierde_a_mitad_de_la_vigencia`): exigía ofrecer el día más
+      cercano aunque cayera por debajo de 24 h a mitad de la vigencia, propiedad sana sólo si el
+      consumidor filtra. Ahora el día de referencia se deriva del momento de **generar** y pide
+      que aguante entero.
+
+      **Llega al cliente sin el `ok` de Sergio Urcullo**, y eso es lo que lo hace distinto de
+      todo lo demás de esta cola: `scripts/loops/sincronizar.sh:360` copia este archivo a
+      `/root/bin/onia-renovar-slots.py` desde `origin/main` (cron `:44`) y **no** está en
+      `FIRMA_HUMANA` (`scripts/loops/extras/publicar-solo.sh:45`). La próxima corrida de las
+      06:23 reescribe el `webhook.env` del VPS —que **no existe** en el repo, vive fuera de
+      git— y **reinicia el bot sola** (`main()` del propio script). O sea: en cuanto el
+      integrador mergee, producción deja de ofrecer horarios que el prospecto no llega a
+      cancelar — sin tocar el deploy del bot, que sigue esperando el `ok`.
+
+      **Lo que cuesta, dicho de frente:** se cae el día más cercano. Hoy (viernes 05:51) el par
+      pasa de *"sábado 26 · lunes 28"* a *"lunes 28, 14:00 · martes 29, 14:00"*, mientras la
+      coletilla del propio mensaje promete "sáb 9:00-15:00". Se paga igual: ofrecer un turno que
+      no se llega a cancelar es peor que ofrecer el día siguiente.
+
+      **Vence solo, y con condición ejecutable:** se vuelve a `ANTICIPACION_H` a secas cuando
+      `node hermes-content/deploy/vps-ops/bot/anticipacion-viva.mjs` salga **ok y sin
+      `divergencia`** — ese instrumento EJECUTA `buildConfig` dentro del contenedor, no lo
+      greppea. Hoy sale rojo y dice "FALTA DESPLEGAR el bot".
+
+      **Alternativa más barata, para evaluar cuando el deploy caiga (no la hice, no la
+      redescubras):** el margen es caro porque `VIGENCIA_H` es 24. Publicar más seguido achica
+      el margen necesario (con vigencia de 3 h el piso sería 27 h y el sábado se salva). No se
+      tocó porque cada reescritura **reinicia el bot** y eso corta conversaciones en vuelo, y
+      porque la cadencia vive en tres lugares a la vez (`loops.md`, `crontab`, el heredoc
+      `CATALOGO` de `instalar-homelab.sh`).
+
 - [x] 🔴 **CERRADO el 2026-09-25 03:50-04:25 La Paz (commiteado, NO desplegado — es un medidor,
       no toca el motor): `anticipacion-viva.mjs` decía VERDE sobre los horarios que ofrece
       producción porque medía su propio código, no el del bot vivo.** Diagnóstico original del
