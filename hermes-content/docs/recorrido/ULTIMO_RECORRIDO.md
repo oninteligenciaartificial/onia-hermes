@@ -12,6 +12,89 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-25 12:10-12:12 La Paz — `BUILD_ID` sin cambios; escalón nuevo: la invitación por correo de un coadministrador SÍ llega (no solo 201)
+
+`ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado ANTES de decidir: `UgtwNYIEjS-DSK0umjqc8`,
+igual al de ayer — no correspondía repetir dental ni ningún rubro (los 5 ya están 9/9). Siguiendo
+el plan de la vuelta anterior, auditoría de "promesa vs entrega" en una superficie no cubierta
+todavía: el modal "Agregar miembro" de `/settings` (equipo), pestaña "Invitar por email".
+
+La pantalla promete: *"Recibirá un email para completar el registro"*. Hasta hoy eso sólo se
+había verificado a nivel API (`scripts/probar_coadministrador.mjs`, cierre de `t_24758d5a`
+2026-09-19): `POST /api/admin/users` responde 201 con `message: "Invitation sent to ..."`, pero
+nadie había mirado si ese correo realmente SALE del servidor — un 201 de
+`supabaseAdmin.auth.admin.inviteUserByEmail` no prueba entrega, igual que un 200 no prueba nada
+sin mirar (regla del carril).
+
+Corrida en vivo: `node scripts/probar_coadministrador.mjs` (org `zz-qa-coadmin-20260925121058`,
+plan `clinic`) → `POST /api/admin/users` da 201 para
+`zz-qa-coadmin-second-20260925121058@onia.com.bo`. Inmediatamente después,
+`docker logs onia-mail --since 5m | grep zz-qa-coadmin-second-20260925121058`:
+
+    postfix/smtp[1106892]: 21ACE1100005: to=<zz-qa-coadmin-second-20260925121058@onia.com.bo>,
+    relay=route2.mx.cloudflare.net[162.159.205.17]:25, delay=2.4, dsn=2.0.0, status=sent (250 2.0.0 Ok)
+
+El correo de invitación SALE de verdad (mismo camino SMTP que la confirmación de alta). Las tres
+puertas de DG-043 (invitar ADMIN en plan que lo paga, verlo en la lista, sacarlo por DELETE)
+siguen sosteniéndose, y ahora la promesa de la pantalla también quedó verificada contra el
+servidor de correo, no solo contra la base. Limpieza confirmada por el propio script:
+`organizations=0 auth.users=0` al cerrar. Sin hallazgo — es cobertura nueva, no un fallo.
+
+RAZÓN: `BUILD_ID` no se movió, así que no correspondía repetir un rubro; el avance fue extender
+la verificación a un escalón que sólo se medía a medias (201 sin entrega).
+LECCIÓN: ninguna nueva — comparar `BUILD_ID` primero y, si no cambió, subir un escalón de
+profundidad en vez de repetir la misma corrida sigue funcionando.
+
+## 2026-09-25 11:09-11:1x La Paz — `BUILD_ID` sin cambios; rotación de rubro → Estética y spa, 9/9
+
+`ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado ANTES de decidir rubro (primer comando de la
+vuelta): `UgtwNYIEjS-DSK0umjqc8`, igual al de la entrada anterior — no correspondía repetir
+dental. Siguiendo la nota de esa misma entrada, roté a **Estética y spa** (junto con servicios
+profesionales, el rubro sin cobertura más reciente).
+
+**Recorrido completo: los 9 pasos, sin agujeros.** Cuenta
+`zz-qa-2026-09-25-1110@onia.com.bo`, confirmación de correo antes del primer login, onboarding en
+6 pantallas (pregunta → negocio → horarios → servicios → equipo → listo), clienta
+`zz-qa-2026-09-25-1110-paciente` cargada y vista en `/patients` (grupo Clientas), cita
+2026-09-28 09:00 agendada (201, `cmugv3o6f001d01o4nj6i9ket`) y VISTA en `/appointments`, factura
+con ítem `zz-qa-2026-09-25-1110-item` vista en su pantalla de cobro (`/billing/...`) — frenado ahí
+sin marcar pago. El dato del paso 6 no aparece en `/dashboard` (esperado: el panel no lista
+clientas). `resumen.json`: `llegoHasta 9/9`, `completo: true`, `agujeros: []`. `organizations`/
+`appointments` con `zz-qa-%` → **0** al cerrar, verificado.
+
+**Sin hallazgo de producto.** Próxima vuelta: comparar `BUILD_ID` primero, siempre; si sigue
+igual, rotar a Servicios profesionales (el único de los 5 rubros activos sin cobertura reciente)
+en vez de repetir dental/comercio/importadora/estética otra vez.
+
+RAZÓN: N/A — avanzó (rubro nuevo rotado, sin hallazgo).
+LECCIÓN: el método "comparar `BUILD_ID` antes de decidir rubro" sigue funcionando bien aplicado
+como primer paso de la vuelta.
+
+## 2026-09-25 10:09-10:2x La Paz — `BUILD_ID` nuevo (`TnvycZvMqHGZrzO9EziLL` → `UgtwNYIEjS-DSK0umjqc8`); dental re-verificado, 9/9
+
+`ONIA_ALTA_AUTOMATICA=abierta`. Comparé `BUILD_ID` ANTES de decidir rubro (siguiendo la lección
+de la vuelta anterior, que esta vez sí se aplicó primero): cambió respecto a la última entrada,
+así que correspondía repetir dental antes de seguir la rotación.
+
+**Recorrido completo: los 9 pasos, sin agujeros.** Cuenta
+`zz-qa-2026-09-25-1009@onia.com.bo`, confirmación de correo antes del primer login, onboarding en
+6 pantallas (pregunta → negocio → horarios → servicios → equipo → listo), paciente
+`zz-qa-2026-09-25-1009-paciente` cargado y visto en `/patients`, cita 2026-09-28 09:00 agendada
+(201, `cmugsxr6w000k01o4qhct2r98`) y VISTA en `/appointments`, factura con ítem
+`zz-qa-2026-09-25-1009-item` vista en su pantalla de cobro (`/billing/...`) — frenado ahí sin
+marcar pago. El dato del paso 6 no aparece en `/dashboard` (esperado en dental: el panel no lista
+pacientes). `resumen.json`: `llegoHasta 9/9`, `completo: true`, `agujeros: []`. `organizations`/
+`appointments` con `zz-qa-%` → **0** al cerrar, verificado.
+
+**Sin hallazgo de producto.** Próxima vuelta: comparar `BUILD_ID` primero, siempre; si sigue
+igual (`UgtwNYIEjS-DSK0umjqc8`), rotar de rubro (estética o servicios profesionales, los dos sin
+cobertura más reciente) en vez de repetir dental o comercio/importadora otra vez.
+
+RAZÓN: el `BUILD_ID` cambió desde la última entrada — repetir dental era lo que correspondía,
+no una repetición innecesaria.
+LECCIÓN: el método "comparar `BUILD_ID` antes de decidir rubro" funcionó esta vez porque se
+corrió como PRIMER paso de la vuelta, tal como quedó anotado ayer.
+
 ## 2026-09-25 08:09-08:20 La Paz — dental repetido sin querer (mismo `BUILD_ID`), corregido rotando a Importadora, 8/8 que le corresponden
 
 Arranqué sin comparar el `BUILD_ID` contra este archivo antes de decidir rubro (la lección de
