@@ -1172,6 +1172,52 @@ abrirlas y decidir a qué deploy se refieren. Se derivan con el comando, nunca d
       código, no el test: ahora los nombra a todos (el log es interno; el tope de cinco filas es del
       canal de Telegram, no del log).
 
+      ---
+
+      ✅ **2026-09-25 04:45-05:30 La Paz — la regla de arriba («el total va siempre») estaba escrita
+      acá para el barrido de colgadas y su HERMANO no la tenía: el vigía le decía a Sergio Urcullo
+      «1 desconocido» habiendo SIETE esperando. Arreglado, y este sí llega sin el deploy del bot.**
+
+      `scripts/vigia_sin_respuesta.mjs` es el otro emisor del mismo hecho, y corre **en el VPS por
+      cron** (`39 */2 * * *` → `/root/bin/onia-vigia-sin-respuesta.sh`, que carga el `.mjs` de
+      `/root/loops/onia-hermes` — el clon de `main`, medido hoy **0 commits atrás de `origin/main`**).
+      O sea que este arreglo **no espera ninguna firma**: entra con el merge del integrador.
+
+      **El defecto:** el aviso se DISPARA por novedad (correcto: no se repite un lead ya avisado),
+      pero el título y el cuerpo se ARMABAN con esa misma lista de novedades. Dos preguntas
+      distintas — *«¿hay algo nuevo que justifique molestarlo?»* y *«¿cuánta gente está
+      esperando?»*— contestadas con un solo número, y el que viajaba era el interno.
+
+      **Medido en producción, las dos puntas lado a lado:**
+
+      | lo que el vigía sabe (su propia salida) | lo que llegó a la hoja de decisiones |
+      |---|---|
+      | `7 colgado(s) — 5 sin respuesta · 2 que nadie más vio` | `[leads-esperando] **1** desconocido(s)`, cuerpo con **una** conversación |
+
+      La prueba de que no se comunicaba: una sesión tuvo que escribir **a mano** la tarea
+      `t_5ea80f5e` (*«son 4, no 3»*) para contar lo que este aviso ya tenía medido. Y hay **una
+      sola** tarea `[leads-esperando]` en todo el tablero.
+
+      **El arreglo:** `colgadosDelAviso()` — todos los que siguen esperando, con `reaviso: true` en
+      los ya avisados. `armarAviso` **ya** sabía presentarlo: su campo `reaviso` nació para que el
+      que lleva 20 días no se lea como uno que entró recién; lo único que faltaba era pasarle la
+      lista entera. El estado se anota con lo que el aviso NOMBRÓ (no sólo con lo que lo disparó):
+      re-avisar por un escalón ya comunicado es el ruido que hace que se deje de leer la hoja.
+
+      **Verificado contra producción sin emitir** (`avisar` inyectado devolviendo
+      `entregado:false`, estado copiado a `/tmp`): el título pasa de `1 desconocido(s)` a
+      **`7 desconocido(s) esperando una respuesta tuya`**, con los siete nombrados y los `wa.me`
+      de los cuatro de WhatsApp.
+
+      **Gate:** `vigia_sin_respuesta.test.mjs` — caso nuevo **en ROJO antes por el motivo correcto**
+      (`1 !== 2` en «el aviso se entrega con los DOS que están esperando», no por un import
+      faltante), **60/60** después.
+
+      ⚠️ **Lo que NO arregla:** los siete siguen esperando y contactarlos es decisión de Sergio
+      Urcullo (`t_768dc2ad`, `blocked`). Como hoy el vigía firma `0 sin avisar`, el aviso corregido
+      no se dispara solo, así que el total real y los siete contactos quedaron **comentados en esa
+      misma tarea** — no se creó una nueva.
+
 - [x] 🔴 **CERRADO el 2026-09-24 17:15-17:45 La Paz (commiteado, NO desplegado — el bot vivo
       corre `/tmp/onia-bot/`): un handoff que NADIE tomó dejaba a la persona escribiéndole a
       nadie, en silencio para los DOS lados.** Medido en el simulador con el guion de hoy, no
