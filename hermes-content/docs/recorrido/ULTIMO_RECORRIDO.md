@@ -12,6 +12,31 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-25 10:09-10:2x La Paz — `BUILD_ID` nuevo (`TnvycZvMqHGZrzO9EziLL` → `UgtwNYIEjS-DSK0umjqc8`); dental re-verificado, 9/9
+
+`ONIA_ALTA_AUTOMATICA=abierta`. Comparé `BUILD_ID` ANTES de decidir rubro (siguiendo la lección
+de la vuelta anterior, que esta vez sí se aplicó primero): cambió respecto a la última entrada,
+así que correspondía repetir dental antes de seguir la rotación.
+
+**Recorrido completo: los 9 pasos, sin agujeros.** Cuenta
+`zz-qa-2026-09-25-1009@onia.com.bo`, confirmación de correo antes del primer login, onboarding en
+6 pantallas (pregunta → negocio → horarios → servicios → equipo → listo), paciente
+`zz-qa-2026-09-25-1009-paciente` cargado y visto en `/patients`, cita 2026-09-28 09:00 agendada
+(201, `cmugsxr6w000k01o4qhct2r98`) y VISTA en `/appointments`, factura con ítem
+`zz-qa-2026-09-25-1009-item` vista en su pantalla de cobro (`/billing/...`) — frenado ahí sin
+marcar pago. El dato del paso 6 no aparece en `/dashboard` (esperado en dental: el panel no lista
+pacientes). `resumen.json`: `llegoHasta 9/9`, `completo: true`, `agujeros: []`. `organizations`/
+`appointments` con `zz-qa-%` → **0** al cerrar, verificado.
+
+**Sin hallazgo de producto.** Próxima vuelta: comparar `BUILD_ID` primero, siempre; si sigue
+igual (`UgtwNYIEjS-DSK0umjqc8`), rotar de rubro (estética o servicios profesionales, los dos sin
+cobertura más reciente) en vez de repetir dental o comercio/importadora otra vez.
+
+RAZÓN: el `BUILD_ID` cambió desde la última entrada — repetir dental era lo que correspondía,
+no una repetición innecesaria.
+LECCIÓN: el método "comparar `BUILD_ID` antes de decidir rubro" funcionó esta vez porque se
+corrió como PRIMER paso de la vuelta, tal como quedó anotado ayer.
+
 ## 2026-09-25 08:09-08:20 La Paz — dental repetido sin querer (mismo `BUILD_ID`), corregido rotando a Importadora, 8/8 que le corresponden
 
 Arranqué sin comparar el `BUILD_ID` contra este archivo antes de decidir rubro (la lección de
