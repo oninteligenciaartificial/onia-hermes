@@ -12,6 +12,7 @@ import {
   nombresConChatbot,
   plan,
   planDeEntrada,
+  primerPlanCon,
   sinSubirDePlan,
 } from "@/lib/pricing";
 
@@ -358,10 +359,17 @@ export default function Portada() {
             <h1 className={p.heroTitulo}>
               Todo el negocio, en <em>una</em> pantalla.
             </h1>
+            {/* La salvedad de los agentes NO es adorno y no se borra: el precio que
+                se lee tres líneas más abajo es el del plan de ENTRADA, que los trae
+                apagados. Sin ella las dos frases son ciertas por separado y falsas
+                juntas, y el lead se entera al pagar. El plan se DERIVA con
+                `primerPlanCon` —nunca se tipea— para que siga siendo cierta el día
+                que la capacidad cambie de escalón, como pasó el 2026-09-12. Lo
+                sostiene `fold-no-promete-lo-apagado.test.ts`. */}
             <p className={p.heroLead}>
               Onia es el sistema con el que llevás tu negocio: clientes, caja,
-              cobros y contabilidad, con agentes que trabajan de noche y te dejan las
-              decisiones a vos.
+              cobros y contabilidad. Con agentes que trabajan de noche y te dejan las
+              decisiones a vos, desde el plan {primerPlanCon("agentes")}.
             </p>
             <div className={p.heroCtas}>
               <Btn href={EMPEZAR_URL}>{CTA_ALTA}</Btn>
