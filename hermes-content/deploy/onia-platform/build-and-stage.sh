@@ -90,27 +90,65 @@ R=$BASE/releases/$SHA8-$(date +%Y%m%d)
 VIVA=$(docker inspect --format '{{.Config.Image}}' "$CONTENEDOR" 2>/dev/null)
 [ "$VIVA" = "$TAG" ] && fatal "produccion ya corre $TAG: no hay nada que armar"
 
-# ── [4/7] los tres valores PUBLICOS, leidos de app.env sin mostrarlos ────────
-# Solo esos tres viajan al build: Next los hornea en el bundle del navegador. El
+# ── [4/7] los valores PUBLICOS, leidos de app.env sin mostrarlos ─────────────
+# Solo estos viajan al build: Next los hornea en el bundle del navegador. El
 # resto de app.env (service role, claves) entra en RUNTIME por --env-file y nunca
 # toca la imagen.
+#
+# La clave publica de push (2026-09-24): sin ella horneada, "Activar notificaciones
+# push" no hace nada y push_subscriptions queda en 0 filas. Tiene que ser la MISMA
+# que VAPID_PUBLIC_KEY, con la que firma el servidor: si difieren, cada suscripcion
+# nace rota. Si app.env solo trae la del servidor, se usa esa.
+#
+# Push se exige SOLO si el Dockerfile del commit declara el ARG (la plataforma lo
+# acepta desde 617631d5). Un commit anterior se arma como antes: docker ignora un
+# build-arg que no declara, no se hornea nada y vapid-no-horneada frenaba TODOS los
+# releases del publicador si este guion llegaba al VPS antes que ese merge.
+# Y se exigen las TRES del servidor: lib/push.ts no manda nada si falta una, y calla.
 [ -r "$ENVFILE" ] || fatal "no puedo leer $ENVFILE"
-unset NEXT_PUBLIC_SUPABASE_URL NEXT_PUBLIC_SUPABASE_ANON_KEY NEXT_PUBLIC_APP_URL
+PUSH=""
+git -C "$REPO" show "$SHA:Dockerfile" 2>/dev/null \
+  | grep -Eq '^[[:space:]]*ARG[[:space:]]+NEXT_PUBLIC_VAPID_PUBLIC_KEY([[:space:]=]|$)' && PUSH=1
+unset NEXT_PUBLIC_SUPABASE_URL NEXT_PUBLIC_SUPABASE_ANON_KEY NEXT_PUBLIC_APP_URL NEXT_PUBLIC_VAPID_PUBLIC_KEY
+VAPID_SERVIDOR=""; VAPID_PRIVADA=""; VAPID_CONTACTO=""
 while IFS='=' read -r k v; do
   v=${v%$'\r'}; v=${v#\"}; v=${v%\"}
-  case "$k" in NEXT_PUBLIC_SUPABASE_URL|NEXT_PUBLIC_SUPABASE_ANON_KEY|NEXT_PUBLIC_APP_URL) export "$k=$v" ;; esac
+  case "$k" in
+    NEXT_PUBLIC_SUPABASE_URL|NEXT_PUBLIC_SUPABASE_ANON_KEY|NEXT_PUBLIC_APP_URL|NEXT_PUBLIC_VAPID_PUBLIC_KEY) export "$k=$v" ;;
+    VAPID_PUBLIC_KEY) VAPID_SERVIDOR=$v ;;
+    VAPID_PRIVATE_KEY) VAPID_PRIVADA=$v ;;
+    VAPID_CONTACT) VAPID_CONTACTO=$v ;;
+  esac
 done < "$ENVFILE"
 if [ "${NEXT_PUBLIC_APP_URL:-}" != "$APP_URL" ] || [ "${NEXT_PUBLIC_SUPABASE_URL:-}" != "$SUPABASE_URL" ] \
    || [ -z "${NEXT_PUBLIC_SUPABASE_ANON_KEY:-}" ]; then
   # CLAUDE.md: un valor publico equivocado se hornea y le llega al cliente (127.0.0.1).
   fatal "app.env no trae los tres valores publicos esperados (URL $APP_URL, supabase, anon key) — no los muestro"
 fi
+ARG_PUSH=""
+if [ -n "$PUSH" ]; then
+  if [ -n "${NEXT_PUBLIC_VAPID_PUBLIC_KEY:-}" ] && [ -n "$VAPID_SERVIDOR" ] \
+     && [ "$NEXT_PUBLIC_VAPID_PUBLIC_KEY" != "$VAPID_SERVIDOR" ]; then
+    fatal "app.env: NEXT_PUBLIC_VAPID_PUBLIC_KEY y VAPID_PUBLIC_KEY no coinciden — cada suscripcion push naceria rota (no las muestro)"
+  fi
+  export NEXT_PUBLIC_VAPID_PUBLIC_KEY=${NEXT_PUBLIC_VAPID_PUBLIC_KEY:-$VAPID_SERVIDOR}
+  [ -n "$NEXT_PUBLIC_VAPID_PUBLIC_KEY" ] \
+    || fatal "app.env no trae la clave publica de push (VAPID_PUBLIC_KEY): sin ella nadie puede activar avisos — no muestro nada"
+  FALTA=""
+  [ -n "$VAPID_PRIVADA" ] || FALTA="$FALTA VAPID_PRIVATE_KEY"
+  [ -n "$VAPID_CONTACTO" ] || FALTA="$FALTA VAPID_CONTACT"
+  [ -z "$FALTA" ] || fatal "app.env no trae${FALTA}: lib/push.ts no manda ningun push sin las tres, y la gente se suscribiria igual — no muestro valores"
+  ARG_PUSH="--build-arg NEXT_PUBLIC_VAPID_PUBLIC_KEY"
+else
+  unset NEXT_PUBLIC_VAPID_PUBLIC_KEY
+  say "el Dockerfile de $SHA8 no declara ARG NEXT_PUBLIC_VAPID_PUBLIC_KEY: armo sin push (ni la exijo ni la paso)"
+fi
 
 if [ -n "$DRY" ]; then
   echo "[dry-run] armaria $TAG desde $SHA"
   echo "[dry-run]   release: $R (SHA, source.tar.gz, src/ sin n8n-mcp-server/node_modules .agents .obsidian .opencode .claude)"
-  echo "[dry-run]   docker build --tag $CAND con los 3 NEXT_PUBLIC_* de $ENVFILE (sin mostrarlos)"
-  echo "[dry-run]   gates: BUILD_ID, node 22, server.js, 0 .env, URL publica + anon key horneadas, 0 valores QA"
+  echo "[dry-run]   docker build --tag $CAND con los NEXT_PUBLIC_* de $ENVFILE (sin mostrarlos)${PUSH:+, incluida la clave de push}"
+  echo "[dry-run]   gates: BUILD_ID, node 22, server.js, 0 .env, URL publica + anon key${PUSH:+ + clave de push} horneadas, 0 valores QA"
   echo "[dry-run]   solo si pasan: docker tag $CAND $TAG"
   echo "[dry-run] no arme nada."
   exit 0
@@ -140,6 +178,7 @@ trap 'docker image rm "$CAND" >/dev/null 2>&1' EXIT
 INICIO=$(date +%s)
 docker build --pull=false --progress=plain --tag "$CAND" \
   --build-arg NEXT_PUBLIC_SUPABASE_URL --build-arg NEXT_PUBLIC_SUPABASE_ANON_KEY --build-arg NEXT_PUBLIC_APP_URL \
+  $ARG_PUSH \
   "$R/src" > "$R/build.log" 2>&1
 CODIGO=$?
 echo "$CODIGO $(( $(date +%s) - INICIO ))s" > "$R/build.exit"
@@ -148,8 +187,8 @@ if [ "$CODIGO" != 0 ]; then tail -20 "$R/build.log"; fatal "docker build fallo (
 # ── [7/7] gates sobre la IMAGEN, sin red ─────────────────────────────────────
 CONF=$(docker image inspect --format '{{.Config.User}}|{{.Config.WorkingDir}}|{{json .Config.Cmd}}' "$CAND" 2>/dev/null)
 [ "$CONF" = 'nextjs|/app|["node","server.js"]' ] || fatal "config de la imagen inesperada: $CONF"
-G=$(K="$NEXT_PUBLIC_SUPABASE_ANON_KEY" U="$NEXT_PUBLIC_SUPABASE_URL" \
-  docker run --rm --network none -e K -e U --entrypoint sh "$CAND" -c '
+G=$(K="$NEXT_PUBLIC_SUPABASE_ANON_KEY" U="$NEXT_PUBLIC_SUPABASE_URL" V="${NEXT_PUBLIC_VAPID_PUBLIC_KEY:-sin-push}" \
+  docker run --rm --network none -e K -e U -e V --entrypoint sh "$CAND" -c '
     echo "build=$(cat .next/BUILD_ID 2>/dev/null)"
     echo "node=$(node --version)"
     test -f server.js && echo server=ok || echo server=falta
@@ -158,6 +197,7 @@ G=$(K="$NEXT_PUBLIC_SUPABASE_ANON_KEY" U="$NEXT_PUBLIC_SUPABASE_URL" \
     echo "envfiles=$(find /app -name ".env*" -not -path "*/node_modules/*" | wc -l)"
     echo "publica=$(grep -rlF "$U" .next/static 2>/dev/null | wc -l)"
     echo "anon=$(grep -rlF "$K" .next/static 2>/dev/null | wc -l)"
+    echo "vapid=$(grep -rlF "$V" .next/static 2>/dev/null | wc -l)"
     echo "qa=$(grep -rlE "127\.0\.0\.1:(3100|3196|543[0-9]{2})|localhost:(3100|3196|543[0-9]{2})|onia_no_database|onia-qa" .next/static .next/server 2>/dev/null | wc -l)"
   ')
 echo "$G" | sed 's/^/  gate /'
@@ -172,6 +212,7 @@ case "$(g node)" in v22.*) ;; *) FALLA="$FALLA node=$(g node)" ;; esac
 [ "$(g envfiles)" = 0 ] || FALLA="$FALLA envfiles=$(g envfiles)"
 [ "$(g publica)" -gt 0 ] 2>/dev/null || FALLA="$FALLA url-publica-no-horneada"
 [ "$(g anon)" -gt 0 ] 2>/dev/null || FALLA="$FALLA anon-key-no-horneada"
+[ -z "$PUSH" ] || [ "$(g vapid)" -gt 0 ] 2>/dev/null || FALLA="$FALLA vapid-no-horneada"
 [ "$(g qa)" = 0 ] || FALLA="$FALLA valores-QA=$(g qa)"
 [ -z "$FALLA" ] || fatal "la imagen $CAND NO pasa los gates:$FALLA"
 docker tag "$CAND" "$TAG" || fatal "no pude etiquetar $TAG"
