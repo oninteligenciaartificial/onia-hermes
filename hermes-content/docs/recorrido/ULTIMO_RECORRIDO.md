@@ -12,6 +12,32 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-25 23:09-23:12 La Paz — `BUILD_ID` sin cambios, rotado a Estética, 9/9 sin hallazgo
+
+`ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado primero: `4FWMcecd4jRBGUVwStDQb`, igual al
+de las dos vueltas anteriores (dental y comercio) — corresponde seguir rotando (lección de la
+entrada anterior), no repetir dental. Tablero revisado: nada `ready` sin reclamar en la zona
+`recorrido-cliente`.
+
+Primer intento sin fijar `RECORRIDO_RUBRO` corrió por default en dental (ya cubierto); se cortó
+a los 120s por el timeout del corredor y dejó una fila a medias
+(`zz-qa-2026-09-25-2309-negocio`), que se borró antes de seguir. Relanzado con
+`RECORRIDO_RUBRO='Estética' node scripts/recorrido_cliente.mjs --escribir` en background:
+**9/9 pasos, sin hallazgo.** Cuenta `zz-qa-2026-09-25-2312@onia.com.bo`, confirmación de correo
+antes del primer login, onboarding en 6 pantallas, paciente `zz-qa-2026-09-25-2312-paciente`
+cargado y visto en `/patients` (group Clientas), cita 2026-09-28 09:00 agendada (201,
+`cmuhkwci5004t01r2ir8cfazy`) y VISTA en `/appointments`, factura con ítem
+`zz-qa-2026-09-25-2312-item` vista en `/billing/...` — frenado ahí sin marcar pago. Dato del
+paso 6 no aparece en `/dashboard` (esperado: el panel no lista group Clientas). `resumen.json`:
+`llegoHasta 9/9`, `completo: true`, `agujeros: []`. `organizations`/`appointments` con `zz-qa-%`
+→ **0** al cerrar, verificado.
+
+**Sin hallazgo de producto.** RAZÓN: N/A — avanzó (Estética queda re-verificada contra el
+`BUILD_ID` vigente). LECCIÓN: al matar un run porque corrió el rubro equivocado, la fila que ya
+alcanzó a crear en producción NO desaparece sola — hay que buscarla y borrarla ANTES de
+relanzar, o queda basura zz-qa- huérfana entre vueltas. Próxima vuelta: si el `BUILD_ID` sigue
+igual, seguir rotando (importadora, servicios profesionales) antes de volver a dental.
+
 ## 2026-09-25 22:09-22:10 La Paz — `BUILD_ID` sin cambios, rotado a Comercio: primer rubro re-verificado contra el build nuevo, 8/8 sin hallazgo
 
 `ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado primero: `4FWMcecd4jRBGUVwStDQb`, igual al
