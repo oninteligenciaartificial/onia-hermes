@@ -3,7 +3,7 @@ import path from "node:path";
 
 import { describe, expect, it } from "vitest";
 
-import { PRUEBA } from "@/lib/pricing";
+import { PRUEBA, RETENCION } from "@/lib/pricing";
 import { CONTENDIENTES, FECHA_CONSULTA, HUECO } from "@/lib/proof";
 
 /**
@@ -113,6 +113,9 @@ describe("los Términos dicen lo que la ley pide y lo que el producto hace", () 
   it("la prueba gratis está en el contrato, con los números del producto", () => {
     expect(TERMINOS).toContain(`${PRUEBA.dias} días de prueba`);
     expect(TERMINOS).toContain(`${PRUEBA.diasDeGracia} día adicional de gracia`);
+    // PRUEBA.copy promete la ventana de exportación: el contrato no puede ser
+    // más angosto que el aviso de venta.
+    expect(TERMINOS).toContain(`${RETENCION.diasParaExportar} días para exportar tus datos`);
   });
 
   it("no describe una renovación automática que no existe", () => {

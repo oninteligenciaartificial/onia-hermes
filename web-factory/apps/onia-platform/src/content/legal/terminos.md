@@ -118,7 +118,8 @@ publicitaria.
 3.7. **Prueba gratis.** Al crear tu cuenta tenés **14 días de prueba** sin
 tarjeta ni pago, y **1 día adicional de gracia**. Si al terminar no pagás un
 plan, la cuenta pasa a solo lectura como en el §3.4: no se te cobra nada ni se
-genera deuda, y tus datos no se borran de inmediato.
+genera deuda, nada se borra de inmediato y tenés 30 días para exportar tus
+datos.
 
 ## 4. Tus datos son tuyos
 
