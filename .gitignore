@@ -52,3 +52,13 @@ test-results/
 
 # salida de trabajo del canario visual (las baselines si se versionan)
 .canario-out/
+
+# Capturas del recorrido de cliente — EVIDENCIA, no fuente.
+# Medido el 2026-09-21: son 124 PNG (25 MB) que el loop `recorrido-cliente`
+# recommitea ENTEROS cada vuelta. 202 commits en 14 dias tocando esa carpeta =
+# 2.320 de los ~4.700 toques de archivo del periodo (49%), y un .git de 11 GB.
+# Se regeneran solas en cada vuelta (`node scripts/recorrido_cliente.mjs`), asi
+# que versionarlas no conserva nada que no se pueda volver a producir en 3 min.
+# Lo que SI queda versionado es lo que se lee: resumen.json y ULTIMO_RECORRIDO.md
+# (canario-visual lee el resumen.json desde otra rama — no romper eso).
+hermes-content/docs/recorrido/**/*.png
