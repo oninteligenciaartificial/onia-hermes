@@ -86,6 +86,40 @@
 >   C: de 5,2 → 16,5 GB libres (+ cachés npm/pip). Queda compactar `docker_data.vhdx` (31 GB, necesita
 >   admin + Docker apagado).
 
+> ### ✅ 25-sep (madrugada, UTC 02:30-04:00): avisos de verdad + app instalable + redactor por plantilla
+> Decisión de Sergio Urcullo sobre el canal del dueño: **primero avisos DENTRO de Onia**, WhatsApp
+> «Onia Avisos» con clientes, tiendas de apps con clientes (`ONIA_AGENTE_DEL_NEGOCIO.md` D3/D5/D7).
+> Planes TDD en `onia-platform/docs/superpowers/plans/2026-09-24-*` (A avisos, B correa, C redactor).
+> - **Carril A en prod** (release `39aa965b`, publicador oficial): el web push NUNCA había funcionado
+>   — la clave VAPID pública no se horneaba (0 suscripciones en la historia). Ahora: build pasa la
+>   clave (hermes `03cdb790`, solo si el Dockerfile del commit declara el ARG, y exige las 3 claves),
+>   cada aprobación avisa a quien puede decidir (UNA por corrida de agente), link directo a
+>   `/pending?approval=<id>` resaltada, campana con link por tipo, «Instalá Onia» (Android/Windows con
+>   prompt nativo; iPhone con instrucciones). **Verificado mirando + de punta a punta:** clave en 1
+>   chunk de `.next/static` (0 en el release anterior); Chromium real se suscribió y quedó en
+>   `push_subscriptions` (Google FCM); envío con las claves del servidor → HTTP 201. Suscripción de
+>   prueba borrada (0). Falta: Sergio Urcullo en Android/iPhone/Windows reales (Task 9).
+> - **Encontrado MIRANDO, no por test:** en oscuro el panel de la campana era `bg-white` con texto
+>   claro (ilegible). Arreglado con guarda de fuente (platform `11df2613`), sale con el release del C.
+> - **Carril C** (platform `2075575f`, hermes `9d89e4d1`): los agentes llenan una plantilla que la IA
+>   escribe UNA vez por negocio y agente y el dueño aprueba; la IA nunca ve clientes; cupo mensual por
+>   plan; Sentry si una aprobada deja de validar. Red PROPIA `onia_llm` (solo plataforma + LiteLLM; la
+>   del stack admite 12 servicios que verían el :3000 sin Traefik). `app.env` con `AGENTS_LLM=1`,
+>   `AGENTS_LLM_BASE_URL`, `AGENTS_LLM_KEY` (clave virtual US$5/30 d; backup
+>   `app.env.bak-pre-agents-llm-20260925`). Suite completa A+C: 517 archivos / 6.478 tests, 0 fallas.
+> - **EN VUELO — plan B (correa):** worktree `E:/onia-wt/platform-b`, rama LOCAL
+>   `wip/v1-correa-20260925` (desde `2075575f`, sin empujar). Si muere la sesión, los commits hechos
+>   quedan en el repo `C:\dev\proyectos\onia-platform`; se retoma leyendo el plan desde la primera
+>   tarea sin commit. Obligatorio: el filtro de avisos de `collab.ts` debe usar el mismo
+>   `puedeDecidirAprobaciones` que decide.
+> - **Intentos fallidos de la noche:** (1) `pgrep -f <script>` por ssh se encuentra A SÍ MISMO (el
+>   `bash -c` remoto lleva el nombre en su línea): dijo «ya corre» y el release del C no se lanzó.
+>   Esperar por el log, no por pgrep. (2) Push en headless: el contexto incógnito de Playwright no
+>   soporta Push API; hace falta `launchPersistentContext` + `channel: "chromium"`. (3) El cartel
+>   «Primeros pasos» tapa la campana en cualquier recorrido automático: cerrarlo primero.
+> - **Heredado (no es de este carril):** el loop mergeó a master `/admin/diseno` («las dos
+>   direcciones de diseño», `122ac28e`) y viajó en el mismo release.
+
 > ### Cola que sigue (autónomo), en orden
 > 1. Checkout: QR estático + datos de la cuenta BCP (cuando llegue la imagen) — bloquea «paga».
 > 2. Vigía de comprobantes PENDING → Telegram (hoy el único aviso es un correo).
