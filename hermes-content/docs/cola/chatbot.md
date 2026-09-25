@@ -678,9 +678,11 @@ abrirlas y decidir a qué deploy se refieren. Se derivan con el comando, nunca d
 
 ## Ahora
 
-- [ ] 🔴 **`anticipacion-viva.mjs` dice VERDE sobre los horarios que ofrece producción y está
-      midiendo su propio código, no el del bot vivo.** Medido el 2026-09-25 03:21-03:47 La Paz.
-      Es el instrumento que nació el 5-sep para exactamente este defecto, y hoy lo tapa.
+- [x] 🔴 **CERRADO el 2026-09-25 03:50-04:25 La Paz (commiteado, NO desplegado — es un medidor,
+      no toca el motor): `anticipacion-viva.mjs` decía VERDE sobre los horarios que ofrece
+      producción porque medía su propio código, no el del bot vivo.** Diagnóstico original del
+      2026-09-25 03:21-03:47 La Paz. Es el instrumento que nació el 5-sep para exactamente este
+      defecto, y lo tapaba.
 
       **Lo que dijo el instrumento** (`npm run test:anticipacion-instrumento`, exit 0):
       *"proceso 30 en onia-center — ofrece 2 horario(s): ok sábado 26 de septiembre, 09:00 — 29.6 h
@@ -712,6 +714,47 @@ abrirlas y decidir a qué deploy se refieren. Se derivan con el comando, nunca d
       vivo y el del repo no coinciden. Hoy esa diferencia es invisible y es la que deja pasar el
       bucle de abajo. Un instrumento que mide su propio código con el nombre de producción es
       peor que no tener instrumento: cierra la pregunta.
+
+      ⚠️ **El diagnóstico de arriba señalaba el archivo equivocado, y eso se corrigió midiendo.**
+      Decía que `config.mjs` vivo era el viejo «que recorta primero». **Falso:** el `config.mjs`
+      del contenedor SÍ trae el filtro (`candidatos.filter(s => !s.pending).slice(0, 2)`, con su
+      fail-safe) y SÍ define `ANTICIPACION_MINIMA_MS` — por eso el `grep` del corte decía «sí».
+      El armador que corre **no lo llama**: `/tmp/onia-bot/run-turn.mjs` arma `overrides.slots`
+      con un `parseEnvSlots()` propio, `slice(0, 2)` y **`pending: false` fijo**, mientras la rama
+      (`run-turn.mjs:146`) hace `overrides.slots = parseSlotsSpec(raw, { now })`. Dos programas
+      sobre el mismo dato; el corte estaba desplegado y el camino caliente lo esquivaba.
+
+      **Cómo se cerró.** El gate ya no razona sobre el código vivo: lo **ejecuta**.
+      `leerParVivo()` corre `buildConfig` de `/tmp/onia-bot/run-turn.mjs` dentro del contenedor
+      con el `ONIA_BOT_SLOTS` del proceso, y `evaluar()` juzga **ese** par, con el estado
+      recalculado por `slotSostenible` (el flag `pending` del vivo miente: viene `false` fijo, y
+      creerle era el falso verde). Si el par vivo y el de la rama difieren, es **rojo por sí
+      solo** aunque los dos se sostengan. Sin poder ejecutar el armador sale **NO MEDIDO (2)**,
+      nunca verde: medir la rama y firmar por producción es el defecto que esto cierra.
+
+      **La prueba, contra el mismo instante, `evaluar()` antes y después:**
+
+      | | `cortos` | `divergencia` | veredicto |
+      |---|---|---|---|
+      | antes | 0 | — | VERDE (aprueba el defecto) |
+      | después | 1 | `true` | **ROJO** |
+
+      Y la medición viva de las 04:20 (`node hermes-content/deploy/vps-ops/bot/anticipacion-viva.mjs`,
+      **exit 1** donde ayer daba 0):
+
+      ```
+      CORTO viernes 25 de septiembre, 21:00 — 17.2 h de aviso
+      ok    sábado 26 de septiembre, 09:00 — 29.2 h de aviso
+      DISTINTO el codigo desplegado arma otro par que el de la rama:
+        lo que OFRECE el contenedor: viernes 25 de septiembre, 21:00 · sábado 26 de septiembre, 09:00
+        lo que elegiria la rama:     sábado 26 de septiembre, 09:00 · lunes 28 de septiembre, 14:00
+      VEREDICTO: roto — 1 horario(s) a menos de 24 h; un prospecto no llega a cancelar
+        Y la rama NO lo ofreceria: el armador desplegado no aplica el corte — FALTA DESPLEGAR el bot.
+      ```
+
+      El self-check pasa 14/14 y sigue siendo **puro** (`npm run test:anticipacion-instrumento`),
+      así que la cadena de `npm test` no depende de docker y no traba el merge de otros carriles.
+      El rojo de producción se ve corriendo el instrumento sin `--self-check`.
 
 - [ ] 🔴 **El lead que elige un horario entra en un bucle sin salida — VIVO en producción, ya
       arreglado en `main`, esperando la firma del deploy.** Medido el 2026-09-25 03:21 La Paz con
