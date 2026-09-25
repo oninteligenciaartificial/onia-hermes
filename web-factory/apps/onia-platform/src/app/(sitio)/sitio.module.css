@@ -1541,6 +1541,20 @@
     margin-left: 1.4rem;
   }
 }
+/* El CTA de la barra NO se parte, y es la unica excepcion del sitio.
+   `white-space: normal` del `.btn` de arriba cuida al boton cuyo texto decide el
+   CATALOGO; el de la barra dice siempre lo mismo (CTA_ALTA) y ahi `normal` no
+   protege: parte. Medido el 2026-09-24 contra produccion, Chromium: a 320px
+   «Crea tu cuenta» caia en TRES lineas y la barra sticky pasaba de 61 a 86,2px
+   —se comia 86 de una pantalla de 640—; a 360px, dos lineas y 67px. Con esta
+   regla los tres anchos (320/360/390) dan barra 61px, boton 46,8px centrado,
+   9,6px hasta «Menu», 14px hasta el borde y desborde horizontal 0.
+   La exencion vive en app/boton-no-empuja-la-pagina.test.ts y se re-mide sola:
+   si el rotulo deja de salir de alta.ts o pasa de 14 caracteres, ese gate se
+   pone rojo. */
+.headerCta .btn {
+  white-space: nowrap;
+}
 
 /* "Entrar" solo en escritorio: en telefono vive dentro del menu */
 .headerLogin {
