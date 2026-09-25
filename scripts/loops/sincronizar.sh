@@ -56,7 +56,10 @@ RAMA=$(git -C "$REPO" branch --show-current 2>/dev/null)
 # espacio, mudo, por el 2>/dev/null de abajo. Medido: 5,4 GB y minutos -> 4,2 MB
 # y 0 s. Si alguna vez agregas un `poner "$RAIZ/..."` de otra carpeta, sumala aca
 # o el archivo no va a existir y `poner` va a avisar que falta.
-RUTAS_SYNC="scripts/loops scripts/kanban scripts/postiz_schedule.mjs scripts/cerebro hermes-content/deploy"
+# `hermes-content/infra` entro el 2026-09-24 para poder cablear los respaldos y los
+# crons del producto (ver el bloque de `poner` de mas abajo). Medido antes de sumarla,
+# que es lo que esta cabecera pide: el tar pasa de 5,74 MB a 5,86 MB (+112 KB, +2,0%).
+RUTAS_SYNC="scripts/loops scripts/kanban scripts/postiz_schedule.mjs scripts/cerebro hermes-content/deploy hermes-content/infra"
 TARERR="/tmp/onia-sync-tar.$$.err"
 
 RAIZ="$REPO"
@@ -94,8 +97,14 @@ else
 fi
 
 
-poner() {  # poner <origen> <destino>
-  local origen="$1" destino="$2" tmp="$2.nuevo.$$"
+poner() {  # poner <origen> <destino> [modo]
+  # `modo` es opcional y sirve para NO ensanchar permisos al cablear algo que ya
+  # vivia en produccion mas cerrado que el default (755/644). Medido el 2026-09-24:
+  # las 8 herramientas de respaldo y crons del producto estan en 700 en el VPS;
+  # cablearlas sin esto las habria publicado en 755 la primera vez que difirieran
+  # —en silencio, y meses despues del commit que las cableo—. Sin tercer argumento
+  # el comportamiento es exactamente el de antes.
+  local origen="$1" destino="$2" modo="${3:-}" tmp="$2.nuevo.$$"
 
   # 🔴 UN SHIM DEL NODO DE CASA NO SE PISA. En el VPS estos helpers son locales;
   # en la PC de casa son shims que salen por SSH, y eso NO es un rodeo: es lo que
@@ -132,12 +141,17 @@ poner() {  # poner <origen> <destino>
   fi
 
   cmp -s "$origen" "$destino" 2>/dev/null && return 0
+  # El destino puede vivir en una SUBCARPETA (/root/bin/onia-backup-v2/…): sin esto
+  # el `cp` falla y el arreglo no llega nunca, con un "FALLO copiando" que se lee
+  # como un problema del archivo y no de la carpeta que no existe. Si ya existe,
+  # `mkdir -p` no hace nada.
+  mkdir -p "$(dirname -- "$destino")" 2>/dev/null || true
   cp -- "$origen" "$tmp" || { log "FALLO copiando $destino"; return 1; }
   # Un corredor roto NO reemplaza a uno que anda.
   case "$destino" in
     *.sh) bash -n "$tmp" || { rm -f "$tmp"; log "RECHAZADO (sintaxis): $destino"; return 1; }
-          chmod 755 "$tmp" ;;
-    *)    chmod 644 "$tmp" ;;
+          chmod "${modo:-755}" "$tmp" ;;
+    *)    chmod "${modo:-644}" "$tmp" ;;
   esac
   mv -f -- "$tmp" "$destino" || { rm -f "$tmp"; log "FALLO renombrando $destino"; return 1; }
   log "actualizado $destino"
@@ -373,8 +387,8 @@ poner "$FUENTE/hf-login-finish.sh"         "$DESTINO_BIN/hf-login-finish.sh"
 #
 # `hermes-content/deploy` y `scripts/loops` ya estan en RUTAS_SYNC, asi que los
 # archivos viajan. Las OTRAS 6 de `npm run herramientas:vivas` (los respaldos y
-# los crons del producto) viven en `hermes-content/infra`, que NO esta en
-# RUTAS_SYNC: esas no se arreglan con una linea y quedan anotadas, no a medias.
+# los crons del producto) vivian en `hermes-content/infra`, que NO estaba en
+# RUTAS_SYNC — quedaron anotadas ese dia y se cablean mas abajo (2026-09-24).
 poner "$RAIZ/hermes-content/deploy/vps-ops/claude-guardia.sh"             "$DESTINO_BIN/claude-guardia.sh"
 poner "$RAIZ/hermes-content/deploy/vps-ops/onia-mirar-cliente.sh"         "$DESTINO_BIN/onia-mirar-cliente.sh"
 # El .sh de arriba es un envoltorio de tres lineas: su trabajo real es `node
@@ -400,6 +414,36 @@ poner "$RAIZ/hermes-content/deploy/vps-ops/backup-storage.sh"             "$DEST
 # Vigia del credito de IA (2026-09-24): del 9 al 17-sep OpenAI estuvo sin credito y el bot
 # contesto con texto fijo sin que nadie se enterara. Nace cableado, como sus hermanos.
 poner "$RAIZ/hermes-content/deploy/vps-ops/vigia-credito-ia.sh"           "$DESTINO_BIN/onia-vigia-credito-ia.sh"
+
+# 🔴 Los respaldos y los crons del PRODUCTO (2026-09-24). Son las ultimas 6 que
+# `npm run herramientas:vivas` reportaba como COPIA_A_MANO: el cron del VPS las
+# ejecuta, el repo las versiona, coinciden por md5… y nada las copiaba. O sea que
+# el dia que alguien arregle la fuente, produccion sigue con el fosil — y una de
+# ellas es el RESPALDO DIARIO de la base de produccion.
+#
+# Medido antes de cablear, en las DOS direcciones (repo `origin/main` contra
+# /root/bin del VPS): los 8 md5 son identicos uno a uno, asi que esto no cambia
+# ni un byte hoy. Por eso es el momento seguro: cablear cuando ya divergieron es
+# elegir en vez de sincronizar.
+#
+# Son OCHO archivos, no 6, y ese es el hallazgo que la tarea no tenia: el cron
+# llama a `backup-onia-postgres-daily.sh`, pero ese es un envoltorio que ejecuta
+# `backup-onia-postgres-job.py`, que a su vez ejecuta `backup-onia-postgres.sh`
+# como exportador (linea 32 y 300 del .py). Cablear solo el envoltorio deja el
+# agujero justo donde esta el codigo — el mismo error que ya se cometio con
+# onia-mirar-cliente.sh y su .mjs, anotado unas lineas mas arriba.
+#
+# Van con modo 700 EXPLICITO porque asi estan hoy en el VPS: el default de `poner`
+# es 755 y publicaria en world-readable un script que maneja el acceso a la base.
+poner "$RAIZ/hermes-content/infra/vps-db/scripts/backup-dentalgest-cloud.sh"              "$DESTINO_BIN/backup-dentalgest-cloud.sh"              700
+poner "$RAIZ/hermes-content/infra/vps-db/scripts/onia-backup-v2/backup-onia-postgres-daily.sh" "$DESTINO_BIN/onia-backup-v2/backup-onia-postgres-daily.sh" 700
+poner "$RAIZ/hermes-content/infra/vps-db/scripts/onia-backup-v2/backup-onia-postgres-job.py"   "$DESTINO_BIN/onia-backup-v2/backup-onia-postgres-job.py"   700
+poner "$RAIZ/hermes-content/infra/vps-db/scripts/onia-backup-v2/backup-onia-postgres.sh"       "$DESTINO_BIN/onia-backup-v2/backup-onia-postgres.sh"       700
+poner "$RAIZ/hermes-content/infra/vps-ops/crons/run-onia-agents-cron.sh"                  "$DESTINO_BIN/run-onia-agents-cron.sh"                  700
+poner "$RAIZ/hermes-content/infra/vps-ops/crons/run-onia-core-workitems.sh"               "$DESTINO_BIN/run-onia-core-workitems.sh"               700
+poner "$RAIZ/hermes-content/infra/vps-ops/crons/run-onia-recurring-invoices.sh"           "$DESTINO_BIN/run-onia-recurring-invoices.sh"           700
+poner "$RAIZ/hermes-content/infra/vps-ops/crons/run-onia-trial-drip.sh"                   "$DESTINO_BIN/run-onia-trial-drip.sh"                   700
+
 poner "$FUENTE/extras/onia-drop-recordatorio.sh"  "$DESTINO_BIN/onia-drop-recordatorio.sh"
 poner "$FUENTE/extras/onia-leads-vigia.sh"        "$DESTINO_BIN/onia-leads-vigia.sh"
 poner "$FUENTE/extras/onia-vigia-embudo.sh"       "$DESTINO_BIN/onia-vigia-embudo.sh"
