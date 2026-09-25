@@ -93,6 +93,39 @@ el log vacío se nota y el ahogado **contesta**: devuelve 80 líneas y cero señ
 "no pasó nada". **Toda línea que se emite en un camino caliente tiene que corresponder a un EVENTO;
 una CONDICIÓN permanente se dice una vez.**
 
+⚠️ **Corregido el 2026-09-25: el ruido era UNA de tres causas, y las otras dos sobreviven al
+arreglo. Aunque el dedup se despliegue mañana, ese comando va a seguir dando 0.** T10 dio el caso
+por cerrado con la causa del ruido; medido hoy sobre el log vivo (64.202 líneas), el comando con el
+que este carril mide su objetivo —`tail -80 | grep -E "demo_agendada|handoff_humano|\[n8n\]"`—
+**vuelve a dar 0 mientras el canal de avisos funciona bien**. Las tres causas, separadas:
+
+| # | causa | por qué el arreglo del ruido no la toca |
+|---|---|---|
+| 1 | **el ruido** (4.811 copias hoy, eran 3.541 el 24-sep) | es la que T10 arregla — y creció 1.270 porque el arreglo sigue sin desplegarse |
+| 2 | **se busca la palabra equivocada** | `demo_agendada` y `handoff_humano` son **etapas** (`etapa=X->Y`), no avisos. El marcador real es `[aviso]`, y lo escribe el LLAMADOR (`webhook-server.mjs:767`), no `aviso-telegram.mjs` — que no tiene ni un `console.log`, así que grepear el módulo también contesta 0 |
+| 3 | **el éxito se loguea como silencio** | `[n8n]` sólo se escribe `if (result.ok === false)` (`webhook-server.mjs:749`). **Cero `[n8n]` significa que nada falló**, o sea lo contrario de lo que el comando sugiere. Un contador de fallos leído como contador de eventos invierte el veredicto |
+
+**Lo que el canal hace de verdad, contado sobre el log entero y no con `tail`:** 6 líneas
+`[aviso]` — **4 `sent`** (`conv=57 pidio_humano_recepcion`, `conv=11 demo_agendada`,
+`conv=11 mensaje_tras_agendar_sin_dolor`, `conv=49 pidio_hablar_con_humano`) y 2 `skipped` de
+cuando `ONIA_BOT_TG_AVISO` estaba apagado. Hoy el interruptor está **encendido** en el proceso
+vivo (`/proc/<pid>/environ`: `ONIA_BOT_TG_AVISO=true`, con `TG_BOT_TOKEN` y `TG_CHAT_ID`
+cargados), y el `webhook-server.mjs` que corre es **idéntico al del repo** (mismo `md5`), con sus
+dos llamadas a `dispararAvisoTelegram`. **El aviso a Sergio Urcullo NO está roto: estaba mal
+medido.**
+
+**Y la cifra «27 eventos» de la tabla de arriba es de la misma familia** — cuenta menciones de
+etapa en líneas de webhook, no avisos, así que sobrecuenta. El embudo real se cuenta en la base,
+que es el lado append-only: `select bot_stage, count(*) from onia_center.bot_conversations group
+by 1` → **12 `handoff_humano`**, 18 `esperando_horario`, 12 `nuevo`, y **0 `demo_agendada`** (ese
+cero es el bug del `slice(0,2)`, arreglado y esperando el deploy del bot — S18).
+
+**La lección que se lleva este carril, y sirve a cualquiera:** *un grep que cuenta FALLOS no puede
+usarse para contar EVENTOS* — cuando todo anda bien devuelve 0, exactamente igual que cuando el
+sistema está muerto. Antes de leer un `grep -c` como "no pasó nada", preguntar **qué se escribe
+cuando la cosa SALE BIEN**. Acá la respuesta era "nada", y por eso dos vueltas seguidas de este
+loop escribieron `avisos 0` teniendo cuatro avisos entregados adentro.
+
 ---
 
 ## ✅ T9 — CERRADO el 2026-09-19 (commiteado, **NO desplegado** — es un medidor, no toca el motor): todo el carril cuenta "el bot contestó" por una fila que existe, y nadie mira si el mensaje LLEGÓ
