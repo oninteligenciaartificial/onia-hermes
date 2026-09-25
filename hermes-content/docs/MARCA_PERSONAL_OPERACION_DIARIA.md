@@ -39,7 +39,7 @@ graban los videos de MCP, tools y loops que ya tienen demostración preparada.
 11. **Llamadas 1:1:** preparación, diagnóstico, notas privadas, patrones anonimizados,
     seguimiento y extracción de preguntas reales para contenido.
 12. **Comunidad gratuita:** drop diario, pregunta, conversación, onboarding, wins y recurso.
-13. **Encuentro presencial:** sede, registro, expositor, agenda, permisos, contenido y
+13. **Encuentro presencial** (🧊 congelado el 25-sep, piloto «IA Lab Santa Cruz»): sede, registro, expositor, agenda, permisos, contenido y
     seguimiento de asistentes.
 14. **Bóveda y productos:** subir recursos a la web, cumplir palabras clave y validar qué
     puede convertirse después en ebook, taller, curso o capa privada.
@@ -146,6 +146,12 @@ Reglas de ahorro:
 ## Preguntas para cerrar el diseño de la comunidad
 
 ### Piloto presencial
+
+> 🧊 **Congelado el 25-sep-2026 por decisión de Sergio Urcullo.** El piloto presencial
+> «IA Lab Santa Cruz» (encuentros → taller o curso pago → membresía) es una línea de negocio
+> nueva, y la Etapa 1 no la permite (`CLAUDE.md` §1, `ONIA_ESTRATEGIA_DE_EMPRESA.md`). Se
+> conserva como propuesta: **no se ejecuta, no se anuncia y no se encuesta.** Se descongela
+> sólo si Sergio Urcullo cambia la etapa.
 
 1. ¿Querés aprobar `IA Lab Santa Cruz` como nombre público o sólo como nombre interno?
 2. ¿Qué día de la semana querés probar durante cuatro semanas y en qué franja horaria?

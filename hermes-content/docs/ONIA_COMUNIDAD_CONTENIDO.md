@@ -44,11 +44,20 @@ no como requisito para pertenecer.
   convertir cada explicación en un activo acumulable, no copiar su catálogo ni su voz.
   Fuente: <https://www.tododeia.com/>.
 
+> 🧊 Los encuentros y el producto pago de esta combinación están congelados desde el 25-sep
+> (ver «Ritual presencial» abajo). La audiencia y la identidad siguen vigentes.
+
 La combinación propia queda así: **bóveda pública que construye autoridad + comunidad que
 ayuda a ejecutar + encuentros que crean relaciones + producto pago futuro que empaqueta un
 resultado repetido**.
 
 ## Ritual presencial — piloto Santa Cruz
+
+> 🧊 **Congelado el 25-sep-2026 por decisión de Sergio Urcullo.** El piloto presencial
+> «IA Lab Santa Cruz» (encuentros → taller o curso pago → membresía) es una línea de negocio
+> nueva, y la Etapa 1 no la permite (`CLAUDE.md` §1, `ONIA_ESTRATEGIA_DE_EMPRESA.md`). Se
+> conserva como propuesta: **no se ejecuta, no se anuncia y no se encuesta.** Se descongela
+> sólo si Sergio Urcullo cambia la etapa.
 
 **Objetivo:** que las personas aprendan una idea aplicable, conozcan colaboradores y salgan
 con un siguiente paso. No es una charla promocional de Onia ni una clase de dos horas dada
@@ -122,7 +131,9 @@ entregar recursos, medir preguntas y preparar el primer piloto presencial.
 | vie 25 | Revisión de diagramas de miembros | feedback a 3 casos, sin vender | personas que ejecutaron |
 | sáb 26 | n8n sin agente para clasificar leads | mapa de nodos + prompt + schema | rubro que pide el workflow |
 | dom 27 | Audio de cierre de 5–8 minutos | errores y preguntas de la grabación | próximo tema votado |
-| lun 28 | Encuesta del piloto de Santa Cruz | dos franjas horarias + tipo de sede | intención real de asistir |
+| lun 28 | 🧊 **No sale** (piloto congelado el 25-sep). Era: encuesta del piloto de Santa Cruz | dos franjas horarias + tipo de sede | intención real de asistir |
+
+> 🧊 La encuesta del lunes 28 no sale: el piloto está congelado desde el 25-sep.
 
 El formulario o encuesta del lunes mide **día, horario, zona, tema y permiso de imagen**.
 No se anuncia sede ni fecha cerrada hasta tener autorización del lugar y un mínimo de
@@ -321,6 +332,9 @@ lo que ya se grabó y escribió para afuera, más lo que afuera no se cuenta.
 
 ## Estrategia de embudo: comunidad → producto pago futuro
 
+> 🧊 **25-sep:** los pilotos presenciales están congelados, así que este embudo no tiene reloj:
+> mientras dure la Etapa 1 no se produce curso, taller ni membresía.
+>
 > **Corrección 2026-09-21:** el calendario de cuatro semanas de abajo es un marco de
 > validación histórico, no una fecha de lanzamiento activa. No se abre una producción de
 > curso ni una membresía hasta medir los cuatro pilotos presenciales, las preguntas

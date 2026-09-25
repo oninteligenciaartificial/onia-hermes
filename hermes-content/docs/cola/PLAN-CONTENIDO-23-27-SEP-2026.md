@@ -1,5 +1,10 @@
 # Plan de contenido grabable · miércoles 23 a domingo 27 de septiembre de 2026
 
+> **25-sep: plan con fecha, así que es historia y no fuente.** Las 11 piezas por día son una
+> de las cuatro cadencias vivas, y la cadencia la fija Sergio Urcullo
+> (`ONIA_CIRCUITO_DE_CONTENIDO.md` §7). 🧊 Lo del piloto presencial «IA Lab Santa Cruz» está
+> congelado desde el 25-sep: **no salen las piezas con `SANTA CRUZ`**.
+
 ## Decisión editorial
 
 La semana no copia a Erik Taveras, Enrique Rocha ni Santiago Muñoz. Toma tres mecanismos:
@@ -299,6 +304,10 @@ proceso roto. No inventar aprendizaje.
 ---
 
 ## Sábado 26 · comunidad, HyperFrames y Santa Cruz
+
+> 🧊 **25-sep:** no salen las tres piezas con `SANTA CRUZ` (B-roll del laboratorio, laboratorio
+> en 120 minutos, primeros 20 miembros fundadores): el piloto está congelado. HyperFrames y la
+> pieza personal siguen.
 
 Objetivo: mostrar qué recibirá una persona en la comunidad y construir una prueba técnica.
 No anunciar sede ni fecha sin confirmación.

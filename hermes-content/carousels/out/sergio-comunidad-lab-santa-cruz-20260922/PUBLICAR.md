@@ -1,5 +1,9 @@
 # Publicar — Comunidad IA práctica en Santa Cruz
 
+> 🧊 **NO PUBLICAR. Congelado el 25-sep-2026 por decisión de Sergio Urcullo.** Anuncia el piloto
+> presencial «IA Lab Santa Cruz», que es una línea de negocio nueva que la Etapa 1 no permite
+> (`CLAUDE.md` §1). Se conserva como propuesta. El zip se renombró a `…-CONGELADO.zip`.
+
 Cuenta: `@sergiourcullo`
 Formato: 1080 × 1350 px · PNG
 Orden: `slide-01.png` → `slide-08.png`

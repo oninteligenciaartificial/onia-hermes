@@ -51,7 +51,7 @@ reemplazo del valor.
 | **IA aplicada** | Claude Code, n8n, MCP, agentes, loops, automatización y venta de soluciones | una idea concreta por pieza; nombres y ejemplos reales |
 | **Personal / criterio** | problemas de las redes, disciplina, juventud, presión, ventas, errores y decisiones | experiencia real → tensión → aprendizaje → acción; prohibidas las frases motivacionales vacías |
 | **Construyendo en público** | Onia, sistemas, pruebas, errores y resultados verificables | mostrar proceso y criterio sin fingir clientes, cifras ni éxitos |
-| **Comunidad / personas** | encuentros, expertos, conversaciones, proyectos y logros de miembros | consentimiento antes de grabar o identificar a terceros |
+| **Comunidad / personas** | encuentros (🧊 los presenciales, congelados el 25-sep), expertos, conversaciones, proyectos y logros de miembros | consentimiento antes de grabar o identificar a terceros |
 
 ### Formatos y profundidad
 
@@ -69,6 +69,9 @@ reemplazo del valor.
 
 ### Estructura diaria aprobada
 
+> ⚠️ **25-sep: la cadencia está en revisión.** Hay cuatro cifras vivas y la fija Sergio Urcullo
+> (`ONIA_CIRCUITO_DE_CONTENIDO.md` §7).
+
 | Bloque | Cantidad | Composición |
 |---|---:|---|
 | **Feed** | 3 | pilar de Samuel · B-roll Sergio/Samuel · video normal de Sergio |
@@ -83,6 +86,8 @@ Samuel.
 
 ### Cierres y promesas
 
+- ⚠️ Hoy `@sergiourcullo` no tiene palabras activas: cada comentario se contesta a mano
+  (`contenido/PUBLICACION.md` §2). La regla de abajo vale cuando alguien los conteste.
 - **Todo carrusel termina invitando a comentar una palabra para obtener un resultado**,
   pero el recurso debe existir antes de publicar.
 - El video personal puede cerrar con una pregunta honesta o una invitación a seguir; no
