@@ -94,6 +94,11 @@ import {
   toConversationRow,
   reiniciarConversacionVencida,
 } from '../hermes-content/deploy/vps-ops/bot/bot-engine.mjs';
+// Los montos legitimos y el normalizador son los MISMOS que usa el guardrail del motor. Se
+// importan, no se copian: el dia que cambie la escalera, esta sonda se entera sola. Una lista
+// propia de precios es como el bot vivo cotizo Bs 750 durante dias con todo en verde.
+import { MONTOS_PERMITIDOS, soloPreciosPublicos } from '../hermes-content/deploy/vps-ops/bot/precios-publicos.mjs';
+import { normalize } from '../hermes-content/deploy/vps-ops/bot/guardrails.mjs';
 
 const HOST = process.env.ONIA_WIDGET_URL || 'https://onia-chatbot-chatwoot.hqdqgh.easypanel.host';
 const WEBSITE_TOKEN = process.env.ONIA_WIDGET_TOKEN || '9k5i7xnAgCbSse1EZwVChZLw';
@@ -233,10 +238,46 @@ export function juzgar({ enviados, mensajes, conversacionId }) {
     };
   }
 
+  // Contestar no es contestar el PRECIO REAL, y esa diferencia es plata. Medido el 2026-09-12: el
+  // bot vivo cotizaba "Bs 320 / Bs 750 / Bs 1.500" —se salteaba el plan Crece entero y cobraba
+  // aparte un chatbot que el Completo ya incluye— con `simulate.mjs` 3/3 y el gate de precios
+  // verde, porque los dos leen el REPO y el bot lee su `knowledge.json`, que se publica a mano y
+  // no esta en git. Esta sonda es el unico instrumento que mira el texto que un visitante RECIBIO,
+  // asi que es el unico lugar desde donde ese falso verde se ve.
+  const ajenos = montosAjenos(mios.flatMap((t) => t.respuestas));
+  if (ajenos.length > 0) {
+    return {
+      codigo: 1,
+      texto:
+        `EL BOT COTIZO UN PRECIO QUE NO EXISTE — conversacion ${conversacionId ?? '?'}: ${detalle}. ` +
+        `Monto(s) ajeno(s) a la fuente unica: ${ajenos.map((monto) => `Bs ${monto}`).join(', ')}. ` +
+        'Los legitimos salen de `precios-publicos.mjs` (subscription-plans.ts + pricing.ts). ' +
+        'Arreglar el repo NO lo cura: el conocimiento vivo se instala con `deploy-bot.sh`, que ' +
+        'corre `webhook-server.sh knowledge` — mirar `npm run bot:precios-vivos`, que mide las ' +
+        'DOS capas (la fila del panel le gana al archivo).',
+    };
+  }
+
   return {
     codigo: 0,
     texto: `EL BOT CONTESTO LOS ${MENSAJES.length} — conversacion ${conversacionId ?? '?'}: ${detalle}.`,
   };
+}
+
+/**
+ * Los montos que el bot cotizo y que NO estan en la fuente unica de precios.
+ *
+ * Devuelve `[]` cuando no hay ninguna cifra, a proposito: la mayoria de los turnos no cotizan
+ * nada, y exigirle un precio al saludo seria un rojo permanente. Lo que se juzga es la cifra que
+ * SI aparecio. El criterio es el del guardrail del motor (`soloPreciosPublicos`), no uno propio.
+ */
+export function montosAjenos(respuestas) {
+  const ajenos = [];
+  for (const texto of Array.isArray(respuestas) ? respuestas : []) {
+    const { intrusos } = soloPreciosPublicos(normalize(String(texto ?? '')));
+    for (const monto of intrusos) if (!ajenos.includes(monto)) ajenos.push(monto);
+  }
+  return ajenos;
 }
 
 // ───────────────────────── el arranque que NO pasa por `/widget` ─────────────────────────
@@ -1204,6 +1245,51 @@ async function selfCheck() {
     const v = juzgar({ enviados: 2, mensajes: CONV_47, conversacionId: 47 });
     assert.strictEqual(v.codigo, 1, `el bug de la semana tiene que salir 1 y salio ${v.codigo}: ${v.texto}`);
     assert.match(v.texto, /1 de 2 turnos sin respuesta/);
+  });
+
+  // ── el precio que el bot DICE ──
+  // El texto de la respuesta vieja es el REAL que el bot vivo servia el 2026-09-12 (esta citado
+  // textual en la cabecera de `precios-vivos.mjs`, leido de su `knowledge.json` dentro del
+  // contenedor). Inventar uno mediria el caso que uno previo; este ya le llego a leads.
+  const PRECIO_VIEJO =
+    'Te los paso derecho, son publicos: el sistema arranca en Bs 320 al mes con el plan Basico, ' +
+    'Bs 750 el Profesional y Bs 1.500 el Completo. El chatbot de WhatsApp va aparte, Bs 390 al mes.';
+  // Y este es el que el bot vivo contesto por el widget el 2026-09-24 (conversacion 49, mensaje
+  // 1709), medido leyendo `messages` de Chatwoot. Es el que NO puede dar rojo.
+  const PRECIO_DE_HOY =
+    'Te los paso derecho, son publicos: el sistema arranca en Bs 320 al mes con el plan Basico, ' +
+    'Bs 550 el Crece, Bs 890 el Profesional y Bs 1.290 el Completo, que ya trae el chatbot de ' +
+    'WhatsApp adentro. En el Basico, el Crece y el Profesional el chatbot va aparte, Bs 390 al mes.';
+  const conPrecio = (respuesta) => [
+    m(0, '2026-09-24 21:00:00', 'Hola, quiero informacion sobre el sistema'),
+    m(1, '2026-09-24 21:00:05', '¡Hola! Soy el asistente automatico de Onia.'),
+    m(0, '2026-09-24 21:00:20', 'Cuanto cuesta el sistema al mes?'),
+    m(1, '2026-09-24 21:00:25', respuesta),
+  ];
+
+  caso('un monto que ya no existe en la escalera → 1, aunque haya contestado los dos', () => {
+    const v = juzgar({ enviados: 2, mensajes: conPrecio(PRECIO_VIEJO), conversacionId: 49 });
+    assert.strictEqual(v.codigo, 1, `cotizar Bs 750 tiene que salir 1 y salio ${v.codigo}: ${v.texto}`);
+    assert.match(v.texto, /750/, 'el veredicto tiene que NOMBRAR el monto ajeno');
+    assert.match(v.texto, /1500|1\.500/, 'y los dos, no solo el primero');
+  });
+
+  caso('el precio que el bot vivo contesta hoy → 0', () => {
+    const v = juzgar({ enviados: 2, mensajes: conPrecio(PRECIO_DE_HOY), conversacionId: 49 });
+    assert.strictEqual(v.codigo, 0, `la escalera vigente no puede dar rojo y dio ${v.codigo}: ${v.texto}`);
+  });
+
+  caso('un turno sin ninguna cifra no se juzga por precio', () => {
+    // Sin esto el gate exigiria que toda respuesta cotice, y el saludo no cotiza nada.
+    assert.deepStrictEqual(montosAjenos(['Perfecto, anotado que te dedicas a odontologia']), []);
+    assert.deepStrictEqual(montosAjenos([]), []);
+  });
+
+  caso('los montos ajenos se derivan de la FUENTE, no de una lista propia', () => {
+    // Si alguien agrega un monto a `precios-publicos.mjs` que no esta en la fuente, lo pone rojo
+    // su propio gate; lo que esta sonda no puede hacer es tener su copia y divergir en silencio.
+    assert.ok(MONTOS_PERMITIDOS.has(890) && MONTOS_PERMITIDOS.has(390), 'la escalera vigente');
+    assert.ok(!MONTOS_PERMITIDOS.has(750), 'Bs 750 salio de la escalera el 2026-09-12');
   });
 
   caso('los enlatados del pre-chat (type 3) NO son una respuesta', () => {
