@@ -81,9 +81,9 @@ mostrar la diferencia lado a lado. Ésa es la prueba que convence.
 
 Sergio levantó la regla del 11-sep («podemos higgsfield»). Condiciones que SÍ siguen:
 
-- **El método que se enseña es el real: Soul + texto** — es el ÚNICO que da
-  consistencia de cara entre generaciones (probado acá; los métodos de referencia por
-  imagen degradan). No enseñar atajos que no usamos.
+- **El método que se enseña es el real: Soul + texto**. Reutilizar un mismo Soul
+  ayuda a mantener la identidad; cada resultado debe revisarse. No prometer que
+  sea el único método posible ni que garantice una cara idéntica en cada imagen.
 - **Etiqueta de IA obligatoria** si el avatar publica en una cuenta propia.
 - Shot list: 1) crear el Soul con las fotos base 2) el prompt de texto con la
   descripción fija del personaje 3) DOS generaciones distintas mostrando la MISMA cara
@@ -113,18 +113,43 @@ Todo con datos de utilería: ningún dato de cliente real aparece en cámara.
 🔴 **Tres hallazgos de producto salieron del rodaje** (el recorrido real se trabó dos
 veces): [`HALLAZGOS-RODAJE-ONIA-18-SEP.md`](HALLAZGOS-RODAJE-ONIA-18-SEP.md).
 
-## Pendiente de grabar — estado al 21-sep, con el bloqueo exacto
+## Retoma Codex — 21-sep, grabaciones de n8n y Higgsfield
 
-Los perfiles persistentes de navegador **existen y están VACÍOS**: verificado hoy,
-`E:\ONIA-YouTube\grabaciones\_perfiles\n8n\` y `...\higgsfield\` no tienen ni un archivo.
-Sin cookie no hay sesión, y sin sesión no hay grabación.
+> **Reemplaza** la sección «Pendiente de grabar — estado al 21-sep, con el bloqueo exacto»
+> (15:54 del 21-sep, en la rama de marca personal): los perfiles de navegador de n8n y
+> Higgsfield estaban vacíos y sin sesión no había grabación. Esta retoma es posterior (20:37)
+> y ese bloqueo ya no aplica. La versión anterior se ve con
+> `git show 1f28b33e:hermes-content/docs/cola/BRIEF-SAMUEL-VIDEOS.md`. Integrado el 25-sep.
 
-| # | Qué falta | Por qué no lo puedo hacer yo | Cómo se desbloquea |
-|---|---|---|---|
-| 1 | **n8n** · los 2 flujos | Probado hoy con Chromium limpio contra `n8n-sergio-n8n.hqdqgh.easypanel.host`: la página carga **en blanco** sin sesión. Y yo no escribo contraseñas en un formulario | `python scripts/marca-personal/abrir_sesion.py n8n` **en la terminal de Sergio Urcullo** (Playwright con ventana no abre en este entorno: `spawn UNKNOWN`). Entrar a mano y cerrar la ventana |
-| 2 | **Higgsfield / avatar** | Mismo caso: sesión propia, login suyo | `python scripts/marca-personal/abrir_sesion.py higgsfield`, igual |
-| 3 | **Terminal de Claude Code** | Es captura de escritorio, no de navegador: otro stack | Pendiente de decidir herramienta |
-| 4 | **Skills CON/SIN** | Se puede grabar sin sesión externa | No está bloqueado: es el siguiente que sale solo |
+Ambas sesiones se verificaron **dentro de las aplicaciones** con Playwright y
+Chrome instalado. El bloqueo de perfiles vacíos queda superado. Sergio confirmó
+el login de Higgsfield y se cerró únicamente su ventana del perfil de grabación.
+
+Los MP4 nuevos muestran construcción y configuración para edición; **no equivalen a ejecutar
+todo el shot list original**. Detalle, rutas y comandos en
+`../handoff/grabaciones-samuel.md`.
+Entrega seleccionada: siete MP4, 5 min 59 s en total, decodificados con FFmpeg y
+revisados por fotogramas. Carpeta `ENTREGA-20260921` y ZIP junto a las grabaciones.
+
+| Pieza | Grabado | Falta para el tutorial completo |
+|---|---|---|
+| n8n A | Construcción nativa nodo por nodo: lienzo vacío → horario → Telegram; parámetros y texto de ejemplo | Prueba de mensaje y recepción. El borrador sigue sin publicar |
+| n8n B | Construcción nativa nodo por nodo: horario → HTTP → condición → Telegram; recorrido de parámetros | Prueba de fallo y recepción. Usa `example.com` y `TU_CHAT_ID`, no prueba un servicio productivo |
+| Higgsfield general | Navegación por herramientas y personajes | Material de apoyo, no generación |
+| Avatar / Soul | Requisitos de fotos; seleccionar Lucía sintética ya entrenada y escribir un prompt | No se subieron fotos, no se entrenó otro Soul, no se generaron dos resultados |
+| Terminal Claude Code | Sin nuevos cambios en esta retoma | Fuera de esta tanda enfocada en n8n/Higgsfield/avatar |
+| Skills CON/SIN | Sin nuevos cambios en esta retoma | Fuera de esta tanda enfocada en n8n/Higgsfield/avatar |
+
+Corrección tras leer `CLAUDE.md` completo: las dos imágenes pequeñas **ya estaban
+autorizadas** por §5. Se intentó generar la primera con Playwright; el gateway
+respondió con fallo de red/CORS y no se confirmó un trabajo. La CLI instalada
+tampoco resolvió el acceso. El lote está registrado en
+`scripts/marca-personal/demos-samuel/lote-soul.json`.
+El mensaje de prueba a Telegram sigue pendiente de autorización explícita.
+
+La pantalla actual de creación recomienda 20+ fotos. Los personajes existentes
+tienen otras cantidades de fotos; no presentar esa diferencia como una regla
+universal. Referencia: [ayuda oficial de Soul ID](https://higgsfield.ai/creator-hub/help-center/ai-models/how-do-i-create-and-use-a-soul-id-character).
 
 ⚠️ **El video 1-2 de Onia Platform tiene un bloqueo propio, y es de contenido:** el
 recorrido real se trabó dos veces

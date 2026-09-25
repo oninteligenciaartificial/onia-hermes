@@ -1,6 +1,23 @@
 # Hermes Coordination Manifest
 
+## Grabaciones Samuel — 2026-09-21
+
+Carril Codex `codex/samuel-grabaciones-20260921`, worktree aislado
+`C:/Users/PC/.codex/worktrees/samuel-grabaciones/onia-hermes`.
+Alcance: scripts de captura en `scripts/marca-personal/`, brief de Samuel y handoff
+de grabaciones. Artefactos: `E:/ONIA-YouTube/grabaciones/samuel/`.
+Principal: Higgsfield, empaquetado y validación; subagente: antecedentes, helper,
+construcción nativa de demos n8n y QA independiente. Perfiles exclusivos por frente.
+n8n: solo borradores de demostración nuevos, sin activar workflows ni enviar mensajes.
+Higgsfield: lotes pequeños de imagen autorizados por CLAUDE.md §5; registrar costo
+y resultados. Videos generativos y lotes grandes requieren aprobación concreta.
+Se preservan archivos de edición y marca personal de otras sesiones.
+Estado: siete clips y ZIP validados; perfiles cerrados. Handoff canónico:
+`hermes-content/docs/handoff/grabaciones-samuel.md`. Generación bloqueada por
+Cloudflare; prueba de Telegram pendiente de autorización. Sin publicación externa.
+
 ## Purpose
+
 This file prevents duplicate work while two Codex/Hermes sessions run at the same time.
 
 Use this as the source of truth before creating new files, skills, docs, or scripts.
