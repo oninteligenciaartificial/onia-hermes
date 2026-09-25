@@ -34,7 +34,7 @@ import {
 import { HUECO_PARTIDO, FECHA_CONSULTA } from "@/lib/proof";
 import { WA_URL_LANDING, SITE_URL } from "@/lib/site";
 import { EMPEZAR_URL } from "./nav";
-import { ALTA_VERBO_VOS, CTA_ALTA, ctaAltaPlan } from "./alta";
+import { ALTA_VERBO_VOS_TITULO, CTA_ALTA, ctaAltaPlan } from "./alta";
 import { FAQ } from "./faq-datos";
 import { Block, Shape, Btn, Kicker, JsonLd, PanelDibujado } from "./ui";
 import { ConversacionNocturna } from "./conversacion";
@@ -726,7 +726,7 @@ export default function Portada() {
         <Reveal>
           <div className={p.centro}>
             <h2 id="v4-cierre" className={s.display} style={{ maxWidth: "18ch" }}>
-              {ALTA_VERBO_VOS} hoy y probalo con tu propio negocio.
+              {ALTA_VERBO_VOS_TITULO} hoy y probalo con tu propio negocio.
             </h2>
             <div className={p.heroCtas}>
               <Btn href={EMPEZAR_URL}>{CTA_ALTA}</Btn>
