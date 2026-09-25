@@ -641,6 +641,27 @@ certificado pago, mientras que el de Google no.
 **Cuándo:** v1.3 (§12), *después* de los 5 clientes y *después* de bajar las horas de soporte.
 Con cero clientes, un add-on excelente y uno malo valen exactamente lo mismo: **cero**.
 
+### Un MCP de Onia (conectar Claude/ChatGPT a los datos del negocio) — 🔴 FALLA LA PRIMERA
+
+> Sergio Urcullo, 2026-09-25: *"el tema de crearle un mcp a onia, que te parece"*.
+
+| Pregunta del test | Respuesta | |
+|---|---|---|
+| ¿Se le vende al MISMO cliente que ya paga? | el cliente ideal (`ONIA_CLIENTE_IDEAL.md`) es el dueño de una clínica de 2-6 profesionales al que **le cuesta usar sistemas**: no conecta conectores a un asistente de IA. Hoy nadie lo pidió | ❌ |
+| ¿Deja de tener sentido sin el núcleo? | sí: sin los datos de Onia no hay nada que exponer | ✅ |
+| ¿Se entrega sin horas por cliente? | casi: es configuración. Pero cada cliente que lo conecte trae soporte de un producto ajeno (su Claude, su ChatGPT) | ⚠️ |
+
+**Veredicto: anotado, no se construye en la 1.0.** Lo que lo hace barato cuando toque: ya existe
+`/api/v1` con claves por negocio (`patients`, `appointments`), así que el MCP sería un envoltorio
+fino sobre esa API — días, no semanas. Lo que lo hace delicado: son datos clínicos que saldrían a
+un modelo de un tercero; antes de construirlo hay que declararlo en Privacidad y pedir
+consentimiento explícito del negocio.
+
+**La versión INTERNA** (un MCP para que Claude opere Onia por Sergio: ver cuentas, aprobar
+comprobantes) tampoco suma hoy: eso ya se hace por SSH, SQL y el circuito de Telegram, y con cero
+clientes no baja ninguna hora de soporte. **Cuándo:** v1.x, cuando un cliente que paga lo pida o
+cuando el soporte (§9) muestre una tarea repetida que un MCP le ahorre a Sergio.
+
 ---
 
 ## 15. Restricción de firma (planificación, no juicio)

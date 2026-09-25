@@ -711,6 +711,35 @@ abrirlas y decidir a qué deploy se refieren. Se derivan con el comando, nunca d
 
 ## Ahora
 
+- [x] 🔴 **CERRADO el 2026-09-25 13:13-14:05 La Paz (commiteado; es un INSTRUMENTO nuevo
+      —`scripts/bot_vivo_tiene_el_codigo.mjs`—, no toca el motor y no necesita deploy): los dos
+      gates de deploy del bot razonan por COMMITS y ninguno le pregunta al proceso que atiende al
+      prospecto. Medido hoy con el instrumento nuevo: 13 de los 57 archivos del bot vivo NO son
+      los del repo, y entre ellos está `bot-engine.mjs`.**
+
+      **Cómo se reproduce en 30 segundos:** `npm run bot:vivo-al-dia` (sale 1 y NOMBRA los
+      archivos; `0` al día, `2` NO MEDIDO). A mano, que es como se encontró:
+      `/root/bin/docker exec onia-center sh -c 'grep -c slotsElegibles /tmp/onia-bot/config.mjs'`
+      → `0`, o sea que el arreglo de horarios del 24-sep no corre.
+
+      **Por qué ningún verde lo veía.** `deploy_sin_pedido.mjs` contesta *«bot: falta publicar y
+      ya hay pedido — t_24fa76aa»* (correcto) y `npm run demo:agendada` sale verde (correcto
+      también: mide lo prometido contra lo avisado). Ninguno de los dos mira `/tmp/onia-bot`. Y el
+      bot corre ahí por rsync con **Node cacheando los módulos**, así que existe un estado en que
+      el deploy «ocurrió» —los archivos viajaron— y el bot sigue contestando con el viejo. El gate
+      nuevo separa las dos preguntas: *¿es el archivo del repo?* (`desfasado`) y *¿el proceso
+      arrancó DESPUÉS de la última copia?* (`copiado_sin_reiniciar`, que es la que nadie hacía).
+      Sin docker sale **2 = NO MEDIDO**, nunca verde.
+
+      **Lo que NO era, y se descartó midiendo** (para no volver a investigarlo): el segundo paso
+      del agendado —que el motor LLAME a la reserva— **ya está cableado y probado**.
+      `persistence.test.mjs:360-388` inyecta `deps.createBooking` y exige el `uid` guardado en
+      `calendarEventId` y el camino del fallo. Iba a escribir ese test y habría sido un duplicado.
+      Los 0 de 43 con `calendar_event_id` se explican por lo de arriba: producción corre el viejo.
+
+      **Queda esperando publicación, y el pedido ya existe: `t_24fa76aa` (blocked, pedido hace
+      6 h).** No se duplica y no se despliega a mano.
+
 - [x] 🔴 **CERRADO el 2026-09-25 10:43-11:25 La Paz (commiteado; es el INSTRUMENTO
       —`scripts/embudo_del_bot.mjs`—, no toca el motor y no necesita deploy): el medidor del
       embudo encendía un 🔴 que no podía bajar nunca, porque contaba una caída de agosto que ya

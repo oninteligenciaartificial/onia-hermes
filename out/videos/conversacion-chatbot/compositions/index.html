@@ -1,0 +1,426 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <!--
+      Este <head> es metadata del archivo fuente: el runtime clona SOLO el
+      contenido de <template>. Todo lo que tiene que existir en el render
+      (estilos, markup, script) vive adentro del template.
+    -->
+    <title>Conversacion nocturna — 23:47</title>
+  </head>
+  <body>
+    <template>
+      <style>
+        /*
+         * ------------------------------------------------------------------
+         * Conversacion nocturna — la version en video de la pieza que hoy
+         * vive en CSS en la portada (conversacion.tsx + sitio.module.css).
+         *
+         * Guion, cabecera y metas: copiados LITERAL de esa pieza. Cero
+         * montos, cero estado de obra, cero autobombo, cero capturas del
+         * sistema real — la tarjeta esta DIBUJADA.
+         *
+         * Paleta: tokens reales de globals.css, pasados a version noche
+         * (son las 23:47; la noche es el argumento).
+         *   --verde-600 #027650  verde primario -> burbujas de Onia
+         *   --verde-900 #013925  cabecera de la tarjeta (igual que .waHead)
+         *   --verde-300 #86D9B0  el punto de "vivo"
+         * ------------------------------------------------------------------
+         */
+
+        /*
+         * Archivo (tipografia de marca de ONIA) congelada en el proyecto: el
+         * render no toca la red. La cara se declara tambien en el <head> del
+         * host; repetirla aca es lo que hace que ESTE archivo se valide solo.
+         * La url es relativa a la pagina ensamblada (la raiz del proyecto).
+         */
+        @font-face {
+          font-family: "Archivo";
+          src: url("assets/fonts/Archivo-var-latin.woff2") format("woff2");
+          font-weight: 400 700;
+          font-style: normal;
+          font-display: block;
+        }
+
+        /* La raiz se estiliza por #root: el scoper lo trata especial. */
+        #root {
+          position: absolute;
+          inset: 0;
+          font-family: "Archivo", "Liberation Sans", Arial, system-ui, sans-serif;
+          font-synthesis: weight;
+          -webkit-font-smoothing: antialiased;
+        }
+
+        .clip {
+          position: absolute;
+          inset: 0;
+        }
+
+        /* --- noche ------------------------------------------------------ */
+        /* El relleno a pantalla completa va en un hijo full-bleed, nunca en
+           la raiz: el compositor de frames puede perder el background de la
+           propia raiz y el frame sale negro. */
+        .fondo {
+          position: absolute;
+          inset: 0;
+          background:
+            radial-gradient(1240px 820px at 50% 45%, #0e1714 0%, #090e0b 58%, #050807 100%);
+        }
+
+        /* Halo verde muy tenue detras de la tarjeta. Estatico: nada de
+           latidos ociosos. */
+        .halo {
+          position: absolute;
+          left: 960px;
+          top: 540px;
+          width: 1560px;
+          height: 1120px;
+          margin-left: -780px;
+          margin-top: -560px;
+          border-radius: 50%;
+          background: radial-gradient(
+            closest-side,
+            rgba(2, 118, 80, 0.17),
+            rgba(2, 118, 80, 0.05) 55%,
+            rgba(2, 118, 80, 0) 78%
+          );
+        }
+
+        /* --- tarjeta ---------------------------------------------------- */
+        .marco {
+          position: absolute;
+          inset: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 80px 160px; /* margen title-safe */
+        }
+
+        .tarjeta {
+          width: 1160px;
+          border-radius: 30px;
+          overflow: hidden;
+          background: #0f1613;
+          border: 1px solid rgba(214, 232, 224, 0.11);
+          box-shadow:
+            0 2px 0 rgba(214, 232, 224, 0.04) inset,
+            0 46px 96px -44px rgba(0, 0, 0, 0.9),
+            0 0 120px -50px rgba(2, 118, 80, 0.55);
+        }
+
+        /* --- cabecera (literal: punto + "WhatsApp del negocio" + 23:47) -- */
+        .cab {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+          padding: 23px 30px;
+          background: #013925;
+        }
+
+        .punto {
+          display: block;
+          width: 16px;
+          height: 16px;
+          border-radius: 50%;
+          background: #86d9b0;
+          flex: 0 0 auto;
+        }
+
+        .quien {
+          display: block;
+          font-size: 26px;
+          font-weight: 650;
+          letter-spacing: -0.005em;
+          color: #f4faf7;
+        }
+
+        .hora-cab {
+          display: block;
+          margin-left: auto;
+          font-size: 23px;
+          font-weight: 500;
+          color: #9fc7b5;
+          font-variant-numeric: tabular-nums;
+        }
+
+        /* --- hilo ------------------------------------------------------- */
+        .hilo {
+          display: grid;
+          gap: 22px;
+          padding: 38px 30px 34px;
+        }
+
+        /* Cada fila reserva desde el frame 1 el alto final de su burbuja:
+           asi el beat de "escribiendo" (absoluto, fuera de flujo) no mueve
+           nada cuando la burbuja aparece. */
+        .fila {
+          position: relative;
+          display: flex;
+        }
+
+        .fila.der {
+          justify-content: flex-end;
+        }
+
+        .msg {
+          max-width: 87%;
+          padding: 24px 28px;
+          border-radius: 24px 24px 24px 7px;
+          background: #1d2723;
+          transform-origin: bottom left;
+        }
+
+        .msg.onia {
+          border-radius: 24px 24px 7px 24px;
+          background: #027650;
+          transform-origin: bottom right;
+        }
+
+        .texto {
+          margin: 0;
+          font-size: 31px;
+          line-height: 1.45;
+          font-weight: 400;
+          letter-spacing: -0.004em;
+          color: #e8eeeb;
+        }
+
+        .msg.onia .texto {
+          color: #f7fcfa;
+        }
+
+        .meta {
+          display: block;
+          margin-top: 10px;
+          font-size: 22px;
+          font-weight: 500;
+          text-align: right;
+          color: #9aa8a1;
+          font-variant-numeric: tabular-nums;
+        }
+
+        .msg.onia .meta {
+          color: #dcefe6;
+        }
+
+        /* --- beat "escribiendo" ----------------------------------------- */
+        .escribiendo {
+          position: absolute;
+          top: 0;
+          right: 0;
+          display: flex;
+          align-items: center;
+          gap: 11px;
+          padding: 24px 28px;
+          border-radius: 24px 24px 7px 24px;
+          background: #027650;
+          transform-origin: bottom right;
+        }
+
+        .pt {
+          display: block;
+          width: 14px;
+          height: 14px;
+          border-radius: 50%;
+          background: #e3f3eb;
+          flex: 0 0 auto;
+        }
+      </style>
+
+      <div
+        id="root"
+        data-composition-id="conversacion"
+        data-start="0"
+        data-duration="7"
+        data-width="1920"
+        data-height="1080"
+      >
+        <div id="conv-escena" class="clip" data-start="0" data-duration="7" data-track-index="0">
+          <div class="fondo"></div>
+          <div class="halo"></div>
+
+          <div class="marco">
+            <div class="tarjeta" id="conv-tarjeta">
+              <div class="cab">
+                <span class="punto" id="conv-punto"></span>
+                <span class="quien" id="conv-quien">WhatsApp del negocio</span>
+                <span class="hora-cab" id="conv-hora">23:47</span>
+              </div>
+
+              <div class="hilo">
+                <div class="fila izq">
+                  <div class="msg" id="conv-m1">
+                    <p class="texto">Hola, ¿tienen taladros Bosch? ¿Atienden mañana?</p>
+                    <span class="meta">23:47</span>
+                  </div>
+                </div>
+
+                <div class="fila der">
+                  <div class="msg onia" id="conv-m2">
+                    <p class="texto">
+                      Sí — tenemos Bosch y Makita en stock. Mañana atendemos de 8:30 a 18:00, en la
+                      misma dirección de siempre.
+                    </p>
+                    <span class="meta">Onia · 23:47</span>
+                  </div>
+                  <div class="escribiendo" id="conv-esc1">
+                    <span class="pt" id="conv-esc1a"></span>
+                    <span class="pt" id="conv-esc1b"></span>
+                    <span class="pt" id="conv-esc1c"></span>
+                  </div>
+                </div>
+
+                <div class="fila izq">
+                  <div class="msg" id="conv-m3">
+                    <p class="texto">Perfecto. ¿Pueden reservarme uno?</p>
+                    <span class="meta">23:48</span>
+                  </div>
+                </div>
+
+                <div class="fila der">
+                  <div class="msg onia" id="conv-m4">
+                    <p class="texto">
+                      Con gusto: su pedido ya quedó registrado con esta conversación, y el encargado
+                      se lo confirma apenas abra el negocio.
+                    </p>
+                    <span class="meta">Onia · 23:48</span>
+                  </div>
+                  <div class="escribiendo" id="conv-esc2">
+                    <span class="pt" id="conv-esc2a"></span>
+                    <span class="pt" id="conv-esc2b"></span>
+                    <span class="pt" id="conv-esc2c"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        /*
+         * UNA timeline pausada, construida sincronicamente, registrada en
+         * window.__timelines["conversacion"]. Determinista: sin relojes, sin
+         * Math.random, sin red, sin repeat infinito.
+         *
+         * En sub-composition las entradas van con fromTo() (from() graba el
+         * estado inicial al registrar y se desincroniza al re-seekear).
+         *
+         * El patron de revelado es el seguro bajo seek: gsap.set(autoAlpha:0)
+         * UNA vez al cargar, y despues to(autoAlpha:1) en la entrada. Nunca
+         * set(opacity:1) + from(opacity:0): bajo render pausado eso deja el
+         * elemento invisible para siempre.
+         */
+        (function () {
+          window.__timelines = window.__timelines || {};
+
+          var CAB = ["#conv-punto", "#conv-quien", "#conv-hora"];
+          var OCULTOS = [
+            "#conv-tarjeta",
+            "#conv-punto",
+            "#conv-quien",
+            "#conv-hora",
+            "#conv-m1",
+            "#conv-m2",
+            "#conv-m3",
+            "#conv-m4",
+            "#conv-esc1",
+            "#conv-esc2",
+          ];
+
+          gsap.set(OCULTOS, { autoAlpha: 0 });
+
+          var tl = gsap.timeline({ paused: true });
+
+          /* ---- beat 0 · 0.00s — la tarjeta llega ---------------------- */
+          tl.to("#conv-tarjeta", { autoAlpha: 1, duration: 0.3, ease: "none" }, 0);
+          tl.fromTo(
+            "#conv-tarjeta",
+            { y: 38, scale: 0.976 },
+            { y: 0, scale: 1, duration: 0.62, ease: "power3.out" },
+            0
+          );
+
+          /* ---- beat 0b · 0.26s — cabecera --------------------------- */
+          tl.to(CAB, { autoAlpha: 1, duration: 0.24, ease: "none", stagger: 0.05 }, 0.26);
+          tl.fromTo(
+            CAB,
+            { y: -12 },
+            { y: 0, duration: 0.38, ease: "power2.out", stagger: 0.05 },
+            0.26
+          );
+
+          /*
+           * Una burbuja aterriza: sube desde abajo y crece desde su propia
+           * cola (transform-origin en CSS). Performa y para — nada queda
+           * respirando.
+           */
+          function aterriza(sel, t) {
+            tl.to(sel, { autoAlpha: 1, duration: 0.22, ease: "none" }, t);
+            tl.fromTo(
+              sel,
+              { y: 30, scale: 0.94 },
+              { y: 0, scale: 1, duration: 0.48, ease: "power3.out" },
+              t
+            );
+          }
+
+          /*
+           * Beat de "escribiendo": la pastilla entra donde va a estar la
+           * respuesta, los tres puntos rebotan un numero FINITO de veces, y
+           * se disuelve justo cuando llega la burbuja.
+           * 4 pasadas x 0.16s = 0.64s por punto (yoyo + repeat:3 -> termina
+           * en y:0, sin quedar colgado arriba).
+           */
+          function escribe(pill, puntos, t, tFuera) {
+            tl.to(pill, { autoAlpha: 1, duration: 0.16, ease: "none" }, t);
+            tl.fromTo(
+              pill,
+              { y: 16, scale: 0.9 },
+              { y: 0, scale: 1, duration: 0.34, ease: "power3.out" },
+              t
+            );
+            tl.to(
+              puntos,
+              {
+                y: -9,
+                duration: 0.16,
+                ease: "sine.inOut",
+                yoyo: true,
+                repeat: 3,
+                stagger: 0.08,
+              },
+              t + 0.1
+            );
+            tl.to(pill, { autoAlpha: 0, duration: 0.16, ease: "none" }, tFuera);
+          }
+
+          /* ---- beat 1 · 0.58s — el cliente escribe a las 23:47 ------- */
+          aterriza("#conv-m1", 0.58);
+
+          /* ---- beat 2 · 1.24s — Onia esta escribiendo --------------- */
+          escribe("#conv-esc1", ["#conv-esc1a", "#conv-esc1b", "#conv-esc1c"], 1.24, 2.14);
+
+          /* ---- beat 3 · 2.14s — Onia contesta ---------------------- */
+          aterriza("#conv-m2", 2.14);
+
+          /* ---- beat 4 · 3.40s — el cliente pide reservar ------------ */
+          aterriza("#conv-m3", 3.4);
+
+          /* ---- beat 5 · 4.02s — Onia esta escribiendo -------------- */
+          escribe("#conv-esc2", ["#conv-esc2a", "#conv-esc2b", "#conv-esc2c"], 4.02, 4.92);
+
+          /* ---- beat 6 · 4.92s — la burbuja que cierra el argumento -- */
+          aterriza("#conv-m4", 4.92);
+
+          /* Ultimo tween termina en 5.40s: quedan 1.60s de quietud total
+             con la respuesta final legible (el piso pedido era 1.2s). */
+
+          window.__timelines["conversacion"] = tl;
+          tl.seek(0);
+        })();
+      </script>
+    </template>
+  </body>
+</html>

@@ -99,9 +99,30 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       ruta fantasma nueva metida en esta sección vuelve a poner el gate en exit 1 (y el
       `hermes-content/docs/COLA.md` se restauró con `cp`, nunca con `git checkout`). Self-check
       110 → **114 casos**; `cola:viva` exit 1 → **0**, con 33 ítems en Ahora todos con evidencia
-      real. ⚠️ **Lo que queda abierto y NO es este ítem:** `cola:viva` es un alias suelto que no
-      corre nadie —no está en la cadena `npm test` ni en la medición de arranque de ningún
-      carril—, y por eso su rojo pudo vivir días sin que nadie lo viera.
+      real. ⚠️ **Eso dejó abierto que `cola:viva` era un alias suelto que no corría nadie** —ni la
+      cadena `npm test` ni el arranque de ningún carril—, y por eso su rojo pudo vivir días sin que
+      nadie lo viera. **CERRADO el 2026-09-25, el mismo día**, con `scripts/colas-vivas.mjs` en la
+      cadena (`test:colas-vivas`, self-check 23/23). Lo que faltaba entender para poder cerrarlo:
+      apuntar el alias a la carpeta **no alcanzaba**, porque de los 32 `.md` de
+      `hermes-content/docs/cola/` + éste, **28 salían exit 1 y los 28 con el MISMO único error**,
+      `cola-vacia` — el verificador no distingue un archivo que **no es una cola** (el `README.md`
+      de esa carpeta, `TABLERO.md`, y los 22 borradores de contenido, que no tienen `## Ahora` y
+      nunca lo van a tener) de una cola de verdad **con `## Ahora` vacío**, que es señal real de
+      carril parado. Los trataba igual, así que la carpeta entera daba **rojo de fábrica**, y un
+      rojo de fábrica entrena a saltearlo: por eso el alias había quedado clavado a un solo
+      archivo escrito a mano. El gate nuevo deriva los sujetos **del disco por forma** (es cola lo
+      que tiene `## Ahora`, con el mismo regex que el verificador, así que una cola nueva entra
+      sola), falla por lo que es su asunto —**evidencia falsa**— y deja `cola-vacia` fuera del
+      rojo pero **nombrado** en la salida, porque el carril parado ya tiene su canal en el
+      tablero. Hoy mide **4 colas** —`COLA.md`, `chatbot.md`, `plataforma-v1.md` en verde y
+      `tendencias.md` PARADO— y nombra los 28 excluidos. Validado **mutando el corpus real**, no
+      sólo el self-check: una ruta inventada metida en el `## Ahora` de `chatbot.md` lo puso en
+      exit 1 citando línea y archivo (y se restauró con `cp`, nunca con `git checkout`).
+      ⚠️ **Y destapó un falso verde del verificador**: corrido desde fuera de la raíz del repo
+      imprime `NO MEDIDO:` y sale **exit 0**, o sea que su negativa a medir se lee igual que una
+      cola limpia —probado desde `/tmp` con dos colas que tenían fantasmas plantados: las tres
+      "verdes"—. Un gate que heredara ese 0 sería un falso verde sobre TODAS las colas a la vez,
+      así que `colas-vivas` lo atrapa por su texto y sale **exit 2, NO MEDIDO**, nunca verde.
 
 - [x] 🔴 **CERRADO el 2026-09-19 por `onia-cola`: el universo ahora sale del CRONTAB del VPS,
       que es quien EJECUTA.** Instrumento nuevo `scripts/herramientas-del-cron.mjs` —self-check
