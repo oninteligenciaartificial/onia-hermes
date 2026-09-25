@@ -1,13 +1,15 @@
 {
   "title": "Automatización, AI Agent o loop",
-  "caption": "No todo problema de IA necesita un agente. Elegí la arquitectura por la forma del trabajo:\n\nIF + Google Sheets + Telegram cuando las reglas son fijas.\nAI Agent + OpenAI Chat Model cuando hay que leer lenguaje y clasificar.\nSchedule Trigger + HTTP Request + IF + Wait cuando hay que revisar un estado hasta que termina.\n\nEl criterio no es usar el modelo más nuevo. Es saber cuándo termina el proceso y quién confirma la excepción. Comentá ARQUITECTURA con el proceso que querés ordenar.",
-  "hashtags": ["#n8n", "#agentesia", "#loops", "#automatizacion", "#ia", "#negocios"],
-  "comment_trigger": "Comentá ARQUITECTURA",
-  "cta": "Comentá ARQUITECTURA",
-  "resource": {
-    "title": "Automatización, agente o loop",
-    "url": "https://sergiourcullo.vercel.app/agentes"
-  },
+  "caption": "No todo problema de IA necesita un agente. La pregunta es quién decide el próximo paso:\n\nTus reglas → IF o Switch, con Google Sheets y Telegram.\nLeer y clasificar un mensaje → Basic LLM Chain + OpenAI Chat Model, con Structured Output Parser validando el JSON.\nEl modelo elige entre herramientas (el CRM, documentos, pedir un dato que falta) → AI Agent.\nUn estado que cambia con el tiempo → Schedule Trigger + HTTP Request + IF + Wait.\n\nClasificar un lead no necesita un agente: la ruta ya está definida. Guardalo para tu próximo workflow.",
+  "hashtags": [
+    "#n8n",
+    "#agentesia",
+    "#loops",
+    "#automatizacion",
+    "#ia",
+    "#negocios"
+  ],
+  "cta": "GUARDALO",
   "identity": "Soy Sergio Urcullo. Comparto sistemas de IA que funcionan en negocios reales.",
   "follow_cta": "Seguime para el próximo sistema.",
   "serie": "IA PRÁCTICA",
@@ -28,17 +30,29 @@
       "number": 2,
       "role": "point",
       "pill": "Automatización",
-      "headline": "Usá `IF` cuando las reglas son fijas",
-      "body": "Ejemplo n8n: `Webhook` recibe un lead → `IF` valida `phone` → `Google Sheets / Append Row` registra → `Telegram / Send Message` avisa.",
+      "headline": "Usá IF cuando las reglas son fijas",
+      "body": "Ejemplo n8n: Webhook recibe un lead → IF valida phone → Google Sheets / Append Row registra → Telegram / Send Message avisa.",
       "callout": "Salida predecible",
       "visual": {
         "type": "flow",
         "label": "REGLAS FIJAS",
         "nodes": [
-          {"name": "Webhook", "detail": "recibir"},
-          {"name": "IF", "detail": "validar"},
-          {"name": "Append Row", "detail": "registrar"},
-          {"name": "Send Message", "detail": "avisar"}
+          {
+            "name": "Webhook",
+            "detail": "recibir"
+          },
+          {
+            "name": "IF",
+            "detail": "validar"
+          },
+          {
+            "name": "Append Row",
+            "detail": "registrar"
+          },
+          {
+            "name": "Send Message",
+            "detail": "avisar"
+          }
         ]
       },
       "save_worthy": false,
@@ -47,55 +61,68 @@
     {
       "number": 3,
       "role": "point",
-      "pill": "AI Agent",
-      "headline": "Usá un agente para interpretar lenguaje",
-      "body": "`AI Agent + OpenAI Chat Model` puede clasificar una consulta en `web`, `automatización` u `otro`; devolvé JSON con `categoria`, `urgencia` y `requiere_humano`.",
-      "callout": "La IA clasifica",
+      "pill": "Clasificar",
+      "headline": "Para clasificar, un modelo *sin agente*",
+      "body": "Basic LLM Chain + OpenAI Chat Model devuelve categoria, urgencia y requiere_humano. Structured Output Parser valida el JSON contra un schema: si no cumple, el nodo falla.",
+      "callout": "La ruta ya está definida",
       "visual": {
-        "type": "contract",
-        "label": "SALIDA DEL AGENTE",
-        "input": "mensaje libre",
-        "output": "categoria · urgencia",
-        "permissions": "requiere_humano"
+        "type": "terminal",
+        "label": "salida validada",
+        "lines": [
+          "{",
+          "  \"categoria\": \"automatizacion\",",
+          "  \"urgencia\": \"normal\",",
+          "  \"requiere_humano\": true",
+          "}"
+        ]
       },
       "save_worthy": false,
-      "alt_text": "AI Agent y OpenAI Chat Model clasifican lenguaje"
+      "alt_text": "Basic LLM Chain con Structured Output Parser clasifica un lead sin AI Agent"
     },
     {
       "number": 4,
       "role": "point",
-      "pill": "Control humano",
-      "headline": "El agente no debe decidir todo el proceso",
-      "body": "Después del `AI Agent`, usá `IF` para revisar `requiere_humano = true`. Si es true, `Telegram` avisa; si es false, `Google Sheets` registra.",
-      "callout": "La ruta la controla el workflow",
+      "pill": "AI Agent",
+      "headline": "*AI Agent*: sólo si elige herramientas",
+      "body": "Consultar el CRM, buscar en documentos o pedir un dato que falta. Si la ruta ya está definida, es un workflow con IA, no un agente.",
+      "callout": "Tus reglas o el modelo",
       "visual": {
-        "type": "flow",
-        "label": "CONTROL HUMANO",
-        "nodes": [
-          {"name": "AI Agent", "detail": "clasificar"},
-          {"name": "IF", "detail": "requiere_humano"},
-          {"name": "Telegram", "detail": "escalar"}
-        ],
-        "note": "El agente interpreta; el workflow decide el siguiente paso."
+        "type": "contract",
+        "label": "CONTRATO DEL AGENTE",
+        "input": "pedido abierto",
+        "output": "respuesta + próxima acción",
+        "permissions": "CRM (sólo leer) · documentos · preguntar"
       },
       "save_worthy": false,
-      "alt_text": "IF controla la salida de un AI Agent"
+      "alt_text": "Un AI Agent se usa cuando el modelo tiene que elegir entre herramientas"
     },
     {
       "number": 5,
       "role": "point",
       "pill": "Loop",
       "headline": "Usá un loop cuando el estado cambia",
-      "body": "`Schedule Trigger` inicia → `HTTP Request` consulta una API → `IF` revisa `status = paid` → `Wait` espera 10 minutos → vuelve a consultar.",
+      "body": "Schedule Trigger inicia → HTTP Request consulta una API → IF revisa status = paid → Wait espera 10 minutos → vuelve a consultar.",
       "callout": "Esperar también es lógica",
       "visual": {
         "type": "flow",
         "label": "ESTADO QUE CAMBIA",
         "nodes": [
-          {"name": "Schedule Trigger", "detail": "iniciar"},
-          {"name": "HTTP Request", "detail": "consultar"},
-          {"name": "IF", "detail": "status = paid"},
-          {"name": "Wait", "detail": "10 minutos"}
+          {
+            "name": "Schedule Trigger",
+            "detail": "iniciar"
+          },
+          {
+            "name": "HTTP Request",
+            "detail": "consultar"
+          },
+          {
+            "name": "IF",
+            "detail": "status = paid"
+          },
+          {
+            "name": "Wait",
+            "detail": "10 minutos"
+          }
         ],
         "note": "El último paso vuelve al segundo: eso es un loop."
       },
@@ -106,31 +133,45 @@
       "number": 6,
       "role": "save",
       "pill": "Matriz guardable",
-      "headline": "Elegí con esta regla de tres líneas",
-      "body": "Reglas fijas → `IF`. Lenguaje ambiguo → `AI Agent`. Revisión repetida → `Schedule Trigger + HTTP Request + IF + Wait`.",
+      "headline": "¿Quién decide el *próximo paso*?",
+      "body": "Tus reglas → IF o Switch. Leer y clasificar → Basic LLM Chain. El modelo elige herramientas → AI Agent. Un estado que cambia → loop con Wait.",
       "callout": "Guardá esto ↗",
       "visual": {
         "type": "matrix",
         "label": "MATRIZ DE ELECCIÓN",
         "items": [
-          {"title": "IF", "body": "reglas fijas"},
-          {"title": "AI Agent", "body": "lenguaje ambiguo"},
-          {"title": "Loop", "body": "estado que cambia"}
+          {
+            "title": "IF / Switch",
+            "body": "tus reglas deciden"
+          },
+          {
+            "title": "Basic LLM Chain",
+            "body": "leer y clasificar"
+          },
+          {
+            "title": "AI Agent",
+            "body": "elegir herramientas"
+          },
+          {
+            "title": "Loop",
+            "body": "estado que cambia"
+          }
         ]
       },
       "save_worthy": true,
-      "alt_text": "Matriz para elegir automatización AI Agent o loop"
+      "alt_text": "Matriz para elegir IF, Basic LLM Chain, AI Agent o loop"
     },
     {
       "number": 7,
       "role": "cta",
       "pill": "Aplicalo a tu negocio",
       "headline": "La arquitectura correcta importa más",
-      "body": "Comentá *ARQUITECTURA* y escribí qué proceso querés ordenar.",
+      "body": "Antes de sumar un agente, preguntate quién decide el próximo paso. Guardá la matriz para tu próximo workflow.",
       "callout": "",
       "save_worthy": false,
-      "alt_text": "Comentá ARQUITECTURA para elegir una arquitectura"
+      "alt_text": "Guardá la matriz antes de armar tu próximo workflow"
     }
   ],
-  "job": "education"
+  "job": "education",
+  "correccion": "25-sep-2026: láminas 3, 4 y 6 alineadas con el G2 del 22-sep (docs/cola/GUIONES-DIA-2026-09-22.md, Guion 2). Sin palabra clave: /agentes daba 404 en producción. Sin backticks: el pack los imprime literales."
 }

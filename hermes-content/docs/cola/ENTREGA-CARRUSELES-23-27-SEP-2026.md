@@ -6,6 +6,10 @@
 >   subir el zip nuevo.
 > - 🧊 **Domingo 27: no sale.** El carrusel del laboratorio de Santa Cruz anuncia el piloto
 >   presencial, congelado el 25-sep. Su zip se renombró a `…-CONGELADO.zip`.
+> - ⚠️ **Medido el 25-sep en producción:** las páginas de recurso `/automatizar` (MAPA),
+>   `/agentes` (ARQUITECTURA) y `/mcp` (MCP) de `sergiourcullo.vercel.app` dan **404**, aunque
+>   `/stack` responde 200. Se escribieron el 21-sep y nunca se desplegaron. Si ya salió un
+>   carrusel con MAPA o MCP, esos comentarios se contestan a mano y sin link hasta desplegarlas.
 
 Todos están renderizados en 1080 × 1350, incluyen caption, CTA de comentario y una
 respuesta manual que sí existe. El carrusel reemplaza el B-roll del Feed; no se suma como
@@ -14,9 +18,9 @@ una cuarta pieza.
 | Día | Carrusel | Palabra | Resultado que se entrega |
 |---|---|---|---|
 | Miércoles 23 | Opus 5.5: costo y migración | `OPUS` | calculadora, tabla A/B y checklist |
-| Jueves 24 | Antes de usar n8n, elegí qué automatizar | `MAPA` | arquitectura entrada–regla–salida |
+| Jueves 24 | Antes de usar n8n, elegí qué automatizar | `MAPA` ⚠️ `/automatizar` da 404 | arquitectura entrada–regla–salida |
 | Viernes 25 | Seis columnas antes de automatizar | `PROCESO` | tabla vacía y test de cinco ejecuciones |
-| Sábado 26 | Automatización, AI Agent o loop | `ARQUITECTURA` | matriz para elegir arquitectura |
+| Sábado 26 | Automatización, AI Agent o loop · **corregido el 25-sep** | — (sin palabra: `/agentes` da 404) | matriz de cuatro filas, para guardar |
 | Domingo 27 | 🧊 **No sale** (congelado). Era: Laboratorio de IA en Santa Cruz | `SANTA CRUZ` | agenda y formulario fundador |
 
 ## Archivos para subir

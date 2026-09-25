@@ -1266,20 +1266,27 @@ ${last ? '' : `.cue{position:absolute;right:46px;bottom:300px;z-index:3;font-siz
 </div></body></html>`;
 }
 
+// La cuenta personal no publica palabras vacías: si el cierre pide comentar una palabra,
+// esa palabra lleva a un recurso, y el final siempre identifica a Sergio. Así el CTA es
+// una puerta útil, no un truco para inflar comentarios.
+// La palabra NO es obligatoria: el 25-sep las tres páginas de recurso de la semana
+// (/automatizar, /agentes, /mcp) daban 404 en producción, y un «Guardalo» honesto le
+// gana a una palabra que promete algo que no existe. Que la URL responda se verifica
+// antes de publicar: el render no sale a la red.
+function faltantesCtaSergio(brief) {
+  const resource = brief.resource || {};
+  return [
+    brief.comment_trigger && !resource.title && 'resource.title',
+    brief.comment_trigger && !resource.url && 'resource.url',
+    !brief.identity && 'identity',
+    !brief.follow_cta && 'follow_cta',
+  ].filter(Boolean);
+}
+
 function render(args) {
   const brief = JSON.parse(fs.readFileSync(args.brief, 'utf8'));
-  // La cuenta personal no publica palabras vacías: una palabra debe llevar a un
-  // recurso que ya existe y el final tiene que identificar a Sergio. Así el CTA
-  // es una puerta útil, no un truco para inflar comentarios.
   if (args.account === 'sergio' && args.pack === 'community-editorial') {
-    const resource = brief.resource || {};
-    const missing = [
-      !brief.comment_trigger && 'comment_trigger',
-      !resource.title && 'resource.title',
-      !resource.url && 'resource.url',
-      !brief.identity && 'identity',
-      !brief.follow_cta && 'follow_cta',
-    ].filter(Boolean);
+    const missing = faltantesCtaSergio(brief);
     if (missing.length) throw new Error(`Sergio community-editorial requiere CTA útil: falta ${missing.join(', ')}`);
   }
   const slides = (brief.slides || []).map((sl) => (
@@ -1363,6 +1370,6 @@ if (require.main === module) {
 module.exports = {
   slideHtml, communityEditorialHtml, darkProductHtml, darkNeonHtml, editorialPhotoHtml, editorialCleanHtml, brightRetailHtml,
   papelSubrayadoHtml, datoIlustradoHtml, tarjetaEmpleadoHtml, bloqueSolidoHtml,
-  emph, roleFor, ACCOUNTS, BRANDS, PACKS, FORMATS,
+  emph, roleFor, ACCOUNTS, BRANDS, PACKS, FORMATS, faltantesCtaSergio,
   setFormat: (name) => { if (!FORMATS[name]) throw new Error('Unknown format: ' + name); FMT = FORMATS[name]; },
 };

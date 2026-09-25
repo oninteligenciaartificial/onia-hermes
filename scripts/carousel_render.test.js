@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /* Tests for the carousel render engine. Run: node scripts/carousel_render.test.js */
 const assert = require('node:assert');
-const { roleFor, slideHtml, communityEditorialHtml, darkProductHtml, darkNeonHtml, editorialPhotoHtml, editorialCleanHtml, brightRetailHtml, bloqueSolidoHtml, emph, ACCOUNTS, BRANDS, PACKS, FORMATS, setFormat } = require('./carousel_render');
+const { roleFor, slideHtml, communityEditorialHtml, darkProductHtml, darkNeonHtml, editorialPhotoHtml, editorialCleanHtml, brightRetailHtml, bloqueSolidoHtml, emph, ACCOUNTS, BRANDS, PACKS, FORMATS, setFormat, faltantesCtaSergio } = require('./carousel_render');
 
 let passed = 0;
 function test(name, fn) {
@@ -345,4 +345,15 @@ test('cierre editorial sin recurso ni firma en el brief no los inventa', () => {
   const onia = communityEditorialHtml({ role: 'cta', headline: 'Probá ONIA', cta: 'CREÁ TU CUENTA' }, 0, 1, 'onia', {});
   assert.ok(!onia.includes('Soy Sergio Urcullo'));
   assert.ok(!onia.includes('RECURSO'));
+});
+
+test('CTA de Sergio: la palabra exige recurso, pero no es obligatoria', () => {
+  const firma = { identity: 'Soy Sergio Urcullo.', follow_cta: 'Seguime.' };
+  // «Guardalo» sin palabra: vale, siempre que firme.
+  assert.deepStrictEqual(faltantesCtaSergio({ cta: 'GUARDALO', ...firma }), []);
+  // Una palabra sin recurso es una promesa vacía.
+  assert.deepStrictEqual(faltantesCtaSergio({ comment_trigger: 'Comentá MAPA', ...firma }), ['resource.title', 'resource.url']);
+  assert.deepStrictEqual(faltantesCtaSergio({ comment_trigger: 'Comentá MAPA', resource: { title: 'T', url: 'https://x' }, ...firma }), []);
+  // Sin firma no sale, con o sin palabra.
+  assert.deepStrictEqual(faltantesCtaSergio({ cta: 'GUARDALO' }), ['identity', 'follow_cta']);
 });
