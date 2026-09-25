@@ -5772,6 +5772,37 @@ y sin operar. Acá se opera, con verificación por ítem.
       Medido el 2026-09-06 10:35 UTC por `onia-cola`: **tres** destinos con pedido en `blocked`,
       uno por destino, y **ninguno contestado**.
 
+      ⚠️ **Hoy es UNO, no tres — medido el 2026-09-25 06:52-07:05 La Paz por `chatbot-cola`, y
+      la afirmación de arriba llevaba 19 días vencida.** Corridos los tres comandos de la tabla:
+      `landing` → *"YA ESTA PUBLICADO — el sitio vivo sirve todo lo que main tiene"*;
+      `plataforma` → *"YA ESTA PUBLICADO — producción corre `e65ab6ee` y nada posterior cambia lo
+      que el cliente ve"*; `bot` → **38 archivos** (`CAMBIA knowledge.onia.json`). Y derivados los
+      pedidos vivos del CUERPO de las tareas `blocked`, queda **uno solo**: `t_24fa76aa`
+      (`DESPLEGAR: bot`), que es el mismo bloqueo que la cola hermana lleva como **S18**. O sea
+      que las otras dos firmas **ya no publican nada**, y este ítem las seguía pidiendo: es
+      exactamente el *«dice pendiente sobre lo resuelto»* que el propio ítem describe dos
+      párrafos abajo, repetido — porque **la cifra se sacó de la tabla pero la frase «tres
+      destinos» quedó**, y una cifra escrita en prosa se pudre igual que una en una columna.
+
+      🔴 **Y por qué sobrevivió 19 días: este ítem no tiene verificador mecánico** — `npm run
+      bloqueos:vencidos` sale `NO MEDIDO` sobre esta cola (*"no tiene una tabla «Bloqueado en
+      Sergio» que leer"*: acá los bloqueos son una lista de ítems, no una tabla). La cola hermana
+      ya probó cuatro veces que ésas son las filas que se mueren de viejas —S10, S11, S12 y S13
+      esperaron hasta 23 días con la decisión ya tomada y las cuatro se cerraron solas el día que
+      se les cableó uno. **Verificador de este ítem, y ya existe: `npm run pedido:entregado`**
+      (dice pendiente sobre lo resuelto) junto a `npm run deploy:sin-pedido` (lo contrario).
+      ⚠️ **No se escribe un gate nuevo para esto**: el 2026-09-25 se empezó a escribir uno y se
+      descartó al medir que duplicaba a esos dos. Un cuarto instrumento del mismo tema es la
+      segunda fuente de verdad que `CLAUDE.md` prohíbe.
+
+      ⚠️ **Y el id de un pedido NO se copia de acá, se deriva** — el `t_d246cfa7` que este carril
+      había derivado a mano 20 minutos antes ya estaba **`archived`** cuando se lo fue a citar
+      (`onia-cola` rehízo el pedido y archivó el viejo, que es el método correcto). Un `ok` sobre
+      una tarea archivada sale **3** y no publica nada sin decir por qué. Se deriva con el CUERPO,
+      nunca con los comentarios: un `grep DESPLEGAR:` sobre la salida entera de
+      `onia-tablero.sh show` dio un falso positivo (`t_6bf938b7`, que es una aprobación visual de
+      una tarjeta), y el brazo ejecutor contestado en seco dijo `{"publicable":false}`.
+
       | destino | cuánto falta por publicar — se DERIVA, no se copia |
       |---|---|
       | `landing` (`onia.com.bo`) | `bash /opt/onia-landing/_deploy/publicar.sh --dry-run` |
