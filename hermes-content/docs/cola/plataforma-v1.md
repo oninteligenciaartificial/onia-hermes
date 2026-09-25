@@ -142,12 +142,34 @@ trabaría el merge de todos los carriles.
         cobra el producto, y los 4 planes comprables coinciden en ciclos y nombre en las dos
         pantallas de la compra.
 
-      **Lo que queda de este ítem** (trabajo, ya no firma): (a) la otra mitad de la auditoría
-      —*"cibersecurity, fallos de estructura de la web, información mal colocada, docs viejos,
-      política de privacidad"*— sobre `web-factory/apps/onia-platform/src/`, que es **zona de
-      `web-venta`**: los hallazgos van a su tablero, no se editan desde acá; (b) probar un video
-      HyperFrames como pieza del bloque chatbot (*"puedes generar videos con hyperframes
-      también, intentá"*) — la conversación CSS se eligió primero porque pesa cero.
+      **La otra mitad de la auditoría también está HECHA — 2026-09-25, `chatbot-cola`.** Era
+      *"cibersecurity, fallos de estructura de la web, información mal colocada, docs viejos,
+      política de privacidad"* sobre `web-factory/apps/onia-platform/src/`. Salió **un solo
+      hallazgo**, y está en el tablero de `web-venta` (`t_8a65ef80`), que es de quien es esa
+      carpeta:
+      - 🔴 **`onia.com.bo` es la única de las dos superficies vivas sin CSP.** `curl -sI`
+        contra el dominio: la landing trae 5 headers (HSTS, `nosniff`, `X-Frame-Options: DENY`,
+        `Referrer-Policy`, `Permissions-Policy`) y **no** `content-security-policy`;
+        `app.onia.com.bo/login` trae esos 5 **y** la CSP. `next.config.ts:54-60` deja la ausencia
+        escrita a propósito —*"una CSP escrita a ciegas rompe el sitio en silencio"*, por los dos
+        scripts inline y el SDK de Chatwoot—. **Ese motivo ya venció:** la hermana corre en
+        producción una CSP que resuelve exactamente eso (`script-src` con `'unsafe-inline'`,
+        `connect-src` con la lista de terceros), así que hay de dónde partir y ya no se escribe a
+        ciegas.
+      - **El resto salió limpio, y no hizo falta un barrido nuevo porque ya está cableado:**
+        `npx vitest run 'src/app/(sitio)'` → **49 archivos, 784 verdes / 1 skip condicional**,
+        que es lo que cubre estructura, enlaces internos, información mal colocada, precios vivos
+        y —en `plazo-que-vence.test.ts`— el **tiempo verbal** del plazo fiscal, el defecto que
+        nace solo el 1 de octubre y que ningún `curl` ni captura puede ver hoy.
+      - **Política de privacidad**, leída servida y no en el repo: v1.1 del 11-sep-2026,
+        coherente con el producto (VPS propio con Supabase auto-hospedado, RLS, subprocesadores
+        nombrados) y honesta sobre el marco boliviano (§9.3: no hay ley integral, rige la CPE).
+
+      **Lo único que queda de este ítem** (trabajo, ya no firma): probar un video HyperFrames
+      como pieza del bloque chatbot (*"puedes generar videos con hyperframes también, intentá"*)
+      — la conversación CSS se eligió primero porque pesa cero. Es la pieza que un cliente ve en
+      la portada, así que **construirla y publicarla son dos permisos distintos**: se muestra
+      renderizada y se espera el OK sobre ESA pieza.
 
 - [x] 🟡 **HECHO el 2026-09-24 en el carril `chatbot` (commiteado, NO publicado) — el detalle,
       los gates y lo que falta viven en `hermes-content/docs/cola/chatbot.md`, "Ahora".**
