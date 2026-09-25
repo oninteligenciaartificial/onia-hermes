@@ -729,6 +729,75 @@ abrirlas y decidir a qué deploy se refieren. Se derivan con el comando, nunca d
 
 ## Ahora
 
+- [x] 🔴 **CERRADO el 2026-09-25 22:30-23:10 La Paz (commiteado, **NO desplegado**): el bot le
+      prometía al lead una duración de reunión **distinta de la que reserva**, y las dos salían en
+      EL MISMO mensaje. Medido contra el bot desplegado: `30` y `45` minutos juntos.**
+
+      **Cómo se encontró** (escalón 2, auditar los `[x]`: las dos colas tenían «Ahora» sin ítems
+      abiertos y los dos de «Después» siguen diferidos a propósito). Se auditó el `[x]` del deploy
+      de hoy promesa por promesa — el método que funcionó la vuelta pasada — empezando por la
+      número 1, *«los 4 enlaces de WhatsApp de onia.com.bo; hoy quien hace clic recibe el saludo
+      genérico»*. Para eso hubo que preguntarle al motor vivo, no al archivo:
+
+          docker exec -w /tmp/onia-bot onia-center node /tmp/probe-campanas.mjs 5
+          → inbox 5 — campanas en el config VIVO: 9 · VEREDICTO: 9/9 campanas vivas
+
+      ✅ **Esa promesa se cumplió: las 9 campañas están VIVAS.** El párrafo de los ítems de abajo
+      que dice que «sigue siendo cierto» que quien hace clic recibe el saludo genérico es HISTORIA
+      desde el deploy de hoy — leído como presente manda a re-arreglar algo que ya anda. El archivo
+      instalado (`/tmp/onia-bot/knowledge.json`, que es el `knowledge.onia.json` del repo) trae
+      `campanas: 9`, la fila del panel sigue sin la clave (`select (data ? 'campanas')` → `f`) y
+      `mergePanelKnowledge` la deja vivir.
+
+      ⚠️ **Y al mirar las respuestas vivas apareció el defecto.** Las campañas 7 y 8 son las que la
+      página `/contacto` enlaza por `wa.me`, y sus textos prometían **20** y **45** minutos. El
+      motor reserva `config.demo.duracionMinutos` = **30** (`CALCOM_BOT_DURATION_MINUTES` está
+      VACÍA en el proceso vivo, así que gana el código). Medido con los slots del proceso vivo:
+
+          >>> minutos prometidos EN EL MISMO MENSAJE: ["30","45"]
+
+          "Te muestro cómo quedaría en TU negocio en 30 minutos por videollamada…"  (M0)
+          "La demo de 45 minutos la hace Sergio sobre TU caso…"                     (campanas[7])
+
+      **Es el bug de agosto entrando por otra puerta, y su invariante no lo veía.** El bloque `DEMO`
+      de `config.mjs` cuenta que durante meses el guion prometía 15 y la reserva bloqueaba 45 — «el
+      prospecto aceptaba creyendo una cosa y su invitación le decía otra» — y se blindó con
+      `demoDuration`, que compara `duracionFrase` contra `duracionMinutos`. Dos campos. El bot dice
+      la duración en más lugares que esos dos, y el texto de campaña es uno.
+
+      **El arreglo, y por qué es un gate y no una regla del validador.** Las dos respuestas dejan de
+      nombrar la duración: queda en UN solo lugar (`{{demo_duracion}}` en M0, que sale del mismo
+      número que se reserva). El gate nuevo
+      —`una-sola-duracion-en-lo-que-el-bot-dice.test.mjs`— **deriva** los sujetos recorriendo
+      `DEFAULT_CONFIG` y el documento entero, así que una campaña nueva o una FAQ del panel quedan
+      cubiertas sin tocar el gate. `validateKnowledge` NO se tocó a propósito: rechaza el documento
+      ENTERO, y un número mal tipeado convertiría las nueve campañas en silencio — el lead volvería
+      al saludo genérico, que es justo lo que las campañas vinieron a tapar.
+      **Exención única, con su motivo:** `campanas[].frase` es el texto que escribe EL LEAD (copia
+      exacta del `wa.me?text=` de la web, y `campanaExacta` compara la frase entera). Tocarlo acá
+      rompe el match; el número mal está en la WEB y se arregla allá.
+
+      **Rojo antes del arreglo, por el motivo correcto:** el gate nombró las 3 menciones ofensoras
+      (`doc.campanas[6].respuesta` ×2 con 20, `doc.campanas[7].respuesta` con 45) contra los 30 que
+      se reservan. Verde después: 4/4 casos, con caso ANCLA (si el recorredor se rompe encuentra
+      cero menciones y pasaría en verde sin mirar nada) y self-check por mutación en las tres
+      puertas: respuesta de campaña, FAQ editable y rango («15-20 minutos» se juzga por el último
+      número, igual que `demoDuration`).
+
+      ⚠️ **Lo que NO arregla este carril: la web.** `web-factory/apps/onia-platform/src/lib/site.ts`
+      (líneas 132 y 136) vende una *«consulta comercial de 20 minutos»* y una *«demo de 45
+      minutos»*, y las dos están vivas en `/contacto` (`page.tsx` las importa). Con este arreglo el
+      bot ya no confirma el número equivocado, pero la web sigue ofreciendo dos duraciones que el
+      producto no reserva. Es del carril **web-venta** y quedó en el tablero con la reproducción y
+      las dos salidas cotizadas: **`t_87226519`**. ⚠️ Si alguna vez cambian esas frases, hay que
+      cambiar `campanas[6].frase` y `campanas[7].frase` en el MISMO merge: `campanaExacta` compara
+      la frase ENTERA y `campanas-web.test.mjs` cruza los dos lados.
+
+      🔴 **NO desplegado, y esta vez el freno es conocido:** `knowledge.onia.json` está en
+      `FIRMA_HUMANA` (`scripts/loops/extras/publicar-solo.sh`), así que el deploy del bot deja de
+      ser automático y se destraba con UNA tarea del tablero cuyo cuerpo diga `DESPLEGAR: bot` y el
+      `ok` de Sergio Urcullo. Hasta entonces el lead que clickea sigue leyendo los 45 minutos.
+
 - [x] 🔴 **CERRADO el 2026-09-25 18:13-19:00 La Paz (commiteado en `5c2af97a`, NO desplegado):
       cinco handoffs de desconocidos reales quedaron mudos PARA SIEMPRE, y los cinco eran los que
       llevaban más tiempo esperando.**
