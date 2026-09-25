@@ -244,6 +244,83 @@ export function idsDuplicados(filas) {
   return motivos;
 }
 
+const MESES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+const FECHA_CORTA = /\b(\d{1,2})[-\s]?(ene|feb|mar|abr|may|jun|jul|ago|sep|oct|nov|dic)\b/gi;
+const RELATIVO = /\b(HOY|MAÑANA|MANANA|en \d+ d[ií]as?)\b/i;
+// Verbos que cuentan la fecha como algo que YA ocurrio. Acentuados y sin acentuar: los titulos se
+// escriben desde tres maquinas y una no siempre los pone.
+// SIN `\b` de cierre a proposito: en JS `\b` mira [A-Za-z0-9_], asi que despues de una `ó` NO hay
+// limite de palabra y `/venci[óo]\b/` no matchea «Venció» — el bug que dejo pasar el falso
+// positivo la primera vez que se corrio esto en vivo.
+const NARRA_PASADO = /\b(venci[óo]|vencido|pas[óo]|paso el|se venci[óo]|expir[óo])/i;
+
+/**
+ * ¿El TITULO de una tarea bloqueada afirma un plazo que ya pasó?
+ *
+ * Por qué el titulo y no el cuerpo: el parte diario de las 09:00 arma la hoja de decisiones de
+ * Sergio Urcullo con el TITULO truncado a 72 (`onia-parte-diario.sh`), asi que es lo unico que el
+ * lee en el telefono. Un comentario aclaratorio adentro no lo alcanza — eso ya se midio el
+ * 2026-09-25 con el T-plata, y se volvio a medir el mismo dia con `t_539598e3`: su titulo decia
+ * «🔴 HOY vence el VPS (24-sep)» y le seguia llegando en rojo el 25-sep, con el VPS vivo y 32 dias
+ * de uptime. Un rojo que miente no es ruido neutro: TAPA a los que no mienten, y ese dia competia
+ * con el unico plazo real que quedaba (la tarjeta de Meta antes del 1-oct).
+ *
+ * Dos formas de caducar, y se distinguen porque se arreglan distinto:
+ *  - `vencido`: el titulo nombra una fecha ABSOLUTA («24-sep») que ya pasó. Se re-mide y se
+ *    reemplaza la tarea.
+ *  - `relativo`: el titulo dice «HOY» / «en 6 dias» y fue escrito OTRO dia. La palabra era cierta
+ *    cuando se escribio y hoy miente sola, sin que nadie la toque. Se reescribe con fecha absoluta.
+ *
+ * No adivina el año: interpreta la fecha en el año de `hoy`, y si eso la deja a mas de 180 dias en
+ * el pasado asume que es del año que viene (un «3-ene» leido en diciembre es futuro, no un vencido).
+ *
+ * @returns {{tipo:'vencido'|'relativo', detalle:string}|null} `null` = el titulo no promete plazo.
+ */
+export function plazoVencidoEnTitulo(titulo, { hoy, creado } = {}) {
+  const texto = String(titulo || '');
+  const ahora = hoy instanceof Date ? hoy : new Date();
+  const dia = (d) => Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate());
+  const hoyDia = dia(ahora);
+
+  // 0. Un titulo que NARRA la fecha en pasado no esta pidiendo nada para esa fecha — es el estado
+  //    ya medido, o sea la forma CORRECTA de reescribir un vencido. Marcarlo seria marcar la cura.
+  if (NARRA_PASADO.test(texto)) return null;
+
+  // 1. Fecha absoluta. Se recorren TODAS y gana la mas tardia: un titulo que nombra dos fechas
+  //    («vence el 24-sep, cortan el 30-sep») sigue vivo mientras la ultima no haya pasado.
+  let masTardia = null;
+  for (const m of texto.matchAll(FECHA_CORTA)) {
+    const d = Number(m[1]);
+    const mes = MESES.indexOf(m[2].toLowerCase());
+    if (mes < 0 || d < 1 || d > 31) continue;
+    let cuando = Date.UTC(ahora.getUTCFullYear(), mes, d);
+    // A mas de 180 dias en el pasado se asume el año siguiente (ver el comentario de arriba).
+    if (hoyDia - cuando > 180 * 86400000) cuando = Date.UTC(ahora.getUTCFullYear() + 1, mes, d);
+    if (masTardia === null || cuando > masTardia) masTardia = cuando;
+  }
+  if (masTardia !== null) {
+    if (masTardia >= hoyDia) return null;
+    const dias = Math.round((hoyDia - masTardia) / 86400000);
+    const etiqueta = `${new Date(masTardia).getUTCDate()}-${MESES[new Date(masTardia).getUTCMonth()]}`;
+    return {
+      tipo: 'vencido',
+      detalle: `el titulo afirma ${etiqueta} y ya pasaron ${dias} dia(s). Re-medi el estado real y reemplaza la tarea: el parte lee el TITULO, un comentario adentro no lo alcanza`,
+    };
+  }
+
+  // 2. Relativo congelado. Solo se puede juzgar sabiendo QUE DIA se escribio; sin `creado` no se
+  //    inventa un veredicto — un gate que adivina es peor que uno que se calla.
+  const rel = texto.match(RELATIVO);
+  if (rel && creado instanceof Date && dia(creado) !== hoyDia) {
+    const dias = Math.round((hoyDia - dia(creado)) / 86400000);
+    return {
+      tipo: 'relativo',
+      detalle: `el titulo dice «${rel[1]}» y se escribio hace ${dias} dia(s): era cierto ese dia y hoy miente solo. Reescribilo con la fecha absoluta`,
+    };
+  }
+  return null;
+}
+
 if (process.argv.includes('--self-check')) {
   // Contados por el script, no escritos a mano: un conteo hardcodeado deja de coincidir en
   // cuanto se agrega un caso, y un gate que miente en su propio numero ya no es un gate.
@@ -382,13 +459,100 @@ if (process.argv.includes('--self-check')) {
     'dos filas cerradas con el mismo id tampoco: nadie les tipea un ok',
   );
 
+  // --- Plazo caduco en el TITULO de una tarea del tablero (el canal que si le llega a Sergio).
+  const HOY = new Date('2026-09-25T12:00:00Z');
+  const pv = (titulo, creado) => plazoVencidoEnTitulo(titulo, { hoy: HOY, creado: creado ? new Date(creado) : undefined });
+
+  // El caso real que lo origino, tal cual estaba escrito.
+  const vps = pv('🔴 HOY vence el VPS (24-sep): renovalo o se apaga TODO', '2026-09-24T12:00:00Z');
+  afirmar(vps !== null, 'un titulo con una fecha ya pasada NO pasa callado');
+  afirmar(vps?.tipo === 'vencido', 'la fecha absoluta vencida se llama `vencido`, que se arregla re-midiendo');
+  afirmar(/24-sep/.test(vps?.detalle || ''), 'el detalle nombra la fecha que caduco, para no tener que abrir la tarea');
+
+  // El hermano vigente el mismo dia: no se toca. Un gate que tambien marca lo vivo apaga el canal
+  // que vino a limpiar — y este es justo el plazo real que el rojo falso estaba tapando.
+  afirmar(pv('🔴 Cargá la tarjeta en Meta antes del 1-oct', '2026-09-25T12:00:00Z') === null,
+    'una fecha que TODAVIA no llego no es un vencimiento');
+
+  // Relativo congelado: era cierto el dia que se escribio y miente solo al dia siguiente.
+  const rel = pv('Contestar hoy a los leads en silencio', '2026-09-20T12:00:00Z');
+  afirmar(rel?.tipo === 'relativo', 'un «hoy» escrito otro dia se marca relativo, no vencido');
+  afirmar(pv('Contestar hoy a los leads en silencio', '2026-09-25T09:00:00Z') === null,
+    'un «hoy» escrito HOY todavia es cierto: no se molesta a nadie');
+  afirmar(pv('Cargá la tarjeta en Meta en 6 días', '2026-09-20T12:00:00Z')?.tipo === 'relativo',
+    '«en N dias» tambien caduca solo — el numero no se recalcula con el tiempo');
+
+  // PASADO != PLAZO. Encontrado corriendo el gate en vivo el 2026-09-25: marco `vencido` la tarea
+  // de reemplazo que acababa de escribirse BIEN («¿Renovaste el VPS? Venció el 24-sep y sigue
+  // vivo»). Ese titulo no promete un plazo: reporta un hecho ya medido, que es exactamente la
+  // forma correcta de reescribir un vencido. Un gate que marca su propia cura se apaga por ruido
+  // en dos vueltas. El self-check no lo vio: hizo falta correrlo contra el tablero de verdad.
+  afirmar(pv('¿Renovaste el VPS? Venció el 24-sep y sigue vivo — decime ok y lo cierro', '2026-09-25T12:00:00Z') === null,
+    'un titulo que NARRA la fecha en pasado no esta pidiendo algo para esa fecha');
+  afirmar(pv('Ya pasó el 24-sep sin cortes: confirmá y cierro', '2026-09-25T12:00:00Z') === null,
+    '«ya paso el X» tampoco es un plazo pendiente');
+  afirmar(pv('🔴 HOY vence el VPS (24-sep): renovalo', '2026-09-24T12:00:00Z')?.tipo === 'vencido',
+    'el presente («vence el X») sigue siendo un plazo: la cura no puede tapar el caso original');
+
+  // Sin plazo: la enorme mayoria de las tareas. Falso positivo aca = gate apagado por ruido.
+  afirmar(pv('Elegí A o B: cómo se nota qué botón apretar', '2026-09-01T12:00:00Z') === null,
+    'un titulo sin plazo no inventa uno');
+  // Fin de año: `3-ene` leido en diciembre es futuro. Sin esto el gate marcaria vencido todo
+  // enero cada diciembre, que es como un gate se gana que lo ignoren.
+  afirmar(plazoVencidoEnTitulo('Pagar el 3-ene', { hoy: new Date('2026-12-20T12:00:00Z') }) === null,
+    'una fecha de enero leida en diciembre es del año que viene, no un vencido');
+
   if (!process.exitCode) console.log(`self-check: ok — ${casos} casos`);
   process.exit(process.exitCode || 0);
 }
 
+// --- Modo tablero: las tareas `blocked` cuyo TITULO promete un plazo que ya caduco.
+// Va aparte de las colas .md a proposito: una cola es trabajo del carril, y el tablero es el canal
+// por donde el parte diario le habla a Sergio Urcullo. Este modo mide el SEGUNDO, que es el que
+// llega. Tri-estado: exit 2 = no se pudo preguntar (nunca se confunde con «esta limpio»).
+if (process.argv.includes('--tablero')) {
+  const bin = process.env.ONIA_TABLERO_BIN || '/root/bin/onia-tablero.sh';
+  if (!existsSync(bin)) {
+    console.error(`NO MEDIDO — no existe ${bin}. El tablero vive en la maquina de los loops; desde otra no se puede preguntar.`);
+    process.exit(2);
+  }
+  let tareas;
+  try {
+    const salida = execFileSync(bin, ['list', '--status', 'blocked', '--json'], {
+      encoding: 'utf8', timeout: TIMEOUT_MS, stdio: ['ignore', 'pipe', 'pipe'],
+    });
+    tareas = JSON.parse(salida);
+    if (!Array.isArray(tareas)) throw new Error('la salida no es una lista de tareas');
+  } catch (e) {
+    console.error(`NO MEDIDO — ${bin} no contesto una lista de tareas: ${e.message}`);
+    process.exit(2);
+  }
+
+  const hoy = new Date();
+  const caducos = [];
+  for (const t of tareas) {
+    const v = plazoVencidoEnTitulo(t?.title, {
+      hoy,
+      creado: t?.created_at ? new Date(typeof t.created_at === 'number' ? t.created_at * 1000 : t.created_at) : undefined,
+    });
+    if (v) caducos.push({ id: t.id, titulo: t.title, ...v });
+  }
+
+  if (caducos.length === 0) {
+    console.log(`tablero: ${tareas.length} tarea(s) bloqueada(s), ninguna promete un plazo caduco`);
+    process.exit(0);
+  }
+  console.error(`tablero: ${caducos.length} de ${tareas.length} tarea(s) bloqueada(s) le piden a Sergio Urcullo algo con un plazo que ya caduco:\n`);
+  for (const c of caducos) {
+    console.error(`  [${c.tipo}] ${c.id} — ${c.titulo}`);
+    console.error(`      ${c.detalle}\n`);
+  }
+  process.exit(1);
+}
+
 const ruta = process.argv[2];
 if (!ruta) {
-  console.error('uso: node scripts/bloqueos_vencidos.mjs <cola.md> | --self-check');
+  console.error('uso: node scripts/bloqueos_vencidos.mjs <cola.md> | --tablero | --self-check');
   process.exit(2);
 }
 
