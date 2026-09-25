@@ -95,9 +95,11 @@ trabaría el merge de todos los carriles.
 
 ## Ahora
 
-- [ ] 🟡 **PORTADA reordenada por el veredicto de Sergio Urcullo (11-sep) — YA ESTÁ PUBLICADA.
-      Lo que falta es el resto de la auditoría que él puso como CONDICIÓN para publicarla, y
-      que el deploy se saltó.** Sus palabras del 11-sep: *"esto no vende nada… coloca algo que
+- [x] 🟡 **CERRADO el 2026-09-25 12:43-13:15 La Paz (commiteado `89b8ffb8`; es una pieza de
+      material, no toca el producto y no necesita deploy) — PORTADA reordenada por el veredicto
+      de Sergio Urcullo (11-sep), YA PUBLICADA; la auditoría que él puso como condición quedó
+      hecha entera, y la última pata —el video— existe, está medida y está en sus manos
+      (tarea `t_e0ece16f`, entregada por Telegram, `message_id=6871`).** Sus palabras del 11-sep: *"esto no vende nada… coloca algo que
       impacte que se vea más el sistema, y el tema de los chatbots es principal, que sea más
       protagonista, está al final eso, quita esas cajitas que son solo texto… el inicio me
       gustaba más así como estaba puro texto estilo hostinger… que sea lo principal llevarlos a
@@ -218,16 +220,41 @@ trabaría el merge de todos los carriles.
          miente: la línea de `configuration` no nombra los encoders; se pregunta con
          `ffmpeg -encoders`, no con `-version`).
 
-      **Lo que queda, en orden, y entra en una vuelta:** renderizar con
-      `npx hyperframes render . -q draft` dentro de ese proyecto, **medir peso y duración reales**
-      del archivo que salga y compararlos contra los ~804 KB de arriba, MIRAR un frame, y recién
-      entonces mostrárselo a Sergio Urcullo para el OK sobre ESA pieza. Si el video pesa más que
-      la portada, el veredicto honesto es que la conversación CSS se queda — probar incluye poder
-      decir que no.
-      ⚠️ **Ese render no se da por hecho hasta que exista el archivo:** `verificar_cola.js` marca
-      fantasma toda línea de esta cola que nombre un archivo de video inexistente, y tiene razón
-      —incluso cuando la mención es la advertencia misma—, así que arriba se nombra el comando y
-      nunca una ruta de salida que todavía no produjo nada.
+      **2026-09-25 12:43-13:15 La Paz — RENDERIZADO, MEDIDO Y MIRADO. El archivo existe:**
+      `out/videos/conversacion-chatbot/renders/conversacion-chatbot_2026-09-25_16-45-05.mp4`.
+
+      - **Las medidas, con `ffprobe` sobre el mp4 y no con el reporte del CLI** (que también las
+        dice, y coinciden): **469.551 B (459 KB)**, **7,0 s**, **1920×1080**, h264, 30 fps,
+        537 kbps, 210 cuadros. Render en 6,5 s con el Chrome de HyperFrames, gpu por software.
+      - **Contra el techo que la vuelta anterior dejó medido:** la portada pide hoy **~804 KB**
+        (121 KB de HTML + 683 KB de chunks). El video **suma 459 KB, un +57 %** sobre todo lo que
+        la portada descarga. O sea: **no** pesa más que la portada —el peor caso que este ítem
+        temía no ocurrió— pero tampoco es gratis, y esa es la cifra con la que se decide.
+      - **`npm run check`** (lint + runtime + layout + motion + contraste): **0 errores, 0
+        warnings, 34/34 textos pasan WCAG AA**.
+      - **Mirado de verdad, y con el instrumento correcto:** se extrajo un cuadro **del mp4** a
+        los 5,6 s (`ffmpeg -ss 5.6 -frames:v 1`) — no la captura del navegador, que es otro
+        instrumento y ya engañó a este proyecto antes. Las cuatro burbujas legibles, texto
+        nítido, sin ligaduras rotas. El contact-sheet de los 8 cuadros queda versionado en
+        `out/videos/conversacion-chatbot/snapshots/contact-sheet.jpg`.
+      - **Fidelidad: el guion es LITERAL.** Las cuatro burbujas, las horas (23:47/23:47/23:48/
+        23:48) y la cabecera salen de `conversacion.tsx` leído del ref (en un worktree sparse el
+        archivo no está en disco y «no existe» miente: `git show HEAD:<ruta>`). Cero montos,
+        cero estado de obra, cero autobombo.
+
+      🔴 **Las dos cosas que el video PIERDE contra la conversación dibujada, y que sólo se ven
+      comparando las dos piezas:** (1) el pie *"Respondido a las 23:47. La consulta no se perdió."*
+      —que es el remate de venta del bloque— **no está en el video**; (2) en la portada el texto
+      es texto real (`role="img"` con su `aria-label`, seleccionable e indexable) y en el video
+      son píxeles. Por eso el veredicto de este carril es **B**: el dibujo se queda en la portada
+      y el video sirve donde el movimiento sí paga y no hay HTML que cuidar —redes y anuncios—.
+      **Probar incluía poder decir que no, y esto es decir que no para la portada.**
+
+      **La decisión es de Sergio Urcullo y ya está en sus manos, no en un `.md`:** tarea
+      `t_e0ece16f` (`blocked`, `needs_input`) con las tres opciones cotizadas (A: reemplaza el
+      dibujo · B: dibujo en portada + video en redes, recomendada · C: las dos, con carga
+      diferida), y el **video entregado por Telegram** para que lo mire — `"ok":true`,
+      `message_id=6871`, que es la única prueba de entrega que vale en ese canal.
 
 - [x] 🟡 **HECHO el 2026-09-24 en el carril `chatbot` (commiteado, NO publicado) — el detalle,
       los gates y lo que falta viven en `hermes-content/docs/cola/chatbot.md`, "Ahora".**
