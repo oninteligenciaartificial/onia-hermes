@@ -392,6 +392,52 @@ export function mtimePorSsh(ruta = BUILD_ID_VIVO, destino = VPS_SSH) {
   return Number.isFinite(seg) && seg > 0 ? seg * 1000 : null;
 }
 
+/** El log del publicador automatico del VPS (`onia-publicar-solo.sh`, cada 3 h). */
+export const LOG_PUBLICADOR_SOLO = "/var/log/onia-publicar-solo.log";
+
+/**
+ * Que dijo de la LANDING la ultima corrida del publicador automatico.
+ *
+ * POR QUE EXISTE. Sin esto, cualquier arreglo varado hacia que el gate mandara
+ * abrir un pedido de deploy — y el pedido le cuesta un `ok` a Sergio Urcullo por
+ * algo que la maquina hace sola. El publicador publica la landing salvo que el
+ * commit toque una fuente de precio (esas quedan detras de firma humana), asi
+ * que el pedido solo hace falta cuando el destino esta FRENADO.
+ *
+ * Devuelve `null` —NO MEDIDO, nunca «publica solo»— si el log no se pudo leer o
+ * si ninguna corrida nombra la landing: confundir «no pude preguntar» con «me
+ * dijeron que si» es como se pierde un arreglo esperando un cron que no viene.
+ */
+export function ultimaCorridaDeLanding(texto) {
+  if (!texto) return null;
+  let cuando = null;
+  let ultima = null;
+  for (const linea of texto.split("\n")) {
+    const cabecera = linea.match(/^==\s*(.+?)\s*==\s*$/);
+    if (cabecera) {
+      cuando = cabecera[1];
+      continue;
+    }
+    const landing = linea.match(/^\s*landing:\s*(.+?)\s*$/);
+    if (landing) ultima = { cuando, motivo: landing[1] };
+  }
+  if (!ultima) return null;
+  return { ...ultima, publicaSolo: !/^NO publico solo/i.test(ultima.motivo) };
+}
+
+/** El log del publicador, leido de este disco o preguntado al VPS. `null` si ninguno contesto. */
+export function textoDelLogPublicador(ruta = LOG_PUBLICADOR_SOLO, destino = VPS_SSH) {
+  try {
+    return readFileSync(ruta, "utf8");
+  } catch {
+    /* no esta montado aca: se pregunta al VPS */
+  }
+  const r = spawnSync("ssh", [...SSH_ARGS, destino, "tail", "-n", "60", ruta], {
+    encoding: "utf8",
+  });
+  return r.status === 0 && r.stdout.trim() ? r.stdout : null;
+}
+
 /**
  * mtime del BUILD_ID vivo, en ms, venga de donde venga. `null` si ninguna de
  * las dos vías contestó — que sigue siendo ausencia de dato, nunca «al día».
@@ -573,10 +619,29 @@ function main() {
     if (nota) console.error(nota);
     const staged = stagedDisponible();
     const s = evaluarStaged({ staged, varados: r.varados });
-    console.error(
-      "\nPublicar onia.com.bo lo decide Sergio. El pedido va COMENTADO en la tarea de deploy" +
-        "\nque ya existe (una sola, no una por commit).\n",
-    );
+    // Antes de mandar a pedir un `ok`, se pregunta si el publicador automatico
+    // ya lo resuelve. Un pedido que no hace falta le cuesta a Sergio Urcullo lo
+    // mismo que uno que si: leerlo y contestarlo.
+    const corrida = ultimaCorridaDeLanding(textoDelLogPublicador());
+    if (corrida === null) {
+      console.error(
+        `\nNO PUDE MEDIR si el publicador automatico lo resuelve solo (${LOG_PUBLICADOR_SOLO}` +
+          "\nno contesto). Miralo ANTES de abrir un pedido: si la landing no esta frenada," +
+          "\nsale sola en la proxima corrida y el pedido sobra.\n",
+      );
+    } else if (corrida.publicaSolo) {
+      console.error(
+        `\nNO abras un pedido de deploy: el publicador automatico publica la landing solo` +
+          `\n(ultima corrida ${corrida.cuando} — "${corrida.motivo}"), y esto sale en la` +
+          "\nproxima. El pedido solo hace falta si el destino queda FRENADO por firma humana.\n",
+      );
+    } else {
+      console.error(
+        `\nEl publicador automatico NO lo va a publicar (${corrida.cuando} — "${corrida.motivo}"),` +
+          "\nasi que aca SI va el pedido: COMENTADO en la tarea de deploy que ya existe" +
+          "\n(una sola, no una por commit). Publicar onia.com.bo lo decide Sergio Urcullo.\n",
+      );
+    }
 
     // El ESTADO del staged se sigue diciendo —es el diagnóstico, y sirve para
     // saber si hay que rearmar—, pero ya no se emite un comando por rama: el

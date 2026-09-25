@@ -12,6 +12,38 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-25 07:09-07:13 La Paz — `BUILD_ID` sin cambios (`TnvycZvMqHGZrzO9EziLL`); rotación de rubro → Comercio, 8/8 que le corresponden
+
+`ONIA_ALTA_AUTOMATICA=abierta`. `grep -m1 BUILD_ID` de este archivo comparado contra el build
+vivo: **no cambió** desde la vuelta anterior (dental ya re-verificado ahí). Según la lección
+propia, correspondía seguir el ciclo de rotación por rubro en vez de repetir dental:
+`RECORRIDO_RUBRO="Comercio" node scripts/recorrido_cliente.mjs --escribir`.
+
+- **Recorrido completo en "Comercio": los 8 pasos que le corresponden — salvo el paso 7**, que
+  este rubro no vende (agenda/citas). Coherente con lo ya sabido (`tieneAgenda()=false` para
+  comercio): su menú tampoco la tiene, así que el paso sale `NO-APLICA`, no roto.
+- Cuenta `zz-qa-2026-09-25-0709@onia.com.bo`, confirmación de correo antes del primer login,
+  onboarding en 6 pantallas (pregunta → negocio → horarios → servicios → equipo → listo).
+- Paso 6: `zz-qa-2026-09-25-0709-paciente` cargado en el Catálogo (`/comercio`) y visto de vuelta.
+- Paso 8: pantalla de cobro (Caja) vista en `/comercio/caja` — frenado ahí sin marcar pago.
+- Paso 9: el dato del paso 6 SÍ aparece en `/dashboard` (a diferencia de dental, donde no
+  aparece — diferencia esperable por rubro, no un hallazgo).
+- `resumen.json`: `llegoHasta 9/9`, `completo: true`, `agujeros: []`, `zzQaRestantes: 0`.
+- Limpieza verificada: `organizations`/`appointments` con `zz-qa-%` → **0** al cerrar.
+
+**Sin hallazgo de producto.** Próxima vuelta: comparar `BUILD_ID` primero, siempre; si sigue
+igual, seguir la rotación (importadora, estética, servicios profesionales) antes de repetir un
+rubro ya cubierto en este `BUILD_ID`.
+
+RAZÓN: la medida de comercio no estaba cubierta en este `BUILD_ID` — el avance real fue
+verificar un rubro nuevo entero (8/8 que le corresponden), no repetir dental sin necesidad.
+LECCIÓN: comparar `BUILD_ID` y, si no cambió, rotar de rubro sigue siendo el método correcto.
+Nuevo dato: en comercio el paso 9 (bandeja) SÍ muestra el dato del paso 6, al revés que en
+dental — la definición de "hecho" del paso 9 tiene que leerse por rubro, no asumir el resultado
+de dental como el genérico.
+
+---
+
 ## 2026-09-25 06:09-06:14 La Paz — `BUILD_ID` nuevo otra vez (`p2O3qK8ejw4RQGq9y0CgH` → `TnvycZvMqHGZrzO9EziLL`); dental re-verificado, 9/9
 
 `ONIA_ALTA_AUTOMATICA=abierta`. `grep -m1 BUILD_ID` de este archivo comparado ANTES de correr
