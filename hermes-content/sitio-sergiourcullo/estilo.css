@@ -198,9 +198,8 @@ h1 .num{color:var(--onia-texto)}
 .paso{margin:56px 0 0;padding:36px 0 0;border-top:2px solid var(--ink)}
 .paso-cab{display:flex;gap:18px;align-items:flex-start}
 .paso-num{
-  font-family:var(--mono);font-weight:600;font-size:12px;line-height:1.25;
-  letter-spacing:.08em;text-transform:uppercase;color:var(--onia-texto);flex:0 0 auto;
-  min-width:54px;padding-top:5px;white-space:nowrap;
+  font-family:var(--display);font-weight:800;font-size:40px;line-height:.9;
+  letter-spacing:-.04em;color:var(--onia-texto);flex:0 0 auto;width:54px;
   font-variant-numeric:tabular-nums;
 }
 .paso-tit{flex:1;min-width:0}
@@ -223,7 +222,7 @@ h1 .num{color:var(--onia-texto)}
 .cuerpo{margin:22px 0 0 72px}
 @media (max-width:620px){
   .meta,.cuerpo{margin-left:0}
-  .paso-num{font-size:11px;min-width:42px}
+  .paso-num{font-size:32px;width:42px}
   .paso-tit h2{font-size:24px}
 }
 .cuerpo p{margin:0 0 14px}
@@ -638,7 +637,7 @@ code{font-family:var(--mono);font-size:.9em;background:var(--line-soft);padding:
 .catalogo-note{font-family:var(--mono);font-size:11px;color:var(--faint);letter-spacing:.03em;margin:12px 0 0}
 
 /* ---------- bóveda: archivo navegable, no una pared de enlaces ---------- */
-.vault-wrap{max-width:1120px}
+.vault-wrap,.vault-barra{max-width:1120px}
 .vault-controls{margin:34px 0 0;padding:22px;border:1px solid var(--line);border-radius:6px;background:var(--raise);box-shadow:var(--shadow)}
 .vault-controls label{display:block;font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin:0 0 9px}
 .vault-controls input{width:100%;min-height:50px;padding:12px 14px;border:1px solid var(--line);border-radius:4px;background:var(--ground);color:var(--ink);font:500 16px var(--body)}
@@ -748,6 +747,12 @@ code{font-family:var(--mono);font-size:.9em;background:var(--line-soft);padding:
 @media (max-width:700px){
   .barra-acciones{flex-direction:column;align-items:flex-end;gap:6px}
   .barra-oferta,.barra .vuelta{font-size:11px}
+  /* Portada: son tres links, no dos. En columna «Bóveda» quedaba sola arriba de la marca
+     y la cabecera pasaba de 116 a 166 px a 390. Acá fluyen en fila detrás de la marca y
+     el botón baja a la segunda. Sólo la portada: las guías publicadas no se tocan. */
+  .barra-portada{flex-wrap:wrap;justify-content:flex-end;row-gap:6px}
+  .barra-portada .marca{margin-right:auto}
+  .barra-portada .barra-acciones{display:contents}
   .webs-teaser{grid-template-columns:1fr;gap:18px}
   .catalogo-hero{padding-top:42px}
   .catalogo-hero h1{max-width:14ch}
