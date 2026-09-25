@@ -28,7 +28,7 @@
 // que el VPS no conteste, y la cura sería saltearse el gate.
 import { execFileSync } from 'node:child_process'
 import { createHash } from 'node:crypto'
-import { readFileSync } from 'node:fs'
+import { readFileSync, readdirSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { VPS, SSH_ARGS } from './lib/vps-o-local.mjs'
@@ -75,6 +75,76 @@ export function cableadasEnElSincronizador (textoSincronizador) {
       .replace(/^\$\{?FUENTE\}?\//, 'scripts/loops/')
       .replace(/^\$\{?RAIZ\}?\//, '')
     mapa.set(nombre, rel)
+  }
+  return mapa
+}
+
+/**
+ * Las herramientas de `/root/bin` que un INSTALADOR versionado escribe con un heredoc.
+ *
+ * POR QUÉ, medido el 2026-09-25 por `onia-cola` desde nodo-casa: el universo de este
+ * instrumento sale del crontab del VPS, y desde el 07-sep los CUATRO loops vivos —incluido
+ * `onia-cola`, el único camino a `main`— los lanza el crontab de nodo-casa. Esa máquina
+ * corre seis herramientas y no las mide nadie. Cruzadas a mano ese día: `onia-loop.sh` y
+ * `onia-vigia-disco.sh` son idénticas a su fuente del repo, pero `onia-memoria-bajar.sh`,
+ * `onia-tunel-inverso.sh` y `onia-tg.sh` no tienen gemelo por contenido — y NO son copias a
+ * mano: dos las ESCRIBE un instalador versionado (`instalar-homelab.sh`,
+ * `preparar-nodo.sh`) y la tercera es el shim que delega al VPS por SSH. Clasificarlas con
+ * el mapa de `poner` del sincronizador las pintaría amarillas todas las vueltas, y un gate
+ * que grita en falso se termina salteando — que es el motivo escrito de las otras
+ * carve-outs de este archivo.
+ *
+ * `literal` es la diferencia que decide cuánto se puede afirmar: con el delimitador entre
+ * comillas (`<<'TUN'`) el cuerpo es byte a byte lo que queda en disco, así que la deriva se
+ * MIDE; sin comillas (`<<BAJAR`) el shell interpola variables al instalar y el cuerpo del
+ * repo no es comparable — ahí sólo se puede afirmar que el cable existe y está versionado.
+ * Decir más sería inventar una medición.
+ */
+export function herramientasQueEscribeElInstalador (textoInstalador, instalador) {
+  const mapa = new Map()
+  const lineas = String(textoInstalador ?? '').split('\n')
+  // `cat > "$BIN/onia-x.sh.nuevo" <<BAJAR` y `cat > /root/bin/onia-x.sh <<'TUN'`. El destino
+  // se acepta por `/root/bin` o por la variable que el instalador usa para esa carpeta; el
+  // sufijo `.nuevo`/`.tmp` es el escritorio-y-mové de `instalar-homelab.sh`, no otro archivo.
+  // El delimitador va en DOS alternativas explícitas en vez de una retro-referencia: con
+  // `(')?…\1?` la numeración de grupos la manda el NOMBRE, que va antes, así que `\1` apuntaba
+  // al nombre y el caso entre comillas —el único cuyo cuerpo se puede medir— no casaba nunca.
+  // Lo cazaron las dos anclas contra los instaladores reales.
+  const re = /^\s*cat\s*>\s*"?(?:\/root\/bin|\$\{?BIN\}?|\$\{?DESTINO_BIN\}?)\/([A-Za-z0-9_.-]+?)(?:\.nuevo|\.tmp)?"?\s*<<\s*(?:'([A-Za-z_][A-Za-z0-9_]*)'|([A-Za-z_][A-Za-z0-9_]*))\s*$/
+  // El TERCER cable, y el que delató que dos no alcanzaban: `instalar-homelab.sh` declara
+  // los shims hacia el VPS con `shim <nombre> <comando remoto>`, una función suya cuyo
+  // heredoc escribe a `"$BIN/$n"` —un nombre VARIABLE, invisible para el barrido de arriba—.
+  // Sin esto, `onia-tg.sh` salía 🔴 CABLEADA_EN_DERIVA contra `scripts/loops/onia-tg.sh`, que
+  // es el script REAL del VPS: en nodo-casa lo correcto es justamente que difiera, porque
+  // ahí es un shim que delega por SSH. Un rojo por el motivo equivocado se termina salteando.
+  const reShim = /^\s*shim\s+([A-Za-z0-9_.-]+\.(?:sh|mjs|py))\s+\S/
+  for (const linea of lineas) {
+    if (/^\s*#/.test(linea)) continue
+    const s = linea.match(reShim)
+    // Interpolado a propósito: el cuerpo lo arma la función con la llave y el host del nodo,
+    // así que existe cable versionado pero no hay cuerpo comparable byte a byte.
+    if (s && !mapa.has(s[1])) mapa.set(s[1], { instalador, literal: false, cuerpo: null })
+  }
+  for (let i = 0; i < lineas.length; i++) {
+    const m = lineas[i].match(re)
+    if (!m) continue
+    const [, nombre, delimLiteral, delimInterpolado] = m
+    const comilla = delimLiteral != null
+    const delim = delimLiteral ?? delimInterpolado
+    const cuerpo = []
+    let cerrado = false
+    for (let j = i + 1; j < lineas.length; j++) {
+      if (lineas[j].trim() === delim) { cerrado = true; break }
+      cuerpo.push(lineas[j])
+    }
+    // Un heredoc sin cierre es un instalador roto: no se le cree el cuerpo a medias.
+    if (!cerrado) continue
+    const literal = comilla
+    mapa.set(nombre, {
+      instalador,
+      literal,
+      cuerpo: literal ? cuerpo.join('\n') + '\n' : null,
+    })
   }
   return mapa
 }
@@ -192,6 +262,7 @@ export const ROJOS = new Set([
   'CABLEADA_EN_DERIVA',
   'CABLEADA_SIN_FUENTE',
   'EN_DERIVA_SIN_CABLE',
+  'INSTALADOR_EN_DERIVA',
   'SIN_FUENTE',
 ])
 
@@ -218,6 +289,99 @@ function ssh (comando) {
 
 function md5 (buf) {
   return createHash('md5').update(buf).digest('hex')
+}
+
+/**
+ * La SEGUNDA máquina: el nodo donde de verdad corren los loops.
+ *
+ * Devuelve `null` cuando esta máquina es el VPS —ahí el bloque de arriba ya la midió y
+ * medirla dos veces contaría doble—. El universo sale del crontab LOCAL, por el mismo
+ * motivo que el de arriba sale del crontab del VPS: manda quien EJECUTA.
+ *
+ * Los cables son DOS, no uno, y por eso no alcanzaba con reusar el bloque del VPS: acá la
+ * herramienta puede venir del sincronizador (`poner`) o de un heredoc dentro de un
+ * instalador versionado. Los instaladores se derivan del DISCO (`scripts/loops/*.sh`), no
+ * de una lista escrita acá, que es como se cuelan los hermanos irregulares.
+ */
+function medirEstaMaquina ({ porMd5, porNombre, cableadas }) {
+  let maquina
+  try {
+    maquina = readFileSync('/root/.onia-nodo', 'utf8').trim()
+  } catch {
+    return null
+  }
+
+  let crontab
+  try {
+    crontab = execFileSync('crontab', ['-l'], { encoding: 'utf8', timeout: 30_000 })
+  } catch (e) {
+    const motivo = String(e?.stderr || e?.message || '').split('\n').filter(Boolean).pop()
+    return { maquina, medido: false, motivo: motivo || 'no pude leer el crontab local' }
+  }
+
+  const instaladores = new Map()
+  for (const f of readdirSync(path.join(RAIZ, 'scripts/loops'))) {
+    if (!f.endsWith('.sh')) continue
+    const rel = `scripts/loops/${f}`
+    let texto
+    try {
+      texto = readFileSync(path.join(RAIZ, rel), 'utf8')
+    } catch {
+      continue
+    }
+    for (const [nombre, dato] of herramientasQueEscribeElInstalador(texto, rel)) {
+      if (!instaladores.has(nombre)) instaladores.set(nombre, dato)
+    }
+  }
+
+  const veredictos = herramientasQueElCronEjecuta(crontab).map((ruta) => {
+    const nombre = ruta.split('/').pop()
+    let vivo
+    try {
+      vivo = readFileSync(ruta)
+    } catch {
+      // Una herramienta que el cron invoca y no está en disco es rojo del bueno: cada
+      // corrida falla, y acá la que falta puede ser la que lanza los loops.
+      return { nombre, veredicto: 'SIN_FUENTE', detalle: `el cron la ejecuta y no existe en ${ruta}` }
+    }
+    const h = md5(vivo)
+
+    const gemelo = porMd5.get(h)
+    if (gemelo) return { nombre, veredicto: 'CABLEADA', detalle: `idéntica a ${gemelo}` }
+
+    const inst = instaladores.get(nombre)
+    if (inst) {
+      if (!inst.literal) {
+        return {
+          nombre,
+          veredicto: 'CABLEADA_POR_INSTALADOR',
+          detalle: `la escribe ${inst.instalador} interpolando: versionada, pero su cuerpo no se puede comparar`,
+        }
+      }
+      if (md5(Buffer.from(inst.cuerpo)) === h) {
+        return { nombre, veredicto: 'CABLEADA', detalle: `byte a byte lo que escribe ${inst.instalador}` }
+      }
+      return {
+        nombre,
+        veredicto: 'INSTALADOR_EN_DERIVA',
+        detalle: `${inst.instalador} escribe otra cosa que la que corre en ${ruta}`,
+      }
+    }
+
+    const fuente = cableadas.get(nombre)
+    if (fuente) return { nombre, veredicto: 'CABLEADA_EN_DERIVA', detalle: `${fuente} no es lo que corre en ${ruta}` }
+
+    const homonimo = porNombre.get(nombre)
+    return {
+      nombre,
+      veredicto: homonimo ? 'EN_DERIVA_SIN_CABLE' : 'COPIA_A_MANO',
+      detalle: homonimo
+        ? `${homonimo} se llama igual y difiere: nadie sabe cuál es la buena`
+        : `sólo existe en ${maquina}: un borrado se la lleva sin rastro`,
+    }
+  })
+
+  return { maquina, medido: true, veredictos }
 }
 
 /** Los shas de `main` que leyeron las corridas de `sincronizar.sh`, en orden. */
@@ -424,7 +588,11 @@ function medir () {
         }
       : v
   })
-  return { medido: true, veredictos }
+  return {
+    medido: true,
+    veredictos,
+    estaMaquina: medirEstaMaquina({ porMd5, porNombre, cableadas }),
+  }
 }
 
 function informar () {
@@ -460,8 +628,38 @@ function informar () {
   }
   for (const v of noMedidos) console.log(`  ·  NO MEDIDO ${v.nombre} — ${v.detalle}`)
 
+  // La segunda máquina se informa en su PROPIA línea, nunca sumada a la de arriba: un solo
+  // total que mezcla dos crontabs no deja ver cuál de los dos se quedó sin medir, y el que
+  // se quedaba sin medir era justo el que lanza los cuatro loops.
+  const rojosLocales = []
+  const m = r.estaMaquina
+  if (m && !m.medido) {
+    console.log(`herramientas que el cron de ${m.maquina} ejecuta: NO MEDIDO — ${m.motivo}`)
+  } else if (m) {
+    const verdesL = m.veredictos.filter((v) => v.veredicto === 'CABLEADA')
+    const instaladas = m.veredictos.filter((v) => v.veredicto === 'CABLEADA_POR_INSTALADOR')
+    rojosLocales.push(...m.veredictos.filter((v) => ROJOS.has(v.veredicto)))
+    const amarillosL = m.veredictos.filter(
+      (v) => !ROJOS.has(v.veredicto) && v.veredicto !== 'CABLEADA' && v.veredicto !== 'CABLEADA_POR_INSTALADOR'
+    )
+    console.log(
+      `herramientas que el cron de ${m.maquina} ejecuta: ${m.veredictos.length} — ` +
+        `cableadas y al día ${verdesL.length} · las escribe un instalador ${instaladas.length} · ` +
+        `copia a mano ${amarillosL.length} · a arreglar ${rojosLocales.length}`
+    )
+    for (const v of [...rojosLocales].sort((a, b) => a.nombre.localeCompare(b.nombre))) {
+      console.log(`  🔴 ${v.veredicto.padEnd(24)} ${v.nombre} — ${v.detalle}`)
+    }
+    for (const v of amarillosL.sort((a, b) => a.nombre.localeCompare(b.nombre))) {
+      console.log(`  🟡 ${v.veredicto.padEnd(24)} ${v.nombre} — ${v.detalle}`)
+    }
+    for (const v of instaladas.sort((a, b) => a.nombre.localeCompare(b.nombre))) {
+      console.log(`  ·  ${v.veredicto.padEnd(24)} ${v.nombre} — ${v.detalle}`)
+    }
+  }
+
   if (noMedidos.length > 0) return 2
-  return rojos.length > 0 ? 1 : 0
+  return rojos.length + rojosLocales.length > 0 ? 1 : 0
 }
 
 if (process.argv[1] && import.meta.url === `file://${process.argv[1]}`) {
