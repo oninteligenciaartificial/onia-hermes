@@ -52,8 +52,10 @@ haber validado esa entrega de punta a punta para esa palabra y cuenta.
 
 1. **Prueba:** Sergio hablando a cámara, 8 s.
    Texto: `No todo lo que tiene IA necesita un agente.`
-2. **Lección:** tabla de tres filas: `IF / Agent / Loop`.
-   Texto: `Regla fija / lenguaje ambiguo / estado que cambia.`
+2. **Lección:** tabla de cuatro filas: `IF / Basic LLM Chain / AI Agent / Loop`.
+   Texto: `Tus reglas / clasificar / elegir herramientas / estado que cambia.`
+   (Corregido el 25-sep: la versión anterior mandaba el «lenguaje ambiguo» al AI Agent, lo
+   contrario del G2 del 22-sep.)
 3. **Interacción:** caja de pregunta.
    Texto: `Mandame el proceso y te digo cuál de las 3 usaría.`
    Remate: `Guía completa en la Bóveda.`

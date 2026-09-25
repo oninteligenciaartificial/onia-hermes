@@ -18,6 +18,9 @@ contrario del G2 del 22-sep («No uses un AI Agent para clasificar leads»,
 - **Lámina 6:** la matriz pasa a cuatro filas, con la pregunta del G2: ¿quién decide el
   próximo paso?
 - **Láminas 2 y 5:** sin backticks. El pack los imprimía literales.
+- **Lámina 5, el loop:** arrancaba con `Schedule Trigger` cada 10 minutos y además esperaba 10
+  minutos adentro. Eso superpone ejecuciones y, una vez pagado, vuelve a avisar en cada corrida.
+  Ahora es una ejecución por cobro (`Webhook`) con tope de 6 intentos.
 - **Cierre:** «GUARDALO» con firma, **sin palabra para comentar**.
   - La palabra `ARQUITECTURA` llevaba a `sergiourcullo.vercel.app/agentes`, que **dio 404 en
     producción el 25-sep** (medido con la página del sitio: `/stack` sí responde 200).
@@ -35,7 +38,7 @@ No todo problema de IA necesita un agente. La pregunta es quién decide el próx
 Tus reglas → IF o Switch, con Google Sheets y Telegram.
 Leer y clasificar un mensaje → Basic LLM Chain + OpenAI Chat Model, con Structured Output Parser validando el JSON.
 El modelo elige entre herramientas (el CRM, documentos, pedir un dato que falta) → AI Agent.
-Un estado que cambia con el tiempo → Schedule Trigger + HTTP Request + IF + Wait.
+Un estado que cambia con el tiempo → un loop: una ejecución por cobro (Webhook), HTTP Request + IF, y Wait con tope de intentos.
 
 Clasificar un lead no necesita un agente: la ruta ya está definida. Guardalo para tu próximo workflow.
 

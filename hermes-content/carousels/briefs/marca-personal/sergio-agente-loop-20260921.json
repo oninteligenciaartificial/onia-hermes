@@ -1,6 +1,6 @@
 {
   "title": "Automatización, AI Agent o loop",
-  "caption": "No todo problema de IA necesita un agente. La pregunta es quién decide el próximo paso:\n\nTus reglas → IF o Switch, con Google Sheets y Telegram.\nLeer y clasificar un mensaje → Basic LLM Chain + OpenAI Chat Model, con Structured Output Parser validando el JSON.\nEl modelo elige entre herramientas (el CRM, documentos, pedir un dato que falta) → AI Agent.\nUn estado que cambia con el tiempo → Schedule Trigger + HTTP Request + IF + Wait.\n\nClasificar un lead no necesita un agente: la ruta ya está definida. Guardalo para tu próximo workflow.",
+  "caption": "No todo problema de IA necesita un agente. La pregunta es quién decide el próximo paso:\n\nTus reglas → IF o Switch, con Google Sheets y Telegram.\nLeer y clasificar un mensaje → Basic LLM Chain + OpenAI Chat Model, con Structured Output Parser validando el JSON.\nEl modelo elige entre herramientas (el CRM, documentos, pedir un dato que falta) → AI Agent.\nUn estado que cambia con el tiempo → un loop: una ejecución por cobro (Webhook), HTTP Request + IF, y Wait con tope de intentos.\n\nClasificar un lead no necesita un agente: la ruta ya está definida. Guardalo para tu próximo workflow.",
   "hashtags": [
     "#n8n",
     "#agentesia",
@@ -101,15 +101,15 @@
       "role": "point",
       "pill": "Loop",
       "headline": "Usá un loop cuando el estado cambia",
-      "body": "Schedule Trigger inicia → HTTP Request consulta una API → IF revisa status = paid → Wait espera 10 minutos → vuelve a consultar.",
+      "body": "Llega un cobro nuevo → HTTP Request consulta su estado → IF status = paid → si no, Wait 10 minutos y vuelve a consultar. Máximo 6 intentos.",
       "callout": "Esperar también es lógica",
       "visual": {
         "type": "flow",
         "label": "ESTADO QUE CAMBIA",
         "nodes": [
           {
-            "name": "Schedule Trigger",
-            "detail": "iniciar"
+            "name": "Webhook",
+            "detail": "llega un cobro"
           },
           {
             "name": "HTTP Request",
@@ -121,13 +121,13 @@
           },
           {
             "name": "Wait",
-            "detail": "10 minutos"
+            "detail": "10 min · máx. 6"
           }
         ],
-        "note": "El último paso vuelve al segundo: eso es un loop."
+        "note": "Una ejecución por cobro. Si en 6 intentos no se pagó, avisa a una persona."
       },
       "save_worthy": false,
-      "alt_text": "Schedule Trigger HTTP Request IF y Wait forman un loop"
+      "alt_text": "Webhook, HTTP Request, IF y Wait forman un loop con tope de intentos"
     },
     {
       "number": 6,
@@ -173,5 +173,5 @@
     }
   ],
   "job": "education",
-  "correccion": "25-sep-2026: láminas 3, 4 y 6 alineadas con el G2 del 22-sep (docs/cola/GUIONES-DIA-2026-09-22.md, Guion 2). Sin palabra clave: /agentes daba 404 en producción. Sin backticks: el pack los imprime literales."
+  "correccion": "25-sep-2026: láminas 3, 4 y 6 alineadas con el G2 del 22-sep (docs/cola/GUIONES-DIA-2026-09-22.md, Guion 2). Sin palabra clave: /agentes daba 404 en producción. Sin backticks: el pack los imprime literales. Lámina 5 (25-sep, tarde): el loop arrancaba con Schedule Trigger cada 10 min y además esperaba 10 min adentro, lo que superponía ejecuciones y repetía el aviso; pasa a una ejecución por cobro con tope de 6 intentos."
 }
