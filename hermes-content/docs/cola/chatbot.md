@@ -2556,6 +2556,7 @@ nunca acusado — acusar una línea del bot con la frontera del panel sería el 
       acepta~~ — CERRADO el 2026-09-18** (motor: `checkHorario` en
       `hermes-content/deploy/vps-ops/bot/knowledge.mjs`; espejo: `onia-platform`
       `lib/chatbot/knowledge.ts`, rama del carril, **falta merge de `onia-cola` y deploy del
+      ✅ YA DESPLEGADO (medido 2026-09-25: `5bc7747f` vive en produccion `39234c89`).
       bot**). El asistente de 6 preguntas ya estaba tapado (`5bc7747f`), pero el **formulario**
       de `/settings/chatbot` tiene `desde` y `hasta` como dos campos numéricos libres y
       `validarConocimiento` los validaba **por separado** (`desde: int 0..23`, `hasta: int
@@ -2593,6 +2594,7 @@ nunca acusado — acusar una línea del bot con la frontera del panel sería el 
 - [x] 🔴 **~~El asistente de 6 preguntas publicaba AL REVÉS el horario de un negocio
       nocturno~~ — CERRADO el 2026-09-18** (`onia-platform` `5bc7747f`, rama del carril;
       falta merge de `onia-cola`; el validador vive en `onia-platform/lib/chatbot/knowledge.ts`). El asistente estrenado ese mismo día (master `f5e32220`,
+      ✅ YA DESPLEGADO (medido 2026-09-25: `5bc7747f` `f5e32220` vive en produccion `39234c89`).
       16:18) convierte el horario a `empresa.horario`, que es UN tramo `dias + desde + hasta`.
       Con *«Lunes a sábado de 18:00 a 02:00»* —un bar, una farmacia de turno, un comercio
       nocturno— `desde` salía del mínimo de los `abre` (18) y `hasta` del máximo de los
@@ -2610,6 +2612,7 @@ nunca acusado — acusar una línea del bot con la frontera del panel sería el 
 - [x] 🔴 **~~El guardia que impide que dos orgs reclamen el mismo inbox mira UNA columna, y el
       que lee mira TRES: el conflicto se crea con un solo número mal tipeado~~ — CERRADO el
       2026-09-18** (`onia-platform` `0c360387`, rama del carril; falta merge de `onia-cola`).
+      ✅ YA DESPLEGADO (medido 2026-09-25: `0c360387` vive en produccion `39234c89`).
       La pregunta se centralizó en `onia-platform/lib/chatbot/otra-org-reclama.ts` —plural,
       porque el alta web evalúa varios candidatos de una— y los CUATRO guardias quedaron
       cableados ahí. Devuelve **quién** lo reclama, así el 409 nombra al dueño ajeno: un error
@@ -2706,6 +2709,7 @@ nunca acusado — acusar una línea del bot con la frontera del panel sería el 
       tres canales, `take: 2`), no su forma.
 
       **En vuelo:** commiteado y pusheado a la rama; **falta el merge a `master` (de `onia-cola`)
+      ✅ YA DESPLEGADO (medido 2026-09-25: `4bc6dad1` `f3082204` vive en produccion `39234c89`).
       y el deploy**. No cuenta como llegado al cliente.
 
 - [x] 🔴 **~~El aviso a Sergio Urcullo no dice si la conversación somos NOSOTROS: la primera
@@ -3932,6 +3936,7 @@ nunca acusado — acusar una línea del bot con la frontera del panel sería el 
       veía su respuesta enviada y el prospecto no recibía nada~~ — CERRADO el 2026-09-17**
       (`onia-platform` `76ebe12`, rama `claude/chatbots-platform-review-0d1d09`).
       **⚠️ Commiteado y con gates verdes, NO desplegado:** falta el merge del integrador y el
+      ✅ YA DESPLEGADO (medido 2026-09-25: `76ebe12` vive en produccion `39234c89`).
       swap; hasta entonces el defecto sigue vivo en producción.
 
       **Qué pasaba.** `POST /api/bandeja/[id]` con `accion:"responder"` llamaba a
@@ -4026,6 +4031,7 @@ nunca acusado — acusar una línea del bot con la frontera del panel sería el 
       asistente no escribía NUNCA — sin un envío, sin un skip, sin un warning~~ — CERRADO el
       2026-09-13 en el repo (`hermes-content/deploy/vps-ops/bot/insistencia-run.mjs` +
       `persistence.mjs`). ⚠️ COMMITEADO, NO DESPLEGADO.**
+      ✅ YA DESPLEGADO (medido 2026-09-25: `75d8925` vive en produccion `39234c89`).
       El panel (`onia-platform/app/(dashboard)/settings/chatbot/ChatbotClient.tsx`) vende
       *"Si el cliente deja de responder, tu asistente le escribe UNA sola vez para retomar"* y
       deja elegir cada cuánto insistir. El barrido que lo ejecuta, en cambio, sólo ve lo que
@@ -4062,6 +4068,7 @@ nunca acusado — acusar una línea del bot con la frontera del panel sería el 
       ✅ **La mitad que el dueño VE quedó CERRADA el 2026-09-13**, misma clase y en la misma
       vuelta que las dos puntas del bot: `onia-platform` `75d8925` y `onia-hermes` (abajo).
       ⚠️ **COMMITEADO, NO DESPLEGADO — y la pantalla NO se miró renderizada con el cambio:**
+      ✅ YA DESPLEGADO (medido 2026-09-25: `75d8925` vive en produccion `39234c89`).
       producción corre el build viejo y `onia-platform` no tiene render testing, así que
       `mirar_bandeja_dueno.mjs` mostraría la versión vieja. **Se mira cuando se publique** —
       hasta entonces el defecto sigue vivo para el cliente.
@@ -4898,6 +4905,7 @@ La historia completa queda acá abajo para no perderla.
       `web-factory/apps/site` tampoco tiene `node_modules` acá ni CI que lo buildee.
 
 - [x] ✅ **CERRADO el 2026-09-11 (`9b9cde4`, onia-platform — pusheado a la rama, falta mergear y
+      ✅ YA DESPLEGADO (medido 2026-09-25: `9b9cde4` vive en produccion `39234c89`).
       desplegar): el add-on vigente no decía hasta cuándo, y no dejaba renovar antes del corte.**
 
       Ayer el add-on ganó vigencia de verdad (`5011003`) y ese mismo día empezó a avisar
@@ -4943,6 +4951,7 @@ La historia completa queda acá abajo para no perderla.
       Gates: `tsc` 0 · **4599** tests · `eslint` 0 errores.
 
 - [x] ✅ **CERRADO el 2026-09-11 (`278f030`, onia-platform — falta mergear y desplegar): el cron
+      ✅ YA DESPLEGADO (medido 2026-09-25: `278f030` vive en produccion `39234c89`).
       de recordatorios le escribía a los pacientes en nombre de una cuenta vencida.**
 
       **La CUARTA puerta que escribe sin sesión del dueño**, y la encontré preguntando por la
@@ -5021,6 +5030,7 @@ La historia completa queda acá abajo para no perderla.
       gates de `onia-platform` verdes: `tsc` 0, 4438 tests, `lint` 0 errores.
 
       ⚠️ **Commiteado y pusheado, NO desplegado**: el swap lo hace `onia-cola` cuando Sergio
+      ✅ YA DESPLEGADO (medido 2026-09-25: `e6adb19` vive en produccion `39234c89`).
       Urcullo aprueba el pedido de deploy de plataforma. Hasta entonces el dueño sigue viendo
       la versión muda.
 
@@ -5325,6 +5335,7 @@ La historia completa queda acá abajo para no perderla.
 
       ⚠️ **En la rama del carril, NO en `master`:** `git merge-base --is-ancestor 12bdb28
       origin/master` dice que no. Falta el merge del integrador y después el deploy
+      ✅ YA DESPLEGADO (medido 2026-09-25: `12bdb28` vive en produccion `39234c89`).
       (`t_bf1607af`) — **no está en producción**.
 
 - [x] ✅ **CERRADO el 2026-09-08 (`af777cd`). HERMANO del anterior, en la MISMA expresión: el bot
@@ -5363,6 +5374,7 @@ La historia completa queda acá abajo para no perderla.
       0 errores — corridos en el worktree del VPS, sobre el árbol que aterrizó.
 
       ⚠️ **Commiteado y pusheado, NO desplegado.** Falta el merge del integrador a `master` y
+      ✅ YA DESPLEGADO (medido 2026-09-25: `af777cd` `abf6cb5b` vive en produccion `39234c89`).
       después el swap; viaja en el pedido de deploy de plataforma que espera el `ok` de Sergio
       Urcullo.
 
@@ -5595,6 +5607,7 @@ La historia completa queda acá abajo para no perderla.
       y los otros dos en la dirección inversa (con las dos columnas cargadas WhatsApp sigue siendo
       WhatsApp, y Meta no se confunde con la web). Gates: `tsc` 0 · **3178** tests · `eslint` 0
       errores. **NO DESPLEGADO** — llega al cliente con el swap de `plataforma` (`t_0268567b`).
+      ✅ YA DESPLEGADO (medido 2026-09-25: `b2c25d4` vive en produccion `39234c89`).
 
       ⚠️ **Y el instrumento falló primero, en la dirección cara:** `mirar_bandeja_dueno.mjs --ancla`
       resuelve con `:text-is()`, que es match **exacto**, así que `--ancla "Tu asistente"` sobre el
@@ -7568,6 +7581,7 @@ archivos.**
 
 - [x] **~~El asistente de configuración aplanaba el horario del dueño sin decírselo~~** — cerrado el
       2026-09-18 (`onia-platform` 9c509b3c, rama del carril; **commiteado, NO desplegado**).
+      ✅ YA DESPLEGADO (medido 2026-09-25: `f5e32220` vive en produccion `39234c89`).
       El wizard de 6 preguntas de `/settings/chatbot` nació ese mismo día (`f5e32220`, 20 min
       antes de esta vuelta) y es la superficie nueva por donde el dueño carga lo que su bot le
       dice a SUS clientes. El esquema del bot (`empresa.horario`) sólo sabe de **un** rango
@@ -7628,6 +7642,7 @@ archivos.**
       Meta, prueba de tenencia más fuerte que un sello propio— y **falla cerrado** si está
       vinculado a otra org. Validado por mutación (esquive del `previo`: 1 test en rojo).
       ⚠️ **Commiteado y en la rama, NO desplegado.**
+      ✅ YA DESPLEGADO (medido 2026-09-25: `21ac3e3` vive en produccion `39234c89`).
 
 - [x] **~~El config del follow-up declaraba IMPOSIBLE un gasto que el código sí hace~~** — cerrado
       el 2026-09-18 (`hermes-content/deploy/vps-ops/bot/config.mjs`). Los dos comentarios de
@@ -7786,6 +7801,7 @@ archivos.**
       se acusaría solo.
 
       **NO desplegado, y es a propósito.** Medido el mismo día: `onia.com.bo/precios` muestra la
+      ✅ YA DESPLEGADO (medido 2026-09-25: `4bff903` vive en produccion `39234c89`).
       escalera vieja y el build vivo cobra `monthly` 320/750/1500/2900. Publicar el bot solo lo dejaría
       cotizando un precio que el checkout todavía no cobra. El acople quedó escrito en el pedido de
       deploy vivo `t_33406907`, que es donde se da el ok — landing, plataforma y bot van juntos.
@@ -7827,6 +7843,7 @@ archivos.**
 
 - [x] **La cuenta vencida seguía cancelando citas por WhatsApp.** Cerrado el 2026-09-11,
       `6aba5bc` (rama del carril — **falta que el integrador lo mergee y falta desplegar**).
+      ✅ YA DESPLEGADO (medido 2026-09-25: `6aba5bc` vive en produccion `39234c89`).
       No estaba en la cola: salió de auditar la puerta pública que es de este carril.
       El panel corta sus 35 escrituras con `checkPlanExpiry` y la reserva pública se cerró
       el 08-sep con ese mismo motivo; `lib/agenda/reserva-publica.ts` **nombra al bot de
@@ -8187,6 +8204,7 @@ archivos.**
       que decía tenerlo arreglado apuntaba a un commit inexistente.** Cerrado el 2026-09-02
       (commit `22fd088` de `onia-platform`, rama `claude/chatbots-platform-review-0d1d09`).
       **Commiteado, NO desplegado** — el deploy es de Sergio y sigue como **S11**.
+      ✅ YA DESPLEGADO (medido 2026-09-25: `22fd088` `ab9e0de` `917adca` vive en produccion `39234c89`).
       Salió de la auditoría de los `[x]`, que es lo que manda el loop cuando "Ahora" queda sin
       ítems desbloqueados (los tres de "Después" están frenados por algo que no es código).
       **Lo que se auditó y salió CIERTO** — se escribe porque una auditoría que sólo reporta lo
@@ -8250,6 +8268,7 @@ archivos.**
       | `campanas:vivas` en 0 | exit **0**, 5 frases vivas / 5 con campaña |
       | suite del bot verde | **690/690** antes de tocar nada (la cola decía 684: creció, no se rompió) |
       | commit `675541b` de `onia-platform` existe con lo que dice | sí: 6 archivos, `vocabulario.ts` + `ChatbotClient.tsx` + los dos tests. Sigue **commiteado, NO desplegado** |
+      ✅ YA DESPLEGADO (medido 2026-09-25: `675541b` vive en produccion `39234c89`).
       🔴 **Lo que salió FALSO, y es lo que esta vuelta arregla: S9 estaba corto otra vez.** El
       detalle y la lista corregida están en su fila; el resumen es que el espejo sumó la feature
       del link de agenda en **cinco** archivos y S9 nombraba dos, con un acople duro
@@ -8368,6 +8387,7 @@ archivos.**
 - [x] **"La cita" ya no le habla de consultorio a una ferretería: cada rubro lee su propia
       palabra.** Cerrado el 2026-09-02 (commit `675541b` de `onia-platform`, rama
       `claude/chatbots-platform-review-0d1d09`). **Commiteado, NO desplegado — y medido el mismo
+      ✅ YA DESPLEGADO (medido 2026-09-25: `675541b` vive en produccion `39234c89`).
       día: tampoco llega a `origin/master`, que es de donde se buildea. Ver S16.**
       **Gate 1 primero, en vivo:** el ítem era REAL —`ChatbotClient.tsx` líneas 90, 505, 510 y
       520 seguían con los literales— y no estaba cerrado más abajo.
