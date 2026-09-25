@@ -678,6 +678,76 @@ abrirlas y decidir a qué deploy se refieren. Se derivan con el comando, nunca d
 
 ## Ahora
 
+- [x] 🔴 **CERRADO el 2026-09-25 07:43-08:20 La Paz (commiteado; es el INSTRUMENTO, no toca el
+      motor — no necesita deploy): cuatro desconocidos escribieron, nadie les contestó nunca, y el
+      medidor del embudo los escondía en la categoría que se lee como «no existen».**
+
+      **Lo que estaba roto.** `scripts/embudo_del_bot.mjs` cruzaba las filas del motor
+      (`onia_center.bot_conversations`) contra las conversaciones de Chatwoot con un
+      `for (const fila of filas)` — o sea **recorría una sola dirección del cruce**. Una
+      conversación que existe en Chatwoot y **no tiene fila en el motor** no entraba nunca al
+      bucle: no salía ni como real ni como descartada. No se contaba mal — **desaparecía**.
+
+      **Cómo se encontró, y por qué nadie lo había visto.** La propia cabecera del archivo nombra
+      los 7 desconocidos reales uno por uno (`inbox 4 web: 34, 36, 38, 40 · inbox 5 WhatsApp: 35,
+      37, 58`), pero al ejecutarlo imprimía `3 desconocido(s) real(es)`. **El comentario y el
+      código daban números distintos y el gate estaba verde**, porque ningún caso comparaba uno
+      contra el otro. Medido en producción:
+
+      ```
+      # los 7 SIGUEN en Chatwoot, con su inbox intacto (4 y 5):
+      select c.id, c.inbox_id, ct.name from conversations c left join contacts ct on ct.id=c.contact_id
+        where c.id in (34,35,36,37,38,40,58);        → 7 filas
+      # pero en el motor hay 3:
+      select conversation_key from onia_center.bot_conversations
+        where conversation_key in ('chatwoot:34',…);  → chatwoot:38, chatwoot:40, chatwoot:58
+      ```
+
+      🔴 **Y los 4 que faltaban son lo peor que podía haber ahí: escribieron y NADIE contestó.**
+      `select conversation_id, count(*) filter (where message_type=1) from messages where
+      conversation_id in (34,35,36,37) group by 1` → **0 respuestas en los cuatro**, ni del bot ni
+      de una persona. Dos son del widget web (`delicate-glitter-674`, `icy-lake-546`) y **dos son
+      de WhatsApp con nombre de persona** (`F`, `mariohassen`), del 24 al 28 de agosto. Son los
+      mismos 4 de la tarea `t_5ea80f5e` («son 4, no 3»), que sigue esperando a Sergio Urcullo
+      porque contactar personas es suya.
+
+      ⚠️ **Y acá me corregí a mí mismo en la misma vuelta, que es justo el error que este carril
+      tiene escrito («desconfiá del instrumento que te da la razón»).** La primera versión de este
+      ítem y del informe decía que los 4 eran *«invisibles para el embudo Y para el vigía de leads
+      sin respuesta, o sea que nadie los rescata»*. **Falso, y en la dirección alarmante.**
+      `scripts/vigia_sin_respuesta.mjs:472` arranca de `messages join conversations` de Chatwoot —
+      el lado append-only— y recién después enriquece con `bot_stage`, así que **sí los ve**.
+      Corrido en vivo el 2026-09-25: `7 colgado(s) — 5 sin respuesta · 2 atendido(s) por el bot`,
+      nombrando a los cuatro con su contacto (`conv 36` dejó incluso un correo,
+      `Saguilera@ds-santacruz.bo`, y `conv 35` escribió *«estoy evaluando un sistema de gestión
+      para una clínica»* — cliente ideal textual). **Lo que estaba roto era la MEDIDA del objetivo
+      de este carril, no el rescate.** Escribirlo como «nadie los ve» habría mandado a la próxima
+      vuelta a construir un rescate que ya existe.
+
+      **El arreglo.** `resumirEmbudo` ahora recorre **las dos direcciones** y devuelve
+      `sinRegistrarEnElMotor`, con los MISMOS dos filtros que el contador viejo (inbox del objetivo
+      + `esNuestra`), para que el número nuevo no se infle con nuestras propias sondas. El informe
+      lo imprime en **su propia línea y con 🔴**, no entre los descartes.
+
+      **Prueba (rojo antes, verde después, y el rojo se pudo provocar a mano).** El caso nuevo
+      falló primero por el motivo correcto (el campo no existía); con el arreglo,
+      `node scripts/embudo_del_bot.mjs --self-check` → `OK`. Validación por MUTACIÓN, con `cp` y no
+      `git checkout`: quitar el filtro anti-sondas → `✗ una sonda nuestra sin fila no es un lead
+      abandonado`; cambiar el texto del informe → `✗ el informe los nombra, no los esconde`.
+      En vivo contra producción:
+
+      ```
+      EMBUDO DEL BOT — 3 desconocido(s) real(es) de 43 fila(s) del motor.
+        🔴 escribieron y el motor no los registro: 4 (chatwoot:34, chatwoot:35, chatwoot:36,
+           chatwoot:37) — invisibles para el embudo y para el vigia de leads sin respuesta
+      ```
+
+      **La cuenta honesta del carril pasó de 3 a 7 desconocidos reales** (3 registrados + 4 que el
+      motor perdió). **Lección, y es la que sobrevive al arreglo:** cuando el comentario de un
+      instrumento y su código dan números distintos, no hay rojo que avise — alguien tiene que
+      restar. Y un cruce entre dos sistemas tiene DOS direcciones: la que falta casi siempre es la
+      que esconde al sujeto, no la que sobra.
+
 - [x] 🔴 **CERRADO el 2026-09-25 06:13-07:05 La Paz (commiteado, NO desplegado — es un test y dos
       comentarios; no toca el motor): el número que el aviso de leads fríos le iba a poner delante
       a Sergio Urcullo estaba inflado 3x, y ningún test podía verlo porque TODOS los fixtures eran
