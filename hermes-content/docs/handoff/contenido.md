@@ -51,9 +51,11 @@ y verificado, pero no está publicado ni mergeado.
    - **Listo:** guion, capturas, carrusel, checklist, texto de LinkedIn y drops.
    - **Falta de Sergio Urcullo:** grabar la cámara de C1-C3, grabar la demo de YouTube en su PC,
      aprobar el carrusel y pegar los drops.
-4. **Capturas de video de la tanda**
-   (`hermes-content/captures/2026-09-25-opus-5-5/`): ver la nota al final de este archivo sobre
-   si la corrida final terminó.
+4. **Capturas de video de la tanda** (`hermes-content/captures/2026-09-25-opus-5-5/`):
+   ✅ **completas**. Son 9 de 9 tomas, todas con HTTP 200 y el texto afirmado verificado en la
+   página. Los videos son 2880×1800 a 60 fps, más una vertical de 1080×1920, y cada foto trae su
+   `region_px`. Se miraron la hoja de contacto, cada foto y un cuadro del medio de un video. No
+   queda nada pendiente de este punto.
 5. **Carrusel:** el pack `community-editorial` numera las láminas ("02 / 08"), pero la regla 1
    de `carousels/CAROUSEL_SYSTEM.md` dice "sin numeración". Es el pack aprobado el 21-sep; no se
    tocó. Hay que decidir si la regla o el pack.

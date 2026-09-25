@@ -1,0 +1,526 @@
+{
+  "tema": "2026-09-25-opus-5-5-migracion",
+  "descripcion": "Capturas REALES para la tanda 'Migrar a Claude Opus 5.5 sin que se rompa tu código'. Fuentes: anuncio oficial y guía de migración oficial. Cada toma verifica el texto que el guion afirma.",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "dpr": 2,
+  "fps": 60,
+  "crf": 18,
+  "tomas": [
+    {
+      "id": "A1-anuncio-portada",
+      "url": "https://www.anthropic.com/claude-opus-5-5",
+      "debe_decir": [
+        "Claude Opus 5.5",
+        "We’re introducing Claude Opus 5.5, the first model in our new Claude 5.5 family"
+      ],
+      "pasos": [
+        {
+          "hacer": "esperar",
+          "s": 3.0
+        },
+        {
+          "hacer": "foto",
+          "nombre": "portada"
+        }
+      ],
+      "nota": "La fecha 'September 22, 2026' se ve en la portada pero no está en el texto de la página (se verificó mirando la captura)."
+    },
+    {
+      "id": "A2-anuncio-costo",
+      "url": "https://www.anthropic.com/claude-opus-5-5",
+      "debe_decir": [
+        "at default settings it will cost 40% less than Opus 5 on typical workloads",
+        "Input and output tokens are $4 and $20 per million, 20% less than Opus 5",
+        "are $0.20 per million tokens, 60% less than Opus 5"
+      ],
+      "pasos": [
+        {
+          "hacer": "scroll",
+          "texto": "Cost and speed.",
+          "s": 1.6,
+          "margen": 170
+        },
+        {
+          "hacer": "esperar",
+          "s": 0.4
+        },
+        {
+          "hacer": "cursor",
+          "texto": "at default settings it will cost 40% less",
+          "s": 0.8
+        },
+        {
+          "hacer": "marcar",
+          "texto": "at default settings it will cost 40% less than Opus 5 on typical workloads",
+          "s": 2.2
+        },
+        {
+          "hacer": "foto",
+          "nombre": "40-por-ciento"
+        },
+        {
+          "hacer": "quitar",
+          "s": 0.3
+        },
+        {
+          "hacer": "cursor",
+          "texto": "Input and output tokens are $4 and $20",
+          "s": 0.7
+        },
+        {
+          "hacer": "marcar",
+          "texto": "Input and output tokens are $4 and $20 per million, 20% less than Opus 5",
+          "s": 2.2
+        },
+        {
+          "hacer": "foto",
+          "nombre": "4-y-20"
+        },
+        {
+          "hacer": "quitar",
+          "s": 0.3
+        },
+        {
+          "hacer": "cursor",
+          "texto": "are $0.20 per million tokens",
+          "s": 0.7
+        },
+        {
+          "hacer": "marcar",
+          "texto": "are $0.20 per million tokens, 60% less than Opus 5",
+          "s": 2.0
+        },
+        {
+          "hacer": "foto",
+          "nombre": "cache"
+        },
+        {
+          "hacer": "quitar",
+          "s": 0.3
+        },
+        {
+          "hacer": "cursor_fuera",
+          "s": 0.6
+        }
+      ]
+    },
+    {
+      "id": "A3-anuncio-fast-mode",
+      "url": "https://www.anthropic.com/claude-opus-5-5",
+      "debe_decir": [
+        "with up to 2.5x speed",
+        "It costs $8 per million input tokens and $40 per million output tokens"
+      ],
+      "pasos": [
+        {
+          "hacer": "scroll",
+          "texto": "Fast mode for Opus 5.5 is also available",
+          "s": 1.6,
+          "margen": 330
+        },
+        {
+          "hacer": "esperar",
+          "s": 0.5
+        },
+        {
+          "hacer": "marcar",
+          "texto": "Fast mode for Opus 5.5 is also available in Claude Code and the Claude Platform with up to 2.5x speed",
+          "s": 2.0
+        },
+        {
+          "hacer": "marcar",
+          "texto": "It costs $8 per million input tokens and $40 per million output tokens",
+          "s": 2.0
+        },
+        {
+          "hacer": "foto",
+          "nombre": "fast-mode"
+        },
+        {
+          "hacer": "quitar",
+          "s": 0.3
+        }
+      ]
+    },
+    {
+      "id": "A4-anuncio-disponible",
+      "url": "https://www.anthropic.com/claude-opus-5-5",
+      "debe_decir": [
+        "Claude Opus 5.5 is now available on all platforms",
+        "get started with claude-opus-5-5"
+      ],
+      "pasos": [
+        {
+          "hacer": "scroll",
+          "texto": "Claude Opus 5.5 is now available on all platforms",
+          "s": 1.8,
+          "margen": 260
+        },
+        {
+          "hacer": "esperar",
+          "s": 0.4
+        },
+        {
+          "hacer": "cursor",
+          "texto": "claude-opus-5-5",
+          "s": 0.8
+        },
+        {
+          "hacer": "marcar",
+          "texto": "claude-opus-5-5",
+          "s": 2.2
+        },
+        {
+          "hacer": "foto",
+          "nombre": "model-id"
+        },
+        {
+          "hacer": "quitar",
+          "s": 0.3
+        },
+        {
+          "hacer": "cursor_fuera",
+          "s": 0.6
+        }
+      ]
+    },
+    {
+      "id": "M0-migracion-400",
+      "url": "https://platform.claude.com/docs/en/models/opus-5-5/migration-guide",
+      "debe_decir": [
+        "Where an item says a setting is rejected, the API returns a 400 error."
+      ],
+      "pasos": [
+        {
+          "hacer": "scroll",
+          "texto": "Where an item says a setting is rejected, the API returns a 400 error.",
+          "s": 1.6,
+          "margen": 260
+        },
+        {
+          "hacer": "esperar",
+          "s": 0.4
+        },
+        {
+          "hacer": "cursor",
+          "texto": "the API returns a 400 error",
+          "s": 0.8
+        },
+        {
+          "hacer": "marcar",
+          "texto": "Where an item says a setting is rejected, the API returns a 400 error.",
+          "s": 2.4
+        },
+        {
+          "hacer": "foto",
+          "nombre": "400"
+        },
+        {
+          "hacer": "quitar",
+          "s": 0.3
+        },
+        {
+          "hacer": "cursor_fuera",
+          "s": 0.6
+        }
+      ]
+    },
+    {
+      "id": "M1-migracion-cinco-reglas",
+      "url": "https://platform.claude.com/docs/en/models/opus-5-5/migration-guide",
+      "debe_decir": [
+        "What every request to Claude Opus 5.5 must satisfy",
+        "are rejected",
+        "the default is medium",
+        "is rejected",
+        "any other value is rejected",
+        "Don't end messages with a prefilled assistant turn: it is rejected"
+      ],
+      "pasos": [
+        {
+          "hacer": "scroll",
+          "texto": "What every request to Claude Opus 5.5 must satisfy",
+          "s": 1.8,
+          "margen": 150
+        },
+        {
+          "hacer": "esperar",
+          "s": 0.6
+        },
+        {
+          "hacer": "marcar",
+          "texto": "thinking: {\"type\": \"disabled\"} and manual thinking budgets",
+          "s": 1.8
+        },
+        {
+          "hacer": "foto",
+          "nombre": "1-thinking"
+        },
+        {
+          "hacer": "quitar",
+          "s": 0.25
+        },
+        {
+          "hacer": "marcar",
+          "texto": "and the default is medium",
+          "s": 1.8
+        },
+        {
+          "hacer": "foto",
+          "nombre": "2-effort"
+        },
+        {
+          "hacer": "quitar",
+          "s": 0.25
+        },
+        {
+          "hacer": "marcar",
+          "texto": "Forcing a tool call with",
+          "s": 1.8
+        },
+        {
+          "hacer": "foto",
+          "nombre": "3-tool-choice"
+        },
+        {
+          "hacer": "quitar",
+          "s": 0.25
+        },
+        {
+          "hacer": "marcar",
+          "texto": "Omit temperature, top_p, and top_k",
+          "s": 1.8
+        },
+        {
+          "hacer": "foto",
+          "nombre": "4-sampling"
+        },
+        {
+          "hacer": "quitar",
+          "s": 0.25
+        },
+        {
+          "hacer": "marcar",
+          "texto": "Don't end messages with a prefilled assistant turn: it is rejected",
+          "s": 1.8
+        },
+        {
+          "hacer": "foto",
+          "nombre": "5-prefill"
+        },
+        {
+          "hacer": "quitar",
+          "s": 0.3
+        },
+        {
+          "hacer": "esperar",
+          "s": 0.5
+        }
+      ]
+    },
+    {
+      "id": "M2-migracion-comando",
+      "url": "https://platform.claude.com/docs/en/models/opus-5-5/migration-guide",
+      "debe_decir": [
+        "Automate your migration with the Claude API skill",
+        "/claude-api migrate this project to claude-opus-5-5"
+      ],
+      "pasos": [
+        {
+          "hacer": "scroll",
+          "texto": "Automate your migration with the Claude API skill",
+          "s": 1.4,
+          "margen": 200
+        },
+        {
+          "hacer": "esperar",
+          "s": 0.4
+        },
+        {
+          "hacer": "cursor",
+          "texto": "/claude-api migrate this project to claude-opus-5-5",
+          "s": 0.8
+        },
+        {
+          "hacer": "marcar",
+          "texto": "/claude-api migrate this project to claude-opus-5-5",
+          "s": 2.4
+        },
+        {
+          "hacer": "foto",
+          "nombre": "comando"
+        },
+        {
+          "hacer": "quitar",
+          "s": 0.3
+        },
+        {
+          "hacer": "cursor_fuera",
+          "s": 0.6
+        }
+      ]
+    },
+    {
+      "id": "M3-migracion-effort-y-errores",
+      "url": "https://platform.claude.com/docs/en/models/opus-5-5/migration-guide",
+      "debe_decir": [
+        "Set effort explicitly: the default is medium",
+        "\"thinking.type.disabled\" is not supported for this model.",
+        "tool_choice: type \"tool\" and \"any\" are not supported for this model."
+      ],
+      "pasos": [
+        {
+          "hacer": "scroll",
+          "texto": "Set effort explicitly: the default is medium",
+          "s": 1.6,
+          "margen": 300
+        },
+        {
+          "hacer": "esperar",
+          "s": 0.3
+        },
+        {
+          "hacer": "marcar",
+          "texto": "Set effort explicitly: the default is medium",
+          "s": 2.2
+        },
+        {
+          "hacer": "foto",
+          "nombre": "effort-explicito"
+        },
+        {
+          "hacer": "quitar",
+          "s": 0.3
+        },
+        {
+          "hacer": "scroll",
+          "texto": "\"thinking.type.disabled\" is not supported for this model.",
+          "s": 1.6,
+          "margen": 300
+        },
+        {
+          "hacer": "marcar",
+          "texto": "\"thinking.type.disabled\" is not supported for this model.",
+          "s": 2.0
+        },
+        {
+          "hacer": "foto",
+          "nombre": "error-thinking"
+        },
+        {
+          "hacer": "quitar",
+          "s": 0.3
+        },
+        {
+          "hacer": "scroll",
+          "texto": "tool_choice: type \"tool\" and \"any\" are not supported for this model.",
+          "s": 1.6,
+          "margen": 300
+        },
+        {
+          "hacer": "marcar",
+          "texto": "tool_choice: type \"tool\" and \"any\" are not supported for this model.",
+          "s": 2.0
+        },
+        {
+          "hacer": "foto",
+          "nombre": "error-tool-choice"
+        },
+        {
+          "hacer": "quitar",
+          "s": 0.3
+        }
+      ]
+    },
+    {
+      "id": "V1-vertical-cinco-reglas",
+      "url": "https://platform.claude.com/docs/en/models/opus-5-5/migration-guide",
+      "viewport": {
+        "width": 540,
+        "height": 960
+      },
+      "debe_decir": [
+        "What every request to Claude Opus 5.5 must satisfy"
+      ],
+      "pasos": [
+        {
+          "hacer": "scroll",
+          "texto": "What every request to Claude Opus 5.5 must satisfy",
+          "s": 1.6,
+          "margen": 110
+        },
+        {
+          "hacer": "esperar",
+          "s": 0.5
+        },
+        {
+          "hacer": "marcar",
+          "texto": "thinking: {\"type\": \"disabled\"} and manual thinking budgets",
+          "s": 1.6
+        },
+        {
+          "hacer": "foto",
+          "nombre": "1-thinking"
+        },
+        {
+          "hacer": "quitar",
+          "s": 0.25
+        },
+        {
+          "hacer": "scroll",
+          "texto": "Forcing a tool call with",
+          "s": 1.0,
+          "margen": 300
+        },
+        {
+          "hacer": "marcar",
+          "texto": "Forcing a tool call with",
+          "s": 1.6
+        },
+        {
+          "hacer": "foto",
+          "nombre": "3-tool-choice"
+        },
+        {
+          "hacer": "quitar",
+          "s": 0.25
+        },
+        {
+          "hacer": "scroll",
+          "texto": "Omit temperature, top_p, and top_k",
+          "s": 1.0,
+          "margen": 300
+        },
+        {
+          "hacer": "marcar",
+          "texto": "Omit temperature, top_p, and top_k",
+          "s": 1.6
+        },
+        {
+          "hacer": "foto",
+          "nombre": "4-sampling"
+        },
+        {
+          "hacer": "quitar",
+          "s": 0.25
+        },
+        {
+          "hacer": "marcar",
+          "texto": "Don't end messages with a prefilled assistant turn: it is rejected",
+          "s": 1.6
+        },
+        {
+          "hacer": "foto",
+          "nombre": "5-prefill"
+        },
+        {
+          "hacer": "quitar",
+          "s": 0.3
+        }
+      ]
+    }
+  ]
+}
