@@ -624,8 +624,31 @@ Arreglado: el veredicto salió de `medir()` a la función pura `veredicto()` —
 `--self-check` no lo probaba— y ahora **0 juzgadas con afirmaciones presentes es `2`, no `0`**,
 el verde dice **sobre cuántas** lo dice, y «ninguna cola pide deploy» sigue siendo un `0`
 honesto (un `2` permanente se aprende a saltear). Hoy el comando sale **`2`**: no está midiendo
-nada, y eso ahora se ve. El sujeto que sí es trabajo de este carril son las **36 líneas sin
-sha**: un ítem que no cita su commit no lo puede corregir nadie, nunca.
+nada, y eso ahora se ve.
+
+⚠️ **Acá decía que «el sujeto que sí es trabajo de este carril son las 36 líneas sin sha», y
+eso era FALSO — medido el 2026-09-25 mirando los 36 sujetos uno por uno.** La enorme mayoría
+son del **MOTOR** («el bot vivo corre desde `/tmp/onia-bot/`», «`/opt/onia/bot` es rsync, no
+git»), y este gate sólo resuelve shas de `onia-platform`: ponerles el sha —que es lo que ese
+remedio pedía— las habría movido de `la linea no cita sha` a `ningun sha es de onia-platform`
+y el `2` habría quedado idéntico. Treinta y pico de líneas de trabajo para no mover la medida,
+y encima el sujeto real enterrado entre ellas.
+
+**El motivo de cada no medida ahora se elige por FRONTERA, no por si hay un hexadecimal**
+(`fronteraDe()` mira la línea primero y el cuerpo del ítem después; sin huellas dice
+`sin ubicar`, nunca adivina). Desglose real de las 58, del propio comando:
+
+| | |
+|---|---|
+| 44 + 5 | del **motor** — otra frontera, este gate no las mide y citarles un sha tampoco |
+| 5 | **sin ubicar** — hay que leerlas |
+| **4** | **EL SUJETO**: piden el deploy del **panel** y no citan su commit |
+
+Los cuatro, derivados (no se copian de acá, que caduca): corré `npm run deploy:ya-ocurrio` y
+leé el desglose. El 2026-09-25 eran `chatbot.md:1623`, `chatbot.md:1666`, `chatbot.md:7099` y
+`plataforma-v1.md:6652`. **No se les puso el sha en esa vuelta a propósito:** un sha equivocado
+acá es peor que ninguno, porque `--corregir` escribe en la cola y marcaría como desplegado algo
+que no lo está. Se resuelve leyendo cada ítem y buscando su commit en `onia-platform`.
 
 ## Ahora
 

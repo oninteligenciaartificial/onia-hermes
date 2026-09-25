@@ -130,6 +130,55 @@ export function sinCitas(linea) {
 // La decisión — pura, sin sistema. Es lo que prueba `--self-check`.
 // ---------------------------------------------------------------------------
 
+/** Huellas del deploy del MOTOR. `/opt/onia/bot` es rsync, no un checkout: otra frontera. */
+export const HUELLA_BOT = /\/opt\/onia\/bot|\/tmp\/onia-bot|deploy-bot\.sh|DESPLEGAR:\s*bot|vps-ops\/bot|webhook-server\.sh/i;
+/** Huellas del deploy del PANEL — el único que este gate sabe medir. */
+export const HUELLA_PLATAFORMA = /onia-platform|app\.onia\.com\.bo|DESPLEGAR:\s*plataforma|(?:publique|swap|deploy)\s+(?:de\s+)?`?plataforma/i;
+
+/**
+ * A qué deploy se refiere una afirmación: `"bot"`, `"plataforma"` o `"sin ubicar"`.
+ *
+ * POR QUÉ EXISTE (medido el 2026-09-25, corriendo el gate en vivo): de las 58 afirmaciones que
+ * este archivo encuentra, 36 salían con el motivo `la linea no cita sha`, y el veredicto le
+ * explicaba al que viene después que *«al ítem le falta su commit, y sin eso nadie puede
+ * corregirlo nunca»*. Mirados los 36 sujetos uno por uno, **la enorme mayoría son del MOTOR**
+ * («el bot vivo corre desde `/tmp/onia-bot/`», «`/opt/onia/bot` es rsync, no git»). Agregarles
+ * el sha —que es lo que el remedio pedía— no los habría hecho medibles ni por un renglón: este
+ * gate sólo resuelve shas de `onia-platform`, así que los 30 y pico habrían pasado de
+ * `la linea no cita sha` a `ningun sha es de onia-platform` y el `2` seguiría igual.
+ *
+ * Un instrumento que nombra un remedio que no cambia su propia medición manda a trabajo
+ * inútil, y encima ENTIERRA el sujeto que sí es corregible entre 30 que no lo son. La frontera
+ * no cambia ningún veredicto —una no medida sigue siendo no medida— cambia a quién se le pide
+ * qué, que es lo único que ese texto tenía que hacer.
+ *
+ * Se mira la LÍNEA primero y el cuerpo del ítem después: casi todas lo dicen por sí mismas, y
+ * un ítem largo puede nombrar los dos deploys mientras la frase acusada habla de uno solo.
+ */
+export function fronteraDe(linea, cuerpo = "") {
+  for (const texto of [linea, cuerpo]) {
+    const t = String(texto ?? "");
+    const bot = HUELLA_BOT.test(t);
+    const plataforma = HUELLA_PLATAFORMA.test(t);
+    if (bot && !plataforma) return "bot";
+    if (plataforma && !bot) return "plataforma";
+  }
+  return "sin ubicar";
+}
+
+/**
+ * Por qué no se pudo juzgar una afirmación — y, sobre todo, QUÉ haría falta para poder.
+ * Es el texto que decide si el que lee se pone a trabajar en algo que sirve.
+ */
+export function motivoDeNoMedida({ shas = [], frontera = "sin ubicar" } = {}) {
+  // Primero la frontera: a una línea del motor, citar un sha no la vuelve medible. Decirle
+  // «te falta el commit» es mandarla a un trabajo que deja el gate exactamente igual.
+  if (frontera === "bot") return "es del bot: otra frontera — citar un sha NO la haria medible";
+  if (shas.length) return "ningun sha es de onia-platform";
+  if (frontera === "plataforma") return "la linea no cita sha";
+  return "no cita sha y no se pudo ubicar la frontera";
+}
+
 /**
  * @param {Array<{archivo:string, linea:number, frase:string, shas:string[]}>} afirmaciones
  * @param {(sha:string)=>(boolean|null)} estaVivo  true = desplegado · false = no · null = no sé
@@ -145,7 +194,7 @@ export function juzgar(afirmaciones, estaVivo) {
     // Sin un solo sha juzgable no hay nada que afirmar: puede ser una línea del bot, o un ítem
     // que nunca citó su commit. NO MEDIDO, que es distinto de honesta.
     if (juzgables.length === 0) {
-      noMedidas.push({ ...a, motivo: a.shas.length ? "ningun sha es de onia-platform" : "la linea no cita sha" });
+      noMedidas.push({ ...a, motivo: motivoDeNoMedida(a) });
       continue;
     }
     // Miente cuando TODO lo que se puede juzgar ya está vivo. Si queda una pieza afuera, la
@@ -173,6 +222,30 @@ export function juzgar(afirmaciones, estaVivo) {
  * @param {{mienten:Array, honestas:Array, noMedidas:Array}} recuento
  * @returns {{codigo:number, mensaje:string}}
  */
+/**
+ * El desglose de las no medidas: cuántas son del MOTOR (para las que este gate no es el
+ * instrumento) y cuántas son el sujeto realmente corregible — una línea del panel sin su
+ * commit. Antes las 58 salían bajo un solo remedio, «al ítem le falta su commit», y mandaba a
+ * ponerle sha a 30 y pico de líneas del bot sin mover el veredicto ni un renglón.
+ */
+export function porFrontera(noMedidas) {
+  const cuenta = (m) => noMedidas.filter((n) => n.motivo === m).length;
+  const bot = cuenta("es del bot: otra frontera — citar un sha NO la haria medible");
+  const sinSha = cuenta("la linea no cita sha");
+  const shaAjeno = cuenta("ningun sha es de onia-platform");
+  const sinUbicar = cuenta("no cita sha y no se pudo ubicar la frontera");
+  const partes = [];
+  if (bot) partes.push(`  ${bot} son del MOTOR (/opt/onia/bot): otra frontera — este gate no las mide, y citarles un sha tampoco.`);
+  if (shaAjeno) partes.push(`  ${shaAjeno} citan un sha que no es de onia-platform: tambien del motor.`);
+  if (sinUbicar) partes.push(`  ${sinUbicar} no cita(n) sha y no se pudo ubicar su frontera: hay que leerlas.`);
+  partes.push(
+    sinSha
+      ? `  ${sinSha} son EL SUJETO: piden el deploy del panel y no citan su commit. Sin sha nadie las puede corregir nunca.`
+      : "  0 son el sujeto corregible: ninguna linea del panel se quedo sin su commit.",
+  );
+  return partes.join("\n");
+}
+
 export function veredicto({ mienten, honestas, noMedidas }) {
   const juzgadas = mienten.length + honestas.length;
   if (mienten.length) return { codigo: MIENTEN, mensaje: "" };
@@ -188,14 +261,17 @@ export function veredicto({ mienten, honestas, noMedidas }) {
       mensaje:
         `\nNO MEDIDO — las ${noMedidas.length} lineas piden un deploy y NINGUNA se pudo juzgar.\n` +
         "No absuelvo a nadie: sin un sha de la plataforma que resolver, este gate no sabe si\n" +
-        "caducaron. Si esperabas que midiera, el sujeto esta en el motivo de cada linea\n" +
-        "(`ningun sha es de onia-platform` = es del bot, otra frontera · `la linea no cita sha`\n" +
-        "= al ítem le falta su commit, y sin eso nadie puede corregirlo nunca).",
+        `caducaron.\n${porFrontera(noMedidas)}`,
     };
   }
+  // El desglose va también acá: en cuanto UNA línea se vuelve juzgable, el gate sale por esta
+  // rama, y sin esto el sujeto corregible se volvería invisible detrás de un «OK» — que es
+  // justo el modo de falla que este archivo entero existe para no repetir.
   return {
     codigo: SIN_MENTIRAS,
-    mensaje: `\nOK — ninguna de las ${juzgadas} lineas juzgadas pide un deploy que ya ocurrio (${noMedidas.length} no medidas).`,
+    mensaje:
+      `\nOK — ninguna de las ${juzgadas} lineas juzgadas pide un deploy que ya ocurrio (${noMedidas.length} no medidas).` +
+      (noMedidas.length ? `\n${porFrontera(noMedidas)}` : ""),
   };
 }
 
@@ -234,7 +310,8 @@ export function afirmacionesDe(texto, archivo) {
       // la corrección vive en la línea de ABAJO. Sin esta salida se la vuelve a acusar en cada
       // corrida y el conteo no baja nunca: sería un bucle, no un arreglo.
       if (MARCA.test(t) || MARCA.test(lineas[n] ?? "")) continue;
-      if (PIDE_DEPLOY.test(sinCitas(t))) out.push({ archivo, linea: n, frase: t.trim().slice(0, 120), shas });
+      if (PIDE_DEPLOY.test(sinCitas(t)))
+        out.push({ archivo, linea: n, frase: t.trim().slice(0, 120), shas, frontera: fronteraDe(t, cuerpo) });
     }
   }
   return out;
@@ -470,6 +547,59 @@ function selfCheck() {
   ok("lee la etiqueta", shaDeEtiqueta("onia-platform:release-3986b807") === "3986b807");
   ok("BUILD_ID no es una etiqueta", shaDeEtiqueta("VREeqNSncIqDIOTMbfLTQ") === null);
   ok("sin etiqueta -> null, no cadena vacia", shaDeEtiqueta(null) === null);
+
+  // --- La frontera: a quién se le pide qué cuando no se pudo medir -----------------------
+  // Los cuatro sujetos son textuales de `chatbot.md`, medidos el 2026-09-25.
+  ok(
+    "frontera: el bot vivo corre en /tmp/onia-bot -> bot",
+    fronteraDe("⚠️ **Commiteado, NO desplegado.** El bot vivo corre desde `/tmp/onia-bot/` dentro de") === "bot",
+  );
+  ok("frontera: /opt/onia/bot es rsync -> bot", fronteraDe("⚠️ **Commiteado, NO desplegado** — `/opt/onia/bot` es rsync, no git.") === "bot");
+  ok(
+    "frontera: hasta que onia-cola publique plataforma -> plataforma",
+    fronteraDe("⚠️ **NO DESPLEGADO.** Hasta que `onia-cola` publique `plataforma`, el dueño sigue leyendo") === "plataforma",
+  );
+  ok("frontera: la linea calla, el cuerpo dice bot -> bot", fronteraDe("**Commiteado, NO desplegado**.", "viaja con `deploy-bot.sh`") === "bot");
+  // Manda la LÍNEA: un ítem largo nombra los dos deploys y la frase acusada habla de uno.
+  ok(
+    "frontera: manda la linea, no el cuerpo",
+    fronteraDe("NO desplegado: falta el swap de `plataforma`", "el bot vivo corre en `/tmp/onia-bot/`") === "plataforma",
+  );
+  ok("frontera: sin huellas -> sin ubicar, nunca un default", fronteraDe("**Commiteado, NO desplegado.**") === "sin ubicar");
+  ok("frontera: nombra los dos -> sin ubicar", fronteraDe("`/opt/onia/bot` y `onia-platform`") === "sin ubicar");
+
+  // El remedio que se le imprime a cada no medida. Es el caso que este arreglo existe para cazar.
+  ok(
+    "remedio: a una linea del bot NO se le pide el commit",
+    motivoDeNoMedida({ shas: [], frontera: "bot" }) === "es del bot: otra frontera — citar un sha NO la haria medible",
+  );
+  ok(
+    "remedio: y tampoco cuando SÍ cita un sha (el sha es de onia-hermes)",
+    motivoDeNoMedida({ shas: ["abc1234"], frontera: "bot" }) === "es del bot: otra frontera — citar un sha NO la haria medible",
+  );
+  ok("remedio: la del panel sin sha SÍ es el sujeto corregible", motivoDeNoMedida({ shas: [], frontera: "plataforma" }) === "la linea no cita sha");
+  ok("remedio: sin ubicar no se disfraza de ninguna de las dos", motivoDeNoMedida({ shas: [], frontera: "sin ubicar" }) === "no cita sha y no se pudo ubicar la frontera");
+
+  // Integración: la frontera tiene que VIAJAR desde el markdown hasta el motivo. Sin esto las
+  // funciones de arriba son puro adorno — es como sobrevivió el falso verde del 25-sep.
+  const mdBot = [
+    "- [x] **CERRADO — el bot le contesta mal**",
+    "      ⚠️ **Commiteado, NO desplegado** — `/opt/onia/bot` es rsync, no git.",
+  ].join("\n");
+  const afsBot = afirmacionesDe(mdBot, "chatbot.md");
+  ok("integra: la afirmacion del motor sale con frontera bot", afsBot.length === 1 && afsBot[0].frontera === "bot");
+  ok("integra: y juzgar le da el remedio del motor", juzgar(afsBot, () => null).noMedidas[0]?.motivo === "es del bot: otra frontera — citar un sha NO la haria medible");
+
+  // El veredicto agregado tiene que nombrar el sujeto CORREGIBLE, no las 58 juntas.
+  const vBot = veredicto({ mienten: [], honestas: [], noMedidas: [{ motivo: "es del bot: otra frontera — citar un sha NO la haria medible" }] });
+  ok("veredicto: sigue siendo NO MEDIDO", vBot.codigo === NO_PUDE_MEDIR);
+  ok("veredicto: no le pide su commit a una cola que es toda del motor", !/al ítem le falta su commit/.test(vBot.mensaje));
+  const vMix = veredicto({
+    mienten: [],
+    honestas: [],
+    noMedidas: [{ motivo: "es del bot: otra frontera — citar un sha NO la haria medible" }, { motivo: "la linea no cita sha" }],
+  });
+  ok("veredicto: cuenta cuantas son el sujeto corregible", /1 .*no cita.*sha|sin sha: 1/i.test(vMix.mensaje));
 
   const malos = casos.filter((c) => !c.ok);
   for (const c of casos) console.log(`${c.ok ? "ok  " : "FALLA"} ${c.nombre}`);
