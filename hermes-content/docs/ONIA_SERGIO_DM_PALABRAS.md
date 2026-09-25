@@ -1,9 +1,13 @@
 # DMs de la marca personal de Sergio — las 7 palabras del mes 1
 
 > Fuente de verdad de los textos que responde el workflow comentario→DM en
-> @sergio_urcullo. Estado: **BORRADOR para OK de Sergio** — las palabras están
+> @sergiourcullo. Estado: **BORRADOR para OK de Sergio Urcullo** — las palabras están
 > cableadas pero APAGADAS hasta que exista la comunidad de WhatsApp del reto.
 > `[COMUNIDAD]` se reemplaza por el link de invitación real antes de encender.
+>
+> ⚠️ **Corregido el 2026-09-25.** Acá decía `@sergio_urcullo`. Medido: la cuenta de
+> Instagram de Sergio Urcullo se renombró a **`@sergiourcullo`** (él lo confirmó el 06-sep,
+> commit `2ee86efb`).
 
 Regla de tono: primera persona de Sergio, directo, cero humo. Cada DM entrega
 LO PROMETIDO en el video + invita a la comunidad. Nunca venta en el mes 1.

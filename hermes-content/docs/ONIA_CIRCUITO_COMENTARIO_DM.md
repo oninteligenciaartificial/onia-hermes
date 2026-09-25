@@ -112,9 +112,14 @@ dos.** El único envío que Meta aceptó fue a Sergio, hace 9 días, desde el wo
 
 **Y ese camino ya no se puede repetir.** El 24-ago se agregó `2935350173474443` — el
 `from_id` de Sergio — a la lista anti-bucle `MIOS`. O sea: si Sergio comenta hoy desde
-`@sergio_urcullo`, el workflow lo descarta como `comentario_propio`. **La única prueba que
+`@sergiourcullo`, el workflow lo descarta como `comentario_propio`. **La única prueba que
 alguna vez funcionó es hoy irrepetible por diseño.** El test de §6 necesita una tercera
 persona, no a Sergio.
+
+> ⚠️ **Corregido el 2026-09-25.** En este párrafo y en §5 decía `@sergio_urcullo` como la
+> cuenta de Sergio Urcullo. Medido: la cuenta se renombró a **`@sergiourcullo`** (él lo
+> confirmó el 06-sep, commit `2ee86efb`); el `from_id` de la lista anti-bucle no cambia con el
+> nombre. La fila 54952 de la tabla de arriba conserva el handle que tenía ese día (18-ago).
 
 ### Las 5 ejecuciones "success" del 24-ago no fueron envíos
 
@@ -321,15 +326,17 @@ match exacto pierde leads que ya dijeron que si.
 No lo ejecuté: publicar un comentario en Instagram es publicar contenido y necesita permiso
 explícito. Queda todo definido para que sea un solo movimiento.
 
-**Quién comenta: NO Sergio desde `@sergio_urcullo`.** Su `from_id` está en la lista anti-bucle
+**Quién comenta: NO Sergio Urcullo desde `@sergiourcullo`.** Su `from_id` está en la lista anti-bucle
 (§3) y el comentario se descarta. Hace falta una tercera persona real, o una segunda cuenta
 personal de Instagram que nunca haya comentado antes.
+⚠️ *Corregido el 2026-09-25: acá y en la tabla de abajo decía `@sergio_urcullo`; ver la nota
+de §3.*
 
 | Qué | Valor exacto |
 |---|---|
 | **Post** | Carrusel de @oniahq del 21-ago — `https://www.instagram.com/p/DcUd8uakZsk/` (el del cuaderno/Excel) |
 | **Comentario a escribir** | `SISTEMA` — sola, sin nada más (también sirve `LISTA`) |
-| **Desde** | Una cuenta de Instagram que NO sea @oniahq, @lucia.antelo.oficial ni @sergio_urcullo |
+| **Desde** | Una cuenta de Instagram que NO sea @oniahq, @lucia.antelo.oficial ni @sergiourcullo |
 | **DM que debe llegar** | "Hola! Vi tu comentario. Te dejo el link para agendar el diagnostico de 20 minutos…" + `https://onia.com.bo/?src=onia-ig-sistema` |
 | **Dónde mirarlo (1)** | **En la bandeja de DMs de la cuenta que comentó.** Este es el único que prueba algo: hay que VER el mensaje |
 | **Dónde mirarlo (2)** | Telegram de Sergio (chat 6830070978): debe llegar "IG comentario -> DM [oniahq]" |

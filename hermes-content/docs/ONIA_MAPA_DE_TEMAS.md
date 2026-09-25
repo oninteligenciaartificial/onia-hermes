@@ -54,9 +54,15 @@ Eso le da a cada canal un trabajo distinto y ninguno pisa al otro:
 | Canal | Qué hace | Formato |
 |---|---|---|
 | **Instagram** | que te encuentren | corto, diario, un ángulo por vez |
-| **YouTube** | el tema entero, en video | largo, uno por semana o cada dos |
+| **YouTube** | el tema entero, en video | largo, **diario desde el 17-sep** ⚠️ |
 | **La web** | el tema entero, en texto — **con el video de YouTube arriba** | la guía |
 | **Comunidad** | el cómo, los archivos, y tus preguntas | drops diarios |
+
+> ⚠️ **Corregido el 2026-09-25.** En la fila de YouTube decía «largo, uno por semana o cada
+> dos». Medido: el 17-sep Sergio Urcullo pasó YouTube a **diario** —primero se termina la serie
+> «Claude Code de cero» y después la alimentan los cortos que pegan—
+> ([`ONIA_ESTRUCTURA_PUBLICACION_DIARIA.md`](ONIA_ESTRUCTURA_PUBLICACION_DIARIA.md) §«La escalera
+> a YouTube»). En cadencia y YouTube manda ése; el resto de esta tabla sigue igual.
 
 **La página de la web pasa a tener las dos formas del mismo tema:** el video para el que
 prefiere mirar, y la guía escrita para el que va a copiar comandos. Es la misma página,
@@ -65,9 +71,15 @@ sirve al doble de gente, y no cuesta producir nada extra.
 Y hay un motivo práctico además: **YouTube es un buscador**. Un video de «qué es Claude
 Code» en español se sigue encontrando meses después. Instagram no hace eso.
 
-🔴 **Pendiente de Sergio Urcullo:** el video de Claude y Claude Code ya está grabado. En
-cuanto esté publicado, **su página en la web** (`/claude-code`) es lo próximo que hay que
-escribir — y ahí se embebe. Falta el link de YouTube.
+✅ **Hecho el 11-sep:** la página del tema en la web,
+[`/claude-code`](https://sergiourcullo.vercel.app/claude-code), se publicó con los videos 01 y
+02 de YouTube embebidos (commit `0533c8e7`, `sitio-sergiourcullo/claude-code/index.html`).
+
+> ⚠️ **Corregido el 2026-09-25.** Acá decía: *«🔴 Pendiente de Sergio Urcullo: el video de
+> Claude y Claude Code ya está grabado. En cuanto esté publicado, su página en la web
+> (`/claude-code`) es lo próximo que hay que escribir — y ahí se embebe. Falta el link de
+> YouTube.»* Medido en el repo: la página existe desde el 11-sep con los dos videos. Lo que
+> queda abierto es el lugar del video 03, que sigue comentado en la página (`VIDEO03_ID`).
 
 ---
 
@@ -106,7 +118,7 @@ Estado: 🟢 recurso publicado · 🟡 en curso · ⬜ sin empezar.
 
 | | Tema | Estado |
 |---|---|---|
-| **S** | Qué es Claude y qué es Claude Code | 🟡 video de YouTube grabado · la instalación ya está en el paso 04 de [`/stack`](https://sergiourcullo.vercel.app/stack) · falta el link para embeber |
+| **S** | Qué es Claude y qué es Claude Code | 🟢 [`/claude-code`](https://sergiourcullo.vercel.app/claude-code) con los videos 01 y 02 (11-sep) · la instalación, en el paso 04 de [`/stack`](https://sergiourcullo.vercel.app/stack) · ⚠️ corregido el 25-sep: decía «🟡 video de YouTube grabado … falta el link para embeber» |
 | **S** | Escribí tu primera habilidad (skill) | ⬜ · sale del drop D4 |
 | **S** | Los cinco prompts que uso para vender | ⬜ · sale del drop D2 |
 | **S** | Un agente que te avisa cuando algo se rompe | ⬜ · Hermes |

@@ -1,12 +1,17 @@
 # 📚 Onia Community — Biblioteca
 
 > Versión pública para miembros: acá viven TODOS los drops, para que nada se pierda en
-> el chat. Se fija el link en Avisos. (Interno: se actualiza con cada drop publicado;
+> el chat. Se fija el link en Announcements. (Interno: se actualiza con cada drop publicado;
 > la copia pública vive en Notion — página "Onia Community · Biblioteca".)
+>
+> ⚠️ **Corregido el 2026-09-25** (interno). Acá y en «Cómo usar esto» decía «Avisos». Medido:
+> el canal de la comunidad se llama **Announcements**
+> ([`comunidad/ESTADO_COMUNIDAD.md`](comunidad/ESTADO_COMUNIDAD.md) §1.1). La página de Notion
+> no se tocó: sigue diciendo «Avisos» hasta que alguien la actualice.
 
 ## Cómo usar esto
 
-Cada día a las 19:00 cae un drop en Avisos. Acá quedan archivados todos. Si recién
+Cada día a las 19:00 cae un drop en Announcements. Acá quedan archivados todos. Si recién
 llegás: empezá por el que más te sirva, aplicalo, y contá cómo te fue en General.
 
 ---

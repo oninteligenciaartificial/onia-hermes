@@ -82,8 +82,12 @@ Ya estaba escrita para las palabras por cuenta y se mantiene. Una palabra sin re
 es **peor** que ninguna: la persona comenta, recibe un link roto, y esa es la única
 impresión que le queda de la marca.
 
-Por eso la cuenta `@sergio_urcullo` tiene la tabla vacía a propósito: sus siete
+Por eso la cuenta `@sergiourcullo` tiene la tabla vacía a propósito: sus siete
 palabras del mes 1 esperan a que exista la comunidad detrás.
+
+> ⚠️ **Corregido el 2026-09-25.** Acá y en la tabla de §7 decía `@sergio_urcullo`. Medido: la
+> cuenta de Instagram de Sergio Urcullo se renombró a **`@sergiourcullo`** (él lo confirmó el
+> 06-sep, commit `2ee86efb`). El `entry_id` de §7 es el mismo: identifica la cuenta, no el nombre.
 
 ## 5. Cómo se configura una palabra POR VIDEO
 
@@ -144,7 +148,7 @@ Está resuelto y conviene no volver a romperlo:
 | cuenta | `entry_id` | palabras activas |
 |---|---|---|
 | `@oniahq` | `17841423363059652` | `SISTEMA`, `LISTA` |
-| `@sergio_urcullo` | `17841441395192146` | **ninguna, a propósito** |
+| `@sergiourcullo` ⚠️ (corregido el 25-sep: decía `@sergio_urcullo`, ver §4) | `17841441395192146` | **ninguna, a propósito** |
 | Lucía (por defecto) | *sin fijar* | `SISTEMA`, `HUMO` |
 | **por video** | `VIDEOS` | **ninguna todavía** — la capa está, los datos los pone Sergio Urcullo |
 

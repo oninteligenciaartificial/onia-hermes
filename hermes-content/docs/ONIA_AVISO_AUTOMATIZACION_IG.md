@@ -5,6 +5,11 @@
 > that no other users or tools have access to your account…"*
 >
 > **La cuenta afectada es `@sergio_urcullo`** — la única de las tres con audiencia real (411).
+>
+> ⚠️ **Nota del 2026-09-25.** `@sergio_urcullo` era el handle de Sergio Urcullo el día del
+> aviso (24-ago). La cuenta se renombró después: hoy es **`@sergiourcullo`** (él lo confirmó el
+> 06-sep, commit `2ee86efb`). Las menciones de abajo narran ese día y se dejan como se
+> escribieron; la regla que salió de acá —en su cuenta se publica a mano— sigue vigente.
 
 ## Mi huella real sobre esa cuenta
 

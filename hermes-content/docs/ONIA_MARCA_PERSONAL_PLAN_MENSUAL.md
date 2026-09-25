@@ -9,7 +9,7 @@
 
 ### Ritmo semanal FIJO (el hábito es la retención)
 
-| Día | Drop 19:00 en Avisos |
+| Día | Drop 19:00 en Announcements ⚠️ |
 |---|---|
 | Lun | **Herramienta de la semana** (qué es, para qué, cómo empezar en 5 min) |
 | Mar | **Receta lista** (prompt/flujo copy-paste) |
@@ -24,11 +24,18 @@
 - **S1 — arranque:** D0-D6 ya escritos. Objetivo: 30+ miembros, hábito instalado.
 - **S2 — profundidad:** primer tutorial completo (el más pedido entre SKILL/FOTO/SÍ),
   primer "miembro de la semana" (resultado real con captura y permiso).
-- **S3 — validación:** encuesta de temario en Avisos ("¿qué querés que enseñe A FONDO?"
+- **S3 — validación:** encuesta de temario en Announcements ("¿qué querés que enseñe A FONDO?"
   con 4 opciones salidas de las señales) + primer audio-AMA en General. El resultado ES
   el temario del curso.
 - **S4 — doblar:** más de lo que más reaccionó + si el curso ya está en producción real,
   primera siembra ("estoy preparando algo con esto"). VSL recién cuando exista.
+
+> ⚠️ **Corregido el 2026-09-25.** En el ritmo semanal y en S3 decía «Avisos». Medido: el canal
+> de la comunidad se llama **Announcements**
+> ([`comunidad/ESTADO_COMUNIDAD.md`](comunidad/ESTADO_COMUNIDAD.md) §1.1). Ojo además: el ritmo
+> semanal de arriba lo superó [`ONIA_MOTOR_SEMANAL_CONTENIDO.md`](ONIA_MOTOR_SEMANAL_CONTENIDO.md)
+> (un tema por semana, seis días, guía); el índice del carril es
+> [`ONIA_CIRCUITO_DE_CONTENIDO.md`](ONIA_CIRCUITO_DE_CONTENIDO.md).
 
 ### Motores de ATRACCIÓN (todo apunta al link)
 

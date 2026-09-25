@@ -6,6 +6,13 @@
 >
 > Cadencia objetivo: **2/día marca personal · 1/día @oniahq · 1/día Lucía**.
 > Reparto: Samuel 38/mes (su propuesta) · yo **90/mes**.
+>
+> ⚠️ **Nota del 2026-09-25.** Este plan es del 24-ago y usa `@sergio_urcullo`, el handle de
+> Sergio Urcullo ese día. La cuenta se renombró después: hoy es **`@sergiourcullo`** (él lo
+> confirmó el 06-sep, commit `2ee86efb`). Las menciones de abajo se dejan como se escribieron.
+> La cadencia de arriba tampoco es la vigente: el reparto diario manda desde
+> [`ONIA_ESTRUCTURA_PUBLICACION_DIARIA.md`](ONIA_ESTRUCTURA_PUBLICACION_DIARIA.md), y el índice
+> del carril es [`ONIA_CIRCUITO_DE_CONTENIDO.md`](ONIA_CIRCUITO_DE_CONTENIDO.md).
 
 ## 1. Qué vende cada cuenta — y por qué son tres y no una
 

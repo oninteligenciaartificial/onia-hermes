@@ -10,7 +10,12 @@
 | Quién | Qué |
 |---|---|
 | **Sergio graba** (1 batch de ~40 min) | 3 videos con el teléfono (guiones abajo) + 2 secuencias de historias + 2-3 clips b-roll de 10 s (pantalla con código, vos trabajando) |
-| **Sergio publica** | 1 drop/día en Avisos (con mi OK-flow) · videos editados a IG/TikTok · carruseles a IG · historias |
+| **Sergio Urcullo publica** | 1 drop/día en Announcements ⚠️ (con mi OK-flow) · videos editados a IG/TikTok · carruseles a IG · historias |
+
+> ⚠️ **Corregido el 2026-09-25.** En la fila de arriba decía «Avisos». Medido: el canal de la
+> comunidad se llama **Announcements** ([`comunidad/ESTADO_COMUNIDAD.md`](comunidad/ESTADO_COMUNIDAD.md)
+> §1.1). Ojo además: esta «semana 1» es la del 02-sep, anterior a Samuel; la semana 1 del motor
+> semanal es otra («Mi stack», 14–19 sep).
 | **La máquina (yo)** | Textos de todos los drops · edición de los 3 videos (cortes + subtítulos karaoke + export 9:16) · 2 carruseles renderizados · captions · guiones de historias · textos X/LinkedIn · KPIs del lunes |
 | **Samuel (cuando arranque)** | Sus 30 videos + yapps + tema/hook semanal de historias — nada de esta semana depende de él |
 
