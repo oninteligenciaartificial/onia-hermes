@@ -4,6 +4,7 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 
 import { PRUEBA } from "@/lib/pricing";
+import { CONTENDIENTES, FECHA_CONSULTA, HUECO } from "@/lib/proof";
 
 /**
  * Lo que la ley boliviana le exige a quien vende por internet, medido en la
@@ -124,5 +125,28 @@ describe("/precios dice que el precio es final", () => {
     expect(plano(crudo("app/(sitio)/precios/page.tsx"))).toMatch(
       /Precios finales en bolivianos, impuestos incluidos\./,
     );
+  });
+});
+
+describe("la comparativa sólo afirma lo que se puede comprobar, con fecha", () => {
+  const TERCEROS = CONTENDIENTES.filter((c) => !c.esOnia);
+
+  it("hay terceros que medir", () => {
+    expect(TERCEROS.length).toBeGreaterThan(0);
+  });
+
+  it("cada precio de un tercero lleva su fecha de consulta al lado", () => {
+    for (const c of TERCEROS) {
+      expect(c.precioNota ?? "", `${c.quien}: precio sin fecha`).toContain(FECHA_CONSULTA);
+    }
+  });
+
+  it("ninguna afirmación sobre el mercado es absoluta", () => {
+    const ABSOLUTA = /\bno existe\b|\bninguno\b|\bnadie\b/i;
+    expect(HUECO).not.toMatch(ABSOLUTA);
+    expect(HUECO).toContain(FECHA_CONSULTA);
+    for (const c of TERCEROS) {
+      expect(c.veredicto, `${c.quien}: veredicto absoluto`).not.toMatch(ABSOLUTA);
+    }
   });
 });
