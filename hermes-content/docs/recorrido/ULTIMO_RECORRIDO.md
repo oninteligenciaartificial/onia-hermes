@@ -12,6 +12,35 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-25 14:12-14:13 La Paz — `BUILD_ID` sin cambios; escalón nuevo: "Olvidé mi contraseña" cambia la contraseña DE VERDAD
+
+`ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado ANTES de decidir: `UgtwNYIEjS-DSK0umjqc8`,
+igual al de las dos entradas anteriores — no correspondía repetir un rubro. Tercer camino de
+`/auth/confirm?token_hash=...&type=...` (los otros dos, alta y la invitación por correo, ya
+estaban cubiertos): el botón "Olvidé mi contraseña" del login, que hasta hoy nadie había seguido.
+
+Nuevo script `scripts/probar_recuperar_contrasena.mjs`: siembra una cuenta `zz-qa-` con
+contraseña VIEJA conocida (bcrypt vía `extensions.crypt`/`extensions.gen_salt` — el pgcrypto de
+este Postgres vive en el schema `extensions`, no en `public`), confirma que esa vieja entra
+(`POST /api/auth/login` 200), abre `/login`, hace clic en "Olvidé mi contraseña", escribe el
+correo y manda "Enviar enlace" **por la UI real**, lee el `recovery_token` que GoTrue dejó en
+`auth.users`, abre `/auth/confirm?type=recovery` en un navegador limpio, carga una contraseña
+NUEVA en `/update-password` y la guarda. Prueba las DOS puertas al final, no solo una: la NUEVA
+entra (200) y la VIEJA deja de entrar (401 `invalid_credentials`) — sin la segunda mitad, un bug
+que dejara las dos contraseñas activas habría pasado como éxito.
+
+Corrida en vivo: org `zz-qa-recuperar-20260925141225` → login viejo 200 → aviso de envío en
+pantalla → enlace `/auth/confirm?type=recovery` → aterriza en `/update-password` → guarda →
+redirige a `/login?notice=password_updated` → login nuevo 200 → login viejo 401. **Las dos
+puertas correctas. Sin hallazgo.** Limpieza confirmada: `organizations=0 auth.users=0` al cerrar.
+
+RAZÓN: `BUILD_ID` no se movió, así que no correspondía repetir un rubro; el avance fue cubrir un
+tercer camino de correo (recovery) que nunca se había recorrido, siguiendo el mismo método que
+cerró alta e invitación.
+LECCIÓN: ninguna nueva — comparar `BUILD_ID` primero y, si no cambió, buscar el próximo camino de
+correo sin recorrer (alta → invitación → recuperación) sigue siendo mejor método que repetir un
+rubro.
+
 ## 2026-09-25 13:09-13:11 La Paz — `BUILD_ID` sin cambios; escalón nuevo: el ENLACE de invitación por correo deja ENTRAR, con rol correcto
 
 `ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado ANTES de decidir: `UgtwNYIEjS-DSK0umjqc8`,
