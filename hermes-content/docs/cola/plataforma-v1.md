@@ -5823,21 +5823,38 @@ y sin operar. Acá se opera, con verificación por ítem.
       (2) recién ahí se aplica al panel. Este ítem **no se vuelve a medir** hasta que el
       tablero devuelva `t_e0f6031a` a `ready`: re-verificarlo cada vuelta es trabajo fantasma.
 
-- [ ] 🔴 **T-plata — dos bloqueos que solo Sergio Urcullo puede pagar** (detectados el
-      10-sep midiendo el precio de la recarga; avisados por el tablero):
-      (1) **OpenAI sin crédito desde el 9-sep ~04-06 UTC** (medido en LiteLLM_SpendLogs: 38
-      failures 429): la rama off-guion del bot cae al texto de respaldo (no muda, pero no
-      reformula) y **Hermes está caído entero** (misma cuenta). Recargar en
-      platform.openai.com. El gasto del bot es ruido: USD 0,00085 en toda su historia.
-      (2) **Método de pago en Meta antes del 1-oct-2026**: la hoja oficial "effective
+- [ ] 🔴 **T-plata — UN bloqueo de plata: el método de pago de Meta antes del 1-oct-2026**
+      (detectado el 10-sep midiendo el precio de la recarga; avisado por el tablero).
+
+      ⚠️ **Este ítem nació con DOS mitades y una está VENCIDA — acotado el 2026-09-25.** La
+      mitad (1) pedía recargar OpenAI («sin crédito desde el 9-sep, la rama off-guion cae al
+      texto de respaldo y Hermes está caído entero»). **Sergio Urcullo ya recargó**, y el
+      pedido siguió saliendo en el parte diario seis días más. Medido hoy en
+      `LiteLLM_SpendLogs` del VPS (`onia_selfhosted-litellm-db-1`, la MISMA fuente con que se
+      detectó el bloqueo): 14/15/16-sep → 21-22 llamadas y **todas `failure`, gasto
+      0,00000**; 18-sep → 52 llamadas, **0 fallos**, USD 0,224; **hoy 25-sep → 36 llamadas,
+      0 fallos, USD 0,0865**. Los únicos fallos recientes (24-sep 22:23-22:28) son de un
+      modelo que no existe en el gateway (`gpt-5.1`) y de uno sin nombre — no de falta de
+      crédito. Lo mismo lo había medido otra sesión el 19-sep por otro camino (la key del
+      proceso vivo transcribe de verdad) y dejó pedido acotar el texto; **acotarlo era el
+      trabajo, y no se hizo: ahí está el costo real de un bloqueo vencido.**
+
+      (2) **Método de pago en Meta antes del 1-oct-2026** — lo único que sigue vivo, y
+      **vence en 6 días**: la hoja oficial "effective
       October 1, 2026" ya salió — service USD 0,0113/mensaje (Rest of Latin America, cubre
       Bolivia) tras 1.000 mensajes de servicio gratis/mes por número; **sin tarjeta cargada
       Meta DEJA DE ENTREGAR desde el mensaje 1.001** — bot mudo a mitad de mes. Vale para
       nuestro número y para cada cliente con número propio (anotarlo en el onboarding del
       canal WhatsApp). Fundamento completo en el comentario de RECARGA_CONVERSACIONES de
       `onia-platform/lib/pricing.ts` y memoria meta-whatsapp-clientes actualizada.
-      **LISTO =** crédito OpenAI >0 (el off-guion vuelve a reformular, Hermes contesta) y
-      método de pago visible en el billing de Meta.
+      **LISTO =** método de pago visible en el billing de WhatsApp Business de Meta.
+      (El crédito de OpenAI ya no es parte de este ítem: cumplido y medido arriba.)
+
+      ⚠️ **No se puede medir desde un loop, y eso está probado, no supuesto:** el conector de
+      Meta (`mcp__claude_ai_Meta_Developer_Tools__*`) devuelve *"Claude requested permissions
+      … but you haven't granted it yet"* — probado hoy 25-sep con `devtools_app_list`. Igual
+      que el de Gmail. Así que este bloqueo es **real hasta que Sergio Urcullo cargue la
+      tarjeta**; ningún carril lo puede cerrar por su cuenta ni verificar después.
 
 - [ ] 🔴 **Nadie probó que el correo de confirmación LLEGUE a una bandeja — y sin ese clic el
       alta nueva muere** (`app/auth/confirm/route.ts` · `scripts/alta_correo_confirma.mjs`)**.**
