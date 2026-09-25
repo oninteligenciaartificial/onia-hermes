@@ -71,7 +71,7 @@ export default function ComparativaPage() {
             </Reveal>
             <Reveal delay={0.06}>
               <h1 className="h2">
-                Onia comparada con lo que hoy se vende en Bolivia.
+                Onia comparada con lo que se vende en Bolivia.
               </h1>
             </Reveal>
             <Reveal delay={0.12}>

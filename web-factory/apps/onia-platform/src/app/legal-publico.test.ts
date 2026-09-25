@@ -165,6 +165,18 @@ describe("la comparativa sólo afirma lo que se puede comprobar, con fecha", () 
     }
   });
 
+  it("ningún titular dice «hoy» sobre datos consultados en otra fecha", () => {
+    for (const f of [
+      "app/(sitio)/comparativa/page.tsx",
+      "app/v1/comparativa/page.tsx",
+      "components/landing-v1/comparativa-teaser.tsx",
+    ]) {
+      expect(crudo(f), `${f}: «hoy» sobre datos del ${FECHA_CONSULTA}`).not.toMatch(
+        /\bhoy(<\/em>)? se vende/,
+      );
+    }
+  });
+
   it("ninguna afirmación sobre el mercado es absoluta", () => {
     const ABSOLUTA = /\bno existe\b|\bninguno\b|\bnadie\b/i;
     expect(HUECO).not.toMatch(ABSOLUTA);

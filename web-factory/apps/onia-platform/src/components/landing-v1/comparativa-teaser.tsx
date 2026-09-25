@@ -37,7 +37,7 @@ export function ComparativaTeaser() {
           <SplitTextReveal
             as="h2"
             className={styles.sectionTitle}
-            text="Contra lo que hoy se vende en Bolivia."
+            text="Contra lo que se vende en Bolivia."
           />
         </div>
         <Reveal>
