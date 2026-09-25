@@ -5,6 +5,41 @@
 > qué es → por qué le importa a la audiencia → demo posible. Pedido por Sergio 2026-09-02.
 > Regla: solo entra lo PROBADO por nosotros o verificable con fuente. Nada de humo.
 
+## Gate obligatorio de valor y calidad
+
+### Carga mínima de enseñanza literal
+
+Un título, una opinión o una lista de conceptos no cuentan como valor por sí solos. Toda
+pieza técnica debe contener, como mínimo:
+
+1. **Una acción exacta:** qué debe hacer la persona.
+2. **Un objeto exacto:** herramienta, nodo, campo, comando, prompt, JSON o pantalla.
+3. **Una entrada y una salida:** qué dato entra y qué resultado debería aparecer.
+4. **Una comprobación:** cómo sabe la persona que funcionó.
+5. **Un límite o fallo:** cuándo no sirve, qué permiso requiere o qué puede salir mal.
+6. **Una prueba o fuente:** demo propia o documentación oficial fechada.
+
+Si el espectador no puede repetir nada después de verlo, la pieza está vacía aunque tenga
+buen hook, edición o CTA. Si el recurso prometido no existe, el CTA no se publica.
+
+Regla ratificada por Sergio Urcullo el 22-sep-2026: **ninguna pieza queda lista sólo
+porque el guion exista, el diseño se vea bien o el archivo abra**. Video, deck, carrusel,
+historia, post y recurso deben pasar las tres puertas siguientes:
+
+1. **Valor enseñable:** al terminar, la persona puede tomar una decisión, copiar una
+   estructura, ejecutar un paso o evitar un error concreto. Si sólo inspira o enumera
+   conceptos, se reescribe.
+2. **Exactitud y prueba:** nombres literales de herramientas, nodos, campos, comandos o
+   fuentes; demo propia o ejemplo reproducible; límites y fallas honestas. No se heredan
+   cifras vivas sin volver a verificarlas.
+3. **Calidad de entrega:** hook, desarrollo, prueba y CTA coherentes; texto legible;
+   contraste, desbordes y zonas seguras revisados; enlaces y archivos abiertos; revisión
+   humana antes de publicar.
+
+Cada pieza se cierra como `APROBADA`, `REVISAR` o `BLOQUEADA`. `REVISAR` y `BLOQUEADA`
+no se programan en Postiz ni se publican. La cantidad diaria nunca justifica saltarse el
+gate: si 13 piezas no pasan, se publican menos.
+
 ## 1 · Lo NUESTRO (ventaja injusta: nadie más puede mostrar esto)
 
 | Tema | Qué es | Ángulo de contenido | Demo |
