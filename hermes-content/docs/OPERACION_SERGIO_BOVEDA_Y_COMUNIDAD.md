@@ -27,9 +27,9 @@ voz, estética, afirmaciones, números, nombres de comunidad ni guiones.
 
 | Palabra | Recurso | Qué recibe alguien | Pregunta que abre conversación |
 |---|---|---|---|
-| `MAPA` | `/automatizar` | matriz repetición × tiempo × error + workflow n8n mínimo | “¿Qué tarea repetís y qué dato se pierde?” |
-| `ARQUITECTURA` | `/agentes` | matriz `IF` / AI Agent / loop | “¿La regla es fija, el mensaje es ambiguo o el estado cambia?” |
-| `MCP` | `/mcp` | contrato de herramienta + permisos mínimos | “¿Qué herramienta querés conectar y qué jamás debería poder hacer sola?” |
+| `MAPA` | `/automatizar` ⚠️ 404 al 25-sep, sin desplegar | matriz repetición × tiempo × error + workflow n8n mínimo | “¿Qué tarea repetís y qué dato se pierde?” |
+| `ARQUITECTURA` | `/agentes` ⚠️ 404 al 25-sep, sin desplegar | matriz `IF` o `Switch` / modelo que clasifica / AI Agent / loop (corregida el 25-sep: clasificar no pide agente) | “¿Quién decide el próximo paso: tus reglas o el modelo?” |
+| `MCP` | `/mcp` ⚠️ 404 al 25-sep, sin desplegar | contrato de herramienta + permisos mínimos | “¿Qué herramienta querés conectar y qué jamás debería poder hacer sola?” |
 
 Si el circuito de DM está sano para la cuenta de Sergio, el privado puede entregar una frase
 corta con el enlace. Si no, la pieza sigue siendo honesta: el recurso se abre directamente

@@ -1,5 +1,11 @@
 # Guion hablado — Video 06 · «Tengo 16 años y mi empresa entera corre con IA»
 
+> ⚠️ **Marcado el 25-sep:** acá se afirma, en primera persona, que todo corre en una PC vieja de la
+> casa de Sergio Urcullo, a $0. Medido el 18-sep: 40 trabajos en el VPS pago y 0 en la PC. Los
+> datos de ejemplo pueden parecerse sin ser los reales, pero lo que uno dice de sí mismo tiene
+> que ser cierto: o se dice como ejemplo («una PC vieja alcanza para empezar») o se dice lo real
+> (`hermes-content/docs/contenido/SISTEMA_DE_GUIONES.md` §2). Si ya salió, no se repite.
+
 10 láminas · ≈ 11:00 (el cierre de la serie puede ir a 12 y está bien: es el caso, no
 una lección) · acapela mirando el deck (tecla **N** apaga las chuletas).
 

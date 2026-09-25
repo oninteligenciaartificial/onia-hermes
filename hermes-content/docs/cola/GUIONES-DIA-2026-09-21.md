@@ -179,6 +179,12 @@ En pantalla, escribir debajo: `Webhook → IF → Google Sheets → Telegram`.
 
 ## Guion 3 · Trial v2
 
+> ⚠️ **Contradicción marcada el 25-sep:** este guion enseña a clasificar con un `AI Agent`. El G2 del
+> 22-sep (`GUIONES-DIA-2026-09-22.md`) enseña lo contrario, y es el correcto: clasificar va con
+> `Basic LLM Chain` + `Structured Output Parser`, y el `AI Agent` se usa sólo cuando el modelo
+> elige herramientas. El carrusel del mismo tema ya se corrigió
+> (`carousels/out/sergio-agente-loop-20260921/`). Si no se grabó, se reescribe antes de grabar.
+
 ### Título
 
 **n8n AI Agent: clasificá leads sin dejar que la IA responda sola**
@@ -224,6 +230,12 @@ Salida JSON para mostrar en pantalla:
 ---
 
 ## Guion 4 · Trial v2
+
+> ⚠️ **Contradicción marcada el 25-sep:** este guion enseña a clasificar con un `AI Agent`. El G2 del
+> 22-sep (`GUIONES-DIA-2026-09-22.md`) enseña lo contrario, y es el correcto: clasificar va con
+> `Basic LLM Chain` + `Structured Output Parser`, y el `AI Agent` se usa sólo cuando el modelo
+> elige herramientas. El carrusel del mismo tema ya se corrigió
+> (`carousels/out/sergio-agente-loop-20260921/`). Si no se grabó, se reescribe antes de grabar.
 
 ### Título
 

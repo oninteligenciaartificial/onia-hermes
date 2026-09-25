@@ -90,6 +90,13 @@ Reglas que lo sostienen:
   que dijo otra sesión o un guion viejo.
 - **Afirmaciones sobre la infraestructura propia** ("corre en mi PC", "tengo N loops"): se miden
   el día de grabar. Fue la afirmación que más se repitió caída.
+- **Los datos de ejemplo pueden parecerse sin ser los reales** (Sergio Urcullo, 25-sep): un JSON
+  ficticio, cifras redondeadas, un negocio inventado parecido al tuyo, datos de prueba en una
+  demo. Dos cosas no se aproximan:
+  - **lo que uno dice de sí mismo** («mi empresa corre en…», «yo pago…»). Si no es así, se dice
+    como ejemplo («una PC vieja alcanza para empezar») y no como hecho propio;
+  - **los datos oficiales de terceros** (precios, versiones, límites de una API): se citan con
+    su fuente y su fecha.
 
 ---
 

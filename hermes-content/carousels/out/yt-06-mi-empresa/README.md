@@ -1,5 +1,11 @@
 # Video 06 — "Mi empresa entera corre con esto"
 
+> ⚠️ **Marcado el 25-sep:** acá se afirma, en primera persona, que todo corre en una PC vieja de la
+> casa de Sergio Urcullo, a $0. Medido el 18-sep: 40 trabajos en el VPS pago y 0 en la PC. Los
+> datos de ejemplo pueden parecerse sin ser los reales, pero lo que uno dice de sí mismo tiene
+> que ser cierto: o se dice como ejemplo («una PC vieja alcanza para empezar») o se dice lo real
+> (`hermes-content/docs/contenido/SISTEMA_DE_GUIONES.md` §2). Si ya salió, no se repite.
+
 Serie **Claude Code de cero**, cierre. Mapa: `hermes-content/docs/SERIE_CLAUDE_CODE.md`.
 Fuente de verdad: [`deck.html`](deck.html), autocontenido, 10 láminas.
 

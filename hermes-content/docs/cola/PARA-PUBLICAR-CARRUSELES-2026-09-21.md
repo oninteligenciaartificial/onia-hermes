@@ -17,8 +17,8 @@ No subir `_contactsheet.png`: es solo una vista previa. La publicación queda ma
 
 - 7 láminas.
 - Ruta local: `hermes-content/carousels/out/sergio-agente-loop-20260921/`
-- Tema: cuándo usar `IF`, `AI Agent + OpenAI Chat Model` o `Schedule Trigger + HTTP Request + IF + Wait`.
-- CTA: comentar `ARQUITECTURA`.
+- Tema (**corregido el 25-sep**): cuándo usar `IF` o `Switch`, `Basic LLM Chain` + `Structured Output Parser`, un `AI Agent` (sólo si el modelo elige herramientas) o un loop con `Wait`. La versión anterior enseñaba a clasificar con un `AI Agent`.
+- CTA: `GUARDALO`, sin palabra. `ARQUITECTURA` llevaba a `/agentes`, que el 25-sep daba 404.
 
 ## 3. MCP en Claude Code: conectá Notion con permisos
 

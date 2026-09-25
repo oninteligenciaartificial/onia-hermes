@@ -320,6 +320,13 @@ X minutos → la revisamos juntos en el navegador → lo que NO hizo bien → ¿
 costado encargarla? → ¿vale la pena? Asciende del corto «la hizo delante mío».
 
 ### E2 · «Mi servidor es una PC vieja de $0: la abrimos y la medimos» (~10-15 min)
+
+> ⚠️ **Marcado el 25-sep:** acá se afirma, en primera persona, que todo corre en una PC vieja de la
+> casa de Sergio Urcullo, a $0. Medido el 18-sep: 40 trabajos en el VPS pago y 0 en la PC. Los
+> datos de ejemplo pueden parecerse sin ser los reales, pero lo que uno dice de sí mismo tiene
+> que ser cierto: o se dice como ejemplo («una PC vieja alcanza para empezar») o se dice lo real
+> (`hermes-content/docs/contenido/SISTEMA_DE_GUIONES.md` §2). Si ya salió, no se repite.
+
 Capítulos: qué corre ahí adentro (la lista real) → la abrimos: specs a cámara → htop
 en vivo: RAM y CPU con todo corriendo → le tiro carga: qué aguanta → cuánto gasta de
 luz (medido, no estimado) → qué NO puede hacer → armala vos: el orden → ¿PC vieja o

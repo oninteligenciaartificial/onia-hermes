@@ -100,6 +100,13 @@
    hizo bien. La IA ejecuta; la responsabilidad no se delega.» Cierre: comunidad.
    *(trailer del video 04 — verificar en vez de creerle)*
 3. **«¿La IA es carísima? Mi empresa corre con UNA suscripción. La cuenta:»**
+
+   > ⚠️ **Marcado el 25-sep:** acá se afirma, en primera persona, que todo corre en una PC vieja de la
+   > casa de Sergio Urcullo, a $0. Medido el 18-sep: 40 trabajos en el VPS pago y 0 en la PC. Los
+   > datos de ejemplo pueden parecerse sin ser los reales, pero lo que uno dice de sí mismo tiene
+   > que ser cierto: o se dice como ejemplo («una PC vieja alcanza para empezar») o se dice lo real
+   > (`hermes-content/docs/contenido/SISTEMA_DE_GUIONES.md` §2). Si ya salió, no se repite.
+
    — Concreto: «Pago una sola herramienta: la que piensa. Las automatizaciones, el que
    vigila, el que publica — software libre en una PC vieja en mi casa, gratis. El peligro
    real no es la suscripción: es el gasto por uso mal configurado. Un día el mío se
