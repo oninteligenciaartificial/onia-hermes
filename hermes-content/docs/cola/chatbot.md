@@ -615,6 +615,41 @@ npm run deploy:ya-ocurrio     # exit 0 = nadie miente · 1 = lista file:línea �
 Sólo juzga la PLATAFORMA: un sha que no existe en el clon de `onia-platform` sale **NO MEDIDO**,
 nunca acusado — acusar una línea del bot con la frontera del panel sería el mismo error al revés.
 
+⚠️ **Y hasta el 2026-09-25 este comando ABSOLVÍA sin haber medido.** Corrido en vivo ese día:
+**58 afirmaciones, 58 NO MEDIDAS** (22 `ningun sha es de onia-platform`, 36 `la linea no cita
+sha`) — y aun así imprimía *«OK — ninguna linea pide un deploy que ya ocurrio»* y salía `0`.
+Para el que lee el exit, «ninguna miente» y «no pude juzgar a ninguna» eran la misma cara, que
+es exactamente cómo sobrevivieron las 20 líneas caducadas que este gate existe para cazar.
+Arreglado: el veredicto salió de `medir()` a la función pura `veredicto()` —por eso el
+`--self-check` no lo probaba— y ahora **0 juzgadas con afirmaciones presentes es `2`, no `0`**,
+el verde dice **sobre cuántas** lo dice, y «ninguna cola pide deploy» sigue siendo un `0`
+honesto (un `2` permanente se aprende a saltear). Hoy el comando sale **`2`**: no está midiendo
+nada, y eso ahora se ve.
+
+⚠️ **Acá decía que «el sujeto que sí es trabajo de este carril son las 36 líneas sin sha», y
+eso era FALSO — medido el 2026-09-25 mirando los 36 sujetos uno por uno.** La enorme mayoría
+son del **MOTOR** («el bot vivo corre desde `/tmp/onia-bot/`», «`/opt/onia/bot` es rsync, no
+git»), y este gate sólo resuelve shas de `onia-platform`: ponerles el sha —que es lo que ese
+remedio pedía— las habría movido de `la linea no cita sha` a `ningun sha es de onia-platform`
+y el `2` habría quedado idéntico. Treinta y pico de líneas de trabajo para no mover la medida,
+y encima el sujeto real enterrado entre ellas.
+
+**El motivo de cada no medida ahora se elige por FRONTERA, no por si hay un hexadecimal**
+(`fronteraDe()` mira la línea primero y el cuerpo del ítem después; sin huellas dice
+`sin ubicar`, nunca adivina). Desglose real de las 58, del propio comando:
+
+| | |
+|---|---|
+| 44 + 5 | del **motor** — otra frontera, este gate no las mide y citarles un sha tampoco |
+| 5 | **sin ubicar** — hay que leerlas |
+| **4** | **EL SUJETO**: piden el deploy del **panel** y no citan su commit |
+
+Los cuatro, derivados (no se copian de acá, que caduca): corré `npm run deploy:ya-ocurrio` y
+leé el desglose. El 2026-09-25 eran `chatbot.md:1623`, `chatbot.md:1666`, `chatbot.md:7099` y
+`plataforma-v1.md:6652`. **No se les puso el sha en esa vuelta a propósito:** un sha equivocado
+acá es peor que ninguno, porque `--corregir` escribe en la cola y marcaría como desplegado algo
+que no lo está. Se resuelve leyendo cada ítem y buscando su commit en `onia-platform`.
+
 ## Ahora
 
 - [ ] 🔴 **Un lead REAL puede escribir, ser atendido, enfriarse y que Sergio Urcullo no se
