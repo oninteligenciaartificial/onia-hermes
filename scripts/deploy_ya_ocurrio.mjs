@@ -157,7 +157,10 @@ export const HUELLA_PLATAFORMA = /onia-platform|app\.onia\.com\.bo|DESPLEGAR:\s*
  */
 export function fronteraDe(linea, cuerpo = "") {
   for (const texto of [linea, cuerpo]) {
-    const t = String(texto ?? "");
+    // `http://onia-platform:3000/…` es el BOT llamando al panel por la red de Docker, no el
+    // deploy del panel: contarlo como huella mandaba ítems del motor a pedir un commit que en
+    // onia-platform no existe, y un sha imposible los deja incorregibles para siempre.
+    const t = String(texto ?? "").replace(/\bhttps?:\/\/onia-platform[^\s'"`)]*/gi, "");
     const bot = HUELLA_BOT.test(t);
     const plataforma = HUELLA_PLATAFORMA.test(t);
     if (bot && !plataforma) return "bot";
@@ -243,6 +246,16 @@ export function porFrontera(noMedidas) {
       ? `  ${sinSha} son EL SUJETO: piden el deploy del panel y no citan su commit. Sin sha nadie las puede corregir nunca.`
       : "  0 son el sujeto corregible: ninguna linea del panel se quedo sin su commit.",
   );
+  // Y AHORA se las ubica. Contar sin nombrar obliga a re-derivar los sujetos a mano en cada
+  // vuelta —la cola mandaba a «correr el comando y leer el desglose», y el desglose no traía el
+  // `archivo:línea`—, que es por qué estos cuatro sobrevivieron vueltas enteras. Sólo se listan
+  // las ACCIONABLES: las del motor se cuentan arriba y no son trabajo de este gate; volcar sus
+  // 45 renglones enterraría a los 4 sujetos, que es el modo de falla del 25-sep al revés.
+  const accionables = noMedidas.filter((n) => n.motivo === "la linea no cita sha" || n.motivo === "no cita sha y no se pudo ubicar la frontera");
+  for (const n of accionables) {
+    const que = n.motivo === "la linea no cita sha" ? "SUJETO" : "leer";
+    partes.push(`    · ${n.archivo}:${n.linea} [${que}] ${String(n.frase ?? "").slice(0, 80)}`);
+  }
   return partes.join("\n");
 }
 
@@ -279,7 +292,7 @@ export function veredicto({ mienten, honestas, noMedidas }) {
  * Saca de un markdown de cola las líneas que piden deploy, con los shas del ÍTEM al que
  * pertenecen (no los de la línea: casi ninguna los repite — el sha vive en la cabecera).
  */
-export function afirmacionesDe(texto, archivo) {
+export function afirmacionesDe(texto, archivo, esCommit = () => false) {
   const lineas = texto.split("\n");
   const items = [];
   let actual = null;
@@ -296,7 +309,11 @@ export function afirmacionesDe(texto, archivo) {
   const out = [];
   for (const it of items) {
     const cuerpo = it.lineas.map((x) => x.texto).join("\n");
-    const shas = [...new Set([...cuerpo.matchAll(SHA)].map((m) => m[1]))].filter((s) => !/^\d+$/.test(s));
+    // El filtro anti-números no puede ser por FORMA: `7756295` es un commit real de
+    // onia-platform y era todo dígitos, así que su línea salía como «no cita sha» —el sujeto
+    // incorregible— teniendo el commit escrito al lado. Pero soltar el filtro tampoco sirve:
+    // estas colas citan RNDs (`102600000007`) y teléfonos. Decide el repo, no la pinta.
+    const shas = [...new Set([...cuerpo.matchAll(SHA)].map((m) => m[1]))].filter((s) => !/^\d+$/.test(s) || esCommit(s));
     // Un ``` abre y cierra: lo de adentro es el comando que el ítem ENSEÑA a correr, no una
     // afirmación sobre producción. Acusarlo hace que `--corregir` le meta prosa a un bash.
     let enCodigo = false;
@@ -309,7 +326,10 @@ export function afirmacionesDe(texto, archivo) {
       // Una línea ya corregida sigue diciendo «NO desplegado» a propósito (es su historia), y
       // la corrección vive en la línea de ABAJO. Sin esta salida se la vuelve a acusar en cada
       // corrida y el conteo no baja nunca: sería un bucle, no un arreglo.
-      if (MARCA.test(t) || MARCA.test(lineas[n] ?? "")) continue;
+      // La marca de una línea ya corregida vive al FINAL de su párrafo, no en el renglón de
+      // abajo (la frase suele seguir ahí). Se busca con el mismo `finDeParrafo` que la escribe:
+      // dos criterios distintos acá y allá re-acusan la línea en cada corrida, para siempre.
+      if (MARCA.test(t) || MARCA.test(lineas[finDeParrafo(lineas, n - 1) + 1] ?? "")) continue;
       if (PIDE_DEPLOY.test(sinCitas(t)))
         out.push({ archivo, linea: n, frase: t.trim().slice(0, 120), shas, frontera: fronteraDe(t, cuerpo) });
     }
@@ -386,6 +406,34 @@ export function vivoContra(repo, referencia) {
  * Aplica la marca a las líneas que mienten de UN texto. Pura: no toca disco.
  * `mentiras` son las de `juzgar(...).mienten` de ese archivo (número de línea 1-indexed).
  */
+/**
+ * ¿Esta línea continúa el párrafo de arriba? Sólo la sangría del cuerpo de un ítem cuenta: una
+ * línea en blanco cierra, y un `- [ ]`, un `##`, un `---` o un ``` abren otra cosa — meter la
+ * marca ahí la pegaría a una frase ajena, que es el bug que este corrector ya tenía al revés.
+ */
+export function esContinuacion(linea) {
+  const l = String(linea ?? "");
+  if (l.trim() === "") return false;
+  if (/^\s*(- |\* |#{1,6} |---|```|\|)/.test(l)) return false;
+  return /^\s{2,}\S/.test(l);
+}
+
+/**
+ * Índice de la ÚLTIMA línea del párrafo que empieza en `i` — donde va la marca, y donde hay
+ * que buscarla para no acusar dos veces. Vive acá, en una sola función, porque el corrector y
+ * el acusador tienen que usar el MISMO criterio: si uno escribe la marca al final del párrafo
+ * y el otro la busca sólo en el renglón de abajo, la línea se re-acusa para siempre y el
+ * conteo no baja nunca. Una marca ya puesta corta el avance (es una línea sangrada más).
+ *
+ * @param {string[]} lineas  el archivo entero, 0-based
+ * @param {number} i         índice de la línea acusada
+ */
+export function finDeParrafo(lineas, i) {
+  let fin = i;
+  while (fin + 1 < lineas.length && esContinuacion(lineas[fin + 1]) && !MARCA.test(lineas[fin + 1])) fin++;
+  return fin;
+}
+
 export function corregirTexto(texto, mentiras, { desplegado, fecha }) {
   const lineas = String(texto).split("\n");
   // De ABAJO hacia arriba: cada inserción corre los números de línea de todo lo que sigue, así
@@ -395,8 +443,12 @@ export function corregirTexto(texto, mentiras, { desplegado, fecha }) {
   for (const m of orden) {
     const i = m.linea - 1;
     if (i < 0 || i >= lineas.length) continue; // el archivo se movió debajo: no inventamos
-    if (MARCA.test(lineas[i]) || MARCA.test(lineas[i + 1] ?? "")) continue; // ya corregida
-    lineas.splice(i + 1, 0, lineaDeMarca(lineas[i], { vivos: m.vivos, desplegado, fecha }));
+    // La afirmación casi nunca termina donde termina su renglón: estas colas envuelven a ~100
+    // columnas, así que «viaja con el» sigue abajo con «pedido de deploy». Insertar en i+1
+    // partía la frase al medio y dejaba el párrafo ilegible aunque la marca fuera cierta.
+    const fin = finDeParrafo(lineas, i);
+    if (MARCA.test(lineas[i]) || MARCA.test(lineas[fin + 1] ?? "")) continue; // ya corregida
+    lineas.splice(fin + 1, 0, lineaDeMarca(lineas[i], { vivos: m.vivos, desplegado, fecha }));
   }
   return lineas.join("\n");
 }
@@ -520,14 +572,19 @@ function selfCheck() {
   const corr = corregirTexto(md0, [{ linea: 2, vivos: ["abc1234"] }], arg);
   const filas = corr.split("\n");
   ok("no parte la frase: la linea original queda intacta", filas[1] === cruda);
-  ok("la medicion va en su propia linea, debajo", MARCA.test(filas[2]) && filas[3].includes("panel"));
+  // Corregido el 2026-09-25: este caso EXIGÍA la marca en `filas[2]`, o sea entre «falta merge
+  // y deploy del» y «panel, que es lo que faltaba» — el defecto medido al aplicar `--corregir`
+  // de verdad. El párrafo entero queda junto y la medición va después de su última línea.
+  ok("la medicion va en su propia linea, debajo del parrafo entero", filas[2].includes("panel") && MARCA.test(filas[3]));
 
   // La cabecera del ítem es el caso que rompe: una marca en columna 0 debajo de un `- [x] …`
   // corta el ítem y le deja el cuerpo huérfano para TODO gate que lo lea por sangría.
   const cabecera = "- [x] 🔴 **CERRADO el 2026-09-11 (`abc1234`, rama del carril — falta el merge del";
   const mdCab = [cabecera, "      integrador): `lib/x.ts`, probado en produccion.**"].join("\n");
   const corrCab = corregirTexto(mdCab, [{ linea: 1, vivos: ["abc1234"] }], arg);
-  ok("la marca bajo una cabecera lleva la sangria del cuerpo", corrCab.split("\n")[1].startsWith("      ✅"));
+  // Misma corrección: la cabecera sigue en el renglón de abajo («…falta el merge del /
+  // integrador): `lib/x.ts`…»), así que la marca va después de ÉSE, no en el medio.
+  ok("la marca bajo una cabecera lleva la sangria del cuerpo", corrCab.split("\n")[2].startsWith("      ✅"));
   ok("no corta el item: el cuerpo sigue siendo suyo", afirmacionesDe(corrCab, "x.md").length === 0);
 
   // Idempotencia — la propiedad que hace que el conteo baje en vez de repetirse para siempre.
@@ -567,6 +624,20 @@ function selfCheck() {
   );
   ok("frontera: sin huellas -> sin ubicar, nunca un default", fronteraDe("**Commiteado, NO desplegado.**") === "sin ubicar");
   ok("frontera: nombra los dos -> sin ubicar", fronteraDe("`/opt/onia/bot` y `onia-platform`") === "sin ubicar");
+  // `onia-platform` como HOST de una URL no es una huella del deploy del panel: es el bot
+  // llamándolo por la red de Docker, o sea evidencia de lo contrario. Medido el 2026-09-25 en
+  // `chatbot.md:7173` (el inbox huérfano): su único `onia-platform` era
+  // `http://onia-platform:3000/api/chatbot-knowledge/published`, y con eso el gate lo mandaba a
+  // la cola del panel a pedirle un commit que sólo existe en el motor (`fetchOrgKnowledge` vive
+  // en `vps-ops/bot/knowledge.mjs` y en ningún archivo de onia-platform). Pedir un sha imposible
+  // deja al ítem incorregible para siempre, con cara de trabajo pendiente.
+  ok(
+    "frontera: onia-platform como host de URL no es huella del panel",
+    fronteraDe("COMMITEADO, NO DESPLEGADO: el bot vivo sirve el panel", "curl 'http://onia-platform:3000/api/chatbot-knowledge/published?inboxId=7'") ===
+      "sin ubicar",
+  );
+  // Pero el repo nombrado como repo SÍ sigue siendo huella del panel.
+  ok("frontera: onia-platform como repo sigue siendo el panel", fronteraDe("falta el swap", "arreglado en `onia-platform/lib/x.ts`") === "plataforma");
 
   // El remedio que se le imprime a cada no medida. Es el caso que este arreglo existe para cazar.
   ok(
@@ -601,6 +672,55 @@ function selfCheck() {
   });
   ok("veredicto: cuenta cuantas son el sujeto corregible", /1 .*no cita.*sha|sin sha: 1/i.test(vMix.mensaje));
 
+  // --- Nombrar al sujeto, no sólo contarlo -----------------------------------------------
+  // Contar «4 son EL SUJETO» sin decir CUÁLES obliga a re-derivarlos a mano cada vuelta, y por
+  // eso llevaban vueltas sin corregirse: la cola mandaba a «correr el comando y leer el
+  // desglose», pero el desglose no traía el `archivo:línea`. Lo mismo con las «hay que
+  // leerlas»: no se puede leer lo que el instrumento no ubica. Los datos ya estaban en la
+  // afirmación (`archivo`, `linea`) — sólo no se imprimían.
+  const conUbicacion = porFrontera([
+    { motivo: "la linea no cita sha", archivo: "chatbot.md", linea: 1623, frase: "⚠️ **NO DESPLEGADO.** Hasta que `onia-cola` publique" },
+    { motivo: "no cita sha y no se pudo ubicar la frontera", archivo: "plataforma-v1.md", linea: 6652, frase: "**Commiteado, NO desplegado.**" },
+    { motivo: "es del bot: otra frontera — citar un sha NO la haria medible", archivo: "chatbot.md", linea: 99, frase: "rsync" },
+  ]);
+  ok("ubica: nombra el archivo:linea del sujeto corregible", /chatbot\.md:1623/.test(conUbicacion));
+  ok("ubica: nombra tambien la que hay que leer", /plataforma-v1\.md:6652/.test(conUbicacion));
+  // Las del motor se cuentan pero NO se listan: son 45 y no son trabajo de nadie acá — listarlas
+  // entierra a los 4 sujetos entre 45 renglones, que es el mismo modo de falla del 25-sep.
+  ok("ubica: no lista las 45 del motor", !/chatbot\.md:99/.test(conUbicacion));
+
+  // --- Un sha que sólo tiene dígitos sigue siendo un sha ---------------------------------
+  // `7756295` es un commit REAL de onia-platform (`77562957`, "el cupo de WhatsApp deja de
+  // cortar mudo") y el filtro anti-números lo tiraba por ser todo dígitos: la línea quedaba
+  // como «no cita sha» —el sujeto que nadie puede corregir— teniendo su commit escrito al
+  // lado. ~4% de los shas de 7 caracteres son todo dígitos, así que no es un caso de borde.
+  // El filtro sigue haciendo falta (estas colas citan RNDs y teléfonos): lo que cambia es
+  // QUIÉN decide — antes la FORMA, ahora el repo, vía `esCommit`.
+  const mdDigitos = ["- [x] **CERRADO** arreglado en `7756295`", "      ⚠️ **Commiteado, NO desplegado**: viaja con `plataforma`."].join("\n");
+  ok("sha todo-digitos: se descarta si el repo no lo conoce", afirmacionesDe(mdDigitos, "x.md")[0]?.shas.length === 0);
+  ok("sha todo-digitos: se acepta si el repo dice que es un commit", afirmacionesDe(mdDigitos, "x.md", (s) => s === "7756295")[0]?.shas[0] === "7756295");
+  const mdRnd = ["- [x] **La RND `102600000007` fija el plazo**", "      ⚠️ **Commiteado, NO desplegado**."].join("\n");
+  ok("sha todo-digitos: una RND no se vuelve sha por existir el predicado", afirmacionesDe(mdRnd, "x.md", () => false)[0]?.shas.length === 0);
+
+  // --- La marca no parte la frase que corrige --------------------------------------------
+  // Medido el 2026-09-25 aplicando `--corregir` de verdad: la afirmación terminaba en «viaja
+  // con el» y seguía en el renglón de abajo con «pedido de deploy de `plataforma`». La marca
+  // entró en el medio y quedó *«viaja con el / ✅ YA DESPLEGADO / pedido de deploy»*: la
+  // corrección es cierta y aun así deja el párrafo ilegible, que es justo lo que este gate
+  // dice de sí mismo evitar («se corrigen CON su medición al lado»). Va al final del párrafo.
+  const parrafo = [
+    "- [x] **CERRADO**: arreglado en `abc1234`. ⚠️ **Commiteado, NO desplegado**: viaja con el",
+    "      pedido de deploy de `plataforma`.",
+    "",
+    "      Otro parrafo que no se toca.",
+  ].join("\n");
+  const corregido = corregirTexto(parrafo, [{ linea: 1, vivos: ["abc1234"] }], { desplegado: "def5678", fecha: "2026-09-25" }).split("\n");
+  ok("corrige: la marca va DESPUES de la ultima linea del parrafo", /pedido de deploy/.test(corregido[1]) && MARCA.test(corregido[2]));
+  ok("corrige: no parte la frase", !MARCA.test(corregido[1]));
+  ok("corrige: no invade el parrafo siguiente", corregido[3] === "" && /Otro parrafo/.test(corregido[4]));
+  // Y sigue sin corregir dos veces: el guard tiene que mirar el punto NUEVO, no el viejo.
+  ok("corrige: no duplica la marca al re-correr", corregirTexto(corregido.join("\n"), [{ linea: 1, vivos: ["abc1234"] }], { desplegado: "def5678", fecha: "2026-09-25" }).split("\n").filter((l) => MARCA.test(l)).length === 1);
+
   const malos = casos.filter((c) => !c.ok);
   for (const c of casos) console.log(`${c.ok ? "ok  " : "FALLA"} ${c.nombre}`);
   console.log(`\n${casos.length - malos.length}/${casos.length} casos`);
@@ -622,7 +742,10 @@ function medir(corregir = false) {
     return NO_PUDE_MEDIR;
   }
 
-  const afirmaciones = colasDe(DIR_COLAS).flatMap(({ archivo, texto }) => afirmacionesDe(texto, archivo));
+  // `estaVivo` ya devuelve null para lo que no existe en el repo: reusarlo como predicado de
+  // "esto es un commit" evita un segundo criterio que se desincronice con el primero.
+  const esCommit = (sha) => estaVivo(sha) !== null;
+  const afirmaciones = colasDe(DIR_COLAS).flatMap(({ archivo, texto }) => afirmacionesDe(texto, archivo, esCommit));
   const { mienten, noMedidas, honestas } = juzgar(afirmaciones, estaVivo);
 
   console.log(`Produccion corre \`${desplegado}\` (etiqueta de imagen de ${CONTENEDOR}).`);

@@ -112,11 +112,26 @@
 >   «Proponer un texto» (Recall, Clínica Sergio de prueba) devolvió un texto real de gpt-4.1-mini, vista
 >   previa con el nombre de muestra fijo, contador «1 de 150», descartado después; campana en oscuro
 >   legible; logs sin errores.
-> - **EN VUELO — plan B (correa):** worktree `E:/onia-wt/platform-b`, rama LOCAL
->   `wip/v1-correa-20260925` (desde `2075575f`, sin empujar). Si muere la sesión, los commits hechos
->   quedan en el repo `C:\dev\proyectos\onia-platform`; se retoma leyendo el plan desde la primera
->   tarea sin commit. Obligatorio: el filtro de avisos de `collab.ts` debe usar el mismo
->   `puedeDecidirAprobaciones` que decide.
+> - **Plan B (correa) EN PROD: `release-d3b24cbc`** (platform `d3b24cbc`, 25-sep 05:11 UTC, publicador
+>   oficial). Quién aprueba se pregunta en UN lugar (`puedeDecidirAprobaciones`): rutas de aprobaciones,
+>   `/pending`, inicio, inicio de comercio, `/agents`, la ruta de textos y los AVISOS de `collab.ts`, con
+>   test de CLASE (toda pantalla que lee propuestas debe llamarlo). Selector «quién aprueba» en
+>   `/team/roles` (solo en planes con coadministradores), con pedido que los otros aprobadores confirman.
+>   Vigía de agentes (cartel en `/agents` + Sentry al caer y al volver), «Por qué» en cada propuesta.
+>   Dos rondas adversariales de PERMISOS: 1 CRITICAL + 1 HIGH + 6 MEDIUM arreglados (entre ellos
+>   `DELETE /api/doctors/[id]` borraba al dueño sin chequeo; `/api/onboarding/aplicar` creaba ADMIN
+>   fantasma), con test de clase de puertas que borran/escriben un rol. Suite 6.650/0.
+>   **Verificado en vivo:** gate pre-merge 0 admins pierden «dueño» (corrido 2 veces); Sentry encendido;
+>   `/team/roles`, `/pending`, `/agents` 200 sin errores de consola, MIRADOS; corrida fallida de prueba en
+>   la clínica de prueba → cartel rojo «Tus agentes fallaron el 25/9/2026…» + evento Sentry; corrida de
+>   vuelta → cartel fuera + evento «volvieron a correr»; filas de prueba borradas.
+>   **Pendiente de mirar:** la línea «Por qué» en `/pending` aparece recién con propuestas NUEVAS (cron
+>   diario 07:00 La Paz): abrir `/pending` después de esa hora. Menores anotados: Sentry agrupa caída y
+>   vuelta en un mismo issue (fingerprint); en inicio de comercio el staff sigue leyendo «0 propuestas
+>   esperando tu aprobación»; `/team/roles` dice «Asigna/asignas» (tuteo, anterior a este carril).
+>   **Decisión pendiente de Sergio Urcullo:** con «Solo el dueño», si ese dueño desaparece sin
+>   entregar, hoy solo lo destraba Onia (SQL en la skill `onia-db`). ¿Automático por inactividad o
+>   manual? (no hay señal fiable de último ingreso en `Profile`).
 > - **Intentos fallidos de la noche:** (1) `pgrep -f <script>` por ssh se encuentra A SÍ MISMO (el
 >   `bash -c` remoto lleva el nombre en su línea): dijo «ya corre» y el release del C no se lanzó.
 >   Esperar por el log, no por pgrep. (2) Push en headless: el contexto incógnito de Playwright no
