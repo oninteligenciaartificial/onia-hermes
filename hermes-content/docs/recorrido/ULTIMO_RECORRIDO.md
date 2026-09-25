@@ -12,6 +12,144 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-25 15:14-15:22 La Paz — `BUILD_ID` sin cambios; escalón nuevo: promesa vs. entrega en home y `/precios`, sin hallazgo
+
+`ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado primero: `UgtwNYIEjS-DSK0umjqc8`, igual al
+de la vuelta anterior — los 5 rubros ya quedan re-verificados en este build (ver entrada de
+arriba), así que no correspondía repetir rubro. Siguiendo el puntero de esa misma entrada
+("auditar una superficie nueva de promesa vs. entrega que no se haya mirado recientemente"): la
+última auditoría de home/precios data del 2026-09-13, doce días atrás, y desde entonces se sumó
+el plan `crece` y se movió la escalera completa — corresponde re-mirar.
+
+Abrí `https://onia.com.bo/` y `https://onia.com.bo/precios` con Playwright (`reducedMotion:
+'reduce'`), capturas en `capturas/extra-promesa-home-2026-09-25.png` y
+`capturas/extra-promesa-precios-2026-09-25.png`, sin ejecutar ningún write (no se creó ninguna
+fila `zz-qa-` esta vuelta).
+
+- **Cero palabras prohibidas** ("muy pronto", "en construcción", "beta", "próximamente") en
+  ninguna de las dos páginas — barrido por texto completo del `body`, no sólo grep del markup.
+- **Cero respuestas HTTP ≥400** durante la navegación de ambas páginas (sin chunks rotos).
+- **Los 11 montos en `Bs` que aparecen en `/precios` se crucé uno por uno contra**
+  `origin/master:onia-platform/lib/subscription-plans.ts` (`DEFAULT_PLAN_AMOUNTS`) y
+  `lib/pricing.ts`: Básico 320/89-semanal/3.200-anual, Crece 550/145/5.500, Profesional
+  890/229/8.900, Completo 1.290/12.900 (sin semanal — correcto, `isCycleAvailable` no lo ofrece),
+  Empresarial 2.900/29.000 (sin semanal). El chatbot add-on Bs 390/mes y la cuenta "Bs 10 más que
+  Profesional con el add-on aparte" (890+390=1280 vs. 1290) coinciden con el comentario del propio
+  código en `subscription-plans.ts:35-38`. **Los cuatro** `href` de "Empezar con el <plan>" van a
+  `https://app.onia.com.bo/register` sin `?plan=`, lo cual es correcto: el alta no elige plan (crea
+  trial `professional` fijo, `TRIAL_PLAN` de memoria compartida) — no es una promesa rota, el botón
+  no promete llevar directo a ESE plan.
+- Sin ninguna mención a "vendedora", equipo de ventas ni autobombo de la empresa.
+
+**Sin hallazgo.** `completo: true` / `llegoHasta: 9/9` sin cambios (no se re-corrió el recorrido
+completo, sólo esta auditoría de superficie). Próxima vuelta: si `BUILD_ID` sigue igual, otra
+superficie de promesa-vs-entrega no cubierta en los últimos días (`/agentes`, `/comparativa`,
+`/facturacion`) o volver a rotar rubro desde dental.
+
+RAZÓN: N/A — avanzó (escalón nuevo auditado, sin hallazgo que reportar).
+LECCIÓN: ninguna nueva — seguir el puntero explícito de la vuelta anterior en vez de repetir el
+mismo rubro dio un escalón distinto y evitó trabajo redundante.
+
+## 2026-09-25 15:09-15:11 La Paz — `BUILD_ID` sin cambios; rotación de rubro → Servicios profesionales, 9/9
+
+`ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado ANTES de decidir (primer comando de la
+vuelta): `UgtwNYIEjS-DSK0umjqc8`, igual al de las últimas cuatro entradas. Las tres vueltas
+anteriores (12:10, 13:09, 14:12) se desviaron a cubrir los tres caminos de correo (invitación,
+recuperación) en vez de seguir el puntero explícito que la entrada de las 11:09 había dejado:
+"rotar a Servicios profesionales (el único de los 5 rubros activos sin cobertura reciente)".
+Con los tres caminos de correo ya cerrados (alta/invite/recovery) y el cuarto (`email_change`)
+confirmado NO alcanzable desde ninguna pantalla (`docs/CORREOS_AUTH_MARCA.md`: "nada en la app
+llama a `updateUser({ email })`" — sigue siendo cierto, sin UI que lo dispare), correspondía
+retomar ese puntero.
+
+`RECORRIDO_RUBRO="Servicios profesionales" node scripts/recorrido_cliente.mjs --escribir`:
+**recorrido completo, los 9 pasos, sin agujeros.** Cuenta
+`zz-qa-2026-09-25-1511@onia.com.bo`, confirmación de correo antes del primer login, onboarding en
+6 pantallas (pregunta → negocio → horarios → servicios → equipo → listo), profesional
+`zz-qa-2026-09-25-1511-profesional` en el alta, clientx `zz-qa-2026-09-25-1511-paciente` cargado
+y visto en `/patients` (group Clientes), cita 2026-09-28 09:00 agendada (201,
+`cmuh3pw7l002g01o4pxnayq47`) y VISTA en `/appointments`, pantalla de cobro (Caja) vista en
+`/comercio/caja` — frenado ahí sin marcar pago. El dato del paso 6 no aparece en `/dashboard`
+(esperado: el panel no lista el group Clientes). `resumen.json`: `llegoHasta 9/9`, `completo:
+true`, `agujeros: []`. `organizations`/`appointments` con `zz-qa-%` → **0** al cerrar, verificado.
+
+**Sin hallazgo de producto.** Con esto los 5 rubros activos quedan re-verificados en este
+`BUILD_ID` (`UgtwNYIEjS-DSK0umjqc8`): dental, comercio, estética y ahora servicios profesionales
+en esta racha, importadora en la anterior. Próxima vuelta: comparar `BUILD_ID` primero; si sigue
+igual, no hay rubro pendiente de esta racha — volver a empezar la rotación por dental, o auditar
+una superficie nueva de "promesa vs. entrega" (home/precios) que no se haya mirado recientemente.
+
+RAZÓN: N/A — avanzó (rubro pendiente cerrado, sin hallazgo).
+LECCIÓN: cuando una vuelta deja un puntero explícito ("próxima vuelta: rotar a X"), la vuelta
+siguiente lo sigue antes de inventar un escalón nuevo — tres vueltas seguidas explorando caminos
+de correo tenían valor, pero dejaron el puntero original sin cerrar; seguirlo ahora evitó que
+quedara huérfano indefinidamente.
+
+## 2026-09-25 14:12-14:13 La Paz — `BUILD_ID` sin cambios; escalón nuevo: "Olvidé mi contraseña" cambia la contraseña DE VERDAD
+
+`ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado ANTES de decidir: `UgtwNYIEjS-DSK0umjqc8`,
+igual al de las dos entradas anteriores — no correspondía repetir un rubro. Tercer camino de
+`/auth/confirm?token_hash=...&type=...` (los otros dos, alta y la invitación por correo, ya
+estaban cubiertos): el botón "Olvidé mi contraseña" del login, que hasta hoy nadie había seguido.
+
+Nuevo script `scripts/probar_recuperar_contrasena.mjs`: siembra una cuenta `zz-qa-` con
+contraseña VIEJA conocida (bcrypt vía `extensions.crypt`/`extensions.gen_salt` — el pgcrypto de
+este Postgres vive en el schema `extensions`, no en `public`), confirma que esa vieja entra
+(`POST /api/auth/login` 200), abre `/login`, hace clic en "Olvidé mi contraseña", escribe el
+correo y manda "Enviar enlace" **por la UI real**, lee el `recovery_token` que GoTrue dejó en
+`auth.users`, abre `/auth/confirm?type=recovery` en un navegador limpio, carga una contraseña
+NUEVA en `/update-password` y la guarda. Prueba las DOS puertas al final, no solo una: la NUEVA
+entra (200) y la VIEJA deja de entrar (401 `invalid_credentials`) — sin la segunda mitad, un bug
+que dejara las dos contraseñas activas habría pasado como éxito.
+
+Corrida en vivo: org `zz-qa-recuperar-20260925141225` → login viejo 200 → aviso de envío en
+pantalla → enlace `/auth/confirm?type=recovery` → aterriza en `/update-password` → guarda →
+redirige a `/login?notice=password_updated` → login nuevo 200 → login viejo 401. **Las dos
+puertas correctas. Sin hallazgo.** Limpieza confirmada: `organizations=0 auth.users=0` al cerrar.
+
+RAZÓN: `BUILD_ID` no se movió, así que no correspondía repetir un rubro; el avance fue cubrir un
+tercer camino de correo (recovery) que nunca se había recorrido, siguiendo el mismo método que
+cerró alta e invitación.
+LECCIÓN: ninguna nueva — comparar `BUILD_ID` primero y, si no cambió, buscar el próximo camino de
+correo sin recorrer (alta → invitación → recuperación) sigue siendo mejor método que repetir un
+rubro.
+
+## 2026-09-25 13:09-13:11 La Paz — `BUILD_ID` sin cambios; escalón nuevo: el ENLACE de invitación por correo deja ENTRAR, con rol correcto
+
+`ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado ANTES de decidir: `UgtwNYIEjS-DSK0umjqc8`,
+igual al de la entrada anterior — no correspondía repetir un rubro. Siguiendo la propia nota de
+la vuelta anterior ("qué le llega al invitado — si el link del correo realmente lo deja entrar
+con rol correcto"), se auditó exactamente eso.
+
+Lo que faltaba: `probar_coadministrador.mjs` (API) y `probar_coadministrador_ui.mjs` (clics)
+sólo cubren el modo **"Crear con contraseña"** del modal `InviteModal` (`POST /api/team`, acceso
+inmediato). El modo **"Invitar por email"** (`POST /api/admin/users`, sin contraseña) nunca se
+había seguido hasta el enlace real: la vuelta de las 12:10 sólo confirmó que el correo SALE
+(postfix `status=sent`), no que el enlace SIRVE. Ese enlace usa
+`/auth/confirm?token_hash=...&type=invite` → `verifyOtp` → redirect a `/dashboard`
+(`app/auth/confirm/route.ts`), y nadie lo había abierto.
+
+Nuevo script `scripts/probar_invitacion_correo_entra.mjs`: invita a un segundo ADMIN por correo
+en una org `clinic`, lee el `confirmation_token` REAL de `auth.users` (el mismo que GoTrue pone
+en el mail — mismo mecanismo que `alta_correo_confirma.mjs`), abre ese enlace en un navegador
+LIMPIO (nunca vio la sesión del dueño), y confirma que la sesión resultante:
+
+- aterriza en `/dashboard` (no `/login?error=...`);
+- con esas cookies, `GET /api/admin/users` da `200` y ve a los **2** usuarios (prueba de que no
+  es una sesión rota que igual no tira error: ve la org del dueño con su propio acceso);
+- el `profile` del invitado quedó con `role='ADMIN'`, el rol que se le asignó al invitar.
+
+Corrida en vivo: org `zz-qa-invenlace-20260925131112` → `POST /api/admin/users` 201 → enlace
+abierto → `https://app.onia.com.bo/dashboard` → `GET /api/admin/users` 200 con 2 usuarios →
+`role` en `profiles` = `ADMIN`. **Las tres puertas sostenidas. Sin hallazgo.** Limpieza
+confirmada por el propio script: `organizations=0 auth.users=0` al cerrar.
+
+RAZÓN: `BUILD_ID` no se movió, así que no correspondía repetir un rubro; el avance fue cerrar el
+escalón que la propia vuelta anterior dejó abierto (201 con entrega ≠ enlace que funciona).
+LECCIÓN: ninguna nueva — comparar `BUILD_ID` primero y, si no cambió, subir el escalón de
+profundidad que la vuelta anterior ya anotó como pendiente sigue funcionando mejor que repetir
+un rubro o inventar uno nuevo.
+
 ## 2026-09-25 12:10-12:12 La Paz — `BUILD_ID` sin cambios; escalón nuevo: la invitación por correo de un coadministrador SÍ llega (no solo 201)
 
 `ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado ANTES de decidir: `UgtwNYIEjS-DSK0umjqc8`,
