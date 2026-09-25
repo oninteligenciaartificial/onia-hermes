@@ -78,6 +78,12 @@ describe("la privacidad declara a quien de verdad recibe los datos", () => {
     expect(seccion(PRIVACIDAD_CRUDA, 13)).toMatch(/Telegram/);
   });
 
+  it("nombra a Cloudflare, por donde pasa todo el tráfico y el correo de datos", () => {
+    // onia.com.bo y app.onia.com.bo resuelven a IPs de Cloudflare (proxy TLS),
+    // y el MX de business@ —la vía del §12— es Cloudflare Email Routing.
+    expect(seccion(PRIVACIDAD_CRUDA, 5)).toMatch(/Cloudflare/);
+  });
+
   it("no promete que el audio no sale ni que nadie más recibe los datos", () => {
     expect(PRIVACIDAD).not.toMatch(/nadie m[aá]s recibe/i);
     expect(PRIVACIDAD).not.toMatch(/no se env[ií]a a servicios de transcripci[oó]n/i);
