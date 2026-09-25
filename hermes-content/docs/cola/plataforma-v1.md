@@ -263,8 +263,27 @@ trabaría el merge de todos los carriles.
 
       ⚠️ **Commiteado y publicado en la rama del carril, NO desplegado:** lo mergea `onia-cola`.
       ✅ YA DESPLEGADO (medido 2026-09-25: `e25eadd6` `1705269d` vive en produccion `39234c89`).
-      No se pudo mirar renderizado con sesión real — sigue vivo el corte de 2FA que manda toda
-      ruta del panel a `/profile?mfa=obligatorio` (tarea `t_3bb6b9ee`, depende de Sergio Urcullo).
+      ⚠️ **Acá decía que NO se podía mirar renderizado con sesión real porque «sigue vivo el
+      corte de 2FA» y que eso dependía de Sergio Urcullo (tarea `t_3bb6b9ee`) — las dos mitades
+      estaban VENCIDAS, corregido el 2026-09-25.** `t_3bb6b9ee` está **archivada** desde el
+      18-sep, y el corte se resolvió el 24-sep cableando TOTP (RFC 6238) en
+      `scripts/lib/sesion_dueno.mjs`, que lee el factor verificado y pasa el segundo paso solo.
+      **Medido hoy, y MIRADO:** `node scripts/mirar_bandeja_dueno.mjs --ruta /inbox` → exit 0,
+      «segundo factor verificado (factor 2867857c…) — sesión aal2», URL final
+      `https://app.onia.com.bo/inbox` (no `/profile?mfa=obligatorio`), HTTP 200, cero respuestas
+      ≥400. La captura muestra la bandeja de `Onia (interna)` con **una conversación de WhatsApp
+      del 18-sep de un desconocido** entre las sondas QA — o sea el punto 1 de este carril se
+      puede verificar hoy, sin pedirle nada a Sergio Urcullo.
+
+      **Lo que este fantasma costaba no es el párrafo: era la capacidad de verificar.** La línea
+      declaraba imposible MIRAR una pantalla con sesión real, que es la única prueba que
+      `CLAUDE.md` acepta («verificar es MIRAR»), y encima le pedía a Sergio Urcullo una decisión
+      que ya había tomado. Ahora lo agarra un gate: `npm run bloqueo:citado`
+      (`scripts/bloqueo_citado_vivo.mjs`) pregunta al tablero por cada tarea que una cola nombre
+      como freno vigente, y se pone rojo si esa tarea está `done`, `archived` o no existe.
+      `bloqueos_vencidos.mjs` no lo veía: mide filas de la tabla «Bloqueado en Sergio» con
+      `**Verificador:**` declarado, y este bloqueo vivía suelto en el cuerpo de un ítem, en una
+      cola que **no tiene esa tabla**.
 
 - [x] 🔴 **CERRADO el 2026-09-18 — el dueño que conectaba su Instagram o el chat de su web no
       podía apagarlos nunca** (`onia-platform` `3a61c3ea`, rama del carril; los tres gates
