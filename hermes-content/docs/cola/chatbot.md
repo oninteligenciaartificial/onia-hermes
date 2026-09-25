@@ -644,11 +644,37 @@ y encima el sujeto real enterrado entre ellas.
 | 5 | **sin ubicar** — hay que leerlas |
 | **4** | **EL SUJETO**: piden el deploy del **panel** y no citan su commit |
 
-Los cuatro, derivados (no se copian de acá, que caduca): corré `npm run deploy:ya-ocurrio` y
-leé el desglose. El 2026-09-25 eran `chatbot.md:1623`, `chatbot.md:1666`, `chatbot.md:7099` y
-`plataforma-v1.md:6652`. **No se les puso el sha en esa vuelta a propósito:** un sha equivocado
-acá es peor que ninguno, porque `--corregir` escribe en la cola y marcaría como desplegado algo
-que no lo está. Se resuelve leyendo cada ítem y buscando su commit en `onia-platform`.
+✅ **RESUELTO el 2026-09-25 — los cuatro sujetos incorregibles son CERO, y el comando ahora los
+UBICA.** El desglose contaba «4 son EL SUJETO» sin decir **cuáles**, así que la única forma de
+trabajarlos era re-derivarlos a mano en cada vuelta: por eso sobrevivieron vueltas enteras
+teniendo el remedio escrito. Los datos (`archivo`, `linea`) ya estaban en la afirmación, sólo no
+se imprimían. Hoy imprime `· archivo:línea [SUJETO|leer] frase` por cada **accionable** — las 45
+del motor se cuentan y no se listan, porque volcarlas entierra a los sujetos, que es el mismo
+modo de falla al revés. Y esto confirma por qué acá había cuatro números de línea copiados: **los
+cuatro ya habían caducado** (eran 1683/1726/7172/6693 el mismo día, no 1623/1666/7099/6652).
+
+Los tres defectos que los mantenían incorregibles, los tres medidos en vivo y con su test:
+
+1. **Un sha de sólo dígitos se descartaba por la forma.** `7756295` es un commit real de
+   `onia-platform` (`77562957`, "el cupo de WhatsApp deja de cortar mudo") y el filtro anti-números
+   lo tiraba, así que su línea salía «no cita sha» teniendo el commit al lado. Ahora decide el
+   repo (`esCommit`), no la pinta — el filtro sigue haciendo falta, estas colas citan RNDs y
+   teléfonos. Con eso el gate cazó su **primera mentira real**: `plataforma-v1.md` pedía un deploy
+   que ya había ocurrido.
+2. **`--corregir` partía la frase que corregía.** Estas colas envuelven a ~100 columnas, y la marca
+   entraba en `i+1`: quedó *«viaja con el / ✅ YA DESPLEGADO / pedido de deploy»*. Va al final del
+   párrafo. El acusador y el corrector comparten `finDeParrafo()` a propósito: con dos criterios
+   distintos la línea se re-acusa en cada corrida y el conteo no baja nunca.
+3. **`onia-platform` como HOST de una URL contaba como huella del panel.** El único
+   `onia-platform` de `chatbot.md:7173` era
+   `http://onia-platform:3000/api/chatbot-knowledge/published` — el **bot** llamándolo por la red
+   de Docker, o sea evidencia de lo contrario. El gate lo mandaba a pedirle un commit que sólo
+   existe en el motor (`fetchOrgKnowledge` vive en `vps-ops/bot/knowledge.mjs` y en **ningún**
+   archivo de onia-platform). Un sha imposible deja al ítem incorregible para siempre, con cara de
+   trabajo pendiente.
+
+**Lo que queda, y ya está ubicado:** 6 líneas `[leer]` — sin huellas de ninguna frontera, hay que
+abrirlas y decidir a qué deploy se refieren. Se derivan con el comando, nunca de acá.
 
 ## Ahora
 
@@ -1680,7 +1706,7 @@ que no lo está. Se resuelve leyendo cada ítem y buscando su commit en `onia-pl
       rama **con efecto** se veía igual que una sin él. Por cada rama que cambia el ESTADO sin
       mandar un mensaje, preguntar si deja rastro — si el efecto no se mandó, para el log no pasó.
 
-- [x] 🔴 **CERRADO el 2026-09-19 13:45-14:25 La Paz (commiteado en `onia-platform`, NO desplegado)
+- [x] 🔴 **CERRADO el 2026-09-19 13:45-14:25 La Paz (commiteado en `onia-platform` como `27af2404`)
       — la pantalla donde el dueño mira trabajar a su bot le prometía lo contrario de lo que le
       cobramos, al lado del único número que sí tiene tope.**
 
@@ -1725,6 +1751,7 @@ que no lo está. Se resuelve leyendo cada ítem y buscando su commit en `onia-pl
 
       ⚠️ **NO DESPLEGADO.** Hasta que `onia-cola` publique `plataforma`, el dueño sigue leyendo
       «sin límite, siempre» en producción.
+      ✅ YA DESPLEGADO (medido 2026-09-25: `27af2404` vive en produccion `2075575f`).
 
 - [x] 🔴 **CERRADO el 2026-09-19 12:43-13:25 La Paz (commiteado; el instrumento no necesita deploy
       para correr, pero sólo mide el respaldo cuando el respaldo esté desplegado) — la ÚNICA red

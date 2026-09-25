@@ -6692,6 +6692,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       quedaba sin canal sin enterarse.** Arreglado en `7756295` (`onia-platform`), rama
       `claude/chatbots-platform-review-0d1d09`. ⚠️ **Commiteado, NO desplegado**: viaja con el
       pedido de deploy de `plataforma`.
+      ✅ YA DESPLEGADO (medido 2026-09-25: `7756295` vive en produccion `2075575f`).
 
       El cron de recordatorios (`app/api/cron/appointment-reminders/route.ts`) tiene **dos**
       cupos hermanos. El de **correo** avisa al dueño al cruzar el 80 % y el 100 %
