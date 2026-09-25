@@ -95,6 +95,60 @@ trabaría el merge de todos los carriles.
 
 ## Ahora
 
+- [ ] 🟡 **PORTADA reordenada por el veredicto de Sergio Urcullo (11-sep) — YA ESTÁ PUBLICADA.
+      Lo que falta es el resto de la auditoría que él puso como CONDICIÓN para publicarla, y
+      que el deploy se saltó.** Sus palabras del 11-sep: *"esto no vende nada… coloca algo que
+      impacte que se vea más el sistema, y el tema de los chatbots es principal, que sea más
+      protagonista, está al final eso, quita esas cajitas que son solo texto… el inicio me
+      gustaba más así como estaba puro texto estilo hostinger… que sea lo principal llevarlos a
+      probar el sistema"*. Qué entró en `a847d9aa`: hero v4 DESCARTADO (vuelve el hero de
+      producción que él aprobó), sección HECHOS retirada, chatbot a la posición 2 con
+      conversación dibujada (`web-factory/apps/onia-platform/src/app/(sitio)/conversacion.tsx`)
+      + CTA al alta. El 11-sep también entró la dieta de add-ons (`e12b740f`).
+
+      ⚠️ **2026-09-25 (chatbot-cola) — este ítem vivía en «Bloqueado en Sergio Urcullo»
+      pidiéndole un OK para publicar algo que era público desde hacía catorce días.** Ese es el
+      bloqueo vencido que el escalón 0 manda reverificar antes de mover nada, y es peor que un
+      fantasma: le pide una decisión que el sistema ya tomó solo. Medido con las tres medidas,
+      no de memoria:
+      1. **Mergeado** — `git log --diff-filter=A -1 origin/main -- …/conversacion.tsx` devuelve
+         **`a847d9aa`**, o sea que ese commit es el que CREÓ la pieza, y
+         `git merge-base --is-ancestor a847d9aa origin/main` sale 0.
+      2. **Qué corre** — `BUILD_ID` de `/opt/onia-landing/runtime-next/apps/onia-platform/.next/`
+         es de hoy (`EexcZO0vmlTK4LsYtP1I_`, 2026-09-25 09:56) y `/var/log/onia-publicar-solo.log`
+         cierra con `landing: al dia`.
+      3. **Vivo** — `curl https://onia.com.bo/` (200, 1,0 s, 121 KB) trae el literal
+         `WhatsApp del negocio`, que sólo existe dentro de `conversacion.tsx`, y los `<h2>` de la
+         portada servida salen en el orden nuevo: el bloque del chatbot es el **segundo**.
+
+      **Por qué se publicó sin la auditoría, y no es un descuido de nadie:** lo publicó el
+      publicador automático del VPS (`/root/bin/onia-publicar-solo.sh`, cron `50 */3`, que **no
+      vive en el repo**: su fuente versionada es el guion de abajo), cuya única guarda
+      —`FIRMA_HUMANA` en `scripts/loops/extras/publicar-solo.sh:45`— frena **fuentes de precio**
+      (`pricing.ts`, `subscription-plans.ts`, el catálogo, el knowledge del bot). Una portada
+      rediseñada no toca ninguna, así que salió sola. El `CLAUDE.md` tiene la regla que eso
+      incumple —*"una superficie viva no se reemplaza sin que Sergio VEA la pieza terminada"*,
+      nacida el 2026-08-20 de publicar la landing v2 y tener que revertirla— pero **la regla
+      está escrita y no cableada**. Queda como tarea para el dueño del publicador; no se arregla
+      desde este carril.
+
+      **Auditoría: la mitad de precios está HECHA y VERDE, medida hoy sobre el sitio vivo.** Es
+      lo primero que él nombró (*"verificamos los precios de los add-ons y las pestañas
+      secundarias"*), y no hacía falta un barrido nuevo: la app ya tiene los dos gates.
+      - `npm run precios:vivos` → **VERDE**: 24/24 pantallas barridas, 2/2 recorridos que llegan
+        al resultado, y los **21** montos presentados como precio salen de la fuente (9 más
+        aparecen citados en prosa, sin periodicidad, y por eso no se juzgan).
+      - `npm run precios:fuente` → **VERDE**: las 44 cifras que publica el sitio son las que
+        cobra el producto, y los 4 planes comprables coinciden en ciclos y nombre en las dos
+        pantallas de la compra.
+
+      **Lo que queda de este ítem** (trabajo, ya no firma): (a) la otra mitad de la auditoría
+      —*"cibersecurity, fallos de estructura de la web, información mal colocada, docs viejos,
+      política de privacidad"*— sobre `web-factory/apps/onia-platform/src/`, que es **zona de
+      `web-venta`**: los hallazgos van a su tablero, no se editan desde acá; (b) probar un video
+      HyperFrames como pieza del bloque chatbot (*"puedes generar videos con hyperframes
+      también, intentá"*) — la conversación CSS se eligió primero porque pesa cero.
+
 - [x] 🟡 **HECHO el 2026-09-24 en el carril `chatbot` (commiteado, NO publicado) — el detalle,
       los gates y lo que falta viven en `hermes-content/docs/cola/chatbot.md`, "Ahora".**
 
@@ -5513,27 +5567,6 @@ y sin operar. Acá se opera, con verificación por ítem.
 > ```bash
 > /root/bin/onia-tablero.sh list --status blocked
 > ```
-
-- [ ] 🔴 **PORTADA reordenada por veredicto de Sergio Urcullo (11-sep, sobre capturas del
-      preview y de producción) — HECHA en `main` (`a847d9aa`), FALTA su OK mirándola y el
-      deploy.** Sus palabras: *"esto no vende nada… coloca algo que impacte que se vea más el
-      sistema, y el tema de los chatbots es principal, que sea más protagonista, está al final
-      eso, quita esas cajitas que son solo texto… el inicio me gustaba más así como estaba puro
-      texto estilo hostinger… que sea lo principal llevarlos a probar el sistema"*. Qué entró:
-      hero v4 DESCARTADO (vuelve el hero de producción que él aprobó), sección HECHOS retirada,
-      chatbot a la posición 2 con conversación dibujada
-      (`web-factory/apps/onia-platform/src/app/(sitio)/conversacion.tsx`) + CTA al alta.
-      Pendiente de ESTE ítem: (a) **AUDITORÍA PRE-PUBLICACIÓN pedida por Sergio Urcullo antes
-      del deploy** (11-sep, textual: *"verificamos los precios de los add-ons y las pestañas
-      secundarias que no es el hero que estén bien hechas, también verificamos cibersecurity,
-      fallos de estructura de la web, información mal colocada, docs viejos, política de
-      privacidad"*) — dos subagentes barriendo seguridad y contenido de
-      `web-factory/apps/onia-platform/src/`; los hallazgos se arreglan ANTES del deploy;
-      (b) tras la auditoría limpia, su OK → deploy con `/opt/onia-landing/_deploy/publicar.sh`;
-      (c) probar un video HyperFrames como pieza del bloque chatbot ("puedes generar videos con
-      hyperframes también, intentá") — arrancamos con la conversación CSS porque pesa cero.
-      El 11-sep también entró la dieta de la sección de add-ons (`e12b740f`: tarjetas con
-      precio en píldora, ancla del salario en una línea, copys cortos en la fuente única).
 
 - [ ] 🔴 **Dos propuestas de diseño para el dashboard del producto** (Sergio Urcullo, 11-sep:
       *"ese color que hay ahorita no es nada intuitivo y no hay botones que resalten, que se
