@@ -65,6 +65,8 @@ const FILA = /^\|\s*(~~)?\s*(S\d+)\s*(~~)?\s*\|/;
 const VERIFICADOR = /\*\*Verificador:\*\*\s*`([^`]+)`\s*(?:→|->)\s*(\d+)/;
 // Arranque de item de cola, primer nivel: `- [ ] ...` o `- [x] ...`.
 const ITEM = /^- \[( |x|X)\]\s/;
+// Un item que se DECLARA bloqueo: `- [ ] 🔴 ...`. No es lo mismo que un item abierto.
+const ITEM_BLOQUEO = /^- \[( |x|X)\]\s*🔴/;
 // Lo que CORTA el bloque de un item: otro item de primer nivel, un titulo, o una tabla.
 const CORTE_ITEM = /^(- \[( |x|X)\]\s|#{1,6}\s|\|)/;
 
@@ -97,16 +99,23 @@ export function extraerItems(lineas) {
     }
 
     const v = VERIFICADOR.exec(lineas.slice(i, fin).join('\n'));
-    if (!v) continue;
+    const cerrado = m[1].toLowerCase() === 'x';
+    // Se extrae si declara verificador (para CORRERLO), o si es un bloqueo abierto `- [ ] 🔴`
+    // (para LISTARLO como "se re-mide a mano"). Sin la segunda mitad, una cola cuyos bloqueos
+    // no declaran verificador devolvia vacio y salia "NO MEDIDO", indistinguible de un archivo
+    // sin bloqueos — ver el bloque largo del self-check. Un bloqueo CERRADO sin verificador no
+    // entra: no se corre ni se lista, y sumarlo haria decir "todos siguen bloqueados" sobre
+    // colas que no tienen ninguno vivo.
+    if (!v && !(!cerrado && ITEM_BLOQUEO.test(lineas[i]))) continue;
 
     items.push({
       // El id es la linea: un item de cola no tiene numero como `S9`, y la linea es con lo que
       // alguien lo encuentra. Dos items nunca comparten linea, asi que tampoco id.
       id: `L${i + 1}`,
       linea: i + 1,
-      cerrado: m[1].toLowerCase() === 'x',
-      comando: v[1].trim(),
-      esperado: Number(v[2]),
+      cerrado,
+      comando: v ? v[1].trim() : null,
+      esperado: v ? Number(v[2]) : null,
     });
   }
   return items;
@@ -378,18 +387,39 @@ if (process.argv.includes('--self-check')) {
     '',
     '- [ ] 🔴 **Item sin verificador** — este se re-mide a mano.',
     '',
+    '- [ ] **Item abierto cualquiera**, que NO es un bloqueo y no debe ensuciar el reporte.',
+    '',
     '- [x] 🔴 **Item ya cerrado** con **Verificador:** `npm run deploy:alcanzable` → 0',
   ].join('\n'));
-  // Un item se mide si DECLARA su verificador, igual que una fila: en una cola cualquier item
-  // abierto NO es un bloqueo, asi que deducirlo de que este abierto llenaria el reporte de
-  // items que nadie esta esperando y apagaria el gate por ruido.
-  afirmar(items.length === 2, 'de una cola sin tabla saca los items que DECLARAN verificador');
+  // Un item se CORRE solo si DECLARA su verificador, igual que una fila. Pero un `- [ ] 🔴`
+  // sin verificador igual se EXTRAE, para que salga en la linea de "se re-miden a mano".
+  //
+  // ESTA DISTINCION ES EL AGUJERO QUE DEJO ABIERTO EL ARREGLO DEL 2026-09-25 (63ab39aa). Ese
+  // commit enseño al gate a leer items y declaro cerrado el punto ciego de `plataforma-v1.md`
+  // — pero como ningun item de esa cola declara verificador, `extraerBloqueos` seguia
+  // devolviendo VACIO y el archivo caia en el mismo `NO MEDIDO` de antes, con exit 1. O sea:
+  // una cola con CUATRO bloqueos vivos daba la misma salida, palabra por palabra, que un
+  // archivo que no es una cola. Ese es el modo de falla que este carril llama el mas caro —
+  // una salida vacia no avisa, CONFIRMA — y ademas dejaba a la capacidad nueva sin un solo
+  // sujeto vivo: self-check verde, cero uso real.
+  //
+  // El `🔴` es lo que separa un bloqueo de un pendiente, y no es teoria: medido el 2026-09-25,
+  // en las 30 colas del repo `- [ ] 🔴` aparece SOLO en `plataforma-v1.md` y son exactamente
+  // sus 4 bloqueos. El miedo al ruido valia para `- [ ]` pelado, que se sigue ignorando.
+  afirmar(items.length === 3, 'un `- [ ] 🔴` sin verificador tambien se extrae: es un bloqueo declarado');
+  afirmar(
+    !items.some((f) => /cualquiera/.test(String(f.id)) || f.linea === 8),
+    'un `- [ ]` sin 🔴 y sin verificador NO se extrae: un pendiente no es un bloqueo',
+  );
+  const sinV = items.find((f) => f.linea === 6);
+  afirmar(sinV && sinV.comando === null && sinV.esperado === null,
+    'el bloqueo sin verificador sale con comando null, asi cae en "se re-miden a mano" y no se corre nada');
   afirmar(items[0].comando === 'npm run marca:chatwoot', 'saca el verificador declarado en la continuacion del item');
   afirmar(items[0].esperado === 0, 'saca el codigo esperado del item');
   afirmar(items[0].linea === 3, 'reporta la linea del item, que es como se lo encuentra');
   afirmar(items[0].cerrado === false, 'el item abierto no se confunde con uno cerrado');
-  afirmar(items[1].linea === 8 && items[1].cerrado === true, 'un `- [x]` sale marcado cerrado, como una fila tachada');
-  afirmar(items.filter((f) => !f.cerrado).length === 1, 'el filtro de vivas deja fuera al item cerrado');
+  afirmar(items[2].linea === 10 && items[2].cerrado === true, 'un `- [x]` sale marcado cerrado, como una fila tachada');
+  afirmar(items.filter((f) => !f.cerrado).length === 2, 'el filtro de vivas deja fuera al item cerrado y deja los DOS bloqueos');
   afirmar(items.length === new Set(items.map((f) => f.id)).size, 'dos items nunca comparten id: el id es su linea');
 
   // Una cola con las DOS formas se mide entera: la tabla no le tapa los items ni al revés.
@@ -561,8 +591,9 @@ const filas = extraerBloqueos(await readFile(ruta, 'utf8'));
 
 if (!filas.length) {
   console.error(
-    `NO MEDIDO — ${ruta} no tiene ni una tabla "Bloqueado en Sergio" ni un item que declare ` +
-      `su verificador (\`**Verificador:** \\\`<comando>\\\` → <codigo>\`). Sin eso no hay nada que correr.`,
+    `NO MEDIDO — ${ruta} no tiene ni una tabla "Bloqueado en Sergio", ni un bloqueo abierto ` +
+      `\`- [ ] 🔴\`, ni un item que declare su verificador ` +
+      `(\`**Verificador:** \\\`<comando>\\\` → <codigo>\`). Sin eso no hay nada que correr.`,
   );
   process.exit(1);
 }
