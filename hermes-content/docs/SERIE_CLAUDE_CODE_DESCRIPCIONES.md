@@ -88,7 +88,13 @@ SERIE «CLAUDE CODE DE CERO»
 
 > Actualizada el 17-sep con el recurso web: los ejemplos del video (hook, subagente,
 > conector y trabajo por horario) viven en `/claude-code`, listos para copiar.
-> ⚠️ Los minutos de los capítulos se completan con el render final antes de pegar.
+> ✅ **Minutos COMPLETADOS el 18-sep** contra el render final de Sergio Urcullo
+> (`editado/video 03 claude editado por capcut sergio.mp4`, 2560×1440, **6:36**),
+> transcrito con faster-whisper. No son estimaciones del guion: son los cortes del video.
+>
+> ⚠️ **Dos cosas que el video promete y la descripción debe cumplir:** en **3:29** dice
+> *"te puedo dejar un plugin en la descripción"* — hay que poner uno o la promesa queda
+> colgada. Y en **3:14** pide comentarios sobre los mejores conectores.
 
 ```
 En el primer video mostré cuatro programas trabajando de madrugada. Hoy muestro cómo.
@@ -99,16 +105,16 @@ https://sergiourcullo.vercel.app/claude-code
 
 CAPÍTULOS
 0:00 Que trabaje sin vos
-El mapa: cuatro escalones
-Escalón 1 · hooks
-Escalón 2 · subagentes
-Escalón 3 · conectores
-El atajo: instalarlo ya hecho
-Escalón 4 · por horario
-Mi caso
-La parte honesta: lo que corre solo, falla solo
-Las tres reglas que me salvan
-En una línea
+0:36 El mapa: cuatro escalones
+1:00 Escalón 1 · hooks
+1:26 Escalón 2 · subagentes
+2:39 Escalón 3 · conectores
+3:21 El atajo: instalarlo ya hecho
+3:58 Escalón 4 · por horario
+4:41 Mi caso
+4:51 La parte honesta: lo que corre solo, falla solo
+5:46 Las tres reglas que me salvan
+5:56 En una línea
 
 SERIE «CLAUDE CODE DE CERO»
 01 · Claude y Claude Code no son lo mismo → https://www.youtube.com/watch?v=kAsAhGe6zyA

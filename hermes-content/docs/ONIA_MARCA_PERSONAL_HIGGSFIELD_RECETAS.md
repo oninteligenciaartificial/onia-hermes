@@ -8,7 +8,22 @@
 > El MCP viejo sigue PROHIBIDO (sustituía modelos y cobraba). La web queda para lo
 > manual/exploratorio. IMAGEN lote chico = autorizado con registro. VIDEO = permiso
 > explícito caso por caso, cotizado antes. Tope del loop: 2 cr/día, solo imagen.
-> Plan ULTRA: 2.019 créditos al 2026-09-02.
+>
+> 🔴 **Corregido 2026-09-21, medido en vivo — dos cosas de acá arriba ya no son ciertas:**
+> 1. **El plan NO es ULTRA y el saldo NO es 2.019.** Hoy: plan **`pro`** con **580,65
+>    créditos** (`balance`). Una sesión que lea «2.019» planifica con **3,5 veces** más
+>    presupuesto del que hay.
+> 2. **El CLI NO está autenticado en Windows.** `higgsfield account status` devuelve
+>    `request failed` → `Run: hf auth login`. La vía que sí funcionó hoy fue el **MCP**,
+>    y cotizando antes: `get_cost:true` → 0,12 cr, debitado 0,12 cr, **exacto**.
+>    El motivo real del veto al MCP («no cotiza antes») **ya no aplica**: sí cotiza.
+>    Y la «sustitución de modelo» era la colisión de nombres ya documentada — se pide
+>    `soul_2` y se ejecuta `text2image_soul_v2`, que es el **mismo** motor (verificado en
+>    los 6 jobs del 21-sep). Regla que sigue firme: **el job type sale del catálogo
+>    (`models_explore get`), nunca de memoria.**
+>
+> ⚠️ **Límite nuevo del plan `pro`: 4 jobs concurrentes.** El 5.º de un lote se rechaza en
+> el acto con `max 4 concurrent job(s) on pro (monthly) plan` — hay que reenviarlo.
 
 ## Qué modelo para qué (roster del repo)
 
@@ -132,3 +147,36 @@ Prompt (inglés, para igualar el estilo cálido y cinematográfico de `public/fo
 > amber. Natural skin texture, subtle film grain, documentary feel. No text, no logos, no screens.
 
 Se generó desde el **VPS**: el CLI de Windows está sin sesión (`Not authenticated`).
+
+## Lote 2026-09-21 · prueba de consistencia de avatar (video 10 del brief de Samuel)
+
+| Dato | Valor |
+|---|---|
+| Vía | **MCP** (el CLI de Windows sigue sin sesión), cotizado con `get_cost:true` antes |
+| Job type | `soul_2` pedido → `text2image_soul_v2` ejecutado (mismo motor, ver cabecera) |
+| Soul | «Sergio ONIA v2» `bce5feb0-f028-4d1f-b2b3-96428a013f85` |
+| Imágenes | 6 (4 con `soul_id`, 2 sin `soul_id` como contraejemplo) |
+| Parámetros | `quality: 2k`, `aspect_ratio: 3:4` (una en `9:16`) |
+| Cotizado / debitado | 0,12 cr c/u → **0,72 cr**, exacto |
+| Saldo antes → después | **580,65 → 579,93** |
+| Video generado | **cero** (sin permiso) |
+| Salida | `hermes-content/references/marca-personal-sergio/higgsfield-avatar-21sep/` |
+| Doc | `hermes-content/docs/cola/HIGGSFIELD-AVATAR-21-SEP.md` (método, prompts, shot list) |
+
+Prompt: bloque de personaje fijo (`Young Latin American man in his early twenties, short
+dark hair, clean shaven, wearing a plain navy blue polo shirt in solid unbranded fabric.`)
++ 4 bloques de escena que varían. Literal completo en el doc del video.
+
+**Resultado, MIRADO:** las 4 con Soul son la misma cara (y coinciden con la foto real del
+identity-lock, aunque el Soul **idealiza**: pelo más prolijo, brazos más musculosos). Las 2
+sin Soul son **otra persona** — y ni siquiera la misma entre sí. El texto fija el *tipo*,
+no la identidad.
+
+### ⚠️ Cuarto caso de marca inventada — y el prompt decía «unbranded»
+
+El prompt pedía literal `plain navy blue polo shirt in solid unbranded fabric` y aun así
+bordó **«Maptolgan®»** en el pecho de una imagen y un logotipo ilegible en otra. Confirma
+la trampa ya documentada y la **agranda**: como `soul_2` no tiene campo negativo
+(`models_explore get soul_2` → sólo `quality` y `soul_id`), escribir «unbranded»
+**no prohíbe, agrega la idea de marca al texto**. Después de Nike, la gorra NY y «BOLVIA»,
+éste es el cuarto. **Mirar pecho, gorra y taza de cada imagen antes de publicarla.**

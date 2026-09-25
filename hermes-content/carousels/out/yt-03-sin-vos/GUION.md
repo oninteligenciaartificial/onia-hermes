@@ -1,6 +1,6 @@
 # Guion hablado — Video 03 · «Hago que la IA trabaje mientras duermo»
 
-11 láminas · ≈ 8:10 · se graba acapela mirando el deck (tecla **N** apaga las chuletas).
+11 láminas · ≈ 8:40 · se graba acapela mirando el deck (tecla **N** apaga las chuletas).
 
 **Antes de grabar:** recontar los números (ver el README de esta carpeta) y tener la lista
 de conectores abierta en otra ventana para el tramo 9.
@@ -52,9 +52,11 @@ de conectores abierta en otra ventana para el tramo 9.
 > Es una línea de horario en una computadora prendida: cada hora, andá y hacé esto. *[mostralo]*
 > Vos no estás. El programa se abre solo.
 
-**8 · Mi caso (5:30–6:00)**
-> Lo que tengo andando: cuatro hooks, tres subagentes, seis conectores y cuatro trabajos por horario.
-> Y esto es lo que quiero que te lleves: todo eso vive en una PC de escritorio prendida en mi casa. No es un servidor especial ni nada caro.
+**8 · Mi caso (5:30–6:15)** — ⚠️ **REESCRITO 18-sep: lo de la «PC de casa» era falso**
+> Lo que tengo andando: cuatro hooks, tres subagentes, seis conectores.
+> Y de trabajos por horario tengo cuarenta. Cuarenta líneas de horario, corriendo hace veinticinco días sin que yo las toque.
+> Pero te tengo que aclarar una cosa, porque si no te miento: eso NO corre en mi casa. Corre en una computadora alquilada, que pago. Cuesta menos que un plan de celular, pero la pago.
+> Lo de mi casa es otra cosa, y es la parte que se rompió. Te la muestro ahora.
 
 **9 · La parte honesta (6:00–7:00)** — *el tercero se graba en vivo*
 > Lo que ningún video de automatización te cuenta: lo que corre solo, falla solo.
@@ -62,6 +64,11 @@ de conectores abierta en otra ventana para el tramo 9.
 > Dos. Tuve un servicio corriendo todos los días durante tres semanas sin publicar nada. Nadie se enteró — porque no fallaba. Simplemente no hacía nada.
 > Y tres, esto es de hoy: de mis seis conectores, hay cuatro que no andan. Dos se cayeron y dos perdieron el permiso. Mirá. *[abrí la lista]*
 > No me avisó ninguno. Me enteré porque fui a mirar.
+>
+> Y hay una cuarta, que la encontré preparando este video. *[mostrá la lista de los cuatro]*
+> Estos cuatro trabajos son los que corren en la computadora de mi casa. Están configurados, el nombre está, el horario está. Pero la computadora está apagada — y cuando fui a ver la lista de tareas, estaba vacía. No hay nada programado. Hace quién sabe cuánto.
+> Y lo peor no es eso. Yo tengo un vigilante puesto justamente para avisarme si estos se caen. Fui a ver su registro. *[mostralo vacío]* Está vacío. El vigilante tampoco corrió.
+> Osea que me falló la tarea, y me falló el que vigila la tarea. Y me enteré hoy, armando un video sobre automatización.
 
 **10 · Las tres reglas (7:00–7:50)**
 > Si te vas a llevar una sola cosa, que sea esta.

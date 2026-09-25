@@ -1,0 +1,92 @@
+{
+  "title": "Conté los errores de una sesión",
+  "caption": "Conté los errores que quedaron anotados en una sola sesión de trabajo con Claude Code: dieciocho. Y lo que no me esperaba: los dieciocho los encontró él, revisando su propio trabajo. El que se le escapó fue uno solo — y ese fue el que llegó a producción. La lección no es desconfiar de todo: es saber dónde mirar.",
+  "hashtags": [
+    "#claudecode",
+    "#ia",
+    "#programacion",
+    "#automatizacion",
+    "#bolivia"
+  ],
+  "slides": [
+    {
+      "number": 1,
+      "role": "cover",
+      "pill": "Mi caso",
+      "headline": "Conté los errores de *una* sesión",
+      "body": "Dieciocho. Y quién los encontró te va a sorprender.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "",
+      "alt_text": "Dieciocho errores en una sesion"
+    },
+    {
+      "number": 2,
+      "role": "stakes",
+      "pill": "El miedo",
+      "headline": "«¿Y si la IA se equivoca?»",
+      "body": "Es la pregunta que todos hacen antes de empezar. La respuesta corta: se equivoca. Bastante. La respuesta larga es más útil.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "",
+      "alt_text": "El miedo"
+    },
+    {
+      "number": 3,
+      "role": "point",
+      "pill": "El número",
+      "headline": "18 errores anotados",
+      "body": "En una sola sesión de trabajo. Desde un diagnóstico equivocado hasta comprobaciones que no comprobaban nada.",
+      "callout": "18",
+      "save_worthy": true,
+      "visual_prompt": "",
+      "alt_text": "El número"
+    },
+    {
+      "number": 4,
+      "role": "point",
+      "pill": "Lo que no esperaba",
+      "headline": "Los 18 los encontró él",
+      "body": "Revisando lo que él mismo había escrito. Se corrige muchísimo más de lo que la gente cree.",
+      "callout": "18 de 18",
+      "save_worthy": true,
+      "visual_prompt": "",
+      "alt_text": "Lo que no esperaba"
+    },
+    {
+      "number": 5,
+      "role": "point",
+      "pill": "El que importa",
+      "headline": "Se le escapó uno",
+      "body": "Una pantalla de entrar que mostraba los nombres de los íconos como texto. Ese no estaba en su lista. Y ese llegó al cliente.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "",
+      "alt_text": "El que importa"
+    },
+    {
+      "number": 6,
+      "role": "point",
+      "pill": "La lección",
+      "headline": "No desconfíes de todo",
+      "body": "Lo que él revisa está bastante bien. Lo que te muerde es lo que NADIE revisó — ni él ni vos.",
+      "callout": "Lo que nadie revisó",
+      "save_worthy": true,
+      "visual_prompt": "",
+      "alt_text": "La lección"
+    },
+    {
+      "number": 7,
+      "role": "cta",
+      "pill": "En una línea",
+      "headline": "Revisá lo que *nadie* miró",
+      "body": "¿Cuántos «listo» diste por buenos sin abrirlos? Contame abajo.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "",
+      "alt_text": "En una línea"
+    }
+  ],
+  "comment_trigger": "",
+  "cta": ""
+}

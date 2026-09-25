@@ -1,0 +1,93 @@
+{
+  "title": "Ahora cuestan lo mismo",
+  "caption": "Anthropic sacó Fable 5.1 el 1 de septiembre. OpenAI sacó GPT-6 Astra el 3 y lo puso por defecto en Codex el 4. Por primera vez cuestan exactamente lo mismo por token. O sea: el precio dejó de ser el criterio. Ahora elegís por cómo trabajás vos. Te dejo los tres criterios que uso.",
+  "hashtags": [
+    "#ia",
+    "#claudecode",
+    "#codex",
+    "#openai",
+    "#anthropic",
+    "#programacion"
+  ],
+  "slides": [
+    {
+      "number": 1,
+      "role": "cover",
+      "pill": "Septiembre 2026",
+      "headline": "El precio *ya no* decide",
+      "body": "Fable 5.1 y GPT-6 Astra cuestan igual.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "",
+      "alt_text": "Ahora cuestan lo mismo"
+    },
+    {
+      "number": 2,
+      "role": "stakes",
+      "pill": "Lo que pasó",
+      "headline": "Dos lanzamientos en tres días",
+      "body": "Anthropic sacó Fable 5.1 el 1 de septiembre. OpenAI sacó GPT-6 Astra el 3, y el 4 ya era el modelo por defecto de Codex.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "",
+      "alt_text": "Lo que pasó"
+    },
+    {
+      "number": 3,
+      "role": "point",
+      "pill": "El dato",
+      "headline": "Mismo precio por token",
+      "body": "Frontera contra frontera, la diferencia de precio se cerró del todo. Ya no hay uno barato y uno caro.",
+      "callout": "Empate",
+      "save_worthy": true,
+      "visual_prompt": "",
+      "alt_text": "El dato"
+    },
+    {
+      "number": 4,
+      "role": "point",
+      "pill": "Criterio 1",
+      "headline": "¿Dónde vivís vos?",
+      "body": "Si trabajás en la terminal y querés escribir tus propias reglas, Claude Code. Si tu equipo ya está metido en el mundo de OpenAI, Codex te va a doler menos.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "",
+      "alt_text": "Criterio 1"
+    },
+    {
+      "number": 5,
+      "role": "point",
+      "pill": "Criterio 2",
+      "headline": "¿Quién revisa el trabajo?",
+      "body": "Los dos ya reparten tareas entre varios agentes. Mirá cuál te muestra mejor QUÉ hizo cada uno — vas a vivir ahí adentro.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "",
+      "alt_text": "Criterio 2"
+    },
+    {
+      "number": 6,
+      "role": "point",
+      "pill": "Criterio 3",
+      "headline": "Probalos una semana",
+      "body": "No los compares leyendo. Dale la misma tarea real a los dos y mirá cuál te hizo corregir menos.",
+      "callout": "Misma tarea, los dos",
+      "save_worthy": true,
+      "visual_prompt": "",
+      "alt_text": "Criterio 3"
+    },
+    {
+      "number": 7,
+      "role": "cta",
+      "pill": "En una línea",
+      "headline": "Elegí por *cómo trabajás*, no por precio",
+      "body": "¿Cuál usás vos, y por qué? Leo todos los comentarios.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "",
+      "alt_text": "En una línea"
+    }
+  ],
+  "comment_trigger": "",
+  "cta": ""
+}

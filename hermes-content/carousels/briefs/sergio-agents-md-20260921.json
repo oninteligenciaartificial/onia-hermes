@@ -1,0 +1,93 @@
+{
+  "title": "Un archivo de reglas para los dos",
+  "caption": "Si usabas Claude Code y Codex, escribías las reglas dos veces. Se acabó: Claude Code 2.1.277 ya lee AGENTS.md, el archivo que usan Codex, Cursor y Copilot. Pero lo van a contar mal — solo lo lee si tu proyecto NO tiene CLAUDE.md. Si tenés los dos, gana CLAUDE.md. Guardalo para cuando te sientes a configurarlo.",
+  "hashtags": [
+    "#claudecode",
+    "#codex",
+    "#ia",
+    "#programacion",
+    "#automatizacion",
+    "#bolivia"
+  ],
+  "comment_trigger": "",
+  "cta": "",
+  "slides": [
+    {
+      "number": 1,
+      "role": "cover",
+      "pill": "Novedad · 2.1.277",
+      "headline": "Un archivo de reglas. *Los dos* agentes",
+      "body": "Claude Code ya lee el archivo de Codex.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Dos terminales abiertas apuntando a un mismo archivo de texto.",
+      "alt_text": "Claude Code ya lee AGENTS.md"
+    },
+    {
+      "number": 2,
+      "role": "stakes",
+      "pill": "El problema",
+      "headline": "Escribías tus reglas dos veces",
+      "body": "CLAUDE.md para Claude Code. AGENTS.md para Codex, Cursor y Copilot. Las mismas reglas, dos archivos, y uno siempre quedaba viejo.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Dos documentos casi iguales, uno con polvo.",
+      "alt_text": "Antes habia que escribir las reglas dos veces"
+    },
+    {
+      "number": 3,
+      "role": "point",
+      "pill": "Qué cambió",
+      "headline": "Era el pedido #1 del repo",
+      "body": "5.270 personas lo pidieron. Llegó en la versión 2.1.277: Claude Code lee AGENTS.md, el estándar que ya usaban los demás.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Contador de votos subiendo en una pantalla.",
+      "alt_text": "Era el pedido numero uno del repositorio"
+    },
+    {
+      "number": 4,
+      "role": "point",
+      "pill": "El detalle",
+      "headline": "Lo van a contar mal",
+      "body": "Lo lee SOLO si tu proyecto no tiene CLAUDE.md. Si están los dos, gana CLAUDE.md y AGENTS.md se ignora entero.",
+      "callout": "Solo si NO hay CLAUDE.md",
+      "save_worthy": true,
+      "visual_prompt": "Dos archivos, uno tachado.",
+      "alt_text": "Solo lo lee si no hay CLAUDE.md"
+    },
+    {
+      "number": 5,
+      "role": "point",
+      "pill": "Qué hacés hoy",
+      "headline": "Dos caminos, los dos cortos",
+      "body": "Arrancás de cero: escribí solo AGENTS.md y te sirve para los cuatro programas. Ya tenés CLAUDE.md andando: no lo borres, metele adentro una línea que diga @AGENTS.md.",
+      "callout": "@AGENTS.md",
+      "save_worthy": true,
+      "visual_prompt": "Una linea de texto agregada a un archivo.",
+      "alt_text": "Escribi solo AGENTS.md o importalo con una linea"
+    },
+    {
+      "number": 6,
+      "role": "point",
+      "pill": "Qué va adentro",
+      "headline": "Tus reglas. Una sola vez",
+      "body": "Cómo escribís, qué no se toca, dónde va cada cosa, qué se verifica antes de dar algo por hecho. Lo que hoy le explicás en cada chat.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Lista de reglas escritas a mano sobre papel.",
+      "alt_text": "Adentro van tus reglas de trabajo"
+    },
+    {
+      "number": 7,
+      "role": "cta",
+      "pill": "En una línea",
+      "headline": "Un archivo. *Dos* agentes. Cero excusas",
+      "body": "¿Ya tenés uno escrito, o le explicás todo de nuevo cada vez?",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Un solo archivo iluminado en una pantalla oscura.",
+      "alt_text": "Un archivo dos agentes"
+    }
+  ]
+}
