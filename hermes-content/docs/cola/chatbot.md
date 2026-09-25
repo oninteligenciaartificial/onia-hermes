@@ -851,6 +851,24 @@ abrirlas y decidir a qué deploy se refieren. Se derivan con el comando, nunca d
       **Queda esperando publicación, y el pedido ya existe: `t_24fa76aa` (blocked, pedido hace
       6 h).** No se duplica y no se despliega a mano.
 
+      ✅ **PUBLICADO. Medido en vivo el 2026-09-25 16:55 La Paz** — o sea que este párrafo de
+      arriba ya no describe el presente: el deploy ocurrió entre ayer y hoy. `npm run
+      bot:vivo-al-dia` sale **0** («el bot vivo corre el código del repo, y arrancó después de la
+      última copia») con los **73** archivos coincidiendo, y el comando que ayer dio `0` —
+      `docker exec onia-center sh -c 'grep -c slotsElegibles /tmp/onia-bot/config.mjs'`— hoy da
+      **5**. Probado de punta a punta con los `ONIA_BOT_SLOTS` del proceso VIVO (leídos de
+      `/proc/<pid>/environ`, no del `.env`): quien escribe *«el miércoles 30 a las 14:00»* —un
+      horario LIBRE que el par A/B no nombraba— ahora sale con `chosen: true` y
+      `scheduledLabel` puesto, en vez de caer en `proposesOwnTime` y a la cola humana.
+
+      ⚠️ **Y la evidencia que este ítem citaba para el bug NO era suya: se retira.** Decía que
+      «los 0 de 43 con `calendar_event_id` se explican por lo de arriba». No: Cal.com no existe en
+      el VPS **por decisión** (opción (c) de `t_b18ca430`, 3-sep: aviso por Telegram ya,
+      calendario después), así que esa columna seguiría en cero con el arreglo publicado — y hoy,
+      publicado, **sigue en 0 de 43**. Citarla como consecuencia manda a la próxima vuelta a
+      buscar un bug ya decidido. La consecuencia real de este bug era la cola humana, y es la que
+      se midió arriba.
+
 - [x] 🔴 **CERRADO el 2026-09-25 10:43-11:25 La Paz (commiteado; es el INSTRUMENTO
       —`scripts/embudo_del_bot.mjs`—, no toca el motor y no necesita deploy): el medidor del
       embudo encendía un 🔴 que no podía bajar nunca, porque contaba una caída de agosto que ya

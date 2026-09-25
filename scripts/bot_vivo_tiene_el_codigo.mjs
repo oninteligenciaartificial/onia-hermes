@@ -191,17 +191,52 @@ function medirVivo() {
     });
   }
 
-  // `ps -eo lstart` y no el `.Created` del contenedor: el contenedor no se recrea cuando el bot
-  // se reinicia, así que su fecha de creación contestaría por el proceso equivocado.
+  // Se le pregunta al PROCESO y no al `.Created` del contenedor: el contenedor no se recrea
+  // cuando el bot se reinicia, así que su fecha de creación contestaría por el proceso
+  // equivocado. Y se pregunta con `etime` y no con `lstart` porque `onia-center` es Alpine: su
+  // `ps` de busybox rechaza `lstart` y dejaba este gate en NO MEDIDO para siempre (ver el
+  // self-check). `etime` lo soportan los dos, con formatos distintos que `epochDeElapsed` cubre.
   try {
-    const ps = enElContenedor(`ps -eo lstart,args | grep -F "${DIR_VIVO}" | grep -v grep | head -1`);
-    const marca = Date.parse(ps.trim().slice(0, 24));
-    if (Number.isFinite(marca)) arranqueProceso = marca;
+    const ps = enElContenedor(`ps -eo etime,args | grep -F "${DIR_VIVO}" | grep -v grep | head -1`);
+    arranqueProceso = epochDeElapsed(ps.trim().split(/\s+/)[0] || "", Date.now());
   } catch {
     arranqueProceso = null;
   }
 
   return { archivos, arranqueProceso };
+}
+
+/**
+ * El tiempo que lleva corriendo un proceso, llevado al epoch en que arrancó.
+ *
+ * Existe porque `ps` no habla un solo idioma: procps da `[[DD-]HH:]MM:SS` y el busybox de Alpine
+ * —el que corre adentro de `onia-center`— da un formato propio y compacto, `2d03` / `2h06` /
+ * `5:30`. Devuelve `null` ante cualquier cosa que no reconozca, incluido el mensaje de error del
+ * propio `ps`: no saber cuándo arrancó tiene que seguir siendo NO MEDIDO, nunca "arrancó recién".
+ *
+ * @param {string} texto  la primera columna de `ps -eo etime,args`
+ * @param {number} ahora  epoch ms de referencia
+ * @returns {number|null} epoch ms del arranque, o null si no se pudo leer
+ */
+export function epochDeElapsed(texto, ahora) {
+  const t = String(texto || "").trim();
+  if (!t) return null;
+  const seg = (d, h, m, s) => ((d * 24 + h) * 60 + m) * 60 + s;
+  let transcurrido = null;
+
+  // busybox: `2d03` (días+horas) y `2h06` (horas+minutos).
+  let m = /^(\d+)([dh])(\d{1,2})$/.exec(t);
+  if (m) {
+    const [uno, dos] = [Number(m[1]), Number(m[3])];
+    transcurrido = m[2] === "d" ? seg(uno, dos, 0, 0) : seg(0, uno, dos, 0);
+  }
+  // procps: `[[DD-]HH:]MM:SS`. busybox `M:SS` cae acá y significa lo mismo.
+  if (transcurrido === null) {
+    m = /^(?:(\d+)-)?(?:(\d+):)?(\d{1,2}):(\d{2})$/.exec(t);
+    if (m) transcurrido = seg(Number(m[1] || 0), Number(m[2] || 0), Number(m[3]), Number(m[4]));
+  }
+  if (transcurrido === null || !Number.isFinite(transcurrido)) return null;
+  return ahora - transcurrido * 1000;
 }
 
 // --- self-check (lo que entra a la cadena) -----------------------------------
@@ -228,6 +263,25 @@ function selfCheck() {
   ok(veredicto({ archivos: [] }).codigo === 2, "sin sujetos = NO MEDIDO");
   ok(veredicto({ archivos: [A()], arranqueProceso: null }).codigo === 2, "sin arranque del proceso = NO MEDIDO");
   ok(veredicto({}).codigo === 2, "sin medida = NO MEDIDO");
+  // EL CASO QUE DEJÓ AL GATE EN exit 2 PERMANENTE (2026-09-25): el contenedor `onia-center` es
+  // Alpine, y su `ps` de busybox NO soporta `lstart` — contesta `ps: bad -o argument 'lstart'`.
+  // Así que "los archivos coinciden" salía con `arranqueProceso: null`, o sea NO MEDIDO, SIEMPRE.
+  // Y un exit 2 que nunca cambia se lee como "el ambiental de siempre" y se saltea: el gate
+  // quedaba vivo y ciego a la vez. Busybox sí da `etime`, pero en formato PROPIO y compacto
+  // (`2h06` = 2 h 6 min), no el `[[DD-]HH:]MM:SS` de procps. Se parsean los dos: el mismo gate
+  // corre contra Alpine y contra una distro con procps, y ninguno de los dos puede quedar mudo.
+  const AHORA = 1_000_000_000_000;
+  const min = 60_000;
+  ok(epochDeElapsed("2h06", AHORA) === AHORA - (126 * min), "busybox `2h06` son 2 h 6 min");
+  ok(epochDeElapsed("2d03", AHORA) === AHORA - (51 * 60 * min), "busybox `2d03` son 2 d 3 h");
+  ok(epochDeElapsed("5:30", AHORA) === AHORA - (5 * min + 30_000), "busybox `5:30` son 5 min 30 s");
+  ok(epochDeElapsed("01:02:03", AHORA) === AHORA - (62 * min + 3_000), "procps `HH:MM:SS`");
+  ok(epochDeElapsed("2-03:04:05", AHORA) === AHORA - (51 * 60 * min + 4 * min + 5_000), "procps `DD-HH:MM:SS`");
+  // No saber sigue siendo no saber: un formato que no se reconoce NO puede volverse "arrancó
+  // recién", que es la respuesta que pondría el gate en verde justo cuando está más ciego.
+  ok(epochDeElapsed("", AHORA) === null, "vacío no es un arranque");
+  ok(epochDeElapsed("ps: bad -o argument", AHORA) === null, "el mensaje de error de busybox no es un arranque");
+
   // Normalizar CRLF no es cosmético: sin esto un tar de Windows pinta rojo todo el bot.
   ok(hashDeContenido("a\r\nb") === hashDeContenido("a\nb"), "CRLF y LF tienen que hashear igual");
   ok(sujetosDelRepo().includes("run-turn.mjs"), "los sujetos se derivan del disco y run-turn.mjs es uno");
