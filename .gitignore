@@ -62,3 +62,14 @@ test-results/
 # Lo que SI queda versionado es lo que se lee: resumen.json y ULTIMO_RECORRIDO.md
 # (canario-visual lee el resumen.json desde otra rama — no romper eso).
 hermes-content/docs/recorrido/**/*.png
+
+# Respaldos ocultos de un .md antes de editarlo (`cp cola.md .cola-antes.md`).
+# Medido el 2026-09-25 integrando el carril chatbot: `.chatbot-antes.md` eran
+# 748 KB / 9.303 lineas IDENTICAS a `chatbot.md` salvo dos parrafos, que ningun
+# script, gate ni doc nombra. No lo decidio nadie: lo commiteo un `chore:
+# auto-sync`, que hace `add -A` a ciegas sobre lo que encuentre en el arbol.
+# Duele dos veces: el peso que todo clon se lleva, y que es una SEGUNDA copia de
+# la cola —con el estado de ayer adentro— que nadie marca como archivada, asi
+# que el que la abre la lee como presente. Cero `.md` ocultos legitimos en el
+# repo el dia que se escribio esto (`git ls-files | grep -E '(^|/)\.[^/]+\.md$'`).
+.*.md
