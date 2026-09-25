@@ -1484,6 +1484,14 @@
   text-decoration: none;
   /* el alto lo fija el <img>; esto solo evita el salto de linea base */
   line-height: 0;
+  /* La marca es lo ULTIMO que se cede, no el relleno de la barra. Sus dos
+     hermanos son rigidos —el CTA por `white-space: nowrap` (ver mas abajo), el
+     boton de menu por su contenido—, asi que sin esto el wordmark es el unico
+     elastico y flexbox lo encoge a el, hasta CERO y sin desbordar: no rompe el
+     layout, no se queja nadie, la marca simplemente no esta. Medido en
+     produccion el 2026-09-25 en /empezar: a 320px el <img> media 0px de 65 y a
+     360px media 35px, cortada por la mitad. Lo cuida marca-no-se-encoge.test.ts. */
+  flex: 0 0 auto;
 }
 .logoImg {
   display: block;
@@ -1573,6 +1581,36 @@
    pone rojo. */
 .headerCta .btn {
   white-space: nowrap;
+}
+
+/* El aire que necesitan los tres para entrar en un telefono chico.
+   Con el wordmark ya rigido (arriba) la barra pide, a 320px, mas ancho del que
+   hay: antes lo pagaba la marca encogiendose a cero. Aca se lo saca del relleno,
+   que es de donde se puede sacar sin que desaparezca nada. Corta en 380px a
+   proposito: a 390 ya entraban los tres y esa pantalla no se toca.
+   Medido inyectando estas reglas sobre produccion el 2026-09-25 (Chromium,
+   /empezar, animaciones apagadas), contra el borde util de la barra:
+
+     320px  logo 0 -> 65px · el boton de menu dejaba de salirse 5px -> 0 · barra 61px
+     360px  logo 35 -> 65px · nada se sale · barra 61px
+     390px  identico (fuera de la media query)
+
+   El CTA sigue en UNA linea en los tres anchos (alto 44-47px): la regla del
+   24-sep que lo impide se respeta, no se afloja. */
+@media (max-width: 380px) {
+  .headerInner {
+    width: calc(100% - 1.6rem);
+    gap: 0.5rem;
+  }
+  .headerCta .btn {
+    padding-inline: 0.8rem;
+    font-size: 0.85rem;
+  }
+  .burger {
+    padding-inline: 0.55rem;
+    gap: 0.3rem;
+    font-size: 0.85rem;
+  }
 }
 
 /* "Entrar" solo en escritorio: en telefono vive dentro del menu */

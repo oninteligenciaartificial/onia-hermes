@@ -1,5 +1,57 @@
 # Handoff — continuar la 1.0 en Codex
 
+> ## 📌 25-sep (tarde) — lo que Sergio Urcullo pidió anotar, y el estado de cada cosa
+>
+> **En curso en esta sesión:** punto 1 de la cola, rediseño de correos con la marca real (worktree
+> `E:/onia-wt/email-marca`, rama platform `claude/email-marca-20260925`). Se publica recién con el
+> OK de Sergio Urcullo sobre la vista previa renderizada.
+>
+> **La app (en qué quedamos):** «Instalá Onia» está EN PROD desde el release `39aa965b` (Android y
+> Windows con el aviso nativo del navegador; iPhone con instrucciones) y el aviso push funciona de
+> punta a punta en Chromium. Falta: (1) que Sergio Urcullo la instale y reciba un aviso en un
+> Android, un iPhone y una Windows reales (Task 9); (2) que elija UN ícono. Play Store / App Store
+> quedó decidido para cuando haya clientes (D7 de `ONIA_AGENTE_DEL_NEGOCIO.md`).
+>
+> **MCP de Onia:** pasado por el test de tres preguntas → falla la primera (el cliente ideal no
+> conecta asistentes de IA). Anotado con su veredicto en `ONIA_ESTRATEGIA_DE_EMPRESA.md` §14. No
+> entra en la 1.0.
+>
+> **Respuestas de Sergio Urcullo (25-sep, 14:20 La Paz) — decisiones, no se vuelven a preguntar:**
+> - Meta: **método de pago ya cargado**.
+> - QR estático del BCP **recibido**: titular «Oniaagency De Mercado Moreno Leslie», cuenta
+>   **701-5104427-3-05**, monto libre (Bs 0,00), **vence el 25/09/2027** (anotar recordatorio). Copia en
+>   `E:/onia-wt/_insumos/qr-bcp-onia-20260925.jpeg` (vino por WhatsApp Desktop). Siguiente de la cola:
+>   ponerlo en el checkout.
+> - SIN: **no llamar**; seguir con la **Fase 2** del SIAT.
+> - Facturación: **nada manual** (no facturar a mano por el Portal Web).
+> - Ícono: **el verde con negro, el de Instagram**. Hay que aplicarlo a la app instalable.
+> - Pruebas del agente del negocio: con el **número de WhatsApp de Onia, el que ya está puesto**.
+> - Si «Solo el dueño» aprueba y desaparece: **se destraba solo, con criterio, o exigiendo más de un
+>   admin**.
+> - Correos: pidió verlos → página https://claude.ai/artifact/LZ3SYuFEqMjEZoEMoh26gD (espera «OK correos»).
+> - Pidió investigar cómo darle acceso a sus cuentas y las novedades de IA: hecho. Conector oficial
+>   donde exista (Cloudflare pendiente de autorizar con `/mcp`), token mínimo en el servidor para lo
+>   que corre solo, su sesión de Chrome para el SIAT, y el banco afuera.
+> - Aprobación del bot (S17→S18): el pedido vivo es `t_24fa76aa`; se aprueba con `ok t_24fa76aa` por
+>   Telegram.
+>
+> **Lo que depende de Sergio Urcullo, junto y en orden de urgencia:**
+> 1. Método de pago de Meta **antes del 30-sep** (el 1-oct termina la ventana gratis de WhatsApp).
+> 2. Imagen del QR estático del banco + titular exacto de la cuenta: sin eso el cliente no puede pagar.
+> 3. SIN (800 10 3444): ¿la solicitud 9473 se autoriza con los XSD viejos o pasa al anexo de la
+>    RND 102600000034? + pedir la Fase 2 antes del **04/11**. Para leer el % de la Fase 1: iniciar
+>    sesión en la pestaña del grupo «Claude» de su Chrome (no se escriben contraseñas por él).
+> 4. Decidir: facturar cada suscripción a mano por el Portal Web mientras el SIN no autoriza.
+> 5. Elegir UN ícono (tile blanco con «on» verde de la app, o verde con «on» negro de la web e Instagram).
+> 6. Probar la app instalada en celulares y PC reales (arriba).
+> 7. Firma S17 para publicar el bot (lo frena el teléfono fijo) y probar el Embedded Signup con un +591.
+> 8. D5: el número del WhatsApp del dueño para el agente del negocio.
+> 9. Con «Solo el dueño» aprobando: si ese dueño desaparece, ¿destrabe automático o manual?
+> 10. Web: el titular «Agentes con IA» (decisión de copy).
+> 11. Token de Cloudflare R2 para la copia de respaldo fuera del VPS.
+> 12. OK visual del rediseño de correos (esta sesión) antes de publicarlo.
+> 13. Lo único que cierra el §11 de la 1.0: **clientes**.
+
 > ## 🎯 GOAL VIGENTE (24-sep-2026) — «terminar la 1.0» — leer esto primero
 >
 > **Pedido de Sergio Urcullo, 24-sep:** *"corre un goal de finalizar la versión 1.0: agentes AI,
