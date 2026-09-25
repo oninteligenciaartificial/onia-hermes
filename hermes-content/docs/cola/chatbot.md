@@ -792,6 +792,38 @@ abrirlas y decidir a qué deploy se refieren. Se derivan con el comando, nunca d
       **Listo =** con el bot desplegado, la sonda de tres turnos deja la conversación en
       `demo_agendada` con `scheduled_at` escrito. Hoy el gate que faltaba es el de arriba.
 
+      ⛔ **NO HAY NADA QUE TRABAJAR ACÁ — es la fila S18 de «Bloqueado en Sergio».** Una vuelta
+      que entre acá a buscar trabajo la pierde: se salta y se toma la brecha siguiente. Lo dice
+      con la medición de hoy, no de memoria.
+
+      🔴 **2026-09-25 04:15-04:35 La Paz — medido lo único que este ítem no sabía: si el deploy
+      ALCANZA.** Hasta hoy eso era una suposición — el ítem daba por hecho
+      que publicar cierra el embudo, sin haber recorrido nunca el camino entero con el motor
+      arreglado. Recorrido con el simulador cargando el spec por `ONIA_BOT_SLOTS` (el mismo
+      camino del bot vivo) y dos horarios sostenibles:
+
+      | turno | qué dijo el lead | qué hizo el motor de `main` |
+      |---|---|---|
+      | 3 | `A` | `[M2] Listo, agendado` · `botStage: demo_agendada` · `scheduledAt: 2026-09-28T18:00:00.000Z` |
+      | 4 | *«los clientes que no vuelven»* | `[M1_RAMA_DENTAL]` — sigue calificando, no muere |
+      | 5 | *«¿me sirve con dos sucursales?»* | `[M5]` handoff a Sergio Urcullo, sin inventar |
+      | 6 | *«gracias, nos vemos el lunes»* | **no contesta** (`cortesia_sin_respuesta`) — no molesta a nadie |
+
+      O sea: **el código no le debe nada al embudo; sólo le debe el swap.** Y el motor emite el
+      aviso al agendar (`notify_sergio` kind `demo_agendada`, `bot-engine.mjs:970`), así que la
+      demo no queda muda del lado de Sergio Urcullo.
+
+      **Y el bloqueo está VIGENTE, no vencido** — medido en el proceso que corre, no en el host:
+      `docker exec onia-center sh -c 'grep -c slotsElegibles /tmp/onia-bot/config.mjs;
+      grep -c slotsElegibles /tmp/onia-bot/run-turn.mjs'` → **0 y 0**. El bot vivo todavía no
+      tiene el arreglo, y `t_dcdc1097` sigue `blocked`.
+
+      ⚠️ **Lo que este ítem afirma de más:** *«0 con `calendar_event_id`»* no prueba este bug —
+      Cal.com no existe en el VPS **por decisión** (`t_b18ca430`), así que esa columna seguiría
+      en cero con el embudo entero funcionando. Lo dice el comentario de `config.mjs:187` y lo
+      confirma la corrida de arriba: `demo_agendada` con `scheduledAt` y `calendarEventId: null`.
+      La medida honesta del embudo es la ETAPA, no esa columna.
+
 - [ ] 🔴 **Un lead REAL puede escribir, ser atendido, enfriarse y que Sergio Urcullo no se
       entere nunca: el aviso sólo dispara en `handoff_humano` y `demo_agendada`, y «se quedó
       callado» no es ninguno de los dos.** Medido el 2026-09-24 en el log del bot vivo, no
