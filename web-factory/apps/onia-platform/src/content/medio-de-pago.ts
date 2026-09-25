@@ -29,6 +29,21 @@
  * que **exportar el objeto ya derivado es estrictamente más seguro** — no existe
  * llamador que pueda pasar el valor equivocado. La función queda pura y pública
  * para poder probar las DOS ramas; las superficies importan `MEDIO_DE_PAGO`.
+ *
+ * 2026-09-25 — TRES MEDIOS, NO DOS. Sergio Urcullo decidió el 24-sep cobrar con
+ * un QR ESTÁTICO de la cuenta BCP de Onia (monto abierto: el dueño escribe el
+ * monto, sube el comprobante y lo verificamos) y lo mandó el 25-sep. Es el mismo
+ * cambio que el producto hizo en `onia-platform lib/checkout/textos.ts` +
+ * `qr-estatico.ts`, y acá se deriva igual: QR dinámico si hay API del banco;
+ * si no, QR estático mientras esté vigente; si venció, transferencia. El
+ * estático NUNCA dice «se activa solo»: eso es sólo del dinámico, que activa el
+ * plan por el callback del banco. OJO: el QR estático existe en producción
+ * recién DESPUÉS del deploy de la plataforma que sirve
+ * `app.onia.com.bo/pago/qr-bcp-onia.jpg`; antes, el checkout sigue pidiendo los
+ * datos por WhatsApp. Por eso este cambio espera a ese deploy, y
+ * `npm run medio-de-pago:vivo` lo verifica pidiendo la imagen. La función deja
+ * de ser pura: lee el reloj para la vigencia, igual que el producto, y sus tres
+ * ramas se prueban con `vi.setSystemTime`.
  */
 
 export interface MedioDePagoOnia {
@@ -46,27 +61,54 @@ export interface MedioDePagoOnia {
 }
 
 /**
+ * Día en que el banco deja de aceptar el QR estático (fecha de La Paz). Espejo
+ * de `venceEl` en `onia-platform lib/checkout/qr-estatico.ts`: si se mueve allá,
+ * se mueve acá. Antes de esa fecha alguien tiene que generar un QR nuevo en la
+ * app del BCP, reemplazar la imagen del producto y mover las dos constantes. Si
+ * nadie lo hace, desde ese día el sitio vuelve solo a la transferencia.
+ */
+export const QR_ESTATICO_VENCE_EL = "2027-09-25";
+
+/** Medianoche de La Paz del día que vence: ese día ya no se ofrece. */
+const CORTE_QR_ESTATICO = new Date(`${QR_ESTATICO_VENCE_EL}T00:00:00-04:00`).getTime();
+
+export function qrEstaticoVigente(hoy: Date = new Date()): boolean {
+  return hoy.getTime() < CORTE_QR_ESTATICO;
+}
+
+/**
  * El medio de pago que el lead se va a ENCONTRAR al llegar al checkout.
  *
  * `qrDisponible` describe producción, no un deseo: es true sólo si el contenedor
  * tiene las credenciales del banco (`BCP_QR_*`) y el checkout puede emitir un QR.
+ * Sin eso, la vigencia del QR estático decide entre él y la transferencia, igual
+ * que `medioSinApi()` en el producto.
  */
 export function medioDePagoOnia(qrDisponible: boolean): MedioDePagoOnia {
-  return qrDisponible
-    ? {
-        alTerminarLaPrueba:
-          "Elegís un plan y pagás por QR desde tu app bancaria, mensual o semanal.",
-        siTeSirve: "Si te sirve, pagás por QR; si no, no pagás nada.",
-      }
-    : {
-        // Sin credenciales del banco no hay ningún QR: el checkout pasa los datos
-        // de pago por WhatsApp y el comprobante lo verificamos nosotros. Es el
-        // camino que corre hoy, dicho completo — no una versión recortada.
-        alTerminarLaPrueba:
-          "Elegís un plan y lo pagás por transferencia: te pasamos los datos por WhatsApp, subís el comprobante y lo verificamos. Mensual o semanal.",
-        siTeSirve:
-          "Si te sirve, lo pagás por transferencia; si no, no pagás nada.",
-      };
+  if (qrDisponible) {
+    return {
+      alTerminarLaPrueba:
+        "Elegís un plan y pagás por QR desde tu app bancaria, mensual o semanal.",
+      siTeSirve: "Si te sirve, pagás por QR; si no, no pagás nada.",
+    };
+  }
+  if (qrEstaticoVigente()) {
+    // Nuestro QR del BCP con monto abierto: el dueño escanea, escribe el monto
+    // y sube el comprobante, que verificamos nosotros. No se activa solo.
+    return {
+      alTerminarLaPrueba:
+        "Elegís un plan y lo pagás con nuestro QR desde la app de tu banco: subís el comprobante y lo verificamos. Mensual o semanal.",
+      siTeSirve: "Si te sirve, lo pagás con nuestro QR; si no, no pagás nada.",
+    };
+  }
+  // Sin credenciales del banco y con el QR estático vencido no hay ningún QR:
+  // el checkout pasa los datos de pago por WhatsApp y el comprobante lo
+  // verificamos nosotros. Es el camino que corre entonces, dicho completo.
+  return {
+    alTerminarLaPrueba:
+      "Elegís un plan y lo pagás por transferencia: te pasamos los datos por WhatsApp, subís el comprobante y lo verificamos. Mensual o semanal.",
+    siTeSirve: "Si te sirve, lo pagás por transferencia; si no, no pagás nada.",
+  };
 }
 
 /**
@@ -85,7 +127,14 @@ export function medioDePagoOnia(qrDisponible: boolean): MedioDePagoOnia {
  */
 export const QR_PARA_PAGARLE_A_ONIA = false;
 
-/** Lo que importan las superficies de venta. Nunca escriban el medio a mano. */
+/**
+ * Lo que importan las superficies de venta. Nunca escriban el medio a mano.
+ *
+ * ponytail: se evalúa al construir el sitio (es estático), así que la vigencia
+ * del QR estático queda congelada en la fecha del build; un build posterior al
+ * vencimiento cambia solo a transferencia. Si alguna vez pasa un año sin deploy,
+ * hace falta evaluarlo por request.
+ */
 export const MEDIO_DE_PAGO: MedioDePagoOnia = medioDePagoOnia(
   QR_PARA_PAGARLE_A_ONIA,
 );
