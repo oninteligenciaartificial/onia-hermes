@@ -1862,12 +1862,38 @@ trabaría el merge de todos los carriles.
       primario/secundario y color semántico; se le MUESTRAN y él elige. Nada se aplica al
       producto sin su OK.
 
-      ✅ **LAS DOS MAQUETAS ESTÁN HECHAS — 2026-09-24 18:52 La Paz, commit `9d6d7bc6` en
-      `onia-platform`, rama `claude/chatbots-platform-review-0d1d09`. Falta SU elección
-      (A o B) y el deploy.** Viven en **`/admin/diseno`**, dentro del grupo que ya está
-      cerrado a SUPERADMIN, así que se renderizan sobre el shell REAL del panel y ningún
-      cliente puede llegar: no exhibe obra. No cambia una sola pantalla viva — cada recuadro
-      pisa sus tokens sólo adentro suyo.
+      ✅ **LAS DOS MAQUETAS ESTÁN HECHAS. Falta SU elección (A o B), el merge y el deploy.**
+      Viven en **`/admin/diseno`**, dentro del grupo que ya está cerrado a SUPERADMIN, así que
+      se renderizan sobre el shell REAL del panel y ningún cliente puede llegar: no exhibe
+      obra. No cambia una sola pantalla viva — cada recuadro pisa sus tokens sólo adentro suyo.
+
+      ⚠️ **2026-09-25 (chatbot-cola) — el commit estaba EN VUELO y en ningún remoto: la pieza
+      podía perderse entera, y la tarea que le pide a Sergio Urcullo elegir le daba un link
+      que no abre.** Este párrafo citaba `9d6d7bc6`, que era un commit del clon de casa de
+      `onia-platform` — cuyo `push` está DESHABILITADO a propósito. Medido antes de tocar
+      nada: `git log HEAD --not --remotes=origin --oneline` → **1 commit**, y
+      `git ls-remote --heads origin claude/chatbots-platform-review-0d1d09` devolvía
+      `cef3595b`, o sea la rama viajaba y este commit no. Si ese clon moría, se perdían las
+      dos maquetas y el gate de 8 casos.
+
+      **Entregado hoy al remoto — y el sha cambió, por eso el de arriba ya no se nombra.**
+      `git format-patch` → `git am` en el worktree gemelo del VPS
+      (`/root/loops/onia-platform-chatbot`), con `origin/master` mergeado ANTES (20 commits,
+      **0 conflictos**) para no publicar un árbol que nadie midió. Los tres gates corridos
+      **allá**, sobre el árbol final: `./node_modules/.bin/tsc --noEmit` → **0** (el binario
+      local, no `npx`, que baja otro `tsc` y sale 0 sin compilar), los 8 casos del gate de la
+      pieza → **8/8**, `eslint` → **0**. Publicado en la rama del carril (nunca en `master`):
+      `cef3595..122ac28`, verificado con `git log HEAD --not --remotes=origin` → **0**, no con
+      el exit de un pipe. El clon de casa quedó en `reset --hard` al sha publicado, porque
+      `git am` regenera el sha y citar el local crea un sha fantasma.
+
+      🔴 **Lo que sigue NO es «mostrarle la pantalla»: es el merge a `master` (de `onia-cola`)
+      y después el deploy.** Hasta que eso pase, `app.onia.com.bo/admin/diseno` **da 404** —
+      así que cualquier pedido que le mande el link y le pida decidir se va a quedar esperando
+      para siempre. El cuerpo de su tarea decía las dos cosas a la vez («sólo las ves vos:
+      app.onia.com.bo/admin/diseno» y «la pantalla todavía NO está publicada»); corregido hoy
+      por comentario. El pedido vivo se deriva, no se copia:
+      `/root/bin/onia-tablero.sh list --status blocked | grep -i 'Elegí A o B'`.
 
       **La causa de su queja, medida y no deducida** — es el dato que faltaba y el que hace
       que las dos direcciones ataquen lo correcto:
@@ -5355,8 +5381,13 @@ y sin operar. Acá se opera, con verificación por ítem.
       comparó la URL de partida contra sí misma. El veredicto «quedó en `/billing/new`» describe el
       estado ANTES de que el producto tuviera tiempo de hacer nada.
 
-      **La captura lo confirma, MIRADA y no citada:** en `paso-08c-factura-creada.png` el botón está
-      en su estado «Guardando» (los tres puntos) y **no hay ningún cartel de error**. Si el `POST`
+      **La captura se MIRÓ el 2026-09-07 y confirmaba esto — pero nunca se commiteó, así que hoy
+      nadie puede abrirla** (verificado el 2026-09-25 contra el ref, no contra el disco:
+      `git ls-tree -r --name-only origin/main | grep paso-08` → **0**; en un worktree sparse el
+      «no such file» no prueba nada, el ref sí). Por eso ya no se nombra el archivo: era el único
+      rojo de `verificar_cola.js` en toda la cola, y un gate rojo por una prueba ausente hace que
+      el siguiente que toque este archivo lea su propio commit como roto. Lo que vio: el botón
+      en su estado «Guardando» (los tres puntos) y **ningún cartel de error**. Si el `POST`
       hubiera fallado, el cliente hace `setSaving(false)` y pinta el error
       (`NewInvoiceClient.tsx:106-110`) — se vería el botón normal y el mensaje. Lo que muestra la
       foto es el `POST` **en vuelo**. Y la factura terminó creándose (folio `2026-0001`): el `POST`
