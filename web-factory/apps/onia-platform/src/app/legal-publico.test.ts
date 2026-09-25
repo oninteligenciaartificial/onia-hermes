@@ -54,6 +54,14 @@ describe("quien vende está identificado", () => {
       expect(texto).toContain(NIT);
     });
   }
+
+  it("los dos pies del sitio exhiben NIT y «EMITE FACTURA»", () => {
+    for (const pie of ["app/(sitio)/ui.tsx", "components/site-footer.tsx"]) {
+      const texto = crudo(pie);
+      expect(texto, `${pie} no muestra el NIT`).toContain(NIT);
+      expect(texto, `${pie} no muestra «EMITE FACTURA»`).toContain("EMITE FACTURA");
+    }
+  });
 });
 
 describe("la privacidad declara a quien de verdad recibe los datos", () => {
