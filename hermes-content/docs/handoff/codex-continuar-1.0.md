@@ -113,10 +113,21 @@
 >   previa con el nombre de muestra fijo, contador «1 de 150», descartado después; campana en oscuro
 >   legible; logs sin errores.
 > - **EN VUELO — plan B (correa):** worktree `E:/onia-wt/platform-b`, rama LOCAL
->   `wip/v1-correa-20260925` (desde `2075575f`, sin empujar). Si muere la sesión, los commits hechos
->   quedan en el repo `C:\dev\proyectos\onia-platform`; se retoma leyendo el plan desde la primera
->   tarea sin commit. Obligatorio: el filtro de avisos de `collab.ts` debe usar el mismo
->   `puedeDecidirAprobaciones` que decide.
+>   `wip/v1-correa-20260925` (desde `2075575f`, sin empujar). Si muere la sesión, los commits quedan
+>   en el repo `C:\dev\proyectos\onia-platform`. Estado 25-sep ~06:00 UTC: tareas 1-14 hechas y
+>   revisadas; dos rondas adversariales de PERMISOS encontraron 1 HIGH + 1 CRITICAL (cuatro puertas que
+>   quitaban/creaban ADMIN sin `puedeCambiarRolesDe`, entre ellas `DELETE /api/doctors/[id]`) + varios
+>   MEDIUM (tomar «Solo el dueño» con un coadmin, dueño que se marca «doctor» y se queda afuera, ficha
+>   fantasma ADMIN desde `/api/onboarding/aplicar`), todos arreglados con test de CLASE (puertas que
+>   borran/escriben un rol exigen el chequeo). Suite 6.614/0 (las 2 de `scripts/qa-v1` fallan solo en
+>   checkouts CRLF de E:). Última ronda: tapar propuestas/borradores en inicio, inicio de comercio y
+>   `/agents` para quien no aprueba. **Gate pre-merge de la tarea 15 corrido en vivo: 0 admins pierden
+>   «dueño»** (6 admins, 5 asignaciones). Sentry encendido en el contenedor (DSN, production, 0 fallas de
+>   arranque). No hay orgs «ZZ QA» con agentes: el chequeo del vigía se hace en la clínica de prueba de
+>   Sergio Urcullo (todas las cuentas son de prueba).
+>   **Decisión pendiente de Sergio Urcullo:** con «Solo el dueño», si ese dueño desaparece sin
+>   entregar, hoy solo lo destraba Onia (SQL en la skill `onia-db`). ¿Automático por inactividad o
+>   manual? (no hay señal fiable de último ingreso en `Profile`).
 > - **Intentos fallidos de la noche:** (1) `pgrep -f <script>` por ssh se encuentra A SÍ MISMO (el
 >   `bash -c` remoto lleva el nombre en su línea): dijo «ya corre» y el release del C no se lanzó.
 >   Esperar por el log, no por pgrep. (2) Push en headless: el contexto incógnito de Playwright no
