@@ -21,6 +21,16 @@
  * Contado con este instrumento el mismo dia, las 43 filas se reparten asi:
  *
  *     desconocidos REALES ....  7   (inbox 4 web: 34, 36, 38, 40 · inbox 5 WhatsApp: 35, 37, 58)
+ *
+ * 🔴 **Ese 7 lo escribio un humano a mano y el CODIGO contaba 3, durante un dia entero, sin que
+ * nada se pusiera rojo — corregido el 2026-09-25.** La cabecera tenia razon y la funcion no: solo
+ * 3 de esos 7 (38, 40, 58) tienen fila en `bot_conversations`, y los otros CUATRO (34, 35, 36, 37)
+ * caian en `sinteticas`, que se lee como "no existen". Peor: esos cuatro escribieron entre el 24 y
+ * el 28 de agosto y **no recibieron una sola respuesta**, ni del bot ni de una persona
+ * (`count(*) filter (where message_type=1)` = 0 en los cuatro). O sea que el descarte mudo que
+ * este archivo promete evitar se estaba comiendo justo a los leads sin contestar. Hoy salen en su
+ * propia linea del informe, con 🔴. Leccion que sobrevive al arreglo: **cuando el comentario de un
+ * instrumento y su codigo dan numeros distintos, el rojo no existe — alguien tiene que restar.**
  *     nuestras ...............  ~12 (sondas `Sonda QA …`, `Prueba …`, y el celular de Sergio)
  *     sinteticas .............  ~9  (`chatwoot:999999`, `chatwoot:990777`, `chatwoot:13..19`:
  *                                    filas del motor SIN conversacion detras en Chatwoot)
@@ -121,6 +131,21 @@ export function resumirEmbudo({ filas = [], conversaciones = [] } = {}) {
     reales.push({ ...fila, inboxId: Number(conv.inboxId), contacto: conv.contacto });
   }
 
+  // ⚠️ LA OTRA DIRECCION DEL CRUCE. El bucle de arriba recorre las filas del motor, asi que una
+  // conversacion que existe en Chatwoot y NO tiene fila no entra nunca: no se contaba mal,
+  // DESAPARECIA. Ojo con la tentacion de agrandarlo: NO quedan sin rescatar por esto —
+  // `vigia_sin_respuesta.mjs` arranca de `messages join conversations` de Chatwoot y si los ve
+  // (corrido el 2026-09-25: nombra a los 7, los 4 incluidos). Lo que se rompia era la MEDIDA del
+  // objetivo de este carril, que decia 3 desconocidos reales cuando son 7.
+  // Se aplican los MISMOS dos filtros (inbox del objetivo + no somos nosotros) para que este
+  // numero no se infle con sondas propias.
+  const clavesDelMotor = new Set(filas.map((f) => idDeChatwoot(f?.conversationKey)).filter(Boolean));
+  const sinRegistrarEnElMotor = conversaciones
+    .filter((c) => !clavesDelMotor.has(String(c.id)))
+    .filter((c) => INBOXES_DEL_OBJETIVO.map(Number).includes(Number(c.inboxId)))
+    .filter((c) => !esNuestra({ contacto: c.contacto, telefono: c.telefono }))
+    .map((c) => `chatwoot:${c.id}`);
+
   const porEtapa = {};
   for (const r of reales) porEtapa[r.botStage || '(sin etapa)'] = (porEtapa[r.botStage || '(sin etapa)'] || 0) + 1;
 
@@ -139,6 +164,7 @@ export function resumirEmbudo({ filas = [], conversaciones = [] } = {}) {
       clavesParadas: paradas.map((r) => r.conversationKey),
     },
     descartadas,
+    sinRegistrarEnElMotor,
   };
 }
 
@@ -146,6 +172,7 @@ export function resumirEmbudo({ filas = [], conversaciones = [] } = {}) {
 export function informe(resumen) {
   const r = resumen.reales;
   const d = resumen.descartadas;
+  const sr = resumen.sinRegistrarEnElMotor || [];
   const etapas = Object.entries(r.porEtapa)
     .sort((a, b) => b[1] - a[1])
     .map(([k, v]) => `${k} ${v}`)
@@ -156,6 +183,9 @@ export function informe(resumen) {
     `  eligieron horario: ${r.conHorario}${r.clavesConHorario.length ? ` (${r.clavesConHorario.join(', ')})` : ''}`,
     `  esperando algo nuestro: ${r.paradas}${r.clavesParadas.length ? ` (${r.clavesParadas.join(', ')})` : ''}`,
     `  descartadas: ${d.nuestras.length} nuestras · ${d.sinteticas.length} sinteticas (sin conversacion en Chatwoot) · ${d.fueraDeLosInboxesDelBot.length} fuera de los inboxes ${INBOXES_DEL_OBJETIVO.join('/')}`,
+    // Va en su propia linea y con el 🔴 adentro: es gente que escribio y el sistema perdio, no un
+    // descarte. Antes ni se imprimia — caia en "sinteticas", que se lee como "no existen".
+    `  ${sr.length ? '🔴 ' : ''}escribieron y el motor no los registro: ${sr.length}${sr.length ? ` (${sr.join(', ')}) — invisibles para ESTE medidor hasta hoy; el vigia de leads sin respuesta si los ve (arranca de Chatwoot)` : ''}`,
   ].join('\n');
 }
 
@@ -255,6 +285,13 @@ function selfCheck() {
     { id: '11', inboxId: 5, contacto: 'Sergio', telefono: '+59171654992' }, // NOSOTROS (telefono)
     { id: '49', inboxId: 4, contacto: 'Sonda QA carril chatbot', telefono: '' }, // NOSOTROS (nombre)
     { id: '52', inboxId: 7, contacto: 'purple-bush-931', telefono: '' }, // banco de pruebas
+    // ─── LA OTRA MITAD DEL CRUCE: escribieron y el motor NO los registro ───
+    // Medido en produccion el 2026-09-25: chatwoot 34/35/36/37 son cuatro desconocidos que
+    // escribieron entre el 24 y el 28 de agosto y NO tienen fila en `bot_conversations`.
+    { id: '36', inboxId: 4, contacto: 'icy-lake-546', telefono: '' }, // desconocido real (web), SIN fila
+    { id: '37', inboxId: 5, contacto: 'mariohassen', telefono: '' }, // desconocido real (WhatsApp), SIN fila
+    { id: '12', inboxId: 5, contacto: 'Prueba Texto', telefono: '' }, // NOSOTROS y sin fila: no es un lead
+    { id: '53', inboxId: 7, contacto: 'dry-dawn-527', telefono: '' }, // banco de pruebas y sin fila
   ];
   const filas = [
     { conversationKey: 'chatwoot:58', botStage: 'esperando_horario', scheduledAt: null },
@@ -287,6 +324,29 @@ function selfCheck() {
 
   // Una fila que YA eligio horario no esta "esperando algo nuestro".
   a('el que ya eligio horario no se cuenta como parado', r.reales.paradas === 1 && r.reales.clavesParadas.join() === 'chatwoot:58');
+
+  // ⚠️ EL CRUCE TIENE DOS DIRECCIONES Y ESTE GATE SOLO MIRABA UNA (arreglado 2026-09-25).
+  // `resumirEmbudo` recorria las filas del motor, asi que una conversacion que existe en Chatwoot
+  // y NO tiene fila no entraba nunca al bucle: no salia ni como real ni como descartada. No se
+  // contaba mal — desaparecia. Medido en produccion ese dia: de los 7 desconocidos reales que la
+  // cabecera de este archivo nombra, solo 3 tenian fila, y los otros 4 (34/35/36/37) habian
+  // escrito SIN recibir una sola respuesta, ni del bot ni de una persona. O sea que el descarte
+  // mudo que esta cabecera promete evitar se estaba comiendo justo a los leads sin contestar.
+  a(
+    'un desconocido que escribio y el motor NO registro se ve (web)',
+    r.sinRegistrarEnElMotor.includes('chatwoot:36'),
+  );
+  a(
+    'un desconocido que escribio y el motor NO registro se ve (WhatsApp)',
+    r.sinRegistrarEnElMotor.includes('chatwoot:37'),
+  );
+  a('y son exactamente esos dos, no una lista inflada', r.sinRegistrarEnElMotor.length === 2);
+  // ANTI-INFLADO, el espejo del anti-tautologia de arriba: el contador nuevo aplica los MISMOS
+  // dos filtros que el viejo. Si no, "sin registrar" se llena de sondas nuestras y del banco de
+  // pruebas, y un numero que sube por nuestra culpa se lee como prospectos abandonados.
+  a('una sonda nuestra sin fila no es un lead abandonado', !r.sinRegistrarEnElMotor.includes('chatwoot:12'));
+  a('el banco de pruebas sin fila tampoco', !r.sinRegistrarEnElMotor.includes('chatwoot:53'));
+  a('el informe los nombra, no los esconde', /escribieron y el motor no los registro: 2/.test(informe(r)));
 
   a('el total crudo se informa igual, para poder comparar con el conteo pelado', r.total === 7);
   a('idDeChatwoot solo acepta la forma exacta', idDeChatwoot('chatwoot:58') === '58' && idDeChatwoot('chatwoot:') === null);

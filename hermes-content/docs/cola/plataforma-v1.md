@@ -95,6 +95,60 @@ trabaría el merge de todos los carriles.
 
 ## Ahora
 
+- [ ] 🟡 **PORTADA reordenada por el veredicto de Sergio Urcullo (11-sep) — YA ESTÁ PUBLICADA.
+      Lo que falta es el resto de la auditoría que él puso como CONDICIÓN para publicarla, y
+      que el deploy se saltó.** Sus palabras del 11-sep: *"esto no vende nada… coloca algo que
+      impacte que se vea más el sistema, y el tema de los chatbots es principal, que sea más
+      protagonista, está al final eso, quita esas cajitas que son solo texto… el inicio me
+      gustaba más así como estaba puro texto estilo hostinger… que sea lo principal llevarlos a
+      probar el sistema"*. Qué entró en `a847d9aa`: hero v4 DESCARTADO (vuelve el hero de
+      producción que él aprobó), sección HECHOS retirada, chatbot a la posición 2 con
+      conversación dibujada (`web-factory/apps/onia-platform/src/app/(sitio)/conversacion.tsx`)
+      + CTA al alta. El 11-sep también entró la dieta de add-ons (`e12b740f`).
+
+      ⚠️ **2026-09-25 (chatbot-cola) — este ítem vivía en «Bloqueado en Sergio Urcullo»
+      pidiéndole un OK para publicar algo que era público desde hacía catorce días.** Ese es el
+      bloqueo vencido que el escalón 0 manda reverificar antes de mover nada, y es peor que un
+      fantasma: le pide una decisión que el sistema ya tomó solo. Medido con las tres medidas,
+      no de memoria:
+      1. **Mergeado** — `git log --diff-filter=A -1 origin/main -- …/conversacion.tsx` devuelve
+         **`a847d9aa`**, o sea que ese commit es el que CREÓ la pieza, y
+         `git merge-base --is-ancestor a847d9aa origin/main` sale 0.
+      2. **Qué corre** — `BUILD_ID` de `/opt/onia-landing/runtime-next/apps/onia-platform/.next/`
+         es de hoy (`EexcZO0vmlTK4LsYtP1I_`, 2026-09-25 09:56) y `/var/log/onia-publicar-solo.log`
+         cierra con `landing: al dia`.
+      3. **Vivo** — `curl https://onia.com.bo/` (200, 1,0 s, 121 KB) trae el literal
+         `WhatsApp del negocio`, que sólo existe dentro de `conversacion.tsx`, y los `<h2>` de la
+         portada servida salen en el orden nuevo: el bloque del chatbot es el **segundo**.
+
+      **Por qué se publicó sin la auditoría, y no es un descuido de nadie:** lo publicó el
+      publicador automático del VPS (`/root/bin/onia-publicar-solo.sh`, cron `50 */3`, que **no
+      vive en el repo**: su fuente versionada es el guion de abajo), cuya única guarda
+      —`FIRMA_HUMANA` en `scripts/loops/extras/publicar-solo.sh:45`— frena **fuentes de precio**
+      (`pricing.ts`, `subscription-plans.ts`, el catálogo, el knowledge del bot). Una portada
+      rediseñada no toca ninguna, así que salió sola. El `CLAUDE.md` tiene la regla que eso
+      incumple —*"una superficie viva no se reemplaza sin que Sergio VEA la pieza terminada"*,
+      nacida el 2026-08-20 de publicar la landing v2 y tener que revertirla— pero **la regla
+      está escrita y no cableada**. Queda como tarea para el dueño del publicador; no se arregla
+      desde este carril.
+
+      **Auditoría: la mitad de precios está HECHA y VERDE, medida hoy sobre el sitio vivo.** Es
+      lo primero que él nombró (*"verificamos los precios de los add-ons y las pestañas
+      secundarias"*), y no hacía falta un barrido nuevo: la app ya tiene los dos gates.
+      - `npm run precios:vivos` → **VERDE**: 24/24 pantallas barridas, 2/2 recorridos que llegan
+        al resultado, y los **21** montos presentados como precio salen de la fuente (9 más
+        aparecen citados en prosa, sin periodicidad, y por eso no se juzgan).
+      - `npm run precios:fuente` → **VERDE**: las 44 cifras que publica el sitio son las que
+        cobra el producto, y los 4 planes comprables coinciden en ciclos y nombre en las dos
+        pantallas de la compra.
+
+      **Lo que queda de este ítem** (trabajo, ya no firma): (a) la otra mitad de la auditoría
+      —*"cibersecurity, fallos de estructura de la web, información mal colocada, docs viejos,
+      política de privacidad"*— sobre `web-factory/apps/onia-platform/src/`, que es **zona de
+      `web-venta`**: los hallazgos van a su tablero, no se editan desde acá; (b) probar un video
+      HyperFrames como pieza del bloque chatbot (*"puedes generar videos con hyperframes
+      también, intentá"*) — la conversación CSS se eligió primero porque pesa cero.
+
 - [x] 🟡 **HECHO el 2026-09-24 en el carril `chatbot` (commiteado, NO publicado) — el detalle,
       los gates y lo que falta viven en `hermes-content/docs/cola/chatbot.md`, "Ahora".**
 
@@ -5514,27 +5568,6 @@ y sin operar. Acá se opera, con verificación por ítem.
 > /root/bin/onia-tablero.sh list --status blocked
 > ```
 
-- [ ] 🔴 **PORTADA reordenada por veredicto de Sergio Urcullo (11-sep, sobre capturas del
-      preview y de producción) — HECHA en `main` (`a847d9aa`), FALTA su OK mirándola y el
-      deploy.** Sus palabras: *"esto no vende nada… coloca algo que impacte que se vea más el
-      sistema, y el tema de los chatbots es principal, que sea más protagonista, está al final
-      eso, quita esas cajitas que son solo texto… el inicio me gustaba más así como estaba puro
-      texto estilo hostinger… que sea lo principal llevarlos a probar el sistema"*. Qué entró:
-      hero v4 DESCARTADO (vuelve el hero de producción que él aprobó), sección HECHOS retirada,
-      chatbot a la posición 2 con conversación dibujada
-      (`web-factory/apps/onia-platform/src/app/(sitio)/conversacion.tsx`) + CTA al alta.
-      Pendiente de ESTE ítem: (a) **AUDITORÍA PRE-PUBLICACIÓN pedida por Sergio Urcullo antes
-      del deploy** (11-sep, textual: *"verificamos los precios de los add-ons y las pestañas
-      secundarias que no es el hero que estén bien hechas, también verificamos cibersecurity,
-      fallos de estructura de la web, información mal colocada, docs viejos, política de
-      privacidad"*) — dos subagentes barriendo seguridad y contenido de
-      `web-factory/apps/onia-platform/src/`; los hallazgos se arreglan ANTES del deploy;
-      (b) tras la auditoría limpia, su OK → deploy con `/opt/onia-landing/_deploy/publicar.sh`;
-      (c) probar un video HyperFrames como pieza del bloque chatbot ("puedes generar videos con
-      hyperframes también, intentá") — arrancamos con la conversación CSS porque pesa cero.
-      El 11-sep también entró la dieta de la sección de add-ons (`e12b740f`: tarjetas con
-      precio en píldora, ancla del salario en una línea, copys cortos en la fuente única).
-
 - [ ] 🔴 **Dos propuestas de diseño para el dashboard del producto** (Sergio Urcullo, 11-sep:
       *"ese color que hay ahorita no es nada intuitivo y no hay botones que resalten, que se
       diferencien para que la experiencia sea más fácil"*). Dos direcciones renderizadas
@@ -5610,10 +5643,29 @@ y sin operar. Acá se opera, con verificación por ítem.
       árbol final (con `origin/master` mergeado, 24 commits, 0 conflictos): `tsc --noEmit` **0**,
       `eslint` **0 errores**, **6.489** tests verdes.
 
-      🔴 **Lo que sigue: merge de `7ed179c3` a `master` (de `onia-cola`) y deploy. Recién
-      después él puede elegir** — si mira antes, elige entre dos pantallas iguales. El pedido
-      vivo se deriva, no se copia:
+      ✅ **ESO YA PASÓ — medido el 2026-09-25 08:50-08:55 La Paz, no heredado.** El merge y el
+      deploy que este párrafo pedía están hechos: `git merge-base --is-ancestor 7ed179c3
+      origin/master` → **mergeado** (y `122ac28e` también), y producción **swapeó sola** tras el
+      merge — el `BUILD_ID` vivo es `UgtwNYIEjS-DSK0umjqc8`, ya no el `p2O3qK8ejw4RQGq9y0CgH`
+      que este ítem citaba a las 03:45.
+
+      **Y las dos direcciones ahora se distinguen. Comprobado MIRÁNDOLA, no con un grep:**
+      `node scripts/mirar_bandeja_dueno.mjs --email superadmin@onia.com.bo --ruta /admin/diseno`
+      → HTTP 200, cero respuestas ≥400, y en la captura **A pinta «Agendar cita» en verde y B
+      lo pinta en ámbar**, con «Enviar recordatorio» al revés en cada una. Un `grep` no servía
+      acá: `color-primary` aparece en el `page.js` de las DOS versiones —la vieja pisaba ese
+      token y la nueva pisa además `--primary`—, así que sólo confirma el arreglo la pantalla
+      renderizada.
+
+      🔴 **Lo único que queda es SU elección**, y el bloqueo estaba mal comunicado: el último
+      comentario de la tarea le decía *«Por ahora no hagas nada»*, escrito cuando todavía era
+      cierto. Un bloqueo vencido es peor que un fantasma — le pide que espere algo que ya
+      ocurrió. Corregido hoy con la prueba de arriba. El pedido vivo se deriva, no se copia:
       `/root/bin/onia-tablero.sh list --status blocked | grep -i 'Elegí A o B'`.
+
+      ⚠️ Y una arista que NO es de este carril, anotada para su dueño (`onia-cola`): el parte
+      diario arma cada línea como `→ ok <id>`, pero esta tarea **no se contesta con `ok`, se
+      contesta con A o B**. Un `ok` la devolvería a `ready` sin registrar ninguna elección.
 
       **La causa de su queja, medida y no deducida** — es el dato que faltaba y el que hace
       que las dos direcciones ataquen lo correcto:
@@ -5641,16 +5693,18 @@ y sin operar. Acá se opera, con verificación por ítem.
       `iconos-en-la-fuente` — el icono de la barra es `tune`, que YA está en la fuente
       subseteada; estrenar uno pinta su NOMBRE en letras gigantes).
 
-      ⚠️ **NO está en producción y no se pushea desde nodo-casa** (el remoto de
-      `onia-platform` está en `DESHABILITADO-NODO-DE-DESARROLLO` a propósito y la llave de
-      deploy sólo existe en el VPS). Entrega por el camino versionado:
+      ⚠️ **Esto ES producción y ya está — lo que sigue vigente es sólo el CAMINO de entrega.**
+      El párrafo decía «NO está en producción»; se publicó (ver la medición del 25-09 más
+      arriba). Lo que no cambió: desde nodo-casa **no se pushea** `onia-platform` (el remoto
+      está en `DESHABILITADO-NODO-DE-DESARROLLO` a propósito y la llave de deploy sólo existe
+      en el VPS), así que todo commit futuro de esta pieza entra por el camino versionado —
       `scripts/integrar-onia-platform.sh` vía `/root/bin/onia-vps.sh`.
 
-      **Pendiente de este ítem, ahora en este orden** (el paso «entregar el commit al VPS» ya
-      no está: se cumplió, y la pantalla se publicó sola tras el merge): (1) merge de
-      `7ed179c3` a `master` y su deploy, sin los cuales B sigue saliendo verde para él;
-      (2) que Sergio Urcullo abra `/admin/diseno` y conteste **A** o **B**; (3) recién ahí se
-      aplica al panel.
+      **Pendiente de este ítem: UN solo paso, y no es de este carril.** Los dos anteriores
+      —entregar el commit al VPS, y el merge de `7ed179c3` con su deploy— **están cumplidos y
+      medidos**. Queda (1) que Sergio Urcullo abra `/admin/diseno` y conteste **A** o **B**;
+      (2) recién ahí se aplica al panel. Este ítem **no se vuelve a medir** hasta que el
+      tablero devuelva `t_e0f6031a` a `ready`: re-verificarlo cada vuelta es trabajo fantasma.
 
 - [ ] 🔴 **T-plata — dos bloqueos que solo Sergio Urcullo puede pagar** (detectados el
       10-sep midiendo el precio de la recarga; avisados por el tablero):
@@ -5771,6 +5825,37 @@ y sin operar. Acá se opera, con verificación por ítem.
 - [ ] 🔴 **Hay arreglos verdes esperando UN `ok` de Sergio Urcullo, y no llegan al cliente.**
       Medido el 2026-09-06 10:35 UTC por `onia-cola`: **tres** destinos con pedido en `blocked`,
       uno por destino, y **ninguno contestado**.
+
+      ⚠️ **Hoy es UNO, no tres — medido el 2026-09-25 06:52-07:05 La Paz por `chatbot-cola`, y
+      la afirmación de arriba llevaba 19 días vencida.** Corridos los tres comandos de la tabla:
+      `landing` → *"YA ESTA PUBLICADO — el sitio vivo sirve todo lo que main tiene"*;
+      `plataforma` → *"YA ESTA PUBLICADO — producción corre `e65ab6ee` y nada posterior cambia lo
+      que el cliente ve"*; `bot` → **38 archivos** (`CAMBIA knowledge.onia.json`). Y derivados los
+      pedidos vivos del CUERPO de las tareas `blocked`, queda **uno solo**: `t_24fa76aa`
+      (`DESPLEGAR: bot`), que es el mismo bloqueo que la cola hermana lleva como **S18**. O sea
+      que las otras dos firmas **ya no publican nada**, y este ítem las seguía pidiendo: es
+      exactamente el *«dice pendiente sobre lo resuelto»* que el propio ítem describe dos
+      párrafos abajo, repetido — porque **la cifra se sacó de la tabla pero la frase «tres
+      destinos» quedó**, y una cifra escrita en prosa se pudre igual que una en una columna.
+
+      🔴 **Y por qué sobrevivió 19 días: este ítem no tiene verificador mecánico** — `npm run
+      bloqueos:vencidos` sale `NO MEDIDO` sobre esta cola (*"no tiene una tabla «Bloqueado en
+      Sergio» que leer"*: acá los bloqueos son una lista de ítems, no una tabla). La cola hermana
+      ya probó cuatro veces que ésas son las filas que se mueren de viejas —S10, S11, S12 y S13
+      esperaron hasta 23 días con la decisión ya tomada y las cuatro se cerraron solas el día que
+      se les cableó uno. **Verificador de este ítem, y ya existe: `npm run pedido:entregado`**
+      (dice pendiente sobre lo resuelto) junto a `npm run deploy:sin-pedido` (lo contrario).
+      ⚠️ **No se escribe un gate nuevo para esto**: el 2026-09-25 se empezó a escribir uno y se
+      descartó al medir que duplicaba a esos dos. Un cuarto instrumento del mismo tema es la
+      segunda fuente de verdad que `CLAUDE.md` prohíbe.
+
+      ⚠️ **Y el id de un pedido NO se copia de acá, se deriva** — el `t_d246cfa7` que este carril
+      había derivado a mano 20 minutos antes ya estaba **`archived`** cuando se lo fue a citar
+      (`onia-cola` rehízo el pedido y archivó el viejo, que es el método correcto). Un `ok` sobre
+      una tarea archivada sale **3** y no publica nada sin decir por qué. Se deriva con el CUERPO,
+      nunca con los comentarios: un `grep DESPLEGAR:` sobre la salida entera de
+      `onia-tablero.sh show` dio un falso positivo (`t_6bf938b7`, que es una aprobación visual de
+      una tarjeta), y el brazo ejecutor contestado en seco dijo `{"publicable":false}`.
 
       | destino | cuánto falta por publicar — se DERIVA, no se copia |
       |---|---|
