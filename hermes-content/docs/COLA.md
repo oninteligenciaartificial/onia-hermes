@@ -77,6 +77,32 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Ahora — plan de features (revisado 2026-08-30, con Gate 1 corrido)
 
+- [x] 🔴 **CERRADO el 2026-09-25 por `onia-cola`: el gate de esta cola llevaba días en rojo y su
+      único ERROR era falso.** `npm run cola:viva` salía **exit 1** acusando que el ítem de acá
+      abajo «apunta a un archivo que NO existe». El archivo era `if/else`: el ítem dice «un
+      `if/else` sin cobertura al lado de su gate», y el extractor de rutas de
+      `scripts/verificar_cola.js` toma por ruta **cualquier token con barra entre backticks**.
+      Es la MISMA clase que el `.test.ts` que ya tenía su carve-out —un constructo de código
+      citado como sustantivo, que nombra una FORMA y no promete ningún archivo—, sólo que con
+      otra notación. Y el costo no es cosmético: **un gate que sale rojo de fábrica entrena a
+      saltearlo**, que es palabra por palabra cómo `CLAUDE.md` cuenta que se rompió el CI dos
+      veces. Los dos pares de la lista (`PARES_DEL_LENGUAJE`) salen de **contar sobre el corpus**
+      —son los únicos pares palabra/palabra de estas colas que no son rutas reales ni paquetes
+      npm—, no de imaginar cuáles podrían aparecer; lista cerrada y token exacto a propósito,
+      porque un patrón genérico taparía carpetas de verdad como `scripts/loops`. Va con sus dos
+      recíprocos, que es lo que impide que el carve-out afloje: el mismo par **con extensión**, y
+      el mismo par **como sufijo de una carpeta**, se siguen verificando los dos. (Acá no se
+      escriben entre backticks a propósito: al redactar este ítem con los dos literales citados,
+      el gate los reclamó como fantasmas y salió exit 1 — o sea que el recorte es de verdad del
+      token entero, medido sin querer.) **Probado además mutando el corpus real**, no sólo el
+      self-check: una
+      ruta fantasma nueva metida en esta sección vuelve a poner el gate en exit 1 (y el
+      `hermes-content/docs/COLA.md` se restauró con `cp`, nunca con `git checkout`). Self-check
+      110 → **114 casos**; `cola:viva` exit 1 → **0**, con 33 ítems en Ahora todos con evidencia
+      real. ⚠️ **Lo que queda abierto y NO es este ítem:** `cola:viva` es un alias suelto que no
+      corre nadie —no está en la cadena `npm test` ni en la medición de arranque de ningún
+      carril—, y por eso su rojo pudo vivir días sin que nadie lo viera.
+
 - [x] 🔴 **CERRADO el 2026-09-19 por `onia-cola`: el universo ahora sale del CRONTAB del VPS,
       que es quien EJECUTA.** Instrumento nuevo `scripts/herramientas-del-cron.mjs` —self-check
       puro en la cadena (`test:herramientas-del-cron`, 17 casos, validado por 7 mutaciones) y
