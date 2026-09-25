@@ -12,6 +12,41 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-25 15:09-15:11 La Paz — `BUILD_ID` sin cambios; rotación de rubro → Servicios profesionales, 9/9
+
+`ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado ANTES de decidir (primer comando de la
+vuelta): `UgtwNYIEjS-DSK0umjqc8`, igual al de las últimas cuatro entradas. Las tres vueltas
+anteriores (12:10, 13:09, 14:12) se desviaron a cubrir los tres caminos de correo (invitación,
+recuperación) en vez de seguir el puntero explícito que la entrada de las 11:09 había dejado:
+"rotar a Servicios profesionales (el único de los 5 rubros activos sin cobertura reciente)".
+Con los tres caminos de correo ya cerrados (alta/invite/recovery) y el cuarto (`email_change`)
+confirmado NO alcanzable desde ninguna pantalla (`docs/CORREOS_AUTH_MARCA.md`: "nada en la app
+llama a `updateUser({ email })`" — sigue siendo cierto, sin UI que lo dispare), correspondía
+retomar ese puntero.
+
+`RECORRIDO_RUBRO="Servicios profesionales" node scripts/recorrido_cliente.mjs --escribir`:
+**recorrido completo, los 9 pasos, sin agujeros.** Cuenta
+`zz-qa-2026-09-25-1511@onia.com.bo`, confirmación de correo antes del primer login, onboarding en
+6 pantallas (pregunta → negocio → horarios → servicios → equipo → listo), profesional
+`zz-qa-2026-09-25-1511-profesional` en el alta, clientx `zz-qa-2026-09-25-1511-paciente` cargado
+y visto en `/patients` (group Clientes), cita 2026-09-28 09:00 agendada (201,
+`cmuh3pw7l002g01o4pxnayq47`) y VISTA en `/appointments`, pantalla de cobro (Caja) vista en
+`/comercio/caja` — frenado ahí sin marcar pago. El dato del paso 6 no aparece en `/dashboard`
+(esperado: el panel no lista el group Clientes). `resumen.json`: `llegoHasta 9/9`, `completo:
+true`, `agujeros: []`. `organizations`/`appointments` con `zz-qa-%` → **0** al cerrar, verificado.
+
+**Sin hallazgo de producto.** Con esto los 5 rubros activos quedan re-verificados en este
+`BUILD_ID` (`UgtwNYIEjS-DSK0umjqc8`): dental, comercio, estética y ahora servicios profesionales
+en esta racha, importadora en la anterior. Próxima vuelta: comparar `BUILD_ID` primero; si sigue
+igual, no hay rubro pendiente de esta racha — volver a empezar la rotación por dental, o auditar
+una superficie nueva de "promesa vs. entrega" (home/precios) que no se haya mirado recientemente.
+
+RAZÓN: N/A — avanzó (rubro pendiente cerrado, sin hallazgo).
+LECCIÓN: cuando una vuelta deja un puntero explícito ("próxima vuelta: rotar a X"), la vuelta
+siguiente lo sigue antes de inventar un escalón nuevo — tres vueltas seguidas explorando caminos
+de correo tenían valor, pero dejaron el puntero original sin cerrar; seguirlo ahora evitó que
+quedara huérfano indefinidamente.
+
 ## 2026-09-25 14:12-14:13 La Paz — `BUILD_ID` sin cambios; escalón nuevo: "Olvidé mi contraseña" cambia la contraseña DE VERDAD
 
 `ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado ANTES de decidir: `UgtwNYIEjS-DSK0umjqc8`,
