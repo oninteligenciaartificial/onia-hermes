@@ -12,6 +12,28 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-25 20:09-20:11 UTC (16:09-16:11 La Paz) — dental, 9/9, sin hallazgo
+
+`ONIA_ALTA_AUTOMATICA=abierta`. Tablero revisado primero (`scripts/kanban/tablero.sh list`):
+ninguna tarea `ready` sin asignar cae en la zona `recorrido-cliente`. Se corrió el recorrido
+completo por defecto (dental, sin `RECORRIDO_RUBRO`).
+
+`node scripts/recorrido_cliente.mjs --escribir`: **recorrido completo, los 9 pasos, sin
+agujeros.** Cuenta `zz-qa-2026-09-25-2009@onia.com.bo`, confirmación de correo antes del primer
+login, onboarding en 6 pantallas, paciente `zz-qa-2026-09-25-2009-paciente` cargado y visto en
+`/patients`, cita 2026-09-28 09:00 agendada (201, `cmuhedezk002o01r22ip987d1`) y VISTA en
+`/appointments`, factura con ítem `zz-qa-2026-09-25-2009-item` vista en `/billing/...` — frenado
+ahí sin marcar pago. El dato del paso 6 no aparece en `/dashboard` (esperado: el panel no lista
+el group Pacientes). `resumen.json`: `llegoHasta 9/9`, `completo: true`, `agujeros: []`.
+`organizations`/`appointments` con `zz-qa-%` → **0** al cerrar, verificado.
+
+**Sin hallazgo de producto.** Próxima vuelta: comparar `BUILD_ID` primero; si cambió, re-rotar
+rubros desde dental; si sigue igual, seguir con superficies de promesa-vs-entrega aún no
+auditadas.
+
+RAZÓN: N/A — avanzó (recorrido re-verificado entero, sin hallazgo que reportar).
+LECCIÓN: ninguna nueva.
+
 ## 2026-09-25 18:09-18:11 La Paz — dental, 9/9, sin hallazgo
 
 `ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` no se comparó explícitamente esta vuelta (la entrada
