@@ -579,6 +579,8 @@ export function Footer() {
             {item.label}
           </a>
         ))}
+        {/* Exhibir NIT y «EMITE FACTURA» es obligación del SIN (150 UFV). */}
+        <span>Onia · NIT 5371375010 · EMITE FACTURA</span>
       </div>
     </footer>
   );

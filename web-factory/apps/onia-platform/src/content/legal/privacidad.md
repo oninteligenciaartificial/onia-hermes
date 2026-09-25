@@ -2,15 +2,17 @@
 title: "Política de Privacidad"
 slug: "privacidad"
 status: "vigente"
-version: "1.1"
-updatedAt: "2026-09-11"
+version: "1.2"
+updatedAt: "2026-09-25"
 ---
 
 # Política de Privacidad — Plataforma Onia
 
-Esta Política explica cómo la plataforma **Onia** (operada por **OniaAgency**, matrícula de comercio y NIT **5371375010**,
-con domicilio en Santa Cruz de la Sierra, Estado Plurinacional de Bolivia) trata los datos personales
-cuando presta su software de gestión. Documento complementario: los
+Esta Política explica cómo la plataforma **Onia** trata los datos personales
+cuando presta su software de gestión. Onia es el nombre comercial de
+**OniaAgency**, empresa unipersonal de **Leslie Mercado Moreno**, con matrícula
+de comercio y NIT **5371375010** y domicilio en Santa Cruz de la Sierra, Estado
+Plurinacional de Bolivia. Documento complementario: los
 [Términos y Condiciones](/terminos).
 
 ## 1. De quién son los datos, y qué rol tiene Onia
@@ -83,7 +85,7 @@ borremos cuando quieras por los canales del §12, sin explicar por qué.
 Onia**, sobre el que corre Supabase en su versión auto-hospedada. No usamos el
 servicio en la nube de Supabase para los datos del producto: la base vive en
 nuestra propia infraestructura, contratada a un proveedor de servidores
-internacional.
+internacional. Hoy ese servidor está en **Estados Unidos**.
 
 4.2. **Automatización y agentes:** en el mismo servidor privado administrado por
 Onia.
@@ -100,9 +102,11 @@ y bajo sus propios compromisos de confidencialidad y seguridad:
 
 | Proveedor | Para qué | Notas |
 |---|---|---|
-| Proveedor del servidor donde Onia aloja la plataforma | Prestar la infraestructura física donde corren la base y los agentes | El proveedor no administra ni consulta los datos: la base la opera Onia sobre ese servidor |
-| Proveedores de modelos de IA (vía API) | Generar borradores y sugerencias | Solo modalidades que **no entrenan** con los datos enviados; se envía el mínimo contexto necesario |
+| Proveedor del servidor donde Onia aloja la plataforma (hoy en Estados Unidos) | Prestar la infraestructura física donde corren la base y los agentes | El proveedor no administra ni consulta los datos: la base la opera Onia sobre ese servidor |
+| **Cloudflare** (Estados Unidos) | Red de entrega y protección por la que pasa el tráfico del sitio y de la app, y recepción del correo que llega a business@onia.com.bo | El tráfico pasa por Cloudflare camino al servidor de Onia; no almacena la base. El correo recibido se reenvía a la casilla de Onia en Google (Gmail) |
+| **OpenAI** (Estados Unidos), vía su API | Transcribir notas de voz, leer imágenes y redactar respuestas del asistente de WhatsApp (el de Onia, §13, y el que contratás como add-on), y generar borradores y sugerencias | Solo por API, modalidad que **no entrena** con los datos enviados; se envía el mínimo contexto necesario. Los pedidos salen desde el servidor de Onia |
 | WhatsApp (Meta) | Mensajería con tus clientes cuando activás ese canal | Los mensajes pasan por la infraestructura de Meta bajo sus propios términos |
+| **Telegram** | Avisos internos a una persona de Onia: cuando alguien pide acceso o la carga inicial de sus datos en la plataforma, y cuando una conversación con el asistente de WhatsApp de Onia (§13) necesita a una persona | Llevan un resumen: en la plataforma, nombre, negocio y contacto; en el asistente, rubro, tamaño del equipo, ciudad y el último mensaje. Van a un chat privado de Onia |
 
 Onia mantendrá esta lista actualizada y avisará ante cambios de subprocesadores
 que traten datos de tus clientes: el aviso se envía al correo de contacto de la
@@ -113,10 +117,13 @@ cambio sea urgente por seguridad.
 
 - Los agentes de IA trabajan **dentro de tu cuenta**, con el mínimo de datos
   necesario para cada tarea.
-- **Toda comunicación saliente requiere tu aprobación previa** (cola de
-  pendientes). Onia no envía nada por sí sola.
-- Los datos enviados a proveedores de IA se procesan bajo modalidades que no los
-  usan para entrenar sus modelos.
+- **Lo que redacta un agente de IA espera tu aprobación** en la cola de
+  pendientes. Fuera de los agentes, la plataforma sí envía sola lo que declara
+  el §6.2 de los [Términos](/terminos): confirmaciones y recordatorios de cita
+  (vienen activos y los pausás en Configuración) y, si lo contratás, el
+  asistente de WhatsApp.
+- Los datos enviados a proveedores de IA (hoy, OpenAI: ver §5) se procesan bajo
+  modalidades que no los usan para entrenar sus modelos.
 - Onia tampoco entrena modelos propios con datos de clientes.
 
 ## 7. Seguridad
@@ -224,25 +231,34 @@ Esta sección cubre los datos de **cualquier persona que escriba a ese número**
 sea o no cliente de Onia:
 
 - **Qué recogemos:** tu número de WhatsApp y el nombre de tu perfil; el
-  contenido de los mensajes que envías; y, si nos lo contás durante la
+  contenido de los mensajes que enviás; y, si nos lo contás durante la
   conversación, el rubro de tu negocio, el tamaño de tu equipo, tu ciudad y qué
   tareas te consumen tiempo. Si pedís una reunión, también el horario que propongas.
-- **Notas de voz:** si enviás un audio, se transcribe a texto con un servicio
-  propio alojado en el servidor de Onia — el audio no se envía a servicios de
-  transcripción de terceros.
+- **Notas de voz, fotos y respuestas:** si enviás un audio, se envía a
+  **OpenAI** (Estados Unidos) para transcribirlo a texto. Si enviás una foto,
+  OpenAI la lee para que el bot entienda qué muestra. Y cuando tu consulta no
+  tiene una respuesta preparada, el texto de la conversación se envía a OpenAI
+  para redactar o ajustar la respuesta del bot. Todo eso sale por su API, que no
+  usa esos datos para entrenar sus modelos (§5 y §6).
 - **Para qué:** atender tu consulta, entender si Onia le sirve a tu negocio y,
   si querés, agendar una reunión. **No usamos estos datos para publicidad, no
   los vendemos y no entrenamos modelos de IA con tus conversaciones** (misma
   regla del §3).
+- **Mensajes que el bot te manda por su cuenta:** si la conversación queda a
+  medias, **un único mensaje de seguimiento**; y si agendaste una reunión, **un
+  recordatorio** antes de que empiece. Dejan de llegar apenas pedís la baja.
 - **Dónde viven:** las conversaciones se gestionan con un sistema de atención
   (Chatwoot) instalado en el **servidor propio de Onia** — no es un proveedor
   externo —, y los datos de contacto y calificación se guardan en la base de
-  datos descrita en el §4 (Supabase).
-- **Terceros que necesariamente participan:** **Meta (WhatsApp)** transporta
-  los mensajes por su infraestructura y bajo sus propios términos, y
-  **Supabase** aloja la base de datos. Nadie más recibe estos datos: la
-  coordinación de una reunión la hace una persona de Onia por este mismo
-  canal, sin pasar tus datos a un servicio de calendarios de terceros.
+  datos descrita en el §4, que Onia opera en ese mismo servidor.
+- **Terceros que participan:** **Meta (WhatsApp)** transporta los mensajes por
+  su infraestructura y bajo sus propios términos, y **OpenAI** procesa lo
+  descrito arriba. Cuando la conversación necesita a una persona de Onia
+  (porque lo pediste, para coordinar una reunión o porque dejaste de responder
+  después del seguimiento), un resumen —rubro, tamaño del equipo, ciudad y tu
+  último mensaje— le llega a esa persona por **Telegram**. La coordinación de
+  una reunión la hacen el bot y una persona de Onia por este mismo canal, sin
+  pasar tus datos a un servicio de calendarios de terceros.
 - **Cuánto los guardamos:** las conversaciones y los datos del contacto se
   conservan hasta **24 meses después de tu última interacción**, o hasta que
   pidas su eliminación (§14) — lo que ocurra primero. El registro de una baja

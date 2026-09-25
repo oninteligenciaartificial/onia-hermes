@@ -74,6 +74,7 @@ export function SiteFooter() {
           <address className={styles.legalId}>
             OniaAgency
             <span aria-hidden> · </span>NIT 5371375010
+            <span aria-hidden> · </span>EMITE FACTURA
             <span aria-hidden> · </span>Santa Cruz de la Sierra, Bolivia
             <span aria-hidden> · </span>
             <a href={`mailto:${CORREO_CONTACTO}`}>{CORREO_CONTACTO}</a>

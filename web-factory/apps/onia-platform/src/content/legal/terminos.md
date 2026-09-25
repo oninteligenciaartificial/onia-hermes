@@ -2,14 +2,17 @@
 title: "Términos y Condiciones"
 slug: "terminos"
 status: "vigente"
-version: "1.1"
-updatedAt: "2026-09-19"
+version: "1.2"
+updatedAt: "2026-09-25"
 ---
 
 # Términos y Condiciones de Uso — Plataforma Onia
 
-Estos Términos regulan el uso de la plataforma de software de gestión **Onia**
-(operada por **OniaAgency**, NIT 5371375010, Santa Cruz de la Sierra, Estado Plurinacional de Bolivia).
+Estos Términos regulan el uso de la plataforma de software de gestión **Onia**.
+Onia es el nombre comercial de **OniaAgency**, empresa unipersonal de **Leslie
+Mercado Moreno**, con matrícula de comercio y NIT **5371375010** y domicilio en
+Santa Cruz de la Sierra, Estado Plurinacional de Bolivia, que es quien te presta
+el servicio y te factura.
 Documento complementario: la [Política de Privacidad](/privacidad).
 
 Al crear una cuenta, contratar un plan o usar la plataforma, aceptás estos
@@ -67,32 +70,34 @@ incumplimiento grave de estos Términos, avisándote salvo urgencia justificada.
 ## 3. Planes, pagos y renovación
 
 3.1. **Moneda y planes.** Los precios se expresan y cobran en **bolivianos
-(Bs)**, según el plan contratado en la propuesta u orden de servicio vigente. Los
-planes y precios publicados pueden ser precios de lanzamiento.
+(Bs)**, según el plan contratado en la propuesta u orden de servicio vigente, y
+son **precios finales en bolivianos, impuestos incluidos**. Los planes y precios
+publicados pueden ser precios de lanzamiento.
 
 3.2. **Cobro.** El servicio se cobra **por adelantado**, en el ciclo que elijas
 entre los que ofrece tu plan: **semanal, mensual o anual** (el ciclo semanal no
 está disponible en todos los planes). El medio es **pago QR** u otro que Onia
 habilite y comunique. El acceso al período se habilita una vez confirmado el
-pago. Onia emite el documento que corresponda conforme a la normativa boliviana
-aplicable.
+pago. Onia te emite **factura por cada pago**, conforme a la normativa boliviana.
 
-3.3. **Renovación.** Al vencer cada período, el servicio se renueva por un
-período igual al precio vigente. Onia envía el aviso de renovación con
-anticipación razonable. Podés no renovar avisando antes del inicio del nuevo
-período; **no hay penalidad por no renovar**. No hay contrato de permanencia:
-lo pagado cubre el período en curso y no se reembolsa de forma anticipada,
-salvo el caso de discontinuación del servicio previsto en §10.2.
+3.3. **Renovación.** Cada período se paga por adelantado y no hay cobro
+automático. Antes del vencimiento Onia te avisa. Si pagás antes, el nuevo
+período se suma al vigente; si pagás después, empieza el día que se confirma el
+pago. Si no pagás, no se genera ninguna deuda: la
+cuenta pasa a solo lectura (§3.4). No renovar es simplemente no pagar el
+período siguiente; **no hay penalidad por no renovar**. No hay contrato de
+permanencia: lo pagado cubre el período en curso y no se reembolsa de forma
+anticipada, salvo el caso de discontinuación del servicio previsto en §10.2.
 
-3.4. **Mora y solo lectura — nunca borrado inmediato.** Si el pago de renovación no
-se confirma al vencimiento:
+3.4. **Sin pago, solo lectura — nunca borrado inmediato.** Si el pago de un
+período no se confirma al vencimiento:
 
 - La cuenta pasa a **solo lectura**: podés ver y exportar tus datos, pero no cargar
   nuevos. Apenas se verifica el pago, vuelve el acceso completo.
-- **Tus datos se conservan intactos**: la mora nunca implica borrarlos de inmediato.
-- Si la mora se prolonga, Onia puede dar por terminado el contrato. Antes de
-  eliminar cualquier dato aplican el derecho de exportación (§4.2) y los plazos
-  de retención de la Política de Privacidad.
+- **Tus datos se conservan intactos**: no pagar nunca implica borrarlos de inmediato.
+- Si la cuenta sigue sin un período pagado, Onia puede dar por terminado el
+  contrato. Antes de eliminar cualquier dato aplican el derecho de exportación
+  (§4.2) y los plazos de retención de la Política de Privacidad.
 
 3.5. **Ajuste de precios.** Por la volatilidad cambiaria e inflacionaria, los
 precios en Bs no son fijos de por vida — en especial los precios de
@@ -110,6 +115,12 @@ el precio: dominio y hosting web del cliente, comisiones de pasarelas de pago,
 créditos de IA de consumo extraordinario, mensajería pagada de terceros ni pauta
 publicitaria.
 
+3.7. **Prueba gratis.** Al crear tu cuenta tenés **14 días de prueba** sin
+tarjeta ni pago, y **1 día adicional de gracia**. Si al terminar no pagás un
+plan, la cuenta pasa a solo lectura como en el §3.4: no se te cobra nada ni se
+genera deuda, nada se borra de inmediato y tenés 30 días para exportar tus
+datos.
+
 ## 4. Tus datos son tuyos
 
 4.1. **Propiedad.** Toda la información que vos y tus usuarios cargan o generan
@@ -119,17 +130,18 @@ conforme a la Política de Privacidad, y no la vende ni la usa para fines propio
 ajenos al servicio. Nos otorgás la autorización necesaria para alojarla,
 procesarla, respaldarla y mostrarla con ese único fin.
 
-4.2. **Te los llevás al irte.** Al terminar el contrato — por no renovación, mora
-o cualquier causa — tenés derecho a solicitar y recibir una **exportación de tus
-datos en formato estándar legible por máquina** (por ejemplo, CSV/JSON), dentro
+4.2. **Te los llevás al irte.** Al terminar el contrato — por no renovación, falta
+de pago o cualquier causa — tenés derecho a solicitar y recibir una **exportación
+de tus datos en formato estándar legible por máquina** (por ejemplo, CSV/JSON), dentro
 del plazo indicado en la Política de Privacidad. Recién después de los plazos de
 retención, Onia elimina los datos de sus sistemas activos y, en el ciclo natural
 de rotación, de sus copias de seguridad.
 
 ## 5. El software es de Onia
 
-El software, el código, los diseños, las marcas, la documentación y todo el
-material de la plataforma son propiedad de Onia o de sus licenciantes, protegidos
+El software, el código, los diseños, el nombre comercial y los signos
+distintivos de Onia, la documentación y todo el material de la plataforma
+pertenecen a Onia o a sus licenciantes, protegidos
 por la normativa boliviana aplicable en materia de propiedad intelectual.
 Recibís únicamente un derecho de uso temporal, no exclusivo e intransferible,
 mientras el servicio esté vigente. Nada en estos Términos te transfiere propiedad
@@ -241,7 +253,7 @@ limitarse.
 vigente, renovándose según §3.3.
 
 10.2. Podés terminar en cualquier momento no renovando. Onia puede terminar por
-mora (§3.4), incumplimiento grave (§8) o discontinuación del servicio — en este
+falta de pago (§3.4), incumplimiento grave (§8) o discontinuación del servicio — en este
 último caso con al menos **60 días** de aviso y devolución proporcional de lo
 pagado por el período no gozado.
 
@@ -269,10 +281,16 @@ tribunales competentes de la ciudad de Santa Cruz de la Sierra.
 - Estos Términos, junto con la propuesta u orden de servicio y la Política de
   Privacidad, son el acuerdo completo entre las partes.
 
-## 14. Contacto
+## 14. Contacto y reclamos
 
 Correo: **business@onia.com.bo** · WhatsApp: **+591 75414930**.
 Santa Cruz de la Sierra, Estado Plurinacional de Bolivia.
+
+**Reclamos.** Si algo del servicio o de un cobro no está bien, escribinos por
+cualquiera de esos dos canales contando qué pasó y con qué cuenta. Te
+respondemos dentro de los **5 días hábiles**. Si la respuesta no te conforma,
+podés acudir a la autoridad de defensa del consumidor conforme a la **Ley N.º
+453**, además de las vías del §12.
 
 ---
 
@@ -281,7 +299,8 @@ Santa Cruz de la Sierra, Estado Plurinacional de Bolivia.
 Estos Términos se rigen por la legislación del Estado Plurinacional de Bolivia:
 el **Código Civil** en materia de contratos, la **Ley N.º 164** de
 Telecomunicaciones y TIC y su reglamento **D.S. N.º 1793** en lo relativo a
-servicios digitales y tratamiento de datos, y la **Constitución Política del
+servicios digitales y tratamiento de datos, la **Ley N.º 453** de derechos de
+usuarios y consumidores en lo que resulte aplicable, y la **Constitución Política del
 Estado** (arts. 21 y 130–131) en materia de privacidad. Bolivia no cuenta hoy
 con una ley integral de protección de datos personales; si una entra en
 vigencia, estos Términos se adecuarán y el cambio se anunciará como indica la
