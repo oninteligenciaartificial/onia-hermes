@@ -28,6 +28,16 @@
 // ---------------------------------------------------------------------------
 
 /**
+ * Cuanto puede estar una reserva EN VUELO antes de darla por abandonada.
+ *
+ * El envio tarda segundos y los barridos corren cada hora, asi que diez minutos no puede pisar a
+ * un envio legitimo ni demorar un reintento mas de una corrida. Medido el 2026-09-25: cinco
+ * marcas quedaron reservadas a las 19:00 y sin entregar, y sin esta ventana silenciaban a sus
+ * leads para siempre (ver `colgada-reservada-sin-entregar-se-reintenta.test.mjs`).
+ */
+export const MS_RESERVA_EN_VUELO = 10 * 60 * 1000;
+
+/**
  * La baranda de hermetismo, con el mensaje de quien la instala.
  *
  * TIRA en vez de no-operar, y es la diferencia entre una baranda y un placebo: un no-op
@@ -69,6 +79,38 @@ export function crearMarcasEnDisco({ dir, envVar, porDefecto, guarda } = {}) {
   if (!elegido && typeof guarda === "function") guarda();
   const destino = elegido || porDefecto;
   const fs = () => import("node:fs");
+
+  /**
+   * La marca ya existia. EXISTIR NO ES HABER AVISADO, y confundir las dos cosas costo cinco leads
+   * mudos el 2026-09-25: un proceso reservo y murio antes de entregar, y el EEXIST de cada corrida
+   * siguiente los daba por avisados para siempre.
+   *
+   *   - con veredicto adentro  -> `false`, se aviso de verdad y no se repite NUNCA
+   *   - vacia y reciente       -> `false`, otro proceso la esta mandando en este momento
+   *   - vacia y vieja          -> `true`, quedo abandonada y la retomo yo
+   *
+   * Al retomarla le refresco el mtime: es lo que evita que un tercer proceso la retome tambien
+   * mientras yo envio. No es un candado perfecto —dos procesos en la misma milesima podrian
+   * duplicar un aviso— y esa asimetria es deliberada: el costo de equivocarse para el lado del
+   * duplicado es un mensaje repetido, y para el otro lado es un lead perdido para siempre.
+   */
+  async function retomarSiQuedoEnVuelo(clave) {
+    try {
+      const { readFileSync, statSync, utimesSync } = await fs();
+      const { join } = await import("node:path");
+      const ruta = join(destino, clave);
+      if (readFileSync(ruta, "utf8").trim()) return false;
+      if (Date.now() - statSync(ruta).mtimeMs < MS_RESERVA_EN_VUELO) return false;
+      const ahora = new Date();
+      utimesSync(ruta, ahora, ahora);
+      return true;
+    } catch {
+      // No pude preguntar. `null` y no `false`: el llamador decide, y "no se pudo recordar" no es
+      // "ya se aviso" — esa distincion es la razon de ser del tri-estado de `reservar`.
+      return null;
+    }
+  }
+
   return {
     async reservar(clave) {
       if (!clave) return null;
@@ -79,8 +121,24 @@ export function crearMarcasEnDisco({ dir, envVar, porDefecto, guarda } = {}) {
         closeSync(openSync(join(destino, clave), "wx"));
         return true;
       } catch (error) {
-        if (error && error.code === "EEXIST") return false;
+        if (error && error.code === "EEXIST") return retomarSiQuedoEnVuelo(clave);
         return null;
+      }
+    },
+    /**
+     * Guarda el veredicto DENTRO de la marca. Lo que silencia de ahi en mas es esto, no el archivo
+     * a secas: sin confirmar, la marca es una reserva en vuelo y se retoma (ver
+     * `retomarSiQuedoEnVuelo`).
+     */
+    async confirmar(clave, veredicto = "sent") {
+      if (!clave) return;
+      try {
+        const { writeFileSync } = await fs();
+        const { join } = await import("node:path");
+        writeFileSync(join(destino, clave), `${veredicto} ${new Date().toISOString()}\n`);
+      } catch {
+        // Peor caso: la marca queda vacia y el lead se reintenta en la corrida siguiente. Un aviso
+        // repetido es molesto; el silencio permanente es el bug que este modulo vino a cerrar.
       }
     },
     async liberar(clave) {
