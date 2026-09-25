@@ -93,6 +93,39 @@ el log vacío se nota y el ahogado **contesta**: devuelve 80 líneas y cero señ
 "no pasó nada". **Toda línea que se emite en un camino caliente tiene que corresponder a un EVENTO;
 una CONDICIÓN permanente se dice una vez.**
 
+⚠️ **Corregido el 2026-09-25: el ruido era UNA de tres causas, y las otras dos sobreviven al
+arreglo. Aunque el dedup se despliegue mañana, ese comando va a seguir dando 0.** T10 dio el caso
+por cerrado con la causa del ruido; medido hoy sobre el log vivo (64.202 líneas), el comando con el
+que este carril mide su objetivo —`tail -80 | grep -E "demo_agendada|handoff_humano|\[n8n\]"`—
+**vuelve a dar 0 mientras el canal de avisos funciona bien**. Las tres causas, separadas:
+
+| # | causa | por qué el arreglo del ruido no la toca |
+|---|---|---|
+| 1 | **el ruido** (4.811 copias hoy, eran 3.541 el 24-sep) | es la que T10 arregla — y creció 1.270 porque el arreglo sigue sin desplegarse |
+| 2 | **se busca la palabra equivocada** | `demo_agendada` y `handoff_humano` son **etapas** (`etapa=X->Y`), no avisos. El marcador real es `[aviso]`, y lo escribe el LLAMADOR (`webhook-server.mjs:767`), no `aviso-telegram.mjs` — que no tiene ni un `console.log`, así que grepear el módulo también contesta 0 |
+| 3 | **el éxito se loguea como silencio** | `[n8n]` sólo se escribe `if (result.ok === false)` (`webhook-server.mjs:749`). **Cero `[n8n]` significa que nada falló**, o sea lo contrario de lo que el comando sugiere. Un contador de fallos leído como contador de eventos invierte el veredicto |
+
+**Lo que el canal hace de verdad, contado sobre el log entero y no con `tail`:** 6 líneas
+`[aviso]` — **4 `sent`** (`conv=57 pidio_humano_recepcion`, `conv=11 demo_agendada`,
+`conv=11 mensaje_tras_agendar_sin_dolor`, `conv=49 pidio_hablar_con_humano`) y 2 `skipped` de
+cuando `ONIA_BOT_TG_AVISO` estaba apagado. Hoy el interruptor está **encendido** en el proceso
+vivo (`/proc/<pid>/environ`: `ONIA_BOT_TG_AVISO=true`, con `TG_BOT_TOKEN` y `TG_CHAT_ID`
+cargados), y el `webhook-server.mjs` que corre es **idéntico al del repo** (mismo `md5`), con sus
+dos llamadas a `dispararAvisoTelegram`. **El aviso a Sergio Urcullo NO está roto: estaba mal
+medido.**
+
+**Y la cifra «27 eventos» de la tabla de arriba es de la misma familia** — cuenta menciones de
+etapa en líneas de webhook, no avisos, así que sobrecuenta. El embudo real se cuenta en la base,
+que es el lado append-only: `select bot_stage, count(*) from onia_center.bot_conversations group
+by 1` → **12 `handoff_humano`**, 18 `esperando_horario`, 12 `nuevo`, y **0 `demo_agendada`** (ese
+cero es el bug del `slice(0,2)`, arreglado y esperando el deploy del bot — S18).
+
+**La lección que se lleva este carril, y sirve a cualquiera:** *un grep que cuenta FALLOS no puede
+usarse para contar EVENTOS* — cuando todo anda bien devuelve 0, exactamente igual que cuando el
+sistema está muerto. Antes de leer un `grep -c` como "no pasó nada", preguntar **qué se escribe
+cuando la cosa SALE BIEN**. Acá la respuesta era "nada", y por eso dos vueltas seguidas de este
+loop escribieron `avisos 0` teniendo cuatro avisos entregados adentro.
+
 ---
 
 ## ✅ T9 — CERRADO el 2026-09-19 (commiteado, **NO desplegado** — es un medidor, no toca el motor): todo el carril cuenta "el bot contestó" por una fila que existe, y nadie mira si el mensaje LLEGÓ
@@ -678,6 +711,58 @@ abrirlas y decidir a qué deploy se refieren. Se derivan con el comando, nunca d
 
 ## Ahora
 
+- [x] 🔴 **CERRADO el 2026-09-25 10:43-11:25 La Paz (commiteado; es el INSTRUMENTO
+      —`scripts/embudo_del_bot.mjs`—, no toca el motor y no necesita deploy): el medidor del
+      embudo encendía un 🔴 que no podía bajar nunca, porque contaba una caída de agosto que ya
+      cerró — y de paso dejaba sin medir la única pérdida que sí importa.**
+
+      **Lo que estaba roto.** La vuelta de ayer hizo bien en sacar a los 4 desconocidos del
+      descarte mudo, pero los dejó en una línea con 🔴 fija: `escribieron y el motor no los
+      registro: 4 (chatwoot:34…37)`. Esos cuatro son del **24 al 28 de agosto** y no pueden
+      cambiar: el número iba a salir en rojo en cada vuelta, para siempre. Eso gasta la señal dos
+      veces — manda a re-investigar historia curada (me costó media vuelta de hoy), y **el día que
+      el motor pierda una conversación de verdad, el rojo ya va a estar encendido y nadie lo va a
+      notar**. Es la regla que este carril ya tenía escrita, *«toda alerta mira la FECHA del
+      fallo»*, sin aplicar a su propio instrumento.
+
+      **Lo que se midió, y es el dato que faltaba: la caída ya cerró.** El motor tiene un hueco
+      contiguo entre `chatwoot:28` (18-ago 11:58) y `chatwoot:38` (29-ago 05:37); las cuatro caen
+      justo adentro. De la 38 en adelante **no perdió ninguna**: de los inboxes 4 y 5 Chatwoot
+      tiene `38 40 45 46 47 48 49 50 58` y el motor tiene las nueve.
+
+          # el hueco, y que despues no hay ninguno:
+          docker exec supabase-db psql -U postgres -tAc \
+            "select conversation_key, created_at from onia_center.bot_conversations order by created_at;"
+          docker exec onia-chatbot_chatwoot-db.1.<sufijo> psql -U postgres -d onia-chatbot -tAc \
+            "select id from conversations where id >= 38 and inbox_id in (4,5) order by id;"
+
+      **El arreglo: separar la cicatriz de la herida, sin traer fechas.** El id de Chatwoot es un
+      contador, así que sirve de reloj: `resumirEmbudo` deriva `ultimoRegistrado` —el id más alto
+      que el motor registró— y parte las pérdidas en `perdidasNuevas` (posteriores: el motor
+      **dejó de escribir**, 🔴, y el próximo lead también se pierde) y `perdidasAnteriores`
+      (cicatriz, sin 🔴, nombradas enteras con su corte). En producción ahora imprime
+      `el motor registro a todos los que escribieron despues de chatwoot:58` y lista las 4 aparte.
+
+      🔴 **La trampa que lo habría hecho fallar ABIERTO, y que por eso tiene caso propio.** El
+      motor guarda claves sintéticas (`chatwoot:999999`, `chatwoot:990777`) que no existen en
+      Chatwoot. Si entraran al corte, `ultimoRegistrado` sería 999999 y **ninguna** pérdida podría
+      volver a ser «nueva»: el 🔴 quedaría apagado para siempre — peor que el 🔴 permanente que
+      este ítem vino a sacar. El corte sólo mira claves que existen de los **dos** lados.
+
+      **Prueba (rojo antes por el motivo correcto, y validado por MUTACIÓN con `cp`).** El primer
+      rojo fue `Cannot read properties of undefined (reading 'join')`: el campo no existía. Con el
+      arreglo, `node scripts/embudo_del_bot.mjs --self-check` → `OK`. Las dos mutaciones:
+      dejar entrar las claves sintéticas al corte → **5 fallas**, entre ellas `✗ una clave
+      sintetica no puede correr el corte al infinito`; ponerle 🔴 a la cicatriz → `✗ y la cicatriz
+      NO lleva 🔴`. Un caso viejo (`el informe los nombra, no los esconde`) se puso rojo al partir
+      la línea en dos y **se reescribió más fuerte, no se borró**: ahora exige que *todas* las
+      claves de `sinRegistrarEnElMotor` aparezcan en el texto, para que separar la señal no
+      termine escondiendo a la mitad.
+
+      ⚠️ **Lo que NO era, y se descartó antes de escribirlo.** La hipótesis de entrada era «el
+      motor está perdiendo conversaciones». Falso: pierde cero desde el 29-ago. Si lo hubiera
+      reportado así, la próxima vuelta se iba a arreglar un motor sano.
+
 - [x] **CERRADO el 2026-09-25 08:13-09:00 La Paz (MEDICIÓN, sin cambio de motor): la definición de
       hecho del carril quedó medida ENTERA por primera vez en varias vueltas — y al medirla
       apareció que el log del bot vivo está ahogado al 83 % por UNA línea.**
@@ -791,6 +876,14 @@ abrirlas y decidir a qué deploy se refieren. Se derivan con el comando, nunca d
         🔴 escribieron y el motor no los registro: 4 (chatwoot:34, chatwoot:35, chatwoot:36,
            chatwoot:37) — invisibles para el embudo y para el vigia de leads sin respuesta
       ```
+
+      ⚠️ **Esa salida es HISTORIA: ni el texto ni el 🔴 son los de hoy (corregido 2026-09-25
+      11:25, ítem de arriba).** La cola de este mismo ítem ya desmentía la frase —el vigía de
+      leads sin respuesta **sí** los ve— pero la cita quedó congelada con la versión vieja, que es
+      justo como un dato falso sobrevive: nadie recita una salida, la copia. Hoy el instrumento
+      imprime `el motor registro a todos los que escribieron despues de chatwoot:58` y lista las
+      cuatro aparte, sin 🔴, porque son una caída de agosto ya cerrada. Se deriva corriéndolo,
+      nunca de acá: `node scripts/embudo_del_bot.mjs`.
 
       **La cuenta honesta del carril pasó de 3 a 7 desconocidos reales** (3 registrados + 4 que el
       motor perdió). **Lección, y es la que sobrevive al arreglo:** cuando el comentario de un
@@ -7289,7 +7382,7 @@ cita: al cerrar una fila hay que barrer quién la nombra, no sólo tacharla.
 | S2 | **Credenciales del BCP + certificado mTLS (`.pfx`)** | Trámite bancario | El botón "Cobrar con QR" en la conversación. Sin banco no hay código que lo destrabe |
 | S3 | **Traslado del 75414930 a coexistencia** — OK explícito ("vamos con A") + ventana acordada + el PIN de dos pasos a mano | El número queda MUDO 30-60 min y el rollback depende de un PIN que sólo él tiene. Runbook completo: `hermes-content/docs/ONIA_RUNBOOK_COEXISTENCIA_75414930.md` | Que Sergio siga usando su app de WhatsApp en el mismo número que atiende el bot |
 | S4 | **Verificar el push "te escribieron" en su celular** (suscribirse y recibir) | Hace falta un dispositivo real | El circuito está testeado 95/95 y deployado; sólo falta la prueba física |
-| S18 | **Publicar el bot.** El pedido vivo lleva la línea `DESPLEGAR: bot`, y **su id se DERIVA, nunca se copia**: `/root/bin/onia-tablero.sh list --status blocked \| grep -i 'Publicar el bot'`. ⚠️ **Acá decía `ok t_0836a42f` y esa tarea está ARCHIVADA — corregido el 2026-09-24.** Un `ok` sobre una tarea archivada sale **3** y no publica nada **sin decir por qué**: la fila que existe para destrabar el deploy era la que lo dejaba trabado. Medido hoy: el pedido vigente cita `main dc4202f5` y **37** archivos sin publicar, del `--dry-run` corrido después del último merge (esta fila decía 32 y `main 5d28ca88`, los dos vencidos). No hace falta ningún `scp`: el circuito ya está cableado | El publicador automático se frena solo porque `knowledge.onia.json` es fuente de precio (`FIRMA_HUMANA`), y ese freno pide su firma a propósito | **Tres cosas que hoy el cliente no tiene, las tres ya verdes en `main`:** las 9 campañas de los enlaces de WhatsApp de onia.com.bo · que el bot ACEPTE los 5 horarios y no sólo los 2 que nombra (hoy: 43 conversaciones, **cero** demos agendadas) · el aviso del lead que se enfría, una sola vez. **Verificador:** `node hermes-content/deploy/vps-ops/bot/espejo-check.mjs` → 0 ⬅️ **Heredado de S17 al fusionarla el 2026-09-25:** el motivo por el que el publicador se frena es que `knowledge.onia.json` está en `FIRMA_HUMANA` y el número que acusa es el **teléfono fijo de Onia** (`022 20 241 45`), que entró con las campañas — no un precio. El freno falla CERRADO a propósito y **no se toca**. ⚠️ **Y el recuento de archivos NO se copia de esta fila: se DERIVA del cuerpo del pedido vivo,** que lo cita del `--dry-run` corrido después del último merge. Esta fila ya llegó a decir «37 archivos / `main dc4202f5`» cuando el pedido decía otra cosa: un recuento escrito a mano acá compite con el único que Sergio Urcullo firma. **Medido el 2026-09-25 05:20 La Paz: `espejo-check.mjs` → exit 1, y `grep -c avisosDePanelYaDados /tmp/onia-bot/knowledge.mjs` → 0. El bloqueo sigue VIGENTE.** — ⚠️ **cableado el 2026-09-25, y la fila lo necesitaba: era una de las 11 «sin verificador mecanico», que son las que se mueren de viejas.** Esta misma tabla ya lo probó cuatro veces — S10, S11, S12 y S13 esperaron hasta 23 días con la decisión YA tomada, y las cuatro se cerraron solas el día que se les cableó uno. Acá decía `docker exec onia-center sh -c "grep -ac '\[aviso\].*conv=58' …"` → ≥1, y **`npm run bloqueos:vencidos` no lo corría**: el gate sólo ejecuta `npm run …` o un `.mjs`/`.js` del repo (`bloqueos_vencidos.mjs:123`), así que un `docker exec` escrito ahí se lee como verificador y no mide nada. Además preguntaba por el efecto (un aviso para `conv=58`) y no por la causa (que el código viaje): si el swap llega un día sin tráfico de ese lead, el efecto no aparece y la fila sigue pidiendo una firma ya dada. `espejo-check.mjs` pregunta lo que de verdad la desbloquea. **Medido hoy: exit 1** — DISTINTOS 27 archivos (`bot-engine.mjs`, `followup-run.mjs`, `aviso-telegram.mjs`, `knowledge.mjs`…) y FALTAN 9 en el VPS, entre ellos los cuatro tests del aviso de colgada. O sea el bloqueo **está vigente**, no vencido |
+| S18 | **Publicar el bot.** El pedido vivo lleva la línea `DESPLEGAR: bot`, y **su id se DERIVA, nunca se copia**: `/root/bin/onia-tablero.sh list --status blocked \| grep -i 'Publicar el bot'`. ⚠️ **Acá decía `ok t_0836a42f` y esa tarea está ARCHIVADA — corregido el 2026-09-24.** Un `ok` sobre una tarea archivada sale **3** y no publica nada **sin decir por qué**: la fila que existe para destrabar el deploy era la que lo dejaba trabado. Medido hoy: el pedido vigente cita `main dc4202f5` y **37** archivos sin publicar, del `--dry-run` corrido después del último merge (esta fila decía 32 y `main 5d28ca88`, los dos vencidos). No hace falta ningún `scp`: el circuito ya está cableado | El publicador automático se frena solo porque `knowledge.onia.json` es fuente de precio (`FIRMA_HUMANA`), y ese freno pide su firma a propósito | **Tres cosas que hoy el cliente no tiene, las tres ya verdes en `main`:** las 9 campañas de los enlaces de WhatsApp de onia.com.bo · que el bot ACEPTE los 5 horarios y no sólo los 2 que nombra (hoy: hoy `npm run embudo:bot`: **3 desconocidos reales**, **0 eligieron horario**, 2 esperando algo nuestro — `chatwoot:38` parada hace 27 días y `chatwoot:58` hace 7. ⚠️ **Acá decía «43 conversaciones, cero demos agendadas» y ese número salía de `calendar_event_id`, que es NULL POR DISEÑO — corregido el 2026-09-25.** No hay Cal.com en el VPS por decisión (`scripts/embudo_del_bot.mjs:48` lo deja escrito: *«EL EXITO NO SE MIDE CON `calendar_event_id`, Y ESTO NO ES UN ATAJO»*), así que esa columna no puede subir aunque el bot agende todos los días: es un 🔴 que no baja nunca, la misma clase de medidor muerto que este carril ya arregló el 2026-09-25 en el embudo. Las 43 además mezclaban 12 filas sintéticas y 20 de fuera de los inboxes 4/5. El sujeto que sí se mueve con esta firma es **«eligieron horario»**. ✅ **Y lo que la firma desbloquea está VERIFICADO EJECUTANDO, no razonado (2026-09-25):** con los CINCO slots reales leídos de `/opt/onia/bot/webhook.env` del proceso vivo, el motor del repo acepta el tercero — `printf 'Hola, quiero una demo\nel martes 29 a las 14:00\n/estado' | node simulate.mjs` deja `scheduledAt: 2026-09-29T18:00:00Z`. Los dos pasos están cableados: `run-turn.test.mjs:216` (que los 3 sean elegibles) y `bot-engine.test.mjs:1258` (que quien los ESCRIBE quede en `demo_agendada` con su efecto de calendario, y que un horario inexistente siga yendo a un humano). Batería del bot **1384/1384**) · el aviso del lead que se enfría, una sola vez. **Verificador:** `node hermes-content/deploy/vps-ops/bot/espejo-check.mjs` → 0 ⬅️ **Heredado de S17 al fusionarla el 2026-09-25:** el motivo por el que el publicador se frena es que `knowledge.onia.json` está en `FIRMA_HUMANA` y el número que acusa es el **teléfono fijo de Onia** (`022 20 241 45`), que entró con las campañas — no un precio. El freno falla CERRADO a propósito y **no se toca**. ⚠️ **Y el recuento de archivos NO se copia de esta fila: se DERIVA del cuerpo del pedido vivo,** que lo cita del `--dry-run` corrido después del último merge. Esta fila ya llegó a decir «37 archivos / `main dc4202f5`» cuando el pedido decía otra cosa: un recuento escrito a mano acá compite con el único que Sergio Urcullo firma. **Medido el 2026-09-25 05:20 La Paz: `espejo-check.mjs` → exit 1, y `grep -c avisosDePanelYaDados /tmp/onia-bot/knowledge.mjs` → 0. El bloqueo sigue VIGENTE.** — ⚠️ **cableado el 2026-09-25, y la fila lo necesitaba: era una de las 11 «sin verificador mecanico», que son las que se mueren de viejas.** Esta misma tabla ya lo probó cuatro veces — S10, S11, S12 y S13 esperaron hasta 23 días con la decisión YA tomada, y las cuatro se cerraron solas el día que se les cableó uno. Acá decía `docker exec onia-center sh -c "grep -ac '\[aviso\].*conv=58' …"` → ≥1, y **`npm run bloqueos:vencidos` no lo corría**: el gate sólo ejecuta `npm run …` o un `.mjs`/`.js` del repo (`bloqueos_vencidos.mjs:123`), así que un `docker exec` escrito ahí se lee como verificador y no mide nada. Además preguntaba por el efecto (un aviso para `conv=58`) y no por la causa (que el código viaje): si el swap llega un día sin tráfico de ese lead, el efecto no aparece y la fila sigue pidiendo una firma ya dada. `espejo-check.mjs` pregunta lo que de verdad la desbloquea. **Medido hoy: exit 1** — DISTINTOS 27 archivos (`bot-engine.mjs`, `followup-run.mjs`, `aviso-telegram.mjs`, `knowledge.mjs`…) y FALTAN 9 en el VPS, entre ellos los cuatro tests del aviso de colgada. O sea el bloqueo **está vigente**, no vencido |
 | S5 | **¿Silenciar el Telegram de los agentes n8n que sí trabajan?** (Vendedor, Contenido, Finanzas, Prospector, Radar IA, Web Factory Radar) + los recordatorios de agenda cada 30 min | Es su canal y su umbral de ruido. No se apagan los workflows: hacen trabajo — hay que editar el nodo de aviso de cada uno | Que Telegram vuelva a ser sólo errores, que es la regla que ya se aplicó al resto |
 | S7 | **Contestar (o descartar) a los cuatro desconocidos que escribieron y nadie respondió** — conv 35 (+591 73232758, clínica dental de 4 doctores, 25-ago), 37 (+591 73021804, 28-ago), 36 (`Saguilera@ds-santacruz.bo`, 27-ago) y 34 (widget, sin dato de contacto) | Vende Sergio, y son personas reales esperando desde hace 3-6 días. Un bot no puede retomar una conversación fría de hace una semana sin que suene a spam | El primer lead atendido del carril. Dos tienen número de WhatsApp y uno correo: tres de los cuatro son alcanzables hoy |
 | ~~S8~~ | ✅ **CERRADO el 2026-08-31: `Onia (interna)` → inbox 5.** Verificado en la base y MIRADO en `/inbox`. **Podado el 01-sep:** esta fila arrastraba el análisis completo de seis vueltas y seguía leyéndose como bloqueo vivo — S8 se nombra **17 veces** en este archivo, casi todas dentro de párrafos viejos que ya no aplican. Lo que quedaba abierto NO era S8 sino el **inbox 4**, y ahora tiene su propio ítem (3 de "Ahora") y su propio bloqueo (**S14**). | — | — |

@@ -1231,10 +1231,10 @@ test("conversacionVencida: bordes deterministas", () => {
 });
 
 // ---------------------------------------------------------------------------
-// EL BOT NUNCA AGENDO UNA DEMO: 3 de los 5 horarios libres eran inalcanzables
+// 3 de los 5 horarios libres eran inalcanzables y terminaban en la cola humana
 // ---------------------------------------------------------------------------
 // Contado en produccion el 2026-09-24, no heredado: `onia_center.bot_conversations` tiene 43
-// conversaciones, 18 paradas en `esperando_horario` y CERO con `calendar_event_id`. El cron
+// conversaciones y 18 paradas en `esperando_horario`. El cron
 // publica CINCO horarios por dia y el guion nombra dos ({{slot_a}} y {{slot_b}} caen en la
 // misma frase); los otros tres quedaban fuera del array que mira `detectSlotChoice`, asi que
 // quien elegia uno de ELLOS —nuestro, libre, y dentro de la franja que la coletilla del mismo
