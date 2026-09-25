@@ -51,7 +51,7 @@ reemplazo del valor.
 | **IA aplicada** | Claude Code, n8n, MCP, agentes, loops, automatización y venta de soluciones | una idea concreta por pieza; nombres y ejemplos reales |
 | **Personal / criterio** | problemas de las redes, disciplina, juventud, presión, ventas, errores y decisiones | experiencia real → tensión → aprendizaje → acción; prohibidas las frases motivacionales vacías |
 | **Construyendo en público** | Onia, sistemas, pruebas, errores y resultados verificables | mostrar proceso y criterio sin fingir clientes, cifras ni éxitos |
-| **Comunidad / personas** | encuentros (🧊 los presenciales, congelados el 25-sep), expertos, conversaciones, proyectos y logros de miembros | consentimiento antes de grabar o identificar a terceros |
+| **Comunidad / personas** | encuentros, expertos, conversaciones, proyectos y logros de miembros | consentimiento antes de grabar o identificar a terceros |
 
 ### Formatos y profundidad
 
@@ -69,8 +69,11 @@ reemplazo del valor.
 
 ### Estructura diaria aprobada
 
-> ⚠️ **25-sep: la cadencia está en revisión.** Hay cuatro cifras vivas y la fija Sergio Urcullo
-> (`ONIA_CIRCUITO_DE_CONTENIDO.md` §7).
+> ✅ **Ratificada por Sergio Urcullo el 25-sep: 10–13 piezas por día**, con una condición: cada pieza
+> enseña, vende la plataforma enseñando o conecta, y deja algo concreto (`contenido/SISTEMA_DE_GUIONES.md`).
+> **«Trial», mientras `@sergiourcullo` tenga menos de 1.000 seguidores:** Instagram pide 1.000 para
+> los Trial Reels (verificado el 25-sep) y la cuenta tenía 503 el 22-sep. Hasta entonces Instagram
+> recibe 3 piezas por día y las de «Trial» salen en TikTok y YouTube Shorts.
 
 | Bloque | Cantidad | Composición |
 |---|---:|---|

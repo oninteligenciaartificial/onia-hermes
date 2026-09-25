@@ -222,6 +222,20 @@ Ninguna se salta. El criterio de avance es un número, no una sensación.
 - Onboarding a mano, cobro por transferencia. **Eso es correcto en esta etapa**, se llama
   concierge: no es deuda, es descubrimiento.
 - **Salida:** Bs 3.750/mes recurrente cobrado.
+- ⚠️ **Excepción decidida por Sergio Urcullo el 2026-09-25:** se abre el piloto presencial
+  «IA Lab Santa Cruz», tal como lo planeó la rama `codex/marca-comunidad-plan`:
+  - encuentro semanal de 120 minutos;
+  - 4 pilotos, después taller o curso pago y después membresía;
+  - el detalle está en `ONIA_COMUNIDAD_CONTENIDO.md`.
+
+  **Se decidió con la cuenta delante.** El piloto falla las tres preguntas del §10: le habla a
+  otro cliente, funciona sin el núcleo y lleva horas de Sergio Urcullo en cada encuentro. Cuesta
+  ~5 h por semana, que se suman a la cadencia de 10–13 piezas por día. Ese día la Etapa 1
+  estaba en 0 de Bs 3.750.
+
+  **Cómo lo tratan las sesiones:** no lo marcan como violación de la etapa, pero tampoco lo usan
+  como precedente para abrir otras líneas. Esta excepción se decide sola: no cambia la etapa
+  vigente.
 
 ### Etapa 2 — Repetibilidad · 5 → 20 clientes
 Acá se decide **empresa o agencia**, y se decide en un solo punto:

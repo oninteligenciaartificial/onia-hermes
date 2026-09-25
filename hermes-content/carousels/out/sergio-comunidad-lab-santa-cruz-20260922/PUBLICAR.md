@@ -1,12 +1,24 @@
 # Publicar — Comunidad IA práctica en Santa Cruz
 
-> 🧊 **NO PUBLICAR. Congelado el 25-sep-2026 por decisión de Sergio Urcullo.** Anuncia el piloto
-> presencial «IA Lab Santa Cruz», que es una línea de negocio nueva que la Etapa 1 no permite
-> (`CLAUDE.md` §1). Se conserva como propuesta. El zip se renombró a `…-CONGELADO.zip`.
-
 Cuenta: `@sergiourcullo`
 Formato: 1080 × 1350 px · PNG
 Orden: `slide-01.png` → `slide-08.png`
+Agendado: domingo 27-sep (`docs/cola/ENTREGA-CARRUSELES-23-27-SEP-2026.md`)
+
+## Estado — 25-sep
+
+- **El piloto se congeló y se reabrió el mismo día.** Sergio Urcullo reabrió el «IA Lab Santa Cruz»
+  tal como estaba planeado. Es una excepción a la Etapa 1, registrada en
+  `docs/ONIA_ESTRATEGIA_DE_EMPRESA.md` §7.
+- **Corregido el 25-sep:**
+  - lámina 6: el titular se cortaba en «transformació»;
+  - lámina 5: una fila decía «PERMISOS: siguiente acción»;
+  - lámina 8: la firma pasó del cuerpo al bloque de firma;
+  - el caption de este archivo estaba cortado a mitad de frase.
+- ⚠️ **Cada comentario `SANTA CRUZ` se contesta a mano.** En `@sergiourcullo` las palabras clave no
+  disparan nada (`docs/contenido/PUBLICACION.md` §2). La respuesta lleva la agenda y las siete
+  preguntas de `docs/recursos/SISTEMAS_IA_PACKS_2026-09-22.md`. No prometas sede ni cupo hasta
+  confirmarlos. **Si ese día no vas a poder contestar, no lo publiques.**
 
 ## Caption
 
@@ -22,6 +34,4 @@ Comentá SANTA CRUZ y te envío la agenda del primer laboratorio y el formulario
 
 #santacruzbolivia #bolivia #comunidadia #inteligenciaartificial #networking #emprendedores
 
-Respuesta manual `SANTA CRUZ`: enviar la agenda y las siete preguntas desde `SISTEMAS_IA_PACKS_2026-09-22.md`. No prometer sede ni cupo hasta confirmarlos.
-
-No subas `_contactsheet.png`: es solo una vista previa.
+No subas `_contactsheet.png`: es sólo una vista previa.

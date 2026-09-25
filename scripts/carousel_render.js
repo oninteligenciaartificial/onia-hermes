@@ -1277,7 +1277,9 @@ function faltantesCtaSergio(brief) {
   const resource = brief.resource || {};
   return [
     brief.comment_trigger && !resource.title && 'resource.title',
-    brief.comment_trigger && !resource.url && 'resource.url',
+    // Un recurso que se manda a mano por mensaje (la agenda, un formulario) no tiene URL: vale
+    // si el brief lo declara con `entrega: 'manual'`, y entonces contestar es trabajo de Sergio.
+    brief.comment_trigger && !resource.url && resource.entrega !== 'manual' && 'resource.url',
     !brief.identity && 'identity',
     !brief.follow_cta && 'follow_cta',
   ].filter(Boolean);

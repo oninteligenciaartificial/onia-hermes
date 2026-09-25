@@ -1,9 +1,10 @@
 # Plan de contenido grabable · miércoles 23 a domingo 27 de septiembre de 2026
 
-> **25-sep: plan con fecha, así que es historia y no fuente.** Las 11 piezas por día son una
-> de las cuatro cadencias vivas, y la cadencia la fija Sergio Urcullo
-> (`ONIA_CIRCUITO_DE_CONTENIDO.md` §7). 🧊 Lo del piloto presencial «IA Lab Santa Cruz» está
-> congelado desde el 25-sep: **no salen las piezas con `SANTA CRUZ`**.
+> **25-sep: plan con fecha, así que es historia y no fuente.** La cadencia vigente es la que
+> ratificó Sergio Urcullo el 25-sep: 10–13 piezas por día (`ONIA_MARCA_PERSONAL_TRES_CARRILES.md`).
+> Mientras `@sergiourcullo` no llegue a 1.000 seguidores, las piezas «Trial» salen en TikTok y
+> Shorts. El piloto «IA Lab Santa Cruz» se congeló y se reabrió el mismo 25-sep, así que las
+> piezas con `SANTA CRUZ` siguen en pie.
 
 ## Decisión editorial
 
@@ -304,10 +305,6 @@ proceso roto. No inventar aprendizaje.
 ---
 
 ## Sábado 26 · comunidad, HyperFrames y Santa Cruz
-
-> 🧊 **25-sep:** no salen las tres piezas con `SANTA CRUZ` (B-roll del laboratorio, laboratorio
-> en 120 minutos, primeros 20 miembros fundadores): el piloto está congelado. HyperFrames y la
-> pieza personal siguen.
 
 Objetivo: mostrar qué recibirá una persona en la comunidad y construir una prueba técnica.
 No anunciar sede ni fecha sin confirmación.

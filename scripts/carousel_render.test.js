@@ -354,6 +354,8 @@ test('CTA de Sergio: la palabra exige recurso, pero no es obligatoria', () => {
   // Una palabra sin recurso es una promesa vacía.
   assert.deepStrictEqual(faltantesCtaSergio({ comment_trigger: 'Comentá MAPA', ...firma }), ['resource.title', 'resource.url']);
   assert.deepStrictEqual(faltantesCtaSergio({ comment_trigger: 'Comentá MAPA', resource: { title: 'T', url: 'https://x' }, ...firma }), []);
+  // Recurso entregado a mano por mensaje: sin URL, pero declarado.
+  assert.deepStrictEqual(faltantesCtaSergio({ comment_trigger: 'Comentá X', resource: { title: 'Agenda', entrega: 'manual' }, ...firma }), []);
   // Sin firma no sale, con o sin palabra.
   assert.deepStrictEqual(faltantesCtaSergio({ cta: 'GUARDALO' }), ['identity', 'follow_cta']);
 });

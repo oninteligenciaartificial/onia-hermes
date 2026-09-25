@@ -1,7 +1,14 @@
 {
   "title": "Así funcionaría una comunidad de IA que sí construye cosas",
   "caption": "No quiero abrir otro grupo donde todos entran, saludan y desaparecen. El piloto en Santa Cruz tiene que producir algo verificable cada semana.\n\nFormato propuesto: 15 minutos para llegar con un problema, 25 para una demostración, 45 para construir, 20 para hot seats, ideas y contactos, y 15 para mostrar avances y elegir la siguiente acción. Total: 120 minutos.\n\nPrimero validamos gratis con 20 miembros fundadores. Después de 3 o 4 encuentros medimos asistencia, porcentaje que termina el reto, personas que vuelven y resultados reales. Recién con evidencia tendría sentido abrir talleres, cursos o un círculo privado de pago.\n\nComentá SANTA CRUZ y te envío la agenda del primer laboratorio y el formulario fundador. Soy Sergio Urcullo; estoy construyendo una comunidad para aprender y vender IA haciendo proyectos reales.",
-  "hashtags": ["#santacruzbolivia", "#bolivia", "#comunidadia", "#inteligenciaartificial", "#networking", "#emprendedores"],
+  "hashtags": [
+    "#santacruzbolivia",
+    "#bolivia",
+    "#comunidadia",
+    "#inteligenciaartificial",
+    "#networking",
+    "#emprendedores"
+  ],
   "comment_trigger": "Comentá SANTA CRUZ",
   "cta": "Comentá SANTA CRUZ",
   "serie": "COMUNIDAD IA",
@@ -45,10 +52,22 @@
         "type": "flow",
         "label": "LABORATORIO SEMANAL",
         "nodes": [
-          {"name": "15 min", "detail": "problema"},
-          {"name": "25 min", "detail": "demostración"},
-          {"name": "45 min", "detail": "construir"},
-          {"name": "20 + 15", "detail": "red + demos"}
+          {
+            "name": "15 min",
+            "detail": "problema"
+          },
+          {
+            "name": "25 min",
+            "detail": "demostración"
+          },
+          {
+            "name": "45 min",
+            "detail": "construir"
+          },
+          {
+            "name": "20 + 15",
+            "detail": "red + demos"
+          }
         ],
         "note": "Todos terminan con una siguiente acción concreta."
       },
@@ -66,9 +85,18 @@
         "type": "matrix",
         "label": "TRES PERFILES",
         "items": [
-          {"title": "aprender", "body": "primer sistema útil"},
-          {"title": "vender", "body": "oferta y demostración"},
-          {"title": "aplicar", "body": "proceso del negocio"}
+          {
+            "title": "aprender",
+            "body": "primer sistema útil"
+          },
+          {
+            "title": "vender",
+            "body": "oferta y demostración"
+          },
+          {
+            "title": "aplicar",
+            "body": "proceso del negocio"
+          }
         ]
       },
       "save_worthy": false,
@@ -82,11 +110,22 @@
       "body": "Cada encuentro deja una plantilla, un flujo o prototipo, dos contactos relevantes y una tarea que puede verificarse la semana siguiente.",
       "callout": "Aprender haciendo",
       "visual": {
-        "type": "contract",
+        "type": "matrix",
         "label": "SALIDA DEL ENCUENTRO",
-        "input": "problema real",
-        "output": "plantilla · flujo · prototipo",
-        "permissions": "siguiente acción"
+        "items": [
+          {
+            "title": "Llegás con",
+            "body": "un problema real"
+          },
+          {
+            "title": "Te llevás",
+            "body": "plantilla, flujo o prototipo"
+          },
+          {
+            "title": "Y además",
+            "body": "dos contactos y una tarea verificable"
+          }
+        ]
       },
       "save_worthy": false,
       "alt_text": "Entregables de cada encuentro de la comunidad de inteligencia artificial"
@@ -95,17 +134,29 @@
       "number": 6,
       "role": "point",
       "pill": "Ruta sostenible",
-      "headline": "Gratis primero. Pago cuando exista una transformación.",
+      "headline": "Gratis primero. Pago cuando haya *resultados*.",
       "body": "Laboratorio presencial + bóveda pública → talleres y cursos específicos → círculo privado solo cuando el acompañamiento tenga valor probado.",
       "callout": "No vender humo",
       "visual": {
         "type": "flow",
         "label": "ESCALERA DE VALOR",
         "nodes": [
-          {"name": "laboratorio", "detail": "gratis"},
-          {"name": "bóveda", "detail": "recursos"},
-          {"name": "taller", "detail": "resultado"},
-          {"name": "círculo", "detail": "acompañamiento"}
+          {
+            "name": "laboratorio",
+            "detail": "gratis"
+          },
+          {
+            "name": "bóveda",
+            "detail": "recursos"
+          },
+          {
+            "name": "taller",
+            "detail": "resultado"
+          },
+          {
+            "name": "círculo",
+            "detail": "acompañamiento"
+          }
         ],
         "note": "La oferta nace de problemas observados en la comunidad."
       },
@@ -125,10 +176,22 @@
         "left": "MÉTRICA",
         "right": "PREGUNTA",
         "rows": [
-          {"left": "asistencia", "right": "¿vinieron?"},
-          {"left": "terminación", "right": "¿construyeron?"},
-          {"left": "retorno", "right": "¿volvieron?"},
-          {"left": "resultado", "right": "¿qué cambió?"}
+          {
+            "left": "asistencia",
+            "right": "¿vinieron?"
+          },
+          {
+            "left": "terminación",
+            "right": "¿construyeron?"
+          },
+          {
+            "left": "retorno",
+            "right": "¿volvieron?"
+          },
+          {
+            "left": "resultado",
+            "right": "¿qué cambió?"
+          }
         ]
       },
       "save_worthy": true,
@@ -139,11 +202,19 @@
       "role": "cta",
       "pill": "Cofundadores del piloto",
       "headline": "¿Lo construirías conmigo en Santa Cruz?",
-      "body": "Comentá *SANTA CRUZ* y te envío la agenda y el formulario fundador. Soy Sergio Urcullo: construyo IA, negocios y comunidad con resultados reales.",
+      "body": "Comentá *SANTA CRUZ* y te envío la agenda y el formulario fundador.",
       "callout": "",
       "save_worthy": false,
       "alt_text": "Comentá Santa Cruz para recibir la agenda de la comunidad"
     }
   ],
-  "job": "education"
+  "job": "education",
+  "resource": {
+    "title": "Agenda del laboratorio + formulario fundador",
+    "entrega": "manual",
+    "label": "TE LLEGA POR MENSAJE"
+  },
+  "identity": "Soy Sergio Urcullo: construyo IA, negocios y comunidad con resultados reales.",
+  "follow_cta": "Seguime para la fecha del primer laboratorio.",
+  "correccion": "25-sep-2026: lámina 6 con titular más corto (se cortaba «transformación»); lámina 5 sin la fila «PERMISOS» mal rotulada; la firma pasa del cuerpo al bloque de firma. Piloto reabierto por Sergio Urcullo el 25-sep «como estaba planeado»."
 }

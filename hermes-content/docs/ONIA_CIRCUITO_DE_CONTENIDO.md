@@ -305,8 +305,8 @@ Medido el 25-sep por el mapa de docs (§3.5 de
 | `claude/carril-contenido` | 02-sep | 195 | lo mismo, más las carpetas `loops/` y `handoffs/`, que no existen en `main` |
 
 - ✅ **Las cuatro primeras se integraron el 25-sep, por decisión de Sergio Urcullo** (PR #40).
-  El piloto «IA Lab Santa Cruz» quedó congelado 🧊. La audiencia nueva sigue vigente, porque
-  está registrada como decisión suya del 21-sep. Llegan a `main` cuando se mergee el PR.
+  El piloto «IA Lab Santa Cruz» se congeló y se reabrió el mismo día, por decisión de Sergio
+  Urcullo. La audiencia nueva sigue vigente: es decisión suya del 21-sep. Llegan a `main` cuando se mergee el PR.
 - **La Fase 1 de movimientos se hace después de mergear el PR #40** (§4.3 del mapa de docs: 33 archivos del
   carril a `contenido/` e `historial/contenido/`, con `git mv` y sus referencias en el mismo
   commit). Si se mueve antes, los archivos nuevos de esas ramas aterrizan en las rutas viejas y
@@ -325,24 +325,23 @@ Medido el 25-sep por el mapa de docs (§3.5 de
 ## 7. Decisiones que dependen de Sergio Urcullo
 
 1. ✅ **Integrar las ramas del carril:** decidido el 25-sep, se integran (PR #40, §6).
-2. **Cadencia.** Hay cuatro cifras vivas: 2 por día (`ONIA_PLAN_DE_CONTENIDO_3_FRENTES.md`,
-   24-ago), 6 videos por semana (`MOTOR`), 10–13 por día (`ESTRUCTURA`, 17-sep) y 11 por día (rama
-   `codex/marca-comunidad-plan`). Y qué día se elige el tema de la semana: viernes o domingo
-   anterior (regla 3).
+2. ✅ **Cadencia: 10–13 piezas por día**, ratificada por Sergio Urcullo el 25-sep
+   (`ONIA_MARCA_PERSONAL_TRES_CARRILES.md`). Condición: cada pieza enseña, vende enseñando o
+   conecta. Las otras cifras (2 por día, 6 videos por semana) quedan como historia. Falta decidir
+   qué día se elige el tema de la semana: viernes o domingo anterior (regla 3).
 3. **¿Higgsfield en el contenido?** (C3) `ONIA_MAPA_DE_TEMAS.md` dice «nada de Higgsfield hasta
    que se resuelva el cobro anual»; `BASE_CONTENIDO` lo usa como tema y hay drops publicados con
    Higgsfield.
 4. **¿Se firmó el acuerdo con Samuel?** (C8) Ningún doc lo registra, y opera desde ~11-sep.
-5. **Qué es «Trial»:** los Trial Reels de Instagram (piden ≥1.000 seguidores según
-   `ONIA_AUDITORIA_LUCIA_Y_PLAN_DIARIO.md`) o una segunda cuenta («la cuenta trial»,
-   `cola/GUIONES-TANDA-2-18-SEP.md`).
+5. ✅ **«Trial»:** los Trial Reels de Instagram piden 1.000 seguidores (verificado el 25-sep).
+   Decidido por Sergio Urcullo: mientras no se llegue, Instagram recibe 3 piezas por día y las
+   de «Trial» salen en TikTok y YouTube Shorts.
 6. **Duración única de la llamada pública.** Hoy la llamada 1 a 1 se anuncia de 15, 20, 30 y
    45 minutos según el doc que se lea (la de 15 es el beneficio de la comunidad, `/15min`; el
    `/30min` que publica `ESTADO_COMUNIDAD` da 404; la agenda de 45 está en una rama sin integrar).
-7. ✅ **Piloto presencial «IA Lab Santa Cruz»: congelado el 25-sep por Sergio Urcullo** 🧊. Es
-   una línea de negocio nueva (encuentros → taller o curso pago → membresía) y la Etapa 1 no la
-   permite. Se conserva como propuesta en `ONIA_COMUNIDAD_CONTENIDO.md`: no se ejecuta, no se
-   anuncia y no se encuesta.
+7. ✅ **Piloto presencial «IA Lab Santa Cruz»: reabierto «como estaba planeado»** el 25-sep por
+   Sergio Urcullo. A la mañana se había congelado. Es una excepción a la Etapa 1, decidida con la
+   cuenta delante y registrada en `ONIA_ESTRATEGIA_DE_EMPRESA.md` §7.
 8. **Comprar `sergiourcullo.com`.** Pedido el 07-sep; sin evidencia de compra y sin conectar al
    proyecto de Vercel (medido el 25-sep: sólo `sergiourcullo.vercel.app`).
 9. **Desplegar las páginas de recurso** `/automatizar`, `/agentes` y `/mcp`. Dan 404 en producción
