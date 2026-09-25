@@ -114,12 +114,22 @@ test("M_SIAT_BODY tiene {{humano}} a mitad de frase y sigue en minuscula", () =>
 // OFRECER es de a dos; ACEPTAR no tiene por que serlo
 // ---------------------------------------------------------------------------
 // Medido en produccion el 2026-09-24: de 43 conversaciones, 18 llegaron a `esperando_horario`
-// y CERO a `demo_agendada` — 0 filas con `calendar_event_id` en toda la historia de
-// `onia_center.bot_conversations`. El cron publica CINCO horarios por dia y el guion nombra
+// y ahi se quedaron. El cron publica CINCO horarios por dia y el guion nombra
 // dos ({{slot_a}} y {{slot_b}} en la misma frase): los otros tres seguian LIBRES en la agenda,
 // pero para el motor no existian. Quien escribia "el lunes 28 a las 14:00" —un horario nuestro,
 // libre y dentro de la franja que la coletilla del MISMO mensaje le prometia— no matcheaba
 // ningun slot, caia en `intents.proposesOwnTime` y se iba a la cola humana.
+//
+// OJO con la evidencia que NO sirve, y que este bloque citaba hasta el 2026-09-25: el CERO de
+// `calendar_event_id`. No prueba nada de este bug y no se mueve con ningun deploy — Cal.com no
+// existe en el VPS POR DECISION (opcion (c), tablero `t_b18ca430`), asi que esa columna solo
+// puede ser null. Re-medido el 2026-09-25: `docker ps -a | grep -i cal` no devuelve NINGUN
+// contenedor y desde `onia-center` el host da `bad address 'calcom:3000'`.
+// Y "CERO a `demo_agendada`" tambien era falso: la etapa SI se alcanzo —conv=49 el 2026-09-03 y
+// conv=11 el 2026-09-10, con su aviso a Telegram en el log del bot vivo—; lo que no hay es
+// ninguna fila PARADA ahi, porque despues siguen a `handoff_humano`. Un estado mutable no cuenta
+// historia. Citar cualquiera de los dos manda a la proxima vuelta a buscar un bug decidido; la
+// consecuencia real de este es la cola humana. Detalle en `config.mjs`, sobre `slotsElegibles`.
 //
 // `parseSlotsSpec` NO cambia: sigue devolviendo el par A/B, que es lo que el guion sabe decir.
 // Lo que se agrega es la otra pregunta, que nadie estaba haciendo: que MAS podemos aceptar.

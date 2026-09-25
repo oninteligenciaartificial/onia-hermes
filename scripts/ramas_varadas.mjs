@@ -46,7 +46,28 @@ export const NO_SON_MIAS = {
   // marca-personal no tiene línea activa ni en casa ni en el VPS. Es la sesión de Sergio Urcullo
   // escribiendo sus carruseles, o sea MARCA, que él decide (CLAUDE.md: "no toques el de contenido").
   'claude/marca-personal-carruseles-dist-deadab': 'marca personal: la mueve la sesión de Sergio Urcullo, no un loop',
+  // 2026-09-25: CUARTO nombre distinto del mismo carril de contenido. Medido antes de excluirla:
+  // 73 archivos, +7.635 líneas, de las cuales 32 caen en `hermes-content/{carousels,captures,
+  // PARA-PUBLICAR}` — láminas para publicar, o sea MARCA —, su punta es `docs(handoff): carril
+  // contenido` y ningún loop la mueve (no tiene `RAMA=` en el corredor). CLAUDE.md: "no toques
+  // el de contenido, el de contenido lo maneja su sesión".
+  'claude/onia-content-scripts-cvat9r': 'carril de contenido con nombre nuevo: láminas y carruseles, los cierra Sergio Urcullo',
 }
+
+// POR QUÉ ESTO SIGUE SIENDO UNA LISTA A MANO, aunque el comentario de abajo diga que se atrasa.
+// El 2026-09-25 se midieron las dos señales que la volverían derivable, y las DOS esconden
+// trabajo real, que es el error más caro que cometió este repo (seis carriles invisibles):
+//   · Por autor del commit: los carriles de loop firman `root@<máquina>` y las sesiones firman
+//     `oninteligenciaartificial@gmail.com` o `noreply@anthropic.com`. Separa limpio HOY — pero
+//     `onia-web-architecture-b37eca` y `onia-dev-node-setup-22a170` eran carriles de verdad
+//     corriendo en la app de Windows, o sea que firmaban como sesión. La regla los habría
+//     excluido, y ésos el integrador SÍ los tiene que mergear.
+//   · Por rutas tocadas: el contenido se concentra en `carousels/captures/PARA-PUBLICAR`, pero
+//     un carril cualquiera puede dejar una referencia ahí y quedar excluido sin que nadie mire.
+// O sea: el costo de atrasarse es un rojo molesto que se arregla en una vuelta; el de derivar
+// mal es trabajo que desaparece del informe y nadie lo busca. Se elige el rojo. Si algún día
+// hay una marca EXPLÍCITA de dueño (un `RAMA=` de contenido, un trailer en el commit), esa sí
+// se deriva y esta lista se borra.
 
 /** Clasifica ramas ya medidas. Función pura: el self-check la ejercita sin tocar git. */
 export function clasificar(ramas, declaradasPorElCorredor, ahoraMs) {
@@ -167,6 +188,9 @@ const CASOS = () => {
     // integrador le prohíbe mergearla sola. Si cuenta como varada, el objetivo se pone rojo y su
     // dueño no tiene ninguna jugada legal.
     { nombre: 'claude/meta-ads-onia-prospecting-8b5122', propios: 1, atras: 410, ultimoMs: ahora - 30 * H },
+    // contenido con nombre nuevo y AL DÍA con main: la salida `aDecidir` no la alcanza (sólo
+    // cubre +100 de atraso), así que sin exclusión nombrada cae en `varadas` a las 24 h.
+    { nombre: 'claude/onia-content-scripts-cvat9r', propios: 12, atras: 15, ultimoMs: ahora - 30 * H },
   ]
   const decl = ['claude/web-venta', 'claude/docs-auditoria', 'claude/ads-creatividades-publicos']
   const r = clasificar(ramas, decl, ahora)
@@ -197,6 +221,11 @@ const CASOS = () => {
     // siendo trabajo del integrador, por mucho que divergió.
     ['un carril DECLARADO por el corredor sigue varado aunque diverja 400', n(r.varadas).includes('claude/docs-auditoria') && !n(r.aDecidir).includes('claude/docs-auditoria')],
     ['el informe NOMBRA la clase a-decidir con su atraso', informe('x', r).includes('claude/meta-ads-onia-prospecting-8b5122') && informe('x', r).includes('410 commits atrás')],
+    // El agujero que dejó abierto el arreglo anterior: `aDecidir` rescata a la rama de Sergio
+    // Urcullo que DIVERGE, pero una rama suya al día con main no diverge nada. La de contenido
+    // del 2026-09-25 tenía 12 propios y 15 de atraso: a las 24 h habría puesto el objetivo del
+    // integrador en rojo por una rama que CLAUDE.md le prohíbe tocar.
+    ['una rama de contenido al día con main tampoco es varada del integrador', n(r.ajenas).includes('claude/onia-content-scripts-cvat9r') && !n(r.varadas).includes('claude/onia-content-scripts-cvat9r')],
     ['medirRepo trae el atraso, no sólo lo propio', (() => {
       const fake = (_r, a) => a[0] === 'for-each-ref' ? 'origin/claude/x\t1757500000\n' : (a[2] === 'origin/main..origin/claude/x' ? '2\n' : '77\n')
       const m = medirRepo('/x', 'origin/main', fake)
