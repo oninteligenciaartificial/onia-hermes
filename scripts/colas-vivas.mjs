@@ -62,6 +62,39 @@ export function esCola(texto) {
   return SECCION_AHORA.test(texto);
 }
 
+/**
+ * "Este carril tiene trabajo?" derivado del TEXTO, no de lo que el verificador opine.
+ *
+ * El verificador solo avisa `cola-vacia` cuando "## Ahora" no tiene NINGUN item, asi que una
+ * seccion con 34 items todos `[x]` le sale verde — y para el carril que la lee es identicamente
+ * "no hay nada que hacer". Medido el 2026-09-25 sobre `hermes-content/docs/COLA.md`: 34 items en
+ * Ahora, CERO abiertos, y este gate la declaraba `ok` mientras el integrador bajaba los cuatro
+ * escalones de "cuando Ahora no te da un item" sin que nada lo registrara. Son dos causas del
+ * MISMO estado y solo una estaba cableada.
+ *
+ * La seccion se acota hasta el proximo `## ` porque si no, un item abierto en "Despues" o en
+ * "Bloqueado" se cuenta como trabajo de "Ahora" y tapa el estado. `^##\s` no matchea `### `, igual
+ * que `esCola` tampoco abre con un h3: las dos puntas de la seccion usan el mismo criterio.
+ */
+export function estadoDeTrabajo(texto) {
+  const t = String(texto);
+  const abre = t.match(SECCION_AHORA);
+  if (!abre) return { sinTrabajo: false, motivo: null, items: 0, abiertos: 0 };
+
+  const desde = abre.index + abre[0].length;
+  const resto = t.slice(desde);
+  const cierra = resto.match(/^##\s/m);
+  const seccion = cierra ? resto.slice(0, cierra.index) : resto;
+
+  // Tolera indentacion a proposito: un sub-item abierto es trabajo pendiente igual que uno de
+  // primer nivel, y esa es la forma en que estas colas anidan el detalle de un item.
+  const items = (seccion.match(/^[ \t]*[-*][ \t]*\[[ xX]\]/gm) || []).length;
+  const abiertos = (seccion.match(/^[ \t]*[-*][ \t]*\[ \]/gm) || []).length;
+
+  if (abiertos > 0) return { sinTrabajo: false, motivo: null, items, abiertos };
+  return { sinTrabajo: true, motivo: items === 0 ? 'sin-items' : 'todo-cerrado', items, abiertos };
+}
+
 export function candidatosEnDisco(raiz = RAIZ, candidatos = CANDIDATOS) {
   const fuera = [];
   for (const c of candidatos) {
@@ -127,7 +160,18 @@ export function medir(raiz = RAIZ, candidatos = CANDIDATOS, medidor = medirUna) 
     const texto = fs.readFileSync(p, 'utf8');
     const rel = path.relative(raiz, p);
     if (!esCola(texto)) { noSonCola.push(rel); continue; }
-    colas.push({ archivo: rel, ...medidor(p, raiz) });
+    const medida = medidor(p, raiz);
+    const trabajo = estadoDeTrabajo(texto);
+    // `parado` se queda con la UNION de las dos señales: la del verificador (`cola-vacia`) y la
+    // derivada del texto. Asi el gate no depende de que el verificador siga emitiendo ese error, y
+    // el motivo sale del texto, que es quien lo sabe.
+    colas.push({
+      archivo: rel,
+      ...medida,
+      parado: medida.parado || (trabajo.sinTrabajo && !medida.noMedido),
+      motivo: medida.noMedido ? null : trabajo.motivo,
+      items: trabajo.items,
+    });
   }
   return { colas, noSonCola };
 }
@@ -147,7 +191,12 @@ function informar(raiz = RAIZ) {
       console.log(`  ROJO ${c.archivo}`);
       for (const e of c.errores) console.log(`       ${e}`);
     } else if (c.parado) {
-      console.log(`  PARADO ${c.archivo} — "## Ahora" sin items: el carril se quedo sin trabajo (no traba el merge; se repone por el tablero)`);
+      // El motivo se dice tal cual es: "sin items" sobre una seccion con 34 items cerrados seria
+      // un mensaje falso, y un gate que miente en su salida entrena a no leerla.
+      const porque = c.motivo === 'todo-cerrado'
+        ? `sus ${c.items} items de "## Ahora" estan TODOS cerrados`
+        : '"## Ahora" no tiene items';
+      console.log(`  PARADO ${c.archivo} — ${porque}: el carril se quedo sin trabajo (no traba el merge; se repone por el tablero)`);
     } else {
       console.log(`  ok ${c.archivo}`);
     }
@@ -202,6 +251,14 @@ function selfCheck() {
     fs.writeFileSync(path.join(tmp, 'q', 'parada.md'), '## Ahora\n\n(nada)\n\n## Despues\n- [ ] luego\n');
     fs.writeFileSync(path.join(tmp, 'q', 'limpia.md'), '## Ahora\n- [ ] Mirar algo · `q/limpia.md` · 5 min\n');
     fs.writeFileSync(path.join(tmp, 'q', 'sucia.md'), '## Ahora\n- [ ] Mirar algo · `q/no-existe-jamas.md` · 5 min\n');
+    // El punto ciego que este gate tenia: "## Ahora" LLENA de items, todos cerrados. Para el
+    // verificador es una cola con items y evidencia real, o sea verde; para el carril que la lee
+    // es exactamente lo mismo que una seccion vacia — no hay nada que hacer. Ver la cabecera.
+    fs.writeFileSync(path.join(tmp, 'q', 'cerrada.md'), '## Ahora\n- [x] Ya hecho · `q/cerrada.md`\n- [x] Tambien hecho · `q/cerrada.md`\n');
+    // Reciprocos, que son los que impiden que el arreglo afloje:
+    fs.writeFileSync(path.join(tmp, 'q', 'mixta.md'), '## Ahora\n- [x] Hecho · `q/mixta.md`\n- [ ] Falta esto · `q/mixta.md`\n');
+    fs.writeFileSync(path.join(tmp, 'q', 'solo-despues.md'), '## Ahora\n- [x] Hecho · `q/solo-despues.md`\n\n## Despues\n- [ ] luego\n');
+    fs.writeFileSync(path.join(tmp, 'q', 'subitem.md'), '## Ahora\n- [x] Padre hecho · `q/subitem.md`\n  - [ ] pero el sub-item sigue abierto\n');
     // El verificador real se NIEGA a correr fuera de la raiz del repo, asi que aca se inyecta un
     // medidor de mentira: lo que este bloque prueba es la DERIVACION de sujetos y el reparto de
     // veredictos, no el verificador (ese tiene sus propios 114 casos en test:cola-selfcheck).
@@ -213,15 +270,24 @@ function selfCheck() {
 
     const { colas, noSonCola } = medir(tmp, [{ carpeta: 'q' }], falso);
     ok(noSonCola.length === 1 && noSonCola[0].endsWith('README.md'), 'el README queda excluido y NOMBRADO');
-    ok(colas.length === 3, 'mide las 3 colas, no los 4 archivos');
+    ok(colas.length === 7, 'mide las 7 colas, no los 8 archivos');
     const porNombre = Object.fromEntries(colas.map((x) => [path.basename(x.archivo), x]));
     ok(porNombre['parada.md'].parado === true && porNombre['parada.md'].errores.length === 0, 'carril parado no es rojo');
     ok(porNombre['limpia.md'].errores.length === 0, 'la cola limpia pasa');
     ok(porNombre['sucia.md'].errores.length === 1, 'la cola con una ruta fantasma da rojo');
 
+    // --- el punto ciego y sus reciprocos
+    ok(porNombre['cerrada.md'].parado === true, 'una cola con "Ahora" lleno pero TODO cerrado esta parada');
+    ok(porNombre['cerrada.md'].errores.length === 0, 'estar sin trabajo no es evidencia falsa: no traba el merge');
+    ok(porNombre['cerrada.md'].motivo === 'todo-cerrado', 'y lo dice por su motivo real, no "sin items" (seria falso: tiene 2)');
+    ok(porNombre['parada.md'].motivo === 'sin-items', 'la seccion vacia sigue teniendo su propio motivo');
+    ok(porNombre['mixta.md'].parado !== true, 'un solo item abierto ya es trabajo: NO esta parada');
+    ok(porNombre['solo-despues.md'].parado === true, 'un item abierto en "Despues" no es trabajo de "Ahora"');
+    ok(porNombre['subitem.md'].parado !== true, 'un sub-item indentado abierto SI cuenta como trabajo');
+
     // Reciproco: un archivo nuevo con "## Ahora" entra SOLO, sin tocar ninguna lista.
     fs.writeFileSync(path.join(tmp, 'q', 'nueva.md'), '## Ahora\n- [ ] Algo · `q/nueva.md` · 1 min\n');
-    ok(medir(tmp, [{ carpeta: 'q' }], falso).colas.length === 4, 'una cola nueva entra sola (sujetos del disco)');
+    ok(medir(tmp, [{ carpeta: 'q' }], falso).colas.length === 8, 'una cola nueva entra sola (sujetos del disco)');
 
     // Reciproco del otro lado: el candidato por archivo suelto tambien se filtra por forma.
     fs.writeFileSync(path.join(tmp, 'suelto.md'), '# No soy una cola\n');
