@@ -40,11 +40,13 @@
 import { execFileSync } from "node:child_process";
 import { pathToFileURL } from "node:url";
 
-import { ANTICIPACION_MINIMA_MS, parseSlotsSpec } from "./config.mjs";
+import { ANTICIPACION_MINIMA_MS, parseSlotsSpec, slotSostenible } from "./config.mjs";
 import { VENTANAS_ATENCION } from "./ventanas-de-atencion.mjs";
 
 const CONTENEDOR = "onia-center";
 const CONFIG_VIVO = "/tmp/onia-bot/config.mjs";
+/** El armador del par que sale al cliente: `buildConfig` vive aca y lo llama `runTurn`. */
+const ARMADOR_VIVO = "/tmp/onia-bot/run-turn.mjs";
 const HORAS = 60 * 60 * 1000;
 /** La Paz es UTC-4 fijo (sin horario de verano), igual que en `ventanas-de-atencion.mjs`. */
 const LAPAZ_OFFSET_MS = 4 * HORAS;
@@ -135,45 +137,100 @@ export function leerSlotsDelProceso() {
   return { pid, raw: environ.replace(/^ONIA_BOT_SLOTS=/, "") || null };
 }
 
+/**
+ * El par que el bot OFRECE, obtenido EJECUTANDO el armador del contenedor (`buildConfig`, el mismo
+ * que llama `runTurn`) con el spec del proceso vivo. No se lee su codigo ni se replica: se corre.
+ *
+ * Por que asi y no con `parseSlotsSpec` local: son dos programas distintos sobre el mismo dato. El
+ * 2026-09-25 el desplegado devolvia el viernes caducado y el de la rama el sabado — un `grep` del
+ * corte en `config.mjs` decia "si" en los dos casos, porque el armador caliente ni siquiera lo
+ * llama. La unica respuesta que no envejece con el proximo refactor es la que da el binario que
+ * corre.
+ *
+ * El marcador existe porque importar el motor imprime avisos de carga en stdout (knowledge.mjs
+ * avisa en cada merge): sin el, un `JSON.parse` de la primera linea leeria un warning.
+ */
+export function leerParVivo(raw) {
+  const script =
+    `import { buildConfig } from ${JSON.stringify(ARMADOR_VIVO)};\n` +
+    `console.log("__PAR__" + JSON.stringify(buildConfig({}).slots || []));`;
+  const salida = execFileSync(
+    "docker",
+    ["exec", "-e", `ONIA_BOT_SLOTS=${raw ?? ""}`, CONTENEDOR, "node", "--input-type=module", "-e", script],
+    { encoding: "utf8", timeout: 60_000, stdio: ["ignore", "pipe", "ignore"] },
+  );
+  const linea = salida.split("\n").find((l) => l.startsWith("__PAR__"));
+  return linea ? JSON.parse(linea.slice("__PAR__".length)) : null;
+}
+
 /** Si el corte vive en el codigo que el contenedor ejecuta. `grep -c` sobre el archivo servido. */
 export function corteEnCodigoVivo() {
   const n = sh(`grep -c 'ANTICIPACION_MINIMA_MS' ${CONFIG_VIVO} || true`);
   return Number(n) > 0;
 }
 
+/** Dos pares son el mismo si ofrecen lo mismo, con la misma letra y el mismo estado. */
+function mismoPar(uno, otro) {
+  const clave = (s) => `${s.key}|${s.label}|${s.startAt}|${s.pending ? 1 : 0}`;
+  if ((uno || []).length !== (otro || []).length) return false;
+  return uno.every((slot, i) => clave(slot) === clave(otro[i]));
+}
+
 /**
- * El veredicto, puro y testeable. Usa el MISMO `parseSlotsSpec` del motor a proposito: si el gate
- * reimplementara la regla, los dos se desincronizarian y el gate aprobaria su propia idea del corte
- * en vez de la que corre.
+ * El veredicto, puro y testeable.
+ *
+ * `slotsVivos` es el par que arma EL CODIGO DEL CONTENEDOR, y es el sujeto: es lo que el prospecto
+ * lee. `parseSlotsSpec` del repo entra solo como CONTRASTE — cuando los dos no coinciden, el gate
+ * se pone rojo aunque el par del repo sea impecable, porque esa diferencia es el defecto.
+ *
+ * ⚠️ Hasta el 2026-09-25 este gate juzgaba unicamente el par del repo y lo reportaba con el nombre
+ * de produccion. Medido ese dia 03:47 La Paz: `run-turn.mjs` vivo arma los slots con un
+ * `parseEnvSlots()` propio —`slice(0, 2)` y `pending: false` fijo— que NO consulta `slotSostenible`,
+ * asi que el bot ofrecio "viernes 25, 21:00" con 17,1 h de aviso mientras este gate firmaba `ok`
+ * sobre "sabado 26 y lunes 28", que es el par que el repo habria elegido. Que `config.mjs` tenga el
+ * corte desplegado no alcanza: hay que mirar si el armador caliente lo LLAMA.
  */
 export function evaluar({
   raw,
   corteVivo,
+  slotsVivos = null,
   now = Date.now(),
   ventanas = VENTANAS_ATENCION,
   anticipacionMs = ANTICIPACION_MINIMA_MS,
 }) {
-  const slots = parseSlotsSpec(raw, { now }) || [];
+  const delRepo = parseSlotsSpec(raw, { now }) || [];
+  const slots = slotsVivos || delRepo;
+  const divergencia = slotsVivos ? !mismoPar(slotsVivos, delRepo) : false;
   const lineas = [];
   const ahora = now instanceof Date ? now.getTime() : Number(now);
 
-  // `pending` y no `sostenible`: parseSlotsSpec marca el horario que NO se sostiene, porque para el
-  // guion es uno sin definir (config.mjs:66). Leer un campo que no existe da undefined -> falsy ->
-  // "CORTO" para TODOS, que es un rojo con el texto de un defecto real sobre horarios sanos.
-  for (const slot of slots) {
+  // El estado se RECALCULA con `slotSostenible`, la misma funcion del motor, en vez de leer el
+  // campo `pending` que trae el par. No es desconfianza teorica: el armador que corre en el
+  // contenedor escribe `pending: false` FIJO, asi que creerle al campo deja pasar en verde
+  // exactamente el horario caducado que este gate existe para atrapar. El dato (el instante) no
+  // miente; el flag si.
+  const juzgados = slots.map((slot) => ({ ...slot, pending: !slotSostenible(slot, ahora) }));
+
+  for (const slot of juzgados) {
     const inicio = slot.startAt ? Date.parse(slot.startAt) : NaN;
     const aviso = Number.isNaN(inicio) ? null : inicio - ahora;
     const cuanto = aviso === null ? "sin fecha verificable" : `${(aviso / HORAS).toFixed(1)} h de aviso`;
     lineas.push(`  ${slot.pending ? "CORTO" : "ok  "} ${slot.label} — ${cuanto}`);
   }
 
-  const cortos = slots.filter((s) => s.pending);
+  const cortos = juzgados.filter((s) => s.pending);
   // Sin horarios cargados el bot cae en su rama "no tengo horarios libres": no promete de menos ni
   // de mas, asi que no es rojo. Se nombra igual, porque un cron caido se ve exactamente asi.
   if (!slots.length) lineas.push("  (el proceso no tiene horarios cargados — el bot cae en su rama sin horarios)");
 
-  const lejos = diasDesaprovechados({ slots, now: ahora, ventanas, anticipacionMs });
+  const lejos = diasDesaprovechados({ slots: juzgados, now: ahora, ventanas, anticipacionMs });
   for (const d of lejos) lineas.push(`  LEJOS ${d.etiqueta} estaba libre y ofrecible, y no se ofrecio`);
+
+  if (divergencia) {
+    lineas.push(`  DISTINTO el codigo desplegado arma otro par que el de la rama:`);
+    lineas.push(`    lo que OFRECE el contenedor: ${(slotsVivos || []).map((s) => s.label).join(" · ") || "(nada)"}`);
+    lineas.push(`    lo que elegiria la rama:     ${delRepo.map((s) => s.label).join(" · ") || "(nada)"}`);
+  }
 
   return {
     lineas,
@@ -181,15 +238,21 @@ export function evaluar({
     cortos: cortos.length,
     desaprovechados: lejos.length,
     primerDesaprovechado: lejos[0] || null,
+    divergencia,
     // Los horarios pueden estar sanos porque el cron corrio hace un rato. El corte es lo que lo
     // sostiene el dia que no corra: su ausencia es roja aunque hoy no se note.
-    roto: cortos.length > 0 || lejos.length > 0 || !corteVivo,
+    //
+    // `divergencia` es roja POR SI SOLA, aunque hoy los dos pares se sostengan: significa que lo
+    // que el prospecto lee no es lo que mide la rama, y entonces todo verde de este gate sobre el
+    // resto es una casualidad del valor servido, no una garantia.
+    roto: cortos.length > 0 || lejos.length > 0 || !corteVivo || divergencia,
   };
 }
 
 function medir() {
   let slots;
   let corteVivo;
+  let parVivo;
   try {
     slots = leerSlotsDelProceso();
     if (!slots.pid) {
@@ -197,19 +260,36 @@ function medir() {
       return 2;
     }
     corteVivo = corteEnCodigoVivo();
+    parVivo = leerParVivo(slots.raw);
   } catch (err) {
     console.log(`NO MEDIDO: no pude leer el proceso vivo (${err.message.split("\n")[0]}).`);
     console.log(`  Este gate mide produccion: necesita docker y el contenedor ${CONTENEDOR}.`);
     return 2;
   }
 
-  const r = evaluar({ raw: slots.raw, corteVivo });
+  // Sin el par del contenedor este gate solo sabe lo que HARIA la rama, que es exactamente el
+  // falso verde que costo el bucle del 25-sep. Se declara NO MEDIDO en vez de caer al de la rama.
+  if (!parVivo) {
+    console.log(`NO MEDIDO: no pude ejecutar buildConfig en ${ARMADOR_VIVO} dentro de ${CONTENEDOR}.`);
+    console.log("  Sin el par que arma el codigo desplegado, medir el de la rama seria firmar por produccion.");
+    return 2;
+  }
+
+  const r = evaluar({ raw: slots.raw, corteVivo, slotsVivos: parVivo });
   console.log(`proceso ${slots.pid} en ${CONTENEDOR} — ofrece ${r.ofrecidos} horario(s)`);
   for (const linea of r.lineas) console.log(linea);
   console.log(`corte de ${ANTICIPACION_MINIMA_MS / HORAS} h en el codigo vivo: ${corteVivo ? "si" : "NO"}`);
 
   if (r.cortos) {
     console.log(`VEREDICTO: roto — ${r.cortos} horario(s) a menos de 24 h; un prospecto no llega a cancelar`);
+    if (r.divergencia) {
+      // El lugar del arreglo, que casi nunca es el codigo: la rama ya elige bien y el contenedor no.
+      console.log("  Y la rama NO lo ofreceria: el armador desplegado no aplica el corte — FALTA DESPLEGAR el bot.");
+    }
+  } else if (r.divergencia) {
+    console.log("VEREDICTO: roto — hoy los horarios se sostienen, pero el contenedor y la rama arman pares DISTINTOS.");
+    console.log("  Lo que el prospecto lee no es lo que mide la rama: cualquier verde sobre el resto es casualidad.");
+    console.log("  Se cura desplegando el bot; hasta entonces este gate no puede firmar por produccion.");
   } else if (r.desaprovechados) {
     // El arreglo casi nunca es el codigo: el generador escribe una vez al dia y lo que esta servido
     // lo calculo la corrida anterior. Se nombra el comando que lo cura para no volver a buscarlo.
@@ -287,6 +367,79 @@ function selfCheck() {
   const okDerivado = domingoAhoraCuenta.length === 1;
   console.log(`  ${okDerivado ? "ok  " : "FALLA"} el techo sale de VENTANAS_ATENCION, no de un mapa propio`);
   if (!okDerivado) fallos++;
+
+  // ── EL PAR QUE SE JUZGA ES EL DEL CONTENEDOR. Anclado en el defecto vivo del 2026-09-25 03:50
+  // La Paz: `run-turn.mjs` desplegado arma los slots con un `parseEnvSlots()` propio que recorta
+  // los dos PRIMEROS y les pone `pending: false` fijo, sin pasar por `slotSostenible`. El bot
+  // ofrecio el viernes a 17,1 h de aviso y este gate firmaba `ok` sobre el par que habria elegido
+  // la rama. Los tres casos cubren las tres formas de esa mentira.
+  const madrugada = Date.parse("2026-09-25T07:50:00Z"); // 03:50 La Paz
+  const elViernes = "viernes 25 de septiembre, 21:00@2026-09-26T01:00:00Z"; // 17,1 h: caducado
+  const elSabado26 = "sábado 26 de septiembre, 09:00@2026-09-26T13:00:00Z";
+  const elLunes28 = "lunes 28 de septiembre, 14:00@2026-09-28T18:00:00Z";
+  const cincoCandidatos = `${elViernes}|${elSabado26}|${elLunes28}`;
+  /** Como los arma el contenedor: los dos primeros crudos, `pending: false` fijo. */
+  const comoLosArmaElVivo = (spec) =>
+    spec
+      .split("|")
+      .slice(0, 2)
+      .map((part, i) => {
+        const [label, startAt] = part.split("@");
+        return { key: i === 0 ? "A" : "B", label, startAt, pending: false };
+      });
+
+  const delPar = [
+    // El caso exacto del 2026-09-25: el vivo ofrece el caducado, la rama elegiria bien. Antes de
+    // este arreglo `evaluar` ni miraba el par vivo y devolvia cortos: 0 / roto: false.
+    [
+      "juzga lo que OFRECE el contenedor, no lo que elegiria la rama",
+      { raw: cincoCandidatos, slotsVivos: comoLosArmaElVivo(cincoCandidatos), corteVivo: true, now: madrugada },
+      { roto: true, cortos: 1, divergencia: true },
+    ],
+    // El flag miente y el instante no: el vivo jura `pending: false` sobre un horario a 17 h.
+    // Leer el campo en vez de recalcular con `slotSostenible` deja pasar esto en verde. El estado
+    // tambien diverge —la rama lo marcaria `pending` y caeria a SIN_HORARIOS, el vivo lo ofrece
+    // como firme—, y por eso `lineaCorto` afirma el recalculo por separado: si alguien vuelve a
+    // leer `slot.pending`, este caso no puede quedar tapado por la divergencia.
+    [
+      "un `pending: false` fijo sobre un horario caducado sigue siendo CORTO",
+      { raw: elViernes, slotsVivos: comoLosArmaElVivo(elViernes), corteVivo: true, now: madrugada },
+      { roto: true, cortos: 1, divergencia: true, lineaCorto: true },
+    ],
+    // Los dos pares se sostienen y aun asi difieren: el prospecto no lee lo que la rama mide, y
+    // cualquier verde sobre el resto es casualidad del valor servido.
+    [
+      "pares distintos aunque los dos se sostengan = rojo",
+      {
+        raw: `${elSabado26}|${elLunes28}`,
+        slotsVivos: comoLosArmaElVivo(`${elLunes28}|${elSabado26}`),
+        corteVivo: true,
+        now: madrugada,
+      },
+      { roto: true, cortos: 0, divergencia: true },
+    ],
+    // Y el verde tiene que seguir existiendo: mismo par, sostenido, corte desplegado.
+    [
+      "el contenedor ofrece lo mismo que la rama = ok",
+      {
+        raw: `${elSabado26}|${elLunes28}`,
+        slotsVivos: comoLosArmaElVivo(`${elSabado26}|${elLunes28}`),
+        corteVivo: true,
+        now: madrugada,
+      },
+      { roto: false, cortos: 0, divergencia: false },
+    ],
+  ];
+  for (const [nombre, entrada, esperado] of delPar) {
+    const r = evaluar(entrada);
+    const ok =
+      r.roto === esperado.roto &&
+      r.cortos === esperado.cortos &&
+      r.divergencia === esperado.divergencia &&
+      (!esperado.lineaCorto || r.lineas.some((l) => l.includes("CORTO")));
+    console.log(`  ${ok ? "ok  " : "FALLA"} ${nombre}`);
+    if (!ok) fallos++;
+  }
 
   // El gate tiene que leer el corte del motor, no tener el suyo: si alguien afloja el del bot, este
   // afloja con el. Un 24 h escrito aca a mano aprobaria lo que el bot ya no respeta.
