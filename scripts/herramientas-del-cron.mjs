@@ -292,6 +292,64 @@ function md5 (buf) {
 }
 
 /**
+ * El veredicto de UNA herramienta de ESTA máquina, a partir de la evidencia ya recogida.
+ *
+ * Vive aparte de `clasificarHerramienta` porque los cables no son los mismos —acá una
+ * herramienta puede nacer de un heredoc dentro de un instalador versionado, allá no— pero
+ * es PURA por el mismo motivo que su hermana: mientras la decisión vivía metida dentro del
+ * `.map` que lee el disco, sus dos caminos rojos (`INSTALADOR_EN_DERIVA` y `COPIA_A_MANO`)
+ * no los podía provocar ningún caso, así que el self-check sólo probaba que el verde era
+ * cierto —nunca que el rojo aparecería—. Un gate cuyo rojo nadie vio es un verde futuro.
+ *
+ * `md5Vivo == null` es «el cron la ejecuta y no está en disco», que acá SÍ es rojo del
+ * bueno: cada corrida falla, y la que falta puede ser la que lanza los loops.
+ */
+export function clasificarEnEstaMaquina (ev) {
+  const { nombre, ruta, maquina, md5Vivo, gemeloPorContenido, instalador, fuenteCableada, homonimo } = ev
+
+  if (md5Vivo == null) {
+    return { nombre, veredicto: 'SIN_FUENTE', detalle: `el cron la ejecuta y no existe en ${ruta}` }
+  }
+
+  if (gemeloPorContenido) {
+    return { nombre, veredicto: 'CABLEADA', detalle: `idéntica a ${gemeloPorContenido}` }
+  }
+
+  if (instalador) {
+    // Interpolado: existe cable versionado, pero el cuerpo lo arma la función con la llave y
+    // el host del nodo, así que no hay nada que comparar byte a byte. Decir más sería
+    // inventar una medición; decir menos lo volvería rojo por el motivo equivocado.
+    if (!instalador.literal) {
+      return {
+        nombre,
+        veredicto: 'CABLEADA_POR_INSTALADOR',
+        detalle: `la escribe ${instalador.instalador} interpolando: versionada, pero su cuerpo no se puede comparar`,
+      }
+    }
+    if (md5(Buffer.from(instalador.cuerpo)) === md5Vivo) {
+      return { nombre, veredicto: 'CABLEADA', detalle: `byte a byte lo que escribe ${instalador.instalador}` }
+    }
+    return {
+      nombre,
+      veredicto: 'INSTALADOR_EN_DERIVA',
+      detalle: `${instalador.instalador} escribe otra cosa que la que corre en ${ruta}`,
+    }
+  }
+
+  if (fuenteCableada) {
+    return { nombre, veredicto: 'CABLEADA_EN_DERIVA', detalle: `${fuenteCableada} no es lo que corre en ${ruta}` }
+  }
+
+  return {
+    nombre,
+    veredicto: homonimo ? 'EN_DERIVA_SIN_CABLE' : 'COPIA_A_MANO',
+    detalle: homonimo
+      ? `${homonimo} se llama igual y difiere: nadie sabe cuál es la buena`
+      : `sólo existe en ${maquina}: un borrado se la lleva sin rastro`,
+  }
+}
+
+/**
  * La SEGUNDA máquina: el nodo donde de verdad corren los loops.
  *
  * Devuelve `null` cuando esta máquina es el VPS —ahí el bloque de arriba ya la midió y
@@ -334,51 +392,27 @@ function medirEstaMaquina ({ porMd5, porNombre, cableadas }) {
     }
   }
 
+  // Este `.map` sólo RECOGE del disco; quién gana lo decide `clasificarEnEstaMaquina`, que
+  // es pura y por eso tiene un caso por camino —incluidos los dos rojos.
   const veredictos = herramientasQueElCronEjecuta(crontab).map((ruta) => {
     const nombre = ruta.split('/').pop()
-    let vivo
+    let vivo = null
     try {
       vivo = readFileSync(ruta)
     } catch {
-      // Una herramienta que el cron invoca y no está en disco es rojo del bueno: cada
-      // corrida falla, y acá la que falta puede ser la que lanza los loops.
-      return { nombre, veredicto: 'SIN_FUENTE', detalle: `el cron la ejecuta y no existe en ${ruta}` }
+      // Ausente en disco: la evidencia viaja como `md5Vivo: null`, no como veredicto.
     }
-    const h = md5(vivo)
-
-    const gemelo = porMd5.get(h)
-    if (gemelo) return { nombre, veredicto: 'CABLEADA', detalle: `idéntica a ${gemelo}` }
-
-    const inst = instaladores.get(nombre)
-    if (inst) {
-      if (!inst.literal) {
-        return {
-          nombre,
-          veredicto: 'CABLEADA_POR_INSTALADOR',
-          detalle: `la escribe ${inst.instalador} interpolando: versionada, pero su cuerpo no se puede comparar`,
-        }
-      }
-      if (md5(Buffer.from(inst.cuerpo)) === h) {
-        return { nombre, veredicto: 'CABLEADA', detalle: `byte a byte lo que escribe ${inst.instalador}` }
-      }
-      return {
-        nombre,
-        veredicto: 'INSTALADOR_EN_DERIVA',
-        detalle: `${inst.instalador} escribe otra cosa que la que corre en ${ruta}`,
-      }
-    }
-
-    const fuente = cableadas.get(nombre)
-    if (fuente) return { nombre, veredicto: 'CABLEADA_EN_DERIVA', detalle: `${fuente} no es lo que corre en ${ruta}` }
-
-    const homonimo = porNombre.get(nombre)
-    return {
+    const h = vivo == null ? null : md5(vivo)
+    return clasificarEnEstaMaquina({
       nombre,
-      veredicto: homonimo ? 'EN_DERIVA_SIN_CABLE' : 'COPIA_A_MANO',
-      detalle: homonimo
-        ? `${homonimo} se llama igual y difiere: nadie sabe cuál es la buena`
-        : `sólo existe en ${maquina}: un borrado se la lleva sin rastro`,
-    }
+      ruta,
+      maquina,
+      md5Vivo: h,
+      gemeloPorContenido: h == null ? null : porMd5.get(h) ?? null,
+      instalador: instaladores.get(nombre) ?? null,
+      fuenteCableada: cableadas.get(nombre) ?? null,
+      homonimo: porNombre.get(nombre) ?? null,
+    })
   })
 
   return { maquina, medido: true, veredictos }

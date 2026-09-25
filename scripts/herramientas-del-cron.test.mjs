@@ -10,12 +10,14 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
+import { createHash } from 'node:crypto'
 import path from 'node:path'
 import {
   RAIZ,
   ROJOS,
   cableadasEnElSincronizador,
   clasificar,
+  clasificarEnEstaMaquina,
   clasificarHerramienta,
   esperaAlSincronizador,
   herramientasQueElCronEjecuta,
@@ -358,4 +360,167 @@ test('la definición de la función shim no es una herramienta, ni su comentario
     'x.sh'
   )
   assert.equal(m.size, 0)
+})
+
+// ───────────────── el bloque de ESTA máquina (nodo-casa) ─────────────────
+//
+// Nace de un hueco que la vuelta del 2026-09-25 dejó ESCRITO en `COLA.md`: la decisión del
+// bloque de casa vivía dentro del `.map` que lee el disco, así que sus dos caminos rojos
+// —`INSTALADOR_EN_DERIVA` y `COPIA_A_MANO`— no los podía provocar ningún caso. El verde era
+// cierto y nadie sabía si el rojo aparecería, que es la definición de un verde futuro.
+// Los cables acá son TRES (sincronizador, heredoc literal, shim interpolado), uno más que en
+// el VPS: por eso la función es hermana y no la misma, y por eso necesita sus propios casos.
+
+const CUERPO = '#!/bin/bash\necho hola\n'
+const H = (s) => createHash('md5').update(Buffer.from(s)).digest('hex')
+
+test('casa: el cron la ejecuta y no está en disco — cada corrida falla', () => {
+  const v = clasificarEnEstaMaquina({
+    nombre: 'onia-loop.sh',
+    ruta: '/root/bin/onia-loop.sh',
+    maquina: 'casa',
+    md5Vivo: null,
+    gemeloPorContenido: null,
+    instalador: null,
+    fuenteCableada: 'scripts/loops/onia-loop.sh',
+    homonimo: 'scripts/loops/onia-loop.sh',
+  })
+  // Rojo aunque HAYA cable: el cable no sirve de nada si el archivo no está.
+  assert.equal(v.veredicto, 'SIN_FUENTE')
+  assert.ok(ROJOS.has(v.veredicto))
+})
+
+test('casa: idéntica byte a byte a un archivo del repo — al día', () => {
+  const v = clasificarEnEstaMaquina({
+    nombre: 'onia-tablero.sh',
+    ruta: '/root/bin/onia-tablero.sh',
+    maquina: 'casa',
+    md5Vivo: H(CUERPO),
+    gemeloPorContenido: 'scripts/kanban/onia-tablero.sh',
+    instalador: null,
+    fuenteCableada: null,
+    homonimo: null,
+  })
+  assert.equal(v.veredicto, 'CABLEADA')
+  assert.match(v.detalle, /scripts\/kanban\/onia-tablero\.sh/)
+})
+
+test('casa: el instalador la escribe INTERPOLANDO, así que su cuerpo no se puede comparar', () => {
+  const v = clasificarEnEstaMaquina({
+    nombre: 'onia-tg.sh',
+    ruta: '/root/bin/onia-tg.sh',
+    maquina: 'casa',
+    md5Vivo: H('cualquier otra cosa'),
+    gemeloPorContenido: null,
+    instalador: { instalador: 'scripts/loops/instalar-homelab.sh', literal: false, cuerpo: null },
+    // El shim de casa DIFIERE del script real del VPS a propósito: allá ejecuta, acá delega
+    // por SSH. Sin este camino volvía el rojo falso que ya se cazó una vez.
+    fuenteCableada: 'scripts/loops/onia-tg.sh',
+    homonimo: 'scripts/loops/onia-tg.sh',
+  })
+  assert.equal(v.veredicto, 'CABLEADA_POR_INSTALADOR')
+  assert.ok(!ROJOS.has(v.veredicto), 'un cuerpo incomparable no es una deriva')
+})
+
+test('casa: heredoc literal y el archivo vivo coincide byte a byte — al día', () => {
+  const v = clasificarEnEstaMaquina({
+    nombre: 'onia-tunel-inverso.sh',
+    ruta: '/root/bin/onia-tunel-inverso.sh',
+    maquina: 'casa',
+    md5Vivo: H(CUERPO),
+    gemeloPorContenido: null,
+    instalador: { instalador: 'scripts/loops/preparar-nodo.sh', literal: true, cuerpo: CUERPO },
+    fuenteCableada: null,
+    homonimo: null,
+  })
+  assert.equal(v.veredicto, 'CABLEADA')
+  assert.match(v.detalle, /byte a byte/)
+})
+
+test('ROJO: el instalador escribe OTRA cosa que la que corre — deriva', () => {
+  const v = clasificarEnEstaMaquina({
+    nombre: 'onia-tunel-inverso.sh',
+    ruta: '/root/bin/onia-tunel-inverso.sh',
+    maquina: 'casa',
+    md5Vivo: H(CUERPO + 'una línea que alguien agregó a mano\n'),
+    gemeloPorContenido: null,
+    instalador: { instalador: 'scripts/loops/preparar-nodo.sh', literal: true, cuerpo: CUERPO },
+    fuenteCableada: null,
+    homonimo: null,
+  })
+  assert.equal(v.veredicto, 'INSTALADOR_EN_DERIVA')
+  assert.ok(ROJOS.has(v.veredicto), 'correr otra cosa que la versionada tiene que ser rojo')
+  assert.match(v.detalle, /preparar-nodo\.sh/)
+})
+
+test('ROJO: cableada por el sincronizador pero corre otra cosa — deriva', () => {
+  const v = clasificarEnEstaMaquina({
+    nombre: 'onia-memoria-bajar.sh',
+    ruta: '/root/bin/onia-memoria-bajar.sh',
+    maquina: 'casa',
+    md5Vivo: H('el fósil'),
+    gemeloPorContenido: null,
+    instalador: null,
+    fuenteCableada: 'scripts/loops/onia-memoria-bajar.sh',
+    homonimo: 'scripts/loops/onia-memoria-bajar.sh',
+  })
+  assert.equal(v.veredicto, 'CABLEADA_EN_DERIVA')
+  assert.ok(ROJOS.has(v.veredicto))
+})
+
+test('ROJO: sin cable y el homónimo del repo difiere — nadie sabe cuál es la buena', () => {
+  const v = clasificarEnEstaMaquina({
+    nombre: 'onia-vigia-disco.sh',
+    ruta: '/root/bin/onia-vigia-disco.sh',
+    maquina: 'casa',
+    md5Vivo: H('el de casa'),
+    gemeloPorContenido: null,
+    instalador: null,
+    fuenteCableada: null,
+    homonimo: 'scripts/loops/vigia-disco.sh',
+  })
+  assert.equal(v.veredicto, 'EN_DERIVA_SIN_CABLE')
+  assert.ok(ROJOS.has(v.veredicto))
+})
+
+test('AVISO: sin cable y sin ninguna copia — un borrado se la lleva sin rastro', () => {
+  const v = clasificarEnEstaMaquina({
+    nombre: 'onia-algo-local.sh',
+    ruta: '/root/bin/onia-algo-local.sh',
+    maquina: 'casa',
+    md5Vivo: H('sólo vive acá'),
+    gemeloPorContenido: null,
+    instalador: null,
+    fuenteCableada: null,
+    homonimo: null,
+  })
+  assert.equal(v.veredicto, 'COPIA_A_MANO')
+  // Aviso, no rojo: hoy corre lo correcto. Lo que falta es que algo la copie.
+  assert.ok(!ROJOS.has(v.veredicto))
+  assert.match(v.detalle, /sólo existe en casa/)
+})
+
+test('el gemelo por CONTENIDO gana sobre el instalador y sobre el cable', () => {
+  // Orden deliberado: si el archivo vivo ES un archivo del repo, da igual quién lo puso.
+  // Invertirlo haría que un heredoc en deriva tapara una herramienta que está al día.
+  const v = clasificarEnEstaMaquina({
+    nombre: 'onia-loop.sh',
+    ruta: '/root/bin/onia-loop.sh',
+    maquina: 'casa',
+    md5Vivo: H(CUERPO),
+    gemeloPorContenido: 'scripts/loops/onia-loop.sh',
+    instalador: { instalador: 'scripts/loops/instalar-homelab.sh', literal: true, cuerpo: 'otra cosa\n' },
+    fuenteCableada: 'scripts/loops/otro-nombre.sh',
+    homonimo: 'scripts/loops/onia-loop.sh',
+  })
+  assert.equal(v.veredicto, 'CABLEADA')
+  assert.match(v.detalle, /idéntica a scripts\/loops\/onia-loop\.sh/)
+})
+
+test('ANCLA: los dos caminos rojos del bloque de casa están en ROJOS', () => {
+  // Sin esto, sacarlos del conjunto dejaría el instrumento informando la deriva en verde
+  // —que es exactamente cómo un instrumento deja de avisar sin dejar de contestar.
+  for (const r of ['INSTALADOR_EN_DERIVA', 'COPIA_A_MANO']) {
+    assert.equal(ROJOS.has(r), r === 'INSTALADOR_EN_DERIVA', `${r} cambió de lado`)
+  }
 })
