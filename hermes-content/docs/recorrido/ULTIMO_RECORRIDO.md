@@ -12,6 +12,42 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-25 13:09-13:11 La Paz — `BUILD_ID` sin cambios; escalón nuevo: el ENLACE de invitación por correo deja ENTRAR, con rol correcto
+
+`ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado ANTES de decidir: `UgtwNYIEjS-DSK0umjqc8`,
+igual al de la entrada anterior — no correspondía repetir un rubro. Siguiendo la propia nota de
+la vuelta anterior ("qué le llega al invitado — si el link del correo realmente lo deja entrar
+con rol correcto"), se auditó exactamente eso.
+
+Lo que faltaba: `probar_coadministrador.mjs` (API) y `probar_coadministrador_ui.mjs` (clics)
+sólo cubren el modo **"Crear con contraseña"** del modal `InviteModal` (`POST /api/team`, acceso
+inmediato). El modo **"Invitar por email"** (`POST /api/admin/users`, sin contraseña) nunca se
+había seguido hasta el enlace real: la vuelta de las 12:10 sólo confirmó que el correo SALE
+(postfix `status=sent`), no que el enlace SIRVE. Ese enlace usa
+`/auth/confirm?token_hash=...&type=invite` → `verifyOtp` → redirect a `/dashboard`
+(`app/auth/confirm/route.ts`), y nadie lo había abierto.
+
+Nuevo script `scripts/probar_invitacion_correo_entra.mjs`: invita a un segundo ADMIN por correo
+en una org `clinic`, lee el `confirmation_token` REAL de `auth.users` (el mismo que GoTrue pone
+en el mail — mismo mecanismo que `alta_correo_confirma.mjs`), abre ese enlace en un navegador
+LIMPIO (nunca vio la sesión del dueño), y confirma que la sesión resultante:
+
+- aterriza en `/dashboard` (no `/login?error=...`);
+- con esas cookies, `GET /api/admin/users` da `200` y ve a los **2** usuarios (prueba de que no
+  es una sesión rota que igual no tira error: ve la org del dueño con su propio acceso);
+- el `profile` del invitado quedó con `role='ADMIN'`, el rol que se le asignó al invitar.
+
+Corrida en vivo: org `zz-qa-invenlace-20260925131112` → `POST /api/admin/users` 201 → enlace
+abierto → `https://app.onia.com.bo/dashboard` → `GET /api/admin/users` 200 con 2 usuarios →
+`role` en `profiles` = `ADMIN`. **Las tres puertas sostenidas. Sin hallazgo.** Limpieza
+confirmada por el propio script: `organizations=0 auth.users=0` al cerrar.
+
+RAZÓN: `BUILD_ID` no se movió, así que no correspondía repetir un rubro; el avance fue cerrar el
+escalón que la propia vuelta anterior dejó abierto (201 con entrega ≠ enlace que funciona).
+LECCIÓN: ninguna nueva — comparar `BUILD_ID` primero y, si no cambió, subir el escalón de
+profundidad que la vuelta anterior ya anotó como pendiente sigue funcionando mejor que repetir
+un rubro o inventar uno nuevo.
+
 ## 2026-09-25 12:10-12:12 La Paz — `BUILD_ID` sin cambios; escalón nuevo: la invitación por correo de un coadministrador SÍ llega (no solo 201)
 
 `ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado ANTES de decidir: `UgtwNYIEjS-DSK0umjqc8`,
