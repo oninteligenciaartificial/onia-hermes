@@ -26,6 +26,7 @@ import {
   fechaBuildVivo,
   parsearStagedRemoto,
   stagedDisponible,
+  ultimaCorridaDeLanding,
 } from "./deploy-vivo.mjs";
 
 /**
@@ -893,5 +894,51 @@ describe("un arreglo que entra a main por un merge posterior al build NO se pier
       expect(commits).not.toBeNull();
       expect(commits!.map((c) => c.sha)).not.toContain(merge.slice(0, 9));
     });
+  });
+});
+
+/**
+ * El publicador automatico del VPS (`onia-publicar-solo.sh`, cada 3 h) publica
+ * la landing SOLO si el commit no toca una fuente de precio. Este gate no lo miraba:
+ * con cualquier arreglo varado mandaba abrir un pedido de deploy, y el pedido le
+ * cuesta un `ok` a Sergio Urcullo por algo que la maquina hace sola en <3 h.
+ * Medido el 2026-09-25: `99476b4c` (CTA de la barra) estaba varado y el publicador
+ * en seco contesto `hay que publicar: 1 arreglo(s)` — o sea que iba a salir solo.
+ */
+describe("lo que el publicador automatico ya resuelve no se le pide a Sergio Urcullo", () => {
+  const LOG = [
+    "== 2026-09-24 20:50 La Paz ==",
+    "  plataforma: al dia",
+    "  landing: PUBLICADO",
+    "  bot: NO publico solo — cambia un numero en una fuente de precio: knowledge.onia.json",
+    "== 2026-09-24 23:50 La Paz ==",
+    "  plataforma: al dia",
+    "  landing: al dia",
+    "  bot: NO publico solo — cambia un numero en una fuente de precio: knowledge.onia.json",
+    "",
+  ].join("\n");
+
+  it("lee la ULTIMA corrida, no la primera que encuentra", () => {
+    expect(ultimaCorridaDeLanding(LOG)).toEqual({
+      cuando: "2026-09-24 23:50 La Paz",
+      publicaSolo: true,
+      motivo: "al dia",
+    });
+  });
+
+  it("dice que NO publica solo cuando el destino esta frenado por firma humana", () => {
+    const frenado = LOG.replace(
+      "  landing: al dia",
+      "  landing: NO publico solo — cambia un numero en una fuente de precio: pricing.ts",
+    );
+    const r = ultimaCorridaDeLanding(frenado);
+    expect(r?.publicaSolo).toBe(false);
+    expect(r?.motivo).toContain("fuente de precio");
+  });
+
+  it("devuelve null —NO MEDIDO— si el log no se pudo leer o no nombra la landing", () => {
+    expect(ultimaCorridaDeLanding(null)).toBeNull();
+    expect(ultimaCorridaDeLanding("")).toBeNull();
+    expect(ultimaCorridaDeLanding("== 2026-09-24 23:50 La Paz ==\n  bot: al dia\n")).toBeNull();
   });
 });
