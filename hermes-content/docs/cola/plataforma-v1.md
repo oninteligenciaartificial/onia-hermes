@@ -1887,12 +1887,51 @@ trabaría el merge de todos los carriles.
       el exit de un pipe. El clon de casa quedó en `reset --hard` al sha publicado, porque
       `git am` regenera el sha y citar el local crea un sha fantasma.
 
-      🔴 **Lo que sigue NO es «mostrarle la pantalla»: es el merge a `master` (de `onia-cola`)
-      y después el deploy.** Hasta que eso pase, `app.onia.com.bo/admin/diseno` **da 404** —
-      así que cualquier pedido que le mande el link y le pida decidir se va a quedar esperando
-      para siempre. El cuerpo de su tarea decía las dos cosas a la vez («sólo las ves vos:
-      app.onia.com.bo/admin/diseno» y «la pantalla todavía NO está publicada»); corregido hoy
-      por comentario. El pedido vivo se deriva, no se copia:
+      ⚠️ **Acá decía que `app.onia.com.bo/admin/diseno` «da 404» y que faltaba el merge y el
+      deploy. Las dos cosas YA PASARON — medido el 2026-09-25 03:45-03:50 La Paz, no heredado.**
+      `git merge-base --is-ancestor 122ac28e origin/master` → **mergeado**;
+      `docker exec onia-platform ls '/app/.next/server/app/(dashboard)/admin/'` → la carpeta
+      `diseno` está **en el build vivo** (`BUILD_ID p2O3qK8ejw4RQGq9y0CgH`); y la pantalla se
+      abrió con la sesión de `superadmin@onia.com.bo` y se MIRÓ renderizada: HTTP 200, cero
+      respuestas ≥400. Un párrafo que dice «da 404» sobre una pantalla publicada es un bloqueo
+      vencido, y le pide a Sergio Urcullo que espere algo que ya ocurrió.
+
+      🔴 **Y al MIRARLA apareció por qué todavía no puede elegir: las dos direcciones se veían
+      IGUALES.** La dirección B se llama *"Verde para moverse, ámbar para actuar"* y su propia
+      etiqueta dice *"UNA por pantalla, en ámbar. El único ámbar que vas a ver"* — y el botón
+      salía **verde**, el mismo de A. Lo único que las diferenciaba en pantalla era el tono de
+      «Enviar recordatorio». Elegir entre dos maquetas iguales no es elegir.
+
+      **Causa, medida en el CSS servido:** el `@theme inline` de `app/globals.css` hace
+      `--color-primary: var(--primary)`, así que Tailwind compila
+      `.bg-primary{background-color:var(--primary)}`. La maqueta pisaba `--color-primary`, que
+      la utilidad **no lee**. Las otras tres (`text-on-primary`, `bg-primary-container`,
+      `text-on-primary-container`) sí leen su `--color-*` y por eso funcionaban: media familia
+      sana se lee como familia sana.
+
+      ```bash
+      docker exec onia-platform sh -lc 'grep -rhoE "\.bg-primary\{[^}]*\}" /app/.next/static/css/*.css | head -1'
+      # → .bg-primary{background-color:var(--primary)}
+      ```
+
+      **El gate de 8 casos pasaba en verde porque preguntaba lo que no era:** exigía que el
+      token *existiera* en `globals.css` (existe) y comparaba las direcciones por el **JSON de
+      sus clases y tokens declarados** (difieren en el papel). Ninguna de las dos preguntas
+      mira el color con el que termina la pantalla. Arreglado en **`7ed179c3`** (rama
+      `claude/chatbots-platform-review-0d1d09` de `onia-platform`, publicada `122ac28e..7ed179c3`
+      con `git log HEAD --not --remotes=origin` → 0): B pisa ahora `--primary` **y**
+      `--color-primary` —las clases `.imp-*` leen la segunda cruda— y entran tres casos que sí
+      miden: que el remapeo de `@theme inline` se haya leído de verdad (sin eso los otros dos
+      pasan vacíos), que todo token pisado sea el que la utilidad **lee**, y que la primaria de
+      A y la de B **no resuelvan al mismo color**. Validado por el rojo previo:
+      `"B: pisa --color-primary, pero la utilidad lee --primary"` y
+      `expected '#027650' to not deeply equal '#027650'`. Gates corridos **en el VPS** sobre el
+      árbol final (con `origin/master` mergeado, 24 commits, 0 conflictos): `tsc --noEmit` **0**,
+      `eslint` **0 errores**, **6.489** tests verdes.
+
+      🔴 **Lo que sigue: merge de `7ed179c3` a `master` (de `onia-cola`) y deploy. Recién
+      después él puede elegir** — si mira antes, elige entre dos pantallas iguales. El pedido
+      vivo se deriva, no se copia:
       `/root/bin/onia-tablero.sh list --status blocked | grep -i 'Elegí A o B'`.
 
       **La causa de su queja, medida y no deducida** — es el dato que faltaba y el que hace
@@ -1926,7 +1965,9 @@ trabaría el merge de todos los carriles.
       deploy sólo existe en el VPS). Entrega por el camino versionado:
       `scripts/integrar-onia-platform.sh` vía `/root/bin/onia-vps.sh`.
 
-      **Pendiente de este ítem, ahora en este orden:** (1) entregar el commit al VPS;
+      **Pendiente de este ítem, ahora en este orden** (el paso «entregar el commit al VPS» ya
+      no está: se cumplió, y la pantalla se publicó sola tras el merge): (1) merge de
+      `7ed179c3` a `master` y su deploy, sin los cuales B sigue saliendo verde para él;
       (2) que Sergio Urcullo abra `/admin/diseno` y conteste **A** o **B**; (3) recién ahí se
       aplica al panel.
 
