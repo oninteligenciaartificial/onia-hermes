@@ -49,7 +49,7 @@
  */
 
 import { execFileSync } from "node:child_process";
-import { readFileSync, readdirSync } from "node:fs";
+import { readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 export const SIN_MENTIRAS = 0;
@@ -72,6 +72,40 @@ export const PIDE_DEPLOY =
 
 /** Un token de sha citado entre backticks. Descarta los que son sólo dígitos (fechas, montos). */
 export const SHA = /`([0-9a-f]{7,40})`/g;
+
+/**
+ * La marca que deja `--corregir`, y que EXIME a la línea de volver a ser acusada.
+ *
+ * Sin ella el arreglo no cierra nada: la línea sigue diciendo «NO desplegado» —y tiene que
+ * seguir diciéndolo, porque esa era la verdad el día que se escribió— así que `PIDE_DEPLOY`
+ * la vuelve a encontrar en la corrida siguiente y el conteo no baja nunca. La marca es lo que
+ * hace que corregir sea IDEMPOTENTE en vez de un bucle.
+ */
+export const MARCA = /✅ YA DESPLEGADO \(medido /;
+
+/**
+ * La medición va en su PROPIA línea, debajo de la que caducó. NO reescribe lo que decía: la
+ * historia del ítem es cierta, lo que caducó es su estado — borrarla dejaría al próximo sin
+ * saber qué se creía.
+ *
+ * ⚠️ Y no se anexa al final del renglón, que fue el primer intento y estaba mal: estas colas
+ * vienen envueltas a ~100 columnas, así que la mayoría de las líneas acusadas son la MITAD de
+ * una oración. Pegar ahí la marca produce «…falta merge de `onia-cola` y deploy del ✅ YA
+ * DESPLEGADO (…)» y la frase sigue en el renglón siguiente: corregir el estado a costa de
+ * romper la prosa deja al ítem ilegible, que es otra forma de perder la información.
+ */
+export function lineaDeMarca(lineaOriginal, { vivos, desplegado, fecha }) {
+  const l = String(lineaOriginal);
+  // ⚠️ La sangría no es cosmética: en este formato el cuerpo de un ítem son las líneas que
+  // arrancan con seis espacios, y la primera que no lo hace lo TERMINA. Una marca en columna 0
+  // debajo de un `- [x] …` parte el ítem en dos y le deja el cuerpo huérfano — medido el
+  // 2026-09-25: `verificar_cola.js` pasó a acusar «no nombra ninguna ruta entre backticks» a
+  // dos ítems que sí la nombraban. Cuando la línea acusada ES la cabecera, la marca va con la
+  // sangría del cuerpo, no con la de ella.
+  const sangria = /^- \[[ x]\] /.test(l) ? "      " : (/^(\s*)/.exec(l)?.[1] ?? "");
+  const shas = [...new Set(vivos ?? [])].map((s) => `\`${s}\``).join(" ");
+  return `${sangria}✅ YA DESPLEGADO (medido ${fecha}: ${shas} vive en produccion \`${desplegado}\`).`;
+}
 
 /**
  * Una CITA no es una afirmación.
@@ -147,7 +181,19 @@ export function afirmacionesDe(texto, archivo) {
   for (const it of items) {
     const cuerpo = it.lineas.map((x) => x.texto).join("\n");
     const shas = [...new Set([...cuerpo.matchAll(SHA)].map((m) => m[1]))].filter((s) => !/^\d+$/.test(s));
+    // Un ``` abre y cierra: lo de adentro es el comando que el ítem ENSEÑA a correr, no una
+    // afirmación sobre producción. Acusarlo hace que `--corregir` le meta prosa a un bash.
+    let enCodigo = false;
     for (const { n, texto: t } of it.lineas) {
+      if (/^\s*```/.test(t)) {
+        enCodigo = !enCodigo;
+        continue;
+      }
+      if (enCodigo) continue;
+      // Una línea ya corregida sigue diciendo «NO desplegado» a propósito (es su historia), y
+      // la corrección vive en la línea de ABAJO. Sin esta salida se la vuelve a acusar en cada
+      // corrida y el conteo no baja nunca: sería un bucle, no un arreglo.
+      if (MARCA.test(t) || MARCA.test(lineas[n] ?? "")) continue;
       if (PIDE_DEPLOY.test(sinCitas(t))) out.push({ archivo, linea: n, frase: t.trim().slice(0, 120), shas });
     }
   }
@@ -217,6 +263,25 @@ export function vivoContra(repo, referencia) {
       return false;
     }
   };
+}
+
+/**
+ * Aplica la marca a las líneas que mienten de UN texto. Pura: no toca disco.
+ * `mentiras` son las de `juzgar(...).mienten` de ese archivo (número de línea 1-indexed).
+ */
+export function corregirTexto(texto, mentiras, { desplegado, fecha }) {
+  const lineas = String(texto).split("\n");
+  // De ABAJO hacia arriba: cada inserción corre los números de línea de todo lo que sigue, así
+  // que insertar en orden normal haría que la segunda marca caiga un renglón más abajo que su
+  // dueña, la tercera dos, y el archivo terminaría con las marcas pegadas a frases ajenas.
+  const orden = [...mentiras].sort((a, b) => b.linea - a.linea);
+  for (const m of orden) {
+    const i = m.linea - 1;
+    if (i < 0 || i >= lineas.length) continue; // el archivo se movió debajo: no inventamos
+    if (MARCA.test(lineas[i]) || MARCA.test(lineas[i + 1] ?? "")) continue; // ya corregida
+    lineas.splice(i + 1, 0, lineaDeMarca(lineas[i], { vivos: m.vivos, desplegado, fecha }));
+  }
+  return lineas.join("\n");
 }
 
 export function colasDe(dir) {
@@ -293,6 +358,46 @@ function selfCheck() {
   const conAjeno = [{ archivo: "a", linea: 1, frase: "x", shas: ["aaa1111", "ccc3333"] }];
   ok("ignora el sha ajeno y juzga el resto", juzgar(conAjeno, (s) => (s === "ccc3333" ? null : true)).mienten.length === 1);
 
+  // --- Corregir: lo que convierte al gate en un arreglo y no en una queja recurrente ---
+  const arg = { vivos: ["abc1234"], desplegado: "39234c89", fecha: "2026-09-25" };
+  // Una línea PARTIDA a la mitad de la oración, que es la forma más común en estas colas:
+  // vienen envueltas a ~100 columnas y la frase sigue en el renglón de abajo.
+  const cruda = "      `lib/x.ts`, rama del carril, **falta merge de `onia-cola` y deploy del";
+  const marca = lineaDeMarca(cruda, arg);
+
+  ok("la marca lleva el sha vivo y el de produccion", marca.includes("abc1234") && marca.includes("39234c89"));
+  ok("la marca lleva la fecha de la medicion", marca.includes("2026-09-25"));
+  ok("la marca hereda la sangria del item", marca.startsWith("      ✅"));
+  ok("la marca se reconoce a si misma", MARCA.test(marca));
+
+  // El texto completo: la línea que caducó queda INTACTA y la medición va debajo.
+  const md0 = ["- [x] **CERRADO (`abc1234`)**", cruda, "      panel, que es lo que faltaba."].join("\n");
+  const corr = corregirTexto(md0, [{ linea: 2, vivos: ["abc1234"] }], arg);
+  const filas = corr.split("\n");
+  ok("no parte la frase: la linea original queda intacta", filas[1] === cruda);
+  ok("la medicion va en su propia linea, debajo", MARCA.test(filas[2]) && filas[3].includes("panel"));
+
+  // La cabecera del ítem es el caso que rompe: una marca en columna 0 debajo de un `- [x] …`
+  // corta el ítem y le deja el cuerpo huérfano para TODO gate que lo lea por sangría.
+  const cabecera = "- [x] 🔴 **CERRADO el 2026-09-11 (`abc1234`, rama del carril — falta el merge del";
+  const mdCab = [cabecera, "      integrador): `lib/x.ts`, probado en produccion.**"].join("\n");
+  const corrCab = corregirTexto(mdCab, [{ linea: 1, vivos: ["abc1234"] }], arg);
+  ok("la marca bajo una cabecera lleva la sangria del cuerpo", corrCab.split("\n")[1].startsWith("      ✅"));
+  ok("no corta el item: el cuerpo sigue siendo suyo", afirmacionesDe(corrCab, "x.md").length === 0);
+
+  // Idempotencia — la propiedad que hace que el conteo baje en vez de repetirse para siempre.
+  ok("una linea ya corregida no se vuelve a acusar", afirmacionesDe(corr, "x.md").length === 0);
+  ok("corregir dos veces es corregir una vez", corregirTexto(corr, [{ linea: 2, vivos: ["abc1234"] }], arg) === corr);
+
+  // Un bloque de código NO es prosa: corregir adentro rompe el comando que el ítem enseña.
+  const conCodigo = [
+    "- [x] **CERRADO (`abc1234`)**",
+    "      ```bash",
+    "      echo 'Commiteado, NO desplegado'   # lo que imprime el gate",
+    "      ```",
+  ].join("\n");
+  ok("no acusa dentro de un bloque de codigo", afirmacionesDe(conCodigo, "x.md").length === 0);
+
   // La etiqueta de imagen: es de donde sale el sha que corre.
   ok("lee la etiqueta", shaDeEtiqueta("onia-platform:release-3986b807") === "3986b807");
   ok("BUILD_ID no es una etiqueta", shaDeEtiqueta("VREeqNSncIqDIOTMbfLTQ") === null);
@@ -306,7 +411,7 @@ function selfCheck() {
 
 // ---------------------------------------------------------------------------
 
-function medir() {
+function medir(corregir = false) {
   const desplegado = shaDesplegado();
   if (!desplegado) {
     console.log(`NO MEDIDO — no pude leer la etiqueta de imagen de \`${CONTENEDOR}\` (ni local ni por SSH).`);
@@ -339,8 +444,22 @@ function medir() {
   if (mienten.length > 80) console.log(`  … y ${mienten.length - 80} mas.`);
   console.log("\nSe corrigen CON su medicion al lado, no se borran: la historia del item es cierta,");
   console.log("lo que caduco es su estado. Una linea congelada en pasado se lee como presente.");
-  return MIENTEN;
+  if (!corregir) {
+    console.log("\nPara aplicarlo: npm run deploy:ya-ocurrio -- --corregir");
+    return MIENTEN;
+  }
+
+  const fecha = new Date().toISOString().slice(0, 10);
+  const porArchivo = new Map();
+  for (const m of mienten) (porArchivo.get(m.archivo) ?? porArchivo.set(m.archivo, []).get(m.archivo)).push(m);
+  for (const [archivo, mentiras] of porArchivo) {
+    const texto = readFileSync(archivo, "utf8");
+    writeFileSync(archivo, corregirTexto(texto, mentiras, { desplegado, fecha }));
+    console.log(`\ncorregidas ${mentiras.length} lineas en ${archivo}`);
+  }
+  console.log("\nRe-medido despues de corregir (si no baja a 0, la marca no exime y es un bucle):");
+  return medir(false);
 }
 
 const esMain = process.argv[1] && process.argv[1].endsWith("deploy_ya_ocurrio.mjs");
-if (esMain) process.exit(process.argv.includes("--self-check") ? selfCheck() : medir());
+if (esMain) process.exit(process.argv.includes("--self-check") ? selfCheck() : medir(process.argv.includes("--corregir")));

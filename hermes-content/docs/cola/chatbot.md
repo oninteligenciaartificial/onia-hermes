@@ -627,7 +627,7 @@ nunca acusado — acusar una línea del bot con la frontera del panel sería el 
       un pedido `DESPLEGAR: bot` en `blocked`, con los archivos ya derivados del `--dry-run`
       corrido después del último merge.** Queda como `- [ ]` porque el cliente
       todavía no lo tiene, pero **una vuelta que entre acá a buscar trabajo pierde la vuelta**:
-      se salta y se toma la brecha siguiente (es la fila **S12** de «Bloqueado en Sergio»).
+      se salta y se toma la brecha siguiente (es la fila **S18** de «Bloqueado en Sergio»).
 
       🔴 **El ID del pedido NO se copia de acá: se DERIVA, y por eso este párrafo ya no nombra
       ninguno.** Medido el 2026-09-24 17:40 La Paz: `t_0836a42f` —que este mismo ítem citaba
@@ -2556,6 +2556,7 @@ nunca acusado — acusar una línea del bot con la frontera del panel sería el 
       acepta~~ — CERRADO el 2026-09-18** (motor: `checkHorario` en
       `hermes-content/deploy/vps-ops/bot/knowledge.mjs`; espejo: `onia-platform`
       `lib/chatbot/knowledge.ts`, rama del carril, **falta merge de `onia-cola` y deploy del
+      ✅ YA DESPLEGADO (medido 2026-09-25: `5bc7747f` vive en produccion `39234c89`).
       bot**). El asistente de 6 preguntas ya estaba tapado (`5bc7747f`), pero el **formulario**
       de `/settings/chatbot` tiene `desde` y `hasta` como dos campos numéricos libres y
       `validarConocimiento` los validaba **por separado** (`desde: int 0..23`, `hasta: int
@@ -2593,6 +2594,7 @@ nunca acusado — acusar una línea del bot con la frontera del panel sería el 
 - [x] 🔴 **~~El asistente de 6 preguntas publicaba AL REVÉS el horario de un negocio
       nocturno~~ — CERRADO el 2026-09-18** (`onia-platform` `5bc7747f`, rama del carril;
       falta merge de `onia-cola`; el validador vive en `onia-platform/lib/chatbot/knowledge.ts`). El asistente estrenado ese mismo día (master `f5e32220`,
+      ✅ YA DESPLEGADO (medido 2026-09-25: `5bc7747f` `f5e32220` vive en produccion `39234c89`).
       16:18) convierte el horario a `empresa.horario`, que es UN tramo `dias + desde + hasta`.
       Con *«Lunes a sábado de 18:00 a 02:00»* —un bar, una farmacia de turno, un comercio
       nocturno— `desde` salía del mínimo de los `abre` (18) y `hasta` del máximo de los
@@ -2610,6 +2612,7 @@ nunca acusado — acusar una línea del bot con la frontera del panel sería el 
 - [x] 🔴 **~~El guardia que impide que dos orgs reclamen el mismo inbox mira UNA columna, y el
       que lee mira TRES: el conflicto se crea con un solo número mal tipeado~~ — CERRADO el
       2026-09-18** (`onia-platform` `0c360387`, rama del carril; falta merge de `onia-cola`).
+      ✅ YA DESPLEGADO (medido 2026-09-25: `0c360387` vive en produccion `39234c89`).
       La pregunta se centralizó en `onia-platform/lib/chatbot/otra-org-reclama.ts` —plural,
       porque el alta web evalúa varios candidatos de una— y los CUATRO guardias quedaron
       cableados ahí. Devuelve **quién** lo reclama, así el 409 nombra al dueño ajeno: un error
@@ -2706,6 +2709,7 @@ nunca acusado — acusar una línea del bot con la frontera del panel sería el 
       tres canales, `take: 2`), no su forma.
 
       **En vuelo:** commiteado y pusheado a la rama; **falta el merge a `master` (de `onia-cola`)
+      ✅ YA DESPLEGADO (medido 2026-09-25: `4bc6dad1` `f3082204` vive en produccion `39234c89`).
       y el deploy**. No cuenta como llegado al cliente.
 
 - [x] 🔴 **~~El aviso a Sergio Urcullo no dice si la conversación somos NOSOTROS: la primera
@@ -3932,6 +3936,7 @@ nunca acusado — acusar una línea del bot con la frontera del panel sería el 
       veía su respuesta enviada y el prospecto no recibía nada~~ — CERRADO el 2026-09-17**
       (`onia-platform` `76ebe12`, rama `claude/chatbots-platform-review-0d1d09`).
       **⚠️ Commiteado y con gates verdes, NO desplegado:** falta el merge del integrador y el
+      ✅ YA DESPLEGADO (medido 2026-09-25: `76ebe12` vive en produccion `39234c89`).
       swap; hasta entonces el defecto sigue vivo en producción.
 
       **Qué pasaba.** `POST /api/bandeja/[id]` con `accion:"responder"` llamaba a
@@ -4026,6 +4031,7 @@ nunca acusado — acusar una línea del bot con la frontera del panel sería el 
       asistente no escribía NUNCA — sin un envío, sin un skip, sin un warning~~ — CERRADO el
       2026-09-13 en el repo (`hermes-content/deploy/vps-ops/bot/insistencia-run.mjs` +
       `persistence.mjs`). ⚠️ COMMITEADO, NO DESPLEGADO.**
+      ✅ YA DESPLEGADO (medido 2026-09-25: `75d8925` vive en produccion `39234c89`).
       El panel (`onia-platform/app/(dashboard)/settings/chatbot/ChatbotClient.tsx`) vende
       *"Si el cliente deja de responder, tu asistente le escribe UNA sola vez para retomar"* y
       deja elegir cada cuánto insistir. El barrido que lo ejecuta, en cambio, sólo ve lo que
@@ -4062,6 +4068,7 @@ nunca acusado — acusar una línea del bot con la frontera del panel sería el 
       ✅ **La mitad que el dueño VE quedó CERRADA el 2026-09-13**, misma clase y en la misma
       vuelta que las dos puntas del bot: `onia-platform` `75d8925` y `onia-hermes` (abajo).
       ⚠️ **COMMITEADO, NO DESPLEGADO — y la pantalla NO se miró renderizada con el cambio:**
+      ✅ YA DESPLEGADO (medido 2026-09-25: `75d8925` vive en produccion `39234c89`).
       producción corre el build viejo y `onia-platform` no tiene render testing, así que
       `mirar_bandeja_dueno.mjs` mostraría la versión vieja. **Se mira cuando se publique** —
       hasta entonces el defecto sigue vivo para el cliente.
@@ -4898,6 +4905,7 @@ La historia completa queda acá abajo para no perderla.
       `web-factory/apps/site` tampoco tiene `node_modules` acá ni CI que lo buildee.
 
 - [x] ✅ **CERRADO el 2026-09-11 (`9b9cde4`, onia-platform — pusheado a la rama, falta mergear y
+      ✅ YA DESPLEGADO (medido 2026-09-25: `9b9cde4` vive en produccion `39234c89`).
       desplegar): el add-on vigente no decía hasta cuándo, y no dejaba renovar antes del corte.**
 
       Ayer el add-on ganó vigencia de verdad (`5011003`) y ese mismo día empezó a avisar
@@ -4943,6 +4951,7 @@ La historia completa queda acá abajo para no perderla.
       Gates: `tsc` 0 · **4599** tests · `eslint` 0 errores.
 
 - [x] ✅ **CERRADO el 2026-09-11 (`278f030`, onia-platform — falta mergear y desplegar): el cron
+      ✅ YA DESPLEGADO (medido 2026-09-25: `278f030` vive en produccion `39234c89`).
       de recordatorios le escribía a los pacientes en nombre de una cuenta vencida.**
 
       **La CUARTA puerta que escribe sin sesión del dueño**, y la encontré preguntando por la
@@ -5021,6 +5030,7 @@ La historia completa queda acá abajo para no perderla.
       gates de `onia-platform` verdes: `tsc` 0, 4438 tests, `lint` 0 errores.
 
       ⚠️ **Commiteado y pusheado, NO desplegado**: el swap lo hace `onia-cola` cuando Sergio
+      ✅ YA DESPLEGADO (medido 2026-09-25: `e6adb19` vive en produccion `39234c89`).
       Urcullo aprueba el pedido de deploy de plataforma. Hasta entonces el dueño sigue viendo
       la versión muda.
 
@@ -5325,6 +5335,7 @@ La historia completa queda acá abajo para no perderla.
 
       ⚠️ **En la rama del carril, NO en `master`:** `git merge-base --is-ancestor 12bdb28
       origin/master` dice que no. Falta el merge del integrador y después el deploy
+      ✅ YA DESPLEGADO (medido 2026-09-25: `12bdb28` vive en produccion `39234c89`).
       (`t_bf1607af`) — **no está en producción**.
 
 - [x] ✅ **CERRADO el 2026-09-08 (`af777cd`). HERMANO del anterior, en la MISMA expresión: el bot
@@ -5363,6 +5374,7 @@ La historia completa queda acá abajo para no perderla.
       0 errores — corridos en el worktree del VPS, sobre el árbol que aterrizó.
 
       ⚠️ **Commiteado y pusheado, NO desplegado.** Falta el merge del integrador a `master` y
+      ✅ YA DESPLEGADO (medido 2026-09-25: `af777cd` `abf6cb5b` vive en produccion `39234c89`).
       después el swap; viaja en el pedido de deploy de plataforma que espera el `ok` de Sergio
       Urcullo.
 
@@ -5595,6 +5607,7 @@ La historia completa queda acá abajo para no perderla.
       y los otros dos en la dirección inversa (con las dos columnas cargadas WhatsApp sigue siendo
       WhatsApp, y Meta no se confunde con la web). Gates: `tsc` 0 · **3178** tests · `eslint` 0
       errores. **NO DESPLEGADO** — llega al cliente con el swap de `plataforma` (`t_0268567b`).
+      ✅ YA DESPLEGADO (medido 2026-09-25: `b2c25d4` vive en produccion `39234c89`).
 
       ⚠️ **Y el instrumento falló primero, en la dirección cara:** `mirar_bandeja_dueno.mjs --ancla`
       resuelve con `:text-is()`, que es match **exacto**, así que `--ancla "Tu asistente"` sobre el
@@ -7179,7 +7192,7 @@ decisión de Sergio, no código.
 | S2 | **Credenciales del BCP + certificado mTLS (`.pfx`)** | Trámite bancario | El botón "Cobrar con QR" en la conversación. Sin banco no hay código que lo destrabe |
 | S3 | **Traslado del 75414930 a coexistencia** — OK explícito ("vamos con A") + ventana acordada + el PIN de dos pasos a mano | El número queda MUDO 30-60 min y el rollback depende de un PIN que sólo él tiene. Runbook completo: `hermes-content/docs/ONIA_RUNBOOK_COEXISTENCIA_75414930.md` | Que Sergio siga usando su app de WhatsApp en el mismo número que atiende el bot |
 | S4 | **Verificar el push "te escribieron" en su celular** (suscribirse y recibir) | Hace falta un dispositivo real | El circuito está testeado 95/95 y deployado; sólo falta la prueba física |
-| S12 | **Publicar el bot — `ok t_0836a42f`.** Pedido vivo, `blocked`, con la línea `DESPLEGAR: bot` y los 32 archivos derivados del `--dry-run` corrido DESPUÉS del último merge (`main 5d28ca88`). No hace falta ningún `scp`: el circuito ya está cableado y el dry-run lo recorrió entero con código 0 | El publicador automático se frena solo porque `knowledge.onia.json` es fuente de precio (`FIRMA_HUMANA`), y ese freno pide su firma a propósito | **Tres cosas que hoy el cliente no tiene, las tres ya verdes en `main`:** las 9 campañas de los enlaces de WhatsApp de onia.com.bo · que el bot ACEPTE los 5 horarios y no sólo los 2 que nombra (hoy: 43 conversaciones, **cero** demos agendadas) · el aviso del lead que se enfría, una sola vez. **Verificador post-swap:** `docker exec onia-center sh -c "grep -ac '\[aviso\].*conv=58' /tmp/onia-bot-webhook.log"` → ≥1 |
+| S18 | **Publicar el bot.** El pedido vivo lleva la línea `DESPLEGAR: bot`, y **su id se DERIVA, nunca se copia**: `/root/bin/onia-tablero.sh list --status blocked \| grep -i 'Publicar el bot'`. ⚠️ **Acá decía `ok t_0836a42f` y esa tarea está ARCHIVADA — corregido el 2026-09-24.** Un `ok` sobre una tarea archivada sale **3** y no publica nada **sin decir por qué**: la fila que existe para destrabar el deploy era la que lo dejaba trabado. Medido hoy: el pedido vigente cita `main dc4202f5` y **37** archivos sin publicar, del `--dry-run` corrido después del último merge (esta fila decía 32 y `main 5d28ca88`, los dos vencidos). No hace falta ningún `scp`: el circuito ya está cableado | El publicador automático se frena solo porque `knowledge.onia.json` es fuente de precio (`FIRMA_HUMANA`), y ese freno pide su firma a propósito | **Tres cosas que hoy el cliente no tiene, las tres ya verdes en `main`:** las 9 campañas de los enlaces de WhatsApp de onia.com.bo · que el bot ACEPTE los 5 horarios y no sólo los 2 que nombra (hoy: 43 conversaciones, **cero** demos agendadas) · el aviso del lead que se enfría, una sola vez. **Verificador post-swap:** `docker exec onia-center sh -c "grep -ac '\[aviso\].*conv=58' /tmp/onia-bot-webhook.log"` → ≥1 |
 | S5 | **¿Silenciar el Telegram de los agentes n8n que sí trabajan?** (Vendedor, Contenido, Finanzas, Prospector, Radar IA, Web Factory Radar) + los recordatorios de agenda cada 30 min | Es su canal y su umbral de ruido. No se apagan los workflows: hacen trabajo — hay que editar el nodo de aviso de cada uno | Que Telegram vuelva a ser sólo errores, que es la regla que ya se aplicó al resto |
 | S7 | **Contestar (o descartar) a los cuatro desconocidos que escribieron y nadie respondió** — conv 35 (+591 73232758, clínica dental de 4 doctores, 25-ago), 37 (+591 73021804, 28-ago), 36 (`Saguilera@ds-santacruz.bo`, 27-ago) y 34 (widget, sin dato de contacto) | Vende Sergio, y son personas reales esperando desde hace 3-6 días. Un bot no puede retomar una conversación fría de hace una semana sin que suene a spam | El primer lead atendido del carril. Dos tienen número de WhatsApp y uno correo: tres de los cuatro son alcanzables hoy |
 | ~~S8~~ | ✅ **CERRADO el 2026-08-31: `Onia (interna)` → inbox 5.** Verificado en la base y MIRADO en `/inbox`. **Podado el 01-sep:** esta fila arrastraba el análisis completo de seis vueltas y seguía leyéndose como bloqueo vivo — S8 se nombra **17 veces** en este archivo, casi todas dentro de párrafos viejos que ya no aplican. Lo que quedaba abierto NO era S8 sino el **inbox 4**, y ahora tiene su propio ítem (3 de "Ahora") y su propio bloqueo (**S14**). | — | — |
@@ -7188,8 +7201,8 @@ decisión de Sergio, no código.
   ssh root@187.77.16.63 "docker exec onia-center sh -c 'grep -c campanas /tmp/onia-bot/knowledge.json'"
   ```
   Tiene que dar **≥1**. Hoy da **0** dentro y fuera del contenedor (904 bytes del 6-ago), que es el estado sin S9. (Se suma al mismo `scp` `recepcionista.test.mjs`, que dejó de ser un archivo de 0 bytes — es un test, no cambia lo que corre.) ✅ **Sumado el 31-ago (10ª vuelta) — verificación PREVIA, que antes no existía:** `npm run campanas:vivas` mide **desde la calle** que el documento cubra las frases que onia.com.bo manda **hoy**. Si sale 1, el `scp` publicaría un documento que ya no matchea y no hay que hacerlo. Corrido hoy: **0** (5 de 5 cubiertas). No reemplaza al `grep -c campanas` de después — ese mide el VPS, este mide el documento. 🔴 **CORREGIDO el 2026-09-02 (auditoría de los `[x]`): S9 volvió a quedar corto, y hacerlo como dice HOY deja el motor llamando a una función que no existe.** Desde que se escribió "viajan TRES archivos", el espejo sumó una feature entera —el bot manda el link de la agenda pública de la org en vez de derivar— repartida en **cinco** archivos. Medido contra `/opt/onia/bot` real, no leído: `espejo-check` nombra ahora `config.mjs`, `intents.mjs` y `preview-route.mjs` **además** de `knowledge.mjs` y `recepcionista.mjs`. Y el acople es duro: el `recepcionista.mjs` del espejo llama a `intents.wantsToBook()` y a la plantilla `R_AGENDA`, y **ninguna de las dos existe en el VPS** (su `intents.mjs` exporta `wantsToOrder` pero no `wantsToBook`; su `config.mjs` tiene cero `R_AGENDA`). Probado ejecutando, no por grep: copiado el subconjunto que S9 mandaba a un `/tmp` con el resto del VPS, `intents.wantsToBook` da `undefined` y llamarlo tira `TypeError: intents.wantsToBook is not a function`. **La lista vigente de S9 = `bot-engine.mjs`(ya en sync) + `config.mjs` + `intents.mjs` + `knowledge.mjs` + `preview-route.mjs` + `recepcionista.mjs` + el documento `knowledge.json`** — y la manda el gate, no este párrafo: `espejo-check.mjs` ahora imprime `VIAJAN JUNTOS` con los acoples calculados en vivo. Correr el gate ANTES del `scp` y copiar lo que diga; esta lista envejece, la del gate no. **Verificador:** `node hermes-content/deploy/vps-ops/bot/espejo-check.mjs` → 0 |
-| S10 | **Aplicar al VPS la defensa ampliada de la marca de Chatwoot** — `scp` de `hermes-content/deploy/vps-ops/chatwoot-brand-onia.sh` a `/root/bin/` y una corrida manual. Repara **DIEZ** `installation_configs` que Chatwoot reconcilia solo (`Internal::ReconcilePlanConfigService`, leído del YML del propio contenedor): el cron que hoy corre (`/root/bin/chatwoot-brand-onia.sh`, cada hora al minuto :17) sólo reaplica 3 de las 9 que le tocan (DISPLAY_MANIFEST queda afuera a propósito: su valor de fábrica es el que se quiere) | Reemplaza un cron que corre solo cada hora: es infra, y la regla del carril dice que el VPS es suyo | Que `BRAND_URL`, `TERMS_URL` y `PRIVACY_URL` dejen de decir `www.chatwoot.com` en el HTML público del login. Se mide **desde la calle, sin VPS ni SSH**: `npm run marca:chatwoot` (`hermes-content/deploy/vps-ops/chatwoot-marca-publica.mjs`, 8 tests) lee `window.globalConfig` del login público — antes de que existiera este gate, la reversión del 16-ago vivió quince días sin que nadie la viera, porque el único chequeo vivía dentro del contenedor. **Re-verificado en vivo el 2026-09-02: sigue en `REVERTIDAS 3/9`, exit 1**, sin cambio desde el 16-ago (ya se vigiló así ocho vueltas seguidas entre el 31-ago y hoy, siempre con el mismo resultado). **Después del `scp` y la corrida manual, tiene que salir 0.** **Verificador:** `npm run marca:chatwoot` → 0 |
-| S11 | **Desplegar el producto para que el sidebar deje de mostrar `ASSIGNMENT_TURNED_IN` en letras gigantes.** El arreglo es el commit **`22fd088`** de `onia-platform`, rama `claude/chatbots-platform-review-0d1d09`. ✅ **Ya está en `origin/master`** desde el merge `503af44` (2026-09-02 12:38 UTC), así que **el deploy hoy SÍ lo alcanza** — durante horas esta fila decía lo contrario y por eso no se destrababa. **Falta sólo el swap**, y el defecto sigue vivo en producción: el contenedor `onia-platform` lleva 15 h arriba (anterior al merge) y su build todavía tiene `assignment_turned_in` — medido con `docker exec … grep -rl` sobre `/app/.next`, no leído. Esta fila se quedó corta tres veces (el commit no existía · existía sin mergear · mergeado pero la fila decía que no); por eso la lista ya no la mantiene este párrafo: `npm run deploy:alcanzable` se lo pregunta a git, y hoy sale **0**. **Y desde el 2026-09-02 esta fila se comprueba sola: `npm run s11:desplegado` le pregunta al contenedor `onia-platform` del VPS —el que CORRE, no el host ni el repo— con qué icono dibuja hoy la entrada `/requerimientos` de su build publicado. Hoy sale 1 nombrando `assignment_turned_in`; el día que Sergio haga el swap sale 0 y `npm run bloqueos:vencidos` levanta la fila solo, sin que nadie se acuerde de mirar. **Verificador:** `npm run s11:desplegado` → 0** | Es un deploy del producto, y ningún deploy sale sin su OK | Que el ítem "Requerimientos" del menú dibuje su icono. 🔴 **CORREGIDO el 2026-09-02 (auditoría de los `[x]`): esta fila mandaba a desplegar un commit que NO EXISTE.** Decía *"commit `4f86381` (rama `carril/chatbot-v68-friccion`)"* y *"ya arreglado y con su guardia en la suite (`scripts/iconos-en-la-fuente.test.ts`)"*. Medido, no leído: después de `git fetch --all --prune` contra GitHub, `git log 4f86381` da `unknown revision`, **no hay ninguna rama** que matchee `friccion` ni `v68` en las 39 remotas, y el archivo del guardia **nunca fue agregado en ninguna rama**. Ese trabajo quedó en el disco de Windows y nunca se pusheó. Un bloqueo que le pide a Sergio desplegar la nada es peor que un fantasma: no se destraba nunca. **El defecto SÍ era real y seguía vivo**, verificado RENDERIZANDO el `.woff2` que se publica (Chromium, no grep): `assignment_turned_in` mide **20em** —el texto crudo— contra **1em** de los otros 34 iconos del menú. Causa medida: el icono entró el 30-ago (`ab9e0de`) y la fuente subseteada es del 29-ago (`917adca`), así que el glifo nunca viajó; y `scripts/subset-iconos.mjs`, que corre dentro del `build`, **se rinde en silencio y sale 0** si falta `pyftsubset` (reproducido acá). **Rehecho de cero en `22fd088`:** el ítem usa `task_alt`, que ya está en el subset (no depende de que exista Python en el entorno de build), más el gate `npm run gate:iconos` (`scripts/iconos-en-la-fuente.mjs`) que renderiza los 35 iconos declarados contra la fuente publicada **sin sesión ni app levantada** — el hueco exacto por el que se coló, ya que `e2e/iconos.spec.ts` sólo mira `/`, `/login` y `/register`. Rojo por el motivo correcto antes, verde después (35/35). Gates: `tsc` limpio · **2441** tests · `eslint` 0 errores. **Verificación post-deploy:** abrir `/inbox` y mirar el menú — el ítem "Requerimientos" tiene que dibujar un tilde, no una palabra |
+| ~~S10~~ | ✅ **CERRADO el 2026-09-24: la marca ya está intacta — nadie tiene que hacer ese `scp`.** Medido en vivo, no heredado: `npm run marca:chatwoot` → `[marca-publica] intacta (9 configs)`, exit **0**, leído del login público `chat.onia.com.bo`. La fila pedía reparar las `installation_configs` que Chatwoot revierte solo y se quedó ocho vueltas en `REVERTIDAS 3/9`; hoy las 9 están puestas. **La cierra su propio verificador**, que es para lo que se le puso — dejarla viva le pedía a Sergio Urcullo un `scp` que ya no arregla nada. | — | — |
+| ~~S11~~ | ✅ **CERRADO el 2026-09-24: el swap llegó y el defecto ya no está en producción.** Medido en vivo: `npm run s11:desplegado` → *"RESUELTO — el build que corre dibuja `/requerimientos` con `task_alt`, ya no con `assignment_turned_in`"*, exit **0**. La fila pedía el deploy del producto para que el sidebar dejara de mostrar `ASSIGNMENT_TURNED_IN` en letras gigantes. **Se levantó sola**: la nombró `npm run bloqueos:vencidos`, no una relectura — que es exactamente lo que su verificador prometía hacer. | — | — |
 | S12 | **Los DOS horarios fijos de demo — sin ellos el bot deriva a un humano en el primer mensaje y se calla para siempre.** Son dos bloques semanales de SU agenda; `hermes-content/deploy/vps-ops/bot/config.mjs` los trae `pending: true` con un TODO que dice *"PROHIBIDO inventar horarios acá"*. **Contexto nuevo del 01-sep:** existía la salida automática por Cal.com y **está muerta** — no hay contenedor de Cal.com en el VPS y `cal.onia.com.bo` responde 302 a `onia.com.bo/empezar`, así que el módulo cae al placeholder en silencio. **Dos opciones, las dos baratas:** (a) Sergio dicta dos bloques fijos (ej. martes 10:00 y jueves 16:00) y quedan como dato — cero código; (b) revivir Cal.com, que es infra y cuesta más. Recomendación: **(a)**, y (b) después si molesta mantenerlos a mano | Son horas de su semana, y el código prohíbe inventarlas | **El ítem 1 de Ahora, que es el único defecto que un comprador ve.** Probado corriendo el motor con dos horarios cualesquiera: el embudo llega hasta `M2` demo agendada sin tocar una línea de código |
 | S13 | **Encender el aviso `notify_sergio`** — hoy el bot pide un humano y no se entera nadie. ⚠️ **NO es "poner `ONIA_N8N_ENABLED=true`"**: `ONIA_N8N_EVENT_URL` está **vacío** y **no existe ningún workflow de n8n** que reciba el evento (listados los 44). Con la variable en `true` y sin URL el envío devuelve `failed` y **nadie se entera**, porque es fire-and-forget a propósito. **Decidir el camino:** (a) Telegram directo desde el bot, reusando el `TG_BOT_TOKEN` que `hermes-content/deploy/vps-ops/bot/webhook-watchdog.sh` ya usa en el VPS — sin workflow, sin URL, sin secreto nuevo; (b) crear el workflow de n8n y cargar la URL. Recomendación: **(a)** | Escribe en el VPS. El código lo escribe este carril; la decisión y el deploy son suyos | El ítem 2 de Ahora. Gate barato antes de mirar el celular: `"configurado":true` en el `/health` del bot |
 | S14 | **De quién es la bandeja del widget (inbox 4)** — hoy no tiene org, y por ahí entraron **SEIS** conversaciones de desconocidos (34, 36, 38, 40, 45, 46), dos de ellas del 01-sep. **Cinco de las seis no dejaron teléfono ni correo**: sólo se les puede contestar desde adentro del widget, que es exactamente lo que el inbox huérfano impide — o sea que un inbox sin dueño no es una demora, es una pérdida. ⚠️ **A diferencia de S8, no alcanza con dos clicks:** está cerrado en esta cola que **una org sólo puede tener UN inbox** (`clinic_settings.chatwootInboxId`, `prisma/schema.prisma:1002`), y `Onia (interna)` ya gastó el suyo en el 5. ⚠️ **Corregido el 2026-09-02:** acá decía que esa columna era *"un `Int?` **único**"* y es falso — medido, no leído: no tiene `@unique` ni hay `@@unique` en `ClinicSettings`. Lo cierto de la frase es la mitad que importa para esta decisión (una org tiene UN inbox, porque es una columna escalar); lo que NO garantiza nadie es el otro sentido — **la base acepta que dos orgs reclamen el mismo inbox**, y el 409 que lo impide vive sólo en el PATCH de superadmin. No cambia las tres opciones de abajo, pero sí descarta "la base no me deja" como argumento. Desde hoy lo vigila `npm run inbox:tenencia`. **Opciones ya cotizadas en `ONIA_RADAR_DECISIONES_PRODUCTO.md` §9:** (a) darle el inbox 4 a otra org existente — cero código, pero mezcla el widget de Onia con una org que no es Onia; (b) crear una org `Onia (web)` sólo para el widget — cero código, ~10 min, agrega una org fantasma; (c) extender `clinic_settings` a N inboxes, que es código del producto y de otro carril. Recomendación: **(b)**. 🔁 **Fusionada el 2026-09-02 con la fila que la tabla listaba aparte bajo un SEGUNDO `S12`** (*"¿sigue en pie la opción 1 de §9?"*): era la **misma decisión preguntada dos veces**, con dos números distintos y uno de ellos ya usado por los horarios de demo. Lo destapó `npm run bloqueos:vencidos` al imprimir `S12, S12` — el gate nombra las filas por su id, así que un id repetido lo vuelve ambiguo. El dato fresco que aportaba esa fila (seis conversaciones, cinco sin contacto) es justo el que le faltaba a la condición de §9 *"hasta que la limitación moleste"*, y ya vive acá. **Y el `5 de las 9` que esta fila decía estaba viejo**: eran seis. | Es decidir en qué bandeja aterrizan los desconocidos de la web | **La otra mitad del objetivo del carril.** Hecho = se abre `/inbox` y se ve la conversación 45 (*"tengo una ferreteria"*) |
@@ -7568,6 +7581,7 @@ archivos.**
 
 - [x] **~~El asistente de configuración aplanaba el horario del dueño sin decírselo~~** — cerrado el
       2026-09-18 (`onia-platform` 9c509b3c, rama del carril; **commiteado, NO desplegado**).
+      ✅ YA DESPLEGADO (medido 2026-09-25: `f5e32220` vive en produccion `39234c89`).
       El wizard de 6 preguntas de `/settings/chatbot` nació ese mismo día (`f5e32220`, 20 min
       antes de esta vuelta) y es la superficie nueva por donde el dueño carga lo que su bot le
       dice a SUS clientes. El esquema del bot (`empresa.horario`) sólo sabe de **un** rango
@@ -7628,6 +7642,7 @@ archivos.**
       Meta, prueba de tenencia más fuerte que un sello propio— y **falla cerrado** si está
       vinculado a otra org. Validado por mutación (esquive del `previo`: 1 test en rojo).
       ⚠️ **Commiteado y en la rama, NO desplegado.**
+      ✅ YA DESPLEGADO (medido 2026-09-25: `21ac3e3` vive en produccion `39234c89`).
 
 - [x] **~~El config del follow-up declaraba IMPOSIBLE un gasto que el código sí hace~~** — cerrado
       el 2026-09-18 (`hermes-content/deploy/vps-ops/bot/config.mjs`). Los dos comentarios de
@@ -7786,6 +7801,7 @@ archivos.**
       se acusaría solo.
 
       **NO desplegado, y es a propósito.** Medido el mismo día: `onia.com.bo/precios` muestra la
+      ✅ YA DESPLEGADO (medido 2026-09-25: `4bff903` vive en produccion `39234c89`).
       escalera vieja y el build vivo cobra `monthly` 320/750/1500/2900. Publicar el bot solo lo dejaría
       cotizando un precio que el checkout todavía no cobra. El acople quedó escrito en el pedido de
       deploy vivo `t_33406907`, que es donde se da el ok — landing, plataforma y bot van juntos.
@@ -7827,6 +7843,7 @@ archivos.**
 
 - [x] **La cuenta vencida seguía cancelando citas por WhatsApp.** Cerrado el 2026-09-11,
       `6aba5bc` (rama del carril — **falta que el integrador lo mergee y falta desplegar**).
+      ✅ YA DESPLEGADO (medido 2026-09-25: `6aba5bc` vive en produccion `39234c89`).
       No estaba en la cola: salió de auditar la puerta pública que es de este carril.
       El panel corta sus 35 escrituras con `checkPlanExpiry` y la reserva pública se cerró
       el 08-sep con ese mismo motivo; `lib/agenda/reserva-publica.ts` **nombra al bot de
@@ -8187,6 +8204,7 @@ archivos.**
       que decía tenerlo arreglado apuntaba a un commit inexistente.** Cerrado el 2026-09-02
       (commit `22fd088` de `onia-platform`, rama `claude/chatbots-platform-review-0d1d09`).
       **Commiteado, NO desplegado** — el deploy es de Sergio y sigue como **S11**.
+      ✅ YA DESPLEGADO (medido 2026-09-25: `22fd088` `ab9e0de` `917adca` vive en produccion `39234c89`).
       Salió de la auditoría de los `[x]`, que es lo que manda el loop cuando "Ahora" queda sin
       ítems desbloqueados (los tres de "Después" están frenados por algo que no es código).
       **Lo que se auditó y salió CIERTO** — se escribe porque una auditoría que sólo reporta lo
@@ -8250,6 +8268,7 @@ archivos.**
       | `campanas:vivas` en 0 | exit **0**, 5 frases vivas / 5 con campaña |
       | suite del bot verde | **690/690** antes de tocar nada (la cola decía 684: creció, no se rompió) |
       | commit `675541b` de `onia-platform` existe con lo que dice | sí: 6 archivos, `vocabulario.ts` + `ChatbotClient.tsx` + los dos tests. Sigue **commiteado, NO desplegado** |
+      ✅ YA DESPLEGADO (medido 2026-09-25: `675541b` vive en produccion `39234c89`).
       🔴 **Lo que salió FALSO, y es lo que esta vuelta arregla: S9 estaba corto otra vez.** El
       detalle y la lista corregida están en su fila; el resumen es que el espejo sumó la feature
       del link de agenda en **cinco** archivos y S9 nombraba dos, con un acople duro
@@ -8368,6 +8387,7 @@ archivos.**
 - [x] **"La cita" ya no le habla de consultorio a una ferretería: cada rubro lee su propia
       palabra.** Cerrado el 2026-09-02 (commit `675541b` de `onia-platform`, rama
       `claude/chatbots-platform-review-0d1d09`). **Commiteado, NO desplegado — y medido el mismo
+      ✅ YA DESPLEGADO (medido 2026-09-25: `675541b` vive en produccion `39234c89`).
       día: tampoco llega a `origin/master`, que es de donde se buildea. Ver S16.**
       **Gate 1 primero, en vivo:** el ítem era REAL —`ChatbotClient.tsx` líneas 90, 505, 510 y
       520 seguían con los literales— y no estaba cerrado más abajo.

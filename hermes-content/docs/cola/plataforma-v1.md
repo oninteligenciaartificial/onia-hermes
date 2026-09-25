@@ -262,6 +262,7 @@ trabaría el merge de todos los carriles.
       — los dos primeros intentos de mutación salieron verdes contra un gate que ya estaba escrito.
 
       ⚠️ **Commiteado y publicado en la rama del carril, NO desplegado:** lo mergea `onia-cola`.
+      ✅ YA DESPLEGADO (medido 2026-09-25: `e25eadd6` `1705269d` vive en produccion `39234c89`).
       No se pudo mirar renderizado con sesión real — sigue vivo el corte de 2FA que manda toda
       ruta del panel a `/profile?mfa=obligatorio` (tarea `t_3bb6b9ee`, depende de Sergio Urcullo).
 
@@ -305,6 +306,7 @@ trabaría el merge de todos los carriles.
       (el gate apagándose solo).
 
       ⚠️ **Commiteado y publicado en la rama del carril, NO desplegado:** lo mergea `onia-cola` y
+      ✅ YA DESPLEGADO (medido 2026-09-25: `3a61c3ea` `b1247fb` `251f64c` vive en produccion `39234c89`).
       el pedido de deploy vivo es `t_b8d00627`, esperando el `ok` de Sergio Urcullo. **No se pudo
       mirar renderizada en producción**: el bug de MFA vencido manda toda ruta del panel a
       `/profile?mfa=obligatorio`, y su arreglo (`b1247fb`) está en `master` pero **no** en el
@@ -447,6 +449,7 @@ trabaría el merge de todos los carriles.
       PERSONALES, y el drip seguía vendiéndole Onia a Sergio Urcullo** (`onia-platform`
       `316476e`, publicado en la rama del carril como `2d5695a`; **commiteado y mergeado a la
       rama, NO desplegado** — entra al pedido de la plataforma cuando el integrador lo junte).
+      ✅ YA DESPLEGADO (medido 2026-09-25: `316476e` `2d5695a` vive en produccion `39234c89`).
 
       **Medido en producción.** `/var/log/onia-trial-drip.log` del VPS: la org
       `bolivian-electricidad-e6t21` recibió la secuencia de venta **completa** — pasos 3, 7, 12,
@@ -657,6 +660,7 @@ trabaría el merge de todos los carriles.
       estilo (rojo **doble**: `tsc` TS2741 y el caso ancla).
 
       ⚠️ **Commiteado en la rama del carril, NO desplegado:** lo mergea `onia-cola`. **No se
+      ✅ YA DESPLEGADO (medido 2026-09-25: `07c97f6` vive en produccion `39234c89`).
       pudo mirar renderizada en producción**: `/admin/plans` con la sesión del superadmin
       termina en `/profile?mfa=obligatorio` — el bug de MFA de más abajo, ya arreglado en
       `master` y esperando el `ok` del pedido de deploy, **también deja afuera al operador**.
@@ -692,6 +696,7 @@ trabaría el merge de todos los carriles.
       disparador).
 
       ⚠️ **Commiteado y publicado en la rama del carril, NO desplegado:** lo merge `onia-cola` y
+      ✅ YA DESPLEGADO (medido 2026-09-25: `1ef035f` vive en produccion `39234c89`).
       el publicador automático swapea solo (no toca fuente de precio).
 
 - [x] 🔴 **Punto nuevo de Sergio Urcullo (12-sep): ¿Onia Platform personalizable POR CLIENTE
@@ -819,6 +824,7 @@ trabaría el merge de todos los carriles.
       `{true ? (` el símbolo seguía importado para el rótulo. El sujeto es la **guarda del
       monto**, no la mención: el gate vigente ancla `muestraAbono ?|&&` y exige que esté **antes**
       del monto. **Falta el deploy** para que el cliente lo vea.
+      ✅ YA DESPLEGADO (medido 2026-09-25: `4bff903d` `5344eae` `419b819` `a9b2d27` `2aa82b4` `d0be692` `310bae6` `07c97f6` `ccc845c` vive en produccion `39234c89`).
 
       ✅ **CERRADO el 2026-09-13: la CUARTA superficie — la comparativa de planes de `/settings`
       le ponía el precio del chatbot al plan que ya lo incluye** (`onia-platform`, rama
@@ -852,6 +858,7 @@ trabaría el merge de todos los carriles.
       de CSV). Validado **por mutación**: con las dos celdas devueltas a mano, 3 tests en rojo
       nombrando las tres celdas. Gates: `tsc --noEmit` limpio, `eslint` 0, suite completa verde.
       **Falta mergear y desplegar** para que el cliente lo vea.
+      ✅ YA DESPLEGADO (medido 2026-09-25: `4bff903d` `5344eae` `419b819` `a9b2d27` `2aa82b4` `d0be692` `310bae6` `07c97f6` `ccc845c` vive en produccion `39234c89`).
 
       ✅ **CERRADO el 2026-09-17: el recorte que protege a este cliente estaba CLAVADO en «no»,
       y su gate no podía verlo porque tenía una copia propia de la expresión** (`onia-platform`,
@@ -880,6 +887,7 @@ trabaría el merge de todos los carriles.
       `map(() => …)`, 1 de 10 en rojo nombrando el caso. Gates: `tsc --noEmit` limpio, `eslint`
       0 errores, **664 tests** de `lib/chatbot` + `lib/subscription` + `lib/plan-comparativa`
       verdes. **Falta mergear y desplegar** para que el cliente lo vea.
+      ✅ YA DESPLEGADO (medido 2026-09-25: `4bff903d` `5344eae` `419b819` `a9b2d27` `2aa82b4` `d0be692` `310bae6` `07c97f6` `ccc845c` vive en produccion `39234c89`).
 
       ✅ **CERRADO el 2026-09-13: el panel de «Mi plan» no conocía el plan Crece, y por eso le
       ofrecía al que paga Bs 550 el plan de Bs 320 como MEJORA** (`onia-platform`, rama
@@ -1008,6 +1016,7 @@ trabaría el merge de todos los carriles.
       **Validado por mutación, dos veces:** guarda fuera → 1 rojo nombrando la pantalla;
       predicado angosto de vuelta → 2 rojos (los campos y el ancla).
       ⚠️ **Falta mergear y desplegar** para que el cliente lo vea.
+      ✅ YA DESPLEGADO (medido 2026-09-25: `4bff903d` `5344eae` `419b819` `a9b2d27` `2aa82b4` `d0be692` `310bae6` `07c97f6` `ccc845c` vive en produccion `39234c89`).
       **El sujeto del gate no es «crece»: son los planes que la pantalla VENDE** (`planesDe`) —
       `app/(dashboard)/settings/la-comparativa-se-pinta-desde-los-planes-que-vende.test.ts`.
       **Validado por mutación en las dos direcciones:** sacar `crece` de las columnas declaradas →
@@ -1075,6 +1084,7 @@ trabaría el merge de todos los carriles.
       ⚠️ **La cuenta "recargar vs subir" NO SE PUEDE ESCRIBIR TODAVÍA, y al medirlo apareció un
       defecto vivo que ya se arregló** (2026-09-12, `310bae6` en `onia-platform`, rama
       `claude/chatbots-platform-review-0d1d09` — pusheado, falta mergear y desplegar).
+      ✅ YA DESPLEGADO (medido 2026-09-25: `4bff903d` `5344eae` `419b819` `a9b2d27` `2aa82b4` `d0be692` `310bae6` `07c97f6` `ccc845c` vive en produccion `39234c89`).
       **"Subir" no es una opción del cupo del chatbot: no existe un nivel con más cupo.**
       Medido: `cuotaDe` (`lib/chatbot/cupo.ts`) devuelve `WHATSAPP_ADDON.includedConversations`
       = **500** sin mirar el plan, `PlanLimits` (`lib/plan-catalogo.ts`) no declara un solo
@@ -1162,6 +1172,7 @@ trabaría el merge de todos los carriles.
       3 literales del panel. Gates: `tsc --noEmit` limpio, `eslint` 0, 439 tests del área —
       **corridos también en el VPS** sobre el árbol con `origin/master` mergeado (436 verdes).
       **Falta mergear y desplegar** para que el operador lo vea.
+      ✅ YA DESPLEGADO (medido 2026-09-25: `4bff903d` `5344eae` `419b819` `a9b2d27` `2aa82b4` `d0be692` `310bae6` `07c97f6` `ccc845c` vive en produccion `39234c89`).
 
       ✅ **CERRADO el 2026-09-17: la QUINTA lista tipeada a mano de esta clase estaba en el
       catálogo mismo, y era la única que no falla con un error** (`onia-platform` `ccc845c`,
@@ -1193,6 +1204,7 @@ trabaría el merge de todos los carriles.
       (lista a mano sin `crece`): 3 casos en rojo. Gates: `tsc` 0, `eslint` 0 errores,
       **5.017 tests verdes**, corridos también **en el VPS** sobre el árbol con `origin/master`
       mergeado. **Falta mergear y desplegar** para que llegue al cliente.
+      ✅ YA DESPLEGADO (medido 2026-09-25: `4bff903d` `5344eae` `419b819` `a9b2d27` `2aa82b4` `d0be692` `310bae6` `07c97f6` `ccc845c` vive en produccion `39234c89`).
 
 - [x] 🔴 **~~Funciones que las empresas usan DE VERDAD — recorte de superficie~~ — MEDIDO el
       2026-09-13, y la medición REFUTA la premisa del ítem: no se puede recortar por uso,
@@ -1286,6 +1298,7 @@ trabaría el merge de todos los carriles.
       `addon.whatsapp` la tienen `validUntil NULL`. El defecto se enciende solo el día que alguien
       **suba de plan**, que es el día que menos ganas hay de descubrirlo.
       **Falta mergear y desplegar** para que el cliente lo vea.
+      ✅ YA DESPLEGADO (medido 2026-09-25: `a38cabc` vive en produccion `39234c89`).
 
 - [x] 🔴 **Estado real de los agentes IA del producto** — ✅ **CERRADO el 2026-09-24.** Lo único
       que le quedaba abierto era lo que él mismo admitía dos veces: *"NO se miró renderizada,
@@ -1388,6 +1401,7 @@ trabaría el merge de todos los carriles.
       gates re-corridos EN EL VPS antes de publicar la rama: `tsc` 0, **4.849 tests verdes**.
       ✅ **DESPLEGADO y MIRADO RENDERIZADO en producción el 2026-09-24** — las dos cosas que
       esta línea daba por faltantes. Decía *"COMMITEADO, NO DESPLEGADO, y NO se miró
+      ✅ YA DESPLEGADO (medido 2026-09-25: `9aa0cd5` `0dae2042` `b86ad03c` `82d34b5` `0376b07` `42ab871` vive en produccion `39234c89`).
       renderizado"* y quedó congelada en pasado: medido hoy, `9aa0cd5` está en `origin/master`
       y el símbolo vive en el build servido (`docker exec onia-platform grep -rl "Propuesta de "
       /app/.next/server` → `/app/.next/server/chunks/4212.js` — ruta DENTRO del contenedor, no
@@ -1453,6 +1467,7 @@ trabaría el merge de todos los carriles.
       rojos; puerta de estado del despacho → 2 rojos). `tsc` limpio, `eslint` 0 errores.
       ✅ **DESPLEGADA y MIRADA RENDERIZADA el 2026-09-24.** Esta línea decía *"NO se miró
       renderizada / Commiteado, NO desplegado"* y las dos mitades eran falsas hoy: `0dae2042`
+      ✅ YA DESPLEGADO (medido 2026-09-25: `9aa0cd5` `0dae2042` `b86ad03c` `82d34b5` `0376b07` `42ab871` vive en produccion `39234c89`).
       está en `origin/master` y el literal vive en el build servido
       (`grep -rl "Falta que la env" /app/.next/server` → `/app/.next/server/chunks/4212.js` y
       `/app/.next/server/app/(dashboard)/agents/page.js` — rutas DENTRO del contenedor
@@ -1734,6 +1749,7 @@ trabaría el merge de todos los carriles.
 
 - [x] ✅ **MEDIDO Y ARREGLADO el 2026-09-12 (`ea80ada`, onia-platform — pusheado a la rama,
       falta mergear y desplegar): los agentes corrían DÍA POR MEDIO, y la pantalla promete
+      ✅ YA DESPLEGADO (medido 2026-09-25: `ea80ada` vive en produccion `39234c89`).
       «corre todos los días».** (Sergio Urcullo, 11-sep: *"mira también cómo están los agentes
       ai"*.)
 
@@ -1890,6 +1906,7 @@ trabaría el merge de todos los carriles.
 
 - [x] ✅ **CERRADO el 2026-09-11 (`c14db84`, rama `claude/chatbots-platform-review-0d1d09`
       de onia-platform — falta mergear a `master` y desplegar; pedido `t_cba4fa74`): el
+      ✅ YA DESPLEGADO (medido 2026-09-25: `c14db84` `8d9e467` vive en produccion `39234c89`).
       cliente que se arrepintió de la baja del asistente y VOLVIÓ A PAGAR no recibía un solo
       aviso, y la pantalla le seguía diciendo que no se renovaba.**
 
@@ -1934,6 +1951,7 @@ trabaría el merge de todos los carriles.
 
 - [x] ✅ **CERRADO el 2026-09-11 (`44fa680`, rama `claude/chatbots-platform-review-0d1d09`
       de onia-platform — falta mergear a `master` y desplegar): la baja del add-on del
+      ✅ YA DESPLEGADO (medido 2026-09-25: `44fa680` vive en produccion `39234c89`).
       chatbot estaba construida ENTERA y no se podía ordenar desde ningún lado.**
 
       El add-on ganó su baja ese mismo día (`7057748`): el módulo con la regla del contrato
@@ -1984,6 +2002,7 @@ trabaría el merge de todos los carriles.
       `prisma migrate`: se ve con `node scripts/migraciones_pendientes.mjs`.
 
 - [x] ✅ **CERRADO el 2026-09-11 (`588d2fa`, onia-platform — falta mergear a `master` y
+      ✅ YA DESPLEGADO (medido 2026-09-25: `588d2fa` vive en produccion `39234c89`).
       desplegar): extender un trial era una orden que la API entiende y que el panel no
       ofrecía, así que se hacía por `curl` o tocando la base.**
 
@@ -2020,6 +2039,7 @@ trabaría el merge de todos los carriles.
       Se ve con: `npx vitest run lib/subscription/orden-del-backoffice-tiene-camino.test.ts lib/subscription/trial-del-operador.test.ts`
 
 - [x] ✅ **CERRADO el 2026-09-11 (`8d9e467`, onia-platform — falta mergear y desplegar): el
+      ✅ YA DESPLEGADO (medido 2026-09-25: `8d9e467` `409ae11` vive en produccion `39234c89`).
       que pidió la baja perdía la escritura sin un solo aviso previo, y no tenía cómo
       verificar que su baja había quedado registrada.**
 
@@ -2059,6 +2079,7 @@ trabaría el merge de todos los carriles.
       subseteada) dibuja el glifo, no la palabra.
 
 - [x] ✅ **CERRADO el 2026-09-11 (`f231555`, onia-platform — falta mergear y desplegar):
+      ✅ YA DESPLEGADO (medido 2026-09-25: `f231555` vive en produccion `39234c89`).
       reprogramar una cita podía pisar el turno de otro paciente, y el sistema le mandaba
       al cliente el correo confirmándoselo.**
 
@@ -2111,6 +2132,7 @@ trabaría el merge de todos los carriles.
       una cita sin moverle la hora y no son sujetos de este gate.
 
 - [x] ✅ **CERRADO el 2026-09-11 (`e887e8e`, onia-platform — falta mergear y desplegar): el
+      ✅ YA DESPLEGADO (medido 2026-09-25: `e887e8e` `53227ab` vive en produccion `39234c89`).
       add-on del chatbot avisaba por el PANEL y no por correo.**
 
       El plan avisa por TRES canales (correo, in-app, push) y el add-on tenía DOS. Media
@@ -2229,6 +2251,7 @@ trabaría el merge de todos los carriles.
       **Listo =** `npx vitest run lib/subscription/addon-que-no-vence-no-avisa.test.ts`
       (8/8). Gates sobre el árbol: tsc 0, vitest 4590/4597 (7 skipped), eslint 0 errores.
       **Commiteado y pusheado; todavía NO desplegado.**
+      ✅ YA DESPLEGADO (medido 2026-09-25: `f46a049` vive en produccion `39234c89`).
 
 - [x] ✅ **CERRADO el 2026-09-11 (`53227ab` + `7b0a154`, onia-platform): el add-on del
       chatbot podía vencer y nadie avisaba que iba a vencer.**
@@ -2279,6 +2302,7 @@ trabaría el merge de todos los carriles.
       0 errores.
 
       ⚠️ **Commiteado y pusheado a la rama, NO desplegado ni migrado**: el swap y la
+      ✅ YA DESPLEGADO (medido 2026-09-25: `53227ab` `7b0a154` vive en produccion `39234c89`).
       migración los hace `onia-cola` cuando Sergio Urcullo aprueba el pedido de deploy. Los
       dos huecos que quedan van arriba como ítems propios (el correo, y la migración).
 
@@ -2319,6 +2343,7 @@ trabaría el merge de todos los carriles.
       con su propia bitácora. Gates: `tsc` 0 · **4486** tests · `eslint` 0 errores.
 
       ⚠️ **Commiteado y pusheado a la rama, NO desplegado**: el swap lo hace `onia-cola` cuando
+      ✅ YA DESPLEGADO (medido 2026-09-25: `54c987a` vive en produccion `39234c89`).
       Sergio Urcullo aprueba el pedido de deploy de plataforma.
 
       **Lo que queda abierto y se anota con su nombre:** el hueco de cobertura de arriba. Los 3
@@ -2361,6 +2386,7 @@ trabaría el merge de todos los carriles.
       siempre `false`. Gates: `tsc` 0 · **4462** tests · `lint` 0.
 
       ⚠️ **Commiteado y pusheado, NO desplegado** — es un gate, así que no cambia nada de lo
+      ✅ YA DESPLEGADO (medido 2026-09-25: `6527b84` `26212f5` vive en produccion `39234c89`).
       que el cliente ve; entra a producción con el próximo swap.
 
 
@@ -2526,6 +2552,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       exacto que se publicó (`git rev-parse HEAD^{tree}` idéntico en las dos máquinas).
 
       🔴 **Commiteado y pusheado a la rama del carril, NO desplegado ni mergeado a `master`.**
+      ✅ YA DESPLEGADO (medido 2026-09-25: `859fd05` vive en produccion `39234c89`).
 
 - [x] 🔴 **CERRADO el 2026-09-11 (~01:00 UTC): la recurrencia de los cobros por QR — el
       cliente PAGO no recibía NI UN aviso antes del corte.** Medido antes de construir: todo
@@ -2821,6 +2848,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       recibiendo el acuse genérico. Pedido de deploy: `t_fab8ad4d` (destino `bot`).
 
 - [x] 🔴 **CERRADO el 2026-09-11 (`52fb146`, rama del carril — falta el merge del
+      ✅ YA DESPLEGADO (medido 2026-09-25: `52fb146` `d634913` vive en produccion `39234c89`).
       integrador y el deploy): su caja ya fía contra la MISMA ficha, y está probado contra
       la base de producción.**
 
@@ -2874,6 +2902,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       con la fila en la base como prueba.
 
 - [x] 🔴 **CERRADO el 2026-09-10 (`825f227`, rama del carril — falta el merge del integrador):
+      ✅ YA DESPLEGADO (medido 2026-09-25: `825f227` vive en produccion `39234c89`).
       el aviso del cupo del chatbot y el del tope de clientes le llegaban al teléfono de la
       recepción y del profesional, que no pueden abrir la pantalla a la que llevan.**
 
@@ -3296,6 +3325,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       detalle que el otro no (el conflicto de merge y por qué `/verify-email` no servía).
 
       **HECHO el 2026-09-10 (chatbot-cola) — `4d45f2f`, MERGEADO a `master` en `2f344e5` (integrador, 2026-09-10 15:5x La Paz).** ⚠️ Lo de «NO desplegado» venció el mismo día: el arreglo GEMELO de la sesión de control (`eaa6703`) ya está **vivo en producción** —`docker exec onia-platform grep -rl Reenviarme /app/.next/server` da un chunk—, así que el 403 mudo ya tiene salida para un cliente real. `4d45f2f` **no** es ancestro de `eaa6703`: son dos escrituras del mismo arreglo, y la rama resolvió el choque a favor del lado medible (`10952417`). Lo que falta desplegar de este ítem es sólo el reemplazo por la versión con gate.
+      ✅ YA DESPLEGADO (medido 2026-09-25: `bc48959` `eaa67038` `4d45f2f` `2f344e5` `eaa6703` `6e0b2905` `86b0fe7` vive en produccion `39234c89`).
       El botón y la decisión viven en `onia-platform/app/(auth)/login/LoginForm.tsx` (corregido: no en
       archivos separados — cierre real `6e0b2905`). Medido contra producción con un alta QA
       (`zz-qa-reenvio-2026-09-10-1852`, borrada al terminar: org/perfil/auth en **0/0/0**, y
@@ -3625,6 +3655,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       vocabulario.
 
       ⚠️ **Commiteado, NO desplegado**: el cliente no lo ve hasta que Sergio Urcullo apruebe el
+      ✅ YA DESPLEGADO (medido 2026-09-25: `f8d0fc2` `64279ff` vive en produccion `39234c89`).
       pedido de deploy vivo de la plataforma.
 
 - [x] 🔴 **CERRADO el 2026-09-08 (`f2237e8`, ya en `master` — verificado el 2026-09-10):
@@ -3661,6 +3692,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       `components/`. `tsc` 0 · **4153 tests** (eran 4030) · eslint 0 errores.
 
       ⚠️ **Commiteado, NO desplegado**: el cliente no lo ve hasta que Sergio Urcullo apruebe el
+      ✅ YA DESPLEGADO (medido 2026-09-25: `f2237e8` vive en produccion `39234c89`).
       pedido de deploy vivo (`t_daa8750c`), que hoy publica 9 arreglos + éste.
 
 - [x] 🔴 **CERRADO el 2026-09-08 (`64279ff`, ya en `master` — verificado el 2026-09-10):
@@ -3709,6 +3741,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       `vertical-pack.ts` (el camino en los 3 navs) y `agents-view.tsx`.
       Gates: `tsc` 0 · `vitest` **4023** verdes · `eslint` 0.
       ⚠️ **Commiteado y en la rama, NO desplegado**: viaja con el pedido de deploy de
+      ✅ YA DESPLEGADO (medido 2026-09-25: `64279ff` vive en produccion `39234c89`).
       `plataforma` (`t_daa8750c`), donde quedó comentado el sha.
 
 - [x] 🔴 **CERRADO el 2026-09-08 (`cc383c1`, ya en `master` — verificado el 2026-09-10):
@@ -3872,6 +3905,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       **Gates:** `tsc` 0 · `vitest` 3885 verdes (315 archivos) · `eslint` 0 errores.
       Commit `029c915` en `onia-platform`, rama `claude/chatbots-platform-review-0d1d09`.
       ⚠️ **Commiteado y en la rama, NO desplegado**: falta que `onia-cola` lo mergee a `master`
+      ✅ YA DESPLEGADO (medido 2026-09-25: `029c915` vive en produccion `39234c89`).
       y que el swap lo publique, así que **el cliente todavía ve los once botones mintiendo**.
 
 - [x] 🔴 **El enlace de reserva que el negocio manda por WhatsApp le vendía el panel a su cliente
@@ -3922,6 +3956,7 @@ y sin operar. Acá se opera, con verificación por ítem.
 
       Gates: `tsc` 0 · `vitest` **3847** verdes · `eslint` 0 errores.
       ⚠️ **Commiteado y en la rama, NO desplegado:** viaja con el pedido `DESPLEGAR: plataforma`.
+      ✅ YA DESPLEGADO (medido 2026-09-25: `b4b2e34` vive en produccion `39234c89`).
 
 - [x] 🔴 **El `roles:` del menú no era una barrera: escondía el enlace y la URL abría la pantalla
       igual — cerrado el 2026-09-08 (`3e9cd3a` en `onia-platform`, publicado en la rama).**
@@ -3968,6 +4003,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       lo caza el ancla. Gates: `tsc` 0 · `vitest` 3795 · `eslint` 0 errores.
 
       ⚠️ **Commiteado y en la rama, NO desplegado**: viaja con el pedido de deploy de `plataforma`,
+      ✅ YA DESPLEGADO (medido 2026-09-25: `3e9cd3a` vive en produccion `39234c89`).
       que sigue esperando el `ok` de Sergio Urcullo.
 
       **Lo que queda anotado y NO se hizo, con su motivo:** el arreglo de fondo es que el layout
@@ -4015,6 +4051,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       glifo real de 18×18 y no la palabra, cero respuestas ≥400).
 
       ⚠️ **Commiteado y en la rama, NO desplegado:** el cliente todavía no lo ve.
+      ✅ YA DESPLEGADO (medido 2026-09-25: `592baa1` vive en produccion `39234c89`).
 
 - [x] 🔴 **La reserva pública le decía al cliente del negocio «Sin horarios disponibles · Probá
       con otra fecha» cuando en realidad NO había podido cargar los horarios — cerrado el
@@ -4059,6 +4096,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       que ya está incluido.
 
       ⚠️ **Commiteado y en la rama, NO desplegado:** viaja con el pedido `t_bf1607af`
+      ✅ YA DESPLEGADO (medido 2026-09-25: `e69736b` vive en produccion `39234c89`).
       (`DESPLEGAR: plataforma`), que espera el `ok` de Sergio Urcullo.
 
 - [x] 🔴 **El panel le negaba al cliente vencido exactamente lo que su propio correo le había
@@ -4147,6 +4185,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       archivos) · `eslint` 0 errores.
 
       ⚠️ **NO desplegado, y NO alcanza con el pedido de deploy que ya existe.** Medido al cerrar:
+      ✅ YA DESPLEGADO (medido 2026-09-25: `8bc5182` `69d95ad` vive en produccion `39234c89`).
       `git merge-base --is-ancestor 8bc5182 origin/master` da **NO**, y el pedido vivo
       (`t_deddf471`) publicaría `69d95ad`, que es el HEAD de `master` — o sea que ejecutarlo hoy
       **no incluye este arreglo**. Faltan DOS pasos, en este orden: que `onia-cola` mergee la rama
@@ -4196,6 +4235,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       el CSS del build vivo (los tres estados), porque el deploy está esperando el `ok`.
 
       ⚠️ **Publicado en la rama del carril, NO en `master` y NO desplegado — y el orden importa,
+      ✅ YA DESPLEGADO (medido 2026-09-25: `bb0ba47` `58e1b9b` vive en produccion `39234c89`).
       porque decirlo mal es un modo de falla conocido.** El publicador buildea desde
       `origin/master` (`publicar.sh --dry-run` contesta hoy *«3 arreglos, HEAD 0331198»*), así
       que **este arreglo todavía no viaja con el pedido de deploy**: primero lo tiene que mergear
@@ -4247,6 +4287,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       **nueva** con copy dental → rojo (nace cubierta); podrir una fila declarada → rojo;
       restaurado → verde.
       ⚠️ **Commiteado y en la rama, NO desplegado**: viaja con el pedido de deploy de `plataforma`.
+      ✅ YA DESPLEGADO (medido 2026-09-25: `3a4977d` vive en produccion `39234c89`).
 
 - [x] 🔴 **A un estudio contable le pedíamos el género y el cumpleaños de su cliente —
       cerrado el 2026-09-07 (`e9b857a` en `onia-platform`, publicado en la rama).**
@@ -4269,6 +4310,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       **Prueba:** `npx vitest run 'app/(dashboard)/patients/'` → 18/18; verificado por
       **mutación** (sacando `esClinico` del filtro de género el gate cae en rojo por el motivo
       correcto). `tsc` 0 · `eslint` 0 errores · **3253** tests. Sin desplegar: viaja en el
+      ✅ YA DESPLEGADO (medido 2026-09-25: `e9b857a` vive en produccion `39234c89`).
       pedido de deploy de `plataforma` que ya espera el `ok`.
 
 - [x] 🔴 **Este carril se mudó de máquina y quedó SIN el árbol de `onia-platform`: no podía
@@ -4351,6 +4393,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       al alta de cita el test se pone rojo y **nombra el archivo**.
 
       ⚠️ **Commiteado y pusheado, NO desplegado** — viaja en el próximo swap de `plataforma`.
+      ✅ YA DESPLEGADO (medido 2026-09-25: `aeeacd0` vive en produccion `39234c89`).
 
 - [x] 🟢 **FANTASMA — el circuito de deploy YA EXISTE. Anotado y cerrado el mismo 2026-09-05,
       sin escribir una línea.** Este ítem decía *"construir el script que implemente los cinco
@@ -4385,6 +4428,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       Prueba: `lib/platform/idioma-del-error.test.ts` en ROJO primero, nombrando los 6 mensajes;
       verde después. Gates: `tsc` 0 · `vitest` 3373 verdes · `eslint` 0.
       ⚠️ **Commiteado y en la rama, NO desplegado**: viaja con el pedido `t_deddf471`.
+      ✅ YA DESPLEGADO (medido 2026-09-25: `55cfbf4` vive en produccion `39234c89`).
 
 - [x] 🟠 **Las otras rutas de la misma clase ya no hablan dental — y eran 14, no 4** (`e6a7012`,
       2026-09-07). Mismo defecto que `55cfbf4`, otro camino. Un estudio contable que borraba una
@@ -4413,6 +4457,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       arreglo → rojo; podrir el exento → rojo; y `doctorId`, que debe seguir permitido, sigue en
       verde. Gates: `tsc` 0 · `vitest` 3496 verdes · `eslint` 0 errores.
       ⚠️ **Commiteado y en la rama, NO desplegado**: viaja con el pedido de deploy de `plataforma`.
+      ✅ YA DESPLEGADO (medido 2026-09-25: `e6a7012` `55cfbf4` vive en produccion `39234c89`).
 
 - [ ] 🔴 **Hay arreglos verdes esperando UN `ok` de Sergio Urcullo, y no llegan al cliente.**
       Medido el 2026-09-06 10:35 UTC por `onia-cola`: **tres** destinos con pedido en `blocked`,
@@ -4579,6 +4624,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       → sólo `addon.whatsapp` 4 y `module.agents` 6), así que el cambio no atrapa ningún dato.
 
       **NO DESPLEGADO** — commiteado en `claude/chatbots-platform-review-0d1d09`; llega al cliente
+      ✅ YA DESPLEGADO (medido 2026-09-25: `2b4db83` vive en produccion `39234c89`).
       con el pedido de deploy de `plataforma` que ya existe.
 
       ⚠️ **El carril de la sesión de control midió lo MISMO el mismo día, por su cuenta**
@@ -4731,6 +4777,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       Gates: `tsc` 0 · `vitest` 3078 passed · `eslint` 0 errores · `iconos-en-la-fuente` 35/35.
 
       ⚠️ **Commiteado, NO desplegado** — el contenedor sigue con el build viejo
+      ✅ YA DESPLEGADO (medido 2026-09-25: `ad2d45f` vive en produccion `39234c89`).
       (`BUILD_ID 3OJpL4LsTtarEkANQEORf`). Anotado en el pedido de deploy que ya existe
       (`t_0268567b`), no en uno nuevo.
 
@@ -4888,6 +4935,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       `/root/capturas-onboarding-estetica/{03-horarios,06-listo}.png`.
 
       **El código YA está arreglado y el defecto sigue vivo igual: falta el deploy.**
+      ✅ YA DESPLEGADO (medido 2026-09-25: `195349b` `581afdf` `9c72275` `1f96d16` `f997f2f` `0a5bdbe` vive en produccion `39234c89`).
       `diasAgendaParaAlta` (`lib/onboarding/horarios-agenda.ts`) tiene el piso `JORNADA_POR_DEFECTO`
       desde `195349b` (06-sep), pero producción corre `build-545dd28` (05-sep) —casado por
       `BUILD_ID`— y `git merge-base --is-ancestor 195349b 545dd28` da **falso**. Evidencia
@@ -4928,6 +4976,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       y `lib/platform/copy-de-pantallas-compartidas.test.ts`, con sujetos derivados de
       `VERTICAL_PACKS` y verificados en ROJO reinyectando el defecto en su forma real.
       Verde: tsc 0 · vitest 3135 · eslint 0 errores. **Commiteado, NO desplegado.**
+      ✅ YA DESPLEGADO (medido 2026-09-25: `195349b` `581afdf` `9c72275` `1f96d16` `f997f2f` `0a5bdbe` vive en produccion `39234c89`).
 
       **La lección, que vale más que las dos pantallas:** todos los barridos de este proyecto
       persiguen texto PROHIBIDO. Acá **no sobraba ninguna palabra** — «tu clínica» es copy
@@ -5017,6 +5066,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       `lib/comercio/idioma-de-credito.test.ts` con sujetos derivados de `VERTICAL_PACKS`,
       verificado en ROJO reinyectando el defecto en su forma real. Verde: tsc 0 · vitest 3163 ·
       eslint 0 errores. **Commiteado, NO desplegado** (sha comentado en `t_0268567b`).
+      ✅ YA DESPLEGADO (medido 2026-09-25: `195349b` `581afdf` `9c72275` `1f96d16` `f997f2f` `0a5bdbe` vive en produccion `39234c89`).
 
       ⚠️ **Y no era un rubro suelto: `gestios-servicios-profesionales` la llama «Por cobrar» en su
       menú y leía exactamente lo mismo.** Son **2 de los 4 packs** que tienen esta pantalla. En la
@@ -5043,6 +5093,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       MIRADO renderizado con el CSS del build vivo y cero respuestas ≥400:
       `/root/capturas-servicios/comercio-caja-arreglada.png`.
       Verde: tsc 0 · vitest 3155 · eslint 0 errores. **Commiteado, NO desplegado.**
+      ✅ YA DESPLEGADO (medido 2026-09-25: `195349b` `581afdf` `9c72275` `1f96d16` `f997f2f` `0a5bdbe` vive en produccion `39234c89`).
 
       ⚠️ **Ganadería (`ganadero-offline`) también tiene la caja y vende «hacienda», no productos.**
       Lleva inventario, así que el helper le deja el idioma de comercio — que es lo que decía
@@ -5099,6 +5150,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       correcto y lleva el caso que ancla que **el rótulo no es igual en todos los rubros** — si lo
       fuera, la regla sobraría y el barrido pasaría en verde el día que alguien vuelva a fijar el
       título. Verde: tsc 0 · vitest 3175 · eslint 0 errores. **Commiteado, NO desplegado.**
+      ✅ YA DESPLEGADO (medido 2026-09-25: `195349b` `581afdf` `9c72275` `1f96d16` `f997f2f` `0a5bdbe` vive en produccion `39234c89`).
       Captura del defecto: `/root/capturas-importadora/empresa.png`.
 
       ⚠️ **Un falso positivo que se descartó leyendo el código y no la foto:** en la captura,
@@ -5178,6 +5230,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       Gates: `tsc` 0 · `vitest` 3072 passed · `eslint` 0 errores.
 
       ⚠️ **Commiteado, NO desplegado**: el contenedor sigue con el build viejo. Anotado en el
+      ✅ YA DESPLEGADO (medido 2026-09-25: `5922faa` vive en produccion `39234c89`).
       pedido de deploy que ya existe (`t_0268567b`), no en uno nuevo.
 
       ⚠️ **`verificar_cola.js` marca `agents-cadencia.ts` como fantasma y NO lo es** — no hay que
@@ -5744,6 +5797,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       `claude/chatbots-platform-review-0d1d09` de `onia-platform`.
 
       ⚠️ **Commiteado y en la rama, NO desplegado**: viaja con el pedido de deploy de
+      ✅ YA DESPLEGADO (medido 2026-09-25: `185d616` vive en produccion `39234c89`).
       `plataforma` (`t_bf1607af`), que sigue esperando el `ok` de Sergio Urcullo.
 
 
@@ -5933,6 +5987,7 @@ y sin operar. Acá se opera, con verificación por ítem.
 - [x] 🔴 **CERRADO el 2026-09-19: el dueño no podía sacar a una coadministradora, y una CUARTA
       puerta la borraba sin preguntar nada.** ⚠️ COMMITEADO Y PUSHEADO (`52409f20`, rama
       `claude/chatbots-platform-review-0d1d09` de `onia-platform`), **falta mergear y desplegar**.
+      ✅ YA DESPLEGADO (medido 2026-09-25: `52409f20` vive en produccion `39234c89`).
 
       Lo reprodujo `recorrido-cliente` con HTTP real contra producción (tarea `t_24758d5a`): org
       de plan `clinic` con DOS administradoras, `DELETE /api/admin/users/<la segunda>` devolvía
@@ -5967,6 +6022,7 @@ y sin operar. Acá se opera, con verificación por ítem.
 - [x] 🔴 **CERRADO el 2026-09-17: los avisos de vencimiento mandaban al dueño de un plan
       Empresa a una pantalla que NO puede cobrarle.** ⚠️ COMMITEADO Y PUSHEADO (`c399caaa`,
       rama `claude/chatbots-platform-review-0d1d09` de `onia-platform`), **falta mergear y
+      ✅ YA DESPLEGADO (medido 2026-09-25: `c399caaa` vive en produccion `39234c89`).
       desplegar**.
 
       El mismo día, `06036905` cerró el callejón de «Renovar Empresa» en `/settings`: el
@@ -6009,6 +6065,7 @@ y sin operar. Acá se opera, con verificación por ítem.
 - [x] 🔴 **CERRADO el 2026-09-17: el dueño no podía quitarle el acceso de administrador a un
       empleado que se fue.** ⚠️ COMMITEADO Y PUBLICADO (`9f103875`, rama
       `claude/chatbots-platform-review-0d1d09` de `onia-platform`), **falta mergear y desplegar**.
+      ✅ YA DESPLEGADO (medido 2026-09-25: `9f103875` vive en produccion `39234c89`).
       El producto sabía COBRAR el segundo administrador —DG-043 cerró las dos puertas que lo
       crean— y no tenía **ninguna** puerta para sacarlo. Las tres vías del cliente contestaban
       403: `PATCH /api/admin/users/[id]` ("Superadmin access required for admin roles", encima en
@@ -6036,6 +6093,7 @@ y sin operar. Acá se opera, con verificación por ítem.
 - [x] 🔴 **CERRADO el 2026-09-17: los tres correos que convierten la prueba en cliente ofrecían
       Bs 890 como único precio, con Bs 320 disponible.** ⚠️ COMMITEADO Y PUBLICADO (`109ee15`,
       rama `claude/chatbots-platform-review-0d1d09` de `onia-platform`), **falta mergear y
+      ✅ YA DESPLEGADO (medido 2026-09-25: `109ee15` vive en produccion `39234c89`).
       desplegar** — pedido anotado en `t_0de82d2f`.
       Los pasos 12, 14 y 15 del drip del trial son los únicos correos que le piden plata al dueño,
       y `trialDripPriceLine()` (`onia-platform/lib/email.ts:1233`) tenía el plan TIPEADO:
@@ -6061,6 +6119,7 @@ y sin operar. Acá se opera, con verificación por ítem.
 - [x] 🔴 **CERRADO el 2026-09-17: cinco frases mandaban al plan de Bs 890 por la agenda que el
       de Bs 550 ya trae.** ⚠️ COMMITEADO Y PUBLICADO (`dd03c75`, rama
       `claude/chatbots-platform-review-0d1d09` de `onia-platform`), **falta mergear y desplegar**.
+      ✅ YA DESPLEGADO (medido 2026-09-25: `dd03c75` vive en produccion `39234c89`).
       La escalera C (12-sep) le dio `publicBookingIncluded` al plan `crece` (Bs 550) y las frases
       que dicen DÓNDE viene incluida la agenda pública estaban tipeadas desde antes: seguían
       diciendo *«incluida en Profesional y Completo»*. Medido contra el catálogo el 17-sep: la
@@ -6104,6 +6163,7 @@ y sin operar. Acá se opera, con verificación por ítem.
 - [x] 🔴 **CERRADO el 2026-09-13: un cron que no entregó NADA contestaba «ok» y su lanzador
       salía 0.** ⚠️ COMMITEADO Y PUBLICADO (`b5cae43`, rama
       `claude/chatbots-platform-review-0d1d09` de `onia-platform`), **falta mergear y desplegar**.
+      ✅ YA DESPLEGADO (medido 2026-09-25: `b5cae43` vive en produccion `39234c89`).
       **Salió de medir producción, no de leer la cola:** el ítem de arriba pedía medir qué
       módulos usan de verdad las empresas, y al contar `audit_logs` apareció que la cuenta de la
       importadora (`bolivian-electricidad-e6t21`) nunca completó el onboarding y su prueba vence
@@ -6401,12 +6461,14 @@ y sin operar. Acá se opera, con verificación por ítem.
 
       `73350a1` (`onia-platform`), rama `claude/chatbots-platform-review-0d1d09`.
       ⚠️ **Commiteado y pusheado, NO en `master` y NO desplegado.** Falta que el integrador lo
+      ✅ YA DESPLEGADO (medido 2026-09-25: `73350a1` vive en produccion `39234c89`).
       mergee; el pedido de deploy vivo es `t_c78d9fa8`, comentado ahí.
 
 - [x] **CERRADO el 2026-09-10: importadora tenía «Créditos» en su menú y NINGÚN camino para
       originar uno — la pantalla quedaba vacía de por vida prometiendo que se iba a llenar.**
       Arreglado en `3e0491b` (`onia-platform`), rama `claude/chatbots-platform-review-0d1d09`.
       ⚠️ **Commiteado y pusheado, NO en `master` y NO desplegado**: falta que el integrador lo
+      ✅ YA DESPLEGADO (medido 2026-09-25: `3e0491b` vive en produccion `39234c89`).
       mergee, y recién después viaja con el pedido de deploy de `plataforma` (`t_6e23cd1c`,
       comentado ahí como *sin mergear todavía* para que nadie lo lea como publicable).
 
@@ -6459,6 +6521,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       —la clave interna— en las tres pantallas donde decide y donde paga.** Arreglado en
       `fe6eb65` (`onia-platform`), rama `claude/chatbots-platform-review-0d1d09`.
       ⚠️ **Commiteado y pusheado, NO en `master` y NO desplegado**: falta que el integrador lo
+      ✅ YA DESPLEGADO (medido 2026-09-25: `fe6eb65` vive en produccion `39234c89`).
       mergee, y recién después viaja con el pedido de deploy de `plataforma`.
 
       `lib/pricing.ts` declara `PLAN_LABELS` como «UN solo lugar» y su propio comentario
@@ -6626,6 +6689,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       67→169 px, cero respuestas ≥400 en el log de la misma corrida.
 
       ⚠️ **Commiteado y pusheado, NO desplegado**: el cliente no lo ve hasta el swap. El pedido
+      ✅ YA DESPLEGADO (medido 2026-09-25: `9208d5c` vive en produccion `39234c89`).
       de deploy vivo ya existe y no se duplica.
 
 - [x] 🔴 **CERRADO el 2026-09-08: el bot de WhatsApp le afirmaba a la gente de un negocio un
@@ -6814,12 +6878,14 @@ y sin operar. Acá se opera, con verificación por ítem.
       Gates: `tsc` 0 · `vitest` **3957 pasan / 0 fallos** · `eslint` 0 errores. Commit `2df57bf`
       en `claude/chatbots-platform-review-0d1d09` de `onia-platform`.
       ⚠️ **Commiteado y en la rama, NO desplegado**: viaja con el pedido de deploy de `plataforma`.
+      ✅ YA DESPLEGADO (medido 2026-09-25: `2df57bf` vive en produccion `39234c89`).
 
 - [x] **CERRADO el 2026-09-08: el cliente confirmaba o cancelaba su cita desde el correo, se
       guardaba, y si el aviso al negocio fallaba le aparecía un error — así que se iba creyendo
       que NO había cancelado, y el negocio tampoco se enteraba.** Commit `9e579b2`, rama
       `claude/chatbots-platform-review-0d1d09` de `onia-platform`. ⚠️ **Commiteado y en la rama,
       NO desplegado**: falta el merge a `master` (es de `onia-cola`) y después el swap.
+      ✅ YA DESPLEGADO (medido 2026-09-25: `9e579b2` vive en produccion `39234c89`).
       Comentado en el pedido vivo `t_bf1607af`.
 
       **Qué estaba mal, y por qué ningún instrumento podía verlo.** `responderCita`
@@ -6858,6 +6924,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       fuera el horario de atención — y lo mandaba a una puerta cerrada.** Commit `6b1ce7c`,
       rama `claude/chatbots-platform-review-0d1d09` de `onia-platform`. ⚠️ **Commiteado y en
       la rama, NO desplegado**: falta el merge a `master` (es de `onia-cola`) y después el
+      ✅ YA DESPLEGADO (medido 2026-09-25: `6b1ce7c` vive en produccion `39234c89`).
       swap. Verificado: `git merge-base --is-ancestor 6b1ce7c origin/master` da NO, así que el
       pedido `t_bf1607af` **todavía no lo publica** — comentado ahí.
 
@@ -6904,6 +6971,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       comercio e importadora, que no tienen agenda.** Commit `e4465c9`, rama
       `claude/chatbots-platform-review-0d1d09` de `onia-platform`. ⚠️ **Commiteado y en la
       rama, NO desplegado**: falta el merge a `master` y el swap.
+      ✅ YA DESPLEGADO (medido 2026-09-25: `e4465c9` vive en produccion `39234c89`).
 
       **Qué estaba mal.** `menuText()` de `lib/whatsapp-bot.ts` estaba escrito para el dental
       y salía igual en los siete rubros: `1️⃣ Ver próxima cita · 2️⃣ Confirmar cita ·
@@ -6945,7 +7013,9 @@ y sin operar. Acá se opera, con verificación por ítem.
 - [x] **CERRADO el 2026-09-08: el cupo del chatbot avisaba que IBA a cortar, no que YA
       cortó.** Commit `ccab1db`, rama `claude/chatbots-platform-review-0d1d09` de
       `onia-platform`. ⚠️ **Commiteado y en la rama, NO desplegado**, y además **la migración
+      ✅ YA DESPLEGADO (medido 2026-09-25: `ccab1db` vive en produccion `39234c89`).
       NO está aplicada en producción**: falta el merge a `master`, el `ALTER TABLE` a mano
+      ✅ YA DESPLEGADO (medido 2026-09-25: `ccab1db` vive en produccion `39234c89`).
       (`prisma/migrations/20260908000000_chatbot_cupo_aviso_del_corte/migration.sql`) y el
       swap. Sin la columna el aviso del corte no sale y todo lo demás sigue igual —
       `registrarMensajeEntrante` cuelga del relay de Chatwoot y jamás tira.
@@ -6982,6 +7052,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       dental» ante los clientes de los otros cuatro rubros.** Commits `8009a9e` (arreglo) y
       `a13d3af` (gate), rama `claude/chatbots-platform-review-0d1d09` de `onia-platform`.
       ⚠️ **Commiteado y en la rama, NO desplegado**: falta el merge a `master` y después el
+      ✅ YA DESPLEGADO (medido 2026-09-25: `8009a9e` `a13d3af` vive en produccion `39234c89`).
       swap — viaja con el pedido de deploy `t_bf1607af`.
 
       **Qué estaba mal.** El add-on de WhatsApp (Bs 390/mes, `pricing.ts`) atiende a los
@@ -7024,6 +7095,7 @@ y sin operar. Acá se opera, con verificación por ítem.
 - [x] **CERRADO el 2026-09-08: nadie vigilaba el simétrico de «camino ausente» — el enlace
       que lleva a una pantalla que ese rubro tiene BLOQUEADA.** Commit `c3a2fda` (rama
       `claude/chatbots-platform-review-0d1d09` de `onia-platform`), **NO desplegado** — es un
+      ✅ YA DESPLEGADO (medido 2026-09-25: `c3a2fda` vive en produccion `39234c89`).
       gate, no cambia lo que el cliente ve.
 
       **La clase.** `caminos-transversales.test.ts` cubre una dirección: *permiso concedido,
@@ -7078,6 +7150,7 @@ y sin operar. Acá se opera, con verificación por ítem.
 - [x] 🔴 **CERRADO el 2026-09-08: a un centro de estética el catálogo le ofrecía archivar
       «Limpieza facial profunda» bajo Endodoncia.** Commit `74879aa` (rama
       `claude/chatbots-platform-review-0d1d09`), **NO desplegado** — viaja con el pedido de
+      ✅ YA DESPLEGADO (medido 2026-09-25: `74879aa` vive en produccion `39234c89`).
       deploy de `plataforma`.
 
       **El defecto.** `/treatments` la tienen en su menú los TRES packs clínicos (dental,
@@ -7119,6 +7192,7 @@ y sin operar. Acá se opera, con verificación por ítem.
 
 - [x] 🔴 **CERRADO el 2026-09-07: el dueño ponía la fecha límite del 9 y su cliente leía el 8.**
       Commit `9ad61aa` (rama `claude/chatbots-platform-review-0d1d09`), **NO desplegado** —
+      ✅ YA DESPLEGADO (medido 2026-09-25: `9ad61aa` vive en produccion `39234c89`).
       viaja con el pedido de deploy de `plataforma`.
 
       **El defecto.** Un `<input type="date">` devuelve `"2026-09-09"`: un día del calendario,
@@ -7165,6 +7239,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       estética y a un estudio contable, y la ayuda mandaba al estudio a cargar sus clientes
       en el catálogo de servicios.** Commit `90b2a47` (rama `claude/chatbots-platform-review-0d1d09`),
       **NO desplegado** — producción corre `build-fe4026e`.
+      ✅ YA DESPLEGADO (medido 2026-09-25: `90b2a47` vive en produccion `39234c89`).
 
       **El defecto, y por qué sobrevivió.** `/patients` la comparten **cuatro** rubros y tiene
       **cinco** pantallas. Cuatro —listado, ficha, alta, edición— ya derivaban el nombre de la
@@ -7254,6 +7329,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       `eslint` 0 errores.
 
       **NO DESPLEGADO** — llega al cliente con el swap de `plataforma` (`t_deddf471`).
+      ✅ YA DESPLEGADO (medido 2026-09-25: `0d0d02a` vive en produccion `39234c89`).
 
 - [x] 🟡 **El gate de cobertura multi-rubro miraba 6 de 25 pantallas compartidas: ampliado a
       las 25.** `lib/platform/pantallas-compartidas-cubiertas.test.ts` excluía por escrito las
@@ -7362,6 +7438,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       están bien. Gates: `tsc` 0 · **3306** tests · `eslint` 0 errores.
 
       **NO DESPLEGADO** — llega al cliente con el swap de `plataforma` (`t_deddf471`).
+      ✅ YA DESPLEGADO (medido 2026-09-25: `e843507` vive en produccion `39234c89`).
 
 - [x] 🔴 **CERRADO el 2026-09-07: el CONTRATO que firma quien se da de alta describía una
       clínica dental — y el alta vende los cinco rubros.**

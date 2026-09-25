@@ -167,6 +167,38 @@ export function juzgar(resultados) {
   return motivos;
 }
 
+/**
+ * Un id repetido entre filas VIVAS vuelve ambigua toda referencia a esa fila — empezando por
+ * el `ok <id>` que Sergio Urcullo tipea, que es la unica forma de destrabar un deploy.
+ *
+ * ESTO YA PASO DOS VECES Y EL GATE LO VIO LAS DOS. El 2026-09-02 la tabla tenia dos `S12` (los
+ * horarios de demo y "¿sigue en pie la opcion 1 de §9?") y se fusionaron a mano; el 2026-09-24
+ * volvio a haber dos, porque una fila NUEVA ("Publicar el bot") reuso el numero. Las dos veces
+ * la salida de este mismo script IMPRIMIO `S12, S12` en la linea de "sin verificador mecanico"
+ * — y siguio saliendo 0 por ese motivo. **Un sintoma a la vista que no pone rojo se lee como
+ * decoracion**: por eso la deteccion va aca y no en el ojo del que lea la salida.
+ *
+ * Solo mira las VIVAS a proposito: las filas cerradas (`~~S8~~`) son historia y comparten
+ * numero con sus propias menciones viejas sin ambiguedad para nadie.
+ */
+export function idsDuplicados(filas) {
+  const porId = new Map();
+  for (const f of filas.filter((f) => !f.cerrado)) {
+    if (!porId.has(f.id)) porId.set(f.id, []);
+    porId.get(f.id).push(f.linea);
+  }
+
+  const motivos = [];
+  for (const [id, lineas] of porId) {
+    if (lineas.length < 2) continue;
+    motivos.push(
+      `${id} nombra ${lineas.length} filas VIVAS (lineas ${lineas.join(', ')}) — toda referencia a ` +
+        `${id} es ambigua, incluido el \`ok ${id}\` de Sergio Urcullo. Renumera una con un id libre`,
+    );
+  }
+  return motivos;
+}
+
 if (process.argv.includes('--self-check')) {
   // Contados por el script, no escritos a mano: un conteo hardcodeado deja de coincidir en
   // cuanto se agrega un caso, y un gate que miente en su propio numero ya no es un gate.
@@ -244,6 +276,28 @@ if (process.argv.includes('--self-check')) {
   afirmar(roto.length === 1 && roto[0].includes('no vence nunca'), 'un verificador que no corre SI es un item');
   afirmar(juzgar([{ id: 'S2', estado: 'sin-verificador', linea: 4 }]).length === 0, 'una fila sin verificador no es un item: se re-mide a mano');
 
+  // Ids duplicados. El caso real que lo motiva: dos filas vivas `S12` el 2026-09-24, una de
+  // ellas con el `ok` que Sergio Urcullo tiene que tipear para publicar el bot.
+  const dupe = idsDuplicados([
+    { id: 'S12', linea: 10, cerrado: false },
+    { id: 'S13', linea: 11, cerrado: false },
+    { id: 'S12', linea: 12, cerrado: false },
+  ]);
+  afirmar(dupe.length === 1, 'dos filas vivas con el mismo id son UN item, no dos');
+  afirmar(/S12/.test(dupe[0]) && /10, 12/.test(dupe[0]), 'nombra el id repetido y las DOS lineas, para poder renumerar');
+  afirmar(
+    idsDuplicados([{ id: 'S1', linea: 1, cerrado: false }, { id: 'S2', linea: 2, cerrado: false }]).length === 0,
+    'ids distintos no son un item',
+  );
+  afirmar(
+    idsDuplicados([{ id: 'S8', linea: 1, cerrado: true }, { id: 'S8', linea: 2, cerrado: false }]).length === 0,
+    'una fila CERRADA que comparte numero con una viva es historia, no ambiguedad',
+  );
+  afirmar(
+    idsDuplicados([{ id: 'S8', linea: 1, cerrado: true }, { id: 'S8', linea: 2, cerrado: true }]).length === 0,
+    'dos filas cerradas con el mismo id tampoco: nadie les tipea un ok',
+  );
+
   if (!process.exitCode) console.log(`self-check: ok — ${casos} casos`);
   process.exit(process.exitCode || 0);
 }
@@ -297,7 +351,7 @@ if (sinVerificador.length) {
   );
 }
 
-const motivos = juzgar(resultados);
+const motivos = [...juzgar(resultados), ...idsDuplicados(filas)];
 if (!motivos.length) {
   console.log(`bloqueos vencidos: ${conVerificador.length} verificador(es) corrido(s), ninguno satisfecho — todos siguen bloqueados`);
   process.exit(0);
