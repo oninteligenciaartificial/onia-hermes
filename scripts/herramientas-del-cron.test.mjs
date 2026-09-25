@@ -19,6 +19,7 @@ import {
   clasificarHerramienta,
   esperaAlSincronizador,
   herramientasQueElCronEjecuta,
+  herramientasQueEscribeElInstalador,
   shaQueElSincronizadorEjecuto,
 } from './herramientas-del-cron.mjs'
 
@@ -279,4 +280,82 @@ test('clasificar devuelve un veredicto por sujeto, sin perder ninguno', () => {
     vs.map((v) => v.veredicto),
     ['NO_MEDIDO', 'CABLEADA', 'SIN_FUENTE']
   )
+})
+
+// ── El segundo crontab: la máquina donde de verdad corren los loops ────────────────────
+//
+// Medido el 2026-09-25 por `onia-cola`: el universo de este instrumento sale de
+// `ssh crontab -l` contra el VPS, y los cuatro loops vivos los lanza el crontab de
+// nodo-casa. Estos casos anclan el cable de las herramientas de esa máquina, que no es
+// `poner` del sincronizador sino un heredoc dentro de un instalador versionado.
+test('ANCLA: preparar-nodo.sh sigue escribiendo el túnel, y su cuerpo es comparable', () => {
+  const m = herramientasQueEscribeElInstalador(
+    readFileSync(path.join(RAIZ, 'scripts/loops/preparar-nodo.sh'), 'utf8'),
+    'scripts/loops/preparar-nodo.sh'
+  )
+  const tunel = m.get('onia-tunel-inverso.sh')
+  assert.ok(tunel, 'preparar-nodo.sh dejó de escribir /root/bin/onia-tunel-inverso.sh')
+  assert.equal(tunel.literal, true, 'el heredoc del túnel está entre comillas: su cuerpo se mide')
+  assert.match(tunel.cuerpo, /ssh/, 'el cuerpo capturado no es el del túnel')
+})
+
+test('ANCLA: instalar-homelab.sh escribe la bajada de memoria, pero INTERPOLA', () => {
+  const m = herramientasQueEscribeElInstalador(
+    readFileSync(path.join(RAIZ, 'scripts/loops/instalar-homelab.sh'), 'utf8'),
+    'scripts/loops/instalar-homelab.sh'
+  )
+  const bajar = m.get('onia-memoria-bajar.sh')
+  assert.ok(bajar, 'instalar-homelab.sh dejó de escribir /root/bin/onia-memoria-bajar.sh')
+  // El `.nuevo` del escribí-y-mové no es otro archivo: si se colara, el nombre no casaría
+  // con el del crontab y la herramienta quedaría fuera del universo, que es invisible y no rojo.
+  assert.equal(m.has('onia-memoria-bajar.sh.nuevo'), false)
+  // Sin comillas el shell expande al instalar: afirmar que el cuerpo del repo es el de disco
+  // sería inventar una medición.
+  assert.equal(bajar.literal, false)
+  assert.equal(bajar.cuerpo, null)
+})
+
+test('un heredoc sin cierre es un instalador roto: no se le cree el cuerpo a medias', () => {
+  const m = herramientasQueEscribeElInstalador(
+    'cat > /root/bin/onia-trunco.sh <<' + "'FIN'\n" + 'echo hola\n',
+    'x.sh'
+  )
+  assert.equal(m.has('onia-trunco.sh'), false)
+})
+
+test('sólo /root/bin: un heredoc hacia otra carpeta no es sujeto de este instrumento', () => {
+  const m = herramientasQueEscribeElInstalador(
+    "cat > /etc/otra/onia-ajeno.sh <<'FIN'\nhola\nFIN\n",
+    'x.sh'
+  )
+  assert.equal(m.size, 0)
+})
+
+test('con delimitador entre comillas el cuerpo es byte a byte el del archivo instalado', () => {
+  const m = herramientasQueEscribeElInstalador(
+    "cat > \"$BIN/onia-x.sh\" <<'FIN'\n#!/bin/sh\necho $NO_SE_EXPANDE\nFIN\n",
+    'x.sh'
+  )
+  assert.equal(m.get('onia-x.sh').cuerpo, '#!/bin/sh\necho $NO_SE_EXPANDE\n')
+})
+
+test('ANCLA: el shim hacia el VPS también es cable, y su cuerpo NO es comparable', () => {
+  const m = herramientasQueEscribeElInstalador(
+    readFileSync(path.join(RAIZ, 'scripts/loops/instalar-homelab.sh'), 'utf8'),
+    'scripts/loops/instalar-homelab.sh'
+  )
+  const tg = m.get('onia-tg.sh')
+  assert.ok(tg, 'instalar-homelab.sh dejó de declarar el shim de onia-tg.sh')
+  // En nodo-casa lo CORRECTO es que difiera de scripts/loops/onia-tg.sh: allá es el script
+  // real del VPS, acá es el shim que delega por SSH. Sin este caso vuelve el rojo falso.
+  assert.equal(tg.literal, false)
+  assert.equal(tg.cuerpo, null)
+})
+
+test('la definición de la función shim no es una herramienta, ni su comentario', () => {
+  const m = herramientasQueEscribeElInstalador(
+    'shim() { # shim <nombre> <comando remoto>\n# El shim de docker.sh lo explica\n',
+    'x.sh'
+  )
+  assert.equal(m.size, 0)
 })

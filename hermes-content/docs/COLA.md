@@ -109,10 +109,27 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       sincronizadas, más `onia-mirar-cliente.mjs` y su sonda, que el instrumento no podía ver).
       `npm run herramientas:vivas` pasó de **12 cableadas / 17 copia a mano** a **21 / 8**, con
       cero a arreglar.
-      **Las 6 que faltan no se arreglan con una línea** y por eso no se tocaron: viven en
+      ~~**Las 6 que faltan no se arreglan con una línea** y por eso no se tocaron: viven en
       `hermes-content/infra/` (los dos respaldos y los cuatro crons del producto), y esa carpeta
       **no está en `RUTAS_SYNC`**, así que el archivo ni siquiera viaja. Agregar un árbol nuevo al
-      `git archive` del sincronizador es un cambio aparte, con su propia medición.
+      `git archive` del sincronizador es un cambio aparte, con su propia medición.~~
+      ⚠️ **VENCIDO — el cambio aparte YA SE HIZO. Recontado el 2026-09-25 por `onia-cola`.**
+      `hermes-content/infra` está en `RUTAS_SYNC` (`scripts/loops/sincronizar.sh:62`), puesto ahí
+      por `fa2d6f83` (el respaldo diario de la base) y `f6f64fd2` (los dos últimos crons), y
+      `npm run herramientas:vivas` da hoy **33 cableadas y al día · 0 copia a mano · 0 a arreglar**.
+      No quedan 6: quedan **cero**. Dejarlo escrito mandaba a la próxima vuelta a cablear un
+      árbol que ya está cableado — trabajo fantasma con la evidencia en contra, que es la clase
+      que este archivo pide medir antes de obedecer.
+      **Lo que SÍ quedó abierto es otra cosa, y es nueva:** ese 33/33 mide **una sola máquina**.
+      Desde el 07-sep los cuatro loops vivos los lanza el crontab de **nodo-casa**, y su universo
+      no entraba en el instrumento. Cableado el 2026-09-25 en `4b46667c`: la medición viva ahora
+      informa **una línea por máquina** (VPS 33/33 · casa 5, con 3 al día y 2 escritas por el
+      instalador) y los cables de casa resultaron ser **tres**, no uno.
+      ⚠️ **Lo que a ese arreglo le falta, dicho para que no se lea como más de lo que es:** los
+      caminos ROJOS del bloque de casa (`INSTALADOR_EN_DERIVA` y `COPIA_A_MANO`) **no los cubre
+      ningún caso todavía** — el self-check ancla la función pura y la corrida viva sale verde,
+      así que hoy sé que el verde es cierto pero **no** que el rojo aparecería. Se cierra
+      metiéndole un fixture de instalador cuyo heredoc literal difiera del archivo vivo.
       ⚠️ **La advertencia de que `claude-guardia.sh` tenía «producción adelante» está VENCIDA.**
       Era cierta el 2026-09-19; medida de nuevo hoy en las dos direcciones, el md5 de `origin/main`
       y el de `/root/bin` son **idénticos**, y lo mismo las otras nueve — por eso cablearlas no
