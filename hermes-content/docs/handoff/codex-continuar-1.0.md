@@ -141,8 +141,10 @@
 >   cláusula de reclamos, precios finales con impuestos, renovación = solo lectura), privacidad declara
 >   **OpenAI, Telegram y Cloudflare**, pie «Onia · NIT 5371375010 · EMITE FACTURA», comparativa con
 >   fechas y sin absolutos.
-> - **Plataforma** (platform `492e7155` = merge de carriles L/F/S, suite 6.809 + CRLF/Windows
->   conocidos): `/terms` `/privacy` `/data-processing` redirigen a la web; alta registra versión 1.2
+> - **Plataforma EN PROD: `release-492e7155`** (12:39 La Paz, publicador oficial; merge de carriles
+>   L/F/S, suite 6.809 + fallos conocidos de CRLF/Windows). `/terms` responde 200 con `meta refresh`
+>   inmediato a la web (redirect de página estática de Next): para un 308 real, moverlo a `redirects()`
+>   de `next.config.ts`. **Falta MIRAR** la reserva pública de una clínica de prueba y el checkout: `/terms` `/privacy` `/data-processing` redirigen a la web; alta registra versión 1.2
 >   en el audit `USER_CREATED`; checkout dice factura y **sin garantía de devolución (decisión de
 >   Sergio Urcullo 25-sep)**; FAQ sin «cifrado en reposo»; planes sin SLA/multisucursal; reserva
 >   pública sin Términos B2B y con aviso de quién recibe los datos; «Nota de venta» + «sin valor
