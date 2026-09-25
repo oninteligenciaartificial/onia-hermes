@@ -678,6 +678,77 @@ abrirlas y decidir a qué deploy se refieren. Se derivan con el comando, nunca d
 
 ## Ahora
 
+- [ ] 🔴 **`anticipacion-viva.mjs` dice VERDE sobre los horarios que ofrece producción y está
+      midiendo su propio código, no el del bot vivo.** Medido el 2026-09-25 03:21-03:47 La Paz.
+      Es el instrumento que nació el 5-sep para exactamente este defecto, y hoy lo tapa.
+
+      **Lo que dijo el instrumento** (`npm run test:anticipacion-instrumento`, exit 0):
+      *"proceso 30 en onia-center — ofrece 2 horario(s): ok sábado 26 de septiembre, 09:00 — 29.6 h
+      de aviso · ok lunes 28 de septiembre, 14:00 — 82.6 h. VEREDICTO: ok"*.
+
+      **Lo que el bot vivo le ofreció a un desconocido 25 minutos antes**, `msg 1764` de
+      `conv 49` (inbox 4), leído de la base de Chatwoot: *"**A)** viernes 25 de septiembre, 21:00 ·
+      **B)** sábado 26 de septiembre, 09:00"* — o sea el horario de **17,7 h** de aviso que el
+      propio corte de 24 h rechaza, primero y como opción A.
+
+      **Por qué miente en verde.** El instrumento lee `ONIA_BOT_SLOTS` del proceso vivo
+      (`/proc/30/environ`, eso está bien) y después arma el par con el parseo **del repo**, que
+      desde el 24-sep filtra por `slotSostenible` ANTES de recortar a dos. El bot vivo es del
+      19-sep y recorta primero: toma los dos primeros candidatos crudos. Dos códigos distintos
+      sobre el mismo dato, y el instrumento reporta el suyo con el nombre del otro. La prueba de
+      que son distintos, sin abrir un diff: el `config.mjs` que corre en el contenedor **no
+      exporta `candidatosDeLista`** (`SyntaxError: does not provide an export named`), que es la
+      función donde vive el filtro que el instrumento cree estar midiendo.
+
+      **Reproducción (dos comandos, no hace falta re-investigar):**
+
+      ```bash
+      node hermes-content/deploy/vps-ops/bot/anticipacion-viva.mjs        # → VEREDICTO: ok
+      /root/bin/onia-vps.sh bash -lc 'docker exec onia-chatbot_chatwoot-db.1.sddet2j4f4gvnrozj4t5b1850 psql -U postgres -d onia-chatbot -tAc "select replace(left(content,160), chr(10), chr(32)) from messages where id=1764;"'
+      ```
+
+      **Listo =** el instrumento deriva el par ofrecido con el código que corre en el contenedor
+      (o directamente del último mensaje que el bot mandó) y se pone **ROJO** cuando el parseo
+      vivo y el del repo no coinciden. Hoy esa diferencia es invisible y es la que deja pasar el
+      bucle de abajo. Un instrumento que mide su propio código con el nombre de producción es
+      peor que no tener instrumento: cierra la pregunta.
+
+- [ ] 🔴 **El lead que elige un horario entra en un bucle sin salida — VIVO en producción, ya
+      arreglado en `main`, esperando la firma del deploy.** Medido el 2026-09-25 03:21 La Paz con
+      la sonda del widget llevada al TERCER turno (`ONIA_SONDA_GUION`, la costura que existía
+      desde el 3-sep y que nadie había usado nunca).
+
+      **La conversación, textual** (`conv 49`, inbox 4, mensajes 1764-1766):
+
+      | quién | qué dijo |
+      |---|---|
+      | bot | ¿Cuál te va mejor? **A)** viernes 25 de septiembre, 21:00 · **B)** sábado 26, 09:00 |
+      | lead | `A` |
+      | bot | Uy, **viernes 25 de septiembre, 21:00** ya no lo tengo disponible… Estos son los horarios que tengo ahora: **A)** viernes 25 de septiembre, 21:00 **B)** sábado 26, 09:00 |
+
+      Rechaza el horario y **lo vuelve a ofrecer como A en el mismo mensaje**. Elija lo que elija,
+      el lead vuelve al principio. La etapa quedó `esperando_horario -> esperando_horario`.
+
+      **El costo, contado en la base** (`onia_center.bot_conversations`): 43 conversaciones,
+      **0** con `calendar_event_id`, **0** que hayan alcanzado `demo_agendada` alguna vez, y
+      **18** trabadas en `esperando_horario`. El bot de Onia nunca agendó una demo, y ésta es la
+      razón — no el motor, no Cal.com.
+
+      **No es un bug de código: es un bug de deploy.** El filtro vive en
+      `hermes-content/deploy/vps-ops/bot/config.mjs` (`elegirPar`, que juzga con `slotSostenible`
+      antes de recortar a dos). Medido con los cinco slots exactos del
+      proceso vivo y el instante exacto del turno, el parseo de `main` ofrece
+      *"A) sábado 26 · B) lunes 28"* y `ofrece alguno NO sostenible: false`. El pedido de deploy
+      que lo publica ya existe y está `blocked` esperando el `ok` de Sergio Urcullo — se deriva,
+      no se copia de acá:
+
+      ```bash
+      /root/bin/onia-tablero.sh list --status blocked | grep -i 'Publicar el bot'
+      ```
+
+      **Listo =** con el bot desplegado, la sonda de tres turnos deja la conversación en
+      `demo_agendada` con `scheduled_at` escrito. Hoy el gate que faltaba es el de arriba.
+
 - [ ] 🔴 **Un lead REAL puede escribir, ser atendido, enfriarse y que Sergio Urcullo no se
       entere nunca: el aviso sólo dispara en `handoff_humano` y `demo_agendada`, y «se quedó
       callado» no es ninguno de los dos.** Medido el 2026-09-24 en el log del bot vivo, no
