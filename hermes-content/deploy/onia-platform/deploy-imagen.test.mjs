@@ -31,6 +31,7 @@ const ANON = 'anon-SECRETO-de-prueba';
 const SRK = 'srk-NO-SE-MUESTRA';
 const VIVO = 'FU8j_OHPyRH1XCCr6-0uY';
 const NUEVO = 'NuevoBuildIdDeLaImagen';
+const VAPID = 'BVapid-publica-DE-PRUEBA';
 
 const barra = (p) => p.replaceAll('\\', '/');
 
@@ -58,6 +59,8 @@ case "$1" in
       rm) [ -f "$S/imagenes" ] && { grep -vxF -- "$ultimo" "$S/imagenes" > "$S/imagenes.t"; mv "$S/imagenes.t" "$S/imagenes"; } ;;
     esac ;;
   build) [ "\${STUB_BUILD_FALLA:-0}" = 0 ] || exit "$STUB_BUILD_FALLA"
+         # Si la clave de push llegó al entorno del build (sin escribirla en ningún lado).
+         if [ "\${NEXT_PUBLIC_VAPID_PUBLIC_KEY:-}" = "$STUB_VAPID_ESPERADA" ]; then echo ok > "$S/vapid-en-build"; else echo otra > "$S/vapid-en-build"; fi
          p=""; for a in "$@"; do [ "$p" = --tag ] && echo "$a" >> "$S/imagenes"; p=$a; done ;;
   tag) echo "$3" >> "$S/imagenes" ;;
   exec)
@@ -70,7 +73,7 @@ case "$1" in
   run)
     case "$*" in
       *"--entrypoint sh"*) printf '%s\\n' "build=$STUB_BUILD_NUEVO" "node=\${STUB_NODE:-v22.11.0}" server=ok node_modules=ok static=40 \\
-        "envfiles=\${STUB_ENVFILES:-0}" "publica=\${STUB_PUBLICA:-3}" "anon=\${STUB_ANON:-3}" "qa=\${STUB_QA:-0}" ;;
+        "envfiles=\${STUB_ENVFILES:-0}" "publica=\${STUB_PUBLICA:-3}" "anon=\${STUB_ANON:-3}" "vapid=\${STUB_VAPID:-3}" "qa=\${STUB_QA:-0}" ;;
       *--rm*) echo "$STUB_BUILD_NUEVO" ;;
       *) touch "$S/nuevo" ;;
     esac ;;
@@ -120,16 +123,16 @@ function mundo(extra = {}) {
   stub('df', '#!/usr/bin/env bash\necho "Filesystem 1024-blocks Used Available Capacity Mounted on"\necho "/dev/sda1 999999999 1 $(( ${STUB_DISCO_GB:-100} * 1048576 )) 1% /"\n');
   stub('flock', '#!/usr/bin/env bash\nexit 0\n');
   writeFileSync(`${t}/meminfo`, `MemTotal: 33554432 kB\nMemAvailable: ${(extra.ramGb ?? 16) * 1048576} kB\n`);
-  writeFileSync(
-    `${base}/app.env`,
-    [
-      `NEXT_PUBLIC_APP_URL=${extra.appUrl ?? 'https://app.onia.com.bo'}`,
-      'NEXT_PUBLIC_SUPABASE_URL=https://app.onia.com.bo/supabase',
-      `NEXT_PUBLIC_SUPABASE_ANON_KEY=${ANON}`,
-      `SUPABASE_SERVICE_ROLE_KEY=${SRK}`,
-      '',
-    ].join('\n'),
-  );
+  const env = [
+    `NEXT_PUBLIC_APP_URL=${extra.appUrl ?? 'https://app.onia.com.bo'}`,
+    'NEXT_PUBLIC_SUPABASE_URL=https://app.onia.com.bo/supabase',
+    `NEXT_PUBLIC_SUPABASE_ANON_KEY=${ANON}`,
+    `SUPABASE_SERVICE_ROLE_KEY=${SRK}`,
+  ];
+  // null = la línea no está en app.env.
+  if (extra.vapid !== null) env.push(`NEXT_PUBLIC_VAPID_PUBLIC_KEY=${extra.vapid ?? VAPID}`);
+  if (extra.vapidServidor !== null) env.push(`VAPID_PUBLIC_KEY=${extra.vapidServidor ?? VAPID}`);
+  writeFileSync(`${base}/app.env`, [...env, ''].join('\n'));
   const git = (...a) => execFileSync('git', ['-C', repo, '-c', 'user.name=t', '-c', 'user.email=t@t', ...a], { encoding: 'utf8' });
   git('init', '-q');
   writeFileSync(`${repo}/Dockerfile`, 'FROM scratch\n');
@@ -156,6 +159,7 @@ function correr(m, guion, args, stubs = {}) {
     STUB_BUILD_VIVO: VIVO,
     STUB_BUILD_NUEVO: NUEVO,
     STUB_IMAGEN_VIVA: 'onia-platform:release-7bcd0a83',
+    STUB_VAPID_ESPERADA: VAPID,
     ...stubs,
   };
   const r = spawnSync('bash', [guion, ...args], { encoding: 'utf8', env, timeout: 60_000 });
@@ -252,6 +256,45 @@ test('build: un app.env con la URL pública equivocada no se hornea, y no se mue
   }
 });
 
+// La clave pública de push (2026-09-24): sin ella horneada, "Activar notificaciones
+// push" no hace nada y push_subscriptions queda en 0 filas. Tiene que ser la MISMA
+// con la que firma el servidor (VAPID_PUBLIC_KEY): si difieren, cada suscripción
+// nace rota.
+test('build: sin clave pública de push en app.env se niega, y no muestra nada', () => {
+  const m = mundo({ vapid: null, vapidServidor: null });
+  try {
+    const r = correr(m, BUILD, [m.sha, '--dry-run']);
+    assert.equal(r.codigo, 1);
+    assert.match(r.salida, /clave publica de push/);
+    assert.ok(!r.salida.includes(ANON) && !r.salida.includes(SRK));
+  } finally {
+    limpiar(m);
+  }
+});
+
+test('build: si app.env solo trae VAPID_PUBLIC_KEY, esa es la que llega al build', () => {
+  const m = mundo({ vapid: null });
+  try {
+    const r = correr(m, BUILD, [m.sha]);
+    assert.equal(r.codigo, 0, r.salida);
+    assert.equal(readFileSync(`${m.estado}/vapid-en-build`, 'utf8').trim(), 'ok');
+  } finally {
+    limpiar(m);
+  }
+});
+
+test('build: si la clave del navegador no es la del servidor se niega, sin mostrar ninguna', () => {
+  const m = mundo({ vapid: 'BOtra-clave-distinta' });
+  try {
+    const r = correr(m, BUILD, [m.sha, '--dry-run']);
+    assert.equal(r.codigo, 1);
+    assert.match(r.salida, /no coinciden/);
+    assert.ok(!r.salida.includes('BOtra-clave-distinta') && !r.salida.includes(VAPID));
+  } finally {
+    limpiar(m);
+  }
+});
+
 // La corrida REAL (sin --dry-run) contra el docker de mentira: lo que tiene que quedar
 // en el release y en qué orden. El BUILD_ID va último porque es lo que deploy-vivo.mjs
 // lee para dar el release por publicable.
@@ -285,6 +328,9 @@ test('build real: release con SHA, código sin lo excluido, docker build sin val
     assert.ok(i(new RegExp(`^image rm onia-platform:candidato-${m.sha8}$`)) > etiqueta, 'dejó el candidato colgado');
     assert.ok(!r.log.includes(ANON) && !r.log.includes(SRK), 'un valor de app.env viajó en la línea de comando');
     assert.ok(!r.salida.includes(ANON) && !r.salida.includes(SRK));
+    assert.match(build, /--build-arg NEXT_PUBLIC_APP_URL --build-arg NEXT_PUBLIC_VAPID_PUBLIC_KEY /);
+    assert.equal(readFileSync(`${m.estado}/vapid-en-build`, 'utf8').trim(), 'ok', 'la clave de push no llegó al build');
+    assert.ok(!r.log.includes(VAPID) && !r.salida.includes(VAPID), 'la clave de push viajó en argv o se mostró');
     assert.match(r.salida, /STAGED_OK/);
   } finally {
     limpiar(m);
@@ -297,6 +343,7 @@ const GATES_ROTOS = [
   [{ STUB_NODE: 'v20.18.0' }, /node=v20\.18\.0/],
   [{ STUB_ENVFILES: '1' }, /envfiles=1/],
   [{ STUB_ANON: '0' }, /anon-key-no-horneada/],
+  [{ STUB_VAPID: '0' }, /vapid-no-horneada/],
   [{ STUB_PUBLICA: '0' }, /url-publica-no-horneada/],
   [{ STUB_CONF: 'root|/|["npm","start"]' }, /config de la imagen inesperada/],
 ];
