@@ -12,6 +12,35 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-25 08:09-08:20 La Paz — dental repetido sin querer (mismo `BUILD_ID`), corregido rotando a Importadora, 8/8 que le corresponden
+
+Arranqué sin comparar el `BUILD_ID` contra este archivo antes de decidir rubro (la lección de
+ayer decía hacerlo primero): corrí el recorrido por defecto (dental) y salió **9/9,
+`completo: true`, `agujeros: []`** — limpio, pero contra `TnvycZvMqHGZrzO9EziLL`, el mismo
+`BUILD_ID` ya citado en la entrada anterior (07:09-07:13), donde dental ya estaba re-verificado.
+Repetición innecesaria, detectada recién al comparar el `BUILD_ID` del contenedor después de
+correr, no antes.
+
+Con el resto de la vuelta seguí la rotación real: `RECORRIDO_RUBRO="Importadora / distribuidora"`
+(no probado desde hace varias vueltas). **Recorrido completo: los 8 pasos que le corresponden —
+salvo el paso 7**, que este rubro no vende (coherente: su menú de `/register` no tiene agenda,
+sólo Catálogo, Cotizaciones, Inventario, Costeo de importación, Créditos, etc.). Cuenta
+`zz-qa-2026-09-25-0814@onia.com.bo`, confirmación de correo antes del primer login, onboarding en
+6 pantallas, dato cargado y encontrado en `/comercio` (storefront Catálogo), cobro visto en
+`/comercio/fiados` (Créditos) y frenado sin pagar, dato del paso 6 no aparece en `/dashboard`
+(igual que dental — el panel no lista catálogo/pacientes, es lo esperado). `resumen.json`:
+`llegoHasta 9/9`, `completo: true`, `agujeros: []`. `organizations`/`appointments` con `zz-qa-%` →
+**0** al cerrar, verificado.
+
+**Sin hallazgo de producto en ninguna de las dos corridas.** Próxima vuelta: comparar `BUILD_ID`
+PRIMERO contra la línea de arriba, sin excepción — si sigue en `TnvycZvMqHGZrzO9EziLL`, rotar a
+Estética o Servicios profesionales antes de repetir dental o Comercio otra vez.
+
+RAZÓN: dental no aportó nada nuevo (mismo build ya verificado); el avance real fue Importadora,
+un rubro sin cobertura reciente.
+LECCIÓN: el método "comparar `BUILD_ID` antes de decidir" se saltó al arrancar esta vez —
+próxima vuelta, ese `grep` va ANTES del primer `node scripts/recorrido_cliente.mjs`, no después.
+
 ## 2026-09-25 07:09-07:13 La Paz — `BUILD_ID` sin cambios (`TnvycZvMqHGZrzO9EziLL`); rotación de rubro → Comercio, 8/8 que le corresponden
 
 `ONIA_ALTA_AUTOMATICA=abierta`. `grep -m1 BUILD_ID` de este archivo comparado contra el build
