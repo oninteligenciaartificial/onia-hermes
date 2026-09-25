@@ -15,7 +15,7 @@
 # El trabajo lo hace swap-imagen.sh --recrear, el mismo camino que un deploy:
 # canario con el env-file nuevo ANTES de tocar produccion (un app.env roto se
 # descubre ahi), el viejo RENOMBRADO y no borrado, todas las redes (REDES_EXTRA) conectadas y
-# verificadas con nc, mas la de LiteLLM como OPCIONAL (avisa, no aborta) — y un app.env
+# verificadas con nc, mas la propia de LiteLLM (onia_llm) como OPCIONAL (avisa, no aborta) — y un app.env
 # con AGENTS_LLM_* nuevo recien se lee al recrear (recrear a mano tumbo prod 3 veces por eso: crear con
 # --network pone UNA sola red), y rollback automatico si algo falla.
 #

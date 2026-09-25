@@ -29,13 +29,14 @@ PAUSA=${ONIA_SWAP_PAUSA:-1}          # segundos entre reintentos (los tests usan
 NAME=onia-platform
 RED_PRINCIPAL=supabase_default                       # donde viven auth, db y kong
 REDES_EXTRA=(easypanel dentalgest-staging-supabase_default)
-# LiteLLM (onia_selfhosted-litellm-1:4000) vive en onia_selfhosted_onia_internal, que es de OTRO
-# stack (/opt/onia-selfhosted). La lee el Redactor por plantilla de los agentes (AGENTS_LLM_*)
-# con su clave virtual. Es OPCIONAL a proposito: sin ella los agentes usan el texto fijo (su
-# respaldo por diseño), y un hotfix no puede abortar porque ese otro stack se este recreando.
-# Se conecta y se prueba con AVISO, nunca con fatal ni rollback. En esa red solo hay litellm,
-# litellm-db y onia-center (verificado 2026-09-24): el :3000 queda visible para ellos sin Traefik.
-RED_LITELLM=onia_selfhosted_onia_internal
+# LiteLLM (onia_selfhosted-litellm-1:4000) la lee el Redactor por plantilla de los agentes
+# (AGENTS_LLM_*) con su clave virtual. Red PROPIA con solo la plataforma y LiteLLM: la de su stack
+# (onia_selfhosted_onia_internal) admite 12 servicios del compose (open-webui, crawl4ai, mailpit...)
+# y cualquiera veria el :3000 sin Traefik ni Cloudflare, falsificando cf-connecting-ip.
+# Es OPCIONAL a proposito: sin ella los agentes usan el texto fijo (su respaldo por diseño), y un
+# hotfix no puede abortar porque el otro stack se este recreando. Se crea, se le suma LiteLLM (si
+# su compose lo recreo, vuelve aca) y se prueba con AVISO, nunca con fatal ni rollback.
+RED_LITELLM=onia_llm
 LITELLM=onia_selfhosted-litellm-1:4000
 CANARIO_PUERTO=127.0.0.1:3101                        # loopback: Traefik no lo ve
 PREV_A_GUARDAR=2
@@ -136,6 +137,10 @@ for r in "${REDES_EXTRA[@]}"; do
   [ "$r" = easypanel ] && continue
   docker network connect "$r" "$CANARIO" || fatal "no pude conectar el canario a $r"
 done
+docker network inspect "$RED_LITELLM" >/dev/null 2>&1 || docker network create "$RED_LITELLM" >/dev/null \
+  || say "AVISO: no pude crear la red $RED_LITELLM (opcional): sigo"
+# Si ya estaba conectado da error y no importa: lo que cuenta es el nc de la verificacion.
+docker network connect "$RED_LITELLM" "${LITELLM%:*}" >/dev/null 2>&1 || true
 docker network connect "$RED_LITELLM" "$CANARIO" \
   || say "AVISO: el canario no se pudo conectar a $RED_LITELLM (opcional): sigo"
 docker start "$CANARIO" >/dev/null || fatal "el canario no arranca"
