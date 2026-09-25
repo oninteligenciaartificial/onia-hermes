@@ -56,6 +56,21 @@ export const ALTA_VERBO_VOS = ALTA_ABIERTA
   : "pedís tu acceso";
 
 /**
+ * El mismo verbo cuando ABRE una frase — un título, una bajada, el remate de
+ * una pantalla.
+ *
+ * Existe porque el de arriba es un fragmento de frase corrida y se usó para
+ * empezar el titular del cierre de la home: en producción se leía «creás tu
+ * cuenta hoy y probalo con tu propio negocio.», en display, a tres renglones y
+ * arrancando en minúscula, como si le faltara el principio (medido MIRANDO la
+ * home el 2026-09-25). Se DERIVA del verbo en vez de tipear la variante: si el
+ * alta se cierra, el título dice «Pedís tu acceso…» sin que nadie se acuerde de
+ * venir a cambiarlo acá. Lo vigila `titulo-no-empieza-en-minuscula.test.ts`.
+ */
+export const ALTA_VERBO_VOS_TITULO =
+  ALTA_VERBO_VOS[0].toLocaleUpperCase("es") + ALTA_VERBO_VOS.slice(1);
+
+/**
  * ¿Entre crear la cuenta y usar el sistema hay un paso obligatorio?
  *
  * true — el alta exige CONFIRMAR EL CORREO. Es la misma decisión del 29-ago que
