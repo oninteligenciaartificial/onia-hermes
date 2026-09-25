@@ -711,6 +711,58 @@ abrirlas y decidir a qué deploy se refieren. Se derivan con el comando, nunca d
 
 ## Ahora
 
+- [x] 🔴 **CERRADO el 2026-09-25 10:43-11:25 La Paz (commiteado; es el INSTRUMENTO
+      —`scripts/embudo_del_bot.mjs`—, no toca el motor y no necesita deploy): el medidor del
+      embudo encendía un 🔴 que no podía bajar nunca, porque contaba una caída de agosto que ya
+      cerró — y de paso dejaba sin medir la única pérdida que sí importa.**
+
+      **Lo que estaba roto.** La vuelta de ayer hizo bien en sacar a los 4 desconocidos del
+      descarte mudo, pero los dejó en una línea con 🔴 fija: `escribieron y el motor no los
+      registro: 4 (chatwoot:34…37)`. Esos cuatro son del **24 al 28 de agosto** y no pueden
+      cambiar: el número iba a salir en rojo en cada vuelta, para siempre. Eso gasta la señal dos
+      veces — manda a re-investigar historia curada (me costó media vuelta de hoy), y **el día que
+      el motor pierda una conversación de verdad, el rojo ya va a estar encendido y nadie lo va a
+      notar**. Es la regla que este carril ya tenía escrita, *«toda alerta mira la FECHA del
+      fallo»*, sin aplicar a su propio instrumento.
+
+      **Lo que se midió, y es el dato que faltaba: la caída ya cerró.** El motor tiene un hueco
+      contiguo entre `chatwoot:28` (18-ago 11:58) y `chatwoot:38` (29-ago 05:37); las cuatro caen
+      justo adentro. De la 38 en adelante **no perdió ninguna**: de los inboxes 4 y 5 Chatwoot
+      tiene `38 40 45 46 47 48 49 50 58` y el motor tiene las nueve.
+
+          # el hueco, y que despues no hay ninguno:
+          docker exec supabase-db psql -U postgres -tAc \
+            "select conversation_key, created_at from onia_center.bot_conversations order by created_at;"
+          docker exec onia-chatbot_chatwoot-db.1.<sufijo> psql -U postgres -d onia-chatbot -tAc \
+            "select id from conversations where id >= 38 and inbox_id in (4,5) order by id;"
+
+      **El arreglo: separar la cicatriz de la herida, sin traer fechas.** El id de Chatwoot es un
+      contador, así que sirve de reloj: `resumirEmbudo` deriva `ultimoRegistrado` —el id más alto
+      que el motor registró— y parte las pérdidas en `perdidasNuevas` (posteriores: el motor
+      **dejó de escribir**, 🔴, y el próximo lead también se pierde) y `perdidasAnteriores`
+      (cicatriz, sin 🔴, nombradas enteras con su corte). En producción ahora imprime
+      `el motor registro a todos los que escribieron despues de chatwoot:58` y lista las 4 aparte.
+
+      🔴 **La trampa que lo habría hecho fallar ABIERTO, y que por eso tiene caso propio.** El
+      motor guarda claves sintéticas (`chatwoot:999999`, `chatwoot:990777`) que no existen en
+      Chatwoot. Si entraran al corte, `ultimoRegistrado` sería 999999 y **ninguna** pérdida podría
+      volver a ser «nueva»: el 🔴 quedaría apagado para siempre — peor que el 🔴 permanente que
+      este ítem vino a sacar. El corte sólo mira claves que existen de los **dos** lados.
+
+      **Prueba (rojo antes por el motivo correcto, y validado por MUTACIÓN con `cp`).** El primer
+      rojo fue `Cannot read properties of undefined (reading 'join')`: el campo no existía. Con el
+      arreglo, `node scripts/embudo_del_bot.mjs --self-check` → `OK`. Las dos mutaciones:
+      dejar entrar las claves sintéticas al corte → **5 fallas**, entre ellas `✗ una clave
+      sintetica no puede correr el corte al infinito`; ponerle 🔴 a la cicatriz → `✗ y la cicatriz
+      NO lleva 🔴`. Un caso viejo (`el informe los nombra, no los esconde`) se puso rojo al partir
+      la línea en dos y **se reescribió más fuerte, no se borró**: ahora exige que *todas* las
+      claves de `sinRegistrarEnElMotor` aparezcan en el texto, para que separar la señal no
+      termine escondiendo a la mitad.
+
+      ⚠️ **Lo que NO era, y se descartó antes de escribirlo.** La hipótesis de entrada era «el
+      motor está perdiendo conversaciones». Falso: pierde cero desde el 29-ago. Si lo hubiera
+      reportado así, la próxima vuelta se iba a arreglar un motor sano.
+
 - [x] **CERRADO el 2026-09-25 08:13-09:00 La Paz (MEDICIÓN, sin cambio de motor): la definición de
       hecho del carril quedó medida ENTERA por primera vez en varias vueltas — y al medirla
       apareció que el log del bot vivo está ahogado al 83 % por UNA línea.**
@@ -824,6 +876,14 @@ abrirlas y decidir a qué deploy se refieren. Se derivan con el comando, nunca d
         🔴 escribieron y el motor no los registro: 4 (chatwoot:34, chatwoot:35, chatwoot:36,
            chatwoot:37) — invisibles para el embudo y para el vigia de leads sin respuesta
       ```
+
+      ⚠️ **Esa salida es HISTORIA: ni el texto ni el 🔴 son los de hoy (corregido 2026-09-25
+      11:25, ítem de arriba).** La cola de este mismo ítem ya desmentía la frase —el vigía de
+      leads sin respuesta **sí** los ve— pero la cita quedó congelada con la versión vieja, que es
+      justo como un dato falso sobrevive: nadie recita una salida, la copia. Hoy el instrumento
+      imprime `el motor registro a todos los que escribieron despues de chatwoot:58` y lista las
+      cuatro aparte, sin 🔴, porque son una caída de agosto ya cerrada. Se deriva corriéndolo,
+      nunca de acá: `node scripts/embudo_del_bot.mjs`.
 
       **La cuenta honesta del carril pasó de 3 a 7 desconocidos reales** (3 registrados + 4 que el
       motor perdió). **Lección, y es la que sobrevive al arreglo:** cuando el comentario de un
