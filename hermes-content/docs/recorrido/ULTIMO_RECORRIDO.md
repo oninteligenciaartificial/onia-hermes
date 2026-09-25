@@ -12,6 +12,44 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-25 01:09-01:18 La Paz — `BUILD_ID` sin cambios; dental repetido de más, `Servicios profesionales` cierra el ciclo de los 5 rubros
+
+`ONIA_ALTA_AUTOMATICA=abierta`. Corrí dental (`node scripts/recorrido_cliente.mjs --escribir`)
+**sin comparar `BUILD_ID` primero** — 9/9, `completo: true`, 0 filas `zz-qa-` al cerrar, pero era
+repetido: al comparar después, el `BUILD_ID` en vivo (`1fCNCDEJaOeFVV1KczGHP`) era el mismo que ya
+citaba la entrada de las 00:10. La entrada anterior ya decía "si sigue este mismo build, rotar a
+importadora o servicios profesionales" — no lo hice antes de correr. Corrijo el método esta
+vuelta: `grep -m1 BUILD_ID` primero, SIEMPRE, antes de lanzar cualquier corrida.
+
+Con eso, corrí el rubro que faltaba: `RECORRIDO_RUBRO="Servicios profesionales" node
+scripts/recorrido_cliente.mjs --escribir`:
+
+- Los 9 pasos OK. Cuenta `zz-qa-2026-09-25-0114@onia.com.bo`, confirmación de correo real,
+  onboarding en 6 pantallas (vocabulario "Clientes"), `/dashboard` sin rebote.
+- Paso 6: `zz-qa-2026-09-25-0114-paciente` cargado en Clientes (`/patients`) y visto de vuelta.
+- Paso 7: cita `2026-09-25 09:00` agendada (201, `cmug9toml002j01pfsu63b5r4`) y VISTA en
+  `/appointments`.
+- Paso 8: la pantalla de cobro de este rubro es "Caja" (`/comercio/caja`, comparte ruta con
+  comercio) — vista y frenada ahí sin pagar. No es un hallazgo: el propio patrón del script ya
+  documentaba "caja" como nombre de cobro válido para "dental, comercio, servicios, estética".
+- Paso 9: el dato del paso 6 no figura en `/dashboard` (esperado, igual que dental/estética: el
+  panel no lista clientes).
+- Limpieza verificada: `organizations`/`appointments` con `zz-qa-%` → **0** al cerrar.
+
+**Sin hallazgo de producto.** Con esto, los 5 rubros activos (dental, comercio, estética,
+importadora, servicios profesionales) quedan re-verificados dentro del `BUILD_ID`
+`1fCNCDEJaOeFVV1KczGHP` — importadora fue el único que no se corrió esta vuelta ni la anterior,
+queda pendiente rotar a él si este `BUILD_ID` sigue vigente la próxima vez.
+
+RAZÓN: la medida principal (9/9 en todos los rubros activos) ya estaba en el techo — no hay más
+escalón 1/2 disponible con este `BUILD_ID`. Avance real: cerrar casi todo el ciclo de rotación de
+rubros y corregir el método (comparar `BUILD_ID` ANTES de correr, no después).
+LECCIÓN: comparar `BUILD_ID` es el PRIMER comando de la vuelta, no un paso que se hace "para
+justificar" después de correr — corrida esta vez sin esa disciplina, dental salió repetido de
+más y gastó tiempo sin agregar información nueva.
+
+---
+
 ## 2026-09-25 00:10 La Paz — `BUILD_ID` cambió (deploy nuevo: `VREeqNSncIqDIOTMbfLTQ` → `1fCNCDEJaOeFVV1KczGHP`); recorrido dental completo, 9/9
 
 Al arrancar había **una fila residual** de la vuelta anterior (auto-sync 23:11) sin limpiar:
