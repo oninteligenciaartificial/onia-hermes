@@ -12,6 +12,39 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-25 12:10-12:12 La Paz — `BUILD_ID` sin cambios; escalón nuevo: la invitación por correo de un coadministrador SÍ llega (no solo 201)
+
+`ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado ANTES de decidir: `UgtwNYIEjS-DSK0umjqc8`,
+igual al de ayer — no correspondía repetir dental ni ningún rubro (los 5 ya están 9/9). Siguiendo
+el plan de la vuelta anterior, auditoría de "promesa vs entrega" en una superficie no cubierta
+todavía: el modal "Agregar miembro" de `/settings` (equipo), pestaña "Invitar por email".
+
+La pantalla promete: *"Recibirá un email para completar el registro"*. Hasta hoy eso sólo se
+había verificado a nivel API (`scripts/probar_coadministrador.mjs`, cierre de `t_24758d5a`
+2026-09-19): `POST /api/admin/users` responde 201 con `message: "Invitation sent to ..."`, pero
+nadie había mirado si ese correo realmente SALE del servidor — un 201 de
+`supabaseAdmin.auth.admin.inviteUserByEmail` no prueba entrega, igual que un 200 no prueba nada
+sin mirar (regla del carril).
+
+Corrida en vivo: `node scripts/probar_coadministrador.mjs` (org `zz-qa-coadmin-20260925121058`,
+plan `clinic`) → `POST /api/admin/users` da 201 para
+`zz-qa-coadmin-second-20260925121058@onia.com.bo`. Inmediatamente después,
+`docker logs onia-mail --since 5m | grep zz-qa-coadmin-second-20260925121058`:
+
+    postfix/smtp[1106892]: 21ACE1100005: to=<zz-qa-coadmin-second-20260925121058@onia.com.bo>,
+    relay=route2.mx.cloudflare.net[162.159.205.17]:25, delay=2.4, dsn=2.0.0, status=sent (250 2.0.0 Ok)
+
+El correo de invitación SALE de verdad (mismo camino SMTP que la confirmación de alta). Las tres
+puertas de DG-043 (invitar ADMIN en plan que lo paga, verlo en la lista, sacarlo por DELETE)
+siguen sosteniéndose, y ahora la promesa de la pantalla también quedó verificada contra el
+servidor de correo, no solo contra la base. Limpieza confirmada por el propio script:
+`organizations=0 auth.users=0` al cerrar. Sin hallazgo — es cobertura nueva, no un fallo.
+
+RAZÓN: `BUILD_ID` no se movió, así que no correspondía repetir un rubro; el avance fue extender
+la verificación a un escalón que sólo se medía a medias (201 sin entrega).
+LECCIÓN: ninguna nueva — comparar `BUILD_ID` primero y, si no cambió, subir un escalón de
+profundidad en vez de repetir la misma corrida sigue funcionando.
+
 ## 2026-09-25 11:09-11:1x La Paz — `BUILD_ID` sin cambios; rotación de rubro → Estética y spa, 9/9
 
 `ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado ANTES de decidir rubro (primer comando de la
