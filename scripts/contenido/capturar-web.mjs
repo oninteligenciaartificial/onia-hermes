@@ -291,21 +291,26 @@ window.__cap = (() => {
     const vivas = new Set();
     for (const m of st.marcas) {
       const piezas = m.modo === 'foco' || !m.rect.lineas ? [m.rect] : m.rect.lineas;
+      // Una línea: recuadro. Dos o más: resaltador (fondo + subrayado), porque en renglones
+      // apretados los recuadros se montan unos sobre otros y la marca se vuelve ruido.
+      const resaltador = m.modo !== 'foco' && piezas.length > 1;
+      const padX = resaltador ? 5 : m.padX, padY = resaltador ? 1 : m.padY;
       piezas.forEach((r, k) => {
         const id = m.id + '-' + k;
         vivas.add(id);
         let el = marcasEl.get(id);
         if (!el) {
           el = document.createElement('div');
-          el.style.cssText = 'position:absolute;border-radius:10px;box-sizing:border-box;transform-origin:center';
-          if (m.modo === 'foco') el.style.boxShadow = '0 0 0 200vmax rgba(10,15,13,.62)';
-          else { el.style.border = '4px solid ' + VERDE; el.style.boxShadow = '0 0 0 5px rgba(16,194,107,.20), 0 8px 22px rgba(16,194,107,.26)'; }
+          el.style.cssText = 'position:absolute;box-sizing:border-box;transform-origin:center;mix-blend-mode:multiply';
+          if (m.modo === 'foco') { el.style.borderRadius = '10px'; el.style.boxShadow = '0 0 0 200vmax rgba(10,15,13,.62)'; el.style.mixBlendMode = 'normal'; }
+          else if (resaltador) { el.style.borderRadius = '6px'; el.style.background = 'rgba(16,194,107,.26)'; el.style.boxShadow = 'inset 0 -3px 0 ' + VERDE; }
+          else { el.style.borderRadius = '10px'; el.style.mixBlendMode = 'normal'; el.style.border = '4px solid ' + VERDE; el.style.boxShadow = '0 0 0 5px rgba(16,194,107,.20), 0 8px 22px rgba(16,194,107,.26)'; }
           raiz.insertBefore(el, pulsoEl);
           marcasEl.set(id, el);
         }
-        const x = r.x - m.padX - scrollX, y = r.y - m.padY - window.scrollY;
+        const x = r.x - padX - scrollX, y = r.y - padY - window.scrollY;
         el.style.left = x + 'px'; el.style.top = y + 'px';
-        el.style.width = (r.w + 2 * m.padX) + 'px'; el.style.height = (r.h + 2 * m.padY) + 'px';
+        el.style.width = (r.w + 2 * padX) + 'px'; el.style.height = (r.h + 2 * padY) + 'px';
         el.style.opacity = m.op; el.style.transform = 'scale(' + m.esc + ')';
         el.style.display = 'block';
       });

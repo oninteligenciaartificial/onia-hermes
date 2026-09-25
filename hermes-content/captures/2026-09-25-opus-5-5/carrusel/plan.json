@@ -1,0 +1,68 @@
+{
+  "tema": "2026-09-25-opus-5-5-migracion · recortes para carrusel",
+  "descripcion": "Las mismas páginas oficiales, en viewport de teléfono (390×844, 3x): la propia página reacomoda el texto en columna angosta y el recorte se lee dentro del marco de 530 px del carrusel. Sólo fotos.",
+  "viewport": { "width": 390, "height": 844 },
+  "dpr": 3,
+  "tomas": [
+    {
+      "id": "K0",
+      "url": "https://platform.claude.com/docs/en/models/opus-5-5/migration-guide",
+      "debe_decir": ["Where an item says a setting is rejected, the API returns a 400 error."],
+      "pasos": [
+        { "hacer": "scroll", "texto": "Where an item says a setting is rejected, the API returns a 400 error.", "s": 0.2, "centrar": true },
+        { "hacer": "marcar", "texto": "Where an item says a setting is rejected, the API returns a 400 error.", "s": 0.4 },
+        { "hacer": "foto", "nombre": "400" }
+      ]
+    },
+    {
+      "id": "K1",
+      "url": "https://platform.claude.com/docs/en/models/opus-5-5/migration-guide",
+      "debe_decir": ["and manual thinking budgets"],
+      "pasos": [
+        { "hacer": "scroll", "texto": "thinking: {\"type\": \"disabled\"} and manual thinking budgets", "s": 0.2, "centrar": true },
+        { "hacer": "marcar", "texto": "thinking: {\"type\": \"disabled\"} and manual thinking budgets", "s": 0.4 },
+        { "hacer": "foto", "nombre": "1-thinking" }
+      ]
+    },
+    {
+      "id": "K3",
+      "url": "https://platform.claude.com/docs/en/models/opus-5-5/migration-guide",
+      "debe_decir": ["tool_choice: type \"tool\" and \"any\" are not supported for this model."],
+      "pasos": [
+        { "hacer": "scroll", "texto": "tool_choice: type \"tool\" and \"any\" are not supported for this model.", "s": 0.2, "centrar": true },
+        { "hacer": "marcar", "texto": "tool_choice: type \"tool\" and \"any\" are not supported for this model.", "s": 0.4 },
+        { "hacer": "foto", "nombre": "error-tool-choice" }
+      ]
+    },
+    {
+      "id": "K4",
+      "url": "https://platform.claude.com/docs/en/models/opus-5-5/migration-guide",
+      "debe_decir": ["Omit temperature, top_p, and top_k"],
+      "pasos": [
+        { "hacer": "scroll", "texto": "Omit temperature, top_p, and top_k", "s": 0.2, "centrar": true },
+        { "hacer": "marcar", "texto": "Omit temperature, top_p, and top_k, or leave them at their defaults: any other value is rejected.", "s": 0.4 },
+        { "hacer": "foto", "nombre": "4-sampling" }
+      ]
+    },
+    {
+      "id": "K5",
+      "url": "https://platform.claude.com/docs/en/models/opus-5-5/migration-guide",
+      "debe_decir": ["Don't end messages with a prefilled assistant turn: it is rejected"],
+      "pasos": [
+        { "hacer": "scroll", "texto": "Don't end messages with a prefilled assistant turn: it is rejected", "s": 0.2, "centrar": true },
+        { "hacer": "marcar", "texto": "Don't end messages with a prefilled assistant turn: it is rejected", "s": 0.4 },
+        { "hacer": "foto", "nombre": "5-prefill" }
+      ]
+    },
+    {
+      "id": "K7",
+      "url": "https://platform.claude.com/docs/en/models/opus-5-5/migration-guide",
+      "debe_decir": ["Set effort explicitly: the default is medium"],
+      "pasos": [
+        { "hacer": "scroll", "texto": "Set effort explicitly: the default is medium", "s": 0.2, "centrar": true },
+        { "hacer": "marcar", "texto": "Set effort explicitly: the default is medium", "s": 0.4 },
+        { "hacer": "foto", "nombre": "effort-explicito" }
+      ]
+    }
+  ]
+}
