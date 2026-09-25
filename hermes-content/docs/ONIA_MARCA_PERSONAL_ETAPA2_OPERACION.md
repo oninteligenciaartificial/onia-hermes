@@ -73,12 +73,16 @@ calendario de demos. El `?src=` ya está vivo en prod.
 
 | Plataforma | Cuenta | Estado | Falta |
 |---|---|---|---|
-| Instagram | @sergio_urcullo | ✅ activa (Etapa 1 publicó ahí) | link de comunidad en bio |
+| Instagram | @sergiourcullo ⚠️ | ✅ activa (Etapa 1 publicó ahí) | link de comunidad en bio |
 | TikTok | ¿? | 🟡 confirmar cuenta personal | handle consistente + bio + link |
 | Facebook | ¿? | 🟡 confirmar página/perfil | ídem |
 | YouTube Shorts | ¿? | 🟡 confirmar canal | ídem |
 | LinkedIn | **linkedin.com/in/sergiourcullo** | ✅ **TERMINADO 2026-08-30**: titular "Fundador de Onia \| Desarrollo sistemas con IA para escalar tu negocio", Acerca de en español (conserva La Galerie Parfums), URL limpia, **foto verde + banner "on\|onia" subidos por Sergio**, **visibilidad pública TOTAL activada y verificada tras recarga** (titular/extracto/experiencia/foto → público, indexable por Google) | nada |
 | X | **@sergiourcullo** (may-2021) | ✅ perfil completo: handle, nombre, bio de IG, ubicación, foto verde | 🟡 banner (asset listo: `Descargas/ChatGPT Image 30 ago 2026, 12_25_34.png`, el mismo de LinkedIn) + website `onia.com.bo` provisorio — **el modal de edición de X dejó de renderizar** (4 intentos 30-ago); reintentar con sesión fresca. Los 3 posts viejos: pestañas renderizan vacías, nada urgente |
+
+> ⚠️ **Corregido el 2026-09-25.** En la fila de Instagram decía `@sergio_urcullo`. Medido: la
+> cuenta se renombró a **`@sergiourcullo`** —el mismo handle que X, LinkedIn y YouTube—;
+> Sergio Urcullo lo confirmó el 06-sep (commit `2ee86efb`).
 
 > Bio unificada (decisión Sergio 2026-08-30): **la de IG** — "Desarrollo sistemas con IA
 > para escalar tu negocio / Fundador de @oniahq / Aprende IA gratis 👇". El link de bio

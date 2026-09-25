@@ -35,7 +35,9 @@ seguimiento · 1 mes del grupo VIP (cuando exista) · actualizaciones del curso.
 
 ## 3 · Validacion ANTES de grabar (esta semana, gratis)
 
-Encuesta a la comunidad (Avisos, con el sticker/poll de WhatsApp) — lista para pegar:
+Encuesta a la comunidad (Announcements, con el sticker/poll de WhatsApp) — lista para pegar:
+⚠️ *Corregido el 2026-09-25: decía «Avisos»; el canal se llama Announcements
+([`comunidad/ESTADO_COMUNIDAD.md`](comunidad/ESTADO_COMUNIDAD.md) §1.1).*
 
 > Estoy armando EL curso: el paso a paso completo del sistema que muestro acá.
 > Quiero hacerlo con lo que VOS necesitás. ¿Qué te urge más?

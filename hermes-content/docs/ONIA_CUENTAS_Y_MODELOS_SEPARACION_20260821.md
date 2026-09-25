@@ -59,6 +59,10 @@ Sergio pasó el plan "Sistema Sergio" de Samuel Aguilera (19-ago): marca persona
 guionizados el mes 1, 2/semana, reto de los $5.000 al 31-dic. Samuel produce; nuestro
 sistema orquesta la infraestructura (comentario→DM, medición, comunidad).
 
+> ⚠️ **Nota del 2026-09-25.** `@sergio_urcullo` era el handle de Instagram de Sergio Urcullo
+> ese día. La cuenta se renombró después: hoy es **`@sergiourcullo`** (él lo confirmó el 06-sep,
+> commit `2ee86efb`). Esta foto del 21-ago se deja como se escribió.
+
 ## El mapa completo de cuentas
 
 | | @oniahq | Lucía | Sergio (personal) |
