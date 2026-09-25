@@ -1,5 +1,5 @@
 {
-  "cuando": "2026-09-25T05:15:16.822Z",
+  "cuando": "2026-09-25T06:13:42.908Z",
   "rubro": "Clínica dental",
   "rubroPromesa": "dentistry Clínica dental Pacientes, citas, tratamientos y cobros",
   "escribio": true,
@@ -17,11 +17,11 @@
         "usuarios": 1
       },
       "filas": [
-        "appointments cmugial20001s01mkafuk3tsl zz-qa-2026-09-25-0511-cita",
-        "patients cmugia87b001q01mkrvw3k06t zz-qa-2026-09-25-0511-paciente",
-        "organizations cmugi7fns001801mkzitp5r3j zz-qa-2026-09-25-0511-negocio",
-        "auth.users 816dcc53-ea17-4617-ba0a-d894ccaf7d66 zz-qa-2026-09-25-0511@onia.com.bo",
-        "invoices cmugiavtu001u01mksegttw6n 2026-0001 10.00"
+        "appointments cmugkdrra000o01rr2h3o74q7 zz-qa-2026-09-25-0609-cita",
+        "patients cmugkdf3g000m01rr767a7ne5 zz-qa-2026-09-25-0609-paciente",
+        "organizations cmugkao9s000401rr6vb4v6mb zz-qa-2026-09-25-0609-negocio",
+        "auth.users a4684509-d35f-4f63-89fa-04f1d6803e40 zz-qa-2026-09-25-0609@onia.com.bo",
+        "invoices cmugke2i5000q01rrxy4i0ucm 2026-0001 10.00"
       ],
       "ajenas": []
     },
@@ -45,16 +45,16 @@
   "agujeros": [],
   "noAplican": [],
   "datosQA": {
-    "nombre": "zz-qa-2026-09-25-0511",
-    "negocio": "zz-qa-2026-09-25-0511-negocio",
-    "email": "zz-qa-2026-09-25-0511@onia.com.bo",
+    "nombre": "zz-qa-2026-09-25-0609",
+    "negocio": "zz-qa-2026-09-25-0609-negocio",
+    "email": "zz-qa-2026-09-25-0609@onia.com.bo",
     "whatsapp": "59170000000",
     "ciudad": "zz-qa-ciudad",
     "password": "zz-qa-2026-09-25-Passw0rd!",
-    "paciente": "zz-qa-2026-09-25-0511-paciente",
-    "profesional": "zz-qa-2026-09-25-0511-profesional",
-    "cita": "zz-qa-2026-09-25-0511-cita",
-    "itemFactura": "zz-qa-2026-09-25-0511-item"
+    "paciente": "zz-qa-2026-09-25-0609-paciente",
+    "profesional": "zz-qa-2026-09-25-0609-profesional",
+    "cita": "zz-qa-2026-09-25-0609-cita",
+    "itemFactura": "zz-qa-2026-09-25-0609-item"
   },
   "pasos": [
     {
@@ -62,7 +62,7 @@
       "nombre": "home",
       "que": "Entrar a onia.com.bo y que se VEA",
       "estado": "ok",
-      "detalle": "cargó en 1866 ms, 8662 caracteres visibles",
+      "detalle": "cargó en 2201 ms, 8662 caracteres visibles",
       "captura": "hermes-content/docs/recorrido/capturas/paso-01-home.png",
       "dom": {
         "textoVisible": 8662,
@@ -127,7 +127,7 @@
       "nombre": "pedir-acceso",
       "que": "Pedir acceso / registrarse con datos zz-qa-",
       "estado": "ok",
-      "detalle": "cuenta zz-qa-2026-09-25-0511@onia.com.bo creada; el alta pide CONFIRMAR EL CORREO antes del primer login — la pantalla dice: \"Tu negocio completo, en un solo sistema. bolt Activación acompañada Entregamos tu sistema con la configuración de tu rub\"",
+      "detalle": "cuenta zz-qa-2026-09-25-0609@onia.com.bo creada; el alta pide CONFIRMAR EL CORREO antes del primer login — la pantalla dice: \"Tu negocio completo, en un solo sistema. bolt Activación acompañada Entregamos tu sistema con la configuración de tu rub\"",
       "campos": [
         {
           "tag": "input",
@@ -247,11 +247,11 @@
         {
           "pantalla": "equipo",
           "vio": "¿Quién más trabaja con vos?",
-          "apreto": "Terminar (profesional zz-qa-2026-09-25-0511-profesional; cierra el alta)"
+          "apreto": "Terminar (profesional zz-qa-2026-09-25-0609-profesional; cierra el alta)"
         },
         {
           "pantalla": "listo",
-          "vio": "zz-qa-2026-09-25-0511-negocio ya está en Onia",
+          "vio": "zz-qa-2026-09-25-0609-negocio ya está en Onia",
           "apreto": "—"
         }
       ],
@@ -260,7 +260,7 @@
       "agendas": 10,
       "capturaAsistente": "hermes-content/docs/recorrido/capturas/paso-05b-onboarding-listo.png",
       "status": 200,
-      "ms": 5297,
+      "ms": 3817,
       "urlFinal": "https://app.onia.com.bo/dashboard",
       "captura": "hermes-content/docs/recorrido/capturas/paso-05c-gate-levantado.png",
       "dom": {
@@ -280,7 +280,7 @@
       "nombre": "cargar-dato",
       "que": "Cargar un dato real del rubro (un cliente, un paciente, un producto)",
       "estado": "ok",
-      "detalle": "\"zz-qa-2026-09-25-0511-paciente\" cargado en group Pacientes (/patients) y encontrado de vuelta en la lista",
+      "detalle": "\"zz-qa-2026-09-25-0609-paciente\" cargado en group Pacientes (/patients) y encontrado de vuelta en la lista",
       "capturaAlta": "hermes-content/docs/recorrido/capturas/paso-06b-alta-dato.png",
       "campos": [
         {
@@ -375,7 +375,7 @@
         }
       ],
       "status": 200,
-      "ms": 2485,
+      "ms": 2422,
       "urlFinal": "https://app.onia.com.bo/patients",
       "captura": "hermes-content/docs/recorrido/capturas/paso-06c-dato-en-la-lista.png",
       "dom": {
@@ -395,10 +395,10 @@
       "nombre": "cita",
       "que": "Agendar una cita zz-qa- con el paciente del paso 6 y VERLA en la agenda",
       "estado": "ok",
-      "detalle": "cita 2026-09-28 09:00 con zz-qa-2026-09-25-0511-paciente agendada (201, id cmugial20001s01mkafuk3tsl) y VISTA en la agenda de https://app.onia.com.bo/appointments",
+      "detalle": "cita 2026-09-28 09:00 con zz-qa-2026-09-25-0609-paciente agendada (201, id cmugkdrra000o01rr2h3o74q7) y VISTA en la agenda de https://app.onia.com.bo/appointments",
       "elegido": {
-        "paciente": "zz-qa-2026-09-25-0511-paciente",
-        "profesional": "zz-qa-2026-09-25-0511",
+        "paciente": "zz-qa-2026-09-25-0609-paciente",
+        "profesional": "zz-qa-2026-09-25-0609",
         "motivo": "Consulta general",
         "hora": "09:00"
       },
@@ -407,7 +407,7 @@
       "botonSinNombre": false,
       "capturaFormulario": "hermes-content/docs/recorrido/capturas/paso-07b-cita-formulario.png",
       "status": 200,
-      "ms": 2274,
+      "ms": 2148,
       "urlFinal": "https://app.onia.com.bo/appointments",
       "captura": "hermes-content/docs/recorrido/capturas/paso-07d-cita-en-agenda.png",
       "dom": {
@@ -428,7 +428,7 @@
       "red": {
         "post": {
           "status": 201,
-          "body": "{\"id\":\"cmugial20001s01mkafuk3tsl\",\"organizationId\":\"cmugi7fns001801mkzitp5r3j\",\"patientId\":\"cmugia87b001q01mkrvw3k06t\",\"doctorId\":\"cmugi7fny001901mkgxgkrzma\",\"dateTime\":\"2026-09-28T13:00:00.000Z\",\"durationMin\":30,\"status\":\"PENDIENTE\",\"reason\":\"Consulta general\",\"notes\":\"zz-qa-2026-09-25-0511-cita\",\""
+          "body": "{\"id\":\"cmugkdrra000o01rr2h3o74q7\",\"organizationId\":\"cmugkao9s000401rr6vb4v6mb\",\"patientId\":\"cmugkdf3g000m01rr767a7ne5\",\"doctorId\":\"cmugkaoa6000501rrvc50ejtk\",\"dateTime\":\"2026-09-28T13:00:00.000Z\",\"durationMin\":30,\"status\":\"PENDIENTE\",\"reason\":\"Consulta general\",\"notes\":\"zz-qa-2026-09-25-0609-cita\",\""
         },
         "disponibilidad": {
           "status": 200,
@@ -442,8 +442,8 @@
       "nombre": "cobro",
       "que": "Llegar a la pantalla de cobro y MIRARLA. Frenar ahí",
       "estado": "ok",
-      "detalle": "factura zz-qa- creada (/billing/cmugiavtu001u01mksegttw6n) con el ítem \"zz-qa-2026-09-25-0511-item\" visible en su pantalla de cobro — FRENADO acá a propósito, sin marcarla pagada",
-      "facturaUrl": "https://app.onia.com.bo/billing/cmugiavtu001u01mksegttw6n",
+      "detalle": "factura zz-qa- creada (/billing/cmugke2i5000q01rrxy4i0ucm) con el ítem \"zz-qa-2026-09-25-0609-item\" visible en su pantalla de cobro — FRENADO acá a propósito, sin marcarla pagada",
+      "facturaUrl": "https://app.onia.com.bo/billing/cmugke2i5000q01rrxy4i0ucm",
       "itemVisible": true,
       "captura": "hermes-content/docs/recorrido/capturas/paso-08c-factura-creada.png",
       "dom": {
@@ -462,10 +462,10 @@
       "nombre": "bandeja",
       "que": "Abrir la bandeja / el panel y ver si el dato del paso 6 aparece",
       "estado": "ok",
-      "detalle": "panel en https://app.onia.com.bo/dashboard: el dato \"zz-qa-2026-09-25-0511-paciente\" NO figura en el panel — sí quedó guardado y visible en group Pacientes (paso 6). El panel no lista group pacientes: no es un fallo, es lo que muestra",
+      "detalle": "panel en https://app.onia.com.bo/dashboard: el dato \"zz-qa-2026-09-25-0609-paciente\" NO figura en el panel — sí quedó guardado y visible en group Pacientes (paso 6). El panel no lista group pacientes: no es un fallo, es lo que muestra",
       "datoEnElPanel": false,
       "status": 200,
-      "ms": 3288,
+      "ms": 3236,
       "urlFinal": "https://app.onia.com.bo/dashboard",
       "captura": "hermes-content/docs/recorrido/capturas/paso-09-bandeja.png",
       "dom": {
