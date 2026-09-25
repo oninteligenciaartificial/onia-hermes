@@ -97,11 +97,40 @@ export function claveDeSlot(slot) {
   return `${slot?.startAt || ""}@@${String(slot?.label || "").trim()}`;
 }
 
-export function parseSlotsSpec(raw, { now = Date.now() } = {}) {
-  const text = String(raw || "").trim();
-  if (!text) return null;
-  const candidatos = candidatosDelSpec(text, now);
+/**
+ * Los horarios que llegan YA parseados —los que puede traer un turno en su payload— llevados a la
+ * misma forma que `candidatosDelSpec` y juzgados contra el MISMO reloj.
+ *
+ * Existe por lo que dice `candidatosDelSpec` doce lineas mas arriba: cada reimplementacion de esta
+ * regla fue un bug. `run-turn.mjs` tenia DOS copias del parseo, una por rama; el arreglo del
+ * 2026-09-24 saco la de la rama del entorno y dejo intacta la del turno, con el mismo
+ * `slice(0, 2)` y el mismo `pending: false` fijo. Con esto las dos ramas preguntan en un solo lado.
+ */
+export function candidatosDeLista(lista, now = Date.now()) {
+  if (!Array.isArray(lista)) return [];
+  return lista
+    .map((slot) => {
+      const iso = slot?.startAt || slot?.start_at || null;
+      return {
+        label: String(slot?.label || "").trim(),
+        startAt: iso,
+        pending: !slotSostenible({ startAt: iso }, now),
+      };
+    })
+    .filter((slot) => slot.label || slot.startAt);
+}
 
+/**
+ * El par que se OFRECE y los libres que ademas se pueden ACEPTAR, de una sola lista de candidatos.
+ * Es lo que necesita cualquiera que arme config: pedir uno sin el otro es como nacio el bug que
+ * dejo tres horarios libres inalcanzables (ver `slotsElegibles`).
+ */
+export function slotsDeCandidatos(candidatos) {
+  const slots = elegirPar(candidatos);
+  return { slots, slotsElegibles: elegiblesFueraDelPar(candidatos, slots) };
+}
+
+function elegirPar(candidatos) {
   // Se eligen los 2 que SE SOSTIENEN, no los 2 primeros: el recorte va DESPUES del
   // juicio. Mientras fue al reves, los candidatos 3 y 4 no se miraban nunca, asi que la
   // unica forma de que el par llegara entero era que el generador reservara margen para
@@ -131,6 +160,19 @@ export function parseSlotsSpec(raw, { now = Date.now() } = {}) {
   }));
 }
 
+function elegiblesFueraDelPar(candidatos, par) {
+  const yaOfrecidos = new Set((par || []).map(claveDeSlot));
+  return candidatos
+    .filter((slot) => !slot.pending && slot.label && !yaOfrecidos.has(claveDeSlot(slot)))
+    .map((slot) => ({ key: null, label: slot.label, startAt: slot.startAt, pending: false }));
+}
+
+export function parseSlotsSpec(raw, { now = Date.now() } = {}) {
+  const text = String(raw || "").trim();
+  if (!text) return null;
+  return elegirPar(candidatosDelSpec(text, now));
+}
+
 /**
  * Los horarios que el prospecto puede ELEGIR y el guion NO nombra.
  *
@@ -155,10 +197,8 @@ export function parseSlotsSpec(raw, { now = Date.now() } = {}) {
 export function slotsElegibles(raw, { now = Date.now() } = {}) {
   const text = String(raw || "").trim();
   if (!text) return [];
-  const yaOfrecidos = new Set((parseSlotsSpec(text, { now }) || []).map(claveDeSlot));
-  return candidatosDelSpec(text, now)
-    .filter((slot) => !slot.pending && slot.label && !yaOfrecidos.has(claveDeSlot(slot)))
-    .map((slot) => ({ key: null, label: slot.label, startAt: slot.startAt, pending: false }));
+  const candidatos = candidatosDelSpec(text, now);
+  return elegiblesFueraDelPar(candidatos, elegirPar(candidatos));
 }
 
 // ---------------------------------------------------------------------------

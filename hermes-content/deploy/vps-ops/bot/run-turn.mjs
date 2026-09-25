@@ -44,7 +44,15 @@
 
 import { pathToFileURL } from "node:url";
 
-import { createBotConfig, DEFAULT_CONFIG, parseSlotsSpec, renderTemplate, slotsElegibles } from "./config.mjs";
+import {
+  candidatosDeLista,
+  createBotConfig,
+  DEFAULT_CONFIG,
+  parseSlotsSpec,
+  renderTemplate,
+  slotsDeCandidatos,
+  slotsElegibles,
+} from "./config.mjs";
 import { esConversacionNuestra } from "./es-nuestra.mjs";
 import { ensureKnowledge, withKnowledge } from "./knowledge.mjs";
 import { createState, step, markHumanTakeover,
@@ -113,12 +121,16 @@ export function buildConfig(input) {
 
   const delTurno = Array.isArray(input.slots) && input.slots.length ? input.slots : null;
   if (delTurno) {
-    overrides.slots = delTurno.slice(0, 2).map((slot, index) => ({
-      key: slot.key || (index === 0 ? "A" : "B"),
-      label: String(slot.label || "").trim() || `opción ${index === 0 ? "A" : "B"}`,
-      startAt: slot.startAt || slot.start_at || null,
-      pending: false,
-    }));
+    // Tampoco esta rama parsea por su cuenta. Tenia la MISMA copia que la de abajo —`slice(0, 2)`
+    // y `pending: false` fijo— y sin `slotsElegibles`: los candidatos 3 a 5 que trajera un turno
+    // volvian a ser inalcanzables y un horario ya caducado se ofrecia como vivo. Hoy nadie la
+    // despierta (en produccion manda ONIA_BOT_SLOTS, y Cal.com no existe en el VPS por decision,
+    // tablero `t_b18ca430`), y por eso se cierra ahora: un bug dormido vuelve MUDO y en verde.
+    // La letra sale de la POSICION, igual que en la otra rama: el par se reordena cronologicamente
+    // al juzgarlo, asi que una "A" que venga en el payload puede terminar nombrando otro horario.
+    const { slots, slotsElegibles: elegibles } = slotsDeCandidatos(candidatosDeLista(delTurno, relojDelTurno(input)));
+    overrides.slots = slots;
+    overrides.slotsElegibles = elegibles;
   } else {
     // El spec del entorno lo parsea `config.mjs`, NO este archivo. Tenia su propia copia —
     // `slice(0, 2)` con `pending: false` fijo— y eso costaba dos cosas a la vez: el bot vivo
