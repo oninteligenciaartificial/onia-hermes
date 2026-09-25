@@ -3880,3 +3880,20 @@ el instrumento, no el sitio".
 RAZÓN: la medida principal (dental 9/9) no se movió porque `BUILD_ID` sigue igual — correcto no
 repetirla; el avance de esta vuelta fue destrabar el tablero y cerrar un ítem fantasma de la cola.
 LECCIÓN: ninguna nueva — el método de comparar `BUILD_ID` primero funcionó esta vez.
+
+## 2026-09-25 15:09-15:14 La Paz — `BUILD_ID` cambió (`4FWMcecd4jRBGUVwStDQb`, antes
+`9tuk1Qk2BjQ2j2HdJcL8u`): correspondía repetir dental, y se corrió
+
+`ONIA_ALTA_AUTOMATICA=abierta`. Tablero: `t_324ad7ec` (informativo de la vuelta anterior sobre
+precios, sin hallazgo) cerrado sin acción.
+
+Recorrido completo con `--escribir`: **9/9 pasos OK en "Clínica dental"**, `completo: true` en
+`resumen.json`, sin agujeros. Cuenta `zz-qa-2026-09-25-1909@onia.com.bo` creada, onboarding en 6
+pantallas, paciente cargado, cita `2026-09-28 09:00` agendada y VISTA en `/appointments`, factura
+con ítem `zz-qa-` mirada en `/billing/...` y frenada sin pagar. Todo lo `zz-qa-` borrado en la
+misma corrida: `appointments`/`organizations` con prefijo `zz-qa-` en 0 filas, verificado con
+`SELECT` después del borrado.
+
+RAZÓN: N/A — avanzó (recorrido re-verificado contra el `BUILD_ID` nuevo, 9/9 sin hallazgo).
+LECCIÓN: ninguna nueva — el método de comparar `BUILD_ID` primero volvió a ser lo que decidió
+repetir dental.
