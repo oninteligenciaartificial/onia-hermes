@@ -52,6 +52,44 @@ const SRC = join(AQUI, "..");
 /** Menos que esto = el parser se rompió, no es que el repo esté limpio. */
 const MINIMO_SUJETOS = 4;
 
+/**
+ * LA ÚNICA EXCEPCIÓN, y por qué no es un agujero.
+ *
+ * La prohibición de arriba cuida al botón cuyo TEXTO no controla el diseño: el
+ * del catálogo, que crece cuando alguien renombra un plan. El CTA de la barra
+ * es el caso opuesto —su rótulo es una constante— y ahí `normal` no protege: lo
+ * PARTE. Medido el 2026-09-24 contra producción, Chromium, la portada:
+ *
+ *     ancho   barra    CTA      líneas
+ *     320px   86,2px   85,2px   TRES («Creá / tu / cuenta»), pegado al borde
+ *     360px   67,0px   66,0px   dos
+ *     390px   61,0px   46,8px   una  ← lo correcto
+ *
+ * La barra es sticky y crece con su contenido: en un iPhone SE se comía 86px de
+ * una pantalla de 640. Con `nowrap` los tres anchos quedan en barra 61 / CTA
+ * 46,8 / centrado, con 9,6px hasta «Menú», 14px hasta el borde y desborde
+ * horizontal 0 — o sea, el mal que este gate persigue NO aparece.
+ *
+ * EL CINTURÓN SE MUDA, NO SE SUELTA. El riesgo que quedaba —un rótulo más largo
+ * que ya no entre— se mide abajo, cada corrida y desde la fuente: qué texto
+ * pone el markup adentro de la barra, y cuánto mide ese texto en `alta.ts`. Una
+ * exención escrita a mano y nunca más mirada es una PRE-APROBACIÓN; ésta se
+ * cae sola el día que deja de ser cierta.
+ */
+const EXENTOS: Record<string, string> = {
+  "app/(sitio)/sitio.module.css → .headerCta .btn":
+    "el CTA de la barra: rótulo constante (CTA_ALTA), no sale del catálogo. Sin `nowrap` se parte " +
+    "en tres líneas a 320px y la barra sticky crece 41%. Medido el 2026-09-24: con `nowrap`, " +
+    "320/360/390 dan barra 61px, CTA 46,8px y desborde 0.",
+};
+
+/**
+ * El largo que se MIDIÓ que entra. A 320px el botón de una línea deja 14px
+ * libres hasta el borde de la pantalla: ~2 caracteres. Un rótulo más largo
+ * vuelve a empujar, así que tiene que volver a medirse a 320 antes de escribirse.
+ */
+const MAX_ROTULO = 14;
+
 /** Los CUATRO que tenían el agujero el día que se escribió esto — a mano se
  * habían encontrado tres; el de la home lo destapó este gate. */
 const ANCLAS = [
@@ -107,6 +145,11 @@ const SUJETOS = css(SRC)
  */
 const BASES = SUJETOS.filter((r) => /^\.btn$/i.test(r.selector.trim()));
 
+/** Los que HOY declaran `nowrap`, con la misma clave que usa `EXENTOS`. */
+const CON_NOWRAP = SUJETOS.filter((r) => /white-space\s*:\s*nowrap/i.test(r.cuerpo)).map(
+  (r) => `${r.archivo} → ${r.selector}`,
+);
+
 describe("un botón no empuja la página de costado", () => {
   it("encuentra los botones del disco, incluidos los tres que tenían el agujero", () => {
     expect(SUJETOS.length).toBeGreaterThanOrEqual(MINIMO_SUJETOS);
@@ -119,14 +162,55 @@ describe("un botón no empuja la página de costado", () => {
   });
 
   it("ningún botón fija `white-space: nowrap`: es lo que convierte un CTA largo en desborde", () => {
-    const culpables = SUJETOS.filter((r) => /white-space\s*:\s*nowrap/i.test(r.cuerpo)).map(
-      (r) => `${r.archivo} → ${r.selector}`,
-    );
+    const culpables = CON_NOWRAP.filter((clave) => !(clave in EXENTOS));
 
     expect(
       culpables,
       "un botón con `nowrap` crece con el largo de su texto y no lo frena nadie; " +
         "el 2026-09-17 eso movió /v1/funciones/facturacion-electronica-siat 30px de lado en un iPhone SE",
+    ).toEqual([]);
+  });
+
+  it("ninguna exención está podrida: la regla que nombra existe y de verdad declara `nowrap`", () => {
+    const podridas = Object.keys(EXENTOS).filter((clave) => !CON_NOWRAP.includes(clave));
+
+    expect(
+      podridas,
+      "una exención que ya no corresponde a ninguna regla queda PRE-APROBADA: el día que alguien " +
+        "escriba ese selector de nuevo, el gate lo deja pasar sin que nadie lo haya medido. Se borra.",
+    ).toEqual([]);
+  });
+
+  it("el botón exento sigue recibiendo el rótulo constante de `alta.ts`, y sigue entrando a 320px", () => {
+    // 1. QUÉ TEXTO ENTRA. Derivado del markup, no de la palabra del que eximió:
+    //    si mañana la barra pasa a mostrar un rótulo del catálogo, esto es rojo.
+    const ui = readFileSync(join(SRC, "app/(sitio)/ui.tsx"), "utf8");
+    const barra = ui.match(/<BarraSitio>([\s\S]*?)<\/BarraSitio>/)?.[1];
+    expect(barra, "no encontré el markup de la barra en app/(sitio)/ui.tsx: el gate perdió su sujeto").
+      toBeTruthy();
+
+    const rotulo = barra?.match(/<Btn[^>]*>([\s\S]*?)<\/Btn>/)?.[1]?.trim();
+    expect(
+      rotulo,
+      "el CTA de la barra dejó de ser `{CTA_ALTA}` pelado. La exención de `nowrap` se midió con un " +
+        "rótulo constante y corto; cualquier otra cosa hay que volver a medirla a 320px",
+    ).toBe("{CTA_ALTA}");
+
+    // 2. CUÁNTO MIDE. Las dos ramas de CTA_ALTA, leídas de su archivo.
+    const alta = readFileSync(join(SRC, "app/(sitio)/alta.ts"), "utf8");
+    const declaracion = alta.match(/export const CTA_ALTA\s*=([^;]*);/)?.[1] ?? "";
+    const literales = [...declaracion.matchAll(/"([^"]*)"/g)].map((m) => m[1].normalize("NFC"));
+
+    expect(
+      literales.length,
+      "no pude leer los rótulos de CTA_ALTA en app/(sitio)/alta.ts: sin eso no estoy midiendo nada",
+    ).toBeGreaterThanOrEqual(2);
+
+    const largos = literales.filter((t) => t.length > MAX_ROTULO);
+    expect(
+      largos,
+      `un rótulo de más de ${MAX_ROTULO} caracteres no entra en una línea a 320px con la barra de hoy ` +
+        "(quedaban 14px libres hasta el borde). Medilo de nuevo a 320 antes de alargarlo",
     ).toEqual([]);
   });
 
