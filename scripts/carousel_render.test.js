@@ -359,3 +359,15 @@ test('CTA de Sergio: la palabra exige recurso, pero no es obligatoria', () => {
   // Sin firma no sale, con o sin palabra.
   assert.deepStrictEqual(faltantesCtaSergio({ cta: 'GUARDALO' }), ['identity', 'follow_cta']);
 });
+
+test('terminal grande: texto para copiar legible en el teléfono, y las líneas vacías separan', () => {
+  const html = communityEditorialHtml({
+    role: 'point', headline: 'H', body: 'B',
+    visual: { type: 'terminal', size: 'grande', label: 'plantilla', lines: ['Hola [nombre],', '', '¿Te reservo el jueves?'] },
+  }, 1, 3, 'sergio', {});
+  assert.ok(html.includes('visual visual-terminal grande'));
+  assert.ok(html.includes('terminal-line gap'));
+  const normal = communityEditorialHtml({ role: 'point', headline: 'H', body: 'B', visual: { type: 'terminal', lines: ['x'] } }, 1, 3, 'sergio', {});
+  assert.ok(normal.includes('class="visual visual-terminal"'), 'sin size queda como estaba');
+});
+

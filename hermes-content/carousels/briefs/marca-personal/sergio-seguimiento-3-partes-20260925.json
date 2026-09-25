@@ -1,0 +1,203 @@
+{
+  "title": "El mensaje de seguimiento que sí se contesta",
+  "caption": "Un mensaje de seguimiento que nadie contesta casi siempre falla en lo mismo: no termina en una pregunta que se pueda responder con un sí.\n\nLas tres partes:\n1) su nombre y qué quedó pendiente\n2) por qué le conviene volver, sin asustar\n3) una sola pregunta de sí o no, con día y hora\n\nAdentro van tres plantillas para copiar: retomar lo pendiente, confirmar sin presionar y cerrar el ciclo después de dos intentos.\n\nLos nombres y los negocios del carrusel son de ejemplo. Guardalo para la próxima vez que tengas que escribirle a un cliente.",
+  "hashtags": [
+    "#ventas",
+    "#atencionalcliente",
+    "#whatsappbusiness",
+    "#ia",
+    "#emprendedores",
+    "#bolivia"
+  ],
+  "cta": "GUARDALO",
+  "identity": "Soy Sergio Urcullo. Comparto sistemas de IA que funcionan en negocios reales.",
+  "follow_cta": "Seguime para el próximo sistema.",
+  "serie": "IA PRÁCTICA",
+  "job": "education",
+  "fuentes": {
+    "dia_modelo": "hermes-content/docs/contenido/piezas/guiones/2026-09-25-dia-modelo-seguimiento-con-ia.md (pieza 4)",
+    "estructura": "Enrique Rocha, «Stop AI slop» — docs/contenido/SISTEMA_DE_GUIONES.md §7",
+    "partes_del_mensaje": "docs/research/ONIA_REFERENTE_ANAS_ANDALUSI_20260925.md §4.3, gancho 2.2",
+    "datos": "nombres y negocios de ejemplo, declarados en el caption"
+  },
+  "slides": [
+    {
+      "number": 1,
+      "role": "cover",
+      "pill": "Seguimiento",
+      "headline": "El mensaje que *sí* se contesta tiene 3 partes",
+      "body": "Casi todos se olvidan de la tercera. Adentro, tres plantillas para copiar.",
+      "bg": "hermes-content/references/marca-personal-sergio/fondos/cuaderno-02.png",
+      "alt_text": "El mensaje de seguimiento que sí se contesta tiene tres partes"
+    },
+    {
+      "number": 2,
+      "role": "point",
+      "pill": "Parte 1",
+      "headline": "Su *nombre* y lo que quedó pendiente",
+      "body": "Un mensaje genérico se lee como publicidad. El nombre y el pendiente exacto muestran que lo escribió alguien que se acuerda.",
+      "visual": {
+        "type": "table",
+        "label": "EL CAMBIO",
+        "left": "ASÍ NO",
+        "right": "ASÍ SÍ",
+        "rows": [
+          {
+            "left": "Hola, ¿cómo estás?",
+            "right": "Hola Ana, quedó pendiente tu segunda sesión"
+          }
+        ]
+      },
+      "alt_text": "Parte 1: el nombre y lo que quedó pendiente"
+    },
+    {
+      "number": 3,
+      "role": "point",
+      "pill": "Parte 2",
+      "headline": "Por qué le conviene *volver*",
+      "body": "Una razón concreta y sin asustar. El miedo hace que la persona deje de contestar.",
+      "visual": {
+        "type": "table",
+        "label": "EL CAMBIO",
+        "left": "ASÍ NO",
+        "right": "ASÍ SÍ",
+        "rows": [
+          {
+            "left": "Si no venís, puede empeorar",
+            "right": "Así no perdés lo que ya avanzamos"
+          }
+        ]
+      },
+      "alt_text": "Parte 2: por qué le conviene volver, sin asustar"
+    },
+    {
+      "number": 4,
+      "role": "point",
+      "pill": "Parte 3",
+      "headline": "*Una* pregunta de sí o no",
+      "body": "La que casi todos olvidan. «Avisame cuando puedas» no se contesta; una propuesta con día y hora, sí.",
+      "visual": {
+        "type": "table",
+        "label": "EL CAMBIO",
+        "left": "ASÍ NO",
+        "right": "ASÍ SÍ",
+        "rows": [
+          {
+            "left": "Avisame cuando puedas",
+            "right": "¿Te reservo el jueves a las 10?"
+          }
+        ]
+      },
+      "alt_text": "Parte 3: una sola pregunta de sí o no, con día y hora"
+    },
+    {
+      "number": 5,
+      "role": "point",
+      "pill": "Plantilla 1",
+      "headline": "Retomar lo *pendiente*",
+      "body": "Para el cliente que empezó algo y no volvió. Cambiá lo que está entre corchetes.",
+      "visual": {
+        "type": "terminal",
+        "size": "grande",
+        "label": "plantilla · copiar",
+        "lines": [
+          "Hola [nombre],",
+          "soy [tu nombre].",
+          "",
+          "Quedó pendiente",
+          "[lo que falta].",
+          "Así no perdés lo",
+          "que ya avanzamos.",
+          "",
+          "¿Te reservo el",
+          "[día] a las [hora]?"
+        ]
+      },
+      "alt_text": "Plantilla para retomar lo pendiente"
+    },
+    {
+      "number": 6,
+      "role": "point",
+      "pill": "Plantilla 2",
+      "headline": "Confirmar sin *presionar*",
+      "body": "El día anterior a la cita. Darle una salida fácil también es confirmar.",
+      "visual": {
+        "type": "terminal",
+        "size": "grande",
+        "label": "plantilla · copiar",
+        "lines": [
+          "Hola [nombre],",
+          "te espero mañana",
+          "a las [hora].",
+          "",
+          "¿Confirmás? Si no",
+          "podés, respondé NO",
+          "y te busco otro",
+          "horario."
+        ]
+      },
+      "alt_text": "Plantilla para confirmar una cita sin presionar"
+    },
+    {
+      "number": 7,
+      "role": "point",
+      "pill": "Plantilla 3",
+      "headline": "Cerrar el ciclo *sin cerrar la puerta*",
+      "body": "Después de dos intentos sin respuesta. Saca la presión y deja la puerta abierta.",
+      "visual": {
+        "type": "terminal",
+        "size": "grande",
+        "label": "plantilla · copiar",
+        "lines": [
+          "Hola [nombre],",
+          "no te quiero llenar",
+          "de mensajes.",
+          "",
+          "Si querés retomar,",
+          "respondé este chat",
+          "y te busco horario."
+        ]
+      },
+      "alt_text": "Plantilla para cerrar el ciclo después de dos intentos"
+    },
+    {
+      "number": 8,
+      "role": "save",
+      "pill": "Antes de mandar",
+      "headline": "Revisá estas *cuatro* cosas",
+      "body": "Si falla una, el mensaje se reescribe antes de salir.",
+      "visual": {
+        "type": "matrix",
+        "label": "CHECKLIST",
+        "items": [
+          {
+            "title": "Nombre y pendiente exacto",
+            "body": "no «hola, ¿cómo estás?»"
+          },
+          {
+            "title": "Una razón para volver",
+            "body": "sin asustar"
+          },
+          {
+            "title": "Una sola pregunta",
+            "body": "de sí o no, con día y hora"
+          },
+          {
+            "title": "Nada que nadie aprobó",
+            "body": "ni precios ni descuentos inventados"
+          }
+        ]
+      },
+      "save_worthy": true,
+      "alt_text": "Checklist de cuatro puntos antes de mandar un mensaje de seguimiento"
+    },
+    {
+      "number": 9,
+      "role": "cta",
+      "pill": "El criterio",
+      "headline": "La IA puede escribirlos. *Vos* decidís qué sale.",
+      "body": "Guardalo para la próxima vez que tengas que escribirle a un cliente.",
+      "alt_text": "La IA puede escribir los mensajes, pero la decisión de mandar es tuya"
+    }
+  ]
+}

@@ -56,12 +56,16 @@ function crear({ esc, emph, roleFor, ACCOUNTS, BRAND, getFmt }) {
 
   function renderTerminal(visual) {
     const lines = list(visual.lines);
-    return `<div class="visual visual-terminal">
+    // `size: 'grande'` es para texto que se copia (una plantilla, un mensaje): a 18 px sobre
+    // 1080 queda en ~6 pt en el teléfono y no se lee. Líneas de hasta ~22 caracteres.
+    const grande = visual.size === 'grande' ? ' grande' : '';
+    return `<div class="visual visual-terminal${grande}">
       <div class="terminal-bar"><i></i><i></i><i></i><span>${esc(visual.label || 'terminal')}</span></div>
       <div class="terminal-body">${lines.map((line) => {
         const value = typeof line === 'string' ? line : line.value;
         const kind = typeof line === 'string' ? '' : (line.kind || '');
-        return `<div class="terminal-line ${esc(kind)}">${esc(value)}</div>`;
+        return value === '' ? '<div class="terminal-line gap"></div>'
+          : `<div class="terminal-line ${esc(kind)}">${esc(value)}</div>`;
       }).join('')}</div>
     </div>`;
   }
@@ -241,6 +245,7 @@ body{font-family:'DM Sans',Inter,system-ui,sans-serif;background:#f7f5ef;color:#
 .terminal-bar i{width:11px;height:11px;border-radius:50%;background:#ef6b5e}.terminal-bar i:nth-child(2){background:#e8bb55}.terminal-bar i:nth-child(3){background:#50ca7c}.terminal-bar span{margin-left:9px}
 .terminal-body{padding:26px 26px 32px;font-family:'DM Mono',monospace;font-size:18px;line-height:1.65;white-space:pre-wrap;overflow-wrap:anywhere}
 .terminal-line{color:#c4d1c9}.terminal-line.command{color:#77e5a4}.terminal-line.comment{color:#879890}
+.terminal-line.gap{height:.7em}.visual-terminal.grande .terminal-body{font-size:30px;line-height:1.4;padding:30px 30px 36px;color:#f7f5ef}.visual-terminal.grande .terminal-line{color:#f7f5ef}.visual-terminal.grande .terminal-bar{font-size:17px}
 .visual-matrix{background:#fdfcf8}
 .matrix-list{display:flex;flex-direction:column;gap:16px}.matrix-item{display:grid;grid-template-columns:48px 1fr;gap:12px;padding:16px 0;border-top:1px solid #dce2dd}.matrix-item:first-child{border-top:0}.matrix-number{font-family:'DM Mono',monospace;color:#08734a;font-size:18px}.matrix-item strong{font-size:24px;color:#17201c}.matrix-item p{font-size:18px;line-height:1.35;color:#526159;margin-top:4px}
 .visual-table{padding:28px 30px;background:#fdfcf8}.table-head,.table-row{display:grid;grid-template-columns:1fr 40px 1fr;align-items:center;gap:10px}.table-head{font-family:'DM Mono',monospace;font-size:14px;letter-spacing:1.4px;color:#526159;padding-bottom:14px;border-bottom:1px solid #cfd8d1}.table-rows{display:flex;flex-direction:column}.table-row{min-height:68px;border-bottom:1px solid #e1e6e2;font-size:21px}.table-row b{font-weight:700}.table-row span{text-align:center;color:#08734a;font-size:28px}

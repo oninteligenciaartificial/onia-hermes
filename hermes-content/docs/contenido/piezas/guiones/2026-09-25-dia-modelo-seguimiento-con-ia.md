@@ -30,7 +30,7 @@ salen 13 publicaciones.
 | 1 | Feed · video normal | IG + TikTok + Shorts | Enseña | **E1** Que la IA escriba el mensaje sin inventar nada | el prompt de 4 reglas y el campo `requiere_revision` |
 | 2 | Feed · pilar | IG + TikTok + Shorts | Vende enseñando | **V1** El paciente que no volvió | la regla para armar la lista, el mensaje y la cola de aprobación |
 | 3 | Feed · B-roll | IG + TikTok + Shorts | Conecta | **C1** Por qué no dejo que la IA mande mensajes sola | las 3 cosas que aprueba siempre una persona |
-| 4 | Carrusel (reemplaza 1 de cada 4 B-roll) | IG + PDF en LinkedIn | Enseña | 3 mensajes de seguimiento que sí se contestan | tres plantillas para copiar |
+| 4 | Carrusel (reemplaza 1 de cada 4 B-roll) | IG + PDF en LinkedIn | Enseña | **El mensaje que sí se contesta tiene 3 partes** · ✅ renderizado: `../../../../carousels/out/sergio-seguimiento-3-partes-20260925/` | las 3 partes y tres plantillas para copiar |
 | 5 | Trial | TikTok + Shorts | Enseña | La regla en una línea | «tratamiento empezado + sin cita hace 45 días = a la lista» |
 | 6 | Trial | TikTok + Shorts | Vende enseñando | Hacé la cuenta | pacientes × sesiones que faltan × lo que cobrás |
 | 7 | Trial | TikTok + Shorts | Enseña | El JSON que no se rompe | por qué pedir `requiere_revision` y no «un mensaje» |

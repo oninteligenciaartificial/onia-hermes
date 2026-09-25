@@ -246,7 +246,8 @@ sesiones no chocan.
   - Capítulos.
   - Una vez por mes, el formato experimento con números en el título ("¿vale la pena?"), tomado
     de Erik Taveras.
-- **Carrusel.** Sigue la skill `hermes-content/skills/carruseles-onia.md`.
+- **Carrusel.** Sigue la skill `hermes-content/skills/carruseles-onia.md` y la estructura de
+  Rocha (tabla de abajo).
   - Estructura de marca personal: problema → insight → solución → ejemplo con pantalla real.
   - La pauta de ONIA tiene su propia estructura.
   - Ninguna lámina repite el fondo con otro titular: cada una prueba algo distinto.
@@ -261,6 +262,31 @@ sesiones no chocan.
   - Útil en menos de 2 minutos y aplicable hoy.
   - Trae el archivo (plantilla, checklist, workflow) y cierra con una pregunta o una mini-tarea.
   - Nunca anuncia algo que no existe.
+
+### Los referentes, formato por formato
+
+> Sergio Urcullo, 25-sep: *«usá de referencia a nuestros referentes, también para carruseles y
+> demás»*. Fuentes: `../research/ONIA_REFERENTES_ROCHA_TAVERAS_MUNOZ_20260925.md` (§1-§5) y
+> `../research/ONIA_REFERENTE_ANAS_ANDALUSI_20260925.md` (§3-§4). Son research con fecha: se
+> re-miden antes de copiar una cifra.
+
+**La fórmula que comparten los cuatro:** una unidad concreta, su prueba a la vista, la cara de quien la
+hizo y una puerta gratis al paso siguiente. Cada formato la aplica así:
+
+| Formato | Referente modelo | Qué se toma | Qué no se toma |
+|---|---|---|---|
+| **Reel / corto** | Santiago Muñoz (reel partido) · Erik Taveras (título) | cabeza fija abajo (~45 %) y prueba arriba (~55 %) que cambia cada 1-3 s; subtítulos de 2-5 palabras con **una** palabra resaltada, en el verde ONIA; un número o la herramienta exacta en el título | el amarillo y el cian de Santiago; «X acaba de destruir a Y» |
+| **Carrusel** | Enrique Rocha («Stop AI slop»: 3,1k likes en un día) | portada que declara una tesis; una unidad por lámina **con su nombre exacto** (plantilla, nodo, comando, repo); una lámina que se guarda; cierre con criterio. Diseño: un solo acento, tipo grande y apretado, etiqueta mono en mayúsculas y la pantalla o el texto real adentro | carruseles generados enteros por IA (la acuarela de Santiago); la estética «glow de IA» |
+| **YouTube largo** | Erik Taveras (experimento) · Santiago Muñoz | pruebas numeradas, número en el título y «¿vale la pena?»; «lo armé para alguien real», con consentimiento; plantilla incluida | cursos de 6-7 h |
+| **LinkedIn** | ninguno lo trabaja: es carril libre · Anas (listas y lanzamientos en texto) | el carrusel de la semana en PDF y un texto en primera persona sobre construir la empresa | autobombo; cifras de ingreso |
+| **Guía web / Bóveda** | Rocha (una guía por pieza) · Taveras (cada reel trae su guía) | una pieza = una guía con URL estable, que se encuentra en buscadores | pedir registro para leerla |
+| **Comunidad** | Taveras (hilos y menciones) · Muñoz (directos) · Rocha (bóveda) | recibe primero, con los archivos; «mostrá lo que armaste» los viernes; un directo «construimos en vivo» cada 2 semanas | comunidad paga; el IA Lab es la única excepción, decidida por Sergio Urcullo |
+| **Palabra clave** | los cuatro (Rocha la automatiza con ManyChat) | una palabra específica por pieza, que entrega un recurso que ya existe | «comentá X» sin recurso ni respuesta (§3) |
+| **Autoridad** | Anas (TV, Forbes) → en ONIA, el escenario del comprador | el Colegio de Odontólogos o la prensa de Santa Cruz (lo decide Sergio Urcullo) | cifras de ingreso, «millonario», títulos inflados |
+
+**La diferencia que manda:** a los cuatro les compra su propia audiencia. A ONIA le compra un dueño
+de clínica. Las piezas que venden llevan el gancho del dueño, la prueba de ONIA funcionando y su
+canal propio: @oniahq, LinkedIn y el WhatsApp de los leads.
 
 ---
 

@@ -88,6 +88,16 @@ que se veía generada por IA y no desarrollaba un argumento de venta.
   - Recurso de la Bóveda (`resource`) sólo si su URL ya responde 200: al 25-sep `/boveda` no
     está desplegada.
   - El renderer no agrega recurso ni firma por defecto: van en el brief o no aparecen.
+  - **Estructura de referencia** (Enrique Rocha, «Stop AI slop»; detalle en
+    `docs/contenido/SISTEMA_DE_GUIONES.md` §7):
+    1. portada que declara una tesis discutible, no un tema;
+    2. una unidad por lámina **con su nombre exacto** (la plantilla, el nodo, el comando) y su prueba
+       adentro;
+    3. una lámina «así no / así sí» cuando hay un error común;
+    4. una lámina que se guarda (checklist o matriz);
+    5. cierre con criterio, un solo CTA y la firma.
+    Diseño: un solo acento (verde ONIA), tipo grande, etiqueta mono en mayúsculas y el texto real
+    en la lámina. Nunca un carrusel generado entero por IA.
 - Lenguaje claro para empresas bolivianas, sin jerga tecnica innecesaria.
 
 ## Checklist de calidad antes de publicar
