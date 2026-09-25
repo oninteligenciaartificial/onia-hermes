@@ -494,21 +494,81 @@ function shasDeMerges(desde) {
 }
 
 /**
+ * Dónde ARRANCA la ventana ancha, derivado del último merge de la rama.
+ *
+ * ⚠️ Acá había un `${RAMA_DEPLOY}~40` fijo, y una ventana fija sobre una rama
+ * que avanza se queda corta SOLA. Medido el 2026-09-25: el último merge de
+ * `origin/master` quedó a **46** commits de la punta, o sea fuera de los 40, y
+ * el centinela de abajo se puso rojo sin que nadie tocara nada. Ese rojo no
+ * dice «el instrumento cuenta mal», dice «pasaron muchos commits sin mergear»
+ * — un dato sobre el calendario disfrazado de defecto. Y sale caro: este
+ * archivo corre en la cadena `npm test` de la raíz, así que traba el merge de
+ * los quince carriles hasta que alguien lo mire.
+ *
+ * Devuelve `null` si la rama no tiene NINGÚN merge: ahí el caso de abajo no
+ * puede concluir y se salta, que no es lo mismo que fallar.
+ */
+function inicioDeVentana(git) {
+  const ultimoMerge = git(['log', '--merges', '-1', '--format=%H', RAMA_DEPLOY]);
+  if (!ultimoMerge) return null;
+  // El PRIMER padre: la punta de la rama justo antes de ese merge, para que el
+  // rango `inicio..RAMA_DEPLOY` lo CONTENGA en vez de dejarlo justo al borde.
+  return git(['rev-parse', '--short', `${ultimoMerge}^1`]) || null;
+}
+
+/** El `git` de verdad. `null` cuando no contesta, nunca cadena vacía. */
+function gitDelRepo(args) {
+  try {
+    const salida = execFileSync('git', ['-C', REPO, ...args], {
+      encoding: 'utf8',
+      timeout: 30000,
+      stdio: ['ignore', 'pipe', 'ignore'],
+    }).trim();
+    return salida || null;
+  } catch {
+    return null;
+  }
+}
+
+/**
  * Ventana ancha del repo real. Se salta si el clon no está: este archivo corre
  * en la cadena `npm test` de la raíz, y un rojo por AMBIENTE traba el merge de
  * los quince carriles.
  */
 function ventana() {
-  try {
-    return execFileSync('git', ['-C', REPO, 'rev-parse', '--short', `${RAMA_DEPLOY}~40`], {
-      encoding: 'utf8',
-      timeout: 30000,
-      stdio: ['ignore', 'pipe', 'ignore'],
-    }).trim();
-  } catch {
-    return null;
-  }
+  return inicioDeVentana(gitDelRepo);
 }
+
+// Los tres casos de abajo son puros —no tocan el clon— y son los que atan el
+// arreglo: sin ellos, volver a escribir un `~N` fijo no pondría nada en rojo
+// hasta el día que la rama lo pasara de largo, que es como nació el defecto.
+test('la ventana se deriva del ÚLTIMO MERGE, no de un ~N fijo que la rama pasa de largo', () => {
+  const pedidos = [];
+  const inicio = inicioDeVentana((args) => {
+    pedidos.push(args.join(' '));
+    return args.includes('--merges') ? 'ffffffffffffffff' : 'abc1234';
+  });
+
+  assert.equal(inicio, 'abc1234');
+  const pedidoDeRevParse = pedidos.find((p) => p.startsWith('rev-parse'));
+  assert.ok(
+    pedidoDeRevParse.includes('^1'),
+    'la ventana tiene que arrancar en el PADRE del merge, para contenerlo',
+  );
+  assert.ok(
+    !pedidoDeRevParse.includes('~'),
+    'un `~N` fijo vuelve a poner el centinela rojo solo el día que la rama lo pasa (46 > 40 el 2026-09-25)',
+  );
+});
+
+test('sin ningún merge en la rama, la ventana no existe y el caso se SALTA en vez de fallar', () => {
+  assert.equal(inicioDeVentana(() => null), null);
+});
+
+test('si git no contesta el padre, la ventana es null y no una cadena vacía que parezca un sha', () => {
+  const inicio = inicioDeVentana((args) => (args.includes('--merges') ? 'ffffffffffffffff' : ''));
+  assert.equal(inicio, null);
+});
 
 // Sin este caso, el de abajo pasaría en verde el día que la ventana no tuviera
 // merges — y entonces `--no-merges` se podría borrar del script sin que nada se
@@ -518,7 +578,7 @@ test('la ventana elegida CONTIENE merges (si no, el caso siguiente no prueba nad
   if (!desde) return t.skip('sin el clon de onia-platform: ambiental, no es un defecto');
   const merges = shasDeMerges(desde);
   assert.notEqual(merges, null, 'git no contestó: el caso siguiente no puede concluir');
-  assert.ok(merges.length > 0, 'la ventana no tiene merges: elegí una más ancha');
+  assert.ok(merges.length > 0, 'la ventana se deriva del último merge: si no lo contiene, la derivación está rota');
 });
 
 test('no devuelve ni un merge, así que el pedido no cuenta dos veces el mismo arreglo', (t) => {
