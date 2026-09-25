@@ -81,8 +81,9 @@ habilite y comunique. El acceso al período se habilita una vez confirmado el
 pago. Onia te emite **factura por cada pago**, conforme a la normativa boliviana.
 
 3.3. **Renovación.** Cada período se paga por adelantado y no hay cobro
-automático: al vencer, Onia te avisa con anticipación razonable y el período
-siguiente empieza cuando pagás. Si no pagás, no se genera ninguna deuda: la
+automático. Antes del vencimiento Onia te avisa. Si pagás antes, el nuevo
+período se suma al vigente; si pagás después, empieza el día que se confirma el
+pago. Si no pagás, no se genera ninguna deuda: la
 cuenta pasa a solo lectura (§3.4). No renovar es simplemente no pagar el
 período siguiente; **no hay penalidad por no renovar**. No hay contrato de
 permanencia: lo pagado cubre el período en curso y no se reembolsa de forma

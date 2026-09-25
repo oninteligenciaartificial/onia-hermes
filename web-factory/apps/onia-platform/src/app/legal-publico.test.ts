@@ -121,6 +121,14 @@ describe("los Términos dicen lo que la ley pide y lo que el producto hace", () 
     expect(TERMINOS).not.toMatch(/\bmora\b/i);
   });
 
+  it("pagar antes suma al período vigente, no lo pisa", () => {
+    // extendPlanEnd (onia-platform lib/subscription/plan-state.ts) extiende
+    // desde el fin vigente si todavía no venció, y desde el pago si ya venció.
+    expect(TERMINOS).not.toMatch(/al vencer, Onia te avisa con anticipaci[oó]n/i);
+    expect(TERMINOS).toMatch(/Si pagás antes, el nuevo período se suma al vigente/);
+    expect(TERMINOS).toMatch(/si pagás después, empieza el día que se confirma el pago/);
+  });
+
   it("no reclama la propiedad de una marca que no está registrada", () => {
     expect(TERMINOS).not.toMatch(/las marcas/i);
     expect(TERMINOS).toMatch(/nombre comercial y los signos distintivos de Onia/);
