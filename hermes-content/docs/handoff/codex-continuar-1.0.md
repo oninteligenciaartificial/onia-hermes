@@ -16,6 +16,25 @@
 > conecta asistentes de IA). Anotado con su veredicto en `ONIA_ESTRATEGIA_DE_EMPRESA.md` §14. No
 > entra en la 1.0.
 >
+> **Respuestas de Sergio Urcullo (25-sep, 14:20 La Paz) — decisiones, no se vuelven a preguntar:**
+> - Meta: **método de pago ya cargado**.
+> - QR estático del BCP **recibido**: titular «Oniaagency De Mercado Moreno Leslie», cuenta
+>   **701-5104427-3-05**, monto libre (Bs 0,00), **vence el 25/09/2027** (anotar recordatorio). Copia en
+>   `E:/onia-wt/_insumos/qr-bcp-onia-20260925.jpeg` (vino por WhatsApp Desktop). Siguiente de la cola:
+>   ponerlo en el checkout.
+> - SIN: **no llamar**; seguir con la **Fase 2** del SIAT.
+> - Facturación: **nada manual** (no facturar a mano por el Portal Web).
+> - Ícono: **el verde con negro, el de Instagram**. Hay que aplicarlo a la app instalable.
+> - Pruebas del agente del negocio: con el **número de WhatsApp de Onia, el que ya está puesto**.
+> - Si «Solo el dueño» aprueba y desaparece: **se destraba solo, con criterio, o exigiendo más de un
+>   admin**.
+> - Correos: pidió verlos → página https://claude.ai/artifact/LZ3SYuFEqMjEZoEMoh26gD (espera «OK correos»).
+> - Pidió investigar cómo darle acceso a sus cuentas y las novedades de IA: hecho. Conector oficial
+>   donde exista (Cloudflare pendiente de autorizar con `/mcp`), token mínimo en el servidor para lo
+>   que corre solo, su sesión de Chrome para el SIAT, y el banco afuera.
+> - Aprobación del bot (S17→S18): el pedido vivo es `t_24fa76aa`; se aprueba con `ok t_24fa76aa` por
+>   Telegram.
+>
 > **Lo que depende de Sergio Urcullo, junto y en orden de urgencia:**
 > 1. Método de pago de Meta **antes del 30-sep** (el 1-oct termina la ventana gratis de WhatsApp).
 > 2. Imagen del QR estático del banco + titular exacto de la cuenta: sin eso el cliente no puede pagar.
