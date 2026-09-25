@@ -96,9 +96,19 @@ export function destinosDeclarados (fuenteDelSincronizador) {
 // vuelve a quedarse corta el dia que alguien agregue el septimo, y se queda corta EN VERDE
 // —el modo de falla que este gate existe para cerrar—. Con la zona declarada, una
 // herramienta nueva ahi nace como agujero hasta que tenga su linea `poner`.
+// El 2026-09-24 se sumaron las dos carpetas de `hermes-content/infra` que el sync
+// empezo a desplegar (los respaldos de la base y los crons del producto: 8 archivos
+// que el cron del VPS ejecutaba y nadie copiaba). El tripwire de mas abajo salio en
+// ROJO al cablearlas, que es exactamente para lo que esta puesto — y por eso entran
+// aca en el MISMO commit, no despues. Se declaran las dos carpetas concretas y no
+// `hermes-content/infra/` entero: el resto de esa carpeta (kits de instalacion,
+// compose, docs) no lo despliega este circuito, y declararlo volveria agujeros a sus
+// habitantes — el rojo falso que el recorte vino a evitar.
 const DUENO_DEL_DESPLIEGUE = [
   'scripts/',
-  'hermes-content/deploy/vps-ops/'
+  'hermes-content/deploy/vps-ops/',
+  'hermes-content/infra/vps-db/scripts/',
+  'hermes-content/infra/vps-ops/crons/'
 ]
 const loDespliegaEsteCircuito = (fuente) => DUENO_DEL_DESPLIEGUE.some((z) => fuente.startsWith(z))
 
