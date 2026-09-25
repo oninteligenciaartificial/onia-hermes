@@ -711,6 +711,50 @@ abrirlas y decidir a qué deploy se refieren. Se derivan con el comando, nunca d
 
 ## Ahora
 
+- [x] 🔴 **MEDIDO el 2026-09-25 14:13-14:45 La Paz (sin cambio de motor — el arreglo ya está
+      commiteado desde el 24-sep y lo único que falta es publicar): el bot vivo no sólo ofrece
+      turnos por debajo del día de aviso; sirve horarios **del pasado**. Probado ejecutando el
+      armador del contenedor con un spec cuyo primer horario es de AYER: lo devolvió igual como
+      opción A.**
+
+      **Cómo se encontró** (escalón 2, auditar los `[x]`: las dos colas tenían «Ahora» sin ítems
+      abiertos y los dos de «Después» están diferidos a propósito —la data QA es evidencia de
+      cuatro ítems cerrados— o esperando credenciales del BCP). Se auditó el `[x]` del
+      instrumento de anticipación corriéndolo contra producción:
+
+          npm run anticipacion:viva     # exit 1
+
+          proceso 8748 en onia-center — ofrece 2 horario(s)
+            CORTO sábado 26 de septiembre, 14:00 — 23.7 h de aviso
+            ok    lunes 28 de septiembre, 14:00 — 71.7 h de aviso
+            DISTINTO el codigo desplegado arma otro par que el de la rama:
+              lo que OFRECE el contenedor: sábado 26, 14:00 · lunes 28, 14:00
+              lo que elegiria la rama:     lunes 28, 14:00 · martes 29, 14:00
+
+      **El dato nuevo, y es el que cambia el tamaño del defecto.** Que el armador desplegado
+      recorte `slice(0, 2)` sin consultar `slotSostenible` ya estaba medido; lo que nadie había
+      preguntado es **qué pasa cuando el primer candidato vence**. Se le pasó al binario del
+      contenedor un spec con el jueves 24 (ayer) adelante:
+
+          node -e 'import { leerParVivo } from ".../anticipacion-viva.mjs"' \
+            con raw = "jueves 24 de septiembre, 14:00@2026-09-24T18:00:00Z|lunes 28…|martes 29…"
+          → el armador VIVO ofrece: A) jueves 24 de septiembre, 14:00 · B) lunes 28 de septiembre, 14:00
+
+      No filtra: devuelve los dos primeros del spec, vencidos o no. Y el spec se reescribe **una
+      vez al día** (`23 10 * * * /root/bin/onia-renovar-slots.py`, o sea 06:23 La Paz; hay un
+      segundo generador a las 07:41 con `slots-run.sh`). O sea que desde que un horario vence
+      hasta el cron siguiente, el prospecto que escribe recibe *«¿te reservo el sábado 26 a las
+      14:00?»* con el sábado ya pasado. Es la peor cara posible de las dos que este carril
+      persigue: no es que el bot no conteste, es que contesta mal con toda confianza.
+
+      **No se arregla acá y no se arregla en el productor.** El motor de la rama ya corta (por eso
+      el gate muestra la divergencia), y `slots-rodantes.mjs` dice en su propio comentario que el
+      margen de vigencia en el generador **ya se probó y le costaba un día de espera al
+      prospecto**: el diseño manda 5 candidatos justamente para que el consumidor elija los que se
+      sostienen. Lo que falta es que el consumidor desplegado sea el que corta. **Falta publicar
+      el bot; el pedido existe y es `t_24fa76aa` (blocked).** Se le comentó el costo con estos
+      números, no se duplicó.
+
 - [x] 🔴 **CERRADO el 2026-09-25 13:43-14:25 La Paz (commiteado; es el MISMO instrumento
       —`scripts/bot_vivo_tiene_el_codigo.mjs`—, no toca el motor y no necesita deploy):
       auditando el `[x]` de la vuelta anterior apareció que el gate miraba `*.mjs` y el deploy
