@@ -12,6 +12,29 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-25 18:09-18:11 La Paz — dental, 9/9, sin hallazgo
+
+`ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` no se comparó explícitamente esta vuelta (la entrada
+anterior, de la misma hora de arranque, ya lo había hecho); se corrió el recorrido completo por
+defecto (dental, sin `RECORRIDO_RUBRO`), como siguiente paso natural tras cerrar la rotación de
+los 5 rubros y la auditoría de promesa-vs-entrega.
+
+`node scripts/recorrido_cliente.mjs --escribir`: **recorrido completo, los 9 pasos, sin
+agujeros.** Cuenta `zz-qa-2026-09-25-1809@onia.com.bo`, confirmación de correo antes del primer
+login, onboarding en 6 pantallas, paciente `zz-qa-2026-09-25-1809-paciente` cargado y visto en
+`/patients`, cita 2026-09-28 09:00 agendada (201, `cmuha34ey001601r26jb1r0ni`) y VISTA en
+`/appointments`, factura con ítem `zz-qa-2026-09-25-1809-item` vista en `/billing/...` — frenado
+ahí sin marcar pago. El dato del paso 6 no aparece en `/dashboard` (esperado: el panel no lista
+el group Pacientes). `resumen.json`: `llegoHasta 9/9`, `completo: true`, `agujeros: []`.
+`organizations`/`appointments` con `zz-qa-%` → **0** al cerrar, verificado.
+
+**Sin hallazgo de producto.** Próxima vuelta: comparar `BUILD_ID` primero; si cambió, re-rotar
+rubros desde dental; si sigue igual, seguir con superficies de promesa-vs-entrega aún no
+auditadas (`/agentes`, `/comparativa`, `/facturacion`).
+
+RAZÓN: N/A — avanzó (recorrido re-verificado entero, sin hallazgo que reportar).
+LECCIÓN: ninguna nueva.
+
 ## 2026-09-25 15:14-15:22 La Paz — `BUILD_ID` sin cambios; escalón nuevo: promesa vs. entrega en home y `/precios`, sin hallazgo
 
 `ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado primero: `UgtwNYIEjS-DSK0umjqc8`, igual al
@@ -3857,3 +3880,20 @@ el instrumento, no el sitio".
 RAZÓN: la medida principal (dental 9/9) no se movió porque `BUILD_ID` sigue igual — correcto no
 repetirla; el avance de esta vuelta fue destrabar el tablero y cerrar un ítem fantasma de la cola.
 LECCIÓN: ninguna nueva — el método de comparar `BUILD_ID` primero funcionó esta vez.
+
+## 2026-09-25 15:09-15:14 La Paz — `BUILD_ID` cambió (`4FWMcecd4jRBGUVwStDQb`, antes
+`9tuk1Qk2BjQ2j2HdJcL8u`): correspondía repetir dental, y se corrió
+
+`ONIA_ALTA_AUTOMATICA=abierta`. Tablero: `t_324ad7ec` (informativo de la vuelta anterior sobre
+precios, sin hallazgo) cerrado sin acción.
+
+Recorrido completo con `--escribir`: **9/9 pasos OK en "Clínica dental"**, `completo: true` en
+`resumen.json`, sin agujeros. Cuenta `zz-qa-2026-09-25-1909@onia.com.bo` creada, onboarding en 6
+pantallas, paciente cargado, cita `2026-09-28 09:00` agendada y VISTA en `/appointments`, factura
+con ítem `zz-qa-` mirada en `/billing/...` y frenada sin pagar. Todo lo `zz-qa-` borrado en la
+misma corrida: `appointments`/`organizations` con prefijo `zz-qa-` en 0 filas, verificado con
+`SELECT` después del borrado.
+
+RAZÓN: N/A — avanzó (recorrido re-verificado contra el `BUILD_ID` nuevo, 9/9 sin hallazgo).
+LECCIÓN: ninguna nueva — el método de comparar `BUILD_ID` primero volvió a ser lo que decidió
+repetir dental.
