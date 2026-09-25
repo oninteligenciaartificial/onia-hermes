@@ -162,11 +162,26 @@ function crear({ esc, emph, roleFor, ACCOUNTS, BRAND, getFmt }) {
     const visual = visualHtml(slide);
     const rawTrigger = text(slide.comment_trigger || slide.cta || 'GUÍA').trim();
     const trigger = rawTrigger.replace(/^coment(?:á|a)\s+/i, '').trim() || 'GUÍA';
-    const cta = role === 'cta'
-      ? slide.comment_trigger
-        ? `<div class="cta-line"><span>Comentá</span><b>${esc(trigger)}</b></div>`
-        : `<div class="cta-line cta-direct"><b>${esc(trigger)}</b><span>→</span></div>`
+    // Recurso y firma sólo si el brief los trae. Sin defaults: con ellos, cada cierre
+    // prometía la Bóveda (sin desplegar) y firmaba «Soy Sergio Urcullo» también en la
+    // pauta de @oniahq.
+    const resource = slide.resource || {};
+    const resourceTitle = text(resource.title || '').trim();
+    const resourceUrl = text(resource.url || '').trim();
+    const resourceLabel = text(resource.label || 'RECURSO').trim();
+    const identity = text(slide.identity || '').trim();
+    const follow = text(slide.follow_cta || '').trim();
+    const ctaLine = slide.comment_trigger
+      ? `<div class="cta-line"><span>Comentá</span><b>${esc(trigger)}</b></div>`
+      : `<div class="cta-line cta-direct"><b>${esc(trigger)}</b><span>→</span></div>`;
+    const ctaResource = resourceTitle
+      ? `<p class="cta-resource"><span>${esc(resourceLabel)}</span><strong>${esc(resourceTitle)}</strong>${resourceUrl ? `<small>${esc(resourceUrl)}</small>` : ''}</p>`
       : '';
+    const ctaSignature = identity || follow
+      ? `<p class="cta-signature">${esc(identity)}${identity && follow ? ' ' : ''}${follow ? `<b>${esc(follow)}</b>` : ''}</p>`
+      : '';
+    const ctaExtras = role === 'cta' && Boolean(ctaResource || ctaSignature);
+    const cta = role === 'cta' ? `${ctaLine}${ctaResource}${ctaSignature}` : '';
     const accountName = text(acc.name || account || 'Onia').toUpperCase();
     const accountShort = text(acc.name || account || 'Onia').split(/\s+/)[0].toUpperCase();
     const coverBrand = `<div class="brandline"><span class="brand-dot"></span><span>${esc(accountName)}</span><span class="brand-rule"></span><span>${esc(serie)}</span></div>`;
@@ -234,8 +249,10 @@ body{font-family:'DM Sans',Inter,system-ui,sans-serif;background:#f7f5ef;color:#
 .visual-note-card{position:relative;min-height:370px;background:#fff1d7;border-color:#efd8ac}.visual-note-card .note-mark{position:absolute;right:26px;top:22px;font-size:52px;color:#f19a33}.visual-note-card strong{font-family:'Instrument Serif',Georgia,serif;font-size:60px;line-height:1.02;font-weight:400;color:#1b1d1b;max-width:85%}.visual-note-card strong .g{color:#0b8a52}.visual-note-card p{font-size:21px;line-height:1.35;margin-top:24px;color:#59625d}
 .save .interior-main{grid-template-columns:38% 62%}.save .headline{font-size:68px}.save .visual{min-height:460px}
 .cta{background:#0e1713;color:#f7f5ef;padding-top:80px}.cta .interior-top{color:#dce8e1}.cta .top-kicker{color:#13c978}.cta .interior-main{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;max-width:900px}.cta .headline{font-size:90px;max-width:900px}.cta .headline .g{color:#13c978;background:none}.cta .body{color:#c3d0c8;max-width:700px}.cta-line{display:inline-flex;align-items:center;gap:18px;margin-top:38px;border-radius:999px;background:#13c978;color:#0e1713;padding:18px 28px;font-size:28px}.cta-line span{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:32px}.cta-line b{font-family:'DM Mono',monospace;font-size:23px;letter-spacing:1px}.cta-line.cta-direct span{font-family:'DM Sans',sans-serif;font-style:normal;font-weight:800}.cta-line.cta-direct b{font-size:22px}.cta .footer{color:#c3d0c8}.cta .visual{display:none}
+.cta-resource{margin:22px 0 0;display:flex;flex-direction:column;gap:3px}.cta-resource span{font:500 13px 'DM Mono',monospace;letter-spacing:1.4px;color:#83cda4}.cta-resource strong{font:500 25px/1.1 'Instrument Serif',Georgia,serif;color:#f7f5ef}.cta-resource small{font:500 13px 'DM Mono',monospace;color:#aabbb1}.cta-signature{max-width:660px;margin:21px 0 0;color:#c3d0c8;font-size:17px;line-height:1.35}.cta-signature b{color:#13c978;font-weight:600}
+.cta.has-extras .headline{font-size:82px}.cta.has-extras .cta-line{margin-top:30px;padding:15px 24px;font-size:26px}.cta.has-extras .cta-line span{font-size:30px}.cta.has-extras .cta-line b{font-size:22px}
 </style></head><body>
-<div class="slide ${role === 'cover' ? 'cover' : role === 'cta' ? 'cta' : `interior ${role}`}${hasPhoto ? ' has-photo' : ''}">
+<div class="slide ${role === 'cover' ? 'cover' : role === 'cta' ? 'cta' : `interior ${role}`}${hasPhoto ? ' has-photo' : ''}${ctaExtras ? ' has-extras' : ''}">
   ${role === 'cover' || role === 'cta' ? photo : paper}
   ${role === 'cover' ? `${coverBrand}<div class="cover-content"><div class="kicker">${esc(kicker)}</div>${headline}${body}</div>${footer}` : `${interiorBrand}<div class="interior-main">${role === 'cta' ? `<div>${headline}${body}${cta}</div>` : `<div>${headline}${body}</div>${visual}`}</div>${footer}`}
 </div></body></html>`;

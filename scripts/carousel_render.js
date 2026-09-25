@@ -1268,11 +1268,28 @@ ${last ? '' : `.cue{position:absolute;right:46px;bottom:300px;z-index:3;font-siz
 
 function render(args) {
   const brief = JSON.parse(fs.readFileSync(args.brief, 'utf8'));
+  // La cuenta personal no publica palabras vacías: una palabra debe llevar a un
+  // recurso que ya existe y el final tiene que identificar a Sergio. Así el CTA
+  // es una puerta útil, no un truco para inflar comentarios.
+  if (args.account === 'sergio' && args.pack === 'community-editorial') {
+    const resource = brief.resource || {};
+    const missing = [
+      !brief.comment_trigger && 'comment_trigger',
+      !resource.title && 'resource.title',
+      !resource.url && 'resource.url',
+      !brief.identity && 'identity',
+      !brief.follow_cta && 'follow_cta',
+    ].filter(Boolean);
+    if (missing.length) throw new Error(`Sergio community-editorial requiere CTA útil: falta ${missing.join(', ')}`);
+  }
   const slides = (brief.slides || []).map((sl) => (
     // El brief trae `comment_trigger` y `cta` a nivel raiz; el render los necesita por slide.
     { ...sl,
       comment_trigger: sl.comment_trigger || brief.comment_trigger || '',
-      cta: sl.cta || brief.cta || '' }));
+      cta: sl.cta || brief.cta || '',
+      resource: sl.resource || brief.resource || {},
+      identity: sl.identity || brief.identity || '',
+      follow_cta: sl.follow_cta || brief.follow_cta || '' }));
   if (!slides.length) throw new Error('brief has no slides');
   // La serie es del CARRUSEL, no de la slide: el brief es su lugar natural. La bandera
   // de linea de comando sigue funcionando y gana, para poder probar sin editar el brief.

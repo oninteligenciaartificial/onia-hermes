@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bóveda — Sergio Urcullo</title>
+<meta name="description" content="Guías prácticas de Sergio Urcullo sobre automatización, n8n, agentes, MCP, Claude Code y servidor propio.">
+<meta property="og:title" content="Bóveda — Sergio Urcullo">
+<meta property="og:description" content="Recursos prácticos para construir sistemas de IA que funcionan.">
+<meta property="og:url" content="https://sergiourcullo.vercel.app/boveda">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="/estilo.css">
+</head>
+<body>
+<div class="cinta"><a href="https://chat.whatsapp.com/ENplPbR8GrbGsdMrGgLxzu"><span>En la comunidad están primero los archivos y las preguntas reales</span><span class="flecha">→</span></a></div>
+<div class="barra"><a class="marca" href="/">sergiourcullo<span class="punto">.</span></a><span class="barra-acciones"><a class="barra-oferta" href="/">Inicio</a><a class="vuelta" href="/">← todas las guías</a></span></div>
+<main class="wrap vault-wrap">
+  <header class="catalogo-hero">
+    <p class="eyebrow">Bóveda de recursos · gratuita</p>
+    <h1>Lo que publico no se pierde en el <span class="num">feed.</span></h1>
+    <p class="bajada">Cada pieza parte de un problema real: primero el método, después la herramienta y al final el límite. Acá quedan las guías para que las uses cuando de verdad las necesites.</p>
+    <div class="catalogo-hero-actions"><a class="catalogo-cta" href="https://chat.whatsapp.com/ENplPbR8GrbGsdMrGgLxzu">Entrar a la comunidad</a><span class="catalogo-note">Ahí salen antes los archivos y podés preguntar por tu caso.</span></div>
+  </header>
+
+  <section class="vault-controls" aria-label="Filtrar recursos">
+    <label for="vault-search">Buscar en la Bóveda</label>
+    <input id="vault-search" type="search" placeholder="Ej. n8n, agentes, Claude Code…" autocomplete="off">
+    <div class="vault-filters" aria-label="Temas">
+      <button class="is-active" type="button" data-filter="all">Todo</button>
+      <button type="button" data-filter="automatizacion">Automatización</button>
+      <button type="button" data-filter="agentes">Agentes y loops</button>
+      <button type="button" data-filter="mcp">MCP y Claude Code</button>
+      <button type="button" data-filter="infra">Servidor propio</button>
+    </div>
+  </section>
+
+  <section class="vault-grid" aria-live="polite">
+    <a class="vault-card" data-tags="automatizacion n8n webhook if google sheets telegram lead" href="/automatizar"><p class="vault-meta">RECURSO · N8N · NUEVO</p><h2>Elegí qué automatizar primero</h2><p>La matriz repetición × tiempo × costo de error. Después: `Webhook → IF → Append Row → Send Message`.</p><span>Ver el mapa →</span></a>
+    <a class="vault-card" data-tags="agentes loops n8n if ai agent schedule trigger http request wait" href="/agentes"><p class="vault-meta">RECURSO · ARQUITECTURA · NUEVO</p><h2>Automatización, agente o loop</h2><p>Cómo decidir entre reglas fijas, interpretación de lenguaje y un estado que todavía no terminó.</p><span>Ver la matriz →</span></a>
+    <a class="vault-card" data-tags="mcp claude code notion permisos herramientas contrato" href="/mcp"><p class="vault-meta">RECURSO · MCP · NUEVO</p><h2>MCP sin darle permiso para todo</h2><p>El contrato de una herramienta: entrada, salida, permisos y el punto donde entra una persona.</p><span>Ver el contrato →</span></a>
+    <a class="vault-card" data-tags="vps servidor docker ubuntu hostinger infraestructura" href="/vps"><p class="vault-meta">GUÍA · SERVIDOR ALQUILADO</p><h2>Qué es un VPS</h2><p>Cuándo pagar por una computadora encendida 24/7 y cuándo no hace falta.</p><span>Leer la guía →</span></a>
+    <a class="vault-card" data-tags="homelab servidor casa pc vieja docker self-hosted" href="/homelab"><p class="vault-meta">GUÍA · SERVIDOR EN CASA</p><h2>El homelab</h2><p>Qué podés correr en una PC vieja, cuánto consume y por qué no es para todo.</p><span>Leer la guía →</span></a>
+    <a class="vault-card" data-tags="claude code skills subagentes hooks comandos" href="/claude-code"><p class="vault-meta">SERIE EN VIDEO · CLAUDE CODE</p><h2>Claude Code, de cero</h2><p>Qué hace, cómo instalarlo y qué dejarle trabajando con límites claros.</p><span>Ver la serie →</span></a>
+    <a class="vault-card" data-tags="stack n8n chatwoot supabase postiz herramientas" href="/stack"><p class="vault-meta">GUÍA · HERRAMIENTAS</p><h2>El stack de $200</h2><p>Las herramientas que uso y el orden en que conviene instalarlas.</p><span>Leer la guía →</span></a>
+  </section>
+  <p id="vault-empty" class="vault-empty" hidden>No encontré ese tema todavía. Comentá qué te falta en el próximo post o preguntalo en la comunidad: si aplica a un sistema real, lo convierto en recurso.</p>
+
+  <section class="comunidad vault-community"><p class="rot">Cómo usar la Bóveda</p><h2>Primero el recurso. Después el comentario.</h2><p>Si un carrusel te pide una palabra, esa palabra corresponde a una guía concreta de acá. No te voy a hacer comentar para inflar números ni prometer un archivo que no existe.</p><a class="boton" href="https://www.instagram.com/sergiourcullo/">Seguir a @sergiourcullo</a></section>
+</main>
+<script>
+const input=document.querySelector('#vault-search'), buttons=[...document.querySelectorAll('[data-filter]')], cards=[...document.querySelectorAll('.vault-card')], empty=document.querySelector('#vault-empty'); let topic='all';
+function apply(){const q=input.value.trim().toLowerCase();let shown=0;cards.forEach(card=>{const okTopic=topic==='all'||card.dataset.tags.includes(topic);const okQuery=!q||(`${card.innerText} ${card.dataset.tags}`).toLowerCase().includes(q);card.hidden=!(okTopic&&okQuery);if(!card.hidden)shown++});empty.hidden=shown!==0}
+input.addEventListener('input',apply);buttons.forEach(button=>button.addEventListener('click',()=>{topic=button.dataset.filter;buttons.forEach(x=>x.classList.toggle('is-active',x===button));apply()}));
+</script>
+</body>
+</html>

@@ -74,9 +74,20 @@ que se veía generada por IA y no desarrollaba un argumento de venta.
 ## Estructura narrativa
 - Entre 3 y 10 slides (default 8 para pauta; 6 para orgánico breve).
 - Slide 1: hook claro que detenga el scroll.
-- Slide 2: costo o consecuencia económica sin inventar cifras.
-- Slides intermedios: causa -> producto real -> mecanismo -> prueba/control.
-- Ultimo slide: CTA unico y especifico.
+- **Pauta de ONIA (`@oniahq`):**
+  - Slide 2: costo o consecuencia económica sin inventar cifras.
+  - Slides intermedios: causa -> producto real -> mecanismo -> prueba/control.
+  - Último slide: CTA único y específico (`cta`, sin «Comentá»).
+- **Orgánico de Sergio Urcullo (`@sergiourcullo`):**
+  - Slides intermedios: problema -> insight -> solución -> ejemplo concreto.
+  - Último slide: CTA único y específico, con firma o posición personal y un motivo concreto
+    para seguirlo (`identity`, `follow_cta`).
+  - «Comentá PALABRA» (`comment_trigger`) sólo si alguien la va a contestar: hoy
+    `@sergiourcullo` no tiene palabras activas y el comentario no dispara nada
+    (`hermes-content/docs/contenido/PUBLICACION.md` §2).
+  - Recurso de la Bóveda (`resource`) sólo si su URL ya responde 200: al 25-sep `/boveda` no
+    está desplegada.
+  - El renderer no agrega recurso ni firma por defecto: van en el brief o no aparecen.
 - Lenguaje claro para empresas bolivianas, sin jerga tecnica innecesaria.
 
 ## Checklist de calidad antes de publicar

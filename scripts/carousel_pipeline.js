@@ -129,8 +129,15 @@ async function publishCarousel(account, urls, caption) {
 
 function buildCaption(brief) {
   const tags = (brief.hashtags || []).join(' ');
-  const trigger = brief.comment_trigger ? `\n\n💬 ${brief.comment_trigger}` : '';
-  return `${brief.caption || brief.title}${trigger}\n\n${tags}`.trim();
+  const resource = brief.resource || {};
+  const resourceLine = resource.url
+    ? `\n\n📎 Recurso completo: ${resource.title || 'Bóveda de Sergio'}\n${resource.url}`
+    : '';
+  const trigger = brief.comment_trigger
+    ? `\n\n💬 ${brief.comment_trigger}${resource.url ? '. El recurso ya está en la Bóveda.' : ''}`
+    : '';
+  const identity = brief.identity ? `\n\n${brief.identity}${brief.follow_cta ? ` ${brief.follow_cta}` : ''}` : '';
+  return `${brief.caption || brief.title}${trigger}${resourceLine}${identity}\n\n${tags}`.trim();
 }
 
 async function main(argv) {
