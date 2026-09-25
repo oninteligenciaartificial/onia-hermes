@@ -5929,104 +5929,6 @@ y sin operar. Acá se opera, con verificación por ítem.
       la única prueba es la llamada. Sigue siendo de Sergio Urcullo (autorizar el conector en
       claude.ai), `t_040684cb` sigue vivo, y el punto sigue sin poder cerrarse desde un loop.
 
-- [ ] 🔴 **Hay arreglos verdes esperando UN `ok` de Sergio Urcullo, y no llegan al cliente.**
-      Medido el 2026-09-06 10:35 UTC por `onia-cola`: **tres** destinos con pedido en `blocked`,
-      uno por destino, y **ninguno contestado**.
-
-      ⚠️ **Hoy es UNO, no tres — medido el 2026-09-25 06:52-07:05 La Paz por `chatbot-cola`, y
-      la afirmación de arriba llevaba 19 días vencida.** Corridos los tres comandos de la tabla:
-      `landing` → *"YA ESTA PUBLICADO — el sitio vivo sirve todo lo que main tiene"*;
-      `plataforma` → *"YA ESTA PUBLICADO — producción corre `e65ab6ee` y nada posterior cambia lo
-      que el cliente ve"*; `bot` → **38 archivos** (`CAMBIA knowledge.onia.json`). Y derivados los
-      pedidos vivos del CUERPO de las tareas `blocked`, queda **uno solo**: `t_24fa76aa`
-      (`DESPLEGAR: bot`), que es el mismo bloqueo que la cola hermana lleva como **S18**. O sea
-      que las otras dos firmas **ya no publican nada**, y este ítem las seguía pidiendo: es
-      exactamente el *«dice pendiente sobre lo resuelto»* que el propio ítem describe dos
-      párrafos abajo, repetido — porque **la cifra se sacó de la tabla pero la frase «tres
-      destinos» quedó**, y una cifra escrita en prosa se pudre igual que una en una columna.
-
-      🔴 **Y por qué sobrevivió 19 días: este ítem no tiene verificador mecánico** — `npm run
-      bloqueos:vencidos` sale `NO MEDIDO` sobre esta cola (*"no tiene una tabla «Bloqueado en
-      Sergio» que leer"*: acá los bloqueos son una lista de ítems, no una tabla). La cola hermana
-      ya probó cuatro veces que ésas son las filas que se mueren de viejas —S10, S11, S12 y S13
-      esperaron hasta 23 días con la decisión ya tomada y las cuatro se cerraron solas el día que
-      se les cableó uno. **Verificador de este ítem, y ya existe: `npm run pedido:entregado`**
-      (dice pendiente sobre lo resuelto) junto a `npm run deploy:sin-pedido` (lo contrario).
-      ⚠️ **No se escribe un gate nuevo para esto**: el 2026-09-25 se empezó a escribir uno y se
-      descartó al medir que duplicaba a esos dos. Un cuarto instrumento del mismo tema es la
-      segunda fuente de verdad que `CLAUDE.md` prohíbe.
-
-      ⚠️ **Y el id de un pedido NO se copia de acá, se deriva** — el `t_d246cfa7` que este carril
-      había derivado a mano 20 minutos antes ya estaba **`archived`** cuando se lo fue a citar
-      (`onia-cola` rehízo el pedido y archivó el viejo, que es el método correcto). Un `ok` sobre
-      una tarea archivada sale **3** y no publica nada sin decir por qué. Se deriva con el CUERPO,
-      nunca con los comentarios: un `grep DESPLEGAR:` sobre la salida entera de
-      `onia-tablero.sh show` dio un falso positivo (`t_6bf938b7`, que es una aprobación visual de
-      una tarjeta), y el brazo ejecutor contestado en seco dijo `{"publicable":false}`.
-
-      | destino | cuánto falta por publicar — se DERIVA, no se copia |
-      |---|---|
-      | `landing` (`onia.com.bo`) | `bash /opt/onia-landing/_deploy/publicar.sh --dry-run` |
-      | `plataforma` (`app.onia.com.bo`) | `bash /opt/onia-platform/_deploy/publicar.sh --dry-run` |
-      | `bot` (WhatsApp) | `bash /opt/onia/bot/_deploy/publicar.sh --dry-run` |
-
-      ⚠️ **Acá había una columna con las cifras (25 / 3 / 17) y se sacó el 2026-09-06 17:55 La
-      Paz, porque un número escrito acá se pudre en una hora.** Cada merge a `main` lo sube y
-      cada swap lo baja a cero, así que la tabla mentía casi siempre — y en las dos direcciones:
-      de más («quedan 25» cuando ya se publicaron) y de menos («quedan 3» con 27 esperando). Es
-      el MISMO defecto que este ítem ya documenta dos párrafos abajo para los IDs de tarea
-      escritos a mano, un escalón más arriba: **lo que cambia solo no se copia, se deriva.** Los
-      tres comandos salen con código 0 sin tocar producción y ya filtran lo que no viaja al
-      navegador; medido así el 2026-09-06 17:38 La Paz daban 27 · 4 · 17 archivos.
-
-      ⚠️ **La plataforma SE PUBLICÓ el 2026-09-06 a las 17:08 UTC (13:08 La Paz), y esta tabla
-      decía lo contrario — corregido a las 19:45 UTC por `onia-cola`.** Decía «22 sin desplegar,
-      corre `build-545dd28`». Hoy corre `build-5fc8bcd` y los **trece** shas que el pedido
-      prometía están adentro (`8b420b6 38bcf8a 195349b 2099778 5922faa 30526c3 5fc333d ad2d45f
-      3fe2db9 06b68c9 a797954 df3e645 bcdfd79`, verificados uno por uno con
-      `git merge-base --is-ancestor <sha> 5fc8bcd`): el alta sin horarios, el corte del mediodía,
-      los dos rubros que el panel negaba, el botón Otorgar sin efecto, la Planilla sin camino y
-      las métricas del asistente **están vivos**. El pedido siguió `blocked` igual, así que le
-      pedía a Sergio Urcullo un `ok` **por trabajo ya hecho** — el modo de falla que este ítem
-      describe, pero al revés: no «dice resuelto sobre lo pendiente», sino **«dice pendiente
-      sobre lo resuelto»**, y de ese lado nadie sospecha porque el pedido sigue ahí, prolijo y
-      ejecutable. Cerrado con su evidencia; los **3** arreglos posteriores tienen pedido nuevo,
-      porque el cuerpo del viejo no los describía y el cuerpo es lo único que él lee.
-
-      **La cifra de la tabla se saca del publicador, no de `git log`.** `bash
-      /opt/onia-platform/_deploy/publicar.sh --dry-run` (y su gemelo de `onia-landing`) filtra lo
-      que no viaja al navegador: el mismo día `git log --since` crudo daba **42** para landing, el
-      cuerpo de la tarea decía **24** y el publicador **25**. Sólo la última es accionable.
-
-      **Este loop NO vuelve a avisar de esto**: el integrador ya mide y ya creó el pedido; un
-      segundo aviso del mismo hecho es el spam que hizo que nadie leyera el primero. Lo que sí
-      hace este carril es **no dar por entregado** un arreglo suyo mientras su pedido siga en
-      `blocked` — construido ≠ terminado.
-
-      ⚠️ **Acá había DOS IDs de tarea escritos a mano (`t_e05a44d7`, `t_8ac57b3f`) y los dos
-      caducaron — corregido el 2026-09-06.** Hoy figuran `archived` y **`done`**, y el ítem
-      remataba con *«Pedidos: `onia-tablero.sh show t_8ac57b3f`»*: quien lo obedecía leía
-      **`done`** y concluía que la plataforma ya se había desplegado, con **22 arreglos** que el
-      cliente no ve. Un pedido de deploy **se rehace** cuando su evidencia envejece (el `edit` del
-      tablero no cambia el cuerpo), así que el ID viejo muere y el nuevo no está escrito en
-      ningún lado — el ID rota **en la dirección cara**: dice «resuelto» sobre lo que sigue sin
-      publicar. Es el mismo remedio que ya se le aplicó al comando de deploy, un escalón más
-      arriba: **el pedido vivo se DERIVA, nunca se copia de una medición anterior.**
-
-      ```sh
-      # los pedidos vivos, sin IDs escritos a mano (uno por destino, o sobra/falta uno):
-      for id in $(/root/bin/onia-tablero.sh list | grep -E '^[⊘▶◻]' | awk '{print $2}'); do
-        d=$(/root/bin/onia-tablero.sh show "$id" | grep -iE '^DESPLEGAR:')
-        [ -n "$d" ] && echo "$id  $d"
-      done
-      # 2026-09-06 devuelve exactamente 3 lineas: bot, landing, plataforma.
-      # Ojo: NO usar `show | grep -q &&`, que cierra el pipe antes de tiempo y el
-      # tablero remata con un BrokenPipeError que se lee como si fallara.
-      ```
-
-      Evidencia: `hermes-content/docs/cola/plataforma-v1.md` (este archivo) y el runbook
-      `onia-platform/.claude/skills/onia-deploy/SKILL.md`.
-
 - [ ] 🔴 **SIAT entra en la v1.0 — decisión de Sergio Urcullo, 2026-09-07: «sin factura no se
       vende». Y el rótulo de este ítem estaba MAL, que es por qué llevaba semanas al final.**
       Este mismo ítem decía *«es un trámite externo, no código»* y *«va último a propósito»*.
@@ -6303,6 +6205,140 @@ y sin operar. Acá se opera, con verificación por ítem.
 
 
 ## Cerrado
+
+- [x] 🔴 **CERRADO el 2026-09-25 15:05 La Paz: no queda NINGÚN arreglo esperando firma.** Sergio
+      Urcullo contestó `ok t_24fa76aa` a las 18:43 UTC y el brazo ejecutor publicó el bot a las
+      18:44:25 UTC con código 0 (`/var/log/onia-deploy-aprobado.log`: *«OK: 38 archivo(s)
+      desplegados… el bot corre lo que hay en origin/main (986d03b35)»*). Era el último de los
+      tres destinos, y el ítem ya había medido el 25-sep que los otros dos no publicaban nada.
+
+      **Cerrado con los DOS verificadores que este ítem nombra, más su propia derivación —
+      ninguno escrito para la ocasión:**
+
+      - `npm run pedido:entregado` → *«OK: no hay pedidos de deploy vivos.»*
+      - `npm run deploy:sin-pedido` → *«OK landing / plataforma / bot / siat: al día, no hay nada
+        que pedir»* (los CUATRO destinos, incluido SIAT).
+      - La derivación del propio ítem (el `for` de abajo, sobre el CUERPO de cada tarea viva)
+        devuelve **cero** líneas: ni un `DESPLEGAR:` pendiente. El 2026-09-06 devolvía tres.
+
+      **Y se verificó que el deploy sirve de algo, contra el PROCESO VIVO** —no el `.env`, no el
+      repo—, porque *construido ≠ terminado* y un `exit 0` del publicador no es eso. Sonda de
+      lectura dentro de `onia-center`, armando la config por el mismo camino que `run-turn.mjs`
+      (`ensureKnowledge` + `withKnowledge`) y leyendo `ONIA_BOT_SLOTS` de `/proc/<pid>/environ`
+      del webhook que está corriendo:
+
+      | qué prometía el pedido | medido en el bot vivo, 2026-09-25 |
+      |---|---|
+      | las 9 campañas de la web contestan | **9/9** `campanaExacta(normalize(frase))`, las dos de `prefijo: true` incluidas. Antes **0/9**: el archivo con la clave `campanas` no estaba instalado. |
+      | se aceptan los 5 horarios, no 2 | ofrece **2** (lun 28, mar 29) y acepta **4/4** (suma mié 30 y jue 1-oct). El 5.º (sáb 26) se descarta bien: anticipación < 1 día. |
+      | el aviso le llega a Sergio Urcullo | `node avisos-vivo.mjs` → **VEREDICTO ok**: flag encendido, `getMe`+`getChat` válidos, el motor desplegado emite `notify_sergio` en LAS DOS ramas (handoff y demo agendada), texto accionable. 4 enviados, 0 fallidos. |
+
+      ⚠️ **Lo que sigue sin probarse, y se dice porque es justo lo que se pierde:** de los avisos
+      existentes **ninguno es de un desconocido** — los 5 son nuestros (`avisos-vivo.mjs`:
+      *«circuito sano, pero NINGUN aviso es de un lead»*). El circuito está medido; el caso real,
+      no. Y la sonda de campañas midió primero **0/9** por un defecto del INSTRUMENTO, no del
+      producto: `campanaExacta` recibe texto ya normalizado y `fraseCanonica` borra las
+      mayúsculas (`[^a-z0-9 ]` sin flag `i`), así que pasarle la frase cruda no matchea nunca.
+      Un 0 de un instrumento mal apuntado se lee igual que un 0 del producto.
+
+      **Historia del ítem, tal como se midió (se conserva entera):** 🔴 **Hay arreglos verdes esperando UN `ok` de Sergio Urcullo, y no llegan al cliente.**
+      Medido el 2026-09-06 10:35 UTC por `onia-cola`: **tres** destinos con pedido en `blocked`,
+      uno por destino, y **ninguno contestado**.
+
+      ⚠️ **Hoy es UNO, no tres — medido el 2026-09-25 06:52-07:05 La Paz por `chatbot-cola`, y
+      la afirmación de arriba llevaba 19 días vencida.** Corridos los tres comandos de la tabla:
+      `landing` → *"YA ESTA PUBLICADO — el sitio vivo sirve todo lo que main tiene"*;
+      `plataforma` → *"YA ESTA PUBLICADO — producción corre `e65ab6ee` y nada posterior cambia lo
+      que el cliente ve"*; `bot` → **38 archivos** (`CAMBIA knowledge.onia.json`). Y derivados los
+      pedidos vivos del CUERPO de las tareas `blocked`, queda **uno solo**: `t_24fa76aa`
+      (`DESPLEGAR: bot`), que es el mismo bloqueo que la cola hermana lleva como **S18**. O sea
+      que las otras dos firmas **ya no publican nada**, y este ítem las seguía pidiendo: es
+      exactamente el *«dice pendiente sobre lo resuelto»* que el propio ítem describe dos
+      párrafos abajo, repetido — porque **la cifra se sacó de la tabla pero la frase «tres
+      destinos» quedó**, y una cifra escrita en prosa se pudre igual que una en una columna.
+
+      🔴 **Y por qué sobrevivió 19 días: este ítem no tiene verificador mecánico** — `npm run
+      bloqueos:vencidos` sale `NO MEDIDO` sobre esta cola (*"no tiene una tabla «Bloqueado en
+      Sergio» que leer"*: acá los bloqueos son una lista de ítems, no una tabla). La cola hermana
+      ya probó cuatro veces que ésas son las filas que se mueren de viejas —S10, S11, S12 y S13
+      esperaron hasta 23 días con la decisión ya tomada y las cuatro se cerraron solas el día que
+      se les cableó uno. **Verificador de este ítem, y ya existe: `npm run pedido:entregado`**
+      (dice pendiente sobre lo resuelto) junto a `npm run deploy:sin-pedido` (lo contrario).
+      ⚠️ **No se escribe un gate nuevo para esto**: el 2026-09-25 se empezó a escribir uno y se
+      descartó al medir que duplicaba a esos dos. Un cuarto instrumento del mismo tema es la
+      segunda fuente de verdad que `CLAUDE.md` prohíbe.
+
+      ⚠️ **Y el id de un pedido NO se copia de acá, se deriva** — el `t_d246cfa7` que este carril
+      había derivado a mano 20 minutos antes ya estaba **`archived`** cuando se lo fue a citar
+      (`onia-cola` rehízo el pedido y archivó el viejo, que es el método correcto). Un `ok` sobre
+      una tarea archivada sale **3** y no publica nada sin decir por qué. Se deriva con el CUERPO,
+      nunca con los comentarios: un `grep DESPLEGAR:` sobre la salida entera de
+      `onia-tablero.sh show` dio un falso positivo (`t_6bf938b7`, que es una aprobación visual de
+      una tarjeta), y el brazo ejecutor contestado en seco dijo `{"publicable":false}`.
+
+      | destino | cuánto falta por publicar — se DERIVA, no se copia |
+      |---|---|
+      | `landing` (`onia.com.bo`) | `bash /opt/onia-landing/_deploy/publicar.sh --dry-run` |
+      | `plataforma` (`app.onia.com.bo`) | `bash /opt/onia-platform/_deploy/publicar.sh --dry-run` |
+      | `bot` (WhatsApp) | `bash /opt/onia/bot/_deploy/publicar.sh --dry-run` |
+
+      ⚠️ **Acá había una columna con las cifras (25 / 3 / 17) y se sacó el 2026-09-06 17:55 La
+      Paz, porque un número escrito acá se pudre en una hora.** Cada merge a `main` lo sube y
+      cada swap lo baja a cero, así que la tabla mentía casi siempre — y en las dos direcciones:
+      de más («quedan 25» cuando ya se publicaron) y de menos («quedan 3» con 27 esperando). Es
+      el MISMO defecto que este ítem ya documenta dos párrafos abajo para los IDs de tarea
+      escritos a mano, un escalón más arriba: **lo que cambia solo no se copia, se deriva.** Los
+      tres comandos salen con código 0 sin tocar producción y ya filtran lo que no viaja al
+      navegador; medido así el 2026-09-06 17:38 La Paz daban 27 · 4 · 17 archivos.
+
+      ⚠️ **La plataforma SE PUBLICÓ el 2026-09-06 a las 17:08 UTC (13:08 La Paz), y esta tabla
+      decía lo contrario — corregido a las 19:45 UTC por `onia-cola`.** Decía «22 sin desplegar,
+      corre `build-545dd28`». Hoy corre `build-5fc8bcd` y los **trece** shas que el pedido
+      prometía están adentro (`8b420b6 38bcf8a 195349b 2099778 5922faa 30526c3 5fc333d ad2d45f
+      3fe2db9 06b68c9 a797954 df3e645 bcdfd79`, verificados uno por uno con
+      `git merge-base --is-ancestor <sha> 5fc8bcd`): el alta sin horarios, el corte del mediodía,
+      los dos rubros que el panel negaba, el botón Otorgar sin efecto, la Planilla sin camino y
+      las métricas del asistente **están vivos**. El pedido siguió `blocked` igual, así que le
+      pedía a Sergio Urcullo un `ok` **por trabajo ya hecho** — el modo de falla que este ítem
+      describe, pero al revés: no «dice resuelto sobre lo pendiente», sino **«dice pendiente
+      sobre lo resuelto»**, y de ese lado nadie sospecha porque el pedido sigue ahí, prolijo y
+      ejecutable. Cerrado con su evidencia; los **3** arreglos posteriores tienen pedido nuevo,
+      porque el cuerpo del viejo no los describía y el cuerpo es lo único que él lee.
+
+      **La cifra de la tabla se saca del publicador, no de `git log`.** `bash
+      /opt/onia-platform/_deploy/publicar.sh --dry-run` (y su gemelo de `onia-landing`) filtra lo
+      que no viaja al navegador: el mismo día `git log --since` crudo daba **42** para landing, el
+      cuerpo de la tarea decía **24** y el publicador **25**. Sólo la última es accionable.
+
+      **Este loop NO vuelve a avisar de esto**: el integrador ya mide y ya creó el pedido; un
+      segundo aviso del mismo hecho es el spam que hizo que nadie leyera el primero. Lo que sí
+      hace este carril es **no dar por entregado** un arreglo suyo mientras su pedido siga en
+      `blocked` — construido ≠ terminado.
+
+      ⚠️ **Acá había DOS IDs de tarea escritos a mano (`t_e05a44d7`, `t_8ac57b3f`) y los dos
+      caducaron — corregido el 2026-09-06.** Hoy figuran `archived` y **`done`**, y el ítem
+      remataba con *«Pedidos: `onia-tablero.sh show t_8ac57b3f`»*: quien lo obedecía leía
+      **`done`** y concluía que la plataforma ya se había desplegado, con **22 arreglos** que el
+      cliente no ve. Un pedido de deploy **se rehace** cuando su evidencia envejece (el `edit` del
+      tablero no cambia el cuerpo), así que el ID viejo muere y el nuevo no está escrito en
+      ningún lado — el ID rota **en la dirección cara**: dice «resuelto» sobre lo que sigue sin
+      publicar. Es el mismo remedio que ya se le aplicó al comando de deploy, un escalón más
+      arriba: **el pedido vivo se DERIVA, nunca se copia de una medición anterior.**
+
+      ```sh
+      # los pedidos vivos, sin IDs escritos a mano (uno por destino, o sobra/falta uno):
+      for id in $(/root/bin/onia-tablero.sh list | grep -E '^[⊘▶◻]' | awk '{print $2}'); do
+        d=$(/root/bin/onia-tablero.sh show "$id" | grep -iE '^DESPLEGAR:')
+        [ -n "$d" ] && echo "$id  $d"
+      done
+      # 2026-09-06 devuelve exactamente 3 lineas: bot, landing, plataforma.
+      # Ojo: NO usar `show | grep -q &&`, que cierra el pipe antes de tiempo y el
+      # tablero remata con un BrokenPipeError que se lee como si fallara.
+      ```
+
+      Evidencia: `hermes-content/docs/cola/plataforma-v1.md` (este archivo) y el runbook
+      `onia-platform/.claude/skills/onia-deploy/SKILL.md`.
+
 
 - [x] 🔴 **CERRADO el 2026-09-19: el dueño no podía sacar a una coadministradora, y una CUARTA
       puerta la borraba sin preguntar nada.** ⚠️ COMMITEADO Y PUSHEADO (`52409f20`, rama
