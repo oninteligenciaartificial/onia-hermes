@@ -3,6 +3,8 @@ import path from "node:path";
 
 import { describe, expect, it } from "vitest";
 
+import { PRUEBA } from "@/lib/pricing";
+
 /**
  * Lo que la ley boliviana le exige a quien vende por internet, medido en la
  * superficie publicada (auditoría 2026-09-25, carril W).
@@ -24,6 +26,7 @@ const SRC = path.resolve(__dirname, "..");
 const crudo = (rel: string) => readFileSync(path.join(SRC, rel), "utf8");
 const plano = (texto: string) => texto.replace(/\s+/g, " ");
 
+const TERMINOS = plano(crudo("content/legal/terminos.md"));
 const PRIVACIDAD_CRUDA = crudo("content/legal/privacidad.md");
 const PRIVACIDAD = plano(PRIVACIDAD_CRUDA);
 
@@ -40,6 +43,7 @@ function seccion(md: string, n: number): string {
 
 describe("quien vende está identificado", () => {
   for (const [nombre, texto] of [
+    ["terminos.md", TERMINOS],
     ["privacidad.md", PRIVACIDAD],
   ] as const) {
     it(`${nombre} nombra a la titular de la empresa unipersonal y su NIT`, () => {
@@ -72,5 +76,37 @@ describe("la privacidad declara a quien de verdad recibe los datos", () => {
   it("declara los mensajes que el bot manda por su cuenta", () => {
     expect(seccion(PRIVACIDAD_CRUDA, 13)).toMatch(/seguimiento/i);
     expect(seccion(PRIVACIDAD_CRUDA, 13)).toMatch(/recordatorio/i);
+  });
+});
+
+describe("los Términos dicen lo que la ley pide y lo que el producto hace", () => {
+  it("se factura cada pago", () => {
+    expect(TERMINOS).toMatch(/factura por cada pago/i);
+  });
+
+  it("el precio es final, en bolivianos, con impuestos incluidos", () => {
+    expect(TERMINOS).toMatch(/precios finales en bolivianos, impuestos incluidos/i);
+  });
+
+  it("hay una vía de reclamo con plazo y la autoridad del consumidor", () => {
+    expect(TERMINOS).toMatch(/reclamo/i);
+    expect(TERMINOS).toMatch(/5 días hábiles/);
+    expect(TERMINOS).toMatch(/Ley N\.º 453/);
+  });
+
+  it("la prueba gratis está en el contrato, con los números del producto", () => {
+    expect(TERMINOS).toContain(`${PRUEBA.dias} días de prueba`);
+    expect(TERMINOS).toContain(`${PRUEBA.diasDeGracia} día adicional de gracia`);
+  });
+
+  it("no describe una renovación automática que no existe", () => {
+    // El pago es QR manual: no hay medio guardado con que cobrar solo.
+    expect(TERMINOS).not.toMatch(/se renueva por un per[ií]odo igual/i);
+    expect(TERMINOS).not.toMatch(/\bmora\b/i);
+  });
+
+  it("no reclama la propiedad de una marca que no está registrada", () => {
+    expect(TERMINOS).not.toMatch(/las marcas/i);
+    expect(TERMINOS).toMatch(/nombre comercial y los signos distintivos de Onia/);
   });
 });
