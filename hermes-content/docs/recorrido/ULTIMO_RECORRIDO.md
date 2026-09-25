@@ -12,6 +12,45 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-25 02:09-02:12 La Paz — `Importadora / distribuidora` cierra el ciclo: los 5 rubros activos quedan re-verificados en este `BUILD_ID`
+
+`BUILD_ID` comparado ANTES de correr (primer comando de la vuelta, como quedó corregido la
+anterior): `1fCNCDEJaOeFVV1KczGHP`, sin cambios contra la entrada previa. Tocaba rotar a
+`Importadora / distribuidora`, el único rubro activo que faltaba dentro de este build.
+
+`RECORRIDO_RUBRO="Importadora / distribuidora" node scripts/recorrido_cliente.mjs --escribir`:
+
+- Los 8 pasos que le corresponden a este rubro, OK. Cuenta `zz-qa-2026-09-25-0211@onia.com.bo`,
+  confirmación de correo real, onboarding en 6 pantallas, `/dashboard` sin rebote.
+- Paso 6: `zz-qa-2026-09-25-0211-paciente` cargado en Catálogo (`/comercio`) y visto de vuelta.
+- **Paso 7 (agendar cita): NO-APLICA, y es correcto** — la propia tarjeta de `/register` promete
+  "Catálogo, cotizaciones B2B y costeo de importación", nunca agenda, y el menú del rubro no
+  tiene ítem de citas (forum, storefront, cotizaciones, inventario, costeo, ventas, créditos,
+  clientes, gastos, contabilidad, planilla, agentes — ninguno es agenda). Coherente con la
+  memoria compartida: `guardaClientesEnPatients`/`tieneAgenda()` dan falso para comercio e
+  importadora.
+- Paso 8: pantalla de cobro de este rubro es "Créditos" (`/comercio/fiados`) — vista y frenada
+  ahí sin pagar.
+- Paso 9: el dato del paso 6 no figura en `/dashboard` (mismo patrón que los otros 4 rubros: el
+  panel no lista el storefront).
+- Limpieza verificada: `organizations`/`appointments` con `zz-qa-%` → **0** al cerrar.
+
+**Sin hallazgo de producto.** Con esto, los 5 rubros activos (dental, comercio, estética,
+importadora, servicios profesionales) quedan re-verificados dentro del `BUILD_ID`
+`1fCNCDEJaOeFVV1KczGHP`. Si en la próxima vuelta el `BUILD_ID` sigue siendo este mismo, el ciclo
+de rotación por rubro ya no da más información nueva: cambiar de método (ver "promesa contra
+entrega" u otro escalón del prompt) en vez de repetir un rubro ya cerrado.
+
+RAZÓN: la medida (9/9, `completo: true`, 0 filas `zz-qa-`) ya estaba en el techo desde vueltas
+anteriores — el avance real fue cerrar el ciclo completo de los 5 rubros dentro de este build.
+LECCIÓN: comparar `BUILD_ID` primero siguió funcionando (segunda vuelta seguida con ese método).
+Nuevo dato: un `RECORRIDO_RUBRO` sin el espaciado exacto del texto del botón (`Importadora/distribuidora`
+en vez de `Importadora / distribuidora`) hace fallar el paso 3 con "el alta no ofrece el rubro" —
+aunque la lista de ofrecidos lo muestre ahí mismo. No es un bug de producto: es que `hasText` no
+matchea si el espaciado difiere. Copiar el texto exacto de `rubrosOfrecidos` antes de invocar.
+
+---
+
 ## 2026-09-25 01:09-01:18 La Paz — `BUILD_ID` sin cambios; dental repetido de más, `Servicios profesionales` cierra el ciclo de los 5 rubros
 
 `ONIA_ALTA_AUTOMATICA=abierta`. Corrí dental (`node scripts/recorrido_cliente.mjs --escribir`)

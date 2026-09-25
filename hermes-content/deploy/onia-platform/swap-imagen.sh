@@ -28,11 +28,16 @@ URL=${ONIA_PLATFORM_URL:-https://app.onia.com.bo}
 PAUSA=${ONIA_SWAP_PAUSA:-1}          # segundos entre reintentos (los tests usan 0)
 NAME=onia-platform
 RED_PRINCIPAL=supabase_default                       # donde viven auth, db y kong
-# La red de LiteLLM (onia_selfhosted_onia_internal) NO va aca todavia: es de otro stack, ningun
-# release lee AGENTS_LLM_* (2026-09-24) y sumarla haria abortar cualquier deploy o hotfix en el
-# canario si esa red no existe. Entra CON el release que la use, y con ella
-# `nc -z onia_selfhosted-litellm-1 4000` en la verificacion de abajo (ver deploy-imagen.test.mjs).
 REDES_EXTRA=(easypanel dentalgest-staging-supabase_default)
+# LiteLLM (onia_selfhosted-litellm-1:4000) la lee el Redactor por plantilla de los agentes
+# (AGENTS_LLM_*) con su clave virtual. Red PROPIA con solo la plataforma y LiteLLM: la de su stack
+# (onia_selfhosted_onia_internal) admite 12 servicios del compose (open-webui, crawl4ai, mailpit...)
+# y cualquiera veria el :3000 sin Traefik ni Cloudflare, falsificando cf-connecting-ip.
+# Es OPCIONAL a proposito: sin ella los agentes usan el texto fijo (su respaldo por diseño), y un
+# hotfix no puede abortar porque el otro stack se este recreando. Se crea, se le suma LiteLLM (si
+# su compose lo recreo, vuelve aca) y se prueba con AVISO, nunca con fatal ni rollback.
+RED_LITELLM=onia_llm
+LITELLM=onia_selfhosted-litellm-1:4000
 CANARIO_PUERTO=127.0.0.1:3101                        # loopback: Traefik no lo ve
 PREV_A_GUARDAR=2
 IMAGENES_A_GUARDAR=3
@@ -98,7 +103,9 @@ if [ -n "$DRY" ]; then
 [dry-run] swap: docker stop $NAME · docker rename $NAME $PREV
 [dry-run]   docker run -d --name $NAME --env-file $ENVFILE --network $RED_PRINCIPAL --restart unless-stopped $IMG
 [dry-run]   docker network connect ${REDES_EXTRA[*]}
+[dry-run]   docker network connect $RED_LITELLM $NAME (opcional: sin ella los agentes usan el texto fijo)
 [dry-run] verificaria: listo, nc auth/db/kong, BUILD_ID $NEW_BUILD, $URL/login sirve $NEW_BUILD con el formulario
+[dry-run]   nc $LITELLM solo avisa: nunca hace rollback
 [dry-run]   cualquier falla -> rollback automatico a $PREV
 [dry-run] produccion NO se toco.
 FIN
@@ -130,6 +137,12 @@ for r in "${REDES_EXTRA[@]}"; do
   [ "$r" = easypanel ] && continue
   docker network connect "$r" "$CANARIO" || fatal "no pude conectar el canario a $r"
 done
+docker network inspect "$RED_LITELLM" >/dev/null 2>&1 || docker network create "$RED_LITELLM" >/dev/null \
+  || say "AVISO: no pude crear la red $RED_LITELLM (opcional): sigo"
+# Si ya estaba conectado da error y no importa: lo que cuenta es el nc de la verificacion.
+docker network connect "$RED_LITELLM" "${LITELLM%:*}" >/dev/null 2>&1 || true
+docker network connect "$RED_LITELLM" "$CANARIO" \
+  || say "AVISO: el canario no se pudo conectar a $RED_LITELLM (opcional): sigo"
 docker start "$CANARIO" >/dev/null || fatal "el canario no arranca"
 CUERPO=$(mktemp)
 CODIGO=""
@@ -167,6 +180,8 @@ docker run -d --name "$NAME" --env-file "$ENVFILE" --network "$RED_PRINCIPAL" \
 for r in "${REDES_EXTRA[@]}"; do
   docker network connect "$r" "$NAME" || rollback "no pude conectar la red $r"
 done
+docker network connect "$RED_LITELLM" "$NAME" \
+  || say "AVISO: $NAME quedo sin la red $RED_LITELLM: los agentes usan el texto fijo hasta el proximo recreate"
 
 # ── [3/4] verificar: adentro, y despues contra lo que ve el cliente ──────────
 LISTO=""
@@ -178,6 +193,8 @@ done
 for destino in auth:9999 db:54329 kong:8000; do
   docker exec "$NAME" nc -z "${destino%:*}" "${destino#*:}" || rollback "no llega a $destino"
 done
+docker exec "$NAME" nc -z "${LITELLM%:*}" "${LITELLM#*:}" \
+  || say "AVISO: $NAME no llega a LiteLLM ($LITELLM): los agentes usan el texto fijo. No es motivo de rollback."
 [ "$(docker exec "$NAME" cat /app/.next/BUILD_ID 2>/dev/null | tr -d '[:space:]')" = "$NEW_BUILD" ] \
   || rollback "el contenedor nuevo no sirve el build $NEW_BUILD"
 PUBLICO=""
