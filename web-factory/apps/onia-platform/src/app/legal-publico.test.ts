@@ -118,3 +118,11 @@ describe("los Términos dicen lo que la ley pide y lo que el producto hace", () 
     expect(TERMINOS).toMatch(/nombre comercial y los signos distintivos de Onia/);
   });
 });
+
+describe("/precios dice que el precio es final", () => {
+  it("con impuestos incluidos", () => {
+    expect(plano(crudo("app/(sitio)/precios/page.tsx"))).toMatch(
+      /Precios finales en bolivianos, impuestos incluidos\./,
+    );
+  });
+});
