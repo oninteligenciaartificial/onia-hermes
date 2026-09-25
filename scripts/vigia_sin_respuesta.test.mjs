@@ -703,3 +703,58 @@ test('ANCLA: un aviso que NO llego no se anota como avisado — si no, el lead s
   assert.equal(intentos, 2, 'y se vuelve a intentar');
   rmSync(estado, { force: true });
 });
+
+// ───────────────────────────────────────────────────────────────────────────────────────────
+// EL AVISO CUENTA EL TOTAL VIGENTE, NO SOLO LA NOVEDAD.
+//
+// Medido el 2026-09-25 en produccion, y es el fallo mas caro que puede tener este vigia:
+// `correrVigia` corrio en seco y firmo «7 colgado(s) — 5 sin respuesta», pero la UNICA tarea
+// que este vigia dejo en el tablero (`t_768dc2ad`, 24-sep 22:39) se titula «[leads-esperando]
+// 1 desconocido(s) esperando una respuesta tuya» y su cuerpo nombra UNA conversacion. El
+// disparo por novedad esta bien —no se repite un lead que ya se aviso—, pero el TITULO y el
+// CUERPO se armaban con `nuevos`, asi que el numero que Sergio Urcullo lee en la hoja de
+// decisiones es el de los que cambiaron desde el ultimo aviso, no el de los que estan
+// esperando. Leyo «1» sobre 7 personas, 5 de ellas sin una sola respuesta nuestra, y decidio
+// sobre una muestra. La prueba de que no se comunicaba: una sesion tuvo que escribir a mano la
+// tarea `t_5ea80f5e` («son 4, no 3») para contar lo que este aviso ya sabia.
+//
+// `armarAviso` YA estaba preparado para esto: su campo `reaviso` existe para que el que lleva
+// 20 dias no se lea como uno que entro recien. Lo que faltaba era pasarle la lista entera.
+test('el aviso dice cuantos estan esperando EN TOTAL, no cuantos son novedad', async () => {
+  const estado = `/tmp/vigia-total-${process.pid}.json`;
+  rmSync(estado, { force: true });
+  const viejo = fila({ conversationId: 888, messageId: 8, content: 'me interesa el sistema' });
+  const recien = fila({ conversationId: 999, messageId: 9, content: 'hola, tienen precios?' });
+  const entregados = [];
+  const deps = {
+    enriquecer: enriquecerNoOp,
+    avisar: async (texto, colgados) => { entregados.push({ texto, colgados }); return { entregado: true }; },
+  };
+
+  // Primera corrida: solo el viejo. Queda anotado como avisado.
+  await correrVigia({ emitir: true, ahoraMs: AHORA, estado }, { ...deps, leerFilas: async () => [viejo] });
+  assert.equal(entregados.length, 1, 'el primer colgado se avisa');
+
+  // Segunda corrida, mismo instante: el viejo NO es novedad (mismo mensaje, mismo escalon) y
+  // el recien llegado si. Son DOS esperando y el aviso tiene que decir DOS.
+  const segunda = await correrVigia(
+    { emitir: true, ahoraMs: AHORA, estado },
+    { ...deps, leerFilas: async () => [viejo, recien] },
+  );
+  rmSync(estado, { force: true });
+
+  assert.equal(segunda.nuevos.length, 1, 'la novedad sigue siendo una sola: el disparo no cambia');
+  assert.equal(entregados.length, 2, 'y con una novedad el aviso sale');
+
+  const ultimo = entregados[1];
+  assert.equal(ultimo.colgados.length, 2,
+    'el aviso se entrega con los DOS que estan esperando: el titulo se arma de esta lista');
+  assert.match(tituloDelAviso(ultimo.colgados), /\] 2 desconocido/,
+    'el titulo que lee Sergio Urcullo dice 2, que es la gente esperando, no 1, que es la novedad');
+  assert.match(ultimo.texto, /888/, 'el cuerpo no puede esconder al que ya esperaba: sigue esperando');
+  assert.match(ultimo.texto, /999/, 'y nombra al que acaba de entrar');
+  assert.match(ultimo.texto, /2 desconocido\(s\) escribieron y nadie contesto/,
+    'el encabezado del bloque cuenta los dos');
+  assert.match(ultimo.texto, /888.*sigue esperando/,
+    'al viejo se lo marca como reaviso para que no parezca que hoy entraron dos');
+});
