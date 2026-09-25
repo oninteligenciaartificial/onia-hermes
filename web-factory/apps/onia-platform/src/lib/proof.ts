@@ -104,6 +104,9 @@ export const FECHA_CONSULTA = "30 de julio de 2026";
 /** Tipo de cambio usado para pasar los precios en USD a Bs. */
 export const TC_NOTA = "Bs 11,89 = USD 1 (tipo de cambio oficial del BCB al 29-jul-2026)";
 
+/** Va al lado de CADA precio de un tercero: un precio ajeno sin fecha no se puede comprobar. */
+const CONSULTADO = `consultado el ${FECHA_CONSULTA}`;
+
 /**
  * Estado de una capacidad en un producto.
  * - "si"      lo tiene y funciona
@@ -181,7 +184,7 @@ export const CONTENDIENTES: readonly Contendiente[] = [
     quien: "El Portal Web del SIN",
     ejemplos: "impuestos.gob.bo — la modalidad oficial del Estado",
     precio: "Bs 0",
-    precioNota: "gratis, y cumple la ley",
+    precioNota: `gratis, y cumple la ley · ${CONSULTADO}`,
     estados: { gestion: "no", siat: "si", agentes: "no" },
     veredicto:
       "Es un emisor de facturas, no un sistema. Su página oficial no menciona agenda, ficha, recordatorios, caja ni permisos. Cada factura se tipea a mano, una por una.",
@@ -191,20 +194,20 @@ export const CONTENDIENTES: readonly Contendiente[] = [
     quien: "Los facturadores bolivianos",
     ejemplos: "Sintic · administraTe · Emizor",
     precio: "Bs 85 – 1.000 / mes",
-    precioNota: "Sintic desde 85 · administraTe hasta 1.000 por sucursal",
+    precioNota: `Sintic desde 85 · administraTe hasta 1.000 por sucursal · ${CONSULTADO}`,
     estados: { gestion: "no", siat: "si", agentes: "no" },
     veredicto:
-      "Facturan y llevan inventario. Ninguno tiene agenda ni ficha del paciente: si tu negocio se organiza por citas, esto no lo resuelve.",
+      `Facturan y llevan inventario. En sus webs, al ${FECHA_CONSULTA}, no figura agenda ni ficha del paciente: si tu negocio se organiza por citas, esto no lo resuelve.`,
   },
   {
     id: "dental-region",
     quien: "El software dental de la región",
     ejemplos: "Dentiqa · Doctocliq · Clinera.io",
     precio: "Bs 1.058 – 5.695 / mes",
-    precioNota: "USD 89 – 479, convertidos · Clinera suma USD 450 de instalación",
+    precioNota: `USD 89 – 479, convertidos · Clinera suma USD 450 de instalación · ${CONSULTADO}`,
     estados: { gestion: "si", siat: "no", agentes: "si" },
     veredicto:
-      "Agenda, odontograma e incluso agentes con IA. Pero no facturan en Bolivia: Doctocliq lo dice en su propia web — factura en Ecuador, Perú, México, Colombia y República Dominicana; Bolivia no está en la lista.",
+      `Agenda, odontograma e incluso agentes con IA. Pero en sus webs, al ${FECHA_CONSULTA}, no figura factura boliviana: Doctocliq dice que factura en Ecuador, Perú, México, Colombia y República Dominicana; Bolivia no está en la lista.`,
   },
   {
     id: "onia",
@@ -243,8 +246,7 @@ export const CONTENDIENTES: readonly Contendiente[] = [
  *
  * Para una superficie donde la tabla no entra —la portada— va `HUECO_PARTIDO`.
  */
-export const HUECO =
-  "No existe un solo software vendido en Bolivia que cruce agenda + ficha del cliente + factura SIAT.";
+export const HUECO = `En los sitios de los proveedores de esta comparación, al ${FECHA_CONSULTA}, no figura un software vendido en Bolivia que cruce agenda + ficha del cliente + factura SIAT.`;
 
 /**
  * El MISMO hallazgo, dicho sin prometer la pata que todavia no tenemos.

@@ -120,7 +120,7 @@ const EXENTOS: ReadonlyArray<{ archivo: string; fragmento: string; motivo: strin
   },
   {
     archivo: join("lib", "proof.ts"),
-    fragmento: "Ninguno tiene agenda ni ficha del paciente",
+    fragmento: "no figura agenda ni ficha del paciente",
     motivo: "mismo caso: es el veredicto sobre otros dos productos, no nuestra oferta",
   },
   {

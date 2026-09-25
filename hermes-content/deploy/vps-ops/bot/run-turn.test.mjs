@@ -195,8 +195,8 @@ test("el prompt del LLM sigue exportado — si se inlinea, los evals dejan de co
 // ---------------------------------------------------------------------------
 // EL CAMINO VIVO: de los 5 horarios que publica el cron, el bot solo podia aceptar 2
 // ---------------------------------------------------------------------------
-// Medido en produccion el 2026-09-24: `onia_center.bot_conversations` tiene 43 conversaciones,
-// 18 en `esperando_horario` y CERO con `calendar_event_id` — el bot nunca agendo una demo. El
+// Medido en produccion el 2026-09-24: `onia_center.bot_conversations` tiene 43 conversaciones
+// y 18 paradas en `esperando_horario`. Esa es la evidencia del bug: la cola humana. El
 // cron escribe CINCO candidatos en ONIA_BOT_SLOTS (uno por dia) y este archivo se quedaba con
 // los dos primeros, asi que "el lunes 28 a las 14:00" —libre en la agenda— caia en
 // `proposesOwnTime` y se iba a la cola humana.

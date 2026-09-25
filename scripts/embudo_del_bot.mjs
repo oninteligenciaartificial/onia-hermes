@@ -140,11 +140,32 @@ export function resumirEmbudo({ filas = [], conversaciones = [] } = {}) {
   // Se aplican los MISMOS dos filtros (inbox del objetivo + no somos nosotros) para que este
   // numero no se infle con sondas propias.
   const clavesDelMotor = new Set(filas.map((f) => idDeChatwoot(f?.conversationKey)).filter(Boolean));
-  const sinRegistrarEnElMotor = conversaciones
+  const perdidas = conversaciones
     .filter((c) => !clavesDelMotor.has(String(c.id)))
     .filter((c) => INBOXES_DEL_OBJETIVO.map(Number).includes(Number(c.inboxId)))
-    .filter((c) => !esNuestra({ contacto: c.contacto, telefono: c.telefono }))
-    .map((c) => `chatwoot:${c.id}`);
+    .filter((c) => !esNuestra({ contacto: c.contacto, telefono: c.telefono }));
+
+  // ⚠️ CICATRIZ vs HERIDA. Las perdidas de produccion son las cuatro del 24 al 28 de agosto
+  // (chatwoot:34/35/36/37), y caen en un hueco del motor que YA CERRO: medido el 2026-09-25, de
+  // la 38 en adelante el motor registro 9 de 9 conversaciones de los inboxes 4 y 5. Un numero que
+  // no puede bajar nunca no es una alarma: manda a re-investigar historia curada cada vuelta, y
+  // el dia que el motor pierda una de verdad el rojo ya esta encendido y nadie lo nota.
+  // El corte se deriva SIN traer fechas: el id de Chatwoot es un contador, asi que el id mas alto
+  // que el motor registro dice hasta donde estuvo escribiendo. Solo entran claves que existen de
+  // los DOS lados — una clave sintetica como `chatwoot:999999` correria el corte al infinito y
+  // dejaria el 🔴 apagado para siempre, que es el fallo opuesto y peor.
+  const idsEnChatwoot = new Set(conversaciones.map((c) => String(c.id)));
+  const ultimoRegistrado = Math.max(
+    0,
+    ...filas
+      .map((f) => idDeChatwoot(f?.conversationKey))
+      .filter((id) => id && idsEnChatwoot.has(id))
+      .map(Number),
+  );
+  const clave = (c) => `chatwoot:${c.id}`;
+  const perdidasNuevas = perdidas.filter((c) => Number(c.id) > ultimoRegistrado).map(clave);
+  const perdidasAnteriores = perdidas.filter((c) => Number(c.id) <= ultimoRegistrado).map(clave);
+  const sinRegistrarEnElMotor = perdidas.map(clave);
 
   const porEtapa = {};
   for (const r of reales) porEtapa[r.botStage || '(sin etapa)'] = (porEtapa[r.botStage || '(sin etapa)'] || 0) + 1;
@@ -165,6 +186,9 @@ export function resumirEmbudo({ filas = [], conversaciones = [] } = {}) {
     },
     descartadas,
     sinRegistrarEnElMotor,
+    perdidasNuevas,
+    perdidasAnteriores,
+    ultimoRegistrado,
   };
 }
 
@@ -172,7 +196,8 @@ export function resumirEmbudo({ filas = [], conversaciones = [] } = {}) {
 export function informe(resumen) {
   const r = resumen.reales;
   const d = resumen.descartadas;
-  const sr = resumen.sinRegistrarEnElMotor || [];
+  const nuevas = resumen.perdidasNuevas || [];
+  const anteriores = resumen.perdidasAnteriores || [];
   const etapas = Object.entries(r.porEtapa)
     .sort((a, b) => b[1] - a[1])
     .map(([k, v]) => `${k} ${v}`)
@@ -183,9 +208,18 @@ export function informe(resumen) {
     `  eligieron horario: ${r.conHorario}${r.clavesConHorario.length ? ` (${r.clavesConHorario.join(', ')})` : ''}`,
     `  esperando algo nuestro: ${r.paradas}${r.clavesParadas.length ? ` (${r.clavesParadas.join(', ')})` : ''}`,
     `  descartadas: ${d.nuestras.length} nuestras · ${d.sinteticas.length} sinteticas (sin conversacion en Chatwoot) · ${d.fueraDeLosInboxesDelBot.length} fuera de los inboxes ${INBOXES_DEL_OBJETIVO.join('/')}`,
-    // Va en su propia linea y con el 🔴 adentro: es gente que escribio y el sistema perdio, no un
-    // descarte. Antes ni se imprimia — caia en "sinteticas", que se lee como "no existen".
-    `  ${sr.length ? '🔴 ' : ''}escribieron y el motor no los registro: ${sr.length}${sr.length ? ` (${sr.join(', ')}) — invisibles para ESTE medidor hasta hoy; el vigia de leads sin respuesta si los ve (arranca de Chatwoot)` : ''}`,
+    // DOS lineas, no una, y el 🔴 va SOLO en la primera. Las dos son gente que escribio y el
+    // sistema perdio —por eso ninguna vuelve a "sinteticas", que se lee como "no existen"— pero
+    // solo una pide trabajo: si hay perdidas mas nuevas que el ultimo registro del motor, el
+    // motor dejo de escribir y el proximo lead tambien se pierde. La otra es una caida vieja que
+    // ya cerro: nombrarla en rojo cada vuelta gasta la senal que hace falta para la primera.
+    `  ${nuevas.length ? '🔴 escribieron y el motor dejo de registrar' : 'el motor registro a todos los que escribieron despues de chatwoot:' + resumen.ultimoRegistrado}${nuevas.length ? `: ${nuevas.length} (${nuevas.join(', ')}) — el motor no esta escribiendo: revisar el webhook ANTES que nada` : ''}`,
+    ...(anteriores.length
+      ? [
+          `  ya perdidas antes de chatwoot:${resumen.ultimoRegistrado} (caida ya curada): ${anteriores.length} (${anteriores.join(', ')})`,
+          '     no es trabajo de este medidor: el vigia de leads sin respuesta si las ve (arranca de Chatwoot)',
+        ]
+      : []),
   ].join('\n');
 }
 
@@ -292,6 +326,10 @@ function selfCheck() {
     { id: '37', inboxId: 5, contacto: 'mariohassen', telefono: '' }, // desconocido real (WhatsApp), SIN fila
     { id: '12', inboxId: 5, contacto: 'Prueba Texto', telefono: '' }, // NOSOTROS y sin fila: no es un lead
     { id: '53', inboxId: 7, contacto: 'dry-dawn-527', telefono: '' }, // banco de pruebas y sin fila
+    // ─── CICATRIZ vs HERIDA: este es POSTERIOR al ultimo que el motor registro (58) ───
+    // O sea el motor dejo de escribir y todo lead que entre ahora se pierde en silencio. Ese es
+    // el unico caso que merece 🔴; los de arriba (36/37) son de una caida ya curada.
+    { id: '60', inboxId: 4, contacto: 'quiet-river-100', telefono: '' }, // desconocido real, SIN fila y NUEVO
   ];
   const filas = [
     { conversationKey: 'chatwoot:58', botStage: 'esperando_horario', scheduledAt: null },
@@ -340,13 +378,44 @@ function selfCheck() {
     'un desconocido que escribio y el motor NO registro se ve (WhatsApp)',
     r.sinRegistrarEnElMotor.includes('chatwoot:37'),
   );
-  a('y son exactamente esos dos, no una lista inflada', r.sinRegistrarEnElMotor.length === 2);
+  a('y son exactamente esos tres, no una lista inflada', r.sinRegistrarEnElMotor.length === 3);
+
+  // ⚠️ UN 🔴 QUE NO PUEDE BAJAR NUNCA DEJA DE SER UNA ALARMA (arreglado 2026-09-25).
+  // Las cuatro perdidas de produccion (chatwoot:34/35/36/37) son del 24 al 28 de agosto y caen
+  // en un hueco del motor que ya esta CERRADO: medido ese dia, de la 38 en adelante el motor
+  // registro 9 de 9 conversaciones de los inboxes 4 y 5. O sea es una cicatriz — no puede
+  // cambiar y no hay nada que hacer con ella. Imprimirla en 🔴 cada vuelta gasta la senal dos
+  // veces: manda a re-investigar historia curada, y el dia que el motor pierda una de VERDAD el
+  // rojo ya va a estar encendido. Esta es la regla que el carril ya tenia escrita —"toda alerta
+  // mira la FECHA del fallo"— aplicada al unico reloj que el cruce tiene a mano: el id de
+  // Chatwoot, que es un contador.
+  a('una perdida ANTERIOR al ultimo registro del motor es cicatriz, no herida', r.perdidasAnteriores.join() === 'chatwoot:36,chatwoot:37');
+  a('una perdida POSTERIOR al ultimo registro del motor SI es herida abierta', r.perdidasNuevas.join() === 'chatwoot:60');
+  a('el 🔴 va solo en la herida', /🔴 escribieron y el motor dejo de registrar: 1 \(chatwoot:60\)/.test(informe(r)));
+  // Y la cicatriz se nombra ENTERA, con su corte y sin 🔴: esconderla seria el error opuesto
+  // —son personas que escribieron— pero llevarla en rojo es lo que gasta la senal.
+  const lineaCicatriz = informe(r).split('\n').find((l) => l.includes('ya perdidas antes de')) || '';
+  a('la cicatriz se nombra con su corte y sus claves', /ya perdidas antes de chatwoot:58 \(caida ya curada\): 2 \(chatwoot:36, chatwoot:37\)/.test(lineaCicatriz));
+  a('y la cicatriz NO lleva 🔴', !lineaCicatriz.includes('🔴'));
+
+  // LA TRAMPA QUE HARIA FALLAR ABIERTO A TODO ESTO: `chatwoot:999999` es una clave del motor sin
+  // conversacion en Chatwoot. Si entrara al corte, el "ultimo registrado" seria 999999 y NINGUNA
+  // perdida podria ser nunca mas nueva que el — el 🔴 quedaria apagado para siempre, que es peor
+  // que el 🔴 permanente que este arreglo viene a sacar. El corte solo mira claves que existen
+  // de los dos lados.
+  a('una clave sintetica no puede correr el corte al infinito', r.ultimoRegistrado === 58);
   // ANTI-INFLADO, el espejo del anti-tautologia de arriba: el contador nuevo aplica los MISMOS
   // dos filtros que el viejo. Si no, "sin registrar" se llena de sondas nuestras y del banco de
   // pruebas, y un numero que sube por nuestra culpa se lee como prospectos abandonados.
   a('una sonda nuestra sin fila no es un lead abandonado', !r.sinRegistrarEnElMotor.includes('chatwoot:12'));
   a('el banco de pruebas sin fila tampoco', !r.sinRegistrarEnElMotor.includes('chatwoot:53'));
-  a('el informe los nombra, no los esconde', /escribieron y el motor no los registro: 2/.test(informe(r)));
+  // El proposito de este caso no cambio al partirse la linea en dos: NINGUNA de las perdidas
+  // puede quedar fuera del texto. Separar cicatriz de herida es para ordenar la senal, no para
+  // esconder a la mitad — y ese es justo el error que seria facil cometer aca.
+  a(
+    'el informe nombra a TODAS las perdidas, no solo a las nuevas',
+    r.sinRegistrarEnElMotor.every((k) => informe(r).includes(k)),
+  );
 
   a('el total crudo se informa igual, para poder comparar con el conteo pelado', r.total === 7);
   a('idDeChatwoot solo acepta la forma exacta', idDeChatwoot('chatwoot:58') === '58' && idDeChatwoot('chatwoot:') === null);

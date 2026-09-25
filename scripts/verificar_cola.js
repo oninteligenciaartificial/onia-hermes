@@ -212,6 +212,15 @@ function evidenciaDe(textoCrudo) {
     // llamada `image/` lleva extension (`image/logo.png`) y se sigue verificando.
     if (/^(image|text|application|audio|video|font|multipart)\/[a-z0-9+-]+$/i.test(ruta)) continue;
 
+    // Un PAR DE ALTERNATIVAS del lenguaje tampoco es un archivo: `if/else`, `try/catch`. La
+    // cola los cita como sustantivo para hablar de la FORMA del codigo, no de un archivo —es
+    // el mismo caso que la extension citada como sustantivo, con otra notacion. Medido el
+    // 2026-09-25: `if/else` era el UNICO ERROR que tenia `npm run cola:viva` en exit 1, sobre
+    // el item de la linea 80 de COLA.md, que dice «un `if/else` sin cobertura al lado de su
+    // gate». Se exige el token ENTERO contra una lista cerrada (ver PARES_DEL_LENGUAJE), asi
+    // que `if/else.ts` y `lib/if/else` se siguen verificando: esto no puede tapar un archivo.
+    if (PARES_DEL_LENGUAJE.has(ruta.toLowerCase())) continue;
+
     // Una ruta se reconoce por tener separador o extension. "10 min" no es una ruta.
     if (/[\/]/.test(ruta)) { rutas.push(ruta); continue; }
 
@@ -266,6 +275,17 @@ const EXTENSIONES = new Set([
   'png', 'jpg', 'jpeg', 'webp', 'svg', 'gif', 'ico', 'avif', 'pdf', 'woff', 'woff2', 'ttf',
   'mp4', 'mov', 'webm', 'mp3', 'wav', 'srt', 'vtt', 'zip', 'gz', 'tar', 'bak',
 ]);
+
+// Los PARES DE ALTERNATIVAS que estas colas escriben para nombrar un constructo de codigo
+// como sustantivo: «un `if/else` sin cobertura», «un `try/catch` que se traga el error».
+// No prometen un archivo —nombran una forma, igual que el `.test.ts` de mas arriba— pero
+// tienen barra, asi que caian en "esto parece una ruta". Los dos salen de CONTAR sobre el
+// corpus (2026-09-25: los unicos pares palabra/palabra de las colas que no son rutas reales
+// ni paquetes), no de imaginar cuales podrian aparecer. Lista cerrada y token exacto a
+// proposito: el dia que haga falta un tercero, el sintoma es un rojo visible con el par
+// adentro del mensaje, que es barato; un patron generico (`\w+/\w+` sin extension) taparia
+// carpetas de verdad como `scripts/loops` y dejaria pasar fantasmas.
+const PARES_DEL_LENGUAJE = new Set(['if/else', 'try/catch']);
 
 
 // ONIA es DOS repos y una cola cita a los dos: el carril de producto trabaja en
@@ -1098,6 +1118,24 @@ function selfCheck() {
   r = revisarCola('## Ahora\n- [ ] Ver `inventado/solo-uno.py` · `existe.png`\n', tmp);
   ok(r.problemas.some((p) => p.regla === 'fantasma'),
     'pero un segmento que NO esta en la ruta real no resuelve: no alcanza con que el nombre exista');
+
+  // (e) Un PAR DE ALTERNATIVAS del lenguaje no es una ruta. La cola escribe «un `if/else` sin
+  // cobertura» para nombrar un constructo de codigo como sustantivo, igual que `.test.ts` en
+  // (a): no promete un archivo, nombra una forma. Tiene barra, asi que caia en "esto parece
+  // una ruta" (medido el 2026-09-25: era el UNICO ERROR que tenia `npm run cola:viva` en
+  // rojo, item de la linea 80 de COLA.md, y por eso el gate llevaba dias en exit 1).
+  r = revisarCola('## Ahora\n- [ ] Un `if/else` sin cobertura al lado de su gate · `existe.png`\n', tmp);
+  ok(!r.problemas.length, 'un par de alternativas del lenguaje no es una ruta');
+  r = revisarCola('## Ahora\n- [ ] Un `try/catch` que se traga el error · `existe.png`\n', tmp);
+  ok(!r.problemas.length, 'y vale para el otro par que estas colas escriben');
+  // Los reciprocos: el recorte pide el token EXACTO, asi que una ruta que solo EMPIECE con esa
+  // palabra —o que la lleve como carpeta— se sigue verificando. Sin esto el carve-out afloja.
+  r = revisarCola('## Ahora\n- [ ] Arreglar `if/else.ts` · `existe.png`\n', tmp);
+  ok(r.problemas.some((p) => p.regla === 'fantasma'),
+    'pero un archivo con extension bajo esa palabra sigue siendo fantasma');
+  r = revisarCola('## Ahora\n- [ ] Arreglar `lib/if/else` · `existe.png`\n', tmp);
+  ok(r.problemas.some((p) => p.regla === 'fantasma'),
+    'y el par como SUFIJO de una ruta tampoco absuelve: se pide el token entero');
 
 
   // --- Los cuatro falsos positivos medidos el 2026-09-02 sobre la propia COLA.md ---

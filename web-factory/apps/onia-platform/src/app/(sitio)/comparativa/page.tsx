@@ -47,7 +47,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "es_BO",
-    title: "Onia comparada con lo que hoy se vende en Bolivia",
+    title: "Onia comparada con lo que se vende en Bolivia",
     description:
       "Nombres propios, precios públicos y fecha de consulta. Comprobalo vos mismo.",
     url: "/comparativa",
@@ -68,7 +68,7 @@ export default function Comparativa() {
         <Reveal>
           <Kicker>Comparación</Kicker>
           <h1 className={s.display}>
-            Comparalo con lo que <em>hoy</em> se vende en Bolivia.
+            Comparalo con lo que se vende en <em>Bolivia</em>.
           </h1>
           <p className={s.lead}>
             {HUECO} Todos los precios de abajo son públicos: abrí cualquiera de

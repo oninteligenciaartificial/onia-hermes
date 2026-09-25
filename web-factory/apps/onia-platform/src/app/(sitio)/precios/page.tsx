@@ -218,6 +218,9 @@ export default function Precios() {
               </div>
             ))}
           </div>
+          <p className={s.note} style={{ marginTop: "1.4em" }}>
+            Precios finales en bolivianos, impuestos incluidos.
+          </p>
         </Reveal>
       </Block>
 
