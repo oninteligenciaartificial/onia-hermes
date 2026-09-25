@@ -24,9 +24,10 @@
 |---|---|---|
 | D1 | Los agentes usan un modelo de verdad | ✅ Sergio Urcullo, 24-sep |
 | D2 | **Plantilla por negocio**: la IA escribe UNA vez, por negocio y por agente, una plantilla con `{nombre}` `{fecha}` `{hora}` `{monto}` en el tono del rubro; el dueño la aprueba una vez; el sistema la llena. **La IA nunca ve datos de clientes ni pacientes** | ✅ 24-sep (reemplaza la redacción mensaje por mensaje de `56752b95`) |
-| D3 | **WhatsApp del dueño ya**: lo que hay que decidir le llega por WhatsApp y aprueba con `ok`/`no` | ✅ 24-sep |
+| D3 | **Primero avisos DENTRO de Onia** (web push + campana, link directo a aprobar, «Instalá Onia» en Windows/Android/iPhone); **después** WhatsApp desde un número nuevo «Onia Avisos». La decisión y el registro viven siempre en la plataforma: un solo ecosistema | ✅ 24-sep (reemplaza «WhatsApp del dueño ya»: el web push existía y estaba roto — la clave VAPID no se horneaba en el build, 0 suscripciones) |
 | D4 | **Cupo de IA por plan**; al tope vuelve el texto fijo, el cliente nunca ve «sin crédito» | ✅ 24-sep |
-| D5 | Desde qué número de WhatsApp le escribe Onia al dueño | ⏳ Pendiente (ver §7) |
+| D5 | Número del canal WhatsApp | ✅ 24-sep: número nuevo dedicado («Onia Avisos»), cuando haya clientes — SIM + alta en Meta a cargo de Sergio Urcullo |
+| D7 | Tiendas de apps | Play Store y Microsoft Store (empaquetando la misma web) con los primeros clientes; App Store de Apple solo si la piden (US$99/año + revisión que rechaza apps que son solo una web) |
 | D6 | Modelo rápido de clasificación (Jev, TypeSafe AI) | Solo después de una prueba en español (ver §6) |
 
 ## 3. Piezas (todas dentro de la plataforma, nada instalado por cliente)
@@ -109,7 +110,8 @@ Urcullo). El diseño recomienda (b): aísla el riesgo de ruteo y no mezcla prosp
 |---|---|---|---|
 | 1 | **Correa**: permiso de aprobar respetado y elegible, vigía, «por qué» en cada propuesta | 1.0 | Test: sin permiso no aprueba · aviso del vigía mirado en pantalla · cada propuesta muestra regla y dato |
 | 2 | **Redactor por plantilla** (D2) + cupo por plan (D4) | 1.0 | Gasto por negocio visible · plantillas aprobadas/rechazadas · alarma si cae al texto fijo por falla |
-| 3 | **WhatsApp del dueño** (D3): vincular, resumen diario, `ok`/`no`, 4 preguntas | Ya (tras D5) | Tiempo entre propuesta y decisión · costo por plantilla medido |
+| 3a | **Avisos en la plataforma** (D3): web push arreglado, aviso por cada aprobación con link directo, «Instalá Onia» | 1.0 (plan `onia-platform/docs/superpowers/plans/2026-09-24-avisos-y-app-instalable.md`) | Suscripciones > 0 · tiempo entre propuesta y decisión |
+| 3b | **WhatsApp del dueño**: vincular, resumen diario, `ok`/`no`, 4 preguntas | Con clientes (número «Onia Avisos») | Costo por plantilla medido |
 | 4 | **«¿Qué hago hoy?»** en barra e inicio (comparte función con el resumen del #3) | Con el #3 | Aprobaciones decididas el mismo día |
 | 5 | **Preguntas libres** («¿cuánto me debe Juan?»): la IA elige qué consultar, la cifra sale de la base; Jev si pasa la prueba | Con clientes | Baja de consultas de soporte por negocio |
 
