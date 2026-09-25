@@ -3549,6 +3549,23 @@ y sin operar. Acá se opera, con verificación por ítem.
       nuestro y no pide nada más de él: subir `DMARC` de `p=none` a `p=quarantine` y revisar el
       remitente. Si contesta **Recibidos**, el punto se cierra.
 
+      ⚠️ **Cómo se re-prueba el bloqueo en 30 s, porque el conector ENGAÑA — medido el
+      2026-09-25 01:55 La Paz.** Esta vuelta lo reintentó (un bloqueo vencido es peor que un
+      fantasma: le pide a Sergio Urcullo una decisión que ya tomó) y el modo de falla no es el
+      que este párrafo hacía esperar. Gmail **no** aparece entre los servidores que piden OAuth
+      —ahí sólo salen Cloudflare, Fillout y N8N—, sus herramientas **sí** se listan y
+      `ToolSearch` devuelve el esquema completo de `search_threads`: hasta ahí todo se lee como
+      «ya está autorizado». El corte llega recién al **llamarla**, y con este texto exacto:
+
+      ```
+      Claude requested permissions to use mcp__claude_ai_Gmail__search_threads,
+      but you haven't granted it yet
+      ```
+
+      O sea: **figurar en la lista, y hasta poder cargar el esquema, no es estar autorizada** —
+      la única prueba es la llamada. Sigue siendo de Sergio Urcullo (autorizar el conector en
+      claude.ai), `t_040684cb` sigue vivo, y el punto sigue sin poder cerrarse desde un loop.
+
 - [x] 🔴 **CERRADO el 2026-09-10 (`0735d5c`, ya en `master` — verificado el 2026-09-10): el
       recordatorio del add-on de WhatsApp salía hacia Meta con un número que WhatsApp no puede
       resolver, y lo tapaba un comentario que prometía justo lo que no hacía.**
