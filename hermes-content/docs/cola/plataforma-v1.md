@@ -5610,10 +5610,29 @@ y sin operar. Acá se opera, con verificación por ítem.
       árbol final (con `origin/master` mergeado, 24 commits, 0 conflictos): `tsc --noEmit` **0**,
       `eslint` **0 errores**, **6.489** tests verdes.
 
-      🔴 **Lo que sigue: merge de `7ed179c3` a `master` (de `onia-cola`) y deploy. Recién
-      después él puede elegir** — si mira antes, elige entre dos pantallas iguales. El pedido
-      vivo se deriva, no se copia:
+      ✅ **ESO YA PASÓ — medido el 2026-09-25 08:50-08:55 La Paz, no heredado.** El merge y el
+      deploy que este párrafo pedía están hechos: `git merge-base --is-ancestor 7ed179c3
+      origin/master` → **mergeado** (y `122ac28e` también), y producción **swapeó sola** tras el
+      merge — el `BUILD_ID` vivo es `UgtwNYIEjS-DSK0umjqc8`, ya no el `p2O3qK8ejw4RQGq9y0CgH`
+      que este ítem citaba a las 03:45.
+
+      **Y las dos direcciones ahora se distinguen. Comprobado MIRÁNDOLA, no con un grep:**
+      `node scripts/mirar_bandeja_dueno.mjs --email superadmin@onia.com.bo --ruta /admin/diseno`
+      → HTTP 200, cero respuestas ≥400, y en la captura **A pinta «Agendar cita» en verde y B
+      lo pinta en ámbar**, con «Enviar recordatorio» al revés en cada una. Un `grep` no servía
+      acá: `color-primary` aparece en el `page.js` de las DOS versiones —la vieja pisaba ese
+      token y la nueva pisa además `--primary`—, así que sólo confirma el arreglo la pantalla
+      renderizada.
+
+      🔴 **Lo único que queda es SU elección**, y el bloqueo estaba mal comunicado: el último
+      comentario de la tarea le decía *«Por ahora no hagas nada»*, escrito cuando todavía era
+      cierto. Un bloqueo vencido es peor que un fantasma — le pide que espere algo que ya
+      ocurrió. Corregido hoy con la prueba de arriba. El pedido vivo se deriva, no se copia:
       `/root/bin/onia-tablero.sh list --status blocked | grep -i 'Elegí A o B'`.
+
+      ⚠️ Y una arista que NO es de este carril, anotada para su dueño (`onia-cola`): el parte
+      diario arma cada línea como `→ ok <id>`, pero esta tarea **no se contesta con `ok`, se
+      contesta con A o B**. Un `ok` la devolvería a `ready` sin registrar ninguna elección.
 
       **La causa de su queja, medida y no deducida** — es el dato que faltaba y el que hace
       que las dos direcciones ataquen lo correcto:
@@ -5641,16 +5660,18 @@ y sin operar. Acá se opera, con verificación por ítem.
       `iconos-en-la-fuente` — el icono de la barra es `tune`, que YA está en la fuente
       subseteada; estrenar uno pinta su NOMBRE en letras gigantes).
 
-      ⚠️ **NO está en producción y no se pushea desde nodo-casa** (el remoto de
-      `onia-platform` está en `DESHABILITADO-NODO-DE-DESARROLLO` a propósito y la llave de
-      deploy sólo existe en el VPS). Entrega por el camino versionado:
+      ⚠️ **Esto ES producción y ya está — lo que sigue vigente es sólo el CAMINO de entrega.**
+      El párrafo decía «NO está en producción»; se publicó (ver la medición del 25-09 más
+      arriba). Lo que no cambió: desde nodo-casa **no se pushea** `onia-platform` (el remoto
+      está en `DESHABILITADO-NODO-DE-DESARROLLO` a propósito y la llave de deploy sólo existe
+      en el VPS), así que todo commit futuro de esta pieza entra por el camino versionado —
       `scripts/integrar-onia-platform.sh` vía `/root/bin/onia-vps.sh`.
 
-      **Pendiente de este ítem, ahora en este orden** (el paso «entregar el commit al VPS» ya
-      no está: se cumplió, y la pantalla se publicó sola tras el merge): (1) merge de
-      `7ed179c3` a `master` y su deploy, sin los cuales B sigue saliendo verde para él;
-      (2) que Sergio Urcullo abra `/admin/diseno` y conteste **A** o **B**; (3) recién ahí se
-      aplica al panel.
+      **Pendiente de este ítem: UN solo paso, y no es de este carril.** Los dos anteriores
+      —entregar el commit al VPS, y el merge de `7ed179c3` con su deploy— **están cumplidos y
+      medidos**. Queda (1) que Sergio Urcullo abra `/admin/diseno` y conteste **A** o **B**;
+      (2) recién ahí se aplica al panel. Este ítem **no se vuelve a medir** hasta que el
+      tablero devuelva `t_e0f6031a` a `ready`: re-verificarlo cada vuelta es trabajo fantasma.
 
 - [ ] 🔴 **T-plata — dos bloqueos que solo Sergio Urcullo puede pagar** (detectados el
       10-sep midiendo el precio de la recarga; avisados por el tablero):
