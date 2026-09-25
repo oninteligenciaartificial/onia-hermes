@@ -112,19 +112,23 @@
 >   «Proponer un texto» (Recall, Clínica Sergio de prueba) devolvió un texto real de gpt-4.1-mini, vista
 >   previa con el nombre de muestra fijo, contador «1 de 150», descartado después; campana en oscuro
 >   legible; logs sin errores.
-> - **EN VUELO — plan B (correa):** worktree `E:/onia-wt/platform-b`, rama LOCAL
->   `wip/v1-correa-20260925` (desde `2075575f`, sin empujar). Si muere la sesión, los commits quedan
->   en el repo `C:\dev\proyectos\onia-platform`. Estado 25-sep ~06:00 UTC: tareas 1-14 hechas y
->   revisadas; dos rondas adversariales de PERMISOS encontraron 1 HIGH + 1 CRITICAL (cuatro puertas que
->   quitaban/creaban ADMIN sin `puedeCambiarRolesDe`, entre ellas `DELETE /api/doctors/[id]`) + varios
->   MEDIUM (tomar «Solo el dueño» con un coadmin, dueño que se marca «doctor» y se queda afuera, ficha
->   fantasma ADMIN desde `/api/onboarding/aplicar`), todos arreglados con test de CLASE (puertas que
->   borran/escriben un rol exigen el chequeo). Suite 6.614/0 (las 2 de `scripts/qa-v1` fallan solo en
->   checkouts CRLF de E:). Última ronda: tapar propuestas/borradores en inicio, inicio de comercio y
->   `/agents` para quien no aprueba. **Gate pre-merge de la tarea 15 corrido en vivo: 0 admins pierden
->   «dueño»** (6 admins, 5 asignaciones). Sentry encendido en el contenedor (DSN, production, 0 fallas de
->   arranque). No hay orgs «ZZ QA» con agentes: el chequeo del vigía se hace en la clínica de prueba de
->   Sergio Urcullo (todas las cuentas son de prueba).
+> - **Plan B (correa) EN PROD: `release-d3b24cbc`** (platform `d3b24cbc`, 25-sep 05:11 UTC, publicador
+>   oficial). Quién aprueba se pregunta en UN lugar (`puedeDecidirAprobaciones`): rutas de aprobaciones,
+>   `/pending`, inicio, inicio de comercio, `/agents`, la ruta de textos y los AVISOS de `collab.ts`, con
+>   test de CLASE (toda pantalla que lee propuestas debe llamarlo). Selector «quién aprueba» en
+>   `/team/roles` (solo en planes con coadministradores), con pedido que los otros aprobadores confirman.
+>   Vigía de agentes (cartel en `/agents` + Sentry al caer y al volver), «Por qué» en cada propuesta.
+>   Dos rondas adversariales de PERMISOS: 1 CRITICAL + 1 HIGH + 6 MEDIUM arreglados (entre ellos
+>   `DELETE /api/doctors/[id]` borraba al dueño sin chequeo; `/api/onboarding/aplicar` creaba ADMIN
+>   fantasma), con test de clase de puertas que borran/escriben un rol. Suite 6.650/0.
+>   **Verificado en vivo:** gate pre-merge 0 admins pierden «dueño» (corrido 2 veces); Sentry encendido;
+>   `/team/roles`, `/pending`, `/agents` 200 sin errores de consola, MIRADOS; corrida fallida de prueba en
+>   la clínica de prueba → cartel rojo «Tus agentes fallaron el 25/9/2026…» + evento Sentry; corrida de
+>   vuelta → cartel fuera + evento «volvieron a correr»; filas de prueba borradas.
+>   **Pendiente de mirar:** la línea «Por qué» en `/pending` aparece recién con propuestas NUEVAS (cron
+>   diario 07:00 La Paz): abrir `/pending` después de esa hora. Menores anotados: Sentry agrupa caída y
+>   vuelta en un mismo issue (fingerprint); en inicio de comercio el staff sigue leyendo «0 propuestas
+>   esperando tu aprobación»; `/team/roles` dice «Asigna/asignas» (tuteo, anterior a este carril).
 >   **Decisión pendiente de Sergio Urcullo:** con «Solo el dueño», si ese dueño desaparece sin
 >   entregar, hoy solo lo destraba Onia (SQL en la skill `onia-db`). ¿Automático por inactividad o
 >   manual? (no hay señal fiable de último ingreso en `Profile`).
