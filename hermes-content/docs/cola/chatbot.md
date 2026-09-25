@@ -678,6 +678,126 @@ abrirlas y decidir a qué deploy se refieren. Se derivan con el comando, nunca d
 
 ## Ahora
 
+- [x] **CERRADO el 2026-09-25 08:13-09:00 La Paz (MEDICIÓN, sin cambio de motor): la definición de
+      hecho del carril quedó medida ENTERA por primera vez en varias vueltas — y al medirla
+      apareció que el log del bot vivo está ahogado al 83 % por UNA línea.**
+
+      **La pata que faltaba.** Las dos vueltas anteriores dejaron el widget «no medido» y lo
+      dijeron explícitamente. Esta vuelta se corrió `scripts/sonda_widget.mjs` contra el widget
+      real: `--self-check` 65/65, y la medición viva **exit 0 sin pipe** (el exit se leyó sin
+      `| tail`, que es como este carril ya se inventó un falso verde):
+
+          EL BOT CONTESTO LOS 2 — conversacion 49:
+            #1 "Hola, quiero informacion sobre el sistem" → 1 respuesta(s)
+            #2 "Tengo una clinica dental en Santa Cruz, " → 1 respuesta(s)
+
+      O sea el segundo turno —donde el bot murió dos veces— está vivo. Las otras dos patas:
+      simulador **3/3** (precio Bs 320/550/890/1.290 + chatbot 390, SIAT con el 1 de octubre,
+      demo con horarios) y `avisos-vivo.mjs` **exit 0 con circuito medido**: los cuatro eslabones
+      ok, las dos ramas (`handoff` y `demo_agendada`) ok, 6 avisos · 4 enviados · 0 fallidos.
+
+      🔴 **Lo que apareció al medir, y es un bug VIVO del log.** Desde el último arranque del bot
+      (hoy 10:23:04Z) hay **98 líneas y sólo 18 distintas: 81 de las 98 son el mismo warn**
+      `[knowledge:panel] ignoro empresa.horario…`. El dedup por VALOR **ya está escrito** en
+      `vps-ops/bot/knowledge.mjs`, pero **no está en producción**: el archivo vivo no tiene el
+      símbolo y el md5 difiere (`43a2ace4…` vivo vs `bc597110…` repo). Es exactamente el fallo que
+      este carril ya pagó: *un log ahogado miente peor que uno vacío, porque contesta*.
+
+      ⚠️ **No se pidió deploy nuevo: ya existe** — `t_24fa76aa` («Publicar el bot: las campanas de
+      la web, que agende demos, y que ningún lead quede en silencio»), blocked esperando el `ok` de
+      Sergio Urcullo. Un segundo pedido del mismo destino es lo que este repo prohíbe.
+
+      **Un falso positivo que se descartó antes de reportarlo.** El log trae **2.803** crashes
+      `ERR_MODULE_NOT_FOUND: audio-transcribe.mjs`. Parecía el hallazgo de la vuelta y **no lo es**:
+      el último está en la línea 50531 de 71725 y el archivo llegó a producción el 19-sep
+      (`ls -l /tmp/onia-bot/audio-transcribe.mjs` → existe). Es historia curada. Un vigía que
+      reporta un fallo viejo como activo inutiliza el canal: toda alerta mira la FECHA.
+
+      **Reproducción** (desde nodo-casa, los dos primeros tardan ~1 min cada uno):
+
+          node scripts/sonda_widget.mjs ; echo $?        # 0 = contestó los DOS. SIN pipe.
+          cd hermes-content/deploy/vps-ops/bot && node avisos-vivo.mjs
+          /root/bin/onia-vps.sh bash -lc 'docker exec onia-center sh -lc "
+            N=\$(grep -n \"escuchando en :3020\" /tmp/onia-bot-webhook.log | tail -1 | cut -d: -f1)
+            tail -n +\$N /tmp/onia-bot-webhook.log | wc -l
+            tail -n +\$N /tmp/onia-bot-webhook.log | sort -u | wc -l"'
+
+      ⚠️ **El comando de log del prompt de arranque da un falso 0 desde nodo-casa.**
+      `bash webhook-server.sh logs | tail -80 | grep …` devolvió **0** eventos; el valor real
+      medido dentro del contenedor es **29**. El bot corre en el VPS: se mide con `docker exec`,
+      no con el script local. Y `tail -80` sobre un log 83 % ruido no puede ver un evento aunque
+      exista.
+
+- [x] 🔴 **CERRADO el 2026-09-25 07:43-08:20 La Paz (commiteado; es el INSTRUMENTO, no toca el
+      motor — no necesita deploy): cuatro desconocidos escribieron, nadie les contestó nunca, y el
+      medidor del embudo los escondía en la categoría que se lee como «no existen».**
+
+      **Lo que estaba roto.** `scripts/embudo_del_bot.mjs` cruzaba las filas del motor
+      (`onia_center.bot_conversations`) contra las conversaciones de Chatwoot con un
+      `for (const fila of filas)` — o sea **recorría una sola dirección del cruce**. Una
+      conversación que existe en Chatwoot y **no tiene fila en el motor** no entraba nunca al
+      bucle: no salía ni como real ni como descartada. No se contaba mal — **desaparecía**.
+
+      **Cómo se encontró, y por qué nadie lo había visto.** La propia cabecera del archivo nombra
+      los 7 desconocidos reales uno por uno (`inbox 4 web: 34, 36, 38, 40 · inbox 5 WhatsApp: 35,
+      37, 58`), pero al ejecutarlo imprimía `3 desconocido(s) real(es)`. **El comentario y el
+      código daban números distintos y el gate estaba verde**, porque ningún caso comparaba uno
+      contra el otro. Medido en producción:
+
+      ```
+      # los 7 SIGUEN en Chatwoot, con su inbox intacto (4 y 5):
+      select c.id, c.inbox_id, ct.name from conversations c left join contacts ct on ct.id=c.contact_id
+        where c.id in (34,35,36,37,38,40,58);        → 7 filas
+      # pero en el motor hay 3:
+      select conversation_key from onia_center.bot_conversations
+        where conversation_key in ('chatwoot:34',…);  → chatwoot:38, chatwoot:40, chatwoot:58
+      ```
+
+      🔴 **Y los 4 que faltaban son lo peor que podía haber ahí: escribieron y NADIE contestó.**
+      `select conversation_id, count(*) filter (where message_type=1) from messages where
+      conversation_id in (34,35,36,37) group by 1` → **0 respuestas en los cuatro**, ni del bot ni
+      de una persona. Dos son del widget web (`delicate-glitter-674`, `icy-lake-546`) y **dos son
+      de WhatsApp con nombre de persona** (`F`, `mariohassen`), del 24 al 28 de agosto. Son los
+      mismos 4 de la tarea `t_5ea80f5e` («son 4, no 3»), que sigue esperando a Sergio Urcullo
+      porque contactar personas es suya.
+
+      ⚠️ **Y acá me corregí a mí mismo en la misma vuelta, que es justo el error que este carril
+      tiene escrito («desconfiá del instrumento que te da la razón»).** La primera versión de este
+      ítem y del informe decía que los 4 eran *«invisibles para el embudo Y para el vigía de leads
+      sin respuesta, o sea que nadie los rescata»*. **Falso, y en la dirección alarmante.**
+      `scripts/vigia_sin_respuesta.mjs:472` arranca de `messages join conversations` de Chatwoot —
+      el lado append-only— y recién después enriquece con `bot_stage`, así que **sí los ve**.
+      Corrido en vivo el 2026-09-25: `7 colgado(s) — 5 sin respuesta · 2 atendido(s) por el bot`,
+      nombrando a los cuatro con su contacto (`conv 36` dejó incluso un correo,
+      `Saguilera@ds-santacruz.bo`, y `conv 35` escribió *«estoy evaluando un sistema de gestión
+      para una clínica»* — cliente ideal textual). **Lo que estaba roto era la MEDIDA del objetivo
+      de este carril, no el rescate.** Escribirlo como «nadie los ve» habría mandado a la próxima
+      vuelta a construir un rescate que ya existe.
+
+      **El arreglo.** `resumirEmbudo` ahora recorre **las dos direcciones** y devuelve
+      `sinRegistrarEnElMotor`, con los MISMOS dos filtros que el contador viejo (inbox del objetivo
+      + `esNuestra`), para que el número nuevo no se infle con nuestras propias sondas. El informe
+      lo imprime en **su propia línea y con 🔴**, no entre los descartes.
+
+      **Prueba (rojo antes, verde después, y el rojo se pudo provocar a mano).** El caso nuevo
+      falló primero por el motivo correcto (el campo no existía); con el arreglo,
+      `node scripts/embudo_del_bot.mjs --self-check` → `OK`. Validación por MUTACIÓN, con `cp` y no
+      `git checkout`: quitar el filtro anti-sondas → `✗ una sonda nuestra sin fila no es un lead
+      abandonado`; cambiar el texto del informe → `✗ el informe los nombra, no los esconde`.
+      En vivo contra producción:
+
+      ```
+      EMBUDO DEL BOT — 3 desconocido(s) real(es) de 43 fila(s) del motor.
+        🔴 escribieron y el motor no los registro: 4 (chatwoot:34, chatwoot:35, chatwoot:36,
+           chatwoot:37) — invisibles para el embudo y para el vigia de leads sin respuesta
+      ```
+
+      **La cuenta honesta del carril pasó de 3 a 7 desconocidos reales** (3 registrados + 4 que el
+      motor perdió). **Lección, y es la que sobrevive al arreglo:** cuando el comentario de un
+      instrumento y su código dan números distintos, no hay rojo que avise — alguien tiene que
+      restar. Y un cruce entre dos sistemas tiene DOS direcciones: la que falta casi siempre es la
+      que esconde al sujeto, no la que sobra.
+
 - [x] 🔴 **CERRADO el 2026-09-25 06:13-07:05 La Paz (commiteado, NO desplegado — es un test y dos
       comentarios; no toca el motor): el número que el aviso de leads fríos le iba a poner delante
       a Sergio Urcullo estaba inflado 3x, y ningún test podía verlo porque TODOS los fixtures eran

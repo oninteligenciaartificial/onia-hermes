@@ -125,11 +125,29 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       no entraba en el instrumento. Cableado el 2026-09-25 en `4b46667c`: la medición viva ahora
       informa **una línea por máquina** (VPS 33/33 · casa 5, con 3 al día y 2 escritas por el
       instalador) y los cables de casa resultaron ser **tres**, no uno.
-      ⚠️ **Lo que a ese arreglo le falta, dicho para que no se lea como más de lo que es:** los
+      ~~⚠️ **Lo que a ese arreglo le falta, dicho para que no se lea como más de lo que es:** los
       caminos ROJOS del bloque de casa (`INSTALADOR_EN_DERIVA` y `COPIA_A_MANO`) **no los cubre
       ningún caso todavía** — el self-check ancla la función pura y la corrida viva sale verde,
       así que hoy sé que el verde es cierto pero **no** que el rojo aparecería. Se cierra
-      metiéndole un fixture de instalador cuyo heredoc literal difiera del archivo vivo.
+      metiéndole un fixture de instalador cuyo heredoc literal difiera del archivo vivo.~~
+      ✅ **CERRADO el 2026-09-25 por `onia-cola`, y la causa era estructural, no un fixture que
+      faltaba.** La decisión del bloque de casa vivía DENTRO del `.map` que lee el disco
+      (`/root/.onia-nodo`, `crontab -l`, `readFileSync` de cada ruta), así que ningún caso podía
+      provocar su rojo sin ensuciar la máquina — y un `if/else` sin cobertura al lado de su
+      hermana ya cubierta es el patrón que esta casa mide seguido: **dos armadores hermanos, y
+      el que corre es el que no tiene test.** Extraída a `clasificarEnEstaMaquina` (pura,
+      exportada); el `.map` ya sólo RECOGE evidencia y la ausencia en disco viaja como
+      `md5Vivo: null` en vez de como veredicto. **11 casos nuevos** (39 en el archivo), uno por
+      camino: los cuatro rojos (`SIN_FUENTE`, `INSTALADOR_EN_DERIVA`, `CABLEADA_EN_DERIVA`,
+      `EN_DERIVA_SIN_CABLE`), el aviso `COPIA_A_MANO`, los dos verdes, el cuerpo interpolado
+      —que es el **rojo falso** ya cazado una vez: en casa `onia-tg.sh` DEBE diferir del script
+      del VPS, porque acá es un shim que delega por SSH— y la precedencia del gemelo por
+      contenido. **Validado por 6 mutaciones**, cada una roja por el motivo correcto y por el
+      caso que le toca: los dos rojos vueltos `CABLEADA`, el interpolado acusado de deriva, el
+      corte de «ausente en disco» quitado, `INSTALADOR_EN_DERIVA` sacado del conjunto `ROJOS`
+      (2 rojos: el caso y el ancla) y el orden invertido para que el instalador tapara al gemelo.
+      El refactor no movió el veredicto vivo: `npm run herramientas:vivas` sigue dando
+      **VPS 33/33 · casa 5 (3 al día + 2 escritas por el instalador) · 0 a arreglar**.
       ⚠️ **La advertencia de que `claude-guardia.sh` tenía «producción adelante» está VENCIDA.**
       Era cierta el 2026-09-19; medida de nuevo hoy en las dos direcciones, el md5 de `origin/main`
       y el de `/root/bin` son **idénticos**, y lo mismo las otras nueve — por eso cablearlas no
