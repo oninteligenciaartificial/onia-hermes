@@ -12,6 +12,44 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-25 15:14-15:22 La Paz — `BUILD_ID` sin cambios; escalón nuevo: promesa vs. entrega en home y `/precios`, sin hallazgo
+
+`ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado primero: `UgtwNYIEjS-DSK0umjqc8`, igual al
+de la vuelta anterior — los 5 rubros ya quedan re-verificados en este build (ver entrada de
+arriba), así que no correspondía repetir rubro. Siguiendo el puntero de esa misma entrada
+("auditar una superficie nueva de promesa vs. entrega que no se haya mirado recientemente"): la
+última auditoría de home/precios data del 2026-09-13, doce días atrás, y desde entonces se sumó
+el plan `crece` y se movió la escalera completa — corresponde re-mirar.
+
+Abrí `https://onia.com.bo/` y `https://onia.com.bo/precios` con Playwright (`reducedMotion:
+'reduce'`), capturas en `capturas/extra-promesa-home-2026-09-25.png` y
+`capturas/extra-promesa-precios-2026-09-25.png`, sin ejecutar ningún write (no se creó ninguna
+fila `zz-qa-` esta vuelta).
+
+- **Cero palabras prohibidas** ("muy pronto", "en construcción", "beta", "próximamente") en
+  ninguna de las dos páginas — barrido por texto completo del `body`, no sólo grep del markup.
+- **Cero respuestas HTTP ≥400** durante la navegación de ambas páginas (sin chunks rotos).
+- **Los 11 montos en `Bs` que aparecen en `/precios` se crucé uno por uno contra**
+  `origin/master:onia-platform/lib/subscription-plans.ts` (`DEFAULT_PLAN_AMOUNTS`) y
+  `lib/pricing.ts`: Básico 320/89-semanal/3.200-anual, Crece 550/145/5.500, Profesional
+  890/229/8.900, Completo 1.290/12.900 (sin semanal — correcto, `isCycleAvailable` no lo ofrece),
+  Empresarial 2.900/29.000 (sin semanal). El chatbot add-on Bs 390/mes y la cuenta "Bs 10 más que
+  Profesional con el add-on aparte" (890+390=1280 vs. 1290) coinciden con el comentario del propio
+  código en `subscription-plans.ts:35-38`. **Los cuatro** `href` de "Empezar con el <plan>" van a
+  `https://app.onia.com.bo/register` sin `?plan=`, lo cual es correcto: el alta no elige plan (crea
+  trial `professional` fijo, `TRIAL_PLAN` de memoria compartida) — no es una promesa rota, el botón
+  no promete llevar directo a ESE plan.
+- Sin ninguna mención a "vendedora", equipo de ventas ni autobombo de la empresa.
+
+**Sin hallazgo.** `completo: true` / `llegoHasta: 9/9` sin cambios (no se re-corrió el recorrido
+completo, sólo esta auditoría de superficie). Próxima vuelta: si `BUILD_ID` sigue igual, otra
+superficie de promesa-vs-entrega no cubierta en los últimos días (`/agentes`, `/comparativa`,
+`/facturacion`) o volver a rotar rubro desde dental.
+
+RAZÓN: N/A — avanzó (escalón nuevo auditado, sin hallazgo que reportar).
+LECCIÓN: ninguna nueva — seguir el puntero explícito de la vuelta anterior en vez de repetir el
+mismo rubro dio un escalón distinto y evitó trabajo redundante.
+
 ## 2026-09-25 15:09-15:11 La Paz — `BUILD_ID` sin cambios; rotación de rubro → Servicios profesionales, 9/9
 
 `ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado ANTES de decidir (primer comando de la
