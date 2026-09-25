@@ -678,6 +678,56 @@ abrirlas y decidir a qué deploy se refieren. Se derivan con el comando, nunca d
 
 ## Ahora
 
+- [x] **CERRADO el 2026-09-25 08:13-09:00 La Paz (MEDICIÓN, sin cambio de motor): la definición de
+      hecho del carril quedó medida ENTERA por primera vez en varias vueltas — y al medirla
+      apareció que el log del bot vivo está ahogado al 83 % por UNA línea.**
+
+      **La pata que faltaba.** Las dos vueltas anteriores dejaron el widget «no medido» y lo
+      dijeron explícitamente. Esta vuelta se corrió `scripts/sonda_widget.mjs` contra el widget
+      real: `--self-check` 65/65, y la medición viva **exit 0 sin pipe** (el exit se leyó sin
+      `| tail`, que es como este carril ya se inventó un falso verde):
+
+          EL BOT CONTESTO LOS 2 — conversacion 49:
+            #1 "Hola, quiero informacion sobre el sistem" → 1 respuesta(s)
+            #2 "Tengo una clinica dental en Santa Cruz, " → 1 respuesta(s)
+
+      O sea el segundo turno —donde el bot murió dos veces— está vivo. Las otras dos patas:
+      simulador **3/3** (precio Bs 320/550/890/1.290 + chatbot 390, SIAT con el 1 de octubre,
+      demo con horarios) y `avisos-vivo.mjs` **exit 0 con circuito medido**: los cuatro eslabones
+      ok, las dos ramas (`handoff` y `demo_agendada`) ok, 6 avisos · 4 enviados · 0 fallidos.
+
+      🔴 **Lo que apareció al medir, y es un bug VIVO del log.** Desde el último arranque del bot
+      (hoy 10:23:04Z) hay **98 líneas y sólo 18 distintas: 81 de las 98 son el mismo warn**
+      `[knowledge:panel] ignoro empresa.horario…`. El dedup por VALOR **ya está escrito** en
+      `vps-ops/bot/knowledge.mjs`, pero **no está en producción**: el archivo vivo no tiene el
+      símbolo y el md5 difiere (`43a2ace4…` vivo vs `bc597110…` repo). Es exactamente el fallo que
+      este carril ya pagó: *un log ahogado miente peor que uno vacío, porque contesta*.
+
+      ⚠️ **No se pidió deploy nuevo: ya existe** — `t_24fa76aa` («Publicar el bot: las campanas de
+      la web, que agende demos, y que ningún lead quede en silencio»), blocked esperando el `ok` de
+      Sergio Urcullo. Un segundo pedido del mismo destino es lo que este repo prohíbe.
+
+      **Un falso positivo que se descartó antes de reportarlo.** El log trae **2.803** crashes
+      `ERR_MODULE_NOT_FOUND: audio-transcribe.mjs`. Parecía el hallazgo de la vuelta y **no lo es**:
+      el último está en la línea 50531 de 71725 y el archivo llegó a producción el 19-sep
+      (`ls -l /tmp/onia-bot/audio-transcribe.mjs` → existe). Es historia curada. Un vigía que
+      reporta un fallo viejo como activo inutiliza el canal: toda alerta mira la FECHA.
+
+      **Reproducción** (desde nodo-casa, los dos primeros tardan ~1 min cada uno):
+
+          node scripts/sonda_widget.mjs ; echo $?        # 0 = contestó los DOS. SIN pipe.
+          cd hermes-content/deploy/vps-ops/bot && node avisos-vivo.mjs
+          /root/bin/onia-vps.sh bash -lc 'docker exec onia-center sh -lc "
+            N=\$(grep -n \"escuchando en :3020\" /tmp/onia-bot-webhook.log | tail -1 | cut -d: -f1)
+            tail -n +\$N /tmp/onia-bot-webhook.log | wc -l
+            tail -n +\$N /tmp/onia-bot-webhook.log | sort -u | wc -l"'
+
+      ⚠️ **El comando de log del prompt de arranque da un falso 0 desde nodo-casa.**
+      `bash webhook-server.sh logs | tail -80 | grep …` devolvió **0** eventos; el valor real
+      medido dentro del contenedor es **29**. El bot corre en el VPS: se mide con `docker exec`,
+      no con el script local. Y `tail -80` sobre un log 83 % ruido no puede ver un evento aunque
+      exista.
+
 - [x] 🔴 **CERRADO el 2026-09-25 07:43-08:20 La Paz (commiteado; es el INSTRUMENTO, no toca el
       motor — no necesita deploy): cuatro desconocidos escribieron, nadie les contestó nunca, y el
       medidor del embudo los escondía en la categoría que se lee como «no existen».**
