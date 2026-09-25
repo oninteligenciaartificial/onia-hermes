@@ -63,6 +63,10 @@ const OTRO_TITULO = /^#{2,6}\s+/;
 // Arranque de fila: `| S9 |` o `| ~~S16~~ |`. El `~~` es como la cola marca lo ya cerrado.
 const FILA = /^\|\s*(~~)?\s*(S\d+)\s*(~~)?\s*\|/;
 const VERIFICADOR = /\*\*Verificador:\*\*\s*`([^`]+)`\s*(?:→|->)\s*(\d+)/;
+// Arranque de item de cola, primer nivel: `- [ ] ...` o `- [x] ...`.
+const ITEM = /^- \[( |x|X)\]\s/;
+// Lo que CORTA el bloque de un item: otro item de primer nivel, un titulo, o una tabla.
+const CORTE_ITEM = /^(- \[( |x|X)\]\s|#{1,6}\s|\|)/;
 
 const TIMEOUT_MS = Number(process.env.ONIA_BLOQUEOS_TIMEOUT_MS || 120000);
 
@@ -71,10 +75,48 @@ const TIMEOUT_MS = Number(process.env.ONIA_BLOQUEOS_TIMEOUT_MS || 120000);
  * fisicas —S9 tiene un bloque de codigo indentado adentro— asi que el corte no es el salto
  * de linea sino el arranque de la fila siguiente.
  */
+/**
+ * Los bloqueos que viven como ITEM de cola y no como fila de tabla. `plataforma-v1.md` no tiene
+ * tabla "Bloqueado en Sergio" —sus bloqueos son items `- [ ] 🔴`— asi que hasta el 2026-09-25
+ * este gate no podia verlos: leia un solo formato y salia "NO MEDIDO" sobre la cola donde
+ * estaban los cuatro bloqueos vivos del producto.
+ *
+ * Se mide el item que DECLARA su verificador, por lo mismo que una fila: en una cola un item
+ * abierto no es necesariamente un bloqueo, y tratar a todos como tal llenaria el reporte de
+ * items que nadie espera — un gate que grita de mas se apaga igual que uno que no grita.
+ */
+export function extraerItems(lineas) {
+  const items = [];
+  for (let i = 0; i < lineas.length; i++) {
+    const m = ITEM.exec(lineas[i]);
+    if (!m) continue;
+
+    let fin = lineas.length;
+    for (let j = i + 1; j < lineas.length; j++) {
+      if (CORTE_ITEM.test(lineas[j])) { fin = j; break; }
+    }
+
+    const v = VERIFICADOR.exec(lineas.slice(i, fin).join('\n'));
+    if (!v) continue;
+
+    items.push({
+      // El id es la linea: un item de cola no tiene numero como `S9`, y la linea es con lo que
+      // alguien lo encuentra. Dos items nunca comparten linea, asi que tampoco id.
+      id: `L${i + 1}`,
+      linea: i + 1,
+      cerrado: m[1].toLowerCase() === 'x',
+      comando: v[1].trim(),
+      esperado: Number(v[2]),
+    });
+  }
+  return items;
+}
+
 export function extraerBloqueos(md) {
   const lineas = md.split(/\r?\n/);
+  const items = extraerItems(lineas);
   const inicio = lineas.findIndex((l) => SECCION.test(l));
-  if (inicio === -1) return [];
+  if (inicio === -1) return items;
 
   let fin = lineas.length;
   for (let i = inicio + 1; i < lineas.length; i++) {
@@ -89,17 +131,20 @@ export function extraerBloqueos(md) {
     filas.push({ id: m[2], cerrado: Boolean(m[1] && m[3]), linea: i + 1, inicio: i, fin });
   }
 
-  return filas.map((f) => {
-    const texto = lineas.slice(f.inicio, f.fin).join('\n');
-    const v = VERIFICADOR.exec(texto);
-    return {
-      id: f.id,
-      linea: f.linea,
-      cerrado: f.cerrado,
-      comando: v ? v[1].trim() : null,
-      esperado: v ? Number(v[2]) : null,
-    };
-  });
+  return [
+    ...items,
+    ...filas.map((f) => {
+      const texto = lineas.slice(f.inicio, f.fin).join('\n');
+      const v = VERIFICADOR.exec(texto);
+      return {
+        id: f.id,
+        linea: f.linea,
+        cerrado: f.cerrado,
+        comando: v ? v[1].trim() : null,
+        esperado: v ? Number(v[2]) : null,
+      };
+    }),
+  ];
 }
 
 /**
@@ -243,6 +288,45 @@ if (process.argv.includes('--self-check')) {
   afirmar(multi.length === 2, 'un bloque de codigo adentro de una fila no la parte en dos');
   afirmar(multi[0].comando === 'npm run marca:chatwoot', 'encuentra el verificador en la continuacion de la fila');
 
+  // Los bloqueos que NO viven en una tabla. `plataforma-v1.md` no tiene tabla "Bloqueado en
+  // Sergio": sus bloqueos son items `- [ ] 🔴` en el cuerpo, y por eso este gate estuvo CIEGO
+  // para ellos. El 2026-09-19 una sesion midio que la mitad OpenAI del item T-plata estaba
+  // vencida y pidio acotar el texto; nadie lo hizo, y el pedido de recargar siguio saliendo en
+  // el parte diario seis dias mas. El gate existia y no podia verlo: leia un solo formato.
+  const items = extraerBloqueos([
+    '# Cola',
+    '',
+    '- [ ] 🔴 **Item con verificador** (algo que se puede comprobar solo)',
+    '      **Verificador:** `npm run marca:chatwoot` → 0',
+    '',
+    '- [ ] 🔴 **Item sin verificador** — este se re-mide a mano.',
+    '',
+    '- [x] 🔴 **Item ya cerrado** con **Verificador:** `npm run deploy:alcanzable` → 0',
+  ].join('\n'));
+  // Un item se mide si DECLARA su verificador, igual que una fila: en una cola cualquier item
+  // abierto NO es un bloqueo, asi que deducirlo de que este abierto llenaria el reporte de
+  // items que nadie esta esperando y apagaria el gate por ruido.
+  afirmar(items.length === 2, 'de una cola sin tabla saca los items que DECLARAN verificador');
+  afirmar(items[0].comando === 'npm run marca:chatwoot', 'saca el verificador declarado en la continuacion del item');
+  afirmar(items[0].esperado === 0, 'saca el codigo esperado del item');
+  afirmar(items[0].linea === 3, 'reporta la linea del item, que es como se lo encuentra');
+  afirmar(items[0].cerrado === false, 'el item abierto no se confunde con uno cerrado');
+  afirmar(items[1].linea === 8 && items[1].cerrado === true, 'un `- [x]` sale marcado cerrado, como una fila tachada');
+  afirmar(items.filter((f) => !f.cerrado).length === 1, 'el filtro de vivas deja fuera al item cerrado');
+  afirmar(items.length === new Set(items.map((f) => f.id)).size, 'dos items nunca comparten id: el id es su linea');
+
+  // Una cola con las DOS formas se mide entera: la tabla no le tapa los items ni al revés.
+  const mixto = extraerBloqueos([
+    '- [ ] 🔴 **Un item arriba de la tabla** **Verificador:** `npm run marca:chatwoot` → 0',
+    '',
+    '## Bloqueado en Sergio',
+    '| # | Que |',
+    '|---|---|',
+    '| S9 | una fila. **Verificador:** `npm run deploy:alcanzable` → 0 |',
+  ].join('\n'));
+  afirmar(mixto.length === 2, 'una cola con tabla Y items devuelve los dos');
+  afirmar(mixto.some((f) => f.id === 'S9'), 'la fila de la tabla sigue saliendo con su id');
+
   // La guarda de ejecucion, que es la parte peligrosa.
   const scripts = { 'marca:chatwoot': 'node x.mjs' };
   const existe = (p) => p === 'scripts/ok.mjs';
@@ -312,7 +396,10 @@ const scripts = JSON.parse(await readFile(join(RAIZ, 'package.json'), 'utf8')).s
 const filas = extraerBloqueos(await readFile(ruta, 'utf8'));
 
 if (!filas.length) {
-  console.error(`NO MEDIDO — ${ruta} no tiene una tabla "Bloqueado en Sergio" que leer.`);
+  console.error(
+    `NO MEDIDO — ${ruta} no tiene ni una tabla "Bloqueado en Sergio" ni un item que declare ` +
+      `su verificador (\`**Verificador:** \\\`<comando>\\\` → <codigo>\`). Sin eso no hay nada que correr.`,
+  );
   process.exit(1);
 }
 
