@@ -118,7 +118,7 @@ medido.**
 etapa en líneas de webhook, no avisos, así que sobrecuenta. El embudo real se cuenta en la base,
 que es el lado append-only: `select bot_stage, count(*) from onia_center.bot_conversations group
 by 1` → **12 `handoff_humano`**, 18 `esperando_horario`, 12 `nuevo`, y **0 `demo_agendada`** (ese
-cero es el bug del `slice(0,2)`, arreglado y esperando el deploy del bot — S18).
+cero es el bug del `slice(0,2)`, arreglado y **desplegado el 2026-09-25** — S18 cerrada).
 
 **La lección que se lleva este carril, y sirve a cualquiera:** *un grep que cuenta FALLOS no puede
 usarse para contar EVENTOS* — cuando todo anda bien devuelve 0, exactamente igual que cuando el
@@ -635,9 +635,27 @@ cierta para el otro, así que el estado se pregunta por separado:
 - **Panel (`onia-platform`)** — medido el 2026-09-24 22:20 UTC: **desplegado entero**, producción
   corre `3986b807` (etiqueta de imagen del contenedor). De las líneas «NO desplegado» de este
   archivo, **20 se referían al panel y las 20 estaban caducadas**.
-- **Motor (el bot)** — sigue esperando la firma de un `DESPLEGAR: bot`. Ese pedido **no se cita
-  por ID**, se deriva:
-  `/root/bin/onia-tablero.sh list --status blocked | grep -i 'Publicar el bot'`.
+- **Motor (el bot)** — ✅ **DESPLEGADO el 2026-09-25: Sergio Urcullo firmó y el swap corrió.**
+  Acá decía *«sigue esperando la firma de un `DESPLEGAR: bot`»* y quedó vencido ese mismo día.
+  Medido, no leído: `espejo-check.mjs` → **exit 0** (`ESPEJO OK`, el código del repo ES el que
+  corre en `/opt/onia/bot`); el `md5sum` de `knowledge.onia.json` da `06a15715…` **idéntico**
+  dentro del contenedor; y el proceso que atiende arrancó **después** de la copia
+  (`ps -eo pid,etime,args` → `1h36` contra un archivo del 24-sep), que es lo único que prueba
+  que la cargó: Node cachea módulos, así que copiar sin reiniciar no cambia nada. Funcional, no
+  sólo de archivo: la frase del configurador de webs devuelve `[R_CAMPANA]` con el texto de
+  **web**, no el pitch del chatbot. El estado se deriva, nunca se copia de acá:
+
+  ```bash
+  node hermes-content/deploy/vps-ops/bot/espejo-check.mjs                       # 0 = el motor corre lo del repo
+  /root/bin/onia-tablero.sh list --status blocked | grep -i 'Publicar el bot'   # vacío = no hay firma pendiente
+  ```
+
+  ⚠️ **Por qué la corrección va acá y no en los 8 encabezados sueltos.** Este bloque es el que
+  cada vuelta lee ANTES de creerle a un «NO desplegado»; mientras dijera que el motor espera
+  firma, los ocho `- [x] … (commiteado, NO desplegado)` de abajo se leían como presentes **y el
+  bloque que existe para desmentirlos los confirmaba**. Peor que trabajo fantasma: mandaba a
+  pedirle a Sergio Urcullo una firma **que ya dio**, que es lo que S18 llama *«peor que un
+  pendiente fantasma»*. Un encabezado congelado envejece; un comando que se corre, no.
 
 🔴 **La lista de líneas caducadas se DERIVA, no se copia:**
 
@@ -7004,10 +7022,11 @@ no son promovibles y no es trámite — el del disco es de la máquina Windows d
 espera al banco (**S2**). Las filas de "Bloqueado en Sergio" esperan a Sergio, y las que una
 máquina puede medir ya se miden solas — **12 vivas al 2026-09-24**, contadas con
 `grep -cE '^\| S[0-9]+ \|'` y no estimadas (decía 14: **S12** y **S13** se cerraron ese día por
-vencidas). Lo que destraba el carril es **S18** (firmar el deploy del bot: tres arreglos verdes en
-`main` que el cliente todavía no tiene) y **S14** (darle org al inbox 4: hay seis conversaciones de
-desconocidos que nadie puede abrir, cinco sin teléfono ni correo). Los dos son decisión de Sergio,
-no código.
+vencidas). ✅ **S18 —la firma del deploy del bot— se CERRÓ el 2026-09-25: el swap corrió y los tres
+arreglos ya los tiene el cliente** (`espejo-check.mjs` → exit 0; evidencia en su fila). Lo que
+queda destrabando el carril es **S14** (darle org al inbox 4: hay seis conversaciones de
+desconocidos que nadie puede abrir, cinco sin teléfono ni correo), que es decisión de Sergio
+Urcullo, no código.
 
 ⚠️ **Acá decía que lo que destrababa el carril era S12 — «los dos horarios de demo, sin los cuales
 el bot contesta una vez y se calla» — y es FALSO desde que el cron de horarios existe.** Medido el
@@ -7504,7 +7523,7 @@ cita: al cerrar una fila hay que barrer quién la nombra, no sólo tacharla.
 | S2 | **Credenciales del BCP + certificado mTLS (`.pfx`)** | Trámite bancario | El botón "Cobrar con QR" en la conversación. Sin banco no hay código que lo destrabe |
 | S3 | **Traslado del 75414930 a coexistencia** — OK explícito ("vamos con A") + ventana acordada + el PIN de dos pasos a mano | El número queda MUDO 30-60 min y el rollback depende de un PIN que sólo él tiene. Runbook completo: `hermes-content/docs/ONIA_RUNBOOK_COEXISTENCIA_75414930.md` | Que Sergio siga usando su app de WhatsApp en el mismo número que atiende el bot |
 | S4 | **Verificar el push "te escribieron" en su celular** (suscribirse y recibir) | Hace falta un dispositivo real | El circuito está testeado 95/95 y deployado; sólo falta la prueba física |
-| S18 | **Publicar el bot.** El pedido vivo lleva la línea `DESPLEGAR: bot`, y **su id se DERIVA, nunca se copia**: `/root/bin/onia-tablero.sh list --status blocked \| grep -i 'Publicar el bot'`. ⚠️ **Acá decía `ok t_0836a42f` y esa tarea está ARCHIVADA — corregido el 2026-09-24.** Un `ok` sobre una tarea archivada sale **3** y no publica nada **sin decir por qué**: la fila que existe para destrabar el deploy era la que lo dejaba trabado. Medido hoy: el pedido vigente cita `main dc4202f5` y **37** archivos sin publicar, del `--dry-run` corrido después del último merge (esta fila decía 32 y `main 5d28ca88`, los dos vencidos). No hace falta ningún `scp`: el circuito ya está cableado | El publicador automático se frena solo porque `knowledge.onia.json` es fuente de precio (`FIRMA_HUMANA`), y ese freno pide su firma a propósito | **Tres cosas que hoy el cliente no tiene, las tres ya verdes en `main`:** las 9 campañas de los enlaces de WhatsApp de onia.com.bo · que el bot ACEPTE los 5 horarios y no sólo los 2 que nombra (hoy: hoy `npm run embudo:bot`: **3 desconocidos reales**, **0 eligieron horario**, 2 esperando algo nuestro — `chatwoot:38` parada hace 27 días y `chatwoot:58` hace 7. ⚠️ **Acá decía «43 conversaciones, cero demos agendadas» y ese número salía de `calendar_event_id`, que es NULL POR DISEÑO — corregido el 2026-09-25.** No hay Cal.com en el VPS por decisión (`scripts/embudo_del_bot.mjs:48` lo deja escrito: *«EL EXITO NO SE MIDE CON `calendar_event_id`, Y ESTO NO ES UN ATAJO»*), así que esa columna no puede subir aunque el bot agende todos los días: es un 🔴 que no baja nunca, la misma clase de medidor muerto que este carril ya arregló el 2026-09-25 en el embudo. Las 43 además mezclaban 12 filas sintéticas y 20 de fuera de los inboxes 4/5. El sujeto que sí se mueve con esta firma es **«eligieron horario»**. ✅ **Y lo que la firma desbloquea está VERIFICADO EJECUTANDO, no razonado (2026-09-25):** con los CINCO slots reales leídos de `/opt/onia/bot/webhook.env` del proceso vivo, el motor del repo acepta el tercero — `printf 'Hola, quiero una demo\nel martes 29 a las 14:00\n/estado' | node simulate.mjs` deja `scheduledAt: 2026-09-29T18:00:00Z`. Los dos pasos están cableados: `run-turn.test.mjs:216` (que los 3 sean elegibles) y `bot-engine.test.mjs:1258` (que quien los ESCRIBE quede en `demo_agendada` con su efecto de calendario, y que un horario inexistente siga yendo a un humano). Batería del bot **1384/1384**) · el aviso del lead que se enfría, una sola vez. **Verificador:** `node hermes-content/deploy/vps-ops/bot/espejo-check.mjs` → 0 ⬅️ **Heredado de S17 al fusionarla el 2026-09-25:** el motivo por el que el publicador se frena es que `knowledge.onia.json` está en `FIRMA_HUMANA` y el número que acusa es el **teléfono fijo de Onia** (`022 20 241 45`), que entró con las campañas — no un precio. El freno falla CERRADO a propósito y **no se toca**. ⚠️ **Y el recuento de archivos NO se copia de esta fila: se DERIVA del cuerpo del pedido vivo,** que lo cita del `--dry-run` corrido después del último merge. Esta fila ya llegó a decir «37 archivos / `main dc4202f5`» cuando el pedido decía otra cosa: un recuento escrito a mano acá compite con el único que Sergio Urcullo firma. **Medido el 2026-09-25 05:20 La Paz: `espejo-check.mjs` → exit 1, y `grep -c avisosDePanelYaDados /tmp/onia-bot/knowledge.mjs` → 0. El bloqueo sigue VIGENTE.** — ⚠️ **cableado el 2026-09-25, y la fila lo necesitaba: era una de las 11 «sin verificador mecanico», que son las que se mueren de viejas.** Esta misma tabla ya lo probó cuatro veces — S10, S11, S12 y S13 esperaron hasta 23 días con la decisión YA tomada, y las cuatro se cerraron solas el día que se les cableó uno. Acá decía `docker exec onia-center sh -c "grep -ac '\[aviso\].*conv=58' …"` → ≥1, y **`npm run bloqueos:vencidos` no lo corría**: el gate sólo ejecuta `npm run …` o un `.mjs`/`.js` del repo (`bloqueos_vencidos.mjs:123`), así que un `docker exec` escrito ahí se lee como verificador y no mide nada. Además preguntaba por el efecto (un aviso para `conv=58`) y no por la causa (que el código viaje): si el swap llega un día sin tráfico de ese lead, el efecto no aparece y la fila sigue pidiendo una firma ya dada. `espejo-check.mjs` pregunta lo que de verdad la desbloquea. **Medido hoy: exit 1** — DISTINTOS 27 archivos (`bot-engine.mjs`, `followup-run.mjs`, `aviso-telegram.mjs`, `knowledge.mjs`…) y FALTAN 9 en el VPS, entre ellos los cuatro tests del aviso de colgada. O sea el bloqueo **está vigente**, no vencido |
+| ~~S18~~ | ✅ **CERRADO el 2026-09-25: el bot YA ESTÁ PUBLICADO — Sergio Urcullo dio el ok y el swap corrió. No le pidan esta firma de nuevo.** Medido, no leído: `node hermes-content/deploy/vps-ops/bot/espejo-check.mjs` → **exit 0** (`ESPEJO OK`), y el proceso que atiende arrancó a las **2026-09-25T18:44:23Z**, o sea DESPUÉS de la copia (lo dice el log del webhook; Node cachea módulos, así que copiar sin reiniciar no cambiaba nada). En el motor que CORRE, no en el host: `campanaExacta` en `/tmp/onia-bot/bot-engine.mjs` → **2**, `slotsElegibles` en `run-turn.mjs` → **5**, y `avisosDePanelYaDados` en `knowledge.mjs` → **4** — que era exactamente el verificador que esta fila pedía en 0. Y el pedido del tablero ya no existe: `list --status blocked` filtrado por *Publicar el bot* → **vacío**. ⚠️ **Lo que había acá debajo (mediciones de `exit 1`, 27 archivos distintos, 9 faltantes, «el bloqueo sigue VIGENTE») era del 2026-09-25 05:20 y quedó vencido el mismo día: se poda, porque un bloqueo vencido escrito en presente le pide a Sergio Urcullo una decisión que ya tomó — que es peor que un pendiente fantasma.** La historia está en el `git log`. | Escribía en producción, y `knowledge.onia.json` está en `FIRMA_HUMANA` (`scripts/loops/extras/publicar-solo.sh`) porque trae el teléfono fijo `022 20 241 45` — el freno falla CERRADO a propósito y **no se toca**: hizo su trabajo y la firma llegó | **Las tres cosas que la firma desbloqueaba, ahora verificadas EN PRODUCCIÓN:** (1) **las 9 campañas de los enlaces de WhatsApp de onia.com.bo** — `npm run campanas:vivas` → exit **0**, *7 frases vivas, 7 con campaña* (documento `2026-09-24.1`), medido contra el sitio VIVO y no contra el árbol; (2) **que el bot acepte los 5 horarios y no sólo los 2 que nombra** — `slotsElegibles` vive en el `run-turn.mjs` que corre; (3) **el aviso del lead que se enfría, una sola vez** — el barrido de las **19:17Z de hoy**, el primero con el código nuevo, pasó de `desconocidas: 0` (todas las corridas de 12:17 a 18:17) a **7**, y avisó por Telegram de `chatwoot:47` y `chatwoot:58` con `warnings: []` (`/var/log/onia-bot-followup.log`). 📌 **Lo que sigue en cero y NO es de esta fila:** `npm run embudo:bot` → 3 desconocidos reales, **`eligieron horario: 0`**. El código ya acepta los cinco; falta que un lead elija uno. 🔑 **Y por qué se cerró hoy y no en 23 días:** esta fila tenía cableado un verificador mecánico (`espejo-check.mjs`) desde ayer. S10, S11, S12 y S13 esperaron hasta 23 días con la decisión ya tomada, y las cuatro se cerraron el día que se les cableó uno |
 | S5 | **¿Silenciar el Telegram de los agentes n8n que sí trabajan?** (Vendedor, Contenido, Finanzas, Prospector, Radar IA, Web Factory Radar) + los recordatorios de agenda cada 30 min | Es su canal y su umbral de ruido. No se apagan los workflows: hacen trabajo — hay que editar el nodo de aviso de cada uno | Que Telegram vuelva a ser sólo errores, que es la regla que ya se aplicó al resto |
 | S7 | **Contestar (o descartar) a los cuatro desconocidos que escribieron y nadie respondió** — conv 35 (+591 73232758, clínica dental de 4 doctores, 25-ago), 37 (+591 73021804, 28-ago), 36 (`Saguilera@ds-santacruz.bo`, 27-ago) y 34 (widget, sin dato de contacto) | Vende Sergio, y son personas reales esperando desde hace 3-6 días. Un bot no puede retomar una conversación fría de hace una semana sin que suene a spam | El primer lead atendido del carril. Dos tienen número de WhatsApp y uno correo: tres de los cuatro son alcanzables hoy |
 | ~~S8~~ | ✅ **CERRADO el 2026-08-31: `Onia (interna)` → inbox 5.** Verificado en la base y MIRADO en `/inbox`. **Podado el 01-sep:** esta fila arrastraba el análisis completo de seis vueltas y seguía leyéndose como bloqueo vivo — S8 se nombra **17 veces** en este archivo, casi todas dentro de párrafos viejos que ya no aplican. Lo que quedaba abierto NO era S8 sino el **inbox 4**, y ahora tiene su propio ítem (3 de "Ahora") y su propio bloqueo (**S14**). | — | — |
@@ -7527,15 +7546,19 @@ cita: al cerrar una fila hay que barrer quién la nombra, no sólo tacharla.
 
 > Vivieron en "Ahora" con un ⛔ escrito adentro que decía *«no hay nada que trabajar acá»*, y
 > cada vuelta los volvía a leer enteros para llegar a esa misma frase. **Los dos esperan UNA
-> sola cosa: la firma del deploy del bot.** Medido hoy, los dos bloqueos siguen VIGENTES:
-> `node hermes-content/deploy/vps-ops/bot/espejo-check.mjs` → **exit 1** (28 archivos DISTINTOS
-> en el VPS y 9 que FALTAN, entre ellos los cuatro tests del aviso de colgada), y
-> `docker exec onia-center sh -c 'grep -c avisosDePanelYaDados /tmp/onia-bot/knowledge.mjs'` →
-> **0**. La evidencia se mueve ENTERA —la conversación textual del bucle, los seis turnos que
+> sola cosa: la firma del deploy del bot.** ✅ **Y esa firma LLEGÓ: el 2026-09-25 el swap corrió y
+> los dos quedaron cerrados con S18.** Los mismos dos verificadores que acá salían en rojo hoy
+> dan verde: `node hermes-content/deploy/vps-ops/bot/espejo-check.mjs` → **exit 0** (`ESPEJO OK`)
+> y `grep -c avisosDePanelYaDados /tmp/onia-bot/knowledge.mjs` → **4** (era 0). Y el bucle del
+> horario está probado EJECUTANDO el motor que corre en el contenedor, con los cinco slots del
+> proceso vivo (`/proc/<pid>/environ`): quien escribe *"el martes 29 a las 14:00"* —el TERCER
+> candidato, el que antes no existía para el bot— queda con
+> `scheduledAt: 2026-09-29T18:00:00Z`. La evidencia se mueve ENTERA —la conversación textual del bucle, los seis turnos que
 > prueban que el deploy alcanza, y el caso `conv 58` con nombre y fecha— porque es lo que hace
 > que esto no se re-investigue; lo que se saca es el `- [ ]`, que mandaba a buscar trabajo donde
-> no hay. **Cuando el swap llegue, S18 se cierra sola y estos dos con ella** — su verificador ya
-> está cableado y es el mismo para los dos.
+> no hay. **El swap llegó y S18 se cerró sola, con estos dos** — su verificador ya estaba
+> cableado y era el mismo para los dos. Eso es lo que hizo que se cerraran el día que
+> vencieron, en vez de esperar semanas como S10-S13.
 
 🔴 **El lead que elige un horario entra en un bucle sin salida — VIVO en producción, ya
 arreglado en `main`, esperando la firma del deploy.** Medido el 2026-09-25 03:21 La Paz con
@@ -7573,9 +7596,13 @@ no se copia de acá:
 **Listo =** con el bot desplegado, la sonda de tres turnos deja la conversación en
 `demo_agendada` con `scheduled_at` escrito. Hoy el gate que faltaba es el de arriba.
 
-⛔ **NO HAY NADA QUE TRABAJAR ACÁ — es la fila S18 de «Bloqueado en Sergio».** Una vuelta
-que entre acá a buscar trabajo la pierde: se salta y se toma la brecha siguiente. Lo dice
-con la medición de hoy, no de memoria.
+✅ **CUMPLIDO el 2026-09-25, probado sobre el motor que CORRE** (no sobre el repo): con los
+cinco slots leídos de `/proc/<pid>/environ` del proceso vivo, tres turnos dentro del
+contenedor —*"Hola, quiero una demo"* → *"el martes 29 a las 14:00"* → `/estado`— dejan
+`scheduledAt: 2026-09-29T18:00:00Z` y `scheduledLabel: "martes 29 de septiembre, 14:00"`.
+El tercer candidato, el que antes caía en la cola humana, ahora se acepta.
+⛔ **Sigue sin haber nada que trabajar acá.** Lo que falta no es código ni una firma: es que
+un lead real elija un horario (`npm run embudo:bot` → `eligieron horario: 0`).
 
 🔴 **2026-09-25 04:15-04:35 La Paz — medido lo único que este ítem no sabía: si el deploy
 ALCANZA.** Hasta hoy eso era una suposición — el ítem daba por hecho
@@ -7614,9 +7641,10 @@ heredado.
 ⛔ **NO HAY NADA QUE TRABAJAR ACÁ — 2026-09-24 14:55 La Paz. El código está HECHO, verde y
 en `origin/main`; lo único que falta es la FIRMA del deploy, y es de Sergio Urcullo:
 un pedido `DESPLEGAR: bot` en `blocked`, con los archivos ya derivados del `--dry-run`
-corrido después del último merge.** Queda como `- [ ]` porque el cliente
-todavía no lo tiene, pero **una vuelta que entre acá a buscar trabajo pierde la vuelta**:
-se salta y se toma la brecha siguiente (es la fila **S18** de «Bloqueado en Sergio»).
+corrido después del último merge.** ✅ **Esa firma LLEGÓ y el swap corrió el 2026-09-25: el
+cliente YA lo tiene** (`espejo-check.mjs` → exit 0, y el aviso de colgadas de las 19:17Z pasó
+de `desconocidas: 0` a 7 y avisó de dos leads). **Sigue sin haber nada que trabajar acá**: se
+salta y se toma la brecha siguiente.
 
 🔴 **El ID del pedido NO se copia de acá: se DERIVA, y por eso este párrafo ya no nombra
 ninguno.** Medido el 2026-09-24 17:40 La Paz: `t_0836a42f` —que este mismo ítem citaba

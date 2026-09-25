@@ -256,8 +256,8 @@ trabaría el merge de todos los carriles.
       diferida), y el **video entregado por Telegram** para que lo mire — `"ok":true`,
       `message_id=6871`, que es la única prueba de entrega que vale en ese canal.
 
-- [x] 🟡 **HECHO el 2026-09-24 en el carril `chatbot` (commiteado, NO publicado) — el detalle,
-      los gates y lo que falta viven en `hermes-content/docs/cola/chatbot.md`, "Ahora".**
+- [x] 🟡 **HECHO el 2026-09-24 en el carril `chatbot` y PUBLICADO el 2026-09-25 — el detalle y
+      los gates viven en `hermes-content/docs/cola/chatbot.md`.**
 
       Resumen: reproducido con el mensaje real del configurador (el bot contestaba `M4_BODY`,
       los planes del sistema, a quien pidió una web), arreglado con una campaña de prefijo que
@@ -271,13 +271,23 @@ trabaría el merge de todos los carriles.
          fuente de precio del bot. Una cifra de `webs.ts` ahí hace que `validateKnowledge`
          rechace el documento **entero** y el bot se quede sin ninguna campaña. No hace falta: el
          precio ya viaja en el mensaje que la persona manda.
-      2. **"Se arregla escribiendo, sin desplegar" era sólo media verdad.** Es cierto que no hay
-         que programar el motor — pero el documento del repo **no es** lo que el bot carga: el
-         bot vivo lee la fila del panel (`[knowledge:panel]`) y esa fila **no tiene la clave
-         `campanas`** (`select version,status,(data ? 'campanas') from public.chatbot_knowledge`
-         → `5|publicado|f`). O sea que hoy **ninguna** campaña está viva, ni las cuatro que
-         `onia.com.bo` enlaza por `wa.me`. Ese agujero es ahora un ítem propio en la cola del
-         chatbot.
+      2. **"Se arregla escribiendo, sin desplegar" era sólo media verdad:** el documento del
+         repo no es lo que el bot carga, así que el arreglo necesitaba su deploy. Ese deploy
+         **ya ocurrió el 2026-09-25** y las 9 campañas están vivas.
+
+         ⚠️ **Acá decía «hoy ninguna campaña está viva, ni las cuatro que `onia.com.bo` enlaza
+         por `wa.me`», y era falso en las dos puntas — corregido el 2026-09-25.** Falso por
+         vencido (el swap corrió) y falso por razonamiento: deducía el apagón de que la fila del
+         panel no trae la clave `campanas` (`select (data ? 'campanas')` → `5|publicado|f`, que
+         **sigue** siendo `f` hoy), pero `mergePanelKnowledge` hace `{...archivo, ...panel}` y
+         pisa **clave por clave** — sin esa clave en el panel, las del archivo **sobreviven**.
+         Una fila que no pisa no apaga nada. Medido hoy, no leído: `npm run campanas:vivas` →
+         **exit 0** (*7 frases vivas, 7 con campaña*, documento `2026-09-24.1`, contra el sitio
+         VIVO) y `espejo-check.mjs` → **exit 0**.
+
+         **Y el "ítem propio en la cola del chatbot" que este párrafo mandaba a buscar ya no
+         existe** — está cerrado allá. Un puntero a trabajo terminado manda a otro carril a
+         re-abrirlo: se deriva con el comando de arriba, no se cita de acá.
 
       <details><summary>El análisis original del ítem — ya ejecutado, y corregido en los dos
       puntos de arriba. Se conserva porque explica el circuito, no porque quede trabajo.</summary>
