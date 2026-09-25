@@ -44,6 +44,10 @@ SECO=${ONIA_PUBLICAR_SECO:-}
 # del bot lleva los precios que el bot dice en voz alta.
 FIRMA_HUMANA='lib/pricing\.ts|lib/subscription-plans\.ts|ONIA_CATALOGO_DE_VENTA\.md|knowledge\.onia\.json'
 
+# Las paginas de la SUPERFICIE DE VENTA. No llevan precios: llevan la forma en
+# que se vende, que es la otra cosa que no sale sin que Sergio Urcullo la mire.
+SUPERFICIE_VENTA='apps/onia-platform/src/app/\(sitio\)/.*page\.tsx$'
+
 # ---------------------------------------------------------------------------
 # TOCAR UNA FUENTE DE PRECIO NO ES CAMBIAR UN PRECIO.
 #
@@ -453,9 +457,65 @@ archivos_de() {  # $1=repo-del-codigo  $2..=shas
   done
 }
 
+# ---------------------------------------------------------------------------
+# TOCAR EL SITIO NO ES REDISEÑARLO.
+#
+# Medido el 2026-09-25 (tarea t_8b40a8d4): `a847d9aa` (11-sep) descarto el hero
+# de la PORTADA, retiro la seccion de hechos y subio el chatbot a la primera
+# posicion. No toca ninguna fuente de precio, asi que salio solo y lleva 14 dias
+# vivo — la cola lo tenia escrito como «FALTA su OK mirandola». CLAUDE.md ya lo
+# dictaba desde el 2026-08-20, cuando la landing v2 se publico igual y Sergio
+# Urcullo la rechazo entera al verla: «una superficie viva no se reemplaza sin
+# que VEA la pieza terminada… construir y publicar son dos permisos distintos».
+# La regla estaba escrita; lo que faltaba era cablearla.
+#
+# La pregunta se elige con el mismo criterio que la de los precios: ahi no se
+# pregunta QUE ARCHIVO se toco sino SI ALGUN NUMERO CAMBIO, porque detener de
+# mas gasta la unica firma que importa y una firma gastada en falsos se vuelve
+# automatica. Aca la pregunta NO es "se toco el sitio" —eso frenaria un typo,
+# una clase CSS o un refactor— sino: ¿cambio la ESTRUCTURA de la pagina, o sea
+# que secciones hay y en que orden? Eso es lo que la regla llama rediseño.
+#
+# La estructura se lee de las anclas que nombran cada seccion (`labelledBy=` de
+# los `<Block>`, `id=` de los encabezados) en su orden de aparicion. Y falla
+# CERRADO: si la secuencia no se puede leer, el destino se detiene.
+# ---------------------------------------------------------------------------
+
+# La secuencia de secciones de una pagina, una por renglon, en orden.
+estructura_de_pagina() {  # $1=repo  $2=archivo  $3=sha
+  GIT_NO_LAZY_FETCH=1 git -C "$1" show "$3:$2" 2>/dev/null \
+    | sed -e 's#/\*[^*]*\*/##g' -e 's#//.*$##' \
+    | grep -oE '(labelledBy|id)="[a-zA-Z0-9_-]+"' \
+    | sed -E 's/.*="([^"]+)"/\1/'
+}
+
+# ¿Alguno de estos commits cambio la estructura de esta pagina?
+#   0 = no cambia (sale solo) · 1 = cambia (imprime que secciones) · 2 = no medido
+estructura_que_cambia() {  # $1=repo  $2=archivo  $3..=shas
+  local repo=$1 archivo=$2 sha antes despues movidas
+  shift 2
+  [ $# -gt 0 ] || return 2
+  for sha in "$@"; do
+    # `$sha^` es el primer padre tambien en un merge, asi que la comparacion da
+    # el efecto NETO del commit — que es lo que llega al visitante.
+    GIT_NO_LAZY_FETCH=1 git -C "$repo" cat-file -e "$sha^{commit}" 2>/dev/null || return 2
+    antes=$(estructura_de_pagina "$repo" "$archivo" "$sha^")
+    despues=$(estructura_de_pagina "$repo" "$archivo" "$sha")
+    # Pagina que nace o muere: es estructura nueva por definicion.
+    if [ -z "$antes" ] && [ -z "$despues" ]; then continue; fi
+    if [ "$antes" = "$despues" ]; then continue; fi
+    # Lo que se fue y lo que llego, sin repetir, para que el aviso lo NOMBRE.
+    movidas=$(diff <(printf '%s\n' "$antes") <(printf '%s\n' "$despues") \
+      | grep -E '^[<>]' | sed -E 's/^([<>]) /\1 /' | sort -u | head -6 | tr '\n' ' ')
+    printf '%s' "${movidas:-orden de secciones}"
+    return 1
+  done
+  return 0
+}
+
 publicar_destino() {  # $1=nombre $2=publicar.sh $3=archivos-tocados $4=repo-del-codigo $5=shas $6=dir-en-produccion
   local nombre=$1 guion=$2 tocados=$3 repo=${4:-} shas=${5:-} prod=${6:-}
-  local precio arch detalle cambian nomedido salida nota=""
+  local precio venta arch detalle cambian nomedido salida nota=""
   precio=$(printf '%s\n' "$tocados" | grep -aE "$FIRMA_HUMANA" | sort -u)
   if [ -n "$precio" ]; then
     cambian=""; nomedido=""
@@ -499,7 +559,37 @@ Eso no sale sin tu firma. El resto se publico solo."
     nota="
 Toco una fuente de precio y <b>ningun monto cambio</b> (por eso salio solo)."
   fi
+  # La otra firma: la forma en que se vende. Misma direccion de falla que la de
+  # precios — si no se puede medir, el destino se detiene.
+  venta=$(printf '%s\n' "$tocados" | grep -aE "$SUPERFICIE_VENTA" | sort -u)
+  if [ -n "$venta" ] && [ -n "$shas" ]; then
+    for arch in $venta; do
+      # shellcheck disable=SC2086   # los shas son hexadecimales: partirlos es lo que se quiere
+      salida=$(estructura_que_cambia "$repo" "$arch" $shas)
+      case $? in
+        1) renglon_detenido "$nombre" "cambia la estructura de una pagina de venta" "$arch: $salida"
+           avisar "<b>Onia — publicacion detenida a proposito</b>
+<b>$nombre</b> tiene un cambio que REORDENA lo que ve un visitante:
+<code>$arch
+$salida</code>
+Un rediseño no sale sin que lo mires. El resto se publico solo."
+           return 0 ;;
+        2) renglon_detenido "$nombre" "toca una pagina de venta y no pude medir si cambia" "$arch"
+           avisar "<b>Onia — publicacion detenida a proposito</b>
+<b>$nombre</b> toca una pagina de venta y <b>no pude comprobar</b> si cambia lo que se ve:
+<code>$arch</code>
+Eso no sale sin tu firma. El resto se publico solo."
+           return 0 ;;
+      esac
+    done
+    nota="$nota
+Toco una pagina de venta y <b>la estructura no cambio</b> (por eso salio solo)."
+  fi
   if [ -n "$SECO" ]; then
+    if [ -n "$venta" ]; then
+      echo "  $nombre: publicaria (toca una pagina de venta y la estructura no cambia)"
+      return 0
+    fi
     if [ -n "$precio" ]; then
       echo "  $nombre: publicaria (toca una fuente de precio y ningun monto cambia)"
     else
@@ -519,6 +609,11 @@ Toco una fuente de precio y <b>ningun monto cambio</b> (por eso salio solo)."
 Produccion no cambio, o volvio sola. Log: /tmp/pub-$nombre.log"
   fi
 }
+
+# Cargado con ONIA_PUBLICAR_SOLO_SOURCE=1 define las funciones y no mide nada:
+# asi un caso de prueba llama a UNA guarda sin disparar los tres destinos ni
+# pelear por el lock de produccion.
+[ -n "${ONIA_PUBLICAR_SOLO_SOURCE:-}" ] && return 0 2>/dev/null
 
 echo "== $(TZ=America/La_Paz date '+%F %H:%M') La Paz =="
 
