@@ -35,6 +35,7 @@ Este sistema existe para que nada de eso llegue a la cámara.
 ENSEÑA:  Al terminar, quien lo vio puede ____________________ (acción concreta, repetible hoy)
          — o — sabe ____________ y lo puede comprobar en ____________ (dato + su fuente)
 PRUEBA:  En pantalla se ve ____________ (captura REAL: archivo + manifiesto, o toma que graba X)
+TRABAJO: enseña (experto en IA) · vende enseñando (ONIA) · conecta (Sergio Urcullo) — uno por pieza
 ```
 
 **Si una de las dos líneas no se puede llenar, la pieza no se escribe.** No se "mejora
@@ -50,10 +51,37 @@ después": se descarta o se reformula hasta que las dos existan.
 ### El pilar personal también enseña
 
 La decisión de Sergio Urcullo del 21-sep reserva espacio diario para experiencias personales y
-criterio (hoy registrada en la rama `codex/marca-comunidad-plan`, sin integrar). No es una
+criterio (`ONIA_MARCA_PERSONAL_TRES_CARRILES.md`). No es una
 excepción a la regla: la pieza personal sigue el camino **experiencia real → tensión →
 aprendizaje → una acción**. Si no deja una acción concreta (qué hacer distinto mañana), no sale.
 Las frases motivacionales sin experiencia detrás están prohibidas.
+
+### Los tres trabajos: enseñar, vender enseñando, conectar
+
+> Sergio Urcullo, 25-sep: *"necesitamos contenido que realmente enseñe algo… contenido que venda
+> la única plataforma, contenido que genere conexión entre yo y los espectadores, los posibles
+> clientes. Y que me deje como un experto… Puede ser contenido inventado… alrededor [de mis
+> cosas]. Pero que tenga sentido."*
+
+Las 10–13 piezas diarias no son 13 ideas sueltas: son ángulos de **un** tema, y cada pieza tiene
+**un** trabajo:
+
+| Trabajo | Qué deja | Ejemplo de ENSEÑA |
+|---|---|---|
+| **Enseña** | una habilidad de IA que se repite hoy: un prompt, un nodo, una regla | «escribís un prompt que no inventa precios y marca `requiere_revision` cuando le falta un dato» |
+| **Vende enseñando** | un problema del negocio, la regla que lo resuelve (sirve aunque no compren) y la pantalla real de ONIA haciéndolo | «encontrás a tus pacientes con tratamiento a medias; en ONIA lo hace el agente Recall cada mañana» |
+| **Conecta** | un criterio, una decisión o una experiencia de Sergio Urcullo, con una regla que el otro se lleva | «las 3 cosas que siempre aprueba una persona antes de que salga un mensaje» |
+
+**Inventado, sí; falso, no.**
+- **El escenario puede ser inventado**: una clínica con 4 dentistas, un paciente «Ana», datos de
+  prueba en la demo.
+- **Lo que ONIA hace no se inventa.** Se muestra lo 🟢 y lo 🟡 en su pantalla real
+  (`ONIA_CATALOGO_DE_VENTA.md`), con su cadencia real: Recall corre **una vez por día**, no
+  24/7.
+- **Sin cifras de resultados de ONIA**: hay cero clientes pagando. La consecuencia económica se
+  muestra como cuenta que hace el que mira («tus pacientes × las sesiones que faltan × lo que
+  cobrás»).
+- **Lo que Sergio Urcullo cuenta de sí mismo**, lo confirma él antes de grabar (§2).
 
 ---
 
@@ -154,6 +182,7 @@ adivina nada (detalle en `research/ONIA_METODO_SANTIAGO_EDICION_20260925.md`).
 ENSEÑA:   al terminar, quien lo vio puede …
 PRUEBA:   <ids de captura> (manifiesto: ../../../captures/<tema>/manifest.json) · o: GRABA <quién> <qué>
 AUDIENCIA: marca personal (construir/vender con IA) · @oniahq (dueño de clínica) · comunidad
+TRABAJO:  enseña | vende enseñando | conecta
 FUENTES:  <URL> (verificada AAAA-MM-DD) · vence: AAAA-MM-DD | —
 CTA:      <uno solo> · recurso: <URL verificada AAAA-MM-DD> | sin recurso
 LAYOUT:   A cabeza a cuadro + overlays · B partido (apoyo arriba 55 % / cabeza abajo 45 %) · C pantalla primero, cara en PiP
