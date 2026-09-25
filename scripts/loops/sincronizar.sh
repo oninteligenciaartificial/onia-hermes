@@ -443,6 +443,18 @@ poner "$RAIZ/hermes-content/infra/vps-ops/crons/run-onia-agents-cron.sh"        
 poner "$RAIZ/hermes-content/infra/vps-ops/crons/run-onia-core-workitems.sh"               "$DESTINO_BIN/run-onia-core-workitems.sh"               700
 poner "$RAIZ/hermes-content/infra/vps-ops/crons/run-onia-recurring-invoices.sh"           "$DESTINO_BIN/run-onia-recurring-invoices.sh"           700
 poner "$RAIZ/hermes-content/infra/vps-ops/crons/run-onia-trial-drip.sh"                   "$DESTINO_BIN/run-onia-trial-drip.sh"                   700
+# Estos dos son de la MISMA familia que los cuatro de arriba —envoltorios de
+# host que leen /opt/onia-platform/app.env y llaman a un endpoint— pero su
+# fuente vivia en el OTRO repo (onia-platform:scripts/cron/), que no entra en
+# el `git archive` de RUTAS_SYNC. O sea: versionados, pero sin un solo circuito
+# que los copiara al VPS. El de citas corre cada 15 min y el de renovacion
+# todos los dias: producción dependía de una copia hecha a mano en agosto.
+# Se movieron aca, junto a sus hermanos, en vez de espejarlos: dos copias del
+# mismo archivo en dos repos es la segunda fuente de verdad que CLAUDE.md
+# prohibe. Momento seguro para cablear: al hacerlo, el md5 del repo hermano y
+# el de /root/bin coincidian en las DOS direcciones (4cee47fd / b5899517).
+poner "$RAIZ/hermes-content/infra/vps-ops/crons/run-onia-appointment-reminders.sh"        "$DESTINO_BIN/run-onia-appointment-reminders.sh"        700
+poner "$RAIZ/hermes-content/infra/vps-ops/crons/run-onia-renewal-reminders.sh"            "$DESTINO_BIN/run-onia-renewal-reminders.sh"            700
 
 poner "$FUENTE/extras/onia-drop-recordatorio.sh"  "$DESTINO_BIN/onia-drop-recordatorio.sh"
 poner "$FUENTE/extras/onia-leads-vigia.sh"        "$DESTINO_BIN/onia-leads-vigia.sh"
