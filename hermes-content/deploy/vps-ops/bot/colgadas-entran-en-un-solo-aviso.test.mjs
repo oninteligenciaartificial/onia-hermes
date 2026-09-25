@@ -1,11 +1,18 @@
 /**
  * EL ESTRENO DEL AVISO DE LEADS FRIOS NO PUEDE SER UNA RAFAGA DE 22 TELEGRAM.
  *
- * EL CASO, medido el 2026-09-24 en produccion (`onia_center.bot_conversations`): hay 22
- * conversaciones colgadas de desconocidos, de 7 a 37 dias calladas (el fixture usa 7 a 28: lo que
- * importa es el BULTO y el orden, no el numero exacto de dias). Produccion todavia no tiene
- * el aviso de "se enfrio", asi que la PRIMERA corrida despues del swap las descubre todas juntas
- * y —con un aviso por lead— le manda a Sergio Urcullo 22 mensajes seguidos.
+ * EL CASO: produccion todavia no tiene el aviso de "se enfrio", asi que la PRIMERA corrida
+ * despues del swap descubre de golpe a todos los que ya estaban colgados y —con un aviso por
+ * lead— le manda a Sergio Urcullo esa pila de mensajes seguidos.
+ *
+ * ⚠️ EL FIXTURE DE 22 ES UNA CARGA SINTETICA, NO EL HEADCOUNT DE PRODUCCION — aclarado el
+ * 2026-09-25. Este encabezado decia "hay 22 conversaciones colgadas de desconocidos, medido el
+ * 2026-09-24", y ese numero contaba nuestras propias sondas: se tomo antes de que `es-nuestra.mjs`
+ * aprendiera a reconocer el inbox 7 (el banco de pruebas). Re-derivado corriendo este barrido
+ * contra `onia_center.bot_conversations` el 2026-09-25 10:20 UTC: 23 colgadas, de las cuales
+ * **7 desconocidas y 16 nuestras**. Las 22 se dejan igual porque prueban el BULTO y el orden con
+ * holgura (5 + 5 + ... hasta drenar), que es lo que este archivo cuida; el reparto real lo fija
+ * el ultimo test de abajo, que es el que faltaba.
  *
  * POR QUE ESO ES UN DEFECTO Y NO UN VOLUMEN: su canal de Telegram ya le llega saturado, y el
  * arreglo del 2026-09-24 a los avisos del parte diario nace de ese mismo problema. Su preferencia
@@ -85,7 +92,7 @@ function canal({ falla = false } = {}) {
 
 const dirDeMarcas = () => mkdtempSync(join(tmpdir(), "colgadas-lote-"));
 
-/** Las 22 de produccion, escalonadas de 7 a 28 dias: todas de desconocidos. */
+/** Carga sintetica de 22, escalonada de 7 a 28 dias: todas de desconocidos (ver el ⚠️ de arriba). */
 const VEINTIDOS = Array.from({ length: 22 }, (_, i) =>
   fila({
     key: `chatwoot:${100 + i}`,
@@ -180,4 +187,72 @@ test("con pocos leads el aviso no habla de una cola que no existe", async () => 
   assert.match(texto, /8 d/, "los dos van en el mensaje");
   assert.match(texto, /7 d/);
   assert.doesNotMatch(texto, /pr[oó]ximos barridos/i, "no hay nadie esperando: decirlo confunde");
+});
+
+/**
+ * EL NUMERO QUE EL AVISO LE DICE A SERGIO URCULLO NO PUEDE CONTAR NUESTRAS PROPIAS PRUEBAS.
+ *
+ * DE DONDE SALE, y es la razon por la que este caso faltaba: los fixtures de arriba son TODOS
+ * desconocidos, asi que `total` y `desconocidas` valen lo mismo en cada uno de ellos y ninguno
+ * puede distinguir un `total` bien cableado de uno mal cableado. Produccion no se parece a eso.
+ *
+ * MEDIDO el 2026-09-25 10:20 UTC corriendo este mismo barrido (codigo de `origin/main`) contra
+ * `onia_center.bot_conversations`: 23 colgadas, y de esas **7 desconocidas y 16 NUESTRAS** — el
+ * banco de pruebas del inbox 7, los contactos sembrados con "Prueba"/"QA" en el nombre, y el
+ * telefono de Sergio Urcullo. Con `total` en vez de `desconocidas`, el estreno del aviso le diria
+ * "23 leads frios" cuando hay 7: un 3x sobre el unico numero con el que decide a quien contactar.
+ *
+ * Y NO ES SIMETRICO. Inflar el numero manda a perseguir leads que no existen; pero el mismo
+ * cableado al reves esconderia desconocidos entre nuestras pruebas, que es el fallo que este
+ * carril existe para evitar. Por eso se fija el reparto (7 / 16) y ademas que NINGUNA fila
+ * nuestra aparezca nombrada en el texto.
+ */
+const MEZCLA_COMO_PRODUCCION = [
+  // Los 7 reales: nombre anonimo de Chatwoot o sin nombre, en los inboxes que atienden (4 y 5).
+  ...Array.from({ length: 7 }, (_, i) =>
+    fila({ key: `chatwoot:${200 + i}`, nombre: `white-pine-${699 + i}`, dias: 8 + i, inbox: 4 }),
+  ),
+  // Nuestras por NOMBRE (asi se reconocen 6 filas de produccion hoy).
+  ...Array.from({ length: 6 }, (_, i) =>
+    fila({ key: `chatwoot:${300 + i}`, nombre: `Sonda QA carril chatbot ${i}`, dias: 30 + i, inbox: 4 }),
+  ),
+  // Nuestras por TENENCIA del inbox: el banco de pruebas le pone nombre anonimo al contacto, o
+  // sea que por nombre son indistinguibles de un desconocido. Son las 10 que faltaban contar.
+  ...Array.from({ length: 10 }, (_, i) =>
+    fila({ key: `chatwoot:${400 + i}`, nombre: `billowing-tree-${407 + i}`, dias: 40 + i, inbox: 7 }),
+  ),
+];
+
+/** El inbox 7 se llama `ZZ QA Clinica Chatbot`: la tenencia se DERIVA de ese nombre, no se tipea. */
+const inboxesDeChatwoot = () => [
+  { id: 4, name: "Onia Web" },
+  { id: 5, name: "WhatsApp" },
+  { id: 7, name: "ZZ QA Clinica Chatbot" },
+];
+
+test("el total del aviso cuenta los 7 desconocidos, NO las 23 colgadas", async () => {
+  const aviso = canal();
+  const resultado = await runFollowUpSweep(
+    { nowIso: AHORA, emit: true },
+    {
+      store: store(MEZCLA_COMO_PRODUCCION),
+      aviso,
+      marcas: crearMarcasEnDisco({ dir: dirDeMarcas() }),
+      listarInboxes: inboxesDeChatwoot,
+    },
+  );
+
+  assert.equal(resultado.colgadas.total, 23, "el conteo crudo sigue viendo las 23 filas");
+  assert.equal(resultado.colgadas.desconocidas, 7, "pero solo 7 son de alguien que no somos");
+  assert.equal(resultado.colgadas.nuestras, 16, "y 16 son nuestras (nombre de prueba o inbox QA)");
+
+  const texto = aviso.enviados[0].texto;
+  assert.match(texto, /\b7\b/, "el total que viaja es el de desconocidos");
+  assert.doesNotMatch(texto, /\b23\b/, "23 es nuestras pruebas incluidas: infla 3x lo que hay en juego");
+
+  // La otra mitad: ninguna fila nuestra puede aparecer NOMBRADA como lead frio.
+  assert.doesNotMatch(texto, /Sonda QA|billowing-tree/, "una prueba nuestra nombrada como lead es ruido");
+  for (const clave of ["chatwoot:300", "chatwoot:400"]) {
+    assert.doesNotMatch(texto, new RegExp(clave), `${clave} es nuestra y no se nombra`);
+  }
 });

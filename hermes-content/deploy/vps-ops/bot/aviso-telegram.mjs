@@ -139,8 +139,20 @@ export function escaparHtml(valor) {
  *
  * Es el unico aviso del sistema que nace con un BULTO: los demas los emite un turno (pasa una
  * cosa, sale un mensaje), y este lo emite un BARRIDO que mira la tabla entera. Cuando se estrene
- * en produccion habra 22 leads colgados esperando, y 22 Telegram seguidos apagan el canal — con
- * el se apaga tambien el aviso que si importaba, el de la demo agendada.
+ * en produccion descubrira de golpe a todos los que ya estaban colgados, y un aviso por lead
+ * apaga el canal — con el se apaga tambien el aviso que si importaba, el de la demo agendada.
+ *
+ * ⚠️ ACA DECIA "habra 22 leads colgados" — CORREGIDO el 2026-09-25 contra produccion. Corriendo
+ * este mismo barrido (codigo de `origin/main`) contra `onia_center.bot_conversations` a las 10:20
+ * UTC: 23 colgadas, pero **7 desconocidas y 16 NUESTRAS** (banco de pruebas del inbox 7, contactos
+ * sembrados con "Prueba"/"QA", y el telefono de Sergio Urcullo). El 22 es de ANTES de que
+ * `es-nuestra.mjs` aprendiera a reconocer el inbox de QA: contaba nuestras propias sondas como
+ * leads. O sea que el estreno son DOS mensajes de a 5, no una rafaga de 22.
+ *
+ * La magnitud NO es el motivo del lote —el lote se justifica solo con que el barrido mire la tabla
+ * entera— y por eso el numero sale de aca: un dato de produccion citado en una decision envejece,
+ * y este ya mando una vez al revés. Lo que queda fijado en test es el REPARTO (lo nuestro nunca
+ * entra en el total), no el headcount.
  *
  * El formato es el que pidio Sergio Urcullo, textual y con fecha (2026-09-03): "cuando me mandes
  * una tabla por telegram, maximo 5 filas, si hay mas me pierdo". Quien recorta a cinco es

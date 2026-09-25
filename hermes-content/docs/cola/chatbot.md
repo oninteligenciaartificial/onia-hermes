@@ -678,6 +678,71 @@ abrirlas y decidir a qué deploy se refieren. Se derivan con el comando, nunca d
 
 ## Ahora
 
+- [x] 🔴 **CERRADO el 2026-09-25 06:13-07:05 La Paz (commiteado, NO desplegado — es un test y dos
+      comentarios; no toca el motor): el número que el aviso de leads fríos le iba a poner delante
+      a Sergio Urcullo estaba inflado 3x, y ningún test podía verlo porque TODOS los fixtures eran
+      de desconocidos.**
+
+      **Cómo se llegó.** Midiendo la tercera pata del objetivo (¿el aviso le llega?). El barrido
+      corre cada hora en producción, en `emit`, y cada hora dice lo mismo:
+
+      ```
+      {"colgadas":{"medido":true,"total":9,"desconocidas":0,"nuestras":9},"warnings":[]}
+      ```
+
+      `desconocidas: 0` se lee como "ningún lead se enfrió". Es falso: producción corre el código
+      de ANTES del arreglo del 24-sep (`grep ETAPAS_QUE_SE_PIERDEN /opt/onia/bot/persistence.mjs`
+      → **0**), así que su filtro no puede ver los 12 `handoff_humano`. Eso ya está arreglado en
+      `main` y espera el `ok` de `t_d246cfa7` — **no se volvió a tocar**.
+
+      **Lo que sí apareció, y es de este carril.** Corriendo el barrido de `origin/main` contra la
+      base de producción (copia aparte en `/tmp/onia-bot-qa`, **dry-run**, sin `--emit`, para no
+      pisar `/tmp/onia-bot` ni gastar las marcas de aviso):
+
+      ```
+      COLGADAS (por encima del piso): 23 · desconocidas: 7 · nuestras: 16
+        chatwoot:58 . — esperando_horario, esperando hace 179 h · YA NO SE RESCATA
+        chatwoot:47 white-pine-699 — handoff_humano, esperando hace 545 h · YA NO SE RESCATA
+        … (7 en total)
+      ```
+
+      **23 colgadas, pero sólo 7 de desconocidos.** Las otras 16 son nuestras: el banco de pruebas
+      del inbox 7 (10), contactos sembrados con "Prueba"/"QA" (5) y el teléfono de Sergio Urcullo.
+      Verificado por dos caminos independientes — el clasificador del propio barrido, y el reparto
+      por inbox en la base (`inbox 4 → 5 · inbox 7 → 4 · inbox 5 → 3 · sin inbox → 11`).
+
+      **El defecto:** `aviso-telegram.mjs` y el encabezado de
+      `colgadas-entran-en-un-solo-aviso.test.mjs` afirmaban *"medido en producción: hay 22
+      conversaciones colgadas de desconocidos"*, y de ahí lo copió el punto 7 del pedido de deploy
+      que Sergio Urcullo tiene que firmar. El 22 se contó **antes de que `es-nuestra.mjs`
+      aprendiera a reconocer el inbox de QA** (19-sep): contaba nuestras propias sondas como leads.
+      Un dato de producción congelado en un comentario se lee como presente — la misma clase de
+      fallo que ya está escrita en `CLAUDE.md`.
+
+      **Por qué ningún test lo agarraba, que es la parte que importa:** los cinco fixtures de ese
+      archivo son **todos** de desconocidos, así que `total` y `desconocidas` valen lo mismo en
+      todos y **ninguno puede distinguir un `total` bien cableado de uno mal cableado**. Probado
+      con mutación: cambiando `total: result.colgadas?.desconocidas` por `?.total`, los cinco
+      siguen en VERDE.
+
+      **Arreglo.** Test nuevo con población MEZCLADA como la de producción (7 desconocidos + 6
+      nuestras por nombre + 10 por tenencia del inbox), que fija el reparto 7/16, que el total que
+      viaja sea 7 y **no** 23, y que ninguna fila nuestra aparezca nombrada. Con la mutación queda
+      ROJO y sólo él (`23 es nuestras pruebas incluidas: infla 3x lo que hay en juego`); revertido
+      con `cp`. Los dos comentarios corregidos con el recuento re-derivado y su fecha; el fixture
+      de 22 se deja porque prueba el BULTO y el orden con holgura — lo que ya no afirma es ser un
+      headcount de producción.
+
+      **Gates:** `node --test *.test.mjs` → **1384 pass / 0 fail**; cadena `npm test` de
+      onia-hermes → **exit 0**.
+
+      **Lo que NO se hizo, a propósito:** no se creó ningún pedido de deploy (ya existe
+      `t_d246cfa7`), no se mandó Telegram, y no se corrió el barrido con `--emit` — eso gastaría
+      el único aviso de cada uno de esos 7 leads, y esas marcas no se purgan. Se comentó el
+      recuento corregido en `t_d246cfa7`, y en `t_5ea80f5e` se anotaron los **3 desconocidos de
+      septiembre** (las conversaciones 45, 46 y 47 de Chatwoot — widget de la web, 22-24 días
+      callados) que esa tarea no nombra porque sólo cubre agosto.
+
 - [x] 🔴 **CERRADO el 2026-09-25 05:43-06:10 La Paz: el bot vivo ofrecía un turno a 15 h vista
       y el arreglo NO necesitaba desplegar el bot — el que publicaba ese horario es el cron, y
       ése sí viaja solo.** El instrumento de ayer (`anticipacion-viva.mjs`) ya decía ROJO; lo
