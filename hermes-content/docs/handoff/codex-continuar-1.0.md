@@ -132,6 +132,60 @@
 >   **Decisión pendiente de Sergio Urcullo:** con «Solo el dueño», si ese dueño desaparece sin
 >   entregar, hoy solo lo destraba Onia (SQL en la skill `onia-db`). ¿Automático por inactividad o
 >   manual? (no hay señal fiable de último ingreso en `Profile`).
+> ### ✅ 25-sep (mediodía): auditoría UI + legal Bolivia + open source, y sus arreglos
+> Página para Sergio Urcullo: https://claude.ai/artifact/F2FnM54TK1M2iakwoatBG7 (62 agentes, 67
+> hallazgos confirmados por verificación adversarial, 3 descartados; informe con archivo:línea en
+> el scratchpad de la sesión `tasks/audit-report.md` y `audit-full.json`).
+> - **Web EN PROD** (hermes `47afdc00`, publicador 12:35 La Paz, verificado con curl): Términos y
+>   Privacidad **v1.2 del 25-sep** (titular Leslie Mercado Moreno + NIT, factura por cada pago,
+>   cláusula de reclamos, precios finales con impuestos, renovación = solo lectura), privacidad declara
+>   **OpenAI, Telegram y Cloudflare**, pie «Onia · NIT 5371375010 · EMITE FACTURA», comparativa con
+>   fechas y sin absolutos.
+> - **Plataforma EN PROD: `release-492e7155`** (12:39 La Paz, publicador oficial; merge de carriles
+>   L/F/S, suite 6.809 + fallos conocidos de CRLF/Windows). `/terms` responde 200 con `meta refresh`
+>   inmediato a la web (redirect de página estática de Next): para un 308 real, moverlo a `redirects()`
+>   de `next.config.ts`. **Falta MIRAR** la reserva pública de una clínica de prueba y el checkout: `/terms` `/privacy` `/data-processing` redirigen a la web; alta registra versión 1.2
+>   en el audit `USER_CREATED`; checkout dice factura y **sin garantía de devolución (decisión de
+>   Sergio Urcullo 25-sep)**; FAQ sin «cifrado en reposo»; planes sin SLA/multisucursal; reserva
+>   pública sin Términos B2B y con aviso de quién recibe los datos; «Nota de venta» + «sin valor
+>   fiscal» donde no hay CUF (correo, impresión, pantallas); fuera la fila IT 3%; libro de ventas corta
+>   el mes en hora de La Paz; correos sin «Sistema de Gestión Dental»; receta con el nombre de la
+>   clínica; badge de push monocromo; push de citas SIN nombre completo ni motivo; no se borra un
+>   paciente con historia clínica; recepción no «guarda» alergias; roles finos aplicados en las
+>   PÁGINAS de plata/planilla/contabilidad/reportes/empresa/settings con test de clase.
+> - **Pendiente, en orden (próxima sesión):**
+>   1. **Rediseño de correos con la marca real** — Sergio vio «Bienvenido, Carla» (género fijo, emoji,
+>      «Onia.» dibujado a mano con punto de oración, tipografía genérica): logo = `onia` minúscula con
+>      el punto verde `#00D26A` como punto de la **i** (`web-factory/docs/ONIA_MARCA.md`, SVG en
+>      `onia-platform/public/onia-logo.svg`, en correo va como PNG hosteado); tinta `#12100E`;
+>      tipografía Archivo con la mecánica Fanvue (`web-factory/data/references/design-sources/
+>      fanvue-mecanica-medida.md`: display peso 500, lh ≤1,0, tracking −2 %); saludo neutro («Hola,
+>      Carla»). Revisar también pantallas con aspecto «IA» (skill `impeccable` + galería).
+>   2. **APIs que siguen por rol base** (MEDIUM, fuga con coadmins): `/api/rrhh/planilla-export`,
+>      `/api/rrhh/employees`, `/api/reports/export`, `/api/empresa/expenses/export`,
+>      `/api/empresa/commissions`, `/api/settings/export`, `/api/settings/api-keys` y las subpáginas
+>      `/settings/chatbot|api|addon-chatbot` → helper que exija `finance.read`/`config.write` + test de
+>      clase en `app/api`.
+>   3. Push del chatbot «te escribieron» genérico (sin nombre ni texto) y asunto del correo al
+>      profesional sin nombre de paciente (`lib/chatbot/push-te-escribieron.ts`, `lib/email.ts` ~1045).
+>   4. Ganancias fáciles Bolivia (informe §3.4): recordatorio RCV día 9 + IUE + F-608; exportar lo
+>      clínico en «Exportar mis datos»; datos de facturación del comprador (NIT/CI/99001-3); bandeja «Por
+>      facturar en el SIN»; consentimiento informado imprimible; compras en plantilla SIN 23 columnas;
+>      auditoría clínica visible al dueño; odontograma con historial; régimen tributario en el alta.
+> - **Lo de Sergio Urcullo:** Meta método de pago ANTES del 30-sep · preguntar al SIN (800 10 3444)
+>   si la solicitud 9473 se autoriza con los XSD viejos o migra al anexo de la **RND 102600000034**
+>   (pruebas 1-oct a 16-nov) · facturar cada suscripción por el Portal Web desde el primer cliente ·
+>   elegir UN ícono (tile blanco/«on» verde de la app vs verde/«on» negro de web e Instagram) · SIAT:
+>   iniciar sesión él en la pestaña del grupo «Claude» de su Chrome para que se lea el % de la Fase 1
+>   (la pestaña que abre la extensión NO comparte su sesión; no se escriben contraseñas).
+> - **Corrección de memoria:** el 30-sep NO obliga a todos a facturar en línea: solo grupos 9-12 por NIT
+>   (RND 102600000007). Open source: ahorro máximo ~US$6/mes; las palancas son Codex (confirmar si
+>   cobra US$100), bajar Claude Max al terminar la construcción, pausar Higgsfield.
+> - **Intentos fallidos (25-sep mediodía):** `git checkout -q origin/master --` sin rutas DESPRENDIÓ el
+>   HEAD del worktree (se recuperó volviendo a la rama; nunca usar checkout con `--` vacío); `npm test`
+>   de la web sale 78 en Windows (el wrapper no lanza `.bin/vitest`): correr
+>   `node node_modules/vitest/vitest.mjs run`; los 19 fallos de la web existen igual en `origin/main`.
+
 > - **Intentos fallidos de la noche:** (1) `pgrep -f <script>` por ssh se encuentra A SÍ MISMO (el
 >   `bash -c` remoto lleva el nombre en su línea): dijo «ya corre» y el release del C no se lanzó.
 >   Esperar por el log, no por pgrep. (2) Push en headless: el contexto incógnito de Playwright no
