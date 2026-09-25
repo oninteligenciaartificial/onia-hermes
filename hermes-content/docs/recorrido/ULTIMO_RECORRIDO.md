@@ -12,6 +12,31 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-25 00:10 La Paz — `BUILD_ID` cambió (deploy nuevo: `VREeqNSncIqDIOTMbfLTQ` → `1fCNCDEJaOeFVV1KczGHP`); recorrido dental completo, 9/9
+
+Al arrancar había **una fila residual** de la vuelta anterior (auto-sync 23:11) sin limpiar:
+`organizations.name='zz-qa-2026-09-24-2309-negocio'` (id `cmug5adre000001pf7tezobtq`, dental,
+sin pacientes/citas/facturas). Se limpió antes de correr el recorrido (perfiles →
+`auth.identities` → `auth.users` → `organizations`) — la fila se imprimió antes de borrar
+(ver arriba en el historial de esta vuelta).
+
+Con `BUILD_ID` nuevo correspondía repetir dental. `node scripts/recorrido_cliente.mjs --escribir`:
+
+- **Los 9 pasos, OK.** Cuenta `zz-qa-2026-09-25-0010@onia.com.bo`, confirmar correo antes del
+  primer login, onboarding en 6 pantallas, `/dashboard` sin rebote, paciente
+  `zz-qa-2026-09-25-0010-paciente` cargado y visto en `/patients`, cita `2026-09-25 09:00`
+  agendada (201, id `cmug7j5ta001401pfumzjfejv`) y VISTA en `/appointments`, factura creada con
+  el ítem visible en `/billing/cmug7jghw001601pf6e3ivyit` — frenado ahí sin pagar.
+- `resumen.json`: `llegoHasta 9 / 9`, `completo: true`, `agujeros: []`.
+- Limpieza verificada por fuera del propio script: `organizations`, `appointments` con
+  `zz-qa-%` → **0** al cerrar.
+
+**Sin hallazgo de producto.** Siguiente vuelta: comparar `BUILD_ID` de nuevo antes de decidir;
+si sigue este mismo build, rotar a importadora o servicios profesionales para cerrar el ciclo
+de los 5 rubros activos (dental, comercio y estética ya re-verificados en el build anterior).
+
+---
+
 ## 2026-09-24 21:09 La Paz — `RECORRIDO_RUBRO="Estética y spa"` completo, 9/9 (`BUILD_ID` sin cambios)
 
 `ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` seguía `VREeqNSncIqDIOTMbfLTQ` (igual a las dos
