@@ -195,6 +195,32 @@ publicación queda manual; no se activó publicación automática»*
    prueba con un comentario real **mirando el DM en la bandeja**—. Es tocar n8n (infra: un
    dueño a la vez) y lo decide Sergio Urcullo.
 
+### Qué palabra lleva a qué guía
+
+> **Regla de Sergio Urcullo, 25-sep:** *«si hablás de n8n: comentá N8N y te enseño cómo
+> instalarlo… eso iría a la Bóveda»*. Cada pieza que enseña una herramienta cierra con «Comentá
+> PALABRA y te <acción concreta>», y la palabra lleva a una guía de su sitio
+> (`sergiourcullo.vercel.app`).
+
+**Sólo se usa una palabra cuya guía responde 200 el día de publicar**, y sigue valiendo lo de
+arriba: una palabra activa por vez, con su fila en el registro, contestada a mano con el link.
+Estado medido el 25-sep con el conector de Vercel (20:48 y 21:20 UTC); el último deploy de
+producción del sitio es del 19-sep.
+
+| Palabra | Guía | Estado | Qué recibe quien comenta |
+|---|---|---|---|
+| `N8N` | `/stack`, paso 03 | ✅ 200 | cómo instalar n8n con un comando, con la hora de Bolivia |
+| `STACK` | `/stack` | ✅ 200 | las seis herramientas, qué NO hace cada una y cómo instalarlas |
+| `HOMELAB` | `/homelab` | ✅ 200 | cómo armar un servidor en casa |
+| `VPS` | `/vps` | ✅ 200 | qué es, cuánto cuesta el suyo, cuándo conviene contra el de casa y los cinco pasos para armarlo |
+| `CLAUDE` | `/claude-code` | ✅ 200 | la serie en video «Claude Code, de cero»: qué es y cómo se instala |
+| `MAPA` | `/automatizar` | ⛔ 404: la Bóveda no está publicada | la matriz para elegir qué automatizar |
+| `ARQUITECTURA` | `/agentes` | ⛔ 404: la Bóveda no está publicada | cuándo alcanza un `IF`, un modelo que clasifica, un AI Agent o un loop |
+| `MCP` | `/mcp` | ⛔ 404: la Bóveda no está publicada | contrato de herramienta y permisos mínimos |
+| `SANTA CRUZ` | sin guía: se contesta con la agenda del IA Lab | manual | la fecha y el formulario del laboratorio |
+
+Cuando se publique la Bóveda, las tres ⛔ se vuelven a medir antes de usarlas.
+
 ---
 
 ## 3. Checklist de publicación manual

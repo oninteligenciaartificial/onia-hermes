@@ -130,6 +130,13 @@ Reglas que lo sostienen:
 
 ## 3. La promesa existe antes del CTA
 
+> **Regla de Sergio Urcullo, 25-sep:** *«los guiones tienen que decir: si hablás de n8n, “comentá
+> N8N y te enseño cómo instalarlo”… eso iría a la Bóveda»*. Cada pieza que enseña una herramienta
+> cierra con **«Comentá PALABRA y te <acción concreta>»**, y la palabra lleva a **una guía de la
+> Bóveda** (su sitio, `sergiourcullo.vercel.app`). Qué palabra lleva a qué guía, y si la guía
+> está en el aire, está en la tabla de [`PUBLICACION.md`](PUBLICACION.md) §2. Las condiciones de
+> abajo siguen valiendo.
+
 - **"Comentá X" sólo si el recurso está publicado y su URL abre**, verificada el día de publicar.
   Si la página no está en el aire, la pieza cierra con otro CTA (seguir, una pregunta) y no
   promete.
@@ -266,23 +273,47 @@ sesiones no chocan.
 ### Los referentes, formato por formato
 
 > Sergio Urcullo, 25-sep: *«usá de referencia a nuestros referentes, también para carruseles y
-> demás»*. Fuentes: `../research/ONIA_REFERENTES_ROCHA_TAVERAS_MUNOZ_20260925.md` (§1-§5) y
-> `../research/ONIA_REFERENTE_ANAS_ANDALUSI_20260925.md` (§3-§4). Son research con fecha: se
-> re-miden antes de copiar una cifra.
+> demás»* y *«no solo a uno por cada cosa… revisá bien todo lo de todos»*. Por eso cada formato
+> toma de los cuatro. Fuentes: `../research/ONIA_REFERENTES_POR_FORMATO_20260925.md` (§1 y §4,
+> con el nivel de evidencia de cada dato), `../research/ONIA_REFERENTES_ROCHA_TAVERAS_MUNOZ_20260925.md`
+> y `../research/ONIA_REFERENTE_ANAS_ANDALUSI_20260925.md`. Son research con fecha: se re-miden
+> antes de copiar una cifra. Instagram, YouTube y TikTok estaban bloqueados al investigar: los
+> títulos salen del buscador, y las duraciones y miniaturas publicadas no se vieron.
 
 **La fórmula que comparten los cuatro:** una unidad concreta, su prueba a la vista, la cara de quien la
-hizo y una puerta gratis al paso siguiente. Cada formato la aplica así:
+hizo y una puerta gratis al paso siguiente. Además, los cuatro publican como contenido la máquina
+con la que hacen su propio marketing con IA. En `@sergiourcullo`, cada formato toma esto:
 
-| Formato | Referente modelo | Qué se toma | Qué no se toma |
-|---|---|---|---|
-| **Reel / corto** | Santiago Muñoz (reel partido) · Erik Taveras (título) | cabeza fija abajo (~45 %) y prueba arriba (~55 %) que cambia cada 1-3 s; subtítulos de 2-5 palabras con **una** palabra resaltada, en el verde ONIA; un número o la herramienta exacta en el título | el amarillo y el cian de Santiago; «X acaba de destruir a Y» |
-| **Carrusel** | Enrique Rocha («Stop AI slop»: 3,1k likes en un día) | portada que declara una tesis; una unidad por lámina **con su nombre exacto** (plantilla, nodo, comando, repo); una lámina que se guarda; cierre con criterio. Diseño: un solo acento, tipo grande y apretado, etiqueta mono en mayúsculas y la pantalla o el texto real adentro | carruseles generados enteros por IA (la acuarela de Santiago); la estética «glow de IA» |
-| **YouTube largo** | Erik Taveras (experimento) · Santiago Muñoz | pruebas numeradas, número en el título y «¿vale la pena?»; «lo armé para alguien real», con consentimiento; plantilla incluida | cursos de 6-7 h |
-| **LinkedIn** | ninguno lo trabaja: es carril libre · Anas (listas y lanzamientos en texto) | el carrusel de la semana en PDF y un texto en primera persona sobre construir la empresa | autobombo; cifras de ingreso |
-| **Guía web / Bóveda** | Rocha (una guía por pieza) · Taveras (cada reel trae su guía) | una pieza = una guía con URL estable, que se encuentra en buscadores | pedir registro para leerla |
-| **Comunidad** | Taveras (hilos y menciones) · Muñoz (directos) · Rocha (bóveda) | recibe primero, con los archivos; «mostrá lo que armaste» los viernes; un directo «construimos en vivo» cada 2 semanas | comunidad paga; el IA Lab es la única excepción, decidida por Sergio Urcullo |
-| **Palabra clave** | los cuatro (Rocha la automatiza con ManyChat) | una palabra específica por pieza, que entrega un recurso que ya existe | «comentá X» sin recurso ni respuesta (§3) |
-| **Autoridad** | Anas (TV, Forbes) → en ONIA, el escenario del comprador | el Colegio de Odontólogos o la prensa de Santa Cruz (lo decide Sergio Urcullo) | cifras de ingreso, «millonario», títulos inflados |
+| Formato | Rocha | Taveras | Muñoz | Anas | No se toma |
+|---|---|---|---|---|---|
+| **Reel / TikTok** | novedad fechada («Claude ahora…») con `vence:` a las 48 h (§2) | número + herramienta + guía; el objeto real en cámara | reel partido: prueba arriba (~55 %), cara abajo (~45 %); subtítulos de 2-5 palabras con **una** resaltada en verde | el clon como TEMA de una sola pieza; la historia de origen contada siempre igual | amarillo y cian; «X acaba de destruir a Y»; UGC sintético; un clon que publica a diario |
+| **Shorts** | se reusa el reel | recorte del largo con el número del experimento | explainer animado sin cara, hecho con código (skill `faceless-explainer`) | recortes de charlas, cuando existan | caricatura sin prueba |
+| **YouTube largo** | cada largo con su guía de URL estable | experimento numerado, número en el título y «¿vale la pena?», uno por mes | «lo hice para alguien real», con consentimiento; intro de 60-90 s; miniatura con foto REAL y texto por código | la clase en vivo que después se sube | maratones de 6-7 h; pantallas inventadas en la miniatura; plata y edad en el título |
+| **Carrusel** | estructura (tesis → unidad con su nombre exacto → así no / así sí → lámina que se guarda → criterio) y motor de código: ya adoptados | la lámina de prueba muestra un objeto o una captura medible | el carrusel 100 % IA (abajo) | las mismas láminas como carrusel de fotos en TikTok | pantallas de ONIA o prueba dibujadas por IA; la misma imagen en todas las láminas |
+| **Historias** | — | — | sticker → pregunta → recurso; la palabra clave en texto nativo de IG; tercio inferior libre | — | cupos o urgencia que no existen |
+| **LinkedIn** | — | reacción a una noticia con el dato verificado y qué significa para un negocio | — | primera persona: «construyendo Onia» | facturación; cifras sin fuente |
+| **Directos** | registro gratis con recordatorio y cupo | directo atado a un hito real (p. ej. los 1.000 seguidores) | «construimos en vivo», uno cada dos semanas | la «clase gratis» | sorteos con plata |
+| **Guía web / Bóveda** | pública, sin registro, una por pieza | la guía de cada reel, con el archivo | el año en el título, para buscadores | landing de la clase gratis | pedir registro para leer |
+| **Comunidad** | afuera, las guías públicas; adentro, los archivos | «mostrá lo que armaste», sin plataforma | el directo dentro de la comunidad | canal de anuncios gratis (ya existe) | comunidad paga (el IA Lab es la única excepción, decidida por Sergio Urcullo); plataforma con XP |
+| **Palabra clave** | la automatiza (ManyChat) | la palabra entrega la guía del reel | «Comentá PALABRA» al cierre | — | «comentá X» sin recurso ni respuesta (§3) |
+| **Repos** | uno por mes, con portada y arranque en un comando (lo decide Sergio Urcullo) | uno con historia de producto, cuando lo haya | publicar la propia máquina (candidato: la receta del carrusel) | — | 67 repos: dispersión |
+| **Autoridad** | — | — | — | TV y Forbes → en ONIA, el escenario del comprador: Colegio de Odontólogos o prensa de Santa Cruz (lo decide Sergio Urcullo) | cifras de ingreso, «millonario», títulos inflados |
+
+**Carrusel 100 % IA.** Sergio Urcullo, 25-sep: *«¿por qué no tomás los carruseles hechos 100 % con
+IA? Se supone que nosotros hacemos eso también»*. Van. **Cómo** lo decide él entre dos formas, con
+el detalle y los costos en `../research/ONIA_REFERENTES_POR_FORMATO_20260925.md` §2.8:
+- **Híbrido (recomendado):** la IA investiga, escribe, ilustra, arma y revisa. El texto lo compone
+  el motor, la prueba es una captura real y la ilustración no lleva letras ni personas.
+- **Píxel (el de Muñoz):** el modelo dibuja la lámina entera, texto incluido. Cada lámina se revisa
+  letra por letra (tildes, ñ, números) y no lleva capturas redibujadas.
+
+En las dos: ninguna pantalla de ONIA ni prueba fabricada (`CLAUDE.md` §5), cada lote se aprueba
+antes con su costo, y el caption lo declara. Hasta que el pack tenga un tipo «ilustración», la
+imagen de IA va sólo en portada y cierre: en una lámina interior sale con marco de captura y el
+rótulo «PRODUCTO REAL». En `@oniahq`, la IA va sólo de fondo decorativo.
+
+Para el dueño de clínica (`@oniahq`), la traducción de cada formato está en la columna «Dueño de
+clínica» de la research §4.
 
 **La diferencia que manda:** a los cuatro les compra su propia audiencia. A ONIA le compra un dueño
 de clínica. Las piezas que venden llevan el gancho del dueño, la prueba de ONIA funcionando y su

@@ -82,9 +82,9 @@ que se veía generada por IA y no desarrollaba un argumento de venta.
   - Slides intermedios: problema -> insight -> solución -> ejemplo concreto.
   - Último slide: CTA único y específico, con firma o posición personal y un motivo concreto
     para seguirlo (`identity`, `follow_cta`).
-  - «Comentá PALABRA» (`comment_trigger`) sólo si alguien la va a contestar: hoy
-    `@sergiourcullo` no tiene palabras activas y el comentario no dispara nada
-    (`hermes-content/docs/contenido/PUBLICACION.md` §2).
+  - «Comentá PALABRA» (`comment_trigger`) sólo con una palabra de la tabla de
+    `hermes-content/docs/contenido/PUBLICACION.md` §2 cuya guía responde 200 el día de publicar.
+    No hay respuesta automática: la contesta Sergio Urcullo a mano, una palabra activa por vez.
   - Recurso de la Bóveda (`resource`) sólo si su URL ya responde 200: al 25-sep `/boveda` no
     está desplegada.
   - El renderer no agrega recurso ni firma por defecto: van en el brief o no aparecen.
@@ -97,7 +97,11 @@ que se veía generada por IA y no desarrollaba un argumento de venta.
     4. una lámina que se guarda (checklist o matriz);
     5. cierre con criterio, un solo CTA y la firma.
     Diseño: un solo acento (verde ONIA), tipo grande, etiqueta mono en mayúsculas y el texto real
-    en la lámina. Nunca un carrusel generado entero por IA.
+    en la lámina.
+  - **Carrusel 100 % IA:** van (Sergio Urcullo, 25-sep). El método, híbrido (recomendado) o
+    píxel, lo decide él: `docs/contenido/SISTEMA_DE_GUIONES.md` §7. En los dos, ninguna pantalla
+    de ONIA ni prueba fabricada, cada lote aprobado con su costo antes de generar, y el caption
+    lo declara.
 - Lenguaje claro para empresas bolivianas, sin jerga tecnica innecesaria.
 
 ## Checklist de calidad antes de publicar
