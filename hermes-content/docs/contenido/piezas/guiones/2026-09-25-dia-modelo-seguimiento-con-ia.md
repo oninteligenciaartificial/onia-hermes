@@ -47,7 +47,8 @@ salen 13 publicaciones.
 
 **⚠️ Depende de la sesión Plataforma:** una organización demo con pacientes inventados, donde
 Recall ya haya propuesto mensajes, y la captura de su cola en `/agents`. Hoy Recall corre pero
-propone 0 (no hay datos de cliente, `ONIA_CATALOGO_DE_VENTA.md` §7). **Sin esa pantalla, V1 y el
+propone 0 (no hay datos de cliente, `ONIA_CATALOGO_DE_VENTA.md` §7). Para que proponga, la org demo
+necesita pacientes con una visita **completada** hace más de 180 días y sin cita por delante. **Sin esa pantalla, V1 y el
 corto 9 no se graban:** producto visible o no sale.
 
 ---
@@ -98,11 +99,11 @@ Devolvé sólo este JSON:
 
 ### V1 · reel/corto · El paciente que no volvió
 
-ENSEÑA:   al terminar, el dueño de una clínica sabe armar la lista de pacientes con tratamiento a medias (la regla), qué mensaje mandarles y por qué alguien lo aprueba antes; y ve que en ONIA lo hace el agente Recall cada mañana
+ENSEÑA:   al terminar, el dueño de una clínica sabe armar a mano la lista de pacientes que no volvieron (última visita hace más de 6 meses y ninguna cita por delante: dos columnas y un filtro), qué mensaje mandarles y por qué alguien lo aprueba antes; y ve que en ONIA esa misma lista la arma Recall cada mañana
 PRUEBA:   GRABA Sergio Urcullo · la cola real de Recall en `/agents`, en la org demo con pacientes inventados (depende de Plataforma, ver arriba)
 AUDIENCIA: dueño de clínica (Etapa 1) · se publica en `@sergiourcullo` y en `@oniahq`
 TRABAJO:  vende enseñando
-FUENTES:  qué hace Recall: `web-factory/apps/onia-platform/src/app/v1/modulos/dental/page.tsx:48-50` (espejo del sitio) · cadencia: `cadencia-prometida.test.ts` («una vez por día») · estado 🟡: `ONIA_CATALOGO_DE_VENTA.md` §7 · **re-verificar con Plataforma el día de grabar**
+FUENTES:  qué arma Recall: `../../../QUE_VENDEMOS_YA.md` (verificado contra `agents-runtime.ts` y `agents-logic.ts`): «quien no volvió y no tiene próxima cita agendada», última visita **completada** hace 180 días (fijo, sin pantalla para cambiarlo), todos los días a las 07:00, borrador en la cola de aprobación · cadencia: `cadencia-prometida.test.ts` · estado 🟡: `ONIA_CATALOGO_DE_VENTA.md` §7 · **re-verificar con Plataforma el día de grabar**
 CTA:      «probalo 14 días gratis, link en mi perfil» · recurso: `app.onia.com.bo/register` (**verificar el día de publicar** que el alta siga abierta: CLAUDE.md §2)
 LAYOUT:   A cabeza a cuadro + overlays, con C (pantalla primero) en los beats 6-7
 EDICIÓN:  completa
@@ -111,11 +112,11 @@ DURACIÓN: 68 s · PALABRAS: ~225
 | # | t | HABLA (literal) | CUE | EN PANTALLA | TEXTO | ZOOM / SFX | NOTA |
 |---|---|---|---|---|---|---|---|
 | 1 | 0-5 | «En tu clínica hay plata que ya ganaste y todavía no cobraste.» | — | CAM | `ya la ganaste` | punch | gancho, sin saludo |
-| 2 | 5-12 | «Es el paciente que empezó un tratamiento, una endodoncia, una ortodoncia, y no volvió a agendar.» | «no volvió» | CAM + tarjeta «tratamiento a medias» | `no volvió` | — | es el dolor #1 (`ONIA_CLIENTE_IDEAL.md` §4) |
+| 2 | 5-12 | «Es el paciente que vino, no volvió y no tiene próxima cita. Entre ellos, los que dejaron un tratamiento a medias.» | «no volvió» | CAM + tarjeta «no volvió · sin próxima cita» | `no volvió` | — | el dolor #1 (`ONIA_CLIENTE_IDEAL.md` §4) está **dentro** de esta lista; la lista no filtra por tratamiento |
 | 3 | 12-22 | «Hacé la cuenta con tus números: cuántos pacientes dejaron algo a medias, por las sesiones que les faltan, por lo que cobrás cada una. Eso es lo que está esperando.» | «Hacé la cuenta» | tarjeta: `pacientes × sesiones × Bs por sesión` | `hacé la cuenta` | — | **sin cifras de ONIA**: la cuenta la hace el que mira |
-| 4 | 22-32 | «Para recuperarlo hacen falta tres cosas. Una lista: tratamiento empezado y sin cita hace más de cuarenta y cinco días.» | «Una lista» | tarjeta con la regla | `+45 días sin cita` | — | 45 es un umbral **de ejemplo** para armarla a mano, no el de Recall |
-| 5 | 32-42 | «Un mensaje corto: el nombre, qué quedó pendiente y una pregunta, “¿te reservo un horario esta semana?”. Y alguien que lo apruebe antes de mandarlo.» | «Un mensaje corto» | tarjeta con el mensaje de ejemplo («Ana», inventada) | `una pregunta` | — | — |
-| 6 | 42-56 | «En ONIA eso lo hace un agente que se llama Recall. Cada mañana revisa quién no vuelve hace meses y te deja el mensaje redactado en una cola.» | «Recall» | **pantalla real**: `/agents`, cola de Recall en la org demo | `cada mañana` | zoom a la cola | «cada mañana», nunca «24/7» |
+| 4 | 22-32 | «Para recuperarlo hacen falta tres cosas. Una lista: última visita hace más de seis meses y ninguna cita por delante. En una planilla son dos columnas y un filtro.» | «Una lista» | planilla de ejemplo (pacientes inventados), filtrada | `+6 meses · sin cita` | — | es la **misma** regla que aplica Recall (180 días): lo que se enseña a mano es lo que ONIA hace sola |
+| 5 | 32-42 | «Un mensaje corto: el nombre, por qué le conviene volver y una sola pregunta, “¿te reservo un horario esta semana?”. Y alguien que lo apruebe antes de mandarlo.» | «Un mensaje corto» | tarjeta con el mensaje de ejemplo («Ana», inventada) | `una pregunta` | — | **no** decir que el borrador de ONIA nombra el tratamiento: no está verificado |
+| 6 | 42-56 | «En ONIA eso lo hace un agente que se llama Recall. Cada mañana a las siete arma esa misma lista y te deja el mensaje redactado en una cola.» | «Recall» | **pantalla real**: `/agents`, cola de Recall en la org demo | `cada mañana` | zoom a la cola | «cada mañana a las siete», nunca «24/7» |
 | 7 | 56-62 | «Vos tocás Aprobar. Nada sale sin tu OK.» | «Aprobar» | pantalla real: el botón Aprobar | `nada sin tu OK` | click | — |
 | 8 | 62-68 | «Si tenés una clínica, probalo catorce días gratis. El link está en mi perfil.» | «catorce días» | CAM | `14 días gratis` | — | un solo CTA; se verifica el alta ese día |
 
@@ -144,6 +145,23 @@ DURACIÓN: 50 s · PALABRAS: ~165
 | 7 | 40-50 | «Lo demás, confirmar un horario o recordar una cita, que salga solo. La IA escribe; la decisión de mandar es tuya. Guardá las tres.» | «Guardá las tres» | CAM | `guardá las tres` | — | coherente con ONIA: los recordatorios de cita salen solos; Recall espera el OK |
 
 ---
+
+## Lo que se tomó de los referentes
+
+De `../../../research/ONIA_REFERENTE_ANAS_ANDALUSI_20260925.md`, que cruza a Anas Andaloussi con
+Rocha, Taveras y Muñoz, salen tres ideas:
+- **La fórmula común:** una unidad concreta por pieza, la prueba a la vista, la cara y el criterio
+  de quien la hace, y una sola puerta gratis al siguiente paso.
+- **Cada pieza de venta enseña a hacer a mano lo que ONIA hace sola.** Es V1: la planilla filtrada
+  y, al lado, Recall armando la misma lista.
+- **Lo inventado funciona cuando se declara, y cobra cuando se presenta como hecho.** A Anas le
+  cobraron el «millonario», los «12 millones» y el «Título Oficial».
+
+Mezcla propuesta para medir durante dos semanas: **~50 % enseña · ~30 % vende enseñando · ~20 %
+conecta**. Cada tipo se mide con su propia métrica:
+- enseña: guardados y seguidores;
+- vende: conversaciones con clínicas, cuentas creadas y diagnósticos agendados;
+- conecta: comentarios y mensajes.
 
 ## Lo que falta para pasar a «grabar» (SISTEMA_DE_GUIONES §10)
 

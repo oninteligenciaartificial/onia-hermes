@@ -170,6 +170,8 @@ archivo no llegó a `main`.
 | [`research/ONIA_REFERENTES_ROCHA_TAVERAS_MUNOZ_20260925.md`](research/ONIA_REFERENTES_ROCHA_TAVERAS_MUNOZ_20260925.md) | investigación: referentes |
 | [`research/ONIA_STACK_GENERACION_ALTERNATIVAS_20260925.md`](research/ONIA_STACK_GENERACION_ALTERNATIVAS_20260925.md) | investigación: alternativas de generación |
 | [`research/ONIA_METODO_SANTIAGO_EDICION_20260925.md`](research/ONIA_METODO_SANTIAGO_EDICION_20260925.md) | investigación: el método de edición |
+| [`research/ONIA_REFERENTE_ANAS_ANDALUSI_20260925.md`](research/ONIA_REFERENTE_ANAS_ANDALUSI_20260925.md) | investigación: Anas Andaloussi, cruzado con los otros tres; mezcla 50/30/20 y nueve ganchos |
+| [`contenido/piezas/guiones/2026-09-25-dia-modelo-seguimiento-con-ia.md`](contenido/piezas/guiones/2026-09-25-dia-modelo-seguimiento-con-ia.md) | día modelo: un tema, 13 piezas, tres trabajos (espera el OK de Sergio Urcullo) |
 | [`historial/contenido/INVENTARIO_GUIONES_20260925.md`](historial/contenido/INVENTARIO_GUIONES_20260925.md) | foto: el inventario de guiones al 25-sep |
 | [`historial/contenido/ESTADO_OPERATIVO_CONTENIDO_20260925.md`](historial/contenido/ESTADO_OPERATIVO_CONTENIDO_20260925.md) | foto: el estado operativo medido el 25-sep |
 | [`historial/MAPA_DOCS_20260925.md`](historial/MAPA_DOCS_20260925.md) | foto: el mapa de todos los docs, con las contradicciones C1–C12 y la propuesta de orden por fases |
