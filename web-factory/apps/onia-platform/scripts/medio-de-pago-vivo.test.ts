@@ -1,10 +1,18 @@
 import { execFileSync } from "node:child_process";
+import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 import { describe, expect, it } from "vitest";
 
-import { loQuePrometeElSitio, loQuePuedeProduccion } from "./medio-de-pago-vivo.mjs";
+import {
+  laImagenDelQr,
+  laImagenSirve,
+  loQuePrometeElSitio,
+  loQuePuedeProduccion,
+  medioQuePromete,
+  venceElQrEstatico,
+} from "./medio-de-pago-vivo.mjs";
 
 /**
  * La parte PURA de `medio-de-pago-vivo.mjs`, que sí puede correr en la cadena.
@@ -64,6 +72,39 @@ describe("lo que producción puede", () => {
   });
 });
 
+describe("el QR estático", () => {
+  it("los dos lectores entienden la fuente REAL (si cambia de forma, el cruce queda ciego)", () => {
+    const fuente = readFileSync(join(AQUI, "..", "src", "content", "medio-de-pago.ts"), "utf8");
+    expect(loQuePrometeElSitio(fuente)).not.toBeNull();
+    expect(venceElQrEstatico(fuente)).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+  });
+
+  it("el vencimiento que cambió de forma es null, NO 'no hay estático'", () => {
+    expect(venceElQrEstatico('export const QR_ESTATICO_VENCE_EL = "2027-09-25";')).toBe("2027-09-25");
+    expect(venceElQrEstatico("export const QR_ESTATICO_VENCE_EL = hoy();")).toBeNull();
+  });
+
+  it("deriva el medio igual que la fuente, con el corte en la medianoche de La Paz", () => {
+    const corte = new Date("2027-09-25T00:00:00-04:00");
+    const antes = new Date(corte.getTime() - 1);
+    expect(medioQuePromete(true, "2027-09-25", corte)).toBe("qr-dinamico");
+    expect(medioQuePromete(false, "2027-09-25", antes)).toBe("qr-estatico");
+    expect(medioQuePromete(false, "2027-09-25", corte)).toBe("transferencia");
+  });
+
+  it("la imagen sirve sólo con 200 y tipo image/*", () => {
+    expect(laImagenSirve(laImagenDelQr(envDe("200\timage/jpeg")))).toBe(true);
+    expect(laImagenSirve(laImagenDelQr(envDe("404\ttext/html; charset=utf-8"))), "antes del deploy").toBe(false);
+    expect(laImagenSirve(laImagenDelQr(envDe("200\ttext/html"))), "página, no imagen").toBe(false);
+    expect(laImagenSirve(laImagenDelQr(envDe("307\t"))), "redirect al login").toBe(false);
+  });
+
+  it("curl que no llega NO es 'la imagen no está'", () => {
+    expect(laImagenDelQr(envDe("000\t", 6))).toBeNull();
+    expect(laImagenDelQr(sinDocker)).toBeNull();
+  });
+});
+
 describe("la guarda de ejecución directa", () => {
   /**
    * En un proceso HIJO a propósito: en éste el módulo ya está cacheado por el
@@ -75,7 +116,7 @@ describe("la guarda de ejecución directa", () => {
       [
         "--input-type=module",
         "-e",
-        `import(${JSON.stringify(join(AQUI, "medio-de-pago-vivo.mjs"))}).then(() => console.log("VIVO"));`,
+        `import(${JSON.stringify(pathToFileURL(join(AQUI, "medio-de-pago-vivo.mjs")).href)}).then(() => console.log("VIVO"));`,
       ],
       { encoding: "utf8" },
     );

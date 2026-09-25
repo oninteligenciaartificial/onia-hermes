@@ -2,12 +2,14 @@ import { readFileSync, readdirSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import {
   MEDIO_DE_PAGO,
+  QR_ESTATICO_VENCE_EL,
   QR_PARA_PAGARLE_A_ONIA,
   medioDePagoOnia,
+  qrEstaticoVigente,
 } from "@/content/medio-de-pago";
 
 /**
@@ -114,9 +116,9 @@ const SIN_DIRECCION_DECLARADAS: { literal: string; porque: string }[] = [
 /**
  * La FUENTE no es una superficie: es el único archivo del sitio donde el texto
  * «pagás por QR» puede existir, porque es la rama que se enciende el día que el
- * banco entregue credenciales. No queda sin vigilar — la custodian los tres
- * casos de abajo («las dos ramas vivas», «sigue al flag», «no se borró la
- * promesa»), que es una vigilancia más fuerte que este barrido de literales.
+ * banco entregue credenciales (y «nuestro QR» mientras el estático esté
+ * vigente). No queda sin vigilar — la custodian «sigue al flag» y el bloque
+ * «tres medios» de abajo, una vigilancia más fuerte que este barrido de literales.
  */
 const FUENTE = "content/medio-de-pago.ts";
 
@@ -184,15 +186,17 @@ describe("cómo se le paga a Onia: la venta sigue a la capacidad", () => {
     expect(nosPaganPorQr(cobrador!)).toBe(false);
   });
 
-  it("ninguna superficie promete pagarle a Onia por QR mientras no haya QR", () => {
-    if (QR_PARA_PAGARLE_A_ONIA) return;
+  it("ninguna superficie tipea a mano que se le paga a Onia por QR", () => {
+    // Desde el 2026-09-25 hay QR (el estático) y aun así esto no se relaja: el
+    // QR estático VENCE, y una promesa tipeada a mano no se entera. Vale para
+    // los tres medios: el texto se pide a la fuente, que sigue a la vigencia.
     const prometen = MENCIONES.filter(nosPaganPorQr).map(
       (m) => `${m.archivo}:${m.linea} → ${m.texto.trim()}`,
     );
     expect(
       prometen,
-      "Estas superficies le prometen al lead pagar por QR y producción no tiene " +
-        "ninguno (BCP_QR_* = 0). El texto se pide a @/content/medio-de-pago, no se tipea.",
+      "Estas superficies le prometen al lead pagar por QR escrito a mano. " +
+        "El texto se pide a @/content/medio-de-pago, no se tipea.",
     ).toEqual([]);
   });
 
@@ -217,26 +221,74 @@ describe("cómo se le paga a Onia: la venta sigue a la capacidad", () => {
     expect(sobran, "Ya no existen en el sitio: sacalas de la lista.").toEqual([]);
   });
 
-  it("la fuente sin QR no nombra QR, y la rama con QR sí (las dos vivas)", () => {
-    const sin = medioDePagoOnia(false);
-    expect(sin.alTerminarLaPrueba).not.toMatch(/\bQR\b/);
-    expect(sin.siTeSirve).not.toMatch(/\bQR\b/);
-    // La rama `true` no es código muerto: es la que vuelve sola el día que el
-    // banco entregue credenciales. Si se pudre, el arreglo de ese día sale mal.
-    const con = medioDePagoOnia(true);
-    expect(con.alTerminarLaPrueba).toMatch(/\bQR\b/);
-    expect(con.siTeSirve).toMatch(/\bQR\b/);
-  });
-
   it("lo que las superficies importan sigue al flag, no a un deseo", () => {
     expect(MEDIO_DE_PAGO).toEqual(medioDePagoOnia(QR_PARA_PAGARLE_A_ONIA));
   });
+});
 
-  it("sin QR, el lead igual se entera de CÓMO paga (no se borró la promesa)", () => {
-    // El arreglo de esta clase es CONDICIONAR la promesa, nunca borrarla: una
-    // pantalla que no dice cómo se paga deja al lead sin saber qué le espera.
-    const sin = medioDePagoOnia(false);
-    expect(sin.alTerminarLaPrueba).toMatch(/transferencia/i);
-    expect(sin.siTeSirve).toMatch(/transferencia/i);
+describe("tres medios: QR dinámico, QR estático, transferencia", () => {
+  /** Medianoche de La Paz del día que vence el QR estático. */
+  const CORTE = new Date(`${QR_ESTATICO_VENCE_EL}T00:00:00-04:00`);
+  const ANTES = new Date(CORTE.getTime() - 1000);
+  const HOY = new Date("2026-09-25T12:00:00-04:00");
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  const a = (fecha: Date) => {
+    vi.useFakeTimers();
+    vi.setSystemTime(fecha);
+  };
+
+  it("con la API del banco manda el QR dinámico, aunque el estático esté vigente o vencido", () => {
+    a(HOY);
+    const vigente = medioDePagoOnia(true);
+    a(CORTE);
+    expect(medioDePagoOnia(true)).toEqual(vigente);
+    expect(vigente.alTerminarLaPrueba).toMatch(/\bQR\b/);
+    expect(vigente.siTeSirve).toMatch(/\bQR\b/);
+    expect(vigente.alTerminarLaPrueba).not.toMatch(/nuestro QR/);
+  });
+
+  it("sin API y con el estático vigente, nombra NUESTRO QR y el comprobante", () => {
+    a(HOY);
+    const m = medioDePagoOnia(false);
+    expect(m.alTerminarLaPrueba).toMatch(/nuestro QR/);
+    expect(m.alTerminarLaPrueba).toMatch(/comprobante/);
+    expect(m.alTerminarLaPrueba).toMatch(/verificamos/);
+    expect(m.siTeSirve).toMatch(/nuestro QR/);
+    expect(m.alTerminarLaPrueba).not.toMatch(/transferencia|WhatsApp/i);
+  });
+
+  it("sin API y con el estático vencido vuelve sola a la transferencia, sin nombrar QR", () => {
+    // El arreglo de esta clase es CONDICIONAR la promesa, nunca borrarla: sin
+    // QR el lead igual se entera de CÓMO paga.
+    a(CORTE);
+    const m = medioDePagoOnia(false);
+    expect(m.alTerminarLaPrueba).toMatch(/transferencia/i);
+    expect(m.siTeSirve).toMatch(/transferencia/i);
+    expect(m.alTerminarLaPrueba).not.toMatch(/\bQR\b/);
+    expect(m.siTeSirve).not.toMatch(/\bQR\b/);
+  });
+
+  it("el corte es la medianoche de La Paz del día que vence, no la de UTC", () => {
+    expect(qrEstaticoVigente(ANTES)).toBe(true);
+    expect(qrEstaticoVigente(CORTE)).toBe(false);
+    // 23:00 del 24 en La Paz ya es el 25 en UTC: sigue vigente.
+    expect(qrEstaticoVigente(new Date(`2027-09-24T23:00:00-04:00`))).toBe(true);
+    a(ANTES);
+    expect(medioDePagoOnia(false).siTeSirve).toMatch(/nuestro QR/);
+    a(CORTE);
+    expect(medioDePagoOnia(false).siTeSirve).toMatch(/transferencia/);
+  });
+
+  it("el QR estático NUNCA promete activarse solo: el comprobante lo verifica una persona", () => {
+    a(HOY);
+    const m = medioDePagoOnia(false);
+    for (const texto of [m.alTerminarLaPrueba, m.siTeSirve]) {
+      expect(texto).not.toMatch(/activa\w*\s+sol[oa]|autom[aá]tic|al instante|en el acto/i);
+      expect(texto, "sin rayas largas en copy de venta").not.toMatch(/—/);
+    }
   });
 });
