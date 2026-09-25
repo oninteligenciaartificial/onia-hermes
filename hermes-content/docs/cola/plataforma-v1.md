@@ -263,8 +263,27 @@ trabaría el merge de todos los carriles.
 
       ⚠️ **Commiteado y publicado en la rama del carril, NO desplegado:** lo mergea `onia-cola`.
       ✅ YA DESPLEGADO (medido 2026-09-25: `e25eadd6` `1705269d` vive en produccion `39234c89`).
-      No se pudo mirar renderizado con sesión real — sigue vivo el corte de 2FA que manda toda
-      ruta del panel a `/profile?mfa=obligatorio` (tarea `t_3bb6b9ee`, depende de Sergio Urcullo).
+      ⚠️ **Acá decía que NO se podía mirar renderizado con sesión real porque «sigue vivo el
+      corte de 2FA» y que eso dependía de Sergio Urcullo (tarea `t_3bb6b9ee`) — las dos mitades
+      estaban VENCIDAS, corregido el 2026-09-25.** `t_3bb6b9ee` está **archivada** desde el
+      18-sep, y el corte se resolvió el 24-sep cableando TOTP (RFC 6238) en
+      `scripts/lib/sesion_dueno.mjs`, que lee el factor verificado y pasa el segundo paso solo.
+      **Medido hoy, y MIRADO:** `node scripts/mirar_bandeja_dueno.mjs --ruta /inbox` → exit 0,
+      «segundo factor verificado (factor 2867857c…) — sesión aal2», URL final
+      `https://app.onia.com.bo/inbox` (no `/profile?mfa=obligatorio`), HTTP 200, cero respuestas
+      ≥400. La captura muestra la bandeja de `Onia (interna)` con **una conversación de WhatsApp
+      del 18-sep de un desconocido** entre las sondas QA — o sea el punto 1 de este carril se
+      puede verificar hoy, sin pedirle nada a Sergio Urcullo.
+
+      **Lo que este fantasma costaba no es el párrafo: era la capacidad de verificar.** La línea
+      declaraba imposible MIRAR una pantalla con sesión real, que es la única prueba que
+      `CLAUDE.md` acepta («verificar es MIRAR»), y encima le pedía a Sergio Urcullo una decisión
+      que ya había tomado. Ahora lo agarra un gate: `npm run bloqueo:citado`
+      (`scripts/bloqueo_citado_vivo.mjs`) pregunta al tablero por cada tarea que una cola nombre
+      como freno vigente, y se pone rojo si esa tarea está `done`, `archived` o no existe.
+      `bloqueos_vencidos.mjs` no lo veía: mide filas de la tabla «Bloqueado en Sergio» con
+      `**Verificador:**` declarado, y este bloqueo vivía suelto en el cuerpo de un ítem, en una
+      cola que **no tiene esa tabla**.
 
 - [x] 🔴 **CERRADO el 2026-09-18 — el dueño que conectaba su Instagram o el chat de su web no
       podía apagarlos nunca** (`onia-platform` `3a61c3ea`, rama del carril; los tres gates
@@ -751,27 +770,6 @@ trabaría el merge de todos los carriles.
       1-2 días). No entra por la misma regla que frena a N1: hoy no le agrega valor a ningún
       cliente que pague. Queda nombrado acá para que se retome con N1, no suelto.
 
-
-- [ ] 🔴 **PORTADA reordenada por veredicto de Sergio Urcullo (11-sep, sobre capturas del
-      preview y de producción) — HECHA en `main` (`a847d9aa`), FALTA su OK mirándola y el
-      deploy.** Sus palabras: *"esto no vende nada… coloca algo que impacte que se vea más el
-      sistema, y el tema de los chatbots es principal, que sea más protagonista, está al final
-      eso, quita esas cajitas que son solo texto… el inicio me gustaba más así como estaba puro
-      texto estilo hostinger… que sea lo principal llevarlos a probar el sistema"*. Qué entró:
-      hero v4 DESCARTADO (vuelve el hero de producción que él aprobó), sección HECHOS retirada,
-      chatbot a la posición 2 con conversación dibujada
-      (`web-factory/apps/onia-platform/src/app/(sitio)/conversacion.tsx`) + CTA al alta.
-      Pendiente de ESTE ítem: (a) **AUDITORÍA PRE-PUBLICACIÓN pedida por Sergio Urcullo antes
-      del deploy** (11-sep, textual: *"verificamos los precios de los add-ons y las pestañas
-      secundarias que no es el hero que estén bien hechas, también verificamos cibersecurity,
-      fallos de estructura de la web, información mal colocada, docs viejos, política de
-      privacidad"*) — dos subagentes barriendo seguridad y contenido de
-      `web-factory/apps/onia-platform/src/`; los hallazgos se arreglan ANTES del deploy;
-      (b) tras la auditoría limpia, su OK → deploy con `/opt/onia-landing/_deploy/publicar.sh`;
-      (c) probar un video HyperFrames como pieza del bloque chatbot ("puedes generar videos con
-      hyperframes también, intentá") — arrancamos con la conversación CSS porque pesa cero.
-      El 11-sep también entró la dieta de la sección de add-ons (`e12b740f`: tarjetas con
-      precio en píldora, ancla del salario en una línea, copys cortos en la fuente única).
 
 - [x] 🔴 **CERRADO el 2026-09-24: el checkbox estaba abierto y el cuerpo entero ya decía ✅.**
       Re-medido en producción HOY, no heredado:
@@ -1854,82 +1852,6 @@ trabaría el merge de todos los carriles.
       se borraron las 3 que generó esta prueba) · 4 agentes intactos · `startedAt` devuelto a
       `2026-09-11 11:00:04.202+00`.
 
-- [ ] 🔴 **Dos propuestas de diseño para el dashboard del producto** (Sergio Urcullo, 11-sep:
-      *"ese color que hay ahorita no es nada intuitivo y no hay botones que resalten, que se
-      diferencien para que la experiencia sea más fácil"*). Dos direcciones renderizadas
-      (maquetas sobre el shell real: `onia-platform/app/(dashboard)/layout.tsx` y
-      `onia-platform/app/globals.css`, no dibujos sueltos), con jerarquía de botones
-      primario/secundario y color semántico; se le MUESTRAN y él elige. Nada se aplica al
-      producto sin su OK.
-
-      ✅ **LAS DOS MAQUETAS ESTÁN HECHAS. Falta SU elección (A o B), el merge y el deploy.**
-      Viven en **`/admin/diseno`**, dentro del grupo que ya está cerrado a SUPERADMIN, así que
-      se renderizan sobre el shell REAL del panel y ningún cliente puede llegar: no exhibe
-      obra. No cambia una sola pantalla viva — cada recuadro pisa sus tokens sólo adentro suyo.
-
-      ⚠️ **2026-09-25 (chatbot-cola) — el commit estaba EN VUELO y en ningún remoto: la pieza
-      podía perderse entera, y la tarea que le pide a Sergio Urcullo elegir le daba un link
-      que no abre.** Este párrafo citaba `9d6d7bc6`, que era un commit del clon de casa de
-      `onia-platform` — cuyo `push` está DESHABILITADO a propósito. Medido antes de tocar
-      nada: `git log HEAD --not --remotes=origin --oneline` → **1 commit**, y
-      `git ls-remote --heads origin claude/chatbots-platform-review-0d1d09` devolvía
-      `cef3595b`, o sea la rama viajaba y este commit no. Si ese clon moría, se perdían las
-      dos maquetas y el gate de 8 casos.
-
-      **Entregado hoy al remoto — y el sha cambió, por eso el de arriba ya no se nombra.**
-      `git format-patch` → `git am` en el worktree gemelo del VPS
-      (`/root/loops/onia-platform-chatbot`), con `origin/master` mergeado ANTES (20 commits,
-      **0 conflictos**) para no publicar un árbol que nadie midió. Los tres gates corridos
-      **allá**, sobre el árbol final: `./node_modules/.bin/tsc --noEmit` → **0** (el binario
-      local, no `npx`, que baja otro `tsc` y sale 0 sin compilar), los 8 casos del gate de la
-      pieza → **8/8**, `eslint` → **0**. Publicado en la rama del carril (nunca en `master`):
-      `cef3595..122ac28`, verificado con `git log HEAD --not --remotes=origin` → **0**, no con
-      el exit de un pipe. El clon de casa quedó en `reset --hard` al sha publicado, porque
-      `git am` regenera el sha y citar el local crea un sha fantasma.
-
-      🔴 **Lo que sigue NO es «mostrarle la pantalla»: es el merge a `master` (de `onia-cola`)
-      y después el deploy.** Hasta que eso pase, `app.onia.com.bo/admin/diseno` **da 404** —
-      así que cualquier pedido que le mande el link y le pida decidir se va a quedar esperando
-      para siempre. El cuerpo de su tarea decía las dos cosas a la vez («sólo las ves vos:
-      app.onia.com.bo/admin/diseno» y «la pantalla todavía NO está publicada»); corregido hoy
-      por comentario. El pedido vivo se deriva, no se copia:
-      `/root/bin/onia-tablero.sh list --status blocked | grep -i 'Elegí A o B'`.
-
-      **La causa de su queja, medida y no deducida** — es el dato que faltaba y el que hace
-      que las dos direcciones ataquen lo correcto:
-
-      ```bash
-      grep -rhoE 'className="[^"]*bg-primary[^"]*"' app components | sort -u | wc -l   # → 187
-      ```
-
-      187 variantes distintas del mismo verde primario. Los botones no son feos: son **todos
-      primarios**, y cuando todo resalta nada resalta. Eso es literalmente *"no hay botones
-      que resalten, que se diferencien"*.
-
-      | | idea | qué cuesta |
-      |---|---|---|
-      | **A** | El verde no se toca; cambia el PESO: **una** sola acción llena por pantalla, el resto en verde suave / contorno / texto | Cero riesgo de marca. La más barata; arregla "no se diferencian" pero no agrega brillo |
-      | **B** | Verde para navegar, **ámbar** para actuar: el botón que hay que apretar usa un color que no aparece en ningún otro lado del panel | Un color nuevo en la identidad; hay que revisar que no choque con el amarillo de avisos |
-
-      **Gate** (`app/(dashboard)/admin/diseno/dos-direcciones-comparables.test.ts`, 8 casos,
-      validado por mutación): exactamente dos direcciones, **una sola primaria en cada una**
-      —repetir el defecto adentro de la maqueta no probaría nada—, los cuatro roles cubiertos
-      en ambas para que se comparen parejas, y **cada token que la maqueta pisa tiene que
-      existir en `globals.css`**: si la maqueta pintara con un hex inventado, él elegiría
-      sobre algo que el producto no puede reproducir.
-      Gates: `tsc` 0 · `eslint` 0 · `vitest` 49/49 (incluye `route-access` e
-      `iconos-en-la-fuente` — el icono de la barra es `tune`, que YA está en la fuente
-      subseteada; estrenar uno pinta su NOMBRE en letras gigantes).
-
-      ⚠️ **NO está en producción y no se pushea desde nodo-casa** (el remoto de
-      `onia-platform` está en `DESHABILITADO-NODO-DE-DESARROLLO` a propósito y la llave de
-      deploy sólo existe en el VPS). Entrega por el camino versionado:
-      `scripts/integrar-onia-platform.sh` vía `/root/bin/onia-vps.sh`.
-
-      **Pendiente de este ítem, ahora en este orden:** (1) entregar el commit al VPS;
-      (2) que Sergio Urcullo abra `/admin/diseno` y conteste **A** o **B**; (3) recién ahí se
-      aplica al panel.
-
 - [x] ✅ **CERRADO el 2026-09-11 (`c14db84`, rama `claude/chatbots-platform-review-0d1d09`
       de onia-platform — falta mergear a `master` y desplegar; pedido `t_cba4fa74`): el
       ✅ YA DESPLEGADO (medido 2026-09-25: `c14db84` `8d9e467` vive en produccion `39234c89`).
@@ -2606,22 +2528,6 @@ y sin operar. Acá se opera, con verificación por ítem.
       confundir con el TCO del BCB de importadora) + `formatUsdAprox()`, pintado en las
       tarjetas de plan del checkout, el "Monto a pagar"/QR, el add-on chatbot y PlanClient.
 
-- [ ] 🔴 **T-plata — dos bloqueos que solo Sergio Urcullo puede pagar** (detectados el
-      10-sep midiendo el precio de la recarga; avisados por el tablero):
-      (1) **OpenAI sin crédito desde el 9-sep ~04-06 UTC** (medido en LiteLLM_SpendLogs: 38
-      failures 429): la rama off-guion del bot cae al texto de respaldo (no muda, pero no
-      reformula) y **Hermes está caído entero** (misma cuenta). Recargar en
-      platform.openai.com. El gasto del bot es ruido: USD 0,00085 en toda su historia.
-      (2) **Método de pago en Meta antes del 1-oct-2026**: la hoja oficial "effective
-      October 1, 2026" ya salió — service USD 0,0113/mensaje (Rest of Latin America, cubre
-      Bolivia) tras 1.000 mensajes de servicio gratis/mes por número; **sin tarjeta cargada
-      Meta DEJA DE ENTREGAR desde el mensaje 1.001** — bot mudo a mitad de mes. Vale para
-      nuestro número y para cada cliente con número propio (anotarlo en el onboarding del
-      canal WhatsApp). Fundamento completo en el comentario de RECARGA_CONVERSACIONES de
-      `onia-platform/lib/pricing.ts` y memoria meta-whatsapp-clientes actualizada.
-      **LISTO =** crédito OpenAI >0 (el off-guion vuelve a reformular, Hermes contesta) y
-      método de pago visible en el billing de Meta.
-
 - [x] 🔴 **CERRADO el 2026-09-11: el gasto de Hermes bajado ~10x** (pedido de Sergio
       Urcullo: "no puedo permitirme gastar mucho"). Atribuido ANTES de cortar (regla
       hermes-gasto-bajar-no-subir): 98% del gasto era gpt-5-mini con ~100K tokens de prompt
@@ -2633,13 +2539,6 @@ y sin operar. Acá se opera, con verificación por ítem.
       mas caro (onia-ordenador-tablero) de cada 6 h a 2/dia (13:00 y 23:00 UTC). Proyeccion:
       de ~$25-30/mes a ~$2-4/mes. ⚠️ Pendiente estructural anotado abajo: la memoria vuelve
       a crecer si nadie la compacta — tope automatico.
-
-- [ ] 🟡 **La memoria de Hermes necesita TOPE automatico de compactacion.** La de 500 KB se
-      compacto a mano el 11-sep, pero onia-aprender.sh y el supervisor siguen appendeando:
-      sin tope vuelve a inflarse en semanas. Fix: cron semanal (o en el propio sync) que si
-      /root/.hermes/memories/MEMORY.md supera ~100 KB dispara compactacion con backup; engancharlo al sync de loops que ya corre cada hora (fuente en el repo: `scripts/loops/README.md`)
-      (mismo criterio del 11-sep: regla + 1 linea de porque, datos operativos textuales).
-      Carril loops. **LISTO =** dos semanas seguidas con MEMORY.md < 100 KB sin mano humana.
 
 - [x] 🟡 **CERRADO el 2026-09-11: banda GRANDE de renovacion en el panel** (pedido de Sergio
       Urcullo: "un apartado grande en la pantalla que avise con opcion de generar el QR").
@@ -2656,14 +2555,6 @@ y sin operar. Acá se opera, con verificación por ítem.
       Publicar + probador; Seguimiento/cita/palabras clave/catálogo/FAQ plegados en un
       `<details>` "Opciones avanzadas" que se abre solo ante un error del validador
       (`onia-platform/app/(dashboard)/settings/chatbot/ChatbotClient.tsx`, 242 tests verdes).
-
-- [ ] 🟡 **BYOK (clave de IA propia) como opción avanzada — hoy NO existe y está bien.** El
-      LLM del bot de cada cliente es el LiteLLM central de Onia (clave nuestra, cero
-      configuración del cliente = el lema). Cuando un cliente grande lo pida: campo "Clave de
-      OpenAI propia (opcional)" en Opciones avanzadas del editor, que el motor use por-inbox
-      (`hermes-content/deploy/vps-ops/bot/run-turn.mjs` askLiteLLM lee env; pasaría a leer
-      del knowledge de la org). No construir antes de que exista el pedido real.
-
 
 - [x] ✅ **T-nueva — CERRADO el 2026-09-10 23:45 UTC: su LISTO se cumple hoy.** Contado en
       `supabase-db`, no deducido: `public.organizations` tiene **3 filas** (`onia-interna`,
@@ -3405,89 +3296,6 @@ y sin operar. Acá se opera, con verificación por ítem.
       GoTrue, que es lo más probable que vea quien aprieta el botón, y el `entregado` que
       impide cantar "listo" sin que GoTrue lo acepte. Árbol publicado idéntico al medido
       (`tree 0a5e033d`, tsc 0 · 4.311 tests · eslint 0).
-
-- [ ] 🔴 **Nadie probó que el correo de confirmación LLEGUE a una bandeja — y sin ese clic el
-      alta nueva muere** (`app/auth/confirm/route.ts` · `scripts/alta_correo_confirma.mjs`)**.**
-      Medido el 2026-09-10 con el circuito entero: GoTrue manda por Postfix
-      (`onia-mail`), DKIM firmado, y Gmail aceptó con `250 OK` dos veces. Pero un 250 no es
-      bandeja — "Gmail acepta y descarta" (skill `onia-verificacion`). El caso real que lo
-      motiva: `sergio.urcullo.m@gmail.com` (alta del 31-ago, org Bolivian electricidad) pasó
-      **10 días sin confirmar y sin poder entrar** — su enlace era del flujo PKCE viejo (el
-      arreglo `/auth/confirm` con `token_hash` nació el 1-sep, un día tarde para él) y el 403
-      del login (`email_not_confirmed`) no se lo contó nadie. Se le reenvió el 10-sep con el
-      flujo nuevo y Gmail lo aceptó. LISTO = una alta QA de punta a punta donde el enlace se
-      abre DESDE el correo recibido en una bandeja real (no spam), el login entra, y el
-      SPF/DMARC de `onia.com.bo` queda verificado con el resultado pegado.
-
-      **MEDIDO EL 2026-09-10 (chatbot-cola): el enlace del correo SÍ deja entrar, y queda
-      UNA sola cosa sin probar — el veredicto de spam de Gmail, que no se puede mirar desde
-      acá.** Alta QA real contra producción (`POST /api/auth/register`, org
-      `zz-qa-correo-2026-09-10-0847`, correo `oninteligenciaartificial+zzqa09101247@gmail.com`,
-      HTTP 200 en 1,6 s) y el circuito entero, paso por paso:
-
-      - **Sale:** GoTrue registró `user_confirmation_requested` y Postfix lo relevó él mismo a
-        `gmail-smtp-in.l.google.com` — `dsn=2.0.0, status=sent (250 2.0.0 OK … gsmtp)`, con
-        `opendkim: DKIM-Signature field added (s=mail, d=onia.com.bo)` y
-        `from=<business@onia.com.bo>`.
-      - **Está autenticado, con el resultado pegado:**
-        `SPF: v=spf1 ip4:187.77.16.63 include:_spf.mx.cloudflare.net ~all` (el 187.77.16.63 es
-        el mismo IP desde el que Postfix entregó, o sea SPF alineado) ·
-        `DMARC: v=DMARC1; p=none; rua=mailto:business@onia.com.bo; fo=1` ·
-        `DKIM mail._domainkey.onia.com.bo: v=DKIM1;h=sha256;k=rsa;p=MIIBIjANBg…` (resuelve).
-
-        ⚠️ **«Resuelve» no confirmaba nada, y era el único pilar sin medir — corregido el
-        2026-09-24 17:10 La Paz.** Que el TXT exista prueba que hay UNA clave publicada, no que
-        sea **la que firma**: si rotan una de las dos y no la otra, cada correo sale con una
-        llave que no abre, Gmail lo manda a Spam, y Postfix sigue logueando `250 OK` — porque el
-        250 es del RECIBO, no del veredicto. Es un fallo mudo que mata el alta entera.
-        Medido ahora, las dos puntas lado a lado: el `p=` publicado contra la pública derivada de
-        `/etc/opendkim/keys/onia.com.bo.private` dentro de `onia-mail`
-        (`openssl rsa -pubout`). **Coinciden byte a byte** (ambas terminan en
-        `…jUNH3lKE8Iz+vQIDAQAB`). O sea que el pilar de autenticación está entero y **el
-        veredicto de Gmail, sea cual sea, no se explica por DKIM**.
-      - **El enlace que VIAJA en el correo funciona, y en OTRO navegador.** La plantilla
-        (`app.onia.com.bo/correos-auth/confirmacion.html`, la que GoTrue descarga) arma
-        `{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=signup`; el token real de
-        `auth.users.confirmation_token` era `pkce_f70615b…` — **el prefijo PKCE que mató al alta
-        del 31-ago sigue ahí**, y aun así `/auth/confirm` lo canjea bien: aterrizó en
-        `/onboarding` desde un contexto limpio, que es el caso normal (uno se registra en la
-        compu y abre el mail en el teléfono). Capturado y MIRADO.
-      - **El login entra** en un navegador que nunca vio el alta: `/login` con ese correo y su
-        clave → `/onboarding`, con el nombre del negocio ya cargado. Capturado y MIRADO.
-      - **Instrumento, para que esto no se vuelva a medir a mano:**
-        `node scripts/alta_correo_confirma.mjs --email <correo> --password <clave>`
-        (`npm run alta:correo-vivo`). Su `--self-check` (8 casos) va **cableado a la cadena
-        `npm test`** como `test:alta-correo` — un instrumento vivo que queda de alias suelto no
-        lo corre nadie —, y la medición viva queda aparte porque necesita producción. Validado
-        por mutación: con `veredictoDelEnlace` siempre en verde, `exit 1` y 4 casos en rojo.
-        Reconstruye la URL del correo desde la MISMA fuente
-        que GoTrue en vez de inventarla, y prueba el login en contexto limpio a propósito —
-        confirmar deja sesión en el navegador que abrió el enlace, así que probar ahí no
-        probaría nada del login. Sale `2` (no medido) si no puede leer el token: un instrumento
-        que no puede medir lo dice, no sale verde.
-      - **Producción quedó limpia:** la org, su perfil y el usuario de Auth borrados (0/0/0), y
-        las **5** organizaciones `zz-qa%` de otros carriles intactas.
-      - **Instrumento de los tres pilares (2026-09-24):** `npm run correo:llega`
-        (`scripts/correo_que_llega.mjs`), hermano de `alta_correo_confirma.mjs` y con otra
-        pregunta — aquél mide «si el correo llega, ¿el enlace deja entrar?» leyendo el token de
-        la base, así que da verde aunque el mail no salga nunca. Éste mide lo de antes: si tiene
-        **con qué** llegar. Los tres pilares en una corrida, tri-estado (`2` = no medí, nunca un
-        verde a medias), y el que importa es la comparación publicada↔que-firma. Su `--self-check`
-        (28 casos) va cableado a `npm test` como `test:correo-llega`; la medición viva queda
-        aparte porque necesita el contenedor de correo. Validado por mutación: con `mismaClave`
-        siempre en verde, `exit 1` y los **4** casos de DKIM en rojo por su motivo, ninguno por
-        ruido. Descarta el fallo de autenticación; **no** prueba Recibidos — eso sigue siendo la
-        mirada de abajo.
-
-      🔴 **Lo único que falta, y no lo puede hacer este carril: mirar si Gmail lo puso en
-      Recibidos o en Spam.** El `250 OK` es aceptación, no bandeja, y el conector de Gmail pide
-      una autorización que una sesión de loop no puede dar. Es una MIRADA de 5 segundos, no una
-      investigación: el mensaje ya está en la cuenta, asunto **«Confirmá tu correo · Onia»**,
-      para `oninteligenciaartificial+zzqa09101247@gmail.com`, del 10-sep 12:47 UTC (08:47 La
-      Paz). Preguntado en el tablero: `t_040684cb`, `blocked` verificado con `show` (un `exit 0`
-      de `block` no prueba que haya quedado bloqueada). Si contesta **Spam**, el arreglo es
-      nuestro y no pide nada más de él: subir `DMARC` de `p=none` a `p=quarantine` y revisar el
-      remitente. Si contesta **Recibidos**, el punto se cierra.
 
 - [x] 🔴 **CERRADO el 2026-09-10 (`0735d5c`, ya en `master` — verificado el 2026-09-10): el
       recordatorio del add-on de WhatsApp salía hacia Meta con un número que WhatsApp no puede
@@ -4485,73 +4293,6 @@ y sin operar. Acá se opera, con verificación por ítem.
       ⚠️ **Commiteado y en la rama, NO desplegado**: viaja con el pedido de deploy de `plataforma`.
       ✅ YA DESPLEGADO (medido 2026-09-25: `e6a7012` `55cfbf4` vive en produccion `39234c89`).
 
-- [ ] 🔴 **Hay arreglos verdes esperando UN `ok` de Sergio Urcullo, y no llegan al cliente.**
-      Medido el 2026-09-06 10:35 UTC por `onia-cola`: **tres** destinos con pedido en `blocked`,
-      uno por destino, y **ninguno contestado**.
-
-      | destino | cuánto falta por publicar — se DERIVA, no se copia |
-      |---|---|
-      | `landing` (`onia.com.bo`) | `bash /opt/onia-landing/_deploy/publicar.sh --dry-run` |
-      | `plataforma` (`app.onia.com.bo`) | `bash /opt/onia-platform/_deploy/publicar.sh --dry-run` |
-      | `bot` (WhatsApp) | `bash /opt/onia/bot/_deploy/publicar.sh --dry-run` |
-
-      ⚠️ **Acá había una columna con las cifras (25 / 3 / 17) y se sacó el 2026-09-06 17:55 La
-      Paz, porque un número escrito acá se pudre en una hora.** Cada merge a `main` lo sube y
-      cada swap lo baja a cero, así que la tabla mentía casi siempre — y en las dos direcciones:
-      de más («quedan 25» cuando ya se publicaron) y de menos («quedan 3» con 27 esperando). Es
-      el MISMO defecto que este ítem ya documenta dos párrafos abajo para los IDs de tarea
-      escritos a mano, un escalón más arriba: **lo que cambia solo no se copia, se deriva.** Los
-      tres comandos salen con código 0 sin tocar producción y ya filtran lo que no viaja al
-      navegador; medido así el 2026-09-06 17:38 La Paz daban 27 · 4 · 17 archivos.
-
-      ⚠️ **La plataforma SE PUBLICÓ el 2026-09-06 a las 17:08 UTC (13:08 La Paz), y esta tabla
-      decía lo contrario — corregido a las 19:45 UTC por `onia-cola`.** Decía «22 sin desplegar,
-      corre `build-545dd28`». Hoy corre `build-5fc8bcd` y los **trece** shas que el pedido
-      prometía están adentro (`8b420b6 38bcf8a 195349b 2099778 5922faa 30526c3 5fc333d ad2d45f
-      3fe2db9 06b68c9 a797954 df3e645 bcdfd79`, verificados uno por uno con
-      `git merge-base --is-ancestor <sha> 5fc8bcd`): el alta sin horarios, el corte del mediodía,
-      los dos rubros que el panel negaba, el botón Otorgar sin efecto, la Planilla sin camino y
-      las métricas del asistente **están vivos**. El pedido siguió `blocked` igual, así que le
-      pedía a Sergio Urcullo un `ok` **por trabajo ya hecho** — el modo de falla que este ítem
-      describe, pero al revés: no «dice resuelto sobre lo pendiente», sino **«dice pendiente
-      sobre lo resuelto»**, y de ese lado nadie sospecha porque el pedido sigue ahí, prolijo y
-      ejecutable. Cerrado con su evidencia; los **3** arreglos posteriores tienen pedido nuevo,
-      porque el cuerpo del viejo no los describía y el cuerpo es lo único que él lee.
-
-      **La cifra de la tabla se saca del publicador, no de `git log`.** `bash
-      /opt/onia-platform/_deploy/publicar.sh --dry-run` (y su gemelo de `onia-landing`) filtra lo
-      que no viaja al navegador: el mismo día `git log --since` crudo daba **42** para landing, el
-      cuerpo de la tarea decía **24** y el publicador **25**. Sólo la última es accionable.
-
-      **Este loop NO vuelve a avisar de esto**: el integrador ya mide y ya creó el pedido; un
-      segundo aviso del mismo hecho es el spam que hizo que nadie leyera el primero. Lo que sí
-      hace este carril es **no dar por entregado** un arreglo suyo mientras su pedido siga en
-      `blocked` — construido ≠ terminado.
-
-      ⚠️ **Acá había DOS IDs de tarea escritos a mano (`t_e05a44d7`, `t_8ac57b3f`) y los dos
-      caducaron — corregido el 2026-09-06.** Hoy figuran `archived` y **`done`**, y el ítem
-      remataba con *«Pedidos: `onia-tablero.sh show t_8ac57b3f`»*: quien lo obedecía leía
-      **`done`** y concluía que la plataforma ya se había desplegado, con **22 arreglos** que el
-      cliente no ve. Un pedido de deploy **se rehace** cuando su evidencia envejece (el `edit` del
-      tablero no cambia el cuerpo), así que el ID viejo muere y el nuevo no está escrito en
-      ningún lado — el ID rota **en la dirección cara**: dice «resuelto» sobre lo que sigue sin
-      publicar. Es el mismo remedio que ya se le aplicó al comando de deploy, un escalón más
-      arriba: **el pedido vivo se DERIVA, nunca se copia de una medición anterior.**
-
-      ```sh
-      # los pedidos vivos, sin IDs escritos a mano (uno por destino, o sobra/falta uno):
-      for id in $(/root/bin/onia-tablero.sh list | grep -E '^[⊘▶◻]' | awk '{print $2}'); do
-        d=$(/root/bin/onia-tablero.sh show "$id" | grep -iE '^DESPLEGAR:')
-        [ -n "$d" ] && echo "$id  $d"
-      done
-      # 2026-09-06 devuelve exactamente 3 lineas: bot, landing, plataforma.
-      # Ojo: NO usar `show | grep -q &&`, que cierra el pipe antes de tiempo y el
-      # tablero remata con un BrokenPipeError que se lee como si fallara.
-      ```
-
-      Evidencia: `hermes-content/docs/cola/plataforma-v1.md` (este archivo) y el runbook
-      `onia-platform/.claude/skills/onia-deploy/SKILL.md`.
-
 - [x] 🔴 **§8 ítem 1 estaba CUMPLIDO, no falso — y la vuelta del 2026-09-05 lo dio vuelta al
       revés. Corregido el mismo día, midiendo contra `origin/master`.** El pendiente decía
       *"terminar el arreglo de servicios profesionales (`/patients` en su nav)"*. **Ya estaba
@@ -5462,140 +5203,6 @@ y sin operar. Acá se opera, con verificación por ítem.
       `npx eslint .` 0 errores. **No está terminado hasta que se publique:** viaja en el pedido
       `t_deddf471` (`DESPLEGAR: plataforma`), que espera el `ok` de Sergio Urcullo.
 
-- [ ] 🔴 **SIAT entra en la v1.0 — decisión de Sergio Urcullo, 2026-09-07: «sin factura no se
-      vende». Y el rótulo de este ítem estaba MAL, que es por qué llevaba semanas al final.**
-      Este mismo ítem decía *«es un trámite externo, no código»* y *«va último a propósito»*.
-      Medido hoy contra `ONIA_SIAT_ESTADO_HOMOLOGACION.md`: lo que falta **no es un trámite**,
-      son **5 de 6 tipos de caso sin cubrir**. El NIT está limpio y no bloquea nada.
-
-      **Lo que dice el marcador real del SIN** (última lectura del portal: **2026-08-27, hace 11
-      días — reléela antes de trabajar, no la cites**):
-      · estado `INICIADO`, **24,8% de la Fase 1**, Porcentaje General **0%**;
-      · **el SIN cuenta COBERTURA, no volumen** — 750 documentos contaron como 125 porque eran la
-        misma combinación repetida. Son **6 casos de 125 cada uno**, y **solo 1 está al 100%**;
-      · los que faltan son de tipo `1 · FACTURA COMPRA-VENTA`, `17 · FACTURA DE
-        HOSPITALES/CLÍNICAS` y `24 · NOTA DE CRÉDITO-DÉBITO`, con sus combinaciones;
-      · **límite de pruebas: 04/11/2026** (Art. 18.III). No se mueve.
-
-      ⚠️ **Y sigue en pie la advertencia vieja, que ahora significa otra cosa:** *«si un loop se
-      planta acá esperando, pierde la vuelta»*. Ya no aplica a esperar al SIN — aplica a esperar
-      **a que alguien te diga qué caso emitir**. La cobertura se calcula de la tabla del §5 de ese
-      doc; no hace falta preguntar.
-
-      **Primero medí, después emitís.** El porcentaje de arriba tiene 11 días: una vuelta que
-      trabaje sobre él sin releer el portal puede estar cubriendo un caso ya cerrado.
-
-      **Listo =** Porcentaje General del portal **> 0%** con al menos un caso nuevo al 100%, leído
-      del portal y no deducido. Y el número de esta cola actualizado con la fecha de esa lectura.
-
-      ---
-
-      **Medido el 2026-09-08 (no heredado): la corrida que el doc daba por «corriendo» terminó
-      el 04-sep 04:12 UTC, cuatro días antes**, con el log cerrado en `fin` y cero procesos
-      vivos. Dejó **los tres combos del PdV 0 en 125/125 en las etapas IV, VII y XI** — o sea
-      `pv0-ds17-tf1` y `pv0-ds24-tf3` son **dos casos nuevos al 100%**, que es lo que este
-      «Listo =» pide. **Lo único que falta para cerrarlo es leer el portal**, y eso necesita el
-      login de Sergio Urcullo: no es trabajo de este carril.
-
-      **Y apareció trabajo que sí era de este carril, desbloqueado y sin hacer desde el 6-ago:**
-      las etapas **VI (20/280, 3%)** y **IX (20/80, 12%)** no dependían del PdV 1 ni de nadie.
-      Estaban frenadas porque `ensureCufd()` se cableó sólo en las tres etapas que motivaron su
-      arreglo (IV, VII, XI) y no en sus hermanas, y **nadie lo vio porque
-      `run-fase1-volumen.sh` corre únicamente IV → VII → XI**: el instrumento miraba justo las
-      tres que ya estaban sanas. Arreglado en `a28b3689` (`fase1-runner.mjs`), guardias
-      validados por mutación, 371/371 verdes. **Desbloquea 320 casos** (260 de VI + 60 de IX).
-      Detalle y los dos mensajes del SIN, en `ONIA_SIAT_ESTADO_HOMOLOGACION.md` §7.
-
-      **VI y IX CORRIDAS Y DESBLOQUEADAS el 2026-09-08 02:2x-02:4x UTC** contra el piloto
-      (`codigoAmbiente=2`), con el runner arreglado. Medido en el estado vivo del emisor en el VPS
-      (`/opt/onia-siat/fase1-state.json`), no deducido:
-
-      | etapa | antes | ahora | el error que la tenía frenada |
-      |---|---|---|---|
-      | VI | `pv0: 20` | **`pv0: 22`** (target) | `984 EL EVENTO SIGNIFICATIVO NO CORRESPONDE AL CUFD` — ya no aparece |
-      | IX | `pv0: 20` | **`pv0: 22`** (target) | `123 CUFD FUERA DE TOLERANCIA` — ya no aparece |
-
-      En las dos queda **sólo `pv1`**, que es el bloqueo legítimo: falta crear el Punto de Venta 1
-      en SIAT, y eso es de Sergio Urcullo.
-
-      ⚠️ **`a28b3689` era necesario pero NO suficiente, y esto es lo que valía la vuelta.** Al
-      reintentar con el runner arreglado, VI frenó con *«sin ventana válida para el evento
-      significativo (CUFD o evento previo demasiado frescos): esperar ~2 min y reintentar»*. Ese
-      mensaje —que pide textualmente reintentar— caía en la **misma rama del `catch`** que un
-      prerequisito determinista, así que quedaba escrito en `blockedCases`; `loop()` saltea todo
-      caso bloqueado y `run-fase1-volumen.sh` nunca pasa `--retry-blocked`. **Un tropiezo de dos
-      minutos congelaba la etapa para siempre**, y nada se ponía rojo. Eso —no el `ensureCufd`
-      solo— es lo que las tuvo un mes en 20. Arreglado en `95606460` (`TransitorioError`), con
-      las dos mitades validadas por mutación, 374/374 verdes.
-
-      ⚠️ **Cómo se corrieron, porque importa para repetirlo:** el emisor de `/opt/onia-siat`
-      **no tiene el arreglo** (`ensureCufd` → 4, contra 6 en el repo; su `mtime` es del 04-sep) y
-      su `run-fase1-volumen.sh` ni siquiera nombra a VI y IX (`for E in IV VII XI`). Se corrió el
-      runner **del clon de main del VPS** (`/root/loops/onia-hermes/…`, que sí tiene el arreglo)
-      con el `cwd` y el `.env` de `/opt/onia-siat`, así que el estado y las credenciales son las
-      de producción y **no se desplegó nada**. El emisor sólo usa módulos nativos de node: no
-      necesita `node_modules`. Backup previo:
-      `/opt/onia-siat/fase1-state.backup-20260908-0218.json`.
-
-      **Lo que sigue, en orden:** releer el portal → actualizar el número de acá. **Eso necesita
-      el login de Sergio Urcullo y no es trabajo de este carril.** El PdV 1 (la otra mitad de la
-      matriz) también es suyo. Que `/opt/onia-siat` quede alineado con el repo es la tarea
-      `t_7d2019bb`.
-
-      **2026-09-10 (chatbot-cola) — el bloqueo era REAL pero NADIE se lo había pedido, y además
-      el ok solo no alcanzaba.** Dos cosas medidas, ninguna heredada:
-
-      1. **El bloqueo estaba escrito acá y en ningún lado más.** Las tres tareas de SIAT del
-         tablero figuran `done`: no existía **ninguna** viva pidiéndole el PdV 1. Un bloqueo que
-         vive en un `.md` no le llega a Sergio Urcullo — sólo una tarea `needs_input` le llega
-         por Telegram. Lleva sin pedirse desde el **2026-08-27**, que es cuando el SIN contestó
-         `933 · EL PUNTO DE VENTA ES INEXISTENTE O INVALIDO` (`fase1-log.ndjson`, etapa I,
-         `pv:1`, tres intentos). Pedido en **`t_39a0c27c`**, `status: blocked` verificado con
-         `show` (no con el exit del `block`), con los pasos, el portal, el usuario y los 6 tipos
-         de PdV que ofrece el SIN ya resueltos: es una auditoría de 5 minutos, no una
-         investigación. Cuánto frena, contado del estado vivo y no estimado: **11 combos =
-         1.169 documentos de cobertura** (IV/VII/XI × 3 combos × 125, más VI y IX × 22). Todo
-         el lado `pv0` está **completo en las 9 etapas**.
-         Para re-derivar el pedido vivo sin citar un id que caduca:
-         `onia-tablero.sh list --status blocked | grep -i 'Punto de Venta'`.
-
-      2. 🔴 **Y el ok solo habría repetido el mes perdido.** `run-fase1-volumen.sh` **de
-         producción** seguía con `for E in IV VII XI` — el recorte original, todavía vivo: el
-         deploy del emisor alineó los módulos (`/opt/onia-siat/emisor/src`, hoy idénticos al
-         repo: `ensureCufd` 6=6, `TransitorioError` 4=4) y **no** el orquestador, que vive un
-         nivel más arriba y quedó afuera de la copia. Peor, la copia del repo
-         tampoco corría la **etapa I**, que es la que pide el CUIS por punto de venta. O sea que
-         el día que exista el PdV 1, correr ese script **no lo desbloquea**: los 11 combos
-         volverían a caer con `sin CUIS para el punto de venta 1: correr la etapa I antes`, y
-         VI y IX quedarían clavadas otra vez.
-
-         **Arreglado en la clase, no en la instancia.** Agregar las etapas que faltaban habría
-         sido reponer el mismo defecto un archivo más allá: la lista a mano **es** el defecto —
-         una lista de inclusión al lado de `STAGE_ORDER`, que es la fuente y ya está anclada por
-         test. Ahora el script las **deriva** del runner y **aborta** si no puede leerlas (caer
-         a una lista por defecto haría que una corrida a medias se lea igual que una entera).
-         Verificado ejecutando la derivación contra los módulos reales: devuelve
-         `I II III IV V VI VII IX XI`, las 9.
-
-         **Gate:** `test/fase1-runner.test.mjs` › «run-fase1-volumen.sh corre TODAS las etapas»,
-         validado **por mutación en 3 direcciones** — tipear la lista · el **esquive** (nombrar
-         `STAGE_ORDER` en un comentario y seguir tipeando) · derivar **filtrando la I**: las
-         tres en rojo, base y restaurado en verde.
-         ⚠️ **La tercera pasó en VERDE en la primera versión del gate** y sólo se vio mutando
-         *después* de arreglar: el caso resolvía por texto («si nombra `STAGE_ORDER`, corre
-         `STAGE_ORDER`»), o sea comparaba la fuente contra sí misma. Ahora **ejecuta** el
-         `node -e` del script en un sandbox con el layout del VPS y afirma sobre la salida.
-
-         **Y el gate no lo corría nadie:** los **92** tests del emisor —el módulo del que
-         depende la v1.0 por la decisión del 07-sep— **no estaban en la cadena `npm test`**.
-         Cableados como `test:siat-fase1` (puro, sin red ni repo hermano, 4,3 s): 92/92 verdes,
-         `test:guards-cableados` verde.
-
-         🔴 **Commiteado, NO desplegado:** `/opt/onia-siat/run-fase1-volumen.sh` sigue con las
-         tres etapas viejas. Desplegar no es de este carril — va por `DESPLEGAR: siat`. **Esto
-         tiene que llegar ANTES de que se corra la matriz de `pv1`**, o el ok de Sergio Urcullo
-         desbloquea 1.125 de los 1.169 y repite el bug de VI y IX.
-
 - [x] 🔴 **CERRADO el 2026-09-08: una cuenta APAGADA seguía tomando reservas por la puerta
       pública, y el desconocido que reservaba se presentaba a un negocio que no lo esperaba.**
       `POST /api/booking/appointments` crea un `patient` y una `appointment` en la base del
@@ -5891,7 +5498,497 @@ y sin operar. Acá se opera, con verificación por ítem.
 
       ⚠️ **Es un gate: no cambia nada que el cliente vea, así que no pide deploy.**
 
+## Bloqueado en Sergio Urcullo
+
+> **Creada el 2026-09-25 02:35 La Paz.** Hasta hoy este archivo **no tenía esta sección**, así
+> que sus ítems bloqueados vivían dentro de «Ahora» — y «Ahora» es donde cada vuelta busca
+> trabajo. El resultado medido: vueltas que leían miles de líneas para descubrir al final que
+> todo lo abierto esperaba una firma. El `CLAUDE.md` del repo ya manda mover un bloqueado
+> ENTERO a su sección; acá no se podía ejecutar porque **faltaba el destino**.
+>
+> **Un ítem de acá NO se re-mide cada vuelta.** Se vuelve a mirar cuando Sergio Urcullo
+> contesta, o cuando el tablero devuelve su tarea a `ready`. Lo que sí se deriva, siempre con
+> el comando y nunca copiando un ID —que caduca en las dos direcciones—:
+>
+> ```bash
+> /root/bin/onia-tablero.sh list --status blocked
+> ```
+
+- [ ] 🔴 **PORTADA reordenada por veredicto de Sergio Urcullo (11-sep, sobre capturas del
+      preview y de producción) — HECHA en `main` (`a847d9aa`), FALTA su OK mirándola y el
+      deploy.** Sus palabras: *"esto no vende nada… coloca algo que impacte que se vea más el
+      sistema, y el tema de los chatbots es principal, que sea más protagonista, está al final
+      eso, quita esas cajitas que son solo texto… el inicio me gustaba más así como estaba puro
+      texto estilo hostinger… que sea lo principal llevarlos a probar el sistema"*. Qué entró:
+      hero v4 DESCARTADO (vuelve el hero de producción que él aprobó), sección HECHOS retirada,
+      chatbot a la posición 2 con conversación dibujada
+      (`web-factory/apps/onia-platform/src/app/(sitio)/conversacion.tsx`) + CTA al alta.
+      Pendiente de ESTE ítem: (a) **AUDITORÍA PRE-PUBLICACIÓN pedida por Sergio Urcullo antes
+      del deploy** (11-sep, textual: *"verificamos los precios de los add-ons y las pestañas
+      secundarias que no es el hero que estén bien hechas, también verificamos cibersecurity,
+      fallos de estructura de la web, información mal colocada, docs viejos, política de
+      privacidad"*) — dos subagentes barriendo seguridad y contenido de
+      `web-factory/apps/onia-platform/src/`; los hallazgos se arreglan ANTES del deploy;
+      (b) tras la auditoría limpia, su OK → deploy con `/opt/onia-landing/_deploy/publicar.sh`;
+      (c) probar un video HyperFrames como pieza del bloque chatbot ("puedes generar videos con
+      hyperframes también, intentá") — arrancamos con la conversación CSS porque pesa cero.
+      El 11-sep también entró la dieta de la sección de add-ons (`e12b740f`: tarjetas con
+      precio en píldora, ancla del salario en una línea, copys cortos en la fuente única).
+
+- [ ] 🔴 **Dos propuestas de diseño para el dashboard del producto** (Sergio Urcullo, 11-sep:
+      *"ese color que hay ahorita no es nada intuitivo y no hay botones que resalten, que se
+      diferencien para que la experiencia sea más fácil"*). Dos direcciones renderizadas
+      (maquetas sobre el shell real: `onia-platform/app/(dashboard)/layout.tsx` y
+      `onia-platform/app/globals.css`, no dibujos sueltos), con jerarquía de botones
+      primario/secundario y color semántico; se le MUESTRAN y él elige. Nada se aplica al
+      producto sin su OK.
+
+      ✅ **LAS DOS MAQUETAS ESTÁN HECHAS. Falta SU elección (A o B), el merge y el deploy.**
+      Viven en **`/admin/diseno`**, dentro del grupo que ya está cerrado a SUPERADMIN, así que
+      se renderizan sobre el shell REAL del panel y ningún cliente puede llegar: no exhibe
+      obra. No cambia una sola pantalla viva — cada recuadro pisa sus tokens sólo adentro suyo.
+
+      ⚠️ **2026-09-25 (chatbot-cola) — el commit estaba EN VUELO y en ningún remoto: la pieza
+      podía perderse entera, y la tarea que le pide a Sergio Urcullo elegir le daba un link
+      que no abre.** Este párrafo citaba `9d6d7bc6`, que era un commit del clon de casa de
+      `onia-platform` — cuyo `push` está DESHABILITADO a propósito. Medido antes de tocar
+      nada: `git log HEAD --not --remotes=origin --oneline` → **1 commit**, y
+      `git ls-remote --heads origin claude/chatbots-platform-review-0d1d09` devolvía
+      `cef3595b`, o sea la rama viajaba y este commit no. Si ese clon moría, se perdían las
+      dos maquetas y el gate de 8 casos.
+
+      **Entregado hoy al remoto — y el sha cambió, por eso el de arriba ya no se nombra.**
+      `git format-patch` → `git am` en el worktree gemelo del VPS
+      (`/root/loops/onia-platform-chatbot`), con `origin/master` mergeado ANTES (20 commits,
+      **0 conflictos**) para no publicar un árbol que nadie midió. Los tres gates corridos
+      **allá**, sobre el árbol final: `./node_modules/.bin/tsc --noEmit` → **0** (el binario
+      local, no `npx`, que baja otro `tsc` y sale 0 sin compilar), los 8 casos del gate de la
+      pieza → **8/8**, `eslint` → **0**. Publicado en la rama del carril (nunca en `master`):
+      `cef3595..122ac28`, verificado con `git log HEAD --not --remotes=origin` → **0**, no con
+      el exit de un pipe. El clon de casa quedó en `reset --hard` al sha publicado, porque
+      `git am` regenera el sha y citar el local crea un sha fantasma.
+
+      ⚠️ **Acá decía que `app.onia.com.bo/admin/diseno` «da 404» y que faltaba el merge y el
+      deploy. Las dos cosas YA PASARON — medido el 2026-09-25 03:45-03:50 La Paz, no heredado.**
+      `git merge-base --is-ancestor 122ac28e origin/master` → **mergeado**;
+      `docker exec onia-platform ls '/app/.next/server/app/(dashboard)/admin/'` → la carpeta
+      `diseno` está **en el build vivo** (`BUILD_ID p2O3qK8ejw4RQGq9y0CgH`); y la pantalla se
+      abrió con la sesión de `superadmin@onia.com.bo` y se MIRÓ renderizada: HTTP 200, cero
+      respuestas ≥400. Un párrafo que dice «da 404» sobre una pantalla publicada es un bloqueo
+      vencido, y le pide a Sergio Urcullo que espere algo que ya ocurrió.
+
+      🔴 **Y al MIRARLA apareció por qué todavía no puede elegir: las dos direcciones se veían
+      IGUALES.** La dirección B se llama *"Verde para moverse, ámbar para actuar"* y su propia
+      etiqueta dice *"UNA por pantalla, en ámbar. El único ámbar que vas a ver"* — y el botón
+      salía **verde**, el mismo de A. Lo único que las diferenciaba en pantalla era el tono de
+      «Enviar recordatorio». Elegir entre dos maquetas iguales no es elegir.
+
+      **Causa, medida en el CSS servido:** el `@theme inline` de `app/globals.css` hace
+      `--color-primary: var(--primary)`, así que Tailwind compila
+      `.bg-primary{background-color:var(--primary)}`. La maqueta pisaba `--color-primary`, que
+      la utilidad **no lee**. Las otras tres (`text-on-primary`, `bg-primary-container`,
+      `text-on-primary-container`) sí leen su `--color-*` y por eso funcionaban: media familia
+      sana se lee como familia sana.
+
+      ```bash
+      docker exec onia-platform sh -lc 'grep -rhoE "\.bg-primary\{[^}]*\}" /app/.next/static/css/*.css | head -1'
+      # → .bg-primary{background-color:var(--primary)}
+      ```
+
+      **El gate de 8 casos pasaba en verde porque preguntaba lo que no era:** exigía que el
+      token *existiera* en `globals.css` (existe) y comparaba las direcciones por el **JSON de
+      sus clases y tokens declarados** (difieren en el papel). Ninguna de las dos preguntas
+      mira el color con el que termina la pantalla. Arreglado en **`7ed179c3`** (rama
+      `claude/chatbots-platform-review-0d1d09` de `onia-platform`, publicada `122ac28e..7ed179c3`
+      con `git log HEAD --not --remotes=origin` → 0): B pisa ahora `--primary` **y**
+      `--color-primary` —las clases `.imp-*` leen la segunda cruda— y entran tres casos que sí
+      miden: que el remapeo de `@theme inline` se haya leído de verdad (sin eso los otros dos
+      pasan vacíos), que todo token pisado sea el que la utilidad **lee**, y que la primaria de
+      A y la de B **no resuelvan al mismo color**. Validado por el rojo previo:
+      `"B: pisa --color-primary, pero la utilidad lee --primary"` y
+      `expected '#027650' to not deeply equal '#027650'`. Gates corridos **en el VPS** sobre el
+      árbol final (con `origin/master` mergeado, 24 commits, 0 conflictos): `tsc --noEmit` **0**,
+      `eslint` **0 errores**, **6.489** tests verdes.
+
+      🔴 **Lo que sigue: merge de `7ed179c3` a `master` (de `onia-cola`) y deploy. Recién
+      después él puede elegir** — si mira antes, elige entre dos pantallas iguales. El pedido
+      vivo se deriva, no se copia:
+      `/root/bin/onia-tablero.sh list --status blocked | grep -i 'Elegí A o B'`.
+
+      **La causa de su queja, medida y no deducida** — es el dato que faltaba y el que hace
+      que las dos direcciones ataquen lo correcto:
+
+      ```bash
+      grep -rhoE 'className="[^"]*bg-primary[^"]*"' app components | sort -u | wc -l   # → 187
+      ```
+
+      187 variantes distintas del mismo verde primario. Los botones no son feos: son **todos
+      primarios**, y cuando todo resalta nada resalta. Eso es literalmente *"no hay botones
+      que resalten, que se diferencien"*.
+
+      | | idea | qué cuesta |
+      |---|---|---|
+      | **A** | El verde no se toca; cambia el PESO: **una** sola acción llena por pantalla, el resto en verde suave / contorno / texto | Cero riesgo de marca. La más barata; arregla "no se diferencian" pero no agrega brillo |
+      | **B** | Verde para navegar, **ámbar** para actuar: el botón que hay que apretar usa un color que no aparece en ningún otro lado del panel | Un color nuevo en la identidad; hay que revisar que no choque con el amarillo de avisos |
+
+      **Gate** (`app/(dashboard)/admin/diseno/dos-direcciones-comparables.test.ts`, 8 casos,
+      validado por mutación): exactamente dos direcciones, **una sola primaria en cada una**
+      —repetir el defecto adentro de la maqueta no probaría nada—, los cuatro roles cubiertos
+      en ambas para que se comparen parejas, y **cada token que la maqueta pisa tiene que
+      existir en `globals.css`**: si la maqueta pintara con un hex inventado, él elegiría
+      sobre algo que el producto no puede reproducir.
+      Gates: `tsc` 0 · `eslint` 0 · `vitest` 49/49 (incluye `route-access` e
+      `iconos-en-la-fuente` — el icono de la barra es `tune`, que YA está en la fuente
+      subseteada; estrenar uno pinta su NOMBRE en letras gigantes).
+
+      ⚠️ **NO está en producción y no se pushea desde nodo-casa** (el remoto de
+      `onia-platform` está en `DESHABILITADO-NODO-DE-DESARROLLO` a propósito y la llave de
+      deploy sólo existe en el VPS). Entrega por el camino versionado:
+      `scripts/integrar-onia-platform.sh` vía `/root/bin/onia-vps.sh`.
+
+      **Pendiente de este ítem, ahora en este orden** (el paso «entregar el commit al VPS» ya
+      no está: se cumplió, y la pantalla se publicó sola tras el merge): (1) merge de
+      `7ed179c3` a `master` y su deploy, sin los cuales B sigue saliendo verde para él;
+      (2) que Sergio Urcullo abra `/admin/diseno` y conteste **A** o **B**; (3) recién ahí se
+      aplica al panel.
+
+- [ ] 🔴 **T-plata — dos bloqueos que solo Sergio Urcullo puede pagar** (detectados el
+      10-sep midiendo el precio de la recarga; avisados por el tablero):
+      (1) **OpenAI sin crédito desde el 9-sep ~04-06 UTC** (medido en LiteLLM_SpendLogs: 38
+      failures 429): la rama off-guion del bot cae al texto de respaldo (no muda, pero no
+      reformula) y **Hermes está caído entero** (misma cuenta). Recargar en
+      platform.openai.com. El gasto del bot es ruido: USD 0,00085 en toda su historia.
+      (2) **Método de pago en Meta antes del 1-oct-2026**: la hoja oficial "effective
+      October 1, 2026" ya salió — service USD 0,0113/mensaje (Rest of Latin America, cubre
+      Bolivia) tras 1.000 mensajes de servicio gratis/mes por número; **sin tarjeta cargada
+      Meta DEJA DE ENTREGAR desde el mensaje 1.001** — bot mudo a mitad de mes. Vale para
+      nuestro número y para cada cliente con número propio (anotarlo en el onboarding del
+      canal WhatsApp). Fundamento completo en el comentario de RECARGA_CONVERSACIONES de
+      `onia-platform/lib/pricing.ts` y memoria meta-whatsapp-clientes actualizada.
+      **LISTO =** crédito OpenAI >0 (el off-guion vuelve a reformular, Hermes contesta) y
+      método de pago visible en el billing de Meta.
+
+- [ ] 🔴 **Nadie probó que el correo de confirmación LLEGUE a una bandeja — y sin ese clic el
+      alta nueva muere** (`app/auth/confirm/route.ts` · `scripts/alta_correo_confirma.mjs`)**.**
+      Medido el 2026-09-10 con el circuito entero: GoTrue manda por Postfix
+      (`onia-mail`), DKIM firmado, y Gmail aceptó con `250 OK` dos veces. Pero un 250 no es
+      bandeja — "Gmail acepta y descarta" (skill `onia-verificacion`). El caso real que lo
+      motiva: `sergio.urcullo.m@gmail.com` (alta del 31-ago, org Bolivian electricidad) pasó
+      **10 días sin confirmar y sin poder entrar** — su enlace era del flujo PKCE viejo (el
+      arreglo `/auth/confirm` con `token_hash` nació el 1-sep, un día tarde para él) y el 403
+      del login (`email_not_confirmed`) no se lo contó nadie. Se le reenvió el 10-sep con el
+      flujo nuevo y Gmail lo aceptó. LISTO = una alta QA de punta a punta donde el enlace se
+      abre DESDE el correo recibido en una bandeja real (no spam), el login entra, y el
+      SPF/DMARC de `onia.com.bo` queda verificado con el resultado pegado.
+
+      **MEDIDO EL 2026-09-10 (chatbot-cola): el enlace del correo SÍ deja entrar, y queda
+      UNA sola cosa sin probar — el veredicto de spam de Gmail, que no se puede mirar desde
+      acá.** Alta QA real contra producción (`POST /api/auth/register`, org
+      `zz-qa-correo-2026-09-10-0847`, correo `oninteligenciaartificial+zzqa09101247@gmail.com`,
+      HTTP 200 en 1,6 s) y el circuito entero, paso por paso:
+
+      - **Sale:** GoTrue registró `user_confirmation_requested` y Postfix lo relevó él mismo a
+        `gmail-smtp-in.l.google.com` — `dsn=2.0.0, status=sent (250 2.0.0 OK … gsmtp)`, con
+        `opendkim: DKIM-Signature field added (s=mail, d=onia.com.bo)` y
+        `from=<business@onia.com.bo>`.
+      - **Está autenticado, con el resultado pegado:**
+        `SPF: v=spf1 ip4:187.77.16.63 include:_spf.mx.cloudflare.net ~all` (el 187.77.16.63 es
+        el mismo IP desde el que Postfix entregó, o sea SPF alineado) ·
+        `DMARC: v=DMARC1; p=none; rua=mailto:business@onia.com.bo; fo=1` ·
+        `DKIM mail._domainkey.onia.com.bo: v=DKIM1;h=sha256;k=rsa;p=MIIBIjANBg…` (resuelve).
+
+        ⚠️ **«Resuelve» no confirmaba nada, y era el único pilar sin medir — corregido el
+        2026-09-24 17:10 La Paz.** Que el TXT exista prueba que hay UNA clave publicada, no que
+        sea **la que firma**: si rotan una de las dos y no la otra, cada correo sale con una
+        llave que no abre, Gmail lo manda a Spam, y Postfix sigue logueando `250 OK` — porque el
+        250 es del RECIBO, no del veredicto. Es un fallo mudo que mata el alta entera.
+        Medido ahora, las dos puntas lado a lado: el `p=` publicado contra la pública derivada de
+        `/etc/opendkim/keys/onia.com.bo.private` dentro de `onia-mail`
+        (`openssl rsa -pubout`). **Coinciden byte a byte** (ambas terminan en
+        `…jUNH3lKE8Iz+vQIDAQAB`). O sea que el pilar de autenticación está entero y **el
+        veredicto de Gmail, sea cual sea, no se explica por DKIM**.
+      - **El enlace que VIAJA en el correo funciona, y en OTRO navegador.** La plantilla
+        (`app.onia.com.bo/correos-auth/confirmacion.html`, la que GoTrue descarga) arma
+        `{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=signup`; el token real de
+        `auth.users.confirmation_token` era `pkce_f70615b…` — **el prefijo PKCE que mató al alta
+        del 31-ago sigue ahí**, y aun así `/auth/confirm` lo canjea bien: aterrizó en
+        `/onboarding` desde un contexto limpio, que es el caso normal (uno se registra en la
+        compu y abre el mail en el teléfono). Capturado y MIRADO.
+      - **El login entra** en un navegador que nunca vio el alta: `/login` con ese correo y su
+        clave → `/onboarding`, con el nombre del negocio ya cargado. Capturado y MIRADO.
+      - **Instrumento, para que esto no se vuelva a medir a mano:**
+        `node scripts/alta_correo_confirma.mjs --email <correo> --password <clave>`
+        (`npm run alta:correo-vivo`). Su `--self-check` (8 casos) va **cableado a la cadena
+        `npm test`** como `test:alta-correo` — un instrumento vivo que queda de alias suelto no
+        lo corre nadie —, y la medición viva queda aparte porque necesita producción. Validado
+        por mutación: con `veredictoDelEnlace` siempre en verde, `exit 1` y 4 casos en rojo.
+        Reconstruye la URL del correo desde la MISMA fuente
+        que GoTrue en vez de inventarla, y prueba el login en contexto limpio a propósito —
+        confirmar deja sesión en el navegador que abrió el enlace, así que probar ahí no
+        probaría nada del login. Sale `2` (no medido) si no puede leer el token: un instrumento
+        que no puede medir lo dice, no sale verde.
+      - **Producción quedó limpia:** la org, su perfil y el usuario de Auth borrados (0/0/0), y
+        las **5** organizaciones `zz-qa%` de otros carriles intactas.
+      - **Instrumento de los tres pilares (2026-09-24):** `npm run correo:llega`
+        (`scripts/correo_que_llega.mjs`), hermano de `alta_correo_confirma.mjs` y con otra
+        pregunta — aquél mide «si el correo llega, ¿el enlace deja entrar?» leyendo el token de
+        la base, así que da verde aunque el mail no salga nunca. Éste mide lo de antes: si tiene
+        **con qué** llegar. Los tres pilares en una corrida, tri-estado (`2` = no medí, nunca un
+        verde a medias), y el que importa es la comparación publicada↔que-firma. Su `--self-check`
+        (28 casos) va cableado a `npm test` como `test:correo-llega`; la medición viva queda
+        aparte porque necesita el contenedor de correo. Validado por mutación: con `mismaClave`
+        siempre en verde, `exit 1` y los **4** casos de DKIM en rojo por su motivo, ninguno por
+        ruido. Descarta el fallo de autenticación; **no** prueba Recibidos — eso sigue siendo la
+        mirada de abajo.
+
+      🔴 **Lo único que falta, y no lo puede hacer este carril: mirar si Gmail lo puso en
+      Recibidos o en Spam.** El `250 OK` es aceptación, no bandeja, y el conector de Gmail pide
+      una autorización que una sesión de loop no puede dar. Es una MIRADA de 5 segundos, no una
+      investigación: el mensaje ya está en la cuenta, asunto **«Confirmá tu correo · Onia»**,
+      para `oninteligenciaartificial+zzqa09101247@gmail.com`, del 10-sep 12:47 UTC (08:47 La
+      Paz). Preguntado en el tablero: `t_040684cb`, `blocked` verificado con `show` (un `exit 0`
+      de `block` no prueba que haya quedado bloqueada). Si contesta **Spam**, el arreglo es
+      nuestro y no pide nada más de él: subir `DMARC` de `p=none` a `p=quarantine` y revisar el
+      remitente. Si contesta **Recibidos**, el punto se cierra.
+
+      ⚠️ **Cómo se re-prueba el bloqueo en 30 s, porque el conector ENGAÑA — medido el
+      2026-09-25 01:55 La Paz.** Esta vuelta lo reintentó (un bloqueo vencido es peor que un
+      fantasma: le pide a Sergio Urcullo una decisión que ya tomó) y el modo de falla no es el
+      que este párrafo hacía esperar. Gmail **no** aparece entre los servidores que piden OAuth
+      —ahí sólo salen Cloudflare, Fillout y N8N—, sus herramientas **sí** se listan y
+      `ToolSearch` devuelve el esquema completo de `search_threads`: hasta ahí todo se lee como
+      «ya está autorizado». El corte llega recién al **llamarla**, y con este texto exacto:
+
+      ```
+      Claude requested permissions to use mcp__claude_ai_Gmail__search_threads,
+      but you haven't granted it yet
+      ```
+
+      O sea: **figurar en la lista, y hasta poder cargar el esquema, no es estar autorizada** —
+      la única prueba es la llamada. Sigue siendo de Sergio Urcullo (autorizar el conector en
+      claude.ai), `t_040684cb` sigue vivo, y el punto sigue sin poder cerrarse desde un loop.
+
+- [ ] 🔴 **Hay arreglos verdes esperando UN `ok` de Sergio Urcullo, y no llegan al cliente.**
+      Medido el 2026-09-06 10:35 UTC por `onia-cola`: **tres** destinos con pedido en `blocked`,
+      uno por destino, y **ninguno contestado**.
+
+      | destino | cuánto falta por publicar — se DERIVA, no se copia |
+      |---|---|
+      | `landing` (`onia.com.bo`) | `bash /opt/onia-landing/_deploy/publicar.sh --dry-run` |
+      | `plataforma` (`app.onia.com.bo`) | `bash /opt/onia-platform/_deploy/publicar.sh --dry-run` |
+      | `bot` (WhatsApp) | `bash /opt/onia/bot/_deploy/publicar.sh --dry-run` |
+
+      ⚠️ **Acá había una columna con las cifras (25 / 3 / 17) y se sacó el 2026-09-06 17:55 La
+      Paz, porque un número escrito acá se pudre en una hora.** Cada merge a `main` lo sube y
+      cada swap lo baja a cero, así que la tabla mentía casi siempre — y en las dos direcciones:
+      de más («quedan 25» cuando ya se publicaron) y de menos («quedan 3» con 27 esperando). Es
+      el MISMO defecto que este ítem ya documenta dos párrafos abajo para los IDs de tarea
+      escritos a mano, un escalón más arriba: **lo que cambia solo no se copia, se deriva.** Los
+      tres comandos salen con código 0 sin tocar producción y ya filtran lo que no viaja al
+      navegador; medido así el 2026-09-06 17:38 La Paz daban 27 · 4 · 17 archivos.
+
+      ⚠️ **La plataforma SE PUBLICÓ el 2026-09-06 a las 17:08 UTC (13:08 La Paz), y esta tabla
+      decía lo contrario — corregido a las 19:45 UTC por `onia-cola`.** Decía «22 sin desplegar,
+      corre `build-545dd28`». Hoy corre `build-5fc8bcd` y los **trece** shas que el pedido
+      prometía están adentro (`8b420b6 38bcf8a 195349b 2099778 5922faa 30526c3 5fc333d ad2d45f
+      3fe2db9 06b68c9 a797954 df3e645 bcdfd79`, verificados uno por uno con
+      `git merge-base --is-ancestor <sha> 5fc8bcd`): el alta sin horarios, el corte del mediodía,
+      los dos rubros que el panel negaba, el botón Otorgar sin efecto, la Planilla sin camino y
+      las métricas del asistente **están vivos**. El pedido siguió `blocked` igual, así que le
+      pedía a Sergio Urcullo un `ok` **por trabajo ya hecho** — el modo de falla que este ítem
+      describe, pero al revés: no «dice resuelto sobre lo pendiente», sino **«dice pendiente
+      sobre lo resuelto»**, y de ese lado nadie sospecha porque el pedido sigue ahí, prolijo y
+      ejecutable. Cerrado con su evidencia; los **3** arreglos posteriores tienen pedido nuevo,
+      porque el cuerpo del viejo no los describía y el cuerpo es lo único que él lee.
+
+      **La cifra de la tabla se saca del publicador, no de `git log`.** `bash
+      /opt/onia-platform/_deploy/publicar.sh --dry-run` (y su gemelo de `onia-landing`) filtra lo
+      que no viaja al navegador: el mismo día `git log --since` crudo daba **42** para landing, el
+      cuerpo de la tarea decía **24** y el publicador **25**. Sólo la última es accionable.
+
+      **Este loop NO vuelve a avisar de esto**: el integrador ya mide y ya creó el pedido; un
+      segundo aviso del mismo hecho es el spam que hizo que nadie leyera el primero. Lo que sí
+      hace este carril es **no dar por entregado** un arreglo suyo mientras su pedido siga en
+      `blocked` — construido ≠ terminado.
+
+      ⚠️ **Acá había DOS IDs de tarea escritos a mano (`t_e05a44d7`, `t_8ac57b3f`) y los dos
+      caducaron — corregido el 2026-09-06.** Hoy figuran `archived` y **`done`**, y el ítem
+      remataba con *«Pedidos: `onia-tablero.sh show t_8ac57b3f`»*: quien lo obedecía leía
+      **`done`** y concluía que la plataforma ya se había desplegado, con **22 arreglos** que el
+      cliente no ve. Un pedido de deploy **se rehace** cuando su evidencia envejece (el `edit` del
+      tablero no cambia el cuerpo), así que el ID viejo muere y el nuevo no está escrito en
+      ningún lado — el ID rota **en la dirección cara**: dice «resuelto» sobre lo que sigue sin
+      publicar. Es el mismo remedio que ya se le aplicó al comando de deploy, un escalón más
+      arriba: **el pedido vivo se DERIVA, nunca se copia de una medición anterior.**
+
+      ```sh
+      # los pedidos vivos, sin IDs escritos a mano (uno por destino, o sobra/falta uno):
+      for id in $(/root/bin/onia-tablero.sh list | grep -E '^[⊘▶◻]' | awk '{print $2}'); do
+        d=$(/root/bin/onia-tablero.sh show "$id" | grep -iE '^DESPLEGAR:')
+        [ -n "$d" ] && echo "$id  $d"
+      done
+      # 2026-09-06 devuelve exactamente 3 lineas: bot, landing, plataforma.
+      # Ojo: NO usar `show | grep -q &&`, que cierra el pipe antes de tiempo y el
+      # tablero remata con un BrokenPipeError que se lee como si fallara.
+      ```
+
+      Evidencia: `hermes-content/docs/cola/plataforma-v1.md` (este archivo) y el runbook
+      `onia-platform/.claude/skills/onia-deploy/SKILL.md`.
+
+- [ ] 🔴 **SIAT entra en la v1.0 — decisión de Sergio Urcullo, 2026-09-07: «sin factura no se
+      vende». Y el rótulo de este ítem estaba MAL, que es por qué llevaba semanas al final.**
+      Este mismo ítem decía *«es un trámite externo, no código»* y *«va último a propósito»*.
+      Medido hoy contra `ONIA_SIAT_ESTADO_HOMOLOGACION.md`: lo que falta **no es un trámite**,
+      son **5 de 6 tipos de caso sin cubrir**. El NIT está limpio y no bloquea nada.
+
+      **Lo que dice el marcador real del SIN** (última lectura del portal: **2026-08-27, hace 11
+      días — reléela antes de trabajar, no la cites**):
+      · estado `INICIADO`, **24,8% de la Fase 1**, Porcentaje General **0%**;
+      · **el SIN cuenta COBERTURA, no volumen** — 750 documentos contaron como 125 porque eran la
+        misma combinación repetida. Son **6 casos de 125 cada uno**, y **solo 1 está al 100%**;
+      · los que faltan son de tipo `1 · FACTURA COMPRA-VENTA`, `17 · FACTURA DE
+        HOSPITALES/CLÍNICAS` y `24 · NOTA DE CRÉDITO-DÉBITO`, con sus combinaciones;
+      · **límite de pruebas: 04/11/2026** (Art. 18.III). No se mueve.
+
+      ⚠️ **Y sigue en pie la advertencia vieja, que ahora significa otra cosa:** *«si un loop se
+      planta acá esperando, pierde la vuelta»*. Ya no aplica a esperar al SIN — aplica a esperar
+      **a que alguien te diga qué caso emitir**. La cobertura se calcula de la tabla del §5 de ese
+      doc; no hace falta preguntar.
+
+      **Primero medí, después emitís.** El porcentaje de arriba tiene 11 días: una vuelta que
+      trabaje sobre él sin releer el portal puede estar cubriendo un caso ya cerrado.
+
+      **Listo =** Porcentaje General del portal **> 0%** con al menos un caso nuevo al 100%, leído
+      del portal y no deducido. Y el número de esta cola actualizado con la fecha de esa lectura.
+
+      ---
+
+      **Medido el 2026-09-08 (no heredado): la corrida que el doc daba por «corriendo» terminó
+      el 04-sep 04:12 UTC, cuatro días antes**, con el log cerrado en `fin` y cero procesos
+      vivos. Dejó **los tres combos del PdV 0 en 125/125 en las etapas IV, VII y XI** — o sea
+      `pv0-ds17-tf1` y `pv0-ds24-tf3` son **dos casos nuevos al 100%**, que es lo que este
+      «Listo =» pide. **Lo único que falta para cerrarlo es leer el portal**, y eso necesita el
+      login de Sergio Urcullo: no es trabajo de este carril.
+
+      **Y apareció trabajo que sí era de este carril, desbloqueado y sin hacer desde el 6-ago:**
+      las etapas **VI (20/280, 3%)** y **IX (20/80, 12%)** no dependían del PdV 1 ni de nadie.
+      Estaban frenadas porque `ensureCufd()` se cableó sólo en las tres etapas que motivaron su
+      arreglo (IV, VII, XI) y no en sus hermanas, y **nadie lo vio porque
+      `run-fase1-volumen.sh` corre únicamente IV → VII → XI**: el instrumento miraba justo las
+      tres que ya estaban sanas. Arreglado en `a28b3689` (`fase1-runner.mjs`), guardias
+      validados por mutación, 371/371 verdes. **Desbloquea 320 casos** (260 de VI + 60 de IX).
+      Detalle y los dos mensajes del SIN, en `ONIA_SIAT_ESTADO_HOMOLOGACION.md` §7.
+
+      **VI y IX CORRIDAS Y DESBLOQUEADAS el 2026-09-08 02:2x-02:4x UTC** contra el piloto
+      (`codigoAmbiente=2`), con el runner arreglado. Medido en el estado vivo del emisor en el VPS
+      (`/opt/onia-siat/fase1-state.json`), no deducido:
+
+      | etapa | antes | ahora | el error que la tenía frenada |
+      |---|---|---|---|
+      | VI | `pv0: 20` | **`pv0: 22`** (target) | `984 EL EVENTO SIGNIFICATIVO NO CORRESPONDE AL CUFD` — ya no aparece |
+      | IX | `pv0: 20` | **`pv0: 22`** (target) | `123 CUFD FUERA DE TOLERANCIA` — ya no aparece |
+
+      En las dos queda **sólo `pv1`**, que es el bloqueo legítimo: falta crear el Punto de Venta 1
+      en SIAT, y eso es de Sergio Urcullo.
+
+      ⚠️ **`a28b3689` era necesario pero NO suficiente, y esto es lo que valía la vuelta.** Al
+      reintentar con el runner arreglado, VI frenó con *«sin ventana válida para el evento
+      significativo (CUFD o evento previo demasiado frescos): esperar ~2 min y reintentar»*. Ese
+      mensaje —que pide textualmente reintentar— caía en la **misma rama del `catch`** que un
+      prerequisito determinista, así que quedaba escrito en `blockedCases`; `loop()` saltea todo
+      caso bloqueado y `run-fase1-volumen.sh` nunca pasa `--retry-blocked`. **Un tropiezo de dos
+      minutos congelaba la etapa para siempre**, y nada se ponía rojo. Eso —no el `ensureCufd`
+      solo— es lo que las tuvo un mes en 20. Arreglado en `95606460` (`TransitorioError`), con
+      las dos mitades validadas por mutación, 374/374 verdes.
+
+      ⚠️ **Cómo se corrieron, porque importa para repetirlo:** el emisor de `/opt/onia-siat`
+      **no tiene el arreglo** (`ensureCufd` → 4, contra 6 en el repo; su `mtime` es del 04-sep) y
+      su `run-fase1-volumen.sh` ni siquiera nombra a VI y IX (`for E in IV VII XI`). Se corrió el
+      runner **del clon de main del VPS** (`/root/loops/onia-hermes/…`, que sí tiene el arreglo)
+      con el `cwd` y el `.env` de `/opt/onia-siat`, así que el estado y las credenciales son las
+      de producción y **no se desplegó nada**. El emisor sólo usa módulos nativos de node: no
+      necesita `node_modules`. Backup previo:
+      `/opt/onia-siat/fase1-state.backup-20260908-0218.json`.
+
+      **Lo que sigue, en orden:** releer el portal → actualizar el número de acá. **Eso necesita
+      el login de Sergio Urcullo y no es trabajo de este carril.** El PdV 1 (la otra mitad de la
+      matriz) también es suyo. Que `/opt/onia-siat` quede alineado con el repo es la tarea
+      `t_7d2019bb`.
+
+      **2026-09-10 (chatbot-cola) — el bloqueo era REAL pero NADIE se lo había pedido, y además
+      el ok solo no alcanzaba.** Dos cosas medidas, ninguna heredada:
+
+      1. **El bloqueo estaba escrito acá y en ningún lado más.** Las tres tareas de SIAT del
+         tablero figuran `done`: no existía **ninguna** viva pidiéndole el PdV 1. Un bloqueo que
+         vive en un `.md` no le llega a Sergio Urcullo — sólo una tarea `needs_input` le llega
+         por Telegram. Lleva sin pedirse desde el **2026-08-27**, que es cuando el SIN contestó
+         `933 · EL PUNTO DE VENTA ES INEXISTENTE O INVALIDO` (`fase1-log.ndjson`, etapa I,
+         `pv:1`, tres intentos). Pedido en **`t_39a0c27c`**, `status: blocked` verificado con
+         `show` (no con el exit del `block`), con los pasos, el portal, el usuario y los 6 tipos
+         de PdV que ofrece el SIN ya resueltos: es una auditoría de 5 minutos, no una
+         investigación. Cuánto frena, contado del estado vivo y no estimado: **11 combos =
+         1.169 documentos de cobertura** (IV/VII/XI × 3 combos × 125, más VI y IX × 22). Todo
+         el lado `pv0` está **completo en las 9 etapas**.
+         Para re-derivar el pedido vivo sin citar un id que caduca:
+         `onia-tablero.sh list --status blocked | grep -i 'Punto de Venta'`.
+
+      2. 🔴 **Y el ok solo habría repetido el mes perdido.** `run-fase1-volumen.sh` **de
+         producción** seguía con `for E in IV VII XI` — el recorte original, todavía vivo: el
+         deploy del emisor alineó los módulos (`/opt/onia-siat/emisor/src`, hoy idénticos al
+         repo: `ensureCufd` 6=6, `TransitorioError` 4=4) y **no** el orquestador, que vive un
+         nivel más arriba y quedó afuera de la copia. Peor, la copia del repo
+         tampoco corría la **etapa I**, que es la que pide el CUIS por punto de venta. O sea que
+         el día que exista el PdV 1, correr ese script **no lo desbloquea**: los 11 combos
+         volverían a caer con `sin CUIS para el punto de venta 1: correr la etapa I antes`, y
+         VI y IX quedarían clavadas otra vez.
+
+         **Arreglado en la clase, no en la instancia.** Agregar las etapas que faltaban habría
+         sido reponer el mismo defecto un archivo más allá: la lista a mano **es** el defecto —
+         una lista de inclusión al lado de `STAGE_ORDER`, que es la fuente y ya está anclada por
+         test. Ahora el script las **deriva** del runner y **aborta** si no puede leerlas (caer
+         a una lista por defecto haría que una corrida a medias se lea igual que una entera).
+         Verificado ejecutando la derivación contra los módulos reales: devuelve
+         `I II III IV V VI VII IX XI`, las 9.
+
+         **Gate:** `test/fase1-runner.test.mjs` › «run-fase1-volumen.sh corre TODAS las etapas»,
+         validado **por mutación en 3 direcciones** — tipear la lista · el **esquive** (nombrar
+         `STAGE_ORDER` en un comentario y seguir tipeando) · derivar **filtrando la I**: las
+         tres en rojo, base y restaurado en verde.
+         ⚠️ **La tercera pasó en VERDE en la primera versión del gate** y sólo se vio mutando
+         *después* de arreglar: el caso resolvía por texto («si nombra `STAGE_ORDER`, corre
+         `STAGE_ORDER`»), o sea comparaba la fuente contra sí misma. Ahora **ejecuta** el
+         `node -e` del script en un sandbox con el layout del VPS y afirma sobre la salida.
+
+         **Y el gate no lo corría nadie:** los **92** tests del emisor —el módulo del que
+         depende la v1.0 por la decisión del 07-sep— **no estaban en la cadena `npm test`**.
+         Cableados como `test:siat-fase1` (puro, sin red ni repo hermano, 4,3 s): 92/92 verdes,
+         `test:guards-cableados` verde.
+
+         🔴 **Commiteado, NO desplegado:** `/opt/onia-siat/run-fase1-volumen.sh` sigue con las
+         tres etapas viejas. Desplegar no es de este carril — va por `DESPLEGAR: siat`. **Esto
+         tiene que llegar ANTES de que se corra la matriz de `pv1`**, o el ok de Sergio Urcullo
+         desbloquea 1.125 de los 1.169 y repite el bug de VI y IX.
+
+
 ## Lo que este carril NO hace
+
+- **No sostiene la memoria de Hermes.** El ítem del **tope automático de compactación de
+  `MEMORY.md`** vivió acá mal archivado: su propio texto decía «Carril loops», y no es un
+  bloqueo de Sergio Urcullo sino trabajo técnico de otro dueño. **Derivado el 2026-09-25 a la
+  tarea `t_b5890f0d`** del tablero, con la medición adentro. Medido ese día, no heredado:
+  `MEMORY.md` = 65.449 bytes (64 KB) —bajo el umbral, pero **porque se compactó a mano** el
+  21-sep— y el único cron de memoria es `onia-respaldar-memoria.sh`, que **respalda, no
+  compacta**. Este carril no lo vuelve a mirar.
+
+- **No construye BYOK (clave de IA propia del cliente).** No es un pendiente: es una decisión
+  ya escrita, y estuvo marcada `- [ ]` en «Ahora» hasta el 2026-09-25, donde se releía como
+  trabajo. El LLM del bot de cada cliente es el LiteLLM central de Onia —clave nuestra, cero
+  configuración del cliente, que es el lema— y el ítem original cerraba con **«hoy NO existe y
+  está bien»** y **«no construir antes de que exista el pedido real»**. Si algún día un cliente
+  grande lo pide: campo «Clave de OpenAI propia (opcional)» en Opciones avanzadas del editor,
+  que el motor use por-inbox (`hermes-content/deploy/vps-ops/bot/run-turn.mjs`, `askLiteLLM`
+  hoy lee del env; pasaría a leer del knowledge de la org).
+
 
 - **No toca los dos rubros bloqueados** (veterinaria, ganadería). Están fuera de la v1.0.
 - **No reescribe un 🟡.** Ver arriba: le falta kilometraje.
@@ -6651,6 +6748,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       quedaba sin canal sin enterarse.** Arreglado en `7756295` (`onia-platform`), rama
       `claude/chatbots-platform-review-0d1d09`. ⚠️ **Commiteado, NO desplegado**: viaja con el
       pedido de deploy de `plataforma`.
+      ✅ YA DESPLEGADO (medido 2026-09-25: `7756295` vive en produccion `2075575f`).
 
       El cron de recordatorios (`app/api/cron/appointment-reminders/route.ts`) tiene **dos**
       cupos hermanos. El de **correo** avisa al dueño al cruzar el 80 % y el 100 %

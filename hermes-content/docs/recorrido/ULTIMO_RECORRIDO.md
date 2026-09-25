@@ -12,6 +12,79 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-25 06:09-06:14 La Paz — `BUILD_ID` nuevo otra vez (`p2O3qK8ejw4RQGq9y0CgH` → `TnvycZvMqHGZrzO9EziLL`); dental re-verificado, 9/9
+
+`ONIA_ALTA_AUTOMATICA=abierta`. `grep -m1 BUILD_ID` de este archivo comparado ANTES de correr
+nada (primer comando de la vuelta): cambió, así que correspondía repetir dental antes de seguir
+el ciclo de rotación de rubros. Chequeo de arranque de residuales `zz-qa-%` en `organizations` y
+`appointments`: **0** las dos — nada que limpiar de una vuelta anterior.
+
+`node scripts/recorrido_cliente.mjs --escribir`:
+
+- **Los 9 pasos, OK.** Cuenta `zz-qa-2026-09-25-0609@onia.com.bo`, confirmación de correo real
+  antes del primer login, onboarding en 6 pantallas, `/dashboard` sin rebote.
+- Paso 6: `zz-qa-2026-09-25-0609-paciente` cargado en Pacientes (`/patients`) y visto de vuelta.
+- Paso 7: cita `2026-09-28 09:00` agendada (201, `cmugkdrra000o01rr2h3o74q7`) y VISTA en
+  `/appointments`.
+- Paso 8: factura creada con el ítem `zz-qa-2026-09-25-0609-item` visible en
+  `/billing/cmugke2i5000q01rrxy4i0ucm` — frenado ahí sin marcarla pagada.
+- Paso 9: el dato del paso 6 no figura en `/dashboard` (esperado, ya conocido en este rubro).
+- Limpieza verificada: `organizations`/`appointments` con `zz-qa-%` → **0** al cerrar.
+
+**Sin hallazgo de producto.** Próxima vuelta: comparar `BUILD_ID` primero, siempre; si sigue en
+`TnvycZvMqHGZrzO9EziLL`, no repetir dental — seguir el ciclo de rotación por rubro (comercio) o
+un escalón nuevo no auditado.
+
+RAZÓN: la medida (9/9, `completo: true`) ya estaba en el techo — el avance real fue re-verificar
+dental contra el deploy nuevo, sin hallazgos ni residuales que limpiar.
+LECCIÓN: comparar `BUILD_ID` primero siguió siendo el método correcto; esta vez el chequeo de
+residuales dio 0 de entrada, sin nada que documentar.
+
+---
+
+## 2026-09-25 05:09-05:13 La Paz — `BUILD_ID` nuevo (deploy: `1fCNCDEJaOeFVV1KczGHP` → `p2O3qK8ejw4RQGq9y0CgH`); dental re-verificado, 9/9
+
+`ONIA_ALTA_AUTOMATICA=abierta`. Al arrancar había **dos filas residuales** de vueltas sin log
+propio en este archivo (03:10 y 04:09, orgs `dentagest-clinical`, sin pacientes/citas/facturas,
+1 fila de `organization_entitlements` cada una): se imprimieron completas antes de borrar y se
+limpiaron en orden FK (`organization_entitlements` → `profiles` → `organizations` →
+`auth.identities` → `auth.users`, por id exacto). Confirmado después: `organizations` y
+`auth.users` con `zz-qa-%` → 0. No quedó registro de qué vuelta las dejó ni por qué no
+escribieron en este archivo — puede ser corte por tope de tiempo antes de cerrar, como ya pasó
+el 2026-09-24 14:09.
+
+`grep -m1 BUILD_ID` de este archivo (`1fCNCDEJaOeFVV1KczGHP`) comparado contra el build vivo
+(`docker exec onia-platform cat /app/.next/BUILD_ID` → `p2O3qK8ejw4RQGq9y0CgH`): **cambió**, así
+que correspondía repetir dental completo, cerrando el ciclo anterior de rotación de rubros que
+ya había re-verificado los 5 rubros activos dentro del build viejo.
+
+`node scripts/recorrido_cliente.mjs --escribir`:
+
+- **Los 9 pasos, OK.** Cuenta `zz-qa-2026-09-25-0511@onia.com.bo`, confirmación de correo real
+  antes del primer login, onboarding en 6 pantallas, `/dashboard` sin rebote.
+- Paso 6: `zz-qa-2026-09-25-0511-paciente` cargado en Pacientes (`/patients`) y visto de vuelta.
+- Paso 7: cita `2026-09-28 09:00` agendada (201, `cmugial20001s01mkafuk3tsl`) y VISTA en
+  `/appointments`.
+- Paso 8: factura creada con el ítem `zz-qa-2026-09-25-0511-item` visible en
+  `/billing/cmugiavtu001u01mksegttw6n` — frenado ahí sin marcarla pagada.
+- Paso 9: el dato del paso 6 no figura en `/dashboard` (esperado, ya conocido en este rubro).
+- Limpieza verificada: `organizations`/`appointments` con `zz-qa-%` → **0** al cerrar.
+
+**Sin hallazgo de producto.** El único hallazgo es de proceso (dos huérfanos sin log propio,
+limpiados esta vuelta — ver arriba). Próxima vuelta: comparar `BUILD_ID` primero, siempre; si
+sigue en `p2O3qK8ejw4RQGq9y0CgH`, no repetir dental — arrancar de nuevo el ciclo de rotación por
+rubro (comercio) o un escalón nuevo no auditado.
+
+RAZÓN: la medida (9/9, `completo: true`) ya estaba en el techo — el avance real fue re-verificar
+dental contra el deploy nuevo y limpiar dos huérfanos que otra vuelta dejó sin cerrar.
+LECCIÓN: comparar `BUILD_ID` primero siguió siendo el método correcto. Nuevo: el chequeo
+obligatorio de arranque (`count(*) from organizations where name like 'zz-qa-%'`) volvió a
+encontrar residuales sin log — cuando eso pase, imprimir e identificar la fila ANTES de asumir
+que es "mía de la vuelta anterior": estas dos no tenían entrada en este archivo, así que se
+documentó la ausencia en vez de inventar una causa no verificada.
+
+---
+
 ## 2026-09-25 02:09-02:12 La Paz — `Importadora / distribuidora` cierra el ciclo: los 5 rubros activos quedan re-verificados en este `BUILD_ID`
 
 `BUILD_ID` comparado ANTES de correr (primer comando de la vuelta, como quedó corregido la
