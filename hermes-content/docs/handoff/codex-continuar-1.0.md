@@ -35,6 +35,16 @@
 > - Aprobación del bot (S17→S18): el pedido vivo es `t_24fa76aa`; se aprueba con `ok t_24fa76aa` por
 >   Telegram.
 >
+> **EN VUELO al cierre del 25-sep (tarde), nada publicado todavía:**
+> | Qué | Dónde | Estado | Espera |
+> |---|---|---|---|
+> | Correos con la marca real (17: 13 de la app + 4 de GoTrue) | platform `claude/email-marca-20260925` en `E:/onia-wt/email-marca`, respaldo `origin/wip/email-marca-20260925` (`6d5b8757`) | revisión adversarial (5 lentes) aplicada, suite 0 fallos nuevos | «OK correos» de Sergio Urcullo → https://claude.ai/artifact/LZ3SYuFEqMjEZoEMoh26gD |
+> | QR estático en el checkout y el add-on | platform `claude/checkout-qr-estatico-20260925` en `E:/onia-wt/checkout-qr`, respaldo `origin/wip/checkout-qr-estatico-20260925` (`93d76046`) | revisión (3 lentes) aplicada; renderizado y MIRADO claro/oscuro 375/1280 | «OK pago» + que Sergio escanee el QR con su banco (OpenCV no decodifica el modo del BCP) → https://claude.ai/artifact/USZ5yuxFc8jpcrSGfuaMWq |
+> | Web: el medio de pago dice «QR» | hermes `web/medio-de-pago-qr-estatico` en `E:/onia-wt/web-qr-estatico` (`29ffb25f`), **solo local, sin upstream a propósito** | 40/40 | el deploy de la plataforma primero (`medio-de-pago-vivo` exige 200 en `/pago/qr-bcp-onia.jpg`) |
+> - **Orden de publicación:** mergear las dos ramas de platform a `master` (conflicto chico esperado en `lib/checkout/textos.ts`: raya larga del correo) → publicador → verificar `/pago/qr-bcp-onia.jpg` 200, `/correo/onia-logo-banda.png` 200, GoTrue toma las plantillas (log `templatemailer`) → recién ahí push de la web. ⚠️ Mergear a `master` = publicar (cron cada 3 h).
+> - **Bot publicado hoy** con el OK de Sergio (t_24fa76aa): 38 archivos, `espejo-check` exit 0, 18:44 UTC.
+> - Anotado, no hecho: «Enviar comprobante — Bs X» del checkout lleva raya larga (anterior); `scripts/qa-v1/contract.test.ts` también falla por CRLF en Windows; el `node_modules` de la web en el checkout principal de hermes apunta a un worktree borrado (`web-creator-personal-site-eed2f3`).
+>
 > **Lo que depende de Sergio Urcullo, junto y en orden de urgencia:**
 > 1. Método de pago de Meta **antes del 30-sep** (el 1-oct termina la ventana gratis de WhatsApp).
 > 2. Imagen del QR estático del banco + titular exacto de la cuenta: sin eso el cliente no puede pagar.
