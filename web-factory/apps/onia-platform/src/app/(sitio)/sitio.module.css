@@ -517,16 +517,35 @@
    centrado (margin auto) y el sobrante se juntaba todo en un hueco muerto
    entre la última fila y el remate — 88-116px a 1440. El mat tiene ratio fijo
    y la lista es corta: el aire va entre las filas, no al final. */
+/* El cuerpo del panel CRECE para que el pie se quede abajo — eso es lo que hace
+   el `flex: 1 1 auto` y se queda. Lo que no puede hacer es repartir sus filas por
+   el alto que le sobró: con `space-evenly`, el `gap` declarado acá abajo deja de
+   decidir nada en cuanto el panel recibe alto de más.
+
+   Medido el 2026-09-25 contra producción (Chromium 1366×900, animaciones
+   apagadas), mismo componente en las dos pantallas que ve un lead:
+     onia.com.bo/         grid de 74px  → separación real  8px sobre 8,6 declarados
+     onia.com.bo/empezar  grid de 222px → separación real 60px sobre 7,9 declarados
+   En `/empezar` el panel va dentro de un marco más alto, le sobraban 157px, y las
+   cuatro pastillas quedaban sueltas con bandas muertas de 110px bajo el título:
+   la última pantalla antes de registrarse leyéndose como una que no terminó de
+   cargar. La hermana de flex ya iba por el mismo camino (19px reales sobre 8,8
+   declarados en un `.panelRows` de la portada), así que se curan juntas.
+
+   `center` mantiene las filas a la distancia que dicen, y donde hoy no sobra alto
+   dibuja exactamente lo mismo que antes: no es un rediseño, es sacarle a la regla
+   la única condición en la que miente. Lo sostiene
+   `grilla-que-crece-no-reparte.test.ts`. */
 .panelRows,
 .panelChat,
 .panelBars {
   flex: 1 1 auto;
-  justify-content: space-evenly;
+  justify-content: center;
 }
 /* grid: el eje que sobra es el de bloque, y ahí manda align-content */
 .panelGrid {
   flex: 1 1 auto;
-  align-content: space-evenly;
+  align-content: center;
 }
 .panelRows {
   display: flex;
