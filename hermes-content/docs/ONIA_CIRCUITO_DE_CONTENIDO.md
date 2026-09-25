@@ -304,25 +304,27 @@ Medido el 25-sep por el mapa de docs (§3.5 de
 | `claude/ads-creatividades-publicos` | 04-sep | 166 | Lucía (congelada): 21 docs distintos a `main` y 13 nuevos, entre ellos `cola/contenido.md`. El integrador tiene prohibido mergearla |
 | `claude/carril-contenido` | 02-sep | 195 | lo mismo, más las carpetas `loops/` y `handoffs/`, que no existen en `main` |
 
-- **Integrar las cuatro primeras es decisión de Sergio Urcullo.** Son del carril y están vivas.
-- **La Fase 1 de movimientos espera esa decisión** (§4.3 del mapa de docs: 33 archivos del
+- ✅ **Las cuatro primeras se integraron el 25-sep, por decisión de Sergio Urcullo** (PR #40).
+  El piloto «IA Lab Santa Cruz» quedó congelado 🧊. La audiencia nueva sigue vigente, porque
+  está registrada como decisión suya del 21-sep. Llegan a `main` cuando se mergee el PR.
+- **La Fase 1 de movimientos se hace después de mergear el PR #40** (§4.3 del mapa de docs: 33 archivos del
   carril a `contenido/` e `historial/contenido/`, con `git mv` y sus referencias en el mismo
   commit). Si se mueve antes, los archivos nuevos de esas ramas aterrizan en las rutas viejas y
   la estructura se desarma en el mismo merge.
 - **Las dos de Lucía** tocan ~22 docs de modelos: antes de tocar esos docs hace falta decidir qué
   pasa con esas ramas.
-- Por lo mismo, **hoy no se editan** los siete archivos que modifican las ramas vivas
+- Ya se pueden editar los siete archivos que modificaban las ramas vivas
   (`ONIA_COMUNIDAD_CONTENIDO`, `ONIA_MARCA_PERSONAL_BASE_CONTENIDO`,
   `ONIA_MARCA_PERSONAL_TRES_CARRILES`, `ONIA_MOTOR_SEMANAL_CONTENIDO`,
   `ONIA_MARCA_PERSONAL_HIGGSFIELD_RECETAS`, `SERIE_CLAUDE_CODE_DESCRIPCIONES`,
   `cola/PLAN-VIDEOS-11-20-SEP.md`). Sus correcciones —por ejemplo, «Avisos» → «Announcements» en
-  `ONIA_COMUNIDAD_CONTENIDO.md`— esperan a la integración.
+  `ONIA_COMUNIDAD_CONTENIDO.md`— van con la Fase 1.
 
 ---
 
 ## 7. Decisiones que dependen de Sergio Urcullo
 
-1. **Integrar (o no) las ramas del carril** (§6). De eso depende la Fase 1 de movimientos.
+1. ✅ **Integrar las ramas del carril:** decidido el 25-sep, se integran (PR #40, §6).
 2. **Cadencia.** Hay cuatro cifras vivas: 2 por día (`ONIA_PLAN_DE_CONTENIDO_3_FRENTES.md`,
    24-ago), 6 videos por semana (`MOTOR`), 10–13 por día (`ESTRUCTURA`, 17-sep) y 11 por día (rama
    `codex/marca-comunidad-plan`). Y qué día se elige el tema de la semana: viernes o domingo
@@ -337,12 +339,15 @@ Medido el 25-sep por el mapa de docs (§3.5 de
 6. **Duración única de la llamada pública.** Hoy la llamada 1 a 1 se anuncia de 15, 20, 30 y
    45 minutos según el doc que se lea (la de 15 es el beneficio de la comunidad, `/15min`; el
    `/30min` que publica `ESTADO_COMUNIDAD` da 404; la agenda de 45 está en una rama sin integrar).
-7. **Piloto presencial «IA Lab Santa Cruz» vs Etapa 1.** La rama `codex/marca-comunidad-plan`
-   lo propone (encuentros → taller o curso pago → membresía). `CLAUDE.md` §1 prohíbe abrir una
-   línea de negocio nueva sin pasar el test de tres preguntas, y `ONIA_ESTRATEGIA_DE_EMPRESA.md`
-   congela todo lo que no sea Onia Platform + chatbot.
+7. ✅ **Piloto presencial «IA Lab Santa Cruz»: congelado el 25-sep por Sergio Urcullo** 🧊. Es
+   una línea de negocio nueva (encuentros → taller o curso pago → membresía) y la Etapa 1 no la
+   permite. Se conserva como propuesta en `ONIA_COMUNIDAD_CONTENIDO.md`: no se ejecuta, no se
+   anuncia y no se encuesta.
 8. **Comprar `sergiourcullo.com`.** Pedido el 07-sep; sin evidencia de compra y sin conectar al
    proyecto de Vercel (medido el 25-sep: sólo `sergiourcullo.vercel.app`).
+9. **Desplegar las páginas de recurso** `/automatizar`, `/agentes` y `/mcp`. Dan 404 en producción
+   (medido el 25-sep; `/stack` responde 200): se escribieron el 21-sep y nunca se desplegaron.
+   Mientras tanto, ningún carrusel pide MAPA, ARQUITECTURA ni MCP. `/agentes` ya está corregida.
 
 ---
 
