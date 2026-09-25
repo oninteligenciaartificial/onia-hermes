@@ -32,6 +32,9 @@ const SRK = 'srk-NO-SE-MUESTRA';
 const VIVO = 'FU8j_OHPyRH1XCCr6-0uY';
 const NUEVO = 'NuevoBuildIdDeLaImagen';
 const VAPID = 'BVapid-publica-DE-PRUEBA';
+const VAPID_PRIVADA = 'vapid-privada-NO-SE-MUESTRA';
+// El Dockerfile de la plataforma desde 617631d5: declara el ARG de la clave de push.
+const DOCKERFILE_CON_PUSH = 'FROM scratch\nARG NEXT_PUBLIC_VAPID_PUBLIC_KEY\n';
 
 const barra = (p) => p.replaceAll('\\', '/');
 
@@ -132,10 +135,12 @@ function mundo(extra = {}) {
   // null = la línea no está en app.env.
   if (extra.vapid !== null) env.push(`NEXT_PUBLIC_VAPID_PUBLIC_KEY=${extra.vapid ?? VAPID}`);
   if (extra.vapidServidor !== null) env.push(`VAPID_PUBLIC_KEY=${extra.vapidServidor ?? VAPID}`);
+  if (extra.vapidPrivada !== null) env.push(`VAPID_PRIVATE_KEY=${extra.vapidPrivada ?? VAPID_PRIVADA}`);
+  if (extra.vapidContacto !== null) env.push(`VAPID_CONTACT=${extra.vapidContacto ?? 'mailto:avisos@onia.com.bo'}`);
   writeFileSync(`${base}/app.env`, [...env, ''].join('\n'));
   const git = (...a) => execFileSync('git', ['-C', repo, '-c', 'user.name=t', '-c', 'user.email=t@t', ...a], { encoding: 'utf8' });
   git('init', '-q');
-  writeFileSync(`${repo}/Dockerfile`, 'FROM scratch\n');
+  writeFileSync(`${repo}/Dockerfile`, extra.dockerfile ?? DOCKERFILE_CON_PUSH);
   for (const d of ['.claude', 'n8n-mcp-server/node_modules', 'lib']) mkdirSync(`${repo}/${d}`, { recursive: true });
   writeFileSync(`${repo}/.claude/settings.json`, '{}');
   writeFileSync(`${repo}/n8n-mcp-server/node_modules/pesado.js`, '');
@@ -283,6 +288,47 @@ test('build: si app.env solo trae VAPID_PUBLIC_KEY, esa es la que llega al build
   }
 });
 
+// lib/push.ts no manda NADA si falta cualquiera de las tres (VAPID_PUBLIC_KEY,
+// VAPID_PRIVATE_KEY, VAPID_CONTACT), y calla: ni log ni Sentry. Con sólo la pública
+// la imagen pasaba todos los gates, la gente se suscribía y no llegaba ni un push.
+for (const [falta, extra] of [
+  ['VAPID_PRIVATE_KEY', { vapidPrivada: null }],
+  ['VAPID_CONTACT', { vapidContacto: null }],
+  ['VAPID_CONTACT (línea vacía)', { vapidContacto: '' }],
+]) {
+  test(`build: con la clave pública pero sin ${falta} se niega, y no muestra ninguna clave`, () => {
+    const m = mundo(extra);
+    try {
+      const r = correr(m, BUILD, [m.sha, '--dry-run']);
+      assert.equal(r.codigo, 1, r.salida);
+      assert.match(r.salida, new RegExp(falta.split(' ')[0]));
+      assert.ok(!r.salida.includes(VAPID) && !r.salida.includes(VAPID_PRIVADA), 'mostró una clave de push');
+    } finally {
+      limpiar(m);
+    }
+  });
+}
+
+// El publicador arma origin/master solo. Si este guion llegaba al VPS antes que el ARG
+// al Dockerfile de la plataforma, docker ignoraba el build-arg, no se horneaba nada y
+// vapid-no-horneada frenaba TODOS los releases. Un commit que no declara el ARG se
+// arma como antes: ni se le exige la clave ni se le pasa.
+test('build real: un commit cuyo Dockerfile no declara la clave de push se arma igual, sin exigirla ni pasarla', () => {
+  const m = mundo({ dockerfile: 'FROM scratch\n', vapid: null, vapidServidor: null, vapidPrivada: null, vapidContacto: null });
+  try {
+    const seco = correr(m, BUILD, [m.sha, '--dry-run']);
+    assert.equal(seco.codigo, 0, seco.salida);
+    const r = correr(m, BUILD, [m.sha], { STUB_VAPID: '0' });
+    assert.equal(r.codigo, 0, r.salida);
+    assert.match(r.salida, /STAGED_OK/);
+    assert.match(r.salida, /no declara ARG NEXT_PUBLIC_VAPID_PUBLIC_KEY/);
+    const build = r.llamadas.find((l) => l.startsWith('build '));
+    assert.ok(!/NEXT_PUBLIC_VAPID_PUBLIC_KEY/.test(build), 'pasó la clave de push a un Dockerfile que no la lee');
+  } finally {
+    limpiar(m);
+  }
+});
+
 test('build: si la clave del navegador no es la del servidor se niega, sin mostrar ninguna', () => {
   const m = mundo({ vapid: 'BOtra-clave-distinta' });
   try {
@@ -331,6 +377,7 @@ test('build real: release con SHA, código sin lo excluido, docker build sin val
     assert.match(build, /--build-arg NEXT_PUBLIC_APP_URL --build-arg NEXT_PUBLIC_VAPID_PUBLIC_KEY /);
     assert.equal(readFileSync(`${m.estado}/vapid-en-build`, 'utf8').trim(), 'ok', 'la clave de push no llegó al build');
     assert.ok(!r.log.includes(VAPID) && !r.salida.includes(VAPID), 'la clave de push viajó en argv o se mostró');
+    assert.ok(!r.log.includes(VAPID_PRIVADA) && !r.salida.includes(VAPID_PRIVADA), 'la clave privada de push viajó o se mostró');
     assert.match(r.salida, /STAGED_OK/);
   } finally {
     limpiar(m);
