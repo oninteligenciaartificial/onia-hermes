@@ -1403,6 +1403,43 @@ que no lo está. Se resuelve leyendo cada ítem y buscando su commit en `onia-pl
   está commiteado y **no llega solo**. Se destraba con la tarea del tablero que ya existe
   (`t_fca27a62`, línea `DESPLEGAR: bot`) y un `ok` de Sergio Urcullo.
 
+  ✅ **2026-09-24 22:45-23:25 La Paz — AUDITADO contra el código de hoy, y el arreglo estaba una
+  rama corto. Cerrado en `config.mjs` + `run-turn.mjs`, commiteado, NO desplegado.** Salió de
+  auditar este mismo `[x]` (la cola entera estaba bloqueada en firmas de Sergio Urcullo), no de
+  releerlo: se grepeó **quién más parsea ese dato**, que es la lección que este ítem dejó escrita.
+
+  **Lo que se confirmó cierto** (no se desmarca nada): el camino vivo sí usa `parseSlotsSpec` +
+  `slotsElegibles` —en producción `ONIA_BOT_SLOTS` está puesto, así que `resolveConfig` corta en
+  la línea 172 y nunca llega a Cal.com—, el `key: null` de los candidatos 3-5 no filtra ningún
+  *"opción null"* (probado con los 5 horarios del proceso vivo: *"el miércoles 30 a las 14:00"* →
+  `Listo, agendado` + `[notas] demo_agendada`), y `construirAviso` no lee la letra del slot, así
+  que el aviso a Sergio Urcullo sobrevive ese `null`.
+
+  **Lo que NO era cierto: «`run-turn.mjs` tenía su propio parseo» se arregló en una sola de sus
+  DOS ramas.** `buildConfig` tiene un `if/else`, y el arreglo sacó la copia del `else` (los
+  horarios del entorno) dejando **la copia idéntica ocho líneas más arriba**, la del `if` (los
+  horarios que trae el turno): mismo `slice(0, 2)`, mismo `pending: false` fijo, y sin
+  `slotsElegibles`. O sea el bug entero —candidatos 3-5 inalcanzables **y** horario caducado
+  ofrecido como vivo— intacto detrás de una rama. `config.mjs:72` ya nombraba a este archivo como
+  el reincidente (*«cada reimplementación de esta regla fue un bug»*) y la reincidencia seguía ahí.
+
+  **Hoy esa rama no la despierta nadie, y por eso se cerró igual:** ningún runner pasa `slots` en
+  el payload y Cal.com no existe en el VPS por decisión (`t_b18ca430`). Un bug dormido vuelve
+  **mudo y con los tests en verde**, que es exactamente como éste sobrevivió un mes.
+
+  **Arreglado en la clase, no en la instancia:** `candidatosDeLista` (normaliza y juzga contra el
+  reloj del mensaje) y `slotsDeCandidatos` (devuelve el par **y** los elegibles juntos — pedir uno
+  sin el otro es como nació el bug). `parseSlotsSpec` y `slotsElegibles` se reescribieron encima de
+  los mismos dos helpers, así que ahora hay **un solo** juicio para las tres entradas. La letra sale
+  de la POSICIÓN también en la rama del turno: el par se reordena cronológicamente al juzgarlo, así
+  que una `"A"` que viniera en el payload podía terminar nombrando otro horario.
+
+  **Gates:** dos casos nuevos en `run-turn.test.mjs`, gemelos exactos de los dos que ya cubrían la
+  rama del entorno, **en ROJO antes por el motivo correcto** (`slotsElegibles` devolvía `[]`; el
+  candidato de 7 h aparecía ofrecido). Validados **por mutación en 2 direcciones** —vaciar
+  `slotsElegibles` · volver `pending` fijo—: las dos en rojo, base restaurada en verde.
+  Suite del bot completa: **1383/1383**.
+
 - [x] 🔴 **CERRADO el 2026-09-24 (commiteado, NO desplegado): las 9 campañas estaban en un
       archivo que NINGÚN deploy copiaba. Ya viven en el que se publica solo.**
 

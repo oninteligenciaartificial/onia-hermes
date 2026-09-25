@@ -259,3 +259,52 @@ test("buildConfig: un horario que ya no da la anticipacion NO se ofrece como si 
     delete process.env.ONIA_BOT_SLOTS;
   }
 });
+
+// Los dos de abajo son los GEMELOS de los dos de arriba, sobre la OTRA rama de buildConfig.
+// El arreglo del 2026-09-24 saco la copia del parseo de la rama del ENTORNO y dejo la copia
+// identica ocho lineas mas arriba, la del TURNO: mismo `slice(0, 2)`, mismo `pending: false`
+// fijo, y sin `slotsElegibles`. `config.mjs:72` ya nombra a este archivo como el reincidente
+// ("cada reimplementacion de esta regla fue un bug"). Hoy esa rama no la despierta nadie
+// —en produccion `ONIA_BOT_SLOTS` esta puesto, y Cal.com no existe en el VPS por decision
+// (tablero `t_b18ca430`)—, y por eso se ancla ahora: el dia que un turno traiga horarios, el
+// bug vuelve MUDO y con los tests en verde, que es exactamente como sobrevivio un mes.
+const SLOTS_DEL_TURNO = SPEC_VIVO.split("|").map((part) => {
+  const [label, startAt] = part.split("@");
+  return { label, startAt };
+});
+
+test("buildConfig: los horarios que trae el TURNO se juzgan igual que los del entorno", () => {
+  const config = buildConfig({ received_at: "2026-09-24T15:00:00Z", slots: SLOTS_DEL_TURNO });
+  assert.deepEqual(
+    config.slots.map((slot) => `${slot.key}:${slot.label}`),
+    ["A:viernes 25 de septiembre, 21:00", "B:sábado 26 de septiembre, 09:00"],
+    "el guion sigue nombrando DOS, venga el horario de donde venga",
+  );
+  assert.deepEqual(
+    config.slotsElegibles.map((slot) => slot.label),
+    [
+      "lunes 28 de septiembre, 14:00",
+      "martes 29 de septiembre, 14:00",
+      "miércoles 30 de septiembre, 14:00",
+    ],
+    "y los otros tres tampoco son inalcanzables por venir en el turno",
+  );
+  assert.ok(config.slotsElegibles.every((slot) => slot.key === null), "sin letra: 'A' no se reasigna");
+});
+
+test("buildConfig: un horario del TURNO que ya no da la anticipacion NO se ofrece como vivo", () => {
+  const config = buildConfig({
+    received_at: "2026-09-24T15:00:00Z",
+    slots: [
+      { label: "jueves 24 de septiembre, 18:00", startAt: "2026-09-24T22:00:00Z" }, // a 7 h
+      { label: "lunes 28 de septiembre, 14:00", startAt: "2026-09-28T18:00:00Z" },
+      { label: "martes 29 de septiembre, 14:00", startAt: "2026-09-29T18:00:00Z" },
+    ],
+  });
+  assert.deepEqual(
+    config.slots.map((slot) => slot.label),
+    ["lunes 28 de septiembre, 14:00", "martes 29 de septiembre, 14:00"],
+    "el que no llega se cae de la oferta tambien por esta rama",
+  );
+  assert.equal(slotsPending(config), false, "y el par que queda es ofrecible de verdad");
+});
