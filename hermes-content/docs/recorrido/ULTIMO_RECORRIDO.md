@@ -12,6 +12,31 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-25 11:09-11:1x La Paz — `BUILD_ID` sin cambios; rotación de rubro → Estética y spa, 9/9
+
+`ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado ANTES de decidir rubro (primer comando de la
+vuelta): `UgtwNYIEjS-DSK0umjqc8`, igual al de la entrada anterior — no correspondía repetir
+dental. Siguiendo la nota de esa misma entrada, roté a **Estética y spa** (junto con servicios
+profesionales, el rubro sin cobertura más reciente).
+
+**Recorrido completo: los 9 pasos, sin agujeros.** Cuenta
+`zz-qa-2026-09-25-1110@onia.com.bo`, confirmación de correo antes del primer login, onboarding en
+6 pantallas (pregunta → negocio → horarios → servicios → equipo → listo), clienta
+`zz-qa-2026-09-25-1110-paciente` cargada y vista en `/patients` (grupo Clientas), cita
+2026-09-28 09:00 agendada (201, `cmugv3o6f001d01o4nj6i9ket`) y VISTA en `/appointments`, factura
+con ítem `zz-qa-2026-09-25-1110-item` vista en su pantalla de cobro (`/billing/...`) — frenado ahí
+sin marcar pago. El dato del paso 6 no aparece en `/dashboard` (esperado: el panel no lista
+clientas). `resumen.json`: `llegoHasta 9/9`, `completo: true`, `agujeros: []`. `organizations`/
+`appointments` con `zz-qa-%` → **0** al cerrar, verificado.
+
+**Sin hallazgo de producto.** Próxima vuelta: comparar `BUILD_ID` primero, siempre; si sigue
+igual, rotar a Servicios profesionales (el único de los 5 rubros activos sin cobertura reciente)
+en vez de repetir dental/comercio/importadora/estética otra vez.
+
+RAZÓN: N/A — avanzó (rubro nuevo rotado, sin hallazgo).
+LECCIÓN: el método "comparar `BUILD_ID` antes de decidir rubro" sigue funcionando bien aplicado
+como primer paso de la vuelta.
+
 ## 2026-09-25 10:09-10:2x La Paz — `BUILD_ID` nuevo (`TnvycZvMqHGZrzO9EziLL` → `UgtwNYIEjS-DSK0umjqc8`); dental re-verificado, 9/9
 
 `ONIA_ALTA_AUTOMATICA=abierta`. Comparé `BUILD_ID` ANTES de decidir rubro (siguiendo la lección
