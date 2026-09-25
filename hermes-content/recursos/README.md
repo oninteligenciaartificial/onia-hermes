@@ -10,7 +10,7 @@ No confundir con:
 - `hermes-content/references/` — análisis e investigación (no se envía a nadie).
 
 Cada recurso nuevo debe:
-- estar atado a una palabra clave concreta. Hoy solo hay dos vigentes: **SISTEMA** y
+- estar atado a una palabra clave concreta (salvo `comunidad/`: archivos exclusivos de los drops, que no se mandan por DM). Hoy solo hay dos vigentes: **SISTEMA** y
   **LISTA** (ver `docs/ONIA_CRONOGRAMA_CONTENIDO_20260814.md` §0). No sumar una tercera sin
   revisar ese doc primero — el punto de tener solo dos es que se recuerden sin anotar.
 - decir de qué pieza/ciclo sale y linkear el doc del ciclo en `docs/`.
@@ -21,6 +21,7 @@ Cada recurso nuevo debe:
 |---|---|---|---|
 | `checklist-seguridad-ia-10-puntos.md` | SISTEMA | `docs/ONIA_CICLO_COMENTARIO_DM_20260815.md` | Alguien comenta SISTEMA en el reel del checklist de seguridad |
 | `lista-por-donde-empezar.pdf` | **LISTA** | `contenido/ONIAHQ.md` | Alguien comenta LISTA en cualquier pieza de `@oniahq` |
+| `comunidad/opus-5-5-migracion/checklist-opus-5-5.pdf` | — *(no es de DM)* | `docs/contenido/piezas/guiones/2026-09-25-opus-5-5-migracion.md` | se adjunta en el drop D1 de la comunidad. Es exclusivo de la comunidad, no se manda por DM ni se publica afuera. Cada ítem cita la guía oficial de Anthropic verificada el 2026-09-25 |
 
 ## `lista-por-donde-empezar` — cómo se hizo y por qué así
 
