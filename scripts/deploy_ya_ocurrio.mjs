@@ -160,6 +160,46 @@ export function juzgar(afirmaciones, estaVivo) {
 }
 
 /**
+ * El veredicto de la corrida: qué exit code y qué frase le corresponden a un recuento.
+ *
+ * Vive aparte de `medir()` a propósito — estaba embebido ahí y por eso `--self-check` no podía
+ * probarlo, que es como sobrevivió el falso verde medido el 2026-09-25: con **58 de 58 líneas
+ * NO MEDIDAS** esto imprimía «OK — ninguna linea pide un deploy que ya ocurrio» y salía `0`.
+ * Para quien lee el exit, «ninguna miente» y «no pude juzgar a ninguna» son la misma cara, y
+ * esta herramienta existe justamente porque 20 líneas caducadas sobrevivieron leídas así.
+ * Lo dice `medir()` treinta líneas más abajo, sobre su otra precondición: no medir NO es estar
+ * bien. Faltaba aplicarlo al agregado.
+ *
+ * @param {{mienten:Array, honestas:Array, noMedidas:Array}} recuento
+ * @returns {{codigo:number, mensaje:string}}
+ */
+export function veredicto({ mienten, honestas, noMedidas }) {
+  const juzgadas = mienten.length + honestas.length;
+  if (mienten.length) return { codigo: MIENTEN, mensaje: "" };
+  // Cero afirmaciones NO es un hueco: si ninguna cola pide un deploy, no hay nada que pueda
+  // mentir. Distinguirlo importa — devolver NO MEDIDO acá dejaría el gate en un `2` permanente,
+  // y un `2` que sale siempre se lee como «el ambiental de siempre» y se saltea.
+  if (!juzgadas && !noMedidas.length) {
+    return { codigo: SIN_MENTIRAS, mensaje: "\nOK — ninguna cola pide un deploy: no hay nada que pueda caducar." };
+  }
+  if (!juzgadas) {
+    return {
+      codigo: NO_PUDE_MEDIR,
+      mensaje:
+        `\nNO MEDIDO — las ${noMedidas.length} lineas piden un deploy y NINGUNA se pudo juzgar.\n` +
+        "No absuelvo a nadie: sin un sha de la plataforma que resolver, este gate no sabe si\n" +
+        "caducaron. Si esperabas que midiera, el sujeto esta en el motivo de cada linea\n" +
+        "(`ningun sha es de onia-platform` = es del bot, otra frontera · `la linea no cita sha`\n" +
+        "= al ítem le falta su commit, y sin eso nadie puede corregirlo nunca).",
+    };
+  }
+  return {
+    codigo: SIN_MENTIRAS,
+    mensaje: `\nOK — ninguna de las ${juzgadas} lineas juzgadas pide un deploy que ya ocurrio (${noMedidas.length} no medidas).`,
+  };
+}
+
+/**
  * Saca de un markdown de cola las líneas que piden deploy, con los shas del ÍTEM al que
  * pertenecen (no los de la línea: casi ninguna los repite — el sha vive en la cabecera).
  */
@@ -358,6 +398,34 @@ function selfCheck() {
   const conAjeno = [{ archivo: "a", linea: 1, frase: "x", shas: ["aaa1111", "ccc3333"] }];
   ok("ignora el sha ajeno y juzga el resto", juzgar(conAjeno, (s) => (s === "ccc3333" ? null : true)).mienten.length === 1);
 
+  // --- El veredicto: lo que el que corre el gate lee como respuesta ---
+  // Medido el 2026-09-25 en vivo: 58 afirmaciones, 58 NO MEDIDAS, y el gate igual imprimía
+  // «OK — ninguna linea pide un deploy que ya ocurrio» con exit 0. Un instrumento que no pudo
+  // juzgar a NADIE no puede absolver a nadie: eso es el falso verde que trae de vuelta las
+  // líneas caducadas.
+  const linea = (n) => ({ archivo: "a", linea: n, frase: "x", shas: [] });
+  ok(
+    "0 de N juzgadas -> NO MEDIDO, nunca OK",
+    veredicto({ mienten: [], honestas: [], noMedidas: [linea(1), linea(2)] }).codigo === NO_PUDE_MEDIR,
+  );
+  ok(
+    "y lo DICE: no puede imprimir OK",
+    !/^\s*OK/m.test(veredicto({ mienten: [], honestas: [], noMedidas: [linea(1)] }).mensaje),
+  );
+  // Al revés: cero afirmaciones NO es un hueco. Si ninguna cola pide un deploy, no hay nada que
+  // pueda mentir y el verde es honesto — tratarlo como NO MEDIDO dejaría el gate en un 2
+  // permanente, que es como se aprende a saltearlo.
+  ok("sin lineas que pidan deploy -> OK", veredicto({ mienten: [], honestas: [], noMedidas: [] }).codigo === SIN_MENTIRAS);
+  // Un verde tiene que decir SOBRE CUÁNTAS lo dice, o vuelve a valer lo mismo medir 1 que 58.
+  const verde = veredicto({ mienten: [], honestas: [linea(1), linea(2)], noMedidas: [linea(3)] });
+  ok("el OK nombra cuantas juzgo", verde.codigo === SIN_MENTIRAS && /\b2\b/.test(verde.mensaje));
+  ok("el OK nombra cuantas NO midio", /\b1\b/.test(verde.mensaje));
+  // Y una que miente manda sobre cualquier recuento de no medidas.
+  ok(
+    "una que miente -> MIENTEN, aunque haya no medidas",
+    veredicto({ mienten: [linea(1)], honestas: [], noMedidas: [linea(2), linea(3)] }).codigo === MIENTEN,
+  );
+
   // --- Corregir: lo que convierte al gate en un arreglo y no en una queja recurrente ---
   const arg = { vivos: ["abc1234"], desplegado: "39234c89", fecha: "2026-09-25" };
   // Una línea PARTIDA a la mitad de la oración, que es la forma más común en estas colas:
@@ -432,9 +500,10 @@ function medir(corregir = false) {
     `Lineas que piden deploy en ${DIR_COLAS}: ${afirmaciones.length} — ` +
       `${mienten.length} mienten · ${honestas.length} ciertas · ${noMedidas.length} no medidas (sha ajeno o sin sha).`,
   );
-  if (!mienten.length) {
-    console.log("\nOK — ninguna linea pide un deploy que ya ocurrio.");
-    return SIN_MENTIRAS;
+  const fallo = veredicto({ mienten, honestas, noMedidas });
+  if (fallo.codigo !== MIENTEN) {
+    console.log(fallo.mensaje);
+    return fallo.codigo;
   }
   console.log("\nESTAS LINEAS PIDEN UN DEPLOY QUE YA OCURRIO (su codigo esta vivo):\n");
   for (const m of mienten.slice(0, 80)) {

@@ -615,6 +615,18 @@ npm run deploy:ya-ocurrio     # exit 0 = nadie miente · 1 = lista file:línea �
 Sólo juzga la PLATAFORMA: un sha que no existe en el clon de `onia-platform` sale **NO MEDIDO**,
 nunca acusado — acusar una línea del bot con la frontera del panel sería el mismo error al revés.
 
+⚠️ **Y hasta el 2026-09-25 este comando ABSOLVÍA sin haber medido.** Corrido en vivo ese día:
+**58 afirmaciones, 58 NO MEDIDAS** (22 `ningun sha es de onia-platform`, 36 `la linea no cita
+sha`) — y aun así imprimía *«OK — ninguna linea pide un deploy que ya ocurrio»* y salía `0`.
+Para el que lee el exit, «ninguna miente» y «no pude juzgar a ninguna» eran la misma cara, que
+es exactamente cómo sobrevivieron las 20 líneas caducadas que este gate existe para cazar.
+Arreglado: el veredicto salió de `medir()` a la función pura `veredicto()` —por eso el
+`--self-check` no lo probaba— y ahora **0 juzgadas con afirmaciones presentes es `2`, no `0`**,
+el verde dice **sobre cuántas** lo dice, y «ninguna cola pide deploy» sigue siendo un `0`
+honesto (un `2` permanente se aprende a saltear). Hoy el comando sale **`2`**: no está midiendo
+nada, y eso ahora se ve. El sujeto que sí es trabajo de este carril son las **36 líneas sin
+sha**: un ítem que no cita su commit no lo puede corregir nadie, nunca.
+
 ## Ahora
 
 - [ ] 🔴 **Un lead REAL puede escribir, ser atendido, enfriarse y que Sergio Urcullo no se
