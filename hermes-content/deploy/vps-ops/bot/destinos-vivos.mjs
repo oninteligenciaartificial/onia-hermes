@@ -37,12 +37,13 @@
 
 import { execFileSync } from "node:child_process";
 import { readdirSync, readFileSync } from "node:fs";
-import { dirname, join } from "node:path";
+import { basename, dirname, join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
 import { getFallbackConfig } from "./audio-transcribe.mjs";
 
 const AQUI = dirname(fileURLToPath(import.meta.url));
+const ESTE = basename(fileURLToPath(import.meta.url));
 const CONTENEDOR = "onia-center";
 
 /**
@@ -108,6 +109,10 @@ export const NO_SON_DESTINO_DEL_TURNO = [
   { archivo: "calcom-booking.mjs", clase: "caido-por-decision", motivo: "mismo destino que calcom-availability.mjs (CALCOM_BASE_URL), opcion (c) del 2026-09-13; el prospecto recibe la salvedad 'Estoy confirmando ese horario con Sergio' y Sergio recibe el aviso — flujo degradado honesto, por diseno" },
   { archivo: "chatwoot-onboard.mjs", clase: "duplicado", de: "chatwoot-adapter.mjs", motivo: "mismo destino que chatwoot-adapter.mjs (CHATWOOT_BASE_URL): se mide una vez" },
   { archivo: "bcp-qr.mjs", clase: "apagada", motivo: "no hay QR para pagarle a Onia (se elimino el 2026-08-18): el bot no cobra" },
+  // Sale a la red —le pregunta a onia.com.bo qué frases manda la web viva— pero NO desde un turno:
+  // es un instrumento que se corre desde el repo. Por eso no puede ser "apagada" (mentiria: sí
+  // sale) ni "duplicado" (su destino, la web publica, no lo mide ningun otro sujeto).
+  { archivo: "campanas-vivas.mjs", clase: "no-es-del-turno", motivo: "instrumento de medicion (2026-09-26): le pregunta a onia.com.bo por las frases de campana y al bot vivo si las escucha; ningun turno lo carga — se corre desde el repo" },
 ];
 
 /**
@@ -118,6 +123,11 @@ export const NO_SON_DESTINO_DEL_TURNO = [
  *   dejo de valer y el destino vuelve a medirse.
  * - `duplicado` AFIRMA que otro sujeto mide el mismo destino. Si ese gemelo no esta en
  *   CAPACIDADES, no lo mide nadie y la excusa tapa el agujero entero.
+ * - `no-es-del-turno` AFIRMA que el modulo sale a la red pero NO desde un turno: es un
+ *   instrumento que se corre desde el repo. Esa premisa la contesta el DISCO: si cualquier modulo
+ *   del bot lo carga, esta en el camino del turno y su destino vuelve a medirse. No se pregunta
+ *   solo por `import` a proposito — una LECTURA (`readFileSync`, un `execFileSync` que lo invoca)
+ *   tambien lo pone en el camino, y mirar solo los import ya apago una landing el 2026-09-25.
  *
  * Nace del 2026-09-19: `calcom-booking.mjs` estaba excusado con «su defecto es vacio: sin env no
  * sale a ningun lado» mientras el proceso vivo corria con `CALCOM_BASE_URL=http://calcom:3000`,
@@ -126,17 +136,55 @@ export const NO_SON_DESTINO_DEL_TURNO = [
  * nada — y este gate, que existe justamente para eso, la excusaba. Un motivo cierto el dia que se
  * escribio es una hipotesis CON FECHA.
  */
+/**
+ * Quien MENCIONA a cada archivo del directorio del bot: su nombre buscado en el texto de los demas
+ * modulos. Se pregunta por la mencion y no por la forma del `import` porque las dos maneras de
+ * ponerlo en el camino del turno cuentan igual: importarlo, o leerlo/ejecutarlo por su ruta.
+ *
+ * Tres clases de mencion no cuentan, y las tres por el mismo motivo —nombrar no es cargar—:
+ * los `.test.mjs` (un test nombra a su sujeto por definicion), los otros instrumentos ya
+ * declarados `no-es-del-turno` (que un medidor llame a otro medidor no lo pone en un turno), y
+ * ESTE archivo, que es el clasificador: su lista de excusas nombra a cada sujeto que decide.
+ *
+ * La tercera la encontro el propio self-check el 2026-09-26, en rojo: al clasificar
+ * `campanas-vivas.mjs` como instrumento, el detector vio la mencion DE ESA MISMA LINEA y refuto la
+ * excusa que se acababa de escribir. Un clasificador que se cuenta como evidencia no puede
+ * clasificar nada.
+ */
+export function cargadoresDelDisco(dir = AQUI, leerDir = readdirSync, leer = readFileSync) {
+  const instrumentos = new Set(NO_SON_DESTINO_DEL_TURNO.filter((e) => e.clase === "no-es-del-turno").map((e) => e.archivo));
+  const porArchivo = new Map();
+  const modulos = leerDir(dir).filter((a) => a.endsWith(".mjs") && !a.endsWith(".test.mjs"));
+  for (const archivo of modulos) {
+    const quienes = modulos.filter((otro) => {
+      if (otro === archivo || otro === ESTE || instrumentos.has(otro)) return false;
+      return String(leer(join(dir, otro), "utf8")).includes(archivo);
+    });
+    if (quienes.length) porArchivo.set(archivo, quienes.sort());
+  }
+  return porArchivo;
+}
+
 export function excusasRefutadas({
   excusas = NO_SON_DESTINO_DEL_TURNO,
   sujetos = [],
   env = {},
   medidos = CAPACIDADES.map((c) => c.archivo),
+  cargadores = null,
 } = {}) {
   const refutadas = [];
   for (const e of excusas) {
     if (e.clase === "duplicado") {
       if (!medidos.includes(e.de)) {
         refutadas.push({ ...e, porque: `dice que el destino lo mide ${e.de}, y ${e.de} no esta en CAPACIDADES: no lo mide nadie` });
+      }
+      continue;
+    }
+    // `no-es-del-turno` AFIRMA que ningun turno lo carga. Lo contesta el disco, no el motivo escrito.
+    if (e.clase === "no-es-del-turno") {
+      const quienes = (cargadores ?? cargadoresDelDisco()).get(e.archivo) || [];
+      if (quienes.length) {
+        refutadas.push({ ...e, porque: `dice que ningun turno lo carga, y lo menciona ${quienes.join(", ")}: su destino esta en el camino del turno` });
       }
       continue;
     }
@@ -543,13 +591,32 @@ function medir() {
 // Self-check — puro, va a la cadena
 // ---------------------------------------------------------------------------
 
-function selfCheck() {
+/**
+ * Los sujetos con los que se arma un caso que mide EL JUICIO: solo los que ese caso mide, y
+ * declarados sinteticamente. `juzgar()` usa la lista de sujetos para UNA sola cosa —detectar los
+ * que nadie decidio— asi que un caso que le pasa el disco entero deja de medir lo que dice medir:
+ * mide "ademas, hoy no hay archivos nuevos".
+ *
+ * Nace del 2026-09-26. `campanas-vivas.mjs` entro al directorio con una env `*_BASE` y el gate
+ * saco SEIS fallas: la suya —correcta— y cinco que decian «una capacidad APAGADA con el destino
+ * caido no puede salir roja», «no haber podido preguntar tiene que salir NO MEDIDO», «con el
+ * primario vivo la capacidad se entrega»… todas mentira. Esos cinco comportamientos estaban
+ * perfectos; lo unico roto era que un archivo nuevo estaba sin clasificar. Un rojo que nombra el
+ * sintoma equivocado manda al callejon equivocado, y cuesta la vuelta entera del que lo lee.
+ */
+function sujetosDelCaso(...archivos) {
+  const decididos = new Set([...CAPACIDADES.map((c) => c.archivo), ...NO_SON_DESTINO_DEL_TURNO.map((c) => c.archivo)]);
+  const sinDecidir = archivos.filter((a) => !decididos.has(a));
+  if (sinDecidir.length) throw new Error(`caso del juicio armado con sujetos sin decidir: ${sinDecidir.join(", ")}`);
+  return archivos.map((archivo) => ({ archivo, envs: [] }));
+}
+
+function correrCasos({ sujetos = destinosDelDisco(), conAncla = true } = {}) {
   const fallas = [];
   const ok = (cond, que) => { if (!cond) fallas.push(que); };
 
   // ANCLA: los dos sujetos que originaron el gate tienen que salir del disco. Si el detector deja
   // de verlos, el gate se apaga en silencio y este caso es lo unico que lo delata.
-  const sujetos = destinosDelDisco();
   const nombres = sujetos.map((s) => s.archivo);
   ok(nombres.includes("audio-transcribe.mjs"), "el universo del disco perdio audio-transcribe.mjs (defecto por CONSTANTE, no por literal)");
   ok(nombres.includes("vision.mjs"), "el universo del disco perdio vision.mjs");
@@ -565,7 +632,7 @@ function selfCheck() {
 
   // El defecto real del 2026-09-19: capacidad encendida, destino que no resuelve.
   const roto = juzgar({
-    sujetos,
+    sujetos: sujetosDelCaso("audio-transcribe.mjs"),
     medidas: [{ archivo: "audio-transcribe.mjs", destino: "http://speaches:8000/v1", encendida: true, contesta: false, motivo: "el host no resuelve" }],
   });
   ok(roto.exit === 1, "una capacidad encendida contra un destino muerto tiene que salir ROJO");
@@ -573,21 +640,21 @@ function selfCheck() {
 
   // Apagada a proposito no es rojo: apagar es una decision, no una falla.
   ok(
-    juzgar({ sujetos, medidas: [{ archivo: "audio-transcribe.mjs", destino: "http://speaches:8000/v1", encendida: false, contesta: false }] }).exit === 0,
+    juzgar({ sujetos: sujetosDelCaso("audio-transcribe.mjs"), medidas: [{ archivo: "audio-transcribe.mjs", destino: "http://speaches:8000/v1", encendida: false, contesta: false }] }).exit === 0,
     "una capacidad APAGADA con el destino caido no puede salir roja",
   );
 
   // Tri-estado: no poder preguntar NO es lo mismo que un destino caido.
-  const nm = juzgar({ sujetos, medidas: [{ archivo: "vision.mjs", destino: "http://x/v1", encendida: true, contesta: null, motivo: "sin docker" }] });
+  const nm = juzgar({ sujetos: sujetosDelCaso("vision.mjs"), medidas: [{ archivo: "vision.mjs", destino: "http://x/v1", encendida: true, contesta: null, motivo: "sin docker" }] });
   ok(nm.exit === 2, "no haber podido preguntar tiene que salir NO MEDIDO (2), nunca rojo ni verde");
 
   // Un destino nuevo que nadie decidio es rojo CON SU NOMBRE: asi se cierra la clase.
-  const nuevo = juzgar({ sujetos: [...sujetos, { archivo: "ocr.mjs", envs: ["ONIA_OCR_BASE_URL"] }], medidas: [] });
+  const nuevo = juzgar({ sujetos: [...sujetosDelCaso("vision.mjs"), { archivo: "ocr.mjs", envs: ["ONIA_OCR_BASE_URL"] }], medidas: [] });
   ok(nuevo.exit === 1 && /ocr\.mjs/.test(nuevo.lineas.join("\n")), "un destino externo nuevo sin decidir tiene que salir rojo nombrandolo");
 
   // Verde solo cuando TODOS contestan.
   ok(
-    juzgar({ sujetos, medidas: [{ archivo: "vision.mjs", destino: "http://x/v1", encendida: true, contesta: true }] }).exit === 0,
+    juzgar({ sujetos: sujetosDelCaso("vision.mjs"), medidas: [{ archivo: "vision.mjs", destino: "http://x/v1", encendida: true, contesta: true }] }).exit === 0,
     "con todos los destinos contestando tiene que salir verde",
   );
 
@@ -625,7 +692,7 @@ function selfCheck() {
 
   // El defecto que este arreglo cierra: primario muerto + respaldo vivo NO es una capacidad rota.
   const degradada = juzgar({
-    sujetos,
+    sujetos: sujetosDelCaso("audio-transcribe.mjs"),
     medidas: [
       { archivo: "audio-transcribe.mjs", rol: "primario", destino: "http://speaches:8000/v1", encendida: true, contesta: false, motivo: "el host no resuelve" },
       { archivo: "audio-transcribe.mjs", rol: "respaldo", destino: "https://api.openai.com/v1", encendida: true, contesta: true },
@@ -637,7 +704,7 @@ function selfCheck() {
 
   // La direccion simetrica, que es como vuelve el bug: el primario aguanta y la red se cayo.
   const sinRed = juzgar({
-    sujetos,
+    sujetos: sujetosDelCaso("audio-transcribe.mjs"),
     medidas: [
       { archivo: "audio-transcribe.mjs", rol: "primario", destino: "http://speaches:8000/v1", encendida: true, contesta: true },
       { archivo: "audio-transcribe.mjs", rol: "respaldo", destino: "https://api.openai.com/v1", encendida: true, contesta: false, motivo: "timeout" },
@@ -648,7 +715,7 @@ function selfCheck() {
 
   // Los DOS destinos muertos sí es rojo, y nombra los dos.
   const dosMuertos = juzgar({
-    sujetos,
+    sujetos: sujetosDelCaso("audio-transcribe.mjs"),
     medidas: [
       { archivo: "audio-transcribe.mjs", rol: "primario", destino: "http://speaches:8000/v1", encendida: true, contesta: false, motivo: "el host no resuelve" },
       { archivo: "audio-transcribe.mjs", rol: "respaldo", destino: "https://api.openai.com/v1", encendida: true, contesta: false, motivo: "timeout" },
@@ -661,7 +728,7 @@ function selfCheck() {
   // Cierre de clase: un modulo que expone un respaldo y no lo declara es ROJO con su nombre.
   ok(respaldosSinDeclarar().length === 0,
     `hay capacidades con respaldo sin declarar: ${respaldosSinDeclarar().map((r) => r.archivo).join(", ")}`);
-  const oculto = juzgar({ sujetos, medidas: [], respaldosOcultos: [{ archivo: "vision.mjs", funcion: "getFallbackConfig" }] });
+  const oculto = juzgar({ sujetos: sujetosDelCaso("vision.mjs"), medidas: [], respaldosOcultos: [{ archivo: "vision.mjs", funcion: "getFallbackConfig" }] });
   ok(oculto.exit === 1 && /vision\.mjs/.test(oculto.lineas.join("\n")),
     "un respaldo nuevo sin declarar tiene que salir rojo nombrando el archivo");
   // Y el detector tiene que VER el caso conocido: sin esto el ancla de arriba pasa por vacia.
@@ -684,7 +751,7 @@ function selfCheck() {
   // indistinguible de «lo mide el gemelo», y por eso nadie podia verificarla.
   for (const e of NO_SON_DESTINO_DEL_TURNO) {
     ok(
-      ["apagada", "duplicado", "caido-por-decision"].includes(e.clase),
+      ["apagada", "duplicado", "caido-por-decision", "no-es-del-turno"].includes(e.clase),
       `la excusa de ${e.archivo} no declara una clase verificable`,
     );
     ok(e.clase !== "duplicado" || Boolean(e.de), `la excusa duplicado de ${e.archivo} no nombra al sujeto que SI lo mide`);
@@ -731,6 +798,40 @@ function selfCheck() {
     "con el entorno vacio ninguna excusa 'apagada' real puede quedar refutada",
   );
 
+  // --- `no-es-del-turno`: la premisa es "ningun turno lo carga", y la contesta el disco. ---
+
+  // Las dos mitades. Sin la segunda, la clase seria un gate que grita siempre; sin la primera,
+  // una excusa que tapa un destino que SI esta en el camino del turno.
+  const comoInstrumento = [{ archivo: "medidor.mjs", clase: "no-es-del-turno", motivo: "instrumento: se corre desde el repo" }];
+  const cargado = excusasRefutadas({
+    excusas: comoInstrumento,
+    cargadores: new Map([["medidor.mjs", ["run-turn.mjs"]]]),
+  });
+  ok(cargado.length === 1, "un modulo excusado como instrumento que un modulo del bot CARGA tiene que quedar refutado");
+  ok(/run-turn\.mjs/.test(cargado[0]?.porque || ""), "la refutacion tiene que NOMBRAR quien lo carga, no solo decir que la excusa es falsa");
+  ok(
+    excusasRefutadas({ excusas: comoInstrumento, cargadores: new Map() }).length === 0,
+    "un instrumento que nadie carga NO puede darse por refutado: se corre desde el repo, no en un turno",
+  );
+
+  // El clasificador no es evidencia: nombrar un sujeto en la lista de excusas no lo carga. Sin este
+  // caso, clasificar un instrumento refuta la excusa que se acaba de escribir (pasó el 2026-09-26).
+  ok(
+    !(cargadoresDelDisco().get("campanas-vivas.mjs") || []).includes(ESTE),
+    `el detector de cargadores se cuenta a si mismo (${ESTE}): toda excusa 'no-es-del-turno' se auto-refuta al escribirse`,
+  );
+
+  // Y el detector tiene que ver de verdad el caso conocido: sin esto las dos mitades pasan en vacio.
+  const cargadoresReales = cargadoresDelDisco();
+  ok(
+    cargadoresReales.get("audio-transcribe.mjs")?.length,
+    "el detector de cargadores no ve quien carga audio-transcribe.mjs: las excusas 'no-es-del-turno' pasarian en vacio",
+  );
+  ok(
+    excusasRefutadas({ sujetos, env: {}, cargadores: cargadoresReales }).every((r) => r.clase !== "no-es-del-turno"),
+    `hay un instrumento que en realidad esta en el camino del turno: ${excusasRefutadas({ sujetos, env: {}, cargadores: cargadoresReales }).filter((r) => r.clase === "no-es-del-turno").map((r) => r.archivo).join(", ")}`,
+  );
+
   // Un `duplicado` cuyo gemelo no se mide tapa el agujero entero.
   ok(
     excusasRefutadas({
@@ -751,13 +852,33 @@ function selfCheck() {
 
   // Una excusa refutada nunca puede terminar en verde: si nadie mide ese destino, el gate no sabe.
   const conRefutada = juzgar({
-    sujetos,
+    sujetos: sujetosDelCaso("vision.mjs"),
     medidas: [{ archivo: "vision.mjs", destino: "http://x/v1", encendida: true, contesta: true }],
     refutadas: [{ archivo: "calcom-booking.mjs", porque: "el proceso vivo tiene CALCOM_BASE_URL=http://calcom:3000" }],
   });
   ok(conRefutada.exit === 1, "con una excusa refutada el gate no puede salir verde");
   ok(/calcom-booking\.mjs/.test(conRefutada.lineas.join("\n")), "el rojo de excusa falsa tiene que NOMBRAR el archivo excusado");
 
+  // ANCLA DEL AISLAMIENTO (2026-09-26): un archivo nuevo sin clasificar tiene que dar UN rojo —el
+  // suyo, con su nombre— y no contaminar ningun otro caso. Se corre el self-check ENTERO contra un
+  // disco simulado que trae un huerfano y se cuentan las fallas: si son mas de una, hay casos que
+  // estan preguntandole al disco en vez de a la logica que dicen medir, y sus rojos mienten.
+  if (conAncla) {
+    const conHuerfano = correrCasos({
+      sujetos: [...sujetos, { archivo: "huerfano-de-prueba.mjs", envs: ["ONIA_HUERFANO_BASE"] }],
+      conAncla: false,
+    });
+    ok(
+      conHuerfano.length === 1 && /huerfano-de-prueba\.mjs/.test(conHuerfano[0]),
+      `un archivo nuevo sin clasificar contamina otros casos: dio ${conHuerfano.length} fallas en vez de 1 (${conHuerfano.filter((f) => !/huerfano-de-prueba/.test(f)).join(" · ")})`,
+    );
+  }
+
+  return fallas;
+}
+
+function selfCheck() {
+  const fallas = correrCasos();
   for (const f of fallas) console.log(`  FALLA  ${f}`);
   console.log(fallas.length ? `self-check: ${fallas.length} falla(s)` : "self-check: ok");
   return fallas.length ? 1 : 0;
