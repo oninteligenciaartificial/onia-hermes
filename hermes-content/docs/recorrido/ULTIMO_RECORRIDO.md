@@ -4193,3 +4193,35 @@ RAZÓN: N/A — avanzó (dental re-confirmado con el `BUILD_ID` vigente, y cerra
 quedaba con verificación vieja).
 LECCIÓN: ninguna nueva — el método de comparar `BUILD_ID` primero y de reproducir con el
 instrumento ya escrito (en vez de reinventar el chequeo) volvió a funcionar.
+
+## 2026-09-26 (vuelta HEAD f3c4327f) — otro eje (cifra-por-cifra), no dental: `BUILD_ID` sin cambio (`4FWMcecd4jRBGUVwStDQb`)
+
+Escalón 3 por ruta ya se había agotado (24/24 rutas auditadas al menos una vez, nota anterior).
+`BUILD_ID` comparado antes de decidir: sin cambio desde la corrida de dental del 2026-09-26
+00:09 → no correspondía repetir dental. Cambié de eje: cifra por cifra, precios REALES contra
+`onia-platform/lib/subscription-plans.ts` (`DEFAULT_PLAN_AMOUNTS`), sobre producción viva
+(`curl https://onia.com.bo/precios` y `/`, no el código fuente).
+
+**Sin hallazgo en precios.** Los 4 escalones (320/550/890/1.290 mensual; 3.200/5.500/8.900/12.900
+anual; semanal 89/145/229 en basic/crece/professional) están servidos IDÉNTICOS en `/precios` y
+en `/` — incluida la letra chica ("anual cobra 10 meses", "Completo se cobra mensual o anual").
+El add-on chatbot (Bs 390/mes, Bs 3.900/año) también coincide con `pricing.ts`. La memoria
+compartida decía que esta escalera (con "crece") era nueva desde el 2026-09-12: confirmado que
+la web YA la sirve completa, sin residuos de la escalera vieja (320/750/1.500).
+
+**Reverifiqué el único hallazgo abierto que traía esta vuelta (`t_826a7ab2`,
+`/servicios/marketing-ia`) — sigue roto en producción pese a estar `done` en el tablero.** El
+fix (commit `5f61db7a`, "la venta le confesaba al lead que no tenemos clientes") existe, pero
+**vive solo en `claude/web-venta`**: `git merge-base --is-ancestor 5f61db7a origin/main` da NO.
+`curl https://onia.com.bo/servicios/marketing-ia` sigue sirviendo el texto viejo ("Somos una
+empresa nueva... no tenemos un muro de logos ni casos de éxito"), idéntico al de la captura
+original. No lo mergeo (no es mi carril, es de `web-venta`/integrador) — dejé la evidencia en un
+comentario de la tarea para que el integrador la levante en su próximo merge. Esto es la regla
+"construido ≠ terminado" aplicada al revés de lo usual: acá lo que falló no fue el código, fue
+tratar un commit en una rama ajena como si ya estuviera en producción.
+
+RAZÓN: N/A — avanzó (precios cifra-por-cifra sin hallazgo nuevo; hallazgo previo reverificado y
+corregido su estado real en el tablero, que decía "done" sin estarlo en producción).
+LECCIÓN: un tablero en "done" certifica que el AGENTE terminó su commit, no que ese commit llegó
+a `origin/main` ni a producción — antes de dar un hallazgo por cerrado, `git merge-base
+--is-ancestor <sha-del-fix> origin/main`, y si no, recurl la superficie viva.
