@@ -128,86 +128,14 @@ export const INSTRUCCION_DE_OK = /`?\bok\b`?[^.!?\n]{0,40}?`?t_[0-9a-f]{8}/;
  */
 export const OK_YA_CONTESTADO = /contest[oó]|respondi[oó]|lleg[oó]|ya dio el|dio el `?ok`? (?:a|de)\b/i;
 
-/**
- * UNA NOTA DE CORRECCION NO AFIRMA LO QUE CITA, y esta es la unica exclusion que se aplica a las
- * DOS vias (freno e instruccion).
- *
- * Estas colas corrigen en el lugar, con la convencion de `CLAUDE.md`: se deja el texto viejo
- * entre comillas y al lado se explica por que estaba mal. Medido el 2026-09-26 en
- * `plataforma-v1.md:441-444` — *«Aca decia que ... porque "sigue vivo el corte de 2FA" ... las dos
- * mitades estaban VENCIDAS, corregido el 2026-09-25»*. La frase CITA el freno para desmentirlo, y
- * `sigue vivo el corte` esta en `LENGUAJE_DE_FRENO`. Sin esta guarda el gate muerde justo la linea
- * que arreglo el problema: le pide borrar la correccion para ponerse verde, o sea premia
- * exactamente lo que este archivo documenta como su peor modo de falla — que el sujeto se borre en
- * vez de arreglarse.
- *
- * ⚠️ SU RIESGO, dicho de frente: suprime la frase ENTERA, asi que una nota de correccion que
- * ademas mande a un id nuevo que TAMBIEN este muerto no se ve. Se acepta porque el lado barato de
- * equivocarse es este: una correccion fechada es legible para el que la lee, mientras que un gate
- * que grita sobre ella se apaga y deja de mirar todo lo demas.
+/*
+ * El parser de frases, la guarda de notas de correccion y el cierre de frase viven en
+ * `scripts/lib/frases_de_cola.mjs` desde el 2026-09-26: los necesita tambien
+ * `en_vuelo_vencido.mjs`, y este archivo no se puede importar (su CLI y su `--self-check`
+ * corren a nivel de modulo). Se re-exportan porque el `--self-check` de abajo los afirma.
  */
-export const NOTA_DE_CORRECCION =
-  /ac[aá] dec[ií]a|esto (?:es|era) historia|estaban? VENCID|vencidas?, corregido|corregido el \d|ya no es cierto|se corrigi[oó]/i;
-
-/**
- * Un renglon que ARRANCA bloque nuevo: nada se pega a traves de el. Renglon vacio, bullet,
- * item numerado, titulo, fila de tabla, cerca de codigo o cita. Sin esto, reconstruir frases
- * pegaria el final de un item con el principio del siguiente.
- */
-const ABRE_BLOQUE = /^\s*$|^\s*[-*+]\s|^\s*\d+\.\s|^\s*#|^\s*\||^\s*```|^\s*>/;
-
-/**
- * Cuantos renglones puede abarcar una frase antes de cerrarla por las malas. El wrap duro de
- * estas colas es de ~95 columnas, asi que una frase real entra en dos o tres renglones; el tope
- * existe para que una prosa sin puntuacion no acumule medio item en una sola ventana.
- */
-const TOPE_RENGLONES = 6;
-
-/**
- * ¿Este renglon CIERRA la frase? Se miran los adornos de markdown del final: `t_76cdb5dc`**
- * no cierra nada, y `(tarea `t_X`, depende de Sergio Urcullo).` si.
- */
-export function cierraFrase(linea) {
-  return /[.!?:;]$/.test(linea.replace(/[\s*_`)\]»”"']+$/u, ''));
-}
-
-/**
- * Reconstruye las FRASES de un markdown de wrap duro, con los renglones donde cae cada id.
- *
- * ⚠️ POR QUE EXISTE, y es el hueco mas caro que tuvo este gate. Medir de a renglones parecia
- * gratis y no lo era: estas colas se escriben con wrap duro a ~95 columnas, asi que una frase
- * cualquiera cae partida en dos renglones — y con ella, el par que este gate necesita ver
- * JUNTO. Medido el 2026-09-26 en `cola/chatbot.md`:
- *
- *   1246  **Deploy:** el arreglo ... ya esta commiteado y espera el `ok` de Sergio
- *   1247  Urcullo en **`t_76cdb5dc`** ("Publicar el bot..."). No se creo un pedido nuevo.
- *
- * El lenguaje de freno esta en 1246 y el id en 1247. Ningun renglon tiene los dos, asi que
- * ninguna lista blanca de frases —por larga que sea— podia morderlo: no era una redaccion que
- * faltara, era la UNIDAD DE MEDIDA equivocada. La unidad de significado es la frase.
- *
- * Y la contracara es la que mantiene vivo al gate: la frase se corta en el terminador y en el
- * arranque de bloque, asi que "…espera el `ok`." seguido de "CERRADO en `t_X`" NO se pegan. Un
- * ensanche que griteara en falso sobre la historia fechada terminaria apagado, y ese es el modo
- * de falla que este archivo ya documenta dos veces.
- */
-export function frases(md) {
-  const salida = [];
-  let actual = null;
-  const cerrar = () => { if (actual) salida.push(actual); actual = null; };
-
-  md.split(/\r?\n/).forEach((linea, i) => {
-    if (ABRE_BLOQUE.test(linea)) cerrar();
-    if (!linea.trim()) return;
-    actual ??= { texto: '', ocurrencias: [], renglones: 0 };
-    actual.texto += (actual.texto ? ' ' : '') + linea.trim();
-    actual.renglones++;
-    for (const id of linea.match(ID) ?? []) actual.ocurrencias.push({ id, linea: i + 1 });
-    if (cierraFrase(linea) || actual.renglones >= TOPE_RENGLONES) cerrar();
-  });
-  cerrar();
-  return salida;
-}
+import { NOTA_DE_CORRECCION, cierraFrase, frases } from './lib/frases_de_cola.mjs';
+export { NOTA_DE_CORRECCION, cierraFrase, frases };
 
 /**
  * Saca las citas que afirman un freno vigente. Sin red y sin disco: es lo que se prueba en
@@ -218,7 +146,7 @@ export function frases(md) {
  */
 export function citasDeBloqueo(md) {
   const citas = [];
-  for (const frase of frases(md)) {
+  for (const frase of frases(md, ID)) {
     if (NOTA_DE_CORRECCION.test(frase.texto)) continue;
     const instruye = INSTRUCCION_DE_OK.test(frase.texto) && !OK_YA_CONTESTADO.test(frase.texto);
     if (!LENGUAJE_DE_FRENO.test(frase.texto) && !instruye) continue;

@@ -3755,11 +3755,24 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
       `onia-interna` no es un cliente que paga, así que eso ensucia la MEDICIÓN, no la plata
       de nadie.
 
-      🔴 **EN VUELO, con su riesgo:** el commit `42eab9a8` está **sólo en el clon de casa**
-      (`/root/loops/onia-platform-chatbot`). Desde nodo-casa `onia-platform` **no se pushea**
-      (`git remote -v` → push `DESHABILITADO-NODO-DE-DESARROLLO`). Si esa máquina se pierde,
-      se pierde el arreglo. Lo entrega el integrador por
-      `scripts/integrar-onia-platform.sh`.
+      ✅ **YA ENTREGADO Y MERGEADO — acá decía «🔴 EN VUELO, con su riesgo: el commit `42eab9a8`
+      está sólo en el clon de casa … si esa máquina se pierde, se pierde el arreglo», y es FALSO
+      desde entonces; corregido el 2026-09-26 midiéndolo.** Vive publicado como **`eb6182d3`**, con
+      `patch-id` idéntico, y **ya está en `origin/master`**. O sea el 🔴 anunciaba pérdida de
+      trabajo sobre algo que llegó al integrador — y un 🔴 de pérdida de datos es de los que hacen
+      que un carril suelte su ítem y corra a rescatar lo que no hace falta rescatar.
+
+      **Por qué el sha citado nunca iba a aparecer en un remoto:** `git am` **regenera el sha** al
+      entregar, así que el local queda huérfano para siempre y el instrumento con que se "probó" el
+      riesgo —`git log HEAD --not --remotes=origin`— lo sigue devolviendo. El sha es la identidad
+      equivocada para esta pregunta; la que sobrevive a `git am` es el **mensaje**, y el contenido
+      se confirma con `patch-id`:
+
+      ```bash
+      cd /root/loops/onia-platform-chatbot && git fetch origin --quiet
+      git log origin/master --oneline --grep='webhook que COBRA'   # → eb6182d3
+      git show 42eab9a8 | git patch-id --stable   # mismo patch-id que el publicado
+      ```
 
 - [x] 🔴 **CERRADO el 2026-09-19 — el bot le clavaba el género masculino a la persona que
       atiende, que la carga el CLIENTE: «la Dra. Ana Ríos … te escribe él»**
@@ -9036,6 +9049,32 @@ cita: al cerrar una fila hay que barrer quién la nombra, no sólo tacharla.
       se deriva, no se copia** (`onia-tablero.sh list --status blocked | grep -i 'Publicar el
       bot'`). No se mandó Telegram: ese `ok` ya le llega en el parte diario, y sumar un aviso a
       un canal saturado es apagarlo.
+
+- [ ] **Terminar `scripts/en_vuelo_vencido.mjs`: la unidad tiene que ser el ÍTEM ABIERTO, no la
+      frase.** El gate existe, corre y su `--self-check` da 10/10, pero **no está cableado a
+      ninguna cadena a propósito**: medido el 2026-09-26 sobre las dos colas da **8 sujetos y 6 son
+      falsos**, y encima **pierde el único que de verdad estaba vencido**. Las dos fallas, con su
+      línea exacta y su causa, están en la cabecera del archivo — no las vuelvas a derivar.
+
+      **El rediseño ya está diagnosticado; falta escribirlo.** Un ítem `- [x]` es historia por
+      construcción (su prosa habla en pasado) y ahí caen 5 de los 6 falsos; el 6.º es una nota de
+      corrección dentro de un ítem abierto, que pide ensanchar `NOTA_DE_CORRECCION` con
+      `YA DESPLEGADO` / `Entregado hoy al remoto` / `citaba`. Tomar el ítem como unidad resuelve de
+      paso el sujeto perdido, porque junta el sha con su afirmación (hoy caen en frases distintas
+      del mismo ítem, a 6 renglones). **Lo que NO se arregla así:** separar «en vuelo» de
+      «mergeado sin desplegar» son dos preguntas distintas, y la segunda ya tiene su gate
+      (`deploy-vivo.mjs`) — no la absorbas acá.
+
+      ```bash
+      node scripts/en_vuelo_vencido.mjs --self-check     # 10 casos, puro, sin red ni disco
+      node scripts/en_vuelo_vencido.mjs hermes-content/docs/cola/chatbot.md \
+        hermes-content/docs/cola/plataforma-v1.md        # hoy: 8 sujetos, 6 falsos
+      ```
+
+      ⚠️ **Se cablea a `npm test` sólo el `--self-check`, nunca la medición viva** — necesita el
+      clon de `onia-platform`, y un gate cuyo self-check depende del repo hermano se pone rojo por
+      ambiente y traba el merge de todos los carriles. La medición viva va en la lista de arranque
+      de este carril, que es el único lugar donde un alias suelto se corre de verdad.
 
 - [ ] **Limpieza de la data QA NUEVA.** La del 29-ago ya se ejecutó; después se generó más:
       las conversaciones QA 39, 43 y 44 (`Cliente Prueba Bandeja`, `Cliente Insistencia Tres`,

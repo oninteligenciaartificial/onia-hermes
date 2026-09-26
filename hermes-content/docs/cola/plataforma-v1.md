@@ -5887,14 +5887,26 @@ y sin operar. Acá se opera, con verificación por ítem.
       **La tarjeta está ENCENDIDA en producción** (`META_APP_ID` y `META_CONFIG_ID` puestos en
       el contenedor `onia-platform`), o sea que el gate no vigila una pantalla apagada.
 
-      ⚠️ **Commiteado, NO publicado en ningún remoto — y esto se pierde si nadie lo entrega.**
-      `onia-platform` no se puede pushear desde nodo-casa (remoto en
-      `DESHABILITADO-NODO-DE-DESARROLLO`). El camino es `format-patch` → VPS → `git am` →
-      push, **pero el gemelo `/root/loops/onia-platform` del VPS está hoy con 392 archivos
-      sucios y 39 commits atrás de `origin/master`**: aplicar el patch ahí publicaría un árbol
-      que nadie midió, encima de trabajo en vuelo que no es de este carril. El commit vive en
-      `/root/loops/onia-platform-chatbot` (rama `claude/chatbots-platform-review-0d1d09`).
-      **Lo que falta es limpiar/decidir ese gemelo, no rehacer el arreglo.**
+      ✅ **YA ENTREGADO AL REMOTO — acá decía «Commiteado, NO publicado en ningún remoto — y esto
+      se pierde si nadie lo entrega … lo que falta es limpiar/decidir ese gemelo», y las dos cosas
+      son FALSAS; corregido el 2026-09-26 midiéndolo.** El arreglo vive publicado en la rama como
+      **`e3276455`**, con `patch-id` idéntico (`97706f49…`) al `71cd8fa9` local. **No falta
+      entregarlo y no hay que tocar el gemelo sucio del VPS** — ese párrafo mandaba a limpiar 392
+      archivos ajenos, en un árbol de otro carril, para re-entregar algo ya entregado.
+
+      **Lo que sí falta es el merge a `master`, que es de `onia-cola`, no de este carril:**
+      `git merge-base --is-ancestor e3276455 origin/master` da falso hoy.
+
+      ⚠️ **Y el sha viejo no se cita más, por la razón que este archivo ya explica en `:1759`:**
+      `git am` **regenera el sha**, así que el local nunca va a aparecer en un remoto y
+      `git log HEAD --not --remotes=origin` lo devuelve para siempre — se lee como «no entregado»
+      cuando la verdad es «entregado con otro nombre». Se deriva por **mensaje**, que es lo único
+      que sobrevive a `git am`:
+
+      ```bash
+      cd /root/loops/onia-platform-chatbot && git fetch origin --quiet
+      git log origin/claude/chatbots-platform-review-0d1d09 --oneline --grep='META le cobra al dueño'
+      ```
 
       Lo que sigue bloqueado es SÓLO la tarjeta en el billing de Meta, y no la puede cargar
       ningún carril.
