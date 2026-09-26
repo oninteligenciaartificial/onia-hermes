@@ -77,6 +77,31 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Ahora — plan de features (revisado 2026-08-30, con Gate 1 corrido)
 
+- [x] 🟠 **El titular de `/empezar` partía su resalte al medio, en las DOS vistas — ARREGLADO el
+      2026-09-26 por `web-venta` (`e9d19c01`), con el gate que lo deja visto.**
+      - **Lo que veía el lead** en la última pantalla antes de registrarse: `Creá tu cuenta` /
+        `y usalo de` / `verdad 14 días.` El resalte verde es **"de verdad"** y el salto de línea
+        caía **adentro**: dos pedazos de verde que no forman una frase. Escritorio y teléfono.
+      - **Causa:** `text-wrap: balance` en `.display` reparte el titular por ancho de renglón y
+        no sabe que ese tramo es una frase. Arreglo: `white-space: nowrap` en `.display em`.
+      - **El riesgo opuesto se midió, no se supuso:** el resalte más largo del sitio es
+        `un solo dato` (`/servicios/webs`) y a **320px ocupa 264px de 320, un renglón, scroll
+        lateral 0**; las 24 pantallas × 5 vistas dan **0 desbordes y 0 recortados** contra el
+        build con el arreglo.
+      - **Por qué ningún gate lo veía** — la mitad que importa: el markup es **idéntico** se
+        parta o no (lo decide el ancho del renglón en el navegador), así que no lo alcanza un
+        test de fuente ni un `grep` del HTML; y la página responde **200 con todo pintado**, así
+        que no lo alcanzaba el resto de `mirar-primera-pantalla`. **Lo vio el ojo leyendo la
+        captura.** Ahora lo mide el gate: `getClientRects()` da una caja por renglón ocupado, y
+        más de una sobre el resalte es rojo. Salió **ROJO por el motivo correcto** antes del
+        arreglo (nombrando `"de verdad"` en las dos vistas, con la portada en `1reng`).
+      - ⚠️ **Trampa de instrumento medida de paso:** `mirar-venta.mjs` toma la base con
+        `--base=<url>`, **no posicional**, y `mirar-primera-pantalla.mjs` sí la toma posicional.
+        Pasarle la URL suelta al primero **no da error**: ignora el argumento y mide
+        **producción**, o sea un verde sobre el sistema equivocado. Casi lo tomo por bueno.
+      - Evidencia: `/tmp/wv-fix/empezar-{escritorio,telefono}.png` y `/tmp/webs-320.png`,
+        abiertas y **miradas**.
+
 - [x] 🟠 **`mirar:portada` pintaba un ROJO intermitente en `telefono /empezar` por una espera que
       no retenía — ARREGLADO el 2026-09-26 por `web-venta`, con la causa medida y los dos
       recíprocos falsificados.**
