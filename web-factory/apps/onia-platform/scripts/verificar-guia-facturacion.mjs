@@ -127,6 +127,10 @@ const p = await navegador.newPage({
   viewport: { width: 390, height: 844 },
   reducedMotion: "reduce",
 });
+/* Se escucha ANTES del goto: los errores que impiden hidratar pasan durante la
+ * carga, y un listener puesto después no los ve nunca. */
+const erroresDeJs = [];
+p.on("pageerror", (e) => erroresDeJs.push(String(e).split("\n")[0]));
 try {
   await p.goto(`${BASE}/guia-facturacion?src=guia-siat-dm`, {
     waitUntil: "domcontentloaded",
@@ -137,6 +141,38 @@ try {
   noMedido(`la guía dejó de responder al abrirla (${e.message.split("\n")[0]})`);
 }
 await p.waitForTimeout(1200);
+
+/*
+ * SONDA DE HIDRATACIÓN — va antes de juzgar cualquier cosa interactiva.
+ *
+ * Nueve de los trece chequeos de abajo dependen de que React haya tomado el
+ * control: si el bundle del cliente no corrió, el HTML se sirve igual (es
+ * server-rendered), la pantalla se ve idéntica, y apretar el botón hace un
+ * submit GET NATIVO. O sea: `8 FALLAS` y exit 1 sobre una pantalla sana.
+ *
+ * No es hipotético, pasó. Medido el 2026-09-25: la CSP que la landing estrenó
+ * el día anterior no traía `'unsafe-eval'`, `next dev` evalúa cada módulo con
+ * `eval`, y este gate quedó en 8 FALLAS fijas mientras producción hidrataba
+ * perfecto. El encabezado de este archivo ya decía que un gate que confunde "no
+ * pude preguntar" con "me dijeron que no" se lee como el ambiental de siempre —
+ * le faltaba justamente este caso, que es el más fácil de confundir de todos,
+ * porque la página responde 200 y se ve bien.
+ *
+ * `window.next` lo publica el runtime del cliente de Next en las dos bases
+ * (medido: `object`, versión 15.5.19, en localhost y en onia.com.bo). Si no
+ * está, nada de lo interactivo se puede juzgar.
+ */
+const hidratada = await p.evaluate(
+  () => typeof window.next === "object" && window.next !== null,
+);
+if (!hidratada) {
+  await navegador.close();
+  noMedido(
+    `la guía cargó pero el JavaScript del cliente no corrió, así que nada interactivo se puede juzgar` +
+      (erroresDeJs.length ? `\n  primer error de la página: ${erroresDeJs[0]}` : "") +
+      `\n  Si dice 'unsafe-eval' es la CSP de next.config.ts: mirá cspDeLaLanding()/ejecutaEval().`,
+  );
+}
 
 /* 1 · un correo mal escrito no gasta un envío y se avisa en el campo */
 let peticiones = 0;
