@@ -12,6 +12,59 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-26 (vuelta HEAD 9a046a0f) — `BUILD_ID` sin cambios; escalón 3 en 7 superficies nunca auditadas por este carril: HALLAZGO en `/servicios/marketing-ia`
+
+`ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado primero contra la entrada de arriba:
+`4FWMcecd4jRBGUVwStDQb`, **igual** — no correspondía repetir el recorrido end-to-end (9/9 ya
+cerrado en los 5 rubros contra este build). Tablero: sin tareas `ready` sin reclamar en la zona
+`recorrido-cliente`.
+
+Antes de elegir superficie, listé TODAS las rutas reales del sitio
+(`find web-factory/apps/onia-platform/src/app -iname page.tsx`) y las crucé contra lo que este
+archivo ya dice haber auditado: `/servicios/consultoria`, `/servicios/marketing-ia`, `/privacidad`,
+`/v1/comparativa`, `/v1/empezar`, `/v1/precios` y `/prueba-gratis` no tenían ni una mención previa
+— siete superficies completas nunca miradas por este carril, pese a que `/agentes`, `/comparativa`
+(sin `/v1`), `/nosotros`, `/terminos` y el resto sí llevan varias vueltas.
+
+Auditadas en vivo (Playwright, `onia.com.bo`, no `curl`+`grep`), las 7 con status 200:
+
+- **`/v1/precios`**: los 4 planes (320/550/890/1.290, semanal 89/145/229, anual 3.200/5.500/8.900/
+  12.900, Grupo/Empresarial 2.900/29.000, chatbot add-on 390) coinciden con la escalera vigente de
+  la memoria compactada (24-sep, `DEFAULT_PLAN_AMOUNTS`). Sin hallazgo.
+- **`/v1/comparativa`**: compara contra el Portal del SIN, facturadores bolivianos y software
+  dental regional, con precio y fecha de consulta citados (30-jul-2026) por proveedor — cero
+  prueba social fabricada, cero testimonios. Sin hallazgo.
+- **`/v1/empezar`**: los 5 rubros vigentes, todos "DISPONIBLE", sin rubro apagado ni "muy pronto".
+  Sin hallazgo.
+- **`/prueba-gratis`**: promete el plan Profesional durante la prueba — coincide con
+  `TRIAL_PLAN='professional'` de la memoria. Sin hallazgo.
+- **`/privacidad`**: v1.2, fechada 25-sep-2026. Es un doc legal, no venta: puede ser honesto sobre
+  límites por regla propia de `CLAUDE.md`. Sin hallazgo.
+- **`/servicios/consultoria`**: "Sin humo" — dice explícito que no promete multiplicar
+  facturación y que no certifica con diplomas. Habla de "nuestra operación real" pero como
+  argumento de venta del servicio (automatizamos la nuestra primero), no como estado de obra.
+  Sin hallazgo.
+- **HALLAZGO en `/servicios/marketing-ia`** (reportado en el tablero, `t_826a7ab2`, prioridad 2,
+  para `web-venta` — dueño de `web-factory/apps/onia-platform/`): la sección "Lo que NO vas a
+  encontrar acá" dice textual **"Somos una empresa nueva y lo decimos de frente: no tenemos un
+  muro de logos ni casos de éxito con números espectaculares — y antes que inventarlos,
+  preferimos no tenerlos todavía."** Es honesto, pero es exactamente lo que `CLAUDE.md` prohíbe
+  en una pantalla de venta: comunicar estado de obra/inmadurez ("todavía") y hablar de la propia
+  situación de la empresa (cero autobombo). Esa honestidad es correcta en un doc interno, no en
+  la pantalla que ve un prospecto antes de pedir propuesta. No lo arreglo — no es mi carril.
+  Capturas: `capturas/hallazgo-autobombo-marketing-ia.png` (sección completa, scrolleada) y
+  `capturas/auditoria-_servicios_marketing-ia.png` (arriba de la pantalla).
+
+RAZÓN de no-avance en la medida `llegoHasta/completo`: no corresponde repetir el recorrido
+end-to-end (build sin cambios, ya 9/9 en los 5 rubros); este escalón mide otra cosa
+(consistencia promesa/entrega en superficies nunca auditadas) y no tiene contraparte numérica en
+`resumen.json`.
+LECCIÓN: ninguna nueva — antes de elegir la próxima superficie de escalón 3, listar TODAS las
+rutas reales (`find ... page.tsx`) y cruzarlas contra lo ya auditado encontró en un solo paso 7
+huecos que las vueltas anteriores no habían visto por ir superficie por superficie de memoria.
+
+---
+
 ## 2026-09-26 (vuelta HEAD 4fcf307d) — `BUILD_ID` sin cambios, escalón 3: promesa vs. entrega en el sitio — sin hallazgo nuevo
 
 `BUILD_ID` comparado primero contra la entrada de abajo: `4FWMcecd4jRBGUVwStDQb`, **igual**. Con
