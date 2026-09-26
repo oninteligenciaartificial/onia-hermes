@@ -22,7 +22,16 @@
  * Alcanza a `import type` a propósito: TypeScript elide el tipo en runtime, pero el `prebuild`
  * corre `tsc --noEmit` antes que los tests y necesita el archivo igual.
  */
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, statSync } from "node:fs";
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  readdirSync,
+  rmSync,
+  statSync,
+  writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -326,6 +335,22 @@ describe("lo que LEE web-factory en runtime también viaja con web-factory", () 
       mkdirSync(join(conHermano, "docs"));
       mkdirSync(join(conHermano, "web-factory", "docs"));
       expect(hermanosInequivocos(join(conHermano, "web-factory"))).toEqual([HERMANO]);
+
+      /*
+       * Y el gate ENTERO en el árbol del stage, que es donde corre el `prebuild` que se rompió:
+       * se le pone adentro un archivo que en el repo completo SÍ sería sujeto —lee disco y arma
+       * la ruta al hermano— y aun así no sale nada, porque ahí no hay contra qué medir. Sin este
+       * caso, el comportamiento de este gate en el único árbol que importa quedaba razonado y no
+       * medido: exactamente el defecto que vino a cazar, cometido por él mismo.
+       */
+      const sujeto = `import { existsSync } from "node:fs";\nconst R = join("${HERMANO}", "x.mjs");\nif (existsSync(R)) readFileSync(R);\n`;
+      writeFileSync(join(soloWebFactory, "web-factory", "sujeto.mjs"), sujeto);
+      expect(lecturasHaciaAfuera(join(soloWebFactory, "web-factory"))).toEqual([]);
+      // …y en el repo completo el MISMO archivo sí sale, o el caso de arriba no probaría nada.
+      writeFileSync(join(conHermano, "web-factory", "sujeto.mjs"), sujeto);
+      expect(lecturasHaciaAfuera(join(conHermano, "web-factory")).map((l) => l.archivo)).toEqual([
+        "sujeto.mjs",
+      ]);
     } finally {
       rmSync(conHermano, { recursive: true, force: true });
       rmSync(soloWebFactory, { recursive: true, force: true });
