@@ -12,6 +12,32 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-26 14:09-14:20 La Paz (vuelta HEAD e292f373) — `BUILD_ID` sin cambios (`DvBubiuO4uC5_E9jFNJeZ`, ya confirmado en dental desktop por `b5c4e6b2`); repetí ese mismo eje por error, y corregí con uno real: recuperación de contraseña con token real, 13 días sin correrse, 9/9
+
+**Corrí primero dental desktop sin ejes nuevos** (`node scripts/recorrido_cliente.mjs --escribir`,
+cuenta `zz-qa-2026-09-26-1810`) sin comparar antes contra `ULTIMO_RECORRIDO.md`: 9/9, `completo:
+true`, limpio — pero era una repetición exacta de lo que la entrada `b5c4e6b2` de este mismo
+`BUILD_ID` ya había confirmado (dental desktop, default). La lección de la vuelta anterior decía
+justo esto: comparar `BUILD_ID` contra este archivo ANTES de decidir qué correr, no sólo antes de
+repetir "dental" a secas. Corregido: grepeé qué ejes llevaban más tiempo sin tocarse y encontré
+`RECORRIDO_PROBAR_RECOVERY=1` sin correrse desde el 2026-09-13 (13 días, ver más abajo).
+
+- **Recuperación de contraseña con token real** (`RECORRIDO_PROBAR_RECOVERY=1 node
+  scripts/recorrido_cliente.mjs --escribir`, dental, cuenta `zz-qa-2026-09-26-1815`): **OK de
+  punta a punta**, sobre el `BUILD_ID` actual. Pide el enlace desde "Olvidé mi contraseña" en
+  `/login`, entra a `/update-password` con el `recovery_token` real, cambia la contraseña y
+  **entra con la nueva** — no sólo un 200 del formulario. Re-logueado con la password nueva,
+  siguió el recorrido normal: onboarding (6 pantallas) → paciente en `/patients` → cita
+  `2026-09-28 09:00` agendada y vista en `/appointments` (id `cmuipqv7a005501mxr6nz1ccy`) →
+  factura con ítem visible en `/billing/...` (frenado sin pagar) → dato del paso 6 no figura en
+  `/dashboard` (esperado, el panel no lista pacientes).
+- `completo: true`, `llegoHasta: 9/9` en ambas corridas de hoy. Limpieza verificada las dos veces:
+  `organizations`/`appointments` con `zz-qa-%` = 0 filas al cerrar.
+- Tablero: sin tareas `ready` sin reclamar en la zona `recorrido-cliente`.
+- **Lección para la próxima**: antes de correr el recorrido default, grepear qué combinación
+  rubro+eje (mobile, recovery, coadmin, rubro) lleva más tiempo sin confirmarse contra el
+  `BUILD_ID` vigente — no alcanza con mirar sólo si "dental" se corrió, sin mirar CON QUÉ flags.
+
 ## 2026-09-26 (vuelta HEAD ebcfe61a) — `BUILD_ID` sin cambios; escalón agentes/comparativa/facturacion RE-CONFIRMADO sano; eje nuevo: `RECORRIDO_MOVIL=1` en dental, 18 días sin correrse, 9/9
 
 `BUILD_ID` comparado antes de decidir: `DvBubiuO4uC5_E9jFNJeZ`, igual al de la entrada de las
