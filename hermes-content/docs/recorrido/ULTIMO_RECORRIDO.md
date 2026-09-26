@@ -12,6 +12,30 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-26 01:09-01:11 La Paz — `BUILD_ID` sin cambios, rotado a Importadora, 8/8 sin hallazgo
+
+`ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado primero: `4FWMcecd4jRBGUVwStDQb`, igual al
+de las vueltas anteriores (dental, comercio, estética, y la re-confirmación de DG-043) —
+correspondía seguir rotando (importadora y servicios profesionales seguían verificados contra el
+build anterior), no repetir dental. Tablero revisado: nada `ready` sin reclamar en la zona
+`recorrido-cliente`.
+
+`RECORRIDO_RUBRO='Importadora / distribuidora' node scripts/recorrido_cliente.mjs --escribir`:
+**8/8 pasos que le corresponden, sin hallazgo** (paso 7 sale NO-APLICA: este rubro vende
+"Catálogo, cotizaciones B2B y costeo de importación", no agenda, y su propio menú tampoco la
+tiene — coherente). Cuenta `zz-qa-2026-09-26-0111@onia.com.bo`, confirmación de correo antes del
+primer login, onboarding en 6 pantallas, dato `zz-qa-2026-09-26-0111-paciente` cargado en
+storefront Catálogo y encontrado de vuelta, pantalla de cobro (Créditos, `/comercio/fiados`)
+vista y frenada sin pagar, dato del paso 6 no aparece en `/dashboard` (esperado: el panel no
+lista storefront catálogo). `resumen.json`: `llegoHasta 9/9`, `completo: true`, `agujeros: []`.
+Todo lo `zz-qa-` borrado en la misma corrida: `organizations`/`appointments` con `zz-qa-%` → 0,
+verificado con `SELECT` después de borrar.
+
+RAZÓN: N/A — avanzó (Importadora re-verificada contra el `BUILD_ID` vigente, sin hallazgo).
+LECCIÓN: ninguna nueva — la rotación por rubro contra un `BUILD_ID` fijo (en vez de repetir
+dental) volvió a ser el método correcto. Próxima vuelta: si el `BUILD_ID` sigue igual, falta
+Servicios profesionales para cerrar la rotación completa de los 5 rubros contra este build.
+
 ## 2026-09-25 23:09-23:12 La Paz — `BUILD_ID` sin cambios, rotado a Estética, 9/9 sin hallazgo
 
 `ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado primero: `4FWMcecd4jRBGUVwStDQb`, igual al
