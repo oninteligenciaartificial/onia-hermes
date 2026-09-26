@@ -274,12 +274,70 @@ export function clasificarEventos(eventos = [], inboxPorConv = null) {
 }
 
 /**
+ * Cruza los eventos que la BASE registra contra los avisos que el LOG nombra.
+ *
+ * POR QUE EXISTE, medido el 2026-09-26 contra produccion. Todo lo de arriba deriva su
+ * universo de eventos del log: `contarEventos` cuenta lineas `[aviso]`. Con eso, un handoff
+ * que ocurrio y NO llego a la linea de aviso no aparece como fallo — aparece como que no
+ * hubo evento. La cabecera de este archivo lo dice con todas las letras: `circuito=ok
+ * eventos=0 -> verde. Nadie pidio un humano hoy`. Esa inferencia no se sostiene: el log
+ * cuenta lo que el codigo de aviso HIZO, y la pregunta del objetivo es que paso con lo que
+ * OCURRIO. Los dos numeros de ese dia: `onia_center.bot_conversations` tenia DOCE filas en
+ * `handoff_humano` y el log tenia avisos de TRES conversaciones — y el veredicto era
+ * `ok · circuito sano`. Diez personas pidieron un humano adentro de la ventana que el log
+ * cubre y no hay una sola linea que las nombre.
+ *
+ * La base es el registro durable: `bot_stage` lo escribe el motor y queda. El log es lo que
+ * el aviso alcanzo a decir. Conciliar los dos es lo unico que distingue "nadie pidio" de
+ * "alguien pidio y se perdio", que es exactamente la distincion que este gate nacio a hacer
+ * y que hasta hoy solo hacia del lado del log.
+ *
+ * LA VENTANA, y por que se es conservador con su borde izquierdo. El log arranca donde
+ * arranca; un handoff anterior no tiene por que estar ahi. Acusar al circuito por un evento
+ * que el log no pudo ver es un FALSO ROJO, y este archivo ya pago uno: el 2026-09-12 dijo
+ * "alguien pidio un humano y nadie se entero" sobre dos salteos que el propio log desmentia,
+ * y eso manda a arreglar lo que no esta roto. Por eso solo entra a la conciliacion el evento
+ * cuyo `desde` —el inicio de la conversacion, la cota mas temprana en que el handoff pudo
+ * pasar— cae DENTRO de la ventana. El resto se cuenta y se NOMBRA como fuera de alcance:
+ * no es cero, es "no lo puedo mirar".
+ *
+ * @param eventosEnLaBase `[{conv, estado, desde}]` con `desde` en ISO, de la base.
+ * @param convsConAviso   numeros de conversacion que el log nombra en un aviso.
+ * @param ventana         `{desde, hasta}` en ISO, derivada del propio log.
+ */
+export function conciliarAvisos({ eventosEnLaBase, convsConAviso, ventana } = {}) {
+  const vacio = { medido: false, sinAviso: [], fueraDeAlcance: [], conAviso: [] };
+  // Tri-estado: sin la base o sin la ventana la respuesta es "no pude preguntar", nunca cero.
+  // Un `[]` por defecto aca seria un verde firmado sobre una pregunta que no se hizo.
+  if (!Array.isArray(eventosEnLaBase) || !ventana?.desde || !ventana?.hasta) return vacio;
+  const avisados = new Set((convsConAviso || []).filter((n) => Number.isInteger(n) && n > 0));
+  const sinAviso = [];
+  const fueraDeAlcance = [];
+  const conAviso = [];
+  for (const ev of eventosEnLaBase) {
+    const desde = String(ev?.desde || "");
+    // Comparacion lexicografica de ISO: es la misma que usa el orden del log.
+    if (!desde || desde < ventana.desde || desde > ventana.hasta) fueraDeAlcance.push(ev);
+    else if (avisados.has(ev.conv)) conAviso.push(ev);
+    else sinAviso.push(ev);
+  }
+  return { medido: true, sinAviso, fueraDeAlcance, conAviso };
+}
+
+/**
  * La linea que le sirve al objetivo del carril. Vive aparte del reporte para que se pueda
  * probar: es una AFIRMACION sobre produccion, y hasta hoy no tenia ni un caso.
  */
-export function lecturaDeEventos({ veredicto, eventos, circuitoSano, origen } = {}) {
+export function lecturaDeEventos({ veredicto, eventos, circuitoSano, origen, conciliacion } = {}) {
   const ev = eventos || contarEventos([]);
   const noSalieron = (ev.salteadosVigentes ?? ev.salteados) + ev.fallidos;
+  // Va ANTES que todo lo demas porque es la unica lectura que habla de eventos que el log no
+  // tiene: si se deja abajo, el `enviados === 0` de mas adelante contesta "sin eventos reales
+  // todavia" sobre gente que si pidio. Ese era el agujero.
+  const perdidos = conciliacion?.medido ? conciliacion.sinAviso.length : 0;
+  if (perdidos > 0) {
+    return `la base registra ${perdidos} pedido(s) de humano/demo que NINGUN aviso nombra — ya se perdieron, hay que ir a buscar a esas personas`;
+  }
   // El motivo se CITA, no se supone. El 2026-09-12 esta linea decia "alguien pidio un humano
   // y nadie se entero" sobre dos salteos que el propio log desmentia (`cuota_agotada` y
   // `pregunta_precio_recepcion`), mientras el unico `pidio_humano_recepcion` habia salido bien.
@@ -305,7 +363,7 @@ export function lecturaDeEventos({ veredicto, eventos, circuitoSano, origen } = 
 /**
  * El veredicto. `circuito` en null significa "no se pudo medir" y NO puede dar verde.
  */
-export function diagnosticar({ circuito, eventos }) {
+export function diagnosticar({ circuito, eventos, conciliacion }) {
   const ev = eventos || contarEventos([]);
   if (!circuito) {
     return { veredicto: "no_medido", motivos: ["no se pudo medir el circuito contra produccion"], eventos: ev };
@@ -340,6 +398,19 @@ export function diagnosticar({ circuito, eventos }) {
     const cuales = (ev.motivosVigentes || []).join(", ");
     motivos.push(
       `${salteadosVivos} aviso(s) SALTEADO(s) sin un envio posterior que los desmienta${cuales ? `: ${cuales}` : ""}`,
+    );
+  }
+
+  // La conciliacion con la base. Es el unico motivo que puede nacer de un evento que el log
+  // NO nombra, y por eso es el unico que ve la clase de fallo en la que este gate era ciego:
+  // los otros necesitan una linea `[aviso]` para existir. Sin base no hay verde — `medido`
+  // en false es ignorancia, y la ignorancia se reporta como ignorancia.
+  if (!conciliacion || conciliacion.medido !== true) {
+    sinMedir.push("conciliacion: no se pudo preguntarle a la base que eventos ocurrieron (el log solo no alcanza)");
+  } else if (conciliacion.sinAviso.length) {
+    const cuales = conciliacion.sinAviso.map((e) => `conv ${e.conv} (${e.estado})`).join(", ");
+    motivos.push(
+      `${conciliacion.sinAviso.length} evento(s) en la base SIN un aviso que los nombre, dentro de la ventana que el log cubre: ${cuales}`,
     );
   }
 
@@ -438,6 +509,16 @@ async function credencialesResponden(token, chatId) {
  * venimos.
  */
 export const RAMAS_QUE_AVISAN = Object.freeze(["handoff", "demo_agendada"]);
+
+/**
+ * La traduccion rama-del-motor -> estado que queda escrito en la base. Vive en UN lugar
+ * porque las dos mitades de este gate hablan de LO MISMO por nombres distintos: el motor
+ * emite la rama `handoff`, y lo que sobrevive en `onia_center.bot_conversations` es
+ * `bot_stage='handoff_humano'`. Con la traduccion repartida, agregar una rama que avisa deja
+ * al conciliador buscando un estado que nadie escribe — y eso no sale rojo: sale VACIO.
+ */
+export const ESTADO_POR_RAMA = Object.freeze({ handoff: "handoff_humano", demo_agendada: "demo_agendada" });
+export const ESTADOS_QUE_AVISAN = Object.freeze(RAMAS_QUE_AVISAN.map((r) => ESTADO_POR_RAMA[r]));
 
 /**
  * Maneja el motor DESPLEGADO hasta CADA una de las ramas de `RAMAS_QUE_AVISAN` y arma el
@@ -599,6 +680,66 @@ export function inboxPorConversacion(convs = []) {
   return mapa;
 }
 
+/** El patron ISO que el log estampa. Lo comparten la ventana y la conciliacion: son el mismo eje. */
+const ISO_EN_EL_LOG = '20[0-9][0-9]-[0-9][0-9]-[0-9][0-9]T[0-9][0-9]:[0-9][0-9]:[0-9][0-9]';
+
+/**
+ * La ventana de tiempo que el log VIVO puede responder, derivada de sus propias marcas.
+ * `null` cuando no se pudo preguntar o no hay ni una marca: sin ventana no hay conciliacion,
+ * y eso es `no_medido`, no verde.
+ *
+ * Se DERIVA y no se asume por dos razones medidas: el log es append-only y sobrevive a los
+ * reinicios (tiene varias lineas `escuchando` adentro), asi que "arranca cuando arranco el
+ * proceso" es falso — el 2026-09-26 el proceso tenia 30 minutos de vida y el log llegaba al
+ * 28 de agosto. Y al reves, el dia que alguien lo rote, la ventana se achica sola y los
+ * eventos viejos pasan a `fueraDeAlcance` en vez de volverse un rojo inventado.
+ */
+export function ventanaDelLog(dir) {
+  if (!dir) return null;
+  const archivo = archivoDeLog(dir);
+  if (!archivo) return null;
+  // `sort` sobre las marcas y no sobre el log: la salida son dos lineas, acotada por
+  // construccion. Igual que `lineasDelLog`, el filtro va DONDE VIVE EL LOG.
+  const cmd = `grep -oE '${ISO_EN_EL_LOG}' ${archivo} 2>/dev/null | sort | sed -n '1p;$p' || true`;
+  const out = sh("docker", ["exec", CONTENEDOR, "sh", "-c", cmd], 60000);
+  const marcas = (out || "").split("\n").map((s) => s.trim()).filter(Boolean);
+  if (marcas.length < 2) return null;
+  return { desde: marcas[0], hasta: marcas[marcas.length - 1] };
+}
+
+/**
+ * Los eventos que el objetivo obliga a avisar, leidos del registro DURABLE.
+ * `null` cuando no se pudo preguntar — de ahi sale el tri-estado de `conciliarAvisos`.
+ *
+ * Es la otra mitad del par: el log dice que hizo el codigo de aviso, esta tabla dice que
+ * ocurrio. `bot_stage` lo escribe el motor y queda; una linea de log puede no haberse
+ * escrito nunca. Por eso la lista de sujetos sale de aca y no del log.
+ */
+export function eventosDeLaBase() {
+  const nombres = sh("docker", ["ps", "--format", "{{.Names}}"], 20000);
+  // Derivado, no clavado: el nombre del contenedor es de otro dueño. Si un dia cambia, esto
+  // devuelve null (no medido) en vez de leer vacio para siempre en verde.
+  const db = (nombres || "").split("\n").map((s) => s.trim()).find((n) => n === "supabase-db" || n.includes("supabase-db"));
+  if (!db) return null;
+  const estados = ESTADOS_QUE_AVISAN.map((e) => `'${e}'`).join(",");
+  const sql =
+    `select conversation_key, bot_stage, to_char(created_at,'YYYY-MM-DD"T"HH24:MI:SS') ` +
+    `from onia_center.bot_conversations where bot_stage in (${estados});`;
+  const out = sh("docker", ["exec", db, "psql", "-U", "postgres", "-tAc", sql], 30000);
+  if (out === null) return null;
+  const eventos = [];
+  for (const linea of out.split("\n")) {
+    const [clave, estado, desde] = linea.trim().split("|");
+    if (!clave || !estado) continue;
+    // `chatwoot:57` -> 57. El numero es la clave con la que el log nombra la conversacion;
+    // una clave de otro canal sin numero no se puede cruzar y no se inventa.
+    const conv = Number(/:(\d+)$/.exec(clave)?.[1]);
+    if (!Number.isInteger(conv)) continue;
+    eventos.push({ conv, estado, desde: desde || "" });
+  }
+  return eventos;
+}
+
 export async function medir() {
   const bot = resolverBotDesplegado();
   try {
@@ -626,9 +767,20 @@ async function medirCon(bot) {
   // independientes, y "hubo avisos pero ninguno de un lead" se responde con el log y la base.
   const deQuien = conversacionesDeAvisos(lineas);
   const origen = clasificarEventos(deQuien, inboxPorConversacion(deQuien.map((e) => e.conv)));
+  // La conciliacion va con el log ya leido: los sujetos salen de la base, los avisos de estas
+  // mismas lineas. Si se pidieran los avisos aparte, las dos mitades podrian mirar momentos
+  // distintos del log y el cruce acusaria por el desfase.
+  const conciliacion = conciliarAvisos({
+    eventosEnLaBase: eventosDeLaBase(),
+    // Solo `sent` cubre a una conversacion. Un `skipped` o un `failed` la NOMBRAN en el log
+    // pero a esa persona no le llego nada: contarlos como cobertura seria usar la evidencia
+    // del fallo para tapar el fallo.
+    convsConAviso: deQuien.filter((e) => e.estado === "sent").map((e) => e.conv),
+    ventana: ventanaDelLog(bot?.dir),
+  });
 
   // Sin el proceso vivo o sin el codigo desplegado no hay nada que afirmar del circuito.
-  if (!env || !motor) return { circuito: null, eventos, origen, ejemplo: null };
+  if (!env || !motor) return { circuito: null, eventos, origen, conciliacion, ejemplo: null };
 
   const credencialesOk = await credencialesResponden(env.TG_BOT_TOKEN, env.TG_CHAT_ID);
   return {
@@ -640,6 +792,7 @@ async function medirCon(bot) {
     },
     eventos,
     origen,
+    conciliacion,
     ejemplo: motor.ejemplo,
     ramas: motor.ramas,
   };
@@ -649,8 +802,8 @@ async function medirCon(bot) {
 // produccion y un process.exit() que mata al proceso importador (medido en este carril
 // el 2026-09-03 con demo_agendada_real.mjs).
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  const { circuito, eventos, origen, ejemplo, ramas } = await medir();
-  const d = diagnosticar({ circuito, eventos });
+  const { circuito, eventos, origen, conciliacion, ejemplo, ramas } = await medir();
+  const d = diagnosticar({ circuito, eventos, conciliacion });
 
   console.log(`circuito: ${circuito ? (d.veredicto === "no_medido" ? "?" : "medido") : "NO SE PUDO MEDIR"}`);
   if (circuito) {
@@ -689,6 +842,19 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
         : "de quien: no se pudo preguntar a la base de Chatwoot (no medido, NO es cero)",
     );
   }
+  // La conciliacion se imprime SIEMPRE, con o sin rojo: es el unico renglon que dice cuantos
+  // eventos hubo DE VERDAD. Un gate que solo habla cuando acusa deja al que lo lee sin saber
+  // sobre cuantos sujetos se pronuncio — que es como "0 avisos" paso de medida a decoracion.
+  if (conciliacion?.medido) {
+    const { conAviso, sinAviso, fueraDeAlcance } = conciliacion;
+    console.log(
+      `en la base: ${conAviso.length + sinAviso.length} evento(s) dentro de la ventana del log` +
+        ` (con aviso ${conAviso.length} · SIN aviso ${sinAviso.length})` +
+        (fueraDeAlcance.length ? ` · ${fueraDeAlcance.length} anterior(es) al log, fuera de alcance` : ""),
+    );
+  } else {
+    console.log("en la base: no se pudo preguntar que eventos ocurrieron (no medido, NO es cero)");
+  }
   if (d.motivos.length) console.log("motivos:\n  - " + d.motivos.join("\n  - "));
   if (ejemplo && d.veredicto === "ok") console.log(`\nlo que recibiria Sergio:\n${ejemplo.replace(/^/gm, "  ")}`);
 
@@ -699,7 +865,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   // es ir a buscar a esas personas, no arreglar el circuito. Medido el 2026-09-12, que es la
   // primera vez que este gate pudo ver sus propios avisos salteados.
   const circuitoSano = circuito && Object.values(circuito).every((v) => v === true);
-  const lectura = lecturaDeEventos({ veredicto: d.veredicto, eventos, circuitoSano, origen });
+  const lectura = lecturaDeEventos({ veredicto: d.veredicto, eventos, circuitoSano, origen, conciliacion });
   console.log(`\nVEREDICTO: ${d.veredicto} · avisos enviados ${eventos.enviados} — ${lectura}`);
 
   process.exit(d.veredicto === "ok" ? 0 : d.veredicto === "roto" ? 1 : 2);

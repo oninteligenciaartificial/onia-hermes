@@ -35,6 +35,9 @@ import {
   asegurarTransporteQueAguanta,
   lineasDelLog,
   inboxPorConversacion,
+  conciliarAvisos,
+  ESTADOS_QUE_AVISAN,
+  ESTADO_POR_RAMA,
   BOT_DIR,
 } from "./avisos-vivo.mjs";
 
@@ -48,11 +51,25 @@ const CIRCUITO_SANO = {
   textoAccionable: true,
 };
 
+/**
+ * Le preguntamos a la base y no hay ningun evento sin aviso. Los casos que afirman VERDE lo
+ * pasan explicito a proposito: desde el 2026-09-26 `diagnosticar` no puede firmar `ok` sin
+ * saber que ocurrio en la base, porque el log solo no distingue "nadie pidio" de "alguien
+ * pidio y no se registro el aviso". Omitirlo aca daria `no_medido`, que es la respuesta
+ * correcta para un gate que no pregunto.
+ */
+const BASE_SIN_PENDIENTES = { medido: true, sinAviso: [], fueraDeAlcance: [], conAviso: [] };
+
 test("cero avisos con el circuito SANO no es lo mismo que cero con el circuito ROTO", () => {
-  const sinEventos = diagnosticar({ circuito: CIRCUITO_SANO, eventos: contarEventos([]) });
+  const sinEventos = diagnosticar({
+    circuito: CIRCUITO_SANO,
+    eventos: contarEventos([]),
+    conciliacion: BASE_SIN_PENDIENTES,
+  });
   const roto = diagnosticar({
     circuito: { ...CIRCUITO_SANO, flagEncendido: false },
     eventos: contarEventos([]),
+    conciliacion: BASE_SIN_PENDIENTES,
   });
 
   // Los dos cuentan 0 avisos. Ese era exactamente el problema.
@@ -113,7 +130,7 @@ test("un salteo por el flag apagado queda CURADO si el circuito volvio a mandar 
     "[aviso] skipped (cuota_agotada): aviso por Telegram apagado (ONIA_BOT_TG_AVISO)",
     "[aviso] sent conv=57 (pidio_humano_recepcion): aviso enviado",
   ];
-  const d = diagnosticar({ circuito: CIRCUITO_SANO, eventos: contarEventos(lineas) });
+  const d = diagnosticar({ circuito: CIRCUITO_SANO, eventos: contarEventos(lineas), conciliacion: BASE_SIN_PENDIENTES });
   assert.equal(d.eventos.salteados, 1, "el total historico se sigue informando");
   assert.equal(d.eventos.salteadosVigentes, 0);
   assert.equal(d.veredicto, "ok");
@@ -162,7 +179,7 @@ test("avisos enviados con el circuito sano es verde, y cuenta los eventos", () =
     "[aviso] sent conv=57 (handoff): ok",
     "[aviso] sent conv=58 (demo_agendada): ok",
   ];
-  const d = diagnosticar({ circuito: CIRCUITO_SANO, eventos: contarEventos(lineas) });
+  const d = diagnosticar({ circuito: CIRCUITO_SANO, eventos: contarEventos(lineas), conciliacion: BASE_SIN_PENDIENTES });
   assert.equal(d.eventos.enviados, 2);
   assert.equal(d.veredicto, "ok");
 });
@@ -766,4 +783,105 @@ test("lineasDelLog trae la linea que produjo cada aviso, o el conv no se puede r
     process.env.PATH = PATH_ORIGINAL;
     rmSync(tmp, { recursive: true, force: true });
   }
+});
+
+// ---------------------------------------------------------------------------
+// La conciliacion con la base: la clase de fallo en la que este gate era ciego.
+//
+// Todo lo de arriba deriva el universo de eventos del LOG. Un handoff que ocurrio y no
+// llego a la linea de aviso no se veia como fallo: se veia como que no hubo evento, y la
+// cabecera de este archivo firmaba `circuito=ok eventos=0 -> nadie pidio un humano hoy`.
+// Medido contra produccion el 2026-09-26: DOCE filas `handoff_humano` en la base, avisos de
+// TRES conversaciones en el log, veredicto `ok · circuito sano`.
+// ---------------------------------------------------------------------------
+
+const VENTANA = { desde: "2026-08-28T22:22:51", hasta: "2026-09-26T10:53:21" };
+
+test("un handoff que la base registra y el log no nombra pone el gate ROJO", () => {
+  const conciliacion = conciliarAvisos({
+    eventosEnLaBase: [{ conv: 45, estado: "handoff_humano", desde: "2026-09-01T10:00:00" }],
+    convsConAviso: [],
+    ventana: VENTANA,
+  });
+  assert.equal(conciliacion.sinAviso.length, 1, "el conciliador no vio el evento sin aviso");
+
+  const d = diagnosticar({ circuito: CIRCUITO_SANO, eventos: contarEventos([]), conciliacion });
+  assert.equal(d.veredicto, "roto", "circuito sano + un pedido de humano sin aviso NO puede ser verde");
+  assert.match(d.motivos.join(" "), /conv 45/, "el rojo tiene que NOMBRAR a quien se perdio");
+});
+
+test("la lectura no puede decir 'sin eventos reales todavia' cuando la base dice que si hubo", () => {
+  const conciliacion = conciliarAvisos({
+    eventosEnLaBase: [{ conv: 45, estado: "handoff_humano", desde: "2026-09-01T10:00:00" }],
+    convsConAviso: [],
+    ventana: VENTANA,
+  });
+  const lectura = lecturaDeEventos({
+    veredicto: "roto",
+    eventos: contarEventos([]),
+    circuitoSano: true,
+    conciliacion,
+  });
+  assert.doesNotMatch(lectura, /sin eventos reales/, "la frase que tapaba el agujero sigue viva");
+  assert.match(lectura, /1 pedido/, "la lectura tiene que decir cuantos se perdieron");
+});
+
+test("un evento ANTERIOR al log no acusa al circuito: es fuera de alcance, no un rojo", () => {
+  const conciliacion = conciliarAvisos({
+    eventosEnLaBase: [{ conv: 11, estado: "handoff_humano", desde: "2026-08-06T09:00:00" }],
+    convsConAviso: [],
+    ventana: VENTANA,
+  });
+  assert.equal(conciliacion.sinAviso.length, 0, "falso rojo: el log no pudo haber visto ese evento");
+  assert.equal(conciliacion.fueraDeAlcance.length, 1, "y tampoco se descarta en silencio: se cuenta");
+
+  const d = diagnosticar({ circuito: CIRCUITO_SANO, eventos: contarEventos([]), conciliacion });
+  assert.equal(d.veredicto, "ok");
+});
+
+test("sin base la respuesta es no_medido, nunca verde", () => {
+  const conciliacion = conciliarAvisos({ eventosEnLaBase: null, convsConAviso: [], ventana: VENTANA });
+  assert.equal(conciliacion.medido, false, "no poder preguntar no es haber preguntado");
+
+  const d = diagnosticar({ circuito: CIRCUITO_SANO, eventos: contarEventos([]), conciliacion });
+  assert.equal(d.veredicto, "no_medido", "un gate que no vio la base no puede firmar al dia");
+});
+
+test("sin ventana tampoco hay verde: sin saber que alcanza el log no se concilia nada", () => {
+  const conciliacion = conciliarAvisos({ eventosEnLaBase: [], convsConAviso: [], ventana: null });
+  assert.equal(conciliacion.medido, false);
+  assert.equal(diagnosticar({ circuito: CIRCUITO_SANO, eventos: contarEventos([]), conciliacion }).veredicto, "no_medido");
+});
+
+test("un aviso SALTEADO no cubre a su conversacion: nombrarla no es avisarle", () => {
+  // El log nombra la conv 51, pero el aviso no salio. Usar esa linea como cobertura seria
+  // tapar el fallo con la evidencia del fallo.
+  const deQuien = conversacionesDeAvisos(["[aviso] skipped conv=51 (pidio_hablar_con_humano): aviso por Telegram apagado"]);
+  const conciliacion = conciliarAvisos({
+    eventosEnLaBase: [{ conv: 51, estado: "handoff_humano", desde: "2026-09-03T10:00:00" }],
+    convsConAviso: deQuien.filter((e) => e.estado === "sent").map((e) => e.conv),
+    ventana: VENTANA,
+  });
+  assert.equal(conciliacion.sinAviso.length, 1, "un skipped se contó como si la persona hubiera sido avisada");
+});
+
+test("un handoff avisado no es un rojo", () => {
+  const conciliacion = conciliarAvisos({
+    eventosEnLaBase: [{ conv: 57, estado: "handoff_humano", desde: "2026-09-04T10:00:00" }],
+    convsConAviso: [57],
+    ventana: VENTANA,
+  });
+  assert.equal(conciliacion.sinAviso.length, 0);
+  assert.equal(conciliacion.conAviso.length, 1);
+  assert.equal(diagnosticar({ circuito: CIRCUITO_SANO, eventos: contarEventos([]), conciliacion }).veredicto, "ok");
+});
+
+test("cada rama que avisa tiene su estado en la base: si no, el conciliador busca lo que nadie escribe", () => {
+  // Agregar una rama a RAMAS_QUE_AVISAN sin su traduccion no sale rojo: sale VACIO, que es
+  // el modo de falla caro. Se ata por propiedad, no por lista escrita a mano.
+  for (const rama of RAMAS_QUE_AVISAN) {
+    assert.ok(ESTADO_POR_RAMA[rama], `la rama ${rama} avisa y no tiene estado en la base`);
+  }
+  assert.equal(ESTADOS_QUE_AVISAN.length, RAMAS_QUE_AVISAN.length);
+  assert.ok(ESTADOS_QUE_AVISAN.every(Boolean), "una rama sin traducir deja al conciliador sin sujetos");
 });
