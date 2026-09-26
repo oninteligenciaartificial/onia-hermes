@@ -77,6 +77,31 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Ahora — plan de features (revisado 2026-08-30, con Gate 1 corrido)
 
+- [ ] 🟠 **`mirar:portada` pinta un ROJO intermitente en `telefono /empezar` por una espera que no
+      retiene: el título SÍ termina de aparecer.** Encontrado el 2026-09-26 por `web-venta`
+      midiendo el árbol; es un **falso rojo del instrumento**, no un defecto que vea un lead.
+      **Lo medido hoy, dos corridas del mismo gate sobre el MISMO build local, sin tocar una línea:**
+      `telefono /empezar -> opacidad=0.990688` (pasó) y `-> opacidad=0.989169` (ROJO, tope
+      `OPACIDAD_PINTADA = 0.99`). Contra producción el mismo campo da 0.9974 / 0.9969 y pasa, así
+      que el rojo aparece sólo cerca del umbral.
+      **Por qué NO es el sitio.** Muestreando la opacidad heredada del `h1` contra el build local,
+      la animación termina y llega a 1: `0 → 0.984 (512ms) → 1 (1015ms)`. El ancestro que la
+      retiene es un `DIV` **sin clase**, y no depende de `reducedMotion`: con `reduce` da
+      `min=0.98915 @6ms → 1 @708ms`, con `no-preference` `min=0.988387 @3ms → 1 @706ms`.
+      **Dónde está la falla.** `scripts/mirar-primera-pantalla.mjs` (paso 3) espera hasta 8 s a que
+      `OPACIDAD_HEREDADA('h1') >= 0.99` y **falla cerrado** (el `catch` reporta el valor que quedó,
+      que es el diseño correcto). Pero el valor cruza 0.99 en ~700 ms, así que esos 8 s nunca
+      deberían vencerse: **la espera no está reteniendo** y el `evaluate` de la línea siguiente mide
+      antes de que el reveal termine. Ahí es donde hay que mirar — no en el CSS del título.
+      **Reproducción exacta** (desde `web-factory/apps/onia-platform/`):
+      ```
+      npm run build && npx next start -p 3311 &
+      node scripts/mirar-primera-pantalla.mjs http://localhost:3311   # repetir: alterna verde/rojo
+      ```
+      **Cómo se sabe que quedó hecho:** el gate corrido **tres veces seguidas** contra el mismo
+      build local da el mismo veredicto las tres, y un caso en `mirar-primera-pantalla.test.ts`
+      falla en ROJO antes del arreglo por el motivo correcto (la espera no retuvo), no por otro.
+
 - [x] 🔴 **La CSP que la landing estrenó el 24-sep dejó al sitio LOCAL sin hidratar, y con eso el
       único gate que prueba la captura de correos de punta a punta pasó a dar 8 FALLAS fijas sobre
       una pantalla sana — ARREGLADO el 2026-09-25 por `web-venta`, con los dos recíprocos medidos.**
