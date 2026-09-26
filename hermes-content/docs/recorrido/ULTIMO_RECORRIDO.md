@@ -12,6 +12,42 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-26 19:09 La Paz (vuelta HEAD a43b5e72) — `BUILD_ID` sin cambios; eje coadmin (30h sin correrse) daba ROJO por un falso negativo del propio instrumento — arreglado y confirmado en verde
+
+`BUILD_ID` comparado antes de decidir: `DvBubiuO4uC5_E9jFNJeZ`, sin cambios. Verifiqué primero
+el eje de checkout weekly/annual (7 días sin correrse, el más viejo): `node
+scripts/probar_checkout_directo.mjs` — crece/anual Bs 5.500, clinic/anual Bs 12.900,
+clinic/semanal avisa "Solo mensual o anual" y no cae a otro monto. **Sin hallazgo.**
+
+Seguí con el eje más viejo después de ése: `RECORRIDO_PROBAR_COADMIN=1` (última vez 2026-09-25
+12:10, ~30h). Primera corrida (9/9, `completo: true`) trajo `coadminProbado.ok: false`: "la
+invitación no se confirmó en pantalla". **Antes de reportarlo como bug de producto, miré la
+captura** (`extra-coadmin-03-invitado.png`) en vez de creerle al texto — regla de la casa,
+"verificar es mirar". La captura mostraba `/team` YA refrescado con el coadministrador en la
+lista como Administrador: la invitación había funcionado. Causa real: el propio comentario del
+código dice que el modal se autocierra con `router.refresh()` a los 2.5s, y el chequeo leía el
+toast "invitación enviada" a los 3000ms — cuando el toast ya no podía estar, por diseño. Un
+chequeo que lee un estado después de que el propio flujo ya lo reemplazó siempre da rojo, sin
+importar si el producto anda bien.
+
+**Arreglado en `scripts/recorrido_cliente.mjs`** (mi instrumento, zona propia): saqué el corte
+duro sobre el toast transitorio y dejé la confirmación real en la fila de `/team` (que ya existía
+más abajo en el código, sin usarse como fuente de verdad). Reordené los `mirar()` para no perder
+la captura del estado justo después de enviar. Segunda corrida completa (cuenta
+`zz-qa-2026-09-26-1916`): `coadminProbado.ok: true`, "invitado como Administrador, confirmado en
+`/team`, y sacado del equipo de punta a punta", con `toastVisto: false` — confirma la hipótesis:
+el toast de verdad no estaba, y no hacía falta que estuviera. Rojo por el motivo correcto primero
+(la captura), verde después por el motivo correcto (la fila persistente), no por bajar la vara.
+
+Limpieza verificada en las tres corridas de la vuelta (checkout, coadmin v1, coadmin v2):
+`organizations`/`appointments`/`auth.users` con `zz-qa-%` = 0 al cerrar.
+
+Tablero: sin tareas `ready` sin reclamar en la zona `recorrido-cliente` (todo `done`).
+
+**Lección para la próxima**: cuando un `extra-*Probado.ok:false` aparece en un recorrido que dio
+9/9, no asumir bug de producto sin mirar la captura del paso que falló — un chequeo de texto
+puede estar midiendo un instante que el propio flujo ya superó.
+
 ## 2026-09-26 14:09-14:20 La Paz (vuelta HEAD e292f373) — `BUILD_ID` sin cambios (`DvBubiuO4uC5_E9jFNJeZ`, ya confirmado en dental desktop por `b5c4e6b2`); repetí ese mismo eje por error, y corregí con uno real: recuperación de contraseña con token real, 13 días sin correrse, 9/9
 
 **Corrí primero dental desktop sin ejes nuevos** (`node scripts/recorrido_cliente.mjs --escribir`,
