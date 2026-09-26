@@ -31,14 +31,28 @@ chmod 755 "$TMP/tg.sh"
 
 # El tablero de mentira devuelve lo que le dejen en $TMP/tablero.txt, en el mismo
 # formato que `onia-tablero.sh list` (marca de estado, id, estado, dueno, titulo).
+#
+# Y responde `show <id>` como el tablero real: con el evento `blocked` que lleva el
+# `kind`. Ese dato NO sale de `list` ni de `list --json` (medido el 2026-09-25: sus
+# claves no incluyen ninguna de bloqueo), asi que `show` es el unico camino. Cada caso
+# declara los kinds que quiere en $TMP_KINDS, una linea "<id> <kind>"; un id que no
+# declare nada no imprime NADA, que es como se prueba el camino "no se pudo clasificar".
 cat > "$TMP/tablero.sh" <<'FIN'
 #!/usr/bin/env bash
+if [ "${1:-}" = show ]; then
+  [ -s "${TMP_KINDS:-/dev/null}" ] || exit 0
+  K=$(awk -v i="${2:-}" '$1==i {print $2}' "$TMP_KINDS")
+  [ -n "$K" ] && printf "  [2026-09-25 23:44] [run 9] blocked {'reason': 'x', 'kind': '%s', 'recurrences': 1}\n" "$K"
+  exit 0
+fi
 cat "$TMP_TABLERO"
 FIN
 chmod 755 "$TMP/tablero.sh"
 
+: > "$TMP/kinds.txt"
+
 correr() {
-  export TMP_MENSAJE="$TMP/mensaje.txt" TMP_TABLERO="$TMP/tablero.txt"
+  export TMP_MENSAJE="$TMP/mensaje.txt" TMP_TABLERO="$TMP/tablero.txt" TMP_KINDS="$TMP/kinds.txt"
   : > "$TMP_MENSAJE"
   ONIA_TABLERO="$TMP/tablero.sh" ONIA_TG="$TMP/tg.sh" bash "$SUT" >/dev/null 2>&1
   cat "$TMP_MENSAJE"
@@ -175,6 +189,56 @@ case "$MSG" in
                            "se declaro sano con un deploy esperando su firma: $MSG" ;;
   *"Publicar el bot"*) ok "un pedido esperando NO se reporta como «todo en orden»" ;;
   *) falla "un pedido esperando NO se reporta como «todo en orden»" "obtuvo: $MSG" ;;
+esac
+
+# ── 10. LA TERCERA REGRESION (2026-09-25): un renglon gastado en algo que el `ok`
+# no desbloquea. La hoja nombra MAX=5 y las derivaba de `grep -E '^⊘'`, o sea de TODO
+# lo blocked — sin distinguir "espera tu firma" de "el agente se colgo y el tablero la
+# bloqueo solo". Medido ese dia sobre el tablero vivo: de 14 blocked, 13 eran
+# `needs_input` y UNA era `kind: capability` (t_781090e0, 517 h parada), y esa se
+# comia uno de los cinco renglones mientras 8 decisiones reales quedaban en "… y N
+# mas" — entre ellas «7 desconocidos esperando una respuesta».
+{
+  echo "⊘ t_0000101  blocked   (unassigned)          Publicar el bot: espera tu firma"
+  echo "⊘ t_0000102  blocked   default               Disenar hero: el agente se colgo"
+  echo "⊘ t_0000103  blocked   (unassigned)          Renovaste el VPS?"
+} > "$TMP/tablero.txt"
+{
+  echo "t_0000101 needs_input"
+  echo "t_0000102 capability"
+  echo "t_0000103 needs_input"
+} > "$TMP/kinds.txt"
+MSG=$(correr)
+case "$MSG" in
+  *"el agente se colgo"*) falla "lo que un \`ok\` no desbloquea NO gasta un renglon" \
+                                "la bloqueada por \`capability\` se nombro igual: $MSG" ;;
+  *) ok "lo que un \`ok\` no desbloquea NO gasta un renglon" ;;
+esac
+# Y el contador cuenta las que DE VERDAD esperan su ok: decir "3 esperan tu ok" cuando
+# solo 2 se pueden contestar le hace buscar una cuarta que no existe.
+case "$MSG" in
+  *"2 esperan tu ok"*) ok "el contador cuenta solo las que se pueden contestar" ;;
+  *) falla "el contador cuenta solo las que se pueden contestar" "obtuvo: $MSG" ;;
+esac
+# Las dos reales siguen enteras, con su id.
+case "$MSG" in
+  *"espera tu firma"*) ok "las decisiones reales siguen en la hoja" ;;
+  *) falla "las decisiones reales siguen en la hoja" "obtuvo: $MSG" ;;
+esac
+
+# ── 11. El filtro FALLA CERRADO: esconder una decision real es el error caro de este
+# canal, asi que lo que no se puede clasificar SIGUE en la hoja. Aca `show` no devuelve
+# ningun evento (tablero viejo, id archivado, salida ilegible por los bytes binarios que
+# ya aparecieron en t_781090e0): entra igual.
+{
+  echo "⊘ t_0000201  blocked   (unassigned)          🔴 Carga la tarjeta en Meta o el bot deja de contestar"
+} > "$TMP/tablero.txt"
+: > "$TMP/kinds.txt"
+MSG=$(correr)
+case "$MSG" in
+  *"tarjeta en Meta"*) ok "sin kind legible la decision NO se esconde (falla cerrado)" ;;
+  *) falla "sin kind legible la decision NO se esconde (falla cerrado)" \
+           "se la trago el filtro: $MSG" ;;
 esac
 
 if [ "$FALLOS" -gt 0 ]; then
