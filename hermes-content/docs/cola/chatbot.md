@@ -1001,6 +1001,82 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
 
 ## Ahora
 
+- [x] 🔴 **CERRADO el 2026-09-26 07:13-08:00 La Paz (es un MEDIDOR, no toca el motor: no necesita
+      deploy): el medidor del par web↔bot que cerró el ítem de abajo miraba 8 de las 25 rutas
+      vivas, y en las otras 17 un par roto NO PODÍA salir rojo — salía como «campaña huérfana,
+      ¿la borramos?».** `cc155d42`.
+
+      **Cómo apareció.** Corriendo la medición de arranque del carril, no auditando nada: su
+      salida decía `rutas vivas miradas (8)` y abajo listaba **seis** `AVISO … ninguna ruta viva
+      la manda hoy (¿pauta, o quedó huérfana?)`. Ocho rutas es poco para un sitio con 25 páginas,
+      y una frase «huérfana» es justo lo que uno borra para limpiar. Así que se contó el universo
+      en vez de creerle: `find src/app -name page.tsx` da **25**, y el medidor derivaba las suyas
+      de `(sitio)/**/page.tsx` **filtradas** por «esta `page.tsx` nombra una constante exportada
+      de `site.ts`». Dos recortes encadenados.
+
+      **Lo que el recorte tapaba, medido contra `onia.com.bo` (HTTP 200 las cuatro, frase leída
+      del `wa.me?text=` servido):**
+
+      | ruta viva | la frase que le escribe al lead | cómo la arma |
+      |---|---|---|
+      | `/servicios/consultoria` | «…Quiero consultoría/capacitación en IA para mi empresa.» | `waServiciosLink("…")` en la propia página |
+      | `/servicios/marketing-ia` | «…Quiero una propuesta de marketing con IA para mi negocio.» | ídem |
+      | `/v1/chatbot` | «…Tengo una consulta antes de elegir el stack.» | ídem |
+      | `/v1/empezar` | «Hola, mi rubro no está en la lista de Onia. Mi negocio es: » | en un módulo que importa (`empezar/data.ts`) |
+
+      🔴 **El daño NO era contar de menos, y por eso valía la vuelta.** `juzgar()` sólo juzga una
+      frase que la web **manda** (`juzgables = repo.filter(f => web.has(f))`). Una ruta que el
+      medidor no visita nunca aporta su frase al lado «web», así que su par **cae fuera de lo
+      juzgable** y aparece como AVISO benigno. O sea: el día que una de esas cuatro frases derive
+      —exactamente el defecto que este instrumento existe para cazar, y que ya pasó dos veces en
+      `/contacto`— el medidor habría dicho «¿pauta, o quedó huérfana?» en vez de «ese lead recibe
+      el saludo genérico». Un rojo disfrazado de invitación a borrar.
+      **Las cuatro están sanas hoy por suerte, no por medición**: se comprobó a mano contra el
+      `knowledge.json` vivo (`ESCUCHA` las cuatro) — nadie las había comparado nunca.
+
+      **El arreglo, en la clase y no en la instancia.** El universo son **todas** las `page.tsx`
+      de `src/app` y se **visitan todas**: qué frase manda cada una se MIDE en su HTML, no se
+      deduce de la fuente. Deducirlo era el defecto —un `waServiciosLink()` inline, un módulo
+      importado o un componente compartido lo esquivan igual— así que se quitó el paso entero
+      (`constantesDeFrase` y `rutasQueMandanFrases` se borraron: nadie más los importaba).
+      Tres cosas más, cada una porque el cambio las volvió posibles:
+      · las carpetas `_privadas` y los slots `@` de Next se saltan (no son rutas que un lead abra);
+      · una ruta con **segmento dinámico** no se puede visitar sin un valor → se **nombra** sin
+        medir, no se descarta muda (hoy hay cero, y por eso conviene dejarlo escrito ahora);
+      · el `NO MEDIDO` **ya no corta el juicio antes de comparar**. Con 25 rutas en vez de 8 una
+        caída suelta es corriente, y devolver `2` primero dejaba que un 503 en `/agentes`
+        escondiera el par roto de `/contacto`. Ahora gana el **rojo medido**; el `2` decide sólo
+        si no hay rojo.
+      Y el AVISO de huérfana pasó a decir **su límite**: hay pantallas que arman el `wa.me`
+      recién cuando el visitante interactúa —`/servicios/webs` lo hace, con `requisitos-gate.tsx`
+      dentro de un componente de cliente— y este medidor lee HTML servido, no pantallas usadas.
+      «No la vi» no es «no existe», así que la línea ahora dice *no la borres sin mirar la
+      pantalla*.
+
+      **Gate:** `campanas-vivas.test.mjs`, 14/14 (eran 10). Cuatro casos nuevos, todos en ROJO
+      antes por su propio motivo, validados **por mutación**: volver a anclar la caminata en
+      `(sitio)` · filtrar rutas por su fuente · dejar que el `NO MEDIDO` vuelva a tapar el rojo ·
+      entrar a las carpetas privadas de Next. La primera mutación sale **1 falla** sola, que es
+      la del caso que le corresponde.
+      ⚠️ Y una trampa propia, para no repetirla: las cuatro mutaciones se aplicaron con un `cd`
+      que falló, así que el `cp` del respaldo **no corrió** y las cuatro quedaron apiladas sobre
+      el archivo sin commitear. Se deshicieron a mano una por una. **El respaldo se verifica que
+      exista antes de mutar, y el arreglo se commitea ANTES de la validación por mutación** —
+      `git checkout` acá se lleva el arreglo puesto.
+
+      **La prueba, que es el veredicto vivo antes y después — mismo comando, mismo minuto:**
+
+      ```
+      node hermes-content/deploy/vps-ops/bot/campanas-vivas.mjs
+      antes:   rutas vivas miradas (8)   · 1 ok · 2 ROTA · 6 AVISO → "ROTO — 2 de 3 frase(s)"
+      después: rutas vivas miradas (25)  · 5 ok · 2 ROTA · 2 AVISO → "ROTO — 2 de 7 frase(s)"
+      ```
+
+      El rojo sigue siendo el mismo y sigue siendo el de siempre —`/contacto` manda «de 30
+      minutos» y el bot vivo escucha «de 20/45 minutos», versión `2026-09-24.1`, y eso lo
+      arregla el **deploy del bot**, no este ítem—. Lo que cambió es que **el denominador dejó de
+      mentir**: cuatro pares que el sitio dispara de verdad pasaron de «huérfanos» a medidos.
+
 - [x] 🔴 **CERRADO el 2026-09-26 03:13-04:05 La Paz (es un MEDIDOR, no toca el motor: no necesita
       deploy): los dos botones de agenda de `onia.com.bo/contacto` están MUERTOS en producción
       ahora mismo, y no había ni un instrumento que pudiera verlo — el gate del par daba 17/17.**
