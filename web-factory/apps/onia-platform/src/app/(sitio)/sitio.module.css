@@ -215,6 +215,20 @@
 .display em {
   font-style: normal;
   color: var(--accent-ink);
+  /*
+   * El resalte se lee ENTERO o no resalta nada. `text-wrap: balance` reparte el
+   * titular por ancho de renglon y no sabe que este tramo es una frase: el
+   * 2026-09-26 partia "usalo <em>de verdad</em> 14 dias" de `/empezar` en "y
+   * usalo de" / "verdad 14 dias", en escritorio Y en telefono, dejando el verde
+   * en dos pedazos que no forman una frase.
+   *
+   * El riesgo de `nowrap` es el opuesto —una frase que no entra desborda a lo
+   * ancho en vez de partirse—, asi que se midio antes de dejarlo: el resalte
+   * mas largo del sitio es "un solo dato" (12 caracteres, /servicios/webs) y
+   * `mirar:venta` no ve desborde en ninguna de las 24 pantallas, incluida la
+   * vista de 320px, que es la mas angosta que se mide.
+   */
+  white-space: nowrap;
 }
 .ink .display em,
 .green .display em {

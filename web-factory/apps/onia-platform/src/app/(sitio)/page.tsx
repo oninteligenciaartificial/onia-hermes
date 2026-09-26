@@ -21,6 +21,12 @@ import {
  * va debajo tienen que hablar del MISMO plan. Que discreparan es el defecto del
  * 2026-09-19 — la línea decía Bs 320 y el panel dibujaba los agentes, que ese
  * plan no enciende.
+ *
+ * Desde el 2026-09-26 son TRES, no dos: el `<head>` (`DESDE_MES`, más abajo)
+ * tipeaba `plan("basico")` mientras la pantalla ya derivaba. Las dos mitades de
+ * la misma página habrían dicho precios distintos el día que entre un escalón
+ * más barato, y la que se ve ANTES de abrir el sitio —snippet de Google,
+ * tarjeta de WhatsApp— es justamente la que estaba tipeada.
  */
 const PLAN_DE_ENTRADA = planDeEntrada();
 import {
@@ -94,7 +100,7 @@ import p from "./portada.module.css";
  * nunca tipeado: una descripción con la cifra a mano es la forma más fácil de
  * publicar un precio que ya no se cobra, y no la ve ninguna captura.
  */
-const DESDE_MES = `Bs ${bs(plan("basico").mensual)}`;
+const DESDE_MES = `Bs ${bs(PLAN_DE_ENTRADA.mensual)}`;
 const TITULO =
   "Onia · Todo el negocio en una pantalla | Software de gestión Bolivia";
 const DESCRIPCION = `Onia es el sistema con el que llevás tu negocio en Bolivia: fichas de clientes, caja y cobros en un solo lugar —más inventario ${ALCANCE_CON_INVENTARIO} y agenda ${ALCANCE_CON_AGENDA}—, ya armado para tu rubro. Desde ${DESDE_MES} al mes. ${PRUEBA.dias} días gratis, sin tarjeta.`;
