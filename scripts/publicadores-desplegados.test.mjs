@@ -95,6 +95,31 @@ export function esEjecutableEnProduccion (ruta, { local = statSync, remoto = pre
   return remoto(ruta)
 }
 
+/**
+ * El contenido que `main` dice que tiene ese publicador. TRI-ESTADO: `null` es
+ * "no pude leer el ref", nunca "esta vacio".
+ *
+ * ⚠️ POR QUE SE LEE DEL REF Y NO DEL WORKTREE, medido el 2026-09-26. El caso de
+ * abajo comparaba /opt contra `readFileSync` del archivo en disco, o sea contra
+ * el arbol del carril que corre la cadena — y su propio mensaje dice "produccion
+ * no corre lo que dice main". No son lo mismo en el unico momento que importa:
+ * un carril que ARREGLA un publicador lo tiene modificado y sin mergear, asi que
+ * el gate lo acusaba de desvio con produccion perfectamente alineada con main.
+ * Y como esta cadena la corre el integrador antes de CADA merge, ese falso rojo
+ * traba el merge de TODOS los carriles — justo cuando alguien esta arreglando la
+ * pieza que el gate cuida. El defecto estaba en la direccion cara: el gate que
+ * existe para que un arreglo de publicador llegue a produccion era el que lo
+ * frenaba.
+ *
+ * El ref no tiene ese punto ciego: `origin/main` es lo mismo se corra donde se
+ * corra, y un `fetch` lo garantiza fresco aunque el clon este meses atras.
+ */
+export function contenidoEnMain (origen, { raiz = RAIZ, correr = spawnSync } = {}) {
+  const r = correr('git', ['-C', raiz, 'show', `origin/main:${origen}`], { encoding: 'utf8', timeout: 60_000 })
+  if (r.error || r.status !== 0) return null
+  return r.stdout
+}
+
 function preguntarPorSsh (ruta) {
   const r = spawnSync(
     'ssh',
@@ -151,9 +176,35 @@ test('el caso que YA cumple: el publicador del bot esta cubierto', () => {
   assert.match(bot.origen, /vps-ops\/bot\/publicar\.sh$/)
 })
 
-test('lo que corre produccion es lo que dice el repo', (t) => {
+test('el veredicto sale del REF, no del arbol de quien corre la cadena', () => {
+  // Ancla lo que `contenidoEnMain` promete. Sin este caso, alguien podria volver
+  // a apuntarlo al worktree y los dos casos de abajo seguirian "midiendo": el
+  // falso rojo del 2026-09-26 (un carril arreglando un publicador trababa el
+  // merge de todos) volveria mudo.
+  const origen = 'scripts/loops/sincronizar.sh'
+  const delRef = contenidoEnMain(origen)
+  assert.ok(delRef !== null, `no pude leer ${origen} de origin/main: el gate no puede juzgar sin su ref`)
+
+  // El ref se lee por un camino independiente del de la funcion.
+  const aparte = spawnSync('git', ['-C', RAIZ, 'cat-file', 'blob', `origin/main:${origen}`], { encoding: 'utf8' })
+  assert.equal(aparte.status, 0, 'no pude leer el blob del ref por el camino de control')
+  assert.equal(delRef, aparte.stdout, 'contenidoEnMain no devuelve lo que tiene origin/main')
+
+  // Y un archivo que NO esta en el ref es `null` (no medido), nunca cadena vacia:
+  // un publicador nuevo sin mergear no puede leerse como "produccion esta vacia".
+  assert.equal(contenidoEnMain('hermes-content/deploy/no-existe-jamas/publicar.sh'), null)
+})
+
+test('lo que corre produccion es lo que dice origin/main', (t) => {
   const desviados = []
   const noMedidos = []
+
+  // Sin fetch se compara contra el ref que haya en disco, que en un clon que
+  // nadie toca envejece — y el veredicto sale coherente y viejo. Si el fetch no
+  // sale, se sigue igual pero se DICE: medir con un ref viejo no es no medir.
+  const fetch = spawnSync('git', ['-C', RAIZ, 'fetch', 'origin', '--quiet'], { encoding: 'utf8', timeout: 120_000 })
+  if (fetch.error || fetch.status !== 0) noMedidos.push('no pude hacer fetch: comparo contra el origin/main que tengo en disco')
+
   for (const destino of destinos) {
     const copia = copias.find((c) => c.destino === destino)
     if (!copia) continue // ya lo reporta el test de huerfanos; no dupliquemos el rojo
@@ -161,14 +212,24 @@ test('lo que corre produccion es lo que dice el repo', (t) => {
     const enRepo = path.join(RAIZ, origen)
     if (!existsSync(enRepo)) { desviados.push(`${destino}: el origen ${origen} no existe en el repo`); continue }
 
+    // El sujeto es MAIN, no el arbol de quien corre la cadena: ver `contenidoEnMain`.
+    const esperado = contenidoEnMain(origen)
+    if (esperado === null) {
+      // Un publicador nuevo, todavia sin mergear, no existe en el ref. Eso no es
+      // un desvio de produccion: es que no hay con que comparar todavia.
+      noMedidos.push(`${destino}: ${origen} no esta en origin/main (¿publicador nuevo sin mergear?)`)
+      continue
+    }
+
     const vivo = leerDeProduccion(destino)
     if (vivo === null) {
       // NI disco local NI SSH. No es "no hay desvio": es que no llegue a mirar.
       noMedidos.push(`${destino}: no pude leerlo ni en disco local ni por SSH al VPS`)
       continue
     }
-    if (vivo.contenido !== readFileSync(enRepo, 'utf8')) {
-      desviados.push(`${destino}: difiere del repo (${origen}) [leido ${vivo.origen}]`)
+    if (vivo.contenido !== esperado) {
+      const enVuelo = readFileSync(enRepo, 'utf8') !== esperado ? ' — ojo: tu arbol lo tiene modificado y sin mergear' : ''
+      desviados.push(`${destino}: difiere de origin/main (${origen}) [leido ${vivo.origen}]${enVuelo}`)
       continue
     }
     const ejecutable = esEjecutableEnProduccion(destino)

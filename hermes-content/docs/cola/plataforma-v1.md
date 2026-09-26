@@ -6133,6 +6133,37 @@ y sin operar. Acá se opera, con verificación por ítem.
          tiene que llegar ANTES de que se corra la matriz de `pv1`**, o el ok de Sergio Urcullo
          desbloquea 1.125 de los 1.169 y repite el bug de VI y IX.
 
+         ⚠️ **2026-09-26 (chatbot-cola) — la línea de arriba era cierta y el `DESPLEGAR: siat`
+         NO la habría arreglado: el publicador copiaba al lugar equivocado y se absolvía solo.**
+         Medido en el VPS, no deducido: los TRES orquestadores estaban en
+         `/opt/onia-siat/emisor/` (13-sep 02:16) y el que el VPS ejecuta,
+         `/opt/onia-siat/run-fase1-volumen.sh`, seguía siendo el del **4-sep** (633 B, con
+         `for E in IV VII XI`); `run-wrapper.sh` ni existía ahí. Causa en
+         `hermes-content/deploy/onia-siat/publicar.sh`: `destino_de()` ruteaba con
+         `case " $ARRIBA " in *" $1 "*`, que pide **espacios** a los lados, y `$ARRIBA` sale de
+         `git ls-files` **separado por saltos de línea**. Mientras fue UN archivo (el regex a
+         dedo) el valor no tenía separador y matcheaba; **el arreglo del 10-sep que amplió el
+         sujeto a tres rompió el ruteo de los tres**, en silencio y cayendo al `$DEST` del
+         emisor.
+
+         **El falso verde se cerraba solo, y por eso duró 16 días:** el publicador COMPARA con
+         el mismo `destino_de()` con el que copia, así que encontraba sus propias copias en el
+         lugar equivocado y decía *«YA ESTA PUBLICADO»*; `npm run deploy:sin-pedido` remataba
+         *«OK siat: al dia, no hay nada que pedir»*. Un gate que juzga con la función que está
+         rota siempre absuelve — por eso nadie iba a pedir nunca ese `DESPLEGAR: siat`.
+
+         **Arreglado** (`destino_de()` recorre `$ARRIBA` con `for`, que separa por IFS igual que
+         el resto del script). **Gate:** `scripts/publicador-siat-cubre.test.mjs` ›
+         *«los orquestadores se copian UN NIVEL MÁS ARRIBA»*, que **ejecuta** la función en vez
+         de leerla y con más de un archivo — con uno solo el defecto no aparece. Rojo antes
+         nombrando los tres destinos equivocados, verde después, 8/8. Cableado en `npm test`
+         como `test:publicador-siat`. **Sigue sin desplegar:** hace falta el merge a `main`
+         (lleva el publicador a `/opt` por `sincronizar.sh`) y **después** el `DESPLEGAR: siat`.
+
+         **La clase, que vale más que el caso:** cobertura no es ruteo. El gate que ya existía
+         preguntaba QUIÉN copia cada archivo y ninguno preguntaba ADÓNDE, así que daba verde
+         sobre un archivo que se copiaba entero al lugar donde nadie lo ejecuta.
+
 
 ## Lo que este carril NO hace
 
