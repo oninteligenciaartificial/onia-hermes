@@ -9074,13 +9074,45 @@ cita: al cerrar una fila hay que barrer quién la nombra, no sólo tacharla.
       líneas, intercaladas con webhooks fechados). Un `grep` de números de línea no es una
       hora, y el que no lo reconstruya reporta un duplicado que no existe.
 
-      ⚠️ **NO se arregló en esta vuelta a propósito, y el motivo importa:** el emisor de la línea
-      es `aviso-telegram.mjs`, en `hermes-content/deploy/vps-ops/bot/`, y hay un pedido de deploy
-      del bot **vivo y esperando la firma de Sergio Urcullo** cuyo cuerpo enumera **13 archivos**.
-      `aviso-telegram.mjs` **no es uno de esos 13** (está idéntico repo ↔ producción), así que
-      tocarlo lo haría el **14.º** e invalidaría el pedido — y ese pedido trae el arreglo de las
-      campanas, que vale más que una hora en un log. **Se hace después del `ok`, o rehaciendo el
-      pedido y archivando el viejo en la misma vuelta.**
+      ⚠️ **NO se arregló en esta vuelta a propósito, y el motivo importa:** hay un pedido de
+      deploy del bot **vivo y esperando la firma de Sergio Urcullo** cuyo cuerpo enumera **13
+      archivos**, y el archivo que hay que tocar **no es uno de esos 13**, así que tocarlo lo haría
+      el **14.º** e invalidaría el pedido — y ese pedido trae el arreglo de las campanas, que vale
+      más que una hora en un log. **Se hace después del `ok`, o rehaciendo el pedido y archivando
+      el viejo en la misma vuelta.**
+
+      ⚠️ **Acá decía que el emisor es `aviso-telegram.mjs`, y es FALSO — corregido el 2026-09-26
+      15:30 La Paz, contado por emisor y no por nombre parecido.** `aviso-telegram.mjs` sólo
+      NOMBRA el formato en dos comentarios; no imprime nada. Quien escribe la línea es
+      **`webhook-server.mjs`, en `:767` (el caso normal) y `:770` (el `catch`)**, con el `log` que
+      ese mismo archivo define en `:626` como un `process.stdout.write` pelado — por eso sale sin
+      hora, mientras la familia `[onia-webhook]` se fecha a sí misma en `:318`. La conclusión de
+      arriba no cambia (`webhook-server.mjs` tampoco está en los 13: sigue congelado), pero el
+      sujeto sí: quien abriera `aviso-telegram.mjs` después del `ok` no encontraría qué editar y
+      volvería a derivarlo desde cero. Se deriva en un comando, y por eso vale más que la lista:
+
+      ```bash
+      cd hermes-content/deploy/vps-ops/bot
+      grep -rn '\[aviso\]' --include=*.mjs . | grep -v backups | grep -v '\.test\.'
+      ```
+
+      🔴 **Y la trampa que el arreglo obvio dispara, medida antes de escribirla: copiar el formato
+      del hermano rompe EN VERDE el instrumento que mide este carril.** El hermano fecha así —
+      `[onia-webhook] 2026-09-26T19:15:18.021Z conv=49 …` —, o sea tag y después la hora. Pero las
+      **CINCO** expresiones de `avisos-vivo.mjs` que leen estas líneas anclan en `[aviso]` seguido
+      **inmediatamente** de la palabra de estado, y con la hora en el medio no matchea ninguna:
+      `motivoDelAviso` (`:136`), las dos de `contarEventos` (`:158` `sent`, `:163` `skipped`) y las
+      dos de `conversacionesDeAvisos` (`:203` el `conv=` propio, `:210` el `estado`). El `\w+`
+      captura `2026`: el `estado` pasa a ser `"2026"`, el `conv=` propio deja de matchear y cae al
+      vecino, el motivo queda `"sin motivo en el log"` y los contadores de enviados/salteados se
+      van a cero — **sin un solo error, y en el único lugar donde este carril cuenta si el aviso le
+      llegó a Sergio Urcullo.** Se derivan con el mismo grep de arriba apuntado a `avisos-vivo.mjs`.
+
+      **Así que el arreglo son DOS archivos que viajan juntos o ninguno**, y están en deploys
+      distintos: `webhook-server.mjs` (fuera de los 13) y `avisos-vivo.mjs` (**dentro** de los 13).
+      Publicar uno sin el otro deja el parser roto en el medio. Lo barato es poner la hora donde
+      ningún ancla la pisa —al final, o antes del `[aviso]`— y **ver el rojo primero** corriendo
+      `avisos-vivo.test.mjs` contra una línea con el formato nuevo.
 
       🔴 **El ID no se copia — se deriva, y esta línea ya se equivocó una vez.** Decía
       `t_76cdb5dc` y esa tarea está **`archived`** desde el 2026-09-26 16:48: el pedido se rehizo
