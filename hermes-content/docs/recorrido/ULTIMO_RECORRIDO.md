@@ -12,6 +12,25 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-26 16:15 La Paz (vuelta HEAD a6d8723e) — `BUILD_ID` sin cambios; repetí dental sin eje nuevo por segunda vez — mismo error que ya está documentado abajo, dos corridas 9/9 igual
+
+`BUILD_ID` comparado ANTES de arrancar contra este archivo (`DvBubiuO4uC5_E9jFNJeZ`, sin cambios)
+y contra el tablero (sin tareas `ready` sin reclamar en la zona `recorrido-cliente`, la cola del
+carril tampoco tenía ítems abiertos). Corrí `node scripts/recorrido_cliente.mjs --escribir` en
+dental plano dos veces (cuentas `zz-qa-2026-09-26-1916` y `zz-qa-2026-09-26-2009`, la primera
+arrancada antes de terminar de leer el resto del archivo) — **9/9 ambas, `completo: true`**, sin
+hallazgo. Limpieza verificada: `organizations`/`appointments` con `zz-qa-%` = 0 al cerrar (la
+cuenta 1916 tardó en limpiarse porque el proceso seguía corriendo cuando medí la primera vez —
+conté antes de que terminara).
+
+**Esto es exactamente el error que la entrada de las 14:09 de hoy (`e292f373`) ya señaló**: dental
+plano ya estaba confirmado por `b5c4e6b2` con este mismo `BUILD_ID`, y los ejes recientes (coadmin,
+recovery, checkout, `RECORRIDO_MOVIL`) ya se corrieron hoy mismo. Repetirlo de nuevo no midió nada
+nuevo. Método para la próxima: antes de tirar `--escribir` en dental a secas, grepear
+`RECORRIDO_(RUBRO|MOVIL|SALTAR_EQUIPO|PROBAR_RECOVERY|PROBAR_COADMIN)=` en este archivo y ordenar
+por fecha — el eje con la fecha más vieja (hoy: rotación de rubro, ninguno se corrió desde el
+2026-09-26 02:xx) es el que corresponde, no dental plano.
+
 ## 2026-09-26 19:09 La Paz (vuelta HEAD a43b5e72) — `BUILD_ID` sin cambios; eje coadmin (30h sin correrse) daba ROJO por un falso negativo del propio instrumento — arreglado y confirmado en verde
 
 `BUILD_ID` comparado antes de decidir: `DvBubiuO4uC5_E9jFNJeZ`, sin cambios. Verifiqué primero
