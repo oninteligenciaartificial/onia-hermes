@@ -8,7 +8,7 @@ import { describe, expect, it } from "vitest";
  * El sitio de venta sólo manda al lead a hosts que existen.
  *
  * El 2026-09-03, siguiendo a mano cada enlace que SALE del sitio, los dos
- * botones grandes de `/contacto` —«Agendar 20 minutos» y «Agendar la demo»,
+ * botones grandes de `/contacto` —hoy «Agendar la consulta» y «Agendar la demo»,
  * los únicos CTA de la página cuyo trabajo entero es que un lead consiga
  * hablar con alguien— apuntaban a `cal.onia.com.bo`, un Cal.com self-hosted
  * que **ya no existe**: no hay contenedor con ese nombre en el VPS y Sergio

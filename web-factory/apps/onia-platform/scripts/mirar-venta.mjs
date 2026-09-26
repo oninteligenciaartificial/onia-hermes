@@ -256,6 +256,17 @@ const falla = (id, clase, texto) =>
 const avisos = [];
 const informe = [];
 
+/**
+ * El barrido HABLA mientras barre: 24 rutas x 5 vistas son ~9 minutos, y hasta
+ * el 2026-09-25 no emitia una sola linea hasta despues de cerrar el navegador.
+ * Un barrido mudo no se distingue de uno colgado, asi que se lo mata: ese dia
+ * lo mate dos veces (a los 400 s y a los 25 s) y diagnostique un cuelgue que no
+ * existia. Va a stderr para no ensuciar el resumen de stdout, que es lo que se
+ * lee al final. Lo guarda `scripts/barrido-que-habla.test.ts`.
+ */
+const TOTAL_MEDICIONES = PANTALLAS.length * VISTAS.length;
+let hechas = 0;
+
 for (const vista of VISTAS) {
   // reducedMotion: estas capturas son las que se MIRAN para aprobar una pieza.
   // Sin esto el PNG puede congelar un numero a medio contar y se aprueba (o se
@@ -347,6 +358,13 @@ for (const vista of VISTAS) {
     if (ajenos.length) avisos.push(`${id}: widget de chat con 429 (limite de Chatwoot, otro carril)`);
 
     informe.push({ pantalla: pantalla.nombre, vista: vista.nombre, status, ms, ...m, errores });
+    hechas++;
+    // El contador de fallas va en la linea: asi se ve QUE aparecio y CUANDO,
+    // sin esperar al resumen. Si la corrida se corta, lo ya medido no se pierde.
+    const rotas = fallas.length ? ` · ${fallas.length} falla(s)` : '';
+    process.stderr.write(
+      `[${String(hechas).padStart(3)}/${TOTAL_MEDICIONES}] ${id} — ${status} en ${ms}ms${rotas}\n`,
+    );
     await page.close();
   }
   await ctx.close();

@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
 import { Reveal } from "@/motion";
-import { AGENDA_DEMO_URL, AGENDA_CONSULTA_URL, WA_URL_LANDING } from "@/lib/site";
+import {
+  AGENDA_DEMO_URL,
+  AGENDA_CONSULTA_URL,
+  CITA_DURACION_MIN,
+  WA_URL_LANDING,
+} from "@/lib/site";
 import { EMPEZAR_URL } from "../nav";
 import { CTA_ALTA } from "../alta";
 import { Block, Btn, Kicker } from "../ui";
@@ -20,14 +25,20 @@ import s from "../sitio.module.css";
  * dos párrafos más arriba, que acá no hay formularios. Ver lib/site.ts y el
  * gate `(sitio)/enlaces.test.ts`.
  *
- * El orden es el del embudo, no el del ego: primero los 20 minutos del que
- * todavía no sabe si le sirve, después los 45 del que ya vio precios.
+ * El orden es el del embudo, no el del ego: primero el que todavía no sabe si
+ * le sirve, después el que ya vio precios y quiere verlo funcionando.
+ *
+ * ⚠️ Las dos duran lo mismo y el número sale de `CITA_DURACION_MIN`, que sigue
+ * a lo que el motor RESERVA. Hasta el 2026-09-25 esta página vendía 20 y 45
+ * minutos mientras el bot bloqueaba 30: se diferenciaban por un reloj que no
+ * existía. Lo que de verdad las separa es lo que pasa adentro, y eso ya está
+ * escrito abajo en `resultado` y `para`. Ver `lib/duracion-de-la-cita.test.ts`.
  */
 
 export const metadata: Metadata = {
   title: "Hablemos — agendá una demo de Onia | Bolivia",
   description:
-    "Elegí el horario por WhatsApp: 20 minutos de consulta comercial para saber si Onia te sirve, o 45 minutos de demo con tu caso adelante. Del otro lado hay alguien que conoce el sistema.",
+    `Elegí el horario por WhatsApp: ${CITA_DURACION_MIN} minutos de consulta comercial para saber si Onia te sirve, o la demo con tu caso adelante. Del otro lado hay alguien que conoce el sistema.`,
   alternates: { canonical: "/contacto" },
   openGraph: {
     type: "website",
@@ -42,19 +53,19 @@ export const metadata: Metadata = {
 const CITAS = [
   {
     id: "consulta",
-    paso: "20 minutos",
+    paso: `${CITA_DURACION_MIN} minutos`,
     salto: "Sin compromiso",
     nombre: "Consulta comercial",
     resultado:
       "Nos contás qué negocio tenés y te decimos, de frente, si Onia te sirve o no. Si no te sirve, te lo decimos ahí.",
     para: "Para el que todavía no sabe si esto es para su rubro.",
     href: AGENDA_CONSULTA_URL,
-    cta: "Agendar 20 minutos",
+    cta: "Agendar la consulta",
     destacado: false,
   },
   {
     id: "demo",
-    paso: "45 minutos",
+    paso: `${CITA_DURACION_MIN} minutos`,
     salto: "Ver el sistema",
     nombre: "Demo y diagnóstico",
     resultado:
