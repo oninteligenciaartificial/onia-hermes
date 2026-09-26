@@ -77,8 +77,24 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Ahora — plan de features (revisado 2026-08-30, con Gate 1 corrido)
 
-- [x] 🟠 **El titular de `/empezar` partía su resalte al medio, en las DOS vistas — ARREGLADO el
-      2026-09-26 por `web-venta` (`e9d19c01`), con el gate que lo deja visto.**
+- [ ] 🟠 **El titular de `/empezar` parte su resalte al medio, en las DOS vistas. ARREGLADO EN
+      CÓDIGO el 2026-09-26 por `web-venta` (`e9d19c01`), con el gate que lo deja visto —
+      pero EL LEAD TODAVÍA LO VE PARTIDO: el arreglo no salió de la rama.**
+      - ⚠️ **Corregido el 2026-09-26 19:0x La Paz, auditando este mismo `[x]`.** Estaba marcado
+        hecho y la palabra era «ARREGLADO» a secas. `CLAUDE.md` es explícito: *construido ≠
+        terminado*, y está **prohibido reportar como hecho lo que no está encendido en
+        producción**. Medido HOY contra el sitio servido, tres veces y por caminos distintos:
+        `web-factory/apps/onia-platform/scripts/mirar-primera-pantalla.mjs` sale **ROJO**
+        nombrando "de verdad" en escritorio y teléfono;
+        `web-factory/apps/onia-platform/src/app/(sitio)/sitio.module.css` en **origin/main**
+        muestra `.display em` **sin** el `white-space: nowrap`; y la hoja de estilos que sirve
+        el dominio tiene **cero** `white-space:nowrap`. La captura mirada,
+        en /tmp/venta-1ra/empezar-escritorio.png — se lee "y usalo de" / "verdad 14 días."
+      - **Qué falta, y de quién es:** nada de código. `e9d19c01` está en la rama del carril
+        (**origin/claude/web-venta**) y **no** en **origin/main** (`git branch -r --contains`
+        lista una sola rama). Merge a main lo hace el integrador (`onia-cola`), no este carril.
+        Latencia normal al momento de medir: el arreglo tenía ~1 h 40 min. **Se vuelve a marcar
+        `[x]` recién cuando el ROJO de arriba dé verde contra `https://onia.com.bo`**, no antes.
       - **Lo que veía el lead** en la última pantalla antes de registrarse: `Creá tu cuenta` /
         `y usalo de` / `verdad 14 días.` El resalte verde es **"de verdad"** y el salto de línea
         caía **adentro**: dos pedazos de verde que no forman una frase. Escritorio y teléfono.
@@ -101,6 +117,37 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
         **producción**, o sea un verde sobre el sistema equivocado. Casi lo tomo por bueno.
       - Evidencia: `/tmp/wv-fix/empezar-{escritorio,telefono}.png` y `/tmp/webs-320.png`,
         abiertas y **miradas**.
+
+- [ ] 🔴 **`deploy:vivo` dice «DEPLOY AL DIA — sin nada varado» con un arreglo MÍO, visible para
+      el cliente, sin salir de la rama. Es el gate del carril fallando EN VERDE sobre la única
+      pregunta que este carril tiene que contestar: ¿mis arreglos llegan al lead?**
+      - **El sujeto:** `web-factory/apps/onia-platform/scripts/deploy-vivo.mjs`.
+      - **Medido el 2026-09-26 19:0x La Paz**, en la misma vuelta y con una sola corrida de cada
+        cosa: `npm run deploy:vivo` imprime *«DEPLOY AL DIA — onia.com.bo sirve el build del
+        2026-09-26 15:52 UTC, sin nada varado»* mientras `git log` de main contra la rama del
+        carril devuelve **4 commits**, y uno de ellos (`e9d19c01`) es el `white-space: nowrap` que
+        endereza el titular de `/empezar`. O sea: el instrumento dijo «al día» y el lead seguía
+        viendo la promesa partida en dos.
+      - **Causa (no supuesta, leída):** el script compara `origin/main` ↔ el build que sirve el
+        dominio. Ese eje es correcto para «¿producción corre lo que main dice?», pero el trabajo
+        de un carril pasa por **tres** estaciones —rama → `main` → producción— y el gate sólo
+        mira la segunda. Todo lo que está entre la rama y `main` es invisible **y se reporta como
+        cero varadas**, que es la forma más cara de equivocarse: no omite, AFIRMA.
+      - **Por qué importa más que el titular:** el titular ya está arreglado y sólo espera un
+        merge. Esto, en cambio, es lo que hizo que el `[x]` de arriba se escribiera como
+        «ARREGLADO» sin mentir a propósito — el carril preguntó «¿quedó algo varado?», le
+        dijeron que no, y le creyó.
+      - **Reproducción exacta, 30 segundos:**
+        ```
+        cd web-factory/apps/onia-platform && npm run deploy:vivo     # dice "sin nada varado"
+        git log origin/main..origin/claude/web-venta --oneline        # y hay commits de producto
+        ```
+      - **Arreglo propuesto:** que `deploy-vivo.mjs` cuente también los commits de la zona que
+        están en la rama del carril y NO en `origin/main`, y los nombre aparte («esperando
+        merge») de los que ya están en `main` esperando swap. Son dos estados distintos con dos
+        dueños distintos (el integrador / el deploy) y hoy se reportan como uno solo: «al día».
+        Verde sólo si las dos cuentas dan cero. Con `git fetch` antes o `exit 2` (NO MEDIDO),
+        nunca un veredicto sobre refs de disco.
 
 - [x] 🟠 **`mirar:portada` pintaba un ROJO intermitente en `telefono /empezar` por una espera que
       no retenía — ARREGLADO el 2026-09-26 por `web-venta`, con la causa medida y los dos
