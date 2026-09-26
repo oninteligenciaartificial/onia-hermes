@@ -463,7 +463,12 @@ async function avisarColgadas(result, nowIso, deps) {
       if (status && status !== "sent") {
         throw Object.assign(new Error(veredicto?.reason || `aviso ${status}`), { noEntregado: true });
       }
-    for (const { quien } of elegidos) {
+    // ENTREGADO: ahora si se escribe el veredicto adentro de la marca. Hasta esta linea la marca
+    // era una reserva EN VUELO, y una reserva en vuelo se retoma; lo que silencia al lead para
+    // siempre es la confirmacion, no el archivo. Sin esto, un proceso que reserva y muere antes de
+    // entregar deja al lead mudo para siempre — paso el 2026-09-25 con cinco desconocidos reales.
+    for (const { quien, clave } of elegidos) {
+      await marcas.confirmar?.(clave, "sent");
       (result.colgadas.avisados ||= []).push(quien.conversationKey);
     }
   } catch (error) {

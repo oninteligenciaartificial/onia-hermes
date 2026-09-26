@@ -729,6 +729,132 @@ abrirlas y decidir a qué deploy se refieren. Se derivan con el comando, nunca d
 
 ## Ahora
 
+- [x] 🔴 **CERRADO el 2026-09-25 22:30-23:10 La Paz (commiteado, **NO desplegado**): el bot le
+      prometía al lead una duración de reunión **distinta de la que reserva**, y las dos salían en
+      EL MISMO mensaje. Medido contra el bot desplegado: `30` y `45` minutos juntos.**
+
+      **Cómo se encontró** (escalón 2, auditar los `[x]`: las dos colas tenían «Ahora» sin ítems
+      abiertos y los dos de «Después» siguen diferidos a propósito). Se auditó el `[x]` del deploy
+      de hoy promesa por promesa — el método que funcionó la vuelta pasada — empezando por la
+      número 1, *«los 4 enlaces de WhatsApp de onia.com.bo; hoy quien hace clic recibe el saludo
+      genérico»*. Para eso hubo que preguntarle al motor vivo, no al archivo:
+
+          docker exec -w /tmp/onia-bot onia-center node /tmp/probe-campanas.mjs 5
+          → inbox 5 — campanas en el config VIVO: 9 · VEREDICTO: 9/9 campanas vivas
+
+      ✅ **Esa promesa se cumplió: las 9 campañas están VIVAS.** El párrafo de los ítems de abajo
+      que dice que «sigue siendo cierto» que quien hace clic recibe el saludo genérico es HISTORIA
+      desde el deploy de hoy — leído como presente manda a re-arreglar algo que ya anda. El archivo
+      instalado (`/tmp/onia-bot/knowledge.json`, que es el `knowledge.onia.json` del repo) trae
+      `campanas: 9`, la fila del panel sigue sin la clave (`select (data ? 'campanas')` → `f`) y
+      `mergePanelKnowledge` la deja vivir.
+
+      ⚠️ **Y al mirar las respuestas vivas apareció el defecto.** Las campañas 7 y 8 son las que la
+      página `/contacto` enlaza por `wa.me`, y sus textos prometían **20** y **45** minutos. El
+      motor reserva `config.demo.duracionMinutos` = **30** (`CALCOM_BOT_DURATION_MINUTES` está
+      VACÍA en el proceso vivo, así que gana el código). Medido con los slots del proceso vivo:
+
+          >>> minutos prometidos EN EL MISMO MENSAJE: ["30","45"]
+
+          "Te muestro cómo quedaría en TU negocio en 30 minutos por videollamada…"  (M0)
+          "La demo de 45 minutos la hace Sergio sobre TU caso…"                     (campanas[7])
+
+      **Es el bug de agosto entrando por otra puerta, y su invariante no lo veía.** El bloque `DEMO`
+      de `config.mjs` cuenta que durante meses el guion prometía 15 y la reserva bloqueaba 45 — «el
+      prospecto aceptaba creyendo una cosa y su invitación le decía otra» — y se blindó con
+      `demoDuration`, que compara `duracionFrase` contra `duracionMinutos`. Dos campos. El bot dice
+      la duración en más lugares que esos dos, y el texto de campaña es uno.
+
+      **El arreglo, y por qué es un gate y no una regla del validador.** Las dos respuestas dejan de
+      nombrar la duración: queda en UN solo lugar (`{{demo_duracion}}` en M0, que sale del mismo
+      número que se reserva). El gate nuevo
+      —`una-sola-duracion-en-lo-que-el-bot-dice.test.mjs`— **deriva** los sujetos recorriendo
+      `DEFAULT_CONFIG` y el documento entero, así que una campaña nueva o una FAQ del panel quedan
+      cubiertas sin tocar el gate. `validateKnowledge` NO se tocó a propósito: rechaza el documento
+      ENTERO, y un número mal tipeado convertiría las nueve campañas en silencio — el lead volvería
+      al saludo genérico, que es justo lo que las campañas vinieron a tapar.
+      **Exención única, con su motivo:** `campanas[].frase` es el texto que escribe EL LEAD (copia
+      exacta del `wa.me?text=` de la web, y `campanaExacta` compara la frase entera). Tocarlo acá
+      rompe el match; el número mal está en la WEB y se arregla allá.
+
+      **Rojo antes del arreglo, por el motivo correcto:** el gate nombró las 3 menciones ofensoras
+      (`doc.campanas[6].respuesta` ×2 con 20, `doc.campanas[7].respuesta` con 45) contra los 30 que
+      se reservan. Verde después: 4/4 casos, con caso ANCLA (si el recorredor se rompe encuentra
+      cero menciones y pasaría en verde sin mirar nada) y self-check por mutación en las tres
+      puertas: respuesta de campaña, FAQ editable y rango («15-20 minutos» se juzga por el último
+      número, igual que `demoDuration`).
+
+      ⚠️ **Lo que NO arregla este carril: la web.** `web-factory/apps/onia-platform/src/lib/site.ts`
+      (líneas 132 y 136) vende una *«consulta comercial de 20 minutos»* y una *«demo de 45
+      minutos»*, y las dos están vivas en `/contacto` (`page.tsx` las importa). Con este arreglo el
+      bot ya no confirma el número equivocado, pero la web sigue ofreciendo dos duraciones que el
+      producto no reserva. Es del carril **web-venta** y quedó en el tablero con la reproducción y
+      las dos salidas cotizadas: **`t_87226519`**. ⚠️ Si alguna vez cambian esas frases, hay que
+      cambiar `campanas[6].frase` y `campanas[7].frase` en el MISMO merge: `campanaExacta` compara
+      la frase ENTERA y `campanas-web.test.mjs` cruza los dos lados.
+
+      🔴 **NO desplegado, y esta vez el freno es conocido:** `knowledge.onia.json` está en
+      `FIRMA_HUMANA` (`scripts/loops/extras/publicar-solo.sh`), así que el deploy del bot deja de
+      ser automático y se destraba con UNA tarea del tablero cuyo cuerpo diga `DESPLEGAR: bot` y el
+      `ok` de Sergio Urcullo. Hasta entonces el lead que clickea sigue leyendo los 45 minutos.
+
+- [x] 🔴 **CERRADO el 2026-09-25 18:13-19:00 La Paz (commiteado en `5c2af97a`, NO desplegado):
+      cinco handoffs de desconocidos reales quedaron mudos PARA SIEMPRE, y los cinco eran los que
+      llevaban más tiempo esperando.**
+
+      **Cómo se encontró, y por qué nadie lo había visto.** El barrido de leads fríos se encendió
+      recién con el deploy de hoy (18:44 UTC), así que su primera corrida real es de hoy. Vale la
+      pena mirarla porque es la verificación que casi nunca se hace: el pedido `t_24fa76aa`
+      prometía siete cosas y **la número 7 era justamente ésta** — *«el estreno son dos Telegram y
+      queda drenado»*. Se verificó, y no quedó drenado.
+
+          docker exec onia-center ls -la /var/lib/onia-colgada-avisado/
+
+          19:00  colgada-chatwoot:990777-…   930 h callado
+          19:00  colgada-chatwoot:990779-…   930 h
+          19:00  colgada-chatwoot:40-…       647 h
+          19:00  colgada-chatwoot:45-…       596 h
+          19:00  colgada-chatwoot:46-…       575 h
+          19:17  colgada-chatwoot:47-…       557 h   ← avisado
+          19:17  colgada-chatwoot:58-…       191 h   ← avisado
+
+      Las dos de 19:17 son del cron y su corrida lo dice: `avisados:["chatwoot:47","chatwoot:58"]`.
+      Las **cinco** de 19:00 las escribió otro proceso que reservó y nunca entregó — en todo el log
+      del barrido hay **UNA sola** corrida con `avisados` no vacío:
+
+          grep -o '"now":"[^"]*".*"avisados":\[[^]]\+\]' /var/log/onia-bot-followup.log
+          → "now":"2026-09-25T19:17:01Z"   "avisados":["chatwoot:47","chatwoot:58"]
+
+      **Por qué eran los cinco peores.** `avisarColgadas` ordena por antigüedad a propósito (para
+      que la cola drene y el de 37 días no quede detrás de cada lead nuevo). Ese orden hizo que el
+      proceso que reservó sin entregar se llevara exactamente a los cinco que más tiempo llevaban
+      esperando. Los dos que sí se avisaron son los dos más nuevos.
+
+      **La causa, y por qué el `catch` que ya existe no alcanzaba.** `reservar` escribía un archivo
+      vacío y `EEXIST` significaba «ya avisé», así que esas cinco marcas los daban por avisados en
+      cada corrida siguiente — y estas marcas **no se purgan a propósito** (el silencio de un lead
+      no vence), o sea: para siempre. El `catch` que suelta las marcas cuando Telegram falla existe
+      y funciona, pero **sólo corre si el proceso llega al catch**: uno que muere entre la reserva y
+      el envío deja la marca puesta. Su propio comentario ya lo anticipaba —*«ese lead quedaba
+      silenciado PARA SIEMPRE»*— y describía el modo de falla que hoy pasó.
+
+      **El arreglo: un archivo vacío ya no significa «avisado», significa «lo estoy mandando».** El
+      veredicto se escribe ADENTRO al confirmarse (`marcas.confirmar`). Una reserva vacía y vieja
+      (>10 min, cuando un envío tarda segundos y los barridos van cada hora) está abandonada y se
+      retoma; una marca con veredicto silencia para siempre, igual que antes. La asimetría es
+      deliberada: duplicar un aviso cuesta un mensaje repetido, no avisar cuesta el lead.
+
+      **Se descartó una hipótesis antes de anunciarla** (y conviene que quede escrito porque era
+      convincente): que `await marcas.liberar?.(clave)` fuera un no-op silencioso por el `?.`.
+      `crearMarcasEnDisco` **sí** expone `liberar` — `marcas-en-disco.mjs:86`. Medido, no supuesto.
+
+      **Los cinco leads se recuperan solos** en cuanto el bot vivo corra este código: sus marcas
+      están vacías y viejas. Hasta entonces siguen mudos — **commiteado, NO desplegado.**
+
+      Gates: los 4 casos nuevos en ROJO por el motivo correcto antes del arreglo
+      (`colgada-reservada-sin-entregar-se-reintenta.test.mjs`), 32/32 en los cinco tests hermanos
+      de colgadas, cadena `npm test` de onia-hermes exit 0.
+
 - [x] 🔴 **MEDIDO el 2026-09-25 14:13-14:45 La Paz (sin cambio de motor — el arreglo ya está
       commiteado desde el 24-sep y lo único que falta es publicar): el bot vivo no sólo ofrece
       turnos por debajo del día de aviso; sirve horarios **del pasado**. Probado ejecutando el
@@ -772,6 +898,25 @@ abrirlas y decidir a qué deploy se refieren. Se derivan con el comando, nunca d
       sostienen. Lo que falta es que el consumidor desplegado sea el que corta. **Falta publicar
       el bot; el pedido existe y es `t_24fa76aa` (blocked).** Se le comentó el costo con estos
       números, no se duplicó.
+
+      ✅ **CURADO EN PRODUCCIÓN el 2026-09-25 18:44 UTC (14:44 La Paz).** Sergio Urcullo firmó
+      `t_24fa76aa` (hoy `done`) y el deploy publicó 38 archivos con código 0. El párrafo de arriba
+      es HISTORIA: leído como presente manda a pedir un deploy que ya se hizo. Medido después, no
+      de memoria:
+
+          npm run anticipacion:viva     # exit 0  (esta mañana daba exit 1)
+
+          proceso 19021 en onia-center — ofrece 2 horario(s)
+            ok   lunes 28 de septiembre, 14:00 — 67.7 h de aviso
+            ok   martes 29 de septiembre, 14:00 — 91.7 h de aviso
+          corte de 24 h en el codigo vivo: si
+          VEREDICTO: ok — promete con un dia de aviso y el corte lo respalda
+
+      El sábado 26 a las 14:00 —que esta mañana el bot vivo ofrecía con 23,7 h de aviso— ya NO se
+      ofrece, y los símbolos del arreglo están en los archivos que lee ese proceso
+      (`slotsElegibles`/`claveDeSlot` en `config.mjs`, `run-turn.mjs` y `bot-engine.mjs`). El
+      proceso 19021 llevaba 3 h 32 min corriendo, o sea que arrancó CON el deploy: no es código
+      copiado sobre un Node que cachea módulos.
 
 - [x] 🔴 **CERRADO el 2026-09-25 13:43-14:25 La Paz (commiteado; es el MISMO instrumento
       —`scripts/bot_vivo_tiene_el_codigo.mjs`—, no toca el motor y no necesita deploy):
