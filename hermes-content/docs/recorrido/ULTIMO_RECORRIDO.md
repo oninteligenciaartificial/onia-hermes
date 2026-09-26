@@ -12,6 +12,166 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-26 17:09 La Paz (vuelta HEAD 82bb23e3) — `BUILD_ID` sin cambios; eje más viejo (`SALTAR_EQUIPO`, 13 días sin correrse) reconfirmado, 9/9
+
+Antes de tirar `--escribir` en dental a secas (el error de la vuelta anterior), grepeé
+`RECORRIDO_(RUBRO|MOVIL|SALTAR_EQUIPO|PROBAR_RECOVERY|PROBAR_COADMIN)=` en este archivo y comparé
+fechas reales por `git log -1 --format=%ci <sha-del-commit-que-lo-corrió>` (las fechas que cada
+entrada se pone a sí misma no siempre coinciden con el commit real). Resultado: `PROBAR_COADMIN` y
+el checkout se corrieron hoy a las 19:09 UTC, `PROBAR_RECOVERY` a las 18:20 UTC, `MOVIL` a las
+16:18 UTC, la rotación de `RUBRO` cerró el ciclo de los 5 a las 02:14 UTC — pero
+`RECORRIDO_SALTAR_EQUIPO=1` no se corría desde el **2026-09-13 11:14** (13 días), por lejos el más
+viejo.
+
+`RECORRIDO_SALTAR_EQUIPO=1 node scripts/recorrido_cliente.mjs --escribir` (dental, cuenta
+`zz-qa-2026-09-26-2110@onia.com.bo`): **9/9 pasos, `completo: true`, sin hallazgo.** Onboarding
+cerrado con "Saltar por ahora" en la pantalla de equipo, sin cargar ningún profesional
+(`profesionalCargado: false`) — igual que el 13-sep. El paso 7 (agendar cita
+`zz-qa-2026-09-26-2110-cita`, 2026-09-28 09:00, id `cmuivzy6e000h01n0z4eitafr`) salió OK de nuevo:
+el desplegable de "profesional" sigue ofreciendo al dueño cuando no hay equipo cargado. **Esto
+RECONFIRMA, tras 13 días y varios deploys de por medio, que saltar "equipo" en el onboarding no
+rompe agendar** — la respuesta del 2026-09-13 sigue siendo verdad hoy. Paciente
+`zz-qa-2026-09-26-2110-paciente` cargado y visto en `/patients`, factura con ítem
+`zz-qa-2026-09-26-2110-item` vista en `/billing/cmuiw08il000j01n0xyfmxnd1` — frenado ahí sin
+marcar pago. Limpieza verificada: `organizations`/`appointments` con `zz-qa-%` = 0 al cerrar.
+
+Tablero: sin tareas `ready` sin reclamar en la zona `recorrido-cliente` (una tarea `ready` vieja,
+`t_07be8328`, es sólo un aviso informativo `[auto:]` que esta misma carrilera ya se auto-generó
+para Telegram — no es un pedido de trabajo, se deja como está).
+
+**Próximo eje más viejo tras esta vuelta**: la rotación de `RUBRO` (cerró ciclo completo
+2026-09-26 02:14 UTC) es ahora el más antiguo de los cinco ejes rastreados.
+
+## 2026-09-26 16:15 La Paz (vuelta HEAD a6d8723e) — `BUILD_ID` sin cambios; repetí dental sin eje nuevo por segunda vez — mismo error que ya está documentado abajo, dos corridas 9/9 igual
+
+`BUILD_ID` comparado ANTES de arrancar contra este archivo (`DvBubiuO4uC5_E9jFNJeZ`, sin cambios)
+y contra el tablero (sin tareas `ready` sin reclamar en la zona `recorrido-cliente`, la cola del
+carril tampoco tenía ítems abiertos). Corrí `node scripts/recorrido_cliente.mjs --escribir` en
+dental plano dos veces (cuentas `zz-qa-2026-09-26-1916` y `zz-qa-2026-09-26-2009`, la primera
+arrancada antes de terminar de leer el resto del archivo) — **9/9 ambas, `completo: true`**, sin
+hallazgo. Limpieza verificada: `organizations`/`appointments` con `zz-qa-%` = 0 al cerrar (la
+cuenta 1916 tardó en limpiarse porque el proceso seguía corriendo cuando medí la primera vez —
+conté antes de que terminara).
+
+**Esto es exactamente el error que la entrada de las 14:09 de hoy (`e292f373`) ya señaló**: dental
+plano ya estaba confirmado por `b5c4e6b2` con este mismo `BUILD_ID`, y los ejes recientes (coadmin,
+recovery, checkout, `RECORRIDO_MOVIL`) ya se corrieron hoy mismo. Repetirlo de nuevo no midió nada
+nuevo. Método para la próxima: antes de tirar `--escribir` en dental a secas, grepear
+`RECORRIDO_(RUBRO|MOVIL|SALTAR_EQUIPO|PROBAR_RECOVERY|PROBAR_COADMIN)=` en este archivo y ordenar
+por fecha — el eje con la fecha más vieja (hoy: rotación de rubro, ninguno se corrió desde el
+2026-09-26 02:xx) es el que corresponde, no dental plano.
+
+## 2026-09-26 19:09 La Paz (vuelta HEAD a43b5e72) — `BUILD_ID` sin cambios; eje coadmin (30h sin correrse) daba ROJO por un falso negativo del propio instrumento — arreglado y confirmado en verde
+
+`BUILD_ID` comparado antes de decidir: `DvBubiuO4uC5_E9jFNJeZ`, sin cambios. Verifiqué primero
+el eje de checkout weekly/annual (7 días sin correrse, el más viejo): `node
+scripts/probar_checkout_directo.mjs` — crece/anual Bs 5.500, clinic/anual Bs 12.900,
+clinic/semanal avisa "Solo mensual o anual" y no cae a otro monto. **Sin hallazgo.**
+
+Seguí con el eje más viejo después de ése: `RECORRIDO_PROBAR_COADMIN=1` (última vez 2026-09-25
+12:10, ~30h). Primera corrida (9/9, `completo: true`) trajo `coadminProbado.ok: false`: "la
+invitación no se confirmó en pantalla". **Antes de reportarlo como bug de producto, miré la
+captura** (`extra-coadmin-03-invitado.png`) en vez de creerle al texto — regla de la casa,
+"verificar es mirar". La captura mostraba `/team` YA refrescado con el coadministrador en la
+lista como Administrador: la invitación había funcionado. Causa real: el propio comentario del
+código dice que el modal se autocierra con `router.refresh()` a los 2.5s, y el chequeo leía el
+toast "invitación enviada" a los 3000ms — cuando el toast ya no podía estar, por diseño. Un
+chequeo que lee un estado después de que el propio flujo ya lo reemplazó siempre da rojo, sin
+importar si el producto anda bien.
+
+**Arreglado en `scripts/recorrido_cliente.mjs`** (mi instrumento, zona propia): saqué el corte
+duro sobre el toast transitorio y dejé la confirmación real en la fila de `/team` (que ya existía
+más abajo en el código, sin usarse como fuente de verdad). Reordené los `mirar()` para no perder
+la captura del estado justo después de enviar. Segunda corrida completa (cuenta
+`zz-qa-2026-09-26-1916`): `coadminProbado.ok: true`, "invitado como Administrador, confirmado en
+`/team`, y sacado del equipo de punta a punta", con `toastVisto: false` — confirma la hipótesis:
+el toast de verdad no estaba, y no hacía falta que estuviera. Rojo por el motivo correcto primero
+(la captura), verde después por el motivo correcto (la fila persistente), no por bajar la vara.
+
+Limpieza verificada en las tres corridas de la vuelta (checkout, coadmin v1, coadmin v2):
+`organizations`/`appointments`/`auth.users` con `zz-qa-%` = 0 al cerrar.
+
+Tablero: sin tareas `ready` sin reclamar en la zona `recorrido-cliente` (todo `done`).
+
+**Lección para la próxima**: cuando un `extra-*Probado.ok:false` aparece en un recorrido que dio
+9/9, no asumir bug de producto sin mirar la captura del paso que falló — un chequeo de texto
+puede estar midiendo un instante que el propio flujo ya superó.
+
+## 2026-09-26 14:09-14:20 La Paz (vuelta HEAD e292f373) — `BUILD_ID` sin cambios (`DvBubiuO4uC5_E9jFNJeZ`, ya confirmado en dental desktop por `b5c4e6b2`); repetí ese mismo eje por error, y corregí con uno real: recuperación de contraseña con token real, 13 días sin correrse, 9/9
+
+**Corrí primero dental desktop sin ejes nuevos** (`node scripts/recorrido_cliente.mjs --escribir`,
+cuenta `zz-qa-2026-09-26-1810`) sin comparar antes contra `ULTIMO_RECORRIDO.md`: 9/9, `completo:
+true`, limpio — pero era una repetición exacta de lo que la entrada `b5c4e6b2` de este mismo
+`BUILD_ID` ya había confirmado (dental desktop, default). La lección de la vuelta anterior decía
+justo esto: comparar `BUILD_ID` contra este archivo ANTES de decidir qué correr, no sólo antes de
+repetir "dental" a secas. Corregido: grepeé qué ejes llevaban más tiempo sin tocarse y encontré
+`RECORRIDO_PROBAR_RECOVERY=1` sin correrse desde el 2026-09-13 (13 días, ver más abajo).
+
+- **Recuperación de contraseña con token real** (`RECORRIDO_PROBAR_RECOVERY=1 node
+  scripts/recorrido_cliente.mjs --escribir`, dental, cuenta `zz-qa-2026-09-26-1815`): **OK de
+  punta a punta**, sobre el `BUILD_ID` actual. Pide el enlace desde "Olvidé mi contraseña" en
+  `/login`, entra a `/update-password` con el `recovery_token` real, cambia la contraseña y
+  **entra con la nueva** — no sólo un 200 del formulario. Re-logueado con la password nueva,
+  siguió el recorrido normal: onboarding (6 pantallas) → paciente en `/patients` → cita
+  `2026-09-28 09:00` agendada y vista en `/appointments` (id `cmuipqv7a005501mxr6nz1ccy`) →
+  factura con ítem visible en `/billing/...` (frenado sin pagar) → dato del paso 6 no figura en
+  `/dashboard` (esperado, el panel no lista pacientes).
+- `completo: true`, `llegoHasta: 9/9` en ambas corridas de hoy. Limpieza verificada las dos veces:
+  `organizations`/`appointments` con `zz-qa-%` = 0 filas al cerrar.
+- Tablero: sin tareas `ready` sin reclamar en la zona `recorrido-cliente`.
+- **Lección para la próxima**: antes de correr el recorrido default, grepear qué combinación
+  rubro+eje (mobile, recovery, coadmin, rubro) lleva más tiempo sin confirmarse contra el
+  `BUILD_ID` vigente — no alcanza con mirar sólo si "dental" se corrió, sin mirar CON QUÉ flags.
+
+## 2026-09-26 (vuelta HEAD ebcfe61a) — `BUILD_ID` sin cambios; escalón agentes/comparativa/facturacion RE-CONFIRMADO sano; eje nuevo: `RECORRIDO_MOVIL=1` en dental, 18 días sin correrse, 9/9
+
+`BUILD_ID` comparado antes de decidir: `DvBubiuO4uC5_E9jFNJeZ`, igual al de la entrada de las
+11:09 (`921cf15d`) → no correspondía repetir dental en escritorio. Tablero: sin tareas `ready` sin
+reclamar en la zona `recorrido-cliente`. Cola (`docs/cola/recorrido-cliente.md`): sección
+"Reportado a otro carril (nuevo)" vacía, nada Gate-1-listo.
+
+**Cerré primero un hallazgo viejo que seguía figurando abierto**: `t_826a7ab2`
+(`/servicios/marketing-ia` admitiendo "somos empresa nueva... no tenemos casos de éxito") tenía un
+comentario mío del 06:12 diciendo que el fix vivía sólo en `claude/web-venta`. Reverifiqué:
+`git merge-base --is-ancestor 5f61db7a origin/main` ahora da SÍ, y
+`curl https://onia.com.bo/servicios/marketing-ia | grep -io 'empresa nueva|muro de logos|casos de
+éxito'` da 0 matches (HTTP 200). El integrador ya lo mergeó y desplegó. Comentario de cierre real
+agregado a la tarea.
+
+**Re-audité el eje "próxima vuelta: `/agentes`, `/comparativa`, `/facturacion`"** que varias
+entradas venían citando como pendiente (líneas de esta misma nota en vueltas de 22:09, 25-sep) sin
+comprobar si seguía vigente — exactamente el error que una lección anterior ya señaló. Con
+Playwright (`reducedMotion:'reduce'`, scroll completo para disparar animaciones de aparición,
+`page.on('response')` para HTTP≥400): las tres, sin palabras prohibidas, sin respuestas ≥400.
+`/comparativa` sigue con el badge "EN TRÁMITE" para la factura SIAT, y `/facturacion` sigue
+diciendo de frente "Falta que el SIN autorice el sistema" — **ya evaluado como sano en la nota del
+2026-09-18** (decisión de "honestidad primero" enmarcada con fecha/resolución/alternativa
+concretas, coherente entre las dos páginas, y necesaria porque negar el estado de homologación
+ante el SIN sería mentir sobre un trámite regulatorio real, no exhibir obra sin motivo). No lo
+relitigo. **Sin hallazgo nuevo — confirmo que esta frase "próxima vuelta" debe dejar de copiarse**:
+ya está exprimida por tercera vez esta semana.
+
+**Eje nuevo de la vuelta: `RECORRIDO_MOVIL=1` en dental.** El último recorrido móvil completo de
+los 5 rubros fue el 2026-09-08 (18 días atrás, muchos deploys después) — más viejo que cualquier
+otro eje activo. Corrida `RECORRIDO_MOVIL=1 node scripts/recorrido_cliente.mjs --escribir`
+(viewport 390×844): **9/9 pasos OK, `completo: true`, `agujeros: []`.** Cuenta
+`zz-qa-2026-09-26-1613@onia.com.bo`, confirmación de correo antes del primer login, onboarding en
+6 pantallas, paciente `zz-qa-2026-09-26-1613-paciente` cargado y visto en `/patients`, cita
+`2026-09-28 09:00` agendada (201, `cmuile78u003401mxiolbmpj7`) y VISTA en `/appointments`, factura
+con ítem `zz-qa-2026-09-26-1613-item` vista en `/billing/cmuilej09003601mxswhwo1mj` y FRENADA sin
+pagar, panel mirado (el paciente no figura ahí: esperado, el dashboard no lista pacientes).
+Limpieza verificada tras cerrar: `appointments`/`organizations` con `zz-qa-%` = 0.
+
+**Sin hallazgo nuevo en móvil tampoco.**
+
+RAZÓN: N/A — avanzó (hallazgo viejo cerrado de verdad, eje `/agentes-comparativa-facturacion`
+re-confirmado sano en vez de repetido a ciegas, y eje móvil refrescado tras 18 días).
+LECCIÓN: la frase "próxima vuelta: `/agentes`, `/comparativa`, `/facturacion`" lleva semanas
+copiándose de entrada en entrada sin verificar vigencia — dejar de escribirla como pendiente
+salvo que el sitio cambie ahí; y un eje "de interacción" (móvil vs escritorio) puede quedar sin
+correrse mucho más tiempo que uno "de rubro" porque no tiene su propio contador visible: conviene
+fecharlo en esta nota cada vez que se corre, como se hace con rubro y `BUILD_ID`.
+
 ## 2026-09-26 (vuelta HEAD e0c0a0ce) — `BUILD_ID` sin cambios; tercer rubro (Importadora): 9/9, paso 7 no-aplica correctamente
 
 `BUILD_ID` (`DvBubiuO4uC5_E9jFNJeZ`) igual al de la entrada de abajo: no correspondía repetir

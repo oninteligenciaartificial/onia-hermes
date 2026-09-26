@@ -646,16 +646,18 @@ async function probarCoadministrador(navegador, email, password, negocio) {
     await page.fill('input[type=email][required]', emailCoadmin).catch(() => {});
     await mirar(page, 'extra-coadmin-02-formulario.png');
     await page.click('button[type=submit]').catch(() => {});
-    await page.waitForTimeout(3000);
-    await mirar(page, 'extra-coadmin-03-invitado.png');
-
+    // El toast "invitación enviada" es TRANSITORIO: el modal se autocierra con router.refresh()
+    // a los 2.5s (comentario de más abajo), así que leerlo a los 3000ms mide un estado que el
+    // propio diseño ya reemplazó. Medido 2026-09-26: a los 3000ms el toast ya no estaba pero la
+    // fila del coadministrador SÍ (extra-coadmin-03-invitado.png), y el chequeo viejo cortaba acá
+    // dando un falso negativo. El toast queda como dato informativo, no como corte.
+    await page.waitForTimeout(600);
     const cuerpoTrasEnviar = (await page.locator('body').innerText().catch(() => '')).replace(/\s+/g, ' ');
-    if (!/invitaci[oó]n enviada/i.test(cuerpoTrasEnviar)) {
-      return { ok: false, detalle: `la invitación no se confirmó en pantalla: "${cuerpoTrasEnviar.slice(0, 200)}"`, emailCoadmin };
-    }
+    const toastVisto = /invitaci[oó]n enviada/i.test(cuerpoTrasEnviar);
 
-    await page.waitForTimeout(3000); // el modal se cierra solo con router.refresh(), tras 2.5s
+    await page.waitForTimeout(2400); // el modal se cierra solo con router.refresh(), tras 2.5s
     await ir(page, `${APP}/team`);
+    await mirar(page, 'extra-coadmin-03-invitado.png');
     await mirar(page, 'extra-coadmin-04-team-con-coadmin.png');
 
     const fila = page.getByText(nombreCoadmin, { exact: false }).first();
@@ -703,6 +705,7 @@ async function probarCoadministrador(navegador, email, password, negocio) {
           : `invitado como Administrador (plan "clinic"), confirmado en /team, y sacado del equipo de punta a punta`,
       emailCoadmin,
       idCoadmin,
+      toastVisto,
     };
   } finally {
     await contexto.close().catch(() => {});
