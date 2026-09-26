@@ -12,6 +12,31 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-26 (vuelta HEAD 4fcf307d) — `BUILD_ID` sin cambios, escalón 3: promesa vs. entrega en el sitio — sin hallazgo nuevo
+
+`BUILD_ID` comparado primero contra la entrada de abajo: `4FWMcecd4jRBGUVwStDQb`, **igual**. Con
+la rotación de los 5 rubros ya agotada contra este build (nota de la vuelta anterior), se pasó al
+escalón 3: recorrer la home y las páginas que enlaza mirando qué promete cada botón y si el
+destino cumple, en vez de repetir un rubro ya verificado.
+
+Auditado en vivo (Playwright, no `curl`+`grep`): `/` (home), `/empezar`, `/precios`,
+`/facturacion`, `/guia-facturacion`, `/rubros`, `/chatbot`, `/agentes`, `/contacto`. Todos los CTA
+de alta apuntan a `https://app.onia.com.bo/register` con copy "Creá tu cuenta" — consistente con el
+alta abierta (`ONIA_ALTA_AUTOMATICA=abierta`). `/precios` muestra la escalera de 4 escalones
+(320/550/890/1.290, chatbot add-on 390) — coincide con la memoria compactada del 24-sep. El hallazgo
+viejo del badge de `/guia-facturacion` (`t_c53fe39c`, "Plazo · 30-09-2026" contra "1 de octubre" en
+el cuerpo) ya está en producción con la fecha correcta (`01-10-2026`) — confirmado fantasma, no se
+reabre. `/facturacion` menciona 30-sep Y 1-oct pero como dos hechos distintos y coherentes (último
+día de transición vs. inicio del régimen obligatorio), no como el mismo dato contradicho — no es
+el bug de la regla de fechas. `/rubros` lista los 5 rubros vigentes, sin "muy pronto" ni rubros
+apagados. Sin hallazgo nuevo en ninguna de las 8 superficies.
+
+RAZÓN de no-avance en la medida `llegoHasta/completo`: no corresponde repetir el recorrido
+end-to-end (ya 9/9 en los 5 rubros contra este mismo build); este escalón mide otra cosa
+(consistencia promesa/entrega) y no tiene contraparte numérica en `resumen.json`.
+
+---
+
 ## 2026-09-26 02:09-02:12 La Paz — `BUILD_ID` sin cambios, rotado a Servicios profesionales, 9/9 — CIERRA la rotación de los 5 rubros
 
 `ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado primero: `4FWMcecd4jRBGUVwStDQb`, igual al de
