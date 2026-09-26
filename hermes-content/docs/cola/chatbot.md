@@ -1001,6 +1001,63 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
 
 ## Ahora
 
+- [ ] 🔴 **El aviso de lead colgado NO alcanza a las filas cuyo `followup_step` ya quemó la
+      insistencia — y el arreglo que está en el repo es SÓLO hacia adelante. Nuestro único lead
+      real de WhatsApp lleva 9 días perdido y Sergio Urcullo nunca se enteró.**
+      Medido el 2026-09-26 10:13-10:55 La Paz contra producción, no heredado.
+
+      **El circuito está VIVO — eso se midió primero, y cambia el diagnóstico.** `node
+      scripts/sonda_widget.mjs` → **3/3** (conversación 49), y la fila quedó en
+      `demo_agendada` con `scheduled_at 2026-09-29 01:00+00`, escrita a las 14:17 UTC. El aviso
+      salió: `[aviso] sent conv=49 (demo_agendada): aviso enviado`. O sea que los **9 días sin
+      una sola conversación nueva** (`max(created_at)` de `onia_center.bot_conversations` =
+      2026-09-17 22:50) son **falta de tráfico, no circuito roto** — y eso NO es de este carril.
+
+      **Lo que sí es de este carril: el lead que se enfría muere en silencio.**
+      `docker exec onia-center grep -cE "\[aviso\].*conv=58" /tmp/onia-bot-webhook.log` → **0**.
+      La conversación 58 (inbox 5 = WhatsApp, lead real del 17-sep) escribió *"Hola, vengo de la
+      web de Onia. Quiero saber si me sirve para mi negocio."*, el bot contestó con el pitch y dos
+      horarios, la insistencia la reenganchó una vez el 18-sep, y **nadie más supo que existía**.
+      El aviso sólo se dispara con `demo_agendada` y `handoff_humano`; el tercer desenlace —el que
+      ni agenda ni escala— no emite nada.
+
+      **La capacidad existe y está ENTERA: no hay que construirla.** `followup-run.mjs` ya arma el
+      aviso de colgadas (`construirAvisoDeColgadas`, `KIND_LEAD_FRIO`) con idempotencia por
+      archivo-por-sujeto (`/var/lib/onia-colgada-avisado`, `colgada-<conv>-<desde>`), y su cron
+      corre (`17 * * * * /opt/onia/bot/followup-run.sh`).
+
+      **Por qué no alcanzó a la 58, medido en la base:**
+      ```
+      docker exec supabase-db psql -U postgres -tAc \
+        "select conversation_key, bot_stage, followup_step from onia_center.bot_conversations
+         where bot_stage='esperando_horario' order by created_at desc limit 6;"
+      → chatwoot:58|esperando_horario|1     ← quemado
+      ```
+      El barrido de colgadas filtra `followup_step=eq.0`. La insistencia le quemó el contador el
+      18-sep, así que la fila **desapareció del barrido** — es el mismo cupo compartido que ya está
+      descrito en `insistencia-run.mjs:222`. Producción corre el build del 18-sep, que todavía
+      cuelga la insistencia de ese contador (`docker exec onia-center grep -cE "reserveFollowUp"
+      /tmp/onia-bot/insistencia-run.mjs` → **2**).
+
+      🔴 **Y acá está lo que NO cubre el arreglo del repo, que es por qué esto es un ítem y no una
+      línea del pedido de deploy.** El arreglo mueve la insistencia a su propio contador, así que
+      **las conversaciones futuras** quedan visibles. Pero las filas **ya quemadas** —`chatwoot:58`,
+      `chatwoot:990777`, `chatwoot:16`— tienen el `followup_step` gastado y **seguirán invisibles
+      para el barrido incluso después de desplegar**. El arreglo es hacia adelante; los leads ya
+      perdidos no los rescata nadie.
+
+      **LISTO =** el barrido de colgadas elige a quién avisar por un criterio propio (la
+      idempotencia ya la dan las marcas de `/var/lib/onia-colgada-avisado`, no la necesita del
+      `followup_step`), con el test en rojo primero por el motivo correcto usando una fila con
+      `followup_step=1`; y la 58 aparece en su salida. Ojo al cerrar: `handoff_humano` **no** es el
+      arreglo — `ESCALATED` silencia al bot y sólo se escribe con un humano real del otro lado.
+
+      **No se arregla tocando la base a mano.** Resetear `followup_step` en producción es una
+      escritura sobre datos vivos y deja el mismo agujero abierto para el próximo lead.
+
+      **Deploy:** el arreglo de la insistencia ya está commiteado y espera el `ok` de Sergio
+      Urcullo en **`t_76cdb5dc`** ("Publicar el bot…"). No se creó un pedido nuevo.
+
 - [x] 🔴 **CERRADO el 2026-09-26 09:13-09:50 La Paz (es un MEDIDOR, no toca el motor: no necesita
       deploy): el gate que decide si pedirle la FIRMA a Sergio Urcullo acusaba 8 archivos y 3 eran
       MEDIDORES de este mismo repo — el prospecto no toca ninguno.**
