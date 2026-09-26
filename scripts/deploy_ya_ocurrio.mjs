@@ -239,15 +239,82 @@ export function juezDelMotor({ frase = "", cuerpo = "" } = {}, motor, sujetos = 
     return { estado: "no-medida", motivo: "es del bot y el motor vivo no se pudo medir" };
   }
   const desfasados = motor.desfasados ?? [];
-  if (desfasados.length === 0) {
-    return { estado: "miente", motivo: "el motor vivo esta ENTERO al dia" };
-  }
+  // `nombrados` se calcula ANTES del atajo de «entero al día»: con el motor entero publicado la
+  // acusación es igual de cierta, y quien juzga desde `sin ubicar` necesita saber QUÉ archivos
+  // nombró para poder exigir que sean exclusivos del motor. Sin esto, salir por el atajo dejaba
+  // sin juzgar justo a las líneas que nombran su archivo — las únicas ubicables sin adivinar.
   const texto = `${frase}\n${cuerpo}`;
   const nombrados = (sujetos ?? []).filter((nombre) => texto.includes(nombre));
+  if (desfasados.length === 0) {
+    return { estado: "miente", motivo: "el motor vivo esta ENTERO al dia", nombrados };
+  }
   const pendientes = nombrados.filter((nombre) => desfasados.includes(nombre));
-  if (pendientes.length) return { estado: "honesta", faltan: pendientes };
-  if (nombrados.length) return { estado: "miente", motivo: `nombra ${nombrados.length} archivo(s) del motor y ninguno esta desfasado` };
+  if (pendientes.length) return { estado: "honesta", faltan: pendientes, nombrados };
+  if (nombrados.length) return { estado: "miente", motivo: `nombra ${nombrados.length} archivo(s) del motor y ninguno esta desfasado`, nombrados };
   return { estado: "no-medida", motivo: `es del bot, no nombra ningun archivo del motor y quedan ${desfasados.length} sin publicar: hay que leerla` };
+}
+
+/**
+ * Los nombres de archivo del motor que NO existen en `onia-platform` — o sea, los que al
+ * aparecer en una línea la ubican sin lugar a duda.
+ *
+ * Se resta por NOMBRE CON EXTENSIÓN, que es la unidad real: `config.mjs` (motor) y `config.ts`
+ * (panel) son dos archivos distintos, y confundirlos era lo que dejaba a la clase entera sin
+ * juzgar. Medido el 2026-09-26: de los 74 sujetos del motor, los 74 resultan exclusivos.
+ *
+ * @param {string[]} sujetos          nombres base de los archivos del motor
+ * @param {string[]|null} delPanel    nombres base de `onia-platform`, o `null` si no se pudo leer
+ * @returns {string[]|null} los exclusivos, o `null` si no se pudo derivar (no se acusa a nadie)
+ */
+export function exclusivosDelMotor(sujetos, delPanel, todoOniaHermes = null) {
+  if (!delPanel) return null;
+  const panel = new Set(delPanel);
+  // Y la ambigüedad DENTRO de onia-hermes, que es la que casi metió el falso positivo: medido el
+  // 2026-09-26 en vivo, las dos líneas del SIAT (`plataforma-v1.md:6131` y `6160`) salieron
+  // acusadas por nombrar `publicar.sh` — que es sujeto del motor y ADEMÁS el nombre del
+  // publicador del SIAT, de la landing y del panel: hay cuatro en el repo. Un basename repetido
+  // no ubica nada, y acusar con él manda el trabajo a un dueño que no es el suyo, que es
+  // justamente lo que la frontera existe para no hacer. Se cuenta, no se enumera a mano.
+  const repetidos = new Set();
+  if (todoOniaHermes) {
+    const veces = new Map();
+    for (const n of todoOniaHermes) veces.set(n, (veces.get(n) ?? 0) + 1);
+    for (const [n, c] of veces) if (c > 1) repetidos.add(n);
+  }
+  return (sujetos ?? []).filter((n) => !panel.has(n) && !repetidos.has(n));
+}
+
+/**
+ * Los nombres base que publica `onia-platform`, leídos de su ref y no del working tree.
+ *
+ * `null` si no se puede preguntar —el clon no está, no hay ref, no hay red—: "no pude preguntar"
+ * no es "me dijeron que no", y con `null` este gate vuelve al comportamiento de antes (absuelve,
+ * nunca acusa) en vez de acusar por no haber podido mirar.
+ */
+export function basenamesDe(repo, ref) {
+  try {
+    return execFileSync("git", ["ls-tree", "-r", "--name-only", ref], {
+      cwd: repo,
+      encoding: "utf8",
+      timeout: 120_000,
+      maxBuffer: 1 << 26,
+    })
+      .split("\n")
+      .map((p) => p.trim().split("/").pop())
+      .filter(Boolean);
+  } catch {
+    return null;
+  }
+}
+
+export function nombresDelPanel(repo = REPO_PLATAFORMA) {
+  try {
+    execFileSync("git", ["fetch", "origin", "--quiet"], { cwd: repo, timeout: 120_000, stdio: "ignore" });
+  } catch {
+    // Un fetch que falla no invalida el ref de disco: se sigue con lo que haya, y si no hay, el
+    // `ls-tree` de abajo tira y el tri-estado sale `null`.
+  }
+  return basenamesDe(repo, "origin/master");
 }
 
 export function motivoDeNoMedida({ shas = [], frontera = "sin ubicar" } = {}) {
@@ -268,7 +335,7 @@ export function motivoDeNoMedida({ shas = [], frontera = "sin ubicar" } = {}) {
  * @param {(sha:string)=>(boolean|null)} estaVivo  true = desplegado · false = no · null = no sé
  * @returns {{mienten:Array, noMedidas:Array, honestas:Array}}
  */
-export function juzgar(afirmaciones, estaVivo, motor = null, sujetos = []) {
+export function juzgar(afirmaciones, estaVivo, motor = null, sujetos = [], exclusivos = null) {
   const mienten = [];
   const noMedidas = [];
   const honestas = [];
@@ -299,6 +366,21 @@ export function juzgar(afirmaciones, estaVivo, motor = null, sujetos = []) {
         const quizaDelMotor = juezDelMotor(a, motor, sujetos);
         if (quizaDelMotor.estado === "honesta") {
           honestas.push({ ...a, faltan: quizaDelMotor.faltan, motor: true });
+          continue;
+        }
+        // Y se ACUSA cuando el nombre no deja duda: el juez nombró archivos del motor, todos ya
+        // publicados, y todos EXCLUSIVOS del motor (no existen en `onia-platform`). Las tres
+        // condiciones juntas — sin `nombrados` sería adivinar desde «el motor está entero al día»,
+        // y con un nombre compartido podría ser una línea del panel, que es el error caro.
+        const nombrados = quizaDelMotor.nombrados ?? [];
+        const soloDelMotor = exclusivos && nombrados.length && nombrados.every((n) => exclusivos.includes(n));
+        if (quizaDelMotor.estado === "miente" && soloDelMotor) {
+          mienten.push({
+            ...a,
+            vivos: [],
+            motor: true,
+            porQue: `nombra ${nombrados.length} archivo(s) exclusivos del motor (${nombrados.join(" ")}) y ninguno esta desfasado`,
+          });
           continue;
         }
       }
@@ -974,6 +1056,96 @@ function selfCheck() {
     "frontera ANCLA: sigue sin mirar nombres de archivo",
     fronteraDe("**NO desplegado** — el arreglo vive en `followup-run.mjs`") === "sin ubicar",
   );
+
+  // --- Desde `sin ubicar` SÍ se acusa cuando el nombre es EXCLUSIVO del motor -------------
+  // El bloque de arriba no acusa nunca, y su motivo escrito era «`config.mjs` vive en los dos
+  // repos». Medido el 2026-09-26 contra `origin/master` de `onia-platform`: de los **74** sujetos
+  // del motor, **74 son exclusivos** — ni `config.mjs` existe allá (lo que existe es `config.ts`,
+  // otro nombre). O sea que la premisa que justificaba el fallo cerrado era falsa, y con ella se
+  // quedaban sin juzgar líneas del motor que nombran SÓLO archivos ya publicados: mienten, y son
+  // justo la clase que este gate existe para cazar.
+  //
+  // La ambigüedad no se asume ni se niega: se MIDE por nombre, y el criterio sigue siendo
+  // conservador en los dos filos —
+  //  · se acusa sólo si TODOS los archivos del motor que nombra son exclusivos (uno compartido
+  //    devuelve la línea a NO MEDIDA: podría ser del panel, y sacarla de su juez por sha es el
+  //    error caro que el bloque de arriba cuida);
+  //  · y sólo cuando el juez acusó por haber NOMBRADO archivos. Un «el motor está ENTERO al día»
+  //    no nombra ninguno: acusar ahí sería adivinar desde la frontera que menos sabe.
+  // Sin la lista de exclusivos (`null` = no se pudo derivar) nada cambia: absuelve y no acusa.
+  const EXCL = ["followup-run.mjs", "knowledge.onia.json", "marcas-en-disco.mjs"]; // `config.mjs` NO: fixture del nombre compartido
+  ok(
+    "sin ubicar: nombra SOLO archivos exclusivos ya publicados -> MIENTE",
+    juzgar(lineaSinUbicar("corregido en `marcas-en-disco.mjs`"), () => null, alDia, SUJETOS, EXCL).mienten.length === 1,
+  );
+  ok(
+    "sin ubicar: y la acusacion dice por que, nombrando la exclusividad",
+    /exclusiv/i.test(juzgar(lineaSinUbicar("corregido en `marcas-en-disco.mjs`"), () => null, alDia, SUJETOS, EXCL).mienten[0]?.porQue ?? ""),
+  );
+  ok(
+    "sin ubicar ANCLA: un nombre COMPARTIDO con el panel devuelve la linea a NO MEDIDA",
+    juzgar(lineaSinUbicar("corregido en `config.mjs`"), () => null, alDia, SUJETOS, EXCL).noMedidas.length === 1,
+  );
+  ok(
+    "sin ubicar ANCLA: mezcla de exclusivo y compartido tampoco acusa",
+    juzgar(lineaSinUbicar("tocamos `marcas-en-disco.mjs` y `config.mjs`"), () => null, alDia, SUJETOS, EXCL).mienten.length === 0,
+  );
+  ok(
+    "sin ubicar ANCLA: sin lista de exclusivos (null) se comporta como antes: no acusa",
+    juzgar(lineaSinUbicar("corregido en `marcas-en-disco.mjs`"), () => null, alDia, SUJETOS, null).mienten.length === 0,
+  );
+  ok(
+    "sin ubicar ANCLA: el archivo exclusivo DESFASADO sigue absolviendo, no acusando",
+    juzgar(lineaSinUbicar("el arreglo vive en `followup-run.mjs`"), () => null, conTres, SUJETOS, EXCL).honestas.length === 1,
+  );
+  ok(
+    "sin ubicar ANCLA: no nombra ningun archivo -> NO MEDIDA aunque el motor este al dia",
+    juzgar(lineaSinUbicar("sin archivos", ["5c2af97a"]), () => null, alDia, SUJETOS, EXCL).noMedidas.length === 1,
+  );
+  ok(
+    "panel ANCLA: la exclusividad no acusa a una linea del PANEL",
+    juzgar(
+      [{ archivo: "chatbot.md", linea: 1, frase: "**NO desplegado**, falta el swap de `plataforma`", shas: [], frontera: "plataforma", cuerpo: "y el bot corre `marcas-en-disco.mjs`" }],
+      () => null,
+      alDia,
+      SUJETOS,
+      EXCL,
+    ).mienten.length === 0,
+  );
+  // Y la derivación: los exclusivos son los sujetos del motor MENOS los basenames del panel.
+  ok(
+    "exclusivos: resta por nombre con extension, no por nombre suelto",
+    JSON.stringify(exclusivosDelMotor(["config.mjs", "followup-run.mjs"], ["config.ts", "page.tsx"])) ===
+      JSON.stringify(["config.mjs", "followup-run.mjs"]),
+  );
+  ok(
+    "exclusivos: un nombre que SI esta en el panel queda afuera",
+    JSON.stringify(exclusivosDelMotor(["config.mjs", "followup-run.mjs"], ["config.mjs"])) === JSON.stringify(["followup-run.mjs"]),
+  );
+  ok(
+    "exclusivos: sin lista del panel devuelve null, nunca la lista entera",
+    exclusivosDelMotor(["config.mjs"], null) === null,
+  );
+  // El falso positivo medido en vivo, ahora ANCLA: `publicar.sh` es sujeto del motor Y el nombre
+  // del publicador del SIAT, la landing y el panel. Un basename repetido dentro de onia-hermes no
+  // ubica nada, y con él las dos lineas del SIAT salian acusadas por la medicion del bot.
+  ok(
+    "exclusivos ANCLA: un basename REPETIDO en onia-hermes no es exclusivo (publicar.sh)",
+    !exclusivosDelMotor(["publicar.sh", "marcas-en-disco.mjs"], ["page.tsx"], [
+      "hermes-content/deploy/vps-ops/bot/publicar.sh".split("/").pop(),
+      "hermes-content/deploy/vps-ops/siat/publicar.sh".split("/").pop(),
+      "marcas-en-disco.mjs",
+    ]).includes("publicar.sh"),
+  );
+  ok(
+    "exclusivos ANCLA: y el que aparece UNA sola vez sigue siendo exclusivo",
+    exclusivosDelMotor(["publicar.sh", "marcas-en-disco.mjs"], ["page.tsx"], ["publicar.sh", "publicar.sh", "marcas-en-disco.mjs"]) .join() ===
+      "marcas-en-disco.mjs",
+  );
+  ok(
+    "exclusivos ANCLA: sin el inventario del repo (null) no se inventan repetidos",
+    exclusivosDelMotor(["publicar.sh"], ["page.tsx"], null).join() === "publicar.sh",
+  );
   // ANCLA de la otra punta: la absolución vale sólo desde `sin ubicar`. Una línea ya ubicada en el
   // PANEL que de paso nombre un archivo del motor no se absuelve con el estado del motor — eso la
   // sacaría del recuento de no medidas sin medirla, que es el falso verde de siempre.
@@ -1067,7 +1239,11 @@ function medir(corregir = false) {
   const esCommit = (sha) => estaVivo(sha) !== null;
   const afirmaciones = colasDe(DIR_COLAS).flatMap(({ archivo, texto }) => afirmacionesDe(texto, archivo, esCommit));
   const { motor, sujetos } = motorVivo();
-  const { mienten, noMedidas, honestas } = juzgar(afirmaciones, estaVivo, motor, sujetos);
+  // La exclusividad se DERIVA del ref del panel cada corrida, no se escribe: el día que
+  // `onia-platform` agregue un archivo con el nombre de uno del motor, ese nombre deja de acusar
+  // solo. `null` (no se pudo leer el clon) devuelve el gate a absolver sin acusar.
+  const exclusivos = exclusivosDelMotor(sujetos, nombresDelPanel(), basenamesDe(".", "HEAD"));
+  const { mienten, noMedidas, honestas } = juzgar(afirmaciones, estaVivo, motor, sujetos, exclusivos);
 
   console.log(`Produccion corre \`${desplegado}\` (etiqueta de imagen de ${CONTENEDOR}).`);
   console.log(

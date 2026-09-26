@@ -13,14 +13,16 @@
 
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
+import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
 
 import {
   selfCheck,
   juzgar,
-  constantesDeFrase,
-  rutasQueMandanFrases,
+  rutasAMirar,
+  paginasDelWeb,
   frasesDeHtml,
   campanasDelRepo,
 } from "./campanas-vivas.mjs";
@@ -82,6 +84,21 @@ test("no poder preguntarle a un lado es NO MEDIDO (2), nunca verde ni rojo", () 
   assert.equal(sinWeb.exit, 2, "una ruta viva que no contesta no puede leerse como 'la web no manda nada'");
 });
 
+test("una ruta sin medir no puede TAPAR una frase rota: primero el rojo", () => {
+  // Con el universo entero (21 rutas en vez de 8) una caída suelta pasa a ser corriente, y
+  // devolver NO MEDIDO antes de juzgar dejaría que cualquier 503 esconda el rojo que le
+  // cuesta el lead. El rojo se dice igual, y lo que no se pudo medir se nombra al lado.
+  const v = juzgar({
+    repo: ["Quiero la demo de 30 minutos."],
+    web: new Set(["Quiero la demo de 30 minutos."]),
+    bot: { frases: new Set(["Quiero la demo de 20 minutos."]), fuente: "archivo" },
+    noMedidas: [{ ruta: "/agentes", motivo: "HTTP 503" }],
+  });
+  assert.equal(v.exit, 1, "hay una frase rota medida: eso es rojo, no NO MEDIDO");
+  assert.match(v.lineas.join("\n"), /saludo genérico/);
+  assert.match(v.lineas.join("\n"), /\/agentes/, "y la ruta que no se pudo medir se nombra igual");
+});
+
 test("con una frase rota, la que sólo tiene el bot se nombra VIEJA — no se manda al remedio opuesto", () => {
   const v = juzgar({
     repo: ["Quiero la demo de 30 minutos."],
@@ -115,17 +132,63 @@ test("una frase viva que ninguna campaña empareja no pone rojo el gate", () => 
   assert.equal(v.exit, 0, "el bot no tiene que tener respuesta propia para CUALQUIER mensaje");
 });
 
-test("los derivadores leen lo que importa y nada más", () => {
-  const cs = constantesDeFrase('export const WA_URL = waLink("a");\nexport const AG = waServiciosLink("b");\nexport const SITE_URL = "https://x";');
-  assert.deepEqual(cs, ["AG", "WA_URL"]);
-
-  const rutas = rutasQueMandanFrases(
-    [{ ruta: "/", archivo: "a" }, { ruta: "/terminos", archivo: "b" }],
-    ["WA_URL"],
-    (f) => (f === "a" ? "href={WA_URL}" : "sin botones"),
+test("el universo de rutas es TODO `src/app`, nunca un subdirectorio", () => {
+  // Medido el 2026-09-26: el medidor caminaba sólo `(sitio)` y encima filtraba por "esta
+  // page.tsx nombra una constante exportada de site.ts". Las dos cosas juntas lo dejaban
+  // mirando 8 de las 21 rutas vivas que le escriben un WhatsApp al lead.
+  assert.match(
+    CODIGO_QUE_MIDE,
+    /"src",\s*"app"\s*\)/,
+    "la caminata arranca en src/app: anclarla en un subdirectorio deja afuera rutas vivas con botón",
   );
-  assert.deepEqual(rutas, ["/"]);
+  assert.doesNotMatch(
+    CODIGO_QUE_MIDE,
+    /\(sitio\)/,
+    "nombrar `(sitio)` como raíz es el recorte que hizo invisible a /servicios/consultoria y /v1/chatbot",
+  );
+});
 
+test("una ruta viva con botón entra al universo AUNQUE no nombre ninguna constante", () => {
+  // `/servicios/consultoria` arma su frase con `waServiciosLink("…")` en la propia página, y
+  // `/v1/empezar` la arma en un módulo que importa. Filtrar por "nombra una constante de
+  // site.ts" las deja afuera a las dos, y entonces su par rota se reporta como AVISO benigno
+  // ("¿pauta, o quedó huérfana?") en vez de ROJO. Medido en vivo el 2026-09-26: las 4 frases
+  // que el medidor llamaba huérfanas las manda la web publicada, con HTTP 200.
+  const { visitables, sinMedir } = rutasAMirar([
+    { ruta: "/", archivo: "a" },
+    { ruta: "/servicios/consultoria", archivo: "b" },
+    { ruta: "/v1/empezar", archivo: "c" },
+  ]);
+  assert.deepEqual(visitables, ["/", "/servicios/consultoria", "/v1/empezar"]);
+  assert.deepEqual(sinMedir, [], "sin segmentos dinámicos no hay nada que declarar sin medir");
+});
+
+test("una ruta con segmento dinámico se NOMBRA sin medir, no se descarta muda", () => {
+  const { visitables, sinMedir } = rutasAMirar([
+    { ruta: "/blog/[slug]", archivo: "a" },
+    { ruta: "/precios", archivo: "b" },
+  ]);
+  assert.deepEqual(visitables, ["/precios"]);
+  assert.equal(sinMedir.length, 1, "no se puede visitar sin un valor: eso se dice, no se omite");
+  assert.match(sinMedir[0].motivo, /dinámico/);
+});
+
+test("la caminata salta lo que Next no publica y no confunde carpeta con ruta", () => {
+  const raiz = mkdtempSync(join(tmpdir(), "onia-campanas-"));
+  for (const p of ["(sitio)", "(sitio)/contacto", "servicios/consultoria", "_interno", "api/algo"]) {
+    mkdirSync(join(raiz, p), { recursive: true });
+  }
+  for (const f of ["(sitio)/page.tsx", "(sitio)/contacto/page.tsx", "servicios/consultoria/page.tsx", "_interno/page.tsx"]) {
+    writeFileSync(join(raiz, f), "x");
+  }
+  writeFileSync(join(raiz, "api/algo/route.ts"), "x");
+
+  const rutas = paginasDelWeb(raiz).map((p) => p.ruta).sort();
+  assert.deepEqual(rutas, ["/", "/contacto", "/servicios/consultoria"]);
+  rmSync(raiz, { recursive: true, force: true });
+});
+
+test("los derivadores leen lo que importa y nada más", () => {
   assert.ok(
     frasesDeHtml('<a href="https://wa.me/591?text=Hola%2C%20soy%20yo">x</a>').has("Hola, soy yo"),
     "la frase se compara DECODIFICADA: el HTML la sirve con %20 y el bot matchea exacto",
