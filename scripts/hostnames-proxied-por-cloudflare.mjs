@@ -150,6 +150,116 @@ export function clasificar(ips, rangos) {
 }
 
 // ---------------------------------------------------------------------------
+// Qué se PUEDE hacer con un DIRECTO. Nombrarlo no alcanza: el consejo equivocado
+// se ejecuta a las tres de la mañana.
+//
+// `ufw` decide con (puerto destino, IP de origen). El hostname es capa 7 y `ufw`
+// NO lo ve: medido el 2026-09-26, sus seis reglas son `22|80|443/tcp ALLOW IN
+// Anywhere` y los cuatro `*.hqdqgh.easypanel.host` resuelven a 187.77.16.63 — la
+// misma IP y el mismo puerto 443 que `app.onia.com.bo`. Por lo tanto **no existe
+// una excepción de ufw por hostname**: dejar 443 abierto para que siga entrando
+// EasyPanel lo deja abierto para cualquiera que conozca la IP, que es exactamente
+// el agujero que el cierre venía a tapar (sin `CF-Connecting-IP` todos comparten
+// un balde de rate limit y el header es spoofeable).
+//
+// El único remedio real de un DIRECTO es que empiece a entrar por Cloudflare, y
+// eso sólo se puede cuando la zona está en NUESTRA cuenta. Eso no se hardcodea:
+// se DERIVA de la propia medición — si otro hostname de la misma zona ya resuelve
+// a Cloudflare, ahí está la prueba viva de que la zona es administrable. Si mañana
+// alguien mete EasyPanel detrás de nuestro Cloudflare, esto lo nota solo.
+// ---------------------------------------------------------------------------
+
+/** `null` si no tiene padre (un apex de dos labels no es zona de nadie acá). */
+export function padreInmediato(host) {
+  const labels = String(host ?? "").split(".").filter(Boolean);
+  if (labels.length < 3) return null;
+  return labels.slice(1).join(".");
+}
+
+/**
+ * Las zonas con PRUEBA de estar en nuestro Cloudflare: las que tienen **al menos
+ * dos hostnames PROXIED hermanos**.
+ *
+ * El «dos» no es cosmético y lo cazó su propio caso de prueba. Sin una Public
+ * Suffix List no se puede distinguir un apex de un subdominio por la cantidad de
+ * labels: `onia.com.bo` (apex) y `hqdqgh.easypanel.host` (subdominio) tienen tres
+ * los dos. Con un solo hijo alcanzaba, el apex `onia.com.bo` aportaba su padre
+ * `com.bo` como «zona nuestra», y cualquier `x.com.bo` ajeno pasaba por
+ * administrable. Dos hermanos proxied en la misma zona sí son prueba de que la
+ * zona es nuestra y no un sufijo público por casualidad.
+ *
+ * Falla CERRADO a propósito: con un solo hostname proxied no se declara ninguna
+ * zona, así que el remedio sale «no puedo probarlo» en vez de autorizar un cierre.
+ * Acá equivocarse apaga servicios a las tres de la mañana.
+ */
+export function zonasConPruebaDeCloudflare(filas) {
+  const hijosPorZona = new Map();
+  for (const f of filas ?? []) {
+    if (f?.estado !== "PROXIED") continue;
+    const padre = padreInmediato(f.host);
+    if (!padre) continue;
+    if (!hijosPorZona.has(padre)) hijosPorZona.set(padre, new Set());
+    hijosPorZona.get(padre).add(f.host);
+  }
+  return new Set([...hijosPorZona].filter(([, hijos]) => hijos.size >= 2).map(([z]) => z));
+}
+
+export function remedioDelDirecto(host, zonas) {
+  const z = zonas instanceof Set ? zonas : new Set(zonas ?? []);
+  const padre = padreInmediato(host);
+  if ((padre && z.has(padre)) || z.has(String(host))) {
+    return {
+      remedio: "DNS_PROXIED",
+      nota: `zona ${padre ?? host} ya tiene hostnames en nuestro Cloudflare: se arregla poniendo el DNS en proxied`,
+    };
+  }
+  return {
+    remedio: "SIN_REMEDIO_EN_UFW",
+    nota: "dominio ajeno (ningún hostname de su zona pasa por nuestro Cloudflare): no se puede proxiar NI exceptuar por hostname",
+  };
+}
+
+/**
+ * El consejo que va a leer la vuelta que abra la ventana 23:00-06:00. Es una
+ * función y no un `console.log` para que el self-check lo pueda medir: la versión
+ * anterior decía «ponerlos detrás de Cloudflare o exceptuarlos», y esa segunda
+ * salida no existe.
+ */
+export function consejoParaDirectos(directos, zonas) {
+  const lineas = [];
+  const conDns = directos.filter((f) => remedioDelDirecto(f.host, zonas).remedio === "DNS_PROXIED");
+  const sinRemedio = directos.filter(
+    (f) => remedioDelDirecto(f.host, zonas).remedio === "SIN_REMEDIO_EN_UFW",
+  );
+
+  lineas.push("🔴 Cerrar 80/443 a los rangos de Cloudflare APAGA los de arriba, y sin un error visible.");
+
+  if (conDns.length > 0) {
+    lineas.push(
+      `Se arreglan poniendo el DNS en proxied (${conDns.length}): ${conDns.map((f) => f.host).join(", ")}`,
+    );
+    lineas.push("  Antes de proxiarlos, comprobar que el servicio de atrás aguante el proxy, y volver a medir acá.");
+  }
+
+  if (sinRemedio.length > 0) {
+    lineas.push(
+      `SIN remedio por DNS (${sinRemedio.length}, dominio ajeno): ${sinRemedio.map((f) => f.host).join(", ")}`,
+    );
+    lineas.push(
+      "  Y NO se arregla con una excepción de ufw: ufw filtra por puerto e IP de origen, no ve el hostname.",
+    );
+    lineas.push(
+      "  Dejar 443 abierto para que sigan entrando lo deja abierto para cualquiera que conozca la IP: el agujero queda ENTERO, no reducido.",
+    );
+    lineas.push(
+      "  Salidas que sí existen: mover el servicio a un hostname de zona propia, o permitir 443 sólo desde IPs de origen conocidas, o aceptar perder ese acceso por HTTPS y entrar por túnel SSH.",
+    );
+  }
+
+  return lineas;
+}
+
+// ---------------------------------------------------------------------------
 // Las tres preguntas al mundo. Cada una devuelve `null` cuando no pudo preguntar.
 // ---------------------------------------------------------------------------
 
@@ -259,6 +369,71 @@ function selfCheck() {
     JSON.stringify(routersVivos({ correr: () => '[{"rule":"Host(`a.b.c`)"}]' })) ===
       JSON.stringify([{ rule: "Host(`a.b.c`)" }]),
   );
+  // --- qué se puede hacer con un DIRECTO (los 11 hostnames reales del 2026-09-26)
+  const FILAS_REALES = [
+    { host: "app.onia.com.bo", estado: "PROXIED" },
+    { host: "onia.com.bo", estado: "PROXIED" },
+    { host: "www.onia.com.bo", estado: "PROXIED" },
+    { host: "chat.onia.com.bo", estado: "PROXIED" },
+    { host: "cal.onia.com.bo", estado: "DIRECTO" },
+    { host: "forms.onia.com.bo", estado: "DIRECTO" },
+    { host: "postiz.onia.com.bo", estado: "DIRECTO" },
+    { host: "n8n-sergio-n8n.hqdqgh.easypanel.host", estado: "DIRECTO" },
+    { host: "onia-chatbot-chatwoot.hqdqgh.easypanel.host", estado: "DIRECTO" },
+    { host: "hqdqgh.easypanel.host", estado: "DIRECTO" },
+    { host: "traefik.hqdqgh.easypanel.host", estado: "DIRECTO" },
+  ];
+  const ZONAS = zonasConPruebaDeCloudflare(FILAS_REALES);
+
+  ok("padre de un subdominio", padreInmediato("cal.onia.com.bo") === "onia.com.bo");
+  ok("un apex de dos labels no tiene zona padre", padreInmediato("easypanel.host") === null);
+  ok("hostname basura no tiene padre", padreInmediato("") === null);
+  ok("la zona propia se deriva de los proxied", ZONAS.has("onia.com.bo"));
+  ok(
+    "el apex proxied NO aporta com.bo como zona administrable",
+    !ZONAS.has("com.bo") && !ZONAS.has("bo"),
+  );
+  ok(
+    "un directo de zona propia se arregla con DNS proxied",
+    remedioDelDirecto("cal.onia.com.bo", ZONAS).remedio === "DNS_PROXIED",
+  );
+  ok(
+    "un directo de dominio ajeno NO tiene remedio en ufw",
+    remedioDelDirecto("traefik.hqdqgh.easypanel.host", ZONAS).remedio === "SIN_REMEDIO_EN_UFW",
+  );
+  ok(
+    "el apex ajeno tampoco",
+    remedioDelDirecto("hqdqgh.easypanel.host", ZONAS).remedio === "SIN_REMEDIO_EN_UFW",
+  );
+  ok(
+    "sin ningún proxied, nada se declara administrable",
+    remedioDelDirecto("cal.onia.com.bo", zonasConPruebaDeCloudflare([])).remedio ===
+      "SIN_REMEDIO_EN_UFW",
+  );
+
+  const CONSEJO = consejoParaDirectos(
+    FILAS_REALES.filter((f) => f.estado === "DIRECTO"),
+    ZONAS,
+  ).join("\n");
+
+  // El caso que nace de un plan escrito que NO se podía ejecutar: la vuelta anterior
+  // decidió «los 4 de *.easypanel.host se EXCEPTUAN en ufw», y el instrumento lo
+  // avalaba diciendo «o exceptuarlos». ufw no ve el hostname: la excepción no existe.
+  ok(
+    "el consejo NO ofrece exceptuar por hostname",
+    !/o exceptuarlos/.test(CONSEJO) && /no ve el hostname/.test(CONSEJO),
+  );
+  ok(
+    "el consejo dice que dejar 443 abierto NO reduce el agujero",
+    /queda ENTERO/.test(CONSEJO),
+  );
+  ok("el consejo separa los 3 de zona propia", /cal\.onia\.com\.bo/.test(CONSEJO) && /proxied \(3\)/.test(CONSEJO));
+  ok(
+    "el consejo separa los 4 de dominio ajeno",
+    /SIN remedio por DNS \(4, dominio ajeno\)/.test(CONSEJO),
+  );
+  ok("el consejo ofrece salidas que sí existen", /túnel SSH/.test(CONSEJO));
+
   ok("un ips-v4 que no baja -> null (no rangos a medias)", rangosDeCloudflare({ bajar: () => null }) === null);
   ok(
     "si sólo falla v6 tampoco se concluye",
@@ -314,10 +489,9 @@ async function main() {
     return 2;
   }
   if (directos.length > 0) {
-    console.log(
-      "\n🔴 Cerrar 80/443 a los rangos de Cloudflare APAGA los de arriba, y sin un error visible.",
-    );
-    console.log("Antes del cierre: ponerlos detrás de Cloudflare (proxy naranja) o exceptuarlos.");
+    const zonas = zonasConPruebaDeCloudflare(filas);
+    console.log("");
+    for (const l of consejoParaDirectos(directos, zonas)) console.log(l);
     return 1;
   }
   console.log("\nTodos los hostnames entran por Cloudflare: cerrar 80/443 no corta ninguno.");
