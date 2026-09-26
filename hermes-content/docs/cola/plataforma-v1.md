@@ -2941,6 +2941,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       🔴 **Commiteado y pusheado, NO desplegado.** El bot vivo corre `/opt/onia/bot`, que es
       un rsync y no un checkout: hasta el swap, un prospecto que escriba "urgente" sigue
       recibiendo el acuse genérico. Pedido de deploy: `t_fab8ad4d` (destino `bot`).
+      ✅ YA DESPLEGADO (medido 2026-09-26: `npm run bot:vivo-al-dia` — el motor vivo ya corre este archivo).
 
 - [x] 🔴 **CERRADO el 2026-09-11 (`52fb146`, rama del carril — falta el merge del
       ✅ YA DESPLEGADO (medido 2026-09-25: `52fb146` `d634913` vive en produccion `39234c89`).

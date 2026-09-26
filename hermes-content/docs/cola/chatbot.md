@@ -743,6 +743,56 @@ abrirlas y decidir a qué deploy se refieren. Se derivan con el comando, nunca d
 
 ## Ahora
 
+- [x] 🔴 **CERRADO el 2026-09-25 20:15-21:00 La Paz: el gate que existe para cazar los «NO
+      desplegado» fantasma era CIEGO al motor del bot — 51 de sus 58 líneas salían «otra
+      frontera, no las mido» y el gate quedaba en `exit 2` todas las vueltas. Cableado al
+      instrumento que sí mide el motor: 35 líneas caducadas encontradas y corregidas.**
+
+      **Cómo se encontró** (escalón 2, auditar los `[x]`: «Ahora» no tenía ítems abiertos y los
+      dos de «Después» siguen diferidos a propósito). Antes de la cola se corrió la definición de
+      hecho del carril y las siete promesas del pedido de deploy de ayer (`t_24fa76aa`), que
+      quedaron auditadas — la 2 se midió hoy por primera vez **ejecutando el motor vivo**:
+
+          # promesa 2, "ahora acepta los cinco horarios": 8/8 frases aceptadas
+          detectSlotChoice del contenedor + elegibleSlots + buildConfig vivo
+          → acepta A) lunes 28 · B) martes 29 · y los NO ofrecidos miércoles 30 y jueves 1
+          (el sábado 26 lo descarta el corte de 24 h, correcto: falta menos de un día)
+
+      **El defecto.** `deploy_ya_ocurrio.mjs` juzga por sha contra `onia-platform`, y el motor no
+      se despliega por commits: se rsyncea. Su propio encabezado declaraba la frontera del bot
+      como ajena — cierto como límite, falso como conclusión: esa frontera SÍ tiene instrumento
+      (`bot_vivo_tiene_el_codigo.mjs`, que compara archivo por archivo contra `/tmp/onia-bot`) y
+      la cabecera de ESE archivo ya nombraba a este gate como ciego. El dato existía y nadie lo
+      cruzaba. Con 51 de 58 sin juzgar el `exit 2` sale siempre, y un `2` permanente se lee como
+      «el ambiental de siempre» y se saltea.
+
+      **Lo que costaba, medido:** el ítem de ayer 14:13 decía *«el bot vivo sirve horarios del
+      pasado … lo único que falta es publicar»*, y ese deploy ocurrió a las 18:44 UTC
+      (`npm run anticipacion:viva` → `ok`, corte vivo, ofrece lunes 28 y martes 29 con 65 h y
+      89 h de aviso). Leída como presente, esa línea manda a re-arreglar lo que ya anda.
+
+      **El arreglo:** `juezDelMotor` razona por ARCHIVO, no por sha, y en tri-estado — motor
+      entero al día → la línea miente · nombra un archivo que sigue desfasado → es cierta y no se
+      toca · nombra archivos y ninguno desfasado → miente · no nombra ninguno → «hay que leerla»,
+      no se acusa a ciegas · motor no medible → NO MEDIDA, nunca verde. A propósito NO se amplió
+      `fronteraDe` con nombres de archivo: `config.mjs` existe en los dos repos y usarlo como
+      huella mandaría líneas del panel al juez del bot, que es el error de este gate al revés.
+
+          antes: 58 lineas — 0 mienten · 0 ciertas · 58 no medidas       exit 2
+          ahora: 58 lineas — 35 mienten · 8 ciertas · 15 no medidas      exit 1
+          --corregir → 0 mienten · 8 ciertas · 15 no medidas             exit 0
+
+      Las 3 que el motor todavía no corre (`followup-run.mjs`, `knowledge.onia.json`,
+      `marcas-en-disco.mjs`) son las de los dos ítems de abajo, y sus líneas quedaron **sin
+      tocar**: el juez las declaró ciertas por nombre de archivo. Ese es el sujeto del próximo
+      `DESPLEGAR: bot`.
+
+      Gates: 84/84 en el self-check (con dos casos ANCLA: si la lista de sujetos llega vacía, un
+      motor al día sigue desmintiendo y un motor con pendientes NO acusa), rojo previo por el
+      motivo correcto en los dos casos de integración, `verificar_cola.js` ok (124 ítems), y
+      `test:deploy-ya-ocurrio` · `test:bot-vivo-al-dia` · `test:cola-selfcheck` ·
+      `test:colas-vivas` · `test:docs-hygiene` en verde.
+
 - [x] 🔴 **CERRADO el 2026-09-25 22:30-23:10 La Paz (commiteado, **NO desplegado**): el bot le
       prometía al lead una duración de reunión **distinta de la que reserva**, y las dos salían en
       EL MISMO mensaje. Medido contra el bot desplegado: `30` y `45` minutos juntos.**
@@ -1212,6 +1262,7 @@ abrirlas y decidir a qué deploy se refieren. Se derivan con el comando, nunca d
       comentarios; no toca el motor): el número que el aviso de leads fríos le iba a poner delante
       a Sergio Urcullo estaba inflado 3x, y ningún test podía verlo porque TODOS los fixtures eran
       de desconocidos.**
+      ✅ YA DESPLEGADO (medido 2026-09-26: `npm run bot:vivo-al-dia` — el motor vivo ya corre este archivo).
 
       **Cómo se llegó.** Midiendo la tercera pata del objetivo (¿el aviso le llega?). El barrido
       corre cada hora en producción, en `emit`, y cada hora dice lo mismo:
@@ -1348,6 +1399,7 @@ abrirlas y decidir a qué deploy se refieren. Se derivan con el comando, nunca d
       producción porque medía su propio código, no el del bot vivo.** Diagnóstico original del
       2026-09-25 03:21-03:47 La Paz. Es el instrumento que nació el 5-sep para exactamente este
       defecto, y lo tapaba.
+      ✅ YA DESPLEGADO (medido 2026-09-26: `npm run bot:vivo-al-dia` — el motor vivo ya corre este archivo).
 
       **Lo que dijo el instrumento** (`npm run test:anticipacion-instrumento`, exit 0):
       *"proceso 30 en onia-center — ofrece 2 horario(s): ok sábado 26 de septiembre, 09:00 — 29.6 h
@@ -1425,6 +1477,7 @@ abrirlas y decidir a qué deploy se refieren. Se derivan con el comando, nunca d
       corre `/tmp/onia-bot/`): un handoff que NADIE tomó dejaba a la persona escribiéndole a
       nadie, en silencio para los DOS lados.** Medido en el simulador con el guion de hoy, no
       heredado:
+      ✅ YA DESPLEGADO (medido 2026-09-26: `npm run bot:vivo-al-dia` — el motor vivo ya corre este archivo).
 
       ```
       vos > quiero hablar con una persona de verdad → [M5] "Ya le pasé tu consulta a Sergio"
@@ -1568,6 +1621,7 @@ abrirlas y decidir a qué deploy se refieren. Se derivan con el comando, nunca d
       `/tmp/onia-bot/` desde el 19-sep 14:40 y la última ocurrencia está en la línea **50.540 de
       70.614**, ~20.000 líneas antes del final; el `[knowledge:panel]` repetido ×3.870 sigue
       vivo porque **T10 está commiteado y NO desplegado**, no porque el arreglo falle.
+      ✅ YA DESPLEGADO (medido 2026-09-26: `npm run bot:vivo-al-dia` — el motor vivo ya corre este archivo).
 
 - [x] 🔴 **CERRADO el 2026-09-24 (medición, sin cambio de código): el embudo del carril se estaba
       contando con `calendar_event_id`, que por la decisión (c) NO PUEDE subir nunca — así que
@@ -1755,6 +1809,7 @@ abrirlas y decidir a qué deploy se refieren. Se derivan con el comando, nunca d
       una, en toda su historia — porque de los 5 horarios que el cron publica a diario sólo 2 se
       podían elegir. Los otros 3 estaban libres en la agenda de Sergio Urcullo y quien los
       nombraba se iba a la cola humana. Ahora los cinco se agendan.**
+      ✅ YA DESPLEGADO (medido 2026-09-26: `npm run bot:vivo-al-dia` — el motor vivo ya corre este archivo).
 
   **La cuenta, contada el 2026-09-24 contra producción (no heredada):**
 
@@ -1823,11 +1878,13 @@ abrirlas y decidir a qué deploy se refieren. Se derivan con el comando, nunca d
   ⚠️ **Falta el deploy.** El bot vivo corre desde `/tmp/onia-bot/` dentro de `onia-center`; esto
   está commiteado y **no llega solo**. Se destraba con la tarea del tablero que ya existe
   (`t_fca27a62`, línea `DESPLEGAR: bot`) y un `ok` de Sergio Urcullo.
+  ✅ YA DESPLEGADO (medido 2026-09-26: `npm run bot:vivo-al-dia` — el motor vivo ya corre este archivo).
 
   ✅ **2026-09-24 22:45-23:25 La Paz — AUDITADO contra el código de hoy, y el arreglo estaba una
   rama corto. Cerrado en `config.mjs` + `run-turn.mjs`, commiteado, NO desplegado.** Salió de
   auditar este mismo `[x]` (la cola entera estaba bloqueada en firmas de Sergio Urcullo), no de
   releerlo: se grepeó **quién más parsea ese dato**, que es la lección que este ítem dejó escrita.
+  ✅ YA DESPLEGADO (medido 2026-09-26: `npm run bot:vivo-al-dia` — el motor vivo ya corre este archivo).
 
   **Lo que se confirmó cierto** (no se desmarca nada): el camino vivo sí usa `parseSlotsSpec` +
   `slotsElegibles` —en producción `ONIA_BOT_SLOTS` está puesto, así que `resolveConfig` corta en
@@ -2395,6 +2452,7 @@ abrirlas y decidir a qué deploy se refieren. Se derivan con el comando, nunca d
       ⚠️ **Commiteado, NO desplegado.** El bot vivo corre desde `/tmp/onia-bot/` dentro de
       `onia-center`; esto llega al cliente recién cuando el publicador del bot corra (o con un
       `DESPLEGAR: bot`). Hasta entonces el defecto sigue vivo en producción.
+      ✅ YA DESPLEGADO (medido 2026-09-26: `npm run bot:vivo-al-dia` — el motor vivo ya corre este archivo).
 
       **Lo que queda abierto y NO es de este carril:** que el bot ENTIENDA los audios pide un
       transcriptor. LiteLLM contesta pero sólo tiene modelos de chat (`gpt-5.1`, `gpt-5-mini`,
@@ -2510,12 +2568,14 @@ abrirlas y decidir a qué deploy se refieren. Se derivan con el comando, nunca d
 
       **Commiteado, NO desplegado** — `/opt/onia/bot` sigue diciendo «te escribe él» hasta que
       `onia-cola` publique.
+      ✅ YA DESPLEGADO (medido 2026-09-26: `npm run bot:vivo-al-dia` — el motor vivo ya corre este archivo).
 
 - [x] 🔴 **CERRADO el 2026-09-19 06:05 — el criterio «¿esta conversación somos NOSOTROS?» ya mira
       el INBOX: el banco de pruebas dejó de pasar como prospecto**
       (`hermes-content/deploy/vps-ops/bot/es-nuestra.mjs`, causa aditiva por tenencia;
       1.243/1.243 verdes). **Commiteado, NO desplegado** — `/opt/onia/bot` sigue con el criterio
       viejo hasta que `onia-cola` publique.
+      ✅ YA DESPLEGADO (medido 2026-09-26: `npm run bot:vivo-al-dia` — el motor vivo ya corre este archivo).
 
       ⚠️ **Las dos premisas que traía escritas este ítem estaban MEDIDAS MAL, y obedecerlas habría
       dejado el gate verde con el defecto vivo.** Es el punto ciego que una tarea con su arreglo ya
@@ -3005,6 +3065,7 @@ abrirlas y decidir a qué deploy se refieren. Se derivan con el comando, nunca d
       guarda está corriendo, y si no puede preguntar **no exime** (fail-closed). Medido después
       del arreglo: sigue **rojo** con su motivo, y se pone verde solo cuando el deploy llegue.
       Self-check 43/43.
+      ✅ YA DESPLEGADO (medido 2026-09-26: `npm run bot:vivo-al-dia` — el motor vivo ya corre este archivo).
 
 - [x] 🔴 **~~El bot del cliente decidía con el horario del cliente y DECÍA el de Onia~~ —
       CERRADO el 2026-09-18** (motor: `applyKnowledge` en
@@ -3021,6 +3082,7 @@ abrirlas y decidir a qué deploy se refieren. Se derivan con el comando, nunca d
       Medido con el motor, no supuesto: `dias:[1..5], desde:8, hasta:20` sin frase daba
       `startHour 8` (decide bien) y `frase: "lun-vie 14:00-17:00 y 20:00-22:00, sáb 9:00-15:00"`
       (dice el horario de Onia) — y encima le promete sábado a un negocio cerrado el sábado.
+      ✅ YA DESPLEGADO (medido 2026-09-26: `npm run bot:vivo-al-dia` — el motor vivo ya corre este archivo).
 
       **La mitad hermana, que el comentario del propio archivo ya declaraba cubierta y no lo
       estaba:** la guarda que pone `franjas = null` miraba `dias`/`desde`/`hasta` y **no** `frase`,
@@ -3244,6 +3306,7 @@ abrirlas y decidir a qué deploy se refieren. Se derivan con el comando, nunca d
       lo mandan**, así el redactor y el medidor quedan fuera solos, sin lista a mano.
 
       **En vuelo:** commiteado, **NO desplegado** — `/opt/onia/bot` no es un checkout de git.
+      ✅ YA DESPLEGADO (medido 2026-09-26: `npm run bot:vivo-al-dia` — el motor vivo ya corre este archivo).
 
 - [x] 🔴 **~~El prospecto que vuelve dos días después y NO elige recibía los horarios ya
       vencidos en pantalla~~ — CERRADO el 2026-09-18.**
@@ -3284,6 +3347,7 @@ abrirlas y decidir a qué deploy se refieren. Se derivan con el comando, nunca d
       ⚠️ **Commiteado y pusheado en la rama del carril, NO desplegado:** lo mergea `onia-cola` y
       el publicador automático del VPS lo toma solo (mide `bot: PUBLICADO` a las 05:50 y 11:50 La
       Paz de hoy). No abrí pedido de deploy: el circuito ya lo cubre.
+      ✅ YA DESPLEGADO (medido 2026-09-26: `npm run bot:vivo-al-dia` — el motor vivo ya corre este archivo).
 
 - [x] 🔴 **~~El gate que vigila qué rubros ofrece el bot cruzaba dos lados del REPO, y el
       documento que producción SIRVE le gana al archivo~~ — CERRADO el 2026-09-18.**
@@ -3320,6 +3384,7 @@ abrirlas y decidir a qué deploy se refieren. Se derivan con el comando, nunca d
 - [x] 🔴 **~~Los horarios de demo NO le llegaban a los barridos: el follow-up salteaba a TODOS
       los prospectos con `slots_sin_definir` — teniendo los cinco horarios vivos~~ — CERRADO el
       2026-09-18 en el repo.** Commiteado, **NO desplegado**.
+      ✅ YA DESPLEGADO (medido 2026-09-26: `npm run bot:vivo-al-dia` — el motor vivo ya corre este archivo).
 
       **Costo medido, con un desconocido real esperando.** `chatwoot:58` escribió por WhatsApp el
       17-sep 22:50 UTC desde el botón de la web, el bot le contestó bien y no volvió. El rescate
@@ -3609,6 +3674,7 @@ abrirlas y decidir a qué deploy se refieren. Se derivan con el comando, nunca d
       muerto~~ — CERRADO el 2026-09-18 en el repo** (`webhook-watchdog.sh` + 7 casos nuevos en
       `webhook-watchdog.test.mjs`, validados por 3 mutaciones). Commiteado, **NO desplegado** —
       el watchdog vivo sigue mudo en esas dos ramas hasta que se publique el bot.
+      ✅ YA DESPLEGADO (medido 2026-09-26: `npm run bot:vivo-al-dia` — el motor vivo ya corre este archivo).
 
       **Cómo apareció.** Midiendo producción por un eje que ningún gate mira: el log
       `/var/log/onia-bot-watchdog.log` del VPS tenía **76 líneas seguidas de `Permission
@@ -4329,6 +4395,7 @@ abrirlas y decidir a qué deploy se refieren. Se derivan con el comando, nunca d
 
       ⚠️ **Commiteado en la rama del carril, NO desplegado.** `/opt/onia/bot` no es un checkout:
       el cron sigue corriendo la copia vieja hasta que se publique el bot.
+      ✅ YA DESPLEGADO (medido 2026-09-26: `npm run bot:vivo-al-dia` — el motor vivo ya corre este archivo).
 
 - [x] 🔴 **~~La lista de puertas del alta era de INCLUSIÓN: la tercera iba a entrar absuelta, igual
       que la segunda~~ — CERRADO el 2026-09-17** (`hermes-content/deploy/vps-ops/bot/puerta-del-alta.mjs`,
@@ -4812,6 +4879,7 @@ abrirlas y decidir a qué deploy se refieren. Se derivan con el comando, nunca d
       completa: **976/976 verde**.
       **Lo que queda y NO lo puede hacer este carril:** `DESPLEGAR: bot`. Hasta entonces el
       campo existe en el repo y no en el log que se lee para diagnosticar.
+      ✅ YA DESPLEGADO (medido 2026-09-26: `npm run bot:vivo-al-dia` — el motor vivo ya corre este archivo).
 
 - [x] 🔴 **~~El bot le prometía a los leads reales «creás tu cuenta y entrás al toque», y el
       producto exige confirmar el correo~~ — CERRADO EN PRODUCCIÓN el 2026-09-13 01:20 La Paz.**
@@ -4916,6 +4984,7 @@ La historia completa queda acá abajo para no perderla.
       es un segundo comando aparte). Mientras tanto `precios-vivos.mjs` compensa desde afuera, y su
       comentario ya dice por qué va a seguir compensando aunque se despliegue: preguntarle al
       mismo proceso que se audita deja sin forma de detectar que ese proceso se equivoca.
+      ✅ YA DESPLEGADO (medido 2026-09-26: `npm run bot:vivo-al-dia` — el motor vivo ya corre este archivo).
 
 <details><summary>Diagnóstico original del 2026-09-12 19:50 (cómo se encontró)</summary>
 
@@ -4992,6 +5061,7 @@ La historia completa queda acá abajo para no perderla.
 - [x] 🟡 **~~El bot tuvo una ventana sirviendo el M4_BODY SIN precios, y no sé por qué~~ — EL
       MECANISMO ESTÁ IDENTIFICADO Y CERRADO POR LOS DOS LADOS EN CÓDIGO, el 2026-09-13 00:05
       La Paz. ⚠️ COMMITEADO, NO DESPLEGADO: el bot vivo todavía corre el build sin esto.**
+      ✅ YA DESPLEGADO (medido 2026-09-26: `npm run bot:vivo-al-dia` — el motor vivo ya corre este archivo).
 
       **Lo que se encontró, leyendo el código y probándolo — ya no es hipótesis:**
 
@@ -5146,6 +5216,7 @@ La historia completa queda acá abajo para no perderla.
       ⚠️ **Commiteado, NO desplegado.** El bot vivo corre desde `/tmp/onia-bot/` en el contenedor
       `onia-center`; publicar es el `ok` de Sergio Urcullo. Esto no cambia lo que recibe el
       prospecto (que ya era el texto correcto): cambia lo que **ve quien mide**.
+      ✅ YA DESPLEGADO (medido 2026-09-26: `npm run bot:vivo-al-dia` — el motor vivo ya corre este archivo).
 
 - [x] ✅ **CERRADO el 2026-09-12: el gate del AVISO miraba 50 líneas de un log de 2,7 MB, y por
       eso firmaba «circuito sano, sin eventos reales todavía» con DOS avisos salteados adentro.**
@@ -5254,6 +5325,7 @@ La historia completa queda acá abajo para no perderla.
       respuesta` en eventos sin mensaje — el MISMO texto, carácter por carácter, que dejaría el
       bug que este log existe para cazar.** (Commiteado; **NO desplegado** — el bot vivo corre
       `/tmp/onia-bot/`. Viaja con el pedido `t_4f08f5d1`, que ya esperaba el `ok`.)
+      ✅ YA DESPLEGADO (medido 2026-09-26: `npm run bot:vivo-al-dia` — el motor vivo ya corre este archivo).
 
       **La pregunta que el ítem dejó abierta, contestada: es un evento SIN MENSAJE, no una
       persona.** No se dedujo — se reprodujo con el parser y el pipeline reales
@@ -5653,6 +5725,7 @@ La historia completa queda acá abajo para no perderla.
       ⚠️ **COMMITEADO, NO DESPLEGADO — y no necesita pedido de deploy**, por lo mismo que el
       ítem de abajo: el daño lo causa la **suite**, que corre desde el repo. Se apaga solo
       cuando el integrador lleve la rama a `main`.
+      ✅ YA DESPLEGADO (medido 2026-09-26: `npm run bot:vivo-al-dia` — el motor vivo ya corre este archivo).
 
 - [x] ✅ **CERRADO el 2026-09-11: el rescate fallido se veía en un log que nadie mira. Ahora
       sale, y sale UNA sola vez por mensaje.** Era la mitad que dejó abierta `7a9e10c0`.
@@ -5721,6 +5794,7 @@ La historia completa queda acá abajo para no perderla.
       ⚠️ **COMMITEADO, NO DESPLEGADO — y NO necesita pedido de deploy.** El cron
       (`4,14,24,34,44,54 * * * *`) corre la copia de `/root/loops/onia-hermes`, no la de
       `/opt/onia/bot`: esto se enciende solo cuando el integrador lleve la rama a `main`.
+      ✅ YA DESPLEGADO (medido 2026-09-26: `npm run bot:vivo-al-dia` — el motor vivo ya corre este archivo).
 
 - [x] ✅ **CERRADO el 2026-09-10 (`31cdfba`): quien pedía hablar con una PERSONA recibía siempre
       «Te conecto con un agente, en unos momentos te atenderán» — y cuando la conversación no
@@ -6275,6 +6349,7 @@ La historia completa queda acá abajo para no perderla.
       handoffs, no es que no salgan. Lo que queda en el espejo sin desplegar son **instrumentos**
       de medición nuevos (`avisos-vivo.mjs`, `rubros-vivos.mjs`, `anticipacion-viva.mjs` y sus
       tests), no el motor — no atienden a nadie y su lugar es el repo.
+      ✅ YA DESPLEGADO (medido 2026-09-26: `npm run bot:vivo-al-dia` — el motor vivo ya corre este archivo).
 
       🔻 **Historia del ítem (cerrado, no rehacer):**
       **El bot prometía "ya le pasé tu consulta a Sergio, te escribe él" y NADIE se lo pasaba:
@@ -6396,6 +6471,7 @@ La historia completa queda acá abajo para no perderla.
       marca ausente hoy es
       `urgencia-en-el-handoff.test.mjs`, que es un test: no viaja al runtime ni lo ve un cliente.
       Sigue pendiente la decisión de Sergio Urcullo (`t_b18ca430`), que es sólo encender un flag.
+      ✅ YA DESPLEGADO (medido 2026-09-26: `npm run bot:vivo-al-dia` — el motor vivo ya corre este archivo).
 
 - [x] 🔴 **El que ESPERA a un humano prometido era invisible para todo el sistema: el único vigía
       que mira la bandeja lo descartaba con un `// ya le contestaron` que en un handoff es
@@ -6797,6 +6873,7 @@ La historia completa queda acá abajo para no perderla.
       del 29-ago, y su stdout va a `/tmp/onia-bot-webhook.log` **dentro del contenedor** — por eso
       en el host el archivo no existe (`ls: cannot access`). Se lee con
       `docker exec onia-center tail -f /tmp/onia-bot-webhook.log`.
+      ✅ YA DESPLEGADO (medido 2026-09-26: `npm run bot:vivo-al-dia` — el motor vivo ya corre este archivo).
 
 - [x] 🔴 **La sonda daba VERDE mientras el bot le contestaba a un desconocido "eso lo tiene que
       ver Sergio, no yo".** CERRADO el 2026-09-03. Lo encontró el chequeo de arranque, mirando el
@@ -7256,6 +7333,7 @@ cita: al cerrar una fila hay que barrer quién la nombra, no sólo tacharla.
       de plantillas de WhatsApp **pagas**. Revertido: el arreglo va en el punto de la fuga, no en
       la semántica compartida. **721/721 verdes**, test nuevo rojo antes por el motivo correcto.
       ⚠️ **Commiteado, NO desplegado** — `/opt/onia/bot` es rsync, no git.
+      ✅ YA DESPLEGADO (medido 2026-09-26: `npm run bot:vivo-al-dia` — el motor vivo ya corre este archivo).
 
 - [x] ~~🔴 **El bot contesta el saludo y se calla en el SEGUNDO mensaje. Reproducido hoy, en vivo, en el inbox de los leads reales.**
       **Cómo se reproduce** (30 segundos, sin tocar nada): abrir
@@ -8454,6 +8532,7 @@ archivos.**
       `CW_TOKEN="$(docker exec … psql …)"` quedaban con la variable vacía y el gate acusaba a
       `followup-run.sh`, que está sano. Se cura sembrando **las dos** fuentes legítimas
       (`webhook.env` y la base) — parámetro `salidaDocker` del harness, vacío por defecto.
+      ✅ YA DESPLEGADO (medido 2026-09-26: `npm run bot:vivo-al-dia` — el motor vivo ya corre este archivo).
 
 - [x] **~~La sonda que define el «hecho» del carril blanqueaba la mitad del estado: los cinco
       campos del reinicio que viven en `raw` quedaban con el valor de la corrida anterior~~** —
@@ -8539,6 +8618,7 @@ archivos.**
       disco (todas las entradas del guion, no las tres que hoy sabemos rotas) y prohíbe la
       FORMA, no el texto viejo. Validado por mutación: con `viaDelCanal` clavado en el
       número, 4 de 5 casos en rojo. Suite del bot 1215/1215.
+      ✅ YA DESPLEGADO (medido 2026-09-26: `npm run bot:vivo-al-dia` — el motor vivo ya corre este archivo).
 
 - [x] **~~Nuestro propio mensaje le movía el reloj al prospecto~~** — cerrado el 2026-09-18
       (`hermes-content/deploy/vps-ops/bot/bot-engine.mjs`, **commiteado, NO desplegado**).
@@ -8548,6 +8628,7 @@ archivos.**
       bandeja, Chatwoot reenvía ese saliente y el adapter lo convierte en un turno con
       `author: "human"` (`chatwoot-adapter.mjs`, `takeoverTurn`). La línea de arriba, la que decide
       si la conversación venció, **sí** preguntaba (`msg.author === "contact"`); la del reloj no.
+      ✅ YA DESPLEGADO (medido 2026-09-26: `npm run bot:vivo-al-dia` — el motor vivo ya corre este archivo).
 
       **Medido en producción, sobre el único lead real vivo de WhatsApp** (conv 58, +59175755019):
       `messages` de Chatwoot tiene **un solo** mensaje entrante suyo, del 17-sep 22:50:55Z; el
@@ -8617,6 +8698,7 @@ archivos.**
       baranda (el domingo, que no tiene atención), no la prohibición del sábado. Validado por
       mutación en las dos mitades: días propios → 1 rojo, hora clavada → 1 rojo.
       ⚠️ **Commiteado y en la rama, NO desplegado** (`slots-rodantes.mjs` viaja con `deploy-bot.sh`).
+      ✅ YA DESPLEGADO (medido 2026-09-26: `npm run bot:vivo-al-dia` — el motor vivo ya corre este archivo).
 
 - [x] **~~El dueño que APAGABA su WhatsApp no podía reconectarlo nunca más~~** — cerrado el
       2026-09-18, sha `21ac3e3` en `onia-platform` (`lib/chatbot/canal-whatsapp.ts`,

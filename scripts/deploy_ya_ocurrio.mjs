@@ -49,6 +49,8 @@
  */
 
 import { execFileSync } from "node:child_process";
+// El motor del bot tiene su propio instrumento: se IMPORTA, no se re-implementa.
+import { medirVivo as medirMotor, sujetosDelRepo as sujetosDelMotor, veredicto as veredictoDelMotor } from "./bot_vivo_tiene_el_codigo.mjs";
 import { readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
@@ -104,6 +106,9 @@ export function lineaDeMarca(lineaOriginal, { vivos, desplegado, fecha }) {
   // sangría del cuerpo, no con la de ella.
   const sangria = /^- \[[ x]\] /.test(l) ? "      " : (/^(\s*)/.exec(l)?.[1] ?? "");
   const shas = [...new Set(vivos ?? [])].map((s) => `\`${s}\``).join(" ");
+  // El motor no se mide por sha: su marca nombra el instrumento que la emitió, para que quien la
+  // lea pueda re-derivarla. Sin esta rama la marca del bot salía «: vive en produccion ``».
+  if (!shas) return `${sangria}✅ YA DESPLEGADO (medido ${fecha}: \`npm run bot:vivo-al-dia\` — el motor vivo ya corre este archivo).`;
   return `${sangria}✅ YA DESPLEGADO (medido ${fecha}: ${shas} vive en produccion \`${desplegado}\`).`;
 }
 
@@ -173,6 +178,50 @@ export function fronteraDe(linea, cuerpo = "") {
  * Por qué no se pudo juzgar una afirmación — y, sobre todo, QUÉ haría falta para poder.
  * Es el texto que decide si el que lee se pone a trabajar en algo que sirve.
  */
+/**
+ * EL JUEZ DEL MOTOR — la mitad de este gate que faltaba, y que lo dejaba en un `2` permanente.
+ *
+ * Medido el 2026-09-25 20:40 La Paz: de 58 líneas que piden deploy, **51 son del motor** y las
+ * 51 salían NO MEDIDAS *«otra frontera — este gate no las mide»*. Cierto como límite y falso
+ * como conclusión: la frontera del motor SÍ tiene instrumento —`bot_vivo_tiene_el_codigo.mjs`,
+ * que compara archivo por archivo el repo contra `/tmp/onia-bot`— y su propia cabecera nombra a
+ * este gate como ciego. O sea que el dato existía y nadie lo cruzaba. Con 51 de 58 sin juzgar,
+ * el exit 2 sale todas las vueltas, y un `2` permanente se lee como «el ambiental de siempre».
+ *
+ * El caso que lo vuelve caro: el ítem del 25-sep decía *«el bot vivo sirve horarios del pasado
+ * … lo único que falta es publicar»*, y ese deploy ocurrió a las 18:44 UTC (`anticipacion:viva`
+ * → `ok`, corte vivo). Una línea así leída como presente manda a re-arreglar lo que ya anda.
+ *
+ * Cómo juzga, y por qué NO razona por sha: el motor no se despliega por commits, se rsyncea, así
+ * que su unidad es el ARCHIVO. Un ítem del bot nombra los archivos que tocó —lo exige
+ * `verificar_cola.js`— y el instrumento vivo dice cuáles están desfasados HOY:
+ *
+ *   · el motor entero al día        → la línea MIENTE (no queda nada por publicar)
+ *   · nombra un archivo desfasado   → la línea es CIERTA para ese archivo, no se toca
+ *   · nombra archivos, ninguno de ellos desfasado → MIENTE
+ *   · no nombra ningún archivo      → NO MEDIDA: «hay que leerla» (no se acusa a ciegas)
+ *   · el motor no se pudo medir     → NO MEDIDA, nunca verde
+ *
+ * @param {{frase?:string, cuerpo?:string}} afirmacion
+ * @param {{medido:boolean, desfasados:string[]}|null} motor
+ * @param {string[]} sujetos  los archivos que el deploy del bot instala (derivados del repo)
+ */
+export function juezDelMotor({ frase = "", cuerpo = "" } = {}, motor, sujetos = []) {
+  if (!motor || motor.medido !== true) {
+    return { estado: "no-medida", motivo: "es del bot y el motor vivo no se pudo medir" };
+  }
+  const desfasados = motor.desfasados ?? [];
+  if (desfasados.length === 0) {
+    return { estado: "miente", motivo: "el motor vivo esta ENTERO al dia" };
+  }
+  const texto = `${frase}\n${cuerpo}`;
+  const nombrados = (sujetos ?? []).filter((nombre) => texto.includes(nombre));
+  const pendientes = nombrados.filter((nombre) => desfasados.includes(nombre));
+  if (pendientes.length) return { estado: "honesta", faltan: pendientes };
+  if (nombrados.length) return { estado: "miente", motivo: `nombra ${nombrados.length} archivo(s) del motor y ninguno esta desfasado` };
+  return { estado: "no-medida", motivo: `es del bot, no nombra ningun archivo del motor y quedan ${desfasados.length} sin publicar: hay que leerla` };
+}
+
 export function motivoDeNoMedida({ shas = [], frontera = "sin ubicar" } = {}) {
   // Primero la frontera: a una línea del motor, citar un sha no la vuelve medible. Decirle
   // «te falta el commit» es mandarla a un trabajo que deja el gate exactamente igual.
@@ -187,16 +236,24 @@ export function motivoDeNoMedida({ shas = [], frontera = "sin ubicar" } = {}) {
  * @param {(sha:string)=>(boolean|null)} estaVivo  true = desplegado · false = no · null = no sé
  * @returns {{mienten:Array, noMedidas:Array, honestas:Array}}
  */
-export function juzgar(afirmaciones, estaVivo) {
+export function juzgar(afirmaciones, estaVivo, motor = null, sujetos = []) {
   const mienten = [];
   const noMedidas = [];
   const honestas = [];
   for (const a of afirmaciones) {
     const veredictos = a.shas.map((s) => ({ sha: s, vivo: estaVivo(s) }));
     const juzgables = veredictos.filter((v) => v.vivo !== null);
-    // Sin un solo sha juzgable no hay nada que afirmar: puede ser una línea del bot, o un ítem
-    // que nunca citó su commit. NO MEDIDO, que es distinto de honesta.
+    // Sin un solo sha juzgable no hay nada que afirmar POR SHA. Si la línea es del motor, su
+    // frontera tiene su propio instrumento y se le pregunta a él: el sha nunca la iba a juzgar
+    // (el bot se rsyncea, no se mergea) y por eso 51 de 58 salían NO MEDIDAS para siempre.
     if (juzgables.length === 0) {
+      if (a.frontera === "bot") {
+        const delMotor = juezDelMotor(a, motor, sujetos);
+        if (delMotor.estado === "miente") mienten.push({ ...a, vivos: [], motor: true, porQue: delMotor.motivo });
+        else if (delMotor.estado === "honesta") honestas.push({ ...a, faltan: delMotor.faltan, motor: true });
+        else noMedidas.push({ ...a, motivo: delMotor.motivo });
+        continue;
+      }
       noMedidas.push({ ...a, motivo: motivoDeNoMedida(a) });
       continue;
     }
@@ -331,7 +388,9 @@ export function afirmacionesDe(texto, archivo, esCommit = () => false) {
       // dos criterios distintos acá y allá re-acusan la línea en cada corrida, para siempre.
       if (MARCA.test(t) || MARCA.test(lineas[finDeParrafo(lineas, n - 1) + 1] ?? "")) continue;
       if (PIDE_DEPLOY.test(sinCitas(t)))
-        out.push({ archivo, linea: n, frase: t.trim().slice(0, 120), shas, frontera: fronteraDe(t, cuerpo) });
+        // El `cuerpo` viaja con la afirmación porque el juez del MOTOR razona por archivo, no por
+        // sha, y el archivo casi nunca está en el renglón acusado: está en el cuerpo del ítem.
+        out.push({ archivo, linea: n, frase: t.trim().slice(0, 120), shas, frontera: fronteraDe(t, cuerpo), cuerpo });
     }
   }
   return out;
@@ -659,7 +718,60 @@ function selfCheck() {
   ].join("\n");
   const afsBot = afirmacionesDe(mdBot, "chatbot.md");
   ok("integra: la afirmacion del motor sale con frontera bot", afsBot.length === 1 && afsBot[0].frontera === "bot");
-  ok("integra: y juzgar le da el remedio del motor", juzgar(afsBot, () => null).noMedidas[0]?.motivo === "es del bot: otra frontera — citar un sha NO la haria medible");
+  ok(
+    "integra: sin medicion del motor, la del bot sigue NO MEDIDA (y lo dice)",
+    juzgar(afsBot, () => null).noMedidas[0]?.motivo === "es del bot y el motor vivo no se pudo medir",
+  );
+
+  // --- EL JUEZ DEL MOTOR: la frontera que este gate declaraba «no mía» y sí tiene instrumento --
+  const SUJETOS = ["config.mjs", "followup-run.mjs", "knowledge.onia.json", "marcas-en-disco.mjs"];
+  const alDia = { medido: true, desfasados: [] };
+  const conTres = { medido: true, desfasados: ["followup-run.mjs", "knowledge.onia.json", "marcas-en-disco.mjs"] };
+
+  ok("motor: sin medir -> NO MEDIDA, nunca verde", juezDelMotor({ frase: "NO desplegado" }, null, SUJETOS).estado === "no-medida");
+  ok("motor: entero al dia -> la linea MIENTE", juezDelMotor({ frase: "NO desplegado" }, alDia, SUJETOS).estado === "miente");
+  ok(
+    "motor: nombra un archivo que sigue desfasado -> es CIERTA, no se toca",
+    juezDelMotor({ frase: "NO desplegado", cuerpo: "el arreglo vive en `followup-run.mjs`" }, conTres, SUJETOS).estado === "honesta",
+  );
+  ok(
+    "motor: nombra archivos y NINGUNO esta desfasado -> MIENTE",
+    juezDelMotor({ frase: "NO desplegado", cuerpo: "corregido en `config.mjs`" }, conTres, SUJETOS).estado === "miente",
+  );
+  ok(
+    "motor: no nombra ningun archivo y quedan pendientes -> hay que leerla, no se acusa a ciegas",
+    juezDelMotor({ frase: "NO desplegado" }, conTres, SUJETOS).estado === "no-medida",
+  );
+  // ANCLA: si la lista de sujetos llega vacía —el instrumento del motor cambió de nombres— nada
+  // se nombra nunca y TODO pasaría a «hay que leerla» en silencio. Con el motor entero al día eso
+  // no puede disfrazarse de verde: el veredicto no depende de los sujetos en ese caso.
+  ok("motor ANCLA: sin sujetos, un motor al dia sigue desmintiendo", juezDelMotor({ frase: "NO desplegado" }, alDia, []).estado === "miente");
+  ok(
+    "motor ANCLA: sin sujetos y con pendientes, NO acusa",
+    juezDelMotor({ frase: "NO desplegado", cuerpo: "`followup-run.mjs`" }, conTres, []).estado === "no-medida",
+  );
+
+  // Integración: la afirmación del markdown tiene que llegar al juez con su CUERPO, que es donde
+  // vive el nombre del archivo. Sin eso el juez ve sólo el renglón acusado y no nombra nada.
+  // La huella de frontera (`/tmp/onia-bot`) va en el MISMO ítem y el archivo en el cuerpo, que es
+  // la forma real de estos ítems: el renglón acusado dice «NO desplegado» y el archivo aparece
+  // arriba o abajo. Un fixture sin huella no probaría el juez, probaría a `fronteraDe` — y a
+  // propósito no se amplió esa función con nombres de archivo: `config.mjs` existe en los DOS
+  // repos, así que usarlo como huella mandaría líneas del panel al juez del bot. Ése es el error
+  // que este gate cuida, al revés.
+  const mdBotArchivo = [
+    "- [x] **CERRADO — el barrido dejaba leads mudos**",
+    "      El arreglo vive en `marcas-en-disco.mjs`; el bot vivo corre desde `/tmp/onia-bot/`.",
+    "      ⚠️ **Commiteado, NO desplegado.**",
+  ].join("\n");
+  const afsArchivo = afirmacionesDe(mdBotArchivo, "chatbot.md");
+  ok("integra: el cuerpo viaja con la afirmacion", typeof afsArchivo[0]?.cuerpo === "string" && afsArchivo[0].cuerpo.includes("marcas-en-disco.mjs"));
+  ok("integra: y con el motor desfasado esa linea es honesta", juzgar(afsArchivo, () => null, conTres, SUJETOS).honestas.length === 1);
+  ok("integra: con el motor al dia, la misma linea miente", juzgar(afsArchivo, () => null, alDia, SUJETOS).mienten.length === 1);
+  ok(
+    "integra: y su marca no cita un sha vacio",
+    lineaDeMarca("      ⚠️ **Commiteado, NO desplegado**", { vivos: [], desplegado: null, fecha: "2026-09-25" }).includes("bot:vivo-al-dia"),
+  );
 
   // El veredicto agregado tiene que nombrar el sujeto CORREGIBLE, no las 58 juntas.
   const vBot = veredicto({ mienten: [], honestas: [], noMedidas: [{ motivo: "es del bot: otra frontera — citar un sha NO la haria medible" }] });
@@ -729,6 +841,28 @@ function selfCheck() {
 
 // ---------------------------------------------------------------------------
 
+/**
+ * La medición del MOTOR, delegada al instrumento que ya la hace (`bot_vivo_tiene_el_codigo.mjs`).
+ * Se importa en vez de replicarse: comparar 73 archivos contra el contenedor por segunda vez es
+ * como nacen los dos criterios que se desincronizan. Todo lo que falla devuelve `medido: false`
+ * con su motivo — un motor que no se pudo mirar deja sus líneas NO MEDIDAS, nunca absueltas.
+ */
+function motorVivo() {
+  try {
+    const { archivos } = medirMotor();
+    const v = veredictoDelMotor({ archivos });
+    if (v.estado === "no_medido") return { motor: { medido: false, porQue: v.lineas[0] ?? "no medido" }, sujetos: [] };
+    // `copiado_sin_reiniciar` es desfase REAL para este gate: los archivos viajaron pero el
+    // proceso corre los viejos, así que ninguna línea del motor caducó todavía.
+    if (v.estado === "copiado_sin_reiniciar") {
+      return { motor: { medido: false, porQue: "el proceso arranco ANTES de la ultima copia: corre codigo viejo" }, sujetos: [] };
+    }
+    return { motor: { medido: true, desfasados: v.distintos ?? [] }, sujetos: sujetosDelMotor() };
+  } catch (e) {
+    return { motor: { medido: false, porQue: String(e?.message ?? e).slice(0, 80) }, sujetos: [] };
+  }
+}
+
 function medir(corregir = false) {
   const desplegado = shaDesplegado();
   if (!desplegado) {
@@ -746,9 +880,15 @@ function medir(corregir = false) {
   // "esto es un commit" evita un segundo criterio que se desincronice con el primero.
   const esCommit = (sha) => estaVivo(sha) !== null;
   const afirmaciones = colasDe(DIR_COLAS).flatMap(({ archivo, texto }) => afirmacionesDe(texto, archivo, esCommit));
-  const { mienten, noMedidas, honestas } = juzgar(afirmaciones, estaVivo);
+  const { motor, sujetos } = motorVivo();
+  const { mienten, noMedidas, honestas } = juzgar(afirmaciones, estaVivo, motor, sujetos);
 
   console.log(`Produccion corre \`${desplegado}\` (etiqueta de imagen de ${CONTENEDOR}).`);
+  console.log(
+    motor.medido
+      ? `Motor del bot (/tmp/onia-bot): ${motor.desfasados.length} archivo(s) sin publicar${motor.desfasados.length ? ` — ${motor.desfasados.join(" ")}` : ""}.`
+      : `Motor del bot: NO MEDIDO (${motor.porQue}) — sus lineas no se juzgan.`,
+  );
   console.log(
     `Lineas que piden deploy en ${DIR_COLAS}: ${afirmaciones.length} — ` +
       `${mienten.length} mienten · ${honestas.length} ciertas · ${noMedidas.length} no medidas (sha ajeno o sin sha).`,
