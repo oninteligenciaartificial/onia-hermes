@@ -20,6 +20,8 @@
     "inclusion:chatbot": "node scripts/inclusion-chatbot.mjs",
     "deploy:vivo": "node scripts/deploy-vivo.mjs",
     "enlaces:vivos": "node scripts/enlaces-vivos.mjs",
+    "obra:viva": "node scripts/obra-viva.mjs",
+    "titular:sistema": "node scripts/titular-es-el-sistema.mjs",
     "rubros:vivos": "node scripts/rubros-vivos.mjs",
     "medio-de-pago:vivo": "node scripts/medio-de-pago-vivo.mjs",
     "intake:vivo": "node scripts/intake-vivo.mjs",
