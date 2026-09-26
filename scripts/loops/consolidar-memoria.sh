@@ -18,7 +18,6 @@ HECHOS="$INBOX/procesados"
 LOCK="${ONIA_MEMORIA_LOCK:-/var/lock/onia-memoria.lock}"
 ARCHIVO="${ONIA_MEMORIA_ARCHIVO:-$(dirname "$MEM")/archivo-aprendizajes}"
 MAX_BYTES="${ONIA_MEMORIA_MAX_BYTES:-65536}"
-TOPE_ENTRADAS=120
 
 if [[ ! "$MAX_BYTES" =~ ^[1-9][0-9]{0,8}$ ]]; then
   echo "ONIA_MEMORIA_MAX_BYTES debe ser un entero positivo (bytes)" >&2
@@ -140,7 +139,7 @@ echo "$AGREGADOS agregado(s), $REPETIDOS repetido(s), $ARCHIVADOS archivado(s) �
 # Retencion de lo procesado: 200 archivos alcanzan para auditar un mes.
 while IFS= read -r viejo; do rm -f -- "$viejo"; done < <(ls -1t "$HECHOS"/*.md 2>/dev/null | tail -n +201)
 
-# 🔴 El aviso de tope SOLO se manda cuando EMPEORA, y nunca dos veces seguidas.
+# 🔴 El aviso SOLO se manda cuando EMPEORA, y nunca dos veces seguidas.
 #
 # Antes se disparaba en CADA vuelta del consolidador mientras N superara el tope.
 # Como nadie compacta al instante, eso son varios Telegram por hora repitiendo lo
@@ -151,24 +150,66 @@ while IFS= read -r viejo; do rm -f -- "$viejo"; done < <(ls -1t "$HECHOS"/*.md 2
 # El estandar ya estaba escrito en el README de esta carpeta —"como mucho 1 cada
 # 6 h por loop (el ruido apaga la senal)"— y este aviso era el que no lo cumplia.
 #
-# Regla nueva, en dos condiciones que se piden JUNTAS:
+# Dos condiciones que se piden JUNTAS:
 #   · que hayan pasado al menos 6 h desde el ultimo aviso, y
-#   · que la memoria haya crecido >= PASO entradas desde ese aviso.
-# Un desborde estable se calla. Uno que crece, avisa — y cada vez mas arriba.
-if [ "$N" -gt "$TOPE_ENTRADAS" ]; then
+#   · que la señal haya crecido >= PASO desde ese aviso.
+# Una saturacion estable se calla. Una que crece, avisa — y cada vez mas arriba.
+#
+# ⚠️ EL EJE CAMBIO EL 2026-09-26, y el viejo se habia apagado SOLO.
+#
+# La condicion era `N > TOPE_ENTRADAS` y `N >= ULT_N + PASO`: CRECIMIENTO de la
+# cuenta de entradas. Eso medía el mundo anterior al tope en bytes (21-sep), cuando
+# el archivo crecia sin freno y contar entradas era medir su tamaño. Con el archivo
+# acotado en MAX_BYTES, saturarse CONGELA N: la unica alarma que existia se apagaba
+# exactamente cuando empezaba a hacer falta.
+#
+# Medido ese dia en el VPS: MEMORY.md en 65.449/65.536 bytes (87 de headroom) con
+# N=116 y el sello en 621. `116 > 120` es falso, y N no puede volver a 646 con un
+# tope de 64 KB: las dos condiciones eran inalcanzables PARA SIEMPRE. Resultado,
+# 278 lecciones desviadas desde el 24-sep 09:08 sin un solo aviso, y la memoria
+# compartida de hecho congelada — los loops seguian aprendiendo contra un archivo
+# que ningun prompt inyecta.
+#
+# El eje nuevo es el DESVIO, que es el sintoma en vez de un proxy, y crece bajo la
+# falla (cada vuelta saturada archiva una mas), asi que la propiedad "solo cuando
+# EMPEORA" se conserva tal cual, con el mismo sello y las mismas variables.
+#
+# TOPE_ENTRADAS se fue con el eje viejo: con el tope en bytes, pasar de 120 entradas
+# no es un problema —el archivo sigue acotado— y dejar la perilla sugeriria un
+# control que ya no existe.
+#
+# Y el texto lleva ⚠️ a proposito. onia-tg.sh clasifica por la primera linea y manda
+# al tablero solo lo que parece un problema: el aviso viejo empezaba con
+# "🧠 <b>Memoria</b>:" y salio INFORMATIVO las DOS veces que llego a dispararse
+# (/var/log/onia-tg.log, 11-sep 08:19 y 14:20). O sea que ni cuando hablaba llegaba
+# a nadie. Que salga como tarea importa porque QUE se saca de la memoria activa lo
+# decide una persona: este script no resume ni reescribe, a proposito.
+if [ "$ARCHIVADOS" -gt 0 ]; then
   SELLO="${ONIA_MEM_AVISO:-/var/lib/onia/memoria-aviso}"
   PASO="${ONIA_MEM_AVISO_PASO:-25}"
   ESPERA="${ONIA_MEM_AVISO_HORAS:-6}"
   mkdir -p "$(dirname "$SELLO")" 2>/dev/null || true
 
+  # La señal se DERIVA del disco, no de un contador de esta corrida: asi sobrevive a
+  # que el cron se interrumpa y no se reinicia sola al reiniciar el proceso.
+  DESVIADAS=$(ls -1 "$ARCHIVO"/*.md 2>/dev/null | wc -l)
+
   ULT_N=0; ULT_T=0
   if [ -f "$SELLO" ]; then read -r ULT_N ULT_T < "$SELLO" 2>/dev/null || true; fi
   : "${ULT_N:=0}"; : "${ULT_T:=0}"
+  # Un sello del eje viejo (entradas, hasta 621) dejaria el nuevo mudo hasta las 646
+  # desviadas. Se descarta lo que no puede venir de este eje.
+  [ "$ULT_N" -le "$DESVIADAS" ] 2>/dev/null || ULT_N=0
   AHORA=$(date +%s)
 
-  if [ "$N" -ge $(( ULT_N + PASO )) ] && [ $(( AHORA - ULT_T )) -ge $(( ESPERA * 3600 )) ]; then
-    "${ONIA_TG:-/root/bin/onia-tg.sh}" "🧠 <b>Memoria</b>: MEMORY.md llegó a ${N} entradas. Revisar qué aprendizajes merecen contexto activo; el excedente queda completo en archivo-aprendizajes. Las reglas no se resumen automáticamente." >/dev/null 2>&1 || true
-    printf '%s %s\n' "$N" "$AHORA" > "$SELLO" 2>/dev/null || true
+  # PASO regula la REPETICION, no la primera vez: mientras no haya un aviso previo de
+  # este eje, un solo desvío ya es noticia. Exigirle 25 dejaba muda justo la vuelta en
+  # que la memoria se llena, que es la unica en que avisar todavia sirve de algo.
+  if [ "$ULT_T" -eq 0 ] 2>/dev/null; then UMBRAL=1; else UMBRAL=$(( ULT_N + PASO )); fi
+
+  if [ "$DESVIADAS" -ge "$UMBRAL" ] && [ $(( AHORA - ULT_T )) -ge $(( ESPERA * 3600 )) ]; then
+    "${ONIA_TG:-/root/bin/onia-tg.sh}" "⚠️ <b>Memoria saturada</b>: MEMORY.md está en $(wc -c < "$MEM")/${MAX_BYTES} bytes y las lecciones nuevas ya NO entran — van ${DESVIADAS} desviadas a archivo-aprendizajes, que ningún prompt inyecta. Hay que decidir qué sale del contexto activo; no se resume solo a propósito." >/dev/null 2>&1 || true
+    printf '%s %s\n' "$DESVIADAS" "$AHORA" > "$SELLO" 2>/dev/null || true
   fi
 fi
 exit 0
