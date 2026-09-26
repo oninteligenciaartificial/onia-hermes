@@ -623,6 +623,12 @@ export function pedidosQueNombranDeMenos(pedidosDelDestino, publicaria) {
 const CAUSAS = new Map();
 
 /**
+ * Los destinos cuyo publicador viene FALLANDO. Salen DESCUBIERTO como cualquier otro, pero su
+ * remedio es el opuesto (`remediosDelDescubierto`): arreglar la máquina, no pedir una firma.
+ */
+const ROTOS = new Set();
+
+/**
  * La salida CRUDA de cada detector, indexada por destino. La primera pregunta («¿le falta
  * publicar?») la reduce a un booleano y tira el resto; la quinta necesita el RECUENTO que la
  * misma salida ya traía. Guardarla es lo que hace que la quinta pregunta cueste cero SSH.
@@ -776,6 +782,60 @@ export function describirPublicadorMudo({ vigente, ultima, ahora } = {}) {
 export function describirDesacuerdo(destino, veredicto) {
   if (!destino || !veredicto) return null;
   return `nuestro detector dice que a ${destino} le falta publicar y el publicador automatico dice "${veredicto}": desacuerdo, no se absuelve a nadie`;
+}
+
+/**
+ * PURA: por qué este destino salió DESCUBIERTO por la MÁQUINA ROTA y no por falta de firma.
+ *
+ * NACE DEL 2026-09-26. `conLoQueFalloDeVerdad` ya sabía marcar `FALLO`, y `seAutoPublicaSegun`
+ * lo aplana —correctamente— a `false` junto con `NECESITA_FIRMA`. De ahí para adelante los dos
+ * son el mismo `DESCUBIERTO`, y este gate imprimía para ambos el mismo remedio: *«abrí un
+ * pedido y que Sergio Urcullo apriete un `ok`»*.
+ *
+ * **Los dos remedios son opuestos, y el equivocado no es inocuo.** Un `ok` dispara el MISMO
+ * `publicar.sh` que acaba de fallar: vuelve a fallar. El pedido nace muerto, y Sergio Urcullo
+ * firma creyendo que publicó — la peor forma de un falso verde, porque la da una persona.
+ *
+ * Medido ese día: el publicador de la landing cortó a las 03:50 UTC con `ERR: el build fallo,
+ * no publico` (un gate de la app que se plantaba ante el árbol recortado del stage), este gate
+ * cantó `DESCUBIERTO landing` y mandó a abrir el pedido. La causa estaba a un `tail` del log y
+ * el instrumento ya la tenía leída.
+ */
+export function describirPublicadorRoto(destino, veredicto) {
+  if (!destino || veredicto !== 'FALLO') return null;
+  return (
+    `la ultima corrida REAL del publicador de ${destino} termino en FALLO (${LOG_SOLO}; el rojo ` +
+    `entero en /tmp/pub-${destino}.log del VPS): no le falta una firma, esta rota la maquina`
+  );
+}
+
+/**
+ * PURA: qué hacer con los descubiertos, separados por la causa. Devuelve las líneas a imprimir.
+ *
+ * `esRoto(destino)` contesta si su publicador viene fallando. Se pasa como función y no se
+ * deduce del texto de la causa a propósito: un remedio elegido por `grep` sobre una frase en
+ * castellano se rompe la primera vez que alguien reescribe la frase, y el modo de falla sería
+ * volver a imprimir el remedio equivocado — exactamente el defecto que esto arregla.
+ */
+export function remediosDelDescubierto(destinos, esRoto) {
+  const rotos = (destinos ?? []).filter((d) => esRoto(d));
+  const sinFirma = (destinos ?? []).filter((d) => !esRoto(d));
+  const lineas = [];
+  if (sinFirma.length > 0) {
+    lineas.push(
+      `Abrir UN pedido por destino descubierto (${sinFirma.join(', ')}), con la linea ` +
+        '"DESPLEGAR: <destino>" en el',
+    );
+    lineas.push('cuerpo y bloqueado con --kind needs_input. La cifra se cita del publicador en seco.');
+  }
+  if (rotos.length > 0) {
+    if (sinFirma.length > 0) lineas.push('');
+    lineas.push(`ARREGLAR, no pedir: ${rotos.join(', ')} — su ultima corrida REAL termino en FALLO.`);
+    lineas.push('  Un "ok" corre el MISMO publicador que acaba de fallar: el pedido nace muerto y');
+    lineas.push('  Sergio Urcullo firma creyendo que publico. El rojo esta en /tmp/pub-<destino>.log');
+    lineas.push('  del VPS: se arregla en esta vuelta y el cron de las 3 h lo publica solo.');
+  }
+  return lineas;
 }
 
 /** Anota una causa sin pisar una explicación mejor que ya esté puesta (igual que `detectar`). */
@@ -984,6 +1044,16 @@ function medirEnVivo() {
       // El CUARTO `null`, y el único que es por destino: los dos instrumentos contestaron y
       // no coinciden. Va con su propia clave o el segundo destino pisaría la causa del primero.
       if (solo === null && verdictos) anotarCausa(`publicador:${d}`, describirDesacuerdo(d, verdictos[d]));
+      // El SEXTO caso, y el único que sale `false` con causa: el publicador no es que no
+      // toque este destino, es que se ROMPIÓ. Sale DESCUBIERTO igual —y está bien, hay
+      // trabajo varado— pero el remedio es el opuesto, así que la causa tiene que viajar.
+      if (solo === false && verdictos) {
+        const roto = describirPublicadorRoto(d, verdictos[d]);
+        if (roto) {
+          ROTOS.add(d);
+          anotarCausa(`publicador:${d}`, roto);
+        }
+      }
       return solo;
     },
     // LA QUINTA PREGUNTA, contra la salida que el detector YA corrió — cero SSH extra.
@@ -995,6 +1065,10 @@ function medirEnVivo() {
     const quien = f.pedidos.length ? ` — pedido ${f.pedidos.join(', ')}` : '';
     if (f.estado === 'DESCUBIERTO') {
       console.log(`DESCUBIERTO ${f.destino}: tiene arreglos sin publicar y NINGUN pedido vivo los pide.`);
+      // La causa distingue el que espera una firma del que tiene el publicador roto. Sin
+      // esta línea los dos se leen igual y el remedio de abajo se elige a ciegas.
+      const causa = CAUSAS.get(`publicador:${f.destino}`);
+      if (causa) console.log(`  causa: ${causa}`);
     } else if (f.estado === 'NO_MEDIDO') {
       console.log(`NO MEDIDO ${f.destino}: ${f.motivo}${quien}`);
       // `fuente` dice a cuál de los dos instrumentos preguntarle la causa. Sin esta línea,
@@ -1031,10 +1105,10 @@ function medirEnVivo() {
     }
   }
 
-  if (filas.some((f) => f.estado === 'DESCUBIERTO')) {
+  const descubiertos = filas.filter((f) => f.estado === 'DESCUBIERTO').map((f) => f.destino);
+  if (descubiertos.length > 0) {
     console.log('');
-    console.log('Abrir UN pedido por destino descubierto, con la linea "DESPLEGAR: <destino>" en el');
-    console.log('cuerpo y bloqueado con --kind needs_input. La cifra se cita del publicador en seco.');
+    for (const linea of remediosDelDescubierto(descubiertos, (d) => ROTOS.has(d))) console.log(linea);
     return 1;
   }
   if (filas.some((f) => f.estado === 'NO_MEDIDO')) return 2;
@@ -1215,6 +1289,29 @@ function selfCheck() {
     clasificarCobertura({ destinos: ['bot'], pedidos: sinPedidos, pendiente: () => true, seAutoPublica: () => null, describeLoQuePublica: nadieEstaCorto, ahora: AHORA })[0].estado === 'NO_MEDIDO',
     'sin saber si se publica solo NO puede salir ni DESCUBIERTO ni absuelto',
   );
+
+  // ── DESCUBIERTO tiene DOS causas y DOS remedios opuestos (2026-09-26) ───────────────
+  // El destino cuya última corrida REAL terminó en `FALLO` sale DESCUBIERTO igual que el
+  // que espera una firma: `seAutoPublicaSegun` aplana los dos a `false` y de ahí en
+  // adelante son indistinguibles. Pero lo que cura a uno no cura al otro — y el remedio
+  // que este gate imprimía era el del OTRO.
+  ok(describirPublicadorRoto('landing', 'FALLO') !== null, 'un FALLO del publicador tiene que tener causa propia');
+  ok(describirPublicadorRoto('landing', 'NECESITA_FIRMA') === null, 'lo que espera firma NO es la maquina rota');
+  ok(describirPublicadorRoto('landing', undefined) === null, 'sin veredicto no se inventa una maquina rota');
+  {
+    const soloFirma = remediosDelDescubierto(['bot'], () => false).join('\n');
+    ok(/Abrir UN pedido/.test(soloFirma), 'al que le falta firma se le abre el pedido de siempre');
+    ok(!/ARREGLAR/.test(soloFirma), 'al que le falta firma NO se le manda arreglar la maquina');
+
+    const soloRoto = remediosDelDescubierto(['landing'], (d) => d === 'landing').join('\n');
+    ok(/ARREGLAR/.test(soloRoto), 'al publicador roto se lo manda ARREGLAR');
+    ok(!/Abrir UN pedido/.test(soloRoto), 'un publicador roto NO se cura con un ok: pedirlo es mandar a Sergio Urcullo a firmar en falso');
+
+    // Los dos a la vez: ningún remedio puede tapar al otro, y cada uno nombra SUS destinos.
+    const mezcla = remediosDelDescubierto(['landing', 'bot'], (d) => d === 'landing').join('\n');
+    ok(/ARREGLAR[^\n]*landing/.test(mezcla) && !/ARREGLAR[^\n]*bot/.test(mezcla), 'el remedio de arreglar nombra solo al roto');
+    ok(/Abrir UN pedido[^\n]*bot/.test(mezcla) && !/Abrir UN pedido[^\n]*landing/.test(mezcla), 'el remedio de pedir nombra solo al que espera firma');
+  }
   // ── ¿y si el pedido SOBRA? (2026-09-19) ─────────────────────────────────────────────
   // Falta publicar, HAY pedido, y el cron lo publica solo igual: ese `ok` no hace falta.
   // Hasta hoy la cadena cortaba en «hay pedido» y nunca llegaba a preguntarlo, así que el
