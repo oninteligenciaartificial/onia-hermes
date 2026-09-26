@@ -12,6 +12,32 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-26 02:09-02:12 La Paz — `BUILD_ID` sin cambios, rotado a Servicios profesionales, 9/9 — CIERRA la rotación de los 5 rubros
+
+`ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado primero: `4FWMcecd4jRBGUVwStDQb`, igual al de
+la vuelta anterior (Importadora). Tablero revisado: nada `ready` sin reclamar en la zona
+`recorrido-cliente`. Correspondía Servicios profesionales, el único rubro que faltaba contra este
+build.
+
+`RECORRIDO_RUBRO='Servicios profesionales' node scripts/recorrido_cliente.mjs --escribir`:
+**RECORRIDO COMPLETO, 9/9 pasos, sin hallazgo.** Cuenta `zz-qa-2026-09-26-0209@onia.com.bo`,
+confirmación de correo antes del primer login, onboarding en 6 pantallas (horarios lun-vie 09-13
+y 15-19), paciente `zz-qa-2026-09-26-0209-paciente` cargado en `/patients` y encontrado de
+vuelta, cita `zz-qa-2026-09-26-0209-cita` agendada (201, `cmuhr8wrk006z01r2l229id3u`) para
+2026-09-28 09:00 y VISTA en `/appointments`, pantalla de cobro (`/comercio/caja`) vista y
+frenada sin pagar, dato del paso 6 no aparece en `/dashboard` (esperado: el panel no lista el
+group Clientes). `resumen.json`: `llegoHasta 9/9`, `completo: true`, `agujeros: []`. Todo lo
+`zz-qa-` borrado en la misma corrida: `organizations`/`appointments` con `zz-qa-%` → 0,
+verificado con `SELECT` después de borrar.
+
+**Con esto quedan re-verificados los 5 rubros del alta (dental, comercio, estética, importadora,
+servicios profesionales) contra el mismo `BUILD_ID` `4FWMcecd4jRBGUVwStDQb`, todos sin hallazgo.**
+
+RAZÓN: N/A — avanzó (rotación completa de los 5 rubros contra el `BUILD_ID` vigente).
+LECCIÓN: ninguna nueva. Próxima vuelta: comparar `BUILD_ID` primero; si sigue igual, la rotación
+por rubro ya está agotada — pasar a otro escalón (promesa vs. entrega en la home, u otro paso del
+recorrido que hoy no se cubra) en vez de repetir un rubro ya verificado contra este mismo build.
+
 ## 2026-09-26 01:09-01:11 La Paz — `BUILD_ID` sin cambios, rotado a Importadora, 8/8 sin hallazgo
 
 `ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado primero: `4FWMcecd4jRBGUVwStDQb`, igual al

@@ -1,7 +1,7 @@
 {
-  "cuando": "2026-09-26T01:14:53.491Z",
-  "rubro": "Importadora / distribuidora",
-  "rubroPromesa": "local_shipping Importadora / distribuidora Catálogo, cotizaciones B2B y costeo de importación",
+  "cuando": "2026-09-26T02:13:33.378Z",
+  "rubro": "Servicios profesionales",
+  "rubroPromesa": "work Servicios profesionales Agenda, citas, cobros y contabilidad",
   "escribio": true,
   "saltoEquipo": false,
   "recoveryProbado": null,
@@ -10,15 +10,17 @@
     "ok": true,
     "antes": {
       "cuentas": {
-        "citas": 0,
-        "pacientes": 0,
+        "citas": 1,
+        "pacientes": 1,
         "perfiles": 2,
         "organizaciones": 1,
         "usuarios": 1
       },
       "filas": [
-        "organizations cmuhp2q9y006101r2vb2cprfa zz-qa-2026-09-26-0111",
-        "auth.users 7316231a-bd9a-4e40-9498-36ebfbb6563a zz-qa-2026-09-26-0111@onia.com.bo"
+        "appointments cmuhr8wrk006z01r2l229id3u zz-qa-2026-09-26-0209-cita",
+        "patients cmuhr8jrv006x01r2e2aj7uj2 zz-qa-2026-09-26-0209-paciente",
+        "organizations cmuhr5kez006k01r2kaou22rq zz-qa-2026-09-26-0209",
+        "auth.users df0c4e0d-6475-4976-9ce6-ef7c297574f1 zz-qa-2026-09-26-0209@onia.com.bo"
       ],
       "ajenas": []
     },
@@ -40,24 +42,18 @@
   "deCuantos": 9,
   "corte": null,
   "agujeros": [],
-  "noAplican": [
-    {
-      "paso": 7,
-      "nombre": "cita",
-      "detalle": "\"Importadora / distribuidora\" no vende agenda —su tarjeta de /register ofrece \"local_shipping Importadora / distribuidora Catálogo, cotizaciones B2B y costeo de importación\"— y el producto es coherente: su menú tampoco la tiene. No hay nada que agendar acá: forum Conversaciones · storefront Catálogo · request_quote Cotizaciones · inventory_2 Inventario · directions_boat Costeo de importación · trending_up Alerta de reprecio · point_of_saleVentas · credit_scoreCréditos · groupsClientes · receipt_longGastos · account_balanceContabilidad · badgePlanilla · smart_toyAgentes · task_altRequerimientos · manage_accountsEquipo · settingsConfiguración · helpAyuda · Z zz-qa-2026-09-26-0111 Ver perfil"
-    }
-  ],
+  "noAplican": [],
   "datosQA": {
-    "nombre": "zz-qa-2026-09-26-0111",
-    "negocio": "zz-qa-2026-09-26-0111-negocio",
-    "email": "zz-qa-2026-09-26-0111@onia.com.bo",
+    "nombre": "zz-qa-2026-09-26-0209",
+    "negocio": "zz-qa-2026-09-26-0209-negocio",
+    "email": "zz-qa-2026-09-26-0209@onia.com.bo",
     "whatsapp": "59170000000",
     "ciudad": "zz-qa-ciudad",
     "password": "zz-qa-2026-09-26-Passw0rd!",
-    "paciente": "zz-qa-2026-09-26-0111-paciente",
-    "profesional": "zz-qa-2026-09-26-0111-profesional",
-    "cita": "zz-qa-2026-09-26-0111-cita",
-    "itemFactura": "zz-qa-2026-09-26-0111-item"
+    "paciente": "zz-qa-2026-09-26-0209-paciente",
+    "profesional": "zz-qa-2026-09-26-0209-profesional",
+    "cita": "zz-qa-2026-09-26-0209-cita",
+    "itemFactura": "zz-qa-2026-09-26-0209-item"
   },
   "pasos": [
     {
@@ -65,7 +61,7 @@
       "nombre": "home",
       "que": "Entrar a onia.com.bo y que se VEA",
       "estado": "ok",
-      "detalle": "cargó en 1836 ms, 8721 caracteres visibles",
+      "detalle": "cargó en 1910 ms, 8721 caracteres visibles",
       "captura": "hermes-content/docs/recorrido/capturas/paso-01-home.png",
       "dom": {
         "textoVisible": 8721,
@@ -130,7 +126,7 @@
       "nombre": "pedir-acceso",
       "que": "Pedir acceso / registrarse con datos zz-qa-",
       "estado": "ok",
-      "detalle": "cuenta zz-qa-2026-09-26-0111@onia.com.bo creada; el alta pide CONFIRMAR EL CORREO antes del primer login — la pantalla dice: \"Tu negocio completo, en un solo sistema. bolt Activación acompañada Tu sistema llega con la configuración de tu rubro pu\"",
+      "detalle": "cuenta zz-qa-2026-09-26-0209@onia.com.bo creada; el alta pide CONFIRMAR EL CORREO antes del primer login — la pantalla dice: \"Tu negocio completo, en un solo sistema. bolt Activación acompañada Tu sistema llega con la configuración de tu rubro pu\"",
       "campos": [
         {
           "tag": "input",
@@ -145,7 +141,7 @@
           "tipo": "text",
           "name": "",
           "id": "",
-          "placeholder": "Carlos Rojas",
+          "placeholder": "María Fernanda Paz",
           "requerido": true
         },
         {
@@ -153,7 +149,7 @@
           "tipo": "email",
           "name": "",
           "id": "",
-          "placeholder": "gerente@importadora.bo",
+          "placeholder": "contacto@estudio.bo",
           "requerido": true
         },
         {
@@ -169,7 +165,7 @@
           "tipo": "text",
           "name": "",
           "id": "",
-          "placeholder": "Importadora Eléctrica del Sur",
+          "placeholder": "Estudio Contable Rojas",
           "requerido": true
         },
         {
@@ -225,7 +221,7 @@
       "nombre": "elegir-rubro",
       "que": "Elegir rubro y terminar el onboarding",
       "estado": "ok",
-      "detalle": "onboarding COMPLETADO en 6 pantallas (pregunta → negocio → horarios → servicios → equipo → listo); /dashboard ya no rebota; horarios cargados, la agenda no se pudo leer (este rubro puede no tenerla)",
+      "detalle": "onboarding COMPLETADO en 6 pantallas (pregunta → negocio → horarios → servicios → equipo → listo); /dashboard ya no rebota; horarios cargados, 5 fila(s) de agenda",
       "traza": [
         {
           "pantalla": "pregunta",
@@ -244,31 +240,31 @@
         },
         {
           "pantalla": "servicios",
-          "vio": "¿Qué vendés y a cuánto?",
+          "vio": "¿Qué hacés y a cuánto?",
           "apreto": "Saltar por ahora"
         },
         {
           "pantalla": "equipo",
           "vio": "¿Quién más trabaja con vos?",
-          "apreto": "Terminar (profesional zz-qa-2026-09-26-0111-profesional; cierra el alta)"
+          "apreto": "Terminar (profesional zz-qa-2026-09-26-0209-profesional; cierra el alta)"
         },
         {
           "pantalla": "listo",
-          "vio": "zz-qa-2026-09-26-0111 ya está en Onia",
+          "vio": "zz-qa-2026-09-26-0209 ya está en Onia",
           "apreto": "—"
         }
       ],
       "horariosCargados": true,
       "profesionalCargado": true,
-      "agendas": -1,
+      "agendas": 5,
       "capturaAsistente": "hermes-content/docs/recorrido/capturas/paso-05b-onboarding-listo.png",
       "status": 200,
-      "ms": 3384,
+      "ms": 4379,
       "urlFinal": "https://app.onia.com.bo/dashboard",
       "captura": "hermes-content/docs/recorrido/capturas/paso-05c-gate-levantado.png",
       "dom": {
-        "textoVisible": 1211,
-        "secciones": 4,
+        "textoVisible": 1531,
+        "secciones": 6,
         "seccionesInvisibles": 0,
         "titulo": "Onia | El sistema con IA que maneja tu negocio en Bolivia"
       },
@@ -283,7 +279,7 @@
       "nombre": "cargar-dato",
       "que": "Cargar un dato real del rubro (un cliente, un paciente, un producto)",
       "estado": "ok",
-      "detalle": "\"zz-qa-2026-09-26-0111-paciente\" cargado en storefront Catálogo (/comercio) y encontrado de vuelta en la lista",
+      "detalle": "\"zz-qa-2026-09-26-0209-paciente\" cargado en group Clientes (/patients) y encontrado de vuelta en la lista",
       "capturaAlta": "hermes-content/docs/recorrido/capturas/paso-06b-alta-dato.png",
       "campos": [
         {
@@ -291,7 +287,7 @@
           "tag": "input",
           "tipo": "text",
           "name": "",
-          "placeholder": "Cemento IP-30 50kg",
+          "placeholder": "Ej: Juan Carlos Mamani",
           "etiqueta": "",
           "requerido": true,
           "visible": true
@@ -301,7 +297,7 @@
           "tag": "input",
           "tipo": "text",
           "name": "",
-          "placeholder": "62.00",
+          "placeholder": "1234567",
           "etiqueta": "",
           "requerido": false,
           "visible": true
@@ -311,74 +307,44 @@
           "tag": "input",
           "tipo": "text",
           "name": "",
-          "placeholder": "CEM-IP30-50",
+          "placeholder": "+591 70000000",
           "etiqueta": "",
-          "requerido": true,
+          "requerido": false,
           "visible": true
         },
         {
           "i": 3,
           "tag": "input",
-          "tipo": "text",
+          "tipo": "email",
           "name": "",
-          "placeholder": "unidad / bolsa / kg",
+          "placeholder": "cliente@email.com",
           "etiqueta": "",
           "requerido": false,
           "visible": true
         },
         {
           "i": 4,
-          "tag": "input",
-          "tipo": "text",
+          "tag": "textarea",
+          "tipo": "textarea",
           "name": "",
-          "placeholder": "120",
-          "etiqueta": "",
-          "requerido": false,
-          "visible": true
-        },
-        {
-          "i": 5,
-          "tag": "input",
-          "tipo": "text",
-          "name": "",
-          "placeholder": "52.50",
-          "etiqueta": "",
-          "requerido": false,
-          "visible": true
-        },
-        {
-          "i": 6,
-          "tag": "input",
-          "tipo": "date",
-          "name": "",
-          "placeholder": "",
-          "etiqueta": "",
-          "requerido": false,
-          "visible": true
-        },
-        {
-          "i": 7,
-          "tag": "input",
-          "tipo": "text",
-          "name": "",
-          "placeholder": "L-2609",
+          "placeholder": "Observaciones adicionales...",
           "etiqueta": "",
           "requerido": false,
           "visible": true
         }
       ],
       "status": 200,
-      "ms": 1617,
-      "urlFinal": "https://app.onia.com.bo/comercio",
+      "ms": 2620,
+      "urlFinal": "https://app.onia.com.bo/patients",
       "captura": "hermes-content/docs/recorrido/capturas/paso-06c-dato-en-la-lista.png",
       "dom": {
-        "textoVisible": 744,
-        "secciones": 3,
+        "textoVisible": 756,
+        "secciones": 4,
         "seccionesInvisibles": 0,
         "titulo": "Onia | El sistema con IA que maneja tu negocio en Bolivia"
       },
-      "destino": "/comercio",
-      "pedida": "/comercio",
+      "destino": "/patients",
+      "pedida": "/patients",
       "llego": true,
       "tapa": null,
       "despejo": false
@@ -387,33 +353,71 @@
       "n": 7,
       "nombre": "cita",
       "que": "Agendar una cita zz-qa- con el paciente del paso 6 y VERLA en la agenda",
-      "estado": "no-aplica",
-      "detalle": "\"Importadora / distribuidora\" no vende agenda —su tarjeta de /register ofrece \"local_shipping Importadora / distribuidora Catálogo, cotizaciones B2B y costeo de importación\"— y el producto es coherente: su menú tampoco la tiene. No hay nada que agendar acá: forum Conversaciones · storefront Catálogo · request_quote Cotizaciones · inventory_2 Inventario · directions_boat Costeo de importación · trending_up Alerta de reprecio · point_of_saleVentas · credit_scoreCréditos · groupsClientes · receipt_longGastos · account_balanceContabilidad · badgePlanilla · smart_toyAgentes · task_altRequerimientos · manage_accountsEquipo · settingsConfiguración · helpAyuda · Z zz-qa-2026-09-26-0111 Ver perfil",
-      "promesa": "local_shipping Importadora / distribuidora Catálogo, cotizaciones B2B y costeo de importación",
-      "prometeAgenda": false
+      "estado": "ok",
+      "detalle": "cita 2026-09-28 09:00 con zz-qa-2026-09-26-0209-paciente agendada (201, id cmuhr8wrk006z01r2l229id3u) y VISTA en la agenda de https://app.onia.com.bo/appointments",
+      "elegido": {
+        "paciente": "zz-qa-2026-09-26-0209-paciente",
+        "profesional": "zz-qa-2026-09-26-0209",
+        "motivo": "Consulta general",
+        "hora": "09:00"
+      },
+      "fecha": "2026-09-28",
+      "altaInline": null,
+      "botonSinNombre": false,
+      "capturaFormulario": "hermes-content/docs/recorrido/capturas/paso-07b-cita-formulario.png",
+      "status": 200,
+      "ms": 2437,
+      "urlFinal": "https://app.onia.com.bo/appointments",
+      "captura": "hermes-content/docs/recorrido/capturas/paso-07d-cita-en-agenda.png",
+      "dom": {
+        "textoVisible": 834,
+        "secciones": 3,
+        "seccionesInvisibles": 0,
+        "titulo": "Onia | El sistema con IA que maneja tu negocio en Bolivia"
+      },
+      "destino": "/appointments",
+      "pedida": "/appointments",
+      "llego": true,
+      "tapa": null,
+      "despejo": false,
+      "agenda": {
+        "ruta": "/appointments",
+        "texto": "event Citas"
+      },
+      "red": {
+        "post": {
+          "status": 201,
+          "body": "{\"id\":\"cmuhr8wrk006z01r2l229id3u\",\"organizationId\":\"cmuhr5kez006k01r2kaou22rq\",\"patientId\":\"cmuhr8jrv006x01r2e2aj7uj2\",\"doctorId\":\"cmuhr5kf7006l01r2gez8usgr\",\"dateTime\":\"2026-09-28T13:00:00.000Z\",\"durationMin\":30,\"status\":\"PENDIENTE\",\"reason\":\"Consulta general\",\"notes\":\"zz-qa-2026-09-26-0209-cita\",\""
+        },
+        "disponibilidad": {
+          "status": 200,
+          "slots": 16,
+          "libres": 16
+        }
+      }
     },
     {
       "n": 8,
       "nombre": "cobro",
       "que": "Llegar a la pantalla de cobro y MIRARLA. Frenar ahí",
       "estado": "ok",
-      "detalle": "la pantalla de cobro (credit_scoreCréditos) a la vista en https://app.onia.com.bo/comercio/fiados — FRENADO acá a propósito",
+      "detalle": "la pantalla de cobro (Caja) a la vista en https://app.onia.com.bo/comercio/caja — FRENADO acá a propósito",
       "menuCobro": {
-        "ruta": "/comercio/fiados",
-        "texto": "credit_scoreCréditos"
+        "ruta": "/comercio/caja",
+        "texto": "point_of_sale Caja"
       },
       "status": 200,
-      "ms": 1625,
-      "urlFinal": "https://app.onia.com.bo/comercio/fiados",
+      "ms": 2024,
+      "urlFinal": "https://app.onia.com.bo/comercio/caja",
       "captura": "hermes-content/docs/recorrido/capturas/paso-08-cobro.png",
       "dom": {
-        "textoVisible": 1177,
+        "textoVisible": 984,
         "secciones": 3,
         "seccionesInvisibles": 0,
         "titulo": "Onia | El sistema con IA que maneja tu negocio en Bolivia"
       },
-      "destino": "/comercio/fiados",
-      "pedida": "/comercio/fiados",
+      "destino": "/comercio/caja",
+      "pedida": "/comercio/caja",
       "llego": true,
       "tapa": null,
       "despejo": false
@@ -423,15 +427,15 @@
       "nombre": "bandeja",
       "que": "Abrir la bandeja / el panel y ver si el dato del paso 6 aparece",
       "estado": "ok",
-      "detalle": "panel en https://app.onia.com.bo/dashboard: el dato \"zz-qa-2026-09-26-0111-paciente\" NO figura en el panel — sí quedó guardado y visible en storefront Catálogo (paso 6). El panel no lista storefront catálogo: no es un fallo, es lo que muestra",
+      "detalle": "panel en https://app.onia.com.bo/dashboard: el dato \"zz-qa-2026-09-26-0209-paciente\" NO figura en el panel — sí quedó guardado y visible en group Clientes (paso 6). El panel no lista group clientes: no es un fallo, es lo que muestra",
       "datoEnElPanel": false,
       "status": 200,
-      "ms": 2076,
+      "ms": 3089,
       "urlFinal": "https://app.onia.com.bo/dashboard",
       "captura": "hermes-content/docs/recorrido/capturas/paso-09-bandeja.png",
       "dom": {
-        "textoVisible": 1334,
-        "secciones": 4,
+        "textoVisible": 1533,
+        "secciones": 6,
         "seccionesInvisibles": 0,
         "titulo": "Onia | El sistema con IA que maneja tu negocio en Bolivia"
       },
