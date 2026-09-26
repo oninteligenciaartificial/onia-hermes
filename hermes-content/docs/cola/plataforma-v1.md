@@ -7985,7 +7985,8 @@ y sin operar. Acá se opera, con verificación por ítem.
 
       ⚠️ **NO llega al cliente todavía:** `800a583` **no es ancestro de `origin/master`**;
       necesita merge (`onia-cola`) para viajar en el deploy que espera el `ok` de Sergio Urcullo
-      (`t_deddf471`). Anotado ahí, sin abrir un pedido nuevo.
+      — **el pedido vivo se deriva, no se copia**: lo imprime `npm run deploy:sin-pedido`. Anotado
+      ahí, sin abrir un pedido nuevo.
 
 - [x] 🔴 **CERRADO el 2026-09-07: al profesional le avisábamos la cita con una hora 4 h
       adelantada — y a la noche, con el día cambiado.**
@@ -8025,7 +8026,8 @@ y sin operar. Acá se opera, con verificación por ítem.
       ⚠️ **NO llega al cliente todavía:** `eec06d7` **no es ancestro de `origin/master`**
       (comprobado con `git merge-base --is-ancestor`), así que **no viaja en el swap que hoy
       espera el `ok`** — el dry-run del publicador cuenta 4 arreglos sobre `HEAD 7c4ff18` y
-      éste no es uno. Entra cuando `onia-cola` mergee la rama. Anotado en `t_deddf471`, sin
+      éste no es uno. Entra cuando `onia-cola` mergee la rama. Anotado en el pedido de deploy vivo
+      —que lo imprime `npm run deploy:sin-pedido`, porque el id caduca cada vez que se rehace—, sin
       abrir un pedido nuevo.
 
 - [x] 🔴 **CERRADO el 2026-09-08: agotado el cupo mensual de correos, la confirmación de la
