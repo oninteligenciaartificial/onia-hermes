@@ -324,7 +324,9 @@ test("TIMEOUT: un signal que YA venia abortado no dispara la reserva a ciegas", 
 // El tope de 5 s de arriba existe para que un prospecto no espere para siempre. Pero el 100%
 // del trafico real lo AGOTA: `CALCOM_BASE_URL=http://calcom:3000` esta declarado en el proceso
 // vivo y no existe ningun contenedor `calcom` (medido el 2026-09-18 y reproducido el 2026-09-26
-// desde `onia-center`: `fetch` a ese host devuelve AbortError a los 5005 ms, no ENOTFOUND). O
+// desde `onia-center`: el DNS de Docker no contesta NXDOMAIN por ese nombre — `dns.lookup` cuelga
+// hasta `EAI_AGAIN` a los 5013 ms, y el abort de los 5000 ms le gana por 13 ms, asi que el fallo
+// llega como AbortError por una carrera, no porque el destino conteste). O
 // sea que el tope se cobra ENTERO, y se lo cobra al prospecto justo en el turno donde acepta un
 // horario — el unico turno del embudo que produce plata.
 //
@@ -434,4 +436,65 @@ test("DESTINO CAIDO: se cura solo — el dia que Cal.com exista, nadie tiene que
 test("DESTINO CAIDO: la ventana no puede ser tan larga que tape un Cal.com que volvio", () => {
   assert.ok(Number(DESTINO_CAIDO_MS) > 0, "sin ventana esto no es memoria, es un apagado");
   assert.ok(Number(DESTINO_CAIDO_MS) <= 30 * 60 * 1000, "mas de media hora ciego es apagar el calendario a mano sin decirlo");
+});
+
+// ---------------------------------------------------------------------------
+// EL NOMBRE QUE NO RESUELVE — lo que falla de verdad en produccion
+// ---------------------------------------------------------------------------
+// Medido el 2026-09-26 DENTRO de `onia-center`, no deducido: `dns.lookup("calcom")` tarda
+// 5013 ms y termina en `EAI_AGAIN`, mientras el control `dns.lookup("onia-platform")` resuelve
+// en 8 ms. O sea que el DNS de Docker no contesta NXDOMAIN por ese nombre: CUELGA.
+//
+// De ahi salen las dos cosas que este bloque fija:
+//
+//   1. NO sirve chequear el DNS antes de reservar para ahorrarle los 5 s al prospecto —
+//      resolver el nombre inexistente cuesta los MISMOS 5 s. Camino descartado con su medicion,
+//      para que la proxima vuelta no lo vuelva a intentar.
+//   2. El `detalle` del warning se decidia por una CARRERA de 13 ms: el `AbortController`
+//      aborta a los 5000 ms y el DNS falla a los 5013 ms. Gana el abort, y por eso el log vivo
+//      dice "no contesto en 5000ms (timeout)". Si el resolver contestara un poco antes —o el
+//      tope fuera un poco mayor— el mismo fallo saldria como "fetch failed" pelado, que es
+//      exactamente el mensaje generico que el `catch` dice querer evitar: manda a diagnosticar
+//      la red del prospecto cuando el que no existe es nuestro destino.
+//
+// Node envuelve el fallo de resolucion en un `TypeError: fetch failed` y deja el codigo real en
+// `cause.code`. Un diagnostico que depende de quien gane una carrera de 13 ms no es diagnostico.
+
+test("DNS: un nombre que no resuelve se NOMBRA, no sale como 'fetch failed' pelado", async () => {
+  olvidarDestinoCaido();
+  const f = async () => {
+    const e = new TypeError("fetch failed");
+    e.cause = Object.assign(new Error("getaddrinfo EAI_AGAIN calcom"), { code: "EAI_AGAIN" });
+    throw e;
+  };
+  const r = await createBooking({ config: CONFIG, startAt: START }, { fetch: f });
+
+  assert.equal(r.ok, false, "si el nombre no resuelve no hay reserva");
+  assert.equal(r.reason, "error");
+  const warning = (r.warnings || []).join(" · ");
+  assert.match(
+    warning,
+    /no resuelve/,
+    `el warning tiene que decir que el NOMBRE del destino no resuelve, y decia: ${warning}`,
+  );
+  assert.ok(
+    !/^calcom: la reserva no salio: fetch failed$/.test(warning),
+    "'fetch failed' pelado manda a diagnosticar la red del prospecto",
+  );
+});
+
+test("DNS: el nombre que no resuelve tambien cierra el destino (el que sigue no paga la espera)", async () => {
+  olvidarDestinoCaido();
+  let intentos = 0;
+  const f = async () => {
+    intentos += 1;
+    const e = new TypeError("fetch failed");
+    e.cause = Object.assign(new Error("getaddrinfo ENOTFOUND calcom"), { code: "ENOTFOUND" });
+    throw e;
+  };
+  await createBooking({ config: CONFIG, startAt: START }, { fetch: f });
+  const segunda = await createBooking({ config: CONFIG, startAt: START }, { fetch: f });
+
+  assert.equal(intentos, 1, "el segundo prospecto no tiene que volver a esperar un nombre que no resuelve");
+  assert.equal(segunda.reason, "destino_caido");
 });
