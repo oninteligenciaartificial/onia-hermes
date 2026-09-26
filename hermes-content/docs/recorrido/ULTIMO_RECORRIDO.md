@@ -12,6 +12,49 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-26 (vuelta HEAD 74204b21) — `BUILD_ID` sin cambios; el eje que dejó la vuelta anterior ya está automatizado — sin hallazgo
+
+`ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado primero contra la entrada de arriba:
+`4FWMcecd4jRBGUVwStDQb`, **igual** — no correspondía repetir el recorrido end-to-end (9/9 ya
+cerrado en los 5 rubros contra este build). Tablero: sin tareas `ready` sin reclamar en la zona
+`recorrido-cliente`. `t_c53fe39c` (badge de plazo en `/guia-facturacion`) figura `done`;
+reverificado en vivo con `curl -s https://onia.com.bo/guia-facturacion | grep -o 'Plazo[^<]*'`:
+ya dice `01-10-2026` en producción, no `30-09-2026` — el deploy que la vuelta del 17-sep daba
+por pendiente ya ocurrió.
+
+La LECCIÓN de la vuelta anterior pedía "cruzar cada cifra citada contra su fuente en el
+producto real, no solo contra `subscription-plans.ts`/`pricing.ts`". Antes de hacerlo a mano
+encontré que `web-factory/apps/onia-platform/scripts/precios-fuente.mjs` YA hace exactamente
+eso — 44 cifras del sitio cruzadas contra el código que cobra, incluidos límites y features por
+plan (no solo montos) — y corre en verde: `node scripts/precios-fuente.mjs` → `VERDE: las 44
+cifras que publica el sitio son las que cobra el producto...`. Repetirlo a mano habría sido
+repetir sin verificar (la propia regla del carril).
+
+Con ese eje ya cubierto por un gate existente, probé el mismo tipo de cruce en dos superficies
+sin cobertura automática: el cupo del chatbot (`content/chatbot-precios.ts`:
+`CONVERSACIONES_INCLUIDAS=500`, recarga 200 que caduca a fin de mes, guardado por
+`(sitio)/extra-que-caduca.test.ts`) coincide con lo que la memoria del sistema describe como lo
+que el motor aplica — sin hallazgo. Y un grep de `MUY PRONTO|PRÓXIMAMENTE|en construcción|beta`
+sobre todo `app/content/components` de la web de venta: las únicas apariciones son en
+COMENTARIOS que narran bugs ya arreglados (ej. `app/v1/empezar/data.ts`, `RUBRO_OPTIONS` ya no
+tiene campo `disponible`, guardado por `obra-en-la-pantalla.test.ts`) — cero superficie viva con
+esas palabras. Grep usado para DESCARTAR, no para confirmar; lo que confirma es que no hay ni un
+literal fuera de comentario, y los gates ya citados sostienen el resto.
+
+RAZÓN de no-avance en la medida `llegoHasta/completo`: no corresponde repetir el recorrido
+end-to-end (build sin cambios). El escalón 3 por superficie sigue agotado (24/24 rutas con al
+menos una auditoría) y el escalón de "promesa vs. entrega" tiene ya dos gates de código
+(`precios-fuente.mjs`, `extra-que-caduca.test.ts`, `obra-en-la-pantalla.test.ts`) cubriendo los
+puntos más caros — mirarlos a mano otra vez es reverificar lo ya medido.
+LECCIÓN: **antes de cruzar una cifra o promesa "a mano", grepear si ya existe un gate de código
+que lo haga** (`grep -rl` del dato en `*.test.ts` de `web-factory/apps/onia-platform`) — si existe
+y corre verde, correrlo y citarlo es la verificación; repetirlo a mano es la sobrevalidación que
+el propio `CLAUDE.md` marca como error. La próxima vuelta sin cambio de `BUILD_ID`: revisar si
+`RUBROS_ACTIVOS` sumó un sexto rubro (dispara escalón 2), o buscar una promesa NO numérica sin
+gate (contractual, de plazo, de disponibilidad) en una superficie ya auditada, no repetir precios.
+
+---
+
 ## 2026-09-26 (vuelta HEAD 2b8a1ac3) — `BUILD_ID` sin cambios; escalón 3: últimas 2 superficies nunca auditadas — sin hallazgo
 
 `ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado primero contra la entrada de arriba:
