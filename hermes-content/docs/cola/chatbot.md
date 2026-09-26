@@ -8887,6 +8887,34 @@ cita: al cerrar una fila hay que barrer quién la nombra, no sólo tacharla.
       (seguir sin borrar), sólo corrige el dato falso para que nadie busque una org que no
       está.
 
+- [ ] **Las líneas `[aviso]` del log del bot no llevan hora, y son las únicas que miden el
+      objetivo de este carril.** Cada línea `[onia-webhook]` trae su marca ISO; las de
+      `[aviso]` salen peladas: `[aviso] sent conv=49 (demo_agendada): aviso enviado`. El
+      objetivo del carril se mide como *«una línea de aviso en el log por cada `demo_agendada`
+      / `handoff_humano`»* — y eso no se puede contar por día ni por evento sobre líneas que
+      no se pueden fechar.
+
+      **Reproducción exacta (2026-09-26, costó cuatro pasos de esta vuelta):**
+
+      ```bash
+      /root/bin/onia-vps.sh bash -lc 'docker exec onia-center sh -c "grep \"^\\[aviso\\]\" /tmp/onia-bot-webhook.log | sort | uniq -c | sort -rn | head"'
+      ```
+
+      Devuelve `10 [aviso] sent conv=49 (demo_agendada): aviso enviado`. Leído así parece UN
+      evento disparando diez avisos a un canal que Sergio Urcullo ya tiene saturado. **No lo
+      es:** son diez corridas de la sonda a lo largo del día, un aviso cada una. Para saberlo
+      hubo que reconstruirlo por la POSICIÓN de las líneas (`grep -n` → 72198…72310, cada ~12
+      líneas, intercaladas con webhooks fechados). Un `grep` de números de línea no es una
+      hora, y el que no lo reconstruya reporta un duplicado que no existe.
+
+      ⚠️ **NO se arregló en esta vuelta a propósito, y el motivo importa:** toca un `.mjs` de
+      `hermes-content/deploy/vps-ops/bot/`, y hay un pedido de deploy del bot **vivo y
+      esperando la firma de Sergio Urcullo** (`t_76cdb5dc`, `DESPLEGAR: bot`) cuyo cuerpo le
+      enumera **13 archivos**. Un archivo más en `main` antes de su `ok` hace que firme 13 y
+      publique 14 — y ese pedido trae el arreglo de las campanas, que vale más que una hora en
+      un log. **Se hace después del `ok`, o rehaciendo el pedido y archivando el viejo en la
+      misma vuelta.**
+
 - [ ] **Botón "Cobrar con QR" dentro de la conversación** (pieza 5 del backlog v5). El
       circuito está completo en mock y verificado mirando (`/bcp/cobrar` + `/bcp/callback`,
       contrato del banco calcado); el código no cambia para el modo real. Espera las
