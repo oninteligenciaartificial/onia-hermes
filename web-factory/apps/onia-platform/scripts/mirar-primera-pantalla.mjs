@@ -54,11 +54,51 @@ const RUTAS = [
 export const MINIMO_PANTALLAS = PANTALLAS.length * RUTAS.length;
 
 /**
- * El umbral con el que se juzga que el titulo TERMINO de aparecer. Es el mismo
- * con el que `waitForFunction` espera, a proposito: si el script esperara una
- * cosa y juzgara otra, una pantalla a medio pintar pasaria en verde.
+ * El umbral con el que se JUZGA que el titulo llego a pintarse.
  */
 export const OPACIDAD_PINTADA = 0.99;
+
+/**
+ * El valor al que se ESPERA antes de medir, y que NO es el que juzga.
+ *
+ * Esperar al umbral del veredicto parece prolijo y es justo el bug: la curva
+ * real del reveal de `/empezar` es `0.989 @5ms -> 0.997 @128ms -> 1 @250ms`,
+ * asi que `>= 0.99` se cumple a los 5 ms y se mide con la animacion todavia
+ * corriendo. Que el valor caiga arriba o abajo del umbral es una moneda al
+ * aire, y de ahi salia el rojo intermitente de `telefono /empezar`.
+ *
+ * Se espera al FIN y se juzga con `OPACIDAD_PINTADA`: el hueco entre los dos
+ * es la tolerancia. Una pantalla que de verdad no pinta no se cuela, porque la
+ * espera vence a los 8 s y el veredicto la juzga con el valor en que quedo.
+ */
+export const OPACIDAD_TERMINADA = 1;
+
+/**
+ * El predicado con el que `waitForFunction` espera el fin del reveal.
+ *
+ * Es una FUNCION y no una cadena a proposito. `waitForFunction` con cadena la
+ * evalua DENTRO de la pagina con `eval`, y la CSP que la landing estreno el
+ * 24-sep no permite 'unsafe-eval' (la de produccion es la misma): la espera
+ * moria en 18 ms con `EvalError`, el `catch` se la tragaba muda y la linea
+ * siguiente media a mitad del reveal. Con una funcion de verdad Playwright no
+ * usa `eval` y la espera retiene — medido: 160-175 ms y opacidad 1, tres de
+ * tres. `leer` solo se inyecta desde el test; en la pagina llega `undefined`.
+ */
+export const REVEAL_TERMINADO = ({ sel, hasta, leer }) => {
+  const medir =
+    leer ||
+    ((s) => {
+      const el = document.querySelector(s);
+      if (!el) return -1;
+      let min = 1;
+      for (let n = el; n && n !== document.body; n = n.parentElement) {
+        const o = parseFloat(getComputedStyle(n).opacity);
+        if (!Number.isNaN(o) && o < min) min = o;
+      }
+      return min;
+    });
+  return medir(sel) >= hasta;
+};
 
 /**
  * El unico estado que este instrumento NO puede atribuir, y por que.
@@ -162,6 +202,23 @@ export function esDefecto(fallida, base) {
 }
 
 /**
+ * Si la base es un servidor de esta maquina. Importa para UNA cosa: contra un
+ * `next start` local lo que se mide ES el arbol, asi que el build vivo no puede
+ * estar atrasado y nombrar el deploy mandaria al lugar equivocado.
+ *
+ * Se pregunta por el host y no por "empieza con http://": un dominio servido
+ * por HTTP sigue siendo remoto.
+ */
+export function esBaseLocal(base) {
+  try {
+    const h = new URL(base).hostname;
+    return h === "localhost" || h === "127.0.0.1" || h === "::1" || h === "[::1]";
+  } catch {
+    return false;
+  }
+}
+
+/**
  * La base se valida en vez de tomarse cruda de `argv[2]`, porque asi
  * `mirar-primera-pantalla.mjs --out=/tmp/x` tomaba la BANDERA como URL. Y el
  * defecto por defecto era peor: sin argumento apuntaba a `127.0.0.1:3111`, que
@@ -190,9 +247,14 @@ export function baseValida(arg) {
  * Devuelve `{ codigo, lineas }` con la MISMA convencion que el resto de los
  * gates del carril: 0 verde, 1 rojo.
  */
-export function veredicto(informe, base = "https://onia.com.bo") {
+export function veredicto(informe, base = "https://onia.com.bo", { arreglosVarados } = {}) {
   const lineas = [];
   let codigo = 0;
+  // Se separa el defecto DEL SITIO (lo que el lead ve) del defecto DEL
+  // INSTRUMENTO (este script dejo de medir). Solo el primero puede venir de un
+  // build viejo; decirle al segundo "esperá el deploy" seria mandar a esperar
+  // un arreglo que nadie escribio.
+  let defectoDeSitio = false;
 
   for (const r of informe) {
     lineas.push(
@@ -216,6 +278,7 @@ export function veredicto(informe, base = "https://onia.com.bo") {
   const noAtribuibles = informe.flatMap((r) => r.fallidas.filter((f) => !esDefecto(f, base)));
   if (conDefecto.length > 0) {
     codigo = 1;
+    defectoDeSitio = true;
     lineas.push(
       "",
       `ROJO: ${conDefecto.length} de ${informe.length} pantallas cargaron con un recurso roto.`,
@@ -241,6 +304,7 @@ export function veredicto(informe, base = "https://onia.com.bo") {
   );
   if (puntoLejos.length > 0) {
     codigo = 1;
+    defectoDeSitio = true;
     lineas.push(
       "",
       `ROJO: en ${puntoLejos.length} pantallas el punto del rotulo quedo suelto, lejos de su etiqueta.`,
@@ -289,6 +353,7 @@ export function veredicto(informe, base = "https://onia.com.bo") {
   );
   if (conHueco.length > 0) {
     codigo = 1;
+    defectoDeSitio = true;
     lineas.push(
       "",
       `ROJO: ${conHueco.length} tarjeta(s) dibujada(s) quedaron a medio llenar (hueco > ${Math.round(HUECO_MAXIMO_DE_LA_TARJETA * 100)}% del alto util).`,
@@ -317,6 +382,7 @@ export function veredicto(informe, base = "https://onia.com.bo") {
   const sinPintar = informe.filter((r) => !(r.opacidadH1 >= OPACIDAD_PINTADA));
   if (sinPintar.length > 0) {
     codigo = 1;
+    defectoDeSitio = true;
     lineas.push(
       "",
       `ROJO: ${sinPintar.length} pantallas no llegaron a pintar el titulo (opacidad < ${OPACIDAD_PINTADA}).`,
@@ -331,6 +397,40 @@ export function veredicto(informe, base = "https://onia.com.bo") {
       `ROJO: se midieron ${informe.length} pantallas y se esperaban ${MINIMO_PANTALLAS}.`,
       "  Un recorrido cortado es instrumento roto, no sitio sano.",
     );
+  }
+
+  // Un defecto visto en produccion tiene DOS causas que se arreglan en lugares
+  // OPUESTOS: el codigo esta mal, o produccion corre un build viejo. Este gate
+  // mira las dos igual, asi que sin esto su rojo nombra una sola —el layout— y
+  // manda a re-abrir un CSS que puede estar ya arreglado.
+  //
+  // Paso el 2026-09-26: el rojo de las dos tarjetas a medio llenar (`/` 22%,
+  // `/empezar` 69%) era CIERTO (el lead lo veia) y su explicacion FALSA: el
+  // commit 36228167 ya las habia cerrado y estaba en origin/main; el publicador
+  // habia corrido veinte minutos antes de ese commit. Buildeando el arbol y
+  // midiendo contra localhost, el mismo gate dio 4% y 4%.
+  //
+  // Por eso no se toca el codigo de salida —el lead lo ve igual— y si el texto:
+  // un rojo por el motivo equivocado es un verde futuro.
+  if (defectoDeSitio && !esBaseLocal(base)) {
+    if (arreglosVarados === null || arreglosVarados === undefined) {
+      lineas.push(
+        "",
+        "NO MEDIDO: no pude preguntar cuantos arreglos quedaron sin llegar al build vivo.",
+        "  Eso NO es 'produccion esta al dia': puede que este rojo ya este arreglado",
+        "  en el arbol. Antes de tocar el layout, medir las dos causas por separado:",
+        `    npm run deploy:vivo`,
+      );
+    } else if (arreglosVarados > 0) {
+      lineas.push(
+        "",
+        `OJO: ${arreglosVarados} arreglo(s) varado(s) — el build vivo es anterior a ellos.`,
+        "  Este rojo puede ser de los DOS lados: el codigo, o un build viejo. Antes de",
+        "  tocar el layout, medir el ARBOL (si ahi sale verde, lo que falta es el deploy):",
+        "    npm run build && npx next start -p 3311 &",
+        "    node scripts/mirar-primera-pantalla.mjs http://localhost:3311",
+      );
+    }
   }
 
   if (codigo === 0) {
@@ -433,8 +533,12 @@ const TARJETAS_DIBUJADAS = `() => {
   return out;
 }`;
 
-/** La opacidad EFECTIVA de un elemento: el minimo de su cadena hasta body. */
-const OPACIDAD_HEREDADA = `(sel) => {
+/**
+ * La opacidad EFECTIVA de un elemento: el minimo de su cadena hasta body.
+ * Devuelve -1 si el selector no encontro nada, que el veredicto lee como rojo.
+ * Es una funcion, como `REVEAL_TERMINADO`, por el mismo motivo.
+ */
+const REVEAL_MEDIDO = ({ sel }) => {
   const el = document.querySelector(sel);
   if (!el) return -1;
   let min = 1;
@@ -443,7 +547,7 @@ const OPACIDAD_HEREDADA = `(sel) => {
     if (!Number.isNaN(o) && o < min) min = o;
   }
   return min;
-}`;
+};
 
 async function mirar(base, out) {
   const require = createRequire("/root/.npm/_npx/e41f203b7505f1fb/");
@@ -491,14 +595,21 @@ async function mirar(base, out) {
       let opacidad = -1;
       try {
         await pagina.waitForFunction(
-          `(${OPACIDAD_HEREDADA})('h1') >= ${OPACIDAD_PINTADA}`,
-          null,
+          REVEAL_TERMINADO,
+          { sel: "h1", hasta: OPACIDAD_TERMINADA },
           { timeout: 8000 },
         );
-      } catch {
-        /* se reporta abajo con el valor que quedo */
+      } catch (e) {
+        /*
+         * Que VENZA es un resultado: la pantalla no llego a pintar y el
+         * veredicto la juzga abajo con el valor en que quedo (falla cerrado).
+         * Cualquier OTRO error es el instrumento roto, y no puede salir mudo:
+         * el `catch` pelado que habia aca hizo que un `EvalError` de la CSP
+         * se leyera durante dias como "la espera vencio".
+         */
+        if (!/Timeout.*exceeded/i.test(String(e?.message ?? e))) throw e;
       }
-      opacidad = await pagina.evaluate(`(${OPACIDAD_HEREDADA})('h1')`);
+      opacidad = await pagina.evaluate(REVEAL_MEDIDO, { sel: "h1" });
 
       const archivo = `${out}/${ruta.id}-${pantalla.id}.png`;
       await pagina.screenshot({ path: archivo });
@@ -535,11 +646,39 @@ async function mirar(base, out) {
   return informe;
 }
 
+/**
+ * Cuantos arreglos de la zona ya estan en `origin/main` y todavia NO llegaron al
+ * build que sirve produccion. Es el dato que le falta al veredicto para no
+ * acusar al layout cuando la causa es el deploy.
+ *
+ * Se reusa `deploy-vivo.mjs` en vez de re-medir: ahi vive el metodo (la cadena
+ * `--first-parent`, y `llegaAlCliente` para no contar commits que solo tocan
+ * herramientas). Dos instrumentos midiendo lo mismo por caminos distintos es
+ * como nacen dos verdades.
+ *
+ * Devuelve `null` —NO MEDIDO— ante cualquier tropiezo, a proposito: este numero
+ * matiza un rojo, nunca lo crea, asi que no puede tumbar la medicion de las
+ * pantallas por no haber podido preguntarle a git o al VPS.
+ */
+export async function arreglosVarados(base) {
+  if (esBaseLocal(base)) return 0; // contra el arbol no hay atraso posible
+  try {
+    const { fechaBuildVivo, commitsDesde, llegaAlCliente } = await import("./deploy-vivo.mjs");
+    const ms = fechaBuildVivo();
+    if (typeof ms !== "number") return null;
+    const commits = commitsDesde(ms);
+    if (commits === null) return null;
+    return commits.filter((c) => llegaAlCliente(c.archivos)).length;
+  } catch {
+    return null;
+  }
+}
+
 async function main() {
   const base = baseValida(process.argv[2]);
   const out = process.env.OUT_DIR || "/tmp/wv-mirar";
   const informe = await mirar(base, out);
-  const r = veredicto(informe, base);
+  const r = veredicto(informe, base, { arreglosVarados: await arreglosVarados(base) });
   console.log(`Base: ${base}  ·  capturas: ${out}`);
   for (const l of r.lineas) console.log(l);
   process.exit(r.codigo);
