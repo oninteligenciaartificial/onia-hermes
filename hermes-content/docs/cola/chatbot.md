@@ -1136,6 +1136,43 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
 
 ## Ahora
 
+- [x] 🔴 **CERRADO el 2026-09-26 17:13-17:55 La Paz (es un MEDIDOR + dos párrafos de esta cola: NO
+      toca el bot, así que NO invalida el pedido de deploy vivo): dos líneas de acá le pedían a
+      Sergio Urcullo una decisión ya tomada, y el remedio que imprimía el gate la habría vuelto a
+      pedir MAÑANA con otro id.**
+
+      **Cómo apareció:** corriendo la medición de arranque del carril, no auditando nada.
+      `npm run bloqueo:citado` salió **1** con dos sujetos (`chatbot.md:1582` y `:1586`), los dos
+      citando `t_4f30a836` —*«[leads-esperando] 7 desconocido(s) esperando una respuesta tuya»*—
+      como freno vigente. Está `archived`.
+
+      **Lo que lo hace un ítem y no una errata.** La tarea viva con ese MISMO título es otra
+      (`blocked`, creada **un día después**: 25-sep 20:39 → 26-sep 20:39). O sea que el vigía
+      `[leads-esperando]` **archiva la de ayer y crea la de hoy**, y el dedup es por título
+      normalizado. El remedio que el gate imprimía —*«nombrá la tarea VIVA que de verdad frena»*—
+      hace copiar el id de hoy, que amanece `archived` mañana: **el arreglo obvio dura 24 horas** y
+      el gate vuelve a rojo sobre un sujeto nuevo. Un puntero que rota no se copia, se deriva.
+
+      **Lo que se cambió, en los dos lados:**
+      - La cola ya no cita ningún id de vigía: nombra el marcador `[leads-esperando]` y dice cómo
+        derivar el id (`onia-tablero.sh list --json`). Con el por qué al lado, que es lo que evita
+        que la próxima vuelta lo "arregle" pegando el id nuevo.
+      - `scripts/bloqueo_citado_vivo.mjs` aprendió a **buscarle sucesora** a la tarea muerta
+        (`sucesoraViva`, por título normalizado con los dígitos a `N`, así "7" y "12
+        desconocido(s)" son el mismo título) y **parte el remedio en dos**: con marcador entre
+        corchetes —lo escribe una máquina— prohíbe copiar el id y manda a citar el marcador; sin
+        marcador —lo escribió una persona, su id es estable— nombra la sucesora para copiarla.
+        Prohibirlo en los dos casos era regalar una regla que se desobedece.
+
+      **Cuidados que no son adorno.** La lista del tablero se pide UNA vez y **sólo si hay alguna
+      cita muerta**; si no se puede listar, el motivo queda como el de antes (`[]`, no una sucesora
+      inventada) — degradar el remedio es barato, inventar un puntero no. Y el verde de hoy **no es
+      el del sujeto borrado** que este mismo archivo pagó: quedan 2 citas vivas y el gate las
+      nombra, `bloqueos citados: 2 cita(s)`.
+
+      Validado en rojo primero, por el motivo correcto (`ReferenceError: normalizarTitulo is not
+      defined` → 63/63 en verde), y con el gate vivo imprimiendo la sucesora antes de tocar la cola.
+
 - [x] 🔴 **CERRADO el 2026-09-26 16:43-17:25 La Paz (commiteado; NO toca el bot, así que NO
       invalida el pedido de deploy vivo): el publicador del bot copia con globs PLANOS, y nada
       medía si alcanzaban a su propio subárbol. Ya había un huérfano en el disco.**
@@ -1178,8 +1215,9 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
       glob plano del gate sin avisar).
 
       **El verde se probó al revés**, porque un gate ciego también da cero: 6 fixtures en rojo por
-      cada clase, más la mutación sobre el subárbol REAL (`motor-zzprueba/agenda.mjs` con
-      `git add -N`) → `not ok 1 ... [huerfano] ... está en un subdirectorio`. Revertido y
+      cada clase, más la mutación sobre el subárbol REAL: un archivo de prueba en un subdirectorio
+      del bot (`motor-zzprueba/agenda.mjs`, que ya no existe — se borró al revertir la mutación) con
+      `git add -N` → `not ok 1 ... [huerfano] ... está en un subdirectorio`. Revertido y
       verificado con `git status --porcelain -- hermes-content/deploy/vps-ops/bot` **vacío**: el
       pedido de deploy sigue intacto en sus 13 archivos.
 
@@ -1574,17 +1612,24 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
         propiedad: una rama nueva sin traducir dejaría al conciliador sin sujetos, y eso **no sale
         rojo, sale VACÍO**.
 
-      ⚠️ **Las diez personas NO son un ítem nuevo de esta cola.** Ya son la tarea `t_4f30a836`
-      (*«7 desconocido(s) esperando una respuesta tuya»*), bloqueada en Sergio Urcullo. Lo que
-      cambió hoy es que **el instrumento ya no dice que están bien**.
+      ⚠️ **Las diez personas NO son un ítem nuevo de esta cola.** Ya son la tarea del vigía
+      `[leads-esperando]` (*«N desconocido(s) esperando una respuesta tuya»*), bloqueada en Sergio
+      Urcullo. Lo que cambió hoy es que **el instrumento ya no dice que están bien**.
 
       ⚠️ **Ese párrafo de arriba es FALSO y lo corrige el ítem que está encima — 2026-09-26 09:00.**
-      Las diez no eran personas ni tenían nada que ver con `t_4f30a836`: consultadas en la base de
+      Las diez no eran personas ni tenían nada que ver con esa tarea: consultadas en la base de
       Chatwoot, **las diez son nuestras** (inbox 7, o contacto `Sonda QA` en el inbox 4), y ocho son
       anteriores a que el código de aviso existiera. Atar un número recién medido a una tarea ajena
       que habla de otra cosa le dio un respaldo que no tenía — y el número correcto es **2, ningún
-      lead**. El bloqueo `t_4f30a836` sigue vivo por su cuenta y no se toca: lo mide otro
+      lead**. El bloqueo `[leads-esperando]` sigue vivo por su cuenta y no se toca: lo mide otro
       instrumento.
+
+      ⚠️ **Y su ID no se cita más, porque rota cada día — medido el 2026-09-26 17:30.** Acá se
+      nombraba `t_4f30a836`, que el 26-sep amaneció `archived`: el vigía **archiva la de ayer y crea
+      la de hoy** con el mismo título y un id nuevo (25-sep 20:39 → 26-sep 20:39). Toda cita de un
+      id de vigía es la fecha de ayer escrita en presente, y el remedio obvio —copiar el id
+      nuevo— la pone en rojo otra vez mañana. Se cita el **marcador** y se deriva el id:
+      `onia-tablero.sh list --json | python3 -c "..."` filtrando por `[leads-esperando]`.
 
       Validado por mutación: con el conciliador ciego caen 3 tests por el motivo correcto
       (`un handoff que la base registra y el log no nombra pone el gate ROJO`, la lectura, y el

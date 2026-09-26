@@ -175,37 +175,116 @@ export function estadoDesdeShow(salida) {
   return m ? m[1] : null;
 }
 
+/** El titulo que `onia-tablero.sh show` pone en su primera linea. Pura. */
+export function tituloDesdeShow(salida) {
+  const m = /^Task\s+t_[0-9a-f]{8}:\s*(.+?)\s*$/m.exec(salida ?? '');
+  return m ? m[1] : null;
+}
+
+/**
+ * La misma normalizacion que usa el dedup del tablero para los avisos automaticos: digitos a `N`,
+ * minusculas, espacios aplanados. Sin esto, "7 desconocido(s)" y "12 desconocido(s)" se leen como
+ * dos tareas distintas cuando son la MISMA, re-creada.
+ */
+export function normalizarTitulo(t) {
+  if (typeof t !== 'string') return null;
+  return t.replace(/\d+/g, 'N').toLowerCase().replace(/\s+/g, ' ').trim();
+}
+
+/**
+ * Un titulo que ARRANCA con un marcador entre corchetes (`[leads-esperando]`, `[auto:4435e1]`) lo
+ * escribe una maquina, y esa maquina lo re-crea: archiva la de ayer y crea la de hoy con id nuevo.
+ * Citar ese id es citar la fecha de ayer. El que NO tiene marcador lo escribio una persona y su id
+ * es estable: ahi copiar el id esta bien, y prohibirlo de gratis hace que se desobedezca la regla.
+ */
+export function marcadorRotatorio(titulo) {
+  const m = /^\s*(\[[^\]\n]{1,40}\])/.exec(titulo ?? '');
+  return m ? m[1] : null;
+}
+
+/** Entre las tareas VIVAS, la que repite el titulo normalizado de la muerta. Pura. */
+export function sucesoraViva(tituloMuerto, vivas) {
+  const clave = normalizarTitulo(tituloMuerto);
+  if (!clave) return null;
+  for (const t of vivas ?? []) {
+    if (!ESTADOS_VIVOS.has(t?.estado)) continue;
+    if (normalizarTitulo(t.titulo) === clave) return t;
+  }
+  return null;
+}
+
 /**
  * Traduce los estados a los motivos por los que ESTO es un item. Pura, como en
  * `bloqueos_vencidos.mjs`: la parte que decide se prueba sin consultar nada.
+ *
+ * EL REMEDIO ES DISTINTO SEGUN QUIEN ESCRIBIO LA TAREA, y eso no es un adorno: hasta el
+ * 2026-09-26 el motivo decia "nombra la tarea VIVA que de verdad frena" para todos, y para una
+ * tarea de vigia eso es un consejo que caduca en 24 h — el id nuevo tambien va a estar archivado
+ * mañana. Con marcador, el remedio es el titulo; sin marcador, el id sirve.
  */
 export function juzgar(resultados) {
   const motivos = [];
   for (const r of resultados) {
     if (r.estado === null) continue; // no medido: no es un item, es un aviso
     if (ESTADOS_VIVOS.has(r.estado)) continue;
-    motivos.push(
+    let motivo =
       `${r.archivo}:${r.linea} cita \`${r.id}\` como freno vigente y esa tarea esta ${r.estado}. ` +
-        `La linea le pide a Sergio Urcullo una decision que ya tomo — reescribila con lo que se ` +
-        `midio, o nombra la tarea VIVA que de verdad frena`,
-    );
+      `La linea le pide a Sergio Urcullo una decision que ya tomo — reescribila con lo que se ` +
+      `midio, o nombra la tarea VIVA que de verdad frena`;
+    if (r.sucesora?.id) {
+      const marcador = marcadorRotatorio(r.sucesora.titulo ?? r.titulo);
+      motivo += `. SUCESORA VIVA: \`${r.sucesora.id}\` (${r.sucesora.estado}), MISMO titulo`;
+      motivo += marcador
+        ? ` — y el marcador \`${marcador}\` dice que la re-crea una maquina, asi que su id ROTA y ` +
+          `no se copia: nombra el titulo/marcador y deja que el lector lo derive ` +
+          `(\`onia-tablero.sh list --json\`). Copiar el id nuevo pone esta misma linea en rojo mañana`
+        : `: el freno sigue, cambio de id — reescribi la linea nombrandola`;
+    }
+    motivos.push(motivo);
   }
   return motivos;
 }
 
-/** Consulta un id. Devuelve null cuando NO SE PUDO medir (que no es lo mismo que muerto). */
+/**
+ * Consulta un id. `estado` es null cuando NO SE PUDO medir (que no es lo mismo que muerto), y
+ * `titulo` null cuando la salida no lo trae: sin titulo no hay sucesora que buscar, y eso baja la
+ * calidad del remedio sin inventar nada.
+ */
 function consultar(id) {
+  let salida = null;
   try {
-    const salida = execFileSync(TABLERO, ['show', id], {
+    salida = execFileSync(TABLERO, ['show', id], {
       cwd: RAIZ,
       encoding: 'utf8',
       timeout: TIMEOUT_MS,
       stdio: ['ignore', 'pipe', 'ignore'],
     });
-    return estadoDesdeShow(salida);
   } catch (e) {
     // Una tarea inexistente puede salir por error; su texto igual puede traer el status.
-    return estadoDesdeShow(e?.stdout);
+    salida = e?.stdout ?? null;
+  }
+  return { estado: estadoDesdeShow(salida), titulo: tituloDesdeShow(salida) };
+}
+
+/**
+ * Las tareas VIVAS del tablero, para buscarle sucesora a una muerta. Se pide UNA vez y solo si hay
+ * alguna cita muerta. Si no se puede listar, devuelve `[]`: el motivo queda como el de siempre —
+ * degradar el remedio es barato, inventar una sucesora no.
+ */
+function tareasVivas() {
+  try {
+    const salida = execFileSync(TABLERO, ['list', '--json'], {
+      cwd: RAIZ,
+      encoding: 'utf8',
+      timeout: TIMEOUT_MS,
+      maxBuffer: 64 * 1024 * 1024,
+      stdio: ['ignore', 'pipe', 'ignore'],
+    });
+    return JSON.parse(salida)
+      .filter((t) => ESTADOS_VIVOS.has(t?.status))
+      .map((t) => ({ id: t.id, estado: t.status, titulo: t.title }));
+  } catch {
+    return [];
   }
 }
 
@@ -382,6 +461,75 @@ if (process.argv.includes('--self-check')) {
   afirmar(juzgar([{ id: 't_1', estado: null, archivo: 'c.md', linea: 1 }]).length === 0, 'NO MEDIDO no es un item: fallo conservador');
 
   /**
+   * LA SUCESORA, y por que el remedio de arriba solo no alcanza — medido el 2026-09-26 17:30.
+   *
+   * `cola/chatbot.md` citaba `t_4f30a836` (*"[leads-esperando] 7 desconocido(s) esperando una
+   * respuesta tuya"*, `archived`) como freno vigente. El remedio que imprimia este gate era
+   * "nombra la tarea VIVA que de verdad frena" — y la tarea viva es `t_da35d070`, con el MISMO
+   * titulo, creada por el vigia UN DIA DESPUES (25-sep 20:39 -> 26-sep 20:39). O sea que ese
+   * remedio, seguido al pie de la letra, pone la cola en rojo otra vez mañana sobre un id nuevo:
+   * el vigia archiva la de ayer y crea la de hoy, y el dedup es por titulo normalizado.
+   *
+   * Por eso el motivo distingue DOS cosas que antes decia igual: si la tarea muerta tiene una
+   * sucesora viva se nombra, y si su titulo arranca con un marcador entre corchetes —lo que
+   * escribe una MAQUINA— el remedio prohibe copiar el id y manda a citar el titulo. Un puntero
+   * que rota cada 24 h no se copia: se deriva.
+   */
+  afirmar(normalizarTitulo('[leads-esperando] 7 desconocido(s) esperando una respuesta tuya')
+    === normalizarTitulo('[leads-esperando] 12 desconocido(s) esperando una respuesta tuya'),
+    'NORMALIZACION: el dedup del tablero manda los digitos a N, asi que 7 y 12 desconocidos son el MISMO titulo');
+  afirmar(normalizarTitulo('  Hola   MUNDO ') === normalizarTitulo('hola mundo'),
+    'y aplana mayusculas y espacios, como el dedup');
+  afirmar(normalizarTitulo('Publicar el bot') !== normalizarTitulo('Publicar la landing'),
+    'pero NO confunde dos titulos distintos: sin esto la sucesora seria cualquiera');
+
+  afirmar(marcadorRotatorio('[leads-esperando] 7 desconocido(s)') === '[leads-esperando]',
+    'MARCADOR: un titulo que arranca entre corchetes lo escribe el vigia, y su id rota');
+  afirmar(marcadorRotatorio('[auto:4435e1] Recorrido de cliente') === '[auto:4435e1]',
+    'los [auto:] tambien: es el mismo mecanismo de dedup por titulo');
+  afirmar(marcadorRotatorio('Publicar el bot: 5 pedidos quedaron mudos') === null,
+    'y una tarea escrita a mano NO es rotatoria: su id se puede citar');
+  afirmar(marcadorRotatorio('texto y despues [algo]') === null,
+    'el marcador tiene que ARRANCAR la linea: un corchete en medio es prosa');
+
+  const vivas = [
+    { id: 't_da35d070', estado: 'blocked', titulo: '[leads-esperando] 7 desconocido(s) esperando una respuesta tuya' },
+    { id: 't_9d970ada', estado: 'ready', titulo: 'Infra: cerrar los huecos del rate limit del login' },
+    { id: 't_ffffffff', estado: 'done', titulo: '[leads-esperando] 7 desconocido(s) esperando una respuesta tuya' },
+  ];
+  const suc = sucesoraViva('[leads-esperando] 5 desconocido(s) esperando una respuesta tuya', vivas);
+  afirmar(suc?.id === 't_da35d070', 'SUCESORA: la encuentra por titulo normalizado, aunque cambie el numero');
+  afirmar(sucesoraViva('Una tarea que nadie re-creo', vivas) === null, 'y sin sucesora devuelve null, no la primera que pasa');
+  afirmar(sucesoraViva(null, vivas) === null, 'sin titulo de la muerta no inventa sucesora');
+  afirmar(sucesoraViva('[leads-esperando] 7 desconocido(s) esperando una respuesta tuya', [vivas[2]]) === null,
+    'una tarea `done` NO es sucesora: no frena nada');
+
+  const conSucesoraRota = juzgar([{
+    id: 't_4f30a836', estado: 'archived', archivo: 'hermes-content/docs/cola/chatbot.md', linea: 1586,
+    titulo: '[leads-esperando] 7 desconocido(s) esperando una respuesta tuya',
+    sucesora: { id: 't_da35d070', estado: 'blocked', titulo: '[leads-esperando] 7 desconocido(s) esperando una respuesta tuya' },
+  }]);
+  afirmar(conSucesoraRota.length === 1, 'con sucesora sigue siendo un item: la linea citada igual esta mintiendo');
+  afirmar(conSucesoraRota[0].includes('t_da35d070'), 'el motivo NOMBRA la sucesora viva: sin eso hay que ir a buscarla');
+  afirmar(conSucesoraRota[0].includes('[leads-esperando]'), 'y nombra el marcador, que es el puntero que NO caduca');
+  afirmar(/no cop\w+ el id|no se copia/i.test(conSucesoraRota[0]),
+    'y PROHIBE copiar el id nuevo: copiarlo pone la cola en rojo mañana sobre otro id');
+
+  const conSucesoraEstable = juzgar([{
+    id: 't_1', estado: 'done', archivo: 'c.md', linea: 9,
+    titulo: 'Publicar el bot', sucesora: { id: 't_2', estado: 'blocked', titulo: 'Publicar el bot' },
+  }]);
+  afirmar(conSucesoraEstable[0].includes('t_2'), 'sin marcador tambien nombra la sucesora');
+  afirmar(!/no se copia/i.test(conSucesoraEstable[0]),
+    'pero ahi el id SI se puede citar: una tarea escrita a mano no rota, y prohibirlo de gratis se desobedece');
+
+  const sinSucesora = juzgar([{
+    id: 't_1', estado: 'archived', archivo: 'c.md', linea: 9, titulo: 'Algo que nadie re-creo', sucesora: null,
+  }]);
+  afirmar(!sinSucesora[0].includes('SUCESORA') && sinSucesora[0].includes('ya tomo'),
+    'sin sucesora el motivo es el de siempre: no se inventa una tarea que no existe');
+
+  /**
    * EL VERDE TIENE QUE DECIR QUE MIDIO. Estos cuatro cierran el hueco del 2026-09-26: el gate
    * salio 0 con el deploy del bot sin hacer, porque las citas se habian borrado, y la cola leyo
    * ese 0 como "el deploy se publico". Se afirma la PROPIEDAD (el exito declara su alcance y
@@ -416,7 +564,17 @@ for (const ruta of rutas) {
   const md = await readFile(ruta, 'utf8');
   idsTotales += idsNombrados(md);
   for (const cita of citasDeBloqueo(md)) {
-    resultados.push({ ...cita, archivo: ruta, estado: consultar(cita.id) });
+    resultados.push({ ...cita, archivo: ruta, ...consultar(cita.id) });
+  }
+}
+
+// La sucesora se busca SOLO si hay alguna cita muerta: sin muertas no hay remedio que mejorar, y
+// la lista del tablero es la consulta mas caro de este gate.
+if (resultados.some((r) => r.estado !== null && !ESTADOS_VIVOS.has(r.estado))) {
+  const vivas = tareasVivas();
+  for (const r of resultados) {
+    if (r.estado === null || ESTADOS_VIVOS.has(r.estado)) continue;
+    r.sucesora = sucesoraViva(r.titulo, vivas);
   }
 }
 
