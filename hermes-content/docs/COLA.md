@@ -3348,6 +3348,20 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
         marketing-ia dice de frente *"no tenemos un muro de logos ni casos de éxito… antes que
         inventarlos, preferimos no tenerlos todavía"*—, y consultoría está en el catálogo de
         venta como servicio que se cobra (`ONIA_CATALOGO_DE_VENTA.md:147`).
+
+        ⚠️ **Esa frase citada como prueba de sanidad ERA el defecto — corregido el 2026-09-26.**
+        No fabricaba prueba social, y por eso pasó: lo que hacía era CONFESAR que no la hay, y
+        el «Cero autobombo» de `CLAUDE.md` prohíbe hablar de nosotros en los dos sentidos, el
+        que se elogia y el que se disculpa. El criterio ya estaba escrito en la cabecera de
+        `TODAVIA_NO` (`lib/proof.ts`): *"acá van funciones que faltan, no «somos nuevos» ni «no
+        tenemos clientes»"*. **Y el chequeo que le dio el verde es el que hay que desconfiar:**
+        una lista de literales (`muy pronto|beta|…`) es de INCLUSIÓN, así que todo autobombo
+        que no use esas palabras sale gratis — la medición del objetivo del carril firmaba
+        «prohibidos 0» con el texto vivo en producción. Esta vuelta lo trajo al nav VIVO con el
+        defecto adentro, o sea que el enlace estaba bien y la lectura que lo habilitó, no.
+        Arreglado en la página y cubierto por `app/trayectoria-declarada.test.ts`, que deriva
+        los sujetos del disco y pregunta por la carencia de la EMPRESA (la del producto ya la
+        cuidaba `hueco-declarado`, y no la veía porque exige que la oración nombre el producto).
       - **El arreglo:** apartado `Servicios` (Webs · Marketing IA · Consultoría) en el mapa
         único del sitio (`(sitio)/nav.ts`), que leen el pie y el menú de teléfono. `webs` va
         con las otras dos aunque ya era alcanzable: una lista partida en dos lugares es la que

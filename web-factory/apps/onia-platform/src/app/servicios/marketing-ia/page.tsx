@@ -31,8 +31,18 @@ export const metadata: Metadata = {
 /**
  * /servicios/marketing-ia — REGLA DE HONESTIDAD DURA: cero casos inventados,
  * cero métricas fabricadas, cero logos de clientes. La página describe QUÉ
- * hacemos y cómo se contrata, y esa transparencia ES el pitch (coherente con
- * /nosotros y la sección de honestidad del home).
+ * hacemos y cómo se contrata, y ofrece la prueba que reemplaza al muro de logos:
+ * ver las piezas andando antes de pagar.
+ *
+ * ⚠️ **No tener prueba social NO se cuenta**, aunque sea cierto y suene honesto.
+ * Hasta el 2026-09-26 esta página tenía una sección *"Lo que NO vas a encontrar
+ * acá."* que abría con *"Somos una empresa nueva … no tenemos un muro de logos
+ * ni casos de éxito"*: el «Cero autobombo» de `CLAUDE.md` prohíbe hablar de
+ * nosotros, y eso incluye el autobombo que se DISCULPA — el criterio ya estaba
+ * escrito en la cabecera de `TODAVIA_NO` (`lib/proof.ts`), con estas dos frases.
+ * Las dos mitades están prohibidas por separado: ni fabricar la prueba que falta
+ * ni confesar que falta. Lo que se dice es cómo la comprueba el lead. Gate:
+ * `app/trayectoria-declarada.test.ts`.
  */
 const SERVICIOS = [
   {
@@ -141,16 +151,14 @@ export default function MarketingIaPage() {
             <SplitTextReveal
               as="h2"
               className="h2"
-              text="Lo que NO vas a encontrar acá."
+              text="Cómo comprobás que funciona."
             />
             <Reveal>
               <p className="lead" style={{ marginTop: "0.75rem" }}>
-                Somos una empresa nueva y lo decimos de frente: no tenemos un
-                muro de logos ni casos de éxito con números espectaculares — y
-                antes que inventarlos, preferimos no tenerlos todavía. Lo que sí
-                tenemos es el método y las herramientas trabajando todos los
-                días para nuestra propia marca. Pedinos ver eso: es la prueba
-                real.
+                Antes de que pongas un peso te mostramos las piezas andando: el
+                contenido ya producido, una campaña corriendo y una influencer
+                IA presentando un producto. Pedinos verlo aplicado a tu rubro y
+                decidí con el trabajo delante, no con una promesa.
               </p>
             </Reveal>
           </div>
