@@ -1001,6 +1001,58 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
 
 ## Ahora
 
+- [x] 🔴 **CERRADO el 2026-09-26 07:43-08:35 La Paz (es un MEDIDOR, no toca el motor: no necesita
+      deploy): el gate del aviso a Sergio Urcullo derivaba sus eventos del LOG, así que la única
+      clase de fallo que no podía ver era justo la que existe para cazar — un handoff que ocurrió
+      y del que no se escribió ni una línea.** `a575f81a`.
+
+      `avisos-vivo.mjs` contaba líneas `[aviso]`. Con ese universo, un pedido de humano que nunca
+      llegó al código de aviso no sale como fallo: sale como que **no hubo evento**. Su propia
+      cabecera lo firmaba — *`circuito=ok eventos=0 -> verde. Nadie pidio un humano hoy`*.
+
+      **Los dos números del mismo día, medidos contra producción:**
+
+      | fuente | qué dice |
+      |---|---|
+      | log vivo (`/tmp/onia-bot-webhook.log`) | 10 avisos, de **3** conversaciones |
+      | base (`onia_center.bot_conversations`) | **12** filas en `handoff_humano` |
+      | veredicto del gate **antes** | `ok · circuito sano` |
+
+      **Diez de esas doce caen DENTRO de la ventana que el log cubre** — `2026-08-28T22:22:51` a
+      `2026-09-26T10:53:21`, derivada de las marcas del propio log, no supuesta. Son diez personas
+      que pidieron un humano y no hay una sola línea que las nombre. Veredicto **después**:
+
+      ```
+      en la base: 11 evento(s) dentro de la ventana del log (con aviso 1 · SIN aviso 10) · 2 anterior(es) al log, fuera de alcance
+      VEREDICTO: roto — la base registra 10 pedido(s) de humano/demo que NINGUN aviso nombra
+      ```
+
+      **El log dice qué HIZO el código de aviso; `bot_stage` dice qué OCURRIÓ, y queda.** Conciliar
+      los dos es lo único que distingue *"nadie pidió"* de *"alguien pidió y se perdió"* — que es
+      la distinción que este gate nació a hacer, y que hasta hoy hacía sólo del lado del log.
+
+      Lo que se agregó, y por qué cada decisión está donde está:
+
+      - `conciliarAvisos` (puro) cruza los eventos de la base con los avisos del log. **Tri-estado:**
+        sin base o sin ventana es `no_medido`, nunca verde — no poder preguntar no es haber
+        preguntado.
+      - **Conservador en el borde izquierdo:** un evento anterior al arranque del log es
+        `fueraDeAlcance`, **contado y nombrado**, no cero. Acusar al circuito por lo que el log no
+        pudo ver es el falso rojo que este mismo archivo ya pagó el 2026-09-12.
+      - Un `skipped` o un `failed` **NO cubre** a su conversación: nombrarla no es avisarle. Usar
+        la evidencia del fallo como cobertura del fallo era el agujero hermano.
+      - `ESTADO_POR_RAMA` ata rama del motor ↔ estado de la base en UN lugar, con test por
+        propiedad: una rama nueva sin traducir dejaría al conciliador sin sujetos, y eso **no sale
+        rojo, sale VACÍO**.
+
+      ⚠️ **Las diez personas NO son un ítem nuevo de esta cola.** Ya son la tarea `t_4f30a836`
+      (*«7 desconocido(s) esperando una respuesta tuya»*), bloqueada en Sergio Urcullo. Lo que
+      cambió hoy es que **el instrumento ya no dice que están bien**.
+
+      Validado por mutación: con el conciliador ciego caen 3 tests por el motivo correcto
+      (`un handoff que la base registra y el log no nombra pone el gate ROJO`, la lectura, y el
+      `skipped`). 47/47 verde con el arreglo.
+
 - [x] 🔴 **CERRADO el 2026-09-26 07:13-08:00 La Paz (es un MEDIDOR, no toca el motor: no necesita
       deploy): el medidor del par web↔bot que cerró el ítem de abajo miraba 8 de las 25 rutas
       vivas, y en las otras 17 un par roto NO PODÍA salir rojo — salía como «campaña huérfana,
