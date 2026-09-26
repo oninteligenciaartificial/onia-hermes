@@ -61,9 +61,45 @@ CUANTAS=$(printf '%s' "$ABIERTAS" | grep -c . || true)
 # Punto de Venta del SIAT espero 14 dias.
 # Van PRIMERO porque son lo unico que no avanza sin el, y CON su id, porque el id es
 # literalmente lo que tiene que escribir para contestar.
-ESPERAN=$(printf '%s\n' "$ESTADO_TABLERO" | grep -E '^⊘' \
+BLOQUEADAS=$(printf '%s\n' "$ESTADO_TABLERO" | grep -E '^⊘' \
   | awk '{ p = index($0, "🔴") ? 0 : 1; printf "%d\t%09d\t%s\n", p, NR, $0 }' \
   | sort -k1,1n -k2,2r | cut -f3- || true)
+
+# 🔴 Y de lo blocked entra SOLO lo que un `ok` puede desbloquear (2026-09-25).
+# El filtro era `grep -E '^⊘'` a secas, o sea TODO lo blocked, sin distinguir "espera
+# tu firma" de "el agente se colgo y el tablero la bloqueo solo". Medido ese dia sobre
+# el tablero vivo: de 14 blocked, 13 eran `needs_input` y UNA era `kind: capability`
+# (t_781090e0, parada 517 h) — y esa se comia uno de los CINCO renglones mientras 8
+# decisiones reales quedaban en "… y N mas", entre ellas «7 desconocidos esperando una
+# respuesta tuya». Un renglon de este mensaje es el 20 % del unico canal del dia.
+#
+# El `kind` NO sale de `list` ni de `list --json` (sus claves no incluyen ninguna de
+# bloqueo), asi que se pregunta con `show` por tarea: 9 s para las 14, medido, y es un
+# cron diario. La salida se lee con `grep -a` porque ya aparecieron bytes binarios en
+# el cuerpo de una tarea real (t_781090e0) y sin `-a` grep la descarta entera.
+#
+# Y el filtro falla CERRADO a proposito: lo que no se pueda clasificar SIGUE en la
+# hoja. Esconder una decision real es el error caro de este canal — el del SIAT ya
+# espero 14 dias —; nombrar una de mas solo gasta un renglon.
+espera_su_ok() {
+  local id="$1" kind
+  # `</dev/null` NO es cosmetico: si ONIA_TABLERO es el shim de nodo-casa, adentro hay
+  # un ssh que se COME el stdin del bucle que llama a esta funcion, y entonces se
+  # clasifica la primera y las demas se pierden MUDAS. Ya costo un barrido entero.
+  kind=$("$TABLERO" show "$id" 2>/dev/null </dev/null \
+    | LC_ALL=C grep -aoE "\[run [0-9]+\] blocked \{.*" | tail -1 \
+    | LC_ALL=C grep -aoE "'kind': '[a-z_]+'" | tail -1 \
+    | LC_ALL=C tr -dc 'a-z_') || true
+  kind=${kind#kind}
+  [ -z "$kind" ] && return 0            # no se pudo clasificar -> entra
+  [ "$kind" = needs_input ]
+}
+ESPERAN=$(printf '%s\n' "$BLOQUEADAS" | while IFS= read -r linea; do
+  [ -n "$linea" ] || continue
+  if espera_su_ok "$(printf '%s\n' "$linea" | awk '{print $2}')"; then
+    printf '%s\n' "$linea"
+  fi
+done)
 CUANTAS_ESPERAN=$(printf '%s' "$ESPERAN" | grep -c . || true)
 
 HOJA=""
