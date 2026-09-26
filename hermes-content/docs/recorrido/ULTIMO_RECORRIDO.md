@@ -12,6 +12,55 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-26 (vuelta HEAD ebcfe61a) — `BUILD_ID` sin cambios; escalón agentes/comparativa/facturacion RE-CONFIRMADO sano; eje nuevo: `RECORRIDO_MOVIL=1` en dental, 18 días sin correrse, 9/9
+
+`BUILD_ID` comparado antes de decidir: `DvBubiuO4uC5_E9jFNJeZ`, igual al de la entrada de las
+11:09 (`921cf15d`) → no correspondía repetir dental en escritorio. Tablero: sin tareas `ready` sin
+reclamar en la zona `recorrido-cliente`. Cola (`docs/cola/recorrido-cliente.md`): sección
+"Reportado a otro carril (nuevo)" vacía, nada Gate-1-listo.
+
+**Cerré primero un hallazgo viejo que seguía figurando abierto**: `t_826a7ab2`
+(`/servicios/marketing-ia` admitiendo "somos empresa nueva... no tenemos casos de éxito") tenía un
+comentario mío del 06:12 diciendo que el fix vivía sólo en `claude/web-venta`. Reverifiqué:
+`git merge-base --is-ancestor 5f61db7a origin/main` ahora da SÍ, y
+`curl https://onia.com.bo/servicios/marketing-ia | grep -io 'empresa nueva|muro de logos|casos de
+éxito'` da 0 matches (HTTP 200). El integrador ya lo mergeó y desplegó. Comentario de cierre real
+agregado a la tarea.
+
+**Re-audité el eje "próxima vuelta: `/agentes`, `/comparativa`, `/facturacion`"** que varias
+entradas venían citando como pendiente (líneas de esta misma nota en vueltas de 22:09, 25-sep) sin
+comprobar si seguía vigente — exactamente el error que una lección anterior ya señaló. Con
+Playwright (`reducedMotion:'reduce'`, scroll completo para disparar animaciones de aparición,
+`page.on('response')` para HTTP≥400): las tres, sin palabras prohibidas, sin respuestas ≥400.
+`/comparativa` sigue con el badge "EN TRÁMITE" para la factura SIAT, y `/facturacion` sigue
+diciendo de frente "Falta que el SIN autorice el sistema" — **ya evaluado como sano en la nota del
+2026-09-18** (decisión de "honestidad primero" enmarcada con fecha/resolución/alternativa
+concretas, coherente entre las dos páginas, y necesaria porque negar el estado de homologación
+ante el SIN sería mentir sobre un trámite regulatorio real, no exhibir obra sin motivo). No lo
+relitigo. **Sin hallazgo nuevo — confirmo que esta frase "próxima vuelta" debe dejar de copiarse**:
+ya está exprimida por tercera vez esta semana.
+
+**Eje nuevo de la vuelta: `RECORRIDO_MOVIL=1` en dental.** El último recorrido móvil completo de
+los 5 rubros fue el 2026-09-08 (18 días atrás, muchos deploys después) — más viejo que cualquier
+otro eje activo. Corrida `RECORRIDO_MOVIL=1 node scripts/recorrido_cliente.mjs --escribir`
+(viewport 390×844): **9/9 pasos OK, `completo: true`, `agujeros: []`.** Cuenta
+`zz-qa-2026-09-26-1613@onia.com.bo`, confirmación de correo antes del primer login, onboarding en
+6 pantallas, paciente `zz-qa-2026-09-26-1613-paciente` cargado y visto en `/patients`, cita
+`2026-09-28 09:00` agendada (201, `cmuile78u003401mxiolbmpj7`) y VISTA en `/appointments`, factura
+con ítem `zz-qa-2026-09-26-1613-item` vista en `/billing/cmuilej09003601mxswhwo1mj` y FRENADA sin
+pagar, panel mirado (el paciente no figura ahí: esperado, el dashboard no lista pacientes).
+Limpieza verificada tras cerrar: `appointments`/`organizations` con `zz-qa-%` = 0.
+
+**Sin hallazgo nuevo en móvil tampoco.**
+
+RAZÓN: N/A — avanzó (hallazgo viejo cerrado de verdad, eje `/agentes-comparativa-facturacion`
+re-confirmado sano en vez de repetido a ciegas, y eje móvil refrescado tras 18 días).
+LECCIÓN: la frase "próxima vuelta: `/agentes`, `/comparativa`, `/facturacion`" lleva semanas
+copiándose de entrada en entrada sin verificar vigencia — dejar de escribirla como pendiente
+salvo que el sitio cambie ahí; y un eje "de interacción" (móvil vs escritorio) puede quedar sin
+correrse mucho más tiempo que uno "de rubro" porque no tiene su propio contador visible: conviene
+fecharlo en esta nota cada vez que se corre, como se hace con rubro y `BUILD_ID`.
+
 ## 2026-09-26 (vuelta HEAD e0c0a0ce) — `BUILD_ID` sin cambios; tercer rubro (Importadora): 9/9, paso 7 no-aplica correctamente
 
 `BUILD_ID` (`DvBubiuO4uC5_E9jFNJeZ`) igual al de la entrada de abajo: no correspondía repetir
