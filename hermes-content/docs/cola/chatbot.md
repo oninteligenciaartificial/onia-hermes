@@ -738,8 +738,40 @@ Los tres defectos que los mantenían incorregibles, los tres medidos en vivo y c
    archivo de onia-platform). Un sha imposible deja al ítem incorregible para siempre, con cara de
    trabajo pendiente.
 
-**Lo que queda, y ya está ubicado:** 6 líneas `[leer]` — sin huellas de ninguna frontera, hay que
+**Lo que queda, y ya está ubicado:** las líneas `[leer]` — sin huellas de ninguna frontera, hay que
 abrirlas y decidir a qué deploy se refieren. Se derivan con el comando, nunca de acá.
+
+✅ **2026-09-26 — de 7 `[leer]` a 3, y el gate cazó su primera mentira del MOTOR.** El párrafo de
+arriba decía «6» y el comando ya daba **7**: un número copiado envejece aunque el remedio de al
+lado diga que se derive. Abiertas las 7 una por una, la causa no era falta de huellas sino **dos
+defectos de razonamiento del gate**, los dos medidos antes de tocar código y los dos con su
+hermano que impide que el arreglo falle abierto:
+
+1. **Acusaba texto TACHADO.** `chatbot.md:5011` decía `~~falta el deploy~~ CUMPLIDO Y VIVO` y
+   `PIDE_DEPLOY` veía el literal sin ver el `~~`. En estas colas el tachado **es** la convención
+   para «esto ya no es cierto» (3492, 3623, 7673, S9, S17…), así que el gate nombraba como
+   pendiente justo la línea donde el autor había escrito que ya está vivo. Arreglado con
+   `sinTachado()`, que quita **sólo pares completos en la misma línea**: en 3492 y 3623 el tachado
+   cubre el título viejo y el «NO desplegado» vigente está AFUERA — tragarse la línea entera las
+   habría absuelto a las dos.
+2. **Trataba 1-contra-5 como empate.** Cuatro líneas del motor (796, 860, 5011, 7368) traían 3-5
+   huellas del bot y **una** mención de `onia-platform` —la que tiene al pasar cualquier ítem
+   largo— y el `bot && !plataforma` las mandaba a la pila de «hay que leerlas», que es la pila que
+   nadie vacía. Ahora decide una **mayoría clara (el doble o más)**; 1-vs-1 y 2-vs-3 siguen
+   `sin ubicar`, y el `> 0` está explícito porque sin él `0 >= 0 * 2` devolvía `"bot"` para una
+   línea sin ninguna huella — el gate adivinando justo donde menos sabe.
+
+**Lo que destapó, que es el punto:** ubicada como motor, `chatbot.md:7368` pasó a juzgarse y
+**MIENTE desde el 2026-09-03** — decía «ARREGLADO … commiteado, NO desplegado» del bot que escribía
+el cargo de la encargada en minúscula a mitad de frase. Verificado de primera mano y no deducido
+del veredicto: `config.mjs` y `webhook-server.mjs` del bot **vivo** son byte a byte los del repo
+(`md5sum` idéntico dentro de `onia-center:/tmp/onia-bot/`), y el arreglo está adentro
+(`renderTemplate` capitaliza por `offset`, `config.mjs:1066`). **23 días de pendiente fantasma.**
+Corregida con `--corregir`, y re-correr el gate sale `0`: la marca exime, no es un bucle.
+
+Medida del gate antes → después: **23 líneas / 15 no medidas / 7 `[leer]` → 21 / 11 / 3**.
+Las 3 que quedan (3492, 3623, 7674) son del motor leídas a mano pero **no tienen ni una huella
+mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se derivan con el comando.
 
 ## Ahora
 
@@ -7366,6 +7398,7 @@ cita: al cerrar una fila hay que barrer quién la nombra, no sólo tacharla.
       Abierto el 2026-09-03 al recorrer el circuito de conocimiento (tablero `t_ff51abdc`).
       Lo ve el cliente del cliente, en la primera respuesta.
       ✅ **ARREGLADO el 2026-09-03 — commiteado, NO desplegado** (ver el punto de deploy al final).
+      ✅ YA DESPLEGADO (medido 2026-09-26: `npm run bot:vivo-al-dia` — el motor vivo ya corre este archivo).
 
       **Reproducción exacta (30 s), ya medida en vivo:**
       ```

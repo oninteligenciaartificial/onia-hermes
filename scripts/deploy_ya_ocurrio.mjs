@@ -131,6 +131,21 @@ export function sinCitas(linea) {
     .replace(/“[^”]*”/g, " ");
 }
 
+/**
+ * Quita el texto TACHADO (`~~…~~`), que en estas colas significa «esto ya no es cierto».
+ *
+ * `chatbot.md:5011` decía `~~falta el deploy~~ CUMPLIDO Y VIVO` y el gate la acusaba igual, o sea
+ * nombraba como trabajo pendiente justo la línea donde el autor había escrito que ya está vivo.
+ *
+ * ⚠️ Sólo pares COMPLETOS dentro de la misma línea, y por eso `[^~]*` y no `[\s\S]*?`: en 3492 y
+ * 3623 el tachado abre en el título y cierra renglones más abajo, en la MISMA línea que el
+ * «Commiteado, NO desplegado» que sí está vigente. Un `~~` suelto no borra nada: si esto se
+ * tragara la línea entera, esas dos quedarían absueltas y el gate fallaría abierto.
+ */
+export function sinTachado(linea) {
+  return String(linea ?? "").replace(/~~[^~]*~~/g, " ");
+}
+
 // ---------------------------------------------------------------------------
 // La decisión — pura, sin sistema. Es lo que prueba `--self-check`.
 // ---------------------------------------------------------------------------
@@ -161,15 +176,28 @@ export const HUELLA_PLATAFORMA = /onia-platform|app\.onia\.com\.bo|DESPLEGAR:\s*
  * un ítem largo puede nombrar los dos deploys mientras la frase acusada habla de uno solo.
  */
 export function fronteraDe(linea, cuerpo = "") {
+  /** Cuántas huellas DISTINTAS de esa frontera hay. Distintas y no totales: repetir `/tmp/onia-bot`
+   *  seis veces es una sola evidencia dicha seis veces, y contarla seis ganaría cualquier empate. */
+  const cuantas = (re, t) => new Set([...t.matchAll(new RegExp(re.source, "gi"))].map((m) => m[0].toLowerCase())).size;
   for (const texto of [linea, cuerpo]) {
     // `http://onia-platform:3000/…` es el BOT llamando al panel por la red de Docker, no el
     // deploy del panel: contarlo como huella mandaba ítems del motor a pedir un commit que en
     // onia-platform no existe, y un sha imposible los deja incorregibles para siempre.
     const t = String(texto ?? "").replace(/\bhttps?:\/\/onia-platform[^\s'"`)]*/gi, "");
-    const bot = HUELLA_BOT.test(t);
-    const plataforma = HUELLA_PLATAFORMA.test(t);
+    const bot = cuantas(HUELLA_BOT, t);
+    const plataforma = cuantas(HUELLA_PLATAFORMA, t);
     if (bot && !plataforma) return "bot";
     if (plataforma && !bot) return "plataforma";
+    // Las dos nombradas: decide sólo una MAYORÍA CLARA (el doble o más). Medido el 2026-09-26,
+    // cuatro líneas del motor de `chatbot.md` traían 3-5 huellas del bot y UNA de `onia-platform`
+    // —la mención al pasar que tiene cualquier ítem largo— y salían `sin ubicar`, que es la pila
+    // que nadie vacía. El umbral es conservador porque el error caro es el otro: mandar una línea
+    // del panel a la frontera del motor la saca del juicio por sha, el único que caza mentiras.
+    // El `> 0` no es redundante: sin él `0 >= 0 * 2` es cierto y una línea SIN NINGUNA huella
+    // volvería "bot" — el gate adivinando en el caso en que menos sabe, que es el fallo abierto
+    // que este bloque existe para no cometer.
+    if (bot > 0 && bot >= plataforma * 2) return "bot";
+    if (plataforma > 0 && plataforma >= bot * 2) return "plataforma";
   }
   return "sin ubicar";
 }
@@ -387,7 +415,7 @@ export function afirmacionesDe(texto, archivo, esCommit = () => false) {
       // abajo (la frase suele seguir ahí). Se busca con el mismo `finDeParrafo` que la escribe:
       // dos criterios distintos acá y allá re-acusan la línea en cada corrida, para siempre.
       if (MARCA.test(t) || MARCA.test(lineas[finDeParrafo(lineas, n - 1) + 1] ?? "")) continue;
-      if (PIDE_DEPLOY.test(sinCitas(t)))
+      if (PIDE_DEPLOY.test(sinTachado(sinCitas(t))))
         // El `cuerpo` viaja con la afirmación porque el juez del MOTOR razona por archivo, no por
         // sha, y el archivo casi nunca está en el renglón acusado: está en el cuerpo del ítem.
         out.push({ archivo, linea: n, frase: t.trim().slice(0, 120), shas, frontera: fronteraDe(t, cuerpo), cuerpo });
@@ -697,6 +725,33 @@ function selfCheck() {
   );
   // Pero el repo nombrado como repo SÍ sigue siendo huella del panel.
   ok("frontera: onia-platform como repo sigue siendo el panel", fronteraDe("falta el swap", "arreglado en `onia-platform/lib/x.ts`") === "plataforma");
+
+  // --- UN VOTO CONTRA CINCO NO ES UN EMPATE ---------------------------------------------
+  // Medido el 2026-09-26 sobre `chatbot.md`: de las 7 líneas que salían `sin ubicar`, CUATRO
+  // (796, 860, 5011, 7368) tenían **una sola** mención de `onia-platform` en el cuerpo contra
+  // **tres a cinco** huellas del motor (`/tmp/onia-bot`, `DESPLEGAR: bot`, `deploy-bot.sh`,
+  // `webhook-server.sh`). El `bot && !plataforma` las leía como ambiguas y las mandaba a la pila
+  // de «hay que leerlas» — la pila que nadie vacía, porque re-derivarla a mano cuesta una vuelta.
+  // Un ítem largo del motor casi siempre nombra el panel UNA vez al pasar; exigir cero menciones
+  // del otro lado es exigir que no exista prosa.
+  // El umbral es el DOBLE y es conservador a propósito: clasificar una línea del panel como del
+  // motor la saca del juicio por sha, que es el único que caza mentiras. Ante la duda, `sin ubicar`.
+  ok("frontera: 3 huellas del bot contra 1 del panel -> bot", fronteraDe("**Commiteado, NO desplegado**.", "corre en `/tmp/onia-bot`, se pide con `DESPLEGAR: bot` y `deploy-bot.sh`; el panel de `onia-platform` lo muestra") === "bot");
+  ok("frontera: 3 huellas del panel contra 1 del bot -> plataforma", fronteraDe("**Commiteado, NO desplegado**.", "`onia-platform` y `app.onia.com.bo`: falta el `DESPLEGAR: plataforma`; el bot llama a `vps-ops/bot`") === "plataforma");
+  // Los hermanos que impiden que el umbral falle abierto: sin mayoría clara NO se adivina.
+  ok("frontera: 1 contra 1 sigue sin ubicar", fronteraDe("`/opt/onia/bot` y `onia-platform`") === "sin ubicar");
+  ok("frontera: 2 contra 3 no alcanza el doble -> sin ubicar", fronteraDe("x", "`/opt/onia/bot` `deploy-bot.sh` contra `onia-platform` `app.onia.com.bo` `DESPLEGAR: plataforma`") === "sin ubicar");
+
+  // --- UNA AFIRMACIÓN TACHADA YA FUE CORREGIDA POR SU AUTOR ------------------------------
+  // `chatbot.md:5011` decía `~~falta el deploy~~ CUMPLIDO Y VIVO` y el gate la acusaba igual:
+  // `PIDE_DEPLOY` ve el literal y no ve el `~~`. En estas colas el tachado es LA convención para
+  // «esto ya no es cierto» (se usa en 3492, 3623, 7673, S9, S17...), así que acusarlo es mandar a
+  // trabajar sobre lo ya resuelto — el trabajo fantasma que este carril tiene medido al 46%.
+  ok("tachado: `~~falta el deploy~~ CUMPLIDO` no se acusa", afirmacionesDe("- [x] F2.1 — ~~falta el deploy~~ CUMPLIDO Y VIVO.\n", "x.md").length === 0);
+  // El hermano, y es el que importa: en 3492 y 3623 el tachado cubre el TÍTULO viejo y el
+  // «NO desplegado» está FUERA. Quitar la línea entera por tener un `~~` las absolvería a las dos.
+  ok("tachado: el NO desplegado de AFUERA se sigue acusando", afirmacionesDe("- [x] ~~El bot promete de más~~ — CERRADO en el repo. Commiteado, **NO desplegado**.\n", "x.md").length === 1);
+  ok("tachado: un `~~` sin cerrar no borra el resto de la linea", afirmacionesDe("- [x] ~~a medias. Commiteado, **NO desplegado**.\n", "x.md").length === 1);
 
   // El remedio que se le imprime a cada no medida. Es el caso que este arreglo existe para cazar.
   ok(
