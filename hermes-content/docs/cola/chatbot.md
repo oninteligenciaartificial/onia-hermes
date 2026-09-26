@@ -2238,8 +2238,9 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
   `slotsElegibles` · volver `pending` fijo—: las dos en rojo, base restaurada en verde.
   Suite del bot completa: **1383/1383**.
 
-- [x] 🔴 **CERRADO el 2026-09-24 (commiteado, NO desplegado): las 9 campañas estaban en un
-      archivo que NINGÚN deploy copiaba. Ya viven en el que se publica solo.**
+- [x] 🔴 **CERRADO el 2026-09-24 y VIVO EN PRODUCCIÓN desde ese día 09:44 (medido el 2026-09-26,
+      ver el cierre del ítem): las 9 campañas estaban en un archivo que NINGÚN deploy copiaba.
+      Ya viven en el que se publica solo.**
 
       **La causa, que no era la que decía este ítem.** Había **dos** documentos de conocimiento
       hermanos en el repo, y sólo uno viaja:
@@ -2287,14 +2288,28 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
       · batería completa del bot **1355/1355**;
       · `campanas-vivas` contra `onia.com.bo` **en vivo**: *7 frases vivas, 7 con campaña*.
 
-      ⚠️ **NO está vivo todavía, y esto no se cuenta como cerrado para el cliente.** Falta que
-      corra el deploy del bot (`DESPLEGAR: bot`, con el ok de Sergio Urcullo — no lo hace este
-      carril). Se verifica así, en el motor que CORRE, no en el host:
-      `docker exec onia-center grep -c campanas /tmp/onia-bot/knowledge.json` → hoy **0**, tiene
-      que dar **≥1**.
+      ✅ **VIVO para el cliente. Medido el 2026-09-26 01:35 La Paz, no heredado.** El ok de
+      Sergio Urcullo llegó (tarea `t_fca27a62`, hoy `archived`) y el deploy corrió el 2026-09-24
+      09:44. Las tres medidas, en el motor que CORRE y no en el host:
+      · el comando que este ítem dejó escrito — `docker exec onia-center grep -c campanas
+        /tmp/onia-bot/knowledge.json` → **1** (pedía ≥1);
+      · el archivo instalado es la versión que escribió este arreglo: **9 campañas, v
+        `2026-09-24.1`**;
+      · y el **camino vivo**, que es lo único que prueba que el motor las CARGA:
+        `buildConfig({inbox_id:4}).campanas` → **9**, y `campanaExacta` matchea las frases que
+        `onia.com.bo` manda por `wa.me` (probadas *"quiero saber si me sirve para mi negocio"*,
+        *"agendar la demo"* y la del configurador de webs).
 
-- [x] 🟡 **CERRADO el 2026-09-24 (commiteado, NO publicado — ver el ítem de arriba): al lead que
-      armó su web entera el bot le contestaba los precios del SISTEMA.**
+      ⚠️ **Un archivo con las campañas NO prueba que el motor las use, y este ítem casi se
+      audita mal por eso.** La primera medición del 26-sep preguntó por `ensureKnowledge()`, que
+      devuelve el DOCUMENTO de conocimiento, y contestó `campanas: AUSENTE` — un rojo falso que
+      daba por muerto algo sano. `campanas` no vive en ese documento: `withKnowledge` la convierte
+      en un **override de config** (`knowledge.mjs:1408`), así que la pregunta correcta es a la
+      config que arma producción (`buildConfig`), no al documento. Un instrumento que mide la capa
+      de al lado da un veredicto coherente y equivocado.
+
+- [x] 🟡 **CERRADO el 2026-09-24 y VIVO EN PRODUCCIÓN (medido el 2026-09-26 — ver el ítem de
+      arriba): al lead que armó su web entera el bot le contestaba los precios del SISTEMA.**
 
       **Reproducido antes de tocar nada**, con el mensaje real que arma
       `web-factory/apps/onia-platform/src/components/web-configurator/WebConfigurator.tsx:195`:
@@ -2339,8 +2354,10 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
 
       **Verde:** `campanas-web.test.mjs` 17/17 · toda la batería del bot **1330/1330**.
 
-      ⚠️ **Lo que sigue sin ser verdad para el cliente:** nada de esto llega hasta que las
-      campañas se publiquen (ítem de arriba). Y aun publicado, el lead recibe **primero** `M0`
+      ✅ **Ya es verdad para el cliente.** Las campañas se publicaron el 2026-09-24 09:44 (ítem de
+      arriba) y esta campaña se probó en el motor vivo el 2026-09-26: `campanaExacta` matchea
+      *"Hola, vengo del configurador de webs de ONIA"* y responde acusando recibo del pedido de
+      web, no los precios del sistema. Y el lead recibe **primero** `M0`
       —la bienvenida con el pitch del sistema y los horarios de demo— y **después** la respuesta
       de su web: es el diseño de `composeWithFunnel` (M0 es lo que declara al bot como bot y lo
       que dispara `lead_upsert`), no un olvido. Si se quiere un M0 propio para el lead de web,
