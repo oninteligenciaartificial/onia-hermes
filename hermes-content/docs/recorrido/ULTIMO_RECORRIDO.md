@@ -12,6 +12,50 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-26 (vuelta HEAD 70e6f2ab) — `BUILD_ID` sin cambios; candidato de la vuelta anterior: el cupo del chatbot cifra-por-cifra contra el código que corta — sin hallazgo
+
+`ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado primero contra la entrada de abajo:
+`4FWMcecd4jRBGUVwStDQb`, **igual** — no correspondía repetir el recorrido end-to-end. Tablero:
+sin tareas `ready` sin reclamar en la zona `recorrido-cliente` (`t_04123cfc` es de
+`carril-docs-auditoria`).
+
+Tomé el candidato que la vuelta anterior (HEAD 82e8232c) dejó explícito: el cupo del chatbot
+(500 conversaciones/mes, recarga Bs 190 por 200) contra el código que REALMENTE corta el cupo, no
+sólo contra el texto de venta.
+
+```
+grep -n "includedConversations\|precio: 190\|conversaciones: 200" onia-platform/lib/pricing.ts
+  → WHATSAPP_ADDON.includedConversations = 500; RECARGA_CONVERSACIONES = {conversaciones: 200, precio: 190}
+grep -n "WHATSAPP_ADDON\|RECARGA_CONVERSACIONES" onia-platform/lib/chatbot/cupo.ts
+  → cuotaDe() = WHATSAPP_ADDON.includedConversations + recargadas — nunca un literal propio
+grep -rn "\b190\b" onia-platform --include=*.ts --include=*.tsx | grep -v test
+  → una sola declaración (pricing.ts:185); las 4 apariciones más (mensaje WhatsApp, comentario
+    de InboxClient, shortLabel) citan la MISMA constante o son comentario, no un segundo número
+grep -n "estadoCupo\|cuota\.agotada" onia-platform/app/api/chatbot-knowledge/published/route.ts
+  → el endpoint que el motor del VPS consulta para cortar llama estadoCupo() de cupo.ts, que a
+    su vez deriva de pricing.ts — el mismo camino que exhibe /settings/chatbot, sin bifurcación
+```
+
+**Sin hallazgo**: el límite (500), la recarga (200×Bs 190) y el corte real (`cuota.agotada` en
+`published/route.ts`, que el motor del VPS lee) cuelgan todos de las mismas dos constantes de
+`pricing.ts` — sin un literal duplicado ni un segundo camino que pueda desincronizarse. Las 8
+superficies que muestran el cupo (`PlanClient`, `AddonChatbotClient`, `InboxClient`,
+`CupoConversacionesCard`, `plan-display.ts`, `remotion/oferta-promo.ts`, `/dev/cupo-chatbot`,
+`/settings/chatbot`) también leen `WHATSAPP_ADDON.includedConversations`, ninguna lo copia.
+
+Con esto se agota también el segundo eje que traía la vuelta anterior. Próximo candidato cifra-
+por-cifra para cuando el `BUILD_ID` siga sin cambiar: los umbrales de `UMBRAL_AVISO` (80 %) y el
+texto exacto de los tres avisos (`avisarAlDueno`, `avisarDelCorte`, `textoDeCupo`) contra lo que
+`/settings/chatbot` renderiza en VIVO — hoy sólo se auditó el código, no la pantalla.
+
+RAZÓN: N/A — avanzó (candidato de la vuelta anterior agotado sin drift; el motor que corta en
+producción corre por el mismo camino que el texto de venta).
+LECCIÓN: el método "cifra-por-cifra contra la fuente única" sigue rindiendo cuando el `BUILD_ID`
+no se mueve — y conviene seguir hasta el punto donde el dato se APLICA (acá `published/route.ts`,
+lo que el motor realmente lee), no sólo hasta la constante que lo declara.
+
+---
+
 ## 2026-09-26 (vuelta HEAD 82e8232c) — `BUILD_ID` sin cambios; cambio de método: cifra-por-cifra en `plan-catalogo.ts` (no grep de literales) — sin hallazgo
 
 `ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado primero contra la entrada de abajo:
