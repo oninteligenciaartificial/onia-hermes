@@ -8973,6 +8973,62 @@ cita: al cerrar una fila hay que barrer quién la nombra, no sólo tacharla.
       alcances, así que nada más lo sujetaba).
       </details>
 
+- [x] ✅ **AUDITORÍA DE LOS `[x]` — 2026-09-26 18:43-19:1x La Paz (escalón 2: «Ahora» agotada en
+      las dos colas y los 3 de «Después» esperando). Los `[x]` auditados RESISTEN, y el escalón
+      dio trabajo real en el tablero: cuatro tareas de mi zona con la evidencia vencida.**
+
+      **Qué se auditó y con qué resultado** (se apuntó a los `[x]` que afirman estado de
+      PRODUCCIÓN, que son los que CLAUDE.md prohíbe dar por hechos sin mirar):
+
+      | claim auditado | veredicto |
+      |---|---|
+      | «el aviso está DESPLEGADO y ENCENDIDO en producción» (09-05, nunca re-medido) | **cierto** |
+      | los 6 medidores cerrados HOY están cableados a algo que corre | **cierto**: 98/98 |
+      | la cadena de gates sostiene los `[x]` | **cierto**: `npm test` exit 0 |
+
+      🔴 **Lo que se buscaba y NO estaba, que es el hallazgo que justifica el escalón.** La
+      hipótesis era la clase ya pagada por este carril: *un `[x]` respaldado por un alias que
+      nadie corre vale cero* («un alias suelto no lo corre nadie: entra a la medición de arranque
+      del carril o vale cero»). Se midió DERIVANDO los invocados desde `scripts.test` de
+      `package.json` y expandiendo transitivamente, en vez de leer la cadena a ojo:
+      **98 aliases `test:*`, 98 en la cadena, CERO huérfanos.** La hipótesis era falsa; se anota
+      porque una hipótesis refutada con el método a la vista es lo que evita volver a gastar la
+      vuelta en ella.
+
+      **Y el `[x]` más cargado del carril se sostuvo por el motivo que importa.** Mi tercera
+      medida de objetivo cuenta líneas `[aviso] … aviso enviado` como prueba de que a Sergio
+      Urcullo le llegó, y la memoria compartida advierte que *sólo la línea `OK message_id=`
+      prueba entrega* porque `onia-tg.sh` es un ENRUTADOR (sus `INFORMATIVO`/`TAREA` salen exit 0
+      sin tocar Telegram). **No aplica acá, y se verificó leyendo el emisor, no suponiendo:**
+      `aviso-telegram.mjs:313` llama `api.telegram.org/sendMessage` con su propio `fetch`, y
+      `:334` corta con `!respuesta.ok || cuerpo.ok === false` **antes** de devolver `sent` — con
+      el comentario que explica por qué mirar sólo el código HTTP sería el falso verde (Telegram
+      contesta 200 con `ok:false`). O sea: esa línea del log es honesta.
+
+      ✅ **Trabajo hecho: cerradas 4 tareas del tablero de mi zona, con su recuento.**
+      `t_93a999c1`, `t_22776686`, `t_f326feb4` y `t_26d50f88` (del 6 y 7-sep, cuatro duplicados
+      del mismo tema, creadas por un ordenador que ya no corre). **Sus tres premisas estaban
+      vencidas**, recontadas antes de cerrar —la evidencia de una tarea se congela—:
+
+      | su premisa | recuento de hoy |
+      |---|---|
+      | «cola vacía, 0 ítems en Ahora» | **3** abiertos; y 137 en «Ahora» todos cerrados |
+      | «session limit en el log» | **0** (`grep -ci "session limit"`) |
+      | «5 sin commit recientes» | las últimas **6** vueltas, exit 0 con 1-3 commits |
+
+      ⚠️ **No se ejecutó su cuerpo a propósito, y el motivo es la regla:** pedían *«añadir 5
+      ítems `- [ ]`»* e *«inventar 3 ítems accionables»*, que es exactamente lo que el prompt del
+      carril PROHÍBE (inventar una tarea o deducirla del foco). Una tarea con la solución escrita
+      traslada su punto ciego al ejecutor: se recuenta y se cierra, no se obedece.
+
+      **Lo que de verdad frena este carril no es falta de ítems escritos: es UNA firma.** El
+      pedido de deploy del bot sigue `blocked` esperando el `ok` de Sergio Urcullo —**13**
+      archivos, recontados con `bash /opt/onia/bot/_deploy/publicar.sh --dry-run` DESPUÉS del
+      último merge— y rescata 7 leads colgados, incluido el único lead real de WhatsApp. **El ID
+      se deriva, no se copia** (`onia-tablero.sh list --status blocked | grep -i 'Publicar el
+      bot'`). No se mandó Telegram: ese `ok` ya le llega en el parte diario, y sumar un aviso a
+      un canal saturado es apagarlo.
+
 - [ ] **Limpieza de la data QA NUEVA.** La del 29-ago ya se ejecutó; después se generó más:
       las conversaciones QA 39, 43 y 44 (`Cliente Prueba Bandeja`, `Cliente Insistencia Tres`,
       `Cliente Comprobante`). **No borrar todavía**: son la evidencia de cuatro ítems cerrados,
