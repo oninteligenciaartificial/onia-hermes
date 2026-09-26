@@ -12,6 +12,48 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-26 (vuelta HEAD 82e8232c) — `BUILD_ID` sin cambios; cambio de método: cifra-por-cifra en `plan-catalogo.ts` (no grep de literales) — sin hallazgo
+
+`ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado primero contra la entrada de abajo:
+`4FWMcecd4jRBGUVwStDQb`, **igual** — no correspondía repetir el recorrido end-to-end (9/9 ya
+cerrado en los 5 rubros contra este build). Tablero: sin tareas `ready` sin reclamar en la zona
+`recorrido-cliente`.
+
+Las dos vueltas anteriores agotaron sus candidatos (vigencia de "14 días" vía `prueba-vs-plan.test.ts`,
+y "responder gratis por WhatsApp" sin literal en el sitio) sin cambiar de método — las dos
+siguieron auditando TEXTO. Esta vuelta cambió de método: en vez de barrer literales, tomé una
+cifra citada en superficie de venta (`/precios`, `/v1/precios`, `prueba-vs-plan.test.ts`: Básico
+300 pacientes/2 usuarios, Pro 1.500 fichas/5 usuarios) y la crucé contra el ÚNICO lugar del
+código que la declara, no contra el texto que la repite:
+
+```
+grep -n "PLAN_LIMITS\s*=\|patients:\|users:" /root/loops/onia-platform/lib/plan-catalogo.ts
+  → basic: patients 300, users 2 · professional: patients 1500, users 5
+grep -rn "patients:.*300\|patients.*1500" /root/loops/onia-platform --include=*.ts --include=*.tsx | grep -v test
+  → una sola ocurrencia de cada una, ambas en plan-catalogo.ts: sin copia duplicada ni valor
+    distinto escondido en otro archivo (el patrón que costó los "CUATRO precios vivos" del
+    2026-08-15, `CLAUDE.md` §2)
+```
+
+Sin hallazgo: las cifras citadas en venta coinciden exactamente con la única fuente, y esa fuente
+no tiene una segunda copia con otro número.
+
+También reverifiqué que `t_826a7ab2` (el autobombo de `/servicios/marketing-ia`, hallazgo de la
+vuelta `9a046a0f`) está `done` y el texto ya no está en la página servida
+(`curl -s https://onia.com.bo/servicios/marketing-ia | grep -o "Somos una empresa nueva[^<]*"` →
+vacío): cerrado de verdad, no solo en el tablero.
+
+RAZÓN de no-avance en la medida `llegoHasta/completo`: no corresponde repetir el recorrido
+end-to-end (build sin cambios, 9/9 ya cerrado en los 5 rubros).
+LECCIÓN: el método "grep de literales sobre el sitio" ya está exprimido para las promesas
+obvias (14 días, WhatsApp gratis, autobombo). El método que sigue dando fruto es cifra-por-cifra
+contra la fuente única del código, no contra otro texto que la repite — y esta vuelta lo aplicó
+por primera vez sin encontrar drift. Candidato para la próxima vuelta sin cambio de `BUILD_ID`:
+el cupo del chatbot (500 conversaciones/mes, recarga Bs 190×200) contra `lib/pricing.ts` y contra
+el código que realmente corta el cupo (`cupo-agotado-deriva`), no solo contra el texto de venta.
+
+---
+
 ## 2026-09-26 (vuelta HEAD 5bec4448) — `BUILD_ID` sin cambios; descartados los dos ejes que dejó la vuelta anterior — sin hallazgo
 
 `ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado primero contra la entrada de abajo:
