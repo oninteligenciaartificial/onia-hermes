@@ -12,6 +12,32 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-25 23:09-23:12 La Paz — `BUILD_ID` sin cambios, rotado a Estética, 9/9 sin hallazgo
+
+`ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado primero: `4FWMcecd4jRBGUVwStDQb`, igual al
+de las dos vueltas anteriores (dental y comercio) — corresponde seguir rotando (lección de la
+entrada anterior), no repetir dental. Tablero revisado: nada `ready` sin reclamar en la zona
+`recorrido-cliente`.
+
+Primer intento sin fijar `RECORRIDO_RUBRO` corrió por default en dental (ya cubierto); se cortó
+a los 120s por el timeout del corredor y dejó una fila a medias
+(`zz-qa-2026-09-25-2309-negocio`), que se borró antes de seguir. Relanzado con
+`RECORRIDO_RUBRO='Estética' node scripts/recorrido_cliente.mjs --escribir` en background:
+**9/9 pasos, sin hallazgo.** Cuenta `zz-qa-2026-09-25-2312@onia.com.bo`, confirmación de correo
+antes del primer login, onboarding en 6 pantallas, paciente `zz-qa-2026-09-25-2312-paciente`
+cargado y visto en `/patients` (group Clientas), cita 2026-09-28 09:00 agendada (201,
+`cmuhkwci5004t01r2ir8cfazy`) y VISTA en `/appointments`, factura con ítem
+`zz-qa-2026-09-25-2312-item` vista en `/billing/...` — frenado ahí sin marcar pago. Dato del
+paso 6 no aparece en `/dashboard` (esperado: el panel no lista group Clientas). `resumen.json`:
+`llegoHasta 9/9`, `completo: true`, `agujeros: []`. `organizations`/`appointments` con `zz-qa-%`
+→ **0** al cerrar, verificado.
+
+**Sin hallazgo de producto.** RAZÓN: N/A — avanzó (Estética queda re-verificada contra el
+`BUILD_ID` vigente). LECCIÓN: al matar un run porque corrió el rubro equivocado, la fila que ya
+alcanzó a crear en producción NO desaparece sola — hay que buscarla y borrarla ANTES de
+relanzar, o queda basura zz-qa- huérfana entre vueltas. Próxima vuelta: si el `BUILD_ID` sigue
+igual, seguir rotando (importadora, servicios profesionales) antes de volver a dental.
+
 ## 2026-09-25 22:09-22:10 La Paz — `BUILD_ID` sin cambios, rotado a Comercio: primer rubro re-verificado contra el build nuevo, 8/8 sin hallazgo
 
 `ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado primero: `4FWMcecd4jRBGUVwStDQb`, igual al
@@ -3968,3 +3994,36 @@ misma corrida: `appointments`/`organizations` con prefijo `zz-qa-` en 0 filas, v
 RAZÓN: N/A — avanzó (recorrido re-verificado contra el `BUILD_ID` nuevo, 9/9 sin hallazgo).
 LECCIÓN: ninguna nueva — el método de comparar `BUILD_ID` primero volvió a ser lo que decidió
 repetir dental.
+
+## 2026-09-26 00:09-00:20 La Paz — dental 9/9 con `BUILD_ID` sin cambios; re-verificado invitar/quitar coadministrador (DG-043) tras varios deploys de esta semana
+
+`ONIA_ALTA_AUTOMATICA=abierta`. Tablero: sin tareas `ready` de `recorrido-cliente` sin reclamar.
+`BUILD_ID` comparado antes de decidir: `4FWMcecd4jRBGUVwStDQb`, igual al de la corrida de
+Estética del 2026-09-25 23:16 y al de dental de las 15:09. Correspondía igual correr el recorrido
+completo (es la medición de arranque obligatoria, no una repetición optativa por gusto).
+
+**Recorrido dental: 9/9, `completo: true`, `agujeros: []`.** Cuenta
+`zz-qa-2026-09-26-0009@onia.com.bo` creada, confirmación de correo real, onboarding en 6
+pantallas, paciente `zz-qa-2026-09-26-0009-paciente` cargado y encontrado, cita
+`2026-09-28 09:00` agendada y VISTA en `/appointments` (id `cmuhmyf1l005k01r2mabfx8yq`), factura
+con ítem `zz-qa-2026-09-26-0009-item` servida en `/billing/cmuhmyqrb005m01r2te357f97` y frenada
+sin pagar, panel mirado (no lista pacientes: es lo que muestra, no un fallo). Todo lo `zz-qa-`
+borrado en la misma corrida: 0 filas en `appointments`/`organizations` con prefijo `zz-qa-`,
+verificado con `SELECT` después del borrado.
+
+Con el resto de la vuelta, re-chequeé el escalón que la nota del 18-sep había dejado señalado
+como "superficie no auditada bajo el `BUILD_ID` vigente" — invitar y quitar un coadministrador
+desde `/settings` (DG-043) — porque `onia-platform` tuvo varios deploys entre esa nota (18-sep)
+y hoy, y la última verificación en VIVO por UI de esa superficie fue el 19-sep, con un `BUILD_ID`
+viejo. Usé `scripts/probar_coadministrador_ui.mjs` (ya existía, no hizo falta escribir nada
+nuevo): org `zz-qa-coadminui-20260926001416` sembrada por SQL con `plan='clinic'`
+(`multiAdminIncluded`), sesión del dueño minteada sin contraseña, clic real en "Agregar a
+alguien" con rol Administrador → quedó un segundo `profiles` con `role='ADMIN'` en la base; clic
+real en "Quitar" con el `confirm()` nativo aceptado → ese `profiles` desapareció. **Sin hallazgo**:
+las dos puntas de DG-043 siguen sosteniéndose por la UI tras los deploys de esta semana. Limpieza
+verificada: `organizations=0 auth.users=0` al cerrar.
+
+RAZÓN: N/A — avanzó (dental re-confirmado con el `BUILD_ID` vigente, y cerrado un escalón que
+quedaba con verificación vieja).
+LECCIÓN: ninguna nueva — el método de comparar `BUILD_ID` primero y de reproducir con el
+instrumento ya escrito (en vez de reinventar el chequeo) volvió a funcionar.
