@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import nextConfig from "../../next.config";
+import nextConfig, { cspDeLaLanding } from "../../next.config";
 import { CHATWOOT_BASE_URL, CHATWOOT_SDK_PATH } from "./chat-diferido";
 
 /**
@@ -176,6 +176,69 @@ describe("la CSP de la landing", () => {
      * y secuestro de URLs relativas. */
     expect(directivas.get("object-src")).toEqual(["'none'"]);
     expect(directivas.get("base-uri")).toEqual(["'self'"]);
+  });
+
+  /**
+   * `'unsafe-eval'`: NO en producción, SÍ en desarrollo — y el segundo caso es
+   * el que faltaba.
+   *
+   * La CSP nació el 2026-09-25 diciendo *"no va `'unsafe-eval'`: se midió y
+   * nada lo pide"*. Cierto para el bundle de producción, falso para `next dev`:
+   * el runtime del dev server evalúa cada módulo con `eval`, así que con esta
+   * CSP puesta la página **no hidrata** en local. Medido el 2026-09-25 en el
+   * puerto 3320, abriendo `/guia-facturacion`:
+   *
+   *     PAGEERROR EvalError: Evaluating a string as JavaScript violates the
+   *       following Content Security Policy directive because 'unsafe-eval' is
+   *       not an allowed source of script…
+   *     URL tras apretar el botón: /guia-facturacion?email=sin-arroba&whatsapp=
+   *
+   * Esa URL es la firma: el formulario hizo un submit GET **nativo**, o sea que
+   * React nunca tomó el control. Producción, medida el mismo día contra
+   * `onia.com.bo/guia-facturacion`, hidrata perfecto (el error se muestra,
+   * `aria-invalid=true`, cero pedidos al intake).
+   *
+   * **Por qué no es un detalle de comodidad de desarrollo.** El gate que prueba
+   * de punta a punta la captura de leads (`scripts/verificar-guia-facturacion.mjs`)
+   * corre contra el sitio LOCAL a propósito —apretar el botón en producción
+   * nace un lead en la bandeja real— y pasó a dar **8 FALLAS** fijas sobre una
+   * pantalla sana. Un gate que grita siempre se saltea, y ése es el único que
+   * vigila el circuito que cruza dos apps por el nombre de una clave JSON: el
+   * día que de verdad se corte la captura de correos, nadie le va a creer.
+   */
+  it("no permite 'unsafe-eval' en producción", () => {
+    expect(cspDeLaLanding("production")).not.toContain("unsafe-eval");
+  });
+
+  it("permite 'unsafe-eval' en desarrollo, o el sitio local no hidrata", () => {
+    const directivas = new Map(
+      cspDeLaLanding("development")
+        .split(";")
+        .map((trozo) => trozo.trim().split(/\s+/))
+        .map(([nombre, ...origenes]) => [nombre.toLowerCase(), origenes]),
+    );
+
+    expect(
+      directivas.get("script-src"),
+      "sin 'unsafe-eval' el dev server no hidrata: React no toma el control y todo gate que MIRE una pantalla local mide una página muerta",
+    ).toContain("'unsafe-eval'");
+  });
+
+  it("el header que sale al navegador se deriva del entorno, no se tipea", async () => {
+    /* El recíproco de los dos de arriba: que `headers()` devuelva EXACTAMENTE
+     * lo que la función pura calcula para este entorno. Sin esto, alguien puede
+     * arreglar la función y dejar el header viejo colgado en `headers()`, y los
+     * dos casos anteriores seguirían verdes sobre un navegador que recibe otra
+     * cosa. */
+    const directivas = await directivasDeLaCsp();
+    const delEntorno = new Map(
+      cspDeLaLanding(process.env.NODE_ENV)
+        .split(";")
+        .map((trozo) => trozo.trim().split(/\s+/))
+        .map(([nombre, ...origenes]) => [nombre.toLowerCase(), origenes]),
+    );
+
+    expect(directivas.get("script-src")).toEqual(delEntorno.get("script-src"));
   });
 
   it("los cinco headers que ya protegían la landing siguen puestos", async () => {

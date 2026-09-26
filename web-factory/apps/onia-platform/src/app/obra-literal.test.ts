@@ -64,9 +64,48 @@ import { PAGINAS, archivoDe, cadenaHastaTexto } from "./rutas";
  * si no, la bitácora que explica POR QUÉ salió una de estas palabras pondría el gate
  * en rojo y obligaría a borrar el registro de lo que pasó — este archivo mismo las
  * nombra una docena de veces.
+ *
+ * ⚠️ **Hasta el 2026-09-26 esta lista tenía CINCO formas y la de `obra.test.ts` tenía
+ * nueve, o sea que el CUERPO —lo que el cliente lee— estaba peor vigilado que su
+ * `<head>`.** Entre las que faltaban estaba `beta`, que `CLAUDE.md` prohíbe por su
+ * nombre y que la medición de arranque de este carril ya buscaba. Medido por mutación,
+ * que es lo que lo vuelve un hecho: se inyectó `"Mantenimiento simple: tu sitio en
+ * línea y al día. (beta)"` en `content/webs.ts` —el copy del plan de Bs 190 de
+ * `/servicios/webs`, una pantalla que producción sirve y que está en el sitemap— y los
+ * dos gates de obra pasaron **verde: 54 tests**. La palabra que le da nombre a la regla
+ * en tres documentos no tenía quién la viera del lado del cuerpo.
+ *
+ * El modo de falla es el mismo que este archivo ya documenta un párrafo más arriba, en
+ * su forma más incómoda: no fue un sujeto mal derivado ni un resolver roto —el
+ * recorrido visitaba el archivo— sino que **nadie le hizo la pregunta**. Dos listas
+ * hermanas que se escribieron por separado divergen en silencio, y la más floja decide.
+ *
+ * ⚠️ **`todavía no` sigue AFUERA a propósito, y no es un olvido**: `obra.test.ts` lo
+ * persigue en la `description` porque ahí es el anzuelo, pero el cuerpo de
+ * `/comparativa` existe para enumerar de frente lo que Onia no hace y taparlo ahí sería
+ * fabricar. Lo mismo `borrador` a secas, que es una capacidad real de los agentes. Las
+ * dos exclusiones están razonadas en `obra.test.ts`; se nombran acá para que la próxima
+ * sesión que compare las dos listas no "empareje" lo que se separó a propósito.
+ *
+ * ⚠️ **`pendiente de revisión` y `borrador de trabajo` también quedan AFUERA de esta
+ * lista, y ésas sí se intentaron.** Agregarlas puso `/terminos` y `/privacidad` en rojo,
+ * y el rojo era FALSO: las dos frases viven en `components/legal/legal-page.tsx` dentro
+ * de `{doc.meta.status === "borrador" && (…)}`, o sea en una rama que sólo se renderiza
+ * si el documento se declara borrador — y los dos frontmatter dicen `status: "vigente"`.
+ * Verificado MIRANDO producción el 2026-09-26, no suponiendo: `curl` de `/terminos` da
+ * cero «Pendiente de revisión» y cero «Borrador v», y sirve la fecha del 25-sep, así que
+ * no es un build viejo tapando el cartel.
+ *
+ * La diferencia con `obra.test.ts` es la que decide: una `description` es texto plano y
+ * lo que está escrito se publica, mientras que el cuerpo pasa por condicionales que este
+ * recorrido no evalúa —lee el CÓDIGO, no el render—. Perseguir acá el texto de una rama
+ * apagada deja dos pantallas sanas en rojo permanente, y un rojo que siempre está rojo
+ * se archiva como «el de siempre»: el gate se muere de ruido, no de falta de patrones.
+ * Esa frase ya tiene guardián donde sí corresponde: el `status` del frontmatter, que es
+ * lo que enciende el cartel, y la `description` que vigila `obra.test.ts`.
  */
 const OBRA =
-  /(muy pronto|pr[oó]ximamente|en construcci[oó]n|en desarrollo|estamos construyendo)/i;
+  /(muy pronto|pr[oó]ximamente|en construcci[oó]n|en desarrollo|estamos construyendo|estamos trabajando|\bbeta\b)/i;
 
 describe("ninguna pantalla anuncia obra en su cuerpo", () => {
   /**
@@ -93,9 +132,10 @@ describe("ninguna pantalla anuncia obra en su cuerpo", () => {
   });
 
   /**
-   * ANCLA DEL PATRÓN. Las cinco formas son las que este proyecto vio de verdad: las
-   * cuatro de la medición del objetivo del carril más la que usó la landing en 2026.
-   * Se prueban con y sin acento porque el copy del sitio escribe las dos.
+   * ANCLA DEL PATRÓN. Las formas son las que este proyecto vio de verdad: las cuatro de
+   * la medición del objetivo del carril, la que usó la landing en 2026, y las cuatro que
+   * el gate de la `description` ya perseguía mientras el cuerpo no. Se prueban con y sin
+   * acento porque el copy del sitio escribe las dos.
    */
   it("el patrón reconoce las formas reales y no se come una frase sana", () => {
     for (const vivo of [
@@ -106,6 +146,10 @@ describe("ninguna pantalla anuncia obra en su cuerpo", () => {
       "Módulo en construccion",
       "Esta pantalla está en desarrollo",
       "Estamos construyendo el módulo de caja",
+      "Estamos trabajando en el módulo de caja",
+      // El caso EXACTO de la mutación del 2026-09-26, que pasó verde con la lista vieja.
+      "Mantenimiento simple: tu sitio en línea y al día. (beta)",
+      "Agenda en beta",
     ]) {
       expect(OBRA.test(vivo), `el patrón no reconoce: ${vivo}`).toBe(true);
     }
@@ -114,6 +158,16 @@ describe("ninguna pantalla anuncia obra en su cuerpo", () => {
       "Tu negocio deja de vivir en el cuaderno",
       "Construimos los flujos y los dejamos andando en tu operación",
       "Contesta al instante a cualquier hora",
+      // `borrador` a secas es una capacidad vendible: los agentes dejan uno esperando
+      // aprobación (`/agentes`). Sólo se persigue el borrador DE LA PÁGINA.
+      "El agente te deja el borrador listo y vos aprobás",
+      // `beta` va con `\b`: no puede morder una palabra que la contenga.
+      "Alfabeta Distribuidora",
+      // La carencia enumerada de frente en `/comparativa` NO es obra: ver el ⚠️ de arriba.
+      "Y lo que Onia todavía no hace",
+      // El cartel condicional de `legal-page.tsx`: apagado por frontmatter `vigente`, y
+      // perseguirlo acá deja `/terminos` y `/privacidad` en rojo falso permanente.
+      "Pendiente de revisión por abogado. Este documento es un borrador de trabajo",
     ]) {
       expect(OBRA.test(sano), `el patrón se come una frase sana: ${sano}`).toBe(false);
     }
