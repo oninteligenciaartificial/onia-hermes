@@ -12,6 +12,46 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-26 (vuelta HEAD e0c0a0ce) — `BUILD_ID` sin cambios; tercer rubro (Importadora): 9/9, paso 7 no-aplica correctamente
+
+`BUILD_ID` (`DvBubiuO4uC5_E9jFNJeZ`) igual al de la entrada de abajo: no correspondía repetir
+dental/comercio. Cambio de método: probé **Importadora**, rubro que la vuelta anterior no había
+cubierto en esta racha reciente (el último hallazgo sobre él —"paso 7 de importadora tampoco era
+culpa del producto"— es viejo y valía re-confirmar que sigue sano).
+
+- **Importadora**: `RECORRIDO_RUBRO=Importadora`, `--escribir`. **9/9 pasos completos.** Paso 7
+  (agendar cita) sale `NO-APLICA` correctamente: la tarjeta del rubro en `/register` promete
+  "Catálogo, cotizaciones B2B y costeo de importación" — sin agenda — y el menú del producto es
+  coherente (no ofrece citas). Paso 6 cargó el dato en storefront/Catálogo (`/comercio`) y se
+  encontró de vuelta. Paso 8 llegó a `/comercio/fiados` (Créditos) y frenó ahí, a propósito.
+  `resumen.json`: `llegoHasta 9/9, completo True, agujeros []`.
+- Limpieza: cuenta `zz-qa-2026-09-26-1409@onia.com.bo`, organización
+  `zz-qa-2026-09-26-1409-negocio` y paciente `zz-qa-2026-09-26-1409-paciente` creados y BORRADOS
+  en la misma corrida. Verificado tras cerrar: `appointments` con `zz-qa-` = 0,
+  `organizations` con `zz-qa-` = 0.
+- Sin hallazgo nuevo: el producto sigue coherente entre lo que promete la tarjeta del rubro y lo
+  que el menú realmente ofrece.
+
+## 2026-09-26 (vuelta HEAD b5c4e6b2) — recorrido end-to-end COMPLETO en dos rubros, `BUILD_ID` cambió
+
+`BUILD_ID` cambió respecto a la entrada de abajo (`4FWMcecd4jRBGUVwStDQb` → `DvBubiuO4uC5_E9jFNJeZ`),
+así que correspondía repetir el recorrido end-to-end. `ONIA_ALTA_AUTOMATICA=abierta`.
+
+- **Clínica dental** (rubro default): `RECORRIDO_RUBRO` sin fijar, `--escribir`. **9/9 pasos
+  OK**, `completo: true` en `resumen.json`. Alta → confirmar correo → onboarding (6 pantallas)
+  → paciente cargado en `/patients` → cita `2026-09-28 09:00` agendada (id
+  `cmuiethf3000k01mx26w1e253`) y VISTA en `/appointments` → factura con ítem visible en
+  `/billing/...` (frenado sin pagar) → dato del paso 6 no figura en `/dashboard` (el panel no
+  lista pacientes; no es un fallo, es lo que muestra esa pantalla).
+- **Comercio**: `RECORRIDO_RUBRO=Comercio`, `--escribir`. **8/8 pasos que le corresponden OK**
+  (paso 7 "agendar cita" sale `NO-APLICA` — coherente: el menú de Comercio no tiene agenda, su
+  tarjeta de alta ofrece "Catálogo, inventario, caja y clientes", no citas). Alta → onboarding →
+  producto cargado en `/comercio` (storefront Catálogo) → pantalla de cobro en
+  `/comercio/caja` (frenado) → dato del paso 6 SÍ aparece en `/dashboard` en este rubro.
+- Limpieza verificada ambas corridas: `organizations`/`appointments` con `zz-qa-%` = 0 filas al
+  cerrar.
+- Tablero: sin tareas `ready` sin reclamar en la zona `recorrido-cliente`.
+
 ## 2026-09-26 (vuelta HEAD 31f9e131) — `BUILD_ID` sin cambios; re-verificado cupo del chatbot EN PANTALLA + agenda pública tras una semana — sin hallazgo, más un hallazgo viejo confirmado corregido
 
 `ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado primero contra la entrada de abajo:
@@ -4425,3 +4465,26 @@ corregido su estado real en el tablero, que decía "done" sin estarlo en producc
 LECCIÓN: un tablero en "done" certifica que el AGENTE terminó su commit, no que ese commit llegó
 a `origin/main` ni a producción — antes de dar un hallazgo por cerrado, `git merge-base
 --is-ancestor <sha-del-fix> origin/main`, y si no, recurl la superficie viva.
+
+## 2026-09-26 11:09 La Paz (vuelta HEAD 921cf15d) — dental 9/9, correspondía repetir: `BUILD_ID` cambió
+
+`BUILD_ID` comparado antes de decidir: vivo `DvBubiuO4uC5_E9jFNJeZ`, distinto al `4FWMcecd4jRBGUVwStDQb`
+de las dos corridas anteriores (00:09 y f3c4327f) → hubo deploy nuevo desde la última corrida completa
+de dental, así que repetir SÍ correspondía (no es el bug de las dos vueltas seguidas sin chequear).
+
+Corrida `--escribir` completa: **RECORRIDO COMPLETO en "Clínica dental", 9/9 pasos OK**,
+`completo: true`, `agujeros: []`. Alta abierta confirmada (`ONIA_ALTA_AUTOMATICA=abierta`) antes de
+arrancar. Los 9 pasos: home visible → camino de alta (Empezar, 2 clics) → cuenta
+`zz-qa-2026-09-26-1509@onia.com.bo` creada, pide confirmar correo → login tras confirmar → onboarding
+completo en 6 pantallas (rubro dental, horarios lun-vie 09-13/15-19, equipo con 1 profesional) →
+paciente `zz-qa-2026-09-26-1509-paciente` cargado y visto en `/patients` → cita 2026-09-28 09:00
+agendada (201, id `cmuij3ag6002901mx9sbcmkgk`) y VISTA en `/appointments` → factura con ítem
+`zz-qa-2026-09-26-1509-item` en `/billing/cmuij3ksc002b01mxzcs965vu`, FRENADO sin pagar → panel
+mirado (el paciente no figura ahí, es lo esperado: el dashboard no lista pacientes). Limpieza
+verificada: `appointments zz-qa-=0`, `organizations zz-qa-=0` al cerrar.
+
+**Sin hallazgo nuevo** — el `BUILD_ID` nuevo no rompió ningún paso del camino dental.
+
+RAZÓN: N/A — avanzó (dental re-confirmado con el `BUILD_ID` nuevo, sin regresión).
+LECCIÓN: ninguna nueva — comparar `BUILD_ID` contra esta misma entrada antes de decidir si dental
+corresponde repetirse volvió a ser el filtro correcto: esta vez SÍ había deploy nuevo detrás.
