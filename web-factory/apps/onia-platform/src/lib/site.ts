@@ -110,10 +110,13 @@ export function waServiciosLink(text: string): string {
  * resto de la web. Cada una entra diciendo cuál eligio, para que del otro lado
  * no haya que preguntarlo.
  *
- * - `demo`: 45 min. Es el CTA principal: quien ya vio precios y quiere ver el
- *   sistema.
- * - `consulta`: 20 min. Para el que todavia no sabe si le sirve y no le vamos
- *   a pedir 45 minutos de entrada.
+ * - `demo`: es el CTA principal: quien ya vio precios y quiere ver el sistema.
+ * - `consulta`: para el que todavia no sabe si le sirve.
+ *
+ * Las dos duran lo MISMO y no se diferencian por reloj sino por lo que pasa
+ * adentro. Antes decian 20 y 45, y el motor que atiende esos dos WhatsApp
+ * reservaba 30: el lead aceptaba creyendo una cosa y le bloqueaban otra. Ver
+ * `CITA_DURACION_MIN` aca abajo y el gate `duracion-de-la-cita.test.ts`.
  *
  * ⚠️ Hasta el 2026-09-03 los dos botones apuntaban a `cal.onia.com.bo`, un
  * Cal.com self-hosted con un comentario que decia "verificado 2026-07-30: los
@@ -128,10 +131,31 @@ export function waServiciosLink(text: string): string {
  * dia vuelve a haber calendario propio, se cambia aca y las dos pantallas lo
  * siguen solas.
  */
+/**
+ * Cuanto dura la cita, en minutos. **No se decide aca**: es lo que el motor
+ * BLOQUEA en el calendario (`DEMO.duracionMinutos` de
+ * `hermes-content/deploy/vps-ops/bot/config.mjs`, decidido por Sergio Urcullo
+ * el 2026-08-06 — «30 y 30»). Este numero lo SIGUE, y el gate
+ * `duracion-de-la-cita.test.ts` se pone rojo si los dos divergen.
+ *
+ * Cambiarlo aca y no alla no cambia la reserva: cambia lo que el lead cree.
+ */
+export const CITA_DURACION_MIN = 30;
+
+/**
+ * ⚠️ Las dos frases van como LITERAL entre comillas dobles, sin interpolar
+ * `CITA_DURACION_MIN`. No es descuido: el gate del bot
+ * (`hermes-content/deploy/vps-ops/bot/campanas-web.test.mjs`) deriva «lo que la
+ * web manda» con `/wa(?:Servicios)?Link\(\s*"([^"]*)"/`, o sea leyendo el
+ * literal crudo. Una plantilla con backticks lo dejaria ciego a estas dos —
+ * las unicas dos frases de todo el sitio que el bot contesta con respuesta
+ * propia— y la ceguera se veria igual que un verde. Que el numero del literal
+ * sea el de la fuente lo sostiene `duracion-de-la-cita.test.ts`.
+ */
 export const AGENDA_CONSULTA_URL = waLink(
-  "Hola, vengo de la web de Onia. Quiero agendar la consulta comercial de 20 minutos.",
+  "Hola, vengo de la web de Onia. Quiero agendar la consulta comercial de 30 minutos.",
 );
 
 export const AGENDA_DEMO_URL = waLink(
-  "Hola, vengo de la web de Onia. Quiero agendar la demo de 45 minutos con mi caso.",
+  "Hola, vengo de la web de Onia. Quiero agendar la demo de 30 minutos con mi caso.",
 );
