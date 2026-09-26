@@ -2941,6 +2941,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       🔴 **Commiteado y pusheado, NO desplegado.** El bot vivo corre `/opt/onia/bot`, que es
       un rsync y no un checkout: hasta el swap, un prospecto que escriba "urgente" sigue
       recibiendo el acuse genérico. Pedido de deploy: `t_fab8ad4d` (destino `bot`).
+      ✅ YA DESPLEGADO (medido 2026-09-26: `npm run bot:vivo-al-dia` — el motor vivo ya corre este archivo).
 
 - [x] 🔴 **CERRADO el 2026-09-11 (`52fb146`, rama del carril — falta el merge del
       ✅ YA DESPLEGADO (medido 2026-09-25: `52fb146` `d634913` vive en produccion `39234c89`).
@@ -6338,6 +6339,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       sobre lo resuelto»**, y de ese lado nadie sospecha porque el pedido sigue ahí, prolijo y
       ejecutable. Cerrado con su evidencia; los **3** arreglos posteriores tienen pedido nuevo,
       porque el cuerpo del viejo no los describía y el cuerpo es lo único que él lee.
+      ✅ YA DESPLEGADO (medido 2026-09-25: `e65ab6ee` vive en produccion `492e7155`).
 
       **La cifra de la tabla se saca del publicador, no de `git log`.** `bash
       /opt/onia-platform/_deploy/publicar.sh --dry-run` (y su gemelo de `onia-landing`) filtra lo
