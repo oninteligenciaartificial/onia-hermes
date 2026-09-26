@@ -41,7 +41,7 @@ Nombraba los archivos desfasados en **una sola lista** y cerraba con una instruc
 
 **Y para uno de los cinco esa instrucción era falsa.** El publicador publica desde `origin/main`.
 Medido archivo por archivo con `git diff --quiet origin/main -- <ruta>`: cuatro **ya están** en
-`origin/main` y sólo esperan el `ok` de Sergio Urcullo (pedido `t_c2fab948`, vivo); el quinto,
+`origin/main` y sólo esperan el `ok` de Sergio Urcullo al pedido de deploy vivo de `bot` (el id se DERIVA, no se copia); el quinto,
 `calcom-booking.mjs`, **difiere** de `origin/main` — es el arreglo del breaker de Cal.com que
 este mismo carril commiteó la vuelta anterior (`1f9529a0`, sin mergear). Ningún deploy lo puede
 traer: lo que falta ahí es el **merge**, no la firma.
@@ -695,7 +695,21 @@ node hermes-content/deploy/vps-ops/bot/campanas-vivas.mjs   # 0 par sano · 1 fr
 Va **acá y no en un alias** porque un alias suelto no lo corre nadie (ya pasó en este repo). Su
 `exit 1` significa que alguien que aprieta un botón de WhatsApp de la web recibe el saludo
 genérico en vez de la respuesta que califica; su `exit 2` significa **NO MEDIDO**, que no es
-estar bien. Hoy sale **1** y se pone verde cuando el `ok` de `t_c2fab948` publique el bot: es
+estar bien.
+
+🔴 **Y UNO más desde el 2026-09-26, por la misma razón y con la prueba de que la razón es
+cierta:**
+
+```bash
+npm run bloqueo:citado   # 0 = los frenos citados nombran tareas VIVAS · 1 = lista archivo:línea · 2 = NO MEDIDO
+```
+
+La cadena del integrador corre `test:bloqueo-citado`, que es **sólo el `--self-check`**: mide que
+el detector funcione, no que las colas estén sanas. La medición viva era este alias suelto — y
+nadie lo corría, así que **catorce líneas** llegaron a citar ocho pedidos de deploy ya
+`archived`/`done` sin que nada se pusiera rojo. Su `exit 1` significa que una línea de esta cola
+le pide a Sergio Urcullo una firma que ya dio, o lo manda a contestar `ok` sobre una tarea
+archivada — donde `ok <id>` **no despliega nada** y el pedido se pierde mudo. Hoy sale **1** y se pone verde cuando el `ok` al pedido de deploy vivo de `bot` lo publique: es
 también el acuse de ese deploy, sin tener que creerle a nadie.
 
 ⚠️ **Y tiene un HERMANO HOMÓNIMO que contesta al revés — medido el 2026-09-26, el mismo minuto.**
@@ -847,6 +861,30 @@ cierta para el otro, así que el estado se pregunta por separado:
 npm run deploy:ya-ocurrio     # exit 0 = nadie miente · 1 = lista file:línea · 2 = NO MEDIDO
 ```
 
+🔴 **Y el ID DEL PEDIDO tampoco se copia — por eso ninguna línea de esta cola lo nombra más.**
+Medido el 2026-09-26: **catorce líneas** de las dos colas citaban un pedido de deploy por su id
+(`t_c2fab948`, `t_d246cfa7`, `t_e45a24ff`, `t_0836a42f`, `t_b8d00627`, `t_deddf471`,
+`t_daa8750c`, `t_bf1607af`) y **los ocho ids estaban `archived` o `done`**. Un pedido se rehace
+cada vez que se le suma un arreglo —y al rehacerlo se archiva el viejo—, así que un id copiado
+caduca **por diseño**, no por descuido. El peor modo de falla es el silencioso: `ok <id>` sobre
+una tarea archivada **no despliega nada** (lista blanca de estados vivos, `exit 3`), y quien lo
+pidió cree que salió. El pedido vivo se pregunta, y los dos comandos ya lo derivan solos:
+
+```bash
+npm run deploy:sin-pedido     # por destino: si falta publicar y si YA hay pedido (lo nombra)
+npm run pedido:entregado      # si el pedido vigente sigue describiendo lo que falta publicar
+```
+
+⚠️ **Lo que dejó pasar esas catorce líneas fue el gate que existe para cazarlas**, y el modo de
+falla vale más que el caso: `bloqueo_citado_vivo.mjs` detectaba el freno por una **lista blanca
+de frases**, pedía `esperando el ok` y el archivo decía `esperan el ok`. Una lista blanca de
+frases falla **abierta** con la próxima redacción, y salía `exit 0` con el mensaje *«ninguna
+línea afirma un freno vigente»* — un cero de sujetos sobre 8.600 líneas llenas de ids, que se
+lee igual que «está todo bien». Ampliado el detector (conjugación, `t_X, vivo`, `el ok de t_X`)
+aparecieron **16 sujetos**; **1 era falso positivo** (una línea que narra en pasado un `ok` ya
+contestado) y se excluyó a mano. Por eso ahora el gate **imprime el denominador**: `0 de N ids
+nombrados`, y avisa cuando hay ≥10 ids y ningún sujeto.
+
 Sólo juzga la PLATAFORMA: un sha que no existe en el clon de `onia-platform` sale **NO MEDIDO**,
 nunca acusado — acusar una línea del bot con la frontera del panel sería el mismo error al revés.
 
@@ -963,7 +1001,7 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
       aprieta cualquiera de los dos botones de agenda recibe el saludo genérico en vez de la
       pregunta que califica — el clic más caro del sitio contestado como un "hola" suelto.
 
-      ⚠️ **El arreglo del contenido ya está pedido y NO se duplicó.** Es `t_c2fab948`
+      ⚠️ **El arreglo del contenido ya está pedido y NO se duplicó.** Es el pedido de deploy vivo de `bot` (el id se DERIVA, no se copia)
       (`DESPLEGAR: bot`, blocked esperando el `ok` de Sergio Urcullo), y su cuerpo ya describe
       exactamente esto en su punto 3, con los 6 archivos. Verificado con `git show
       origin/main:…` vs `/opt` vs el contenedor: `origin/main` está **adelante** en los tres
@@ -1015,7 +1053,7 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
       ```
 
       🔴 **Este medidor entra en la medición de arranque del carril** (abajo, "Cómo se mide"): un
-      alias suelto no lo corre nadie. Se pone verde solo cuando el `ok` de `t_c2fab948` publique
+      alias suelto no lo corre nadie. Se pone verde solo cuando el `ok` al pedido de deploy vivo de `bot` lo publique
       el bot — o sea que además **sirve de acuse del deploy**, sin tener que creerle a nadie.
 
       **Regalo del barrido, anotado y no ejecutado (no es de este carril):** 6 de las 9 campañas
@@ -1845,7 +1883,7 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
       `desconocidas: 0` se lee como "ningún lead se enfrió". Es falso: producción corre el código
       de ANTES del arreglo del 24-sep (`grep ETAPAS_QUE_SE_PIERDEN /opt/onia/bot/persistence.mjs`
       → **0**), así que su filtro no puede ver los 12 `handoff_humano`. Eso ya está arreglado en
-      `main` y espera el `ok` de `t_d246cfa7` — **no se volvió a tocar**.
+      `main` y espera el `ok` al pedido de deploy vivo de `bot` — **no se volvió a tocar**.
 
       **Lo que sí apareció, y es de este carril.** Corriendo el barrido de `origin/main` contra la
       base de producción (copia aparte en `/tmp/onia-bot-qa`, **dry-run**, sin `--emit`, para no
@@ -5994,7 +6032,7 @@ La historia completa queda acá abajo para no perderla.
       comando. Suite del bot: **932/932**.
 
       ⚠️ **Commiteado, NO desplegado** — y el orden importa: mientras esto no esté en `main`, el
-      `ok` de `t_e45a24ff` **sigue necesitando** el comando a mano que su cuerpo nombra.
+      `ok` al pedido de deploy vivo de `bot` **sigue necesitando** el comando a mano que su cuerpo nombra.
 
 - [x] ✅ **CERRADO el 2026-09-11 (`93256eab`, onia-hermes — pusheado a la rama, falta mergear):
       el intake de leads le afirmaba a Sergio Urcullo que TODO contacto había pedido una demo.**
@@ -8656,7 +8694,7 @@ el motivo correcto** (el del lanzador nombró `followup-run.sh` y la variable qu
 Sus sujetos **se derivan del disco** —quién importa `aviso-telegram.mjs`, y qué variables lee
 ese módulo—, no de una lista a mano: una lista a mano falla ABIERTO y el próximo emisor
 nacería mudo igual. Suite del bot completa: **1360/1360**. Commiteado, **NO desplegado** —
-viaja en el mismo pedido `t_0836a42f`, que ya está `blocked` esperando el `ok`.
+viaja en el mismo pedido de deploy de `bot`, que ya está `blocked` esperando el `ok` (el id se DERIVA).
 
 ---
 

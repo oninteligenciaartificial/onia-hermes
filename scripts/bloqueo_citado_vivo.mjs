@@ -72,9 +72,48 @@ export const ESTADOS_VIVOS = new Set(['ready', 'todo', 'blocked', 'in_progress',
  * t_XXX", "lo midio t_XXX") y esas citas SON correctas apuntando a una tarea done — marcarlas
  * seria el gate gritando en falso, que es como se apaga un gate. Solo muerde el presente:
  * la linea tiene que decir que algo ESTA esperando.
+ *
+ * ⚠️ AMPLIADO el 2026-09-26, y el motivo importa mas que las frases nuevas: esta lista blanca
+ * salio `exit 0` sobre `cola/chatbot.md` mientras SIETE lineas citaban `t_c2fab948` — ya
+ * ARCHIVADA — y una decia textualmente "(pedido `t_c2fab948`, vivo)". Se escapaba por la
+ * CONJUGACION: la lista pedia "esperando el ok" y el archivo decia "esperan el ok". Una lista
+ * blanca de frases falla ABIERTA con la proxima redaccion, y el `exit 0` la deja invisible.
+ * Por eso ademas de las frases nuevas, el gate ahora IMPRIME cuantos ids vio en total: un cero
+ * de sujetos sobre un archivo lleno de ids es la firma de este mismo fallo.
  */
 export const LENGUAJE_DE_FRENO =
-  /depende de Sergio|espera (?:la )?decisi|esperando (?:el |su )?ok|sigue (?:vivo el |sin )?bloquead|sigue bloqueado|bloqueado en Sergio|pendiente de Sergio|necesita el ok de Sergio|sigue vivo el corte/i;
+  /depende de Sergio|espera (?:la )?decisi|esperan?(?:do)?\s+(?:el\s+|su\s+)?`?ok|sigue (?:vivo el |sin )?bloquead|sigue bloqueado|bloqueado en Sergio|pendiente de Sergio|necesita el ok de Sergio|sigue vivo el corte|ya est[aá] pedido|t_[0-9a-f]{8}`?\s*,?\s*(?:y\s+)?(?:sigue\s+)?vivo/i;
+
+/**
+ * Citar un id como EL OK QUE HAY QUE APRETAR es la forma mas caable de este fallo, y no la
+ * cubre ninguna frase de espera: "se pone verde cuando el `ok` de `t_XXX` publique el bot" no
+ * dice que nada este bloqueado, pero le dice a Sergio Urcullo QUE id contestar. Si esa tarea
+ * esta archivada, `ok <id>` **no ejecuta** (lista blanca de estados vivos, exit 3) y el deploy
+ * se pierde en silencio — el peor modo de falla posible, porque quien lo pidio cree que salio.
+ *
+ * VA SIN `/i` A PROPOSITO. La instruccion se escribe en minuscula (`ok <id>`, como en todos los
+ * prompts), mientras que `OK t_XXX (bot): sigue VIGENTE` es la salida LITERAL del gate
+ * `pedido:entregado` copiada en una tabla de evidencia — historia fechada, no una instruccion.
+ * Distinguirlas por la caja es lo unico que separa el sujeto real del falso positivo que
+ * apagaria el gate.
+ */
+export const INSTRUCCION_DE_OK = /`?ok`?\s+(?:de\s+)?`?t_[0-9a-f]{8}/;
+
+/**
+ * Un `ok` YA CONTESTADO no es una instruccion: es el acuse de que el deploy salio, y su id
+ * apunta —correctamente— a una tarea `done`. Marcarlo seria el gate gritando en falso sobre la
+ * unica clase de linea que conviene tener escrita.
+ *
+ * Medido el 2026-09-26: `plataforma-v1.md:6280` dice "Sergio Urcullo contesto `ok t_24fa76aa` a
+ * las 18:43 UTC y el brazo ejecutor publico el bot" — `t_24fa76aa` esta `done` y la frase es
+ * cierta. Fue el unico falso positivo de los 16 sujetos que aparecieron al ampliar el detector,
+ * y se encontro porque se leyeron los 16 a mano antes de commitear el gate.
+ *
+ * Solo desactiva `INSTRUCCION_DE_OK`. `LENGUAJE_DE_FRENO` sigue midiendo la misma linea: si
+ * alguien escribe "contesto ok t_viejo, y t_nuevo sigue esperando el ok", el freno nuevo muerde
+ * igual por la otra via.
+ */
+export const OK_YA_CONTESTADO = /contest[oó]|respondi[oó]|ya dio el|dio el `?ok`? (?:a|de)\b/i;
 
 /**
  * Saca las citas que afirman un freno vigente. Sin red y sin disco: es lo que se prueba en
@@ -83,11 +122,21 @@ export const LENGUAJE_DE_FRENO =
 export function citasDeBloqueo(md) {
   const citas = [];
   md.split(/\r?\n/).forEach((linea, i) => {
-    if (!LENGUAJE_DE_FRENO.test(linea)) return;
+    const instruye = INSTRUCCION_DE_OK.test(linea) && !OK_YA_CONTESTADO.test(linea);
+    if (!LENGUAJE_DE_FRENO.test(linea) && !instruye) return;
     const ids = [...new Set(linea.match(ID) ?? [])];
     for (const id of ids) citas.push({ id, linea: i + 1, texto: linea.trim() });
   });
   return citas;
+}
+
+/**
+ * Cuantos ids del tablero nombra el archivo, sin importar el lenguaje. NO es lo que el gate
+ * juzga: es el DENOMINADOR que hace legible un cero. "0 citas de freno" sobre un archivo con
+ * 0 ids es un archivo sin tareas; sobre uno con 40 ids es un detector ciego.
+ */
+export function idsNombrados(md) {
+  return new Set(md.match(ID) ?? []).size;
 }
 
 /** Traduce la salida de `onia-tablero.sh show` a un estado. Pura: se le pasa el texto. */
@@ -153,6 +202,41 @@ if (process.argv.includes('--self-check')) {
   const repe = citasDeBloqueo('depende de Sergio Urcullo: t_aaaaaaa1, ver t_aaaaaaa1');
   afirmar(repe.length === 1, 'el mismo id repetido en la linea se cuenta una vez');
 
+  /**
+   * Los cuatro sujetos REALES que se le escaparon el 2026-09-26, medidos en
+   * `cola/chatbot.md` con `t_c2fab948` ya ARCHIVADA y el gate saliendo `exit 0`.
+   * Cada uno entra por un hueco distinto, y los cuatro son textuales del archivo.
+   */
+  const conjugado = citasDeBloqueo('`origin/main` y solo esperan el `ok` de Sergio Urcullo (pedido `t_c2fab948`, vivo); el quinto,');
+  afirmar(conjugado.length === 1, 'CONJUGACION: "esperan el ok" es lo mismo que "esperando el ok"');
+  afirmar(citasDeBloqueo('el pedido espera el `ok` de Sergio Urcullo: t_aaaaaaa1').length === 1, 'y "espera el ok" en singular tambien');
+
+  const vitalidad = citasDeBloqueo('Es `t_aaaaaaa1`, vivo.');
+  afirmar(vitalidad.length === 1, 'VITALIDAD: una linea que declara el id "vivo" afirma un freno vigente');
+  afirmar(citasDeBloqueo('el arreglo ya esta pedido y NO se duplico. Es `t_aaaaaaa1`').length === 1, 'y "ya esta pedido" tambien lo afirma');
+
+  const instruccion = citasDeBloqueo('Hoy sale **1** y se pone verde cuando el `ok` de `t_c2fab948` publique el bot: es');
+  afirmar(instruccion.length === 1, 'INSTRUCCION: "el `ok` de t_X" le dice a alguien QUE id apretar — si esta archivada, el ok no ejecuta');
+  afirmar(citasDeBloqueo('se destraba con `ok t_aaaaaaa1`').length === 1, 'y la forma imperativa "ok t_X" igual');
+
+  // Y lo que NO debe morder, que es como se apaga un gate: la historia fechada.
+  afirmar(citasDeBloqueo('| El gate quedo verde | `npm run pedido:entregado` | `OK t_aaaaaaa1 (bot): sigue VIGENTE` |').length === 0,
+    'una tabla de evidencia con la salida literal de un comando NO es un freno');
+  afirmar(citasDeBloqueo('**Que se hizo.** Pedido nuevo `t_aaaaaaa1`, cuerpo derivado de').length === 0,
+    '"pedido nuevo t_X" cuenta lo que se hizo: es historia de esa vuelta');
+  afirmar(citasDeBloqueo('ONIA_DESPLEGAR_DRY=1 node /root/bin/onia-publicar-aprobado.mjs t_aaaaaaa1').length === 0,
+    'un comando de verificacion reproducible tampoco afirma que el pedido siga vivo');
+
+  afirmar(citasDeBloqueo('Urcullo contesto `ok t_aaaaaaa1` a las 18:43 UTC y el brazo ejecutor publico el bot').length === 0,
+    'PASADO: un ok ya contestado es el acuse del deploy, no una instruccion pendiente');
+  afirmar(citasDeBloqueo('Sergio respondio `ok t_aaaaaaa1` y se publico').length === 0, 'y "respondio ok t_X" tampoco');
+  afirmar(citasDeBloqueo('contesto `ok t_aaaaaaa1`, y `t_aaaaaaa2` sigue esperando el `ok`').some((c) => c.id === 't_aaaaaaa2'),
+    'pero la exclusion NO tapa un freno nuevo en la misma linea: muerde por LENGUAJE_DE_FRENO');
+
+  // El DENOMINADOR que hace legible un cero de sujetos.
+  afirmar(idsNombrados('cerrado en t_aaaaaaa1 y t_aaaaaaa2, ver t_aaaaaaa1') === 2, 'cuenta ids unicos sin mirar el lenguaje');
+  afirmar(idsNombrados('una linea sin ids') === 0, 'un archivo sin ids da cero, y ese cero si es honesto');
+
   // El parseo del tablero.
   afirmar(estadoDesdeShow('Task t_x: hola\n  status:    archived\n  assignee:  -') === 'archived', 'lee el status de show');
   afirmar(estadoDesdeShow('Task t_x: hola\n  status:    ready\n') === 'ready', 'lee un status vivo');
@@ -182,14 +266,30 @@ if (!rutas.length) {
 }
 
 const resultados = [];
+let idsTotales = 0;
 for (const ruta of rutas) {
-  for (const cita of citasDeBloqueo(await readFile(ruta, 'utf8'))) {
+  const md = await readFile(ruta, 'utf8');
+  idsTotales += idsNombrados(md);
+  for (const cita of citasDeBloqueo(md)) {
     resultados.push({ ...cita, archivo: ruta, estado: consultar(cita.id) });
   }
 }
 
 if (!resultados.length) {
-  console.log(`bloqueos citados: ninguna linea afirma un freno vigente en ${rutas.join(', ')}`);
+  // El denominador va SIEMPRE, y por esto: la version anterior imprimia solo "ninguna linea
+  // afirma un freno vigente" y eso se lee como "esta todo bien". Salio asi sobre una cola con
+  // 7 citas de una tarea archivada. Con el denominador delante, el mismo cero se lee como lo
+  // que es — el detector no encontro sujetos entre N ids, que es una pregunta, no un veredicto.
+  console.log(
+    `bloqueos citados: 0 de ${idsTotales} id(s) nombrados afirman un freno vigente en ${rutas.join(', ')}`,
+  );
+  if (idsTotales >= 10) {
+    console.log(
+      `  ⚠️  ${idsTotales} ids citados y NINGUNO con lenguaje de freno: puede ser cierto, o puede ` +
+        `ser que la redaccion de esos frenos no este en LENGUAJE_DE_FRENO. Si buscas un freno ` +
+        `vencido y este gate calla, leelo a mano antes de creerle al verde.`,
+    );
+  }
   process.exit(0);
 }
 

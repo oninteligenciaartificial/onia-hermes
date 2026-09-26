@@ -501,7 +501,7 @@ trabaría el merge de todos los carriles.
 
       ⚠️ **Commiteado y publicado en la rama del carril, NO desplegado:** lo mergea `onia-cola` y
       ✅ YA DESPLEGADO (medido 2026-09-25: `3a61c3ea` `b1247fb` `251f64c` vive en produccion `39234c89`).
-      el pedido de deploy vivo es `t_b8d00627`, esperando el `ok` de Sergio Urcullo. **No se pudo
+      el pedido de deploy vivo de `plataforma` espera el `ok` de Sergio Urcullo (el id se DERIVA, no se copia). **No se pudo
       mirar renderizada en producción**: el bug de MFA vencido manda toda ruta del panel a
       `/profile?mfa=obligatorio`, y su arreglo (`b1247fb`) está en `master` pero **no** en el
       build vivo — medido el 2026-09-18: `BUILD_ID` vivo `OFd4xCDzoTbQdThUbfzDv` =
@@ -5235,7 +5235,7 @@ y sin operar. Acá se opera, con verificación por ítem.
 
       **Gates:** `npx tsc --noEmit` exit 0 · `npx vitest run` **3264 pasan / 288 archivos** ·
       `npx eslint .` 0 errores. **No está terminado hasta que se publique:** viaja en el pedido
-      `t_deddf471` (`DESPLEGAR: plataforma`), que espera el `ok` de Sergio Urcullo.
+      el pedido de deploy vivo (`DESPLEGAR: plataforma`), que espera el `ok` de Sergio Urcullo.
 
 - [x] 🟡 **CERRADO el 2026-09-07: el cliente ya podía exportar sus datos y no había botón — y la
       misma pantalla le ofrecía comprar la exportación que ya había pagado.**
@@ -5281,7 +5281,7 @@ y sin operar. Acá se opera, con verificación por ítem.
 
       **Gates:** `npx tsc --noEmit` exit 0 · `npx vitest run` **3273 pasan / 288 archivos** ·
       `npx eslint .` 0 errores. **No está terminado hasta que se publique:** anotado en el pedido
-      `t_deddf471` (`DESPLEGAR: plataforma`), que espera el `ok` de Sergio Urcullo.
+      el pedido de deploy vivo (`DESPLEGAR: plataforma`), que espera el `ok` de Sergio Urcullo.
       ✅ **El riesgo que decía acá está levantado (2026-09-07):** `33b40ff` ya está en `master`
       —entró con el merge `2aa79f8`, tres gates verdes sobre el árbol real (tsc 0, 3273 tests,
       lint 0 errores)— así que el swap lo publica sí o sí. Ese aviso duró lo que tardó el
@@ -5384,7 +5384,7 @@ y sin operar. Acá se opera, con verificación por ítem.
 
       **Gates:** `npx tsc --noEmit` exit 0 · `npx vitest run` **3289 pasan / 289 archivos** ·
       `npx eslint .` 0 errores. **No está terminado hasta que se publique:** viaja en el pedido
-      `t_deddf471` (`DESPLEGAR: plataforma`), que espera el `ok` de Sergio Urcullo.
+      el pedido de deploy vivo (`DESPLEGAR: plataforma`), que espera el `ok` de Sergio Urcullo.
 
 - [x] 🔴 **CERRADO el 2026-09-08: una cuenta APAGADA seguía tomando reservas por la puerta
       pública, y el desconocido que reservaba se presentaba a un negocio que no lo esperaba.**
@@ -5429,7 +5429,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       `npx eslint .` 0 errores.
 
       🔴 **NO ESTÁ DESPLEGADO y además falta un paso antes:** `ba2270b` está en la rama del
-      carril, **no en `master`**. Si el `ok` de `t_daa8750c` llega antes de que el integrador
+      carril, **no en `master`**. Si el `ok` al pedido de deploy vivo de `plataforma` llega antes de que el integrador
       mergee, este arreglo **no viaja en ese swap**. Anotado como comentario en ese pedido.
 
 - [x] 🟡 **CERRADO el 2026-09-08: la puerta pública crea clientes sin contarlos contra el tope
@@ -5521,7 +5521,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       `npx vitest run` **3994 pasan / 331 archivos** · `npx eslint .` 0 errores.
 
       🔴 **NO ESTÁ DESPLEGADO, y encima falta un paso antes:** `9c7031a` está en la rama del
-      carril, **no en `master`**. Si el `ok` de `t_daa8750c` llega antes de que el integrador
+      carril, **no en `master`**. Si el `ok` al pedido de deploy vivo de `plataforma` llega antes de que el integrador
       mergee, este arreglo no viaja en ese swap. Anotado como comentario en ese pedido.
 
 - [x] 🔴 **CERRADO el 2026-09-08: el dueño elegía pagar el AÑO y el mensaje con el que
@@ -5619,7 +5619,7 @@ y sin operar. Acá se opera, con verificación por ítem.
 
       ⚠️ **Commiteado y en la rama, NO desplegado**: viaja con el pedido de deploy de
       ✅ YA DESPLEGADO (medido 2026-09-25: `185d616` vive en produccion `39234c89`).
-      `plataforma` (`t_bf1607af`), que sigue esperando el `ok` de Sergio Urcullo.
+      `plataforma`, que sigue esperando el `ok` de Sergio Urcullo (el id se DERIVA, no se copia).
 
 
 - [x] **CERRADO el 2026-09-11 (`ef69e9b`): el gate de camino de fallo cubría 2 de los 17
