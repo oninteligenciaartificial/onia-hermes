@@ -12,6 +12,40 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-26 (vuelta HEAD 5bec4448) — `BUILD_ID` sin cambios; descartados los dos ejes que dejó la vuelta anterior — sin hallazgo
+
+`ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado primero contra la entrada de abajo:
+`4FWMcecd4jRBGUVwStDQb`, **igual** — no correspondía repetir el recorrido end-to-end. Tablero:
+sin tareas `ready` sin reclamar en la zona `recorrido-cliente`.
+
+La vuelta anterior dejó dos pistas concretas para cuando el `BUILD_ID` no cambia: (1) revisar si
+`RUBROS_ACTIVOS` sumó un sexto rubro, (2) buscar una promesa NO numérica sin gate en una
+superficie ya auditada. Las dos se descartaron:
+
+1. `RUBROS_ACTIVOS` (`lib/platform/rubros-activos.ts`, medido contra el build vivo
+   `/opt/onia-platform/build-251f64c` en el VPS) sigue en **5**: `dentagest-clinical`,
+   `gestios-general`, `proveegest-electrico`, `esteticagest-clinical`,
+   `gestios-servicios-profesionales`. No dispara el escalón 2.
+2. Las promesas contractuales/de plazo (salida sin penalidad, reembolso, 30/90 días de
+   exportación y borrado, aviso de cambio de precio) ya tienen gate: `salida-prometida.test.ts`,
+   `legal-publico.test.ts` y `salida-con-fecha.test.ts` — corridos ahora (`npx vitest run
+   src/app/salida-prometida.test.ts src/app/legal-publico.test.ts` → 26/26 verde). Busqué además
+   una promesa de "responder por WhatsApp es gratis" (Meta empieza a cobrar la ventana de 24h el
+   1-oct-2026, por memoria del sistema): no existe ese literal en el sitio — la única frase
+   relacionada (`components/landing-v1/faq.tsx:44`) ya distingue correctamente "el botón de
+   WhatsApp va gratis" de "los mensajes que tu negocio inicia se los pagás a Meta", sin prometer
+   gratuidad de la respuesta entrante. Sin hallazgo.
+
+RAZÓN de no-avance en la medida `llegoHasta/completo`: no corresponde repetir el recorrido
+end-to-end (build sin cambios, 9/9 ya cerrado en los 5 rubros). Ambos ejes que dejó la vuelta
+anterior se agotaron sin hallazgo.
+LECCIÓN: con `RUBROS_ACTIVOS` estable y los gates de contrato/plazo en verde, la próxima vuelta
+sin cambio de `BUILD_ID` necesita un eje nuevo — no repetir estos dos. Candidato sin cubrir
+todavía: barrer si alguna promesa de "prueba gratis 14 días" tiene gate de vigencia (fecha de
+corte del trial) o si es un texto fijo sin verificación contra `TRIAL_PLAN`/lógica real.
+
+---
+
 ## 2026-09-26 (vuelta HEAD 74204b21) — `BUILD_ID` sin cambios; el eje que dejó la vuelta anterior ya está automatizado — sin hallazgo
 
 `ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado primero contra la entrada de arriba:
