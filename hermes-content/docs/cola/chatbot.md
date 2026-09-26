@@ -144,55 +144,64 @@ timestamp: `tail` crudo, nunca `sort`.
 
 ---
 
-## 🔴 T10 — **REABIERTO el 2026-09-26 17:05 La Paz**: el dedup está DESPLEGADO y el log sigue ahogado — se arregló la repetición dentro de un proceso, y el emisor que inunda vive un segundo
-⚠️ **Su cierre era falso, y lo que falló no fue el arreglo: fue el sujeto.** El arreglo (dedup por
-VALOR con `avisosDePanelYaDados`) está **vivo en producción** —`md5sum` de `knowledge.mjs` idéntico
-repo ↔ `/tmp/onia-bot/knowledge.mjs` (`bc597110499091b9923610980fddd74a`)— y la línea **sigue
-saliendo ~700 veces por día**. O sea que este ítem no se cierra con «commiteado y desplegado»:
-se cierra contando las líneas del log vivo, que es lo que mide su objetivo.
+## ✅ T10 — **CERRADO el 2026-09-26 17:23 La Paz. La reapertura de las 17:05 era FALSA, y el error fue de esta misma sesión: midió volumen acumulado creyendo que medía tasa de emisión**
+El arreglo del dedup **funciona en producción**. Lo que estaba roto era el instrumento con el que
+este ítem se juzgaba a sí mismo — y su criterio de cierre, que no podía ponerse verde nunca.
 
-**Medido hoy, en el log vivo** (`onia-center`, `/tmp/onia-bot-webhook.log`):
+**Tres instrumentos independientes, los tres coinciden:**
 
-| qué | cuánto |
-|---|---|
-| líneas totales | **72.311** |
-| formas DISTINTAS de línea (`sed -E 's/[0-9]+//g' \| sort -u`) | **164** |
-| copias de `[knowledge:panel] ignoro empresa.horario…` | **5.033** |
-| de ésas, **en las últimas 2.000 líneas** | **1.417** (71 %) |
-| ventana que abarcan esas 2.000 líneas | 2026-09-24 10h → 2026-09-26 15h |
-| reinicios del proceso en esa ventana (`grep -c "Node.js v"`) | **0** |
+1. **Fechar la última copia por vecindad.** Las líneas de ruido no llevan hora, pero las
+   `[onia-webhook]` de alrededor sí. La última `[knowledge:panel]` del log es la línea 72.226,
+   entre `10:23:04` y `10:48:48` UTC. Al medir eran las `17:16` UTC → **casi 7 h sin una copia**.
+   Y el proceso vivo (`ps -eo pid,etime`) llevaba **6 h 52** → arrancó ≈`10:24`, o sea que la
+   última copia es la del **arranque**, exactamente como manda el dedup.
+2. **Experimento, no inferencia.** Cinco `wget` a `/health` en el puerto real (`3020`, no `8090`):
+   contestaron **OK las cinco** y el log **no creció ni una línea** — `wc -l` idéntico antes y
+   después, `grep -c knowledge:panel` idéntico.
+3. **El medidor nuevo** (abajo): `0` copias en la ventana de 2 h · `3.400` históricas · `0` sin
+   fechar → **sano**, y la cola de 80 líneas **deja ver 21 eventos**.
 
-Reproducir en 30 segundos:
+**Por qué el diagnóstico de las 17:05 se equivocó, que es lo único que vale de este ítem.**
+Concluyó de `tail -2000 | grep -c knowledge:panel` → `1.417`. **`tail -N` es una ventana de LÍNEAS,
+no de TIEMPO**, y en un log que no se rota las dos se separan hasta invertir el veredicto. Peor: se
+separan **más cuanto más prolífica es la línea de ruido**, porque su propio pasado le come la
+ventana. Las 1.417 copias eran de antes del último arranque, congeladas en un archivo de 72.311
+líneas que nadie rota.
 
-```bash
-/root/bin/onia-vps.sh bash -lc 'docker exec onia-center sh -c "tail -2000 /tmp/onia-bot-webhook.log | grep -c knowledge:panel"'
-```
+⚠️ **Y por eso su criterio `LISTO` estaba mal escrito: era inalcanzable por construcción.** Pedía
+`tail -2000` con `< 50` copias sobre un log que no se rota — no podía ponerse verde por perfecto
+que fuera el emisor, así que mandaba a cada vuelta a "arreglar" algo sano. **Un criterio de cierre
+que no puede ponerse verde es peor que no tener criterio**: convierte un carril sano en trabajo
+infinito. Ya costó la vuelta de las 17:05 entera y media de esta.
 
-**Por qué el dedup no alcanza — y es la parte que vale.** `avisosDePanelYaDados` es un `Set` de
-MÓDULO: dedupe dentro de **un** proceso. La condición es permanente, así que un proceso largo la
-dice una vez y calla. Pero el emisor que inunda **no es largo**: `webhook-server.mjs:204` llama
-`ensureKnowledgeHealth()` en **cada** request de `/health`, y `webhook-watchdog.sh` golpea `/health`
-por cron **cada 2 minutos** → ~720/día, que es exactamente la tasa medida (1.417 en ~2 días).
-Un dedup por proceso no puede ayudar a un camino que se recorre 720 veces.
+**La causa que las 17:05 escribió también era falsa, y conviene decirlo para que nadie la reviva:**
+decía que `webhook-server.mjs:204` llama `ensureKnowledgeHealth()` en cada `/health` → ~720 avisos
+por día. La llamada existe y el watchdog golpea cada 2 min, pero el proceso es de **larga vida**
+(6 h 52 medidas), así que el `Set` de módulo dedupea perfectamente ese camino. Lo probó el
+experimento 2. **No hay nada que arreglar en `ensureKnowledgeHealth`.**
 
-**Tres hipótesis ya DESCARTADAS — no las vuelvas a medir:**
-- ❌ *«el proceso se reinicia y limpia el `Set`»* → **0** `Node.js v` en la ventana.
-- ❌ *«alguien llama `resetAvisosDePanel()`»* → `grep -rn resetAvisosDePanel *.mjs` sin los tests:
-  **sólo su propia definición** (`knowledge.mjs:1048`), ningún llamador.
-- ❌ *«el módulo se reimporta con cache-buster»* → no hay ni un `import(...?t=)` en el árbol; el
-  único `import("./knowledge.mjs")` dinámico es `validadores-cruzados.mjs:276` (un gate).
-- ❌ *«son 2.803 crashes por `audio-transcribe.mjs` faltante»* → ese archivo **sí está** en
-  `/tmp/onia-bot/`; esos crashes son historia de antes del 19-sep en un log que nunca se rotó.
+**Lo que sí quedó, y no es de este carril:** el log vivo **no se rota** (72.311 líneas, ~4 MB,
+acumulando desde antes del 19-sep). Eso es de infra y tiene otro dueño. **Ya no ciega la medición**,
+porque el medidor mide por tiempo y nombra las históricas aparte en vez de contarlas.
 
-**Lo que queda por decidir (es la próxima vuelta, no está decidido):** el aviso de una condición
-permanente no debería viajar por el camino de `/health`. Dos salidas, y hay que elegir midiendo:
-(a) que `ensureKnowledgeHealth` no emita el warn —el health es una CONSULTA, no una carga— y lo
-emita sólo el arranque del motor; (b) sacar el dedup del proceso (marca en disco por valor, como
-`/var/lib/onia-vigia-remotos/<id>` con `openSync wx`). (a) es más chica y ataca la causa: el warn
-está en el camino equivocado. **Y el log vivo no se rota acá**: eso es de infra, otro dueño.
+**El arreglo entregado — `scripts/log_del_bot_ahogado.mjs`** (vive en `scripts/` de `onia-hermes`,
+**no** en la carpeta del bot: no viaja en el pedido de deploy de 13 archivos y no lo invalida).
+Da dos veredictos separados a propósito:
+- **`ruido`** — ¿se emite ruido AHORA, en una ventana de tiempo? Es el diagnóstico.
+- **`cola`** — ¿el `tail -80` con el que este carril mide su objetivo deja ver los eventos? Es el
+  síntoma, y es el que importa. Puede estar verde con miles de copias históricas más arriba.
 
-**LISTO =** `tail -2000` del log vivo trae **< 50** copias de esa línea, y los eventos
-`demo_agendada`/`handoff_humano` se ven con un `tail -80`.
+Tri-estado: cuando una línea de ruido no se puede fechar por ningún lado sale **NO MEDIDO**, nunca
+verde. Ese tercer estado es el que evita las **dos** cegueras a la vez — el falso verde del 24-sep
+(*"no hubo eventos"* con 27 adentro) y el falso rojo del 26-sep (*"sigue ahogado"* estando sano).
+
+Gate: `npm run test:log-ahogado` (11 casos puros + self-check), en la cadena entre
+`test:bot-vivo-al-dia` y `test:embudo-bot`. El caso que da nombre al archivo es el par
+**mismo volumen / distinta fecha / distinto veredicto**: si el instrumento volviera a medir volumen,
+ese par se pone rojo solo.
+
+**LISTO =** `node scripts/log_del_bot_ahogado.mjs` sale **0**, con `0` copias en la ventana y la
+cola dejando ver los eventos. **Medido:** sale 0. ✅
 
 <details><summary>Historia del cierre falso (2026-09-24) — el arreglo original, que sigue siendo correcto para lo suyo</summary>
 
@@ -778,6 +787,20 @@ cierta:**
 ```bash
 npm run bloqueo:citado   # 0 = los frenos citados nombran tareas VIVAS · 1 = lista archivo:línea · 2 = NO MEDIDO
 ```
+
+🔴 **Y UNO más desde el 2026-09-26 17:23, porque el comando que este carril usaba para mirar su
+propio log dio el veredicto AL REVÉS dos veces en tres días** (ver T10, ya cerrado):
+
+```bash
+node scripts/log_del_bot_ahogado.mjs   # 0 sano · 1 la cola del log está ciega · 2 NO MEDIDO
+```
+
+**No uses `tail -N | grep -c` para juzgar el log del bot.** `tail -N` es una ventana de LÍNEAS, no
+de TIEMPO, y ese log **no se rota**: el 24-sep un `tail -80` devolvió vacío con 27 eventos adentro
+del archivo (falso verde), y el 26-sep un `tail -2000` devolvió 1.417 copias de una línea que ya
+no se emite (falso rojo, costó una vuelta entera). Este comando fecha cada línea por vecindad con
+las marcas ISO de alrededor, separa *ruido de ahora* de *ruido histórico*, y sale **2** cuando no
+puede fechar — nunca verde por no haber podido preguntar.
 
 La cadena del integrador corre `test:bloqueo-citado`, que es **sólo el `--self-check`**: mide que
 el detector funcione, no que las colas estén sanas. La medición viva era este alias suelto — y
@@ -8958,13 +8981,28 @@ cita: al cerrar una fila hay que barrer quién la nombra, no sólo tacharla.
       líneas, intercaladas con webhooks fechados). Un `grep` de números de línea no es una
       hora, y el que no lo reconstruya reporta un duplicado que no existe.
 
-      ⚠️ **NO se arregló en esta vuelta a propósito, y el motivo importa:** toca un `.mjs` de
-      `hermes-content/deploy/vps-ops/bot/`, y hay un pedido de deploy del bot **vivo y
-      esperando la firma de Sergio Urcullo** (`t_76cdb5dc`, `DESPLEGAR: bot`) cuyo cuerpo le
-      enumera **13 archivos**. Un archivo más en `main` antes de su `ok` hace que firme 13 y
-      publique 14 — y ese pedido trae el arreglo de las campanas, que vale más que una hora en
-      un log. **Se hace después del `ok`, o rehaciendo el pedido y archivando el viejo en la
-      misma vuelta.**
+      ⚠️ **NO se arregló en esta vuelta a propósito, y el motivo importa:** el emisor de la línea
+      es `aviso-telegram.mjs`, en `hermes-content/deploy/vps-ops/bot/`, y hay un pedido de deploy
+      del bot **vivo y esperando la firma de Sergio Urcullo** cuyo cuerpo enumera **13 archivos**.
+      `aviso-telegram.mjs` **no es uno de esos 13** (está idéntico repo ↔ producción), así que
+      tocarlo lo haría el **14.º** e invalidaría el pedido — y ese pedido trae el arreglo de las
+      campanas, que vale más que una hora en un log. **Se hace después del `ok`, o rehaciendo el
+      pedido y archivando el viejo en la misma vuelta.**
+
+      🔴 **El ID no se copia — se deriva, y esta línea ya se equivocó una vez.** Decía
+      `t_76cdb5dc` y esa tarea está **`archived`** desde el 2026-09-26 16:48: el pedido se rehizo
+      (van cuatro) y hoy vive con otro ID. Un `ok` sobre la archivada **no despliega nada** y el
+      pedido se pierde mudo. Se deriva así, que además dice si el bloqueo sigue vivo:
+
+      ```bash
+      /root/bin/onia-tablero.sh list --status blocked | grep -i 'Publicar el bot'
+      bash /opt/onia/bot/_deploy/publicar.sh --dry-run | tail -3   # el recuento honesto: 13
+      ```
+
+      ⚠️ Y `npm run bloqueo:citado` **no ve esta cita**: muerde la redacción «el `ok` de `t_X`», y
+      acá el ID venía en prosa entre paréntesis. O sea que su verde no cubre este caso — no es que
+      no hubiera sujeto, es que el gate no lo alcanza. Enseñarle esta forma es trabajo propio, no
+      de este ítem.
 
 - [ ] **Botón "Cobrar con QR" dentro de la conversación** (pieza 5 del backlog v5). El
       circuito está completo en mock y verificado mirando (`/bcp/cobrar` + `/bcp/callback`,
