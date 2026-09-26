@@ -777,9 +777,11 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
 
 ## Ahora
 
-- [ ] 🔴 **`puerta:alta` —el ÚNICO instrumento de la mitad «no promete lo que el producto no
-      hace» de este objetivo— lleva ~18 días saliendo `exit 2` porque busca el árbol del build
-      vivo en la carpeta equivocada. Medido el 2026-09-25 23:05-23:20 La Paz, sin heredar nada.**
+- [x] 🔴 **CERRADO el 2026-09-26 (commiteado; son INSTRUMENTOS, no tocan el motor ni el producto):
+      `puerta:alta` —el ÚNICO instrumento de la mitad «no promete lo que el producto no
+      hace» de este objetivo— llevaba ~18 días saliendo `exit 2` porque buscaba el árbol del build
+      vivo en la carpeta equivocada. Diagnosticado el 2026-09-25 23:05-23:20 La Paz, arreglado el
+      26. Hoy `npm run puerta:alta` sale `0` en 55 s y mide las DOS puertas.**
 
       `puerta-del-alta.mjs` sale `NO SE PUDO MEDIR — 2 puerta(s) sin medir: activar la
       verificacion en dos pasos (no pude casar el BUILD_ID vivo con ningun arbol de fuentes en
@@ -837,6 +839,68 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
       permanente no es honestidad, es un rojo disfrazado: mientras duró, la mitad «no promete lo
       que el producto no hace» de este objetivo se midió con **cero** instrumentos y el carril
       siguió reportando su medida en meta con las otras tres cifras.
+
+      ---
+
+      **EL ARREGLO (2026-09-26).** El diagnóstico de arriba acertó el síntoma y erró un detalle
+      que habría dejado el gate roto igual: el árbol de un release **no** tiene las fuentes en su
+      raíz. Medido antes de escribir nada — `ls` de `releases/492e7155-20260925/` (ruta del VPS,
+      no existe en este repo) devuelve `BUILD_ID · SHA · build.exit · build.log · source.tar.gz ·
+      src`, y `lib/mfa/policy.ts` aparece bajo **`src/`**.
+      O sea que un release aporta DOS diferencias contra staging, no una:
+      el `BUILD_ID` está en la raíz **y** las fuentes cuelgan de `src/`.
+
+      | | `build-<sha>/` (staging) | `releases/<sha8>-<fecha>/` (publicado) |
+      |---|---|---|
+      | `BUILD_ID` | `<dir>/.next/standalone/.next/BUILD_ID` | `<dir>/BUILD_ID` |
+      | fuentes | `<dir>` | `<dir>/src` |
+      | sha | del nombre, abreviado | `<dir>/SHA`, **completo** |
+
+      **La tabla vive en UN lugar, y ése es el arreglo de verdad:**
+      `scripts/lib/arbol-del-build-vivo.mjs` (nuevo, `npm run test:arbol-build`, **14/14**, ya en
+      la cadena `npm test`). Exporta `buildQueCorre({})` → `{ dir, fuentes, sha, layout }`. El
+      punto ciego no era de un instrumento: era de la **receta**, copiada en cuatro lugares, y
+      por eso no se arregló inline. Cuando aparezca un tercer layout se agrega una fila y los
+      consumidores se enteran solos. Tiene ancla en la otra punta: invertir el orden de los
+      layouts da el mismo build (el orden es costo, no criterio).
+
+      **Rojo primero, y cada caso por su motivo.** En `puerta-del-alta.mjs` el self-check pasó de
+      51/53 —fallando exactamente las dos del release, con la de «sin par sigue siendo `null`»
+      ya en verde, que es lo que prueba que el rojo era por el layout y no por otra cosa— a
+      **53/53**. En `addon_canal_vivo.mjs` el test de cableado se corrió contra la receta VIEJA
+      (copia del archivo de `HEAD` con sólo el `export` agregado, restaurada con `cp`): **13/14**,
+      falla sólo el caso del release → con el arreglo **14/14**.
+
+      **Los hermanos, derivados con `grep -rn 'build-\*' --include=*.mjs` y medidos uno por uno:**
+
+      - `addon_canal_vivo.mjs` — **ciego, mismo motivo, arreglado acá** (es de este carril).
+        Antes: `exit 2 · NO MEDIDO: no pude leer las orgs de la base o el codigo del build vivo`
+        con la base contestando perfecto. Ahora: `exit 0 · OK: el build vivo
+        (492e715598236efdb3af0ad86c2a5077eb0ee285) lee la capacidad y ninguna org diverge`, 16 s.
+      - `pedido_deploy_entregado.mjs:962` — **ciego, mismo motivo, NO es de este carril**
+        (pedidos de deploy es zona de `onia-cola`): tarea `t_66d7e2f6` con la reproducción exacta
+        y el módulo ya listo para enchufar. Reproducido hoy: ningún `build-*` casa contra
+        `4FWMcecd4jRBGUVwStDQb`, así que `shaVivoPlataforma()` da `null` y el gate deja de juzgar
+        los pedidos de plataforma **en verde**.
+      - `deploy_ya_ocurrio.mjs` — **sano**: ya migró a la etiqueta de imagen
+        (`onia-platform:release-<sha>`) y lo dice en su cabecera.
+      - `limpiar-builds-staging.sh` — **sano**: habla de staging a propósito, es lo que borra.
+
+      **Medido en vivo al cerrar** (no de memoria): `docker exec onia-platform cat
+      /app/.next/BUILD_ID` → `4FWMcecd4jRBGUVwStDQb`; `docker inspect onia-platform --format
+      '{{.Config.Image}}'` → `onia-platform:release-492e7155`; el par está en
+      `releases/492e7155-20260925/BUILD_ID`, que es del VPS y no existe en este repo.
+      `npm run puerta:alta` → **`exit 0`, 55 s**:
+      *«NINGUN TEXTO SERVIDO PROMETE ENTRAR SIN LOS PASOS QUE EL PRODUCTO EXIGE — 4 documento(s)
+      mirados, con 1 puerta(s) viva(s): confirmar el correo»*. Las dos puertas quedaron medidas:
+      la de 2FA salió **false** (el build vivo ya trae la gracia colgada del alta), que es
+      justamente lo que un `exit 2` no podía decir.
+
+      Gates verdes: `test:arbol-build` · `test:puerta-alta` · `test:addon-canal` ·
+      `test:vps-o-local` · `test:guards-cableados`.
+      Archivos: `scripts/lib/arbol-del-build-vivo.mjs` (nuevo) ·
+      `hermes-content/deploy/vps-ops/bot/puerta-del-alta.mjs` · `scripts/addon_canal_vivo.mjs` ·
+      `scripts/addon_canal_vivo.test.mjs` · `package.json`.
 
 - [x] 🔴 **CERRADO el 2026-09-25 22:13-22:40 La Paz (commiteado; es el INSTRUMENTO, no toca el
       motor): el gate imprimía «tambien del motor» sobre 7 líneas cuya frontera había medido

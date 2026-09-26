@@ -16,7 +16,7 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { veredicto, sinCanal } from './addon_canal_vivo.mjs';
+import { veredicto, sinCanal, medirShaVivo } from './addon_canal_vivo.mjs';
 
 // ─── Quien queda sin canal ─────────────────────────────────────────────────
 //
@@ -159,4 +159,43 @@ test('importar el modulo NO dispara la medicion contra produccion', async () => 
   // Este test pasa por el solo hecho de que el import de arriba no haya matado
   // al proceso; lo que se afirma aca es que el modulo exporta la funcion pura.
   assert.equal(typeof veredicto, 'function');
+});
+
+// ─── De donde sale el build vivo ───────────────────────────────────────────
+//
+// Medido el 2026-09-26: este gate salia `exit 2` («no pude leer las orgs de la
+// base o el codigo del build vivo») con la base contestando perfecto. La mitad
+// muda era el sha: casaba el BUILD_ID solo contra `/opt/onia-platform/build-*`,
+// que es STAGING, y desde que produccion se publica por imagen el arbol vivo
+// queda bajo `releases/<sha>-<fecha>/` con el BUILD_ID en la RAIZ. Vivo ese dia:
+// BUILD_ID 4FWMcecd4jRBGUVwStDQb, imagen onia-platform:release-492e7155, y el par
+// en /opt/onia-platform/releases/492e7155-20260925/BUILD_ID.
+//
+// Este test mira el CABLEADO, no la tabla de layouts (esa tiene su propio
+// self-check en scripts/lib/arbol-del-build-vivo.mjs): que el sha que usa ESTE
+// gate salga del resolutor que conoce los dos layouts. Un gate que valida el
+// modulo compartido no prueba que su consumidor lo cargue.
+
+test('el sha vivo se casa tambien cuando el build esta publicado como release', async () => {
+  const REL = '/opt/onia-platform/releases/492e7155-20260925';
+  const correr = (_cmd, args) =>
+    args?.[0] === 'exec' && args?.[2] === 'cat' ? { status: 0, stdout: '4FWMcecd4jRBGUVwStDQb\n' } : { status: 1, stdout: '' };
+  const listar = (patron) =>
+    String(patron).includes('/releases/') ? { dirs: [`${REL}/`], origen: 'remoto' } : { dirs: [], origen: 'remoto' };
+  const leer = (ruta) => {
+    if (ruta === `${REL}/BUILD_ID`) return { contenido: '4FWMcecd4jRBGUVwStDQb\n', origen: 'remoto' };
+    if (ruta === `${REL}/SHA`) return { contenido: '492e715598236efdb3af0ad86c2a5077eb0ee285\n', origen: 'remoto' };
+    return null;
+  };
+  assert.equal(await medirShaVivo({ correr, leer, listar }), '492e715598236efdb3af0ad86c2a5077eb0ee285');
+});
+
+test('sin par en disco el sha vivo es null, nunca uno adivinado', async () => {
+  // El tri-estado es el punto: con un sha inventado este gate juzgaria el codigo
+  // de un build que nadie corre, y su verde absolveria al que si corre.
+  const correr = (_cmd, args) =>
+    args?.[0] === 'exec' && args?.[2] === 'cat' ? { status: 0, stdout: 'ID-QUE-NO-ESTA\n' } : { status: 1, stdout: '' };
+  const listar = () => ({ dirs: ['/opt/onia-platform/releases/aaaaaaa-20260924'], origen: 'remoto' });
+  const leer = () => null;
+  assert.equal(await medirShaVivo({ correr, leer, listar }), null);
 });
