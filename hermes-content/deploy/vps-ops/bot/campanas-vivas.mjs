@@ -43,9 +43,20 @@
 //
 //  · web  — las páginas VIVAS, no `site.ts`. El literal del repo puede estar corregido y la
 //           página publicada seguir sirviendo el viejo: es el mismo desfase, del otro lado.
-//           Las rutas se DERIVAN del disco (las que nombran una constante de frase), nunca
-//           se escriben a mano: una ruta nueva con un botón de WhatsApp tiene que entrar
-//           sola o el instrumento envejece mudo.
+//           Las rutas se DERIVAN del disco —TODAS las `page.tsx` de `src/app`— y se visitan
+//           todas: qué frase manda cada una se MIDE en su HTML, no se deduce de la fuente.
+//
+//           ⚠️ Acá decía que las rutas eran "las que nombran una constante de frase", y ese
+//           recorte tenía al medidor ciego en 13 de las 21 rutas vivas con botón. Medido el
+//           2026-09-26: caminaba sólo `(sitio)` y encima exigía que la `page.tsx` nombrara un
+//           `export` de `site.ts`, así que visitaba 8. `/servicios/consultoria`,
+//           `/servicios/marketing-ia` y `/v1/chatbot` arman la frase con `waServiciosLink("…")`
+//           en la propia página y `/v1/empezar` en un módulo que importa — las cuatro
+//           contestan 200 en `onia.com.bo` y las cuatro escriben su `wa.me?text=`. El daño no
+//           era sólo contar de menos: `juzgar()` sólo juzga una frase que la web MANDA, así
+//           que un par roto en una de esas rutas salía como `AVISO ... ¿quedó huérfana?` —una
+//           línea que invita a BORRAR la campaña— en vez de ROJO. Hoy las cuatro están sanas
+//           por suerte, no por medición: nadie las había comparado nunca.
 //  · bot  — `/tmp/onia-bot/knowledge.json` DENTRO de `onia-center`, que es lo que el motor
 //           lee. No `/opt/onia/bot/` (eso es lo que se desplegó, y el rsync puede no haber
 //           corrido) ni el archivo del repo (eso es la intención). Y además la fila del
@@ -76,8 +87,7 @@ try {
 const AQUI = fileURLToPath(new URL(".", import.meta.url));
 // bot/ -> vps-ops/ -> deploy/ -> hermes-content/ -> raíz del repo
 const RAIZ = join(AQUI, "..", "..", "..", "..");
-const SITIO = join(RAIZ, "web-factory", "apps", "onia-platform", "src", "app", "(sitio)");
-const SITE_TS = join(RAIZ, "web-factory", "apps", "onia-platform", "src", "lib", "site.ts");
+const APP = join(RAIZ, "web-factory", "apps", "onia-platform", "src", "app");
 const DOC_REPO = fileURLToPath(new URL("./knowledge.onia.json", import.meta.url));
 
 const BASE = process.env.ONIA_CAMPANAS_BASE || "https://onia.com.bo";
@@ -85,21 +95,13 @@ const CONTENEDOR = process.env.ONIA_BOT_CONTENEDOR || "onia-center";
 const KNOWLEDGE_VIVO = "/tmp/onia-bot/knowledge.json";
 
 /**
- * Los nombres de las constantes de `site.ts` que ARMAN una frase de WhatsApp.
+ * Todas las `page.tsx` del app, con su ruta pública.
  *
- * Se derivan del archivo y no se listan acá por la misma razón que las rutas: una constante
- * nueva tiene que entrar sola. `waLink` y `waServiciosLink` son las dos fábricas que usa el
- * sitio (el gate del repo deriva con ese mismo par en su regex).
+ * Un segmento entre paréntesis es un route group: agrupa archivos y NO viaja a la URL. Las
+ * carpetas que empiezan con `_` son privadas de Next y las que empiezan con `@` son slots de
+ * rutas paralelas: ninguna de las dos se publica, así que no son rutas que un lead pueda abrir.
  */
-export function constantesDeFrase(fuente) {
-  const nombres = new Set();
-  const re = /export\s+const\s+([A-Z][A-Z0-9_]*)\s*=\s*wa(?:Servicios)?Link\s*\(/g;
-  for (const m of fuente.matchAll(re)) nombres.add(m[1]);
-  return [...nombres].sort();
-}
-
-/** Todas las `page.tsx` bajo `(sitio)`, con su ruta pública. `(sitio)` es un route group: no viaja a la URL. */
-export function paginasDelSitio(dir, prefijo = "", salida = []) {
+export function paginasDelWeb(dir, prefijo = "", salida = []) {
   let entradas;
   try {
     entradas = readdirSync(dir, { withFileTypes: true });
@@ -109,9 +111,9 @@ export function paginasDelSitio(dir, prefijo = "", salida = []) {
   for (const e of entradas) {
     const full = join(dir, e.name);
     if (e.isDirectory()) {
-      // Un segmento entre paréntesis es un grupo de rutas: agrupa archivos, no URL.
+      if (e.name.startsWith("_") || e.name.startsWith("@")) continue;
       const seg = /^\(.*\)$/.test(e.name) ? prefijo : `${prefijo}/${e.name}`;
-      paginasDelSitio(full, seg, salida);
+      paginasDelWeb(full, seg, salida);
     } else if (e.name === "page.tsx" || e.name === "page.ts") {
       salida.push({ ruta: prefijo === "" ? "/" : prefijo, archivo: full });
     }
@@ -119,20 +121,25 @@ export function paginasDelSitio(dir, prefijo = "", salida = []) {
   return salida;
 }
 
-/** Las rutas vivas que hay que mirar: las que nombran alguna constante de frase. */
-export function rutasQueMandanFrases(paginas, constantes, leer = (f) => readFileSync(f, "utf8")) {
-  const rutas = [];
+/**
+ * Qué rutas se visitan y cuáles NO se pueden visitar.
+ *
+ * Se visitan TODAS: qué frase manda una página se lee de su HTML, y deducirlo de la fuente es
+ * lo que dejó 13 rutas afuera (ver la cabecera). Lo único que no se puede abrir es una ruta con
+ * segmento dinámico —`/blog/[slug]` necesita un valor que este medidor no tiene para inventar—,
+ * y eso se NOMBRA: una ruta descartada en silencio es la misma ceguera con otro disfraz.
+ */
+export function rutasAMirar(paginas) {
+  const visitables = new Set();
+  const sinMedir = [];
   for (const p of paginas) {
-    let src;
-    try {
-      src = leer(p.archivo);
-    } catch {
-      continue;
+    if (/\[[^\]]+\]/.test(p.ruta)) {
+      sinMedir.push({ ruta: p.ruta, motivo: "tiene un segmento dinámico: no se puede visitar sin un valor" });
+    } else {
+      visitables.add(p.ruta);
     }
-    // \b para que `WA_URL` no matchee dentro de `WA_URL_VIEJA` ni al revés.
-    if (constantes.some((c) => new RegExp(`\\b${c}\\b`).test(src))) rutas.push(p.ruta);
   }
-  return [...new Set(rutas)].sort();
+  return { visitables: [...visitables].sort(), sinMedir };
 }
 
 /**
@@ -162,12 +169,12 @@ export async function frasesQueMandaLaWeb(rutas, traer) {
     try {
       const html = await traer(`${BASE}${ruta}`);
       if (typeof html !== "string" || html.length === 0) {
-        noMedidas.push({ ruta, motivo: "respuesta vacía" });
+        noMedidas.push({ ruta, motivo: "la web contestó vacío" });
         continue;
       }
       for (const f of frasesDeHtml(html)) frases.add(f);
     } catch (error) {
-      noMedidas.push({ ruta, motivo: String(error?.message || error).slice(0, 120) });
+      noMedidas.push({ ruta, motivo: `la web no contestó: ${String(error?.message || error).slice(0, 110)}` });
     }
   }
   return { frases, noMedidas };
@@ -216,10 +223,12 @@ export function campanasQueEscuchaElBot(correr, panelTraeCampanas) {
 export function juzgar({ repo, web, bot, noMedidas = [] }) {
   const lineas = [];
 
-  if (noMedidas.length > 0) {
-    for (const nm of noMedidas) lineas.push(`  NO MEDIDO  la web no contestó ${nm.ruta}: ${nm.motivo}`);
-    return { exit: 2, lineas, veredicto: `NO MEDIDO — ${noMedidas.length} ruta(s) viva(s) sin respuesta: no se puede saber qué manda la web` };
-  }
+  // Lo que no se pudo medir se dice SIEMPRE y primero en la salida, pero no corta el juicio:
+  // con 21 rutas en vez de 8, una caída suelta es corriente, y devolver NO MEDIDO antes de
+  // comparar deja que un 503 en `/agentes` esconda el par roto de `/contacto`. El rojo de una
+  // frase MEDIDA gana; el NO MEDIDO sólo decide cuando no hay rojo (más abajo).
+  for (const nm of noMedidas) lineas.push(`  NO MEDIDO  ${nm.ruta} quedó sin mirar: ${nm.motivo}`);
+
   if (!bot || bot.frases === null) {
     lineas.push(`  NO MEDIDO  ${bot?.motivo || "no se pudo preguntar qué escucha el bot"}`);
     return { exit: 2, lineas, veredicto: "NO MEDIDO — no se pudo leer qué escucha el bot vivo" };
@@ -240,10 +249,13 @@ export function juzgar({ repo, web, bot, noMedidas = [] }) {
     lineas.push("             la web viva se la escribe al lead y el bot vivo NO la escucha: recibe el saludo genérico");
   }
 
-  // El repo empareja una frase que NINGUNA página viva manda: no es rojo (puede venir de una
-  // pauta o de un material impreso), pero se dice — un par que nadie dispara es peso muerto.
+  // El repo empareja una frase que el HTML de ninguna ruta viva trae: no es rojo, pero se dice.
+  // Y se dice con su límite adelante, porque esta línea ya invitó una vez a sacar campañas que
+  // estaban vivas: hay pantallas que arman el `wa.me` recién cuando el visitante interactúa
+  // —`/servicios/webs` lo hace, con `requisitos-gate.tsx` dentro de un componente de cliente—
+  // y este medidor lee HTML servido, no pantallas usadas. "No la vi" no es "no existe".
   for (const f of repo.filter((x) => !web.has(x))) {
-    lineas.push(`  AVISO      "${f}" — ninguna ruta viva la manda hoy (¿pauta, o quedó huérfana?)`);
+    lineas.push(`  AVISO      "${f}" — ningún HTML vivo la trae (¿pauta, material impreso, o una pantalla que la arma al interactuar?). NO es prueba de que esté huérfana: no la borres sin mirar la pantalla`);
   }
   // Y al revés: el bot escucha algo que el repo ya no empareja. Eso tiene DOS causas con
   // remedios OPUESTOS, y confundirlas manda al revés:
@@ -265,17 +277,25 @@ export function juzgar({ repo, web, bot, noMedidas = [] }) {
     }
   }
 
+  const deQuien = `${bot.fuente}${bot.version ? `, versión ${bot.version}` : ""}`;
   if (rotas.length > 0) {
     return {
       exit: 1,
       lineas,
-      veredicto: `ROTO — ${rotas.length} de ${juzgables.length} frase(s) que la web viva manda no las escucha el bot vivo (${bot.fuente}${bot.version ? `, versión ${bot.version}` : ""})`,
+      veredicto: `ROTO — ${rotas.length} de ${juzgables.length} frase(s) que la web viva manda no las escucha el bot vivo (${deQuien})`,
+    };
+  }
+  if (noMedidas.length > 0) {
+    return {
+      exit: 2,
+      lineas,
+      veredicto: `NO MEDIDO — ninguna de las ${juzgables.length} frase(s) que sí pude leer está rota, pero ${noMedidas.length} ruta(s) viva(s) no contestaron: de ésas no se sabe nada`,
     };
   }
   return {
     exit: 0,
     lineas,
-    veredicto: `ok — las ${juzgables.length} frase(s) que la web viva manda las escucha el bot vivo (${bot.fuente}${bot.version ? `, versión ${bot.version}` : ""})`,
+    veredicto: `ok — las ${juzgables.length} frase(s) que la web viva manda las escucha el bot vivo (${deQuien})`,
   };
 }
 
@@ -323,17 +343,10 @@ async function traerHtml(url) {
 }
 
 async function medir() {
-  let constantes = [];
-  try {
-    constantes = constantesDeFrase(readFileSync(SITE_TS, "utf8"));
-  } catch (error) {
-    console.log(`NO MEDIDO — no pude leer ${SITE_TS}: ${String(error?.message || error).slice(0, 140)}`);
-    return 2;
-  }
-  const paginas = paginasDelSitio(SITIO);
-  const rutas = rutasQueMandanFrases(paginas, constantes);
-  if (constantes.length === 0 || rutas.length === 0) {
-    console.log(`NO MEDIDO — no derivé ni una ruta con frase de WhatsApp (constantes: ${constantes.length}, páginas: ${paginas.length}). Si el sitio cambió de forma, este derivador quedó ciego.`);
+  const paginas = paginasDelWeb(APP);
+  const { visitables: rutas, sinMedir } = rutasAMirar(paginas);
+  if (rutas.length === 0) {
+    console.log(`NO MEDIDO — no derivé ni una ruta de ${APP}. Si el app cambió de forma, este derivador quedó ciego.`);
     return 2;
   }
 
@@ -347,7 +360,7 @@ async function medir() {
 
   const { frases: web, noMedidas } = await frasesQueMandaLaWeb(rutas, traerHtml);
   const bot = campanasQueEscuchaElBot(dockerCorre, panelPisaCampanas());
-  const v = juzgar({ repo, web, bot, noMedidas });
+  const v = juzgar({ repo, web, bot, noMedidas: [...sinMedir, ...noMedidas] });
 
   console.log(`rutas vivas miradas (${rutas.length}): ${rutas.join(" ")}`);
   for (const l of v.lineas) console.log(l);
@@ -426,22 +439,26 @@ export function selfCheck() {
   ok(!vieja.lineas.join("\n").includes("la borraría"),
     "con una frase rota NO se puede decir que el deploy borraría algo: el deploy es el arreglo");
 
-  // Derivadores: una ruta nueva con botón tiene que entrar sola.
-  const constantes = constantesDeFrase('export const WA_URL = waLink("hola");\nexport const AGENDA = waServiciosLink("che");\nconst OTRO = 1;');
-  ok(constantes.length === 2 && constantes.includes("WA_URL") && constantes.includes("AGENDA"),
-    "las constantes de frase se derivan de las DOS fábricas (waLink y waServiciosLink)");
-  ok(!constantesDeFrase('export const SITE_URL = "https://onia.com.bo";').includes("SITE_URL"),
-    "una constante que no arma una frase de WhatsApp no es sujeto");
+  // Derivadores: una ruta nueva con botón tiene que entrar sola, sin que nadie la declare.
+  const { visitables, sinMedir } = rutasAMirar([
+    { ruta: "/", archivo: "a" },
+    { ruta: "/servicios/consultoria", archivo: "b" },
+    { ruta: "/blog/[slug]", archivo: "c" },
+  ]);
+  ok(visitables.includes("/servicios/consultoria"),
+    "una ruta que arma la frase en su propia página entra al universo sin nombrar constantes");
+  ok(!visitables.includes("/blog/[slug]") && sinMedir.length === 1,
+    "una ruta con segmento dinámico no se puede visitar: se NOMBRA sin medir, no se descarta muda");
 
-  const rutas = rutasQueMandanFrases(
-    [{ ruta: "/", archivo: "a" }, { ruta: "/contacto", archivo: "b" }, { ruta: "/terminos", archivo: "c" }],
-    ["WA_URL"],
-    (f) => (f === "c" ? "nada de whatsapp" : "usa WA_URL aquí"),
-  );
-  ok(rutas.length === 2 && rutas.includes("/contacto") && !rutas.includes("/terminos"),
-    "sólo entran las rutas que nombran una constante de frase");
-  ok(rutasQueMandanFrases([{ ruta: "/x", archivo: "a" }], ["WA_URL"], () => "usa WA_URL_VIEJA").length === 0,
-    "el nombre se matchea con límites: WA_URL_VIEJA no es WA_URL");
+  const conRota = juzgar({
+    repo: [FRASE_30],
+    web: new Set([FRASE_30]),
+    bot: { frases: new Set(["otra"]), fuente: "archivo" },
+    noMedidas: [{ ruta: "/agentes", motivo: "la web no contestó: HTTP 503" }],
+  });
+  ok(conRota.exit === 1, "una ruta caída no puede TAPAR una frase rota medida: primero el rojo");
+  ok(conRota.lineas.join("\n").includes("/agentes"),
+    "y la ruta que quedó sin mirar se nombra igual en la salida");
 
   // El HTML servido trae la frase escapada: si no se normaliza, la comparación exacta miente.
   const deHtml = frasesDeHtml('<a href="https://wa.me/591?text=Hola%2C%20quiero%20la%20demo%20de%2030%20minutos.">x</a>');
