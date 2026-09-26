@@ -41,7 +41,7 @@ Nombraba los archivos desfasados en **una sola lista** y cerraba con una instruc
 
 **Y para uno de los cinco esa instrucción era falsa.** El publicador publica desde `origin/main`.
 Medido archivo por archivo con `git diff --quiet origin/main -- <ruta>`: cuatro **ya están** en
-`origin/main` y sólo esperan el `ok` de Sergio Urcullo (pedido `t_c2fab948`, vivo); el quinto,
+`origin/main` y sólo esperan el `ok` de Sergio Urcullo al pedido de deploy vivo de `bot` (el id se DERIVA, no se copia); el quinto,
 `calcom-booking.mjs`, **difiere** de `origin/main` — es el arreglo del breaker de Cal.com que
 este mismo carril commiteó la vuelta anterior (`1f9529a0`, sin mergear). Ningún deploy lo puede
 traer: lo que falta ahí es el **merge**, no la firma.
@@ -695,8 +695,71 @@ node hermes-content/deploy/vps-ops/bot/campanas-vivas.mjs   # 0 par sano · 1 fr
 Va **acá y no en un alias** porque un alias suelto no lo corre nadie (ya pasó en este repo). Su
 `exit 1` significa que alguien que aprieta un botón de WhatsApp de la web recibe el saludo
 genérico en vez de la respuesta que califica; su `exit 2` significa **NO MEDIDO**, que no es
-estar bien. Hoy sale **1** y se pone verde cuando el `ok` de `t_c2fab948` publique el bot: es
-también el acuse de ese deploy, sin tener que creerle a nadie.
+estar bien.
+
+🔴 **Y UNO más desde el 2026-09-26, por la misma razón y con la prueba de que la razón es
+cierta:**
+
+```bash
+npm run bloqueo:citado   # 0 = los frenos citados nombran tareas VIVAS · 1 = lista archivo:línea · 2 = NO MEDIDO
+```
+
+La cadena del integrador corre `test:bloqueo-citado`, que es **sólo el `--self-check`**: mide que
+el detector funcione, no que las colas estén sanas. La medición viva era este alias suelto — y
+nadie lo corría, así que **catorce líneas** llegaron a citar ocho pedidos de deploy ya
+`archived`/`done` sin que nada se pusiera rojo. Su `exit 1` significa que una línea de esta cola
+le pide a Sergio Urcullo una firma que ya dio, o lo manda a contestar `ok` sobre una tarea
+archivada — donde `ok <id>` **no despliega nada** y el pedido se pierde mudo.
+
+⚠️ **Acá decía que este gate era «también el acuse de ese deploy, sin tener que creerle a nadie»
+— y es FALSO, medido el 2026-09-26.** Sale **0** desde esta vuelta, con el deploy del bot **sin
+hacer**: `node scripts/bot_vivo_tiene_el_codigo.mjs` cuenta **7 archivos viejos** corriendo en
+`onia-center` —`knowledge.onia.json` entre ellos, o sea 2 de los 3 botones de WhatsApp de la web
+viva cayendo en el saludo genérico— y el `knowledge.json` cargado sigue siendo `2026-09-24.1`
+contra `2026-09-25.1` del repo.
+
+**Por qué se puso verde, que es lo que lo vuelve un modo de falla y no un descuido:** este gate
+mide **CITAS**, y la vuelta anterior le enseñó a morder la redacción «el `ok` de `t_X`». La cola
+respondió a ese rojo **borrando la cita**. Sujeto cero, verde trivial — y el significado que se le
+había atribuido al verde sobrevivió al borrado del sujeto. Un gate de citas se pone verde cuando
+se borran las citas, y eso no es que el freno se haya levantado.
+
+**Arreglado, no anotado:** los **dos** caminos de `exit 0` (N citas vivas, y cero sujetos)
+imprimen ahora su `ALCANCE:` desde una constante compartida y mandan al hermano que sí mira
+producción. El self-check lo ata por propiedad —no por texto— y quedó validado por mutación: con
+la línea vieja puesta de vuelta salen tres rojos por el motivo correcto. **El acuse del deploy del
+bot es `scripts/bot_vivo_tiene_el_codigo.mjs`, no este gate.**
+
+⚠️ **Y tiene un HERMANO HOMÓNIMO que contesta al revés — medido el 2026-09-26, el mismo minuto.**
+`hermes-content/deploy/vps-ops/campanas-vivas.mjs` (sin `bot/`, y es el que tenía el nombre
+canónico `npm run campanas:vivas`, el lugar en la cadena `npm test` y las citas de los docs) salió
+**exit 0**, *«toda frase viva tiene campaña»*, mientras el de `bot/` salía **exit 1**, *«2 de 3
+frases que la web viva manda no las escucha el bot vivo»*. **Los dos tenían razón:** el primero
+coteja la web viva contra el documento del **REPO** (`knowledge.onia.json`, `2026-09-25.1`); el
+segundo, contra el `knowledge.json` que el proceso del bot tiene **CARGADO** (`2026-09-24.1`, con
+las frases de *«20 minutos»* y *«45 minutos»* que la web ya no manda).
+
+Lo caro no era la discrepancia: era **de quién era el nombre**. Cualquiera que preguntara *«¿las
+campañas están bien?»* corría el alias, leía *«toda frase viva tiene campaña»* y cerraba el tema
+con 2 de 3 botones de WhatsApp de la web muertos en producción. Ya había pasado: la fila **S18**
+se cerró el 25-sep citando ese `exit 0` como *«medido contra el sitio VIVO y no contra el árbol»*
+— cierto para la web, **falso para el documento**, que sí venía del árbol. Y su propia cabecera
+denunciaba ese mismo error en un tercero (*«producción se sirve de un build, no del working
+tree»*) mientras lo cometía del otro lado.
+
+**Arreglado, no anotado.** Cada alias dice ahora qué mide, y el nombre que promete «vivas» no
+puede dar verde con el bot atrasado:
+
+| alias | qué coteja | hoy |
+|---|---|---|
+| `npm run campanas:documento` | web viva ↔ documento del **repo** | **0** — y su éxito ya imprime su `ALCANCE:` y manda al hermano |
+| `npm run campanas:bot-vivo` | web viva ↔ `knowledge.json` **cargado** en el bot | **1** — 2 de 3 muertas |
+| `npm run campanas:vivas` | **los dos**, en orden | **1** |
+
+El gate que lo sostiene es una propiedad, no un texto: `campanas-vivas.test.mjs` exige que la
+línea de éxito nombre la **versión del documento** que miró y el **instrumento hermano** que sí
+mira producción. Validado por mutación — con el texto viejo puesto de vuelta sale rojo por el
+motivo correcto (`el exito no dice contra QUE cotejo`), y los otros 12 tests siguen verdes.
 
 **Y nada se declara "listo para desplegar" sin que el deploy lo alcance:**
 
@@ -749,7 +812,16 @@ Genera una sesión del dueño real de la bandeja (preguntado a la base, no hardc
 `/api/bandeja` contra el host público y sale **0** si ahí hay alguien que no somos nosotros.
 Es el ÚNICO gate que mide el objetivo y no una pieza suya: `inbox:tenencia` mide la columna, que
 es el primer eslabón de cinco, y **los otros cuatro fallan devolviendo 200 con la lista vacía**.
-Hoy sale **0** — mariohassen y F, por el camino completo.
+Hoy sale **0** — siete desconocidos, por el camino completo y pasando la 2FA solo.
+
+⚠️ **Y estuvo `NO MEDIDO` sin que nadie lo notara, hasta el 2026-09-26.** El gate cerraba su
+veredicto diciendo que pasar el segundo factor era *"algo que un loop no puede hacer"* — falso
+desde el 24-sep, cuando `scripts/lib/totp.mjs` entró al repo. La causa era una copia vieja de la
+receta de sesión dentro del propio gate, que se quedaba en `aal1`. Arreglado en `865e11ff`; el
+detalle está en "Cerrado". **Lo que sobrevive al arreglo es la regla:** un `NO MEDIDO` que sale
+todas las vueltas por el mismo motivo se lee como el ambiental de siempre y se saltea, así que
+cuando el motivo impreso diga que algo es imposible, **preguntarle al disco si este repo ya lo
+hace** antes de creerle.
 
 **Nunca:** desplegar al VPS sin OK de Sergio · tocar otro carril (web-factory es dueño de
 `web-factory/`, producto de la cola de plataforma) · gastar plata · bajar una superficie viva.
@@ -806,6 +878,30 @@ cierta para el otro, así que el estado se pregunta por separado:
 ```bash
 npm run deploy:ya-ocurrio     # exit 0 = nadie miente · 1 = lista file:línea · 2 = NO MEDIDO
 ```
+
+🔴 **Y el ID DEL PEDIDO tampoco se copia — por eso ninguna línea de esta cola lo nombra más.**
+Medido el 2026-09-26: **catorce líneas** de las dos colas citaban un pedido de deploy por su id
+(`t_c2fab948`, `t_d246cfa7`, `t_e45a24ff`, `t_0836a42f`, `t_b8d00627`, `t_deddf471`,
+`t_daa8750c`, `t_bf1607af`) y **los ocho ids estaban `archived` o `done`**. Un pedido se rehace
+cada vez que se le suma un arreglo —y al rehacerlo se archiva el viejo—, así que un id copiado
+caduca **por diseño**, no por descuido. El peor modo de falla es el silencioso: `ok <id>` sobre
+una tarea archivada **no despliega nada** (lista blanca de estados vivos, `exit 3`), y quien lo
+pidió cree que salió. El pedido vivo se pregunta, y los dos comandos ya lo derivan solos:
+
+```bash
+npm run deploy:sin-pedido     # por destino: si falta publicar y si YA hay pedido (lo nombra)
+npm run pedido:entregado      # si el pedido vigente sigue describiendo lo que falta publicar
+```
+
+⚠️ **Lo que dejó pasar esas catorce líneas fue el gate que existe para cazarlas**, y el modo de
+falla vale más que el caso: `bloqueo_citado_vivo.mjs` detectaba el freno por una **lista blanca
+de frases**, pedía `esperando el ok` y el archivo decía `esperan el ok`. Una lista blanca de
+frases falla **abierta** con la próxima redacción, y salía `exit 0` con el mensaje *«ninguna
+línea afirma un freno vigente»* — un cero de sujetos sobre 8.600 líneas llenas de ids, que se
+lee igual que «está todo bien». Ampliado el detector (conjugación, `t_X, vivo`, `el ok de t_X`)
+aparecieron **16 sujetos**; **1 era falso positivo** (una línea que narra en pasado un `ok` ya
+contestado) y se excluyó a mano. Por eso ahora el gate **imprime el denominador**: `0 de N ids
+nombrados`, y avisa cuando hay ≥10 ids y ningún sujeto.
 
 Sólo juzga la PLATAFORMA: un sha que no existe en el clon de `onia-platform` sale **NO MEDIDO**,
 nunca acusado — acusar una línea del bot con la frontera del panel sería el mismo error al revés.
@@ -923,7 +1019,7 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
       aprieta cualquiera de los dos botones de agenda recibe el saludo genérico en vez de la
       pregunta que califica — el clic más caro del sitio contestado como un "hola" suelto.
 
-      ⚠️ **El arreglo del contenido ya está pedido y NO se duplicó.** Es `t_c2fab948`
+      ⚠️ **El arreglo del contenido ya está pedido y NO se duplicó.** Es el pedido de deploy vivo de `bot` (el id se DERIVA, no se copia)
       (`DESPLEGAR: bot`, blocked esperando el `ok` de Sergio Urcullo), y su cuerpo ya describe
       exactamente esto en su punto 3, con los 6 archivos. Verificado con `git show
       origin/main:…` vs `/opt` vs el contenedor: `origin/main` está **adelante** en los tres
@@ -975,7 +1071,7 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
       ```
 
       🔴 **Este medidor entra en la medición de arranque del carril** (abajo, "Cómo se mide"): un
-      alias suelto no lo corre nadie. Se pone verde solo cuando el `ok` de `t_c2fab948` publique
+      alias suelto no lo corre nadie. Se pone verde solo cuando el `ok` al pedido de deploy vivo de `bot` lo publique
       el bot — o sea que además **sirve de acuse del deploy**, sin tener que creerle a nadie.
 
       **Regalo del barrido, anotado y no ejecutado (no es de este carril):** 6 de las 9 campañas
@@ -1805,7 +1901,7 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
       `desconocidas: 0` se lee como "ningún lead se enfrió". Es falso: producción corre el código
       de ANTES del arreglo del 24-sep (`grep ETAPAS_QUE_SE_PIERDEN /opt/onia/bot/persistence.mjs`
       → **0**), así que su filtro no puede ver los 12 `handoff_humano`. Eso ya está arreglado en
-      `main` y espera el `ok` de `t_d246cfa7` — **no se volvió a tocar**.
+      `main` y espera el `ok` al pedido de deploy vivo de `bot` — **no se volvió a tocar**.
 
       **Lo que sí apareció, y es de este carril.** Corriendo el barrido de `origin/main` contra la
       base de producción (copia aparte en `/tmp/onia-bot-qa`, **dry-run**, sin `--emit`, para no
@@ -5954,7 +6050,7 @@ La historia completa queda acá abajo para no perderla.
       comando. Suite del bot: **932/932**.
 
       ⚠️ **Commiteado, NO desplegado** — y el orden importa: mientras esto no esté en `main`, el
-      `ok` de `t_e45a24ff` **sigue necesitando** el comando a mano que su cuerpo nombra.
+      `ok` al pedido de deploy vivo de `bot` **sigue necesitando** el comando a mano que su cuerpo nombra.
 
 - [x] ✅ **CERRADO el 2026-09-11 (`93256eab`, onia-hermes — pusheado a la rama, falta mergear):
       el intake de leads le afirmaba a Sergio Urcullo que TODO contacto había pedido una demo.**
@@ -8327,7 +8423,7 @@ cita: al cerrar una fila hay que barrer quién la nombra, no sólo tacharla.
 | S2 | **Credenciales del BCP + certificado mTLS (`.pfx`)** | Trámite bancario | El botón "Cobrar con QR" en la conversación. Sin banco no hay código que lo destrabe |
 | S3 | **Traslado del 75414930 a coexistencia** — OK explícito ("vamos con A") + ventana acordada + el PIN de dos pasos a mano | El número queda MUDO 30-60 min y el rollback depende de un PIN que sólo él tiene. Runbook completo: `hermes-content/docs/ONIA_RUNBOOK_COEXISTENCIA_75414930.md` | Que Sergio siga usando su app de WhatsApp en el mismo número que atiende el bot |
 | S4 | **Verificar el push "te escribieron" en su celular** (suscribirse y recibir) | Hace falta un dispositivo real | El circuito está testeado 95/95 y deployado; sólo falta la prueba física |
-| ~~S18~~ | ✅ **CERRADO el 2026-09-25: el bot YA ESTÁ PUBLICADO — Sergio Urcullo dio el ok y el swap corrió. No le pidan esta firma de nuevo.** Medido, no leído: `node hermes-content/deploy/vps-ops/bot/espejo-check.mjs` → **exit 0** (`ESPEJO OK`), y el proceso que atiende arrancó a las **2026-09-25T18:44:23Z**, o sea DESPUÉS de la copia (lo dice el log del webhook; Node cachea módulos, así que copiar sin reiniciar no cambiaba nada). En el motor que CORRE, no en el host: `campanaExacta` en `/tmp/onia-bot/bot-engine.mjs` → **2**, `slotsElegibles` en `run-turn.mjs` → **5**, y `avisosDePanelYaDados` en `knowledge.mjs` → **4** — que era exactamente el verificador que esta fila pedía en 0. Y el pedido del tablero ya no existe: `list --status blocked` filtrado por *Publicar el bot* → **vacío**. ⚠️ **Lo que había acá debajo (mediciones de `exit 1`, 27 archivos distintos, 9 faltantes, «el bloqueo sigue VIGENTE») era del 2026-09-25 05:20 y quedó vencido el mismo día: se poda, porque un bloqueo vencido escrito en presente le pide a Sergio Urcullo una decisión que ya tomó — que es peor que un pendiente fantasma.** La historia está en el `git log`. | Escribía en producción, y `knowledge.onia.json` está en `FIRMA_HUMANA` (`scripts/loops/extras/publicar-solo.sh`) porque trae el teléfono fijo `022 20 241 45` — el freno falla CERRADO a propósito y **no se toca**: hizo su trabajo y la firma llegó | **Las tres cosas que la firma desbloqueaba, ahora verificadas EN PRODUCCIÓN:** (1) **las 9 campañas de los enlaces de WhatsApp de onia.com.bo** — `npm run campanas:vivas` → exit **0**, *7 frases vivas, 7 con campaña* (documento `2026-09-24.1`), medido contra el sitio VIVO y no contra el árbol; (2) **que el bot acepte los 5 horarios y no sólo los 2 que nombra** — `slotsElegibles` vive en el `run-turn.mjs` que corre; (3) **el aviso del lead que se enfría, una sola vez** — el barrido de las **19:17Z de hoy**, el primero con el código nuevo, pasó de `desconocidas: 0` (todas las corridas de 12:17 a 18:17) a **7**, y avisó por Telegram de `chatwoot:47` y `chatwoot:58` con `warnings: []` (`/var/log/onia-bot-followup.log`). 📌 **Lo que sigue en cero y NO es de esta fila:** `npm run embudo:bot` → 3 desconocidos reales, **`eligieron horario: 0`**. El código ya acepta los cinco; falta que un lead elija uno. 🔑 **Y por qué se cerró hoy y no en 23 días:** esta fila tenía cableado un verificador mecánico (`espejo-check.mjs`) desde ayer. S10, S11, S12 y S13 esperaron hasta 23 días con la decisión ya tomada, y las cuatro se cerraron el día que se les cableó uno |
+| ~~S18~~ | ✅ **CERRADO el 2026-09-25: el bot YA ESTÁ PUBLICADO — Sergio Urcullo dio el ok y el swap corrió. No le pidan esta firma de nuevo.** Medido, no leído: `node hermes-content/deploy/vps-ops/bot/espejo-check.mjs` → **exit 0** (`ESPEJO OK`), y el proceso que atiende arrancó a las **2026-09-25T18:44:23Z**, o sea DESPUÉS de la copia (lo dice el log del webhook; Node cachea módulos, así que copiar sin reiniciar no cambiaba nada). En el motor que CORRE, no en el host: `campanaExacta` en `/tmp/onia-bot/bot-engine.mjs` → **2**, `slotsElegibles` en `run-turn.mjs` → **5**, y `avisosDePanelYaDados` en `knowledge.mjs` → **4** — que era exactamente el verificador que esta fila pedía en 0. Y el pedido del tablero ya no existe: `list --status blocked` filtrado por *Publicar el bot* → **vacío**. ⚠️ **Lo que había acá debajo (mediciones de `exit 1`, 27 archivos distintos, 9 faltantes, «el bloqueo sigue VIGENTE») era del 2026-09-25 05:20 y quedó vencido el mismo día: se poda, porque un bloqueo vencido escrito en presente le pide a Sergio Urcullo una decisión que ya tomó — que es peor que un pendiente fantasma.** La historia está en el `git log`. | Escribía en producción, y `knowledge.onia.json` está en `FIRMA_HUMANA` (`scripts/loops/extras/publicar-solo.sh`) porque trae el teléfono fijo `022 20 241 45` — el freno falla CERRADO a propósito y **no se toca**: hizo su trabajo y la firma llegó | **Las tres cosas que la firma desbloqueaba, ahora verificadas EN PRODUCCIÓN:** (1) **las 9 campañas de los enlaces de WhatsApp de onia.com.bo** — `npm run campanas:vivas` → exit **0**, *7 frases vivas, 7 con campaña* (documento `2026-09-24.1`). ⚠️ **Corregido el 2026-09-26: ese `"medido contra el sitio VIVO y no contra el árbol"` era falso de la mitad que importa.** El alias corría el instrumento que coteja la web viva contra el documento del **REPO**; del `knowledge.json` que el bot tiene CARGADO no sabía nada. Aquel día el resultado igual era cierto —el repo estaba en `2026-09-24.1`, la misma versión que el bot— pero **por coincidencia, no por medición**, que es exactamente lo que la cabecera de ese archivo advierte sobre un tercero. Cuando el repo pasó a `2026-09-25.1` y la web cambió a *«30 minutos»*, el instrumento siguió en verde con 2 de 3 botones muertos. **La firma de S18 no se discute** (se dio y el swap corrió); lo que se corrige es el alcance de esta evidencia. El verificador vigente es `npm run campanas:bot-vivo`, que pregunta al proceso; (2) **que el bot acepte los 5 horarios y no sólo los 2 que nombra** — `slotsElegibles` vive en el `run-turn.mjs` que corre; (3) **el aviso del lead que se enfría, una sola vez** — el barrido de las **19:17Z de hoy**, el primero con el código nuevo, pasó de `desconocidas: 0` (todas las corridas de 12:17 a 18:17) a **7**, y avisó por Telegram de `chatwoot:47` y `chatwoot:58` con `warnings: []` (`/var/log/onia-bot-followup.log`). 📌 **Lo que sigue en cero y NO es de esta fila:** `npm run embudo:bot` → 3 desconocidos reales, **`eligieron horario: 0`**. El código ya acepta los cinco; falta que un lead elija uno. 🔑 **Y por qué se cerró hoy y no en 23 días:** esta fila tenía cableado un verificador mecánico (`espejo-check.mjs`) desde ayer. S10, S11, S12 y S13 esperaron hasta 23 días con la decisión ya tomada, y las cuatro se cerraron el día que se les cableó uno |
 | S5 | **¿Silenciar el Telegram de los agentes n8n que sí trabajan?** (Vendedor, Contenido, Finanzas, Prospector, Radar IA, Web Factory Radar) + los recordatorios de agenda cada 30 min | Es su canal y su umbral de ruido. No se apagan los workflows: hacen trabajo — hay que editar el nodo de aviso de cada uno | Que Telegram vuelva a ser sólo errores, que es la regla que ya se aplicó al resto |
 | S7 | **Contestar (o descartar) a los cuatro desconocidos que escribieron y nadie respondió** — conv 35 (+591 73232758, clínica dental de 4 doctores, 25-ago), 37 (+591 73021804, 28-ago), 36 (`Saguilera@ds-santacruz.bo`, 27-ago) y 34 (widget, sin dato de contacto) | Vende Sergio, y son personas reales esperando desde hace 3-6 días. Un bot no puede retomar una conversación fría de hace una semana sin que suene a spam | El primer lead atendido del carril. Dos tienen número de WhatsApp y uno correo: tres de los cuatro son alcanzables hoy |
 | ~~S8~~ | ✅ **CERRADO el 2026-08-31: `Onia (interna)` → inbox 5.** Verificado en la base y MIRADO en `/inbox`. **Podado el 01-sep:** esta fila arrastraba el análisis completo de seis vueltas y seguía leyéndose como bloqueo vivo — S8 se nombra **17 veces** en este archivo, casi todas dentro de párrafos viejos que ya no aplican. Lo que quedaba abierto NO era S8 sino el **inbox 4**, y ahora tiene su propio ítem (3 de "Ahora") y su propio bloqueo (**S14**). | — | — |
@@ -8616,7 +8712,7 @@ el motivo correcto** (el del lanzador nombró `followup-run.sh` y la variable qu
 Sus sujetos **se derivan del disco** —quién importa `aviso-telegram.mjs`, y qué variables lee
 ese módulo—, no de una lista a mano: una lista a mano falla ABIERTO y el próximo emisor
 nacería mudo igual. Suite del bot completa: **1360/1360**. Commiteado, **NO desplegado** —
-viaja en el mismo pedido `t_0836a42f`, que ya está `blocked` esperando el `ok`.
+viaja en el mismo pedido de deploy de `bot`, que ya está `blocked` esperando el `ok` (el id se DERIVA).
 
 ---
 
@@ -9041,6 +9137,54 @@ archivos.**
 ---
 
 ## Cerrado — no rehacer
+
+- [x] 🔴 **CERRADO el 2026-09-26 03:43-04:35 La Paz (commiteado en `865e11ff`; es el
+      INSTRUMENTO, no toca el motor ni el producto — no necesita deploy): el único gate que mide
+      el objetivo del carril estaba `NO MEDIDO`, y su propio veredicto explicaba por qué no valía
+      la pena intentarlo.**
+
+      `npm run objetivo:visible` es el único que mide el objetivo entero —que un desconocido
+      escriba y esa conversación **se vea** en la bandeja—; los otros miden una pieza. Salía
+      `NO MEDIDO — 403 MFA_REQUIRED` y cerraba así: *"la única salida es que ese dueño pase la
+      2FA (TOTP), **que un loop no puede hacer**"*.
+
+      **Era falso cuando se imprimió.** `scripts/lib/totp.mjs` (RFC 6238) y
+      `elevarSegundoFactor()` de `scripts/lib/sesion_dueno.mjs` entraron el **24-sep** y hacen
+      exactamente eso; con ellos `mirar_bandeja_dueno.mjs` ya miraba `/inbox` de esa misma
+      cuenta. O sea: la capacidad estaba en el repo, a dos archivos de distancia.
+
+      **La causa, y es de una clase que ya está escrita en este repo:** el gate tenía su **propia
+      copia** de la receta de sesión (`generate_link` → `verify` → `setSession` → cookies), y esa
+      copia se quedó en `aal1`. La cabecera de `sesion_dueno.mjs` lo había anunciado palabra por
+      palabra — *"Dos copias de esto divergen, y la que quede vieja no falla: entra igual y mide
+      otra cosa"*. Midió otra cosa: nada, vuelta tras vuelta.
+
+      **Lo que se arregló:** `medir()` ya no acuña la sesión (usa `acunarSesion()`, que eleva a
+      `aal2`), `acunarSesion()` **devuelve** si elevó —antes ese dato sólo existía en el log— y la
+      rama «puerta» separa los dos cortes, que se arreglan en lugares **opuestos**: con la sesión
+      ya elevada el sospechoso es el JWT que no llegó al proxy; sin factor inscripto sí hace falta
+      una persona, porque ningún TOTP inventa un factor que no existe. Un guardia nuevo se pone
+      rojo si el `generate_link` vuelve a este archivo.
+
+      **La prueba, medida y no supuesta:** self-check **118 casos verdes** (9 estaban en ROJO
+      antes del arreglo, cada uno por su motivo), y el gate en vivo pasó de `NO MEDIDO` a
+      **exit 0**: `segundo factor verificado (factor 2867857c…) — sesión aal2` y **7
+      conversaciones de gente que no somos nosotros** (#58 `+59175755019`, #40, #38, #37
+      `mariohassen`, #36, #35 `F`, #34). El verde sigue nombrando su herida: **5 de esas 7 sin
+      respuesta, la más vieja hace 32 días** — eso no lo destraba ningún loop.
+
+      ⚠️ **Dos trampas que costaron un intento cada una, y las dos ya estaban escritas:**
+      (1) un caso del self-check salió **verde sin que `medir()` llamara a nada**, porque el
+      mensaje del propio `afirmar` contenía el literal buscado — el gate se absolvió solo; el
+      nombre va **partido** y el sujeto es la llamada con su paréntesis. (2) Por eso mismo, buscar
+      un literal de código en esta fuente **quita los comentarios primero** (`soloCodigo()`): la
+      prosa de acá cita los literales viejos a propósito para explicar cada bug.
+
+      ⚠️ **Y una del método, que se llevó el susto más grande:** `npm test` salió **ROJO** en
+      `destinos-instrumento` acusando a `campanas-vivas.mjs`, el archivo de la vuelta anterior.
+      Parecía deuda propia recién mergeada. Era **el worktree atrasado**: `git merge origin/main`
+      trajo el arreglo que otro carril ya había hecho y el gate salió verde sin tocar nada.
+      Mergear ANTES de creerle a un rojo es lo que evitó deshacer un arreglo vivo.
 
 - [x] **~~El criterio «¿esta conversación somos NOSOTROS?» corría CIEGO en el barrido
       post-demo: era el único de los cuatro sin el insumo, y fallaba abierto~~** — cerrado el

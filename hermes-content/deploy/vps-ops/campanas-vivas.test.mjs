@@ -8,7 +8,7 @@
 
 import test from "node:test";
 import assert from "node:assert/strict";
-import { frasesDelHtml, cotejar } from "./campanas-vivas.mjs";
+import { frasesDelHtml, cotejar, lineasDelVeredicto, INSTRUMENTO_VIVO } from "./campanas-vivas.mjs";
 
 const FRASE = "Hola, vengo de la web de Onia. Quiero saber si me sirve para mi negocio.";
 const ENCODED = "Hola%2C%20vengo%20de%20la%20web%20de%20Onia.%20Quiero%20saber%20si%20me%20sirve%20para%20mi%20negocio.";
@@ -97,4 +97,62 @@ test("el match lo decide el MOTOR: los acentos y las mayusculas se normalizan ig
 test("sin campañas publicadas, TODA frase viva es un fallo (no un verde hueco)", () => {
   const r = cotejar(new Map([[FRASE, ["/"]]]), { campanas: [] });
   assert.equal(r.sinCampana.length, 1);
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// El veredicto tiene que declarar su ALCANCE. Nace del 2026-09-26.
+//
+// Medido ese dia, el mismo minuto, sobre el mismo destino: este instrumento salio `exit 0`
+// diciendo "toda frase viva tiene campaña", y su hermano `bot/campanas-vivas.mjs` salio
+// `exit 1`: "2 de 3 frases que la web viva manda no las escucha el bot vivo". Los dos tenian
+// razon. Este lee `knowledge.onia.json` del REPO (version 2026-09-25.1); el bot vivo corria
+// la 2026-09-24.1, con las frases de "20 minutos" y "45 minutos" que la web ya no manda.
+//
+// Lo que hace el fallo caro es la asimetria de autoridad: el nombre canonico
+// (`npm run campanas:vivas`), el lugar en la cadena `npm test` y las citas de los docs son
+// de ESTE, el que no mira produccion. Un ítem cerrado de la cola cita como prueba
+// *"campanas-vivas contra onia.com.bo EN VIVO: 7 frases vivas, 7 con campaña"* — y ese "en
+// vivo" es el de este instrumento, que del bot no sabe nada. Su propia cabecera denuncia el
+// mismo error en un tercero ("produccion se sirve de un build, no del working tree") y lo
+// comete del otro lado.
+//
+// La propiedad que se exige no es un texto: es que la linea de exito NO pueda leerse como
+// "el bot vivo las escucha". Dos anclas comprobables — la version del documento que miro, y
+// el nombre del instrumento que si mide produccion.
+const DOC_CON_VERSION = { ...DOC, version: "2026-09-25.1" };
+
+test("el exito declara que mira el DOCUMENTO DEL REPO, no el bot vivo", () => {
+  const v = lineasDelVeredicto({
+    base: "https://onia.com.bo",
+    vivas: new Map([[FRASE, ["/"]]]),
+    cubiertas: [{ frase: FRASE, paginas: ["/"], campana: DOC.campanas[0] }],
+    sinCampana: [],
+    sinFraseViva: [],
+    doc: DOC_CON_VERSION,
+  });
+  assert.equal(v.exit, 0);
+  assert.equal(v.alcance, "documento-del-repo");
+  const exito = v.salida.join("\n");
+  assert.match(exito, /DOCUMENTO DEL REPO/, "el exito no dice contra QUE cotejo");
+  assert.ok(exito.includes(DOC_CON_VERSION.version), "el exito no nombra la version del documento que miro");
+  assert.ok(
+    exito.includes(INSTRUMENTO_VIVO),
+    "el exito no manda al instrumento que SI le pregunta al bot vivo: se lee como via libre",
+  );
+});
+
+// El rojo no cambia de dueño: sigue siendo un fallo del documento, y sigue mandando a desplegar.
+test("el fallo nombra las frases huerfanas y sigue pidiendo el deploy del bot", () => {
+  const huerfana = "Hola, vengo de la web de Onia. Quiero un demo.";
+  const v = lineasDelVeredicto({
+    base: "https://onia.com.bo",
+    vivas: new Map([[huerfana, ["/precios"]]]),
+    cubiertas: [],
+    sinCampana: [{ frase: huerfana, paginas: ["/precios"] }],
+    sinFraseViva: [],
+    doc: DOC_CON_VERSION,
+  });
+  assert.equal(v.exit, 1);
+  assert.match(v.error.join("\n"), /DESPLEGAR: bot/);
+  assert.match(v.error.join("\n"), /Quiero un demo/);
 });

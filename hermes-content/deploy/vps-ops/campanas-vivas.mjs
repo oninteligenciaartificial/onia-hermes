@@ -12,10 +12,24 @@
 // desconocido, y se mide desde afuera. Esto es un GET y nada mas — sin VPS, sin docker, sin
 // token. Corre desde cualquier maquina:
 //
-//   npm run campanas:vivas
+//   npm run campanas:documento
 //
-// Sale 0 si toda frase viva tiene campaña, 1 nombrando las que no. No escribe nada: quien
-// publica es S9 (el `scp` del documento al VPS), este solo mira.
+// ⚠️ SU ALCANCE, y es la mitad de la pregunta: coteja la web VIVA contra el documento del
+// REPO. Su `exit 0` NO dice que un lead reciba la respuesta que califica — el contenedor
+// puede correr una version anterior de ese mismo archivo. Eso lo mide el hermano,
+// `bot/campanas-vivas.mjs` (`npm run campanas:bot-vivo`), y `npm run campanas:vivas` corre
+// los dos porque la pregunta completa necesita los dos.
+//
+// Nace de haber cometido del otro lado el error que la cabecera de arriba denuncia. El
+// 2026-09-26, el mismo minuto y sobre el mismo destino: este instrumento dijo `exit 0`
+// ("toda frase viva tiene campaña") mientras el hermano decia `exit 1` ("2 de 3 frases que
+// la web viva manda no las escucha el bot vivo"). Los dos tenian razon — este leia la
+// version 2026-09-25.1 del repo, el bot corria la 2026-09-24.1. Y la fila S18 de la cola se
+// habia cerrado el dia anterior citando justamente este `exit 0` como *"medido contra el
+// sitio VIVO y no contra el arbol"*: cierto para la web, falso para el documento.
+//
+// Sale 0 si toda frase viva tiene campaña EN EL DOCUMENTO, 1 nombrando las que no. No
+// escribe nada: quien publica es S9 (el `scp` del documento al VPS), este solo mira.
 //
 // Env opcional: ONIA_WEB_URL (default https://onia.com.bo).
 
@@ -91,6 +105,46 @@ export async function frasesVivas(base, paginas = PAGINAS) {
   return vivas;
 }
 
+/**
+ * El instrumento HERMANO que sí le pregunta al bot VIVO. Este de acá coteja la web viva
+ * contra el documento del REPO; ese coteja la web viva contra el `knowledge.json` que el
+ * proceso del bot tiene CARGADO. Son preguntas distintas y pueden contestar al revés.
+ */
+export const INSTRUMENTO_VIVO = "hermes-content/deploy/vps-ops/bot/campanas-vivas.mjs";
+
+/**
+ * El veredicto, como dato y sin red, para que el gate pueda exigirle propiedades.
+ *
+ * Lo que mide este instrumento es **web viva ↔ documento del repo**, y la salida tiene que
+ * decirlo: el `exit 0` de acá NO significa que un lead reciba la respuesta que califica.
+ * @returns {{salida: string[], error: string[], exit: 0|1, alcance: string}}
+ */
+export function lineasDelVeredicto({ base, vivas, cubiertas, sinCampana, sinFraseViva, doc }) {
+  const version = doc?.version || "sin version";
+  const salida = [
+    `[campanas-vivas] ${base} — ${vivas.size} frases vivas, ${cubiertas.length} con campaña (documento ${version})`,
+    ...sinFraseViva.map((c) => `[campanas-vivas]   campaña sin frase viva (no es un fallo): ${JSON.stringify(c.frase)}`),
+  ];
+  if (sinCampana.length === 0) {
+    salida.push(
+      `[campanas-vivas] toda frase viva tiene campaña en el DOCUMENTO DEL REPO (${version}).`,
+      `[campanas-vivas] ALCANCE: esto NO prueba que el bot VIVO las escuche — el contenedor puede`,
+      `[campanas-vivas]   correr una version anterior de ese mismo archivo. Eso lo mide ${INSTRUMENTO_VIVO}.`,
+    );
+    return { salida, error: [], exit: 0, alcance: "documento-del-repo" };
+  }
+  return {
+    salida,
+    error: [
+      `[campanas-vivas] SIN CAMPAÑA ${sinCampana.length}/${vivas.size} — el desconocido recibe el saludo generico:`,
+      ...sinCampana.map(({ frase, paginas }) => `[campanas-vivas]   ${JSON.stringify(frase)}  <- ${paginas.join(", ")}`),
+      `[campanas-vivas] agregala a ${DOC_PATH} y desplega el bot (DESPLEGAR: bot).`,
+    ],
+    exit: 1,
+    alcance: "documento-del-repo",
+  };
+}
+
 // `process.exitCode` y NUNCA `process.exit()`: en Windows, matar el proceso con los sockets
 // keep-alive de `fetch` abiertos revienta libuv y devuelve 127 en vez del 1. Un gate que no
 // puede decir su veredicto por el codigo de salida no lo lee ningun cron.
@@ -100,16 +154,10 @@ if (process.argv[1]?.endsWith("campanas-vivas.mjs")) {
   try {
     const vivas = await frasesVivas(base, PAGINAS);
     const { cubiertas, sinCampana, sinFraseViva } = cotejar(vivas, doc);
-    console.log(`[campanas-vivas] ${base} — ${vivas.size} frases vivas, ${cubiertas.length} con campaña (documento ${doc.version || "sin version"})`);
-    for (const { frase } of sinFraseViva) console.log(`[campanas-vivas]   campaña sin frase viva (no es un fallo): ${JSON.stringify(frase)}`);
-    if (sinCampana.length === 0) {
-      console.log("[campanas-vivas] toda frase viva tiene campaña.");
-    } else {
-      console.error(`[campanas-vivas] SIN CAMPAÑA ${sinCampana.length}/${vivas.size} — el desconocido recibe el saludo generico:`);
-      for (const { frase, paginas } of sinCampana) console.error(`[campanas-vivas]   ${JSON.stringify(frase)}  <- ${paginas.join(", ")}`);
-      console.error(`[campanas-vivas] agregala a ${DOC_PATH} y desplega el bot (DESPLEGAR: bot).`);
-      process.exitCode = 1;
-    }
+    const v = lineasDelVeredicto({ base, vivas, cubiertas, sinCampana, sinFraseViva, doc });
+    for (const linea of v.salida) console.log(linea);
+    for (const linea of v.error) console.error(linea);
+    if (v.exit !== 0) process.exitCode = v.exit;
   } catch (e) {
     console.error(`[campanas-vivas] no se pudo medir: ${e.message}`);
     process.exitCode = 1;
