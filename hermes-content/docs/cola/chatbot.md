@@ -1001,6 +1001,73 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
 
 ## Ahora
 
+- [x] 🔴 **CERRADO el 2026-09-26 08:43-09:35 La Paz (es un MEDIDOR, no toca el motor: no necesita
+      deploy): las DOS MITADES de `avisos-vivo.mjs` juzgaban al REVÉS los mismos dos eventos, y la
+      que acusa ganaba el veredicto — un rojo que nadie podía curar.**
+
+      Los dos ítems anteriores estrecharon el rojo de diez a dos y dejaron **abierta la pregunta de
+      por qué se perdieron esos dos**. Contada en vivo, la respuesta es que **no se perdieron**, y la
+      contradicción estaba escrita en el mismo reporte, a dos renglones de distancia:
+
+      ```
+      eventos: ... salteados 2 (2 ya desmentido(s) por un envio posterior)     <- absueltos
+      motivos: 2 evento(s) en la base SIN un aviso que los nombre ...          <- `roto`
+      VEREDICTO: roto ... el circuito perdio eventos
+      ```
+
+      En el código las dos reglas viven **18 líneas aparte** dentro de `diagnosticar()`:
+      `salteadosVigentes` no cuenta un salteo global desmentido por un envío posterior, y
+      `conciliacion.sinAviso` sí lo cuenta. Gana el que acusa.
+
+      **Lo que pasó de verdad, leído del log vivo de producción** — se reproduce con
+      `docker exec onia-center sh -c "sed -n '50795,50860p' \$LOG"` (el log del bot vivo, dentro del
+      contenedor, no en el repo), mirando cada línea `[aviso]` junto a su vecina del webhook:
+
+      | conv | el motor escribió | la línea del aviso |
+      |---|---|---|
+      | 53 | `03:41:45.953 etapa=nuevo->handoff_humano` | `[aviso] skipped (cuota_agotada): aviso por Telegram apagado (ONIA_BOT_TG_AVISO)` |
+      | 55 | `06:38:24.196 etapa=nuevo->handoff_humano` | `[aviso] skipped (pregunta_precio_recepcion): … (ONIA_BOT_TG_AVISO)` |
+
+      O sea: el aviso **sí emitió una línea por cada uno** y no salió porque el flag global estaba
+      apagado ese día. Hoy está encendido (10 avisos enviados), así que **la causa está muerta** — y
+      el log es append-only: esas dos líneas **no se van nunca**. Ese rojo no lo puede curar nadie,
+      y un rojo permanente se lee como el ambiental de siempre. El día que el circuito se rompa de
+      verdad, el veredicto iba a ser **idéntico al de hoy**: el gate perdía justo la única cosa que
+      tiene que poder decir, *"se rompió HOY"*.
+
+      **El arreglo** usa **la misma regla** que ya usaba la otra mitad (`salteadosYaDesmentidos()`:
+      el último envío exitoso desmiente a todo salteo global anterior), a propósito — mientras las
+      dos mitades compartan la regla no pueden volver a contradecirse. Los eventos van a un balde
+      propio `causaMuerta`, **nombrados**, no desaparecidos: absolver no es callar, y una absolución
+      anónima no se puede auditar.
+
+      **Lo que sigue ROJO, que es lo que hace que el arreglo no sea un verde falso:**
+      - salteo global **sin** ningún envío posterior → el flag sigue apagado, y eso **se arregla**
+        encendiéndolo;
+      - salteo por causa **propia** de esa conversación → el envío de otra no lo cura;
+      - `failed`; y un evento **sin ninguna línea** → ahí sí el circuito lo perdió.
+      - `conAviso` se evalúa **antes** que `causaMuerta`: si la misma conv tuvo un salteo y después
+        su propio envío, manda el envío — al revés se absolvería a alguien que sí fue avisado.
+
+      **Medido, no supuesto** (exit real, no por un pipe): `node …/avisos-vivo.mjs` pasó de
+      `exit 1 · VEREDICTO: roto … el circuito perdio eventos` a `exit 0 · VEREDICTO: ok`, y ahora
+      imprime `SIN aviso 0 · sin aviso por causa ya muerta 2` y la línea
+      `2 sin aviso por una causa YA muerta (conv 53, conv 55): el flag global estaba apagado y
+      despues hubo envios — no los perdio el circuito`.
+
+      **5 tests nuevos, los 4 de conducta en ROJO por el motivo correcto antes del arreglo**
+      (`se acusa al circuito de perder un evento que el propio log da por desmentido — 1 !== 0`;
+      el primer rojo fue `salteadosYaDesmentidos is not defined`, que es un símbolo ausente y **no**
+      cuenta como rojo por conducta, así que se implementó la función pura primero y se volvió a
+      medir). 60/60 verde con el arreglo, `test:avisos-gate` ya en la cadena.
+      El test ancla el **log real del 4-sep** y afirma la invariante, no el número:
+      `eventos.salteados - eventos.salteadosVigentes === 2` ⇒ `conciliacion.sinAviso.length === 0`.
+
+      ⚠️ **La lección que sirve a otros carriles:** cuando un instrumento tiene dos mitades que
+      pueden juzgar al mismo sujeto, la pregunta no es si cada una está bien, sino **si comparten la
+      regla**. Acá una absolvía y la otra condenaba, las dos con su comentario explicando por qué
+      tenían razón, y el veredicto salía de la que acusa.
+
 - [x] 🔴 **CERRADO el 2026-09-26 08:13-09:05 La Paz (es un MEDIDOR, no toca el motor: no necesita
       deploy): el rojo que el ítem de abajo destapó ayer estaba INFLADO 5×, y por las dos puntas
       — acusaba al circuito por handoffs anteriores al código de aviso, y mandaba a "ir a buscar a

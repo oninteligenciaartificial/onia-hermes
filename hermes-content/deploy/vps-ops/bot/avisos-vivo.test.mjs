@@ -36,6 +36,7 @@ import {
   lineasDelLog,
   inboxPorConversacion,
   conciliarAvisos,
+  salteadosYaDesmentidos,
   ventanaDelAviso,
   ESTADOS_QUE_AVISAN,
   ESTADO_POR_RAMA,
@@ -1042,4 +1043,114 @@ test("sin poder ubicar a los perdidos, la lectura no afirma que no haya nadie a 
   });
   assert.doesNotMatch(lectura, /banco de pruebas/, "no se pudo preguntar de quien son: no se puede absolver");
   assert.match(lectura, /hay que ir a buscar/, "en la duda, se va a buscar");
+});
+
+// ---------------------------------------------------------------------------
+// Las dos mitades de este archivo juzgaban los MISMOS eventos al reves
+//
+// Medido en produccion el 2026-09-26: conv 53 y 55 (4-sep) salian a la vez
+// "salteados 2 (2 ya desmentido(s) por un envio posterior)" por `contarEventos`
+// —o sea absueltos, la causa esta muerta— y "SIN un aviso que los nombre ... el
+// circuito perdio eventos" por `conciliarAvisos`. La mitad que acusa gana el
+// veredicto, asi que el gate quedaba en un rojo que NADIE puede curar: el flag ya
+// esta encendido y esas dos lineas del 4-sep no se van del log append-only.
+// Un rojo permanente se lee como el ambiental de siempre, y el dia que el circuito
+// se rompa de verdad el veredicto sera identico al de hoy.
+
+test("un salteo por la causa GLOBAL con un envio posterior no es 'el circuito perdio': la causa ya esta muerta", () => {
+  const lineas = [
+    '[onia-webhook] 2026-09-04T03:41:45.953Z conv=53 rama=respondio etapa=nuevo->handoff_humano',
+    "[aviso] skipped (cuota_agotada): aviso por Telegram apagado (ONIA_BOT_TG_AVISO)",
+    "[aviso] sent conv=57 (pidio_humano_recepcion): aviso enviado",
+  ];
+  const deQuien = conversacionesDeAvisos(lineas);
+  const conciliacion = conciliarAvisos({
+    eventosEnLaBase: [{ conv: 53, estado: "handoff_humano", desde: "2026-09-04T03:41:45" }],
+    convsConAviso: deQuien.filter((e) => e.estado === "sent").map((e) => e.conv),
+    convsDesmentidos: salteadosYaDesmentidos(deQuien),
+    ventana: VENTANA,
+  });
+  assert.equal(conciliacion.sinAviso.length, 0, "se acusa al circuito de perder un evento que el propio log da por desmentido");
+  assert.equal(conciliacion.causaMuerta.length, 1, "el evento tiene que quedar NOMBRADO en su propio balde, no desaparecer");
+  assert.equal(
+    diagnosticar({ circuito: CIRCUITO_SANO, eventos: contarEventos(lineas), conciliacion }).veredicto,
+    "ok",
+    "rojo que nadie puede curar: el flag ya esta encendido y la linea del 4-sep no se va del log",
+  );
+});
+
+test("un salteo por la causa global SIN envio posterior sigue ROJO: la causa esta viva", () => {
+  const lineas = [
+    '[onia-webhook] 2026-09-04T03:41:45.953Z conv=53 rama=respondio etapa=nuevo->handoff_humano',
+    "[aviso] skipped (cuota_agotada): aviso por Telegram apagado (ONIA_BOT_TG_AVISO)",
+  ];
+  const deQuien = conversacionesDeAvisos(lineas);
+  const conciliacion = conciliarAvisos({
+    eventosEnLaBase: [{ conv: 53, estado: "handoff_humano", desde: "2026-09-04T03:41:45" }],
+    convsConAviso: [],
+    convsDesmentidos: salteadosYaDesmentidos(deQuien),
+    ventana: VENTANA,
+  });
+  assert.equal(conciliacion.sinAviso.length, 1, "sin un envio posterior el flag sigue apagado: es rojo y se arregla encendiendolo");
+  assert.equal(conciliacion.causaMuerta.length, 0);
+});
+
+test("un salteo por causa PROPIA no lo cura un envio ajeno posterior", () => {
+  // `contarEventos` ya usa esta regla: solo la causa GLOBAL la desmiente otro envio, porque
+  // esa linea no es de ningun aviso en particular. Un `cupo_agotado` de ESTA conversacion
+  // sigue siendo suyo aunque despues salga el aviso de otra.
+  const lineas = [
+    '[onia-webhook] 2026-09-04T03:41:45.953Z conv=53 rama=respondio etapa=nuevo->handoff_humano',
+    "[aviso] skipped (pidio_hablar_con_humano): no habia texto accionable",
+    "[aviso] sent conv=57 (pidio_humano_recepcion): aviso enviado",
+  ];
+  const deQuien = conversacionesDeAvisos(lineas);
+  const conciliacion = conciliarAvisos({
+    eventosEnLaBase: [{ conv: 53, estado: "handoff_humano", desde: "2026-09-04T03:41:45" }],
+    convsConAviso: deQuien.filter((e) => e.estado === "sent").map((e) => e.conv),
+    convsDesmentidos: salteadosYaDesmentidos(deQuien),
+    ventana: VENTANA,
+  });
+  assert.equal(conciliacion.sinAviso.length, 1, "un envio ajeno no cura el salteo propio de otra conversacion");
+});
+
+test("las dos mitades no pueden volver a contradecirse: lo que contarEventos da por desmentido no queda en sinAviso", () => {
+  // El log REAL del 4-sep, con las dos lineas anonimas y el envio que las desmiente.
+  const lineas = [
+    '[onia-webhook] 2026-09-04T03:41:45.953Z conv=53 rama=respondio etapa=nuevo->handoff_humano',
+    "[aviso] skipped (cuota_agotada): aviso por Telegram apagado (ONIA_BOT_TG_AVISO)",
+    '[onia-webhook] 2026-09-04T06:38:24.196Z conv=55 rama=respondio etapa=nuevo->handoff_humano',
+    "[aviso] skipped (pregunta_precio_recepcion): aviso por Telegram apagado (ONIA_BOT_TG_AVISO)",
+    "[aviso] sent conv=57 (pidio_humano_recepcion): aviso enviado",
+  ];
+  const eventos = contarEventos(lineas);
+  const deQuien = conversacionesDeAvisos(lineas);
+  const conciliacion = conciliarAvisos({
+    eventosEnLaBase: [
+      { conv: 53, estado: "handoff_humano", desde: "2026-09-04T03:41:45" },
+      { conv: 55, estado: "handoff_humano", desde: "2026-09-04T06:37:54" },
+    ],
+    convsConAviso: deQuien.filter((e) => e.estado === "sent").map((e) => e.conv),
+    convsDesmentidos: salteadosYaDesmentidos(deQuien),
+    ventana: VENTANA,
+  });
+  // La invariante, escrita como invariante y no como numero: los dos salteos que
+  // `contarEventos` NO cuenta como vigentes no pueden aparecer como perdidos del otro lado.
+  assert.equal(eventos.salteados - eventos.salteadosVigentes, 2, "el log de referencia tiene 2 salteos ya desmentidos");
+  assert.equal(conciliacion.sinAviso.length, 0, "la mitad que absuelve y la que acusa juzgan al reves el mismo evento");
+  assert.equal(
+    diagnosticar({ circuito: CIRCUITO_SANO, eventos, conciliacion }).veredicto,
+    "ok",
+    "el veredicto tiene que poder volver a verde, o no puede decir 'se rompio HOY'",
+  );
+});
+
+test("el reporte NOMBRA los desmentidos: un alcance que no se imprime se re-descubre", () => {
+  const lectura = lecturaDeEventos({
+    veredicto: "ok",
+    eventos: contarEventos(["[aviso] sent conv=57 (pidio_humano_recepcion): aviso enviado"]),
+    circuitoSano: true,
+    conciliacion: { medido: true, sinAviso: [], conAviso: [], fueraDeAlcance: [], causaMuerta: [{ conv: 53, estado: "handoff_humano" }] },
+  });
+  assert.match(lectura, /53/, "el evento absuelto queda sin nombre y nadie puede auditar la absolucion");
 });

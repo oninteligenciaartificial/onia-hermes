@@ -210,9 +210,56 @@ export function conversacionesDeAvisos(lineas = []) {
       estado: /\[aviso\]\s+(\w+)/.exec(l)?.[1] || null,
       motivo: motivoDelAviso(l),
       conv: conv === null ? null : Number(conv),
+      // Si el salteo fue por la causa GLOBAL o por una propia de este aviso. El `motivo` no
+      // alcanza para distinguirlas: es el `(...)` con el que el motor PIDIO el aviso, y la
+      // causa vive en el `reason`, despues de los dos puntos. Sin este campo la unica forma de
+      // saberlo era volver a la linea cruda, que es justo lo que este parseo existe para evitar.
+      causaGlobal: l.includes(CAUSA_GLOBAL_DE_SALTEO),
     });
   });
   return eventos;
+}
+
+/**
+ * Los conv cuyo aviso NO salio por la causa GLOBAL, y cuya causa ya esta MUERTA porque el
+ * circuito volvio a enviar despues.
+ *
+ * POR QUE EXISTE, medido contra produccion el 2026-09-26. Las dos mitades de este archivo
+ * juzgaban al REVES los mismos dos eventos, y la que acusa ganaba el veredicto:
+ *
+ *   contarEventos      "salteados 2 (2 ya desmentido(s) por un envio posterior)"  -> absueltos
+ *   conciliarAvisos    "2 evento(s) ... SIN un aviso que los nombre"              -> `roto`
+ *
+ * Son conv 53 y 55 del 4-sep: el motor escribio su handoff, el aviso emitio su linea y NO
+ * salio porque `ONIA_BOT_TG_AVISO` estaba apagado. Ese rojo no lo puede curar NADIE — el flag
+ * ya esta encendido (10 avisos enviados) y el log es append-only, esas dos lineas no se van.
+ * Y un rojo permanente se lee como el ambiental de siempre: el dia que el circuito se rompa de
+ * verdad, el veredicto va a ser identico al de hoy. Eso es exactamente lo que el gate no puede
+ * permitirse, y lo que la cabecera de `contarEventos` ya habia aprendido de su lado.
+ *
+ * La regla es LA MISMA que usa `contarEventos` —el ultimo envio exitoso desmiente a todo
+ * salteo global anterior— a proposito: mientras las dos mitades compartan la regla no pueden
+ * volver a contradecirse. Lo que NO cura: un salteo por causa propia (es de ESA conversacion,
+ * el envio de otra no lo arregla), un `failed`, y un salteo global sin ningun envio posterior
+ * (ahi el flag sigue apagado, y eso si se arregla encendiendolo).
+ *
+ * Absolver no es callar: el que llama lo pone en su propio balde y el reporte lo NOMBRA.
+ *
+ * @param eventos la salida de `conversacionesDeAvisos`, en el orden del log.
+ */
+export function salteadosYaDesmentidos(eventos = []) {
+  const lista = Array.isArray(eventos) ? eventos : [];
+  // Posicion del ultimo envio exitoso, comparada por orden en el log, que es el orden real.
+  let ultimoEnvio = -1;
+  lista.forEach((e, i) => {
+    if (e?.estado === "sent") ultimoEnvio = i;
+  });
+  const convs = new Set();
+  lista.forEach((e, i) => {
+    if (e?.estado !== "skipped" || e?.causaGlobal !== true) return;
+    if (ultimoEnvio > i && Number.isInteger(e?.conv) && e.conv > 0) convs.add(e.conv);
+  });
+  return [...convs];
 }
 
 /**
@@ -305,23 +352,31 @@ export function clasificarEventos(eventos = [], inboxPorConv = null) {
  * @param convsConAviso   numeros de conversacion que el log nombra en un aviso.
  * @param ventana         `{desde, hasta}` en ISO, derivada del propio log.
  */
-export function conciliarAvisos({ eventosEnLaBase, convsConAviso, ventana } = {}) {
-  const vacio = { medido: false, sinAviso: [], fueraDeAlcance: [], conAviso: [] };
+export function conciliarAvisos({ eventosEnLaBase, convsConAviso, convsDesmentidos, ventana } = {}) {
+  const vacio = { medido: false, sinAviso: [], fueraDeAlcance: [], conAviso: [], causaMuerta: [] };
   // Tri-estado: sin la base o sin la ventana la respuesta es "no pude preguntar", nunca cero.
   // Un `[]` por defecto aca seria un verde firmado sobre una pregunta que no se hizo.
   if (!Array.isArray(eventosEnLaBase) || !ventana?.desde || !ventana?.hasta) return vacio;
   const avisados = new Set((convsConAviso || []).filter((n) => Number.isInteger(n) && n > 0));
+  // Los que el propio log da por desmentidos (ver `salteadosYaDesmentidos`). NO son cobertura
+  // —a esa persona no le llego nada— pero tampoco son un evento que el circuito PERDIO, y esa
+  // es la diferencia entre un rojo que se arregla y uno que nadie puede curar.
+  const desmentidos = new Set((convsDesmentidos || []).filter((n) => Number.isInteger(n) && n > 0));
   const sinAviso = [];
   const fueraDeAlcance = [];
   const conAviso = [];
+  const causaMuerta = [];
   for (const ev of eventosEnLaBase) {
     const desde = String(ev?.desde || "");
     // Comparacion lexicografica de ISO: es la misma que usa el orden del log.
     if (!desde || desde < ventana.desde || desde > ventana.hasta) fueraDeAlcance.push(ev);
+    // `conAviso` va PRIMERO: un envio propio cubre, y punto. Si la misma conv tuvo antes un
+    // salteo global, el envio manda — al reves se absolveria a alguien que SI fue avisado.
     else if (avisados.has(ev.conv)) conAviso.push(ev);
+    else if (desmentidos.has(ev.conv)) causaMuerta.push(ev);
     else sinAviso.push(ev);
   }
-  return { medido: true, sinAviso, fueraDeAlcance, conAviso };
+  return { medido: true, sinAviso, fueraDeAlcance, conAviso, causaMuerta };
 }
 
 /**
@@ -403,16 +458,26 @@ export function lecturaDeEventos({ veredicto, eventos, circuitoSano, origen, con
       ? `el circuito responde, pero ${noSalieron} aviso(s) NO salieron${cuales ? ` (${cuales})` : ""} y nada posterior lo desmiente`
       : "EL PROXIMO QUE PIDA UN HUMANO SE PIERDE";
   }
-  if (ev.enviados === 0) return "circuito sano, sin eventos reales todavia";
+  // Lo ABSUELTO se nombra igual. Son eventos a los que no les llego un aviso, absueltos porque
+  // la causa (el flag global) ya esta muerta — no porque no hayan pasado. Una absolucion que no
+  // se imprime se re-descubre como bug: el 2026-09-26 estos mismos dos eventos costaron una
+  // vuelta entera justo por leerse como "el circuito perdio" sin decir de donde salia el numero.
+  const absueltos = conciliacion?.medido ? conciliacion.causaMuerta || [] : [];
+  const coda = absueltos.length
+    ? ` · ${absueltos.length} sin aviso por una causa YA muerta (el flag estaba apagado y despues hubo envios): ${absueltos
+        .map((e) => `conv ${e.conv}`)
+        .join(", ")}`
+    : "";
+  if (ev.enviados === 0) return `circuito sano, sin eventos reales todavia${coda}`;
   // Hay envios. La pregunta que faltaba: ¿alguno fue de alguien de AFUERA?
   if (origen?.medido && origen.reales.length === 0) {
     const delBanco = origen.nuestros.length;
     return `circuito sano, pero NINGUN aviso es de un lead: ${delBanco} nuestro(s)${
       origen.sinUbicar.length ? ` y ${origen.sinUbicar.length} sin ubicar` : ""
-    } — nunca se probo con un desconocido`;
+    } — nunca se probo con un desconocido${coda}`;
   }
-  if (origen && !origen.medido) return "circuito sano y avisando (no se pudo ubicar de quien son los avisos)";
-  return "circuito sano y avisando";
+  if (origen && !origen.medido) return `circuito sano y avisando (no se pudo ubicar de quien son los avisos)${coda}`;
+  return `circuito sano y avisando${coda}`;
 }
 
 /**
@@ -867,6 +932,10 @@ async function medirCon(bot) {
     // pero a esa persona no le llego nada: contarlos como cobertura seria usar la evidencia
     // del fallo para tapar el fallo.
     convsConAviso: deQuien.filter((e) => e.estado === "sent").map((e) => e.conv),
+    // Y los que el propio log da por desmentidos, que no son cobertura pero tampoco son una
+    // perdida del circuito: sin esto las dos mitades de este archivo juzgan al reves el mismo
+    // evento y el gate queda en un rojo incurable (ver `salteadosYaDesmentidos`).
+    convsDesmentidos: salteadosYaDesmentidos(deQuien),
     ventana: borde,
   });
   // De quien son los PERDIDOS. Es otra pregunta que la de `origen`, que mira los avisos que el
@@ -947,7 +1016,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   // eventos hubo DE VERDAD. Un gate que solo habla cuando acusa deja al que lo lee sin saber
   // sobre cuantos sujetos se pronuncio — que es como "0 avisos" paso de medida a decoracion.
   if (conciliacion?.medido) {
-    const { conAviso, sinAviso, fueraDeAlcance } = conciliacion;
+    const { conAviso, sinAviso, fueraDeAlcance, causaMuerta = [] } = conciliacion;
     // El BORDE se imprime con su motivo: es el numero que decide a quien se acusa, y hasta el
     // 2026-09-26 era invisible — el reporte decia "dentro de la ventana del log" sobre una
     // ventana seis dias mas ancha que la capacidad. Un alcance que no se nombra se re-descubre.
@@ -955,9 +1024,18 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
       ? `desde ${borde.desde}, que es cuando el aviso EMPEZO a emitir (el log arranca antes)`
       : `desde ${borde?.desde}, que es donde arranca el log`;
     console.log(
-      `en la base: ${conAviso.length + sinAviso.length} evento(s) dentro del alcance del aviso` +
-        ` (con aviso ${conAviso.length} · SIN aviso ${sinAviso.length}) — ${porQue}` +
-        (fueraDeAlcance.length ? `\n  · ${fueraDeAlcance.length} evento(s) anteriores a ese borde, fuera de alcance: no los pudo perder un circuito que no existia` : ""),
+      `en la base: ${conAviso.length + sinAviso.length + causaMuerta.length} evento(s) dentro del alcance del aviso` +
+        ` (con aviso ${conAviso.length} · SIN aviso ${sinAviso.length}${
+          causaMuerta.length ? ` · sin aviso por causa ya muerta ${causaMuerta.length}` : ""
+        }) — ${porQue}` +
+        (fueraDeAlcance.length ? `\n  · ${fueraDeAlcance.length} evento(s) anteriores a ese borde, fuera de alcance: no los pudo perder un circuito que no existia` : "") +
+        // Se NOMBRAN. Es el balde que absuelve, y una absolucion anonima no se puede auditar:
+        // el que lo lea tiene que poder ir al log y ver la linea `skipped` y el envio posterior.
+        (causaMuerta.length
+          ? `\n  · ${causaMuerta.length} sin aviso por una causa YA muerta (${causaMuerta
+              .map((e) => `conv ${e.conv}`)
+              .join(", ")}): el flag global estaba apagado y despues hubo envios — no los perdio el circuito`
+          : ""),
     );
     if (origenPerdidos) {
       console.log(
