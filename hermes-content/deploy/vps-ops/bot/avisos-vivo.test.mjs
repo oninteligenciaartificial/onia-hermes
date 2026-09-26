@@ -36,6 +36,7 @@ import {
   lineasDelLog,
   inboxPorConversacion,
   conciliarAvisos,
+  ventanaDelAviso,
   ESTADOS_QUE_AVISAN,
   ESTADO_POR_RAMA,
   BOT_DIR,
@@ -884,4 +885,161 @@ test("cada rama que avisa tiene su estado en la base: si no, el conciliador busc
   }
   assert.equal(ESTADOS_QUE_AVISAN.length, RAMAS_QUE_AVISAN.length);
   assert.ok(ESTADOS_QUE_AVISAN.every(Boolean), "una rama sin traducir deja al conciliador sin sujetos");
+});
+
+// ---------------------------------------------------------------------------
+// EL BORDE IZQUIERDO DE LA VENTANA. Nace del 2026-09-26, midiendo el rojo de este
+// propio gate contra produccion.
+//
+// El bloque de arriba fue conservador con el borde izquierdo y eligio la referencia
+// EQUIVOCADA: la ventana del LOG. La pregunta que el conciliador contesta es "¿el circuito
+// perdio este evento?", y para poder perderlo el codigo que escribe la linea `[aviso]` tiene
+// que haber estado corriendo. Los dos numeros medidos:
+//
+//   ventana del log         desde 2026-08-28T22:22:51  (primera marca del propio log)
+//   primera linea [aviso]         2026-09-04T03:41:45  (linea 50803 del log vivo)
+//
+// Seis dias y ~250 lineas de diferencia, y DIEZ de los eventos que el gate acusaba vivian
+// en esa brecha: son handoffs anteriores al aviso mismo, estructuralmente inavisables. El
+// veredicto decia `roto — 10 pedidos que NINGUN aviso nombra, ya se perdieron, hay que ir a
+// buscar a esas personas`. Un rojo permanente que nadie puede curar se lee como el ambiental
+// de siempre — y el dia que el circuito se rompa DE VERDAD, el veredicto sera idéntico al de
+// hoy. Un rojo por el motivo equivocado es un verde futuro.
+// ---------------------------------------------------------------------------
+
+/** La ventana del log vivo el 2026-09-26, y la primera evidencia de que el aviso emitia. */
+const LOG_VIVO = { desde: "2026-08-28T22:22:51", hasta: "2026-09-26T10:53:21" };
+const PRIMER_AVISO = "2026-09-04T03:41:45";
+
+test("la ventana del aviso arranca cuando el AVISO empezo a emitir, no donde arranca el log", () => {
+  const v = ventanaDelAviso({ ventana: LOG_VIVO, primerAviso: PRIMER_AVISO });
+  assert.equal(v.desde, PRIMER_AVISO, "el borde sigue siendo el del log: acusa por lo que el aviso no pudo hacer");
+  assert.equal(v.hasta, LOG_VIVO.hasta, "el borde derecho no se toca: lo manda el log");
+  assert.equal(v.borde, "primer_aviso", "el reporte tiene que poder decir CUAL borde uso");
+});
+
+test("el borde nunca se ADELANTA: con el log arrancando despues del primer aviso, manda el log", () => {
+  // El dia que alguien rote el log, la ventana se achica sola. Tomar el primer aviso ahi
+  // seria ensanchar el alcance hacia atras sobre lineas que ya no existen.
+  const v = ventanaDelAviso({ ventana: { desde: "2026-09-10T00:00:00", hasta: "2026-09-26T00:00:00" }, primerAviso: PRIMER_AVISO });
+  assert.equal(v.desde, "2026-09-10T00:00:00");
+  assert.equal(v.borde, "log");
+});
+
+test("un handoff de ANTES de que el aviso emitiera no acusa al circuito, aunque el log lo cubra", () => {
+  // conv 46: `created_at` 2026-09-01T02:03:01, DENTRO de la ventana del log y SEIS DIAS antes
+  // de que existiera una linea `[aviso]`. Este es el caso que ponia el gate rojo para siempre.
+  const evento = { conv: 46, estado: "handoff_humano", desde: "2026-09-01T02:03:01" };
+  const ventana = ventanaDelAviso({ ventana: LOG_VIVO, primerAviso: PRIMER_AVISO });
+  const conciliacion = conciliarAvisos({ eventosEnLaBase: [evento], convsConAviso: [], ventana });
+
+  assert.equal(conciliacion.sinAviso.length, 0, "falso rojo: el aviso no existia cuando ese handoff paso");
+  assert.equal(conciliacion.fueraDeAlcance.length, 1, "y no se descarta en silencio: se cuenta y se nombra");
+  assert.equal(diagnosticar({ circuito: CIRCUITO_SANO, eventos: contarEventos([]), conciliacion }).veredicto, "ok");
+
+  // El hermano, que es la mitad que no puede fallar: DESPUES del primer aviso sigue rojo.
+  const despues = conciliarAvisos({
+    eventosEnLaBase: [{ conv: 55, estado: "handoff_humano", desde: "2026-09-04T06:37:54" }],
+    convsConAviso: [],
+    ventana,
+  });
+  assert.equal(despues.sinAviso.length, 1, "el arreglo del borde no puede apagar el rojo que SI corresponde");
+  assert.equal(diagnosticar({ circuito: CIRCUITO_SANO, eventos: contarEventos([]), conciliacion: despues }).veredicto, "roto");
+});
+
+test("un log SIN una sola linea de aviso no habilita el verde: no hay evidencia de que la capacidad viviera", () => {
+  const v = ventanaDelAviso({ ventana: LOG_VIVO, primerAviso: null });
+  assert.equal(v.desde, null, "sin una sola linea [aviso] no hay borde del que colgar la acusacion");
+  assert.equal(v.borde, "sin_evidencia");
+
+  const conciliacion = conciliarAvisos({
+    eventosEnLaBase: [{ conv: 46, estado: "handoff_humano", desde: "2026-09-01T02:03:01" }],
+    convsConAviso: [],
+    ventana: v,
+  });
+  assert.equal(conciliacion.medido, false, "no poder distinguir 'no habia codigo' de 'se perdio' no es cero");
+  assert.equal(
+    diagnosticar({ circuito: CIRCUITO_SANO, eventos: contarEventos([]), conciliacion }).veredicto,
+    "no_medido",
+    "ni verde ni un rojo inventado: la ignorancia se reporta como ignorancia",
+  );
+});
+
+test("sin ventana del log, el borde tampoco se inventa", () => {
+  assert.equal(ventanaDelAviso({ ventana: null, primerAviso: PRIMER_AVISO }), null);
+  assert.equal(ventanaDelAviso({ ventana: { desde: "2026-09-01T00:00:00" }, primerAviso: PRIMER_AVISO }), null);
+});
+
+// ---------------------------------------------------------------------------
+// DE QUIEN son los perdidos. La otra mitad del mismo rojo inflado, medida el mismo dia.
+//
+// El veredicto cerraba con "ya se perdieron, hay que ir a buscar a esas personas" sobre los
+// diez sujetos. Consultados en la base de Chatwoot: los DIEZ son nuestros — inbox 7 (el banco
+// de pruebas) o contacto `Sonda QA` / `Cliente Prueba` en el inbox 4. El gate mandaba a
+// perseguir a sus propias sondas. `clasificarEventos` ya sabia hacer esta distincion; la
+// conciliacion no la usaba porque sus sujetos salen de la base y nunca pasaron por el log.
+// ---------------------------------------------------------------------------
+
+test("el rojo no manda a buscar a nadie cuando los perdidos son del banco de pruebas", () => {
+  const conciliacion = conciliarAvisos({
+    eventosEnLaBase: [
+      { conv: 53, estado: "handoff_humano", desde: "2026-09-04T03:41:45" },
+      { conv: 55, estado: "handoff_humano", desde: "2026-09-04T06:37:54" },
+    ],
+    convsConAviso: [],
+    ventana: ventanaDelAviso({ ventana: LOG_VIVO, primerAviso: PRIMER_AVISO }),
+  });
+  assert.equal(conciliacion.sinAviso.length, 2, "los dos eventos del 4-sep si caen dentro del alcance");
+
+  // Los inboxes REALES de esas dos conversaciones, medidos el 2026-09-26 en la base de Chatwoot.
+  const origenPerdidos = clasificarEventos(conciliacion.sinAviso, new Map([
+    [53, { inbox: 7, contacto: "wandering-water-74", telefono: "" }],
+    [55, { inbox: 7, contacto: "dry-cherry-292", telefono: "" }],
+  ]));
+  assert.equal(origenPerdidos.reales.length, 0, "el banco de pruebas no es un lead");
+
+  const lectura = lecturaDeEventos({
+    veredicto: "roto", eventos: contarEventos([]), circuitoSano: true, conciliacion, origenPerdidos,
+  });
+  // El literal se busca SIN su negacion: el mensaje correcto termina en "no hay a quien ir a
+  // buscar", y un /ir a buscar/ pelado lo lee como la orden contraria.
+  assert.doesNotMatch(lectura, /hay que ir a buscar/, "manda a perseguir a nuestras propias sondas");
+  assert.match(lectura, /banco de pruebas/, "y tiene que DECIR por que no hay a quien buscar");
+
+  // Perder un evento sigue siendo perder un evento: esto no puede volverse verde.
+  assert.equal(diagnosticar({ circuito: CIRCUITO_SANO, eventos: contarEventos([]), conciliacion }).veredicto, "roto");
+});
+
+test("con un lead de verdad entre los perdidos, la lectura SIGUE mandando a buscarlo", () => {
+  const conciliacion = conciliarAvisos({
+    eventosEnLaBase: [{ conv: 70, estado: "handoff_humano", desde: "2026-09-20T15:00:00" }],
+    convsConAviso: [],
+    ventana: ventanaDelAviso({ ventana: LOG_VIVO, primerAviso: PRIMER_AVISO }),
+  });
+  const origenPerdidos = clasificarEventos(conciliacion.sinAviso, new Map([
+    [70, { inbox: 5, contacto: "Marcela Rojas", telefono: "+59177712345" }],
+  ]));
+  assert.equal(origenPerdidos.reales.length, 1, "un desconocido por el inbox de leads ES un lead");
+
+  const lectura = lecturaDeEventos({
+    veredicto: "roto", eventos: contarEventos([]), circuitoSano: true, conciliacion, origenPerdidos,
+  });
+  assert.match(lectura, /hay que ir a buscar/, "el arreglo no puede fallar cerrado: a un lead perdido hay que ir a buscarlo");
+  assert.match(lectura, /conv 70/, "y tiene que nombrarlo");
+});
+
+test("sin poder ubicar a los perdidos, la lectura no afirma que no haya nadie a quien buscar", () => {
+  // Tri-estado: `clasificarEventos` sin mapa devuelve `medido:false`. Leerlo como "0 leads"
+  // seria firmar "no hay a quien buscar" sobre una pregunta que no se hizo.
+  const conciliacion = conciliarAvisos({
+    eventosEnLaBase: [{ conv: 70, estado: "handoff_humano", desde: "2026-09-20T15:00:00" }],
+    convsConAviso: [],
+    ventana: ventanaDelAviso({ ventana: LOG_VIVO, primerAviso: PRIMER_AVISO }),
+  });
+  const lectura = lecturaDeEventos({
+    veredicto: "roto", eventos: contarEventos([]), circuitoSano: true, conciliacion,
+    origenPerdidos: clasificarEventos(conciliacion.sinAviso, null),
+  });
+  assert.doesNotMatch(lectura, /banco de pruebas/, "no se pudo preguntar de quien son: no se puede absolver");
+  assert.match(lectura, /hay que ir a buscar/, "en la duda, se va a buscar");
 });

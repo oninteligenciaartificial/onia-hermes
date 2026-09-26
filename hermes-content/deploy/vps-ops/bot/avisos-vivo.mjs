@@ -325,10 +325,49 @@ export function conciliarAvisos({ eventosEnLaBase, convsConAviso, ventana } = {}
 }
 
 /**
+ * La ventana que el AVISO pudo cubrir, que no es la del log.
+ *
+ * POR QUE EXISTE, medido el 2026-09-26 contra produccion. `conciliarAvisos` fue conservador
+ * con su borde izquierdo y eligio la referencia equivocada: la ventana del log. La pregunta
+ * que contesta es "¿el circuito perdio este evento?", y para poder perderlo el codigo que
+ * escribe la linea `[aviso]` tiene que haber estado CORRIENDO. Los dos numeros de ese dia:
+ *
+ *   ventana del log         desde `2026-08-28T22:22:51`  (primera marca del propio log)
+ *   primera linea [aviso]         `2026-09-04T03:41:45`  (linea 50803 del log vivo)
+ *
+ * Seis dias de brecha, y OCHO de los diez eventos que el gate acusaba vivian ahi: handoffs
+ * anteriores al aviso mismo, estructuralmente inavisables. El veredicto salia `roto — 10
+ * pedidos que NINGUN aviso nombra, ya se perdieron, hay que ir a buscar a esas personas`, y
+ * ese rojo no lo puede curar nadie: es historia. Un rojo permanente se lee como el ambiental
+ * de siempre, y el dia que el circuito se rompa DE VERDAD el veredicto sera identico al de
+ * hoy — el gate pierde justo la unica cosa que tiene que poder decir, "se rompio HOY".
+ *
+ * El borde es el MAXIMO de los dos, nunca uno solo:
+ *  - el log manda cuando arranca despues (alguien lo roto): mas atras no hay lineas que mirar.
+ *  - el primer aviso manda cuando arranca despues: mas atras no habia quien escribiera.
+ *
+ * Y sin una sola linea `[aviso]` en el log no hay borde: no se puede distinguir "no habia
+ * codigo" de "se perdio", y eso es `no_medido`. `desde: null` hace que `conciliarAvisos`
+ * devuelva su tri-estado solo, sin una rama nueva. Los eslabones del circuito
+ * (`motorEmiteNotify` y compania) siguen contestando ahi: son los que ven un aviso que no
+ * emite nunca, que es la unica cosa que este borde podria tapar.
+ *
+ * @param ventana     `{desde, hasta}` en ISO, del propio log.
+ * @param primerAviso ISO de la primera evidencia de que el aviso emitia, o `null`.
+ */
+export function ventanaDelAviso({ ventana, primerAviso } = {}) {
+  if (!ventana?.desde || !ventana?.hasta) return null;
+  if (!primerAviso) return { desde: null, hasta: ventana.hasta, borde: "sin_evidencia" };
+  // Comparacion lexicografica de ISO: el mismo eje que usa la conciliacion.
+  if (primerAviso > ventana.desde) return { desde: primerAviso, hasta: ventana.hasta, borde: "primer_aviso" };
+  return { desde: ventana.desde, hasta: ventana.hasta, borde: "log" };
+}
+
+/**
  * La linea que le sirve al objetivo del carril. Vive aparte del reporte para que se pueda
  * probar: es una AFIRMACION sobre produccion, y hasta hoy no tenia ni un caso.
  */
-export function lecturaDeEventos({ veredicto, eventos, circuitoSano, origen, conciliacion } = {}) {
+export function lecturaDeEventos({ veredicto, eventos, circuitoSano, origen, conciliacion, origenPerdidos } = {}) {
   const ev = eventos || contarEventos([]);
   const noSalieron = (ev.salteadosVigentes ?? ev.salteados) + ev.fallidos;
   // Va ANTES que todo lo demas porque es la unica lectura que habla de eventos que el log no
@@ -336,7 +375,23 @@ export function lecturaDeEventos({ veredicto, eventos, circuitoSano, origen, con
   // todavia" sobre gente que si pidio. Ese era el agujero.
   const perdidos = conciliacion?.medido ? conciliacion.sinAviso.length : 0;
   if (perdidos > 0) {
-    return `la base registra ${perdidos} pedido(s) de humano/demo que NINGUN aviso nombra — ya se perdieron, hay que ir a buscar a esas personas`;
+    const cabeza = `la base registra ${perdidos} pedido(s) de humano/demo que NINGUN aviso nombra`;
+    // A QUIEN se perdio cambia lo que hay que hacer, y el 2026-09-26 esta linea mandaba a
+    // perseguir a nuestras propias sondas: los diez sujetos eran inbox 7 o contacto `Sonda
+    // QA`. Sigue siendo rojo —el circuito perdio eventos— pero no hay a quien ir a buscar.
+    // Solo absuelve con la pregunta HECHA: `medido` en false es ignorancia, y en la duda se
+    // va a buscar. Si se leyera como "0 leads" se firmaria una absolucion sin preguntar.
+    if (origenPerdidos?.medido && origenPerdidos.reales.length === 0) {
+      const detalle = [
+        origenPerdidos.nuestros.length ? `${origenPerdidos.nuestros.length} del banco de pruebas` : "",
+        origenPerdidos.sinUbicar.length ? `${origenPerdidos.sinUbicar.length} sin ubicar` : "",
+      ].filter(Boolean).join(" · ");
+      return `${cabeza}, y NINGUNO es de un lead (${detalle}) — el circuito perdio eventos, pero no hay a quien ir a buscar`;
+    }
+    const quienes = origenPerdidos?.medido && origenPerdidos.reales.length
+      ? ` (${origenPerdidos.reales.map((c) => `conv ${c}${origenPerdidos.contactos?.get(c) ? ` · ${origenPerdidos.contactos.get(c)}` : ""}`).join(", ")})`
+      : "";
+    return `${cabeza} — ya se perdieron, hay que ir a buscar a esas personas${quienes}`;
   }
   // El motivo se CITA, no se supone. El 2026-09-12 esta linea decia "alguien pidio un humano
   // y nadie se entero" sobre dos salteos que el propio log desmentia (`cuota_agotada` y
@@ -410,7 +465,7 @@ export function diagnosticar({ circuito, eventos, conciliacion }) {
   } else if (conciliacion.sinAviso.length) {
     const cuales = conciliacion.sinAviso.map((e) => `conv ${e.conv} (${e.estado})`).join(", ");
     motivos.push(
-      `${conciliacion.sinAviso.length} evento(s) en la base SIN un aviso que los nombre, dentro de la ventana que el log cubre: ${cuales}`,
+      `${conciliacion.sinAviso.length} evento(s) en la base SIN un aviso que los nombre, dentro del alcance en que el aviso YA emitia: ${cuales}`,
     );
   }
 
@@ -708,6 +763,39 @@ export function ventanaDelLog(dir) {
 }
 
 /**
+ * La primera evidencia, en el log VIVO, de que el aviso ya emitia. `null` cuando no se pudo
+ * preguntar o cuando el log no tiene ni una linea `[aviso]`.
+ *
+ * Se toma la hora de la linea ANTERIOR y no de la propia porque las lineas `[aviso]` no
+ * llevan marca: lo escribe `log()` sin estampar. Medido el 2026-09-26 en produccion — la
+ * primera es `[aviso] skipped (cuota_agotada): aviso por Telegram apagado` a secas, y la
+ * linea de arriba es `[onia-webhook] 2026-09-04T03:41:45.953Z conv=53 ... rama=respondio
+ * etapa=nuevo->handoff_humano`. El log esta EN ORDEN y es append-only, asi que la ultima
+ * marca en o antes de esa linea es la cota mas temprana en que sabemos que la capacidad
+ * estaba viva. Es la misma tecnica por la que `conversacionesDeAvisos` recupera el `conv` de
+ * los avisos viejos.
+ *
+ * POR QUE NO el mtime del modulo: `/tmp/onia-bot/aviso-telegram.mjs` dice `2026-09-25 10:41`,
+ * que es cuando llego LA COPIA DE HOY, no cuando llego la capacidad. Usarlo pondria el borde
+ * seis semanas adelante de la verdad y se moveria con cada rsync, tapando en verde cualquier
+ * perdida anterior. El log no se re-escribe: la evidencia que deja es monotona.
+ */
+export function primerAvisoDelLog(dir) {
+  if (!dir) return null;
+  const archivo = archivoDeLog(dir);
+  if (!archivo) return null;
+  // Todo el filtro corre DONDE VIVE EL LOG, igual que sus hermanos: la salida es UNA marca,
+  // acotada por construccion, y no tiene techo que alcanzar cuando el log crezca.
+  const cmd =
+    `n=$(grep -n -F '[aviso]' ${archivo} 2>/dev/null | head -1 | cut -d: -f1); ` +
+    `if [ -n "$n" ]; then sed -n "1,\${n}p" ${archivo} | grep -oE '${ISO_EN_EL_LOG}' | tail -1; fi; true`;
+  const out = sh("docker", ["exec", CONTENEDOR, "sh", "-c", cmd], 60000);
+  const marca = (out || "").trim();
+  // Se exige la forma: una salida rara no puede convertirse en un borde que absuelve.
+  return new RegExp(`^${ISO_EN_EL_LOG}$`).test(marca) ? marca : null;
+}
+
+/**
  * Los eventos que el objetivo obliga a avisar, leidos del registro DURABLE.
  * `null` cuando no se pudo preguntar — de ahi sale el tri-estado de `conciliarAvisos`.
  *
@@ -770,17 +858,28 @@ async function medirCon(bot) {
   // La conciliacion va con el log ya leido: los sujetos salen de la base, los avisos de estas
   // mismas lineas. Si se pidieran los avisos aparte, las dos mitades podrian mirar momentos
   // distintos del log y el cruce acusaria por el desfase.
+  // El borde izquierdo es el de la CAPACIDAD, no el del log: un handoff anterior a la primera
+  // linea `[aviso]` no lo pudo perder un circuito que todavia no existia (ver `ventanaDelAviso`).
+  const borde = ventanaDelAviso({ ventana: ventanaDelLog(bot?.dir), primerAviso: primerAvisoDelLog(bot?.dir) });
   const conciliacion = conciliarAvisos({
     eventosEnLaBase: eventosDeLaBase(),
     // Solo `sent` cubre a una conversacion. Un `skipped` o un `failed` la NOMBRAN en el log
     // pero a esa persona no le llego nada: contarlos como cobertura seria usar la evidencia
     // del fallo para tapar el fallo.
     convsConAviso: deQuien.filter((e) => e.estado === "sent").map((e) => e.conv),
-    ventana: ventanaDelLog(bot?.dir),
+    ventana: borde,
   });
+  // De quien son los PERDIDOS. Es otra pregunta que la de `origen`, que mira los avisos que el
+  // log nombra: estos sujetos nunca pasaron por el log, salen de la base. Sin esto el veredicto
+  // mandaba a "ir a buscar a esas personas" sobre el banco de pruebas — los diez sujetos del
+  // rojo del 2026-09-26 eran inbox 7 o contacto `Sonda QA`, medidos en la base de Chatwoot.
+  const perdidos = conciliacion.sinAviso.map((e) => ({ conv: e.conv }));
+  const origenPerdidos = perdidos.length
+    ? clasificarEventos(perdidos, inboxPorConversacion(perdidos.map((e) => e.conv)))
+    : null;
 
   // Sin el proceso vivo o sin el codigo desplegado no hay nada que afirmar del circuito.
-  if (!env || !motor) return { circuito: null, eventos, origen, conciliacion, ejemplo: null };
+  if (!env || !motor) return { circuito: null, eventos, origen, conciliacion, borde, origenPerdidos, ejemplo: null };
 
   const credencialesOk = await credencialesResponden(env.TG_BOT_TOKEN, env.TG_CHAT_ID);
   return {
@@ -793,6 +892,8 @@ async function medirCon(bot) {
     eventos,
     origen,
     conciliacion,
+    borde,
+    origenPerdidos,
     ejemplo: motor.ejemplo,
     ramas: motor.ramas,
   };
@@ -802,7 +903,7 @@ async function medirCon(bot) {
 // produccion y un process.exit() que mata al proceso importador (medido en este carril
 // el 2026-09-03 con demo_agendada_real.mjs).
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  const { circuito, eventos, origen, conciliacion, ejemplo, ramas } = await medir();
+  const { circuito, eventos, origen, conciliacion, borde, origenPerdidos, ejemplo, ramas } = await medir();
   const d = diagnosticar({ circuito, eventos, conciliacion });
 
   console.log(`circuito: ${circuito ? (d.veredicto === "no_medido" ? "?" : "medido") : "NO SE PUDO MEDIR"}`);
@@ -847,11 +948,29 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   // sobre cuantos sujetos se pronuncio — que es como "0 avisos" paso de medida a decoracion.
   if (conciliacion?.medido) {
     const { conAviso, sinAviso, fueraDeAlcance } = conciliacion;
+    // El BORDE se imprime con su motivo: es el numero que decide a quien se acusa, y hasta el
+    // 2026-09-26 era invisible — el reporte decia "dentro de la ventana del log" sobre una
+    // ventana seis dias mas ancha que la capacidad. Un alcance que no se nombra se re-descubre.
+    const porQue = borde?.borde === "primer_aviso"
+      ? `desde ${borde.desde}, que es cuando el aviso EMPEZO a emitir (el log arranca antes)`
+      : `desde ${borde?.desde}, que es donde arranca el log`;
     console.log(
-      `en la base: ${conAviso.length + sinAviso.length} evento(s) dentro de la ventana del log` +
-        ` (con aviso ${conAviso.length} · SIN aviso ${sinAviso.length})` +
-        (fueraDeAlcance.length ? ` · ${fueraDeAlcance.length} anterior(es) al log, fuera de alcance` : ""),
+      `en la base: ${conAviso.length + sinAviso.length} evento(s) dentro del alcance del aviso` +
+        ` (con aviso ${conAviso.length} · SIN aviso ${sinAviso.length}) — ${porQue}` +
+        (fueraDeAlcance.length ? `\n  · ${fueraDeAlcance.length} evento(s) anteriores a ese borde, fuera de alcance: no los pudo perder un circuito que no existia` : ""),
     );
+    if (origenPerdidos) {
+      console.log(
+        origenPerdidos.medido
+          ? `  · de los perdidos: leads ${origenPerdidos.reales.length}${
+              origenPerdidos.reales.length ? ` (${origenPerdidos.reales.map((c) => `conv ${c}`).join(", ")})` : ""
+            } · nuestros ${origenPerdidos.nuestros.length}${origenPerdidos.sinUbicar.length ? ` · sin ubicar ${origenPerdidos.sinUbicar.length}` : ""}`
+          : "  · de los perdidos: no se pudo preguntar de quien son (no medido, NO es cero)",
+      );
+    }
+  } else if (borde?.borde === "sin_evidencia") {
+    // Se distingue de "no pude hablar con la base": la base contesto, lo que falta es el borde.
+    console.log("en la base: no se puede conciliar — el log no tiene ni UNA linea [aviso], asi que no hay con que distinguir 'no habia codigo' de 'se perdio'");
   } else {
     console.log("en la base: no se pudo preguntar que eventos ocurrieron (no medido, NO es cero)");
   }
@@ -865,7 +984,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   // es ir a buscar a esas personas, no arreglar el circuito. Medido el 2026-09-12, que es la
   // primera vez que este gate pudo ver sus propios avisos salteados.
   const circuitoSano = circuito && Object.values(circuito).every((v) => v === true);
-  const lectura = lecturaDeEventos({ veredicto: d.veredicto, eventos, circuitoSano, origen, conciliacion });
+  const lectura = lecturaDeEventos({ veredicto: d.veredicto, eventos, circuitoSano, origen, conciliacion, origenPerdidos });
   console.log(`\nVEREDICTO: ${d.veredicto} · avisos enviados ${eventos.enviados} — ${lectura}`);
 
   process.exit(d.veredicto === "ok" ? 0 : d.veredicto === "roto" ? 1 : 2);
