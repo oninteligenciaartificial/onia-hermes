@@ -6037,6 +6037,43 @@ y sin operar. Acá se opera, con verificación por ítem.
       **Listo =** Porcentaje General del portal **> 0%** con al menos un caso nuevo al 100%, leído
       del portal y no deducido. Y el número de esta cola actualizado con la fecha de esa lectura.
 
+      🔴 **2026-09-26 — TODO LO QUE ESTE ÍTEM DA POR FRENADO YA ESTÁ HECHO; lo único vivo es
+      leer el portal.** Contado en el estado vivo del emisor (`/opt/onia-siat/fase1-state.json`,
+      `mtime 2026-09-13 01:05`), no heredado ni deducido: **las NUEVE etapas de la Fase 1 están
+      completas en los DOS puntos de venta**, con **cero** casos incompletos y **cero**
+      bloqueados. VI `pv0=280` **y `pv1=280`** (target 280) · IX `pv0=80` **y `pv1=80`**
+      (target 80) · IV, VII y XI con sus **seis** combos a 125/125, los tres de `pv0` **y los
+      tres de `pv1`**. Y el **PdV 1 existe**: tiene CUFD propio desde
+      `cufdByPv.1.obtenidoEn = 2026-09-12T19:35:48Z`, dieciséis minutos después del de `pv0`.
+      Se re-mide en un comando, y por eso vale más que esta lista:
+
+      ```bash
+      /root/bin/onia-vps.sh bash -lc 'python3 -c "
+      import json; d=json.load(open(\"/opt/onia-siat/fase1-state.json\"))
+      for e,t in d[\"etapas\"].items():
+          g=t.get(\"target\"); c=t.get(\"cases\",{}) or {}
+          print(e, g, sorted(c.items()), \"BLOQ\", len(t.get(\"blockedCases\") or {}))"'
+      ```
+
+      **Así que todo lo de abajo que diga «falta el PdV 1», «queda sólo `pv1`», «11 combos =
+      1.169 documentos» o «la otra mitad de la matriz también es suya» quedó VIEJO** — no estaba
+      mal cuando se escribió (8 y 10 de septiembre), caducó el 12-13. El `933 EL PUNTO DE VENTA
+      ES INEXISTENTE O INVALIDO` que se citaba como prueba ya no aparece: el PdV 1 se creó por
+      SOAP `registroPuntoVenta` (tipo 5 CAJEROS, CUIS `35B2967A`), **sin el login de Sergio
+      Urcullo**. Y el punto 2 de abajo —que el `ok` solo no alcanzaba porque
+      `run-fase1-volumen.sh` no corría la etapa I— también quedó atrás: las etapas corrieron
+      igual y llegaron al target.
+
+      ⚠️ **Y la lección que sobrevive al dato, porque es la que costó los días:** `web-venta`
+      midió este mismo vencimiento el **2026-09-19** y lo dejó **comentado** en `t_39a0c27c`.
+      Un comentario no desbloquea nada: **el título siguió siete días más pidiéndole a Sergio
+      Urcullo un trámite de 5 minutos que ya estaba hecho**, porque el título es lo que le llega
+      por el parte diario, no el último comentario. Corregido el 2026-09-26 **rehaciendo** la
+      tarea, no comentándola: el pedido real (leer el Porcentaje General, un minuto) vive ahora
+      en una tarea nueva y la vieja quedó `archived` en la misma vuelta. Se re-deriva sin citar
+      un id que caduca:
+      `onia-tablero.sh list --status blocked | grep -i 'Porcentaje General'`.
+
       ---
 
       **Medido el 2026-09-08 (no heredado): la corrida que el doc daba por «corriendo» terminó
