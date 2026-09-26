@@ -124,6 +124,9 @@ import {
   barrerTableroJson,
   cuerpoCortoArchivos,
   partirPedido,
+  // El MISMO criterio de «viva» que usa el barrido de pedidos. Importado y no copiado: dos
+  // derivaciones de qué estado está abierto se contradicen el día que el tablero agrega uno.
+  tareaAbierta,
 } from './pedido_deploy_entregado.mjs';
 
 const TABLERO = '/root/bin/onia-tablero.sh';
@@ -137,7 +140,64 @@ const HORAS_SIN_CORRER = 4;
 /** La Paz no tiene horario de verano, así que el desfase es fijo. */
 const LA_PAZ_UTC = -4;
 
+/**
+ * DESTINOS DE PRODUCCIÓN QUE EL `ok` NO CABLEA. Entran al universo de este gate igual.
+ *
+ * 🔴 Nace del 2026-09-26, tarea `t_34f5c0eb`, y el defecto era de ESTE archivo. El universo
+ * se derivaba de `Object.keys(DESTINOS)` —la lista blanca del `ok`— así que un destino de
+ * producción que se publica a mano no salía rojo NI no-medido: salía **ausente**, y el
+ * veredicto imprimía «0 destinos sin pedido» sin nombrarlo. Medido ese día: el contenedor
+ * `onia-center`, que recibe TODO lead de `onia.com.bo` por la red Docker, corría un build del
+ * 1-sep — 15 días marcando «Confirmar demo / solicitada» a gente que sólo bajó un PDF— y este
+ * gate salió 0 las quince veces que se corrió.
+ *
+ * Un destino fuera del universo es silencio, no alarma. Y el silencio es el modo de falla más
+ * caro de un instrumento: no avisa, CONFIRMA.
+ *
+ * ⚠️ Esto NO los cablea al `ok` — eso es tocar las dos listas blancas y es decisión de Sergio
+ * Urcullo (opción B de esa tarea). Acá sólo se los mide, que no requiere el permiso de nadie.
+ *
+ * ⚠️ Y por eso su pedido NO se reconoce por la línea `DESPLEGAR:`: un pedido con esa línea
+ * para un destino que la lista blanca no tiene muere en el ejecutor con «destino desconocido»
+ * y el `ok` de Sergio Urcullo devuelve tilde verde sin publicar nada. Se reconoce por MENCIÓN
+ * (`pedidosQueNombranDestino`), que es más débil a propósito: el error de este lado es contar
+ * como cubierto algo que no lo está, y el de no mirar es el silencio de arriba.
+ */
+export const DESTINOS_SIN_CIRCUITO = {
+  'onia-center': {
+    que_es: 'el contenedor que recibe los leads de onia.com.bo (la landing lo llama por la red Docker, no hay ruta publica)',
+    runbook: 'hermes-content/deploy/onia-center/RUNBOOK.md (build-and-stage.sh + swap-and-verify.sh)',
+    // Por qué no se le pregunta «¿le falta publicar?» como a los otros cuatro: no escribe
+    // `.commit` ni `BUILD_ID`, así que no hay con qué derivar el sha vivo. Inventarle una
+    // medición por grep de un símbolo la ataría a UN arreglo puntual y quedaría verde el día
+    // que el arreglo varado sea otro. Mientras no tenga con qué verificarse, lo honesto es
+    // decir que sólo sale a mano y exigir que alguien lo esté pidiendo.
+    no_se_puede_medir: 'no escribe .commit ni BUILD_ID: no hay sha vivo que comparar',
+  },
+};
+
 // ── núcleo puro ────────────────────────────────────────────────────────────────────────
+
+/**
+ * PURA: los ids de las tareas VIVAS que nombran a `destino`, en su título o en su cuerpo.
+ *
+ * `null` si no se pudo barrer el tablero — nunca `[]`, que se leería como «lo barrí y nadie lo
+ * pide» y mandaría a abrir un pedido duplicado del que ya existe.
+ */
+export function pedidosQueNombranDestino(tareas, destino) {
+  if (!Array.isArray(tareas)) return null;
+  const aguja = String(destino).toLowerCase();
+  const ids = [];
+  for (const t of tareas) {
+    const id = typeof t?.id === 'string' ? t.id.trim() : '';
+    if (!id) continue;
+    const estado = typeof t?.status === 'string' ? t.status.trim() : '';
+    if (!tareaAbierta(estado)) continue;
+    const texto = `${typeof t?.title === 'string' ? t.title : ''}\n${typeof t?.body === 'string' ? t.body : ''}`;
+    if (texto.toLowerCase().includes(aguja)) ids.push(id);
+  }
+  return ids;
+}
 
 /**
  * A partir de cuántas horas un pedido de deploy vivo deja de ser «recién pedido» y pasa a
@@ -243,7 +303,7 @@ export function pedidosQueDescribenDeMenos(pedidosDelDestino, seco) {
  * que no escala a nadie). El veredicto era cierto —había pedido— y aun así el cliente no
  * recibía nada: la firma de la familia es «verde mientras el trabajo no llega».
  */
-export function clasificarCobertura({ destinos, pendiente, pedidos, seAutoPublica, describeLoQuePublica, ahora }) {
+export function clasificarCobertura({ destinos, pendiente, pedidos, seAutoPublica, describeLoQuePublica, ahora, sinCircuito = [], nombradoPor = () => null }) {
   // EXIGIDA, no opcional con default: un llamador que se olvide de la tercera pregunta
   // volvería a mandar a abrir pedidos que el cron cumple solo, y lo haría en silencio.
   if (typeof seAutoPublica !== 'function') {
@@ -262,9 +322,30 @@ export function clasificarCobertura({ destinos, pendiente, pedidos, seAutoPublic
     throw new TypeError('clasificarCobertura necesita ahora (epoch ms) para saber si un pedido envejecio');
   }
   const filas = [];
+  const noCableados = new Set(sinCircuito);
   for (const destino of destinos) {
     const delDestino = (pedidos || []).filter((p) => p.destino === destino);
     const cubiertoPor = delDestino.map((p) => p.id);
+    // LA SÉPTIMA PREGUNTA, del 2026-09-26: ¿este destino tiene circuito de `ok`? Va ANTES de
+    // todo lo demás porque a un destino sin circuito las otras seis no se le pueden hacer —no
+    // tiene publicador en `/opt` que correr en seco, y el cron automático no lo toca— y
+    // hacérselas devolvía `null` para todas, o sea NO_MEDIDO permanente. Un `exit 2` que sale
+    // todas las vueltas por el mismo sujeto se lee como «el ambiental de siempre» y se
+    // saltea: eso es cambiar un silencio por otro. Ver `DESTINOS_SIN_CIRCUITO`.
+    if (noCableados.has(destino)) {
+      const nombrado = nombradoPor(destino);
+      if (nombrado === null || nombrado === undefined) {
+        filas.push({ destino, estado: 'NO_MEDIDO', fuente: 'tablero', motivo: 'no lo publica ningun ok y no pude barrer el tablero para saber si alguien lo esta pidiendo', pedidos: [] });
+        continue;
+      }
+      // Sin nadie que lo pida, un destino que SÓLO sale a mano es trabajo varado con nadie
+      // mirándolo: es el mismo DESCUBIERTO de siempre y lleva el mismo remedio (abrir el
+      // pedido). No se le invita un estado propio: el que lo lee tiene que hacer lo mismo.
+      filas.push(nombrado.length > 0
+        ? { destino, estado: 'SIN_CIRCUITO', pedidos: nombrado }
+        : { destino, estado: 'DESCUBIERTO', pedidos: [] });
+      continue;
+    }
     const p = pendiente(destino);
     if (p === null || p === undefined) {
       // `fuente` dice QUIÉN no contestó, para que el que imprime pueda buscar la causa sin
@@ -1000,9 +1081,21 @@ function verdictosDelPublicadorSolo() {
  * verlo es abrir un DUPLICADO por un destino que ya tenía el suyo.
  */
 function pedidosVivos() {
-  return barrerTableroJson(
-    sh('bash', [TABLERO, 'list', '--json'], { timeout: 180_000, clave: 'tablero' }),
-  );
+  const crudo = sh('bash', [TABLERO, 'list', '--json'], { timeout: 180_000, clave: 'tablero' });
+  const barrido = barrerTableroJson(crudo);
+  if (barrido === null) return null;
+  // Las tareas CRUDAS de la MISMA foto, para la séptima pregunta: `barrerTablero` sólo
+  // devuelve las que traen `DESPLEGAR:`, y un destino sin circuito no lleva esa línea. Leer el
+  // tablero una segunda vez abriría la ventana que ese barrido cerró (una tarea archivada
+  // entre dos lecturas) y costaría otro SSH.
+  let tareas = null;
+  try {
+    const arr = JSON.parse(crudo);
+    if (Array.isArray(arr)) tareas = arr;
+  } catch {
+    tareas = null;
+  }
+  return { ...barrido, tareas };
 }
 
 function medirEnVivo() {
@@ -1028,9 +1121,13 @@ function medirEnVivo() {
   const alDia = ponerElEspejoAlDia();
   if (!alDia.puesto) console.log(`aviso: el árbol de los detectores quedó como estaba (${alDia.motivo})`);
 
-  const destinos = Object.keys(DESTINOS);
+  const destinos = [...Object.keys(DESTINOS), ...Object.keys(DESTINOS_SIN_CIRCUITO)];
   const filas = clasificarCobertura({
     destinos,
+    sinCircuito: Object.keys(DESTINOS_SIN_CIRCUITO),
+    // Del mismo barrido que ya está en la mano: cero llamadas extra al tablero (que desde el
+    // nodo de casa es un SSH por llamada, y así se apagó un gate hermano).
+    nombradoPor: (d) => pedidosQueNombranDestino(barrido.tareas, d),
     pedidos,
     pendiente: (d) => (DETECTORES[d] ? DETECTORES[d]() : null),
     seAutoPublica: (d) => {
@@ -1079,6 +1176,11 @@ function medirEnVivo() {
         ? (CAUSAS.get(`publicador:${f.destino}`) ?? CAUSAS.get('publicador'))
         : CAUSAS.get(f.destino);
       if (causa) console.log(`  causa: ${causa}`);
+    } else if (f.estado === 'SIN_CIRCUITO') {
+      const d = DESTINOS_SIN_CIRCUITO[f.destino] ?? {};
+      console.log(`AVISO ${f.destino}: NINGUN ok lo publica — sale solo a mano${quien}`);
+      if (d.no_se_puede_medir) console.log(`  no puedo decir si le falta publicar: ${d.no_se_puede_medir}`);
+      if (d.runbook) console.log(`  se publica con: ${d.runbook}`);
     } else if (f.estado === 'AL_DIA') {
       console.log(`OK ${f.destino}: al dia, no hay nada que pedir${quien}`);
     } else if (f.estado === 'SE_PUBLICA_SOLO') {
@@ -1131,6 +1233,12 @@ function selfCheck() {
     fallos++;
     console.log(`FALLO: ${nombre}`);
   };
+  // Dicen QUÉ salió cuando fallan. Con `ok(a === b)` pelado el rojo no es reproducible sin
+  // volver a instrumentar a mano, que es la queja que ya se pagó en otros gates de acá.
+  const equal = (real, esperado, nombre) =>
+    ok(real === esperado, `${nombre} — esperaba ${JSON.stringify(esperado)}, salio ${JSON.stringify(real)}`);
+  const deepEqual = (real, esperado, nombre) =>
+    ok(JSON.stringify(real) === JSON.stringify(esperado), `${nombre} — esperaba ${JSON.stringify(esperado)}, salio ${JSON.stringify(real)}`);
 
   const sinPedidos = [];
   const conLanding = [{ id: 't_x', destino: 'landing' }];
@@ -1747,6 +1855,63 @@ function selfCheck() {
   detectar({ clave: 'zz_quinta', guion: 'x', leer: leerPendienteDelSeco, correr: () => SECO7 });
   ok(_salidaParaPruebas('zz_quinta') === SECO7, 'detectar deja la salida CRUDA disponible para la quinta pregunta');
   ok(recuentoDeArreglos(_salidaParaPruebas('zz_quinta')) === 7, 'y de ahi sale el recuento con el que se juzga el cuerpo');
+
+  // ── LA SÉPTIMA PREGUNTA: ¿el universo incluye a los destinos que el `ok` NO cablea? ──────
+  // Del 2026-09-26 (tarea `t_34f5c0eb`). Ver `DESTINOS_SIN_CIRCUITO`.
+  ok(
+    Object.keys(DESTINOS_SIN_CIRCUITO).length > 0,
+    'hay al menos un destino de produccion que el ok no cablea, y esta declarado',
+  );
+  ok(
+    !Object.keys(DESTINOS).includes('onia-center'),
+    'onia-center sigue FUERA de la lista blanca del ok (cablearlo es decision de Sergio Urcullo)',
+  );
+  {
+    // Nombrado por una tarea viva → cubierto. Con la línea `DESPLEGAR:` NO alcanza: estos
+    // destinos no la llevan, porque el ejecutor la rechazaría con «destino desconocido».
+    const tareas = [
+      { id: 't_viva', status: 'blocked', title: 'Los leads caen en un build viejo', body: 'onia-center corre una version del 1-sep' },
+      { id: 't_otra', status: 'ready', title: 'nada que ver', body: 'sin mencion' },
+      { id: 't_muerta', status: 'done', title: 'vieja', body: 'onia-center ya se publico' },
+    ];
+    deepEqual(pedidosQueNombranDestino(tareas, 'onia-center'), ['t_viva'], 'reconoce la tarea VIVA que nombra el destino');
+    deepEqual(pedidosQueNombranDestino(tareas, 'landing'), [], 'y no inventa menciones que no estan');
+    deepEqual(pedidosQueNombranDestino([{ id: 't_t', status: 'ready', title: 'onia-center viejo' }], 'onia-center'), ['t_t'], 'el TITULO tambien cuenta: un pedido puede nombrarlo ahi');
+    equal(pedidosQueNombranDestino(null, 'onia-center'), null, 'sin tablero es NO MEDIDO, nunca lista vacia');
+  }
+  {
+    // La fila sale SIEMPRE, con pedido o sin él: el defecto que esto cierra es que no salía.
+    const base = {
+      pendiente: () => { throw new Error('a un destino sin circuito no se le pregunta por su publicador'); },
+      seAutoPublica: () => { throw new Error('ni al publicador automatico, que no lo toca'); },
+      describeLoQuePublica: () => [],
+      ahora: Date.parse('2026-09-26T12:00:00Z'),
+      sinCircuito: ['onia-center'],
+    };
+    const conPedido = clasificarCobertura({ ...base, destinos: ['onia-center'], pedidos: [], nombradoPor: () => ['t_viva'] });
+    equal(conPedido[0].estado, 'SIN_CIRCUITO', 'con una tarea que lo nombra: sale SIN_CIRCUITO, no ausente');
+    deepEqual(conPedido[0].pedidos, ['t_viva'], 'y arrastra el id para que se pueda mirar');
+    const sinPedido = clasificarCobertura({ ...base, destinos: ['onia-center'], pedidos: [], nombradoPor: () => [] });
+    equal(sinPedido[0].estado, 'DESCUBIERTO', 'sin nadie que lo nombre es DESCUBIERTO: hay que abrir el pedido');
+    const noMedido = clasificarCobertura({ ...base, destinos: ['onia-center'], pedidos: [], nombradoPor: () => null });
+    equal(noMedido[0].estado, 'NO_MEDIDO', 'y si no se pudo barrer el tablero, NO MEDIDO — nunca verde');
+    // Los cableados no cambian de camino por esto.
+    const cableado = clasificarCobertura({
+      destinos: ['bot'], pedidos: [], sinCircuito: ['onia-center'], nombradoPor: () => ['t_viva'],
+      pendiente: () => false, seAutoPublica: () => false, describeLoQuePublica: () => [], ahora: base.ahora,
+    });
+    equal(cableado[0].estado, 'AL_DIA', 'un destino cableado se sigue midiendo por su detector, no por menciones');
+  }
+  // CABLEADO: el universo vivo tiene que ser la UNIÓN. Sin esto, todo lo de arriba queda
+  // verde y el destino vuelve a salir ausente — que es el defecto entero.
+  ok(
+    /const destinos = \[\.\.\.Object\.keys\(DESTINOS\), \.\.\.Object\.keys\(DESTINOS_SIN_CIRCUITO\)\]/.test(fuente),
+    'medirEnVivo mide la UNION de los cableados y los que el ok no cablea',
+  );
+  ok(
+    /nombradoPor: \(d\) => pedidosQueNombranDestino\(/.test(fuente),
+    'y les reconoce el pedido por mencion, con la funcion pura',
+  );
 
   console.log(fallos === 0 ? 'self-check OK' : `self-check con ${fallos} fallo(s)`);
   return fallos === 0 ? 0 : 1;
