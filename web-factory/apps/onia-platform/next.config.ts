@@ -58,7 +58,9 @@ const CLOUDFLARE_INSIGHTS = "https://static.cloudflareinsights.com";
  *  - `'unsafe-inline'` en `script-src`: `layout.tsx` cuelga dos `<script>`
  *    inline —el tema antes del primer paint y el diferido del chat— y ninguno
  *    puede pasar a archivo sin perder justamente la propiedad de correr antes
- *    del bundle. No va `'unsafe-eval'`: se midió y nada lo pide.
+ *    del bundle. `'unsafe-eval'` NO va en el build —nada del bundle lo pide— y
+ *    SÍ en `next dev`, que evalúa cada módulo con `eval`: sin él el sitio local
+ *    no hidrata y se ve idéntico (ver `ejecutaEval`, medido el 2026-09-25).
  *  - `static.cloudflareinsights.com` en `script-src`: el beacon que inyecta el
  *    proxy. Es el único origen de esta lista que no sale del código, así que es
  *    también el único que un `grep` no puede defender: ver `CLOUDFLARE_INSIGHTS`.
@@ -74,19 +76,52 @@ const CLOUDFLARE_INSIGHTS = "https://static.cloudflareinsights.com";
  *    cubre en la práctica.
  *  - `form-action 'self'`: los formularios de contacto postean acá y nada más.
  */
-const CSP_DE_LA_LANDING = [
-  "default-src 'self'",
-  `script-src 'self' 'unsafe-inline' ${CHATWOOT_BASE_URL} ${CLOUDFLARE_INSIGHTS}`,
-  "style-src 'self' 'unsafe-inline'",
-  `img-src 'self' data: blob: ${CHATWOOT_BASE_URL}`,
-  "font-src 'self' data:",
-  `connect-src 'self' ${CHATWOOT_BASE_URL} ${CHATWOOT_WS}`,
-  `frame-src ${CHATWOOT_BASE_URL}`,
-  `media-src 'self' ${CHATWOOT_BASE_URL}`,
-  "object-src 'none'",
-  "base-uri 'self'",
-  "form-action 'self'",
-].join("; ");
+export function cspDeLaLanding(entorno = process.env.NODE_ENV): string {
+  return [
+    "default-src 'self'",
+    `script-src 'self' 'unsafe-inline'${ejecutaEval(entorno)} ${CHATWOOT_BASE_URL} ${CLOUDFLARE_INSIGHTS}`,
+    "style-src 'self' 'unsafe-inline'",
+    `img-src 'self' data: blob: ${CHATWOOT_BASE_URL}`,
+    "font-src 'self' data:",
+    `connect-src 'self' ${CHATWOOT_BASE_URL} ${CHATWOOT_WS}`,
+    `frame-src ${CHATWOOT_BASE_URL}`,
+    `media-src 'self' ${CHATWOOT_BASE_URL}`,
+    "object-src 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+  ].join("; ");
+}
+
+/**
+ * El ÚNICO permiso de esta CSP que depende del entorno, y el único que no se
+ * puede derivar mirando el dominio vivo — porque en el dominio vivo no hace
+ * falta.
+ *
+ * `next dev` evalúa cada módulo del cliente con `eval`. Con la CSP de arriba y
+ * sin `'unsafe-eval'`, el bundle del navegador muere antes de hidratar:
+ *
+ *     EvalError: Evaluating a string as JavaScript violates the following
+ *       Content Security Policy directive… 'unsafe-eval' is not an allowed
+ *       source of script
+ *
+ * La página sigue dando 200 y se ve idéntica —el HTML es server-rendered— así
+ * que nada lo delata salvo apretar algo: medido el 2026-09-25 en el puerto
+ * 3320, el formulario de `/guia-facturacion` respondía con un submit GET
+ * **nativo** (`?email=sin-arroba&whatsapp=`), que es la firma de "React nunca
+ * tomó el control". Producción, medida el mismo día, hidrata perfecto.
+ *
+ * Lo que costó: el gate de punta a punta de la captura de leads
+ * (`scripts/verificar-guia-facturacion.mjs`) corre contra el sitio LOCAL a
+ * propósito —apretar el botón contra producción nace un lead en la bandeja
+ * real— y quedó en **8 FALLAS** fijas sobre una pantalla sana.
+ *
+ * En el build NO entra, y eso lo afirma `src/lib/csp-de-la-landing.test.ts`:
+ * `eval` en producción es la primitiva que convierte un XSS en ejecución, y acá
+ * nada del bundle la pide.
+ */
+function ejecutaEval(entorno: string | undefined): string {
+  return entorno === "development" ? " 'unsafe-eval'" : "";
+}
 
 const nextConfig: NextConfig = {
   turbopack: {
@@ -164,7 +199,7 @@ const nextConfig: NextConfig = {
             key: "Permissions-Policy",
             value: "camera=(), microphone=(), geolocation=()",
           },
-          { key: "Content-Security-Policy", value: CSP_DE_LA_LANDING },
+          { key: "Content-Security-Policy", value: cspDeLaLanding() },
         ],
       },
     ];

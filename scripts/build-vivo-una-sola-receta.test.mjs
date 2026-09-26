@@ -58,13 +58,17 @@ const EXENTOS = new Map([
     'scripts/objetivo_visible.mjs',
     'lo nombra en PROSA impresa (una instruccion para el humano que lee la salida), no deriva nada',
   ],
-  [
-    'hermes-content/deploy/onia-platform/deploy-vivo.mjs',
-    'tiene la receta copiada PERO no esta ciego: su fuente primaria es la etiqueta de la imagen ' +
-      '(`onia-platform:release-<sha8>`) y el BUILD_ID es respaldo, asi que hoy contesta. Migrarlo ' +
-      'al modulo es trabajo declarado, no un perdon: tarea t_4ae98f29.',
-  ],
 ]);
+
+// `hermes-content/deploy/onia-platform/deploy-vivo.mjs` fue el ULTIMO exento de esta lista y se
+// MIGRO el 2026-09-26 (tarea t_4ae98f29): ahora importa los paths de la tabla dueña y se exime
+// DERIVANDO, por `importaElDueno`. Con eso la familia entera quedo cableada y `EXENTOS` sólo
+// guarda archivos que nombran la receta sin ejecutarla.
+//
+// Lo que lo empujo no fue que estuviera ciego —no lo estaba: su fuente primaria es la etiqueta de
+// la imagen y el BUILD_ID es respaldo, asi que contestaba bien— sino que tenia las rutas repetidas
+// TRES veces adentro (`buildsEnDisco`, `guionBuildsSsh`, `parsearBuildsSsh`). El respaldo de un
+// gate es justo la parte que nadie mira cuando se rompe.
 
 /**
  * Archivos versionados de la familia, derivados de git — no una lista escrita a mano.
