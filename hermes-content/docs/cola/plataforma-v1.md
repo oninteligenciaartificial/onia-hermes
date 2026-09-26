@@ -6137,8 +6137,15 @@ y sin operar. Acá se opera, con verificación por ítem.
 
          **Y el gate no lo corría nadie:** los **92** tests del emisor —el módulo del que
          depende la v1.0 por la decisión del 07-sep— **no estaban en la cadena `npm test`**.
-         Cableados como `test:siat-fase1` (puro, sin red ni repo hermano, 4,3 s): 92/92 verdes,
+         Cableados como `test:siat-todo` (puro, sin red ni repo hermano, 4,3 s): 92/92 verdes,
          `test:guards-cableados` verde.
+
+         ⚠️ **Acá decía ~~`test:siat-fase1`~~ y ese alias no existe — corregido el 2026-09-26
+         corriendo el que sí está.** El nombre vivo en `package.json` es `test:siat-todo`
+         (`node --test "hermes-content/integrations/siat/test/*.test.mjs"`), y hoy da **430
+         pass · 0 fail en 4,5 s**, o sea que cubre estos 92 y los que se sumaron después. El
+         gate está cableado; lo que estaba roto era el puntero, que es peor que un gate ausente:
+         manda a concluir que nadie lo corre y a cablearlo de nuevo al lado del que ya corre.
 
          🔴 **Commiteado, NO desplegado:** `/opt/onia-siat/run-fase1-volumen.sh` sigue con las
          tres etapas viejas. Desplegar no es de este carril — va por `DESPLEGAR: siat`. **Esto
@@ -6267,7 +6274,8 @@ y sin operar. Acá se opera, con verificación por ítem.
         (a) ✅ **CERRADO 2026-09-11 (`3927d847`)** VELOCIDAD — el widget de Chatwoot era el
         **71% del peso** de la landing (1.062 KB de 1.491 KB, 18 requests) y lo descargaba toda
         visita. Ahora espera al primer gesto de una persona o 12 s (`src/lib/chat-diferido.ts`,
-        gate `chat-diferido.test.ts`, medición viva `scripts/chat-diferido-vivo.mjs`). Medido
+        gate `chat-diferido.test.ts`, medición viva
+        `web-factory/apps/onia-platform/scripts/chat-diferido-vivo.mjs`). Medido
         sobre la portada buildeada: **0 pedidos y 0 KB al chat sin tocar nada**. Sin launcher
         propio: la burbuja es la misma y no hubo cambio visual que aprobar. ⚠️ Y la trampa que
         costó la vuelta: con `scroll` y `mousemove` en la lista de gestos el SDK salía pedido a
