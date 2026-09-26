@@ -802,7 +802,7 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
 
       **Prueba.** Rojo primero y cada caso por su motivo (6 de 6: el sha ajeno no atribuye motor ·
       las dos que faltaba nombrar · el rótulo · la absolución · el motivo de la no medida) →
-      **100 de 106**; con el arreglo **107 de 107**, con dos ANCLAS en la otra punta: una línea del
+      `100/106`; con el arreglo **`107/107`**, con dos ANCLAS en la otra punta: una línea del
       **panel** no se absuelve con el estado del motor, y `fronteraDe` sigue ciega a los nombres
       de archivo. En vivo:
 
@@ -823,6 +823,26 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
       motor y cuatro citan un sha ajeno; leerlas una por una es trabajo de lectura, no de
       instrumento. Y `plataforma-v1.md:6096` sigue **sin instrumento**: la frontera del SIAT
       (`/opt/onia-siat`) no tiene su `bot_vivo_tiene_el_codigo.mjs`. Ahora al menos se ve.
+
+- [x] 🔴 **CERRADO el 2026-09-25 22:40 La Paz (commiteado; instrumento compartido): el
+      verificador de la cola leía un RECUENTO como ruta, y esta misma vuelta lo mordió por
+      SEGUNDA vez seguida.** En `scripts/verificar_cola.js` la sola presencia de una barra
+      declaraba ruta (`if (/[\/]/.test(ruta))`), así que el recuento de un self-check —`100/106`—
+      salía como `ERROR fantasma: … apunta a 100/106 y ese archivo NO existe` y el gate en `1`.
+      Ayer y hoy se curó reescribiendo la frase a «100 de 106»: la instancia dos veces, la clase
+      nunca. **Es el falso rojo caro** — manda a borrar de la cola justamente la PRUEBA del ítem,
+      que es el número que el gate de al lado exige, y deja rojo un verificador que traba el merge
+      de **todos** los carriles.
+
+      **El arreglo:** con barra se pide además una letra en algún tramo. Ningún archivo se llama
+      sólo con dígitos y barras, y una ruta con un tramo puramente numérico sigue entrando por sus
+      otros tramos. **Prueba:** rojo primero por su motivo
+      (*«un recuento `100/106` no se lee como ruta»*), 4 casos nuevos con dos ANCLAS en la otra
+      punta (una ruta con cifras adentro y otra con un tramo numérico siguen siendo rutas; los
+      fixtures viven en el self-check, no acá, porque nombrar una ruta de ejemplo en la cola la
+      vuelve un fantasma — lo acusó este mismo gate al escribir este ítem) → **`118/118`** en el
+      self-check; y la prueba de integración es este archivo, que ahora escribe `100/106` entre
+      backticks y pasa: `cola ok: 127 items` en `chatbot.md` y `98` en `plataforma-v1.md`.
 
 - [x] 🔴 **CERRADO el 2026-09-25 21:43-22:35 La Paz (commiteado; es el INSTRUMENTO, no toca el
       motor): el gate de los «NO desplegado» fantasma no miraba los RÓTULOS de sección — y dos

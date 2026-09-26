@@ -222,7 +222,17 @@ function evidenciaDe(textoCrudo) {
     if (PARES_DEL_LENGUAJE.has(ruta.toLowerCase())) continue;
 
     // Una ruta se reconoce por tener separador o extension. "10 min" no es una ruta.
-    if (/[\/]/.test(ruta)) { rutas.push(ruta); continue; }
+    // La barra sola no alcanza: un RECUENTO se escribe con barra (`100/106`, `3/3`, `14/24`) y
+    // salia acusado de "apunta a 100/106 y ese archivo NO existe". Mordio dos vueltas seguidas
+    // (2026-09-25) y las dos se curo reescribiendo la frase, o sea la instancia. Es el falso rojo
+    // caro: manda a borrar de la cola la PRUEBA del item —el recuento que el gate de al lado
+    // exige— y deja el verificador en rojo, que traba el merge de todos los carriles. Se pide una
+    // letra en ALGUN tramo: ningun archivo se llama solo con digitos y barras, y una ruta que
+    // tenga un tramo numerico (`scripts/loops/v2/correr.sh`) sigue entrando por sus otros tramos.
+    if (/[\/]/.test(ruta)) {
+      if (/[a-z]/i.test(ruta)) rutas.push(ruta);
+      continue;
+    }
 
     // Sin barra, la sola presencia de un punto NO alcanza: `visto.texto`, `d.fonts`,
     // `patient.ci` son expresiones de codigo, y `.texto` no es una extension de nada. Se
@@ -1422,6 +1432,23 @@ function selfCheck() {
   // El sha va entre backticks y entero: `753718f` cuenta, pero no un pedazo de otra palabra.
   ok(evidenciaDe('commit `753718f` y `no-es-sha`').shas.join() === '753718f',
     'se extrae el sha del trozo entero, no un pedazo');
+
+  // --- Un RECUENTO no es una ruta, aunque lleve barra ---
+  // La barra bastaba para declarar ruta, y el recuento de un self-check se escribe `100/106`:
+  // el gate lo acusaba de "apunta a 100/106 y ese archivo NO existe" y salia 1. Mordio DOS
+  // vueltas seguidas (2026-09-25, chatbot-cola) y las dos veces se curo reescribiendo la frase
+  // — la instancia, no la clase. Es el falso rojo caro: manda a borrar de la cola justamente la
+  // PRUEBA del item, que es el numero que el gate de al lado existe para exigir. Ningun archivo
+  // se llama solo con digitos y barras, asi que pedir una letra en algun tramo no tapa ninguno.
+  ok(evidenciaDe('self-check: `100/106` casos').rutas.length === 0,
+    'un recuento `100/106` no se lee como ruta');
+  ok(evidenciaDe('simulador `3/3` y widget `2/2`').rutas.length === 0,
+    'tampoco los recuentos cortos del objetivo');
+  // ANCLA de la otra punta: una ruta de verdad con digitos adentro sigue siendo ruta.
+  ok(evidenciaDe('`hermes-content/docs/cola/plataforma-v1.md`').rutas.length === 1,
+    'una ruta con cifras adentro sigue siendo ruta');
+  ok(evidenciaDe('`scripts/loops/v2/correr.sh`').rutas.length === 1,
+    'y un tramo de solo digitos dentro de una ruta con letras tambien');
 
   // --- La ruta CON el nombre del repo adelante se busca en TODOS los hermanos ---
   // Medido el 2026-09-11: `onia-platform/scripts/cron/run-onia-renewal-reminders.sh` salia
