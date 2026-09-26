@@ -12,6 +12,129 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-26 (vuelta HEAD 31f9e131) — `BUILD_ID` sin cambios; re-verificado cupo del chatbot EN PANTALLA + agenda pública tras una semana — sin hallazgo, más un hallazgo viejo confirmado corregido
+
+`ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado primero contra la entrada de abajo:
+`4FWMcecd4jRBGUVwStDQb`, **igual** — no correspondía repetir el recorrido end-to-end. Tablero:
+sin tareas `ready` sin reclamar en la zona `recorrido-cliente`.
+
+**1) La vuelta anterior sólo auditó código (cifra-por-cifra) del cupo del chatbot, no la
+pantalla.** Corrí `scripts/probar_cupo_chatbot.mjs` (ya existía desde el 24-sep, no hacía falta
+escribir nada nuevo) contra `app.onia.com.bo` real: 80% → barra ámbar, botón "Sumar 200
+conversaciones" con link `wa.me` que menciona Bs 190, texto de alerta; 100% → barra roja/error,
+texto menciona derivar a una persona. **Sin hallazgo** — tercera confirmación de este eje (código
+09-24, cifra-por-cifra 09-26, pantalla en vivo ahora). Limpieza verificada: `organizations=0
+auth.users=0`.
+
+**2) Cambié de eje** (el del cupo ya está triplemente exprimido): re-verifiqué la agenda pública
+`/book/<slug>` con `scripts/probar_reserva_publica.mjs`, sin haberse corrido desde el 19-sep (una
+semana, varios deploys de por medio). Un desconocido SIN sesión abre el link, ve el profesional y
+el horario, reserva por la API real (`POST /api/booking/appointments` → 201) y el dueño la ve en
+`/appointments`. **Sin hallazgo** — sigue sosteniéndose igual que hace una semana.
+
+**3) Reverifiqué el hallazgo abierto que la vuelta `f3c4327f` había dejado pendiente**
+(`t_826a7ab2`, `/servicios/marketing-ia` admitía en la venta "somos una empresa nueva sin casos de
+éxito"): `git merge-base --is-ancestor 5f61db7a origin/main` ahora da **sí** (antes NO) y
+`curl https://onia.com.bo/servicios/marketing-ia` ya **no** sirve ese texto (grep vacío, HTTP 200,
+45.910 bytes). El fix llegó a producción esta semana — el tablero ya lo tenía `done`, y ahora
+también es cierto en el sitio real. No hizo falta ninguna acción más.
+
+RAZÓN: N/A — avanzó (dos ejes re-verificados sin drift, y un hallazgo viejo confirmado corregido
+en producción, no sólo en el tablero).
+LECCIÓN: cuando un eje da "sin hallazgo" dos veces seguidas por el MISMO método (código, luego
+cifra-por-cifra), la tercera vuelta lo cambia por el método que realmente falta — MIRAR la
+pantalla renderizada — antes de darlo por agotado. Y una superficie de venta pública con drift de
+`main` no se vuelve a revisar por sospecha: se revisa por CALENDARIO (una semana sin corrida es
+tiempo suficiente para que el integrador la haya movido).
+
+---
+
+## 2026-09-26 (vuelta HEAD 70e6f2ab) — `BUILD_ID` sin cambios; candidato de la vuelta anterior: el cupo del chatbot cifra-por-cifra contra el código que corta — sin hallazgo
+
+`ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado primero contra la entrada de abajo:
+`4FWMcecd4jRBGUVwStDQb`, **igual** — no correspondía repetir el recorrido end-to-end. Tablero:
+sin tareas `ready` sin reclamar en la zona `recorrido-cliente` (`t_04123cfc` es de
+`carril-docs-auditoria`).
+
+Tomé el candidato que la vuelta anterior (HEAD 82e8232c) dejó explícito: el cupo del chatbot
+(500 conversaciones/mes, recarga Bs 190 por 200) contra el código que REALMENTE corta el cupo, no
+sólo contra el texto de venta.
+
+```
+grep -n "includedConversations\|precio: 190\|conversaciones: 200" onia-platform/lib/pricing.ts
+  → WHATSAPP_ADDON.includedConversations = 500; RECARGA_CONVERSACIONES = {conversaciones: 200, precio: 190}
+grep -n "WHATSAPP_ADDON\|RECARGA_CONVERSACIONES" onia-platform/lib/chatbot/cupo.ts
+  → cuotaDe() = WHATSAPP_ADDON.includedConversations + recargadas — nunca un literal propio
+grep -rn "\b190\b" onia-platform --include=*.ts --include=*.tsx | grep -v test
+  → una sola declaración (pricing.ts:185); las 4 apariciones más (mensaje WhatsApp, comentario
+    de InboxClient, shortLabel) citan la MISMA constante o son comentario, no un segundo número
+grep -n "estadoCupo\|cuota\.agotada" onia-platform/app/api/chatbot-knowledge/published/route.ts
+  → el endpoint que el motor del VPS consulta para cortar llama estadoCupo() de cupo.ts, que a
+    su vez deriva de pricing.ts — el mismo camino que exhibe /settings/chatbot, sin bifurcación
+```
+
+**Sin hallazgo**: el límite (500), la recarga (200×Bs 190) y el corte real (`cuota.agotada` en
+`published/route.ts`, que el motor del VPS lee) cuelgan todos de las mismas dos constantes de
+`pricing.ts` — sin un literal duplicado ni un segundo camino que pueda desincronizarse. Las 8
+superficies que muestran el cupo (`PlanClient`, `AddonChatbotClient`, `InboxClient`,
+`CupoConversacionesCard`, `plan-display.ts`, `remotion/oferta-promo.ts`, `/dev/cupo-chatbot`,
+`/settings/chatbot`) también leen `WHATSAPP_ADDON.includedConversations`, ninguna lo copia.
+
+Con esto se agota también el segundo eje que traía la vuelta anterior. Próximo candidato cifra-
+por-cifra para cuando el `BUILD_ID` siga sin cambiar: los umbrales de `UMBRAL_AVISO` (80 %) y el
+texto exacto de los tres avisos (`avisarAlDueno`, `avisarDelCorte`, `textoDeCupo`) contra lo que
+`/settings/chatbot` renderiza en VIVO — hoy sólo se auditó el código, no la pantalla.
+
+RAZÓN: N/A — avanzó (candidato de la vuelta anterior agotado sin drift; el motor que corta en
+producción corre por el mismo camino que el texto de venta).
+LECCIÓN: el método "cifra-por-cifra contra la fuente única" sigue rindiendo cuando el `BUILD_ID`
+no se mueve — y conviene seguir hasta el punto donde el dato se APLICA (acá `published/route.ts`,
+lo que el motor realmente lee), no sólo hasta la constante que lo declara.
+
+---
+
+## 2026-09-26 (vuelta HEAD 82e8232c) — `BUILD_ID` sin cambios; cambio de método: cifra-por-cifra en `plan-catalogo.ts` (no grep de literales) — sin hallazgo
+
+`ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado primero contra la entrada de abajo:
+`4FWMcecd4jRBGUVwStDQb`, **igual** — no correspondía repetir el recorrido end-to-end (9/9 ya
+cerrado en los 5 rubros contra este build). Tablero: sin tareas `ready` sin reclamar en la zona
+`recorrido-cliente`.
+
+Las dos vueltas anteriores agotaron sus candidatos (vigencia de "14 días" vía `prueba-vs-plan.test.ts`,
+y "responder gratis por WhatsApp" sin literal en el sitio) sin cambiar de método — las dos
+siguieron auditando TEXTO. Esta vuelta cambió de método: en vez de barrer literales, tomé una
+cifra citada en superficie de venta (`/precios`, `/v1/precios`, `prueba-vs-plan.test.ts`: Básico
+300 pacientes/2 usuarios, Pro 1.500 fichas/5 usuarios) y la crucé contra el ÚNICO lugar del
+código que la declara, no contra el texto que la repite:
+
+```
+grep -n "PLAN_LIMITS\s*=\|patients:\|users:" /root/loops/onia-platform/lib/plan-catalogo.ts
+  → basic: patients 300, users 2 · professional: patients 1500, users 5
+grep -rn "patients:.*300\|patients.*1500" /root/loops/onia-platform --include=*.ts --include=*.tsx | grep -v test
+  → una sola ocurrencia de cada una, ambas en plan-catalogo.ts: sin copia duplicada ni valor
+    distinto escondido en otro archivo (el patrón que costó los "CUATRO precios vivos" del
+    2026-08-15, `CLAUDE.md` §2)
+```
+
+Sin hallazgo: las cifras citadas en venta coinciden exactamente con la única fuente, y esa fuente
+no tiene una segunda copia con otro número.
+
+También reverifiqué que `t_826a7ab2` (el autobombo de `/servicios/marketing-ia`, hallazgo de la
+vuelta `9a046a0f`) está `done` y el texto ya no está en la página servida
+(`curl -s https://onia.com.bo/servicios/marketing-ia | grep -o "Somos una empresa nueva[^<]*"` →
+vacío): cerrado de verdad, no solo en el tablero.
+
+RAZÓN de no-avance en la medida `llegoHasta/completo`: no corresponde repetir el recorrido
+end-to-end (build sin cambios, 9/9 ya cerrado en los 5 rubros).
+LECCIÓN: el método "grep de literales sobre el sitio" ya está exprimido para las promesas
+obvias (14 días, WhatsApp gratis, autobombo). El método que sigue dando fruto es cifra-por-cifra
+contra la fuente única del código, no contra otro texto que la repite — y esta vuelta lo aplicó
+por primera vez sin encontrar drift. Candidato para la próxima vuelta sin cambio de `BUILD_ID`:
+el cupo del chatbot (500 conversaciones/mes, recarga Bs 190×200) contra `lib/pricing.ts` y contra
+el código que realmente corta el cupo (`cupo-agotado-deriva`), no solo contra el texto de venta.
+
+---
+
 ## 2026-09-26 (vuelta HEAD 5bec4448) — `BUILD_ID` sin cambios; descartados los dos ejes que dejó la vuelta anterior — sin hallazgo
 
 `ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado primero contra la entrada de abajo:
