@@ -5,6 +5,8 @@ import {
   HUECO_MAXIMO_DE_LA_TARJETA,
   MINIMO_PANTALLAS,
   OPACIDAD_PINTADA,
+  OPACIDAD_TERMINADA,
+  REVEAL_TERMINADO,
   baseValida,
   esDefecto,
   veredicto,
@@ -296,6 +298,59 @@ describe("mirar-primera-pantalla: la base", () => {
 
   it("sin argumento mira PRODUCCIÓN, no un puerto de esta máquina", () => {
     expect(baseValida(undefined)).toBe("https://onia.com.bo");
+  });
+});
+
+describe("mirar-primera-pantalla: la espera tiene que RETENER", () => {
+  /**
+   * Las dos causas del rojo intermitente de `telefono /empezar`, medidas el
+   * 2026-09-26 contra el build local (tres corridas, sin tocar una linea:
+   * 0.989169 ROJO / 0.991023 / 0.990462 — y `/` dando 1 exacto siempre).
+   *
+   * 1) La espera recibia una CADENA. `waitForFunction` con cadena la evalua
+   *    DENTRO de la pagina con `eval`, y la CSP que la landing estreno el
+   *    24-sep no permite 'unsafe-eval': la espera moria en 18 ms con
+   *    `EvalError`, el `catch` se la tragaba muda y la linea siguiente medi­a a
+   *    mitad del reveal. Con una funcion de verdad Playwright no usa `eval` y
+   *    la espera retiene (medido: 160-175 ms, opacidad 1 las tres veces).
+   *    La CSP de produccion es la MISMA, asi que el fallo no era local.
+   *
+   * 2) Esperar al umbral del VEREDICTO no es esperar a que el reveal termine.
+   *    La curva real es 0.989 @5ms -> 0.997 @128ms -> 1 @250ms, asi que
+   *    `>= 0.99` se cumple a los 5 ms y se mide con la animacion corriendo:
+   *    que caiga arriba o abajo de 0.99 es una moneda al aire. Se espera al
+   *    FIN (1) y se juzga con 0.99; el hueco entre los dos es la tolerancia.
+   */
+  it("espera con una FUNCIÓN, no con una cadena que la CSP mata con eval", () => {
+    expect(typeof REVEAL_TERMINADO).toBe("function");
+  });
+
+  it("espera a que el reveal TERMINE, más arriba del umbral con que juzga", () => {
+    expect(OPACIDAD_TERMINADA).toBeGreaterThan(OPACIDAD_PINTADA);
+  });
+
+  it("no se da por satisfecha con un título a medio pintar", () => {
+    const enPagina = REVEAL_TERMINADO as unknown as (a: {
+      sel: string;
+      hasta: number;
+      leer: (sel: string) => number;
+    }) => boolean;
+    const conOpacidad = (op: number) =>
+      enPagina({ sel: "h1", hasta: OPACIDAD_TERMINADA, leer: () => op });
+    // El valor que hoy pasa por verde es justo el que delata la carrera.
+    expect(conOpacidad(0.989169)).toBe(false);
+    expect(conOpacidad(OPACIDAD_PINTADA)).toBe(false);
+    expect(conOpacidad(0.997201)).toBe(false);
+    expect(conOpacidad(1)).toBe(true);
+  });
+
+  it("no da por pintado un título que no encontró", () => {
+    const enPagina = REVEAL_TERMINADO as unknown as (a: {
+      sel: string;
+      hasta: number;
+      leer: (sel: string) => number;
+    }) => boolean;
+    expect(enPagina({ sel: "h1", hasta: OPACIDAD_TERMINADA, leer: () => -1 })).toBe(false);
   });
 });
 

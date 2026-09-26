@@ -54,11 +54,51 @@ const RUTAS = [
 export const MINIMO_PANTALLAS = PANTALLAS.length * RUTAS.length;
 
 /**
- * El umbral con el que se juzga que el titulo TERMINO de aparecer. Es el mismo
- * con el que `waitForFunction` espera, a proposito: si el script esperara una
- * cosa y juzgara otra, una pantalla a medio pintar pasaria en verde.
+ * El umbral con el que se JUZGA que el titulo llego a pintarse.
  */
 export const OPACIDAD_PINTADA = 0.99;
+
+/**
+ * El valor al que se ESPERA antes de medir, y que NO es el que juzga.
+ *
+ * Esperar al umbral del veredicto parece prolijo y es justo el bug: la curva
+ * real del reveal de `/empezar` es `0.989 @5ms -> 0.997 @128ms -> 1 @250ms`,
+ * asi que `>= 0.99` se cumple a los 5 ms y se mide con la animacion todavia
+ * corriendo. Que el valor caiga arriba o abajo del umbral es una moneda al
+ * aire, y de ahi salia el rojo intermitente de `telefono /empezar`.
+ *
+ * Se espera al FIN y se juzga con `OPACIDAD_PINTADA`: el hueco entre los dos
+ * es la tolerancia. Una pantalla que de verdad no pinta no se cuela, porque la
+ * espera vence a los 8 s y el veredicto la juzga con el valor en que quedo.
+ */
+export const OPACIDAD_TERMINADA = 1;
+
+/**
+ * El predicado con el que `waitForFunction` espera el fin del reveal.
+ *
+ * Es una FUNCION y no una cadena a proposito. `waitForFunction` con cadena la
+ * evalua DENTRO de la pagina con `eval`, y la CSP que la landing estreno el
+ * 24-sep no permite 'unsafe-eval' (la de produccion es la misma): la espera
+ * moria en 18 ms con `EvalError`, el `catch` se la tragaba muda y la linea
+ * siguiente media a mitad del reveal. Con una funcion de verdad Playwright no
+ * usa `eval` y la espera retiene — medido: 160-175 ms y opacidad 1, tres de
+ * tres. `leer` solo se inyecta desde el test; en la pagina llega `undefined`.
+ */
+export const REVEAL_TERMINADO = ({ sel, hasta, leer }) => {
+  const medir =
+    leer ||
+    ((s) => {
+      const el = document.querySelector(s);
+      if (!el) return -1;
+      let min = 1;
+      for (let n = el; n && n !== document.body; n = n.parentElement) {
+        const o = parseFloat(getComputedStyle(n).opacity);
+        if (!Number.isNaN(o) && o < min) min = o;
+      }
+      return min;
+    });
+  return medir(sel) >= hasta;
+};
 
 /**
  * El unico estado que este instrumento NO puede atribuir, y por que.
@@ -493,8 +533,12 @@ const TARJETAS_DIBUJADAS = `() => {
   return out;
 }`;
 
-/** La opacidad EFECTIVA de un elemento: el minimo de su cadena hasta body. */
-const OPACIDAD_HEREDADA = `(sel) => {
+/**
+ * La opacidad EFECTIVA de un elemento: el minimo de su cadena hasta body.
+ * Devuelve -1 si el selector no encontro nada, que el veredicto lee como rojo.
+ * Es una funcion, como `REVEAL_TERMINADO`, por el mismo motivo.
+ */
+const REVEAL_MEDIDO = ({ sel }) => {
   const el = document.querySelector(sel);
   if (!el) return -1;
   let min = 1;
@@ -503,7 +547,7 @@ const OPACIDAD_HEREDADA = `(sel) => {
     if (!Number.isNaN(o) && o < min) min = o;
   }
   return min;
-}`;
+};
 
 async function mirar(base, out) {
   const require = createRequire("/root/.npm/_npx/e41f203b7505f1fb/");
@@ -551,14 +595,21 @@ async function mirar(base, out) {
       let opacidad = -1;
       try {
         await pagina.waitForFunction(
-          `(${OPACIDAD_HEREDADA})('h1') >= ${OPACIDAD_PINTADA}`,
-          null,
+          REVEAL_TERMINADO,
+          { sel: "h1", hasta: OPACIDAD_TERMINADA },
           { timeout: 8000 },
         );
-      } catch {
-        /* se reporta abajo con el valor que quedo */
+      } catch (e) {
+        /*
+         * Que VENZA es un resultado: la pantalla no llego a pintar y el
+         * veredicto la juzga abajo con el valor en que quedo (falla cerrado).
+         * Cualquier OTRO error es el instrumento roto, y no puede salir mudo:
+         * el `catch` pelado que habia aca hizo que un `EvalError` de la CSP
+         * se leyera durante dias como "la espera vencio".
+         */
+        if (!/Timeout.*exceeded/i.test(String(e?.message ?? e))) throw e;
       }
-      opacidad = await pagina.evaluate(`(${OPACIDAD_HEREDADA})('h1')`);
+      opacidad = await pagina.evaluate(REVEAL_MEDIDO, { sel: "h1" });
 
       const archivo = `${out}/${ruta.id}-${pantalla.id}.png`;
       await pagina.screenshot({ path: archivo });
