@@ -66,6 +66,7 @@
     "deploy:alcanzable": "node scripts/deploy_alcanzable.mjs hermes-content/docs/cola/chatbot.md",
     "test:deploy-alcanzable": "node scripts/deploy_alcanzable.mjs --self-check",
     "bloqueos:vencidos": "node scripts/bloqueos_vencidos.mjs hermes-content/docs/cola/chatbot.md",
+    "bloqueos:tablero": "node scripts/bloqueos_vencidos.mjs --tablero",
     "test:bloqueos-vencidos": "node scripts/bloqueos_vencidos.mjs --self-check",
     "bloqueo:citado": "node scripts/bloqueo_citado_vivo.mjs hermes-content/docs/cola/chatbot.md hermes-content/docs/cola/plataforma-v1.md",
     "test:bloqueo-citado": "node scripts/bloqueo_citado_vivo.mjs --self-check",
