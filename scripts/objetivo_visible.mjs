@@ -63,6 +63,9 @@
 import { execFileSync } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+// La sesion del dueño la acuña el modulo compartido, que es el unico que sabe elevar el segundo
+// factor. Este archivo tuvo su propia copia y por eso quedo ciego — ver el comentario de `medir()`.
+import { acunarSesion } from './lib/sesion_dueno.mjs';
 
 /**
  * Los inboxes por donde entra un desconocido: el widget web de `onia.com.bo` (4) y WhatsApp (5).
@@ -250,6 +253,26 @@ export function banderasQueRecomienda(fuente) {
 }
 
 /**
+ * La fuente SIN la prosa: bloques `/* … *\/` y lineas que son solo comentario.
+ *
+ * ⚠️ Nace del 2026-09-26. Un gate que busca un literal de CODIGO en su propio archivo tiene que
+ * sacar los comentarios primero, porque acá la prosa CITA a proposito los literales viejos para
+ * explicar cada bug: buscarlos sobre el archivo entero encuentra la cita y sale verde con el
+ * codigo roto. La misma trampa se midio el mismo dia en `web-factory` partiendo un fuente por
+ * `'<dialog'` y cortando en el comentario que lo explicaba.
+ *
+ * Se quitan lineas COMPLETAS de comentario y no todo lo que siga a un `//`, para no destrozar los
+ * `https://` de los literales: lo que se busca acá son llamadas e imports, que viven en su linea.
+ */
+export function soloCodigo(fuente) {
+  return String(fuente ?? '')
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .split('\n')
+    .filter((linea) => !/^\s*\/\//.test(linea))
+    .join('\n');
+}
+
+/**
  * ¿El corte lo hizo la PUERTA de la app, antes de que el pedido llegara a la bandeja?
  *
  * POR QUE EXISTE, con fecha (2026-09-18). `/api/bandeja` contestaba 403 y este gate lo
@@ -278,9 +301,29 @@ export function corteDeLaPuerta(cuerpo) {
  * El veredicto, separado de la red a proposito: es lo que se prueba sin docker, sin sesion y
  * sin produccion. `respuesta` es `{ status, cuerpo }` tal como sale de `/api/bandeja`.
  */
+/**
+ * ¿La sesion con la que se midio llego a `aal2`?
+ *
+ * El dato viaja como la LINEA que devuelve `elevarSegundoFactor()` —la misma que va al log— y no
+ * como un booleano, para que el veredicto pueda citarla. La interpretacion vive acá, en un solo
+ * lugar: repartir un `test(/aal2/)` por cada rama es como dos copias del mismo juicio divergen.
+ */
+export function seElevoElSegundoFactor(linea) {
+  return /aal2/i.test(String(linea ?? ''));
+}
+
+/** El `code` del proxy que significa "hay factor verificado y falta el codigo" — el que el gate resuelve solo. */
+export const CODE_FALTA_EL_CODIGO = 'MFA_REQUIRED';
+
 export function juzgar(
   respuesta,
-  { colgados, dueñoTieneOrg = null, rolDelDueño = null, otrosPerfilesDelDueño = null } = {},
+  {
+    colgados,
+    dueñoTieneOrg = null,
+    rolDelDueño = null,
+    otrosPerfilesDelDueño = null,
+    segundoFactor = null,
+  } = {},
 ) {
   const { status, cuerpo } = respuesta ?? {};
 
@@ -289,19 +332,55 @@ export function juzgar(
   // perfil ausente) y 503 (no pudo leer el estado). Todos cortan igual de lejos de la bandeja.
   const puerta = status !== 200 ? corteDeLaPuerta(cuerpo) : null;
   if (puerta) {
+    const comun =
+      `NO MEDIDO — la PUERTA de la app corto el pedido ANTES de la bandeja: ${status} ` +
+      `\`${puerta.code}\`${puerta.error ? ` ("${puerta.error}")` : ''}, y manda a \`${puerta.next}\`. ` +
+      'Ese cuerpo con `code` lo escribe `proxy.ts`, no `/api/bandeja` (que contesta 403 SIN ' +
+      '`code`): la sesion llego y `bandeja-auth.ts` no es sospechoso de nada. El objetivo ' +
+      'TAMPOCO se ve mientras la puerta corte, pero lo que se destraba es lo que pide ese ' +
+      `\`code\`, no la bandeja. A quien se le corto: el dueño DERIVADO de los inboxes ` +
+      `${INBOXES_DEL_OBJETIVO.join('/')}${rolDelDueño ? `, rol \`${rolDelDueño}\`` : ' (rol no medido)'}. ` +
+      'A QUIEN alcanza esa exigencia lo decide `MFA_REQUIRED_ROLES` de `lib/mfa/policy.ts` en ' +
+      '`onia-platform`, asi que este corte NO dice nada sobre las demas cuentas del panel: ';
+
+    // ── El corte que este gate YA resuelve solo ────────────────────────────────────────────
+    // Si la sesion se elevo a `aal2` y la puerta corta igual pidiendo el codigo, el sospechoso
+    // no es la cuenta ni la 2FA: es que el JWT elevado no llego al proxy. Mandar a probar otra
+    // cuenta ahi es la caza inutil que este archivo ya pago una vez.
+    if (seElevoElSegundoFactor(segundoFactor)) {
+      return {
+        codigo: 2,
+        sospechoso: 'puerta',
+        mensaje:
+          comun +
+          `y el segundo factor de ESTA medicion ya se paso (${segundoFactor}), asi que la 2FA no ` +
+          'es lo que falta. Lo que queda es que el JWT `aal2` no llegue al proxy: mirar que ' +
+          'cookie viajo en el pedido (las que valen son las de DESPUES de `mfa.verify`) y que ' +
+          'build corre produccion (`docker exec onia-platform cat /app/.next/BUILD_ID`).',
+      };
+    }
+
+    // ── El corte que necesita una persona ─────────────────────────────────────────────────
+    // Sin factor verificado no hay codigo que calcular: `totp.mjs` lee un secreto que todavia no
+    // existe. Inscribirlo es un acto de una persona en su perfil, y eso hay que decirlo asi.
+    if (puerta.code !== CODE_FALTA_EL_CODIGO) {
+      return {
+        codigo: 2,
+        sospechoso: 'puerta',
+        mensaje:
+          comun +
+          'y lo que falta NO es tipear un codigo sino INSCRIBIR el segundo factor: sin un factor ' +
+          '`verified` en `auth.mfa_factors` no hay secreto que leer, asi que ningun TOTP lo puede ' +
+          'inventar. Eso lo hace una persona desde su perfil (Sergio Urcullo), y hasta entonces ' +
+          'el objetivo del carril queda sin comprobar por esta cuenta.',
+      };
+    }
+
     return {
       codigo: 2,
       sospechoso: 'puerta',
       mensaje:
-        `NO MEDIDO — la PUERTA de la app corto el pedido ANTES de la bandeja: ${status} ` +
-        `\`${puerta.code}\`${puerta.error ? ` ("${puerta.error}")` : ''}, y manda a \`${puerta.next}\`. ` +
-        'Ese cuerpo con `code` lo escribe `proxy.ts`, no `/api/bandeja` (que contesta 403 SIN ' +
-        '`code`): la sesion llego y `bandeja-auth.ts` no es sospechoso de nada. El objetivo ' +
-        'TAMPOCO se ve mientras la puerta corte, pero lo que se destraba es lo que pide ese ' +
-        `\`code\`, no la bandeja. A quien se le corto: el dueño DERIVADO de los inboxes ` +
-        `${INBOXES_DEL_OBJETIVO.join('/')}${rolDelDueño ? `, rol \`${rolDelDueño}\`` : ' (rol no medido)'}. ` +
-        'A QUIEN alcanza esa exigencia lo decide `MFA_REQUIRED_ROLES` de `lib/mfa/policy.ts` en ' +
-        '`onia-platform`, asi que este corte NO dice nada sobre las demas cuentas del panel: ' +
+        comun +
         // El remedio se ofrece SOLO si existe una cuenta que pueda tipearse ahi. La org dueña de
         // los inboxes 4/5 (`onia-interna`) tiene UN solo perfil, medido el 2026-09-19, asi que
         // recomendarlo a ciegas manda a buscar una cuenta que no existe.
@@ -311,8 +390,10 @@ export function juzgar(
           : otrosPerfilesDelDueño > 0
             ? `esa organizacion tiene ${otrosPerfilesDelDueño} cuenta(s) mas: ` +
               'medir otra con `--email <correo>` antes de concluir que ninguna entra.'
-            : 'y esa organizacion NO tiene ninguna otra cuenta, asi que `--email` no puede nombrar a ' +
-              'nadie: la unica salida es que ese dueño pase la 2FA (TOTP), que un loop no puede hacer.'),
+            : 'y esa organizacion NO tiene ninguna otra cuenta. La salida NO es que una persona ' +
+              'tipee la 2FA: la sesion de esta medicion tenia que elevarse sola y no lo hizo, asi ' +
+              'que mirar por que fallo `elevarSegundoFactor()` de `scripts/lib/sesion_dueno.mjs`, ' +
+              'que calcula el TOTP leyendo `auth.mfa_factors` (su salida va al log de esta corrida).'),
     };
   }
 
@@ -566,11 +647,6 @@ function leerOtrosPerfilesDelDueño(contenedor, email) {
   }
 }
 
-/** Una variable de entorno del contenedor que CORRE. Nunca se imprime. */
-function leerEnv(contenedor, nombre) {
-  return correr('docker', ['exec', contenedor, 'printenv', nombre]).trim();
-}
-
 async function medir({ plataforma, base, appUrl, ssrDir, email = null }) {
   // `--email` pisa la derivacion, que es lo que hace ejecutable el remedio que imprime la rama
   // «puerta». Y se le exige el perfil ANTES de emitir nada: `generate_link` CREA la cuenta si el
@@ -591,49 +667,22 @@ async function medir({ plataforma, base, appUrl, ssrDir, email = null }) {
     );
   }
 
-  const supabaseUrl = leerEnv(plataforma, 'NEXT_PUBLIC_SUPABASE_URL');
-  const anon = leerEnv(plataforma, 'NEXT_PUBLIC_SUPABASE_ANON_KEY');
-  const service = leerEnv(plataforma, 'SUPABASE_SERVICE_ROLE_KEY');
-
-  const cabecerasAdmin = {
-    apikey: service,
-    Authorization: `Bearer ${service}`,
-    'Content-Type': 'application/json',
-  };
-  const enlace = await fetch(`${supabaseUrl}/auth/v1/admin/generate_link`, {
-    method: 'POST',
-    headers: cabecerasAdmin,
-    body: JSON.stringify({ type: 'magiclink', email: dueño }),
+  // ⚠️ LA SESION NO SE ACUÑA ACA. Hasta el 2026-09-26 este bloque tenia su propia copia de la
+  // receta (`generate_link` → `verify` → `setSession` → cookies) y esa copia quedaba en `aal1`:
+  // toda cuenta con 2FA verificada rebotaba, el gate salia `NO MEDIDO — MFA_REQUIRED` y encima
+  // cerraba diciendo que pasar el segundo factor era algo *"que un loop no puede hacer"* —
+  // mientras `elevarSegundoFactor()` del modulo compartido lo hacia desde dos dias antes.
+  // Esa es la divergencia que la cabecera de `sesion_dueno.mjs` anuncia palabra por palabra:
+  // *"la que quede vieja no falla: entra igual y mide otra cosa"*. Midio otra cosa: nada.
+  const { cookies, segundoFactor } = await acunarSesion(dueño, {
+    raices: [`${ssrDir}/node_modules`],
+    plataforma,
   });
-  const enlaceJson = await enlace.json();
-  if (!enlaceJson?.hashed_token) throw new Error(`generate_link respondio ${enlace.status} sin hashed_token`);
-
-  const verificado = await fetch(`${supabaseUrl}/auth/v1/verify`, {
-    method: 'POST',
-    headers: { apikey: service, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ type: 'magiclink', token_hash: enlaceJson.hashed_token }),
-  });
-  const sesion = await verificado.json();
-  if (!sesion?.access_token) throw new Error(`verify respondio ${verificado.status} sin access_token`);
-
-  // Las cookies las arma la libreria, no este script: el nombre sale de la URL de Supabase y el
-  // chunking lo decide `@supabase/ssr`. Adivinarlo es como se pierde una tarde.
-  const { createServerClient } = await import(`${ssrDir}/node_modules/@supabase/ssr/dist/main/index.js`);
-  let tarro = [];
-  const cliente = createServerClient(supabaseUrl, anon, {
-    cookies: {
-      getAll: () => tarro,
-      setAll: (nuevas) => {
-        for (const c of nuevas) tarro = tarro.filter((t) => t.name !== c.name).concat({ name: c.name, value: c.value });
-      },
-    },
-  });
-  await cliente.auth.setSession({ access_token: sesion.access_token, refresh_token: sesion.refresh_token });
-  if (!tarro.length) throw new Error('`@supabase/ssr` no escribio ninguna cookie de sesion');
+  if (!cookies?.length) throw new Error('`@supabase/ssr` no escribio ninguna cookie de sesion');
 
   // Solo la LISTA. Abrir una conversacion la marcaria como leida en el Chatwoot de gente real.
   const r = await fetch(`${appUrl}/api/bandeja`, {
-    headers: { cookie: tarro.map((c) => `${c.name}=${c.value}`).join('; ') },
+    headers: { cookie: cookies.map((c) => `${c.name}=${c.value}`).join('; ') },
   });
   let cuerpo = null;
   try {
@@ -647,6 +696,7 @@ async function medir({ plataforma, base, appUrl, ssrDir, email = null }) {
     status: r.status,
     cuerpo,
     dueño,
+    segundoFactor,
     dueñoTieneOrg: leerDueñoTieneOrg(base, dueño),
     rolDelDueño: leerRolDelDueño(base, dueño),
     otrosPerfilesDelDueño: leerOtrosPerfilesDelDueño(base, dueño),
@@ -854,6 +904,60 @@ function selfCheck() {
   afirmar(corteDeLaPuerta({ error: 'No autorizado' }) === null, 'un cuerpo sin `code` no es corte de la puerta');
   afirmar(corteDeLaPuerta({ code: 'X' }) === null, 'ni uno con `code` pero sin `next`');
   afirmar(corteDeLaPuerta(null) === null, 'ni un cuerpo que no se pudo leer');
+
+  // ─── El segundo factor: lo que el gate declaraba IMPOSIBLE y el repo ya sabia hacer ────────
+  //
+  // ⚠️ EL CASO DE CLASE, medido el 2026-09-26. Este gate salio `NO MEDIDO — MFA_REQUIRED` y
+  // cerro el veredicto diciendo *"la unica salida es que ese dueño pase la 2FA (TOTP), que un
+  // loop no puede hacer"*. Eso era FALSO cuando se imprimio: `scripts/lib/totp.mjs` (RFC 6238)
+  // y `elevarSegundoFactor()` de `scripts/lib/sesion_dueno.mjs` existen desde el 2026-09-24 y
+  // hacen exactamente eso — `mirar_bandeja_dueno.mjs` ya mira `/inbox` de esa misma cuenta.
+  //
+  // Es el MISMO molde que el bug del `--email` de mas abajo, y peor de un modo nuevo: ese
+  // imprimia un remedio inejecutable; este declaraba imposible una capacidad PROPIA, o sea que
+  // apagaba la unica medicion del objetivo del carril y encima explicaba por que no valia la
+  // pena intentarlo. Un `NO MEDIDO` permanente se lee como "el ambiental de siempre".
+  //
+  // Los dos codes se separan porque se arreglan en lugares OPUESTOS: `MFA_REQUIRED` es "hay
+  // factor verificado y falta el codigo" —el gate lo resuelve solo— y `MFA_ENROLLMENT_REQUIRED`
+  // es "no hay factor", que ningun TOTP puede inventar: ahi si hace falta una persona.
+  const puertaCodigo = { status: 403, cuerpo: { error: 'Confirmá tu código.', code: 'MFA_REQUIRED', next: '/login/2fa' } };
+  // `otrosPerfilesDelDueño: 0` no es decorado: es la rama que imprimia el literal falso (la org
+  // dueña de los inboxes tiene UNA sola cuenta). Sin ese dato el mensaje cae en "no se pudo
+  // contar" y el caso pasaria verde sin tocar nunca la frase que este bloque existe para matar.
+  const conSegundo = juzgar(puertaCodigo, {
+    dueñoTieneOrg: true,
+    segundoFactor: 'sesión aal2',
+    otrosPerfilesDelDueño: 0,
+  });
+  afirmar(conSegundo.codigo === 2, 'un corte de la puerta sigue siendo NO MEDIDO');
+  afirmar(
+    !/un loop no puede/i.test(conSegundo.mensaje),
+    'y NO declara imposible lo que `elevarSegundoFactor()` de este repo ya hace',
+  );
+  afirmar(
+    /aal2|segundo factor/i.test(conSegundo.mensaje),
+    'sino que DICE que la sesion ya se elevo, que es el dato que mueve al sospechoso',
+  );
+  afirmar(
+    !/`--email/.test(conSegundo.mensaje),
+    'y no manda a buscar otra cuenta: con el factor ya pasado, el sospechoso no es la cuenta',
+  );
+  // La mitad simetrica: sin factor verificado el TOTP no sirve, y eso hay que seguir diciendolo.
+  const sinFactor = juzgar(
+    { status: 403, cuerpo: { error: 'Activá la 2FA.', code: 'MFA_ENROLLMENT_REQUIRED', next: '/profile?mfa=obligatorio' } },
+    { dueñoTieneOrg: true, segundoFactor: null, otrosPerfilesDelDueño: 0 },
+  );
+  afirmar(sinFactor.codigo === 2, 'un corte por falta de INSCRIPCION tambien es NO MEDIDO');
+  afirmar(
+    /inscri|no tiene (segundo )?factor/i.test(sinFactor.mensaje),
+    'y dice que lo que falta es INSCRIBIR el factor, no tipear un codigo',
+  );
+  afirmar(
+    /persona|Sergio/i.test(sinFactor.mensaje),
+    'y que eso si necesita una persona: ningun TOTP inventa un factor que no existe',
+  );
+
   // Un 200 nunca es corte: el cuerpo de la bandeja podria traer un campo `code` algun dia.
   afirmar(
     juzgar({ status: 200, cuerpo: { ok: true, sinCanal: true, conversaciones: [], code: 'X', next: '/y' } }).codigo === 1,
@@ -893,6 +997,43 @@ function selfCheck() {
   afirmar(
     returnDeMedir ? /leerDue[^(]*\(base, dueño\)/.test(returnDeMedir[0]) : false,
     'y DERIVA el dato del dueño ahi mismo, en vez de dejar la clave puesta en null',
+  );
+
+  // ⚠️ CABLEADO del segundo factor, hermano del de `dueñoTieneOrg`. Sin esto, los seis casos de
+  // la seccion «segundo factor» quedan verdes con `medir()` acuñando su sesion `aal1` por su
+  // cuenta — que es EXACTAMENTE como nacio ese bug: este archivo tenia su propia copia de la
+  // receta (`generate_link` → `verify` → cookies) y esa copia se quedo sin el paso del segundo
+  // factor. La cabecera de `sesion_dueno.mjs` ya lo habia escrito: *"Dos copias de esto
+  // divergen, y la que quede vieja no falla: entra igual y mide otra cosa"*. Midio otra cosa.
+  //
+  // Los comentarios se quitan ANTES de buscar: este archivo CITA el literal viejo a proposito,
+  // y un gate que parte su fuente sin sacar la prosa mide el pedazo equivocado en verde.
+  const codigoVivo = soloCodigo(fuente);
+  // El nombre va PARTIDO y el sujeto es la LLAMADA (con su parentesis): escrito entero, el
+  // mensaje de este mismo `afirmar` es codigo y el gate se acusa —o se absuelve— solo. Pasó al
+  // escribirlo: el caso salio verde sin que `medir()` llamara a nada.
+  const elevar = 'elevarSegundo' + 'Factor';
+  afirmar(
+    codigoVivo.includes(`${elevar}(`),
+    `\`medir()\` LLAMA a \`${elevar}\` del modulo compartido, en vez de una receta propia`,
+  );
+  afirmar(
+    /from '\.\/lib\/sesion_dueno\.mjs'/.test(codigoVivo),
+    'y lo importa de `scripts/lib/sesion_dueno.mjs`, que es el unico dueño de esa receta',
+  );
+  afirmar(
+    returnDeMedir ? /segundoFactor/.test(returnDeMedir[0]) : false,
+    'y `medir()` DEVUELVE si se elevo, en vez de dejar el dato sin salir de la funcion',
+  );
+  afirmar(
+    llamadaViva ? llamadaViva[0].includes('segundoFactor') : false,
+    'y la llamada viva a juzgar() se lo pasa: sin eso el veredicto no puede mover al sospechoso',
+  );
+  // Y el guardia contra la copia que quede: si el literal de `generate_link` vuelve al CODIGO de
+  // este archivo, alguien reimplemento la receta al lado de la compartida.
+  afirmar(
+    !codigoVivo.includes('admin/' + 'generate_link'),
+    'y NO vuelve a tener su propia receta de magiclink al lado de la del modulo compartido',
   );
 
   // ─── Un remedio que se imprime tiene que poder tipearse ────────────────────────────────────
@@ -1206,6 +1347,7 @@ async function main() {
     dueñoTieneOrg: respuesta?.dueñoTieneOrg ?? null,
     rolDelDueño: respuesta?.rolDelDueño ?? null,
     otrosPerfilesDelDueño: respuesta?.otrosPerfilesDelDueño ?? null,
+    segundoFactor: respuesta?.segundoFactor ?? null,
   });
   console[veredicto.codigo === 0 ? 'log' : 'error'](`[dueño: ${respuesta.dueño}] ${veredicto.mensaje}`);
   return veredicto.codigo;
