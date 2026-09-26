@@ -180,6 +180,73 @@ export function patronesDelDeploy(guion = path.join(DIR_REPO, "deploy-bot.sh")) 
   return patrones;
 }
 
+/** Los `./algo.mjs` que un archivo importa, por nombre base. */
+function importesDe(dir, nombre) {
+  let texto;
+  try {
+    texto = fs.readFileSync(path.join(dir, nombre), "utf8");
+  } catch {
+    return [];
+  }
+  return [...texto.matchAll(/(?:from|import)\s*\(?\s*["'](\.\/[^"']+)["']/g)].map((m) => m[1].replace(/^\.\//, ""));
+}
+
+/**
+ * QUÉ código toca un prospecto: el grafo de imports desde las entradas del runtime.
+ *
+ * Las entradas también se DERIVAN — son los `.mjs` que nombran los `.sh` del propio directorio,
+ * que es lo que arranca y lo que corren los barridos (`webhook-server.mjs`, `run-turn.mjs`,
+ * `followup-run.mjs`, `knowledge.mjs`…). Escribirlas a mano acá sería la lista que se queda
+ * corta el día que aparece el barrido nuevo, y ése es justo el que nadie mira.
+ */
+export function alcanceDelRuntime(dir = DIR_REPO) {
+  const enDisco = fs.readdirSync(dir);
+  const mjs = enDisco.filter((n) => n.endsWith(".mjs") && !n.endsWith(".test.mjs"));
+  const cola = [];
+  for (const sh of enDisco.filter((n) => n.endsWith(".sh"))) {
+    const texto = fs.readFileSync(path.join(dir, sh), "utf8");
+    for (const m of texto.matchAll(/([A-Za-z0-9_-]+\.mjs)/g)) if (mjs.includes(m[1])) cola.push(m[1]);
+  }
+  const vistos = new Set();
+  while (cola.length > 0) {
+    const f = cola.pop();
+    if (vistos.has(f)) continue;
+    vistos.add(f);
+    for (const d of importesDe(dir, f)) if (!vistos.has(d)) cola.push(d);
+  }
+  return vistos;
+}
+
+/**
+ * Los MEDIDORES del carril, que el deploy copia pero ningún prospecto toca.
+ *
+ * Nace de un rojo medido el 2026-09-26: el gate acusaba 7 archivos "esperando FIRMA" y tres eran
+ * medidores de este repo. Peor que inflar el conteo: el día que los únicos desfasados sean
+ * medidores, este gate pide la firma de Sergio Urcullo para publicar algo que no cambia una coma
+ * de lo que el bot dice.
+ *
+ * La exención exige **prueba positiva**, no ausencia de prueba, y por eso pide las DOS mitades:
+ *   1. no lo alcanza el grafo del runtime, y
+ *   2. está cableado como alias de `package.json` — o sea que su forma de correr es desde el repo.
+ * Con sólo (1), `rescate-run.mjs` —que nadie invoca desde un `.sh` de acá— se eximiría solo, y un
+ * barrido de producción exento es un falso verde: peor que el rojo inflado que vine a arreglar.
+ */
+export function medidoresDelRepo(dir = DIR_REPO, guionNpm = path.join(RAIZ, "package.json")) {
+  const alcanzados = alcanceDelRuntime(dir);
+  let alias = "";
+  try {
+    alias = JSON.stringify(JSON.parse(fs.readFileSync(guionNpm, "utf8")).scripts || {});
+  } catch {
+    return new Set(); // sin poder leer los alias no hay prueba positiva: nadie queda exento
+  }
+  return new Set(
+    fs
+      .readdirSync(dir)
+      .filter((n) => n.endsWith(".mjs") && !n.endsWith(".test.mjs"))
+      .filter((n) => !alcanzados.has(n) && alias.includes(n)),
+  );
+}
+
 /**
  * Los sujetos se DERIVAN del disco y de la lista blanca del deploy, no de una lista escrita acá:
  * una lista se queda corta el día que alguien agrega un módulo —o un patrón—, y justo ése es el
@@ -188,12 +255,15 @@ export function patronesDelDeploy(guion = path.join(DIR_REPO, "deploy-bot.sh")) 
  * Los `.test.mjs` quedan afuera a propósito, y el motivo NO es que el deploy no los instale
  * (los instala: `*.mjs` los matchea, y el 2026-09-03 se midieron tres viajando). Es que un test
  * no le contesta a ningún prospecto: su desfase no cambia una coma de lo que el bot dice.
+ *
+ * Los medidores salen por el MISMO motivo y con la misma prueba derivada — ver `medidoresDelRepo`.
  */
 export function sujetosDelRepo(dir = DIR_REPO) {
   const patrones = patronesDelDeploy().map(globAregex);
+  const medidores = medidoresDelRepo(dir);
   return fs
     .readdirSync(dir)
-    .filter((n) => !n.endsWith(".test.mjs") && patrones.some((re) => re.test(n)))
+    .filter((n) => !n.endsWith(".test.mjs") && !medidores.has(n) && patrones.some((re) => re.test(n)))
     .sort();
 }
 
@@ -390,15 +460,48 @@ function selfCheck() {
   ok(sujetosDelRepo().includes("knowledge.onia.json"), "el conocimiento que el bot RECITA es sujeto, no sólo el código que lo lee");
   ok(sujetosDelRepo().includes("webhook-server.sh"), "los .sh son el runtime del bot: el deploy los instala y son sujetos");
 
+  // EL OTRO AGUJERO, medido el 2026-09-26: el gate acusaba 7 archivos "esperando FIRMA" y TRES
+  // eran MEDIDORES de este mismo repo (`campanas-vivas.mjs`, `destinos-vivos.mjs`,
+  // `puerta-del-alta.mjs`). El deploy los copia porque `*.mjs` los matchea, pero ningún
+  // prospecto los toca: no los alcanza el grafo de imports desde ninguna entrada del runtime.
+  // El daño no es el conteo: el día que los únicos desfasados sean medidores, este gate pide la
+  // FIRMA de Sergio Urcullo para publicar un archivo que no cambia una coma de lo que el bot
+  // dice — y su atención es el recurso más escaso del proyecto.
+  ok(!sujetosDelRepo().includes("campanas-vivas.mjs"), "un medidor del repo no le contesta a ningún prospecto: no es sujeto");
+  ok(!sujetosDelRepo().includes("destinos-vivos.mjs"), "un medidor del repo no le contesta a ningún prospecto: no es sujeto");
+  ok(!sujetosDelRepo().includes("puerta-del-alta.mjs"), "un medidor del repo no le contesta a ningún prospecto: no es sujeto");
+
+  // Y LA MITAD QUE IMPIDE QUE ESTE ARREGLO SE VUELVA UN FALSO VERDE, que sería peor que el bug:
+  // la exención exige prueba POSITIVA de ser medidor (estar cableado como alias de `package.json`
+  // y correrse desde el repo), no la simple ausencia de prueba de ser motor. `rescate-run.mjs`
+  // tampoco lo alcanza el grafo y NO tiene alias: puede ser un barrido que alguien invoca desde
+  // otro lado, así que sigue siendo sujeto. Falla cerrado a propósito.
+  ok(sujetosDelRepo().includes("rescate-run.mjs"), "sin alias que lo pruebe medidor, un archivo fuera del grafo SIGUE siendo sujeto");
+  ok(sujetosDelRepo().includes("humo-plantillas.mjs"), "sin alias que lo pruebe medidor, un archivo fuera del grafo SIGUE siendo sujeto");
+  // El runtime nunca queda exento, tenga o no alias: `simulate.mjs` corre el mismo motor.
+  ok(sujetosDelRepo().includes("run-turn.mjs"), "lo que el prospecto SÍ toca no lo exime ningún alias");
+
   // Y la propiedad que impide que el agujero vuelva: los sujetos NO pueden ser menos que lo que
   // el deploy instala. Se deriva del propio `deploy-bot.sh`, así que agregar un patrón allá
   // arrastra el gate solo. Una lista copiada a mano es como nació este bug.
   const patrones = patronesDelDeploy();
   ok(patrones.length > 0, "los patrones se leen de deploy-bot.sh, no se escriben acá");
+  const medidores = medidoresDelRepo();
   for (const patron of patrones) {
-    const enElRepo = fs.readdirSync(DIR_REPO).filter((n) => !n.endsWith(".test.mjs") && globAregex(patron).test(n));
+    const enElRepo = fs
+      .readdirSync(DIR_REPO)
+      .filter((n) => !n.endsWith(".test.mjs") && !medidores.has(n) && globAregex(patron).test(n));
     const cubiertos = enElRepo.filter((n) => sujetosDelRepo().includes(n));
     ok(cubiertos.length === enElRepo.length, `el deploy instala "${patron}" y el gate no mira ${enElRepo.length - cubiertos.length} de esos archivos`);
+  }
+
+  // Cada exención se RE-MIDE en cada corrida, que es lo que la separa de una lista a mano: si
+  // alguien conecta un medidor al runtime, deja de estar exento sin que nadie toque este archivo.
+  const alcanzados = alcanceDelRuntime();
+  ok(medidores.size > 0, "si NADIE queda exento, la derivación se rompió y el rojo vuelve a inflarse");
+  for (const m of medidores) {
+    ok(!alcanzados.has(m), `"${m}" está exento y el runtime lo alcanza: la exención es falsa`);
+    ok(!sujetosDelRepo().includes(m), `"${m}" está exento y sigue en la lista de sujetos`);
   }
 
   if (!process.exitCode) console.log("self-check OK — la lógica distingue desfasado, copiado-sin-reiniciar y NO MEDIDO");
@@ -420,7 +523,14 @@ if (process.argv[1] && path.resolve(process.argv[1]) === ESTE) {
     }
     const r = veredicto(medida);
     const etiqueta = { al_dia: "OK", desfasado: "ROJO", copiado_sin_reiniciar: "ROJO", no_medido: "NO MEDIDO" }[r.estado];
-    console.log(`${etiqueta} bot vivo (${CONTENEDOR}:${DIR_VIVO}) — ${medida.archivos.length} archivo(s) mirado(s)`);
+    // Los exentos se NOMBRAN. Excluir en silencio es el modo de falla más caro que este archivo
+    // ya pagó una vez: `knowledge.onia.json` no estaba rojo, estaba invisible. Un exento contado
+    // en voz alta se puede discutir; uno callado se hereda.
+    const exentos = [...medidoresDelRepo()].sort();
+    console.log(
+      `${etiqueta} bot vivo (${CONTENEDOR}:${DIR_VIVO}) — ${medida.archivos.length} archivo(s) mirado(s)` +
+        (exentos.length > 0 ? `, ${exentos.length} medidor(es) exento(s): corren desde el repo, ningún prospecto los toca` : ""),
+    );
     for (const linea of r.lineas) console.log(linea);
     // El remedio lo DERIVA `veredicto()` por archivo y ya viene en `lineas`: acá estaba escrito
     // fijo ("se destraba con el pedido de deploy"), y era falso para todo archivo que aún no

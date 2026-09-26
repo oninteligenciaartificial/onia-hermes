@@ -1001,6 +1001,64 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
 
 ## Ahora
 
+- [x] 🔴 **CERRADO el 2026-09-26 09:13-09:50 La Paz (es un MEDIDOR, no toca el motor: no necesita
+      deploy): el gate que decide si pedirle la FIRMA a Sergio Urcullo acusaba 8 archivos y 3 eran
+      MEDIDORES de este mismo repo — el prospecto no toca ninguno.**
+
+      La medición de arranque salió `ROJO bot vivo — 8 archivo(s) del bot NO son los del repo —
+      **el prospecto habla con el código viejo**`, y entre los 7 que "esperan FIRMA" estaban
+      `campanas-vivas.mjs`, `destinos-vivos.mjs` y `puerta-del-alta.mjs`. Los tres son
+      instrumentos de este carril: se corren con su alias de `package.json`, desde el repo. El
+      deploy los copia sólo porque `*.mjs` los matchea en la lista blanca de `deploy-bot.sh`.
+
+      🔴 **El daño no es el conteo inflado, y por eso valía la vuelta.** El veredicto seguía rojo
+      por los 4 de verdad, así que el color no cambiaba hoy. Pero el día que los únicos
+      desfasados sean medidores, este gate pide **la firma de Sergio Urcullo** para publicar un
+      archivo que no cambia una coma de lo que el bot dice — y su atención es el recurso más
+      escaso del proyecto. Además `avisos-vivo.mjs` (el arreglo de la vuelta anterior) aparecía
+      como *«espera MERGE: ningún deploy lo trae»*, que es cierto y es irrelevante: es un medidor.
+
+      **Cómo se derivó quién es motor y quién medidor** (`alcanceDelRuntime`): grafo de imports
+      desde las entradas del runtime, y las entradas también se derivan — son los `.mjs` que
+      nombran los `.sh` del propio directorio (15: `webhook-server.mjs`, `run-turn.mjs`,
+      `followup-run.mjs`, `knowledge.mjs`, los barridos…). Alcance: 36 de 58.
+
+      ⚠️ **La mitad que impide que este arreglo sea un falso verde, que sería peor que el bug:**
+      la exención exige **prueba positiva** de ser medidor —fuera del grafo **Y** cableado como
+      alias de `package.json`— no la simple ausencia de prueba de ser motor. Con sólo la primera
+      mitad, `rescate-run.mjs` y `humo-plantillas.mjs` se eximían solos: nadie los invoca desde un
+      `.sh` de acá, pero pueden ser barridos llamados desde otro lado. **Siguen siendo sujetos.**
+      Falla cerrado a propósito, y hay un caso por cada uno.
+
+      Y los exentos **se nombran** en la salida, no se callan: excluir en silencio es el modo de
+      falla que este mismo archivo ya pagó con `knowledge.onia.json` —*no estaba rojo, estaba
+      invisible*—. Cada exención **se re-mide en cada corrida** (si alguien conecta un medidor al
+      runtime deja de estar exento sin que nadie edite nada), y un caso exige que la lista NO
+      quede vacía: si nadie queda exento, la derivación se rompió y el rojo vuelve a inflarse.
+
+      **Test en ROJO primero, por el motivo correcto** (3 fallas, exactamente los 3 medidores):
+
+      ```
+      $ npm run test:bot-vivo-al-dia
+      FALLA: un medidor del repo no le contesta a ningún prospecto: no es sujeto   (×3)
+      ```
+
+      **Verificado en vivo después** — el rojo pasó de 8 acusados a 4, y los 4 son motor:
+
+      ```
+      $ npm run bot:vivo-al-dia          # exit 1
+      ROJO bot vivo (onia-center:/tmp/onia-bot) — 60 archivo(s) mirado(s),
+        14 medidor(es) exento(s): corren desde el repo, ningún prospecto los toca
+      4 ya está(n) en origin/main — espera(n) FIRMA:
+        calcom-booking.mjs · followup-run.mjs · knowledge.onia.json · marcas-en-disco.mjs
+      ```
+
+      **Dato que el arreglo deja a la vista y antes no se veía:** ya NO hay nada "esperando
+      MERGE". Todo lo que el prospecto toca está en `origin/main` y espera sólo el `ok` del
+      pedido de deploy de `bot` (el id se DERIVA, no se copia). Gates vecinos en verde:
+      `test:deploy-alcanzable`, `test:deploy-ya-ocurrio`, `test:frontera-derivada`,
+      `test:cola-selfcheck`, `test:bloqueo-citado`.
+
 - [x] 🔴 **CERRADO el 2026-09-26 08:43-09:35 La Paz (es un MEDIDOR, no toca el motor: no necesita
       deploy): las DOS MITADES de `avisos-vivo.mjs` juzgaban al REVÉS los mismos dos eventos, y la
       que acusa ganaba el veredicto — un rojo que nadie podía curar.**
