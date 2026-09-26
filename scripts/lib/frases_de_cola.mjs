@@ -41,7 +41,40 @@ const TOPE_RENGLONES = 6;
  * sobre ella se apaga y deja de mirar todo lo demas.
  */
 export const NOTA_DE_CORRECCION =
-  /ac[aá] dec[ií]a|esto (?:es|era) historia|estaban? VENCID|vencidas?, corregido|corregido el \d|ya no es cierto|se corrigi[oó]/i;
+  /ac[aá] dec[ií]a|esto (?:es|era) historia|estaban? VENCID|vencidas?, corregido|corregido el \d|ya no es cierto|se corrigi[oó]|YA DESPLEGADO|YA ENTREGADO|[Ee]ntregado hoy al remoto|citaba/i;
+
+/** Un renglon que ARRANCA un item de cola, abierto (`- [ ]`) o cerrado (`- [x]`). */
+const ITEM = /^(\s*)- \[([ x])\]/;
+
+/**
+ * Devuelve el markdown con los items CERRADOS (`- [x]`) blanqueados, y todo lo demas intacto.
+ *
+ * POR QUE (medido el 2026-09-26 sobre las dos colas de este carril): `en_vuelo_vencido.mjs` daba
+ * 7 sujetos y 6 eran falsos; CINCO vivian dentro de un item `- [x]`. Un item cerrado es historia
+ * **por construccion** —su prosa cuenta lo que ya paso: "el commit estaba en vuelo", "no estaba
+ * en ningun remoto"— y ninguna lista de palabras alcanza para distinguir ese pasado del presente,
+ * porque el tiempo verbal no esta en las palabras, esta en el ESTADO DEL ITEM. Ese estado es un
+ * dato que la cola ya escribe, gratis, en la casilla.
+ *
+ * Blanquea en vez de recortar para que el renglon reportado siga siendo el del ARCHIVO: en una
+ * cola de 9.000 renglones, el numero de renglon es la mitad del arreglo. Y como el renglon vacio
+ * es `ABRE_BLOQUE`, blanquear tambien corta las frases que cruzarian el borde del item.
+ *
+ * ⚠️ Un item ANIDADO abierto dentro de uno cerrado SI se mide: la casilla de adentro es la que
+ * habla de ese trabajo. Por eso el item se cierra en el siguiente `- [` de cualquier nivel.
+ */
+export function sinHistoria(md) {
+  const renglones = md.split(/\r?\n/);
+  let dentroDeCerrado = false;
+  return renglones
+    .map((linea) => {
+      const m = ITEM.exec(linea);
+      if (m) dentroDeCerrado = m[2] === 'x';
+      else if (/^#{1,6} |^---\s*$/.test(linea)) dentroDeCerrado = false;
+      return dentroDeCerrado ? '' : linea;
+    })
+    .join('\n');
+}
 
 /**
  * ¿Este renglon CIERRA la frase? Se miran los adornos de markdown del final: `t_76cdb5dc`**
@@ -80,12 +113,13 @@ export function frases(md, patron) {
   }
   const salida = [];
   let actual = null;
+  let bloque = 0;
   const cerrar = () => { if (actual) salida.push(actual); actual = null; };
 
   md.split(/\r?\n/).forEach((linea, i) => {
-    if (ABRE_BLOQUE.test(linea)) cerrar();
+    if (ABRE_BLOQUE.test(linea)) { cerrar(); bloque++; }
     if (!linea.trim()) return;
-    actual ??= { texto: '', ocurrencias: [], renglones: 0 };
+    actual ??= { texto: '', ocurrencias: [], renglones: 0, bloque };
     actual.texto += (actual.texto ? ' ' : '') + linea.trim();
     actual.renglones++;
     for (const id of linea.match(patron) ?? []) actual.ocurrencias.push({ id, linea: i + 1 });

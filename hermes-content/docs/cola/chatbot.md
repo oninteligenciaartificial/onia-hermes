@@ -813,6 +813,18 @@ cierta:**
 npm run bloqueo:citado   # 0 = los frenos citados nombran tareas VIVAS · 1 = lista archivo:línea · 2 = NO MEDIDO
 ```
 
+🔴 **Y UNO más desde el 2026-09-26 21:00, el día que dejó de medir de más:**
+
+```bash
+npm run envuelo:vencido   # 0 = las afirmaciones "en vuelo" siguen ciertas · 1 = lista archivo:línea · 2 = NO MEDIDO
+```
+
+Su `exit 1` significa que esta cola —o la de plataforma— anuncia trabajo que se puede perder y
+**ya viajó**: el riesgo asustaba a la próxima vuelta con algo que no existe. No va a `npm test` a
+propósito: necesita el clon de `onia-platform` y `fetch`, o sea que se pondría rojo por ambiente y
+trabaría el merge de todos los carriles. A la cadena va sólo su `--self-check`
+(`test:en-vuelo-vencido`, 18 casos).
+
 🔴 **Y UNO más desde el 2026-09-26 17:23, porque el comando que este carril usaba para mirar su
 propio log dio el veredicto AL REVÉS dos veces en tres días** (ver T10, ya cerrado):
 
@@ -9050,11 +9062,34 @@ cita: al cerrar una fila hay que barrer quién la nombra, no sólo tacharla.
       bot'`). No se mandó Telegram: ese `ok` ya le llega en el parte diario, y sumar un aviso a
       un canal saturado es apagarlo.
 
-- [ ] **Terminar `scripts/en_vuelo_vencido.mjs`: la unidad tiene que ser el ÍTEM ABIERTO, no la
-      frase.** El gate existe, corre y su `--self-check` da 10/10, pero **no está cableado a
-      ninguna cadena a propósito**: medido el 2026-09-26 sobre las dos colas da **8 sujetos y 6 son
-      falsos**, y encima **pierde el único que de verdad estaba vencido**. Las dos fallas, con su
-      línea exacta y su causa, están en la cabecera del archivo — no las vuelvas a derivar.
+- [x] **CERRADO el 2026-09-26 15:50-16:30 La Paz (es un MEDIDOR, no toca el motor: no necesita
+      deploy). `scripts/en_vuelo_vencido.mjs`: la unidad ya es el ÍTEM ABIERTO, no la frase.**
+      Medición viva, corrida sobre las dos colas después del arreglo: **0 sujetos** (antes de
+      tocar nada daba **7, y 6 eran falsos**). Self-check **18 casos** — eran 10; los 8 nuevos son
+      COPIA TEXTUAL de los falsos medidos, no redacciones inventadas: el primer intento los
+      escribió sanitizados y **cinco de los seis pasaron en verde sin arreglar nada**, que es
+      exactamente el "rojo por el motivo equivocado" que se vuelve un verde futuro.
+
+      **Las dos piezas del arreglo atacan causas distintas, y ninguna sola alcanzaba:**
+      `sinHistoria()` (en `scripts/lib/frases_de_cola.mjs`) blanquea los ítems `- [x]` antes de
+      medir — el tiempo verbal de un ítem no está en sus palabras, está en su **casilla**, y la
+      casilla ya la escribe la cola gratis. Eso mata 5 de los 6 falsos. El 6.º vive en un ítem
+      **abierto** (`plataforma-v1.md:5715`, *"Este párrafo citaba `9d6d7bc6`"*) y sólo lo salva el
+      ensanche de `NOTA_DE_CORRECCION` con `YA DESPLEGADO` / `YA ENTREGADO` / `Entregado hoy al
+      remoto` / `citaba`. Y el sujeto que se PERDÍA se recupera con una tercera: una afirmación sin
+      sha adopta los shas de otras frases de su mismo **bloque de prosa** (nunca de otro párrafo).
+
+      ⚠️ **Un `0 sujetos` también es lo que devuelve un gate que quedó ciego, así que se probó al
+      revés**: un archivo de mutación con el MISMO texto dos veces, una en `- [ ]` y otra en
+      `- [x]`, citando un sha publicado → salió `VENCIDA` sólo en el abierto, `exit 1`. El cero de
+      las colas reales es un cero honesto.
+
+      **Cableado (era el único pendiente del ítem):** `npm run test:en-vuelo-vencido` —sólo el
+      `--self-check`— entra a la cadena del integrador junto a `test:bloqueo-citado`; la medición
+      viva es `npm run envuelo:vencido` y vive en la lista de arranque de este carril, el único
+      lugar donde un alias suelto se corre de verdad. Verificado que el ensanche NO afloja al gate
+      hermano, que comparte la constante: `test:bloqueo-citado` 45/45 y `bloqueo:citado` sigue
+      dando las mismas **3** citas vivas.
 
       **El rediseño ya está diagnosticado; falta escribirlo.** Un ítem `- [x]` es historia por
       construcción (su prosa habla en pasado) y ahí caen 5 de los 6 falsos; el 6.º es una nota de
