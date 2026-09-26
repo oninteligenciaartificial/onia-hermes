@@ -1001,10 +1001,70 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
 
 ## Ahora
 
-- [ ] 🔴 **El aviso de lead colgado NO alcanza a las filas cuyo `followup_step` ya quemó la
-      insistencia — y el arreglo que está en el repo es SÓLO hacia adelante. Nuestro único lead
-      real de WhatsApp lleva 9 días perdido y Sergio Urcullo nunca se enteró.**
-      Medido el 2026-09-26 10:13-10:55 La Paz contra producción, no heredado.
+- [x] 🔴 **CERRADO el 2026-09-26 10:43-11:05 La Paz — era un FANTASMA en su causa, y la causa
+      escrita mandaba a construir de nuevo algo que ya existe. El síntoma sí es real: el aviso de
+      la colgada 58 no salió. Pero NO es `followup_step`, y el deploy que ya espera firma SÍ la
+      rescata.** Re-medido contra producción, no heredado del ítem.
+
+      🔴 **Las dos afirmaciones centrales del ítem son falsas, y cada una llevaba a trabajo de más:**
+
+      **1. «El barrido de colgadas filtra `followup_step=eq.0`» — ya no, desde el 24-sep.** El
+      reparto en `persistence.mjs:295` es `FILTROS_COLGADAS = [enEtapas(ETAPAS_QUE_SE_PIERDEN),
+      ...FILTROS_FOLLOWUP_BASE]`: ni una condición de `followup_step`. Lo arregló `813c5fa3`, lo
+      protege `colgada-que-ya-recibio-followup-sigue-perdida.test.mjs` (6/6 en verde) y **producción
+      también lo tiene** (`docker exec onia-center grep -n "FILTROS_COLGADAS = " /tmp/onia-bot/persistence.mjs`
+      → línea 295, idéntica). El `LISTO` pedía construir ese criterio propio: **ya estaba construido**.
+
+      Derivado del módulo y corrido contra la base — la 58 sale **primera**, con `step=1`:
+      ```
+      $ node -e 'import("./persistence.mjs").then(m=>console.log(m.FILTROS_COLGADAS))'
+      ["bot_stage=in.(esperando_calificacion,esperando_horario,handoff_humano)",
+       "human_took_over=is.false","opt_out_at=is.null"]
+      → chatwoot:58 | esperando_horario | step=1 | last_inbound=2026-09-17 22:50:55+00
+      → chatwoot:990777 | esperando_horario | step=1 | ...        (23 filas, las dos «quemadas» adentro)
+      ```
+
+      **2. «Seguirán invisibles incluso después de desplegar» — al revés: el deploy las rescata.**
+      El barrido las ELIGE cada hora desde el 25-sep 19:17, y está en su propio log:
+      ```
+      $ tail -1 /var/log/onia-bot-followup.log
+      {"notes":["colgadas_sin_rescate"],"colgadas":{"total":23,"quienes":[
+        {"conversationKey":"chatwoot:58","silentHours":207,"contacto":"+59175755019","inboxId":"5"}, …7],
+        "avisados":[]}}                                     ← las ve, no las avisa
+      ```
+
+      **La causa REAL del silencio, medida: la marca de idempotencia se puso antes de entregar.**
+      Las 7 marcas de `/var/lib/onia-colgada-avisado` (dentro del contenedor, no en el host) son de
+      **0 bytes** — cinco del 25-sep 19:00, dos del 19:17. Con el `marcas-en-disco.mjs` que corre
+      hoy, existir es haber avisado, así que el `EEXIST` de cada corrida las da por avisadas para
+      siempre y `avisados` queda vacío. Eso es exactamente el bug que el pedido de deploy ya
+      arregla, y su módulo nuevo distingue los dos casos por el CONTENIDO, no por el archivo:
+      `confirmar()` escribe el veredicto adentro, y `retomarSiQuedoEnVuelo()` retoma la marca
+      **vacía y más vieja que `MS_RESERVA_EN_VUELO` (10 min)**. Las 7 son vacías y de ayer.
+
+      **Producción corre el módulo viejo — por eso hoy no se reintenta, y por eso el deploy alcanza:**
+      ```
+      $ docker exec onia-center sh -c 'grep -c MS_RESERVA_EN_VUELO /tmp/onia-bot/marcas-en-disco.mjs'
+      0        (y retomarSiQuedoEnVuelo: 0 · "async confirmar": 0)
+      ```
+      Gate del caso, en verde: `colgada-reservada-sin-entregar-se-reintenta.test.mjs` (4/4), cuya
+      cabecera ya nombraba este mismo incidente — *«cinco marcas quedaron reservadas a las 19:00 y
+      sin entregar»*.
+
+      **Qué queda, y no es código:** el `ok` de Sergio Urcullo en **`t_76cdb5dc`**. Al desplegar, las
+      7 marcas vacías se retoman y el aviso de las colgadas sale, **la 58 incluida**. Se comentó ese
+      efecto en la tarea: el cuerpo describía cuatro ganancias y ésta era una quinta, no escrita.
+
+      ⚠️ **La lección del instrumento, que es por qué esto valía la vuelta.** El ítem concluyó
+      *«nadie supo que existía»* desde `grep -cE "\[aviso\].*conv=58"` → **0**. El grep es correcto y
+      la conclusión no: el aviso de colgadas es **agrupado** (`KIND_LEAD_FRIO`, "🥶 SE ENFRIÓ"), no
+      emite una línea `[aviso] sent conv=N` por sujeto. Buscar el formato del aviso hermano da cero
+      en un circuito sano y en uno roto por igual. La huella que sí distingue los dos casos es la
+      **marca en disco** y el campo `avisados` del log del barrido — ahí se ve que las elige y no
+      las manda. Un `grep` sirve para descartar, nunca para confirmar: acá confirmó de más.
+
+      **Lo de abajo es el diagnóstico ORIGINAL del 2026-09-26 10:13, y se conserva porque su primera
+      mitad —el circuito vivo— sigue siendo cierta y medida. La segunda mitad está refutada arriba.**
 
       **El circuito está VIVO — eso se midió primero, y cambia el diagnóstico.** `node
       scripts/sonda_widget.mjs` → **3/3** (conversación 49), y la fila quedó en
@@ -1039,17 +1099,22 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
       cuelga la insistencia de ese contador (`docker exec onia-center grep -cE "reserveFollowUp"
       /tmp/onia-bot/insistencia-run.mjs` → **2**).
 
-      🔴 **Y acá está lo que NO cubre el arreglo del repo, que es por qué esto es un ítem y no una
+      ~~🔴 **Y acá está lo que NO cubre el arreglo del repo, que es por qué esto es un ítem y no una
       línea del pedido de deploy.** El arreglo mueve la insistencia a su propio contador, así que
       **las conversaciones futuras** quedan visibles. Pero las filas **ya quemadas** —`chatwoot:58`,
       `chatwoot:990777`, `chatwoot:16`— tienen el `followup_step` gastado y **seguirán invisibles
       para el barrido incluso después de desplegar**. El arreglo es hacia adelante; los leads ya
-      perdidos no los rescata nadie.
+      perdidos no los rescata nadie.~~
+      ⛔ **REFUTADO el 2026-09-26 10:43** — ver arriba: el barrido ya no mira `followup_step` (ni en
+      el repo ni en producción) y las 7 marcas vacías se retoman al desplegar. Las elige hoy mismo,
+      cada hora, con la 58 primera.
 
-      **LISTO =** el barrido de colgadas elige a quién avisar por un criterio propio (la
+      ~~**LISTO =** el barrido de colgadas elige a quién avisar por un criterio propio (la
       idempotencia ya la dan las marcas de `/var/lib/onia-colgada-avisado`, no la necesita del
       `followup_step`), con el test en rojo primero por el motivo correcto usando una fila con
-      `followup_step=1`; y la 58 aparece en su salida. Ojo al cerrar: `handoff_humano` **no** es el
+      `followup_step=1`; y la 58 aparece en su salida.~~ ⛔ **Ya estaba construido antes de escribirse
+      este LISTO** (`813c5fa3`, 24-sep). Escribir un test nuevo en rojo era imposible por el motivo
+      correcto: el motivo ya no existía. Ojo igual al cerrar: `handoff_humano` **no** es el
       arreglo — `ESCALATED` silencia al bot y sólo se escribe con un humano real del otro lado.
 
       **No se arregla tocando la base a mano.** Resetear `followup_step` en producción es una
