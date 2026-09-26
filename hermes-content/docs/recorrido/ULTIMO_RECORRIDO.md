@@ -12,6 +12,172 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-26 (vuelta HEAD 2b8a1ac3) — `BUILD_ID` sin cambios; escalón 3: últimas 2 superficies nunca auditadas — sin hallazgo
+
+`ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado primero contra la entrada de arriba:
+`4FWMcecd4jRBGUVwStDQb`, **igual** — no correspondía repetir el recorrido end-to-end. Tablero:
+sin tareas `ready` sin reclamar en la zona `recorrido-cliente`.
+
+Volví a listar TODAS las rutas reales (`find web-factory/apps/onia-platform/src/app -iname
+page.tsx`) y las crucé contra todo lo ya auditado (incluida la vuelta anterior, que cerró 7
+superficies). Quedaban exactamente DOS sin ni una mención: `/v1/funciones/facturacion-electronica-siat`
+y `/v1/modulos/dental`. Con esto, **las 24 rutas reales del sitio quedan cubiertas por este
+carril al menos una vez.**
+
+Auditadas en vivo (Playwright, `onia.com.bo`, 1440×900, `reducedMotion:'reduce'`, texto leído con
+`innerText`, no `curl`+`grep`), las dos con status 200:
+
+- **`/v1/funciones/facturacion-electronica-siat`**: la fecha del plazo SIAT (30-sep último día de
+  transición, 1-oct primer día de exclusividad online, RND 102600000007) coincide con la memoria
+  del sistema — no repite el error viejo de "30 de septiembre" a secas, distingue las dos fechas
+  correctamente. Explica el portal gratuito del SIN antes de vender el sistema propio (sin
+  presión falsa de "estás obligado a comprar"). Sin hallazgo.
+- **`/v1/modulos/dental`**: "Nuestro emisor ya está registrado ante el SIN y en trámite de
+  homologación; mientras tanto, podés emitir por el portal gratuito" — mismo patrón que
+  `/nosotros` (auditado el 17-sep y ya aceptado ahí: es un estado regulatorio real, necesario
+  para no mentir sobre certificación, no un "muy pronto" de producto propio). Precios y límites
+  citados (Básico Bs 320/mes) coherentes con la escalera vigente. Sin hallazgo.
+
+RAZÓN de no-avance en la medida `llegoHasta/completo`: no corresponde repetir el recorrido
+end-to-end (build sin cambios, ya 9/9 en los 5 rubros); este escalón no tiene contraparte
+numérica en `resumen.json`.
+LECCIÓN: con esta vuelta se agota el escalón 3 por SUPERFICIE (las 24 rutas reales ya tienen al
+menos una auditoría). La próxima vuelta sin cambio de `BUILD_ID` necesita otro eje — no relistar
+`page.tsx` esperando encontrar algo nuevo, porque no lo hay: revisar promesa-vs-entrega DENTRO de
+una misma pantalla ya auditada (ej. cruzar cada cifra citada contra su fuente en el producto real,
+no solo contra `subscription-plans.ts`/`pricing.ts`), o el escalón 2 (repetir rubros) si vence el
+`BUILD_ID`.
+
+---
+
+## 2026-09-26 (vuelta HEAD 9a046a0f) — `BUILD_ID` sin cambios; escalón 3 en 7 superficies nunca auditadas por este carril: HALLAZGO en `/servicios/marketing-ia`
+
+`ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado primero contra la entrada de arriba:
+`4FWMcecd4jRBGUVwStDQb`, **igual** — no correspondía repetir el recorrido end-to-end (9/9 ya
+cerrado en los 5 rubros contra este build). Tablero: sin tareas `ready` sin reclamar en la zona
+`recorrido-cliente`.
+
+Antes de elegir superficie, listé TODAS las rutas reales del sitio
+(`find web-factory/apps/onia-platform/src/app -iname page.tsx`) y las crucé contra lo que este
+archivo ya dice haber auditado: `/servicios/consultoria`, `/servicios/marketing-ia`, `/privacidad`,
+`/v1/comparativa`, `/v1/empezar`, `/v1/precios` y `/prueba-gratis` no tenían ni una mención previa
+— siete superficies completas nunca miradas por este carril, pese a que `/agentes`, `/comparativa`
+(sin `/v1`), `/nosotros`, `/terminos` y el resto sí llevan varias vueltas.
+
+Auditadas en vivo (Playwright, `onia.com.bo`, no `curl`+`grep`), las 7 con status 200:
+
+- **`/v1/precios`**: los 4 planes (320/550/890/1.290, semanal 89/145/229, anual 3.200/5.500/8.900/
+  12.900, Grupo/Empresarial 2.900/29.000, chatbot add-on 390) coinciden con la escalera vigente de
+  la memoria compactada (24-sep, `DEFAULT_PLAN_AMOUNTS`). Sin hallazgo.
+- **`/v1/comparativa`**: compara contra el Portal del SIN, facturadores bolivianos y software
+  dental regional, con precio y fecha de consulta citados (30-jul-2026) por proveedor — cero
+  prueba social fabricada, cero testimonios. Sin hallazgo.
+- **`/v1/empezar`**: los 5 rubros vigentes, todos "DISPONIBLE", sin rubro apagado ni "muy pronto".
+  Sin hallazgo.
+- **`/prueba-gratis`**: promete el plan Profesional durante la prueba — coincide con
+  `TRIAL_PLAN='professional'` de la memoria. Sin hallazgo.
+- **`/privacidad`**: v1.2, fechada 25-sep-2026. Es un doc legal, no venta: puede ser honesto sobre
+  límites por regla propia de `CLAUDE.md`. Sin hallazgo.
+- **`/servicios/consultoria`**: "Sin humo" — dice explícito que no promete multiplicar
+  facturación y que no certifica con diplomas. Habla de "nuestra operación real" pero como
+  argumento de venta del servicio (automatizamos la nuestra primero), no como estado de obra.
+  Sin hallazgo.
+- **HALLAZGO en `/servicios/marketing-ia`** (reportado en el tablero, `t_826a7ab2`, prioridad 2,
+  para `web-venta` — dueño de `web-factory/apps/onia-platform/`): la sección "Lo que NO vas a
+  encontrar acá" dice textual **"Somos una empresa nueva y lo decimos de frente: no tenemos un
+  muro de logos ni casos de éxito con números espectaculares — y antes que inventarlos,
+  preferimos no tenerlos todavía."** Es honesto, pero es exactamente lo que `CLAUDE.md` prohíbe
+  en una pantalla de venta: comunicar estado de obra/inmadurez ("todavía") y hablar de la propia
+  situación de la empresa (cero autobombo). Esa honestidad es correcta en un doc interno, no en
+  la pantalla que ve un prospecto antes de pedir propuesta. No lo arreglo — no es mi carril.
+  Capturas: `capturas/hallazgo-autobombo-marketing-ia.png` (sección completa, scrolleada) y
+  `capturas/auditoria-_servicios_marketing-ia.png` (arriba de la pantalla).
+
+RAZÓN de no-avance en la medida `llegoHasta/completo`: no corresponde repetir el recorrido
+end-to-end (build sin cambios, ya 9/9 en los 5 rubros); este escalón mide otra cosa
+(consistencia promesa/entrega en superficies nunca auditadas) y no tiene contraparte numérica en
+`resumen.json`.
+LECCIÓN: ninguna nueva — antes de elegir la próxima superficie de escalón 3, listar TODAS las
+rutas reales (`find ... page.tsx`) y cruzarlas contra lo ya auditado encontró en un solo paso 7
+huecos que las vueltas anteriores no habían visto por ir superficie por superficie de memoria.
+
+---
+
+## 2026-09-26 (vuelta HEAD 4fcf307d) — `BUILD_ID` sin cambios, escalón 3: promesa vs. entrega en el sitio — sin hallazgo nuevo
+
+`BUILD_ID` comparado primero contra la entrada de abajo: `4FWMcecd4jRBGUVwStDQb`, **igual**. Con
+la rotación de los 5 rubros ya agotada contra este build (nota de la vuelta anterior), se pasó al
+escalón 3: recorrer la home y las páginas que enlaza mirando qué promete cada botón y si el
+destino cumple, en vez de repetir un rubro ya verificado.
+
+Auditado en vivo (Playwright, no `curl`+`grep`): `/` (home), `/empezar`, `/precios`,
+`/facturacion`, `/guia-facturacion`, `/rubros`, `/chatbot`, `/agentes`, `/contacto`. Todos los CTA
+de alta apuntan a `https://app.onia.com.bo/register` con copy "Creá tu cuenta" — consistente con el
+alta abierta (`ONIA_ALTA_AUTOMATICA=abierta`). `/precios` muestra la escalera de 4 escalones
+(320/550/890/1.290, chatbot add-on 390) — coincide con la memoria compactada del 24-sep. El hallazgo
+viejo del badge de `/guia-facturacion` (`t_c53fe39c`, "Plazo · 30-09-2026" contra "1 de octubre" en
+el cuerpo) ya está en producción con la fecha correcta (`01-10-2026`) — confirmado fantasma, no se
+reabre. `/facturacion` menciona 30-sep Y 1-oct pero como dos hechos distintos y coherentes (último
+día de transición vs. inicio del régimen obligatorio), no como el mismo dato contradicho — no es
+el bug de la regla de fechas. `/rubros` lista los 5 rubros vigentes, sin "muy pronto" ni rubros
+apagados. Sin hallazgo nuevo en ninguna de las 8 superficies.
+
+RAZÓN de no-avance en la medida `llegoHasta/completo`: no corresponde repetir el recorrido
+end-to-end (ya 9/9 en los 5 rubros contra este mismo build); este escalón mide otra cosa
+(consistencia promesa/entrega) y no tiene contraparte numérica en `resumen.json`.
+
+---
+
+## 2026-09-26 02:09-02:12 La Paz — `BUILD_ID` sin cambios, rotado a Servicios profesionales, 9/9 — CIERRA la rotación de los 5 rubros
+
+`ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado primero: `4FWMcecd4jRBGUVwStDQb`, igual al de
+la vuelta anterior (Importadora). Tablero revisado: nada `ready` sin reclamar en la zona
+`recorrido-cliente`. Correspondía Servicios profesionales, el único rubro que faltaba contra este
+build.
+
+`RECORRIDO_RUBRO='Servicios profesionales' node scripts/recorrido_cliente.mjs --escribir`:
+**RECORRIDO COMPLETO, 9/9 pasos, sin hallazgo.** Cuenta `zz-qa-2026-09-26-0209@onia.com.bo`,
+confirmación de correo antes del primer login, onboarding en 6 pantallas (horarios lun-vie 09-13
+y 15-19), paciente `zz-qa-2026-09-26-0209-paciente` cargado en `/patients` y encontrado de
+vuelta, cita `zz-qa-2026-09-26-0209-cita` agendada (201, `cmuhr8wrk006z01r2l229id3u`) para
+2026-09-28 09:00 y VISTA en `/appointments`, pantalla de cobro (`/comercio/caja`) vista y
+frenada sin pagar, dato del paso 6 no aparece en `/dashboard` (esperado: el panel no lista el
+group Clientes). `resumen.json`: `llegoHasta 9/9`, `completo: true`, `agujeros: []`. Todo lo
+`zz-qa-` borrado en la misma corrida: `organizations`/`appointments` con `zz-qa-%` → 0,
+verificado con `SELECT` después de borrar.
+
+**Con esto quedan re-verificados los 5 rubros del alta (dental, comercio, estética, importadora,
+servicios profesionales) contra el mismo `BUILD_ID` `4FWMcecd4jRBGUVwStDQb`, todos sin hallazgo.**
+
+RAZÓN: N/A — avanzó (rotación completa de los 5 rubros contra el `BUILD_ID` vigente).
+LECCIÓN: ninguna nueva. Próxima vuelta: comparar `BUILD_ID` primero; si sigue igual, la rotación
+por rubro ya está agotada — pasar a otro escalón (promesa vs. entrega en la home, u otro paso del
+recorrido que hoy no se cubra) en vez de repetir un rubro ya verificado contra este mismo build.
+
+## 2026-09-26 01:09-01:11 La Paz — `BUILD_ID` sin cambios, rotado a Importadora, 8/8 sin hallazgo
+
+`ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado primero: `4FWMcecd4jRBGUVwStDQb`, igual al
+de las vueltas anteriores (dental, comercio, estética, y la re-confirmación de DG-043) —
+correspondía seguir rotando (importadora y servicios profesionales seguían verificados contra el
+build anterior), no repetir dental. Tablero revisado: nada `ready` sin reclamar en la zona
+`recorrido-cliente`.
+
+`RECORRIDO_RUBRO='Importadora / distribuidora' node scripts/recorrido_cliente.mjs --escribir`:
+**8/8 pasos que le corresponden, sin hallazgo** (paso 7 sale NO-APLICA: este rubro vende
+"Catálogo, cotizaciones B2B y costeo de importación", no agenda, y su propio menú tampoco la
+tiene — coherente). Cuenta `zz-qa-2026-09-26-0111@onia.com.bo`, confirmación de correo antes del
+primer login, onboarding en 6 pantallas, dato `zz-qa-2026-09-26-0111-paciente` cargado en
+storefront Catálogo y encontrado de vuelta, pantalla de cobro (Créditos, `/comercio/fiados`)
+vista y frenada sin pagar, dato del paso 6 no aparece en `/dashboard` (esperado: el panel no
+lista storefront catálogo). `resumen.json`: `llegoHasta 9/9`, `completo: true`, `agujeros: []`.
+Todo lo `zz-qa-` borrado en la misma corrida: `organizations`/`appointments` con `zz-qa-%` → 0,
+verificado con `SELECT` después de borrar.
+
+RAZÓN: N/A — avanzó (Importadora re-verificada contra el `BUILD_ID` vigente, sin hallazgo).
+LECCIÓN: ninguna nueva — la rotación por rubro contra un `BUILD_ID` fijo (en vez de repetir
+dental) volvió a ser el método correcto. Próxima vuelta: si el `BUILD_ID` sigue igual, falta
+Servicios profesionales para cerrar la rotación completa de los 5 rubros contra este build.
+
 ## 2026-09-25 23:09-23:12 La Paz — `BUILD_ID` sin cambios, rotado a Estética, 9/9 sin hallazgo
 
 `ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado primero: `4FWMcecd4jRBGUVwStDQb`, igual al
