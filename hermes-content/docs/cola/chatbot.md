@@ -29,6 +29,59 @@ contra producción (SSH al VPS, las dos bases, el motor corrido de verdad), no c
 
 ---
 
+## ✅ T12 — CERRADO el 2026-09-26 03:05 La Paz: el instrumento que decide si pedirle la firma a Sergio Urcullo mandaba al remedio OPUESTO para un archivo de cada cinco
+
+**Qué pasaba.** `scripts/bot_vivo_tiene_el_codigo.mjs` es el que contesta *«¿el bot vivo corre el
+código del repo?»*, y es el que esta cola manda correr ANTES de creerle a un «NO desplegado».
+Nombraba los archivos desfasados en **una sola lista** y cerraba con una instrucción fija:
+
+    5 archivo(s) del bot NO son los del repo — el prospecto habla con el código viejo:
+      calcom-booking.mjs · followup-run.mjs · knowledge.onia.json · marcas-en-disco.mjs · puerta-del-alta.mjs
+    El arreglo está commiteado y NO corre. Se destraba con el pedido de deploy del bot, no a mano.
+
+**Y para uno de los cinco esa instrucción era falsa.** El publicador publica desde `origin/main`.
+Medido archivo por archivo con `git diff --quiet origin/main -- <ruta>`: cuatro **ya están** en
+`origin/main` y sólo esperan el `ok` de Sergio Urcullo (pedido `t_c2fab948`, vivo); el quinto,
+`calcom-booking.mjs`, **difiere** de `origin/main` — es el arreglo del breaker de Cal.com que
+este mismo carril commiteó la vuelta anterior (`1f9529a0`, sin mergear). Ningún deploy lo puede
+traer: lo que falta ahí es el **merge**, no la firma.
+
+**Por qué importa más que un texto impreciso.** El único remedio que el instrumento ofrecía era
+pedirle a Sergio Urcullo que firme — y firmar no acerca ni un centímetro a ese archivo. Es el
+modo de falla que esta cola ya tiene nombrado como *peor que un pendiente fantasma*: pedirle una
+decisión que no lo destraba. Y el hermano `espejo-check.mjs` **ya tenía la guarda** (sale
+«ESPEJO SIN VEREDICTO — el espejo NO es origin/main»): dos instrumentos del mismo carril
+contestando la misma pregunta, uno con la guarda y el otro sin ella.
+
+**Arreglo.** `medirVivo()` deriva por archivo de qué lado de `origin/main` está (`difierenDeMain()`,
+**con `git fetch` antes** — sin eso se comparan refs de disco y el gate falla EN VERDE), y
+`veredicto()` parte los desfasados en dos listas con su remedio propio. El remedio salió del
+impresor, donde estaba escrito fijo, y pasó a derivarse por sujeto.
+
+**Tri-estado, igual que el resto del archivo:** si no se pudo derivar el lado de **ninguno**
+(sin red, sin ref), el desfase sigue siendo cierto pero la cura no, así que sale **NO MEDIDO (2)**
+— una cura equivocada cuesta más que no medir.
+
+**Test en ROJO primero, por el motivo correcto** (`FALLA: el que DIFIERE de origin/main espera
+MERGE, no firma`, más dos hermanas). El assert prohíbe la **instrucción** (`se destraba con el
+pedido de deploy`), no la palabra «firma»: la línea del merge la nombra justamente para negarla.
+El self-check queda **puro** — `difierenDeMain()` hace red y no se lo llama desde ahí.
+
+**Verificado en vivo, y coincide con la medición a mano:**
+
+```
+$ node scripts/bot_vivo_tiene_el_codigo.mjs          # exit 1
+4 ya está(n) en origin/main — espera(n) FIRMA:  followup-run · knowledge.onia.json · marcas-en-disco · puerta-del-alta
+  se destraba con el pedido de deploy del bot, no a mano
+1 difiere(n) de origin/main — espera(n) MERGE:  calcom-booking.mjs
+  el publicador publica desde origin/main: ningún deploy los trae, y pedir la firma no los destraba
+```
+
+`npm test` (cadena entera de `onia-hermes`) en verde. **No toca el motor**: es un medidor, así
+que no entra en el pedido de deploy ni cambia una palabra de lo que el bot le dice al cliente.
+
+---
+
 ## ✅ T11 — CERRADO el 2026-09-26 00:20 La Paz: el pedido de deploy del bot le pedía a Sergio Urcullo firmar 6 archivos describiéndole 5 — y el que faltaba era el más largo
 
 **Qué pasaba.** El pedido `t_94b9955d` (creado 02:46 UTC de hoy) listaba en su cuerpo los **5**
