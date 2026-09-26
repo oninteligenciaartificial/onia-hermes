@@ -401,7 +401,7 @@ sigue cayendo a `M_AUDIO_FAIL` para todo prospecto hasta que se publique el bot.
 
 ---
 
-## ✅ T6 — CERRADO el 2026-09-19 (commiteado, **NO desplegado**): el catálogo vende "entiende audios" y el bot no entendía ninguno
+## ✅ T6 — CERRADO el 2026-09-19 · **DESPLEGADO y VIVO** (medido el 2026-09-26, ver el cierre del ítem): el catálogo vendía "entiende audios" y el bot no entendía ninguno
 
 **Lo que veía el prospecto.** `ONIA_CATALOGO_DE_VENTA.md:153` —la fuente única de QUÉ se
 vende— marca el chatbot ✅ **vivo** prometiendo que *"entiende FOTOS y audios"*. La foto sí
@@ -448,11 +448,35 @@ respaldo y tirar su resultado), reintentar el silencio, aceptar un proveedor des
 sacar el header `Authorization`, declarar respaldo sin key, no imprimir `aviso=`, imprimirlo
 vacío, repetirlo en la rama MUDA y ponerlo en todo turno sano.
 
-⚠️ **Commiteado, NO desplegado.** Hasta que `/opt/onia/bot` reciba este código, la promesa del
+~~⚠️ **Commiteado, NO desplegado.** Hasta que `/opt/onia/bot` reciba este código, la promesa del
 catálogo sigue siendo falsa en producción y `npm run destinos:vivos` sigue diciendo `ROTA` —
 y ese veredicto es CORRECTO mientras tanto: la exención cuelga del deploy, no del repo.
 Se publica con `DESPLEGAR: bot` (el publicador automático lo saca solo si el lote no toca una
-fuente de precio).
+fuente de precio).~~
+
+✅ **YA SE DESPLEGÓ — medido el 2026-09-26, y por el criterio que este ítem mismo dejó escrito.**
+Las tres medidas, en vivo y no heredadas:
+
+```
+docker exec onia-center grep -c FALLBACK_PROVIDER /tmp/onia-bot/audio-transcribe.mjs   → 3   (era 0)
+docker exec onia-center grep -c 'aviso=' /tmp/onia-bot/webhook-server.mjs              → 1
+npm run destinos:vivos  → ok — "la sirve el RESPALDO https://api.openai.com/v1, que contesta:
+                                el prospecto SI recibe la capacidad"
+```
+
+El ítem había fijado `destinos:vivos` diciendo `ROTA` como la señal de que faltaba el deploy;
+hoy dice `ok` y el VEREDICTO global es `ok — los 5 destino(s) externos del turno contestan`.
+O sea que **la promesa del catálogo —*"entiende FOTOS y audios"*— es verdadera en producción**,
+y la nota de voz del prospecto se transcribe por el respaldo.
+
+⚠️ **Por qué esto valía corregirse y no era cosmético.** El rótulo decía que el catálogo le
+miente al cliente. Un ítem `✅ CERRADO` cuyo encabezado afirma «NO desplegado» se lee como
+presente, así que la vuelta siguiente hereda como pendiente el deploy más caro de este carril
+—el del motor— y puede volver a pedirle la firma a Sergio Urcullo por algo que ya está vivo.
+Ningún gate lo agarró: `deploy:ya-ocurrio` lo clasifica **NO MEDIDO** («no se pudo ubicar su
+frontera»), que es honesto pero mudo, y un `2` permanente por el mismo sujeto se saltea igual
+que un rojo ambiental. La medición que sí concluye es la del motor
+(`npm run bot:vivo-al-dia`, que nombra los 4 archivos que de verdad no viajaron).
 
 ---
 
@@ -3227,6 +3251,7 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
 - [x] 🔴 **CERRADO el 2026-09-19 14:15-15:05 La Paz (commiteado, NO desplegado) — el único camino
       que tiene el dueño para devolverle una conversación al bot funciona, y el log lo escribía
       igual que si no hubiera pasado nada.**
+      ✅ YA DESPLEGADO (medido 2026-09-26: `npm run bot:vivo-al-dia` — el motor vivo ya corre este archivo).
 
       **Cómo apareció.** No de la cola. Midiendo un eje que ningún gate mira: *el dueño contesta
       desde `/inbox` y el bot se calla — ¿existe el camino de vuelta?* La pantalla lo promete
