@@ -1174,7 +1174,9 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
       cabecera ya nombraba este mismo incidente — *«cinco marcas quedaron reservadas a las 19:00 y
       sin entregar»*.
 
-      **Qué queda, y no es código:** el `ok` de Sergio Urcullo en **`t_76cdb5dc`**. Al desplegar, las
+      **Qué queda, y no es código:** el `ok` de Sergio Urcullo al pedido de deploy del bot. **El id
+      se deriva, no se copia** — lo imprime `npm run deploy:sin-pedido`, que además dice si sigue
+      pendiente. Al desplegar, las
       7 marcas vacías se retoman y el aviso de las colgadas sale, **la 58 incluida**. Se comentó ese
       efecto en la tarea: el cuerpo describía cuatro ganancias y ésta era una quinta, no escrita.
 
@@ -1244,7 +1246,8 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
       escritura sobre datos vivos y deja el mismo agujero abierto para el próximo lead.
 
       **Deploy:** el arreglo de la insistencia ya está commiteado y espera el `ok` de Sergio
-      Urcullo en **`t_76cdb5dc`** ("Publicar el bot…"). No se creó un pedido nuevo.
+      Urcullo al pedido de deploy del bot — **que se deriva, no se copia**: lo imprime
+      `npm run deploy:sin-pedido`. No se creó un pedido nuevo.
 
 - [x] 🔴 **CERRADO el 2026-09-26 09:13-09:50 La Paz (es un MEDIDOR, no toca el motor: no necesita
       deploy): el gate que decide si pedirle la FIRMA a Sergio Urcullo acusaba 8 archivos y 3 eran
@@ -2371,9 +2374,10 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
       símbolo y el md5 difiere (`43a2ace4…` vivo vs `bc597110…` repo). Es exactamente el fallo que
       este carril ya pagó: *un log ahogado miente peor que uno vacío, porque contesta*.
 
-      ⚠️ **No se pidió deploy nuevo: ya existe** — `t_24fa76aa` («Publicar el bot: las campanas de
-      la web, que agende demos, y que ningún lead quede en silencio»), blocked esperando el `ok` de
-      Sergio Urcullo. Un segundo pedido del mismo destino es lo que este repo prohíbe.
+      ⚠️ **No se pidió deploy nuevo: ya existe** — el del bot, «Publicar el bot», y **su id se
+      deriva**: `npm run deploy:sin-pedido` lo imprime y dice si sigue pendiente. Acá estaba escrito
+      a mano y caducó (van cuatro pedidos, cada uno archivó al anterior). Un segundo pedido del
+      mismo destino es lo que este repo prohíbe.
 
       **Un falso positivo que se descartó antes de reportarlo.** El log trae **2.803** crashes
       `ERR_MODULE_NOT_FOUND: audio-transcribe.mjs`. Parecía el hallazgo de la vuelta y **no lo es**:
@@ -9024,10 +9028,16 @@ cita: al cerrar una fila hay que barrer quién la nombra, no sólo tacharla.
       bash /opt/onia/bot/_deploy/publicar.sh --dry-run | tail -3   # el recuento honesto: 13
       ```
 
-      ⚠️ Y `npm run bloqueo:citado` **no ve esta cita**: muerde la redacción «el `ok` de `t_X`», y
-      acá el ID venía en prosa entre paréntesis. O sea que su verde no cubre este caso — no es que
-      no hubiera sujeto, es que el gate no lo alcanza. Enseñarle esta forma es trabajo propio, no
-      de este ítem.
+      ⚠️ **Acá decía que `npm run bloqueo:citado` «no ve esta cita» y que enseñarle esa forma era
+      trabajo de otro ítem. Ya se hizo — 2026-09-26.** El gate salía verde con TRES líneas citando
+      esa tarea archivada, y los dos huecos eran distintos: uno de redacción (el destinatario metido
+      en medio, «el `ok` de Sergio Urcullo en `t_X`») y **uno estructural, que es el que importa** —
+      el gate medía RENGLONES y estas colas tienen wrap duro a ~95 columnas, así que el lenguaje de
+      freno caía en un renglón y el ID en el siguiente. Ninguna lista blanca de frases podía
+      morderlo: no faltaba una redacción, estaba mal la **unidad de medida**. Ahora reconstruye la
+      frase antes de juzgarla (`frases()` en `scripts/bloqueo_citado_vivo.mjs`), corta en el
+      terminador y en el arranque de bloque para no pegar dos frases, y no muerde las notas de
+      corrección fechadas como ésta.
 
 - [ ] **Botón "Cobrar con QR" dentro de la conversación** (pieza 5 del backlog v5). El
       circuito está completo en mock y verificado mirando (`/bcp/cobrar` + `/bcp/callback`,
@@ -9375,9 +9385,10 @@ entrante no se persiste a propósito (`INBOUND_BODY_PLACEHOLDER = "(entrante —
 persistido)"`, `persistence.mjs:219`). El aviso honesto lleva contacto, etapa, días callado y
 **por dónde abrir la conversación** — que es lo que `construirAviso` ya arma.
 
-⚠️ **Esto NO es «contactar a un prospecto»** —eso sí es decisión de Sergio Urcullo y ya
-está pedido en `t_e57e3376`—: es avisarle A ÉL de algo que pasó en su propio sistema.
-Confundir las dos cosas es lo que dejó a `conv 58` sin dueño seis días.
+⚠️ **Esto NO es «contactar a un prospecto»** —eso sí es decisión de Sergio Urcullo, y se pide
+por el tablero, que es donde se deriva si hay uno vivo (`onia-tablero.sh list --status blocked`);
+acá había un id escrito a mano y ya está archivado—: es avisarle A ÉL de algo que pasó en su
+propio sistema. Confundir las dos cosas es lo que dejó a `conv 58` sin dueño seis días.
 
 ---
 

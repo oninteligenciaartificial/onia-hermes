@@ -99,8 +99,15 @@ export const LENGUAJE_DE_FRENO =
  * `pedido:entregado` copiada en una tabla de evidencia — historia fechada, no una instruccion.
  * Distinguirlas por la caja es lo unico que separa el sujeto real del falso positivo que
  * apagaria el gate.
+ *
+ * ⚠️ EL HUECO ENTRE `ok` Y EL ID, ampliado el 2026-09-26. Antes se exigia que el id viniera
+ * PEGADO ("ok t_X" u "ok de t_X"), y la cola escribia **"el `ok` de Sergio Urcullo en
+ * `t_76cdb5dc`"** — el destinatario metido en medio. Tres lineas citaban una tarea archivada y
+ * el gate salia verde. Ahora se admite cualquier relleno corto que NO cruce un fin de frase:
+ * el limite de 40 caracteres y la exclusion de `.!?` son lo que impide que "ok" enganche un id
+ * de la frase de al lado.
  */
-export const INSTRUCCION_DE_OK = /`?ok`?\s+(?:de\s+)?`?t_[0-9a-f]{8}/;
+export const INSTRUCCION_DE_OK = /`?\bok\b`?[^.!?\n]{0,40}?`?t_[0-9a-f]{8}/;
 
 /**
  * Un `ok` YA CONTESTADO no es una instruccion: es el acuse de que el deploy salio, y su id
@@ -115,21 +122,113 @@ export const INSTRUCCION_DE_OK = /`?ok`?\s+(?:de\s+)?`?t_[0-9a-f]{8}/;
  * Solo desactiva `INSTRUCCION_DE_OK`. `LENGUAJE_DE_FRENO` sigue midiendo la misma linea: si
  * alguien escribe "contesto ok t_viejo, y t_nuevo sigue esperando el ok", el freno nuevo muerde
  * igual por la otra via.
+ *
+ * `lleg[oó]` entro el 2026-09-26: "El ok de Sergio Urcullo llego (tarea `t_X`, hoy `archived`)"
+ * es el acuse de un deploy que ya salio, y la frase misma dice que la tarea esta archivada.
  */
-export const OK_YA_CONTESTADO = /contest[oó]|respondi[oó]|ya dio el|dio el `?ok`? (?:a|de)\b/i;
+export const OK_YA_CONTESTADO = /contest[oó]|respondi[oó]|lleg[oó]|ya dio el|dio el `?ok`? (?:a|de)\b/i;
+
+/**
+ * UNA NOTA DE CORRECCION NO AFIRMA LO QUE CITA, y esta es la unica exclusion que se aplica a las
+ * DOS vias (freno e instruccion).
+ *
+ * Estas colas corrigen en el lugar, con la convencion de `CLAUDE.md`: se deja el texto viejo
+ * entre comillas y al lado se explica por que estaba mal. Medido el 2026-09-26 en
+ * `plataforma-v1.md:441-444` — *«Aca decia que ... porque "sigue vivo el corte de 2FA" ... las dos
+ * mitades estaban VENCIDAS, corregido el 2026-09-25»*. La frase CITA el freno para desmentirlo, y
+ * `sigue vivo el corte` esta en `LENGUAJE_DE_FRENO`. Sin esta guarda el gate muerde justo la linea
+ * que arreglo el problema: le pide borrar la correccion para ponerse verde, o sea premia
+ * exactamente lo que este archivo documenta como su peor modo de falla — que el sujeto se borre en
+ * vez de arreglarse.
+ *
+ * ⚠️ SU RIESGO, dicho de frente: suprime la frase ENTERA, asi que una nota de correccion que
+ * ademas mande a un id nuevo que TAMBIEN este muerto no se ve. Se acepta porque el lado barato de
+ * equivocarse es este: una correccion fechada es legible para el que la lee, mientras que un gate
+ * que grita sobre ella se apaga y deja de mirar todo lo demas.
+ */
+export const NOTA_DE_CORRECCION =
+  /ac[aá] dec[ií]a|esto (?:es|era) historia|estaban? VENCID|vencidas?, corregido|corregido el \d|ya no es cierto|se corrigi[oó]/i;
+
+/**
+ * Un renglon que ARRANCA bloque nuevo: nada se pega a traves de el. Renglon vacio, bullet,
+ * item numerado, titulo, fila de tabla, cerca de codigo o cita. Sin esto, reconstruir frases
+ * pegaria el final de un item con el principio del siguiente.
+ */
+const ABRE_BLOQUE = /^\s*$|^\s*[-*+]\s|^\s*\d+\.\s|^\s*#|^\s*\||^\s*```|^\s*>/;
+
+/**
+ * Cuantos renglones puede abarcar una frase antes de cerrarla por las malas. El wrap duro de
+ * estas colas es de ~95 columnas, asi que una frase real entra en dos o tres renglones; el tope
+ * existe para que una prosa sin puntuacion no acumule medio item en una sola ventana.
+ */
+const TOPE_RENGLONES = 6;
+
+/**
+ * ¿Este renglon CIERRA la frase? Se miran los adornos de markdown del final: `t_76cdb5dc`**
+ * no cierra nada, y `(tarea `t_X`, depende de Sergio Urcullo).` si.
+ */
+export function cierraFrase(linea) {
+  return /[.!?:;]$/.test(linea.replace(/[\s*_`)\]»”"']+$/u, ''));
+}
+
+/**
+ * Reconstruye las FRASES de un markdown de wrap duro, con los renglones donde cae cada id.
+ *
+ * ⚠️ POR QUE EXISTE, y es el hueco mas caro que tuvo este gate. Medir de a renglones parecia
+ * gratis y no lo era: estas colas se escriben con wrap duro a ~95 columnas, asi que una frase
+ * cualquiera cae partida en dos renglones — y con ella, el par que este gate necesita ver
+ * JUNTO. Medido el 2026-09-26 en `cola/chatbot.md`:
+ *
+ *   1246  **Deploy:** el arreglo ... ya esta commiteado y espera el `ok` de Sergio
+ *   1247  Urcullo en **`t_76cdb5dc`** ("Publicar el bot..."). No se creo un pedido nuevo.
+ *
+ * El lenguaje de freno esta en 1246 y el id en 1247. Ningun renglon tiene los dos, asi que
+ * ninguna lista blanca de frases —por larga que sea— podia morderlo: no era una redaccion que
+ * faltara, era la UNIDAD DE MEDIDA equivocada. La unidad de significado es la frase.
+ *
+ * Y la contracara es la que mantiene vivo al gate: la frase se corta en el terminador y en el
+ * arranque de bloque, asi que "…espera el `ok`." seguido de "CERRADO en `t_X`" NO se pegan. Un
+ * ensanche que griteara en falso sobre la historia fechada terminaria apagado, y ese es el modo
+ * de falla que este archivo ya documenta dos veces.
+ */
+export function frases(md) {
+  const salida = [];
+  let actual = null;
+  const cerrar = () => { if (actual) salida.push(actual); actual = null; };
+
+  md.split(/\r?\n/).forEach((linea, i) => {
+    if (ABRE_BLOQUE.test(linea)) cerrar();
+    if (!linea.trim()) return;
+    actual ??= { texto: '', ocurrencias: [], renglones: 0 };
+    actual.texto += (actual.texto ? ' ' : '') + linea.trim();
+    actual.renglones++;
+    for (const id of linea.match(ID) ?? []) actual.ocurrencias.push({ id, linea: i + 1 });
+    if (cierraFrase(linea) || actual.renglones >= TOPE_RENGLONES) cerrar();
+  });
+  cerrar();
+  return salida;
+}
 
 /**
  * Saca las citas que afirman un freno vigente. Sin red y sin disco: es lo que se prueba en
  * `--self-check`.
+ *
+ * El id se reporta con SU renglon —no con el de la frase— porque el renglon del id es el que
+ * hay que editar, y en un archivo de 9.000 renglones esa diferencia es la mitad del arreglo.
  */
 export function citasDeBloqueo(md) {
   const citas = [];
-  md.split(/\r?\n/).forEach((linea, i) => {
-    const instruye = INSTRUCCION_DE_OK.test(linea) && !OK_YA_CONTESTADO.test(linea);
-    if (!LENGUAJE_DE_FRENO.test(linea) && !instruye) return;
-    const ids = [...new Set(linea.match(ID) ?? [])];
-    for (const id of ids) citas.push({ id, linea: i + 1, texto: linea.trim() });
-  });
+  for (const frase of frases(md)) {
+    if (NOTA_DE_CORRECCION.test(frase.texto)) continue;
+    const instruye = INSTRUCCION_DE_OK.test(frase.texto) && !OK_YA_CONTESTADO.test(frase.texto);
+    if (!LENGUAJE_DE_FRENO.test(frase.texto) && !instruye) continue;
+    const vistos = new Set();
+    for (const { id, linea } of frase.ocurrencias) {
+      if (vistos.has(`${id}:${linea}`)) continue;
+      vistos.add(`${id}:${linea}`);
+      citas.push({ id, linea, texto: frase.texto.trim() });
+    }
+  }
   return citas;
 }
 
@@ -262,6 +361,61 @@ if (process.argv.includes('--self-check')) {
   const instruccion = citasDeBloqueo('Hoy sale **1** y se pone verde cuando el `ok` de `t_c2fab948` publique el bot: es');
   afirmar(instruccion.length === 1, 'INSTRUCCION: "el `ok` de t_X" le dice a alguien QUE id apretar — si esta archivada, el ok no ejecuta');
   afirmar(citasDeBloqueo('se destraba con `ok t_aaaaaaa1`').length === 1, 'y la forma imperativa "ok t_X" igual');
+
+  /**
+   * LOS DOS HUECOS del 2026-09-26 (segunda tanda), medidos con `t_76cdb5dc` ya ARCHIVADA,
+   * TRES lineas de `cola/chatbot.md` citandola y este gate saliendo `exit 0` con 2 citas.
+   * Los dos son textuales del archivo y cada uno entra por un hueco distinto.
+   */
+  const okConNombre = citasDeBloqueo(
+    '      **Qué queda, y no es código:** el `ok` de Sergio Urcullo en **`t_76cdb5dc`**. Al desplegar, las',
+  );
+  afirmar(okConNombre.length === 1,
+    'NOMBRE EN MEDIO: "el `ok` de Sergio Urcullo en `t_X`" es la misma instruccion que "el `ok` de `t_X`"');
+
+  const partida = citasDeBloqueo([
+    '      **Deploy:** el arreglo de la insistencia ya está commiteado y espera el `ok` de Sergio',
+    '      Urcullo en **`t_76cdb5dc`** ("Publicar el bot…"). No se creó un pedido nuevo.',
+  ].join('\n'));
+  afirmar(partida.length === 1,
+    'WRAP: el freno y el id caen en renglones distintos de la MISMA frase — la unidad de significado es la frase, no el renglon');
+  afirmar(partida[0]?.linea === 2,
+    'y se reporta el renglon donde esta el ID, que es el que hay que editar');
+
+  // La contracara: reconstruir la frase NO puede pegar dos frases distintas, que es como este
+  // ensanche se convertiria en un gate que grita en falso y termina apagado.
+  const noPega = citasDeBloqueo([
+    'El pedido `t_aaaaaaa1` espera decision de Sergio Urcullo.',
+    'CERRADO el 2026-09-18 por la tarea `t_82251f19` — historia, no freno.',
+  ].join('\n'));
+  afirmar(noPega.length === 1 && noPega[0].id === 't_aaaaaaa1',
+    'TERMINADOR: una frase que ya cerro con punto no contamina el renglon siguiente');
+  afirmar(citasDeBloqueo([
+    '      del bot y solo falta que lo publiquen; espera el `ok` de Sergio',
+    '',
+    '- [x] CERRADO el 2026-09-18: lo midio `t_82251f19`.',
+  ].join('\n')).length === 0,
+    'un renglon en blanco y un item nuevo cortan la frase: no se pega con el bullet siguiente');
+
+  /**
+   * LOS DOS FALSOS POSITIVOS que produjo el ensanche de arriba, encontrados leyendo a mano los
+   * 9 sujetos que aparecieron — la misma disciplina que la vez anterior. Son textuales, y los dos
+   * son la clase de linea que MAS conviene tener escrita: la que cuenta que el freno se levanto.
+   */
+  afirmar(citasDeBloqueo([
+    '      ✅ **VIVO para el cliente. Medido el 2026-09-26 01:35 La Paz, no heredado.** El ok de',
+    '      Sergio Urcullo llegó (tarea `t_fca27a62`, hoy `archived`) y el deploy corrió el 2026-09-24',
+    '      09:44. Las tres medidas, en el motor que CORRE y no en el host:',
+  ].join('\n')).length === 0,
+    'PASADO: "el ok de Sergio Urcullo llego (tarea t_X, hoy archived)" es el acuse del deploy, no una instruccion');
+
+  afirmar(citasDeBloqueo([
+    '      ⚠️ **Acá decía que NO se podía mirar renderizado con sesión real porque «sigue vivo el',
+    '      corte de 2FA» y que eso dependía de Sergio Urcullo (tarea `t_3bb6b9ee`) — las dos mitades',
+    '      estaban VENCIDAS, corregido el 2026-09-25.** `t_3bb6b9ee` está **archivada** desde el',
+    '      18-sep, y el corte se resolvió el 24-sep cableando TOTP (RFC 6238) en',
+  ].join('\n')).length === 0,
+    'CORRECCION: una nota que CITA el freno viejo para desmentirlo no lo afirma — si esto muerde, el gate castiga justo la linea que lo arreglo');
 
   // Y lo que NO debe morder, que es como se apaga un gate: la historia fechada.
   afirmar(citasDeBloqueo('| El gate quedo verde | `npm run pedido:entregado` | `OK t_aaaaaaa1 (bot): sigue VIGENTE` |').length === 0,
