@@ -1545,6 +1545,57 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Registro de corridas (2026-09-01 → 2026-09-03) — no rehacer
 
+### Del carril `web-venta` — corrida del 2026-09-26 18:48 La Paz (el precio que viaja HORNEADO en la tarjeta social)
+
+Los cuatro gates del objetivo salieron verdes (0 prohibidos · 0/21 precios fuera de
+fuente · 0/44 CTA rotos · favicon 200) y la cola no tenía pendientes, así que la vuelta
+fue al escalón de auditoría: **mirar lo que ningún gate mira**.
+
+**Lo que nadie había mirado nunca: la `og:image`.** Es lo único que ve quien recibe
+`onia.com.bo` por WhatsApp y nunca abre el link — el canal por el que Sergio Urcullo
+manda el sitio a un lead. Medido: las **24** superficies de venta comparten **una sola
+imagen** (mismo md5 `2aae94e6` en las 24, 200 y 45.656 bytes cada una), y el precio va
+**horneado en píxeles**. Ningún `grep`, ningún barrido de HTML y ninguna captura de
+pantalla ve un número adentro de un PNG.
+
+**El defecto, latente:** la tarjeta componía su «Desde Bs …» con `plan("basico")`
+**tipeado**, y no con `planDeEntrada()`. El propio `lib/pricing.ts` documenta por qué
+esa función existe: *«un `"basico"` tipeado sigue compilando y queda anunciando el plan
+equivocado»* el día que entre un escalón más abajo — que es lo que pasó el 2026-09-12
+cuando la escalera C metió el plan Crece. La cura se aplicó al hero el 2026-09-19 y **no
+viajó a sus gemelos**: el `<head>` de la home, la tarjeta social, `/v1` y `/v1/modulos/dental`
+seguían tipeados. La home derivaba bien el precio de **pantalla** y tipeaba el del
+**snippet**: las dos mitades del mismo `<head>` habrían dicho precios distintos.
+
+**Por qué ningún gate lo veía, y esto es lo que importa:** `precios:vivos` y
+`precios:fuente` miran el RESULTADO servido, y hoy `plan("basico").mensual` ===
+`planDeEntrada().mensual` === 320. Salen verdes — y **seguirían saliendo verdes el día
+que el bug se vuelva visible**, porque el monto viejo seguiría siendo el precio real de
+un plan real. Un gate de resultado no puede ver una premisa que todavía no falló.
+Peor: un test existente (`hero.test.ts`) **exigía el literal** `plan("basico").mensual`
+en dos aserciones, o sea que estaba **defendiendo** el defecto que su propio vecino ya
+había curado.
+
+- [x] Los 7 usos derivan del piso de la escalera — `(sitio)/tarjeta-social.tsx`,
+  `(sitio)/page.tsx` (`DESDE_MES`), `v1/page.tsx` ×3 y `v1/modulos/dental/page.tsx` ×2
+  (incluido el `price` del JSON-LD, que es el que publica Google). La FAQ de dental que
+  dice «el plan Básico (Bs N/mes) … hasta 300 pacientes activos» queda como está: nombra
+  un plan concreto y es verdad de ese plan.
+- [x] Gate nuevo `(sitio)/precio-de-entrada-derivado.test.ts`, **visto en ROJO primero**
+  por el motivo correcto (los 7 sujetos, con archivo y línea). Fija la regla: `plan("<id>")`
+  sólo vale si la frase cita `.nombre`; si saca un monto sin nombrar el plan, lo está
+  usando como «el más barato» y eso se deriva. Borra los comentarios antes de medir —
+  dos archivos explican este mismo bug EN PROSA citando `plan("basico")` textual, y
+  medir sobre el crudo acusa a quien documentó la cura.
+- [x] Las dos aserciones de `hero.test.ts` ahora exigen la PROPIEDAD (derivado del piso)
+  en vez del literal viejo.
+
+**Evidencia de que no rompe nada hoy:** con el build nuevo levantado, la `og:image` que
+produce es **byte por byte** la que sirve producción — mismo md5 `2aae94e6`, y mirada:
+«Desde Bs 320 al mes. 14 días gratis, sin tarjeta.» El arreglo cambia la DERIVACIÓN, no
+el valor. Gates: `typecheck` 0, `build` 0, suite **1612 tests / 117 archivos en verde**.
+
+
 > **Esto NO es cola: es la bitácora de lo ya corrido.** Cada `###` de abajo es una corrida
 > fechada de un carril (`canario-visual`, `web-venta`, `onia-cola`) con lo que midió ese día.
 > Se lee para no repetir un hallazgo; **no se toma trabajo de acá.**
