@@ -1136,6 +1136,51 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
 
 ## Ahora
 
+- [x] 🔴 **CERRADO el 2026-09-26 18:13-19:02 La Paz (es el INSTRUMENTO de mirar, no el bot: NO
+      toca producción y NO necesita deploy). El instrumento con el que este carril MIRA las
+      pantallas del cliente mentía cuatro horas en toda hora que sacara.**
+
+      **Cómo saltó:** ejecutando la definición de hecho de esta vuelta (abrir `/inbox` del dueño
+      y mirar que la conversación del desconocido esté ahí). La conversación de la sonda, creada
+      minutos antes, se veía **"10:16 p.m."** con las 18:16 en el reloj de La Paz. Casi se abre
+      un ítem de bug de zona horaria en el producto.
+
+      **No era el producto.** `app/(dashboard)/inbox/InboxClient.tsx:61` es `"use client"` y
+      formatea con `toLocaleTimeString` sin `timeZone`, o sea con la zona del navegador **del
+      cliente**: un dueño en Bolivia ve bien. El que mentía era `scripts/mirar_bandeja_dueno.mjs`,
+      que abría `newContext` sin `timezoneId` y por eso Playwright heredaba la zona del PROCESO
+      — UTC acá. Probado cambiando sólo el instrumento, contra la misma pantalla y el mismo dato:
+
+          node scripts/mirar_bandeja_dueno.mjs --ruta /inbox …   → "10:16 p.m."
+          TZ=America/La_Paz  (mismo comando)                     → "06:16 p.m."
+
+      **Por qué importa más de lo que parece.** Falla en las dos direcciones: hacia el falso
+      positivo (un carril reporta un bug de horas que no existe — el mismo modo de fallo que le
+      costó TRES días al canario visual) y, peor, hacia el **falso negativo**: el corrimiento es
+      consistente, así que un bug real de horas queda tapado. Y cruzando la medianoche UTC la
+      captura muestra el DÍA siguiente: entre las 20:00 y las 24:00 de La Paz, "hoy" y "mañana"
+      se invierten en pantalla. Lo usa también `recorrido-cliente`, con el mismo módulo.
+
+      **Arreglo:** `scripts/lib/zona-del-negocio.mjs` — la zona se LEE del negocio que se está
+      mirando (`clinic_settings.timezone` vía el `psql` que el módulo ya usaba), no se clava una
+      constante, porque clavar `America/La_Paz` volvería a mentir con un negocio de otra zona y
+      esta vez sin aviso. Tri-estado explícito (`negocio` / `defecto` / `invalida`): "no pude
+      preguntarle a la base" y "la base dice La Paz" no son lo mismo. Nunca devuelve vacío — sin
+      zona, Playwright hereda UTC y vuelve el bug. La zona usada se IMPRIME en cada corrida.
+
+      **Los DOS `newContext`, no uno.** `mirar_bandeja_dueno.mjs` y el hermano
+      `scripts/lib/sesion_dueno.mjs` (`navegadorConSesion`) armaban su propio contexto; arreglar
+      sólo el que saltó dejaba el bug vivo para quien entrara por el otro.
+
+      **Gate:** `npm run test:zona-de-la-captura` (`scripts/lib/zona-del-negocio.test.mjs`, 7
+      casos, en la cadena). Los dos que atrapan la regresión LEEN el instrumento y exigen que el
+      `newContext` fije `timezoneId` y que la zona salga impresa; estuvieron en ROJO por ese
+      motivo exacto antes del arreglo.
+
+      **Verificado MIRANDO:** re-corrido sin `TZ` en el entorno → imprime
+      `zona: America/La_Paz (del negocio)` y la captura dice **06:16 p.m.**
+
+
 - [x] 🔴 **CERRADO el 2026-09-26 17:13-17:24 La Paz (es un MEDIDOR + dos párrafos de esta cola: NO
       toca el bot, así que NO invalida el pedido de deploy vivo): dos líneas de acá le pedían a
       Sergio Urcullo una decisión ya tomada, y el remedio que imprimía el gate la habría vuelto a
