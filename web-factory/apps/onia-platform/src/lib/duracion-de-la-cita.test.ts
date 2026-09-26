@@ -1,5 +1,5 @@
 import { existsSync, readFileSync } from "node:fs";
-import { dirname, join } from "node:path";
+import { dirname, join, parse } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { describe, expect, it } from "vitest";
@@ -28,36 +28,67 @@ import { AGENDA_CONSULTA_URL, AGENDA_DEMO_URL, CITA_DURACION_MIN } from "@/lib/s
  * lugares con el mismo hecho, libres de divergir. La fuente es la del motor que
  * hace la reserva; la web la sigue.
  *
- * Si el árbol no trae `hermes-content/` (worktree sparse), el gate **se planta**:
- * un archivo ausente leído como «no hay contradicción» es un verde que no midió
- * nada.
+ * **Si el árbol no trae `hermes-content/`, este gate se declara NO MEDIDO — no se
+ * planta.** Y esa distinción no es una comodidad: plantarse rompió el deploy.
+ *
+ * Medido el 2026-09-26 03:50 UTC en `/tmp/pub-landing.log` del VPS: el publicador
+ * de la landing armó su build, estos tres casos tiraron *«árbol incompleto, este
+ * gate NO midió nada»*, el `prebuild` salió 1 y el publicador cortó con `ERR: el
+ * build falló, no publico`. **La landing dejó de publicarse.** El árbol del stage
+ * está recortado *por diseño*: `build-and-stage.sh` empaqueta sólo
+ * `web-factory/apps packages package.json pnpm-lock.yaml …`, así que
+ * `hermes-content/` no viaja nunca y este gate iba a fallar en TODOS los builds,
+ * no en uno raro.
+ *
+ * Es el mecanismo que esta app ya tenía escrito dos veces y que este gate no usó:
+ * `promesa-inclusion-espejo.test.ts` pregunta por el subárbol hermano antes de
+ * comparar, y `recurso-que-se-manda.test.ts` lo dice con todas las letras —*«ese
+ * cruce necesita leer `hermes-content/`, que no está en todos los worktrees
+ * —sparse-checkout, o el árbol de la app copiado solo—»*.
+ *
+ * **Lo que NO se ablanda.** El salto vale sólo cuando falta el subárbol ENTERO
+ * (stage de publicación, worktree sparse). Si `hermes-content/` está y el archivo
+ * puntual no, sigue siendo ROJO: ahí la fuente se movió de verdad, y eso es el
+ * defecto que este gate existe para cazar. Un skip que no distingue las dos cosas
+ * es el verde permanente que la próxima nadie mira.
  */
 
 const AQUI = dirname(fileURLToPath(import.meta.url));
 
-/** `hermes-content/deploy/vps-ops/bot/config.mjs`, buscando la raíz del repo hacia arriba. */
-function configDelBot(): string {
-  const RELATIVA = join("hermes-content", "deploy", "vps-ops", "bot", "config.mjs");
-  let dir = AQUI;
+const RELATIVA = join("hermes-content", "deploy", "vps-ops", "bot", "config.mjs");
+
+/**
+ * La raíz del monorepo, buscando el subárbol hermano hacia arriba.
+ * `null` = árbol recortado (el stage del publicador, o un worktree sparse).
+ */
+export function raizDelMonorepo(desde: string = AQUI): string | null {
+  let dir = desde;
   for (let i = 0; i < 8; i += 1) {
-    const candidato = join(dir, RELATIVA);
-    if (existsSync(candidato)) return candidato;
+    if (existsSync(join(dir, "hermes-content"))) return dir;
     const padre = dirname(dir);
-    if (padre === dir) break;
+    if (padre === dir) return null;
     dir = padre;
   }
-  throw new Error(
-    `no encontré ${RELATIVA} subiendo desde ${AQUI} — árbol incompleto, este gate NO midió nada`,
-  );
+  return null;
 }
+
+const RAIZ = raizDelMonorepo();
+/** ¿Hay con qué cruzar? En el stage de publicación, no — y eso se dice, no se supone. */
+const EN_EL_REPO_COMPLETO = RAIZ !== null;
 
 /** Lo que el motor BLOQUEA en el calendario. Es la fuente; la web la sigue. */
 function minutosQueReservaElProducto(): number {
-  const src = readFileSync(configDelBot(), "utf8");
+  const candidato = join(RAIZ as string, RELATIVA);
+  if (!existsSync(candidato)) {
+    throw new Error(
+      `el árbol trae hermes-content/ pero no ${RELATIVA} — la fuente se movió, este gate NO midió nada`,
+    );
+  }
+  const src = readFileSync(candidato, "utf8");
   const m = /duracionMinutos:\s*(\d+)/.exec(src);
   if (!m) {
     throw new Error(
-      "config.mjs del bot ya no declara `duracionMinutos: <n>` — árbol incompleto o la fuente se movió",
+      "config.mjs del bot ya no declara `duracionMinutos: <n>` — la fuente se movió",
     );
   }
   return Number(m[1]);
@@ -73,11 +104,23 @@ function frase(waUrl: string): string {
 const CONTACTO = join(AQUI, "..", "app", "(sitio)", "contacto", "page.tsx");
 
 describe("la duración que promete la web es la que reserva el producto", () => {
-  it("CITA_DURACION_MIN sale de la fuente del bot, no de una copia", () => {
+  /**
+   * Corre en los DOS árboles, y es lo que evita que el salto de arriba se vuelva un
+   * verde permanente: si el detector dijera «repo completo» en cualquier parte, los
+   * casos de abajo se saltarían para siempre sin que nada lo diga.
+   */
+  it("el detector de árbol recortado contesta las dos cosas, no siempre la misma", () => {
+    expect(raizDelMonorepo(parse(AQUI).root)).toBeNull();
+    if (EN_EL_REPO_COMPLETO) {
+      expect(existsSync(join(RAIZ as string, "hermes-content"))).toBe(true);
+    }
+  });
+
+  it.skipIf(!EN_EL_REPO_COMPLETO)("CITA_DURACION_MIN sale de la fuente del bot, no de una copia", () => {
     expect(CITA_DURACION_MIN).toBe(minutosQueReservaElProducto());
   });
 
-  it("ninguna de las dos frases de WhatsApp nombra otra duración", () => {
+  it.skipIf(!EN_EL_REPO_COMPLETO)("ninguna de las dos frases de WhatsApp nombra otra duración", () => {
     const reservados = minutosQueReservaElProducto();
     for (const url of [AGENDA_CONSULTA_URL, AGENDA_DEMO_URL]) {
       const texto = frase(url);
@@ -89,7 +132,7 @@ describe("la duración que promete la web es la que reserva el producto", () => 
     }
   });
 
-  it("/contacto no nombra ninguna otra duración de cita", () => {
+  it.skipIf(!EN_EL_REPO_COMPLETO)("/contacto no nombra ninguna otra duración de cita", () => {
     if (!existsSync(CONTACTO)) {
       throw new Error(`${CONTACTO} no existe — árbol incompleto, este gate NO midió nada`);
     }
