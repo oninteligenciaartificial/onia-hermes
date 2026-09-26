@@ -77,6 +77,48 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Ahora — plan de features (revisado 2026-08-30, con Gate 1 corrido)
 
+- [x] 🔴 **La CSP que la landing estrenó el 24-sep dejó al sitio LOCAL sin hidratar, y con eso el
+      único gate que prueba la captura de correos de punta a punta pasó a dar 8 FALLAS fijas sobre
+      una pantalla sana — ARREGLADO el 2026-09-25 por `web-venta`, con los dos recíprocos medidos.**
+      - **Cómo salió.** Los cuatro números del carril estaban en meta (prohibidos 0 · precios fuera
+        de fuente 0 · CTA rotos 0/25 · favicon 200), así que la vuelta corrió los **11 gates vivos**
+        de la app en vez de los cuatro de siempre. Diez verdes y uno rojo: `npm run guia:facturacion`
+        → **exit 1, `8 FALLAS`**.
+      - **El rojo NO era ambiental, y tampoco era la guía.** Primero se descartó lentitud del
+        `next dev`: con el sitio ya caliente (apuntando `GUIA_URL` al puerto 3320) el rojo salía
+        idéntico. Después se MIRÓ, con la consola escuchando, y apareció la causa en una línea:
+        `EvalError: Evaluating a string as JavaScript violates the following Content Security
+        Policy directive because 'unsafe-eval' is not an allowed source of script`. Y la firma:
+        tras apretar el botón la URL era `/guia-facturacion?email=sin-arroba&whatsapp=` — un submit
+        **GET nativo**, o sea que React nunca tomó el control.
+      - **Producción está SANA, medido sin ensuciar la bandeja.** Contra
+        `onia.com.bo/guia-facturacion` con un correo INVÁLIDO (que no dispara ningún envío): el
+        error se muestra, `aria-invalid=true`, **0 pedidos** al intake y la URL no navega. O sea
+        que el defecto vivía en el entorno de desarrollo, y su costo estaba en el instrumento.
+      - **Por qué importaba igual, y no es comodidad de desarrollo.**
+        `scripts/verificar-guia-facturacion.mjs` corre contra el sitio LOCAL **a propósito** —los
+        pasos 2 y 4 aprietan el botón, y contra producción cada envío nace como lead en la bandeja
+        real— y es el único que vigila el circuito que cruza dos apps por el nombre de una clave
+        JSON (`body.email`). Con 8 FALLAS de fábrica se entrena a saltearlo, que es exactamente lo
+        que su propio encabezado dice que no puede pasar: *"el día que de verdad se corte la
+        captura de correos nadie le va a creer"*.
+      - **El arreglo, en dos mitades.** (1) `next.config.ts`: la CSP pasó de constante a
+        `cspDeLaLanding(entorno)`, y `'unsafe-eval'` entra **sólo** con `NODE_ENV=development`
+        (`ejecutaEval`). (2) `scripts/verificar-guia-facturacion.mjs`: **sonda de hidratación**
+        antes de juzgar nada interactivo — si `window.next` no está, sale **NO MEDIDO (2)** con el
+        primer error de la página, nunca `8 FALLAS`. Así el gate sigue siendo honesto si mañana la
+        hidratación se cae por otro camino.
+      - **Test en ROJO primero, por el motivo correcto:** `src/lib/csp-de-la-landing.test.ts` sumó
+        tres casos y con el arreglo revertido falló **sólo** el de desarrollo, nombrando
+        `'unsafe-eval'`, con los otros 11 en verde. El tercer caso es el recíproco que faltaba: que
+        el header que devuelve `headers()` sea **el que la función calcula para este entorno**, para
+        que nadie arregle la función y deje el header viejo colgado.
+      - **Medido al cerrar:** `guia:facturacion` **TODO VERDE (13/13, exit 0)**; con la hidratación
+        rota a propósito, **NO MEDIDO exit 2** citando el `EvalError`; `next start` sobre el build
+        sirve la CSP **sin `unsafe-eval`** (verificado con `curl -sI`, no razonado); `npm run
+        typecheck` 0, `npm test` **115 archivos / 1557 casos** verde, `npm run build` 0. Y
+        `npm run mirar:venta` contra producción: 24 rutas × 5 vistas, sin defecto medible.
+
 - [x] 🔴 **CERRADO el 2026-09-25 por `onia-cola`: el gate de esta cola llevaba días en rojo y su
       único ERROR era falso.** `npm run cola:viva` salía **exit 1** acusando que el ítem de acá
       abajo «apunta a un archivo que NO existe». El archivo era `if/else`: el ítem dice «un
