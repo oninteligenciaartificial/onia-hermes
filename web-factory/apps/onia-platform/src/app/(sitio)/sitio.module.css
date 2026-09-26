@@ -547,6 +547,45 @@
   flex: 1 1 auto;
   align-content: center;
 }
+
+/* La tarjeta ABRAZA su contenido dentro del mat; el mat conserva su forma.
+   Medido el 2026-09-26 contra producción (Chromium, animaciones apagadas), el
+   hueco vacío dentro de la tarjeta como fracción de su alto útil:
+
+     onia.com.bo/empezar   escritorio  154px de 222px   69%   panel «Tu cuenta»
+     onia.com.bo/          escritorio   42px de 187px   22%   panel «Para aprobar»
+     las dos               teléfono              ≤5%          (ahí el ratio se suelta)
+
+   LA CAUSA es el reparto de alto entre el mat y la tarjeta, no el espaciado de
+   la tarjeta. `.shape` conserva `aspect-ratio: 4/3` en escritorio —es la forma
+   de la columna, y eso se queda— y la tarjeta, al ser item de ese grid, heredaba
+   `align-self: stretch`: se estiraba hasta el borde del mat y el cuerpo que crece
+   (`flex: 1 1 auto`) se quedaba con todo el sobrante. Mientras el contenido era
+   largo no sobraba nada; las listas se acortaron dos veces este mes por motivos
+   correctos («Facturación» salió porque la homologación sigue en trámite,
+   «Inventario» porque servicios profesionales no tiene esa pantalla) y el hueco
+   apareció sin que nadie tocara el layout.
+
+   Por qué acá y no en el cuerpo: el aire sobrante tiene que quedar AFUERA de la
+   tarjeta, en el mat, donde el aire es intencional (su propio `padding: 7%`).
+   Cualquier cura dentro del cuerpo sólo elige en qué borde apilar el hueco —el
+   gate hermano `grilla-que-crece-no-reparte.test.ts` (2026-09-25) ya curó que el
+   cuerpo lo REPARTIERA entre sus filas, y escribió su propio límite: «una caja
+   que reciba alto de más por otro camino no es sujeto de nadie acá». Este es ese
+   otro camino.
+
+   Sigue siendo el arreglo de un defecto y no un rediseño: el mat no cambia de
+   tamaño ni de forma, la tarjeta no cambia de ancho, y donde hoy no sobra alto
+   —el teléfono, y los paneles cuyo contenido ya llena el mat— dibuja lo mismo
+   que antes. Se limita a `> .panel` a propósito: el panel del conmutador de
+   rubros vive en otro mat (la ranura del rodillo) y ahí las tarjetas tienen que
+   medir todas igual, o el rodillo salta al cambiar de rubro.
+
+   Lo sostiene la medición de `mirar:portada` (HUECO_MAXIMO_DE_LA_TARJETA), que
+   abre las dos pantallas y mide la tarjeta Y sus cajas de contenido. */
+.shape > .panel {
+  align-self: center;
+}
 .panelRows {
   display: flex;
   flex-direction: column;
@@ -663,8 +702,12 @@
 }
 
 /* ---- módulos encendidos (panel "cuenta") ---- */
-/* Los seis van encendidos SIEMPRE. Un llenado progresivo sería una barra de
-   progreso, y eso es exhibir obra en la pantalla de venta. */
+/* Los que hay van encendidos SIEMPRE. Un llenado progresivo sería una barra de
+   progreso, y eso es exhibir obra en la pantalla de venta.
+   ⚠️ Acá decía «los seis» y hoy son CUATRO como máximo: la lista se derivó del
+   plan y se acortó dos veces (`modulos-de-la-cuenta.ts`). Un número escrito a
+   mano en un comentario envejece solo y hace creer que el hueco de abajo es
+   contenido que falta cargar, cuando es reparto de alto. */
 .panelGrid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
