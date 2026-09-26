@@ -1001,6 +1001,88 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
 
 ## Ahora
 
+- [x] 🔴 **CERRADO el 2026-09-26 08:13-09:05 La Paz (es un MEDIDOR, no toca el motor: no necesita
+      deploy): el rojo que el ítem de abajo destapó ayer estaba INFLADO 5×, y por las dos puntas
+      — acusaba al circuito por handoffs anteriores al código de aviso, y mandaba a "ir a buscar a
+      esas personas" cuando los diez sujetos eran nuestras propias sondas.** `c8d4c2c0`.
+
+      El arreglo de ayer fue el correcto: cruzar la base contra el log es lo único que distingue
+      *"nadie pidió"* de *"alguien pidió y se perdió"*. Pero eligió la **referencia equivocada para
+      el borde izquierdo** de la ventana, y el número que publicó no se sostiene.
+
+      **Las dos medidas, contra el log vivo:**
+
+      | qué | cuándo |
+      |---|---|
+      | primera marca del log (el borde que usaba) | `2026-08-28T22:22:51` |
+      | primera línea `[aviso]` del log (línea 50803) | `2026-09-04T03:41:45` |
+
+      Seis días de brecha. La pregunta que el conciliador contesta es *¿el circuito perdió este
+      evento?*, y para perderlo el código que escribe esa línea tiene que **haber estado
+      corriendo**. Ocho de los diez acusados vivían en esa brecha: son handoffs anteriores al aviso
+      mismo, **estructuralmente inavisables**. Y el rojo que producían no lo puede curar nadie — es
+      historia — así que se lee como el ambiental de siempre, y **el día que el circuito se rompa de
+      verdad el veredicto va a ser idéntico al de hoy**. Un rojo por el motivo equivocado es un
+      verde futuro.
+
+      **La segunda punta, medida en la base de Chatwoot:** los DIEZ sujetos son nuestros.
+      `39, 41, 44, 51, 53, 55` son del inbox 7 (el banco de pruebas) y `45, 46, 47` son inbox 4 con
+      contacto `Sonda QA`. El veredicto cerraba con *"ya se perdieron, hay que ir a buscar a esas
+      personas"* — mandaba a perseguir a sus propias sondas. `clasificarEventos` ya sabía hacer esa
+      distinción desde el 13-sep; la conciliación no la usaba porque sus sujetos salen de la base y
+      nunca pasan por el log.
+
+      **El veredicto vivo, antes y después:**
+
+      ```
+      antes:  en la base: 11 evento(s) dentro de la ventana del log (con aviso 1 · SIN aviso 10)
+              VEREDICTO: roto — 10 pedido(s) que NINGUN aviso nombra — ya se perdieron, hay que ir
+              a buscar a esas personas
+
+      después: en la base: 2 evento(s) dentro del alcance del aviso (con aviso 0 · SIN aviso 2)
+                 — desde 2026-09-04T03:41:45, que es cuando el aviso EMPEZO a emitir
+                 · 11 evento(s) anteriores a ese borde, fuera de alcance
+                 · de los perdidos: leads 0 · nuestros 2
+               VEREDICTO: roto — 2 pedido(s) que NINGUN aviso nombra, y NINGUNO es de un lead
+                 (2 del banco de pruebas) — el circuito perdio eventos, pero no hay a quien ir a buscar
+      ```
+
+      **Sigue en ROJO a propósito** (`exit 1`, medido — no por un pipe): el circuito perdió dos
+      eventos el 4-sep con el flag de Telegram apagado, y perder un evento es perder un evento.
+      Lo que cambió es que ya no acusa por lo que no pudo pasar ni manda a buscar a nadie que no
+      exista. **Ni un lead real quedó sin aviso** — eso es lo que el gate no podía decir ayer.
+
+      Decisiones y por qué cada una está donde está:
+
+      - `ventanaDelAviso` (pura) toma el **máximo** de los dos bordes, nunca uno solo: el log manda
+        cuando arranca después (alguien lo rotó: más atrás no hay líneas), el primer aviso manda
+        cuando arranca después (más atrás no había quien escribiera).
+      - `primerAvisoDelLog` saca la hora de la **línea anterior**, porque las `[aviso]` no llevan
+        marca propia. **NO usa el `mtime` del módulo:** `/tmp/onia-bot/aviso-telegram.mjs` dice
+        `2026-09-25 10:41`, que es cuando llegó la copia de hoy — usarlo pondría el borde tres
+        semanas adelante de la verdad y taparía en verde cualquier pérdida anterior. El log no se
+        re-escribe; la evidencia que deja es monótona.
+      - **Sin ni una línea `[aviso]` en el log no hay borde** → `no_medido`, ni verde ni un rojo
+        inventado. El agujero que eso podría tapar (un aviso que no emite nunca) lo ven los
+        eslabones del circuito, que siguen contestando ahí.
+      - La absolución exige la pregunta **hecha**: `clasificarEventos` sin mapa da `medido:false`, y
+        leerlo como "0 leads" sería firmar *"no hay a quien buscar"* sin preguntar. En la duda, se
+        va a buscar.
+      - El reporte **nombra el borde y su motivo**. Un alcance que no se imprime se re-descubre: el
+        renglón decía "dentro de la ventana del log" sobre una ventana seis días más ancha que la
+        capacidad, y nadie lo podía auditar.
+
+      ⚠️ **Y algo peor, que apareció de paso: `avisos-vivo.test.mjs` no lo corría NADIE.** Sus 47
+      tests (hoy 55) vivían fuera de la cadena — `grep avisos-vivo.test package.json` daba vacío —
+      así que el *"47/47 verde"* de ayer era una corrida a mano, y el arreglo de hoy se podía
+      revertir sin que nada se pusiera rojo. Cableado como `test:avisos-gate` en la cadena de
+      `npm test`. Es hermético (232 ms, `docker` falso en el `PATH`, sin red).
+
+      Validado por mutación, cada una cayendo por el motivo correcto: borde vuelto al del log → caen
+      los 2 tests del borde; absolver sin mirar el origen → cae *"manda a perseguir a nuestras
+      propias sondas"*; absolver sin haber preguntado → cae *"en la duda, se va a buscar"*.
+      55/55 verde con el arreglo.
+
 - [x] 🔴 **CERRADO el 2026-09-26 07:43-08:35 La Paz (es un MEDIDOR, no toca el motor: no necesita
       deploy): el gate del aviso a Sergio Urcullo derivaba sus eventos del LOG, así que la única
       clase de fallo que no podía ver era justo la que existe para cazar — un handoff que ocurrió
@@ -1048,6 +1130,14 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
       ⚠️ **Las diez personas NO son un ítem nuevo de esta cola.** Ya son la tarea `t_4f30a836`
       (*«7 desconocido(s) esperando una respuesta tuya»*), bloqueada en Sergio Urcullo. Lo que
       cambió hoy es que **el instrumento ya no dice que están bien**.
+
+      ⚠️ **Ese párrafo de arriba es FALSO y lo corrige el ítem que está encima — 2026-09-26 09:00.**
+      Las diez no eran personas ni tenían nada que ver con `t_4f30a836`: consultadas en la base de
+      Chatwoot, **las diez son nuestras** (inbox 7, o contacto `Sonda QA` en el inbox 4), y ocho son
+      anteriores a que el código de aviso existiera. Atar un número recién medido a una tarea ajena
+      que habla de otra cosa le dio un respaldo que no tenía — y el número correcto es **2, ningún
+      lead**. El bloqueo `t_4f30a836` sigue vivo por su cuenta y no se toca: lo mide otro
+      instrumento.
 
       Validado por mutación: con el conciliador ciego caen 3 tests por el motivo correcto
       (`un handoff que la base registra y el log no nombra pone el gate ROJO`, la lectura, y el
