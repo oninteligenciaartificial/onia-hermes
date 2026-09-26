@@ -30,6 +30,7 @@ contra producción (SSH al VPS, las dos bases, el motor corrido de verdad), no c
 ---
 
 ## ✅ T10 — CERRADO el 2026-09-24 (commiteado, **NO desplegado**): el log del bot estaba ahogado por UNA línea repetida, y por eso la medición de este carril salía vacía teniendo los datos adentro
+✅ YA DESPLEGADO (medido 2026-09-26: `npm run bot:vivo-al-dia` — el motor vivo ya corre este archivo).
 
 **Cómo apareció.** No lo trajo la cola: lo trajo el chequeo de arranque. El comando con el que este
 carril mide su propio objetivo —`webhook-server.sh logs | tail -80 | grep -E
@@ -129,6 +130,7 @@ loop escribieron `avisos 0` teniendo cuatro avisos entregados adentro.
 ---
 
 ## ✅ T9 — CERRADO el 2026-09-19 (commiteado, **NO desplegado** — es un medidor, no toca el motor): todo el carril cuenta "el bot contestó" por una fila que existe, y nadie mira si el mensaje LLEGÓ
+✅ YA DESPLEGADO (medido 2026-09-26: `npm run bot:vivo-al-dia` — el motor vivo ya corre este archivo).
 
 **El eje.** La definición de hecho de este carril —*"el bot contestó los DOS"*— se mide contando
 filas en `messages` de Chatwoot. El simulador imprime el texto. El adapter sólo mira que el POST
@@ -774,6 +776,230 @@ Las 3 que quedan (3492, 3623, 7674) son del motor leídas a mano pero **no tiene
 mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se derivan con el comando.
 
 ## Ahora
+
+- [x] 🔴 **CERRADO el 2026-09-26 (commiteado; son INSTRUMENTOS, no tocan el motor ni el producto):
+      `puerta:alta` —el ÚNICO instrumento de la mitad «no promete lo que el producto no
+      hace» de este objetivo— llevaba ~18 días saliendo `exit 2` porque buscaba el árbol del build
+      vivo en la carpeta equivocada. Diagnosticado el 2026-09-25 23:05-23:20 La Paz, arreglado el
+      26. Hoy `npm run puerta:alta` sale `0` en 55 s y mide las DOS puertas.**
+
+      `puerta-del-alta.mjs` sale `NO SE PUDO MEDIR — 2 puerta(s) sin medir: activar la
+      verificacion en dos pasos (no pude casar el BUILD_ID vivo con ningun arbol de fuentes en
+      /opt/onia-platform) · las puertas que pone el panel`. Su propia última línea dice por qué
+      importa: *«la que no pude medir puede ser justo la que frena al lead»*.
+
+      ⚠️ **La causa NO es la mudanza a nodo-casa, que era la hipótesis obvia y es FALSA.**
+      Medido: `scripts/lib/vps-o-local.mjs` funciona perfecto desde casa —
+      `listarDeProduccion("/opt/onia-platform/build-*")` devuelve los 7 directorios con
+      `origen: "remoto"` y `leerDeProduccion("/opt/onia-platform/app.env")` trae 10.322 bytes.
+      El helper no es el problema; el problema es **dónde busca** `arbolDelBuildVivo`.
+
+      **La causa real, en una línea:** `arbolDelBuildVivo` (`puerta-del-alta.mjs:146-152`) sólo
+      considera `listar("/opt/onia-platform/build-*")` y lee, dentro de cada uno, el sufijo `.next/standalone/.next/BUILD_ID` — que no existe en este repo, es del VPS.
+      Pero el árbol que el contenedor SIRVE no vive ahí: vive bajo `releases/` — ruta que no existe en este repo, es del VPS,
+      y ahí el `BUILD_ID` está en la **raíz** del directorio, no bajo `.next` como en staging. Los `build-*` son
+      **staging**, y `scripts/limpiar-builds-staging.sh` los borra — así que después de un swap el
+      `BUILD_ID` vivo legítimamente no tiene par en `build-*` y el instrumento concluye `null`.
+
+      **Reproducción exacta (30 s, los tres comandos y lo que devolvieron hoy):**
+
+      ```bash
+      docker exec onia-platform cat /app/.next/BUILD_ID
+      # → 4FWMcecd4jRBGUVwStDQb
+
+      # donde BUSCA hoy: los 7 staging, NINGUNO es el vivo
+      ssh -o BatchMode=yes root@187.77.16.63 'for d in /opt/onia-platform/build-*/; do \
+        echo "$d -> $(cat "$d/.next/standalone/.next/BUILD_ID" 2>/dev/null)"; done'
+      # → 9tuk1Qk2BjQ2j2HdJcL8u · NIRA4pNJ8fJVouaUsyu1E · AUiuQ9c0SmcJnuF37_qTo
+      #   Df2rH9P_zIOujNXHs0ist · bky4wwl7NUSLgbQgipVi2 · Idvh9u4mdBzHBgE2penq4 · HyMvkgxD68MORYYHikiG6
+
+      # donde ESTÁ de verdad:
+      ssh -o BatchMode=yes root@187.77.16.63 'find /opt/onia-platform/releases -maxdepth 4 \
+        -name BUILD_ID | while read p; do echo "$p -> $(cat $p)"; done'
+      # → .../releases/492e7155-20260925/BUILD_ID -> 4FWMcecd4jRBGUVwStDQb   <-- el arbol VIVO
+      ```
+
+      **Listo =** `node hermes-content/deploy/vps-ops/bot/puerta-del-alta.mjs` sale 0 o 1 (midió),
+      nunca 2 por este motivo, con el árbol casado contra `releases` del VPS. El test tiene que fallar en
+      ROJO primero **por el motivo correcto**: un `BUILD_ID` vivo que sólo tiene par en `releases/`
+      hoy devuelve `null`, y el self-check de `puerta-del-alta.mjs:715-731` ya tiene la forma del
+      caso (`listarFake` + `leerFake` con `origen: "remoto"`) — se le agrega el hermano de
+      `releases` ahí, no un archivo nuevo.
+
+      ⚠️ **Al arreglarlo, mirar los HERMANOS en la misma vuelta.** `arbolDelBuildVivo` no es el
+      único que casa por `BUILD_ID` contra `build-*`: la memoria compartida documenta la misma
+      receta («casado contra los `build-*` de `/opt/onia-platform` del VPS») como
+      la medida (2) de «verificar un deploy de onia-platform», así que **todo instrumento que la
+      copie tiene este mismo punto ciego** y hay que derivar los sujetos con
+      `grep -rn 'build-\*' --include=*.mjs`. Arreglar sólo este deja la familia viva.
+
+      ⚠️ **Por qué sobrevivió 18 días teniendo alarma:** salía `exit 2` TODAS las vueltas y
+      siempre por el mismo sujeto, y eso se lee como «el ambiental de siempre» y se saltea — la
+      trampa que la memoria compartida ya nombró el 2026-09-24 con el gate del cron. Un `exit 2`
+      permanente no es honestidad, es un rojo disfrazado: mientras duró, la mitad «no promete lo
+      que el producto no hace» de este objetivo se midió con **cero** instrumentos y el carril
+      siguió reportando su medida en meta con las otras tres cifras.
+
+      ---
+
+      **EL ARREGLO (2026-09-26).** El diagnóstico de arriba acertó el síntoma y erró un detalle
+      que habría dejado el gate roto igual: el árbol de un release **no** tiene las fuentes en su
+      raíz. Medido antes de escribir nada — `ls` de `releases/492e7155-20260925/` (ruta del VPS,
+      no existe en este repo) devuelve `BUILD_ID · SHA · build.exit · build.log · source.tar.gz ·
+      src`, y `lib/mfa/policy.ts` aparece bajo **`src/`**.
+      O sea que un release aporta DOS diferencias contra staging, no una:
+      el `BUILD_ID` está en la raíz **y** las fuentes cuelgan de `src/`.
+
+      | | `build-<sha>/` (staging) | `releases/<sha8>-<fecha>/` (publicado) |
+      |---|---|---|
+      | `BUILD_ID` | `<dir>/.next/standalone/.next/BUILD_ID` | `<dir>/BUILD_ID` |
+      | fuentes | `<dir>` | `<dir>/src` |
+      | sha | del nombre, abreviado | `<dir>/SHA`, **completo** |
+
+      **La tabla vive en UN lugar, y ése es el arreglo de verdad:**
+      `scripts/lib/arbol-del-build-vivo.mjs` (nuevo, `npm run test:arbol-build`, **14/14**, ya en
+      la cadena `npm test`). Exporta `buildQueCorre({})` → `{ dir, fuentes, sha, layout }`. El
+      punto ciego no era de un instrumento: era de la **receta**, copiada en cuatro lugares, y
+      por eso no se arregló inline. Cuando aparezca un tercer layout se agrega una fila y los
+      consumidores se enteran solos. Tiene ancla en la otra punta: invertir el orden de los
+      layouts da el mismo build (el orden es costo, no criterio).
+
+      **Rojo primero, y cada caso por su motivo.** En `puerta-del-alta.mjs` el self-check pasó de
+      51/53 —fallando exactamente las dos del release, con la de «sin par sigue siendo `null`»
+      ya en verde, que es lo que prueba que el rojo era por el layout y no por otra cosa— a
+      **53/53**. En `addon_canal_vivo.mjs` el test de cableado se corrió contra la receta VIEJA
+      (copia del archivo de `HEAD` con sólo el `export` agregado, restaurada con `cp`): **13/14**,
+      falla sólo el caso del release → con el arreglo **14/14**.
+
+      **Los hermanos, derivados con `grep -rn 'build-\*' --include=*.mjs` y medidos uno por uno:**
+
+      - `addon_canal_vivo.mjs` — **ciego, mismo motivo, arreglado acá** (es de este carril).
+        Antes: `exit 2 · NO MEDIDO: no pude leer las orgs de la base o el codigo del build vivo`
+        con la base contestando perfecto. Ahora: `exit 0 · OK: el build vivo
+        (492e715598236efdb3af0ad86c2a5077eb0ee285) lee la capacidad y ninguna org diverge`, 16 s.
+      - `pedido_deploy_entregado.mjs:962` — **ciego, mismo motivo, NO es de este carril**
+        (pedidos de deploy es zona de `onia-cola`): tarea `t_66d7e2f6` con la reproducción exacta
+        y el módulo ya listo para enchufar. Reproducido hoy: ningún `build-*` casa contra
+        `4FWMcecd4jRBGUVwStDQb`, así que `shaVivoPlataforma()` da `null` y el gate deja de juzgar
+        los pedidos de plataforma **en verde**.
+      - `deploy_ya_ocurrio.mjs` — **sano**: ya migró a la etiqueta de imagen
+        (`onia-platform:release-<sha>`) y lo dice en su cabecera.
+      - `limpiar-builds-staging.sh` — **sano**: habla de staging a propósito, es lo que borra.
+
+      **Medido en vivo al cerrar** (no de memoria): `docker exec onia-platform cat
+      /app/.next/BUILD_ID` → `4FWMcecd4jRBGUVwStDQb`; `docker inspect onia-platform --format
+      '{{.Config.Image}}'` → `onia-platform:release-492e7155`; el par está en
+      `releases/492e7155-20260925/BUILD_ID`, que es del VPS y no existe en este repo.
+      `npm run puerta:alta` → **`exit 0`, 55 s**:
+      *«NINGUN TEXTO SERVIDO PROMETE ENTRAR SIN LOS PASOS QUE EL PRODUCTO EXIGE — 4 documento(s)
+      mirados, con 1 puerta(s) viva(s): confirmar el correo»*. Las dos puertas quedaron medidas:
+      la de 2FA salió **false** (el build vivo ya trae la gracia colgada del alta), que es
+      justamente lo que un `exit 2` no podía decir.
+
+      Gates verdes: `test:arbol-build` · `test:puerta-alta` · `test:addon-canal` ·
+      `test:vps-o-local` · `test:guards-cableados`.
+      Archivos: `scripts/lib/arbol-del-build-vivo.mjs` (nuevo) ·
+      `hermes-content/deploy/vps-ops/bot/puerta-del-alta.mjs` · `scripts/addon_canal_vivo.mjs` ·
+      `scripts/addon_canal_vivo.test.mjs` · `package.json`.
+
+- [x] 🔴 **CERRADO el 2026-09-25 22:13-22:40 La Paz (commiteado; es el INSTRUMENTO, no toca el
+      motor): el gate imprimía «tambien del motor» sobre 7 líneas cuya frontera había medido
+      `sin ubicar` — una conjetura impresa como medición, y encima ese bucket era el único que
+      no se nombraba.** Una de las 7 es `plataforma-v1.md:6096`, del **SIAT**
+      (`/opt/onia-siat/run-fase1-volumen.sh`): la tercera frontera, la que este mismo archivo
+      declara sin instrumento. Llamarla «del motor» la manda a un dueño que no es el suyo, y al
+      quedar fuera de `accionables` nunca salía con su `archivo:línea` — invisible y mal
+      atribuida a la vez.
+
+      **La causa, de una línea:** `motivoDeNoMedida` trataba «tiene un sha que no puedo resolver»
+      como evidencia de frontera. No lo es — `onia-hermes` es el repo del motor, pero también el
+      de las colas y el del SIAT. Medidas las 7 con `fronteraDe`: **las 7 daban `sin ubicar`**,
+      o sea que el rótulo no salía de ninguna medición.
+
+      **El arreglo, tres piezas.** (1) Manda la frontera, también cuando hay sha: `sin ubicar` +
+      sha irresoluble → «hay que leerla», y entra a `accionables`, que es lo que la nombra.
+      (2) El rótulo dice lo que se sabe: la del panel pide **su** sha, y de una frontera sin
+      ubicar no se afirma dueño. (3) Desde `sin ubicar` se puede **ABSOLVER y nunca ACUSAR**: si
+      la línea nombra un archivo que el deploy del motor todavía no instaló, el deploy que pide no
+      ocurrió para ese archivo y es CIERTA por medición. Acusar desde ahí sacaría una línea del
+      panel de su único juez —`config.mjs` vive en los DOS repos— y ése es el error caro.
+      `fronteraDe` sigue **sin** mirar nombres de archivo, a propósito, como ya decía su cabecera.
+
+      **Prueba.** Rojo primero y cada caso por su motivo (6 de 6: el sha ajeno no atribuye motor ·
+      las dos que faltaba nombrar · el rótulo · la absolución · el motivo de la no medida) →
+      `100/106`; con el arreglo **`107/107`**, con dos ANCLAS en la otra punta: una línea del
+      **panel** no se absuelve con el estado del motor, y `fronteraDe` sigue ciega a los nombres
+      de archivo. En vivo:
+
+          antes: 24 lineas — 0 mienten · 10 ciertas · 14 no medidas — 6 nombradas
+          ahora: 24 lineas — 0 mienten · 14 ciertas · 10 no medidas — 9 nombradas (las 9)
+
+      Las 4 que pasaron a medidas se absolvieron **nombrando el archivo que falta**, y ese archivo
+      es de los tres que el motor vivo no tiene hoy: dos por `marcas-en-disco.mjs` y dos por
+      `followup-run.mjs`. **No se copian acá sus `archivo:línea`**: este mismo ítem las corrió
+      cuarenta renglones abajo al insertarse, y un puntero movido se lee como sujeto nuevo —
+      el gate los imprime al día en cada corrida, que es para lo que se le agregó nombrarlos.
+      Gates: `test:deploy-ya-ocurrio` ·
+      `test:bot-vivo-al-dia` · `test:cola-selfcheck` · `test:colas-vivas` · `test:docs-hygiene` ·
+      `test:frontera-derivada` en verde. Archivo: `scripts/deploy_ya_ocurrio.mjs`.
+
+      ⚠️ **Lo que NO arregla, con su número:** quedan **9 no medidas y las 9 dicen «hay que
+      leerlas»** — ninguna es ya del tipo corregible por sha. Seis no nombran ningún archivo del
+      motor y cuatro citan un sha ajeno; leerlas una por una es trabajo de lectura, no de
+      instrumento. Y `plataforma-v1.md:6096` sigue **sin instrumento**: la frontera del SIAT
+      (`/opt/onia-siat`) no tiene su `bot_vivo_tiene_el_codigo.mjs`. Ahora al menos se ve.
+
+- [x] 🔴 **CERRADO el 2026-09-25 22:40 La Paz (commiteado; instrumento compartido): el
+      verificador de la cola leía un RECUENTO como ruta, y esta misma vuelta lo mordió por
+      SEGUNDA vez seguida.** En `scripts/verificar_cola.js` la sola presencia de una barra
+      declaraba ruta (`if (/[\/]/.test(ruta))`), así que el recuento de un self-check —`100/106`—
+      salía como `ERROR fantasma: … apunta a 100/106 y ese archivo NO existe` y el gate en `1`.
+      Ayer y hoy se curó reescribiendo la frase a «100 de 106»: la instancia dos veces, la clase
+      nunca. **Es el falso rojo caro** — manda a borrar de la cola justamente la PRUEBA del ítem,
+      que es el número que el gate de al lado exige, y deja rojo un verificador que traba el merge
+      de **todos** los carriles.
+
+      **El arreglo:** con barra se pide además una letra en algún tramo. Ningún archivo se llama
+      sólo con dígitos y barras, y una ruta con un tramo puramente numérico sigue entrando por sus
+      otros tramos. **Prueba:** rojo primero por su motivo
+      (*«un recuento `100/106` no se lee como ruta»*), 4 casos nuevos con dos ANCLAS en la otra
+      punta (una ruta con cifras adentro y otra con un tramo numérico siguen siendo rutas; los
+      fixtures viven en el self-check, no acá, porque nombrar una ruta de ejemplo en la cola la
+      vuelve un fantasma — lo acusó este mismo gate al escribir este ítem) → **`118/118`** en el
+      self-check; y la prueba de integración es este archivo, que ahora escribe `100/106` entre
+      backticks y pasa: `cola ok: 127 items` en `chatbot.md` y `98` en `plataforma-v1.md`.
+
+- [x] 🔴 **CERRADO el 2026-09-25 21:43-22:35 La Paz (commiteado; es el INSTRUMENTO, no toca el
+      motor): el gate de los «NO desplegado» fantasma no miraba los RÓTULOS de sección — y dos
+      de ellos mentían, uno desde el 24-sep.** `afirmacionesDe()` abría sujeto sólo con
+      `- [ ]` / `- [x]`; una cabecera `## ` únicamente CERRABA el anterior, así que
+      `## ✅ T10 — … (commiteado, **NO desplegado**)` y su hermano T9 nunca entraron al juicio.
+      El rótulo es lo PRIMERO que lee la vuelta siguiente y es lo que decide si el ítem cuenta
+      por cerrado: una corrección escrita en el cuerpo deja la mentira arriba, donde más se lee.
+
+      **Cómo apareció, y por qué no lo trajo la cola.** Midiendo el objetivo de esta vuelta el
+      `tail -400` del log del bot devolvió **0** `demo_agendada` / `handoff_humano` teniendo
+      **30** adentro (5 + 25 en las 72.147 líneas del archivo): 264 de esas 400 eran la línea
+      `[knowledge:panel]` que T10 dice haber dedupeado. Parecía el bug de T10 vivo — y no: el
+      dedup **ya está desplegado** (`docker exec onia-center grep -c avisosDePanelYaDados
+      /tmp/onia-bot/knowledge.mjs` → `4`, y **cero** líneas `[knowledge:panel]` el 25 y el
+      26-sep contra 5.032 históricas). Lo que sobrevive es la CICATRIZ en un log que no rota,
+      más un rótulo congelado en pasado. El defecto medible era el segundo.
+
+      **Prueba.** Self-check en ROJO primero y por el motivo correcto (3 casos nuevos: la
+      cabecera es afirmación · se le ubica la frontera · cabecera e ítem se acusan por
+      separado) → 92 de 95 casos; con el arreglo, 95 de 95. En vivo el gate pasó de **21 líneas
+      juzgadas, 0 mienten** a **25 líneas, 2 mienten**, nombró `chatbot.md:32` y `:131`, y
+      `--corregir` les puso su medición al lado sin borrar la historia. La cabecera-REGLA
+      `## 🔴 ANTES DE CREERLE A UN «NO desplegado»…` queda absuelta **sin excepción escrita a
+      mano**: la absuelve `sinCitas()`, el mismo criterio que ya absolvía las citas de un ítem.
+      Archivos: `scripts/deploy_ya_ocurrio.mjs`, `hermes-content/docs/cola/chatbot.md`.
+
+      ⚠️ **Lo que este ítem NO arregla, dicho con su número:** quedan **13 de 23** líneas NO
+      MEDIDAS — 7 citan un sha que no es de `onia-platform` y salen del juicio por sha aunque
+      hablen del motor, y 5 no citan sha ni ubican frontera (`chatbot.md:289` es T6, otra
+      cabecera). Y hay una TERCERA frontera sin instrumento: `plataforma-v1.md:6096` es del
+      SIAT (`/opt/onia-siat`). Ése es el próximo sujeto de este gate, no uno nuevo.
 
 - [x] 🔴 **CERRADO el 2026-09-25 20:15-21:00 La Paz: el gate que existe para cazar los «NO
       desplegado» fantasma era CIEGO al motor del bot — 51 de sus 58 líneas salían «otra
