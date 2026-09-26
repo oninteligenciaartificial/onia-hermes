@@ -144,8 +144,57 @@ timestamp: `tail` crudo, nunca `sort`.
 
 ---
 
-## ✅ T10 — CERRADO el 2026-09-24 (commiteado, **NO desplegado**): el log del bot estaba ahogado por UNA línea repetida, y por eso la medición de este carril salía vacía teniendo los datos adentro
-✅ YA DESPLEGADO (medido 2026-09-26: `npm run bot:vivo-al-dia` — el motor vivo ya corre este archivo).
+## 🔴 T10 — **REABIERTO el 2026-09-26 17:05 La Paz**: el dedup está DESPLEGADO y el log sigue ahogado — se arregló la repetición dentro de un proceso, y el emisor que inunda vive un segundo
+⚠️ **Su cierre era falso, y lo que falló no fue el arreglo: fue el sujeto.** El arreglo (dedup por
+VALOR con `avisosDePanelYaDados`) está **vivo en producción** —`md5sum` de `knowledge.mjs` idéntico
+repo ↔ `/tmp/onia-bot/knowledge.mjs` (`bc597110499091b9923610980fddd74a`)— y la línea **sigue
+saliendo ~700 veces por día**. O sea que este ítem no se cierra con «commiteado y desplegado»:
+se cierra contando las líneas del log vivo, que es lo que mide su objetivo.
+
+**Medido hoy, en el log vivo** (`onia-center`, `/tmp/onia-bot-webhook.log`):
+
+| qué | cuánto |
+|---|---|
+| líneas totales | **72.311** |
+| formas DISTINTAS de línea (`sed -E 's/[0-9]+//g' \| sort -u`) | **164** |
+| copias de `[knowledge:panel] ignoro empresa.horario…` | **5.033** |
+| de ésas, **en las últimas 2.000 líneas** | **1.417** (71 %) |
+| ventana que abarcan esas 2.000 líneas | 2026-09-24 10h → 2026-09-26 15h |
+| reinicios del proceso en esa ventana (`grep -c "Node.js v"`) | **0** |
+
+Reproducir en 30 segundos:
+
+```bash
+/root/bin/onia-vps.sh bash -lc 'docker exec onia-center sh -c "tail -2000 /tmp/onia-bot-webhook.log | grep -c knowledge:panel"'
+```
+
+**Por qué el dedup no alcanza — y es la parte que vale.** `avisosDePanelYaDados` es un `Set` de
+MÓDULO: dedupe dentro de **un** proceso. La condición es permanente, así que un proceso largo la
+dice una vez y calla. Pero el emisor que inunda **no es largo**: `webhook-server.mjs:204` llama
+`ensureKnowledgeHealth()` en **cada** request de `/health`, y `webhook-watchdog.sh` golpea `/health`
+por cron **cada 2 minutos** → ~720/día, que es exactamente la tasa medida (1.417 en ~2 días).
+Un dedup por proceso no puede ayudar a un camino que se recorre 720 veces.
+
+**Tres hipótesis ya DESCARTADAS — no las vuelvas a medir:**
+- ❌ *«el proceso se reinicia y limpia el `Set`»* → **0** `Node.js v` en la ventana.
+- ❌ *«alguien llama `resetAvisosDePanel()`»* → `grep -rn resetAvisosDePanel *.mjs` sin los tests:
+  **sólo su propia definición** (`knowledge.mjs:1048`), ningún llamador.
+- ❌ *«el módulo se reimporta con cache-buster»* → no hay ni un `import(...?t=)` en el árbol; el
+  único `import("./knowledge.mjs")` dinámico es `validadores-cruzados.mjs:276` (un gate).
+- ❌ *«son 2.803 crashes por `audio-transcribe.mjs` faltante»* → ese archivo **sí está** en
+  `/tmp/onia-bot/`; esos crashes son historia de antes del 19-sep en un log que nunca se rotó.
+
+**Lo que queda por decidir (es la próxima vuelta, no está decidido):** el aviso de una condición
+permanente no debería viajar por el camino de `/health`. Dos salidas, y hay que elegir midiendo:
+(a) que `ensureKnowledgeHealth` no emita el warn —el health es una CONSULTA, no una carga— y lo
+emita sólo el arranque del motor; (b) sacar el dedup del proceso (marca en disco por valor, como
+`/var/lib/onia-vigia-remotos/<id>` con `openSync wx`). (a) es más chica y ataca la causa: el warn
+está en el camino equivocado. **Y el log vivo no se rota acá**: eso es de infra, otro dueño.
+
+**LISTO =** `tail -2000` del log vivo trae **< 50** copias de esa línea, y los eventos
+`demo_agendada`/`handoff_humano` se ven con un `tail -80`.
+
+<details><summary>Historia del cierre falso (2026-09-24) — el arreglo original, que sigue siendo correcto para lo suyo</summary>
 
 **Cómo apareció.** No lo trajo la cola: lo trajo el chequeo de arranque. El comando con el que este
 carril mide su propio objetivo —`webhook-server.sh logs | tail -80 | grep -E
@@ -241,6 +290,8 @@ usarse para contar EVENTOS* — cuando todo anda bien devuelve 0, exactamente ig
 sistema está muerto. Antes de leer un `grep -c` como "no pasó nada", preguntar **qué se escribe
 cuando la cosa SALE BIEN**. Acá la respuesta era "nada", y por eso dos vueltas seguidas de este
 loop escribieron `avisos 0` teniendo cuatro avisos entregados adentro.
+
+</details>
 
 ---
 
