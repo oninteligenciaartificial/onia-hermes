@@ -110,10 +110,45 @@ const ESTADO = process.env.ONIA_SONDA_ESTADO || '/root/.onia/sonda-widget.json';
 const ESTADO_DB = process.env.ONIA_BOT_ESTADO_DB || 'supabase-db';
 const NOMBRE_SONDA = 'Sonda QA carril chatbot';
 
-/** Los dos mensajes del chequeo, tal cual los fija el prompt del loop. */
+/**
+ * Los mensajes del chequeo. Los dos primeros son los que fija el prompt del loop; el TERCERO
+ * elige el horario, que es el turno donde la conversacion se vuelve una demo.
+ *
+ * Por que el tercero esta en el DEFAULT y no en la costura: el objetivo del carril nombra el
+ * 2.o y el 3.er turno, pero el gate horario media solo dos. La costura para llegar al tercero
+ * (`ONIA_SONDA_GUION`) se escribio el 2026-09-03 y no la corrio NADIE en tres semanas — un env
+ * suelto no lo corre nadie, asi que el unico turno que produce plata quedaba sin medir.
+ *
+ * Medido el 2026-09-26 contra produccion: el bot contesta los tres y el embudo de
+ * `onia_center.bot_conversations` paso de 0 a 1 `demo_agendada` (venia de 43 conversaciones con
+ * 18 paradas en `esperando_horario` y CERO agendadas). El tercer turno ya andaba; faltaba mirarlo.
+ *
+ * `'A'` sale del guion mismo: el bot cierra los dos primeros mensajes con "¿Cuál te va mejor?
+ * **A)** … **B)** …", y `detectSlotChoice` resuelve la letra contra el par que el prospecto vio.
+ */
 export const GUION_POR_DEFECTO = Object.freeze([
   'Hola, quiero informacion sobre el sistema',
   'Tengo una clinica dental en Santa Cruz, somos 4 personas',
+  'A',
+]);
+
+/**
+ * Guiones que la sonda uso ANTES, para que sus rastros sigan siendo reconocibles.
+ *
+ * `esRastroDeSonda` exige el guion COMPLETO, asi que el dia que el default crece las sondas ya
+ * escritas dejan de calificar y `objetivo_visible.mjs` las vuelve a contar como "un desconocido
+ * escribio" — el falso verde que ese predicado existe para evitar, y que no se puede deshacer
+ * porque el contacto quedo con nombre anonimo. Pasa con las conversaciones 48 y 50 del inbox 4.
+ *
+ * Es una lista EXPLICITA y no "cualquier prefijo del guion" a proposito: el sesgo tiene que
+ * quedar del lado seguro. Reclamar de menos deja un falso verde viejo; reclamar de mas borraria
+ * un lead de verdad. Al crecer el guion otra vez, el guion anterior se agrega ACA.
+ */
+export const GUIONES_HISTORICOS = Object.freeze([
+  Object.freeze([
+    'Hola, quiero informacion sobre el sistema',
+    'Tengo una clinica dental en Santa Cruz, somos 4 personas',
+  ]),
 ]);
 
 /**
@@ -158,8 +193,18 @@ export function esRastroDeSonda(mensajesDelCliente, guion = MENSAJES) {
   const limpiar = (s) => String(s ?? '').replace(/\s+/g, ' ').trim();
   const mios = Array.isArray(mensajesDelCliente) ? mensajesDelCliente : null;
   if (!mios || mios.length === 0) return false;
-  if (mios.length !== guion.length) return false;
-  return guion.every((esperado, i) => limpiar(mios[i]) === limpiar(esperado) && limpiar(esperado) !== '');
+  const calza = (esperados) =>
+    mios.length === esperados.length &&
+    esperados.every((esperado, i) => limpiar(mios[i]) === limpiar(esperado) && limpiar(esperado) !== '');
+  if (calza(guion)) return true;
+  // Los historicos solo cuentan cuando se esta midiendo con el guion POR DEFECTO. Con
+  // `ONIA_SONDA_GUION` puesto, quien lo puso decide el universo entero y no hereda rastros
+  // ajenos. Se compara por CONTENIDO porque `leerGuion` devuelve una copia, no la referencia.
+  const esElDefault =
+    guion.length === GUION_POR_DEFECTO.length &&
+    guion.every((m, i) => limpiar(m) === limpiar(GUION_POR_DEFECTO[i]));
+  if (!esElDefault) return false;
+  return GUIONES_HISTORICOS.some(calza);
 }
 
 /** Chatwoot: 0 entrante · 1 saliente (respuesta de verdad) · 2 actividad · 3 enlatado del pre-chat. */
@@ -191,9 +236,10 @@ export function turnos(mensajes) {
  * logro mandar los dos, no hay nada que juzgar y eso es 2, no 1: culpar al bot de un mensaje
  * que nunca salio manda a mirar el archivo equivocado.
  */
-export function juzgar({ enviados, mensajes, conversacionId }) {
-  if (enviados < MENSAJES.length) {
-    return { codigo: 2, texto: `NO SE PUDO MEDIR — la sonda mando ${enviados} de ${MENSAJES.length} mensajes` };
+export function juzgar({ enviados, mensajes, conversacionId, guion = MENSAJES }) {
+  const esperados = guion.length;
+  if (enviados < esperados) {
+    return { codigo: 2, texto: `NO SE PUDO MEDIR — la sonda mando ${enviados} de ${esperados} mensajes` };
   }
   if (!Array.isArray(mensajes) || mensajes.length === 0) {
     return { codigo: 2, texto: `NO SE PUDO MEDIR — la conversacion ${conversacionId ?? '?'} no devolvio ni un mensaje` };
@@ -203,9 +249,9 @@ export function juzgar({ enviados, mensajes, conversacionId }) {
   // Solo los turnos de ESTA vuelta: la conversacion de sonda se reusa, asi que arrastra los
   // turnos de todas las anteriores. Juzgar sobre el historico dejaria verde para siempre una
   // sonda que hoy no obtiene respuesta.
-  const mios = todos.slice(-MENSAJES.length);
-  if (mios.length < MENSAJES.length) {
-    return { codigo: 2, texto: `NO SE PUDO MEDIR — se esperaban ${MENSAJES.length} turnos y la base tiene ${mios.length}` };
+  const mios = todos.slice(-esperados);
+  if (mios.length < esperados) {
+    return { codigo: 2, texto: `NO SE PUDO MEDIR — se esperaban ${esperados} turnos y la base tiene ${mios.length}` };
   }
 
   const mudos = mios.filter((t) => t.respuestas.length === 0);
@@ -218,7 +264,7 @@ export function juzgar({ enviados, mensajes, conversacionId }) {
       codigo: 1,
       texto:
         `EL BOT SE QUEDO MUDO — conversacion ${conversacionId ?? '?'}: ${detalle}. ` +
-        `${mudos.length} de ${MENSAJES.length} turnos sin respuesta. Una sola respuesta es EL bug, ` +
+        `${mudos.length} de ${esperados} turnos sin respuesta. Una sola respuesta es EL bug, ` +
         `no un exito parcial: es como el bot paso una semana con gente real del otro lado.`,
     };
   }
@@ -260,7 +306,7 @@ export function juzgar({ enviados, mensajes, conversacionId }) {
 
   return {
     codigo: 0,
-    texto: `EL BOT CONTESTO LOS ${MENSAJES.length} — conversacion ${conversacionId ?? '?'}: ${detalle}.`,
+    texto: `EL BOT CONTESTO LOS ${esperados} — conversacion ${conversacionId ?? '?'}: ${detalle}.`,
   };
 }
 
@@ -1205,6 +1251,13 @@ async function selfCheck() {
   const caso = (nombre, fn) => casos.push([nombre, fn]);
   const m = (message_type, created_at, content) => ({ message_type, created_at, content });
 
+  // Los casos de `juzgar` de abajo son filas REALES de produccion de cuando el guion tenia DOS
+  // turnos, y siguen valiendo tal cual: lo que afirman (mudo en el 2.o, precio ajeno, derivacion
+  // en el 1.er turno) no depende de cuantos turnos mida el guion de hoy. Se les pasa su guion en
+  // vez de reescribir los fixtures — si leyeran el global, subir el default los volveria "NO SE
+  // PUDO MEDIR" en bloque y el carril perderia de golpe los tres falsos verdes que cubren.
+  const DOS_TURNOS = GUIONES_HISTORICOS[0];
+
   // La costura del guion. Lo que se afirma NO es que se pueda cambiar el guion: es que el
   // default siga siendo EXACTAMENTE el del prompt del loop. Una costura que corre el default
   // convierte el gate horario en otra medicion sin que nadie se entere.
@@ -1219,7 +1272,7 @@ async function selfCheck() {
   caso('el guion por defecto es inmutable', () => {
     const copia = leerGuion(undefined);
     copia.push('cuarto mensaje');
-    assert.strictEqual(GUION_POR_DEFECTO.length, 2, 'mutar lo devuelto no puede tocar el default');
+    assert.strictEqual(GUION_POR_DEFECTO.length, 3, 'mutar lo devuelto no puede tocar el default');
   });
 
   // Los dos primeros son filas REALES de produccion del 2026-09-02: la conversacion 47 es el bug
@@ -1237,12 +1290,12 @@ async function selfCheck() {
   ];
 
   caso('los dos turnos contestados → 0', () => {
-    const v = juzgar({ enviados: 2, mensajes: CONV_48, conversacionId: 48 });
+    const v = juzgar({ enviados: 2, guion: DOS_TURNOS, mensajes: CONV_48, conversacionId: 48 });
     assert.strictEqual(v.codigo, 0, `deberia ser 0 y fue ${v.codigo}: ${v.texto}`);
   });
 
   caso('el bug real: mudo en el SEGUNDO mensaje → 1', () => {
-    const v = juzgar({ enviados: 2, mensajes: CONV_47, conversacionId: 47 });
+    const v = juzgar({ enviados: 2, guion: DOS_TURNOS, mensajes: CONV_47, conversacionId: 47 });
     assert.strictEqual(v.codigo, 1, `el bug de la semana tiene que salir 1 y salio ${v.codigo}: ${v.texto}`);
     assert.match(v.texto, /1 de 2 turnos sin respuesta/);
   });
@@ -1268,14 +1321,14 @@ async function selfCheck() {
   ];
 
   caso('un monto que ya no existe en la escalera → 1, aunque haya contestado los dos', () => {
-    const v = juzgar({ enviados: 2, mensajes: conPrecio(PRECIO_VIEJO), conversacionId: 49 });
+    const v = juzgar({ enviados: 2, guion: DOS_TURNOS, mensajes: conPrecio(PRECIO_VIEJO), conversacionId: 49 });
     assert.strictEqual(v.codigo, 1, `cotizar Bs 750 tiene que salir 1 y salio ${v.codigo}: ${v.texto}`);
     assert.match(v.texto, /750/, 'el veredicto tiene que NOMBRAR el monto ajeno');
     assert.match(v.texto, /1500|1\.500/, 'y los dos, no solo el primero');
   });
 
   caso('el precio que el bot vivo contesta hoy → 0', () => {
-    const v = juzgar({ enviados: 2, mensajes: conPrecio(PRECIO_DE_HOY), conversacionId: 49 });
+    const v = juzgar({ enviados: 2, guion: DOS_TURNOS, mensajes: conPrecio(PRECIO_DE_HOY), conversacionId: 49 });
     assert.strictEqual(v.codigo, 0, `la escalera vigente no puede dar rojo y dio ${v.codigo}: ${v.texto}`);
   });
 
@@ -1299,7 +1352,7 @@ async function selfCheck() {
       m(0, '2026-09-02 10:00:15', 'Tengo una clinica dental en Santa Cruz, somos 4 personas'),
       m(3, '2026-09-02 10:00:15', 'Dale al equipo una forma de llegar a ti.'),
     ];
-    const v = juzgar({ enviados: 2, mensajes: solo3, conversacionId: 90 });
+    const v = juzgar({ enviados: 2, guion: DOS_TURNOS, mensajes: solo3, conversacionId: 90 });
     assert.strictEqual(v.codigo, 1, `type 3 no puede contar como respuesta; salio ${v.codigo}: ${v.texto}`);
   });
 
@@ -1310,7 +1363,7 @@ async function selfCheck() {
       m(1, '2026-09-02 11:00:06', 'segunda'),
       m(0, '2026-09-02 11:00:15', 'Tengo una clinica dental en Santa Cruz, somos 4 personas'),
     ];
-    const v = juzgar({ enviados: 2, mensajes: cargado, conversacionId: 91 });
+    const v = juzgar({ enviados: 2, guion: DOS_TURNOS, mensajes: cargado, conversacionId: 91 });
     assert.strictEqual(v.codigo, 1, `contar el TOTAL de salientes da 0 en falso; salio ${v.codigo}: ${v.texto}`);
   });
 
@@ -1324,7 +1377,7 @@ async function selfCheck() {
       m(0, '2026-09-02 12:00:12', 'Tengo una clinica dental en Santa Cruz, somos 4 personas'),
       m(1, '2026-09-02 12:00:20', 'una sola respuesta para los dos'),
     ];
-    const v = juzgar({ enviados: 2, mensajes: dosSeguidos, conversacionId: 92 });
+    const v = juzgar({ enviados: 2, guion: DOS_TURNOS, mensajes: dosSeguidos, conversacionId: 92 });
     assert.strictEqual(v.codigo, 1, `una respuesta no contesta dos entrantes; salio ${v.codigo}: ${v.texto}`);
   });
 
@@ -1333,23 +1386,23 @@ async function selfCheck() {
     // entero dejaria el gate rojo eternamente por un turno que fallo una vez, y un gate que no
     // puede volver a verde deja de informar: se lo ignora igual que a uno que nunca falla.
     const historico = [m(0, '2026-09-01 09:00:00', 'vuelta vieja que quedo muda'), ...CONV_48];
-    const v = juzgar({ enviados: 2, mensajes: historico, conversacionId: 93 });
+    const v = juzgar({ enviados: 2, guion: DOS_TURNOS, mensajes: historico, conversacionId: 93 });
     assert.strictEqual(v.codigo, 0, `solo se juzgan los dos turnos de HOY; salio ${v.codigo}: ${v.texto}`);
   });
 
   caso('mandar menos de dos mensajes es 2, no 1', () => {
-    const v = juzgar({ enviados: 1, mensajes: CONV_48, conversacionId: 48 });
+    const v = juzgar({ enviados: 1, guion: DOS_TURNOS, mensajes: CONV_48, conversacionId: 48 });
     assert.strictEqual(v.codigo, 2, `si la sonda no mando los dos, no se puede culpar al bot; salio ${v.codigo}`);
   });
 
   caso('conversacion sin ningun mensaje → 2', () => {
-    const v = juzgar({ enviados: 2, mensajes: [], conversacionId: 94 });
+    const v = juzgar({ enviados: 2, guion: DOS_TURNOS, mensajes: [], conversacionId: 94 });
     assert.strictEqual(v.codigo, 2, `salio ${v.codigo}`);
   });
 
   caso('el orden lo pone el script, no la base', () => {
     const desordenado = [CONV_48[5], CONV_48[4], CONV_48[3], CONV_48[0]];
-    const v = juzgar({ enviados: 2, mensajes: desordenado, conversacionId: 48 });
+    const v = juzgar({ enviados: 2, guion: DOS_TURNOS, mensajes: desordenado, conversacionId: 48 });
     assert.strictEqual(v.codigo, 0, `con las filas desordenadas tiene que dar 0 igual; salio ${v.codigo}: ${v.texto}`);
   });
 
@@ -1616,7 +1669,7 @@ async function selfCheck() {
       m(0, '2026-09-03 05:04:12', 'Tengo una clinica dental en Santa Cruz, somos 4 personas'),
       m(1, '2026-09-03 05:04:12', 'Te leo, y esto tambien se lo paso a Sergio — sigo siendo el bot.'),
     ];
-    const v = juzgar({ enviados: 2, mensajes: DERIVADA_EN_EL_PRIMERO, conversacionId: 49 });
+    const v = juzgar({ enviados: 2, guion: DOS_TURNOS, mensajes: DERIVADA_EN_EL_PRIMERO, conversacionId: 49 });
     assert.strictEqual(v.codigo, 1, `deberia ser 1 y fue ${v.codigo}: ${v.texto}`);
     assert.match(v.texto, /primer/i, 'el texto tiene que decir que el problema es el PRIMER turno');
   });
@@ -1628,7 +1681,7 @@ async function selfCheck() {
       m(0, '2026-09-03 03:04:46', 'Tengo una clinica dental en Santa Cruz, somos 4 personas'),
       m(1, '2026-09-03 03:04:47', 'Perfecto, anotado que te dedicas a odontologia, que son 4 personas.'),
     ];
-    const v = juzgar({ enviados: 2, mensajes: SANA, conversacionId: 49 });
+    const v = juzgar({ enviados: 2, guion: DOS_TURNOS, mensajes: SANA, conversacionId: 49 });
     assert.strictEqual(v.codigo, 0, `deberia ser 0 y fue ${v.codigo}: ${v.texto}`);
   });
 
@@ -1656,7 +1709,7 @@ async function selfCheck() {
       m(0, '2026-09-03 03:04:46', 'Tengo una clinica dental en Santa Cruz, somos 4 personas'),
       m(1, '2026-09-03 03:04:47', 'Eso lo tiene que ver Sergio, no yo — soy un bot y no quiero inventarte nada.'),
     ];
-    const v = juzgar({ enviados: 2, mensajes: DERIVA_TARDE, conversacionId: 49 });
+    const v = juzgar({ enviados: 2, guion: DOS_TURNOS, mensajes: DERIVA_TARDE, conversacionId: 49 });
     assert.strictEqual(v.codigo, 0, `deberia ser 0 y fue ${v.codigo}: ${v.texto}`);
   });
 
@@ -1831,6 +1884,33 @@ async function selfCheck() {
   });
   caso('un guion vacio no convierte a todos en rastro', () => {
     assert.strictEqual(esRastroDeSonda([''], ['']), false);
+  });
+
+  caso('el default llega al TERCER turno, que es el que vale plata', () => {
+    // El carril media "widget 2/2" y su OBJETIVO nombra tres turnos: el tercero es donde el
+    // prospecto ELIGE el horario, o sea donde la conversacion se vuelve una demo. La costura
+    // `ONIA_SONDA_GUION` existe desde el 2026-09-03 para llegar ahi y NADIE la corrio nunca:
+    // un env suelto no lo corre nadie, asi que el turno que decide quedaba sin medir cada hora.
+    //
+    // Medido el 2026-09-26 corriendola a mano contra produccion: el bot contesto los tres y el
+    // embudo paso de 0 a 1 `demo_agendada` (era 43 conversaciones con 18 paradas en
+    // `esperando_horario` y CERO agendadas). El tercer turno anda; lo que faltaba era mirarlo.
+    assert.strictEqual(GUION_POR_DEFECTO.length, 3, 'el default mide los tres turnos');
+    assert.strictEqual(GUION_POR_DEFECTO[2], 'A', 'el tercero elige el horario A que el bot acaba de ofrecer');
+  });
+
+  caso('los rastros VIEJOS de dos mensajes siguen reconociendose', () => {
+    // La trampa de subir el default: `esRastroDeSonda` exige el guion COMPLETO, asi que al pasar
+    // a tres turnos las sondas ya escritas (conv 48 y 50 del inbox 4, dos mensajes) dejaban de
+    // calificar — y `objetivo_visible.mjs` las volvia a contar como "un desconocido escribio".
+    // Un falso verde que nada puede deshacer, que es exactamente lo que ese predicado existe
+    // para evitar. Los guiones historicos se reconocen por lista EXPLICITA, no por prefijo:
+    // aceptar prefijos arbitrarios si podria tragarse un lead real.
+    assert.strictEqual(esRastroDeSonda(CONV48.mensajesDelCliente), true);
+    assert.strictEqual(esRastroDeSonda([...CONV48.mensajesDelCliente, 'A']), true);
+    // Y el sesgo sigue del lado seguro: un desconocido real no se vuelve rastro por la lista.
+    assert.strictEqual(esRastroDeSonda(CONV36.mensajesDelCliente), false);
+    assert.strictEqual(esRastroDeSonda([...CONV48.mensajesDelCliente, 'y cuanto sale?']), false);
   });
 
   caso('el sellado alcanza la tabla que lee el PRODUCTO, no solo la que ve el humano', () => {

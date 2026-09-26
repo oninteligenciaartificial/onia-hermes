@@ -61,15 +61,51 @@ export function veredicto({ archivos, arranqueProceso } = {}) {
 
   const distintos = archivos.filter((a) => a.hashVivo === null || a.hashVivo !== a.hashRepo);
   if (distintos.length > 0) {
-    return {
-      estado: "desfasado",
-      codigo: 1,
-      distintos: distintos.map((a) => a.nombre),
-      lineas: [
-        `${distintos.length} archivo(s) del bot NO son los del repo — el prospecto habla con el código viejo:`,
-        ...distintos.map((a) => `  ${a.nombre}${a.hashVivo === null ? " (no llegó nunca)" : ""}`),
-      ],
-    };
+    // Desfasado tiene DOS causas con curas OPUESTAS, y mezclarlas manda a pedir la firma
+    // equivocada. El publicador publica desde `origin/main`: un archivo que ya está ahí sólo
+    // espera el `ok` de Sergio Urcullo, y uno que todavía difiere no lo trae ningún deploy.
+    const esperanFirma = distintos.filter((a) => a.enMain === true);
+    const esperanMerge = distintos.filter((a) => a.enMain === false);
+    const sinLado = distintos.filter((a) => a.enMain !== true && a.enMain !== false);
+    const nombres = (lista) => lista.map((a) => `  ${a.nombre}${a.hashVivo === null ? " (no llegó nunca)" : ""}`);
+
+    // No saber de qué lado está un archivo no le inventa remedio: si no se pudo derivar
+    // NINGUNO, el desfase es cierto pero la cura no, y una cura equivocada cuesta más que
+    // no medir. NO MEDIDO gana, igual que arriba.
+    if (esperanFirma.length === 0 && esperanMerge.length === 0) {
+      return {
+        estado: "no_medido",
+        codigo: 2,
+        distintos: distintos.map((a) => a.nombre),
+        esperanFirma: [],
+        esperanMerge: [],
+        lineas: [
+          `${distintos.length} archivo(s) del bot NO son los del repo, pero no se pudo derivar si están en origin/main:`,
+          ...nombres(sinLado),
+          "  sin eso no se sabe si falta la firma o falta el merge, y son remedios opuestos",
+        ],
+      };
+    }
+
+    const lineas = [`${distintos.length} archivo(s) del bot NO son los del repo — el prospecto habla con el código viejo:`];
+    if (esperanFirma.length > 0) {
+      lineas.push(
+        `${esperanFirma.length} ya está(n) en origin/main — espera(n) FIRMA:`,
+        ...nombres(esperanFirma),
+        "  se destraba con el pedido de deploy del bot, no a mano",
+      );
+    }
+    if (esperanMerge.length > 0) {
+      lineas.push(
+        `${esperanMerge.length} difiere(n) de origin/main — espera(n) MERGE:`,
+        ...nombres(esperanMerge),
+        "  el publicador publica desde origin/main: ningún deploy los trae, y pedir la firma no los destraba",
+      );
+    }
+    if (sinLado.length > 0) {
+      lineas.push(`${sinLado.length} sin lado derivado (remedio desconocido):`, ...nombres(sinLado));
+    }
+    return { estado: "desfasado", codigo: 1, distintos: distintos.map((a) => a.nombre), esperanFirma, esperanMerge, lineas };
   }
 
   // Todos iguales. Falta la segunda pregunta, la que nadie hace.
@@ -163,10 +199,36 @@ export function sujetosDelRepo(dir = DIR_REPO) {
 
 // Exportada para que `deploy_ya_ocurrio.mjs` juzgue las lineas del MOTOR con ESTA medicion y no
 // con una copia propia: su cabecera ya lo nombraba como ciego a esta frontera.
+/**
+ * Los sujetos del bot que DIFIEREN de `origin/main` — o sea, los que ningún deploy puede traer
+ * todavía porque el publicador publica desde ahí.
+ *
+ * Se FETCHEA antes: sin eso se comparan refs de disco y el gate falla EN VERDE, que es la
+ * trampa que este repo ya tiene escrita. Si no se puede preguntar (sin red, sin ref) devuelve
+ * `null` y el veredicto sale NO MEDIDO: "no pude preguntar" no es "me dijeron que no".
+ *
+ * @returns {Set<string>|null} nombres base que difieren, o null si no se pudo derivar
+ */
+export function difierenDeMain() {
+  const git = (args) => execFileSync("git", args, { cwd: RAIZ, encoding: "utf8", timeout: 120_000, stdio: ["ignore", "pipe", "pipe"] });
+  try {
+    git(["fetch", "origin", "--quiet"]);
+    return new Set(
+      git(["diff", "--name-only", "origin/main", "--", DIR_REPO])
+        .split("\n")
+        .map((l) => path.basename(l.trim()))
+        .filter(Boolean),
+    );
+  } catch {
+    return null;
+  }
+}
+
 export function medirVivo() {
   const nombres = sujetosDelRepo();
   const archivos = [];
   let arranqueProceso = null;
+  const fueraDeMain = difierenDeMain();
 
   // Un solo `docker exec`: cada uno desde casa es un SSH, y 70 archivos serían 70 viajes.
   // El `[ -f ]` no es de adorno: un patrón sin match queda LITERAL en sh y `sed` sobre él
@@ -190,6 +252,8 @@ export function medirVivo() {
       hashRepo: hashDeContenido(fs.readFileSync(path.join(DIR_REPO, nombre), "utf8")),
       hashVivo: delVivo ? delVivo.hash : null,
       mtimeVivo: delVivo ? delVivo.mtime : null,
+      // De qué lado de `origin/main` está: decide si el remedio es la firma o el merge.
+      enMain: fueraDeMain === null ? null : !fueraDeMain.has(nombre),
     });
   }
 
@@ -253,7 +317,7 @@ function selfCheck() {
   const A = (extra = {}) => ({ nombre: "config.mjs", hashRepo: "aa", hashVivo: "aa", mtimeVivo: 1000, ...extra });
 
   ok(veredicto({ archivos: [A()], arranqueProceso: 2000 }).codigo === 0, "iguales y reiniciado despues = al dia");
-  ok(veredicto({ archivos: [A({ hashVivo: "bb" })], arranqueProceso: 2000 }).codigo === 1, "hash distinto = desfasado");
+  ok(veredicto({ archivos: [A({ hashVivo: "bb", enMain: true })], arranqueProceso: 2000 }).codigo === 1, "hash distinto = desfasado");
   ok(
     veredicto({ archivos: [A({ hashVivo: null })], arranqueProceso: 2000 }).distintos.length === 1,
     "un archivo que no llego nunca tiene que NOMBRARSE, no contarse como ausencia de novedad",
@@ -261,6 +325,36 @@ function selfCheck() {
   // El caso que ningún otro gate ve.
   const tarde = veredicto({ archivos: [A({ mtimeVivo: 3000 })], arranqueProceso: 2000 });
   ok(tarde.estado === "copiado_sin_reiniciar" && tarde.codigo === 1, "copiado DESPUES del arranque = Node cacheo el viejo");
+  // EL CASO QUE MANDABA AL REMEDIO OPUESTO (2026-09-26): un archivo desfasado tiene DOS causas
+  // y sus curas son contrarias. Si el archivo del repo ES el de `origin/main`, el deploy lo
+  // trae y lo que falta es la FIRMA de Sergio Urcullo. Si DIFIERE de `origin/main` —un commit
+  // de carril todavía sin mergear— ningún deploy puede traerlo: el publicador publica desde
+  // `origin/main`, así que lo que falta es el MERGE y pedir la firma no destraba nada.
+  // Medido ese día: de los 5 acusados, 4 esperaban firma y `calcom-booking.mjs` esperaba merge
+  // —el arreglo que este mismo carril había commiteado la vuelta anterior— y el gate los metía
+  // en una sola lista bajo "Se destraba con el pedido de deploy del bot". Pedirle a Sergio
+  // Urcullo una firma que no puede traer el archivo es el modo de falla que esta cola llama
+  // "peor que un pendiente fantasma". Su hermano `espejo-check.mjs` ya tenía la guarda.
+  const firma = veredicto({ archivos: [A({ hashVivo: "bb", enMain: true })], arranqueProceso: 2000 });
+  ok(firma.esperanFirma?.length === 1 && firma.esperanMerge?.length === 0, "el que YA está en origin/main espera FIRMA");
+  const merge = veredicto({ archivos: [A({ hashVivo: "bb", enMain: false })], arranqueProceso: 2000 });
+  ok(merge.esperanMerge?.length === 1 && merge.esperanFirma?.length === 0, "el que DIFIERE de origin/main espera MERGE, no firma");
+  // Se prohíbe la INSTRUCCIÓN, no la palabra: la línea del merge nombra la firma justamente
+  // para negarla ("pedir la firma no los destraba"), y eso es lo que hay que poder decir.
+  ok(
+    merge.lineas.some((l) => /MERGE/.test(l)) && !merge.lineas.some((l) => /se destraba con el pedido de deploy/i.test(l)),
+    "el que espera merge NO puede salir con el remedio de la firma",
+  );
+  // Los dos a la vez: cada uno con su remedio, y ninguno tapa al otro.
+  const mixto = veredicto({
+    archivos: [A({ nombre: "followup-run.mjs", hashVivo: "bb", enMain: true }), A({ nombre: "calcom-booking.mjs", hashVivo: "bb", enMain: false })],
+    arranqueProceso: 2000,
+  });
+  ok(mixto.codigo === 1 && mixto.esperanFirma.length === 1 && mixto.esperanMerge.length === 1, "firma y merge conviven sin taparse");
+  // Y no saber de qué lado está un archivo no puede inventarle un remedio.
+  const sinRef = veredicto({ archivos: [A({ hashVivo: "bb", enMain: null })], arranqueProceso: 2000 });
+  ok(sinRef.codigo === 2, "sin poder derivar el lado de origin/main, el remedio es NO MEDIDO");
+
   // Y los dos modos de no saber, que no pueden salir verdes.
   ok(veredicto({ archivos: [] }).codigo === 2, "sin sujetos = NO MEDIDO");
   ok(veredicto({ archivos: [A()], arranqueProceso: null }).codigo === 2, "sin arranque del proceso = NO MEDIDO");
@@ -328,7 +422,10 @@ if (process.argv[1] && path.resolve(process.argv[1]) === ESTE) {
     const etiqueta = { al_dia: "OK", desfasado: "ROJO", copiado_sin_reiniciar: "ROJO", no_medido: "NO MEDIDO" }[r.estado];
     console.log(`${etiqueta} bot vivo (${CONTENEDOR}:${DIR_VIVO}) — ${medida.archivos.length} archivo(s) mirado(s)`);
     for (const linea of r.lineas) console.log(linea);
-    if (r.codigo === 1) console.log("\nEl arreglo está commiteado y NO corre. Se destraba con el pedido de deploy del bot, no a mano.");
+    // El remedio lo DERIVA `veredicto()` por archivo y ya viene en `lineas`: acá estaba escrito
+    // fijo ("se destraba con el pedido de deploy"), y era falso para todo archivo que aún no
+    // está en `origin/main` — el caso que manda a pedir una firma que no lo puede traer.
+    if (r.codigo === 1) console.log("\nEl arreglo está commiteado y NO corre — arriba, el remedio de cada archivo.");
     process.exit(r.codigo);
   }
 }

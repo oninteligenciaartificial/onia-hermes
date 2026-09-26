@@ -4,19 +4,23 @@
 // afirme "agendado" cuando el calendario no lo confirmo, y que distinga el horario tomado
 // (hay que ofrecer el otro) de un error de red (no hay que mentir tampoco, pero es otra cosa).
 
-import test from "node:test";
+import test, { beforeEach } from "node:test";
 import assert from "node:assert/strict";
 
 import {
+  avisoDeReservaFallida,
   botAttendeeEmail,
   buildBookingNotes,
   buildBookingPayload,
+  cierreDeReservaFallida,
   createBooking,
   getBookingConfig,
   meetingLink,
+  olvidarDestinoCaido,
   DEFAULT_DURATION_MINUTES,
   DEFAULT_PUBLIC_URL,
   BOOKING_TIMEOUT_MS,
+  DESTINO_CAIDO_MS,
 } from "./calcom-booking.mjs";
 
 const CONFIG = { baseUrl: "http://calcom:3000", eventTypeId: 5, durationMinutes: 45, timeZone: "America/La_Paz" };
@@ -36,6 +40,14 @@ function fetchMock(responses) {
 
 const ok = (body) => ({ ok: true, status: 200, json: async () => body, text: async () => JSON.stringify(body) });
 const status = (code, text = "") => ({ ok: false, status: code, json: async () => ({}), text: async () => text });
+
+// El destino caido es estado del MODULO, porque en produccion es una propiedad del proceso y no
+// de un turno (ver `DESTINO_CAIDO_MS`). Eso hace que un test se lo pase al siguiente: al
+// escribirlo, los cinco casos que venian DESPUES de "CAL.COM CAIDO" se pusieron rojos de golpe
+// —no reservaban porque el caso anterior ya habia cerrado el destino— y ninguno de los cinco
+// tenia nada que ver con esto. Se limpia acá, una vez, en vez de en cada caso: asi el que agregue
+// el sexto no tiene que enterarse, que es justo como esos cinco se habrian quedado rojos.
+beforeEach(olvidarDestinoCaido);
 
 // ---------------------------------------------------------------------------
 // Config
@@ -304,4 +316,122 @@ test("TIMEOUT: un signal que YA venia abortado no dispara la reserva a ciegas", 
   const r = await createBooking({ config: CONFIG, startAt: START }, { fetch: f, signal: propio.signal });
   assert.equal(r.ok, false);
   assert.ok(salioALaRed === false || r.reason === "error");
+});
+
+// ---------------------------------------------------------------------------
+// DESTINO CAIDO — el tope protege UN turno; esto protege a los que vienen despues
+// ---------------------------------------------------------------------------
+// El tope de 5 s de arriba existe para que un prospecto no espere para siempre. Pero el 100%
+// del trafico real lo AGOTA: `CALCOM_BASE_URL=http://calcom:3000` esta declarado en el proceso
+// vivo y no existe ningun contenedor `calcom` (medido el 2026-09-18 y reproducido el 2026-09-26
+// desde `onia-center`: `fetch` a ese host devuelve AbortError a los 5005 ms, no ENOTFOUND). O
+// sea que el tope se cobra ENTERO, y se lo cobra al prospecto justo en el turno donde acepta un
+// horario — el unico turno del embudo que produce plata.
+//
+// Un tope no es memoria: sin esto, la demo numero 40 paga los mismos 5 s que la primera por un
+// destino que ya se sabe que no contesta. La distincion que importa es QUIEN fallo: si contesto
+// el servidor (409, 500), el destino esta VIVO y la proxima reserva tiene que intentar igual.
+
+test("DESTINO CAIDO: la segunda demo no vuelve a pagar el timeout del destino muerto", async () => {
+  olvidarDestinoCaido();
+  const colgado = async (_url, init) =>
+    new Promise((_resolve, reject) => {
+      init?.signal?.addEventListener("abort", () => {
+        const e = new Error("The operation was aborted");
+        e.name = "AbortError";
+        reject(e);
+      });
+    });
+
+  const primera = await createBooking({ config: CONFIG, startAt: START }, { fetch: colgado, timeoutMs: 40 });
+  assert.equal(primera.ok, false, "el destino no existe: la primera no puede reservar");
+
+  let salioALaRed = false;
+  const testigo = async () => {
+    salioALaRed = true;
+    return ok({ uid: "no-deberia-llegar" });
+  };
+  const arranque = Date.now();
+  const segunda = await createBooking({ config: CONFIG, startAt: START }, { fetch: testigo, timeoutMs: 40 });
+  const tardo = Date.now() - arranque;
+
+  assert.equal(salioALaRed, false, "el destino ya se sabe caido: la segunda demo no sale a la red");
+  assert.equal(segunda.ok, false, "no reservar sigue siendo no reservar: el prospecto NO puede leer 'agendado' pelado");
+  assert.equal(segunda.reason, "destino_caido", "el motivo se NOMBRA: un 'error' generico manda a buscar un fallo de red que no paso");
+  assert.ok(tardo < 20, `la segunda tardo ${tardo}ms: tiene que ser inmediata, no esperar el tope`);
+  // El prospecto recibe la MISMA salvedad honesta que con cualquier otro fallo: lo que cambia
+  // es lo que NO se gasta, no lo que se le promete.
+  assert.equal(cierreDeReservaFallida("destino_caido"), cierreDeReservaFallida("error"));
+  // Y Sergio Urcullo no recibe un aviso extra: correr sin calendario es la opcion (c), ya
+  // decidida el 2026-09-03, asi que el aviso del motor alcanza y uno por demo seria ruido.
+  assert.equal(avisoDeReservaFallida({ conversationKey: "chatwoot:49", reason: "destino_caido" }), null);
+});
+
+test("DESTINO CAIDO: un 409 NO lo abre — el destino contesto, la proxima demo tiene que intentar", async () => {
+  olvidarDestinoCaido();
+  const primera = await createBooking({ config: CONFIG, startAt: START }, { fetch: fetchMock([status(409)]) });
+  assert.equal(primera.reason, "horario_tomado");
+
+  let salioALaRed = false;
+  const testigo = async () => {
+    salioALaRed = true;
+    return ok({ uid: "abc" });
+  };
+  const segunda = await createBooking({ config: CONFIG, startAt: START }, { fetch: testigo });
+  assert.equal(salioALaRed, true, "un horario tomado prueba que Cal.com esta VIVO: cerrar el destino perderia reservas buenas");
+  assert.equal(segunda.ok, true);
+});
+
+test("DESTINO CAIDO: un 500 NO lo abre tampoco — el servidor contesto, aunque haya contestado mal", async () => {
+  olvidarDestinoCaido();
+  const primera = await createBooking({ config: CONFIG, startAt: START }, { fetch: fetchMock([status(500, "boom")]) });
+  assert.equal(primera.reason, "error");
+
+  let salioALaRed = false;
+  const testigo = async () => {
+    salioALaRed = true;
+    return ok({ uid: "abc" });
+  };
+  await createBooking({ config: CONFIG, startAt: START }, { fetch: testigo });
+  assert.equal(salioALaRed, true, "un 500 es del servidor, no del destino: el proximo turno tiene que volver a preguntar");
+});
+
+test("DESTINO CAIDO: se cura solo — el dia que Cal.com exista, nadie tiene que acordarse de reiniciar el bot", async () => {
+  olvidarDestinoCaido();
+  const colgado = async (_url, init) =>
+    new Promise((_resolve, reject) => {
+      init?.signal?.addEventListener("abort", () => {
+        const e = new Error("The operation was aborted");
+        e.name = "AbortError";
+        reject(e);
+      });
+    });
+  let ahora = 1_000_000;
+  const reloj = () => ahora;
+
+  await createBooking({ config: CONFIG, startAt: START }, { fetch: colgado, timeoutMs: 40, now: reloj });
+
+  const dentro = await createBooking({ config: CONFIG, startAt: START }, { fetch: colgado, timeoutMs: 40, now: reloj });
+  assert.equal(dentro.reason, "destino_caido", "dentro de la ventana no se reintenta");
+
+  ahora += DESTINO_CAIDO_MS + 1;
+  let salioALaRed = false;
+  const revivio = async () => {
+    salioALaRed = true;
+    return ok({ uid: "uid-de-verdad" });
+  };
+  const despues = await createBooking({ config: CONFIG, startAt: START }, { fetch: revivio, timeoutMs: 40, now: reloj });
+  assert.equal(salioALaRed, true, "pasada la ventana se vuelve a intentar: un breaker que no reintenta es el mismo bug al reves");
+  assert.equal(despues.ok, true);
+  assert.equal(despues.uid, "uid-de-verdad");
+
+  // Y una reserva buena BORRA la memoria del fallo: si no, la ventana seguiria corriendo sobre
+  // un destino que ya contesta.
+  const siguiente = await createBooking({ config: CONFIG, startAt: START }, { fetch: revivio, timeoutMs: 40, now: reloj });
+  assert.equal(siguiente.ok, true, "tras una reserva buena el destino esta vivo para todos los turnos que siguen");
+});
+
+test("DESTINO CAIDO: la ventana no puede ser tan larga que tape un Cal.com que volvio", () => {
+  assert.ok(Number(DESTINO_CAIDO_MS) > 0, "sin ventana esto no es memoria, es un apagado");
+  assert.ok(Number(DESTINO_CAIDO_MS) <= 30 * 60 * 1000, "mas de media hora ciego es apagar el calendario a mano sin decirlo");
 });
