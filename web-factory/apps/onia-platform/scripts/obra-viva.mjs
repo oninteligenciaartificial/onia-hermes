@@ -484,8 +484,24 @@ async function medir() {
   return codigo;
 }
 
-if (process.argv.includes("--self-check")) {
-  process.exit(selfCheck() === 0 ? 0 : 1);
-} else {
-  process.exit(await medir());
+/**
+ * La medicion corre SOLO si a este archivo lo invocaron; importarlo no dispara nada.
+ *
+ * Sin esta guarda, `import { textoQueLeeElLead } from "./obra-viva.mjs"` ejecutaba el barrido
+ * entero (24 curls contra produccion) y despues `process.exit()` MATABA al proceso que lo
+ * importo — y peor: como el `--self-check` se lee de `process.argv`, el importador que pasara
+ * esa bandera veia el veredicto de ESTE archivo y creia que era el suyo. Medido el 2026-09-26
+ * escribiendo `titular-es-el-sistema.mjs`, que reusa `textoQueLeeElLead` para no tener un
+ * segundo extractor de texto visible que se le desincronice (la clase que ya separo a
+ * `precios-vivos` de `enlaces-vivos` el 2026-09-12).
+ *
+ * Es la misma guarda que `rutas-de-venta.mjs` documenta y que por eso lo dejo importable.
+ */
+const esPrincipal = process.argv[1] && import.meta.url.endsWith(process.argv[1].split("/").pop());
+if (esPrincipal) {
+  if (process.argv.includes("--self-check")) {
+    process.exit(selfCheck() === 0 ? 0 : 1);
+  } else {
+    process.exit(await medir());
+  }
 }
