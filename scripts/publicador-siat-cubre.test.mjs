@@ -126,4 +126,58 @@ test("el publicador del emisor SIAT cubre todo lo que el VPS ejecuta", async (t)
     const dobles = archivos.filter((a) => alEmisor.test(a.ruta) && arriba.test(a.ruta)).map((a) => a.ruta);
     assert.deepEqual(dobles, [], `estos irían a los dos destinos y la segunda copia pisa a la primera: ${dobles.join(", ")}`);
   });
+
+  // COBERTURA NO ES RUTEO, y esa distinción costó 16 días de un archivo vivo.
+  //
+  // Los sub-tests de arriba preguntan QUIÉN copia cada archivo; ninguno pregunta
+  // ADÓNDE. El 2026-09-26 se midió que `destino_de()` mandaba los TRES
+  // orquestadores a `$DEST` (/opt/onia-siat/emisor/) en vez de `$DEST_ARRIBA`
+  // (/opt/onia-siat/), que es donde se ejecutan y donde vive el estado que leen.
+  // Efecto: `/opt/onia-siat/run-fase1-volumen.sh` seguía siendo el del 4-sep
+  // (633 B, `for E in IV VII XI`) mientras main tenía el del 10-sep (3023 B, el
+  // que deriva las etapas de STAGE_ORDER y corre la etapa I).
+  //
+  // Y el falso verde era perfecto: el publicador COMPARA con el mismo
+  // `destino_de()` con el que copia, así que encontraba sus propias copias en el
+  // lugar equivocado, decía «YA ESTA PUBLICADO» y `deploy:sin-pedido` remataba
+  // «siat: al día, no hay nada que pedir». Un gate que usa la función que está
+  // rota para juzgarla siempre absuelve.
+  //
+  // LA CLASE: el arreglo del 10-sep amplió el sujeto (de un nombre a dedo a la
+  // derivación por `git ls-files`) y al hacerlo cambió el SEPARADOR de `$ARRIBA`
+  // de «un solo valor» a «varias líneas» — y `case " $ARRIBA " in *" $1 "*` pide
+  // espacios a los lados. Con un archivo matcheaba; con tres dejó de matchear
+  // para todos, en silencio y cayendo al default. Ampliar un conjunto puede
+  // romper el ruteo del elemento que ya funcionaba: por eso esto se mide
+  // ejecutando la función real, no leyéndola.
+  await t.test("los orquestadores se copian UN NIVEL MÁS ARRIBA, no dentro del emisor", () => {
+    const fuente = readFileSync(PUBLICADOR, "utf8");
+    const m = fuente.match(/^destino_de\(\) \{\n[\s\S]*?^\}/m);
+    assert.ok(m, `${PUBLICADOR} ya no declara destino_de(): el gate no puede medir el ruteo`);
+
+    const alNivelDeArriba = archivos.filter((a) => arriba.test(a.ruta)).map((a) => a.ruta);
+    assert.ok(
+      alNivelDeArriba.length >= 2,
+      `esperaba varios orquestadores (el bug sólo aparece con más de uno), encontré ${alNivelDeArriba.length}`,
+    );
+
+    // `ARRIBA` se arma como lo arma el publicador —salida de `git ls-files`, una
+    // por línea—, porque el separador ES el defecto que se está midiendo.
+    const guion = [
+      `ARRIBA=$(printf '%s\\n' ${alNivelDeArriba.map((r) => `'${r}'`).join(" ")})`,
+      'DEST=/opt/onia-siat/emisor',
+      'DEST_ARRIBA=/opt/onia-siat',
+      m[0],
+      'for f in $ARRIBA; do echo "$f=$(destino_de "$f")"; done',
+    ].join("\n");
+
+    const salida = execFileSync("bash", ["-c", guion], { encoding: "utf8" }).trim().split("\n");
+    const malRuteados = salida.filter((l) => l.split("=")[1].startsWith("/opt/onia-siat/emisor/"));
+    assert.deepEqual(
+      malRuteados,
+      [],
+      `estos orquestadores se copiarían DENTRO del emisor en vez de un nivel más arriba, ` +
+        `así que el archivo que el VPS ejecuta nunca se actualiza: ${malRuteados.join(", ")}`,
+    );
+  });
 });

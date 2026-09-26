@@ -282,8 +282,12 @@ trabaría el merge de todos los carriles.
          **sigue** siendo `f` hoy), pero `mergePanelKnowledge` hace `{...archivo, ...panel}` y
          pisa **clave por clave** — sin esa clave en el panel, las del archivo **sobreviven**.
          Una fila que no pisa no apaga nada. Medido hoy, no leído: `npm run campanas:vivas` →
-         **exit 0** (*7 frases vivas, 7 con campaña*, documento `2026-09-24.1`, contra el sitio
-         VIVO) y `espejo-check.mjs` → **exit 0**.
+         **exit 0** (*7 frases vivas, 7 con campaña*, documento `2026-09-24.1`) y
+         `espejo-check.mjs` → **exit 0**. ⚠️ **El `"contra el sitio VIVO"` que decía acá se cayó
+         el 2026-09-26:** ese alias cotejaba la web viva contra el documento del **repo**, no
+         contra el `knowledge.json` cargado en el bot. La conclusión de la fila (una fila de panel
+         sin la clave no pisa nada) **se sostiene** — la midió `mergePanelKnowledge`, no este
+         alias. Lo que cambia es a quién se le pregunta: `npm run campanas:bot-vivo`.
 
          **Y el "ítem propio en la cola del chatbot" que este párrafo mandaba a buscar ya no
          existe** — está cerrado allá. Un puntero a trabajo terminado manda a otro carril a
@@ -497,7 +501,7 @@ trabaría el merge de todos los carriles.
 
       ⚠️ **Commiteado y publicado en la rama del carril, NO desplegado:** lo mergea `onia-cola` y
       ✅ YA DESPLEGADO (medido 2026-09-25: `3a61c3ea` `b1247fb` `251f64c` vive en produccion `39234c89`).
-      el pedido de deploy vivo es `t_b8d00627`, esperando el `ok` de Sergio Urcullo. **No se pudo
+      el pedido de deploy vivo de `plataforma` espera el `ok` de Sergio Urcullo (el id se DERIVA, no se copia). **No se pudo
       mirar renderizada en producción**: el bug de MFA vencido manda toda ruta del panel a
       `/profile?mfa=obligatorio`, y su arreglo (`b1247fb`) está en `master` pero **no** en el
       build vivo — medido el 2026-09-18: `BUILD_ID` vivo `OFd4xCDzoTbQdThUbfzDv` =
@@ -5231,7 +5235,7 @@ y sin operar. Acá se opera, con verificación por ítem.
 
       **Gates:** `npx tsc --noEmit` exit 0 · `npx vitest run` **3264 pasan / 288 archivos** ·
       `npx eslint .` 0 errores. **No está terminado hasta que se publique:** viaja en el pedido
-      `t_deddf471` (`DESPLEGAR: plataforma`), que espera el `ok` de Sergio Urcullo.
+      el pedido de deploy vivo (`DESPLEGAR: plataforma`), que espera el `ok` de Sergio Urcullo.
 
 - [x] 🟡 **CERRADO el 2026-09-07: el cliente ya podía exportar sus datos y no había botón — y la
       misma pantalla le ofrecía comprar la exportación que ya había pagado.**
@@ -5277,7 +5281,7 @@ y sin operar. Acá se opera, con verificación por ítem.
 
       **Gates:** `npx tsc --noEmit` exit 0 · `npx vitest run` **3273 pasan / 288 archivos** ·
       `npx eslint .` 0 errores. **No está terminado hasta que se publique:** anotado en el pedido
-      `t_deddf471` (`DESPLEGAR: plataforma`), que espera el `ok` de Sergio Urcullo.
+      el pedido de deploy vivo (`DESPLEGAR: plataforma`), que espera el `ok` de Sergio Urcullo.
       ✅ **El riesgo que decía acá está levantado (2026-09-07):** `33b40ff` ya está en `master`
       —entró con el merge `2aa79f8`, tres gates verdes sobre el árbol real (tsc 0, 3273 tests,
       lint 0 errores)— así que el swap lo publica sí o sí. Ese aviso duró lo que tardó el
@@ -5380,7 +5384,7 @@ y sin operar. Acá se opera, con verificación por ítem.
 
       **Gates:** `npx tsc --noEmit` exit 0 · `npx vitest run` **3289 pasan / 289 archivos** ·
       `npx eslint .` 0 errores. **No está terminado hasta que se publique:** viaja en el pedido
-      `t_deddf471` (`DESPLEGAR: plataforma`), que espera el `ok` de Sergio Urcullo.
+      el pedido de deploy vivo (`DESPLEGAR: plataforma`), que espera el `ok` de Sergio Urcullo.
 
 - [x] 🔴 **CERRADO el 2026-09-08: una cuenta APAGADA seguía tomando reservas por la puerta
       pública, y el desconocido que reservaba se presentaba a un negocio que no lo esperaba.**
@@ -5425,7 +5429,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       `npx eslint .` 0 errores.
 
       🔴 **NO ESTÁ DESPLEGADO y además falta un paso antes:** `ba2270b` está en la rama del
-      carril, **no en `master`**. Si el `ok` de `t_daa8750c` llega antes de que el integrador
+      carril, **no en `master`**. Si el `ok` al pedido de deploy vivo de `plataforma` llega antes de que el integrador
       mergee, este arreglo **no viaja en ese swap**. Anotado como comentario en ese pedido.
 
 - [x] 🟡 **CERRADO el 2026-09-08: la puerta pública crea clientes sin contarlos contra el tope
@@ -5517,7 +5521,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       `npx vitest run` **3994 pasan / 331 archivos** · `npx eslint .` 0 errores.
 
       🔴 **NO ESTÁ DESPLEGADO, y encima falta un paso antes:** `9c7031a` está en la rama del
-      carril, **no en `master`**. Si el `ok` de `t_daa8750c` llega antes de que el integrador
+      carril, **no en `master`**. Si el `ok` al pedido de deploy vivo de `plataforma` llega antes de que el integrador
       mergee, este arreglo no viaja en ese swap. Anotado como comentario en ese pedido.
 
 - [x] 🔴 **CERRADO el 2026-09-08: el dueño elegía pagar el AÑO y el mensaje con el que
@@ -5615,7 +5619,7 @@ y sin operar. Acá se opera, con verificación por ítem.
 
       ⚠️ **Commiteado y en la rama, NO desplegado**: viaja con el pedido de deploy de
       ✅ YA DESPLEGADO (medido 2026-09-25: `185d616` vive en produccion `39234c89`).
-      `plataforma` (`t_bf1607af`), que sigue esperando el `ok` de Sergio Urcullo.
+      `plataforma`, que sigue esperando el `ok` de Sergio Urcullo (el id se DERIVA, no se copia).
 
 
 - [x] **CERRADO el 2026-09-11 (`ef69e9b`): el gate de camino de fallo cubría 2 de los 17
@@ -6128,6 +6132,37 @@ y sin operar. Acá se opera, con verificación por ítem.
          tres etapas viejas. Desplegar no es de este carril — va por `DESPLEGAR: siat`. **Esto
          tiene que llegar ANTES de que se corra la matriz de `pv1`**, o el ok de Sergio Urcullo
          desbloquea 1.125 de los 1.169 y repite el bug de VI y IX.
+
+         ⚠️ **2026-09-26 (chatbot-cola) — la línea de arriba era cierta y el `DESPLEGAR: siat`
+         NO la habría arreglado: el publicador copiaba al lugar equivocado y se absolvía solo.**
+         Medido en el VPS, no deducido: los TRES orquestadores estaban en
+         `/opt/onia-siat/emisor/` (13-sep 02:16) y el que el VPS ejecuta,
+         `/opt/onia-siat/run-fase1-volumen.sh`, seguía siendo el del **4-sep** (633 B, con
+         `for E in IV VII XI`); `run-wrapper.sh` ni existía ahí. Causa en
+         `hermes-content/deploy/onia-siat/publicar.sh`: `destino_de()` ruteaba con
+         `case " $ARRIBA " in *" $1 "*`, que pide **espacios** a los lados, y `$ARRIBA` sale de
+         `git ls-files` **separado por saltos de línea**. Mientras fue UN archivo (el regex a
+         dedo) el valor no tenía separador y matcheaba; **el arreglo del 10-sep que amplió el
+         sujeto a tres rompió el ruteo de los tres**, en silencio y cayendo al `$DEST` del
+         emisor.
+
+         **El falso verde se cerraba solo, y por eso duró 16 días:** el publicador COMPARA con
+         el mismo `destino_de()` con el que copia, así que encontraba sus propias copias en el
+         lugar equivocado y decía *«YA ESTA PUBLICADO»*; `npm run deploy:sin-pedido` remataba
+         *«OK siat: al dia, no hay nada que pedir»*. Un gate que juzga con la función que está
+         rota siempre absuelve — por eso nadie iba a pedir nunca ese `DESPLEGAR: siat`.
+
+         **Arreglado** (`destino_de()` recorre `$ARRIBA` con `for`, que separa por IFS igual que
+         el resto del script). **Gate:** `scripts/publicador-siat-cubre.test.mjs` ›
+         *«los orquestadores se copian UN NIVEL MÁS ARRIBA»*, que **ejecuta** la función en vez
+         de leerla y con más de un archivo — con uno solo el defecto no aparece. Rojo antes
+         nombrando los tres destinos equivocados, verde después, 8/8. Cableado en `npm test`
+         como `test:publicador-siat`. **Sigue sin desplegar:** hace falta el merge a `main`
+         (lleva el publicador a `/opt` por `sincronizar.sh`) y **después** el `DESPLEGAR: siat`.
+
+         **La clase, que vale más que el caso:** cobertura no es ruteo. El gate que ya existía
+         preguntaba QUIÉN copia cada archivo y ninguno preguntaba ADÓNDE, así que daba verde
+         sobre un archivo que se copiaba entero al lugar donde nadie lo ejecuta.
 
 
 ## Lo que este carril NO hace

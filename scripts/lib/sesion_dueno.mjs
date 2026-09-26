@@ -33,8 +33,8 @@ const RAICES = [
   "/root/node_modules",
 ];
 
-export function cargar(paquete) {
-  for (const raiz of RAICES) {
+export function cargar(paquete, raices = RAICES) {
+  for (const raiz of raices) {
     try {
       return createRequire(`${raiz}/`)(paquete);
     } catch (e) {
@@ -42,7 +42,7 @@ export function cargar(paquete) {
     }
   }
   console.error(
-    `FALTA la dependencia '${paquete}'. Se buscó en:\n  ${RAICES.join("\n  ")}\n` +
+    `FALTA la dependencia '${paquete}'. Se buscó en:\n  ${raices.join("\n  ")}\n` +
       `Sin eso esto NO puede medir nada — no sale verde por defecto.`
   );
   process.exit(2);
@@ -165,10 +165,15 @@ export async function elevarSegundoFactor(cliente) {
  * servidor de Next sobre un tarro de cookies de mentira: lo que la libreria ESCRIBE ahi es,
  * por construccion, lo que el servidor va a LEER.
  */
-export async function acunarSesion(email) {
+/**
+ * `raices` deja que un consumidor con su propia lista de arboles (`objetivo_visible.mjs` la
+ * parametriza con `ONIA_SSR_DIR`) siga eligiendo de donde sale `@supabase/ssr`. Por omision usa
+ * las de acá, asi que los llamadores viejos no cambian.
+ */
+export async function acunarSesion(email, { raices, plataforma = "onia-platform" } = {}) {
   exigirCuentaConPerfil(email);
-  const { createServerClient } = cargar("@supabase/ssr");
-  const env = envDelContenedor("onia-platform");
+  const { createServerClient } = cargar("@supabase/ssr", raices ?? RAICES);
+  const env = envDelContenedor(plataforma);
   const url = env.NEXT_PUBLIC_SUPABASE_URL;
   const anon = env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   const service = env.SUPABASE_SERVICE_ROLE_KEY;
@@ -204,13 +209,18 @@ export async function acunarSesion(email) {
       // El segundo paso va ANTES de leer el tarro: `mfa.verify` reemplaza la sesión por una
       // `aal2`, y las cookies que valen son las de DESPUÉS. Leerlas antes se lleva el JWT
       // `aal1` y la captura sale de /login/2fa con exit 0.
-      console.log(`segundo factor: ${await elevarSegundoFactor(cliente)}`);
+      // La linea se DEVUELVE además de imprimirse: un consumidor que juzga el corte de la puerta
+      // necesita saber si la sesion quedo en `aal2`, y hasta el 2026-09-26 ese dato solo existia
+      // en el log — asi que `objetivo_visible.mjs` no podia distinguir "falta tipear el codigo"
+      // de "ya lo tipeamos y la puerta corto igual", que se arreglan en lugares opuestos.
+      const segundoFactor = await elevarSegundoFactor(cliente);
+      console.log(`segundo factor: ${segundoFactor}`);
       const cookies = [...tarro].map(([name, value]) => ({ name, value }));
       if (!cookies.length) {
         console.error("La librería no escribió ni una cookie: sin eso el servidor no ve la sesión.");
         process.exit(2);
       }
-      return { host: new URL(url).host, cookies, email: data.session.user?.email };
+      return { host: new URL(url).host, cookies, email: data.session.user?.email, segundoFactor };
     }
     ultimo = error;
   }

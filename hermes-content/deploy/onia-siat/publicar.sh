@@ -135,11 +135,32 @@ DEST_ARRIBA=$(dirname "$DEST")
 #
 # El destino se pregunta UNA vez, acá, y lo usan los tres pasos (comparar,
 # copiar, verificar). Tener la regla escrita tres veces es como se desincronizan.
+#
+# ⚠️ Acá decía `case " $ARRIBA " in *" $1 "*)`, y el patrón pide ESPACIOS a los
+# lados del nombre. `$ARRIBA` sale de `git ls-files`: viene separado por saltos
+# de línea, no por espacios. Mientras fue UN archivo (el regex a dedo
+# `^run-fase1-volumen\.sh$`) el valor no tenía separador y `" $ARRIBA "` lo
+# rodeaba de espacios, así que matcheaba; al derivarlo el 10-sep y pasar a TRES,
+# el separador se volvió `\n` y dejó de matchear **para los tres**, en silencio y
+# cayendo al default. Medido el 2026-09-26: los tres orquestadores estaban en
+# /opt/onia-siat/emisor/ (13-sep 02:16) y el que el VPS ejecuta,
+# /opt/onia-siat/run-fase1-volumen.sh, seguía siendo el del 4-sep (633 B, con
+# `for E in IV VII XI`) — 16 días creyéndose desplegado.
+#
+# Y el falso verde se cerraba solo: el publicador COMPARA con este mismo
+# `destino_de()`, así que encontraba sus propias copias en el lugar equivocado y
+# decía «YA ESTA PUBLICADO». Ampliar el conjunto rompió el ruteo del elemento que
+# ya andaba — por eso `scripts/publicador-siat-cubre.test.mjs` ahora EJECUTA esta
+# función en vez de leerla, y con más de un archivo: con uno solo el defecto no
+# aparece.
+#
+# El `for` no tiene ese punto ciego: separa por IFS (espacios Y saltos de línea),
+# que es exactamente como el resto del script ya recorre `$TODOS` y `$ARRIBA`.
 destino_de() {
-  case " $ARRIBA " in
-    *" $1 "*) echo "$DEST_ARRIBA/$1" ;;
-    *)        echo "$DEST/$1" ;;
-  esac
+  for _a in $ARRIBA; do
+    [ "$_a" = "$1" ] && { echo "$DEST_ARRIBA/$1"; return; }
+  done
+  echo "$DEST/$1"
 }
 TODOS="$ARCHIVOS $ARRIBA"
 
