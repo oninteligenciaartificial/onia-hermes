@@ -12,6 +12,43 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-26 (vuelta HEAD 31f9e131) — `BUILD_ID` sin cambios; re-verificado cupo del chatbot EN PANTALLA + agenda pública tras una semana — sin hallazgo, más un hallazgo viejo confirmado corregido
+
+`ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado primero contra la entrada de abajo:
+`4FWMcecd4jRBGUVwStDQb`, **igual** — no correspondía repetir el recorrido end-to-end. Tablero:
+sin tareas `ready` sin reclamar en la zona `recorrido-cliente`.
+
+**1) La vuelta anterior sólo auditó código (cifra-por-cifra) del cupo del chatbot, no la
+pantalla.** Corrí `scripts/probar_cupo_chatbot.mjs` (ya existía desde el 24-sep, no hacía falta
+escribir nada nuevo) contra `app.onia.com.bo` real: 80% → barra ámbar, botón "Sumar 200
+conversaciones" con link `wa.me` que menciona Bs 190, texto de alerta; 100% → barra roja/error,
+texto menciona derivar a una persona. **Sin hallazgo** — tercera confirmación de este eje (código
+09-24, cifra-por-cifra 09-26, pantalla en vivo ahora). Limpieza verificada: `organizations=0
+auth.users=0`.
+
+**2) Cambié de eje** (el del cupo ya está triplemente exprimido): re-verifiqué la agenda pública
+`/book/<slug>` con `scripts/probar_reserva_publica.mjs`, sin haberse corrido desde el 19-sep (una
+semana, varios deploys de por medio). Un desconocido SIN sesión abre el link, ve el profesional y
+el horario, reserva por la API real (`POST /api/booking/appointments` → 201) y el dueño la ve en
+`/appointments`. **Sin hallazgo** — sigue sosteniéndose igual que hace una semana.
+
+**3) Reverifiqué el hallazgo abierto que la vuelta `f3c4327f` había dejado pendiente**
+(`t_826a7ab2`, `/servicios/marketing-ia` admitía en la venta "somos una empresa nueva sin casos de
+éxito"): `git merge-base --is-ancestor 5f61db7a origin/main` ahora da **sí** (antes NO) y
+`curl https://onia.com.bo/servicios/marketing-ia` ya **no** sirve ese texto (grep vacío, HTTP 200,
+45.910 bytes). El fix llegó a producción esta semana — el tablero ya lo tenía `done`, y ahora
+también es cierto en el sitio real. No hizo falta ninguna acción más.
+
+RAZÓN: N/A — avanzó (dos ejes re-verificados sin drift, y un hallazgo viejo confirmado corregido
+en producción, no sólo en el tablero).
+LECCIÓN: cuando un eje da "sin hallazgo" dos veces seguidas por el MISMO método (código, luego
+cifra-por-cifra), la tercera vuelta lo cambia por el método que realmente falta — MIRAR la
+pantalla renderizada — antes de darlo por agotado. Y una superficie de venta pública con drift de
+`main` no se vuelve a revisar por sospecha: se revisa por CALENDARIO (una semana sin corrida es
+tiempo suficiente para que el integrador la haya movido).
+
+---
+
 ## 2026-09-26 (vuelta HEAD 70e6f2ab) — `BUILD_ID` sin cambios; candidato de la vuelta anterior: el cupo del chatbot cifra-por-cifra contra el código que corta — sin hallazgo
 
 `ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado primero contra la entrada de abajo:
