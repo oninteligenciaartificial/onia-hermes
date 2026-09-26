@@ -383,7 +383,11 @@ export function afirmacionesDe(texto, archivo, esCommit = () => false) {
   let actual = null;
   for (let i = 0; i < lineas.length; i++) {
     const l = lineas[i];
-    if (/^- \[[ x]\] /.test(l)) {
+    // Una cabecera de seccion abre su propio sujeto ADEMAS de cerrar el anterior. Hasta el
+    // 2026-09-25 solo cerraba, y por eso tres rotulos («## ✅ T10 … commiteado, **NO
+    // desplegado**: …» y sus hermanos T9 y T6) nunca entraron al juicio: el titulo es lo
+    // primero que lee la vuelta siguiente, y es el que decide si el item cuenta por cerrado.
+    if (/^- \[[ x]\] /.test(l) || /^#{2,3} /.test(l)) {
       actual = { desde: i, lineas: [] };
       items.push(actual);
     } else if (actual && !(l.startsWith("      ") || l.trim() === "")) {
@@ -686,6 +690,34 @@ function selfCheck() {
     "      ```",
   ].join("\n");
   ok("no acusa dentro de un bloque de codigo", afirmacionesDe(conCodigo, "x.md").length === 0);
+
+  // --- El ROTULO de la seccion tambien afirma, y era el unico invisible -------------------
+  //
+  // Medido el 2026-09-25 22:00 La Paz: `chatbot.md:32` dice en su TITULO de seccion
+  // «## ✅ T10 — CERRADO el 2026-09-24 (commiteado, **NO desplegado**): el log del bot estaba
+  // ahogado…» y el dedup que ese item entrego YA ESTA VIVO (`/tmp/onia-bot/knowledge.mjs`
+  // trae `avisosDePanelYaDados`, y el log tiene 0 lineas `[knowledge:panel]` el 25 y el 26 de
+  // septiembre contra 5.032 historicas). O sea que el rotulo MIENTE — y este gate no lo veia,
+  // porque solo abria item con `- [ ]` / `- [x]` y la cabecera `## ` unicamente CERRABA el
+  // anterior. Tres cabeceras (T10, T9, T6) afirmaban deploy y ninguna entraba al juicio.
+  //
+  // El rotulo es lo PRIMERO que lee la vuelta siguiente y es lo que decide si el item cuenta
+  // como cerrado: un renglon del cuerpo corregido debajo de un titulo que sigue diciendo «NO
+  // desplegado» deja la mentira arriba, donde mas se lee.
+  const cabSeccion = "## ✅ T10 — CERRADO el 2026-09-24 (commiteado, **NO desplegado**): el bot vivo corre desde `/tmp/onia-bot`";
+  ok("la cabecera de seccion tambien es una afirmacion", afirmacionesDe(cabSeccion + "\n", "x.md").length === 1);
+  ok("y se le ubica la frontera igual que a un item", afirmacionesDe(cabSeccion + "\n", "x.md")[0]?.frontera === "bot");
+  // Y la regla del archivo NO es una afirmacion: dice «NO desplegado» entre guillemets porque
+  // habla DEL LITERAL, no de codigo suyo. Absolverla no es una excepcion escrita a mano — la
+  // hace `sinCitas`, el mismo criterio que ya absolvia a las citas dentro de un item.
+  ok(
+    "la cabecera-REGLA que menciona el literal no se acusa",
+    afirmacionesDe("## 🔴 ANTES DE CREERLE A UN «NO desplegado» DE ESTE ARCHIVO\n", "x.md").length === 0,
+  );
+  // Un item que vive DENTRO de la seccion sigue siendo suyo: la cabecera no se queda con su
+  // cuerpo (si se lo quedara, el juez del motor leeria los archivos del item de al lado).
+  const seccionConItem = [cabSeccion, "", "- [x] **CERRADO.** Commiteado, **NO desplegado** — `knowledge.mjs`.", ""].join("\n");
+  ok("cabecera e item se acusan por separado", afirmacionesDe(seccionConItem, "x.md").length === 2);
 
   // La etiqueta de imagen: es de donde sale el sha que corre.
   ok("lee la etiqueta", shaDeEtiqueta("onia-platform:release-3986b807") === "3986b807");

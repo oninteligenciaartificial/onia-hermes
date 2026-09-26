@@ -30,6 +30,7 @@ contra producción (SSH al VPS, las dos bases, el motor corrido de verdad), no c
 ---
 
 ## ✅ T10 — CERRADO el 2026-09-24 (commiteado, **NO desplegado**): el log del bot estaba ahogado por UNA línea repetida, y por eso la medición de este carril salía vacía teniendo los datos adentro
+✅ YA DESPLEGADO (medido 2026-09-26: `npm run bot:vivo-al-dia` — el motor vivo ya corre este archivo).
 
 **Cómo apareció.** No lo trajo la cola: lo trajo el chequeo de arranque. El comando con el que este
 carril mide su propio objetivo —`webhook-server.sh logs | tail -80 | grep -E
@@ -129,6 +130,7 @@ loop escribieron `avisos 0` teniendo cuatro avisos entregados adentro.
 ---
 
 ## ✅ T9 — CERRADO el 2026-09-19 (commiteado, **NO desplegado** — es un medidor, no toca el motor): todo el carril cuenta "el bot contestó" por una fila que existe, y nadie mira si el mensaje LLEGÓ
+✅ YA DESPLEGADO (medido 2026-09-26: `npm run bot:vivo-al-dia` — el motor vivo ya corre este archivo).
 
 **El eje.** La definición de hecho de este carril —*"el bot contestó los DOS"*— se mide contando
 filas en `messages` de Chatwoot. El simulador imprime el texto. El adapter sólo mira que el POST
@@ -774,6 +776,38 @@ Las 3 que quedan (3492, 3623, 7674) son del motor leídas a mano pero **no tiene
 mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se derivan con el comando.
 
 ## Ahora
+
+- [x] 🔴 **CERRADO el 2026-09-25 21:43-22:35 La Paz (commiteado; es el INSTRUMENTO, no toca el
+      motor): el gate de los «NO desplegado» fantasma no miraba los RÓTULOS de sección — y dos
+      de ellos mentían, uno desde el 24-sep.** `afirmacionesDe()` abría sujeto sólo con
+      `- [ ]` / `- [x]`; una cabecera `## ` únicamente CERRABA el anterior, así que
+      `## ✅ T10 — … (commiteado, **NO desplegado**)` y su hermano T9 nunca entraron al juicio.
+      El rótulo es lo PRIMERO que lee la vuelta siguiente y es lo que decide si el ítem cuenta
+      por cerrado: una corrección escrita en el cuerpo deja la mentira arriba, donde más se lee.
+
+      **Cómo apareció, y por qué no lo trajo la cola.** Midiendo el objetivo de esta vuelta el
+      `tail -400` del log del bot devolvió **0** `demo_agendada` / `handoff_humano` teniendo
+      **30** adentro (5 + 25 en las 72.147 líneas del archivo): 264 de esas 400 eran la línea
+      `[knowledge:panel]` que T10 dice haber dedupeado. Parecía el bug de T10 vivo — y no: el
+      dedup **ya está desplegado** (`docker exec onia-center grep -c avisosDePanelYaDados
+      /tmp/onia-bot/knowledge.mjs` → `4`, y **cero** líneas `[knowledge:panel]` el 25 y el
+      26-sep contra 5.032 históricas). Lo que sobrevive es la CICATRIZ en un log que no rota,
+      más un rótulo congelado en pasado. El defecto medible era el segundo.
+
+      **Prueba.** Self-check en ROJO primero y por el motivo correcto (3 casos nuevos: la
+      cabecera es afirmación · se le ubica la frontera · cabecera e ítem se acusan por
+      separado) → `92/95`; con el arreglo `95/95`. En vivo el gate pasó de **21 líneas
+      juzgadas, 0 mienten** a **25 líneas, 2 mienten**, nombró `chatbot.md:32` y `:131`, y
+      `--corregir` les puso su medición al lado sin borrar la historia. La cabecera-REGLA
+      `## 🔴 ANTES DE CREERLE A UN «NO desplegado»…` queda absuelta **sin excepción escrita a
+      mano**: la absuelve `sinCitas()`, el mismo criterio que ya absolvía las citas de un ítem.
+      Archivos: `scripts/deploy_ya_ocurrio.mjs`, `hermes-content/docs/cola/chatbot.md`.
+
+      ⚠️ **Lo que este ítem NO arregla, dicho con su número:** quedan **13 de 23** líneas NO
+      MEDIDAS — 7 citan un sha que no es de `onia-platform` y salen del juicio por sha aunque
+      hablen del motor, y 5 no citan sha ni ubican frontera (`chatbot.md:289` es T6, otra
+      cabecera). Y hay una TERCERA frontera sin instrumento: `plataforma-v1.md:6096` es del
+      SIAT (`/opt/onia-siat`). Ése es el próximo sujeto de este gate, no uno nuevo.
 
 - [x] 🔴 **CERRADO el 2026-09-25 20:15-21:00 La Paz: el gate que existe para cazar los «NO
       desplegado» fantasma era CIEGO al motor del bot — 51 de sus 58 líneas salían «otra
