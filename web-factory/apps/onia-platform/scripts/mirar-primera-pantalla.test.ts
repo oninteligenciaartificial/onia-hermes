@@ -61,6 +61,10 @@ describe("mirar-primera-pantalla: el veredicto", () => {
     // medicion que el barrido SIEMPRE toma y el fixture omite es como este
     // archivo aprueba un juicio que corre sobre un dato que no existe.
     tarjetas: [{ rotulo: "Tu cuenta", alto: 193, util: 154, contenido: 148, hueco: 6, fraccion: 0.039, caja: "tarjeta" }],
+    // El caso sano del resalte: la frase verde entra entera en un renglon. Va
+    // en la fabrica por el mismo motivo que `tarjetas` — el barrido la toma
+    // SIEMPRE, y omitirla aca seria aprobar el juicio sin el dato.
+    resaltes: [{ texto: "una pantalla", medible: true, renglones: 1 }],
     fallidas: [] as Fallida[],
     ...extra,
   });
@@ -256,6 +260,42 @@ describe("mirar-primera-pantalla: el veredicto", () => {
     expect(sinPreguntar.lineas.join("\n")).toContain("sin la medicion del rotulo");
   });
 
+  /**
+   * El defecto que vivió en producción hasta el 2026-09-26: el titular de
+   * `/empezar` partía "usalo <em>de verdad</em> 14 días" en "y usalo de" /
+   * "verdad 14 días". Ningún gate lo veía — el markup es idéntico parta o no,
+   * así que no lo alcanza un test de fuente, y la página responde 200 con todo
+   * pintado, así que no lo alcanza el resto de este archivo. Lo vio el ojo
+   * mirando la captura, y esta es la medición que lo deja visto para siempre.
+   */
+  it("da ROJO cuando el resalte del titular cae partido en dos renglones", () => {
+    const r = veredicto(
+      cuatroSanas.map((p, i) =>
+        i === 0 ? { ...p, resaltes: [{ texto: "de verdad", medible: true, renglones: 2 }] } : p,
+      ),
+    );
+    expect(r.codigo).toBe(1);
+    expect(r.lineas.join("\n")).toContain("partido en dos renglones");
+    expect(r.lineas.join("\n")).toContain("de verdad");
+  });
+
+  it("no acusa a un titular sin resalte ni a uno que entra entero", () => {
+    expect(veredicto(cuatroSanas.map((p) => ({ ...p, resaltes: [] }))).codigo).toBe(0);
+    expect(veredicto(cuatroSanas).codigo).toBe(0);
+  });
+
+  /** Misma separación que en el rótulo: no preguntar no es "está bien". */
+  it("distingue un resalte sin caja de una medición que no se hizo", () => {
+    const sinCaja = veredicto(
+      cuatroSanas.map((p) => ({ ...p, resaltes: [{ texto: "de verdad", medible: false }] })),
+    );
+    expect(sinCaja.codigo).toBe(2);
+    expect(sinCaja.lineas.join("\n")).toContain("NO MEDIDO");
+    const sinPreguntar = veredicto(cuatroSanas.map((p) => ({ ...p, resaltes: undefined })));
+    expect(sinPreguntar.codigo).toBe(1);
+    expect(sinPreguntar.lineas.join("\n")).toContain("sin la medicion del resalte");
+  });
+
   it("da ROJO con un informe vacío en vez de leer el silencio como éxito", () => {
     expect(veredicto([]).codigo).not.toBe(0);
   });
@@ -369,6 +409,7 @@ describe("mirar-primera-pantalla: el umbral de pintado", () => {
         h1: "x",
         opacidadH1: n,
         kicker: null,
+        resaltes: [],
         tarjetas: [{ rotulo: "x", alto: 100, util: 90, contenido: 88, hueco: 2, fraccion: 0.022, caja: "tarjeta" }],
         fallidas: [] as Fallida[],
       }));
@@ -392,6 +433,7 @@ describe("mirar-primera-pantalla: la tarjeta a medio llenar", () => {
     h1: "Creá tu cuenta y usalo de verdad 14 días.",
     opacidadH1: 1,
     kicker: null,
+    resaltes: [{ texto: "de verdad", medible: true, renglones: 1 }],
     tarjetas: [
       {
         rotulo: "Una cuenta recién creada",

@@ -114,8 +114,15 @@ describe("el hero de la portada se DIBUJA, no se captura", () => {
     expect(head, "el <head> volvió a vender el asistente").not.toMatch(
       /asistente|chatbot|\bbot\b|recepcionista/i,
     );
-    // y el precio también acá sale de la fuente, no tipeado
-    expect(head).toMatch(/plan\("basico"\)\.mensual/);
+    // Y el precio también acá sale de la fuente, no tipeado — con el MISMO
+    // criterio que el hero cuatro tests más abajo: derivado del piso de la
+    // escalera, no de un id escrito a mano. Hasta el 2026-09-26 esta línea
+    // exigía el literal `plan("basico").mensual`, o sea que un gate estaba
+    // DEFENDIENDO el defecto que su propio vecino ya había curado: la cura del
+    // 2026-09-19 llegó al hero y no a su `<head>`, que es la mitad que se ve
+    // antes de abrir el sitio.
+    expect(head).toMatch(/PLAN_DE_ENTRADA\.mensual/);
+    expect(head).not.toMatch(/plan\(\s*"[a-z]+"\s*\)\.mensual/);
   });
 
   /**
@@ -251,7 +258,14 @@ describe("la tarjeta que se ve al compartir el link vende lo mismo que el head",
     // mismo criterio que el hero: si la tarjeta publica un número, lo lee de
     // lib/pricing.ts. Una cifra a mano acá se comparte por WhatsApp durante
     // meses sin que ninguna pantalla la muestre.
-    expect(copy).toMatch(/plan\("basico"\)\.mensual/);
+    //
+    // Y lee el PISO de la escalera, no un id tipeado. Acá es donde más caro
+    // sale equivocarse: el número va horneado en píxeles y las 24 superficies
+    // de venta comparten esta única imagen (medido el 2026-09-26: mismo md5 en
+    // las 24). Un monto dentro de un PNG no lo ve ningún grep ni ningún
+    // barrido de HTML — ni el propio `precios:vivos`, que sale verde igual.
+    expect(copy).toMatch(/planDeEntrada\(\)\.mensual/);
+    expect(copy).not.toMatch(/plan\(\s*"[a-z]+"\s*\)\.mensual/);
   });
 
   it("sigue dibujada: cero captura, como el hero", () => {

@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-import { bs, plan, PRUEBA } from "@/lib/pricing";
+import { bs, planDeEntrada, PRUEBA } from "@/lib/pricing";
 
 /**
  * La tarjeta social del sitio de venta — DIBUJADA, no fotografiada.
@@ -92,7 +92,14 @@ const PIEZAS = ["Clientes", "Caja", "Cobros", "Contabilidad"];
  * Interpolado en el JSX rompe el `next build` entero —las cinco rutas con
  * tarjeta fallan al prerenderizar— y el error no dice cuál es el div.
  */
-const BAJADA = `Desde Bs ${bs(plan("basico").mensual)} al mes. ${PRUEBA.dias} días gratis, sin tarjeta.`;
+/**
+ * El «desde» es un superlativo: cotiza el plan MÁS BARATO, no un plan llamado
+ * «basico». Va derivado porque este número viaja HORNEADO EN PÍXELES a las 24
+ * superficies de venta —comparten una sola imagen— y es lo que ve quien recibe
+ * el link por WhatsApp. Un monto dentro de un PNG no lo ve ningún grep, ningún
+ * barrido de HTML ni ninguna captura: si queda viejo, queda viejo en silencio.
+ */
+const BAJADA = `Desde Bs ${bs(planDeEntrada().mensual)} al mes. ${PRUEBA.dias} días gratis, sin tarjeta.`;
 
 export function dibujarTarjeta(): ImageResponse {
   return new ImageResponse(
