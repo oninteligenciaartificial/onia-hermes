@@ -777,6 +777,67 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
 
 ## Ahora
 
+- [ ] 🔴 **`puerta:alta` —el ÚNICO instrumento de la mitad «no promete lo que el producto no
+      hace» de este objetivo— lleva ~18 días saliendo `exit 2` porque busca el árbol del build
+      vivo en la carpeta equivocada. Medido el 2026-09-25 23:05-23:20 La Paz, sin heredar nada.**
+
+      `puerta-del-alta.mjs` sale `NO SE PUDO MEDIR — 2 puerta(s) sin medir: activar la
+      verificacion en dos pasos (no pude casar el BUILD_ID vivo con ningun arbol de fuentes en
+      /opt/onia-platform) · las puertas que pone el panel`. Su propia última línea dice por qué
+      importa: *«la que no pude medir puede ser justo la que frena al lead»*.
+
+      ⚠️ **La causa NO es la mudanza a nodo-casa, que era la hipótesis obvia y es FALSA.**
+      Medido: `scripts/lib/vps-o-local.mjs` funciona perfecto desde casa —
+      `listarDeProduccion("/opt/onia-platform/build-*")` devuelve los 7 directorios con
+      `origen: "remoto"` y `leerDeProduccion("/opt/onia-platform/app.env")` trae 10.322 bytes.
+      El helper no es el problema; el problema es **dónde busca** `arbolDelBuildVivo`.
+
+      **La causa real, en una línea:** `arbolDelBuildVivo` (`puerta-del-alta.mjs:146-152`) sólo
+      considera `listar("/opt/onia-platform/build-*")` y lee, dentro de cada uno, el sufijo `.next/standalone/.next/BUILD_ID` — que no existe en este repo, es del VPS.
+      Pero el árbol que el contenedor SIRVE no vive ahí: vive bajo `releases/` — ruta que no existe en este repo, es del VPS,
+      y ahí el `BUILD_ID` está en la **raíz** del directorio, no bajo `.next` como en staging. Los `build-*` son
+      **staging**, y `scripts/limpiar-builds-staging.sh` los borra — así que después de un swap el
+      `BUILD_ID` vivo legítimamente no tiene par en `build-*` y el instrumento concluye `null`.
+
+      **Reproducción exacta (30 s, los tres comandos y lo que devolvieron hoy):**
+
+      ```bash
+      docker exec onia-platform cat /app/.next/BUILD_ID
+      # → 4FWMcecd4jRBGUVwStDQb
+
+      # donde BUSCA hoy: los 7 staging, NINGUNO es el vivo
+      ssh -o BatchMode=yes root@187.77.16.63 'for d in /opt/onia-platform/build-*/; do \
+        echo "$d -> $(cat "$d/.next/standalone/.next/BUILD_ID" 2>/dev/null)"; done'
+      # → 9tuk1Qk2BjQ2j2HdJcL8u · NIRA4pNJ8fJVouaUsyu1E · AUiuQ9c0SmcJnuF37_qTo
+      #   Df2rH9P_zIOujNXHs0ist · bky4wwl7NUSLgbQgipVi2 · Idvh9u4mdBzHBgE2penq4 · HyMvkgxD68MORYYHikiG6
+
+      # donde ESTÁ de verdad:
+      ssh -o BatchMode=yes root@187.77.16.63 'find /opt/onia-platform/releases -maxdepth 4 \
+        -name BUILD_ID | while read p; do echo "$p -> $(cat $p)"; done'
+      # → .../releases/492e7155-20260925/BUILD_ID -> 4FWMcecd4jRBGUVwStDQb   <-- el arbol VIVO
+      ```
+
+      **Listo =** `node hermes-content/deploy/vps-ops/bot/puerta-del-alta.mjs` sale 0 o 1 (midió),
+      nunca 2 por este motivo, con el árbol casado contra `releases` del VPS. El test tiene que fallar en
+      ROJO primero **por el motivo correcto**: un `BUILD_ID` vivo que sólo tiene par en `releases/`
+      hoy devuelve `null`, y el self-check de `puerta-del-alta.mjs:715-731` ya tiene la forma del
+      caso (`listarFake` + `leerFake` con `origen: "remoto"`) — se le agrega el hermano de
+      `releases` ahí, no un archivo nuevo.
+
+      ⚠️ **Al arreglarlo, mirar los HERMANOS en la misma vuelta.** `arbolDelBuildVivo` no es el
+      único que casa por `BUILD_ID` contra `build-*`: la memoria compartida documenta la misma
+      receta («casado contra los `build-*` de `/opt/onia-platform` del VPS») como
+      la medida (2) de «verificar un deploy de onia-platform», así que **todo instrumento que la
+      copie tiene este mismo punto ciego** y hay que derivar los sujetos con
+      `grep -rn 'build-\*' --include=*.mjs`. Arreglar sólo este deja la familia viva.
+
+      ⚠️ **Por qué sobrevivió 18 días teniendo alarma:** salía `exit 2` TODAS las vueltas y
+      siempre por el mismo sujeto, y eso se lee como «el ambiental de siempre» y se saltea — la
+      trampa que la memoria compartida ya nombró el 2026-09-24 con el gate del cron. Un `exit 2`
+      permanente no es honestidad, es un rojo disfrazado: mientras duró, la mitad «no promete lo
+      que el producto no hace» de este objetivo se midió con **cero** instrumentos y el carril
+      siguió reportando su medida en meta con las otras tres cifras.
+
 - [x] 🔴 **CERRADO el 2026-09-25 22:13-22:40 La Paz (commiteado; es el INSTRUMENTO, no toca el
       motor): el gate imprimía «tambien del motor» sobre 7 líneas cuya frontera había medido
       `sin ubicar` — una conjetura impresa como medición, y encima ese bucket era el único que
