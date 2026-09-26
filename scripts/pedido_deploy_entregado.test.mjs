@@ -11,7 +11,7 @@ import { readFileSync, writeFileSync, rmSync, mkdtempSync, mkdirSync } from 'nod
 import { join, dirname } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
-import { publicadoEnLanding, publicadoPorFecha, archivosDelDryRun, archivosDelDryRunBot, archivosNombrados, secoDeProduccion, barrerTablero, creadoEnSegundos, barrerTableroJson, buildQueCorre, cadenaPorPedido, clasificarPedido, imprimirCadena, cuerpoCortoArchivos, cuerpoNoEjecuta, inmediblesSinDeclarar, publicariaLanding, publicariaPorCopia, shasDelTexto, shasPrometidos, soloLosQueViajan } from './pedido_deploy_entregado.mjs';
+import { publicadoEnLanding, publicadoPorFecha, archivosDelDryRun, archivosDelDryRunBot, recuentosDelDryRunBot, cuerpoDeclaraOtroRecuento, archivosNombrados, secoDeProduccion, barrerTablero, creadoEnSegundos, barrerTableroJson, buildQueCorre, cadenaPorPedido, clasificarPedido, imprimirCadena, cuerpoCortoArchivos, cuerpoNoEjecuta, inmediblesSinDeclarar, publicariaLanding, publicariaPorCopia, shasDelTexto, shasPrometidos, soloLosQueViajan } from './pedido_deploy_entregado.mjs';
 import { DESTINOS, ESTADOS_VIVOS } from './kanban/publicar-aprobado.mjs';
 
 // El caso que me costo la vuelta del 2026-09-06: los 13 shas prometidos por t_0268567b
@@ -616,8 +616,18 @@ test('el main INVOCA el instrumento de los destinos por copia, no solo lo declar
   // 🔴 Pedir que `publicariaPorCopia()` APAREZCA se satisface con el ESQUIVE de llamarlo y
   // tirar el resultado (`publicariaPorCopia(p.destino); const publicaria = null;`): medido el
   // 2026-09-11, esa mutacion pasaba 44/44 en VERDE. Tiene que estar ASIGNADO a lo que se usa.
-  assert.match(vecindad, /const\s+publicaria\s*=\s*publicariaPorCopia\(p\.destino\)/,
+  // ⚠️ El invocador dejo de ser `publicariaPorCopia` el 2026-09-25: paso a `leerCopia`, que
+  // corre el MISMO dry-run una sola vez y devuelve las dos preguntas (que archivos y cuantas
+  // lineas cada uno). El invariante no cambio —derivar el universo del publicador del destino y
+  // USARLO, no llamarlo para tirar el resultado—; cambio el nombre de quien lo deriva.
+  assert.match(vecindad, /const\s+\{\s*archivos:\s*publicaria\s*,\s*recuentos\s*\}\s*=\s*leerCopia\(p\.destino\)/,
     'el universo se deriva del publicador DEL DESTINO Y se usa, no se llama para tirarlo');
+  // Y el control de los recuentos cuelga del MISMO dry-run: sin esto, `leerCopia` podria
+  // devolver los recuentos y el main tirarlos — el esquive que este test existe para cazar.
+  assert.match(vecindad, /cuerpoDeclaraOtroRecuento\(\{[^}]*recuentos/,
+    'y los recuentos medidos se comparan contra lo que el cuerpo declara');
+  assert.match(vecindad, /OTRA_VERSION'\s*\)\s*\{?\s*otraVersion\.push\(/,
+    'y el rojo de los recuentos cuelga de SU comparacion, no de otra');
   assert.match(vecindad, /cuerpoCortoArchivos\(\{[^}]*texto:\s*p\.texto/,
     'y se le pregunta al CUERPO del pedido');
   assert.match(vecindad, /SUB_DESCRIBE'\s*\)\s*\{?\s*cortosSiat\.push\(/,
@@ -1600,4 +1610,61 @@ test('landing: sin .commit se cae a la fecha, que es el respaldo de siempre', ()
   assert.equal(publicadoEnLanding({ porAncestria: null, porFecha: true }), true);
   assert.equal(publicadoEnLanding({ porAncestria: null, porFecha: false }), false);
   assert.equal(publicadoEnLanding({ porAncestria: null, porFecha: null }), null);
+});
+
+// 🔴 EL DEFECTO que estos cuatro casos cierran, medido el 2026-09-25 sobre `t_ba58f0d3` (el
+// bot). Su cuerpo listaba los 5 archivos que su `ok` publica —asi que `cuerpoCortoArchivos`
+// decia COMPLETA— y declaraba «knowledge.onia.json (6 lineas)». Cuando el merge 851dac0d
+// (carril web-venta) corrigio DOS frases mas DENTRO de ese mismo archivo, el publicador paso a
+// medir 10 lineas y el gate siguio en verde: «sigue VIGENTE — 5 archivo(s) sin publicar». Los
+// nombres seguian estando todos; lo que cambio fue el CONTENIDO de uno.
+//
+// Por que importa y no es cosmetico: el cuerpo es lo unico que Sergio Urcullo lee para firmar,
+// y un recuento viejo describe OTRA version del cambio. Ese pedido decia dos arreglos mientras
+// su `ok` publicaba tres — el tercero era que los dos botones de WhatsApp de la web pedian una
+// reunion de 20 y 45 minutos que la agenda no reserva. Firmar a ciegas es exactamente lo que
+// el pedido existe para evitar.
+//
+// Es la familia de mi leccion de la vuelta anterior: un instrumento cuyo universo es su propia
+// cobertura. Contar ARCHIVOS y llamarlo «el cuerpo lo describe» convierte cada cambio de
+// contenido en silencio.
+test('bot: el cuerpo declara 6 lineas y el publicador mide 10 -> el cuerpo describe otra version', () => {
+  const recuentos = recuentosDelDryRunBot(SECO_BOT);   // avisos-vivo 57, knowledge 2
+  const r = cuerpoDeclaraOtroRecuento({
+    texto: '- avisos-vivo.mjs (57 lineas)\n- precios-vivos.mjs\n- knowledge.onia.json (6 lineas)',
+    recuentos,
+  });
+  assert.equal(r.estado, 'OTRA_VERSION');
+  assert.deepEqual(r.discrepancias, [{ archivo: 'knowledge.onia.json', declara: 6, mide: 2 }]);
+});
+
+// El anclaje del verde: mismo cuerpo con el numero que el publicador mide de verdad.
+test('bot: los recuentos del cuerpo coinciden con los medidos -> COINCIDE', () => {
+  const r = cuerpoDeclaraOtroRecuento({
+    texto: '- avisos-vivo.mjs (57 lineas)\n- precios-vivos.mjs (nuevo)\n- knowledge.onia.json (2 lineas)',
+    recuentos: recuentosDelDryRunBot(SECO_BOT),
+  });
+  assert.equal(r.estado, 'COINCIDE');
+  assert.deepEqual(r.discrepancias, []);
+});
+
+// DIRECCION DEL ERROR, igual que en los controles hermanos: ante la duda NO se acusa. Un cuerpo
+// que nombra el archivo sin prometer ningun numero no miente —`cuerpoCortoArchivos` ya le exige
+// el nombre, y este control solo juzga los numeros que el cuerpo SI escribio—. Sin este caso,
+// el gate mandaria a rehacer y ARCHIVAR pedidos sanos, que es el unico dano que le borra a
+// Sergio Urcullo un pedido real.
+test('bot: un cuerpo sin recuentos no miente — no se acusa', () => {
+  const r = cuerpoDeclaraOtroRecuento({
+    texto: 'Viaja avisos-vivo.mjs, precios-vivos.mjs y knowledge.onia.json.',
+    recuentos: recuentosDelDryRunBot(SECO_BOT),
+  });
+  assert.equal(r.estado, 'COINCIDE');
+});
+
+// Y la guarda de siempre: sin poder derivar los recuentos sale NO_MEDIDO, nunca COINCIDE.
+// Declarar «coincide» sobre algo que no se pudo comparar es la salida que borra el problema.
+test('bot: sin recuentos derivables -> NO_MEDIDO, nunca COINCIDE', () => {
+  assert.equal(cuerpoDeclaraOtroRecuento({ texto: 'x (6 lineas)', recuentos: null }).estado, 'NO_MEDIDO');
+  assert.equal(recuentosDelDryRunBot(null), null, 'el SSH no contesto');
+  assert.equal(recuentosDelDryRunBot('ERR: no existe el destino'), null, 'el publicador fallo');
 });

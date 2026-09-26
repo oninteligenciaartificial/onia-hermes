@@ -670,6 +670,91 @@ export function archivosDelDryRunBot(salida) {
 }
 
 /**
+ * PURA: del mismo dry-run del bot, ¿CUÁNTAS LÍNEAS cambia cada archivo?
+ *
+ * El hermano de `archivosDelDryRunBot` una capa más abajo. Aquél contesta «qué archivos», y con
+ * eso `cuerpoCortoArchivos` puede exigir que el cuerpo los NOMBRE. Éste contesta «cuánto de
+ * cada uno», que es la pregunta que faltaba: el nombre puede seguir estando mientras el
+ * contenido cambió debajo.
+ *
+ * Sólo los `CAMBIA` traen recuento — un `NUEVO` viaja entero y el publicador no le imprime
+ * número—, así que un archivo nuevo no aparece acá y no se le puede exigir ninguno.
+ *
+ * Reusa `archivosDelDryRunBot` como guarda en vez de repetirla: si aquél no pudo leer la salida
+ * (SSH mudo, publicador roto, `total:` que no casa con las líneas), acá tampoco hay nada que
+ * medir. Un lector que se cree solo lo que entiende y calla el resto es el falso verde.
+ *
+ * @param {string|null} salida  stdout de `/opt/onia/bot/_deploy/publicar.sh --dry-run`
+ * @returns {Record<string,number>|null}
+ */
+export function recuentosDelDryRunBot(salida) {
+  if (archivosDelDryRunBot(salida) === null) return null;
+  /** @type {Record<string,number>} */
+  const recuentos = {};
+  for (const l of String(salida).split('\n')) {
+    const m = /^\s+CAMBIA\s+(\S+)\s+\((\d+)\s+l[ií]neas?\)/.exec(l);
+    if (m) recuentos[m[1]] = Number(m[2]);
+  }
+  return recuentos;
+}
+
+/**
+ * PURA: ¿el CUERPO declara para algún archivo un recuento distinto al que el publicador mide?
+ *
+ * 🔴 EL DEFECTO, medido el 2026-09-25 sobre `t_ba58f0d3` (el bot). Su cuerpo nombraba los 5
+ * archivos que su `ok` publica —así que `cuerpoCortoArchivos` decía COMPLETA— y declaraba
+ * «knowledge.onia.json (6 lineas)». El merge `851dac0d` (carril web-venta) corrigió DOS frases
+ * más dentro de ese mismo archivo, el publicador pasó a medir 10 líneas, y este gate siguió
+ * imprimiendo «sigue VIGENTE — 5 archivo(s) sin publicar». Ningún control lo vio: todos
+ * preguntaban por NOMBRES, y los nombres seguían todos ahí.
+ *
+ * POR QUÉ NO ES COSMÉTICO. El cuerpo es lo único que Sergio Urcullo lee para firmar. Ese pedido
+ * describía dos arreglos mientras su `ok` publicaba tres: el tercero era que los dos botones de
+ * WhatsApp de la web hacían al lead pedir una reunión de 20 y 45 minutos que la agenda no
+ * reserva. Un recuento viejo no es un número desactualizado — es la descripción de OTRA versión
+ * del cambio, y firmar a ciegas es justo lo que el pedido existe para evitar.
+ *
+ * ES LA MISMA FAMILIA que la lección de la vuelta anterior de este carril: un instrumento cuyo
+ * universo es su propia cobertura. Contar archivos y llamarlo «el cuerpo lo describe» convierte
+ * todo cambio de contenido en silencio.
+ *
+ * QUÉ SE JUZGA: sólo los números que el cuerpo SÍ escribió. Un cuerpo que nombra el archivo sin
+ * prometer ningún recuento no miente, y exigirle uno sería inventar un requisito nuevo —
+ * `cuerpoCortoArchivos` ya se ocupa de que el nombre esté.
+ *
+ * DIRECCIÓN DEL ERROR, igual que en los hermanos: ante la duda NO se acusa. Sin recuentos
+ * derivables sale `NO_MEDIDO` y nunca `COINCIDE`, porque declarar que coincide algo que no se
+ * pudo comparar es la única salida que borra el problema; y un rojo falso hace rehacer —y
+ * ARCHIVAR— un pedido sano, que es el único daño que le borra a Sergio Urcullo un pedido real.
+ *
+ * @param {{texto:string, recuentos:Record<string,number>|null}} args
+ */
+export function cuerpoDeclaraOtroRecuento({ texto, recuentos }) {
+  if (recuentos === null || typeof recuentos !== 'object') {
+    return { estado: 'NO_MEDIDO', motivo: 'no pude derivar cuantas lineas cambia cada archivo', discrepancias: [] };
+  }
+  const cuerpo = partirPedido(texto).cuerpo;
+  const discrepancias = [];
+  for (const [ruta, mide] of Object.entries(recuentos)) {
+    const base = String(ruta).split('/').pop();
+    for (const l of cuerpo.split('\n')) {
+      // El recuento y el nombre tienen que estar en LA MISMA línea: así el número se le
+      // atribuye a su archivo y no al que quedó tres renglones más arriba. Es el formato que
+      // los pedidos ya usan («- knowledge.onia.json (10 lineas) — lo que el bot DICE»).
+      if (!l.includes(ruta) && !(base && l.includes(base))) continue;
+      const m = /\((\d+)\s+l[ií]neas?\)/.exec(l);
+      if (m === null) continue;
+      const declara = Number(m[1]);
+      if (declara !== mide) discrepancias.push({ archivo: ruta, declara, mide });
+      break;
+    }
+  }
+  return discrepancias.length === 0
+    ? { estado: 'COINCIDE', discrepancias: [] }
+    : { estado: 'OTRA_VERSION', discrepancias };
+}
+
+/**
  * PURA: ¿el texto nombra todos los ARCHIVOS que su `ok` publica?
  *
  * La gemela de `promesaCompleta` para los destinos que se publican por copia. Mismas dos
@@ -1171,6 +1256,32 @@ export function publicariaPorCopia(destino, io = {}) {
 }
 
 /**
+ * Las DOS preguntas de un destino por copia con UN solo dry-run: qué archivos publicaría y
+ * cuántas líneas cambia cada uno.
+ *
+ * Existe por el costo, no por elegancia: el publicador en seco corre gates enteros por SSH y
+ * tarda minutos. Llamar a `publicariaPorCopia` y después a un hermano para los recuentos lo
+ * correría dos veces — y, peor, sobre dos momentos distintos: entre las dos corridas puede
+ * entrar un merge y los dos veredictos dejarían de hablar del mismo árbol. Un instrumento que
+ * compara dos fotos distintas y las presenta como una es el falso rojo más difícil de explicar.
+ *
+ * `recuentos` sólo se llena para `bot`: `siat` imprime sus archivos sin número de líneas, así
+ * que ahí queda `null` y el control de recuentos sale NO_MEDIDO por sí solo, que es lo correcto
+ * — no hay nada que comparar.
+ *
+ * @returns {{archivos:string[]|null, recuentos:Record<string,number>|null}}
+ */
+export function leerCopia(destino, io = {}) {
+  const d = DESTINOS_POR_COPIA[destino];
+  if (d === undefined) return { archivos: null, recuentos: null };
+  const crudo = secoDeProduccion(d.seco, io);
+  return {
+    archivos: d.lector(crudo),
+    recuentos: d.lector === archivosDelDryRunBot ? recuentosDelDryRunBot(crudo) : null,
+  };
+}
+
+/**
  * PURA: el barrido a partir del texto crudo de `list --json`. `null` = no se pudo leer.
  *
  * El parseo va separado del proceso a propósito: es el único punto donde una respuesta
@@ -1266,7 +1377,7 @@ export function citaDelVivo(destino, vivoPorDestino) {
  * Se llama desde `cadenaPorPedido`, nunca con los acumuladores crudos — ver el porqué ahí.
  */
 export function imprimirCadena({
-  entregados, entregadosSiat, mudos, punteros, cortosSiat, incompletos, vencidos, cortos,
+  entregados, entregadosSiat, mudos, punteros, cortosSiat, otraVersion = [], incompletos, vencidos, cortos,
   inmedibles, vivoPorDestino,
 }) {
   if (entregados.length > 0) {
@@ -1336,6 +1447,25 @@ export function imprimirCadena({
       // bot a correr el publicador del emisor fiscal, que no publica nada suyo.
       console.log(`    bash ${DESTINOS_POR_COPIA[c.destino].seco} --dry-run`);
       console.log('  y ARCHIVANDO el viejo en la misma vuelta.');
+    }
+    return 1;
+  }
+
+  // Justo DEBAJO de `cortosSiat` y no arriba: que falte el nombre de un archivo entero es peor
+  // que que su recuento esté viejo, y la cadena imprime un solo rojo por vuelta. Los dos se
+  // curan igual (rehacer + archivar), así que el orden sólo elige cuál se lee primero.
+  if (otraVersion.length > 0) {
+    for (const c of otraVersion) {
+      console.log(`\nROJO ${c.id}: su CUERPO describe OTRA version del cambio.`);
+      for (const d of c.discrepancias) {
+        console.log(`    ${d.archivo}: el cuerpo dice ${d.declara} lineas, el publicador mide ${d.mide}`);
+      }
+      console.log('  Los nombres estan todos — lo que cambio es el CONTENIDO de uno, casi');
+      console.log('  siempre porque entro otro merge despues de escribir el pedido. Sergio');
+      console.log('  Urcullo estaria firmando una descripcion que ya no es la de lo que su ok');
+      console.log('  publica. Se cura rehaciendo el pedido con el recuento derivado de');
+      console.log(`    bash ${DESTINOS_POR_COPIA[c.destino].seco} --dry-run`);
+      console.log('  corrido DESPUES del ultimo merge, y ARCHIVANDO el viejo en la misma vuelta.');
     }
     return 1;
   }
@@ -1521,6 +1651,8 @@ async function medirEnVivo() {
   // comando de cura del publicador que le toca.
   const entregadosSiat = [];
   const cortosSiat = [];
+  // Hermano de `cortosSiat` para la otra pregunta del cuerpo: los nombres estan, los numeros no.
+  const otraVersion = [];
   // Transversal a TODOS los destinos: cualquier cuerpo puede mandar a apretar el `ok` de otra
   // tarea, y el daño no depende de si se publica por sha, por fecha o por copia. Por eso se
   // barre aparte del `for` de destinos, y no adentro de una de sus ramas.
@@ -1609,7 +1741,7 @@ async function medirEnVivo() {
       // así que su universo son los ARCHIVOS que su propio publicador en seco enumera. Mismo
       // invariante que los otros dos destinos (el cuerpo describe lo que su ok publica), otro
       // artefacto.
-      const publicaria = publicariaPorCopia(p.destino);
+      const { archivos: publicaria, recuentos } = leerCopia(p.destino);
       if (publicaria === null) {
         noMedidos.push(`${p.id} (${p.destino}): no pude correr el publicador en seco (¿SSH al VPS?)`);
         continue;
@@ -1628,6 +1760,12 @@ async function medirEnVivo() {
         cortosSiat.push({ id: p.id, destino: p.destino, mudos: k.mudos });
       } else if (k.estado === 'NO_MEDIDO') {
         noMedidos.push(`${p.id} (${p.destino}, cuerpo completo): ${k.motivo}`);
+      }
+      // Nombrar los archivos no alcanza: el contenido de uno puede haber cambiado debajo del
+      // pedido. `siat` no imprime recuentos, así que ahí esto sale NO_MEDIDO y no acusa nada.
+      const v = cuerpoDeclaraOtroRecuento({ texto: p.texto, recuentos });
+      if (v.estado === 'OTRA_VERSION') {
+        otraVersion.push({ id: p.id, destino: p.destino, discrepancias: v.discrepancias });
       }
       continue;
     }
@@ -1699,7 +1837,7 @@ async function medirEnVivo() {
   const corta = cadenaPorPedido({
     ids: pedidos.map((p) => p.id),
     acumuladores: {
-      entregados, entregadosSiat, mudos, punteros, cortosSiat, incompletos, vencidos, cortos,
+      entregados, entregadosSiat, mudos, punteros, cortosSiat, otraVersion, incompletos, vencidos, cortos,
       inmedibles,
     },
     correr: (propios) => imprimirCadena({ ...propios, vivoPorDestino }),
