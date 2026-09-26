@@ -5,6 +5,8 @@ import {
   HUECO_MAXIMO_DE_LA_TARJETA,
   MINIMO_PANTALLAS,
   OPACIDAD_PINTADA,
+  OPACIDAD_TERMINADA,
+  REVEAL_TERMINADO,
   baseValida,
   esDefecto,
   veredicto,
@@ -299,6 +301,59 @@ describe("mirar-primera-pantalla: la base", () => {
   });
 });
 
+describe("mirar-primera-pantalla: la espera tiene que RETENER", () => {
+  /**
+   * Las dos causas del rojo intermitente de `telefono /empezar`, medidas el
+   * 2026-09-26 contra el build local (tres corridas, sin tocar una linea:
+   * 0.989169 ROJO / 0.991023 / 0.990462 — y `/` dando 1 exacto siempre).
+   *
+   * 1) La espera recibia una CADENA. `waitForFunction` con cadena la evalua
+   *    DENTRO de la pagina con `eval`, y la CSP que la landing estreno el
+   *    24-sep no permite 'unsafe-eval': la espera moria en 18 ms con
+   *    `EvalError`, el `catch` se la tragaba muda y la linea siguiente medi­a a
+   *    mitad del reveal. Con una funcion de verdad Playwright no usa `eval` y
+   *    la espera retiene (medido: 160-175 ms, opacidad 1 las tres veces).
+   *    La CSP de produccion es la MISMA, asi que el fallo no era local.
+   *
+   * 2) Esperar al umbral del VEREDICTO no es esperar a que el reveal termine.
+   *    La curva real es 0.989 @5ms -> 0.997 @128ms -> 1 @250ms, asi que
+   *    `>= 0.99` se cumple a los 5 ms y se mide con la animacion corriendo:
+   *    que caiga arriba o abajo de 0.99 es una moneda al aire. Se espera al
+   *    FIN (1) y se juzga con 0.99; el hueco entre los dos es la tolerancia.
+   */
+  it("espera con una FUNCIÓN, no con una cadena que la CSP mata con eval", () => {
+    expect(typeof REVEAL_TERMINADO).toBe("function");
+  });
+
+  it("espera a que el reveal TERMINE, más arriba del umbral con que juzga", () => {
+    expect(OPACIDAD_TERMINADA).toBeGreaterThan(OPACIDAD_PINTADA);
+  });
+
+  it("no se da por satisfecha con un título a medio pintar", () => {
+    const enPagina = REVEAL_TERMINADO as unknown as (a: {
+      sel: string;
+      hasta: number;
+      leer: (sel: string) => number;
+    }) => boolean;
+    const conOpacidad = (op: number) =>
+      enPagina({ sel: "h1", hasta: OPACIDAD_TERMINADA, leer: () => op });
+    // El valor que hoy pasa por verde es justo el que delata la carrera.
+    expect(conOpacidad(0.989169)).toBe(false);
+    expect(conOpacidad(OPACIDAD_PINTADA)).toBe(false);
+    expect(conOpacidad(0.997201)).toBe(false);
+    expect(conOpacidad(1)).toBe(true);
+  });
+
+  it("no da por pintado un título que no encontró", () => {
+    const enPagina = REVEAL_TERMINADO as unknown as (a: {
+      sel: string;
+      hasta: number;
+      leer: (sel: string) => number;
+    }) => boolean;
+    expect(enPagina({ sel: "h1", hasta: OPACIDAD_TERMINADA, leer: () => -1 })).toBe(false);
+  });
+});
+
 describe("mirar-primera-pantalla: el umbral de pintado", () => {
   /**
    * `waitForFunction` ya esperaba `>= 0.99`; el veredicto tiene que usar el
@@ -391,5 +446,79 @@ describe("mirar-primera-pantalla: la tarjeta a medio llenar", () => {
     const noPreguntado = veredicto(conTarjeta(0.02, { tarjetas: undefined }));
     expect(noPreguntado.codigo).not.toBe(0);
     expect(noPreguntado.lineas.join("\n")).toMatch(/es este instrumento/);
+  });
+
+  /**
+   * Un defecto visto en producción tiene DOS causas que se arreglan en lugares
+   * opuestos: el código está mal, o producción corre un build viejo. Este gate
+   * mira `https://onia.com.bo`, así que ve las dos igual — y su rojo nombraba
+   * sólo una: el layout.
+   *
+   * Medido el 2026-09-26. `mirar:portada` salió rojo con las dos tarjetas a
+   * medio llenar (`/` al 22%, `/empezar` al 69%) y mandó a mirar el reparto de
+   * alto. Pero esas dos tarjetas ya estaban arregladas: el commit `36228167`
+   * las cerró la vuelta anterior y estaba en `origin/main`. Lo que pasaba es que
+   * el publicador automático había corrido a las 08:50 La Paz, veinte minutos
+   * ANTES de ese commit, así que producción servía un build de antes del
+   * arreglo. Buildeando el árbol y midiendo contra `localhost` el mismo gate dio
+   * verde: 22% -> 4% y 69% -> 4%.
+   *
+   * O sea que el rojo era cierto (el lead lo veía) y su explicación era falsa. Y
+   * ése es el peor modo de falla de un gate: la próxima vuelta lee "el mock se
+   * lee a medio cargar" y se va a re-abrir un CSS que ya está bien, con riesgo
+   * de romperlo. Un rojo por el motivo equivocado es un verde futuro.
+   *
+   * Por eso el juicio recibe cuántos arreglos de la zona quedaron VARADOS (los
+   * que ya están en `origin/main` y todavía no llegaron al build vivo) y lo dice
+   * con el rojo. Tres estados y no dos, como el resto de esta familia: `null` es
+   * "no lo pude medir", que no es "producción está al día".
+   */
+  describe("cuando el rojo puede ser del deploy y no del código", () => {
+    const PROD = "https://onia.com.bo";
+
+    it("nombra el deploy cuando producción corre un build anterior al arreglo", () => {
+      const r = veredicto(conTarjeta(0.69), PROD, { arreglosVarados: 3 });
+      // Sigue siendo rojo: el lead lo ve igual, no se perdona.
+      expect(r.codigo).toBe(1);
+      const texto = r.lineas.join("\n");
+      expect(texto).toMatch(/medio llenar/);
+      // Y ahora dice la otra causa, con el número de arreglos varados.
+      expect(texto).toMatch(/3 arreglo/);
+      expect(texto).toMatch(/build/i);
+      // Manda a medir contra el árbol ANTES de tocar el layout.
+      expect(texto).toMatch(/localhost|árbol|arbol/i);
+    });
+
+    it("con producción al día NO nombra el deploy: el defecto está en el código", () => {
+      const r = veredicto(conTarjeta(0.69), PROD, { arreglosVarados: 0 });
+      expect(r.codigo).toBe(1);
+      const texto = r.lineas.join("\n");
+      expect(texto).toMatch(/medio llenar/);
+      expect(texto).not.toMatch(/arreglo\(s\) varado/);
+    });
+
+    it("dice NO MEDIDO en vez de callarse cuando no pudo preguntar por el build vivo", () => {
+      const r = veredicto(conTarjeta(0.69), PROD, { arreglosVarados: null });
+      expect(r.codigo).toBe(1);
+      // No medir el atraso no es "producción está al día": se dice.
+      expect(r.lineas.join("\n")).toMatch(/no pud|NO MEDIDO/i);
+    });
+
+    /**
+     * Contra un servidor local el atraso no existe por construcción: lo que se
+     * mide ES el árbol. Nombrar ahí el deploy manda al lugar equivocado, que es
+     * justo el defecto que este bloque arregla.
+     */
+    it("nunca nombra el deploy cuando la base es un servidor local", () => {
+      const r = veredicto(conTarjeta(0.69), "http://localhost:3311", { arreglosVarados: 3 });
+      expect(r.codigo).toBe(1);
+      expect(r.lineas.join("\n")).not.toMatch(/arreglo\(s\) varado/);
+    });
+
+    it("no arrastra el cartel del deploy a una corrida sin defectos", () => {
+      const r = veredicto(conTarjeta(0.02), PROD, { arreglosVarados: 3 });
+      expect(r.codigo).toBe(0);
+      expect(r.lineas.join("\n")).not.toMatch(/arreglo\(s\) varado/);
+    });
   });
 });
