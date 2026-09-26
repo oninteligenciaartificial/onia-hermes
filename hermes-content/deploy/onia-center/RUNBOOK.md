@@ -32,6 +32,28 @@ SIAT). Cablear un quinto destino publicaria una superficie que nadie puede pedir
 **manual**, con este runbook. Si algun dia vuelve a haber un router apuntando a
 `onia-center-manual`, esta decision vence y hay que rehacerla.
 
+### Como se PIDE un deploy de aca (y por que no es `DESPLEGAR: onia-center`)
+
+`npm run deploy:sin-pedido` mide este destino igual que a los cuatro cableados, y para
+absolverlo necesita que **alguien lo este pidiendo** en el tablero. Pero la linea
+`DESPLEGAR: onia-center` **no sirve**: muere en el ejecutor con «destino desconocido» y el
+`ok` de Sergio Urcullo devuelve tilde verde sin publicar nada. Un pedido de aca se declara
+de una de estas dos formas, y con cualquiera alcanza:
+
+- **citando la ruta de este runbook** (`hermes-content/deploy/onia-center/RUNBOOK.md`), que
+  es lo que un pedido accionable tiene que traer igual, o
+- con la linea **`PUBLICAR A MANO: onia-center`** en el **cuerpo** (no en un comentario: el
+  barrido usa `list --json`, que **no trae los comentarios**, y `edit` del tablero **no puede
+  cambiar el cuerpo** — o nace con la linea, o se rehace la tarea).
+
+⚠️ **Nombrarlo NO alcanza, y el motivo es medido (2026-09-26).** El criterio era la simple
+mencion, y el bot de Onia corre DENTRO de este contenedor: ese dia **tres** tareas vivas
+nombraban `onia-center` y solo UNA lo pedia — las otras dos eran la renovacion del VPS y las
+23 ramas viejas, que lo nombran en un `docker exec` de paso. Un destino absuelto por una
+mencion ajena es el mismo silencio por el que esta superficie corrio 15 dias con un build
+viejo. Si el gate dice DESCUBIERTO y ya habia una tarea pidiendolo, **no abras otra**:
+agregale la linea de arriba (rehaciendo la tarea) y archiva la vieja en la misma vuelta.
+
 ⚠️ **Y no confundir esta app con el intake de leads de `onia.com.bo`.** El intake es
 `/api/agenda-intake` y vive en la app de la **landing** (`web-factory/apps/onia-platform`),
 viva en produccion (`GET https://onia.com.bo/api/agenda-intake` → **405**, o sea la ruta
