@@ -95,6 +95,7 @@
     "boton:whatsapp-vivo": "node scripts/boton_conectar_whatsapp.mjs",
     "test:cola-selfcheck": "node scripts/verificar_cola.js --self-check",
     "test:punteros-cola": "node scripts/punteros-de-cola.mjs --self-check && node scripts/punteros-de-cola.mjs",
+    "punteros:producto": "node scripts/punteros-de-cola.mjs --producto",
     "cola:viva": "node scripts/verificar_cola.js hermes-content/docs/COLA.md",
     "test:colas-vivas": "node scripts/colas-vivas.mjs --self-check && node scripts/colas-vivas.mjs",
     "demo:agendada": "node scripts/demo_agendada_real.mjs",

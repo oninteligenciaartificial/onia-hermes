@@ -832,6 +832,26 @@ propio log dio el veredicto AL REVÉS dos veces en tres días** (ver T10, ya cer
 node scripts/log_del_bot_ahogado.mjs   # 0 sano · 1 la cola del log está ciega · 2 NO MEDIDO
 ```
 
+🔴 **Y UNO más desde el 2026-09-26 18:43, que es el hueco que el gate de punteros tenía POR
+DISEÑO:**
+
+```bash
+npm run punteros:producto   # 0 = los punteros al producto siguen vivos · 1 = lista · 2 = NO MEDIDO
+```
+
+`test:punteros-cola` (que sí está en la cadena) deja en **silencio** toda ruta que "no está y git
+nunca la vio", porque podría ser de otro repo. Correcta la regla, y por eso mismo **`onia-platform`
+entero quedaba afuera**: sus raíces (`lib/`, `app/`, `prisma/`) no son raíces de este repo. Medido
+al escribirlo: **373 rutas de producto citadas** por estas dos colas y **2 fósiles invisibles** —
+`~~lib/whatsapp-bot.ts~~` (citado 4 veces) y `~~lib/whatsapp-ai.ts~~`, que `abf6cb5b` y `4f8441ae`
+borraron el 2026-09-17 — sosteniendo dos `[x]` que decían *"YA DESPLEGADO … vive en producción"*.
+Los dos commits SIGUEN siendo antepasados del build vivo, así que la frase era cierta en el
+sentido de `git` y falsa en el que importa. **Un `[x]` cuyo sujeto es un archivo se comprueba
+contra el ÁRBOL (`git ls-tree`), no contra la ancestría del commit.**
+
+Su `exit 2` es NO MEDIDO (no hay clon de `onia-platform` que contenste `fetch`), nunca verde por
+no haber podido preguntar. No va a `npm test` a propósito, por lo mismo que `envuelo:vencido`.
+
 **No uses `tail -N | grep -c` para juzgar el log del bot.** `tail -N` es una ventana de LÍNEAS, no
 de TIEMPO, y ese log **no se rota**: el 24-sep un `tail -80` devolvió vacío con 27 eventos adentro
 del archivo (falso verde), y el 26-sep un `tail -2000` devolvió 1.417 copias de una línea que ya
@@ -5492,7 +5512,7 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
 
       **Por qué nadie lo veía.** El eje VENCIDA estaba cerrado en la puerta HERMANA
       (`lib/whatsapp/atiende-el-bot.ts`, 11-sep), que gatea al bot que corre DENTRO de la
-      plataforma (`lib/whatsapp-bot.ts`, que ya no existe: lo retiró `abf6cb5b`, DG-044) — y media
+      plataforma (~~`lib/whatsapp-bot.ts`~~, que ya no existe: lo retiró `abf6cb5b`, DG-044) — y media
       familia cubierta se lee como familia cubierta.
       Peor: el hermano sano vive en ESTE MISMO archivo. Dos líneas más abajo el slug de la agenda
       ya era fail-closed por vencimiento (`puedeRecibirReservasPublicas` → `isWriteBlocked`, desde
@@ -7373,7 +7393,7 @@ La historia completa queda acá abajo para no perderla.
 
       <details><summary>El ítem como estaba escrito</summary>
 
-      Dos líneas más arriba del catálogo, `lib/whatsapp-bot.ts` —archivo que ya no existe, lo
+      Dos líneas más arriba del catálogo, ~~`lib/whatsapp-bot.ts`~~ —archivo que ya no existe, lo
       retiró `abf6cb5b` (DG-044)— hace
       `prisma.patient.findFirst({ where: { organizationId, phone: { contains: ... } } })`.
       Comercio e importadora guardan a sus clientes en `onia_core_business_partners`
@@ -10642,7 +10662,7 @@ archivos.**
       el 08-sep con ese mismo motivo; `lib/agenda/reserva-publica.ts` **nombra al bot de
       WhatsApp como la superficie hermana**, pero sólo cerró el eje RUBRO. El eje VENCIDA
       quedó abierto acá — media familia cubierta se lee como familia cubierta.
-      Medido sobre `lib/whatsapp-bot.ts` (415 líneas, el motor detrás del webhook): **cero**
+      Medido sobre ~~`lib/whatsapp-bot.ts`~~ (415 líneas, el motor detrás del webhook): **cero**
       menciones de `isWriteBlocked`, `checkPlanExpiry`, `planEnd` o `trialEnd`. Su único
       corte —el paso rotulado «Check plan limits»— es `checkWhatsAppAddon`, que pregunta por
       el add-on y por el cupo del mes, nunca por si la suscripción está viva (`plan` es el
