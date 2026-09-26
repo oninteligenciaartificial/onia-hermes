@@ -1136,7 +1136,7 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
 
 ## Ahora
 
-- [x] 🔴 **CERRADO el 2026-09-26 17:13-17:55 La Paz (es un MEDIDOR + dos párrafos de esta cola: NO
+- [x] 🔴 **CERRADO el 2026-09-26 17:13-17:24 La Paz (es un MEDIDOR + dos párrafos de esta cola: NO
       toca el bot, así que NO invalida el pedido de deploy vivo): dos líneas de acá le pedían a
       Sergio Urcullo una decisión ya tomada, y el remedio que imprimía el gate la habría vuelto a
       pedir MAÑANA con otro id.**
@@ -1172,6 +1172,15 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
 
       Validado en rojo primero, por el motivo correcto (`ReferenceError: normalizarTitulo is not
       defined` → 63/63 en verde), y con el gate vivo imprimiendo la sucesora antes de tocar la cola.
+
+      **Y el resto de la medición de arranque, para que el verde de acá no se lea como todo bien:**
+      simulador **3/3** (precio 320/550/890/1.290 + add-on 390, SIAT con la fecha del 1-oct, demo con
+      A/B); widget real **3/3** (`node scripts/sonda_widget.mjs` → conversación **49**, el bot
+      contestó el 2.º y el 3.er turno EN PRODUCCIÓN); `log_del_bot_ahogado` **0** (21 eventos
+      visibles en la cola de 80, cero ruido en la ventana); campañas **5 de 7** y
+      `bot_vivo_tiene_el_codigo` **ROJO con 4 archivos viejos** (`knowledge.onia.json` entre ellos)
+      — las dos siguen esperando el `ok` del pedido de deploy del bot, `t_3752e986`, que está
+      `blocked` y no lo destraba ningún loop.
 
 - [x] 🔴 **CERRADO el 2026-09-26 16:43-17:25 La Paz (commiteado; NO toca el bot, así que NO
       invalida el pedido de deploy vivo): el publicador del bot copia con globs PLANOS, y nada
