@@ -839,6 +839,72 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
 
 ## Ahora
 
+- [x] 🔴 **CERRADO el 2026-09-26 02:13-03:05 La Paz (commiteado, **NO desplegado**; toca el MOTOR):
+      cada prospecto que acepta un horario pagaba 5,0 s muertos en el turno donde acepta — el
+      único del embudo que produce plata — contra un Cal.com que se decidió que no exista.**
+
+      **Medido, no supuesto.** El turno de hoy 05:49 UTC de la conv 49 dejó en
+      `/tmp/onia-bot-webhook.log`: `etapa=esperando_horario->demo_agendada enviados=1/1
+      aviso=calcom: la reserva no salio: no contesto en 5000ms (timeout)`. Reproducido desde
+      dentro del contenedor, que es donde corre el bot:
+
+          docker exec onia-center node -e 'const t0=Date.now(); const c=new AbortController();
+            setTimeout(()=>c.abort(),5000);
+            fetch("http://calcom:3000/api/v1/bookings",{signal:c.signal})
+              .catch(e=>console.log(e.name, Date.now()-t0+"ms"))'
+          → AbortError 5005ms
+
+      El tope de 5 s **no es el defecto: es la baranda** (existe para que nadie espere para
+      siempre). El defecto es que el 100% del tráfico la agota y **nadie lo recordaba**: la demo
+      número 40 pagaba los mismos 5 s que la primera. `CALCOM_BASE_URL=http://calcom:3000` está
+      declarado en el proceso vivo y no existe ningún contenedor `calcom` (`docker ps -a` no lo
+      lista ni parado; desde `onia-center` el hostname ni resuelve), así que el fetch **no falla
+      rápido con ENOTFOUND** —el DNS de Docker no contesta NXDOMAIN por ese nombre— sino que se
+      cuelga el tope entero.
+
+      **Arreglo:** `calcom-booking.mjs` recuerda el destino caído por `DESTINO_CAIDO_MS` (10 min)
+      y devuelve `reason: "destino_caido"` sin salir a la red. Lo que **no** cambia: el prospecto
+      recibe la MISMA salvedad honesta (`cierreDeReservaFallida` da el mismo texto para
+      `destino_caido` que para `error`, aserido en el test) y Sergio Urcullo **no** recibe un aviso
+      extra (`avisoDeReservaFallida` sólo desdice con `horario_tomado`) — correr sin calendario es
+      la opción (c) ya decidida el 2026-09-03, y un aviso por demo sería ruido.
+
+      **La distinción que importa es QUIÉN falló.** Sólo cuenta como destino caído lo que pasa
+      ANTES de que el servidor conteste (timeout, error de red). Un 409 o un 500 prueban que
+      Cal.com está VIVO, y cerrar el destino ahí perdería reservas buenas — peor que el gasto que
+      esto evita. Los dos casos están gateados. Y **se cura solo**: pasada la ventana se reintenta
+      y una reserva buena borra la memoria, así que el día que Cal.com exista nadie tiene que
+      acordarse de reiniciar el bot.
+
+      **Validado por mutación**, no sólo en verde: desactivando el corte (`if (false)`), los dos
+      casos del breaker salen ROJOS por su motivo propio —*«el destino ya se sabe caído: la
+      segunda demo no sale a la red»* y *«dentro de la ventana no se reintenta»*— sin colgarse y
+      sin arrastrar vecinos. `npm run test:bot` → **1409/1409**.
+
+      ⚠️ **Lo que se aprendió escribiéndolo, y es la parte reusable:** el destino caído es estado
+      del MÓDULO (en producción es una propiedad del proceso, no de un turno), y eso se lo pasa un
+      test al siguiente. Al agregarlo, los **cinco** casos que venían después de *«CAL.COM
+      CAIDO»* se pusieron rojos de golpe y **ninguno tenía que ver con esto**. Se limpia con un
+      `beforeEach(olvidarDestinoCaido)` único, no caso por caso: así el que agregue el sexto no
+      tiene que enterarse — que es exactamente cómo esos cinco se habrían quedado rojos.
+
+      ⚠️ **`calendar_event_id` NO mide «demo agendada», y este carril lo venía arrastrando en su
+      propia línea `OBJETIVO:`.** Cal.com no existe **por decisión** (opción (c), tablero
+      `t_b18ca430`: *Telegram ya, calendario después*), así que esa columna seguiría en cero
+      aunque los cinco candidatos se aceptaran — `config.mjs` ya lo dice: *«citarla como
+      consecuencia manda a la próxima vuelta a buscar un bug decidido»*. La medida correcta es el
+      instrumento que el carril ya tiene: `node scripts/demo_agendada_real.mjs`, que acepta la
+      reserva **o el aviso** como prueba. Corrido hoy: **`LAS 3 DEMOS PROMETIDAS LLEGARON A
+      SERGIO — cada una tiene su reserva o su aviso`, exit 0.** La próxima vuelta mide con eso y
+      no con un `select count(calendar_event_id)`.
+
+      ✅ **De paso, el 🔴 hermano quedó confirmado CERRADO en producción, contra el mensaje real y
+      no contra el código:** el bot NO dice *«Listo, agendado»* pelado. El mensaje 1908 de la conv
+      49 (535 caracteres, leído entero) termina en *«(Estoy confirmando ese horario con Sergio; si
+      hubiera un cruce te aviso enseguida.)»*. ⚠️ Y casi lo reporté al revés: mi primera consulta
+      fue `left(content,200)` y el cierre honesto se pega **al final**, así que el truncado
+      fabricó la acusación. Un `left()` es un `grep`: sirve para descartar, nunca para confirmar.
+
 - [x] 🔴 **CERRADO el 2026-09-26 (commiteado; son INSTRUMENTOS, no tocan el motor ni el producto):
       `puerta:alta` —el ÚNICO instrumento de la mitad «no promete lo que el producto no
       hace» de este objetivo— llevaba ~18 días saliendo `exit 2` porque buscaba el árbol del build

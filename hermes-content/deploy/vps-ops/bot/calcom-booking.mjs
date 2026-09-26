@@ -243,22 +243,74 @@ export function cierreSinReservar({ stageBefore, stageAfter, scheduledAt, calend
 export const BOOKING_TIMEOUT_MS = 5000;
 
 /**
+ * Cuanto se RECUERDA que el destino no contesta, en ms.
+ *
+ * El tope de arriba protege UN turno; esto protege a los que vienen despues. El 100% del
+ * trafico real agota los 5 s (`CALCOM_BASE_URL` declarado, contenedor `calcom` inexistente:
+ * medido el 2026-09-18, reproducido el 2026-09-26 desde `onia-center` — AbortError a los
+ * 5005 ms, no ENOTFOUND, porque el DNS de Docker no contesta NXDOMAIN por ese nombre), y sin
+ * memoria la demo numero 40 los paga igual que la primera. Se los cobra al prospecto en el
+ * turno donde ACEPTA un horario, que es el unico del embudo que produce plata.
+ *
+ * La ventana es corta A PROPOSITO: el dia que Cal.com exista —que es la opcion (c) del tablero
+ * `t_b18ca430`, "calendario despues"— nadie tiene que acordarse de reiniciar el bot. Un breaker
+ * que no reintenta solo es el mismo bug al revés, y encima mudo.
+ */
+export const DESTINO_CAIDO_MS = 10 * 60 * 1000;
+
+/**
+ * Lo unico que se recuerda: hasta cuando, y por que. Vive en el modulo porque el destino es del
+ * PROCESO, no de un turno — cada turno del webhook llama a `createBooking` de cero.
+ */
+let destinoCaidoHasta = 0;
+
+/** Olvida el destino caido. Para los tests, y para forzar un reintento sin esperar la ventana. */
+export function olvidarDestinoCaido() {
+  destinoCaidoHasta = 0;
+}
+
+/**
+ * QUIEN fallo, y por eso si se cierra el destino o no.
+ *
+ * Solo cuenta como destino caido lo que pasa ANTES de que el servidor conteste: timeout y error
+ * de red. Un 409 o un 500 prueban que Cal.com esta VIVO, y cerrar el destino ahi perderia
+ * reservas buenas — que es peor que el gasto que esto viene a evitar.
+ */
+function recordarDestinoCaido(now) {
+  destinoCaidoHasta = now + DESTINO_CAIDO_MS;
+}
+
+/**
  * Crea la reserva.
  *
  * @returns {Promise<{ok: boolean, uid: string|null, reason: string, warnings: string[]}>}
  *   `reason: "horario_tomado"` es el caso IMPORTANTE: alguien gano la carrera por ese horario.
  *   El llamador tiene que ofrecer el otro, no repetir "listo, agendado".
+ *   `reason: "destino_caido"` es no-reservar SIN gastar el turno: para el prospecto es igual
+ *   que cualquier otro fallo (misma salvedad honesta), lo que cambia es lo que no se espera.
  */
 export async function createBooking(options = {}, deps = {}) {
   const warnings = [];
   const config = options.config || getBookingConfig(deps.env || process.env, options.durationMinutes);
   const doFetch = deps.fetch || options.fetch || globalThis.fetch;
+  // El reloj se inyecta para poder probar la ventana sin dormir 10 minutos en un test.
+  const ahora = () => (typeof deps.now === "function" ? deps.now() : Date.now());
 
   if (!config.baseUrl || !config.eventTypeId) {
     return { ok: false, uid: null, reason: "sin_config", warnings: ["calcom: falta CALCOM_BASE_URL o CALCOM_BOT_EVENT_TYPE_ID"] };
   }
   if (typeof doFetch !== "function") {
     return { ok: false, uid: null, reason: "sin_fetch", warnings: ["calcom: no hay implementacion de fetch"] };
+  }
+  if (ahora() < destinoCaidoHasta) {
+    // No es silencio ni es una reserva: es el MISMO no-reservar de siempre, sin cobrarle al
+    // prospecto un tope que ya se sabe que se va a agotar. El texto que recibe no cambia.
+    return {
+      ok: false,
+      uid: null,
+      reason: "destino_caido",
+      warnings: [`calcom: no se intento — el destino no contesto hace menos de ${Math.round(DESTINO_CAIDO_MS / 60000)} min`],
+    };
   }
 
   const payload = buildBookingPayload({
@@ -302,6 +354,9 @@ export async function createBooking(options = {}, deps = {}) {
       error?.name === "AbortError"
         ? `no contesto en ${timeoutMs}ms (timeout)`
         : String(error?.message || error).slice(0, 200);
+    // El servidor nunca contesto: esto es el destino, no la reserva. Se recuerda para que el
+    // proximo prospecto que acepte un horario no vuelva a esperar el tope completo.
+    recordarDestinoCaido(ahora());
     return { ok: false, uid: null, reason: "error", warnings: [`calcom: la reserva no salio: ${detalle}`] };
   } finally {
     clearTimeout(alarma);
@@ -327,5 +382,9 @@ export async function createBooking(options = {}, deps = {}) {
   const uid = body && typeof body.uid === "string" ? body.uid : null;
   if (!uid) warnings.push("calcom: reservo pero no devolvio uid");
 
+  // Reservo: el destino esta vivo para todos los turnos que siguen. Sin esto la ventana seguiria
+  // corriendo sobre un Cal.com que ya contesta, y las demos de los 10 min siguientes no se
+  // reservarian teniendo con quien.
+  olvidarDestinoCaido();
   return { ok: true, uid, reason: "reservado", warnings };
 }
