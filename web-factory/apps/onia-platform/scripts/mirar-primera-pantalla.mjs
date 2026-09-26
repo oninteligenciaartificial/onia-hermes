@@ -258,7 +258,7 @@ export function veredicto(informe, base = "https://onia.com.bo", { arreglosVarad
 
   for (const r of informe) {
     lineas.push(
-      `${r.pantalla.padEnd(10)} ${r.ruta.padEnd(10)} opacidad=${r.opacidadH1} 4xx/5xx=${r.fallidas.length} punto=${r.kicker ? (r.kicker.medible ? `${r.kicker.dx}px` : "sin caja") : "sin rotulo"} tarjetas=${(r.tarjetas ?? []).map((t) => `${Math.round(t.fraccion * 100)}%`).join(",") || "ninguna"} h1="${r.h1}"`,
+      `${r.pantalla.padEnd(10)} ${r.ruta.padEnd(10)} opacidad=${r.opacidadH1} 4xx/5xx=${r.fallidas.length} punto=${r.kicker ? (r.kicker.medible ? `${r.kicker.dx}px` : "sin caja") : "sin rotulo"} tarjetas=${(r.tarjetas ?? []).map((t) => `${Math.round(t.fraccion * 100)}%`).join(",") || "ninguna"} resalte=${(r.resaltes ?? []).map((e) => (e.medible ? `${e.renglones}reng` : "sin caja")).join(",") || "ninguno"} h1="${r.h1}"`,
     );
     for (const f of r.fallidas) {
       const marca = esDefecto(f, base) ? "" : "  (limite de un tercero, no atribuible)";
@@ -377,6 +377,49 @@ export function veredicto(informe, base = "https://onia.com.bo", { arreglosVarad
       "  No es el sitio: es este instrumento. `[role=img][class*=panel]` dejo de",
       "  encontrar sujetos y el juicio seguiria dando verde sin haber medido.",
     );
+  }
+
+  // El resalte del titular, entero en un renglon. Ver RESALTE_DEL_TITULAR.
+  const resaltePartido = informe.flatMap((r) =>
+    (r.resaltes ?? [])
+      .filter((e) => e.medible && e.renglones > 1)
+      .map((e) => ({ ...e, pantalla: r.pantalla, ruta: r.ruta, archivo: r.archivo })),
+  );
+  if (resaltePartido.length > 0) {
+    codigo = 1;
+    defectoDeSitio = true;
+    lineas.push(
+      "",
+      `ROJO: en ${resaltePartido.length} pantalla(s) el resalte del titular quedo partido en dos renglones.`,
+      ...resaltePartido.map(
+        (e) =>
+          `  ${e.pantalla} ${e.ruta} -> "${e.texto}" cae en ${e.renglones} renglones — ${e.archivo}`,
+      ),
+      "  El verde marca la promesa: partido al medio, el lead lee dos pedazos que",
+      "  no forman una frase.",
+    );
+  }
+
+  // Mismo motivo que en las tarjetas: un selector que deja de encontrar sujetos
+  // es como esta familia falla EN VERDE. Estas dos pantallas resaltan algo en su
+  // titular; ninguna medicion de resalte significa que dejo de preguntarse.
+  const sinResalte = informe.filter((r) => r.resaltes === undefined);
+  if (sinResalte.length > 0) {
+    codigo = 1;
+    lineas.push(
+      "",
+      `ROJO: ${sinResalte.length} pantallas llegaron sin la medicion del resalte del titular.`,
+      "  No es el sitio: es este instrumento, que dejo de preguntar.",
+    );
+  }
+  const sinMedirResalte = informe.flatMap((r) =>
+    (r.resaltes ?? [])
+      .filter((e) => e.medible === false)
+      .map((e) => `  ${r.pantalla} ${r.ruta} -> "${e.texto}" sin caja que medir`),
+  );
+  if (sinMedirResalte.length > 0) {
+    if (codigo === 0) codigo = 2;
+    lineas.push("", "NO MEDIDO: hay resaltes sin caja que medir.", ...sinMedirResalte);
   }
 
   const sinPintar = informe.filter((r) => !(r.opacidadH1 >= OPACIDAD_PINTADA));
@@ -534,6 +577,41 @@ const TARJETAS_DIBUJADAS = `() => {
 }`;
 
 /**
+ * En cuantos RENGLONES cae el resalte del titular.
+ *
+ * El titular de estas dos pantallas resalta una frase en verde (`<em>`), y esa
+ * frase es la promesa: "usalo <em>de verdad</em> 14 dias". Cuando el salto de
+ * linea cae ADENTRO del resalte, el lead no lee una frase pintada: lee "y usalo
+ * de" y abajo "verdad 14 dias", con el verde partido en dos pedazos que no
+ * forman nada. Lo vio el ojo el 2026-09-26 en las DOS vistas de `/empezar`.
+ *
+ * Se mide con `getClientRects()`, que devuelve UNA caja por renglon ocupado:
+ * es el unico dato que distingue "entra justo" de "se partio", y ningun grep
+ * del HTML lo ve —el markup es identico en los dos casos, lo decide el ancho
+ * del renglon en el navegador—. Por eso vive aca y no en un test de fuente.
+ *
+ * Los `top` se agrupan con tolerancia: dentro de un mismo renglon los rects de
+ * un inline pueden diferir por decimas de pixel, y contar eso como dos lineas
+ * seria un rojo falso permanente.
+ */
+const RESALTE_DEL_TITULAR = `() => {
+  const h1 = document.querySelector('h1');
+  if (!h1) return null;
+  const out = [];
+  for (const em of h1.querySelectorAll('em')) {
+    const texto = (em.innerText || em.textContent || '').replace(/\\s+/g, ' ').trim();
+    const cajas = [...em.getClientRects()].filter((r) => r.width > 0 && r.height > 0);
+    if (cajas.length === 0) { out.push({ texto, medible: false }); continue; }
+    const renglones = [];
+    for (const r of cajas) {
+      if (!renglones.some((t) => Math.abs(t - r.top) <= 2)) renglones.push(r.top);
+    }
+    out.push({ texto, medible: true, renglones: renglones.length });
+  }
+  return out;
+}`;
+
+/**
  * La opacidad EFECTIVA de un elemento: el minimo de su cadena hasta body.
  * Devuelve -1 si el selector no encontro nada, que el veredicto lee como rojo.
  * Es una funcion, como `REVEAL_TERMINADO`, por el mismo motivo.
@@ -615,6 +693,7 @@ async function mirar(base, out) {
       await pagina.screenshot({ path: archivo });
       const kicker = await pagina.evaluate(`(${PUNTO_DEL_ROTULO})()`);
       const tarjetas = await pagina.evaluate(`(${TARJETAS_DIBUJADAS})()`);
+      const resaltes = await pagina.evaluate(`(${RESALTE_DEL_TITULAR})()`);
       const h1 = await pagina
         .locator("h1")
         .first()
@@ -628,6 +707,7 @@ async function mirar(base, out) {
         opacidadH1: opacidad,
         kicker,
         tarjetas,
+        resaltes,
         fallidas,
       });
       // El barrido HABLA mientras barre. Mudo no se distingue de colgado, y un
