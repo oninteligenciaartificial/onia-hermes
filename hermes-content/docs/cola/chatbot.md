@@ -1056,8 +1056,9 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
       **Gate:** `campanas-vivas.test.mjs`, 14/14 (eran 10). Cuatro casos nuevos, todos en ROJO
       antes por su propio motivo, validados **por mutación**: volver a anclar la caminata en
       `(sitio)` · filtrar rutas por su fuente · dejar que el `NO MEDIDO` vuelva a tapar el rojo ·
-      entrar a las carpetas privadas de Next. La primera mutación sale **1 falla** sola, que es
-      la del caso que le corresponde.
+      entrar a las carpetas privadas de Next. Corridas **una por una**, cada mutación tumba el
+      caso que le corresponde y no otro (la del `(sitio)` sale con **1 falla** sola; las otras
+      tres suman el `self-check`, que cubre esas dos fronteras a propósito).
       ⚠️ Y una trampa propia, para no repetirla: las cuatro mutaciones se aplicaron con un `cd`
       que falló, así que el `cp` del respaldo **no corrió** y las cuatro quedaron apiladas sobre
       el archivo sin commitear. Se deshicieron a mano una por una. **El respaldo se verifica que
