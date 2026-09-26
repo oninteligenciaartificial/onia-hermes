@@ -19,7 +19,7 @@
 //   exit 0 = ninguna rama de carril activo varada · 1 = hay varadas · 2 = NO MEDIDO
 
 import { execFileSync } from 'node:child_process'
-import { readFileSync, existsSync } from 'node:fs'
+import { readFileSync, existsSync, readdirSync } from 'node:fs'
 import { pathToFileURL } from 'node:url'
 
 export const HORAS_VARADA = 24
@@ -151,6 +151,87 @@ export function medirRepo(raiz, base, correr = git) {
   return ramas
 }
 
+// ── Commits que no salieron de la MÁQUINA ────────────────────────────────────────────────
+// `medirRepo` pregunta por `refs/remotes/origin/`: mide lo que ya está publicado. Es ciego por
+// construcción a un commit que vive sólo en el disco de este nodo, y ése es el modo de falla MÁS
+// probable de esta topología, no el menos: los dos clones de `onia-platform` tienen el push
+// puesto en `DESHABILITADO-NODO-DE-DESARROLLO` a propósito, así que ahí un commit NO puede salir
+// solo nunca — hay que entregarlo a mano (`format-patch` + ssh al VPS). Medido el 2026-09-26: el
+// carril chatbot encontró `71cd8fa9` en `/root/loops/onia-platform-chatbot` sin estar en ningún
+// remoto, y el objetivo del integrador decía 0 varadas ese mismo rato. Peor que varado: invisible.
+export function clasificarArboles(arboles, ahoraMs) {
+  const varados = []
+  const enVuelo = []
+  for (const a of arboles) {
+    if (!a.localesSinRemoto) continue
+    const horas = (ahoraMs - a.ultimoMs) / 3_600_000
+    // Un árbol que NO puede pushear no se absuelve por ser reciente: la espera no lo va a
+    // publicar. Es el único caso donde la antigüedad no dice nada y el rojo es inmediato.
+    if (!a.puedePushear) varados.push({ ...a, horas, motivo: 'el push está deshabilitado: no sale solo nunca, se entrega a mano' })
+    else if (horas > HORAS_VARADA) varados.push({ ...a, horas, motivo: `puede pushear y no lo hizo en ${Math.round(horas)} h` })
+    // Un commit local de hace minutos en un árbol que SÍ puede pushear es trabajo EN VUELO de un
+    // carril corriendo ahora, no trabajo perdido. Contarlo como varado enseña a ignorar el rojo:
+    // el 2026-09-26 `onia-hermes-web-venta` tenía el merge de `origin/main` de hacía 22 min, con
+    // su loop a mitad de vuelta (cron `48 */2`). Se NOMBRA aparte, no se cuenta.
+    else enVuelo.push({ ...a, horas })
+  }
+  return { varados, enVuelo }
+}
+
+/** Mide un árbol de trabajo. Devuelve null si no pudo preguntar (NO MEDIDO, nunca 0). */
+export function medirArbol(ruta, correr = git) {
+  try {
+    // `--not --remotes=origin` y no `@{u}..HEAD`: lo segundo infla con lo ya publicado en otra
+    // rama y ya llevó a planear un reset destructivo.
+    // `%x09`, NO `%09`: son DOS lenguajes de formato distintos. `for-each-ref` expande `%09` a
+    // TAB; `git log` lo deja LITERAL, así que `split('\t')[1]` sale undefined y la fecha queda
+    // NaN. Y `NaN > HORAS_VARADA` es `false`: el árbol varado se habría clasificado «en vuelo» y
+    // absuelto. Medido el 2026-09-26 con `cat -A`: `%091790441283` contra `^I1790441283`.
+    const sueltos = correr(ruta, ['log', 'HEAD', '--not', '--remotes=origin', '--format=%H%x09%ct'])
+      .split('\n').filter(l => l.trim())
+    let push = ''
+    try {
+      push = correr(ruta, ['remote', 'get-url', '--push', 'origin']).trim()
+    } catch {
+      push = ''
+    }
+    const rama = correr(ruta, ['branch', '--show-current']).trim()
+    // El más NUEVO de los sueltos: si el carril sigue commiteando, sigue en vuelo.
+    const ultimoMs = sueltos.length
+      ? Math.max(...sueltos.map(l => Number(l.split('\t')[1]) * 1000))
+      : 0
+    // Hay commits pero no pude fecharlos: NO MEDIDO, nunca «absuelto». Una fecha que no es un
+    // número se propaga como NaN y toda comparación con ella sale `false`, o sea que el árbol
+    // pasaría por sano. Es la misma regla que el resto del archivo: tri-estado, no catch→ok.
+    if (sueltos.length && !Number.isFinite(ultimoMs)) return null
+    return {
+      ruta,
+      rama: rama || 'DESPEGADO',
+      localesSinRemoto: sueltos.length,
+      // Un remoto de push que no es una URL (el centinela DESHABILITADO-…) no puede publicar.
+      puedePushear: /:|\/\//.test(push),
+      ultimoMs,
+    }
+  } catch {
+    return null
+  }
+}
+
+function informeArboles(res, noMedidos) {
+  const l = ['== árboles de trabajo (commits que no salieron de esta máquina)']
+  if (!res.varados.length) l.push('   OK: ningún árbol con commits que no puedan salir de acá')
+  for (const v of res.varados) {
+    l.push(`   VARADO EN DISCO ${v.ruta.split('/').pop()} (${v.rama}): ${v.localesSinRemoto} commit(s) — ${v.motivo}`)
+  }
+  // En vuelo se NOMBRA igual: un número sin su lista no se puede refutar, y el que lee tiene que
+  // poder ver que ahí hay commits sin publicar aunque hoy no cuenten.
+  for (const e of res.enVuelo) {
+    l.push(`   en vuelo ${e.ruta.split('/').pop()} (${e.rama}): ${e.localesSinRemoto} commit(s), ${Math.round(e.horas)} h — su loop está corriendo`)
+  }
+  for (const n of noMedidos) l.push(`   NO MEDIDO ${n}: no pude preguntarle a git`)
+  return l.join('\n')
+}
+
 function informe(nombreRepo, res) {
   const l = []
   l.push(`== ${nombreRepo}`)
@@ -226,6 +307,64 @@ const CASOS = () => {
     // del 2026-09-25 tenía 12 propios y 15 de atraso: a las 24 h habría puesto el objetivo del
     // integrador en rojo por una rama que CLAUDE.md le prohíbe tocar.
     ['una rama de contenido al día con main tampoco es varada del integrador', n(r.ajenas).includes('claude/onia-content-scripts-cvat9r') && !n(r.varadas).includes('claude/onia-content-scripts-cvat9r')],
+    // ── commits que no salieron de la máquina: `medirRepo` es ciego a esto por construcción ──
+    ...(() => {
+      const arb = [
+        { ruta: '/root/loops/onia-platform-chatbot', rama: 'claude/x', localesSinRemoto: 1, puedePushear: false, ultimoMs: ahora - 0.1 * H },
+        { ruta: '/root/loops/onia-hermes-web-venta', rama: 'claude/web-venta', localesSinRemoto: 1, puedePushear: true, ultimoMs: ahora - 0.4 * H },
+        { ruta: '/root/loops/onia-hermes-lucia', rama: 'claude/lucia-vps', localesSinRemoto: 2, puedePushear: true, ultimoMs: ahora - 30 * H },
+        { ruta: '/root/loops/onia-hermes-limpio', rama: 'main', localesSinRemoto: 0, puedePushear: true, ultimoMs: 0 },
+      ]
+      const a = clasificarArboles(arb, ahora)
+      const nom = s => s.map(x => x.ruta)
+      return [
+        // El caso que este bloque existe para cerrar: sin push no hay hora que lo salve.
+        ['un árbol con el push DESHABILITADO y 1 commit local es varado, aunque sea de hace minutos',
+          nom(a.varados).includes('/root/loops/onia-platform-chatbot')],
+        // Y el error simétrico, que es el que enseña a ignorar el rojo: el carril está corriendo.
+        ['un árbol que SÍ puede pushear con un commit de hace 24 min está EN VUELO, no varado',
+          nom(a.enVuelo).includes('/root/loops/onia-hermes-web-venta') && !nom(a.varados).includes('/root/loops/onia-hermes-web-venta')],
+        ['un árbol que puede pushear y no lo hizo en 30 h SÍ es varado',
+          nom(a.varados).includes('/root/loops/onia-hermes-lucia')],
+        ['un árbol sin commits locales no se cuenta ni se nombra',
+          ![...nom(a.varados), ...nom(a.enVuelo)].includes('/root/loops/onia-hermes-limpio')],
+        // Un número sin su lista no se puede refutar.
+        ['el informe NOMBRA el árbol varado con su rama y su motivo',
+          informeArboles(a, []).includes('onia-platform-chatbot (claude/x)') && informeArboles(a, []).includes('no sale solo nunca')],
+        ['el informe NOMBRA lo que está en vuelo, no lo esconde',
+          informeArboles(a, []).includes('en vuelo onia-hermes-web-venta')],
+        ['un árbol NO MEDIDO se nombra y no se absuelve en silencio',
+          informeArboles({ varados: [], enVuelo: [] }, ['/root/loops/roto']).includes('NO MEDIDO /root/loops/roto')],
+        // Tri-estado: "no pude preguntar" nunca se aplana a "no hay nada".
+        ['medirArbol devuelve null si git no contesta, nunca 0 commits',
+          medirArbol('/x', () => { throw new Error('no git') }) === null],
+        ['medirArbol lee el centinela DESHABILITADO como "no puede pushear"', (() => {
+          const fake = (_r, a2) => a2[0] === 'log' ? 'abc\t1757500000\n' : a2[0] === 'remote' ? 'DESHABILITADO-NODO-DE-DESARROLLO\n' : 'claude/x\n'
+          const m = medirArbol('/x', fake)
+          return m?.puedePushear === false && m?.localesSinRemoto === 1
+        })()],
+        // El bug que este archivo tuvo vivo un rato: `git log` no expande `%09`, así que la fecha
+        // salía NaN y el árbol caía en «en vuelo» — absuelto. Se ancla el formato que git ENTIENDE.
+        ['medirArbol pide el TAB como %x09, que es el que git log expande', (() => {
+          let pedido = ''
+          const fake = (_r, a2) => {
+            if (a2[0] === 'log') { pedido = a2.find(x => x.startsWith('--format=')) || ''; return 'abc\t1757500000\n' }
+            return a2[0] === 'remote' ? 'git@github.com:o/r.git\n' : 'main\n'
+          }
+          medirArbol('/x', fake)
+          return pedido.includes('%x09') && !/%09/.test(pedido.replace('%x09', ''))
+        })()],
+        ['una fecha ilegible es NO MEDIDO, no un árbol sano', (() => {
+          // Exactamente lo que devolvía git con el formato equivocado: sha + "%09" + epoch, sin TAB.
+          const fake = (_r, a2) => a2[0] === 'log' ? 'abc%091757500000\n' : a2[0] === 'remote' ? 'git@github.com:o/r.git\n' : 'main\n'
+          return medirArbol('/x', fake) === null
+        })()],
+        ['medirArbol reconoce una URL de push real', (() => {
+          const fake = (_r, a2) => a2[0] === 'log' ? '' : a2[0] === 'remote' ? 'git@github.com:o/r.git\n' : 'main\n'
+          return medirArbol('/x', fake)?.puedePushear === true
+        })()],
+      ]
+    })(),
     ['medirRepo trae el atraso, no sólo lo propio', (() => {
       const fake = (_r, a) => a[0] === 'for-each-ref' ? 'origin/claude/x\t1757500000\n' : (a[2] === 'origin/main..origin/claude/x' ? '2\n' : '77\n')
       const m = medirRepo('/x', 'origin/main', fake)
@@ -272,13 +411,38 @@ function main() {
       if (!vistas.has(e)) partes.push(`⚠ la exclusión "${e}" ya no existe en ningún remoto: sobra`)
     }
   }
+  // Los sujetos se DERIVAN del disco, no de una lista: un worktree nuevo de un carril nuevo
+  // aparece solo. Una lista a mano acá repetiría el agujero que este archivo existe para cerrar.
+  const arboles = []
+  const noMedidos = []
+  let raices = []
+  try {
+    raices = readdirSync('/root/loops', { withFileTypes: true })
+      .filter(d => d.isDirectory())
+      .map(d => `/root/loops/${d.name}`)
+      .filter(p => existsSync(`${p}/.git`))
+      .sort()
+  } catch {
+    noMedidos.push('/root/loops (no pude listar el directorio)')
+  }
+  for (const p of raices) {
+    const m = medirArbol(p)
+    if (m === null) noMedidos.push(p)
+    else arboles.push(m)
+  }
+  const resArb = clasificarArboles(arboles, Date.now())
+  partes.push(informeArboles(resArb, noMedidos))
+
   console.log(partes.join('\n'))
   if (medidos === 0) {
     console.log('\nNO MEDIDO: ningún repo contestó')
     return 2
   }
   console.log(`\nramas de carril activo varadas +${HORAS_VARADA} h: ${varadas}`)
-  return varadas === 0 ? 0 : 1
+  // Línea APARTE: son dos preguntas distintas ("no se mergeó" vs "no salió de la máquina") y
+  // sumarlas en un número haría que el veredicto no diga cuál de las dos está rota.
+  console.log(`árboles con commits que no salieron de esta máquina: ${resArb.varados.length}`)
+  return varadas === 0 && resArb.varados.length === 0 ? 0 : 1
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
