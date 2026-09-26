@@ -71,7 +71,7 @@
  */
 
 import { execFileSync } from 'node:child_process';
-import { existsSync, readdirSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { dirname, join } from 'node:path';
 // El criterio de «esto lo ve un lead» se IMPORTA del instrumento que ya lo tiene y que el
@@ -85,6 +85,8 @@ import { baseDelBuild, llegaAlCliente } from '../web-factory/apps/onia-platform/
 // que el brazo decide si el `ok` de Sergio Urcullo ejecuta algo: preguntarle a ELLA es lo único
 // que garantiza que «pedido vivo» signifique acá lo mismo que allá.
 import { elegirCamino, motivoParaNoEjecutar } from './kanban/publicar-aprobado.mjs';
+// Con alias: la receta del build vivo es UNA y vive en ese módulo. Ver `shaVivoPlataforma`.
+import { buildQueCorre as arbolDelBuildVivo } from './lib/arbol-del-build-vivo.mjs';
 
 const RAIZ = join(dirname(fileURLToPath(import.meta.url)), '..');
 /** La zona de `main` que arma el sitio de venta. Anclada con `:/` a propósito: un pathspec
@@ -234,21 +236,12 @@ export function barrerTablero({ tareas }) {
   return { pedidos, ilegibles, abiertos };
 }
 
-/**
- * PURA: cuál de los `build-<sha>` del disco es el que corre, casando su `BUILD_ID` contra el
- * que sirve el contenedor. Devuelve `null` si no hay con qué casar.
- *
- * Nunca «el más nuevo» ni «el primero»: elegir uno sin casarlo declararía ENTREGADO contra un
- * build inventado, y eso le borra a Sergio Urcullo un pedido real por un arreglo que el
- * cliente nunca recibió.
- */
-export function buildQueCorre({ buildIdVivo, candidatos }) {
-  if (!buildIdVivo) return null;
-  for (const c of candidatos || []) {
-    if (c && c.buildId && c.buildId === buildIdVivo) return c.sha;
-  }
-  return null;
-}
+// ⚠️ Acá vivía una `buildQueCorre({ buildIdVivo, candidatos })` PURA que casaba el `BUILD_ID`
+// contra los `build-<sha>` del disco. Se borró el 2026-09-26 (tarea `t_66d7e2f6`) porque conocía
+// UN solo layout —staging— y `shaVivoPlataforma` ya delega en `scripts/lib/arbol-del-build-vivo.mjs`,
+// que conoce los dos. Quedarse con las dos habría dejado una función exportada y testeada sin un
+// solo llamador de producción: código muerto con cara de vivo, que el día del tercer layout alguien
+// vuelve a cablear porque «ya estaba probada».
 
 /**
  * PURA: decide el estado de un pedido. `publicado(sha)` devuelve true / false / null,
@@ -952,43 +945,28 @@ function fetchearRepo(repo) {
 /**
  * El sha que corre producción, derivado del artefacto — nunca de `origin/master`.
  *
- * ⚠️ SE MIDE DONDE ESTÁ `/opt`, NO DONDE CORRE EL LOOP. El integrador se mudó al nodo de
- * casa, donde `/opt/onia-platform` no existe: `readdirSync` tiraba, esto devolvía `null` y
- * el ÚNICO destino que este gate sabe medir salía «no pude derivar el build vivo» en cada
- * vuelta. No fallaba en verde —el motivo se imprime— pero el efecto es el mismo que ya está
- * medido para `deploy-vivo.mjs`: el instrumento que caza un pedido vencido queda mudo
- * justo en la máquina del carril que lo posee. El nodo de casa SÍ llega al VPS por SSH.
+ * ⚠️ LA RECETA NO VIVE ACÁ: la trae `scripts/lib/arbol-del-build-vivo.mjs`, que conoce los DOS
+ * layouts y sabe preguntarle al VPS cuando `/opt` no está en esta máquina.
+ *
+ * Acá estaba copiada, y casaba el `BUILD_ID` vivo SÓLO contra `/opt/onia-platform/build-*`, que
+ * es STAGING. Desde el 2026-09-24 producción se publica por imagen y el árbol vivo queda bajo
+ * `releases/<sha8>-<fecha>/` (con el `BUILD_ID` en la RAÍZ), y encima
+ * `limpiar-builds-staging.sh` borra los `build-*`. O sea que **después de cada swap el `BUILD_ID`
+ * vivo legítimamente no tiene par en `build-*`**: esto devolvía `null`, `puedePlataforma` quedaba
+ * en `false` y el gate DEJABA DE JUZGAR los pedidos de plataforma — el único destino que sabe
+ * medir— saliendo verde igual. Medido el 2026-09-26: vivo `4FWMcecd4jRBGUVwStDQb`, ninguno de los
+ * 7 `build-*` casaba, y estaba en `releases/492e7155-20260925/BUILD_ID`. Tarea `t_66d7e2f6`.
+ *
+ * ⚠️ El sha de un `release` viene COMPLETO (40) y el de un `staging` ABREVIADO. Esto no compara
+ * shas: se los pasa a `git cat-file` / `merge-base`, que aceptan las dos formas. Cualquier
+ * comparación por igualdad de cadenas que se agregue acá se rompe en silencio al cambiar el layout.
  */
 function shaVivoPlataforma() {
-  if (existsSync(DIR_BUILDS)) {
-    const buildId = sh('docker', ['exec', 'onia-platform', 'cat', '/app/.next/BUILD_ID']);
-    let dirs = [];
-    try {
-      dirs = readdirSync(DIR_BUILDS).filter((d) => d.startsWith('build-'));
-    } catch {
-      return null;
-    }
-    const candidatos = dirs.map((d) => {
-      const p = `${DIR_BUILDS}/${d}/.next/standalone/.next/BUILD_ID`;
-      return { sha: d.slice('build-'.length), buildId: existsSync(p) ? sh('cat', [p]) : null };
-    });
-    return buildQueCorre({ buildIdVivo: buildId, candidatos });
+  try {
+    return arbolDelBuildVivo({})?.sha ?? null;
+  } catch {
+    return null; // no pude preguntar: NO MEDIDO, nunca un sha adivinado
   }
-
-  // Sin `/opt` local: se le pregunta al VPS. Una sola llamada, y su salida se valida —si el
-  // SSH no contesta o devuelve cualquier otra cosa, esto es `null` (NO MEDIDO), nunca un sha
-  // adivinado que haría cerrar un pedido vivo.
-  if (!existsSync(VPS)) return null;
-  const guion = [
-    'V=$(docker exec onia-platform cat /app/.next/BUILD_ID 2>/dev/null) || exit 1',
-    '[ -n "$V" ] || exit 1',
-    `for d in ${DIR_BUILDS}/build-*/; do`,
-    '  [ "$(cat "$d/.next/standalone/.next/BUILD_ID" 2>/dev/null)" = "$V" ] && { basename "$d" | sed s/^build-//; exit 0; }',
-    'done',
-    'exit 1',
-  ].join('\n');
-  const salida = sh('bash', [VPS, 'bash', '-lc', guion], { timeout: 120_000 });
-  return salida && /^[0-9a-f]{7,40}$/.test(salida) ? salida : null;
 }
 
 /**
