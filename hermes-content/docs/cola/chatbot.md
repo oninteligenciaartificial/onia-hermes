@@ -813,6 +813,18 @@ cierta:**
 npm run bloqueo:citado   # 0 = los frenos citados nombran tareas VIVAS · 1 = lista archivo:línea · 2 = NO MEDIDO
 ```
 
+🔴 **Y UNO más desde el 2026-09-26 21:00, el día que dejó de medir de más:**
+
+```bash
+npm run envuelo:vencido   # 0 = las afirmaciones "en vuelo" siguen ciertas · 1 = lista archivo:línea · 2 = NO MEDIDO
+```
+
+Su `exit 1` significa que esta cola —o la de plataforma— anuncia trabajo que se puede perder y
+**ya viajó**: el riesgo asustaba a la próxima vuelta con algo que no existe. No va a `npm test` a
+propósito: necesita el clon de `onia-platform` y `fetch`, o sea que se pondría rojo por ambiente y
+trabaría el merge de todos los carriles. A la cadena va sólo su `--self-check`
+(`test:en-vuelo-vencido`, 18 casos).
+
 🔴 **Y UNO más desde el 2026-09-26 17:23, porque el comando que este carril usaba para mirar su
 propio log dio el veredicto AL REVÉS dos veces en tres días** (ver T10, ya cerrado):
 
@@ -1123,6 +1135,160 @@ Las 3 que quedan (3492, 3623, 7674) son del motor leídas a mano pero **no tiene
 mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se derivan con el comando.
 
 ## Ahora
+
+- [x] 🔴 **CERRADO el 2026-09-26 18:13-19:02 La Paz (es el INSTRUMENTO de mirar, no el bot: NO
+      toca producción y NO necesita deploy). El instrumento con el que este carril MIRA las
+      pantallas del cliente mentía cuatro horas en toda hora que sacara.**
+
+      **Cómo saltó:** ejecutando la definición de hecho de esta vuelta (abrir `/inbox` del dueño
+      y mirar que la conversación del desconocido esté ahí). La conversación de la sonda, creada
+      minutos antes, se veía **"10:16 p.m."** con las 18:16 en el reloj de La Paz. Casi se abre
+      un ítem de bug de zona horaria en el producto.
+
+      **No era el producto.** `app/(dashboard)/inbox/InboxClient.tsx:61` es `"use client"` y
+      formatea con `toLocaleTimeString` sin `timeZone`, o sea con la zona del navegador **del
+      cliente**: un dueño en Bolivia ve bien. El que mentía era `scripts/mirar_bandeja_dueno.mjs`,
+      que abría `newContext` sin `timezoneId` y por eso Playwright heredaba la zona del PROCESO
+      — UTC acá. Probado cambiando sólo el instrumento, contra la misma pantalla y el mismo dato:
+
+          node scripts/mirar_bandeja_dueno.mjs --ruta /inbox …   → "10:16 p.m."
+          TZ=America/La_Paz  (mismo comando)                     → "06:16 p.m."
+
+      **Por qué importa más de lo que parece.** Falla en las dos direcciones: hacia el falso
+      positivo (un carril reporta un bug de horas que no existe — el mismo modo de fallo que le
+      costó TRES días al canario visual) y, peor, hacia el **falso negativo**: el corrimiento es
+      consistente, así que un bug real de horas queda tapado. Y cruzando la medianoche UTC la
+      captura muestra el DÍA siguiente: entre las 20:00 y las 24:00 de La Paz, "hoy" y "mañana"
+      se invierten en pantalla. Lo usa también `recorrido-cliente`, con el mismo módulo.
+
+      **Arreglo:** `scripts/lib/zona-del-negocio.mjs` — la zona se LEE del negocio que se está
+      mirando (`clinic_settings.timezone` vía el `psql` que el módulo ya usaba), no se clava una
+      constante, porque clavar `America/La_Paz` volvería a mentir con un negocio de otra zona y
+      esta vez sin aviso. Tri-estado explícito (`negocio` / `defecto` / `invalida`): "no pude
+      preguntarle a la base" y "la base dice La Paz" no son lo mismo. Nunca devuelve vacío — sin
+      zona, Playwright hereda UTC y vuelve el bug. La zona usada se IMPRIME en cada corrida.
+
+      **Los DOS `newContext`, no uno.** `mirar_bandeja_dueno.mjs` y el hermano
+      `scripts/lib/sesion_dueno.mjs` (`navegadorConSesion`) armaban su propio contexto; arreglar
+      sólo el que saltó dejaba el bug vivo para quien entrara por el otro.
+
+      **Gate:** `npm run test:zona-de-la-captura` (`scripts/lib/zona-del-negocio.test.mjs`, 7
+      casos, en la cadena). Los dos que atrapan la regresión LEEN el instrumento y exigen que el
+      `newContext` fije `timezoneId` y que la zona salga impresa; estuvieron en ROJO por ese
+      motivo exacto antes del arreglo.
+
+      **Verificado MIRANDO:** re-corrido sin `TZ` en el entorno → imprime
+      `zona: America/La_Paz (del negocio)` y la captura dice **06:16 p.m.**
+
+
+- [x] 🔴 **CERRADO el 2026-09-26 17:13-17:24 La Paz (es un MEDIDOR + dos párrafos de esta cola: NO
+      toca el bot, así que NO invalida el pedido de deploy vivo): dos líneas de acá le pedían a
+      Sergio Urcullo una decisión ya tomada, y el remedio que imprimía el gate la habría vuelto a
+      pedir MAÑANA con otro id.**
+
+      **Cómo apareció:** corriendo la medición de arranque del carril, no auditando nada.
+      `npm run bloqueo:citado` salió **1** con dos sujetos (`chatbot.md:1582` y `:1586`), los dos
+      citando `t_4f30a836` —*«[leads-esperando] 7 desconocido(s) esperando una respuesta tuya»*—
+      como freno vigente. Está `archived`.
+
+      **Lo que lo hace un ítem y no una errata.** La tarea viva con ese MISMO título es otra
+      (`blocked`, creada **un día después**: 25-sep 20:39 → 26-sep 20:39). O sea que el vigía
+      `[leads-esperando]` **archiva la de ayer y crea la de hoy**, y el dedup es por título
+      normalizado. El remedio que el gate imprimía —*«nombrá la tarea VIVA que de verdad frena»*—
+      hace copiar el id de hoy, que amanece `archived` mañana: **el arreglo obvio dura 24 horas** y
+      el gate vuelve a rojo sobre un sujeto nuevo. Un puntero que rota no se copia, se deriva.
+
+      **Lo que se cambió, en los dos lados:**
+      - La cola ya no cita ningún id de vigía: nombra el marcador `[leads-esperando]` y dice cómo
+        derivar el id (`onia-tablero.sh list --json`). Con el por qué al lado, que es lo que evita
+        que la próxima vuelta lo "arregle" pegando el id nuevo.
+      - `scripts/bloqueo_citado_vivo.mjs` aprendió a **buscarle sucesora** a la tarea muerta
+        (`sucesoraViva`, por título normalizado con los dígitos a `N`, así "7" y "12
+        desconocido(s)" son el mismo título) y **parte el remedio en dos**: con marcador entre
+        corchetes —lo escribe una máquina— prohíbe copiar el id y manda a citar el marcador; sin
+        marcador —lo escribió una persona, su id es estable— nombra la sucesora para copiarla.
+        Prohibirlo en los dos casos era regalar una regla que se desobedece.
+
+      **Cuidados que no son adorno.** La lista del tablero se pide UNA vez y **sólo si hay alguna
+      cita muerta**; si no se puede listar, el motivo queda como el de antes (`[]`, no una sucesora
+      inventada) — degradar el remedio es barato, inventar un puntero no. Y el verde de hoy **no es
+      el del sujeto borrado** que este mismo archivo pagó: quedan 2 citas vivas y el gate las
+      nombra, `bloqueos citados: 2 cita(s)`.
+
+      Validado en rojo primero, por el motivo correcto (`ReferenceError: normalizarTitulo is not
+      defined` → 63/63 en verde), y con el gate vivo imprimiendo la sucesora antes de tocar la cola.
+
+      **Y el resto de la medición de arranque, para que el verde de acá no se lea como todo bien:**
+      simulador **3/3** (precio 320/550/890/1.290 + add-on 390, SIAT con la fecha del 1-oct, demo con
+      A/B); widget real **3/3** (`node scripts/sonda_widget.mjs` → conversación **49**, el bot
+      contestó el 2.º y el 3.er turno EN PRODUCCIÓN); `log_del_bot_ahogado` **0** (21 eventos
+      visibles en la cola de 80, cero ruido en la ventana); campañas **5 de 7** y
+      `bot_vivo_tiene_el_codigo` **ROJO con 4 archivos viejos** (`knowledge.onia.json` entre ellos)
+      — las dos siguen esperando el `ok` del pedido de deploy del bot, `t_3752e986`, que está
+      `blocked` y no lo destraba ningún loop.
+
+- [x] 🔴 **CERRADO el 2026-09-26 16:43-17:25 La Paz (commiteado; NO toca el bot, así que NO
+      invalida el pedido de deploy vivo): el publicador del bot copia con globs PLANOS, y nada
+      medía si alcanzaban a su propio subárbol. Ya había un huérfano en el disco.**
+
+      Salió de bajar al escalón 2 (auditar los `[x]`): las dos colas tenían la sección "Ahora"
+      vacía y los tres ítems de "Después" parados por motivos verificados — la data QA espera
+      conversaciones reales que la reemplacen como prueba, el `[aviso]` sin hora no se toca
+      porque sería el 14.º archivo del pedido, y el botón QR espera credenciales del BCP.
+
+      **Lo medido.** `deploy-bot.sh:33` declara
+      `PATRONES=("*.mjs" "*.sh" "knowledge.example.json" "knowledge.onia.json" "plantillas-humo.json")`
+      y copia con `cd "$REPO_DIR"; for patron in ...; do for f in $patron`. Un glob de shell
+      **no recurre**, y el paso de copia es `cp -p "$f" "$DEST/$f"` **sin `mkdir -p`**: un archivo
+      en subdirectorio no puede llegar ni por accidente.
+
+      ```
+      git ls-files . | grep -c '/'                 → 1   (evals/evals.test.mjs)
+      ls /opt/onia/bot/evals/                      → No such file or directory
+      ls /opt/onia/bot/*.mjs | wc -l               → 145   (el repo tiene 150)
+      ```
+
+      **Hoy el huérfano es un test y no rompe nada** — `test:bot` corre `node --test` desde la
+      carpeta, que sí recurre, así que se ejecuta como gate igual. Lo que rompe es lo que viene
+      después: con 150 `.mjs` en una carpeta plana, el primer refactor que agrupe runtime en un
+      subdirectorio deja ese código fuera de producción **y `deploy-bot.sh` canta éxito**.
+
+      **La clase es la que este carril ya pagó dos veces:** una lista blanca escrita a mano
+      defiende el hueco que existe para impedir. El publicador SIAT dejó huérfano a
+      `run-fase1-volumen.sh` con un motivo escrito y verdadero, y las 9 campanas vivieron 24 días
+      en un archivo que ningún deploy copiaba, con su gate en 17/17 verde. **El emisor SIAT tiene
+      gate de cobertura desde entonces (`test:publicador-siat`); el bot no tenía ninguno.**
+
+      **Lo hecho:** `scripts/publicador-bot-cubre.test.mjs` + `npm run test:publicador-bot`,
+      cableado a la cadena del integrador al lado de su hermano. Lee los patrones **de la fuente**
+      del publicador (si `PATRONES` desaparece, TIRA en vez de dar verde), deriva los sujetos de
+      `git ls-files`, y las exenciones se derivan del nombre (test / dotfile / `.md` / `.example`)
+      en vez de ser una lista de rutas perdonadas, que es como una exención se vuelve permanente
+      sin que nadie la audite. Cubre tres clases: huérfano, entrada literal de la lista blanca sin
+      archivo (el renombre que mató a las campanas) y patrón con barra (que rompería el modelo de
+      glob plano del gate sin avisar).
+
+      **El verde se probó al revés**, porque un gate ciego también da cero: 6 fixtures en rojo por
+      cada clase, más la mutación sobre el subárbol REAL: un archivo de prueba en un subdirectorio
+      del bot (`motor-zzprueba/agenda.mjs`, que ya no existe — se borró al revertir la mutación) con
+      `git add -N` → `not ok 1 ... [huerfano] ... está en un subdirectorio`. Revertido y
+      verificado con `git status --porcelain -- hermes-content/deploy/vps-ops/bot` **vacío**: el
+      pedido de deploy sigue intacto en sus 13 archivos.
+
+      **Vive en `scripts/`, a propósito.** El arreglo natural sería el subárbol del bot, pero está
+      congelado hasta el `ok` de `t_3752e986`: cualquier archivo ahí sería el 14.º y el cuerpo que
+      Sergio Urcullo firma dejaría de describir lo que se publica.
+
+      ⚠️ **Queda anotado, no hecho (mismo motivo):** el gate hermano que vive DENTRO de la carpeta,
+      `ejecutable-viaja-ejecutable.test.mjs:32`, comparte el punto ciego —
+      `readdirSync(carpeta, { withFileTypes: true }).filter(e => e.isFile() && e.name.endsWith('.sh'))`
+      es plano y sólo mira `.sh`. No urge: el gate nuevo mide TODOS los archivos del subárbol,
+      subdirectorios incluidos, así que la cobertura ya está cubierta desde afuera. Lo que sigue
+      pendiente es el bit de ejecución de un `.sh` anidado, que sólo ese hermano mira.
+
+      Gates: `test:publicador-bot` 9/9 · `test:guards-cableados` 9/9 (es el que exige que un
+      `test:*` nuevo esté en la cadena) · `test:cadena-publicador`, `test:publicadores`,
+      `test:docs-hygiene`, `test:cola-selfcheck` sin rojos.
 
 - [x] 🔴 **CERRADO el 2026-09-26 10:43-11:05 La Paz — era un FANTASMA en su causa, y la causa
       escrita mandaba a construir de nuevo algo que ya existe. El síntoma sí es real: el aviso de
@@ -1500,17 +1666,24 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
         propiedad: una rama nueva sin traducir dejaría al conciliador sin sujetos, y eso **no sale
         rojo, sale VACÍO**.
 
-      ⚠️ **Las diez personas NO son un ítem nuevo de esta cola.** Ya son la tarea `t_4f30a836`
-      (*«7 desconocido(s) esperando una respuesta tuya»*), bloqueada en Sergio Urcullo. Lo que
-      cambió hoy es que **el instrumento ya no dice que están bien**.
+      ⚠️ **Las diez personas NO son un ítem nuevo de esta cola.** Ya son la tarea del vigía
+      `[leads-esperando]` (*«N desconocido(s) esperando una respuesta tuya»*), bloqueada en Sergio
+      Urcullo. Lo que cambió hoy es que **el instrumento ya no dice que están bien**.
 
       ⚠️ **Ese párrafo de arriba es FALSO y lo corrige el ítem que está encima — 2026-09-26 09:00.**
-      Las diez no eran personas ni tenían nada que ver con `t_4f30a836`: consultadas en la base de
+      Las diez no eran personas ni tenían nada que ver con esa tarea: consultadas en la base de
       Chatwoot, **las diez son nuestras** (inbox 7, o contacto `Sonda QA` en el inbox 4), y ocho son
       anteriores a que el código de aviso existiera. Atar un número recién medido a una tarea ajena
       que habla de otra cosa le dio un respaldo que no tenía — y el número correcto es **2, ningún
-      lead**. El bloqueo `t_4f30a836` sigue vivo por su cuenta y no se toca: lo mide otro
+      lead**. El bloqueo `[leads-esperando]` sigue vivo por su cuenta y no se toca: lo mide otro
       instrumento.
+
+      ⚠️ **Y su ID no se cita más, porque rota cada día — medido el 2026-09-26 17:30.** Acá se
+      nombraba `t_4f30a836`, que el 26-sep amaneció `archived`: el vigía **archiva la de ayer y crea
+      la de hoy** con el mismo título y un id nuevo (25-sep 20:39 → 26-sep 20:39). Toda cita de un
+      id de vigía es la fecha de ayer escrita en presente, y el remedio obvio —copiar el id
+      nuevo— la pone en rojo otra vez mañana. Se cita el **marcador** y se deriva el id:
+      `onia-tablero.sh list --json | python3 -c "..."` filtrando por `[leads-esperando]`.
 
       Validado por mutación: con el conciliador ciego caen 3 tests por el motivo correcto
       (`un handoff que la base registra y el log no nombra pone el gate ROJO`, la lectura, y el
@@ -3147,7 +3320,7 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
       · `hermes-content/deploy/vps-ops/bot/knowledge.onia.json` — el que `deploy-bot.sh` lista en
         `PATRONES` y después instala en el contenedor vía `webhook-server.sh knowledge`
         (`deploy-bot.sh:170`). Tenía **cero** campañas.
-      · `hermes-content/docs/chatbot/campanas-onia.knowledge.json` — las **9** campañas, los 3
+      · ~~`hermes-content/docs/chatbot/campanas-onia.knowledge.json`~~ — las **9** campañas, los 3
         gates y todo el cuidado, y **nadie lo desplegaba jamás** (ya no existe: se borró en este
         mismo arreglo).
       Eso es exactamente lo que `CLAUDE.md` §2 prohíbe: dos fuentes de verdad del mismo tema. El
@@ -3755,11 +3928,24 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
       `onia-interna` no es un cliente que paga, así que eso ensucia la MEDICIÓN, no la plata
       de nadie.
 
-      🔴 **EN VUELO, con su riesgo:** el commit `42eab9a8` está **sólo en el clon de casa**
-      (`/root/loops/onia-platform-chatbot`). Desde nodo-casa `onia-platform` **no se pushea**
-      (`git remote -v` → push `DESHABILITADO-NODO-DE-DESARROLLO`). Si esa máquina se pierde,
-      se pierde el arreglo. Lo entrega el integrador por
-      `scripts/integrar-onia-platform.sh`.
+      ✅ **YA ENTREGADO Y MERGEADO — acá decía «🔴 EN VUELO, con su riesgo: el commit `42eab9a8`
+      está sólo en el clon de casa … si esa máquina se pierde, se pierde el arreglo», y es FALSO
+      desde entonces; corregido el 2026-09-26 midiéndolo.** Vive publicado como **`eb6182d3`**, con
+      `patch-id` idéntico, y **ya está en `origin/master`**. O sea el 🔴 anunciaba pérdida de
+      trabajo sobre algo que llegó al integrador — y un 🔴 de pérdida de datos es de los que hacen
+      que un carril suelte su ítem y corra a rescatar lo que no hace falta rescatar.
+
+      **Por qué el sha citado nunca iba a aparecer en un remoto:** `git am` **regenera el sha** al
+      entregar, así que el local queda huérfano para siempre y el instrumento con que se "probó" el
+      riesgo —`git log HEAD --not --remotes=origin`— lo sigue devolviendo. El sha es la identidad
+      equivocada para esta pregunta; la que sobrevive a `git am` es el **mensaje**, y el contenido
+      se confirma con `patch-id`:
+
+      ```bash
+      cd /root/loops/onia-platform-chatbot && git fetch origin --quiet
+      git log origin/master --oneline --grep='webhook que COBRA'   # → eb6182d3
+      git show 42eab9a8 | git patch-id --stable   # mismo patch-id que el publicado
+      ```
 
 - [x] 🔴 **CERRADO el 2026-09-19 — el bot le clavaba el género masculino a la persona que
       atiende, que la carga el CLIENTE: «la Dra. Ana Ríos … te escribe él»**
@@ -5003,7 +5189,8 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
       (17:50 y 20:50 La Paz del 17-sep). El `--dry-run` del publicador, en cambio, contestaba
       *"YA ESTA PUBLICADO"* — la contradicción era la pista.
 
-      **La causa.** `scripts/inclusion-chatbot.mjs` (del carril `web-venta`) importaba, con cuatro
+      **La causa.** `web-factory/apps/onia-platform/scripts/inclusion-chatbot.mjs` (del carril
+      `web-venta`) importaba, con cuatro
       saltos de directorio hacia arriba, el archivo
       `hermes-content/deploy/vps-ops/bot/promesa-inclusion.mjs`, que es **mío**
       (`943735cb`). Pero el publicador arma el stage con
@@ -8973,6 +9160,128 @@ cita: al cerrar una fila hay que barrer quién la nombra, no sólo tacharla.
       alcances, así que nada más lo sujetaba).
       </details>
 
+- [x] ✅ **AUDITORÍA DE LOS `[x]` — 2026-09-26 18:43-19:1x La Paz (escalón 2: «Ahora» agotada en
+      las dos colas y los 3 de «Después» esperando). Los `[x]` auditados RESISTEN, y el escalón
+      dio trabajo real en el tablero: cuatro tareas de mi zona con la evidencia vencida.**
+
+      **Qué se auditó y con qué resultado** (se apuntó a los `[x]` que afirman estado de
+      PRODUCCIÓN, que son los que CLAUDE.md prohíbe dar por hechos sin mirar):
+
+      | claim auditado | veredicto |
+      |---|---|
+      | «el aviso está DESPLEGADO y ENCENDIDO en producción» (09-05, nunca re-medido) | **cierto** |
+      | los 6 medidores cerrados HOY están cableados a algo que corre | **cierto**: 99/99 |
+      | la cadena de gates sostiene los `[x]` | **cierto**: `npm test` exit 0 |
+
+      🔴 **Lo que se buscaba y NO estaba, que es el hallazgo que justifica el escalón.** La
+      hipótesis era la clase ya pagada por este carril: *un `[x]` respaldado por un alias que
+      nadie corre vale cero* («un alias suelto no lo corre nadie: entra a la medición de arranque
+      del carril o vale cero»). Se midió DERIVANDO los invocados desde `scripts.test` de
+      `package.json` y expandiendo transitivamente, en vez de leer la cadena a ojo:
+      **99 aliases `test:*`, 99 en la cadena, CERO huérfanos.** La hipótesis era falsa; se anota
+      porque una hipótesis refutada con el método a la vista es lo que evita volver a gastar la
+      vuelta en ella.
+
+      ⚠️ **Ese número se REHIZO, no se corrigió, y por eso vale.** Se anotó
+      `BASE=$(git rev-parse origin/main)` antes de medir; al cerrar, `git diff --name-only
+      "$BASE"..origin/main` mostró que entró un commit y que tocó **`package.json`** — que es
+      justamente la fuente de esta medición. Primera cuenta: 98/98. Rehecha sobre el árbol
+      mergeado: **99/99** (el commit ajeno agregó `test:auth-solo-cloudflare` y viene ya
+      cableado). La conclusión aguantó y el número no: si se hubiera «corregido» de memoria en vez
+      de volver a derivarlo, la cola habría quedado afirmando un conteo que ya no existe.
+
+      ⚠️ **Y el nombre del alias estaba MAL — corregido el 2026-09-26 contra `package.json`, no
+      contra el recuerdo.** Decía ~~`test:traefik-auth-cloudflare`~~, que **nunca existió**:
+      `git log -S'traefik-auth-cloudflare' -- package.json` no devuelve un solo commit. El
+      alias que el commit `82fafedb` agregó y que corre en la cadena es
+      `test:auth-solo-cloudflare`; lo que se llama «traefik» es el ARCHIVO
+      (`scripts/traefik_auth_solo_cloudflare.mjs`). El párrafo se escribió tomando el nombre del
+      archivo por el del alias — y quien audite «¿está cableado?» grepeando el nombre viejo no
+      encuentra nada y concluye que no lo está.
+
+      **Y el `[x]` más cargado del carril se sostuvo por el motivo que importa.** Mi tercera
+      medida de objetivo cuenta líneas `[aviso] … aviso enviado` como prueba de que a Sergio
+      Urcullo le llegó, y la memoria compartida advierte que *sólo la línea `OK message_id=`
+      prueba entrega* porque `onia-tg.sh` es un ENRUTADOR (sus `INFORMATIVO`/`TAREA` salen exit 0
+      sin tocar Telegram). **No aplica acá, y se verificó leyendo el emisor, no suponiendo:**
+      `aviso-telegram.mjs:313` llama `api.telegram.org/sendMessage` con su propio `fetch`, y
+      `:334` corta con `!respuesta.ok || cuerpo.ok === false` **antes** de devolver `sent` — con
+      el comentario que explica por qué mirar sólo el código HTTP sería el falso verde (Telegram
+      contesta 200 con `ok:false`). O sea: esa línea del log es honesta.
+
+      ✅ **Trabajo hecho: cerradas 4 tareas del tablero de mi zona, con su recuento.**
+      `t_93a999c1`, `t_22776686`, `t_f326feb4` y `t_26d50f88` (del 6 y 7-sep, cuatro duplicados
+      del mismo tema, creadas por un ordenador que ya no corre). **Sus tres premisas estaban
+      vencidas**, recontadas antes de cerrar —la evidencia de una tarea se congela—:
+
+      | su premisa | recuento de hoy |
+      |---|---|
+      | «cola vacía, 0 ítems en Ahora» | **3** abiertos; y 137 en «Ahora» todos cerrados |
+      | «session limit en el log» | **0** (`grep -ci "session limit"`) |
+      | «5 sin commit recientes» | las últimas **6** vueltas, exit 0 con 1-3 commits |
+
+      ⚠️ **No se ejecutó su cuerpo a propósito, y el motivo es la regla:** pedían *«añadir 5
+      ítems `- [ ]`»* e *«inventar 3 ítems accionables»*, que es exactamente lo que el prompt del
+      carril PROHÍBE (inventar una tarea o deducirla del foco). Una tarea con la solución escrita
+      traslada su punto ciego al ejecutor: se recuenta y se cierra, no se obedece.
+
+      **Lo que de verdad frena este carril no es falta de ítems escritos: es UNA firma.** El
+      pedido de deploy del bot sigue `blocked` esperando el `ok` de Sergio Urcullo —**13**
+      archivos, recontados con `bash /opt/onia/bot/_deploy/publicar.sh --dry-run` DESPUÉS del
+      último merge— y rescata 7 leads colgados, incluido el único lead real de WhatsApp. **El ID
+      se deriva, no se copia** (`onia-tablero.sh list --status blocked | grep -i 'Publicar el
+      bot'`). No se mandó Telegram: ese `ok` ya le llega en el parte diario, y sumar un aviso a
+      un canal saturado es apagarlo.
+
+- [x] **CERRADO el 2026-09-26 15:50-16:30 La Paz (es un MEDIDOR, no toca el motor: no necesita
+      deploy). `scripts/en_vuelo_vencido.mjs`: la unidad ya es el ÍTEM ABIERTO, no la frase.**
+      Medición viva, corrida sobre las dos colas después del arreglo: **0 sujetos** (antes de
+      tocar nada daba **7, y 6 eran falsos**). Self-check **18 casos** — eran 10; los 8 nuevos son
+      COPIA TEXTUAL de los falsos medidos, no redacciones inventadas: el primer intento los
+      escribió sanitizados y **cinco de los seis pasaron en verde sin arreglar nada**, que es
+      exactamente el "rojo por el motivo equivocado" que se vuelve un verde futuro.
+
+      **Las dos piezas del arreglo atacan causas distintas, y ninguna sola alcanzaba:**
+      `sinHistoria()` (en `scripts/lib/frases_de_cola.mjs`) blanquea los ítems `- [x]` antes de
+      medir — el tiempo verbal de un ítem no está en sus palabras, está en su **casilla**, y la
+      casilla ya la escribe la cola gratis. Eso mata 5 de los 6 falsos. El 6.º vive en un ítem
+      **abierto** (`plataforma-v1.md:5715`, *"Este párrafo citaba `9d6d7bc6`"*) y sólo lo salva el
+      ensanche de `NOTA_DE_CORRECCION` con `YA DESPLEGADO` / `YA ENTREGADO` / `Entregado hoy al
+      remoto` / `citaba`. Y el sujeto que se PERDÍA se recupera con una tercera: una afirmación sin
+      sha adopta los shas de otras frases de su mismo **bloque de prosa** (nunca de otro párrafo).
+
+      ⚠️ **Un `0 sujetos` también es lo que devuelve un gate que quedó ciego, así que se probó al
+      revés**: un archivo de mutación con el MISMO texto dos veces, una en `- [ ]` y otra en
+      `- [x]`, citando un sha publicado → salió `VENCIDA` sólo en el abierto, `exit 1`. El cero de
+      las colas reales es un cero honesto.
+
+      **Cableado (era el único pendiente del ítem):** `npm run test:en-vuelo-vencido` —sólo el
+      `--self-check`— entra a la cadena del integrador junto a `test:bloqueo-citado`; la medición
+      viva es `npm run envuelo:vencido` y vive en la lista de arranque de este carril, el único
+      lugar donde un alias suelto se corre de verdad. Verificado que el ensanche NO afloja al gate
+      hermano, que comparte la constante: `test:bloqueo-citado` 45/45 y `bloqueo:citado` sigue
+      dando las mismas **3** citas vivas.
+
+      **El rediseño ya está diagnosticado; falta escribirlo.** Un ítem `- [x]` es historia por
+      construcción (su prosa habla en pasado) y ahí caen 5 de los 6 falsos; el 6.º es una nota de
+      corrección dentro de un ítem abierto, que pide ensanchar `NOTA_DE_CORRECCION` con
+      `YA DESPLEGADO` / `Entregado hoy al remoto` / `citaba`. Tomar el ítem como unidad resuelve de
+      paso el sujeto perdido, porque junta el sha con su afirmación (hoy caen en frases distintas
+      del mismo ítem, a 6 renglones). **Lo que NO se arregla así:** separar «en vuelo» de
+      «mergeado sin desplegar» son dos preguntas distintas, y la segunda ya tiene su gate
+      (`deploy-vivo.mjs`) — no la absorbas acá.
+
+      ```bash
+      node scripts/en_vuelo_vencido.mjs --self-check     # 10 casos, puro, sin red ni disco
+      node scripts/en_vuelo_vencido.mjs hermes-content/docs/cola/chatbot.md \
+        hermes-content/docs/cola/plataforma-v1.md        # hoy: 8 sujetos, 6 falsos
+      ```
+
+      ⚠️ **Se cablea a `npm test` sólo el `--self-check`, nunca la medición viva** — necesita el
+      clon de `onia-platform`, y un gate cuyo self-check depende del repo hermano se pone rojo por
+      ambiente y traba el merge de todos los carriles. La medición viva va en la lista de arranque
+      de este carril, que es el único lugar donde un alias suelto se corre de verdad.
+
 - [ ] **Limpieza de la data QA NUEVA.** La del 29-ago ya se ejecutó; después se generó más:
       las conversaciones QA 39, 43 y 44 (`Cliente Prueba Bandeja`, `Cliente Insistencia Tres`,
       `Cliente Comprobante`). **No borrar todavía**: son la evidencia de cuatro ítems cerrados,
@@ -9010,13 +9319,45 @@ cita: al cerrar una fila hay que barrer quién la nombra, no sólo tacharla.
       líneas, intercaladas con webhooks fechados). Un `grep` de números de línea no es una
       hora, y el que no lo reconstruya reporta un duplicado que no existe.
 
-      ⚠️ **NO se arregló en esta vuelta a propósito, y el motivo importa:** el emisor de la línea
-      es `aviso-telegram.mjs`, en `hermes-content/deploy/vps-ops/bot/`, y hay un pedido de deploy
-      del bot **vivo y esperando la firma de Sergio Urcullo** cuyo cuerpo enumera **13 archivos**.
-      `aviso-telegram.mjs` **no es uno de esos 13** (está idéntico repo ↔ producción), así que
-      tocarlo lo haría el **14.º** e invalidaría el pedido — y ese pedido trae el arreglo de las
-      campanas, que vale más que una hora en un log. **Se hace después del `ok`, o rehaciendo el
-      pedido y archivando el viejo en la misma vuelta.**
+      ⚠️ **NO se arregló en esta vuelta a propósito, y el motivo importa:** hay un pedido de
+      deploy del bot **vivo y esperando la firma de Sergio Urcullo** cuyo cuerpo enumera **13
+      archivos**, y el archivo que hay que tocar **no es uno de esos 13**, así que tocarlo lo haría
+      el **14.º** e invalidaría el pedido — y ese pedido trae el arreglo de las campanas, que vale
+      más que una hora en un log. **Se hace después del `ok`, o rehaciendo el pedido y archivando
+      el viejo en la misma vuelta.**
+
+      ⚠️ **Acá decía que el emisor es `aviso-telegram.mjs`, y es FALSO — corregido el 2026-09-26
+      15:30 La Paz, contado por emisor y no por nombre parecido.** `aviso-telegram.mjs` sólo
+      NOMBRA el formato en dos comentarios; no imprime nada. Quien escribe la línea es
+      **`webhook-server.mjs`, en `:767` (el caso normal) y `:770` (el `catch`)**, con el `log` que
+      ese mismo archivo define en `:626` como un `process.stdout.write` pelado — por eso sale sin
+      hora, mientras la familia `[onia-webhook]` se fecha a sí misma en `:318`. La conclusión de
+      arriba no cambia (`webhook-server.mjs` tampoco está en los 13: sigue congelado), pero el
+      sujeto sí: quien abriera `aviso-telegram.mjs` después del `ok` no encontraría qué editar y
+      volvería a derivarlo desde cero. Se deriva en un comando, y por eso vale más que la lista:
+
+      ```bash
+      cd hermes-content/deploy/vps-ops/bot
+      grep -rn '\[aviso\]' --include=*.mjs . | grep -v backups | grep -v '\.test\.'
+      ```
+
+      🔴 **Y la trampa que el arreglo obvio dispara, medida antes de escribirla: copiar el formato
+      del hermano rompe EN VERDE el instrumento que mide este carril.** El hermano fecha así —
+      `[onia-webhook] 2026-09-26T19:15:18.021Z conv=49 …` —, o sea tag y después la hora. Pero las
+      **CINCO** expresiones de `avisos-vivo.mjs` que leen estas líneas anclan en `[aviso]` seguido
+      **inmediatamente** de la palabra de estado, y con la hora en el medio no matchea ninguna:
+      `motivoDelAviso` (`:136`), las dos de `contarEventos` (`:158` `sent`, `:163` `skipped`) y las
+      dos de `conversacionesDeAvisos` (`:203` el `conv=` propio, `:210` el `estado`). El `\w+`
+      captura `2026`: el `estado` pasa a ser `"2026"`, el `conv=` propio deja de matchear y cae al
+      vecino, el motivo queda `"sin motivo en el log"` y los contadores de enviados/salteados se
+      van a cero — **sin un solo error, y en el único lugar donde este carril cuenta si el aviso le
+      llegó a Sergio Urcullo.** Se derivan con el mismo grep de arriba apuntado a `avisos-vivo.mjs`.
+
+      **Así que el arreglo son DOS archivos que viajan juntos o ninguno**, y están en deploys
+      distintos: `webhook-server.mjs` (fuera de los 13) y `avisos-vivo.mjs` (**dentro** de los 13).
+      Publicar uno sin el otro deja el parser roto en el medio. Lo barato es poner la hora donde
+      ningún ancla la pisa —al final, o antes del `[aviso]`— y **ver el rojo primero** corriendo
+      `avisos-vivo.test.mjs` contra una línea con el formato nuevo.
 
       🔴 **El ID no se copia — se deriva, y esta línea ya se equivocó una vez.** Decía
       `t_76cdb5dc` y esa tarea está **`archived`** desde el 2026-09-26 16:48: el pedido se rehizo
@@ -9070,7 +9411,7 @@ cita: al cerrar una fila hay que barrer quién la nombra, no sólo tacharla.
 | S5 | **¿Silenciar el Telegram de los agentes n8n que sí trabajan?** (Vendedor, Contenido, Finanzas, Prospector, Radar IA, Web Factory Radar) + los recordatorios de agenda cada 30 min | Es su canal y su umbral de ruido. No se apagan los workflows: hacen trabajo — hay que editar el nodo de aviso de cada uno | Que Telegram vuelva a ser sólo errores, que es la regla que ya se aplicó al resto |
 | S7 | **Contestar (o descartar) a los cuatro desconocidos que escribieron y nadie respondió** — conv 35 (+591 73232758, clínica dental de 4 doctores, 25-ago), 37 (+591 73021804, 28-ago), 36 (`Saguilera@ds-santacruz.bo`, 27-ago) y 34 (widget, sin dato de contacto) | Vende Sergio, y son personas reales esperando desde hace 3-6 días. Un bot no puede retomar una conversación fría de hace una semana sin que suene a spam | El primer lead atendido del carril. Dos tienen número de WhatsApp y uno correo: tres de los cuatro son alcanzables hoy |
 | ~~S8~~ | ✅ **CERRADO el 2026-08-31: `Onia (interna)` → inbox 5.** Verificado en la base y MIRADO en `/inbox`. **Podado el 01-sep:** esta fila arrastraba el análisis completo de seis vueltas y seguía leyéndose como bloqueo vivo — S8 se nombra **17 veces** en este archivo, casi todas dentro de párrafos viejos que ya no aplican. Lo que quedaba abierto NO era S8 sino el **inbox 4**, y ahora tiene su propio ítem (3 de "Ahora") y su propio bloqueo (**S14**). | — | — |
-| ~~S9~~ | ✅ **CERRADA el 2026-09-25 · SIN OBJETO desde el 2026-09-24 — no le pidan esto a Sergio Urcullo.** ⚠️ **Estuvo un día entera escrita como resuelta y sin tachar, y por eso seguía contando como bloqueo vivo:** `npm run bloqueos:vencidos` sobre esta cola salía **rojo** nombrándola (*«S9 YA ESTA SATISFECHO — su verificador sale 0, que es lo que la propia fila declara como resuelto»*). El texto decía «SIN OBJETO» y la sintaxis decía «viva»; el gate lee la sintaxis, y tenía razón. **Declarar cerrado en prosa no cierra: se tacha el id o sigue abierto.** S9 mandaba un `scp` a mano del documento sobre `/opt/onia/bot/knowledge.json`, y esperó **24 días**. La causa real era otra: las campañas vivían en `docs/chatbot/campanas-onia.knowledge.json`, un archivo que ningún deploy copiaba, mientras el circuito automático ya publicaba `bot/knowledge.onia.json` (`deploy-bot.sh:170`). Las campañas se mudaron al archivo que viaja y el hermano se borró. **Lo que queda no es un `scp`: es el deploy del bot normal (`DESPLEGAR: bot`).** Lo de abajo es historia de cómo se llegó acá. ~~**Publicar las campañas en el VPS — y son CUATRO archivos, no uno.**~~ 🔴 **Corregido el 31-ago (3ª vuelta): tal como estaba escrito, esto NO encendía nada.** Decía copiar sólo `campanas-onia.knowledge.json` a `/opt/onia/bot/knowledge.json` porque daba el motor por desplegado; medido con md5, el VPS está **un commit atrás** (`3e3841aa`, sin `994eb42d`) y su `bot-engine.mjs` tiene **cero `campanaExacta`** — habría ignorado las campañas en silencio. Lo que tiene que viajar: **`bot-engine.mjs` + `knowledge.mjs` + `run-turn.mjs`** (del espejo `hermes-content/deploy/vps-ops/bot/`) **+ `knowledge.json`** (desde `hermes-content/docs/chatbot/campanas-onia.knowledge.json`), y después **reiniciar** — `webhook-server.sh` sólo recopia al contenedor si cambia su STAMP. Verificar con `node hermes-content/deploy/vps-ops/bot/espejo-check.mjs` (tiene que salir 0) | Escribe en el VPS, y la regla dice que ningún deploy sale sin su OK | **El ítem 2 entero.** El motor del repo ya las lee en modo venta (**647/647 verde**, probado con este mismo documento); falta que el VPS TENGA ese motor y que el archivo del número traiga las campañas. ⚠️ **Sumado el 31-ago (4ª vuelta): `run-turn.mjs`**, que volvió a exportar `LLM_SYSTEM_PROMPT` para revivir los 12 evals. Corrido hoy contra producción, `espejo-check.mjs` sale **1**: DISTINTOS `bot-engine.mjs`, `bot-engine.test.mjs`, `knowledge.mjs`, `run-turn.mjs`, `run-turn.test.mjs`; FALTAN `campanas-web.test.mjs`, `espejo-check.mjs`, `espejo-check.test.mjs`, `recepcionista.test.mjs`. Sin esto las 4 frases vivas de onia.com.bo siguen recibiendo el saludo genérico. ✅ **Gate 1 del 31-ago (5ª vuelta): EL CÓDIGO YA VIAJÓ — S9 se achicó a UN archivo de datos.** Medido, no leído: `espejo-check.mjs` sale **0** (`ESPEJO OK`), o sea que `bot-engine.mjs`, `knowledge.mjs` y `run-turn.mjs` ya son los del repo. Y confirmado en el motor que **CORRE**, no en el host: `docker exec onia-center grep -c campanaExacta /tmp/onia-bot/bot-engine.mjs` → **2** (era 0). Lo único que falta es el documento: `/opt/onia/bot/knowledge.json` sigue en **904 bytes del 6-ago, con cero `campanas`** — dentro y fuera del contenedor. **S9 hoy = copiar `hermes-content/docs/chatbot/campanas-onia.knowledge.json` a `/opt/onia/bot/knowledge.json` y reiniciar.** 🔴 **CORREGIDO el 31-ago (9ª vuelta): ya NO alcanza el JSON solo — son TRES archivos, y hacerlo con uno EMPEORA producción.** El documento nuevo trae `prefijo` (la campaña del CTA de `/v1/empezar`), y el esquema del validador **rechaza claves desconocidas**: `parseKnowledge` devuelve `data: null`, o sea que el documento **no carga a medias, no carga nada**. Medido con el `knowledge.mjs` que HOY corre en el VPS, bajado por `scp`: `ok=false`, `campanas[4].prefijo: clave desconocida`. Copiando sólo el JSON no quedan 5 campañas de 6 — quedan **cero**, y encima se pierden la FAQ `siat` y el horario que hoy sí están vivos. **Lo que tiene que viajar junto:** `hermes-content/deploy/vps-ops/bot/knowledge.mjs` + `hermes-content/deploy/vps-ops/bot/recepcionista.mjs` + el documento a `/opt/onia/bot/knowledge.json`, y reiniciar. Verificación previa: `node hermes-content/deploy/vps-ops/bot/espejo-check.mjs` hoy sale **1** y nombra `knowledge.mjs` y `recepcionista.mjs` entre los DISTINTOS — después del `scp` tiene que salir **0**. ✅ **Sumado el 31-ago (6ª vuelta) — verificado que la copia es SEGURA, que era un riesgo sin medir.** La instrucción manda a **sobrescribir un archivo de datos vivo en producción** y nadie había comparado los dos lados: si el documento nuevo no traía algo que el viejo sí, el `scp` lo borraba en silencio. Bajado el vivo del VPS y diffeado campo por campo contra el del repo: `identity`, `empresa` (el horario lun-vie 9-18) y `triggersExtra` son **idénticos**, y la única FAQ (`siat`) es **byte a byte la misma**. El nuevo sólo agrega `campanas` (5) y sube `version` de `2026-08-06.1` a `2026-08-31.1`. Es un **superset estricto**: no se pierde nada. **Y cómo se comprueba DESPUÉS del scp** — porque este carril ya dio dos deploys por hechos sin mirarlos, y hay que medirlo en el motor que CORRE, no en el host:
+| ~~S9~~ | ✅ **CERRADA el 2026-09-25 · SIN OBJETO desde el 2026-09-24 — no le pidan esto a Sergio Urcullo.** ⚠️ **Estuvo un día entera escrita como resuelta y sin tachar, y por eso seguía contando como bloqueo vivo:** `npm run bloqueos:vencidos` sobre esta cola salía **rojo** nombrándola (*«S9 YA ESTA SATISFECHO — su verificador sale 0, que es lo que la propia fila declara como resuelto»*). El texto decía «SIN OBJETO» y la sintaxis decía «viva»; el gate lee la sintaxis, y tenía razón. **Declarar cerrado en prosa no cierra: se tacha el id o sigue abierto.** S9 mandaba un `scp` a mano del documento sobre `/opt/onia/bot/knowledge.json`, y esperó **24 días**. La causa real era otra: las campañas vivían en `docs/chatbot/campanas-onia.knowledge.json`, un archivo que ningún deploy copiaba, mientras el circuito automático ya publicaba `bot/knowledge.onia.json` (`deploy-bot.sh:170`). Las campañas se mudaron al archivo que viaja y el hermano se borró. **Lo que queda no es un `scp`: es el deploy del bot normal (`DESPLEGAR: bot`).** Lo de abajo es historia de cómo se llegó acá. ~~**Publicar las campañas en el VPS — y son CUATRO archivos, no uno.**~~ 🔴 **Corregido el 31-ago (3ª vuelta): tal como estaba escrito, esto NO encendía nada.** Decía copiar sólo `campanas-onia.knowledge.json` a `/opt/onia/bot/knowledge.json` porque daba el motor por desplegado; medido con md5, el VPS está **un commit atrás** (`3e3841aa`, sin `994eb42d`) y su `bot-engine.mjs` tiene **cero `campanaExacta`** — habría ignorado las campañas en silencio. Lo que tiene que viajar: **`bot-engine.mjs` + `knowledge.mjs` + `run-turn.mjs`** (del espejo `hermes-content/deploy/vps-ops/bot/`) **+ `knowledge.json`** (desde ~~`hermes-content/docs/chatbot/campanas-onia.knowledge.json`~~), y después **reiniciar** — `webhook-server.sh` sólo recopia al contenedor si cambia su STAMP. Verificar con `node hermes-content/deploy/vps-ops/bot/espejo-check.mjs` (tiene que salir 0) | Escribe en el VPS, y la regla dice que ningún deploy sale sin su OK | **El ítem 2 entero.** El motor del repo ya las lee en modo venta (**647/647 verde**, probado con este mismo documento); falta que el VPS TENGA ese motor y que el archivo del número traiga las campañas. ⚠️ **Sumado el 31-ago (4ª vuelta): `run-turn.mjs`**, que volvió a exportar `LLM_SYSTEM_PROMPT` para revivir los 12 evals. Corrido hoy contra producción, `espejo-check.mjs` sale **1**: DISTINTOS `bot-engine.mjs`, `bot-engine.test.mjs`, `knowledge.mjs`, `run-turn.mjs`, `run-turn.test.mjs`; FALTAN `campanas-web.test.mjs`, `espejo-check.mjs`, `espejo-check.test.mjs`, `recepcionista.test.mjs`. Sin esto las 4 frases vivas de onia.com.bo siguen recibiendo el saludo genérico. ✅ **Gate 1 del 31-ago (5ª vuelta): EL CÓDIGO YA VIAJÓ — S9 se achicó a UN archivo de datos.** Medido, no leído: `espejo-check.mjs` sale **0** (`ESPEJO OK`), o sea que `bot-engine.mjs`, `knowledge.mjs` y `run-turn.mjs` ya son los del repo. Y confirmado en el motor que **CORRE**, no en el host: `docker exec onia-center grep -c campanaExacta /tmp/onia-bot/bot-engine.mjs` → **2** (era 0). Lo único que falta es el documento: `/opt/onia/bot/knowledge.json` sigue en **904 bytes del 6-ago, con cero `campanas`** — dentro y fuera del contenedor. **S9 hoy = copiar ~~`hermes-content/docs/chatbot/campanas-onia.knowledge.json`~~ a `/opt/onia/bot/knowledge.json` y reiniciar.** 🔴 **CORREGIDO el 31-ago (9ª vuelta): ya NO alcanza el JSON solo — son TRES archivos, y hacerlo con uno EMPEORA producción.** El documento nuevo trae `prefijo` (la campaña del CTA de `/v1/empezar`), y el esquema del validador **rechaza claves desconocidas**: `parseKnowledge` devuelve `data: null`, o sea que el documento **no carga a medias, no carga nada**. Medido con el `knowledge.mjs` que HOY corre en el VPS, bajado por `scp`: `ok=false`, `campanas[4].prefijo: clave desconocida`. Copiando sólo el JSON no quedan 5 campañas de 6 — quedan **cero**, y encima se pierden la FAQ `siat` y el horario que hoy sí están vivos. **Lo que tiene que viajar junto:** `hermes-content/deploy/vps-ops/bot/knowledge.mjs` + `hermes-content/deploy/vps-ops/bot/recepcionista.mjs` + el documento a `/opt/onia/bot/knowledge.json`, y reiniciar. Verificación previa: `node hermes-content/deploy/vps-ops/bot/espejo-check.mjs` hoy sale **1** y nombra `knowledge.mjs` y `recepcionista.mjs` entre los DISTINTOS — después del `scp` tiene que salir **0**. ✅ **Sumado el 31-ago (6ª vuelta) — verificado que la copia es SEGURA, que era un riesgo sin medir.** La instrucción manda a **sobrescribir un archivo de datos vivo en producción** y nadie había comparado los dos lados: si el documento nuevo no traía algo que el viejo sí, el `scp` lo borraba en silencio. Bajado el vivo del VPS y diffeado campo por campo contra el del repo: `identity`, `empresa` (el horario lun-vie 9-18) y `triggersExtra` son **idénticos**, y la única FAQ (`siat`) es **byte a byte la misma**. El nuevo sólo agrega `campanas` (5) y sube `version` de `2026-08-06.1` a `2026-08-31.1`. Es un **superset estricto**: no se pierde nada. **Y cómo se comprueba DESPUÉS del scp** — porque este carril ya dio dos deploys por hechos sin mirarlos, y hay que medirlo en el motor que CORRE, no en el host:
   ```bash
   ssh root@187.77.16.63 "docker exec onia-center sh -c 'grep -c campanas /tmp/onia-bot/knowledge.json'"
   ```
@@ -9620,7 +9961,7 @@ de verdad.** Medido contra producción con `curl`, no leyendo el repo:
 Las tres "avisen cuando esté listo" además chocan con `MODULOS_LISTOS`
 (`hermes-content/deploy/vps-ops/bot/config.mjs:408`): comercio y proveedores **ya están listos**. Que sean código muerto
 refuerza la 📌 de abajo — no hay que corregir el texto, hay que borrarlo.
-**Lo que se hizo:** `hermes-content/docs/chatbot/campanas-onia.knowledge.json` — el
+**Lo que se hizo:** ~~`hermes-content/docs/chatbot/campanas-onia.knowledge.json`~~ — el
 documento de Onia (copia del vivo del VPS) con **5 campañas** (las 4 vivas + `WA_URL`, que
 está a un import de volver). Pasa la **compuerta real de publicación**
 (`node hermes-content/deploy/vps-ops/bot/knowledge.mjs --check <ruta>` → `OK`, exit 0) y las
@@ -9665,14 +10006,14 @@ donde caen los wa.me?text= de onia.com.bo:
 - `composeWithFunnel` acepta `vars` (R_CAMPANA es la única plantilla de ese camino cuyo texto
   no está en el guion: lo trae el documento publicado).
 **Probado con el documento real, no con un fixture** (las 5 campañas de
-`hermes-content/docs/chatbot/campanas-onia.knowledge.json` corridas por el motor en modo venta): las cinco contestan su
+~~`hermes-content/docs/chatbot/campanas-onia.knowledge.json`~~ corridas por el motor en modo venta): las cinco contestan su
 propia respuesta y las cinco conservan `lead_upsert` + `notify_sergio`. Antes de este cambio
 las cinco daban `M0_SIN_HORARIOS` solo — exactamente el saludo genérico que el ítem denuncia.
 **7 tests nuevos** (incluido el guardia de no-regresión "sin campañas publicadas el motor no
 cambia" y "el opt-out le gana a la campaña"). Suite del bot **626/626** verde (619 antes).
 La compuerta de publicación sigue en `OK` sobre el documento.
 ⚠️ **Lo único que queda, y es MUCHO más barato que S8:** copiar
-`hermes-content/docs/chatbot/campanas-onia.knowledge.json` a `/opt/onia/bot/knowledge.json`
+~~`hermes-content/docs/chatbot/campanas-onia.knowledge.json`~~ a `/opt/onia/bot/knowledge.json`
 del VPS (hoy tiene 904 bytes y no trae `campanas`) y probar las 4 frases vivas MIRANDO. Eso
 es un deploy al VPS ⇒ **OK de Sergio**, pero ya no hace falta decidir dueño de inbox ni
 desplegar el producto. **Corrección a S8:** el ítem 2 sale de su lista de desbloqueos.
@@ -9730,7 +10071,7 @@ y `run-turn.mjs` del VPS ya son los del repo. Y verificado donde importa, en el 
 campañas y el archivo del número no trae ninguna — las 4 frases vivas de onia.com.bo
 siguen recibiendo el saludo genérico, pero por UNA razón y no por cuatro.
 **S9 quedó en un archivo de datos:** copiar
-`hermes-content/docs/chatbot/campanas-onia.knowledge.json` a `/opt/onia/bot/knowledge.json`
+~~`hermes-content/docs/chatbot/campanas-onia.knowledge.json`~~ a `/opt/onia/bot/knowledge.json`
 y reiniciar. Sigue siendo un deploy ⇒ **OK de Sergio**.
 
 ⚙️ **Vuelta del 2026-08-31 (novena) — el CTA de `/v1/empezar` ya no puede tener campaña
@@ -9754,7 +10095,7 @@ match sigue siendo del mensaje entero — una campaña normal no se estira sola.
 exacto **le gana siempre** al prefijo, y entre dos prefijos gana la frase más larga; el
 límite es un espacio, así que `mi negocio es` no se come `mi negocio establecido`.
 `prefijo` agregado al esquema (`knowledge.mjs`) y la **sexta campaña** al documento
-(`hermes-content/docs/chatbot/campanas-onia.knowledge.json`, `version` → `2026-08-31.2`),
+(~~`hermes-content/docs/chatbot/campanas-onia.knowledge.json`~~, `version` → `2026-08-31.2`),
 que sigue pasando la compuerta real de publicación (`--check` → `OK`, exit 0).
 **Probado con el documento REAL corrido por el motor**, no con un fixture: las dos
 variantes (`…Mi negocio es: panadería` y el prefijo pelado) salen ahora **`M0` + `R_CAMPANA`
@@ -9781,6 +10122,44 @@ archivos.**
 ---
 
 ## Cerrado — no rehacer
+
+- [x] **CERRADO el 2026-09-26 18:05 La Paz — las dos colas de este carril mandaban a 5 lugares
+      equivocados, y una de las rutas rotas me la creí yo mismo auditando** (es doc + gate, no
+      toca el motor ni el producto: **no necesita deploy**).
+
+      Con «Ahora» sin ítem desbloqueado en las dos colas, la vuelta bajó al escalón *auditar los
+      `[x]`* y contó los punteros que las colas citan: **310 rutas completas y 120 alias**. Rotos:
+      **5 sujetos en 13 citas**, y las clases resultaron distintas entre sí —
+
+      - **2 vivían en otra raíz del mismo repo.** ~~`scripts/inclusion-chatbot.mjs`~~ y
+        ~~`scripts/chat-diferido-vivo.mjs`~~ están en `web-factory/apps/onia-platform/scripts/`. Hay
+        **tres** carpetas `scripts/` en juego (la raíz de `onia-hermes`, la del repo
+        `onia-platform` y la de `web-factory/apps/onia-platform`), así que un `scripts/x.mjs`
+        pelado no dice cuál. ⚠️ **Mi propia auditoría a mano las dio por inexistentes** antes de
+        mirar: el error que el gate evita lo cometí yo primero.
+      - **1 fósil citado 9 veces.** `campanas-onia.knowledge.json` lo borró `82831cc4`; las 9
+        campañas viven hoy en `hermes-content/deploy/vps-ops/bot/knowledge.onia.json` (medido:
+        `campanas: 9`).
+      - **2 alias de gate que no existen.** ~~`test:siat-fase1`~~ es hoy `test:siat-todo` —corrido,
+        **430 pass · 0 fail**— y ~~`test:traefik-auth-cloudflare`~~ **nunca existió**
+        (`git log -S… -- package.json` vacío): el alias es `test:auth-solo-cloudflare` y
+        «traefik» es el nombre del archivo. Los dos estaban en frases que afirman *«ya viene
+        cableado»*, o sea una promesa sobre el presente: quien audita grepeando ese nombre no
+        encuentra nada y cablea un duplicado al lado del que ya corre.
+
+      **Gate: `npm run test:punteros-cola`** (`scripts/punteros-de-cola.mjs`, puro, en la cadena
+      al lado de `test:cola-selfcheck`). Rojo antes con los 5, verde después.
+
+      🔴 **La convención que deja este ítem, y que hay que respetar al escribir: un puntero que se
+      cita como HISTORIA va TACHADO** — ~~`asi`~~. El gate salta los tachados. Sin esa salida, un
+      gate duro empuja a borrar el registro para poner el verde, y el registro es justo lo que
+      evita repetir el callejón. Se eligió `~~` y no una lista de frases («ya no existe», «se
+      borró») porque **una lista de frases falla ABIERTA**: alcanza con redactarlo distinto.
+
+      **Por qué no lo cubría `verificar_cola.js`, que ya lee backticks:** ése exige evidencia en
+      «Ahora» y para una ruta inexistente imprime `AVISO fantasma-narrado` **sin cortar** (exit
+      0). Pregunta distinta: aquél mide si el ítem tiene evidencia; éste, si el puntero apunta
+      bien — y por eso puede ser duro donde el otro sólo avisa.
 
 - [x] 🔴 **CERRADO el 2026-09-26 03:43-04:35 La Paz (commiteado en `865e11ff`; es el
       INSTRUMENTO, no toca el motor ni el producto — no necesita deploy): el único gate que mide
@@ -10298,7 +10677,7 @@ archivos.**
 - [x] 🔴 **El bot adelantaba UN DÍA el plazo fiscal, y los DOS gates del tema exigían la fecha
       equivocada.** Cerrado el 2026-09-06 (`85a3f41d2`). Archivos:
       `hermes-content/deploy/vps-ops/bot/knowledge.onia.json`,
-      `hermes-content/docs/chatbot/campanas-onia.knowledge.json`,
+      ~~`hermes-content/docs/chatbot/campanas-onia.knowledge.json`~~,
       `hermes-content/deploy/vps-ops/bot/fecha-que-caduca.test.mjs`, `evals/evals.test.mjs`.
       **Cómo apareció:** midiendo el objetivo al arrancar. El simulador dio 3/3 y en la respuesta
       del SIAT decía *"desde el 30 de septiembre es obligatoria"*. El plazo real es el **1 de

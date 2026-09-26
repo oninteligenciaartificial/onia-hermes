@@ -26,6 +26,33 @@ if [ "$LARGO" -gt 1200 ]; then
   exit 2
 fi
 
+# 🔴 Una nota de METODO sobre el propio carril no es memoria compartida.
+#
+# Medido el 2026-09-26, con MEMORY.md congelada en 65.449/65.536 bytes: de los 25
+# bloques firmados que ocupaban el contexto activo, NUEVE (2.709 bytes, 4% del
+# archivo) empezaban con la marca del carril y hablaban del carril — "[recorrido-
+# cliente] ninguna nueva — el método de comparar BUILD_ID siguió funcionando",
+# "[chatbot-cola] dos vueltas seguidas midiendo lo mismo". Y CINCO de esas nueve
+# repetian, con otras palabras y minutos despues, un hecho que el mismo carril ya
+# habia dejado completo: al reescribirlo cambia el hash, asi que el dedup del
+# consolidador no las ve y entran las dos veces.
+#
+# La regla ya estaba escrita en todos los prompts —"Que NO va: ... nada que sea
+# solo de tu carril"— y la plantilla de cierre pide esa linea como `LECCION:` en la
+# SALIDA de la vuelta, que es donde el corredor se la muestra a la vuelta siguiente.
+# Lo que faltaba era que la PUERTA lo dijera: una regla que vive solo en el prompt
+# no avisa al que la desobedece, y cada byte que ocupa se lo cobra a los 15 carriles
+# en cada llamada.
+#
+# El corte es la marca al inicio, no el tema: hablar de metodo esta bien si el hecho
+# le sirve a otro carril. Un falso positivo cuesta reescribir sin el prefijo.
+if [[ "$HECHO" =~ ^\[[a-z0-9-]+\] ]]; then
+  echo "rechazado: eso es la LECCIÓN de tu vuelta, no un hecho compartido." >&2
+  echo "  La linea '[$(printf '%s' "$HECHO" | sed 's/^\[\([a-z0-9-]*\)\].*/\1/')] ...' va en tu SALIDA (RAZÓN:/LECCIÓN:), que el corredor le muestra a tu próxima vuelta." >&2
+  echo "  Acá va sólo lo que le sirve a otro carril, y sin la marca del tuyo adelante." >&2
+  exit 2
+fi
+
 mkdir -p "$INBOX" || exit 1
 SELLO=$(date -u '+%Y%m%dT%H%M%SZ')
 ARCHIVO="$INBOX/$SELLO-$QUIEN-$$.md"
