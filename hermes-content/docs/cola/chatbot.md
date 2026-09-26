@@ -1136,6 +1136,68 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
 
 ## Ahora
 
+- [x] 🔴 **CERRADO el 2026-09-26 16:43-17:25 La Paz (commiteado; NO toca el bot, así que NO
+      invalida el pedido de deploy vivo): el publicador del bot copia con globs PLANOS, y nada
+      medía si alcanzaban a su propio subárbol. Ya había un huérfano en el disco.**
+
+      Salió de bajar al escalón 2 (auditar los `[x]`): las dos colas tenían la sección "Ahora"
+      vacía y los tres ítems de "Después" parados por motivos verificados — la data QA espera
+      conversaciones reales que la reemplacen como prueba, el `[aviso]` sin hora no se toca
+      porque sería el 14.º archivo del pedido, y el botón QR espera credenciales del BCP.
+
+      **Lo medido.** `deploy-bot.sh:33` declara
+      `PATRONES=("*.mjs" "*.sh" "knowledge.example.json" "knowledge.onia.json" "plantillas-humo.json")`
+      y copia con `cd "$REPO_DIR"; for patron in ...; do for f in $patron`. Un glob de shell
+      **no recurre**, y el paso de copia es `cp -p "$f" "$DEST/$f"` **sin `mkdir -p`**: un archivo
+      en subdirectorio no puede llegar ni por accidente.
+
+      ```
+      git ls-files . | grep -c '/'                 → 1   (evals/evals.test.mjs)
+      ls /opt/onia/bot/evals/                      → No such file or directory
+      ls /opt/onia/bot/*.mjs | wc -l               → 145   (el repo tiene 150)
+      ```
+
+      **Hoy el huérfano es un test y no rompe nada** — `test:bot` corre `node --test` desde la
+      carpeta, que sí recurre, así que se ejecuta como gate igual. Lo que rompe es lo que viene
+      después: con 150 `.mjs` en una carpeta plana, el primer refactor que agrupe runtime en un
+      subdirectorio deja ese código fuera de producción **y `deploy-bot.sh` canta éxito**.
+
+      **La clase es la que este carril ya pagó dos veces:** una lista blanca escrita a mano
+      defiende el hueco que existe para impedir. El publicador SIAT dejó huérfano a
+      `run-fase1-volumen.sh` con un motivo escrito y verdadero, y las 9 campanas vivieron 24 días
+      en un archivo que ningún deploy copiaba, con su gate en 17/17 verde. **El emisor SIAT tiene
+      gate de cobertura desde entonces (`test:publicador-siat`); el bot no tenía ninguno.**
+
+      **Lo hecho:** `scripts/publicador-bot-cubre.test.mjs` + `npm run test:publicador-bot`,
+      cableado a la cadena del integrador al lado de su hermano. Lee los patrones **de la fuente**
+      del publicador (si `PATRONES` desaparece, TIRA en vez de dar verde), deriva los sujetos de
+      `git ls-files`, y las exenciones se derivan del nombre (test / dotfile / `.md` / `.example`)
+      en vez de ser una lista de rutas perdonadas, que es como una exención se vuelve permanente
+      sin que nadie la audite. Cubre tres clases: huérfano, entrada literal de la lista blanca sin
+      archivo (el renombre que mató a las campanas) y patrón con barra (que rompería el modelo de
+      glob plano del gate sin avisar).
+
+      **El verde se probó al revés**, porque un gate ciego también da cero: 6 fixtures en rojo por
+      cada clase, más la mutación sobre el subárbol REAL (`motor-zzprueba/agenda.mjs` con
+      `git add -N`) → `not ok 1 ... [huerfano] ... está en un subdirectorio`. Revertido y
+      verificado con `git status --porcelain -- hermes-content/deploy/vps-ops/bot` **vacío**: el
+      pedido de deploy sigue intacto en sus 13 archivos.
+
+      **Vive en `scripts/`, a propósito.** El arreglo natural sería el subárbol del bot, pero está
+      congelado hasta el `ok` de `t_3752e986`: cualquier archivo ahí sería el 14.º y el cuerpo que
+      Sergio Urcullo firma dejaría de describir lo que se publica.
+
+      ⚠️ **Queda anotado, no hecho (mismo motivo):** el gate hermano que vive DENTRO de la carpeta,
+      `ejecutable-viaja-ejecutable.test.mjs:32`, comparte el punto ciego —
+      `readdirSync(carpeta, { withFileTypes: true }).filter(e => e.isFile() && e.name.endsWith('.sh'))`
+      es plano y sólo mira `.sh`. No urge: el gate nuevo mide TODOS los archivos del subárbol,
+      subdirectorios incluidos, así que la cobertura ya está cubierta desde afuera. Lo que sigue
+      pendiente es el bit de ejecución de un `.sh` anidado, que sólo ese hermano mira.
+
+      Gates: `test:publicador-bot` 9/9 · `test:guards-cableados` 9/9 (es el que exige que un
+      `test:*` nuevo esté en la cadena) · `test:cadena-publicador`, `test:publicadores`,
+      `test:docs-hygiene`, `test:cola-selfcheck` sin rojos.
+
 - [x] 🔴 **CERRADO el 2026-09-26 10:43-11:05 La Paz — era un FANTASMA en su causa, y la causa
       escrita mandaba a construir de nuevo algo que ya existe. El síntoma sí es real: el aviso de
       la colgada 58 no salió. Pero NO es `followup_step`, y el deploy que ya espera firma SÍ la
