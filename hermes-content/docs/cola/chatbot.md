@@ -796,7 +796,7 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
 
       **Prueba.** Self-check en ROJO primero y por el motivo correcto (3 casos nuevos: la
       cabecera es afirmación · se le ubica la frontera · cabecera e ítem se acusan por
-      separado) → `92/95`; con el arreglo `95/95`. En vivo el gate pasó de **21 líneas
+      separado) → 92 de 95 casos; con el arreglo, 95 de 95. En vivo el gate pasó de **21 líneas
       juzgadas, 0 mienten** a **25 líneas, 2 mienten**, nombró `chatbot.md:32` y `:131`, y
       `--corregir` les puso su medición al lado sin borrar la historia. La cabecera-REGLA
       `## 🔴 ANTES DE CREERLE A UN «NO desplegado»…` queda absuelta **sin excepción escrita a
