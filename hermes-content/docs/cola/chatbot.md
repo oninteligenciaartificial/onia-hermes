@@ -8983,7 +8983,7 @@ cita: al cerrar una fila hay que barrer quién la nombra, no sólo tacharla.
       | claim auditado | veredicto |
       |---|---|
       | «el aviso está DESPLEGADO y ENCENDIDO en producción» (09-05, nunca re-medido) | **cierto** |
-      | los 6 medidores cerrados HOY están cableados a algo que corre | **cierto**: 98/98 |
+      | los 6 medidores cerrados HOY están cableados a algo que corre | **cierto**: 99/99 |
       | la cadena de gates sostiene los `[x]` | **cierto**: `npm test` exit 0 |
 
       🔴 **Lo que se buscaba y NO estaba, que es el hallazgo que justifica el escalón.** La
@@ -8991,9 +8991,17 @@ cita: al cerrar una fila hay que barrer quién la nombra, no sólo tacharla.
       nadie corre vale cero* («un alias suelto no lo corre nadie: entra a la medición de arranque
       del carril o vale cero»). Se midió DERIVANDO los invocados desde `scripts.test` de
       `package.json` y expandiendo transitivamente, en vez de leer la cadena a ojo:
-      **98 aliases `test:*`, 98 en la cadena, CERO huérfanos.** La hipótesis era falsa; se anota
+      **99 aliases `test:*`, 99 en la cadena, CERO huérfanos.** La hipótesis era falsa; se anota
       porque una hipótesis refutada con el método a la vista es lo que evita volver a gastar la
       vuelta en ella.
+
+      ⚠️ **Ese número se REHIZO, no se corrigió, y por eso vale.** Se anotó
+      `BASE=$(git rev-parse origin/main)` antes de medir; al cerrar, `git diff --name-only
+      "$BASE"..origin/main` mostró que entró un commit y que tocó **`package.json`** — que es
+      justamente la fuente de esta medición. Primera cuenta: 98/98. Rehecha sobre el árbol
+      mergeado: **99/99** (el commit ajeno agregó `test:traefik-auth-cloudflare` y viene ya
+      cableado). La conclusión aguantó y el número no: si se hubiera «corregido» de memoria en vez
+      de volver a derivarlo, la cola habría quedado afirmando un conteo que ya no existe.
 
       **Y el `[x]` más cargado del carril se sostuvo por el motivo que importa.** Mi tercera
       medida de objetivo cuenta líneas `[aviso] … aviso enviado` como prueba de que a Sergio
