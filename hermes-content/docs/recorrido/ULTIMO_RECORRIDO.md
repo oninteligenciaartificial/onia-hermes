@@ -12,6 +12,44 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-26 (vuelta HEAD 2b8a1ac3) — `BUILD_ID` sin cambios; escalón 3: últimas 2 superficies nunca auditadas — sin hallazgo
+
+`ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado primero contra la entrada de arriba:
+`4FWMcecd4jRBGUVwStDQb`, **igual** — no correspondía repetir el recorrido end-to-end. Tablero:
+sin tareas `ready` sin reclamar en la zona `recorrido-cliente`.
+
+Volví a listar TODAS las rutas reales (`find web-factory/apps/onia-platform/src/app -iname
+page.tsx`) y las crucé contra todo lo ya auditado (incluida la vuelta anterior, que cerró 7
+superficies). Quedaban exactamente DOS sin ni una mención: `/v1/funciones/facturacion-electronica-siat`
+y `/v1/modulos/dental`. Con esto, **las 24 rutas reales del sitio quedan cubiertas por este
+carril al menos una vez.**
+
+Auditadas en vivo (Playwright, `onia.com.bo`, 1440×900, `reducedMotion:'reduce'`, texto leído con
+`innerText`, no `curl`+`grep`), las dos con status 200:
+
+- **`/v1/funciones/facturacion-electronica-siat`**: la fecha del plazo SIAT (30-sep último día de
+  transición, 1-oct primer día de exclusividad online, RND 102600000007) coincide con la memoria
+  del sistema — no repite el error viejo de "30 de septiembre" a secas, distingue las dos fechas
+  correctamente. Explica el portal gratuito del SIN antes de vender el sistema propio (sin
+  presión falsa de "estás obligado a comprar"). Sin hallazgo.
+- **`/v1/modulos/dental`**: "Nuestro emisor ya está registrado ante el SIN y en trámite de
+  homologación; mientras tanto, podés emitir por el portal gratuito" — mismo patrón que
+  `/nosotros` (auditado el 17-sep y ya aceptado ahí: es un estado regulatorio real, necesario
+  para no mentir sobre certificación, no un "muy pronto" de producto propio). Precios y límites
+  citados (Básico Bs 320/mes) coherentes con la escalera vigente. Sin hallazgo.
+
+RAZÓN de no-avance en la medida `llegoHasta/completo`: no corresponde repetir el recorrido
+end-to-end (build sin cambios, ya 9/9 en los 5 rubros); este escalón no tiene contraparte
+numérica en `resumen.json`.
+LECCIÓN: con esta vuelta se agota el escalón 3 por SUPERFICIE (las 24 rutas reales ya tienen al
+menos una auditoría). La próxima vuelta sin cambio de `BUILD_ID` necesita otro eje — no relistar
+`page.tsx` esperando encontrar algo nuevo, porque no lo hay: revisar promesa-vs-entrega DENTRO de
+una misma pantalla ya auditada (ej. cruzar cada cifra citada contra su fuente en el producto real,
+no solo contra `subscription-plans.ts`/`pricing.ts`), o el escalón 2 (repetir rubros) si vence el
+`BUILD_ID`.
+
+---
+
 ## 2026-09-26 (vuelta HEAD 9a046a0f) — `BUILD_ID` sin cambios; escalón 3 en 7 superficies nunca auditadas por este carril: HALLAZGO en `/servicios/marketing-ia`
 
 `ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado primero contra la entrada de arriba:
