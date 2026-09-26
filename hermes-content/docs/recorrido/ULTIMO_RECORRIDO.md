@@ -4465,3 +4465,26 @@ corregido su estado real en el tablero, que decía "done" sin estarlo en producc
 LECCIÓN: un tablero en "done" certifica que el AGENTE terminó su commit, no que ese commit llegó
 a `origin/main` ni a producción — antes de dar un hallazgo por cerrado, `git merge-base
 --is-ancestor <sha-del-fix> origin/main`, y si no, recurl la superficie viva.
+
+## 2026-09-26 11:09 La Paz (vuelta HEAD 921cf15d) — dental 9/9, correspondía repetir: `BUILD_ID` cambió
+
+`BUILD_ID` comparado antes de decidir: vivo `DvBubiuO4uC5_E9jFNJeZ`, distinto al `4FWMcecd4jRBGUVwStDQb`
+de las dos corridas anteriores (00:09 y f3c4327f) → hubo deploy nuevo desde la última corrida completa
+de dental, así que repetir SÍ correspondía (no es el bug de las dos vueltas seguidas sin chequear).
+
+Corrida `--escribir` completa: **RECORRIDO COMPLETO en "Clínica dental", 9/9 pasos OK**,
+`completo: true`, `agujeros: []`. Alta abierta confirmada (`ONIA_ALTA_AUTOMATICA=abierta`) antes de
+arrancar. Los 9 pasos: home visible → camino de alta (Empezar, 2 clics) → cuenta
+`zz-qa-2026-09-26-1509@onia.com.bo` creada, pide confirmar correo → login tras confirmar → onboarding
+completo en 6 pantallas (rubro dental, horarios lun-vie 09-13/15-19, equipo con 1 profesional) →
+paciente `zz-qa-2026-09-26-1509-paciente` cargado y visto en `/patients` → cita 2026-09-28 09:00
+agendada (201, id `cmuij3ag6002901mx9sbcmkgk`) y VISTA en `/appointments` → factura con ítem
+`zz-qa-2026-09-26-1509-item` en `/billing/cmuij3ksc002b01mxzcs965vu`, FRENADO sin pagar → panel
+mirado (el paciente no figura ahí, es lo esperado: el dashboard no lista pacientes). Limpieza
+verificada: `appointments zz-qa-=0`, `organizations zz-qa-=0` al cerrar.
+
+**Sin hallazgo nuevo** — el `BUILD_ID` nuevo no rompió ningún paso del camino dental.
+
+RAZÓN: N/A — avanzó (dental re-confirmado con el `BUILD_ID` nuevo, sin regresión).
+LECCIÓN: ninguna nueva — comparar `BUILD_ID` contra esta misma entrada antes de decidir si dental
+corresponde repetirse volvió a ser el filtro correcto: esta vez SÍ había deploy nuevo detrás.
