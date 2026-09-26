@@ -288,7 +288,7 @@ un skill-doc del bot Hermes: no se mueve sin coordinar (mapa de docs §3.1 y §4
 ## 6. ¿Vale la pena automatizar ahora?
 
 **Para la Etapa 1, no es la prioridad.** La etapa vigente vende a clínicas
-(`ONIA_ESTRATEGIA_DE_EMPRESA.md:218-224`) y la marca personal le habla a otra audiencia
+(`ONIA_ESTRATEGIA_DE_EMPRESA.md` §7, «Etapa 1») y la marca personal le habla a otra audiencia
 (`SERIE_CLAUDE_CODE.md:16-18`; `contenido/MARCA_ONIA.md` §1). Automatizar su publicación **se
 anota y no se prioriza**. Lo que sí es barato y sirve a cualquier cuenta: registrar las URLs
 (§3) y no prometer una palabra sin recurso (§2).
