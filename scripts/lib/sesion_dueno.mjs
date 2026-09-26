@@ -21,6 +21,7 @@ import { cargarPlaywright } from "./playwright-que-arranca.mjs";
 // El magiclink del admin API entra en `aal1`. Toda cuenta con 2FA verificado rebota a
 // `/login/2fa` y el instrumento sale con exit 2 — ver `elevarSegundoFactor` abajo.
 import { codigoTotp, segundosHastaLaProximaVentana } from "./totp.mjs";
+import { describirZona, zonaParaMirar } from "./zona-del-negocio.mjs";
 
 /**
  * Ni playwright ni @supabase/ssr viven en el repo onia-hermes: se resuelven por lista de
@@ -236,7 +237,16 @@ export async function navegadorConSesion(email, { viewport = { width: 1440, heig
   );
   const { chromium } = await cargarPlaywright();
   const navegador = await chromium.launch({ args: ["--no-sandbox"] });
-  const ctx = await navegador.newContext({ viewport });
+  // Misma razon que en `mirar_bandeja_dueno.mjs`: sin `timezoneId` el navegador hereda la zona
+  // del proceso (UTC acá) y toda hora de la captura sale corrida. Este hermano existe aparte y
+  // arreglar solo el otro dejaba el bug vivo para quien entre por acá.
+  const zonaMirada = zonaParaMirar(confirmado, psql);
+  const ctx = await navegador.newContext({
+    viewport,
+    timezoneId: zonaMirada.zona,
+    locale: "es-BO",
+  });
+  console.log(describirZona(zonaMirada));
   await ctx.addCookies(
     cookies.map((c) => ({ ...c, domain: host, path: "/", httpOnly: false, secure: true, sameSite: "Lax" }))
   );

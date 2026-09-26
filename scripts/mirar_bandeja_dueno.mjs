@@ -35,7 +35,8 @@
 // El mint de sesión vive en `scripts/lib/sesion_dueno.mjs` desde el 2026-09-06: apareció un
 // segundo consumidor (recorrer el onboarding por la UI) y dos copias de esto divergen sin
 // fallar — la que quede vieja entra igual y mide otra cosa.
-import { acunarSesion } from "./lib/sesion_dueno.mjs";
+import { acunarSesion, psql } from "./lib/sesion_dueno.mjs";
+import { describirZona, zonaParaMirar } from "./lib/zona-del-negocio.mjs";
 import { cargarPlaywright } from "./lib/playwright-que-arranca.mjs";
 import { porQueRebote, veredictoDePantalla } from "./lib/pantalla-servida.mjs";
 
@@ -92,8 +93,21 @@ console.log(`sesión emitida para ${email} — ${cookies.length} cookie(s): ${co
 const { chromium, raiz: raizPw } = await cargarPlaywright();
 console.log(`playwright: ${raizPw}`);
 const navegador = await chromium.launch({ args: ["--no-sandbox"] });
-const ctx = await navegador.newContext({ viewport: VIEWPORT, isMobile: MOVIL, hasTouch: MOVIL });
+// La zona NO se hereda del proceso. Sin `timezoneId`, Playwright usa la del VPS (UTC) y toda
+// pantalla con horas sale 4 h corrida: medido el 2026-09-26 en /inbox, la misma conversación
+// decía "10:16 p.m." acá y "06:16 p.m." con `TZ=America/La_Paz`. Las pantallas son `"use client"`,
+// o sea que el producto está sano y el que mentía era este instrumento. Detalle en
+// `lib/zona-del-negocio.mjs`.
+const zonaMirada = zonaParaMirar(email, psql);
+const ctx = await navegador.newContext({
+  viewport: VIEWPORT,
+  isMobile: MOVIL,
+  hasTouch: MOVIL,
+  timezoneId: zonaMirada.zona,
+  locale: "es-BO",
+});
 console.log(`viewport: ${VIEWPORT.width}x${VIEWPORT.height}${MOVIL ? " (móvil)" : " (escritorio)"}`);
+console.log(describirZona(zonaMirada));
 await ctx.addCookies(
   cookies.map((c) => ({ ...c, domain: host, path: "/", httpOnly: false, secure: true, sameSite: "Lax" }))
 );

@@ -5887,14 +5887,26 @@ y sin operar. Acá se opera, con verificación por ítem.
       **La tarjeta está ENCENDIDA en producción** (`META_APP_ID` y `META_CONFIG_ID` puestos en
       el contenedor `onia-platform`), o sea que el gate no vigila una pantalla apagada.
 
-      ⚠️ **Commiteado, NO publicado en ningún remoto — y esto se pierde si nadie lo entrega.**
-      `onia-platform` no se puede pushear desde nodo-casa (remoto en
-      `DESHABILITADO-NODO-DE-DESARROLLO`). El camino es `format-patch` → VPS → `git am` →
-      push, **pero el gemelo `/root/loops/onia-platform` del VPS está hoy con 392 archivos
-      sucios y 39 commits atrás de `origin/master`**: aplicar el patch ahí publicaría un árbol
-      que nadie midió, encima de trabajo en vuelo que no es de este carril. El commit vive en
-      `/root/loops/onia-platform-chatbot` (rama `claude/chatbots-platform-review-0d1d09`).
-      **Lo que falta es limpiar/decidir ese gemelo, no rehacer el arreglo.**
+      ✅ **YA ENTREGADO AL REMOTO — acá decía «Commiteado, NO publicado en ningún remoto — y esto
+      se pierde si nadie lo entrega … lo que falta es limpiar/decidir ese gemelo», y las dos cosas
+      son FALSAS; corregido el 2026-09-26 midiéndolo.** El arreglo vive publicado en la rama como
+      **`e3276455`**, con `patch-id` idéntico (`97706f49…`) al `71cd8fa9` local. **No falta
+      entregarlo y no hay que tocar el gemelo sucio del VPS** — ese párrafo mandaba a limpiar 392
+      archivos ajenos, en un árbol de otro carril, para re-entregar algo ya entregado.
+
+      **Lo que sí falta es el merge a `master`, que es de `onia-cola`, no de este carril:**
+      `git merge-base --is-ancestor e3276455 origin/master` da falso hoy.
+
+      ⚠️ **Y el sha viejo no se cita más, por la razón que este archivo ya explica en `:1759`:**
+      `git am` **regenera el sha**, así que el local nunca va a aparecer en un remoto y
+      `git log HEAD --not --remotes=origin` lo devuelve para siempre — se lee como «no entregado»
+      cuando la verdad es «entregado con otro nombre». Se deriva por **mensaje**, que es lo único
+      que sobrevive a `git am`:
+
+      ```bash
+      cd /root/loops/onia-platform-chatbot && git fetch origin --quiet
+      git log origin/claude/chatbots-platform-review-0d1d09 --oneline --grep='META le cobra al dueño'
+      ```
 
       Lo que sigue bloqueado es SÓLO la tarjeta en el billing de Meta, y no la puede cargar
       ningún carril.
@@ -6125,8 +6137,15 @@ y sin operar. Acá se opera, con verificación por ítem.
 
          **Y el gate no lo corría nadie:** los **92** tests del emisor —el módulo del que
          depende la v1.0 por la decisión del 07-sep— **no estaban en la cadena `npm test`**.
-         Cableados como `test:siat-fase1` (puro, sin red ni repo hermano, 4,3 s): 92/92 verdes,
+         Cableados como `test:siat-todo` (puro, sin red ni repo hermano, 4,3 s): 92/92 verdes,
          `test:guards-cableados` verde.
+
+         ⚠️ **Acá decía ~~`test:siat-fase1`~~ y ese alias no existe — corregido el 2026-09-26
+         corriendo el que sí está.** El nombre vivo en `package.json` es `test:siat-todo`
+         (`node --test "hermes-content/integrations/siat/test/*.test.mjs"`), y hoy da **430
+         pass · 0 fail en 4,5 s**, o sea que cubre estos 92 y los que se sumaron después. El
+         gate está cableado; lo que estaba roto era el puntero, que es peor que un gate ausente:
+         manda a concluir que nadie lo corre y a cablearlo de nuevo al lado del que ya corre.
 
          🔴 **Commiteado, NO desplegado:** `/opt/onia-siat/run-fase1-volumen.sh` sigue con las
          tres etapas viejas. Desplegar no es de este carril — va por `DESPLEGAR: siat`. **Esto
@@ -6255,7 +6274,8 @@ y sin operar. Acá se opera, con verificación por ítem.
         (a) ✅ **CERRADO 2026-09-11 (`3927d847`)** VELOCIDAD — el widget de Chatwoot era el
         **71% del peso** de la landing (1.062 KB de 1.491 KB, 18 requests) y lo descargaba toda
         visita. Ahora espera al primer gesto de una persona o 12 s (`src/lib/chat-diferido.ts`,
-        gate `chat-diferido.test.ts`, medición viva `scripts/chat-diferido-vivo.mjs`). Medido
+        gate `chat-diferido.test.ts`, medición viva
+        `web-factory/apps/onia-platform/scripts/chat-diferido-vivo.mjs`). Medido
         sobre la portada buildeada: **0 pedidos y 0 KB al chat sin tocar nada**. Sin launcher
         propio: la burbuja es la misma y no hubo cambio visual que aprobar. ⚠️ Y la trampa que
         costó la vuelta: con `scroll` y `mousemove` en la lista de gestos el SDK salía pedido a
