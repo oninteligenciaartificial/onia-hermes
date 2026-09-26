@@ -161,7 +161,9 @@ export function sujetosDelRepo(dir = DIR_REPO) {
     .sort();
 }
 
-function medirVivo() {
+// Exportada para que `deploy_ya_ocurrio.mjs` juzgue las lineas del MOTOR con ESTA medicion y no
+// con una copia propia: su cabecera ya lo nombraba como ciego a esta frontera.
+export function medirVivo() {
   const nombres = sujetosDelRepo();
   const archivos = [];
   let arranqueProceso = null;
