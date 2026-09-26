@@ -12,6 +12,29 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-26 19:13 La Paz (vuelta HEAD 30b7f005) — recorrido base (sin variantes), 9/9
+
+`node scripts/recorrido_cliente.mjs --escribir` (dental, sin env de variante, cuenta
+`zz-qa-2026-09-26-2309@onia.com.bo`): **9/9 pasos, `completo: true`, sin hallazgo.** Onboarding
+con equipo cargado (profesional `zz-qa-2026-09-26-2309-profesional`), cita
+`zz-qa-2026-09-26-2309-cita` agendada para 2026-09-28 09:00 (id `cmuj08skt002001n0qgpo120n`) y
+VISTA en `/appointments`, paciente `zz-qa-2026-09-26-2309-paciente` visto en `/patients`,
+factura con ítem `zz-qa-2026-09-26-2309-item` vista en `/billing/cmuj092wx002201n0i9lrng7l` —
+frenado ahí sin marcar pago. El paso 9 (panel/dashboard) confirma que el paciente NO aparece
+listado ahí — comportamiento esperado, el panel no lista pacientes.
+
+Limpieza verificada al cerrar: `select count(*) from organizations where name like 'zz-qa-%'` = 0,
+`select count(*) from appointments where notes like 'zz-qa-%' or reason like 'zz-qa-%'` = 0.
+
+**Nota para la próxima vuelta:** esta corrida fue con la variante base (sin `RECORRIDO_RUBRO`,
+`RECORRIDO_MOVIL`, `RECORRIDO_SALTAR_EQUIPO`, `RECORRIDO_PROBAR_RECOVERY` ni
+`RECORRIDO_PROBAR_COADMIN`), que ya se corre seguido. El eje que hace más tiempo no se corre según
+la entrada anterior era `SALTAR_EQUIPO` — reconfirmado hoy a las 17:09 La Paz. La próxima vuelta
+debería mirar `PROBAR_RECOVERY`, `PROBAR_COADMIN`, `MOVIL` o la rotación de `RUBRO` (grepear las
+fechas de cada uno en este archivo) en vez de repetir la variante base.
+
+---
+
 ## 2026-09-26 17:09 La Paz (vuelta HEAD 82bb23e3) — `BUILD_ID` sin cambios; eje más viejo (`SALTAR_EQUIPO`, 13 días sin correrse) reconfirmado, 9/9
 
 Antes de tirar `--escribir` en dental a secas (el error de la vuelta anterior), grepeé
