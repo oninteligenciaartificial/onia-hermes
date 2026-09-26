@@ -148,6 +148,28 @@ export function frasePromesa(textoConfig) {
  * @param {Record<number,boolean>} avisos   conversationId → salio el aviso a Sergio
  * @param {string|null} avisoDesde          desde cuando existe el canal de aviso; null = no hay
  */
+/**
+ * ¿La promesa se la hizo el bot a una sonda NUESTRA, o a alguien de afuera?
+ *
+ * Los nombres salen de lo que hay hoy en `contacts` de Chatwoot (medido el 2026-09-26): las
+ * sondas se llaman `Sonda QA…` a proposito (lo dice `sonda_widget.mjs`, que lo eligio asi para
+ * que `objetivo_visible.mjs` no las cuente como desconocidos), y las pruebas viejas quedaron
+ * como `Prueba …`, `Cliente Prueba …`, `Prospecto Prueba …`, `Visitante Prueba …`.
+ *
+ * ⚠️ El criterio es ESTRECHO y la duda se resuelve hacia "es un prospecto", a proposito. Los dos
+ * errores posibles no cuestan lo mismo: contar una sonda como prospecto infla la demanda y manda
+ * a gastar en Cal.com; contar un prospecto como sonda ESCONDE la unica demanda que hay, que es lo
+ * que este carril existe para encontrar. Por eso un nombre generado por Chatwoot
+ * (`delicate-glitter-674`) cuenta como persona, y por eso quedan afuera `Cliente Insistencia Dos`
+ * y `Cliente Comprobante` —que SI son nuestras, pero viven en el inbox 7 de QA y esta fila no
+ * trae `inbox_id`—: de menos y nombradas, nunca de mas y mudas.
+ */
+export function esSondaNuestra(contacto) {
+  const n = String(contacto || '').trim().toLowerCase();
+  if (!n) return false; // sin nombre no se puede afirmar que sea nuestra
+  return /^sonda\b/.test(n) || /^(prueba|cliente prueba|prospecto prueba|visitante prueba)\b/.test(n);
+}
+
 export function juzgar(promesas, reservas, avisos = {}, avisoDesde = null) {
   if (!Array.isArray(promesas) || !reservas || typeof reservas !== 'object') {
     return { codigo: 2, texto: 'NO SE PUDO MEDIR — la consulta no devolvio lo que se esperaba' };
@@ -165,9 +187,23 @@ export function juzgar(promesas, reservas, avisos = {}, avisoDesde = null) {
   const avisada = (p) => Boolean(avisos && avisos[p.conversationId]);
   const huecas = promesas.filter((p) => !reservada(p) && !avisada(p));
   if (huecas.length === 0) {
+    // El JUICIO es sobre todas (una promesa hueca de una sonda delata el mismo defecto), pero el
+    // NUMERO que se publica separa quien la pidio. Ver el caso del 2026-09-26 en `selfCheck`.
+    const deSondas = promesas.filter((p) => esSondaNuestra(p.contacto)).length;
+    const dePersonas = promesas.length - deSondas;
+    if (dePersonas === 0) {
+      return {
+        codigo: 0,
+        texto:
+          `DEMOS QUE LLEGARON A SERGIO: ${promesas.length} en total, pero ninguna es de un prospecto — ` +
+          'son todas sondas nuestras. Nada que festejar: nadie pidio una demo todavia.',
+      };
+    }
+    const cuenta = dePersonas === 1 ? '1 de un prospecto' : `${dePersonas} de prospectos`;
+    const sondas = deSondas > 0 ? `, ${deSondas} de sondas nuestras (${promesas.length} en total)` : '';
     return {
       codigo: 0,
-      texto: `LAS ${promesas.length} DEMOS PROMETIDAS LLEGARON A SERGIO — cada una tiene su reserva o su aviso.`,
+      texto: `DEMOS QUE LLEGARON A SERGIO: ${cuenta}${sondas} — cada una tiene su reserva o su aviso.`,
     };
   }
 
@@ -377,6 +413,50 @@ function selfCheck() {
   );
   afirmar('una hueca entre varias hace fallar igual', mezcla.codigo === 1);
   afirmar('no acusa a la que si tiene reserva', mezcla.texto.includes('conv 2') && !mezcla.texto.includes('conv 1'));
+
+  // ── El numero que este gate PUBLICA se lee como demanda comercial ───────────────────────────
+  // Medido el 2026-09-26: en verde decia "LAS 13 DEMOS PROMETIDAS LLEGARON A SERGIO" y de esas 13
+  // casi todas eran `sonda_widget.mjs` corriendo sobre la conv 49. Los sujetos salen de `messages`
+  // (append-only, y esta BIEN asi: es lo que arreglo el gate anterior), pero eso significa que cada
+  // corrida horaria de nuestra propia sonda suma una promesa para siempre. El total es correcto
+  // para lo que el gate juzga —¿toda promesa tiene reserva o aviso?— y ENGAÑOSO en cuanto se lee
+  // como cuantas demos pidio gente. Quien lo lee asi es la condicion de vencimiento de Cal.com
+  // (cola/chatbot.md, item cerrado del 13-sep): *"mas de ~1 demo agendada por semana"* reabre
+  // redesplegar Cal.com o abrir una cuenta cloud. O sea que el numero inflado por nuestras sondas
+  // manda a gastar por demanda que no existe. El contacto ya venia en la fila (`p.contacto`);
+  // lo unico que faltaba era no sumar sondas y prospectos en el mismo numero.
+  const conSonda = juzgar(
+    [
+      { conversationId: 49, texto: 'Listo, agendado: **lunes**', contacto: 'Sonda QA carril chatbot' },
+      { conversationId: 50, texto: 'Listo, agendado: **lunes**', contacto: 'Sonda QA' },
+      { conversationId: 9, texto: 'Listo, agendado: **sabado**', contacto: 'Mario Hassen' },
+    ],
+    { 'chatwoot:49': 'uid', 'chatwoot:50': 'uid', 'chatwoot:9': 'uid' },
+  );
+  afirmar('el verde cuenta las demos de PROSPECTOS, no el total', /\b1 de un prospecto\b/.test(conSonda.texto));
+  afirmar('el verde no publica el total como si fuera demanda', !/^LAS 3 DEMOS PROMETIDAS/.test(conSonda.texto));
+  afirmar('el verde nombra las sondas igual, no las esconde', /2 de sondas nuestras/.test(conSonda.texto));
+
+  // Todas nuestras: el peor caso para la condicion de vencimiento, porque es el que mas se parece
+  // a "hay demanda" y es exactamente lo contrario. Tiene que decir CERO prospectos, no tres demos.
+  const todasSondas = juzgar(
+    [
+      { conversationId: 49, texto: 'a', contacto: 'Sonda QA carril chatbot' },
+      { conversationId: 45, texto: 'b', contacto: 'Sonda QA' },
+      { conversationId: 39, texto: 'c', contacto: 'Cliente Prueba Bandeja' },
+    ],
+    { 'chatwoot:49': 'uid', 'chatwoot:45': 'uid', 'chatwoot:39': 'uid' },
+  );
+  afirmar('sin un solo prospecto lo dice, no festeja 3 demos', /ninguna es de un prospecto/.test(todasSondas.texto));
+  afirmar('sigue saliendo 0: no es un fallo, es que nadie pidio demo', todasSondas.codigo === 0);
+
+  // Un nombre raro de visitante real (Chatwoot los genera asi) NO es una sonda: si la duda se
+  // resolviera hacia "es nuestra", el gate esconderia demanda real, que es el error caro.
+  const visitante = juzgar(
+    [{ conversationId: 34, texto: 'Listo, agendado: **martes**', contacto: 'delicate-glitter-674' }],
+    { 'chatwoot:34': 'uid' },
+  );
+  afirmar('un visitante con nombre generado cuenta como prospecto', /\b1 de un prospecto\b/.test(visitante.texto));
 
   // No medir no es estar bien.
   afirmar('una consulta rota sale 2', juzgar(null, {}).codigo === 2);
