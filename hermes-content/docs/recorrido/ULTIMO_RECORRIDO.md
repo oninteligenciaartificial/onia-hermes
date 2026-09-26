@@ -12,6 +12,36 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-26 17:09 La Paz (vuelta HEAD 82bb23e3) — `BUILD_ID` sin cambios; eje más viejo (`SALTAR_EQUIPO`, 13 días sin correrse) reconfirmado, 9/9
+
+Antes de tirar `--escribir` en dental a secas (el error de la vuelta anterior), grepeé
+`RECORRIDO_(RUBRO|MOVIL|SALTAR_EQUIPO|PROBAR_RECOVERY|PROBAR_COADMIN)=` en este archivo y comparé
+fechas reales por `git log -1 --format=%ci <sha-del-commit-que-lo-corrió>` (las fechas que cada
+entrada se pone a sí misma no siempre coinciden con el commit real). Resultado: `PROBAR_COADMIN` y
+el checkout se corrieron hoy a las 19:09 UTC, `PROBAR_RECOVERY` a las 18:20 UTC, `MOVIL` a las
+16:18 UTC, la rotación de `RUBRO` cerró el ciclo de los 5 a las 02:14 UTC — pero
+`RECORRIDO_SALTAR_EQUIPO=1` no se corría desde el **2026-09-13 11:14** (13 días), por lejos el más
+viejo.
+
+`RECORRIDO_SALTAR_EQUIPO=1 node scripts/recorrido_cliente.mjs --escribir` (dental, cuenta
+`zz-qa-2026-09-26-2110@onia.com.bo`): **9/9 pasos, `completo: true`, sin hallazgo.** Onboarding
+cerrado con "Saltar por ahora" en la pantalla de equipo, sin cargar ningún profesional
+(`profesionalCargado: false`) — igual que el 13-sep. El paso 7 (agendar cita
+`zz-qa-2026-09-26-2110-cita`, 2026-09-28 09:00, id `cmuivzy6e000h01n0z4eitafr`) salió OK de nuevo:
+el desplegable de "profesional" sigue ofreciendo al dueño cuando no hay equipo cargado. **Esto
+RECONFIRMA, tras 13 días y varios deploys de por medio, que saltar "equipo" en el onboarding no
+rompe agendar** — la respuesta del 2026-09-13 sigue siendo verdad hoy. Paciente
+`zz-qa-2026-09-26-2110-paciente` cargado y visto en `/patients`, factura con ítem
+`zz-qa-2026-09-26-2110-item` vista en `/billing/cmuiw08il000j01n0xyfmxnd1` — frenado ahí sin
+marcar pago. Limpieza verificada: `organizations`/`appointments` con `zz-qa-%` = 0 al cerrar.
+
+Tablero: sin tareas `ready` sin reclamar en la zona `recorrido-cliente` (una tarea `ready` vieja,
+`t_07be8328`, es sólo un aviso informativo `[auto:]` que esta misma carrilera ya se auto-generó
+para Telegram — no es un pedido de trabajo, se deja como está).
+
+**Próximo eje más viejo tras esta vuelta**: la rotación de `RUBRO` (cerró ciclo completo
+2026-09-26 02:14 UTC) es ahora el más antiguo de los cinco ejes rastreados.
+
 ## 2026-09-26 16:15 La Paz (vuelta HEAD a6d8723e) — `BUILD_ID` sin cambios; repetí dental sin eje nuevo por segunda vez — mismo error que ya está documentado abajo, dos corridas 9/9 igual
 
 `BUILD_ID` comparado ANTES de arrancar contra este archivo (`DvBubiuO4uC5_E9jFNJeZ`, sin cambios)
