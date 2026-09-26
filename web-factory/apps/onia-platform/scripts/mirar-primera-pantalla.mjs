@@ -103,6 +103,47 @@ export const ESTADO_DE_LIMITE = 429;
  */
 export const SEPARACION_MAXIMA_DEL_PUNTO = 1.2;
 
+/**
+ * Cuanto puede quedar VACIO dentro de la tarjeta dibujada, como fraccion de su
+ * alto util (el alto menos su propio padding). Cero seria absurdo —los `gap`
+ * declarados entre cabecera, cuerpo y remate son aire a proposito—, asi que el
+ * tope deja pasar el espaciado normal y corta el hueco estructural.
+ *
+ * POR QUE EXISTE. Medido el 2026-09-26 contra produccion (Chromium 1440x900 y
+ * 1920x1080, animaciones apagadas), el MISMO panel «Tu cuenta» en las dos
+ * pantallas que ve un lead:
+ *
+ *   onia.com.bo/          3 pastillas · grid de  74px · contenido == caja
+ *   onia.com.bo/empezar   4 pastillas · grid de 222px · 68px de pastillas
+ *
+ * En `/empezar` la tarjeta medía 347px para 193px de contenido: 154px de vacio
+ * partidos en DOS bandas de 77px, una bajo el titulo y otra sobre el remate. La
+ * ultima pantalla antes de registrarse dibujaba su unico mock de producto como
+ * una tarjeta a medio cargar.
+ *
+ * LA CAUSA. El mat (`.shape`) conserva `aspect-ratio: 4/3` en escritorio —es la
+ * forma de la columna— y la tarjeta blanca, al ser item de ese grid, se ESTIRA
+ * para llenarlo. Mientras la lista de modulos era larga no sobraba nada; se
+ * achico dos veces este mes por motivos correctos («Facturacion» salio porque la
+ * homologacion sigue en tramite, «Inventario» porque servicios profesionales no
+ * tiene esa pantalla) y el hueco aparecio sin que nadie tocara el layout. En
+ * telefono no se veia porque ahi el ratio se suelta y el mat crece con el panel.
+ *
+ * POR QUE NINGUN GATE LO VEIA, que es lo que hace nueva a esta clase. El gate
+ * hermano `grilla-que-crece-no-reparte.test.ts` (2026-09-25) curo la mitad de
+ * esto —que el cuerpo REPARTIERA sus filas por el alto sobrante— y escribio su
+ * propio limite: «esto mira el CSS, no la pantalla; una caja que reciba alto de
+ * mas por otro camino no es sujeto de nadie aca». El alto de mas venia por ese
+ * otro camino: el ratio del padre. Y este script abria las dos pantallas desde
+ * semanas antes, pero solo preguntaba si PINTABAN, no si lo pintado llenaba su
+ * caja. Un hueco estructural no rompe nada medible: no hay pedido fallido, no
+ * hay opacidad baja, no hay monto fuera de fuente. Solo se ve mirando.
+ *
+ * El tope es 0.18: el caso sano de la portada mide ~0.10 (los dos `gap` de
+ * 0.8em sobre una tarjeta corta) y el defecto medido 0.44.
+ */
+export const HUECO_MAXIMO_DE_LA_TARJETA = 0.18;
+
 /** Si el recurso sale del mismo origen que la pagina que estamos mirando. */
 export function esNuestro(url, base) {
   try {
@@ -155,7 +196,7 @@ export function veredicto(informe, base = "https://onia.com.bo") {
 
   for (const r of informe) {
     lineas.push(
-      `${r.pantalla.padEnd(10)} ${r.ruta.padEnd(10)} opacidad=${r.opacidadH1} 4xx/5xx=${r.fallidas.length} punto=${r.kicker ? (r.kicker.medible ? `${r.kicker.dx}px` : "sin caja") : "sin rotulo"} h1="${r.h1}"`,
+      `${r.pantalla.padEnd(10)} ${r.ruta.padEnd(10)} opacidad=${r.opacidadH1} 4xx/5xx=${r.fallidas.length} punto=${r.kicker ? (r.kicker.medible ? `${r.kicker.dx}px` : "sin caja") : "sin rotulo"} tarjetas=${(r.tarjetas ?? []).map((t) => `${Math.round(t.fraccion * 100)}%`).join(",") || "ninguna"} h1="${r.h1}"`,
     );
     for (const f of r.fallidas) {
       const marca = esDefecto(f, base) ? "" : "  (limite de un tercero, no atribuible)";
@@ -238,6 +279,41 @@ export function veredicto(informe, base = "https://onia.com.bo") {
     );
   }
 
+  // La tarjeta dibujada es el UNICO mock de producto de estas pantallas (cero
+  // <img>, cero capturas: la regla del 2026-09-01). Si se lee a medio llenar, el
+  // lead no ve un panel: ve algo que no cargo. Ver HUECO_MAXIMO_DE_LA_TARJETA.
+  const conHueco = informe.flatMap((r) =>
+    (r.tarjetas ?? [])
+      .filter((t) => t.fraccion > HUECO_MAXIMO_DE_LA_TARJETA)
+      .map((t) => ({ ...t, pantalla: r.pantalla, ruta: r.ruta, archivo: r.archivo })),
+  );
+  if (conHueco.length > 0) {
+    codigo = 1;
+    lineas.push(
+      "",
+      `ROJO: ${conHueco.length} tarjeta(s) dibujada(s) quedaron a medio llenar (hueco > ${Math.round(HUECO_MAXIMO_DE_LA_TARJETA * 100)}% del alto util).`,
+      ...conHueco.map(
+        (t) =>
+          `  ${t.pantalla} ${t.ruta} -> ${t.hueco}px de ${t.util}px vacios (${Math.round(t.fraccion * 100)}%) en "${t.rotulo}" — ${t.archivo}`,
+      ),
+      "  El mock es lo unico que ese lead ve del producto: medio vacio se lee como",
+      "  una pantalla que no termino de cargar.",
+    );
+  }
+
+  // Un selector que deja de encontrar sujetos es como esta familia falla en
+  // verde: si NINGUNA pantalla trajo tarjeta, no se midio nada.
+  const conTarjeta = informe.filter((r) => (r.tarjetas ?? []).length > 0);
+  if (informe.length > 0 && conTarjeta.length === 0) {
+    codigo = 1;
+    lineas.push(
+      "",
+      "ROJO: ninguna de las pantallas trajo una tarjeta dibujada que medir.",
+      "  No es el sitio: es este instrumento. `[role=img][class*=panel]` dejo de",
+      "  encontrar sujetos y el juicio seguiria dando verde sin haber medido.",
+    );
+  }
+
   const sinPintar = informe.filter((r) => !(r.opacidadH1 >= OPACIDAD_PINTADA));
   if (sinPintar.length > 0) {
     codigo = 1;
@@ -297,6 +373,64 @@ const PUNTO_DEL_ROTULO = `() => {
     lineas: lineas.length,
     dx: Math.round((lineas[0].left - caja.right) * 10) / 10,
   };
+}`;
+
+/**
+ * Cuanto de cada tarjeta dibujada quedo VACIO. Se agarra de `role="img"`, que es
+ * lo que declara `PanelDibujado`, y no de la clase: el hash de CSS Modules
+ * cambia en cada build.
+ *
+ * Devuelve `[]` si la pantalla no dibuja ninguna tarjeta —hay rutas que no
+ * tienen mock— y eso NO es verde ni rojo: `veredicto` exige que al menos una de
+ * las pantallas barridas haya tenido tarjeta que medir, porque un selector que
+ * deja de encontrar sujetos es como esta familia de gates falla en verde.
+ *
+ * El hueco se mide contra el alto UTIL (sin el padding propio de la tarjeta) y
+ * el contenido es el tramo del primer hijo al ultimo: lo que sobra es hueco
+ * estructural, no espaciado.
+ */
+const TARJETAS_DIBUJADAS = `() => {
+  // El hueco NO esta necesariamente entre los hijos de la tarjeta: el cuerpo que
+  // CRECE (\`flex: 1 1 auto\`) se come el alto sobrante y el vacio queda adentro
+  // suyo. Medido el 2026-09-26 en /empezar: los tres hijos de la tarjeta llenaban
+  // sus 308px utiles al milimetro mientras el grid del medio media 222px para
+  // 68px de pastillas. Mirar solo el primer nivel daba 0% sobre el defecto — o
+  // sea, verde. Por eso se recorre la tarjeta Y sus cajas de contenido, y se
+  // reporta la PEOR.
+  const medirCaja = (el) => {
+    const hijos = [...el.children].filter((c) => c.getBoundingClientRect().height > 0);
+    if (hijos.length === 0) return null;
+    const caja = el.getBoundingClientRect();
+    const cs = getComputedStyle(el);
+    const util = caja.height - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+    if (!(util > 1)) return null;
+    const arriba = Math.min(...hijos.map((c) => c.getBoundingClientRect().top));
+    const abajo = Math.max(...hijos.map((c) => c.getBoundingClientRect().bottom));
+    const contenido = abajo - arriba;
+    return {
+      util: Math.round(util),
+      contenido: Math.round(contenido),
+      hueco: Math.round((util - contenido) * 10) / 10,
+      fraccion: Math.round(((util - contenido) / util) * 1000) / 1000,
+    };
+  };
+  const out = [];
+  for (const card of document.querySelectorAll('[role="img"][class*="panel"]')) {
+    const cajas = [card, ...card.children]
+      .map((el) => {
+        const m = medirCaja(el);
+        return m && { ...m, caja: el === card ? 'tarjeta' : (el.className || el.tagName).toString().replace(/sitio_|__[A-Za-z0-9_-]+/g, '').trim() };
+      })
+      .filter(Boolean);
+    if (cajas.length === 0) continue;
+    const peor = cajas.reduce((a, b) => (b.fraccion > a.fraccion ? b : a));
+    out.push({
+      rotulo: (card.getAttribute('aria-label') || '').slice(0, 48),
+      alto: Math.round(card.getBoundingClientRect().height),
+      ...peor,
+    });
+  }
+  return out;
 }`;
 
 /** La opacidad EFECTIVA de un elemento: el minimo de su cadena hasta body. */
@@ -369,6 +503,7 @@ async function mirar(base, out) {
       const archivo = `${out}/${ruta.id}-${pantalla.id}.png`;
       await pagina.screenshot({ path: archivo });
       const kicker = await pagina.evaluate(`(${PUNTO_DEL_ROTULO})()`);
+      const tarjetas = await pagina.evaluate(`(${TARJETAS_DIBUJADAS})()`);
       const h1 = await pagina
         .locator("h1")
         .first()
@@ -381,6 +516,7 @@ async function mirar(base, out) {
         h1: h1.replace(/\s+/g, " ").trim(),
         opacidadH1: opacidad,
         kicker,
+        tarjetas,
         fallidas,
       });
       // El barrido HABLA mientras barre. Mudo no se distingue de colgado, y un

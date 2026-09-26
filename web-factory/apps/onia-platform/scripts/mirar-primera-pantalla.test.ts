@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   ESTADO_DE_LIMITE,
+  HUECO_MAXIMO_DE_LA_TARJETA,
   MINIMO_PANTALLAS,
   OPACIDAD_PINTADA,
   baseValida,
@@ -53,6 +54,11 @@ describe("mirar-primera-pantalla: el veredicto", () => {
     h1: "Cerrás vos. El negocio no.",
     opacidadH1: 1,
     kicker: { medible: true, texto: "UN SOLO SISTEMA", fontSize: 12.8, lineas: 1, dx: 7.7 },
+    // El caso sano medido en la portada: el contenido llena su caja salvo los
+    // `gap` declarados. Va en la fabrica y no en cada caso a proposito: una
+    // medicion que el barrido SIEMPRE toma y el fixture omite es como este
+    // archivo aprueba un juicio que corre sobre un dato que no existe.
+    tarjetas: [{ rotulo: "Tu cuenta", alto: 193, util: 154, contenido: 148, hueco: 6, fraccion: 0.039, caja: "tarjeta" }],
     fallidas: [] as Fallida[],
     ...extra,
   });
@@ -308,10 +314,82 @@ describe("mirar-primera-pantalla: el umbral de pintado", () => {
         h1: "x",
         opacidadH1: n,
         kicker: null,
+        tarjetas: [{ rotulo: "x", alto: 100, util: 90, contenido: 88, hueco: 2, fraccion: 0.022, caja: "tarjeta" }],
         fallidas: [] as Fallida[],
       }));
     // Justo en el umbral pasa; un pelo por debajo, no.
     expect(veredicto(justo(OPACIDAD_PINTADA)).codigo).toBe(0);
     expect(veredicto(justo(OPACIDAD_PINTADA - 0.01)).codigo).not.toBe(0);
+  });
+});
+
+describe("mirar-primera-pantalla: la tarjeta a medio llenar", () => {
+  /**
+   * `MINIMO_PANTALLAS` pantallas sanas, y la fraccion de hueco puesta en la
+   * primera. El relleno NO es decoracion: con una sola pantalla el veredicto ya
+   * sale rojo por "barrido incompleto", asi que el caso verde no podia ser verde
+   * y el rojo lo era por el motivo equivocado — que es como nace un verde futuro.
+   */
+  const sana = (fraccion: number, extra: Record<string, unknown> = {}) => ({
+    ruta: "/empezar",
+    pantalla: "escritorio",
+    archivo: "/tmp/empezar-escritorio.png",
+    h1: "Creá tu cuenta y usalo de verdad 14 días.",
+    opacidadH1: 1,
+    kicker: null,
+    tarjetas: [
+      {
+        rotulo: "Una cuenta recién creada",
+        alto: 347,
+        util: 222,
+        contenido: Math.round(222 * (1 - fraccion)),
+        hueco: Math.round(222 * fraccion),
+        fraccion,
+        caja: "panelGrid",
+      },
+    ],
+    fallidas: [] as Fallida[],
+    ...extra,
+  });
+
+  const conTarjeta = (fraccion: number, extra: Record<string, unknown> = {}) => [
+    sana(fraccion, extra),
+    ...Array.from({ length: Math.max(0, MINIMO_PANTALLAS - 1) }, (_, i) =>
+      sana(0.02, { ruta: `/r${i}`, archivo: `/tmp/r${i}.png`, ...extra }),
+    ),
+  ];
+
+  /**
+   * El defecto tal como se midió el 2026-09-26 en producción: la tarjeta de
+   * `/empezar` con 154px vacíos de 222px útiles. Es el caso ancla — si algún día
+   * este número vuelve a pasar en verde, el gate dejó de mirar.
+   */
+  it("pinta ROJO con el hueco medido en /empezar (69%)", () => {
+    const r = veredicto(conTarjeta(0.69));
+    expect(r.codigo).toBe(1);
+    expect(r.lineas.join("\n")).toMatch(/medio llenar/);
+    // Nombra la pantalla y la captura, o el rojo no se puede ir a mirar.
+    expect(r.lineas.join("\n")).toMatch(/empezar-escritorio\.png/);
+  });
+
+  it("acepta el espaciado normal de la portada y corta en el tope", () => {
+    expect(veredicto(conTarjeta(HUECO_MAXIMO_DE_LA_TARJETA)).codigo).toBe(0);
+    expect(veredicto(conTarjeta(HUECO_MAXIMO_DE_LA_TARJETA + 0.01)).codigo).toBe(1);
+  });
+
+  /**
+   * Una pantalla puede no dibujar ninguna tarjeta y eso no es un defecto. Lo que
+   * NO puede pasar es que el juicio firme verde cuando NINGUNA la trajo: ahí el
+   * selector se rompió y el gate estaría midiendo la nada. Es la misma
+   * separación que ya hace `kicker` entre `null` y `undefined`.
+   */
+  it("no firma verde si el selector dejó de encontrar tarjetas", () => {
+    const sinSujetos = veredicto(conTarjeta(0.02, { tarjetas: [] }));
+    expect(sinSujetos.codigo).not.toBe(0);
+    expect(sinSujetos.lineas.join("\n")).toMatch(/es este instrumento/);
+
+    const noPreguntado = veredicto(conTarjeta(0.02, { tarjetas: undefined }));
+    expect(noPreguntado.codigo).not.toBe(0);
+    expect(noPreguntado.lineas.join("\n")).toMatch(/es este instrumento/);
   });
 });
