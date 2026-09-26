@@ -282,8 +282,12 @@ trabaría el merge de todos los carriles.
          **sigue** siendo `f` hoy), pero `mergePanelKnowledge` hace `{...archivo, ...panel}` y
          pisa **clave por clave** — sin esa clave en el panel, las del archivo **sobreviven**.
          Una fila que no pisa no apaga nada. Medido hoy, no leído: `npm run campanas:vivas` →
-         **exit 0** (*7 frases vivas, 7 con campaña*, documento `2026-09-24.1`, contra el sitio
-         VIVO) y `espejo-check.mjs` → **exit 0**.
+         **exit 0** (*7 frases vivas, 7 con campaña*, documento `2026-09-24.1`) y
+         `espejo-check.mjs` → **exit 0**. ⚠️ **El `"contra el sitio VIVO"` que decía acá se cayó
+         el 2026-09-26:** ese alias cotejaba la web viva contra el documento del **repo**, no
+         contra el `knowledge.json` cargado en el bot. La conclusión de la fila (una fila de panel
+         sin la clave no pisa nada) **se sostiene** — la midió `mergePanelKnowledge`, no este
+         alias. Lo que cambia es a quién se le pregunta: `npm run campanas:bot-vivo`.
 
          **Y el "ítem propio en la cola del chatbot" que este párrafo mandaba a buscar ya no
          existe** — está cerrado allá. Un puntero a trabajo terminado manda a otro carril a
