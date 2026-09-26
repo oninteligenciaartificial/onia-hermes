@@ -41,6 +41,83 @@ class MemoriaTest(unittest.TestCase):
         return self.mem.read_text(encoding="utf-8") + "".join(
             p.read_text(encoding="utf-8") for p in self.archive.glob("*.md"))
 
+    def recorder(self):
+        """ONIA_TG de prueba que ANOTA el aviso, para poder afirmar sobre él.
+
+        Hasta el 2026-09-26 todos los casos apuntaban ONIA_TG a /bin/false, así que
+        ninguno podía ver si el aviso salía. El desvío por falta de lugar estaba
+        cubierto de sobra; avisarlo no lo miraba nadie, y por ahí se colaron 278
+        lecciones desviadas en silencio.
+        """
+        avisos = self.root / "avisos.txt"
+        tg = self.root / "tg.sh"
+        tg.write_text(
+            '#!/usr/bin/env bash\nprintf "%s\\n" "$1" >> {}\n'.format(
+                subprocess.list2cmdline([str(avisos)])),
+            encoding="utf-8")
+        tg.chmod(0o755)
+        return str(tg), avisos
+
+    def saturate(self, headroom=60, entries=2):
+        """MEMORY.md casi llena con POCAS entradas: el estado real del VPS el 2026-09-26.
+
+        Ahí eran 65.449 de 65.536 bytes (87 de headroom) con N=116 entradas. La
+        saturación se mide en bytes y CONGELA la cuenta de entradas, así que el eje
+        que hay que mirar es el desvío, no N.
+        """
+        cuerpo = self.original + "".join(
+            f"§\nRegla vigente {i} medida con su causa.\n" for i in range(entries))
+        relleno = 1024 - headroom - len(cuerpo.encode())
+        self.assertGreater(relleno, 0, "el fixture no llegó a saturar")
+        self.mem.write_bytes(cuerpo.encode() + b"x" * relleno)
+
+    def test_saturada_avisa_aunque_la_cuenta_de_entradas_este_congelada(self):
+        tg, avisos = self.recorder()
+        self.saturate()
+        self.fact("a", "Hallazgo medido con su causa y su evidencia, que ya no entra.")
+        result = self.run_script(ONIA_TG=tg)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(len(list(self.archive.glob("*.md"))), 1,
+                         "la lección tenía que desviarse por falta de lugar")
+        self.assertTrue(avisos.exists(),
+                        "memoria saturada, lección desviada y NINGÚN aviso salió")
+
+    def test_el_aviso_de_saturacion_sale_marcado_como_problema(self):
+        """onia-tg.sh clasifica por la primera línea y sólo abre tarea si parece un problema.
+
+        El aviso viejo empezaba con "🧠 <b>Memoria</b>:" y salió INFORMATIVO las dos
+        veces que se disparó (log del 11-sep): ni cuando hablaba llegaba a nadie.
+        """
+        tg, avisos = self.recorder()
+        self.saturate()
+        self.fact("a", "Hallazgo medido con su causa y su evidencia, que ya no entra.")
+        self.assertEqual(self.run_script(ONIA_TG=tg).returncode, 0)
+        self.assertTrue(avisos.exists(), "no salió ningún aviso que clasificar")
+        primera = avisos.read_text(encoding="utf-8").splitlines()[0]
+        self.assertRegex(primera, "⚠️|🔴",
+                         "sin marca de problema el enrutador lo archiva como INFORMATIVO")
+
+    def test_el_aviso_no_se_repite_mientras_no_empeore(self):
+        """Sergio Urcullo, 2026-09-05: "ordena telegram, me llenan de mensajes innecesarios"."""
+        tg, avisos = self.recorder()
+        self.saturate()
+        self.fact("a", "Primer hallazgo medido con causa y evidencia, que ya no entra.")
+        self.assertEqual(self.run_script(ONIA_TG=tg).returncode, 0)
+        self.fact("b", "Segundo hallazgo medido con causa y evidencia, que tampoco entra.")
+        self.assertEqual(self.run_script(ONIA_TG=tg).returncode, 0)
+        self.assertEqual(len(list(self.archive.glob("*.md"))), 2)
+        self.assertEqual(len(avisos.read_text(encoding="utf-8").strip().splitlines()), 1,
+                         "una saturación estable avisa UNA vez, no en cada vuelta")
+
+    def test_sin_saturacion_no_hay_aviso(self):
+        """El recíproco: si la lección entra, el aviso no existe."""
+        tg, avisos = self.recorder()
+        self.fact("a", "Hallazgo medido con su causa y su evidencia, que entra de sobra.")
+        self.assertEqual(self.run_script(ONIA_TG=tg).returncode, 0)
+        self.assertEqual(self.saved().count("que entra de sobra"), 1)
+        self.assertEqual(len(list(self.archive.glob("*.md"))), 0)
+        self.assertFalse(avisos.exists(), "avisó sin que nada se haya desviado")
+
     def test_overflow_is_bounded_and_keeps_every_fact(self):
         facts = [self.fact(f"{i:02}", f"Lección {i}: " + "á🧠" * 90) for i in range(12)]
         result = self.run_script()
