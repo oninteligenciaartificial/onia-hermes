@@ -12,6 +12,26 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-26 (vuelta HEAD b5c4e6b2) — recorrido end-to-end COMPLETO en dos rubros, `BUILD_ID` cambió
+
+`BUILD_ID` cambió respecto a la entrada de abajo (`4FWMcecd4jRBGUVwStDQb` → `DvBubiuO4uC5_E9jFNJeZ`),
+así que correspondía repetir el recorrido end-to-end. `ONIA_ALTA_AUTOMATICA=abierta`.
+
+- **Clínica dental** (rubro default): `RECORRIDO_RUBRO` sin fijar, `--escribir`. **9/9 pasos
+  OK**, `completo: true` en `resumen.json`. Alta → confirmar correo → onboarding (6 pantallas)
+  → paciente cargado en `/patients` → cita `2026-09-28 09:00` agendada (id
+  `cmuiethf3000k01mx26w1e253`) y VISTA en `/appointments` → factura con ítem visible en
+  `/billing/...` (frenado sin pagar) → dato del paso 6 no figura en `/dashboard` (el panel no
+  lista pacientes; no es un fallo, es lo que muestra esa pantalla).
+- **Comercio**: `RECORRIDO_RUBRO=Comercio`, `--escribir`. **8/8 pasos que le corresponden OK**
+  (paso 7 "agendar cita" sale `NO-APLICA` — coherente: el menú de Comercio no tiene agenda, su
+  tarjeta de alta ofrece "Catálogo, inventario, caja y clientes", no citas). Alta → onboarding →
+  producto cargado en `/comercio` (storefront Catálogo) → pantalla de cobro en
+  `/comercio/caja` (frenado) → dato del paso 6 SÍ aparece en `/dashboard` en este rubro.
+- Limpieza verificada ambas corridas: `organizations`/`appointments` con `zz-qa-%` = 0 filas al
+  cerrar.
+- Tablero: sin tareas `ready` sin reclamar en la zona `recorrido-cliente`.
+
 ## 2026-09-26 (vuelta HEAD 31f9e131) — `BUILD_ID` sin cambios; re-verificado cupo del chatbot EN PANTALLA + agenda pública tras una semana — sin hallazgo, más un hallazgo viejo confirmado corregido
 
 `ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado primero contra la entrada de abajo:
