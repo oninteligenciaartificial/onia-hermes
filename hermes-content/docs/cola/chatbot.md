@@ -777,6 +777,53 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
 
 ## Ahora
 
+- [x] 🔴 **CERRADO el 2026-09-25 22:13-22:40 La Paz (commiteado; es el INSTRUMENTO, no toca el
+      motor): el gate imprimía «tambien del motor» sobre 7 líneas cuya frontera había medido
+      `sin ubicar` — una conjetura impresa como medición, y encima ese bucket era el único que
+      no se nombraba.** Una de las 7 es `plataforma-v1.md:6096`, del **SIAT**
+      (`/opt/onia-siat/run-fase1-volumen.sh`): la tercera frontera, la que este mismo archivo
+      declara sin instrumento. Llamarla «del motor» la manda a un dueño que no es el suyo, y al
+      quedar fuera de `accionables` nunca salía con su `archivo:línea` — invisible y mal
+      atribuida a la vez.
+
+      **La causa, de una línea:** `motivoDeNoMedida` trataba «tiene un sha que no puedo resolver»
+      como evidencia de frontera. No lo es — `onia-hermes` es el repo del motor, pero también el
+      de las colas y el del SIAT. Medidas las 7 con `fronteraDe`: **las 7 daban `sin ubicar`**,
+      o sea que el rótulo no salía de ninguna medición.
+
+      **El arreglo, tres piezas.** (1) Manda la frontera, también cuando hay sha: `sin ubicar` +
+      sha irresoluble → «hay que leerla», y entra a `accionables`, que es lo que la nombra.
+      (2) El rótulo dice lo que se sabe: la del panel pide **su** sha, y de una frontera sin
+      ubicar no se afirma dueño. (3) Desde `sin ubicar` se puede **ABSOLVER y nunca ACUSAR**: si
+      la línea nombra un archivo que el deploy del motor todavía no instaló, el deploy que pide no
+      ocurrió para ese archivo y es CIERTA por medición. Acusar desde ahí sacaría una línea del
+      panel de su único juez —`config.mjs` vive en los DOS repos— y ése es el error caro.
+      `fronteraDe` sigue **sin** mirar nombres de archivo, a propósito, como ya decía su cabecera.
+
+      **Prueba.** Rojo primero y cada caso por su motivo (6 de 6: el sha ajeno no atribuye motor ·
+      las dos que faltaba nombrar · el rótulo · la absolución · el motivo de la no medida) →
+      **100 de 106**; con el arreglo **107 de 107**, con dos ANCLAS en la otra punta: una línea del
+      **panel** no se absuelve con el estado del motor, y `fronteraDe` sigue ciega a los nombres
+      de archivo. En vivo:
+
+          antes: 24 lineas — 0 mienten · 10 ciertas · 14 no medidas — 6 nombradas
+          ahora: 24 lineas — 0 mienten · 14 ciertas · 10 no medidas — 9 nombradas (las 9)
+
+      Las 4 que pasaron a medidas se absolvieron **nombrando el archivo que falta**, y ese archivo
+      es de los tres que el motor vivo no tiene hoy: dos por `marcas-en-disco.mjs` y dos por
+      `followup-run.mjs`. **No se copian acá sus `archivo:línea`**: este mismo ítem las corrió
+      cuarenta renglones abajo al insertarse, y un puntero movido se lee como sujeto nuevo —
+      el gate los imprime al día en cada corrida, que es para lo que se le agregó nombrarlos.
+      Gates: `test:deploy-ya-ocurrio` ·
+      `test:bot-vivo-al-dia` · `test:cola-selfcheck` · `test:colas-vivas` · `test:docs-hygiene` ·
+      `test:frontera-derivada` en verde. Archivo: `scripts/deploy_ya_ocurrio.mjs`.
+
+      ⚠️ **Lo que NO arregla, con su número:** quedan **9 no medidas y las 9 dicen «hay que
+      leerlas»** — ninguna es ya del tipo corregible por sha. Seis no nombran ningún archivo del
+      motor y cuatro citan un sha ajeno; leerlas una por una es trabajo de lectura, no de
+      instrumento. Y `plataforma-v1.md:6096` sigue **sin instrumento**: la frontera del SIAT
+      (`/opt/onia-siat`) no tiene su `bot_vivo_tiene_el_codigo.mjs`. Ahora al menos se ve.
+
 - [x] 🔴 **CERRADO el 2026-09-25 21:43-22:35 La Paz (commiteado; es el INSTRUMENTO, no toca el
       motor): el gate de los «NO desplegado» fantasma no miraba los RÓTULOS de sección — y dos
       de ellos mentían, uno desde el 24-sep.** `afirmacionesDe()` abría sujeto sólo con

@@ -254,7 +254,11 @@ export function motivoDeNoMedida({ shas = [], frontera = "sin ubicar" } = {}) {
   // Primero la frontera: a una línea del motor, citar un sha no la vuelve medible. Decirle
   // «te falta el commit» es mandarla a un trabajo que deja el gate exactamente igual.
   if (frontera === "bot") return "es del bot: otra frontera — citar un sha NO la haria medible";
-  if (shas.length) return "ningun sha es de onia-platform";
+  // Y la frontera manda TAMBIÉN cuando hay sha. Tener un sha que este gate no puede resolver no
+  // dice de qué deploy habla la línea: `onia-hermes` es el repo del motor, pero también el de las
+  // colas y el del SIAT. Atribuirle el motor por descarte es una conjetura, y medido el 2026-09-26
+  // las 7 líneas que salían así tenían `sin ubicar` — una era del SIAT. Se dice lo que se sabe.
+  if (shas.length) return frontera === "plataforma" ? "ningun sha es de onia-platform" : "cita un sha ajeno y no se pudo ubicar la frontera";
   if (frontera === "plataforma") return "la linea no cita sha";
   return "no cita sha y no se pudo ubicar la frontera";
 }
@@ -281,6 +285,22 @@ export function juzgar(afirmaciones, estaVivo, motor = null, sujetos = []) {
         else if (delMotor.estado === "honesta") honestas.push({ ...a, faltan: delMotor.faltan, motor: true });
         else noMedidas.push({ ...a, motivo: delMotor.motivo });
         continue;
+      }
+      // Sin frontera ubicada queda una pregunta que SÍ se puede contestar sin adivinar: ¿la línea
+      // nombra un archivo que el deploy del motor todavía no instaló? Si sí, el deploy que pide no
+      // ocurrió para ese archivo y la línea es CIERTA por medición. Sólo absuelve: acusar desde
+      // `sin ubicar` sacaría una línea del panel de su único juez —`config.mjs` vive en los dos
+      // repos— y ése es el error caro que este gate cuida. Absolver de más no cuesta nada: la
+      // línea se queda escrita como está.
+      // `sin ubicar` y NADA más: a una línea ya ubicada en el panel, absolverla con el estado del
+      // motor es un falso verde —la saca del recuento de no medidas sin haberla medido— y es la
+      // clase que este archivo entero existe para no cometer.
+      if (a.frontera === "sin ubicar") {
+        const quizaDelMotor = juezDelMotor(a, motor, sujetos);
+        if (quizaDelMotor.estado === "honesta") {
+          honestas.push({ ...a, faltan: quizaDelMotor.faltan, motor: true });
+          continue;
+        }
       }
       noMedidas.push({ ...a, motivo: motivoDeNoMedida(a) });
       continue;
@@ -321,11 +341,12 @@ export function porFrontera(noMedidas) {
   const bot = cuenta("es del bot: otra frontera — citar un sha NO la haria medible");
   const sinSha = cuenta("la linea no cita sha");
   const shaAjeno = cuenta("ningun sha es de onia-platform");
-  const sinUbicar = cuenta("no cita sha y no se pudo ubicar la frontera");
+  const shaAjenoSinUbicar = cuenta("cita un sha ajeno y no se pudo ubicar la frontera");
+  const sinUbicar = cuenta("no cita sha y no se pudo ubicar la frontera") + shaAjenoSinUbicar;
   const partes = [];
   if (bot) partes.push(`  ${bot} son del MOTOR (/opt/onia/bot): otra frontera — este gate no las mide, y citarles un sha tampoco.`);
-  if (shaAjeno) partes.push(`  ${shaAjeno} citan un sha que no es de onia-platform: tambien del motor.`);
-  if (sinUbicar) partes.push(`  ${sinUbicar} no cita(n) sha y no se pudo ubicar su frontera: hay que leerlas.`);
+  if (shaAjeno) partes.push(`  ${shaAjeno} piden el deploy del PANEL y su sha no esta en onia-platform: sin el suyo nadie las puede juzgar.`);
+  if (sinUbicar) partes.push(`  ${sinUbicar} no se pudo ubicar su frontera (${shaAjenoSinUbicar} con sha ajeno): hay que leerlas.`);
   partes.push(
     sinSha
       ? `  ${sinSha} son EL SUJETO: piden el deploy del panel y no citan su commit. Sin sha nadie las puede corregir nunca.`
@@ -336,7 +357,13 @@ export function porFrontera(noMedidas) {
   // `archivo:línea`—, que es por qué estos cuatro sobrevivieron vueltas enteras. Sólo se listan
   // las ACCIONABLES: las del motor se cuentan arriba y no son trabajo de este gate; volcar sus
   // 45 renglones enterraría a los 4 sujetos, que es el modo de falla del 25-sep al revés.
-  const accionables = noMedidas.filter((n) => n.motivo === "la linea no cita sha" || n.motivo === "no cita sha y no se pudo ubicar la frontera");
+  const accionables = noMedidas.filter(
+    (n) =>
+      n.motivo === "la linea no cita sha" ||
+      n.motivo === "no cita sha y no se pudo ubicar la frontera" ||
+      n.motivo === "cita un sha ajeno y no se pudo ubicar la frontera" ||
+      n.motivo === "ningun sha es de onia-platform",
+  );
   for (const n of accionables) {
     const que = n.motivo === "la linea no cita sha" ? "SUJETO" : "leer";
     partes.push(`    · ${n.archivo}:${n.linea} [${que}] ${String(n.frase ?? "").slice(0, 80)}`);
@@ -887,6 +914,78 @@ function selfCheck() {
   // Las del motor se cuentan pero NO se listan: son 45 y no son trabajo de nadie acá — listarlas
   // entierra a los 4 sujetos entre 45 renglones, que es el mismo modo de falla del 25-sep.
   ok("ubica: no lista las 45 del motor", !/chatbot\.md:99/.test(conUbicacion));
+
+  // --- Un sha que no se puede resolver NO ubica una frontera ------------------------------
+  // Medido el 2026-09-26 en vivo: 7 de las 14 no medidas salían bajo el rótulo «citan un sha que
+  // no es de onia-platform: TAMBIEN DEL MOTOR», y `fronteraDe` les había medido `sin ubicar` a
+  // las siete. O sea que el rótulo era una CONJETURA impresa como medición — y encima ese bucket
+  // quedaba fuera de `accionables`, así que ninguna se nombraba nunca con su `archivo:línea`.
+  // Una de ellas es `plataforma-v1.md:6096`, que es del SIAT (`/opt/onia-siat`): la tercera
+  // frontera, la que este archivo declara SIN instrumento. Llamarla «del motor» la manda a un
+  // dueño que no es el suyo, y no nombrarla la deja invisible, que es exactamente el modo de
+  // falla que el bloque de arriba existe para cerrar.
+  ok(
+    "no medida: un sha ajeno con la frontera SIN UBICAR no se le atribuye al motor",
+    motivoDeNoMedida({ shas: ["5c2af97a"], frontera: "sin ubicar" }) === "cita un sha ajeno y no se pudo ubicar la frontera",
+  );
+  ok(
+    "no medida: con la frontera en el PANEL, el sha ajeno sigue siendo el reclamo correcto",
+    motivoDeNoMedida({ shas: ["5c2af97a"], frontera: "plataforma" }) === "ningun sha es de onia-platform",
+  );
+  const sinUbicarConSha = porFrontera([
+    { motivo: "cita un sha ajeno y no se pudo ubicar la frontera", archivo: "plataforma-v1.md", linea: 6096, frase: "🔴 **Commiteado, NO desplegado:** `/opt/onia-siat/run-fase1-volumen.sh`" },
+    { motivo: "ningun sha es de onia-platform", archivo: "chatbot.md", linea: 77, frase: "falta el swap de `plataforma`" },
+  ]);
+  ok("ubica: la del sha ajeno sin frontera tambien se nombra", /plataforma-v1\.md:6096/.test(sinUbicarConSha));
+  ok("ubica: y la del panel con sha ajeno tambien, que es corregible", /chatbot\.md:77/.test(sinUbicarConSha));
+  // El rótulo mismo era la mentira: «tambien del motor» se imprimía por tener un sha irresoluble,
+  // y ninguna de las dos clases lo justifica — la del panel es del PANEL y la sin ubicar no se
+  // midió. Un desglose que atribuye dueño sin haberlo medido manda el trabajo al carril de al lado.
+  ok("ubica: el desglose ya no le atribuye el motor a nadie por el sha", !/tambien del motor/i.test(sinUbicarConSha));
+  ok(
+    "ubica: a la del panel le pide SU sha, que es lo unico que la vuelve medible",
+    /sha/.test(sinUbicarConSha) && /onia-platform/.test(sinUbicarConSha),
+  );
+
+  // --- Desde `sin ubicar` se puede ABSOLVER, nunca ACUSAR ---------------------------------
+  // El nombre de archivo es la unidad del deploy del motor, así que una línea que nombra un
+  // archivo TODAVÍA sin publicar es cierta por medición, no por conjetura: el deploy que pide no
+  // ocurrió para ese archivo. Al revés no: `config.mjs` existe en los DOS repos, así que acusar
+  // desde `sin ubicar` es el error caro —sacar una línea del panel de su único juez— y por eso
+  // este juicio absuelve pero no acusa. `fronteraDe` sigue SIN mirar nombres de archivo.
+  const lineaSinUbicar = (cuerpo, shas = []) => [{ archivo: "chatbot.md", linea: 931, frase: "**NO desplegado**", shas, frontera: "sin ubicar", cuerpo }];
+  ok(
+    "sin ubicar: nombra un archivo del motor que sigue desfasado -> es CIERTA",
+    juzgar(lineaSinUbicar("el arreglo vive en `followup-run.mjs`", ["5c2af97a"]), () => null, conTres, SUJETOS).honestas.length === 1,
+  );
+  ok(
+    "sin ubicar ANCLA: nombra solo archivos ya publicados -> sigue NO MEDIDA, no se acusa",
+    juzgar(lineaSinUbicar("corregido en `config.mjs`"), () => null, conTres, SUJETOS).noMedidas.length === 1,
+  );
+  ok(
+    "sin ubicar ANCLA: con el motor ENTERO al dia tampoco acusa",
+    juzgar(lineaSinUbicar("corregido en `config.mjs`"), () => null, alDia, SUJETOS).mienten.length === 0,
+  );
+  ok(
+    "sin ubicar ANCLA: no nombra ningun archivo -> NO MEDIDA con su motivo de frontera",
+    juzgar(lineaSinUbicar("", ["5c2af97a"]), () => null, conTres, SUJETOS).noMedidas[0]?.motivo === "cita un sha ajeno y no se pudo ubicar la frontera",
+  );
+  ok(
+    "frontera ANCLA: sigue sin mirar nombres de archivo",
+    fronteraDe("**NO desplegado** — el arreglo vive en `followup-run.mjs`") === "sin ubicar",
+  );
+  // ANCLA de la otra punta: la absolución vale sólo desde `sin ubicar`. Una línea ya ubicada en el
+  // PANEL que de paso nombre un archivo del motor no se absuelve con el estado del motor — eso la
+  // sacaría del recuento de no medidas sin medirla, que es el falso verde de siempre.
+  ok(
+    "panel ANCLA: una linea del PANEL no se absuelve con el estado del motor",
+    juzgar(
+      [{ archivo: "chatbot.md", linea: 1, frase: "**NO desplegado**, falta el swap de `plataforma`", shas: ["5c2af97a"], frontera: "plataforma", cuerpo: "y el bot corre `followup-run.mjs`" }],
+      () => null,
+      conTres,
+      SUJETOS,
+    ).noMedidas[0]?.motivo === "ningun sha es de onia-platform",
+  );
 
   // --- Un sha que sólo tiene dígitos sigue siendo un sha ---------------------------------
   // `7756295` es un commit REAL de onia-platform (`77562957`, "el cupo de WhatsApp deja de
