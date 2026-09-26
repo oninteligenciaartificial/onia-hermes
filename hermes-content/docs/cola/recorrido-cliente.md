@@ -40,17 +40,13 @@ Instrumento: `scripts/recorrido_cliente.mjs`.
 
 
 
-- **`/guia-facturacion`: el badge "Plazo · 30-09-2026" contradice a su propia bajada** —
-  reportado el 2026-09-17 14:26 La Paz (`t_c53fe39c`, prioridad 2, para el dueño del sitio).
-  Escalón 3 (promesa vs. entrega), superficie nueva no auditada antes por este carril. El
-  `Kicker` de esa página (`src/app/(sitio)/guia-facturacion/page.tsx:125`) es un string tipeado
-  a mano — el único texto de plazo en `/facturacion` y `/guia-facturacion` que NO sale de
-  `lib/siat.ts`, pese a que el comentario de ese mismo archivo asegura que "el texto sale
-  entero de `lib/siat.ts`... si el SIN mueve la fecha se corrige ese archivo y las dos páginas
-  se enteran solas". Dos líneas más abajo, `SIAT_GUIA_BAJADA` (que sí sale de la fuente) dice
-  "cómo saber si te toca el **1 de octubre**" — el mismo dato, en la misma pantalla, con dos
-  fechas distintas como si fueran la misma cosa. Captura:
-  `../recorrido/capturas/hallazgo-plazo-guia-facturacion.png`.
+## Cerrado — verificado en vivo, no solo por el estado de la tarea
+
+- **`/guia-facturacion`: el badge "Plazo · 30-09-2026" — CERRADO, deployado.** Reportado
+  2026-09-17 (`t_c53fe39c`); el código llegó en `47e2c3aa` y la tarea marcaba `done`, pero un
+  comentario propio del 17-sep ya advertía que seguía viva en producción por deuda de deploy.
+  Reverificado el 2026-09-26: `curl -s https://onia.com.bo/guia-facturacion | grep -o
+  'Plazo[^<]*'` da `Plazo · 01-10-2026` — ya no `30-09-2026`. El deploy pendiente ya ocurrió.
 
 ## Abierto
 
