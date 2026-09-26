@@ -29,6 +29,68 @@ contra producción (SSH al VPS, las dos bases, el motor corrido de verdad), no c
 
 ---
 
+## ✅ T11 — CERRADO el 2026-09-26 00:20 La Paz: el pedido de deploy del bot le pedía a Sergio Urcullo firmar 6 archivos describiéndole 5 — y el que faltaba era el más largo
+
+**Qué pasaba.** El pedido `t_94b9955d` (creado 02:46 UTC de hoy) listaba en su cuerpo los **5**
+archivos que su `ok` publica. Medido con el recuento honesto, eran **6**: faltaba
+`puerta-del-alta.mjs`, **55 líneas**, el cambio más grande del viaje después de
+`marcas-en-disco.mjs`. El cuerpo es lo único que Sergio Urcullo lee para decidir, así que estaba
+a punto de firmar a ciegas el archivo más pesado del lote.
+
+**Por qué se desincronizó — y es lo reutilizable.** El pedido no nació mal: nació **correcto** a
+`851dac0d` (02:36 UTC) y se rompió solo 1 h 17 min después, cuando `1ca04177` y `4ca1a99a`
+entraron a `main` (03:53 UTC) y uno de los dos tocó un archivo de la carpeta del bot. O sea:
+
+> **Un pedido de deploy caduca con el siguiente merge, incluso con un merge de tu propio carril.**
+> Es la regla «no mergear más después de crear el pedido» vista desde el otro lado: el que mergea
+> no se acuerda de que hay un pedido abierto, así que el pedido tiene que **volver a medirse**, no
+> confiar en que nadie tocó nada.
+
+**Lo bueno: el gate ya existía y funcionó.** No lo encontré leyendo, lo encontró el instrumento —
+y esto es el único control del repo que mira el **cuerpo** y no el recuento:
+
+```
+$ npm run pedido:entregado
+ROJO t_94b9955d: su CUERPO no nombra 1 archivo(s) que su ok publica.
+    puerta-del-alta.mjs
+```
+
+Y trae su propia cura, que es la que se aplicó: **rehacer el pedido con el cuerpo derivado del
+`--dry-run` y archivar el viejo en la misma vuelta**. `comment` no lo limpia: el gate lee el
+cuerpo, y `edit` del tablero no cambia el cuerpo.
+
+**Qué se hizo.** Pedido nuevo `t_c2fab948`, cuerpo derivado de
+`bash /opt/onia/bot/_deploy/publicar.sh --dry-run` (6 archivos, gates del bot 1404 pass / 0 fail),
+con el sexto descrito por lo que es para el negocio: *"herramienta NUESTRA de medición, no cambia
+ni una palabra de lo que el bot le dice al cliente"* — porque es verdad y porque un archivo sin
+explicar en una hoja de firma es una razón legítima para no firmar. `t_94b9955d` archivado en la
+misma vuelta (un `ok` sobre archivada ya no ejecuta: sale exit 3).
+
+**Verificado, las cuatro puntas:**
+
+| Qué | Cómo se miró | Resultado |
+|---|---|---|
+| El pedido nuevo quedó bloqueado de verdad | `list --status blocked \| grep t_c2fab948` (el status, no el `exit 0` de `block`) | ⊘ blocked |
+| El gate quedó verde | `npm run pedido:entregado` | `OK t_c2fab948 (bot): sigue VIGENTE — 6 archivo(s) sin publicar` |
+| El brazo ejecutor reconoce el pedido | `ONIA_DESPLEGAR_DRY=1 node /root/bin/onia-publicar-aprobado.mjs t_c2fab948` **en el VPS** | `{"desplegando":true,"destino":"bot","seco":true}` |
+| El seco no tocó producción | `/var/log/onia-deploy-aprobado.log` | `[dry-run] producción NO se toca.` |
+
+**Trampa de instrumento anotada al pasar:** `onia-publicar-aprobado.mjs` **existe** en
+nodo-casa y **no corre** ahí — muere con `spawnSync /usr/local/lib/hermes-agent/venv/bin/python
+ENOENT`, que es justo el archivo con el que se detecta «soy el VPS». Verificar el brazo ejecutor
+desde casa exige `onia-vps.sh bash -lc '...'`; el `ENOENT` no es el circuito roto.
+
+**Lo que NO se tocó, y por qué.** El chequeo de arranque pareció encontrar un segundo problema —
+`tail -400` del log vivo devolvió **246 copias** de la misma advertencia de `[knowledge:panel]`, o
+sea el ruido de T10 otra vez. Era **falso**: las últimas 25 líneas **crudas** del log no tienen ni
+una, y el `knowledge.mjs` vivo ya trae el dedup (`grep -c avisosDePanelYaDados` → 4). Las 5.032
+copias son **historia** de antes del deploy de T10, y el log no rota. El error fue mío y vale
+anotarlo: **`tail -N | sort | uniq -c` destruye el orden temporal**, que era la única información
+capaz de distinguir «pasa ahora» de «pasó una vez y quedó escrito». Para fechar una línea sin
+timestamp: `tail` crudo, nunca `sort`.
+
+---
+
 ## ✅ T10 — CERRADO el 2026-09-24 (commiteado, **NO desplegado**): el log del bot estaba ahogado por UNA línea repetida, y por eso la medición de este carril salía vacía teniendo los datos adentro
 ✅ YA DESPLEGADO (medido 2026-09-26: `npm run bot:vivo-al-dia` — el motor vivo ya corre este archivo).
 
