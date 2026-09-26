@@ -685,6 +685,19 @@ un grep sirve para descartar y nunca para confirmar), gates completos donde haya
 node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
 ```
 
+🔴 **Y la medición de arranque del carril lleva UN comando más desde el 2026-09-26** — el par
+web↔bot, que es la primera cosa que ve un lead y la que nadie podía ver:
+
+```bash
+node hermes-content/deploy/vps-ops/bot/campanas-vivas.mjs   # 0 par sano · 1 frase viva muerta · 2 NO MEDIDO
+```
+
+Va **acá y no en un alias** porque un alias suelto no lo corre nadie (ya pasó en este repo). Su
+`exit 1` significa que alguien que aprieta un botón de WhatsApp de la web recibe el saludo
+genérico en vez de la respuesta que califica; su `exit 2` significa **NO MEDIDO**, que no es
+estar bien. Hoy sale **1** y se pone verde cuando el `ok` de `t_c2fab948` publique el bot: es
+también el acuse de ese deploy, sin tener que creerle a nadie.
+
 **Y nada se declara "listo para desplegar" sin que el deploy lo alcance:**
 
 ```bash
@@ -891,6 +904,85 @@ Las 3 que quedan (3492, 3623, 7674) son del motor leídas a mano pero **no tiene
 mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se derivan con el comando.
 
 ## Ahora
+
+- [x] 🔴 **CERRADO el 2026-09-26 03:13-04:05 La Paz (es un MEDIDOR, no toca el motor: no necesita
+      deploy): los dos botones de agenda de `onia.com.bo/contacto` están MUERTOS en producción
+      ahora mismo, y no había ni un instrumento que pudiera verlo — el gate del par daba 17/17.**
+
+      **El par que se rompió.** Una campaña es un par: la web le escribe la frase al lead
+      (`wa.me?text=…`, la manda sin tipear) y el bot la reconoce **exacta** y contesta con la
+      respuesta de esa campaña — la que pide rubro y cuánta gente trabaja, o sea **la que
+      califica**. Medido hoy de los dos lados vivos:
+
+      | lado | qué dice hoy |
+      |---|---|
+      | `onia.com.bo/contacto` (vivo, `curl`) | "…la consulta comercial de **30** minutos." · "…la demo de **30** minutos con mi caso." |
+      | bot que CORRE (`/tmp/onia-bot/knowledge.json` en `onia-center`, versión `2026-09-24.1`; el md5 se re-deriva, no se cita: `docker exec onia-center md5sum /tmp/onia-bot/knowledge.json`) | "…de **20** minutos." · "…de **45** minutos." |
+
+      O sea: **2 de las 3 frases que la web viva manda, el bot vivo no las escucha.** Quien
+      aprieta cualquiera de los dos botones de agenda recibe el saludo genérico en vez de la
+      pregunta que califica — el clic más caro del sitio contestado como un "hola" suelto.
+
+      ⚠️ **El arreglo del contenido ya está pedido y NO se duplicó.** Es `t_c2fab948`
+      (`DESPLEGAR: bot`, blocked esperando el `ok` de Sergio Urcullo), y su cuerpo ya describe
+      exactamente esto en su punto 3, con los 6 archivos. Verificado con `git show
+      origin/main:…` vs `/opt` vs el contenedor: `origin/main` está **adelante** en los tres
+      archivos del motor (`followup-run.mjs`, `marcas-en-disco.mjs`, `puerta-del-alta.mjs`) y en
+      el knowledge, así que el deploy **arregla**, no revierte. Lo que faltaba no era el
+      arreglo: era **poder ver la deriva sin que alguien la encuentre a mano**.
+
+      **Por qué ningún gate lo veía, y por qué va a volver a pasar.** `campanas-web.test.mjs`
+      valida el par **repo contra repo** (el literal de `site.ts` contra `knowledge.onia.json`) y
+      lo dice él mismo en su línea 35: la comparación viva "necesita el VPS y por eso no entra en
+      la cadena". Pero las dos mitades del par **no se publican juntas, y nunca lo van a hacer**:
+      la web se publica sola cada 3 h (`/root/bin/onia-publicar-solo.sh` del VPS, cron `50 */3`) y el
+      `knowledge.onia.json` del bot está en `FIRMA_HUMANA` porque es fuente de precio, así que su
+      deploy **se frena esperando la firma**. «Web adelante, bot atrás» no es un accidente: es el
+      estado **normal** de este sistema.
+
+      **Lo que se hizo:** `hermes-content/deploy/vps-ops/bot/campanas-vivas.mjs` — compara las
+      frases de las **páginas vivas** contra los disparadores del **bot que corre**. Tri-estado
+      (`0` par sano · `1` frase viva que el bot no escucha · `2` NO MEDIDO). Detalles que lo
+      hacen no-decorativo:
+      · las rutas se **derivan del disco** (`(sitio)/**/page.tsx` que nombren una constante de
+        frase) — hoy dieron 8; una página nueva con botón entra sola, y un gate de mutación lo
+        sostiene;
+      · el lado vivo es el contenedor, **no `/opt`** (lo desplegado) ni el repo (la intención);
+      · pregunta si la fila publicada del panel trae `campanas`, porque `mergePanelKnowledge`
+        pisa **clave por clave** y entonces el archivo no se leería (hoy `v5 publicado` → `f`);
+      · una frase que ninguna campaña empareja **no** pone rojo: no es deriva, es un mensaje
+        cualquiera.
+
+      **Y un defecto propio, encontrado mirando la salida y corregido antes de commitear:** la
+      primera versión rotulaba las frases que sólo tiene el bot como *"producción quedó ADELANTE,
+      un deploy la borraría"* — al revés del remedio, porque acá son la versión **vieja** de las
+      frases que el repo ya cambió y el deploy las reemplaza. Ahora distingue los dos casos por
+      si hay frases rotas, y el gate prohíbe la frase "la borraría" cuando las hay. Es la misma
+      familia del arreglo de ayer (un instrumento que mandaba al remedio opuesto).
+
+      **Pruebas.** `node campanas-vivas.mjs --self-check` → `ok`. `node --test
+      campanas-vivas.test.mjs` → **9/9**. Cadena entera del bot → **1406/1406, 0 fail**. Guarda
+      de derivación probada por **mutación** (le metí `["/contacto"]` a mano → rojo por el motivo
+      correcto; restaurado → verde). Y la medición viva, que es la que importa:
+
+      ```
+      $ node hermes-content/deploy/vps-ops/bot/campanas-vivas.mjs
+      rutas vivas miradas (8): / /chatbot /contacto /empezar /facturacion /guia-facturacion /nosotros /precios
+        ok         "…Quiero saber si me sirve para mi negocio."
+        ROTA       "…Quiero agendar la consulta comercial de 30 minutos."
+        ROTA       "…Quiero agendar la demo de 30 minutos con mi caso."
+      VEREDICTO: ROTO — 2 de 3 frase(s) que la web viva manda no las escucha el bot vivo
+      ```
+
+      🔴 **Este medidor entra en la medición de arranque del carril** (abajo, "Cómo se mide"): un
+      alias suelto no lo corre nadie. Se pone verde solo cuando el `ok` de `t_c2fab948` publique
+      el bot — o sea que además **sirve de acuse del deploy**, sin tener que creerle a nadie.
+
+      **Regalo del barrido, anotado y no ejecutado (no es de este carril):** 6 de las 9 campañas
+      que el repo empareja **ninguna ruta viva las manda hoy**, entre ellas `WA_URL`
+      ("Hola, quiero conocer Onia"), que se declara a sí misma "el CTA general de toda la
+      página". Coincide con lo que ya dice la nota de `web-factory` al final de "Después" — la
+      diferencia es que ahora está **medido contra el sitio vivo**, no por `grep`.
 
 - [x] 🔴 **CERRADO el 2026-09-26 02:13-03:05 La Paz (commiteado, **NO desplegado**; toca el MOTOR):
       cada prospecto que acepta un horario pagaba 5,0 s muertos en el turno donde acepta — el
