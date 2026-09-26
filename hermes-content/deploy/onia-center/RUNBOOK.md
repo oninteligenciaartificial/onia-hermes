@@ -20,11 +20,25 @@ El contenedor **igual no se apaga**: el bot de Onia vive adentro (`/tmp/onia-bot
 interno 3020) y el auditor diario lo usa como runtime de node. **Bajar el deploy y bajar el
 servicio son cosas distintas.**
 
-Y **el sha vivo de esta superficie no se puede leer del disco**: `/opt/onia-center/runtime-next`
-no tiene `.commit` ni `BUILD_ID` (a diferencia de landing y plataforma, que si los tienen y
-por eso su deploy se puede medir). Lo unico que fecha el ultimo deploy es el nombre del
-backup: `runtime-next.bak-deploy-20260901214144` → **1-sep-2026**. Es la tercera razon para
+Y **el sha vivo de esta superficie no se podia leer del disco**: `/opt/onia-center/runtime-next`
+no tenia `.commit` ni `BUILD_ID` (a diferencia de landing y plataforma, que si los tienen y
+por eso su deploy se puede medir). Lo unico que fechaba el ultimo deploy era el nombre del
+backup: `runtime-next.bak-deploy-20260901214144` → **1-sep-2026**. Era la tercera razon para
 no cablearla al `ok`: un destino que no se puede medir no se puede verificar despues.
+
+⚠️ **Esa tercera razon ya no esta en pie — arreglado el 2026-09-26 por `onia-cola`.**
+`scripts/deploy-onia-center.sh` ahora estampa el sha en **`$STAGE/.commit`** antes de armar el
+tarball, asi que viaja al VPS con el runtime y el `mv` del swap lo deja en
+`/opt/onia-center/runtime-next/.commit`. Se lee con
+`docker exec onia-center cat /app/.commit` o, desde el host,
+`cat /opt/onia-center/runtime-next/.commit`.
+Lo cuidan los diez casos de `scripts/onia-center-sha-vivo.test.mjs` (cableado a `npm test`):
+que lo estampe, que lo estampe **antes** del tarball —lo unico que viaja—, que no estampe
+`unknown` (un sha inventado haria fallar al instrumento *en verde*, que es peor que no medir),
+que resuelva `DEPLOY_REF=main` a un commit, y que el swap siga moviendo el arbol entero.
+**Hoy el archivo todavia no existe en produccion**, y no puede existir hasta la proxima
+publicacion: el build vivo es del 1-sep, anterior al estampado. Hasta entonces
+`deploy:sin-pedido` sigue diciendo —con razon— que no hay sha vivo que comparar.
 
 **Por eso `onia-center` NO se cablea como destino del `ok`** (la lista blanca de
 `scripts/kanban/desplegar-en-segundo-plano.sh` tiene cuatro: landing, plataforma, bot,

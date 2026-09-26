@@ -35,6 +35,20 @@
 > - Aprobación del bot (S17→S18): el pedido vivo es `t_24fa76aa`; se aprueba con `ok t_24fa76aa` por
 >   Telegram.
 >
+> **26-sep (tarde):** ✅ **Correos EN PROD** — Sergio Urcullo los aprobó («perfectos»; sugirió quizá
+> más breves o con más emoción, anotado para una segunda pasada). `release-d1ca514e` (BUILD
+> `PNIhLndYbrHxc_q0RFByG`, publicador oficial, 20:45 UTC; incluye el heredado `766a3a33` de
+> `onia-cola`); CI+Security verdes; rollback `onia-platform-prev-DvBubiuO-20260926-204539`. Medido:
+> `/correo/onia-logo-banda.png` 200 image/png; las 4 plantillas de GoTrue 200 con el logo y sin
+> «Onia.»; `supabase-auth2` con sus 4 `MAILER_TEMPLATES`. Pago con QR **rehecho con la identidad de
+> Onia** a pedido de Sergio (QR recortado de la tarjeta del BCP, `f2dc9a7b`) + **ícono verde/negro**
+> (`claude/icono-app-verde-20260926`, `a700b4cb`, respaldo `origin/wip/icono-app-verde-20260926`;
+> ojo: el logo del encabezado móvil y `/book` usan `public/icon.svg` y también pasan al tile verde).
+> Los dos esperan «OK pago» / «OK ícono» en https://claude.ai/artifact/USZ5yuxFc8jpcrSGfuaMWq.
+> Análisis Yeezy/SKIMS + push en la web: `research/2026-09-26-web-estructura-yeezy-skims-y-push.md`
+> (push en la web: NO; propuesta de 7 cambios de estructura, sin aplicar; FAQ 6 «homologación en
+> trámite» = obra en la venta, decide Sergio).
+>
 > **EN VUELO al cierre del 25-sep (tarde), nada publicado todavía:**
 > | Qué | Dónde | Estado | Espera |
 > |---|---|---|---|

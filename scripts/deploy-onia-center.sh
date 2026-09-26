@@ -20,6 +20,10 @@ VPS_KEY="${VPS_KEY:?VPS_KEY (ruta a la llave SSH) es requerido}"
 DEPLOY_SWAP="${DEPLOY_SWAP:-false}"
 TS=$(date +%Y%m%d%H%M%S)
 REF="${DEPLOY_REF:-$(git rev-parse --short HEAD 2>/dev/null || echo unknown)}"
+# El sha que se estampa en produccion, RESUELTO a commit. `DEPLOY_REF` lo escribe
+# una persona o el Action, asi que puede llegar `main` — y un `.commit` que dice
+# `main` no se puede comparar con nada, porque `main` se mueve.
+SHA="$(git rev-parse --short "$REF" 2>/dev/null || echo unknown)"
 REMOTE="$VPS_USER@$VPS_HOST"
 ROOT=/opt/onia-center
 REPO="$(cd "$(dirname "$0")/.." && pwd)"
@@ -39,9 +43,18 @@ cp -a "$SA/." "$STAGE/"
 cp -a "apps/site/.next/static" "$STAGE/apps/site/.next/static"
 ( cd apps/site/public && tar -cf - --exclude=nuvia . ) | ( cd "$STAGE/apps/site/public" && tar -xf - )
 BUILD_ID="$(cat "$STAGE/apps/site/.next/BUILD_ID")"
+# EL SHA VIVO DE onia-center, que hasta el 2026-09-26 no existia. Sin este archivo
+# el destino no se puede medir: corre `node:20-alpine` (imagen sin etiqueta de
+# commit) y `deploy:sin-pedido` contestaba «no hay sha vivo que comparar», que es
+# como un build del 1-sep atendio leads quince dias sin que nadie lo viera.
+# Va DENTRO de $STAGE porque el tarball es lo UNICO que viaja al VPS, y solo si el
+# sha se pudo resolver: un `.commit` con "unknown" adentro es peor que su ausencia
+# —el instrumento pasaria de «no pude medir» a comparar contra un sha inexistente,
+# o sea a fallar EN VERDE. Lo cuida scripts/onia-center-sha-vivo.test.mjs.
+if [ "$SHA" != unknown ]; then printf '%s\n' "$SHA" > "$STAGE/.commit"; fi
 TARBALL="$WORK/runtime-$TS.tgz"
 tar -C "$WORK" -czf "$TARBALL" runtime-next
-echo "BUILD_ID=$BUILD_ID ref=$REF tarball=$(du -h "$TARBALL" | cut -f1)"
+echo "BUILD_ID=$BUILD_ID ref=$REF commit=$SHA tarball=$(du -h "$TARBALL" | cut -f1)"
 
 echo "== [3/6] subir + stage en VPS (reusa public/nuvia del runtime vivo) =="
 ssh $SSHOPTS "$REMOTE" "mkdir -p $ROOT/_deploy"
