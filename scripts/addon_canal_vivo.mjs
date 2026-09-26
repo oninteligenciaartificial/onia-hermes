@@ -19,10 +19,11 @@
 // "Contratar el chatbot" dos veces sobre una org con 3 de 500 conversaciones
 // consumidas — o sea el add-on activo.
 
-import { execFile } from 'node:child_process';
+import { execFile, spawnSync } from 'node:child_process';
 import { promisify } from 'node:util';
 import { existsSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
+import { buildQueCorre } from './lib/arbol-del-build-vivo.mjs';
 import { leerDeProduccion, listarDeProduccion } from './lib/vps-o-local.mjs';
 
 const ejecutar = promisify(execFile);
@@ -170,7 +171,7 @@ async function medirAfectadas(leeCapacidad) {
 }
 
 /**
- * BUILD_ID vivo -> /opt/onia-platform/build-<sha> -> sha.
+ * BUILD_ID vivo -> el arbol en disco que lo produjo -> su sha.
  *
  * Los builds viven en el disco del VPS. Cuando este loop se mudo a nodo-casa
  * `/opt/onia-platform` dejo de existir acá, asi que el `ls` salia vacio y TODO el
@@ -178,23 +179,23 @@ async function medirAfectadas(leeCapacidad) {
  * barata (la base por `docker exec`) sí contestaba, porque `docker` es un shim que
  * delega en el VPS. Medido el 2026-09-08. Ahora se le pregunta al disco local y,
  * si no contesta, al VPS por SSH.
+ *
+ * ⚠️ Y DONDE BUSCAR TAMPOCO SE DECIDE ACA (2026-09-26). Esto casaba el `BUILD_ID`
+ * solo contra `/opt/onia-platform/build-*`, que es STAGING; desde que produccion se
+ * publica por imagen el arbol vivo queda bajo `releases/<sha>-<fecha>/` y
+ * `limpiar-builds-staging.sh` borra los `build-*`. Resultado medido ese dia: `exit 2`
+ * («no pude leer las orgs de la base o el codigo del build vivo») con la base
+ * contestando perfecto — o sea que la mitad cara estaba muda y se leia como
+ * ambiental. La tabla de layouts vive en UN lugar porque el punto ciego era de la
+ * RECETA, copiada en cuatro instrumentos.
  */
-async function medirShaVivo() {
+export async function medirShaVivo({
+  correr = spawnSync,
+  leer = leerDeProduccion,
+  listar = listarDeProduccion,
+} = {}) {
   try {
-    const buildId = (await salida('docker', ['exec', CONTENEDOR_APP, 'cat', '/app/.next/BUILD_ID'])).trim();
-    if (!buildId) return null;
-    const listado = listarDeProduccion(`${DIR_BUILDS}/build-*/`);
-    if (listado === null) return null;
-    for (const d of listado.dirs) {
-      const f = `${d}.next/standalone/.next/BUILD_ID`;
-      const leido = leerDeProduccion(f);
-      if (leido === null) continue;
-      if (leido.contenido.trim() === buildId) {
-        const m = d.match(/build-([0-9a-f]+)\/?$/);
-        if (m) return m[1];
-      }
-    }
-    return null;
+    return buildQueCorre({ correr, contenedor: CONTENEDOR_APP, base: DIR_BUILDS, leer, listar })?.sha ?? null;
   } catch {
     return null;
   }

@@ -11,7 +11,7 @@ import { readFileSync, writeFileSync, rmSync, mkdtempSync, mkdirSync } from 'nod
 import { join, dirname } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
-import { publicadoEnLanding, publicadoPorFecha, archivosDelDryRun, archivosDelDryRunBot, recuentosDelDryRunBot, cuerpoDeclaraOtroRecuento, archivosNombrados, secoDeProduccion, barrerTablero, creadoEnSegundos, barrerTableroJson, buildQueCorre, cadenaPorPedido, clasificarPedido, imprimirCadena, cuerpoCortoArchivos, cuerpoNoEjecuta, inmediblesSinDeclarar, publicariaLanding, publicariaPorCopia, shasDelTexto, shasPrometidos, soloLosQueViajan } from './pedido_deploy_entregado.mjs';
+import { publicadoEnLanding, publicadoPorFecha, archivosDelDryRun, archivosDelDryRunBot, recuentosDelDryRunBot, cuerpoDeclaraOtroRecuento, archivosNombrados, secoDeProduccion, barrerTablero, creadoEnSegundos, barrerTableroJson, cadenaPorPedido, clasificarPedido, imprimirCadena, cuerpoCortoArchivos, cuerpoNoEjecuta, inmediblesSinDeclarar, publicariaLanding, publicariaPorCopia, shasDelTexto, shasPrometidos, soloLosQueViajan } from './pedido_deploy_entregado.mjs';
 import { DESTINOS, ESTADOS_VIVOS } from './kanban/publicar-aprobado.mjs';
 
 // El caso que me costo la vuelta del 2026-09-06: los 13 shas prometidos por t_0268567b
@@ -248,27 +248,17 @@ test('un JSON truncado es NO MEDIDO, nunca un tablero sin pedidos', () => {
 
 // ─────────────────────────────────────────────────────────────────────────────────────
 // EL BUILD VIVO. El sha que corre produccion se CASA contra el artefacto; no se adivina.
-
-test('el build que corre es el que casa su BUILD_ID, no el primero de la lista', () => {
-  const candidatos = [
-    { sha: 'aaaaaaa', buildId: 'viejo1' },
-    { sha: 'fe4026e', buildId: 'r3bGWN_19MBDFZ24EKDZi' },
-    { sha: 'bbbbbbb', buildId: 'viejo2' },
-  ];
-  assert.equal(buildQueCorre({ buildIdVivo: 'r3bGWN_19MBDFZ24EKDZi', candidatos }), 'fe4026e');
-});
-
-// Sin BUILD_ID vivo no hay con que casar. Devolver un sha igual —el mas nuevo, el primero—
-// haria que el gate declarara ENTREGADO contra un build inventado, que es cerrarle a Sergio
-// Urcullo un pedido real por un arreglo que el cliente nunca recibio.
-test('sin BUILD_ID vivo no se elige ningun build', () => {
-  assert.equal(buildQueCorre({ buildIdVivo: null, candidatos: [{ sha: 'fe4026e', buildId: 'x' }] }), null);
-});
-
-test('si ningun candidato casa, no se elige ninguno', () => {
-  const candidatos = [{ sha: 'aaaaaaa', buildId: 'viejo1' }];
-  assert.equal(buildQueCorre({ buildIdVivo: 'otro', candidatos }), null);
-});
+//
+// ⚠️ Los tres casos de `buildQueCorre` que vivian aca se fueron el 2026-09-26 CON su sujeto
+// (tarea `t_66d7e2f6`): esa funcion conocia un solo layout —staging— y `shaVivoPlataforma` ahora
+// delega en `scripts/lib/arbol-del-build-vivo.mjs`. Las TRES propiedades que afirmaban siguen
+// cubiertas, en el self-check de ese modulo (`npm run test:arbol-build`, 14/14):
+//   · «un release se casa por BUILD_ID leido de la RAIZ» y «el layout viejo de staging sigue
+//     casando» ← el build que corre es el que CASA, no el primero de la lista;
+//   · «sin BUILD_ID vivo es null, nunca un build adivinado»;
+//   · «sin par no se devuelve el primero que haya: null».
+// Se mudo el fixture, no se bajo la cobertura: declarar ENTREGADO contra un build inventado le
+// borra a Sergio Urcullo un pedido real por un arreglo que el cliente nunca recibio.
 
 // ── landing: de que se compone «lo que el ok publicaria» ───────────────────────────────
 //
