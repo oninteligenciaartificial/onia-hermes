@@ -673,8 +673,33 @@ preguntarle. Contado el 2026-09-13, además, la tarea nunca existió en el table
 **jamás**, y el 🔴 habría esperado para siempre.
 
 **Condición de vencimiento** (lo que reabre (a)/(b), sin volver a preguntar): que anotar a mano
-empiece a molestar, es decir **más de ~1 demo agendada por semana**. Se cuenta sin instrumento
-nuevo: `demo_agendada` en el log del bot, o `scheduled_at` en `onia_center.bot_conversations`.
+empiece a molestar, es decir **más de ~1 demo agendada por semana**. Se cuenta con
+**`npm run demo:agendada`**, que ya separa quién pidió la demo.
+
+⚠️ **Los dos instrumentos que esta línea nombraba antes CUENTAN NUESTRAS PROPIAS SONDAS, y con
+eso la condición dispara sola — corregido el 2026-09-26.** Decía *«se cuenta sin instrumento
+nuevo: `demo_agendada` en el log del bot, o `scheduled_at` en `onia_center.bot_conversations`»*, y
+ninguno de los dos distingue un prospecto de `sonda_widget.mjs`, que agenda una demo sobre la
+conv 49 **en cada vuelta horaria** y en el inbox 4, el real (filtrar por el inbox 7 de QA no la
+saca). Medido ese día: el log daba **13** promesas y `npm run demo:agendada` las publicaba como
+*«LAS 13 DEMOS PROMETIDAS LLEGARON A SERGIO»*. De esas 13, **una** era de un prospecto y **12**
+eran nuestras. Con el umbral en ~1 por semana, leer 13 manda a redesplegar Cal.com (a) o a abrir
+una cuenta cloud (b) por demanda que no existe — un gasto disparado por nuestro propio tráfico de
+prueba. Y los dos instrumentos se ofrecían como equivalentes sin serlo: la base guarda **una fila
+por conversación** (`conversation_key` único, así que 12 corridas sobre la conv 49 dan 1), el log
+deja **una línea por evento** (12). Mismo umbral, dos respuestas.
+
+✅ **ARREGLADO el 2026-09-26** (`scripts/demo_agendada_real.mjs`, `esSondaNuestra` + el veredicto
+verde): el juicio sigue siendo sobre TODAS las promesas —una promesa hueca de una sonda delata el
+mismo defecto— pero el número que se publica separa prospecto de sonda y nombra las dos cifras,
+sin esconder ninguna. Corrido en vivo: `DEMOS QUE LLEGARON A SERGIO: 1 de un prospecto, 12 de
+sondas nuestras (13 en total)`. O sea: **la condición NO está vencida** (1 demo de prospecto en
+total, no por semana) y (c) sigue siendo la decisión correcta. 5 casos nuevos en el `--self-check`
+(71/71), en ROJO antes por el motivo correcto. La duda se resuelve hacia *«es un prospecto»* a
+propósito: inflar la demanda hace gastar, pero esconderla oculta lo único que este carril busca.
+**Es un MEDIDOR: no toca el motor, no necesita deploy** y no entra en el pedido de los 13
+archivos.
+
 Hoy el volumen es de una demo por semana y el prospecto no ve ningún síntoma: el bot no promete
 calendario ni link (M2_LINK sólo sale con `booking ok`) y agrega su salvedad
 (`run-turn.mjs:493`, `cierreDeReservaFallida`) — verificado leyendo el ejecutor, no el
