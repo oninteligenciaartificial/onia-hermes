@@ -29,6 +29,121 @@ contra producción (SSH al VPS, las dos bases, el motor corrido de verdad), no c
 
 ---
 
+## ✅ T12 — CERRADO el 2026-09-26 03:05 La Paz: el instrumento que decide si pedirle la firma a Sergio Urcullo mandaba al remedio OPUESTO para un archivo de cada cinco
+
+**Qué pasaba.** `scripts/bot_vivo_tiene_el_codigo.mjs` es el que contesta *«¿el bot vivo corre el
+código del repo?»*, y es el que esta cola manda correr ANTES de creerle a un «NO desplegado».
+Nombraba los archivos desfasados en **una sola lista** y cerraba con una instrucción fija:
+
+    5 archivo(s) del bot NO son los del repo — el prospecto habla con el código viejo:
+      calcom-booking.mjs · followup-run.mjs · knowledge.onia.json · marcas-en-disco.mjs · puerta-del-alta.mjs
+    El arreglo está commiteado y NO corre. Se destraba con el pedido de deploy del bot, no a mano.
+
+**Y para uno de los cinco esa instrucción era falsa.** El publicador publica desde `origin/main`.
+Medido archivo por archivo con `git diff --quiet origin/main -- <ruta>`: cuatro **ya están** en
+`origin/main` y sólo esperan el `ok` de Sergio Urcullo (pedido `t_c2fab948`, vivo); el quinto,
+`calcom-booking.mjs`, **difiere** de `origin/main` — es el arreglo del breaker de Cal.com que
+este mismo carril commiteó la vuelta anterior (`1f9529a0`, sin mergear). Ningún deploy lo puede
+traer: lo que falta ahí es el **merge**, no la firma.
+
+**Por qué importa más que un texto impreciso.** El único remedio que el instrumento ofrecía era
+pedirle a Sergio Urcullo que firme — y firmar no acerca ni un centímetro a ese archivo. Es el
+modo de falla que esta cola ya tiene nombrado como *peor que un pendiente fantasma*: pedirle una
+decisión que no lo destraba. Y el hermano `espejo-check.mjs` **ya tenía la guarda** (sale
+«ESPEJO SIN VEREDICTO — el espejo NO es origin/main»): dos instrumentos del mismo carril
+contestando la misma pregunta, uno con la guarda y el otro sin ella.
+
+**Arreglo.** `medirVivo()` deriva por archivo de qué lado de `origin/main` está (`difierenDeMain()`,
+**con `git fetch` antes** — sin eso se comparan refs de disco y el gate falla EN VERDE), y
+`veredicto()` parte los desfasados en dos listas con su remedio propio. El remedio salió del
+impresor, donde estaba escrito fijo, y pasó a derivarse por sujeto.
+
+**Tri-estado, igual que el resto del archivo:** si no se pudo derivar el lado de **ninguno**
+(sin red, sin ref), el desfase sigue siendo cierto pero la cura no, así que sale **NO MEDIDO (2)**
+— una cura equivocada cuesta más que no medir.
+
+**Test en ROJO primero, por el motivo correcto** (`FALLA: el que DIFIERE de origin/main espera
+MERGE, no firma`, más dos hermanas). El assert prohíbe la **instrucción** (`se destraba con el
+pedido de deploy`), no la palabra «firma»: la línea del merge la nombra justamente para negarla.
+El self-check queda **puro** — `difierenDeMain()` hace red y no se lo llama desde ahí.
+
+**Verificado en vivo, y coincide con la medición a mano:**
+
+```
+$ node scripts/bot_vivo_tiene_el_codigo.mjs          # exit 1
+4 ya está(n) en origin/main — espera(n) FIRMA:  followup-run · knowledge.onia.json · marcas-en-disco · puerta-del-alta
+  se destraba con el pedido de deploy del bot, no a mano
+1 difiere(n) de origin/main — espera(n) MERGE:  calcom-booking.mjs
+  el publicador publica desde origin/main: ningún deploy los trae, y pedir la firma no los destraba
+```
+
+`npm test` (cadena entera de `onia-hermes`) en verde. **No toca el motor**: es un medidor, así
+que no entra en el pedido de deploy ni cambia una palabra de lo que el bot le dice al cliente.
+
+---
+
+## ✅ T11 — CERRADO el 2026-09-26 00:20 La Paz: el pedido de deploy del bot le pedía a Sergio Urcullo firmar 6 archivos describiéndole 5 — y el que faltaba era el más largo
+
+**Qué pasaba.** El pedido `t_94b9955d` (creado 02:46 UTC de hoy) listaba en su cuerpo los **5**
+archivos que su `ok` publica. Medido con el recuento honesto, eran **6**: faltaba
+`puerta-del-alta.mjs`, **55 líneas**, el cambio más grande del viaje después de
+`marcas-en-disco.mjs`. El cuerpo es lo único que Sergio Urcullo lee para decidir, así que estaba
+a punto de firmar a ciegas el archivo más pesado del lote.
+
+**Por qué se desincronizó — y es lo reutilizable.** El pedido no nació mal: nació **correcto** a
+`851dac0d` (02:36 UTC) y se rompió solo 1 h 17 min después, cuando `1ca04177` y `4ca1a99a`
+entraron a `main` (03:53 UTC) y uno de los dos tocó un archivo de la carpeta del bot. O sea:
+
+> **Un pedido de deploy caduca con el siguiente merge, incluso con un merge de tu propio carril.**
+> Es la regla «no mergear más después de crear el pedido» vista desde el otro lado: el que mergea
+> no se acuerda de que hay un pedido abierto, así que el pedido tiene que **volver a medirse**, no
+> confiar en que nadie tocó nada.
+
+**Lo bueno: el gate ya existía y funcionó.** No lo encontré leyendo, lo encontró el instrumento —
+y esto es el único control del repo que mira el **cuerpo** y no el recuento:
+
+```
+$ npm run pedido:entregado
+ROJO t_94b9955d: su CUERPO no nombra 1 archivo(s) que su ok publica.
+    puerta-del-alta.mjs
+```
+
+Y trae su propia cura, que es la que se aplicó: **rehacer el pedido con el cuerpo derivado del
+`--dry-run` y archivar el viejo en la misma vuelta**. `comment` no lo limpia: el gate lee el
+cuerpo, y `edit` del tablero no cambia el cuerpo.
+
+**Qué se hizo.** Pedido nuevo `t_c2fab948`, cuerpo derivado de
+`bash /opt/onia/bot/_deploy/publicar.sh --dry-run` (6 archivos, gates del bot 1404 pass / 0 fail),
+con el sexto descrito por lo que es para el negocio: *"herramienta NUESTRA de medición, no cambia
+ni una palabra de lo que el bot le dice al cliente"* — porque es verdad y porque un archivo sin
+explicar en una hoja de firma es una razón legítima para no firmar. `t_94b9955d` archivado en la
+misma vuelta (un `ok` sobre archivada ya no ejecuta: sale exit 3).
+
+**Verificado, las cuatro puntas:**
+
+| Qué | Cómo se miró | Resultado |
+|---|---|---|
+| El pedido nuevo quedó bloqueado de verdad | `list --status blocked \| grep t_c2fab948` (el status, no el `exit 0` de `block`) | ⊘ blocked |
+| El gate quedó verde | `npm run pedido:entregado` | `OK t_c2fab948 (bot): sigue VIGENTE — 6 archivo(s) sin publicar` |
+| El brazo ejecutor reconoce el pedido | `ONIA_DESPLEGAR_DRY=1 node /root/bin/onia-publicar-aprobado.mjs t_c2fab948` **en el VPS** | `{"desplegando":true,"destino":"bot","seco":true}` |
+| El seco no tocó producción | `/var/log/onia-deploy-aprobado.log` | `[dry-run] producción NO se toca.` |
+
+**Trampa de instrumento anotada al pasar:** `onia-publicar-aprobado.mjs` **existe** en
+nodo-casa y **no corre** ahí — muere con `spawnSync /usr/local/lib/hermes-agent/venv/bin/python
+ENOENT`, que es justo el archivo con el que se detecta «soy el VPS». Verificar el brazo ejecutor
+desde casa exige `onia-vps.sh bash -lc '...'`; el `ENOENT` no es el circuito roto.
+
+**Lo que NO se tocó, y por qué.** El chequeo de arranque pareció encontrar un segundo problema —
+`tail -400` del log vivo devolvió **246 copias** de la misma advertencia de `[knowledge:panel]`, o
+sea el ruido de T10 otra vez. Era **falso**: las últimas 25 líneas **crudas** del log no tienen ni
+una, y el `knowledge.mjs` vivo ya trae el dedup (`grep -c avisosDePanelYaDados` → 4). Las 5.032
+copias son **historia** de antes del deploy de T10, y el log no rota. El error fue mío y vale
+anotarlo: **`tail -N | sort | uniq -c` destruye el orden temporal**, que era la única información
+capaz de distinguir «pasa ahora» de «pasó una vez y quedó escrito». Para fechar una línea sin
+timestamp: `tail` crudo, nunca `sort`.
+
+---
+
 ## ✅ T10 — CERRADO el 2026-09-24 (commiteado, **NO desplegado**): el log del bot estaba ahogado por UNA línea repetida, y por eso la medición de este carril salía vacía teniendo los datos adentro
 ✅ YA DESPLEGADO (medido 2026-09-26: `npm run bot:vivo-al-dia` — el motor vivo ya corre este archivo).
 
@@ -570,6 +685,19 @@ un grep sirve para descartar y nunca para confirmar), gates completos donde haya
 node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
 ```
 
+🔴 **Y la medición de arranque del carril lleva UN comando más desde el 2026-09-26** — el par
+web↔bot, que es la primera cosa que ve un lead y la que nadie podía ver:
+
+```bash
+node hermes-content/deploy/vps-ops/bot/campanas-vivas.mjs   # 0 par sano · 1 frase viva muerta · 2 NO MEDIDO
+```
+
+Va **acá y no en un alias** porque un alias suelto no lo corre nadie (ya pasó en este repo). Su
+`exit 1` significa que alguien que aprieta un botón de WhatsApp de la web recibe el saludo
+genérico en vez de la respuesta que califica; su `exit 2` significa **NO MEDIDO**, que no es
+estar bien. Hoy sale **1** y se pone verde cuando el `ok` de `t_c2fab948` publique el bot: es
+también el acuse de ese deploy, sin tener que creerle a nadie.
+
 **Y nada se declara "listo para desplegar" sin que el deploy lo alcance:**
 
 ```bash
@@ -776,6 +904,151 @@ Las 3 que quedan (3492, 3623, 7674) son del motor leídas a mano pero **no tiene
 mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se derivan con el comando.
 
 ## Ahora
+
+- [x] 🔴 **CERRADO el 2026-09-26 03:13-04:05 La Paz (es un MEDIDOR, no toca el motor: no necesita
+      deploy): los dos botones de agenda de `onia.com.bo/contacto` están MUERTOS en producción
+      ahora mismo, y no había ni un instrumento que pudiera verlo — el gate del par daba 17/17.**
+
+      **El par que se rompió.** Una campaña es un par: la web le escribe la frase al lead
+      (`wa.me?text=…`, la manda sin tipear) y el bot la reconoce **exacta** y contesta con la
+      respuesta de esa campaña — la que pide rubro y cuánta gente trabaja, o sea **la que
+      califica**. Medido hoy de los dos lados vivos:
+
+      | lado | qué dice hoy |
+      |---|---|
+      | `onia.com.bo/contacto` (vivo, `curl`) | "…la consulta comercial de **30** minutos." · "…la demo de **30** minutos con mi caso." |
+      | bot que CORRE (`/tmp/onia-bot/knowledge.json` en `onia-center`, versión `2026-09-24.1`; el md5 se re-deriva, no se cita: `docker exec onia-center md5sum /tmp/onia-bot/knowledge.json`) | "…de **20** minutos." · "…de **45** minutos." |
+
+      O sea: **2 de las 3 frases que la web viva manda, el bot vivo no las escucha.** Quien
+      aprieta cualquiera de los dos botones de agenda recibe el saludo genérico en vez de la
+      pregunta que califica — el clic más caro del sitio contestado como un "hola" suelto.
+
+      ⚠️ **El arreglo del contenido ya está pedido y NO se duplicó.** Es `t_c2fab948`
+      (`DESPLEGAR: bot`, blocked esperando el `ok` de Sergio Urcullo), y su cuerpo ya describe
+      exactamente esto en su punto 3, con los 6 archivos. Verificado con `git show
+      origin/main:…` vs `/opt` vs el contenedor: `origin/main` está **adelante** en los tres
+      archivos del motor (`followup-run.mjs`, `marcas-en-disco.mjs`, `puerta-del-alta.mjs`) y en
+      el knowledge, así que el deploy **arregla**, no revierte. Lo que faltaba no era el
+      arreglo: era **poder ver la deriva sin que alguien la encuentre a mano**.
+
+      **Por qué ningún gate lo veía, y por qué va a volver a pasar.** `campanas-web.test.mjs`
+      valida el par **repo contra repo** (el literal de `site.ts` contra `knowledge.onia.json`) y
+      lo dice él mismo en su línea 35: la comparación viva "necesita el VPS y por eso no entra en
+      la cadena". Pero las dos mitades del par **no se publican juntas, y nunca lo van a hacer**:
+      la web se publica sola cada 3 h (`/root/bin/onia-publicar-solo.sh` del VPS, cron `50 */3`) y el
+      `knowledge.onia.json` del bot está en `FIRMA_HUMANA` porque es fuente de precio, así que su
+      deploy **se frena esperando la firma**. «Web adelante, bot atrás» no es un accidente: es el
+      estado **normal** de este sistema.
+
+      **Lo que se hizo:** `hermes-content/deploy/vps-ops/bot/campanas-vivas.mjs` — compara las
+      frases de las **páginas vivas** contra los disparadores del **bot que corre**. Tri-estado
+      (`0` par sano · `1` frase viva que el bot no escucha · `2` NO MEDIDO). Detalles que lo
+      hacen no-decorativo:
+      · las rutas se **derivan del disco** (`(sitio)/**/page.tsx` que nombren una constante de
+        frase) — hoy dieron 8; una página nueva con botón entra sola, y un gate de mutación lo
+        sostiene;
+      · el lado vivo es el contenedor, **no `/opt`** (lo desplegado) ni el repo (la intención);
+      · pregunta si la fila publicada del panel trae `campanas`, porque `mergePanelKnowledge`
+        pisa **clave por clave** y entonces el archivo no se leería (hoy `v5 publicado` → `f`);
+      · una frase que ninguna campaña empareja **no** pone rojo: no es deriva, es un mensaje
+        cualquiera.
+
+      **Y un defecto propio, encontrado mirando la salida y corregido antes de commitear:** la
+      primera versión rotulaba las frases que sólo tiene el bot como *"producción quedó ADELANTE,
+      un deploy la borraría"* — al revés del remedio, porque acá son la versión **vieja** de las
+      frases que el repo ya cambió y el deploy las reemplaza. Ahora distingue los dos casos por
+      si hay frases rotas, y el gate prohíbe la frase "la borraría" cuando las hay. Es la misma
+      familia del arreglo de ayer (un instrumento que mandaba al remedio opuesto).
+
+      **Pruebas.** `node campanas-vivas.mjs --self-check` → `ok`. `node --test
+      campanas-vivas.test.mjs` → **9/9**. Cadena entera del bot → **1406/1406, 0 fail**. Guarda
+      de derivación probada por **mutación** (le metí `["/contacto"]` a mano → rojo por el motivo
+      correcto; restaurado → verde). Y la medición viva, que es la que importa:
+
+      ```
+      $ node hermes-content/deploy/vps-ops/bot/campanas-vivas.mjs
+      rutas vivas miradas (8): / /chatbot /contacto /empezar /facturacion /guia-facturacion /nosotros /precios
+        ok         "…Quiero saber si me sirve para mi negocio."
+        ROTA       "…Quiero agendar la consulta comercial de 30 minutos."
+        ROTA       "…Quiero agendar la demo de 30 minutos con mi caso."
+      VEREDICTO: ROTO — 2 de 3 frase(s) que la web viva manda no las escucha el bot vivo
+      ```
+
+      🔴 **Este medidor entra en la medición de arranque del carril** (abajo, "Cómo se mide"): un
+      alias suelto no lo corre nadie. Se pone verde solo cuando el `ok` de `t_c2fab948` publique
+      el bot — o sea que además **sirve de acuse del deploy**, sin tener que creerle a nadie.
+
+      **Regalo del barrido, anotado y no ejecutado (no es de este carril):** 6 de las 9 campañas
+      que el repo empareja **ninguna ruta viva las manda hoy**, entre ellas `WA_URL`
+      ("Hola, quiero conocer Onia"), que se declara a sí misma "el CTA general de toda la
+      página". Coincide con lo que ya dice la nota de `web-factory` al final de "Después" — la
+      diferencia es que ahora está **medido contra el sitio vivo**, no por `grep`.
+
+- [x] 🔴 **CERRADO el 2026-09-26 02:13-03:05 La Paz (commiteado, **NO desplegado**; toca el MOTOR):
+      cada prospecto que acepta un horario pagaba 5,0 s muertos en el turno donde acepta — el
+      único del embudo que produce plata — contra un Cal.com que se decidió que no exista.**
+
+      **Medido, no supuesto.** El turno de hoy 05:49 UTC de la conv 49 dejó en
+      `/tmp/onia-bot-webhook.log`: `etapa=esperando_horario->demo_agendada enviados=1/1
+      aviso=calcom: la reserva no salio: no contesto en 5000ms (timeout)`. Reproducido desde
+      dentro del contenedor, que es donde corre el bot:
+
+          docker exec onia-center node -e 'const t0=Date.now(); const c=new AbortController();
+            setTimeout(()=>c.abort(),5000);
+            fetch("http://calcom:3000/api/v1/bookings",{signal:c.signal})
+              .catch(e=>console.log(e.name, Date.now()-t0+"ms"))'
+          → AbortError 5005ms
+
+      El tope de 5 s **no es el defecto: es la baranda** (existe para que nadie espere para
+      siempre). El defecto es que el 100% del tráfico la agota y **nadie lo recordaba**: la demo
+      número 40 pagaba los mismos 5 s que la primera. `CALCOM_BASE_URL=http://calcom:3000` está
+      declarado en el proceso vivo y no existe ningún contenedor `calcom` (`docker ps -a` no lo
+      lista ni parado; desde `onia-center` el hostname ni resuelve), así que el fetch **no falla
+      rápido con ENOTFOUND** —el DNS de Docker no contesta NXDOMAIN por ese nombre— sino que se
+      cuelga el tope entero.
+
+      **Arreglo:** `calcom-booking.mjs` recuerda el destino caído por `DESTINO_CAIDO_MS` (10 min)
+      y devuelve `reason: "destino_caido"` sin salir a la red. Lo que **no** cambia: el prospecto
+      recibe la MISMA salvedad honesta (`cierreDeReservaFallida` da el mismo texto para
+      `destino_caido` que para `error`, aserido en el test) y Sergio Urcullo **no** recibe un aviso
+      extra (`avisoDeReservaFallida` sólo desdice con `horario_tomado`) — correr sin calendario es
+      la opción (c) ya decidida el 2026-09-03, y un aviso por demo sería ruido.
+
+      **La distinción que importa es QUIÉN falló.** Sólo cuenta como destino caído lo que pasa
+      ANTES de que el servidor conteste (timeout, error de red). Un 409 o un 500 prueban que
+      Cal.com está VIVO, y cerrar el destino ahí perdería reservas buenas — peor que el gasto que
+      esto evita. Los dos casos están gateados. Y **se cura solo**: pasada la ventana se reintenta
+      y una reserva buena borra la memoria, así que el día que Cal.com exista nadie tiene que
+      acordarse de reiniciar el bot.
+
+      **Validado por mutación**, no sólo en verde: desactivando el corte (`if (false)`), los dos
+      casos del breaker salen ROJOS por su motivo propio —*«el destino ya se sabe caído: la
+      segunda demo no sale a la red»* y *«dentro de la ventana no se reintenta»*— sin colgarse y
+      sin arrastrar vecinos. `npm run test:bot` → **1409/1409**.
+
+      ⚠️ **Lo que se aprendió escribiéndolo, y es la parte reusable:** el destino caído es estado
+      del MÓDULO (en producción es una propiedad del proceso, no de un turno), y eso se lo pasa un
+      test al siguiente. Al agregarlo, los **cinco** casos que venían después de *«CAL.COM
+      CAIDO»* se pusieron rojos de golpe y **ninguno tenía que ver con esto**. Se limpia con un
+      `beforeEach(olvidarDestinoCaido)` único, no caso por caso: así el que agregue el sexto no
+      tiene que enterarse — que es exactamente cómo esos cinco se habrían quedado rojos.
+
+      ⚠️ **`calendar_event_id` NO mide «demo agendada», y este carril lo venía arrastrando en su
+      propia línea `OBJETIVO:`.** Cal.com no existe **por decisión** (opción (c), tablero
+      `t_b18ca430`: *Telegram ya, calendario después*), así que esa columna seguiría en cero
+      aunque los cinco candidatos se aceptaran — `config.mjs` ya lo dice: *«citarla como
+      consecuencia manda a la próxima vuelta a buscar un bug decidido»*. La medida correcta es el
+      instrumento que el carril ya tiene: `node scripts/demo_agendada_real.mjs`, que acepta la
+      reserva **o el aviso** como prueba. Corrido hoy: **`LAS 3 DEMOS PROMETIDAS LLEGARON A
+      SERGIO — cada una tiene su reserva o su aviso`, exit 0.** La próxima vuelta mide con eso y
+      no con un `select count(calendar_event_id)`.
+
+      ✅ **De paso, el 🔴 hermano quedó confirmado CERRADO en producción, contra el mensaje real y
+      no contra el código:** el bot NO dice *«Listo, agendado»* pelado. El mensaje 1908 de la conv
+      49 (535 caracteres, leído entero) termina en *«(Estoy confirmando ese horario con Sergio; si
+      hubiera un cruce te aviso enseguida.)»*. ⚠️ Y casi lo reporté al revés: mi primera consulta
+      fue `left(content,200)` y el cierre honesto se pega **al final**, así que el truncado
+      fabricó la acusación. Un `left()` es un `grep`: sirve para descartar, nunca para confirmar.
 
 - [x] 🔴 **CERRADO el 2026-09-26 (commiteado; son INSTRUMENTOS, no tocan el motor ni el producto):
       `puerta:alta` —el ÚNICO instrumento de la mitad «no promete lo que el producto no
@@ -2176,8 +2449,9 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
   `slotsElegibles` · volver `pending` fijo—: las dos en rojo, base restaurada en verde.
   Suite del bot completa: **1383/1383**.
 
-- [x] 🔴 **CERRADO el 2026-09-24 (commiteado, NO desplegado): las 9 campañas estaban en un
-      archivo que NINGÚN deploy copiaba. Ya viven en el que se publica solo.**
+- [x] 🔴 **CERRADO el 2026-09-24 y VIVO EN PRODUCCIÓN desde ese día 09:44 (medido el 2026-09-26,
+      ver el cierre del ítem): las 9 campañas estaban en un archivo que NINGÚN deploy copiaba.
+      Ya viven en el que se publica solo.**
 
       **La causa, que no era la que decía este ítem.** Había **dos** documentos de conocimiento
       hermanos en el repo, y sólo uno viaja:
@@ -2225,14 +2499,28 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
       · batería completa del bot **1355/1355**;
       · `campanas-vivas` contra `onia.com.bo` **en vivo**: *7 frases vivas, 7 con campaña*.
 
-      ⚠️ **NO está vivo todavía, y esto no se cuenta como cerrado para el cliente.** Falta que
-      corra el deploy del bot (`DESPLEGAR: bot`, con el ok de Sergio Urcullo — no lo hace este
-      carril). Se verifica así, en el motor que CORRE, no en el host:
-      `docker exec onia-center grep -c campanas /tmp/onia-bot/knowledge.json` → hoy **0**, tiene
-      que dar **≥1**.
+      ✅ **VIVO para el cliente. Medido el 2026-09-26 01:35 La Paz, no heredado.** El ok de
+      Sergio Urcullo llegó (tarea `t_fca27a62`, hoy `archived`) y el deploy corrió el 2026-09-24
+      09:44. Las tres medidas, en el motor que CORRE y no en el host:
+      · el comando que este ítem dejó escrito — `docker exec onia-center grep -c campanas
+        /tmp/onia-bot/knowledge.json` → **1** (pedía ≥1);
+      · el archivo instalado es la versión que escribió este arreglo: **9 campañas, v
+        `2026-09-24.1`**;
+      · y el **camino vivo**, que es lo único que prueba que el motor las CARGA:
+        `buildConfig({inbox_id:4}).campanas` → **9**, y `campanaExacta` matchea las frases que
+        `onia.com.bo` manda por `wa.me` (probadas *"quiero saber si me sirve para mi negocio"*,
+        *"agendar la demo"* y la del configurador de webs).
 
-- [x] 🟡 **CERRADO el 2026-09-24 (commiteado, NO publicado — ver el ítem de arriba): al lead que
-      armó su web entera el bot le contestaba los precios del SISTEMA.**
+      ⚠️ **Un archivo con las campañas NO prueba que el motor las use, y este ítem casi se
+      audita mal por eso.** La primera medición del 26-sep preguntó por `ensureKnowledge()`, que
+      devuelve el DOCUMENTO de conocimiento, y contestó `campanas: AUSENTE` — un rojo falso que
+      daba por muerto algo sano. `campanas` no vive en ese documento: `withKnowledge` la convierte
+      en un **override de config** (`knowledge.mjs:1408`), así que la pregunta correcta es a la
+      config que arma producción (`buildConfig`), no al documento. Un instrumento que mide la capa
+      de al lado da un veredicto coherente y equivocado.
+
+- [x] 🟡 **CERRADO el 2026-09-24 y VIVO EN PRODUCCIÓN (medido el 2026-09-26 — ver el ítem de
+      arriba): al lead que armó su web entera el bot le contestaba los precios del SISTEMA.**
 
       **Reproducido antes de tocar nada**, con el mensaje real que arma
       `web-factory/apps/onia-platform/src/components/web-configurator/WebConfigurator.tsx:195`:
@@ -2277,8 +2565,10 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
 
       **Verde:** `campanas-web.test.mjs` 17/17 · toda la batería del bot **1330/1330**.
 
-      ⚠️ **Lo que sigue sin ser verdad para el cliente:** nada de esto llega hasta que las
-      campañas se publiquen (ítem de arriba). Y aun publicado, el lead recibe **primero** `M0`
+      ✅ **Ya es verdad para el cliente.** Las campañas se publicaron el 2026-09-24 09:44 (ítem de
+      arriba) y esta campaña se probó en el motor vivo el 2026-09-26: `campanaExacta` matchea
+      *"Hola, vengo del configurador de webs de ONIA"* y responde acusando recibo del pedido de
+      web, no los precios del sistema. Y el lead recibe **primero** `M0`
       —la bienvenida con el pitch del sistema y los horarios de demo— y **después** la respuesta
       de su web: es el diseño de `composeWithFunnel` (M0 es lo que declara al bot como bot y lo
       que dispara `lead_upsert`), no un olvido. Si se quiere un M0 propio para el lead de web,

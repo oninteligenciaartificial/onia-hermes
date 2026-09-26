@@ -5864,6 +5864,37 @@ y sin operar. Acá se opera, con verificación por ítem.
       que el de Gmail. Así que este bloqueo es **real hasta que Sergio Urcullo cargue la
       tarjeta**; ningún carril lo puede cerrar por su cuenta ni verificar después.
 
+      ✅ **Re-medido el 2026-09-26 y sigue siendo cierto, con los DOS conectores:**
+      `devtools_app_list` **y** `ads_get_ad_accounts` (que es otro servidor, no el mismo)
+      devuelven los dos el mismo *"you haven't granted it yet"*. Figurar en la lista de
+      herramientas no es estar autorizado — cuesta dos llamadas comprobarlo y evita heredar
+      un "no se puede" que quizá ya venció.
+
+      ✅ **La mitad que NO dependía de Sergio Urcullo está HECHA (2026-09-26, `71cd8fa9` en
+      `onia-platform`): «anotarlo en el onboarding del canal WhatsApp».** El paréntesis de
+      arriba pedía eso y nadie lo había hecho: `CanalWhatsappCard` avisaba las funciones que
+      Meta apaga durante la coexistencia y **callaba el cobro**, así que el dueño se enteraba
+      el día que Meta dejaba de entregarle. Ahora el aviso va en el mismo bloque, arriba del
+      botón de conectar, con la fecha escrita, el tier gratis y qué tiene que hacer.
+      Dato anclado a la fuente con respaldo en `lib/chatbot/meta-cobra-el-servicio.ts` (no un
+      literal en la pantalla) y monto por `formatBs`. Gate:
+      `CanalWhatsappCard.meta-cobra.render.test.ts`, visto en ROJO por el motivo correcto
+      antes del arreglo. `tsc` 0 · `eslint` 0 · `vitest` 6.815 verdes.
+      **La tarjeta está ENCENDIDA en producción** (`META_APP_ID` y `META_CONFIG_ID` puestos en
+      el contenedor `onia-platform`), o sea que el gate no vigila una pantalla apagada.
+
+      ⚠️ **Commiteado, NO publicado en ningún remoto — y esto se pierde si nadie lo entrega.**
+      `onia-platform` no se puede pushear desde nodo-casa (remoto en
+      `DESHABILITADO-NODO-DE-DESARROLLO`). El camino es `format-patch` → VPS → `git am` →
+      push, **pero el gemelo `/root/loops/onia-platform` del VPS está hoy con 392 archivos
+      sucios y 39 commits atrás de `origin/master`**: aplicar el patch ahí publicaría un árbol
+      que nadie midió, encima de trabajo en vuelo que no es de este carril. El commit vive en
+      `/root/loops/onia-platform-chatbot` (rama `claude/chatbots-platform-review-0d1d09`).
+      **Lo que falta es limpiar/decidir ese gemelo, no rehacer el arreglo.**
+
+      Lo que sigue bloqueado es SÓLO la tarjeta en el billing de Meta, y no la puede cargar
+      ningún carril.
+
 - [ ] 🔴 **Nadie probó que el correo de confirmación LLEGUE a una bandeja — y sin ese clic el
       alta nueva muere** (`app/auth/confirm/route.ts` · `scripts/alta_correo_confirma.mjs`)**.**
       Medido el 2026-09-10 con el circuito entero: GoTrue manda por Postfix
