@@ -122,13 +122,27 @@ export function lineaDeMarca(lineaOriginal, { vivos, desplegado, fecha }) {
  *
  * Se recortan los tramos entre comillas —`*"…"*`, `"…"`, `«…»`— y se juzga sólo lo que queda,
  * que es lo que la línea dice POR SÍ MISMA.
+ *
+ * ⚠️ **Y los tramos entre backticks, agregado el 2026-09-26.** Faltaba justo la forma en que
+ * esta cola cita un RÓTULO: `chatbot.md:1811` escribe `` `## ✅ T10 — … (**NO desplegado**)` ``
+ * como la evidencia de por qué se arregló este gate el 25-sep, y el gate la acusaba de pedir un
+ * deploy. Eso no es un conteo de más y nada más: el comando imprime «Para aplicarlo: --corregir»,
+ * y aplicarlo INYECTA un «✅ YA DESPLEGADO (medido …)» debajo de la cita, borrando la evidencia
+ * de su propio arreglo y haciendo leer el rótulo viejo de T10 como si hubiera pasado el juicio.
+ * Es el mismo criterio que ya absolvía a `"…"` y `«…»`, sólo que en la notación del markdown.
+ *
+ * Sólo pares COMPLETOS en la misma línea (`[^`]*`, como `sinTachado`): un backtick suelto no
+ * recorta nada. Y recortar código NUNCA absuelve la afirmación —una línea que dice «NO
+ * desplegado» y nombra `/opt/onia/bot` entre backticks sigue cayendo—, así que el arreglo no
+ * puede fallar ABIERTO; eso lo fija el segundo lote del `--self-check`.
  */
 export function sinCitas(linea) {
   return String(linea ?? "")
     .replace(/\*"[^"]*"\*/g, " ")
     .replace(/«[^»]*»/g, " ")
     .replace(/"[^"]*"/g, " ")
-    .replace(/“[^”]*”/g, " ");
+    .replace(/“[^”]*”/g, " ")
+    .replace(/`[^`]*`/g, " ");
 }
 
 /**
@@ -692,12 +706,24 @@ function selfCheck() {
     '⚠️ Cuatro líneas de este mismo ítem decían *"Commiteado, NO desplegado"* sobre código vivo',
     'esta línea daba por faltantes. Decía *"COMMITEADO, NO DESPLEGADO, y NO se miró"*',
     "la cola decía «falta mergear y desplegar» y hacía tres días que estaba vivo",
+    // 2026-09-26: la cita del RÓTULO viejo se escribe entre backticks, no entre comillas —
+    // `chatbot.md:1811` cita `## ✅ T10 — … (**NO desplegado**)` como la evidencia de por qué
+    // se arregló este gate el 25-sep. Acusarla manda a corregir la historia que lo explica.
+    "`## ✅ T10 — … (commiteado, **NO desplegado**)` y su hermano T9 nunca entraron al juicio.",
+    "el gate acusaba `~~falta el deploy~~` y `Commiteado, NO desplegado` por igual",
   ]) ok(`no acusa a la cita: ${frase.slice(0, 38)}`, !PIDE_DEPLOY.test(sinCitas(frase)));
   // …pero una línea que lo afirma DE VERDAD sigue cayendo, aunque tenga comillas en otra parte.
   ok(
     "acusa igual si la cita es de otra cosa",
     PIDE_DEPLOY.test(sinCitas('El pedido se llama "Publicar app.onia" — **Commiteado, NO desplegado**.')),
   );
+  // …y aunque el backtick envuelva OTRA cosa: recortar código no puede absolver la afirmación.
+  // Este es el par del caso de arriba y lo que evita que el arreglo falle ABIERTO.
+  for (const frase of [
+    "⚠️ **Commiteado, NO desplegado.** Hasta que `/opt/onia/bot` reciba este código, la promesa es falsa.",
+    "**NO desplegado**: falta el merge a `master` y el swap del contenedor.",
+    "`followup-run.mjs` y `marcas-en-disco.mjs` siguen sin desplegar",
+  ]) ok(`acusa igual con backtick de otra cosa: ${frase.slice(0, 32)}`, PIDE_DEPLOY.test(sinCitas(frase)));
 
   // Extracción: el sha vive en la cabecera del ítem, la frase dos líneas más abajo.
   const md = [

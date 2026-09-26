@@ -401,7 +401,7 @@ sigue cayendo a `M_AUDIO_FAIL` para todo prospecto hasta que se publique el bot.
 
 ---
 
-## ✅ T6 — CERRADO el 2026-09-19 (commiteado, **NO desplegado**): el catálogo vende "entiende audios" y el bot no entendía ninguno
+## ✅ T6 — CERRADO el 2026-09-19 · **DESPLEGADO y VIVO** (medido el 2026-09-26, ver el cierre del ítem): el catálogo vendía "entiende audios" y el bot no entendía ninguno
 
 **Lo que veía el prospecto.** `ONIA_CATALOGO_DE_VENTA.md:153` —la fuente única de QUÉ se
 vende— marca el chatbot ✅ **vivo** prometiendo que *"entiende FOTOS y audios"*. La foto sí
@@ -448,11 +448,35 @@ respaldo y tirar su resultado), reintentar el silencio, aceptar un proveedor des
 sacar el header `Authorization`, declarar respaldo sin key, no imprimir `aviso=`, imprimirlo
 vacío, repetirlo en la rama MUDA y ponerlo en todo turno sano.
 
-⚠️ **Commiteado, NO desplegado.** Hasta que `/opt/onia/bot` reciba este código, la promesa del
+~~⚠️ **Commiteado, NO desplegado.** Hasta que `/opt/onia/bot` reciba este código, la promesa del
 catálogo sigue siendo falsa en producción y `npm run destinos:vivos` sigue diciendo `ROTA` —
 y ese veredicto es CORRECTO mientras tanto: la exención cuelga del deploy, no del repo.
 Se publica con `DESPLEGAR: bot` (el publicador automático lo saca solo si el lote no toca una
-fuente de precio).
+fuente de precio).~~
+
+✅ **YA SE DESPLEGÓ — medido el 2026-09-26, y por el criterio que este ítem mismo dejó escrito.**
+Las tres medidas, en vivo y no heredadas:
+
+```
+docker exec onia-center grep -c FALLBACK_PROVIDER /tmp/onia-bot/audio-transcribe.mjs   → 3   (era 0)
+docker exec onia-center grep -c 'aviso=' /tmp/onia-bot/webhook-server.mjs              → 1
+npm run destinos:vivos  → ok — "la sirve el RESPALDO https://api.openai.com/v1, que contesta:
+                                el prospecto SI recibe la capacidad"
+```
+
+El ítem había fijado `destinos:vivos` diciendo `ROTA` como la señal de que faltaba el deploy;
+hoy dice `ok` y el VEREDICTO global es `ok — los 5 destino(s) externos del turno contestan`.
+O sea que **la promesa del catálogo —*"entiende FOTOS y audios"*— es verdadera en producción**,
+y la nota de voz del prospecto se transcribe por el respaldo.
+
+⚠️ **Por qué esto valía corregirse y no era cosmético.** El rótulo decía que el catálogo le
+miente al cliente. Un ítem `✅ CERRADO` cuyo encabezado afirma «NO desplegado» se lee como
+presente, así que la vuelta siguiente hereda como pendiente el deploy más caro de este carril
+—el del motor— y puede volver a pedirle la firma a Sergio Urcullo por algo que ya está vivo.
+Ningún gate lo agarró: `deploy:ya-ocurrio` lo clasifica **NO MEDIDO** («no se pudo ubicar su
+frontera»), que es honesto pero mudo, y un `2` permanente por el mismo sujeto se saltea igual
+que un rojo ambiental. La medición que sí concluye es la del motor
+(`npm run bot:vivo-al-dia`, que nombra los 4 archivos que de verdad no viajaron).
 
 ---
 
@@ -1000,6 +1024,128 @@ Las 3 que quedan (3492, 3623, 7674) son del motor leídas a mano pero **no tiene
 mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se derivan con el comando.
 
 ## Ahora
+
+- [x] 🔴 **CERRADO el 2026-09-26 10:43-11:05 La Paz — era un FANTASMA en su causa, y la causa
+      escrita mandaba a construir de nuevo algo que ya existe. El síntoma sí es real: el aviso de
+      la colgada 58 no salió. Pero NO es `followup_step`, y el deploy que ya espera firma SÍ la
+      rescata.** Re-medido contra producción, no heredado del ítem.
+
+      🔴 **Las dos afirmaciones centrales del ítem son falsas, y cada una llevaba a trabajo de más:**
+
+      **1. «El barrido de colgadas filtra `followup_step=eq.0`» — ya no, desde el 24-sep.** El
+      reparto en `persistence.mjs:295` es `FILTROS_COLGADAS = [enEtapas(ETAPAS_QUE_SE_PIERDEN),
+      ...FILTROS_FOLLOWUP_BASE]`: ni una condición de `followup_step`. Lo arregló `813c5fa3`, lo
+      protege `colgada-que-ya-recibio-followup-sigue-perdida.test.mjs` (6/6 en verde) y **producción
+      también lo tiene** (`docker exec onia-center grep -n "FILTROS_COLGADAS = " /tmp/onia-bot/persistence.mjs`
+      → línea 295, idéntica). El `LISTO` pedía construir ese criterio propio: **ya estaba construido**.
+
+      Derivado del módulo y corrido contra la base — la 58 sale **primera**, con `step=1`:
+      ```
+      $ node -e 'import("./persistence.mjs").then(m=>console.log(m.FILTROS_COLGADAS))'
+      ["bot_stage=in.(esperando_calificacion,esperando_horario,handoff_humano)",
+       "human_took_over=is.false","opt_out_at=is.null"]
+      → chatwoot:58 | esperando_horario | step=1 | last_inbound=2026-09-17 22:50:55+00
+      → chatwoot:990777 | esperando_horario | step=1 | ...        (23 filas, las dos «quemadas» adentro)
+      ```
+
+      **2. «Seguirán invisibles incluso después de desplegar» — al revés: el deploy las rescata.**
+      El barrido las ELIGE cada hora desde el 25-sep 19:17, y está en su propio log:
+      ```
+      $ tail -1 /var/log/onia-bot-followup.log
+      {"notes":["colgadas_sin_rescate"],"colgadas":{"total":23,"quienes":[
+        {"conversationKey":"chatwoot:58","silentHours":207,"contacto":"+59175755019","inboxId":"5"}, …7],
+        "avisados":[]}}                                     ← las ve, no las avisa
+      ```
+
+      **La causa REAL del silencio, medida: la marca de idempotencia se puso antes de entregar.**
+      Las 7 marcas de `/var/lib/onia-colgada-avisado` (dentro del contenedor, no en el host) son de
+      **0 bytes** — cinco del 25-sep 19:00, dos del 19:17. Con el `marcas-en-disco.mjs` que corre
+      hoy, existir es haber avisado, así que el `EEXIST` de cada corrida las da por avisadas para
+      siempre y `avisados` queda vacío. Eso es exactamente el bug que el pedido de deploy ya
+      arregla, y su módulo nuevo distingue los dos casos por el CONTENIDO, no por el archivo:
+      `confirmar()` escribe el veredicto adentro, y `retomarSiQuedoEnVuelo()` retoma la marca
+      **vacía y más vieja que `MS_RESERVA_EN_VUELO` (10 min)**. Las 7 son vacías y de ayer.
+
+      **Producción corre el módulo viejo — por eso hoy no se reintenta, y por eso el deploy alcanza:**
+      ```
+      $ docker exec onia-center sh -c 'grep -c MS_RESERVA_EN_VUELO /tmp/onia-bot/marcas-en-disco.mjs'
+      0        (y retomarSiQuedoEnVuelo: 0 · "async confirmar": 0)
+      ```
+      Gate del caso, en verde: `colgada-reservada-sin-entregar-se-reintenta.test.mjs` (4/4), cuya
+      cabecera ya nombraba este mismo incidente — *«cinco marcas quedaron reservadas a las 19:00 y
+      sin entregar»*.
+
+      **Qué queda, y no es código:** el `ok` de Sergio Urcullo en **`t_76cdb5dc`**. Al desplegar, las
+      7 marcas vacías se retoman y el aviso de las colgadas sale, **la 58 incluida**. Se comentó ese
+      efecto en la tarea: el cuerpo describía cuatro ganancias y ésta era una quinta, no escrita.
+
+      ⚠️ **La lección del instrumento, que es por qué esto valía la vuelta.** El ítem concluyó
+      *«nadie supo que existía»* desde `grep -cE "\[aviso\].*conv=58"` → **0**. El grep es correcto y
+      la conclusión no: el aviso de colgadas es **agrupado** (`KIND_LEAD_FRIO`, "🥶 SE ENFRIÓ"), no
+      emite una línea `[aviso] sent conv=N` por sujeto. Buscar el formato del aviso hermano da cero
+      en un circuito sano y en uno roto por igual. La huella que sí distingue los dos casos es la
+      **marca en disco** y el campo `avisados` del log del barrido — ahí se ve que las elige y no
+      las manda. Un `grep` sirve para descartar, nunca para confirmar: acá confirmó de más.
+
+      **Lo de abajo es el diagnóstico ORIGINAL del 2026-09-26 10:13, y se conserva porque su primera
+      mitad —el circuito vivo— sigue siendo cierta y medida. La segunda mitad está refutada arriba.**
+
+      **El circuito está VIVO — eso se midió primero, y cambia el diagnóstico.** `node
+      scripts/sonda_widget.mjs` → **3/3** (conversación 49), y la fila quedó en
+      `demo_agendada` con `scheduled_at 2026-09-29 01:00+00`, escrita a las 14:17 UTC. El aviso
+      salió: `[aviso] sent conv=49 (demo_agendada): aviso enviado`. O sea que los **9 días sin
+      una sola conversación nueva** (`max(created_at)` de `onia_center.bot_conversations` =
+      2026-09-17 22:50) son **falta de tráfico, no circuito roto** — y eso NO es de este carril.
+
+      **Lo que sí es de este carril: el lead que se enfría muere en silencio.**
+      `docker exec onia-center grep -cE "\[aviso\].*conv=58" /tmp/onia-bot-webhook.log` → **0**.
+      La conversación 58 (inbox 5 = WhatsApp, lead real del 17-sep) escribió *"Hola, vengo de la
+      web de Onia. Quiero saber si me sirve para mi negocio."*, el bot contestó con el pitch y dos
+      horarios, la insistencia la reenganchó una vez el 18-sep, y **nadie más supo que existía**.
+      El aviso sólo se dispara con `demo_agendada` y `handoff_humano`; el tercer desenlace —el que
+      ni agenda ni escala— no emite nada.
+
+      **La capacidad existe y está ENTERA: no hay que construirla.** `followup-run.mjs` ya arma el
+      aviso de colgadas (`construirAvisoDeColgadas`, `KIND_LEAD_FRIO`) con idempotencia por
+      archivo-por-sujeto (`/var/lib/onia-colgada-avisado`, `colgada-<conv>-<desde>`), y su cron
+      corre (`17 * * * * /opt/onia/bot/followup-run.sh`).
+
+      **Por qué no alcanzó a la 58, medido en la base:**
+      ```
+      docker exec supabase-db psql -U postgres -tAc \
+        "select conversation_key, bot_stage, followup_step from onia_center.bot_conversations
+         where bot_stage='esperando_horario' order by created_at desc limit 6;"
+      → chatwoot:58|esperando_horario|1     ← quemado
+      ```
+      El barrido de colgadas filtra `followup_step=eq.0`. La insistencia le quemó el contador el
+      18-sep, así que la fila **desapareció del barrido** — es el mismo cupo compartido que ya está
+      descrito en `insistencia-run.mjs:222`. Producción corre el build del 18-sep, que todavía
+      cuelga la insistencia de ese contador (`docker exec onia-center grep -cE "reserveFollowUp"
+      /tmp/onia-bot/insistencia-run.mjs` → **2**).
+
+      ~~🔴 **Y acá está lo que NO cubre el arreglo del repo, que es por qué esto es un ítem y no una
+      línea del pedido de deploy.** El arreglo mueve la insistencia a su propio contador, así que
+      **las conversaciones futuras** quedan visibles. Pero las filas **ya quemadas** —`chatwoot:58`,
+      `chatwoot:990777`, `chatwoot:16`— tienen el `followup_step` gastado y **seguirán invisibles
+      para el barrido incluso después de desplegar**. El arreglo es hacia adelante; los leads ya
+      perdidos no los rescata nadie.~~
+      ⛔ **REFUTADO el 2026-09-26 10:43** — ver arriba: el barrido ya no mira `followup_step` (ni en
+      el repo ni en producción) y las 7 marcas vacías se retoman al desplegar. Las elige hoy mismo,
+      cada hora, con la 58 primera.
+
+      ~~**LISTO =** el barrido de colgadas elige a quién avisar por un criterio propio (la
+      idempotencia ya la dan las marcas de `/var/lib/onia-colgada-avisado`, no la necesita del
+      `followup_step`), con el test en rojo primero por el motivo correcto usando una fila con
+      `followup_step=1`; y la 58 aparece en su salida.~~ ⛔ **Ya estaba construido antes de escribirse
+      este LISTO** (`813c5fa3`, 24-sep). Escribir un test nuevo en rojo era imposible por el motivo
+      correcto: el motivo ya no existía. Ojo igual al cerrar: `handoff_humano` **no** es el
+      arreglo — `ESCALATED` silencia al bot y sólo se escribe con un humano real del otro lado.
+
+      **No se arregla tocando la base a mano.** Resetear `followup_step` en producción es una
+      escritura sobre datos vivos y deja el mismo agujero abierto para el próximo lead.
+
+      **Deploy:** el arreglo de la insistencia ya está commiteado y espera el `ok` de Sergio
+      Urcullo en **`t_76cdb5dc`** ("Publicar el bot…"). No se creó un pedido nuevo.
 
 - [x] 🔴 **CERRADO el 2026-09-26 09:13-09:50 La Paz (es un MEDIDOR, no toca el motor: no necesita
       deploy): el gate que decide si pedirle la FIRMA a Sergio Urcullo acusaba 8 archivos y 3 eran
@@ -3105,6 +3251,7 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
 - [x] 🔴 **CERRADO el 2026-09-19 14:15-15:05 La Paz (commiteado, NO desplegado) — el único camino
       que tiene el dueño para devolverle una conversación al bot funciona, y el log lo escribía
       igual que si no hubiera pasado nada.**
+      ✅ YA DESPLEGADO (medido 2026-09-26: `npm run bot:vivo-al-dia` — el motor vivo ya corre este archivo).
 
       **Cómo apareció.** No de la cola. Midiendo un eje que ningún gate mira: *el dueño contesta
       desde `/inbox` y el bot se calla — ¿existe el camino de vuelta?* La pantalla lo promete
@@ -8739,6 +8886,34 @@ cita: al cerrar una fila hay que barrer quién la nombra, no sólo tacharla.
       que ya existe, `ZZ QA Clinica Chatbot`, no uno nuevo. No cambia lo que hay que hacer
       (seguir sin borrar), sólo corrige el dato falso para que nadie busque una org que no
       está.
+
+- [ ] **Las líneas `[aviso]` del log del bot no llevan hora, y son las únicas que miden el
+      objetivo de este carril.** Cada línea `[onia-webhook]` trae su marca ISO; las de
+      `[aviso]` salen peladas: `[aviso] sent conv=49 (demo_agendada): aviso enviado`. El
+      objetivo del carril se mide como *«una línea de aviso en el log por cada `demo_agendada`
+      / `handoff_humano`»* — y eso no se puede contar por día ni por evento sobre líneas que
+      no se pueden fechar.
+
+      **Reproducción exacta (2026-09-26, costó cuatro pasos de esta vuelta):**
+
+      ```bash
+      /root/bin/onia-vps.sh bash -lc 'docker exec onia-center sh -c "grep \"^\\[aviso\\]\" /tmp/onia-bot-webhook.log | sort | uniq -c | sort -rn | head"'
+      ```
+
+      Devuelve `10 [aviso] sent conv=49 (demo_agendada): aviso enviado`. Leído así parece UN
+      evento disparando diez avisos a un canal que Sergio Urcullo ya tiene saturado. **No lo
+      es:** son diez corridas de la sonda a lo largo del día, un aviso cada una. Para saberlo
+      hubo que reconstruirlo por la POSICIÓN de las líneas (`grep -n` → 72198…72310, cada ~12
+      líneas, intercaladas con webhooks fechados). Un `grep` de números de línea no es una
+      hora, y el que no lo reconstruya reporta un duplicado que no existe.
+
+      ⚠️ **NO se arregló en esta vuelta a propósito, y el motivo importa:** toca un `.mjs` de
+      `hermes-content/deploy/vps-ops/bot/`, y hay un pedido de deploy del bot **vivo y
+      esperando la firma de Sergio Urcullo** (`t_76cdb5dc`, `DESPLEGAR: bot`) cuyo cuerpo le
+      enumera **13 archivos**. Un archivo más en `main` antes de su `ok` hace que firme 13 y
+      publique 14 — y ese pedido trae el arreglo de las campanas, que vale más que una hora en
+      un log. **Se hace después del `ok`, o rehaciendo el pedido y archivando el viejo en la
+      misma vuelta.**
 
 - [ ] **Botón "Cobrar con QR" dentro de la conversación** (pieza 5 del backlog v5). El
       circuito está completo en mock y verificado mirando (`/bcp/cobrar` + `/bcp/callback`,
