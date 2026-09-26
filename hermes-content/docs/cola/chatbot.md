@@ -1001,6 +1001,273 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
 
 ## Ahora
 
+- [x] 🔴 **CERRADO el 2026-09-26 09:13-09:50 La Paz (es un MEDIDOR, no toca el motor: no necesita
+      deploy): el gate que decide si pedirle la FIRMA a Sergio Urcullo acusaba 8 archivos y 3 eran
+      MEDIDORES de este mismo repo — el prospecto no toca ninguno.**
+
+      La medición de arranque salió `ROJO bot vivo — 8 archivo(s) del bot NO son los del repo —
+      **el prospecto habla con el código viejo**`, y entre los 7 que "esperan FIRMA" estaban
+      `campanas-vivas.mjs`, `destinos-vivos.mjs` y `puerta-del-alta.mjs`. Los tres son
+      instrumentos de este carril: se corren con su alias de `package.json`, desde el repo. El
+      deploy los copia sólo porque `*.mjs` los matchea en la lista blanca de `deploy-bot.sh`.
+
+      🔴 **El daño no es el conteo inflado, y por eso valía la vuelta.** El veredicto seguía rojo
+      por los 4 de verdad, así que el color no cambiaba hoy. Pero el día que los únicos
+      desfasados sean medidores, este gate pide **la firma de Sergio Urcullo** para publicar un
+      archivo que no cambia una coma de lo que el bot dice — y su atención es el recurso más
+      escaso del proyecto. Además `avisos-vivo.mjs` (el arreglo de la vuelta anterior) aparecía
+      como *«espera MERGE: ningún deploy lo trae»*, que es cierto y es irrelevante: es un medidor.
+
+      **Cómo se derivó quién es motor y quién medidor** (`alcanceDelRuntime`): grafo de imports
+      desde las entradas del runtime, y las entradas también se derivan — son los `.mjs` que
+      nombran los `.sh` del propio directorio (15: `webhook-server.mjs`, `run-turn.mjs`,
+      `followup-run.mjs`, `knowledge.mjs`, los barridos…). Alcance: 36 de 58.
+
+      ⚠️ **La mitad que impide que este arreglo sea un falso verde, que sería peor que el bug:**
+      la exención exige **prueba positiva** de ser medidor —fuera del grafo **Y** cableado como
+      alias de `package.json`— no la simple ausencia de prueba de ser motor. Con sólo la primera
+      mitad, `rescate-run.mjs` y `humo-plantillas.mjs` se eximían solos: nadie los invoca desde un
+      `.sh` de acá, pero pueden ser barridos llamados desde otro lado. **Siguen siendo sujetos.**
+      Falla cerrado a propósito, y hay un caso por cada uno.
+
+      Y los exentos **se nombran** en la salida, no se callan: excluir en silencio es el modo de
+      falla que este mismo archivo ya pagó con `knowledge.onia.json` —*no estaba rojo, estaba
+      invisible*—. Cada exención **se re-mide en cada corrida** (si alguien conecta un medidor al
+      runtime deja de estar exento sin que nadie edite nada), y un caso exige que la lista NO
+      quede vacía: si nadie queda exento, la derivación se rompió y el rojo vuelve a inflarse.
+
+      **Test en ROJO primero, por el motivo correcto** (3 fallas, exactamente los 3 medidores):
+
+      ```
+      $ npm run test:bot-vivo-al-dia
+      FALLA: un medidor del repo no le contesta a ningún prospecto: no es sujeto   (×3)
+      ```
+
+      **Verificado en vivo después** — el rojo pasó de 8 acusados a 4, y los 4 son motor:
+
+      ```
+      $ npm run bot:vivo-al-dia          # exit 1
+      ROJO bot vivo (onia-center:/tmp/onia-bot) — 60 archivo(s) mirado(s),
+        14 medidor(es) exento(s): corren desde el repo, ningún prospecto los toca
+      4 ya está(n) en origin/main — espera(n) FIRMA:
+        calcom-booking.mjs · followup-run.mjs · knowledge.onia.json · marcas-en-disco.mjs
+      ```
+
+      **Dato que el arreglo deja a la vista y antes no se veía:** ya NO hay nada "esperando
+      MERGE". Todo lo que el prospecto toca está en `origin/main` y espera sólo el `ok` del
+      pedido de deploy de `bot` (el id se DERIVA, no se copia). Gates vecinos en verde:
+      `test:deploy-alcanzable`, `test:deploy-ya-ocurrio`, `test:frontera-derivada`,
+      `test:cola-selfcheck`, `test:bloqueo-citado`.
+
+- [x] 🔴 **CERRADO el 2026-09-26 08:43-09:35 La Paz (es un MEDIDOR, no toca el motor: no necesita
+      deploy): las DOS MITADES de `avisos-vivo.mjs` juzgaban al REVÉS los mismos dos eventos, y la
+      que acusa ganaba el veredicto — un rojo que nadie podía curar.**
+
+      Los dos ítems anteriores estrecharon el rojo de diez a dos y dejaron **abierta la pregunta de
+      por qué se perdieron esos dos**. Contada en vivo, la respuesta es que **no se perdieron**, y la
+      contradicción estaba escrita en el mismo reporte, a dos renglones de distancia:
+
+      ```
+      eventos: ... salteados 2 (2 ya desmentido(s) por un envio posterior)     <- absueltos
+      motivos: 2 evento(s) en la base SIN un aviso que los nombre ...          <- `roto`
+      VEREDICTO: roto ... el circuito perdio eventos
+      ```
+
+      En el código las dos reglas viven **18 líneas aparte** dentro de `diagnosticar()`:
+      `salteadosVigentes` no cuenta un salteo global desmentido por un envío posterior, y
+      `conciliacion.sinAviso` sí lo cuenta. Gana el que acusa.
+
+      **Lo que pasó de verdad, leído del log vivo de producción** — se reproduce con
+      `docker exec onia-center sh -c "sed -n '50795,50860p' \$LOG"` (el log del bot vivo, dentro del
+      contenedor, no en el repo), mirando cada línea `[aviso]` junto a su vecina del webhook:
+
+      | conv | el motor escribió | la línea del aviso |
+      |---|---|---|
+      | 53 | `03:41:45.953 etapa=nuevo->handoff_humano` | `[aviso] skipped (cuota_agotada): aviso por Telegram apagado (ONIA_BOT_TG_AVISO)` |
+      | 55 | `06:38:24.196 etapa=nuevo->handoff_humano` | `[aviso] skipped (pregunta_precio_recepcion): … (ONIA_BOT_TG_AVISO)` |
+
+      O sea: el aviso **sí emitió una línea por cada uno** y no salió porque el flag global estaba
+      apagado ese día. Hoy está encendido (10 avisos enviados), así que **la causa está muerta** — y
+      el log es append-only: esas dos líneas **no se van nunca**. Ese rojo no lo puede curar nadie,
+      y un rojo permanente se lee como el ambiental de siempre. El día que el circuito se rompa de
+      verdad, el veredicto iba a ser **idéntico al de hoy**: el gate perdía justo la única cosa que
+      tiene que poder decir, *"se rompió HOY"*.
+
+      **El arreglo** usa **la misma regla** que ya usaba la otra mitad (`salteadosYaDesmentidos()`:
+      el último envío exitoso desmiente a todo salteo global anterior), a propósito — mientras las
+      dos mitades compartan la regla no pueden volver a contradecirse. Los eventos van a un balde
+      propio `causaMuerta`, **nombrados**, no desaparecidos: absolver no es callar, y una absolución
+      anónima no se puede auditar.
+
+      **Lo que sigue ROJO, que es lo que hace que el arreglo no sea un verde falso:**
+      - salteo global **sin** ningún envío posterior → el flag sigue apagado, y eso **se arregla**
+        encendiéndolo;
+      - salteo por causa **propia** de esa conversación → el envío de otra no lo cura;
+      - `failed`; y un evento **sin ninguna línea** → ahí sí el circuito lo perdió.
+      - `conAviso` se evalúa **antes** que `causaMuerta`: si la misma conv tuvo un salteo y después
+        su propio envío, manda el envío — al revés se absolvería a alguien que sí fue avisado.
+
+      **Medido, no supuesto** (exit real, no por un pipe): `node …/avisos-vivo.mjs` pasó de
+      `exit 1 · VEREDICTO: roto … el circuito perdio eventos` a `exit 0 · VEREDICTO: ok`, y ahora
+      imprime `SIN aviso 0 · sin aviso por causa ya muerta 2` y la línea
+      `2 sin aviso por una causa YA muerta (conv 53, conv 55): el flag global estaba apagado y
+      despues hubo envios — no los perdio el circuito`.
+
+      **5 tests nuevos, los 4 de conducta en ROJO por el motivo correcto antes del arreglo**
+      (`se acusa al circuito de perder un evento que el propio log da por desmentido — 1 !== 0`;
+      el primer rojo fue `salteadosYaDesmentidos is not defined`, que es un símbolo ausente y **no**
+      cuenta como rojo por conducta, así que se implementó la función pura primero y se volvió a
+      medir). 60/60 verde con el arreglo, `test:avisos-gate` ya en la cadena.
+      El test ancla el **log real del 4-sep** y afirma la invariante, no el número:
+      `eventos.salteados - eventos.salteadosVigentes === 2` ⇒ `conciliacion.sinAviso.length === 0`.
+
+      ⚠️ **La lección que sirve a otros carriles:** cuando un instrumento tiene dos mitades que
+      pueden juzgar al mismo sujeto, la pregunta no es si cada una está bien, sino **si comparten la
+      regla**. Acá una absolvía y la otra condenaba, las dos con su comentario explicando por qué
+      tenían razón, y el veredicto salía de la que acusa.
+
+- [x] 🔴 **CERRADO el 2026-09-26 08:13-09:05 La Paz (es un MEDIDOR, no toca el motor: no necesita
+      deploy): el rojo que el ítem de abajo destapó ayer estaba INFLADO 5×, y por las dos puntas
+      — acusaba al circuito por handoffs anteriores al código de aviso, y mandaba a "ir a buscar a
+      esas personas" cuando los diez sujetos eran nuestras propias sondas.** `c8d4c2c0`.
+
+      El arreglo de ayer fue el correcto: cruzar la base contra el log es lo único que distingue
+      *"nadie pidió"* de *"alguien pidió y se perdió"*. Pero eligió la **referencia equivocada para
+      el borde izquierdo** de la ventana, y el número que publicó no se sostiene.
+
+      **Las dos medidas, contra el log vivo:**
+
+      | qué | cuándo |
+      |---|---|
+      | primera marca del log (el borde que usaba) | `2026-08-28T22:22:51` |
+      | primera línea `[aviso]` del log (línea 50803) | `2026-09-04T03:41:45` |
+
+      Seis días de brecha. La pregunta que el conciliador contesta es *¿el circuito perdió este
+      evento?*, y para perderlo el código que escribe esa línea tiene que **haber estado
+      corriendo**. Ocho de los diez acusados vivían en esa brecha: son handoffs anteriores al aviso
+      mismo, **estructuralmente inavisables**. Y el rojo que producían no lo puede curar nadie — es
+      historia — así que se lee como el ambiental de siempre, y **el día que el circuito se rompa de
+      verdad el veredicto va a ser idéntico al de hoy**. Un rojo por el motivo equivocado es un
+      verde futuro.
+
+      **La segunda punta, medida en la base de Chatwoot:** los DIEZ sujetos son nuestros.
+      `39, 41, 44, 51, 53, 55` son del inbox 7 (el banco de pruebas) y `45, 46, 47` son inbox 4 con
+      contacto `Sonda QA`. El veredicto cerraba con *"ya se perdieron, hay que ir a buscar a esas
+      personas"* — mandaba a perseguir a sus propias sondas. `clasificarEventos` ya sabía hacer esa
+      distinción desde el 13-sep; la conciliación no la usaba porque sus sujetos salen de la base y
+      nunca pasan por el log.
+
+      **El veredicto vivo, antes y después:**
+
+      ```
+      antes:  en la base: 11 evento(s) dentro de la ventana del log (con aviso 1 · SIN aviso 10)
+              VEREDICTO: roto — 10 pedido(s) que NINGUN aviso nombra — ya se perdieron, hay que ir
+              a buscar a esas personas
+
+      después: en la base: 2 evento(s) dentro del alcance del aviso (con aviso 0 · SIN aviso 2)
+                 — desde 2026-09-04T03:41:45, que es cuando el aviso EMPEZO a emitir
+                 · 11 evento(s) anteriores a ese borde, fuera de alcance
+                 · de los perdidos: leads 0 · nuestros 2
+               VEREDICTO: roto — 2 pedido(s) que NINGUN aviso nombra, y NINGUNO es de un lead
+                 (2 del banco de pruebas) — el circuito perdio eventos, pero no hay a quien ir a buscar
+      ```
+
+      **Sigue en ROJO a propósito** (`exit 1`, medido — no por un pipe): el circuito perdió dos
+      eventos el 4-sep con el flag de Telegram apagado, y perder un evento es perder un evento.
+      Lo que cambió es que ya no acusa por lo que no pudo pasar ni manda a buscar a nadie que no
+      exista. **Ni un lead real quedó sin aviso** — eso es lo que el gate no podía decir ayer.
+
+      Decisiones y por qué cada una está donde está:
+
+      - `ventanaDelAviso` (pura) toma el **máximo** de los dos bordes, nunca uno solo: el log manda
+        cuando arranca después (alguien lo rotó: más atrás no hay líneas), el primer aviso manda
+        cuando arranca después (más atrás no había quien escribiera).
+      - `primerAvisoDelLog` saca la hora de la **línea anterior**, porque las `[aviso]` no llevan
+        marca propia. **NO usa el `mtime` del módulo:** `/tmp/onia-bot/aviso-telegram.mjs` dice
+        `2026-09-25 10:41`, que es cuando llegó la copia de hoy — usarlo pondría el borde tres
+        semanas adelante de la verdad y taparía en verde cualquier pérdida anterior. El log no se
+        re-escribe; la evidencia que deja es monótona.
+      - **Sin ni una línea `[aviso]` en el log no hay borde** → `no_medido`, ni verde ni un rojo
+        inventado. El agujero que eso podría tapar (un aviso que no emite nunca) lo ven los
+        eslabones del circuito, que siguen contestando ahí.
+      - La absolución exige la pregunta **hecha**: `clasificarEventos` sin mapa da `medido:false`, y
+        leerlo como "0 leads" sería firmar *"no hay a quien buscar"* sin preguntar. En la duda, se
+        va a buscar.
+      - El reporte **nombra el borde y su motivo**. Un alcance que no se imprime se re-descubre: el
+        renglón decía "dentro de la ventana del log" sobre una ventana seis días más ancha que la
+        capacidad, y nadie lo podía auditar.
+
+      ⚠️ **Y algo peor, que apareció de paso: `avisos-vivo.test.mjs` no lo corría NADIE.** Sus 47
+      tests (hoy 55) vivían fuera de la cadena — `grep avisos-vivo.test package.json` daba vacío —
+      así que el *"47/47 verde"* de ayer era una corrida a mano, y el arreglo de hoy se podía
+      revertir sin que nada se pusiera rojo. Cableado como `test:avisos-gate` en la cadena de
+      `npm test`. Es hermético (232 ms, `docker` falso en el `PATH`, sin red).
+
+      Validado por mutación, cada una cayendo por el motivo correcto: borde vuelto al del log → caen
+      los 2 tests del borde; absolver sin mirar el origen → cae *"manda a perseguir a nuestras
+      propias sondas"*; absolver sin haber preguntado → cae *"en la duda, se va a buscar"*.
+      55/55 verde con el arreglo.
+
+- [x] 🔴 **CERRADO el 2026-09-26 07:43-08:35 La Paz (es un MEDIDOR, no toca el motor: no necesita
+      deploy): el gate del aviso a Sergio Urcullo derivaba sus eventos del LOG, así que la única
+      clase de fallo que no podía ver era justo la que existe para cazar — un handoff que ocurrió
+      y del que no se escribió ni una línea.** `a575f81a`.
+
+      `avisos-vivo.mjs` contaba líneas `[aviso]`. Con ese universo, un pedido de humano que nunca
+      llegó al código de aviso no sale como fallo: sale como que **no hubo evento**. Su propia
+      cabecera lo firmaba — *`circuito=ok eventos=0 -> verde. Nadie pidio un humano hoy`*.
+
+      **Los dos números del mismo día, medidos contra producción:**
+
+      | fuente | qué dice |
+      |---|---|
+      | log vivo (`/tmp/onia-bot-webhook.log`) | 10 avisos, de **3** conversaciones |
+      | base (`onia_center.bot_conversations`) | **12** filas en `handoff_humano` |
+      | veredicto del gate **antes** | `ok · circuito sano` |
+
+      **Diez de esas doce caen DENTRO de la ventana que el log cubre** — `2026-08-28T22:22:51` a
+      `2026-09-26T10:53:21`, derivada de las marcas del propio log, no supuesta. Son diez personas
+      que pidieron un humano y no hay una sola línea que las nombre. Veredicto **después**:
+
+      ```
+      en la base: 11 evento(s) dentro de la ventana del log (con aviso 1 · SIN aviso 10) · 2 anterior(es) al log, fuera de alcance
+      VEREDICTO: roto — la base registra 10 pedido(s) de humano/demo que NINGUN aviso nombra
+      ```
+
+      **El log dice qué HIZO el código de aviso; `bot_stage` dice qué OCURRIÓ, y queda.** Conciliar
+      los dos es lo único que distingue *"nadie pidió"* de *"alguien pidió y se perdió"* — que es
+      la distinción que este gate nació a hacer, y que hasta hoy hacía sólo del lado del log.
+
+      Lo que se agregó, y por qué cada decisión está donde está:
+
+      - `conciliarAvisos` (puro) cruza los eventos de la base con los avisos del log. **Tri-estado:**
+        sin base o sin ventana es `no_medido`, nunca verde — no poder preguntar no es haber
+        preguntado.
+      - **Conservador en el borde izquierdo:** un evento anterior al arranque del log es
+        `fueraDeAlcance`, **contado y nombrado**, no cero. Acusar al circuito por lo que el log no
+        pudo ver es el falso rojo que este mismo archivo ya pagó el 2026-09-12.
+      - Un `skipped` o un `failed` **NO cubre** a su conversación: nombrarla no es avisarle. Usar
+        la evidencia del fallo como cobertura del fallo era el agujero hermano.
+      - `ESTADO_POR_RAMA` ata rama del motor ↔ estado de la base en UN lugar, con test por
+        propiedad: una rama nueva sin traducir dejaría al conciliador sin sujetos, y eso **no sale
+        rojo, sale VACÍO**.
+
+      ⚠️ **Las diez personas NO son un ítem nuevo de esta cola.** Ya son la tarea `t_4f30a836`
+      (*«7 desconocido(s) esperando una respuesta tuya»*), bloqueada en Sergio Urcullo. Lo que
+      cambió hoy es que **el instrumento ya no dice que están bien**.
+
+      ⚠️ **Ese párrafo de arriba es FALSO y lo corrige el ítem que está encima — 2026-09-26 09:00.**
+      Las diez no eran personas ni tenían nada que ver con `t_4f30a836`: consultadas en la base de
+      Chatwoot, **las diez son nuestras** (inbox 7, o contacto `Sonda QA` en el inbox 4), y ocho son
+      anteriores a que el código de aviso existiera. Atar un número recién medido a una tarea ajena
+      que habla de otra cosa le dio un respaldo que no tenía — y el número correcto es **2, ningún
+      lead**. El bloqueo `t_4f30a836` sigue vivo por su cuenta y no se toca: lo mide otro
+      instrumento.
+
+      Validado por mutación: con el conciliador ciego caen 3 tests por el motivo correcto
+      (`un handoff que la base registra y el log no nombra pone el gate ROJO`, la lectura, y el
+      `skipped`). 47/47 verde con el arreglo.
+
 - [x] 🔴 **CERRADO el 2026-09-26 07:13-08:00 La Paz (es un MEDIDOR, no toca el motor: no necesita
       deploy): el medidor del par web↔bot que cerró el ítem de abajo miraba 8 de las 25 rutas
       vivas, y en las otras 17 un par roto NO PODÍA salir rojo — salía como «campaña huérfana,
