@@ -12,6 +12,83 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-26 (vuelta HEAD 5bec4448) — `BUILD_ID` sin cambios; descartados los dos ejes que dejó la vuelta anterior — sin hallazgo
+
+`ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado primero contra la entrada de abajo:
+`4FWMcecd4jRBGUVwStDQb`, **igual** — no correspondía repetir el recorrido end-to-end. Tablero:
+sin tareas `ready` sin reclamar en la zona `recorrido-cliente`.
+
+La vuelta anterior dejó dos pistas concretas para cuando el `BUILD_ID` no cambia: (1) revisar si
+`RUBROS_ACTIVOS` sumó un sexto rubro, (2) buscar una promesa NO numérica sin gate en una
+superficie ya auditada. Las dos se descartaron:
+
+1. `RUBROS_ACTIVOS` (`lib/platform/rubros-activos.ts`, medido contra el build vivo
+   `/opt/onia-platform/build-251f64c` en el VPS) sigue en **5**: `dentagest-clinical`,
+   `gestios-general`, `proveegest-electrico`, `esteticagest-clinical`,
+   `gestios-servicios-profesionales`. No dispara el escalón 2.
+2. Las promesas contractuales/de plazo (salida sin penalidad, reembolso, 30/90 días de
+   exportación y borrado, aviso de cambio de precio) ya tienen gate: `salida-prometida.test.ts`,
+   `legal-publico.test.ts` y `salida-con-fecha.test.ts` — corridos ahora (`npx vitest run
+   src/app/salida-prometida.test.ts src/app/legal-publico.test.ts` → 26/26 verde). Busqué además
+   una promesa de "responder por WhatsApp es gratis" (Meta empieza a cobrar la ventana de 24h el
+   1-oct-2026, por memoria del sistema): no existe ese literal en el sitio — la única frase
+   relacionada (`components/landing-v1/faq.tsx:44`) ya distingue correctamente "el botón de
+   WhatsApp va gratis" de "los mensajes que tu negocio inicia se los pagás a Meta", sin prometer
+   gratuidad de la respuesta entrante. Sin hallazgo.
+
+RAZÓN de no-avance en la medida `llegoHasta/completo`: no corresponde repetir el recorrido
+end-to-end (build sin cambios, 9/9 ya cerrado en los 5 rubros). Ambos ejes que dejó la vuelta
+anterior se agotaron sin hallazgo.
+LECCIÓN: con `RUBROS_ACTIVOS` estable y los gates de contrato/plazo en verde, la próxima vuelta
+sin cambio de `BUILD_ID` necesita un eje nuevo — no repetir estos dos. Candidato sin cubrir
+todavía: barrer si alguna promesa de "prueba gratis 14 días" tiene gate de vigencia (fecha de
+corte del trial) o si es un texto fijo sin verificación contra `TRIAL_PLAN`/lógica real.
+
+---
+
+## 2026-09-26 (vuelta HEAD 74204b21) — `BUILD_ID` sin cambios; el eje que dejó la vuelta anterior ya está automatizado — sin hallazgo
+
+`ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado primero contra la entrada de arriba:
+`4FWMcecd4jRBGUVwStDQb`, **igual** — no correspondía repetir el recorrido end-to-end (9/9 ya
+cerrado en los 5 rubros contra este build). Tablero: sin tareas `ready` sin reclamar en la zona
+`recorrido-cliente`. `t_c53fe39c` (badge de plazo en `/guia-facturacion`) figura `done`;
+reverificado en vivo con `curl -s https://onia.com.bo/guia-facturacion | grep -o 'Plazo[^<]*'`:
+ya dice `01-10-2026` en producción, no `30-09-2026` — el deploy que la vuelta del 17-sep daba
+por pendiente ya ocurrió.
+
+La LECCIÓN de la vuelta anterior pedía "cruzar cada cifra citada contra su fuente en el
+producto real, no solo contra `subscription-plans.ts`/`pricing.ts`". Antes de hacerlo a mano
+encontré que `web-factory/apps/onia-platform/scripts/precios-fuente.mjs` YA hace exactamente
+eso — 44 cifras del sitio cruzadas contra el código que cobra, incluidos límites y features por
+plan (no solo montos) — y corre en verde: `node scripts/precios-fuente.mjs` → `VERDE: las 44
+cifras que publica el sitio son las que cobra el producto...`. Repetirlo a mano habría sido
+repetir sin verificar (la propia regla del carril).
+
+Con ese eje ya cubierto por un gate existente, probé el mismo tipo de cruce en dos superficies
+sin cobertura automática: el cupo del chatbot (`content/chatbot-precios.ts`:
+`CONVERSACIONES_INCLUIDAS=500`, recarga 200 que caduca a fin de mes, guardado por
+`(sitio)/extra-que-caduca.test.ts`) coincide con lo que la memoria del sistema describe como lo
+que el motor aplica — sin hallazgo. Y un grep de `MUY PRONTO|PRÓXIMAMENTE|en construcción|beta`
+sobre todo `app/content/components` de la web de venta: las únicas apariciones son en
+COMENTARIOS que narran bugs ya arreglados (ej. `app/v1/empezar/data.ts`, `RUBRO_OPTIONS` ya no
+tiene campo `disponible`, guardado por `obra-en-la-pantalla.test.ts`) — cero superficie viva con
+esas palabras. Grep usado para DESCARTAR, no para confirmar; lo que confirma es que no hay ni un
+literal fuera de comentario, y los gates ya citados sostienen el resto.
+
+RAZÓN de no-avance en la medida `llegoHasta/completo`: no corresponde repetir el recorrido
+end-to-end (build sin cambios). El escalón 3 por superficie sigue agotado (24/24 rutas con al
+menos una auditoría) y el escalón de "promesa vs. entrega" tiene ya dos gates de código
+(`precios-fuente.mjs`, `extra-que-caduca.test.ts`, `obra-en-la-pantalla.test.ts`) cubriendo los
+puntos más caros — mirarlos a mano otra vez es reverificar lo ya medido.
+LECCIÓN: **antes de cruzar una cifra o promesa "a mano", grepear si ya existe un gate de código
+que lo haga** (`grep -rl` del dato en `*.test.ts` de `web-factory/apps/onia-platform`) — si existe
+y corre verde, correrlo y citarlo es la verificación; repetirlo a mano es la sobrevalidación que
+el propio `CLAUDE.md` marca como error. La próxima vuelta sin cambio de `BUILD_ID`: revisar si
+`RUBROS_ACTIVOS` sumó un sexto rubro (dispara escalón 2), o buscar una promesa NO numérica sin
+gate (contractual, de plazo, de disponibilidad) en una superficie ya auditada, no repetir precios.
+
+---
+
 ## 2026-09-26 (vuelta HEAD 2b8a1ac3) — `BUILD_ID` sin cambios; escalón 3: últimas 2 superficies nunca auditadas — sin hallazgo
 
 `ONIA_ALTA_AUTOMATICA=abierta`. `BUILD_ID` comparado primero contra la entrada de arriba:
@@ -4193,3 +4270,35 @@ RAZÓN: N/A — avanzó (dental re-confirmado con el `BUILD_ID` vigente, y cerra
 quedaba con verificación vieja).
 LECCIÓN: ninguna nueva — el método de comparar `BUILD_ID` primero y de reproducir con el
 instrumento ya escrito (en vez de reinventar el chequeo) volvió a funcionar.
+
+## 2026-09-26 (vuelta HEAD f3c4327f) — otro eje (cifra-por-cifra), no dental: `BUILD_ID` sin cambio (`4FWMcecd4jRBGUVwStDQb`)
+
+Escalón 3 por ruta ya se había agotado (24/24 rutas auditadas al menos una vez, nota anterior).
+`BUILD_ID` comparado antes de decidir: sin cambio desde la corrida de dental del 2026-09-26
+00:09 → no correspondía repetir dental. Cambié de eje: cifra por cifra, precios REALES contra
+`onia-platform/lib/subscription-plans.ts` (`DEFAULT_PLAN_AMOUNTS`), sobre producción viva
+(`curl https://onia.com.bo/precios` y `/`, no el código fuente).
+
+**Sin hallazgo en precios.** Los 4 escalones (320/550/890/1.290 mensual; 3.200/5.500/8.900/12.900
+anual; semanal 89/145/229 en basic/crece/professional) están servidos IDÉNTICOS en `/precios` y
+en `/` — incluida la letra chica ("anual cobra 10 meses", "Completo se cobra mensual o anual").
+El add-on chatbot (Bs 390/mes, Bs 3.900/año) también coincide con `pricing.ts`. La memoria
+compartida decía que esta escalera (con "crece") era nueva desde el 2026-09-12: confirmado que
+la web YA la sirve completa, sin residuos de la escalera vieja (320/750/1.500).
+
+**Reverifiqué el único hallazgo abierto que traía esta vuelta (`t_826a7ab2`,
+`/servicios/marketing-ia`) — sigue roto en producción pese a estar `done` en el tablero.** El
+fix (commit `5f61db7a`, "la venta le confesaba al lead que no tenemos clientes") existe, pero
+**vive solo en `claude/web-venta`**: `git merge-base --is-ancestor 5f61db7a origin/main` da NO.
+`curl https://onia.com.bo/servicios/marketing-ia` sigue sirviendo el texto viejo ("Somos una
+empresa nueva... no tenemos un muro de logos ni casos de éxito"), idéntico al de la captura
+original. No lo mergeo (no es mi carril, es de `web-venta`/integrador) — dejé la evidencia en un
+comentario de la tarea para que el integrador la levante en su próximo merge. Esto es la regla
+"construido ≠ terminado" aplicada al revés de lo usual: acá lo que falló no fue el código, fue
+tratar un commit en una rama ajena como si ya estuviera en producción.
+
+RAZÓN: N/A — avanzó (precios cifra-por-cifra sin hallazgo nuevo; hallazgo previo reverificado y
+corregido su estado real en el tablero, que decía "done" sin estarlo en producción).
+LECCIÓN: un tablero en "done" certifica que el AGENTE terminó su commit, no que ese commit llegó
+a `origin/main` ni a producción — antes de dar un hallazgo por cerrado, `git merge-base
+--is-ancestor <sha-del-fix> origin/main`, y si no, recurl la superficie viva.
