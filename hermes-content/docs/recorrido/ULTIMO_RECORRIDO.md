@@ -12,6 +12,26 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-26 (vuelta HEAD e0c0a0ce) — `BUILD_ID` sin cambios; tercer rubro (Importadora): 9/9, paso 7 no-aplica correctamente
+
+`BUILD_ID` (`DvBubiuO4uC5_E9jFNJeZ`) igual al de la entrada de abajo: no correspondía repetir
+dental/comercio. Cambio de método: probé **Importadora**, rubro que la vuelta anterior no había
+cubierto en esta racha reciente (el último hallazgo sobre él —"paso 7 de importadora tampoco era
+culpa del producto"— es viejo y valía re-confirmar que sigue sano).
+
+- **Importadora**: `RECORRIDO_RUBRO=Importadora`, `--escribir`. **9/9 pasos completos.** Paso 7
+  (agendar cita) sale `NO-APLICA` correctamente: la tarjeta del rubro en `/register` promete
+  "Catálogo, cotizaciones B2B y costeo de importación" — sin agenda — y el menú del producto es
+  coherente (no ofrece citas). Paso 6 cargó el dato en storefront/Catálogo (`/comercio`) y se
+  encontró de vuelta. Paso 8 llegó a `/comercio/fiados` (Créditos) y frenó ahí, a propósito.
+  `resumen.json`: `llegoHasta 9/9, completo True, agujeros []`.
+- Limpieza: cuenta `zz-qa-2026-09-26-1409@onia.com.bo`, organización
+  `zz-qa-2026-09-26-1409-negocio` y paciente `zz-qa-2026-09-26-1409-paciente` creados y BORRADOS
+  en la misma corrida. Verificado tras cerrar: `appointments` con `zz-qa-` = 0,
+  `organizations` con `zz-qa-` = 0.
+- Sin hallazgo nuevo: el producto sigue coherente entre lo que promete la tarjeta del rubro y lo
+  que el menú realmente ofrece.
+
 ## 2026-09-26 (vuelta HEAD b5c4e6b2) — recorrido end-to-end COMPLETO en dos rubros, `BUILD_ID` cambió
 
 `BUILD_ID` cambió respecto a la entrada de abajo (`4FWMcecd4jRBGUVwStDQb` → `DvBubiuO4uC5_E9jFNJeZ`),
