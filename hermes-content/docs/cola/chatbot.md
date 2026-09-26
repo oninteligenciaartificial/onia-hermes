@@ -749,7 +749,16 @@ Genera una sesión del dueño real de la bandeja (preguntado a la base, no hardc
 `/api/bandeja` contra el host público y sale **0** si ahí hay alguien que no somos nosotros.
 Es el ÚNICO gate que mide el objetivo y no una pieza suya: `inbox:tenencia` mide la columna, que
 es el primer eslabón de cinco, y **los otros cuatro fallan devolviendo 200 con la lista vacía**.
-Hoy sale **0** — mariohassen y F, por el camino completo.
+Hoy sale **0** — siete desconocidos, por el camino completo y pasando la 2FA solo.
+
+⚠️ **Y estuvo `NO MEDIDO` sin que nadie lo notara, hasta el 2026-09-26.** El gate cerraba su
+veredicto diciendo que pasar el segundo factor era *"algo que un loop no puede hacer"* — falso
+desde el 24-sep, cuando `scripts/lib/totp.mjs` entró al repo. La causa era una copia vieja de la
+receta de sesión dentro del propio gate, que se quedaba en `aal1`. Arreglado en `865e11ff`; el
+detalle está en "Cerrado". **Lo que sobrevive al arreglo es la regla:** un `NO MEDIDO` que sale
+todas las vueltas por el mismo motivo se lee como el ambiental de siempre y se saltea, así que
+cuando el motivo impreso diga que algo es imposible, **preguntarle al disco si este repo ya lo
+hace** antes de creerle.
 
 **Nunca:** desplegar al VPS sin OK de Sergio · tocar otro carril (web-factory es dueño de
 `web-factory/`, producto de la cola de plataforma) · gastar plata · bajar una superficie viva.
@@ -9041,6 +9050,54 @@ archivos.**
 ---
 
 ## Cerrado — no rehacer
+
+- [x] 🔴 **CERRADO el 2026-09-26 03:43-04:35 La Paz (commiteado en `865e11ff`; es el
+      INSTRUMENTO, no toca el motor ni el producto — no necesita deploy): el único gate que mide
+      el objetivo del carril estaba `NO MEDIDO`, y su propio veredicto explicaba por qué no valía
+      la pena intentarlo.**
+
+      `npm run objetivo:visible` es el único que mide el objetivo entero —que un desconocido
+      escriba y esa conversación **se vea** en la bandeja—; los otros miden una pieza. Salía
+      `NO MEDIDO — 403 MFA_REQUIRED` y cerraba así: *"la única salida es que ese dueño pase la
+      2FA (TOTP), **que un loop no puede hacer**"*.
+
+      **Era falso cuando se imprimió.** `scripts/lib/totp.mjs` (RFC 6238) y
+      `elevarSegundoFactor()` de `scripts/lib/sesion_dueno.mjs` entraron el **24-sep** y hacen
+      exactamente eso; con ellos `mirar_bandeja_dueno.mjs` ya miraba `/inbox` de esa misma
+      cuenta. O sea: la capacidad estaba en el repo, a dos archivos de distancia.
+
+      **La causa, y es de una clase que ya está escrita en este repo:** el gate tenía su **propia
+      copia** de la receta de sesión (`generate_link` → `verify` → `setSession` → cookies), y esa
+      copia se quedó en `aal1`. La cabecera de `sesion_dueno.mjs` lo había anunciado palabra por
+      palabra — *"Dos copias de esto divergen, y la que quede vieja no falla: entra igual y mide
+      otra cosa"*. Midió otra cosa: nada, vuelta tras vuelta.
+
+      **Lo que se arregló:** `medir()` ya no acuña la sesión (usa `acunarSesion()`, que eleva a
+      `aal2`), `acunarSesion()` **devuelve** si elevó —antes ese dato sólo existía en el log— y la
+      rama «puerta» separa los dos cortes, que se arreglan en lugares **opuestos**: con la sesión
+      ya elevada el sospechoso es el JWT que no llegó al proxy; sin factor inscripto sí hace falta
+      una persona, porque ningún TOTP inventa un factor que no existe. Un guardia nuevo se pone
+      rojo si el `generate_link` vuelve a este archivo.
+
+      **La prueba, medida y no supuesta:** self-check **118 casos verdes** (9 estaban en ROJO
+      antes del arreglo, cada uno por su motivo), y el gate en vivo pasó de `NO MEDIDO` a
+      **exit 0**: `segundo factor verificado (factor 2867857c…) — sesión aal2` y **7
+      conversaciones de gente que no somos nosotros** (#58 `+59175755019`, #40, #38, #37
+      `mariohassen`, #36, #35 `F`, #34). El verde sigue nombrando su herida: **5 de esas 7 sin
+      respuesta, la más vieja hace 32 días** — eso no lo destraba ningún loop.
+
+      ⚠️ **Dos trampas que costaron un intento cada una, y las dos ya estaban escritas:**
+      (1) un caso del self-check salió **verde sin que `medir()` llamara a nada**, porque el
+      mensaje del propio `afirmar` contenía el literal buscado — el gate se absolvió solo; el
+      nombre va **partido** y el sujeto es la llamada con su paréntesis. (2) Por eso mismo, buscar
+      un literal de código en esta fuente **quita los comentarios primero** (`soloCodigo()`): la
+      prosa de acá cita los literales viejos a propósito para explicar cada bug.
+
+      ⚠️ **Y una del método, que se llevó el susto más grande:** `npm test` salió **ROJO** en
+      `destinos-instrumento` acusando a `campanas-vivas.mjs`, el archivo de la vuelta anterior.
+      Parecía deuda propia recién mergeada. Era **el worktree atrasado**: `git merge origin/main`
+      trajo el arreglo que otro carril ya había hecho y el gate salió verde sin tocar nada.
+      Mergear ANTES de creerle a un rojo es lo que evitó deshacer un arreglo vivo.
 
 - [x] **~~El criterio «¿esta conversación somos NOSOTROS?» corría CIEGO en el barrido
       post-demo: era el único de los cuatro sin el insumo, y fallaba abierto~~** — cerrado el
