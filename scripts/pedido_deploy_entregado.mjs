@@ -71,7 +71,7 @@
  */
 
 import { execFileSync } from 'node:child_process';
-import { existsSync, readdirSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { dirname, join } from 'node:path';
 // El criterio de «esto lo ve un lead» se IMPORTA del instrumento que ya lo tiene y que el
@@ -85,6 +85,8 @@ import { baseDelBuild, llegaAlCliente } from '../web-factory/apps/onia-platform/
 // que el brazo decide si el `ok` de Sergio Urcullo ejecuta algo: preguntarle a ELLA es lo único
 // que garantiza que «pedido vivo» signifique acá lo mismo que allá.
 import { elegirCamino, motivoParaNoEjecutar } from './kanban/publicar-aprobado.mjs';
+// Con alias: la receta del build vivo es UNA y vive en ese módulo. Ver `shaVivoPlataforma`.
+import { buildQueCorre as arbolDelBuildVivo } from './lib/arbol-del-build-vivo.mjs';
 
 const RAIZ = join(dirname(fileURLToPath(import.meta.url)), '..');
 /** La zona de `main` que arma el sitio de venta. Anclada con `:/` a propósito: un pathspec
@@ -234,21 +236,12 @@ export function barrerTablero({ tareas }) {
   return { pedidos, ilegibles, abiertos };
 }
 
-/**
- * PURA: cuál de los `build-<sha>` del disco es el que corre, casando su `BUILD_ID` contra el
- * que sirve el contenedor. Devuelve `null` si no hay con qué casar.
- *
- * Nunca «el más nuevo» ni «el primero»: elegir uno sin casarlo declararía ENTREGADO contra un
- * build inventado, y eso le borra a Sergio Urcullo un pedido real por un arreglo que el
- * cliente nunca recibió.
- */
-export function buildQueCorre({ buildIdVivo, candidatos }) {
-  if (!buildIdVivo) return null;
-  for (const c of candidatos || []) {
-    if (c && c.buildId && c.buildId === buildIdVivo) return c.sha;
-  }
-  return null;
-}
+// ⚠️ Acá vivía una `buildQueCorre({ buildIdVivo, candidatos })` PURA que casaba el `BUILD_ID`
+// contra los `build-<sha>` del disco. Se borró el 2026-09-26 (tarea `t_66d7e2f6`) porque conocía
+// UN solo layout —staging— y `shaVivoPlataforma` ya delega en `scripts/lib/arbol-del-build-vivo.mjs`,
+// que conoce los dos. Quedarse con las dos habría dejado una función exportada y testeada sin un
+// solo llamador de producción: código muerto con cara de vivo, que el día del tercer layout alguien
+// vuelve a cablear porque «ya estaba probada».
 
 /**
  * PURA: decide el estado de un pedido. `publicado(sha)` devuelve true / false / null,
@@ -670,6 +663,91 @@ export function archivosDelDryRunBot(salida) {
 }
 
 /**
+ * PURA: del mismo dry-run del bot, ¿CUÁNTAS LÍNEAS cambia cada archivo?
+ *
+ * El hermano de `archivosDelDryRunBot` una capa más abajo. Aquél contesta «qué archivos», y con
+ * eso `cuerpoCortoArchivos` puede exigir que el cuerpo los NOMBRE. Éste contesta «cuánto de
+ * cada uno», que es la pregunta que faltaba: el nombre puede seguir estando mientras el
+ * contenido cambió debajo.
+ *
+ * Sólo los `CAMBIA` traen recuento — un `NUEVO` viaja entero y el publicador no le imprime
+ * número—, así que un archivo nuevo no aparece acá y no se le puede exigir ninguno.
+ *
+ * Reusa `archivosDelDryRunBot` como guarda en vez de repetirla: si aquél no pudo leer la salida
+ * (SSH mudo, publicador roto, `total:` que no casa con las líneas), acá tampoco hay nada que
+ * medir. Un lector que se cree solo lo que entiende y calla el resto es el falso verde.
+ *
+ * @param {string|null} salida  stdout de `/opt/onia/bot/_deploy/publicar.sh --dry-run`
+ * @returns {Record<string,number>|null}
+ */
+export function recuentosDelDryRunBot(salida) {
+  if (archivosDelDryRunBot(salida) === null) return null;
+  /** @type {Record<string,number>} */
+  const recuentos = {};
+  for (const l of String(salida).split('\n')) {
+    const m = /^\s+CAMBIA\s+(\S+)\s+\((\d+)\s+l[ií]neas?\)/.exec(l);
+    if (m) recuentos[m[1]] = Number(m[2]);
+  }
+  return recuentos;
+}
+
+/**
+ * PURA: ¿el CUERPO declara para algún archivo un recuento distinto al que el publicador mide?
+ *
+ * 🔴 EL DEFECTO, medido el 2026-09-25 sobre `t_ba58f0d3` (el bot). Su cuerpo nombraba los 5
+ * archivos que su `ok` publica —así que `cuerpoCortoArchivos` decía COMPLETA— y declaraba
+ * «knowledge.onia.json (6 lineas)». El merge `851dac0d` (carril web-venta) corrigió DOS frases
+ * más dentro de ese mismo archivo, el publicador pasó a medir 10 líneas, y este gate siguió
+ * imprimiendo «sigue VIGENTE — 5 archivo(s) sin publicar». Ningún control lo vio: todos
+ * preguntaban por NOMBRES, y los nombres seguían todos ahí.
+ *
+ * POR QUÉ NO ES COSMÉTICO. El cuerpo es lo único que Sergio Urcullo lee para firmar. Ese pedido
+ * describía dos arreglos mientras su `ok` publicaba tres: el tercero era que los dos botones de
+ * WhatsApp de la web hacían al lead pedir una reunión de 20 y 45 minutos que la agenda no
+ * reserva. Un recuento viejo no es un número desactualizado — es la descripción de OTRA versión
+ * del cambio, y firmar a ciegas es justo lo que el pedido existe para evitar.
+ *
+ * ES LA MISMA FAMILIA que la lección de la vuelta anterior de este carril: un instrumento cuyo
+ * universo es su propia cobertura. Contar archivos y llamarlo «el cuerpo lo describe» convierte
+ * todo cambio de contenido en silencio.
+ *
+ * QUÉ SE JUZGA: sólo los números que el cuerpo SÍ escribió. Un cuerpo que nombra el archivo sin
+ * prometer ningún recuento no miente, y exigirle uno sería inventar un requisito nuevo —
+ * `cuerpoCortoArchivos` ya se ocupa de que el nombre esté.
+ *
+ * DIRECCIÓN DEL ERROR, igual que en los hermanos: ante la duda NO se acusa. Sin recuentos
+ * derivables sale `NO_MEDIDO` y nunca `COINCIDE`, porque declarar que coincide algo que no se
+ * pudo comparar es la única salida que borra el problema; y un rojo falso hace rehacer —y
+ * ARCHIVAR— un pedido sano, que es el único daño que le borra a Sergio Urcullo un pedido real.
+ *
+ * @param {{texto:string, recuentos:Record<string,number>|null}} args
+ */
+export function cuerpoDeclaraOtroRecuento({ texto, recuentos }) {
+  if (recuentos === null || typeof recuentos !== 'object') {
+    return { estado: 'NO_MEDIDO', motivo: 'no pude derivar cuantas lineas cambia cada archivo', discrepancias: [] };
+  }
+  const cuerpo = partirPedido(texto).cuerpo;
+  const discrepancias = [];
+  for (const [ruta, mide] of Object.entries(recuentos)) {
+    const base = String(ruta).split('/').pop();
+    for (const l of cuerpo.split('\n')) {
+      // El recuento y el nombre tienen que estar en LA MISMA línea: así el número se le
+      // atribuye a su archivo y no al que quedó tres renglones más arriba. Es el formato que
+      // los pedidos ya usan («- knowledge.onia.json (10 lineas) — lo que el bot DICE»).
+      if (!l.includes(ruta) && !(base && l.includes(base))) continue;
+      const m = /\((\d+)\s+l[ií]neas?\)/.exec(l);
+      if (m === null) continue;
+      const declara = Number(m[1]);
+      if (declara !== mide) discrepancias.push({ archivo: ruta, declara, mide });
+      break;
+    }
+  }
+  return discrepancias.length === 0
+    ? { estado: 'COINCIDE', discrepancias: [] }
+    : { estado: 'OTRA_VERSION', discrepancias };
+}
+
+/**
  * PURA: ¿el texto nombra todos los ARCHIVOS que su `ok` publica?
  *
  * La gemela de `promesaCompleta` para los destinos que se publican por copia. Mismas dos
@@ -867,43 +945,28 @@ function fetchearRepo(repo) {
 /**
  * El sha que corre producción, derivado del artefacto — nunca de `origin/master`.
  *
- * ⚠️ SE MIDE DONDE ESTÁ `/opt`, NO DONDE CORRE EL LOOP. El integrador se mudó al nodo de
- * casa, donde `/opt/onia-platform` no existe: `readdirSync` tiraba, esto devolvía `null` y
- * el ÚNICO destino que este gate sabe medir salía «no pude derivar el build vivo» en cada
- * vuelta. No fallaba en verde —el motivo se imprime— pero el efecto es el mismo que ya está
- * medido para `deploy-vivo.mjs`: el instrumento que caza un pedido vencido queda mudo
- * justo en la máquina del carril que lo posee. El nodo de casa SÍ llega al VPS por SSH.
+ * ⚠️ LA RECETA NO VIVE ACÁ: la trae `scripts/lib/arbol-del-build-vivo.mjs`, que conoce los DOS
+ * layouts y sabe preguntarle al VPS cuando `/opt` no está en esta máquina.
+ *
+ * Acá estaba copiada, y casaba el `BUILD_ID` vivo SÓLO contra `/opt/onia-platform/build-*`, que
+ * es STAGING. Desde el 2026-09-24 producción se publica por imagen y el árbol vivo queda bajo
+ * `releases/<sha8>-<fecha>/` (con el `BUILD_ID` en la RAÍZ), y encima
+ * `limpiar-builds-staging.sh` borra los `build-*`. O sea que **después de cada swap el `BUILD_ID`
+ * vivo legítimamente no tiene par en `build-*`**: esto devolvía `null`, `puedePlataforma` quedaba
+ * en `false` y el gate DEJABA DE JUZGAR los pedidos de plataforma — el único destino que sabe
+ * medir— saliendo verde igual. Medido el 2026-09-26: vivo `4FWMcecd4jRBGUVwStDQb`, ninguno de los
+ * 7 `build-*` casaba, y estaba en `releases/492e7155-20260925/BUILD_ID`. Tarea `t_66d7e2f6`.
+ *
+ * ⚠️ El sha de un `release` viene COMPLETO (40) y el de un `staging` ABREVIADO. Esto no compara
+ * shas: se los pasa a `git cat-file` / `merge-base`, que aceptan las dos formas. Cualquier
+ * comparación por igualdad de cadenas que se agregue acá se rompe en silencio al cambiar el layout.
  */
 function shaVivoPlataforma() {
-  if (existsSync(DIR_BUILDS)) {
-    const buildId = sh('docker', ['exec', 'onia-platform', 'cat', '/app/.next/BUILD_ID']);
-    let dirs = [];
-    try {
-      dirs = readdirSync(DIR_BUILDS).filter((d) => d.startsWith('build-'));
-    } catch {
-      return null;
-    }
-    const candidatos = dirs.map((d) => {
-      const p = `${DIR_BUILDS}/${d}/.next/standalone/.next/BUILD_ID`;
-      return { sha: d.slice('build-'.length), buildId: existsSync(p) ? sh('cat', [p]) : null };
-    });
-    return buildQueCorre({ buildIdVivo: buildId, candidatos });
+  try {
+    return arbolDelBuildVivo({})?.sha ?? null;
+  } catch {
+    return null; // no pude preguntar: NO MEDIDO, nunca un sha adivinado
   }
-
-  // Sin `/opt` local: se le pregunta al VPS. Una sola llamada, y su salida se valida —si el
-  // SSH no contesta o devuelve cualquier otra cosa, esto es `null` (NO MEDIDO), nunca un sha
-  // adivinado que haría cerrar un pedido vivo.
-  if (!existsSync(VPS)) return null;
-  const guion = [
-    'V=$(docker exec onia-platform cat /app/.next/BUILD_ID 2>/dev/null) || exit 1',
-    '[ -n "$V" ] || exit 1',
-    `for d in ${DIR_BUILDS}/build-*/; do`,
-    '  [ "$(cat "$d/.next/standalone/.next/BUILD_ID" 2>/dev/null)" = "$V" ] && { basename "$d" | sed s/^build-//; exit 0; }',
-    'done',
-    'exit 1',
-  ].join('\n');
-  const salida = sh('bash', [VPS, 'bash', '-lc', guion], { timeout: 120_000 });
-  return salida && /^[0-9a-f]{7,40}$/.test(salida) ? salida : null;
 }
 
 /**
@@ -1171,6 +1234,32 @@ export function publicariaPorCopia(destino, io = {}) {
 }
 
 /**
+ * Las DOS preguntas de un destino por copia con UN solo dry-run: qué archivos publicaría y
+ * cuántas líneas cambia cada uno.
+ *
+ * Existe por el costo, no por elegancia: el publicador en seco corre gates enteros por SSH y
+ * tarda minutos. Llamar a `publicariaPorCopia` y después a un hermano para los recuentos lo
+ * correría dos veces — y, peor, sobre dos momentos distintos: entre las dos corridas puede
+ * entrar un merge y los dos veredictos dejarían de hablar del mismo árbol. Un instrumento que
+ * compara dos fotos distintas y las presenta como una es el falso rojo más difícil de explicar.
+ *
+ * `recuentos` sólo se llena para `bot`: `siat` imprime sus archivos sin número de líneas, así
+ * que ahí queda `null` y el control de recuentos sale NO_MEDIDO por sí solo, que es lo correcto
+ * — no hay nada que comparar.
+ *
+ * @returns {{archivos:string[]|null, recuentos:Record<string,number>|null}}
+ */
+export function leerCopia(destino, io = {}) {
+  const d = DESTINOS_POR_COPIA[destino];
+  if (d === undefined) return { archivos: null, recuentos: null };
+  const crudo = secoDeProduccion(d.seco, io);
+  return {
+    archivos: d.lector(crudo),
+    recuentos: d.lector === archivosDelDryRunBot ? recuentosDelDryRunBot(crudo) : null,
+  };
+}
+
+/**
  * PURA: el barrido a partir del texto crudo de `list --json`. `null` = no se pudo leer.
  *
  * El parseo va separado del proceso a propósito: es el único punto donde una respuesta
@@ -1266,7 +1355,7 @@ export function citaDelVivo(destino, vivoPorDestino) {
  * Se llama desde `cadenaPorPedido`, nunca con los acumuladores crudos — ver el porqué ahí.
  */
 export function imprimirCadena({
-  entregados, entregadosSiat, mudos, punteros, cortosSiat, incompletos, vencidos, cortos,
+  entregados, entregadosSiat, mudos, punteros, cortosSiat, otraVersion = [], incompletos, vencidos, cortos,
   inmedibles, vivoPorDestino,
 }) {
   if (entregados.length > 0) {
@@ -1336,6 +1425,25 @@ export function imprimirCadena({
       // bot a correr el publicador del emisor fiscal, que no publica nada suyo.
       console.log(`    bash ${DESTINOS_POR_COPIA[c.destino].seco} --dry-run`);
       console.log('  y ARCHIVANDO el viejo en la misma vuelta.');
+    }
+    return 1;
+  }
+
+  // Justo DEBAJO de `cortosSiat` y no arriba: que falte el nombre de un archivo entero es peor
+  // que que su recuento esté viejo, y la cadena imprime un solo rojo por vuelta. Los dos se
+  // curan igual (rehacer + archivar), así que el orden sólo elige cuál se lee primero.
+  if (otraVersion.length > 0) {
+    for (const c of otraVersion) {
+      console.log(`\nROJO ${c.id}: su CUERPO describe OTRA version del cambio.`);
+      for (const d of c.discrepancias) {
+        console.log(`    ${d.archivo}: el cuerpo dice ${d.declara} lineas, el publicador mide ${d.mide}`);
+      }
+      console.log('  Los nombres estan todos — lo que cambio es el CONTENIDO de uno, casi');
+      console.log('  siempre porque entro otro merge despues de escribir el pedido. Sergio');
+      console.log('  Urcullo estaria firmando una descripcion que ya no es la de lo que su ok');
+      console.log('  publica. Se cura rehaciendo el pedido con el recuento derivado de');
+      console.log(`    bash ${DESTINOS_POR_COPIA[c.destino].seco} --dry-run`);
+      console.log('  corrido DESPUES del ultimo merge, y ARCHIVANDO el viejo en la misma vuelta.');
     }
     return 1;
   }
@@ -1521,6 +1629,8 @@ async function medirEnVivo() {
   // comando de cura del publicador que le toca.
   const entregadosSiat = [];
   const cortosSiat = [];
+  // Hermano de `cortosSiat` para la otra pregunta del cuerpo: los nombres estan, los numeros no.
+  const otraVersion = [];
   // Transversal a TODOS los destinos: cualquier cuerpo puede mandar a apretar el `ok` de otra
   // tarea, y el daño no depende de si se publica por sha, por fecha o por copia. Por eso se
   // barre aparte del `for` de destinos, y no adentro de una de sus ramas.
@@ -1609,7 +1719,7 @@ async function medirEnVivo() {
       // así que su universo son los ARCHIVOS que su propio publicador en seco enumera. Mismo
       // invariante que los otros dos destinos (el cuerpo describe lo que su ok publica), otro
       // artefacto.
-      const publicaria = publicariaPorCopia(p.destino);
+      const { archivos: publicaria, recuentos } = leerCopia(p.destino);
       if (publicaria === null) {
         noMedidos.push(`${p.id} (${p.destino}): no pude correr el publicador en seco (¿SSH al VPS?)`);
         continue;
@@ -1628,6 +1738,12 @@ async function medirEnVivo() {
         cortosSiat.push({ id: p.id, destino: p.destino, mudos: k.mudos });
       } else if (k.estado === 'NO_MEDIDO') {
         noMedidos.push(`${p.id} (${p.destino}, cuerpo completo): ${k.motivo}`);
+      }
+      // Nombrar los archivos no alcanza: el contenido de uno puede haber cambiado debajo del
+      // pedido. `siat` no imprime recuentos, así que ahí esto sale NO_MEDIDO y no acusa nada.
+      const v = cuerpoDeclaraOtroRecuento({ texto: p.texto, recuentos });
+      if (v.estado === 'OTRA_VERSION') {
+        otraVersion.push({ id: p.id, destino: p.destino, discrepancias: v.discrepancias });
       }
       continue;
     }
@@ -1699,7 +1815,7 @@ async function medirEnVivo() {
   const corta = cadenaPorPedido({
     ids: pedidos.map((p) => p.id),
     acumuladores: {
-      entregados, entregadosSiat, mudos, punteros, cortosSiat, incompletos, vencidos, cortos,
+      entregados, entregadosSiat, mudos, punteros, cortosSiat, otraVersion, incompletos, vencidos, cortos,
       inmedibles,
     },
     correr: (propios) => imprimirCadena({ ...propios, vivoPorDestino }),

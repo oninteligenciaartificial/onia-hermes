@@ -60,6 +60,7 @@
 import { spawnSync } from "node:child_process";
 import { pathToFileURL } from "node:url";
 
+import { buildIdVivo as buildIdVivoCompartido, buildVivoEnDisco } from "../../../../scripts/lib/arbol-del-build-vivo.mjs";
 import { leerDeProduccion, listarDeProduccion } from "../../../../scripts/lib/vps-o-local.mjs";
 import { normalize } from "./guardrails.mjs";
 import {
@@ -128,31 +129,24 @@ export function contenedorAuth({ correr = spawnSync } = {}) {
 
 /** El `BUILD_ID` que sirve el contenedor. `null` = no pude preguntar. */
 export function buildIdVivo({ correr = spawnSync } = {}) {
-  const r = correr("docker", ["exec", CONTENEDOR_APP, "cat", "/app/.next/BUILD_ID"], {
-    encoding: "utf8",
-    timeout: 60_000,
-  });
-  if (!r || r.error || r.status !== 0 || typeof r.stdout !== "string") return null;
-  return r.stdout.trim() || null;
+  return buildIdVivoCompartido({ correr, contenedor: CONTENEDOR_APP });
 }
 
 /**
  * El directorio de fuentes que produjo el build vivo, casado por `BUILD_ID`.
  *
  * Se DERIVA, nunca se nombra un sha: produccion swapea sola tras los merges y un sha escrito a
- * mano envejece en horas. `null` = no pude preguntar o ningun staged casa (las dos son «no medi»,
+ * mano envejece en horas. `null` = no pude preguntar o ningun arbol casa (las dos son «no medi»,
  * y ninguna es «no hay puerta»).
+ *
+ * ⚠️ DONDE BUSCAR NO SE DECIDE ACA. Produccion deja el arbol en dos layouts (`build-*` de
+ * staging y `releases/<sha>-<fecha>/src` de lo publicado) y esa tabla vive en UN lugar
+ * (`scripts/lib/arbol-del-build-vivo.mjs`) porque el punto ciego era de la RECETA, copiada en
+ * cuatro instrumentos: casar solo contra `build-*` dejo a este gate en `exit 2` ~18 dias, y con
+ * el una de las dos mitades del objetivo del carril sin ningun instrumento.
  */
 export function arbolDelBuildVivo({ correr = spawnSync, leer = leerDeProduccion, listar = listarDeProduccion } = {}) {
-  const id = buildIdVivo({ correr });
-  if (!id) return null;
-  const candidatos = listar("/opt/onia-platform/build-*");
-  if (!candidatos || !Array.isArray(candidatos.dirs)) return null;
-  for (const dir of candidatos.dirs) {
-    const suyo = leer(`${dir}/.next/standalone/.next/BUILD_ID`);
-    if (suyo && String(suyo.contenido).trim() === id) return dir;
-  }
-  return null;
+  return buildVivoEnDisco({ buildId: buildIdVivo({ correr }), leer, listar })?.fuentes ?? null;
 }
 
 /** El rol con el que nace una cuenta nueva, leido del alta que produccion EJECUTA. */
@@ -733,6 +727,35 @@ function selfCheck() {
   ok(
     dosPasosExigido({ correr: correrBuild("ID-QUE-NO-ESTA"), leer: leerFake, listar: listarFake }).estado === null,
     "sin arbol vivo la puerta sale sin medir, nunca cerrada",
+  );
+
+  // ...y el build vivo puede estar publicado como RELEASE, que es OTRO layout: el `BUILD_ID` no
+  // cuelga de `.next/standalone` sino de la raiz, y las fuentes no estan en la raiz sino en
+  // `src/`. Casar solo contra `build-*` deja al instrumento en `exit 2` para siempre — y un
+  // `exit 2` permanente se lee como "el ambiental de siempre" y se saltea (paso 18 dias).
+  const RELEASE = "/opt/onia-platform/releases/bbbbbbb-20260925";
+  const listarRelease = (patron) =>
+    String(patron).includes("/releases/")
+      ? { dirs: ["/opt/onia-platform/releases/aaaaaaa-20260924", RELEASE], origen: "remoto" }
+      : { dirs: [], origen: "remoto" };
+  const leerRelease = (ruta) => {
+    if (ruta === `${RELEASE}/BUILD_ID`) return { contenido: "ID-VIVO\n", origen: "remoto" };
+    if (ruta === "/opt/onia-platform/releases/aaaaaaa-20260924/BUILD_ID") return { contenido: "ID-VIEJO\n", origen: "remoto" };
+    if (ruta === `${RELEASE}/src/lib/mfa/policy.ts`) return { contenido: nueva, origen: "remoto" };
+    if (ruta === `${RELEASE}/src/app/api/auth/register/route.ts`) return { contenido: alta, origen: "remoto" };
+    return null;
+  };
+  ok(
+    arbolDelBuildVivo({ correr: correrBuild("ID-VIVO"), leer: leerRelease, listar: listarRelease }) === `${RELEASE}/src`,
+    "un build publicado como release se casa igual, y el arbol devuelto es el de sus FUENTES (src/)",
+  );
+  ok(
+    arbolDelBuildVivo({ correr: correrBuild("ID-QUE-NO-ESTA"), leer: leerRelease, listar: listarRelease }) === null,
+    "tampoco en releases se devuelve el primero que haya: sin par sigue siendo null",
+  );
+  ok(
+    dosPasosExigido({ correr: correrBuild("ID-VIVO"), leer: leerRelease, listar: listarRelease, now: DESPUES }).estado === false,
+    "desde un release la puerta se MIDE de verdad, no sale 'no pude casar el BUILD_ID'",
   );
 
   // Tri-estado en las dos puntas: no medir nunca es 0.
