@@ -6433,9 +6433,17 @@ y sin operar. Acá se opera, con verificación por ítem.
       párrafos abajo, repetido — porque **la cifra se sacó de la tabla pero la frase «tres
       destinos» quedó**, y una cifra escrita en prosa se pudre igual que una en una columna.
 
-      🔴 **Y por qué sobrevivió 19 días: este ítem no tiene verificador mecánico** — `npm run
-      bloqueos:vencidos` sale `NO MEDIDO` sobre esta cola (*"no tiene una tabla «Bloqueado en
-      Sergio» que leer"*: acá los bloqueos son una lista de ítems, no una tabla). La cola hermana
+      🔴 **Y por qué sobrevivió 19 días: este ítem no tiene verificador mecánico.** ⚠️ **Acá
+      decía que `npm run bloqueos:vencidos` sale `NO MEDIDO` sobre esta cola porque *"no tiene una
+      tabla «Bloqueado en Sergio» que leer"*, y es FALSO — corregido el 2026-09-26, apuntándole el
+      gate a mano en vez de heredar la frase.** El gate lee TAMBIÉN los bloqueos escritos como
+      ítems (`- [ ] 🔴`), lo dice su propio mensaje de `NO MEDIDO` al enumerar las tres formas que
+      acepta, y corrido sobre este archivo devuelve las cuatro filas vivas por número de línea
+      (`L5700, L5838, L5914, L6014`) con exit **0**, sin un solo `NO MEDIDO`. **Lo que pasaba era
+      otra cosa, y peor: el alias de `package.json` pasaba UNA sola cola —`chatbot.md`— así que a
+      este archivo no se lo midió nunca.** La frase de arriba daba la explicación equivocada del
+      síntoma correcto, y mientras existiera nadie iba a intentarlo. Arreglado en la misma vuelta:
+      el gate acepta varias rutas y el alias ahora pasa las dos. La cola hermana
       ya probó cuatro veces que ésas son las filas que se mueren de viejas —S10, S11, S12 y S13
       esperaron hasta 23 días con la decisión ya tomada y las cuatro se cerraron solas el día que
       se les cableó uno. **Verificador de este ítem, y ya existe: `npm run pedido:entregado`**
