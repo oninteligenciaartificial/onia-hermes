@@ -6307,6 +6307,61 @@ y sin operar. Acá se opera, con verificación por ítem.
 
 ## Cerrado
 
+- [x] **CERRADO el 2026-09-26 12:10 La Paz — publicado en la rama del carril `873d0729`, NO
+      mergeado a `master` y NO desplegado.** La tarjeta de WhatsApp del panel tipeaba el monto
+      que Meta le cobra al dueño en vez de leerlo de `lib/pricing.ts`, **y una de las dos copias
+      ya había vencido**.
+
+      **Cómo apareció, que es la parte que importa:** no estaba en ninguna cola. La vuelta
+      arrancó midiendo el objetivo y encontró en `/root/loops/onia-platform-chatbot` **un commit
+      que no estaba en ningún remoto** (`git log HEAD --not --remotes=origin` → `71cd8fa9`, del
+      26-sep 00:59 La Paz). Desde nodo-casa este repo no puede pushear (remoto en
+      `DESHABILITADO-NODO-DE-DESARROLLO`), así que ese trabajo se perdía entero si moría el nodo.
+      `git cherry -v origin/master HEAD` dio `+`: no estaba en `master` ni con otro sha.
+
+      **El defecto que traía:** su propio comentario decía que «citaba» a `pricing.ts` «para que
+      la pantalla no tipee el dato a mano». Era cierto de la PANTALLA y falso del módulo: copiaba
+      `0.0113` y `11.37` como literales propios. Los dos ya están exportados
+      (`WHATSAPP_ADDON.meta.utilityUsd`, `TIPO_CAMBIO_REFERENCIA_BS_POR_USD`), y este último lleva
+      escrito al lado, textual, **«Se corrige ACÁ y en ningún otro lado»**.
+
+      **Y no era hipotético — la copia hermana YA había divergido.** `adminLimitLabel` mostraba
+      `Bs 0,11/msg`, que es esa misma tarifa al cambio VIEJO de ~10 Bs/USD; con el de hoy (11,37)
+      son `Bs 0,13`, y la prosa de `RECARGA_CONVERSACIONES` decía 0,13 tres párrafos más abajo.
+      El mismo archivo traía el número de dos maneras y la que se mostraba era la vencida:
+      subestimaba en un 18 % lo que Meta le cobra al cliente. `utilityBob: 0.113` y
+      `marketingBob` son la misma copia vieja y **no los lee nadie** (grep: sólo su propia línea)
+      — quedan como dato muerto, anotado acá y no tocado en esta vuelta.
+
+      **Prueba, no afirmación:**
+
+      - El gate mira el FUENTE y exige que el literal no esté, porque comparar valores no alcanza:
+        dos copias iguales también empatan, y empatan hasta el día que una se mueve. Visto en
+        **ROJO por ese motivo** antes de existir el arreglo — 3 literales presentes y
+        `serviceFreePerMonth` `undefined`, no «no encontré el archivo».
+      - El primer intento del arreglo usó `toFixed` y **lo cazó un gate de la casa**
+        (`__tests__/terminacion-lote-1.test.ts`, *«ningun monto en Bs se imprime con toFixed()»*).
+        Va por `formatBs`, como todo monto del repo.
+      - Los dos textos, leídos renderizados: admin → `…aprox. Bs 0,13/msg, marketing aparte)`;
+        dueño → `…los primeros 1.000 de cada mes son gratis y después son unos Bs 0,13 cada uno.`
+      - Gates, los CINCO del CI: `tsc --noEmit` 0 · **6.825 tests** (7 nuevos) · `check:onia-core`
+        OK · `eslint` 0 errores.
+      - **El árbol publicado es el árbol medido, probado y no inferido:** `git rev-parse
+        HEAD^{tree}` da `42ecc70f` en casa (donde corrieron los gates) y `42ecc70f` en el gemelo
+        del VPS (donde se pusheó). `BASE` era `766a3a33` en las dos puntas, o sea que `master` no
+        se movió debajo de la medición.
+
+      **Trampas que cobró la entrega, para el que venga:** el gemelo `/root/loops/onia-platform`
+      del VPS tiene **392 archivos sucios** (eran 106 el 19-sep) — ahí no se hace `git am`; el
+      limpio es `/root/loops/onia-platform-chatbot`. Y `git am` regenera los shas: el local se
+      alineó con `fetch` + `reset --hard` al sha publicado, porque citar el sha local crea un
+      sha-fantasma que nadie puede encontrar.
+
+      Archivos: `lib/pricing.ts` · `lib/chatbot/meta-cobra-el-servicio.ts` ·
+      `lib/chatbot/meta-cobra-el-servicio.anclado-a-pricing.test.ts` (nuevo) ·
+      `app/(dashboard)/settings/chatbot/CanalWhatsappCard.tsx` y su render test (vienen en
+      `71cd8fa9`).
+
 - [x] 🔴 **CERRADO el 2026-09-25 15:05 La Paz: no queda NINGÚN arreglo esperando firma.** Sergio
       Urcullo contestó `ok t_24fa76aa` a las 18:43 UTC y el brazo ejecutor publicó el bot a las
       18:44:25 UTC con código 0 (`/var/log/onia-deploy-aprobado.log`: *«OK: 38 archivo(s)
