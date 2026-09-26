@@ -159,9 +159,29 @@ const LA_PAZ_UTC = -4;
  *
  * ⚠️ Y por eso su pedido NO se reconoce por la línea `DESPLEGAR:`: un pedido con esa línea
  * para un destino que la lista blanca no tiene muere en el ejecutor con «destino desconocido»
- * y el `ok` de Sergio Urcullo devuelve tilde verde sin publicar nada. Se reconoce por MENCIÓN
- * (`pedidosQueNombranDestino`), que es más débil a propósito: el error de este lado es contar
- * como cubierto algo que no lo está, y el de no mirar es el silencio de arriba.
+ * y el `ok` de Sergio Urcullo devuelve tilde verde sin publicar nada.
+ *
+ * 🔴 CORREGIDO EL MISMO DÍA, unas horas después, y el defecto era otra vez de este archivo.
+ * Acá decía que el pedido se reconoce por MENCIÓN, «más débil a propósito: el error de este
+ * lado es contar como cubierto algo que no lo está». Esa dirección del daño está mal elegida
+ * y el nombre del contenedor es justo el peor sujeto posible: el bot de Onia corre DENTRO de
+ * `onia-center`, así que media diagnosis del sistema lo nombra al pasar. Medido el 2026-09-26
+ * a las 09:4x La Paz sobre el tablero real: **tres** tareas vivas lo mencionaban y sólo UNA
+ * lo pedía — las otras dos eran la renovación del VPS (`t_9c87fb69`) y las 23 ramas viejas
+ * (`t_f539a03d`), que lo nombran en un `docker exec` de paso.
+ *
+ * Contar de más no es el error barato: el día que este destino NO tenga pedido, cualquier
+ * tarea que lo nombre de paso lo absuelve y el veredicto imprime «ya hay pedido». Eso es
+ * cambiar el silencio de arriba por otro silencio, una capa más adentro — y el trabajo varado
+ * que lo reveló (15 días de leads marcados «Confirmar demo») entró por un silencio igual.
+ *
+ * Lo que SÍ distingue a un pedido de una mención es que un pedido **dice cómo se publica**:
+ * o cita el `runbook` de este mismo registro, o lleva la línea `PUBLICAR A MANO: <destino>`.
+ * Las dos señas se declaran acá abajo, así que no hay convención nueva que recordar; y un
+ * pedido que no dice cómo publicar no es accionable ni para Sergio Urcullo ni para nadie.
+ * Ver `pedidosQuePidenAMano`, y `mencionesDelDestino`, que es el seguro contra el error
+ * simétrico: cuando NO hay pedido, el remedio NOMBRA las menciones para que el que lo lea
+ * mire si alguna ya lo pedía antes de abrir un duplicado.
  */
 export const DESTINOS_SIN_CIRCUITO = {
   'onia-center': {
@@ -179,24 +199,75 @@ export const DESTINOS_SIN_CIRCUITO = {
 // ── núcleo puro ────────────────────────────────────────────────────────────────────────
 
 /**
- * PURA: los ids de las tareas VIVAS que nombran a `destino`, en su título o en su cuerpo.
+ * La línea con la que un pedido se declara para un destino que el `ok` no cablea. Es la gemela
+ * de `DESPLEGAR: <destino>` y NO puede colisionar con el ejecutor: sus dos filtros están
+ * anclados (`/^PUBLICAR:/i` y `/^DESPLEGAR:/i`), y «PUBLICAR A MANO:» no empieza por ninguno
+ * de los dos. O sea que declarar el pedido no lo vuelve ejecutable por accidente, que es
+ * justamente lo que hay que evitar en un destino que sale a mano.
+ */
+const MARCA_A_MANO = (destino) => new RegExp(`^PUBLICAR A MANO:\\s*${destino}\\b`, 'im');
+
+/** El texto que se mira de una tarea: título y cuerpo. `list --json` no trae los comentarios. */
+function textoDe(t) {
+  return `${typeof t?.title === 'string' ? t.title : ''}\n${typeof t?.body === 'string' ? t.body : ''}`;
+}
+
+/** PURA: las tareas VIVAS con id, en orden — el universo de las dos preguntas de abajo. */
+function vivasConId(tareas) {
+  return (tareas || []).filter(
+    (t) => typeof t?.id === 'string' && t.id.trim() && tareaAbierta(typeof t?.status === 'string' ? t.status.trim() : ''),
+  );
+}
+
+/**
+ * PURA: los ids de las tareas VIVAS que PIDEN publicar `destino` a mano.
+ *
+ * Una tarea pide si dice CÓMO se publica: cita el `runbook` del destino, o lleva la línea
+ * `PUBLICAR A MANO: <destino>`. Nombrarlo no alcanza — ver el recuadro de
+ * `DESTINOS_SIN_CIRCUITO` con las dos tareas ajenas que lo absolvían.
  *
  * `null` si no se pudo barrer el tablero — nunca `[]`, que se leería como «lo barrí y nadie lo
  * pide» y mandaría a abrir un pedido duplicado del que ya existe.
+ *
+ * ⚠️ `runbook` es EXIGIDO, no opcional: sin él quedaría sólo la marca, que hoy no lleva ningún
+ * pedido vivo, y este gate mandaría a duplicar el pedido que sí existe. Que no se pueda llamar
+ * a medias es el punto.
  */
-export function pedidosQueNombranDestino(tareas, destino) {
+export function pedidosQuePidenAMano(tareas, destino, runbook) {
   if (!Array.isArray(tareas)) return null;
-  const aguja = String(destino).toLowerCase();
+  if (typeof runbook !== 'string' || !runbook.trim()) {
+    throw new TypeError('pedidosQuePidenAMano necesita el runbook del destino: es una de las dos senas del pedido');
+  }
+  // La ruta, sin el paréntesis con el que el registro la explica: lo que un pedido cita es el
+  // archivo, no la glosa. Se compara en minúsculas porque el que escribe el pedido copia y
+  // pega, y una mayúscula de más no debería volverlo invisible.
+  const ruta = runbook.split(/[\s(]/)[0].toLowerCase();
+  const marca = MARCA_A_MANO(destino);
   const ids = [];
-  for (const t of tareas) {
-    const id = typeof t?.id === 'string' ? t.id.trim() : '';
-    if (!id) continue;
-    const estado = typeof t?.status === 'string' ? t.status.trim() : '';
-    if (!tareaAbierta(estado)) continue;
-    const texto = `${typeof t?.title === 'string' ? t.title : ''}\n${typeof t?.body === 'string' ? t.body : ''}`;
-    if (texto.toLowerCase().includes(aguja)) ids.push(id);
+  for (const t of vivasConId(tareas)) {
+    const texto = textoDe(t);
+    if (texto.toLowerCase().includes(ruta) || marca.test(texto)) ids.push(t.id.trim());
   }
   return ids;
+}
+
+/**
+ * PURA: los ids de las tareas VIVAS que NOMBRAN a `destino` sin pedirlo.
+ *
+ * No decide nada — es el texto del remedio cuando el destino sale DESCUBIERTO. Sin esto, el
+ * criterio estricto de arriba tiene el error simétrico: manda a abrir un pedido y el que
+ * obedece no tiene cómo enterarse de que una tarea viva ya lo pedía con otras palabras.
+ *
+ * `null` si no se pudo barrer el tablero, por el mismo motivo que su hermana.
+ */
+export function mencionesDelDestino(tareas, destino, runbook) {
+  const piden = pedidosQuePidenAMano(tareas, destino, runbook);
+  if (piden === null) return null;
+  const yaPide = new Set(piden);
+  const aguja = String(destino).toLowerCase();
+  return vivasConId(tareas)
+    .filter((t) => !yaPide.has(t.id.trim()) && textoDe(t).toLowerCase().includes(aguja))
+    .map((t) => t.id.trim());
 }
 
 /**
@@ -303,7 +374,7 @@ export function pedidosQueDescribenDeMenos(pedidosDelDestino, seco) {
  * que no escala a nadie). El veredicto era cierto —había pedido— y aun así el cliente no
  * recibía nada: la firma de la familia es «verde mientras el trabajo no llega».
  */
-export function clasificarCobertura({ destinos, pendiente, pedidos, seAutoPublica, describeLoQuePublica, ahora, sinCircuito = [], nombradoPor = () => null }) {
+export function clasificarCobertura({ destinos, pendiente, pedidos, seAutoPublica, describeLoQuePublica, ahora, sinCircuito = [], nombradoPor = () => null, mencionadoPor = () => [] }) {
   // EXIGIDA, no opcional con default: un llamador que se olvide de la tercera pregunta
   // volvería a mandar a abrir pedidos que el cron cumple solo, y lo haría en silencio.
   if (typeof seAutoPublica !== 'function') {
@@ -341,9 +412,14 @@ export function clasificarCobertura({ destinos, pendiente, pedidos, seAutoPublic
       // Sin nadie que lo pida, un destino que SÓLO sale a mano es trabajo varado con nadie
       // mirándolo: es el mismo DESCUBIERTO de siempre y lleva el mismo remedio (abrir el
       // pedido). No se le invita un estado propio: el que lo lee tiene que hacer lo mismo.
+      //
+      // ⚠️ Pero el DESCUBIERTO se lleva las MENCIONES, que no son un pedido y tampoco son
+      // nada: son las tareas vivas que nombran el destino sin decir cómo publicarlo. El que
+      // lea el remedio tiene que mirarlas ANTES de abrir otra, o el criterio estricto de
+      // `pedidosQuePidenAMano` se paga con un pedido duplicado.
       filas.push(nombrado.length > 0
         ? { destino, estado: 'SIN_CIRCUITO', pedidos: nombrado }
-        : { destino, estado: 'DESCUBIERTO', pedidos: [] });
+        : { destino, estado: 'DESCUBIERTO', pedidos: [], menciones: mencionadoPor(destino) ?? [] });
       continue;
     }
     const p = pendiente(destino);
@@ -1127,7 +1203,8 @@ function medirEnVivo() {
     sinCircuito: Object.keys(DESTINOS_SIN_CIRCUITO),
     // Del mismo barrido que ya está en la mano: cero llamadas extra al tablero (que desde el
     // nodo de casa es un SSH por llamada, y así se apagó un gate hermano).
-    nombradoPor: (d) => pedidosQueNombranDestino(barrido.tareas, d),
+    nombradoPor: (d) => pedidosQuePidenAMano(barrido.tareas, d, DESTINOS_SIN_CIRCUITO[d]?.runbook ?? ''),
+    mencionadoPor: (d) => mencionesDelDestino(barrido.tareas, d, DESTINOS_SIN_CIRCUITO[d]?.runbook ?? ''),
     pedidos,
     pendiente: (d) => (DETECTORES[d] ? DETECTORES[d]() : null),
     seAutoPublica: (d) => {
@@ -1166,6 +1243,12 @@ function medirEnVivo() {
       // esta línea los dos se leen igual y el remedio de abajo se elige a ciegas.
       const causa = CAUSAS.get(`publicador:${f.destino}`);
       if (causa) console.log(`  causa: ${causa}`);
+      // Las MENCIONES no absuelven, pero se miran antes de abrir el pedido: es el seguro del
+      // criterio estricto contra su propio error simétrico (abrir un duplicado).
+      if (f.menciones?.length) {
+        console.log(`  ojo: ${f.menciones.length} tarea(s) viva(s) lo nombran sin decir como publicarlo: ${f.menciones.join(', ')}`);
+        console.log(`  miralas antes de abrir otra; si alguna ya lo pedia, agregale la linea "PUBLICAR A MANO: ${f.destino}".`);
+      }
     } else if (f.estado === 'NO_MEDIDO') {
       console.log(`NO MEDIDO ${f.destino}: ${f.motivo}${quien}`);
       // `fuente` dice a cuál de los dos instrumentos preguntarle la causa. Sin esta línea,
@@ -1867,17 +1950,44 @@ function selfCheck() {
     'onia-center sigue FUERA de la lista blanca del ok (cablearlo es decision de Sergio Urcullo)',
   );
   {
-    // Nombrado por una tarea viva → cubierto. Con la línea `DESPLEGAR:` NO alcanza: estos
-    // destinos no la llevan, porque el ejecutor la rechazaría con «destino desconocido».
+    // Un pedido se reconoce porque DICE CÓMO PUBLICAR. Con la línea `DESPLEGAR:` no alcanza
+    // —estos destinos no la llevan, el ejecutor la rechazaría con «destino desconocido»— y con
+    // la MENCIÓN tampoco: ver el recuadro de `DESTINOS_SIN_CIRCUITO`.
+    const RB = DESTINOS_SIN_CIRCUITO['onia-center'].runbook;
     const tareas = [
-      { id: 't_viva', status: 'blocked', title: 'Los leads caen en un build viejo', body: 'onia-center corre una version del 1-sep' },
-      { id: 't_otra', status: 'ready', title: 'nada que ver', body: 'sin mencion' },
-      { id: 't_muerta', status: 'done', title: 'vieja', body: 'onia-center ya se publico' },
+      // El pedido real del 2026-09-26 (`t_34f5c0eb`), acortado: cita el runbook.
+      { id: 't_pide', status: 'blocked', title: 'Los leads caen en un build de hace 15 dias', body: `A) Publicar onia-center a mano con ${RB}` },
+      // Las DOS tareas ajenas que lo absolvían, con su texto real acortado.
+      { id: 't_vps', status: 'blocked', title: 'Renovaste el VPS?', body: 'docker exec contra supabase-db y onia-center contesta normal' },
+      { id: 't_ramas', status: 'blocked', title: '23 ramas viejas', body: 'el bot corre dentro de onia-center' },
+      { id: 't_muerta', status: 'done', title: 'vieja', body: `ya se publico con ${RB}` },
     ];
-    deepEqual(pedidosQueNombranDestino(tareas, 'onia-center'), ['t_viva'], 'reconoce la tarea VIVA que nombra el destino');
-    deepEqual(pedidosQueNombranDestino(tareas, 'landing'), [], 'y no inventa menciones que no estan');
-    deepEqual(pedidosQueNombranDestino([{ id: 't_t', status: 'ready', title: 'onia-center viejo' }], 'onia-center'), ['t_t'], 'el TITULO tambien cuenta: un pedido puede nombrarlo ahi');
-    equal(pedidosQueNombranDestino(null, 'onia-center'), null, 'sin tablero es NO MEDIDO, nunca lista vacia');
+    deepEqual(pedidosQuePidenAMano(tareas, 'onia-center', RB), ['t_pide'], 'pide el que CITA el runbook, y solo ese');
+    deepEqual(mencionesDelDestino(tareas, 'onia-center', RB), ['t_vps', 't_ramas'], 'las dos ajenas son MENCIONES, no pedidos: se nombran en el remedio');
+    deepEqual(
+      pedidosQuePidenAMano([{ id: 't_marca', status: 'ready', title: 'x', body: 'bla\nPUBLICAR A MANO: onia-center\nbla' }], 'onia-center', RB),
+      ['t_marca'],
+      'la linea PUBLICAR A MANO: tambien declara el pedido, sin pegar la ruta',
+    );
+    deepEqual(
+      pedidosQuePidenAMano([{ id: 't_t', status: 'ready', title: `publicar onia-center con ${RB}` }], 'onia-center', RB),
+      ['t_t'],
+      'el TITULO tambien cuenta: un pedido puede declararse ahi',
+    );
+    deepEqual(pedidosQuePidenAMano(tareas, 'landing', 'hermes-content/deploy/landing/RUNBOOK.md'), [], 'y no inventa pedidos que no estan');
+    equal(pedidosQuePidenAMano(null, 'onia-center', RB), null, 'sin tablero es NO MEDIDO, nunca lista vacia');
+    equal(mencionesDelDestino(null, 'onia-center', RB), null, 'y su hermana arrastra el mismo tri-estado');
+    // El runbook es EXIGIDO: llamarla a medias dejaría sólo la marca, que hoy no lleva ningún
+    // pedido vivo, y este gate mandaría a duplicar el pedido que sí existe.
+    let tiro = false;
+    try { pedidosQuePidenAMano(tareas, 'onia-center'); } catch { tiro = true; }
+    ok(tiro, 'sin runbook tira, no mide a medias');
+    // Y ningún destino sin circuito puede quedar sin runbook declarado: si quedara, el
+    // llamador vivo tiraría en producción en vez de medir.
+    ok(
+      Object.entries(DESTINOS_SIN_CIRCUITO).every(([, d]) => typeof d.runbook === 'string' && d.runbook.trim()),
+      'todo destino sin circuito declara su runbook: es una de las dos senas del pedido',
+    );
   }
   {
     // La fila sale SIEMPRE, con pedido o sin él: el defecto que esto cierra es que no salía.
@@ -1891,8 +2001,15 @@ function selfCheck() {
     const conPedido = clasificarCobertura({ ...base, destinos: ['onia-center'], pedidos: [], nombradoPor: () => ['t_viva'] });
     equal(conPedido[0].estado, 'SIN_CIRCUITO', 'con una tarea que lo nombra: sale SIN_CIRCUITO, no ausente');
     deepEqual(conPedido[0].pedidos, ['t_viva'], 'y arrastra el id para que se pueda mirar');
-    const sinPedido = clasificarCobertura({ ...base, destinos: ['onia-center'], pedidos: [], nombradoPor: () => [] });
-    equal(sinPedido[0].estado, 'DESCUBIERTO', 'sin nadie que lo nombre es DESCUBIERTO: hay que abrir el pedido');
+    const sinPedido = clasificarCobertura({ ...base, destinos: ['onia-center'], pedidos: [], nombradoPor: () => [], mencionadoPor: () => ['t_vps'] });
+    equal(sinPedido[0].estado, 'DESCUBIERTO', 'sin nadie que lo PIDA es DESCUBIERTO: hay que abrir el pedido');
+    deepEqual(sinPedido[0].menciones, ['t_vps'], 'y arrastra las menciones, para no abrir un duplicado de una tarea que ya lo pedia');
+    // El seguro no puede volverse absolución: una mención no cambia el veredicto.
+    equal(
+      clasificarCobertura({ ...base, destinos: ['onia-center'], pedidos: [], nombradoPor: () => [], mencionadoPor: () => ['t_a', 't_b', 't_c'] })[0].estado,
+      'DESCUBIERTO',
+      'tres menciones siguen siendo DESCUBIERTO: mencionar no es pedir',
+    );
     const noMedido = clasificarCobertura({ ...base, destinos: ['onia-center'], pedidos: [], nombradoPor: () => null });
     equal(noMedido[0].estado, 'NO_MEDIDO', 'y si no se pudo barrer el tablero, NO MEDIDO — nunca verde');
     // Los cableados no cambian de camino por esto.
@@ -1909,8 +2026,18 @@ function selfCheck() {
     'medirEnVivo mide la UNION de los cableados y los que el ok no cablea',
   );
   ok(
-    /nombradoPor: \(d\) => pedidosQueNombranDestino\(/.test(fuente),
-    'y les reconoce el pedido por mencion, con la funcion pura',
+    /nombradoPor: \(d\) => pedidosQuePidenAMano\(barrido\.tareas, d, DESTINOS_SIN_CIRCUITO\[d\]\?\.runbook/.test(fuente),
+    'y les reconoce el pedido por sus DOS senas (runbook o marca), con la funcion pura',
+  );
+  // CABLEADO del seguro: sin esta línea el criterio estricto queda sin su contrapeso y el
+  // DESCUBIERTO manda a abrir un pedido sin decir que hay tareas vivas nombrando el destino.
+  ok(
+    /mencionadoPor: \(d\) => mencionesDelDestino\(barrido\.tareas, d, DESTINOS_SIN_CIRCUITO\[d\]\?\.runbook/.test(fuente),
+    'y el DESCUBIERTO recibe las menciones para que nadie abra un duplicado',
+  );
+  ok(
+    /ojo: \$\{f\.menciones\.length\} tarea\(s\) viva\(s\) lo nombran/.test(fuente),
+    'y las IMPRIME: una mencion que nadie ve no es un seguro',
   );
 
   console.log(fallos === 0 ? 'self-check OK' : `self-check con ${fallos} fallo(s)`);
