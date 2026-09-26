@@ -709,8 +709,26 @@ el detector funcione, no que las colas estén sanas. La medición viva era este 
 nadie lo corría, así que **catorce líneas** llegaron a citar ocho pedidos de deploy ya
 `archived`/`done` sin que nada se pusiera rojo. Su `exit 1` significa que una línea de esta cola
 le pide a Sergio Urcullo una firma que ya dio, o lo manda a contestar `ok` sobre una tarea
-archivada — donde `ok <id>` **no despliega nada** y el pedido se pierde mudo. Hoy sale **1** y se pone verde cuando el `ok` al pedido de deploy vivo de `bot` lo publique: es
-también el acuse de ese deploy, sin tener que creerle a nadie.
+archivada — donde `ok <id>` **no despliega nada** y el pedido se pierde mudo.
+
+⚠️ **Acá decía que este gate era «también el acuse de ese deploy, sin tener que creerle a nadie»
+— y es FALSO, medido el 2026-09-26.** Sale **0** desde esta vuelta, con el deploy del bot **sin
+hacer**: `node scripts/bot_vivo_tiene_el_codigo.mjs` cuenta **7 archivos viejos** corriendo en
+`onia-center` —`knowledge.onia.json` entre ellos, o sea 2 de los 3 botones de WhatsApp de la web
+viva cayendo en el saludo genérico— y el `knowledge.json` cargado sigue siendo `2026-09-24.1`
+contra `2026-09-25.1` del repo.
+
+**Por qué se puso verde, que es lo que lo vuelve un modo de falla y no un descuido:** este gate
+mide **CITAS**, y la vuelta anterior le enseñó a morder la redacción «el `ok` de `t_X`». La cola
+respondió a ese rojo **borrando la cita**. Sujeto cero, verde trivial — y el significado que se le
+había atribuido al verde sobrevivió al borrado del sujeto. Un gate de citas se pone verde cuando
+se borran las citas, y eso no es que el freno se haya levantado.
+
+**Arreglado, no anotado:** los **dos** caminos de `exit 0` (N citas vivas, y cero sujetos)
+imprimen ahora su `ALCANCE:` desde una constante compartida y mandan al hermano que sí mira
+producción. El self-check lo ata por propiedad —no por texto— y quedó validado por mutación: con
+la línea vieja puesta de vuelta salen tres rojos por el motivo correcto. **El acuse del deploy del
+bot es `scripts/bot_vivo_tiene_el_codigo.mjs`, no este gate.**
 
 ⚠️ **Y tiene un HERMANO HOMÓNIMO que contesta al revés — medido el 2026-09-26, el mismo minuto.**
 `hermes-content/deploy/vps-ops/campanas-vivas.mjs` (sin `bot/`, y es el que tenía el nombre

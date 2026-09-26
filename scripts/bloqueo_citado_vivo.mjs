@@ -46,6 +46,9 @@
  */
 
 import { readFile } from 'node:fs/promises';
+// Sincrono y solo para el `--self-check`, que se lee a si mismo para verificar el camino de
+// exito que no es una funcion pura (el de cero sujetos vive en el cuerpo del CLI).
+import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
@@ -179,6 +182,47 @@ function consultar(id) {
   }
 }
 
+/**
+ * El instrumento que SI contesta "¿produccion corre el codigo del repo?". Va exportado porque lo
+ * nombra la linea de exito de aca y el gate lo exige: si se renombra, esto tiene que romperse.
+ */
+export const HERMANO_QUE_MIDE_PRODUCCION = 'scripts/bot_vivo_tiene_el_codigo.mjs';
+
+/**
+ * LA LINEA DE EXITO, y por que no puede ser solo "todas nombran una tarea VIVA".
+ *
+ * Medido el 2026-09-26. `cola/chatbot.md` le atribuia a este verde un significado que este gate
+ * NO mide: *"Hoy sale 1 y se pone verde cuando el `ok` al pedido de deploy vivo de `bot` lo
+ * publique: es tambien el acuse de ese deploy, sin tener que creerle a nadie"*. Ese mismo dia el
+ * gate salio 0 con el deploy SIN hacer — `bot_vivo_tiene_el_codigo.mjs` contaba 7 archivos viejos
+ * corriendo en `onia-center`, entre ellos `knowledge.onia.json`, o sea 2 de los 3 botones de
+ * WhatsApp de la web viva cayendo en el saludo generico.
+ *
+ * POR QUE SE PUSO VERDE, que es lo que lo hace un modo de falla y no un descuido: este gate mide
+ * CITAS, y la vuelta anterior le enseño a morder la redaccion "el `ok` de t_X" (caso
+ * `instruccion` del self-check). La cola respondio a ese rojo BORRANDO la cita. Sujeto cero,
+ * verde trivial — y el significado atribuido al verde sobrevivio al borrado del sujeto. Un gate
+ * de citas se pone verde cuando se borran las citas, y eso NO es que el freno se haya levantado.
+ *
+ * Por eso el exito declara su ALCANCE y nombra al hermano, igual que hizo `campanas:documento`
+ * con el suyo. Un verde que no dice que midio se lee como el verde que el lector esperaba.
+ *
+ * EL TEXTO ES UNO Y LOS CAMINOS DE EXITO SON DOS (N citas vivas, y cero sujetos). Los dos salen
+ * `exit 0` y los dos se leen igual de mal, asi que el alcance vive en UNA constante: este mismo
+ * archivo tiene escrito que dos copias de un texto es como nacio el bug que lo trajo. Y el camino
+ * de cero sujetos es el MAS probable para este fallo, no el menos: es donde cae un pedido de
+ * deploy que nadie cita.
+ */
+export const ALCANCE_DEL_VERDE = [
+  `  ALCANCE: esto mide las CITAS de las colas, NO el estado de produccion. Un pedido de deploy`,
+  `  pendiente no se ve aca: si nadie lo cita, este gate sale verde igual. Que el bot vivo corra`,
+  `  el codigo del repo lo mide ${HERMANO_QUE_MIDE_PRODUCCION}.`,
+].join('\n');
+
+export function lineaDeExito(cuantas) {
+  return `bloqueos citados: ${cuantas} cita(s), todas nombran una tarea VIVA\n${ALCANCE_DEL_VERDE}`;
+}
+
 if (process.argv.includes('--self-check')) {
   let casos = 0;
   const afirmar = (cond, que) => { casos++; if (!cond) { console.error('FALLO:', que); process.exitCode = 1; } };
@@ -255,6 +299,25 @@ if (process.argv.includes('--self-check')) {
   afirmar(juzgar([{ id: 't_1', estado: 'inexistente', archivo: 'c.md', linea: 1 }]).length === 1, 'un id que no existe tampoco frena');
   afirmar(juzgar([{ id: 't_1', estado: null, archivo: 'c.md', linea: 1 }]).length === 0, 'NO MEDIDO no es un item: fallo conservador');
 
+  /**
+   * EL VERDE TIENE QUE DECIR QUE MIDIO. Estos cuatro cierran el hueco del 2026-09-26: el gate
+   * salio 0 con el deploy del bot sin hacer, porque las citas se habian borrado, y la cola leyo
+   * ese 0 como "el deploy se publico". Se afirma la PROPIEDAD (el exito declara su alcance y
+   * manda al hermano), no el texto — cualquier redaccion que la cumpla pasa.
+   */
+  const exito = lineaDeExito(1);
+  afirmar(/ALCANCE/.test(exito), 'el exito declara su ALCANCE: sin eso se lee como el verde que el lector esperaba');
+  afirmar(exito.includes(HERMANO_QUE_MIDE_PRODUCCION), 'y nombra al instrumento hermano que SI mira produccion');
+  afirmar(/deploy/i.test(exito) && /no se ve|NO el estado/i.test(exito),
+    'y dice explicitamente que un pedido de deploy pendiente NO se ve aca: es el significado que se le atribuyo mal');
+  afirmar(lineaDeExito(3).includes('3 cita(s)'), 'y sigue diciendo cuantas citas miro');
+  // Los DOS caminos de exit 0 lo llevan: el de N citas vivas y el de cero sujetos. Se afirma
+  // sobre la fuente compartida, asi que separarlos en dos textos rompe esto.
+  afirmar(lineaDeExito(1).includes(ALCANCE_DEL_VERDE), 'el camino de N citas usa el alcance compartido, no una copia');
+  const fuente = readFileSync(new URL(import.meta.url), 'utf8');
+  const cerosConAlcance = /if \(!resultados\.length\) \{[\s\S]*?console\.log\(ALCANCE_DEL_VERDE\);[\s\S]*?process\.exit\(0\)/.test(fuente);
+  afirmar(cerosConAlcance, 'el camino de CERO sujetos tambien lo imprime: es donde cae un deploy que nadie cita');
+
   if (!process.exitCode) console.log(`self-check: ok — ${casos} casos`);
   process.exit(process.exitCode || 0);
 }
@@ -290,6 +353,7 @@ if (!resultados.length) {
         `vencido y este gate calla, leelo a mano antes de creerle al verde.`,
     );
   }
+  console.log(ALCANCE_DEL_VERDE);
   process.exit(0);
 }
 
@@ -320,5 +384,5 @@ if (noMedidos.length) {
   process.exit(2);
 }
 
-console.log(`bloqueos citados: ${resultados.length} cita(s), todas nombran una tarea VIVA`);
+console.log(lineaDeExito(resultados.length));
 process.exit(0);
