@@ -243,12 +243,24 @@ export function cierreSinReservar({ stageBefore, stageAfter, scheduledAt, calend
 export const BOOKING_TIMEOUT_MS = 5000;
 
 /**
+ * Codigos con los que el sistema dice "ese NOMBRE no existe".
+ *
+ * Solo resolucion. `ECONNREFUSED` queda AFUERA a proposito: ahi el nombre resolvio y alguien
+ * contesto que no escucha — es un destino que existe y esta apagado, un diagnostico distinto
+ * (y en general mas facil de arreglar) que un hostname que no apunta a nada.
+ */
+const NO_RESUELVE = new Set(["EAI_AGAIN", "ENOTFOUND"]);
+
+/**
  * Cuanto se RECUERDA que el destino no contesta, en ms.
  *
  * El tope de arriba protege UN turno; esto protege a los que vienen despues. El 100% del
  * trafico real agota los 5 s (`CALCOM_BASE_URL` declarado, contenedor `calcom` inexistente:
- * medido el 2026-09-18, reproducido el 2026-09-26 desde `onia-center` — AbortError a los
- * 5005 ms, no ENOTFOUND, porque el DNS de Docker no contesta NXDOMAIN por ese nombre), y sin
+ * medido el 2026-09-18 y re-medido el 2026-09-26 desde `onia-center` — el DNS de Docker no
+ * contesta NXDOMAIN por ese nombre: `dns.lookup("calcom")` cuelga hasta `EAI_AGAIN` a los
+ * 5013 ms, con `dns.lookup("onia-platform")` en 8 ms como control. Llega como AbortError porque
+ * el abort de los 5000 ms le gana por 13 ms, no porque el destino conteste; por eso el codigo
+ * real se lee de `cause.code` y no del nombre del error), y sin
  * memoria la demo numero 40 los paga igual que la primera. Se los cobra al prospecto en el
  * turno donde ACEPTA un horario, que es el unico del embudo que produce plata.
  *
@@ -350,8 +362,18 @@ export async function createBooking(options = {}, deps = {}) {
   } catch (error) {
     // El timeout se NOMBRA. Un "error" generico manda a diagnosticar la red del prospecto
     // cuando el problema es nuestro: el calendario no contesto a tiempo.
-    const detalle =
-      error?.name === "AbortError"
+    //
+    // Y el fallo de RESOLUCION se nombra aparte, porque es el que pasa de verdad: medido el
+    // 2026-09-26 dentro de `onia-center`, `dns.lookup("calcom")` termina en `EAI_AGAIN` a los
+    // 5013 ms (control `onia-platform`: 8 ms) — el DNS de Docker no contesta NXDOMAIN por ese
+    // nombre, cuelga. Con el tope en 5000 ms el abort le gana por 13 ms, asi que el log dice
+    // "timeout"; correr el tope unos milisegundos, o un resolver un poco mas rapido, y el MISMO
+    // fallo saldria como "fetch failed" pelado. Diagnosticar por quien gana una carrera de 13 ms
+    // no es diagnosticar: el codigo real viene en `cause.code` y ese no depende del reloj.
+    const codigoDeRed = String(error?.cause?.code || error?.code || "");
+    const detalle = NO_RESUELVE.has(codigoDeRed)
+      ? `el nombre del destino no resuelve (${codigoDeRed}): revisar CALCOM_BASE_URL, no la red del prospecto`
+      : error?.name === "AbortError"
         ? `no contesto en ${timeoutMs}ms (timeout)`
         : String(error?.message || error).slice(0, 200);
     // El servidor nunca contesto: esto es el destino, no la reserva. Se recuerda para que el
