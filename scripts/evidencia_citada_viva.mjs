@@ -75,9 +75,22 @@ const RAIZ = join(dirname(fileURLToPath(import.meta.url)), '..');
  *
  * El presupuesto no inventa veredictos: lo que no llega a medirse sale NO MEDIDA, el tercer
  * estado que este gate ya tenia. Cortar por tiempo es una forma de «no pude preguntar».
+ *
+ * ⚠️ **El default del presupuesto se puso primero en 300 s y estaba MAL, por la misma razon que
+ * T10.** Dejada correr entera desde nodo-casa el 2026-09-27, esta medicion tarda MAS de 300 s
+ * (murio a los 300 s en el primer intento) y menos de 900 s, y su veredicto real es `exit 0` —
+ * las 21 citas honestas. Con el tope en 300 s el default habria devuelto NO MEDIDO **siempre**,
+ * y un `exit 2` permanente se lee como «el ambiental de siempre» y se saltea: un criterio que no
+ * puede ponerse verde es peor que no tener criterio. El tope existe para que la corrida sea
+ * ACOTADA, no para que sea corta — 20 min entran holgados en una vuelta de 50.
+ *
+ * Por lo mismo el tope POR CITA se deja en los 300 s de siempre: bajarlo no arregla nada —el
+ * defecto era la falta de tope de corrida— y en cambio puede convertir en NO MEDIDA a una cita
+ * honesta pero lenta. `npm run sonda:widget` abre un Chromium de verdad y manda tres mensajes
+ * con esperas: sale `0` dentro de los 300 s, y no esta medido que salga dentro de 120.
  */
-const TIMEOUT_MS = Number(process.env.ONIA_EVIDENCIA_TIMEOUT_MS || 120000);
-const PRESUPUESTO_MS = Number(process.env.ONIA_EVIDENCIA_PRESUPUESTO_MS || 300000);
+const TIMEOUT_MS = Number(process.env.ONIA_EVIDENCIA_TIMEOUT_MS || 300000);
+const PRESUPUESTO_MS = Number(process.env.ONIA_EVIDENCIA_PRESUPUESTO_MS || 1200000);
 
 export const SIN_MENTIRAS = 0;
 export const MIENTEN = 1;

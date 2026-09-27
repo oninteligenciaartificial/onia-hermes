@@ -1391,8 +1391,21 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
       · `medir(..., alMedir)` — cada cita se entrega apenas se mide, así una corrida cortada deja
         lo que alcanzó a medir.
       · El denominador se imprime **antes** de correr nada.
-      · Topes por defecto: cita `ONIA_EVIDENCIA_TIMEOUT_MS` 120 s (era 300), corrida
-        `ONIA_EVIDENCIA_PRESUPUESTO_MS` 300 s (no existía).
+      · Topes por defecto: corrida `ONIA_EVIDENCIA_PRESUPUESTO_MS` **1.200 s** (no existía); el
+        tope por cita queda en los 300 s de siempre.
+
+      🔴 **El default del presupuesto se puso primero en 300 s y estaba MAL — corregido en la
+      misma vuelta, y el error es el de T10 otra vez.** Dejada correr entera, esta medición tarda
+      **más de 300 s** (murió a los 300 s en el primer intento) y **menos de 900 s**, y su
+      veredicto real es **`exit 0` — las 21 citas siguen obteniendo el veredicto que declaran**,
+      o sea que hoy ninguna línea de estas dos colas miente. Con el tope en 300 s el default
+      habría devuelto NO MEDIDO **siempre**: un `exit 2` permanente se lee como *«el ambiental de
+      siempre»* y se saltea, y un criterio que no puede ponerse verde es peor que no tener
+      criterio. **El tope existe para que la corrida sea ACOTADA, no para que sea corta.** Y por
+      lo mismo el tope por cita **no** se bajó a 120 s: eso no arreglaba nada —el defecto era la
+      falta de tope de corrida— y podía convertir en NO MEDIDA a una cita honesta pero lenta
+      (`npm run sonda:widget` abre un Chromium de verdad; sale `0` dentro de los 300 s y no está
+      medido que salga dentro de 120).
 
       ⚠️ **No toca la cadena `npm test`:** el que corre ahí es `test:evidencia-citada`, que es el
       `--self-check` puro. El que se colgaba es el alias vivo, que no está en la cadena — por eso
