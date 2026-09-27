@@ -12,6 +12,82 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-26 21:10-21:14 La Paz (vuelta HEAD d58daf8c) — rotación de rubro sigue: Estética y spa, 9/9 sin hallazgo
+
+Chequeo de arranque: `ONIA_ALTA_AUTOMATICA=abierta`. Tablero sin tareas `ready` sin reclamar en
+la zona `recorrido-cliente`. `BUILD_ID` vivo cambió a `PNIhLndYbrHxc_q0RFByG` (antes
+`DvBubiuO4uC5_E9jFNJeZ`) — hubo deploy nuevo, pero el eje que correspondía por la nota anterior
+("Próximo eje: Estética") ya era el siguiente paso de la rotación, así que se corrió ése.
+
+`RECORRIDO_RUBRO='Estética y spa' node scripts/recorrido_cliente.mjs --escribir` (cuenta
+`zz-qa-2026-09-27-0110@onia.com.bo`): **9/9 pasos que le corresponden, `completo: true`,
+`agujeros: []`.** Onboarding en 6 pantallas (horarios lun-vie 09-13/15-19, equipo con 1
+profesional), paciente `zz-qa-2026-09-27-0110-paciente` cargado y visto en `/patients`, cita
+`2026-09-28 09:00` agendada (201, id `cmuj4krtk003z01n0lfovmmh5`) y VISTA en `/appointments`,
+factura con ítem `zz-qa-2026-09-27-0110-item` vista en `/billing/cmuj4l2hw004101n08lanx8qu`,
+FRENADO ahí sin pagar. Panel mirado: el paciente no figura en `/dashboard` (esperado, el panel no
+lista pacientes). **Sin hallazgo** — el `BUILD_ID` nuevo no rompió nada en Estética.
+
+Limpieza verificada al cerrar: `organizations`/`appointments` con `zz-qa-%` = 0.
+
+**Próximo eje para la vuelta siguiente**: seguir la rotación con Servicios profesionales (cuarto
+rubro del ciclo nuevo — dental, comercio, estética ya corridos en este ciclo).
+
+RAZÓN: N/A — avanzó (rotación de rubro, Estética 9/9 sin hallazgo, `BUILD_ID` nuevo verificado).
+LECCIÓN: ninguna nueva — grepear los ejes antes de tirar `--escribir` a secas (la lección de la
+vuelta anterior) volvió a evitar repetir dental sin necesidad.
+
+---
+
+## 2026-09-26 20:14-20:41 La Paz (vuelta HEAD b7a6ad57) — dental base repetido por error de método, corregido con Comercio (rotación de rubro), 8/8 sin hallazgo
+
+Corrí `node scripts/recorrido_cliente.mjs --escribir` en dental plano (cuenta
+`zz-qa-2026-09-27-0009@onia.com.bo`) **sin grepear antes** los ejes de este archivo: **9/9,
+`completo: true`**, pero repitió la entrada de una hora antes (19:13, `30b7f005`, misma
+variante base) — no midió nada nuevo. Es el mismo error que ya está documentado más abajo
+(16:15, `a6d8723e`): antes de tirar `--escribir` a secas hay que grepear
+`RECORRIDO_(RUBRO|MOVIL|SALTAR_EQUIPO|PROBAR_RECOVERY|PROBAR_COADMIN)=` y ordenar por fecha.
+
+Corregido en la misma vuelta: la rotación de los 5 rubros había cerrado su ciclo el 26-sep a
+las 02:09-02:12 (Servicios profesionales), así que el eje más viejo era retomarla desde el
+principio. Corrí `RECORRIDO_RUBRO=Comercio node scripts/recorrido_cliente.mjs --escribir`
+(cuenta `zz-qa-2026-09-27-0014@onia.com.bo`): **8/8 pasos que le corresponden, `completo: true`,
+sin hallazgo.** El paso 7 (agendar cita) sale `NO-APLICA` correctamente — Comercio vende
+storefront/catálogo/caja, no agenda, y su propio menú no ofrece citas. Paciente
+`zz-qa-2026-09-27-0014-paciente` cargado en `/comercio` (catálogo) y visto de vuelta ahí y en
+`/dashboard` (a diferencia de dental, en Comercio el dato SÍ aparece en el panel). Frenado en
+la pantalla de cobro (`/comercio/caja`) sin marcar pago.
+
+Limpieza verificada al cerrar, ambas corridas: `organizations`/`appointments` con `zz-qa-%` = 0.
+
+**Próximo eje para la vuelta siguiente**: seguir la rotación con Estética (tercer rubro del
+ciclo nuevo).
+
+---
+
+## 2026-09-26 19:13 La Paz (vuelta HEAD 30b7f005) — recorrido base (sin variantes), 9/9
+
+`node scripts/recorrido_cliente.mjs --escribir` (dental, sin env de variante, cuenta
+`zz-qa-2026-09-26-2309@onia.com.bo`): **9/9 pasos, `completo: true`, sin hallazgo.** Onboarding
+con equipo cargado (profesional `zz-qa-2026-09-26-2309-profesional`), cita
+`zz-qa-2026-09-26-2309-cita` agendada para 2026-09-28 09:00 (id `cmuj08skt002001n0qgpo120n`) y
+VISTA en `/appointments`, paciente `zz-qa-2026-09-26-2309-paciente` visto en `/patients`,
+factura con ítem `zz-qa-2026-09-26-2309-item` vista en `/billing/cmuj092wx002201n0i9lrng7l` —
+frenado ahí sin marcar pago. El paso 9 (panel/dashboard) confirma que el paciente NO aparece
+listado ahí — comportamiento esperado, el panel no lista pacientes.
+
+Limpieza verificada al cerrar: `select count(*) from organizations where name like 'zz-qa-%'` = 0,
+`select count(*) from appointments where notes like 'zz-qa-%' or reason like 'zz-qa-%'` = 0.
+
+**Nota para la próxima vuelta:** esta corrida fue con la variante base (sin `RECORRIDO_RUBRO`,
+`RECORRIDO_MOVIL`, `RECORRIDO_SALTAR_EQUIPO`, `RECORRIDO_PROBAR_RECOVERY` ni
+`RECORRIDO_PROBAR_COADMIN`), que ya se corre seguido. El eje que hace más tiempo no se corre según
+la entrada anterior era `SALTAR_EQUIPO` — reconfirmado hoy a las 17:09 La Paz. La próxima vuelta
+debería mirar `PROBAR_RECOVERY`, `PROBAR_COADMIN`, `MOVIL` o la rotación de `RUBRO` (grepear las
+fechas de cada uno en este archivo) en vez de repetir la variante base.
+
+---
+
 ## 2026-09-26 17:09 La Paz (vuelta HEAD 82bb23e3) — `BUILD_ID` sin cambios; eje más viejo (`SALTAR_EQUIPO`, 13 días sin correrse) reconfirmado, 9/9
 
 Antes de tirar `--escribir` en dental a secas (el error de la vuelta anterior), grepeé
