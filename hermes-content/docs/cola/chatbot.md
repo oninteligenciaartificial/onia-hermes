@@ -255,9 +255,18 @@ Gate: `npm run test:log-ahogado` (15 casos puros + self-check), en la cadena ent
 **mismo volumen / distinta fecha / distinto veredicto**: si el instrumento volviera a medir volumen,
 ese par se pone rojo solo.
 
-**LISTO =** `node scripts/log_del_bot_ahogado.mjs` sale **0**, con `0` copias en la ventana y la
-cola dejando ver los eventos. **Medido el 2026-09-27 08:55 UTC: sale 1.** 🔴 **La mitad del ruido
-está sana y la otra mitad NO, y el ítem se reabre por eso.**
+**LISTO =** el gate del log ahogado sale **0**, con `0` copias en la ventana y la cola dejando ver
+los eventos.
+**Medido el 2026-09-27 08:55 UTC:** `node scripts/log_del_bot_ahogado.mjs` → **exit 1**. 🔴 **La
+mitad del ruido está sana y la otra mitad NO, y el ítem se reabre por eso.**
+
+> ⚠️ **El criterio y la medición quedan en renglones SEPARADOS a propósito, y el motivo es del
+> instrumento que encontró esto.** Antes compartían renglón —*«LISTO = `node …` sale 0 … Medido:
+> sale 0»*— y `evidencia:citada` lee el veredicto en los 160 caracteres que siguen a la receta, así
+> que leía el **criterio** (`sale 0`) como si fuera la **medición**. Con eso, una línea corregida
+> seguía acusada: el número que declaraba era el que el ítem quiere alcanzar, no el que el gate da
+> hoy. Una receta viva se cita **una** vez, al lado de su veredicto real; el criterio de cierre
+> nombra el gate sin repetir el comando.
 
 🔴 **REABIERTO el 2026-09-27, y no lo trajo la cola: lo trajo `npm run evidencia:citada`** — el
 instrumento que se cerró tres horas antes acusó esta misma línea (*«declara 0 y sale 1»*). O sea
