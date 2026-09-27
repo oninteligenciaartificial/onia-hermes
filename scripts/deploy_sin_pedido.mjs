@@ -115,7 +115,7 @@
 
 import { execFileSync } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
-import { pathToFileURL } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import { DESTINOS } from './kanban/publicar-aprobado.mjs';
 import {
@@ -1301,12 +1301,22 @@ function medirEnVivo() {
     }
   }
 
+  // Ver el bloque de abajo: un destino con el sha al día no alcanza si el commit traía una
+  // migración que producción nunca aplicó. Se pregunta siempre, y se imprime en los tres
+  // estados — el silencio acá se lee como «no hay nada que reportar».
+  const migraciones = medirMigraciones();
+  for (const linea of describirMigraciones(migraciones)) console.log(linea);
+
   const descubiertos = filas.filter((f) => f.estado === 'DESCUBIERTO').map((f) => f.destino);
   if (descubiertos.length > 0) {
     console.log('');
     for (const linea of remediosDelDescubierto(descubiertos, (d) => ROTOS.has(d))) console.log(linea);
     return 1;
   }
+  // Una migración sin aplicar SÍ cambia el código de salida, al revés que `CUBIERTO_VIEJO`:
+  // no espera la firma de nadie —se registra con un comando— y este camino vivo no está en la
+  // cadena `npm test`, así que un rojo acá no traba el merge de ningún carril.
+  if (migraciones.estado === 'PENDIENTES') return 1;
   if (filas.some((f) => f.estado === 'NO_MEDIDO')) return 2;
   // ⚠️ Ni `CUBIERTO_VIEJO` ni `CUBIERTO_CORTO` cambian el código de salida, y es una decisión,
   // no un olvido — los dos se curan con algo que sólo pasa fuera de esta vuelta. Este
@@ -1316,6 +1326,88 @@ function medirEnVivo() {
   // esta familia de gates se muere. El aviso va donde lo lee quien puede hacer algo: la
   // salida que mira la vuelta del integrador.
   return 0;
+}
+
+// ── la migración que nadie aplicó ──────────────────────────────────────────────────────
+//
+// Las cinco preguntas de arriba miran COMMITS: si el sha vivo de un destino está atrás, falta
+// publicar. Pero un destino puede estar publicado y el arreglo IGUAL no llegar al cliente
+// cuando el commit traía una migración: el swap no corre `prisma migrate` (medido, cero
+// líneas en `publicar.sh`), así que la columna que el código nuevo lee no existe y
+// `plataforma` sale «al día». Es el peor modo de falla de este archivo — el que ESCONDE
+// trabajo, no el que lo inventa.
+//
+// La medición ya estaba escrita y probada en `migraciones_pendientes.mjs`, pero sólo como
+// alias suelto (`npm run migraciones:pendientes`), y un alias que no está en la medición de
+// arranque de ningún carril no lo corre nadie. Se le PREGUNTA a él —no se reimplementa: dos
+// derivaciones del mismo cruce se contradicen el día que una cambia— y se traduce su código
+// de salida, que ya es tri-estado: 0 al día · 1 pendientes · 2 no medido.
+
+/** El instrumento que sabe medirlo. Se resuelve al lado de este archivo, no por ruta fija. */
+const MIGRACIONES = fileURLToPath(new URL('migraciones_pendientes.mjs', import.meta.url));
+
+/**
+ * Traduce UNA corrida del instrumento de migraciones. Un `status` que no es 0 ni 1 —incluido
+ * `null`, que es «no arrancó»: timeout, archivo ausente, node caído— cae en NO MEDIDO a
+ * propósito: leer eso como AL_DÍA sería el falso verde exacto que este control existe para
+ * cerrar, y con la salida vacía se vería idéntico a un «está todo aplicado».
+ */
+export function leerMigraciones({ status, salida } = {}) {
+  const lineas = String(salida ?? '')
+    .split('\n')
+    .map((l) => l.trim())
+    .filter(Boolean);
+  const conMarca = (marca) => lineas.find((l) => l.startsWith(marca)) ?? null;
+  // Los nombres de migración que el instrumento lista debajo de su veredicto.
+  const nombres = lineas.filter((l) => /^\d{8,}_\S+$/.test(l));
+  if (status === 0) return { estado: 'AL_DIA', detalle: conMarca('OK:'), nombres: [] };
+  if (status === 1) return { estado: 'PENDIENTES', detalle: conMarca('PENDIENTES:'), nombres };
+  return { estado: 'NO_MEDIDO', detalle: conMarca('VEREDICTO: NO MEDIDO') ?? lineas[lineas.length - 1] ?? null, nombres: [] };
+}
+
+/**
+ * Qué se imprime en cada estado. AL_DÍA también habla: callarlo lo volvería indistinguible de
+ * «no se midió», que es como esta dimensión estuvo invisible hasta hoy.
+ */
+export function describirMigraciones({ estado, detalle, nombres = [] } = {}) {
+  if (estado === 'AL_DIA') {
+    // Su veredicto ya viene con su propia marca «OK:»: se le saca para no imprimir «OK ... OK:».
+    const dicho = (detalle ?? 'las migraciones de origin/master estan aplicadas en produccion.').replace(/^OK:\s*/, '');
+    return [`OK migraciones: ${dicho}`];
+  }
+  if (estado === 'PENDIENTES') {
+    const cuales = nombres.length > 0 ? ` — ${nombres.join(', ')}` : '';
+    return [
+      `FALTA migraciones: ${detalle ?? 'hay migraciones de origin/master que produccion NO aplico'}${cuales}`,
+      '  El swap NO las aplica (publicar.sh no corre prisma migrate): el ok publica el codigo y la',
+      '  columna sigue sin existir, asi que el arreglo no llega al cliente aunque el sha diga que si.',
+      '  Se registran contra supabase-db por docker exec, y el pedido del destino tiene que DECIRLO',
+      '  en su cuerpo. Detalle: npm run migraciones:pendientes',
+    ];
+  }
+  return [
+    `NO MEDIDO migraciones: ${detalle ?? 'el instrumento de migraciones no contesto'}`,
+    '  Ojo: NO significa que esten al dia. Se vuelve a preguntar con: npm run migraciones:pendientes',
+  ];
+}
+
+/** `correr` es inyectable sólo para el self-check: la costura que se rompe es el CABLEADO. */
+export function medirMigraciones({ correr = corridaDeMigraciones } = {}) {
+  return leerMigraciones(correr());
+}
+
+function corridaDeMigraciones() {
+  try {
+    const salida = execFileSync(process.execPath, [MIGRACIONES], {
+      encoding: 'utf8',
+      timeout: 180_000,
+      stdio: ['ignore', 'pipe', 'pipe'],
+    });
+    return { status: 0, salida };
+  } catch (e) {
+    // El instrumento dice lo que midió por stdout incluso cuando sale 1 o 2: se conserva.
+    return { status: typeof e?.status === 'number' ? e.status : null, salida: String(e?.stdout ?? e?.output?.[1] ?? '') };
+  }
 }
 
 // ── self-check ─────────────────────────────────────────────────────────────────────────
@@ -2050,6 +2142,39 @@ function selfCheck() {
     /ojo: \$\{f\.menciones\.length\} tarea\(s\) viva\(s\) lo nombran/.test(fuente),
     'y las IMPRIME: una mencion que nadie ve no es un seguro',
   );
+
+  // ── la migración que nadie aplicó ───────────────────────────────────────────────────
+  const alDiaMig = leerMigraciones({ status: 0, salida: 'OK: las 35 migraciones de origin/master estan aplicadas en produccion.' });
+  ok(alDiaMig.estado === 'AL_DIA', `codigo 0 del instrumento es al dia (salio ${alDiaMig.estado})`);
+  const pendMig = leerMigraciones({
+    status: 1,
+    salida: 'PENDIENTES: 1 migracion(es) en el repo que produccion NO tiene:\n20260927120000_algo\n\nEl swap NO las aplica.',
+  });
+  ok(
+    pendMig.estado === 'PENDIENTES' && pendMig.nombres.join(',') === '20260927120000_algo',
+    `codigo 1 nombra la migracion que falta (salio ${JSON.stringify(pendMig)})`,
+  );
+  ok(
+    leerMigraciones({ status: 2, salida: 'VEREDICTO: NO MEDIDO — no pude preguntarle a supabase-db.' }).estado === 'NO_MEDIDO',
+    'codigo 2 del instrumento es no medido',
+  );
+  // El caso que produce el falso verde: el instrumento no arranca y su salida viene vacía.
+  // Eso se ve idéntico a «no hay nada pendiente» y NO lo es.
+  ok(leerMigraciones({ status: null, salida: '' }).estado === 'NO_MEDIDO', 'si el instrumento no arranca: no medido, nunca al dia');
+  ok(leerMigraciones().estado === 'NO_MEDIDO', 'sin corrida tampoco da al dia');
+  ok(describirMigraciones(alDiaMig).length === 1, 'al dia dice UNA linea: el silencio se lee como que no hay nada que reportar');
+  const dichoPend = describirMigraciones(pendMig).join('\n');
+  ok(
+    /20260927120000_algo/.test(dichoPend) && /prisma migrate/.test(dichoPend),
+    'pendientes nombra la migracion y por que el swap no la aplica',
+  );
+  ok(/NO significa que esten al dia/.test(describirMigraciones({ estado: 'NO_MEDIDO' }).join('\n')), 'no medido aclara que no es al dia');
+  // CABLEADO: que `medirEnVivo` la mida, la IMPRIMA y que su rojo llegue al código de salida.
+  // Llamar-y-tirar es el esquive que pasa en verde con el guardia muerto.
+  ok(/const migraciones = medirMigraciones\(\);/.test(fuente), 'medirEnVivo mide las migraciones sin aplicar');
+  ok(/for \(const linea of describirMigraciones\(migraciones\)\) console\.log\(linea\);/.test(fuente), 'y las imprime');
+  ok(/if \(migraciones\.estado === 'PENDIENTES'\) return 1;/.test(fuente), 'y una migracion sin aplicar pone el veredicto en rojo');
+  ok(/execFileSync\(process\.execPath, \[MIGRACIONES\]/.test(fuente), 'y le pregunta al instrumento que ya sabe medirlo, en vez de rehacer el cruce');
 
   console.log(fallos === 0 ? 'self-check OK' : `self-check con ${fallos} fallo(s)`);
   return fallos === 0 ? 0 : 1;
