@@ -31,8 +31,21 @@
 //
 // CÓDIGOS DE SALIDA
 //   0  cada frase que la web viva manda y el repo empareja, el bot viva la escucha
-//   1  hay una frase viva que el bot NO escucha  → ese lead recibe el saludo genérico
+//   1  hay una frase viva que el bot NO escucha y NADA desplegado la arregla → hay que
+//      ESCRIBIR la respuesta. Es trabajo de este carril.
 //   2  NO MEDIDO — no se pudo preguntar a uno de los dos lados (no es estar bien)
+//   3  hay una frase rota, pero el repo YA la dice bien y producción tiene la versión vieja →
+//      no hay código que escribir, falta PUBLICAR el bot. Rojo para el lead, no del carril.
+//
+// POR QUÉ EL ROJO VIENE PARTIDO EN 1 Y 3 (2026-09-26/27). Este medidor entró a la medición de
+// arranque del carril y devolvió `exit 1` en TODAS las vueltas, por el deploy del bot que
+// espera la firma de Sergio Urcullo: el repo pasó las dos frases de agenda a 30 minutos y
+// producción sigue en 20 y 45. Un rojo permanente con causa conocida se archiva como "el de
+// siempre", y entonces el día que alguien rompa una frase EN EL REPO —el caso que este archivo
+// existe para agarrar— sale el mismo código y nadie lo distingue. Es el daño que ya hicieron
+// acá los `exit 2` ambientales. Los dos rojos piden trabajo OPUESTO, así que se cuentan aparte:
+// se emparejan por `mismaFraseSalvoNumeros`, y cuando hay una de cada clase manda el `1`, para
+// que una respuesta que nadie escribió no quede escondida detrás de un pedido de deploy.
 //
 // POR QUÉ TRI-ESTADO: los dos lados son remotos (la web por HTTPS, el bot por `docker exec`
 // contra el VPS). Un `catch` que devuelva "no escucha" convierte "no pude preguntar" en un
@@ -215,10 +228,29 @@ export function campanasQueEscuchaElBot(correr, panelTraeCampanas) {
 }
 
 /**
+ * ¿Son la MISMA frase con otros números?
+ *
+ * Es lo único que separa "producción tiene la versión vieja" de "nadie escribió la respuesta",
+ * y esos dos piden trabajo opuesto. Se compara ignorando los dígitos porque así fue la deriva
+ * real del 2026-09-26 —la web pasó a "30 minutos" y el bot vivo quedó en "20" y en "45"—, y
+ * porque un criterio más flojo (parecido general) emparejaría campañas distintas y mandaría a
+ * esperar un deploy que nunca va a arreglarlas.
+ *
+ * Si no empareja, la rotura se trata como del carril: es el lado exigente del error.
+ */
+export function mismaFraseSalvoNumeros(uno, otro) {
+  const sinNumeros = (s) => String(s).replace(/\d+/g, "#").replace(/\s+/g, " ").trim();
+  return uno !== otro && sinNumeros(uno) === sinNumeros(otro);
+}
+
+/**
  * El veredicto.
  *
  * Rojo SOLO cuando las tres cosas pasan a la vez: el repo empareja la frase, la web viva ya
  * la manda, y el bot vivo no la escucha. Ésa es la deriva que le cuesta el lead.
+ *
+ * Y el rojo viene en DOS códigos, porque tiene dos dueños: `1` cuando hay que escribir la
+ * respuesta (es de este carril) y `3` cuando el repo ya la dice y sólo falta publicar el bot.
  */
 export function juzgar({ repo, web, bot, noMedidas = [] }) {
   const lineas = [];
@@ -243,10 +275,29 @@ export function juzgar({ repo, web, bot, noMedidas = [] }) {
   const rotas = juzgables.filter((f) => !bot.frases.has(f));
   const sanas = juzgables.filter((f) => bot.frases.has(f));
 
+  // Las frases que el bot vivo escucha y el repo ya no empareja: las candidatas a ser la
+  // versión ANTERIOR de una rota. Se derivan ANTES de clasificar porque son la evidencia que
+  // separa las dos clases de rotura, y esa separación decide el código de salida.
+  const soloDelBot = [...bot.frases].filter((x) => !repo.includes(x));
+  const viejaDe = new Map();
+  for (const f of rotas) {
+    const previa = soloDelBot.find((v) => mismaFraseSalvoNumeros(v, f));
+    if (previa) viejaDe.set(f, previa);
+  }
+  const porDeploy = rotas.filter((f) => viejaDe.has(f));
+  const delCarril = rotas.filter((f) => !viejaDe.has(f));
+
   for (const f of sanas) lineas.push(`  ok         "${f}"`);
   for (const f of rotas) {
     lineas.push(`  ROTA       "${f}"`);
     lineas.push("             la web viva se la escribe al lead y el bot vivo NO la escucha: recibe el saludo genérico");
+    // El remedio se nombra por frase, porque son OPUESTOS: una pide desplegar lo que ya está
+    // escrito, la otra pide escribirlo. Un solo rojo para las dos manda al trabajo equivocado.
+    if (viejaDe.has(f)) {
+      lineas.push(`             el repo YA dice esto; producción quedó en "${viejaDe.get(f)}" — se arregla DESPLEGANDO, no escribiendo código`);
+    } else {
+      lineas.push("             el bot vivo no escucha NINGUNA versión de esta frase: no hay nada desplegado que la arregle, hay que escribir la respuesta");
+    }
   }
 
   // El repo empareja una frase que el HTML de ninguna ruta viva trae: no es rojo, pero se dice.
@@ -269,20 +320,39 @@ export function juzgar({ repo, web, bot, noMedidas = [] }) {
   // Se afirma sólo lo que se puede distinguir. Decir "un deploy la borraría" cuando en
   // realidad el deploy la corrige es el mismo error que costó el gate hermano del 2026-09-26
   // (un instrumento que nombraba el remedio OPUESTO), así que acá se nombra la duda.
-  for (const f of [...bot.frases].filter((x) => !repo.includes(x))) {
-    if (rotas.length > 0) {
-      lineas.push(`  AVISO      el bot vivo escucha "${f}", que el repo ya no empareja — con ${rotas.length} frase(s) rota(s) arriba, lo esperable es que sea la versión VIEJA de una de ellas: el deploy la reemplaza`);
+  const esVieja = new Set(viejaDe.values());
+  for (const f of soloDelBot) {
+    if (esVieja.has(f)) {
+      const suya = [...viejaDe.keys()].find((r) => viejaDe.get(r) === f);
+      lineas.push(`  AVISO      el bot vivo escucha "${f}": es la versión VIEJA de "${suya}" — el deploy la reemplaza`);
+    } else if (rotas.length > 0) {
+      lineas.push(`  AVISO      el bot vivo escucha "${f}", que el repo ya no empareja, y NO es la versión vieja de ninguna de las ${rotas.length} rota(s) de arriba: no se puede decir si sobra o si falta en el repo — mirala antes de tocarla`);
     } else {
       lineas.push(`  AVISO      el bot vivo escucha "${f}", que el repo ya no empareja, y NO hay ninguna frase rota: producción quedó ADELANTE y un deploy la borraría`);
     }
   }
 
   const deQuien = `${bot.fuente}${bot.version ? `, versión ${bot.version}` : ""}`;
-  if (rotas.length > 0) {
+  const esperaDeploy = porDeploy.length ? ` · ${porDeploy.length} de ellas ya está(n) bien en el repo y sólo espera(n) el DEPLOY del bot` : "";
+  // El rojo del carril MANDA sobre el que sólo espera deploy: si no, una frase que nadie
+  // escribió queda escondida detrás de un pedido de deploy que puede tardar días.
+  if (delCarril.length > 0) {
     return {
       exit: 1,
       lineas,
-      veredicto: `ROTO — ${rotas.length} de ${juzgables.length} frase(s) que la web viva manda no las escucha el bot vivo (${deQuien})`,
+      veredicto: `ROTO — ${rotas.length} de ${juzgables.length} frase(s) que la web viva manda no las escucha el bot vivo (${deQuien}); ${delCarril.length} necesita(n) que se ESCRIBA la respuesta${esperaDeploy}`,
+    };
+  }
+  // Rojo igual —el lead recibe el saludo genérico HOY—, pero con otro código, porque el
+  // trabajo no es de este carril. Nace del 2026-09-26/27: este medidor entró a la medición de
+  // arranque y devolvió `exit 1` en todas las vueltas por el deploy del bot que espera firma.
+  // Un rojo permanente con causa conocida se lee como "el de siempre" y tapa al que sí es
+  // nuevo — el mismo daño que ya hicieron acá los `exit 2` ambientales.
+  if (porDeploy.length > 0) {
+    return {
+      exit: 3,
+      lineas,
+      veredicto: `ESPERA DEPLOY — las ${porDeploy.length} frase(s) rota(s) ya están bien en el repo y producción tiene la versión vieja (${deQuien}): no hay código que escribir, hay que publicar el bot. El lead que aprieta el botón HOY recibe el saludo genérico`,
     };
   }
   if (noMedidas.length > 0) {
@@ -385,7 +455,10 @@ export function selfCheck() {
     web: new Set([FRASE_30]),
     bot: { frases: new Set([FRASE_20]), fuente: "archivo", version: "2026-09-24.1" },
   });
-  ok(deriva.exit === 1, "web manda una frase que el bot no escucha tiene que salir ROJO");
+  // Rojo, y con el código que dice DE QUIÉN es el trabajo: acá el repo ya está en 30, así que
+  // no hay nada que escribir (3 = espera deploy). Lo que no puede ser NUNCA es 0.
+  ok(deriva.exit === 3, "web manda una frase que el bot no escucha tiene que salir ROJO");
+  ok(deriva.exit !== 0, "una frase rota no es verde ni cuando el remedio es de otro");
   ok(deriva.lineas.join("\n").includes("saludo genérico"), "el rojo tiene que decir QUÉ recibe el lead, no sólo que difiere");
   ok(deriva.lineas.join("\n").includes(FRASE_30), "el rojo tiene que NOMBRAR la frase que se rompió");
 
@@ -433,7 +506,7 @@ export function selfCheck() {
     web: new Set([FRASE_30]),
     bot: { frases: new Set([FRASE_20]), fuente: "archivo" },
   });
-  ok(vieja.exit === 1, "con la frase cambiada el gate sigue rojo");
+  ok(vieja.exit === 3, "con la frase cambiada el gate sigue rojo, y el código dice que el remedio es publicar");
   ok(vieja.lineas.join("\n").includes("versión VIEJA"),
     "si hay una frase rota, la que sólo tiene el bot se nombra como la VIEJA, no como producción adelante");
   ok(!vieja.lineas.join("\n").includes("la borraría"),

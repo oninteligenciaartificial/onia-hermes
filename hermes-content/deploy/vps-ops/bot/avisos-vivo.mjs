@@ -131,9 +131,42 @@ export function resolverBotDesplegado(deps = {}) {
  */
 export const CAUSA_GLOBAL_DE_SALTEO = "ONIA_BOT_TG_AVISO";
 
+/**
+ * El patron ISO que el log estampa. Lo comparten la ventana, la conciliacion y los anclajes
+ * de `[aviso]`: son el mismo eje. Va en clases POSIX (no `\d`) porque tambien viaja dentro de
+ * un `grep -oE` que corre donde vive el log.
+ */
+const ISO_EN_EL_LOG = '20[0-9][0-9]-[0-9][0-9]-[0-9][0-9]T[0-9][0-9]:[0-9][0-9]:[0-9][0-9]';
+
+/**
+ * TODO anclaje que lee una linea `[aviso]` se arma aca, y por eso tolera la hora OPCIONAL.
+ *
+ * POR QUE UNA SOLA FUENTE. Son SEIS los anclajes que leen estas lineas —`motivoDelAviso`,
+ * `conEstado`, el `sent` y el `skipped` de `contarEventos`, y el `conv=` y el `estado` de
+ * `conversacionesDeAvisos`— y hasta el 2026-09-26 cada uno traia su literal `\[aviso\]`
+ * pegado a la palabra de estado. Con la hora en el medio el `\w+` captura `2026`: el
+ * `estado` pasa a ser "2026", el `conv=` propio deja de matchear y cae al vecino de arriba
+ * —otra conversacion—, el motivo queda "sin motivo en el log" y los contadores se van a
+ * CERO. Sin un solo error, y en el unico lugar donde este carril cuenta si el aviso le llego
+ * a Sergio Urcullo. La cola los daba por CINCO: el que faltaba era `conEstado`, justo el que
+ * alimenta el numero que se publica. Con los seis derivados de aca, arreglar cinco y olvidar
+ * uno dejo de ser posible.
+ *
+ * POR QUE OPCIONAL Y NO OBLIGATORIA. Hoy `webhook-server.mjs` (`:767` y `:770`) escribe estas
+ * lineas sin hora, con un `log()` que es un `process.stdout.write` pelado, mientras su
+ * hermana `[onia-webhook]` se fecha a si misma (`:318`). Estampar la hora es lo que falta
+ * para poder contar el objetivo por dia, pero ese archivo esta congelado detras de un pedido
+ * de deploy del bot de 13 archivos que NO lo incluye. Aceptando los dos formatos, el dia que
+ * la hora llegue no hay "los dos archivos o ninguno" ni un parser roto en el medio: el log
+ * viejo del VPS es append-only y sus lineas peladas se siguen leyendo igual.
+ */
+function anclaAviso(resto) {
+  return new RegExp(String.raw`\[aviso\]\s+(?:${ISO_EN_EL_LOG}(?:\.[0-9]+)?Z?\s+)?${resto}`);
+}
+
 /** El `(motivo)` con el que el motor pidio el aviso: `[aviso] skipped (cuota_agotada): ...`. */
 function motivoDelAviso(linea) {
-  return /\[aviso\]\s+\w+\s+(?:conv=\d+\s+)?\(([^)]+)\)/.exec(String(linea))?.[1] || "sin motivo en el log";
+  return anclaAviso(String.raw`\w+\s+(?:conv=\d+\s+)?\(([^)]+)\)`).exec(String(linea))?.[1] || "sin motivo en el log";
 }
 
 /**
@@ -149,18 +182,18 @@ function motivoDelAviso(linea) {
  */
 export function contarEventos(lineas = []) {
   const avisos = (Array.isArray(lineas) ? lineas : []).filter((l) => String(l).includes("[aviso]"));
-  const conEstado = (estado) => avisos.filter((l) => new RegExp(`\\[aviso\\]\\s+${estado}\\b`).test(l)).length;
+  const conEstado = (estado) => avisos.filter((l) => anclaAviso(`${estado}\\b`).test(l)).length;
 
   // Posicion del ultimo envio exitoso: todo lo anterior a el ya fue desmentido POR EL
   // CIRCUITO, que volvio a mandar. Se compara por orden en el log, que es el orden real.
   let ultimoEnvio = -1;
   avisos.forEach((l, i) => {
-    if (/\[aviso\]\s+sent\b/.test(String(l))) ultimoEnvio = i;
+    if (anclaAviso(String.raw`sent\b`).test(String(l))) ultimoEnvio = i;
   });
 
   const vigentes = [];
   avisos.forEach((l, i) => {
-    if (!/\[aviso\]\s+skipped\b/.test(String(l))) return;
+    if (!anclaAviso(String.raw`skipped\b`).test(String(l))) return;
     const curado = String(l).includes(CAUSA_GLOBAL_DE_SALTEO) && ultimoEnvio > i;
     if (!curado) vigentes.push(motivoDelAviso(l));
   });
@@ -200,14 +233,14 @@ export function conversacionesDeAvisos(lineas = []) {
   const eventos = [];
   todas.forEach((l, i) => {
     if (!l.includes("[aviso]")) return;
-    const propio = /\[aviso\]\s+\w+\s+conv=(\d+)/.exec(l)?.[1];
+    const propio = anclaAviso(String.raw`\w+\s+conv=(\d+)`).exec(l)?.[1];
     // Solo la vecina INMEDIATA, y solo si es una linea de webhook: el aviso se loguea en el
     // callback del mismo turno, asi que cualquier otra distancia ya es adivinar.
     const previa = todas[i - 1] || "";
     const vecino = !propio && previa.includes("[onia-webhook]") ? /\bconv=(\d+)/.exec(previa)?.[1] : null;
     const conv = propio ?? vecino ?? null;
     eventos.push({
-      estado: /\[aviso\]\s+(\w+)/.exec(l)?.[1] || null,
+      estado: anclaAviso(String.raw`(\w+)`).exec(l)?.[1] || null,
       motivo: motivoDelAviso(l),
       conv: conv === null ? null : Number(conv),
       // Si el salteo fue por la causa GLOBAL o por una propia de este aviso. El `motivo` no
@@ -641,6 +674,36 @@ export const ESTADO_POR_RAMA = Object.freeze({ handoff: "handoff_humano", demo_a
 export const ESTADOS_QUE_AVISAN = Object.freeze(RAMAS_QUE_AVISAN.map((r) => ESTADO_POR_RAMA[r]));
 
 /**
+ * La conversacion con la que este gate maneja el motor. Vive en UNA constante porque entra por
+ * DOS puertas que tienen que decir lo mismo: el `conversationKey` del estado sintetico (de
+ * donde el motor saca el `Conversación chatwoot:N` de su texto) y el `conversationId` que se le
+ * pasa a `construirAviso` (de donde sale el `conversacion N` de la cabecera). Con dos valores
+ * distintos el gate imprime un aviso con DOS identidades, que es una combinacion que ningun
+ * aviso real puede tener — y ese ejemplo es lo unico que un humano compara contra produccion.
+ */
+export const CONVERSACION_DEL_GATE = 4242;
+
+/**
+ * ¿El aviso dice a QUIEN contestarle? Sin esto Sergio Urcullo recibe un timbre sin puerta.
+ *
+ * Se exige en las DOS mitades del mensaje, y ahi esta el filo: la cabecera la estampa
+ * `construirAviso` con el `conversationId` que le pasa el llamador, asi que preguntarle SOLO a
+ * ella es preguntarle al gate por su propio argumento —tautologico, no puede ponerse rojo por
+ * nada que haga el motor—. El cuerpo lo escribe el MOTOR (`bot-engine.mjs`, con
+ * `state.conversationKey`), y es la mitad que de verdad puede fallar.
+ */
+export function avisoEsAccionable({ aviso, conversationId = CONVERSACION_DEL_GATE } = {}) {
+  const texto = String(aviso?.texto ?? "");
+  if (!texto) return false;
+  // Fuera del texto: es lo unico que queda cuando el aviso NO sale (ver `construirAviso`).
+  if (aviso?.conversationId !== conversationId) return false;
+  // La cabecera, que es lo primero accionable que Sergio Urcullo lee.
+  if (!new RegExp(`conversacion ${conversationId}\\b`).test(texto)) return false;
+  // El cuerpo del motor. `\b` para que `chatwoot:4` no pase por `chatwoot:42`.
+  return new RegExp(`chatwoot:${conversationId}\\b`).test(texto);
+}
+
+/**
  * Maneja el motor DESPLEGADO hasta CADA una de las ramas de `RAMAS_QUE_AVISAN` y arma el
  * aviso con el `construirAviso` desplegado. Es el unico eslabon que prueba que las piezas
  * encajan entre si: cada una tiene su test, y aun asi el empalme puede estar cambiado de
@@ -681,7 +744,11 @@ export async function motorProduceAviso(dir) {
 
     for (const kind of RAMAS_QUE_AVISAN) {
       const { config, dice } = guiones[kind];
-      let estado = engine.createState({ conversationKey: "chatwoot:0", leadKey: "gate", channel: "web" });
+      let estado = engine.createState({
+        conversationKey: `chatwoot:${CONVERSACION_DEL_GATE}`,
+        leadKey: "gate",
+        channel: "web",
+      });
       estado = engine.step(estado, { text: "Hola", receivedAt: ahora() }, { config }).nextState;
       const r = engine.step(estado, { text: dice, receivedAt: ahora() }, { config });
 
@@ -698,12 +765,11 @@ export async function motorProduceAviso(dir) {
       // MAS POBRE que el aviso real y el instrumento deja de mostrar lo que mide.
       const aviso = construirAviso({
         notify: deLaRama,
-        conversationId: 4242,
+        conversationId: CONVERSACION_DEL_GATE,
         stageAfter: r.nextState?.botStage,
         canal: "Channel::WebWidget",
       });
-      // "Accionable" = nombra la conversacion. Sin eso Sergio recibe un timbre sin puerta.
-      const accionable = Boolean(aviso?.texto?.includes("4242")) && aviso?.conversationId === 4242;
+      const accionable = avisoEsAccionable({ aviso, conversationId: CONVERSACION_DEL_GATE });
       ramas[kind] = { emite: true, accionable };
       if (!ejemplo) ejemplo = aviso?.texto;
     }
@@ -799,9 +865,6 @@ export function inboxPorConversacion(convs = []) {
   }
   return mapa;
 }
-
-/** El patron ISO que el log estampa. Lo comparten la ventana y la conciliacion: son el mismo eje. */
-const ISO_EN_EL_LOG = '20[0-9][0-9]-[0-9][0-9]-[0-9][0-9]T[0-9][0-9]:[0-9][0-9]:[0-9][0-9]';
 
 /**
  * La ventana de tiempo que el log VIVO puede responder, derivada de sus propias marcas.
