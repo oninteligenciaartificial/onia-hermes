@@ -1185,6 +1185,34 @@ cierta para el otro, así que el estado se pregunta por separado:
   /root/bin/onia-tablero.sh list --status blocked | grep -i 'Publicar el bot'   # vacío = no hay firma pendiente
   ```
 
+  🔴 **«Hay firma pendiente» NO quiere decir que se le esté PIDIENDO — medido el 2026-09-27 09:15
+  UTC, y es el estado de hoy.** Ese `grep` contesta que el pedido existe; no contesta si Sergio
+  Urcullo puede verlo. **La hoja de decisiones del parte diario nombra CINCO** (`MAX=5` en
+  `scripts/loops/parte-diario.sh:23`) y hoy hay **18** tareas `blocked kind=needs_input`: las otras
+  13 salen como *«… y 13 mas esperando en el tablero»*, sin id y sin título, o sea sin forma de
+  contestarlas. **`t_3752e986` —el pedido del bot— está 9.º, así que no se nombró ni hoy ni ayer.**
+  El parte sí salió (`OK message_id=6955`, 1.061 bytes): el canal funciona, el renglón no alcanza.
+
+  Y no se arregla solo con esperar: el orden es `🔴` en el título y después la posición en la
+  salida de `onia-tablero.sh list`, que no correlaciona con la edad ni con lo que el `ok`
+  desbloquea. Por eso **las mismas quedan afuera todos los días** — `t_6bf938b7`, que es de este
+  carril, lleva **24 días** (creada el 2026-09-03) en el puesto 16 y nunca se nombró. Es el modo de
+  falla del Punto de Venta del SIAT, que esperó 14 días, y esta hoja se creó para evitarlo.
+
+  **Para este archivo cambia una cosa concreta:** los tres ítems que dicen *«se hace después del
+  `ok`»* —T10, el de *«las líneas `[aviso]` … no llevan hora»* y el de *«`espejo-check.mjs` veta el
+  árbol entero»*, los dos en «Después»— están esperando
+  una firma **que no se está pidiendo en pantalla**, no una que Sergio Urcullo esté demorando. No
+  se re-mide cada vuelta y **no se le vuelve a preguntar por Telegram** —sumar un aviso al canal
+  saturado es apagarlo—. El arreglo es del parte diario, que es maquinaria de loops y tiene otro
+  dueño: **`t_b3143556`**, con la reproducción y tres opciones cotizadas. Derivar, no copiar:
+
+  ```bash
+  /root/bin/onia-tablero.sh list > /tmp/tab.txt          # ¿en qué puesto está, y cuántas esperan?
+  grep -E '^⊘' /tmp/tab.txt | awk '{ p = index($0,"🔴") ? 0 : 1; printf "%d\t%09d\t%s\n", p, NR, $0 }' \
+    | sort -k1,1n -k2,2r | cut -f3- | nl | head -20
+  ```
+
   ⚠️ **Acá hubo un veredicto escrito TRES veces y las tres caducó, en las dos direcciones — y
   por eso ahora hay un gate que prohíbe volver a escribirlo** (`npm run test:frontera-derivada`,
   puro, en la cadena). El 24-sep decía *«sigue esperando la firma de un `DESPLEGAR: bot`»* con la
