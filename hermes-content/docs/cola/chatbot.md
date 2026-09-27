@@ -864,6 +864,36 @@ contra el ÁRBOL (`git ls-tree`), no contra la ancestría del commit.**
 Su `exit 2` es NO MEDIDO (no hay clon de `onia-platform` que contenste `fetch`), nunca verde por
 no haber podido preguntar. No va a `npm test` a propósito, por lo mismo que `envuelo:vencido`.
 
+🔴 **Y UNO más desde el 2026-09-27, que cierra el hueco que `deploy:ya-ocurrio` tenía POR DISEÑO:**
+
+```bash
+npm run evidencia:citada   # 0 = las citas siguen obteniendo el veredicto que declaran · 1 = lista archivo:línea · 2 = NO MEDIDO
+```
+
+Muchas líneas de estas dos colas declaran su evidencia como **el veredicto de otro gate**
+(*«`npm run demo:agendada` → exit 1»*). Nadie corría esos gates para ver si todavía dan eso:
+`deploy:ya-ocurrio` juzga por **ARCHIVO** —si el que la línea nombra está entre los desfasados de
+`/tmp/onia-bot`— y `knowledge.onia.json` lo está SIEMPRE mientras el pedido de deploy del bot
+espere firma, así que toda línea que lo nombre salía «cierta» sin importar si su arreglo ya viajó.
+El caso que lo trajo: `chatbot.md:3888` mandaba a hacer a mano un install que el deploy ya hace
+solo, y `deploy:ya-ocurrio` decía **«0 mienten»**. Medir el archivo en vez de la afirmación, otra
+vez, y fallando en la dirección cara: **verde sobre un doc que miente.**
+
+No se arregló dentro de `deploy:ya-ocurrio` a propósito: meter una medición VIVA ahí lo pondría
+rojo por ambiente, y su `--self-check` está en la cadena raíz. Acá el `--self-check` es **puro**
+(el corredor se inyecta, 44 casos, `test:evidencia-citada` en la cadena) y lo vivo vive en este
+alias — el mismo reparto que `campanas-vivas` y `bloqueo:citado`.
+
+⚠️ **Lo que NO juzga, dicho para que su cero sea legible**, porque acusar a cualquiera de estos
+sería como se apaga un gate: los **números de adentro** de la salida (`plataforma-v1.md:1860` dice
+«REALES: 4» y hoy son 3 — el veredicto sigue siendo 1, así que se absuelve con razón); el **pasado**
+(*«`bloqueo:citado` salió 1»* cuenta un defecto ya arreglado); las **mutaciones** (*«con
+`update-index` … sale 1; restaurado, verdes»* es el rojo-primero que este repo exige); las **filas
+de bitácora** `| … |`, que son la foto de un día; lo **tachado**; la marca `**Verificador:**`, que
+ya mide `bloqueos:vencidos`; y toda cita que **ya trae su nota de corrección** fechada, mirando
+también el párrafo siguiente. Imprime el recuento de las saltadas **por motivo**: sin ese
+denominador, «0 mienten» sobre 0 sujetos y sobre 21 se leen igual.
+
 **No uses `tail -N | grep -c` para juzgar el log del bot.** `tail -N` es una ventana de LÍNEAS, no
 de TIEMPO, y ese log **no se rota**: el 24-sep un `tail -80` devolvió vacío con 27 eventos adentro
 del archivo (falso verde), y el 26-sep un `tail -2000` devolvió 1.417 copias de una línea que ya
@@ -9601,8 +9631,59 @@ cita: al cerrar una fila hay que barrer quién la nombra, no sólo tacharla.
       circuito está completo en mock y verificado mirando (`/bcp/cobrar` + `/bcp/callback`,
       contrato del banco calcado); el código no cambia para el modo real. Espera las
       credenciales del BCP — ver Bloqueado.
-- [ ] 🔴 **`deploy:ya-ocurrio` firma «cierta» una afirmación cuya consecuencia ya es falsa, porque
-      juzga por ARCHIVO y no por ARREGLO.** Encontrado el 2026-09-26 22:30 La Paz auditando los
+- [x] ✅ **CERRADO el 2026-09-27 03:1x La Paz — el hueco ya tiene instrumento: `npm run
+      evidencia:citada`** (`scripts/evidencia_citada_viva.mjs`, self-check **47/47**, en la cadena
+      como `test:evidencia-citada`; la medición viva quedó declarada arriba, en «Cómo se trabaja
+      esta cola», donde van las que no pueden ir a `npm test`). Lee las líneas que declaran su
+      evidencia como el veredicto de otro gate, **corre ese gate** y compara: declarado ≠ medido →
+      `exit 1` con `archivo:línea`; no se pudo correr → `exit 2`, nunca verde.
+
+      **Se hizo aparte y no dentro de `juezDelMotor`**, que era el arreglo obvio y el prohibido: una
+      medición viva ahí pondría rojo por ambiente a un `--self-check` que está en la cadena raíz.
+      Acá el self-check es **puro** (el corredor y la clave de caché se inyectan).
+
+      **Los CUATRO defectos que aparecieron por exigir el rojo antes, y que ninguna lectura habría
+      dado** — los cuatro son del instrumento, no del producto:
+      1. **`→ 2 horarios con 33,7 h de aviso` se leía como «código 2».** La palabra (`exit`, `sale`)
+         era opcional después de la flecha, así que un CONTEO pasaba por veredicto y el gate acusaba
+         con una polaridad inventada. Es el texto real de `:7872`.
+      2. **`\b` después de `[oó]` no cierra nunca:** la vocal acentuada no es `\w`, así que
+         `sali[oó]\b` no matchea «salió » y `cambi[oó]\b` no matchea «CAMBIÓ el 2026-09-04» — el
+         texto real de `:7917`. Con «AMPLIADO» sí andaba (termina en `O`, que sí es `\w`), y esa
+         asimetría es la que vuelve al bug invisible: la mitad de los casos en verde. **Escrito con
+         `\b` las dos veces, y las dos veces falló.** Mismo tropiezo que la raíz `includ` contra
+         «inclu-**i**-do», ya pagado en esta cola.
+      3. **La segunda alternativa del regex captura en el grupo 2**, y leer sólo el 1 daba
+         `esperado: NaN` — que nunca es igual a nada, o sea que toda la forma `→ 0` salía ACUSADA
+         siempre. El falso positivo más caro de los cuatro.
+      4. **Dos citas del MISMO script se corrían dos veces, y una de ellas escribe en producción.**
+         `sonda_widget.mjs` le manda dos mensajes de verdad al widget del inbox 4 —el de los leads
+         reales, que ratelimitea al 4.º pedido por IP— y esta cola lo cita de las dos formas
+         (`node scripts/…` en `:3091` y `:8525`, `npm run sonda:widget` en `:8789`). El caché ahora
+         mira **a qué script apunta** el alias, no su texto. Un gate que mide no puede ensuciar más
+         que el defecto que busca.
+
+      **Y lo que el gate deja AFUERA está contado por motivo, no escondido:** de 53 citas con código
+      declarado en las dos colas, **21 son juzgables** y 32 se saltan (11 tachadas, 6 filas de
+      bitácora `| … |`, 6 en pasado o bajo mutación, 5 con su nota de corrección fechada, 4 que ya
+      mide `bloqueos:vencidos`). Acusar a cualquiera de esas clases es como se apaga un gate: 30
+      rojos que el lector sabe que están mal le enseñan a no mirar el 31. **No juzga los números de
+      adentro de la salida** — `plataforma-v1.md:1860` dice «REALES: 4» y hoy son 3, pero el
+      veredicto sigue siendo 1 y se absuelve con razón; juzgar el cuerpo es otra unidad y otro gate.
+
+      **De paso, un defecto de contrato en el hermano:** `bloqueos_vencidos.mjs` `export`a
+      `validarComando`/`resolverBin` y **es imposible importarlo** — su CLI corre a nivel de módulo
+      sin guarda de `argv[1]`, así que el `import` imprime el uso y mata al proceso que lo pide
+      (medido: el callback del importador nunca corre). Es el mismo patrón que ya se pagó en
+      `demo_agendada_real.mjs`. Las dos guardas se mudaron a `scripts/lib/comando_de_cola.mjs` y el
+      hermano las re-exporta, así que su `--self-check` sigue afirmándolas: **61/61 verde después de
+      la mudanza.** Copiar la guarda en el segundo consumidor era la otra salida y es peor: es la
+      parte que decide QUÉ SE EJECUTA, y dos copias de eso divergen.
+
+      Lo de abajo es el diagnóstico con el que se abrió.
+
+      ~~🔴 **`deploy:ya-ocurrio` firma «cierta» una afirmación cuya consecuencia ya es falsa**~~, porque
+      juzga por ARCHIVO y no por ARREGLO. Encontrado el 2026-09-26 22:30 La Paz auditando los
       `[x]` (escalón 2), con un caso real: la línea `chatbot.md:3888` decía que el lead del plan
       Empresa leía una frase vieja y que el texto necesitaba un segundo paso a mano; las dos cosas
       eran falsas desde el 24-sep y el gate la daba por cierta.
