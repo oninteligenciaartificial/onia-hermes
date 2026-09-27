@@ -12,6 +12,31 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-27 09:09-13:16 La Paz (vuelta HEAD d28aeda4) — dental 9/9 y comercio 8/8, ambas corridas en esta vuelta, sin hallazgo nuevo
+
+Chequeo de arranque: máquina `casa`. `ONIA_ALTA_AUTOMATICA=abierta`. Cron `recorrido-cliente`
+registrado (`9 * * * *`, coincide con `loops.md`). Tablero sin tareas `ready` sin reclamar en
+`recorrido-cliente`.
+
+`node scripts/recorrido_cliente.mjs --escribir` (dental por defecto) — **9/9**. Cuenta
+`zz-qa-2026-09-27-1309@onia.com.bo`, onboarding completo, paciente cargado, cita `2026-09-28
+09:00` agendada y VISTA en `/appointments` (id `cmuju93wl00ff01n0xii4jlp9`), factura mirada en
+`/billing/...` y frenada sin pagar.
+
+`RECORRIDO_RUBRO=Comercio node scripts/recorrido_cliente.mjs --escribir` — **8/8** (paso 7
+no-aplica, correcto: Comercio no vende agenda). Cuenta `zz-qa-2026-09-27-1313@onia.com.bo`,
+onboarding completo, dato cargado en storefront Catálogo y visto en `/dashboard`, caja
+(`/comercio/caja`) mirada y frenada sin cobrar.
+
+Limpieza verificada tras AMBAS corridas: `appointments`/`organizations`/`profiles` con
+`zz-qa-%` = 0 (impreso antes de borrar en cada salida, y re-confirmado con `SELECT` aparte).
+
+RAZÓN: N/A — avanzó (los dos objetivos de la vuelta, dental 9/9 y comercio 8/8, quedaron
+verificados en producción sin hallazgos nuevos que reportar a otro carril).
+LECCIÓN: ninguna nueva.
+
+---
+
 ## 2026-09-27 10:09-10:12 La Paz (vuelta HEAD 76201554) — rotación de rubro: Comercio (el eje más viejo sin correrse desde el 09-26 20:14), 8/8
 
 Chequeo de arranque: máquina `casa` (nodo-casa, WSL). `ONIA_ALTA_AUTOMATICA=abierta`. Los 4 loops
