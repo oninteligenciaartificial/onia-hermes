@@ -1,5 +1,74 @@
 # Handoff — continuar la 1.0 en Codex
 
+> ## 🧭 EMPEZÁ ACÁ (Codex, 27-sep-2026) — lo demás de este archivo es historia de apoyo
+>
+> **1. Objetivo.** La 1.0 = un cliente de los 5 rubros **descubre, prueba, usa y paga** Onia sin un
+> humano de Onia y sin una sola promesa falsa (`cola/plataforma-v1.md` §«Definición 1.0»). La etapa
+> del negocio es **conseguir clientes** (`ONIA_ESTRATEGIA_DE_EMPRESA.md`): nada de líneas nuevas.
+>
+> **2. En producción y verificado.**
+> - Correos con la marca real (logo PNG, tinta, Archivo; 13 de la app + 4 de GoTrue):
+>   `release-d1ca514e`, 26-sep 20:45 UTC; logo y plantillas 200; rollback
+>   `onia-platform-prev-DvBubiuO-20260926-204539`.
+> - Bot de ventas (tarea `t_24fa76aa`, con el OK de Sergio): 25-sep 18:44 UTC, `espejo-check` exit 0.
+>
+> **3. A medias — TODO está commiteado y en GitHub; nada vive solo en la PC.**
+> | # | Qué | Repo · rama · commit | Worktree | Respaldo | Falta |
+> |---|---|---|---|---|---|
+> | A | Pago con el QR estático del BCP, con la identidad de Onia (QR recortado de la tarjeta del banco) | platform · `claude/checkout-qr-estatico-20260925` · `f2dc9a7b` | `E:/onia-wt/checkout-qr` | `origin/wip/checkout-qr-estatico-20260925` | «OK pago» de Sergio + que escanee el QR con su banco |
+> | B | Ícono de la app verde con «on» negro (el de Instagram) | platform · `claude/icono-app-verde-20260926` · `a700b4cb` | `E:/onia-wt/icono-app` | `origin/wip/icono-app-verde-20260926` | «OK ícono». Ojo: el logo del encabezado móvil y `/book` usan `public/icon.svg` y también cambian |
+> | C | La web dice «pagás con nuestro QR» | hermes · `web/medio-de-pago-qr-estatico` · `481ff75d` | `E:/onia-wt/web-qr-estatico` | `origin/wip/web-medio-de-pago-qr-estatico` | se publica DESPUÉS de A: `medio-de-pago-vivo` exige 200 en `/pago/qr-bcp-onia.png` |
+> - **Cómo se publica A/B:** rebase sobre `origin/master` (en A, conflicto chico esperado en
+>   `lib/checkout/textos.ts`: conservar la versión del QR), suites + `tsc`, push `HEAD:master`, esperar
+>   CI y Security verdes, `nohup bash /opt/onia-platform/_deploy/publicar.sh > /var/log/<nombre>.log`
+>   en el VPS y seguir el log hasta «PUBLICADO Y VERIFICADO». Después mirar `/pago/qr-bcp-onia.png`
+>   200 y la pantalla renderizada. Recién ahí C: push a `main` de hermes.
+> - Páginas de revisión de Sergio: pago + ícono https://claude.ai/artifact/USZ5yuxFc8jpcrSGfuaMWq ·
+>   correos (ya aprobados) https://claude.ai/artifact/LZ3SYuFEqMjEZoEMoh26gD.
+>
+> **4. Archivos clave.** platform: `lib/email-marca.ts` (envoltorios y piezas de todos los correos),
+> `lib/email.ts`, `lib/checkout/qr-estatico.ts` (datos del QR, **vence 25/09/2027**),
+> `lib/checkout/textos.ts` (única fuente de «cómo se le paga a Onia»: 3 medios),
+> `components/billing/QrEstaticoOnia.tsx`, `app/checkout/checkout.css`, `public/pago/qr-bcp-onia.png`,
+> `public/correo/onia-logo-banda.png` (`scripts/marca/generar-logo-correo.mjs`),
+> `scripts/gen-app-icons.mjs`; guards `__tests__/lib/email-marca-real.test.ts`,
+> `lib/checkout/medio-de-pago-derivado.test.ts`. hermes: `web-factory/apps/onia-platform/src/content/medio-de-pago.ts`,
+> `docs/research/2026-09-26-web-estructura-yeezy-skims-y-push.md`.
+>
+> **5. Intentos fallidos y trampas (no repetirlos).**
+> - **Empujar una rama `claude/*` = publicarla** en los DOS repos (`onia-cola.md` líneas 407 y 465 la
+>   mergea sola). Respaldos con prefijo `wip/`. **Mergear a `master` de platform = publicar** (cron
+>   cada 3 h, minuto 50).
+> - `next dev` NO corre desde `E:` con `node_modules` en junction a `C:`. Renderizar desde
+>   `git archive HEAD` a una carpeta en `C:` con junction a `C:\dev\proyectos\onia-platform\node_modules`.
+>   Usar Playwright con `waitUntil: "load"` (con `networkidle` se cuelga por la recarga en vivo). Borrar la
+>   junction con `cmd /c rmdir` ANTES de borrar la carpeta.
+> - OpenCV NO decodifica el QR del BCP (modo 5); solo lo detecta. La prueba real es la app del banco.
+> - Vitest reescribe 2 `.snap` a LF: `git checkout -- <snap>` antes de commitear. Fallan en Windows y
+>   son conocidos: `sin-envoltorios-de-cron-del-vps` (git ENOENT) y `scripts/qa-v1/{schema,contract}` (CRLF).
+> - El `ok <id>` de Telegram = `onia-tablero.sh unblock <id>` **+** `node /root/bin/onia-publicar-aprobado.mjs <id>`.
+>   El `unblock` solo NO despliega.
+> - El `node_modules` de la web en el checkout principal de hermes apunta a un worktree borrado
+>   (`web-creator-personal-site-eed2f3`): en un worktree nuevo, crear junctions a `web-factory/node_modules/.pnpm`.
+>
+> **6. Lo que depende de Sergio Urcullo.**
+> 1. «OK pago» (después de escanear el QR sin pagar) y «OK ícono».
+> 2. Autorizar Cloudflare (`claude` → `/mcp` → cloudflare): copia de respaldo fuera del VPS en R2, con
+>    la PC de casa como segunda copia.
+> 3. Probar «Conectar mi WhatsApp» en la cuenta Clínica Sergio con su número nuevo, **nunca** el del bot.
+> 4. SIAT: entrar al portal para ver el marcador y pedir la Fase 2 antes del 04/11. Leslie: certificado
+>    de producción (Bs 70).
+> 5. Decidir: rehacer la web con estructura corta (research) y sacar «homologación en trámite» de la FAQ.
+> 6. Factura de los primeros pagos: el sistema no puede emitir factura electrónica hasta que el SIN lo
+>    autorice (Fase 2), y Sergio pidió «nada manual».
+>
+> **7. Próximos pasos, en orden.** (1) Con los OK: publicar A y B, y después C. (2) Destrabe del
+> aprobador único: se destraba solo, con criterio, o se exige más de un admin (decisión de Sergio,
+> memoria `decisiones-sergio-25-sep-qr-icono-destrabe`). (3) Respaldo en R2 + casa. (4) Segunda
+> pasada de los correos, más breves y con más emoción (sugerencia de Sergio). (5) Web corta, si Sergio
+> dice sí. (6) Menores: raya larga en «Enviar comprobante — Bs X», APIs por rol base (punto 2 de la
+> cola vieja) y push del chatbot genérico (punto 3).
+
 > ## 📌 25-sep (tarde) — lo que Sergio Urcullo pidió anotar, y el estado de cada cosa
 >
 > **En curso en esta sesión:** punto 1 de la cola, rediseño de correos con la marca real (worktree
