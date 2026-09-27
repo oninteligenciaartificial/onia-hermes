@@ -104,6 +104,15 @@ pero coinciden **por diligencia, no por construccion**. `scripts/loops/sincroniz
 mantiene los `publicar.sh` de los destinos cableados, y aca no hay ninguno. Antes de correr
 algo de `/opt/onia-center/_deploy/`, comparar md5 contra esta carpeta.
 
+⚠️ **Y de los dos caminos, sólo UNO estampa el sha: publicá por `scripts/deploy-onia-center.sh`.**
+`build-and-stage.sh` buildea en el VPS desde `wf-code.tgz`, que es código sin metadatos de git:
+no tiene de dónde derivar el commit, así que el runtime que arma sale **sin `.commit`** y
+`deploy:sin-pedido` vuelve a quedar sin poder medir este destino. No se le inventa el sha —un
+`.commit` falso hace fallar al instrumento *en verde*, que es peor que no medir—, pero desde el
+2026-09-26 su paso `[5/5]` imprime `COMMIT=MISSING` y nombra el guión correcto, así que el hueco
+se ve **en el momento en que se crea** y no dos semanas después. Sigue siendo el rescate válido
+cuando no hay repo a mano; sólo hay que saber lo que cuesta.
+
 Correr manual:
 ```bash
 gh workflow run deploy-onia-center.yml -f swap=false   # validar build+stage

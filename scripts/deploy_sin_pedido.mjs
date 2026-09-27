@@ -186,12 +186,23 @@ const LA_PAZ_UTC = -4;
 export const DESTINOS_SIN_CIRCUITO = {
   'onia-center': {
     que_es: 'el contenedor que recibe los leads de onia.com.bo (la landing lo llama por la red Docker, no hay ruta publica)',
-    runbook: 'hermes-content/deploy/onia-center/RUNBOOK.md (build-and-stage.sh + swap-and-verify.sh)',
-    // Por qué no se le pregunta «¿le falta publicar?» como a los otros cuatro: no escribe
+    // ⚠️ La glosa nombra el guion de ENTRADA, y eso NO es cosmético: `onia-center` tiene dos
+    // caminos de publicación hermanos y sólo uno estampa el sha. Hasta el 2026-09-26 acá decía
+    // «build-and-stage.sh + swap-and-verify.sh» —los dos guiones del VPS, que no estampan—, así
+    // que el que obedeciera este remedio (o el `ok` de la tarea viva, que lo copia) publicaba
+    // por el camino inmedible: `.commit` no aparecía y este mismo instrumento volvía a contestar
+    // «no hay sha vivo que comparar», para siempre. El estampado de `scripts/deploy-onia-center.sh`
+    // quedaba esperando a un camino que nadie iba a tomar. Lo cuida
+    // `scripts/onia-center-sha-vivo.test.mjs`, que deriva los guiones de esta glosa y exige que
+    // alguno estampe — así que el día que los del VPS también estampen, se pone verde solo.
+    runbook: 'hermes-content/deploy/onia-center/RUNBOOK.md (scripts/deploy-onia-center.sh, el unico camino que estampa el sha)',
+    // Por qué no se le pregunta «¿le falta publicar?» como a los otros cuatro: HOY no escribe
     // `.commit` ni `BUILD_ID`, así que no hay con qué derivar el sha vivo. Inventarle una
     // medición por grep de un símbolo la ataría a UN arreglo puntual y quedaría verde el día
     // que el arreglo varado sea otro. Mientras no tenga con qué verificarse, lo honesto es
-    // decir que sólo sale a mano y exigir que alguien lo esté pidiendo.
+    // decir que sólo sale a mano y exigir que alguien lo esté pidiendo. El build vivo es del
+    // 1-sep, anterior al estampado: el archivo aparece en la próxima publicación, y recién
+    // entonces este campo se puede dar de baja.
     no_se_puede_medir: 'no escribe .commit ni BUILD_ID: no hay sha vivo que comparar',
   },
 };
