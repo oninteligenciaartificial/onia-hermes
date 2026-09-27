@@ -107,10 +107,22 @@ const TODAS = superficiesDeVenta().map((ruta) => ({ nombre: nombreDeRuta(ruta), 
 
 /**
  * `--rutas=/,/precios` acota el barrido a una tanda. Existe porque el universo
- * entero son 24 rutas x 5 vistas = 120 navegaciones (~70 min contra produccion)
- * y la vuelta del loop tiene tope de 50: sin una forma de partirlo, el gate
- * ampliado no lo corre nadie y la cobertura vuelve a ser dos pantallas, pero
- * ahora sin que nadie lo diga.
+ * entero son 24 rutas x 5 vistas = 120 navegaciones y la vuelta del loop tiene
+ * tope de 50 min: sin una forma de partirlo, el gate ampliado no lo corre nadie
+ * y la cobertura vuelve a ser dos pantallas, pero ahora sin que nadie lo diga.
+ *
+ * ⚠️ EL UNIVERSO ENTERO ENTRA EN UNA VUELTA — medido, no estimado. Aca decia
+ * "~70 min contra produccion", y esa cifra sola bastaba para que nadie lo
+ * corriera: no entra en un tope de 50, asi que la forma correcta de usar el
+ * instrumento parecia ser una tanda, dejando 21 rutas sin mirar cada vez. El
+ * 2026-09-27 se corrio completo por primera vez desde nodo-casa contra
+ * produccion: **120 navegaciones en ~7 min de reloj** (2,6 min de red sumada,
+ * ~1,1 s por navegacion; log en la corrida de esa fecha). Diez veces menos.
+ *
+ * O sea: `--rutas` es para acotar cuando se busca algo puntual, NO el modo
+ * normal. El modo normal es sin flag. Una estimacion pesimista escrita en un
+ * comentario es una lista de inclusion disfrazada — el mismo modo de falla que
+ * este bloque documenta arriba, pero pintado de prudencia.
  *
  * ⚠️ Y por eso el recorte HABLA: el resumen dice siempre cuantas del universo se
  * miraron y cuantas quedaron. Un tope mudo es una lista de inclusion disfrazada
