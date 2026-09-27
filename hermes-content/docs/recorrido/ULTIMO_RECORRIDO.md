@@ -12,6 +12,110 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-27 17:10-17:20 La Paz (vuelta HEAD 45e0b407) — dental 9/9 (repetido), tres corridas transitoriamente ROTAS antes por lentitud de red, no por el producto
+
+Chequeo de arranque: máquina `casa`. `ONIA_ALTA_AUTOMATICA=abierta`. Tablero: nada `ready` sin
+reclamar en zona `recorrido-cliente`.
+
+`node scripts/recorrido_cliente.mjs --escribir` cortó ROTO tres veces seguidas antes de esta
+entrada: paso 2 con `ERR_CONNECTION_CLOSED` en `/empezar`, paso 4 con timeout de 45 s entrando a
+`/login`, paso 3 con timeout de 45 s en `/register`. Antes de reportarlo como hallazgo se
+verificó el instrumento: `curl` a los tres hosts respondió 200 en <1 s cada vez, y un script
+Playwright aislado (mismo `channel: 'chromium'`, mismo viewport/timezone, sin las demás
+operaciones del recorrido) navegó los tres saltos sin fallar. La CUARTA corrida completó los
+**9/9** con paso 1 tardando 14,9 s (vs ~1,6 s normal) — la lentitud era real mientras duró, sólo
+transitoria de red desde `casa`, no un corte del sitio ni de la sesión.
+
+Cuenta `zz-qa-2026-09-27-2116@onia.com.bo`, onboarding completo (6 pantallas), paciente
+`zz-qa-...-paciente` cargado en `/patients`, cita `2026-09-28 09:00` agendada y VISTA en
+`/appointments` (`cmukbnt5u00m701n00we91e9k`), factura mirada en `/billing/...` (ítem
+`...-item`) y frenada sin pagar. Limpieza verificada: `appointments`/`organizations` con
+`zz-qa-%` = 0 tras la corrida.
+
+Las tres corridas rotas SÍ escribieron una cuenta/organización zz-qa- en producción (el aviso de
+cierre las nombra incondicionalmente cuando `--escribir` está activo, aunque el paso de creación
+haya fallado antes de someter el formulario) — la limpieza (`limpiarProduccion()`) las barrió
+igual por el prefijo `zz-qa-`, así que no quedó basura, pero el aviso de "se escribió X" no
+prueba que X se haya escrito de verdad: es una lista de lo que EL SCRIPT intentó nombrar, no de
+lo que confirmó crear. Queda anotado en la cola para no fingir un hallazgo de producto sobre un
+bache de red de esta máquina.
+
+RAZÓN: no avanzó la brecha de cobertura (dental ya estaba confirmado hoy); la vuelta se fue en
+descartar que la falla fuera real antes de escalarla — que es exactamente la regla de "toda
+investigación tiene que poder refutar su propia hipótesis".
+LECCIÓN: ante un ROTO nuevo en un paso que veníamos viendo verde, replicar con curl y con un
+Playwright aislado ANTES de escribir una tarea al carril dueño. Repetir el mismo comando 2-3
+veces también sirve como replicación cuando el fallo es de red y no de código. La próxima vuelta
+sigue el orden normal: rotar rubro o revisar la cola pasada por el Gate 1.
+
+---
+
+## 2026-09-27 16:09-16:35 La Paz (vuelta HEAD 35ddb461) — promesa vs entrega (punto 3), sin hallazgo
+
+Chequeo de arranque: máquina `casa`. `ONIA_ALTA_AUTOMATICA=abierta`. Los 4 crons de casa están
+en `crontab -l`, nada que rearmar. Tablero: cero tareas `ready` sin reclamar en zona
+`recorrido-cliente`.
+
+Los 5 rubros ya estaban cubiertos hoy sin hallazgos nuevos (ver entradas de abajo), así que esta
+vuelta siguió la LECCIÓN de la entrada anterior: en vez de rotar rubro (agotado por hoy), se
+barrió el punto 3 — **promesa de la home contra lo que entrega el paso siguiente**, sin usar
+`--escribir` (no hacía falta escribir nada en producción para esto).
+
+Revisado con Playwright (viewport 390×844, sin escribir en la base):
+- **Home** (`onia.com.bo`): TODOS los CTA (`Creá tu cuenta`, `Empezar con el <plan>`, `Empezar`)
+  apuntan a `https://app.onia.com.bo/register` — ninguno dice "Pedí tu acceso" ni nada que
+  contradiga el alta abierta.
+- **`/precios`**: la escalera mostrada (320/550/890/1.290, anual 3.200/5.500/8.900/12.900, add-on
+  chatbot 390/mes y 3.900/año) coincide EXACTO con `onia-platform/lib/subscription-plans.ts`
+  (`DEFAULT_PLAN_AMOUNTS`) y `lib/pricing.ts` (verificado leyendo el archivo fuente en
+  `/root/loops/onia-platform`, que sí está disponible en esta máquina).
+- **`/empezar`**: 0 `<form>` (correcto, no promete un formulario ahí), tres CTA "Creá tu cuenta"
+  consistentes con el registro real de 3 pasos.
+- **`/chatbot`**: se presenta como add-on ("Pedir el chatbot" separado de "Ver precios"), nunca
+  como el producto titular — consistente con la regla de Sergio Urcullo del 2026-09-03.
+
+Ningún desajuste encontrado. No se corrió `--escribir` esta vuelta (no hacía falta para este
+chequeo): cero filas `zz-qa-` creadas ni que limpiar.
+
+RAZÓN: no avanzó la brecha (ni cobertura de rubro ni hallazgo de promesa-vs-entrega) — el sitio
+está consistente hoy en los cuatro puntos revisados.
+LECCIÓN: **dos vueltas seguidas sin hallazgo** (esta y la anterior, ambas dental/promesa). La
+próxima vuelta no debería repetir ni "rotar rubro" (agotado) ni "promesa vs entrega" (ya barrido
+hoy sin nada): probar el punto 1 de la lista — un paso del recorrido que el script **todavía no
+cubre** (ver si hay alguno de los 9 pasos reales sin verificación, más allá de los 8 nominales del
+prompt) — o revisar la cola de `recorrido-cliente.md` pasada por el Gate 1 antes de repetir un
+método ya agotado por hoy.
+
+---
+
+## 2026-09-27 14:09-14:34 La Paz (vuelta HEAD 03e7f34e) — dental 9/9 (repetido), sin hallazgo nuevo
+
+Chequeo de arranque: máquina `casa` (marcador `/root/.onia-nodo`). Los 4 crons de casa
+(`web-venta`, `onia-cola`, `chatbot-cola`, `recorrido-cliente`) están en `crontab -l` con la
+cadencia que dice `loops.md`: nada que rearmar. `ONIA_ALTA_AUTOMATICA=abierta`. Tablero: cero
+tareas `ready` sin reclamar en zona `recorrido-cliente` (todas las de la lista aparecen `done`).
+
+`node scripts/recorrido_cliente.mjs --escribir` (dental por defecto) — **9/9**. Cuenta
+`zz-qa-2026-09-27-1809@onia.com.bo`, onboarding completo (6 pantallas), paciente
+`zz-qa-2026-09-27-1809-paciente` cargado en `/patients`, cita `2026-09-28 09:00` agendada y VISTA
+en `/appointments` (`cmuk4z0mt00k901n0nt0i0rik`), factura mirada en `/billing/...` (ítem
+`zz-qa-2026-09-27-1809-item`) y frenada sin pagar. Limpieza verificada: `appointments`/
+`organizations` con `zz-qa-%` = 0 tras la corrida.
+
+Dental ya llevaba 5+ corridas hoy (los 5 rubros están cubiertos hoy: dental, estética, comercio,
+importadora, servicios profesionales — todos verdes, ver entradas de abajo). Esta corrida no
+suma cobertura nueva: es la default del script sin `RECORRIDO_RUBRO`. Para la próxima vuelta,
+rotar explícitamente a otro rubro en vez de dejar correr el default.
+
+RAZÓN: no avanzó la brecha de cobertura — dental ya estaba confirmado hoy varias veces; ningún
+hallazgo nuevo que reportar a otro carril.
+LECCIÓN: cuando los 5 rubros ya se corrieron el mismo día sin hallazgos, correr el default
+(dental) de nuevo no agrega información. La próxima vuelta debería fijar `RECORRIDO_RUBRO`
+explícito o buscar la brecha del punto 3 (promesa contra entrega) en vez del punto 2 (rotar
+rubro) cuando el punto 2 ya está agotado por hoy.
+
+---
+
 ## 2026-09-27 12:09-16:16 La Paz (vuelta HEAD 18defb5e) — dental 9/9 (repetido) y Estética 9/9 (rubro que faltaba hoy), sin hallazgo nuevo
 
 Chequeo de arranque: máquina `casa`. `ONIA_ALTA_AUTOMATICA=abierta`. Cron `recorrido-cliente`
