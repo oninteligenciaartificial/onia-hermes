@@ -3892,6 +3892,52 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
       el lead del plan Empresa sigue leyendo la frase vieja. El publicador en seco ya venía con
       9 archivos del bot esperando (el respaldo de audio de T6/T7 entre ellos).
 
+      ⚠️ **Ese párrafo era CIERTO el día que se escribió y dejó de serlo el 24-sep — corregido el
+      2026-09-26 22:30 La Paz, medido, no supuesto.** El commit que lo arregla (`fb1f1480`,
+      2026-09-19 14:55 UTC) cayó DENTRO de la ventana de este mismo ítem, así que «commiteado, no
+      desplegado» era exacto; el conocimiento vivo se instaló después y hoy declara versión
+      `2026-09-24.1`. **Un rider que nació verdadero es el que menos se audita.**
+
+      **Hoy sus TRES afirmaciones son falsas, y cada una manda a trabajo de más.** El ítem sigue
+      cerrado y `knowledge.onia.json` sigue pendiente de publicar: lo que caducó es lo que el
+      párrafo dice que le PASA al lead y quién tiene que hacer algo.
+
+      1. **«`npm run precios:vivos` sigue acusando al bot vivo» → hoy sale `exit 0`:** *«EL BOT
+         VIVO COTIZA SOLO PRECIOS DE LA FUENTE UNICA — 17 montos vigentes»*, y la inclusión
+         *«coincide con el catálogo publicado (4 planes nombrados)»*. Lo único que queda es un
+         **aviso**, no un rojo: *«"Empresa" (enterprise) trae el chatbot incluido y el bot no lo
+         nombra: no miente, pero no lo está vendiendo»*.
+      2. **«el lead del plan Empresa sigue leyendo la frase vieja» → no hay frase vieja.** El
+         conocimiento VIVO (`/tmp/onia-bot/knowledge.json`, versión `2026-09-24.1`) ya dice:
+         *«Bs 1.290 el Completo, que ya trae el chatbot de WhatsApp adentro. En el Básico, el
+         Crece y el Profesional el chatbot va aparte, Bs 390 al mes»* — enumera los tres planes
+         que pagan aparte en vez de cerrar en universal, que era exactamente el arreglo de
+         `fb1f1480` (*«al lead del plan mas caro se le cobraba Bs 390/mes por algo que su plan ya
+         trae»*). **Al Empresa ya no se le cobra de más: viajó.**
+      3. **«`DESPLEGAR: bot` no lleva el texto: el install del conocimiento es aparte» → lo
+         lleva, y hace 14 días.** `deploy-bot.sh:170` corre
+         `ONIA_BOT_KNOWLEDGE_FILE="$DEST/knowledge.onia.json" "$DEST/webhook-server.sh" knowledge`
+         como **paso 7 del propio deploy**, sin condición, y su comentario (`:153-154`) dice por
+         qué existe: *«pasar de uno al otro era un SEGUNDO comando a mano. Nadie lo corría»*.
+         Es el hermano exacto del fallo que ya costó 24 días de pedirle a Sergio Urcullo un `scp`
+         que no hacía falta: **el circuito ya estaba cableado y el doc mandaba a hacerlo a mano.**
+      4. El «9 archivos esperando» hoy son **13** (`publicar.sh --dry-run`). Es una PISTA, no un
+         dato: se re-deriva, no se copia.
+
+      🔴 **Por qué sobrevivió teniendo un gate encima, que es la parte que le sirve a otro
+      ítem:** `npm run deploy:ya-ocurrio` **sí juzga esta línea** (probado: sale en su lista con
+      `frontera: "bot"` y `shas: 0`) y la firma **«cierta»** — y por su propio criterio tiene
+      razón, porque razona por ARCHIVO y `knowledge.onia.json` sí tiene cambios sin publicar. Pero
+      el pendiente de HOY en ese archivo es **otro** (los 20/45 → 30 minutos del pedido vivo), no
+      el de este ítem. **Un juez por archivo no puede distinguir «el arreglo de ESTE ítem no
+      viajó» de «ese archivo tiene ALGÚN cambio pendiente»**, así que firma en verde un párrafo
+      cuya consecuencia ya es falsa. Reproducción exacta, 30 segundos, sin tocar producción:
+
+      ```bash
+      npm run --silent precios:vivos; echo "exit=$?"   # 0 = ya no acusa al bot vivo
+      node -e 'import("./scripts/deploy_ya_ocurrio.mjs").then(async m=>{const fs=await import("node:fs");const f="hermes-content/docs/cola/chatbot.md";console.log(m.afirmacionesDe(fs.readFileSync(f,"utf8"),f).filter(x=>x.linea===3888))})'
+      ```
+
 - [x] **MEDIDO el 2026-09-19 08:13-08:45 La Paz — los cuatro ejes del objetivo en verde, y
       DOS hipótesis propias refutadas antes de anunciarlas.** Simulador **3/3** (escalera C:
       320/550/890/1.290, Completo con el chatbot adentro; SIAT con «1 de octubre de 2026,
@@ -9555,6 +9601,37 @@ cita: al cerrar una fila hay que barrer quién la nombra, no sólo tacharla.
       circuito está completo en mock y verificado mirando (`/bcp/cobrar` + `/bcp/callback`,
       contrato del banco calcado); el código no cambia para el modo real. Espera las
       credenciales del BCP — ver Bloqueado.
+- [ ] 🔴 **`deploy:ya-ocurrio` firma «cierta» una afirmación cuya consecuencia ya es falsa, porque
+      juzga por ARCHIVO y no por ARREGLO.** Encontrado el 2026-09-26 22:30 La Paz auditando los
+      `[x]` (escalón 2), con un caso real: la línea `chatbot.md:3888` decía que el lead del plan
+      Empresa leía una frase vieja y que el texto necesitaba un segundo paso a mano; las dos cosas
+      eran falsas desde el 24-sep y el gate la daba por cierta.
+
+      **La causa, no el síntoma:** el juez del motor (`juezDelMotor`) decide mirando si el archivo
+      que el ítem nombra está entre los que `/tmp/onia-bot` tiene viejos. `knowledge.onia.json`
+      SIEMPRE lo está mientras el pedido de deploy del bot espere firma, así que **toda** línea que
+      lo nombre sale «cierta» — sin importar si el arreglo de ESE ítem ya viajó en un install
+      anterior. Es el mismo error de unidad que ya se pagó dos veces acá: medir el archivo en vez
+      de medir la afirmación. Y falla en la dirección cara: **verde sobre un doc que miente**.
+
+      **Reproducción exacta (30 s, no toca producción):**
+
+      ```bash
+      npm run --silent deploy:ya-ocurrio   # dice "0 mienten"; la 3888 está entre las 17 "ciertas"
+      npm run --silent precios:vivos       # exit 0: la consecuencia que la 3888 afirma NO ocurre
+      ```
+
+      **Lo que hay que decidir al arreglarlo, porque no es obvio:** un arreglo ingenuo —hacer que
+      el juez corra el gate que la línea cita— mete una medición VIVA (VPS) dentro de un script
+      cuyo `--self-check` está en la cadena raíz, y eso es exactamente la forma que este repo ya
+      prohibió («un gate cuyo self-check necesita el repo hermano NO va en la cadena»). El camino
+      que queda es un instrumento **aparte** que lea las líneas cuya evidencia declarada es el
+      veredicto de otro gate, lo corra, y compare — self-check puro en la cadena, medición viva en
+      la medición de arranque del carril, como ya hacen `campanas-vivas` y `bloqueo:citado`.
+
+      ⚠️ **No toca ninguno de los 13 archivos del pedido de deploy del bot** (`scripts/` de
+      `onia-hermes`, no la carpeta del bot), así que se puede hacer sin rehacer el pedido.
+
 - 📌 **Nota para el carril web-factory (no la ejecuta este carril):** tres de las frases de
   `site.ts` dicen *"avisen cuando Onia para comercio/servicios/importadoras esté listo"*, y
   eso es **exhibir obra en la superficie de venta** — prohibido por CLAUDE.md §3. Además los
