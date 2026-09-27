@@ -11,7 +11,7 @@ import { readFileSync, writeFileSync, rmSync, mkdtempSync, mkdirSync } from 'nod
 import { join, dirname } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
-import { publicadoEnLanding, publicadoPorFecha, archivosDelDryRun, archivosDelDryRunBot, recuentosDelDryRunBot, cuerpoDeclaraOtroRecuento, archivosNombrados, secoDeProduccion, barrerTablero, creadoEnSegundos, barrerTableroJson, cadenaPorPedido, clasificarPedido, imprimirCadena, cuerpoCortoArchivos, cuerpoNoEjecuta, inmediblesSinDeclarar, publicariaLanding, publicariaPorCopia, shasDelTexto, shasPrometidos, soloLosQueViajan } from './pedido_deploy_entregado.mjs';
+import { conComentarios, publicadoEnLanding, publicadoPorFecha, archivosDelDryRun, archivosDelDryRunBot, recuentosDelDryRunBot, cuerpoDeclaraOtroRecuento, archivosNombrados, secoDeProduccion, barrerTablero, creadoEnSegundos, barrerTableroJson, cadenaPorPedido, clasificarPedido, imprimirCadena, cuerpoCortoArchivos, cuerpoNoEjecuta, inmediblesSinDeclarar, publicariaLanding, publicariaPorCopia, shasDelTexto, shasPrometidos, soloLosQueViajan } from './pedido_deploy_entregado.mjs';
 import { DESTINOS, ESTADOS_VIVOS } from './kanban/publicar-aprobado.mjs';
 
 // El caso que me costo la vuelta del 2026-09-06: los 13 shas prometidos por t_0268567b
@@ -223,17 +223,53 @@ test('un barrido que no pudo leer NADA no se confunde con un tablero sin pedidos
 // con el tablero, hasta no contestar dentro de la vuelta. Un gate que no contesta es
 // indistinguible de uno que no existe. El sujeto se deriva del fuente: si vuelve un `show`
 // por tarea, este caso lo dice — que es lo unico que impide que el arreglo se revierta solo.
-test('cableado: el tablero se lee UNA vez, no un show por tarea', () => {
+test('cableado: el show se paga por PEDIDO, no por tarea abierta', () => {
   const src = readFileSync(new URL('./pedido_deploy_entregado.mjs', import.meta.url), 'utf8')
     .split('\n').filter((l) => !/^\s*(\/\/|\*|\/\*)/.test(l)).join('\n');
-  assert.ok(
-    !/TABLERO,\s*'show'/.test(src),
-    'un `show` por tarea es un SSH por tarea: el gate deja de contestar dentro de la vuelta',
-  );
+
+  // La lectura MASIVA sigue siendo una sola: los cuerpos y los estados de todas las tareas
+  // salen de la misma foto, asi que ninguna puede archivarse entre dos lecturas.
   assert.match(src, /TABLERO,\s*'list',\s*'--json'/,
     'el barrido sale de `list --json`, que trae los cuerpos de todas las tareas de una');
-  const lecturas = [...src.matchAll(/\[TABLERO[^\]]*\]/g)];
-  assert.equal(lecturas.length, 1, `el tablero se consulta una sola vez, no ${lecturas.length}`);
+  assert.equal([...src.matchAll(/TABLERO,\s*'list'/g)].length, 1,
+    'la lista se pide una sola vez, no una por destino');
+
+  // ⚠️ ESTE CASO PROHIBIA EL VERBO `show` A SECAS, y esa era la medida equivocada del sujeto
+  // correcto. Lo que costaba 7 minutos no era el `show`: era pagarlo POR TAREA ABIERTA (72 y
+  // creciendo). La marca `DEPLOY PEDIDO <sha>` vive en un COMENTARIO y `list --json` no los
+  // trae, asi que con el verbo prohibido el gate no podia ver su propio sujeto — y estuvo
+  // ciego hasta el 2026-09-27 (`t_11c16e58`), diciendo «no declara ni un sha» sobre pedidos
+  // que la tenian escrita. Un gate que prohibe el unico camino a su dato no protege: congela.
+  // Lo que se exige ahora es la propiedad de VERDAD: el `show` existe, y su universo son los
+  // PEDIDOS (tres) y no las tareas abiertas (setenta y dos).
+  // La LLAMADA, no la firma: las dos dicen `conComentarios({`, y la firma aparece primera en el
+  // archivo — un `indexOf` pelado mide la definicion y este caso fallaria por el motivo
+  // equivocado. Lo que las distingue es el `mostrar:` con dos puntos, que solo tiene la llamada.
+  const llamadas = [...src.matchAll(/conComentarios\(\{[\s\S]{0,300}?\}\)/g)]
+    .map((m) => m[0]).filter((b) => b.includes('mostrar:'));
+  assert.equal(llamadas.length, 1, `esperaba una sola llamada a conComentarios, halle ${llamadas.length}`);
+  const dentroDeConComentarios = llamadas[0];
+  assert.match(dentroDeConComentarios, /TABLERO,\s*'show'/,
+    'el show tiene que vivir en el `mostrar` de conComentarios, que solo recorre pedidos');
+  assert.match(dentroDeConComentarios, /pedidos/,
+    'y su universo son los pedidos ya filtrados por `DESPLEGAR:`, no `abiertos`');
+  assert.equal([...src.matchAll(/TABLERO,\s*'show'/g)].length, 1,
+    'un solo lugar pide `show`: si aparece otro, puede estar recorriendo las tareas abiertas');
+  assert.ok(!/for\s*\(const \w+ of abiertos\)/.test(src),
+    'nada recorre las tareas abiertas pidiendole algo al tablero');
+});
+
+// El costo, medido y no argumentado: `conComentarios` pide un `show` por pedido y ni uno mas.
+// Es la mitad funcional del caso de arriba — el de fuente prueba DONDE vive el show, este
+// prueba CUANTOS son. Con el universo equivocado (las tareas abiertas) este numero seria 72.
+test('un show por pedido y ni uno mas', () => {
+  const pedidos = ['t_1', 't_2', 't_3'].map((id) => ({ id, destino: 'plataforma', texto: 'DESPLEGAR: plataforma' }));
+  const pedidos_vistos = [];
+  conComentarios({
+    pedidos,
+    mostrar: (id) => { pedidos_vistos.push(id); return `Task ${id}: x\n\nBody:\nDESPLEGAR: plataforma`; },
+  });
+  assert.deepEqual(pedidos_vistos, ['t_1', 't_2', 't_3'], 'uno por pedido, en orden, sin repetir');
 });
 
 // TRI-ESTADO en el parseo, que es donde un SSH cortado a mitad del JSON se disfraza de
@@ -994,7 +1030,7 @@ test('toda rama que le pregunta al TEXTO ENTERO le pregunta tambien al cuerpo', 
     .map((f) => f.nombre);
   assert.ok(soloCuerpo.length >= 3, `esperaba los controles de cuerpo, derive ${soloCuerpo}`);
 
-  const desde = src.indexOf('for (const p of pedidos) {\n    if (p.destino === ');
+  const desde = src.indexOf('for (const p of conShow) {\n    if (p.destino === ');
   assert.ok(desde > 0, 'no encontre el bucle que juzga cada pedido');
   const bucle = src.slice(desde, src.indexOf('\n  for (const n of noMedidos)', desde));
 
@@ -1657,4 +1693,81 @@ test('bot: sin recuentos derivables -> NO_MEDIDO, nunca COINCIDE', () => {
   assert.equal(cuerpoDeclaraOtroRecuento({ texto: 'x (6 lineas)', recuentos: null }).estado, 'NO_MEDIDO');
   assert.equal(recuentosDelDryRunBot(null), null, 'el SSH no contesto');
   assert.equal(recuentosDelDryRunBot('ERR: no existe el destino'), null, 'el publicador fallo');
+});
+
+// ───────────────────────────────────────────────────────────────────────────────────────────
+// La marca `DEPLOY PEDIDO <sha>` vive en un COMENTARIO, y `list --json` NO trae comentarios.
+//
+// Medido el 2026-09-27 en t_5a20e9bb (tarea t_11c16e58): el `show` imprime
+// «DEPLOY PEDIDO b68c9e52» y el gate contestaba «no declara ni un sha, asi que NO SE PUEDE
+// JUZGAR», rematando con la instruccion de escribir la marca QUE YA ESTABA ESCRITA. El regex
+// (`shasPrometidos`) siempre estuvo bien: lo que se rompio fue de DONDE sale el texto, cuando
+// `pedidosVivos` paso de un `show` por tarea a un solo `list --json` para no tardar 7 minutos.
+// `list --json` trae `body`; los comentarios no estan en NINGUNA de sus 23 claves (medido).
+//
+// El costo real de la ceguera son DOS controles, no uno: `shasPrometidos` no ve la marca, y
+// `cuerpoVencido` queda en su rama muda —«si el show no trae la marca, todo cuenta como
+// cuerpo»—, asi que el pedido que describe trabajo ya publicado deja de salir VENCIDO. Y un
+// ROJO permanente por el motivo equivocado no se lee: se saltea como «el ambiental de siempre»,
+// y mientras dure tapa al rojo que el gate existe para cazar (un pedido cumplido que sigue
+// pidiendole un ok a Sergio Urcullo por trabajo hecho).
+test('la marca DEPLOY PEDIDO escrita en un comentario se ve', () => {
+  const show = [
+    'Task t_5a20e9bb: Publicar la plataforma',
+    '  status:    blocked',
+    '',
+    'Body:',
+    'Tres arreglos estan en master.',
+    '',
+    'DESPLEGAR: plataforma',
+    '',
+    'Comments (2):',
+    '  [2026-09-27 03:01] sesion: BLOCKED: espera ok',
+    '  [2026-09-27 03:04] sesion: DEPLOY PEDIDO b68c9e52 — publica los 3 arreglos',
+  ].join('\n');
+  const pedidos = [{ id: 't_5a20e9bb', destino: 'plataforma', texto: 'DESPLEGAR: plataforma' }];
+  const [p] = conComentarios({ pedidos, mostrar: () => show });
+  assert.equal(p.comentariosLeidos, true);
+  assert.deepEqual(shasPrometidos(p.texto), ['b68c9e52'], 'la marca del comentario tiene que llegar');
+  // Y el efecto que se buscaba: con la marca a la vista el pedido ya se puede juzgar.
+  assert.equal(clasificarPedido({ id: p.id, shas: shasPrometidos(p.texto), publicado: () => true }).estado, 'ENTREGADO');
+});
+
+// El discriminador NO puede ser la cabecera `Comments (N):`. Medido el mismo dia contra el
+// tablero real: una tarea SIN comentarios (t_8baa5891) no imprime esa linea, asi que su
+// ausencia no distingue «no tiene comentarios» de «no pude leer el show». Un show valido, en
+// cambio, SIEMPRE abre con `Task <id>:`.
+test('un pedido sin comentarios se lee igual, y no se lo confunde con ilegible', () => {
+  const show = 'Task t_8baa5891: Probar\n  status:    ready\n\nBody:\nDESPLEGAR: bot\n\nEvents (1):';
+  const [p] = conComentarios({
+    pedidos: [{ id: 't_8baa5891', destino: 'bot', texto: 'DESPLEGAR: bot' }],
+    mostrar: () => show,
+  });
+  assert.equal(p.comentariosLeidos, true, 'el show llego: no tener comentarios no es no poder leerlos');
+  assert.deepEqual(shasPrometidos(p.texto), []);
+});
+
+// DIRECCION DEL ERROR, la de siempre: si el `show` no llega NO se acusa al pedido de estar mal
+// escrito. «No pude leer» y «no lo escribio» se curan en lugares opuestos —uno es ambiental,
+// el otro se arregla con un comentario— y confundirlos es exactamente el bug que esta tanda
+// cierra, con el signo cambiado: mandaria a escribir una marca que quizas ya esta ahi.
+test('sin poder leer el show -> NO_MEDIDO ambiental, nunca SIN_DECLARAR', () => {
+  const pedidos = [{ id: 't_deadbee', destino: 'plataforma', texto: 'DESPLEGAR: plataforma' }];
+  for (const mostrar of [() => null, () => '', () => { throw new Error('ssh murio'); }, () => 'ERR: timeout']) {
+    const [p] = conComentarios({ pedidos, mostrar });
+    assert.equal(p.comentariosLeidos, false);
+    assert.equal(p.texto, 'DESPLEGAR: plataforma', 'el cuerpo de list --json se conserva');
+    const r = clasificarPedido({ id: p.id, shas: shasPrometidos(p.texto), comentariosLeidos: p.comentariosLeidos });
+    assert.equal(r.estado, 'NO_MEDIDO');
+    assert.notEqual(r.causa, 'SIN_DECLARAR', 'no se manda a escribir la marca sin haber podido mirar');
+    assert.match(r.motivo, /comentario/i, 'el motivo tiene que decir que falto leer los comentarios');
+  }
+});
+
+// Y la direccion contraria, que es la que hace util al control: con los comentarios LEIDOS y la
+// marca de verdad ausente, sigue saliendo SIN_DECLARAR — el mensaje que manda escribirla.
+test('comentarios leidos y sin marca -> SIN_DECLARAR (el gate no se vuelve permisivo)', () => {
+  const r = clasificarPedido({ id: 't_x', shas: [], comentariosLeidos: true });
+  assert.equal(r.causa, 'SIN_DECLARAR');
+  assert.deepEqual(inmediblesSinDeclarar({ resultados: [r] }), ['t_x']);
 });
