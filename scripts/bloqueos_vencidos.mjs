@@ -156,47 +156,16 @@ export function extraerBloqueos(md) {
   ];
 }
 
-/**
- * La guarda, separada de la ejecucion a proposito: es la parte que decide si algo se corre,
- * y esa parte se prueba sin correr nada.
+/*
+ * La guarda de ejecucion (`validarComando`) y el spawn sin shell (`resolverBin`) viven en
+ * `scripts/lib/comando_de_cola.mjs` desde el 2026-09-26: los necesita tambien
+ * `evidencia_citada_viva.mjs`, que corre el gate que una linea de cola cita como evidencia, y
+ * ESTE archivo no se puede importar — su CLI corre a nivel de modulo sin guarda de `argv[1]`, asi
+ * que un `import` imprime el uso y mata al proceso que lo pide. Se re-exportan porque el
+ * `--self-check` de abajo las afirma, y porque son parte del contrato publico de este gate.
  */
-export function validarComando(comando, scripts, existe = (p) => existsSync(join(RAIZ, p))) {
-  const npm = /^npm run ([\w:.-]+)$/.exec(comando);
-  if (npm) {
-    if (!(npm[1] in scripts)) return { error: `\`npm run ${npm[1]}\` no existe en package.json` };
-    return { bin: 'npm', args: ['run', '--silent', npm[1]] };
-  }
-
-  const nodo = /^node ([\w./-]+)$/.exec(comando);
-  if (nodo) {
-    const ruta = nodo[1];
-    if (isAbsolute(ruta) || ruta.split('/').includes('..')) return { error: `la ruta \`${ruta}\` se sale del repo` };
-    const abs = resolve(RAIZ, ruta);
-    const dentro = relative(RAIZ, abs);
-    if (dentro.startsWith('..')) return { error: `la ruta \`${ruta}\` se sale del repo` };
-    if (!/\.(mjs|js)$/.test(ruta)) return { error: `\`${ruta}\` no es un script de node` };
-    if (!existe(ruta)) return { error: `\`${ruta}\` no existe en el repo` };
-    return { bin: 'node', args: [abs] };
-  }
-
-  return { error: 'solo se aceptan `npm run <script>` y `node <ruta del repo>`' };
-}
-
-/**
- * Traduce el plan validado a algo que ESTA plataforma pueda spawnear sin shell.
- *
- * En Windows `npm` es `npm.cmd`, y Node se niega a spawnear `.cmd`/`.bat` sin shell
- * (CVE-2024-27980). Con `bin: 'npm'` pelado, en win32 TODOS los verificadores npm morian en el
- * spawn → `status` null → `no-medido`, y un bloqueo ya satisfecho (S17, 2026-09-12) quedaba
- * invisible — el molde exacto por el que S16 vencio en silencio. Se corre el JS de npm con
- * este MISMO node: sin shell, sin cmd.exe, la guarda de `validarComando` intacta.
- */
-export function resolverBin(plan, plataforma = process.platform, existe = existsSync) {
-  if (plan.error || plan.bin !== 'npm' || plataforma !== 'win32') return plan;
-  const cli = join(dirname(process.execPath), 'node_modules', 'npm', 'bin', 'npm-cli.js');
-  if (!existe(cli)) return plan; // sin npm-cli.js a la vista, el intento directo al menos avisa
-  return { bin: process.execPath, args: [cli, ...plan.args] };
-}
+export { validarComando, resolverBin } from './lib/comando_de_cola.mjs';
+import { validarComando, resolverBin } from './lib/comando_de_cola.mjs';
 
 /**
  * Traduce los resultados a los motivos por los que ESTO es un item. Sin red y sin disco: es

@@ -29,6 +29,55 @@ contra producción (SSH al VPS, las dos bases, el motor corrido de verdad), no c
 
 ---
 
+## ✅ T13 — CERRADO el 2026-09-27 04:00 La Paz: mi propia sonda le mandaba a Sergio Urcullo un «DEMO AGENDADA — anotala» falso cada media hora, y enterró la única demo real 28 a 1
+
+**Qué pasaba.** El 2026-09-26 el tercer turno entró al guion por defecto de
+`scripts/sonda_widget.mjs` con el mensaje `'A'` — elegir el horario. El razonamiento era
+correcto (*«el único turno que produce plata quedaba sin medir»*) y el costo no se contó:
+**elegir un horario no es leer el bot, es ESCRIBIR en el embudo.** El motor marca
+`demo_agendada` y dispara el aviso a Telegram que dice *«DEMO AGENDADA — anotala»*. La sonda
+corre dos veces por hora.
+
+**Medido el 2026-09-27, no deducido** — `npm run demo:agendada`:
+
+```
+DEMOS QUE LLEGARON A SERGIO: 1 de un prospecto, 28 de sondas nuestras (29 en total)
+```
+
+**28 de 29, y creciendo ~48 por día**, cada uno con una instrucción falsa: no hay ninguna demo
+que anotar. Es justo el canal que Sergio Urcullo pidió limpio el 2026-09-05, y el objetivo de
+este carril es *«cada demo agendada o handoff le llega a Sergio»* — una señal enterrada 28 a 1
+**está apagada**. El instrumento que mide el objetivo era el que lo rompía.
+
+**Por qué el arreglo fue en la sonda y no en el emisor.** El aviso lo escribe
+`webhook-server.mjs`, que **no** está entre los 13 archivos del pedido de deploy vivo
+`t_3752e986`: tocarlo lo haría el 14.º e invalidaría un pedido que ya espera la firma. Se
+re-deriva con `onia-tablero.sh list --status blocked | grep -i 'Publicar el bot'`.
+
+**Qué cambió.** El 3.er turno **se conserva** —es donde el bot murió dos veces— y deja de
+escribir en el embudo: el mensaje pasó de `'A'` a `'¿Cuánto cuesta?'`. De yapa mide **el precio
+contra el widget real**, que es la otra mitad del objetivo y hasta hoy sólo se medía en seco con
+el simulador. El guion viejo quedó en `GUIONES_HISTORICOS` — sin esa fila las 28 conversaciones
+ya escritas vuelven a contarse como prospectos y `objetivo_visible.mjs` da el falso verde que
+`esRastroDeSonda` existe para evitar.
+
+**Verificado en producción** (no con un grep): la sonda con el guion nuevo contestó los tres
+turnos, el 3.º devolvió `Bs 320 … 550 … 890`, la fila quedó en **`esperando_horario`** y no en
+`demo_agendada`, y el contador de líneas `[aviso]` del bot vivo **no se movió** (33 → 33).
+`--self-check` **70/70**, con los tres casos nuevos en ROJO antes por el motivo correcto, y los
+cuatro hermanos que leen la sonda en verde (`veredicto-widget`, `objetivo-visible`,
+`demo-agendada`, `qa-sin-rastro`).
+
+⚠️ **La lección, que es más grande que el bug:** un instrumento que llega hasta el final del
+embudo **no es un lector, es un escritor** — y escribe en el mismo canal donde el carril busca su
+señal. Antes de que una sonda recorra un turno más, la pregunta es *qué ESCRIBE ese turno y quién
+lo lee*. Acá el mismo commit que mejoró la cobertura apagó la métrica que la cobertura servía.
+
+**Para medir el cierre de demo en vivo** sigue la costura, ahora con motivo para usarla a mano y
+no cada hora: `ONIA_SONDA_GUION='Hola, quiero informacion sobre el sistema|Tengo una clinica dental en Santa Cruz, somos 4 personas|A'`.
+
+---
+
 ## ✅ T12 — CERRADO el 2026-09-26 03:05 La Paz: el instrumento que decide si pedirle la firma a Sergio Urcullo mandaba al remedio OPUESTO para un archivo de cada cinco
 
 **Qué pasaba.** `scripts/bot_vivo_tiene_el_codigo.mjs` es el que contesta *«¿el bot vivo corre el
@@ -798,13 +847,25 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
 web↔bot, que es la primera cosa que ve un lead y la que nadie podía ver:
 
 ```bash
-node hermes-content/deploy/vps-ops/bot/campanas-vivas.mjs   # 0 par sano · 1 frase viva muerta · 2 NO MEDIDO
+node hermes-content/deploy/vps-ops/bot/campanas-vivas.mjs   # 0 par sano · 1 hay que ESCRIBIR la respuesta · 2 NO MEDIDO · 3 el repo ya la dice: falta PUBLICAR
 ```
 
-Va **acá y no en un alias** porque un alias suelto no lo corre nadie (ya pasó en este repo). Su
-`exit 1` significa que alguien que aprieta un botón de WhatsApp de la web recibe el saludo
-genérico en vez de la respuesta que califica; su `exit 2` significa **NO MEDIDO**, que no es
+Va **acá y no en un alias** porque un alias suelto no lo corre nadie (ya pasó en este repo). En
+los tres códigos distintos de cero, alguien que aprieta un botón de WhatsApp de la web recibe el
+saludo genérico en vez de la respuesta que califica — lo que cambia es **de quién es el trabajo**:
+`1` = ninguna versión de esa frase está desplegada, hay que escribir la respuesta (es de este
+carril); `3` = el repo ya la dice bien y producción tiene la versión vieja, así que no hay código
+que escribir y el remedio es el `ok` del pedido de deploy del bot; `2` = **NO MEDIDO**, que no es
 estar bien.
+
+⚠️ **El `3` existe porque el rojo de este medidor es PERMANENTE mientras el pedido de deploy
+espere firma, y un rojo permanente se archiva como «el de siempre».** Hasta el 2026-09-27 las dos
+clases salían con el mismo `exit 1`: el repo pasó las dos frases de agenda a *30 minutos* y
+producción sigue escuchando *20* y *45*, así que toda vuelta leía rojo por esa causa y el día que
+alguien rompiera una frase EN EL REPO —el caso que el medidor existe para agarrar— habría salido
+idéntico. Con una rota de cada clase manda el `1`, para que una respuesta que nadie escribió no
+quede escondida detrás del pedido. **Un `3` NO se trabaja acá: se comprueba que el pedido siga
+vivo y se sigue** (el ID se deriva, no se copia — ver el bloque de abajo).
 
 🔴 **Y UNO más desde el 2026-09-26, por la misma razón y con la prueba de que la razón es
 cierta:**
@@ -851,6 +912,44 @@ contra el ÁRBOL (`git ls-tree`), no contra la ancestría del commit.**
 
 Su `exit 2` es NO MEDIDO (no hay clon de `onia-platform` que contenste `fetch`), nunca verde por
 no haber podido preguntar. No va a `npm test` a propósito, por lo mismo que `envuelo:vencido`.
+
+🔴 **Y UNO más desde el 2026-09-27, que cierra el hueco que `deploy:ya-ocurrio` tenía POR DISEÑO:**
+
+```bash
+npm run evidencia:citada   # 0 = las citas siguen obteniendo el veredicto que declaran · 1 = lista archivo:línea · 2 = NO MEDIDO
+```
+
+Muchas líneas de estas dos colas declaran su evidencia como **el veredicto de otro gate** — la
+forma *«tal alias → exit N»*. Nadie corría esos gates para ver si todavía dan eso:
+`deploy:ya-ocurrio` juzga por **ARCHIVO** —si el que la línea nombra está entre los desfasados de
+`/tmp/onia-bot`— y `knowledge.onia.json` lo está SIEMPRE mientras el pedido de deploy del bot
+espere firma, así que toda línea que lo nombre salía «cierta» sin importar si su arreglo ya viajó.
+El caso que lo trajo: `chatbot.md:3888` mandaba a hacer a mano un install que el deploy ya hace
+solo, y `deploy:ya-ocurrio` decía **«0 mienten»**. Medir el archivo en vez de la afirmación, otra
+vez, y fallando en la dirección cara: **verde sobre un doc que miente.**
+
+No se arregló dentro de `deploy:ya-ocurrio` a propósito: meter una medición VIVA ahí lo pondría
+rojo por ambiente, y su `--self-check` está en la cadena raíz. Acá el `--self-check` es **puro**
+(el corredor se inyecta, 44 casos, `test:evidencia-citada` en la cadena) y lo vivo vive en este
+alias — el mismo reparto que `campanas-vivas` y `bloqueo:citado`.
+
+⚠️ **Lo que NO juzga, dicho para que su cero sea legible**, porque acusar a cualquiera de estos
+sería como se apaga un gate: los **números de adentro** de la salida (`plataforma-v1.md:1860` dice
+«REALES: 4» y hoy son 3 — el veredicto sigue siendo 1, así que se absuelve con razón); el **pasado**
+(*«`bloqueo:citado` salió 1»* cuenta un defecto ya arreglado); las **mutaciones** (*«con
+`update-index` … sale 1; restaurado, verdes»* es el rojo-primero que este repo exige); las **filas
+de bitácora** `| … |`, que son la foto de un día; lo **tachado**; la marca `**Verificador:**`, que
+ya mide `bloqueos:vencidos`; y toda cita que **ya trae su nota de corrección** fechada, mirando
+también el párrafo siguiente. Imprime el recuento de las saltadas **por motivo**: sin ese
+denominador, «0 mienten» sobre 0 sujetos y sobre 21 se leen igual.
+
+📌 **Lectura del 2026-09-27 03:4x La Paz, desde nodo-casa: `exit 2` — 20 de 21 citas honestas, CERO
+mintiendo, y UNA no medida**: `espejo-check.mjs` sale `2` desde casa porque no alcanza `/opt`, así
+que su línea (la del `**Verificador:**` de S9, que lo cita también fuera de la marca) no se puede
+juzgar acá. **Ese `2` es el esperado en esta máquina y no es trabajo de este carril** — se juzga
+desde el VPS. La primera pasada, antes de arreglarlo, llamaba MENTIROSA a esa línea cierta.
+⚠️ Tarda **~9 min** en vivo: corre 14 scripts de verdad, varios contra el VPS. Va al final de la
+medición de arranque, no al principio.
 
 **No uses `tail -N | grep -c` para juzgar el log del bot.** `tail -N` es una ventana de LÍNEAS, no
 de TIEMPO, y ese log **no se rota**: el 24-sep un `tail -80` devolvió vacío con 27 eventos adentro
@@ -1183,6 +1282,65 @@ Las 3 que quedan (3492, 3623, 7674) son del motor leídas a mano pero **no tiene
 mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se derivan con el comando.
 
 ## Ahora
+
+- [x] 🔴 **CERRADO el 2026-09-26 21:13-22:05 La Paz (es una HERRAMIENTA DE MEDICIÓN de las 13 que
+      ya viajan en el pedido de deploy del bot, no el motor: el recuento sigue en 13 y NO cambia
+      una palabra de lo que el bot le dice a un cliente). El medidor del par web↔bot iba a salir
+      ROJO en todas las vueltas por una causa conocida, y con eso tapaba al rojo que sí importa.**
+
+      **Archivos:** `hermes-content/deploy/vps-ops/bot/campanas-vivas.mjs` y su gate
+      `hermes-content/deploy/vps-ops/bot/campanas-vivas.test.mjs`.
+
+      **Cómo saltó:** corriendo la medición de arranque de este carril. `campanas-vivas.mjs`
+      devolvió `exit 1` —«frase viva muerta»— con este veredicto: *«ROTO — 2 de 7 frases que la
+      web viva manda no las escucha el bot vivo»*. Las dos son los botones de agenda: el repo
+      pasó a *30 minutos* y producción sigue escuchando *20* y *45*. O sea que el repo **ya está
+      bien** y el remedio es el `ok` del pedido de deploy del bot, que espera firma.
+
+      **El defecto no es el rojo: es que hay UN SOLO rojo para dos cosas con remedios opuestos.**
+      Mientras el pedido espere firma, este medidor sale `1` en cada vuelta. Un rojo permanente con
+      causa conocida se archiva como «el ambiental de siempre» —ya pasó en este repo con los
+      `exit 2`— y entonces el día que alguien rompa una frase EN EL REPO, que es el caso que el
+      medidor existe para agarrar, sale **el mismo código** y nadie lo distingue. El propio archivo
+      ya sabía nombrar la diferencia en una línea de AVISO (*«lo esperable es que sea la versión
+      VIEJA»*), pero la afirmaba **en agregado** («con N rotas arriba») y el veredicto y el código
+      de salida no la usaban.
+
+      **Lo que se hizo.** El rojo se partió en dos según de quién es el trabajo, emparejando cada
+      rota con su versión vieja por `mismaFraseSalvoNumeros` (ignora los dígitos: así fue la deriva
+      real, 30 vs 20 y 45; un criterio más flojo emparejaría campañas distintas y mandaría a
+      esperar un deploy que no las arregla):
+
+      - `exit 1` — **ninguna** versión de la frase está desplegada: nadie escribió la respuesta.
+        Es de este carril. El deploy no la va a inventar.
+      - `exit 3` — el repo la dice bien y producción tiene la versión vieja: **no hay código que
+        escribir**, falta publicar. Sigue siendo rojo (el lead que aprieta el botón HOY recibe el
+        saludo genérico), pero no es trabajo de acá.
+      - Con una de cada clase **manda el `1`**, para que una respuesta que nadie escribió no quede
+        escondida detrás de un pedido de deploy que puede tardar días.
+
+      Y el AVISO dejó de inferir en agregado: ahora nombra **de cuál** rota es la vieja, o dice
+      que no empareja con ninguna y que por eso no se puede afirmar si sobra o si falta.
+
+      **Rojo primero, por los tres motivos correctos** (`expected 3, actual 1`; el veredicto sin
+      nombrar el remedio; y el caso mixto saliendo igual que el simple). Los tres casos que fijaban
+      el `1` sobre la deriva 30↔20 se actualizaron a `3` **agregando** el sub-caso de la otra clase,
+      así que ninguno quedó más débil: lo que cuidan —«nunca verde», «el rojo gana al NO MEDIDO»—
+      se asserta aparte del número.
+
+      **Prueba.** `campanas-vivas.test.mjs` **17/17** (eran 14). Cadena entera del bot
+      **1452/1452, 0 fail** (`npm run test:bot`). Medición viva, mismos datos que antes del cambio:
+
+          node hermes-content/deploy/vps-ops/bot/campanas-vivas.mjs   → exit 3
+          VEREDICTO: ESPERA DEPLOY — las 2 frase(s) rota(s) ya están bien en el repo y producción
+          tiene la versión vieja (archivo /tmp/onia-bot/knowledge.json, versión 2026-09-24.1): no
+          hay código que escribir, hay que publicar el bot. El lead que aprieta el botón HOY
+          recibe el saludo genérico
+
+      Los códigos quedaron documentados en la medición de arranque de esta cola y en la cabecera
+      del medidor. **El pedido de deploy no se invalidó:** `campanas-vivas.mjs` ya era uno de los
+      13 (entra como NUEVO), el cuerpo lo describe como *«mira si las campañas están vivas en el
+      bot, no en un archivo»* —que sigue siendo exacto— y el `--dry-run` sigue contando 13.
 
 - [x] 🔴 **CERRADO el 2026-09-26 18:13-19:02 La Paz (es el INSTRUMENTO de mirar, no el bot: NO
       toca producción y NO necesita deploy). El instrumento con el que este carril MIRA las
@@ -3820,6 +3978,52 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
       el install del conocimiento es aparte (`webhook-server.sh knowledge`). Hasta que eso pase,
       el lead del plan Empresa sigue leyendo la frase vieja. El publicador en seco ya venía con
       9 archivos del bot esperando (el respaldo de audio de T6/T7 entre ellos).
+
+      ⚠️ **Ese párrafo era CIERTO el día que se escribió y dejó de serlo el 24-sep — corregido el
+      2026-09-26 22:30 La Paz, medido, no supuesto.** El commit que lo arregla (`fb1f1480`,
+      2026-09-19 14:55 UTC) cayó DENTRO de la ventana de este mismo ítem, así que «commiteado, no
+      desplegado» era exacto; el conocimiento vivo se instaló después y hoy declara versión
+      `2026-09-24.1`. **Un rider que nació verdadero es el que menos se audita.**
+
+      **Hoy sus TRES afirmaciones son falsas, y cada una manda a trabajo de más.** El ítem sigue
+      cerrado y `knowledge.onia.json` sigue pendiente de publicar: lo que caducó es lo que el
+      párrafo dice que le PASA al lead y quién tiene que hacer algo.
+
+      1. **«`npm run precios:vivos` sigue acusando al bot vivo» → hoy sale `exit 0`:** *«EL BOT
+         VIVO COTIZA SOLO PRECIOS DE LA FUENTE UNICA — 17 montos vigentes»*, y la inclusión
+         *«coincide con el catálogo publicado (4 planes nombrados)»*. Lo único que queda es un
+         **aviso**, no un rojo: *«"Empresa" (enterprise) trae el chatbot incluido y el bot no lo
+         nombra: no miente, pero no lo está vendiendo»*.
+      2. **«el lead del plan Empresa sigue leyendo la frase vieja» → no hay frase vieja.** El
+         conocimiento VIVO (`/tmp/onia-bot/knowledge.json`, versión `2026-09-24.1`) ya dice:
+         *«Bs 1.290 el Completo, que ya trae el chatbot de WhatsApp adentro. En el Básico, el
+         Crece y el Profesional el chatbot va aparte, Bs 390 al mes»* — enumera los tres planes
+         que pagan aparte en vez de cerrar en universal, que era exactamente el arreglo de
+         `fb1f1480` (*«al lead del plan mas caro se le cobraba Bs 390/mes por algo que su plan ya
+         trae»*). **Al Empresa ya no se le cobra de más: viajó.**
+      3. **«`DESPLEGAR: bot` no lleva el texto: el install del conocimiento es aparte» → lo
+         lleva, y hace 14 días.** `deploy-bot.sh:170` corre
+         `ONIA_BOT_KNOWLEDGE_FILE="$DEST/knowledge.onia.json" "$DEST/webhook-server.sh" knowledge`
+         como **paso 7 del propio deploy**, sin condición, y su comentario (`:153-154`) dice por
+         qué existe: *«pasar de uno al otro era un SEGUNDO comando a mano. Nadie lo corría»*.
+         Es el hermano exacto del fallo que ya costó 24 días de pedirle a Sergio Urcullo un `scp`
+         que no hacía falta: **el circuito ya estaba cableado y el doc mandaba a hacerlo a mano.**
+      4. El «9 archivos esperando» hoy son **13** (`publicar.sh --dry-run`). Es una PISTA, no un
+         dato: se re-deriva, no se copia.
+
+      🔴 **Por qué sobrevivió teniendo un gate encima, que es la parte que le sirve a otro
+      ítem:** `npm run deploy:ya-ocurrio` **sí juzga esta línea** (probado: sale en su lista con
+      `frontera: "bot"` y `shas: 0`) y la firma **«cierta»** — y por su propio criterio tiene
+      razón, porque razona por ARCHIVO y `knowledge.onia.json` sí tiene cambios sin publicar. Pero
+      el pendiente de HOY en ese archivo es **otro** (los 20/45 → 30 minutos del pedido vivo), no
+      el de este ítem. **Un juez por archivo no puede distinguir «el arreglo de ESTE ítem no
+      viajó» de «ese archivo tiene ALGÚN cambio pendiente»**, así que firma en verde un párrafo
+      cuya consecuencia ya es falsa. Reproducción exacta, 30 segundos, sin tocar producción:
+
+      ```bash
+      npm run --silent precios:vivos; echo "exit=$?"   # 0 = ya no acusa al bot vivo
+      node -e 'import("./scripts/deploy_ya_ocurrio.mjs").then(async m=>{const fs=await import("node:fs");const f="hermes-content/docs/cola/chatbot.md";console.log(m.afirmacionesDe(fs.readFileSync(f,"utf8"),f).filter(x=>x.linea===3888))})'
+      ```
 
 - [x] **MEDIDO el 2026-09-19 08:13-08:45 La Paz — los cuatro ejes del objetivo en verde, y
       DOS hipótesis propias refutadas antes de anunciarlas.** Simulador **3/3** (escalera C:
@@ -9401,11 +9605,63 @@ cita: al cerrar una fila hay que barrer quién la nombra, no sólo tacharla.
       van a cero — **sin un solo error, y en el único lugar donde este carril cuenta si el aviso le
       llegó a Sergio Urcullo.** Se derivan con el mismo grep de arriba apuntado a `avisos-vivo.mjs`.
 
-      **Así que el arreglo son DOS archivos que viajan juntos o ninguno**, y están en deploys
-      distintos: `webhook-server.mjs` (fuera de los 13) y `avisos-vivo.mjs` (**dentro** de los 13).
-      Publicar uno sin el otro deja el parser roto en el medio. Lo barato es poner la hora donde
-      ningún ancla la pisa —al final, o antes del `[aviso]`— y **ver el rojo primero** corriendo
-      `avisos-vivo.test.mjs` contra una línea con el formato nuevo.
+      ⚠️ **El acoplamiento ya NO existe — hecha la mitad desacoplable el 2026-09-26 20:55 La Paz.**
+      Acá decía que *«el arreglo son DOS archivos que viajan juntos o ninguno»* y que había que
+      poner la hora *«donde ningún ancla la pisa —al final, o antes del `[aviso]`»*. Las dos cosas
+      dejaron de ser ciertas: `avisos-vivo.mjs` ahora acepta **los dos formatos**, con hora y sin
+      hora, así que `webhook-server.mjs` puede estampar la hora **donde la estampa su hermana**
+      (tag → hora → estado, que es lo consistente con el resto del log) el día que se destrabe, sin
+      arrastrar a este archivo y sin parser roto en el medio. El log viejo del VPS es append-only y
+      sus líneas peladas se siguen leyendo igual: `npm run avisos:vivo` devuelve el mismo recuento
+      que antes del cambio (27 avisos · 25 enviados · 2 salteados, medido las dos veces).
+
+      **Y eran SEIS anclajes, no cinco.** La lista de arriba (`:136`, `:158`, `:163`, `:203`,
+      `:210`) no contaba a **`conEstado`**, que es justo el que alimenta
+      `enviados`/`salteados`/`fallidos`, o sea el número que se publica: arreglar los cinco
+      nombrados habría dejado los contadores en cero igual. Ahora los seis se derivan de **una
+      sola** función (`anclaAviso`), así que arreglar cinco y olvidar uno dejó de ser posible.
+      Rojo visto primero por los tres motivos correctos (contadores en 0, el `conv` cayendo al
+      vecino `11` en vez de `49`, y el salteo sin reconocer); verde después: 1449/1449 en
+      `npm run test:bot`.
+
+      **Lo que queda del ítem es UNA línea en un archivo congelado:** estampar la hora en
+      `webhook-server.mjs` `:767` y `:770`. Sigue detrás del `ok` del pedido de deploy del bot
+      (derivar el ID con el comando de abajo). No toca a nadie más.
+
+      ✅ **Re-derivado el 2026-09-26 21:55 La Paz: el bloqueo SIGUE VIVO y es real.**
+      `publicar.sh --dry-run` cuenta **13** archivos y `webhook-server.mjs` no es ninguno de
+      ellos, así que tocarlo lo haría el 14.º. La tarea del pedido es **`t_3752e986`** (derivada,
+      no copiada; sigue `blocked`). No se re-mide otra vez hasta que el tablero la devuelva a
+      `ready`.
+
+      🔴 **Y auditando este mismo circuito apareció un falso verde ESTRUCTURAL en el gate de al
+      lado, ya arreglado en esta vuelta — `avisos-vivo.mjs`, no `webhook-server.mjs`, así que el
+      pedido sigue siendo de 13.** El gate `textoAccionable` dice medir *«el aviso nombra la
+      conversación a la que contestar»* y lo juzgaba con
+      `aviso.texto.includes("4242") && aviso.conversationId === 4242`. **Las dos mitades miran el
+      mismo argumento que el gate se inyecta a sí mismo:** `construirAviso` estampa ese número en
+      la cabecera y lo devuelve tal cual, así que el juicio es **tautológico** — no podía ponerse
+      rojo por nada que hiciera el motor, que es justo lo único que puede fallar. Probado, no
+      argumentado: con el cuerpo diciendo `chatwoot:0` y la cabecera `4242`, la lógica vieja
+      devolvía `accionable = true`.
+
+      **El síntoma estaba impreso a la vista y nadie lo leyó**, que es por lo que se encontró: el
+      ejemplo de «lo que recibiría Sergio» salía con **DOS identidades para la misma
+      conversación** — cabecera `conversacion 4242`, cuerpo `Conversación chatwoot:0` —, una
+      combinación que **ningún aviso real puede tener**, porque en producción los dos lados salen
+      del mismo evento de Chatwoot (la cabecera del `conversationId`, el cuerpo del
+      `state.conversationKey` en `bot-engine.mjs:305`). Un ejemplo infiel apaga al instrumento:
+      quien lo compare con un aviso real no puede distinguir bug de artefacto.
+
+      **Arreglo:** una constante `CONVERSACION_DEL_GATE` para las DOS puertas (el
+      `conversationKey` del estado sintético y el `conversationId` de `construirAviso`), y el
+      juicio movido a `avisoEsAccionable()`, que ahora exige las **tres**: el campo fuera del
+      texto, la cabecera, y **el cuerpo que escribe el motor** (con `\b`, para que `chatwoot:4` no
+      pase por `chatwoot:42`). Rojo visto primero por el motivo correcto (*«el cuerpo del ejemplo
+      nombra OTRA conversación que la cabecera»*); verde después: **65/65** en su test,
+      **1454/1454** en `npm run test:bot`, `npm test` exit 0. Y el recuento vivo contra producción
+      es **idéntico** al de antes del cambio (29 avisos · 27 enviados · 2 salteados · 0 fallidos),
+      con el ejemplo ya coherente: `conversacion 4242` + `chatwoot:4242`.
 
       🔴 **El ID no se copia — se deriva, y esta línea ya se equivocó una vez.** Decía
       `t_76cdb5dc` y esa tarea está **`archived`** desde el 2026-09-26 16:48: el pedido se rehizo
@@ -9428,10 +9684,177 @@ cita: al cerrar una fila hay que barrer quién la nombra, no sólo tacharla.
       terminador y en el arranque de bloque para no pegar dos frases, y no muerde las notas de
       corrección fechadas como ésta.
 
+- [ ] **`espejo-check.mjs` veta el árbol entero cuando le alcanzaría vetar el archivo, y por eso
+      está mudo en el único lugar donde se lo corre.** Su guarda es correcta en el fondo (si el
+      subárbol del bot difiere de `origin/main`, una diferencia contra el VPS puede ser su propio
+      atraso) pero se aplica a TODO: un solo archivo distinto y no opina de ninguno. En un worktree
+      de carril eso es permanente, porque tener commits sin mergear es su estado normal — medido el
+      2026-09-27: difieren los 4 archivos que este carril commiteó el 26-sep y el script salió 2
+      sin mirar los otros 56. Su hermano `scripts/bot_vivo_tiene_el_codigo.mjs` ya resuelve la
+      misma pregunta archivo por archivo y concluye igual (sale 1, nombra 4 desfasados), así que el
+      criterio existe y está probado; lo que falta es traerlo acá.
+
+      **Reproducción (30 s, no hace falta investigar nada):**
+
+      ```bash
+      node hermes-content/deploy/vps-ops/bot/espejo-check.mjs; echo $?   # 2 — "ESPEJO SIN VEREDICTO"
+      node scripts/bot_vivo_tiene_el_codigo.mjs;              echo $?   # 1 — y nombra los 4
+      npm run evidencia:citada                                          # NO MEDIDO, por la cita de arriba
+      ```
+
+      **Forma del arreglo:** los archivos que difieren de `origin/main` salen del juicio como NO
+      MEDIDO **nombrados**, y los demás se comparan igual; exit 1 si queda alguno desfasado
+      atribuible, 2 sólo si no se pudo juzgar ninguno (o si git no contestó), 0 si todos se
+      juzgaron y coinciden. **Ojo con el consumidor:** `scripts/deploy_sin_pedido.mjs` lo corre y
+      **parsea su stdout** (`:742`, `:1111`), así que el formato de salida viaja con él o se rompe
+      un gate ajeno — van los dos archivos o ninguno.
+
+      🔴 **BLOQUEADO — acá decía que esto «no toca el pedido de deploy vivo» porque
+      *«`publicar.sh --dry-run` cuenta 13 y `espejo-check` no es uno»*, y la conclusión está al
+      revés. Corregido el 2026-09-27 02:40 La Paz, derivando la lista blanca en vez de leer el
+      recuento.** No estar entre los 13 es exactamente lo que hace que tocarlo sume el 14.º — es
+      el mismo razonamiento que el ítem de arriba (`:9576`) hace bien sobre `webhook-server.mjs`,
+      escrito al revés. La pregunta correcta no es *«¿está entre los 13 de hoy?»* sino **«¿cae en
+      la lista blanca del publicador?»**, y se deriva de su guion, no del recuento:
+
+      ```bash
+      grep -n 'PATRONES=' hermes-content/deploy/vps-ops/bot/deploy-bot.sh
+      #  PATRONES=("*.mjs" "*.sh" "knowledge.example.json" "knowledge.onia.json" "plantillas-humo.json")
+      ```
+
+      `espejo-check.mjs` está en la **raíz** de ese subárbol y cae en `*.mjs`, así que el
+      publicador lo copia (además ya existe en `/opt/onia/bot`, o sea que saldría `CAMBIA`).
+      Editarlo dejaría el cuerpo del pedido **`t_3752e986`** describiendo 13 archivos sobre 14, y
+      por el método vigente eso obliga a rehacerlo y archivar el viejo — van cuatro. **Así que
+      este ítem espera el mismo `ok` que el de las líneas `[aviso]`.** El otro archivo del par,
+      `scripts/deploy_sin_pedido.mjs`, sí queda afuera (vive en `scripts/` de `onia-hermes`), pero
+      el ítem dice «van los dos o ninguno», así que no se parte.
+
+      ✅ **Y el hueco quedó con instrumento en la misma vuelta: `npm run test:toca-el-pedido`**
+      (`scripts/toca_el_pedido_de_deploy.mjs`, self-check **27 casos**, en la cadena `npm test`
+      con su medición viva incluida —es pura: la lista blanca, el subárbol y las colas están
+      todos en el repo—). Lee las frases que absuelven a un cambio de tocar el pedido, deriva la
+      lista blanca del `deploy-bot.sh` del disco, y acusa si algún archivo nombrado viaja. Rojo
+      visto primero por el motivo correcto (acusó esta línea nombrando `espejo-check.mjs`) y
+      absolviendo las otras cinco: la que **advierte** la consecuencia (`:9576`) y la que da la
+      razón verdadera (`:9808`, «`scripts/` de `onia-hermes`, **no la carpeta del bot**»).
+
+      **Los TRES defectos que sólo aparecieron por exigir el rojo antes, los tres del instrumento:**
+      1. **Los dos puntos no cierran una absolución: la ABREN.** `frases_de_cola.mjs` corta en `:`
+         —correcto para sus dos consumidores, que buscan ids del tablero— y acá la frase terminaba
+         en *«No toca el pedido de deploy vivo:»* con `espejo-check` en la frase **siguiente**. El
+         gate salía `0 acusada(s)` con el sujeto delante. Arreglado en el gate (`conLaEvidencia`),
+         **no** en la librería: cambiar `cierraFrase` movería el suelo de `bloqueo_citado_vivo.mjs`
+         y `en_vuelo_vencido.mjs`, que ya están verdes sobre esa unidad.
+      2. **El módulo no era importable** — `process.exit` a nivel de módulo, el mismo falso verde
+         que `frases_de_cola.mjs` documenta y que `bloqueos_vencidos.mjs` ya pagó. Se vio en carne:
+         el primer `import` de prueba imprimió el veredicto de las colas en vez de los casos puros.
+         Ahora la CLI corre detrás de la guarda de `argv[1]`.
+      3. **El gate se acusó a sí mismo — con esta misma nota.** La convención de la casa conserva
+         el texto viejo entre `*«…»*`, y el detector leyó esa **cita** como una absolución nueva:
+         pedía borrar la corrección para ponerse verde. Arreglado con el recorte de su hermano
+         (`textoJuzgable`), con dos diferencias medidas: los backticks de una línea **no** se
+         recortan (ahí vive el sujeto de este gate, no su leyenda), y los bloques de código se
+         blanquean **antes** de partir en frases — puesto adentro de la frase no sirve, porque
+         `frases_de_cola.mjs` corta en la cerca y una frase nunca contiene el bloque entero.
+
 - [ ] **Botón "Cobrar con QR" dentro de la conversación** (pieza 5 del backlog v5). El
       circuito está completo en mock y verificado mirando (`/bcp/cobrar` + `/bcp/callback`,
       contrato del banco calcado); el código no cambia para el modo real. Espera las
       credenciales del BCP — ver Bloqueado.
+- [x] ✅ **CERRADO el 2026-09-27 03:1x La Paz — el hueco ya tiene instrumento: `npm run
+      evidencia:citada`** (`scripts/evidencia_citada_viva.mjs`, self-check **47/47**, en la cadena
+      como `test:evidencia-citada`; la medición viva quedó declarada arriba, en «Cómo se trabaja
+      esta cola», donde van las que no pueden ir a `npm test`). Lee las líneas que declaran su
+      evidencia como el veredicto de otro gate, **corre ese gate** y compara: declarado ≠ medido →
+      `exit 1` con `archivo:línea`; no se pudo correr → `exit 2`, nunca verde.
+
+      **Se hizo aparte y no dentro de `juezDelMotor`**, que era el arreglo obvio y el prohibido: una
+      medición viva ahí pondría rojo por ambiente a un `--self-check` que está en la cadena raíz.
+      Acá el self-check es **puro** (el corredor y la clave de caché se inyectan).
+
+      **Los CUATRO defectos que aparecieron por exigir el rojo antes, y que ninguna lectura habría
+      dado** — los cuatro son del instrumento, no del producto:
+      1. **`→ 2 horarios con 33,7 h de aviso` se leía como «código 2».** La palabra (`exit`, `sale`)
+         era opcional después de la flecha, así que un CONTEO pasaba por veredicto y el gate acusaba
+         con una polaridad inventada. Es el texto real de `:7872`.
+      2. **`\b` después de `[oó]` no cierra nunca:** la vocal acentuada no es `\w`, así que
+         `sali[oó]\b` no matchea «salió » y `cambi[oó]\b` no matchea «CAMBIÓ el 2026-09-04» — el
+         texto real de `:7917`. Con «AMPLIADO» sí andaba (termina en `O`, que sí es `\w`), y esa
+         asimetría es la que vuelve al bug invisible: la mitad de los casos en verde. **Escrito con
+         `\b` las dos veces, y las dos veces falló.** Mismo tropiezo que la raíz `includ` contra
+         «inclu-**i**-do», ya pagado en esta cola.
+      3. **La segunda alternativa del regex captura en el grupo 2**, y leer sólo el 1 daba
+         `esperado: NaN` — que nunca es igual a nada, o sea que toda la forma `→ 0` salía ACUSADA
+         siempre. El falso positivo más caro de los cuatro.
+      4. **Dos citas del MISMO script se corrían dos veces, y una de ellas escribe en producción.**
+         `sonda_widget.mjs` le manda dos mensajes de verdad al widget del inbox 4 —el de los leads
+         reales, que ratelimitea al 4.º pedido por IP— y esta cola lo cita de las dos formas
+         (`node scripts/…` en `:3091` y `:8525`, `npm run sonda:widget` en `:8789`). El caché ahora
+         mira **a qué script apunta** el alias, no su texto. Un gate que mide no puede ensuciar más
+         que el defecto que busca.
+
+      **Y DOS más que sólo aparecieron al correrlo en vivo la primera vez** — ninguna lectura del
+      código las habría dado, y las dos son la falta que el instrumento existe para no cometer:
+      5. **Un `2` del gate citado NO es un veredicto que contradiga: es su propio NO MEDIDO.** Todo
+         gate de este repo usa `2` para «no pude preguntar», y desde nodo-casa `espejo-check.mjs`
+         sale `2` porque no alcanza `/opt`. La primera pasada llamó **mentirosa a una línea cierta**
+         por un problema de ambiente. Ahora un `2` inesperado es `no-medida` (`exit 2`), nunca `1`;
+         una línea que **declara** `2` y recibe `2` sigue siendo honesta.
+      6. **El gate se acusó a sí mismo:** el párrafo de arriba citaba *«`npm run demo:agendada` →
+         exit 1»* como EJEMPLO de la forma que detecta, y el detector lo leyó como una afirmación.
+         La documentación de un detector es corpus del detector. El ejemplo quedó con `exit N`.
+
+      **Y lo que el gate deja AFUERA está contado por motivo, no escondido:** de 53 citas con código
+      declarado en las dos colas, **21 son juzgables** y 32 se saltan (11 tachadas, 6 filas de
+      bitácora `| … |`, 6 en pasado o bajo mutación, 5 con su nota de corrección fechada, 4 que ya
+      mide `bloqueos:vencidos`). Acusar a cualquiera de esas clases es como se apaga un gate: 30
+      rojos que el lector sabe que están mal le enseñan a no mirar el 31. **No juzga los números de
+      adentro de la salida** — `plataforma-v1.md:1860` dice «REALES: 4» y hoy son 3, pero el
+      veredicto sigue siendo 1 y se absuelve con razón; juzgar el cuerpo es otra unidad y otro gate.
+
+      **De paso, un defecto de contrato en el hermano:** `bloqueos_vencidos.mjs` `export`a
+      `validarComando`/`resolverBin` y **es imposible importarlo** — su CLI corre a nivel de módulo
+      sin guarda de `argv[1]`, así que el `import` imprime el uso y mata al proceso que lo pide
+      (medido: el callback del importador nunca corre). Es el mismo patrón que ya se pagó en
+      `demo_agendada_real.mjs`. Las dos guardas se mudaron a `scripts/lib/comando_de_cola.mjs` y el
+      hermano las re-exporta, así que su `--self-check` sigue afirmándolas: **61/61 verde después de
+      la mudanza.** Copiar la guarda en el segundo consumidor era la otra salida y es peor: es la
+      parte que decide QUÉ SE EJECUTA, y dos copias de eso divergen.
+
+      Lo de abajo es el diagnóstico con el que se abrió.
+
+      ~~🔴 **`deploy:ya-ocurrio` firma «cierta» una afirmación cuya consecuencia ya es falsa**~~, porque
+      juzga por ARCHIVO y no por ARREGLO. Encontrado el 2026-09-26 22:30 La Paz auditando los
+      `[x]` (escalón 2), con un caso real: la línea `chatbot.md:3888` decía que el lead del plan
+      Empresa leía una frase vieja y que el texto necesitaba un segundo paso a mano; las dos cosas
+      eran falsas desde el 24-sep y el gate la daba por cierta.
+
+      **La causa, no el síntoma:** el juez del motor (`juezDelMotor`) decide mirando si el archivo
+      que el ítem nombra está entre los que `/tmp/onia-bot` tiene viejos. `knowledge.onia.json`
+      SIEMPRE lo está mientras el pedido de deploy del bot espere firma, así que **toda** línea que
+      lo nombre sale «cierta» — sin importar si el arreglo de ESE ítem ya viajó en un install
+      anterior. Es el mismo error de unidad que ya se pagó dos veces acá: medir el archivo en vez
+      de medir la afirmación. Y falla en la dirección cara: **verde sobre un doc que miente**.
+
+      **Reproducción exacta (30 s, no toca producción):**
+
+      ```bash
+      npm run --silent deploy:ya-ocurrio   # dice "0 mienten"; la 3888 está entre las 17 "ciertas"
+      npm run --silent precios:vivos       # exit 0: la consecuencia que la 3888 afirma NO ocurre
+      ```
+
+      **Lo que hay que decidir al arreglarlo, porque no es obvio:** un arreglo ingenuo —hacer que
+      el juez corra el gate que la línea cita— mete una medición VIVA (VPS) dentro de un script
+      cuyo `--self-check` está en la cadena raíz, y eso es exactamente la forma que este repo ya
+      prohibió («un gate cuyo self-check necesita el repo hermano NO va en la cadena»). El camino
+      que queda es un instrumento **aparte** que lea las líneas cuya evidencia declarada es el
+      veredicto de otro gate, lo corra, y compare — self-check puro en la cadena, medición viva en
+      la medición de arranque del carril, como ya hacen `campanas-vivas` y `bloqueo:citado`.
+
+      ⚠️ **No toca ninguno de los 13 archivos del pedido de deploy del bot** (`scripts/` de
+      `onia-hermes`, no la carpeta del bot), así que se puede hacer sin rehacer el pedido.
+
 - 📌 **Nota para el carril web-factory (no la ejecuta este carril):** tres de las frases de
   `site.ts` dicen *"avisen cuando Onia para comercio/servicios/importadoras esté listo"*, y
   eso es **exhibir obra en la superficie de venta** — prohibido por CLAUDE.md §3. Además los
@@ -9481,7 +9904,24 @@ cita: al cerrar una fila hay que barrer quién la nombra, no sólo tacharla.
 > sola cosa: la firma del deploy del bot.** ✅ **Y esa firma LLEGÓ: el 2026-09-25 el swap corrió y
 > los dos quedaron cerrados con S18.** Los mismos dos verificadores que acá salían en rojo hoy
 > dan verde: `node hermes-content/deploy/vps-ops/bot/espejo-check.mjs` → **exit 0** (`ESPEJO OK`)
-> y `grep -c avisosDePanelYaDados /tmp/onia-bot/knowledge.mjs` → **4** (era 0). Y el bucle del
+> y `grep -c avisosDePanelYaDados /tmp/onia-bot/knowledge.mjs` → **4** (era 0).
+>
+> ⚠️ **El primero de esos dos verificadores caducó como RECETA el 2026-09-27 — el hecho sigue en
+> pie (el swap del 25-sep ocurrió), lo que ya no reproduce es su `exit 0`: hoy sale 2.** Y no es
+> que el bot se haya desincronizado: `espejo-check.mjs` se niega a concluir cuando el subárbol del
+> bot difiere de `origin/main`, y difiere por lo que ESTE carril commiteó y todavía no mergeó
+> (`avisos-vivo.mjs`, `avisos-vivo.test.mjs`, `campanas-vivas.mjs`, `campanas-vivas.test.mjs`).
+> O sea que ese verificador sólo reproduce desde un árbol recién mergeado, y desde el worktree
+> donde se trabaja está mudo **por diseño** — un NO MEDIDO permanente, que además dejaba en NO
+> MEDIDO a `npm run evidencia:citada`, que está en la medición de arranque de este carril.
+> El hermano que SÍ concluye desde acá es `node scripts/bot_vivo_tiene_el_codigo.mjs`, que compara
+> archivo por archivo en vez de vetar el árbol entero: sale **1** y nombra los **4** desfasados que
+> esperan esta misma firma — `calcom-booking.mjs`, `followup-run.mjs`, `knowledge.onia.json`,
+> `marcas-en-disco.mjs`. Ése es el dato que esta línea quería dar, y es el que hay que derivar.
+> El SEGUNDO verificador sí reproduce, medido en el contenedor y no heredado:
+> `docker exec onia-center grep -c avisosDePanelYaDados /tmp/onia-bot/knowledge.mjs` → **4**.
+>
+> Y el bucle del
 > horario está probado EJECUTANDO el motor que corre en el contenedor, con los cinco slots del
 > proceso vivo (`/proc/<pid>/environ`): quien escribe *"el martes 29 a las 14:00"* —el TERCER
 > candidato, el que antes no existía para el bot— queda con
