@@ -1381,6 +1381,17 @@
   gap: 0.5em;
   color: color-mix(in srgb, currentColor 82%, transparent);
   font-size: 0.95em;
+  /* Lo declara la LISTA, no el envoltorio, y esa es toda la corrección. `text-align` se
+     hereda, y la banda de precios de la home vive dentro del `.centro` de la portada: sin
+     esta línea, el texto de cada renglón se iba al centro de su columna y dejaba al punto
+     verde solo contra el margen. Medido el 2026-09-27 en producción a 390px: «Todo lo del
+     Crece» tenía el punto en x=49 y su texto en x=145 — 76px de aire entre la viñeta y lo
+     que nombra, nueve renglones así en las cuatro tarjetas de plan, que es justo donde el
+     lead decide. Que es leak y no diseño lo prueba la misma clase en las otras pantallas:
+     `/precios` (23 renglones) y `/chatbot` (11) daban `start` y hueco −1px. Y lo dice la
+     regla de abajo, que reserva una columna PARA el marcador: esa forma sólo cierra con el
+     texto al inicio de su columna. Gate: `scripts/vineta-pegada-a-su-texto.{mjs,test.ts}`. */
+  text-align: left;
 }
 .planList li {
   display: grid;
