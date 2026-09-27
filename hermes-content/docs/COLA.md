@@ -122,11 +122,27 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
         `/tmp/wv-vineta-verde/portada-13.png`, `/tmp/wv-vineta-verde/portada-15.png` y
         `/tmp/wv-vineta-verde/escritorio-planes.png` (las tres con su carpeta: un nombre pelado
         manda a buscarlas al repo, donde no están).
-      - ⏳ **Todavía NO lo ve el lead:** `main` no publica. El publicador del VPS
+      - ✅ **YA lo ve el lead — comprobado el 2026-09-27 14:5x La Paz.** El publicador del VPS
         (`/root/bin/onia-publicar-solo.sh`, fuente versionada
-        `scripts/loops/extras/publicar-solo.sh`, cron `50 */3`) se lo lleva solo; se comprueba con
-        `curl -s https://onia.com.bo/_next/static/css/*.css | grep planList` — tiene que decir
-        `text-align:left`.
+        `scripts/loops/extras/publicar-solo.sh`, cron `50 */3`) se lo llevó solo. Producción
+        sirve `sitio_planList__gzeop{…;text-align:left}`, y el gate que antes estaba **rojo
+        contra producción** ahora da `VERDE: los 116 renglones de 6 pantalla(s) … el peor hueco
+        es 0px`. Ese es el cierre: el gate vivo, no el CSS a ojo.
+      - ⚠️ **La receta de comprobación que este mismo ítem dejó escrita estaba ROTA, y fallaba
+        en el sentido peligroso: hacia el falso NEGATIVO.** Decía
+        `curl -s https://onia.com.bo/_next/static/css/*.css | grep planList`, y eso devuelve
+        **vacío aunque el arreglo esté vivo** — por dos motivos independientes: el `*.css` del
+        glob no lo expande `curl` (el nombre del bundle es un hash que hay que sacar del HTML),
+        y sobre todo **Next mangla los nombres de CSS Modules**: en el bundle la clase no es
+        `.planList` sino `.sitio_planList__gzeop`. La próxima vuelta habría leído ese vacío como
+        «todavía no publicó» y habría vuelto a arreglar algo que el lead ya ve. Lo que sí mide:
+        `node scripts/vineta-pegada-a-su-texto.mjs` (24 rutas contra producción), o si se quiere
+        el CSS crudo, sacar el bundle del HTML y buscar la clase **como subcadena**:
+        `for c in $(curl -s https://onia.com.bo/ | grep -oE '/_next/static/css/[^"]+\.css' | sort -u); do curl -s "https://onia.com.bo$c" | grep -oE '[a-zA-Z0-9_]*planList[a-zA-Z0-9_]*\{[^}]*\}'; done`
+        **Regla que deja:** una receta de verificación escrita para la vuelta siguiente se corre
+        UNA vez antes de dejarla. Un `grep` que nunca se ejecutó no es una comprobación, es una
+        conjetura con formato de comando — y cuando falla, falla afirmando que el trabajo no
+        llegó.
 
 - [x] 🟠 **Con el interruptor en Anual, la tarjeta «Completo» partía su unidad a la mitad: el lead
       leía `Bs /` y abajo `año`. ARREGLADO Y GATEADO el 2026-09-27 06:5x La Paz por `web-venta`.**
