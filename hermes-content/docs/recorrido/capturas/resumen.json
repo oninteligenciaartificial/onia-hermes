@@ -1,7 +1,7 @@
 {
-  "cuando": "2026-09-27T16:15:07.785Z",
-  "rubro": "Estetica",
-  "rubroPromesa": null,
+  "cuando": "2026-09-27T16:19:04.498Z",
+  "rubro": "Estética",
+  "rubroPromesa": "spa Estética y spa Agenda, clientas, tratamientos y caja",
   "escribio": true,
   "saltoEquipo": false,
   "recoveryProbado": null,
@@ -10,13 +10,19 @@
     "ok": true,
     "antes": {
       "cuentas": {
-        "citas": 0,
-        "pacientes": 0,
-        "perfiles": 0,
-        "organizaciones": 0,
-        "usuarios": 0
+        "citas": 1,
+        "pacientes": 1,
+        "perfiles": 2,
+        "organizaciones": 1,
+        "usuarios": 1
       },
-      "filas": [],
+      "filas": [
+        "appointments cmuk0vwu500iq01n0au4hmxh6 zz-qa-2026-09-27-1615-cita",
+        "patients cmuk0vk8n00io01n0jeb81x1u zz-qa-2026-09-27-1615-paciente",
+        "organizations cmuk0stcz00i301n0vfjam0kg zz-qa-2026-09-27-1615",
+        "auth.users aa5254c3-f616-4259-ba22-a23f56f4b86b zz-qa-2026-09-27-1615@onia.com.bo",
+        "invoices cmuk0w77t00is01n09jn08kbe 2026-0001 10.00"
+      ],
       "ajenas": [],
       "huerfanos": []
     },
@@ -33,72 +39,24 @@
   },
   "zzQaRestantes": 0,
   "zzQaAjenas": [],
-  "llegoHasta": 2,
-  "ultimoOkSuelto": 2,
-  "completo": false,
+  "llegoHasta": 9,
+  "ultimoOkSuelto": 9,
+  "completo": true,
   "deCuantos": 9,
-  "corte": {
-    "paso": 3,
-    "nombre": "pedir-acceso",
-    "estado": "roto",
-    "detalle": "el alta no ofrece el rubro \"Estetica\". Los que ofrece: Clínica dental Pacientes, · Comercio / tienda · Importadora / distribuidora · Estética y spa · Servicios profesionales Agenda,"
-  },
-  "agujeros": [
-    {
-      "paso": 3,
-      "nombre": "pedir-acceso",
-      "estado": "roto",
-      "detalle": "el alta no ofrece el rubro \"Estetica\". Los que ofrece: Clínica dental Pacientes, · Comercio / tienda · Importadora / distribuidora · Estética y spa · Servicios profesionales Agenda,"
-    },
-    {
-      "paso": 4,
-      "nombre": "entrar",
-      "estado": "no-medido",
-      "detalle": "no hay con qué entrar: --escribir está apagado (no se creó cuenta) y faltan RECORRIDO_USER/RECORRIDO_PASS"
-    },
-    {
-      "paso": 5,
-      "nombre": "elegir-rubro",
-      "estado": "no-medido",
-      "detalle": "sin sesión: el paso 4 no pudo entrar"
-    },
-    {
-      "paso": 6,
-      "nombre": "cargar-dato",
-      "estado": "no-medido",
-      "detalle": "sin sesión: el paso 4 no pudo entrar"
-    },
-    {
-      "paso": 7,
-      "nombre": "cita",
-      "estado": "no-medido",
-      "detalle": "sin sesión: el paso 4 no pudo entrar"
-    },
-    {
-      "paso": 8,
-      "nombre": "cobro",
-      "estado": "no-medido",
-      "detalle": "sin sesión: el paso 4 no pudo entrar"
-    },
-    {
-      "paso": 9,
-      "nombre": "bandeja",
-      "estado": "no-medido",
-      "detalle": "sin sesión: el paso 4 no pudo entrar"
-    }
-  ],
+  "corte": null,
+  "agujeros": [],
   "noAplican": [],
   "datosQA": {
-    "nombre": "zz-qa-2026-09-27-1614",
-    "negocio": "zz-qa-2026-09-27-1614-negocio",
-    "email": "zz-qa-2026-09-27-1614@onia.com.bo",
+    "nombre": "zz-qa-2026-09-27-1615",
+    "negocio": "zz-qa-2026-09-27-1615-negocio",
+    "email": "zz-qa-2026-09-27-1615@onia.com.bo",
     "whatsapp": "59170000000",
     "ciudad": "zz-qa-ciudad",
     "password": "zz-qa-2026-09-27-Passw0rd!",
-    "paciente": "zz-qa-2026-09-27-1614-paciente",
-    "profesional": "zz-qa-2026-09-27-1614-profesional",
-    "cita": "zz-qa-2026-09-27-1614-cita",
-    "itemFactura": "zz-qa-2026-09-27-1614-item"
+    "paciente": "zz-qa-2026-09-27-1615-paciente",
+    "profesional": "zz-qa-2026-09-27-1615-profesional",
+    "cita": "zz-qa-2026-09-27-1615-cita",
+    "itemFactura": "zz-qa-2026-09-27-1615-item"
   },
   "pasos": [
     {
@@ -106,7 +64,7 @@
       "nombre": "home",
       "que": "Entrar a onia.com.bo y que se VEA",
       "estado": "ok",
-      "detalle": "cargó en 1972 ms, 8721 caracteres visibles",
+      "detalle": "cargó en 1766 ms, 8721 caracteres visibles",
       "captura": "hermes-content/docs/recorrido/capturas/paso-01-home.png",
       "dom": {
         "textoVisible": 8721,
@@ -170,18 +128,72 @@
       "n": 3,
       "nombre": "pedir-acceso",
       "que": "Pedir acceso / registrarse con datos zz-qa-",
-      "estado": "roto",
-      "detalle": "el alta no ofrece el rubro \"Estetica\". Los que ofrece: Clínica dental Pacientes, · Comercio / tienda · Importadora / distribuidora · Estética y spa · Servicios profesionales Agenda,",
-      "rubrosOfrecidos": [
-        "dentistry Clínica dental Pacientes, citas, tratamientos y cobros Empezar aquí arrow_forward",
-        "storefront Comercio / tienda Catálogo, inventario, caja y clientes Empezar aquí arrow_forward",
-        "local_shipping Importadora / distribuidora Catálogo, cotizaciones B2B y costeo de importación Empezar aquí arrow_forward",
-        "spa Estética y spa Agenda, clientas, tratamientos y caja Empezar aquí arrow_forward",
-        "work Servicios profesionales Agenda, citas, cobros y contabilidad Empezar aquí arrow_forward"
+      "estado": "ok",
+      "detalle": "cuenta zz-qa-2026-09-27-1615@onia.com.bo creada; el alta pide CONFIRMAR EL CORREO antes del primer login — la pantalla dice: \"Tu negocio completo, en un solo sistema. bolt Activación acompañada Tu sistema llega con la configuración de tu rubro pu\"",
+      "campos": [
+        {
+          "tag": "input",
+          "tipo": "text",
+          "name": "sitioWeb",
+          "id": "",
+          "placeholder": "",
+          "requerido": false
+        },
+        {
+          "tag": "input",
+          "tipo": "text",
+          "name": "",
+          "id": "",
+          "placeholder": "Lic. Ana Ríos",
+          "requerido": true
+        },
+        {
+          "tag": "input",
+          "tipo": "email",
+          "name": "",
+          "id": "",
+          "placeholder": "duena@estetica.bo",
+          "requerido": true
+        },
+        {
+          "tag": "input",
+          "tipo": "password",
+          "name": "",
+          "id": "",
+          "placeholder": "Mínimo 8 caracteres",
+          "requerido": true
+        },
+        {
+          "tag": "input",
+          "tipo": "text",
+          "name": "",
+          "id": "",
+          "placeholder": "Estética Bella Piel",
+          "requerido": true
+        },
+        {
+          "tag": "select",
+          "tipo": "select-one",
+          "name": "",
+          "id": "",
+          "placeholder": "",
+          "requerido": false
+        },
+        {
+          "tag": "input",
+          "tipo": "checkbox",
+          "name": "",
+          "id": "",
+          "placeholder": "",
+          "requerido": false
+        }
       ],
-      "captura": "hermes-content/docs/recorrido/capturas/paso-03-pedir-acceso.png",
+      "altaCreaCuenta": true,
+      "requiereConfirmacionDeCorreo": true,
+      "urlTrasEnviar": "https://app.onia.com.bo/register",
+      "captura": "hermes-content/docs/recorrido/capturas/paso-03b-pedir-acceso-enviado.png",
       "dom": {
-        "textoVisible": 1245,
+        "textoVisible": 761,
         "secciones": 2,
         "seccionesInvisibles": 0,
         "titulo": "Onia | El sistema con IA que maneja tu negocio en Bolivia"
@@ -191,43 +203,284 @@
       "n": 4,
       "nombre": "entrar",
       "que": "Entrar a la plataforma con esa cuenta",
-      "estado": "no-medido",
-      "detalle": "no hay con qué entrar: --escribir está apagado (no se creó cuenta) y faltan RECORRIDO_USER/RECORRIDO_PASS"
+      "estado": "ok",
+      "detalle": "entró con la cuenta recién creada; quedó en https://app.onia.com.bo/onboarding — hizo falta confirmar el correo primero, como haría el cliente con el enlace del mail",
+      "confirmoCorreo": {
+        "ok": true,
+        "detalle": "correo confirmado abriendo el enlace del mail; quedó en https://app.onia.com.bo/onboarding",
+        "url": "https://app.onia.com.bo/onboarding"
+      },
+      "recoveryProbado": null,
+      "captura": "hermes-content/docs/recorrido/capturas/paso-04-entrar.png",
+      "dom": {
+        "textoVisible": 404,
+        "secciones": 0,
+        "seccionesInvisibles": 0,
+        "titulo": "Onia | El sistema con IA que maneja tu negocio en Bolivia"
+      }
     },
     {
       "n": 5,
       "nombre": "elegir-rubro",
       "que": "Elegir rubro y terminar el onboarding",
-      "estado": "no-medido",
-      "detalle": "sin sesión: el paso 4 no pudo entrar"
+      "estado": "ok",
+      "detalle": "onboarding COMPLETADO en 6 pantallas (pregunta → negocio → horarios → servicios → equipo → listo); /dashboard ya no rebota; horarios cargados, 10 fila(s) de agenda",
+      "traza": [
+        {
+          "pantalla": "pregunta",
+          "vio": "¿Cómo se llama tu negocio?",
+          "apreto": "Completar el formulario"
+        },
+        {
+          "pantalla": "negocio",
+          "vio": "Contanos de tu negocio",
+          "apreto": "Continuar"
+        },
+        {
+          "pantalla": "horarios",
+          "vio": "¿Cuándo atendés?",
+          "apreto": "Continuar (lun-vie 09-13 y 15-19 cargados)"
+        },
+        {
+          "pantalla": "servicios",
+          "vio": "¿Qué hacés y a cuánto?",
+          "apreto": "Saltar por ahora"
+        },
+        {
+          "pantalla": "equipo",
+          "vio": "¿Quién más trabaja con vos?",
+          "apreto": "Terminar (profesional zz-qa-2026-09-27-1615-profesional; cierra el alta)"
+        },
+        {
+          "pantalla": "listo",
+          "vio": "zz-qa-2026-09-27-1615 ya está en Onia",
+          "apreto": "—"
+        }
+      ],
+      "horariosCargados": true,
+      "profesionalCargado": true,
+      "agendas": 10,
+      "capturaAsistente": "hermes-content/docs/recorrido/capturas/paso-05b-onboarding-listo.png",
+      "status": 200,
+      "ms": 3680,
+      "urlFinal": "https://app.onia.com.bo/dashboard",
+      "captura": "hermes-content/docs/recorrido/capturas/paso-05c-gate-levantado.png",
+      "dom": {
+        "textoVisible": 1398,
+        "secciones": 9,
+        "seccionesInvisibles": 0,
+        "titulo": "Onia | El sistema con IA que maneja tu negocio en Bolivia"
+      },
+      "destino": "/dashboard",
+      "pedida": "/dashboard",
+      "llego": true,
+      "tapa": null,
+      "despejo": true
     },
     {
       "n": 6,
       "nombre": "cargar-dato",
       "que": "Cargar un dato real del rubro (un cliente, un paciente, un producto)",
-      "estado": "no-medido",
-      "detalle": "sin sesión: el paso 4 no pudo entrar"
+      "estado": "ok",
+      "detalle": "\"zz-qa-2026-09-27-1615-paciente\" cargado en group Clientas (/patients) y encontrado de vuelta en la lista",
+      "capturaAlta": "hermes-content/docs/recorrido/capturas/paso-06b-alta-dato.png",
+      "campos": [
+        {
+          "i": 0,
+          "tag": "input",
+          "tipo": "text",
+          "name": "",
+          "placeholder": "Ej: Juan Carlos Mamani",
+          "etiqueta": "",
+          "requerido": true,
+          "visible": true
+        },
+        {
+          "i": 1,
+          "tag": "input",
+          "tipo": "text",
+          "name": "",
+          "placeholder": "1234567",
+          "etiqueta": "",
+          "requerido": false,
+          "visible": true
+        },
+        {
+          "i": 2,
+          "tag": "input",
+          "tipo": "date",
+          "name": "",
+          "placeholder": "",
+          "etiqueta": "",
+          "requerido": false,
+          "visible": true
+        },
+        {
+          "i": 3,
+          "tag": "input",
+          "tipo": "text",
+          "name": "",
+          "placeholder": "+591 70000000",
+          "etiqueta": "",
+          "requerido": false,
+          "visible": true
+        },
+        {
+          "i": 4,
+          "tag": "input",
+          "tipo": "email",
+          "name": "",
+          "placeholder": "clienta@email.com",
+          "etiqueta": "",
+          "requerido": false,
+          "visible": true
+        },
+        {
+          "i": 5,
+          "tag": "input",
+          "tipo": "text",
+          "name": "",
+          "placeholder": "Nombre del familiar",
+          "etiqueta": "",
+          "requerido": false,
+          "visible": true
+        },
+        {
+          "i": 6,
+          "tag": "input",
+          "tipo": "text",
+          "name": "",
+          "placeholder": "+591 60000000",
+          "etiqueta": "",
+          "requerido": false,
+          "visible": true
+        },
+        {
+          "i": 7,
+          "tag": "textarea",
+          "tipo": "textarea",
+          "name": "",
+          "placeholder": "Penicilina, látex, etc.",
+          "etiqueta": "",
+          "requerido": false,
+          "visible": true
+        },
+        {
+          "i": 8,
+          "tag": "textarea",
+          "tipo": "textarea",
+          "name": "",
+          "placeholder": "Observaciones adicionales...",
+          "etiqueta": "",
+          "requerido": false,
+          "visible": true
+        }
+      ],
+      "status": 200,
+      "ms": 2536,
+      "urlFinal": "https://app.onia.com.bo/patients",
+      "captura": "hermes-content/docs/recorrido/capturas/paso-06c-dato-en-la-lista.png",
+      "dom": {
+        "textoVisible": 787,
+        "secciones": 4,
+        "seccionesInvisibles": 0,
+        "titulo": "Onia | El sistema con IA que maneja tu negocio en Bolivia"
+      },
+      "destino": "/patients",
+      "pedida": "/patients",
+      "llego": true,
+      "tapa": null,
+      "despejo": false
     },
     {
       "n": 7,
       "nombre": "cita",
       "que": "Agendar una cita zz-qa- con el paciente del paso 6 y VERLA en la agenda",
-      "estado": "no-medido",
-      "detalle": "sin sesión: el paso 4 no pudo entrar"
+      "estado": "ok",
+      "detalle": "cita 2026-09-28 09:00 con zz-qa-2026-09-27-1615-paciente agendada (201, id cmuk0vwu500iq01n0au4hmxh6) y VISTA en la agenda de https://app.onia.com.bo/appointments",
+      "elegido": {
+        "paciente": "zz-qa-2026-09-27-1615-paciente",
+        "profesional": "zz-qa-2026-09-27-1615",
+        "motivo": "Consulta general",
+        "hora": "09:00"
+      },
+      "fecha": "2026-09-28",
+      "altaInline": null,
+      "botonSinNombre": false,
+      "capturaFormulario": "hermes-content/docs/recorrido/capturas/paso-07b-cita-formulario.png",
+      "status": 200,
+      "ms": 2138,
+      "urlFinal": "https://app.onia.com.bo/appointments",
+      "captura": "hermes-content/docs/recorrido/capturas/paso-07d-cita-en-agenda.png",
+      "dom": {
+        "textoVisible": 876,
+        "secciones": 3,
+        "seccionesInvisibles": 0,
+        "titulo": "Onia | El sistema con IA que maneja tu negocio en Bolivia"
+      },
+      "destino": "/appointments",
+      "pedida": "/appointments",
+      "llego": true,
+      "tapa": null,
+      "despejo": false,
+      "agenda": {
+        "ruta": "/appointments",
+        "texto": "calendar_month Citas"
+      },
+      "red": {
+        "post": {
+          "status": 201,
+          "body": "{\"id\":\"cmuk0vwu500iq01n0au4hmxh6\",\"organizationId\":\"cmuk0stcz00i301n0vfjam0kg\",\"patientId\":\"cmuk0vk8n00io01n0jeb81x1u\",\"doctorId\":\"cmuk0std200i401n0l4zf6m14\",\"dateTime\":\"2026-09-28T13:00:00.000Z\",\"durationMin\":30,\"status\":\"PENDIENTE\",\"reason\":\"Consulta general\",\"notes\":\"zz-qa-2026-09-27-1615-cita\",\""
+        },
+        "disponibilidad": {
+          "status": 200,
+          "slots": 16,
+          "libres": 16
+        }
+      }
     },
     {
       "n": 8,
       "nombre": "cobro",
       "que": "Llegar a la pantalla de cobro y MIRARLA. Frenar ahí",
-      "estado": "no-medido",
-      "detalle": "sin sesión: el paso 4 no pudo entrar"
+      "estado": "ok",
+      "detalle": "factura zz-qa- creada (/billing/cmuk0w77t00is01n09jn08kbe) con el ítem \"zz-qa-2026-09-27-1615-item\" visible en su pantalla de cobro — FRENADO acá a propósito, sin marcarla pagada",
+      "facturaUrl": "https://app.onia.com.bo/billing/cmuk0w77t00is01n09jn08kbe",
+      "itemVisible": true,
+      "captura": "hermes-content/docs/recorrido/capturas/paso-08c-factura-creada.png",
+      "dom": {
+        "textoVisible": 1250,
+        "secciones": 3,
+        "seccionesInvisibles": 0,
+        "titulo": "Onia | El sistema con IA que maneja tu negocio en Bolivia"
+      },
+      "menuCobro": {
+        "ruta": "/billing",
+        "texto": "paymentsCobros"
+      }
     },
     {
       "n": 9,
       "nombre": "bandeja",
       "que": "Abrir la bandeja / el panel y ver si el dato del paso 6 aparece",
-      "estado": "no-medido",
-      "detalle": "sin sesión: el paso 4 no pudo entrar"
+      "estado": "ok",
+      "detalle": "panel en https://app.onia.com.bo/dashboard: el dato \"zz-qa-2026-09-27-1615-paciente\" NO figura en el panel — sí quedó guardado y visible en group Clientas (paso 6). El panel no lista group clientas: no es un fallo, es lo que muestra",
+      "datoEnElPanel": false,
+      "status": 200,
+      "ms": 3162,
+      "urlFinal": "https://app.onia.com.bo/dashboard",
+      "captura": "hermes-content/docs/recorrido/capturas/paso-09-bandeja.png",
+      "dom": {
+        "textoVisible": 1568,
+        "secciones": 9,
+        "seccionesInvisibles": 0,
+        "titulo": "Onia | El sistema con IA que maneja tu negocio en Bolivia"
+      },
+      "destino": "/dashboard",
+      "pedida": "/dashboard",
+      "llego": true,
+      "tapa": null,
+      "despejo": false
     }
   ]
 }
