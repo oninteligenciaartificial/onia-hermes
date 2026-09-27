@@ -894,6 +894,14 @@ ya mide `bloqueos:vencidos`; y toda cita que **ya trae su nota de corrección** 
 también el párrafo siguiente. Imprime el recuento de las saltadas **por motivo**: sin ese
 denominador, «0 mienten» sobre 0 sujetos y sobre 21 se leen igual.
 
+📌 **Lectura del 2026-09-27 03:4x La Paz, desde nodo-casa: `exit 2` — 20 de 21 citas honestas, CERO
+mintiendo, y UNA no medida**: `espejo-check.mjs` sale `2` desde casa porque no alcanza `/opt`, así
+que su línea (la del `**Verificador:**` de S9, que lo cita también fuera de la marca) no se puede
+juzgar acá. **Ese `2` es el esperado en esta máquina y no es trabajo de este carril** — se juzga
+desde el VPS. La primera pasada, antes de arreglarlo, llamaba MENTIROSA a esa línea cierta.
+⚠️ Tarda **~9 min** en vivo: corre 14 scripts de verdad, varios contra el VPS. Va al final de la
+medición de arranque, no al principio.
+
 **No uses `tail -N | grep -c` para juzgar el log del bot.** `tail -N` es una ventana de LÍNEAS, no
 de TIEMPO, y ese log **no se rota**: el 24-sep un `tail -80` devolvió vacío con 27 eventos adentro
 del archivo (falso verde), y el 26-sep un `tail -2000` devolvió 1.417 copias de una línea que ya
