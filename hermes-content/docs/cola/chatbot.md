@@ -193,7 +193,13 @@ timestamp: `tail` crudo, nunca `sort`.
 
 ---
 
-## ✅ T10 — **CERRADO el 2026-09-26 17:23 La Paz. La reapertura de las 17:05 era FALSA, y el error fue de esta misma sesión: midió volumen acumulado creyendo que medía tasa de emisión**
+## 🔴 T10 — **REABIERTO el 2026-09-27 08:55 UTC por su MITAD de cola, no por el ruido. El dedup del 26-sep sigue curado y no se toca; lo que tapa la cola es otra cosa y es del emisor (ver el cierre del ítem, abajo)**
+> El encabezado de acá decía «CERRADO el 2026-09-26 17:23 La Paz» y quedó **medio falso** menos de
+> un día: el veredicto `ruido` sigue en 0 y el veredicto `cola` pasó a 1. Se reabre en el mismo
+> encabezado y no en un ítem nuevo, porque el archivo y el gate son los mismos — un ítem nuevo con
+> la fecha de hoy es justo lo que `CLAUDE.md` prohíbe. **Lo que sigue (los tres instrumentos, el
+> experimento del `/health`) es CIERTO y es la historia del dedup: no se re-mide.**
+
 El arreglo del dedup **funciona en producción**. Lo que estaba roto era el instrumento con el que
 este ítem se juzgaba a sí mismo — y su criterio de cierre, que no podía ponerse verde nunca.
 
@@ -244,13 +250,50 @@ Tri-estado: cuando una línea de ruido no se puede fechar por ningún lado sale 
 verde. Ese tercer estado es el que evita las **dos** cegueras a la vez — el falso verde del 24-sep
 (*"no hubo eventos"* con 27 adentro) y el falso rojo del 26-sep (*"sigue ahogado"* estando sano).
 
-Gate: `npm run test:log-ahogado` (11 casos puros + self-check), en la cadena entre
+Gate: `npm run test:log-ahogado` (15 casos puros + self-check), en la cadena entre
 `test:bot-vivo-al-dia` y `test:embudo-bot`. El caso que da nombre al archivo es el par
 **mismo volumen / distinta fecha / distinto veredicto**: si el instrumento volviera a medir volumen,
 ese par se pone rojo solo.
 
 **LISTO =** `node scripts/log_del_bot_ahogado.mjs` sale **0**, con `0` copias en la ventana y la
-cola dejando ver los eventos. **Medido:** sale 0. ✅
+cola dejando ver los eventos. **Medido el 2026-09-27 08:55 UTC: sale 1.** 🔴 **La mitad del ruido
+está sana y la otra mitad NO, y el ítem se reabre por eso.**
+
+🔴 **REABIERTO el 2026-09-27, y no lo trajo la cola: lo trajo `npm run evidencia:citada`** — el
+instrumento que se cerró tres horas antes acusó esta misma línea (*«declara 0 y sale 1»*). O sea
+que la evidencia caducó sola y el gate de al lado la delató sin que nadie la releyera. **El ruido
+por el que se abrió T10 sigue curado** (`knowledge:panel`: 0 en la ventana, 3.064 históricas), así
+que ese arreglo es correcto y no se toca. Lo que está rojo es el otro veredicto, el que importa:
+**la cola de 80 no muestra ni un evento y el archivo tiene 83.**
+
+**La causa, medida y no argumentada:** de las últimas 80 líneas, **59 son no-eventos** —
+`rama=ignorado` 51 (el bot viendo salir su propio mensaje, `mensaje_no_entrante:outgoing`, más el
+update del mismo mensaje, `update_sin_botones`) y `rama=MUDO` 8 (webhook sin mensaje adentro)—
+contra **21** `rama=respondio`. El bot emite **tres líneas por turno y dos son ruido**, así que el
+último evento real quedó **133 líneas atrás**: la cola se tapa sola cada vez que alguien escribe.
+Es la lección que este carril ya tiene escrita —*«toda línea emitida en un camino caliente tiene
+que ser un EVENTO»*— una vuelta más adentro: no era una condición permanente repetida, era un
+**no-evento estructural**.
+
+**Hecho en esta vuelta, sin tocar nada congelado:** el rojo ahora **nombra la causa y el remedio**
+(`quienTapaLaCola`, 4 casos nuevos → 15 en total). Antes decía sólo *«la medición está CIEGA»* y
+derivar la composición costaba un `tail -80 | grep -oE 'rama='` a mano — la próxima vuelta lo lee
+en la misma línea del veredicto. Las clases se derivan del campo `rama=` que el log estampa, no de
+una lista de frases, y se imprimen **todas** con su conteo: una rama nueva no la acusa sola
+(subestima a propósito) pero sale nombrada, que es la única dirección en la que se acepta fallar.
+
+⚠️ **Lo que FALTA es del emisor y está BLOQUEADO — derivado del guion, no del recuento.** Que esas
+ramas no escriban en el camino caliente se arregla en **`webhook-server.mjs`**, que cae en `*.mjs`
+de la lista blanca de `deploy-bot.sh` (`npm run test:toca-el-pedido` la deriva sola), así que
+tocarlo lo haría el **14.º** archivo de un pedido que describe 13 e invalidaría **`t_3752e986`**
+—el mismo `ok` que esperan los otros dos ítems del carril (`:9576` y `:9691`)—. Se hace después
+del `ok`, en la misma vuelta que los otros dos, porque los tres tocan el subárbol del bot.
+
+✅ **Y mientras tanto la medición del objetivo NO está ciega: `npm run avisos:vivo` lee el archivo
+entero y hoy da 33 avisos · 31 enviados · 2 salteados, circuito sano.** El `tail -80` del chequeo
+de arranque es el camino ciego; el veredicto ahora lo dice en su propia línea de remedio. Un
+carril que mide su objetivo con una ventana de líneas sobre un log que no se rota mide el volumen
+del día, no su objetivo.
 
 <details><summary>Historia del cierre falso (2026-09-24) — el arreglo original, que sigue siendo correcto para lo suyo</summary>
 

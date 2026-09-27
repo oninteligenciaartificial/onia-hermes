@@ -19,7 +19,12 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { colaDejaVerLosEventos, juzgarRuidoDelLog, RUIDO_CONOCIDO } from "./log_del_bot_ahogado.mjs";
+import {
+  colaDejaVerLosEventos,
+  juzgarRuidoDelLog,
+  quienTapaLaCola,
+  RUIDO_CONOCIDO,
+} from "./log_del_bot_ahogado.mjs";
 
 const PATRON = RUIDO_CONOCIDO[0].patron;
 const AHORA = "2026-09-26T17:16:00";
@@ -146,4 +151,59 @@ test("sin eventos en ningun lado NO es rojo de cola: no hay nada que tapar", () 
   const r = colaDejaVerLosEventos({ cola: [web("2026-09-26T17:15:00")], lineasDelArchivo: [] });
   assert.equal(r.ve, true);
   assert.equal(r.enElArchivo, 0);
+});
+
+// ───────────── Y la pregunta que el rojo NO contestaba: QUE tapa la cola ─────────────
+//
+// Medido el 2026-09-27 08:51 UTC en el bot vivo. El gate salio 1 («AHOGADO — la cola no muestra
+// ni un evento») con el ruido conocido SANO (0 en la ventana), o sea que el veredicto era cierto
+// y aun asi no decia nada accionable: derivar la causa costo un `tail -80 | grep -oE 'rama='`
+// a mano. La composicion real de esas 80 lineas fue 51 `ignorado` + 8 `MUDO` + 21 `respondio`,
+// y el ultimo evento habia quedado 133 lineas atras.
+//
+// La causa importa porque manda a lugares OPUESTOS: si la cola se llena de lineas que declaran
+// que el bot NO hizo nada, el defecto es del emisor (loguea no-eventos en el camino caliente);
+// si se llena de respuestas reales, no hay defecto de emisor y la ventana es corta. Un rojo que
+// no distingue las dos manda a la proxima vuelta a re-derivarlo desde cero.
+
+test("cola tapada por no-eventos: la causa es del EMISOR y se nombra", () => {
+  // La composicion exacta del bot vivo el 2026-09-27.
+  const cola = [
+    ...Array.from({ length: 51 }, () => web("2026-09-27T08:48:06", "conv=49 rama=ignorado motivo=mensaje_no_entrante:outgoing")),
+    ...Array.from({ length: 8 }, () => web("2026-09-27T08:49:02", "conv=49 rama=MUDO motivo=evento sin mensaje")),
+    ...Array.from({ length: 21 }, () => web("2026-09-27T08:47:51", "conv=49 rama=respondio enviados=1/1")),
+  ];
+  const r = quienTapaLaCola(cola);
+  assert.equal(r.causa, "no_eventos");
+  assert.equal(r.noEventos, 59);
+  assert.equal(r.utiles, 21);
+  // Nombra cada rama con su conteo: una rama nueva no puede quedar invisible.
+  assert.deepEqual(
+    r.clases.map((c) => `${c.rama}:${c.n}`),
+    ["ignorado:51", "respondio:21", "MUDO:8"],
+  );
+});
+
+test("cola tapada por TRAFICO real: no acusa al emisor", () => {
+  const cola = Array.from({ length: 80 }, () => web("2026-09-27T08:47:51", "conv=49 rama=respondio enviados=1/1"));
+  const r = quienTapaLaCola(cola);
+  assert.equal(r.causa, "trafico");
+  assert.equal(r.noEventos, 0);
+  assert.equal(r.utiles, 80);
+});
+
+test("una rama DESCONOCIDA no se cuenta como no-evento, pero sale nombrada", () => {
+  // Falla ABIERTA a proposito: si manana el emisor agrega `rama=descartado`, este gate NO la
+  // acusa sola (subestima), pero la imprime con su conteo para que se pueda juzgar a ojo.
+  const cola = Array.from({ length: 80 }, () => web("2026-09-27T08:47:51", "conv=49 rama=descartado"));
+  const r = quienTapaLaCola(cola);
+  assert.equal(r.noEventos, 0);
+  assert.equal(r.clases[0].rama, "descartado");
+  assert.equal(r.clases[0].n, 80);
+});
+
+test("cola sin ninguna rama reconocible: causa desconocida, nunca inventada", () => {
+  const r = quienTapaLaCola(["texto suelto", "otra cosa"]);
+  assert.equal(r.causa, "desconocida");
+  assert.equal(r.clases.length, 0);
 });
