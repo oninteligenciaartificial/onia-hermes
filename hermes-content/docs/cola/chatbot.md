@@ -1235,6 +1235,27 @@ cierta para el otro, así que el estado se pregunta por separado:
   deriva con `npm run deploy:sin-pedido`; el que esta línea citaba quedó `archived` horas después).
   El parte sí salió (`OK message_id=6955`, 1.061 bytes): el canal funciona, el renglón no alcanza.
 
+  🔴 **Y una pregunta más que esta sección no hacía: «hay firma pendiente» tampoco dice que la
+  firma vaya a PUBLICAR. Medido el 2026-09-27 15:1x La Paz contra el pedido vivo del bot (el
+  tercero del día): sí publica.** Los tres ítems que esperan ese `ok` cuentan con que el brazo
+  ejecutor funcione, y eso no estaba comprobado para ESTE pedido — que nació hoy, con id nuevo.
+  Se prueba en seco, sin tocar producción, y hay que correrlo **en el VPS**:
+
+  ```bash
+  /root/bin/onia-vps.sh bash -lc 'ONIA_DESPLEGAR_DRY=1 node /root/bin/onia-publicar-aprobado.mjs <id>'
+  # {"desplegando":true,"destino":"bot","seco":true} · exit 0 — y el log dice "produccion NO se toca"
+  ```
+
+  ⚠️ **El mismo comando en nodo-casa —la máquina donde viven los CUATRO loops— muere con
+  `spawnSync /usr/local/lib/hermes-agent/venv/bin/python ENOENT` y sale 1.** Ese intérprete es
+  justo el archivo con el que el chequeo de arranque IDENTIFICA al VPS, así que por construcción
+  no existe acá. El ENOENT no distingue *«no pude preguntar»* de *«el pedido está roto»*: quien lo
+  corra desde casa puede concluir que el `ok` de Sergio Urcullo no publicaría, teniendo el circuito
+  sano — y es el único camino que decide si algo sale a producción. El arreglo es de `onia-cola`
+  (`scripts/kanban/publicar-aprobado.mjs`, donde el escape `PY_HERMES` ya existe); la tarea con la
+  reproducción en las dos máquinas se deriva, no se copia:
+  `/root/bin/onia-tablero.sh list | grep -i 'verificador del ok'`.
+
   ⚠️ **Los dos párrafos que seguían acá caducaron el mismo día que se escribieron — corregido el
   2026-09-27 15:30 La Paz, derivando el guion del parte y no su recuento.** Decían que *«el orden
   es `🔴` en el título y después la posición en la salida de `onia-tablero.sh list`, que no
