@@ -257,8 +257,9 @@ ese par se pone rojo solo.
 
 **LISTO =** el gate del log ahogado sale **0**, con `0` copias en la ventana y la cola dejando ver
 los eventos.
-**Medido el 2026-09-27 08:55 UTC:** `node scripts/log_del_bot_ahogado.mjs` → **exit 1**. 🔴 **La
-mitad del ruido está sana y la otra mitad NO, y el ítem se reabre por eso.**
+**Medido el 2026-09-27 16:5x La Paz:** `node scripts/log_del_bot_ahogado.mjs` → **exit 1**, con
+`ignorado=52 · MUDO=7 · respondio=21`. ✅ **El emisor quedó arreglado en esta vuelta (ver el cierre,
+abajo); el exit 1 es el log VIVO, que corre el build anterior — se apaga al publicar el bot.**
 
 > ⚠️ **El criterio y la medición quedan en renglones SEPARADOS a propósito, y el motivo es del
 > instrumento que encontró esto.** Antes compartían renglón —*«LISTO = `node …` sale 0 … Medido:
@@ -344,6 +345,52 @@ entero y hoy da 33 avisos · 31 enviados · 2 salteados, circuito sano.** El `ta
 de arranque es el camino ciego; el veredicto ahora lo dice en su propia línea de remedio. Un
 carril que mide su objetivo con una ventana de líneas sobre un log que no se rota mide el volumen
 del día, no su objetivo.
+
+### ✅ El emisor, ARREGLADO el 2026-09-27 17:0x La Paz — y el freno que lo congelaba costaba CERO
+
+**El freno se reverificó antes de obedecerlo, y su cuenta estaba mal.** Acá arriba decía que el
+`ok` del pedido del bot *«entra en la hoja de decisiones el DÍA 5 de la rotación»*. Medido
+corriendo el ensayo del parte contra el tablero real (la receta de arriba, 6 días en vez de 5):
+entra el **día 4**, y el ciclo **es de 4 días** — o sea que «día 5» es el día 1 otra vez. La
+diferencia no es de un día: **«día 5 de 4» se lee como «nunca»**, y con eso tres ítems de este
+carril quedaron esperando algo que en realidad vuelve cada cuatro días. Y lo que el freno protegía
+—no resetear la antigüedad del pedido— **no se pierde**: el pedido del bot ya era el penúltimo por
+antigüedad de 18 decisiones, así que rehacerlo no lo saca del día 4. Un freno se re-mide antes de
+obedecerlo aunque esté escrito por tu propia vuelta anterior; el costo que declara envejece.
+
+**Lo que se hizo, que es la mitad de cola de T10 y nada más.** `crearFiltroDeEco` en
+`webhook-server.mjs`: el ECO de nuestra propia actividad ya no gasta una línea cada vez — sale
+**una de resumen cada 200**, con el conteo por razón completa. Las tres clases se derivaron
+contando el log vivo, no de memoria: `update_sin_botones` 350 · `mensaje_no_entrante:outgoing` 348
+· `status_no_desarma:open` 132, sobre 4.000 líneas.
+
+⚠️ **`MUDO` NO se agrupó, y es la mitad importante del diseño.** El remedio que el gate imprime
+dice *«que esas ramas no escriban»* y nombra las dos (`ignorado` y `MUDO`). Obedecerlo literal
+silenciaría el bug que sobrevivió **una semana** con cinco personas reales del otro lado — son 7
+de 80 líneas, no tapan nada, y son el único rastro de un silencio. Se agrupa sólo el eco
+previsible; `ERROR`, `NO_ENTREGADO`, `rechazado`, `repetido` y `respondio` siguen escribiendo
+siempre. **Un remedio impreso por un gate es una pista, no una orden.**
+
+**Falla CERRADO:** la clase se compara por el prefijo antes de `:` (así un `status_no_desarma:`
+nuevo también se agrupa) pero una razón de `ignorado` que nadie previó **se escribe entera**. Una
+lista de inclusión que fallara abierta perdería en silencio justo la razón que se agregue mañana.
+
+**Los dos archivos van juntos porque son un par:** `scripts/log_del_bot_ahogado.mjs` ahora declara
+`eco` como no-evento. Sin eso, el gate la dejaba SIN CLASIFICAR y una cola tapada por resúmenes
+se leería como tráfico sano. Probado por mutación en las dos direcciones (quitar el filtro → 2
+rojos; quitar `eco` del clasificador → 1 rojo), porque un test que no se cae no prueba nada.
+
+**Commiteado, NO desplegado** — `webhook-server.mjs` cae en `*.mjs` de la lista blanca de
+`deploy-bot.sh`, así que suma un archivo al pedido de deploy del bot. El `exit 1` del gate se apaga
+cuando ese `ok` se conteste: el log vivo corre el build anterior.
+
+⚠️ **El pedido NO se rehizo en esta vuelta, y el motivo es que rehacerlo acá saldría mal.** El
+publicador compara contra `origin/main` y este commit vive en la rama del carril, así que
+`publicar.sh --dry-run` seguiría contando **14** archivos y el cuerpo nuevo nacería describiendo de
+menos — el mismo defecto que hizo rehacer los dos pedidos anteriores. El recuento sólo es derivable
+**después** del merge, y este carril no mergea. Lo rehace `onia-cola`, que mide «commits sin
+desplegar» cada vuelta y es quien integra; por eso tampoco sale un aviso por Telegram de esto.
+**Un pedido de deploy no se puede crear desde el lado del carril sin mentir en el recuento.**
 
 <details><summary>Historia del cierre falso (2026-09-24) — el arreglo original, que sigue siendo correcto para lo suyo</summary>
 
@@ -761,7 +808,17 @@ Telegram. El mismo mensaje que a las 19:28 daba `rama=MUDO` ahora recorre el gui
   Commits `55e669a6` + `22546797` (rama `claude/cobro-e2e-punto-1-25ba65`). Tarea en el
   tablero pidiéndole a Sergio Urcullo el "hola" de cierre.
 
-## ✅ CERRADO 2026-09-13 — Cal.com no existe, la decisión ya estaba tomada (c), y el turno del prospecto ya no espera 5 s
+## ✅ CERRADO 2026-09-13 — Cal.com no existe, la decisión ya estaba tomada (c), y el turno del prospecto tiene un TECHO propio
+
+⚠️ **El titular decía «y el turno del prospecto ya no espera 5 s», y era falso — corregido el
+2026-09-27 (ver T14 en «Ahora»).** Lo que este día se agregó es un **techo**, y el techo es real:
+sin él, un Cal.com que resolviera y colgara dejaba el turno esperando **sin límite**. Pero el techo
+quedó en el mismo número que ya tardaba el resolvedor, así que el prospecto siguió esperando los 5 s
+completos: medido en el log vivo, **27 de 27** reservas salieron por `no contesto en 5000ms` y el
+breaker de 10 min ahorró **0** esperas (a ~1 demo/semana todo prospecto es el primero de su
+ventana). **Un techo no es una rebaja**, y el titular las confundía. La rebaja llegó con T14
+(`RESOLUCION_TIMEOUT_MS`): preguntar la resolución aparte. Todo lo que sigue de este ítem es
+CIERTO y no se re-mide — la decisión (c) sigue en pie y no se reabre.
 
 Pregunta directa de Sergio Urcullo ("¿está funcionando el cal de onia?"). Medido en vivo:
 **cero contenedores de Cal.com en el VPS** (`docker ps` completo, ninguno), cal.onia.com.bo
@@ -1455,6 +1512,72 @@ Las 3 que quedan (3492, 3623, 7674) son del motor leídas a mano pero **no tiene
 mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se derivan con el comando.
 
 ## Ahora
+
+- [x] ✅ **T14 — 2026-09-27 22:5x UTC: el prospecto que ACEPTA un horario esperaba 5 s por un
+      destino que no existe, y el log culpaba al calendario de «no contestar». 27 de 27.**
+
+      **Cómo apareció: midiendo el objetivo, no leyendo la cola.** El log vivo mostró, en cada
+      reserva, `aviso=calcom: la reserva no salio: no contesto en 5000ms (timeout)`. Eso se lee
+      como «Cal.com está lento». Contra producción, `docker exec onia-center`:
+
+      | qué se preguntó | respuesta |
+      |---|---|
+      | `getent hosts calcom` desde `onia-center` | **NO_RESUELVE** |
+      | `docker ps -a \| grep -i cal` | **ningún contenedor** |
+      | `CALCOM_API_KEY` en `/proc/<pid>/environ` | **0** (ausente) |
+      | reservas con `no contesto en 5000ms` | **27** |
+      | reservas que nombraron el DNS | **0** |
+      | reservas que el breaker de 10 min ahorró | **0** |
+      | `calendar_event_id` no nulo en `bot_conversations` | **0** de 43 |
+
+      **El dato que decide: la rama de DNS llevaba semanas MUERTA y su gate estaba verde.** Los
+      dos casos `DNS:` de `calcom-booking.test.mjs` le hacen al `fetch` un `throw` con
+      `cause.code` ya puesto — un resolvedor que falla RÁPIDO. El de producción no falla rápido,
+      **cuelga**: `dns.lookup("calcom")` no recibe NXDOMAIN, se cuelga hasta `EAI_AGAIN` a los
+      5013 ms, y el abort de la reserva le gana por **13 ms**. Cuando el abort gana **no hay
+      `cause.code` que leer**: sale `AbortError` y el motivo dice «no contestó». Un test que
+      modela el modo de falla cómodo en vez del que pasa es un verde que defiende el bug.
+
+      ⚠️ **Esto CORRIGE el titular del ítem del 13-sep** (`Cal.com no existe…`), que decía *«y el
+      turno del prospecto ya no espera 5 s»*. Su cuerpo es honesto —lo que ese día se agregó fue
+      un TECHO, que es real y sigue valiendo—, pero el titular se lee como que los 5 s se fueron,
+      y no se fueron: `BOOKING_TIMEOUT_MS` sigue en 5000 y el breaker de 10 min no alcanza a un
+      prospecto real, porque a ~1 demo/semana **todo prospecto es el primero de su ventana**.
+      Medido: 0 de 27 se ahorraron la espera. Un techo no es una rebaja.
+
+      ✅ **El arreglo: la resolución se pregunta APARTE y ANTES, con su propio tope**
+      (`RESOLUCION_TIMEOUT_MS = 1500`, `resolverDestino`). Así el veredicto deja de depender de
+      quién gana una carrera de 13 ms. **No se corrió el tope**: ganar la carrera por
+      milisegundos es diagnosticar por sorteo, y el remedio hubiera quedado atado al resolvedor
+      del día.
+
+      **Medido en el camino REAL, sin inyectar nada** (`createBooking` contra
+      `http://calcom:3000`): 1.er prospecto **49 ms** (era 5000) con motivo *«el nombre del
+      destino no resuelve (ENOTFOUND): revisar CALCOM_BASE_URL, no la red del prospecto»*; 2.º
+      prospecto **0 ms**, `destino_caido`. En el contenedor, donde el resolvedor cuelga en vez de
+      contestar, el techo es 1500 ms — ése es el caso que fija `lookupQueCuelga()`.
+
+      ⚠️ **La primera versión del arreglo rompió 11 casos, y el suite tenía razón.** Resolver
+      siempre ataba el módulo al DNS de la máquina donde corre, en un suite cuya cabecera dice
+      «Cero red: el `fetch` se inyecta siempre». Regla aplicada: **si el llamador inyectó su
+      `fetch`, reemplazó la red**, así que el DNS del ambiente no es esa red y no puede dar
+      veredicto — el mismo tri-estado de siempre («no pude preguntar» ≠ «me dijeron que no»).
+      Producción no inyecta ninguno de los dos (`run-turn.mjs:553` pasa los `deps` del webhook),
+      así que ahí sí se pregunta, que es donde importa.
+
+      **Lo que NO cambia, a propósito:** el prospecto lee el mismo texto
+      (`cierreDeReservaFallida` sólo distingue `horario_tomado`), el `reason` sigue siendo
+      `error` para no tocar a ningún llamador, y **la decisión (c) no se reabre** — Cal.com sigue
+      sin existir por decisión de Sergio Urcullo (tablero `t_b18ca430`) y con 1 demo de prospecto
+      en total la condición de vencimiento (~1/semana) **no está vencida**. Esto no trae el
+      calendario: le saca 5 s al turno que produce plata y hace que el log diga la verdad.
+
+      ✅ **Gates:** `calcom-booking.test.mjs` 33/33 (4 casos nuevos), en **ROJO antes por el
+      motivo correcto** (`el fetch no se intenta — 1 !== 0`) y **validado por mutación**: al
+      quitar el arreglo caen exactamente 30 y 31 y ningún otro. `npm run test:bot` **1465/1465**.
+      **Commiteado, NO desplegado** — `calcom-booking.mjs` cae en `*.mjs` de la lista blanca de
+      `deploy-bot.sh`, así que suma un archivo al pedido de deploy del bot que ya está vivo; el
+      recuento lo deriva `onia-cola` después del merge, no este carril.
 
 - [x] ✅ **AUDITORÍA DE LOS `[x]` — 2026-09-27 20:1x-20:4x UTC (escalón 2: «Ahora» agotada en las
       dos colas, el único 🔴 vivo y los 4 de «Después» esperando el mismo `ok`). Tres afirmaciones
@@ -9993,12 +10116,68 @@ cita: al cerrar una fila hay que barrer quién la nombra, no sólo tacharla.
       (seguir sin borrar), sólo corrige el dato falso para que nadie busque una org que no
       está.
 
-- [ ] **Las líneas `[aviso]` del log del bot no llevan hora, y son las únicas que miden el
-      objetivo de este carril.** Cada línea `[onia-webhook]` trae su marca ISO; las de
-      `[aviso]` salen peladas: `[aviso] sent conv=49 (demo_agendada): aviso enviado`. El
-      objetivo del carril se mide como *«una línea de aviso en el log por cada `demo_agendada`
-      / `handoff_humano`»* — y eso no se puede contar por día ni por evento sobre líneas que
-      no se pueden fechar.
+- [x] 🔴 **CERRADO el 2026-09-27 22:1x-23:0x La Paz (commiteado, **NO desplegado**; toca el
+      subárbol del bot). Y lo que lo destrabó no fue una decisión de Sergio Urcullo: fue
+      RE-MEDIR el freno, que ya estaba vencido y me lo había escrito yo mismo tres horas
+      antes.**
+
+      El freno decía: *«`publicar.sh --dry-run` cuenta 14 archivos y `webhook-server.mjs` no es
+      ninguno de ellos, así que tocarlo sumaría uno más [e invalidaría el pedido]»*. Las dos
+      mitades siguen siendo literalmente ciertas —medidas hoy: `--dry-run` da **14** y
+      `git show origin/main:…/webhook-server.mjs | md5sum` es **idéntico** al de producción— y
+      la conclusión es **falsa igual**, porque el costo ya estaba gastado: `dbb86c47` (mi propia
+      vuelta de las 17:0x, el filtro de eco de T10) **ya modifica ese archivo** en la rama del
+      carril. O sea que el pedido nace corto de dos archivos en cuanto `onia-cola` mergee, haga
+      yo esto o no. **Editarlo otra vez suma CERO.** Un freno cuyo costo lo pagó una vuelta
+      anterior sigue leyéndose como pendiente: por eso se re-mide contra el ÁRBOL y no contra su
+      propio texto, aunque el texto lo haya escrito uno mismo y diga «re-derivado hoy».
+
+      **Lo que se hizo** — un emisor único, `lineaDeAviso()` en `webhook-server.mjs`, por donde
+      salen los dos sitios (el normal y el `catch`). Formato: `[aviso] <ISO> sent conv=49
+      (demo_agendada): …`, tag → hora → estado, la misma posición que `[onia-webhook]`. La hora
+      es la del AVISO y no la del turno, porque es fire-and-forget: la pregunta que estas líneas
+      contestan es cuándo SALIÓ el aviso, no cuándo entró el mensaje (eso ya lo dice la línea de
+      al lado).
+
+      **Por qué una función y no dos literales, que es lo que mantiene esto arreglado:** este
+      mismo par ya pagó la factura del lado del LECTOR —seis anclajes con su literal pegado, y
+      arreglar cinco dejaba los contadores en cero (`anclaAviso`)—. Así que el tercer test
+      **deriva los sitios de emisión del ARCHIVO**, no de una lista: un `[aviso]` escrito a mano
+      mañana nace sin hora y nadie lo notaría.
+
+      **Los cuatro rojos, vistos primero y cada uno por SU motivo** (mutación en las dos
+      direcciones, porque un test que no se cae no prueba nada):
+      - emisor sin hora → *«la hora va entre el tag y el estado … salió: `[aviso] sent conv=49`»*
+      - `anclaAviso` dejando de tolerar la hora → *«la línea fechada tiene que seguir contando
+        como enviada»* (es el bug del `\w+` capturando `2026`, probado y no argumentado)
+      - un `log(\`[aviso] …\`)` a mano en el `catch` → el gate lo nombra con su número de línea
+      - el literal viejo en el camino HTTP real → *«la línea que sale del servidor tiene que
+        venir fechada»*, que es distinto de que el emisor suelto esté bien
+
+      ⚠️ **El primer intento del gate del archivo salió rojo por el motivo EQUIVOCADO, y por eso
+      hay que decirlo:** se acusó a sí mismo — el docblock de `lineaDeAviso` cita la línea vieja
+      entre backticks, y el gate medía el archivo entero. Es la trampa que este repo ya tiene
+      escrita (*«un gate que parte un archivo fuente por un literal tiene que quitar los
+      COMENTARIOS primero»*), acá en su versión barata: falló en la dirección segura. Se ciegan
+      los comentarios conservando el renglón, así el número de línea que informa sigue siendo el
+      del archivo.
+
+      **Verde:** `npm run test:bot` **1461/1461**, `npm test` exit 0. **Y el recuento vivo contra
+      producción es IDÉNTICO al de antes del cambio** — `npm run avisos:vivo` → *31 enviados*,
+      medido las dos veces: los lectores toleran la hora OPCIONAL, y eso no se endurece nunca
+      porque el log del VPS es append-only y no se rota, así que sus líneas peladas son la única
+      evidencia de todo lo anterior a hoy. Exigir la hora pondría el histórico en cero.
+
+      **Barrido de lo que quedó falso** (una promesa que cambia se barre en toda la superficie,
+      incluidas las notas que la citan): `avisos-vivo.mjs` decía *«hoy … escribe estas líneas sin
+      hora»* en dos docblocks —el de `anclaAviso` y el de `primerAvisoDelLog`— y
+      `avisos-vivo.test.mjs` titulaba *«se va a FECHAR»* en futuro. Los tres corregidos en el
+      mismo commit; los dos archivos ya viajaban en el pedido (son el 8 y el 10 de los 14), así
+      que tampoco suman nada.
+
+      **Lo que este ítem NO arregla, dicho con su nombre:** el log vivo sigue mostrando líneas
+      peladas hasta que el bot se publique, porque producción corre el build anterior. `[n8n]`
+      tampoco lleva hora — no se tocó, no es de este ítem y no mide el objetivo de nadie.
 
       **Reproducción exacta (2026-09-26, costó cuatro pasos de esta vuelta):**
 

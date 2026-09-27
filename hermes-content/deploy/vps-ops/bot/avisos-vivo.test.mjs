@@ -201,14 +201,17 @@ test("contarEventos ignora las lineas que no son del aviso", () => {
 });
 
 // ---------------------------------------------------------------------------
-// La linea `[aviso]` se va a FECHAR, y este parseo tiene que sobrevivirlo
+// La linea `[aviso]` YA se fecha, y este parseo lo sobrevivio
 // ---------------------------------------------------------------------------
 //
-// POR QUE EXISTE. Hoy `webhook-server.mjs` (`:767` y `:770`) escribe estas lineas con un
-// `process.stdout.write` pelado, sin hora, mientras su hermana `[onia-webhook]` se fecha a
-// si misma. Eso deja al objetivo de este carril —"una linea de aviso por cada
-// demo_agendada / handoff_humano"— sin poder contarse por dia: `10 [aviso] sent conv=49` se
-// lee como un evento disparando diez avisos, y son diez corridas de la sonda.
+// POR QUE EXISTE. Se escribio el 2026-09-26, cuando `webhook-server.mjs` todavia escribia estas
+// lineas con un `process.stdout.write` pelado mientras su hermana `[onia-webhook]` se fechaba a
+// si misma. Eso dejaba al objetivo de este carril —"una linea de aviso por cada demo_agendada /
+// handoff_humano"— sin poder contarse por dia: `10 [aviso] sent conv=49` se lee como un evento
+// disparando diez avisos, y son diez corridas de la sonda. La hora llego el 2026-09-27
+// (`lineaDeAviso`), asi que estos casos pasaron de preparar un cambio futuro a ser la guarda de
+// un formato vivo: el emisor los tiene del otro lado en `webhook-server.test.mjs`
+// ("AVISO FECHADO"), y se quedan los dos porque el modo de falla es que UNO de los dos cambie.
 //
 // El arreglo natural es estampar la hora igual que la hermana: tag, hora, estado. Y ahi
 // estaba la trampa, que es la razon de este test: los SEIS anclajes que leen estas lineas

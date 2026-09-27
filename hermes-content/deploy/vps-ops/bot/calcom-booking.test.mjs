@@ -21,6 +21,7 @@ import {
   DEFAULT_PUBLIC_URL,
   BOOKING_TIMEOUT_MS,
   DESTINO_CAIDO_MS,
+  RESOLUCION_TIMEOUT_MS,
 } from "./calcom-booking.mjs";
 
 const CONFIG = { baseUrl: "http://calcom:3000", eventTypeId: 5, durationMinutes: 45, timeZone: "America/La_Paz" };
@@ -497,4 +498,117 @@ test("DNS: el nombre que no resuelve tambien cierra el destino (el que sigue no 
 
   assert.equal(intentos, 1, "el segundo prospecto no tiene que volver a esperar un nombre que no resuelve");
   assert.equal(segunda.reason, "destino_caido");
+});
+
+// ---------------------------------------------------------------------------
+// EL RESOLVEDOR QUE CUELGA — el caso que PASA en produccion, y que los dos casos de
+// arriba no modelan.
+//
+// Los dos `DNS:` de arriba le hacen al `fetch` un `throw` con `cause.code` ya puesto:
+// un resolvedor que falla RAPIDO. El de produccion NO falla rapido, CUELGA — y por eso
+// esa rama nunca corrio. Medido el 2026-09-27 en el log vivo del bot (contenedor
+// `onia-center`, 73.106 lineas):
+//
+//   | que dijo la reserva                          | veces |
+//   |----------------------------------------------|-------|
+//   | `no contesto en 5000ms (timeout)`            |  27   |
+//   | `el nombre del destino no resuelve (...)`     |   0   |
+//   | `no se intento — el destino no contesto ...`  |   0   |
+//
+// O sea: 27 de 27 reservas pagaron el tope ENTERO, la rama que nombra el DNS nunca se
+// ejecuto, y el breaker de 10 min no ahorro una sola espera (a ~1 demo/semana —el
+// volumen que sostiene la decision (c)— todo prospecto real es el primero de su
+// ventana, asi que la ventana no lo alcanza nunca).
+//
+// El comentario de `DESTINO_CAIDO_MS` ya habia medido la causa —`dns.lookup("calcom")`
+// cuelga hasta `EAI_AGAIN` a los 5013 ms, con el abort ganandole por 13 ms— y concluyo
+// que por eso el codigo real se lee de `cause.code`. La medicion de hoy refuta esa
+// conclusion: cuando el abort gana, NO HAY `cause.code` que leer. Se sale por
+// `AbortError` y el motivo dice "no contesto", que apunta a un calendario lento cuando
+// lo que pasa es que el destino NO EXISTE. Son dos remedios opuestos: uno manda a subir
+// el tope, el otro a mirar `CALCOM_BASE_URL`.
+//
+// LA SALIDA NO ES CORRER EL TOPE. Ganar la carrera por milisegundos es diagnosticar por
+// sorteo. La resolucion se pregunta APARTE, con su propio tope mas corto, y ahi el
+// veredicto ya no depende de quien gane.
+// ---------------------------------------------------------------------------
+
+/** Un resolvedor que cuelga: exactamente el de produccion. */
+function lookupQueCuelga() {
+  const fn = () => new Promise(() => {});
+  fn.llamadas = [];
+  return fn;
+}
+
+test("DNS QUE CUELGA: el prospecto no paga el tope entero, y el motivo NOMBRA la resolucion", async () => {
+  olvidarDestinoCaido();
+  // Un fetch que reservaria BIEN: si se llega a el, el defecto sigue vivo.
+  const f = fetchMock([{ ok: true, status: 200, json: async () => ({ uid: "no-deberia-llegar" }) }]);
+
+  // A PROPOSITO sin `timeoutMs`: se mide el tope QUE CORRE EN PRODUCCION, donde ningun llamador
+  // pasa uno. Con un tope chico inyectado los dos relojes se colapsan en el mismo numero y el
+  // caso dejaria de probar lo unico que importa — que el prospecto espera el de resolucion y no
+  // el de la reserva.
+  const arranque = Date.now();
+  const r = await createBooking({ config: CONFIG, startAt: START }, { fetch: f, lookup: lookupQueCuelga() });
+  const tardo = Date.now() - arranque;
+
+  assert.equal(f.llamadas.length, 0, "si el nombre no resuelve no hay a donde hacer el POST: el fetch no se intenta");
+  assert.equal(r.ok, false, "sin destino no hay reserva");
+  const warning = (r.warnings || []).join(" · ");
+  assert.match(
+    warning,
+    /CALCOM_BASE_URL/,
+    `el motivo tiene que mandar a mirar la config, no la red del prospecto, y decia: ${warning}`,
+  );
+  // El motivo VIEJO, textual, es el que hay que no volver a escribir: culpaba al calendario de
+  // no contestar cuando el nombre no existe, y con eso manda a SUBIR el tope.
+  assert.ok(
+    !/\(timeout\)/.test(warning),
+    `el motivo viejo "no contesto en Nms (timeout)" es el diagnostico OPUESTO, y decia: ${warning}`,
+  );
+  assert.ok(
+    tardo < Number(BOOKING_TIMEOUT_MS),
+    `tardo ${tardo}ms con el tope de la reserva en ${BOOKING_TIMEOUT_MS}ms: el prospecto seguia pagando el tope entero`,
+  );
+  assert.ok(
+    tardo >= Number(RESOLUCION_TIMEOUT_MS),
+    `tardo ${tardo}ms: si corta antes de ${RESOLUCION_TIMEOUT_MS}ms no espero la resolucion, y este caso no probaria nada`,
+  );
+});
+
+test("DNS QUE CUELGA: cierra el destino igual que un nombre que falla rapido", async () => {
+  olvidarDestinoCaido();
+  const f = fetchMock([{ ok: true, status: 200, json: async () => ({ uid: "x" }) }]);
+  const lookup = lookupQueCuelga();
+
+  await createBooking({ config: CONFIG, startAt: START }, { fetch: f, lookup, timeoutMs: 200 });
+  const segunda = await createBooking({ config: CONFIG, startAt: START }, { fetch: f, lookup, timeoutMs: 200 });
+
+  assert.equal(
+    segunda.reason,
+    "destino_caido",
+    "un resolvedor que cuelga es un destino caido: el prospecto que sigue no vuelve a esperarlo",
+  );
+});
+
+test("DNS: la resolucion tiene su PROPIO tope, y es mas corto que el de la reserva", () => {
+  // Si los dos topes fueran iguales volvemos a la carrera de 13 ms que este gate vino a sacar.
+  assert.ok(Number(RESOLUCION_TIMEOUT_MS) > 0, "tiene que haber un tope para resolver el nombre");
+  assert.ok(
+    Number(RESOLUCION_TIMEOUT_MS) < Number(BOOKING_TIMEOUT_MS),
+    `el tope de resolucion (${RESOLUCION_TIMEOUT_MS}ms) tiene que ser MENOR que el de la reserva (${BOOKING_TIMEOUT_MS}ms): con topes iguales el veredicto lo decide quien gane la carrera`,
+  );
+});
+
+test("DNS SANO: el nombre que resuelve sigue llegando al fetch — el dia que Cal.com exista", async () => {
+  olvidarDestinoCaido();
+  const f = fetchMock([{ ok: true, status: 200, json: async () => ({ uid: "reservado-de-verdad" }) }]);
+  const lookup = async () => ({ address: "172.18.0.9", family: 4 });
+
+  const r = await createBooking({ config: CONFIG, startAt: START }, { fetch: f, lookup });
+
+  assert.equal(f.llamadas.length, 1, "un nombre que resuelve NO puede quedar cortado por su propia guarda");
+  assert.equal(r.ok, true);
+  assert.equal(r.uid, "reservado-de-verdad");
 });

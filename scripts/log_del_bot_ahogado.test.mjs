@@ -202,6 +202,20 @@ test("una rama DESCONOCIDA no se cuenta como no-evento, pero sale nombrada", () 
   assert.equal(r.clases[0].n, 80);
 });
 
+test("`rama=eco` es un no-evento: el resumen del emisor no se cuenta como senal", () => {
+  // El par productor/consumidor del arreglo del 2026-09-27: el emisor agrupa el eco en UNA linea
+  // cada 200, y si el gate no la declarara, esas lineas saldrian fuera de `noEventos` y una cola
+  // tapada por resumenes se leeria como trafico sano.
+  const cola = [
+    ...Array.from({ length: 60 }, () => web("2026-09-27T08:47:51", "conv=49 rama=eco total=200 update_sin_botones=120")),
+    ...Array.from({ length: 20 }, () => web("2026-09-27T08:47:51", "conv=49 rama=respondio")),
+  ];
+  const r = quienTapaLaCola(cola);
+  assert.equal(r.noEventos, 60, "los resumenes de eco cuentan como no-eventos");
+  assert.equal(r.utiles, 20);
+  assert.equal(r.causa, "no_eventos");
+});
+
 test("cola sin ninguna rama reconocible: causa desconocida, nunca inventada", () => {
   const r = quienTapaLaCola(["texto suelto", "otra cosa"]);
   assert.equal(r.causa, "desconocida");

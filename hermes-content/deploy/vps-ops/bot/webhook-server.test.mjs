@@ -20,18 +20,22 @@ import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import { createHmac } from "node:crypto";
 import { once } from "node:events";
+import { readFileSync } from "node:fs";
 
 import {
   checkDatabaseHealth,
   createWebhookServer,
+  crearFiltroDeEco,
   formatearTraza,
   getHealthStatus,
   getServerConfig,
   handleChatwootWebhook,
+  lineaDeAviso,
   matchWebhookPath,
   DEFAULT_PORT,
   WEBHOOK_PATH,
 } from "./webhook-server.mjs";
+import { contarEventos, conversacionesDeAvisos } from "./avisos-vivo.mjs";
 import { _resetDedup } from "./message-dedup.mjs";
 import { resetOrgKnowledgeCache, KNOWLEDGE_SCHEMA } from "./knowledge.mjs";
 
@@ -1068,6 +1072,15 @@ test("HTTP REAL: el aviso que NO sale dice DE QUIEN era (sin eso no se puede rec
     assert.match(delAviso[0], /skipped/, "apagado tiene que verse como skipped, no como exito");
     assert.match(delAviso[0], /conv=77/, "sin la conversacion el aviso perdido NO se puede recuperar");
     assert.match(delAviso[0], /cuota_agotada/, "el motivo tambien: dice por que el bot derivo");
+    // La hora, medida en el camino REAL y no en el emisor suelto: `lineaDeAviso` puede estar
+    // perfecta y el servidor seguir escribiendo el literal viejo. Es la unica linea del log que
+    // mide el objetivo de este carril, y sin marca no se puede contar por dia (ver el bloque
+    // AVISO FECHADO, abajo).
+    assert.match(
+      delAviso[0],
+      /^\[aviso\] 20\d\d-\d\d-\d\dT\d\d:\d\d:\d\d(?:\.\d+)?Z skipped\b/,
+      `la linea que sale del servidor tiene que venir fechada; salio: ${delAviso[0]}`,
+    );
   } finally {
     server.close();
     await once(server, "close");
@@ -1127,4 +1140,135 @@ test("TRAZA: la rama MUDA sigue explicandose con su motivo, no con el campo nuev
   assert.match(linea, /rama=MUDO/);
   assert.match(linea, /motivo=audio: sin transcripción/, "el motivo del silencio manda: es lo primero que se lee");
   assert.ok(!/aviso=/.test(linea), "no se dice dos veces lo mismo en la misma linea");
+});
+
+// ---------------------------------------------------------------------------
+// EL ECO NO TAPA LA COLA DEL LOG — 2026-09-27 (T10, mitad "cola")
+//
+// Medido en el log vivo ese dia: de las ultimas 80 lineas, 59 declaraban que el bot no habia
+// hecho nada (`rama=ignorado` 52, `rama=MUDO` 7) contra 21 `rama=respondio`, asi que el ultimo
+// evento real quedaba 133 lineas atras y `tail -80 | grep demo_agendada` devolvia CERO con 83
+// eventos en el archivo. El bot emite TRES lineas por turno y dos son el eco de su propia
+// respuesta: la cola se tapa sola cada vez que alguien escribe.
+//
+// Las tres razones que lo causan, contadas en vivo sobre 4.000 lineas:
+//   350 update_sin_botones · 348 mensaje_no_entrante:outgoing · 132 status_no_desarma:open
+//
+// Lo que NO se toca, y es la mitad importante del diseno: `MUDO` es el bug que sobrevivio una
+// semana con cinco personas reales del otro lado. Silenciarlo seria volver a 2026-09-02. Se
+// agrupa SOLO el eco previsible de nuestra propia actividad, y una razon de `ignorado` que no
+// este en la lista se escribe IGUAL (falla cerrado: una razon nueva no se pierde en silencio).
+// ---------------------------------------------------------------------------
+
+test("ECO: el eco previsible se agrupa y no gasta una linea por vez", () => {
+  const decidir = crearFiltroDeEco({ cada: 3 });
+  const eco = (reason) => ({ conversacion: "77", estado: 200, cuerpo: { ok: true, skipped: true, reason } });
+
+  assert.equal(decidir(eco("mensaje_no_entrante:outgoing")), null, "el 1.o no escribe");
+  assert.equal(decidir(eco("update_sin_botones")), null, "el 2.o tampoco");
+  const resumen = decidir(eco("status_no_desarma:open"));
+  assert.match(resumen, /rama=eco/, "al llegar al tope sale UNA linea de resumen");
+  assert.match(resumen, /mensaje_no_entrante:outgoing=1/);
+  assert.match(resumen, /update_sin_botones=1/);
+  assert.match(resumen, /status_no_desarma:open=1/, "el sufijo se conserva: dice QUE status era");
+  assert.equal(decidir(eco("update_sin_botones")), null, "el contador arranca de cero otra vez");
+});
+
+test("ECO: MUDO, ERROR y respondio siguen escribiendo SIEMPRE — nunca se agrupan", () => {
+  const decidir = crearFiltroDeEco({ cada: 3 });
+  const mudo = decidir({ conversacion: "77", estado: 200, cuerpo: { ok: true, sent: [], warnings: [] } });
+  assert.match(mudo, /rama=MUDO/, "el bug de la semana no se agrupa ni una vez");
+
+  const roto = decidir({ conversacion: "77", estado: 200, cuerpo: { ok: false, error: "x", reason: "y", sent: [] } });
+  assert.match(roto, /rama=ERROR/);
+
+  const ok = decidir({ conversacion: "77", estado: 200, cuerpo: { ok: true, sent: [{ posted: true }] } });
+  assert.match(ok, /rama=respondio/);
+});
+
+test("ECO: una razon de `ignorado` que no esta en la lista se escribe — falla CERRADO", () => {
+  const decidir = crearFiltroDeEco({ cada: 3 });
+  const nueva = decidir({
+    conversacion: "77",
+    estado: 200,
+    cuerpo: { ok: true, skipped: true, reason: "motivo_que_nadie_previo" },
+  });
+  assert.match(nueva, /rama=ignorado/, "una razon nueva no se pierde en el agrupador");
+  assert.match(nueva, /motivo=motivo_que_nadie_previo/);
+});
+
+test("ECO: la clase se compara por el prefijo, asi que un sufijo nuevo tambien se agrupa", () => {
+  const decidir = crearFiltroDeEco({ cada: 2 });
+  assert.equal(decidir({ estado: 200, cuerpo: { ok: true, skipped: true, reason: "status_no_desarma:pending" } }), null);
+  const resumen = decidir({ estado: 200, cuerpo: { ok: true, skipped: true, reason: "status_no_desarma:snoozed" } });
+  assert.match(resumen, /status_no_desarma:pending=1/);
+  assert.match(resumen, /status_no_desarma:snoozed=1/);
+});
+
+// ---------------------------------------------------------------------------
+// LA HORA DE LA LINEA `[aviso]` — 2026-09-27.
+//
+// Estas lineas son las UNICAS que miden el objetivo de este carril, y salian sin marca. El
+// 2026-09-26 un `uniq -c` sobre el log vivo devolvio `10 [aviso] sent conv=49 (demo_agendada)`,
+// que se lee como UN evento disparando diez avisos a un canal saturado. Eran diez corridas de la
+// sonda, un aviso cada una, y distinguirlo costo reconstruir la POSICION de las lineas. Un numero
+// de linea no es una hora.
+//
+// El caso 3 es el que mantiene esto arreglado: deriva los sitios de emision del ARCHIVO, no de
+// una lista escrita a mano. Los dos de hoy no son el riesgo; el tercero de mañana si.
+// ---------------------------------------------------------------------------
+
+test("AVISO FECHADO: la linea trae su propia hora, en la posicion de su hermana (tag -> hora -> estado)", () => {
+  const linea = lineaDeAviso("sent conv=49 (demo_agendada): aviso enviado");
+  assert.match(
+    linea,
+    /^\[aviso\] 20\d\d-\d\d-\d\dT\d\d:\d\d:\d\d(?:\.\d+)?Z sent\b/,
+    `la hora va entre el tag y el estado, como en [onia-webhook]; salio: ${linea}`,
+  );
+  // La hora es la del AVISO, no la del turno: se inyecta para poder afirmarlo sin reloj.
+  assert.equal(
+    lineaDeAviso("sent conv=49 (demo_agendada): aviso enviado", "2026-09-27T22:41:03.000Z"),
+    "[aviso] 2026-09-27T22:41:03.000Z sent conv=49 (demo_agendada): aviso enviado",
+  );
+});
+
+test("AVISO FECHADO: los lectores de avisos-vivo siguen contando la linea CON hora — y las viejas sin ella", () => {
+  // Este es el modo de falla que el par ya tuvo al reves: con la hora en el medio, un `\w+`
+  // pegado al tag captura `2026`, el `conv=` propio cae al vecino de arriba y los contadores se
+  // van a CERO. Sin un solo error, en el unico lugar donde este carril cuenta si el aviso salio.
+  const conHora = lineaDeAviso("sent conv=49 (demo_agendada): aviso enviado", "2026-09-27T22:41:03.000Z");
+  const vieja = "[aviso] skipped (cuota_agotada): aviso por Telegram apagado (ONIA_BOT_TG_AVISO)";
+
+  const cuenta = contarEventos([conHora, vieja]);
+  assert.equal(cuenta.enviados, 1, "la linea fechada tiene que seguir contando como enviada");
+  assert.equal(cuenta.salteados, 1, "y el log append-only del VPS sigue teniendo lineas peladas");
+
+  const [fechado] = conversacionesDeAvisos([conHora]);
+  assert.equal(fechado.estado, "sent", "el estado no puede salir '2026'");
+  assert.equal(fechado.conv, 49, "el conv sale de la linea PROPIA, no del vecino");
+  assert.equal(fechado.motivo, "demo_agendada");
+});
+
+test("AVISO FECHADO: TODO sitio que emite `[aviso]` pasa por lineaDeAviso (derivado del archivo)", () => {
+  const fuente = readFileSync(new URL("./webhook-server.mjs", import.meta.url), "utf8");
+  // Los COMENTARIOS se ciegan primero, y no es prolijidad: la primera version de este gate se
+  // acuso a si misma —el docblock de `lineaDeAviso` cita la linea vieja entre backticks— y ese
+  // rojo por el motivo equivocado es un verde futuro. Se reemplazan por vacio conservando el
+  // renglon, asi el numero de linea que informa sigue siendo el del archivo.
+  const codigo = fuente
+    .split("\n")
+    .map((linea) => (/^\s*(?:\/\/|\*|\/\*)/.test(linea) ? "" : linea.replace(/\/\/.*$/, "")));
+  // Se descuenta el cuerpo del emisor: es el unico lugar donde el literal es legitimo.
+  const sueltos = codigo
+    .map((linea, i) => ({ n: i + 1, linea }))
+    .filter(({ linea }) => /(?:`|"|')\[aviso\]/.test(linea))
+    .filter(({ linea }) => !linea.includes("return `[aviso] ${iso}"));
+  assert.deepEqual(
+    sueltos,
+    [],
+    `un [aviso] escrito a mano nace SIN hora y nadie lo nota: ${JSON.stringify(sueltos)}`,
+  );
+  // Y que el emisor siga existiendo: si alguien lo borra, el filtro de arriba quedaria vacio
+  // por la razon opuesta y este gate se volveria verde por no tener nada que mirar.
+  assert.match(fuente, /export function lineaDeAviso\(/);
 });

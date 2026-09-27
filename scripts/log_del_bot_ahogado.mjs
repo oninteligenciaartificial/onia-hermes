@@ -165,8 +165,15 @@ function contarEventos(lineas) {
  * (`mensaje_no_entrante:outgoing`) o el update del mismo mensaje (`update_sin_botones`); `MUDO`
  * es un webhook sin mensaje adentro. Medido el 2026-09-27: DOS de cada tres lineas que el bot
  * emite por turno son de estas.
+ *
+ * `eco` es el RESUMEN que el emisor escribe desde el arreglo del 2026-09-27 (`crearFiltroDeEco`
+ * en webhook-server.mjs): una linea cada 200 ecos en vez de una por vez. Sigue siendo un
+ * no-evento —no hay nada que accionar— y entra aca porque el productor y el consumidor de esa
+ * rama son un par: sin declararla, el gate la dejaria SIN CLASIFICAR y su conteo saldria fuera
+ * de `noEventos`, que es de donde se deriva la causa. Subestimar el tapon es la direccion buena
+ * para una rama que nadie previo, no para una que se acaba de escribir aca al lado.
  */
-const RAMAS_NO_EVENTO = new Set(["ignorado", "MUDO"]);
+const RAMAS_NO_EVENTO = new Set(["ignorado", "MUDO", "eco"]);
 /** Ramas que si son un evento: el bot le contesto a alguien. */
 const RAMAS_UTILES = new Set(["respondio"]);
 
