@@ -77,6 +77,41 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Ahora — plan de features (revisado 2026-08-30, con Gate 1 corrido)
 
+- [x] 🟠 **El precio ANUAL de la home sólo existe después de un clic, y ningún gate apretaba ese
+      botón. CUBIERTO el 2026-09-27 07:0x La Paz por `web-venta` (`b114973c`).**
+      - **Cómo apareció, que es la parte que importa.** Los cuatro medidores del objetivo estaban
+        en VERDE y la medida no se movía desde la vuelta anterior, así que en vez de repetirlos se
+        cambió de método: mirar las pantallas **renderizadas**. `recorrer-portada.mjs` sacó las
+        **16 fotos** de la home (14.327 px de alto) y se miraron una por una. En la banda de
+        precios está el toggle `Mensual | Anual −16 %` — y ahí se ve que el número que decide la
+        compra **se reemplaza al apretarlo**.
+      - **Medido, no supuesto:** el DOM pasa de `320@61px` a `3.200@61px`. `precios-vivos.mjs`
+        barre 24 pantallas pero lee el **HTML servido**: ese estado no lo miraba nadie.
+      - **Lo que de verdad estaba sin red: el derivado.** El toggle pinta "Equivale a Bs 267 por
+        mes", que **no está declarado en ninguna fuente — se calcula**. Nadie lo escribe mal: se
+        calcula mal. Con `anual/10` en vez de `anual/12` el Básico se ofrece a "Bs 320 por mes"
+        pagando el año (el descuento desaparece de la pantalla) y las 24 pantallas siguen verdes,
+        porque el número ofensor no está en el HTML que ellas leen.
+      - **Producción está SANA:** 267 / 458 / 742 / 1.075 son los doceavos exactos de 3.200 /
+        5.500 / 8.900 / 12.900. Esto no arregla un defecto vivo: le pone **rojo posible** al
+        segundo turno. Captura mirada: `/tmp/wv-tras-el-clic/anual.png`.
+      - **Visto en ROJO antes que en verde:** mutado `anual/12` → `anual/10`, el gate acusa
+        `expected 320 to be 267`; revertido, verde. Un gate que sólo sabe decir "verde" es
+        indistinguible de uno que no mide.
+      - ⚠️ **Dos correcciones las encontró la corrida VIVA, no el escritorio** — y las dos
+        quedaron fijadas como casos, porque las dos son la misma clase de error (un gate nuevo
+        que acusa copy sano se gana fama de ruidoso y termina salteado):
+        1. el add-on (Bs 390) se pinta **del mismo tamaño que un plan**, así que el universo son
+           **DOS** fuentes (`src/lib/pricing.ts` + `src/content/chatbot-precios.ts`), no una;
+        2. el add-on **no cambia** con el toggle (se cobra por mes y lo aclara). Exigir que todo
+           monto cambiara daba rojo sobre copy sano — se exige **por separado** que el clic
+           cambie *algo*, que es el síntoma real de un toggle muerto.
+      - Queda anotado, sin abrir frente: en la tarjeta **Completo** la unidad `Bs / año` se parte
+        en dos renglones por el ancho de `12.900`; las otras tres la muestran en uno.
+      - Archivos: `web-factory/apps/onia-platform/scripts/precio-tras-el-clic.{mjs,test.ts}` +
+        alias `precio-tras-el-clic:vivo`. Gates: `typecheck` 0 · `npm test` **119 archivos /
+        1.654 tests** verdes · `build` 0 · corrida viva contra `onia.com.bo` en VERDE.
+
 - [x] 🟠 **Un parpadeo de red apagaba los medidores del carril de venta, y el carril se quedaba
       sin medición sin que nada se pusiera rojo. ARREGLADO Y PROBADO DE PUNTA A PUNTA el
       2026-09-27 01:0x La Paz por `web-venta`.**
