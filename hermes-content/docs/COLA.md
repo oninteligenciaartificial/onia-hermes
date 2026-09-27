@@ -77,9 +77,28 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Ahora — plan de features (revisado 2026-08-30, con Gate 1 corrido)
 
-- [ ] 🟠 **El titular de `/empezar` parte su resalte al medio, en las DOS vistas. ARREGLADO EN
-      CÓDIGO el 2026-09-26 por `web-venta` (`e9d19c01`), con el gate que lo deja visto —
-      pero EL LEAD TODAVÍA LO VE PARTIDO: el arreglo no salió de la rama.**
+- [x] 🟠 **El titular de `/empezar` parte su resalte al medio, en las DOS vistas. CERRADO EN
+      PRODUCCIÓN el 2026-09-26 21:00 La Paz por `onia-cola`: el lead ya lee «de verdad»
+      entero.**
+      - **Las tres estaciones, completas por primera vez en este ítem.** Código: `e9d19c01`
+        (`web-venta`). Merge a `main`: `c5a15c12`, 2026-09-26 19:36 La Paz, por el integrador.
+        Producción: la publicó el cron de las **20:50 La Paz** (el log del publicador en el VPS,
+        `/var/log/onia-publicar-solo`, renglón `landing: PUBLICADO`) — y el chunk de estilos que
+        sirve el dominio cambió de hash en `/empezar`, que es la señal de que el swap entró.
+      - **Medido DESPUÉS del swap, no antes, y contra el dominio:**
+        `OUT_DIR=/tmp/base-despues node scripts/mirar-primera-pantalla.mjs https://onia.com.bo`
+        → **exit 0 real** (no por pipe) y `resalte=1reng` en las **cuatro** pantallas, incluidas
+        `escritorio /empezar` y `telefono /empezar`, que eran las dos que salían `2reng`.
+      - **Y MIRADO**, que es lo que el gate no hace por vos: `/tmp/base-despues/empezar-escritorio.png`
+        y `/tmp/base-despues/empezar-telefono.png` se leen «Creá tu cuenta y usalo **de verdad**
+        14 días.» con el verde entero en un renglón. La foto del antes quedó en
+        `/tmp/base-antes/` con el defecto vivo («y usalo de» / «verdad 14 días.»), sacada esta
+        misma vuelta contra el mismo dominio: el antes y el después salen del mismo instrumento.
+      - ⚠️ **La latencia NO fue un bloqueo y por eso no se pidió nada.** La landing la publica el
+        cron de cada 3 h (`50 */3`), y este cambio **no** gastó la firma de Sergio Urcullo pese a
+        tocar `(sitio)/page.tsx`: la guarda `SUPERFICIE_VENTA` de `publicar-solo.sh:564` no frena
+        por TOCAR una página de venta, frena si le **cambia la estructura** — y acá no cambió.
+        Confundir «todavía no salió» con «necesita firma» habría abierto un pedido falso.
       - ⚠️ **Corregido el 2026-09-26 19:0x La Paz, auditando este mismo `[x]`.** Estaba marcado
         hecho y la palabra era «ARREGLADO» a secas. `CLAUDE.md` es explícito: *construido ≠
         terminado*, y está **prohibido reportar como hecho lo que no está encendido en
