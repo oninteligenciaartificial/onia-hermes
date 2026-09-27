@@ -6079,6 +6079,37 @@ y sin operar. Acá se opera, con verificación por ítem.
       **Listo =** Porcentaje General del portal **> 0%** con al menos un caso nuevo al 100%, leído
       del portal y no deducido. Y el número de esta cola actualizado con la fecha de esa lectura.
 
+      ⚠️ **2026-09-27 — la Fase 1 tiene DIEZ etapas y están las DIEZ: 5732/5732. El bloque de
+      abajo dice «NUEVE» y con eso se dio por faltante una etapa que ya está aceptada por el
+      SIN.** La etapa **VIII** no aparece en `fase1-state.json` porque corrió con un estado
+      **aparte**, `/opt/onia-siat/fase1-state-viii.json` (`mtime 2026-09-13 02:29`, los 6 combos
+      `pv0/pv1 × ds1/ds17/ds24` a **115/115**, cero bloqueados). Una etapa que usa otro archivo
+      no sale en cero: **no sale**, y quien lea sólo el principal concluye que nunca corrió.
+
+      **Se midió contra el SIN, no contra nuestro archivo** — que es lo único que prueba
+      aceptación:
+
+      ```bash
+      /root/bin/onia-vps.sh bash -lc "python3 -c \"
+      import json,collections
+      est=collections.Counter()
+      for l in open('/opt/onia-siat/fase1-viii.ndjson'): est[json.loads(l).get('codigoEstado')]+=1
+      print(dict(est))\""
+      # {902: 28, None: 14, 908: 690}   · 908 = VALIDADA · 690 = el target exacto (6 × 115)
+      ```
+
+      🔴 **Y trae un riesgo que hay que levantar ANTES de publicar el emisor:** el pedido de
+      deploy `t_ea3e4f1b` (27-sep 06:10) pide el `ok` con la razón *«VIII 0/690 → NUNCA
+      CORRIÓ»*, medida contra `fase1-state.json`. Su arreglo 1 hace que
+      `run-fase1-volumen.sh` **derive las diez etapas** de `STAGE_ORDER`; corrido después
+      contra ese mismo estado, ve la VIII en cero y **re-emite los 690 documentos al SIN**.
+      Antes de correrlo: fusionar el estado de la VIII al principal, o pasarle `--state` del
+      archivo que la tiene. Comentado en la tarea el 27-sep; los 4 arreglos siguen valiendo,
+      lo que cambia es la razón y el orden.
+
+      **Lo que esto NO cambia:** el ítem sigue bloqueado y sigue siendo de Sergio Urcullo —
+      pero el bloqueo es **una lectura de dos minutos**, no una obra. No falta emitir nada.
+
       🔴 **2026-09-26 — TODO LO QUE ESTE ÍTEM DA POR FRENADO YA ESTÁ HECHO; lo único vivo es
       leer el portal.** Contado en el estado vivo del emisor (`/opt/onia-siat/fase1-state.json`,
       `mtime 2026-09-13 01:05`), no heredado ni deducido: **las NUEVE etapas de la Fase 1 están

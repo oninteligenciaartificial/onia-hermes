@@ -12,6 +12,36 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-27 12:09-16:16 La Paz (vuelta HEAD 18defb5e) — dental 9/9 (repetido) y Estética 9/9 (rubro que faltaba hoy), sin hallazgo nuevo
+
+Chequeo de arranque: máquina `casa`. `ONIA_ALTA_AUTOMATICA=abierta`. Cron `recorrido-cliente`
+(`9 * * * *`) coincide con `loops.md`. Tablero sin tareas `ready` sin reclamar en
+`recorrido-cliente`.
+
+`node scripts/recorrido_cliente.mjs --escribir` (dental por defecto) — **9/9**. Cuenta
+`zz-qa-2026-09-27-1609@onia.com.bo` (nota: coincide de minuto con una corrida previa del día,
+son cuentas distintas por el segundo del timestamp), onboarding completo, paciente cargado, cita
+`2026-09-28 09:00` agendada y VISTA (`cmuk0oldt00hy01n0mbba2ts9`), factura mirada y frenada.
+
+Dental ya llevaba 4 corridas hoy (09:09, 10:09, 09:22, 13:16) y Estética ninguna: roté.
+`RECORRIDO_RUBRO=Estetica` (sin tilde) dio un **falso ROJO en paso 3** — "el alta no ofrece el
+rubro" — porque el matching de la tarjeta es por texto exacto del botón (`Estética y spa`, con
+tilde). No es un bug del script: es mi propio parámetro mal escrito. Repetido con
+`RECORRIDO_RUBRO="Estética"` — **9/9**. Cuenta `zz-qa-2026-09-27-1615@onia.com.bo`, onboarding
+completo, clienta `zz-qa-2026-09-27-1615-paciente` cargada en `/patients`, cita `2026-09-28 09:00`
+agendada y VISTA (`cmuk0vwu500iq01n0au4hmxh6`), factura mirada y frenada.
+
+Limpieza verificada tras AMBAS corridas: `appointments`/`organizations` con `zz-qa-%` = 0 (impreso
+antes de borrar en cada salida, y re-confirmado con `SELECT` aparte tras cada corrida).
+
+RAZÓN: N/A — avanzó (dental 9/9 re-confirmado, Estética 9/9 cubierto por primera vez en el día).
+LECCIÓN: `RECORRIDO_RUBRO` matchea por texto EXACTO del botón de la tarjeta — sin tilde da
+"rubro no ofrecido" en vez de sugerir la corrección. Antes de reportar un rubro como no-ofrecido,
+comparar el valor pasado carácter por carácter contra los nombres que el propio paso 3 imprime en
+`rubrosOfrecidos`.
+
+---
+
 ## 2026-09-27 09:09-13:16 La Paz (vuelta HEAD d28aeda4) — dental 9/9 y comercio 8/8, ambas corridas en esta vuelta, sin hallazgo nuevo
 
 Chequeo de arranque: máquina `casa`. `ONIA_ALTA_AUTOMATICA=abierta`. Cron `recorrido-cliente`
