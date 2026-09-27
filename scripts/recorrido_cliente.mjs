@@ -2141,6 +2141,24 @@ function limpiarProduccion() {
   // los huérfanos de una corrida mía anterior que se cayó a la mitad, que son justo los que hay
   // que barrer. Lo que lleva el prefijo y NO tiene mi forma se CUENTA y se informa, jamás se toca.
   const MIO = '^zz-qa-[0-9]{4}-[0-9]{2}-[0-9]{2}-[0-9]{4}';
+  // 🔴 HUÉRFANOS: si una corrida vieja borró la organización pero se le trabó una tabla hija
+  // (medido el 2026-09-27: `onia_commerce_products` con una fila del 2026-09-18 sobrevivió
+  // 9 días porque el loop de arriba sólo visita organizaciones que TODAVÍA existen — una vez
+  // borrada la organización, esa fila deja de ser visible para siempre), el barrido normal
+  // nunca la ve: no hay organización con ese nombre para disparar el loop. Estas son las
+  // tablas con columna `name` + `organizationId` (huérfanas identificables por su FORMA, no
+  // por su organización), y se barren SIN requerir que la organización exista.
+  const TABLAS_CON_NOMBRE = ['inventory_items', 'onia_accounting_accounts',
+    'onia_accounting_fiscal_periods', 'onia_accounting_fixed_assets', 'onia_accounting_tax_rates',
+    'onia_agents_agents', 'onia_commerce_price_lists', 'onia_commerce_products',
+    'onia_commerce_warehouses', 'onia_core_business_partners', 'onia_core_saved_views',
+    'organization_api_keys', 'patients', 'profiles', 'treatments'];
+  const listarHuerfanos = () => TABLAS_CON_NOMBRE.map((t) =>
+    `SELECT '${t} '||id||' '||name FROM "${t}" WHERE name ~ '${MIO}' AND "organizationId" NOT IN (SELECT id FROM organizations)`
+  ).join(' UNION ALL ');
+  const borrarHuerfanos = () => TABLAS_CON_NOMBRE.map((t) =>
+    `DELETE FROM "${t}" WHERE name ~ '${MIO}' AND "organizationId" NOT IN (SELECT id FROM organizations);`
+  ).join('\n      ');
   const CUENTAS = {
     citas: `SELECT count(*) FROM appointments WHERE coalesce(notes,'') ~ '${MIO}' OR coalesce(reason,'') ~ '${MIO}'`,
     pacientes: `SELECT count(*) FROM patients WHERE name ~ '${MIO}'`,
@@ -2164,6 +2182,7 @@ function limpiarProduccion() {
         UNION ALL SELECT 'auth.users '||id||' '||email FROM auth.users WHERE email ~ '${MIO}'
         UNION ALL SELECT 'invoices '||i.id||' '||i."invoiceNumber"||' '||i.total FROM invoices i JOIN organizations o ON o.id = i."organizationId" WHERE o.name ~ '${MIO}'`).split('\n').filter(Boolean),
       ajenas: psql(AJENAS).split('\n').filter(Boolean),
+      huerfanos: psql(listarHuerfanos()).split('\n').filter(Boolean),
     };
     psql(`BEGIN;
       DELETE FROM notifications WHERE "appointmentId" IN (SELECT id FROM appointments WHERE coalesce(notes,'') ~ '${MIO}' OR coalesce(reason,'') ~ '${MIO}');
@@ -2188,11 +2207,13 @@ function limpiarProduccion() {
       END $$;
       DELETE FROM auth.identities WHERE email ~ '${MIO}';
       DELETE FROM auth.users WHERE email ~ '${MIO}';
+      ${borrarHuerfanos()}
       COMMIT;`);
     const despues = contar();
     const restantes = Object.values(despues).reduce((a, b) => a + b, 0);
     const ajenas = psql(AJENAS).split('\n').filter(Boolean);
-    return { ok: restantes === 0, antes, despues, restantes, ajenas };
+    const huerfanosDespues = psql(listarHuerfanos()).split('\n').filter(Boolean);
+    return { ok: restantes === 0 && huerfanosDespues.length === 0, antes, despues, restantes, ajenas, huerfanosDespues };
   } catch (e) {
     return { ok: false, error: e.message.split('\n').slice(0, 3).join(' ').slice(0, 300) };
   }
@@ -2284,7 +2305,7 @@ async function main() {
     recoveryProbado: ctx.recoveryProbado || null,
     coadminProbado,
     borrado,
-    zzQaRestantes: borrado ? (borrado.restantes ?? null) : 0,
+    zzQaRestantes: borrado ? ((borrado.restantes ?? 0) + (borrado.huerfanosDespues?.length ?? 0)) : 0,
     // Filas con el prefijo `zz-qa-` que NO son de este carril. Van al resumen para que el
     // `count(*) LIKE 'zz-qa-%'` de afuera no se lea como basura mía sin limpiar — y para que su
     // dueño las vea. Nunca se borran acá.
@@ -2334,7 +2355,7 @@ async function main() {
     if (borrado?.ok) {
       console.log(`\n🧹 Se escribió en producción (${creado.join(' · ')}) y se BORRÓ en esta misma corrida: quedan 0 filas mías.${ajenas}`);
     } else {
-      const que = borrado?.error ? `FALLÓ: ${borrado.error}` : `dejó ${borrado?.restantes} fila(s) zz-qa-: ${JSON.stringify(borrado?.despues)}`;
+      const que = borrado?.error ? `FALLÓ: ${borrado.error}` : `dejó ${borrado?.restantes} fila(s) zz-qa-: ${JSON.stringify(borrado?.despues)}${borrado?.huerfanosDespues?.length ? ` + ${borrado.huerfanosDespues.length} huérfano(s): ${borrado.huerfanosDespues.join(' | ')}` : ''}`;
       console.log(`\n⚠️  Se escribió en producción: ${creado.join(' · ')}. El borrado ${que}. HAY QUE BORRARLO A MANO EN ESTA MISMA VUELTA.`);
     }
   }

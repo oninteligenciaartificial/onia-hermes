@@ -25,9 +25,21 @@
  *
  * LOS DOS SUJETOS, y por qué estos dos y no los nueve. Un bloqueo sólo admite verificador
  * mecánico si lo que espera es un HECHO que se puede leer en producción. S1 (un chip y su
- * sesión de Meta), S3 (un PIN en su mano), S5 (su umbral de ruido), S7 (que él le escriba a
- * cuatro personas), S15 (un alta de usuario) y S6 (plata) no dejan rastro legible o son una
- * decisión sin estado. Estos dos sí:
+ * sesión de Meta), S3 (un PIN en su mano), S5 (su umbral de ruido), S15 (un alta de usuario) y
+ * S6 no dejan rastro legible o son una decisión sin estado. Estos dos sí:
+ *
+ * 🔴 **CORREGIDO el 2026-09-27: S7 estaba en esa lista por un motivo FALSO, y ya tiene su
+ * verificador — `npm run lead:contestado` (`scripts/lead_contestado.mjs`).** Acá decía *«S7
+ * (que él le escriba a cuatro personas)»* como si no dejara rastro. Deja el más legible de
+ * todos: contestar en Chatwoot escribe una fila en `messages`. El error fue fusionar **dos
+ * preguntas distintas** — *«¿por qué sólo lo puede hacer Sergio Urcullo?»* (vende él, son
+ * personas reales) y *«¿el resultado se puede leer?»*—; la primera no implica la segunda, y el
+ * filtro falló CERRADO sobre una fila perfectamente medible. Es el mismo error de unidad que
+ * esta cola ya pagó dos veces. **Y el motivo de S6 también estaba mal dicho** (*«plata»*, que
+ * es por qué la decide él, no por qué no se mide): lo que la hace inmedible desde un loop es
+ * que su sujeto vive en el **Supabase cloud**, y acá no hay con qué preguntarle — medido el
+ * 2026-09-27: cero `SUPABASE_ACCESS_TOKEN` en disco y el conector MCP de Supabase sin
+ * autorizar. Si algún día llega ese token, S6 pasa a ser cablable.
  *
  *   bcp   → S2. «Credenciales del BCP + certificado mTLS (`.pfx`)». Son DOS mitades y el
  *           bloqueo se satisface con las dos: con las credenciales pero sin el `.pfx` no hay
