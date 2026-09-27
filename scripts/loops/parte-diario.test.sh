@@ -44,11 +44,18 @@ chmod 755 "$TMP/tg.sh"
 # sin una consulta nueva. Cada caso declara las fechas en $TMP_FECHAS, "<id> <YYYY-MM-DD>
 # <HH:MM>"; un id sin fecha no imprime la linea, que es como se prueba el camino
 # "no se pudo leer la fecha".
+#
+# Y el CUERPO, que es de donde sale la linea `DESPLEGAR: <destino>` de un pedido de deploy
+# (ver el caso 14). Cada caso declara "<id> <destino>" en $TMP_CUERPOS; un id sin destino no
+# imprime la linea, que es el sujeto normal — una decision estable no se publica en ningun
+# lado. Sale de la MISMA llamada que el kind y la fecha: ninguna consulta nueva.
 cat > "$TMP/tablero.sh" <<'FIN'
 #!/usr/bin/env bash
 if [ "${1:-}" = show ]; then
   F=$(awk -v i="${2:-}" '$1==i {print $2, $3}' "${TMP_FECHAS:-/dev/null}" 2>/dev/null)
   [ -n "$F" ] && printf '  created:   %s by user\n' "$F"
+  D=$(awk -v i="${2:-}" '$1==i {print $2}' "${TMP_CUERPOS:-/dev/null}" 2>/dev/null)
+  [ -n "$D" ] && printf 'Body:\n\nDESPLEGAR: %s\n' "$D"
   [ -s "${TMP_KINDS:-/dev/null}" ] || exit 0
   K=$(awk -v i="${2:-}" '$1==i {print $2}' "$TMP_KINDS")
   [ -n "$K" ] && printf "  [2026-09-25 23:44] [run 9] blocked {'reason': 'x', 'kind': '%s', 'recurrences': 1}\n" "$K"
@@ -60,6 +67,7 @@ chmod 755 "$TMP/tablero.sh"
 
 : > "$TMP/kinds.txt"
 : > "$TMP/fechas.txt"
+: > "$TMP/cuerpos.txt"
 
 # La hoja de decisiones ROTA, y para eso recuerda en disco a quien ya nombro (ver el caso
 # 13). Ese estado es lo unico de este script que SOBREVIVE a una corrida, asi que por
@@ -68,7 +76,7 @@ chmod 755 "$TMP/tablero.sh"
 # corridas encadenadas lo pide explicito con `correr misma-ronda`.
 correr() {
   export TMP_MENSAJE="$TMP/mensaje.txt" TMP_TABLERO="$TMP/tablero.txt" TMP_KINDS="$TMP/kinds.txt"
-  export TMP_FECHAS="$TMP/fechas.txt" ONIA_PARTE_RONDA="$TMP/ronda"
+  export TMP_FECHAS="$TMP/fechas.txt" TMP_CUERPOS="$TMP/cuerpos.txt" ONIA_PARTE_RONDA="$TMP/ronda"
   [ "${1:-}" = misma-ronda ] || rm -rf "$ONIA_PARTE_RONDA"
   : > "$TMP_MENSAJE"
   ONIA_TABLERO="$TMP/tablero.sh" ONIA_TG="$TMP/tg.sh" bash "$SUT" >/dev/null 2>&1
@@ -407,6 +415,101 @@ case "$DIA3" in
   *"decision numero 2"*) ok "ronda dia 3: cerrada la ronda, la mas vieja vuelve a entrar" ;;
   *) falla "ronda dia 3: cerrada la ronda, la mas vieja vuelve a entrar" \
            "la ronda no se reabrio y la hoja se quedo sin sujetos: $DIA3" ;;
+esac
+
+# ── 14. LA SEXTA REGRESION (2026-09-27, tarea t_ceefb6cd): un pedido de deploy CADUCA, y la
+# rotacion por id lo trataba como una decision nueva cada vez que se rehacia.
+# El caso 13 arreglo el starvation de las decisiones ESTABLES: cada una tiene su renglon
+# dentro de una ronda. Pero un pedido de deploy no es estable — se rehace con id NUEVO cada
+# vez que se le suma un arreglo (el del bot se rehizo 30 veces, a veces 3 en un dia). Un id
+# nuevo nunca tuvo turno, entra en SIN_TURNO y el orden ahi es por EDAD: su edad es «ahora»,
+# asi que va ULTIMO. Con una ronda que dura dias y un sujeto que vive horas, el renglon no
+# le llega NUNCA — y es el unico renglon que hace que el trabajo ya mergeado y verificado
+# llegue al cliente. No es mala suerte: es aritmetica.
+#
+# El arreglo: la identidad de ronda de un pedido de deploy es su DESTINO, no su id. Un
+# pedido rehecho HEREDA el turno y la antiguedad de su antecesor en vez de volver al final.
+{
+  for n in 1 2 3 4 5 6 7 8 9; do
+    echo "⊘ t_0000d0$n  blocked   (unassigned)          decision estable numero $n"
+  done
+  echo "⊘ t_0000d10  blocked   (unassigned)          decision estable numero 10"
+  echo "⊘ t_0000dp1  blocked   (unassigned)          Publicar el bot: 5 pedidos de hablar con una persona quedaron mudos"
+} > "$TMP/tablero.txt"
+{
+  for n in 1 2 3 4 5 6 7 8 9; do echo "t_0000d0$n 2026-09-0$n 00:00"; done
+  echo "t_0000d10 2026-09-10 00:00"
+  echo "t_0000dp1 2026-09-05 12:00"
+} > "$TMP/fechas.txt"
+echo "t_0000dp1 bot" > "$TMP/cuerpos.txt"
+DIA1=$(correr)
+# El dia 1 el pedido queda afuera por edad, y eso esta BIEN: hay cinco que esperan mas.
+# Lo que importa es que su destino quede anotado, porque manana el id ya no existe.
+case "$DIA1" in
+  *"Publicar el bot"*) falla "ronda dia 1: el pedido no deberia entrar todavia (es el 6to por edad)" \
+                             "entro antes de tiempo: $DIA1" ;;
+  *) ok "ronda dia 1: entran las 5 que esperan mas, el pedido espera su turno" ;;
+esac
+# Dia 2: el pedido se REHIZO — id nuevo, fecha de hoy, mismo destino. Sin heredar, vuelve al
+# final de la cola y no se nombra; con la herencia entra por la antiguedad de su antecesor.
+{
+  for n in 1 2 3 4 5 6 7 8 9; do
+    echo "⊘ t_0000d0$n  blocked   (unassigned)          decision estable numero $n"
+  done
+  echo "⊘ t_0000d10  blocked   (unassigned)          decision estable numero 10"
+  echo "⊘ t_0000dp2  blocked   (unassigned)          Publicar el bot: 5 mudos y +7 leads colgados"
+} > "$TMP/tablero.txt"
+{
+  for n in 1 2 3 4 5 6 7 8 9; do echo "t_0000d0$n 2026-09-0$n 00:00"; done
+  echo "t_0000d10 2026-09-10 00:00"
+  echo "t_0000dp2 2026-09-27 09:00"
+} > "$TMP/fechas.txt"
+echo "t_0000dp2 bot" > "$TMP/cuerpos.txt"
+DIA2=$(correr misma-ronda)
+case "$DIA2" in
+  *"Publicar el bot"*) ok "el pedido rehecho HEREDA la antiguedad de su destino y se nombra" ;;
+  *) falla "el pedido rehecho HEREDA la antiguedad de su destino y se nombra" \
+           "el id nuevo volvio al final de la cola y el renglon no le llego: $DIA2" ;;
+esac
+# El error simetrico, que es el que convierte un arreglo en otro starvation: un pedido que YA
+# uso su renglon en esta ronda no se lo puede quedar rehaciendose. El turno tambien se hereda.
+{
+  echo "⊘ t_0000dq1  blocked   (unassigned)          Publicar la plataforma: 10 arreglos que ningun cliente ve"
+  for n in 1 2 3 4 5 6 7 8 9; do
+    echo "⊘ t_0000e0$n  blocked   (unassigned)          otra decision estable numero $n"
+  done
+} > "$TMP/tablero.txt"
+{
+  echo "t_0000dq1 2026-09-01 00:00"
+  for n in 1 2 3 4 5 6 7 8 9; do echo "t_0000e0$n 2026-09-1$n 00:00"; done
+} > "$TMP/fechas.txt"
+echo "t_0000dq1 plataforma" > "$TMP/cuerpos.txt"
+UNO=$(correr)
+case "$UNO" in
+  *"Publicar la plataforma"*) ok "un pedido que es el mas viejo se nombra el primer dia" ;;
+  *) falla "un pedido que es el mas viejo se nombra el primer dia" "no entro: $UNO" ;;
+esac
+{
+  echo "⊘ t_0000dq2  blocked   (unassigned)          Publicar la plataforma: 11 arreglos que ningun cliente ve"
+  for n in 1 2 3 4 5 6 7 8 9; do
+    echo "⊘ t_0000e0$n  blocked   (unassigned)          otra decision estable numero $n"
+  done
+} > "$TMP/tablero.txt"
+{
+  echo "t_0000dq2 2026-09-27 10:00"
+  for n in 1 2 3 4 5 6 7 8 9; do echo "t_0000e0$n 2026-09-1$n 00:00"; done
+} > "$TMP/fechas.txt"
+echo "t_0000dq2 plataforma" > "$TMP/cuerpos.txt"
+DOS=$(correr misma-ronda)
+case "$DOS" in
+  *"Publicar la plataforma"*) falla "un pedido que ya uso su renglon no se lo queda rehaciendose" \
+                                    "se quedo con el renglon otra ronda: $DOS" ;;
+  *) ok "un pedido que ya uso su renglon cede el turno: la herencia corta en los dos sentidos" ;;
+esac
+# Y el total NO rota: son 10 esperando, se nombre el pedido o no.
+case "$DOS" in
+  *"10 esperan tu ok"*) ok "el total sigue siendo el total con pedidos de deploy en la lista" ;;
+  *) falla "el total sigue siendo el total con pedidos de deploy en la lista" "obtuvo: $DOS" ;;
 esac
 
 if [ "$FALLOS" -gt 0 ]; then
