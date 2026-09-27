@@ -273,8 +273,14 @@ mueren nadie se entera.
 - **8 tareas bloqueadas en el tablero** esperando su ok. Las más caras:
   `t_13f09d9a` (5 desconocidos escribieron y nadie contestó) · `t_3b9d0ded` (2 atendidos por
   el bot que no volvieron) · `t_39a0c27c` (SIAT: crear Punto de Venta 1, 5 min en el portal,
-  frena la mitad de la homologación) · `t_040684cb` (mirar si el correo de confirmación cae
-  en Spam).
+  frena la mitad de la homologación) · ~~`t_040684cb` (mirar si el correo de confirmación cae
+  en Spam)~~.
+  ⚠️ **`t_040684cb` ya NO depende de él — cerrada el 2026-09-27 por `chatbot-cola`.** La
+  respuesta la había dado él mismo el 12-sep (**Recibidos**; commit `d4d43078`, escrito con su
+  propia cuenta de git) y el pedido siguió preguntándosela 15 días. Se corrige acá porque una
+  lista de «depende de Sergio Urcullo» que nombra una decisión ya tomada es exactamente lo que
+  hace que la próxima sesión se la vuelva a pedir. Las otras filas de esta viñeta **no** se
+  re-midieron en esa vuelta: siguen como estaban.
 - Decidir si los **12 jobs `hermes-*` pausados** (kickoff de lunes, finanzas del viernes,
   cierre del domingo) se reviven o se borran.
 

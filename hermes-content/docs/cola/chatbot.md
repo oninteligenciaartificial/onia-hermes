@@ -6573,9 +6573,13 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
       producto era honesto y el bot no:** su propia pantalla de alta dice *«Tu cuenta ya fue
       creada. Revisá tu correo… y confirma tu cuenta antes de iniciar sesión»*
       (`app/(auth)/register/SignupForm.tsx:294`). El lead creaba la cuenta creyendo que entraba,
-      no podía, y la entrega de ese correo **ni siquiera está probada** (tarea `t_040684cb`, en
-      Sergio Urcullo). Es la fricción más cara que existe: en el último clic, después de
-      convencerlo.
+      no podía, y la entrega de ese correo ~~ni siquiera está probada~~ **no estaba probada**
+      (tarea `t_040684cb`). Es la fricción más cara que existe: en el último clic, después de
+      convencerlo. ⚠️ **Esa última cláusula CADUCÓ — corregido el 2026-09-27.** La entrega sí
+      está probada y la tarea está **`done`**: Sergio Urcullo miró su bandeja el 12-sep y el
+      correo estaba **en Recibidos** (`d4d43078`, commiteado por su propia cuenta de git). El
+      resto del párrafo sigue en pie; lo que ya no es cierto es que la entrega esté sin probar.
+      Detalle y la re-medición de hoy, en `plataforma-v1.md` («Nadie probó que el correo…»).
       **Por qué no lo veía ningún gate:** esa frase **no está en el repo**. Vive en una fila
       publicada desde el panel (`chatbot_knowledge` de la org interna, `updatedBy:
       carril-brecha-panel-venta`) que el motor sirve **por encima** del archivo. Misma familia que
