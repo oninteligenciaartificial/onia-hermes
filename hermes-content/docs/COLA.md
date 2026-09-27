@@ -77,11 +77,54 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Ahora — plan de features (revisado 2026-08-30, con Gate 1 corrido)
 
+- [x] 🟠 **Un parpadeo de red apagaba los medidores del carril de venta, y el carril se quedaba
+      sin medición sin que nada se pusiera rojo. ARREGLADO Y PROBADO DE PUNTA A PUNTA el
+      2026-09-27 01:0x La Paz por `web-venta`.**
+      - **Lo que se vio, no lo que se supuso.** Corriendo los once medidores vivos en fila:
+        `rubros:vivos exit=2 — NO PUDE MEDIR: el alta (https://app.onia.com.bo/register) no
+        contesto — fetch failed`. Noventa segundos después el MISMO comando salió `VERDE: los 5
+        rubros que entrega el alta son los 5 que vende el sitio`, y `curl` al mismo URL daba
+        `200` en 0,93 s. El alta estaba viva: el gate se rindió en el primer pedido.
+      - **Por qué importaba más de lo que parece.** El `exit 2` es la conducta correcta (no pudo
+        preguntar, no miente), pero un `NO MEDIDO` **intermitente** es peor que uno permanente:
+        el permanente se ve siempre igual, el intermitente se lee como «el ambiental de siempre»
+        y se saltea. Y los dos gates más expuestos son justo los que hacen cumplir las dos
+        reglas escritas de Sergio Urcullo —`obra:viva` (la venta no exhibe obra) y
+        `titular:sistema` (la home vende el sistema, no el bot)— porque barren **24 pantallas
+        cada uno**: 24 pedidos por corrida es 24 veces la exposición de un pedido suelto.
+      - **Las dos causas, y hacían falta las dos curas.** (1) Node ≥20 corta cada intento de
+        conexión a 250 ms (`autoSelectFamily`) y devuelve ETIMEDOUT sobre hosts VIVOS mientras
+        `curl` da 200 — eso estaba curado en **2 de los 7** scripts que fetchean y en ninguno de
+        los otros 5. (2) Ninguno de los 7 reintentaba: `grep -c reintent` daba **0 en todos**.
+      - **Qué quedó:** `scripts/red-que-parpadea.mjs` (`traer`, que reintenta 3 veces sólo
+        cuando `fetch` RECHAZA) cableado en los 5 que piden desde este proceso —`obra-viva`,
+        `titular-es-el-sistema`, `rubros-vivos`, `recursos-vivos`,
+        `verificar-guia-facturacion`—; cura inline en los 2 que corren el `fetch` DENTRO del
+        contenedor por `docker exec node -e`, donde el módulo no viaja. Gate nuevo
+        `scripts/red-que-parpadea.test.ts`, **visto en ROJO primero y por el motivo correcto**
+        (nombró los 7 sujetos), con los sujetos derivados del **disco**: un `.mjs` nuevo que
+        pida a la red nace cubierto.
+      - **Lo que NO hace, que es la mitad del diseño:** no reintenta una RESPUESTA. Un 404, un
+        500 o un 429 son el servidor contestando; reintentarlos convierte un hallazgo en una
+        espera — y el widget del sitio ratelimitea al 4º pedido por IP, así que un reintento
+        automático ahí se lo provoca solo. Tampoco reintenta el `AbortError` del tope que puso
+        el llamador: ese tope **es** una medición de tiempo, y triplicarlo la falsea.
+      - **La prueba de punta a punta, con el gate de verdad** (no sólo el `fetch` de mentira de
+        la suite): un servidor local que corta el socket del PRIMER pedido y contesta el
+        segundo. `fetch` pelado contra él → `NO PUDE MEDIR — fetch failed`.
+        `node scripts/rubros-vivos.mjs --alta=http://127.0.0.1:3919/` → `(red) … contesto al
+        intento 2 de 3; el anterior parpadeo: fetch failed` y después `VERDE`, exit 0.
+      - **Y avisa cuando salva.** Un rescate mudo volvería invisible una red que falla 2 de cada
+        3 veces: se vería igual de verde que una sana. Una línea por pedido rescatado a stderr —
+        es un EVENTO raro, no una condición permanente, así que no ahoga el log.
+      - Gates: `typecheck` 0 · `npm test` **118 archivos / 1.640 tests** verdes · `npm run build`
+        0 · y los 4 gates cableados re-corridos **contra producción**, los 4 en verde.
+
 - [x] 🟠 **El titular de `/empezar` partía su resalte al medio, en las DOS vistas. ARREGLADO Y
       VIVO: el lead ya lo lee entero. Verificado contra `https://onia.com.bo` el 2026-09-26
       20:56 La Paz por `web-venta`, MIRANDO las capturas.**
       - **Lo que cierra el ítem, que es lo que faltaba: está ENCENDIDO en producción.** El
-        publicador automático del VPS (`onia-publicar-solo.sh`, cron `50 */3`) publicó la
+        publicador automático del VPS (`/root/bin/onia-publicar-solo.sh`, cron `50 */3`) publicó la
         landing a las 20:50 La Paz; el build vivo quedó sellado a las `2026-09-27 00:52 UTC`
         con `.commit = a7b69babd`, que es el HEAD de `origin/main` y contiene `e9d19c01`
         (`git merge-base --is-ancestor` → sí). **No hizo falta pedido de deploy.**
