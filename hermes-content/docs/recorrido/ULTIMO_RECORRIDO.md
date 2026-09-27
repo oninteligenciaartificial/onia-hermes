@@ -12,6 +12,27 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-27 06:09 La Paz (vuelta HEAD b0e56742) — Clínica dental, recorrido completo, 9/9
+
+Chequeo de arranque: máquina `casa` (nodo-casa, WSL). `ONIA_ALTA_AUTOMATICA=abierta`. Tablero
+sin tareas `ready` sin reclamar en `recorrido-cliente`.
+
+Corrí `node scripts/recorrido_cliente.mjs --escribir` en rubro por defecto (Clínica dental).
+**9/9, `completo: true`, `agujeros: []`.** Cuenta `zz-qa-2026-09-27-0609@onia.com.bo` creada,
+confirmó correo, onboarding completo en 6 pantallas, paciente
+`zz-qa-2026-09-27-0609-paciente` cargado y visto en `/patients`, cita 2026-09-28 09:00 agendada
+(201, `cmujf8uxu008701n0v6kw68fy`) y vista en `/appointments`, factura con ítem
+`zz-qa-2026-09-27-0609-item` vista en `/billing/...` y frenada sin pagar. El panel
+(`/dashboard`) no lista el paciente — confirmado que es lo esperado (el panel no muestra ese
+grupo), no un fallo.
+
+Limpieza verificada al cerrar: `appointments`/`organizations` con `zz-qa-%` = 0 (impreso antes
+de borrar, en la salida de la corrida).
+
+RAZÓN: N/A — avanzó (recorrido completo, sin hallazgos nuevos que reportar a otro carril).
+
+---
+
 ## 2026-09-27 05:xx La Paz (vuelta HEAD 7cf4566e) — dos vueltas anteriores murieron sin limpiar; limpieza + Servicios profesionales RE-VERIFICADO: el fix del paso 6 ya está en producción, 9/9
 
 Chequeo de arranque: `ONIA_ALTA_AUTOMATICA=abierta`. Tablero sin tareas `ready` sin reclamar en
