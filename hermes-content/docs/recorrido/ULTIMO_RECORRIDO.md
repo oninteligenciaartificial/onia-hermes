@@ -12,6 +12,44 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-27 16:09-16:35 La Paz (vuelta HEAD 35ddb461) — promesa vs entrega (punto 3), sin hallazgo
+
+Chequeo de arranque: máquina `casa`. `ONIA_ALTA_AUTOMATICA=abierta`. Los 4 crons de casa están
+en `crontab -l`, nada que rearmar. Tablero: cero tareas `ready` sin reclamar en zona
+`recorrido-cliente`.
+
+Los 5 rubros ya estaban cubiertos hoy sin hallazgos nuevos (ver entradas de abajo), así que esta
+vuelta siguió la LECCIÓN de la entrada anterior: en vez de rotar rubro (agotado por hoy), se
+barrió el punto 3 — **promesa de la home contra lo que entrega el paso siguiente**, sin usar
+`--escribir` (no hacía falta escribir nada en producción para esto).
+
+Revisado con Playwright (viewport 390×844, sin escribir en la base):
+- **Home** (`onia.com.bo`): TODOS los CTA (`Creá tu cuenta`, `Empezar con el <plan>`, `Empezar`)
+  apuntan a `https://app.onia.com.bo/register` — ninguno dice "Pedí tu acceso" ni nada que
+  contradiga el alta abierta.
+- **`/precios`**: la escalera mostrada (320/550/890/1.290, anual 3.200/5.500/8.900/12.900, add-on
+  chatbot 390/mes y 3.900/año) coincide EXACTO con `onia-platform/lib/subscription-plans.ts`
+  (`DEFAULT_PLAN_AMOUNTS`) y `lib/pricing.ts` (verificado leyendo el archivo fuente en
+  `/root/loops/onia-platform`, que sí está disponible en esta máquina).
+- **`/empezar`**: 0 `<form>` (correcto, no promete un formulario ahí), tres CTA "Creá tu cuenta"
+  consistentes con el registro real de 3 pasos.
+- **`/chatbot`**: se presenta como add-on ("Pedir el chatbot" separado de "Ver precios"), nunca
+  como el producto titular — consistente con la regla de Sergio Urcullo del 2026-09-03.
+
+Ningún desajuste encontrado. No se corrió `--escribir` esta vuelta (no hacía falta para este
+chequeo): cero filas `zz-qa-` creadas ni que limpiar.
+
+RAZÓN: no avanzó la brecha (ni cobertura de rubro ni hallazgo de promesa-vs-entrega) — el sitio
+está consistente hoy en los cuatro puntos revisados.
+LECCIÓN: **dos vueltas seguidas sin hallazgo** (esta y la anterior, ambas dental/promesa). La
+próxima vuelta no debería repetir ni "rotar rubro" (agotado) ni "promesa vs entrega" (ya barrido
+hoy sin nada): probar el punto 1 de la lista — un paso del recorrido que el script **todavía no
+cubre** (ver si hay alguno de los 9 pasos reales sin verificación, más allá de los 8 nominales del
+prompt) — o revisar la cola de `recorrido-cliente.md` pasada por el Gate 1 antes de repetir un
+método ya agotado por hoy.
+
+---
+
 ## 2026-09-27 14:09-14:34 La Paz (vuelta HEAD 03e7f34e) — dental 9/9 (repetido), sin hallazgo nuevo
 
 Chequeo de arranque: máquina `casa` (marcador `/root/.onia-nodo`). Los 4 crons de casa
