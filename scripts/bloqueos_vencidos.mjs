@@ -50,7 +50,7 @@
  * menos le pide a Sergio algo que ya hizo.
  */
 
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
@@ -299,6 +299,53 @@ export function plazoVencidoEnTitulo(titulo, { hoy, creado } = {}) {
   return null;
 }
 
+/**
+ * El id del loop de un aviso de salud («Loop X no pudo correr»), o `null` si la tarea no es uno.
+ *
+ * POR QUE EXIGE LAS DOS COSAS —nombrar el loop Y decir que no pudo correr— y no le alcanza con
+ * nombrarlo: el tablero esta lleno de tareas que nombran un loop de paso («Reponer onia-cola…»,
+ * «El 70 % de la cuota son 2 loops…»), y este chequeo termina en un `complete`. Un gate que cierra
+ * por una mencion es la misma falla que ya se midio el 2026-09-26 con `onia-center`, donde tres
+ * tareas lo nombraban y solo UNA lo pedia. Ante la duda, no es un aviso de salud.
+ */
+export function loopDeAvisoDeSalud(titulo, cuerpo = '') {
+  const texto = `${titulo || ''}\n${cuerpo || ''}`;
+  if (!/no pudo correr/i.test(texto)) return null;
+  const m = texto.match(/Loop\s*(?:<\/?b>\s*)?([a-z][a-z0-9-]*)/i);
+  return m ? m[1] : null;
+}
+
+/**
+ * La ultima vuelta de `loopId` que TERMINO en `exit 0` en o despues de `desde`, o `null`.
+ *
+ * La prueba de que un «no pudo correr» se curo no es que el loop este vivo hoy: es que corrio BIEN
+ * despues de que se escribio el aviso. Por eso compara contra `desde` (la fecha de creacion de la
+ * tarea) y no contra la ultima linea del log. Sin esa comparacion el gate cerraria el aviso recien
+ * creado —el unico que hay que mirar— porque el loop arranco una vez mas mientras tanto.
+ *
+ * Devuelve `null` en TODOS los casos en que no puede afirmar la cura (log vacio, otro loop, exit
+ * distinto de 0, o la vuelta sana es anterior al aviso). El `null` deja el aviso VIVO, que es el
+ * lado seguro: un falso «se curo» borra una alarma real y nadie se entera.
+ */
+export function vueltaSanaDespuesDe(logTexto, loopId, desde) {
+  if (!logTexto || !loopId || !(desde instanceof Date) || Number.isNaN(desde.getTime())) return null;
+  const corte = desde.getTime();
+  // Se recorre de atras para adelante: interesa la MAS RECIENTE, y los logs de loop son largos.
+  const lineas = String(logTexto).split('\n');
+  const patron = new RegExp(
+    `^(\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z).*TERMINA\\s+${loopId.replace(/[^a-zA-Z0-9-]/g, '')}\\s+—.*?—\\s*exit\\s+(\\d+)`,
+  );
+  for (let i = lineas.length - 1; i >= 0; i -= 1) {
+    const m = lineas[i].match(patron);
+    if (!m) continue;
+    const fin = new Date(m[1]);
+    if (Number.isNaN(fin.getTime()) || fin.getTime() < corte) continue;
+    if (Number(m[2]) !== 0) continue;
+    return { fin: m[1], exit: 0 };
+  }
+  return null;
+}
+
 if (process.argv.includes('--self-check')) {
   // Contados por el script, no escritos a mano: un conteo hardcodeado deja de coincidir en
   // cuanto se agrega un caso, y un gate que miente en su propio numero ya no es un gate.
@@ -501,6 +548,48 @@ if (process.argv.includes('--self-check')) {
   afirmar(plazoVencidoEnTitulo('Pagar el 3-ene', { hoy: new Date('2026-12-20T12:00:00Z') }) === null,
     'una fecha de enero leida en diciembre es del año que viene, no un vencido');
 
+  // --- Aviso de salud de un loop cuya CONDICION ya se curo (2026-09-27).
+  // El bloque de arriba mide PLAZOS caducos. Esto mide otra cosa, y por eso hacen falta los dos:
+  // un aviso «Loop X no pudo correr» no promete ninguna fecha, asi que `plazoVencidoEnTitulo` lo
+  // deja pasar con razon — y se queda en el tablero para siempre, porque el vigia que lo creo no
+  // cierra lo que su propio rojo abrio. Medido ese dia: de los SEIS 🔴 que competian por los
+  // CINCO renglones del parte diario, CINCO estaban curados (de hace 6 a 17 dias) y el unico real
+  // era el del dia. Lo que quedaba sin nombrar: la memoria compartida al 99,6% y dos cuentas de
+  // prueba a medias en produccion. Un aviso curado no es ruido neutro: DESALOJA al que importa.
+  const LOG_WV = [
+    '2026-09-27T02:48:03Z ===== ARRANCA web-venta — rama claude/web-venta — HEAD aaaa1111 — tope 3000s =====',
+    '2026-09-27T02:48:09Z ===== TERMINA web-venta — 6s — exit 1 — sin commit =====',
+    '2026-09-27T20:48:04Z ===== ARRANCA web-venta — rama claude/web-venta — HEAD 5b8de34f — tope 3000s =====',
+    '2026-09-27T21:04:58Z ===== TERMINA web-venta — 1014s — exit 0 — commiteo 5b8de34f..48161eed — 2 commit(s) =====',
+  ].join('\n');
+
+  afirmar(loopDeAvisoDeSalud('🔴 Loop web-venta (VPS) no pudo correr: claude salio con codigo 1') === 'web-venta',
+    'del titulo de un aviso de salud se saca el id del loop, que es con lo que se mide');
+  afirmar(loopDeAvisoDeSalud('Publicar el bot: 5 pedidos quedaron mudos') === null,
+    'una tarea que no es aviso de salud de un loop no entra a este chequeo');
+  // Sin esto el gate cerraria pedidos de deploy y decisiones de plata por nombrar un loop de paso.
+  afirmar(loopDeAvisoDeSalud('Reponer onia-cola: crear 3 tareas accionables') === null,
+    'nombrar un loop NO alcanza: hace falta que el aviso diga que no pudo correr');
+
+  const sana = vueltaSanaDespuesDe(LOG_WV, 'web-venta', new Date('2026-09-27T02:48:03Z'));
+  afirmar(sana !== null, 'una vuelta exit 0 POSTERIOR al aviso es la prueba de que la condicion se curo');
+  afirmar(sana?.fin === '2026-09-27T21:04:58Z', 'se reporta CUANDO se curo, para poder discutirlo sin abrir el log');
+  // El caso que hace peligroso a este gate: si mirara la ultima vuelta sin comparar fechas,
+  // cerraria el aviso que se acaba de crear — justo el unico que hay que mirar.
+  afirmar(vueltaSanaDespuesDe(LOG_WV, 'web-venta', new Date('2026-09-27T21:30:00Z')) === null,
+    'una vuelta sana ANTERIOR al aviso no lo cura: el aviso es mas nuevo que la prueba');
+  afirmar(vueltaSanaDespuesDe(LOG_WV, 'otro-loop', new Date('2026-09-27T02:48:03Z')) === null,
+    'las vueltas de OTRO loop no curan este aviso');
+  // exit 1 no cura nada, y esta es la diferencia entre medir y contar renglones.
+  afirmar(vueltaSanaDespuesDe(
+    '2026-09-27T22:00:00Z ===== ARRANCA web-venta — tope 3000s =====\n2026-09-27T22:00:06Z ===== TERMINA web-venta — 6s — exit 1 — sin commit =====',
+    'web-venta', new Date('2026-09-27T02:48:03Z')) === null,
+    'una vuelta que volvio a fallar no es una vuelta sana');
+  // Tri-estado: sin log no se concluye. Un `null` por «no pude leer» leido como «no se curo» deja
+  // el aviso vivo, que es el lado seguro; al reves cerraria a ciegas.
+  afirmar(vueltaSanaDespuesDe('', 'web-venta', new Date('2026-09-27T02:48:03Z')) === null,
+    'un log vacio no prueba que se curo');
+
   if (!process.exitCode) console.log(`self-check: ok — ${casos} casos`);
   process.exit(process.exitCode || 0);
 }
@@ -515,13 +604,22 @@ if (process.argv.includes('--tablero')) {
     console.error(`NO MEDIDO — no existe ${bin}. El tablero vive en la maquina de los loops; desde otra no se puede preguntar.`);
     process.exit(2);
   }
-  let tareas;
-  try {
-    const salida = execFileSync(bin, ['list', '--status', 'blocked', '--json'], {
+  const pedir = (estado) => {
+    const salida = execFileSync(bin, ['list', '--status', estado, '--json'], {
       encoding: 'utf8', timeout: TIMEOUT_MS, stdio: ['ignore', 'pipe', 'pipe'],
     });
-    tareas = JSON.parse(salida);
-    if (!Array.isArray(tareas)) throw new Error('la salida no es una lista de tareas');
+    const lista = JSON.parse(salida);
+    if (!Array.isArray(lista)) throw new Error(`la salida de --status ${estado} no es una lista`);
+    return lista;
+  };
+  let tareas;
+  let listas;
+  try {
+    // Las DOS clases se piden juntas y se juzgan al final, no una y despues la otra: si el primer
+    // pedido saliera rojo y cortara, la segunda clase quedaria SIN MEDIR justo en la vuelta en que
+    // algo se movio. Es la misma leccion del `&&` del alias, anotada mas abajo.
+    tareas = pedir('blocked');
+    listas = pedir('ready');
   } catch (e) {
     console.error(`NO MEDIDO — ${bin} no contesto una lista de tareas: ${e.message}`);
     process.exit(2);
@@ -537,15 +635,46 @@ if (process.argv.includes('--tablero')) {
     if (v) caducos.push({ id: t.id, titulo: t.title, ...v });
   }
 
-  if (caducos.length === 0) {
-    console.log(`tablero: ${tareas.length} tarea(s) bloqueada(s), ninguna promete un plazo caduco`);
+  // Avisos de salud de loop en `ready` cuya condicion ya se curo. Van en la misma corrida porque
+  // compiten por el MISMO recurso escaso: los cinco renglones del parte diario.
+  const curados = [];
+  let sinLog = 0;
+  for (const t of listas) {
+    const loop = loopDeAvisoDeSalud(t?.title, t?.body);
+    if (!loop) continue;
+    const creado = t?.created_at
+      ? new Date(typeof t.created_at === 'number' ? t.created_at * 1000 : t.created_at)
+      : null;
+    if (!creado || Number.isNaN(creado.getTime())) continue;
+    const log = `/var/log/onia-loop-${loop}.log`;
+    if (!existsSync(log)) { sinLog += 1; continue; }
+    let sana = null;
+    try {
+      sana = vueltaSanaDespuesDe(readFileSync(log, 'utf8'), loop, creado);
+    } catch { sinLog += 1; continue; }
+    if (sana) {
+      const dias = Math.round((hoy.getTime() - creado.getTime()) / 86400000);
+      curados.push({
+        id: t.id,
+        titulo: t.title,
+        tipo: 'curado',
+        detalle: `el aviso tiene ${dias} dia(s) y ${loop} ya corrio BIEN despues: exit 0 el ${sana.fin} (${log}). Cerralo con esa medicion en el comentario`,
+      });
+    }
+  }
+
+  const hallazgos = [...caducos, ...curados];
+  if (hallazgos.length === 0) {
+    console.log(`tablero: ${tareas.length} bloqueada(s) sin plazo caduco · ${listas.length} en ready sin aviso de loop ya curado`);
+    if (sinLog) console.log(`  (${sinLog} aviso(s) de loop NO MEDIDO(s): su log no esta en esta maquina)`);
     process.exit(0);
   }
-  console.error(`tablero: ${caducos.length} de ${tareas.length} tarea(s) bloqueada(s) le piden a Sergio Urcullo algo con un plazo que ya caduco:\n`);
-  for (const c of caducos) {
+  console.error(`tablero: ${hallazgos.length} tarea(s) le estan robando renglones del parte diario a Sergio Urcullo (${caducos.length} con plazo caduco · ${curados.length} con la condicion ya curada):\n`);
+  for (const c of hallazgos) {
     console.error(`  [${c.tipo}] ${c.id} — ${c.titulo}`);
     console.error(`      ${c.detalle}\n`);
   }
+  if (sinLog) console.error(`  (${sinLog} aviso(s) de loop NO MEDIDO(s): su log no esta en esta maquina)\n`);
   process.exit(1);
 }
 
