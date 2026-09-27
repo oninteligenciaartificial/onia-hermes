@@ -61,7 +61,22 @@ Producción del sitio personal = commit `7412814` del repo `oninteligenciaartifi
 
 ### 3.1 Resultado de la verificación
 
-(pendiente de completar por esta sesión; si está vacío, el subagente no terminó y Codex la rehace)
+**Veredicto (27-sep): no se publica tal cual.** Reporte completo con los reemplazos exactos:
+[`../historial/contenido/VERIF_BOVEDA_20260927.md`](../historial/contenido/VERIF_BOVEDA_20260927.md).
+
+- **B1 — decide Sergio Urcullo:** el hero de la portada dice «6 herramientas en producción · 5 gratis ·
+  $200 al mes todo el stack», y `/vps` dice «Bs 220 al mes» más la llave de Hermes que se paga por uso.
+  Hay reemplazo por defecto en el reporte; «6 en producción» sólo lo puede confirmar él.
+- **C5 — decide Sergio Urcullo:** «los archivos salen primero en la comunidad» no tiene respaldo (no hay
+  drops desde el 20-sep). Si no los mandó, va el reemplazo del reporte.
+- **C1–C4, C6, C7:** correcciones sin decisión, con texto listo (tiempos de lectura, comando de `/mcp`
+  cortado en el teléfono, permisos en `/permissions`, el Webhook de n8n que responde «Immediately»,
+  «cada pieza termina en un recurso», contraste del `IF` en modo oscuro). C2 y C4 probados a 390 px.
+- **Bien:** 0 links internos rotos, 0 scroll horizontal, nombres de nodos de n8n 2.40 y comandos de
+  Claude Code 2.1.283 confirmados, y las guías ya publicadas quedan idénticas.
+
+**Receta:** aplicar C1–C4, C6 y C7 en `hermes-content/sitio-sergiourcullo/` → Sergio contesta B1 y
+C5 → mirar las 5 páginas a 390 px → push al repo del sitio (arriba) → medir en producción.
 
 ## 4. Lo que hay que saber para decidir
 
