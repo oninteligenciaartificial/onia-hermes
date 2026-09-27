@@ -692,45 +692,117 @@ function lineaDeCoadministradores(plan: Plan): string[] {
  *     chatbot adentro teniendo debajo uno que no. El escalón que se agregue mañana nace con la
  *     cuenta bien hecha, y si el de abajo también lo trae, la comparación desaparece sola.
  */
+/**
+ * 🔴 **Y la cuenta se hace en el ciclo QUE LA TARJETA MUESTRA — agregado el 2026-09-27.**
+ *
+ * Hasta hoy esto sólo sabía sumar el MENSUAL, y la portada tiene un interruptor Mensual/Anual.
+ * Mirado renderizado (Chromium, clic en «Anual», texto leído): la tarjeta del Completo decía
+ * `12.900 Bs / año` · `Equivale a Bs 1.075 por mes` · `Bs 10 más al mes que Profesional`. En
+ * anual la cuenta es otra —8.900 + 3.900 = 12.800 contra 12.900, o sea **Bs 100 más al año**, Bs
+ * 8 por mes— así que el lead que restaba con los números que la propia tarjeta le daba (1.075
+ * contra 742 + 325) obtenía 8 y leía 10. Las dos mitades de una misma tarjeta salían de ciclos
+ * distintos.
+ *
+ * Es la MISMA falla que el bloque de arriba documenta, un escalón más adentro: la cura del
+ * 2026-09-19 arregló la aritmética y **se quedó en un solo ciclo**. Por eso el ciclo entra al
+ * tipo (`CuentaVsAddon.ciclo`) y la unidad de la frase se deriva de él: el semanal, que ya existe
+ * en `Plan.semanal`, nace obligado a contestar qué dice en vez de heredar el mensual en silencio.
+ */
+export type CicloDeCuenta = "mensual" | "anual";
+
+/** Los dos montos del add-on, para poder sumar en cualquiera de los dos ciclos. */
+export interface AddonDeLaCuenta {
+  readonly mensual: number;
+  readonly anual: number;
+}
+
+export interface OpcionesDeLaCuenta {
+  /** En qué ciclo se está mostrando el precio. Por defecto el mensual, que es el de catálogo. */
+  readonly ciclo?: CicloDeCuenta;
+  readonly addon?: AddonDeLaCuenta;
+}
+
 export interface CuentaVsAddon {
+  /** El ciclo en el que está hecha: manda sobre la unidad de la frase. */
+  readonly ciclo: CicloDeCuenta;
   /** El escalón de abajo: el que tiene que comprar el add-on aparte. */
   readonly contra: Plan;
-  /** Lo que sale armarlo abajo: mensual del de abajo + el add-on. */
+  /** Lo que sale armarlo abajo, en el ciclo de la cuenta: el de abajo + el add-on. */
   readonly armado: number;
   /** Lo que cuesta de MÁS el plan que lo trae adentro. Negativo = sale más barato. */
   readonly deMas: number;
 }
 
+/** Cuánto cobra un plan en un ciclo. Un solo lugar elige la columna, así no se cruzan. */
+function montoEnElCiclo(plan: Plan, ciclo: CicloDeCuenta): number {
+  return ciclo === "anual" ? plan.anual : plan.mensual;
+}
+
+/**
+ * El monto del add-on en el ciclo de la cuenta.
+ *
+ * Un número suelto es el MENSUAL y nada más: **no se le deriva un anual** con la regla de los 10
+ * meses aunque el catálogo entero la cumpla. Sería una suposición en el camino de la plata, y el
+ * ciclo de un número suelto es siempre el mensual, así que nunca hace falta.
+ */
+function addonEnElCiclo(opciones: number | OpcionesDeLaCuenta, ciclo: CicloDeCuenta): number {
+  if (typeof opciones === "number") return opciones;
+  const addon = opciones.addon ?? CHATBOT_PLAN;
+  return ciclo === "anual" ? addon.anual : addon.mensual;
+}
+
 export function cuentaVsAddon(
   plan: Plan,
   planes: readonly Plan[] = ESCALERA,
-  addonMensual: number = CHATBOT_MENSUAL,
+  // `number` se sigue aceptando y se lee como el mensual del add-on: es lo que hacen los
+  // llamadores que existían antes del ciclo, y cambiarlos no habría probado nada.
+  opciones: number | OpcionesDeLaCuenta = {},
 ): CuentaVsAddon | null {
+  const ciclo = typeof opciones === "number" ? "mensual" : (opciones.ciclo ?? "mensual");
+
   if (!plan.chatbotIncluido) return null;
   const i = planes.findIndex((p) => p.id === plan.id);
   // Sin escalón debajo, o con uno que también lo trae adentro, no hay contra qué comparar: la
   // oración no se escribe, en vez de compararse contra sí misma.
   const contra = i > 0 ? planes[i - 1] : null;
   if (!contra || contra.chatbotIncluido) return null;
-  const armado = contra.mensual + addonMensual;
-  return { contra, armado, deMas: plan.mensual - armado };
+  const armado = montoEnElCiclo(contra, ciclo) + addonEnElCiclo(opciones, ciclo);
+  return { ciclo, contra, armado, deMas: montoEnElCiclo(plan, ciclo) - armado };
 }
+
+/** Cómo se nombra cada ciclo dentro de la frase. El día que entre el semanal, entra acá. */
+const UNIDAD_DEL_CICLO: Record<CicloDeCuenta, string> = {
+  mensual: "al mes",
+  anual: "al año",
+};
 
 /** La cuenta, dicha. Las tres direcciones salen del signo, nunca de un literal elegido a mano. */
 export function cuentaEnPalabras(cuenta: CuentaVsAddon): string {
+  const unidad = UNIDAD_DEL_CICLO[cuenta.ciclo];
   const cola =
     cuenta.deMas > 0
-      ? `Bs ${bs(cuenta.deMas)} más al mes que ${cuenta.contra.nombre} con el add-on aparte`
+      ? `Bs ${bs(cuenta.deMas)} más ${unidad} que ${cuenta.contra.nombre} con el add-on aparte`
       : cuenta.deMas === 0
         ? `lo mismo que ${cuenta.contra.nombre} con el add-on aparte`
-        : `Bs ${bs(-cuenta.deMas)} menos al mes que ${cuenta.contra.nombre} con el add-on aparte`;
+        : `Bs ${bs(-cuenta.deMas)} menos ${unidad} que ${cuenta.contra.nombre} con el add-on aparte`;
   return `Chatbot de WhatsApp incluido (${CONVERSACIONES_INCLUIDAS} conversaciones/mes): ${cola}.`;
 }
 
-/** El `resultado` de la tarjeta: derivado si hay cuenta que hacer, y si no el de la escalera. */
-function resultadoDelPlan(plan: Plan): string {
-  const cuenta = cuentaVsAddon(plan);
+/**
+ * El `resultado` de la tarjeta en el ciclo que se está mostrando.
+ *
+ * Lo llama la tarjeta CON interruptor (`(sitio)/precios-toggle.tsx`). Las pantallas que muestran
+ * el mensual grande —`(sitio)/precios`, `landing-v1`— siguen leyendo `plan.resultado`, que es
+ * exactamente esta función en «mensual»: ahí la cuenta mensual es la correcta.
+ */
+export function resultadoSegunCiclo(plan: Plan, ciclo: CicloDeCuenta): string {
+  const cuenta = cuentaVsAddon(plan, ESCALERA, { ciclo });
   return cuenta ? cuentaEnPalabras(cuenta) : plan.resultado;
+}
+
+/** El `resultado` de catálogo: el del ciclo mensual, que es el que publica `PLANES`. */
+function resultadoDelPlan(plan: Plan): string {
+  return resultadoSegunCiclo(plan, "mensual");
 }
 
 /** Lo mínimo que hace falta para contestar «¿este plan trae el chatbot adentro?». */
