@@ -9684,6 +9684,33 @@ cita: al cerrar una fila hay que barrer quién la nombra, no sólo tacharla.
       terminador y en el arranque de bloque para no pegar dos frases, y no muerde las notas de
       corrección fechadas como ésta.
 
+- [ ] **`espejo-check.mjs` veta el árbol entero cuando le alcanzaría vetar el archivo, y por eso
+      está mudo en el único lugar donde se lo corre.** Su guarda es correcta en el fondo (si el
+      subárbol del bot difiere de `origin/main`, una diferencia contra el VPS puede ser su propio
+      atraso) pero se aplica a TODO: un solo archivo distinto y no opina de ninguno. En un worktree
+      de carril eso es permanente, porque tener commits sin mergear es su estado normal — medido el
+      2026-09-27: difieren los 4 archivos que este carril commiteó el 26-sep y el script salió 2
+      sin mirar los otros 56. Su hermano `scripts/bot_vivo_tiene_el_codigo.mjs` ya resuelve la
+      misma pregunta archivo por archivo y concluye igual (sale 1, nombra 4 desfasados), así que el
+      criterio existe y está probado; lo que falta es traerlo acá.
+
+      **Reproducción (30 s, no hace falta investigar nada):**
+
+      ```bash
+      node hermes-content/deploy/vps-ops/bot/espejo-check.mjs; echo $?   # 2 — "ESPEJO SIN VEREDICTO"
+      node scripts/bot_vivo_tiene_el_codigo.mjs;              echo $?   # 1 — y nombra los 4
+      npm run evidencia:citada                                          # NO MEDIDO, por la cita de arriba
+      ```
+
+      **Forma del arreglo:** los archivos que difieren de `origin/main` salen del juicio como NO
+      MEDIDO **nombrados**, y los demás se comparan igual; exit 1 si queda alguno desfasado
+      atribuible, 2 sólo si no se pudo juzgar ninguno (o si git no contestó), 0 si todos se
+      juzgaron y coinciden. **Ojo con el consumidor:** `scripts/deploy_sin_pedido.mjs` lo corre y
+      **parsea su stdout** (`:742`, `:1111`), así que el formato de salida viaja con él o se rompe
+      un gate ajeno — van los dos archivos o ninguno. No toca el pedido de deploy vivo:
+      `publicar.sh --dry-run` cuenta 13 y `espejo-check` no es uno (`grep -c espejo-check` → 0,
+      medido el 2026-09-27), igual que `avisos-vivo.mjs` el 26-sep.
+
 - [ ] **Botón "Cobrar con QR" dentro de la conversación** (pieza 5 del backlog v5). El
       circuito está completo en mock y verificado mirando (`/bcp/cobrar` + `/bcp/callback`,
       contrato del banco calcado); el código no cambia para el modo real. Espera las
@@ -9830,7 +9857,24 @@ cita: al cerrar una fila hay que barrer quién la nombra, no sólo tacharla.
 > sola cosa: la firma del deploy del bot.** ✅ **Y esa firma LLEGÓ: el 2026-09-25 el swap corrió y
 > los dos quedaron cerrados con S18.** Los mismos dos verificadores que acá salían en rojo hoy
 > dan verde: `node hermes-content/deploy/vps-ops/bot/espejo-check.mjs` → **exit 0** (`ESPEJO OK`)
-> y `grep -c avisosDePanelYaDados /tmp/onia-bot/knowledge.mjs` → **4** (era 0). Y el bucle del
+> y `grep -c avisosDePanelYaDados /tmp/onia-bot/knowledge.mjs` → **4** (era 0).
+>
+> ⚠️ **El primero de esos dos verificadores caducó como RECETA el 2026-09-27 — el hecho sigue en
+> pie (el swap del 25-sep ocurrió), lo que ya no reproduce es su `exit 0`: hoy sale 2.** Y no es
+> que el bot se haya desincronizado: `espejo-check.mjs` se niega a concluir cuando el subárbol del
+> bot difiere de `origin/main`, y difiere por lo que ESTE carril commiteó y todavía no mergeó
+> (`avisos-vivo.mjs`, `avisos-vivo.test.mjs`, `campanas-vivas.mjs`, `campanas-vivas.test.mjs`).
+> O sea que ese verificador sólo reproduce desde un árbol recién mergeado, y desde el worktree
+> donde se trabaja está mudo **por diseño** — un NO MEDIDO permanente, que además dejaba en NO
+> MEDIDO a `npm run evidencia:citada`, que está en la medición de arranque de este carril.
+> El hermano que SÍ concluye desde acá es `node scripts/bot_vivo_tiene_el_codigo.mjs`, que compara
+> archivo por archivo en vez de vetar el árbol entero: sale **1** y nombra los **4** desfasados que
+> esperan esta misma firma — `calcom-booking.mjs`, `followup-run.mjs`, `knowledge.onia.json`,
+> `marcas-en-disco.mjs`. Ése es el dato que esta línea quería dar, y es el que hay que derivar.
+> El SEGUNDO verificador sí reproduce, medido en el contenedor y no heredado:
+> `docker exec onia-center grep -c avisosDePanelYaDados /tmp/onia-bot/knowledge.mjs` → **4**.
+>
+> Y el bucle del
 > horario está probado EJECUTANDO el motor que corre en el contenedor, con los cinco slots del
 > proceso vivo (`/proc/<pid>/environ`): quien escribe *"el martes 29 a las 14:00"* —el TERCER
 > candidato, el que antes no existía para el bot— queda con
