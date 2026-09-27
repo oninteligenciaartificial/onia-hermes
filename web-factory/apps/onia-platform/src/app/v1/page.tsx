@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { PLANES, bs, plan, primerPlanCon, PRUEBA, ALCANCE_CON_AGENDA, ALCANCE_CON_INVENTARIO } from "@/lib/pricing";
+import { PLANES, bs, plan, planDeEntrada, primerPlanCon, PRUEBA, ALCANCE_CON_AGENDA, ALCANCE_CON_INVENTARIO } from "@/lib/pricing";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Hero } from "@/components/landing-v1/hero";
@@ -27,7 +27,7 @@ const TITLE = "Onia · Tu negocio no pierde citas ni cobros | Bolivia";
 // trae desde la escalera C): la pantalla se contradecía consigo misma y la
 // mitad falsa era la que viaja al preview de WhatsApp, que ninguna captura mira.
 const DESCRIPTION =
-  `Onia Platform es el sistema de gestión con inteligencia artificial para negocios en Bolivia: clientes, cobros y agenda ${ALCANCE_CON_AGENDA}. Desde Bs ${bs(plan("basico").mensual)} al mes. Probalo ${PRUEBA.dias} días gratis, sin tarjeta. Agentes que revisan tu negocio cada día y esperan tu aprobación, desde el plan ${primerPlanCon("agentes")}.`;
+  `Onia Platform es el sistema de gestión con inteligencia artificial para negocios en Bolivia: clientes, cobros y agenda ${ALCANCE_CON_AGENDA}. Desde Bs ${bs(planDeEntrada().mensual)} al mes. Probalo ${PRUEBA.dias} días gratis, sin tarjeta. Agentes que revisan tu negocio cada día y esperan tu aprobación, desde el plan ${primerPlanCon("agentes")}.`;
 
 /*
  * La tarjeta social NO se declara acá: la dibuja `opengraph-image.tsx` de este
@@ -53,14 +53,14 @@ export const metadata: Metadata = {
     siteName: "Onia Platform",
     title: "Tu negocio no pierde citas ni cobros — Onia, Bolivia",
     description:
-      `Onia recuerda cada cita, persigue cada deuda y hace volver al cliente que se enfrió. Vos aprobás; el sistema hace. Desde Bs ${bs(plan("basico").mensual)}/mes, ${PRUEBA.dias} días gratis.`,
+      `Onia recuerda cada cita, persigue cada deuda y hace volver al cliente que se enfrió. Vos aprobás; el sistema hace. Desde Bs ${bs(planDeEntrada().mensual)}/mes, ${PRUEBA.dias} días gratis.`,
     url: "/",
   },
   twitter: {
     card: "summary_large_image",
     title: "Tu negocio no pierde citas ni cobros — Onia, Bolivia",
     description:
-      `Onia recuerda cada cita, persigue cada deuda y hace volver al cliente que se enfrió. Vos aprobás; el sistema hace. Desde Bs ${bs(plan("basico").mensual)}/mes, ${PRUEBA.dias} días gratis.`,
+      `Onia recuerda cada cita, persigue cada deuda y hace volver al cliente que se enfrió. Vos aprobás; el sistema hace. Desde Bs ${bs(planDeEntrada().mensual)}/mes, ${PRUEBA.dias} días gratis.`,
   },
 };
 

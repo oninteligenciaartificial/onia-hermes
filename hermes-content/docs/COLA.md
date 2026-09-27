@@ -77,6 +77,78 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Ahora — plan de features (revisado 2026-08-30, con Gate 1 corrido)
 
+- [ ] 🟠 **El titular de `/empezar` parte su resalte al medio, en las DOS vistas. ARREGLADO EN
+      CÓDIGO el 2026-09-26 por `web-venta` (`e9d19c01`), con el gate que lo deja visto —
+      pero EL LEAD TODAVÍA LO VE PARTIDO: el arreglo no salió de la rama.**
+      - ⚠️ **Corregido el 2026-09-26 19:0x La Paz, auditando este mismo `[x]`.** Estaba marcado
+        hecho y la palabra era «ARREGLADO» a secas. `CLAUDE.md` es explícito: *construido ≠
+        terminado*, y está **prohibido reportar como hecho lo que no está encendido en
+        producción**. Medido HOY contra el sitio servido, tres veces y por caminos distintos:
+        `web-factory/apps/onia-platform/scripts/mirar-primera-pantalla.mjs` sale **ROJO**
+        nombrando "de verdad" en escritorio y teléfono;
+        `web-factory/apps/onia-platform/src/app/(sitio)/sitio.module.css` en **origin/main**
+        muestra `.display em` **sin** el `white-space: nowrap`; y la hoja de estilos que sirve
+        el dominio tiene **cero** `white-space:nowrap`. La captura mirada,
+        en /tmp/venta-1ra/empezar-escritorio.png — se lee "y usalo de" / "verdad 14 días."
+      - **Qué falta, y de quién es:** nada de código. `e9d19c01` está en la rama del carril
+        (**origin/claude/web-venta**) y **no** en **origin/main** (`git branch -r --contains`
+        lista una sola rama). Merge a main lo hace el integrador (`onia-cola`), no este carril.
+        Latencia normal al momento de medir: el arreglo tenía ~1 h 40 min. **Se vuelve a marcar
+        `[x]` recién cuando el ROJO de arriba dé verde contra `https://onia.com.bo`**, no antes.
+      - **Lo que veía el lead** en la última pantalla antes de registrarse: `Creá tu cuenta` /
+        `y usalo de` / `verdad 14 días.` El resalte verde es **"de verdad"** y el salto de línea
+        caía **adentro**: dos pedazos de verde que no forman una frase. Escritorio y teléfono.
+      - **Causa:** `text-wrap: balance` en `.display` reparte el titular por ancho de renglón y
+        no sabe que ese tramo es una frase. Arreglo: `white-space: nowrap` en `.display em`.
+      - **El riesgo opuesto se midió, no se supuso:** el resalte más largo del sitio es
+        `un solo dato` (`/servicios/webs`) y a **320px ocupa 264px de 320, un renglón, scroll
+        lateral 0**; las 24 pantallas × 5 vistas dan **0 desbordes y 0 recortados** contra el
+        build con el arreglo.
+      - **Por qué ningún gate lo veía** — la mitad que importa: el markup es **idéntico** se
+        parta o no (lo decide el ancho del renglón en el navegador), así que no lo alcanza un
+        test de fuente ni un `grep` del HTML; y la página responde **200 con todo pintado**, así
+        que no lo alcanzaba el resto de `mirar-primera-pantalla`. **Lo vio el ojo leyendo la
+        captura.** Ahora lo mide el gate: `getClientRects()` da una caja por renglón ocupado, y
+        más de una sobre el resalte es rojo. Salió **ROJO por el motivo correcto** antes del
+        arreglo (nombrando `"de verdad"` en las dos vistas, con la portada en `1reng`).
+      - ⚠️ **Trampa de instrumento medida de paso:** `mirar-venta.mjs` toma la base con
+        `--base=<url>`, **no posicional**, y `mirar-primera-pantalla.mjs` sí la toma posicional.
+        Pasarle la URL suelta al primero **no da error**: ignora el argumento y mide
+        **producción**, o sea un verde sobre el sistema equivocado. Casi lo tomo por bueno.
+      - Evidencia: `/tmp/wv-fix/empezar-{escritorio,telefono}.png` y `/tmp/webs-320.png`,
+        abiertas y **miradas**.
+
+- [ ] 🔴 **`deploy:vivo` dice «DEPLOY AL DIA — sin nada varado» con un arreglo MÍO, visible para
+      el cliente, sin salir de la rama. Es el gate del carril fallando EN VERDE sobre la única
+      pregunta que este carril tiene que contestar: ¿mis arreglos llegan al lead?**
+      - **El sujeto:** `web-factory/apps/onia-platform/scripts/deploy-vivo.mjs`.
+      - **Medido el 2026-09-26 19:0x La Paz**, en la misma vuelta y con una sola corrida de cada
+        cosa: `npm run deploy:vivo` imprime *«DEPLOY AL DIA — onia.com.bo sirve el build del
+        2026-09-26 15:52 UTC, sin nada varado»* mientras `git log` de main contra la rama del
+        carril devuelve **4 commits**, y uno de ellos (`e9d19c01`) es el `white-space: nowrap` que
+        endereza el titular de `/empezar`. O sea: el instrumento dijo «al día» y el lead seguía
+        viendo la promesa partida en dos.
+      - **Causa (no supuesta, leída):** el script compara `origin/main` ↔ el build que sirve el
+        dominio. Ese eje es correcto para «¿producción corre lo que main dice?», pero el trabajo
+        de un carril pasa por **tres** estaciones —rama → `main` → producción— y el gate sólo
+        mira la segunda. Todo lo que está entre la rama y `main` es invisible **y se reporta como
+        cero varadas**, que es la forma más cara de equivocarse: no omite, AFIRMA.
+      - **Por qué importa más que el titular:** el titular ya está arreglado y sólo espera un
+        merge. Esto, en cambio, es lo que hizo que el `[x]` de arriba se escribiera como
+        «ARREGLADO» sin mentir a propósito — el carril preguntó «¿quedó algo varado?», le
+        dijeron que no, y le creyó.
+      - **Reproducción exacta, 30 segundos:**
+        ```
+        cd web-factory/apps/onia-platform && npm run deploy:vivo     # dice "sin nada varado"
+        git log origin/main..origin/claude/web-venta --oneline        # y hay commits de producto
+        ```
+      - **Arreglo propuesto:** que `deploy-vivo.mjs` cuente también los commits de la zona que
+        están en la rama del carril y NO en `origin/main`, y los nombre aparte («esperando
+        merge») de los que ya están en `main` esperando swap. Son dos estados distintos con dos
+        dueños distintos (el integrador / el deploy) y hoy se reportan como uno solo: «al día».
+        Verde sólo si las dos cuentas dan cero. Con `git fetch` antes o `exit 2` (NO MEDIDO),
+        nunca un veredicto sobre refs de disco.
+
 - [x] 🟠 **`mirar:portada` pintaba un ROJO intermitente en `telefono /empezar` por una espera que
       no retenía — ARREGLADO el 2026-09-26 por `web-venta`, con la causa medida y los dos
       recíprocos falsificados.**
@@ -1544,6 +1616,57 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 ---
 
 ## Registro de corridas (2026-09-01 → 2026-09-03) — no rehacer
+
+### Del carril `web-venta` — corrida del 2026-09-26 18:48 La Paz (el precio que viaja HORNEADO en la tarjeta social)
+
+Los cuatro gates del objetivo salieron verdes (0 prohibidos · 0/21 precios fuera de
+fuente · 0/44 CTA rotos · favicon 200) y la cola no tenía pendientes, así que la vuelta
+fue al escalón de auditoría: **mirar lo que ningún gate mira**.
+
+**Lo que nadie había mirado nunca: la `og:image`.** Es lo único que ve quien recibe
+`onia.com.bo` por WhatsApp y nunca abre el link — el canal por el que Sergio Urcullo
+manda el sitio a un lead. Medido: las **24** superficies de venta comparten **una sola
+imagen** (mismo md5 `2aae94e6` en las 24, 200 y 45.656 bytes cada una), y el precio va
+**horneado en píxeles**. Ningún `grep`, ningún barrido de HTML y ninguna captura de
+pantalla ve un número adentro de un PNG.
+
+**El defecto, latente:** la tarjeta componía su «Desde Bs …» con `plan("basico")`
+**tipeado**, y no con `planDeEntrada()`. El propio `lib/pricing.ts` documenta por qué
+esa función existe: *«un `"basico"` tipeado sigue compilando y queda anunciando el plan
+equivocado»* el día que entre un escalón más abajo — que es lo que pasó el 2026-09-12
+cuando la escalera C metió el plan Crece. La cura se aplicó al hero el 2026-09-19 y **no
+viajó a sus gemelos**: el `<head>` de la home, la tarjeta social, `/v1` y `/v1/modulos/dental`
+seguían tipeados. La home derivaba bien el precio de **pantalla** y tipeaba el del
+**snippet**: las dos mitades del mismo `<head>` habrían dicho precios distintos.
+
+**Por qué ningún gate lo veía, y esto es lo que importa:** `precios:vivos` y
+`precios:fuente` miran el RESULTADO servido, y hoy `plan("basico").mensual` ===
+`planDeEntrada().mensual` === 320. Salen verdes — y **seguirían saliendo verdes el día
+que el bug se vuelva visible**, porque el monto viejo seguiría siendo el precio real de
+un plan real. Un gate de resultado no puede ver una premisa que todavía no falló.
+Peor: un test existente (`hero.test.ts`) **exigía el literal** `plan("basico").mensual`
+en dos aserciones, o sea que estaba **defendiendo** el defecto que su propio vecino ya
+había curado.
+
+- [x] Los 7 usos derivan del piso de la escalera — `(sitio)/tarjeta-social.tsx`,
+  `(sitio)/page.tsx` (`DESDE_MES`), `v1/page.tsx` ×3 y `v1/modulos/dental/page.tsx` ×2
+  (incluido el `price` del JSON-LD, que es el que publica Google). La FAQ de dental que
+  dice «el plan Básico (Bs N/mes) … hasta 300 pacientes activos» queda como está: nombra
+  un plan concreto y es verdad de ese plan.
+- [x] Gate nuevo `(sitio)/precio-de-entrada-derivado.test.ts`, **visto en ROJO primero**
+  por el motivo correcto (los 7 sujetos, con archivo y línea). Fija la regla: `plan("<id>")`
+  sólo vale si la frase cita `.nombre`; si saca un monto sin nombrar el plan, lo está
+  usando como «el más barato» y eso se deriva. Borra los comentarios antes de medir —
+  dos archivos explican este mismo bug EN PROSA citando `plan("basico")` textual, y
+  medir sobre el crudo acusa a quien documentó la cura.
+- [x] Las dos aserciones de `hero.test.ts` ahora exigen la PROPIEDAD (derivado del piso)
+  en vez del literal viejo.
+
+**Evidencia de que no rompe nada hoy:** con el build nuevo levantado, la `og:image` que
+produce es **byte por byte** la que sirve producción — mismo md5 `2aae94e6`, y mirada:
+«Desde Bs 320 al mes. 14 días gratis, sin tarjeta.» El arreglo cambia la DERIVACIÓN, no
+el valor. Gates: `typecheck` 0, `build` 0, suite **1612 tests / 117 archivos en verde**.
+
 
 > **Esto NO es cola: es la bitácora de lo ya corrido.** Cada `###` de abajo es una corrida
 > fechada de un carril (`canario-visual`, `web-venta`, `onia-cola`) con lo que midió ese día.

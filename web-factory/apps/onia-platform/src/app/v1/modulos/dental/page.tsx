@@ -3,7 +3,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { PressableCta, Reveal, SplitTextReveal, StaggerGrid, StaggerItem } from "@/motion";
 import { APP_URL, WA_URL_LANDING } from "@/lib/site";
-import { bs, plan, primerPlanCon, PRUEBA } from "@/lib/pricing";
+import { bs, plan, planDeEntrada, primerPlanCon, PRUEBA } from "@/lib/pricing";
 
 const SITE_URL = "https://onia.com.bo";
 const REGISTRO_URL = `${APP_URL}/register`;
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   // 2026-09-17 en `app/v1/page.tsx`): con el id tipeado, esta línea cotizaba
   // Bs 890 por lo que el escalón de Bs 550 ya trae.
   description:
-    `Agenda, ficha del paciente con odontograma, recordatorios automáticos, caja y contabilidad con IVA/IT. Desde Bs ${bs(plan("basico").mensual)}/mes, ${PRUEBA.dias} días gratis. Agentes con IA que recuperan pacientes, desde el plan ${primerPlanCon("agentes")}.`,
+    `Agenda, ficha del paciente con odontograma, recordatorios automáticos, caja y contabilidad con IVA/IT. Desde Bs ${bs(planDeEntrada().mensual)}/mes, ${PRUEBA.dias} días gratis. Agentes con IA que recuperan pacientes, desde el plan ${primerPlanCon("agentes")}.`,
   alternates: { canonical: "/modulos/dental" },
   openGraph: {
     type: "website",
@@ -116,13 +116,16 @@ const JSON_LD = {
       // literales ni captura llega — y del que Google saca lo que publica.
       description: `Software de gestión para clínicas dentales en Bolivia: agenda, odontograma, recordatorios, caja y contabilidad. Agentes con IA desde el plan ${primerPlanCon("agentes")}.`,
       // El monto se LEE de la tabla: acá estaba tipeado "320", dos líneas
-      // debajo de un `plan("basico").mensual` bien leído en la `description`.
+      // debajo de una `description` que ya lo leía. Y desde el 2026-09-26 lo
+      // lee del plan MÁS BARATO derivado, no de un id tipeado: este `price` es
+      // el que Google publica, y el comentario de arriba ya dice que cotiza
+      // «el plan más barato» — que es una POSICIÓN en la escalera, no un id.
       // En el JSON-LD el precio viaja desnudo y con la moneda en otra clave,
       // así que ningún gate lo veía y ninguna captura lo muestra — y es de
       // donde Google saca el precio que publica.
       offers: {
         "@type": "Offer",
-        price: String(plan("basico").mensual),
+        price: String(planDeEntrada().mensual),
         priceCurrency: "BOB",
         category: "Suscripción mensual",
       },
