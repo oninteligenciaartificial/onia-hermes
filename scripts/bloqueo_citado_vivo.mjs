@@ -134,8 +134,100 @@ export const OK_YA_CONTESTADO = /contest[oó]|respondi[oó]|lleg[oó]|ya dio el|
  * `en_vuelo_vencido.mjs`, y este archivo no se puede importar (su CLI y su `--self-check`
  * corren a nivel de modulo). Se re-exportan porque el `--self-check` de abajo los afirma.
  */
-import { NOTA_DE_CORRECCION, cierraFrase, frases } from './lib/frases_de_cola.mjs';
-export { NOTA_DE_CORRECCION, cierraFrase, frases };
+import {
+  NOTA_DE_CORRECCION,
+  cierraFrase,
+  frases,
+  sinHistoria,
+  sinSeccionesCerradas,
+} from './lib/frases_de_cola.mjs';
+export { NOTA_DE_CORRECCION, cierraFrase, frases, sinHistoria, sinSeccionesCerradas };
+
+/**
+ * ─────────────────────────────────────────────────────────────────────────────────────────────
+ * SEGUNDO VEREDICTO: UN ID DE PEDIDO DE DEPLOY COPIADO, DIGA LO QUE DIGA LA FRASE.
+ *
+ * POR QUE NO ALCANZA `LENGUAJE_DE_FRENO`, medido el 2026-09-27: `t_3752e986` —el pedido de deploy
+ * del bot— se archivo y quedo citado en DIEZ renglones de `cola/chatbot.md`, y este gate veia DOS.
+ * Los otros ocho no dicen "espera el ok": dicen *"invalidaria `t_3752e986`"*, *"`t_3752e986` esta
+ * 9.º"*, *"La tarea del pedido es `t_3752e986`"*, *"los 13 archivos de `t_3752e986`"*. Ninguna
+ * redaccion de freno, todas falsas, y una de ellas escrita el dia DESPUES de que esta misma cola
+ * escribiera la regla *"el ID DEL PEDIDO tampoco se copia"*.
+ *
+ * LA POLARIDAD ES AL REVES QUE LA DE `LENGUAJE_DE_FRENO`, Y ESO ES EL ARREGLO. Esa lista blanca
+ * enumera las redacciones que ACUSAN, asi que una redaccion nueva se escapa: falla ABIERTA, y este
+ * archivo ya tiene escrito lo que costo. Aca no se enumera lo acusable: se acusa por el ESTADO del
+ * sujeto —la tarea es un pedido de deploy y esta muerta— y la lista blanca es de ABSOLUCIONES. Una
+ * redaccion nueva que afirme algo presente sobre un id muerto no tiene marca de muerte, asi que
+ * cae acusada: falla CERRADA, que es la unica direccion en la que un gate puede envejecer.
+ *
+ * POR QUE SOLO LOS PEDIDOS DE DEPLOY, y no cualquier id muerto: un pedido caduca POR DISENO —se
+ * rehace cada vez que se le suma un arreglo y al rehacerlo se archiva el viejo—, mientras que una
+ * tarea escrita a mano tiene id estable y prohibir copiarla de gratis hace que la regla se
+ * desobedezca (es el mismo criterio que ya usa `marcadorRotatorio`). Se pregunta por el CUERPO
+ * (`DESPLEGAR:`), que es lo que hace que un `ok` publique, no por el titulo.
+ */
+
+/**
+ * La frase declara ella misma que el id que nombra ya no esta vivo. Absolucion, no acusacion.
+ *
+ * Los cuatro sujetos legitimos, textuales de `cola/chatbot.md` el 2026-09-27: *"`t_94b9955d`
+ * archivado en la misma vuelta"*, *"los ocho ids estaban `archived` o `done`"*, *"esa tarea esta
+ * **`archived`** desde el 2026-09-26"*, *"el pedido se rehizo (van cuatro)"*. Las cuatro son
+ * historia util y ninguna manda a apretar nada.
+ */
+export const DECLARA_MUERTA =
+  /archivad[oa]|`archived`|`done`|ya no existe|se rehizo|se rehace|caduc|dado de baja/i;
+
+/**
+ * Las citas que copian un id de pedido, sin juzgar todavia si esta vivo (eso lo hace el tablero).
+ *
+ * Se mide sobre `sinSeccionesCerradas(sinHistoria(md))`: un item `- [x]` y una seccion `## ✅ …
+ * CERRADO` son historia POR CONSTRUCCION, y ese dato ya esta escrito en la casilla y en el titulo.
+ * Es el mismo criterio que `en_vuelo_vencido.mjs` — el tiempo verbal no esta en las palabras, esta
+ * en el estado del item.
+ */
+export function citasDePedidoCopiado(md) {
+  const citas = [];
+  for (const frase of frases(sinSeccionesCerradas(sinHistoria(md)), ID)) {
+    if (NOTA_DE_CORRECCION.test(frase.texto)) continue;
+    if (DECLARA_MUERTA.test(frase.texto)) continue;
+    if (OK_YA_CONTESTADO.test(frase.texto)) continue;
+    const vistos = new Set();
+    for (const { id, linea } of frase.ocurrencias) {
+      if (vistos.has(`${id}:${linea}`)) continue;
+      vistos.add(`${id}:${linea}`);
+      citas.push({ id, linea, texto: frase.texto.trim() });
+    }
+  }
+  return citas;
+}
+
+/** ¿El cuerpo de la tarea la vuelve un pedido de deploy? Pura: es la linea que ejecuta el `ok`. */
+export function esPedidoDeDeploy(cuerpo) {
+  return /^DESPLEGAR:/m.test(cuerpo ?? '');
+}
+
+/**
+ * Los motivos del segundo veredicto. Pura, como `juzgar()`: solo se acusa al pedido de deploy
+ * MUERTO. Un id vivo, uno que no es pedido, y uno que no se pudo consultar NO son items.
+ */
+export function juzgarPedidosCopiados(resultados) {
+  const motivos = [];
+  for (const r of resultados) {
+    if (r.estado === null || !r.esPedido) continue;
+    if (ESTADOS_VIVOS.has(r.estado)) continue;
+    motivos.push(
+      `${r.archivo}:${r.linea} copia \`${r.id}\`, un PEDIDO DE DEPLOY que esta ${r.estado}, y la ` +
+        `frase no dice que este muerto. Un pedido se rehace cada vez que se le suma un arreglo y ` +
+        `al rehacerlo se archiva el viejo: el id caduca POR DISENO, y \`ok ${r.id}\` sobre una ` +
+        `archivada no publica nada (exit 3) mientras el que lo pidio cree que salio. Remedio: no ` +
+        `nombres el id — deriva el pedido vivo con \`npm run deploy:sin-pedido\` — o, si la linea ` +
+        `es historia, deci que la tarea esta archivada (que es lo que la absuelve)`,
+    );
+  }
+  return motivos;
+}
 
 /**
  * Saca las citas que afirman un freno vigente. Sin red y sin disco: es lo que se prueba en
@@ -263,7 +355,11 @@ function consultar(id) {
     // Una tarea inexistente puede salir por error; su texto igual puede traer el status.
     salida = e?.stdout ?? null;
   }
-  return { estado: estadoDesdeShow(salida), titulo: tituloDesdeShow(salida) };
+  return {
+    estado: estadoDesdeShow(salida),
+    titulo: tituloDesdeShow(salida),
+    esPedido: esPedidoDeDeploy(salida),
+  };
 }
 
 /**
@@ -548,6 +644,96 @@ if (process.argv.includes('--self-check')) {
   const cerosConAlcance = /if \(!resultados\.length\) \{[\s\S]*?console\.log\(ALCANCE_DEL_VERDE\);[\s\S]*?process\.exit\(0\)/.test(fuente);
   afirmar(cerosConAlcance, 'el camino de CERO sujetos tambien lo imprime: es donde cae un deploy que nadie cita');
 
+  /**
+   * EL SEGUNDO VEREDICTO: un id de pedido copiado, diga lo que diga la frase.
+   *
+   * Los sujetos son TEXTUALES de `cola/chatbot.md` el 2026-09-27, con `t_3752e986` ya `archived`
+   * y este gate saliendo `exit 1` por sólo DOS de los diez renglones que la citaban.
+   */
+  const copiada = (md) => citasDePedidoCopiado(md).map((c) => c.id);
+
+  afirmar(
+    copiada('tocarlo lo haria el **14.º** archivo de un pedido que describe 13 e invalidaria **`t_3752e986`**.').length === 1,
+    'REDACCION AJENA AL FRENO: "invalidaria t_X" no dice que nada espere, y es el renglon mas caro',
+  );
+  afirmar(
+    copiada('**`t_3752e986` —el pedido del bot— esta 9.º, asi que no se nombro ni hoy ni ayer.**').length === 1,
+    'y "t_X esta 9.º" tampoco: afirma un presente sobre una tarea muerta',
+  );
+  afirmar(
+    copiada('La tarea del pedido es **`t_3752e986`** (derivada, no copiada; sigue `blocked`).').length === 1,
+    'y decir "derivada, no copiada" mientras se copia el id no absuelve a nadie',
+  );
+
+  // Las ABSOLUCIONES. Son lista blanca a proposito, y por eso el gate falla CERRADO: una
+  // redaccion nueva que afirme algo presente sobre un id muerto no trae marca de muerte.
+  afirmar(
+    copiada('`t_94b9955d` archivado en la misma vuelta (un `ok` sobre archivada ya no ejecuta).').length === 0,
+    'ABSUELVE a la frase que DICE que la tarea esta archivada: es historia util, y un gate que la muerde se apaga',
+  );
+  afirmar(
+    copiada('citaban un pedido por su id (`t_c2fab948`, `t_d246cfa7`) y los ocho estaban `archived` o `done`.').length === 0,
+    'y a la que declara el estado de varios ids de una vez',
+  );
+  afirmar(
+    copiada('El pedido se rehizo (van cuatro) y hoy vive con otro ID: era `t_76cdb5dc`.').length === 0,
+    'y a la que explica que el pedido se rehizo, que es la razon por la que el id caduca',
+  );
+  afirmar(
+    copiada('Sergio Urcullo contesto `ok t_24fa76aa` a las 18:43 UTC y el brazo ejecutor publico el bot.').length === 0,
+    'y al acuse de un ok YA contestado: reusa OK_YA_CONTESTADO, no una copia',
+  );
+
+  // El ESTADO DEL ITEM y del TITULO, no las palabras. Es el mismo criterio que `en_vuelo_vencido`.
+  afirmar(
+    copiada('- [x] CERRADO: el pedido `t_3752e986` listaba 13 archivos en su cuerpo.').length === 0,
+    'un item `- [x]` es historia POR CONSTRUCCION: el tiempo verbal esta en la casilla, no en las palabras',
+  );
+  afirmar(
+    copiada('## ✅ T11 — CERRADO el 2026-09-26\n\nEl pedido `t_94b9955d` listaba en su cuerpo los 5 archivos.').length === 0,
+    'SECCION CERRADA: un titulo `## ✅ … CERRADO` hace por su seccion lo que la casilla hace por un item',
+  );
+  afirmar(
+    copiada('## 🔴 T10 — REABIERTO el 2026-09-27\n\ninvalidaria **`t_3752e986`**, que espera firma.').length === 1,
+    'y `🔴` NO cierra: es la marca de lo REABIERTO, o sea lo mas vivo del archivo',
+  );
+
+  // Y solo los PEDIDOS DE DEPLOY: una tarea escrita a mano tiene id estable y prohibirla de gratis
+  // hace que la regla se desobedezca (mismo criterio que `marcadorRotatorio`).
+  afirmar(esPedidoDeDeploy('DESPLEGAR: bot\n\nContesta "ok"'), 'un cuerpo con DESPLEGAR: es un pedido de deploy');
+  afirmar(!esPedidoDeDeploy('Arreglar el aviso del bot. Ver DESPLEGAR: mas abajo'),
+    'pero no si `DESPLEGAR:` no arranca el renglon: es lo que el brazo ejecutor exige');
+  afirmar(!esPedidoDeDeploy(''), 'y un cuerpo vacio no lo es');
+
+  const unSujeto = [{ id: 't_1', estado: 'archived', esPedido: true, archivo: 'c.md', linea: 7 }];
+  afirmar(juzgarPedidosCopiados(unSujeto).length === 1, 'un pedido muerto copiado es un item');
+  afirmar(juzgarPedidosCopiados(unSujeto)[0].includes('deploy:sin-pedido'),
+    'y el motivo trae el comando que DERIVA el vivo: sin eso el remedio es "adivina"');
+  afirmar(
+    juzgarPedidosCopiados([{ id: 't_1', estado: 'archived', esPedido: false, archivo: 'c.md', linea: 7 }]).length === 0,
+    'una tarea archivada que NO es pedido de deploy no se acusa aca: su id no caduca por diseno',
+  );
+  afirmar(
+    juzgarPedidosCopiados([{ id: 't_1', estado: 'blocked', esPedido: true, archivo: 'c.md', linea: 7 }]).length === 0,
+    'un pedido VIVO citado no es un item',
+  );
+  afirmar(
+    juzgarPedidosCopiados([{ id: 't_1', estado: null, esPedido: true, archivo: 'c.md', linea: 7 }]).length === 0,
+    'y no medir no es estar muerto: sin estado no se acusa',
+  );
+
+  // El camino de CERO citas de freno tambien tiene que llevarse el segundo veredicto: si no, el
+  // `process.exit(0)` de "0 de N ids" lo saltea entero — y ese es el caso que trajo esto.
+  const fuenteCli = readFileSync(new URL(import.meta.url), 'utf8');
+  afirmar(
+    fuenteCli.indexOf('juzgarPedidosCopiados(copiadas)') < fuenteCli.indexOf('if (!resultados.length)'),
+    'el segundo veredicto se calcula ANTES del camino de cero sujetos, o ese exit 0 lo saltea',
+  );
+  afirmar(
+    /if \(motivosCopiados\.length\) process\.exit\(1\)/.test(fuenteCli),
+    'y ese camino sale 1 cuando el segundo veredicto acusa, aunque no haya ni una cita de freno',
+  );
+
   if (!process.exitCode) console.log(`self-check: ok — ${casos} casos`);
   process.exit(process.exitCode || 0);
 }
@@ -559,12 +745,24 @@ if (!rutas.length) {
 }
 
 const resultados = [];
+const copiadas = [];
 let idsTotales = 0;
+// Un id se consulta UNA vez por corrida: `t_3752e986` llego a estar en diez renglones, y cada
+// consulta es un ssh al VPS desde nodo-casa. Memorizar no cambia el veredicto, cambia si el gate
+// entra en la medicion de arranque del carril o si se saltea por lento.
+const cache = new Map();
+const consultarUnaVez = (id) => {
+  if (!cache.has(id)) cache.set(id, consultar(id));
+  return cache.get(id);
+};
 for (const ruta of rutas) {
   const md = await readFile(ruta, 'utf8');
   idsTotales += idsNombrados(md);
   for (const cita of citasDeBloqueo(md)) {
-    resultados.push({ ...cita, archivo: ruta, ...consultar(cita.id) });
+    resultados.push({ ...cita, archivo: ruta, ...consultarUnaVez(cita.id) });
+  }
+  for (const cita of citasDePedidoCopiado(md)) {
+    copiadas.push({ ...cita, archivo: ruta, ...consultarUnaVez(cita.id) });
   }
 }
 
@@ -577,6 +775,17 @@ if (resultados.some((r) => r.estado !== null && !ESTADOS_VIVOS.has(r.estado))) {
     r.sucesora = sucesoraViva(r.titulo, vivas);
   }
 }
+
+// El segundo veredicto se imprime SIEMPRE y ANTES del camino de cero sujetos. Si fuera al final,
+// el `process.exit(0)` de "0 citas de freno" lo saltearia entero — y ese es justo el caso que lo
+// trajo: ocho renglones copiando un pedido archivado que ninguna redaccion de freno nombra.
+const motivosCopiados = juzgarPedidosCopiados(copiadas);
+const pedidosMirados = copiadas.filter((c) => c.esPedido).length;
+console.log(
+  `ids de pedido de deploy copiados: ${motivosCopiados.length} de ${pedidosMirados} cita(s) de ` +
+    `pedido en contexto vivo (${copiadas.length} id(s) mirados en total)`,
+);
+for (const m of motivosCopiados) console.error(`  - ${m}`);
 
 if (!resultados.length) {
   // El denominador va SIEMPRE, y por esto: la version anterior imprimia solo "ninguna linea
@@ -593,6 +802,7 @@ if (!resultados.length) {
         `vencido y este gate calla, leelo a mano antes de creerle al verde.`,
     );
   }
+  if (motivosCopiados.length) process.exit(1);
   console.log(ALCANCE_DEL_VERDE);
   process.exit(0);
 }
@@ -606,9 +816,9 @@ for (const r of resultados) {
 const noMedidos = resultados.filter((r) => r.estado === null);
 const motivos = juzgar(resultados);
 
-if (motivos.length) {
+if (motivos.length || motivosCopiados.length) {
   console.error(`\nBLOQUEO CITADO QUE YA NO EXISTE`);
-  for (const m of motivos) console.error(`  - ${m}`);
+  for (const m of [...motivos, ...motivosCopiados]) console.error(`  - ${m}`);
   console.error(
     '\nUn bloqueo vencido es peor que un fantasma: le presta su motivo falso al de al lado y ' +
       'declara imposible una verificacion que hoy se puede hacer.',
