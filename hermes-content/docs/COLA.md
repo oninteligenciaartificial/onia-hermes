@@ -1765,6 +1765,59 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Registro de corridas (2026-09-01 → 2026-09-03) — no rehacer
 
+### Del carril `web-venta` — corrida del 2026-09-27 04:48 La Paz (la tarjeta decía dos ciclos a la vez)
+
+Los cuatro gates del objetivo salieron verdes (0 prohibidos · 0/18 montos fuera de fuente ·
+**0/25 CTA rotos** · favicon 200), así que la vuelta fue al escalón de auditoría.
+
+**Dos hipótesis propias, probadas y DESCARTADAS antes de anunciarlas** — quedan acá para que
+nadie las vuelva a perseguir:
+
+- *«la home nombra el bot más que el sistema» (38 contra 37)*: **falso, es el instrumento.** El
+  HTML de Next trae el árbol RSC **duplicado**, así que el contador de palabras cuenta cada
+  mención dos veces, y encima suma nav, pie y JSON-LD. La prominencia real está bien (`<title>`
+  «Software de gestión Bolivia», `h1` «Onia es el sistema…»), y la propiedad ya la gatea
+  `(sitio)/hero.test.ts`, que prohíbe `asistente|chatbot|bot|recepcionista` en el hero **y** en el
+  `<head>`. Un conteo de apariciones no mide prominencia — y está roto en las dos direcciones:
+  saturado de ruido estructural, no vería volver al bot al titular.
+- *«`/servicios/webs` está ofrecida con precio pero desindexada»*: **falso.** `robots.ts` la deja
+  fuera del disallow a propósito y lo explica: es un add-on con precio en `ADDONS`, no un enlace
+  de agencia huérfano.
+
+**El defecto real, MIRADO renderizado** (Chromium, clic en «Anual», texto de la tarjeta leído):
+con el interruptor de la portada en anual, la tarjeta del Completo decía las tres cosas juntas —
+`12.900 Bs / año` · `Equivale a Bs 1.075 por mes` · `Bs 10 más al mes que Profesional con el
+add-on aparte`. En anual la cuenta es otra: 8.900 + 3.900 = **12.800** contra 12.900, o sea **Bs
+100 más al año** (Bs 8 por mes). El lead que restaba con los números que la propia tarjeta le
+daba —1.075 contra 742 + 325— obtenía 8 y leía 10: **las dos mitades de una misma tarjeta salían
+de ciclos distintos**, en la pantalla cuyo título es «PRECIOS CLAROS».
+
+**Por qué ningún gate lo veía:** misma familia que `cuentaVsAddon` cerró el 2026-09-19 —el
+resultado de una cuenta entre montos legítimos, que ningún instrumento de montos suma— y **la
+cura cubrió un solo ciclo**. Los tres sumandos anuales salen de la fuente, así que `precios:vivos`
+y `precios:fuente` seguían verdes; `cuenta-vs-addon-no-se-tipea.test.ts` mide `plan.resultado`,
+que es el mensual, o sea la mitad que estaba bien. Y el número ofensor, 10, no es el precio de
+nada: no hay con qué cruzarlo. Es el patrón que este carril ya pagó dos veces — **la cura se
+aplica donde saltó el defecto y no viaja a sus gemelos** (el 19-sep fue el hero contra el `<head>`).
+
+- [x] El ciclo entra al tipo (`CuentaVsAddon.ciclo`) y la unidad de la frase se deriva de él, así
+  que el semanal —que ya existe en `Plan.semanal`— nace obligado a contestar qué dice en vez de
+  heredar el mensual en silencio. `lib/pricing.ts`, `(sitio)/precios-toggle.tsx`.
+- [x] Un número suelto como add-on se sigue leyendo como el mensual y **no** se le deriva un anual
+  con la regla de los 10 meses, aunque el catálogo entero la cumpla: sería una suposición en el
+  camino de la plata. Los 4 llamadores viejos quedaron intactos, sin tocar su gate.
+- [x] Gate nuevo `lib/cuenta-del-ciclo-que-se-muestra.test.ts`, **visto en ROJO primero por los
+  cinco motivos correctos** — incluido el de la SUPERFICIE (*«pinta `plan.resultado`»*), que es el
+  que evita una función correcta que nadie llama.
+
+**Evidencia:** build nuevo levantado y MIRADO — en anual «Bs 100 más al año», en mensual sigue
+«Bs 10 más al mes», cero respuestas ≥400. Captura de la tarjeta leída. `typecheck` 0 · `build` 0 ·
+**1661 tests / 120 archivos en verde**. Commit `9637b772`.
+
+⚠️ **Para quien publique:** el cambio toca `lib/pricing.ts`, que está en `FIRMA_HUMANA`. Medido
+con el criterio del propio freno (números del código, comentarios afuera): **70 antes, 70 después,
+ninguno nuevo ni perdido** — no cambia ningún monto, así que no debería detener la landing.
+
 ### Del carril `web-venta` — corrida del 2026-09-26 18:48 La Paz (el precio que viaja HORNEADO en la tarjeta social)
 
 Los cuatro gates del objetivo salieron verdes (0 prohibidos · 0/21 precios fuera de
