@@ -12,6 +12,55 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-27 05:xx La Paz (vuelta HEAD 7cf4566e) — dos vueltas anteriores murieron sin limpiar; limpieza + Servicios profesionales RE-VERIFICADO: el fix del paso 6 ya está en producción, 9/9
+
+Chequeo de arranque: `ONIA_ALTA_AUTOMATICA=abierta`. Tablero sin tareas `ready` sin reclamar en
+`recorrido-cliente`.
+
+**Antes de correr nada, encontré basura de producción sin limpiar.** `t_419b2849` (perdón,
+`t_419b2949`) del hallazgo anterior tenía un comentario diciendo que el fix de las etiquetas
+(`b68c9e52`) ya estaba en `master` y pedía re-mirar Servicios profesionales con una cuenta real
+en cuanto existiera una. Antes de crear esa cuenta miré la base y encontré **dos organizaciones
+`zz-qa-2026-09-27-0309-negocio` y `zz-qa-2026-09-27-0409-negocio`** (con sus 2 perfiles y 2
+usuarios de `auth.users` cada una) que ya estaban ahí: dos vueltas de este mismo loop —
+disparadas por el cron horario a las 03:09 y 04:09 UTC— crearon la cuenta y **murieron antes de
+llegar a `limpiarProduccion()`** (0 filas de `appointments`/`patients`, o sea que ni siquiera
+llegaron muy lejos). Ninguna dejó línea en este archivo. Filas impresas antes de borrar (salida
+completa de `--solo-limpiar`, quedó en el log de esta vuelta):
+
+    organizations cmuj8qadv005l01n0kyqxgyc8 zz-qa-2026-09-27-0309-negocio
+    organizations cmujavgb4006901n06pixsj37 zz-qa-2026-09-27-0409-negocio
+    auth.users ba882afb-53af-4268-a55d-06928bea6892 zz-qa-2026-09-27-0309@onia.com.bo
+    auth.users c7790148-b9b0-4619-9806-66da1e6d0037 zz-qa-2026-09-27-0409@onia.com.bo
+
+Barridas con `node scripts/recorrido_cliente.mjs --solo-limpiar` (la póliza que ya existe para
+exactamente este caso): `restantes: 0`.
+
+**Con la base limpia, corrí lo que quedaba pendiente**: `RECORRIDO_RUBRO='Servicios
+profesionales' node scripts/recorrido_cliente.mjs --escribir` (cuenta
+`zz-qa-2026-09-27-0512@onia.com.bo`). **9/9, `completo: true`, `agujeros: []`.** El paso 6
+(`/patients/new`) que el 27-sep a las 02:xx parecía "sin ningún campo de texto" ahora carga
+`zz-qa-2026-09-27-0512-paciente` sin problema — confirma en vivo que `b68c9e52` (etiquetas
+asociadas, no campos nuevos: el defecto real era accesibilidad) ya está sirviendo en producción.
+Paso 7 agenda la cita con ese paciente (201, `cmujd89c0007601n0sluijf5r`) y la ve en
+`/appointments`. Frenado en `/comercio/caja` sin pagar.
+
+Limpieza verificada al cerrar: `organizations`/`appointments` con `zz-qa-%` = 0.
+
+**Lección que le sirve a otro carril** (va a `onia-aprender.sh`): una vuelta de este loop que
+muere por timeout entre crear la cuenta y `limpiarProduccion()` deja basura silenciosa en
+producción — sin log, sin aviso. `--solo-limpiar` es la única red, pero nadie la corre sola: hay
+que ir a buscarla mirando la base, no confiar en que "si no hay línea en el archivo, no hay
+basura".
+
+RAZÓN: N/A — avanzó (limpieza de basura de dos vueltas caídas + hallazgo anterior confirmado
+cerrado en producción, con reproducción).
+LECCIÓN: dos vueltas seguidas del cron pueden morir por timeout sin dejar rastro escrito;
+agregar un chequeo de basura `zz-qa-` AL ARRANCAR (antes del recorrido, no solo al cerrar) evita
+que se acumule sin que nadie lo note.
+
+---
+
 ## 2026-09-27 02:09-02:17 La Paz (vuelta HEAD 7b578eee) — rotación de rubro: Servicios profesionales — HALLAZGO REAL, roto en paso 6
 
 Chequeo de arranque: `ONIA_ALTA_AUTOMATICA=abierta`. Tablero sin tareas `ready` sin reclamar en
