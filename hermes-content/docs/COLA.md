@@ -89,13 +89,13 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
         barre 24 pantallas pero lee el **HTML servido**: ese estado no lo miraba nadie.
       - **Lo que de verdad estaba sin red: el derivado.** El toggle pinta "Equivale a Bs 267 por
         mes", que **no está declarado en ninguna fuente — se calcula**. Nadie lo escribe mal: se
-        calcula mal. Con `anual/10` en vez de `anual/12` el Básico se ofrece a "Bs 320 por mes"
+        calcula mal. Con una division por 10 en vez de por 12, el Básico se ofrece a "Bs 320 por mes"
         pagando el año (el descuento desaparece de la pantalla) y las 24 pantallas siguen verdes,
         porque el número ofensor no está en el HTML que ellas leen.
       - **Producción está SANA:** 267 / 458 / 742 / 1.075 son los doceavos exactos de 3.200 /
         5.500 / 8.900 / 12.900. Esto no arregla un defecto vivo: le pone **rojo posible** al
         segundo turno. Captura mirada: `/tmp/wv-tras-el-clic/anual.png`.
-      - **Visto en ROJO antes que en verde:** mutado `anual/12` → `anual/10`, el gate acusa
+      - **Visto en ROJO antes que en verde:** mutado el divisor de 12 a 10, el gate acusa
         `expected 320 to be 267`; revertido, verde. Un gate que sólo sabe decir "verde" es
         indistinguible de uno que no mide.
       - ⚠️ **Dos correcciones las encontró la corrida VIVA, no el escritorio** — y las dos
