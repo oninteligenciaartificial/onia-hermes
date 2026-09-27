@@ -57,7 +57,8 @@
 >    la PC de casa como segunda copia.
 > 3. Probar «Conectar mi WhatsApp» en la cuenta Clínica Sergio con su número nuevo, **nunca** el del bot.
 > 4. SIAT: entrar al portal para ver el marcador y pedir la Fase 2 antes del 04/11. Leslie: certificado
->    de producción (Bs 70).
+>    de producción (Bs 70). **Sergio Urcullo le pasa a Codex el estado actual de la Fase 1** (27-sep):
+>    partir de ese dato, no del 24,8 % viejo de la memoria.
 > 5. Decidir: rehacer la web con estructura corta (research) y sacar «homologación en trámite» de la FAQ.
 > 6. Factura de los primeros pagos: el sistema no puede emitir factura electrónica hasta que el SIN lo
 >    autorice (Fase 2), y Sergio pidió «nada manual».
