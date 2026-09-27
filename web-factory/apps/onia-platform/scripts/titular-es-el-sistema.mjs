@@ -61,6 +61,7 @@
  */
 import { normalizar, textoQueLeeElLead } from "./obra-viva.mjs";
 import { superficiesDeVenta } from "./rutas-de-venta.mjs";
+import { traer } from "./red-que-parpadea.mjs";
 
 export const LIMPIO = 0;
 export const DEFECTO_NUESTRO = 1;
@@ -139,7 +140,9 @@ export function recuento(textoNormalizado) {
 async function bajar(ruta) {
   const url = `${BASE}${ruta}`;
   try {
-    const r = await fetch(url, {
+    // `traer` y no `fetch`: 24 pantallas por barrido son 24 chances de parpadeo, y este es
+    // el gate que hace cumplir "la home vende el SISTEMA, no el bot".
+    const r = await traer(url, {
       redirect: "follow",
       signal: AbortSignal.timeout(30_000),
       headers: { "user-agent": "onia-titular/1.0" },

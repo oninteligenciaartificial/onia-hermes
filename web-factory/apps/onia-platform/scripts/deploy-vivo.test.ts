@@ -18,7 +18,9 @@ import {
   ZONA,
   baseDelBuild,
   commitsDesde,
+  commitsSinMergear,
   diagnosticar,
+  ramaDelCarril,
   evaluarStaged,
   llegaAlCliente,
   BUILD_ID_VIVO,
@@ -60,6 +62,7 @@ describe("deploy-vivo: el diagnóstico", () => {
     const r = diagnosticar({
       buildIdMtimeMs: ms(1_000),
       commits: [commit(seg(2_000), "fix: el CTA no creaba la cuenta")],
+      sinMergear: [],
       homeStatus: 200,
     });
 
@@ -77,7 +80,7 @@ describe("deploy-vivo: el diagnóstico", () => {
    * verde— sigue viva; el corte por fecha se prueba ahora donde vive.
    */
   it("da VERDE cuando no hay ni un commit que el build no traiga", () => {
-    const r = diagnosticar({ buildIdMtimeMs: ms(3_000), commits: [], homeStatus: 200 });
+    const r = diagnosticar({ buildIdMtimeMs: ms(3_000), commits: [], sinMergear: [], homeStatus: 200 });
 
     expect(r.codigo).toBe(AL_DIA);
     expect(r.varados).toHaveLength(0);
@@ -93,6 +96,7 @@ describe("deploy-vivo: el diagnóstico", () => {
       const r = diagnosticar({
         buildIdMtimeMs: null,
         commits: [],
+        sinMergear: [],
         homeStatus: 200,
       });
       expect(r.codigo).toBe(NO_PUDE_MEDIR);
@@ -103,6 +107,7 @@ describe("deploy-vivo: el diagnóstico", () => {
       const r = diagnosticar({
         buildIdMtimeMs: ms(1_000),
         commits: null,
+        sinMergear: [],
         homeStatus: 200,
       });
       expect(r.codigo).toBe(NO_PUDE_MEDIR);
@@ -112,6 +117,7 @@ describe("deploy-vivo: el diagnóstico", () => {
       const r = diagnosticar({
         buildIdMtimeMs: ms(3_000),
         commits: [commit(seg(1_000))],
+        sinMergear: [],
         homeStatus: 502,
       });
       expect(r.codigo).toBe(NO_PUDE_MEDIR);
@@ -125,11 +131,11 @@ describe("deploy-vivo: el diagnóstico", () => {
      */
     it("distingue «cero varados» de «no pude preguntar»", () => {
       expect(
-        diagnosticar({ buildIdMtimeMs: ms(9), commits: [], homeStatus: 200 })
+        diagnosticar({ buildIdMtimeMs: ms(9), commits: [], sinMergear: [], homeStatus: 200 })
           .codigo,
       ).toBe(AL_DIA);
       expect(
-        diagnosticar({ buildIdMtimeMs: ms(9), commits: null, homeStatus: 200 })
+        diagnosticar({ buildIdMtimeMs: ms(9), commits: null, sinMergear: [], homeStatus: 200 })
           .codigo,
       ).toBe(NO_PUDE_MEDIR);
     });
@@ -147,7 +153,7 @@ describe("deploy-vivo: el diagnóstico", () => {
     // «el empate: un commit del mismo segundo que el build ya está adentro».
     // Acá queda la mitad que sigue siendo de `diagnosticar`: si el conjunto
     // llegó vacío, el veredicto es verde y no otra cosa.
-    const r = diagnosticar({ buildIdMtimeMs: ms(5_000), commits: [], homeStatus: 200 });
+    const r = diagnosticar({ buildIdMtimeMs: ms(5_000), commits: [], sinMergear: [], homeStatus: 200 });
     expect(r.codigo).toBe(AL_DIA);
   });
 });
@@ -435,6 +441,7 @@ describe("deploy-vivo: qué archivos llegan de verdad al cliente", () => {
           ],
         },
       ],
+      sinMergear: [],
       homeStatus: 200,
     });
 
@@ -453,6 +460,7 @@ describe("deploy-vivo: qué archivos llegan de verdad al cliente", () => {
           archivos: [enZona("src/app/(sitio)/page.tsx")],
         },
       ],
+      sinMergear: [],
       homeStatus: 200,
     });
 
@@ -480,6 +488,7 @@ describe("deploy-vivo: qué archivos llegan de verdad al cliente", () => {
           ],
         },
       ],
+      sinMergear: [],
       homeStatus: 200,
     });
 
@@ -656,7 +665,7 @@ describe("deploy-vivo: mide el sitio vivo aunque no corra en el VPS", () => {
     const r = fechaBuildVivo(BUILD_ID_VIVO, { local: () => null, remoto: () => null });
 
     expect(r).toBeNull();
-    expect(diagnosticar({ buildIdMtimeMs: r, commits: [], homeStatus: 200 }).codigo).toBe(
+    expect(diagnosticar({ buildIdMtimeMs: r, commits: [], sinMergear: [], homeStatus: 200 }).codigo).toBe(
       NO_PUDE_MEDIR,
     );
   });
@@ -940,5 +949,225 @@ describe("lo que el publicador automatico ya resuelve no se le pide a Sergio Urc
     expect(ultimaCorridaDeLanding(null)).toBeNull();
     expect(ultimaCorridaDeLanding("")).toBeNull();
     expect(ultimaCorridaDeLanding("== 2026-09-24 23:50 La Paz ==\n  bot: al dia\n")).toBeNull();
+  });
+});
+
+/**
+ * LA TERCERA ESTACIÓN — el trabajo del carril pasa por rama → `main` → producción,
+ * y este gate sólo miraba el tramo del medio.
+ *
+ * Medido el 2026-09-26 19:0x La Paz: `npm run deploy:vivo` imprimió «DEPLOY AL DIA
+ * — sin nada varado» mientras `git log origin/main..origin/claude/web-venta`
+ * devolvía CUATRO commits, y uno de ellos (`e9d19c01`) era el `white-space:
+ * nowrap` que endereza el titular de `/empezar`. El lead seguía leyendo la
+ * promesa partida en dos («y usalo de» / «verdad 14 días.») y el instrumento del
+ * carril firmaba que no faltaba nada.
+ *
+ * Es la forma más cara de equivocarse: no OMITE, AFIRMA. El `[x]` de ese ítem se
+ * escribió como «ARREGLADO» sin mentir a propósito — el carril preguntó «¿quedó
+ * algo varado?», le dijeron que no, y le creyó.
+ *
+ * Las dos cuentas se reportan SEPARADAS porque tienen dueños distintos: lo que
+ * está en `main` espera el swap (deploy, decide Sergio Urcullo) y lo que está en
+ * la rama espera el merge (el integrador, `onia-cola`). Mezclarlas repetiría el
+ * defecto que ya se curó el 2026-09-06 en la otra dirección: inflar el pedido de
+ * deploy que él tiene que leer y contestar.
+ */
+describe("deploy-vivo: lo que está en la rama y main todavía no tiene", () => {
+  const ms = (s: number) => s * 1000;
+  const pantalla = (ct: number, subject: string) => ({
+    sha: `sha${ct}`,
+    ct,
+    subject,
+    archivos: [`${ZONA}/src/app/(sitio)/page.tsx`],
+  });
+
+  it("NO dice «al día» con un arreglo del carril que main todavía no tiene", () => {
+    const r = diagnosticar({
+      buildIdMtimeMs: ms(1_000),
+      commits: [],
+      sinMergear: [pantalla(2_000, "fix: el titular de /empezar parte su resalte")],
+      homeStatus: 200,
+    });
+
+    expect(r.codigo, "el gate firmó «al día» con trabajo sin mergear").not.toBe(AL_DIA);
+    expect(r.sinMergear).toHaveLength(1);
+    expect(r.sinMergear[0].subject).toContain("titular");
+  });
+
+  /**
+   * La mitad que protege a Sergio Urcullo: un commit que ni siquiera llegó a
+   * `main` no se puede publicar, así que no puede entrar en el pedido de deploy.
+   * Si entrara, el `ok` publicaría menos de lo que la tarea dice — y el pedido
+   * congelado sobre-describe lo que el `ok` publica, que es la trampa que este
+   * repo ya midió.
+   */
+  it("lo que espera merge NO entra en la lista que arma el pedido de deploy", () => {
+    const r = diagnosticar({
+      buildIdMtimeMs: ms(1_000),
+      commits: [],
+      sinMergear: [pantalla(2_000, "fix: algo de la rama")],
+      homeStatus: 200,
+    });
+
+    expect(r.varados, "un commit sin mergear se coló en el pedido de deploy").toHaveLength(0);
+  });
+
+  it("cuenta las dos estaciones por separado cuando hay trabajo en las dos", () => {
+    const r = diagnosticar({
+      buildIdMtimeMs: ms(1_000),
+      commits: [pantalla(2_000, "fix: ya está en main, falta el swap")],
+      sinMergear: [pantalla(3_000, "fix: todavía en la rama")],
+      homeStatus: 200,
+    });
+
+    expect(r.codigo).toBe(ARREGLOS_VARADOS);
+    expect(r.varados).toHaveLength(1);
+    expect(r.sinMergear).toHaveLength(1);
+    expect(r.varados[0].subject).toContain("main");
+    expect(r.sinMergear[0].subject).toContain("rama");
+  });
+
+  /**
+   * El mismo criterio que la otra estación: un commit al instrumento del carril
+   * es trabajo real, pero mergearlo no le cambia la pantalla a nadie. Si contara,
+   * el gate quedaría rojo para siempre —cada vuelta commitea sus propios
+   * gates— y un rojo permanente se lee como «el ambiental de siempre».
+   */
+  it("un commit de la rama que sólo toca herramientas no cuenta como trabajo del lead", () => {
+    const r = diagnosticar({
+      buildIdMtimeMs: ms(1_000),
+      commits: [],
+      sinMergear: [
+        {
+          sha: "solo-gate",
+          ct: 2_000,
+          subject: "test: un caso nuevo",
+          archivos: [`${ZONA}/scripts/deploy-vivo.test.ts`],
+        },
+      ],
+      homeStatus: 200,
+    });
+
+    expect(r.codigo).toBe(AL_DIA);
+    expect(r.sinMergear).toHaveLength(0);
+  });
+
+  /**
+   * No puede fallar en verde, y acá el modo de fallo es sutil: un llamador que
+   * NO mide la tercera estación la deja `undefined`, y tratar la ausencia de
+   * dato como «no hay ninguno» es exactamente cómo este gate firmaba «al día».
+   * `[]` es un dato; `undefined` y `null` son la ausencia de dato.
+   *
+   * El `as` no es azúcar: el tipo del parámetro ya EXIGE la cuenta, así que un
+   * llamador nuevo que la olvide no compila. Este caso prueba la otra mitad —que
+   * en tiempo de ejecución tampoco se rinde en verde—, y para eso tiene que
+   * poder escribir lo que el tipo prohíbe.
+   */
+  it("sin medir la tercera estación NO dice «al día»", () => {
+    for (const sinMergear of [undefined, null] as unknown[]) {
+      const r = diagnosticar({
+        buildIdMtimeMs: ms(1_000),
+        commits: [],
+        sinMergear: sinMergear as never,
+        homeStatus: 200,
+      });
+      expect(r.codigo, `con sinMergear=${String(sinMergear)} el gate se rindió en verde`).toBe(
+        NO_PUDE_MEDIR,
+      );
+    }
+  });
+});
+
+/**
+ * La medición de la tercera estación contra git de verdad, con su propio repo
+ * sembrado: el rango es `origin/main..<rama>` y la zona es la misma.
+ */
+describe("deploy-vivo: commitsSinMergear mide la rama contra main", () => {
+  const ZONA_REL = `${ZONA}/src/app/(sitio)`;
+
+  function conRepoSembrado(fn: (cwd: string) => void) {
+    const raiz = mkdtempSync(join(tmpdir(), "deploy-vivo-rama-"));
+    const git = (args: string[]) => {
+      const r = spawnSync("git", args, { cwd: raiz, encoding: "utf8" });
+      if (r.status !== 0) {
+        throw new Error(`no pude sembrar el repo (git ${args.join(" ")}): ${r.stderr}`);
+      }
+      return r.stdout.trim();
+    };
+    const escribir = (rel: string, texto: string) => {
+      mkdirSync(dirname(join(raiz, rel)), { recursive: true });
+      writeFileSync(join(raiz, rel), texto);
+    };
+
+    try {
+      git(["init", "--quiet", "--initial-branch=main"]);
+      git(["config", "user.email", "gate@onia.test"]);
+      git(["config", "user.name", "gate"]);
+      git(["config", "commit.gpgsign", "false"]);
+
+      escribir(`${ZONA_REL}/base.tsx`, "export const base = 1;\n");
+      git(["add", "-A"]);
+      git(["commit", "--quiet", "-m", "base"]);
+
+      git(["checkout", "--quiet", "-b", "carril"]);
+      escribir(`${ZONA_REL}/page.tsx`, "export const titular = 1;\n");
+      git(["add", "-A"]);
+      git(["commit", "--quiet", "-m", "fix(venta): el titular de /empezar"]);
+      // Fuera de la zona: el carril no lo publica y no debe contarlo. El
+      // subárbol se nombra como `README.md` de la raíz y no como una carpeta
+      // real del monorepo, porque `imports-que-viajan-al-stage` vigila —con
+      // razón— que ningún archivo de esta app nombre un subárbol que no viaja
+      // al stage de la landing, y no puede distinguir un literal de un repo
+      // sembrado de una ruta que el publicador va a resolver de verdad.
+      escribir("README.md", "# fuera de la zona\n");
+      git(["add", "-A"]);
+      git(["commit", "--quiet", "-m", "docs: algo fuera de la zona"]);
+
+      fn(raiz);
+    } finally {
+      rmSync(raiz, { recursive: true, force: true });
+    }
+  }
+
+  it("nombra el commit de la zona que la rama tiene y main no", () => {
+    conRepoSembrado((cwd) => {
+      const r = commitsSinMergear(ZONA, { cwd, ref: "main", rama: "carril" });
+      expect(r, "git no contestó: el caso no puede concluir").not.toBeNull();
+      expect(r!.map((c) => c.subject)).toContain("fix(venta): el titular de /empezar");
+    });
+  });
+
+  it("no cuenta lo que está fuera de la zona del carril", () => {
+    conRepoSembrado((cwd) => {
+      const r = commitsSinMergear(ZONA, { cwd, ref: "main", rama: "carril" });
+      expect(r!.map((c) => c.subject)).not.toContain("docs: algo fuera de la zona");
+    });
+  });
+
+  it("con la rama al día devuelve [] —un dato— y no null", () => {
+    conRepoSembrado((cwd) => {
+      const r = commitsSinMergear(ZONA, { cwd, ref: "main", rama: "main" });
+      expect(r).toEqual([]);
+    });
+  });
+
+  it("si git falla devuelve null, que es ausencia de dato", () => {
+    conRepoSembrado((cwd) => {
+      expect(commitsSinMergear(ZONA, { cwd, ref: "main", rama: "no-existe-esta-rama" })).toBeNull();
+    });
+  });
+
+  /**
+   * La rama se DERIVA, nunca se tipea: este script lo corren carriles distintos
+   * y un nombre escrito a mano mide la rama de otro (o ninguna) en silencio.
+   * En `HEAD` desprendido no hay rama que medir, y eso es NO MEDIDO, no cero.
+   */
+  it("deriva la rama del árbol donde corre, y en HEAD desprendido devuelve null", () => {
+    conRepoSembrado((cwd) => {
+      expect(ramaDelCarril({ cwd })).toBe("carril");
+      spawnSync("git", ["checkout", "--quiet", "--detach"], { cwd });
+      expect(ramaDelCarril({ cwd })).toBeNull();
+    });
   });
 });

@@ -64,6 +64,11 @@ const EXENTOS: Record<string, string> = {
     "y lo cubren enlaces-vivos.test.ts y precios-vivos.test.ts. Hasta el 2026-09-24 tuvo alias " +
     "(`rutas:venta`) y era el unico de esta familia que lo tenia: correrlo imprimia NADA y salia 0, " +
     "un verde mudo en la lista de gates del carril de venta. Un alias suyo no mide — tranquiliza.",
+  "red-que-parpadea.mjs":
+    "modulo puro sin medicion propia: exporta `traer` y lo importan los cinco medidores que le " +
+    "piden a produccion (obra-viva, titular-es-el-sistema, rubros-vivos, recursos-vivos, " +
+    "verificar-guia-facturacion), y lo cubre red-que-parpadea.test.ts con un fetch de mentira. " +
+    "Un alias suyo no mediria nada: correrlo solo no pregunta a nadie.",
   "promesa-inclusion.mjs":
     "modulo puro sin medicion propia: lo importa inclusion-chatbot.mjs. Es el ESPEJO byte a byte de " +
     "hermes-content/deploy/vps-ops/bot/promesa-inclusion.mjs, y vive de este lado porque el publicador " +

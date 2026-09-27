@@ -24,17 +24,22 @@
  *   node scripts/recursos-vivos.mjs           mide y compara
  *   node scripts/recursos-vivos.mjs --sin-red  sólo el cruce de texto
  */
-import { setDefaultAutoSelectFamilyAttemptTimeout } from "node:net";
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 /**
- * Node corta cada intento de conexión a los 250 ms por defecto, y en el nodo de
- * casa la ruta IPv6 no llega: `fetch` moría con ETIMEDOUT contra un host vivo,
- * que se lee como "el recurso está caído" — el falso rojo más caro de acá.
+ * `traer` trae las DOS curas de red y por eso se fue de acá el
+ * `setDefaultAutoSelectFamilyAttemptTimeout(2000)` que este archivo tenía suelto:
+ *
+ *  1. La que ya estaba — Node corta cada intento de conexión a los 250 ms por defecto, y en
+ *     el nodo de casa la ruta IPv6 no llega: `fetch` moría con ETIMEDOUT contra un host vivo,
+ *     que se lee como "el recurso está caído" — el falso rojo más caro de acá.
+ *  2. La que faltaba — reintentar el parpadeo. La cura 1 sola no alcanzó: el 2026-09-27
+ *     `rubros:vivos` salió NO PUDE MEDIR por un `fetch failed` sobre un host que contestaba
+ *     200 en 0,93 s.
  */
-setDefaultAutoSelectFamilyAttemptTimeout(2000);
+import { traer } from "./red-que-parpadea.mjs";
 
 const AQUI = dirname(fileURLToPath(import.meta.url));
 const APP = resolve(AQUI, "..");
@@ -184,7 +189,7 @@ if (!SIN_RED) {
     if (!enDisco.has(archivo)) continue;
     const url = `https://onia.com.bo/${CARPETA_DE_RECURSOS}/${archivo}`;
     try {
-      const r = await fetch(url, {
+      const r = await traer(url, {
         redirect: "follow",
         // Sin esto una red lenta cuelga el gate para siempre, que en un loop por
         // cron es peor que un rojo: se come la vuelta entera sin decir nada.

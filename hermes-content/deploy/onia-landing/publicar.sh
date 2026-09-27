@@ -40,13 +40,28 @@ cd "$REPO" || { echo "ERR: no puedo entrar a $REPO"; exit 2; }
 # «no hay nada varado» de «no pude medir», sabe qué archivos viajan al navegador
 # y qué staged aceptaría el swap. Duplicarla es como las dos copias se
 # desincronizan y una publica lo que la otra frena.
+# Las estaciones se le piden al módulo TODAS, y derivadas por él: `diagnosticar()`
+# falla CERRADA, así que una que no se pasa no da un veredicto flojo — da
+# NO_PUDE_MEDIR, y este publicador entonces no publica. El 2026-09-27 faltaba
+# `sinMergear` (la estación que el módulo ganó ese día) y la landing se frenó sola
+# durante una vuelta del cron, con `npm test` en verde. Lo cuida
+# `scripts/publicador-mide-todo.test.mjs`, que lee la firma del módulo: una
+# estación nueva pone rojo acá antes de llegar a producción.
 medir() {
-  git fetch origin --quiet 2>/dev/null || echo "aviso: fetch falló, mido contra el origin/main que tengo" >&2
   node --input-type=module -e '
     const m = await import(process.env.GATE_URL);
+    // El fetch lo hace el módulo, no el shell: antes era un `git fetch || aviso`
+    // que fallaba ABIERTO y dejaba medir contra refs de disco — un `origin/main`
+    // de ayer deja fuera lo que se mergeó hoy y el veredicto sale EN VERDE.
+    if (!m.fetchearOrigin()) { console.log("NO_PUDE_MEDIR\t`git fetch origin` fallo: las refs de disco pueden estar viejas y no mido a ciegas\t"); process.exit(0); }
     const vivo = m.fechaBuildVivo();
     if (typeof vivo !== "number") { console.log("NO_PUDE_MEDIR\tno leo el BUILD_ID vivo\t"); process.exit(0); }
-    const d = m.diagnosticar({ buildIdMtimeMs: vivo, commits: m.commitsDesde(vivo), homeStatus: m.estadoHome() });
+    const d = m.diagnosticar({
+      buildIdMtimeMs: vivo,
+      commits: m.commitsDesde(vivo),
+      sinMergear: m.commitsSinMergear(),
+      homeStatus: m.estadoHome(),
+    });
     if (d.codigo === m.NO_PUDE_MEDIR) { console.log(`NO_PUDE_MEDIR\t${d.motivo}\t`); process.exit(0); }
     if (d.codigo === m.AL_DIA)        { console.log(`AL_DIA\t${d.motivo}\t`); process.exit(0); }
     const staged = m.stagedDisponible();

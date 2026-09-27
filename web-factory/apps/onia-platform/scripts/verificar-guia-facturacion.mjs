@@ -37,14 +37,15 @@
  */
 import { createRequire } from "node:module";
 import { spawn } from "node:child_process";
-import { setDefaultAutoSelectFamilyAttemptTimeout } from "node:net";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-// Node >=20 corta cada intento de conexión a 250 ms y devuelve ETIMEDOUT sobre
-// hosts vivos pero lentos. Sin esto, la sonda declara muerto un sitio que está
-// arrancando y el gate se va a NO MEDIDO por nada.
-setDefaultAutoSelectFamilyAttemptTimeout(2000);
+// `traer` trae las dos curas y por eso se fue de acá el
+// `setDefaultAutoSelectFamilyAttemptTimeout(2000)` suelto: (1) Node >=20 corta cada intento de
+// conexión a 250 ms y devuelve ETIMEDOUT sobre hosts vivos pero lentos, así que la sonda
+// declaraba muerto un sitio que está arrancando; y (2) además reintenta el parpadeo, que es lo
+// que acá más importa — este gate sondea un `next dev` recién levantado.
+import { traer } from "./red-que-parpadea.mjs";
 
 /** Código propio: el gate no pudo preguntar. Ni 0 (verde) ni 1 (la guía falla). */
 export const NO_MEDIDO = 2;
@@ -63,11 +64,18 @@ const noMedido = (motivo) => {
   process.exit(NO_MEDIDO);
 };
 
-/** ¿Contesta la guía en esa base? Una sola pregunta, con tope propio. */
+/**
+ * ¿Contesta la guía en esa base? Una sola pregunta, con tope propio.
+ *
+ * ⚠️ `intentos: 1` a propósito: el reintento acá lo hace el LLAMADOR, que es un `while` con
+ * su propio tope de 150 s y 2 s de espera. Poner tres intentos adentro triplicaría cada
+ * sondeo y el tope de arriba dejaría de medir lo que dice medir. Lo que sí se aprovecha de
+ * `traer` es la cura del `autoSelectFamily`, que es la que hacía falta acá.
+ */
 const contesta = async (ms = 3000) => {
   const corte = AbortSignal.timeout(ms);
   try {
-    return (await fetch(`${BASE}/guia-facturacion`, { signal: corte })).ok;
+    return (await traer(`${BASE}/guia-facturacion`, { signal: corte }, { intentos: 1 })).ok;
   } catch {
     return false;
   }
