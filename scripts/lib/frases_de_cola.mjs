@@ -77,6 +77,46 @@ export function sinHistoria(md) {
 }
 
 /**
+ * Un TITULO que declara su seccion cerrada. Es el hermano de `sinHistoria()` un nivel arriba: lo
+ * mismo que la casilla `- [x]` hace por un item, el `✅` / `CERRADO` del titulo lo hace por una
+ * seccion entera.
+ *
+ * POR QUE HACE FALTA aunque ya exista `sinHistoria()` (medido el 2026-09-27 sobre `cola/chatbot.md`):
+ * los items grandes de esta cola se cierran promoviendolos a `## ✅ T11 — CERRADO el …`, y su prosa
+ * entera pasa a ser narracion en pasado SIN una sola casilla. Ahi vive, por ejemplo, *"El pedido
+ * `t_94b9955d` (creado 02:46 UTC de hoy) listaba en su cuerpo los 5 archivos"* — cierto, fechado, y
+ * sobre una tarea hoy archivada. Un gate que mire el presente y no sepa leer ese titulo acusa
+ * historia fechada, y un gate que acusa historia se apaga.
+ *
+ * `🔴` NO cierra: es la marca de lo REABIERTO (`## 🔴 T10 — REABIERTO el …`), o sea lo mas vivo del
+ * archivo. Se pregunta por el marcador, no por el numero del item.
+ */
+const TITULO_CERRADO = /^#{1,6} .*(?:✅|\bCERRAD[OA]\b)/;
+
+/**
+ * Devuelve el markdown con las SECCIONES cerradas blanqueadas, igual que `sinHistoria()` hace con
+ * los items: se blanquea, no se recorta, para que el numero de renglon siga siendo el del archivo.
+ *
+ * Una seccion cerrada va desde su titulo hasta el proximo titulo de nivel igual o superior. Un
+ * subtitulo mas profundo NO la reabre — sigue contando lo mismo.
+ */
+export function sinSeccionesCerradas(md) {
+  let nivelCerrado = 0;
+  return md
+    .split(/\r?\n/)
+    .map((linea) => {
+      const m = /^(#{1,6}) /.exec(linea);
+      if (m) {
+        const nivel = m[1].length;
+        if (nivelCerrado && nivel <= nivelCerrado) nivelCerrado = 0;
+        if (!nivelCerrado && TITULO_CERRADO.test(linea)) nivelCerrado = nivel;
+      }
+      return nivelCerrado ? '' : linea;
+    })
+    .join('\n');
+}
+
+/**
  * ¿Este renglon CIERRA la frase? Se miran los adornos de markdown del final: `t_76cdb5dc`**
  * no cierra nada, y `(tarea `t_X`, depende de Sergio Urcullo).` si.
  */

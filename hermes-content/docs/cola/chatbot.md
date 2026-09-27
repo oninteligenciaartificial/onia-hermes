@@ -294,9 +294,20 @@ una lista de frases, y se imprimen **todas** con su conteo: una rama nueva no la
 ⚠️ **Lo que FALTA es del emisor y está BLOQUEADO — derivado del guion, no del recuento.** Que esas
 ramas no escriban en el camino caliente se arregla en **`webhook-server.mjs`**, que cae en `*.mjs`
 de la lista blanca de `deploy-bot.sh` (`npm run test:toca-el-pedido` la deriva sola), así que
-tocarlo lo haría el **14.º** archivo de un pedido que describe 13 e invalidaría **`t_3752e986`**
-—el mismo `ok` que esperan los otros dos ítems del carril (`:9576` y `:9691`)—. Se hace después
-del `ok`, en la misma vuelta que los otros dos, porque los tres tocan el subárbol del bot.
+tocarlo sumaría un archivo más al pedido de deploy del bot e invalidaría su cuerpo —el mismo `ok`
+que esperan los otros dos ítems del carril (`:9576` y `:9691`)—. Se hace después del `ok`, en la
+misma vuelta que los otros dos, porque los tres tocan el subárbol del bot.
+
+🔴 **El ID del pedido no se nombra acá, y no es prolijidad: se midió.** El 2026-09-27 este párrafo
+decía *«el 14.º archivo de un pedido que describe 13 e invalidaría `t_3752e986`»* y las dos mitades
+estaban vencidas el mismo día — el pedido se rehizo (hoy describe **14** archivos, así que uno
+nuevo sería el 15.º) y `t_3752e986` quedó `archived`. Un pedido caduca **por diseño**: se rehace
+cada vez que se le suma un arreglo. **El vivo y su recuento se derivan en un comando**, y lo
+verifica `npm run bloqueo:citado`:
+
+```bash
+npm run deploy:sin-pedido     # nombra el pedido VIVO de cada destino
+```
 
 ✅ **Y mientras tanto la medición del objetivo NO está ciega: `npm run avisos:vivo` lee el archivo
 entero y hoy da 33 avisos · 31 enviados · 2 salteados, circuito sano.** El `tail -80` del chequeo
@@ -1190,7 +1201,8 @@ cierta para el otro, así que el estado se pregunta por separado:
   Urcullo puede verlo. **La hoja de decisiones del parte diario nombra CINCO** (`MAX=5` en
   `scripts/loops/parte-diario.sh:23`) y hoy hay **18** tareas `blocked kind=needs_input`: las otras
   13 salen como *«… y 13 mas esperando en el tablero»*, sin id y sin título, o sea sin forma de
-  contestarlas. **`t_3752e986` —el pedido del bot— está 9.º, así que no se nombró ni hoy ni ayer.**
+  contestarlas. **El pedido del bot estaba 9.º, así que no se nombró ni hoy ni ayer** (su id se
+  deriva con `npm run deploy:sin-pedido`; el que esta línea citaba quedó `archived` horas después).
   El parte sí salió (`OK message_id=6955`, 1.061 bytes): el canal funciona, el renglón no alcanza.
 
   Y no se arregla solo con esperar: el orden es `🔴` en el título y después la posición en la
@@ -1220,8 +1232,8 @@ cierta para el otro, así que el estado se pregunta por separado:
   corrigió a *«✅ DESPLEGADO: Sergio Urcullo firmó y el swap corrió»*, cierto ese momento. **Cinco
   horas después ya era falso al revés**, que es el sentido caro: medido el 2026-09-25 19:50 La Paz,
   `espejo-check.mjs` → 1 (`followup-run.mjs` y `marcas-en-disco.mjs` distintos, dos tests sin
-  viajar) y `bot_vivo_tiene_el_codigo.mjs` → 1 (**3 archivos viejos corriendo**), con el pedido
-  `t_a464b8c0` esperando firma. Y los archivos desfasados son los del aviso de los leads colgados
+  viajar) y `bot_vivo_tiene_el_codigo.mjs` → 1 (**3 archivos viejos corriendo**), con el pedido de
+  ese día (`t_a464b8c0`, hoy `archived`: se rehizo) esperando firma. Y los archivos desfasados son los del aviso de los leads colgados
   — justo *«cada handoff le llega a Sergio Urcullo»*, el objetivo de este carril. Este bloque es el
   que cada vuelta lee ANTES de creerle a un «NO desplegado»: mientras afirmó «desplegado entero»,
   **el bloque que existe para desmentir los ocho `- [x] … NO desplegado` los daba por vivos**.
@@ -1362,6 +1374,68 @@ Las 3 que quedan (3492, 3623, 7674) son del motor leídas a mano pero **no tiene
 mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se derivan con el comando.
 
 ## Ahora
+
+- [x] 🔴 **CERRADO el 2026-09-27 13:4x-15:0x UTC (`scripts/bloqueo_citado_vivo.mjs` +
+      `scripts/lib/frases_de_cola.mjs`, los dos en `scripts/` de `onia-hermes` — **no** en la
+      carpeta del bot, así que no suman un archivo al pedido de deploy ni lo invalidan): esta cola
+      copió el id de un pedido de deploy en DIEZ renglones el día después de escribir la regla que
+      lo prohíbe, y el gate que existe para cazarlo veía DOS.**
+
+      **Medido al arrancar la vuelta, no deducido:** `npm run bloqueo:citado` → **exit 1**, dos
+      renglones (`:1624`, `:1676`) citando `t_3752e986` —`archived`— como el `ok` que falta, con la
+      sucesora viva nombrada. Al derivar el resto a mano aparecieron **ocho más** que el gate no
+      veía, y el recuento que todos ellos usaban para razonar también estaba vencido: decían
+      *«un pedido que describe 13 archivos»* y el pedido vivo describe **14**, así que la cuenta
+      *«tocarlo lo haría el 14.º»* —la que congela tres ítems del carril— daba el número
+      equivocado.
+
+      **Por qué el gate veía dos de diez, que es lo reutilizable.** `LENGUAJE_DE_FRENO` enumera las
+      redacciones que ACUSAN, así que sólo muerde a quien escribe el freno con una de ellas.
+      Los otros ocho renglones no hablaban de esperar nada: decían que el pedido se invalidaría, que
+      estaba noveno en la hoja de decisiones, o simplemente *«la tarea del pedido es tal id»*.
+      Una lista blanca de acusaciones falla **abierta** con la próxima redacción — este mismo
+      archivo ya lo tenía escrito por el caso idéntico del 2026-09-26 —siete renglones citando un
+      pedido ya archivado— y volvió a pasar igual. Las tres redacciones exactas viven en el
+      `--self-check` del gate, que es donde no caducan.
+
+      **El arreglo invierte la polaridad, y eso es todo el arreglo.** El segundo veredicto no
+      pregunta cómo está redactada la frase: pregunta por el **estado del sujeto** —¿la tarea es un
+      pedido de deploy (`DESPLEGAR:` en su cuerpo) y está muerta?— y la lista blanca pasa a ser de
+      **absoluciones** (la frase dice que está `archived`, que el pedido se rehizo, que el `ok` ya
+      se contestó). Una redacción nueva que afirme algo presente sobre un id muerto no trae marca
+      de muerte, así que cae acusada: falla **cerrada**, que es la única dirección en la que un
+      gate envejece sin apagarse.
+
+      **Y el tiempo verbal se lee del ESTADO, no de las palabras** — mismo criterio que
+      `en_vuelo_vencido.mjs`. `sinHistoria()` ya blanqueaba los items `- [x]`; faltaba el nivel de
+      arriba, porque los ítems grandes de esta cola se cierran promoviéndolos a `## ✅ T11 —
+      CERRADO el …` y su prosa entera queda narrando en pasado **sin una sola casilla**. Ahí vive
+      *«El pedido `t_94b9955d` listaba en su cuerpo los 5 archivos»*: cierto, fechado, y sobre una
+      tarea hoy archivada. `sinSeccionesCerradas()` (nueva, en `frases_de_cola.mjs`) blanquea esas
+      secciones; `🔴` **no** cierra, porque es la marca de lo REABIERTO.
+
+      **Sólo los pedidos de deploy, y no cualquier id muerto.** Un pedido caduca **por diseño**: se
+      rehace cada vez que se le suma un arreglo y al rehacerlo se archiva el viejo. Una tarea
+      escrita a mano tiene id estable, y prohibir copiarla de gratis es cómo se desobedece una regla
+      (el mismo criterio que ya usaba `marcadorRotatorio`).
+
+      **Rojo primero, por el motivo correcto, y probado por mutación** (no por símbolo ausente):
+      con el detector devolviendo vacío se ponen rojos los 4 casos de acusación; quitando
+      `sinSeccionesCerradas` se pone rojo exactamente el caso de la sección `## ✅`, y ninguno más.
+      Restaurado con `cp`, verde: **83 casos** en `npm run test:bloqueo-citado` (eran 62).
+
+      ✅ **Medido después:** `npm run bloqueo:citado` → **exit 0**, `0 de 0 citas de pedido en
+      contexto vivo` sobre **20 ids mirados** y `0 de 95 ids nombrados` con lenguaje de freno. Los
+      13 renglones quedaron reescritos: los vivos derivan el pedido con `npm run deploy:sin-pedido`
+      y los fechados dicen el estado de la tarea que nombran. `npm run test:en-vuelo-vencido` sigue
+      en 18 (comparte el módulo y sólo se le agregó un export) y `node scripts/verificar_cola.js`
+      da `cola ok`.
+
+      ⚠️ **Lo que este ítem NO arregla, dicho para que su verde sea legible:** el freno sigue. El
+      pedido de deploy del bot está `blocked` esperando el `ok` de Sergio Urcullo, y con él siguen
+      congelados los tres ítems que tocan el subárbol del bot (`webhook-server.mjs`). Lo que cambió
+      es que ahora el que lo lea llega a la tarea **viva** en vez de a una archivada, donde `ok`
+      sale `exit 3` y no publica nada mientras el que lo pidió cree que salió.
 
 - [x] 🔴 **CERRADO el 2026-09-27 10:43-11:15 UTC (`scripts/veredicto_widget.mjs`, vive en
       `scripts/` de `onia-hermes` — **no** en la carpeta del bot: `npm run test:toca-el-pedido`
@@ -1621,8 +1695,9 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
       contestó el 2.º y el 3.er turno EN PRODUCCIÓN); `log_del_bot_ahogado` **0** (21 eventos
       visibles en la cola de 80, cero ruido en la ventana); campañas **5 de 7** y
       `bot_vivo_tiene_el_codigo` **ROJO con 4 archivos viejos** (`knowledge.onia.json` entre ellos)
-      — las dos siguen esperando el `ok` del pedido de deploy del bot, `t_3752e986`, que está
-      `blocked` y no lo destraba ningún loop.
+      — las dos siguen esperando el `ok` del pedido de deploy del bot, que no lo destraba ningún
+      loop. El id no se copia acá porque el pedido se rehace y el viejo queda `archived`: se deriva
+      con `npm run deploy:sin-pedido`.
 
 - [x] 🔴 **CERRADO el 2026-09-26 16:43-17:25 La Paz (commiteado; NO toca el bot, así que NO
       invalida el pedido de deploy vivo): el publicador del bot copia con globs PLANOS, y nada
@@ -1673,8 +1748,9 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
       pedido de deploy sigue intacto en sus 13 archivos.
 
       **Vive en `scripts/`, a propósito.** El arreglo natural sería el subárbol del bot, pero está
-      congelado hasta el `ok` de `t_3752e986`: cualquier archivo ahí sería el 14.º y el cuerpo que
-      Sergio Urcullo firma dejaría de describir lo que se publica.
+      congelado hasta el `ok` del pedido de deploy del bot (se deriva con
+      `npm run deploy:sin-pedido`): cualquier archivo ahí sumaría uno más y el cuerpo que Sergio
+      Urcullo firma dejaría de describir lo que se publica.
 
       ⚠️ **Queda anotado, no hecho (mismo motivo):** el gate hermano que vive DENTRO de la carpeta,
       `ejecutable-viaja-ejecutable.test.mjs:32`, comparte el punto ciego —
@@ -9823,10 +9899,12 @@ cita: al cerrar una fila hay que barrer quién la nombra, no sólo tacharla.
       `webhook-server.mjs` `:767` y `:770`. Sigue detrás del `ok` del pedido de deploy del bot
       (derivar el ID con el comando de abajo). No toca a nadie más.
 
-      ✅ **Re-derivado el 2026-09-26 21:55 La Paz: el bloqueo SIGUE VIVO y es real.**
-      `publicar.sh --dry-run` cuenta **13** archivos y `webhook-server.mjs` no es ninguno de
-      ellos, así que tocarlo lo haría el 14.º. La tarea del pedido es **`t_3752e986`** (derivada,
-      no copiada; sigue `blocked`). No se re-mide otra vez hasta que el tablero la devuelva a
+      ✅ **Re-derivado el 2026-09-27: el bloqueo SIGUE VIVO y es real.** `publicar.sh --dry-run`
+      cuenta **14** archivos y `webhook-server.mjs` no es ninguno de ellos, así que tocarlo sumaría
+      uno más. **La tarea del pedido no se copia acá** —el 2026-09-26 esta línea decía
+      «`t_3752e986` (derivada, no copiada; sigue `blocked`)» y al día siguiente esa tarea estaba
+      `archived`, porque el pedido se rehizo—: se deriva con `npm run deploy:sin-pedido`, que
+      además dice si el freno sigue. No se re-mide otra vez hasta que el tablero lo devuelva a
       `ready`.
 
       🔴 **Y auditando este mismo circuito apareció un falso verde ESTRUCTURAL en el gate de al
@@ -9919,8 +9997,9 @@ cita: al cerrar una fila hay que barrer quién la nombra, no sólo tacharla.
 
       `espejo-check.mjs` está en la **raíz** de ese subárbol y cae en `*.mjs`, así que el
       publicador lo copia (además ya existe en `/opt/onia/bot`, o sea que saldría `CAMBIA`).
-      Editarlo dejaría el cuerpo del pedido **`t_3752e986`** describiendo 13 archivos sobre 14, y
-      por el método vigente eso obliga a rehacerlo y archivar el viejo — van cuatro. **Así que
+      Editarlo dejaría el cuerpo del pedido de deploy del bot describiendo un archivo menos de los
+      que publica (hoy son **14**; el id se deriva con `npm run deploy:sin-pedido`, nunca se copia),
+      y por el método vigente eso obliga a rehacerlo y archivar el viejo. **Así que
       este ítem espera el mismo `ok` que el de las líneas `[aviso]`.** El otro archivo del par,
       `scripts/deploy_sin_pedido.mjs`, sí queda afuera (vive en `scripts/` de `onia-hermes`), pero
       el ítem dice «van los dos o ninguno», así que no se parte.
@@ -10191,7 +10270,8 @@ demo no queda muda del lado de Sergio Urcullo.
 **Y el bloqueo está VIGENTE, no vencido** — medido en el proceso que corre, no en el host:
 `docker exec onia-center sh -c 'grep -c slotsElegibles /tmp/onia-bot/config.mjs;
 grep -c slotsElegibles /tmp/onia-bot/run-turn.mjs'` → **0 y 0**. El bot vivo todavía no
-tiene el arreglo, y `t_dcdc1097` sigue `blocked`.
+tiene el arreglo, y el pedido de ese día (`t_dcdc1097`, hoy `archived`: se rehizo) seguía
+`blocked`. El pedido vivo se deriva con `npm run deploy:sin-pedido`.
 
 ⚠️ **Lo que este ítem afirma de más:** *«0 con `calendar_event_id`»* no prueba este bug —
 Cal.com no existe en el VPS **por decisión** (`t_b18ca430`), así que esa columna seguiría
@@ -10225,7 +10305,7 @@ muerta para concluir que el deploy no está pedido. El comando, que no caduca:
 
 Verificado hoy que el pedido cubre estos commits —`813c5fa3` y `055713e4` son ancestros de
 `origin/main` y el punto 3 de su cuerpo los nombra—, así que **no hay que rehacerlo ni
-crear otro**: dos pedidos del mismo destino es el bug que ya archivó a `t_2508295d`.
+crear otro**: dos pedidos del mismo destino es el bug que dejó `archived` a `t_2508295d`.
 
 **El caso, con nombre y fecha.** `conv 58`, `inbox=5` (WhatsApp, leads reales), número
 `+59175755019`. El 2026-09-17 22:50 UTC escribió *"Hola, vengo de la web de Onia. Quiero
@@ -10352,7 +10432,8 @@ La baranda de hermetismo lo cortó en rojo, que es exactamente para lo que está
 
 🔴 **2026-09-24 15:45-16:15 La Paz — el aviso estaba escrito, verde y CABLEADO A NINGÚN
 LADO: publicado tal cual, no habría llegado NUNCA, y encima se habría comido al lead para
-siempre.** Encontrado auditando el punto 3 del pedido `t_0836a42f` contra el camino vivo —
+siempre.** Encontrado auditando el punto 3 del pedido de ese día (`t_0836a42f`, hoy
+`archived`) contra el camino vivo —
 no re-leyendo la cola. **Dos defectos, una sola causa: el emisor nuevo nació en el único de
 los tres lanzadores que no pasa las credenciales del aviso.**
 
@@ -10417,7 +10498,8 @@ propio sistema. Confundir las dos cosas es lo que dejó a `conv 58` sin dueño s
 ---
 
 🔴 **2026-09-24 16:50 La Paz — el pedido de deploy tiene un ORDEN, y nada lo verifica.
-Medido contra `origin/main`, no heredado.** El punto 3 de `t_0836a42f` promete que el
+Medido contra `origin/main`, no heredado.** El punto 3 del pedido de ese día (`t_0836a42f`,
+hoy `archived`) promete que el
 aviso del lead frío LLEGA. La mitad que lo emite ya está en `main` (`813c5fa3`,
 `055713e4` son ancestros); **la mitad que lo hace SALIR de la máquina no**:
 
@@ -10440,8 +10522,8 @@ nadie.
 
 **No hay que rehacer el pedido** —los 32 archivos son los mismos, `followup-run.mjs` y
 `followup-run.sh` ya están en la lista—: sólo cambia el orden. Anotado como comentario en
-`t_0836a42f` (no una tarea nueva: dos pedidos del mismo destino es el bug que archivó a
-`t_2508295d`). Antes de ejecutar el `ok`:
+el pedido de ese día (`t_0836a42f`, hoy `archived`) — no una tarea nueva: dos pedidos del
+mismo destino es el bug que dejó `archived` a `t_2508295d`. Antes de ejecutar el `ok`:
 `git merge-base --is-ancestor 5a7d1224 origin/main && echo LISTO || echo FALTA-MERGE`.
 
 ✅ **2026-09-24 17:30 La Paz — esa precondición SE CUMPLIÓ. Corrido hoy, da `LISTO`:**
