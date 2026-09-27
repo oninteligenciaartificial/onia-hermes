@@ -52,6 +52,17 @@
  *   · **«o descartar»**, la otra mitad del texto de S7: descartar no deja rastro. Si Sergio
  *     Urcullo los descarta en silencio, esto sigue diciendo «bloqueado». Se dice acá en vez de
  *     fingir que el instrumento lo ve.
+ *   · 🔴 **EL AGUJERO QUE ESTE GATE PUEDE ABRIR CONTRA SÍ MISMO, y hay que decirlo porque es
+ *     el riesgo caro.** Sólo ve lo que se contesta **dentro de Chatwoot**. La tarea del tablero
+ *     `t_5ea80f5e` recomienda justamente la otra vía para conv 36 (*«escribirle por correo HOY,
+ *     cero costo, cero restricción»*, porque dejó `Saguilera@ds-santacruz.bo`) y los dos de
+ *     WhatsApp pasaron la ventana de 24 h, así que la opción B los manda a contestar **desde el
+ *     teléfono personal de Sergio Urcullo**. Las dos vías son correctas y **ninguna deja fila en
+ *     `messages`**: si contesta así, este gate sigue diciendo «bloqueado» y le vuelve a pedir
+ *     trabajo que YA HIZO — que es exactamente el daño que un verificador existe para evitar.
+ *     **Por eso su 1 no autoriza a re-pedirle nada por sí solo:** antes de volver a nombrarle
+ *     S7 hay que mirar el comentario de esa tarea. Cerrar la fila con su palabra es válido; el
+ *     gate mide UNA de las tres vías, no las tres.
  *
  * CÓDIGOS DE SALIDA — el contrato de `credencial_de_bloqueo.mjs` e `inbox_tenencia.mjs`:
  *   0  ya les contestaron a todos  → S7 SATISFECHO, hay que cerrar la fila
