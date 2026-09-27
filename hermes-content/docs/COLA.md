@@ -77,8 +77,56 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Ahora — plan de features (revisado 2026-08-30, con Gate 1 corrido)
 
+- [x] 🟠 **En las cuatro tarjetas de plan de la home, el punto verde de cada renglón quedaba
+      contra el margen y su texto centrado lejos: la lista no se leía como lista. ARREGLADO Y
+      GATEADO el 2026-09-27 09:1x La Paz por `web-venta`.**
+      - **Cómo apareció.** Los cuatro medidores del objetivo estaban en verde (prohibidos 0 ·
+        precios 0/44 fuera de fuente · CTA 0/25 rotos · favicon 200) y la cola no tenía ni un
+        ítem sin marcar, así que en vez de re-medir se cambió de ancho: se recorrió la home a
+        **390px** —el teléfono del lead que llega de Instagram— y se miraron las **20 capturas**
+        una por una. El defecto está en la banda de precios, que es donde el lead decide.
+      - **Medido, no supuesto** (390px, producción): «Todo lo del Crece» tenía el punto en x=49
+        y su texto arrancando en x=145 — **76px de aire** entre la viñeta y lo que nombra, en
+        una pantalla de 390. Nueve renglones así. No depende del ancho: a 1366 el mismo renglón
+        daba 45px.
+      - **Que es leak y no diseño se prueba sin opinar, y por eso se pudo arreglar sin
+        consultar:** la MISMA clase `.planList` se pinta bien en las otras pantallas que la
+        usan —`/precios` (30 renglones) y `/chatbot` (11) dan `text-align: start` y hueco −1px—,
+        y la regla reserva `grid-template-columns: 1.1em 1fr`, una columna PARA el marcador:
+        esa forma sólo cierra con el texto al inicio de su columna. La home era la única
+        centrada porque su banda vive dentro del `.centro` de la portada y `text-align` **se
+        hereda**. El arreglo es una línea: que la lista **declare** su alineación en vez de
+        dejársela al envoltorio. Los títulos, el precio y el párrafo de la tarjeta siguen
+        centrados — no se tocó la dirección visual, sólo se pegó la viñeta a su texto.
+      - **Visto en ROJO primero y por el motivo correcto:** contra producción, `/: 9 viñeta(s)
+        sueltas de su texto. La peor, «Todo lo del Crece»: 76px`. Contra el build con el
+        arreglo: `VERDE: los 116 renglones de 6 pantalla(s) … el peor hueco es 0px`. Y el test
+        estático, mutado (borrada la línea del CSS), acusa `.planList no declara text-align: lo
+        hereda`.
+      - ⚠️ **El "verde" local de la primera medición era FALSO y lo delató una cuenta que no
+        cerraba:** producción daba 6 pantallas / 116 renglones y el local 4 / 66. Había un
+        `next start` de una vuelta anterior ocupando el puerto (PID de las 10:56), así que mi
+        `npm run start` murió con `EADDRINUSE` **en su log, no en mi cara**, y yo estaba
+        midiendo el build viejo — que además servía un chunk con 400 y por eso no aplicaba ni
+        el CSS. **Un servidor local que ya estaba levantado contesta 200 y miente entero:**
+        antes de creerle a un verde local, comparar una cuenta contra producción.
+      - ⚠️ **El gate se acusó a sí mismo en su primera corrida, y estuvo bien:** partía el CSS
+        por la primera `}` del archivo crudo, y el comentario de esa misma regla nombra su gate
+        como `vineta-pegada-a-su-texto.{mjs,test.ts}` — esa llave cerraba el bloque **en la
+        prosa** y dejaba la declaración afuera. Rojo por el motivo equivocado es un verde
+        futuro: quedó el caso fijado y los comentarios se quitan antes de parsear.
+      - Archivos: `src/app/(sitio)/sitio.module.css` +
+        `scripts/vineta-pegada-a-su-texto.{mjs,test.ts}` + alias `vineta-pegada:viva`.
+        Gates: `typecheck` 0 · `npm test` **121 archivos / 1.675 tests** · `build` 0 · gate vivo
+        verde contra el build local y rojo contra producción. Capturas MIRADAS:
+        `/tmp/wv-vineta-verde/portada-13.png`, `portada-15.png` y `escritorio-planes.png`.
+      - ⏳ **Todavía NO lo ve el lead:** `main` no publica. El publicador del VPS
+        (`onia-publicar-solo.sh`, cron `50 */3`) se lo lleva solo; se comprueba con
+        `curl -s https://onia.com.bo/_next/static/css/*.css | grep planList` — tiene que decir
+        `text-align:left`.
+
 - [x] 🟠 **Con el interruptor en Anual, la tarjeta «Completo» partía su unidad a la mitad: el lead
-      leía `Bs /` y abajo `año`. ARREGLADO Y GATEADO el 2026-09-27 11:0x La Paz por `web-venta`.**
+      leía `Bs /` y abajo `año`. ARREGLADO Y GATEADO el 2026-09-27 06:5x La Paz por `web-venta`.**
       - **Medido, no supuesto** (1366px, producción): la fila de precio tiene 216px útiles y esa
         tarjeta pide 178 (`12.900`) + 5,4 + 60 (`Bs / año`) = 243. Lo que sobra no desborda — el
         hijo de flex que puede encogerse se encoge a 32px y parte su texto; el resto de la tarjeta
