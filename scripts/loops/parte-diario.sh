@@ -61,9 +61,22 @@ CUANTAS=$(printf '%s' "$ABIERTAS" | grep -c . || true)
 # Punto de Venta del SIAT espero 14 dias.
 # Van PRIMERO porque son lo unico que no avanza sin el, y CON su id, porque el id es
 # literalmente lo que tiene que escribir para contestar.
-BLOQUEADAS=$(printf '%s\n' "$ESTADO_TABLERO" | grep -E '^⊘' \
-  | awk '{ p = index($0, "🔴") ? 0 : 1; printf "%d\t%09d\t%s\n", p, NR, $0 }' \
-  | sort -k1,1n -k2,2r | cut -f3- || true)
+#
+# 🔴 Y NO se ordenan como lo de arriba (2026-09-27). Esta hoja nacio el 24-sep copiando la
+# clave de orden de la seccion de fallos —«🔴 primero, y lo MAS NUEVO antes»— y para una
+# DECISION es exactamente al reves: un fallo envejece hacia lo irrelevante (el sistema lo
+# arregla o lo tapa otro), una firma pendiente se vuelve MAS urgente cuanto mas espera.
+# Con MAX=5 fijo, las mismas quedaban afuera todos los dias: medido ese dia sobre el
+# tablero vivo, 19 blocked y t_6bf938b7 llevaba 24 DIAS sin ser nombrada una sola vez.
+# Es el modo de falla del Punto de Venta del SIAT —14 dias— que esta hoja existe para evitar.
+#
+# Ademas la clave vieja era la POSICION en `list`, y ese orden no correlaciona con nada
+# util: medido el mismo dia, la #1 era del 18-sep y la #3 del 03-sep. O sea que los cinco
+# renglones se repartian por el orden en que el tablero imprime.
+# El orden correcto es: 1. los 🔴 (la valvula para lo que no puede esperar su turno);
+# 2. dentro de cada grupo, la que espera hace MAS TIEMPO. Asi toda decision sube sola si
+# nadie la contesta, y ninguna puede quedar invisible para siempre.
+BLOQUEADAS=$(printf '%s\n' "$ESTADO_TABLERO" | grep -E '^⊘' || true)
 
 # 🔴 Y de lo blocked entra SOLO lo que un `ok` puede desbloquear (2026-09-25).
 # El filtro era `grep -E '^⊘'` a secas, o sea TODO lo blocked, sin distinguir "espera
@@ -81,25 +94,45 @@ BLOQUEADAS=$(printf '%s\n' "$ESTADO_TABLERO" | grep -E '^⊘' \
 # Y el filtro falla CERRADO a proposito: lo que no se pueda clasificar SIGUE en la
 # hoja. Esconder una decision real es el error caro de este canal — el del SIAT ya
 # espero 14 dias —; nombrar una de mas solo gasta un renglon.
-espera_su_ok() {
-  local id="$1" kind
+#
+# La EDAD sale de la MISMA llamada: `show` imprime tambien «created:   <fecha> by <quien>»
+# (medido el 2026-09-27 sobre t_b3143556). Pedirla aparte con `list --json` seria una
+# consulta nueva por nada — y el `kind`, que es el otro dato que hace falta, solo existe
+# aca. Una sola pregunta por tarea devuelve los dos.
+datos_del_bloqueo() {
+  local id="$1" salida kind creada
   # `</dev/null` NO es cosmetico: si ONIA_TABLERO es el shim de nodo-casa, adentro hay
   # un ssh que se COME el stdin del bucle que llama a esta funcion, y entonces se
   # clasifica la primera y las demas se pierden MUDAS. Ya costo un barrido entero.
-  kind=$("$TABLERO" show "$id" 2>/dev/null </dev/null \
+  # El `tr -d '\0'` saca los bytes nulos que ya aparecieron en el cuerpo de una tarea real
+  # (t_781090e0): sin el, bash avisa «ignored null byte in input» en CADA tarea con basura
+  # binaria, y este script escribe a un log de cron que alguien tiene que poder leer.
+  salida=$("$TABLERO" show "$id" 2>/dev/null </dev/null | LC_ALL=C tr -d '\0') || true
+  kind=$(printf '%s\n' "$salida" \
     | LC_ALL=C grep -aoE "\[run [0-9]+\] blocked \{.*" | tail -1 \
     | LC_ALL=C grep -aoE "'kind': '[a-z_]+'" | tail -1 \
     | LC_ALL=C tr -dc 'a-z_') || true
   kind=${kind#kind}
-  [ -z "$kind" ] && return 0            # no se pudo clasificar -> entra
-  [ "$kind" = needs_input ]
+  # `head -1` porque el cuerpo de una tarea puede contener la palabra: el metadato va
+  # antes del Body. Sin fecha legible se devuelve la mas vieja posible, o sea entra
+  # arriba: el filtro falla CERRADO tambien con la edad.
+  creada=$(printf '%s\n' "$salida" \
+    | LC_ALL=C grep -aoE 'created: *[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}' | head -1 \
+    | LC_ALL=C grep -aoE '[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}') || true
+  printf '%s\t%s\n' "$kind" "${creada:-0000-00-00 00:00}"
 }
+# El desempate final es la linea misma (o sea el id): con dos fechas iguales el orden
+# tiene que ser el mismo todos los dias, no el que salga.
 ESPERAN=$(printf '%s\n' "$BLOQUEADAS" | while IFS= read -r linea; do
   [ -n "$linea" ] || continue
-  if espera_su_ok "$(printf '%s\n' "$linea" | awk '{print $2}')"; then
-    printf '%s\n' "$linea"
-  fi
-done)
+  datos=$(datos_del_bloqueo "$(printf '%s\n' "$linea" | awk '{print $2}')")
+  kind=${datos%%$'\t'*}
+  creada=${datos#*$'\t'}
+  [ -z "$kind" ] || [ "$kind" = needs_input ] || continue
+  prioridad=1
+  case "$linea" in *🔴*) prioridad=0 ;; esac
+  printf '%d\t%s\t%s\n' "$prioridad" "$creada" "$linea"
+done | sort -t$'\t' -k1,1n -k2,2 -k3,3 | cut -f3-)
 CUANTAS_ESPERAN=$(printf '%s' "$ESPERAN" | grep -c . || true)
 
 HOJA=""
