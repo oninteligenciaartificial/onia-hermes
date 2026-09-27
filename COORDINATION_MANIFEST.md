@@ -3,9 +3,9 @@
 ## Carril marca personal Sergio/ONIA — 2026-09-27
 
 Rama `codex/marca-sergio-guiones-20260927`, worktree aislado
-`C:/Users/PC/.codex/worktrees/marca-sergio-guiones-20260927/onia-hermes`.
+`C:/Users/PC/.codex/worktrees/marca-sergio-continuacion/onia-hermes`.
 Alcance: `hermes-content/docs/{ONIA_MARCA_PERSONAL_MADRE,ONIA_MARCA_PERSONAL_BOVEDA,ONIA_PUBLICACION_MULTICANAL}.md`,
-`hermes-content/docs/cola/{RODAJE-MARCA-PERSONAL-2026-09-27,LEARNINGS-APROBADOS-MARCA-PERSONAL}.md`,
+`hermes-content/docs/cola/{RODAJE-MARCA-PERSONAL-2026-09-27,LEARNINGS-APROBADOS-MARCA-PERSONAL,APROBACION-CARRUSELES-SERGIO-2026-09-27,EDICION-G06-OPUS-55-2026-09-27}.md`,
 drop del 27-sep, handoff de este carril y tres carruseles v2 de Sergio (briefs y PNG).
 No toca servicios, OAuth, programación ni publicación. El checkout compartido conserva
 el video candidato v3 y cambios de otros carriles; no stagear su árbol completo.

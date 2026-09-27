@@ -39,6 +39,8 @@ VSL; curso 20+ ventas antes del VIP. Nada se anuncia antes de existir.
 | `ONIA_PUBLICACION_MULTICANAL.md` | seis destinos confirmados, incluido YouTube personal de Sergio; acceso seguro, aprobaciones y recuperación de Postiz sin liberar vencidos |
 | `cola/RODAJE-MARCA-PERSONAL-2026-09-27.md` | guiones palabra por palabra, G06 Opus y seis nuevos G09–G14; formato de grabación por pieza |
 | `cola/LEARNINGS-APROBADOS-MARCA-PERSONAL.md` | versión y aprendizaje aprobado por Sergio, nunca borradores por inferencia |
+| `cola/APROBACION-CARRUSELES-SERGIO-2026-09-27.md` | las tres piezas v2 exactas, captions, hashes, destino y horarios propuestos para un OK cerrado |
+| `cola/EDICION-G06-OPUS-55-2026-09-27.md` | intake, timeline, fuentes y QA para editar G06 cuando llegue el bruto exacto |
 | `docs/cola/marca-personal.md` | la cola viva del carril (el loop trabaja de ahí) |
 | `references/ui-patterns/statement-3d-minimal/` | patrón visual aprendido (plantilla + ficha + referencia) |
 | `references/marca-personal/` | los PDFs/planes de Samuel (historia) |

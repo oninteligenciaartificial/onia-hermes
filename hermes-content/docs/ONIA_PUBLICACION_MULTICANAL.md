@@ -21,10 +21,51 @@
 
 TikTok, X, la cuenta de Lucía, un posible YouTube de ONIA y la comunidad WhatsApp aparecen en planes/registros históricos, **pero no forman parte de estos seis destinos confirmados**. La comunidad conserva su propio carril editorial; no se conecta a Postiz por inferencia. La URL `youtube.com/@oniahq` devolvió 404 en la verificación pública; no inferir un canal de ONIA.
 
+## Ruta oficial por destino
+
+Postiz puede volver a ser el panel central para cinco destinos, pero no es hoy
+la única vía ni el primer gate. Cada conexión debe usar OAuth oficial y cada
+publicación debe verificarse en la plataforma, no sólo en el scheduler.
+
+| Destino | Ruta estable propuesta | Permisos / prerrequisitos | Prueba segura antes de publicar | Evidencia final |
+|---|---|---|---|---|
+| Instagram Sergio | OAuth de cuenta profesional en Postiz recuperado o API oficial de Instagram | Elegir **una** modalidad: Instagram Login (`instagram_business_basic`, `instagram_business_content_publish`) o Facebook Login con Página vinculada (`pages_show_list`, `instagram_basic`, `instagram_content_publish`, `pages_read_engagement` y tarea de crear contenido). No mezclar modelos por costumbre. | Crear el contenedor, esperar estado `FINISHED` y **no** ejecutar `media_publish`. Es validación transitoria, no borrador duradero. | Media ID y permalink visibles en `@sergiourcullo`. |
+| Instagram ONIA | Misma ruta oficial, autorización separada de `@oniahq` | Cuenta profesional, identidad ONIA y acceso correcto; no reutilizar por inferencia la autorización de Sergio. | Igual: contenedor terminado sin publicarlo, o borrador interno de Postiz cuando esté sano. | Media ID y permalink en `@oniahq`; claim contrastado con producto. |
+| LinkedIn Sergio | OAuth de miembro + [Posts API](https://learn.microsoft.com/en-us/linkedin/marketing/community-management/shares/posts-api) o integración Postiz | Producto Share on LinkedIn, OAuth 3-legged y `w_member_social`. Para 2–20 imágenes usar MultiImage orgánico, no «carousel» publicitario. | Guardar borrador interno en Postiz. La creación por Posts API usa `PUBLISHED`; **no** usar un POST real como test privado. | Header `x-restli-id`, lectura del URN como autor y URL pública en el perfil correcto. |
+| Facebook personal Sergio | Publicación nativa/manual | Sesión de Sergio y aprobación exacta. Los permisos de Pages no habilitan el perfil personal. | Borrador nativo si la interfaz lo permite; no existe test por Postiz para este destino. | URL pública, fecha y perfil `sergio.urcullo.7`. |
+| Página Facebook ONIA | OAuth `Facebook Page` en Postiz o Pages API | Rol/tarea con creación de contenido; `pages_manage_posts` y permisos de selección/lectura que la app requiera (`pages_show_list`, `pages_read_engagement`). | Borrador interno Postiz. No afirmar «prueba privada» por Graph API sin validar el formato y visibilidad concretos. | Page post ID y URL visible desde una sesión sin rol de app. |
+| YouTube Sergio | OAuth en Postiz o [YouTube Data API `videos.insert`](https://developers.google.com/youtube/v3/docs/videos/insert) | Scope mínimo de subida `youtube.upload`; comprobar antes que la identidad OAuth corresponde a `UCk_4mmXsWTxlk63rpz2hRtg`. No usar tokens del canal Máquina Humana. | Subir con `privacyStatus=private`; un proyecto API no auditado puede quedar limitado a privado incluso si la subida funciona. | Video ID, `videos.list` autenticado, canal correcto y luego URL `youtube.com/watch?v=<id>` cuando la versión sea pública. |
+
+Fuentes operativas: [Meta Instagram API](https://www.postman.com/meta/instagram/documentation/6yqw8pt/instagram-api),
+[LinkedIn Posts API](https://learn.microsoft.com/en-us/linkedin/marketing/community-management/shares/posts-api),
+[LinkedIn OAuth/access](https://learn.microsoft.com/en-us/linkedin/shared/authentication/getting-access),
+[YouTube upload/OAuth](https://developers.google.com/youtube/v3/guides/uploading_a_video) y
+[canales admitidos por Postiz](https://docs.postiz.com/general/platforms/overview).
+Las páginas de Meta deben revalidarse al implementar porque versión, permisos y
+flujos de login pueden cambiar.
+
+## Orden de puesta en marcha
+
+1. Aprobar arte, caption, destino y hora; el
+   [paquete de carruseles v2](cola/APROBACION-CARRUSELES-SERGIO-2026-09-27.md)
+   sirve como contrato cerrado del primer lote.
+2. Mientras Postiz esté 502, usar publicación nativa sólo para piezas exactas
+   aprobadas. No introducir una automatización paralela improvisada.
+3. Conectar OAuth oficial **una cuenta por vez** y verificar identidad antes de
+   cualquier escritura. YouTube empieza con subida privada; LinkedIn no ofrece
+   un POST de prueba no público, por lo que su primera escritura debe ser una
+   pieza real ya aprobada.
+4. Recuperar Postiz sólo en otra intervención autorizada, con respaldo,
+   neutralización de vencidos y workers controlados. Después listar
+   integraciones y comprobar conexión viva; recién entonces crear borradores.
+5. Para cada publicación, verificar URL/ID público en la identidad correcta y
+   registrar la fecha. Un contenedor, borrador, `201` o respuesta del scheduler
+   no equivale a publicación comprobada.
+
 ## Acceso estable, sin perderlo ni exponerlo
 
 1. Sergio mantiene propiedad, correo de recuperación y 2FA. Conectar cada canal mediante el OAuth/rol oficial dentro del publicador aprobado; no pedir ni pegar contraseñas, cookies de sesión, recovery codes o tokens por chat.
-2. Postiz self-hosted es el candidato central para las **cinco cuentas que su catálogo puede admitir** (dos Instagram, LinkedIn personal, Página Facebook ONIA y YouTube Sergio), pero primero se recupera sin liberar cola vencida. YouTube además requiere configurar la app OAuth correcta y probar una subida **privada** al canal verificado antes de siquiera programar material público. El Facebook personal de Sergio va por publicación nativa/manual. La [API oficial permite listar canales](https://docs.postiz.com/public-api/integrations/list) y [verificar conexión](https://docs.postiz.com/public-api/integrations/is-connected); los identificadores y estado, no las credenciales, se registran aquí después de consulta viva.
+2. Postiz self-hosted es el candidato central para las **cinco cuentas que su catálogo puede admitir** (dos Instagram, LinkedIn personal, Página Facebook ONIA y YouTube Sergio), pero primero se recupera sin liberar cola vencida. YouTube además requiere configurar la app OAuth correcta y probar una subida **privada** al canal verificado antes de siquiera programar material público. El Facebook personal de Sergio va por publicación nativa/manual. La [API de Postiz permite listar integraciones](https://docs.postiz.com/public-api/integrations/list) y [verificar conexión](https://docs.postiz.com/public-api/integrations/is-connected); los identificadores y estado, no las credenciales, se registran aquí después de consulta viva.
 3. Secretos sólo en almacenamiento restringido del servicio/VPS. La key de Postiz que un handoff antiguo reporta expuesta debe **rotarse** una vez asegurada la recuperación, coordinando scripts dependientes. No guardar valores en Git, Notion ni la bóveda.
 4. Una ruta publicadora por cuenta. Si la Página Facebook ONIA cruza nativamente desde IG, no programar una segunda copia directa sin comprobar que no duplica. El perfil Facebook personal de Sergio no se presenta como canal Postiz; registrar enlace/fecha de la publicación manual. Si una plataforma revoca OAuth, registrar el paso humano y no simular que sigue automatizada.
 5. Mantener un registro de último acceso verificado, vencimiento conocido si lo hay, próxima revisión y dueño de reconexión. «Cuenta viva» significa detección y reautorización a tiempo + contenido aprobado; ninguna herramienta puede garantizar una sesión perpetua.
