@@ -9707,9 +9707,56 @@ cita: al cerrar una fila hay que barrer quién la nombra, no sólo tacharla.
       atribuible, 2 sólo si no se pudo juzgar ninguno (o si git no contestó), 0 si todos se
       juzgaron y coinciden. **Ojo con el consumidor:** `scripts/deploy_sin_pedido.mjs` lo corre y
       **parsea su stdout** (`:742`, `:1111`), así que el formato de salida viaja con él o se rompe
-      un gate ajeno — van los dos archivos o ninguno. No toca el pedido de deploy vivo:
-      `publicar.sh --dry-run` cuenta 13 y `espejo-check` no es uno (`grep -c espejo-check` → 0,
-      medido el 2026-09-27), igual que `avisos-vivo.mjs` el 26-sep.
+      un gate ajeno — van los dos archivos o ninguno.
+
+      🔴 **BLOQUEADO — acá decía que esto «no toca el pedido de deploy vivo» porque
+      *«`publicar.sh --dry-run` cuenta 13 y `espejo-check` no es uno»*, y la conclusión está al
+      revés. Corregido el 2026-09-27 02:40 La Paz, derivando la lista blanca en vez de leer el
+      recuento.** No estar entre los 13 es exactamente lo que hace que tocarlo sume el 14.º — es
+      el mismo razonamiento que el ítem de arriba (`:9576`) hace bien sobre `webhook-server.mjs`,
+      escrito al revés. La pregunta correcta no es *«¿está entre los 13 de hoy?»* sino **«¿cae en
+      la lista blanca del publicador?»**, y se deriva de su guion, no del recuento:
+
+      ```bash
+      grep -n 'PATRONES=' hermes-content/deploy/vps-ops/bot/deploy-bot.sh
+      #  PATRONES=("*.mjs" "*.sh" "knowledge.example.json" "knowledge.onia.json" "plantillas-humo.json")
+      ```
+
+      `espejo-check.mjs` está en la **raíz** de ese subárbol y cae en `*.mjs`, así que el
+      publicador lo copia (además ya existe en `/opt/onia/bot`, o sea que saldría `CAMBIA`).
+      Editarlo dejaría el cuerpo del pedido **`t_3752e986`** describiendo 13 archivos sobre 14, y
+      por el método vigente eso obliga a rehacerlo y archivar el viejo — van cuatro. **Así que
+      este ítem espera el mismo `ok` que el de las líneas `[aviso]`.** El otro archivo del par,
+      `scripts/deploy_sin_pedido.mjs`, sí queda afuera (vive en `scripts/` de `onia-hermes`), pero
+      el ítem dice «van los dos o ninguno», así que no se parte.
+
+      ✅ **Y el hueco quedó con instrumento en la misma vuelta: `npm run test:toca-el-pedido`**
+      (`scripts/toca_el_pedido_de_deploy.mjs`, self-check **27 casos**, en la cadena `npm test`
+      con su medición viva incluida —es pura: la lista blanca, el subárbol y las colas están
+      todos en el repo—). Lee las frases que absuelven a un cambio de tocar el pedido, deriva la
+      lista blanca del `deploy-bot.sh` del disco, y acusa si algún archivo nombrado viaja. Rojo
+      visto primero por el motivo correcto (acusó esta línea nombrando `espejo-check.mjs`) y
+      absolviendo las otras cinco: la que **advierte** la consecuencia (`:9576`) y la que da la
+      razón verdadera (`:9808`, «`scripts/` de `onia-hermes`, **no la carpeta del bot**»).
+
+      **Los TRES defectos que sólo aparecieron por exigir el rojo antes, los tres del instrumento:**
+      1. **Los dos puntos no cierran una absolución: la ABREN.** `frases_de_cola.mjs` corta en `:`
+         —correcto para sus dos consumidores, que buscan ids del tablero— y acá la frase terminaba
+         en *«No toca el pedido de deploy vivo:»* con `espejo-check` en la frase **siguiente**. El
+         gate salía `0 acusada(s)` con el sujeto delante. Arreglado en el gate (`conLaEvidencia`),
+         **no** en la librería: cambiar `cierraFrase` movería el suelo de `bloqueo_citado_vivo.mjs`
+         y `en_vuelo_vencido.mjs`, que ya están verdes sobre esa unidad.
+      2. **El módulo no era importable** — `process.exit` a nivel de módulo, el mismo falso verde
+         que `frases_de_cola.mjs` documenta y que `bloqueos_vencidos.mjs` ya pagó. Se vio en carne:
+         el primer `import` de prueba imprimió el veredicto de las colas en vez de los casos puros.
+         Ahora la CLI corre detrás de la guarda de `argv[1]`.
+      3. **El gate se acusó a sí mismo — con esta misma nota.** La convención de la casa conserva
+         el texto viejo entre `*«…»*`, y el detector leyó esa **cita** como una absolución nueva:
+         pedía borrar la corrección para ponerse verde. Arreglado con el recorte de su hermano
+         (`textoJuzgable`), con dos diferencias medidas: los backticks de una línea **no** se
+         recortan (ahí vive el sujeto de este gate, no su leyenda), y los bloques de código se
+         blanquean **antes** de partir en frases — puesto adentro de la frase no sirve, porque
+         `frases_de_cola.mjs` corta en la cerca y una frase nunca contiene el bloque entero.
 
 - [ ] **Botón "Cobrar con QR" dentro de la conversación** (pieza 5 del backlog v5). El
       circuito está completo en mock y verificado mirando (`/bcp/cobrar` + `/bcp/callback`,
