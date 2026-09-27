@@ -1836,6 +1836,66 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Registro de corridas (2026-09-01 → 2026-09-03) — no rehacer
 
+### Del carril `web-venta` — corrida del 2026-09-27 10:48 La Paz (el derecho que la venta no caducaba)
+
+Los cuatro gates del objetivo salieron verdes (**0 prohibidos · 0/21 precios fuera de fuente ·
+0/44 CTA rotos · favicon 200**) y la cola no tenía un solo ítem sin marcar, así que la vuelta fue
+al escalón de auditoría. Las cuatro pantallas (`/` y `/empezar`, escritorio y teléfono) se
+abrieron y se MIRARON: limpias.
+
+**Una hipótesis propia, probada y DESCARTADA** — queda acá para que nadie la vuelva a perseguir:
+*«el hero promete agentes desde el plan Crece y la memoria dice que son Pro+»*. **Falso, la
+memoria está vieja.** `onia-platform/lib/plan-catalogo.ts` da `agentsIncluded: true` desde `crece`
+(línea 83→94) desde que entró la escalera C el 2026-09-12, y el hero **no tipea** el plan: lo
+deriva con `primerPlanCon("agentes")`. La prosa que dice «Pro+» sobrevive en dos comentarios
+(`plan-catalogo.ts:25` y el encabezado de `datos-que-se-llevan.test.ts`), que es de dónde salía la
+confusión — un comentario congelado se lee como presente.
+
+**El defecto real: `/empezar` se contradecía A SÍ MISMA, en la misma respuesta HTTP.**
+
+> hero (lo que se lee justo antes de apretar «Creá tu cuenta»): «…no pagás nada — y tus datos los
+> exportás **cuando quieras**.»
+> más abajo, misma página: «…la cuenta queda en solo lectura: tenés **30 días** para exportar tus
+> datos.»
+
+`content/legal/privacidad.md` §8 —la política que ese lead acepta al crear la cuenta— le da la
+razón a la segunda: el export se pide *«dentro de los 30 días posteriores a la terminación»*, y a
+los 90 los datos se eliminan. O sea que la promesa más sensible del sitio («tus datos son tuyos»)
+se ofrecía sin caducidad en la última pantalla antes del alta. Tres copias vivas: `(sitio)/empezar`,
+`(sitio)/nosotros` y `v1/prueba-gratis`.
+
+**Por qué ningún gate lo veía, teniendo TRES vecinos que leen el mismo contrato:**
+`salida-prometida` mide el ALCANCE de irse (no conoce el verbo `exportar`), `datos-que-se-llevan`
+persigue una condición de plan que SOBRA (acá faltaba una), y `salida-con-fecha` exige una negación
+junto a `borrar|eliminar` (esta frase no niega un borrado: promete un derecho). Ninguno preguntaba
+hasta cuándo vive el **derecho a pedir** los datos una vez que el cliente se fue. Y la mitad
+correcta ya existía y ya estaba derivada —`RETENCION.diasParaExportar` alimenta `PRUEBA.copy` desde
+el 11-sep—: **no fue ignorancia del plazo, fue que la cura no viajó a sus gemelas.** Es el tercer
+mes seguido que este carril paga el mismo patrón.
+
+- [x] Las tres frases nombran la ventana, **derivada** de `RETENCION.diasParaExportar` y nunca
+      tipeada: el día que §8 cambie, cambia el copy. `(sitio)/empezar/page.tsx`,
+      `(sitio)/nosotros/page.tsx`, `v1/prueba-gratis/page.tsx`.
+- [x] **NO se prohibió «cuando quieras» a secas**, que era más fácil y estaba mal: mientras la
+      cuenta vive el export SÍ es cuando quieras (no lo gatea ningún plan, y eso lo defiende
+      `datos-que-se-llevan.test.ts`). Prohibir el adverbio pondría a los dos gates a pelear y
+      cambiaría un copy honesto por uno miedoso. Verificado servido: «Tus datos son tuyos: los
+      exportás cuando quieras» sigue viva e intacta en `/nosotros` y en el cierre de la home.
+- [x] Gate nuevo `export-al-irse-con-su-plazo.test.ts`, **visto en ROJO primero por el motivo
+      correcto**: nombró las tres frases y ninguna otra. Sujeto derivado del disco (una página
+      nueva nace cubierta), medido sin comentarios, y con el **JSX aplanado antes de cortar en
+      oraciones** — sin eso el corte parte la frase al medio y las dos mitades pasan limpias, que
+      es como falla ABIERTA esta familia.
+
+**Evidencia:** build nuevo levantado y la pantalla MIRADA renderizada en teléfono — «no pagás nada
+— y tus datos te los llevás en CSV, con 30 días para hacerlo», cero respuestas ≥400. Las 3 páginas
+servidas re-medidas: 0 promesas sin ventana. `typecheck` 0 · `build` 0 · **1678 tests / 122
+archivos en verde**. Commit `c9b8acb2`.
+
+**Deploy: no hace falta pedirlo.** `lib/pricing.ts` no se toca, así que no entra en `FIRMA_HUMANA`;
+el publicador de las :50 cada 3 h dice `landing: PUBLICADO` (medido hoy 08:50 en
+`/var/log/onia-publicar-solo.log`). Sale solo en cuanto el integrador mergee a `main`.
+
 ### Del carril `web-venta` — corrida del 2026-09-27 04:48 La Paz (la tarjeta decía dos ciclos a la vez)
 
 Los cuatro gates del objetivo salieron verdes (0 prohibidos · 0/18 montos fuera de fuente ·
