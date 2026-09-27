@@ -57,7 +57,7 @@ const NO_PUDE_MEDIR = 2;
 const AQUI = dirname(fileURLToPath(import.meta.url));
 const FUENTE = join(AQUI, "..", "src", "content", "medio-de-pago.ts");
 const CONTENEDOR = "onia-platform";
-const IMAGEN_QR = "https://app.onia.com.bo/pago/qr-bcp-onia.jpg";
+const IMAGEN_QR = "https://app.onia.com.bo/pago/qr-bcp-onia.png";
 
 /**
  * Lo que el SITIO declara. Se lee del texto del modulo y no con un `import`
