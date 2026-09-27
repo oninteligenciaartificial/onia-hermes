@@ -1,7 +1,7 @@
 {
-  "cuando": "2026-09-27T13:17:04.860Z",
-  "rubro": "Comercio",
-  "rubroPromesa": "storefront Comercio / tienda Catálogo, inventario, caja y clientes",
+  "cuando": "2026-09-27T16:15:07.785Z",
+  "rubro": "Estetica",
+  "rubroPromesa": null,
   "escribio": true,
   "saltoEquipo": false,
   "recoveryProbado": null,
@@ -12,14 +12,11 @@
       "cuentas": {
         "citas": 0,
         "pacientes": 0,
-        "perfiles": 2,
-        "organizaciones": 1,
-        "usuarios": 1
+        "perfiles": 0,
+        "organizaciones": 0,
+        "usuarios": 0
       },
-      "filas": [
-        "organizations cmujub89400fk01n07qqoea2e zz-qa-2026-09-27-1313",
-        "auth.users 63aa5b75-8f8e-493a-abfb-477caaf637bf zz-qa-2026-09-27-1313@onia.com.bo"
-      ],
+      "filas": [],
       "ajenas": [],
       "huerfanos": []
     },
@@ -36,30 +33,72 @@
   },
   "zzQaRestantes": 0,
   "zzQaAjenas": [],
-  "llegoHasta": 9,
-  "ultimoOkSuelto": 9,
-  "completo": true,
+  "llegoHasta": 2,
+  "ultimoOkSuelto": 2,
+  "completo": false,
   "deCuantos": 9,
-  "corte": null,
-  "agujeros": [],
-  "noAplican": [
+  "corte": {
+    "paso": 3,
+    "nombre": "pedir-acceso",
+    "estado": "roto",
+    "detalle": "el alta no ofrece el rubro \"Estetica\". Los que ofrece: Clínica dental Pacientes, · Comercio / tienda · Importadora / distribuidora · Estética y spa · Servicios profesionales Agenda,"
+  },
+  "agujeros": [
+    {
+      "paso": 3,
+      "nombre": "pedir-acceso",
+      "estado": "roto",
+      "detalle": "el alta no ofrece el rubro \"Estetica\". Los que ofrece: Clínica dental Pacientes, · Comercio / tienda · Importadora / distribuidora · Estética y spa · Servicios profesionales Agenda,"
+    },
+    {
+      "paso": 4,
+      "nombre": "entrar",
+      "estado": "no-medido",
+      "detalle": "no hay con qué entrar: --escribir está apagado (no se creó cuenta) y faltan RECORRIDO_USER/RECORRIDO_PASS"
+    },
+    {
+      "paso": 5,
+      "nombre": "elegir-rubro",
+      "estado": "no-medido",
+      "detalle": "sin sesión: el paso 4 no pudo entrar"
+    },
+    {
+      "paso": 6,
+      "nombre": "cargar-dato",
+      "estado": "no-medido",
+      "detalle": "sin sesión: el paso 4 no pudo entrar"
+    },
     {
       "paso": 7,
       "nombre": "cita",
-      "detalle": "\"Comercio\" no vende agenda —su tarjeta de /register ofrece \"storefront Comercio / tienda Catálogo, inventario, caja y clientes\"— y el producto es coherente: su menú tampoco la tiene. No hay nada que agendar acá: forum Conversaciones · storefront Catálogo · inventory_2 Inventario · point_of_sale Caja · credit_scoreFiados · groupsClientes · receipt_longGastos · account_balanceContabilidad · badgePlanilla · smart_toyAgentes · task_altRequerimientos · manage_accountsEquipo · settingsConfiguración · helpAyuda · Z zz-qa-2026-09-27-1313 Ver perfil"
+      "estado": "no-medido",
+      "detalle": "sin sesión: el paso 4 no pudo entrar"
+    },
+    {
+      "paso": 8,
+      "nombre": "cobro",
+      "estado": "no-medido",
+      "detalle": "sin sesión: el paso 4 no pudo entrar"
+    },
+    {
+      "paso": 9,
+      "nombre": "bandeja",
+      "estado": "no-medido",
+      "detalle": "sin sesión: el paso 4 no pudo entrar"
     }
   ],
+  "noAplican": [],
   "datosQA": {
-    "nombre": "zz-qa-2026-09-27-1313",
-    "negocio": "zz-qa-2026-09-27-1313-negocio",
-    "email": "zz-qa-2026-09-27-1313@onia.com.bo",
+    "nombre": "zz-qa-2026-09-27-1614",
+    "negocio": "zz-qa-2026-09-27-1614-negocio",
+    "email": "zz-qa-2026-09-27-1614@onia.com.bo",
     "whatsapp": "59170000000",
     "ciudad": "zz-qa-ciudad",
     "password": "zz-qa-2026-09-27-Passw0rd!",
-    "paciente": "zz-qa-2026-09-27-1313-paciente",
-    "profesional": "zz-qa-2026-09-27-1313-profesional",
-    "cita": "zz-qa-2026-09-27-1313-cita",
-    "itemFactura": "zz-qa-2026-09-27-1313-item"
+    "paciente": "zz-qa-2026-09-27-1614-paciente",
+    "profesional": "zz-qa-2026-09-27-1614-profesional",
+    "cita": "zz-qa-2026-09-27-1614-cita",
+    "itemFactura": "zz-qa-2026-09-27-1614-item"
   },
   "pasos": [
     {
@@ -67,7 +106,7 @@
       "nombre": "home",
       "que": "Entrar a onia.com.bo y que se VEA",
       "estado": "ok",
-      "detalle": "cargó en 1811 ms, 8721 caracteres visibles",
+      "detalle": "cargó en 1972 ms, 8721 caracteres visibles",
       "captura": "hermes-content/docs/recorrido/capturas/paso-01-home.png",
       "dom": {
         "textoVisible": 8721,
@@ -131,72 +170,18 @@
       "n": 3,
       "nombre": "pedir-acceso",
       "que": "Pedir acceso / registrarse con datos zz-qa-",
-      "estado": "ok",
-      "detalle": "cuenta zz-qa-2026-09-27-1313@onia.com.bo creada; el alta pide CONFIRMAR EL CORREO antes del primer login — la pantalla dice: \"Tu negocio completo, en un solo sistema. bolt Activación acompañada Tu sistema llega con la configuración de tu rubro pu\"",
-      "campos": [
-        {
-          "tag": "input",
-          "tipo": "text",
-          "name": "sitioWeb",
-          "id": "",
-          "placeholder": "",
-          "requerido": false
-        },
-        {
-          "tag": "input",
-          "tipo": "text",
-          "name": "",
-          "id": "",
-          "placeholder": "María Pérez",
-          "requerido": true
-        },
-        {
-          "tag": "input",
-          "tipo": "email",
-          "name": "",
-          "id": "",
-          "placeholder": "dueno@negocio.bo",
-          "requerido": true
-        },
-        {
-          "tag": "input",
-          "tipo": "password",
-          "name": "",
-          "id": "",
-          "placeholder": "Mínimo 8 caracteres",
-          "requerido": true
-        },
-        {
-          "tag": "input",
-          "tipo": "text",
-          "name": "",
-          "id": "",
-          "placeholder": "Ferretería El Tornillo",
-          "requerido": true
-        },
-        {
-          "tag": "select",
-          "tipo": "select-one",
-          "name": "",
-          "id": "",
-          "placeholder": "",
-          "requerido": false
-        },
-        {
-          "tag": "input",
-          "tipo": "checkbox",
-          "name": "",
-          "id": "",
-          "placeholder": "",
-          "requerido": false
-        }
+      "estado": "roto",
+      "detalle": "el alta no ofrece el rubro \"Estetica\". Los que ofrece: Clínica dental Pacientes, · Comercio / tienda · Importadora / distribuidora · Estética y spa · Servicios profesionales Agenda,",
+      "rubrosOfrecidos": [
+        "dentistry Clínica dental Pacientes, citas, tratamientos y cobros Empezar aquí arrow_forward",
+        "storefront Comercio / tienda Catálogo, inventario, caja y clientes Empezar aquí arrow_forward",
+        "local_shipping Importadora / distribuidora Catálogo, cotizaciones B2B y costeo de importación Empezar aquí arrow_forward",
+        "spa Estética y spa Agenda, clientas, tratamientos y caja Empezar aquí arrow_forward",
+        "work Servicios profesionales Agenda, citas, cobros y contabilidad Empezar aquí arrow_forward"
       ],
-      "altaCreaCuenta": true,
-      "requiereConfirmacionDeCorreo": true,
-      "urlTrasEnviar": "https://app.onia.com.bo/register",
-      "captura": "hermes-content/docs/recorrido/capturas/paso-03b-pedir-acceso-enviado.png",
+      "captura": "hermes-content/docs/recorrido/capturas/paso-03-pedir-acceso.png",
       "dom": {
-        "textoVisible": 761,
+        "textoVisible": 1245,
         "secciones": 2,
         "seccionesInvisibles": 0,
         "titulo": "Onia | El sistema con IA que maneja tu negocio en Bolivia"
@@ -206,242 +191,43 @@
       "n": 4,
       "nombre": "entrar",
       "que": "Entrar a la plataforma con esa cuenta",
-      "estado": "ok",
-      "detalle": "entró con la cuenta recién creada; quedó en https://app.onia.com.bo/onboarding — hizo falta confirmar el correo primero, como haría el cliente con el enlace del mail",
-      "confirmoCorreo": {
-        "ok": true,
-        "detalle": "correo confirmado abriendo el enlace del mail; quedó en https://app.onia.com.bo/onboarding",
-        "url": "https://app.onia.com.bo/onboarding"
-      },
-      "recoveryProbado": null,
-      "captura": "hermes-content/docs/recorrido/capturas/paso-04-entrar.png",
-      "dom": {
-        "textoVisible": 404,
-        "secciones": 0,
-        "seccionesInvisibles": 0,
-        "titulo": "Onia | El sistema con IA que maneja tu negocio en Bolivia"
-      }
+      "estado": "no-medido",
+      "detalle": "no hay con qué entrar: --escribir está apagado (no se creó cuenta) y faltan RECORRIDO_USER/RECORRIDO_PASS"
     },
     {
       "n": 5,
       "nombre": "elegir-rubro",
       "que": "Elegir rubro y terminar el onboarding",
-      "estado": "ok",
-      "detalle": "onboarding COMPLETADO en 6 pantallas (pregunta → negocio → horarios → servicios → equipo → listo); /dashboard ya no rebota; horarios cargados, la agenda no se pudo leer (este rubro puede no tenerla)",
-      "traza": [
-        {
-          "pantalla": "pregunta",
-          "vio": "¿Cómo se llama tu negocio?",
-          "apreto": "Completar el formulario"
-        },
-        {
-          "pantalla": "negocio",
-          "vio": "Contanos de tu negocio",
-          "apreto": "Continuar"
-        },
-        {
-          "pantalla": "horarios",
-          "vio": "¿Cuándo atendés?",
-          "apreto": "Continuar (lun-vie 09-13 y 15-19 cargados)"
-        },
-        {
-          "pantalla": "servicios",
-          "vio": "¿Qué vendés y a cuánto?",
-          "apreto": "Saltar por ahora"
-        },
-        {
-          "pantalla": "equipo",
-          "vio": "¿Quién más trabaja con vos?",
-          "apreto": "Terminar (profesional zz-qa-2026-09-27-1313-profesional; cierra el alta)"
-        },
-        {
-          "pantalla": "listo",
-          "vio": "zz-qa-2026-09-27-1313 ya está en Onia",
-          "apreto": "—"
-        }
-      ],
-      "horariosCargados": true,
-      "profesionalCargado": true,
-      "agendas": -1,
-      "capturaAsistente": "hermes-content/docs/recorrido/capturas/paso-05b-onboarding-listo.png",
-      "status": 200,
-      "ms": 2863,
-      "urlFinal": "https://app.onia.com.bo/dashboard",
-      "captura": "hermes-content/docs/recorrido/capturas/paso-05c-gate-levantado.png",
-      "dom": {
-        "textoVisible": 1664,
-        "secciones": 7,
-        "seccionesInvisibles": 0,
-        "titulo": "Onia | El sistema con IA que maneja tu negocio en Bolivia"
-      },
-      "destino": "/dashboard",
-      "pedida": "/dashboard",
-      "llego": true,
-      "tapa": null,
-      "despejo": true
+      "estado": "no-medido",
+      "detalle": "sin sesión: el paso 4 no pudo entrar"
     },
     {
       "n": 6,
       "nombre": "cargar-dato",
       "que": "Cargar un dato real del rubro (un cliente, un paciente, un producto)",
-      "estado": "ok",
-      "detalle": "\"zz-qa-2026-09-27-1313-paciente\" cargado en storefront Catálogo (/comercio) y encontrado de vuelta en la lista",
-      "capturaAlta": "hermes-content/docs/recorrido/capturas/paso-06b-alta-dato.png",
-      "campos": [
-        {
-          "i": 0,
-          "tag": "input",
-          "tipo": "text",
-          "name": "",
-          "placeholder": "Cemento IP-30 50kg",
-          "etiqueta": "",
-          "requerido": true,
-          "visible": true
-        },
-        {
-          "i": 1,
-          "tag": "input",
-          "tipo": "text",
-          "name": "",
-          "placeholder": "62.00",
-          "etiqueta": "",
-          "requerido": false,
-          "visible": true
-        },
-        {
-          "i": 2,
-          "tag": "input",
-          "tipo": "text",
-          "name": "",
-          "placeholder": "CEM-IP30-50",
-          "etiqueta": "",
-          "requerido": true,
-          "visible": true
-        },
-        {
-          "i": 3,
-          "tag": "input",
-          "tipo": "text",
-          "name": "",
-          "placeholder": "unidad / bolsa / kg",
-          "etiqueta": "",
-          "requerido": false,
-          "visible": true
-        },
-        {
-          "i": 4,
-          "tag": "input",
-          "tipo": "text",
-          "name": "",
-          "placeholder": "120",
-          "etiqueta": "",
-          "requerido": false,
-          "visible": true
-        },
-        {
-          "i": 5,
-          "tag": "input",
-          "tipo": "text",
-          "name": "",
-          "placeholder": "52.50",
-          "etiqueta": "",
-          "requerido": false,
-          "visible": true
-        },
-        {
-          "i": 6,
-          "tag": "input",
-          "tipo": "date",
-          "name": "",
-          "placeholder": "",
-          "etiqueta": "",
-          "requerido": false,
-          "visible": true
-        },
-        {
-          "i": 7,
-          "tag": "input",
-          "tipo": "text",
-          "name": "",
-          "placeholder": "L-2609",
-          "etiqueta": "",
-          "requerido": false,
-          "visible": true
-        }
-      ],
-      "status": 200,
-      "ms": 1670,
-      "urlFinal": "https://app.onia.com.bo/comercio",
-      "captura": "hermes-content/docs/recorrido/capturas/paso-06c-dato-en-la-lista.png",
-      "dom": {
-        "textoVisible": 645,
-        "secciones": 3,
-        "seccionesInvisibles": 0,
-        "titulo": "Onia | El sistema con IA que maneja tu negocio en Bolivia"
-      },
-      "destino": "/comercio",
-      "pedida": "/comercio",
-      "llego": true,
-      "tapa": null,
-      "despejo": false
+      "estado": "no-medido",
+      "detalle": "sin sesión: el paso 4 no pudo entrar"
     },
     {
       "n": 7,
       "nombre": "cita",
       "que": "Agendar una cita zz-qa- con el paciente del paso 6 y VERLA en la agenda",
-      "estado": "no-aplica",
-      "detalle": "\"Comercio\" no vende agenda —su tarjeta de /register ofrece \"storefront Comercio / tienda Catálogo, inventario, caja y clientes\"— y el producto es coherente: su menú tampoco la tiene. No hay nada que agendar acá: forum Conversaciones · storefront Catálogo · inventory_2 Inventario · point_of_sale Caja · credit_scoreFiados · groupsClientes · receipt_longGastos · account_balanceContabilidad · badgePlanilla · smart_toyAgentes · task_altRequerimientos · manage_accountsEquipo · settingsConfiguración · helpAyuda · Z zz-qa-2026-09-27-1313 Ver perfil",
-      "promesa": "storefront Comercio / tienda Catálogo, inventario, caja y clientes",
-      "prometeAgenda": false
+      "estado": "no-medido",
+      "detalle": "sin sesión: el paso 4 no pudo entrar"
     },
     {
       "n": 8,
       "nombre": "cobro",
       "que": "Llegar a la pantalla de cobro y MIRARLA. Frenar ahí",
-      "estado": "ok",
-      "detalle": "la pantalla de cobro (Caja) a la vista en https://app.onia.com.bo/comercio/caja — FRENADO acá a propósito",
-      "menuCobro": {
-        "ruta": "/comercio/caja",
-        "texto": "point_of_sale Caja"
-      },
-      "status": 200,
-      "ms": 1722,
-      "urlFinal": "https://app.onia.com.bo/comercio/caja",
-      "captura": "hermes-content/docs/recorrido/capturas/paso-08-cobro.png",
-      "dom": {
-        "textoVisible": 960,
-        "secciones": 3,
-        "seccionesInvisibles": 0,
-        "titulo": "Onia | El sistema con IA que maneja tu negocio en Bolivia"
-      },
-      "destino": "/comercio/caja",
-      "pedida": "/comercio/caja",
-      "llego": true,
-      "tapa": null,
-      "despejo": false
+      "estado": "no-medido",
+      "detalle": "sin sesión: el paso 4 no pudo entrar"
     },
     {
       "n": 9,
       "nombre": "bandeja",
       "que": "Abrir la bandeja / el panel y ver si el dato del paso 6 aparece",
-      "estado": "ok",
-      "detalle": "panel en https://app.onia.com.bo/dashboard: el dato \"zz-qa-2026-09-27-1313-paciente\" del paso 6 aparece acá",
-      "datoEnElPanel": true,
-      "status": 200,
-      "ms": 1980,
-      "urlFinal": "https://app.onia.com.bo/dashboard",
-      "captura": "hermes-content/docs/recorrido/capturas/paso-09-bandeja.png",
-      "dom": {
-        "textoVisible": 1655,
-        "secciones": 7,
-        "seccionesInvisibles": 0,
-        "titulo": "Onia | El sistema con IA que maneja tu negocio en Bolivia"
-      },
-      "destino": "/dashboard",
-      "pedida": "/dashboard",
-      "llego": true,
-      "tapa": null,
-      "despejo": false
+      "estado": "no-medido",
+      "detalle": "sin sesión: el paso 4 no pudo entrar"
     }
   ]
 }
