@@ -1333,11 +1333,27 @@
   line-height: 1;
   margin: 0.2em 0 0;
 }
+/* `flex-wrap: wrap` no es decoración: es lo que decide CÓMO se resuelve el
+   desborde cuando el número no entra al lado de su unidad. Sin él, el hijo de
+   flex que SÍ puede encogerse —la unidad— se encoge y parte su texto a la
+   mitad. Medido en producción el 2026-09-27 a 1366px: la fila tiene 216px de
+   ancho útil, y con el interruptor en Anual la tarjeta «Completo» pide
+   178 (`12.900`) + 5,4 + 60 (`Bs / año`) = 243. El lead leía «Bs /» y debajo
+   «año», y el resto de esa tarjeta bajaba 26px contra sus tres hermanas.
+   Con esto, lo que se mueve es la unidad ENTERA a un segundo renglón, que es
+   además lo que `.offerPrice` —la fila hermana, misma forma— ya hacía. */
 .planPrice {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
   gap: 0.3em;
   margin-top: 0.5em;
+}
+/* Va acotado a la fila de precio a propósito: `/precios` reusa `.planUnit` para
+   el renglón «12.900 Bs/año · 229 Bs/sem», que mide 206px de los 216 y SÍ
+   necesita poder cortarse. Un `nowrap` suelto en la clase lo haría desbordar. */
+.planPrice .planUnit {
+  white-space: nowrap;
 }
 .planNum {
   font-family: var(--font-display), sans-serif;
@@ -2459,6 +2475,10 @@
 .offerUnit {
   color: color-mix(in srgb, currentColor 74%, transparent);
   font-size: 0.95em;
+  /* `.offerPrice` ya trae `flex-wrap: wrap`, así que acá el `nowrap` no puede
+     desbordar: manda la unidad entera al renglón de abajo. Es la mitad que le
+     faltaba al patrón — envolver sin esto deja igual que el texto se parta. */
+  white-space: nowrap;
 }
 .offerNote {
   margin: 0.8em 0 0;

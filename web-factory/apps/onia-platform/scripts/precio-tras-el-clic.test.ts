@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   aNumero,
   escaleraDeclarada,
+  fallasDeUnidadPartida,
   fallasDelSegundoTurno,
   porMesDeUnAnual,
 } from "./precio-tras-el-clic.mjs";
@@ -172,5 +173,50 @@ describe("el precio que aparece recien tras el clic", () => {
     });
     expect(fallas).toHaveLength(1);
     expect(fallas[0]).toMatch(/NI UN plan/);
+  });
+});
+
+/**
+ * El otro defecto del segundo turno: el precio es CORRECTO y aun asi se lee mal.
+ *
+ * El caso vivo, medido en produccion el 2026-09-27 a 1366px: con el interruptor en Anual,
+ * la tarjeta "Completo" pinta `12.900` (178px) y ya no le queda lugar para `Bs / año`
+ * (60px) en una fila de 216px. La unidad se encoge a 32px y su texto se parte: "Bs /"
+ * arriba, "año" abajo.
+ *
+ * Por que el criterio es el ANCHO y no la cantidad de renglones: la unidad es hijo de un
+ * contenedor flex, o sea un bloque, y `getClientRects().length` devuelve 1 aunque su texto
+ * ocupe dos renglones. Se comprobo sobre la unidad partida: devolvia 1. Un gate construido
+ * sobre esa señal sale verde encima del defecto.
+ */
+describe("la unidad del precio, entera", () => {
+  const entera = { texto: "Bs / año", ciclo: "anual", num: "3.200", ancho: 60, natural: 60 };
+
+  it("acusa la unidad que el navegador tuvo que partir", () => {
+    const fallas = fallasDeUnidadPartida([
+      entera,
+      { texto: "Bs / año", ciclo: "anual", num: "12.900", ancho: 32, natural: 60 },
+    ]);
+    expect(fallas).toHaveLength(1);
+    expect(fallas[0]).toMatch(/12\.900/);
+    expect(fallas[0]).toMatch(/32px de los 60px/);
+  });
+
+  /** Una unidad que entra justa no es un defecto: el subpixel no puede inventar rojos. */
+  it("calla sobre unidades que entran, aunque el ancho no coincida al decimal", () => {
+    expect(
+      fallasDeUnidadPartida([entera, { ...entera, num: "5.500", ancho: 59.4, natural: 60 }]),
+    ).toEqual([]);
+  });
+
+  /**
+   * El modo de falla que ya mordio a este carril: si alguien renombra la clase o cambia el
+   * markup, el lector se queda sin sujetos. "Cero unidades, cero fallas" se lee identico a
+   * "todo bien" — y entonces el gate deja de medir sin ponerse rojo ni una vez.
+   */
+  it("se niega a dar por sana una banda donde no encontro ni una unidad", () => {
+    const fallas = fallasDeUnidadPartida([]);
+    expect(fallas).toHaveLength(1);
+    expect(fallas[0]).toMatch(/NI UNA unidad/);
   });
 });

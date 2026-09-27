@@ -123,7 +123,7 @@ datos_del_bloqueo() {
 }
 # El desempate final es la linea misma (o sea el id): con dos fechas iguales el orden
 # tiene que ser el mismo todos los dias, no el que salga.
-ESPERAN=$(printf '%s\n' "$BLOQUEADAS" | while IFS= read -r linea; do
+ESPERAN_CLAVES=$(printf '%s\n' "$BLOQUEADAS" | while IFS= read -r linea; do
   [ -n "$linea" ] || continue
   datos=$(datos_del_bloqueo "$(printf '%s\n' "$linea" | awk '{print $2}')")
   kind=${datos%%$'\t'*}
@@ -132,13 +132,74 @@ ESPERAN=$(printf '%s\n' "$BLOQUEADAS" | while IFS= read -r linea; do
   prioridad=1
   case "$linea" in *🔴*) prioridad=0 ;; esac
   printf '%d\t%s\t%s\n' "$prioridad" "$creada" "$linea"
-done | sort -t$'\t' -k1,1n -k2,2 -k3,3 | cut -f3-)
+done | sort -t$'\t' -k1,1n -k2,2 -k3,3)
+ESPERAN=$(printf '%s\n' "$ESPERAN_CLAVES" | cut -f3-)
 CUANTAS_ESPERAN=$(printf '%s' "$ESPERAN" | grep -c . || true)
+
+# 🔴 Y la hoja ROTA (2026-09-27). El orden por edad hace que toda decision SUBA sola…
+# pero solo si las de arriba se contestan. Con MAX=5 fijo y 18 esperando —medido ese dia
+# sobre el tablero vivo— cinco decisiones que no se pueden contestar hoy clavan los cinco
+# renglones TODOS los dias, y las 13 de abajo no se nombran nunca: entre ellas estaban los
+# TRES pedidos de deploy (posiciones 11, 17 y 18), que son lo unico que hace que el trabajo
+# ya mergeado llegue al cliente. El orden es una cola sin salida si la cabeza no avanza.
+#
+# La rotacion la hace avanzar: cada decision tiene su renglon dentro de una ronda. Reglas,
+# y cada una es un modo de falla que ya se pago en otra parte del sistema:
+#   · los 🔴 NO rotan — son la valvula de lo que no puede esperar turno, y una valvula que
+#     pasa hambre cambia un starvation por otro. No consumen ronda ni la pierden.
+#   · la ronda se cierra cuando ya no quedan sin turno para llenar los renglones libres, y
+#     las que quedaron sin turno entran PRIMERAS en la siguiente: si no, la ultima de una
+#     ronda corta no se nombraria nunca, que es el bug de vuelta con otro disfraz.
+#   · se rota lo que se NOMBRA, nunca lo que se CUENTA: el total sigue siendo el total, o
+#     la hoja mentiria sobre el tamano de la deuda.
+#   · elegir y mostrar son dos preguntas distintas: la hoja se sigue leyendo por edad.
+# El estado es un archivo por sujeto con noclobber (el `openSync wx` de /var/lib/
+# onia-vigia-remotos/<id>), NO una tabla ajena con unique key — ese patron ya fallo justo
+# en el peor modo de falla. Perderlo no rompe nada: arranca una ronda nueva.
+RONDA="${ONIA_PARTE_RONDA:-/var/lib/onia-parte-diario/ronda}"
+tuvo_turno() { [ -e "$RONDA/$1" ]; }
+dar_turno() { mkdir -p "$RONDA" 2>/dev/null || return 0; ( set -C; : > "$RONDA/$1" ) 2>/dev/null || true; }
+ids_de() { printf '%s\n' "$1" | awk -F'\t' 'NF { print $3 }' | awk '{ print $2 }'; }
+
+ROJAS=$(printf '%s\n' "$ESPERAN_CLAVES" | awk -F'\t' '$1 == 0')
+RESTO=$(printf '%s\n' "$ESPERAN_CLAVES" | awk -F'\t' '$1 == 1')
+CUANTAS_ROJAS=$(printf '%s' "$ROJAS" | grep -c . || true)
+# Los 🔴 entran siempre, hasta llenar la hoja ellos solos si hace falta.
+LIBRES=$((MAX - CUANTAS_ROJAS))
+[ "$LIBRES" -lt 0 ] && LIBRES=0
+
+SIN_TURNO=""; CON_TURNO=""
+while IFS= read -r fila; do
+  [ -n "$fila" ] || continue
+  id=$(printf '%s\n' "$fila" | awk -F'\t' '{ print $3 }' | awk '{ print $2 }')
+  if tuvo_turno "$id"; then CON_TURNO="$CON_TURNO$fila
+"; else SIN_TURNO="$SIN_TURNO$fila
+"; fi
+done <<EOF
+$RESTO
+EOF
+CUANTAS_SIN_TURNO=$(printf '%s' "$SIN_TURNO" | grep -c . || true)
+
+if [ "$CUANTAS_SIN_TURNO" -lt "$LIBRES" ]; then
+  # Ronda agotada: se cierra y se abre otra. Las que no alcanzaron turno van primeras.
+  rm -rf "$RONDA" 2>/dev/null || true
+  ELEGIBLES="$SIN_TURNO$CON_TURNO"
+else
+  ELEGIBLES="$SIN_TURNO"
+fi
+TOMADAS=$(printf '%s' "$ELEGIBLES" | grep . | head -"$LIBRES" || true)
+for id in $(ids_de "$TOMADAS"); do dar_turno "$id"; done
+
+# Elegido el conjunto, se MUESTRA por la clave de siempre: 🔴 primero y despues por edad.
+ESPERAN=$(printf '%s\n%s\n' "$ROJAS" "$TOMADAS" | grep . \
+  | sort -t$'\t' -k1,1n -k2,2 -k3,3 | cut -f3- || true)
 
 HOJA=""
 if [ "${CUANTAS_ESPERAN:-0}" -gt 0 ]; then
   # Del renglon del tablero («⊘ id estado dueno titulo») se tira todo menos el titulo,
   # igual que abajo, y el id se reengancha en su propia linea como el comando a copiar.
+  # El recorte a $MAX ya lo hizo la rotacion; `head` queda como red por si $ROJAS sola
+  # lo pasa, que es el unico camino en que puede venir mas larga.
   FILAS=$(printf '%s\n' "$ESPERAN" | head -"$MAX" \
     | awk '{ id=$2; $1=$2=$3=$4=""; sub(/^ +/, ""); sub(/\[auto:[0-9a-f]*\] */, "");
              t=$0; if (length(t) > 72) t = substr(t, 1, 69) "…";

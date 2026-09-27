@@ -61,9 +61,15 @@ chmod 755 "$TMP/tablero.sh"
 : > "$TMP/kinds.txt"
 : > "$TMP/fechas.txt"
 
+# La hoja de decisiones ROTA, y para eso recuerda en disco a quien ya nombro (ver el caso
+# 13). Ese estado es lo unico de este script que SOBREVIVE a una corrida, asi que por
+# default `correr` lo borra: si no, el caso 8 le dejaria sujetos marcados al 12 y los casos
+# pasarian o fallarian segun el orden en que esten escritos. El unico que necesita dos
+# corridas encadenadas lo pide explicito con `correr misma-ronda`.
 correr() {
   export TMP_MENSAJE="$TMP/mensaje.txt" TMP_TABLERO="$TMP/tablero.txt" TMP_KINDS="$TMP/kinds.txt"
-  export TMP_FECHAS="$TMP/fechas.txt"
+  export TMP_FECHAS="$TMP/fechas.txt" ONIA_PARTE_RONDA="$TMP/ronda"
+  [ "${1:-}" = misma-ronda ] || rm -rf "$ONIA_PARTE_RONDA"
   : > "$TMP_MENSAJE"
   ONIA_TABLERO="$TMP/tablero.sh" ONIA_TG="$TMP/tg.sh" bash "$SUT" >/dev/null 2>&1
   cat "$TMP_MENSAJE"
@@ -325,6 +331,82 @@ case "$MSG" in
   *"sin fecha legible"*) ok "sin fecha legible la decision NO se esconde (falla cerrado)" ;;
   *) falla "sin fecha legible la decision NO se esconde (falla cerrado)" \
            "se la trago el orden: $MSG" ;;
+esac
+
+# ── 13. LA QUINTA REGRESION (2026-09-27): la hoja ROTA, asi las de arriba no clavan
+# el renglon para siempre.
+# El caso 12 arreglo el ORDEN (la que espera mas va primero) y con eso toda decision SUBE
+# sola… pero solo si las de arriba se contestan. Con MAX=5 fijo y 18 esperando —medido ese
+# dia sobre el tablero vivo—, cinco decisiones que Sergio Urcullo no puede contestar hoy
+# clavan los cinco renglones TODOS los dias, y las 13 de abajo no se nombran nunca. Entre
+# esas 13 estaban los TRES pedidos de deploy (posiciones 11, 17 y 18): lo unico que hace
+# que el trabajo ya mergeado llegue al cliente.
+#
+# El orden por edad no alcanza porque es una cola sin salida: la cabeza no avanza sola.
+# La rotacion la hace avanzar — cada decision tiene su renglon dentro de una ronda — y el
+# estado va en un archivo por sujeto (patron `openSync wx` / noclobber, como
+# /var/lib/onia-vigia-remotos/<id>), NO en una tabla ajena con unique key.
+{
+  echo "⊘ t_0000401  blocked   (unassigned)          🔴 la urgencia que no puede esperar turno"
+  for n in 2 3 4 5 6 7 8; do
+    echo "⊘ t_000040$n  blocked   (unassigned)          decision numero $n"
+  done
+} > "$TMP/tablero.txt"
+{
+  echo "t_0000401 2026-09-26 10:00"
+  # 02 es la mas vieja y 08 la mas nueva: con MAX=5 y un 🔴 fijo, el dia 1 entran 02..05.
+  for n in 2 3 4 5 6 7 8; do echo "t_000040$n 2026-09-0$n 09:00"; done
+} > "$TMP/fechas.txt"
+: > "$TMP/kinds.txt"
+DIA1=$(correr)
+case "$DIA1" in
+  *"decision numero 2"*) ok "ronda dia 1: entra la mas vieja" ;;
+  *) falla "ronda dia 1: entra la mas vieja" "obtuvo: $DIA1" ;;
+esac
+case "$DIA1" in
+  *"decision numero 8"*) falla "ronda dia 1: la mas nueva todavia no entra" "obtuvo: $DIA1" ;;
+  *) ok "ronda dia 1: la mas nueva todavia no entra" ;;
+esac
+# EL ROJO DEL BUG: hoy la corrida 2 es IDENTICA a la 1 —mismas cinco— y la 08 no se nombra
+# nunca. Con rotacion, las que no tuvieron turno entran al dia siguiente.
+DIA2=$(correr misma-ronda)
+case "$DIA2" in
+  *"decision numero 8"*) ok "ronda dia 2: la que no tuvo turno AYER se nombra hoy" ;;
+  *) falla "ronda dia 2: la que no tuvo turno AYER se nombra hoy" \
+           "la hoja repitio las mismas cinco de ayer — es el starvation con otro nombre: $DIA2" ;;
+esac
+case "$DIA2" in
+  *"decision numero 6"*) ok "ronda dia 2: tambien entra la otra que quedo afuera" ;;
+  *) falla "ronda dia 2: tambien entra la otra que quedo afuera" "obtuvo: $DIA2" ;;
+esac
+# Y el 🔴 NO se rota afuera nunca: es la valvula de lo que no puede esperar su turno, asi
+# que no consume ronda ni la pierde. Si pasara hambre, la rotacion habria cambiado un
+# starvation por otro.
+case "$DIA2" in
+  *"no puede esperar turno"*) ok "ronda dia 2: el 🔴 sigue nombrado (no pasa hambre)" ;;
+  *) falla "ronda dia 2: el 🔴 sigue nombrado (no pasa hambre)" \
+           "la rotacion se comio la valvula de urgencia: $DIA2" ;;
+esac
+# La hoja se sigue LEYENDO por edad aunque la eleccion rote: elegir un conjunto y mostrarlo
+# son dos preguntas distintas, y el renglon de arriba es el que se lee en el telefono.
+PRIMERO=$(printf '%s\n' "$DIA2" | grep -m1 '^•')
+case "$PRIMERO" in
+  *"no puede esperar turno"*) ok "ronda dia 2: el 🔴 va primero en la hoja" ;;
+  *) falla "ronda dia 2: el 🔴 va primero en la hoja" "primero fue: $PRIMERO" ;;
+esac
+# El conteo NUNCA rota: son 8 esperando los dos dias. Rotar lo que se NOMBRA y rotar lo que
+# se CUENTA son dos cosas distintas — si el total bajara, la hoja mentiria sobre la deuda.
+case "$DIA2" in
+  *"8 esperan tu ok"*) ok "el total de la hoja no rota: siguen siendo 8" ;;
+  *) falla "el total de la hoja no rota: siguen siendo 8" "obtuvo: $DIA2" ;;
+esac
+# Con la ronda entera dada, el estado se cierra y empieza otra: nadie queda afuera y nadie
+# se queda con el renglon. Al tercer dia vuelve a entrar la mas vieja.
+DIA3=$(correr misma-ronda)
+case "$DIA3" in
+  *"decision numero 2"*) ok "ronda dia 3: cerrada la ronda, la mas vieja vuelve a entrar" ;;
+  *) falla "ronda dia 3: cerrada la ronda, la mas vieja vuelve a entrar" \
+           "la ronda no se reabrio y la hoja se quedo sin sujetos: $DIA3" ;;
 esac
 
 if [ "$FALLOS" -gt 0 ]; then
