@@ -77,9 +77,32 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Ahora — plan de features (revisado 2026-08-30, con Gate 1 corrido)
 
-- [ ] 🟠 **El titular de `/empezar` parte su resalte al medio, en las DOS vistas. ARREGLADO EN
-      CÓDIGO el 2026-09-26 por `web-venta` (`e9d19c01`), con el gate que lo deja visto —
-      pero EL LEAD TODAVÍA LO VE PARTIDO: el arreglo no salió de la rama.**
+- [x] 🟠 **El titular de `/empezar` partía su resalte al medio, en las DOS vistas. ARREGLADO Y
+      VIVO: el lead ya lo lee entero. Verificado contra `https://onia.com.bo` el 2026-09-26
+      20:56 La Paz por `web-venta`, MIRANDO las capturas.**
+      - **Lo que cierra el ítem, que es lo que faltaba: está ENCENDIDO en producción.** El
+        publicador automático del VPS (`onia-publicar-solo.sh`, cron `50 */3`) publicó la
+        landing a las 20:50 La Paz; el build vivo quedó sellado a las `2026-09-27 00:52 UTC`
+        con `.commit = a7b69babd`, que es el HEAD de `origin/main` y contiene `e9d19c01`
+        (`git merge-base --is-ancestor` → sí). **No hizo falta pedido de deploy.**
+      - **La medición, MIRADA y no supuesta:** `node scripts/mirar-primera-pantalla.mjs
+        https://onia.com.bo` → `resalte=1reng` en las 4 pantallas, exit 0. Capturas abiertas y
+        leídas: escritorio dice `Creá tu / cuenta y usalo / de verdad / 14 días.` y teléfono
+        `Creá tu cuenta y / usalo de verdad / 14 días.` — el verde entero en un renglón en las
+        dos. Evidencia: `/tmp/wv-g2/empezar-{escritorio,telefono}.png`.
+      - ⚠️ **La trampa que casi lo da por roto, y vale para cualquier carril:** la primera
+        medición de la vuelta (20:48) salió **ROJA** — dos minutos ANTES del swap. Un veredicto
+        sobre producción caduca en minutos: **el build vivo se relee justo antes de concluir**,
+        nunca se arrastra la lectura del arranque de la vuelta.
+      - ⚠️ **Y el `grep` volvió a mentir en la dirección cómoda:** las hojas servidas tenían
+        `white-space:nowrap` (1 en dos de tres) con el arreglo todavía sin publicar — eran
+        otros ocho selectores (`.panelTitle`, `.rowPrice`, `.cierre`…). Contar el literal
+        «confirmaba» un arreglo que no estaba. Sirve para DESCARTAR, nunca para confirmar.
+
+      <details><summary>El diagnóstico de la vuelta anterior — HISTORIA, no el estado de hoy
+      (dice «sale ROJO» y «no salió de la rama»: las dos cosas dejaron de ser ciertas a las
+      20:52 La Paz del 2026-09-26)</summary>
+
       - ⚠️ **Corregido el 2026-09-26 19:0x La Paz, auditando este mismo `[x]`.** Estaba marcado
         hecho y la palabra era «ARREGLADO» a secas. `CLAUDE.md` es explícito: *construido ≠
         terminado*, y está **prohibido reportar como hecho lo que no está encendido en
@@ -117,10 +140,44 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
         **producción**, o sea un verde sobre el sistema equivocado. Casi lo tomo por bueno.
       - Evidencia: `/tmp/wv-fix/empezar-{escritorio,telefono}.png` y `/tmp/webs-320.png`,
         abiertas y **miradas**.
+      </details>
 
-- [ ] 🔴 **`deploy:vivo` dice «DEPLOY AL DIA — sin nada varado» con un arreglo MÍO, visible para
-      el cliente, sin salir de la rama. Es el gate del carril fallando EN VERDE sobre la única
-      pregunta que este carril tiene que contestar: ¿mis arreglos llegan al lead?**
+- [x] 🔴 **`deploy:vivo` decía «DEPLOY AL DIA — sin nada varado» con un arreglo MÍO, visible
+      para el cliente, sin salir de la rama — ARREGLADO el 2026-09-26 por `web-venta`
+      (`60e3043b`), con el rojo falsificado antes y el camino vivo probado después.**
+      - **Qué quedó.** El gate cuenta ahora las TRES estaciones: `build vivo ↔ origin/main`
+        (lo de siempre) **y `origin/main ↔ la rama`**, por separado y con sus dueños escritos.
+        Verde sólo si las dos dan cero. Funciones nuevas en `scripts/deploy-vivo.mjs`:
+        `commitsSinMergear`, `ramaDelCarril` (la rama se DERIVA, nunca se tipea: este script lo
+        corren carriles distintos), `fetchearOrigin` y `commitsDelRango` —el parseo compartido,
+        para que las dos preguntas no diverjan—.
+      - **Lo que NO se mezcló, a propósito:** lo que espera merge **no entra** en la lista que
+        arma el pedido de deploy, porque todavía no se puede publicar. Mezclarlas repetiría en
+        la otra dirección el defecto ya curado el 2026-09-06 (inflar el pedido que Sergio
+        Urcullo tiene que leer). Cuando `main` está al día el informe dice **ESPERANDO MERGE** y
+        **no nombra ni el comando de publicar ni el staged**.
+      - **Entró también el `git fetch origin` que faltaba.** Las dos estaciones se miden contra
+        `origin/main`: sin fetch el veredicto salía sobre refs de disco, o sea verde justo
+        sobre lo que se mergeó hoy. Si el fetch falla → NO MEDIDO, nunca «al día».
+      - **Falla CERRADA igual que su hermana:** `[]` es un dato; `undefined` —un llamador que no
+        mide la tercera estación— y `null` salen por `NO_PUDE_MEDIR`. El tipo del parámetro
+        además la exige, así que un llamador nuevo que la olvide no compila.
+      - **ROJO antes, por el motivo correcto:** 9 casos nuevos fallando con *«el gate firmó «al
+        día» con trabajo sin mergear»* y *«con sinMergear=undefined el gate se rindió en
+        verde»*, más `commitsSinMergear is not a function`. Después: 52/52 verde.
+      - **Y el camino VIVO falsificado, no sólo el puro** (el bloque que imprime no lo cubría
+        ningún test): con un commit de sonda que toca `portada.module.css`, `npm run
+        deploy:vivo` salió **exit 1** diciendo `ESPERANDO MERGE … 1 commit(s) … que main TODAVÍA
+        NO tiene`, sin ofrecer el comando de publicar. Sonda revertida en el acto (`reset
+        --hard`, árbol limpio).
+      - Gates: `npm run typecheck` verde · `npm run build` verde (1.626 tests) · 52/52 en
+        `deploy-vivo.test.ts`.
+      - ⚠️ **De paso, un rojo ajeno que mordió bien y se respetó:** `imports-que-viajan-al-stage`
+        acusó al test nuevo por nombrar `hermes-content` en un literal de repo sembrado. No se
+        declaró exención: se cambió el literal. Una exención por un dato de prueba deja el gate
+        ciego para el caso real.
+
+      <details><summary>El diagnóstico original, como se escribió</summary>
       - **El sujeto:** `web-factory/apps/onia-platform/scripts/deploy-vivo.mjs`.
       - **Medido el 2026-09-26 19:0x La Paz**, en la misma vuelta y con una sola corrida de cada
         cosa: `npm run deploy:vivo` imprime *«DEPLOY AL DIA — onia.com.bo sirve el build del
@@ -148,6 +205,7 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
         dueños distintos (el integrador / el deploy) y hoy se reportan como uno solo: «al día».
         Verde sólo si las dos cuentas dan cero. Con `git fetch` antes o `exit 2` (NO MEDIDO),
         nunca un veredicto sobre refs de disco.
+      </details>
 
 - [x] 🟠 **`mirar:portada` pintaba un ROJO intermitente en `telefono /empezar` por una espera que
       no retenía — ARREGLADO el 2026-09-26 por `web-venta`, con la causa medida y los dos
