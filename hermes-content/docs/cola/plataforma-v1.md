@@ -734,9 +734,12 @@ trabaría el merge de todos los carriles.
       Contado en la base (`organizations` ⋈ `onia_trial_drip_sends`), `zz-qa-bandeja-10` sigue
       viva y su correo es `oninteligenciaartificial+prueba10@gmail.com` — la bandeja de Sergio
       Urcullo, que ya pidió ordenar. Y salen de `business@onia.com.bo` hacia casillas de prueba:
-      los rebotes de las que ya se borraron pegan en la reputación del dominio, que es **el ítem
-      que este carril todavía tiene abierto** («¿Gmail nos pone en Recibidos o en Spam?», más
-      abajo).
+      los rebotes de las que ya se borraron pegan en la reputación del dominio — que era **el
+      ítem que este carril tenía abierto** («¿Gmail nos pone en Recibidos o en Spam?»). ⚠️ **Ese
+      ítem se CERRÓ el 2026-09-27** (más abajo): la respuesta era **Recibidos** y la había dado
+      Sergio Urcullo el 12-sep en `d4d43078`. La reputación del dominio sigue siendo un buen
+      motivo para no mandarle correos de venta a casillas de prueba; lo que ya no es cierto es
+      que haya un ítem abierto esperándola.
 
       **La causa no fue el prefijo que faltaba: fue que el criterio estaba escrito tres veces.**
       `DEMO_SLUG_PREFIX` en `lib/platform/demo-provisioning.ts`, y un `const DEMO_PREFIX =
@@ -5924,8 +5927,10 @@ y sin operar. Acá se opera, con verificación por ítem.
       Lo que sigue bloqueado es SÓLO la tarjeta en el billing de Meta, y no la puede cargar
       ningún carril.
 
-- [ ] 🔴 **Nadie probó que el correo de confirmación LLEGUE a una bandeja — y sin ese clic el
-      alta nueva muere** (`app/auth/confirm/route.ts` · `scripts/alta_correo_confirma.mjs`)**.**
+- [x] ✅ **~~Nadie probó que el correo de confirmación LLEGUE a una bandeja — y sin ese clic el
+      alta nueva muere~~ — CERRADO el 2026-09-27 03:0x La Paz: la respuesta la dio Sergio Urcullo
+      el 12-sep y este ítem siguió preguntándosela 15 días** (`app/auth/confirm/route.ts` ·
+      `scripts/alta_correo_confirma.mjs`)**.**
       Medido el 2026-09-10 con el circuito entero: GoTrue manda por Postfix
       (`onia-mail`), DKIM firmado, y Gmail aceptó con `250 OK` dos veces. Pero un 250 no es
       bandeja — "Gmail acepta y descarta" (skill `onia-verificacion`). El caso real que lo
@@ -5997,32 +6002,56 @@ y sin operar. Acá se opera, con verificación por ítem.
         ruido. Descarta el fallo de autenticación; **no** prueba Recibidos — eso sigue siendo la
         mirada de abajo.
 
-      🔴 **Lo único que falta, y no lo puede hacer este carril: mirar si Gmail lo puso en
-      Recibidos o en Spam.** El `250 OK` es aceptación, no bandeja, y el conector de Gmail pide
-      una autorización que una sesión de loop no puede dar. Es una MIRADA de 5 segundos, no una
-      investigación: el mensaje ya está en la cuenta, asunto **«Confirmá tu correo · Onia»**,
-      para `oninteligenciaartificial+zzqa09101247@gmail.com`, del 10-sep 12:47 UTC (08:47 La
-      Paz). Preguntado en el tablero: `t_040684cb`, `blocked` verificado con `show` (un `exit 0`
-      de `block` no prueba que haya quedado bloqueada). Si contesta **Spam**, el arreglo es
-      nuestro y no pide nada más de él: subir `DMARC` de `p=none` a `p=quarantine` y revisar el
-      remitente. Si contesta **Recibidos**, el punto se cierra.
+      ✅ **LA RESPUESTA YA ESTABA DADA, EN ESTE MISMO ARCHIVO, 5.890 LÍNEAS MÁS ARRIBA.** El
+      ítem esperaba UNA cosa —«¿Gmail nos pone en Recibidos o en Spam?»— y Sergio Urcullo la
+      contestó el **2026-09-12**: la fila 1 de la *Definición 1.0* (`:37`) dice *«correo
+      "Confirmá tu correo" **EN RECIBIDOS** (no spam, 6:55 pm), clic en "Confirmar mi correo" →
+      `app.onia.com.bo/onboarding` con la cuenta adentro»*. No es una cita de segunda mano: el
+      commit que la escribió es **`d4d43078`** y su autor de git es **`oninteligenciaartificial@
+      gmail.com` — la cuenta de Sergio Urcullo —**, `Sat Sep 12 19:15:56 2026 -0400`, o sea
+      **veinte minutos después** de que el correo entrara (18:55). Él miró su bandeja con su
+      Chrome y lo commiteó él mismo.
 
-      ⚠️ **Cómo se re-prueba el bloqueo en 30 s, porque el conector ENGAÑA — medido el
-      2026-09-25 01:55 La Paz.** Esta vuelta lo reintentó (un bloqueo vencido es peor que un
-      fantasma: le pide a Sergio Urcullo una decisión que ya tomó) y el modo de falla no es el
-      que este párrafo hacía esperar. Gmail **no** aparece entre los servidores que piden OAuth
-      —ahí sólo salen Cloudflare, Fillout y N8N—, sus herramientas **sí** se listan y
-      `ToolSearch` devuelve el esquema completo de `search_threads`: hasta ahí todo se lee como
-      «ya está autorizado». El corte llega recién al **llamarla**, y con este texto exacto:
+      **Lo que se miró NO fue el mensaje que el pedido nombraba, y conviene decirlo exacto:**
+      Sergio Urcullo miró el correo de **su propia alta real** del 12-sep, no el de la sonda QA
+      del 10-sep (`oninteligenciaartificial+zzqa09101247@gmail.com`). Eso no debilita el cierre,
+      lo fortalece — una alta real en una bandeja real es una instancia **más fuerte** que una
+      sonda con dirección `+etiqueta`, y el pedido mismo define qué cambia según la respuesta:
+      *«Recibidos → el punto se cierra, el alta nueva funciona de punta a punta»*.
 
-      ```
-      Claude requested permissions to use mcp__claude_ai_Gmail__search_threads,
-      but you haven't granted it yet
-      ```
+      ⚠️ **Antes de cerrar se midió lo que SÍ cambió después de esa mirada**, porque un veredicto
+      del 12-sep sobre un artefacto que se reescribió el 25-sep no se hereda:
+      `public/correos-auth/confirmacion.html` fue **restyleada** (`e38a5b4f`, `d1ca514e`) y el
+      logotipo pasó de texto a **una imagen externa**, la única del correo. Medido hoy contra
+      producción: `https://app.onia.com.bo/correo/onia-logo-banda.png` → **HTTP 200 · 3.633 B ·
+      `image/png` · 360×180 · 0,77 s**, bajado y **MIRADO** (es el logotipo `onia` con el punto
+      verde sobre tinta, no un placeholder roto). Y los tres pilares de autenticación, en vivo:
+      `npm run correo:llega` **exit 0** — SPF autoriza `187.77.16.63`, **la clave DKIM publicada
+      ES la que firma**, DMARC presente.
 
-      O sea: **figurar en la lista, y hasta poder cargar el esquema, no es estar autorizada** —
-      la única prueba es la llamada. Sigue siendo de Sergio Urcullo (autorizar el conector en
-      claude.ai), `t_040684cb` sigue vivo, y el punto sigue sin poder cerrarse desde un loop.
+      **El hueco que la imagen abrió ya estaba cuidado y no hizo falta gate nuevo** (se buscó
+      antes de escribir uno, que es la regla): `__tests__/public-se-sirve-sin-sesion.test.ts`
+      camina `public/` entero y exige que todo se sirva sin cookies; `correos-auth-marca.test.ts`
+      fija que haya **una sola** imagen, con `alt="onia"` y el peso por debajo del recorte de
+      Gmail; y `lib/platform/no-mandamos-a-una-url-que-no-existe.test.ts:81` afirma que
+      `/correo/onia-logo-banda.png` **existe**, que es justo el modo de falla mudo de una imagen
+      externa en el correo del que depende toda cuenta nueva.
+
+      🔴 **POR QUÉ SOBREVIVIÓ 15 DÍAS, que es lo único de acá que le sirve a otro carril.** El
+      pedido `t_040684cb` nació el 10-sep 12:57 y fue contestado el 12-sep 19:15. Después se lo
+      re-intentó **cuatro veces** (13-sep, 17-sep, 24-sep, 25-sep), y las cuatro fueron a pelear
+      con el conector de Gmail —*«figurar en la lista no es estar autorizada»*— sin que ninguna
+      preguntara **si la respuesta ya estaba**. Todas re-midieron el CAMINO (¿puedo mirar la
+      bandeja?) y ninguna re-midió la PREGUNTA (¿alguien ya la contestó?). Un bloqueo se re-abre
+      por su respuesta, no por su instrumento: **antes de reintentar el camino, buscar la
+      respuesta.** El conector de Gmail sigue sin autorizar y eso ya **no bloquea nada** de este
+      ítem; si otro carril lo necesita, que lo pida por lo suyo.
+
+      ⚠️ **El gate lo daba por «a mano» y nadie lo hacía.** `npm run bloqueos:vencidos` imprime
+      *«5 fila(s) sin verificador mecánico … se re-miden a mano: L5700, L5713, L5851, L5927,
+      L6027»* y sale **exit 0**. Esa línea es correcta y honesta, pero como paréntesis dentro de
+      un verde nadie la ejecutó nunca. Las otras **cuatro** filas siguen en esa lista: se
+      re-miden a mano, no están medidas.
 
 - [ ] 🔴 **SIAT entra en la v1.0 — decisión de Sergio Urcullo, 2026-09-07: «sin factura no se
       vende». Y el rótulo de este ítem estaba MAL, que es por qué llevaba semanas al final.**
