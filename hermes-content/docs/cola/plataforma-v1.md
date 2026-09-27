@@ -5697,6 +5697,19 @@ y sin operar. Acá se opera, con verificación por ítem.
 > /root/bin/onia-tablero.sh list --status blocked
 > ```
 
+- [ ] 🔴 **La cuenta se quedó sin minutos de GitHub Actions: el CI de `onia-platform` no corre**
+  (medido el 27-sep 05:00 La Paz). **No hay defecto de código** — los cinco pasos del CI pasan en
+  el sha exacto de `master` (`3448d37c`) con las env de `ci.yml`. Lo roto es la ejecución: los
+  jobs mueren en 3-4 s con `runner_name` vacío y cero pasos; septiembre sumó **2.028 min
+  facturables** (onia-platform 1.644 + onia-hermes 384) contra la cuota de **2.000** de repos
+  privados. ⚠️ **El texto que escribe el vigía — «master está roto y el deploy va a fallar» — es
+  falso en este modo**, y ya mandó a abrir dos tareas: el publicador del VPS buildea del clon y
+  no le pregunta a GitHub. **Ya hecho, sin gastar:** freno `cancel-in-progress` en los dos
+  workflows + gate que lo defiende (`0cdfac50`, esperando al integrador); recupera ~71 min/mes
+  medidos y **no alcanza solo**. Las cinco opciones cotizadas (esperar el reset · Pro USD 4/mes ·
+  cobro por minuto · repo público · runner propio) están en la tarea del tablero; derivarla con
+  el comando de arriba, no por ID. **Mientras siga así, cada merge va con una red menos.**
+
 - [ ] 🔴 **Dos propuestas de diseño para el dashboard del producto** (Sergio Urcullo, 11-sep:
       *"ese color que hay ahorita no es nada intuitivo y no hay botones que resalten, que se
       diferencien para que la experiencia sea más fácil"*). Dos direcciones renderizadas
