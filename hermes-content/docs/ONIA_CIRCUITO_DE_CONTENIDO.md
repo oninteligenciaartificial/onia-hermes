@@ -346,9 +346,16 @@ Medido el 25-sep por el mapa de docs (§3.5 de
    cuenta delante y registrada en `ONIA_ESTRATEGIA_DE_EMPRESA.md` §7.
 8. **Comprar `sergiourcullo.com`.** Pedido el 07-sep; sin evidencia de compra y sin conectar al
    proyecto de Vercel (medido el 25-sep: sólo `sergiourcullo.vercel.app`).
-9. **Desplegar las páginas de recurso** `/automatizar`, `/agentes` y `/mcp`. Dan 404 en producción
+9. ✅ **Desplegar las páginas de recurso:** autorizado por Sergio Urcullo el 27-sep, con la condición
+   de verificar toda la información antes (`handoff/contenido.md` §3). `/automatizar`, `/agentes` y `/mcp`. Dan 404 en producción
    (medido el 25-sep; `/stack` responde 200): se escribieron el 21-sep y nunca se desplegaron.
    Mientras tanto, ningún carrusel pide MAPA, ARQUITECTURA ni MCP. `/agentes` ya está corregida.
+10. **Lucía para contenido de ONIA:** Sergio Urcullo dijo el 27-sep «usémosla para contenido de ONIA».
+    Bloqueo: su cara sale de un video de una mujer real sin consentimiento documentado. Se habilita
+    reconstruyéndola desde un canon 100 % sintético (plan v4), con lote aprobado y su costo
+    (`handoff/contenido.md` §4.2).
+11. **Carrusel 100 % IA: híbrido o píxel.** Explicado el 27-sep (`handoff/contenido.md` §4.1); la
+    recomendación es híbrido. Falta que Sergio Urcullo elija.
 
 ---
 
