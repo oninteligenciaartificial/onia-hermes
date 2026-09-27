@@ -1,0 +1,74 @@
+{
+  "title": "MCP en Claude Code: conectá Notion con permisos",
+  "caption": "MCP no es un modelo: es un protocolo para que Claude Code descubra herramientas de un servidor externo.\n\nLa documentación de Claude Code muestra este comando de ejemplo para registrar el servidor HTTP de Notion: claude mcp add --transport http notion https://mcp.notion.com/mcp. Después, claude mcp list muestra los servidores configurados y un estado de conexión; /mcp permite revisar estado y autenticación dentro de Claude Code. Ni aparecer en la lista ni figurar como conectado prueban que una operación concreta haya funcionado: comprobalo en tu entorno con una lectura permitida.\n\nEl contrato get_lead_by_id del carrusel es hipotético, no una herramienta confirmada de Notion. Empezá con permisos mínimos y aprobación humana para acciones sensibles. ¿Qué integración querés entender antes de conectarla?",
+  "hashtags": ["#mcp", "#claudecode", "#notion", "#agentesia", "#desarrollosoftware"],
+  "serie": "IA PRÁCTICA",
+  "episodio": "03",
+  "slides": [
+    {
+      "number": 1, "role": "cover", "pill": "Claude Code · MCP",
+      "headline": "MCP conecta *herramientas*, no magia",
+      "body": "Notion es un ejemplo. El permiso real depende del servidor y de tu cuenta.",
+      "bg": "hermes-content/references/marca-personal-sergio/fondos/cuaderno-02.png",
+      "alt_text": "MCP conecta herramientas externas con Claude Code"
+    },
+    {
+      "number": 2, "role": "stakes", "dense": true, "pill": "Qué resuelve",
+      "headline": "Claude Code puede descubrir herramientas externas",
+      "body": "MCP describe cómo un cliente se comunica con un servidor. El servidor expone capacidades; tu autenticación y sus permisos determinan qué puede hacerse.",
+      "visual": {"type": "flow", "label": "ARQUITECTURA", "nodes": [
+        {"name": "Claude Code", "detail": "cliente"},
+        {"name": "Servidor MCP", "detail": "herramientas"},
+        {"name": "Notion", "detail": "servicio externo"}
+      ], "note": "Conectar no equivale a autorizar todo."},
+      "alt_text": "Relación entre Claude Code, servidor MCP y Notion"
+    },
+    {
+      "number": 3, "role": "point", "dense": true, "pill": "Comando documentado",
+      "headline": "Registrá el servidor HTTP de Notion",
+      "body": "Este comando configura el servidor. Todavía debés autenticar tu cuenta y probar la herramienta que vayas a usar.",
+      "visual": {"type": "terminal", "label": "EJEMPLO · CLAUDE CODE", "lines": [
+        {"value": "$ claude mcp add --transport http notion https://mcp.notion.com/mcp", "kind": "command"},
+        {"value": "# copiar como una sola línea", "kind": "comment"}
+      ]},
+      "alt_text": "Comando de ejemplo para agregar el servidor MCP HTTP de Notion"
+    },
+    {
+      "number": 4, "role": "point", "dense": true, "pill": "Verificación",
+      "headline": "Listar no significa que ya funciona",
+      "body": "claude mcp list muestra configuración y estado, no una operación probada. Dentro de Claude Code, /mcp permite revisar la conexión. Después, probá una lectura permitida y mirá el resultado.",
+      "visual": {"type": "matrix", "label": "TRES COMPROBACIONES", "items": [
+        {"title": "1 · Configuración", "body": "claude mcp list"},
+        {"title": "2 · Autenticación", "body": "/mcp en Claude Code"},
+        {"title": "3 · Operación", "body": "Lectura de prueba y resultado"}
+      ]},
+      "alt_text": "Tres pasos para verificar configuración, autenticación y operación"
+    },
+    {
+      "number": 5, "role": "point", "dense": true, "pill": "Contrato hipotético",
+      "headline": "Definí input, output y permisos",
+      "body": "Ejemplo inventado de diseño: get_lead_by_id recibe lead_id y devuelve name, status y source. No es una herramienta de Notion verificada.",
+      "visual": {"type": "contract", "label": "EJEMPLO · NO ES TOOL REAL", "input": "lead_id", "output": "name · status · source", "permissions": "solo lectura"},
+      "alt_text": "Ejemplo hipotético de contrato de herramienta de solo lectura"
+    },
+    {
+      "number": 6, "role": "save", "dense": true, "pill": "Regla de seguridad",
+      "headline": "El acceso técnico no reemplaza tu criterio",
+      "body": "Empezá por leer. Validá la salida. Para escribir, borrar, cobrar o enviar mensajes, pedí aprobación humana y revisá permisos del servidor.",
+      "visual": {"type": "matrix", "label": "PERMISOS MÍNIMOS", "items": [
+        {"title": "1 · Leer", "body": "Solo los datos necesarios."},
+        {"title": "2 · Validar", "body": "Comprobar resultado y contexto."},
+        {"title": "3 · Aprobar", "body": "Humano ante cambios sensibles."}
+      ]},
+      "alt_text": "Secuencia de seguridad: leer, validar y aprobar acciones sensibles"
+    },
+    {
+      "number": 7, "role": "cta", "pill": "Siguiente paso",
+      "headline": "Probá una sola lectura, con permisos mínimos",
+      "body": "¿Qué servicio querés conectar? Contá el caso: herramienta, datos y permiso necesario.",
+      "cta": "CONTÁ TU CASO",
+      "alt_text": "Invitación a plantear un caso concreto antes de conectar MCP"
+    }
+  ],
+  "job": "education"
+}
