@@ -1235,6 +1235,27 @@ cierta para el otro, así que el estado se pregunta por separado:
   deriva con `npm run deploy:sin-pedido`; el que esta línea citaba quedó `archived` horas después).
   El parte sí salió (`OK message_id=6955`, 1.061 bytes): el canal funciona, el renglón no alcanza.
 
+  🔴 **Y una pregunta más que esta sección no hacía: «hay firma pendiente» tampoco dice que la
+  firma vaya a PUBLICAR. Medido el 2026-09-27 15:1x La Paz contra el pedido vivo del bot (el
+  tercero del día): sí publica.** Los tres ítems que esperan ese `ok` cuentan con que el brazo
+  ejecutor funcione, y eso no estaba comprobado para ESTE pedido — que nació hoy, con id nuevo.
+  Se prueba en seco, sin tocar producción, y hay que correrlo **en el VPS**:
+
+  ```bash
+  /root/bin/onia-vps.sh bash -lc 'ONIA_DESPLEGAR_DRY=1 node /root/bin/onia-publicar-aprobado.mjs <id>'
+  # {"desplegando":true,"destino":"bot","seco":true} · exit 0 — y el log dice "produccion NO se toca"
+  ```
+
+  ⚠️ **El mismo comando en nodo-casa —la máquina donde viven los CUATRO loops— muere con
+  `spawnSync /usr/local/lib/hermes-agent/venv/bin/python ENOENT` y sale 1.** Ese intérprete es
+  justo el archivo con el que el chequeo de arranque IDENTIFICA al VPS, así que por construcción
+  no existe acá. El ENOENT no distingue *«no pude preguntar»* de *«el pedido está roto»*: quien lo
+  corra desde casa puede concluir que el `ok` de Sergio Urcullo no publicaría, teniendo el circuito
+  sano — y es el único camino que decide si algo sale a producción. El arreglo es de `onia-cola`
+  (`scripts/kanban/publicar-aprobado.mjs`, donde el escape `PY_HERMES` ya existe); la tarea con la
+  reproducción en las dos máquinas se deriva, no se copia:
+  `/root/bin/onia-tablero.sh list | grep -i 'verificador del ok'`.
+
   ⚠️ **Los dos párrafos que seguían acá caducaron el mismo día que se escribieron — corregido el
   2026-09-27 15:30 La Paz, derivando el guion del parte y no su recuento.** Decían que *«el orden
   es `🔴` en el título y después la posición en la salida de `onia-tablero.sh list`, que no
@@ -1434,6 +1455,67 @@ Las 3 que quedan (3492, 3623, 7674) son del motor leídas a mano pero **no tiene
 mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se derivan con el comando.
 
 ## Ahora
+
+- [x] ✅ **AUDITORÍA DE LOS `[x]` — 2026-09-27 20:1x-20:4x UTC (escalón 2: «Ahora» agotada en las
+      dos colas, el único 🔴 vivo y los 4 de «Después» esperando el mismo `ok`). Tres afirmaciones
+      de estado de producción estaban VENCIDAS, y las tres mentían en la dirección cara.**
+
+      **Por qué este escalón, medido antes de bajarlo:** `Ahora` de esta cola tiene 144 ítems y
+      **cero abiertos**; `Ahora` de `plataforma-v1.md` también (sus 4 abiertos viven dentro de
+      «Bloqueado en Sergio Urcullo»). T10 sigue 🔴 pero su mitad restante toca
+      `webhook-server.mjs`, y el pedido de deploy del bot está vivo —derivado, no copiado:
+      `npm run deploy:sin-pedido` lo nombra con «pedido hace 7 h»—, así que el freno es real y no
+      un fantasma. Los 4 de «Después» esperan ese mismo `ok` o las credenciales del BCP.
+
+      **De dónde salieron los sujetos: del propio instrumento, no de una corazonada.**
+      `npm run deploy:ya-ocurrio` sale **0** y a la vez imprime *«5 no se pudo ubicar su frontera:
+      hay que leerlas»*. Ese `[leer]` es correcto —el gate juzga por ARCHIVO y estas líneas no
+      nombran uno— pero **nadie lo leía nunca**: es la clase «un alias suelto no lo corre nadie»,
+      movida un nivel adentro. Las 5 se leyeron a mano; 3 estaban vencidas.
+
+      | línea | sobre qué afirmaba | medido el 2026-09-27 |
+      |---|---|---|
+      | `:9703` | el fallback de un inbox sin org | **vencida** — el arreglo vive en producción y se verificó por comportamiento |
+      | `:7437` | si el `ok` del bot exige un paso manual | **vencida** — la condición que ella misma puso ya se cumplió |
+      | `:7440` | si `93256eab` llegó a `main` | **vencida** — `is-ancestor origin/main` da 0 |
+      | `:7495` | la cobertura de `onia-center` | **vigente** — sigue fuera de la lista blanca del `ok` |
+      | las dos del SIAT en la otra cola | su publicación | **vigente** — su pedido `t_ea3e4f1b` sigue esperando firma |
+
+      **La peor de las tres es `:7437`, y no por el dato:** decía que el `ok` del bot *«sigue
+      necesitando el comando a mano»* cuando el cuerpo del pedido vivo dice textual *«No hace falta
+      ningun comando a mano»*. Esa exacta confusión ya costó **24 días** pidiéndole a Sergio Urcullo
+      un `scp` que el circuito hacía solo. **Un «NO desplegado» cuya condición se cumplió no
+      envejece a inocuo: envejece a instrucción falsa** — y ésta gastaba la atención del único que
+      puede destrabar el carril.
+
+      **Verificado MIRANDO, no por `grep` de confirmación.** La prueba de `:9703` la había dejado
+      escrita el ítem mismo para «después del deploy» y nunca se corrió:
+      `wget -qO- 'http://127.0.0.1:3020/health?inboxId=99'` → `"huerfano":true` con `source:"code"`,
+      y `?inboxId=4` → `source:"panel"` con `"huerfano":false` (la frontera de al lado, intacta).
+      Se le atribuye a ESTE código porque el `md5sum` del `knowledge.mjs` vivo es **idéntico** al
+      del repo; el `grep -c huerfano` (9 y 9) sólo sirvió para descartar.
+
+      📌 **La lección, que es del método y no de estas tres líneas:** un gate que reporta
+      honestamente lo que **no** pudo juzgar traslada ese trabajo a un humano que no existe, y su
+      `exit 0` lo entierra. Mientras el `[leer]` no tenga dueño, las líneas que caen ahí envejecen
+      sin que nada se ponga rojo — que es exactamente cómo estas tres sobrevivieron 14 días.
+
+      ✅ **Gates después:** `node scripts/verificar_cola.js …/chatbot.md` → `cola ok: 145 items en
+      Ahora, todos con evidencia real`; `npm run test:toca-el-pedido` → **0 acusada(s)** sobre 165
+      archivos que viajan (esto se edita en `hermes-content/docs/`, así que **no** suma un archivo
+      al pedido del bot ni lo invalida); y `npm run deploy:ya-ocurrio` bajó de **6 líneas sin
+      frontera a 5**, que es la única forma de mostrar que este escalón consumió deuda en vez de
+      describirla.
+
+      🔴 **Y el escalón se cobró a sí mismo, que es la parte que vale.** La primera redacción de
+      esta entrada puso en ROJO dos gates: `verificar_cola` (la tabla nombraba
+      `plataforma-v1:6260/6289` y el verificador lo leyó como una ruta inexistente) y
+      `deploy:ya-ocurrio`, que acusó **2 líneas mías** — la fila de la tabla y la cita textual de la
+      advertencia corregida. Las dos por la misma causa: **al citar una afirmación muerta se la
+      vuelve a emitir viva**, y el detector no distingue la cita de la afirmación. Por eso la
+      corrección de `:9703` describe la advertencia vieja en vez de reproducirla, contra la
+      convención de la casa y con el motivo escrito al lado. Se vio porque los gates se corrieron
+      **después** de editar y no antes de escribir.
 
 - [x] 🔴 **CERRADO el 2026-09-27 13:4x-15:0x UTC (`scripts/bloqueo_citado_vivo.mjs` +
       `scripts/lib/frases_de_cola.mjs`, los dos en `scripts/` de `onia-hermes` — **no** en la
@@ -7413,10 +7495,23 @@ La historia completa queda acá abajo para no perderla.
       `node --test` sobre la carpeta) y por eso **también gatea el deploy**, que corre ese mismo
       comando. Suite del bot: **932/932**.
 
-      ⚠️ **Commiteado, NO desplegado** — y el orden importa: mientras esto no esté en `main`, el
-      `ok` al pedido de deploy vivo de `bot` **sigue necesitando** el comando a mano que su cuerpo nombra.
+      ✅ **YA EN `main` — medido el 2026-09-27, y la corrección importa más que el dato.** Acá
+      decía *«⚠️ Commiteado, NO desplegado — mientras esto no esté en `main`, el `ok` al pedido de
+      deploy vivo de `bot` sigue necesitando el comando a mano que su cuerpo nombra»*. La condición
+      que el propio ítem puso **ya se cumplió**:
+      `git show origin/main:hermes-content/deploy/vps-ops/bot/deploy-bot.sh` trae el paso en `:170`
+      (`webhook-server.sh knowledge`) y el gate `conocimiento-viaja-con-el-deploy.test.mjs` está en
+      `git ls-tree origin/main`. **O sea que el `ok` NO necesita ningún comando a mano** — lo dice
+      también el cuerpo del pedido vivo, textual: *«No hace falta ningun comando a mano»*.
+      🔴 **Por qué se corrige y no se borra:** esta clase de frase ya costó **24 días** en este
+      carril, pidiéndole a Sergio Urcullo un `scp` manual que el circuito ya hacía solo. Un
+      «commiteado, NO desplegado» cuya condición se cumplió no envejece a inocuo: envejece a
+      **instrucción falsa**, y encima en la dirección que gasta la atención del único que puede
+      dar el `ok`.
 
-- [x] ✅ **CERRADO el 2026-09-11 (`93256eab`, onia-hermes — pusheado a la rama, falta mergear):
+- [x] ✅ **CERRADO el 2026-09-11 (`93256eab`, onia-hermes — ✅ YA EN `main`, verificado el
+      2026-09-27 con `git merge-base --is-ancestor 93256eab origin/main`; acá decía «pusheado a la
+      rama, falta mergear» y ese merge ya ocurrió):
       el intake de leads le afirmaba a Sergio Urcullo que TODO contacto había pedido una demo.**
       Tablero `t_62aa450c`, encontrado por otro carril midiendo en vivo.
 
@@ -9679,7 +9774,23 @@ cita: al cerrar una fila hay que barrer quién la nombra, no sólo tacharla.
 
 - [x] 🟡 **~~El inbox que nazca huérfano le habla a los clientes del CLIENTE con la cara de
       Onia~~ — CERRADO EN CÓDIGO el 2026-09-13 02:55 La Paz.
-      ⚠️ COMMITEADO, NO DESPLEGADO: el bot vivo sigue sirviéndole el panel a cualquier inbox.**
+      ✅ **YA DESPLEGADO Y VERIFICADO EN PRODUCCIÓN — medido el 2026-09-27 20:2x UTC corriendo la
+      prueba que este ítem dejó escrita para "después del deploy", que nadie había corrido.**
+      Acá había una advertencia en presente —de la familia «commiteado, todavía no publicado»,
+      diciendo que el motor vivo le servía el panel de Onia a cualquier inbox— y era **falsa hoy**:
+      el swap pasó y la frase siguió leyéndose como presente, o sea anunciando un agujero de marca
+      ya tapado. Se reemplaza en vez de conservarse entre comillas **a propósito**: en esta cola el
+      texto viejo se cita, pero acá la cita hacía que el propio instrumento
+      (`npm run deploy:ya-ocurrio`) leyera la advertencia muerta como una afirmación viva y la
+      acusara — *la documentación de un detector es corpus del detector*, la misma trampa que ya
+      pagó `evidencia:citada`. Tres medidas independientes, ninguna un `grep` de confirmación:
+      `docker exec onia-center wget -qO- 'http://127.0.0.1:3020/health?inboxId=99'` →
+      `"huerfano":true` con `source:"code"` (**no** `panel`); `?inboxId=4` → `source:"panel"` con
+      `"huerfano":false`, o sea que la frontera de al lado sigue viva; y `md5sum` del
+      `knowledge.mjs` vivo **idéntico** al del repo (`bc59711049…`), que es la única forma de
+      atribuirle el comportamiento a ESTE código y no a otro. De paso quedó medido que el
+      **inbox 7** (`ZZ QA Clinica Chatbot`) sale `huerfano:true`: es un inbox real sin org que lo
+      reclame, justo el caso que el arreglo degrada a recepcionista neutro.**
       **Peor de lo que decía este ítem, recontado en vivo antes de tocar nada:** no son «los
       cuatro inboxes», es **cualquier número**. `?inboxId=99` —un inbox que no existe— contestaba
       igual `source: "panel"`, o sea el guion de venta de Onia con sus precios y sus horarios de
@@ -10208,7 +10319,7 @@ cita: al cerrar una fila hay que barrer quién la nombra, no sólo tacharla.
 
 | # | Qué | Por qué sólo él | Qué desbloquea |
 |---|---|---|---|
-| S1 | **Probar el popup de Embedded Signup con un +591 real** (`chat.onia.com.bo` → Add Inbox → WhatsApp → Connect with WhatsApp Business) | Necesita su sesión de Meta y un chip. Todo lo nuestro está hecho desde el 28-ago: Access Verification ✅, Configuration ID `1824225392073753`, dominio JS SDK autorizado, las 3 InstallationConfigs cargadas | Que un CLIENTE conecte su propio WhatsApp solo. ⚠️ Hoy el inbox que nazca queda huérfano — ver ítem 2 de Ahora |
+| S1 | **Probar el popup de Embedded Signup con un +591 real** (`chat.onia.com.bo` → Add Inbox → WhatsApp → Connect with WhatsApp Business) | Necesita su sesión de Meta y un chip. Todo lo nuestro está hecho desde el 28-ago: Access Verification ✅, Configuration ID `1824225392073753`, dominio JS SDK autorizado, las 3 InstallationConfigs cargadas. Medido el 2026-09-27 19:3x UTC: los inboxes siguen siendo los **cuatro nuestros** (3 Api, 4 web, 5 WhatsApp, 7 QA) — ninguno ajeno. ⚠️ El inbox de cliente se cuenta por **canal WhatsApp fuera de nuestra lista**, no por cantidad: un inbox web nuevo no satisface esto, y contar `> 4` lo daría por hecho con cualquier widget que alguien agregue. **Verificador:** `npm run bloqueo:inbox-cliente` → 0 | Necesita su sesión de Meta y un chip | Que un CLIENTE conecte su propio WhatsApp solo. ⚠️ Hoy el inbox que nazca queda huérfano — ver ítem 2 de Ahora |
 | S2 | **Credenciales del BCP + certificado mTLS (`.pfx`)**. Son DOS mitades y hacen falta las dos: con las credenciales pero sin el `.pfx` no hay conexión, y con el `.pfx` solo no hay con qué firmar — el verificador dice cuál llegó. Medido el 2026-09-26 19:4x La Paz: **cero** variables `BCP_*` en el entorno de `onia-platform` y **cero** `.pfx` en `/opt/onia-platform/`. **Verificador:** `npm run bcp:credenciales` → 0 | Trámite bancario | El botón "Cobrar con QR" en la conversación. Sin banco no hay código que lo destrabe |
 | S3 | **Traslado del 75414930 a coexistencia** — OK explícito ("vamos con A") + ventana acordada + el PIN de dos pasos a mano | El número queda MUDO 30-60 min y el rollback depende de un PIN que sólo él tiene. Runbook completo: `hermes-content/docs/ONIA_RUNBOOK_COEXISTENCIA_75414930.md` | Que Sergio siga usando su app de WhatsApp en el mismo número que atiende el bot |
 | S4 | **Verificar el push "te escribieron" en su celular** (suscribirse y recibir). Suscribirse deja una fila en `push_subscriptions`: es el único rastro que un dispositivo real deja, así que se puede medir sin él. Medido el 2026-09-26 19:4x La Paz: **cero** suscripciones en toda la base, ni suyas ni ajenas. ⚠️ La trampa está dentro del verificador y por eso se declara acá: `push_subscriptions."userId"` referencia `profiles.id`, **no** `profiles."userId"` — el join equivocado devuelve vacío y se lee como «nadie se suscribió» teniendo la fila delante. **Verificador:** `npm run push:suscripcion` → 0 | Hace falta un dispositivo real | El circuito está testeado 95/95 y deployado; sólo falta la prueba física |
@@ -10226,10 +10337,11 @@ cita: al cerrar una fila hay que barrer quién la nombra, no sólo tacharla.
 | ~~S12~~ | ✅ **VENCIDO el 2026-09-24 — no le pidan esto a Sergio Urcullo: ya lo decidió y está VIVO.** Pedía que dictara dos bloques semanales de su agenda. Medido hoy en el **proceso vivo**, no heredado: `npm run anticipacion:viva` → *"proceso 30 en onia-center — ofrece 2 horario(s): sábado 26 de septiembre 09:00 (33,7 h de aviso) · lunes 28 de septiembre 14:00 (86,7 h) · corte de 24 h en el codigo vivo: si"*, exit **0**. Las ventanas que dictó (L-V 14:00-17:00 y 20:00-22:00, sáb 09:00-15:00) las convierte en horarios concretos `/root/bin/onia-renovar-slots.py`, que corre por cron (`23 10 * * *`) y los deja en `ONIA_BOT_SLOTS` de `/opt/onia/bot/webhook.env` — hoy con **5** horarios fechados. ⚠️ **Los `pending: true` de `config.mjs` que esta fila citaba como prueba NO prueban nada: son el DEFAULT del archivo, y `parseSlotsSpec` los reemplaza por los del entorno.** Leer un default y llamarlo estado es el error que dejó esta fila 23 días pidiendo una decisión ya tomada. **Se cierra sola desde hoy**: se le cableó el verificador que le faltaba (era una de las 13 filas «sin verificador mecanico», que son las que se mueren de viejas sin que nadie lo note). ~~**Los DOS horarios fijos de demo — sin ellos el bot deriva a un humano en el primer mensaje y se calla para siempre.**~~ Son dos bloques semanales de SU agenda; `hermes-content/deploy/vps-ops/bot/config.mjs` los trae `pending: true` con un TODO que dice *"PROHIBIDO inventar horarios acá"*. **Contexto nuevo del 01-sep:** existía la salida automática por Cal.com y **está muerta** — no hay contenedor de Cal.com en el VPS y `cal.onia.com.bo` responde 302 a `onia.com.bo/empezar`, así que el módulo cae al placeholder en silencio. **Dos opciones, las dos baratas:** (a) Sergio dicta dos bloques fijos (ej. martes 10:00 y jueves 16:00) y quedan como dato — cero código; (b) revivir Cal.com, que es infra y cuesta más. Recomendación: **(a)**, y (b) después si molesta mantenerlos a mano | — (ya decidido) | — **Verificador:** `npm run anticipacion:viva` → 0 |
 | ~~S13~~ | ✅ **VENCIDO el 2026-09-24 — el circuito está ENCENDIDO y ya mandó avisos: no hay camino que decidir.** Pedía elegir entre (a) Telegram directo o (b) un workflow de n8n. Se fue por **(a)** y está vivo. Medido hoy, no heredado: `npm run avisos:vivo` → `circuito: medido` con los seis controles en `ok` (`flagEncendido`, `credencialesOk`, `motorEmiteNotify`, `textoAccionable`, rama `handoff`, rama `demo_agendada`) y **6 avisos · 4 enviados · 0 fallidos**, exit **0**. O sea que el `"configurado":true` que esta misma fila pedía como gate barato ya se cumple, y además se cumple la parte que ese gate NO veía: que un aviso SALGA. ⚠️ **Cerrar S13 no cierra el problema del lead que se enfría** — ése es el 🔴 de «Ahora», y es otra cosa: el mismo instrumento avisa que *«NINGUN aviso es de un lead: 5 nuestro(s)»*, porque el motor sólo emite al derivar a un humano o al agendar, y una conversación que se apaga en `esperando_horario` no emite nada. Lo que muere acá es **la decisión**, no el defecto. **Se cierra sola desde hoy**: se le cableó el verificador que le faltaba. ~~**Encender el aviso `notify_sergio`**~~ — hoy el bot pide un humano y no se entera nadie. ⚠️ **NO es "poner `ONIA_N8N_ENABLED=true`"**: `ONIA_N8N_EVENT_URL` está **vacío** y **no existe ningún workflow de n8n** que reciba el evento (listados los 44). Con la variable en `true` y sin URL el envío devuelve `failed` y **nadie se entera**, porque es fire-and-forget a propósito. **Decidir el camino:** (a) Telegram directo desde el bot, reusando el `TG_BOT_TOKEN` que `hermes-content/deploy/vps-ops/bot/webhook-watchdog.sh` ya usa en el VPS — sin workflow, sin URL, sin secreto nuevo; (b) crear el workflow de n8n y cargar la URL. Recomendación: **(a)** | — (ya decidido y encendido) | — **Verificador:** `npm run avisos:vivo` → 0 |
 | ~~S14~~ | ✅ **VENCIDO, CERRADO el 2026-09-26 19:3x La Paz — no le pidan esta decisión a Sergio Urcullo: la bandeja ya tiene dueño.** Pedía decidir en qué org aterrizan los desconocidos de la web (inbox 4). Medido en la base de producción, no heredado: `select o.slug, cs."chatwootInboxId", cs."chatwootWhatsappInboxId" from organizations o left join clinic_settings cs on cs."organizationId"=o.id` devuelve **`onia-interna \| 4 \| 5`** y las otras tres orgs con las dos columnas vacías — o sea `Onia (interna)` tiene el 4 (web) **y** el 5 (WhatsApp), sin colisión. Y su verificador, que YA EXISTÍA, lo dice solo: `npm run inbox:tenencia` → exit **0**, *«TENENCIA OK — `Onia (interna)` tiene el 4 (web) y el 5 (WhatsApp), sin colisiones»*. ⚠️ **La premisa de la fila era falsa y es la causa de que sobreviviera:** decía que *«una org sólo puede tener UN inbox»* y por eso las tres opciones (a/b/c) que se le ofrecían. Hay **DOS** columnas de canal —`chatwootInboxId` y `chatwootWhatsappInboxId`— así que nunca hubo que elegir nada: la opción (c) ya estaba construida. 🔑 **Y por qué esperó de más teniendo el verificador hecho:** la fila lo nombraba en prosa (*«desde hoy lo vigila `npm run inbox:tenencia`»*) y `bloqueos_vencidos.mjs` sólo corre lo que se declara en la marca `**Verificador:** \`<comando>\` → <codigo>`. Nombrar el comando no es declararlo — el gate la listó nueve vueltas entre las «sin verificador mecanico» con el verificador ya escrito al lado. Es la misma lección que S10-S13 (*«las cuatro se cerraron el día que se les cableó uno»*), un paso más adentro: **no alcanza con tenerlo, hay que declararlo.** **Verificador:** `npm run inbox:tenencia` → 0. Lo de abajo es la historia de cómo se llegó acá. ~~**De quién es la bandeja del widget (inbox 4)**~~ — hoy no tiene org, y por ahí entraron **SEIS** conversaciones de desconocidos (34, 36, 38, 40, 45, 46), dos de ellas del 01-sep. **Cinco de las seis no dejaron teléfono ni correo**: sólo se les puede contestar desde adentro del widget, que es exactamente lo que el inbox huérfano impide — o sea que un inbox sin dueño no es una demora, es una pérdida. ⚠️ **A diferencia de S8, no alcanza con dos clicks:** está cerrado en esta cola que **una org sólo puede tener UN inbox** (`clinic_settings.chatwootInboxId`, `prisma/schema.prisma:1002`), y `Onia (interna)` ya gastó el suyo en el 5. ⚠️ **Corregido el 2026-09-02:** acá decía que esa columna era *"un `Int?` **único**"* y es falso — medido, no leído: no tiene `@unique` ni hay `@@unique` en `ClinicSettings`. Lo cierto de la frase es la mitad que importa para esta decisión (una org tiene UN inbox, porque es una columna escalar); lo que NO garantiza nadie es el otro sentido — **la base acepta que dos orgs reclamen el mismo inbox**, y el 409 que lo impide vive sólo en el PATCH de superadmin. No cambia las tres opciones de abajo, pero sí descarta "la base no me deja" como argumento. Desde hoy lo vigila `npm run inbox:tenencia`. **Opciones ya cotizadas en `ONIA_RADAR_DECISIONES_PRODUCTO.md` §9:** (a) darle el inbox 4 a otra org existente — cero código, pero mezcla el widget de Onia con una org que no es Onia; (b) crear una org `Onia (web)` sólo para el widget — cero código, ~10 min, agrega una org fantasma; (c) extender `clinic_settings` a N inboxes, que es código del producto y de otro carril. Recomendación: **(b)**. 🔁 **Fusionada el 2026-09-02 con la fila que la tabla listaba aparte bajo un SEGUNDO `S12`** (*"¿sigue en pie la opción 1 de §9?"*): era la **misma decisión preguntada dos veces**, con dos números distintos y uno de ellos ya usado por los horarios de demo. Lo destapó `npm run bloqueos:vencidos` al imprimir `S12, S12` — el gate nombra las filas por su id, así que un id repetido lo vuelve ambiguo. El dato fresco que aportaba esa fila (seis conversaciones, cinco sin contacto) es justo el que le faltaba a la condición de §9 *"hasta que la limitación moleste"*, y ya vive acá. **Y el `5 de las 9` que esta fila decía estaba viejo**: eran seis. | Es decidir en qué bandeja aterrizan los desconocidos de la web | **La otra mitad del objetivo del carril.** Hecho = se abre `/inbox` y se ve la conversación 45 (*"tengo una ferreteria"*) |
-| S15 | **Una credencial de sólo lectura para que el canario ENTRE al panel del chatbot** — un usuario del producto (correo + contraseña) que sólo mire. Se enchufa como `ONIA_CANARIO_USER` / `ONIA_CANARIO_PASS` en el entorno del loop `canario-visual`; **no hay una línea de código pendiente**: `requiereSesion` y `iniciarSesion()` ya están en `scripts/canario_visual.mjs` y entran por el formulario real de `/login`. Sin ella el canario NO miente (desde hoy dice `NO MEDIDA` con el motivo), pero **la pantalla que un cliente usa para editar su conocimiento sigue sin que nadie la mire nunca**. ⚠️ La otra opción que el ítem original proponía —una ruta de vista previa pública— **se descarta**: expone configuración de cliente sin sesión, y es agregar una superficie viva | Es un alta de usuario en producción, y una contraseña | Que `/settings/chatbot` entre a la ronda del canario como las otras diez. Hecho = el canario imprime `panel-chatbot … sin disparo mecanico` y su baseline se crea con `urlFinal` = `/settings/chatbot` |
+| S15 | **Una credencial de sólo lectura para que el canario ENTRE al panel del chatbot** — un usuario del producto (correo + contraseña) que sólo mire. Se enchufa como `ONIA_CANARIO_USER` / `ONIA_CANARIO_PASS` en el entorno del loop `canario-visual`; **no hay una línea de código pendiente**: `requiereSesion` y `iniciarSesion()` ya están en `scripts/canario_visual.mjs` y entran por el formulario real de `/login`. Sin ella el canario NO miente (desde hoy dice `NO MEDIDA` con el motivo), pero **la pantalla que un cliente usa para editar su conocimiento sigue sin que nadie la mire nunca**. ⚠️ La otra opción que el ítem original proponía —una ruta de vista previa pública— **se descarta**: expone configuración de cliente sin sesión, y es agregar una superficie viva 🔴 **SACADO de la hoja de decisiones el 2026-09-27 19:4x UTC: su CONSUMIDOR está apagado a propósito, así que esta fila no podía satisfacerse nunca.** Medido, no deducido: `canario-visual` está en la tabla **«Apagados a propósito»** de `loops.md:490` (*«Foco en vender. Mide y audita; no produce venta»*) y su línea del crontab del VPS está comentada desde el 2026-09-04 (`# PAUSADO 2026-09-04 (foco: vender; cuota escasa) — 41 6,18 * * * …`); en nodo-casa no existe. O sea que la credencial que esta fila le pide a Sergio Urcullo **no la consumiría nadie**, y su «Hecho =» —*«el canario imprime `panel-chatbot …`»*— no puede ocurrir por construcción. **No se arregla encendiendo el canario:** se apagó con su motivo medido y revivirlo desobedece esa decisión (`loops.md`, tabla «Apagados a propósito»). Queda **PARKEADA detrás de la reactivación del canario**, que es de Sergio Urcullo y no de este carril: el día que lo reactive, esta fila vuelve a la hoja con la credencial como primer paso. ⚠️ **La clase de fallo, que es lo reutilizable y `bloqueos_vencidos.mjs` todavía no ve:** el instrumento pregunta *«¿el bloqueo está satisfecho?»* y nunca *«¿queda alguien que consuma la respuesta?»*. Un bloqueo cuyo consumidor murió es **inmortal** — no se satisface y no vence — y ocupa uno de los CINCO renglones rotativos de la hoja de decisiones para siempre. Es la hermana del hueco que este carril ya midió en los gates (*«un gate que valida un ARCHIVO no prueba que el motor lo CARGUE»*), un nivel más arriba | Es un alta de usuario en producción, y una contraseña — pero **hoy no se le pide**: primero tiene que existir quien la use | Que `/settings/chatbot` entre a la ronda del canario como las otras diez. Hecho = el canario imprime `panel-chatbot … sin disparo mecanico` y su baseline se crea con `urlFinal` = `/settings/chatbot` — **inalcanzable mientras `canario-visual` siga apagado** |
 | ~~S17~~ | ✅ **FUSIONADA en S18 el 2026-09-25 — era la MISMA firma pedida dos veces, y la hoja que Sergio Urcullo lee le mostraba TRES recuentos del mismo deploy.** S17 decía «**7** commits sin publicar», S18 decía «**37** archivos, `main dc4202f5`» y el pedido vivo dice «**38** archivos, `main 14495def`»: dos de los tres vencidos, y ninguna de las dos filas se contradecía a la vista porque tenían números distintos. **Es el mismo bug que ya se arregló con el `S12` duplicado el 2026-09-02** (la misma decisión con dos ids), sólo que esta vez el duplicado no era el id sino la DECISIÓN. Medido antes de fusionar: los dos bloqueos estaban VIGENTES y los dos se satisfacen con el MISMO evento —el swap del bot—, así que eran una firma, no dos. Y S17 encima era una de las 10 filas **sin verificador mecánico**, que por lección de esta misma tabla son las que se mueren de viejas; S18 sí lo tiene. **El dato que sólo S17 traía, y que se conserva en S18: el número que el freno acusa es el TELÉFONO fijo de Onia (`022 20 241 45`), no un precio** — entró con las campañas, y el freno falla CERRADO por diseño porque se ancla al ARCHIVO y no a la clave que recibe el número. ⚠️ **El freno no está roto y no se toca:** su propia cabecera dice que gastar esta firma en falsos la vuelve automática, y ésa es la dirección cara. | — | — |
 | ~~S16~~ | ✅ **VENCIDO el 2026-09-02 — Sergio no decide nada: la decisión ya se tomó y el trabajo ya llegó.** Pedía elegir entre cambiar el procedimiento del integrador, mergear a mano, o dejarlo. Pasaron **las dos primeras**: el integrador arregló su Paso 1 (`d26444c1` de `onia-hermes`, *"contaba las ramas contra el repo equivocado"*) y mergeó el carril a `master` de `onia-platform` (`503af44`, 12:38 UTC). Verificado con `git fetch` fresco y `merge-base --is-ancestor`: **los cuatro** commits declarados (`22fd088`, `675541b`, `d62beeb`, `e644c85`) llegan a `origin/master`; `npm run deploy:alcanzable` sale **0**. El radar §23 ya figuraba **RESUELTO** — sólo esta fila seguía pidiendo la decisión. Detalle en el primer ítem de "Cerrado". | — | — |
-| S6 | **Proyecto Supabase cloud `Dental-gest` (`kvepqgikokjlacxngkiw`) sigue ACTIVE_HEALTHY** — decidir pausar o borrar. Y si algún día se reactiva `Gesti-Os` (`jafxylfocvvlflpqfsix`), **rotar su `service_role` primero**: estuvo expuesto en los JSON de n8n que se redactaron el 29-ago | Es plata y es borrado de datos | Cerrar la cola del saneamiento de secretos |
+| S6 | **Proyecto Supabase cloud `Dental-gest` (`kvepqgikokjlacxngkiw`) sigue ACTIVE_HEALTHY** — decidir pausar o borrar. Y si algún día se reactiva `Gesti-Os` (`jafxylfocvvlflpqfsix`), **rotar su `service_role` primero**: estuvo expuesto en los JSON de n8n que se redactaron el 29-ago. Medido el 2026-09-27 19:3x UTC **sin credenciales**: `Dental-gest` contesta `http 401` («No API key found») = PostgREST despierto, o sea **sigue vivo**; `Gesti-Os` no contesta y su DNS no resuelve. ⚠️ La medición obvia —curl y ver si contesta— falla en la dirección CARA: `http 000` también es «no tengo internet», así que la ausencia se confirma por DNS **y** con una sonda de control; sin eso una máquina sin red diría «ya no está» = bloqueo satisfecho = pedirle a Sergio Urcullo que cierre una decisión que nunca tomó. **Verificador:** `npm run bloqueo:supabase-cloud` → 0 | Es plata y es borrado de datos | Cerrar la cola del saneamiento de secretos |
+| S19 | **Firmar el pedido de deploy del bot** (`ok <id>` en el tablero; el id se DERIVA con `npm run deploy:sin-pedido`, nunca se copia acá: un pedido se rehace y se archiva cada vez que se le suma un arreglo). Medido el 2026-09-27 19:5x UTC: `node scripts/bot_vivo_tiene_el_codigo.mjs` → **1**, y nombra los **4** archivos que el prospecto no ve todavía (`calcom-booking.mjs`, `followup-run.mjs`, `knowledge.onia.json`, `marcas-en-disco.mjs`) — los cuatro ya están en `origin/main`, o sea que el arreglo está commiteado y NO corre. ⚠️ **Esta fila nació el 2026-09-27 porque el freno que más pesa en el carril era el único sin fila acá**, y por eso era el único que nadie re-medía: los tres ítems que congela lo declaran en prosa (`## 🔴 T10`, `:9906`, `:10041`) y la prosa no la corre ningún gate. El día que la firma llegue, el bot se despliega y estos tres quedan listos para hacer — **sin este verificador nada lo iba a notar**, porque `bloqueos_vencidos.mjs` sólo corre lo que declara su comando. **Verificador:** `node scripts/bot_vivo_tiene_el_codigo.mjs` → 0 | El publicador se frena solo cuando cambia un número en una fuente de precio, y `knowledge.onia.json` es una de ellas (al pasar las reuniones de 20 y 45 min a 30 cambiaron números). El freno está bien puesto: pide su firma | Los 4 arreglos que el prospecto no ve —entre ellos los 5 pedidos de hablar con una persona que quedaron mudos y los 7 leads colgados rescatables— y los TRES ítems del carril que tocan el subárbol del bot |
 
 ### S18 — los dos ítems completos, movidos de "Ahora" el 2026-09-25
 

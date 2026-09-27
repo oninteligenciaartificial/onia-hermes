@@ -2841,3 +2841,46 @@ hoy queda cubierta porque la pantalla se lo dice antes de que gaste.
 
 **No bloquea nada ni corre prisa:** con cero clientes pagando, nadie ha recargado nunca.
 Se ve con: `docker exec supabase-db psql -U postgres -d postgres -tAc "select \"organizationId\", mes, recargadas from public.chatbot_uso_mensual where recargadas > 0;"`
+
+---
+
+## 46. Las pruebas automáticas no corren: una decisión de plata que se pidió TRES veces y se anuló a sí misma (2026-09-27) — decisión de Sergio Urcullo
+
+**La decisión vive en UNA sola tarea: `t_e667b4c8`.** Si llegaste acá pensando en abrir otra,
+no la abras — es la cuarta.
+
+Desde el 2026-09-27 02:49 UTC GitHub no le da máquina a ningún workflow: los jobs arrancan y
+mueren en 3 segundos con `steps=[]` y `runner_name` vacío. **Medido, es de la CUENTA y no de un
+repo**: las tres corridas programadas de `onia-hermes` de hoy fallaron con el mismo síntoma
+exacto, y las mismas tres de ayer salieron verdes. **No es un incidente de GitHub** (Actions
+`operational`, 0 incidentes). **No es el código**: los cinco pasos de `ci.yml` se corrieron a
+mano sobre `3448d37c` y los cinco dan exit 0.
+
+**Lo que esta entrada existe para evitar no es el bloqueo: es cómo se pidió.** En una hora se
+crearon **tres** tareas del mismo tema (`t_0d3ed46e` 05:50, `t_78360823` 04:47, `t_95d4a01a`
+05:07). Dos le pedían a Sergio Urcullo la misma decisión **con letras distintas** (`A–D` contra
+`1–5`, donde "correr en el VPS" era `D` en una y `5` en la otra) y **con recomendaciones
+opuestas**: una recomendaba el VPS, la otra pagar Pro. El parte de las 09:00 le mandó las dos
+juntas y **no contestó ninguna** — que es el resultado esperable, no una omisión suya. Un `ok`
+suelto ahí no habría tenido a qué referirse.
+
+> **La lección, que es más general que este caso:** duplicar una decisión no hace ruido, hace
+> **parálisis**. Dos hojas del mismo tema con distinta numeración no son dos recordatorios: son
+> una pregunta que se anula a sí misma. Por eso el canal es **UNA hoja con `ok <id>`**, y el
+> que encuentra la segunda **consolida y archiva en la misma vuelta** en vez de sumar la tercera.
+
+**Y un dato falso que sobrevivió a las dos hojas:** `t_95d4a01a` afirmaba como medición
+"2.028 minutos consumidos contra los 2.000 incluidos", y sobre ese número apoyaba su
+recomendación de plan. **Ningún instrumento de acá puede dar ese número**: la API de facturación
+responde 403, y el endpoint de minutos facturables devuelve `total_ms=0` — validado contra la
+corrida **verde** de ayer (`run 36248269781`), que sí gastó minutos. O sea que el 0 significa
+"no te lo digo", no "no consumió". Si el consumo real fuera el doble, la opción "Pro" no alcanza.
+
+**Por eso la bifurcación real no es cuánto pagar, y es la que la hoja pone primero:** en
+`Settings → Billing and plans`, *minutos agotados* y *pago rechazado* llevan a remedios
+opuestos — en el segundo caso, pagar más no devuelve nada hasta arreglar el medio de pago.
+Dos de las cinco opciones cuestan **Bs 0** (esperar el reinicio; correr las pruebas en el VPS
+que ya está pagado).
+
+Se ve con:
+`/root/bin/onia-tablero.sh show t_e667b4c8`
