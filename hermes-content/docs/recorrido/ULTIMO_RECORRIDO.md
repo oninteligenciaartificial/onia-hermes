@@ -12,6 +12,36 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-27 02:09-02:17 La Paz (vuelta HEAD 7b578eee) — rotación de rubro: Servicios profesionales — HALLAZGO REAL, roto en paso 6
+
+Chequeo de arranque: `ONIA_ALTA_AUTOMATICA=abierta`. Tablero sin tareas `ready` sin reclamar en
+`recorrido-cliente`.
+
+Corrí primero el recorrido por defecto (dental, sin `RECORRIDO_RUBRO`): **9/9, `completo: true`,
+`agujeros: []`**, cuenta `zz-qa-2026-09-27-0209@onia.com.bo`, limpieza verificada (0 filas).
+Ese recheck no era estrictamente necesario (la nota anterior ya marcaba "próximo eje: Servicios
+profesionales"), pero no invalidó nada: confirmó dental sano antes de seguir la rotación.
+
+Seguí el plan: `RECORRIDO_RUBRO='Servicios profesionales' node scripts/recorrido_cliente.mjs
+--escribir` (cuenta `zz-qa-2026-09-27-0213@onia.com.bo`). **LLEGÓ HASTA EL PASO 5 de 9.
+`completo: false`.**
+
+**AGUJERO real en el paso 6**: `https://app.onia.com.bo/patients/new` (grupo "Clientes" del menú
+de este rubro) **no tiene ni un campo de texto** donde cargar un cliente — pantalla vacía
+funcionalmente. Esto corta en cascada el paso 7 (agendar cita: no hay con quién) y deja el paso 9
+sin dato que buscar. El paso 8 (cobro, `/comercio/caja`) sí abrió y se pudo mirar.
+
+Reportado en el tablero para el dueño del producto: `t_419b2949` (prioridad 1), con la
+reproducción exacta y dos capturas adjuntas (`paso-06-cargar-dato.png`, `paso-06-menu.png`).
+No lo arreglo — no es mi carril.
+
+Limpieza verificada al cerrar ambas corridas: `organizations`/`appointments` con `zz-qa-%` = 0.
+
+RAZÓN: N/A — avanzó (hallazgo real reportado con reproducción y capturas).
+LECCIÓN: ninguna nueva.
+
+---
+
 ## 2026-09-26 21:10-21:14 La Paz (vuelta HEAD d58daf8c) — rotación de rubro sigue: Estética y spa, 9/9 sin hallazgo
 
 Chequeo de arranque: `ONIA_ALTA_AUTOMATICA=abierta`. Tablero sin tareas `ready` sin reclamar en
