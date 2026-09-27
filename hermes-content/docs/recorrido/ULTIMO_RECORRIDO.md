@@ -12,6 +12,33 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-27 09:09-09:22 La Paz (vuelta HEAD 99052093) — dental x3 seguidas por defecto; rotado a Importadora, ambos 9/9
+
+Chequeo de arranque: máquina `casa` (nodo-casa, WSL). `ONIA_ALTA_AUTOMATICA=abierta`. Los 4 loops
+de `casa` coinciden con `loops.md` (registro OK). Tablero sin tareas `ready` sin reclamar en
+`recorrido-cliente`.
+
+Corrí `node scripts/recorrido_cliente.mjs --escribir` sin fijar rubro (default: Clínica dental,
+como las dos vueltas anteriores) — **9/9, `completo: true`**. Cuenta
+`zz-qa-2026-09-27-0909@onia.com.bo` creada, onboarding en 6 pantallas, paciente
+`zz-qa-2026-09-27-0909-paciente` en `/patients`, cita 2026-09-28 09:00 agendada
+(`cmujlopor00ao01n01j1dr4bg`) y vista en `/appointments`, factura con ítem
+`zz-qa-2026-09-27-0909-item` vista en `/billing/...` y frenada sin pagar.
+
+Era la 3ra corrida seguida en dental por defecto — así que roté el eje:
+`RECORRIDO_RUBRO=Importadora node scripts/recorrido_cliente.mjs --escribir` — **8/8 (el paso 7 no
+aplica, correctamente: "Importadora" no vende agenda, coherente con su propio menú)**. Cuenta
+`zz-qa-2026-09-27-0914@onia.com.bo`, paciente `zz-qa-2026-09-27-0914-paciente` cargado y visto en
+storefront Catálogo (`/comercio`), pantalla de cobro (`/comercio/fiados`, Créditos) mirada y
+frenada sin pagar.
+
+Limpieza verificada en las DOS corridas: `appointments`/`organizations` con `zz-qa-%` = 0 al
+cerrar (impreso antes de borrar, en la salida de cada corrida).
+
+RAZÓN: N/A — avanzó (dos recorridos completos, sin hallazgos nuevos que reportar a otro carril).
+
+---
+
 ## 2026-09-27 03:10 La Paz (vuelta HEAD cce94006) — limpieza de basura ajena + Clínica dental, recorrido completo, 9/9
 
 Chequeo de arranque: máquina `casa` (nodo-casa, WSL). Encontré 1 fila `zz-qa-` de una vuelta
