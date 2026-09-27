@@ -77,6 +77,27 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Ahora — plan de features (revisado 2026-08-30, con Gate 1 corrido)
 
+- [x] 🟠 **Con el interruptor en Anual, la tarjeta «Completo» partía su unidad a la mitad: el lead
+      leía `Bs /` y abajo `año`. ARREGLADO Y GATEADO el 2026-09-27 11:0x La Paz por `web-venta`.**
+      - **Medido, no supuesto** (1366px, producción): la fila de precio tiene 216px útiles y esa
+        tarjeta pide 178 (`12.900`) + 5,4 + 60 (`Bs / año`) = 243. Lo que sobra no desborda — el
+        hijo de flex que puede encogerse se encoge a 32px y parte su texto; el resto de la tarjeta
+        bajaba 26px contra sus tres hermanas. Sólo pasa en anual: el número mensual mide 145px.
+      - **El arreglo no es un rediseño, es completar un patrón que ya estaba shippeado:**
+        `.offerPrice` —la fila hermana, misma forma— ya trae `flex-wrap: wrap`; `.planPrice` era
+        la única que no. Con eso lo que se mueve al segundo renglón es la unidad ENTERA. El
+        `nowrap` va acotado a `.planPrice .planUnit` porque `/precios` reusa esa clase para
+        «12.900 Bs/año · 229 Bs/sem», que mide 206 de 216 y SÍ necesita poder cortarse.
+      - **Visto en ROJO primero, por el motivo correcto:** contra producción el gate nombró
+        `"Bs / año" al lado de 12.900 (anual) se parte en dos renglones: 32px de los 60px`.
+        Tras el arreglo, verde contra el build local y **mirado renderizado**.
+      - ⚠️ **`getClientRects().length` NO sirve para esto y devolvía 1 sobre la unidad partida**
+        (un hijo de flex es un bloque). El criterio que no miente es el ancho: se clona la unidad
+        con `nowrap` fuera de flujo y se compara con lo que se pinta.
+      - Archivos: `src/app/(sitio)/sitio.module.css` + `scripts/precio-tras-el-clic.{mjs,test.ts}`.
+        Gates: `typecheck` 0 · `npm test` **120 archivos / 1.664 tests** · `build` 0 · barrido de
+        7 anchos (320→1440) en home y `/precios` sin desborde. Captura: `/tmp/wv27-verde/anual.png`.
+
 - [x] 🟠 **El precio ANUAL de la home sólo existe después de un clic, y ningún gate apretaba ese
       botón. CUBIERTO el 2026-09-27 07:0x La Paz por `web-venta` (`b114973c`).**
       - **Cómo apareció, que es la parte que importa.** Los cuatro medidores del objetivo estaban
@@ -106,8 +127,10 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
         2. el add-on **no cambia** con el toggle (se cobra por mes y lo aclara). Exigir que todo
            monto cambiara daba rojo sobre copy sano — se exige **por separado** que el clic
            cambie *algo*, que es el síntoma real de un toggle muerto.
-      - Queda anotado, sin abrir frente: en la tarjeta **Completo** la unidad `Bs / año` se parte
-        en dos renglones por el ancho de `12.900`; las otras tres la muestran en uno.
+      - ~~Queda anotado, sin abrir frente: en la tarjeta **Completo** la unidad `Bs / año` se
+        parte en dos renglones por el ancho de `12.900`.~~ **CERRADO el 2026-09-27**, ítem de
+        arriba. Dejarlo escrito como «anotado» después de arreglado manda a la próxima vuelta a
+        buscar un defecto que ya no existe.
       - Archivos: `web-factory/apps/onia-platform/scripts/precio-tras-el-clic.{mjs,test.ts}` +
         alias `precio-tras-el-clic:vivo`. Gates: `typecheck` 0 · `npm test` **119 archivos /
         1.654 tests** verdes · `build` 0 · corrida viva contra `onia.com.bo` en VERDE.

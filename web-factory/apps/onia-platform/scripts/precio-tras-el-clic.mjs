@@ -154,6 +154,77 @@ export function fallasDelSegundoTurno({ declarada, mensualesVistos, anualesVisto
   return fallas;
 }
 
+/**
+ * La unidad del precio ("Bs / año") partida a la mitad.
+ *
+ * POR QUE VIVE EN ESTE ARCHIVO y no en uno nuevo: es el MISMO segundo turno. El precio
+ * anual solo existe despues del clic, y el numero anual es mas largo que el mensual
+ * (`12.900` mide 178px contra los 145px de `3.200`). O sea que el unico estado donde la
+ * fila de precio se queda sin lugar es justo el que nadie miraba. Medido en produccion el
+ * 2026-09-27 a 1366px: la fila tiene 216px de ancho util y la tarjeta "Completo" necesita
+ * 178 + 5,4 + 60 = 243. Lo que sobra no desborda: la unidad se ENCOGE a 32px y se parte en
+ * dos renglones — el lead lee "Bs /" y abajo "año", y todo lo que sigue en esa tarjeta baja
+ * 26px contra sus tres hermanas.
+ *
+ * COMO SE DETECTA SIN FALLAR EN VERDE. `getClientRects().length` NO sirve: la unidad es un
+ * hijo de flex, o sea un bloque, y devuelve UN rect aunque su texto ocupe dos renglones
+ * (medido: devolvia 1 sobre la unidad partida). Lo que no miente es el ancho: se clona la
+ * unidad con `white-space: nowrap` fuera de flujo y se mide cuanto necesita ENTERA. Si lo
+ * que se pinta es mas angosto que eso, es que el navegador la tuvo que partir.
+ */
+export function fallasDeUnidadPartida(unidades) {
+  const fallas = [];
+  if (!unidades.length) {
+    fallas.push(
+      'no encontre NI UNA unidad de precio ("Bs / mes", "Bs / año") en la banda: sin sujetos ' +
+        "no hay veredicto, y un gate sin sujetos sale verde para siempre",
+    );
+    return fallas;
+  }
+  for (const u of unidades) {
+    // 1px de tolerancia: los anchos vienen en subpixel y el clon no tiene por que dar
+    // exactamente el mismo float que el original.
+    if (u.natural - u.ancho > 1) {
+      fallas.push(
+        `"${u.texto}" al lado de ${u.num} (${u.ciclo}) se parte en dos renglones: se pinta en ` +
+          `${Math.round(u.ancho)}px de los ${Math.round(u.natural)}px que necesita entera`,
+      );
+    }
+  }
+  return fallas;
+}
+
+/**
+ * Las unidades de precio tal como se estan pintando, con lo que medirian sin partirse.
+ * Se toman por su TEXTO y no por su clase: la clase la renombra cualquier refactor de CSS
+ * modules y el gate se quedaria sin sujetos, que es como esta familia miente en verde.
+ */
+const unidadesDePrecio = (pagina, ciclo) =>
+  pagina.evaluate((cicloActual) => {
+    const vistas = [];
+    document.querySelectorAll("*").forEach((n) => {
+      if (n.children.length) return;
+      const texto = (n.textContent || "").trim();
+      if (!/^Bs\s*\/\s*(año|mes|sem)$/.test(texto)) return;
+      const clon = n.cloneNode(true);
+      clon.style.whiteSpace = "nowrap";
+      clon.style.position = "absolute";
+      clon.style.visibility = "hidden";
+      n.parentElement.appendChild(clon);
+      const natural = clon.getBoundingClientRect().width;
+      clon.remove();
+      const hermano = n.parentElement.firstElementChild;
+      vistas.push({
+        texto,
+        ciclo: cicloActual,
+        num: hermano && hermano !== n ? hermano.textContent.trim() : "?",
+        ancho: n.getBoundingClientRect().width,
+        natural,
+      });
+    });
+    return vistas;
+  }, ciclo);
+
 /** Los montos que el lead ve GRANDES — los que deciden la compra, no la letra chica. */
 const montosGrandes = (pagina) =>
   pagina.evaluate(() => {
@@ -214,6 +285,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   });
 
   const mensualesVistos = (await montosGrandes(pagina)).map(aNumero);
+  const unidadesMensual = await unidadesDePrecio(pagina, "mensual");
 
   const toggle = pagina.locator("button,[role=button],label").filter({ hasText: /anual/i }).first();
   let habiaToggle = true;
@@ -226,6 +298,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
 
   const anualesVistos = habiaToggle ? (await montosGrandes(pagina)).map(aNumero) : [];
   const porMesVistos = habiaToggle ? (await porMesALaVista(pagina)).map(aNumero) : [];
+  const unidadesAnual = habiaToggle ? await unidadesDePrecio(pagina, "anual") : [];
   await pagina.screenshot({ path: join(out, "anual.png") });
   await navegador.close();
 
@@ -241,15 +314,22 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   console.log(`  anual,  despues del clic: ${anualesVistos.join(", ")}`);
   console.log(`  "por mes" derivado      : ${porMesVistos.join(", ")}`);
 
-  const fallas = fallasDelSegundoTurno({ declarada, mensualesVistos, anualesVistos, porMesVistos });
+  const unidades = [...unidadesMensual, ...unidadesAnual];
+  console.log(`  unidades de precio medidas: ${unidades.length} (los dos ciclos)`);
+
+  const fallas = [
+    ...fallasDelSegundoTurno({ declarada, mensualesVistos, anualesVistos, porMesVistos }),
+    ...fallasDeUnidadPartida(unidades),
+  ];
   if (fallas.length) {
-    console.error(`\nROJO — el segundo turno publica ${fallas.length} precio(s) que nadie cobra:`);
+    console.error(`\nROJO — la banda de precios tiene ${fallas.length} defecto(s):`);
     for (const f of fallas) console.error(`  · ${f}`);
     console.error(`\nCaptura: ${join(out, "anual.png")}`);
     process.exit(1);
   }
   console.log(
-    `\nVERDE: el toggle responde y los ${anualesVistos.length} precios anuales + los ` +
-      `${porMesVistos.length} equivalentes mensuales salen de pricing.ts. Captura: ${join(out, "anual.png")}`,
+    `\nVERDE: el toggle responde, los ${anualesVistos.length} precios anuales + los ` +
+      `${porMesVistos.length} equivalentes mensuales salen de pricing.ts, y las ` +
+      `${unidades.length} unidades se leen enteras. Captura: ${join(out, "anual.png")}`,
   );
 }
