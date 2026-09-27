@@ -18,8 +18,10 @@ import { describe, expect, it } from "vitest";
  * seis meses después.
  *
  * Se mira la SECCIÓN, no el archivo: el resto de la portada sí lleva capturas
- * reales y eso está bien. Los comentarios numerados (`1 · HERO`, `2 · BANDA`)
- * son la estructura del archivo y sirven de ancla.
+ * reales y eso está bien. Los comentarios numerados del `page.tsx` (`1 · HERO` y
+ * los que le siguen) son la estructura del archivo y sirven de ancla — el ancla
+ * es el NOMBRE, y el orden lo dice el archivo: ver
+ * `seccion-citada-no-se-tipea.test.ts`.
  */
 
 const AQUI = dirname(fileURLToPath(import.meta.url));
@@ -79,8 +81,12 @@ describe("el hero de la portada se DIBUJA, no se captura", () => {
    * hace el asistente, no el plan— y cerraba con "El asistente es la puerta".
    * El add-on de Bs 390 era el argumento y el sistema de Bs 320 el relleno.
    *
-   * Se mira la PRIMERA PANTALLA, no la página: el asistente sigue teniendo su
-   * sección propia más abajo (6 · CHATBOT), que es donde le toca vender.
+   * Se mira la PRIMERA PANTALLA, no la página: el asistente tiene su sección
+   * propia (CHATBOT), que es donde le toca vender. DÓNDE va esa sección no lo
+   * decide este gate: hoy va inmediatamente después del hero por `a847d9aa`,
+   * "veredicto de Sergio 11-sep — chatbot protagonista". Nombrarla por su número
+   * acá ya mintió una vez (`seccion-citada-no-se-tipea.test.ts` cuenta el caso):
+   * lo que este gate defiende es que el TITULAR no sea el add-on, no su orden.
    */
   it("el titular vende el SISTEMA, no el asistente", () => {
     const copy = copyHero(PORTADA);
