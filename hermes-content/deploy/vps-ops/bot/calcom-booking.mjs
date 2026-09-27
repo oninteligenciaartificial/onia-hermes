@@ -26,6 +26,8 @@
 // Tolerante por contrato: no tira NUNCA. Si Cal.com no responde, devuelve `ok:false` con una
 // razon y el llamador decide. Un fallo de calendario no puede dejar al prospecto sin respuesta.
 
+import { lookup as dnsLookup } from "node:dns/promises";
+
 import { DEFAULT_CONFIG } from "./config.mjs";
 
 /**
@@ -271,6 +273,22 @@ const NO_RESUELVE = new Set(["EAI_AGAIN", "ENOTFOUND"]);
 export const DESTINO_CAIDO_MS = 10 * 60 * 1000;
 
 /**
+ * Cuanto se espera a que el NOMBRE del destino resuelva, en ms.
+ *
+ * Tope propio, y mas corto que el de la reserva A PROPOSITO. Medido el 2026-09-27 en el log
+ * vivo: de 27 reservas, 27 salieron por `no contesto en 5000ms (timeout)` y CERO por la rama
+ * que nombra el DNS — porque el resolvedor de Docker no contesta NXDOMAIN por `calcom`, cuelga
+ * hasta `EAI_AGAIN` a los 5013 ms, y el abort de la reserva le gana por 13 ms. Con los dos
+ * relojes en el mismo numero el diagnostico lo decide una carrera; preguntar la resolucion
+ * aparte lo vuelve determinista.
+ *
+ * 1500 ms es holgado por dos ordenes de magnitud: un nombre que EXISTE resuelve en 8 ms dentro
+ * de esta red (control `onia-platform`, misma medicion). Lo que compra no es precision, es que
+ * el prospecto que acepta un horario deje de esperar 5 s por un destino que no esta.
+ */
+export const RESOLUCION_TIMEOUT_MS = 1500;
+
+/**
  * Lo unico que se recuerda: hasta cuando, y por que. Vive en el modulo porque el destino es del
  * PROCESO, no de un turno — cada turno del webhook llama a `createBooking` de cero.
  */
@@ -290,6 +308,69 @@ export function olvidarDestinoCaido() {
  */
 function recordarDestinoCaido(now) {
   destinoCaidoHasta = now + DESTINO_CAIDO_MS;
+}
+
+/**
+ * ¿El NOMBRE del destino existe? Pregunta separada de "¿el destino contesta?".
+ *
+ * Devuelve `{ok:true}` si resuelve, y `{ok:false, detalle}` con el motivo YA REDACTADO si no.
+ * El detalle apunta a `CALCOM_BASE_URL` a proposito: es lo unico que se puede arreglar cuando
+ * un hostname no apunta a nada, y es lo que el motivo viejo ("no contesto") escondia.
+ *
+ * TRES SALIDAS, no dos, porque "no pude preguntar" no es "me dijeron que no":
+ *   - resuelve                  -> ok
+ *   - dice que no existe        -> no ok, con el codigo (`EAI_AGAIN` / `ENOTFOUND`)
+ *   - no contesta a tiempo      -> no ok, y se NOMBRA que fue el resolvedor el que colgo
+ *
+ * Un `baseUrl` que no se puede parsear se deja PASAR: ahi el que falla es el valor, no el
+ * nombre, y el `fetch` de abajo ya lo dice mejor que esto. Fallar aca seria acusar al DNS de
+ * un error de tipeo.
+ */
+async function resolverDestino(baseUrl, { lookup, timeoutMs, signal } = {}) {
+  let hostname = "";
+  try {
+    hostname = new URL(String(baseUrl)).hostname;
+  } catch {
+    return { ok: true };
+  }
+  if (!hostname) return { ok: true };
+
+  const resolver = typeof lookup === "function" ? lookup : dnsLookup;
+  const tope = Number(timeoutMs) > 0 ? Number(timeoutMs) : RESOLUCION_TIMEOUT_MS;
+
+  let alarma;
+  try {
+    // `race` y no un `AbortController`: `dns.lookup` no acepta signal, asi que un abort no lo
+    // corta — lo unico que se puede hacer es dejar de esperarlo. El proceso es de larga vida y
+    // la promesa huerfana se resuelve sola a los 5 s sin nadie escuchando; atarla a un signal
+    // daria la ilusion de cancelarla.
+    const vencimiento = new Promise((_r, reject) => {
+      alarma = setTimeout(() => reject(Object.assign(new Error("resolucion vencida"), { esVencimiento: true })), tope);
+    });
+    if (signal?.aborted) return { ok: false, detalle: "el llamador aborto antes de resolver el destino" };
+    await Promise.race([resolver(hostname), vencimiento]);
+    return { ok: true };
+  } catch (error) {
+    const codigo = String(error?.code || error?.cause?.code || "");
+    if (error?.esVencimiento) {
+      return {
+        ok: false,
+        detalle: `el nombre del destino no resuelve (${hostname}: el resolvedor no contesto en ${tope}ms): revisar CALCOM_BASE_URL, no la red del prospecto`,
+      };
+    }
+    if (NO_RESUELVE.has(codigo)) {
+      return {
+        ok: false,
+        detalle: `el nombre del destino no resuelve (${codigo}): revisar CALCOM_BASE_URL, no la red del prospecto`,
+      };
+    }
+    // Cualquier otra cosa del resolvedor NO se toma como veredicto: que el `fetch` de abajo
+    // hable. Una guarda que inventa un rojo con un error que no entiende tapa el diagnostico
+    // real igual que el motivo que vino a arreglar.
+    return { ok: true };
+  } finally {
+    clearTimeout(alarma);
+  }
 }
 
 /**
@@ -343,6 +424,41 @@ export async function createBooking(options = {}, deps = {}) {
   // turno del prospecto quedaba atado a lo que tardara la red. Con el signal del llamador
   // presente se respeta: el reloj se suma, no lo reemplaza.
   const timeoutMs = Number(deps.timeoutMs) > 0 ? Number(deps.timeoutMs) : BOOKING_TIMEOUT_MS;
+
+  // ¿EXISTE EL NOMBRE? Se pregunta APARTE y ANTES, con su propio tope.
+  //
+  // Medido el 2026-09-27 en el log vivo: 27 de 27 reservas salieron por "no contesto en 5000ms
+  // (timeout)" y CERO por la rama de DNS de abajo, que por eso llevaba semanas muerta. La causa
+  // ya estaba anotada en `DESTINO_CAIDO_MS` pero su conclusion era al reves: cuando el abort de
+  // la reserva le gana al resolvedor, NO HAY `cause.code` que leer — se sale por `AbortError` y
+  // el motivo dice "no contesto", que apunta a un calendario lento cuando el destino NO EXISTE.
+  // Dos remedios opuestos (subir el tope vs. mirar `CALCOM_BASE_URL`) elegidos por quien gana
+  // una carrera de 13 ms.
+  //
+  // Con la resolucion aparte el veredicto ya no depende del reloj, y el prospecto que acepta un
+  // horario —el unico turno del embudo que produce plata— espera 1,5 s en vez de 5.
+  // ⚠️ Y solo se pregunta cuando la respuesta puede valer para LA RED QUE SE VA A USAR. Si el
+  // llamador inyecto su propio `fetch`, reemplazo la red: el DNS del ambiente no es la red de
+  // ese fetch, asi que resolver ahi no contesta la pregunta — la contesta sobre otro sistema.
+  // Tri-estado de siempre: "no pude preguntar" no es "me dijeron que no". Un test que inyecta
+  // `fetch` sin `lookup` no queda atado al DNS de la maquina donde corre; produccion no inyecta
+  // ninguno de los dos (`run-turn.mjs:553` pasa los `deps` del webhook), asi que ahi SI se
+  // pregunta, que es donde importa.
+  const redInyectada = typeof (deps.fetch || options.fetch) === "function";
+  const resolucion = typeof deps.lookup === "function" || !redInyectada
+    ? await resolverDestino(config.baseUrl, {
+        lookup: deps.lookup,
+        timeoutMs: Math.min(RESOLUCION_TIMEOUT_MS, timeoutMs),
+        signal: deps.signal,
+      })
+    : { ok: true };
+  if (!resolucion.ok) {
+    // Es el MISMO no-reservar de siempre: el prospecto recibe la misma salvedad honesta
+    // (`cierreDeReservaFallida` no distingue motivos fuera de `horario_tomado`). Lo que cambia
+    // es a donde manda a mirar el que lee el log, y lo que el proximo prospecto no espera.
+    recordarDestinoCaido(ahora());
+    return { ok: false, uid: null, reason: "error", warnings: [`calcom: la reserva no salio: ${resolucion.detalle}`] };
+  }
   const reloj = new AbortController();
   const alarma = setTimeout(() => reloj.abort(), timeoutMs);
   const cancelarConElLlamador = () => reloj.abort();
