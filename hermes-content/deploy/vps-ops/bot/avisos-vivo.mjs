@@ -131,9 +131,42 @@ export function resolverBotDesplegado(deps = {}) {
  */
 export const CAUSA_GLOBAL_DE_SALTEO = "ONIA_BOT_TG_AVISO";
 
+/**
+ * El patron ISO que el log estampa. Lo comparten la ventana, la conciliacion y los anclajes
+ * de `[aviso]`: son el mismo eje. Va en clases POSIX (no `\d`) porque tambien viaja dentro de
+ * un `grep -oE` que corre donde vive el log.
+ */
+const ISO_EN_EL_LOG = '20[0-9][0-9]-[0-9][0-9]-[0-9][0-9]T[0-9][0-9]:[0-9][0-9]:[0-9][0-9]';
+
+/**
+ * TODO anclaje que lee una linea `[aviso]` se arma aca, y por eso tolera la hora OPCIONAL.
+ *
+ * POR QUE UNA SOLA FUENTE. Son SEIS los anclajes que leen estas lineas —`motivoDelAviso`,
+ * `conEstado`, el `sent` y el `skipped` de `contarEventos`, y el `conv=` y el `estado` de
+ * `conversacionesDeAvisos`— y hasta el 2026-09-26 cada uno traia su literal `\[aviso\]`
+ * pegado a la palabra de estado. Con la hora en el medio el `\w+` captura `2026`: el
+ * `estado` pasa a ser "2026", el `conv=` propio deja de matchear y cae al vecino de arriba
+ * —otra conversacion—, el motivo queda "sin motivo en el log" y los contadores se van a
+ * CERO. Sin un solo error, y en el unico lugar donde este carril cuenta si el aviso le llego
+ * a Sergio Urcullo. La cola los daba por CINCO: el que faltaba era `conEstado`, justo el que
+ * alimenta el numero que se publica. Con los seis derivados de aca, arreglar cinco y olvidar
+ * uno dejo de ser posible.
+ *
+ * POR QUE OPCIONAL Y NO OBLIGATORIA. Hoy `webhook-server.mjs` (`:767` y `:770`) escribe estas
+ * lineas sin hora, con un `log()` que es un `process.stdout.write` pelado, mientras su
+ * hermana `[onia-webhook]` se fecha a si misma (`:318`). Estampar la hora es lo que falta
+ * para poder contar el objetivo por dia, pero ese archivo esta congelado detras de un pedido
+ * de deploy del bot de 13 archivos que NO lo incluye. Aceptando los dos formatos, el dia que
+ * la hora llegue no hay "los dos archivos o ninguno" ni un parser roto en el medio: el log
+ * viejo del VPS es append-only y sus lineas peladas se siguen leyendo igual.
+ */
+function anclaAviso(resto) {
+  return new RegExp(String.raw`\[aviso\]\s+(?:${ISO_EN_EL_LOG}(?:\.[0-9]+)?Z?\s+)?${resto}`);
+}
+
 /** El `(motivo)` con el que el motor pidio el aviso: `[aviso] skipped (cuota_agotada): ...`. */
 function motivoDelAviso(linea) {
-  return /\[aviso\]\s+\w+\s+(?:conv=\d+\s+)?\(([^)]+)\)/.exec(String(linea))?.[1] || "sin motivo en el log";
+  return anclaAviso(String.raw`\w+\s+(?:conv=\d+\s+)?\(([^)]+)\)`).exec(String(linea))?.[1] || "sin motivo en el log";
 }
 
 /**
@@ -149,18 +182,18 @@ function motivoDelAviso(linea) {
  */
 export function contarEventos(lineas = []) {
   const avisos = (Array.isArray(lineas) ? lineas : []).filter((l) => String(l).includes("[aviso]"));
-  const conEstado = (estado) => avisos.filter((l) => new RegExp(`\\[aviso\\]\\s+${estado}\\b`).test(l)).length;
+  const conEstado = (estado) => avisos.filter((l) => anclaAviso(`${estado}\\b`).test(l)).length;
 
   // Posicion del ultimo envio exitoso: todo lo anterior a el ya fue desmentido POR EL
   // CIRCUITO, que volvio a mandar. Se compara por orden en el log, que es el orden real.
   let ultimoEnvio = -1;
   avisos.forEach((l, i) => {
-    if (/\[aviso\]\s+sent\b/.test(String(l))) ultimoEnvio = i;
+    if (anclaAviso(String.raw`sent\b`).test(String(l))) ultimoEnvio = i;
   });
 
   const vigentes = [];
   avisos.forEach((l, i) => {
-    if (!/\[aviso\]\s+skipped\b/.test(String(l))) return;
+    if (!anclaAviso(String.raw`skipped\b`).test(String(l))) return;
     const curado = String(l).includes(CAUSA_GLOBAL_DE_SALTEO) && ultimoEnvio > i;
     if (!curado) vigentes.push(motivoDelAviso(l));
   });
@@ -200,14 +233,14 @@ export function conversacionesDeAvisos(lineas = []) {
   const eventos = [];
   todas.forEach((l, i) => {
     if (!l.includes("[aviso]")) return;
-    const propio = /\[aviso\]\s+\w+\s+conv=(\d+)/.exec(l)?.[1];
+    const propio = anclaAviso(String.raw`\w+\s+conv=(\d+)`).exec(l)?.[1];
     // Solo la vecina INMEDIATA, y solo si es una linea de webhook: el aviso se loguea en el
     // callback del mismo turno, asi que cualquier otra distancia ya es adivinar.
     const previa = todas[i - 1] || "";
     const vecino = !propio && previa.includes("[onia-webhook]") ? /\bconv=(\d+)/.exec(previa)?.[1] : null;
     const conv = propio ?? vecino ?? null;
     eventos.push({
-      estado: /\[aviso\]\s+(\w+)/.exec(l)?.[1] || null,
+      estado: anclaAviso(String.raw`(\w+)`).exec(l)?.[1] || null,
       motivo: motivoDelAviso(l),
       conv: conv === null ? null : Number(conv),
       // Si el salteo fue por la causa GLOBAL o por una propia de este aviso. El `motivo` no
@@ -799,9 +832,6 @@ export function inboxPorConversacion(convs = []) {
   }
   return mapa;
 }
-
-/** El patron ISO que el log estampa. Lo comparten la ventana y la conciliacion: son el mismo eje. */
-const ISO_EN_EL_LOG = '20[0-9][0-9]-[0-9][0-9]-[0-9][0-9]T[0-9][0-9]:[0-9][0-9]:[0-9][0-9]';
 
 /**
  * La ventana de tiempo que el log VIVO puede responder, derivada de sus propias marcas.

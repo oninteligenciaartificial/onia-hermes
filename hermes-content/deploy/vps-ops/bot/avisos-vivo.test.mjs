@@ -198,6 +198,79 @@ test("contarEventos ignora las lineas que no son del aviso", () => {
   assert.equal(contarEventos(lineas).total, 1);
 });
 
+// ---------------------------------------------------------------------------
+// La linea `[aviso]` se va a FECHAR, y este parseo tiene que sobrevivirlo
+// ---------------------------------------------------------------------------
+//
+// POR QUE EXISTE. Hoy `webhook-server.mjs` (`:767` y `:770`) escribe estas lineas con un
+// `process.stdout.write` pelado, sin hora, mientras su hermana `[onia-webhook]` se fecha a
+// si misma. Eso deja al objetivo de este carril —"una linea de aviso por cada
+// demo_agendada / handoff_humano"— sin poder contarse por dia: `10 [aviso] sent conv=49` se
+// lee como un evento disparando diez avisos, y son diez corridas de la sonda.
+//
+// El arreglo natural es estampar la hora igual que la hermana: tag, hora, estado. Y ahi
+// estaba la trampa, que es la razon de este test: los SEIS anclajes que leen estas lineas
+// exigian `[aviso]` seguido INMEDIATAMENTE de la palabra de estado, asi que con la hora en
+// el medio el `\w+` captura `2026` — el `estado` pasa a ser "2026", el `conv=` propio deja
+// de matchear y cae al vecino, el motivo queda "sin motivo en el log" y los contadores se
+// van a CERO. Sin un solo error, y en el unico lugar donde este carril cuenta si el aviso
+// le llego a Sergio Urcullo.
+//
+// La cola daba esto por CINCO anclajes (`:136`, `:158`, `:163`, `:203`, `:210`) y son SEIS:
+// `conEstado` (`:152`) es el que alimenta enviados/salteados/fallidos, o sea el numero que
+// se publica. Contarlos de menos era publicar un arreglo a medias.
+//
+// Aceptar los DOS formatos —y no cambiar de uno a otro— es lo que desacopla el arreglo: hoy
+// `webhook-server.mjs` esta congelado detras de un pedido de deploy de 13 archivos que no lo
+// incluye, y este archivo SI es uno de los 13. Con el parseo tolerante, el dia que la hora
+// llegue no hay "los dos archivos o ninguno" ni un parser roto en el medio.
+
+const FECHADO = "2026-09-26T19:15:18.021Z";
+
+test("un `[aviso]` FECHADO se lee igual que uno pelado: los seis anclajes toleran la hora", () => {
+  const pelado = "[aviso] sent conv=49 (demo_agendada): aviso enviado";
+  const fechado = `[aviso] ${FECHADO} sent conv=49 (demo_agendada): aviso enviado`;
+
+  // Los contadores (anclajes `conEstado` :152 y `sent` :158) no pueden depender del formato.
+  assert.equal(contarEventos([fechado]).total, 1);
+  assert.equal(contarEventos([fechado]).enviados, contarEventos([pelado]).enviados);
+  assert.equal(contarEventos([fechado]).enviados, 1);
+
+  // El sujeto y su motivo (anclajes `conv=` :203, `estado` :210, `motivoDelAviso` :136).
+  const [conFecha] = conversacionesDeAvisos([fechado]);
+  const [sinFecha] = conversacionesDeAvisos([pelado]);
+  assert.equal(conFecha.estado, "sent");
+  assert.equal(conFecha.conv, 49);
+  assert.equal(conFecha.motivo, "demo_agendada");
+  assert.deepEqual(conFecha, sinFecha);
+});
+
+test("el `conv` de un aviso FECHADO sale de la linea propia, no del vecino de arriba", () => {
+  // La direccion cara del bug: con el anclaje roto el `conv=` propio no matchea y cae al
+  // webhook anterior, que es OTRA conversacion. Un aviso atribuido a quien no es manda a
+  // buscar a la persona equivocada — es el caso que `conversacionesDeAvisos` existe para
+  // evitar, y la hora en el medio lo reintroducia.
+  const lineas = [
+    "[onia-webhook] 2026-09-26T19:15:17.900Z conv=11 msg=497 estado=200 rama=respondio",
+    `[aviso] ${FECHADO} sent conv=49 (demo_agendada): aviso enviado`,
+  ];
+  assert.equal(conversacionesDeAvisos(lineas)[0].conv, 49);
+});
+
+test("un salteo FECHADO por la causa global lo sigue curando un envio posterior", () => {
+  // El anclaje `skipped` (:163) es el que decide si un salteo esta VIGENTE. Roto por la
+  // hora, ningun salteo se reconoce: `salteadosVigentes` cae a 0 y el gate firma verde
+  // sobre una persona que nadie atendio.
+  const lineas = [
+    `[aviso] ${FECHADO} skipped (handoff): aviso por Telegram apagado (ONIA_BOT_TG_AVISO)`,
+    `[aviso] 2026-09-26T19:20:00.000Z sent conv=49 (demo_agendada): aviso enviado`,
+  ];
+  const eventos = contarEventos(lineas);
+  assert.equal(eventos.salteados, 1);
+  assert.equal(eventos.enviados, 1);
+  assert.equal(eventos.salteadosVigentes, 0);
+});
+
 test("sin poder medir, el veredicto es no_medido — NUNCA ok", () => {
   // La direccion cara. Ya paso en este carril el 2026-09-05: un gate que leia una ruta
   // absoluta del VPS dejo de medir al mudarse el loop, y el objetivo siguio firmando

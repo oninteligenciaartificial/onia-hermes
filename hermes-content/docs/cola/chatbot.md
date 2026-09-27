@@ -9401,11 +9401,28 @@ cita: al cerrar una fila hay que barrer quién la nombra, no sólo tacharla.
       van a cero — **sin un solo error, y en el único lugar donde este carril cuenta si el aviso le
       llegó a Sergio Urcullo.** Se derivan con el mismo grep de arriba apuntado a `avisos-vivo.mjs`.
 
-      **Así que el arreglo son DOS archivos que viajan juntos o ninguno**, y están en deploys
-      distintos: `webhook-server.mjs` (fuera de los 13) y `avisos-vivo.mjs` (**dentro** de los 13).
-      Publicar uno sin el otro deja el parser roto en el medio. Lo barato es poner la hora donde
-      ningún ancla la pisa —al final, o antes del `[aviso]`— y **ver el rojo primero** corriendo
-      `avisos-vivo.test.mjs` contra una línea con el formato nuevo.
+      ⚠️ **El acoplamiento ya NO existe — hecha la mitad desacoplable el 2026-09-26 20:55 La Paz.**
+      Acá decía que *«el arreglo son DOS archivos que viajan juntos o ninguno»* y que había que
+      poner la hora *«donde ningún ancla la pisa —al final, o antes del `[aviso]`»*. Las dos cosas
+      dejaron de ser ciertas: `avisos-vivo.mjs` ahora acepta **los dos formatos**, con hora y sin
+      hora, así que `webhook-server.mjs` puede estampar la hora **donde la estampa su hermana**
+      (tag → hora → estado, que es lo consistente con el resto del log) el día que se destrabe, sin
+      arrastrar a este archivo y sin parser roto en el medio. El log viejo del VPS es append-only y
+      sus líneas peladas se siguen leyendo igual: `npm run avisos:vivo` devuelve el mismo recuento
+      que antes del cambio (27 avisos · 25 enviados · 2 salteados, medido las dos veces).
+
+      **Y eran SEIS anclajes, no cinco.** La lista de arriba (`:136`, `:158`, `:163`, `:203`,
+      `:210`) no contaba a **`conEstado`**, que es justo el que alimenta
+      `enviados`/`salteados`/`fallidos`, o sea el número que se publica: arreglar los cinco
+      nombrados habría dejado los contadores en cero igual. Ahora los seis se derivan de **una
+      sola** función (`anclaAviso`), así que arreglar cinco y olvidar uno dejó de ser posible.
+      Rojo visto primero por los tres motivos correctos (contadores en 0, el `conv` cayendo al
+      vecino `11` en vez de `49`, y el salteo sin reconocer); verde después: 1449/1449 en
+      `npm run test:bot`.
+
+      **Lo que queda del ítem es UNA línea en un archivo congelado:** estampar la hora en
+      `webhook-server.mjs` `:767` y `:770`. Sigue detrás del `ok` del pedido de deploy del bot
+      (derivar el ID con el comando de abajo). No toca a nadie más.
 
       🔴 **El ID no se copia — se deriva, y esta línea ya se equivocó una vez.** Decía
       `t_76cdb5dc` y esa tarea está **`archived`** desde el 2026-09-26 16:48: el pedido se rehizo
