@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Mide los precios que dice el bot QUE ESTA CORRIENDO, no los del repo. Correr:
-//   node hermes-content/deploy/vps-ops/bot/precios-vivos.mjs     (npm run bot:precios-vivos)
+//   node hermes-content/deploy/vps-ops/bot/precios-vivos.mjs     (npm run precios:vivos)
 //   node hermes-content/deploy/vps-ops/bot/precios-vivos.mjs --self-check
 //
 // ORIGEN (medido el 2026-09-12, carril chatbot-cola). El carril tiene como objetivo que "el bot

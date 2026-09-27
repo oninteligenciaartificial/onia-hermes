@@ -10799,6 +10799,61 @@ archivos.**
 
 ## Cerrado — no rehacer
 
+- [x] **CERRADO el 2026-09-27 11:20-11:55 UTC — el remedio que la sonda del widget imprime
+      cuando el bot vivo cotiza un precio que ya no existe moría en `Missing script`, y ningún
+      gate podía verlo** (es gate + comentarios: **no toca el motor, no necesita deploy, no toca
+      los 13 archivos de `t_3752e986`**).
+
+      «Ahora» no dio ítem (T10 sigue esperando el `ok` del pedido del bot), así que la vuelta
+      corrió el método que dejó escrito la anterior: **correr los instrumentos del carril y
+      auditar si son honestos**. Lo que apareció no estaba en ninguna cola.
+
+      `scripts/sonda_widget.mjs:318` es el rojo más caro del carril —*«el bot vivo cotiza un monto
+      que ya no existe»*, el defecto que en septiembre le cotizó **Bs 750 y Bs 1.500** a leads
+      reales con `simulate.mjs` 3/3 y `test:precios-bot` verde— y su remedio impreso mandaba a
+      correr ~~`npm run bot:precios-vivos`~~. **Ese alias nunca existió: es `precios:vivos`.**
+      La cabecera de `precios-vivos.mjs` lo citaba igual. Verificado corriendo el bueno:
+      `npm run precios:vivos` → **exit 0**, *«EL BOT VIVO COTIZA SOLO PRECIOS DE LA FUENTE ÚNICA —
+      17 montos vigentes»*, y su proceso **sirve la fuente `panel` (versión v4)**.
+
+      **Por qué el gate de punteros no lo veía — son DOS huecos, y los dos eran de su diseño:**
+
+      - **Namespace.** El matcher decía `^(?:npm run\s+)?(test:[a-z0-9-]+)$`: sólo veía `test:`.
+        La raíz tiene **50 namespaces más** (`precios:`, `avisos:`, `embudo:`, `sonda:`, `bot:`,
+        `deploy:`…) y un alias muerto en cualquiera era **invisible, no rojo**. Es el mismo
+        defecto que el propio origen del gate narra (~~`test:traefik-auth-cloudflare`~~), un
+        namespace corrido.
+      - **Sujeto.** Barría las dos colas, y **la receta que un carril sigue cuando algo se rompe
+        no está en la cola: la imprime el instrumento.** Ahora los sujetos se derivan del disco —
+        los archivos que los alias de la raíz nombran (**85**), con los `*.test.*` afuera y el
+        motivo escrito: sus fixtures nombran alias a propósito.
+
+      ⚠️ **La forma `bare` se aceptó sólo para `test:`, y eso está MEDIDO, no elegido por gusto:**
+      aceptar cualquier `x:y` pelado acusaba **61 sujetos y ninguno era un alias**
+      (`chatwoot:58`, `10:23:04`, `og:url`, `md:pb-28`, `postgres:postgres`, `node:20-alpine`).
+      Con `npm run` delante el que escribió ya declaró que es ejecutable: **0 ruido sobre 466
+      trozos**. Los cinco falsos positivos están fijados como casos.
+
+      ⚠️ **Y los alias vivos salen de los 21 `package.json` del repo, no del de la raíz** — misma
+      lección que las tres carpetas `scripts/`: contra la raíz sola, `precios:fuente` (vivo en
+      `web-factory/apps/onia-platform`) salía MUERTO, o sea un **fósil inventado**. Un alias cuyo
+      namespace la raíz no usa sale **AJENO** y se cuenta aparte, nunca en silencio:
+      `gate:iconos` y `check:onia-core` son del repo `onia-platform`, que no está en este árbol.
+      Y si un `package.json` que el índice nombra no se puede leer (worktree sparse), el gate sale
+      **NO MEDIDO (exit 2)**: descartarlo borraría alias y convertiría citas sanas en fósiles.
+
+      **Gate: `npm run test:punteros-cola`.** Rojo antes por el motivo correcto (nombró las 3
+      citas con archivo y línea), verde después, y **probado por mutación**: al romper a mano el
+      alias de `sonda_widget.mjs` el gate lo acusa por su línea y vuelve a verde al revertirlo
+      (revertido con `cp`, nunca `git checkout`). El conteo del self-check pasó a derivarse de las
+      corridas (**41 casos**): estaba escrito a mano —«21 caso(s)»— y un número a mano se queda
+      viejo en cuanto alguien agrega un caso.
+
+      🔴 **La salida para un fixture que NECESITE nombrar un alias muerto es la misma convención
+      de las colas: tacharlo con `~~`.** Este archivo es sujeto de su propio barrido, así que el
+      caso que reproduce el fósil usa un namespace inventado (`fulano:mengano`) en vez del nombre
+      real — **un instrumento no se exime de su propio gate**, y esa es la propiedad buscada.
+
 - [x] **CERRADO el 2026-09-26 18:05 La Paz — las dos colas de este carril mandaban a 5 lugares
       equivocados, y una de las rutas rotas me la creí yo mismo auditando** (es doc + gate, no
       toca el motor ni el producto: **no necesita deploy**).

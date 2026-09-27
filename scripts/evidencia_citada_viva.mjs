@@ -376,7 +376,7 @@ function selfCheck() {
   ok('una cita SIN veredicto declarado no se juzga', citasDeEvidencia('correr `npm run test:bot` antes').juzgables.length === 0);
   ok(
     'un numero suelto no es un codigo de salida',
-    citasDeEvidencia('`npm run rubros:vendibles` de los 5 rubros activos').juzgables.length === 0,
+    citasDeEvidencia('`npm run rubros:vivos` de los 5 rubros activos').juzgables.length === 0,
   );
   ok(
     'un codigo de 4 digitos no es un codigo de salida (`exit 1114` de los tests)',
