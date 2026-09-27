@@ -12,6 +12,33 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-26 21:10-21:14 La Paz (vuelta HEAD d58daf8c) — rotación de rubro sigue: Estética y spa, 9/9 sin hallazgo
+
+Chequeo de arranque: `ONIA_ALTA_AUTOMATICA=abierta`. Tablero sin tareas `ready` sin reclamar en
+la zona `recorrido-cliente`. `BUILD_ID` vivo cambió a `PNIhLndYbrHxc_q0RFByG` (antes
+`DvBubiuO4uC5_E9jFNJeZ`) — hubo deploy nuevo, pero el eje que correspondía por la nota anterior
+("Próximo eje: Estética") ya era el siguiente paso de la rotación, así que se corrió ése.
+
+`RECORRIDO_RUBRO='Estética y spa' node scripts/recorrido_cliente.mjs --escribir` (cuenta
+`zz-qa-2026-09-27-0110@onia.com.bo`): **9/9 pasos que le corresponden, `completo: true`,
+`agujeros: []`.** Onboarding en 6 pantallas (horarios lun-vie 09-13/15-19, equipo con 1
+profesional), paciente `zz-qa-2026-09-27-0110-paciente` cargado y visto en `/patients`, cita
+`2026-09-28 09:00` agendada (201, id `cmuj4krtk003z01n0lfovmmh5`) y VISTA en `/appointments`,
+factura con ítem `zz-qa-2026-09-27-0110-item` vista en `/billing/cmuj4l2hw004101n08lanx8qu`,
+FRENADO ahí sin pagar. Panel mirado: el paciente no figura en `/dashboard` (esperado, el panel no
+lista pacientes). **Sin hallazgo** — el `BUILD_ID` nuevo no rompió nada en Estética.
+
+Limpieza verificada al cerrar: `organizations`/`appointments` con `zz-qa-%` = 0.
+
+**Próximo eje para la vuelta siguiente**: seguir la rotación con Servicios profesionales (cuarto
+rubro del ciclo nuevo — dental, comercio, estética ya corridos en este ciclo).
+
+RAZÓN: N/A — avanzó (rotación de rubro, Estética 9/9 sin hallazgo, `BUILD_ID` nuevo verificado).
+LECCIÓN: ninguna nueva — grepear los ejes antes de tirar `--escribir` a secas (la lección de la
+vuelta anterior) volvió a evitar repetir dental sin necesidad.
+
+---
+
 ## 2026-09-26 20:14-20:41 La Paz (vuelta HEAD b7a6ad57) — dental base repetido por error de método, corregido con Comercio (rotación de rubro), 8/8 sin hallazgo
 
 Corrí `node scripts/recorrido_cliente.mjs --escribir` en dental plano (cuenta
