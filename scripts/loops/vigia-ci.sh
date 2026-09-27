@@ -45,6 +45,10 @@ MARCA_DIR="${ONIA_CI_MARCA_DIR:-/var/lib}"
 TG="${ONIA_TG:-/root/bin/onia-tg.sh}"
 # Para el autotest: si apunta a un archivo, se usa en vez de llamar a la API.
 FIXTURE="${ONIA_CI_FIXTURE:-}"
+# Idem para `actions/runs/<id>/jobs`, que es lo que separa «el CI dijo que esta
+# roto» de «el CI no pudo correr». Va aparte a proposito: sin el, el fixture de
+# corridas deja la pregunta por los jobs SIN CONTESTAR, que es el tri-estado.
+FIXTURE_JOBS="${ONIA_CI_FIXTURE_JOBS:-}"
 
 TABLERO="${ONIA_TABLERO:-/root/bin/onia-tablero.sh}"
 
@@ -98,7 +102,7 @@ Mientras tanto este vigia sale 0 y no vuelve a insistir."
 fi
 
 # ── Traer el estado de cada objetivo ────────────────────────────────────────
-# Salida normalizada, una linea por workflow:  <workflow>\t<conclusion>\t<sha>\t<url>\t<created_at>
+# Salida normalizada, una linea por workflow:  <workflow>\t<conclusion>\t<sha>\t<url>\t<created_at>\t<run_id>
 estado_de() {  # estado_de <owner/repo> <rama>
   local repo="$1" rama="$2" json
   if [ -n "$FIXTURE" ]; then
@@ -129,8 +133,52 @@ let e = ""; process.stdin.on("data", c => e += c); process.stdin.on("end", () =>
     const c = r.conclusion;
     if (!c || ["cancelled", "skipped", "neutral"].includes(c)) continue;  // no son veredictos sobre el codigo
     visto.add(n);
-    console.log([n, c, (r.head_sha || "").slice(0, 7), r.html_url || "", r.created_at || ""].join("\t"));
+    console.log([n, c, (r.head_sha || "").slice(0, 7), r.html_url || "", r.created_at || "", r.id || ""].join("\t"));
   }
+});
+' 2>/dev/null
+}
+
+# ── ¿El trabajo de esta corrida LLEGO A CORRER? ─────────────────────────────
+#
+# Un `failure` no siempre habla del codigo. Medido el 2026-09-27: `CI` y
+# `Security` de `master` fallaron los dos a la vez, en 3 segundos, con CERO
+# pasos ejecutados y sin runner asignado, contra 7-8 MINUTOS en las corridas
+# verdes anteriores; los logs ni existian (`BlobNotFound`). El codigo estaba
+# sano. GitHub no le habia dado maquina — `onia-platform` es privado y sus
+# minutos de Actions se cobran, asi que la causa vive en la cuenta, no en el
+# repo. El vigia, mientras tanto, creaba tareas diciendo «master esta roto».
+#
+# La senal es DETERMINISTA, no la duracion: un trabajo que corrio deja pasos
+# ejecutados y el nombre del runner que se lo dio. Se pregunta SOLO cuando hay
+# rojo, asi que no agrega una llamada por vuelta en el caso normal.
+#
+# TRI-ESTADO a proposito — "EJECUTADO", "NO_EJECUTADO", o vacio = no se pudo
+# preguntar. Vacio se comporta como hasta hoy (se avisa el rojo): confundir «no
+# pude preguntar» con «me dijeron que no» es justo el modo de falla que esto
+# cierra, y reintroducirlo del otro lado seria peor — dejaria de avisar rojos
+# de verdad cada vez que la API de jobs no conteste.
+ejecucion_de() {  # ejecucion_de <owner/repo> <run_id>
+  local repo="$1" run_id="${2:-}" json
+  if [ -n "$FIXTURE_JOBS" ]; then
+    json=$(cat "$FIXTURE_JOBS" 2>/dev/null)
+  elif [ -n "$FIXTURE" ]; then
+    return 0            # fixture de corridas sin fixture de jobs: no se pudo preguntar
+  else
+    [ -n "$run_id" ] || return 0
+    json=$(curl -s --max-time 25 \
+      -H "Authorization: Bearer $TOKEN" \
+      -H "Accept: application/vnd.github+json" \
+      "https://api.github.com/repos/$repo/actions/runs/$run_id/jobs" 2>/dev/null)
+  fi
+  printf '%s' "$json" | node -e '
+let e = ""; process.stdin.on("data", c => e += c); process.stdin.on("end", () => {
+  let d;
+  try { d = JSON.parse(e); } catch { return; }            // ilegible: no se pudo preguntar
+  if (!d || !Array.isArray(d.jobs) || d.jobs.length === 0) return;   // idem: sin jobs no hay con que juzgar
+  const arranco = d.jobs.some(j =>
+    (Array.isArray(j.steps) && j.steps.length > 0) || String(j.runner_name || "").length > 0);
+  console.log(arranco ? "EJECUTADO" : "NO_EJECUTADO");
 });
 ' 2>/dev/null
 }
@@ -142,7 +190,7 @@ for objetivo in $OBJETIVOS; do
   SALIDA=$(estado_de "$REPO" "$RAMA")
   [ -z "$SALIDA" ] && continue
 
-  while IFS=$'\t' read -r WF CONCL SHA URL CREADO; do
+  while IFS=$'\t' read -r WF CONCL SHA URL CREADO RUN_ID; do
     [ -n "${WF:-}" ] || continue
 
     # La API contesto un error (token vencido, permiso quitado, repo movido). Es
@@ -162,6 +210,9 @@ No se toco ninguna marca: no se puede declarar verde lo que no se pudo mirar."
     # Una marca por repo+workflow. El nombre del workflow puede traer espacios.
     CLAVE=$(printf '%s-%s' "$REPO" "$WF" | tr -c 'A-Za-z0-9._-' '-')
     MARCA="$MARCA_DIR/onia-ci-$CLAVE.rojo"
+    # Episodio distinto, marca distinta: «el CI dijo que esta roto» y «el CI no
+    # pudo correr» son dos problemas con dos remedios, y uno no cura al otro.
+    SINMEDIR="$MARCA_DIR/onia-ci-$CLAVE.sinmedir"
 
     # LA RESPUESTA DE LA API NO PUEDE RETROCEDER EN EL TIEMPO.
     #
@@ -197,20 +248,21 @@ No se toco ninguna marca: no se puede declarar verde lo que no se pudo mirar."
     [ -n "$T_ESTE" ] && printf '%s' "$T_ESTE" > "$VISTO"
 
     if [ "$CONCL" = "success" ]; then
-      if [ -f "$MARCA" ]; then
+      # Verde cura los DOS episodios: el rojo del codigo y el «no pudo correr».
+      # Si volvio a correr y dio verde, quedo medido y quedo bien.
+      if [ -f "$MARCA" ] || [ -f "$SINMEDIR" ]; then
         # La marca guarda el id de la tarea que abrio este episodio (puede estar
         # vacia: marcas viejas, o un rojo que no llego a crear tarea).
-        TAREA_ROJA=$(grep -oE 't_[0-9a-f]{8}' "$MARCA" 2>/dev/null | head -1 || true)
+        TAREA_ROJA=$(cat "$MARCA" "$SINMEDIR" 2>/dev/null | grep -oE 't_[0-9a-f]{8}' | head -1 || true)
         avisar "🟢 <b>CI recuperado</b> — <code>$REPO</code> · <b>$WF</b>
 Verde en <code>$SHA</code>." >/dev/null
         cerrar_tarea "$TAREA_ROJA" "Cerrada por el vigia de CI: $REPO · $WF volvio a verde en $SHA. El rojo que abrio esta tarea ya no es cierto."
-        rm -f "$MARCA"
+        rm -f "$MARCA" "$SINMEDIR"
       fi
       continue
     fi
 
     # failure / timed_out / startup_failure / action_required
-    [ -f "$MARCA" ] && continue      # ya avisamos de este episodio
 
     # CUANDO fue el fallo va ADENTRO del aviso.
     #
@@ -225,6 +277,12 @@ Verde en <code>$SHA</code>." >/dev/null
     #
     # Se agrega solo cuando aporta: en un rojo de hoy «hace 0 dias» es ruido, y
     # el caso 11 de la prueba existe para que nadie lo ponga siempre.
+    #
+    # Se calcula ACA ARRIBA, antes de los dos avisos, porque los dos la quieren:
+    # «el CI no esta midiendo desde hace tres dias» es otra urgencia que «desde
+    # recien». Con `set -u`, usarla antes de definirla aborta el script ENTERO y
+    # el vigia se apaga mudo — el modo de falla que estos avisos existen para
+    # evitar, entrando por la puerta de al lado.
     CUANDO=""
     if [ -n "${CREADO:-}" ]; then
       CUANDO="
@@ -235,6 +293,30 @@ Corrida del <code>${CREADO%%T*}</code>"
       fi
       CUANDO="$CUANDO."
     fi
+
+    # ANTES DE LLAMARLO ROJO: ¿el trabajo llego a correr? Un `failure` de una
+    # corrida que nunca arranco no habla del codigo (ver `ejecucion_de`).
+    if [ "$(ejecucion_de "$REPO" "$RUN_ID")" = "NO_EJECUTADO" ]; then
+      [ -f "$SINMEDIR" ] && continue     # ya avisamos de este episodio
+      ID_TAREA=$(avisar "⚠️ <b>El CI no esta midiendo</b> — <code>$REPO</code> · <b>$WF</b>
+La corrida de <code>$SHA</code> figura fallada, pero el trabajo <b>nunca arranco</b>:
+cero pasos ejecutados y sin runner asignado.$CUANDO
+
+Eso <b>no dice que el codigo este roto</b>: dice que GitHub no le dio maquina.
+Casi siempre son los minutos de Actions agotados o un pago rechazado
+(<code>$REPO</code> es privado, asi que sus minutos se cobran):
+Settings → Billing and plans.
+
+Mientras siga asi, <code>$RAMA</code> avanza <b>SIN GATE</b>: nadie esta midiendo
+lo que se mergea.
+$URL")
+      printf '%s' "$ID_TAREA" > "$SINMEDIR"
+      continue
+    fi
+    # Arranco de verdad: lo que sigue SI es un veredicto sobre el codigo.
+    rm -f "$SINMEDIR"
+
+    [ -f "$MARCA" ] && continue      # ya avisamos de este episodio
 
     # La marca guarda el ID de la tarea, no solo su existencia: es lo unico que
     # le permite al verde de mañana cerrar el rojo de hoy. Si el aviso no genero
