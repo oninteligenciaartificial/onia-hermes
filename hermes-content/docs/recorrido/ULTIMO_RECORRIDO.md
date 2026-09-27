@@ -12,6 +12,32 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-26 20:14-20:41 La Paz (vuelta HEAD b7a6ad57) — dental base repetido por error de método, corregido con Comercio (rotación de rubro), 8/8 sin hallazgo
+
+Corrí `node scripts/recorrido_cliente.mjs --escribir` en dental plano (cuenta
+`zz-qa-2026-09-27-0009@onia.com.bo`) **sin grepear antes** los ejes de este archivo: **9/9,
+`completo: true`**, pero repitió la entrada de una hora antes (19:13, `30b7f005`, misma
+variante base) — no midió nada nuevo. Es el mismo error que ya está documentado más abajo
+(16:15, `a6d8723e`): antes de tirar `--escribir` a secas hay que grepear
+`RECORRIDO_(RUBRO|MOVIL|SALTAR_EQUIPO|PROBAR_RECOVERY|PROBAR_COADMIN)=` y ordenar por fecha.
+
+Corregido en la misma vuelta: la rotación de los 5 rubros había cerrado su ciclo el 26-sep a
+las 02:09-02:12 (Servicios profesionales), así que el eje más viejo era retomarla desde el
+principio. Corrí `RECORRIDO_RUBRO=Comercio node scripts/recorrido_cliente.mjs --escribir`
+(cuenta `zz-qa-2026-09-27-0014@onia.com.bo`): **8/8 pasos que le corresponden, `completo: true`,
+sin hallazgo.** El paso 7 (agendar cita) sale `NO-APLICA` correctamente — Comercio vende
+storefront/catálogo/caja, no agenda, y su propio menú no ofrece citas. Paciente
+`zz-qa-2026-09-27-0014-paciente` cargado en `/comercio` (catálogo) y visto de vuelta ahí y en
+`/dashboard` (a diferencia de dental, en Comercio el dato SÍ aparece en el panel). Frenado en
+la pantalla de cobro (`/comercio/caja`) sin marcar pago.
+
+Limpieza verificada al cerrar, ambas corridas: `organizations`/`appointments` con `zz-qa-%` = 0.
+
+**Próximo eje para la vuelta siguiente**: seguir la rotación con Estética (tercer rubro del
+ciclo nuevo).
+
+---
+
 ## 2026-09-26 19:13 La Paz (vuelta HEAD 30b7f005) — recorrido base (sin variantes), 9/9
 
 `node scripts/recorrido_cliente.mjs --escribir` (dental, sin env de variante, cuenta
