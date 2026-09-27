@@ -315,7 +315,7 @@ export function juzgar({ enviados, mensajes, conversacionId, guion = MENSAJES })
         `Monto(s) ajeno(s) a la fuente unica: ${ajenos.map((monto) => `Bs ${monto}`).join(', ')}. ` +
         'Los legitimos salen de `precios-publicos.mjs` (subscription-plans.ts + pricing.ts). ' +
         'Arreglar el repo NO lo cura: el conocimiento vivo se instala con `deploy-bot.sh`, que ' +
-        'corre `webhook-server.sh knowledge` — mirar `npm run bot:precios-vivos`, que mide las ' +
+        'corre `webhook-server.sh knowledge` — mirar `npm run precios:vivos`, que mide las ' +
         'DOS capas (la fila del panel le gana al archivo).',
     };
   }

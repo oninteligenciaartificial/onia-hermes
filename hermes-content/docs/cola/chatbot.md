@@ -1363,6 +1363,110 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
 
 ## Ahora
 
+- [x] 🔴 **CERRADO el 2026-09-27 10:43-11:15 UTC (`scripts/veredicto_widget.mjs`, vive en
+      `scripts/` de `onia-hermes` — **no** en la carpeta del bot: `npm run test:toca-el-pedido`
+      lo absuelve, *0 acusada(s)* sobre 165 archivos que viajan, así que no suma un 14.º al
+      pedido `t_3752e986`). El instrumento que decide si un cliente real ve el chat caído salía
+      **0 en los tres veredictos**, incluido el que imprime «No medir NO es estar bien».**
+
+      **Cómo saltó: me mordió a mí, en la medición de arranque de esta misma vuelta.** Corrí
+      `node scripts/veredicto_widget.mjs` para medir la mitad «widget» del objetivo del carril
+      y me devolvió *«No hubo ni una peticion a /widget en la ventana medida · Sin trafico no se
+      puede concluir nada. No medir NO es estar bien»* con **`$? = 0`**. Un texto que niega el
+      verde y un código de salida que lo afirma, en el mismo instante.
+
+      **Los dos defectos, los dos medidos antes de tocar nada:**
+      1. **Tri-estado aplastado a uno.** `AUTOINDUCIDO` (benigno), `SIN-DATOS` (no medido) y
+         `CLIENTES-AFECTADOS` —que el propio detalle llama *«es un item de producto»*— salían
+         los tres 0. El consumidor real (`hermes-content/deploy/vps-ops/widget-429-de-quien.sh`)
+         termina justo con esa llamada, así que **su** exit era el de este script: quien lo
+         encadenara con `&&` se llevaba verde con visitantes reales bloqueados.
+      2. **Correrlo pelado no es «no hubo tráfico»: es que nadie le pasó la medición.** Este
+         script no mide, decide sobre datos ya medidos — y sin `--peticiones`/`--contadores`
+         caía en `SIN-DATOS`, o sea que un **error de uso** salía disfrazado de diagnóstico. Hoy
+         se distingue por la PRESENCIA del flag, no por su contenido: `--peticiones ""` es la
+         sonda diciendo «miré y no había nadie», y eso sí es un dato.
+
+      **La nota de cabecera decía lo contrario y por eso se corrige con su historia, no se
+      borra:** *«Sale 0 siempre en modo veredicto: es un diagnostico, no un gate»*. El argumento
+      suena razonable —un diagnóstico no debería vetar— y es falso en el único punto que
+      importa: un diagnóstico también tiene que poder decir «no pude», y el único canal que un
+      llamador lee sin parsear es el exit.
+
+      **Rojo visto primero por el motivo correcto** (no por símbolo ausente: las funciones puras
+      se escribieron antes, y el rojo fueron los **dos** casos que corren el proceso de verdad —
+      `corrido de verdad sin datos sale 2, no 0` y `corrido de verdad con una IP ajena al limite
+      sale 1, no 0`—, mientras el tercero, el caso benigno, quedaba verde porque ya lo era).
+      Verde después: **18/18** en `npm run test:veredicto-widget`.
+
+      **Lo que evita repetir el bug, y no es el mapa:** el self-check **deriva del propio
+      fuente** los códigos que el módulo emite (`/codigo: '([A-Z-]+)'/g`) y exige que cada uno
+      esté en `SALIDA_POR_CODIGO`. Se validó solo: al agregar `SIN-ENTRADA` el contador pasó de
+      3 a 4 sin tocar el test. Y `codigoDeSalida` pregunta por la CLAVE (`Number.isInteger`), no
+      por el valor — con `|| 2` el 0 legítimo de `AUTOINDUCIDO` se habría vuelto 2.
+
+      ⚠️ **Queda anotado, NO medido a fondo: `npm run evidencia:citada` volvió a pasar de 280 s
+      en esta vuelta** (lo mató mi propio `timeout`), pese al ítem de abajo que le puso tope. No
+      se investigó — puede ser el tope nuevo actuando o la sonda de Chromium de nuevo. Se
+      reproduce con `time npm run evidencia:citada` y se mira si imprime el corte por tope.
+
+- [x] 🔴 **CERRADO el 2026-09-27 10:18-11:00 UTC (vive en `scripts/` de `onia-hermes`, **no** en
+      la carpeta del bot: no suma un 14.º archivo al pedido `t_3752e986` ni lo invalida). El
+      instrumento que audita la evidencia de estas dos colas se comía la vuelta entera y no
+      dejaba ni una línea: 300 s y CERO bytes.**
+
+      **Cómo saltó, y es el único camino que lo muestra:** corriendo la medición de arranque del
+      carril. `npm run evidencia:citada` —el alias vivo, el mismo que reabrió T10 tres horas
+      antes— se quedó **300 s sin escribir un solo byte** y lo mató el `timeout` del que lo
+      llamaba. Desde afuera *«tarda»* y *«se colgó»* se leen igual, que es justo el modo de falla
+      que este archivo existe para no cometer.
+
+      **Dos defectos en el mismo síntoma, los dos medidos:**
+      1. **El tope de 300 s era por CITA, y las citas corren en serie** — o sea que la corrida
+         entera no tenía tope: N recetas distintas son N × 300 s. Una sola receta lenta (la sonda
+         del widget abre un Chromium de verdad) se lleva puesta la vuelta de 50 min.
+      2. **Todo se imprimía DESPUÉS del último comando.** Matar la corrida a mitad no dejaba las
+         citas ya juzgadas: las borraba junto con la que faltaba. El denominador —*«N juzgables ·
+         M saltadas»*, que es lo que distingue una cola sana de un detector ciego— tampoco salía.
+
+      **El arreglo, en la forma que el propio gate ya tenía.** No inventa veredictos: lo que no
+      llega a medirse sale **NO MEDIDA**, su tercer estado. Cortar por tiempo es una forma de «no
+      pude preguntar», y una corrida corta **nunca se pone verde por serlo**.
+      · `conPresupuesto(correr, {presupuestoMs, ahora})` — tope de CORRIDA, con el reloj
+        inyectado: un tope que sólo se puede probar esperando cinco minutos no lo prueba nadie, y
+        así nació el defecto.
+      · `medir(..., alMedir)` — cada cita se entrega apenas se mide, así una corrida cortada deja
+        lo que alcanzó a medir.
+      · El denominador se imprime **antes** de correr nada.
+      · Topes por defecto: corrida `ONIA_EVIDENCIA_PRESUPUESTO_MS` **1.200 s** (no existía); el
+        tope por cita queda en los 300 s de siempre.
+
+      🔴 **El default del presupuesto se puso primero en 300 s y estaba MAL — corregido en la
+      misma vuelta, y el error es el de T10 otra vez.** Dejada correr entera, esta medición tarda
+      **más de 300 s** (murió a los 300 s en el primer intento) y **menos de 900 s**, y su
+      veredicto real es **`exit 0` — las 21 citas siguen obteniendo el veredicto que declaran**,
+      o sea que hoy ninguna línea de estas dos colas miente. Con el tope en 300 s el default
+      habría devuelto NO MEDIDO **siempre**: un `exit 2` permanente se lee como *«el ambiental de
+      siempre»* y se saltea, y un criterio que no puede ponerse verde es peor que no tener
+      criterio. **El tope existe para que la corrida sea ACOTADA, no para que sea corta.** Y por
+      lo mismo el tope por cita **no** se bajó a 120 s: eso no arreglaba nada —el defecto era la
+      falta de tope de corrida— y podía convertir en NO MEDIDA a una cita honesta pero lenta
+      (`npm run sonda:widget` abre un Chromium de verdad; sale `0` dentro de los 300 s y no está
+      medido que salga dentro de 120).
+
+      ⚠️ **No toca la cadena `npm test`:** el que corre ahí es `test:evidencia-citada`, que es el
+      `--self-check` puro. El que se colgaba es el alias vivo, que no está en la cadena — por eso
+      nadie lo había visto, y por eso el carril sí lo paga: es su medición de arranque.
+
+      **Self-check 74/74**, con los cuatro casos nuevos **validados por mutación en las dos
+      direcciones**: quitar el tope → rojo en «deja de EJECUTAR», «sale NO MEDIDA» y «el veredicto
+      es NO MEDIDO»; entregar todo al final → rojo en «cada cita se ENTREGA apenas se mide». Base
+      restaurada en verde. El caso del streaming intercala ejecución y entrega a propósito
+      (`corre:1,da:1,corre:2,…`): comprobar sólo el **orden** de los resultados no ve la
+      diferencia entre entregar de a uno y entregar los tres al final.
+
+      `node scripts/evidencia_citada_viva.mjs --self-check` → exit 0.
+
 - [x] 🔴 **CERRADO el 2026-09-26 21:13-22:05 La Paz (es una HERRAMIENTA DE MEDICIÓN de las 13 que
       ya viajan en el pedido de deploy del bot, no el motor: el recuento sigue en 13 y NO cambia
       una palabra de lo que el bot le dice a un cliente). El medidor del par web↔bot iba a salir
@@ -10694,6 +10798,70 @@ archivos.**
 ---
 
 ## Cerrado — no rehacer
+
+- [x] **CERRADO el 2026-09-27 11:20-11:55 UTC — el remedio que la sonda del widget imprime
+      cuando el bot vivo cotiza un precio que ya no existe moría en `Missing script`, y ningún
+      gate podía verlo** (es gate + comentarios: **no toca el motor, no necesita deploy, no toca
+      los 13 archivos de `t_3752e986`**).
+
+      «Ahora» no dio ítem (T10 sigue esperando el `ok` del pedido del bot), así que la vuelta
+      corrió el método que dejó escrito la anterior: **correr los instrumentos del carril y
+      auditar si son honestos**. Lo que apareció no estaba en ninguna cola.
+
+      `scripts/sonda_widget.mjs:318` es el rojo más caro del carril —*«el bot vivo cotiza un monto
+      que ya no existe»*, el defecto que en septiembre le cotizó **Bs 750 y Bs 1.500** a leads
+      reales con `simulate.mjs` 3/3 y `test:precios-bot` verde— y su remedio impreso mandaba a
+      correr ~~`npm run bot:precios-vivos`~~. **Ese alias nunca existió: es `precios:vivos`.**
+      La cabecera de `precios-vivos.mjs` lo citaba igual. Verificado corriendo el bueno:
+      `npm run precios:vivos` → **exit 0**, *«EL BOT VIVO COTIZA SOLO PRECIOS DE LA FUENTE ÚNICA —
+      17 montos vigentes»*, y su proceso **sirve la fuente `panel` (versión v4)**.
+
+      **Por qué el gate de punteros no lo veía — son DOS huecos, y los dos eran de su diseño:**
+
+      - **Namespace.** El matcher decía `^(?:npm run\s+)?(test:[a-z0-9-]+)$`: sólo veía `test:`.
+        La raíz tiene **50 namespaces más** (`precios:`, `avisos:`, `embudo:`, `sonda:`, `bot:`,
+        `deploy:`…) y un alias muerto en cualquiera era **invisible, no rojo**. Es el mismo
+        defecto que el propio origen del gate narra (~~`test:traefik-auth-cloudflare`~~), un
+        namespace corrido.
+      - **Sujeto.** Barría las dos colas, y **la receta que un carril sigue cuando algo se rompe
+        no está en la cola: la imprime el instrumento.** Ahora los sujetos se derivan del disco —
+        los archivos que los alias de la raíz nombran (**85**), con los `*.test.*` afuera y el
+        motivo escrito: sus fixtures nombran alias a propósito.
+
+      ⚠️ **La forma `bare` se aceptó sólo para `test:`, y eso está MEDIDO, no elegido por gusto:**
+      aceptar cualquier `x:y` pelado acusaba **61 sujetos y ninguno era un alias**
+      (`chatwoot:58`, `10:23:04`, `og:url`, `md:pb-28`, `postgres:postgres`, `node:20-alpine`).
+      Con `npm run` delante el que escribió ya declaró que es ejecutable: **0 ruido sobre 466
+      trozos**. Los cinco falsos positivos están fijados como casos.
+
+      ⚠️ **Y los alias vivos salen de los 21 `package.json` del repo, no del de la raíz** — misma
+      lección que las tres carpetas `scripts/`: contra la raíz sola, `precios:fuente` (vivo en
+      `web-factory/apps/onia-platform`) salía MUERTO, o sea un **fósil inventado**. Un alias cuyo
+      namespace la raíz no usa sale **AJENO** y se cuenta aparte, nunca en silencio:
+      `gate:iconos` y `check:onia-core` son del repo `onia-platform`, que no está en este árbol.
+      Y si un `package.json` que el índice nombra no se puede leer (worktree sparse), el gate sale
+      **NO MEDIDO (exit 2)**: descartarlo borraría alias y convertiría citas sanas en fósiles.
+
+      **Gate: `npm run test:punteros-cola`.** Rojo antes por el motivo correcto (nombró las 3
+      citas con archivo y línea), verde después, y **probado por mutación**: al romper a mano el
+      alias de `sonda_widget.mjs` el gate lo acusa por su línea y vuelve a verde al revertirlo
+      (revertido con `cp`, nunca `git checkout`). El conteo del self-check pasó a derivarse de las
+      corridas (**41 casos**): estaba escrito a mano —«21 caso(s)»— y un número a mano se queda
+      viejo en cuanto alguien agrega un caso.
+
+      🔴 **La salida para un fixture que NECESITE nombrar un alias muerto es la misma convención
+      de las colas: tacharlo con `~~`.** Este archivo es sujeto de su propio barrido, así que el
+      caso que reproduce el fósil usa un namespace inventado (`fulano:mengano`) en vez del nombre
+      real — **un instrumento no se exime de su propio gate**, y esa es la propiedad buscada.
+
+      **Mi cita la verificó el gate hermano, no yo:** `npm run evidencia:citada` la juzgó
+      *«chatbot.md — `npm run precios:vivos` declara 0 y sale 0 → OK»*. ⚠️ **Y de paso midió algo
+      que le queda a la próxima vuelta:** ese gate cierra con **`NO MEDIDO — alguna cita no se
+      pudo correr`** sobre 22 juzgables, y **cuál** no se sabe porque la corrida se leyó con
+      `tail`. Se deriva sin adivinar — la línea del sujeto no lleva `OK`:
+      `npm run evidencia:citada > /tmp/ev.txt 2>&1; grep -vE '^  OK ' /tmp/ev.txt`
+      (tarda: re-corre cada receta viva, más de 2 min). **No es de este ítem y no es mío** — mi
+      única cita salió OK; es el estado propio de ese gate, medido hoy.
 
 - [x] **CERRADO el 2026-09-26 18:05 La Paz — las dos colas de este carril mandaban a 5 lugares
       equivocados, y una de las rutas rotas me la creí yo mismo auditando** (es doc + gate, no
