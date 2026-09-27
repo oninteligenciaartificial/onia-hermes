@@ -1405,10 +1405,17 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
       3 a 4 sin tocar el test. Y `codigoDeSalida` pregunta por la CLAVE (`Number.isInteger`), no
       por el valor — con `|| 2` el 0 legítimo de `AUTOINDUCIDO` se habría vuelto 2.
 
-      ⚠️ **Queda anotado, NO medido a fondo: `npm run evidencia:citada` volvió a pasar de 280 s
-      en esta vuelta** (lo mató mi propio `timeout`), pese al ítem de abajo que le puso tope. No
-      se investigó — puede ser el tope nuevo actuando o la sonda de Chromium de nuevo. Se
-      reproduce con `time npm run evidencia:citada` y se mira si imprime el corte por tope.
+      ✅ **MEDIDO el 2026-09-27 12:2x UTC — no era ninguna de las dos sospechas, y no hay nada
+      que arreglar en el instrumento.** Acá decía: *«`npm run evidencia:citada` volvió a pasar de
+      280 s … puede ser el tope nuevo actuando o la sonda de Chromium de nuevo»*. Corrido con
+      `time`: **5m 06s reales, exit 0, las 23 citas juzgadas en verde**, y **no** imprime corte
+      por tope (o sea que el tope de corrida no actuó: no se agotó). Tampoco es Chromium — son
+      **23 gates de verdad corridos en serie, ~13 s cada uno**, que es su trabajo. Y el defecto
+      por el que se lo acusaba —*«300 s y CERO bytes»*— **está arreglado**: imprime desde el
+      primer segundo (medido: 195 bytes a los 5 s, 14 líneas al minuto y medio). **Lo único que
+      queda es del LLAMADOR, no del instrumento:** quien lo corra con `timeout 280` lo mata a
+      mitad y lee el silencio como cuelgue. Se corre con ≥ 360 s, o en segundo plano leyendo su
+      salida a medida que sale.
 
 - [x] 🔴 **CERRADO el 2026-09-27 10:18-11:00 UTC (vive en `scripts/` de `onia-hermes`, **no** en
       la carpeta del bot: no suma un 14.º archivo al pedido `t_3752e986` ni lo invalida). El
