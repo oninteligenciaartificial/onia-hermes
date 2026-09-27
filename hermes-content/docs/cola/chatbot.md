@@ -381,9 +381,16 @@ se leería como tráfico sano. Probado por mutación en las dos direcciones (qui
 rojos; quitar `eco` del clasificador → 1 rojo), porque un test que no se cae no prueba nada.
 
 **Commiteado, NO desplegado** — `webhook-server.mjs` cae en `*.mjs` de la lista blanca de
-`deploy-bot.sh`, así que el pedido de deploy del bot se rehizo en esta vuelta con este archivo
-adentro y el viejo quedó `archived`. El `exit 1` del gate se apaga cuando Sergio Urcullo conteste
-ese `ok`: el log vivo es del build anterior.
+`deploy-bot.sh`, así que suma un archivo al pedido de deploy del bot. El `exit 1` del gate se apaga
+cuando ese `ok` se conteste: el log vivo corre el build anterior.
+
+⚠️ **El pedido NO se rehizo en esta vuelta, y el motivo es que rehacerlo acá saldría mal.** El
+publicador compara contra `origin/main` y este commit vive en la rama del carril, así que
+`publicar.sh --dry-run` seguiría contando **14** archivos y el cuerpo nuevo nacería describiendo de
+menos — el mismo defecto que hizo rehacer los dos pedidos anteriores. El recuento sólo es derivable
+**después** del merge, y este carril no mergea. Lo rehace `onia-cola`, que mide «commits sin
+desplegar» cada vuelta y es quien integra; por eso tampoco sale un aviso por Telegram de esto.
+**Un pedido de deploy no se puede crear desde el lado del carril sin mentir en el recuento.**
 
 <details><summary>Historia del cierre falso (2026-09-24) — el arreglo original, que sigue siendo correcto para lo suyo</summary>
 
