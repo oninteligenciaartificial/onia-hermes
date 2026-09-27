@@ -61,7 +61,23 @@ import { NOTA_DE_CORRECCION } from './lib/frases_de_cola.mjs';
 import { validarComando, resolverBin } from './lib/comando_de_cola.mjs';
 
 const RAIZ = join(dirname(fileURLToPath(import.meta.url)), '..');
-const TIMEOUT_MS = Number(process.env.ONIA_EVIDENCIA_TIMEOUT_MS || 300000);
+
+/**
+ * Tope por CITA y tope de la CORRIDA ENTERA. Son dos preguntas distintas y antes habia una sola.
+ *
+ * Medido el 2026-09-27 10:18 UTC, corriendo el alias vivo desde nodo-casa: `npm run
+ * evidencia:citada` se comio **300 s y escribio CERO bytes**, y lo mato el `timeout` del que lo
+ * llamaba. Dos defectos en el mismo sintoma: el tope de 300 s era **por cita** y las citas corren
+ * en serie, asi que la corrida entera no tenia tope —N recetas distintas son N x 300 s—; y como
+ * todo se imprimia al final, una corrida cortada no dejaba **ninguna** evidencia parcial. Para el
+ * que llama, «tarda mucho» y «se colgo» se leen igual, que es el modo de falla que este archivo
+ * entero existe para no cometer.
+ *
+ * El presupuesto no inventa veredictos: lo que no llega a medirse sale NO MEDIDA, el tercer
+ * estado que este gate ya tenia. Cortar por tiempo es una forma de «no pude preguntar».
+ */
+const TIMEOUT_MS = Number(process.env.ONIA_EVIDENCIA_TIMEOUT_MS || 120000);
+const PRESUPUESTO_MS = Number(process.env.ONIA_EVIDENCIA_PRESUPUESTO_MS || 300000);
 
 export const SIN_MENTIRAS = 0;
 export const MIENTEN = 1;
@@ -246,12 +262,45 @@ export function claveDeCache(comando, scripts = {}) {
 }
 
 /**
- * Compara lo declarado con lo medido. Un mismo script se corre UNA vez aunque lo citen diez
- * lineas: son 300 s de tope cada uno, varios tocan produccion, y las colas los repiten.
+ * Un `correr` con TOPE DE CORRIDA: mide mientras quede presupuesto y, agotado, deja de ejecutar.
+ *
+ * No devuelve un veredicto inventado — devuelve `codigo: null`, o sea NO MEDIDA, que es lo que
+ * este gate ya usa para «no pude preguntar». El sesgo queda del lado seguro: una corrida corta
+ * nunca se pone verde por serlo.
+ *
+ * El reloj se inyecta (`ahora`) para poder probarlo sin esperar: un tope que solo se puede
+ * verificar dejandolo correr cinco minutos no lo verifica nadie, y asi nacio el defecto.
  */
-export function medir(juzgables, correr, clave = (c) => c) {
+export function conPresupuesto(correr, { presupuestoMs = PRESUPUESTO_MS, ahora = Date.now } = {}) {
+  const arranque = ahora();
+  return (comando) => {
+    const gastado = ahora() - arranque;
+    if (gastado >= presupuestoMs) {
+      return { codigo: null, error: `presupuesto de corrida agotado (${presupuestoMs} ms): no se corrio` };
+    }
+    return correr(comando);
+  };
+}
+
+/**
+ * Compara lo declarado con lo medido. Un mismo script se corre UNA vez aunque lo citen diez
+ * lineas: cada uno tiene su tope, varios tocan produccion, y las colas los repiten.
+ *
+ * `alMedir` recibe cada resultado APENAS se mide. Existe para que una corrida cortada a mitad
+ * deje lo que alcanzo a medir: sin eso, el unico `console.log` vivia despues del ultimo comando y
+ * matar la corrida borraba las veinte citas ya juzgadas junto con la que faltaba.
+ */
+export function medir(juzgables, correr, clave = (c) => c, alMedir = () => {}) {
   const cache = new Map();
   return juzgables.map((cita) => {
+    const r = juzgarUna(cita, correr, clave, cache);
+    alMedir(r);
+    return r;
+  });
+}
+
+function juzgarUna(cita, correr, clave, cache) {
+  {
     const k = clave(cita.comando);
     if (!cache.has(k)) cache.set(k, correr(cita.comando));
     const { codigo, error } = cache.get(k);
@@ -266,7 +315,7 @@ export function medir(juzgables, correr, clave = (c) => c) {
       return { ...cita, estado: 'no-medida', medido: codigo, error: `el gate citado salio ${CODIGO_NO_MEDIDO} (su propio NO MEDIDO): no contesto` };
     }
     return { ...cita, estado: codigo === cita.esperado ? 'honesta' : 'miente', medido: codigo };
-  });
+  }
 }
 
 /**
@@ -443,6 +492,48 @@ function selfCheck() {
     'pero una linea que DECLARA 2 y recibe 2 es honesta',
     medir([{ ...cita, esperado: 2 }], () => ({ codigo: 2 }))[0].estado === 'honesta',
   );
+
+  // --- el tope de corrida y la evidencia parcial --------------------------------------------
+  // Los dos defectos que la corrida viva del 2026-09-27 10:18 UTC dejo ver: 300 s POR CITA sin
+  // tope de corrida, y todo impreso al final, o sea cero evidencia cuando la matan.
+  const tresCitas = [1, 2, 3].map((n) => ({ ...cita, linea: n, comando: `npm run gate-${n}` }));
+  // La traza intercala EJECUCION y ENTREGA: si `alMedir` se llamara al final —como estaba, con el
+  // unico `console.log` despues del ultimo comando— saldria `corre,corre,corre,da,da,da` y matar
+  // la corrida a mitad borraria las dos citas ya juzgadas. Comprobar solo el orden no lo veria.
+  const traza = [];
+  medir(
+    tresCitas,
+    (c) => { traza.push(`corre:${c.slice(-1)}`); return { codigo: 1 }; },
+    (c) => c,
+    (r) => traza.push(`da:${r.linea}`),
+  );
+  ok(
+    'cada cita se ENTREGA apenas se mide, no todas al final',
+    traza.join(',') === 'corre:1,da:1,corre:2,da:2,corre:3,da:3',
+  );
+
+  let reloj = 0;
+  const ejecutadas = [];
+  const correrLento = (comando) => {
+    ejecutadas.push(comando);
+    reloj += 200; // cada cita se come 200 ms del presupuesto
+    return { codigo: 1 };
+  };
+  const conTope = medir(
+    tresCitas,
+    conPresupuesto(correrLento, { presupuestoMs: 300, ahora: () => reloj }),
+    (c) => c,
+  );
+  ok('con el presupuesto agotado deja de EJECUTAR', ejecutadas.length === 2);
+  ok('la cita que alcanzo a medirse conserva su veredicto', conTope[0].estado === 'honesta');
+  ok(
+    'la que no llego sale NO MEDIDA, nunca honesta ni MIENTE',
+    conTope[2].estado === 'no-medida' && /presupuesto/.test(conTope[2].error ?? ''),
+  );
+  ok(
+    'y el veredicto de la corrida es NO MEDIDO: una corrida corta no se pone verde por serlo',
+    veredicto(conTope) === NO_PUDE_MEDIR,
+  );
   ok(
     'y una que declara 2 y recibe 0 SI miente',
     medir([{ ...cita, esperado: 2 }], () => ({ codigo: 0 }))[0].estado === 'miente',
@@ -503,27 +594,27 @@ async function medirVivo(rutas) {
   const juzgables = porCola.flatMap((c) => c.juzgables.map((x) => ({ ...x, cola: c.ruta })));
   const saltadas = porCola.flatMap((c) => c.saltadas.map((x) => ({ ...x, cola: c.ruta })));
 
-  const resultados = medir(
-    juzgables,
-    (comando) => correrCita(comando, scripts),
-    (comando) => claveDeCache(comando, scripts),
-  );
-
-  // El denominador primero: "0 mienten" sobre 0 sujetos es un detector ciego, y sobre 20 es una
-  // cola sana. Las dos cosas se leen igual si no se imprime el denominador.
+  // El denominador PRIMERO, y antes de correr nada: "0 mienten" sobre 0 sujetos es un detector
+  // ciego, y sobre 20 es una cola sana. Las dos cosas se leen igual si no se imprime el
+  // denominador — y una corrida que lo imprime al final no lo imprime cuando la matan.
   console.log(
     `Citas que declaran el veredicto de otro gate: ${juzgables.length} juzgables · ${saltadas.length} saltadas ` +
       `(${saltadas.filter((s) => s.motivo.startsWith('ya trae')).length} ya con su nota de correccion).`,
   );
 
-  for (const r of resultados) {
-    const etiqueta = r.estado === 'miente' ? 'ITEM   ' : r.estado === 'no-medida' ? 'NO MEDI' : 'OK     ';
-    const detalle =
-      r.estado === 'no-medida'
-        ? `no se pudo correr \`${r.comando}\`: ${r.error}`
-        : `\`${r.comando}\` declara ${r.esperado} y sale ${r.medido}`;
-    console.log(`  ${etiqueta} ${r.cola.replace(/^.*cola\//, '')}:${r.linea} — ${detalle}`);
-  }
+  const resultados = medir(
+    juzgables,
+    conPresupuesto((comando) => correrCita(comando, scripts)),
+    (comando) => claveDeCache(comando, scripts),
+    (r) => {
+      const etiqueta = r.estado === 'miente' ? 'ITEM   ' : r.estado === 'no-medida' ? 'NO MEDI' : 'OK     ';
+      const detalle =
+        r.estado === 'no-medida'
+          ? `no se pudo correr \`${r.comando}\`: ${r.error}`
+          : `\`${r.comando}\` declara ${r.esperado} y sale ${r.medido}`;
+      console.log(`  ${etiqueta} ${r.cola.replace(/^.*cola\//, '')}:${r.linea} — ${detalle}`);
+    },
+  );
 
   const mienten = resultados.filter((r) => r.estado === 'miente');
   if (mienten.length) {

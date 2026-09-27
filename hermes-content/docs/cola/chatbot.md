@@ -1363,6 +1363,50 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
 
 ## Ahora
 
+- [x] 🔴 **CERRADO el 2026-09-27 10:18-11:00 UTC (vive en `scripts/` de `onia-hermes`, **no** en
+      la carpeta del bot: no suma un 14.º archivo al pedido `t_3752e986` ni lo invalida). El
+      instrumento que audita la evidencia de estas dos colas se comía la vuelta entera y no
+      dejaba ni una línea: 300 s y CERO bytes.**
+
+      **Cómo saltó, y es el único camino que lo muestra:** corriendo la medición de arranque del
+      carril. `npm run evidencia:citada` —el alias vivo, el mismo que reabrió T10 tres horas
+      antes— se quedó **300 s sin escribir un solo byte** y lo mató el `timeout` del que lo
+      llamaba. Desde afuera *«tarda»* y *«se colgó»* se leen igual, que es justo el modo de falla
+      que este archivo existe para no cometer.
+
+      **Dos defectos en el mismo síntoma, los dos medidos:**
+      1. **El tope de 300 s era por CITA, y las citas corren en serie** — o sea que la corrida
+         entera no tenía tope: N recetas distintas son N × 300 s. Una sola receta lenta (la sonda
+         del widget abre un Chromium de verdad) se lleva puesta la vuelta de 50 min.
+      2. **Todo se imprimía DESPUÉS del último comando.** Matar la corrida a mitad no dejaba las
+         citas ya juzgadas: las borraba junto con la que faltaba. El denominador —*«N juzgables ·
+         M saltadas»*, que es lo que distingue una cola sana de un detector ciego— tampoco salía.
+
+      **El arreglo, en la forma que el propio gate ya tenía.** No inventa veredictos: lo que no
+      llega a medirse sale **NO MEDIDA**, su tercer estado. Cortar por tiempo es una forma de «no
+      pude preguntar», y una corrida corta **nunca se pone verde por serlo**.
+      · `conPresupuesto(correr, {presupuestoMs, ahora})` — tope de CORRIDA, con el reloj
+        inyectado: un tope que sólo se puede probar esperando cinco minutos no lo prueba nadie, y
+        así nació el defecto.
+      · `medir(..., alMedir)` — cada cita se entrega apenas se mide, así una corrida cortada deja
+        lo que alcanzó a medir.
+      · El denominador se imprime **antes** de correr nada.
+      · Topes por defecto: cita `ONIA_EVIDENCIA_TIMEOUT_MS` 120 s (era 300), corrida
+        `ONIA_EVIDENCIA_PRESUPUESTO_MS` 300 s (no existía).
+
+      ⚠️ **No toca la cadena `npm test`:** el que corre ahí es `test:evidencia-citada`, que es el
+      `--self-check` puro. El que se colgaba es el alias vivo, que no está en la cadena — por eso
+      nadie lo había visto, y por eso el carril sí lo paga: es su medición de arranque.
+
+      **Self-check 74/74**, con los cuatro casos nuevos **validados por mutación en las dos
+      direcciones**: quitar el tope → rojo en «deja de EJECUTAR», «sale NO MEDIDA» y «el veredicto
+      es NO MEDIDO»; entregar todo al final → rojo en «cada cita se ENTREGA apenas se mide». Base
+      restaurada en verde. El caso del streaming intercala ejecución y entrega a propósito
+      (`corre:1,da:1,corre:2,…`): comprobar sólo el **orden** de los resultados no ve la
+      diferencia entre entregar de a uno y entregar los tres al final.
+
+      `node scripts/evidencia_citada_viva.mjs --self-check` → exit 0.
+
 - [x] 🔴 **CERRADO el 2026-09-26 21:13-22:05 La Paz (es una HERRAMIENTA DE MEDICIÓN de las 13 que
       ya viajan en el pedido de deploy del bot, no el motor: el recuento sigue en 13 y NO cambia
       una palabra de lo que el bot le dice a un cliente). El medidor del par web↔bot iba a salir
