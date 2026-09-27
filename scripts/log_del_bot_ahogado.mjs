@@ -159,6 +159,50 @@ function contarEventos(lineas) {
   return lineas.filter((l) => EVENTOS_DEL_OBJETIVO.test(String(l ?? ""))).length;
 }
 
+/**
+ * Ramas que declaran que el bot NO hizo nada. Son no-eventos: ocupan la cola sin decir nada que
+ * alguien pueda accionar. `ignorado` es el bot viendo su propio mensaje salir
+ * (`mensaje_no_entrante:outgoing`) o el update del mismo mensaje (`update_sin_botones`); `MUDO`
+ * es un webhook sin mensaje adentro. Medido el 2026-09-27: DOS de cada tres lineas que el bot
+ * emite por turno son de estas.
+ */
+const RAMAS_NO_EVENTO = new Set(["ignorado", "MUDO"]);
+/** Ramas que si son un evento: el bot le contesto a alguien. */
+const RAMAS_UTILES = new Set(["respondio"]);
+
+/**
+ * ¿QUE tapa la cola? Es la pregunta que el rojo de `colaDejaVerLosEventos` no contestaba, y su
+ * respuesta manda a lugares OPUESTOS: `no_eventos` es un defecto del EMISOR (loguea no-eventos
+ * en el camino caliente, y la cola se tapa sola cada vez que alguien escribe); `trafico` no
+ * acusa a nadie — son respuestas reales y la ventana de 80 es corta para el volumen del dia.
+ *
+ * Las clases se DERIVAN del campo `rama=` que el propio log estampa, no de una lista de frases,
+ * y se imprimen TODAS con su conteo. Una rama nueva que en verdad sea un no-evento no la acusa
+ * sola (subestima: cae en «desconocida»), pero sale nombrada — asi se juzga a ojo en un segundo
+ * en vez de quedar invisible. Es la unica direccion en la que se acepta fallar acá: inventar un
+ * culpable es peor que senalar uno de menos.
+ */
+export function quienTapaLaCola(cola) {
+  const conteo = new Map();
+  for (const l of Array.isArray(cola) ? cola : []) {
+    const m = /\brama=([A-Za-z_]+)/.exec(String(l ?? ""));
+    if (m) conteo.set(m[1], (conteo.get(m[1]) ?? 0) + 1);
+  }
+  const clases = [...conteo]
+    .map(([rama, n]) => ({ rama, n }))
+    .sort((a, b) => b.n - a.n || a.rama.localeCompare(b.rama));
+
+  let noEventos = 0;
+  let utiles = 0;
+  for (const { rama, n } of clases) {
+    if (RAMAS_NO_EVENTO.has(rama)) noEventos += n;
+    else if (RAMAS_UTILES.has(rama)) utiles += n;
+  }
+  const clasificadas = noEventos + utiles;
+  const causa = clasificadas === 0 ? "desconocida" : noEventos > clasificadas / 2 ? "no_eventos" : "trafico";
+  return { total: Array.isArray(cola) ? cola.length : 0, noEventos, utiles, clases, causa };
+}
+
 function marcaDe(iso) {
   if (!iso) return null;
   const d = new Date(`${String(iso).slice(0, 19)}Z`);
@@ -223,10 +267,33 @@ function medir() {
   );
 
   if (!vista.ve) {
+    const tapa = quienTapaLaCola(cola);
+    console.log(
+      `  quien la tapa: ${tapa.clases.map((c) => `${c.rama}=${c.n}`).join(" · ") || "(ninguna rama reconocible)"}` +
+        ` — no-eventos ${tapa.noEventos}/${tapa.total} · utiles ${tapa.utiles}`,
+    );
     console.log(
       "1 AHOGADO — la cola del log no muestra ni un evento y el archivo los tiene: la medicion " +
         "del objetivo de este carril esta CIEGA (devuelve lineas y cero se~nal).",
     );
+    // La causa manda a lugares opuestos, asi que el remedio se imprime con ella: sin esto, el
+    // rojo obliga a re-derivar la composicion a mano (costo una vuelta el 2026-09-27).
+    if (tapa.causa === "no_eventos") {
+      console.log(
+        `  causa: NO-EVENTOS del emisor — ${tapa.noEventos} de ${tapa.total} lineas declaran que el bot ` +
+          "no hizo nada. Remedio: que esas ramas no escriban en el camino caliente " +
+          "(webhook-server.mjs). Medir el objetivo con `npm run avisos:vivo`, que lee el archivo entero.",
+      );
+    } else if (tapa.causa === "trafico") {
+      console.log(
+        "  causa: TRAFICO real — la cola es corta para el volumen del dia, el emisor no tiene defecto. " +
+          "Medir el objetivo con `npm run avisos:vivo`, nunca con un `tail` de la cola.",
+      );
+    } else {
+      console.log(
+        "  causa: DESCONOCIDA — ninguna rama conocida ocupa la cola. Mirarla a ojo antes de acusar a nadie.",
+      );
+    }
     return 1;
   }
   if (ruidos.some((r) => r.veredicto === "ahogado")) {
