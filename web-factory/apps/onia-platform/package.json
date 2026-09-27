@@ -35,7 +35,8 @@
     "alta:confirma-vivo": "node scripts/alta-confirma-vivo.mjs",
     "chat-diferido:vivo": "node scripts/chat-diferido-vivo.mjs",
     "precio-tras-el-clic:vivo": "node scripts/precio-tras-el-clic.mjs",
-    "vineta-pegada:viva": "node scripts/vineta-pegada-a-su-texto.mjs"
+    "vineta-pegada:viva": "node scripts/vineta-pegada-a-su-texto.mjs",
+    "tarjeta-social:viva": "node scripts/tarjeta-social-viva.mjs"
   },
   "dependencies": {
     "motion": "^12.23.26",

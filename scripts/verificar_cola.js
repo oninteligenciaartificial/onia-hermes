@@ -44,6 +44,21 @@ const ITEM_ESTADO = /^\s*[-*]\s+\[([ xX])\]\s+(.*)$/;
 // `algo` entre backticks. Una ruta se distingue de un comando por el `$ ` inicial.
 const TROZOS = /`([^`]+)`/g;
 
+// Un DIGEST (md5, sha256, checksum) es hexadecimal igual que un commit, asi que el extractor de
+// shas no lo puede distinguir por su forma: `2aae94e6ec55` cumple las tres condiciones. Lo unico
+// que los separa es la palabra que el propio texto escribe al lado.
+//
+// Ojo con `sha` A SECAS: en esta cola eso nombra un COMMIT ("cita el sha del merge"), no un
+// algoritmo. Por eso la lista pide el sufijo numerico (`sha256`) y nunca el `sha` pelado —
+// meterlo apagaria la regla entera y el gate pasaria a verde sobre cualquier fantasma.
+const ETIQUETA_DIGEST = /(?:^|[^a-z0-9])(?:md5|sha-?(?:1|224|256|384|512)|hash|checksum|digest|crc32)$/i;
+
+// La etiqueta va PEGADA al valor: se le sacan los adornos de markdown y la puntuacion que la cola
+// mete en medio (`md5:`, `**md5**`, `md5 =`). A proposito NO se salta ninguna palabra: si entre la
+// etiqueta y el trozo hay prosa, el trozo vuelve a leerse como commit. La guarda angosta falla
+// hacia el comportamiento viejo; una ancha silenciaria shas de verdad, que es el error caro.
+const esDigestEtiquetado = (previo) => ETIQUETA_DIGEST.test(previo.replace(/[\s:=*_~([]+$/, ''));
+
 // Una linea de continuacion: indentada y con contenido. Un item largo pone su evidencia ahi,
 // asi que leer solo la primera linea era declarar "sin evidencia" lo que citaba tres archivos.
 const CONTINUACION = /^\s{2,}\S/;
@@ -96,7 +111,13 @@ function evidenciaDe(textoCrudo) {
     // Un SHA es la otra forma de evidencia que escribe esta cola: "ya en `origin/master`
     // (`e644c85`)". Se pide UN digito y UNA letra a proposito — sin eso, `defaced` y `facade`
     // son hexadecimal validos y cualquier palabra de esas entra como commit.
-    if (/^[0-9a-f]{7,40}$/.test(t) && /[0-9]/.test(t) && /[a-f]/.test(t)) { shas.push(t); continue; }
+    if (/^[0-9a-f]{7,40}$/.test(t) && /[0-9]/.test(t) && /[a-f]/.test(t)) {
+      // ...salvo que el texto de al lado ya lo haya declarado un digest. Un md5 citado como
+      // prueba ("las 12 rutas devuelven el mismo md5") no es un commit y no vive en ningun repo.
+      if (esDigestEtiquetado(texto.slice(0, m.index))) continue;
+      shas.push(t);
+      continue;
+    }
 
     // "lib/plan-limits.ts:396" es como se cita una linea. El archivo es lo de la izquierda;
     // el sufijo no es parte del nombre, y buscarlo tal cual daba fantasmas falsos.
@@ -1432,6 +1453,39 @@ function selfCheck() {
   // El sha va entre backticks y entero: `753718f` cuenta, pero no un pedazo de otra palabra.
   ok(evidenciaDe('commit `753718f` y `no-es-sha`').shas.join() === '753718f',
     'se extrae el sha del trozo entero, no un pedazo');
+
+  // --- Un md5 NO es un commit, aunque sea hexadecimal ---
+  // Medido el 2026-09-27: la cola de `web-venta` probaba que las 12 rutas que sirven tarjeta
+  // devuelven el MISMO PNG citando su md5, `2aae94e6ec55` — 12 hex con digitos y letras, o sea
+  // que cumple las tres condiciones del extractor y entraba como commit. El gate salia rojo con
+  // "cita el commit 2aae94e6ec55 y no existe en ningun repo" y TRABABA EL MERGE DE TODOS LOS
+  // CARRILES, porque esta cadena la corre el integrador antes de mergear.
+  //
+  // Es el mismo falso rojo caro que el recuento `100/106` de mas abajo: manda a borrar de la
+  // cola justo la PRUEBA del item —el digest es la unica forma de decir "byte por byte la
+  // misma imagen"— y se cura reescribiendo la frase, o sea la instancia y no la clase.
+  // El discriminador no puede ser el largo (un md5 citado corto es indistinguible de un sha):
+  // es la PALABRA que lo etiqueta, que el propio texto ya escribe al lado.
+  ok(evidenciaDe('las 12 con el mismo md5 `2aae94e6ec55`, 1200x630').shas.length === 0,
+    'un md5 etiquetado como tal no se lee como commit');
+  ok(evidenciaDe('mismo md5 `2aae94e6`').shas.length === 0,
+    'el md5 truncado que escribe la cola tampoco');
+  ok(evidenciaDe('el **mismo** md5 `2aae94e6ec55`').shas.length === 0,
+    'ni con negrita de markdown entre la etiqueta y el valor');
+  ok(evidenciaDe('sha256 `4e1243bd22c66e76c2ba9eddc1f91394e57f9f83`').shas.length === 0,
+    'sha256 nombra un digest, no un commit de este repo');
+  ok(evidenciaDe('checksum `2aae94e6ec55`').shas.length === 0, 'checksum tampoco');
+  // ANCLAS de la otra punta, que son las que impiden que esta guarda tape un sha de verdad.
+  // `sha` a secas es como esta cola nombra un COMMIT ("el sha del merge"), no un algoritmo:
+  // excluirlo apagaria la regla entera y el gate pasaria a verde sobre cualquier fantasma.
+  ok(evidenciaDe('el sha `e644c85` del merge').shas.join() === 'e644c85',
+    '"sha" a secas sigue nombrando un commit');
+  ok(evidenciaDe('commit `753718f`').shas.join() === '753718f', 'un commit etiquetado sigue entrando');
+  ok(evidenciaDe('ya en `origin/master` (`e644c85`)').shas.join() === 'e644c85',
+    'un sha sin etiqueta delante sigue entrando');
+  r = revisarCola('## Ahora\n- [ ] Se arreglo · `existe.png` · md5 `0ddbeef`\n', tmp, gitFalso([]));
+  ok(!r.problemas.some((p) => p.regla === 'sha-fantasma'),
+    'la cola entera: un md5 fantasma no ensucia el veredicto');
 
   // --- Un RECUENTO no es una ruta, aunque lleve barra ---
   // La barra bastaba para declarar ruta, y el recuento de un self-check se escribe `100/106`:
