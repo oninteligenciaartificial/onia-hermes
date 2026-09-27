@@ -8,7 +8,7 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { generateKeyPairSync } from "node:crypto";
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -556,6 +556,166 @@ describe("reintento de casos bloqueados (--retry-blocked)", () => {
   });
 });
 
+
+describe("summary(): el universo son las etapas del SIN, no las claves del checkpoint", () => {
+  // Nace de un caso medido el 2026-09-27 contra /opt/onia-siat/fase1-state.json: la
+  // etapa VIII entro al runner el 12-sep, el checkpoint vivo arranco antes y el script
+  // desplegado solo nombra IV/VII/XI, asi que VIII no tiene fila en `etapas`. summary()
+  // derivaba sus filas de Object.entries(state.etapas), o sea del checkpoint: devolvia
+  // NUEVE filas todas al 100% con un general de 87%, y quien leia las filas concluia
+  // "la Fase 1 esta completa". Una etapa que falta tiene que salir NOMBRADA en 0, no
+  // desaparecer: ausente se lee como inexistente, y eso AFIRMA en vez de omitir.
+  const runnerDePrueba = (etapas) => {
+    const dir = mkdtempSync(join(tmpdir(), "fase1-summary-"));
+    const runner = new Runner({
+      token: "t",
+      nit: "5371375010",
+      codigoSistema: "SIS",
+      stateFile: join(dir, "state.json"),
+      logFile: join(dir, "log.ndjson"),
+      pace: 0,
+    });
+    runner.state.etapas = etapas;
+    return { runner, dir };
+  };
+
+  it("una etapa de STAGE_ORDER que falta en el checkpoint sale en 0 y marcada, no omitida", () => {
+    // Replica del estado vivo: las otras nueve llenas por casos, VIII sin fila.
+    const etapas = {};
+    for (const id of STAGE_ORDER) {
+      if (id === "VIII") continue;
+      etapas[id] = {
+        done: 0,
+        target: STAGE_TARGETS[id],
+        attempts: 1,
+        cases: { unico: STAGE_TOTALS[id] },
+        blockedCases: {},
+      };
+    }
+    const { runner, dir } = runnerDePrueba(etapas);
+    try {
+      const s = runner.summary();
+      assert.deepEqual(
+        s.etapas.map((r) => r.etapa),
+        STAGE_ORDER,
+        "summary() tiene que traer una fila por etapa del SIN, en su orden",
+      );
+      const viii = s.etapas.find((r) => r.etapa === "VIII");
+      assert.ok(viii, "la etapa VIII no puede desaparecer del informe");
+      assert.equal(viii.hechas, 0);
+      assert.equal(viii.totalSin, STAGE_TOTALS.VIII);
+      assert.equal(viii.avance, "0%");
+      assert.equal(viii.corrio, false, "hay que poder distinguir 'nunca corrio' de 'corrio y dio 0'");
+      // Y el general no se toca: sigue midiendo contra el total del SIN.
+      assert.equal(s.general, "5042/5732 (87%)");
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it("con las diez etapas presentes, ninguna queda marcada como no corrida", () => {
+    const etapas = {};
+    for (const id of STAGE_ORDER) {
+      etapas[id] = {
+        done: 0,
+        target: STAGE_TARGETS[id],
+        attempts: 1,
+        cases: { unico: STAGE_TOTALS[id] },
+        blockedCases: {},
+      };
+    }
+    const { runner, dir } = runnerDePrueba(etapas);
+    try {
+      const s = runner.summary();
+      assert.equal(s.etapas.length, STAGE_ORDER.length);
+      assert.deepEqual(
+        s.etapas.filter((r) => !r.corrio).map((r) => r.etapa),
+        [],
+      );
+      assert.equal(s.general, "5732/5732 (100%)");
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it("una etapa que el checkpoint trae y el SIN no sigue saliendo, para que no se esconda", () => {
+    // El reciproco: si alguien deja basura o una etapa retirada en el checkpoint, no se
+    // puede perder por derivar de STAGE_ORDER — se nombra al final, con totalSin null.
+    const { runner, dir } = runnerDePrueba({
+      IV: { done: 0, target: 125, attempts: 1, cases: { unico: 750 }, blockedCases: {} },
+      ZZ: { done: 3, target: 3, attempts: 3, cases: {}, blockedCases: {} },
+    });
+    try {
+      const s = runner.summary();
+      const ids = s.etapas.map((r) => r.etapa);
+      assert.deepEqual(ids.slice(0, STAGE_ORDER.length), STAGE_ORDER);
+      assert.ok(ids.includes("ZZ"), "una etapa ajena al SIN no se descarta en silencio");
+      const zz = s.etapas.find((r) => r.etapa === "ZZ");
+      assert.equal(zz.totalSin, null);
+      assert.equal(zz.hechas, 3);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+});
+
+const RUNNER_CLI = fileURLToPath(new URL("../src/fase1-runner.mjs", import.meta.url));
+
+describe("--solo-informe: leer el avance sin tocar al SIN ni pedir credenciales", () => {
+  // Hasta el 2026-09-27 el avance SOLO se imprimia despues de correr una etapa, o sea
+  // despues de golpear al SIN. Por eso nadie lo miraba y la etapa que faltaba paso
+  // quince dias invisible: preguntar "como va la Fase 1" costaba una corrida real.
+  it("parseArgs reconoce el flag (default false)", () => {
+    assert.equal(parseArgs([]).soloInforme, false);
+    assert.equal(parseArgs(["--solo-informe"]).soloInforme, true);
+    assert.equal(parseArgs(["--solo-informe", "--state", "x.json"]).state, "x.json");
+  });
+
+  it("imprime el informe con el checkpoint dado, sin credenciales, y NO escribe nada", () => {
+    const dir = mkdtempSync(join(tmpdir(), "fase1-informe-"));
+    const stateFile = join(dir, "state.json");
+    const etapas = {};
+    for (const id of STAGE_ORDER) {
+      if (id === "VIII") continue;
+      etapas[id] = { done: 0, target: STAGE_TARGETS[id], attempts: 1, cases: { unico: STAGE_TOTALS[id] }, blockedCases: {} };
+    }
+    writeFileSync(stateFile, JSON.stringify({ ...emptyState(), etapas }), "utf8");
+    const antes = readFileSync(stateFile, "utf8");
+    try {
+      const salida = execFileSync(
+        process.execPath,
+        [RUNNER_CLI, "--solo-informe", "--state", stateFile],
+        {
+          encoding: "utf8",
+          // Sin token, sin nit, sin codigo de sistema: el informe no los necesita.
+          env: { PATH: process.env.PATH, HOME: process.env.HOME },
+        },
+      );
+      const informe = JSON.parse(salida);
+      assert.equal(informe.general, "5042/5732 (87%)");
+      const viii = informe.etapas.find((r) => r.etapa === "VIII");
+      assert.equal(viii.corrio, false, "el informe tiene que NOMBRAR la etapa que falta");
+      assert.equal(readFileSync(stateFile, "utf8"), antes, "un informe no escribe el checkpoint");
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it("sin el flag sigue exigiendo credenciales (no se abrio una puerta que corra al SIN sin token)", () => {
+    let fallo = null;
+    try {
+      execFileSync(process.execPath, [RUNNER_CLI, "--etapa", "I"], {
+        encoding: "utf8",
+        env: { PATH: process.env.PATH, HOME: process.env.HOME },
+      });
+    } catch (err) {
+      fallo = err;
+    }
+    assert.ok(fallo, "sin credenciales y sin --solo-informe tiene que salir en rojo");
+    assert.equal(fallo.status, 1);
+    assert.match(fallo.stderr, /faltan SIAT_PILOT_TOKEN/);
+  });
+});
 
 describe("matriz de casos del SIN (etapa IV, leida del portal 2026-08-27)", () => {
   it("son 6 combos: 2 puntos de venta x 3 documentos sector", () => {
