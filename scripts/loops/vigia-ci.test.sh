@@ -229,6 +229,100 @@ fixture "$(corridas success completed "$AHORA")"; run
 TAB=$(cat "$TMP/tablero.txt" 2>/dev/null)
 [ -z "$TAB" ] && ok "verde sin rojo previo: no toca el tablero" || falla "verde solo" "(nada)" "$TAB"
 
+# ── 18-22. `failure` NO SIEMPRE ES UN VEREDICTO SOBRE EL CODIGO ─────────────
+#
+# Medido el 2026-09-27 04:30 por el integrador: `CI` y `Security` de `master`
+# dieron `failure` en `b68c9e52` y en `3448d37c`, y el vigia creo dos tareas
+# diciendo «master esta roto y el deploy va a fallar». Era FALSO. El codigo
+# estaba sano —gitleaks limpio sobre el arbol y sobre los dos rangos, gates
+# locales verdes— y lo que pasaba era otra cosa:
+#
+#   started_at 03:41:56 -> completed_at 03:41:59   (TRES segundos)
+#   steps: 0 · runner_name: ""  · logs: BlobNotFound
+#   ...contra 7-8 MINUTOS en las dos corridas verdes anteriores.
+#
+# El trabajo NUNCA ARRANCO: GitHub no le dio maquina (minutos de Actions
+# agotados o pago rechazado — `onia-platform` es privado, sus minutos se
+# cobran). Los DOS workflows a la vez, uno de node y otro de docker, cayendo en
+# 3 s desde el mismo commit, no es codigo: es la cuenta.
+#
+# Por que importa mas que un aviso mal redactado, en las dos direcciones:
+#
+#  - Manda a un carril a arreglar codigo sano. El tablero se lee ANTES que la
+#    cola, asi que la tarea falsa gana la vuelta de alguien.
+#  - Y tapa lo verdaderamente grave, que es lo contrario de lo que el aviso
+#    dice: si el CI no corre, `master` NO esta roto — `master` esta SIN GATE.
+#    Nadie esta midiendo lo que se mergea, y eso no se arregla mirando el
+#    codigo. Un "rojo" cada tanto se convive; "nadie esta midiendo" se corta.
+#
+# La senal es DETERMINISTA, no una heuristica de duracion: un trabajo que corrio
+# deja pasos ejecutados y el nombre del runner que se lo dio.
+fixture_jobs() { printf '%s' "$1" > "$TMP/fxjobs.json"; }
+
+# `run` con fixture de jobs: el vigia pregunta por los jobs solo cuando hay rojo.
+run_con_jobs() {
+  : > "$TMP/mensajes.txt"
+  TMP_MENSAJES="$TMP/mensajes.txt" \
+  TMP_TABLERO="$TMP/tablero.txt" \
+  ONIA_TG="$TMP/tg.sh" \
+  ONIA_TABLERO="$TMP/tablero.sh" \
+  ONIA_CI_MARCA_DIR="$TMP" \
+  ONIA_CI_FIXTURE="$TMP/fx.json" \
+  ONIA_CI_FIXTURE_JOBS="$TMP/fxjobs.json" \
+  ONIA_CI_OBJETIVOS="oninteligenciaartificial/onia-platform:master" \
+  bash "$SUT"
+  RC=$?
+  MSGS=$(cat "$TMP/mensajes.txt")
+  return $RC
+}
+
+JOBS_NO_ARRANCO='{"jobs":[{"name":"Lint, Typecheck, Tests & Build","conclusion":"failure","runner_name":"","steps":[]}]}'
+JOBS_ARRANCO='{"jobs":[{"name":"Lint, Typecheck, Tests & Build","conclusion":"failure","runner_name":"GitHub Actions 5","steps":[{"name":"Set up job","conclusion":"success"},{"name":"npm test","conclusion":"failure"}]}]}'
+
+# 18. El trabajo nunca arranco: NO se afirma que el codigo este roto.
+rm -f "$TMP"/onia-ci-*
+fixture "$(corridas failure completed "$AHORA")"; fixture_jobs "$JOBS_NO_ARRANCO"; run_con_jobs
+case "$MSGS" in
+  *"CI en ROJO"*) falla "job sin arrancar" "NO decir 'CI en ROJO'" "$MSGS" ;;
+  *) ok "job que nunca arranco: no lo llama rojo del codigo" ;;
+esac
+case "$MSGS" in
+  *"no esta midiendo"*) ok "lo nombra por lo que es: el CI no esta midiendo" ;;
+  *) falla "aviso de sin-medir" "no esta midiendo" "${MSGS:-(nada)}" ;;
+esac
+# Y dice lo que de verdad esta en juego, que es lo contrario de "master roto".
+case "$MSGS" in
+  *"SIN GATE"*) ok "avisa que master avanza sin gate" ;;
+  *) falla "consecuencia real" "SIN GATE" "$MSGS" ;;
+esac
+
+# 19. No se repite cada diez minutos: un episodio, un aviso (como el rojo).
+fixture "$(corridas failure completed "$AHORA")"; fixture_jobs "$JOBS_NO_ARRANCO"; run_con_jobs
+[ -z "$MSGS" ] && ok "sin-medir -> sin-medir: SILENCIO" || falla "sin-medir repite" "(nada)" "$MSGS"
+
+# 20. Y cuando vuelve a correr en verde, cierra la tarea que abrio.
+# Misma deuda que el caso 16: un aviso que crea tarea y no la cierra llena el
+# tablero de estados ya curados.
+: > "$TMP/tablero.txt"
+fixture "$(corridas success completed "$MAS_TARDE")"; run
+TAB=$(cat "$TMP/tablero.txt" 2>/dev/null)
+case "$TAB" in *"complete t_deadbeef"*) ok "el verde cierra la tarea del sin-medir" ;; *) falla "cierre del sin-medir" "complete t_deadbeef" "${TAB:-(nada)}" ;; esac
+
+# 21. LA RED NO SE APAGA: un job que SI arranco y fallo sigue siendo rojo.
+# Sin este caso, devolver siempre "no arranco" pasaria el 18 y el vigia quedaria
+# mudo para los rojos de verdad — apagado con cara de arreglado.
+rm -f "$TMP"/onia-ci-*
+fixture "$(corridas failure completed "$AHORA")"; fixture_jobs "$JOBS_ARRANCO"; run_con_jobs
+case "$MSGS" in *"CI en ROJO"*) ok "job que corrio y fallo: sigue siendo ROJO" ;; *) falla "rojo real con jobs" "CI en ROJO" "$MSGS" ;; esac
+
+# 22. TRI-ESTADO: no poder preguntar por los jobs NO es "no arranco".
+# Confundir «no pude preguntar» con «me dijeron que no» es exactamente el modo de
+# falla que estos casos cierran; reintroducirlo del otro lado seria peor, porque
+# dejaria de avisar rojos reales cada vez que la API de jobs no conteste.
+rm -f "$TMP"/onia-ci-*
+fixture "$(corridas failure completed "$AHORA")"; run     # sin ONIA_CI_FIXTURE_JOBS
+case "$MSGS" in *"CI en ROJO"*) ok "sin poder mirar los jobs: avisa el rojo igual" ;; *) falla "jobs no consultables" "CI en ROJO" "$MSGS" ;; esac
+
 echo
 if [ "$FALLOS" = "0" ]; then echo "vigia-ci: TODO VERDE"; exit 0; fi
 echo "vigia-ci: $FALLOS fallo(s)"; exit 1
