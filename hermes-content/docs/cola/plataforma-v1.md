@@ -6037,6 +6037,43 @@ y sin operar. Acá se opera, con verificación por ítem.
       **Listo =** Porcentaje General del portal **> 0%** con al menos un caso nuevo al 100%, leído
       del portal y no deducido. Y el número de esta cola actualizado con la fecha de esa lectura.
 
+      🔴 **2026-09-26 — TODO LO QUE ESTE ÍTEM DA POR FRENADO YA ESTÁ HECHO; lo único vivo es
+      leer el portal.** Contado en el estado vivo del emisor (`/opt/onia-siat/fase1-state.json`,
+      `mtime 2026-09-13 01:05`), no heredado ni deducido: **las NUEVE etapas de la Fase 1 están
+      completas en los DOS puntos de venta**, con **cero** casos incompletos y **cero**
+      bloqueados. VI `pv0=280` **y `pv1=280`** (target 280) · IX `pv0=80` **y `pv1=80`**
+      (target 80) · IV, VII y XI con sus **seis** combos a 125/125, los tres de `pv0` **y los
+      tres de `pv1`**. Y el **PdV 1 existe**: tiene CUFD propio desde
+      `cufdByPv.1.obtenidoEn = 2026-09-12T19:35:48Z`, dieciséis minutos después del de `pv0`.
+      Se re-mide en un comando, y por eso vale más que esta lista:
+
+      ```bash
+      /root/bin/onia-vps.sh bash -lc 'python3 -c "
+      import json; d=json.load(open(\"/opt/onia-siat/fase1-state.json\"))
+      for e,t in d[\"etapas\"].items():
+          g=t.get(\"target\"); c=t.get(\"cases\",{}) or {}
+          print(e, g, sorted(c.items()), \"BLOQ\", len(t.get(\"blockedCases\") or {}))"'
+      ```
+
+      **Así que todo lo de abajo que diga «falta el PdV 1», «queda sólo `pv1`», «11 combos =
+      1.169 documentos» o «la otra mitad de la matriz también es suya» quedó VIEJO** — no estaba
+      mal cuando se escribió (8 y 10 de septiembre), caducó el 12-13. El `933 EL PUNTO DE VENTA
+      ES INEXISTENTE O INVALIDO` que se citaba como prueba ya no aparece: el PdV 1 se creó por
+      SOAP `registroPuntoVenta` (tipo 5 CAJEROS, CUIS `35B2967A`), **sin el login de Sergio
+      Urcullo**. Y el punto 2 de abajo —que el `ok` solo no alcanzaba porque
+      `run-fase1-volumen.sh` no corría la etapa I— también quedó atrás: las etapas corrieron
+      igual y llegaron al target.
+
+      ⚠️ **Y la lección que sobrevive al dato, porque es la que costó los días:** `web-venta`
+      midió este mismo vencimiento el **2026-09-19** y lo dejó **comentado** en `t_39a0c27c`.
+      Un comentario no desbloquea nada: **el título siguió siete días más pidiéndole a Sergio
+      Urcullo un trámite de 5 minutos que ya estaba hecho**, porque el título es lo que le llega
+      por el parte diario, no el último comentario. Corregido el 2026-09-26 **rehaciendo** la
+      tarea, no comentándola: el pedido real (leer el Porcentaje General, un minuto) vive ahora
+      en una tarea nueva y la vieja quedó `archived` en la misma vuelta. Se re-deriva sin citar
+      un id que caduca:
+      `onia-tablero.sh list --status blocked | grep -i 'Porcentaje General'`.
+
       ---
 
       **Medido el 2026-09-08 (no heredado): la corrida que el doc daba por «corriendo» terminó
@@ -6433,9 +6470,17 @@ y sin operar. Acá se opera, con verificación por ítem.
       párrafos abajo, repetido — porque **la cifra se sacó de la tabla pero la frase «tres
       destinos» quedó**, y una cifra escrita en prosa se pudre igual que una en una columna.
 
-      🔴 **Y por qué sobrevivió 19 días: este ítem no tiene verificador mecánico** — `npm run
-      bloqueos:vencidos` sale `NO MEDIDO` sobre esta cola (*"no tiene una tabla «Bloqueado en
-      Sergio» que leer"*: acá los bloqueos son una lista de ítems, no una tabla). La cola hermana
+      🔴 **Y por qué sobrevivió 19 días: este ítem no tiene verificador mecánico.** ⚠️ **Acá
+      decía que `npm run bloqueos:vencidos` sale `NO MEDIDO` sobre esta cola porque *"no tiene una
+      tabla «Bloqueado en Sergio» que leer"*, y es FALSO — corregido el 2026-09-26, apuntándole el
+      gate a mano en vez de heredar la frase.** El gate lee TAMBIÉN los bloqueos escritos como
+      ítems (`- [ ] 🔴`), lo dice su propio mensaje de `NO MEDIDO` al enumerar las tres formas que
+      acepta, y corrido sobre este archivo devuelve las cuatro filas vivas por número de línea
+      (`L5700, L5838, L5914, L6014`) con exit **0**, sin un solo `NO MEDIDO`. **Lo que pasaba era
+      otra cosa, y peor: el alias de `package.json` pasaba UNA sola cola —`chatbot.md`— así que a
+      este archivo no se lo midió nunca.** La frase de arriba daba la explicación equivocada del
+      síntoma correcto, y mientras existiera nadie iba a intentarlo. Arreglado en la misma vuelta:
+      el gate acepta varias rutas y el alias ahora pasa las dos. La cola hermana
       ya probó cuatro veces que ésas son las filas que se mueren de viejas —S10, S11, S12 y S13
       esperaron hasta 23 días con la decisión ya tomada y las cuatro se cerraron solas el día que
       se les cableó uno. **Verificador de este ítem, y ya existe: `npm run pedido:entregado`**
@@ -7507,7 +7552,25 @@ y sin operar. Acá se opera, con verificación por ítem.
       rama, NO desplegado**: falta el merge a `master` y el swap.
       ✅ YA DESPLEGADO (medido 2026-09-25: `e4465c9` vive en produccion `39234c89`).
 
-      **Qué estaba mal.** `menuText()` de `lib/whatsapp-bot.ts` estaba escrito para el dental
+      ⚠️ **Y ese «YA DESPLEGADO» hoy manda al revés — corregido el 2026-09-26, auditando los
+      `[x]` contra el árbol de HOY.** El commit sigue siendo antepasado del build vivo, así que
+      la frase es cierta en el sentido de `git` y **falsa en el único que importa**: el motor que
+      arreglaba ya no existe. El 2026-09-17 —nueve días ANTES de esa medición— `abf6cb5b`
+      (*«retire the legacy direct WhatsApp webhook (DG-044)»*, decisión de Sergio Urcullo ese
+      día) **borró ~~`lib/whatsapp-bot.ts`~~ con su test**, y `4f8441ae` borró su hermano
+      ~~`lib/whatsapp-ai.ts`~~. O sea: no hay `menuText()` que revisar ni regla de prompt que leer.
+      **El arreglo no se perdió, cambió de casa:** el webhook directo contestaba 503 sin efecto
+      y se retiró a propósito; el bot que el cliente paga entra hoy por el relay de Chatwoot
+      (`lib/whatsapp.ts`, intacto) y el menú lo arma el motor de `onia-center`
+      (`hermes-content/deploy/vps-ops/bot/`), que deriva el rubro de `trackId` y tiene su propio
+      gate. Medido: `git grep tieneAgenda origin/master` da **7 consumidores vivos** en
+      `onia-platform` (plan, ajustes, reserva pública, FAQ, export, agents, drip) y **ninguno**
+      en `lib/whatsapp*` — no es un hueco, es que esa pregunta se mudó al motor.
+      **La clase, que es lo que vale para la próxima vuelta:** un `[x]` que declara «vive en
+      producción» por ANTEPASADO de commit no sabe si el código sigue ahí. Cuando el sujeto es
+      un archivo, la pregunta se hace al árbol (`git ls-tree`), no a la ancestría.
+
+      **Qué estaba mal.** `menuText()` de ~~`lib/whatsapp-bot.ts`~~ estaba escrito para el dental
       y salía igual en los siete rubros: `1️⃣ Ver próxima cita · 2️⃣ Confirmar cita ·
       3️⃣ Cancelar cita · 4️⃣ Horarios`. `gestios-general` (comercio) y `proveegest-electrico`
       (importadora) —**2 de los 5 rubros de la v1.0**— no declaran `/appointments` ni
@@ -7515,7 +7578,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       dueño paga a **Bs 390/mes** le ofrecía tres opciones imposibles **en el primer
       mensaje**, se las **repetía después de cada respuesta libre**, y si elegía una le
       contestaba *«No tienes citas programadas próximamente»*, que da a entender que podría
-      tenerlas. Y `buildSystemPrompt` (`lib/whatsapp-ai.ts`) le ordenaba a la IA, en regla
+      tenerlas. Y `buildSystemPrompt` (~~`lib/whatsapp-ai.ts`~~) le ordenaba a la IA, en regla
       fija: *«Para agendar, confirmar o cancelar citas, indica que use el menú (opciones 1,
       2, 3)»* — o sea el add-on prometía una capacidad que ese pack no tiene.
 
@@ -7537,7 +7600,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       turno*. Los rubros con agenda quedan idénticos.
 
       **Prueba.** Test primero en ROJO por el motivo correcto: **12 casos** de 33
-      (`lib/whatsapp-bot-menu-por-rubro.test.ts`), sujetos derivados de `VERTICAL_PACKS` —un
+      (~~`lib/whatsapp-bot-menu-por-rubro.test.ts`~~), sujetos derivados de `VERTICAL_PACKS` —un
       rubro nuevo nace medido—. Verde después: 33/33. **Validado por mutación, 4 de 4 en
       rojo**, incluidas las dos de ESQUIVE que un gate ingenuo no ataja: menú **vacío** sin
       agenda (mata las citas y deja al cliente mudo) → 4 rojos, y **numerar el texto distinto
@@ -7589,6 +7652,14 @@ y sin operar. Acá se opera, con verificación por ítem.
       ✅ YA DESPLEGADO (medido 2026-09-25: `8009a9e` `a13d3af` vive en produccion `39234c89`).
       swap — viaja con el pedido de deploy `t_bf1607af`.
 
+      ⚠️ **Mismo caso que su hermano de arriba, y por la misma causa — corregido el 2026-09-26.**
+      `4f8441ae` (*«delete the dead direct-OpenAI wrapper»*, 2026-09-17) borró ~~`lib/whatsapp-ai.ts`~~
+      **y el gate de este ítem con él**, o sea que el archivo que esta línea manda a abrir para ver
+      la prueba no está. El vocabulario por rubro se sigue derivando —lo hace `buildSystemPrompt`
+      del motor de `onia-center`, desde `trackId`— pero **acá no hay nada que leer**: quien busque
+      `~~lib/whatsapp-ai-idioma-del-rubro.test.ts~~` concluye «no existe» en vez de «se mudó», que
+      son dos vueltas distintas.
+
       **Qué estaba mal.** El add-on de WhatsApp (Bs 390/mes, `pricing.ts`) atiende a los
       clientes DE la org. Su system prompt decía, literal:
       `Eres el asistente virtual de ${clinicName}, una clínica dental.` — más «términos
@@ -7624,7 +7695,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       **Prueba.** Rojo antes por el motivo correcto (30/30). Cuatro mutaciones, todas en rojo:
       revertir el prompt (24), el llamador sin `trackId` (1, nombrando el archivo), esquivar
       borrando la palabra (9), detector sin sujetos (1). Gates: `tsc` 0 · `vitest` **3676**
-      verdes · `eslint` 0 errores. Ver `lib/whatsapp-ai-idioma-del-rubro.test.ts`.
+      verdes · `eslint` 0 errores. Ver ~~`lib/whatsapp-ai-idioma-del-rubro.test.ts`~~.
 
 - [x] **CERRADO el 2026-09-08: nadie vigilaba el simétrico de «camino ausente» — el enlace
       que lleva a una pantalla que ese rubro tiene BLOQUEADA.** Commit `c3a2fda` (rama
@@ -8026,7 +8097,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       **Por qué sobrevivió a todos los gates:** no sobra ninguna palabra, el texto ya estaba en
       el idioma del rubro (arreglado el 06-sep), la pantalla se ve perfecta y **el correo —que
       es lo que se auditó— estaba bien**. El defecto sólo aparece **comparando los dos avisos
-      entre sí**. Es la misma clase «arreglar la instancia y no la clase»: `lib/whatsapp-bot.ts`
+      entre sí**. Es la misma clase «arreglar la instancia y no la clase»: ~~`lib/whatsapp-bot.ts`~~
       ya pasaba `timeZone: settings.timezone` en sus dos formateos.
 
       **El arreglo:** `eec06d7` en `claude/chatbots-platform-review-0d1d09`. La construcción del

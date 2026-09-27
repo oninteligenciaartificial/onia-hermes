@@ -113,6 +113,12 @@ export function esRuta(trozo, raices) {
   if (!EXT.test(trozo)) return false;
   if (/\s/.test(trozo)) return false;            // un comando, no una ruta
   if (!trozo.includes('/')) return false;        // un nombre suelto no promete ubicacion
+  // ⚠️ Un GLOB no es un puntero, y medirlo como tal MIENTE: `app/api/**/route.ts` salio FOSIL en
+  // la primera corrida del modo --producto porque `git log -- <pathspec>` resuelve comodines, y
+  // le encontro el borrado de `app/api/webhooks/whatsapp/route.ts`. La cola hablaba de una FAMILIA
+  // de rutas, que sigue viva y con 60 archivos. Se descarta aca, no en un modo: un comodin no
+  // apunta a un archivo en ninguno de los dos.
+  if (/[*?]/.test(trozo)) return false;
   if (AJENAS.some((re) => re.test(trozo))) return false;
   return raices.has(trozo.split('/')[0]);
 }
@@ -130,6 +136,15 @@ export function juzgarRuta(ruta, { existe, dondeEsta, commitQueBorro }) {
   const sha = commitQueBorro(ruta);
   if (sha) return { veredicto: 'FOSIL', sha };
   return { veredicto: 'sin juicio' };
+}
+
+/**
+ * La frontera entre los dos modos, aparte para que el self-check la mida: una ruta que este repo
+ * tiene (en cualquier raiz) la juzga `medir()`, que mira el DISCO; el modo `--producto` mira un
+ * ref del repo hermano y sabe menos. Dos gates sobre el mismo sujeto acaban contradiciendose.
+ */
+export function loJuzgaElRepoLocal(ruta, sufijosDeAca) {
+  return sufijosDeAca.has(ruta);
 }
 
 // ── medicion viva ───────────────────────────────────────────────────────────────────────
@@ -158,7 +173,7 @@ function medir() {
     dondeEsta: (r) => (porSufijo.get(r) || []).filter((f) => f !== r),
     commitQueBorro: (r) => {
       try {
-        const sha = execFileSync('git', ['-C', RAIZ, 'log', '--diff-filter=D', '--format=%h', '-1', '--', r], { encoding: 'utf8' }).trim();
+        const sha = execFileSync('git', ['-C', RAIZ, 'log', '--diff-filter=D', '--format=%h', '-1', '--', `:(literal)${r}`], { encoding: 'utf8' }).trim();
         return sha || null;
       } catch { return null; }
     },
@@ -263,6 +278,23 @@ function selfCheck() {
   afirmar('una abreviatura de prosa NO se juzga', esRuta('lib/pricing.ts', raices), false);
   afirmar('otra abreviatura de prosa NO se juzga', esRuta('bot/knowledge.mjs', raices), false);
 
+  // ── la frontera del modo --producto, que es de donde salio el hueco ──────────────────────
+  // El sujeto que estuvo invisible: con las raices de ESTE repo, `lib/...` se descarta como
+  // abreviatura de prosa (y esta bien: aca `lib` no existe). Con las del PRODUCTO se juzga.
+  const raicesProducto = new Set(['lib', 'app', 'components', 'prisma', 'scripts']);
+  afirmar('con las raices del producto, lib/ SI se juzga', esRuta('lib/whatsapp-bot.ts', raicesProducto), true);
+  afirmar('con las raices de este repo, lib/ no se juzga', esRuta('lib/whatsapp-bot.ts', raices), false);
+  // Sin esta frontera, `scripts/x.mjs` lo juzgarian LOS DOS modos y el que mira un ref ajeno
+  // (que sabe menos) podria acusar de fosil lo que este repo tiene en el disco.
+  afirmar('lo que este repo tiene se lo deja al modo local',
+    loJuzgaElRepoLocal('scripts/x.mjs', new Set(['scripts/x.mjs'])), true);
+  afirmar('lo que este repo no tiene pasa al modo producto',
+    loJuzgaElRepoLocal('lib/whatsapp-bot.ts', new Set(['scripts/x.mjs'])), false);
+
+  // El falso positivo que la primera corrida del modo --producto canto sola.
+  afirmar('un glob no es un puntero', esRuta('app/api/**/route.ts', raicesProducto), false);
+  afirmar('un glob del repo local tampoco', esRuta('scripts/*.mjs', raices), false);
+
   const t = trozosConLinea('una linea\nsigue `scripts/a.mjs` y `test:b`\n');
   afirmar('los trozos traen su linea', t.length === 2 && t[0].linea === 2 && t[1].trozo === 'test:b', true);
 
@@ -275,9 +307,139 @@ function selfCheck() {
     for (const f of fallos) console.error('  · ' + f);
     return 1;
   }
-  console.log(`self-check ok — 15 caso(s), los cuatro veredictos validados por mutacion.`);
+  console.log(`self-check ok — 21 caso(s), los cuatro veredictos validados por mutacion.`);
   return 0;
 }
 
+// ── modo --producto: las rutas del OTRO repo, que este gate deja en silencio a proposito ──
+//
+// NACE DEL HUECO DE SU PROPIO DISENO, medido el 2026-09-26 por el carril chatbot-cola. Arriba
+// esta escrito que una ruta que "no esta y git nunca la vio" sale en SILENCIO porque "puede ser
+// de otro repo". Correcto — y por eso mismo **todo el producto queda afuera**: `onia-platform`
+// es otro repo, sus raices (`lib/`, `app/`, `prisma/`, `components/`) no son raices de este, y
+// `esRuta` las descarta como abreviaturas de prosa. Resultado medido sobre `plataforma-v1.md`:
+// **222 rutas de producto citadas y 4 fosiles invisibles** —
+// `lib/whatsapp-bot.ts` + su test (los borro `abf6cb5b`, *retire the legacy direct WhatsApp
+// webhook*, 2026-09-17) y `lib/whatsapp-ai.ts` + el suyo (`4f8441ae`). Dos items `[x]` decian
+// "YA DESPLEGADO ... vive en produccion" sobre commits cuyo codigo ya no existe: el commit sigue
+// siendo antepasado del build, y el archivo no esta. La proxima vuelta que abriera esa evidencia
+// concluiria "no existe" en vez de "se mudo al motor de onia-center", que son dos vueltas.
+//
+// POR QUE ES UN MODO APARTE Y NO PARTE DE `medir()`: necesita el clon hermano. Un gate cuyo
+// sujeto vive en otro repo se pone rojo POR AMBIENTE en cualquier arbol que no lo tenga, y este
+// corre en la cadena del integrador, o sea que trabaria el merge de todos los carriles. La
+// division ya esta medida en este repo: self-check puro en la cadena, medicion viva como alias
+// suelto — y para que el alias no muera de olvido, entra a la lista de arranque del carril.
+//
+// TRI-ESTADO, sin excepcion: sin clon, sin `fetch` o sin `origin/master` sale **2 = NO MEDIDO**.
+// No medir no es estar bien, y un `catch → false` aca diria "el producto esta sano" cuando lo
+// unico cierto es que no se pudo preguntar.
+const CLONES_PRODUCTO = [
+  process.env.ONIA_PLATFORM_REPO,
+  '/root/loops/onia-platform-chatbot',
+  '/root/loops/onia-platform',
+].filter(Boolean);
+
+function arbolDelProducto() {
+  for (const clon of CLONES_PRODUCTO) {
+    if (!fs.existsSync(path.join(clon, '.git'))) continue;
+    try {
+      // Fetch primero: sin esto se mide el ref de disco y se falla EN VERDE.
+      execFileSync('git', ['-C', clon, 'fetch', 'origin', '--quiet'], { encoding: 'utf8', timeout: 120_000 });
+      const archivos = execFileSync('git', ['-C', clon, 'ls-tree', '-r', '--name-only', 'origin/master'],
+        { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }).split('\n').filter(Boolean);
+      if (!archivos.length) continue;
+      return { clon, archivos };
+    } catch { /* probar el siguiente */ }
+  }
+  return null;
+}
+
+function medirProducto() {
+  const arbol = arbolDelProducto();
+  if (!arbol) {
+    console.log('NO MEDIDO — ningun clon de onia-platform contesto `fetch` + `ls-tree origin/master`.');
+    console.log(`  probados: ${CLONES_PRODUCTO.join(' · ')}`);
+    console.log('  Se mide donde el clon EXISTE (o con ONIA_PLATFORM_REPO=<ruta>). No medir no es estar bien.');
+    return 2;
+  }
+  const { clon, archivos } = arbol;
+  const enProducto = new Set(archivos);
+  const raicesProducto = new Set(archivos.map((f) => f.split('/')[0]).filter(Boolean));
+  const porSufijoProducto = new Map();
+  for (const f of archivos) {
+    const partes = f.split('/');
+    for (let n = 1; n <= Math.min(3, partes.length); n++) {
+      const suf = partes.slice(-n).join('/');
+      if (!porSufijoProducto.has(suf)) porSufijoProducto.set(suf, []);
+      porSufijoProducto.get(suf).push(f);
+    }
+  }
+  // Lo que este repo tiene se lo deja al modo local: dos gates sobre el mismo sujeto se
+  // contradicen, y el local sabe mas (mira el disco, no un ref).
+  const deAca = new Set(listarArchivosDelRepo());
+  const sufijosDeAca = new Set();
+  for (const f of deAca) {
+    const partes = f.split('/');
+    for (let n = 1; n <= Math.min(3, partes.length); n++) sufijosDeAca.add(partes.slice(-n).join('/'));
+  }
+
+  const herramientas = {
+    existe: (r) => enProducto.has(r),
+    dondeEsta: (r) => (porSufijoProducto.get(r) || []).filter((f) => f !== r),
+    commitQueBorro: (r) => {
+      try {
+        const sha = execFileSync('git', ['-C', clon, 'log', '--all', '--diff-filter=D', '--format=%h', '-1', '--', `:(literal)${r}`],
+          { encoding: 'utf8', timeout: 120_000 }).trim();
+        return sha || null;
+      } catch { return null; }
+    },
+  };
+
+  const hallazgos = [];
+  let miradas = 0;
+  let tachados = 0;
+  for (const cola of COLAS) {
+    const abs = path.join(RAIZ, cola);
+    if (!fs.existsSync(abs)) continue;
+    for (const { trozo, linea, tachado } of trozosConLinea(fs.readFileSync(abs, 'utf8'))) {
+      if (!esRuta(trozo, raicesProducto)) continue;
+      if (loJuzgaElRepoLocal(trozo, sufijosDeAca)) continue;   // es de este repo: lo juzga `medir()`
+      if (tachado) { tachados++; continue; }
+      miradas++;
+      const j = juzgarRuta(trozo, herramientas);
+      if (j.veredicto === 'MISROUTADA') {
+        hallazgos.push({ cola, linea, trozo, veredicto: j.veredicto, detalle: `el producto la tiene en: ${j.donde.slice(0, 3).join(' · ')}` });
+      } else if (j.veredicto === 'FOSIL') {
+        hallazgos.push({ cola, linea, trozo, veredicto: j.veredicto, detalle: `la borro el commit ${j.sha} de onia-platform` });
+      }
+    }
+  }
+
+  console.log(`punteros de PRODUCTO — ${miradas} ruta(s) de onia-platform citada(s) en ${COLAS.length} cola(s) · ${tachados} tachada(s) como historia · arbol ${clon} origin/master`);
+  const porSujeto = new Map();
+  for (const h of hallazgos) {
+    const clave = `${h.veredicto} ${h.trozo} ${h.detalle}`;
+    if (!porSujeto.has(clave)) porSujeto.set(clave, { ...h, lugares: [] });
+    porSujeto.get(clave).lugares.push(`${h.cola}:${h.linea}`);
+  }
+  for (const h of porSujeto.values()) {
+    console.log(`  ${h.veredicto}  \`${h.trozo}\` — ${h.detalle}`);
+    console.log(`            citada en ${h.lugares.length}: ${h.lugares.slice(0, 6).join(' · ')}${h.lugares.length > 6 ? ' …' : ''}`);
+  }
+  if (!hallazgos.length) {
+    console.log('VEREDICTO: ok — toda ruta de producto citada sigue en el arbol de onia-platform.');
+    return 0;
+  }
+  console.log(`VEREDICTO: ROTO — ${porSujeto.size} puntero(s) de producto mandan al lugar equivocado (${hallazgos.length} cita(s)).`);
+  console.log('  Un FOSIL del producto NO se borra de la cola: se TACHA con `~~` y se dice donde vive hoy esa');
+  console.log('  capacidad. El `[x]` sigue siendo cierto (el trabajo se hizo); lo que caduco es el puntero.');
+  return 1;
+}
+
 const esCLI = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
-if (esCLI) process.exit(process.argv.includes('--self-check') ? selfCheck() : medir());
+if (esCLI) {
+  process.exit(process.argv.includes('--self-check') ? selfCheck()
+    : process.argv.includes('--producto') ? medirProducto()
+    : medir());
+}

@@ -580,23 +580,39 @@ if (process.argv.includes('--tablero')) {
   process.exit(1);
 }
 
-const ruta = process.argv[2];
-if (!ruta) {
-  console.error('uso: node scripts/bloqueos_vencidos.mjs <cola.md> | --tablero | --self-check');
+// VARIAS colas por corrida, y por qué no alcanzaba una. Este carril tiene DOS —`chatbot.md` y
+// `plataforma-v1.md`— y el alias de `package.json` sólo pasaba la primera, así que los cuatro
+// bloqueos de la segunda no los miró nadie nunca (medido el 2026-09-26: apuntándolo a mano
+// aparecen como `L5700, L5838, L5914, L6014`, las cuatro sin verificador). Se resolvió acá y no
+// encadenando dos comandos en el alias con `&&` a propósito: `&&` corta en el primer rojo, o sea
+// que un vencido en la primera cola dejaría la segunda SIN MEDIR justo en la vuelta en que algo
+// se movió. Se miden todas y después se juzga.
+const rutas = process.argv.slice(2).filter((a) => !a.startsWith('--'));
+if (!rutas.length) {
+  console.error('uso: node scripts/bloqueos_vencidos.mjs <cola.md> [<cola.md> ...] | --tablero | --self-check');
   process.exit(2);
 }
 
 const scripts = JSON.parse(await readFile(join(RAIZ, 'package.json'), 'utf8')).scripts ?? {};
-const filas = extraerBloqueos(await readFile(ruta, 'utf8'));
 
-if (!filas.length) {
-  console.error(
-    `NO MEDIDO — ${ruta} no tiene ni una tabla "Bloqueado en Sergio", ni un bloqueo abierto ` +
-      `\`- [ ] 🔴\`, ni un item que declare su verificador ` +
-      `(\`**Verificador:** \\\`<comando>\\\` → <codigo>\`). Sin eso no hay nada que correr.`,
-  );
+// La cola de origen viaja con cada fila: con dos archivos, un id suelto («S2») no dice dónde
+// arreglarlo, y los ids de una cola no son únicos contra los de la otra.
+const porCola = [];
+for (const ruta of rutas) porCola.push({ ruta, filas: extraerBloqueos(await readFile(ruta, 'utf8')) });
+
+const vacias = porCola.filter((c) => !c.filas.length);
+if (vacias.length) {
+  for (const c of vacias) {
+    console.error(
+      `NO MEDIDO — ${c.ruta} no tiene ni una tabla "Bloqueado en Sergio", ni un bloqueo abierto ` +
+        `\`- [ ] 🔴\`, ni un item que declare su verificador ` +
+        `(\`**Verificador:** \\\`<comando>\\\` → <codigo>\`). Sin eso no hay nada que correr.`,
+    );
+  }
   process.exit(1);
 }
+
+const filas = porCola.flatMap((c) => c.filas.map((f) => ({ ...f, cola: c.ruta })));
 
 const vivas = filas.filter((f) => !f.cerrado);
 const conVerificador = vivas.filter((f) => f.comando);
@@ -627,19 +643,27 @@ for (const r of resultados) {
 }
 
 if (sinVerificador.length) {
-  console.log(
-    `  (${sinVerificador.length} fila(s) sin verificador mecanico, se re-miden a mano: ` +
-      `${sinVerificador.map((f) => f.id).join(', ')})`,
-  );
+  // Agrupadas por cola: un id suelto no dice en qué archivo arreglarlo.
+  for (const { ruta } of porCola) {
+    const suyas = sinVerificador.filter((f) => f.cola === ruta);
+    if (!suyas.length) continue;
+    console.log(`  (${suyas.length} fila(s) sin verificador mecanico en ${ruta}, se re-miden a mano: ${suyas.map((f) => f.id).join(', ')})`);
+  }
 }
 
-const motivos = [...juzgar(resultados), ...idsDuplicados(filas)];
+// Los ids duplicados se buscan DENTRO de cada cola, no en la bolsa mezclada: dos colas pueden
+// nombrar `S2` legítimamente y eso no es el bug que `idsDuplicados` caza (el `S12, S12` de una
+// misma tabla, que vuelve ambigua la fila que el gate nombra).
+const motivos = [...juzgar(resultados), ...porCola.flatMap((c) => idsDuplicados(c.filas))];
 if (!motivos.length) {
-  console.log(`bloqueos vencidos: ${conVerificador.length} verificador(es) corrido(s), ninguno satisfecho — todos siguen bloqueados`);
+  console.log(
+    `bloqueos vencidos: ${conVerificador.length} verificador(es) corrido(s) sobre ${rutas.length} cola(s), ` +
+      `ninguno satisfecho — todos siguen bloqueados`,
+  );
   process.exit(0);
 }
 
-console.error(`\nBLOQUEO VENCIDO — ${ruta}`);
+console.error(`\nBLOQUEO VENCIDO — ${rutas.join(', ')}`);
 for (const m of motivos) console.error(`  - ${m}`);
 console.error('\nUn bloqueo vencido le pide a Sergio una decision que ya tomo, y le presta su motivo falso al de al lado.');
 process.exit(1);
