@@ -12,6 +12,30 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-27 10:09-10:12 La Paz (vuelta HEAD 76201554) — rotación de rubro: Comercio (el eje más viejo sin correrse desde el 09-26 20:14), 8/8
+
+Chequeo de arranque: máquina `casa` (nodo-casa, WSL). `ONIA_ALTA_AUTOMATICA=abierta`. Los 4 loops
+de `casa` coinciden con `loops.md`. Tablero sin tareas `ready` sin reclamar en
+`recorrido-cliente`. La vuelta anterior ya había cubierto dental (x3) e Importadora, así que
+roté al rubro con más tiempo sin probarse: Comercio (última corrida 2026-09-26 20:14).
+
+`RECORRIDO_RUBRO=Comercio node scripts/recorrido_cliente.mjs --escribir` — **8/8 (el paso 7 no
+aplica, correctamente: "Comercio" es storefront/catálogo/caja, no vende agenda, coherente con su
+propio menú)**. Cuenta `zz-qa-2026-09-27-1010@onia.com.bo` creada, confirmó correo, onboarding
+completo en 6 pantallas, dato `zz-qa-2026-09-27-1010-paciente` cargado y visto en storefront
+Catálogo (`/comercio`) y de vuelta en `/dashboard`, pantalla de cobro (`/comercio/caja`) mirada y
+frenada sin pagar. Sin hallazgo nuevo.
+
+Limpieza verificada: `appointments`/`organizations` con `zz-qa-%` = 0 al cerrar (impreso antes de
+borrar en la salida de la corrida, y re-confirmado con `SELECT` aparte).
+
+RAZÓN: N/A — avanzó (recorrido completo en Comercio, sin hallazgos nuevos que reportar a otro
+carril).
+LECCIÓN: ninguna nueva — rotar al rubro más viejo sin correrse (en vez de por defecto o al azar)
+sigue siendo el criterio correcto para no concentrar la cobertura en un solo eje.
+
+---
+
 ## 2026-09-27 09:09-09:22 La Paz (vuelta HEAD 99052093) — dental x3 seguidas por defecto; rotado a Importadora, ambos 9/9
 
 Chequeo de arranque: máquina `casa` (nodo-casa, WSL). `ONIA_ALTA_AUTOMATICA=abierta`. Los 4 loops
