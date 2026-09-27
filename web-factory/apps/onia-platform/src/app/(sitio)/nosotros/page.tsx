@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { PRUEBA } from "@/lib/pricing";
+import { PRUEBA, RETENCION } from "@/lib/pricing";
 import { Reveal } from "@/motion";
 import { WA_URL_LANDING, SITE_URL, CORREO_CONTACTO } from "@/lib/site";
 import { SIAT_ESTADO_ONIA } from "@/lib/siat";
@@ -155,8 +155,8 @@ export default function Nosotros() {
             {SIAT_ESTADO_ONIA}. Lo probás tal como está hoy: {PRUEBA.dias} días con el
             plan {PRUEBA.planQueCorre} completo, sin tarjeta y sin contrato de
             permanencia. Si no
-            te sirve, no pagás nada y tus datos te los llevás en CSV cuando
-            quieras.
+            te sirve, no pagás nada y tus datos te los llevás en CSV, con{" "}
+            {RETENCION.diasParaExportar} días para hacerlo.
           </p>
           <div className={s.actions}>
             <Btn href={EMPEZAR_URL}>{CTA_ALTA}</Btn>

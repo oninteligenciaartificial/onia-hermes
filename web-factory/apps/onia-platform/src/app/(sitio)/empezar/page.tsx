@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Reveal } from "@/motion";
-import { PRUEBA, ALCANCE_CON_AGENDA, ALCANCE_CON_INVENTARIO } from "@/lib/pricing";
+import { PRUEBA, RETENCION, ALCANCE_CON_AGENDA, ALCANCE_CON_INVENTARIO } from "@/lib/pricing";
 import { WA_URL_LANDING, SITE_URL } from "@/lib/site";
 import { MEDIO_DE_PAGO } from "@/content/medio-de-pago";
 import { REGISTRO_URL } from "../nav";
@@ -112,10 +112,20 @@ export default function Empezar() {
                   chatbot de WhatsApp y el segundo administrador los trae el
                   plan de arriba. Se nombra el plan —la misma forma que usa
                   PRUEBA.copy— en vez de cuantificar las partes. */}
+              {/* «los exportás cuando quieras» decía esta frase hasta el
+                  2026-09-27, y es más ancha que el contrato: privacidad.md §8
+                  da RETENCION.diasParaExportar días desde la terminación para
+                  pedir el export. Mientras la cuenta vive el export SÍ es
+                  cuando quieras (no lo gatea ningún plan, y eso lo cuida
+                  `datos-que-se-llevan.test.ts`); lo que caduca es el derecho
+                  DESPUÉS de irse, que es justo de lo que habla esta oración.
+                  El plazo se DERIVA, nunca se tipea. Lo sostiene
+                  `export-al-irse-con-su-plazo.test.ts`. */}
               <p className={s.lead}>
                 No es una demo recortada: es tu cuenta real, con el plan{" "}
                 {PRUEBA.planQueCorre} completo. Si al final no te sirve, no
-                pagás nada — y tus datos los exportás cuando quieras.
+                pagás nada — y tus datos te los llevás en CSV, con{" "}
+                {RETENCION.diasParaExportar} días para hacerlo.
               </p>
               <div className={s.actions}>
                 <Btn href={REGISTRO_URL}>{CTA_ALTA}</Btn>
