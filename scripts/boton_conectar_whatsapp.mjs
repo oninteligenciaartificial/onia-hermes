@@ -33,8 +33,13 @@
  * motivo entero. Se guarda el texto visible ANTES de apretar y se toman las lineas que
  * aparecieron DESPUES: eso es, sin adivinar, lo que el producto contesto.
  */
+import { execFile } from "node:child_process";
+import { promisify } from "node:util";
 import { pathToFileURL } from "node:url";
 import { navegadorConSesion } from "./lib/sesion_dueno.mjs";
+
+const ejecutar = promisify(execFile);
+const CONTENEDOR_DB = "supabase-db";
 
 function arg(nombre, porDefecto) {
   const i = process.argv.indexOf(`--${nombre}`);
@@ -87,6 +92,100 @@ export function lineasNuevas(antes, despues) {
     .filter((l) => l && !previas.has(l));
 }
 
+// ── de quien se mide: se DERIVA del sistema, no se escribe ──────────────────────────────
+//
+// Esto nacio de un exit 2 permanente. El sujeto era el literal
+// `oninteligenciaartificial+qacomercio@gmail.com`, una cuenta QA que ya no existe en
+// produccion (`profiles` devuelve 0), asi que el instrumento salia 2 TODAS las vueltas —
+// y un exit 2 que no cambia se lee como "el ambiental de siempre" y se saltea. El punto (2)
+// de `t_6bf938b7` quedaba sin medir con el gate en pie, que es peor que no tenerlo: da la
+// sensacion de estar vigilado.
+//
+// La org interna NO sirve de sujeto: su pack es de operacion, no de rubro, asi que no
+// renderiza la tarjeta de un cliente (y ademas pide 2FA).
+export const ORGS_QUE_NO_MIDEN = ["onia-interna"];
+
+/** Filas crudas de psql (-tAF|) → objetos. Vacio si la consulta no devolvio nada. */
+export function parsearFilas(stdout) {
+  return String(stdout)
+    .split("\n")
+    .map((l) => l.trim())
+    .filter(Boolean)
+    .map((l) => {
+      const [slug, addon, status, validUntil, email, role] = l.split("|");
+      return {
+        slug,
+        whatsappAddon: addon === "t",
+        status: status && status !== "-" ? status : null,
+        validUntil: validUntil ? new Date(validUntil) : null,
+        email: email || "",
+        role: role || "",
+      };
+    });
+}
+
+/**
+ * Elige el dueno sobre el que se mide la tarjeta.
+ *
+ * ⚠️ El add-on se pregunta con el criterio UNICO de `lib/plan-limits.ts`
+ * (`isWhatsAppAddonActive`): la columna vieja `organizations."whatsappAddon"` **O** el
+ * entitlement `addon.whatsapp` vigente. Leer solo la columna invierte el diagnostico — en
+ * produccion miente para 3 de las 4 orgs que tienen el add-on, y el instrumento elegiria
+ * una org sin boton y firmaria "NO MEDIDO" por el motivo equivocado.
+ *
+ * Devuelve `{ email, slug }`, o `{ email: null, motivo }` — nunca un sujeto inventado: no
+ * poder elegir es un resultado, y su motivo tiene que nombrar lo que falta en el sistema.
+ */
+export function elegirSujeto(filas, ahora = new Date()) {
+  const conAddon = filas.filter(
+    (f) => f.whatsappAddon || (f.status === "active" && (f.validUntil === null || f.validUntil > ahora)),
+  );
+  if (conAddon.length === 0) {
+    return { email: null, motivo: "ninguna org de produccion tiene el add-on de WhatsApp activo" };
+  }
+  const medibles = conAddon.filter((f) => !ORGS_QUE_NO_MIDEN.includes(f.slug));
+  if (medibles.length === 0) {
+    return {
+      email: null,
+      motivo: `las unicas orgs con el add-on son internas (${conAddon.map((f) => f.slug).join(", ")}): no renderizan la tarjeta de un cliente`,
+    };
+  }
+  const duenos = medibles.filter((f) => f.role === "ADMIN" && f.email);
+  if (duenos.length === 0) {
+    return {
+      email: null,
+      motivo: `las orgs con el add-on (${medibles.map((f) => f.slug).join(", ")}) no tienen ningun perfil ADMIN con correo`,
+    };
+  }
+  return { email: duenos[0].email, slug: duenos[0].slug };
+}
+
+/** Pregunta a la base de produccion quien puede ser el sujeto. */
+async function sujetoDerivado() {
+  const sql =
+    'select o.slug, o."whatsappAddon", coalesce(e.status,\'-\'), coalesce(e."validUntil"::text,\'\'), ' +
+    // `role` es un enum: sin ::text, coalesce falla con «invalid input value for enum "Role"»
+    // y la consulta entera se cae. Medido el 2026-09-27.
+    "coalesce(p.email,''), coalesce(p.role::text,'') from organizations o " +
+    'left join organization_entitlements e on e."organizationId"=o.id ' +
+    "and e.\"featureKey\"='addon.whatsapp' " +
+    'join profiles p on p."organizationId"=o.id order by o.slug, p.role;';
+  // No poder PREGUNTAR no es "el boton esta roto": si esto escapa como excepcion, el proceso
+  // muere con 1, y en este instrumento 1 significa EL BUG. Se devuelve sin sujeto (→ 2).
+  let stdout;
+  try {
+    ({ stdout } = await ejecutar(
+      "docker",
+      ["exec", CONTENEDOR_DB, "psql", "-U", "postgres", "-d", "postgres", "-tAF|", "-c", sql],
+      { maxBuffer: 8 * 1024 * 1024 },
+    ));
+  } catch (e) {
+    const detalle = String(e?.stderr || e?.message || e).split("\n")[0];
+    return { email: null, motivo: `no se pudo preguntar a la base de produccion: ${detalle}` };
+  }
+  return elegirSujeto(parsearFilas(stdout));
+}
+
 // ── self-check ──────────────────────────────────────────────────────────────────────────
 // Los casos van en las DOS direcciones. Uno que solo pruebe el rojo pasa igual con el gate
 // roto: hace falta el caso que TIENE que dar verde (aca, la ventana que abre) para que una
@@ -118,6 +217,64 @@ export function casos() {
       obs: { botonPresente: false, popupAbierto: false, deshabilitadoFinal: false, mensajeNuevo: "", motivoAusencia: "la tarjeta ofrece 'Contratar el chatbot'" },
       espera: 2,
     },
+    // ── la eleccion del sujeto ───────────────────────────────────────────────────────────
+    // El caso que importa es el PRIMERO: con el criterio a medias (solo la columna vieja)
+    // esta org queda afuera, el instrumento elige otra sin boton y firma "NO MEDIDO" por el
+    // motivo equivocado. Es el mismo error que ya invirtio diagnosticos en produccion.
+    {
+      que: "org con el add-on SOLO por entitlement (columna en false) → es sujeto valido",
+      fn: () =>
+        elegirSujeto([
+          { slug: "tienda-x", whatsappAddon: false, status: "active", validUntil: null, email: "d@x.bo", role: "ADMIN" },
+        ]).email,
+      esperaFn: "d@x.bo",
+    },
+    {
+      que: "org con el add-on SOLO por la columna vieja (sin entitlement) → tambien es valido",
+      fn: () =>
+        elegirSujeto([
+          { slug: "tienda-y", whatsappAddon: true, status: null, validUntil: null, email: "d@y.bo", role: "ADMIN" },
+        ]).email,
+      esperaFn: "d@y.bo",
+    },
+    {
+      que: "entitlement VENCIDO no alcanza: no es sujeto",
+      fn: () =>
+        elegirSujeto(
+          [{ slug: "tienda-z", whatsappAddon: false, status: "active", validUntil: new Date("2026-01-01"), email: "d@z.bo", role: "ADMIN" }],
+          new Date("2026-09-27"),
+        ).email,
+      esperaFn: null,
+    },
+    {
+      que: "la org interna no mide aunque tenga el add-on → sin sujeto, con su motivo",
+      fn: () =>
+        elegirSujeto([
+          { slug: "onia-interna", whatsappAddon: true, status: "active", validUntil: null, email: "superadmin@onia.com.bo", role: "SUPERADMIN" },
+        ]).email,
+      esperaFn: null,
+    },
+    {
+      que: "org con add-on pero sin perfil ADMIN → sin sujeto, nunca uno inventado",
+      fn: () =>
+        elegirSujeto([
+          { slug: "tienda-w", whatsappAddon: true, status: null, validUntil: null, email: "", role: "STAFF" },
+        ]).email,
+      esperaFn: null,
+    },
+    {
+      que: "base vacia → sin sujeto (no puede salir verde por no encontrar nada)",
+      fn: () => elegirSujeto([]).email,
+      esperaFn: null,
+    },
+    {
+      que: "parsearFilas lee la fila de psql tal como sale (-tAF|)",
+      fn: () => {
+        const f = parsearFilas("clinica-sergio-p2ljs|t|active||sergio@onia.com.bo|ADMIN\n")[0];
+        return `${f.slug}/${f.whatsappAddon}/${f.status}/${f.email}/${f.role}`;
+      },
+      esperaFn: "clinica-sergio-p2ljs/true/active/sergio@onia.com.bo/ADMIN",
+    },
     {
       que: "lineasNuevas no repite lo que ya estaba",
       fn: () => lineasNuevas("Tu WhatsApp\nConectar mi WhatsApp", "Tu WhatsApp\nConectar mi WhatsApp\nAlgo falló").join("|"),
@@ -144,7 +301,18 @@ function selfCheck() {
 
 // ── medicion viva ───────────────────────────────────────────────────────────────────────
 async function medir() {
-  const EMAIL = arg("email", "oninteligenciaartificial+qacomercio@gmail.com");
+  // El sujeto se DERIVA salvo que lo fuercen: un literal aca se muere solo el dia que la
+  // cuenta se borra, y el instrumento sigue en pie diciendo "NO MEDIDO" para siempre.
+  let EMAIL = arg("email", "");
+  if (!EMAIL) {
+    const s = await sujetoDerivado();
+    if (!s.email) {
+      console.error(`NO MEDIDO — no hay sobre quien medir: ${s.motivo}.`);
+      process.exit(2);
+    }
+    EMAIL = s.email;
+    console.log(`sujeto derivado de produccion: ${EMAIL} (org ${s.slug}, add-on activo)`);
+  }
   const SALIDA = arg("salida", "/root/capturas-tarjeta/whatsapp-clic.png");
   const ESPERA = Number(arg("espera", "35000"));
 
