@@ -826,7 +826,7 @@ export function hashFor(mode, xmlString, gzipBuffer) {
 }
 
 export function parseArgs(argv) {
-  const args = { etapa: null, count: null, pace: 500, state: "fase1-state.json", log: "fase1-log.ndjson", retryBlocked: false };
+  const args = { etapa: null, count: null, pace: 500, state: "fase1-state.json", log: "fase1-log.ndjson", retryBlocked: false, soloInforme: false };
   for (let i = 0; i < argv.length; i += 1) {
     const a = argv[i];
     if (a === "--etapa") args.etapa = argv[++i];
@@ -835,6 +835,7 @@ export function parseArgs(argv) {
     else if (a === "--state") args.state = argv[++i];
     else if (a === "--log") args.log = argv[++i];
     else if (a === "--retry-blocked") args.retryBlocked = true;
+    else if (a === "--solo-informe") args.soloInforme = true;
   }
   return args;
 }
@@ -1864,23 +1865,41 @@ class Runner {
    * "Listado de Etapas" del portal sin hacer cuentas a mano. `done` de las
    * etapas por-caso no se incrementa (los contadores viven en `cases`), asi
    * que el avance real se suma de ahi.
+   *
+   * EL UNIVERSO ES STAGE_ORDER, NO LAS CLAVES DEL CHECKPOINT (2026-09-27).
+   * Antes las filas salian de Object.entries(state.etapas), o sea del archivo de
+   * estado. Una etapa que nunca corrio no tiene fila ahi, asi que no salia en 0:
+   * NO SALIA. Medido contra /opt/onia-siat/fase1-state.json: la etapa VIII entro
+   * al runner el 12-sep, el checkpoint vivo arranco antes y el script desplegado
+   * solo nombra IV/VII/XI — el informe devolvia nueve filas todas al 100% con un
+   * general del 87%, y de ahi se concluyo que la Fase 1 estaba completa. Un sujeto
+   * ausente se lee como inexistente: eso no omite, AFIRMA. Ahora cada etapa del
+   * SIN tiene su fila con `corrio`, y las ajenas al SIN se nombran al final en vez
+   * de descartarse.
    */
   summary() {
-    const rows = Object.entries(this.state.etapas).map(([id, e]) => {
-      const porCasos = Object.values(e.cases ?? {}).reduce((a, b) => a + b, 0);
-      const hechas = porCasos > 0 ? porCasos : e.done;
+    const fila = (id, e) => {
+      const porCasos = Object.values(e?.cases ?? {}).reduce((a, b) => a + b, 0);
+      const hechas = e ? (porCasos > 0 ? porCasos : e.done) : 0;
       const total = STAGE_TOTALS[id] ?? null;
       return {
         etapa: id,
+        corrio: Boolean(e),
         hechas,
         totalSin: total,
         avance: total ? `${Math.floor((hechas / total) * 100)}%` : null,
-        porCaso: e.cases,
-        attempts: e.attempts,
-        blocked: e.blockedCases,
+        porCaso: e?.cases ?? {},
+        attempts: e?.attempts ?? 0,
+        blocked: e?.blockedCases ?? {},
       };
-    });
-    const hechas = rows.reduce((a, r) => a + r.hechas, 0);
+    };
+    const delSin = STAGE_ORDER.map((id) => fila(id, this.state.etapas[id]));
+    const ajenas = Object.keys(this.state.etapas)
+      .filter((id) => !STAGE_ORDER.includes(id))
+      .map((id) => fila(id, this.state.etapas[id]));
+    const rows = [...delSin, ...ajenas];
+    // El general se mide contra el total del SIN, asi que solo suma lo que el SIN pide.
+    const hechas = delSin.reduce((a, r) => a + r.hechas, 0);
     const total = Object.values(STAGE_TOTALS).reduce((a, b) => a + b, 0);
     return {
       hashMode: this.state.hashMode,
@@ -1900,6 +1919,22 @@ const isMain =
 
 if (isMain) {
   const args = parseArgs(process.argv.slice(2));
+  // --solo-informe LEE el checkpoint y se va: no habla con el SIN, asi que no pide
+  // credenciales ni firma, y no escribe (nunca llama checkpoint()). Existe para que
+  // preguntar "como va la Fase 1" no cueste una corrida real contra el SIN — que es
+  // lo que hacia que nadie lo preguntara.
+  if (args.soloInforme) {
+    const soloLectura = new Runner({
+      token: "",
+      nit: "",
+      codigoSistema: "",
+      stateFile: args.state,
+      logFile: args.log,
+      pace: 0,
+    });
+    console.log(JSON.stringify(soloLectura.summary(), null, 2));
+    process.exit(0);
+  }
   const token = process.env.SIAT_PILOT_TOKEN;
   const nit = process.env.SIAT_NIT;
   const codigoSistema = process.env.SIAT_CODIGO_SISTEMA;
