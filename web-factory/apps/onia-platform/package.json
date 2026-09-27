@@ -33,7 +33,8 @@
     "recorrer:portada": "node scripts/recorrer-portada.mjs",
     "iconos:generar": "node scripts/generate-brand-icons.mjs",
     "alta:confirma-vivo": "node scripts/alta-confirma-vivo.mjs",
-    "chat-diferido:vivo": "node scripts/chat-diferido-vivo.mjs"
+    "chat-diferido:vivo": "node scripts/chat-diferido-vivo.mjs",
+    "precio-tras-el-clic:vivo": "node scripts/precio-tras-el-clic.mjs"
   },
   "dependencies": {
     "motion": "^12.23.26",

@@ -49,6 +49,7 @@
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { traer } from "./red-que-parpadea.mjs";
 
 export const COINCIDEN = 0;
 export const DESALINEADO = 1;
@@ -149,7 +150,9 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
 
   let html;
   try {
-    const r = await fetch(alta, { redirect: "follow" });
+    // `traer` y no `fetch`: el 2026-09-27 este mismo gate salio NO PUDE MEDIR por un
+    // `fetch failed` sobre un alta que contestaba 200 en 0,93 s por curl. Ver red-que-parpadea.mjs.
+    const r = await traer(alta, { redirect: "follow" });
     if (!r.ok) throw new Error(`HTTP ${r.status}`);
     html = await r.text();
   } catch (e) {

@@ -24,6 +24,19 @@
  * corre. Es genérica a propósito —no una lista de arreglos a mano— para que un
  * cambio futuro nazca vigilado en vez de haber que acordarse de agregarlo.
  *
+ * ⚠️ LAS TRES ESTACIONES (2026-09-26). Esa resta contesta «¿producción corre lo
+ * que main dice?», que es UN tramo de los dos que separan al carril del lead: el
+ * trabajo pasa por rama → `main` → producción. Hasta hoy todo lo que estaba
+ * entre la rama y `main` era invisible **y se reportaba como cero varadas** —no
+ * omitía, AFIRMABA—: ese día el gate imprimió «DEPLOY AL DIA, sin nada varado»
+ * con cuatro commits en la rama, uno de ellos el `white-space: nowrap` que
+ * endereza el titular de `/empezar`, mientras el lead seguía leyendo la promesa
+ * partida en dos. El `[x]` de ese ítem se escribió como «ARREGLADO» sin mentir a
+ * propósito: el carril preguntó si quedaba algo varado, le dijeron que no, y le
+ * creyó. Ahora se cuentan las dos, SEPARADAS, porque tienen dueños distintos
+ * (el swap lo decide Sergio Urcullo; el merge lo hace el integrador) y verde
+ * sólo si las dos dan cero.
+ *
  * La fecha del build vivo sale del mtime del BUILD_ID, que `next build` escribe
  * al terminar. NO se usa `docker inspect --format {{.Created}}`: el swap
  * reemplaza el runtime y REINICIA, no recrea, así que `Created` queda anclado
@@ -149,13 +162,14 @@ export function llegaAlCliente(archivos) {
  * poder probar las ramas que no se pueden reproducir a pedido (git mudo, home
  * caída) sin tocar producción.
  *
- * @param {{buildIdMtimeMs: number|null, commits: Array<{sha:string,ct:number,subject:string,archivos?:string[]}>|null, homeStatus: number|null}} m
+ * @param {{buildIdMtimeMs: number|null, commits: Array<{sha:string,ct:number,subject:string,archivos?:string[]}>|null, sinMergear: Array<{sha:string,ct:number,subject:string,archivos?:string[]}>|null, homeStatus: number|null}} m
  */
-export function diagnosticar({ buildIdMtimeMs, commits, homeStatus }) {
+export function diagnosticar({ buildIdMtimeMs, commits, sinMergear, homeStatus }) {
+  const vacio = { varados: [], sinMergear: [] };
   if (typeof buildIdMtimeMs !== "number") {
     return {
       codigo: NO_PUDE_MEDIR,
-      varados: [],
+      ...vacio,
       motivo:
         `no pude leer la fecha del build vivo (${BUILD_ID_VIVO}), ni en este disco` +
         ` ni por SSH a ${VPS_SSH}. Sin eso no sé qué está publicado: NO es «al día».`,
@@ -164,14 +178,27 @@ export function diagnosticar({ buildIdMtimeMs, commits, homeStatus }) {
   if (!Array.isArray(commits)) {
     return {
       codigo: NO_PUDE_MEDIR,
-      varados: [],
+      ...vacio,
       motivo: "git no contestó: no sé si hay commits varados o si falló el comando",
+    };
+  }
+  // La tercera estación falla CERRADA igual que la segunda. `[]` es un dato;
+  // `undefined` —un llamador que no la mide— y `null` son la ausencia de dato, y
+  // tratarla como «no hay ninguno» es exactamente cómo este gate firmaba «al
+  // día» con cuatro commits del carril sin mergear (2026-09-26).
+  if (!Array.isArray(sinMergear)) {
+    return {
+      codigo: NO_PUDE_MEDIR,
+      ...vacio,
+      motivo:
+        "no sé qué tiene la rama del carril que main todavía no: sin esa cuenta," +
+        " «al día» sólo significa «producción sirve lo que main dice», que es otra pregunta",
     };
   }
   if (homeStatus !== 200) {
     return {
       codigo: NO_PUDE_MEDIR,
-      varados: [],
+      ...vacio,
       motivo: `onia.com.bo contestó ${homeStatus ?? "nada"}: no puedo afirmar nada del sitio vivo`,
     };
   }
@@ -192,20 +219,34 @@ export function diagnosticar({ buildIdMtimeMs, commits, homeStatus }) {
   // contarlo invalidaba el build armado en cada vuelta y el deploy no salía
   // nunca (medido el 2026-09-04, tres pedidos vencidos el mismo día).
   const varados = posteriores.filter((c) => llegaAlCliente(c.archivos));
-  const soloHerramientas = posteriores.length - varados.length;
+  // El MISMO criterio en la tercera estación: un commit al instrumento del
+  // carril es trabajo real, pero mergearlo no le cambia la pantalla a nadie. Sin
+  // este filtro el gate quedaría rojo para siempre —cada vuelta commitea sus
+  // propios gates— y un rojo permanente se lee como «el ambiental de siempre».
+  const esperandoMerge = sinMergear.filter((c) => llegaAlCliente(c.archivos));
+  const soloHerramientas =
+    posteriores.length - varados.length + (sinMergear.length - esperandoMerge.length);
 
-  return varados.length === 0
+  // Las dos cuentas van SEPARADAS: tienen dueños distintos —el swap lo decide
+  // Sergio Urcullo, el merge lo hace el integrador— y un commit que todavía no
+  // está en `main` no se puede publicar, así que no puede entrar en el pedido de
+  // deploy sin sobre-describir lo que el `ok` va a publicar.
+  return varados.length === 0 && esperandoMerge.length === 0
     ? {
         codigo: AL_DIA,
         varados,
+        sinMergear: esperandoMerge,
         soloHerramientas,
-        motivo: "el sitio vivo sirve todo lo que main tiene",
+        motivo: "el sitio vivo sirve todo lo que main tiene, y la rama no guarda nada",
       }
     : {
         codigo: ARREGLOS_VARADOS,
         varados,
+        sinMergear: esperandoMerge,
         soloHerramientas,
-        motivo: `${varados.length} arreglo(s) en main que el cliente no ve`,
+        motivo:
+          `${varados.length} arreglo(s) en main que el cliente no ve` +
+          ` y ${esperandoMerge.length} en la rama que main todavía no tiene`,
       };
 }
 
@@ -531,6 +572,28 @@ export function commitsDesde(desdeMs, zona = ZONA, { cwd, ref = "origin/main" } 
   const base = baseDelBuild(desdeMs, { cwd, ref });
   if (base === null) return null;
 
+  // Ancestría, NO fecha: `base..ref` es «lo que ref tiene y el build no».
+  return commitsDelRango(base.sha ? `${base.sha}..${ref}` : ref, zona, { cwd });
+}
+
+/**
+ * Los commits de la zona en un rango de git, con sus archivos. `null` si git
+ * falla — que es distinto de «no hay ninguno».
+ *
+ * Vive aparte desde el 2026-09-26, cuando entró la tercera estación: las dos
+ * preguntas del gate (¿qué tiene `main` que el build no? · ¿qué tiene la rama
+ * que `main` no?) difieren SÓLO en el rango, y dos copias del parseo divergen —
+ * la primera en quedarse vieja sería la de la rama, que es la que le habla al
+ * carril que está trabajando ahora.
+ *
+ * Todas las trampas que documenta `commitsDesde` viven acá: el pathspec anclado
+ * con `:/`, `--no-merges`, y el NUL que abre cada cabecera.
+ *
+ * @param {string} rango
+ * @param {string} [zona]
+ * @param {{cwd?: string}} [opciones]
+ */
+export function commitsDelRango(rango, zona = ZONA, { cwd } = {}) {
   const r = spawnSync(
     "git",
     [
@@ -541,8 +604,7 @@ export function commitsDesde(desdeMs, zona = ZONA, { cwd, ref = "origin/main" } 
       "--format=%x00%H%x09%ct%x09%s",
       "--name-only",
       "--no-merges",
-      // Ancestría, NO fecha: `base..ref` es «lo que ref tiene y el build no».
-      base.sha ? `${base.sha}..${ref}` : ref,
+      rango,
       "--",
       `:/${zona}`,
     ],
@@ -569,6 +631,66 @@ export function commitsDesde(desdeMs, zona = ZONA, { cwd, ref = "origin/main" } 
   return commits.filter((c) => Number.isFinite(c.ct));
 }
 
+/**
+ * LA TERCERA ESTACIÓN: commits de la zona que la RAMA del carril tiene y `main`
+ * todavía no. `null` si git falla o si no hay rama que medir.
+ *
+ * ⚠️ POR QUÉ EXISTE. Hasta el 2026-09-26 este script medía un solo tramo —build
+ * vivo ↔ `origin/main`— y el trabajo de un carril pasa por TRES estaciones: rama
+ * → `main` → producción. Todo lo que estaba entre la rama y `main` era invisible
+ * **y se reportaba como cero varadas**. Medido ese día: «DEPLOY AL DIA, sin nada
+ * varado» con cuatro commits en la rama, uno de ellos el arreglo del titular de
+ * `/empezar` que el lead seguía viendo partido al medio.
+ *
+ * Se mide contra `HEAD` y no contra `origin/<rama>` a propósito: un commit que
+ * ni siquiera se pusheó está MÁS lejos del lead, no menos, y el carril tiene que
+ * verlo igual.
+ *
+ * @param {string} [zona]
+ * @param {{cwd?: string, ref?: string, rama?: string}} [opciones] `rama` sólo la
+ *   usan los casos; en producción se DERIVA.
+ */
+export function commitsSinMergear(zona = ZONA, { cwd, ref = "origin/main", rama } = {}) {
+  const cual = rama === undefined ? ramaDelCarril({ cwd }) : rama;
+  if (cual === null) return null;
+  // La rama del integrador ES `main`: ahí no hay tercera estación que medir, y
+  // `main..main` da [] por sí solo. Se nombra igual para que se lea.
+  return commitsDelRango(`${ref}..${cual}`, zona, { cwd });
+}
+
+/**
+ * La rama del árbol donde corre el gate, DERIVADA. `null` en `HEAD` desprendido
+ * o si git no contesta — que es NO MEDIDO, nunca cero.
+ *
+ * Nunca se tipea: este script lo corren carriles distintos sobre worktrees
+ * distintos, y un nombre escrito a mano mide la rama de otro (o ninguna) en
+ * silencio, que es la misma familia de falla que el gate entero viene a cerrar.
+ *
+ * @param {{cwd?: string}} [opciones]
+ */
+export function ramaDelCarril({ cwd } = {}) {
+  const r = spawnSync("git", ["rev-parse", "--abbrev-ref", "HEAD"], { encoding: "utf8", cwd });
+  if (r.status !== 0) return null;
+  const rama = r.stdout.trim();
+  return rama === "" || rama === "HEAD" ? null : rama;
+}
+
+/**
+ * Pone al día las refs remotas antes de preguntar. `false` si no se pudo.
+ *
+ * Sin esto el veredicto sale sobre refs de DISCO: un `origin/main` de ayer deja
+ * fuera del conteo todo lo que se mergeó hoy, y el gate falla EN VERDE. Es la
+ * regla del repo —todo gate que compare contra `origin/*` fetchea antes o sale
+ * NO MEDIDO— y acá pesa doble, porque las dos estaciones se miden contra
+ * `origin/main`.
+ *
+ * @param {{cwd?: string}} [opciones]
+ */
+export function fetchearOrigin({ cwd } = {}) {
+  const r = spawnSync("git", ["fetch", "origin", "--quiet"], { encoding: "utf8", cwd });
+  return r.status === 0;
+}
+
 /** Código HTTP de la home. `null` si no contestó. */
 export function estadoHome(url = "https://onia.com.bo/") {
   const r = spawnSync(
@@ -582,13 +704,27 @@ export function estadoHome(url = "https://onia.com.bo/") {
 }
 
 function main() {
+  // Antes de preguntarle nada a git: sin fetch, las dos estaciones se miden
+  // contra un `origin/main` de disco y el gate falla EN VERDE sobre lo que se
+  // mergeó hoy. Si no se puede fetchear, no se mide — no se adivina.
+  const conRed = fetchearOrigin();
   const buildIdMtimeMs = fechaBuildVivo();
   const medicion = {
     buildIdMtimeMs,
-    commits: typeof buildIdMtimeMs === "number" ? commitsDesde(buildIdMtimeMs) : null,
+    commits: conRed && typeof buildIdMtimeMs === "number" ? commitsDesde(buildIdMtimeMs) : null,
+    sinMergear: conRed ? commitsSinMergear() : null,
     homeStatus: estadoHome(),
   };
-  const r = diagnosticar(medicion);
+  const r = conRed
+    ? diagnosticar(medicion)
+    : {
+        codigo: NO_PUDE_MEDIR,
+        varados: [],
+        sinMergear: [],
+        motivo:
+          "`git fetch origin` falló: las refs de disco pueden estar viejas y un" +
+          " veredicto sobre ellas se equivoca justo con lo de hoy",
+      };
 
   if (process.argv.includes("--json")) {
     console.log(JSON.stringify({ ...r, buildIdMtimeMs }, null, 2));
@@ -608,14 +744,39 @@ function main() {
         " —scripts y tests—, que no viajan al navegador: no piden deploy.)"
       : "";
 
+  // La tercera estación se dice SIEMPRE que tenga sujetos, en las dos ramas de
+  // abajo: un arreglo que todavía no llegó a `main` tampoco lo ve el lead, y su
+  // dueño no es el que despliega sino el que mergea.
+  const esperandoMerge = () => {
+    if (r.sinMergear.length === 0) return;
+    console.error(
+      `\n${r.sinMergear.length} commit(s) de ${ZONA} en ${ramaDelCarril() ?? "esta rama"}` +
+        " que main TODAVÍA NO tiene:\n",
+    );
+    for (const c of r.sinMergear) console.error(`  ${c.sha}  ${c.subject}`);
+    console.error(
+      "\nEsto NO se despliega: primero lo mergea el integrador (`onia-cola`), y recién" +
+        "\nahí entra en un pedido de deploy. Publicar sin el merge publica menos de lo" +
+        "\nque el pedido dice.\n",
+    );
+  };
+
   if (r.codigo === AL_DIA) {
     console.log(
       `DEPLOY AL DIA — onia.com.bo sirve el build del ${cuando}, sin nada varado.${nota}`,
     );
+  } else if (r.codigo === ARREGLOS_VARADOS && r.varados.length === 0) {
+    // Hay trabajo del carril, pero NADA que publicar todavía. Pedir un deploy
+    // acá le cuesta a Sergio Urcullo un `ok` por algo que ni siquiera está en
+    // `main`, así que no se nombra ni el comando ni el staged.
+    console.error(`ESPERANDO MERGE — onia.com.bo sirve el build del ${cuando}, y main está al día.`);
+    esperandoMerge();
+    if (nota) console.error(nota);
   } else if (r.codigo === ARREGLOS_VARADOS) {
     console.error(`ARREGLOS VARADOS — onia.com.bo sirve el build del ${cuando}.`);
     console.error(`${r.varados.length} commit(s) de ${ZONA} en main que el cliente NO ve:\n`);
     for (const c of r.varados) console.error(`  ${c.sha}  ${c.subject}`);
+    esperandoMerge();
     if (nota) console.error(nota);
     const staged = stagedDisponible();
     const s = evaluarStaged({ staged, varados: r.varados });

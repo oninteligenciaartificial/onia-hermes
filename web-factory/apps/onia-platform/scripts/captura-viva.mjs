@@ -186,6 +186,10 @@ function envDelContenedor(ejecutar = execFileSync) {
  */
 function sondear(ejecutar = execFileSync) {
   const programa = `
+    // Node >=20 corta cada intento de conexion a 250 ms: sin esto la sonda declara
+    // muerto un destino vivo. Va inline porque este programa corre DENTRO del
+    // contenedor por \`node -e\`, donde red-que-parpadea.mjs no existe.
+    require("node:net").setDefaultAutoSelectFamilyAttemptTimeout(2000);
     const url = process.env.ONIA_CENTER_INTAKE_URL;
     const sec = process.env.ONIA_CENTER_INTAKE_SECRET;
     const pedir = async (secreto) => {

@@ -77,28 +77,122 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Ahora — plan de features (revisado 2026-08-30, con Gate 1 corrido)
 
-- [x] 🟠 **El titular de `/empezar` parte su resalte al medio, en las DOS vistas. CERRADO EN
-      PRODUCCIÓN el 2026-09-26 21:00 La Paz por `onia-cola`: el lead ya lee «de verdad»
-      entero.**
-      - **Las tres estaciones, completas por primera vez en este ítem.** Código: `e9d19c01`
-        (`web-venta`). Merge a `main`: `c5a15c12`, 2026-09-26 19:36 La Paz, por el integrador.
-        Producción: la publicó el cron de las **20:50 La Paz** (el log del publicador en el VPS,
-        `/var/log/onia-publicar-solo`, renglón `landing: PUBLICADO`) — y el chunk de estilos que
-        sirve el dominio cambió de hash en `/empezar`, que es la señal de que el swap entró.
-      - **Medido DESPUÉS del swap, no antes, y contra el dominio:**
-        `OUT_DIR=/tmp/base-despues node scripts/mirar-primera-pantalla.mjs https://onia.com.bo`
-        → **exit 0 real** (no por pipe) y `resalte=1reng` en las **cuatro** pantallas, incluidas
-        `escritorio /empezar` y `telefono /empezar`, que eran las dos que salían `2reng`.
-      - **Y MIRADO**, que es lo que el gate no hace por vos: `/tmp/base-despues/empezar-escritorio.png`
-        y `/tmp/base-despues/empezar-telefono.png` se leen «Creá tu cuenta y usalo **de verdad**
-        14 días.» con el verde entero en un renglón. La foto del antes quedó en
-        `/tmp/base-antes/` con el defecto vivo («y usalo de» / «verdad 14 días.»), sacada esta
-        misma vuelta contra el mismo dominio: el antes y el después salen del mismo instrumento.
+- [x] 🟠 **El precio ANUAL de la home sólo existe después de un clic, y ningún gate apretaba ese
+      botón. CUBIERTO el 2026-09-27 07:0x La Paz por `web-venta` (`b114973c`).**
+      - **Cómo apareció, que es la parte que importa.** Los cuatro medidores del objetivo estaban
+        en VERDE y la medida no se movía desde la vuelta anterior, así que en vez de repetirlos se
+        cambió de método: mirar las pantallas **renderizadas**. `recorrer-portada.mjs` sacó las
+        **16 fotos** de la home (14.327 px de alto) y se miraron una por una. En la banda de
+        precios está el toggle `Mensual | Anual −16 %` — y ahí se ve que el número que decide la
+        compra **se reemplaza al apretarlo**.
+      - **Medido, no supuesto:** el DOM pasa de `320@61px` a `3.200@61px`. `precios-vivos.mjs`
+        barre 24 pantallas pero lee el **HTML servido**: ese estado no lo miraba nadie.
+      - **Lo que de verdad estaba sin red: el derivado.** El toggle pinta "Equivale a Bs 267 por
+        mes", que **no está declarado en ninguna fuente — se calcula**. Nadie lo escribe mal: se
+        calcula mal. Con una division por 10 en vez de por 12, el Básico se ofrece a "Bs 320 por mes"
+        pagando el año (el descuento desaparece de la pantalla) y las 24 pantallas siguen verdes,
+        porque el número ofensor no está en el HTML que ellas leen.
+      - **Producción está SANA:** 267 / 458 / 742 / 1.075 son los doceavos exactos de 3.200 /
+        5.500 / 8.900 / 12.900. Esto no arregla un defecto vivo: le pone **rojo posible** al
+        segundo turno. Captura mirada: `/tmp/wv-tras-el-clic/anual.png`.
+      - **Visto en ROJO antes que en verde:** mutado el divisor de 12 a 10, el gate acusa
+        `expected 320 to be 267`; revertido, verde. Un gate que sólo sabe decir "verde" es
+        indistinguible de uno que no mide.
+      - ⚠️ **Dos correcciones las encontró la corrida VIVA, no el escritorio** — y las dos
+        quedaron fijadas como casos, porque las dos son la misma clase de error (un gate nuevo
+        que acusa copy sano se gana fama de ruidoso y termina salteado):
+        1. el add-on (Bs 390) se pinta **del mismo tamaño que un plan**, así que el universo son
+           **DOS** fuentes (`src/lib/pricing.ts` + `src/content/chatbot-precios.ts`), no una;
+        2. el add-on **no cambia** con el toggle (se cobra por mes y lo aclara). Exigir que todo
+           monto cambiara daba rojo sobre copy sano — se exige **por separado** que el clic
+           cambie *algo*, que es el síntoma real de un toggle muerto.
+      - Queda anotado, sin abrir frente: en la tarjeta **Completo** la unidad `Bs / año` se parte
+        en dos renglones por el ancho de `12.900`; las otras tres la muestran en uno.
+      - Archivos: `web-factory/apps/onia-platform/scripts/precio-tras-el-clic.{mjs,test.ts}` +
+        alias `precio-tras-el-clic:vivo`. Gates: `typecheck` 0 · `npm test` **119 archivos /
+        1.654 tests** verdes · `build` 0 · corrida viva contra `onia.com.bo` en VERDE.
+
+- [x] 🟠 **Un parpadeo de red apagaba los medidores del carril de venta, y el carril se quedaba
+      sin medición sin que nada se pusiera rojo. ARREGLADO Y PROBADO DE PUNTA A PUNTA el
+      2026-09-27 01:0x La Paz por `web-venta`.**
+      - **Lo que se vio, no lo que se supuso.** Corriendo los once medidores vivos en fila:
+        `rubros:vivos exit=2 — NO PUDE MEDIR: el alta (https://app.onia.com.bo/register) no
+        contesto — fetch failed`. Noventa segundos después el MISMO comando salió `VERDE: los 5
+        rubros que entrega el alta son los 5 que vende el sitio`, y `curl` al mismo URL daba
+        `200` en 0,93 s. El alta estaba viva: el gate se rindió en el primer pedido.
+      - **Por qué importaba más de lo que parece.** El `exit 2` es la conducta correcta (no pudo
+        preguntar, no miente), pero un `NO MEDIDO` **intermitente** es peor que uno permanente:
+        el permanente se ve siempre igual, el intermitente se lee como «el ambiental de siempre»
+        y se saltea. Y los dos gates más expuestos son justo los que hacen cumplir las dos
+        reglas escritas de Sergio Urcullo —`obra:viva` (la venta no exhibe obra) y
+        `titular:sistema` (la home vende el sistema, no el bot)— porque barren **24 pantallas
+        cada uno**: 24 pedidos por corrida es 24 veces la exposición de un pedido suelto.
+      - **Las dos causas, y hacían falta las dos curas.** (1) Node ≥20 corta cada intento de
+        conexión a 250 ms (`autoSelectFamily`) y devuelve ETIMEDOUT sobre hosts VIVOS mientras
+        `curl` da 200 — eso estaba curado en **2 de los 7** scripts que fetchean y en ninguno de
+        los otros 5. (2) Ninguno de los 7 reintentaba: `grep -c reintent` daba **0 en todos**.
+      - **Qué quedó:** `scripts/red-que-parpadea.mjs` (`traer`, que reintenta 3 veces sólo
+        cuando `fetch` RECHAZA) cableado en los 5 que piden desde este proceso —`obra-viva`,
+        `titular-es-el-sistema`, `rubros-vivos`, `recursos-vivos`,
+        `verificar-guia-facturacion`—; cura inline en los 2 que corren el `fetch` DENTRO del
+        contenedor por `docker exec node -e`, donde el módulo no viaja. Gate nuevo
+        `scripts/red-que-parpadea.test.ts`, **visto en ROJO primero y por el motivo correcto**
+        (nombró los 7 sujetos), con los sujetos derivados del **disco**: un `.mjs` nuevo que
+        pida a la red nace cubierto.
+      - **Lo que NO hace, que es la mitad del diseño:** no reintenta una RESPUESTA. Un 404, un
+        500 o un 429 son el servidor contestando; reintentarlos convierte un hallazgo en una
+        espera — y el widget del sitio ratelimitea al 4º pedido por IP, así que un reintento
+        automático ahí se lo provoca solo. Tampoco reintenta el `AbortError` del tope que puso
+        el llamador: ese tope **es** una medición de tiempo, y triplicarlo la falsea.
+      - **La prueba de punta a punta, con el gate de verdad** (no sólo el `fetch` de mentira de
+        la suite): un servidor local que corta el socket del PRIMER pedido y contesta el
+        segundo. `fetch` pelado contra él → `NO PUDE MEDIR — fetch failed`.
+        `node scripts/rubros-vivos.mjs --alta=http://127.0.0.1:3919/` → `(red) … contesto al
+        intento 2 de 3; el anterior parpadeo: fetch failed` y después `VERDE`, exit 0.
+      - **Y avisa cuando salva.** Un rescate mudo volvería invisible una red que falla 2 de cada
+        3 veces: se vería igual de verde que una sana. Una línea por pedido rescatado a stderr —
+        es un EVENTO raro, no una condición permanente, así que no ahoga el log.
+      - Gates: `typecheck` 0 · `npm test` **118 archivos / 1.640 tests** verdes · `npm run build`
+        0 · y los 4 gates cableados re-corridos **contra producción**, los 4 en verde.
+
+- [x] 🟠 **El titular de `/empezar` partía su resalte al medio, en las DOS vistas. ARREGLADO Y
+      VIVO: el lead ya lo lee entero. Verificado contra `https://onia.com.bo` el 2026-09-26
+      20:56 La Paz por `web-venta`, MIRANDO las capturas.**
+      - **Lo que cierra el ítem, que es lo que faltaba: está ENCENDIDO en producción.** El
+        publicador automático del VPS (`/root/bin/onia-publicar-solo.sh`, cron `50 */3`) publicó la
+        landing a las 20:50 La Paz; el build vivo quedó sellado a las `2026-09-27 00:52 UTC`
+        con `.commit = a7b69babd`, que es el HEAD de `origin/main` y contiene `e9d19c01`
+        (`git merge-base --is-ancestor` → sí). **No hizo falta pedido de deploy.**
+      - **La medición, MIRADA y no supuesta:** `node scripts/mirar-primera-pantalla.mjs
+        https://onia.com.bo` → `resalte=1reng` en las 4 pantallas, exit 0. Capturas abiertas y
+        leídas: escritorio dice `Creá tu / cuenta y usalo / de verdad / 14 días.` y teléfono
+        `Creá tu cuenta y / usalo de verdad / 14 días.` — el verde entero en un renglón en las
+        dos. Evidencia: `/tmp/wv-g2/empezar-{escritorio,telefono}.png`.
+      - ⚠️ **La trampa que casi lo da por roto, y vale para cualquier carril:** la primera
+        medición de la vuelta (20:48) salió **ROJA** — dos minutos ANTES del swap. Un veredicto
+        sobre producción caduca en minutos: **el build vivo se relee justo antes de concluir**,
+        nunca se arrastra la lectura del arranque de la vuelta.
+      - ⚠️ **Y el `grep` volvió a mentir en la dirección cómoda:** las hojas servidas tenían
+        `white-space:nowrap` (1 en dos de tres) con el arreglo todavía sin publicar — eran
+        otros ocho selectores (`.panelTitle`, `.rowPrice`, `.cierre`…). Contar el literal
+        «confirmaba» un arreglo que no estaba. Sirve para DESCARTAR, nunca para confirmar.
+      - **Las tres estaciones, cerradas — lo confirmó `onia-cola` a las 21:00 La Paz, 4 minutos
+        después de la medición de arriba y por un camino distinto.** Código: `e9d19c01`
+        (`web-venta`). Merge a `main`: `c5a15c12`, 19:36 La Paz. Producción: el renglón
+        `landing: PUBLICADO` del log del publicador en el VPS (`/var/log/onia-publicar-solo`),
+        y el chunk de estilos que sirve el dominio cambió de hash en `/empezar` — la señal de
+        que el swap entró. Capturas del antes y del después sacadas con el MISMO instrumento
+        contra el MISMO dominio, en `/tmp/base-antes/` y `/tmp/base-despues/`.
       - ⚠️ **La latencia NO fue un bloqueo y por eso no se pidió nada.** La landing la publica el
         cron de cada 3 h (`50 */3`), y este cambio **no** gastó la firma de Sergio Urcullo pese a
         tocar `(sitio)/page.tsx`: la guarda `SUPERFICIE_VENTA` de `publicar-solo.sh:564` no frena
         por TOCAR una página de venta, frena si le **cambia la estructura** — y acá no cambió.
         Confundir «todavía no salió» con «necesita firma» habría abierto un pedido falso.
+
+      <details><summary>El diagnóstico de la vuelta anterior — HISTORIA, no el estado de hoy
+      (dice «sale ROJO» y «no salió de la rama»: las dos cosas dejaron de ser ciertas a las
+      20:52 La Paz del 2026-09-26)</summary>
+
       - ⚠️ **Corregido el 2026-09-26 19:0x La Paz, auditando este mismo `[x]`.** Estaba marcado
         hecho y la palabra era «ARREGLADO» a secas. `CLAUDE.md` es explícito: *construido ≠
         terminado*, y está **prohibido reportar como hecho lo que no está encendido en
@@ -136,10 +230,44 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
         **producción**, o sea un verde sobre el sistema equivocado. Casi lo tomo por bueno.
       - Evidencia: `/tmp/wv-fix/empezar-{escritorio,telefono}.png` y `/tmp/webs-320.png`,
         abiertas y **miradas**.
+      </details>
 
-- [ ] 🔴 **`deploy:vivo` dice «DEPLOY AL DIA — sin nada varado» con un arreglo MÍO, visible para
-      el cliente, sin salir de la rama. Es el gate del carril fallando EN VERDE sobre la única
-      pregunta que este carril tiene que contestar: ¿mis arreglos llegan al lead?**
+- [x] 🔴 **`deploy:vivo` decía «DEPLOY AL DIA — sin nada varado» con un arreglo MÍO, visible
+      para el cliente, sin salir de la rama — ARREGLADO el 2026-09-26 por `web-venta`
+      (`60e3043b`), con el rojo falsificado antes y el camino vivo probado después.**
+      - **Qué quedó.** El gate cuenta ahora las TRES estaciones: `build vivo ↔ origin/main`
+        (lo de siempre) **y `origin/main ↔ la rama`**, por separado y con sus dueños escritos.
+        Verde sólo si las dos dan cero. Funciones nuevas en `scripts/deploy-vivo.mjs`:
+        `commitsSinMergear`, `ramaDelCarril` (la rama se DERIVA, nunca se tipea: este script lo
+        corren carriles distintos), `fetchearOrigin` y `commitsDelRango` —el parseo compartido,
+        para que las dos preguntas no diverjan—.
+      - **Lo que NO se mezcló, a propósito:** lo que espera merge **no entra** en la lista que
+        arma el pedido de deploy, porque todavía no se puede publicar. Mezclarlas repetiría en
+        la otra dirección el defecto ya curado el 2026-09-06 (inflar el pedido que Sergio
+        Urcullo tiene que leer). Cuando `main` está al día el informe dice **ESPERANDO MERGE** y
+        **no nombra ni el comando de publicar ni el staged**.
+      - **Entró también el `git fetch origin` que faltaba.** Las dos estaciones se miden contra
+        `origin/main`: sin fetch el veredicto salía sobre refs de disco, o sea verde justo
+        sobre lo que se mergeó hoy. Si el fetch falla → NO MEDIDO, nunca «al día».
+      - **Falla CERRADA igual que su hermana:** `[]` es un dato; `undefined` —un llamador que no
+        mide la tercera estación— y `null` salen por `NO_PUDE_MEDIR`. El tipo del parámetro
+        además la exige, así que un llamador nuevo que la olvide no compila.
+      - **ROJO antes, por el motivo correcto:** 9 casos nuevos fallando con *«el gate firmó «al
+        día» con trabajo sin mergear»* y *«con sinMergear=undefined el gate se rindió en
+        verde»*, más `commitsSinMergear is not a function`. Después: 52/52 verde.
+      - **Y el camino VIVO falsificado, no sólo el puro** (el bloque que imprime no lo cubría
+        ningún test): con un commit de sonda que toca `portada.module.css`, `npm run
+        deploy:vivo` salió **exit 1** diciendo `ESPERANDO MERGE … 1 commit(s) … que main TODAVÍA
+        NO tiene`, sin ofrecer el comando de publicar. Sonda revertida en el acto (`reset
+        --hard`, árbol limpio).
+      - Gates: `npm run typecheck` verde · `npm run build` verde (1.626 tests) · 52/52 en
+        `deploy-vivo.test.ts`.
+      - ⚠️ **De paso, un rojo ajeno que mordió bien y se respetó:** `imports-que-viajan-al-stage`
+        acusó al test nuevo por nombrar `hermes-content` en un literal de repo sembrado. No se
+        declaró exención: se cambió el literal. Una exención por un dato de prueba deja el gate
+        ciego para el caso real.
+
+      <details><summary>El diagnóstico original, como se escribió</summary>
       - **El sujeto:** `web-factory/apps/onia-platform/scripts/deploy-vivo.mjs`.
       - **Medido el 2026-09-26 19:0x La Paz**, en la misma vuelta y con una sola corrida de cada
         cosa: `npm run deploy:vivo` imprime *«DEPLOY AL DIA — onia.com.bo sirve el build del
@@ -167,6 +295,7 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
         dueños distintos (el integrador / el deploy) y hoy se reportan como uno solo: «al día».
         Verde sólo si las dos cuentas dan cero. Con `git fetch` antes o `exit 2` (NO MEDIDO),
         nunca un veredicto sobre refs de disco.
+      </details>
 
 - [x] 🟠 **`mirar:portada` pintaba un ROJO intermitente en `telefono /empezar` por una espera que
       no retenía — ARREGLADO el 2026-09-26 por `web-venta`, con la causa medida y los dos

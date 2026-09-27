@@ -130,6 +130,10 @@ export function leerConfig(ejecutar = spawnSync) {
  */
 export function golpearDestino(ejecutar = spawnSync) {
   const adentro = `
+    // Node >=20 corta cada intento de conexion a 250 ms: sin esto la sonda declara
+    // muerto un destino vivo. Va inline porque esto corre DENTRO del contenedor por
+    // \`node -e\`, donde red-que-parpadea.mjs no existe.
+    require("node:net").setDefaultAutoSelectFamilyAttemptTimeout(2000);
     const u = process.env.ONIA_CENTER_INTAKE_URL, s = process.env.ONIA_CENTER_INTAKE_SECRET;
     if (!u || !s) { console.log("SIN-CONFIG"); process.exit(0); }
     const tocar = (secreto) => fetch(u, {

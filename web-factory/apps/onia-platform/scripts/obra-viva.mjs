@@ -84,6 +84,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { superficiesDeVenta } from "./rutas-de-venta.mjs";
+import { traer } from "./red-que-parpadea.mjs";
 
 const AQUI = dirname(fileURLToPath(import.meta.url));
 const APP = join(AQUI, "..");
@@ -401,7 +402,9 @@ function selfCheck() {
 async function bajar(ruta) {
   const url = `${BASE}${ruta}`;
   try {
-    const r = await fetch(url, {
+    // `traer` y no `fetch`: este gate barre 24 pantallas, o sea 24 chances de que un
+    // parpadeo lo mande a NO MEDIDO — y es el que hace cumplir "la venta no exhibe obra".
+    const r = await traer(url, {
       redirect: "follow",
       signal: AbortSignal.timeout(30_000),
       headers: { "user-agent": "onia-obra-viva/1.0" },
