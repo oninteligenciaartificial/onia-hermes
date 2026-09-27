@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { PRUEBA, ALCANCE_CON_AGENDA, ALCANCE_CON_INVENTARIO } from "@/lib/pricing";
+import { PRUEBA, RETENCION, ALCANCE_CON_AGENDA, ALCANCE_CON_INVENTARIO } from "@/lib/pricing";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { APP_URL, WA_URL_LANDING } from "@/lib/site";
@@ -107,10 +107,15 @@ export default function PruebaGratisPage() {
                 WhatsApp ni el segundo administrador. El h1 de arriba ya nombra
                 el plan, así que repetirlo sería decir dos veces lo mismo: lo
                 que queda es la promesa que el alta SÍ cumple. */}
+            {/* La ventana del export se nombra acá por lo mismo que en
+                `(sitio)/empezar`: §8 la acota a RETENCION.diasParaExportar días
+                desde la terminación, y esta oración habla justamente de irse.
+                Son hermanas: arreglar una sola es como nació el defecto. */}
             <p className="lead">
               No es una demo recortada: es tu cuenta real, con tu rubro ya
               configurado. Si al final no te sirve, no pagás nada — y tus datos
-              los exportás cuando quieras.
+              te los llevás en CSV, con {RETENCION.diasParaExportar} días para
+              hacerlo.
             </p>
             <p style={{ marginTop: "1.5rem", display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
               <a className="btn" href={REGISTRO_URL}>

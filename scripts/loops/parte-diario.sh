@@ -100,7 +100,7 @@ BLOQUEADAS=$(printf '%s\n' "$ESTADO_TABLERO" | grep -E '^⊘' || true)
 # consulta nueva por nada — y el `kind`, que es el otro dato que hace falta, solo existe
 # aca. Una sola pregunta por tarea devuelve los dos.
 datos_del_bloqueo() {
-  local id="$1" salida kind creada
+  local id="$1" salida kind creada destino
   # `</dev/null` NO es cosmetico: si ONIA_TABLERO es el shim de nodo-casa, adentro hay
   # un ssh que se COME el stdin del bucle que llama a esta funcion, y entonces se
   # clasifica la primera y las demas se pierden MUDAS. Ya costo un barrido entero.
@@ -119,21 +119,33 @@ datos_del_bloqueo() {
   creada=$(printf '%s\n' "$salida" \
     | LC_ALL=C grep -aoE 'created: *[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}' | head -1 \
     | LC_ALL=C grep -aoE '[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}') || true
-  printf '%s\t%s\n' "$kind" "${creada:-0000-00-00 00:00}"
+  # El DESTINO, si es un pedido de deploy: las dos formas que ya existen y que el instrumento
+  # del objetivo (`scripts/deploy_sin_pedido.mjs`) reconoce — `DESPLEGAR: <destino>` para los
+  # cuatro de la lista blanca del `ok`, y `PUBLICAR A MANO: <destino>` para los que no estan
+  # cableados. No se inventa convencion nueva: se lee la que el pedido ya tiene que llevar
+  # para ser accionable. Es la IDENTIDAD DE RONDA del pedido (ver la rotacion mas abajo).
+  destino=$(printf '%s\n' "$salida" \
+    | LC_ALL=C grep -aoE '(DESPLEGAR|PUBLICAR A MANO): *[a-z0-9-]+' | head -1 \
+    | LC_ALL=C sed -E 's/.*: *//' | LC_ALL=C tr -dc 'a-z0-9-') || true
+  printf '%s\t%s\t%s\n' "$kind" "${creada:-0000-00-00 00:00}" "$destino"
 }
 # El desempate final es la linea misma (o sea el id): con dos fechas iguales el orden
 # tiene que ser el mismo todos los dias, no el que salga.
 ESPERAN_CLAVES=$(printf '%s\n' "$BLOQUEADAS" | while IFS= read -r linea; do
   [ -n "$linea" ] || continue
-  datos=$(datos_del_bloqueo "$(printf '%s\n' "$linea" | awk '{print $2}')")
-  kind=${datos%%$'\t'*}
-  creada=${datos#*$'\t'}
+  id=$(printf '%s\n' "$linea" | awk '{print $2}')
+  datos=$(datos_del_bloqueo "$id")
+  kind=$(printf '%s' "$datos" | cut -f1)
+  creada=$(printf '%s' "$datos" | cut -f2)
+  destino=$(printf '%s' "$datos" | cut -f3)
   [ -z "$kind" ] || [ "$kind" = needs_input ] || continue
   prioridad=1
   case "$linea" in *🔴*) prioridad=0 ;; esac
-  printf '%d\t%s\t%s\n' "$prioridad" "$creada" "$linea"
-done | sort -t$'\t' -k1,1n -k2,2 -k3,3)
-ESPERAN=$(printf '%s\n' "$ESPERAN_CLAVES" | cut -f3-)
+  # La CLAVE DE RONDA: el destino si es un pedido de deploy, el id si no. Ver la rotacion.
+  if [ -n "$destino" ]; then clave="deploy-$destino"; else clave="$id"; fi
+  printf '%d\t%s\t%s\t%s\n' "$prioridad" "$creada" "$clave" "$linea"
+done | sort -t$'\t' -k1,1n -k2,2 -k4,4)
+ESPERAN=$(printf '%s\n' "$ESPERAN_CLAVES" | cut -f4-)
 CUANTAS_ESPERAN=$(printf '%s' "$ESPERAN" | grep -c . || true)
 
 # 🔴 Y la hoja ROTA (2026-09-27). El orden por edad hace que toda decision SUBA sola…
@@ -156,10 +168,58 @@ CUANTAS_ESPERAN=$(printf '%s' "$ESPERAN" | grep -c . || true)
 # El estado es un archivo por sujeto con noclobber (el `openSync wx` de /var/lib/
 # onia-vigia-remotos/<id>), NO una tabla ajena con unique key — ese patron ya fallo justo
 # en el peor modo de falla. Perderlo no rompe nada: arranca una ronda nueva.
+#
+# 🔴 Y la SEXTA (2026-09-27, tarea `t_ceefb6cd`): la rotacion de arriba arregla el starvation
+# de las decisiones ESTABLES, pero un pedido de deploy no es estable — CADUCA POR DISENO y se
+# rehace con id NUEVO cada vez que se le suma un arreglo (el del bot se rehizo 30 veces, a
+# veces 3 en un dia). Un id nuevo nunca tuvo turno, entra en SIN_TURNO, y el orden ahi es por
+# EDAD: su edad es «ahora», asi que va ULTIMO. Con 17 esperando y 4 renglones libres la ronda
+# dura ~5 dias; un sujeto que vive horas no alcanza su renglon NUNCA. No es mala suerte: es
+# aritmetica. Y es el unico renglon que hace que el trabajo ya mergeado y verificado llegue al
+# cliente — el del bot tenia adentro 5 desconocidos que pidieron hablar con una persona.
+#
+# Por eso la identidad de ronda de un pedido de deploy es su DESTINO, no su id: un pedido
+# rehecho HEREDA el turno y la antiguedad de su antecesor en vez de volver al final. Se eligio
+# esto y no «los pedidos no rotan, como los rojos» porque una valvula que pasa hambre cambia un
+# starvation por otro — este mismo archivo ya lo advierte dos parrafos arriba.
+#
+# La herencia corta en los DOS sentidos, y el segundo es el que evita cambiar un starvation por
+# otro: un pedido que YA uso su renglon en esta ronda no se lo puede quedar rehaciendose.
 RONDA="${ONIA_PARTE_RONDA:-/var/lib/onia-parte-diario/ronda}"
+# Las edades viven ADENTRO del estado de ronda pero tienen que sobrevivir a su cierre: si se
+# fueran con la ronda, el pedido rehecho volveria al final cada cinco dias y el bug reaparece
+# despacio. Por eso el cierre borra las marcas de turno (archivos sueltos) y no el arbol.
+EDADES="$RONDA/edades"
 tuvo_turno() { [ -e "$RONDA/$1" ]; }
 dar_turno() { mkdir -p "$RONDA" 2>/dev/null || return 0; ( set -C; : > "$RONDA/$1" ) 2>/dev/null || true; }
-ids_de() { printf '%s\n' "$1" | awk -F'\t' 'NF { print $3 }' | awk '{ print $2 }'; }
+cerrar_ronda() { find "$RONDA" -maxdepth 1 -type f -delete 2>/dev/null || true; }
+claves_de() { printf '%s\n' "$1" | awk -F'\t' 'NF { print $3 }'; }
+# La antiguedad de una clave es la MAS VIEJA que se le vio: el pedido de hoy hereda la fecha
+# del primero que pidio ese destino. Sin estado legible se devuelve la fecha nueva, o sea el
+# comportamiento de antes: no se puede fallar hacia «mas viejo que nadie» por no poder leer.
+edad_heredada() {
+  local clave="$1" nueva="$2" guardada=""
+  mkdir -p "$EDADES" 2>/dev/null || { printf '%s' "$nueva"; return 0; }
+  [ -f "$EDADES/$clave" ] && guardada=$(LC_ALL=C tr -dc '0-9: -' < "$EDADES/$clave" 2>/dev/null) || true
+  # Fechas ISO: comparar como texto ES comparar cronologicamente.
+  if [ -n "$guardada" ] && [ "$guardada" \< "$nueva" ]; then printf '%s' "$guardada"; return 0; fi
+  printf '%s' "$nueva" > "$EDADES/$clave" 2>/dev/null || true
+  printf '%s' "$nueva"
+}
+# Recien aca se puede aplicar la herencia (el estado se define arriba), asi que la clave de
+# orden se reescribe y la lista se vuelve a ordenar. Solo toca a los pedidos de deploy: para
+# un sujeto estable la clave es su id y su fecha es siempre la misma.
+ESPERAN_CLAVES=$(printf '%s\n' "$ESPERAN_CLAVES" | while IFS= read -r fila; do
+  [ -n "$fila" ] || continue
+  clave=$(printf '%s' "$fila" | cut -f3)
+  case "$clave" in
+    deploy-*)
+      printf '%s\t%s\t%s\t%s\n' "$(printf '%s' "$fila" | cut -f1)" \
+        "$(edad_heredada "$clave" "$(printf '%s' "$fila" | cut -f2)")" \
+        "$clave" "$(printf '%s' "$fila" | cut -f4-)" ;;
+    *) printf '%s\n' "$fila" ;;
+  esac
+done | sort -t$'\t' -k1,1n -k2,2 -k4,4)
 
 ROJAS=$(printf '%s\n' "$ESPERAN_CLAVES" | awk -F'\t' '$1 == 0')
 RESTO=$(printf '%s\n' "$ESPERAN_CLAVES" | awk -F'\t' '$1 == 1')
@@ -171,8 +231,8 @@ LIBRES=$((MAX - CUANTAS_ROJAS))
 SIN_TURNO=""; CON_TURNO=""
 while IFS= read -r fila; do
   [ -n "$fila" ] || continue
-  id=$(printf '%s\n' "$fila" | awk -F'\t' '{ print $3 }' | awk '{ print $2 }')
-  if tuvo_turno "$id"; then CON_TURNO="$CON_TURNO$fila
+  clave=$(printf '%s' "$fila" | cut -f3)
+  if tuvo_turno "$clave"; then CON_TURNO="$CON_TURNO$fila
 "; else SIN_TURNO="$SIN_TURNO$fila
 "; fi
 done <<EOF
@@ -182,17 +242,17 @@ CUANTAS_SIN_TURNO=$(printf '%s' "$SIN_TURNO" | grep -c . || true)
 
 if [ "$CUANTAS_SIN_TURNO" -lt "$LIBRES" ]; then
   # Ronda agotada: se cierra y se abre otra. Las que no alcanzaron turno van primeras.
-  rm -rf "$RONDA" 2>/dev/null || true
+  cerrar_ronda
   ELEGIBLES="$SIN_TURNO$CON_TURNO"
 else
   ELEGIBLES="$SIN_TURNO"
 fi
 TOMADAS=$(printf '%s' "$ELEGIBLES" | grep . | head -"$LIBRES" || true)
-for id in $(ids_de "$TOMADAS"); do dar_turno "$id"; done
+for clave in $(claves_de "$TOMADAS"); do dar_turno "$clave"; done
 
 # Elegido el conjunto, se MUESTRA por la clave de siempre: 🔴 primero y despues por edad.
 ESPERAN=$(printf '%s\n%s\n' "$ROJAS" "$TOMADAS" | grep . \
-  | sort -t$'\t' -k1,1n -k2,2 -k3,3 | cut -f3- || true)
+  | sort -t$'\t' -k1,1n -k2,2 -k4,4 | cut -f4- || true)
 
 HOJA=""
 if [ "${CUANTAS_ESPERAN:-0}" -gt 0 ]; then
