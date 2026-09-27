@@ -14,7 +14,7 @@
 
 import { useState } from "react";
 
-import { PLANES, bs } from "@/lib/pricing";
+import { PLANES, bs, resultadoSegunCiclo } from "@/lib/pricing";
 
 import { Btn } from "./ui";
 import { ctaAltaPlan } from "./alta";
@@ -77,7 +77,14 @@ export function PreciosConCiclo() {
                   ? `Equivale a Bs ${bs(Math.round(plan.anual / 12))} por mes`
                   : `Bs ${bs(plan.anual)} pagando el año — ahorrás ${ahorroAnual(plan.mensual, plan.anual)} %`}
               </p>
-              <p className={s.planResult}>{plan.resultado}</p>
+              {/* La cuenta «este plan trae el chatbot adentro» va en el ciclo QUE SE ESTÁ
+                  MOSTRANDO. Con el interruptor en Anual esta línea decía «Bs 10 más al mes»
+                  —la cuenta del mensual— debajo de un precio anual, y en anual son Bs 100 más
+                  al año: el lead que restaba con los números de la propia tarjeta (1.075 contra
+                  742 + 325) obtenía 8 y leía 10. */}
+              <p className={s.planResult}>
+                {resultadoSegunCiclo(plan, anual ? "anual" : "mensual")}
+              </p>
               <ul className={s.planList}>
                 {plan.incluye.slice(0, 4).map((item) => (
                   <li key={item}>{item}</li>
