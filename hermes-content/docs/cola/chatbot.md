@@ -1363,6 +1363,53 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
 
 ## Ahora
 
+- [x] 🔴 **CERRADO el 2026-09-27 10:43-11:15 UTC (`scripts/veredicto_widget.mjs`, vive en
+      `scripts/` de `onia-hermes` — **no** en la carpeta del bot: `npm run test:toca-el-pedido`
+      lo absuelve, *0 acusada(s)* sobre 165 archivos que viajan, así que no suma un 14.º al
+      pedido `t_3752e986`). El instrumento que decide si un cliente real ve el chat caído salía
+      **0 en los tres veredictos**, incluido el que imprime «No medir NO es estar bien».**
+
+      **Cómo saltó: me mordió a mí, en la medición de arranque de esta misma vuelta.** Corrí
+      `node scripts/veredicto_widget.mjs` para medir la mitad «widget» del objetivo del carril
+      y me devolvió *«No hubo ni una peticion a /widget en la ventana medida · Sin trafico no se
+      puede concluir nada. No medir NO es estar bien»* con **`$? = 0`**. Un texto que niega el
+      verde y un código de salida que lo afirma, en el mismo instante.
+
+      **Los dos defectos, los dos medidos antes de tocar nada:**
+      1. **Tri-estado aplastado a uno.** `AUTOINDUCIDO` (benigno), `SIN-DATOS` (no medido) y
+         `CLIENTES-AFECTADOS` —que el propio detalle llama *«es un item de producto»*— salían
+         los tres 0. El consumidor real (`hermes-content/deploy/vps-ops/widget-429-de-quien.sh`)
+         termina justo con esa llamada, así que **su** exit era el de este script: quien lo
+         encadenara con `&&` se llevaba verde con visitantes reales bloqueados.
+      2. **Correrlo pelado no es «no hubo tráfico»: es que nadie le pasó la medición.** Este
+         script no mide, decide sobre datos ya medidos — y sin `--peticiones`/`--contadores`
+         caía en `SIN-DATOS`, o sea que un **error de uso** salía disfrazado de diagnóstico. Hoy
+         se distingue por la PRESENCIA del flag, no por su contenido: `--peticiones ""` es la
+         sonda diciendo «miré y no había nadie», y eso sí es un dato.
+
+      **La nota de cabecera decía lo contrario y por eso se corrige con su historia, no se
+      borra:** *«Sale 0 siempre en modo veredicto: es un diagnostico, no un gate»*. El argumento
+      suena razonable —un diagnóstico no debería vetar— y es falso en el único punto que
+      importa: un diagnóstico también tiene que poder decir «no pude», y el único canal que un
+      llamador lee sin parsear es el exit.
+
+      **Rojo visto primero por el motivo correcto** (no por símbolo ausente: las funciones puras
+      se escribieron antes, y el rojo fueron los **dos** casos que corren el proceso de verdad —
+      `corrido de verdad sin datos sale 2, no 0` y `corrido de verdad con una IP ajena al limite
+      sale 1, no 0`—, mientras el tercero, el caso benigno, quedaba verde porque ya lo era).
+      Verde después: **18/18** en `npm run test:veredicto-widget`.
+
+      **Lo que evita repetir el bug, y no es el mapa:** el self-check **deriva del propio
+      fuente** los códigos que el módulo emite (`/codigo: '([A-Z-]+)'/g`) y exige que cada uno
+      esté en `SALIDA_POR_CODIGO`. Se validó solo: al agregar `SIN-ENTRADA` el contador pasó de
+      3 a 4 sin tocar el test. Y `codigoDeSalida` pregunta por la CLAVE (`Number.isInteger`), no
+      por el valor — con `|| 2` el 0 legítimo de `AUTOINDUCIDO` se habría vuelto 2.
+
+      ⚠️ **Queda anotado, NO medido a fondo: `npm run evidencia:citada` volvió a pasar de 280 s
+      en esta vuelta** (lo mató mi propio `timeout`), pese al ítem de abajo que le puso tope. No
+      se investigó — puede ser el tope nuevo actuando o la sonda de Chromium de nuevo. Se
+      reproduce con `time npm run evidencia:citada` y se mira si imprime el corte por tope.
+
 - [x] 🔴 **CERRADO el 2026-09-27 10:18-11:00 UTC (vive en `scripts/` de `onia-hermes`, **no** en
       la carpeta del bot: no suma un 14.º archivo al pedido `t_3752e986` ni lo invalida). El
       instrumento que audita la evidencia de estas dos colas se comía la vuelta entera y no

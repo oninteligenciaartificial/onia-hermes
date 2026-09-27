@@ -23,8 +23,22 @@
 //   node scripts/veredicto_widget.mjs --widget 200 --peticiones "1.2.3.4:286,5.6.7.8:1"
 //   node scripts/veredicto_widget.mjs --self-check   (prueba la logica, sin tocar el sistema)
 //
-// Sale 0 siempre en modo veredicto: es un diagnostico, no un gate. Con --self-check sale != 0
-// si algun caso falla.
+// CODIGO DE SALIDA, tri-estado (ver SALIDA_POR_CODIGO): 0 = medido y la huella es nuestra ·
+// 1 = medido y hay visitantes reales afectados · 2 = NO MEDIDO. Con --self-check, != 0 si
+// algun caso falla.
+//
+// ⚠️ Aca decia *"Sale 0 siempre en modo veredicto: es un diagnostico, no un gate"* — corregido
+// el 2026-09-27, despues de morderlo en carne. El argumento suena razonable y es falso en el
+// unico punto que importa: este script IMPRIME "No medir NO es estar bien" y salia 0 junto con
+// esa frase, o sea que su texto y su codigo de salida decian lo contrario. Medido esa vuelta:
+// `node scripts/veredicto_widget.mjs` -> SIN-DATOS y `$? = 0`, leido como "el widget esta
+// bien" en el arranque del carril del chatbot. Y "CLIENTES-AFECTADOS" —que el propio detalle
+// llama "un item de producto"— salia 0 igual que el caso benigno. Un diagnostico tambien tiene
+// que poder decir "no pude", y el unico canal que un llamador lee sin parsear es el exit.
+
+import { readFileSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 
 const NUESTRA_IP_POR_DEFECTO = '187.77.16.63';
 const LIMITE_POR_HORA = 5;
@@ -111,9 +125,42 @@ export function parsearPares(texto) {
     });
 }
 
-function arg(nombre, porDefecto) {
-  const i = process.argv.indexOf(`--${nombre}`);
-  return i === -1 ? porDefecto : process.argv[i + 1];
+function arg(nombre, porDefecto, argv = process.argv) {
+  const i = argv.indexOf(`--${nombre}`);
+  return i === -1 ? porDefecto : argv[i + 1];
+}
+
+// Correrlo pelado (`node scripts/veredicto_widget.mjs`) NO es "no hubo trafico": es que nadie
+// le paso la medicion. Los dos daban SIN-DATOS y el mismo 0, asi que un error de uso se leia
+// como diagnostico. La diferencia es la PRESENCIA del flag, no su contenido: `--peticiones ""`
+// es la sonda diciendo "mire y no habia nadie", y eso si es un dato.
+export function entradaDeLaCli(argv) {
+  const falta = !argv.includes('--peticiones') && !argv.includes('--contadores');
+  return {
+    falta,
+    widgetStatus: arg('widget', '?', argv),
+    nuestraIp: arg('nuestra-ip', NUESTRA_IP_POR_DEFECTO, argv),
+    peticiones: parsearPares(arg('peticiones', '', argv)),
+    contadores: parsearPares(arg('contadores', '', argv)),
+  };
+}
+
+// --- el codigo de salida -----------------------------------------------------
+
+// Los tres veredictos NO valen lo mismo, y hasta el 2026-09-27 los tres salian 0 — incluido
+// el que imprime "No medir NO es estar bien". Quien lo corriera encadenado (`&& echo ok`) o
+// leyera el `$?` se llevaba un verde de un instrumento que acababa de declararse ciego.
+export const SALIDA_POR_CODIGO = {
+  AUTOINDUCIDO: 0, // medido, y la huella es nuestra: no es un item de producto
+  'CLIENTES-AFECTADOS': 1, // medido, y hay visitantes reales que pueden ver el chat caido
+  'SIN-DATOS': 2, // NO MEDIDO: no hubo trafico en la ventana
+  'SIN-ENTRADA': 2, // NO MEDIDO: nadie le paso la medicion
+};
+
+// Un codigo que nadie mapeo sale 2, nunca 0: el default de un tri-estado se elige del lado
+// que no miente. Con `|| 2` un 0 legitimo se volveria 2; por eso se pregunta por la clave.
+export function codigoDeSalida(codigo) {
+  return Number.isInteger(SALIDA_POR_CODIGO[codigo]) ? SALIDA_POR_CODIGO[codigo] : 2;
 }
 
 // --- self-check --------------------------------------------------------------
@@ -188,6 +235,54 @@ function selfCheck() {
       JSON.stringify([['1.2.3.4', 286], ['5.6.7.8', 1]]));
   ok('y tolera el vacio', parsearPares('').length === 0);
 
+  // --- el codigo de salida: los tres veredictos NO valen lo mismo -------------
+  // Hasta el 2026-09-27 los tres salian 0, incluido el que dice "No medir NO es estar bien".
+  ok('lo diagnosticado y ajeno a producto sale 0', codigoDeSalida('AUTOINDUCIDO') === 0);
+  ok('clientes afectados NO es verde', codigoDeSalida('CLIENTES-AFECTADOS') === 1);
+  ok('sin datos es NO MEDIDO (2), nunca verde', codigoDeSalida('SIN-DATOS') === 2);
+  ok('no me pasaron los datos tampoco es verde', codigoDeSalida('SIN-ENTRADA') === 2);
+  ok(
+    'un codigo que nadie mapeo cae en NO MEDIDO, no en verde',
+    codigoDeSalida('CODIGO-QUE-NO-EXISTE-TODAVIA') === 2,
+  );
+
+  // Derivado del fuente, no de una lista escrita a mano: el dia que alguien agregue un
+  // `codigo:` nuevo y olvide el mapa, esto lo muerde en vez de salir verde por omision.
+  const fuente = readFileSync(new URL(import.meta.url), 'utf8');
+  const emitidos = [...fuente.matchAll(/codigo: '([A-Z-]+)'/g)].map((m) => m[1]);
+  ok(
+    `los ${emitidos.length} codigo(s) que el modulo emite estan todos en el mapa de salida`,
+    emitidos.length > 0 && emitidos.every((c) => c in SALIDA_POR_CODIGO),
+  );
+
+  // --- correrlo SIN datos no es un diagnostico, es un error de uso ------------
+  ok(
+    'sin --peticiones ni --contadores se niega a opinar',
+    entradaDeLaCli(['node', 'x']).falta === true,
+  );
+  ok(
+    'con los flags presentes y vacios SI opina: eso es "medi y no hubo trafico"',
+    entradaDeLaCli(['node', 'x', '--peticiones', '', '--contadores', '']).falta === false,
+  );
+
+  // El consumidor real (widget-429-de-quien.sh) se lleva el exit de este proceso, asi que
+  // se mide corriendo el proceso, no la funcion.
+  const corrida = (args) =>
+    spawnSync(process.execPath, [fileURLToPath(import.meta.url), ...args], { encoding: 'utf8' });
+  ok(
+    'corrido de verdad sin datos sale 2, no 0',
+    corrida([]).status === 2,
+  );
+  ok(
+    'corrido de verdad con una IP ajena al limite sale 1, no 0',
+    corrida(['--widget', '429', '--peticiones', '200.1.1.9:9', '--contadores', '']).status === 1,
+  );
+  ok(
+    'y cuando la huella es nuestra sale 0',
+    corrida(['--widget', '200', '--peticiones', '187.77.16.63:286,5.6.7.8:1', '--contadores', ''])
+      .status === 0,
+  );
+
   console.log(fallos === 0 ? '\nself-check verde' : `\nself-check ROJO (${fallos})`);
   return fallos;
 }
@@ -197,14 +292,21 @@ function selfCheck() {
 if (process.argv.includes('--self-check')) {
   process.exit(selfCheck() === 0 ? 0 : 1);
 } else {
-  const r = veredicto({
-    widgetStatus: arg('widget', '?'),
-    nuestraIp: arg('nuestra-ip', NUESTRA_IP_POR_DEFECTO),
-    peticiones: parsearPares(arg('peticiones', '')),
-    contadores: parsearPares(arg('contadores', '')),
-  });
+  const entrada = entradaDeLaCli(process.argv);
+  const r = entrada.falta
+    ? {
+        codigo: 'SIN-ENTRADA',
+        titulo: 'NO MEDIDO: nadie me paso la medicion',
+        detalle:
+          'Este script no mide: decide sobre datos ya medidos. Quien los junta es ' +
+          'hermes-content/deploy/vps-ops/widget-429-de-quien.sh (corre en el VPS, lee los logs ' +
+          'de Chatwoot y me los pasa por --peticiones/--contadores). Corrido pelado no hay ' +
+          'veredicto que dar.',
+      }
+    : veredicto(entrada);
   console.log(`   ${r.titulo}`);
   for (const linea of r.detalle.match(/.{1,86}(\s|$)/g) ?? []) {
     console.log(`   ${linea.trim()}`);
   }
+  process.exit(codigoDeSalida(r.codigo));
 }
