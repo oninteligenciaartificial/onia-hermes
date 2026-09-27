@@ -41,6 +41,8 @@ import {
   ESTADOS_QUE_AVISAN,
   ESTADO_POR_RAMA,
   BOT_DIR,
+  CONVERSACION_DEL_GATE,
+  avisoEsAccionable,
 } from "./avisos-vivo.mjs";
 
 /** El bot de ESTE repo. Es el espejo del desplegado y no sale a la red: el gate sigue hermetico. */
@@ -1226,4 +1228,74 @@ test("el reporte NOMBRA los desmentidos: un alcance que no se imprime se re-desc
     conciliacion: { medido: true, sinAviso: [], conAviso: [], fueraDeAlcance: [], causaMuerta: [{ conv: 53, estado: "handoff_humano" }] },
   });
   assert.match(lectura, /53/, "el evento absuelto queda sin nombre y nadie puede auditar la absolucion");
+});
+
+// ---------------------------------------------------------------------------------------------
+// `accionable` medía el dato que el propio gate inyecta, no el que escribe el MOTOR.
+//
+// Medido el 2026-09-26: el gate `textoAccionable` armaba el aviso con `conversationId: 4242`
+// y lo juzgaba con `aviso.texto.includes("4242") && aviso.conversationId === 4242`. Las dos
+// mitades miran el MISMO argumento: `construirAviso` estampa ese numero en la cabecera y lo
+// devuelve tal cual, asi que el juicio es tautologico — no puede ponerse rojo por nada que
+// haga el motor, que es justo lo que dice medir ("el aviso nombra la conversacion").
+//
+// Y su sintoma estaba impreso a la vista: el ejemplo de "lo que recibiria Sergio" salia con
+// DOS identidades para la misma conversacion —cabecera `conversacion 4242`, cuerpo
+// `Conversación chatwoot:0`— una combinacion que ningun aviso real puede tener, porque en
+// produccion los dos lados salen del mismo evento de Chatwoot. Un ejemplo infiel apaga al
+// instrumento: quien lo compare con un aviso real no puede distinguir bug de artefacto.
+test("accionable mira el CUERPO que escribe el motor, no solo la cabecera que el gate inyecta", () => {
+  const conv = CONVERSACION_DEL_GATE;
+
+  // El caso real: el motor nombra la conversacion en su texto (`bot-engine.mjs` lo arma con
+  // `state.conversationKey`), asi que cabecera y cuerpo coinciden.
+  assert.equal(
+    avisoEsAccionable({
+      aviso: { texto: `🔔 <b>Bot Onia</b> — conversacion ${conv} · web\n\nConversación chatwoot:${conv} (web). Motivo: x`, conversationId: conv },
+      conversationId: conv,
+    }),
+    true,
+    "el aviso bien formado tiene que seguir pasando, o el gate se vuelve inutil por el otro lado",
+  );
+
+  // El fallo que la version tautologica dejaba pasar EN VERDE: el motor nombra OTRA
+  // conversacion. Sergio Urcullo abre la que dice el cuerpo y encuentra a otro prospecto.
+  assert.equal(
+    avisoEsAccionable({
+      aviso: { texto: `🔔 <b>Bot Onia</b> — conversacion ${conv} · web\n\nConversación chatwoot:0 (web). Motivo: x`, conversationId: conv },
+      conversationId: conv,
+    }),
+    false,
+    "cabecera y cuerpo nombran conversaciones distintas y el gate lo aprueba: es el falso verde que este test existe para morder",
+  );
+
+  // Y el que el comentario del gate dice medir: el motor no nombra ninguna conversacion.
+  assert.equal(
+    avisoEsAccionable({
+      aviso: { texto: `🔔 <b>Bot Onia</b> — conversacion ${conv} · web\n\n<b>te esperan a vos</b>`, conversationId: conv },
+      conversationId: conv,
+    }),
+    false,
+    "un aviso cuyo cuerpo no dice a que conversacion contestar es un timbre sin puerta",
+  );
+});
+
+// El ejemplo que el instrumento IMPRIME es lo unico que un humano compara contra un aviso
+// real. Si el gate arma su estado sintetico con una conversacion distinta de la que le pasa a
+// `construirAviso`, el ejemplo miente sobre el producto sin que nada se ponga rojo.
+test("el ejemplo impreso es FIEL: la conversacion de la cabecera es la del cuerpo", async () => {
+  const motor = await motorProduceAviso(DIR_BOT);
+  assert.ok(motor, "sin motor no hay nada que medir");
+  assert.ok(motor.ejemplo, "el gate dejo de imprimir el ejemplo: el instrumento ya no muestra lo que mide");
+  assert.match(
+    motor.ejemplo,
+    new RegExp(`conversacion ${CONVERSACION_DEL_GATE}`),
+    "la cabecera del ejemplo no nombra la conversacion del gate",
+  );
+  assert.match(
+    motor.ejemplo,
+    new RegExp(`chatwoot:${CONVERSACION_DEL_GATE}`),
+    "el cuerpo del ejemplo nombra OTRA conversacion que la cabecera: el ejemplo no es un aviso posible",
+  );
+  assert.equal(motor.accionable, true, "el gate tiene que seguir verde con el ejemplo fiel");
 });

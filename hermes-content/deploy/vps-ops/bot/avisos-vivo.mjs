@@ -674,6 +674,36 @@ export const ESTADO_POR_RAMA = Object.freeze({ handoff: "handoff_humano", demo_a
 export const ESTADOS_QUE_AVISAN = Object.freeze(RAMAS_QUE_AVISAN.map((r) => ESTADO_POR_RAMA[r]));
 
 /**
+ * La conversacion con la que este gate maneja el motor. Vive en UNA constante porque entra por
+ * DOS puertas que tienen que decir lo mismo: el `conversationKey` del estado sintetico (de
+ * donde el motor saca el `Conversación chatwoot:N` de su texto) y el `conversationId` que se le
+ * pasa a `construirAviso` (de donde sale el `conversacion N` de la cabecera). Con dos valores
+ * distintos el gate imprime un aviso con DOS identidades, que es una combinacion que ningun
+ * aviso real puede tener — y ese ejemplo es lo unico que un humano compara contra produccion.
+ */
+export const CONVERSACION_DEL_GATE = 4242;
+
+/**
+ * ¿El aviso dice a QUIEN contestarle? Sin esto Sergio Urcullo recibe un timbre sin puerta.
+ *
+ * Se exige en las DOS mitades del mensaje, y ahi esta el filo: la cabecera la estampa
+ * `construirAviso` con el `conversationId` que le pasa el llamador, asi que preguntarle SOLO a
+ * ella es preguntarle al gate por su propio argumento —tautologico, no puede ponerse rojo por
+ * nada que haga el motor—. El cuerpo lo escribe el MOTOR (`bot-engine.mjs`, con
+ * `state.conversationKey`), y es la mitad que de verdad puede fallar.
+ */
+export function avisoEsAccionable({ aviso, conversationId = CONVERSACION_DEL_GATE } = {}) {
+  const texto = String(aviso?.texto ?? "");
+  if (!texto) return false;
+  // Fuera del texto: es lo unico que queda cuando el aviso NO sale (ver `construirAviso`).
+  if (aviso?.conversationId !== conversationId) return false;
+  // La cabecera, que es lo primero accionable que Sergio Urcullo lee.
+  if (!new RegExp(`conversacion ${conversationId}\\b`).test(texto)) return false;
+  // El cuerpo del motor. `\b` para que `chatwoot:4` no pase por `chatwoot:42`.
+  return new RegExp(`chatwoot:${conversationId}\\b`).test(texto);
+}
+
+/**
  * Maneja el motor DESPLEGADO hasta CADA una de las ramas de `RAMAS_QUE_AVISAN` y arma el
  * aviso con el `construirAviso` desplegado. Es el unico eslabon que prueba que las piezas
  * encajan entre si: cada una tiene su test, y aun asi el empalme puede estar cambiado de
@@ -714,7 +744,11 @@ export async function motorProduceAviso(dir) {
 
     for (const kind of RAMAS_QUE_AVISAN) {
       const { config, dice } = guiones[kind];
-      let estado = engine.createState({ conversationKey: "chatwoot:0", leadKey: "gate", channel: "web" });
+      let estado = engine.createState({
+        conversationKey: `chatwoot:${CONVERSACION_DEL_GATE}`,
+        leadKey: "gate",
+        channel: "web",
+      });
       estado = engine.step(estado, { text: "Hola", receivedAt: ahora() }, { config }).nextState;
       const r = engine.step(estado, { text: dice, receivedAt: ahora() }, { config });
 
@@ -731,12 +765,11 @@ export async function motorProduceAviso(dir) {
       // MAS POBRE que el aviso real y el instrumento deja de mostrar lo que mide.
       const aviso = construirAviso({
         notify: deLaRama,
-        conversationId: 4242,
+        conversationId: CONVERSACION_DEL_GATE,
         stageAfter: r.nextState?.botStage,
         canal: "Channel::WebWidget",
       });
-      // "Accionable" = nombra la conversacion. Sin eso Sergio recibe un timbre sin puerta.
-      const accionable = Boolean(aviso?.texto?.includes("4242")) && aviso?.conversationId === 4242;
+      const accionable = avisoEsAccionable({ aviso, conversationId: CONVERSACION_DEL_GATE });
       ramas[kind] = { emite: true, accionable };
       if (!ejemplo) ejemplo = aviso?.texto;
     }

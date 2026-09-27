@@ -9495,6 +9495,41 @@ cita: al cerrar una fila hay que barrer quién la nombra, no sólo tacharla.
       `webhook-server.mjs` `:767` y `:770`. Sigue detrás del `ok` del pedido de deploy del bot
       (derivar el ID con el comando de abajo). No toca a nadie más.
 
+      ✅ **Re-derivado el 2026-09-26 21:55 La Paz: el bloqueo SIGUE VIVO y es real.**
+      `publicar.sh --dry-run` cuenta **13** archivos y `webhook-server.mjs` no es ninguno de
+      ellos, así que tocarlo lo haría el 14.º. La tarea del pedido es **`t_3752e986`** (derivada,
+      no copiada; sigue `blocked`). No se re-mide otra vez hasta que el tablero la devuelva a
+      `ready`.
+
+      🔴 **Y auditando este mismo circuito apareció un falso verde ESTRUCTURAL en el gate de al
+      lado, ya arreglado en esta vuelta — `avisos-vivo.mjs`, no `webhook-server.mjs`, así que el
+      pedido sigue siendo de 13.** El gate `textoAccionable` dice medir *«el aviso nombra la
+      conversación a la que contestar»* y lo juzgaba con
+      `aviso.texto.includes("4242") && aviso.conversationId === 4242`. **Las dos mitades miran el
+      mismo argumento que el gate se inyecta a sí mismo:** `construirAviso` estampa ese número en
+      la cabecera y lo devuelve tal cual, así que el juicio es **tautológico** — no podía ponerse
+      rojo por nada que hiciera el motor, que es justo lo único que puede fallar. Probado, no
+      argumentado: con el cuerpo diciendo `chatwoot:0` y la cabecera `4242`, la lógica vieja
+      devolvía `accionable = true`.
+
+      **El síntoma estaba impreso a la vista y nadie lo leyó**, que es por lo que se encontró: el
+      ejemplo de «lo que recibiría Sergio» salía con **DOS identidades para la misma
+      conversación** — cabecera `conversacion 4242`, cuerpo `Conversación chatwoot:0` —, una
+      combinación que **ningún aviso real puede tener**, porque en producción los dos lados salen
+      del mismo evento de Chatwoot (la cabecera del `conversationId`, el cuerpo del
+      `state.conversationKey` en `bot-engine.mjs:305`). Un ejemplo infiel apaga al instrumento:
+      quien lo compare con un aviso real no puede distinguir bug de artefacto.
+
+      **Arreglo:** una constante `CONVERSACION_DEL_GATE` para las DOS puertas (el
+      `conversationKey` del estado sintético y el `conversationId` de `construirAviso`), y el
+      juicio movido a `avisoEsAccionable()`, que ahora exige las **tres**: el campo fuera del
+      texto, la cabecera, y **el cuerpo que escribe el motor** (con `\b`, para que `chatwoot:4` no
+      pase por `chatwoot:42`). Rojo visto primero por el motivo correcto (*«el cuerpo del ejemplo
+      nombra OTRA conversación que la cabecera»*); verde después: **65/65** en su test,
+      **1454/1454** en `npm run test:bot`, `npm test` exit 0. Y el recuento vivo contra producción
+      es **idéntico** al de antes del cambio (29 avisos · 27 enviados · 2 salteados · 0 fallidos),
+      con el ejemplo ya coherente: `conversacion 4242` + `chatwoot:4242`.
+
       🔴 **El ID no se copia — se deriva, y esta línea ya se equivocó una vez.** Decía
       `t_76cdb5dc` y esa tarea está **`archived`** desde el 2026-09-26 16:48: el pedido se rehizo
       (van cuatro) y hoy vive con otro ID. Un `ok` sobre la archivada **no despliega nada** y el
