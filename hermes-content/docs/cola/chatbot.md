@@ -1456,6 +1456,67 @@ mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se deriv
 
 ## Ahora
 
+- [x] ✅ **AUDITORÍA DE LOS `[x]` — 2026-09-27 20:1x-20:4x UTC (escalón 2: «Ahora» agotada en las
+      dos colas, el único 🔴 vivo y los 4 de «Después» esperando el mismo `ok`). Tres afirmaciones
+      de estado de producción estaban VENCIDAS, y las tres mentían en la dirección cara.**
+
+      **Por qué este escalón, medido antes de bajarlo:** `Ahora` de esta cola tiene 144 ítems y
+      **cero abiertos**; `Ahora` de `plataforma-v1.md` también (sus 4 abiertos viven dentro de
+      «Bloqueado en Sergio Urcullo»). T10 sigue 🔴 pero su mitad restante toca
+      `webhook-server.mjs`, y el pedido de deploy del bot está vivo —derivado, no copiado:
+      `npm run deploy:sin-pedido` lo nombra con «pedido hace 7 h»—, así que el freno es real y no
+      un fantasma. Los 4 de «Después» esperan ese mismo `ok` o las credenciales del BCP.
+
+      **De dónde salieron los sujetos: del propio instrumento, no de una corazonada.**
+      `npm run deploy:ya-ocurrio` sale **0** y a la vez imprime *«5 no se pudo ubicar su frontera:
+      hay que leerlas»*. Ese `[leer]` es correcto —el gate juzga por ARCHIVO y estas líneas no
+      nombran uno— pero **nadie lo leía nunca**: es la clase «un alias suelto no lo corre nadie»,
+      movida un nivel adentro. Las 5 se leyeron a mano; 3 estaban vencidas.
+
+      | línea | sobre qué afirmaba | medido el 2026-09-27 |
+      |---|---|---|
+      | `:9703` | el fallback de un inbox sin org | **vencida** — el arreglo vive en producción y se verificó por comportamiento |
+      | `:7437` | si el `ok` del bot exige un paso manual | **vencida** — la condición que ella misma puso ya se cumplió |
+      | `:7440` | si `93256eab` llegó a `main` | **vencida** — `is-ancestor origin/main` da 0 |
+      | `:7495` | la cobertura de `onia-center` | **vigente** — sigue fuera de la lista blanca del `ok` |
+      | las dos del SIAT en la otra cola | su publicación | **vigente** — su pedido `t_ea3e4f1b` sigue esperando firma |
+
+      **La peor de las tres es `:7437`, y no por el dato:** decía que el `ok` del bot *«sigue
+      necesitando el comando a mano»* cuando el cuerpo del pedido vivo dice textual *«No hace falta
+      ningun comando a mano»*. Esa exacta confusión ya costó **24 días** pidiéndole a Sergio Urcullo
+      un `scp` que el circuito hacía solo. **Un «NO desplegado» cuya condición se cumplió no
+      envejece a inocuo: envejece a instrucción falsa** — y ésta gastaba la atención del único que
+      puede destrabar el carril.
+
+      **Verificado MIRANDO, no por `grep` de confirmación.** La prueba de `:9703` la había dejado
+      escrita el ítem mismo para «después del deploy» y nunca se corrió:
+      `wget -qO- 'http://127.0.0.1:3020/health?inboxId=99'` → `"huerfano":true` con `source:"code"`,
+      y `?inboxId=4` → `source:"panel"` con `"huerfano":false` (la frontera de al lado, intacta).
+      Se le atribuye a ESTE código porque el `md5sum` del `knowledge.mjs` vivo es **idéntico** al
+      del repo; el `grep -c huerfano` (9 y 9) sólo sirvió para descartar.
+
+      📌 **La lección, que es del método y no de estas tres líneas:** un gate que reporta
+      honestamente lo que **no** pudo juzgar traslada ese trabajo a un humano que no existe, y su
+      `exit 0` lo entierra. Mientras el `[leer]` no tenga dueño, las líneas que caen ahí envejecen
+      sin que nada se ponga rojo — que es exactamente cómo estas tres sobrevivieron 14 días.
+
+      ✅ **Gates después:** `node scripts/verificar_cola.js …/chatbot.md` → `cola ok: 145 items en
+      Ahora, todos con evidencia real`; `npm run test:toca-el-pedido` → **0 acusada(s)** sobre 165
+      archivos que viajan (esto se edita en `hermes-content/docs/`, así que **no** suma un archivo
+      al pedido del bot ni lo invalida); y `npm run deploy:ya-ocurrio` bajó de **6 líneas sin
+      frontera a 5**, que es la única forma de mostrar que este escalón consumió deuda en vez de
+      describirla.
+
+      🔴 **Y el escalón se cobró a sí mismo, que es la parte que vale.** La primera redacción de
+      esta entrada puso en ROJO dos gates: `verificar_cola` (la tabla nombraba
+      `plataforma-v1:6260/6289` y el verificador lo leyó como una ruta inexistente) y
+      `deploy:ya-ocurrio`, que acusó **2 líneas mías** — la fila de la tabla y la cita textual de la
+      advertencia corregida. Las dos por la misma causa: **al citar una afirmación muerta se la
+      vuelve a emitir viva**, y el detector no distingue la cita de la afirmación. Por eso la
+      corrección de `:9703` describe la advertencia vieja en vez de reproducirla, contra la
+      convención de la casa y con el motivo escrito al lado. Se vio porque los gates se corrieron
+      **después** de editar y no antes de escribir.
+
 - [x] 🔴 **CERRADO el 2026-09-27 13:4x-15:0x UTC (`scripts/bloqueo_citado_vivo.mjs` +
       `scripts/lib/frases_de_cola.mjs`, los dos en `scripts/` de `onia-hermes` — **no** en la
       carpeta del bot, así que no suman un archivo al pedido de deploy ni lo invalidan): esta cola
@@ -7434,10 +7495,23 @@ La historia completa queda acá abajo para no perderla.
       `node --test` sobre la carpeta) y por eso **también gatea el deploy**, que corre ese mismo
       comando. Suite del bot: **932/932**.
 
-      ⚠️ **Commiteado, NO desplegado** — y el orden importa: mientras esto no esté en `main`, el
-      `ok` al pedido de deploy vivo de `bot` **sigue necesitando** el comando a mano que su cuerpo nombra.
+      ✅ **YA EN `main` — medido el 2026-09-27, y la corrección importa más que el dato.** Acá
+      decía *«⚠️ Commiteado, NO desplegado — mientras esto no esté en `main`, el `ok` al pedido de
+      deploy vivo de `bot` sigue necesitando el comando a mano que su cuerpo nombra»*. La condición
+      que el propio ítem puso **ya se cumplió**:
+      `git show origin/main:hermes-content/deploy/vps-ops/bot/deploy-bot.sh` trae el paso en `:170`
+      (`webhook-server.sh knowledge`) y el gate `conocimiento-viaja-con-el-deploy.test.mjs` está en
+      `git ls-tree origin/main`. **O sea que el `ok` NO necesita ningún comando a mano** — lo dice
+      también el cuerpo del pedido vivo, textual: *«No hace falta ningun comando a mano»*.
+      🔴 **Por qué se corrige y no se borra:** esta clase de frase ya costó **24 días** en este
+      carril, pidiéndole a Sergio Urcullo un `scp` manual que el circuito ya hacía solo. Un
+      «commiteado, NO desplegado» cuya condición se cumplió no envejece a inocuo: envejece a
+      **instrucción falsa**, y encima en la dirección que gasta la atención del único que puede
+      dar el `ok`.
 
-- [x] ✅ **CERRADO el 2026-09-11 (`93256eab`, onia-hermes — pusheado a la rama, falta mergear):
+- [x] ✅ **CERRADO el 2026-09-11 (`93256eab`, onia-hermes — ✅ YA EN `main`, verificado el
+      2026-09-27 con `git merge-base --is-ancestor 93256eab origin/main`; acá decía «pusheado a la
+      rama, falta mergear» y ese merge ya ocurrió):
       el intake de leads le afirmaba a Sergio Urcullo que TODO contacto había pedido una demo.**
       Tablero `t_62aa450c`, encontrado por otro carril midiendo en vivo.
 
@@ -9700,7 +9774,23 @@ cita: al cerrar una fila hay que barrer quién la nombra, no sólo tacharla.
 
 - [x] 🟡 **~~El inbox que nazca huérfano le habla a los clientes del CLIENTE con la cara de
       Onia~~ — CERRADO EN CÓDIGO el 2026-09-13 02:55 La Paz.
-      ⚠️ COMMITEADO, NO DESPLEGADO: el bot vivo sigue sirviéndole el panel a cualquier inbox.**
+      ✅ **YA DESPLEGADO Y VERIFICADO EN PRODUCCIÓN — medido el 2026-09-27 20:2x UTC corriendo la
+      prueba que este ítem dejó escrita para "después del deploy", que nadie había corrido.**
+      Acá había una advertencia en presente —de la familia «commiteado, todavía no publicado»,
+      diciendo que el motor vivo le servía el panel de Onia a cualquier inbox— y era **falsa hoy**:
+      el swap pasó y la frase siguió leyéndose como presente, o sea anunciando un agujero de marca
+      ya tapado. Se reemplaza en vez de conservarse entre comillas **a propósito**: en esta cola el
+      texto viejo se cita, pero acá la cita hacía que el propio instrumento
+      (`npm run deploy:ya-ocurrio`) leyera la advertencia muerta como una afirmación viva y la
+      acusara — *la documentación de un detector es corpus del detector*, la misma trampa que ya
+      pagó `evidencia:citada`. Tres medidas independientes, ninguna un `grep` de confirmación:
+      `docker exec onia-center wget -qO- 'http://127.0.0.1:3020/health?inboxId=99'` →
+      `"huerfano":true` con `source:"code"` (**no** `panel`); `?inboxId=4` → `source:"panel"` con
+      `"huerfano":false`, o sea que la frontera de al lado sigue viva; y `md5sum` del
+      `knowledge.mjs` vivo **idéntico** al del repo (`bc59711049…`), que es la única forma de
+      atribuirle el comportamiento a ESTE código y no a otro. De paso quedó medido que el
+      **inbox 7** (`ZZ QA Clinica Chatbot`) sale `huerfano:true`: es un inbox real sin org que lo
+      reclame, justo el caso que el arreglo degrada a recepcionista neutro.**
       **Peor de lo que decía este ítem, recontado en vivo antes de tocar nada:** no son «los
       cuatro inboxes», es **cualquier número**. `?inboxId=99` —un inbox que no existe— contestaba
       igual `source: "panel"`, o sea el guion de venta de Onia con sus precios y sus horarios de
