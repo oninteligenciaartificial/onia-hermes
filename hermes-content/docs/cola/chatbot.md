@@ -10040,12 +10040,68 @@ cita: al cerrar una fila hay que barrer quién la nombra, no sólo tacharla.
       (seguir sin borrar), sólo corrige el dato falso para que nadie busque una org que no
       está.
 
-- [ ] **Las líneas `[aviso]` del log del bot no llevan hora, y son las únicas que miden el
-      objetivo de este carril.** Cada línea `[onia-webhook]` trae su marca ISO; las de
-      `[aviso]` salen peladas: `[aviso] sent conv=49 (demo_agendada): aviso enviado`. El
-      objetivo del carril se mide como *«una línea de aviso en el log por cada `demo_agendada`
-      / `handoff_humano`»* — y eso no se puede contar por día ni por evento sobre líneas que
-      no se pueden fechar.
+- [x] 🔴 **CERRADO el 2026-09-27 22:1x-23:0x La Paz (commiteado, **NO desplegado**; toca el
+      subárbol del bot). Y lo que lo destrabó no fue una decisión de Sergio Urcullo: fue
+      RE-MEDIR el freno, que ya estaba vencido y me lo había escrito yo mismo tres horas
+      antes.**
+
+      El freno decía: *«`publicar.sh --dry-run` cuenta 14 archivos y `webhook-server.mjs` no es
+      ninguno de ellos, así que tocarlo sumaría uno más [e invalidaría el pedido]»*. Las dos
+      mitades siguen siendo literalmente ciertas —medidas hoy: `--dry-run` da **14** y
+      `git show origin/main:…/webhook-server.mjs | md5sum` es **idéntico** al de producción— y
+      la conclusión es **falsa igual**, porque el costo ya estaba gastado: `dbb86c47` (mi propia
+      vuelta de las 17:0x, el filtro de eco de T10) **ya modifica ese archivo** en la rama del
+      carril. O sea que el pedido nace corto de dos archivos en cuanto `onia-cola` mergee, haga
+      yo esto o no. **Editarlo otra vez suma CERO.** Un freno cuyo costo lo pagó una vuelta
+      anterior sigue leyéndose como pendiente: por eso se re-mide contra el ÁRBOL y no contra su
+      propio texto, aunque el texto lo haya escrito uno mismo y diga «re-derivado hoy».
+
+      **Lo que se hizo** — un emisor único, `lineaDeAviso()` en `webhook-server.mjs`, por donde
+      salen los dos sitios (el normal y el `catch`). Formato: `[aviso] <ISO> sent conv=49
+      (demo_agendada): …`, tag → hora → estado, la misma posición que `[onia-webhook]`. La hora
+      es la del AVISO y no la del turno, porque es fire-and-forget: la pregunta que estas líneas
+      contestan es cuándo SALIÓ el aviso, no cuándo entró el mensaje (eso ya lo dice la línea de
+      al lado).
+
+      **Por qué una función y no dos literales, que es lo que mantiene esto arreglado:** este
+      mismo par ya pagó la factura del lado del LECTOR —seis anclajes con su literal pegado, y
+      arreglar cinco dejaba los contadores en cero (`anclaAviso`)—. Así que el tercer test
+      **deriva los sitios de emisión del ARCHIVO**, no de una lista: un `[aviso]` escrito a mano
+      mañana nace sin hora y nadie lo notaría.
+
+      **Los cuatro rojos, vistos primero y cada uno por SU motivo** (mutación en las dos
+      direcciones, porque un test que no se cae no prueba nada):
+      - emisor sin hora → *«la hora va entre el tag y el estado … salió: `[aviso] sent conv=49`»*
+      - `anclaAviso` dejando de tolerar la hora → *«la línea fechada tiene que seguir contando
+        como enviada»* (es el bug del `\w+` capturando `2026`, probado y no argumentado)
+      - un `log(\`[aviso] …\`)` a mano en el `catch` → el gate lo nombra con su número de línea
+      - el literal viejo en el camino HTTP real → *«la línea que sale del servidor tiene que
+        venir fechada»*, que es distinto de que el emisor suelto esté bien
+
+      ⚠️ **El primer intento del gate del archivo salió rojo por el motivo EQUIVOCADO, y por eso
+      hay que decirlo:** se acusó a sí mismo — el docblock de `lineaDeAviso` cita la línea vieja
+      entre backticks, y el gate medía el archivo entero. Es la trampa que este repo ya tiene
+      escrita (*«un gate que parte un archivo fuente por un literal tiene que quitar los
+      COMENTARIOS primero»*), acá en su versión barata: falló en la dirección segura. Se ciegan
+      los comentarios conservando el renglón, así el número de línea que informa sigue siendo el
+      del archivo.
+
+      **Verde:** `npm run test:bot` **1461/1461**, `npm test` exit 0. **Y el recuento vivo contra
+      producción es IDÉNTICO al de antes del cambio** — `npm run avisos:vivo` → *31 enviados*,
+      medido las dos veces: los lectores toleran la hora OPCIONAL, y eso no se endurece nunca
+      porque el log del VPS es append-only y no se rota, así que sus líneas peladas son la única
+      evidencia de todo lo anterior a hoy. Exigir la hora pondría el histórico en cero.
+
+      **Barrido de lo que quedó falso** (una promesa que cambia se barre en toda la superficie,
+      incluidas las notas que la citan): `avisos-vivo.mjs` decía *«hoy … escribe estas líneas sin
+      hora»* en dos docblocks —el de `anclaAviso` y el de `primerAvisoDelLog`— y
+      `avisos-vivo.test.mjs` titulaba *«se va a FECHAR»* en futuro. Los tres corregidos en el
+      mismo commit; los dos archivos ya viajaban en el pedido (son el 8 y el 10 de los 14), así
+      que tampoco suman nada.
+
+      **Lo que este ítem NO arregla, dicho con su nombre:** el log vivo sigue mostrando líneas
+      peladas hasta que el bot se publique, porque producción corre el build anterior. `[n8n]`
+      tampoco lleva hora — no se tocó, no es de este ítem y no mide el objetivo de nadie.
 
       **Reproducción exacta (2026-09-26, costó cuatro pasos de esta vuelta):**
 

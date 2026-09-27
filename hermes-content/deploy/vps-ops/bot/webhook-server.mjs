@@ -431,6 +431,38 @@ export function crearFiltroDeEco({ cada = ECO_CADA } = {}) {
 }
 
 /**
+ * La línea `[aviso]`, fechada. TODO `[aviso]` de este archivo sale de acá.
+ *
+ * POR QUÉ LLEVA HORA. Estas líneas son las únicas que miden el objetivo de este carril —«un
+ * aviso en el log por cada `demo_agendada` / `handoff_humano`»— y hasta hoy salían peladas
+ * (`[aviso] sent conv=49 (demo_agendada): aviso enviado`) mientras su hermana `[onia-webhook]`
+ * se fecha a sí misma. Sin marca no se pueden contar por día ni por evento: el 2026-09-26 un
+ * `uniq -c` devolvió `10 [aviso] sent conv=49 …` y eso se lee como UN evento disparando diez
+ * avisos a un canal que Sergio Urcullo ya tiene saturado. No lo era —eran diez corridas de la
+ * sonda, un aviso cada una— y distinguirlo costó reconstruir la POSICIÓN de las líneas
+ * (`grep -n`, ~12 líneas de separación, intercaladas con webhooks fechados). Un número de línea
+ * no es una hora, y el que no lo reconstruya reporta un duplicado que no existe.
+ *
+ * POR QUÉ SU PROPIA HORA Y NO LA DEL TURNO. El aviso es fire-and-forget: su callback corre
+ * después de que el webhook contestó. La pregunta que estas líneas responden es CUÁNDO SALIÓ EL
+ * AVISO, no cuándo entró el mensaje — que ya lo dice la línea del webhook de al lado.
+ *
+ * POR QUÉ UNA SOLA FUNCIÓN Y NO DOS LITERALES. Este mismo par de archivos ya pagó esa factura al
+ * revés: los SEIS anclajes que LEEN estas líneas traían cada uno su literal pegado, y arreglar
+ * cinco dejaba los contadores en cero (ver `anclaAviso` en `avisos-vivo.mjs`). Del lado del
+ * emisor hay dos sitios hoy —el normal y el `catch`— y un tercero mañana: con la hora acá, un
+ * sitio nuevo nace fechado. Lo verifica un test que deriva los sitios del ARCHIVO, no de una
+ * lista escrita a mano.
+ *
+ * POSICIÓN: tag → hora → estado, la misma que `[onia-webhook]` (`formatearTraza`). Los lectores
+ * la toleran OPCIONAL a propósito: el log del VPS es append-only y sus líneas viejas —peladas—
+ * se siguen contando igual, así que esto no invalida un solo recuento histórico.
+ */
+export function lineaDeAviso(resto, iso = new Date().toISOString()) {
+  return `[aviso] ${iso} ${resto}`;
+}
+
+/**
  * Datos mínimos para la traza cuando `parseChatwootWebhook` los descartó.
  * Un `skip` devuelve `{skip, reason}` SIN `meta`, y una traza sin conversación no sirve para
  * nada: hay que poder decir CUÁL charla se ignoró, no sólo que se ignoró alguna.
@@ -840,10 +872,10 @@ export function createWebhookServer(deps = {}) {
           // queda de una persona a la que el bot le prometió que Sergio le escribe. Sin el número
           // no se puede ir a buscarla después.
           const conv = outcome.avisoTelegram.conversationId ?? "?";
-          log(`[aviso] ${result?.status} conv=${conv} (${motivos}): ${result?.reason}`);
+          log(lineaDeAviso(`${result?.status} conv=${conv} (${motivos}): ${result?.reason}`));
         });
       } catch (error) {
-        log(`[aviso] no se pudo disparar: ${String(error?.message || error)}`);
+        log(lineaDeAviso(`no se pudo disparar: ${String(error?.message || error)}`));
       }
     }
 

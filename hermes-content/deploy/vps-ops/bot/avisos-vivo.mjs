@@ -152,13 +152,14 @@ const ISO_EN_EL_LOG = '20[0-9][0-9]-[0-9][0-9]-[0-9][0-9]T[0-9][0-9]:[0-9][0-9]:
  * alimenta el numero que se publica. Con los seis derivados de aca, arreglar cinco y olvidar
  * uno dejo de ser posible.
  *
- * POR QUE OPCIONAL Y NO OBLIGATORIA. Hoy `webhook-server.mjs` (`:767` y `:770`) escribe estas
- * lineas sin hora, con un `log()` que es un `process.stdout.write` pelado, mientras su
- * hermana `[onia-webhook]` se fecha a si misma (`:318`). Estampar la hora es lo que falta
- * para poder contar el objetivo por dia, pero ese archivo esta congelado detras de un pedido
- * de deploy del bot de 13 archivos que NO lo incluye. Aceptando los dos formatos, el dia que
- * la hora llegue no hay "los dos archivos o ninguno" ni un parser roto en el medio: el log
- * viejo del VPS es append-only y sus lineas peladas se siguen leyendo igual.
+ * POR QUE OPCIONAL Y NO OBLIGATORIA. Hasta el 2026-09-27 este parrafo decia que la hora "es lo
+ * que falta" — ya llego: `webhook-server.mjs` la estampa en `lineaDeAviso`, que es por donde
+ * salen sus dos sitios de emision, en la misma posicion que su hermana `[onia-webhook]`
+ * (tag -> hora -> estado). Sigue OPCIONAL y no se endurece, por una razon que no caduca: el log
+ * del VPS es append-only y NO se rota, asi que sus lineas viejas —peladas— son la unica
+ * evidencia de todo lo que paso antes de hoy. Exigir la hora pondria en CERO el recuento
+ * historico, que es justo lo que este archivo existe para no perder. Medido las dos veces, antes
+ * y despues del cambio: 31 enviados, identico.
  */
 function anclaAviso(resto) {
   return new RegExp(String.raw`\[aviso\]\s+(?:${ISO_EN_EL_LOG}(?:\.[0-9]+)?Z?\s+)?${resto}`);
@@ -894,14 +895,15 @@ export function ventanaDelLog(dir) {
  * La primera evidencia, en el log VIVO, de que el aviso ya emitia. `null` cuando no se pudo
  * preguntar o cuando el log no tiene ni una linea `[aviso]`.
  *
- * Se toma la hora de la linea ANTERIOR y no de la propia porque las lineas `[aviso]` no
- * llevan marca: lo escribe `log()` sin estampar. Medido el 2026-09-26 en produccion — la
- * primera es `[aviso] skipped (cuota_agotada): aviso por Telegram apagado` a secas, y la
- * linea de arriba es `[onia-webhook] 2026-09-04T03:41:45.953Z conv=53 ... rama=respondio
- * etapa=nuevo->handoff_humano`. El log esta EN ORDEN y es append-only, asi que la ultima
- * marca en o antes de esa linea es la cota mas temprana en que sabemos que la capacidad
- * estaba viva. Es la misma tecnica por la que `conversacionesDeAvisos` recupera el `conv` de
- * los avisos viejos.
+ * La busqueda va HASTA la linea del aviso, inclusive, y no hasta la anterior: desde el
+ * 2026-09-27 el aviso trae su PROPIA hora (`lineaDeAviso` en `webhook-server.mjs`) y `tail -1`
+ * la prefiere sola, que es la marca exacta en vez de una cota. Y sigue funcionando sobre las
+ * viejas, que es lo que este borde mide de verdad: la PRIMERA del log vivo es del 4-sep y salio
+ * pelada — `[aviso] skipped (cuota_agotada): aviso por Telegram apagado` a secas, con
+ * `[onia-webhook] 2026-09-04T03:41:45.953Z conv=53 ... rama=respondio` arriba. El log esta EN
+ * ORDEN y es append-only, asi que la ultima marca en o antes de esa linea es la cota mas
+ * temprana en que sabemos que la capacidad estaba viva. Es la misma tecnica por la que
+ * `conversacionesDeAvisos` recupera el `conv` de los avisos viejos.
  *
  * POR QUE NO el mtime del modulo: `/tmp/onia-bot/aviso-telegram.mjs` dice `2026-09-25 10:41`,
  * que es cuando llego LA COPIA DE HOY, no cuando llego la capacidad. Usarlo pondria el borde
