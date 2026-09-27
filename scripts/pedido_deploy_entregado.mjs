@@ -537,11 +537,15 @@ export function cuerpoVencido({ texto, publicado }) {
   const { cuerpo, comentarios } = partirPedido(texto);
   const delCuerpo = shasPrometidos(cuerpo);
   if (delCuerpo.length === 0) {
-    return { estado: 'NO_MEDIDO', motivo: 'el cuerpo no promete ningun sha con su marca', mudos: [] };
+    // `causa` separa las DOS especies de no-medido que esta funcion puede devolver, porque se
+    // curan de formas opuestas y hasta hoy se imprimian juntas. Ésta es PERMANENTE: con el
+    // cuerpo escrito sin la marca no se va a poder medir en ninguna vuelta futura, y sólo la
+    // cura reescribir el cuerpo. La de abajo se cura sola cuando el sha resuelva.
+    return { estado: 'NO_MEDIDO', causa: 'SIN_DECLARAR', motivo: 'el cuerpo no promete ningun sha con su marca', mudos: [] };
   }
   const estados = delCuerpo.map((s) => ({ sha: s, pub: publicado(s) }));
   if (estados.some((e) => e.pub === null || e.pub === undefined)) {
-    return { estado: 'NO_MEDIDO', motivo: 'un sha del cuerpo no se pudo resolver', mudos: [] };
+    return { estado: 'NO_MEDIDO', causa: 'SHA_IRRESOLUBLE', motivo: 'un sha del cuerpo no se pudo resolver', mudos: [] };
   }
   if (estados.some((e) => !e.pub)) {
     return { estado: 'VIGENTE', motivo: 'el cuerpo todavia promete algo sin publicar', mudos: [] };
@@ -1684,6 +1688,14 @@ async function medirEnVivo() {
   // único modo de falla que este archivo existe para cazar. Impreso como no-medido se lee
   // como ruido de ambiente, y por eso sobrevivió con el gate en verde. Ver `inmediblesSinDeclarar`.
   const inmedibles = [];
+  // Hermano de `inmedibles` para la pregunta del CUERPO. Misma raiz —no hay marca `DEPLOY
+  // PEDIDO`— pero distinta cura y distinto precio, y por eso NO comparte su rojo: `inmedibles`
+  // se cura con un comentario, y esto sólo lo cura reescribir el cuerpo, o sea rehacer el
+  // pedido. Como el cuerpo de hoy puede estar perfectamente sano (el de `t_d3b032ba` lo esta),
+  // exigirlo en rojo mandaria a archivar un pedido vivo — la unica salida que le borra a Sergio
+  // Urcullo un pedido real, que es justo lo que `cuerpoVencido` eligio no hacer nunca. Se
+  // NOMBRA como control apagado y se sigue en verde.
+  const cuerposSinMarca = [];
   // `noMedidos` y `sinCubrir` NO son lo mismo, y mezclarlos fue el bug: el primero es
   // transitorio (el SSH no contestó, el sha no resuelve) y se cura solo en la vuelta
   // siguiente; el segundo es un AGUJERO del gate, que no se cura nunca y hay que escribirle
@@ -1846,6 +1858,9 @@ async function medirEnVivo() {
       // vencido — que es lo que Sergio Urcullo lee para decidir.
       const v = cuerpoVencido({ texto: p.texto, publicado: esPublicado });
       if (v.estado === 'VENCIDO') vencidos.push({ id: p.id, destino: 'plataforma', mudos: v.mudos });
+      // La causa PERMANENTE va aparte de los no-medidos: `noMedidos` esta documentado como
+      // transitorio —«se cura solo en la vuelta siguiente»— y ésta no se cura nunca sola.
+      else if (v.causa === 'SIN_DECLARAR') cuerposSinMarca.push({ id: p.id, destino: 'plataforma' });
       else if (v.estado === 'NO_MEDIDO') noMedidos.push(`${p.id} (plataforma, cuerpo vigente): ${v.motivo}`);
 
       // Y la simétrica de esa, que hasta el 2026-09-11 tampoco tenía dueño: el cuerpo puede
@@ -1860,6 +1875,19 @@ async function medirEnVivo() {
 
   for (const n of noMedidos) console.log(`NO MEDIDO ${n}`);
   for (const s of sinCubrir) console.log(`SIN INSTRUMENTO ${s}`);
+  // Se imprime SIEMPRE que corresponda, aunque el resto salga verde: el punto es que no se
+  // pueda confundir con un no-medido de los que se curan solos. No cambia el codigo de salida.
+  if (cuerposSinMarca.length > 0) {
+    for (const c of cuerposSinMarca) {
+      console.log(`CONTROL APAGADO ${c.id} (${c.destino}): su cuerpo nombra los shas en PROSA, sin la marca`);
+      console.log('  `DEPLOY PEDIDO <sha>`, asi que el control que compara EL CUERPO contra lo publicado no');
+      console.log('  puede correr — ni hoy ni en ninguna vuelta futura. Los otros controles del pedido si');
+      console.log('  corrieron: esto no dice que el pedido este mal, dice que a esta pregunta no se le');
+      console.log('  contesto. Queda en verde a proposito: el cuerpo puede estar sano, y exigir la marca en');
+      console.log('  rojo mandaria a rehacer y archivar un pedido vivo. Se cura al REDACTAR el proximo:');
+      console.log('  que el cuerpo escriba `DEPLOY PEDIDO <sha>` por cada arreglo, no solo el numero en prosa.');
+    }
+  }
 
   // Cada destino cita SU build. El de la landing se pide sólo si hay un pedido suyo —es un SSH—
   // y si no contesta queda `null`: la cita se omite, nunca se cae a la del vecino. Ver
@@ -1938,6 +1966,35 @@ function selfCheck() {
       promesaCompleta({ shas: ['1111111'], publicaria: [{ sha: '1111111abc', titulo: 'a' }] }).estado === 'COMPLETA'],
     ['sin poder derivar que publica -> NO_MEDIDO, nunca COMPLETA',
       promesaCompleta({ shas: ['1111111'], publicaria: null }).estado === 'NO_MEDIDO'],
+
+    // ── `cuerpoVencido`: sus DOS no-medidos no son la misma especie ───────────────────
+    // Medido el 2026-09-27 sobre `t_d3b032ba`, el pedido vivo de la plataforma: sale
+    // `NO MEDIDO ... el cuerpo no promete ningun sha con su marca` y ahi se queda, vuelta
+    // tras vuelta. No es que no se pudo medir HOY: es que con el cuerpo escrito asi no se
+    // va a poder medir NUNCA — los pedidos se redactan con el recuento del publicador en
+    // seco y una lista en prosa, y `shasPrometidos` sólo cuenta la marca `DEPLOY PEDIDO`.
+    // Impreso junto a los no-medidos transitorios (el SSH no contestó, el sha no resuelve)
+    // se lee como el ruido de ambiente de siempre y se saltea, que es la misma trampa que
+    // `noMedidos`/`sinCubrir` ya tuvieron que separar mas arriba.
+    ['cuerpoVencido: sin marca en el cuerpo la causa es PERMANENTE, no transitoria',
+      cuerpoVencido({ texto: '1) 1111111 arregla algo', publicado: () => true }).causa === 'SIN_DECLARAR'],
+    ['cuerpoVencido: un sha que no resuelve SI es transitorio, y se distingue',
+      cuerpoVencido({ texto: 'DEPLOY PEDIDO 1111111', publicado: () => null }).causa === 'SHA_IRRESOLUBLE'],
+    // Los dos siguen siendo NO_MEDIDO: la direccion conservadora de esta funcion no cambia.
+    // Un VENCIDO falso manda a rehacer —y archivar— un pedido sano, que es la unica salida
+    // que le borra a Sergio Urcullo un pedido real. Lo que se separa es como se REPORTA.
+    ['cuerpoVencido: separar la causa NO convierte ninguno en VENCIDO',
+      cuerpoVencido({ texto: '1) 1111111 arregla algo', publicado: () => true }).estado === 'NO_MEDIDO'
+      && cuerpoVencido({ texto: 'DEPLOY PEDIDO 1111111', publicado: () => null }).estado === 'NO_MEDIDO'],
+    // CABLEADO. Que la funcion sepa distinguir no sirve si `medirEnVivo` vuelve a mezclar
+    // las dos en `noMedidos`: ese fue el bug, no la clasificacion.
+    ['cuerpoVencido: `medirEnVivo` reporta la causa permanente APARTE de los transitorios',
+      (() => {
+        const fuente = readFileSync(fileURLToPath(import.meta.url), 'utf8');
+        return /v\.causa === 'SIN_DECLARAR'/.test(fuente)
+          && /cuerposSinMarca\.push\(/.test(fuente)
+          && /if\s*\(\s*cuerposSinMarca\.length\s*>\s*0\s*\)/.test(fuente);
+      })()],
 
     // ── landing: el destino sin sha en el artefacto, que se mide por FECHA ─────────────
     // El caso que YA cumple. Sin él, romper la comparación (devolver siempre null) pasaría
