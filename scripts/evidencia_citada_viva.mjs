@@ -67,6 +67,9 @@ export const SIN_MENTIRAS = 0;
 export const MIENTEN = 1;
 export const NO_PUDE_MEDIR = 2;
 
+/** El codigo con el que TODO gate de este repo dice «no pude preguntar». Ver `medir()`. */
+export const CODIGO_NO_MEDIDO = 2;
+
 /** Una cita ejecutable dentro de backticks. Las dos formas que `validarComando` acepta. */
 export const CITA = /`(npm run [\w:.-]+|node [\w./-]+)`/g;
 
@@ -253,6 +256,15 @@ export function medir(juzgables, correr, clave = (c) => c) {
     if (!cache.has(k)) cache.set(k, correr(cita.comando));
     const { codigo, error } = cache.get(k);
     if (codigo === null) return { ...cita, estado: 'no-medida', medido: null, error };
+    // ⚠️ UN `2` DEL GATE CITADO NO ES UN VEREDICTO QUE CONTRADIGA: es su propio NO MEDIDO. Todo
+    // gate de este repo usa 2 para «no pude preguntar», asi que tratarlo como desacuerdo acusa a
+    // la linea por un problema de AMBIENTE. Medido en la primera pasada viva (2026-09-27, desde
+    // nodo-casa): `espejo-check.mjs` salio 2 —no alcanza `/opt` desde casa— y este gate llamo
+    // mentirosa a una linea cierta. Es exactamente el falso positivo que el instrumento existe
+    // para no cometer, cometido por el instrumento.
+    if (codigo === CODIGO_NO_MEDIDO && cita.esperado !== CODIGO_NO_MEDIDO) {
+      return { ...cita, estado: 'no-medida', medido: codigo, error: `el gate citado salio ${CODIGO_NO_MEDIDO} (su propio NO MEDIDO): no contesto` };
+    }
     return { ...cita, estado: codigo === cita.esperado ? 'honesta' : 'miente', medido: codigo };
   });
 }
@@ -420,6 +432,20 @@ function selfCheck() {
   ok(
     'no se pudo correr → NO MEDIDA, nunca honesta',
     medir([cita], () => ({ codigo: null, error: 'timeout' }))[0].estado === 'no-medida',
+  );
+  // El caso que la primera pasada viva encontro: `espejo-check.mjs` salio 2 desde nodo-casa y este
+  // gate acuso a una linea cierta. Un 2 del gate citado es SU no-medido, no un desacuerdo.
+  ok(
+    'el gate citado sale 2 (su NO MEDIDO) → NO MEDIDA, nunca MIENTE',
+    medir([{ ...cita, esperado: 0 }], () => ({ codigo: 2 }))[0].estado === 'no-medida',
+  );
+  ok(
+    'pero una linea que DECLARA 2 y recibe 2 es honesta',
+    medir([{ ...cita, esperado: 2 }], () => ({ codigo: 2 }))[0].estado === 'honesta',
+  );
+  ok(
+    'y una que declara 2 y recibe 0 SI miente',
+    medir([{ ...cita, esperado: 2 }], () => ({ codigo: 0 }))[0].estado === 'miente',
   );
 
   let corridas = 0;

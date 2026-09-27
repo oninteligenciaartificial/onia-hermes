@@ -870,8 +870,8 @@ no haber podido preguntar. No va a `npm test` a propósito, por lo mismo que `en
 npm run evidencia:citada   # 0 = las citas siguen obteniendo el veredicto que declaran · 1 = lista archivo:línea · 2 = NO MEDIDO
 ```
 
-Muchas líneas de estas dos colas declaran su evidencia como **el veredicto de otro gate**
-(*«`npm run demo:agendada` → exit 1»*). Nadie corría esos gates para ver si todavía dan eso:
+Muchas líneas de estas dos colas declaran su evidencia como **el veredicto de otro gate** — la
+forma *«tal alias → exit N»*. Nadie corría esos gates para ver si todavía dan eso:
 `deploy:ya-ocurrio` juzga por **ARCHIVO** —si el que la línea nombra está entre los desfasados de
 `/tmp/onia-bot`— y `knowledge.onia.json` lo está SIEMPRE mientras el pedido de deploy del bot
 espere firma, así que toda línea que lo nombre salía «cierta» sin importar si su arreglo ya viajó.
@@ -9662,6 +9662,17 @@ cita: al cerrar una fila hay que barrer quién la nombra, no sólo tacharla.
          (`node scripts/…` en `:3091` y `:8525`, `npm run sonda:widget` en `:8789`). El caché ahora
          mira **a qué script apunta** el alias, no su texto. Un gate que mide no puede ensuciar más
          que el defecto que busca.
+
+      **Y DOS más que sólo aparecieron al correrlo en vivo la primera vez** — ninguna lectura del
+      código las habría dado, y las dos son la falta que el instrumento existe para no cometer:
+      5. **Un `2` del gate citado NO es un veredicto que contradiga: es su propio NO MEDIDO.** Todo
+         gate de este repo usa `2` para «no pude preguntar», y desde nodo-casa `espejo-check.mjs`
+         sale `2` porque no alcanza `/opt`. La primera pasada llamó **mentirosa a una línea cierta**
+         por un problema de ambiente. Ahora un `2` inesperado es `no-medida` (`exit 2`), nunca `1`;
+         una línea que **declara** `2` y recibe `2` sigue siendo honesta.
+      6. **El gate se acusó a sí mismo:** el párrafo de arriba citaba *«`npm run demo:agendada` →
+         exit 1»* como EJEMPLO de la forma que detecta, y el detector lo leyó como una afirmación.
+         La documentación de un detector es corpus del detector. El ejemplo quedó con `exit N`.
 
       **Y lo que el gate deja AFUERA está contado por motivo, no escondido:** de 53 citas con código
       declarado en las dos colas, **21 son juzgables** y 32 se saltan (11 tachadas, 6 filas de
