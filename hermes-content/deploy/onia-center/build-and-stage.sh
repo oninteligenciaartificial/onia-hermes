@@ -46,6 +46,22 @@ fi
 
 echo "== [5/5] verify staged artifact =="
 echo "BUILD_ID=$(cat "$STAGE/apps/site/.next/BUILD_ID" 2>/dev/null || echo NONE)"
+# El sha del commit que se esta armando. Este camino NO lo puede estampar: buildea en el VPS
+# desde `wf-code.tgz`, un archivo de codigo sin metadatos de git, asi que no hay de donde
+# derivarlo — y un `.commit` inventado seria peor que su ausencia (`deploy:sin-pedido` pasaria
+# de "no pude medir", honesto, a comparar contra un sha que no existe: fallar EN VERDE).
+# Lo que si se puede es DECIRLO en el momento en que se crea el hueco, y no dos semanas
+# despues: sin `.commit` en el arbol, `npm run deploy:sin-pedido` no va a poder contestar
+# nunca si a onia-center le falta publicar. El camino que si estampa es
+# `scripts/deploy-onia-center.sh` (lo corre el Action, y corre en cualquier host Linux con el
+# repo y la llave). Se avisa, no se aborta: este guion sigue siendo el rescate valido cuando
+# no hay repo a mano.
+if [ -s "$STAGE/.commit" ]; then
+  echo "COMMIT=$(cat "$STAGE/.commit")"
+else
+  echo "COMMIT=MISSING — este camino no estampa el sha: produccion queda inmedible para deploy:sin-pedido."
+  echo "COMMIT_HINT=publica con scripts/deploy-onia-center.sh si querés que el sha vivo se pueda leer."
+fi
 MR=$(find "$STAGE" -path '*server/app/api/onia-center/maintenance*' -name 'route.js' 2>/dev/null | head -1 || true)
 echo "MAINTENANCE_ROUTE=${MR:-MISSING}"
 echo "NUVIA_PUBLIC=$([ -d "$STAGE/apps/site/public/nuvia" ] && echo present || echo MISSING)"
