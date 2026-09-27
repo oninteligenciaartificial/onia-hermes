@@ -10854,6 +10854,15 @@ archivos.**
       caso que reproduce el fósil usa un namespace inventado (`fulano:mengano`) en vez del nombre
       real — **un instrumento no se exime de su propio gate**, y esa es la propiedad buscada.
 
+      **Mi cita la verificó el gate hermano, no yo:** `npm run evidencia:citada` la juzgó
+      *«chatbot.md — `npm run precios:vivos` declara 0 y sale 0 → OK»*. ⚠️ **Y de paso midió algo
+      que le queda a la próxima vuelta:** ese gate cierra con **`NO MEDIDO — alguna cita no se
+      pudo correr`** sobre 22 juzgables, y **cuál** no se sabe porque la corrida se leyó con
+      `tail`. Se deriva sin adivinar — la línea del sujeto no lleva `OK`:
+      `npm run evidencia:citada > /tmp/ev.txt 2>&1; grep -vE '^  OK ' /tmp/ev.txt`
+      (tarda: re-corre cada receta viva, más de 2 min). **No es de este ítem y no es mío** — mi
+      única cita salió OK; es el estado propio de ese gate, medido hoy.
+
 - [x] **CERRADO el 2026-09-26 18:05 La Paz — las dos colas de este carril mandaban a 5 lugares
       equivocados, y una de las rutas rotas me la creí yo mismo auditando** (es doc + gate, no
       toca el motor ni el producto: **no necesita deploy**).
