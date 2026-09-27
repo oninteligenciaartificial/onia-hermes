@@ -12,6 +12,33 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-27 18:09-18:35 La Paz (vuelta HEAD d0757d4d) — dental 9/9 (cuarta vez hoy), sin brecha nueva: los 5 rubros, promesa-vs-entrega y la cola ya estaban agotados antes de arrancar
+
+Chequeo de arranque: máquina `casa`, rama `claude/recorrido-cliente` OK, alta `abierta`, cron
+`9 * * * *` presente. Tablero: nada `ready` sin reclamar en zona `recorrido-cliente`.
+
+`node scripts/recorrido_cliente.mjs --escribir` completó **9/9** en "Clínica dental" (cuenta
+`zz-qa-2026-09-27-2209@onia.com.bo`, paciente, cita `2026-09-28 09:00`
+(`cmukdje1300mz01n0k47lnlmn`) vista en `/appointments`, factura mirada en `/billing/...` y
+frenada sin pagar). `resumen.json`: `llegoHasta 9/9, completo true, agujeros []`. Base limpia:
+`appointments`/`organizations` con `zz-qa-%` = 0 tras la corrida.
+
+Se buscó la brecha más grande antes de repetir dental: los 5 rubros de `RUBROS_ACTIVOS` y el
+punto "promesa vs entrega" ya estaban cubiertos **hoy mismo**, en las dos vueltas anteriores
+(16:09 y 17:10-17:20), y la cola del carril (`cola/recorrido-cliente.md`) no tiene ningún ítem
+en "Reportado a otro carril (nuevo)" ni en "Abierto" sin cerrar. No había paso, rubro ni ítem de
+cola nuevo para tomar esta vuelta: correr el recorrido (paso 1, siempre obligatorio) fue la
+única medición posible, y salió verde otra vez.
+
+RAZÓN: no avanzó la brecha de cobertura — está genuinamente agotada por hoy (rubros, promesa
+vs entrega, cola), no por falta de método.
+LECCIÓN: cuando las tres fuentes de brecha (rubros, promesa-vs-entrega, cola) ya se agotaron el
+mismo día, repetir el recorrido base sigue siendo obligatorio (es el chequeo de "hecho"), pero
+no cuenta como encontrar brecha nueva — la próxima vuelta debería preferir revisar la cola de
+OTRO carril dueño por si algo pasó de `blocked` a listo, antes que rotar rubro de nuevo.
+
+---
+
 ## 2026-09-27 17:10-17:20 La Paz (vuelta HEAD 45e0b407) — dental 9/9 (repetido), tres corridas transitoriamente ROTAS antes por lentitud de red, no por el producto
 
 Chequeo de arranque: máquina `casa`. `ONIA_ALTA_AUTOMATICA=abierta`. Tablero: nada `ready` sin
