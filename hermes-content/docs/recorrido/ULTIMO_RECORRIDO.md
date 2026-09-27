@@ -12,6 +12,44 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-27 17:10-17:20 La Paz (vuelta HEAD 45e0b407) — dental 9/9 (repetido), tres corridas transitoriamente ROTAS antes por lentitud de red, no por el producto
+
+Chequeo de arranque: máquina `casa`. `ONIA_ALTA_AUTOMATICA=abierta`. Tablero: nada `ready` sin
+reclamar en zona `recorrido-cliente`.
+
+`node scripts/recorrido_cliente.mjs --escribir` cortó ROTO tres veces seguidas antes de esta
+entrada: paso 2 con `ERR_CONNECTION_CLOSED` en `/empezar`, paso 4 con timeout de 45 s entrando a
+`/login`, paso 3 con timeout de 45 s en `/register`. Antes de reportarlo como hallazgo se
+verificó el instrumento: `curl` a los tres hosts respondió 200 en <1 s cada vez, y un script
+Playwright aislado (mismo `channel: 'chromium'`, mismo viewport/timezone, sin las demás
+operaciones del recorrido) navegó los tres saltos sin fallar. La CUARTA corrida completó los
+**9/9** con paso 1 tardando 14,9 s (vs ~1,6 s normal) — la lentitud era real mientras duró, sólo
+transitoria de red desde `casa`, no un corte del sitio ni de la sesión.
+
+Cuenta `zz-qa-2026-09-27-2116@onia.com.bo`, onboarding completo (6 pantallas), paciente
+`zz-qa-...-paciente` cargado en `/patients`, cita `2026-09-28 09:00` agendada y VISTA en
+`/appointments` (`cmukbnt5u00m701n00we91e9k`), factura mirada en `/billing/...` (ítem
+`...-item`) y frenada sin pagar. Limpieza verificada: `appointments`/`organizations` con
+`zz-qa-%` = 0 tras la corrida.
+
+Las tres corridas rotas SÍ escribieron una cuenta/organización zz-qa- en producción (el aviso de
+cierre las nombra incondicionalmente cuando `--escribir` está activo, aunque el paso de creación
+haya fallado antes de someter el formulario) — la limpieza (`limpiarProduccion()`) las barrió
+igual por el prefijo `zz-qa-`, así que no quedó basura, pero el aviso de "se escribió X" no
+prueba que X se haya escrito de verdad: es una lista de lo que EL SCRIPT intentó nombrar, no de
+lo que confirmó crear. Queda anotado en la cola para no fingir un hallazgo de producto sobre un
+bache de red de esta máquina.
+
+RAZÓN: no avanzó la brecha de cobertura (dental ya estaba confirmado hoy); la vuelta se fue en
+descartar que la falla fuera real antes de escalarla — que es exactamente la regla de "toda
+investigación tiene que poder refutar su propia hipótesis".
+LECCIÓN: ante un ROTO nuevo en un paso que veníamos viendo verde, replicar con curl y con un
+Playwright aislado ANTES de escribir una tarea al carril dueño. Repetir el mismo comando 2-3
+veces también sirve como replicación cuando el fallo es de red y no de código. La próxima vuelta
+sigue el orden normal: rotar rubro o revisar la cola pasada por el Gate 1.
+
+---
+
 ## 2026-09-27 16:09-16:35 La Paz (vuelta HEAD 35ddb461) — promesa vs entrega (punto 3), sin hallazgo
 
 Chequeo de arranque: máquina `casa`. `ONIA_ALTA_AUTOMATICA=abierta`. Los 4 crons de casa están
