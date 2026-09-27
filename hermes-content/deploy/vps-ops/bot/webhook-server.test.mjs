@@ -24,6 +24,7 @@ import { once } from "node:events";
 import {
   checkDatabaseHealth,
   createWebhookServer,
+  crearFiltroDeEco,
   formatearTraza,
   getHealthStatus,
   getServerConfig,
@@ -1127,4 +1128,67 @@ test("TRAZA: la rama MUDA sigue explicandose con su motivo, no con el campo nuev
   assert.match(linea, /rama=MUDO/);
   assert.match(linea, /motivo=audio: sin transcripción/, "el motivo del silencio manda: es lo primero que se lee");
   assert.ok(!/aviso=/.test(linea), "no se dice dos veces lo mismo en la misma linea");
+});
+
+// ---------------------------------------------------------------------------
+// EL ECO NO TAPA LA COLA DEL LOG — 2026-09-27 (T10, mitad "cola")
+//
+// Medido en el log vivo ese dia: de las ultimas 80 lineas, 59 declaraban que el bot no habia
+// hecho nada (`rama=ignorado` 52, `rama=MUDO` 7) contra 21 `rama=respondio`, asi que el ultimo
+// evento real quedaba 133 lineas atras y `tail -80 | grep demo_agendada` devolvia CERO con 83
+// eventos en el archivo. El bot emite TRES lineas por turno y dos son el eco de su propia
+// respuesta: la cola se tapa sola cada vez que alguien escribe.
+//
+// Las tres razones que lo causan, contadas en vivo sobre 4.000 lineas:
+//   350 update_sin_botones · 348 mensaje_no_entrante:outgoing · 132 status_no_desarma:open
+//
+// Lo que NO se toca, y es la mitad importante del diseno: `MUDO` es el bug que sobrevivio una
+// semana con cinco personas reales del otro lado. Silenciarlo seria volver a 2026-09-02. Se
+// agrupa SOLO el eco previsible de nuestra propia actividad, y una razon de `ignorado` que no
+// este en la lista se escribe IGUAL (falla cerrado: una razon nueva no se pierde en silencio).
+// ---------------------------------------------------------------------------
+
+test("ECO: el eco previsible se agrupa y no gasta una linea por vez", () => {
+  const decidir = crearFiltroDeEco({ cada: 3 });
+  const eco = (reason) => ({ conversacion: "77", estado: 200, cuerpo: { ok: true, skipped: true, reason } });
+
+  assert.equal(decidir(eco("mensaje_no_entrante:outgoing")), null, "el 1.o no escribe");
+  assert.equal(decidir(eco("update_sin_botones")), null, "el 2.o tampoco");
+  const resumen = decidir(eco("status_no_desarma:open"));
+  assert.match(resumen, /rama=eco/, "al llegar al tope sale UNA linea de resumen");
+  assert.match(resumen, /mensaje_no_entrante:outgoing=1/);
+  assert.match(resumen, /update_sin_botones=1/);
+  assert.match(resumen, /status_no_desarma:open=1/, "el sufijo se conserva: dice QUE status era");
+  assert.equal(decidir(eco("update_sin_botones")), null, "el contador arranca de cero otra vez");
+});
+
+test("ECO: MUDO, ERROR y respondio siguen escribiendo SIEMPRE — nunca se agrupan", () => {
+  const decidir = crearFiltroDeEco({ cada: 3 });
+  const mudo = decidir({ conversacion: "77", estado: 200, cuerpo: { ok: true, sent: [], warnings: [] } });
+  assert.match(mudo, /rama=MUDO/, "el bug de la semana no se agrupa ni una vez");
+
+  const roto = decidir({ conversacion: "77", estado: 200, cuerpo: { ok: false, error: "x", reason: "y", sent: [] } });
+  assert.match(roto, /rama=ERROR/);
+
+  const ok = decidir({ conversacion: "77", estado: 200, cuerpo: { ok: true, sent: [{ posted: true }] } });
+  assert.match(ok, /rama=respondio/);
+});
+
+test("ECO: una razon de `ignorado` que no esta en la lista se escribe — falla CERRADO", () => {
+  const decidir = crearFiltroDeEco({ cada: 3 });
+  const nueva = decidir({
+    conversacion: "77",
+    estado: 200,
+    cuerpo: { ok: true, skipped: true, reason: "motivo_que_nadie_previo" },
+  });
+  assert.match(nueva, /rama=ignorado/, "una razon nueva no se pierde en el agrupador");
+  assert.match(nueva, /motivo=motivo_que_nadie_previo/);
+});
+
+test("ECO: la clase se compara por el prefijo, asi que un sufijo nuevo tambien se agrupa", () => {
+  const decidir = crearFiltroDeEco({ cada: 2 });
+  assert.equal(decidir({ estado: 200, cuerpo: { ok: true, skipped: true, reason: "status_no_desarma:pending" } }), null);
+  const resumen = decidir({ estado: 200, cuerpo: { ok: true, skipped: true, reason: "status_no_desarma:snoozed" } });
+  assert.match(resumen, /status_no_desarma:pending=1/);
+  assert.match(resumen, /status_no_desarma:snoozed=1/);
 });

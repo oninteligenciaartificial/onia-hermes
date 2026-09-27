@@ -360,6 +360,76 @@ export function formatearTraza(traza = {}) {
   return campos.join(" ");
 }
 
+// ---------------------------------------------------------------------------
+// EL ECO NO PUEDE TAPAR LA COLA DEL LOG — 2026-09-27
+//
+// Todo webhook sigue dejando rastro; lo que cambia es que el ECO de nuestra propia actividad no
+// gasta una línea cada vez. Medido ese día en el log vivo: de las últimas 80 líneas, 59 decían
+// que el bot no hizo nada y sólo 21 eran turnos reales, así que el último evento del embudo
+// quedaba 133 líneas atrás y `tail -80 | grep demo_agendada` devolvía CERO con 83 eventos en el
+// archivo. El bot escribe TRES líneas por turno y dos son el eco de su propia respuesta: la cola
+// se tapa sola justo cuando alguien escribe, que es cuando hay que poder mirarla.
+//
+// LO QUE NO SE AGRUPA, y es la mitad importante del diseño: `MUDO` es el bug que sobrevivió una
+// semana con cinco personas reales del otro lado — silenciarlo sería volver al 2026-09-02.
+// Tampoco `ERROR`, `NO_ENTREGADO`, `rechazado`, `repetido` ni `respondio`. Sólo el eco previsible.
+// ---------------------------------------------------------------------------
+
+/**
+ * Las clases de `ignorado` que son ECO de nuestra propia actividad, no señal.
+ * Se compara el prefijo antes de `:` (la CLASE), no la razón entera: el sufijo es un detalle
+ * variable (`status_no_desarma:open` / `:pending`) y si entrara en la comparación, un estado
+ * nuevo de Chatwoot volvería a tapar la cola sin que nadie lo tocara. El sufijo se conserva en
+ * el resumen, que es donde sirve.
+ */
+export const CLASES_DE_ECO = new Set([
+  "mensaje_no_entrante", // el bot viendo salir su propio mensaje (348 en 4.000 líneas)
+  "update_sin_botones", // Chatwoot avisando un update que no trae nada que atender (350)
+  "status_no_desarma", // un cambio de estado que no es el desarme del traspaso humano (132)
+]);
+
+/** Cada cuántos ecos sale UNA línea de resumen. 200 ≈ dos por hora en el tráfico medido. */
+export const ECO_CADA = 200;
+
+/** La clase de eco de una traza, o `null` si la línea es señal y hay que escribirla. */
+function claseDeEco(traza = {}) {
+  const cuerpo = traza.cuerpo || {};
+  // Sólo la rama `ignorado`: se pregunta por lo MISMO que `formatearTraza` para decidir la rama,
+  // no por el nombre de la rama ya formateada (parsear la línea de vuelta las desacoplaría).
+  if (!cuerpo.skipped || Number(traza.estado) >= 400) return null;
+  const razon = String(cuerpo.reason || "");
+  const clase = razon.split(":")[0];
+  // Falla CERRADO: una razón de `ignorado` que nadie previó NO es eco y se escribe entera. Una
+  // lista de inclusión que fallara abierta perdería en silencio justo la razón que se agregue
+  // mañana, que es la única que vale mirar.
+  return CLASES_DE_ECO.has(clase) ? razon : null;
+}
+
+/**
+ * Filtro con estado por proceso: traza -> línea a escribir, o `null` para no escribir nada.
+ * Devuelve la línea de resumen recién al llegar al tope, con el conteo por razón COMPLETA: si el
+ * eco cambia de forma o de volumen, se ve; si no, no gasta la cola.
+ */
+export function crearFiltroDeEco({ cada = ECO_CADA } = {}) {
+  const porRazon = new Map();
+  let acumulados = 0;
+  return function decidirLinea(traza = {}) {
+    const razon = claseDeEco(traza);
+    if (!razon) return formatearTraza(traza);
+    porRazon.set(razon, (porRazon.get(razon) || 0) + 1);
+    acumulados += 1;
+    if (acumulados < cada) return null;
+    const detalle = [...porRazon.entries()]
+      .sort((a, b) => b[1] - a[1])
+      .map(([r, n]) => `${r}=${n}`)
+      .join(" ");
+    const total = acumulados;
+    porRazon.clear();
+    acumulados = 0;
+    return `[onia-webhook] ${traza.iso || new Date().toISOString()} rama=eco total=${total} ${detalle}`;
+  };
+}
+
 /**
  * Datos mínimos para la traza cuando `parseChatwootWebhook` los descartó.
  * Un `skip` devuelve `{skip, reason}` SIN `meta`, y una traza sin conversación no sirve para
@@ -624,6 +694,10 @@ export function createWebhookServer(deps = {}) {
   const handle = typeof deps.handle === "function" ? deps.handle : handleChatwootWebhook;
   const fireEvent = typeof deps.fireEvent === "function" ? deps.fireEvent : fireN8nBotTurnEvent;
   const log = typeof deps.log === "function" ? deps.log : (line) => process.stdout.write(`${line}\n`);
+  // UNO por servidor, no por turno: el agrupador necesita memoria entre webhooks. El proceso es
+  // de larga vida (se midieron 6 h 52 de `etime`), así que un `Map` de módulo alcanza y no hay
+  // nada que expirar — al reiniciar se pierde un resumen parcial, que es el peor caso aceptable.
+  const decidirLinea = typeof deps.decidirLinea === "function" ? deps.decidirLinea : crearFiltroDeEco();
 
   return createServer(async (req, res) => {
     // Defensa en profundidad: si el cliente corta a mitad de la respuesta, un evento `error`
@@ -724,7 +798,9 @@ export function createWebhookServer(deps = {}) {
     // Envuelto porque un log que tira mataría el turno — al revés de para qué existe.
     if (outcome.traza) {
       try {
-        log(formatearTraza(outcome.traza));
+        // `null` = es eco y quedó contado para el próximo resumen. Cualquier otra rama escribe.
+        const linea = decidirLinea(outcome.traza);
+        if (linea) log(linea);
       } catch {
         /* nunca romper el turno por no poder loguearlo */
       }

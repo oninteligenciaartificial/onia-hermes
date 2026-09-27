@@ -257,8 +257,9 @@ ese par se pone rojo solo.
 
 **LISTO =** el gate del log ahogado sale **0**, con `0` copias en la ventana y la cola dejando ver
 los eventos.
-**Medido el 2026-09-27 08:55 UTC:** `node scripts/log_del_bot_ahogado.mjs` → **exit 1**. 🔴 **La
-mitad del ruido está sana y la otra mitad NO, y el ítem se reabre por eso.**
+**Medido el 2026-09-27 16:5x La Paz:** `node scripts/log_del_bot_ahogado.mjs` → **exit 1**, con
+`ignorado=52 · MUDO=7 · respondio=21`. ✅ **El emisor quedó arreglado en esta vuelta (ver el cierre,
+abajo); el exit 1 es el log VIVO, que corre el build anterior — se apaga al publicar el bot.**
 
 > ⚠️ **El criterio y la medición quedan en renglones SEPARADOS a propósito, y el motivo es del
 > instrumento que encontró esto.** Antes compartían renglón —*«LISTO = `node …` sale 0 … Medido:
@@ -344,6 +345,45 @@ entero y hoy da 33 avisos · 31 enviados · 2 salteados, circuito sano.** El `ta
 de arranque es el camino ciego; el veredicto ahora lo dice en su propia línea de remedio. Un
 carril que mide su objetivo con una ventana de líneas sobre un log que no se rota mide el volumen
 del día, no su objetivo.
+
+### ✅ El emisor, ARREGLADO el 2026-09-27 17:0x La Paz — y el freno que lo congelaba costaba CERO
+
+**El freno se reverificó antes de obedecerlo, y su cuenta estaba mal.** Acá arriba decía que el
+`ok` del pedido del bot *«entra en la hoja de decisiones el DÍA 5 de la rotación»*. Medido
+corriendo el ensayo del parte contra el tablero real (la receta de arriba, 6 días en vez de 5):
+entra el **día 4**, y el ciclo **es de 4 días** — o sea que «día 5» es el día 1 otra vez. La
+diferencia no es de un día: **«día 5 de 4» se lee como «nunca»**, y con eso tres ítems de este
+carril quedaron esperando algo que en realidad vuelve cada cuatro días. Y lo que el freno protegía
+—no resetear la antigüedad del pedido— **no se pierde**: el pedido del bot ya era el penúltimo por
+antigüedad de 18 decisiones, así que rehacerlo no lo saca del día 4. Un freno se re-mide antes de
+obedecerlo aunque esté escrito por tu propia vuelta anterior; el costo que declara envejece.
+
+**Lo que se hizo, que es la mitad de cola de T10 y nada más.** `crearFiltroDeEco` en
+`webhook-server.mjs`: el ECO de nuestra propia actividad ya no gasta una línea cada vez — sale
+**una de resumen cada 200**, con el conteo por razón completa. Las tres clases se derivaron
+contando el log vivo, no de memoria: `update_sin_botones` 350 · `mensaje_no_entrante:outgoing` 348
+· `status_no_desarma:open` 132, sobre 4.000 líneas.
+
+⚠️ **`MUDO` NO se agrupó, y es la mitad importante del diseño.** El remedio que el gate imprime
+dice *«que esas ramas no escriban»* y nombra las dos (`ignorado` y `MUDO`). Obedecerlo literal
+silenciaría el bug que sobrevivió **una semana** con cinco personas reales del otro lado — son 7
+de 80 líneas, no tapan nada, y son el único rastro de un silencio. Se agrupa sólo el eco
+previsible; `ERROR`, `NO_ENTREGADO`, `rechazado`, `repetido` y `respondio` siguen escribiendo
+siempre. **Un remedio impreso por un gate es una pista, no una orden.**
+
+**Falla CERRADO:** la clase se compara por el prefijo antes de `:` (así un `status_no_desarma:`
+nuevo también se agrupa) pero una razón de `ignorado` que nadie previó **se escribe entera**. Una
+lista de inclusión que fallara abierta perdería en silencio justo la razón que se agregue mañana.
+
+**Los dos archivos van juntos porque son un par:** `scripts/log_del_bot_ahogado.mjs` ahora declara
+`eco` como no-evento. Sin eso, el gate la dejaba SIN CLASIFICAR y una cola tapada por resúmenes
+se leería como tráfico sano. Probado por mutación en las dos direcciones (quitar el filtro → 2
+rojos; quitar `eco` del clasificador → 1 rojo), porque un test que no se cae no prueba nada.
+
+**Commiteado, NO desplegado** — `webhook-server.mjs` cae en `*.mjs` de la lista blanca de
+`deploy-bot.sh`, así que el pedido de deploy del bot se rehizo en esta vuelta con este archivo
+adentro y el viejo quedó `archived`. El `exit 1` del gate se apaga cuando Sergio Urcullo conteste
+ese `ok`: el log vivo es del build anterior.
 
 <details><summary>Historia del cierre falso (2026-09-24) — el arreglo original, que sigue siendo correcto para lo suyo</summary>
 
