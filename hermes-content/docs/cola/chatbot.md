@@ -1205,19 +1205,49 @@ cierta para el otro, así que el estado se pregunta por separado:
   deriva con `npm run deploy:sin-pedido`; el que esta línea citaba quedó `archived` horas después).
   El parte sí salió (`OK message_id=6955`, 1.061 bytes): el canal funciona, el renglón no alcanza.
 
-  Y no se arregla solo con esperar: el orden es `🔴` en el título y después la posición en la
-  salida de `onia-tablero.sh list`, que no correlaciona con la edad ni con lo que el `ok`
-  desbloquea. Por eso **las mismas quedan afuera todos los días** — `t_6bf938b7`, que es de este
-  carril, lleva **24 días** (creada el 2026-09-03) en el puesto 16 y nunca se nombró. Es el modo de
-  falla del Punto de Venta del SIAT, que esperó 14 días, y esta hoja se creó para evitarlo.
+  ⚠️ **Los dos párrafos que seguían acá caducaron el mismo día que se escribieron — corregido el
+  2026-09-27 15:30 La Paz, derivando el guion del parte y no su recuento.** Decían que *«el orden
+  es `🔴` en el título y después la posición en la salida de `onia-tablero.sh list`, que no
+  correlaciona con la edad»* y que el arreglo estaba pendiente en *«`t_b3143556`, con la
+  reproducción y tres opciones cotizadas»*. **Las dos mitades están vencidas:** esa tarea se cerró
+  a las 10:57 y a las 12:44 su dueño instaló la **rotación** —`RONDA`, un archivo por sujeto con
+  `noclobber`— así que hoy el orden **sí** es por edad y cada decisión estable tiene su renglón
+  garantizado dentro de una ronda. Citar ese diagnóstico como presente manda a pedir un arreglo
+  que ya existe, que es el error que esta sección entera denuncia.
+
+  🔴 **Pero la rotación NO alcanza a un pedido de deploy, y por eso los tres ítems de abajo siguen
+  esperando. Medido el 2026-09-27, es aritmética y no mala suerte.** La rotación cura el starvation
+  de una decisión **estable**; un pedido de deploy **caduca por diseño** y se rehace con **id
+  nuevo** cada vez que se le suma un arreglo. Un id nuevo nunca «tuvo turno», así que entra en
+  `SIN_TURNO` — correcto— pero el orden ahí dentro es por **edad**, y su edad es *ahora*: entra
+  **último**, mientras su antecesor (que tal vez ya tenía turno cerca) se archiva. Los números:
+
+  | qué | cuánto |
+  |---|---|
+  | decisiones `needs_input` esperando (1 roja) | 18 → **4 renglones libres/día** |
+  | duración de una ronda completa | `ceil(17/4)` ≈ **5 días** |
+  | veces que se rehizo el pedido del bot | **30** (hasta 3 en un día: 15:40 → 15:41 → 16:45) |
+
+  **Un sujeto que vive horas contra una ronda que dura días no alcanza su renglón nunca.** Se
+  reproduce en seco, sin mandar nada a Telegram (`ONIA_TG` y `ONIA_PARTE_RONDA` son overrideables,
+  y la copia de la ronda mantiene la fidelidad):
+
+  ```bash
+  /root/bin/onia-vps.sh bash -lc 'cp -a /var/lib/onia-parte-diario/ronda /tmp/ronda-seca 2>/dev/null; ONIA_TG=/bin/echo ONIA_PARTE_RONDA=/tmp/ronda-seca /root/bin/onia-parte-diario.sh'
+  ```
+
+  Hoy nombra 5 y **ninguna es un pedido de deploy**, con los tres vivos esperando. El arreglo
+  sigue siendo del parte diario —maquinaria de loops, otro dueño— y la tarea con la reproducción y
+  las dos formas cotizadas (heredar el turno por **destino** en vez de por id, o no rotar como los
+  🔴) se **deriva**, no se copia: `list | grep -i 'rotacion lo trata como decision nueva'`.
 
   **Para este archivo cambia una cosa concreta:** los tres ítems que dicen *«se hace después del
   `ok`»* —T10, el de *«las líneas `[aviso]` … no llevan hora»* y el de *«`espejo-check.mjs` veta el
   árbol entero»*, los dos en «Después»— están esperando
   una firma **que no se está pidiendo en pantalla**, no una que Sergio Urcullo esté demorando. No
   se re-mide cada vuelta y **no se le vuelve a preguntar por Telegram** —sumar un aviso al canal
-  saturado es apagarlo—. El arreglo es del parte diario, que es maquinaria de loops y tiene otro
-  dueño: **`t_b3143556`**, con la reproducción y tres opciones cotizadas. Derivar, no copiar:
+  saturado es apagarlo—. El arreglo es del parte diario y tiene otro dueño (ver el bloque de
+  arriba: el id se deriva, porque el anterior ya se cerró el mismo día). Derivar, no copiar:
 
   ```bash
   /root/bin/onia-tablero.sh list > /tmp/tab.txt          # ¿en qué puesto está, y cuántas esperan?
