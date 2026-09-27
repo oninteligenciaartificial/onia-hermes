@@ -1,5 +1,9 @@
 # Hermes Agent Orchestration Order
 
+> **¿Venís a continuar la 1.0 (Codex)?** Leé primero la sección «🧭 EMPEZÁ ACÁ» de
+> `hermes-content/docs/handoff/codex-continuar-1.0.md`: tiene las ramas en vuelo, cómo se publica,
+> las trampas y lo que depende de Sergio Urcullo. Ojo: empujar una rama `claude/*` la publica.
+
 ## Orden principal
 Antes de ejecutar cualquier cambio relevante en Hermes, planear primero y dividir el trabajo en agentes especializados cuando la tarea lo justifique.
 
