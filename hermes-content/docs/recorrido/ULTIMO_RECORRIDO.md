@@ -12,6 +12,43 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-27 23:09-23:20 La Paz (vuelta HEAD b56dcd49) — dental 9/9 (quinta vez hoy), sin brecha nueva; la pregunta de la lección anterior (cola de otro carril) tampoco dio nada
+
+Chequeo de arranque: máquina `casa`, rama `claude/recorrido-cliente` OK, alta `abierta`, cron
+`9 * * * *` presente en `crontab -l`. Tablero: nada `ready` sin reclamar en zona
+`recorrido-cliente`; los `blocked` existentes son todos `needs_input` de otros carriles (SIAT,
+deploy, plata), ninguno pasó a listo.
+
+`node scripts/recorrido_cliente.mjs --escribir` completó **9/9** en "Clínica dental" (cuenta
+`zz-qa-2026-09-27-2309@onia.com.bo`, paciente, cita `2026-09-28 09:00`
+(`cmukfop5m00nx01n0y4x5gqdk`) vista en `/appointments`, factura `/billing/cmukfozob00nz01n0zry9378r`
+mirada y frenada sin pagar). `resumen.json`: `llegoHasta 9/9, completo true, agujeros []`. Base
+limpia: `appointments`/`organizations` con `zz-qa-%` = 0 tras la corrida.
+
+Siguiendo la lección de la vuelta 18:35: miré la cola de `recorrido-cliente.md` ("Reportado a
+otro carril (nuevo)" sigue vacía) y el tablero completo — nada propio pasó de `blocked` a listo.
+Como escalón siguiente probé cruzar una promesa numérica que este carril ya había verificado
+antes (14-sep, línea 4671 de este archivo) contra el código real, por si el valor se había
+desincronizado desde entonces: `TRIAL_DAYS = 14` sigue siendo la única fuente
+(`/root/loops/onia-platform/lib/subscription/plan-state.ts:22`), `trialEndFrom(now)` en
+`app/api/auth/register/route.ts:299` la hereda por default de parámetro sin hardcodear el
+número, y el espejo de marketing en `web-factory/apps/onia-platform` la referencia y la testea
+con `condicion-a-mano.test.ts` (`PRUEBA.dias` contra `TRIAL_DAYS`). Sin cambio desde la última
+vez: no era una brecha nueva, era una re-verificación de algo ya cerrado — lo anoto porque
+confirma que sigue sano, no como hallazgo.
+
+RAZÓN: no avanzó la medida — los 5 rubros, promesa-vs-entrega y la cola siguen agotados por
+hoy, y la brecha "cola de otro carril" de la lección anterior tampoco dio ítem nuevo.
+LECCIÓN: revisar la cola de otros carriles antes de rotar rubro (como sugirió la vuelta
+anterior) es un buen chequeo pero no genera trabajo cuando todos los `blocked` son
+`needs_input` de Sergio Urcullo: la próxima vuelta con `BUILD_ID` sin cambios debería, en vez de
+eso, tomar UNA cifra o promesa YA verificada hace más de una semana y revalidarla contra el
+código (no repetir el grep textual del sitio, que ya está exprimido) — el trial de hoy fue el
+primer caso de ese método y salió sano; quedan candidatas: el cupo de 500 conversaciones del
+chatbot, el corte al 80% del cupo, y `csvExportEnabled` desde plan básico.
+
+---
+
 ## 2026-09-27 18:09-18:35 La Paz (vuelta HEAD d0757d4d) — dental 9/9 (cuarta vez hoy), sin brecha nueva: los 5 rubros, promesa-vs-entrega y la cola ya estaban agotados antes de arrancar
 
 Chequeo de arranque: máquina `casa`, rama `claude/recorrido-cliente` OK, alta `abierta`, cron
