@@ -25,7 +25,7 @@
 // parsean TRES campos, se validan contra una lista blanca de cuentas y contra el
 // disco, y se invoca el publicador con execFile (sin shell, sin interpolacion).
 
-import { execFileSync, spawn } from 'node:child_process';
+import { execFileSync, spawn, spawnSync } from 'node:child_process';
 import { existsSync, readFileSync, statSync, readdirSync } from 'node:fs';
 import { isAbsolute, dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -234,8 +234,49 @@ export function motivoParaNoEjecutar(estado) {
   return `no conozco el estado "${e}", asi que no ejecuto nada (estados vivos: ${[...ESTADOS_VIVOS].join(', ')})`;
 }
 
+// El interprete que habla con el tablero. Vive SOLO en el VPS: es el MISMO
+// archivo con el que el chequeo de arranque de los loops identifica a esa
+// maquina, asi que por construccion no existe en nodo-casa — donde corren los
+// cuatro loops desde el 07-sep.
+export const PY_TABLERO = process.env.PY_HERMES || '/usr/local/lib/hermes-agent/venv/bin/python';
+
+// NO MEDIDO. Tiene codigo propio a proposito: 2 es "no habia nada que hacer" y 3
+// es "la tarea esta cerrada" — las dos son respuestas REALES del tablero, y esta
+// no lo es. Fundirla con cualquiera de ellas seria el mismo bug con otro
+// disfraz.
+export const NO_MEDIDO = 4;
+
+/**
+ * `null` = puedo preguntarle al tablero. Un string = NO pude preguntar, y ese
+ * string trae el remedio.
+ *
+ * POR QUE EXISTE. Medido el 2026-09-27 desde nodo-casa: `ONIA_DESPLEGAR_DRY=1
+ * node /root/bin/onia-publicar-aprobado.mjs t_60df5009` moria con `spawnSync
+ * /usr/local/lib/hermes-agent/venv/bin/python ENOENT` y exit 1 — un ENOENT
+ * pelado, sin nombrar la maquina ni el remedio; el mismo comando en el VPS
+ * contestaba `{"desplegando":true,"destino":"bot","seco":true}`.
+ *
+ * El simulacro en seco es el UNICO metodo para saber si un pedido de deploy es
+ * accionable ANTES de que Sergio Urcullo firme. Un loop que lo corre desde casa
+ * lee exit 1 y puede concluir que su `ok` no publicaria — cuando el circuito
+ * esta sano. Es "no pude preguntar" leido como "me dijeron que no", sobre el
+ * unico camino que decide si algo sale a produccion.
+ *
+ * Se queda en NO MEDIDO en vez de delegar la consulta por SSH: este script
+ * PUBLICA A PRODUCCION, y ensenarle a operar desde otra maquina agranda esa
+ * superficie por una comodidad de diagnostico. El comando remoto se NOMBRA para
+ * que lo corra quien lo necesite, con su propio SSH.
+ */
+export function motivoSinTablero(py, hayInterprete) {
+  if (hayInterprete) return null;
+  return `no pude preguntarle al tablero desde esta maquina: no existe el interprete ${py}. `
+    + 'Esto NO dice que el pedido este roto ni que el "ok" no publicaria: dice que aca no se puede medir. '
+    + `Lo que si contesta: /root/bin/onia-vps.sh bash -lc 'ONIA_DESPLEGAR_DRY=1 node /root/bin/onia-publicar-aprobado.mjs <id>'`
+    + ' — o exporta PY_HERMES si tenes el interprete en otra ruta.';
+}
+
 function tareaDelTablero(tid) {
-  const py = process.env.PY_HERMES || '/usr/local/lib/hermes-agent/venv/bin/python';
+  const py = PY_TABLERO;
   const salida = execFileSync(
     py,
     ['-m', 'hermes_cli.main', 'kanban', '--board', process.env.ONIA_TABLERO || 'onia', 'show', tid, '--json'],
@@ -301,7 +342,7 @@ export function precondicionPendiente(cuerpo, lista) {
 
 function listaDelTablero() {
   try {
-    const py = process.env.PY_HERMES || '/usr/local/lib/hermes-agent/venv/bin/python';
+    const py = PY_TABLERO;
     const salida = execFileSync(
       py,
       ['-m', 'hermes_cli.main', 'kanban', '--board', process.env.ONIA_TABLERO || 'onia', 'list', '--json'],
@@ -315,7 +356,7 @@ function listaDelTablero() {
 
 function pedidoVivoDe(destino) {
   try {
-    const py = process.env.PY_HERMES || '/usr/local/lib/hermes-agent/venv/bin/python';
+    const py = PY_TABLERO;
     const salida = execFileSync(
       py,
       ['-m', 'hermes_cli.main', 'kanban', '--board', process.env.ONIA_TABLERO || 'onia', 'list', '--json'],
@@ -520,6 +561,55 @@ function autotest() {
   const iPre = cuerpoMain.search(/if\s*\(\s*pendiente\s*\)/);
   ok(iPre > -1, 'main() tiene que CORTAR con esa precondicion');
   ok(iPre < iSpawn, 'la precondicion tiene que cortar ANTES del spawn del deploy');
+
+  // ── NO PUDE PREGUNTAR ≠ EL PEDIDO ESTA ROTO ───────────────────────────────
+  // El interprete del tablero vive SOLO en el VPS, y los CUATRO loops corren en
+  // nodo-casa. Medido el 2026-09-27 en las dos maquinas: desde casa el simulacro
+  // —el unico metodo para saber si un pedido es accionable ANTES de que Sergio
+  // Urcullo firme— moria con `spawnSync ... ENOENT` y exit 1, sin nombrar la
+  // maquina ni el remedio. Un loop que lee ese exit 1 puede concluir que el `ok`
+  // no publicaria, cuando el circuito esta sano: es exactamente el error que la
+  // casa ya tiene escrito como regla (un catch->false confunde "no pude
+  // preguntar" con "me dijeron que no").
+  ok(motivoSinTablero('/usr/bin/python3', true) === null, 'con interprete presente no tiene que cortar');
+  const sinPy = motivoSinTablero('/no/existe/python', false);
+  ok(typeof sinPy === 'string' && sinPy.length > 0, 'sin interprete tiene que dar un motivo');
+  ok(sinPy.includes('/no/existe/python'), 'el motivo tiene que NOMBRAR el interprete que falta');
+  // Las dos mitades que lo vuelven accionable en vez de un ENOENT pelado: que
+  // diga que NO midio, y con que comando se mide.
+  ok(/no pude preguntar/i.test(sinPy), 'el motivo tiene que decir que NO MIDIO, no que el pedido este roto');
+  ok(sinPy.includes('onia-vps.sh'), 'el motivo tiene que traer el comando que SI contesta');
+  ok(sinPy.includes('PY_HERMES'), 'el motivo tiene que nombrar el escape por variable de entorno');
+
+  // ANCLA DE CABLEADO. Los casos de arriba prueban la funcion pura; sin esto la
+  // guarda se esquiva no llamandola, y siguen en verde. Tiene que cortar ANTES
+  // de `tareaDelTablero`, que es la linea exacta donde hoy explota.
+  ok(/const\s+sinTablero\s*=\s*motivoSinTablero\(/.test(cuerpoMain),
+    'main() tiene que ASIGNAR el resultado de motivoSinTablero, no llamarla suelta');
+  const iSinPy = cuerpoMain.search(/if\s*\(\s*sinTablero\s*\)/);
+  ok(iSinPy > -1, 'main() tiene que CORTAR con ese motivo');
+  const iTablero = cuerpoMain.search(/tareaDelTablero\(/);
+  ok(iTablero > -1 && iSinPy < iTablero, 'la guarda tiene que cortar ANTES de consultar el tablero');
+
+  // PRUEBA DE COMPORTAMIENTO, no de forma: se corre el script de verdad con un
+  // interprete que no existe. Es seguro —corta antes de tocar el tablero y antes
+  // de cualquier spawn—, y es la unica que probaria el arreglo si alguien
+  // reescribe la guarda con otros nombres.
+  const yo = fileURLToPath(import.meta.url);
+  const corrida = spawnSync(process.execPath, [yo, 't_noexiste'], {
+    encoding: 'utf8', timeout: 60000,
+    env: { ...process.env, PY_HERMES: '/no/existe/python' },
+  });
+  ok(corrida.status === NO_MEDIDO,
+    `sin interprete tiene que salir ${NO_MEDIDO} (NO MEDIDO), dio ${corrida.status}: ${String(corrida.stderr).slice(0, 200)}`);
+  // 2 y 3 ya estan tomados y significan otra cosa ("no habia nada que hacer" y
+  // "la tarea esta cerrada"). Reusar uno seria volver a fundir dos respuestas
+  // distintas en un solo numero, que es el bug que esto arregla.
+  ok(NO_MEDIDO !== 2 && NO_MEDIDO !== 3 && NO_MEDIDO !== 0,
+    'NO MEDIDO no puede compartir codigo con "no habia nada que hacer" ni con "tarea cerrada"');
+  const dicho = JSON.parse(String(corrida.stdout || '{}'));
+  ok(dicho.medido === false, 'la salida tiene que declarar medido:false para que un consumidor lo distinga');
+  ok(dicho.desplegando === false && dicho.publicable === false, 'no midio: no puede afirmar que despliega ni que publica');
   console.log('autotest OK');
 }
 
@@ -527,6 +617,25 @@ const main = () => {
   const arg = process.argv[2];
   if (arg === '--autotest') return autotest();
   if (!arg) throw new Error('uso: publicar-aprobado.mjs <id-de-tarea>');
+
+  // 🔴 GUARDA DE "NO PUDE PREGUNTAR" — va ANTES de tareaDelTablero, que es la
+  // linea exacta donde esto explotaba con un ENOENT pelado. Sin ella, correr el
+  // simulacro desde nodo-casa —donde viven los CUATRO loops— sale con exit 1 y
+  // se lee igual que "el pedido esta roto".
+  //
+  // No la cubre el `catch` de abajo: ese traduce cualquier excepcion a exit 1,
+  // que es justo el numero que hace indistinguibles las dos respuestas.
+  const sinTablero = motivoSinTablero(PY_TABLERO, existsSync(PY_TABLERO));
+  if (sinTablero) {
+    console.log(JSON.stringify({
+      medido: false, publicable: false, desplegando: false, ejecutado: false,
+      interprete: PY_TABLERO, motivo: sinTablero,
+    }));
+    // Tambien por stderr: el brazo de Telegram muestra stderr cuando el codigo
+    // no es 0/2/3, asi que asi el remedio llega escrito en vez de un ENOENT.
+    console.error(sinTablero);
+    process.exit(NO_MEDIDO);
+  }
 
   const { cuerpo, estado } = tareaDelTablero(arg);
 
