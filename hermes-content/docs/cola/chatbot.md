@@ -298,6 +298,36 @@ tocarlo sumaría un archivo más al pedido de deploy del bot e invalidaría su c
 que esperan los otros dos ítems del carril (`:9576` y `:9691`)—. Se hace después del `ok`, en la
 misma vuelta que los otros dos, porque los tres tocan el subárbol del bot.
 
+🔴 **Y ese `ok` NO es inminente: entra en la hoja de decisiones el DÍA 5 de la rotación, no
+mañana. Medido el 2026-09-27 12:5x La Paz, corriendo el parte de verdad contra el tablero de
+verdad.** Los tres ítems de arriba decían «se hace después del `ok`» como si fuera cosa de un día,
+y con eso cada vuelta llega, lo encuentra bloqueado y se va sin nada. El parte diario nombra **5**
+de **18** decisiones por mañana y el resto **rota por antigüedad**: el pedido del bot nació hoy
+12:50, así que pierde contra 13 decisiones más viejas hasta que la ronda le llega. El de SIAT entra
+el día 4; el de `plataforma` entra el día 1 porque hereda la antigüedad de su destino
+(`deploy-plataforma` espera desde el **2026-09-03 19:38**) — o sea que la herencia de `df7a0803`
+funciona, y lo que se midió acá es su consecuencia, no un defecto.
+
+**Reproducción sin enviarle nada a nadie ni tocar el estado real** (el `ONIA_TG` falso guarda el
+mensaje en un archivo y la ronda va a `/tmp`; se corre en el VPS, que es donde el tablero es nativo
+y no un shim por SSH — desde nodo-casa el bucle `while read` del script se come el stdin):
+
+```bash
+git show origin/main:scripts/loops/parte-diario.sh | base64 -w0 \
+  | ssh root@187.77.16.63 'base64 -d > /tmp/pd-ensayo.sh'
+ssh root@187.77.16.63 'printf "%s\n" "#!/usr/bin/env bash" "printf %s \"\$1\" > /tmp/pd-mensaje.txt" \
+  > /tmp/tg-falso.sh; chmod 755 /tmp/tg-falso.sh /tmp/pd-ensayo.sh; rm -rf /tmp/pd-ronda
+  for d in 1 2 3 4 5; do ONIA_TG=/tmp/tg-falso.sh ONIA_PARTE_RONDA=/tmp/pd-ronda bash /tmp/pd-ensayo.sh >/dev/null 2>&1
+    printf "dia %s: " "$d"; grep -oE "ok t_[0-9a-f]+" /tmp/pd-mensaje.txt | tr "\n" " "; echo; done'
+```
+
+⚠️ **Lo que NO se hizo, y el motivo importa.** La válvula para saltarse la rotación existe y es el
+🔴 del **título** (`parte-diario.sh:143`; los 🔴 no rotan a propósito). Ponerle 🔴 a este pedido lo
+nombraría todas las mañanas — y **no se hizo**: la hoja tiene 5 renglones, un 🔴 más es un renglón
+rotativo menos **para siempre**, y ya hay un 🔴 sin contestar ocupando el suyo desde hace días. Eso
+es presupuesto de atención de Sergio Urcullo, no una decisión técnica de una sesión. Si una vuelta
+cree que corresponde, lo plantea con esta cuenta delante; no lo hace por su cuenta.
+
 🔴 **El ID del pedido no se nombra acá, y no es prolijidad: se midió.** El 2026-09-27 este párrafo
 decía *«el 14.º archivo de un pedido que describe 13 e invalidaría `t_3752e986`»* y las dos mitades
 estaban vencidas el mismo día — el pedido se rehizo (hoy describe **14** archivos, así que uno
