@@ -39,7 +39,7 @@
  * estático NUNCA dice «se activa solo»: eso es sólo del dinámico, que activa el
  * plan por el callback del banco. OJO: el QR estático existe en producción
  * recién DESPUÉS del deploy de la plataforma que sirve
- * `app.onia.com.bo/pago/qr-bcp-onia.jpg`; antes, el checkout sigue pidiendo los
+ * `app.onia.com.bo/pago/qr-bcp-onia.png`; antes, el checkout sigue pidiendo los
  * datos por WhatsApp. Por eso este cambio espera a ese deploy, y
  * `npm run medio-de-pago:vivo` lo verifica pidiendo la imagen. La función deja
  * de ser pura: lee el reloj para la vigencia, igual que el producto, y sus tres
