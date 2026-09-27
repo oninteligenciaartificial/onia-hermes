@@ -77,6 +77,66 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Ahora — plan de features (revisado 2026-08-30, con Gate 1 corrido)
 
+- [x] 🟠 **La tarjeta que se ve al compartir `onia.com.bo` por WhatsApp no la medía NADIE contra
+      producción. Gate nuevo el 2026-09-27 21:0x La Paz por `web-venta`. La tarjeta está sana;
+      lo que no existía era el instrumento que lo prueba.**
+      - **Cómo apareció.** Los cuatro medidores del objetivo estaban en verde (prohibidos 0 ·
+        precios 0 fuera de fuente · CTA 0/25 rotos · favicon 200) y la cola no tenía un ítem sin
+        marcar, así que —igual que la vuelta anterior, que cambió de ANCHO— esta cambió de
+        **superficie**: la primera pantalla del producto no es la home, es el PNG de 1200x630
+        que dibuja WhatsApp cuando Sergio Urcullo le pasa el link a un lead. El que nunca abre
+        el sitio ve sólo eso.
+      - **El punto ciego lo declara el propio código**, en `tarjeta-social.tsx:99`: *«Un monto
+        dentro de un PNG no lo ve ningún grep, ningún barrido de HTML ni ninguna captura: si
+        queda viejo, queda viejo en silencio.»* Lo que lo cuidaba era `hero.test.ts:247`, y mide
+        con `readFileSync("tarjeta-social.tsx")` — el **código fuente**. Exige que el precio se
+        interpole y que el dibujo no venda el add-on, y las dos cosas son ciertas.
+      - **Por qué no alcanza:** un defecto en producción tiene DOS causas y ese gate ve una. Con
+        el código perfecto y un build viejo, la tarjeta se comparte con un precio que ya no
+        existe, y los cuatro medidores del carril pasan en verde porque los cuatro leen TEXTO y
+        acá el texto son píxeles. La escalera de precios cambió dos veces este mes (el plan
+        `crece` el 12-sep, `a6adee05` el 17): en cualquiera de las dos el PNG podía quedarse
+        atrás sin que nada avisara.
+      - **Medido, no supuesto** (producción, UA de WhatsApp): las **12** rutas de `(sitio)`
+        sirven tarjeta, las 12 con el **mismo** md5 `2aae94e6ec55`, 1200x630, y ese md5 es **byte
+        a byte** el que genera el build de hoy. El monto horneado es `Bs 320`, que es
+        `planDeEntrada()` de `lib/pricing.ts`. Cobertura cruzada contra el disco: 24 de 25 rutas
+        con `page.tsx` tienen su `opengraph-image.tsx`; la que falta es `/patrones`, que está en
+        el `disallow` de `robots.ts` y no es superficie de venta.
+      - ⚠️ **Una hipótesis mía quedó REFUTADA y por eso no se tocó nada del dibujo.** Mirando el
+        PNG leí «la caja de las cuatro piezas queda con un tercio vacío a la derecha, se ve como
+        si faltara algo». Medido en píxeles: el marco va de x=72 a **x=1199**, o sea que SÍ se
+        escapa por el borde derecho — que es exactamente lo que el comentario de la línea 154
+        declara como intención (*«el sistema sigue, no se acaba en la tarjeta»*). Mi lectura
+        visual era opinión de dirección visual, no defecto, y cambiarlo habría sido **rediseño
+        sin el OK de Sergio Urcullo**. Se probó antes de anunciarlo, no después.
+      - **Visto en ROJO primero y por el motivo correcto:** con un servidor impostor que sirve
+        otro PNG válido de 1200x630, el cruce acusa las 12 rutas con
+        `producción sirve un dibujo DISTINTO del que genera el código de hoy` y sale **exit 1**;
+        contra el build real, `VERDE … y es el que genera el código de hoy`. El `--self-check`
+        falsifica los 10 casos sin red (ruta sin `og:image`, PNG que no es PNG, medidas
+        distintas de las declaradas, una ruta con otro dibujo…).
+      - **Tres decisiones que valen para el próximo que toque esto:** los sujetos se **derivan
+        del disco** (una lista escrita a mano envejece hacia el falso verde: la ruta nueva no
+        está, no se mide, pasa — así `/empezar` estuvo semanas sin tarjeta); el tamaño se **lee
+        de `export const size`** en vez de tipearse (un gate que repite el valor que vigila
+        defiende el valor, no la fuente); y sale por `traer` y no por `fetch` pelado, porque un
+        parpadeo de red daría un md5 vacío y el cruce lo leería como «producción está vieja» —
+        un rojo de ambiente sobre una tarjeta sana es como se le enseña a un carril a ignorar su
+        gate. Ese último lo atajó el gate `red-que-parpadea.test.ts` del propio repo.
+      - Archivos: `scripts/tarjeta-social-viva.{mjs,test.ts}` + alias `tarjeta-social:viva`.
+        Gates: `typecheck` 0 · `npm test` **124 archivos / 1.695 tests** · `build` 0 · medición
+        viva 12/12 verde y falsificada en rojo. La tarjeta MIRADA:
+        `/tmp/wv-tarjeta-que-ve-el-lead.png`.
+      - **Cómo se corre el cruce fuerte** (el que cierra fuente → código → píxeles servidos):
+
+            cd web-factory/apps/onia-platform && npm run build
+            PORT=3317 npm run start &
+            node scripts/tarjeta-social-viva.mjs --contra http://localhost:3317
+
+        Sin `--contra` mide igual contra producción y cuida lo que no necesita build. Si no
+        puede preguntar sale **2 = NO MEDIDO**, nunca 1.
+
 - [x] 🟠 **En las cuatro tarjetas de plan de la home, el punto verde de cada renglón quedaba
       contra el margen y su texto centrado lejos: la lista no se leía como lista. ARREGLADO Y
       GATEADO el 2026-09-27 09:1x La Paz por `web-venta`.**
