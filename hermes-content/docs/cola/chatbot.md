@@ -798,13 +798,25 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
 web↔bot, que es la primera cosa que ve un lead y la que nadie podía ver:
 
 ```bash
-node hermes-content/deploy/vps-ops/bot/campanas-vivas.mjs   # 0 par sano · 1 frase viva muerta · 2 NO MEDIDO
+node hermes-content/deploy/vps-ops/bot/campanas-vivas.mjs   # 0 par sano · 1 hay que ESCRIBIR la respuesta · 2 NO MEDIDO · 3 el repo ya la dice: falta PUBLICAR
 ```
 
-Va **acá y no en un alias** porque un alias suelto no lo corre nadie (ya pasó en este repo). Su
-`exit 1` significa que alguien que aprieta un botón de WhatsApp de la web recibe el saludo
-genérico en vez de la respuesta que califica; su `exit 2` significa **NO MEDIDO**, que no es
+Va **acá y no en un alias** porque un alias suelto no lo corre nadie (ya pasó en este repo). En
+los tres códigos distintos de cero, alguien que aprieta un botón de WhatsApp de la web recibe el
+saludo genérico en vez de la respuesta que califica — lo que cambia es **de quién es el trabajo**:
+`1` = ninguna versión de esa frase está desplegada, hay que escribir la respuesta (es de este
+carril); `3` = el repo ya la dice bien y producción tiene la versión vieja, así que no hay código
+que escribir y el remedio es el `ok` del pedido de deploy del bot; `2` = **NO MEDIDO**, que no es
 estar bien.
+
+⚠️ **El `3` existe porque el rojo de este medidor es PERMANENTE mientras el pedido de deploy
+espere firma, y un rojo permanente se archiva como «el de siempre».** Hasta el 2026-09-27 las dos
+clases salían con el mismo `exit 1`: el repo pasó las dos frases de agenda a *30 minutos* y
+producción sigue escuchando *20* y *45*, así que toda vuelta leía rojo por esa causa y el día que
+alguien rompiera una frase EN EL REPO —el caso que el medidor existe para agarrar— habría salido
+idéntico. Con una rota de cada clase manda el `1`, para que una respuesta que nadie escribió no
+quede escondida detrás del pedido. **Un `3` NO se trabaja acá: se comprueba que el pedido siga
+vivo y se sigue** (el ID se deriva, no se copia — ver el bloque de abajo).
 
 🔴 **Y UNO más desde el 2026-09-26, por la misma razón y con la prueba de que la razón es
 cierta:**
@@ -1183,6 +1195,65 @@ Las 3 que quedan (3492, 3623, 7674) son del motor leídas a mano pero **no tiene
 mecánica** en su cuerpo, así que el gate hace bien en no adivinarlas. Se derivan con el comando.
 
 ## Ahora
+
+- [x] 🔴 **CERRADO el 2026-09-26 21:13-22:05 La Paz (es una HERRAMIENTA DE MEDICIÓN de las 13 que
+      ya viajan en el pedido de deploy del bot, no el motor: el recuento sigue en 13 y NO cambia
+      una palabra de lo que el bot le dice a un cliente). El medidor del par web↔bot iba a salir
+      ROJO en todas las vueltas por una causa conocida, y con eso tapaba al rojo que sí importa.**
+
+      **Archivos:** `hermes-content/deploy/vps-ops/bot/campanas-vivas.mjs` y su gate
+      `hermes-content/deploy/vps-ops/bot/campanas-vivas.test.mjs`.
+
+      **Cómo saltó:** corriendo la medición de arranque de este carril. `campanas-vivas.mjs`
+      devolvió `exit 1` —«frase viva muerta»— con este veredicto: *«ROTO — 2 de 7 frases que la
+      web viva manda no las escucha el bot vivo»*. Las dos son los botones de agenda: el repo
+      pasó a *30 minutos* y producción sigue escuchando *20* y *45*. O sea que el repo **ya está
+      bien** y el remedio es el `ok` del pedido de deploy del bot, que espera firma.
+
+      **El defecto no es el rojo: es que hay UN SOLO rojo para dos cosas con remedios opuestos.**
+      Mientras el pedido espere firma, este medidor sale `1` en cada vuelta. Un rojo permanente con
+      causa conocida se archiva como «el ambiental de siempre» —ya pasó en este repo con los
+      `exit 2`— y entonces el día que alguien rompa una frase EN EL REPO, que es el caso que el
+      medidor existe para agarrar, sale **el mismo código** y nadie lo distingue. El propio archivo
+      ya sabía nombrar la diferencia en una línea de AVISO (*«lo esperable es que sea la versión
+      VIEJA»*), pero la afirmaba **en agregado** («con N rotas arriba») y el veredicto y el código
+      de salida no la usaban.
+
+      **Lo que se hizo.** El rojo se partió en dos según de quién es el trabajo, emparejando cada
+      rota con su versión vieja por `mismaFraseSalvoNumeros` (ignora los dígitos: así fue la deriva
+      real, 30 vs 20 y 45; un criterio más flojo emparejaría campañas distintas y mandaría a
+      esperar un deploy que no las arregla):
+
+      - `exit 1` — **ninguna** versión de la frase está desplegada: nadie escribió la respuesta.
+        Es de este carril. El deploy no la va a inventar.
+      - `exit 3` — el repo la dice bien y producción tiene la versión vieja: **no hay código que
+        escribir**, falta publicar. Sigue siendo rojo (el lead que aprieta el botón HOY recibe el
+        saludo genérico), pero no es trabajo de acá.
+      - Con una de cada clase **manda el `1`**, para que una respuesta que nadie escribió no quede
+        escondida detrás de un pedido de deploy que puede tardar días.
+
+      Y el AVISO dejó de inferir en agregado: ahora nombra **de cuál** rota es la vieja, o dice
+      que no empareja con ninguna y que por eso no se puede afirmar si sobra o si falta.
+
+      **Rojo primero, por los tres motivos correctos** (`expected 3, actual 1`; el veredicto sin
+      nombrar el remedio; y el caso mixto saliendo igual que el simple). Los tres casos que fijaban
+      el `1` sobre la deriva 30↔20 se actualizaron a `3` **agregando** el sub-caso de la otra clase,
+      así que ninguno quedó más débil: lo que cuidan —«nunca verde», «el rojo gana al NO MEDIDO»—
+      se asserta aparte del número.
+
+      **Prueba.** `campanas-vivas.test.mjs` **17/17** (eran 14). Cadena entera del bot
+      **1452/1452, 0 fail** (`npm run test:bot`). Medición viva, mismos datos que antes del cambio:
+
+          node hermes-content/deploy/vps-ops/bot/campanas-vivas.mjs   → exit 3
+          VEREDICTO: ESPERA DEPLOY — las 2 frase(s) rota(s) ya están bien en el repo y producción
+          tiene la versión vieja (archivo /tmp/onia-bot/knowledge.json, versión 2026-09-24.1): no
+          hay código que escribir, hay que publicar el bot. El lead que aprieta el botón HOY
+          recibe el saludo genérico
+
+      Los códigos quedaron documentados en la medición de arranque de esta cola y en la cabecera
+      del medidor. **El pedido de deploy no se invalidó:** `campanas-vivas.mjs` ya era uno de los
+      13 (entra como NUEVO), el cuerpo lo describe como *«mira si las campañas están vivas en el
+      bot, no en un archivo»* —que sigue siendo exacto— y el `--dry-run` sigue contando 13.
 
 - [x] 🔴 **CERRADO el 2026-09-26 18:13-19:02 La Paz (es el INSTRUMENTO de mirar, no el bot: NO
       toca producción y NO necesita deploy). El instrumento con el que este carril MIRA las

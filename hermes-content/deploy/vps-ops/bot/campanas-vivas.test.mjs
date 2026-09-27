@@ -67,8 +67,20 @@ test("una frase rota NUNCA puede salir verde, y el rojo dice qué recibe el lead
     web: new Set(["Quiero la demo de 30 minutos."]),
     bot: { frases: new Set(["Quiero la demo de 20 minutos."]), fuente: "archivo" },
   });
-  assert.equal(v.exit, 1);
+  // El caso es la deriva real (repo en 30, producción en 20), así que su código es el 3: rojo
+  // cuyo remedio es publicar. Lo que este caso cuida es que NUNCA sea 0, con cualquier remedio.
+  assert.notEqual(v.exit, 0, "una frase que la web manda y el bot no escucha no puede salir verde");
+  assert.equal(v.exit, 3);
   assert.match(v.lineas.join("\n"), /saludo genérico/, "el rojo tiene que decir qué recibe el lead");
+
+  // Y la otra clase de rotura, para que el caso no se apoye en un solo código de salida.
+  const sinNadaQueDesplegar = juzgar({
+    repo: ["Quiero la demo de 30 minutos."],
+    web: new Set(["Quiero la demo de 30 minutos."]),
+    bot: { frases: new Set(["Hola, vengo de una pauta"]), fuente: "archivo" },
+  });
+  assert.notEqual(sinNadaQueDesplegar.exit, 0);
+  assert.equal(sinNadaQueDesplegar.exit, 1, "sin versión vieja en producción el trabajo es de este carril");
 });
 
 test("no poder preguntarle a un lado es NO MEDIDO (2), nunca verde ni rojo", () => {
@@ -94,7 +106,8 @@ test("una ruta sin medir no puede TAPAR una frase rota: primero el rojo", () => 
     bot: { frases: new Set(["Quiero la demo de 20 minutos."]), fuente: "archivo" },
     noMedidas: [{ ruta: "/agentes", motivo: "HTTP 503" }],
   });
-  assert.equal(v.exit, 1, "hay una frase rota medida: eso es rojo, no NO MEDIDO");
+  assert.notEqual(v.exit, 2, "hay una frase rota medida: eso es rojo, no NO MEDIDO");
+  assert.equal(v.exit, 3, "y el rojo conserva su clase: el repo ya está bien, falta publicar");
   assert.match(v.lineas.join("\n"), /saludo genérico/);
   assert.match(v.lineas.join("\n"), /\/agentes/, "y la ruta que no se pudo medir se nombra igual");
 });
@@ -208,4 +221,48 @@ test("el knowledge del repo que este medidor lee es el que el deploy instala", (
     /docs\/chatbot\/campanas-onia\.knowledge\.json/,
     "ese hermano de docs/ no viaja en ningún deploy: leerlo es el falso verde que este gate evita",
   );
+});
+
+// ── las DOS clases de rotura, que tienen dueños distintos ────────────────────────────────
+//
+// Nace del 2026-09-26/27: este medidor entró a la medición de arranque del carril y salió
+// `exit 1` en TODAS las vueltas por una causa que él mismo ya sabía nombrar en su salida —el
+// deploy del bot esperando la firma de Sergio Urcullo, con el repo en 30 y producción en 20 y
+// 45—. Un rojo permanente por una causa conocida se lee como "el de siempre" y se saltea: el
+// día que alguien rompa una frase EN EL REPO, el gate dice lo mismo y nadie lo distingue. Es
+// el patrón que ya costó vueltas en este repo con los `exit 2` ambientales.
+//
+// Las dos clases piden trabajo OPUESTO, y por eso se separan por código de salida:
+//   · el bot tiene la versión VIEJA de la frase (difieren sólo en los números) → no hay nada
+//     que escribir: hay que DESPLEGAR. Sigue siendo rojo para el lead, pero no es del carril.
+//   · el bot no tiene ninguna versión de la frase → nadie escribió la respuesta. Es del carril.
+
+test("rotura que sólo espera el deploy no se cuenta igual que una rotura del repo", () => {
+  const v = juzgar({
+    repo: ["Quiero agendar la demo de 30 minutos."],
+    web: new Set(["Quiero agendar la demo de 30 minutos."]),
+    bot: { frases: new Set(["Quiero agendar la demo de 45 minutos."]), fuente: "archivo" },
+  });
+  assert.equal(v.exit, 3, "el repo ya dice lo correcto: el remedio es desplegar, no escribir código");
+  assert.match(v.veredicto, /deploy/i, "el veredicto tiene que NOMBRAR el remedio, no sólo que difiere");
+  assert.notEqual(v.exit, 0, "que el remedio sea un deploy no lo vuelve verde: el lead HOY recibe el saludo genérico");
+});
+
+test("rotura sin versión vieja en el bot sigue siendo rojo del carril (1)", () => {
+  const v = juzgar({
+    repo: ["Quiero agendar la demo de 30 minutos."],
+    web: new Set(["Quiero agendar la demo de 30 minutos."]),
+    bot: { frases: new Set(["Hola, vengo de una pauta"]), fuente: "archivo" },
+  });
+  assert.equal(v.exit, 1, "nadie escribió la respuesta: el deploy no la va a inventar");
+});
+
+test("con una rotura de cada clase gana la del carril: el deploy no puede tapar trabajo", () => {
+  const v = juzgar({
+    repo: ["Quiero la demo de 30 minutos.", "Quiero la consulta nueva."],
+    web: new Set(["Quiero la demo de 30 minutos.", "Quiero la consulta nueva."]),
+    bot: { frases: new Set(["Quiero la demo de 45 minutos."]), fuente: "archivo" },
+  });
+  assert.equal(v.exit, 1, "una rota que el deploy NO arregla manda: si no, queda escondida detrás del pedido");
+  assert.match(v.veredicto, /deploy/i, "y el veredicto igual nombra la parte que sí arregla el deploy");
 });
