@@ -4898,3 +4898,43 @@ verificada: `appointments zz-qa-=0`, `organizations zz-qa-=0` al cerrar.
 RAZÓN: N/A — avanzó (dental re-confirmado con el `BUILD_ID` nuevo, sin regresión).
 LECCIÓN: ninguna nueva — comparar `BUILD_ID` contra esta misma entrada antes de decidir si dental
 corresponde repetirse volvió a ser el filtro correcto: esta vez SÍ había deploy nuevo detrás.
+
+## 2026-09-27 08:09 La Paz (vuelta HEAD cc8bb40c) — dental 9/9 + comercio 8/8 con `BUILD_ID` nuevo, y un bug propio arreglado
+
+`BUILD_ID` comparado antes de decidir: vivo `PNIhLndYbrHxc_q0RFByG`, distinto al
+`DvBubiuO4uC5_E9jFNJeZ` de la corrida anterior → correspondía repetir dental.
+
+**Dental: RECORRIDO COMPLETO, 9/9, `completo: true`.** Cuenta `zz-qa-2026-09-27-1209@onia.com.bo`
+creada, confirmación de correo, onboarding en 6 pantallas, paciente
+`zz-qa-2026-09-27-1209-paciente` cargado y visto, cita 2026-09-28 09:00 agendada (id
+`cmujs3qdl00e201n0u0day4q0`) y vista en `/appointments`, factura con ítem
+`zz-qa-2026-09-27-1209-item` servida en `/billing/cmujs410300e401n05hudx75k` y frenada sin pagar.
+Sin hallazgo nuevo.
+
+**Con el resto de la vuelta, reverifiqué Comercio (sin agenda) contra el mismo `BUILD_ID`:
+RECORRIDO COMPLETO, 8/8 (paso 7 no aplica, correcto — el rubro no vende citas).** Cuenta
+`zz-qa-2026-09-27-1214@onia.com.bo`, onboarding completo, dato cargado en `/comercio` (storefront
+Catálogo) y visto en el panel, cobro mirado en `/comercio/caja`, frenado. Sin hallazgo nuevo.
+
+**Al contar la limpieza de comercio apareció un huérfano de 9 días: `onia_commerce_products`
+tenía una fila `zz-qa-2026-09-18-0710-paciente` cuya organización YA NO EXISTÍA** (`select count(*)
+from organizations where id=...` daba 0). Causa: mi barrido normal recorre organizaciones que
+`name ~ MIO` — si una corrida vieja logró borrar la organización pero dejó una tabla hija sin
+limpiar (versión anterior del script, o una pasada que no alcanzó esa tabla), esa fila deja de
+tener organización visitable y queda invisible para SIEMPRE a corridas futuras. La borré a mano
+(impresa antes de borrar: id `cmu6mfxkx003e01rwf1yylrwl` · nombre `zz-qa-2026-09-18-0710-paciente`
+· org `cmu6md3ha003101rwyzppf06i`, confirmada inexistente) y arreglé `scripts/recorrido_cliente.mjs`: agregué
+un barrido de huérfanos que busca filas `name ~ MIO` con `organizationId NOT IN (SELECT id FROM
+organizations)` en las 15 tablas con columna `name` + `organizationId` (`inventory_items`,
+`onia_accounting_*`, `onia_agents_agents`, `onia_commerce_*`, `onia_core_*`,
+`organization_api_keys`, `patients`, `profiles`, `treatments`), sin depender de que la
+organización siga existiendo. Probado insertando un huérfano sintético
+(`onia_commerce_products` con `organizationId` inexistente) y corriendo `--solo-limpiar`: lo
+detectó, lo listó en `antes.huerfanos` y lo borró (`huerfanosDespues: []`). `zzQaRestantes` ahora
+suma también los huérfanos que hayan quedado.
+
+RAZÓN: N/A — avanzó (dos rubros reconfirmados con `BUILD_ID` nuevo, sin hallazgo, y un agujero de
+9 días en mi propio instrumento cerrado con test).
+LECCIÓN: un borrado que camina por "organizaciones que existen" nunca ve la basura que quedó
+huérfana — el barrido tiene que caminar también por la FORMA del dato (`name ~ MIO`), no sólo por
+el padre. Se aplica a cualquier limpieza scoped-by-parent de este proyecto, no sólo a este script.
