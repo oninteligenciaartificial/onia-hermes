@@ -12,6 +12,34 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-27 14:09-14:34 La Paz (vuelta HEAD 03e7f34e) — dental 9/9 (repetido), sin hallazgo nuevo
+
+Chequeo de arranque: máquina `casa` (marcador `/root/.onia-nodo`). Los 4 crons de casa
+(`web-venta`, `onia-cola`, `chatbot-cola`, `recorrido-cliente`) están en `crontab -l` con la
+cadencia que dice `loops.md`: nada que rearmar. `ONIA_ALTA_AUTOMATICA=abierta`. Tablero: cero
+tareas `ready` sin reclamar en zona `recorrido-cliente` (todas las de la lista aparecen `done`).
+
+`node scripts/recorrido_cliente.mjs --escribir` (dental por defecto) — **9/9**. Cuenta
+`zz-qa-2026-09-27-1809@onia.com.bo`, onboarding completo (6 pantallas), paciente
+`zz-qa-2026-09-27-1809-paciente` cargado en `/patients`, cita `2026-09-28 09:00` agendada y VISTA
+en `/appointments` (`cmuk4z0mt00k901n0nt0i0rik`), factura mirada en `/billing/...` (ítem
+`zz-qa-2026-09-27-1809-item`) y frenada sin pagar. Limpieza verificada: `appointments`/
+`organizations` con `zz-qa-%` = 0 tras la corrida.
+
+Dental ya llevaba 5+ corridas hoy (los 5 rubros están cubiertos hoy: dental, estética, comercio,
+importadora, servicios profesionales — todos verdes, ver entradas de abajo). Esta corrida no
+suma cobertura nueva: es la default del script sin `RECORRIDO_RUBRO`. Para la próxima vuelta,
+rotar explícitamente a otro rubro en vez de dejar correr el default.
+
+RAZÓN: no avanzó la brecha de cobertura — dental ya estaba confirmado hoy varias veces; ningún
+hallazgo nuevo que reportar a otro carril.
+LECCIÓN: cuando los 5 rubros ya se corrieron el mismo día sin hallazgos, correr el default
+(dental) de nuevo no agrega información. La próxima vuelta debería fijar `RECORRIDO_RUBRO`
+explícito o buscar la brecha del punto 3 (promesa contra entrega) en vez del punto 2 (rotar
+rubro) cuando el punto 2 ya está agotado por hoy.
+
+---
+
 ## 2026-09-27 12:09-16:16 La Paz (vuelta HEAD 18defb5e) — dental 9/9 (repetido) y Estética 9/9 (rubro que faltaba hoy), sin hallazgo nuevo
 
 Chequeo de arranque: máquina `casa`. `ONIA_ALTA_AUTOMATICA=abierta`. Cron `recorrido-cliente`
