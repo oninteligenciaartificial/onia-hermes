@@ -29,6 +29,55 @@ contra producción (SSH al VPS, las dos bases, el motor corrido de verdad), no c
 
 ---
 
+## ✅ T13 — CERRADO el 2026-09-27 04:00 La Paz: mi propia sonda le mandaba a Sergio Urcullo un «DEMO AGENDADA — anotala» falso cada media hora, y enterró la única demo real 28 a 1
+
+**Qué pasaba.** El 2026-09-26 el tercer turno entró al guion por defecto de
+`scripts/sonda_widget.mjs` con el mensaje `'A'` — elegir el horario. El razonamiento era
+correcto (*«el único turno que produce plata quedaba sin medir»*) y el costo no se contó:
+**elegir un horario no es leer el bot, es ESCRIBIR en el embudo.** El motor marca
+`demo_agendada` y dispara el aviso a Telegram que dice *«DEMO AGENDADA — anotala»*. La sonda
+corre dos veces por hora.
+
+**Medido el 2026-09-27, no deducido** — `npm run demo:agendada`:
+
+```
+DEMOS QUE LLEGARON A SERGIO: 1 de un prospecto, 28 de sondas nuestras (29 en total)
+```
+
+**28 de 29, y creciendo ~48 por día**, cada uno con una instrucción falsa: no hay ninguna demo
+que anotar. Es justo el canal que Sergio Urcullo pidió limpio el 2026-09-05, y el objetivo de
+este carril es *«cada demo agendada o handoff le llega a Sergio»* — una señal enterrada 28 a 1
+**está apagada**. El instrumento que mide el objetivo era el que lo rompía.
+
+**Por qué el arreglo fue en la sonda y no en el emisor.** El aviso lo escribe
+`webhook-server.mjs`, que **no** está entre los 13 archivos del pedido de deploy vivo
+`t_3752e986`: tocarlo lo haría el 14.º e invalidaría un pedido que ya espera la firma. Se
+re-deriva con `onia-tablero.sh list --status blocked | grep -i 'Publicar el bot'`.
+
+**Qué cambió.** El 3.er turno **se conserva** —es donde el bot murió dos veces— y deja de
+escribir en el embudo: el mensaje pasó de `'A'` a `'¿Cuánto cuesta?'`. De yapa mide **el precio
+contra el widget real**, que es la otra mitad del objetivo y hasta hoy sólo se medía en seco con
+el simulador. El guion viejo quedó en `GUIONES_HISTORICOS` — sin esa fila las 28 conversaciones
+ya escritas vuelven a contarse como prospectos y `objetivo_visible.mjs` da el falso verde que
+`esRastroDeSonda` existe para evitar.
+
+**Verificado en producción** (no con un grep): la sonda con el guion nuevo contestó los tres
+turnos, el 3.º devolvió `Bs 320 … 550 … 890`, la fila quedó en **`esperando_horario`** y no en
+`demo_agendada`, y el contador de líneas `[aviso]` del bot vivo **no se movió** (33 → 33).
+`--self-check` **70/70**, con los tres casos nuevos en ROJO antes por el motivo correcto, y los
+cuatro hermanos que leen la sonda en verde (`veredicto-widget`, `objetivo-visible`,
+`demo-agendada`, `qa-sin-rastro`).
+
+⚠️ **La lección, que es más grande que el bug:** un instrumento que llega hasta el final del
+embudo **no es un lector, es un escritor** — y escribe en el mismo canal donde el carril busca su
+señal. Antes de que una sonda recorra un turno más, la pregunta es *qué ESCRIBE ese turno y quién
+lo lee*. Acá el mismo commit que mejoró la cobertura apagó la métrica que la cobertura servía.
+
+**Para medir el cierre de demo en vivo** sigue la costura, ahora con motivo para usarla a mano y
+no cada hora: `ONIA_SONDA_GUION='Hola, quiero informacion sobre el sistema|Tengo una clinica dental en Santa Cruz, somos 4 personas|A'`.
+
+---
+
 ## ✅ T12 — CERRADO el 2026-09-26 03:05 La Paz: el instrumento que decide si pedirle la firma a Sergio Urcullo mandaba al remedio OPUESTO para un archivo de cada cinco
 
 **Qué pasaba.** `scripts/bot_vivo_tiene_el_codigo.mjs` es el que contesta *«¿el bot vivo corre el

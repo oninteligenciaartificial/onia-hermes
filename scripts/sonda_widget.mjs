@@ -112,24 +112,33 @@ const NOMBRE_SONDA = 'Sonda QA carril chatbot';
 
 /**
  * Los mensajes del chequeo. Los dos primeros son los que fija el prompt del loop; el TERCERO
- * elige el horario, que es el turno donde la conversacion se vuelve una demo.
+ * existe porque el objetivo del carril nombra el 2.o y el 3.er turno, y el gate horario medía
+ * solo dos. La costura (`ONIA_SONDA_GUION`) se escribio el 2026-09-03 y no la corrio NADIE en
+ * tres semanas: un env suelto no lo corre nadie, asi que el turno tenia que entrar al default.
  *
- * Por que el tercero esta en el DEFAULT y no en la costura: el objetivo del carril nombra el
- * 2.o y el 3.er turno, pero el gate horario media solo dos. La costura para llegar al tercero
- * (`ONIA_SONDA_GUION`) se escribio el 2026-09-03 y no la corrio NADIE en tres semanas — un env
- * suelto no lo corre nadie, asi que el unico turno que produce plata quedaba sin medir.
+ * ⚠️ **El tercer mensaje era `'A'` —elegir el horario— y eso se revirtio el 2026-09-27, con el
+ * costo medido.** Elegir un horario no es LEER el bot: es ESCRIBIR en el embudo. El motor marca
+ * `demo_agendada` y le manda a Sergio Urcullo un Telegram que dice "DEMO AGENDADA — anotala".
+ * Contado con `npm run demo:agendada`: **28 de 29 avisos eran de esta sonda y UNO de un
+ * prospecto**. A dos corridas por hora son ~48 por dia sobre el canal que el pidio limpio
+ * (2026-09-05), cada uno con una instruccion falsa: no hay ninguna demo que anotar. Una senal
+ * real enterrada 28 a 1 esta apagada, y apagarla es exactamente lo que este carril viene a
+ * evitar.
  *
- * Medido el 2026-09-26 contra produccion: el bot contesta los tres y el embudo de
- * `onia_center.bot_conversations` paso de 0 a 1 `demo_agendada` (venia de 43 conversaciones con
- * 18 paradas en `esperando_horario` y CERO agendadas). El tercer turno ya andaba; faltaba mirarlo.
+ * Lo que se conserva y lo que se cambia: se conserva el 3.er turno, que es donde el bot murio
+ * dos veces. Cambia QUE se pregunta ahi. `'¿Cuánto cuesta?'` lo contesta el motor en el mismo
+ * estado `esperando_horario` (verificado en el simulador: `[notas] pregunta_precio`, sin pasar a
+ * `demo_agendada`) y de paso mide **el precio contra el widget real** — la primera mitad del
+ * objetivo del carril, que hasta hoy solo se medía en seco. El juez ya sabe juzgarlo: ver el caso
+ * «el precio que el bot vivo contesta hoy → 0».
  *
- * `'A'` sale del guion mismo: el bot cierra los dos primeros mensajes con "¿Cuál te va mejor?
- * **A)** … **B)** …", y `detectSlotChoice` resuelve la letra contra el par que el prospecto vio.
+ * Para medir el cierre de demo en vivo sigue estando la costura, ahora con un motivo para usarla
+ * a mano y no cada hora: `ONIA_SONDA_GUION='…|…|A'`.
  */
 export const GUION_POR_DEFECTO = Object.freeze([
   'Hola, quiero informacion sobre el sistema',
   'Tengo una clinica dental en Santa Cruz, somos 4 personas',
-  'A',
+  '¿Cuánto cuesta?',
 ]);
 
 /**
@@ -148,6 +157,13 @@ export const GUIONES_HISTORICOS = Object.freeze([
   Object.freeze([
     'Hola, quiero informacion sobre el sistema',
     'Tengo una clinica dental en Santa Cruz, somos 4 personas',
+  ]),
+  // El guion del 2026-09-26 al 2026-09-27: el que cerraba la demo con 'A'. Son las 28 demos que
+  // `npm run demo:agendada` cuenta como nuestras; sin esta fila vuelven a leerse como prospectos.
+  Object.freeze([
+    'Hola, quiero informacion sobre el sistema',
+    'Tengo una clinica dental en Santa Cruz, somos 4 personas',
+    'A',
   ]),
 ]);
 
@@ -1275,6 +1291,44 @@ async function selfCheck() {
     assert.strictEqual(GUION_POR_DEFECTO.length, 3, 'mutar lo devuelto no puede tocar el default');
   });
 
+  // EL COSTO QUE NADIE CONTO al meter el tercer turno en el default (2026-09-26): elegir un
+  // horario no es leer, es ESCRIBIR en el embudo. El motor marca `demo_agendada` y le manda a
+  // Sergio Urcullo un Telegram que dice "DEMO AGENDADA — anotala". Medido el 2026-09-27 con
+  // `npm run demo:agendada`: 28 de 29 avisos eran de esta sonda y UNO de un prospecto. A dos
+  // corridas por hora eso son ~48 por dia sobre el canal que el pidio limpio, cada uno con una
+  // instruccion FALSA: no hay nada que anotar. Una senal real enterrada 28 a 1 esta apagada.
+  //
+  // Por que el default y no un env: un interruptor suelto no lo corre nadie (es el mismo motivo
+  // por el que el tercer turno entro al default). El tercer turno se SIGUE midiendo — que es lo
+  // que valia — con una pregunta que el bot contesta en el mismo estado sin cerrar la demo.
+  caso('el guion por defecto NO cierra una demo en el inbox de leads reales', () => {
+    const eligeHorario = (m) => /^[ab]$/i.test(String(m).trim());
+    const culpable = GUION_POR_DEFECTO.find(eligeHorario);
+    assert.strictEqual(
+      culpable,
+      undefined,
+      `el guion manda "${culpable}", que el motor lee como elegir horario: escribe demo_agendada ` +
+        'y dispara un "DEMO AGENDADA — anotala" falso a Sergio Urcullo en cada corrida',
+    );
+  });
+  caso('el tercer turno se sigue midiendo, y ahora verifica el precio en vivo', () => {
+    assert.strictEqual(GUION_POR_DEFECTO.length, 3, 'el 3.er turno es donde el bot murio dos veces');
+    assert.match(
+      GUION_POR_DEFECTO[2],
+      /cu[aá]nto|precio|cuesta/i,
+      'el 3.er turno pregunta el precio: lo unico del objetivo que solo se medía en seco',
+    );
+  });
+  caso('el guion viejo sigue reconociendose como rastro nuestro', () => {
+    // Si no, `objetivo_visible.mjs` vuelve a contar las conversaciones ya escritas como "un
+    // desconocido escribio" — el falso verde que `esRastroDeSonda` existe para evitar, y que no
+    // se puede deshacer porque el contacto quedo con nombre anonimo.
+    const conTresYLaLetra = GUIONES_HISTORICOS.some(
+      (g) => g.length === 3 && /^[ab]$/i.test(String(g[2]).trim()),
+    );
+    assert.ok(conTresYLaLetra, 'el guion que se acaba de jubilar tiene que quedar en GUIONES_HISTORICOS');
+  });
+
   // Los dos primeros son filas REALES de produccion del 2026-09-02: la conversacion 47 es el bug
   // (murio en el segundo mensaje) y la 48 es la misma prueba despues del arreglo de las 17:19.
   const CONV_47 = [
@@ -1886,17 +1940,20 @@ async function selfCheck() {
     assert.strictEqual(esRastroDeSonda([''], ['']), false);
   });
 
-  caso('el default llega al TERCER turno, que es el que vale plata', () => {
-    // El carril media "widget 2/2" y su OBJETIVO nombra tres turnos: el tercero es donde el
-    // prospecto ELIGE el horario, o sea donde la conversacion se vuelve una demo. La costura
+  caso('el default llega al TERCER turno, que es donde el bot murio dos veces', () => {
+    // El carril media "widget 2/2" y su OBJETIVO nombra tres turnos. La costura
     // `ONIA_SONDA_GUION` existe desde el 2026-09-03 para llegar ahi y NADIE la corrio nunca:
-    // un env suelto no lo corre nadie, asi que el turno que decide quedaba sin medir cada hora.
+    // un env suelto no lo corre nadie, asi que el tercer turno tenia que entrar al default.
     //
-    // Medido el 2026-09-26 corriendola a mano contra produccion: el bot contesto los tres y el
-    // embudo paso de 0 a 1 `demo_agendada` (era 43 conversaciones con 18 paradas en
-    // `esperando_horario` y CERO agendadas). El tercer turno anda; lo que faltaba era mirarlo.
+    // ⚠️ Este caso exigia `GUION_POR_DEFECTO[2] === 'A'` y por eso la sonda cerraba una demo de
+    // mentira cada media hora. El 3.er turno se conserva —es lo que valia—; lo que cambio es que
+    // ya no ESCRIBE en el embudo. El por que, medido, esta arriba en `GUION_POR_DEFECTO` y en el
+    // caso «el guion por defecto NO cierra una demo en el inbox de leads reales».
     assert.strictEqual(GUION_POR_DEFECTO.length, 3, 'el default mide los tres turnos');
-    assert.strictEqual(GUION_POR_DEFECTO[2], 'A', 'el tercero elige el horario A que el bot acaba de ofrecer');
+    assert.ok(
+      !/^[ab]$/i.test(GUION_POR_DEFECTO[2].trim()),
+      'el tercero pregunta, no elige horario: elegirlo marca demo_agendada y avisa a Sergio Urcullo',
+    );
   });
 
   caso('los rastros VIEJOS de dos mensajes siguen reconociendose', () => {
