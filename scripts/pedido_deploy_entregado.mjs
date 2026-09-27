@@ -125,6 +125,49 @@ export function shasDelTexto(texto) {
 }
 
 /**
+ * Le pega a cada pedido su `show` —el único lugar donde se ven los COMENTARIOS— y declara si
+ * lo consiguió. `mostrar(id)` devuelve el `show` crudo, o algo que no lo sea si no pudo.
+ *
+ * 🔴 POR QUÉ EXISTE. La marca `DEPLOY PEDIDO <sha>` se escribe en un COMENTARIO —es lo que este
+ * mismo gate manda hacer cuando falta—, y `list --json` trae `body` pero los comentarios no
+ * están en ninguna de sus 23 claves. Medido el 2026-09-27 (tarea `t_11c16e58`) sobre
+ * `t_5a20e9bb`: el `show` imprimía «DEPLOY PEDIDO b68c9e52» y el gate contestaba «no declara ni
+ * un sha», rematando con la instrucción de escribir la marca **que ya estaba escrita**. El regex
+ * nunca estuvo mal; lo que se rompió fue de dónde sale el texto, el día que `pedidosVivos` pasó
+ * de un `show` por tarea a un solo `list --json` para no tardar 7 minutos con 72 tareas abiertas.
+ *
+ * Y apagó DOS controles, no uno: `shasPrometidos` deja de ver la marca, y `cuerpoVencido` cae en
+ * su rama muda (sin la cabecera de comentarios «todo cuenta como cuerpo»), así que el pedido que
+ * describe trabajo ya publicado deja de salir VENCIDO. Peor: un rojo permanente por el motivo
+ * equivocado se saltea como «el ambiental de siempre», y mientras dure tapa al rojo que el gate
+ * existe para cazar.
+ *
+ * LA OPTIMIZACIÓN SE CONSERVA, que era su razón de ser: el `show` se paga sólo por los pedidos
+ * —los cuerpos con línea `DESPLEGAR:`, que `barrerTablero` ya filtró del `list --json`—, no por
+ * tarea abierta. Medido el mismo día: 3 pedidos vivos × 2,4 s = ~7 s, contra los ~7 minutos que
+ * costaba preguntar por las 72.
+ *
+ * DISCRIMINADOR, y no es la cabecera `Comments (N):`: una tarea sin comentarios no la imprime
+ * (medido en `t_8baa5891`), así que su ausencia no distingue «no tiene» de «no pude leer». Un
+ * `show` válido siempre abre con `Task <id>:`. Ante la duda se conserva el cuerpo del `list
+ * --json` y se declara `comentariosLeidos: false`, para que `clasificarPedido` diga NO_MEDIDO
+ * ambiental en vez de acusar al pedido de estar mal escrito: son dos curas opuestas.
+ */
+export function conComentarios({ pedidos, mostrar }) {
+  return (Array.isArray(pedidos) ? pedidos : []).map((p) => {
+    let crudo = null;
+    try {
+      crudo = mostrar(p.id);
+    } catch {
+      crudo = null; // el shim por SSH puede morir: eso NO es culpa del pedido
+    }
+    const s = typeof crudo === 'string' ? crudo : '';
+    if (!s.includes(`Task ${p.id}`)) return { ...p, comentariosLeidos: false };
+    return { ...p, texto: s, comentariosLeidos: true };
+  });
+}
+
+/**
  * Los shas que el pedido PROMETE publicar. Sólo los declarados con la marca `DEPLOY PEDIDO
  * <sha>`, que es como este proyecto suma arreglos a un pedido que envejece.
  *
@@ -247,8 +290,24 @@ export function barrerTablero({ tareas }) {
  * PURA: decide el estado de un pedido. `publicado(sha)` devuelve true / false / null,
  * donde null es «no se sabe» y arrastra a VIGENTE, nunca a ENTREGADO.
  */
-export function clasificarPedido({ id, shas, publicado }) {
+export function clasificarPedido({ id, shas, publicado, comentariosLeidos = true }) {
   if (!shas || shas.length === 0) {
+    // «No lo escribió» y «no pude leer donde lo escribe» se curan en lugares OPUESTOS: el
+    // primero con un comentario, el segundo arreglando el ambiente. La marca vive en un
+    // comentario (ver `conComentarios`), así que sin haber podido leerlos no se puede acusar al
+    // pedido de estar mal escrito — hacerlo manda a escribir una marca que quizás ya está ahí,
+    // que es el bug de `t_11c16e58` con el signo cambiado. El default es `true` porque el
+    // llamador que no sabe nada de comentarios pregunta por el cuerpo y ya lo leyó.
+    if (comentariosLeidos === false) {
+      return {
+        id,
+        estado: 'NO_MEDIDO',
+        causa: 'COMENTARIOS_ILEGIBLES',
+        motivo: 'no pude leer los comentarios de la tarea, y la marca DEPLOY PEDIDO vive ahi',
+        sinPublicar: [],
+        indeterminados: [],
+      };
+    }
     // `causa` y no sólo `motivo`: el reporte tiene que poder separar este caso —el pedido
     // está mal escrito, y se arregla con un comentario— de los otros NO_MEDIDO, que son
     // AMBIENTALES (no pude fetchear, no pude derivar el build vivo). Distinguirlos comparando
@@ -1534,6 +1593,13 @@ async function medirEnVivo() {
     return 0;
   }
 
+  // Los COMENTARIOS, que es donde vive la marca `DEPLOY PEDIDO <sha>` y donde `list --json` no
+  // llega. Se paga un `show` por PEDIDO —tres hoy—, no por tarea abierta: ver `conComentarios`.
+  const conShow = conComentarios({
+    pedidos,
+    mostrar: (id) => salidaAunqueFalle('bash', [TABLERO, 'show', id], { timeout: 60_000 }),
+  });
+
   // Los refs ANTES de derivar nada: todo lo que sigue mide contra `origin/*` del disco, y con
   // un clon atrasado un pedido que SUB-DESCRIBE sale OK. Ver `refsAlDia`.
   const frescura = refsAlDia({
@@ -1637,7 +1703,7 @@ async function medirEnVivo() {
   const punteros = [];
   /** Pedidos cuyo `ok` no despliega nada aunque su cuerpo lo prometa. Ver `cuerpoNoEjecuta`. */
   const mudos = [];
-  for (const p of pedidos) {
+  for (const p of conShow) {
     const r = cuerpoPunteroMuerto({ texto: p.texto, idPropio: p.id, idsVivos: abiertos });
     if (r.estado === 'PUNTERO_MUERTO') punteros.push({ id: p.id, destino: p.destino, muertos: r.muertos });
     else if (r.estado === 'NO_MEDIDO') noMedidos.push(`${p.id} (${p.destino}, punteros): ${r.motivo}`);
@@ -1676,7 +1742,7 @@ async function medirEnVivo() {
     } catch { return false; }
   };
 
-  for (const p of pedidos) {
+  for (const p of conShow) {
     if (p.destino === 'landing') {
       if (buildLanding === null && shaLanding === null) {
         noMedidos.push(`${p.id} (landing): no pude leer el build vivo, ni su sha ni su fecha (¿SSH al VPS?)`);
@@ -1684,6 +1750,7 @@ async function medirEnVivo() {
       }
       const r = clasificarPedido({
         id: p.id,
+        comentariosLeidos: p.comentariosLeidos,
         shas: shasPrometidos(p.texto),
         publicado: (s) => publicadoEnLanding({
           porAncestria: ancestroDelBuildLanding(s),
@@ -1755,7 +1822,7 @@ async function medirEnVivo() {
       noMedidos.push(`${p.id} (plataforma): no pude derivar el build vivo ni el repo`);
       continue;
     }
-    const r = clasificarPedido({ id: p.id, shas: shasPrometidos(p.texto), publicado: esPublicado });
+    const r = clasificarPedido({ id: p.id, shas: shasPrometidos(p.texto), publicado: esPublicado, comentariosLeidos: p.comentariosLeidos });
     if (r.estado === 'ENTREGADO') entregados.push({ ...r, destino: 'plataforma' });
     else if (r.causa === 'SIN_DECLARAR') inmedibles.push({ id: p.id, destino: 'plataforma' });
     else if (r.estado === 'NO_MEDIDO') noMedidos.push(`${p.id} (plataforma): ${r.motivo}`);
