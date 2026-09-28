@@ -1,13 +1,157 @@
 # Skill: seguridad-credenciales
 
 ## Objetivo
-Proteger credenciales del VPS, Meta, OpenAI y Notion.
+Proteger credenciales y sesiones personales de la laptop y secretos de servicios
+de ONIA. Mantener el acceso de Codex y Claude dentro de las tareas autorizadas.
 
 ## Reglas
 - No repetir secretos completos en respuestas.
 - Si el usuario pega un secreto, recomendar rotarlo.
-- Guardar secretos solo en `/root/.hermes/.env`.
+- Credenciales personales para agentes: boveda KeePassXC local fuera del repo.
+- Secretos de servicios existentes en el VPS: su mecanismo de credenciales o
+  variables ya configurado (incluido `/root/.hermes/.env` cuando corresponda).
+  Esta regla no autoriza migrar o modificar secretos de produccion.
 - Para verificar, mostrar solo `<set>` o longitud aproximada.
+
+## Acceso local de Codex y Claude a apps personales
+
+Origen y vigencia: instrucción explícita de Sergio Urcullo, 2026-09-28.
+El objetivo es reutilizar las credenciales autorizadas y las sesiones vigentes
+de su laptop para reducir logins repetidos y operar sus apps web.
+
+### Alcance y ubicación
+
+- La bóveda escogida es KeePassXC en Windows. Ruta propuesta:
+  `C:/Users/PC/BovedaPrivada/Agentes.kdbx`. Es un archivo local fuera del repo;
+  confirmar que existe antes de depender de él. No crearlo con una contraseña
+  conocida por el agente ni cambiar su cifrado sin indicación de Sergio Urcullo.
+- Aplica a Codex y Claude Code que ejecuten herramientas locales bajo el usuario
+  autorizado. Claude web, agentes de nube, WSL u otro equipo no heredan acceso
+  a la bóveda o al navegador automáticamente.
+- El VPS de ONIA Platform mantiene su función de producto. Esta regla no
+  autoriza alojar allí la bóveda personal, copiarle cookies o abrir un servicio
+  de acceso remoto al navegador.
+- KeePassXC cifra las entradas dentro del archivo; usarlas requiere descifrarlas
+  en el proceso autorizado. Los grupos de una base no son barreras de permisos:
+  quien obtiene su clave maestra puede acceder al conjunto de esa base.
+
+### Antes de pedir otro inicio de sesión
+
+1. Comprobar únicamente presencia de la base y disponibilidad del mecanismo
+   autorizado para la cuenta de la tarea; no inspeccionar ni imprimir sus valores.
+2. Revisar la sesión de la app usando la herramienta de navegador disponible
+   y sus permisos. Si sigue vigente, reutilizarla y continuar el trabajo.
+3. Si la app admite el flujo requerido por CLI/API oficial y ya hay autorización
+   local, reutilizarla. Un login web de Google no implica login de la CLI.
+4. Si falta autenticación, usar el puente de credenciales configurado para
+   esa cuenta. Una base abierta en KeePassXC no habilita automáticamente
+   `keepassxc-cli`, Playwright ni otro proceso; cada integración debe configurarse.
+5. Si falta la base, el puente o el acceso del navegador, indicar exactamente
+   qué falta. No afirmar que todas las apps están conectadas porque existe
+   una regla. Preparar lo reversible que no requiera claves ni instalaciones.
+6. Pedir a Sergio Urcullo sólo la intervención humana necesaria para desbloquear
+   en KeePassXC/Windows Hello si está disponible, autorizar Google, dar
+   consentimiento o resolver MFA/CAPTCHA. Nunca pedir su contraseña maestra
+   en el chat ni intentar evadir controles de autenticación.
+
+La autorización existente para usar una cuenta dentro de una tarea se conserva.
+No volver a pedir permiso para cada lectura o paso si ya está autorizado y
+la sesión sigue vigente. La sesión puede caducar o ser revocada.
+
+### Credenciales y perfiles
+
+- El puente entrega la credencial al proceso que la utiliza, sin devolverla
+  como texto al modelo, stdout, logs, historial del shell, capturas, docs o Git.
+  No ejecutar exportaciones completas ni comandos que impriman claves.
+- No guardar la contraseña maestra en scripts, argumentos, variables, memoria
+  del agente o notas. La introduce Sergio Urcullo directamente en la aplicación.
+- Usar sesiones existentes autorizadas cuando la herramienta pueda acceder a
+  ellas. Si se configura Playwright persistente, emplear un perfil dedicado
+  fuera del repo, por ejemplo `C:/Users/PC/BovedaPrivada/BrowserProfiles/<cuenta>`.
+  Ese perfil contiene credenciales de sesión; proteger su carpeta y comprobar
+  el cifrado del disco antes de tratar el perfil completo como cifrado.
+- No iniciar con `launchPersistentContext` un proceso nuevo sobre el directorio
+  principal de Chrome: para eso se usa un perfil dedicado. Es válido reutilizar
+  el Chrome existente con un conector autorizado que ya controle sus pestañas.
+- No copiar perfiles entre worktrees ni abrir dos procesos con el mismo
+  `userDataDir`. Coordinar su uso con un único navegador/worker o un bloqueo
+  antes de trabajar en paralelo.
+- Respetar las restricciones de la herramienta de navegador disponible. Tener
+  Playwright instalado no habilita una vía alternativa cuando el entorno
+  exige otro proveedor o no concede acceso al navegador.
+- No exponer CDP ni un puerto de control del navegador a Internet. Una red
+  privada, un worker remoto o cualquier instalación requieren preparación y
+  autorización específica, y no forman parte de guardar esta regla.
+
+### Acceso y acciones
+
+El acceso sirve para ver y operar las apps habilitadas dentro de la tarea.
+No amplía por sí mismo el permiso a pagos, consumo de créditos, generaciones
+pagadas, publicaciones, mensajes a terceros, borrados o cambios de producción.
+Se mantienen las aprobaciones existentes del proveedor y del proyecto.
+
+Para Higgsfield rige `hermes-content/docs/HIGGSFIELD_VIDEO_SYSTEM.md`: CLI
+oficial para operaciones soportadas; controles exclusivos de web según el
+flujo manual autorizado. No montar producción o descargas por Playwright web
+desde el VPS. Cotizar y aprobar el gasto según la regla vigente antes de generar.
+
+Antes de descargar o instalar cualquier componente (incluidos extensiones,
+plugins, dependencias que `npx` descargue o navegadores de Playwright), explicar
+su nombre, origen y propósito y esperar aprobación explícita de Sergio Urcullo.
+
+### Estado y comprobación
+
+El 2026-09-28 se comprobó KeePassXC 2.7.12 instalado. Sergio Urcullo creó una
+base `.kdbx` y se confirmó su existencia por metadatos, sin leer entradas.
+La primera ubicación fue `OneDrive/Escritorio`; se indicó usar Guardar como
+para dejar la base activa en la ruta local acordada fuera de OneDrive.
+Verificar de nuevo la ubicación definitiva antes de operar.
+
+También se comprobó que el conector de navegador disponible en Codex puede
+leer la sesión ya autenticada de Higgsfield en el Chrome `OnIA` (pantalla Assets
+y menú de cuenta presentes). No se generó, descargó ni modificó contenido.
+Esto prueba acceso de navegador en Codex a esa cuenta; no prueba acceso al
+interior de KeePassXC ni la conexión equivalente de Claude Code.
+
+El proveedor rechazó por política abrir `chrome://extensions/`, por lo que no
+se confirmó si KeePassXC-Browser está instalada. No intentar inspeccionarla
+mediante vías alternativas que eludan ese rechazo. Sergio Urcullo aprobó el
+2026-09-28 instalar la extensión oficial KeePassXC-Browser en Chrome `OnIA`
+y conectarla a su bóveda para las credenciales que permita. No pedir de nuevo
+esa autorización en esta tarea; no cubre otros componentes o nuevas finalidades.
+Abrir la página oficial de Chrome Web Store mediante el conector también
+devolvió `Not allowed`. La instalación y la asociación con KeePassXC requieren
+el paso manual en la UI protegida; no se descargó ni instaló la extensión.
+
+Procedimiento aprobado: guardar la base activa en la ubicación local acordada;
+abrir el enlace oficial que figura abajo y añadir KeePassXC-Browser a Chrome;
+en KeePassXC, Herramientas > Configuración > Integración con navegadores,
+habilitar la integración y seleccionar Chrome. Con la base desbloqueada,
+abrir la extensión, pulsar Conectar y elegir un nombre único como
+`OnIA-Agentes-Windows`. Sergio Urcullo confirma la asociación y las entradas
+permitidas directamente en la aplicación, sin enviar claves al chat.
+
+Enlace oficial aprobado:
+https://chromewebstore.google.com/detail/keepassxc-browser/oboonakemofpalcgghocfoadofidjkkk
+
+Pendiente: confirmar ubicación definitiva de la base, cargar las entradas
+autorizadas en la app y conectar el puente compatible con cada agente/navegador.
+Comprobar con una cuenta autorizada que se abre la app y que una segunda tarea
+reutiliza la sesión; registrar sólo éxito/error y datos no sensibles.
+Guardar la regla no equivale a completar esa conexión. Todas estas comprobaciones
+son puntuales; volver a revisar disponibilidad cuando una tarea la necesite.
+
+Las instrucciones globales de la laptop (`~/.codex/AGENTS.md` y
+`~/.claude/CLAUDE.md`) contienen la regla resumida. Las sesiones nuevas las
+leen al arrancar; las tareas ya abiertas deben recibir el aviso y releerlas.
+
+Fuentes oficiales:
+- https://keepassxc.org/docs/KeePassXC_GettingStarted
+- https://playwright.dev/docs/auth
+- https://playwright.dev/docs/api/class-browsertype#browser-type-launch-persistent-context
+- https://developers.openai.com/codex/guides/agents-md
+- https://code.claude.com/docs/en/memory
+
 
 ## Comandos seguros
 
@@ -78,6 +222,7 @@ Si `expires_at` existe y no es `0`, agendar rotacion antes de esa fecha.
 Decir:
 - El secreto debe tratarse como expuesto.
 - Rotar password/token.
-- Actualizar `/root/.hermes/.env`.
-- Reiniciar servicios si aplica.
+- Actualizar la entrada de KeePassXC o el mecanismo del servicio afectado,
+  incluido `/root/.hermes/.env` si es el almacen de ese servicio.
+- Reiniciar servicios solo si aplica y existe autorizacion para produccion.
 - Buscar y eliminar cualquier copia en Markdown, capturas o logs compartidos.

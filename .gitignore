@@ -6,6 +6,12 @@
 *.pem
 *_token.txt
 **/credentials.json
+# Bovedas y sesiones personales: fuera de Git, incluso si se copian por error.
+*.kdbx
+*.kdbx.lock
+*.keyx
+**/playwright/.auth/
+.hermes/browser-profiles/
 # Sesion de Instagram de fetch-video.mjs: perfil de Chromium + cookies.txt con
 # el sessionid. Es una credencial viva — jamas al repo.
 .hermes/ig-session/

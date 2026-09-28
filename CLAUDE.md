@@ -10,6 +10,31 @@ Instrucciones de proyecto. Override sobre defaults.
 
 # 1. Al arrancar
 
+## Acceso local a apps, credenciales y sesiones (regla compartida)
+
+Origen: Sergio Urcullo, 2026-09-28. Evitar que Codex y Claude pidan iniciar
+sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
+
+- Antes de pedir claves o un login, leer `hermes-content/skills/seguridad-credenciales.md`
+  y comprobar la sesión y el mecanismo local de acceso ya autorizados para esa cuenta.
+- La bóveda KeePassXC prevista es `C:/Users/PC/BovedaPrivada/Agentes.kdbx`, fuera
+  del repo. Verificar su existencia y la integración; KeePassXC abierto no concede
+  acceso automático a Codex, Claude Code, Playwright ni agentes remotos.
+- Reutilizar la sesión vigente mediante la herramienta de navegador disponible
+  y sus permisos. Los perfiles persistentes se guardan fuera de Git y se usan
+  de forma serializada; no crear un contexto efímero nuevo por cada tarea.
+- Usar la credencial necesaria mediante un puente configurado. No volcar la bóveda,
+  mostrar contraseñas/tokens/cookies, exportar secretos a texto ni pedir la
+  contraseña maestra por chat. Google, consentimiento y MFA requieren a Sergio
+  Urcullo cuando corresponda; no prometer sesiones permanentes.
+- El acceso a una cuenta mantiene el alcance de la tarea autorizada. Pagos,
+  generaciones pagadas, publicaciones, contacto con terceros y producción
+  conservan sus aprobaciones específicas.
+- Antes de descargar o instalar herramientas, dependencias, navegadores,
+  plugins o extensiones, explicar qué componente y propósito y pedir aprobación.
+  El VPS de ONIA Platform no se usa para alojar esta bóveda o sesiones personales.
+
+
 ## Objetivo por sesión (REGLA)
 
 > Sergio, 2026-07-20: separar el trabajo en muchas sesiones mezcla la información y se

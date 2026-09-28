@@ -5,6 +5,30 @@ This file prevents duplicate work while two Codex/Hermes sessions run at the sam
 
 Use this as the source of truth before creating new files, skills, docs, or scripts.
 
+## Credenciales y sesiones personales en laptop — 2026-09-28
+
+Carril Codex: `codex/regla-acceso-local-20260928`, worktree
+`C:/Users/PC/.codex/worktrees/regla-acceso-local-agentes/onia-hermes`.
+Alcance documental: `AGENTS.md`, `CLAUDE.md`, `.gitignore` y la fuente existente
+`hermes-content/skills/seguridad-credenciales.md`. Se añade la regla de consultar
+sesiones/credenciales autorizadas antes de pedir otro login; la bóveda prevista
+vive en la laptop, fuera del repo. También se añaden instrucciones globales
+en `C:/Users/PC/.codex/AGENTS.md` y `C:/Users/PC/.claude/CLAUDE.md` y una nota
+de preferencia en el directorio de memoria autorizado.
+
+Estado: regla aplicada en instrucciones globales y locales, con revisión de
+seguridad documental. Base creada por Sergio Urcullo y confirmada por metadatos;
+ubicación local definitiva y puente pendientes. Codex pudo leer la sesión vigente
+de Higgsfield en Chrome OnIA sin login, gasto ni cambios. Sergio Urcullo aprobó
+la extensión oficial KeePassXC-Browser y su conexión; el proveedor rechazó la
+UI interna y la tienda, por lo que instalación/asociación requieren paso manual.
+El checkout principal conserva trabajo ajeno; sólo recibe los fragmentos
+documentales de este carril. Commit/push en la rama aislada;
+sin merge o commit en `main`. No se instaló/descargó software ni se leyeron claves,
+configuró el navegador, realizaron logins o tocaron servicios del VPS.
+Las otras tareas de estrategia y marca personal fueron notificadas antes de editar.
+
+
 ## Infra retomada en Codex — 2026-09-21
 
 Sergio Urcullo trasladó el carril de Claude a la tarea Codex de ONIA Platform.
