@@ -1,0 +1,162 @@
+# Continuar los guiones con Claude
+
+Handoff pedido por Sergio el 28-sep-2026. Leer este archivo y el guion enlazado;
+no reiniciar una auditoría extensa ni convertir el encargo en un calendario.
+
+## 1. Dónde continuar
+
+- Worktree: `C:/Users/PC/.codex/worktrees/6af1/onia-hermes`.
+- Rama: `codex/guiones-reinicio-20260928`.
+- Archivo de trabajo único:
+  `hermes-content/docs/cola/GUIONES-REINICIO-2026-09-28.md`.
+  Tiene primero el guion de Opus 5.5, enseñanza personal, ficha técnica O55,
+  fuentes, caso de prueba y clave de corrección. Después conserva dos guiones
+  anteriores (cotizador HTML y corrección de SRT).
+- Leer AGENTS.md y COORDINATION_MANIFEST.md. No mezclar cambios de otras tareas,
+  no usar `git add -A`, no publicar ni desplegar.
+- Este worktree es distinto del checkout `C:/dev/proyectos/onia-hermes`.
+  Si Claude arranca allí, abrir estos archivos por su ruta absoluta o trabajar
+  en este worktree. No asumir que las ramas contienen lo mismo.
+
+## 2. Qué pidió Sergio y qué corregimos
+
+Quiere contenido de calidad, actual, pertinente y con señales reales de interés
+en su nicho. Sus referentes enseñan cosas actuales; no quiere recetas evergreen
+elegidas sin explicar por qué importan ahora.
+
+Pidió empezar simple: **un guion sobre el nuevo Opus 5.5**. Preguntó cómo se
+decidía que una técnica era la mejor y exigió una **ficha técnica que permita
+saber de dónde sale la información, cómo se aprendió y qué se comprobó**.
+Le parece lógico hacer una pequeña prueba, sin inventar resultados.
+
+Sergio graba a cámara. El agente/editor se ocupa de prompts, archivos,
+demostraciones, capturas, pantallas, subtítulos y montaje. **La entrega para
+Sergio es solo el guion hablado y una enseñanza para él al final, fuera de
+cámara.** La ficha y la preparación se conservan en el archivo de trabajo,
+accesibles pero sin llenar la respuesta con producción o investigación.
+
+Los temas de cotizador y SRT le gustaron como punto de partida, pero cambió la
+prioridad a actualidad. No insistir con esos dos antes de terminar Opus.
+Eso no autoriza publicación ni significa que sus demos estén ejecutadas.
+
+La sesión anterior a este reinicio fue rechazada por vacía/incompleta.
+`RODAJE-MARCA-PERSONAL-2026-09-27.md` y el JSON `EXTRACCION-REFERENTES-GUIONES.json`
+no certifican guiones aprobados. No traerlos como conclusiones editoriales.
+
+## 3. Hacia dónde va el contenido
+
+El recorrido editorial acordado es:
+
+**Actualidad pertinente → para qué sirve → pequeña prueba → tarea reproducible
+→ aprendizaje propio → aplicación real en ONIA/ONIA Platform cuando encaje.**
+
+- Sergio: enseñar y documentar como constructor; lenguaje conversado y concreto.
+- ONIA/Platform: prueba comercial y aplicación real, sin convertir cada reel
+  en publicidad ni atribuir funciones o resultados que no se verificaron.
+- La comunidad/web puede recibir recursos y profundización cuando existan.
+  No prometer «comentá X y te envío» si el recurso y la entrega no están listos.
+- Primera pieza: Opus 5.5, qué cambió y cómo evaluarlo hoy.
+- Continuación lógica, condicionada a la prueba: mostrar un resultado real,
+  explicar el procedimiento y después su aplicación en una tarea de negocio.
+  No hay calendario aprobado ni obligación de producir una serie larga.
+
+La ficha debe registrar fecha, versión/producto, fuente primaria, señal social,
+material realmente observado, decisión editorial, prueba y resultado o bloqueo.
+Comprobar actualidad otra vez el día de publicar. Una tendencia ayuda a elegir
+tema; no demuestra que una herramienta funcione mejor. Una demo prueba un caso,
+no superioridad general. No confundir vistas/likes con eficacia didáctica.
+
+## 4. Referentes y fuentes concretas
+
+Sergio añadió explícitamente que le encantan **Santiago Muñoz y Enrique Rocha**.
+Incluirlos entre los principales, junto con Erik e Ian. Tiago y Carlos también
+están en la selección usada. Inspirarse en claridad y estructura sin copiar
+frases, identidad ni afirmaciones personales.
+
+| Referente | Perfil | Pieza / estado observado el 28-sep |
+|---|---|---|
+| Santiago Muñoz | https://www.instagram.com/sanmunoz.ia/ | Opus: https://www.instagram.com/sanmunoz.ia/reel/DdpMVvQopMC/ — 23-sep 20:42 UTC, caption y fecha; señala Opus5.5 y condiciones del costo. Sonnet: https://www.instagram.com/sanmunoz.ia/reel/Dd2KbhWIRap/ — 28-sep 21:35 UTC, caption y fragmento visual |
+| Enrique Rocha | https://www.instagram.com/soyenriquerocha/ | https://www.instagram.com/soyenriquerocha/reel/Dd2S811ODEy/ — 28-sep 22:52 UTC, Sonnet5.5; caption, fecha y fragmento a cámara |
+| Erik Taveras | https://www.instagram.com/eriktaveras/ | https://www.instagram.com/eriktaveras/reel/Ddxz2P_uCp6/ — 27-sep UTC, subagentes; fragmentos y guía pública leída |
+| Ian Lee | https://www.instagram.com/ianlee.js/ | https://www.instagram.com/ianlee.js/reel/DdmNXhGOnHe/ — 22-sep, construcción con API/Higgsfield; caption y fragmentos |
+| Tiago Lemos | https://www.instagram.com/tiagolemosx/ | https://www.instagram.com/tiagolemosx/reel/DdzhIFKRQ43/ — 27-sep 20:56 UTC, edición con Claude; caption y fragmento. No verificamos su afirmación de edición integral por IA |
+| Carlos Domínguez | https://www.instagram.com/carlosdominguez.dev/ | https://www.instagram.com/carlosdominguez.dev/reel/Dd1j7n7xRyM/ — 28-sep 15:59 UTC, workflow n8n creado con Claude Code; caption y fecha. No ejecución propia ni modelo Opus confirmado |
+
+No se vieron completos todos esos reels. No decir «analicé todo su contenido».
+La muestra muestra actividad contemporánea del nicho; no es un estudio de
+tendencia global ni prueba de que todos estén hablando de Opus.
+
+Fuentes oficiales consultadas para el guion:
+
+1. https://www.anthropic.com/claude-opus-5-5 — anuncio fechado 22-sep-2026.
+2. https://www.anthropic.com/claude/opus — disponibilidad y precio; su encabezado
+   conserva “Opus4.8”, aunque el cuerpo describe5.5. Preferir anuncio fechado.
+3. https://www.anthropic.com/claude-sonnet-5-5 — lanzamiento 28-sep-2026.
+
+Hechos que cambian el guion:
+
+- **Opus5.5 salió el22; Sonnet5.5 salió el28.** No decir que Opus salió hoy.
+  El lanzamiento nuevo de Sonnet mantiene relevante elegir dónde usar Opus.
+- Anthropic reporta aproximadamente40% menos costo frente a Opus5 en tareas
+  típicas facturadas por tokens, a configuración predeterminada. **No es una
+  rebaja de40% de la mensualidad ni un ahorro garantizado.**
+- Opus normal: USD4/M entrada, USD20/M salida, USD0,20/M lectura de caché.
+  El precio por token entrada/salida baja20%; el ahorro total40% combina
+  precios y consumo. Fast mode tiene otra tarifa; no mezclar.
+- Disponibilidad general publicada: Pro, Max, Team, Enterprise y API/plataformas.
+  No se comprobó acceso en la cuenta de Sergio.
+- Trabajo complejo y comunicación más clara: afirmaciones del fabricante,
+  no resultados propios de ONIA. Evitar superlativos universales.
+
+## 5. Prueba preparada y bloqueo concreto
+
+La ficha O55 contiene el prompt íntegro de tres presupuestos ficticios para
+una web durante tres meses, con presupuesto máximo Bs1200, dominio propio y
+exportación de datos obligatorios. Clave revisada:
+
+- A: 300 +250×3 =1050; cumple todo.
+- B: 100 +200×3 +120×3 =1060; anuncia700 omitiendo dominio y no permite exportar.
+- C: 350×3 +300 =1350; excede el máximo.
+
+**No se ejecutó el prompt en Opus ni Sonnet.** Está listo para una prueba
+pequeña usando la misma entrada y condiciones; registrar salida completa,
+modelo, esfuerzo, fecha, tiempo y correcciones. Si ambos aciertan, decirlo.
+No inventar un ganador ni inferir calidad general de un caso tan pequeño.
+
+Acceso comprobado:
+
+- CLI Claude Code2.1.267 instalada.
+- `claude auth status`: `loggedIn:false`, `authMethod:none`.
+- Navegador integrado: `https://claude.ai/login`.
+- No se usaron APIs pagadas ni se instalaron herramientas.
+
+Antes de pedir login, seguir
+`C:/dev/proyectos/onia-hermes/hermes-content/skills/seguridad-credenciales.md`.
+Una sesión web y la autenticación de CLI son distintas. Reutilizar mecanismos
+autorizados si Claude dispone de ellos, sin leer/imprimir secretos. No configurar
+nuevos accesos ni gastar. Si no hay sesión disponible, conservar el bloqueo y
+entregar el guion como explicación del anuncio, sin experiencia de prueba falsa.
+
+## 6. Próxima acción de Claude
+
+1. Leer el guion prioritario y la ficha O55 en el archivo único indicado.
+2. Revalidar únicamente los datos que hayan cambiado desde28-sep. Evitar otra
+   exploración masiva: ya están el tema, las fuentes y el caso de prueba.
+3. Si existe acceso autorizado sin nuevo gasto, ejecutar la prueba pequeña y
+   completar la ficha; si no, mantener la limitación explícita.
+4. Pulir una sola narración breve, útil y natural sobre Opus5.5. Mostrar el
+   beneficio con un ejemplo. Los datos del fabricante van atribuidos.
+5. Entregar solo guion + enseñanza personal al final, con un enlace discreto
+   a la ficha. El editor prepara todo lo visual. No pedirle capturas ni demos
+   a Sergio. Si posteriormente encarga montaje, localizar primero su A-roll.
+
+## 7. Trabajo y límites al cerrar
+
+Se usaron dos subagentes: fuentes/validación oficial y revisión de referencias/
+ejecutabilidad. Hay revisión de cálculos y `git diff --check` sin errores.
+Eso no equivale a ejecución del modelo ni prueba con audiencia.
+
+Archivos de este carril: manifiesto, archivo único de guiones/fichas y este
+handoff. No hubo publicación, deploy, instalación, contacto con terceros ni
+cambios de precio/producto. Conservar y revisar estos archivos antes de integrar;
+no arrastrar trabajo ajeno del checkout principal.

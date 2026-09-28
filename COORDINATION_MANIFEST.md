@@ -5,6 +5,21 @@ This file prevents duplicate work while two Codex/Hermes sessions run at the sam
 
 Use this as the source of truth before creating new files, skills, docs, or scripts.
 
+## Guiones prácticos, reinicio editorial — 2026-09-28
+
+Rama `codex/guiones-reinicio-20260928`, worktree
+`C:/Users/PC/.codex/worktrees/6af1/onia-hermes`.
+Alcance exclusivo: `hermes-content/docs/cola/GUIONES-REINICIO-2026-09-28.md`,
+`hermes-content/docs/handoff/CONTINUAR-GUIONES-CLAUDE-2026-09-28.md`
+y esta declaración. Dos frentes de lectura: referentes actuales de Erik;
+referencias guardadas de Ian, Tiago y Carlos. Integración editorial por el agente
+principal. No modifica la tanda rechazada ni masters. Sin publicación,
+instalación, servicios ni generaciones pagadas. Fuentes y límites de observación
+quedan al pie de los guiones, sin informe adicional.
+Handoff solicitado por Sergio para pasar a Claude: dirección editorial,
+referentes actuales, fuentes primarias y prueba de Opus 5.5 pendiente por
+autenticación. Sergio recibe solo narración y enseñanza personal al final.
+
 ## Infra retomada en Codex — 2026-09-21
 
 Sergio Urcullo trasladó el carril de Claude a la tarea Codex de ONIA Platform.
