@@ -5,6 +5,19 @@ This file prevents duplicate work while two Codex/Hermes sessions run at the sam
 
 Use this as the source of truth before creating new files, skills, docs, or scripts.
 
+## Nuevas apuestas comerciales ONIA — 2026-09-28
+
+Carril Codex: `codex/onia-nuevas-apuestas-20260928`, worktree
+`C:/Users/PC/.codex/worktrees/onia-nuevas-apuestas/onia-hermes`.
+Alcance: investigación y propuesta interna en
+`hermes-content/docs/research/ONIA_NUEVAS_APUESTAS_NEGOCIO_2026-09-28.md`.
+Frentes: mercado B2B/agentes, infraestructura de Santa Cruz y síntesis estratégica.
+Se revisaron fuentes públicas y planes existentes; las ofertas siguen siendo
+hipótesis comerciales pendientes de un piloto pagado y revisión de especialistas.
+Entrega documental aislada; su integración a la estrategia comercial requiere
+decisión de Sergio. No se altera el checkout principal ni los carriles de producto,
+marca personal o credenciales.
+
 ## Infra retomada en Codex — 2026-09-21
 
 Sergio Urcullo trasladó el carril de Claude a la tarea Codex de ONIA Platform.
