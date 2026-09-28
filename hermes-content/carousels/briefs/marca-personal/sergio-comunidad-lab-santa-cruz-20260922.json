@@ -1,0 +1,220 @@
+{
+  "title": "Así funcionaría una comunidad de IA que sí construye cosas",
+  "caption": "No quiero abrir otro grupo donde todos entran, saludan y desaparecen. El piloto en Santa Cruz tiene que producir algo verificable cada semana.\n\nFormato propuesto: 15 minutos para llegar con un problema, 25 para una demostración, 45 para construir, 20 para hot seats, ideas y contactos, y 15 para mostrar avances y elegir la siguiente acción. Total: 120 minutos.\n\nPrimero validamos gratis con 20 miembros fundadores. Después de 3 o 4 encuentros medimos asistencia, porcentaje que termina el reto, personas que vuelven y resultados reales. Recién con evidencia tendría sentido abrir talleres, cursos o un círculo privado de pago.\n\nComentá SANTA CRUZ y te envío la agenda del primer laboratorio y el formulario fundador. Soy Sergio Urcullo; estoy construyendo una comunidad para aprender y vender IA haciendo proyectos reales.",
+  "hashtags": [
+    "#santacruzbolivia",
+    "#bolivia",
+    "#comunidadia",
+    "#inteligenciaartificial",
+    "#networking",
+    "#emprendedores"
+  ],
+  "comment_trigger": "Comentá SANTA CRUZ",
+  "cta": "Comentá SANTA CRUZ",
+  "serie": "COMUNIDAD IA",
+  "episodio": "01",
+  "slides": [
+    {
+      "number": 1,
+      "role": "cover",
+      "pill": "Santa Cruz · piloto",
+      "headline": "No quiero lanzar otra comunidad muerta",
+      "body": "Quiero un laboratorio semanal donde cada persona construya algo.",
+      "callout": "Este es el formato",
+      "bg": "hermes-content/references/marca-personal-sergio/fondos/desk-01.png",
+      "save_worthy": false,
+      "alt_text": "Propuesta para una comunidad práctica de inteligencia artificial en Santa Cruz"
+    },
+    {
+      "number": 2,
+      "role": "stakes",
+      "pill": "La condición",
+      "headline": "La comunidad no empieza cobrando",
+      "body": "Primero tiene que demostrar que la gente aprende, construye, vuelve y consigue un resultado. El piloto sería gratis y pequeño.",
+      "callout": "20 miembros fundadores",
+      "visual": {
+        "type": "note",
+        "label": "ORDEN CORRECTO",
+        "value": "valor → evidencia → oferta",
+        "detail": "No vender una membresía antes de tener un ritual que funciona."
+      },
+      "save_worthy": false,
+      "alt_text": "Primero valor y evidencia, después una oferta de comunidad"
+    },
+    {
+      "number": 3,
+      "role": "point",
+      "pill": "Agenda literal",
+      "headline": "Dos horas, cinco bloques y un resultado",
+      "body": "15 min problema → 25 min demostración → 45 min construcción → 20 min hot seats y networking → 15 min demos y siguiente acción.",
+      "callout": "Total: 120 minutos",
+      "visual": {
+        "type": "flow",
+        "label": "LABORATORIO SEMANAL",
+        "nodes": [
+          {
+            "name": "15 min",
+            "detail": "problema"
+          },
+          {
+            "name": "25 min",
+            "detail": "demostración"
+          },
+          {
+            "name": "45 min",
+            "detail": "construir"
+          },
+          {
+            "name": "20 + 15",
+            "detail": "red + demos"
+          }
+        ],
+        "note": "Todos terminan con una siguiente acción concreta."
+      },
+      "save_worthy": true,
+      "alt_text": "Agenda de 120 minutos para laboratorio de inteligencia artificial"
+    },
+    {
+      "number": 4,
+      "role": "point",
+      "pill": "Para quién",
+      "headline": "Personas que quieren aprender o vender IA",
+      "body": "Jóvenes, aficionados, freelancers, emprendedores y dueños de negocio. No hace falta programar; sí traer un problema real y trabajar.",
+      "callout": "Venir a construir",
+      "visual": {
+        "type": "matrix",
+        "label": "TRES PERFILES",
+        "items": [
+          {
+            "title": "aprender",
+            "body": "primer sistema útil"
+          },
+          {
+            "title": "vender",
+            "body": "oferta y demostración"
+          },
+          {
+            "title": "aplicar",
+            "body": "proceso del negocio"
+          }
+        ]
+      },
+      "save_worthy": false,
+      "alt_text": "La comunidad es para personas que quieren aprender vender o aplicar IA"
+    },
+    {
+      "number": 5,
+      "role": "point",
+      "pill": "Qué te llevás",
+      "headline": "No solo contactos: una entrega concreta",
+      "body": "Cada encuentro deja una plantilla, un flujo o prototipo, dos contactos relevantes y una tarea que puede verificarse la semana siguiente.",
+      "callout": "Aprender haciendo",
+      "visual": {
+        "type": "matrix",
+        "label": "SALIDA DEL ENCUENTRO",
+        "items": [
+          {
+            "title": "Llegás con",
+            "body": "un problema real"
+          },
+          {
+            "title": "Te llevás",
+            "body": "plantilla, flujo o prototipo"
+          },
+          {
+            "title": "Y además",
+            "body": "dos contactos y una tarea verificable"
+          }
+        ]
+      },
+      "save_worthy": false,
+      "alt_text": "Entregables de cada encuentro de la comunidad de inteligencia artificial"
+    },
+    {
+      "number": 6,
+      "role": "point",
+      "pill": "Ruta sostenible",
+      "headline": "Gratis primero. Pago cuando haya *resultados*.",
+      "body": "Laboratorio presencial + bóveda pública → talleres y cursos específicos → círculo privado solo cuando el acompañamiento tenga valor probado.",
+      "callout": "No vender humo",
+      "visual": {
+        "type": "flow",
+        "label": "ESCALERA DE VALOR",
+        "nodes": [
+          {
+            "name": "laboratorio",
+            "detail": "gratis"
+          },
+          {
+            "name": "bóveda",
+            "detail": "recursos"
+          },
+          {
+            "name": "taller",
+            "detail": "resultado"
+          },
+          {
+            "name": "círculo",
+            "detail": "acompañamiento"
+          }
+        ],
+        "note": "La oferta nace de problemas observados en la comunidad."
+      },
+      "save_worthy": false,
+      "alt_text": "Escalera desde laboratorio gratuito hasta talleres y comunidad privada"
+    },
+    {
+      "number": 7,
+      "role": "save",
+      "pill": "Después de 4 pilotos",
+      "headline": "Estas cuatro métricas deciden si seguimos",
+      "body": "Asistencia real, porcentaje que termina el reto, personas que regresan y resultados comprobables. Seguidores y miembros del grupo no bastan.",
+      "callout": "Guardá las métricas ↗",
+      "visual": {
+        "type": "table",
+        "label": "TABLERO DEL PILOTO",
+        "left": "MÉTRICA",
+        "right": "PREGUNTA",
+        "rows": [
+          {
+            "left": "asistencia",
+            "right": "¿vinieron?"
+          },
+          {
+            "left": "terminación",
+            "right": "¿construyeron?"
+          },
+          {
+            "left": "retorno",
+            "right": "¿volvieron?"
+          },
+          {
+            "left": "resultado",
+            "right": "¿qué cambió?"
+          }
+        ]
+      },
+      "save_worthy": true,
+      "alt_text": "Métricas para validar el piloto de una comunidad"
+    },
+    {
+      "number": 8,
+      "role": "cta",
+      "pill": "Cofundadores del piloto",
+      "headline": "¿Lo construirías conmigo en Santa Cruz?",
+      "body": "Comentá *SANTA CRUZ* y te envío la agenda y el formulario fundador.",
+      "callout": "",
+      "save_worthy": false,
+      "alt_text": "Comentá Santa Cruz para recibir la agenda de la comunidad"
+    }
+  ],
+  "job": "education",
+  "resource": {
+    "title": "Agenda del laboratorio + formulario fundador",
+    "entrega": "manual",
+    "label": "TE LLEGA POR MENSAJE"
+  },
+  "identity": "Soy Sergio Urcullo: construyo IA, negocios y comunidad con resultados reales.",
+  "follow_cta": "Seguime para la fecha del primer laboratorio.",
+  "correccion": "25-sep-2026: lámina 6 con titular más corto (se cortaba «transformación»); lámina 5 sin la fila «PERMISOS» mal rotulada; la firma pasa del cuerpo al bloque de firma. Piloto reabierto por Sergio Urcullo el 25-sep «como estaba planeado»."
+}

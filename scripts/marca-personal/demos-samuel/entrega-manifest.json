@@ -1,0 +1,82 @@
+{
+  "createdAt": "2026-09-22T00:36:26.400Z",
+  "kind": "screen-recordings",
+  "audio": false,
+  "files": [
+    {
+      "name": "higgsfield-00-herramientas.mp4",
+      "title": "Higgsfield: recorrido general",
+      "duration": 28,
+      "bytes": 6716356,
+      "sha256": "ba5a3c27f560a3ceefb8de52fa2550e4e69dc540c767c4840e5a9fb6201dce31",
+      "width": 1440,
+      "height": 900,
+      "fps": 30
+    },
+    {
+      "name": "higgsfield-01-crear-soul.mp4",
+      "title": "Avatar: requisitos de fotos para Soul",
+      "duration": 24.833333,
+      "bytes": 1590468,
+      "sha256": "39f3a306e41d9ae754c2e814de510e92d488730f76cdc7c1947c94e3416f6230",
+      "width": 1440,
+      "height": 900,
+      "fps": 30
+    },
+    {
+      "name": "higgsfield-02-avatar-prompt-limpio.mp4",
+      "title": "Avatar: personaje y prompt",
+      "duration": 39.333333,
+      "bytes": 2142561,
+      "sha256": "2fcdea806f63b774022954bded000b9c4a01f58df176f9b40d137c968ad45815",
+      "width": 1440,
+      "height": 900,
+      "fps": 30
+    },
+    {
+      "name": "n8n-01-mensaje-programado.mp4",
+      "title": "n8n: mensaje programado",
+      "duration": 26.8,
+      "bytes": 1068203,
+      "sha256": "d6910e8e3d7e5ef22c1cee9dafb5037e10b641fe5ff787f6bc77b562f6486791",
+      "width": 1440,
+      "height": 900,
+      "fps": 30
+    },
+    {
+      "name": "n8n-02-monitor-y-alerta.mp4",
+      "title": "n8n: monitor y alerta",
+      "duration": 45.133333,
+      "bytes": 2164045,
+      "sha256": "8b66e01c910fd8107e1c6e8cd851845c1d56f04c125e9133c602216062f61849",
+      "width": 1440,
+      "height": 900,
+      "fps": 30
+    },
+    {
+      "name": "n8n-03-construccion-paso-a-paso.mp4",
+      "title": "n8n: construcción paso a paso",
+      "duration": 58.266667,
+      "bytes": 3093422,
+      "sha256": "094b615701da6269e93eef896dab01a5d116007ea5dfbcf8c99514ad3962b60c",
+      "width": 1440,
+      "height": 900,
+      "fps": 30
+    },
+    {
+      "name": "n8n-04-construccion-monitor.mp4",
+      "title": "n8n: construcción del monitor",
+      "duration": 136.333333,
+      "bytes": 5572037,
+      "sha256": "f5cac823bf9611446181b425fe9266391766952dbe2c4228726a29d6a84eb075",
+      "width": 1440,
+      "height": 900,
+      "fps": 30
+    }
+  ],
+  "limitations": [
+    "No se entrenó un Soul nuevo.",
+    "La primera generación se intentó dos veces y falló en el gateway de Higgsfield; no hay resultados nuevos confirmados. La segunda no se envió.",
+    "Workflows sin publicar y sin mensajes enviados. No se ha grabado recepción en teléfono."
+  ]
+}

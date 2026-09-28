@@ -905,6 +905,9 @@ Cuatro eventos reales llegaron a `/webhook/ig-comment` en 90 segundos:
 | 54951 | `sergio_urcullo` | "informacion" | ✅ ignorado |
 | 54952 | `sergio_urcullo` | **"sistema"** | ✅ **DM ENVIADO** |
 
+> ⚠️ *Nota del 2026-09-25: `sergio_urcullo` es el usuario que Meta mandó ese día. La cuenta de
+> Sergio Urcullo se renombró después a `@sergiourcullo` (commit `2ee86efb`, 06-sep).*
+
 **Prueba de que vino de Meta y no de un curl:** en el payload llegó
 `sha256=c698f443f2466317ac166c3739528a6afa9a80e45f0770617b5c31f375b6523f` — el header
 `X-Hub-Signature-256`, que solo Meta puede firmar. Más el `entry_id` `17841423363059652` y el

@@ -1,6 +1,23 @@
 # Hermes Coordination Manifest
 
+## Grabaciones Samuel — 2026-09-21
+
+Carril Codex `codex/samuel-grabaciones-20260921`, worktree aislado
+`C:/Users/PC/.codex/worktrees/samuel-grabaciones/onia-hermes`.
+Alcance: scripts de captura en `scripts/marca-personal/`, brief de Samuel y handoff
+de grabaciones. Artefactos: `E:/ONIA-YouTube/grabaciones/samuel/`.
+Principal: Higgsfield, empaquetado y validación; subagente: antecedentes, helper,
+construcción nativa de demos n8n y QA independiente. Perfiles exclusivos por frente.
+n8n: solo borradores de demostración nuevos, sin activar workflows ni enviar mensajes.
+Higgsfield: lotes pequeños de imagen autorizados por CLAUDE.md §5; registrar costo
+y resultados. Videos generativos y lotes grandes requieren aprobación concreta.
+Se preservan archivos de edición y marca personal de otras sesiones.
+Estado: siete clips y ZIP validados; perfiles cerrados. Handoff canónico:
+`hermes-content/docs/handoff/grabaciones-samuel.md`. Generación bloqueada por
+Cloudflare; prueba de Telegram pendiente de autorización. Sin publicación externa.
+
 ## Purpose
+
 This file prevents duplicate work while two Codex/Hermes sessions run at the same time.
 
 Use this as the source of truth before creating new files, skills, docs, or scripts.
@@ -20,7 +37,84 @@ Aplicación completada 21-sep 20:40 UTC desde `063e5e54`: hashes verificados,
 respaldo privado y cron/contenedores/gateway sin cambios. Loops no reactivados.
 La tabla de agosto de abajo es historial, no evidencia de escritores activos hoy.
 
-## ⚠️ Carriles VIVOS (2026-08-23) — AUTORIDAD ACTUAL
+## Sesiones vivas y protocolo entre ellas — 2026-09-25 (lo declara el carril CONTENIDO)
+
+> Sergio Urcullo, 2026-09-25: *"tenemos una sesión haciendo la ONIA Platform, así que vos no vas
+> a tocar eso… en esta sesión la creación de contenido… en otra sesión vamos a hacer el tema de
+> las ediciones, pero quiero que te comuniques entre todas las sesiones"*.
+
+| Sesión | Dónde corre | Rama | Objetivo | Dueño de |
+|---|---|---|---|---|
+| **Plataforma v1.0** ("onia plattform") | PC de Sergio Urcullo | `claude/goal-v1-24sep` | la v1.0 y los 5 clientes de la Etapa 1, **incluida la venta**: leads, Diagnóstico para clínicas, qué se vende | PLATFORM |
+| **Contenido y guiones** | nube | `claude/onia-content-scripts-cvat9r` | guiones, estructura por plataforma, capturas reales, comunidad, llamadas 1 a 1, LinkedIn | CONTENIDO |
+| **Edición y publicación** — *a abrir* | PC de Sergio Urcullo (el material crudo vive ahí) | la que abra | cortar, subtitular y renderizar con el método Santiago; publicar y anotar la URL | `videos/**` + estados `editado`/`publicado` de los archivos de tema |
+| Infra / loops | PC (Codex) | `codex/infra-producto-20260921` | infra con TURNO | CEREBRO |
+
+⚠️ **Riesgo medido:** a las 05:24 UTC del 25-sep, la sesión "onia plattform" tenía **54 commits sin
+pushear**. Viven sólo en la PC de Sergio Urcullo: si la sesión se pierde, se pierden.
+
+**Protocolo entre sesiones:**
+
+1. **El repo es el canal.** Cada sesión escribe su `handoff/<carril>.md` al cerrar y mueve **sólo
+   sus estados** en los archivos de tema (`hermes-content/docs/contenido/piezas/guiones/*`, §6 de
+   `contenido/SISTEMA_DE_GUIONES.md`): contenido → `guion/verificado/capturas`, Sergio Urcullo →
+   `grabado/aprobado`, edición → `editado/publicado`.
+2. **Los mensajes directos entre sesiones son un extra, no el canal.** Cuando dos sesiones corren
+   en la misma máquina, se avisan con SendMessage. La sesión de nube no siempre ve a las de la PC:
+   el 25-sep no vio ninguna, porque la PC estaba desconectada.
+3. **Pedir, no editar.** Lo que una sesión necesita de un archivo ajeno lo deja escrito en el handoff
+   del dueño; no lo edita.
+4. **Nadie integra ramas de otra sesión sin OK explícito de Sergio Urcullo.** El 25-sep la
+   integración de las 4 ramas del carril contenido quedó preparada y no se aplicó; la decide él.
+
+### Dueños de archivos por dominio — propuesta del 2026-09-25
+
+> Medida por el carril CONTENIDO sobre `main` (`historial/MAPA_DOCS_20260925.md`). **Cada carril
+> confirma o corrige SU fila**; reemplaza la línea de agosto que declaraba a `claude/git-status-935f47`
+> dueño de todo `hermes-content/docs/**`.
+
+Tres sesiones escriben en el mismo repo. Un archivo tiene UN dueño; el resto lo LEE y, si
+necesita cambiarlo, deja la tarea en el tablero en vez de editarlo. Nadie mueve ni renombra
+un archivo ajeno.
+
+| Ruta | Dueño | Qué es |
+|---|---|---|
+| `hermes-content/docs/COLA.md` · `docs/cola/{chatbot,plataforma-v1,recorrido-cliente}.md` | **PLATFORM** (+ loops onia-cola, chatbot-cola, recorrido-cliente) | colas de la 1.0 |
+| `hermes-content/docs/recorrido/**` · `docs/platform/**` · `docs/chatbot/**` · `docs/legal/**` · `docs/assets/meta-whatsapp-access/**` | **PLATFORM** | producto, chatbot, T&C del producto |
+| `docs/ONIA_{V1_*,PLAN_DE_VERSIONES,PLAN_CIERRE_1_0,DEFINICION_DE_TERMINADO,PLAN_DESARROLLO_Y_VENTA,RADAR_DECISIONES_PRODUCTO,NIVEL_REFERENTES_BRECHA,UI_DASHBOARD_PENDIENTE,NOMBRE_DENTALGEST_PENDIENTE,PERSONALIZACION_POR_CLIENTE,DEPLOYMENT_OFFLINE_HA_PRICING_2026,MAPA_PRODUCTOS_POR_RUBRO_2026,AUDITORIA_FUNCIONAL_DENTAL}.md` | **PLATFORM** | alcance y estado del producto |
+| `docs/ONIA_{CHATBOT_*,BOT_*,MODELO_MULTICLIENTE_CHATBOT_*,VOZ_WHATSAPP_*,RUNBOOK_COEXISTENCIA_75414930,AGENTES_*,AGENTE_PRODUCTO_DISENO,PRICING_CHATBOT_PROPUESTA}.md` | **PLATFORM** | chatbot y agentes |
+| `docs/ONIA_{SIAT_ESTADO_HOMOLOGACION,SIAT_TU_PARTE_DEL_TRAMITE,FACTURACION_ESTADO_REAL,BCP_API_QR_INTEGRACION}.md` · `hermes-content/integrations/siat/**` · `ajuste.wsdl` · `comput.wsdl` | **PLATFORM** | SIAT y cobro |
+| `docs/ONIA_{CATALOGO_DE_VENTA,QUE_SE_VENDE_Y_A_QUE_PRECIO,PSICOLOGIA_PRECIOS_COMPETENCIA,SENDYPRO_ANALISIS,LEADS_ESPERANDO,PROSPECTOS_DENTAL_SCZ}.md` · `docs/CRM_PROSPECTING.md` · `hermes-content/{sales-kit,propuestas,research/competencia}/**` | **PLATFORM** (venta de la plataforma) | qué se vende, a cuánto, a quién se le escribe |
+| `docs/ONIA_{WEB_IMAGENES_DE_CONTEXTO,LANDING_ESTUDIO_SAAS,LEAD_MAGNET_GUIA_UNA_PAGINA_PRD,WEB_FACTORY_Y_PRODUCTO_UI}.md` · `web-factory/apps/onia-platform/**` (salvo lo de web-creator) | **PLATFORM** (web de venta) | onia.com.bo / app.onia.com.bo |
+| `docs/research/{rubro-*,ONIA_SUCURSALES_NORMA_BOLIVIA,whatsapp-chatwoot-embedded-signup,imagenes-de-uso-onia-materia-prima,ONIA_AGENTES_DE_LLAMADAS_*,ONIA_VISION_COMPUTADORA_*}.md` | **PLATFORM** | investigación de producto |
+| `docs/handoff/{chatbot,codex-continuar-1.0,cobro-e2e,fiscal,onia-v1-panel-ui,onia-v1-servicios,onia-cola,canario-visual,publicacion-y-nodo-casa,nit-navegador-issue,claude-git-status-935f47}.md` | **PLATFORM** | estado de sus carriles |
+| `hermes-content/deploy/{onia-platform,onia-landing,onia-siat,vps-ops/bot}/**` | **PLATFORM** | despliegue del producto y del bot |
+| `CLAUDE.md` · `AGENTS.md` · `CODEX_SKILL_ROUTING.md` · `COORDINATION_MANIFEST.md` · `README.md` · `docs/**` (raíz) | **CEREBRO** (sesión de control) | reglas y coordinación |
+| `docs/{LEEME-PRIMERO,ONIA_ESTRATEGIA_DE_EMPRESA,ONIA_CLIENTE_IDEAL,ONIA_VENDER_MIENTRAS_SE_DESARROLLA,ONIA_CATALOGO_DE_IDEAS,ONIA_TEMAS_CHARLA_CONTESTADOS,ONIA_CEREBRO,HERMES_AGENT,ONIA_PLAN_ORDENAMIENTO,ONIA_GRAFO_DE_CONOCIMIENTO_DECISION,ONIA_STRIX_EVALUACION,SECURITY,ORCHESTRATOR}.md` | **CEREBRO** | estrategia, índice general, decisiones |
+| `docs/{AI_MODEL_ROUTING_2026,ONIA_MODELOS_CLAUDE_Y_CUOTA,ONIA_SKILLS_STACK_Y_SUBAGENTES}.md` | **CEREBRO** | modelos IA y skills |
+| `docs/{ONIA_INFRA_*,PLAN_HOMELAB,DAILY_CRONS,COMO_SE_ARMA_UN_LOOP,CONOCIMIENTO_DE_LOS_LOOPS,ONIA_N8N_*,ONIA_CONSOLA_UNICA_Y_ACCESOS,ONIA_SALIR_DE_WORKSPACE_PASO_A_PASO,ONIA_RADAR_NORMATIVO_RUNBOOK_2026}.md` · `docs/cola/{README,loops,EQUIPO,TABLERO}.md` | **CEREBRO** | infra y loops |
+| `docs/{FINANCE_LOG_2026,ONIA_FECHAS_CRITICAS_PLAN,ONIA_LEGAL_BOLIVIA_ESTADO,ONIA_SENAPI_PI112_TRAMITE,ONIA_BCP_APERTURA_CUENTA_PAQUETE,ONIA_FACTURA_PLANTILLA_DATOS_FIJOS_2026,ONIA_GASTOS_CAPTURA_CREDITO_FISCAL_2026,ONIA_OPTIMIZACION_FISCAL_PROPIA_2026,ONIA_SIAT_HABILITAR_FACTURACION_CHECKLIST_2026}.md` · `docs/{bcp-paquete,n8n-workflows}/**` | **CEREBRO** | plata, fiscal propio, legal |
+| `docs/handoff/{README,infra-cerebro-loops,onia-dev-node-setup,supervisor,docs-auditoria}.md` · `docs/research/{alternativas-agentes-2026-09,vps-llm-local-que-modelo,ONIA_EVALS_*,ONIA_LLUVIA_IDEAS_*}.md` | **CEREBRO** | |
+| `hermes-content/{infra,skills,plugins}/**` · `hermes-content/deploy/{vps-ops (salvo bot),n8n,hermes-agent,calcom,selfhosted,postiz}/**` · `scripts/loops/**` · `scripts/cerebro/**` | **CEREBRO** | infra, bot Hermes, loops |
+| `docs/historial/**` | **CEREBRO** (sólo recibe) | fotos de un día: se agrega, no se edita |
+| Los ~40 docs vivos de dominio 3 (§2.2) · `docs/cola/{drops/**,GUIONES-*,PARA-PUBLICAR-*,PLAN-VIDEOS-*,AUDITORIA-8-CARRUSELES,ARRANQUE-MOTOR-SEMANAL,marca-personal,tendencias}.md` · `docs/{yt,comunidad}/**` · `docs/assets/{captions-bench-*,editor-ab-*}/**` · `docs/research/ONIA_TIKTOK_AUTOMATIZACION_API_*.md` · (futuros `docs/contenido/**` y `docs/historial/contenido/**`) | **CONTENIDO** | marca personal de Sergio Urcullo, comunidad, YouTube, producción, distribución, ads de ONIA |
+| `docs/handoff/{marca-personal-carruseles,yt-canal,edicion-marca-personal,meta-ads-prospeccion,claude-analizar-reels-videos-67f762}.md` | **CONTENIDO** | |
+| `hermes-content/{carousels,campaigns,recursos,lead-magnets,PARA-PUBLICAR,scripts}/**` · `hermes-content/references/{video-intake,marca-personal,marca-personal-sergio,sergio-approved-media,oniahq,radar-ia,tendencias,carruseles-referencia,creator-video-references,moldes-video,piezas-ui-patterns,portafolio-antes-despues}/**` · `scripts/{marca-personal,hyperframes}/**` · `scripts/carousel_*` · `videos/**` · `out/**` · `output/**` | **CONTENIDO** | piezas, motor de carruseles, referencias |
+| `hermes-content/contenido/**` | **CONTENIDO** — ⚠️ `README.md` lo lee `recursos-vivos.mjs` de PLATFORM: no se mueve ni renombra sin avisar | reglas por cuenta |
+| `hermes-content/sitio-sergiourcullo/**` | **CONTENIDO** (hoy lo declara `web-creator`: **decidir**) | web personal |
+| `hermes-content/brand/**` · `hermes-content/references/ui-patterns/**` · `hermes-content/assets/onia/**` · `PRODUCT.md` · `docs/HIGGSFIELD_VIDEO_SYSTEM.md` · `.claude/skills/**` · `.agents/skills/**` | **COMPARTIDO** — se avisa antes de tocar | marca, patrones UI, política Higgsfield (CLAUDE.md), skills |
+| Los 120 docs de dominio 4 (§2.2) · `docs/research/{ONIA_BOX_*,ONIA_IMPORTACION_*,ONIA_IA_LOCAL_*,calidad-generado/**,...}` · `hermes-content/references/{modelos,models,ai-ecommerce-model,avatar-lab,ugc-model-ltx23,arthur-reels-crudos}/**` · `hermes-content/channels/**` · `video-factory/**` · `hermes-scripts/**` · `tmp-assets/**` · `references-inbox/**` · `web-factory/**` (salvo `apps/onia-platform`) | **CONGELADO** — sin dueño; sólo con decisión de Sergio Urcullo | líneas congeladas por la etapa 1 |
+| `onia-core/**` | carril **onia-core** (skill `onia-core`, subagente `onia-core-guardian`) | el núcleo |
+
+Reglas de frontera:
+1. Un archivo que **lee código de otro carril** (hoy: `ONIA_CIRCUITO_COMENTARIO_DM.md`,
+   `hermes-content/contenido/README.md`, `docs/cola/drops/`, `HIGGSFIELD_VIDEO_SYSTEM.md`) no se
+   mueve ni renombra sin que el dueño del código lo cambie en el mismo merge.
+2. `docs/cola/` es sólo para colas; las piezas de contenido van a `docs/contenido/piezas/`.
+3. Nadie mueve en masa `hermes-content/docs/`: cada carril mueve sólo lo suyo, en un commit, con
+   `git mv` y las refs actualizadas.
+
+## ⚠️ Carriles VIVOS (2026-08-23) — la tabla de ramas ya es historia (manda la de arriba, 2026-09-25); las 3 reglas de abajo siguen vigentes
 
 **Esto reemplaza al modelo de 2026-07-05 de más abajo**, que se conserva por referencia. Ese
 modelo era del **30-jul**, nombraba carriles A-H con nombres de sesiones que ya no existen, y

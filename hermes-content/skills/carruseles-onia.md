@@ -74,9 +74,34 @@ que se veía generada por IA y no desarrollaba un argumento de venta.
 ## Estructura narrativa
 - Entre 3 y 10 slides (default 8 para pauta; 6 para orgánico breve).
 - Slide 1: hook claro que detenga el scroll.
-- Slide 2: costo o consecuencia económica sin inventar cifras.
-- Slides intermedios: causa -> producto real -> mecanismo -> prueba/control.
-- Ultimo slide: CTA unico y especifico.
+- **Pauta de ONIA (`@oniahq`):**
+  - Slide 2: costo o consecuencia económica sin inventar cifras.
+  - Slides intermedios: causa -> producto real -> mecanismo -> prueba/control.
+  - Último slide: CTA único y específico (`cta`, sin «Comentá»).
+- **Orgánico de Sergio Urcullo (`@sergiourcullo`):**
+  - Slides intermedios: problema -> insight -> solución -> ejemplo concreto.
+  - Último slide: CTA único y específico, con firma o posición personal y un motivo concreto
+    para seguirlo (`identity`, `follow_cta`).
+  - «Comentá PALABRA» (`comment_trigger`) sólo con una palabra de la tabla de
+    `hermes-content/docs/contenido/PUBLICACION.md` §2 cuya guía responde 200 el día de publicar.
+    No hay respuesta automática: la contesta Sergio Urcullo a mano, una palabra activa por vez.
+  - Recurso de la Bóveda (`resource`) sólo si su URL ya responde 200: al 25-sep `/boveda` no
+    está desplegada.
+  - El renderer no agrega recurso ni firma por defecto: van en el brief o no aparecen.
+  - **Estructura de referencia** (Enrique Rocha, «Stop AI slop»; detalle en
+    `docs/contenido/SISTEMA_DE_GUIONES.md` §7):
+    1. portada que declara una tesis discutible, no un tema;
+    2. una unidad por lámina **con su nombre exacto** (la plantilla, el nodo, el comando) y su prueba
+       adentro;
+    3. una lámina «así no / así sí» cuando hay un error común;
+    4. una lámina que se guarda (checklist o matriz);
+    5. cierre con criterio, un solo CTA y la firma.
+    Diseño: un solo acento (verde ONIA), tipo grande, etiqueta mono en mayúsculas y el texto real
+    en la lámina.
+  - **Carrusel 100 % IA:** van (Sergio Urcullo, 25-sep). El método, híbrido (recomendado) o
+    píxel, lo decide él: `docs/contenido/SISTEMA_DE_GUIONES.md` §7. En los dos, ninguna pantalla
+    de ONIA ni prueba fabricada, cada lote aprobado con su costo antes de generar, y el caption
+    lo declara.
 - Lenguaje claro para empresas bolivianas, sin jerga tecnica innecesaria.
 
 ## Checklist de calidad antes de publicar

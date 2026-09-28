@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "purpose": "Registro de evidencia para mejorar la marca personal de Sergio sin inventar métricas ni entrenar modelos opacos.",
+  "rules": {
+    "unit_of_learning": "Comparar formatos y objetivos equivalentes.",
+    "minimum_evidence_window_days": [7, 30],
+    "never_optimize_for": ["likes sin contexto", "comentarios sin intención", "promesas sin recurso"]
+  },
+  "required_fields_for_each_piece": [
+    "id", "published_at", "format", "topic", "hook", "resource_url",
+    "comment_keyword", "goal", "views_7d", "retention_7d", "saves_7d",
+    "shares_7d", "intent_comments_7d", "vault_visits_7d", "conversations_7d", "notes"
+  ],
+  "patterns_to_test": [
+    {
+      "id": "proof-to-resource",
+      "hypothesis": "Una demostración real seguida de un recurso concreto genera conversaciones de mayor intención que un CTA genérico.",
+      "status": "ready_for_measurement"
+    },
+    {
+      "id": "one-decision-per-piece",
+      "hypothesis": "Un contenido que resuelve una decisión específica se guarda más que una lista amplia de herramientas.",
+      "status": "ready_for_measurement"
+    },
+    {
+      "id": "story-interaction-after-feed",
+      "hypothesis": "Una historia con encuesta o pregunta después de una pieza educativa mejora la calidad de las preguntas recibidas.",
+      "status": "ready_for_measurement"
+    }
+  ],
+  "observations": []
+}

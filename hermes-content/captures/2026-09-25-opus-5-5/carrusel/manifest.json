@@ -1,0 +1,453 @@
+{
+  "tema": "2026-09-25-opus-5-5-migracion · recortes para carrusel",
+  "herramienta": "capturar-web 1.0 (2026-09-25)",
+  "capturado": "2026-09-25T15:28:08.922Z",
+  "navegador": "Chromium 141.0.7390.37",
+  "sesion": "sin login · contexto nuevo · sin cookies guardadas",
+  "nota": "Página real. El recuadro verde, el foco y el cursor son edición encima; el contenido no se tocó. Se ocultan banners de cookies. Todo pedido que no sea GET/HEAD se bloquea y se anota.",
+  "tomas": [
+    {
+      "id": "K0",
+      "url": "https://platform.claude.com/docs/en/models/opus-5-5/migration-guide",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "dpr": 3,
+      "fps": 60,
+      "bloqueados": [
+        "POST https://platform.claude.com/sentry?o=1158394&p=4506240373030912",
+        "POST https://platform.claude.com/sentry?o=1158394&p=4506240373030912",
+        "POST https://platform.claude.com/sentry?o=1158394&p=4506240373030912",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br"
+      ],
+      "debe_decir": [
+        {
+          "texto": "Where an item says a setting is rejected, the API returns a 400 error.",
+          "encontrado": true
+        }
+      ],
+      "estado_http": 200,
+      "url_final": "https://platform.claude.com/docs/en/models/opus-5-5/migration-guide",
+      "titulo": "Migrating to Claude Opus 5.5 - Claude Platform Docs",
+      "duracion_s": 0.6,
+      "fotos": [
+        {
+          "archivo": "K0-400.png",
+          "limpia": "K0-400-limpia.png",
+          "t": 0.6,
+          "region_px": {
+            "x": 57,
+            "y": 1201,
+            "w": 889,
+            "h": 129
+          },
+          "recorte": {
+            "archivo": "recortes/K0-400.png",
+            "px": {
+              "x": 0,
+              "y": 954,
+              "w": 1104,
+              "h": 624
+            }
+          }
+        }
+      ],
+      "ok": true
+    },
+    {
+      "id": "K1",
+      "url": "https://platform.claude.com/docs/en/models/opus-5-5/migration-guide",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "dpr": 3,
+      "fps": 60,
+      "bloqueados": [
+        "POST https://platform.claude.com/sentry?o=1158394&p=4506240373030912",
+        "POST https://platform.claude.com/sentry?o=1158394&p=4506240373030912",
+        "POST https://platform.claude.com/sentry?o=1158394&p=4506240373030912",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://platform.claude.com/api/event_logging/v2/batch"
+      ],
+      "debe_decir": [
+        {
+          "texto": "and manual thinking budgets",
+          "encontrado": true
+        }
+      ],
+      "estado_http": 200,
+      "url_final": "https://platform.claude.com/docs/en/models/opus-5-5/migration-guide",
+      "titulo": "Migrating to Claude Opus 5.5 - Claude Platform Docs",
+      "duracion_s": 0.6,
+      "fotos": [
+        {
+          "archivo": "K1-1-thinking.png",
+          "limpia": "K1-1-thinking-limpia.png",
+          "t": 0.6,
+          "region_px": {
+            "x": 170,
+            "y": 1201,
+            "w": 874,
+            "h": 129
+          },
+          "recorte": {
+            "archivo": "recortes/K1-1-thinking.png",
+            "px": {
+              "x": 62,
+              "y": 958,
+              "w": 1090,
+              "h": 616
+            }
+          }
+        }
+      ],
+      "ok": true
+    },
+    {
+      "id": "K3",
+      "url": "https://platform.claude.com/docs/en/models/opus-5-5/migration-guide",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "dpr": 3,
+      "fps": 60,
+      "bloqueados": [
+        "POST https://platform.claude.com/sentry?o=1158394&p=4506240373030912",
+        "POST https://platform.claude.com/sentry?o=1158394&p=4506240373030912",
+        "POST https://platform.claude.com/sentry?o=1158394&p=4506240373030912",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://platform.claude.com/api/event_logging/v2/batch"
+      ],
+      "debe_decir": [
+        {
+          "texto": "tool_choice: type \"tool\" and \"any\" are not supported for this model.",
+          "encontrado": true
+        }
+      ],
+      "estado_http": 200,
+      "url_final": "https://platform.claude.com/docs/en/models/opus-5-5/migration-guide",
+      "titulo": "Migrating to Claude Opus 5.5 - Claude Platform Docs",
+      "duracion_s": 0.6,
+      "fotos": [
+        {
+          "archivo": "K3-error-tool-choice.png",
+          "limpia": "K3-error-tool-choice-limpia.png",
+          "t": 0.6,
+          "region_px": {
+            "x": 57,
+            "y": 1173,
+            "w": 974,
+            "h": 186
+          },
+          "recorte": {
+            "archivo": "recortes/K3-error-tool-choice.png",
+            "px": {
+              "x": 0,
+              "y": 936,
+              "w": 1170,
+              "h": 660
+            }
+          }
+        }
+      ],
+      "ok": true
+    },
+    {
+      "id": "K4",
+      "url": "https://platform.claude.com/docs/en/models/opus-5-5/migration-guide",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "dpr": 3,
+      "fps": 60,
+      "bloqueados": [
+        "POST https://platform.claude.com/sentry?o=1158394&p=4506240373030912",
+        "POST https://platform.claude.com/sentry?o=1158394&p=4506240373030912",
+        "POST https://platform.claude.com/sentry?o=1158394&p=4506240373030912",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://platform.claude.com/api/event_logging/v2/batch"
+      ],
+      "debe_decir": [
+        {
+          "texto": "Omit temperature, top_p, and top_k",
+          "encontrado": true
+        }
+      ],
+      "estado_http": 200,
+      "url_final": "https://platform.claude.com/docs/en/models/opus-5-5/migration-guide",
+      "titulo": "Migrating to Claude Opus 5.5 - Claude Platform Docs",
+      "duracion_s": 0.6,
+      "fotos": [
+        {
+          "archivo": "K4-4-sampling.png",
+          "limpia": "K4-4-sampling-limpia.png",
+          "t": 0.6,
+          "region_px": {
+            "x": 170,
+            "y": 1201,
+            "w": 828,
+            "h": 261
+          },
+          "recorte": {
+            "archivo": "recortes/K4-4-sampling.png",
+            "px": {
+              "x": 62,
+              "y": 1037,
+              "w": 1044,
+              "h": 590
+            }
+          }
+        }
+      ],
+      "ok": true
+    },
+    {
+      "id": "K5",
+      "url": "https://platform.claude.com/docs/en/models/opus-5-5/migration-guide",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "dpr": 3,
+      "fps": 60,
+      "bloqueados": [
+        "POST https://platform.claude.com/sentry?o=1158394&p=4506240373030912",
+        "POST https://platform.claude.com/sentry?o=1158394&p=4506240373030912",
+        "POST https://platform.claude.com/sentry?o=1158394&p=4506240373030912",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://platform.claude.com/api/event_logging/v2/batch"
+      ],
+      "debe_decir": [
+        {
+          "texto": "Don't end messages with a prefilled assistant turn: it is rejected",
+          "encontrado": true
+        }
+      ],
+      "estado_http": 200,
+      "url_final": "https://platform.claude.com/docs/en/models/opus-5-5/migration-guide",
+      "titulo": "Migrating to Claude Opus 5.5 - Claude Platform Docs",
+      "duracion_s": 0.6,
+      "fotos": [
+        {
+          "archivo": "K5-5-prefill.png",
+          "limpia": "K5-5-prefill-limpia.png",
+          "t": 0.6,
+          "region_px": {
+            "x": 170,
+            "y": 1201,
+            "w": 792,
+            "h": 129
+          },
+          "recorte": {
+            "archivo": "recortes/K5-5-prefill.png",
+            "px": {
+              "x": 62,
+              "y": 981,
+              "w": 1008,
+              "h": 568
+            }
+          }
+        }
+      ],
+      "ok": true
+    },
+    {
+      "id": "K7",
+      "url": "https://platform.claude.com/docs/en/models/opus-5-5/migration-guide",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "dpr": 3,
+      "fps": 60,
+      "bloqueados": [
+        "POST https://platform.claude.com/sentry?o=1158394&p=4506240373030912",
+        "POST https://platform.claude.com/sentry?o=1158394&p=4506240373030912",
+        "POST https://platform.claude.com/sentry?o=1158394&p=4506240373030912",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://browser-intake-us5-datadoghq.com/api/v2/rum?ddsource=browser&dd-api-key=pubd2844a8db34d457769f7b3b787938806&dd-evp-origin-version=7.6.0&dd-evp-origin=br",
+        "POST https://platform.claude.com/api/event_logging/v2/batch"
+      ],
+      "debe_decir": [
+        {
+          "texto": "Set effort explicitly: the default is medium",
+          "encontrado": true
+        }
+      ],
+      "estado_http": 200,
+      "url_final": "https://platform.claude.com/docs/en/models/opus-5-5/migration-guide",
+      "titulo": "Migrating to Claude Opus 5.5 - Claude Platform Docs",
+      "duracion_s": 0.6,
+      "fotos": [
+        {
+          "archivo": "K7-effort-explicito.png",
+          "limpia": "K7-effort-explicito-limpia.png",
+          "t": 0.6,
+          "region_px": {
+            "x": 170,
+            "y": 1203,
+            "w": 780,
+            "h": 126
+          },
+          "recorte": {
+            "archivo": "recortes/K7-effort-explicito.png",
+            "px": {
+              "x": 62,
+              "y": 985,
+              "w": 996,
+              "h": 562
+            }
+          }
+        }
+      ],
+      "ok": true
+    }
+  ]
+}

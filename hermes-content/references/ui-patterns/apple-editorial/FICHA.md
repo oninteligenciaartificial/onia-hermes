@@ -277,3 +277,69 @@ aparte y deja el A/B mirable.
    más la diferencia" — y el bug hacía algo peor sin que nadie lo pidiera. **En una pieza
    que presume de datos verificados, el gráfico es la afirmación más fácil de desmentir:
    se compara con una regla en la pantalla.**
+
+19. 🔴 **El `<pre>` de la terminal envuelve y deja la palabra huérfana pegada al margen
+   izquierdo — y NINGÚN gate lo ve.** El gate `--check` mide el ancho del BLOQUE contra el
+   ancho útil; una línea que envuelve **no desborda nada**, así que reporta verde. Pero el
+   renglón partido rompe la ilusión de terminal: la segunda mitad cae sin sangría, contra
+   el borde de la caja. Salió en 20 líneas de las 5 piezas del 21-sep, en su primer render.
+
+   **Las dos medidas son distintas, y ésa es la trampa dentro de la trampa:**
+
+   | Dónde | Caja | Fuente | Caracteres por línea |
+   |---|---|---|---|
+   | `term` del layout **R** | ~840px | 38px | **31** |
+   | `obj_term` del layout **P** (portada) | **560px** | 34px | **22** |
+
+   Un bloque que entra perfecto en una lámina R se parte en la portada. El rótulo de la
+   barra (`term_titulo` / `obj_term_titulo`) aguanta **~24** en P.
+
+   **Se mide antes de rendir**, con las cadenas ya sin etiquetas HTML (`&gt;` cuenta 1, no
+   4). No hace falta un gate nuevo: un conteo de caracteres sobre el dict de la pieza
+   alcanza, y es instantáneo.
+
+20. 🔴 **Los `\n` del `sub` y de `linea` son sugerencias, no cortes.** Si la línea que vos
+   escribiste pasa el ancho del bloque, **igual se envuelve**, y el resultado es peor que
+   no haber puesto el salto: queda un pedazo suelto centrado debajo (`«Dales la / misma»`
+   en la lámina 5 de mismo-precio). Medidas útiles: `.sub` (38px) **47** caracteres,
+   `.linea-r` y `.contexto` (33px) **52**. Mismo método que la #19 — se cuenta, no se
+   estima a ojo.
+
+21. ⚠️ **El handle del layout P arrancaba en `x=0`: la arroba tocaba el borde del lienzo.**
+   `.handle` trae `left:0;right:0` y se centra por herencia del flex; el lienzo `.p` alinea
+   a la izquierda, así que la firma quedaba flush contra el canto. Ya salía así en
+   `noticia-whatsapp` y nadie lo había visto porque **el gate no mide márgenes**. Corregido
+   con `left:96px;text-align:left` — el mismo canal que la píldora de arriba, así la firma
+   se alinea con ella.
+
+22. 🔴 **El gate reporta «la sonda no devolvió medidas» en toda lámina de layout P.** No es
+   un defecto de la pieza: la sonda busca clases (`.remate`, `.nombre`, `.sub`…) que el
+   layout P no usa — sus clases son `.tit-p`, `.pill-p`, `.swipe-p`. Igual que el layout H.
+   **Un rojo del gate en la lámina 01 de una pieza con portada P no significa rota**; esa
+   lámina se verifica MIRÁNDOLA. Control para comprobarlo: `--pieza noticia-whatsapp
+   --check` falla idéntico y esa pieza está aprobada.
+
+23. 🔴 **El titular ES el hallazgo, no su anuncio.** Sergio Urcullo rechazó la portada
+   «Conté mis errores. Los anoté todos» el 21-sep: *«no estás diciendo nada, hacelos
+   enseñando cosas de verdad»*. Un titular que teasea obliga a deslizar para averiguar si
+   vale la pena, y **el que desliza ya decidió que no**.
+
+   **Prueba rápida, de un segundo: si el titular se puede poner en una pieza de OTRO
+   tema, está mal escrito.** «Un dato viejo no es un dato» pasa esa prueba y por eso está
+   mal; «Decía 4. Fui a contarlo: eran 40» no pasa, y por eso enseña desde la portada.
+
+   | Aforismo (no dice nada) | Hallazgo (enseña) |
+   |---|---|
+   | «Conté mis errores. Los anoté todos» | «18 errores. Los 18 los anotó él» |
+   | «Un dato viejo no es un dato» | «Decía 4. Fui a contarlo: eran 40» |
+   | «Si da verde con la cosa rota…» | «Dos verdes. Y la pantalla estaba rota» |
+   | «El precio ya no decide» | «Fable 5.1 y GPT-6 Astra cuestan igual» |
+   | «Lo van a contar mal» | «Sólo si NO tenés CLAUDE.md» |
+
+   Aplica a **los titulares de adentro también** (`titular` del layout R, `remate` del D),
+   no sólo a la portada. Un remate como «Medí la cosa, no su sombra» suena bien y no dice
+   qué hacer; «Abrila y mirala» sí.
+
+   Es la hermana de la regla del 10-sep («si el carrusel no tiene UNA cosa que el lector
+   no sabía, no se hace»): aquélla pide que la PIEZA enseñe, ésta pide que el TITULAR lo
+   haga. Una pieza con buen dato y titular de aforismo se pierde en el scroll igual.

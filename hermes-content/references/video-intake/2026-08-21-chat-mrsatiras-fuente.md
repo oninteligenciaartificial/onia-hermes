@@ -17,6 +17,9 @@ con **`mrsatiras__`** es donde le mandan lo que le gusta — o sea, **es la fuen
 | Otras cuentas en el navegador | `lucia.antelo.oficial` y `oniahq` |
 | Hilo | `instagram.com/direct/t/17842603284520515/` |
 
+> ⚠️ *Nota del 2026-09-25: `sergio_urcullo` era el handle ese día. La cuenta de Sergio Urcullo
+> se renombró después a `@sergiourcullo` (commit `2ee86efb`, 06-sep): es la misma cuenta.*
+
 **Los guardados están vacíos.** Todo lo que le interesa vive en ese chat, no en una colección.
 
 ---

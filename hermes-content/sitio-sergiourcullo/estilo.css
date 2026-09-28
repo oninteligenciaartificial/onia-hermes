@@ -635,6 +635,28 @@ code{font-family:var(--mono);font-size:.9em;background:var(--line-soft);padding:
 .catalogo-hero .bajada{max-width:58ch}
 .catalogo-hero-actions{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin:24px 0 0}
 .catalogo-note{font-family:var(--mono);font-size:11px;color:var(--faint);letter-spacing:.03em;margin:12px 0 0}
+
+/* ---------- bóveda: archivo navegable, no una pared de enlaces ---------- */
+.vault-wrap,.vault-barra{max-width:1120px}
+.vault-controls{margin:34px 0 0;padding:22px;border:1px solid var(--line);border-radius:6px;background:var(--raise);box-shadow:var(--shadow)}
+.vault-controls label{display:block;font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin:0 0 9px}
+.vault-controls input{width:100%;min-height:50px;padding:12px 14px;border:1px solid var(--line);border-radius:4px;background:var(--ground);color:var(--ink);font:500 16px var(--body)}
+.vault-controls input:focus{outline:2px solid var(--onia-texto);outline-offset:2px}
+.vault-filters{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.vault-filters button{border:1px solid var(--line);border-radius:999px;padding:8px 12px;background:transparent;color:var(--muted);font:500 12px var(--mono);cursor:pointer}
+.vault-filters button:hover,.vault-filters button.is-active{border-color:var(--onia);background:var(--onia);color:var(--onia-sobre)}
+.vault-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:28px 0 0}
+.vault-card{display:flex;flex-direction:column;min-height:255px;padding:22px;border:1px solid var(--line);border-radius:6px;background:var(--raise);box-shadow:var(--shadow);color:var(--ink);text-decoration:none}
+.vault-card:hover{border-color:var(--onia-texto);transform:translateY(-2px)}
+.vault-card:focus-visible{outline:2px solid var(--onia-texto);outline-offset:3px}
+.vault-card[hidden]{display:none}
+.vault-meta{font:500 11px var(--mono);letter-spacing:.1em;color:var(--onia-texto);margin:0 0 20px}
+.vault-card h2{font:700 27px/1.06 var(--display);letter-spacing:-.03em;margin:0;text-wrap:balance}
+.vault-card p:not(.vault-meta){color:var(--muted);font-size:15px;line-height:1.5;margin:12px 0 0}
+.vault-card span{margin-top:auto;padding-top:18px;font:600 12px var(--mono);color:var(--onia-texto)}
+.vault-empty{margin:22px 0;color:var(--muted)}
+.vault-community{margin-top:54px}
+@media (max-width:760px){.vault-grid{grid-template-columns:1fr}.vault-card{min-height:220px}.vault-controls{padding:18px}}
 .catalogo-section{margin:54px 0 0}
 .catalogo-section-head{border-top:2px solid var(--ink);padding-top:20px;margin-bottom:22px}
 .catalogo-section-head h2,.fabrica h2{
@@ -725,6 +747,12 @@ code{font-family:var(--mono);font-size:.9em;background:var(--line-soft);padding:
 @media (max-width:700px){
   .barra-acciones{flex-direction:column;align-items:flex-end;gap:6px}
   .barra-oferta,.barra .vuelta{font-size:11px}
+  /* Portada: son tres links, no dos. En columna «Bóveda» quedaba sola arriba de la marca
+     y la cabecera pasaba de 116 a 166 px a 390. Acá fluyen en fila detrás de la marca y
+     el botón baja a la segunda. Sólo la portada: las guías publicadas no se tocan. */
+  .barra-portada{flex-wrap:wrap;justify-content:flex-end;row-gap:6px}
+  .barra-portada .marca{margin-right:auto}
+  .barra-portada .barra-acciones{display:contents}
   .webs-teaser{grid-template-columns:1fr;gap:18px}
   .catalogo-hero{padding-top:42px}
   .catalogo-hero h1{max-width:14ch}

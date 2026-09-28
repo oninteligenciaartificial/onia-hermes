@@ -4,6 +4,12 @@
   "hashtags": ["#n8n", "#automatizacion", "#ia", "#negocios", "#pymes", "#bolivia"],
   "comment_trigger": "Comentá MAPA",
   "cta": "Comentá MAPA",
+  "resource": {
+    "title": "Elegí qué automatizar primero",
+    "url": "https://sergiourcullo.vercel.app/automatizar"
+  },
+  "identity": "Soy Sergio Urcullo. Comparto sistemas de IA que funcionan en negocios reales.",
+  "follow_cta": "Seguime para el próximo sistema.",
   "serie": "IA PRÁCTICA",
   "episodio": "01",
   "slides": [

@@ -1,0 +1,60 @@
+{
+  "name": "Samuel - Construccion mensaje (demo)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        0
+      ],
+      "id": "55c820dc-decd-4419-bc99-08d5d2ff9ded",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "chatId": "TU_CHAT_ID",
+        "text": "Buenos dias. Revisa tus pendientes y define la tarea mas importante de hoy.",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        224,
+        0
+      ],
+      "id": "7ab14e90-f574-4d23-bb0d-2055880525e0",
+      "name": "Send a text message"
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "timezone": "America/La_Paz"
+  },
+  "active": false,
+  "pinData": {},
+  "tags": []
+}

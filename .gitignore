@@ -50,6 +50,9 @@ n8n-mcp-server/node_modules/
 .tmp/
 test-results/
 
+# Capturas de QA regenerables de HyperFrames; los decks HTML sí se versionan.
+hermes-content/carousels/out/yt-*/snapshots/
+
 # salida de trabajo del canario visual (las baselines si se versionan)
 .canario-out/
 
@@ -73,3 +76,10 @@ hermes-content/docs/recorrido/**/*.png
 # que el que la abre la lee como presente. Cero `.md` ocultos legitimos en el
 # repo el dia que se escribio esto (`git ls-files | grep -E '(^|/)\.[^/]+\.md$'`).
 .*.md
+
+# Worktrees que crea Claude Code para sus subagentes (isolation: worktree). Son checkouts
+# COMPLETOS del repo (~6 GB cada uno) con su propio .git: si quedan como no-trackeados, el
+# `git add -A` del auto-sync (hook Stop) los commitea como repos embebidos y los empuja.
+# Visto el 2026-09-25 en la sesion de contenido: dos worktrees de subagentes aparecieron
+# como `?? .claude/worktrees/` en el checkout principal.
+.claude/worktrees/

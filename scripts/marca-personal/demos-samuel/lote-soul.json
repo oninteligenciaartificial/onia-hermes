@@ -1,0 +1,27 @@
+{
+  "purpose": "Dos resultados del mismo personaje para la grabación de Samuel",
+  "model": "text2image_soul_v2",
+  "resolution": "2k",
+  "aspectRatio": "3:4",
+  "character": "LUCIA-SINTETICA-v3",
+  "authorization": "CLAUDE.md, sección 5: imagen en lote chico ya validada; Sergio Urcullo pidió leer y aplicar estas reglas en esta sesión.",
+  "visibleCostBefore": "7000 free gens left",
+  "visibleCostAfterAttempts": "7000 free gens left",
+  "billingVerified": false,
+  "networkDiagnostic": "OPTIONS al endpoint de generación: HTTP 403, Server cloudflare, sin Access-Control-Allow-Origin. No se desactivó CORS ni se eludió el rechazo.",
+  "items": [
+    {
+      "prompt": "The same LUCIA character, light freckles, natural skin texture, warm brown hair. Plain black shirt, bright modern office, soft window light, candid portrait. Preserve facial identity.",
+      "attempts": 2,
+      "status": "gateway_error_no_confirmed_job",
+      "error": "POST fnf-api-gw.higgsfield.ai/fnf/jobs/v2/text2image_soul_v2: net::ERR_FAILED; UI: Could not reach the server. Check your connection and try again."
+    },
+    {
+      "prompt": "The same LUCIA character, light freckles, natural skin texture, warm brown hair. Beige jacket, quiet cafe, warm afternoon window light, candid portrait. Preserve facial identity.",
+      "attempts": 0,
+      "status": "not_submitted_until_gateway_recovers"
+    }
+  ],
+  "fallback": "CLI 1.1.24 instalado; account status no obtiene respuesta y model get informa Not authenticated. No se creó otra credencial ni se expusieron tokens.",
+  "resume": "Verificar trabajos recientes y transacciones antes de reenviar: un error de red no demuestra por sí solo que un backend no recibió la solicitud. Continuar con un máximo de dos resultados confirmados del lote."
+}

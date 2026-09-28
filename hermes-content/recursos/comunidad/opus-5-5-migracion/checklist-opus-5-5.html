@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Checklist · Migrar a Claude Opus 5.5 sin errores 400</title>
+<!--
+  Recurso EXCLUSIVO de la comunidad (drop D1 de la tanda
+  hermes-content/docs/contenido/piezas/guiones/2026-09-25-opus-5-5-migracion.md).
+  Cada ítem resume la guía oficial de migración de Anthropic, verificada el 2026-09-25
+  con captura y manifiesto: hermes-content/captures/2026-09-25-opus-5-5/manifest.json.
+  Se re-genera con: node hermes-content/recursos/comunidad/opus-5-5-migracion/render.mjs
+-->
+<style>
+@font-face{font-family:'Bricolage Grotesque';src:url('../../../brand/fonts/BricolageGrotesque-var-latin.woff2') format('woff2');font-weight:500 700}
+@font-face{font-family:'DM Sans';src:url('../../../brand/fonts/DMSans-var-latin.woff2') format('woff2');font-weight:400 500}
+@font-face{font-family:'Spline Sans Mono';src:url('../../../brand/fonts/SplineSansMono-var-latin.woff2') format('woff2');font-weight:400 500}
+:root{--green:#10C26B;--green-deep:#0B8F4F;--green-soft:#D6F5E5;--ink:#0A0F0D;--ink-2:#1C2622;--surface:#F4F5F2;--muted:#6B756F}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:210mm;height:297mm;overflow:hidden;background:var(--surface)}
+body{font-family:'DM Sans',system-ui,sans-serif;color:var(--ink);font-size:10pt;line-height:1.36;padding:11mm 14mm 10mm;position:relative}
+header{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2px solid var(--ink);padding-bottom:4mm;margin-bottom:3.6mm}
+.kicker{font-family:'Spline Sans Mono',monospace;font-size:8pt;letter-spacing:.14em;text-transform:uppercase;color:var(--green-deep)}
+h1{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:23pt;line-height:1.06;letter-spacing:-.02em;margin-top:1.6mm;max-width:130mm}
+h1 em{font-style:normal;background:var(--green-soft);padding:0 1.8mm;border-radius:2mm;display:inline-block;margin-top:1mm}
+.sello{text-align:right;font-size:8pt;color:var(--muted);line-height:1.35}
+.sello b{display:block;font-family:'Bricolage Grotesque',sans-serif;font-size:10pt;color:var(--ink)}
+.intro{font-size:9.6pt;color:var(--ink-2);margin-bottom:3mm;max-width:180mm}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:0 6mm}
+.item{display:grid;grid-template-columns:6mm 1fr;gap:2.4mm;padding:2.3mm 0;border-top:1px solid #d9dfda}
+.box{width:5mm;height:5mm;border:1.6px solid var(--ink);border-radius:1.2mm;margin-top:.6mm}
+.item h3{font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:10.3pt;line-height:1.16;margin-bottom:.7mm}
+.item p{font-size:8.6pt;color:var(--ink-2);line-height:1.34}
+.tag{display:inline-block;font-family:'Spline Sans Mono',monospace;font-size:7pt;letter-spacing:.06em;padding:.4mm 1.6mm;border-radius:1mm;margin-left:1mm;vertical-align:1px}
+.t400{background:var(--ink);color:#fff}.tok{background:var(--green-soft);color:var(--green-deep)}
+code{font-family:'Spline Sans Mono',monospace;font-size:8pt;background:#e7ebe7;padding:.1mm 1mm;border-radius:.8mm}
+.cmd{grid-column:1/-1;background:var(--ink);color:#e9f4ee;border-radius:3mm;padding:3.2mm 5mm;display:flex;flex-direction:column;gap:1.2mm;margin-top:1.8mm}
+.cmd span{font-size:8.6pt;color:#b8c9bf}
+.cmd code{background:none;color:var(--green);font-size:11pt;padding:0;white-space:nowrap}
+table{width:100%;border-collapse:collapse;font-size:8.6pt;margin-top:.6mm}
+th,td{text-align:left;padding:.9mm 1.6mm;border-bottom:1px solid #d9dfda}
+th{font-family:'Spline Sans Mono',monospace;font-size:7.4pt;letter-spacing:.08em;color:var(--muted);font-weight:500}
+td.n{font-family:'Spline Sans Mono',monospace}
+.abajo{display:grid;grid-template-columns:1.05fr 1fr;gap:6mm;margin-top:3.4mm}
+.panel{border:1.4px solid var(--ink);border-radius:3mm;padding:3mm 3.6mm}
+.panel h4{font-family:'Bricolage Grotesque',sans-serif;font-size:10.5pt;margin-bottom:1.2mm}
+.panel p{font-size:8.5pt;color:var(--ink-2);line-height:1.36}
+footer{position:absolute;left:14mm;right:14mm;bottom:8mm;display:flex;justify-content:space-between;font-size:7.4pt;color:var(--muted);border-top:1px solid #cfd6d0;padding-top:2mm}
+footer a{color:var(--green-deep);text-decoration:none}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="kicker">Onia Community · checklist</div>
+    <h1>Migrar a Claude Opus 5.5<br><em>sin errores 400</em></h1>
+  </div>
+  <div class="sello"><b>Sergio Urcullo</b>verificado el 25-sep-2026<br>contra la guía oficial de Anthropic</div>
+</header>
+
+<p class="intro">Opus 5.5 rechaza configuraciones que Opus 5 aceptaba. Si cambiás sólo el nombre del modelo, algunas llamadas devuelven <b>error 400</b>. Marcá cada casilla en tu proyecto antes de migrar.</p>
+
+<div class="grid">
+  <div class="item"><div class="box"></div><div><h3>Cambiá el modelo a <code>claude-opus-5-5</code></h3><p>Disponible en la plataforma de Claude, AWS, Google Cloud y Azure.</p></div></div>
+  <div class="item"><div class="box"></div><div><h3>Sacá el thinking desactivado <span class="tag t400">400</span></h3><p><code>thinking: {"type": "disabled"}</code> y los presupuestos manuales (<code>budget_tokens</code>) se rechazan. El thinking adaptativo está siempre prendido.</p></div></div>
+  <div class="item"><div class="box"></div><div><h3>Fijá <code>effort</code> a mano <span class="tag tok">clave</span></h3><p>Niveles: low · medium · high · xhigh · max. El default ahora es <b>medium</b>; en Opus 5 era <b>high</b>. Si no lo fijás, piensa menos que antes.</p></div></div>
+  <div class="item"><div class="box"></div><div><h3>No fuerces herramientas <span class="tag t400">400</span></h3><p><code>tool_choice</code> sólo acepta <code>auto</code> o <code>none</code>. <code>any</code> y <code>tool</code> se rechazan: usá strict tool use o structured outputs, y decí en el prompt cuándo aplica.</p></div></div>
+  <div class="item"><div class="box"></div><div><h3>Sacá <code>temperature</code>, <code>top_p</code> y <code>top_k</code> <span class="tag t400">400</span></h3><p>Cualquier valor distinto del default se rechaza. Guiá el comportamiento con el prompt.</p></div></div>
+  <div class="item"><div class="box"></div><div><h3>Nada de prefill del asistente <span class="tag t400">400</span></h3><p>No termines <code>messages</code> con un turno del asistente ya escrito. Usá structured outputs o instrucciones en el system prompt.</p></div></div>
+  <div class="item"><div class="box"></div><div><h3>Revisá <code>max_tokens</code></h3><p>Cubre thinking <b>más</b> texto, y el thinking se cobra como salida. En xhigh o max, empezá en 64k y ajustá.</p></div></div>
+  <div class="item"><div class="box"></div><div><h3>Leé la respuesta por tipo de bloque</h3><p>Los bloques <code>thinking</code> llegan primero. En loops con herramientas, devolvelos <b>sin modificar</b>: editados o reordenados, dan 400.</p></div></div>
+  <div class="item"><div class="box"></div><div><h3>El texto del thinking viene vacío</h3><p><code>display</code> es <code>"omitted"</code> por defecto: se ve como una pausa larga. Si lo mostrás a usuarios, usá <code>"summarized"</code>.</p></div></div>
+  <div class="item"><div class="box"></div><div><h3>¿Tenés Priority Tier?</h3><p>No está soportado en Opus 5.5: planificá esa capacidad aparte.</p></div></div>
+  <div class="cmd"><span>Atajo en Claude Code: aplica el cambio de modelo y los parámetros, pregunta el alcance antes de editar y deja la lista de lo que hay que revisar a mano.</span><code>/claude-api migrate this project to claude-opus-5-5</code></div>
+</div>
+
+<div class="abajo">
+  <div class="panel">
+    <h4>Cuánto cuesta (por millón de tokens)</h4>
+    <table>
+      <tr><th></th><th>OPUS 5.5</th><th>OPUS 5</th></tr>
+      <tr><td>Entrada</td><td class="n">$4</td><td class="n">$5</td></tr>
+      <tr><td>Salida</td><td class="n">$20</td><td class="n">$25</td></tr>
+      <tr><td>Lectura de caché</td><td class="n">$0.20</td><td class="n">$0.50</td></tr>
+      <tr><td>Escritura de caché</td><td class="n">$5</td><td class="n">$6.25</td></tr>
+      <tr><td>Fast mode (hasta 2,5×)</td><td class="n">$8 / $40</td><td class="n">—</td></tr>
+    </table>
+  </div>
+  <div class="panel">
+    <h4>La letra chica del "40 % más barato"</h4>
+    <p>Según Anthropic, Opus 5.5 cuesta 40 % menos que Opus 5 <b>con la configuración por defecto</b>, en cargas típicas. El precio por token bajó 20 %; el resto viene de usar menos tokens, y el default de effort bajó a medium.</p>
+    <p style="margin-top:2mm"><b>Antes de migrar algo en producción:</b> corré la misma tarea en medium y en high, y compará tokens de salida y calidad con tus datos.</p>
+  </div>
+</div>
+
+<footer>
+  <span>Fuentes: <a href="https://platform.claude.com/docs/en/models/opus-5-5/migration-guide">guía oficial de migración</a> · <a href="https://www.anthropic.com/claude-opus-5-5">anuncio de Claude Opus 5.5</a></span>
+  <span>Onia Community · para aplicar, no para guardar</span>
+</footer>
+</body>
+</html>

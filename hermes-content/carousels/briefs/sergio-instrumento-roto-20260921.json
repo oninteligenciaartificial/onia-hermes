@@ -1,0 +1,92 @@
+{
+  "title": "Si da verde con la cosa rota",
+  "caption": "Di por buena una pantalla tres veces sin abrirla nunca. El buscador encontraba los textos, el servidor respondía bien, y me decían que estaba lista. Estaba rota, en producción, días. De ahí saqué la regla que más uso: si el instrumento puede dar verde con la cosa rota, el instrumento está roto. Guardalo.",
+  "hashtags": [
+    "#programacion",
+    "#ia",
+    "#claudecode",
+    "#calidad",
+    "#negocios"
+  ],
+  "slides": [
+    {
+      "number": 1,
+      "role": "cover",
+      "pill": "La regla",
+      "headline": "Si da verde con la cosa *rota*...",
+      "body": "...el instrumento está roto. Te cuento cómo aprendí esto.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "",
+      "alt_text": "Si el instrumento da verde con la cosa rota esta roto"
+    },
+    {
+      "number": 2,
+      "role": "stakes",
+      "pill": "El caso",
+      "headline": "La di por buena tres veces",
+      "body": "Una pantalla de entrar, en producción. Tres comprobaciones, las tres en verde. Nunca la abrí.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "",
+      "alt_text": "El caso"
+    },
+    {
+      "number": 3,
+      "role": "point",
+      "pill": "Verde 1",
+      "headline": "Busqué los textos",
+      "body": "Estaban todos adentro del archivo. Verde. Pero buscar sirve para descartar, nunca para confirmar.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "",
+      "alt_text": "Verde 1"
+    },
+    {
+      "number": 4,
+      "role": "point",
+      "pill": "Verde 2",
+      "headline": "Pregunté si respondía",
+      "body": "Doscientos. Verde. Una página puede responder perfecto y verse rota.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "",
+      "alt_text": "Verde 2"
+    },
+    {
+      "number": 5,
+      "role": "point",
+      "pill": "La realidad",
+      "headline": "Decía «credit_card_off»",
+      "body": "Donde iba un candado. En la pantalla de entrar. En producción. Días. Lo encontró otra persona, no yo.",
+      "callout": "credit_card_off",
+      "save_worthy": true,
+      "visual_prompt": "",
+      "alt_text": "La realidad"
+    },
+    {
+      "number": 6,
+      "role": "point",
+      "pill": "La regla",
+      "headline": "El instrumento estaba roto",
+      "body": "Los dos medían un sustituto, no la cosa. Si tu medida puede dar verde con todo roto, no es una medida.",
+      "callout": "Medí la cosa, no su sombra",
+      "save_worthy": true,
+      "visual_prompt": "",
+      "alt_text": "La regla"
+    },
+    {
+      "number": 7,
+      "role": "cta",
+      "pill": "En una línea",
+      "headline": "Abrilo. *Miralo*. Después decí listo",
+      "body": "¿Qué «verde» tenés hoy que nunca abriste?",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "",
+      "alt_text": "En una línea"
+    }
+  ],
+  "comment_trigger": "",
+  "cta": ""
+}

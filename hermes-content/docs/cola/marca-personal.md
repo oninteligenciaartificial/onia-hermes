@@ -19,13 +19,16 @@ compartida. **Reintentar en la primera corrida de un DIA nuevo**, no en la vuelt
 siguiente — y si vuelve a fallar ahi, registrar y esperar al dia siguiente otra vez.
 # Cola — carril MARCA PERSONAL · COMUNIDAD · CONTRATO SAMUEL
 
-> Índice del carril: `docs/ONIA_MARCA_PERSONAL_MADRE.md` (documento madre).
+> Índice del carril: `docs/ONIA_CIRCUITO_DE_CONTENIDO.md`.
+> ⚠️ **Corregido el 2026-09-25.** Acá decía `docs/ONIA_MARCA_PERSONAL_MADRE.md` (documento
+> madre). Medido: MADRE quedó superado ese día por el índice único del carril, que absorbió lo
+> que tenía de propio. Esta cola sigue quieta desde el 05-sep.
 
 ## PRODUCCIÓN DEL LOOP (2026-09-01 en adelante, orden de prioridad)
 
 | # | Pieza | Estado |
 |---|---|---|
-| P1 | **Biblioteca de drops** | ✅ 2026-09-01: `ONIA_COMUNIDAD_BIBLIOTECA.md` + página Notion "Onia Community · Biblioteca" (borrador privado — **Sergio: abrirla → Compartir → Publicar en la web → fijar ese link en Avisos**) |
+| P1 | **Biblioteca de drops** | ✅ 2026-09-01: `ONIA_COMUNIDAD_BIBLIOTECA.md` + página Notion "Onia Community · Biblioteca" (borrador privado — **Sergio Urcullo: abrirla → Compartir → Publicar en la web → fijar ese link en Announcements**) ⚠️ *corregido el 25-sep: decía «Avisos»; el canal se llama Announcements (`comunidad/ESTADO_COMUNIDAD.md` §1.1)* |
 | P2 | **Drops semana 2** | ✅ 2026-09-01: 7 drops lun-dom en `ONIA_COMUNIDAD_CONTENIDO.md` (sáb se llena con señales del mié; jue y dom llevan el toque de Sergio) |
 | P3 | **Radar mensual #1 para Samuel** | ✅ 2026-09-01: `ONIA_MARCA_PERSONAL_RADAR.md` (14 ganchos por serie + tabla tema→palabra→recurso) |
 | P4 | **Carrusel 1 "5 prompts"** | ✅ 2026-09-01: 7 láminas 1080×1350 en `carousels/out/carrusel-5-prompts/` — íconos Fluent 3D (MIT), SIN esperar Higgsfield. Generador: `scripts/marca-personal/generar-carrusel-prompts.py`. Carrusel 2 ("3 cursos") pendiente, mismo generador |

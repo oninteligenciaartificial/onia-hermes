@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /* Tests for the carousel render engine. Run: node scripts/carousel_render.test.js */
 const assert = require('node:assert');
-const { roleFor, slideHtml, communityEditorialHtml, darkProductHtml, darkNeonHtml, editorialPhotoHtml, editorialCleanHtml, brightRetailHtml, bloqueSolidoHtml, emph, ACCOUNTS, BRANDS, PACKS, FORMATS, setFormat } = require('./carousel_render');
+const { roleFor, slideHtml, communityEditorialHtml, darkProductHtml, darkNeonHtml, editorialPhotoHtml, editorialCleanHtml, brightRetailHtml, bloqueSolidoHtml, emph, ACCOUNTS, BRANDS, PACKS, FORMATS, setFormat, faltantesCtaSergio } = require('./carousel_render');
 
 let passed = 0;
 function test(name, fn) {
@@ -231,7 +231,9 @@ test('bright-retail cuadrado: ribbon con viewBox del formato y alturas escaladas
   assert.ok(html.includes('M -120 784'));
 });
 
-console.log(`\n${passed} passed`);
+// El total se imprime al salir: los tests agregados después de esta línea quedaban fuera
+// de la cuenta (decía «32 passed» con 44 corriendo).
+process.on('exit', (code) => { if (code === 0) console.log(`\n${passed} passed`); });
 
 // --- 2026-08-23: texto que la plantilla inventaba y el brief nunca declaraba ---
 
@@ -314,3 +316,58 @@ test('chip de dato: {{x}} se vuelve span.dato, y convive con *verde*', () => {
 test('chip de dato: escapa el HTML antes de convertir', () => {
   assert.ok(emph('{{<b>5</b>}}').includes('&lt;b&gt;5&lt;/b&gt;'), 'no debe inyectar HTML');
 });
+
+test('cierre editorial de Sergio muestra comentario, Bóveda y firma', () => {
+  const html = communityEditorialHtml({
+    role: 'cta', headline: 'H', body: 'B', comment_trigger: 'Comentá MAPA',
+    resource: { title: 'Elegí qué automatizar primero', url: 'https://sergiourcullo.vercel.app/automatizar' },
+    identity: 'Soy Sergio Urcullo.', follow_cta: 'Seguime para el próximo sistema.',
+  }, 6, 7, 'sergio', {});
+  assert.ok(html.includes('Comentá'));
+  assert.ok(html.includes('Elegí qué automatizar primero'));
+  assert.ok(html.includes('https://sergiourcullo.vercel.app/automatizar'));
+  assert.ok(html.includes('Soy Sergio Urcullo.'));
+  assert.ok(html.includes('Seguime para el próximo sistema.'));
+  assert.ok(/class="slide cta[^"]*has-extras/.test(html), 'con recurso y firma, el cierre se compacta');
+});
+
+test('cierre editorial sin recurso ni firma en el brief no los inventa', () => {
+  // Pasó con los defaults de la rama de la Bóveda: todo cierre prometía un recurso en
+  // /boveda (sin desplegar) y firmaba como Sergio, también en la pauta de @oniahq.
+  const sergio = communityEditorialHtml({
+    role: 'cta', headline: 'H', body: 'B', comment_trigger: 'Comentá MAPA',
+  }, 6, 7, 'sergio', {});
+  assert.ok(sergio.includes('Comentá'));
+  assert.ok(!sergio.includes('cta-resource">'), 'sin resource no hay bloque de recurso');
+  assert.ok(!sergio.includes('cta-signature">'), 'sin identity ni follow_cta no hay firma');
+  assert.ok(!sergio.includes('Soy Sergio Urcullo'));
+  assert.ok(!/class="slide cta[^"]*has-extras/.test(sergio));
+  const onia = communityEditorialHtml({ role: 'cta', headline: 'Probá ONIA', cta: 'CREÁ TU CUENTA' }, 0, 1, 'onia', {});
+  assert.ok(!onia.includes('Soy Sergio Urcullo'));
+  assert.ok(!onia.includes('RECURSO'));
+});
+
+test('CTA de Sergio: la palabra exige recurso, pero no es obligatoria', () => {
+  const firma = { identity: 'Soy Sergio Urcullo.', follow_cta: 'Seguime.' };
+  // «Guardalo» sin palabra: vale, siempre que firme.
+  assert.deepStrictEqual(faltantesCtaSergio({ cta: 'GUARDALO', ...firma }), []);
+  // Una palabra sin recurso es una promesa vacía.
+  assert.deepStrictEqual(faltantesCtaSergio({ comment_trigger: 'Comentá MAPA', ...firma }), ['resource.title', 'resource.url']);
+  assert.deepStrictEqual(faltantesCtaSergio({ comment_trigger: 'Comentá MAPA', resource: { title: 'T', url: 'https://x' }, ...firma }), []);
+  // Recurso entregado a mano por mensaje: sin URL, pero declarado.
+  assert.deepStrictEqual(faltantesCtaSergio({ comment_trigger: 'Comentá X', resource: { title: 'Agenda', entrega: 'manual' }, ...firma }), []);
+  // Sin firma no sale, con o sin palabra.
+  assert.deepStrictEqual(faltantesCtaSergio({ cta: 'GUARDALO' }), ['identity', 'follow_cta']);
+});
+
+test('terminal grande: texto para copiar legible en el teléfono, y las líneas vacías separan', () => {
+  const html = communityEditorialHtml({
+    role: 'point', headline: 'H', body: 'B',
+    visual: { type: 'terminal', size: 'grande', label: 'plantilla', lines: ['Hola [nombre],', '', '¿Te reservo el jueves?'] },
+  }, 1, 3, 'sergio', {});
+  assert.ok(html.includes('visual visual-terminal grande'));
+  assert.ok(html.includes('terminal-line gap'));
+  const normal = communityEditorialHtml({ role: 'point', headline: 'H', body: 'B', visual: { type: 'terminal', lines: ['x'] } }, 1, 3, 'sergio', {});
+  assert.ok(normal.includes('class="visual visual-terminal"'), 'sin size queda como estaba');
+});
+

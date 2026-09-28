@@ -1,0 +1,142 @@
+{
+  "title": "Pasar a Opus 5.5 sin errores 400",
+  "caption": "Cambiar sólo el nombre del modelo a claude-opus-5-5 no alcanza: la guía oficial de Anthropic lista configuraciones que Opus 5.5 rechaza con error 400.\n\n1) thinking desactivado o con budget_tokens\n2) tool_choice forzado (any / tool)\n3) temperature, top_p o top_k distintos del default\n4) prefill: terminar los mensajes con un turno del asistente ya escrito\n\nY la letra chica: el effort por defecto bajó de high a medium. Si no lo fijás, piensa menos que antes.\n\nEl atajo en Claude Code: /claude-api migrate this project to claude-opus-5-5. Pregunta el alcance antes de editar y deja la lista de lo que hay que revisar a mano.\n\nTodo verificado el 25-sep contra la guía oficial de migración de Anthropic. Guardalo para cuando migres.",
+  "hashtags": [
+    "#claude",
+    "#anthropic",
+    "#claudecode",
+    "#opus",
+    "#ia",
+    "#programacion"
+  ],
+  "cta": "GUARDALO",
+  "serie": "IA PRÁCTICA",
+  "fuentes": {
+    "guia": "https://platform.claude.com/docs/en/models/opus-5-5/migration-guide",
+    "anuncio": "https://www.anthropic.com/claude-opus-5-5",
+    "verificado": "2026-09-25",
+    "capturas": "hermes-content/captures/2026-09-25-opus-5-5/manifest.json",
+    "guion": "hermes-content/docs/contenido/piezas/guiones/2026-09-25-opus-5-5-migracion.md"
+  },
+  "slides": [
+    {
+      "number": 1,
+      "role": "cover",
+      "pill": "Claude Opus 5.5 · API",
+      "headline": "Pasar a Opus 5.5 te puede dar *error 400*",
+      "body": "Cuatro configuraciones que ya no acepta, y el comando que migra solo.",
+      "callout": "Guardalo antes de migrar",
+      "bg": "hermes-content/references/marca-personal-sergio/fondos/laptop-03.png",
+      "save_worthy": false,
+      "alt_text": "Pasar a Claude Opus 5.5 te puede dar error 400"
+    },
+    {
+      "number": 2,
+      "role": "stakes",
+      "pill": "Qué cambió",
+      "headline": "Cambiar el nombre del modelo *no alcanza*",
+      "body": "La guía oficial lo dice: si una configuración está rechazada, la API devuelve 400.",
+      "callout": "Guía oficial de Anthropic",
+      "visual": {
+        "type": "screenshot",
+        "file": "hermes-content/captures/2026-09-25-opus-5-5/carrusel/recortes/K0-400.png",
+        "label": "GUÍA DE MIGRACIÓN · ANTHROPIC",
+        "fit": "contain",
+        "caption": "Captura real, 25-sep-2026."
+      },
+      "save_worthy": false,
+      "alt_text": "La guía oficial: una configuración rechazada devuelve error 400"
+    },
+    {
+      "number": 3,
+      "role": "point",
+      "pill": "1 · Thinking",
+      "headline": "El thinking *ya no se apaga*",
+      "body": "thinking: disabled y budget_tokens se rechazan. Cuánto piensa se controla con effort.",
+      "callout": "400 si lo mandás",
+      "visual": {
+        "type": "screenshot",
+        "file": "hermes-content/captures/2026-09-25-opus-5-5/carrusel/recortes/K1-1-thinking.png",
+        "label": "LO QUE DICE LA GUÍA",
+        "fit": "contain"
+      },
+      "save_worthy": false,
+      "alt_text": "Thinking desactivado se rechaza en Opus 5.5"
+    },
+    {
+      "number": 4,
+      "role": "point",
+      "pill": "2 · Herramientas",
+      "headline": "No podés *forzar* una herramienta",
+      "body": "tool_choice con any o tool da 400. Usá auto con strict tool use o structured outputs.",
+      "callout": "El error, literal",
+      "visual": {
+        "type": "screenshot",
+        "file": "hermes-content/captures/2026-09-25-opus-5-5/carrusel/recortes/K3-error-tool-choice.png",
+        "label": "EL MENSAJE DE ERROR",
+        "fit": "contain"
+      },
+      "save_worthy": false,
+      "alt_text": "tool_choice any o tool no está soportado en Opus 5.5"
+    },
+    {
+      "number": 5,
+      "role": "point",
+      "pill": "3 · Sampling",
+      "headline": "Chau *temperature*, top_p y top_k",
+      "body": "Cualquier valor distinto del default se rechaza. El comportamiento se guía con el prompt.",
+      "callout": "Buscalos en tu código",
+      "visual": {
+        "type": "screenshot",
+        "file": "hermes-content/captures/2026-09-25-opus-5-5/carrusel/recortes/K4-4-sampling.png",
+        "label": "LO QUE DICE LA GUÍA",
+        "fit": "contain"
+      },
+      "save_worthy": false,
+      "alt_text": "temperature top_p y top_k se rechazan en Opus 5.5"
+    },
+    {
+      "number": 6,
+      "role": "point",
+      "pill": "4 · Prefill",
+      "headline": "Nada de respuestas *pre-escritas*",
+      "body": "Si terminabas messages con un turno del asistente ya escrito, ahora se rechaza. Usá structured outputs.",
+      "callout": "También da 400",
+      "visual": {
+        "type": "screenshot",
+        "file": "hermes-content/captures/2026-09-25-opus-5-5/carrusel/recortes/K5-5-prefill.png",
+        "label": "LO QUE DICE LA GUÍA",
+        "fit": "contain"
+      },
+      "save_worthy": false,
+      "alt_text": "El prefill del asistente se rechaza en Opus 5.5"
+    },
+    {
+      "number": 7,
+      "role": "save",
+      "pill": "La letra chica",
+      "headline": "El effort por defecto *bajó*",
+      "body": "En Opus 5 era high; en Opus 5.5 es medium. Si no lo fijás a mano, piensa menos que antes.",
+      "callout": "Guardá esto ↗",
+      "visual": {
+        "type": "screenshot",
+        "file": "hermes-content/captures/2026-09-25-opus-5-5/carrusel/recortes/K7-effort-explicito.png",
+        "label": "CHECKLIST OFICIAL",
+        "fit": "contain"
+      },
+      "save_worthy": true,
+      "alt_text": "El effort por defecto en Opus 5.5 es medium, en Opus 5 era high"
+    },
+    {
+      "number": 8,
+      "role": "cta",
+      "pill": "El atajo",
+      "headline": "En Claude Code: */claude-api migrate*",
+      "body": "Cambia el modelo, corrige los parámetros, pregunta el alcance antes de editar y te deja la lista de lo que tenés que revisar a mano.",
+      "callout": "",
+      "save_worthy": false,
+      "alt_text": "El comando claude-api migrate hace la migración en Claude Code"
+    }
+  ],
+  "job": "education"
+}

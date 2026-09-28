@@ -56,12 +56,16 @@ function crear({ esc, emph, roleFor, ACCOUNTS, BRAND, getFmt }) {
 
   function renderTerminal(visual) {
     const lines = list(visual.lines);
-    return `<div class="visual visual-terminal">
+    // `size: 'grande'` es para texto que se copia (una plantilla, un mensaje): a 18 px sobre
+    // 1080 queda en ~6 pt en el teléfono y no se lee. Líneas de hasta ~22 caracteres.
+    const grande = visual.size === 'grande' ? ' grande' : '';
+    return `<div class="visual visual-terminal${grande}">
       <div class="terminal-bar"><i></i><i></i><i></i><span>${esc(visual.label || 'terminal')}</span></div>
       <div class="terminal-body">${lines.map((line) => {
         const value = typeof line === 'string' ? line : line.value;
         const kind = typeof line === 'string' ? '' : (line.kind || '');
-        return `<div class="terminal-line ${esc(kind)}">${esc(value)}</div>`;
+        return value === '' ? '<div class="terminal-line gap"></div>'
+          : `<div class="terminal-line ${esc(kind)}">${esc(value)}</div>`;
       }).join('')}</div>
     </div>`;
   }
@@ -162,11 +166,26 @@ function crear({ esc, emph, roleFor, ACCOUNTS, BRAND, getFmt }) {
     const visual = visualHtml(slide);
     const rawTrigger = text(slide.comment_trigger || slide.cta || 'GUÍA').trim();
     const trigger = rawTrigger.replace(/^coment(?:á|a)\s+/i, '').trim() || 'GUÍA';
-    const cta = role === 'cta'
-      ? slide.comment_trigger
-        ? `<div class="cta-line"><span>Comentá</span><b>${esc(trigger)}</b></div>`
-        : `<div class="cta-line cta-direct"><b>${esc(trigger)}</b><span>→</span></div>`
+    // Recurso y firma sólo si el brief los trae. Sin defaults: con ellos, cada cierre
+    // prometía la Bóveda (sin desplegar) y firmaba «Soy Sergio Urcullo» también en la
+    // pauta de @oniahq.
+    const resource = slide.resource || {};
+    const resourceTitle = text(resource.title || '').trim();
+    const resourceUrl = text(resource.url || '').trim();
+    const resourceLabel = text(resource.label || 'RECURSO').trim();
+    const identity = text(slide.identity || '').trim();
+    const follow = text(slide.follow_cta || '').trim();
+    const ctaLine = slide.comment_trigger
+      ? `<div class="cta-line"><span>Comentá</span><b>${esc(trigger)}</b></div>`
+      : `<div class="cta-line cta-direct"><b>${esc(trigger)}</b><span>→</span></div>`;
+    const ctaResource = resourceTitle
+      ? `<p class="cta-resource"><span>${esc(resourceLabel)}</span><strong>${esc(resourceTitle)}</strong>${resourceUrl ? `<small>${esc(resourceUrl)}</small>` : ''}</p>`
       : '';
+    const ctaSignature = identity || follow
+      ? `<p class="cta-signature">${esc(identity)}${identity && follow ? ' ' : ''}${follow ? `<b>${esc(follow)}</b>` : ''}</p>`
+      : '';
+    const ctaExtras = role === 'cta' && Boolean(ctaResource || ctaSignature);
+    const cta = role === 'cta' ? `${ctaLine}${ctaResource}${ctaSignature}` : '';
     const accountName = text(acc.name || account || 'Onia').toUpperCase();
     const accountShort = text(acc.name || account || 'Onia').split(/\s+/)[0].toUpperCase();
     const coverBrand = `<div class="brandline"><span class="brand-dot"></span><span>${esc(accountName)}</span><span class="brand-rule"></span><span>${esc(serie)}</span></div>`;
@@ -226,6 +245,7 @@ body{font-family:'DM Sans',Inter,system-ui,sans-serif;background:#f7f5ef;color:#
 .terminal-bar i{width:11px;height:11px;border-radius:50%;background:#ef6b5e}.terminal-bar i:nth-child(2){background:#e8bb55}.terminal-bar i:nth-child(3){background:#50ca7c}.terminal-bar span{margin-left:9px}
 .terminal-body{padding:26px 26px 32px;font-family:'DM Mono',monospace;font-size:18px;line-height:1.65;white-space:pre-wrap;overflow-wrap:anywhere}
 .terminal-line{color:#c4d1c9}.terminal-line.command{color:#77e5a4}.terminal-line.comment{color:#879890}
+.terminal-line.gap{height:.7em}.visual-terminal.grande .terminal-body{font-size:30px;line-height:1.4;padding:30px 30px 36px;color:#f7f5ef}.visual-terminal.grande .terminal-line{color:#f7f5ef}.visual-terminal.grande .terminal-bar{font-size:17px}
 .visual-matrix{background:#fdfcf8}
 .matrix-list{display:flex;flex-direction:column;gap:16px}.matrix-item{display:grid;grid-template-columns:48px 1fr;gap:12px;padding:16px 0;border-top:1px solid #dce2dd}.matrix-item:first-child{border-top:0}.matrix-number{font-family:'DM Mono',monospace;color:#08734a;font-size:18px}.matrix-item strong{font-size:24px;color:#17201c}.matrix-item p{font-size:18px;line-height:1.35;color:#526159;margin-top:4px}
 .visual-table{padding:28px 30px;background:#fdfcf8}.table-head,.table-row{display:grid;grid-template-columns:1fr 40px 1fr;align-items:center;gap:10px}.table-head{font-family:'DM Mono',monospace;font-size:14px;letter-spacing:1.4px;color:#526159;padding-bottom:14px;border-bottom:1px solid #cfd8d1}.table-rows{display:flex;flex-direction:column}.table-row{min-height:68px;border-bottom:1px solid #e1e6e2;font-size:21px}.table-row b{font-weight:700}.table-row span{text-align:center;color:#08734a;font-size:28px}
@@ -234,8 +254,10 @@ body{font-family:'DM Sans',Inter,system-ui,sans-serif;background:#f7f5ef;color:#
 .visual-note-card{position:relative;min-height:370px;background:#fff1d7;border-color:#efd8ac}.visual-note-card .note-mark{position:absolute;right:26px;top:22px;font-size:52px;color:#f19a33}.visual-note-card strong{font-family:'Instrument Serif',Georgia,serif;font-size:60px;line-height:1.02;font-weight:400;color:#1b1d1b;max-width:85%}.visual-note-card strong .g{color:#0b8a52}.visual-note-card p{font-size:21px;line-height:1.35;margin-top:24px;color:#59625d}
 .save .interior-main{grid-template-columns:38% 62%}.save .headline{font-size:68px}.save .visual{min-height:460px}
 .cta{background:#0e1713;color:#f7f5ef;padding-top:80px}.cta .interior-top{color:#dce8e1}.cta .top-kicker{color:#13c978}.cta .interior-main{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;max-width:900px}.cta .headline{font-size:90px;max-width:900px}.cta .headline .g{color:#13c978;background:none}.cta .body{color:#c3d0c8;max-width:700px}.cta-line{display:inline-flex;align-items:center;gap:18px;margin-top:38px;border-radius:999px;background:#13c978;color:#0e1713;padding:18px 28px;font-size:28px}.cta-line span{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:32px}.cta-line b{font-family:'DM Mono',monospace;font-size:23px;letter-spacing:1px}.cta-line.cta-direct span{font-family:'DM Sans',sans-serif;font-style:normal;font-weight:800}.cta-line.cta-direct b{font-size:22px}.cta .footer{color:#c3d0c8}.cta .visual{display:none}
+.cta-resource{margin:22px 0 0;display:flex;flex-direction:column;gap:3px}.cta-resource span{font:500 13px 'DM Mono',monospace;letter-spacing:1.4px;color:#83cda4}.cta-resource strong{font:500 25px/1.1 'Instrument Serif',Georgia,serif;color:#f7f5ef}.cta-resource small{font:500 13px 'DM Mono',monospace;color:#aabbb1}.cta-signature{max-width:660px;margin:21px 0 0;color:#c3d0c8;font-size:17px;line-height:1.35}.cta-signature b{color:#13c978;font-weight:600}
+.cta.has-extras .headline{font-size:82px}.cta.has-extras .cta-line{margin-top:30px;padding:15px 24px;font-size:26px}.cta.has-extras .cta-line span{font-size:30px}.cta.has-extras .cta-line b{font-size:22px}
 </style></head><body>
-<div class="slide ${role === 'cover' ? 'cover' : role === 'cta' ? 'cta' : `interior ${role}`}${hasPhoto ? ' has-photo' : ''}">
+<div class="slide ${role === 'cover' ? 'cover' : role === 'cta' ? 'cta' : `interior ${role}`}${hasPhoto ? ' has-photo' : ''}${ctaExtras ? ' has-extras' : ''}">
   ${role === 'cover' || role === 'cta' ? photo : paper}
   ${role === 'cover' ? `${coverBrand}<div class="cover-content"><div class="kicker">${esc(kicker)}</div>${headline}${body}</div>${footer}` : `${interiorBrand}<div class="interior-main">${role === 'cta' ? `<div>${headline}${body}${cta}</div>` : `<div>${headline}${body}</div>${visual}`}</div>${footer}`}
 </div></body></html>`;

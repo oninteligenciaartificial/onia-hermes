@@ -1266,13 +1266,39 @@ ${last ? '' : `.cue{position:absolute;right:46px;bottom:300px;z-index:3;font-siz
 </div></body></html>`;
 }
 
+// La cuenta personal no publica palabras vacías: si el cierre pide comentar una palabra,
+// esa palabra lleva a un recurso, y el final siempre identifica a Sergio. Así el CTA es
+// una puerta útil, no un truco para inflar comentarios.
+// La palabra NO es obligatoria: el 25-sep las tres páginas de recurso de la semana
+// (/automatizar, /agentes, /mcp) daban 404 en producción, y un «Guardalo» honesto le
+// gana a una palabra que promete algo que no existe. Que la URL responda se verifica
+// antes de publicar: el render no sale a la red.
+function faltantesCtaSergio(brief) {
+  const resource = brief.resource || {};
+  return [
+    brief.comment_trigger && !resource.title && 'resource.title',
+    // Un recurso que se manda a mano por mensaje (la agenda, un formulario) no tiene URL: vale
+    // si el brief lo declara con `entrega: 'manual'`, y entonces contestar es trabajo de Sergio.
+    brief.comment_trigger && !resource.url && resource.entrega !== 'manual' && 'resource.url',
+    !brief.identity && 'identity',
+    !brief.follow_cta && 'follow_cta',
+  ].filter(Boolean);
+}
+
 function render(args) {
   const brief = JSON.parse(fs.readFileSync(args.brief, 'utf8'));
+  if (args.account === 'sergio' && args.pack === 'community-editorial') {
+    const missing = faltantesCtaSergio(brief);
+    if (missing.length) throw new Error(`Sergio community-editorial requiere CTA útil: falta ${missing.join(', ')}`);
+  }
   const slides = (brief.slides || []).map((sl) => (
     // El brief trae `comment_trigger` y `cta` a nivel raiz; el render los necesita por slide.
     { ...sl,
       comment_trigger: sl.comment_trigger || brief.comment_trigger || '',
-      cta: sl.cta || brief.cta || '' }));
+      cta: sl.cta || brief.cta || '',
+      resource: sl.resource || brief.resource || {},
+      identity: sl.identity || brief.identity || '',
+      follow_cta: sl.follow_cta || brief.follow_cta || '' }));
   if (!slides.length) throw new Error('brief has no slides');
   // La serie es del CARRUSEL, no de la slide: el brief es su lugar natural. La bandera
   // de linea de comando sigue funcionando y gana, para poder probar sin editar el brief.
@@ -1346,6 +1372,6 @@ if (require.main === module) {
 module.exports = {
   slideHtml, communityEditorialHtml, darkProductHtml, darkNeonHtml, editorialPhotoHtml, editorialCleanHtml, brightRetailHtml,
   papelSubrayadoHtml, datoIlustradoHtml, tarjetaEmpleadoHtml, bloqueSolidoHtml,
-  emph, roleFor, ACCOUNTS, BRANDS, PACKS, FORMATS,
+  emph, roleFor, ACCOUNTS, BRANDS, PACKS, FORMATS, faltantesCtaSergio,
   setFormat: (name) => { if (!FORMATS[name]) throw new Error('Unknown format: ' + name); FMT = FORMATS[name]; },
 };
