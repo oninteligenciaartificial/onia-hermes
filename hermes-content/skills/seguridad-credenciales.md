@@ -179,10 +179,11 @@ conector de navegación de Claude o de Codex.
 | Codex abre una pestaña nueva de Higgsfield en Chrome OnIA | Correcto: Assets y menú de cuenta visibles; sin solicitar login ni modificar contenido |
 | Reutilización después de recuperar el conector | Correcto: Chrome OnIA volvió a aparecer; una segunda apertura mostró Assets y menú de cuenta sin otro login. La recarga inicial se interrumpió y no se considera una prueba completada |
 | Cierre y nuevo acceso en el navegador integrado de Codex | Correcto: se verificó Login después de salir; Continue with Google devolvió menú de cuenta y Assets, sin solicitar contraseña |
-| Nuevo acceso en Chrome después del cierre solicitado | Pendiente: Google llegó al formulario; KeePassXC no rellenó el campo y se solicita comprobar el estado de la extensión |
+| Nuevo acceso en Chrome después del cierre solicitado | Pendiente: Sergio informó un rellenado; la comprobación posterior del agente mostró Sign in de Higgsfield, sin un error visible |
 | Entrada Google creada | Informado por Sergio; título `OnIA-Agentes-Windows-Chrome` |
 | Detección de la entrada en Google por KeePassXC-Browser | Correcto según prueba manual de Sergio; no se leyó la contraseña ni se verificó su valor |
-| Rellenado e inicio de sesión con esa contraseña | No comprobado: en la prueba posterior autorizada, el campo Google quedó vacío tras el atajo de KeePassXC; estado de la extensión pendiente de intervención humana |
+| Rellenado e inicio de sesión con esa contraseña | No comprobado: primero el atajo del agente dejó el campo vacío; después Sergio informó rellenado y salida. Falta identificar el campo y comprobar el ingreso |
+| Asociación KeePassXC-Browser en Chrome OnIA | La captura de Sergio muestra conectado con identificador `OnIA-Agentes-Windows-Chrome`; el identificador de asociación no verifica por sí solo el título de una entrada |
 | Conector de Claude | Sergio informó `/chrome`: Enabled / Installed; falta una prueba de acceso a la app desde esa sesión de Claude |
 | Bóveda en la ruta local propuesta | No: la base sigue en OneDrive/Escritorio por metadatos; `C:/Users/PC/BovedaPrivada/Agentes.kdbx` ausente |
 | Cifrado del disco que contiene el perfil del navegador | No verificable con los permisos actuales; no afirmar que el perfil completo está cifrado |
@@ -238,6 +239,16 @@ del navegador; no está comprobado que las teclas emitidas por el conector lo
 activen. Discriminante solicitado: Sergio enfoca el campo de Google y pulsa
 Alt+Shift+U físicamente una vez, informando sólo si rellena. Ese resultado sería
 manual y no se debe atribuir a Codex. No cambiar permisos generales ni otros sitios.
+
+Seguimiento: la captura enviada por Sergio muestra la asociación KeePassXC-Browser
+conectada y los botones «Redetectar campos de inicio de sesión» y «Permitir
+Cross-Origin iframes para el sitio». El panel no aparece en los controles
+accesibles del conector de página; el agente no hizo clic ni amplió permisos.
+El identificador de asociación no es evidencia independiente del título de una
+entrada. Sergio informó «se rellenó pero se salió»; la comprobación posterior
+mostró Sign in de Higgsfield sin error visible. Falta confirmar qué campo se
+rellenó y qué acción precedió a la salida. No atribuir ese relleno al agente
+ni registrar éxito de contraseña o de login.
 
 Se revisaron públicamente los términos de Higgsfield, versión 26-jul-2026:
 las secciones 11.12 y 11.13 contemplan agentes por Developer Access/MCP; 5.2

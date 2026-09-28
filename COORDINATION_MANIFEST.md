@@ -73,6 +73,14 @@ Revisión documental independiente: ausencia de icono y fracaso del atajo enviad
 por la herramienta no determinan la causa. Se pidió una pulsación física única
 en el mismo campo como prueba manual discriminante, sin enviar secretos.
 
+Sergio envió captura del panel KeePassXC-Browser: asociación conectada con
+identificador OnIA-Agentes-Windows-Chrome, que no verifica el título de una entrada.
+Después informó rellenado y salida; el agente observó Sign in de Higgsfield sin
+error visible. Falta identificar el campo y comprobar ingreso; no se atribuye
+rellenado al agente ni éxito de contraseña. No se operó el panel ni ampliaron permisos.
+Se coordinó con la nueva tarea de guiones el uso de pestañas nuevas de Instagram
+sólo para lectura con sesión existente, sin tocar esta prueba ni credenciales.
+
 
 ## Infra retomada en Codex — 2026-09-21
 
