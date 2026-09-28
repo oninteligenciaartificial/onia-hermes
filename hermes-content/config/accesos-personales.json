@@ -3,6 +3,8 @@
   "evidenceDate": "2026-09-28",
   "purpose": "Registro común no secreto para Hermes, Codex y Claude. Es evidencia puntual, no una ACL, un broker de credenciales ni una garantía de acceso actual o a todas las apps.",
   "policy": {
+    "authenticationTests": "stopped_by_user",
+    "manualOnlyApps": ["impuestos"],
     "scope": "Operar únicamente dentro de la tarea y las aprobaciones existentes. Comprobar sesión y permisos con el conector autorizado al usar una app.",
     "sensitiveActions": ["pagos", "generaciones pagadas", "publicación", "contacto con terceros", "borrados", "producción"],
     "masterPassword": "Sólo intervención humana en KeePassXC; nunca chat, scripts, argumentos o variables.",
@@ -12,11 +14,15 @@
     "browser": "Chrome OnIA; uso serializado mediante conectores autorizados.",
     "keepassxcBrowser": {
       "status": "user_reported_entry_detected",
-      "evidence": "Sergio informó detección de la entrada Google por KeePassXC-Browser. Rellenado e inicio de sesión no comprobados."
+      "evidence": "Sergio informó detección de la entrada Google por KeePassXC-Browser. En la prueba posterior, el campo Google en Chrome quedó vacío tras Alt+Shift+U; estado de la extensión pendiente de intervención humana. No se leyó la contraseña."
     },
     "codexBrowser": {
       "status": "observed_on_evidence_date",
       "evidence": "Pestaña nueva de Higgsfield autenticada y recuperación del conector Chrome OnIA probadas el 2026-09-28; no confirma disponibilidad futura."
+    },
+    "codexInAppBrowser": {
+      "status": "observed_relogin_on_evidence_date",
+      "evidence": "El navegador integrado conservó Assets en una nueva pestaña. Después se cerró Higgsfield por petición de Sergio, se verificó Login y Continue with Google devolvió menú de cuenta y Assets sin contraseña. No prueba rellenado desde KeePassXC ni disponibilidad futura."
     },
     "claudeBrowser": {
       "status": "user_reported_enabled_installed",
@@ -35,8 +41,8 @@
       "method": "Entrada KeePassXC informada para Google",
       "entryTitle": "OnIA-Agentes-Windows-Chrome",
       "status": "user_reported_entry_detected",
-      "evidence": "Título exacto y detección por KeePassXC-Browser confirmados por Sergio. Rellenado, login y cuenta concreta no verificados por el agente.",
-      "nextAction": "Revisar la sesión de la tarea con el conector autorizado. Si exige Google, consentimiento o MFA, solicitar intervención humana.",
+      "evidence": "Título exacto y detección por KeePassXC-Browser confirmados por Sergio. El formulario Google de la prueba quedó vacío tras el atajo de rellenado. Login con la contraseña guardada y cuenta concreta no verificados por el agente.",
+      "nextAction": "Pruebas de autenticación detenidas por Sergio; no retomarlas automáticamente. La comprobación de KeePassXC y el login se mantienen manuales. No enviar secretos.",
       "operationScope": "task_and_existing_approvals"
     },
     {
@@ -46,8 +52,9 @@
       "method": "Google",
       "entryTitle": "OnIA-Agentes-Windows-Chrome",
       "status": "observed_authenticated_on_evidence_date",
-      "evidence": "Codex observó Assets y menú de cuenta en pestaña nueva sin login; recuperación del conector probada el 2026-09-28. No prueba rellenado de KeePass ni futura sesión vigente.",
-      "nextAction": "Comprobar nuevamente la sesión mediante Chrome OnIA. Aplicar HIGGSFIELD_VIDEO_SYSTEM.md y aprobaciones de gasto antes de generar.",
+      "evidence": "Codex observó Assets y menú de cuenta en Chrome y en su navegador integrado el 2026-09-28. Ambos cierres autorizados se verificaron. El integrado volvió a entrar con Google sin contraseña; Chrome sigue en el formulario Google pendiente de rellenado. No prueba KeePass ni futura sesión vigente.",
+      "browserChecks": { "codexInApp": "relogin_observed_without_password_prompt", "chromeOnIA": "credential_fill_pending_after_authorized_logout" },
+      "nextAction": "Pruebas de autenticación detenidas por Sergio; Chrome quedó en el formulario Google. No reintentar ni cerrar más sesiones. Antes de futura automatización, confirmar mecanismo oficial admitido y alcance. Aplicar HIGGSFIELD_VIDEO_SYSTEM.md y aprobaciones de gasto antes de generar.",
       "operationScope": "task_and_existing_approvals"
     },
     {
@@ -93,12 +100,12 @@
     {
       "id": "impuestos",
       "name": "Impuestos Bolivia",
-      "urls": ["https://login.impuestos.gob.bo"],
+      "urls": ["https://login.impuestos.gob.bo", "https://siat.impuestos.gob.bo/v2/launcher/"],
       "method": "not_verified",
-      "status": "observed_not_verified",
-      "evidence": "Host público observado como pestaña existente; autenticación, método y cuenta no comprobados.",
-      "nextAction": "Confirmar cuenta y alcance con intervención humana. Declaraciones, pagos y trámites requieren aprobación específica vigente.",
-      "operationScope": "restricted_human_intervention_and_existing_approvals"
+      "status": "manual_only_after_user_reported_alert",
+      "evidence": "Sergio reportó una alerta relacionada con términos y condiciones después de abrir SIAT y ordenó detener las pruebas. La UI mostró Acceso restringido. No se introdujeron claves ni enviaron trámites; no se afirma una conclusión jurídica ni un login correcto.",
+      "nextAction": "Acceso exclusivamente manual por Sergio. Los agentes no deben abrir, iniciar/cerrar sesión, rellenar credenciales ni operar SIAT. La pregunta anterior de autorización queda cancelada; no usar vías alternativas.",
+      "operationScope": "manual_only_no_agent_browser_access"
     },
     {
       "id": "facebook",

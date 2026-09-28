@@ -50,6 +50,20 @@ de comprobación local en `hermes-content/config/accesos-personales.json` y
 `scripts/seguridad/acceso-local{,.test}.mjs`; un subagente implementó ese frente.
 Estos archivos sólo consultan metadatos/registro: no leen ni otorgan claves.
 Revisión independiente aprobada; nueve pruebas con bases ficticias correctas.
+Nueva prueba explícita de Sergio: cierre de Higgsfield verificado en Chrome OnIA
+y navegador integrado de Codex. Después del segundo cierre, el integrado volvió
+a mostrar sesión y Assets mediante Google sin contraseña. Chrome quedó con el campo
+vacío tras el atajo de KeePassXC. Estado del puente pendiente de intervención humana.
+Sergio añadió SIAT: se observó sesión existente con Acceso restringido; autorización
+para cerrarla y probar login pendiente. No se realizaron trámites ni pagos.
+Se avisó a la tarea activa de guiones que evite uso simultáneo de ese perfil
+durante la prueba. Registro y fuente documental se mantienen en el carril aislado.
+Restricción posterior de Sergio: todas las pruebas de autenticación detenidas.
+SIAT queda exclusivamente manual tras una alerta sobre términos y condiciones
+reportada por Sergio; se cancela la pregunta pendiente de autorización para probarlo.
+No se introdujeron claves SIAT ni enviaron trámites. No realizar más operaciones de
+navegador ni retomar pruebas automáticamente. Se corrige la conclusión: Google
+permitió volver a Higgsfield, pero KeePassXC no rellenó el campo de la prueba.
 
 
 ## Infra retomada en Codex — 2026-09-21

@@ -120,10 +120,15 @@ test('registro enumera apps únicas, URLs públicas sin queries y estados histó
       assert.equal(url.search + url.hash + url.username + url.password, '');
       assert.notEqual(url.hostname, 'chromewebstore.google.com');
     }
-    if (!['google', 'higgsfield'].includes(app.id)) {
+    if (!['google', 'higgsfield', 'impuestos'].includes(app.id)) {
       assert.equal(app.status, 'observed_not_verified');
       assert.equal(app.method, 'not_verified');
     }
   }
   assert.equal(registry.mechanisms.directVaultApiCli.status, 'not_configured');
+  assert.equal(registry.policy.authenticationTests, 'stopped_by_user');
+  assert.deepEqual(registry.policy.manualOnlyApps, ['impuestos']);
+  const siat = registry.apps.find((app) => app.id === 'impuestos');
+  assert.equal(siat.status, 'manual_only_after_user_reported_alert');
+  assert.equal(siat.operationScope, 'manual_only_no_agent_browser_access');
 });

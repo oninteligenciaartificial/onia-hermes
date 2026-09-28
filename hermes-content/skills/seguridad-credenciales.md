@@ -5,6 +5,13 @@ Proteger credenciales y sesiones personales de la laptop y secretos de servicios
 de ONIA. Mantener el acceso de Codex y Claude dentro de las tareas autorizadas.
 
 ## Reglas
+- Restricción vigente de Sergio, 2026-09-28: las pruebas de autenticación quedaron
+  detenidas. SIAT/Impuestos es de acceso exclusivamente manual por Sergio. Los
+  agentes no deben abrirlo, iniciar/cerrar sesión, rellenar credenciales ni operar
+  su navegador. Una clave guardada en KeePassXC no autoriza ese acceso.
+  Sergio reportó una alerta relacionada con términos y condiciones; no se
+  verificó jurídicamente su alcance y no se deben intentar vías alternativas.
+  Las preguntas anteriores para continuar las pruebas quedan canceladas.
 - No repetir secretos completos en respuestas.
 - Si el usuario pega un secreto, recomendar rotarlo.
 - Credenciales personales para agentes: boveda KeePassXC local fuera del repo.
@@ -165,9 +172,11 @@ conector de navegación de Claude o de Codex.
 |---|---|
 | Codex abre una pestaña nueva de Higgsfield en Chrome OnIA | Correcto: Assets y menú de cuenta visibles; sin solicitar login ni modificar contenido |
 | Reutilización después de recuperar el conector | Correcto: Chrome OnIA volvió a aparecer; una segunda apertura mostró Assets y menú de cuenta sin otro login. La recarga inicial se interrumpió y no se considera una prueba completada |
+| Cierre y nuevo acceso en el navegador integrado de Codex | Correcto: se verificó Login después de salir; Continue with Google devolvió menú de cuenta y Assets, sin solicitar contraseña |
+| Nuevo acceso en Chrome después del cierre solicitado | Pendiente: Google llegó al formulario; KeePassXC no rellenó el campo y se solicita comprobar el estado de la extensión |
 | Entrada Google creada | Informado por Sergio; título `OnIA-Agentes-Windows-Chrome` |
 | Detección de la entrada en Google por KeePassXC-Browser | Correcto según prueba manual de Sergio; no se leyó la contraseña ni se verificó su valor |
-| Rellenado e inicio de sesión con esa contraseña | No comprobado; no cerrar sesiones vigentes para forzar la prueba |
+| Rellenado e inicio de sesión con esa contraseña | No comprobado: en la prueba posterior autorizada, el campo Google quedó vacío tras el atajo de KeePassXC; estado de la extensión pendiente de intervención humana |
 | Conector de Claude | Sergio informó `/chrome`: Enabled / Installed; falta una prueba de acceso a la app desde esa sesión de Claude |
 | Bóveda en la ruta local propuesta | No: la base sigue en OneDrive/Escritorio por metadatos; `C:/Users/PC/BovedaPrivada/Agentes.kdbx` ausente |
 | Cifrado del disco que contiene el perfil del navegador | No verificable con los permisos actuales; no afirmar que el perfil completo está cifrado |
@@ -178,6 +187,40 @@ un login persistente previo a una contraseña recién cargada. El resultado se r
 sólo con estado y metadatos no sensibles. Tras una desconexión explícita, comprobar
 el inventario disponible y recuperar el mismo Chrome/perfil con su API documentada;
 no fijar IDs efímeros ni usar otra vía para eludir políticas o permisos.
+
+Seguimiento de prueba solicitado explícitamente por Sergio: se cerró Higgsfield
+en Chrome OnIA y en el navegador integrado de Codex, verificando después el botón
+Login. Antes del segundo cierre, el integrado había llegado al menú de cuenta
+con Google y conservado Assets en una nueva pestaña. Eso prueba sesión web, no
+lectura de la bóveda ni rellenado de contraseña. Después de verificar Login, el
+segundo acceso integrado mediante Google volvió a mostrar menú de cuenta y Assets
+sin contraseña. Chrome continúa en el formulario Google pendiente de rellenado.
+No atribuir automáticamente el puente KeePassXC de Chrome al navegador integrado.
+
+En Chrome se abrió el formulario Google con «Usar otra cuenta» para probar la
+entrada guardada sin cerrar las otras sesiones Google. No se observó el control
+de KeePassXC y el atajo oficial Alt+Shift+U dejó el campo vacío. Se solicitó a
+Sergio comprobar el estado de la extensión con la bóveda desbloqueada, sin
+enviar secretos. No inspeccionar su panel protegido mediante otra vía.
+
+Sergio informó que añadió una credencial SIAT. Se abrió el portal durante la
+prueba, aunque su petición de cerrar sesión correspondía a Higgsfield. La UI
+mostró una sesión existente con «Acceso restringido»; no prueba la contraseña
+añadida ni permiso efectivo para operar. Sergio reportó una alerta sobre términos
+y condiciones y ordenó detener las pruebas. La pregunta anterior sobre cerrar
+SIAT queda cancelada: no esperar ni interpretar una respuesta como autorización
+vigente. SIAT queda exclusivamente manual. No se introdujeron claves ni realizaron
+trámites, declaraciones o pagos; guardar sólo el estado técnico, sin datos tributarios.
+
+No presentar la vuelta a Higgsfield mediante Google como prueba de rellenado
+de KeePassXC. El campo de la prueba permaneció vacío. Tampoco afirmar que una
+automatización es admitida por el proveedor o está libre de riesgo de suspensión
+sin comprobar sus condiciones y mecanismos oficiales. Las pruebas detenidas no
+deben retomarse automáticamente.
+
+Cuando la herramienta entregue sólo diferencias de la UI, pedir un estado
+completo antes de deducir presencia o ausencia de Login/menú de cuenta. Una
+diferencia sin ese texto no demuestra que el elemento haya desaparecido.
 
 Prueba desde la sesión existente de Claude, cuando su herramienta esté disponible:
 `Abre https://higgsfield.ai/asset/all en Chrome OnIA. Confirma únicamente si hay
@@ -237,7 +280,9 @@ La decisión de proveedor y la implementación requieren aprobación específica
   La extensión de navegador no configura por sí sola el uso de esas claves
   por CLI/API ni conecta directamente la bóveda a Codex o Claude.
 - Comprobar cada integración con la cuenta autorizada, registrando sólo estado
-  y errores sin valores sensibles. No cerrar sesiones vigentes para comprobarla.
+  y errores sin valores sensibles. Cerrar una sesión para probar credenciales
+  requiere que Sergio lo pida explícitamente para esa app/cuenta; no extender
+  esa autorización a Google u otros servicios.
 
 ### Estado y comprobación
 
@@ -294,6 +339,7 @@ leen al arrancar; las tareas ya abiertas deben recibir el aviso y releerlas.
 Fuentes oficiales:
 - https://keepassxc.org/docs/KeePassXC_GettingStarted
 - https://github.com/keepassxreboot/keepassxc/blob/develop/docs/topics/BrowserIntegration.adoc
+- https://github.com/keepassxreboot/keepassxc-browser/blob/develop/keepassxc-browser/manifest.json
 - https://keepassxc.org/blog/2023-06-20-cve-202335866/
 - https://learn.microsoft.com/en-us/windows-hardware/drivers/driversecurity/windows-security-model
 - https://code.claude.com/docs/en/chrome
