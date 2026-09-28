@@ -174,6 +174,18 @@ conector de navegación de Claude o de Codex.
 
 ### Prueba de acceso solicitada por Sergio — 2026-09-28
 
+**Estado final: pendiente y pruebas pausadas.** En el último intento autorizado,
+Codex pulsó Continue with Google, eligió Usar otra cuenta y envió Alt+Shift+U
+una vez al campo de correo. La UI completa y la captura de la página mostraron
+el campo vacío, sin control visible de KeePassXC. No se completó el ingreso.
+El panel de la extensión queda fuera del control del conector disponible.
+No está confirmada la causa del fallo ni que el atajo llegue a la extensión.
+Sergio autorizó dejarlo anotado: no repetir el mismo intento automáticamente.
+Próximo paso: comprobar un mecanismo de rellenado compatible con el conector,
+primero con datos ficticios y después con la cuenta autorizada; cualquier
+instalación requiere aprobación. Hasta entonces reutilizar sesiones vigentes
+autorizadas y solicitar ingreso humano sólo cuando sea necesario. SIAT sigue manual.
+
 | Comprobación | Resultado y alcance |
 |---|---|
 | Codex abre una pestaña nueva de Higgsfield en Chrome OnIA | Correcto: Assets y menú de cuenta visibles; sin solicitar login ni modificar contenido |

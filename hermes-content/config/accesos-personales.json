@@ -14,7 +14,7 @@
   "mechanisms": {
     "browser": "Chrome OnIA; uso serializado mediante conectores autorizados.",
     "keepassxcBrowser": {
-      "status": "user_reported_fill_login_pending",
+      "status": "final_agent_fill_attempt_unsuccessful",
       "evidence": "La captura de Sergio muestra asociación conectada con identificador OnIA-Agentes-Windows-Chrome; no verifica por sí sola el título de una entrada. Sergio informó rellenado y salida; falta identificar el campo. El agente observó después Sign in de Higgsfield sin error visible. No operó el panel ni leyó claves."
     },
     "codexBrowser": {
@@ -43,7 +43,7 @@
       "entryTitle": "OnIA-Agentes-Windows-Chrome",
       "status": "user_reported_entry_detected",
       "evidence": "Título y detección informados por Sergio. La captura posterior muestra el mismo texto como identificador de asociación, no como título de entrada. Tras el campo vacío con el atajo del agente, Sergio informó un rellenado y salida; falta identificar el campo. Login con contraseña no comprobado.",
-      "nextAction": "Aclarar qué campo se rellenó y qué ocurrió antes de volver a Sign in de Higgsfield. Continuar sólo Google/Higgsfield mediante controles autorizados; sin ampliar permisos del puente ni leer o imprimir claves.",
+      "nextAction": "Pruebas pausadas: el último Alt+Shift+U del agente dejó el campo vacío, verificado en UI y captura. Diagnosticar un mecanismo compatible antes de otra prueba autorizada; no repetir el mismo intento automáticamente ni instalar sin aprobación.",
       "operationScope": "task_and_existing_approvals"
     },
     {
@@ -54,8 +54,8 @@
       "entryTitle": "OnIA-Agentes-Windows-Chrome",
       "status": "authentication_pending_after_authorized_logout",
       "evidence": "Codex observó antes Assets y menú de cuenta en ambos navegadores. El integrado volvió a entrar con Google sin contraseña. En Chrome, después del rellenado y salida reportados por Sergio, el agente observó Sign in de Higgsfield sin error visible. Login por contraseña pendiente; no prueba KeePass ni futura sesión vigente.",
-      "browserChecks": { "codexInApp": "relogin_observed_without_password_prompt", "chromeOnIA": "user_reported_fill_returned_to_sign_in" },
-      "nextAction": "Identificar el campo rellenado y comprobar el resultado del ingreso sólo en Google/Higgsfield. El panel protegido no es accesible con el conector de página. Sesión/SSO no prueba contraseña. No generación ni operaciones con coste en esta prueba.",
+      "browserChecks": { "codexInApp": "relogin_observed_without_password_prompt", "chromeOnIA": "final_attempt_google_identifier_empty_login_incomplete" },
+      "nextAction": "Prueba pausada y pendiente: en el último intento Continue with Google y Usar otra cuenta abrieron el formulario, pero Alt+Shift+U dejó el campo vacío. El panel no es accesible con el conector de página. Reutilizar sesiones autorizadas si siguen vigentes; pedir ingreso humano cuando haga falta. Verificar un mecanismo compatible antes de retomar.",
       "operationScope": "task_and_existing_approvals"
     },
     {

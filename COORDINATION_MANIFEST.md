@@ -81,6 +81,13 @@ rellenado al agente ni éxito de contraseña. No se operó el panel ni ampliaron
 Se coordinó con la nueva tarea de guiones el uso de pestañas nuevas de Instagram
 sólo para lectura con sesión existente, sin tocar esta prueba ni credenciales.
 
+Cierre posterior: último intento autorizado ejecutado hasta el formulario Google;
+Alt+Shift+U dejó el campo vacío, confirmado por UI completa y captura de página.
+Ingreso no completado; causa sin confirmar y panel de extensión inaccesible al
+conector. Sergio permitió dejarlo anotado: pruebas pausadas, sin repetir el mismo
+intento automáticamente. Pendiente comprobar un mecanismo compatible; cualquier
+instalación requiere aprobación. Se mantiene SIAT manual y el VPS fuera del alcance.
+
 
 ## Infra retomada en Codex — 2026-09-21
 
