@@ -12,6 +12,10 @@ Carril Codex: `codex/onia-nuevas-apuestas-20260928`, worktree
 Alcance: investigación y propuesta interna en
 `hermes-content/docs/research/ONIA_NUEVAS_APUESTAS_NEGOCIO_2026-09-28.md`.
 Frentes: mercado B2B/agentes, infraestructura de Santa Cruz y síntesis estratégica.
+Ampliación solicitada por Sergio: referentes de Taiwán sobre señales adaptativas,
+cámaras, agentes municipales y prevención de inundaciones. Tres frentes de lectura
+revisaron tráfico, visión/sensores y agentes; la síntesis se incorpora al mismo
+documento de investigación, con un piloto urbano propuesto para Santa Cruz.
 Se revisaron fuentes públicas y planes existentes; las ofertas siguen siendo
 hipótesis comerciales pendientes de un piloto pagado y revisión de especialistas.
 Entrega documental aislada; su integración a la estrategia comercial requiere
