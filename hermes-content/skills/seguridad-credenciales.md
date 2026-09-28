@@ -119,10 +119,96 @@ concede acceso: se necesita la herramienta y el puente autorizados disponibles.
 
 | App | Método | Entrada Google | Navegador |
 |---|---|---|---|
-| Higgsfield | Continuar con Google | Título pendiente de confirmación de Sergio | Chrome OnIA |
+| Higgsfield | Continuar con Google | `OnIA-Agentes-Windows-Chrome` (título informado por Sergio) | Chrome OnIA |
 
 Si hay varias cuentas Google, confirmar cuál corresponde a la tarea antes de
 iniciar una sesión nueva. Mantener y reutilizar las sesiones existentes autorizadas.
+
+### Acceso con mínima exposición
+
+Para operar apps web, preferir el navegador autenticado con su conector autorizado.
+La contraseña maestra permanece con Sergio; el agente no recibe un volcado de la
+bóveda ni necesita leer contraseñas para reutilizar una sesión vigente.
+
+Recomendaciones de configuración, pendientes de comprobar en la UI de Sergio:
+- KeePassXC-Browser: permitir sólo la entrada seleccionada para el sitio concreto,
+  por ejemplo `https://accounts.google.com`, manteniendo confirmación para entradas
+  o sitios nuevos. No ampliar la URL a todos los dominios de las apps con Google.
+- Las opciones de Integración con navegadores permiten ocultar entradas y desactivar
+  la integración de grupos. Son controles del puente; los grupos siguen sin ser
+  barreras criptográficas de acceso dentro de una misma base desbloqueada.
+- Activar bloqueo automático de la bóveda por inactividad y al bloquear Windows.
+  Bloquear la bóveda no elimina las sesiones ya establecidas en las apps web.
+- Limitar los sitios y acciones permitidos en los conectores de cada agente según
+  la tarea. No usar permisos generales como sustituto de aprobaciones de gasto,
+  publicación, mensajes a terceros o producción.
+
+Los permisos de KeePassXC-Browser corresponden al navegador/sitio; no identifican
+por separado a Codex y Claude cuando controlan el mismo Chrome. Las instrucciones
+de agentes tampoco son un aislamiento del sistema operativo: procesos con acceso
+amplio bajo el mismo usuario de Windows comparten sus permisos. Para una frontera
+fuerte habría que diseñar un usuario o entorno separado y un puente limitado.
+No se ha configurado ese aislamiento ni un servicio remoto en esta tarea.
+
+Claude Code dispone de integración oficial con Claude in Chrome. En una sesión
+existente, `/chrome` permite consultar el estado. Requiere la extensión compatible,
+sesión Anthropic compatible y permiso para los sitios. La configuración MCP local
+revisada no basta para confirmar o descartar esa integración incorporada.
+Si falta la extensión u otro componente, explicar nombre, fuente oficial y finalidad
+y obtener aprobación antes de instalar; activar permisos sensibles requiere revisión
+del alcance en el momento de otorgarlos. No asumir que KeePassXC-Browser es el
+conector de navegación de Claude o de Codex.
+
+### Prueba de acceso solicitada por Sergio — 2026-09-28
+
+| Comprobación | Resultado y alcance |
+|---|---|
+| Codex abre una pestaña nueva de Higgsfield en Chrome OnIA | Correcto: Assets y menú de cuenta visibles; sin solicitar login ni modificar contenido |
+| Reutilización después de recuperar el conector | Correcto: Chrome OnIA volvió a aparecer; una segunda apertura mostró Assets y menú de cuenta sin otro login. La recarga inicial se interrumpió y no se considera una prueba completada |
+| Entrada Google creada | Informado por Sergio; título `OnIA-Agentes-Windows-Chrome` |
+| Detección de la entrada en Google por KeePassXC-Browser | Correcto según prueba manual de Sergio; no se leyó la contraseña ni se verificó su valor |
+| Rellenado e inicio de sesión con esa contraseña | No comprobado; no cerrar sesiones vigentes para forzar la prueba |
+| Conector de Claude | Sergio informó `/chrome`: Enabled / Installed; falta una prueba de acceso a la app desde esa sesión de Claude |
+| Bóveda en la ruta local propuesta | No: la base sigue en OneDrive/Escritorio por metadatos; `C:/Users/PC/BovedaPrivada/Agentes.kdbx` ausente |
+| Cifrado del disco que contiene el perfil del navegador | No verificable con los permisos actuales; no afirmar que el perfil completo está cifrado |
+| Acceso directo a la bóveda o claves por API/CLI | No configurado; no se ejecutaron exportaciones ni comandos que revelen entradas |
+
+La prueba de navegador es independiente de la detección de la entrada. No atribuir
+un login persistente previo a una contraseña recién cargada. El resultado se registra
+sólo con estado y metadatos no sensibles. Tras una desconexión explícita, comprobar
+el inventario disponible y recuperar el mismo Chrome/perfil con su API documentada;
+no fijar IDs efímeros ni usar otra vía para eludir políticas o permisos.
+
+Prueba desde la sesión existente de Claude, cuando su herramienta esté disponible:
+`Abre https://higgsfield.ai/asset/all en Chrome OnIA. Confirma únicamente si hay
+sesión iniciada y Assets visible. No leas cookies ni contraseñas; no generes,
+descargues ni modifiques contenido. Reutiliza esa sesión en una segunda operación.`
+
+### Hermes como punto común de operación
+
+Sergio pidió manejar sus apps desde Hermes con Codex y Claude, reduciendo logins.
+El registro no secreto es `hermes-content/config/accesos-personales.json`;
+identifica apps, métodos, entrada requerida y evidencia puntual, sin valores privados.
+El comando `node scripts/seguridad/acceso-local.mjs --app higgsfield --json` sirve
+de comprobación previa local. Sus resultados son metadatos y evidencia guardada:
+no autentica, descifra la bóveda ni demuestra una sesión actual por sí solo.
+
+Validación del comando: `node --test scripts/seguridad/acceso-local.test.mjs`.
+Las nueve pruebas usan bases ficticias y cubren rutas ausentes, presencia por
+metadatos, errores seguros, filtro de apps y el contrato no secreto del registro.
+
+Flujo común: consultar registro, comprobar la herramienta disponible y la sesión
+de la cuenta correspondiente, usar el navegador para funciones web o CLI/API oficial
+para funciones soportadas, y registrar estado sin secretos. Las claves API requieren
+un mecanismo específico que las entregue al proceso autorizado sin devolverlas al
+chat. Ese puente sigue sin estar configurado; el registro no lo sustituye.
+
+La cobertura inicial corresponde a los servicios observados en las pestañas del
+Chrome OnIA y a la cuenta Google indicada. Una pestaña abierta no prueba login ni
+autoriza cualquier operación. Cada app pendiente necesita comprobación de cuenta,
+método y herramientas; no inventar que todas utilizan Google ni que todos sus flujos
+pueden automatizarse. MFA, consentimiento, restricciones del proveedor y acciones
+sensibles mantienen sus intervenciones y aprobaciones.
 
 ### Pendiente futuro: navegadores en la nube
 
@@ -187,14 +273,14 @@ permitidas directamente en la aplicación, sin enviar claves al chat.
 
 Después Sergio informó que tiene la extensión en Chrome, habilitó la integración
 con navegadores y completó la asociación. Es un estado reportado por el usuario;
-no se han verificado aún el rellenado de una entrada ni el acceso directo de
-Codex/Claude a credenciales. El siguiente paso es cargar las entradas autorizadas
-y comprobar el mecanismo disponible para cada tipo de acceso.
+también confirmó la entrada Google y su detección por la extensión. No se han
+verificado aún su rellenado ni el acceso directo de Codex/Claude a credenciales.
+El siguiente paso es comprobar el mecanismo disponible para cada tipo de acceso.
 
 Enlace oficial aprobado:
 https://chromewebstore.google.com/detail/keepassxc-browser/oboonakemofpalcgghocfoadofidjkkk
 
-Pendiente: confirmar ubicación definitiva de la base, cargar las entradas
+Pendiente: confirmar ubicación definitiva de la base, cargar las demás entradas
 autorizadas en la app y conectar el puente compatible con cada agente/navegador.
 Comprobar con una cuenta autorizada que se abre la app y que una segunda tarea
 reutiliza la sesión; registrar sólo éxito/error y datos no sensibles.
@@ -207,6 +293,10 @@ leen al arrancar; las tareas ya abiertas deben recibir el aviso y releerlas.
 
 Fuentes oficiales:
 - https://keepassxc.org/docs/KeePassXC_GettingStarted
+- https://github.com/keepassxreboot/keepassxc/blob/develop/docs/topics/BrowserIntegration.adoc
+- https://keepassxc.org/blog/2023-06-20-cve-202335866/
+- https://learn.microsoft.com/en-us/windows-hardware/drivers/driversecurity/windows-security-model
+- https://code.claude.com/docs/en/chrome
 - https://playwright.dev/docs/auth
 - https://playwright.dev/docs/api/class-browsertype#browser-type-launch-persistent-context
 - https://developers.openai.com/codex/guides/agents-md

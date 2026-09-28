@@ -1,0 +1,144 @@
+{
+  "schemaVersion": 1,
+  "evidenceDate": "2026-09-28",
+  "purpose": "Registro común no secreto para Hermes, Codex y Claude. Es evidencia puntual, no una ACL, un broker de credenciales ni una garantía de acceso actual o a todas las apps.",
+  "policy": {
+    "scope": "Operar únicamente dentro de la tarea y las aprobaciones existentes. Comprobar sesión y permisos con el conector autorizado al usar una app.",
+    "sensitiveActions": ["pagos", "generaciones pagadas", "publicación", "contacto con terceros", "borrados", "producción"],
+    "masterPassword": "Sólo intervención humana en KeePassXC; nunca chat, scripts, argumentos o variables.",
+    "platformVps": "Separado de las sesiones y bóveda personal. No trasladar claves ni cookies."
+  },
+  "mechanisms": {
+    "browser": "Chrome OnIA; uso serializado mediante conectores autorizados.",
+    "keepassxcBrowser": {
+      "status": "user_reported_entry_detected",
+      "evidence": "Sergio informó detección de la entrada Google por KeePassXC-Browser. Rellenado e inicio de sesión no comprobados."
+    },
+    "codexBrowser": {
+      "status": "observed_on_evidence_date",
+      "evidence": "Pestaña nueva de Higgsfield autenticada y recuperación del conector Chrome OnIA probadas el 2026-09-28; no confirma disponibilidad futura."
+    },
+    "claudeBrowser": {
+      "status": "user_reported_enabled_installed",
+      "evidence": "Sergio informó /chrome Enabled/Installed. Acceso a una app desde Claude aún no probado."
+    },
+    "directVaultApiCli": {
+      "status": "not_configured",
+      "evidence": "KeePassXC abierto o KeePassXC-Browser asociado no conectan automáticamente API/CLI a la bóveda."
+    }
+  },
+  "apps": [
+    {
+      "id": "google",
+      "name": "Google",
+      "urls": ["https://accounts.google.com", "https://www.google.com"],
+      "method": "Entrada KeePassXC informada para Google",
+      "entryTitle": "OnIA-Agentes-Windows-Chrome",
+      "status": "user_reported_entry_detected",
+      "evidence": "Título exacto y detección por KeePassXC-Browser confirmados por Sergio. Rellenado, login y cuenta concreta no verificados por el agente.",
+      "nextAction": "Revisar la sesión de la tarea con el conector autorizado. Si exige Google, consentimiento o MFA, solicitar intervención humana.",
+      "operationScope": "task_and_existing_approvals"
+    },
+    {
+      "id": "higgsfield",
+      "name": "Higgsfield",
+      "urls": ["https://higgsfield.ai/asset/all"],
+      "method": "Google",
+      "entryTitle": "OnIA-Agentes-Windows-Chrome",
+      "status": "observed_authenticated_on_evidence_date",
+      "evidence": "Codex observó Assets y menú de cuenta en pestaña nueva sin login; recuperación del conector probada el 2026-09-28. No prueba rellenado de KeePass ni futura sesión vigente.",
+      "nextAction": "Comprobar nuevamente la sesión mediante Chrome OnIA. Aplicar HIGGSFIELD_VIDEO_SYSTEM.md y aprobaciones de gasto antes de generar.",
+      "operationScope": "task_and_existing_approvals"
+    },
+    {
+      "id": "artificialanalysis",
+      "name": "Artificial Analysis",
+      "urls": ["https://artificialanalysis.ai"],
+      "method": "not_verified",
+      "status": "observed_not_verified",
+      "evidence": "Host público observado como pestaña existente; autenticación, método y cuenta no comprobados.",
+      "nextAction": "Revisar sesión y permisos con el conector autorizado dentro de la tarea.",
+      "operationScope": "task_and_existing_approvals"
+    },
+    {
+      "id": "chatgpt",
+      "name": "ChatGPT",
+      "urls": ["https://chatgpt.com"],
+      "method": "not_verified",
+      "status": "observed_not_verified",
+      "evidence": "Host público observado como pestaña existente; autenticación, método y cuenta no comprobados.",
+      "nextAction": "Revisar sesión y permisos con el conector autorizado dentro de la tarea.",
+      "operationScope": "task_and_existing_approvals"
+    },
+    {
+      "id": "typesafe",
+      "name": "TypeSafe",
+      "urls": ["https://console.typesafe.ai"],
+      "method": "not_verified",
+      "status": "observed_not_verified",
+      "evidence": "Host público observado como pestaña existente; autenticación, método y cuenta no comprobados.",
+      "nextAction": "Revisar sesión y permisos con el conector autorizado dentro de la tarea.",
+      "operationScope": "task_and_existing_approvals"
+    },
+    {
+      "id": "hostinger",
+      "name": "Hostinger",
+      "urls": ["https://hpanel.hostinger.com"],
+      "method": "not_verified",
+      "status": "observed_not_verified",
+      "evidence": "Host público observado como pestaña existente; autenticación, método y cuenta no comprobados.",
+      "nextAction": "Confirmar tarea y cuenta con intervención humana cuando falten datos. Aplicar aprobaciones existentes antes de pagos, dominios, DNS o cambios de producción.",
+      "operationScope": "restricted_human_intervention_and_existing_approvals"
+    },
+    {
+      "id": "impuestos",
+      "name": "Impuestos Bolivia",
+      "urls": ["https://login.impuestos.gob.bo"],
+      "method": "not_verified",
+      "status": "observed_not_verified",
+      "evidence": "Host público observado como pestaña existente; autenticación, método y cuenta no comprobados.",
+      "nextAction": "Confirmar cuenta y alcance con intervención humana. Declaraciones, pagos y trámites requieren aprobación específica vigente.",
+      "operationScope": "restricted_human_intervention_and_existing_approvals"
+    },
+    {
+      "id": "facebook",
+      "name": "Facebook",
+      "urls": ["https://www.facebook.com"],
+      "method": "not_verified",
+      "status": "observed_not_verified",
+      "evidence": "Host público observado como pestaña existente; autenticación, método y cuenta no comprobados.",
+      "nextAction": "Revisar sesión y permisos con el conector autorizado dentro de la tarea.",
+      "operationScope": "task_and_existing_approvals"
+    },
+    {
+      "id": "instagram",
+      "name": "Instagram",
+      "urls": ["https://www.instagram.com"],
+      "method": "not_verified",
+      "status": "observed_not_verified",
+      "evidence": "Host público observado como pestaña existente; autenticación, método y cuenta no comprobados.",
+      "nextAction": "Revisar sesión y permisos con el conector autorizado dentro de la tarea.",
+      "operationScope": "task_and_existing_approvals"
+    },
+    {
+      "id": "linkedin",
+      "name": "LinkedIn",
+      "urls": ["https://www.linkedin.com"],
+      "method": "not_verified",
+      "status": "observed_not_verified",
+      "evidence": "Host público observado como pestaña existente; autenticación, método y cuenta no comprobados.",
+      "nextAction": "Revisar sesión y permisos con el conector autorizado dentro de la tarea.",
+      "operationScope": "task_and_existing_approvals"
+    },
+    {
+      "id": "youtube",
+      "name": "YouTube",
+      "urls": ["https://www.youtube.com"],
+      "method": "not_verified",
+      "status": "observed_not_verified",
+      "evidence": "Host público observado como pestaña existente; autenticación, método y cuenta no comprobados.",
+      "nextAction": "Revisar sesión y permisos con el conector autorizado dentro de la tarea.",
+      "operationScope": "task_and_existing_approvals"
+    }
+  ]
+}

@@ -38,6 +38,18 @@ entradas y comprobar el acceso de cada agente sin revelar secretos.
 Se precisó la convención de etiquetas/notas y el registro mínimo para Google/SSO;
 el título exacto de la entrada queda pendiente de confirmación de Sergio. Las
 reglas globales existentes remiten a la fuente común; no se duplican secretos.
+Prueba solicitada por Sergio: Codex abrió una pestaña nueva autenticada de
+Higgsfield; recarga pendiente de confirmar por desconexión del conector.
+Sergio confirmó título `OnIA-Agentes-Windows-Chrome` y detección en Google por
+KeePassXC-Browser. Revisión independiente de seguridad realizada. Acceso de Claude,
+rellenado y cifrado del disco aún no comprobados; se documentan controles mínimos.
+Después se recuperó el Chrome OnIA disponible y se repitió el acceso a Higgsfield
+sin login. Sergio informó Claude `/chrome`: Enabled / Installed; prueba app pendiente.
+Por su petición de operar desde Hermes, se creó inventario no secreto y comando
+de comprobación local en `hermes-content/config/accesos-personales.json` y
+`scripts/seguridad/acceso-local{,.test}.mjs`; un subagente implementó ese frente.
+Estos archivos sólo consultan metadatos/registro: no leen ni otorgan claves.
+Revisión independiente aprobada; nueve pruebas con bases ficticias correctas.
 
 
 ## Infra retomada en Codex — 2026-09-21
