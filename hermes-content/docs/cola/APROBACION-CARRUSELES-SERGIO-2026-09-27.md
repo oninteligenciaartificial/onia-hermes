@@ -7,6 +7,14 @@
 
 ## Recomendación
 
+**Actualización 28-sep:** Sergio confirma «no hemos posteado nada». Este lote
+sigue sin publicación y sin autorización final. Conservar los tres artes v2;
+primero Matriz n8n, después agente/loop y por último MCP. El
+[handoff vigente](../handoff/marca-sergio-guiones-20260927.md) propone un video
+y un carrusel por semana como tanda inicial, no como cambio automático de la
+cadencia acordada. Horarios de abajo son propuestas históricas, no cola activa.
+El caption de Matriz se simplifica a una única CTA, sin alterar sus PNG.
+
 Publicar esta serie primero sólo en Instagram `@sergiourcullo`, una pieza por
 semana. Es el destino natural del arte 4:5 y evita convertir seis cuentas en
 copias del mismo post. LinkedIn y Facebook requieren adaptación propia; ONIA
@@ -25,7 +33,7 @@ aprobación, debe proponerse otra fecha exacta y aprobarse de nuevo.
 ## `SERGIO-CAR-01-V2` · Matriz n8n
 
 - Brief: `hermes-content/carousels/briefs/marca-personal/sergio-matriz-n8n-20260921-v2.json`
-- SHA-256 brief: `eff7bd523e27c98c77344b1668e9e5994ee83a412c3ba5271e5edf7038542a71`
+- SHA-256 brief, caption actualizado el 28-sep: `39fa26f14aea1d37ab9db0e70ecec48565c6d25538c53e2b7b1ba6610a6c62cb`
 - Assets: `hermes-content/carousels/out/sergio-matriz-n8n-20260921-v2/slide-01.png` a `slide-08.png`
 - Todas las láminas: PNG, 1080×1350.
 - Hoja de contacto: [`_contactsheet.png`](../../carousels/out/sergio-matriz-n8n-20260921-v2/_contactsheet.png)
@@ -38,7 +46,7 @@ Antes de abrir n8n, dibujá cuatro cosas: entrada, regla, salida y excepción.
 
 Ejemplo de arquitectura para una consulta: Webhook recibe nombre, teléfono, servicio y origen. IF comprueba los campos mínimos. La rama válida puede registrar en Google Sheets y avisar por Telegram. Para que la rama incompleta diga qué dato falta, hay que construir ese mensaje y configurar Webhook para responder con Respond to Webhook. Es un mapa de diseño, no un flujo ejecutado: configurá credenciales, mapeos, respuesta y pruebas con datos de ejemplo.
 
-Guardá la matriz. ¿Qué tarea repetís en tu negocio? Compartila en comentarios.
+¿Qué tarea repetís en tu negocio? Contala con su entrada, regla y salida.
 
 #n8n #automatizacion #negocios #pymes #bolivia
 ```

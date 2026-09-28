@@ -4,6 +4,12 @@
 
 ## Estado al 27-sep-2026
 
+**Actualización de estado 28-sep:** Sergio dice «no hemos posteado nada». Para
+la operación vigente no se da por publicado este lote ni se infiere rendimiento
+del relato histórico siguiente. G09/G11/G12 tienen versiones de rodaje revisadas
+con prompts concretos; siguen sin aprobación de corte/publicación. Esta edición
+no añade un learning aprobado ni convierte sus salidas esperadas en pruebas.
+
 No hay **piezas completas** aprobadas en este registro nuevo. El primer video está publicado según Sergio, pero aún faltan URL/cuenta/fecha y una evaluación concreta. El segundo video de n8n sigue rechazado; la v3 es sólo candidata. G06 Opus está en grabación; G09–G14 son borradores.
 
 **Aprobación parcial del 27-sep:** Sergio dijo que los tres carruseles v2 «están buenos» visualmente. Pidió asegurar que la información sea enseñanza realista o tutorial real, y dejarlo anotado para la siguiente sesión. La dirección visual se conserva; el QA factual de 22 láminas/captions quedó realizado contra fuentes oficiales. Son esquemas educativos realistas, **no tutoriales ejecutados**. Esto **no equivale a aprobación para publicar**.

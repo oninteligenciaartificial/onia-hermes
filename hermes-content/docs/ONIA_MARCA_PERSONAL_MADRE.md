@@ -7,6 +7,13 @@
 
 ## El objetivo (la escalera completa)
 
+**Entrada vigente · 28-sep:** [handoff y plan de producción](handoff/marca-sergio-guiones-20260927.md).
+Sergio pide contenido que enseñe, carruseles, comunidad y guiones; se cierra la
+investigación de navegador. Dice «no hemos posteado nada»: no dar por publicada
+ninguna pieza de este lote. Primera tanda G09/G11/G12 con prompts reproducibles
+en el rodaje canónico y tres carruseles v2 existentes. La escalera de abajo es
+historia estratégica, no autorización para lanzar curso/VSL ni prueba de demanda.
+
 **Redes (alcance) → Comunidad WhatsApp gratis (confianza + señales) → VSL → Curso
 (pago único) → Grupo VIP (recurrente, solo habla Sergio).**
 Cada nivel se lanza cuando el anterior tiene masa: comunidad 100-300 miembros antes del
@@ -41,6 +48,8 @@ VSL; curso 20+ ventas antes del VIP. Nada se anuncia antes de existir.
 | `cola/LEARNINGS-APROBADOS-MARCA-PERSONAL.md` | versión y aprendizaje aprobado por Sergio, nunca borradores por inferencia |
 | `cola/APROBACION-CARRUSELES-SERGIO-2026-09-27.md` | las tres piezas v2 exactas, captions, hashes, destino y horarios propuestos para un OK cerrado |
 | `cola/EDICION-G06-OPUS-55-2026-09-27.md` | intake, timeline, fuentes y QA para editar G06 cuando llegue el bruto exacto |
+| [`cola/AUDITORIA-GUIONES-COMUNIDAD-2026-09-28.md`](cola/AUDITORIA-GUIONES-COMUNIDAD-2026-09-28.md) | revisión G00–G14, referentes y brechas; G09/G11/G12 aplicados después en el rodaje, ninguna publicación |
+| [`cola/drops/2026-09-28-primer-ejercicio-preparado.md`](cola/drops/2026-09-28-primer-ejercicio-preparado.md) | bienvenida y ejercicio práctico de cuatro datos; preparado, no enviado |
 | `docs/cola/marca-personal.md` | la cola viva del carril (el loop trabaja de ahí) |
 | `references/ui-patterns/statement-3d-minimal/` | patrón visual aprendido (plantilla + ficha + referencia) |
 | `references/marca-personal/` | los PDFs/planes de Samuel (historia) |

@@ -23,7 +23,19 @@ Grabar **dos hooks alternativos** por cuerpo, conservar el que mejor coincida co
 - En pantalla, una prueba que **coincida** con la frase hablada. Un diagrama conceptual lleva rótulo «esquema», no «n8n real».
 - Entregar cada bruto con nombre `G01-loop-camera`, `G02-workflow-agente-camera`, etc., y las capturas `G01-loop-screen`, etc. Guardar los dos casos de prueba y, si aparece, un error real con su corrección.
 
-## Orden para grabar hoy
+## Orden vigente · instrucción del 28-sep
+
+**Primera tanda: G09 → G11 → G12**, revisados abajo con texto completo, prompts
+reproducibles y tres pantallas por video. El objetivo es enseñar una acción,
+no acumular noticias ni seguir investigando herramientas. Estado declarado por
+Sergio el 28-sep: este lote todavía no se ha publicado. La revisión no acredita
+que los nuevos videos estén grabados ni aprueba su publicación.
+
+El [handoff con plan](../handoff/marca-sergio-guiones-20260927.md) concentra el
+arranque de la siguiente sesión. Preparar una pieza completa a la vez, empezando
+por G09; los tres carruseles v2 existentes no se regeneran por defecto.
+
+### Orden anterior · conservar sólo como contexto del 27-sep
 
 Si ya estás grabando el video de Opus, usá **G06 generalista** de abajo y no la versión de tokens/precios anterior. G00 es sólo captura para rescatar un video existente; G01–G05 son piezas de enseñanza con voz simple y prueba técnica en pantalla. G07/G08 quedan como **banco avanzado, no para grabar ahora**. No volver a grabar guiones que el archivo del 22-sep marca como hechos hasta localizar el bruto.
 
@@ -161,21 +173,68 @@ El audio ya existe. No volver a grabar la cara hasta revisar si la nueva captura
 
 Cada uno nombra **ventaja, prueba y límite** con lenguaje cotidiano. Un ejemplo de pantalla no se presenta como resultado propio si no fue ejecutado. Grabar sólo datos ficticios o propios saneados.
 
-### G09 · La IA te responde genérico porque le falta contexto — 35–45 s
+### G09 · Cuatro datos para responder una consulta — revisado 28-sep
 
-**Formato:** frontal vertical 9:16, sin verde; captura separada de los dos prompts con caso ficticio. Yo muestro la diferencia en pantalla dividida legible.
+**Formato:** cámara frontal vertical 9:16, fondo real, sin verde. Capturas separadas,
+con «CASO FICTICIO» visible. Objetivo 40–55 s; cronometrar, no acelerar la voz.
+Audiencia: personas que atienden consultas de su negocio. Enseña a redactar una
+respuesta específica con cuatro datos y revisar sus límites.
 
-**Hook A:** «Si la IA te responde genérico, probá esto antes de cambiar de modelo».
+**Hook A:** «Si la IA te escribe mensajes genéricos, probá darle estos cuatro datos».
 
-**Hook B:** «El problema de este mensaje no es la IA: le faltan cuatro datos».
+**Hook B:** «Antes de mandar esta respuesta a un cliente, revisá que no esté inventando datos».
 
 **Decir a cámara:**
 
-> Si le pedís a la IA «escribime un mensaje para vender», te va a devolver algo que podría servirle a cualquiera. Probá darle cuatro datos: qué vendés, a quién, qué te preguntó esa persona y qué no podés prometer. Después pedile una respuesta corta y una pregunta para seguir la conversación. La ventaja es que el primer borrador se parece más a tu negocio y tenés menos que corregir. Pero no lo copies a ciegas: revisá precio, condiciones y tono antes de enviarlo.
+> Si le pedís a la IA «respondé esta consulta», puede darte algo genérico. Probá con un taller de bicicletas ficticio. Dale cuatro datos: ofrece revisión de frenos, atiende a ciclistas urbanos, le preguntaron cuánto cuesta y todavía no confirmó el precio. Después pedile un mensaje corto y una pregunta para seguir la conversación. Así el borrador puede responder mejor a esa consulta. Pero mirá el límite: no debería inventar un monto ni prometer que entrega hoy. Revisá esos dos puntos y el tono antes de enviar.
 
-**Mostrar:** dos prompts con el **mismo caso ficticio** (por ejemplo, un taller de bicicletas): pedido vago frente a los cuatro datos, y salida real si se ejecuta. Resaltar qué cambió, no enseñar una respuesta inventada como resultado del modelo. **Ventaja:** borrador más específico. **Límite:** humano verifica hechos y envía.
+**Prueba reproducible:** mismo modelo, dos conversaciones nuevas. Mantener el
+mismo taller y consulta; no comparar dos negocios distintos.
 
-**Cierre:** «Antes de cambiar de IA, dale el contexto que le falta».
+Pedido básico:
+
+```text
+CASO FICTICIO. Respondé a esta consulta de un cliente de un taller de bicicletas:
+«¿Cuánto cuesta revisar los frenos?».
+```
+
+Pedido con contexto:
+
+```text
+CASO FICTICIO.
+Qué vendo: revisión de frenos de bicicletas.
+A quién: ciclistas urbanos.
+Qué preguntó la persona: «¿Cuánto cuesta revisar los frenos?».
+Qué no puedo prometer: todavía no confirmé el precio ni la fecha de entrega.
+
+Escribí una respuesta de hasta 45 palabras, en español natural con voseo.
+Reconocé que el precio necesita confirmación y hacé una sola pregunta útil
+para entender el problema de los frenos.
+No inventes precios, descuentos, disponibilidad ni plazos.
+Devolvé sólo el mensaje.
+```
+
+**Tres pantallas:** (1) pedido básico y salida real; (2) cuatro datos grandes;
+(3) segunda salida real, marcando qué responde y si inventó un monto o plazo.
+Si falla, mostrar la corrección; no fabricar una salida perfecta. Si ambas salidas
+son adecuadas, decirlo: un ejemplo no demuestra que el prompt garantice mejoras.
+Antes de ejecutar, estos textos son entradas de prueba, no resultados obtenidos.
+
+**Cierre / única CTA:** «Probá esos cuatro datos en tu próxima consulta».
+
+**Caption propuesto:**
+
+```text
+Una consulta necesita contexto, no una promesa inventada.
+
+En este taller ficticio damos cuatro datos: servicio, destinatario, pregunta y
+límites. El modelo propone un borrador; una persona verifica precio, plazo y tono.
+La pantalla debe mostrar las salidas obtenidas, incluso si hay que corregirlas.
+
+Probá esos cuatro datos en tu próxima consulta.
+
+#inteligenciaartificial #negocios #atencionalcliente
+```
 
 ### G10 · La IA revisa huecos de una propuesta, no decide tu precio — 35–45 s
 
@@ -193,37 +252,129 @@ Cada uno nombra **ventaja, prueba y límite** con lenguaje cotidiano. Un ejemplo
 
 **Cierre:** «Usala para detectar huecos, no para regalar alcance».
 
-### G11 · De una reunión a tareas que alguien puede hacer — 35–45 s
+### G11 · Convertir notas de reunión en próximos pasos — revisado 28-sep
 
-**Formato:** frontal vertical 9:16, sin verde; captura separada de notas ficticias y tabla final. Yo animo la transformación nota → acción sin mostrar clientes.
+**Formato:** frontal vertical 9:16, sin verde. Capturas separadas, «CASO FICTICIO»
+visible. Objetivo 40–55 s; cronometrar. Audiencia: equipos que necesitan seguir
+acuerdos. Enseña tres bloques y cómo detectar responsables o fechas inventados.
 
-**Hook A:** «Una reunión sin responsables suele terminar en otra reunión».
+**Hook A:** «¿Terminaste una reunión y todavía no sabés quién hace qué?».
 
 **Hook B:** «No le pidas a la IA un resumen: pedile los próximos pasos».
 
 **Decir a cámara:**
 
-> Terminó una reunión y tenés una página de notas. En vez de pedirle a la IA «resumí esto», pedile tres listas: decisiones tomadas, tareas con responsable y preguntas que quedaron abiertas. La ventaja es que salís con un seguimiento que se puede ejecutar, no con otro párrafo para leer. Pero hay una regla: si nadie dijo una fecha o un responsable, tiene que marcar «por definir», no inventarlo. Yo comparo la lista con mis notas antes de mandarla al equipo.
+> Si una reunión termina en un párrafo largo, todavía cuesta saber qué hacer. Probá darle a la IA seis líneas de notas ficticias y pedirle tres bloques: decisiones, tareas y preguntas abiertas. En este ejemplo, Ana prepara un borrador para el viernes; alguien tiene que revisar el presupuesto, pero nadie dijo quién ni cuándo. La IA debe separar esas dos tareas y marcar lo que falta como «por definir». Así podés ver qué sigue y qué necesita aclaración. Antes de compartirlo, compará cada tarea con las notas: ordenar información no autoriza inventar acuerdos.
 
-**Mostrar:** notas ficticias de 6 líneas → tabla `decisión / tarea y responsable / por definir`; salida real si se ejecuta. Ningún audio o transcripción de cliente sin autorización. **Ventaja:** seguimiento claro. **Límite:** revisar atribuciones y fechas.
+**Prompt exacto:**
 
-**Cierre:** «Un buen resumen termina en una acción concreta».
+```text
+CASO FICTICIO.
+Ordená estas notas en tres bloques:
+1. Decisiones tomadas.
+2. Tareas: acción, responsable y fecha.
+3. Preguntas abiertas.
 
-### G12 · Un bot útil sabe decir «no tengo ese dato» — 35–45 s
+Usá únicamente lo que dicen las notas.
+Si falta responsable o fecha, escribí «por definir».
+No conviertas «viernes» en una fecha de calendario.
+No presentes una pregunta como una decisión.
 
-**Formato:** frontal vertical 9:16, sin verde; captura de tres chats de prueba ficticios o storyboard rotulado. Yo agrando cada respuesta en edición.
+NOTAS:
+- Decidimos preparar una demo sencilla.
+- Ana prepara el borrador para el viernes.
+- Hay que revisar el presupuesto.
+- No se asignó responsable ni fecha para esa revisión.
+- Falta confirmar a qué hora mostraremos la demo.
+- No se fijó la próxima reunión.
+```
 
-**Hook A:** «Tu bot puede perder una venta si inventa un precio».
+**Tres pantallas:** (1) seis notas ficticias; (2) salida real con decisión y dos
+tareas, ampliando `revisar presupuesto / por definir / por definir`; (3) cotejo
+con las notas: Ana/viernes sí consta; presupuesto, horario y próxima reunión
+necesitan aclaración. Si inventa, marcar y corregir. No mostrar transcripción
+ni audio de clientes. Sin ejecución, rotular «resultado esperado», no «prueba».
+
+**Cierre / única CTA:** «Probá esas tres listas con tus próximas notas».
+
+**Caption propuesto:**
+
+```text
+Ordenar una reunión no es inventar acuerdos.
+
+Separá decisiones, tareas y preguntas. Si nadie asignó un responsable o una
+fecha, tiene que quedar “por definir”. El ejemplo es ficticio y el resultado
+siempre se compara con las notas originales.
+
+Probá esas tres listas con tus próximas notas.
+
+#inteligenciaartificial #equipos #productividad
+```
+
+### G12 · Tres consultas para revisar un bot — revisado 28-sep
+
+**Formato:** frontal vertical 9:16, sin verde. Capturas separadas de tres respuestas,
+«CASO FICTICIO · SIMULACIÓN» visible. Objetivo 40–55 s; cronometrar. Audiencia:
+negocios que evalúan un bot. Enseña un test inicial, no una auditoría completa.
+
+**Hook A:** «Que un bot responda rápido no significa que responda bien».
 
 **Hook B:** «La respuesta más profesional de un bot a veces es “lo confirmo”».
 
 **Decir a cámara:**
 
-> Un bot puede responder rápido las preguntas que se repiten: horarios, servicios y pasos para reservar. Ésa es su ventaja: la persona recibe orientación sin esperar horas. Pero si le preguntan un precio o una disponibilidad que no están confirmados, no debe adivinar. Tiene que decir qué falta, tomar la consulta y pasarla a una persona. Antes de activarlo, probalo con tres preguntas: una que sabe, una que no sabe y una que requiere trato humano. Si inventa una respuesta o no pasa el caso sensible a una persona, todavía no está listo.
+> Antes de activar un bot, probá tres consultas. Primera: preguntale un horario que sí está en su información. Segunda: pedile un precio que no está confirmado. Tercera: pedí hablar con una persona. La primera debería responder con el dato disponible. La segunda debería reconocer que falta información. La tercera debería dejar de insistir y explicar cómo pedir atención humana. Eso te ayuda a detectar respuestas inventadas y traspasos confusos. Pero una respuesta que dice «te paso con alguien» no demuestra que lo haya hecho. En el sistema real, comprobá que una persona reciba el caso.
 
-**Mostrar:** tres chats **ficticios y rotulados** con respuesta conocida, información ausente y caso sensible; mostrar un test real sólo si el bot está conectado en entorno de prueba. No usar datos de clientes ni afirmar stock/precios actuales. **Ventaja:** respuesta inicial rápida. **Límite:** incertidumbre y casos sensibles van a humano.
+**Prompt reproducible en un chat de prueba:**
 
-**Cierre:** «Rapidez sí; respuestas inventadas, no».
+```text
+CASO FICTICIO. Simulación de respuestas; no hay un bot de WhatsApp conectado.
+Actuá como asistente de un taller de bicicletas ficticio.
+
+Información disponible:
+- Horario: lunes a viernes, de 9:00 a 18:00.
+- Servicio: revisión de frenos.
+- No hay precio ni disponibilidad confirmados.
+- Canal humano ficticio: atención en el mostrador durante ese horario.
+
+Reglas:
+- Respondé sólo con información disponible.
+- Si falta un dato, reconocelo.
+- Si piden una persona, explicá el canal humano y dejá de intentar resolver.
+- No afirmes que enviaste un mensaje o transferiste el caso.
+- No inventes tiempos de respuesta.
+
+Para cada consulta devolvé:
+Respuesta al cliente: máximo 35 palabras.
+Decisión: responder / falta dato / atención humana.
+
+Consultas:
+1. «¿A qué hora abren el lunes?».
+2. «¿Cuánto cuesta revisar los frenos?».
+3. «Quiero hablar con una persona».
+```
+
+**Tres pantallas:** (1) horario: comprobar `9:00`; (2) precio: reconocer que no
+está confirmado, sin monto inventado; (3) persona: indicar mostrador, sin afirmar
+un traspaso inexistente. Capturar salidas reales. Rótulo final: «La simulación
+prueba respuestas; el traspaso real se comprueba aparte». No afirmar que un bot
+ONIA pasó estos tests ni que estos tres casos bastan para activar producción.
+
+**Cierre / única CTA:** «Probá lo que sabe, lo que no sabe y cuándo debe dejar de responder».
+
+**Caption propuesto:**
+
+```text
+Una respuesta rápida también puede estar equivocada.
+
+Tres consultas iniciales: un dato disponible, un dato que falta y una petición
+de atención humana. Esta simulación enseña a revisar respuestas: no conecta
+WhatsApp ni demuestra un traspaso real. Ese recorrido se comprueba aparte.
+
+Probá lo que sabe, lo que no sabe y cuándo debe dejar de responder.
+
+#chatbots #inteligenciaartificial #atencionalcliente
+```
 
 ### G13 · ¿Vale la pena automatizarlo? Medí cinco casos — 35–45 s
 

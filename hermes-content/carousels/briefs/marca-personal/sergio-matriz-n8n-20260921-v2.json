@@ -1,6 +1,6 @@
 {
   "title": "Antes de usar n8n, elegí qué automatizar",
-  "caption": "Antes de abrir n8n, dibujá cuatro cosas: entrada, regla, salida y excepción.\n\nEjemplo de arquitectura para una consulta: Webhook recibe nombre, teléfono, servicio y origen. IF comprueba los campos mínimos. La rama válida puede registrar en Google Sheets y avisar por Telegram. Para que la rama incompleta diga qué dato falta, hay que construir ese mensaje y configurar Webhook para responder con Respond to Webhook. Es un mapa de diseño, no un flujo ejecutado: configurá credenciales, mapeos, respuesta y pruebas con datos de ejemplo.\n\nGuardá la matriz. ¿Qué tarea repetís en tu negocio? Compartila en comentarios.",
+  "caption": "Antes de abrir n8n, dibujá cuatro cosas: entrada, regla, salida y excepción.\n\nEjemplo de arquitectura para una consulta: Webhook recibe nombre, teléfono, servicio y origen. IF comprueba los campos mínimos. La rama válida puede registrar en Google Sheets y avisar por Telegram. Para que la rama incompleta diga qué dato falta, hay que construir ese mensaje y configurar Webhook para responder con Respond to Webhook. Es un mapa de diseño, no un flujo ejecutado: configurá credenciales, mapeos, respuesta y pruebas con datos de ejemplo.\n\n¿Qué tarea repetís en tu negocio? Contala con su entrada, regla y salida.",
   "hashtags": ["#n8n", "#automatizacion", "#negocios", "#pymes", "#bolivia"],
   "serie": "IA PRÁCTICA",
   "episodio": "01",

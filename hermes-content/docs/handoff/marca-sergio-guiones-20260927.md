@@ -1,5 +1,167 @@
 # Handoff — marca-sergio-guiones-20260927
 
+## VIGENTE · 28-sep · contenido que enseña, no más investigación
+
+### 1. Objetivo y última instrucción de Sergio
+
+«Corta lo de Playwright, objetivo tus carruseles, creación de contenido,
+comunidad, guiones de videos». Después: «DAME LOS GUIONES QUE ENSEÑEN COSAS,
+TENÉS EQUIPOS DE AGENTES, NO HEMOS POSTEADO NADA, ARMA TU HANDOFF Y ARMA TU
+PLAN Y ABRIMOS NUEVA SESIÓN».
+
+El resultado buscado es **contenido terminado que alguien pueda aplicar**.
+No empezar otra auditoría de herramientas, referentes, navegador, infraestructura
+o cuentas. No ampliar a cursos/VSL, ads, avatares ni seis canales a la vez.
+Sergio enseña criterio y acciones; ONIA sólo muestra producto cuando funciona;
+la comunidad permite practicar una tarea y compartir un bloqueo.
+
+Última precisión: **«quiero empezar a grabar ... dame los guiones ... la
+principal tarea es esta»**. Entregar los cuerpos de G09/G11/G12 de inmediato;
+no volver a condicionar el rodaje a la revisión de un referente o al scheduler.
+
+### 2. Qué está en producción / qué NO está
+
+- Estado declarado por Sergio: **«no hemos posteado nada»**. Cero publicaciones
+  acreditadas de este lote. El relato histórico de un primer video publicado
+  más abajo no se usa como estado vigente ni como métrica.
+- No se publicaron/programaron piezas ni enviaron ejercicios/DM en este cierre.
+- No se activaron keywords, recuperó Postiz ni modificó una integración.
+- Los guiones están listos para lectura/rodaje, no grabados por esta sesión.
+- Los carruseles están renderizados y revisados; aprobación visual parcial
+  anterior ≠ permiso de publicación. No crear variantes por defecto.
+
+### 3. Entregables y ruta exacta
+
+Carril canónico: `codex/marca-sergio-guiones-20260927`.
+Worktree de continuidad: `C:/Users/PC/.codex/worktrees/marca-sergio-continuacion/onia-hermes`.
+El checkout `C:/dev/proyectos/onia-hermes` tiene trabajo ajeno; no stagear ni
+editarlo en bloque. La siguiente sesión toma este carril como único escritor,
+tras leer `COORDINATION_MANIFEST.md`. Leer este handoff desde la ruta absoluta
+si su cwd inicial es otro; no reconstruir el contexto del chat.
+
+| Archivo canónico | Resultado disponible |
+|---|---|
+| [Rodaje](../cola/RODAJE-MARCA-PERSONAL-2026-09-27.md) | **G09/G11/G12 revisados**: dos hooks, cuerpo completo, cierre, prompt exacto, tres pantallas y caption por video. G00–G08/G10/G13/G14 permanecen como banco; no grabar todo. |
+| [Carruseles v2](../cola/APROBACION-CARRUSELES-SERGIO-2026-09-27.md) | Tres artes existentes: Matriz n8n, agente/loop y MCP; 22 láminas. Caption de Matriz actualizado a una sola CTA; PNG sin cambio. Horarios históricos no son programación. |
+| [Primer ejercicio comunitario](../cola/drops/2026-09-28-primer-ejercicio-preparado.md) | Bienvenida + prompt de respuesta frecuente + tres checks + participación opcional. Preparado, no enviado. Derivados G11/G12 definidos sin prometer archivos nuevos. |
+| [Auditoría de contexto](../cola/AUDITORIA-GUIONES-COMUNIDAD-2026-09-28.md) | Sólo consultar si aparece una duda concreta. G00–G14, referentes comprobados y brechas; no repetir la investigación. |
+
+Hojas de contacto existentes:
+
+- [Matriz n8n · primero](../../carousels/out/sergio-matriz-n8n-20260921-v2/_contactsheet.png).
+- [Automatización / agente / loop · segundo](../../carousels/out/sergio-agente-loop-20260921-v2/_contactsheet.png).
+- [MCP · tercero](../../carousels/out/sergio-mcp-claude-code-20260921-v2/_contactsheet.png).
+
+G09 enseña **cuatro datos para responder una consulta**; G11 enseña **decisión,
+tarea y pregunta abierta**; G12 enseña **dato disponible, dato faltante y humano**.
+Los tres tienen una acción reproducible y no dependen de noticias de modelos.
+
+### 4. Intentos / desvíos que no repetir
+
+- Se dedicó demasiado trabajo a auditoría/navegación mientras seguían sin salir
+  piezas. Sergio cerró ese frente: la investigación no es el siguiente entregable.
+- No hacer otros quince guiones, tres artes nuevas ni un calendario enorme
+  antes de terminar la primera pieza.
+- No presentar un diagrama, storyboard o respuesta escrita a mano como ejecución
+  de n8n, ChatGPT o un bot ONIA. Rotular ejemplos/simulaciones y capturar una
+  salida real sólo si se ejecuta.
+- El segundo video n8n antiguo fue rechazado por pantalla/voz discordantes.
+  Su candidata v3 sigue sin aprobación; no ponerla al principio del nuevo plan.
+- No esperar a arreglar Postiz, automatizar DMs o lanzar un curso para producir
+  educación sin promesa de recurso. Esas tareas están fuera de este arranque.
+- No recrear la automatización de seis horas que se eliminó anteriormente.
+
+### 5. Equipo / validación de este cierre
+
+Tres frentes independientes, en lectura: `audit_guiones` entregó cuerpos y
+prompts; `audit_comunidad` entregó bienvenida/ejercicio; `audit_conversion`
+eligió los carruseles existentes y el orden. La raíz revisó coherencia, ajustó
+G09 para comparar el mismo caso, integró textos y delimitó aprobación.
+La siguiente sesión puede crear agentes nuevos por estos contratos; los nombres
+anteriores no garantizan agentes activos entre sesiones.
+
+Validación local: G09/G11/G12 contienen aprendizaje, ejemplo ficticio, límite,
+prompt, tres pantallas y una CTA; enlaces/artefactos locales comprobados y diff
+revisado antes de commit. No se reportan prompts ejecutados ni salidas de modelo
+obtenidas. QA factual/visual de 22 láminas está preservada del cierre anterior;
+en esta continuación cambia sólo el caption de Matriz, no sus hashes de imagen.
+
+### 6. Dependencias concretas — no bloquear lo que sí se puede hacer
+
+- **Rodaje:** Sergio debe grabar A-roll; si ya existe una toma, localizar ruta
+  exacta antes de repetir. Frontal vertical 9:16, sin verde, audio real limpio.
+- **Demostraciones:** ejecutar los prompts con datos ficticios y guardar captura
+  de entradas/salidas para edición. Si no hay acceso, preparar el esquema con
+  rótulo de ejemplo; no venderlo como prueba ejecutada.
+- **Comunidad:** falta verificar último drop recibido y acceso de miembro a
+  biblioteca. Notion devolvió `UNAUTHORIZED` en esta revisión; no concluir que
+  no existe. Eso no impide grabar G09/G11/G12 sin keyword.
+- **Publicación/envío:** aprobación expresa de versión, caption, cuenta y fecha;
+  ningún texto de este handoff la concede. Una ruta manual aprobada es válida;
+  no ampliar a recuperación de servicios sin autorización específica.
+
+### 7. Plan de ejecución de la siguiente sesión
+
+**Primer resultado de la sesión: enseñar a Sergio G09 completo y la hoja de
+Matriz n8n, cerrar una versión producible, no devolver otra lista de ideas.**
+
+| Orden | Frente | Trabajo acotado | Listo cuando |
+|---|---|---|---|
+| 1 | Raíz + contenido | Abrir G09 y Matriz n8n existentes. Mantener la dirección visual aprobada y el prompt exacto. | Sergio recibe texto de cámara y arte concretos; no otra auditoría. |
+| 2 | Contenido/media | Preparar tres pantallas de G09: pedido básico, cuatro datos y salida revisada. Usar el mismo caso; guardar una ejecución sólo si ocurrió. | Pantalla, voz y rótulos coinciden. La primera pieza no espera a terminar las otras cinco. |
+| 3 | Rodaje/edición | Recibir/localizar A-roll G09; corte vertical, subtítulos legibles y captura ampliada. Aplicar las skills de edición pertinentes sólo al editar. | Preview completo reproducible y versión identificada, no master aprobado por inferencia. |
+| 4 | QA/editorial | Revisar G09 y caption final de Matriz; aprobación específica por versión/cuenta/fecha. | Un paquete exacto para decidir y ninguna promesa de DM/recurso no probado. |
+| 5 | Comunidad | Revisar ejercicio 1 y «empieza aquí», acceso y último drop. | Primer ejercicio utilizable, sin duplicar entregas; listo para envío sólo tras aprobación. |
+| 6 | Publicación | Ejecutar únicamente el lote expresamente aprobado por una ruta con acceso verificado. | URL/ID + cuenta + fecha registrados; no sólo respuesta del scheduler. |
+| 7 | Continuidad | Producir G11 + agente/loop; después G12 + MCP. | Una pieza completa cada vez y banco reutilizado, no nuevos artes sin necesidad. |
+
+**Propuesta de tanda, relativa a aprobación; NO cadencia nueva aplicada:**
+
+| Momento | Video | Carrusel | Comunidad |
+|---|---|---|---|
+| Semana 1 | G09 · cuatro datos | Matriz n8n · entrada/regla/salida/excepción | Ejercicio de respuesta frecuente. |
+| Semana 2 | G11 · notas a acciones | Automatización/agente/loop · elegir por tarea | Una tarea con responsable/fecha pendientes. |
+| Semana 3 | G12 · tres consultas | MCP · permiso y operación comprobada | Clasificar respuestas y reconocer derivación. |
+
+Si G09 todavía no tiene bruto, Matriz puede ser la primera pieza tras aprobación
+exacta. No obliga a esperar tres semanas ni sustituye compromisos anteriores.
+Instagram Sergio primero es una propuesta de foco, no aprobación de destino.
+No cambiar horarios/precios/cadencia ni publicar automáticamente.
+
+Los agentes nuevos deben tener entregables cerrados: contenido valida primera
+pieza, media produce un preview con los assets que sí existen, comunidad prepara
+una entrega utilizable, QA comprueba aprendizaje/legibilidad/privacidad/CTA.
+La raíz integra y muestra resultados. No delegar lecturas de skills obligatorias
+que necesita hacer el agente principal.
+
+Aplicación de skills: `marca-personal-sergio` fija voz real y enseñanza práctica;
+`content-strategy` prioriza tareas reproducibles sobre noticias/pila de ideas;
+`community-marketing` convierte cada tema en primera acción para un miembro.
+Referentes ya revisados: Santiago para composición, Revolutia para contraste,
+Ingeniero Binario para criterio/prueba/límite. No copiar identidad ni volver a
+navegarlos como primera tarea.
+
+**Pedido adicional de producción de carruseles:** Sergio indicó exactamente
+[este reel de Santiago](https://www.instagram.com/reels/Ddz9G7KIEfT/): aunque
+trata de edición, quiere aprender su proceso para generar carruseles. No reducir
+ese pedido a copiar el acabado. Se confirmó `@sanmunoz.ia` y se vieron frames
+de texto/animación arriba y cara abajo, con cambios de composición y una
+ilustración simple de monedas; la portada menciona Claude Code. **No se revisó
+el audio completo ni se verificó su prompt, skill o exportación.** La revisión
+se cerró al priorizar Sergio el rodaje; no declarar ese método ya aprendido.
+
+Continuación acotada, después de entregar los guiones: identificar el proceso
+que realmente enseña en ese reel (entrada, instrucciones, iteración y salida),
+separar observación de inferencia y hacer una prueba original de **una lámina**
+con ese principio sobre nuestra Matriz n8n. Primero preview comparativo;
+no regenerar los 22 PNG ni instalar/pagar herramientas por inferencia. La
+legibilidad y la enseñanza tienen prioridad sobre copiar animaciones, paleta,
+frases o identidad. Este pendiente no bloquea G09/G11/G12 ni las artes existentes.
+
+---
+
+## HISTORIAL · 27-sep · no usar como estado vigente
+
 **Objetivo**
 Ordenar la marca personal de Sergio y ONIA por guiones, videos, comunidad, posts y bóveda; dejar piezas educativas con fuente real, seis destinos sociales identificados, y un carril seguro para editar/publicar sólo versiones aprobadas. Objetivo cumplido para documentación/guiones y diagnóstico; **no** para publicación, recuperación de Postiz ni edición final de Opus.
 

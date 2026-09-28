@@ -7,9 +7,18 @@ Rama `codex/marca-sergio-guiones-20260927`, worktree aislado
 Alcance: `hermes-content/docs/{ONIA_MARCA_PERSONAL_MADRE,ONIA_MARCA_PERSONAL_BOVEDA,ONIA_PUBLICACION_MULTICANAL}.md`,
 `hermes-content/docs/cola/{RODAJE-MARCA-PERSONAL-2026-09-27,LEARNINGS-APROBADOS-MARCA-PERSONAL,APROBACION-CARRUSELES-SERGIO-2026-09-27,EDICION-G06-OPUS-55-2026-09-27}.md`,
 drop del 27-sep, handoff de este carril y tres carruseles v2 de Sergio (briefs y PNG).
+Revisión del 28-sep: `hermes-content/docs/cola/AUDITORIA-GUIONES-COMUNIDAD-2026-09-28.md`.
+Frentes de guiones, experiencia de miembros y carruseles trabajan sólo lectura;
+la raíz integra los textos y el handoff. El 28-sep Sergio cerró la investigación
+de navegador y pidió concentrarse en carruseles, comunidad y guiones que enseñen.
+Se revisan G09/G11/G12 en el rodaje canónico, se prepara el primer ejercicio
+comunitario y se actualiza el handoff con plan de producción. Ingeniero Binario
+queda como referencia estructural, no como otra tarea de investigación.
+Estado declarado por Sergio el 28-sep: todavía no se ha publicado este lote.
 No toca servicios, OAuth, programación ni publicación. El checkout compartido conserva
 el video candidato v3 y cambios de otros carriles; no stagear su árbol completo.
-Handoff: `hermes-content/docs/handoff/marca-sergio-guiones-20260927.md`.
+Handoff y plan vigente: `hermes-content/docs/handoff/marca-sergio-guiones-20260927.md`.
+Primer ejercicio: `hermes-content/docs/cola/drops/2026-09-28-primer-ejercicio-preparado.md`.
 
 ## Purpose
 This file prevents duplicate work while two Codex/Hermes sessions run at the same time.
