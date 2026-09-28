@@ -6,12 +6,18 @@ de ONIA. Mantener el acceso de Codex y Claude dentro de las tareas autorizadas.
 
 ## Reglas
 - Restricción vigente de Sergio, 2026-09-28: las pruebas de autenticación quedaron
-  detenidas. SIAT/Impuestos es de acceso exclusivamente manual por Sergio. Los
+  detenidas y luego Sergio autorizó retomar sólo la prueba de Google para
+  Higgsfield. SIAT/Impuestos sigue siendo de acceso exclusivamente manual. Los
   agentes no deben abrirlo, iniciar/cerrar sesión, rellenar credenciales ni operar
   su navegador. Una clave guardada en KeePassXC no autoriza ese acceso.
   Sergio reportó una alerta relacionada con términos y condiciones; no se
   verificó jurídicamente su alcance y no se deben intentar vías alternativas.
   Las preguntas anteriores para continuar las pruebas quedan canceladas.
+- La prueba retomada exige comprobar rellenado real y resultado del login.
+  Sesión previa o vuelta mediante Google sin contraseña no demuestra KeePassXC.
+  Antes de actuar, verificar Chrome OnIA, la página correcta y los controles
+  visibles del puente. Si el panel de la extensión no es accesible, pedir sólo
+  su estado/desbloqueo al usuario; no inspeccionarlo por otra vía ni pedir claves.
 - No repetir secretos completos en respuestas.
 - Si el usuario pega un secreto, recomendar rotarlo.
 - Credenciales personales para agentes: boveda KeePassXC local fuera del repo.
@@ -218,6 +224,28 @@ automatización es admitida por el proveedor o está libre de riesgo de suspensi
 sin comprobar sus condiciones y mecanismos oficiales. Las pruebas detenidas no
 deben retomarse automáticamente.
 
+Sergio pidió después retomar correctamente la prueba de Higgsfield; esa petición
+autoriza únicamente Google/Higgsfield y mantiene SIAT manual. Se verificó Chrome
+OnIA y el formulario Google: al enfocar el campo seguía vacío, sin un control
+visible de KeePassXC. Se solicitó el estado de la extensión a Sergio porque
+su panel protegido no es operable mediante el conector disponible. No se
+introdujeron valores inventados ni se enviaron intentos de login vacíos.
+
+Revisión independiente de documentación: las páginas de sólo usuario pueden
+necesitar la opción Username-only en Site Preferences de KeePassXC-Browser.
+La ausencia de icono no demuestra esa causa. El atajo pertenece a comandos
+del navegador; no está comprobado que las teclas emitidas por el conector lo
+activen. Discriminante solicitado: Sergio enfoca el campo de Google y pulsa
+Alt+Shift+U físicamente una vez, informando sólo si rellena. Ese resultado sería
+manual y no se debe atribuir a Codex. No cambiar permisos generales ni otros sitios.
+
+Se revisaron públicamente los términos de Higgsfield, versión 26-jul-2026:
+las secciones 11.12 y 11.13 contemplan agentes por Developer Access/MCP; 5.2
+restringe scraping/descarga de páginas y elusión de protecciones. Esa revisión
+no garantiza ausencia de suspensión ni prueba compatibilidad de un puente
+KeePassXC con el navegador integrado. No convertirla en permiso general
+para automatizar cualquier operación web.
+
 Cuando la herramienta entregue sólo diferencias de la UI, pedir un estado
 completo antes de deducir presencia o ausencia de Login/menú de cuenta. Una
 diferencia sin ese texto no demuestra que el elemento haya desaparecido.
@@ -337,9 +365,13 @@ Las instrucciones globales de la laptop (`~/.codex/AGENTS.md` y
 leen al arrancar; las tareas ya abiertas deben recibir el aviso y releerlas.
 
 Fuentes oficiales:
+- https://higgsfield.ai/terms-of-use-agreement
 - https://keepassxc.org/docs/KeePassXC_GettingStarted
 - https://github.com/keepassxreboot/keepassxc/blob/develop/docs/topics/BrowserIntegration.adoc
 - https://github.com/keepassxreboot/keepassxc-browser/blob/develop/keepassxc-browser/manifest.json
+- https://github.com/keepassxreboot/keepassxc-browser/wiki/What's-new-in-1.5.0#5-changes-to-site-preferences
+- https://github.com/keepassxreboot/keepassxc-browser/wiki/Extension-details
+- https://developer.chrome.com/docs/extensions/reference/api/commands
 - https://keepassxc.org/blog/2023-06-20-cve-202335866/
 - https://learn.microsoft.com/en-us/windows-hardware/drivers/driversecurity/windows-security-model
 - https://code.claude.com/docs/en/chrome

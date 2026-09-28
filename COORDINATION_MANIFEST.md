@@ -64,6 +64,14 @@ reportada por Sergio; se cancela la pregunta pendiente de autorización para pro
 No se introdujeron claves SIAT ni enviaron trámites. No realizar más operaciones de
 navegador ni retomar pruebas automáticamente. Se corrige la conclusión: Google
 permitió volver a Higgsfield, pero KeePassXC no rellenó el campo de la prueba.
+Petición posterior de Sergio: retomar bien sólo la prueba de Google/Higgsfield.
+Se confirmó perfil Chrome OnIA y campo Google vacío sin control de KeePassXC.
+El panel protegido de la extensión requiere que Sergio confirme estado/desbloqueo;
+no se enviaron intentos de login ni se abrió SIAT. Revisión pública de términos
+de Higgsfield realizada, sin afirmar garantía contra restricciones de cuenta.
+Revisión documental independiente: ausencia de icono y fracaso del atajo enviado
+por la herramienta no determinan la causa. Se pidió una pulsación física única
+en el mismo campo como prueba manual discriminante, sin enviar secretos.
 
 
 ## Infra retomada en Codex — 2026-09-21

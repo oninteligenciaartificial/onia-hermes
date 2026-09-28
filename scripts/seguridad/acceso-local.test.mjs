@@ -126,7 +126,8 @@ test('registro enumera apps únicas, URLs públicas sin queries y estados histó
     }
   }
   assert.equal(registry.mechanisms.directVaultApiCli.status, 'not_configured');
-  assert.equal(registry.policy.authenticationTests, 'stopped_by_user');
+  assert.equal(registry.policy.authenticationTests, 'higgsfield_google_only');
+  assert.deepEqual(registry.policy.authenticationTestApps, ['higgsfield', 'google']);
   assert.deepEqual(registry.policy.manualOnlyApps, ['impuestos']);
   const siat = registry.apps.find((app) => app.id === 'impuestos');
   assert.equal(siat.status, 'manual_only_after_user_reported_alert');

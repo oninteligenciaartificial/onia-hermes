@@ -3,7 +3,8 @@
   "evidenceDate": "2026-09-28",
   "purpose": "Registro común no secreto para Hermes, Codex y Claude. Es evidencia puntual, no una ACL, un broker de credenciales ni una garantía de acceso actual o a todas las apps.",
   "policy": {
-    "authenticationTests": "stopped_by_user",
+    "authenticationTests": "higgsfield_google_only",
+    "authenticationTestApps": ["higgsfield", "google"],
     "manualOnlyApps": ["impuestos"],
     "scope": "Operar únicamente dentro de la tarea y las aprobaciones existentes. Comprobar sesión y permisos con el conector autorizado al usar una app.",
     "sensitiveActions": ["pagos", "generaciones pagadas", "publicación", "contacto con terceros", "borrados", "producción"],
@@ -42,7 +43,7 @@
       "entryTitle": "OnIA-Agentes-Windows-Chrome",
       "status": "user_reported_entry_detected",
       "evidence": "Título exacto y detección por KeePassXC-Browser confirmados por Sergio. El formulario Google de la prueba quedó vacío tras el atajo de rellenado. Login con la contraseña guardada y cuenta concreta no verificados por el agente.",
-      "nextAction": "Pruebas de autenticación detenidas por Sergio; no retomarlas automáticamente. La comprobación de KeePassXC y el login se mantienen manuales. No enviar secretos.",
+      "nextAction": "Sergio retomó sólo Google/Higgsfield. Esperar el estado/desbloqueo del puente de KeePassXC en Chrome OnIA; probar únicamente la entrada autorizada sin leer ni imprimir claves. No extender la prueba a otros servicios.",
       "operationScope": "task_and_existing_approvals"
     },
     {
@@ -54,7 +55,7 @@
       "status": "observed_authenticated_on_evidence_date",
       "evidence": "Codex observó Assets y menú de cuenta en Chrome y en su navegador integrado el 2026-09-28. Ambos cierres autorizados se verificaron. El integrado volvió a entrar con Google sin contraseña; Chrome sigue en el formulario Google pendiente de rellenado. No prueba KeePass ni futura sesión vigente.",
       "browserChecks": { "codexInApp": "relogin_observed_without_password_prompt", "chromeOnIA": "credential_fill_pending_after_authorized_logout" },
-      "nextAction": "Pruebas de autenticación detenidas por Sergio; Chrome quedó en el formulario Google. No reintentar ni cerrar más sesiones. Antes de futura automatización, confirmar mecanismo oficial admitido y alcance. Aplicar HIGGSFIELD_VIDEO_SYSTEM.md y aprobaciones de gasto antes de generar.",
+      "nextAction": "Sergio retomó sólo la prueba de Google/Higgsfield. Comprobar rellenado real con KeePassXC y resultado de login; falta conocer estado del puente protegido. Sesión/SSO no prueba contraseña. No generación ni operaciones con coste en esta prueba.",
       "operationScope": "task_and_existing_approvals"
     },
     {
