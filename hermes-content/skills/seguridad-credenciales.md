@@ -99,6 +99,35 @@ Antes de descargar o instalar cualquier componente (incluidos extensiones,
 plugins, dependencias que `npx` descargue o navegadores de Playwright), explicar
 su nombre, origen y propósito y esperar aprobación explícita de Sergio Urcullo.
 
+### Pendiente futuro: navegadores en la nube
+
+El 2026-09-28 Sergio Urcullo pidió anotar para el futuro la opción de
+navegadores persistentes en la nube, con acceso privado para Codex y Claude,
+para reutilizar sesiones sin depender de que la laptop esté encendida.
+Por ahora se mantiene el esquema local y se completa su conexión.
+
+Antes de implementar, evaluar compatibilidad con las herramientas autorizadas,
+persistencia y protección de sesiones, acceso privado, costos y autenticación
+con la bóveda local. Elegir un entorno separado del VPS de ONIA Platform.
+Este pendiente no autoriza contratar servicios, instalar componentes, desplegar
+infraestructura ni trasladar la bóveda, credenciales o cookies a otro equipo.
+La decisión de proveedor y la implementación requieren aprobación específica.
+
+### Cargar entradas después de asociar el navegador
+
+- Para una cuenta con contraseña, Sergio crea una entrada en KeePassXC con
+  título, usuario, contraseña y URL de inicio de sesión del servicio.
+  La contraseña se introduce directamente en la aplicación, nunca por chat.
+- Para Higgsfield con Google, la credencial corresponde a Google; no inventar
+  una contraseña separada de Higgsfield. Conservar la sesión existente y pedir
+  intervención humana sólo cuando Google requiera consentimiento o MFA.
+- Para claves API, usar entradas separadas e identificar servicio y finalidad;
+  guardar el valor en el campo de contraseña o en un atributo protegido.
+  La extensión de navegador no configura por sí sola el uso de esas claves
+  por CLI/API ni conecta directamente la bóveda a Codex o Claude.
+- Comprobar cada integración con la cuenta autorizada, registrando sólo estado
+  y errores sin valores sensibles. No cerrar sesiones vigentes para comprobarla.
+
 ### Estado y comprobación
 
 El 2026-09-28 se comprobó KeePassXC 2.7.12 instalado. Sergio Urcullo creó una
@@ -130,6 +159,12 @@ habilitar la integración y seleccionar Chrome. Con la base desbloqueada,
 abrir la extensión, pulsar Conectar y elegir un nombre único como
 `OnIA-Agentes-Windows`. Sergio Urcullo confirma la asociación y las entradas
 permitidas directamente en la aplicación, sin enviar claves al chat.
+
+Después Sergio informó que tiene la extensión en Chrome, habilitó la integración
+con navegadores y completó la asociación. Es un estado reportado por el usuario;
+no se han verificado aún el rellenado de una entrada ni el acceso directo de
+Codex/Claude a credenciales. El siguiente paso es cargar las entradas autorizadas
+y comprobar el mecanismo disponible para cada tipo de acceso.
 
 Enlace oficial aprobado:
 https://chromewebstore.google.com/detail/keepassxc-browser/oboonakemofpalcgghocfoadofidjkkk

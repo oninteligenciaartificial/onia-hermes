@@ -28,6 +28,14 @@ sin merge o commit en `main`. No se instaló/descargó software ni se leyeron cl
 configuró el navegador, realizaron logins o tocaron servicios del VPS.
 Las otras tareas de estrategia y marca personal fueron notificadas antes de editar.
 
+Seguimiento 2026-09-28: Sergio pidió guardar como pendiente futuro evaluar
+navegadores persistentes en la nube. Se registró en la fuente de seguridad y en
+una nota de memoria autorizada; sólo documentación en el mismo carril aislado.
+La configuración actual sigue local. La implementación remota requiere un
+entorno separado de Platform y aprobación posterior.
+Sergio informó después que completó la asociación Chrome/KeePassXC; falta cargar
+entradas y comprobar el acceso de cada agente sin revelar secretos.
+
 
 ## Infra retomada en Codex — 2026-09-21
 
