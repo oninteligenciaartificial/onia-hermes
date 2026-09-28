@@ -1,7 +1,8 @@
 # Continuar los guiones con Claude
 
 Handoff pedido por Sergio el 28-sep-2026. Leer este archivo y el guion enlazado;
-no reiniciar una auditoría extensa ni convertir el encargo en un calendario.
+no reiniciar una auditoría extensa. Incorporar el bloque diario de grabación
+pedido al cierre; no inventar un horario ni una cuota de publicaciones.
 
 ## 1. Dónde continuar
 
@@ -58,7 +59,8 @@ El recorrido editorial acordado es:
 - Primera pieza: Opus 5.5, qué cambió y cómo evaluarlo hoy.
 - Continuación lógica, condicionada a la prueba: mostrar un resultado real,
   explicar el procedimiento y después su aplicación en una tarea de negocio.
-  No hay calendario aprobado ni obligación de producir una serie larga.
+  Hay un mínimo diario de una hora para grabar (ver sección 8), sin horario
+  definido ni obligación de publicar diariamente en todos los canales.
 
 La ficha debe registrar fecha, versión/producto, fuente primaria, señal social,
 material realmente observado, decisión editorial, prueba y resultado o bloqueo.
@@ -160,3 +162,64 @@ Archivos de este carril: manifiesto, archivo único de guiones/fichas y este
 handoff. No hubo publicación, deploy, instalación, contacto con terceros ni
 cambios de precio/producto. Conservar y revisar estos archivos antes de integrar;
 no arrastrar trabajo ajeno del checkout principal.
+
+## 8. Una hora diaria de grabación y formatos
+
+Última instrucción de Sergio: dejar **al menos una hora al día para grabar**
+contenido para YouTube horizontal y TikTok, Instagram y otros canales verticales.
+La investigación, escritura, preparación de demos y edición deben ocurrir fuera
+de esa hora y estar listas antes de que Sergio empiece. No hay hora del reloj
+acordada ni evento de calendario creado.
+
+Distribución inicial propuesta, ajustable según el tema:
+
+- 35 minutos: grabación horizontal 16:9 de una explicación/tutorial de fondo
+  para YouTube, con ejemplo y aprendizaje. Es tiempo de rodaje, no duración final.
+- 20 minutos: grabación vertical 9:16 de 2–3 piezas breves relacionadas, cada
+  una con contexto, gancho y enseñanza propios. Es objetivo de sesión, no cuota.
+- 5 minutos: retomas de frases, aperturas y cierres.
+
+Trabajar una idea central por sesión: actualidad de IA, tutorial reproducible,
+o construcción/aplicación real en ONIA. La explicación horizontal desarrolla
+el proceso; las piezas verticales resuelven una pregunta concreta. Reutilizar
+investigación y demostraciones; adaptar narración y encuadre. No asumir que
+recortar automáticamente el horizontal produce buenos verticales.
+
+Antes de grabar, dejar un paquete breve: guion horizontal, guiones verticales,
+enseñanza personal y ficha interna con fuentes y estado de la demo. El editor
+se encarga de las pantallas, recursos y montaje. Mantener Opus como siguiente
+tema; no abrir otra investigación editorial general.
+
+## 9. Por qué se alargó esta tarea y cómo corregirlo
+
+Diagnóstico del proceso observado; no hay medición por etapa para asignar
+minutos o porcentajes ni atribuir la demora al modelo:
+
+1. Se extendió la exploración de varios referentes y temas antes de cerrar una
+   pieza grabable. Faltó un criterio de cuándo había evidencia suficiente.
+2. Se mezclaron diseño editorial, investigación técnica, revisión visual,
+   preparación de demos y comprobación de acceso en una misma entrega.
+3. Los intentos de acceso y la navegación social añadieron fricción: perfiles
+   con modal de login, uso de enlaces directos y Claude sin sesión disponible.
+4. Sergio tuvo que corregir el alcance varias veces: actualidad, solo guion,
+   fuentes trazables y enseñanza. Esas correcciones produjeron retrabajo.
+
+Corrección para Claude:
+
+- Partir de esta ficha y del tema elegido; refrescar solo información cambiante.
+- Para cada pieza, comprobar fuente primaria y referencias recientes pertinentes.
+  Revisar todos los referentes a lo largo del radar, sin recorrer los seis de
+  nuevo para cada guion. Si solo se leyó caption, no atribuir análisis del video.
+- Cerrar investigación cuando las afirmaciones del guion estén respaldadas y
+  exista un ejemplo útil. Si la señal de tendencia es insuficiente, decirlo.
+- Ejecutar una demo acotada con acceso disponible. Ante bloqueo de autenticación,
+  registrar qué falta y entregar una explicación atribuida, sin fingir resultados
+  ni seguir probando rutas indefinidamente.
+- Mostrar pronto un guion completo. Conservar investigación y producción en
+  la ficha; no obligar a Sergio a revisar el proceso entero para poder grabar.
+- Medir desde la próxima pieza inicio/fin de investigación, demo y escritura,
+  y número de revisiones. Esa evidencia permitirá ajustar tiempos; hoy no hay
+  base para prometer una reducción concreta.
+
+Esta ampliación se hizo localmente en el frente de contenido/documentación;
+no necesitó más subagentes ni nueva investigación web.
