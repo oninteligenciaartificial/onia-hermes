@@ -99,6 +99,31 @@ Antes de descargar o instalar cualquier componente (incluidos extensiones,
 plugins, dependencias que `npx` descargue o navegadores de Playwright), explicar
 su nombre, origen y propósito y esperar aprobación explícita de Sergio Urcullo.
 
+### Identificar la cuenta Google para los agentes
+
+Convención propuesta para la entrada de Google: un título que distinga la cuenta,
+por ejemplo `Google — Personal` o `Google — ONIA`; etiquetas `google`, `sso`
+y `agentes`, añadidas por separado. Las etiquetas sólo organizan la entrada:
+no conceden permisos ni configuran un puente de acceso.
+
+Texto sugerido para Notas dentro de KeePassXC:
+`Cuenta Google usada para acceder a apps mediante Continuar con Google, incluido
+Higgsfield. Reutilizar la sesión autorizada de Chrome OnIA. Si Google solicita
+verificación o consentimiento, pedir intervención de Sergio.`
+
+Las reglas globales de Codex y Claude ya apuntan a este procedimiento. Para
+comunicar el acceso, registrar aquí únicamente el título confirmado de la entrada,
+la app, el método y el navegador; nunca correo real, contraseña, tokens o cookies.
+No asumir que una nota en la bóveda es visible para los agentes ni que su título
+concede acceso: se necesita la herramienta y el puente autorizados disponibles.
+
+| App | Método | Entrada Google | Navegador |
+|---|---|---|---|
+| Higgsfield | Continuar con Google | Título pendiente de confirmación de Sergio | Chrome OnIA |
+
+Si hay varias cuentas Google, confirmar cuál corresponde a la tarea antes de
+iniciar una sesión nueva. Mantener y reutilizar las sesiones existentes autorizadas.
+
 ### Pendiente futuro: navegadores en la nube
 
 El 2026-09-28 Sergio Urcullo pidió anotar para el futuro la opción de

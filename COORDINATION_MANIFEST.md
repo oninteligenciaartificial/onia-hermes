@@ -35,6 +35,9 @@ La configuración actual sigue local. La implementación remota requiere un
 entorno separado de Platform y aprobación posterior.
 Sergio informó después que completó la asociación Chrome/KeePassXC; falta cargar
 entradas y comprobar el acceso de cada agente sin revelar secretos.
+Se precisó la convención de etiquetas/notas y el registro mínimo para Google/SSO;
+el título exacto de la entrada queda pendiente de confirmación de Sergio. Las
+reglas globales existentes remiten a la fuente común; no se duplican secretos.
 
 
 ## Infra retomada en Codex — 2026-09-21
