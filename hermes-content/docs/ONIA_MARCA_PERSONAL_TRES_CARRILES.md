@@ -1,5 +1,12 @@
 # Marca personal — los tres carriles y qué NO va en cada uno
 
+> **Corrección vigente · 28-sep-2026:** Sergio pidió que los guiones enseñen de
+> verdad. Lo público entrega una acción completa y comprobable; la web amplía
+> y la comunidad aporta material preparado y aplicación al caso del miembro.
+> El [mapa de frentes](ONIA_MAPA_DE_TEMAS.md) reúne ONIA, Platform, Sergio,
+> enseñanza de IA y comunidad. Las métricas y estados de septiembre de abajo
+> son históricos; no confirman conexiones, archivos ni publicaciones actuales.
+
 > 📍 **Índice del carril, con qué documento manda sobre qué:**
 > [`ONIA_CIRCUITO_DE_CONTENIDO.md`](ONIA_CIRCUITO_DE_CONTENIDO.md) — y la misma
 > estructura para consultar de un vistazo en
@@ -35,20 +42,22 @@ sentido.
 
 ## 1 · Marca personal — lo público
 
-**Trabajo:** que te encuentren y que comenten. Nada más.
+**Trabajo:** que te encuentren, entiendan tu criterio y reciban algo útil.
 
 **Formato:** carruseles del patrón `apple-editorial` en Instagram. Cinco piezas hoy, con su
 orden en [`cola/PARA-PUBLICAR-APPLE-ORDEN.md`](cola/PARA-PUBLICAR-APPLE-ORDEN.md).
 
-**Qué SÍ va:** el qué y el porqué. La lista de herramientas, el precio, la opinión, el
-dato que sorprende.
+**Qué SÍ va:** una idea aplicada: prompt, ejemplo, cálculo, caso o criterio con
+evidencia. También decisiones propias y humor del trabajo, con propósito claro.
 
-**🔴 Qué NO va: el cómo.** Ni un comando, ni un paso a paso, ni una configuración. No por
-mezquindad — es que **no entra en una lámina y nadie lo lee ahí**. Un carrusel que intenta
-enseñar a instalar Docker fracasa en las dos cosas: no enseña y no engancha.
+**El cómo sí va.** Se elige una unidad pequeña que quepa y se entregue completa.
+Si el tema requiere una instalación larga, el video muestra un paso con su
+resultado y la guía desarrolla el proceso completo. No se oculta el procedimiento
+para obligar a comentar o entrar a la comunidad.
 
-**Cierre obligatorio:** las cinco piezas terminan pidiendo comentario. Es la bisagra con el
-carril 2.
+**Cierre:** una llamada a la acción coherente: guía existente, aplicación en
+comunidad, conversación o demo de producto. El comentario con envío de material
+sólo se usa con recurso y entrega comprobados; no es obligatorio en cada pieza.
 
 ---
 
@@ -188,7 +197,7 @@ que no existe* está escrito para evitar.
 | 2 → 3 | La guía termina diciendo qué **no** cubre. Ahí es donde la comunidad tiene sentido |
 | 3 → 1 | Lo que se pregunta adentro es el mejor listado de temas para el próximo carrusel |
 
-**El error a evitar es siempre el mismo en los tres:** dar de más en el escalón anterior.
-Un carrusel que enseña a instalar deja sin trabajo al entregable; un entregable que regala
-los archivos deja sin sentido a la comunidad. Cada escalón entrega **completo** lo suyo y
-**nada** de lo del siguiente.
+Cada pieza entrega completo lo que promete. El video resuelve una unidad pequeña;
+la guía desarrolla el procedimiento; la comunidad aporta el trabajo preparado,
+la práctica y preguntas sobre el caso de cada miembro. Enseñar bien afuera
+construye confianza y no reemplaza ese acompañamiento.

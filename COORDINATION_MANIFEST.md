@@ -5,6 +5,30 @@ This file prevents duplicate work while two Codex/Hermes sessions run at the sam
 
 Use this as the source of truth before creating new files, skills, docs, or scripts.
 
+
+## Guiones y extracción de referentes — 2026-09-28
+
+Tarea Codex `Revisa guiones de marca personal` (`01a0e9f1-1d82-7d51-9bb0-3594fcee69ce`).
+Alcance: extracción de todas las referencias registradas del carril, revisión de
+enseñanza real y corrección de `hermes-content/docs/cola/RODAJE-MARCA-PERSONAL-2026-09-27.md`.
+Ampliación de Sergio: mapa de frentes ONIA/Platform/Sergio/enseñanza y circuito de
+comunidad en `ONIA_MAPA_DE_TEMAS.md`; corrección de la regla pública «sin cómo»
+en `ONIA_MARCA_PERSONAL_TRES_CARRILES.md`. Sólo propuesta documental, sin modificar
+el catálogo, la oferta, las cuentas ni la comunidad real.
+Tres subagentes leen lotes disjuntos de `references/video-intake/` y
+`references/creator-video-references/`; el integrador consolida evidencia y guiones.
+Artefactos temporales en `.hermes/referencia-guiones/`; extracción canónica junto a
+las referencias y actualización del handoff existente. Sin edición de video,
+publicación, cambios de web/comunidad, instalación, generación paga ni servicios.
+Se preserva el resto del árbol compartido y no se incorporan cambios ajenos al commit.
+Estado: extracción documental y 12 guiones corregidos, con tres subagentes y
+revisión final incorporada. Mapa de 13 frentes, CTAs y contenidos comunitarios
+guardado. Inventario: 131 fichas fechadas + 6 registros de junio, cero faltantes;
+lectura guardada no equivale a reproducción actual completa. Fechas primarias
+de Erik comprobadas; últimas publicaciones de todos los perfiles no certificadas.
+Preservación aislada en `codex/guiones-referentes-20260928`; sin publicar,
+grabar, editar masters, ejecutar demos ni cambiar la oferta.
+
 ## Infra retomada en Codex — 2026-09-21
 
 Sergio Urcullo trasladó el carril de Claude a la tarea Codex de ONIA Platform.
