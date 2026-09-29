@@ -28,7 +28,7 @@
 # ── LA ADUANA (2026-09-29) ───────────────────────────────────────────────────
 # Sergio Urcullo, 2026-09-29: "que me envíe poquitas cosas… me manda puros errores".
 # Ese día eligió lo que le llega (hermes-content/docs/ONIA_CEREBRO.md, «La regla de
-# entrega»): un resumen a las 06:30, un cierre a las 22:00, y en el medio SOLO cuatro
+# entrega»): un resumen a las 06:30, un cierre a las 21:30, y en el medio SOLO cuatro
 # interrupciones. Este script pasa a ser la aduana única, con tres categorías:
 #
 #   ONIA_AVISO=sistema     (por defecto) lo de siempre: problema -> tarea, resto -> log.
@@ -55,6 +55,10 @@
 #   ONIA_AVISO_SOLTAR=1       (cron cada 5 min, sin mensaje) si ya no está en un bloque, manda
 #                             lo retenido en UN mensaje; si terminó en el silencio de la noche,
 #                             lo pasa al resumen de las 06:30.
+#   ONIA_AVISO_PUEDO=1        (sin mensaje) CONSULTA para los emisores que mandan por su cuenta
+#                             —las aprobaciones van con foto o video y no pasan por acá—:
+#                             sale 0 si ahora se lo puede interrumpir, 75 si hay que esperar
+#                             (silencio o bloque). Con el interruptor apagado, siempre 0.
 #
 # 🔴 El silencio y la cola del resumen están detrás de un interruptor:
 # $ONIA_AVISO_ESTADO/activo. Sin él, `interrumpe` sale como siempre. Motivo: si la aduana
@@ -63,7 +67,7 @@
 # El archivo lo crea el mismo paso que instala el resumen, y nadie más.
 set -uo pipefail
 
-if [ "${ONIA_AVISO_SOLTAR:-0}" = "1" ]; then MSG="${1:-}"; else MSG="${1:?uso: onia-tg.sh \"mensaje\"}"; fi
+if [ "${ONIA_AVISO_SOLTAR:-0}" = "1" ] || [ "${ONIA_AVISO_PUEDO:-0}" = "1" ]; then MSG="${1:-}"; else MSG="${1:?uso: onia-tg.sh \"mensaje\"}"; fi
 LOG="${ONIA_TG_LOG:-/var/log/onia-tg.log}"
 TABLERO="${ONIA_TABLERO:-/root/bin/onia-tablero.sh}"
 ESTADO="${ONIA_AVISO_ESTADO:-/var/lib/onia-aviso}"
@@ -105,6 +109,16 @@ en_bloque() {
   awk -F'\t' -v hoy="$(fecha_lapaz)" -v hm="$((10#$(hm_lapaz)))" \
     '$1 == hoy && hm >= ($2 + 0) && hm < ($3 + 0) { print $4; hallado = 1; exit } END { exit !hallado }' "$f"
 }
+
+# ── puedo: ¿se lo puede interrumpir AHORA? (para quien manda por su cuenta) ─────
+# 75 = EX_TEMPFAIL: «ahora no, probá después». Cualquier otro error del que pregunta tiene
+# que tratarse como «sí» —mandar como antes—: una aduana rota no puede callar las preguntas.
+if [ "${ONIA_AVISO_PUEDO:-0}" = "1" ]; then
+  [ "$POLITICA" = 1 ] || exit 0
+  en_silencio && exit 75
+  en_bloque >/dev/null && exit 75
+  exit 0
+fi
 
 # ── soltar: lo retenido durante un bloque sale junto, cuando el bloque termina ──
 if [ "${ONIA_AVISO_SOLTAR:-0}" = "1" ]; then
