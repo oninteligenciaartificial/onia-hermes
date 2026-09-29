@@ -1,0 +1,151 @@
+{
+  "title": "No automatices hasta poder llenar estas seis columnas",
+  "caption": "Antes de abrir n8n, dibujá el proceso en seis columnas: entrada, responsable, dato, decisión, salida y excepción.\n\nEjemplo en una cafetería: entra una solicitud de reserva; atención es responsable; fecha, hora y cantidad son los datos; disponibilidad es la decisión; confirmación y registro son la salida; grupos grandes, devoluciones o precios especiales son la excepción humana.\n\nEjecutalo cinco veces a mano. Si cada intento cambia de criterio o nadie responde cuando falla, todavía no tenés un proceso para automatizar.\n\nComentá PROCESO y te envío la tabla vacía y el test de cinco ejecuciones. Soy Sergio Urcullo; construyo sistemas de IA desde Bolivia y te muestro cómo funcionan.",
+  "hashtags": ["#automatizacion", "#n8n", "#negocios", "#bolivia", "#procesos", "#inteligenciaartificial"],
+  "comment_trigger": "Comentá PROCESO",
+  "cta": "Comentá PROCESO",
+  "serie": "NEGOCIOS CON IA",
+  "episodio": "01",
+  "slides": [
+    {
+      "number": 1,
+      "role": "cover",
+      "pill": "Proceso antes que herramienta",
+      "headline": "No automatices hasta llenar estas 6 columnas",
+      "body": "Si falta una, n8n solo acelera el desorden.",
+      "callout": "Guardá la tabla",
+      "bg": "hermes-content/references/marca-personal-sergio/fondos/cuaderno-02.png",
+      "save_worthy": false,
+      "alt_text": "Seis columnas que se deben llenar antes de automatizar un proceso"
+    },
+    {
+      "number": 2,
+      "role": "point",
+      "pill": "Columna 1 · entrada",
+      "headline": "Nombrá el evento exacto",
+      "body": "No escribas “llega información”. Escribí `mensaje de WhatsApp`, `POST /reserva`, `factura recibida` o `fila nueva`.",
+      "callout": "¿Qué inicia el proceso?",
+      "visual": {
+        "type": "flow",
+        "label": "ENTRADA DE RESERVA",
+        "nodes": [
+          {"name": "WhatsApp", "detail": "mensaje"},
+          {"name": "formulario", "detail": "POST /reserva"},
+          {"name": "evento", "detail": "fecha y hora"}
+        ],
+        "note": "Una entrada concreta se puede reproducir en una prueba."
+      },
+      "save_worthy": false,
+      "alt_text": "Definir la entrada exacta de un proceso"
+    },
+    {
+      "number": 3,
+      "role": "point",
+      "pill": "Columna 2 · responsable",
+      "headline": "Alguien responde cuando falla",
+      "body": "En la reserva, atención es responsable. Automatizar no elimina la propiedad: define quién recibe la alerta y en cuánto tiempo actúa.",
+      "callout": "Sin dueño no hay fallback",
+      "visual": {
+        "type": "contract",
+        "label": "RESPONSABLE HUMANO",
+        "input": "error o excepción",
+        "output": "decisión documentada",
+        "permissions": "atención · 15 min"
+      },
+      "save_worthy": false,
+      "alt_text": "Cada proceso automatizado necesita un responsable humano"
+    },
+    {
+      "number": 4,
+      "role": "point",
+      "pill": "Columna 3 · dato",
+      "headline": "Listá lo mínimo para decidir",
+      "body": "Para una reserva: `fecha`, `hora`, `cantidad` y `contacto`. Si falta uno, la salida correcta es pedirlo; no inventarlo.",
+      "callout": "Dato faltante ≠ rechazo",
+      "visual": {
+        "type": "matrix",
+        "label": "CAMPOS MÍNIMOS",
+        "items": [
+          {"title": "fecha + hora", "body": "cuándo"},
+          {"title": "cantidad", "body": "capacidad"},
+          {"title": "contacto", "body": "confirmación"}
+        ]
+      },
+      "save_worthy": false,
+      "alt_text": "Datos mínimos necesarios para decidir una reserva"
+    },
+    {
+      "number": 5,
+      "role": "point",
+      "pill": "Columna 4 · decisión",
+      "headline": "Escribí la regla que divide caminos",
+      "body": "`IF disponibilidad = true` confirma. Si es false, propone otro horario. Si el grupo supera el límite, escala a una persona.",
+      "callout": "Probá true, false y límite",
+      "visual": {
+        "type": "flow",
+        "label": "DECISIÓN",
+        "nodes": [
+          {"name": "IF", "detail": "disponibilidad"},
+          {"name": "true", "detail": "confirmar"},
+          {"name": "false", "detail": "alternativa"},
+          {"name": "límite", "detail": "humano"}
+        ],
+        "note": "La excepción no se esconde dentro del prompt."
+      },
+      "save_worthy": false,
+      "alt_text": "Regla IF con caminos de confirmación alternativa y humano"
+    },
+    {
+      "number": 6,
+      "role": "point",
+      "pill": "Columna 5 · salida",
+      "headline": "El resultado debe dejar evidencia",
+      "body": "Confirmar al cliente no basta. Registrá `reserva_id`, estado, fecha y responsable; después enviá el mensaje.",
+      "callout": "Guardar antes de avisar",
+      "visual": {
+        "type": "terminal",
+        "label": "SALIDA VERIFICABLE",
+        "lines": [
+          {"value": "reserva_id: RSV-1042", "kind": "command"},
+          {"value": "status: confirmed", "kind": "comment"},
+          {"value": "message_sent: true", "kind": "comment"}
+        ]
+      },
+      "save_worthy": false,
+      "alt_text": "Salida verificable de una reserva con identificador y estado"
+    },
+    {
+      "number": 7,
+      "role": "save",
+      "pill": "Columna 6 · excepción",
+      "headline": "La automatización termina donde aumenta el riesgo",
+      "body": "Grupo grande, devolución, precio especial, garantía o reclamo sensible pasan a una persona. Probá el proceso cinco veces y anotá cada excepción.",
+      "callout": "Guardá este límite ↗",
+      "visual": {
+        "type": "table",
+        "label": "TEST MANUAL",
+        "left": "CASO",
+        "right": "SALIDA",
+        "rows": [
+          {"left": "normal", "right": "automatizar"},
+          {"left": "dato faltante", "right": "preguntar"},
+          {"left": "riesgo alto", "right": "humano"},
+          {"left": "error técnico", "right": "alertar"}
+        ]
+      },
+      "save_worthy": true,
+      "alt_text": "Excepciones que deben pasar a revisión humana"
+    },
+    {
+      "number": 8,
+      "role": "cta",
+      "pill": "Plantilla para tu negocio",
+      "headline": "Te paso las seis columnas vacías",
+      "body": "Comentá *PROCESO*. Soy Sergio Urcullo: construyo sistemas de IA desde Bolivia y te muestro cómo funcionan.",
+      "callout": "",
+      "save_worthy": false,
+      "alt_text": "Comentá proceso para recibir la tabla de seis columnas"
+    }
+  ],
+  "job": "education"
+}

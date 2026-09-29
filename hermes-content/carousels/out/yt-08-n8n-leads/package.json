@@ -1,0 +1,9 @@
+{
+  "name": "yt-08-n8n-leads",
+  "private": true,
+  "scripts": {
+    "dev": "hyperframes present .",
+    "lint": "hyperframes lint .",
+    "check": "hyperframes check . --snapshots"
+  }
+}

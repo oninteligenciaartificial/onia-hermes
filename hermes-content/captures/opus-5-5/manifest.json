@@ -1,0 +1,122 @@
+{
+  "capturedAt": "2026-09-23T03:38:12.925Z",
+  "viewport": "1920x1080",
+  "browser": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+  "sources": [
+    "https://www.anthropic.com/claude-opus-5-5",
+    "https://platform.claude.com/docs/en/models/opus-5-5/migration-guide"
+  ],
+  "captures": [
+    {
+      "file": "01-hero-launch.png",
+      "expected": [
+        "Claude Opus 5.5",
+        "September 22, 2026"
+      ]
+    },
+    {
+      "file": "02-cost-and-speed.png",
+      "matchedText": "Cost and speed."
+    },
+    {
+      "file": "03-availability-model-id.png",
+      "matchedText": "claude-opus-5-5"
+    },
+    {
+      "file": "04-migration-thinking.png",
+      "matchedText": "Thinking can't be disabled\n"
+    },
+    {
+      "file": "05-migration-tool-choice.png",
+      "matchedText": "tool_choice"
+    }
+  ],
+  "validation": {
+    "migrationPageContainsOpus55": true,
+    "noAuthenticationUsed": true,
+    "noFormSubmitted": true,
+    "blockedNonReadRequests": [
+      {
+        "method": "POST",
+        "url": "https://claude.com/api/queue"
+      },
+      {
+        "method": "POST",
+        "url": "https://claude.com/api/queue"
+      },
+      {
+        "method": "POST",
+        "url": "https://claude.com/api/queue"
+      },
+      {
+        "method": "POST",
+        "url": "https://claude.com/api/queue"
+      },
+      {
+        "method": "POST",
+        "url": "https://claude.com/api/queue"
+      },
+      {
+        "method": "POST",
+        "url": "https://claude.com/api/queue"
+      },
+      {
+        "method": "POST",
+        "url": "https://claude.com/api/queue"
+      },
+      {
+        "method": "POST",
+        "url": "https://claude.com/api/queue"
+      },
+      {
+        "method": "POST",
+        "url": "https://claude.com/api/queue"
+      },
+      {
+        "method": "POST",
+        "url": "https://claude.com/api/queue"
+      },
+      {
+        "method": "POST",
+        "url": "https://claude.com/api/queue"
+      },
+      {
+        "method": "POST",
+        "url": "https://claude.com/api/queue"
+      },
+      {
+        "method": "POST",
+        "url": "https://claude.com/api/queue"
+      },
+      {
+        "method": "POST",
+        "url": "https://claude.com/api/queue"
+      },
+      {
+        "method": "POST",
+        "url": "https://claude.com/api/queue"
+      },
+      {
+        "method": "POST",
+        "url": "https://claude.com/api/queue"
+      },
+      {
+        "method": "POST",
+        "url": "https://platform.claude.com/sentry?o=1158394&p=4506240373030912"
+      },
+      {
+        "method": "POST",
+        "url": "https://platform.claude.com/sentry?o=1158394&p=4506240373030912"
+      },
+      {
+        "method": "POST",
+        "url": "https://platform.claude.com/sentry?o=1158394&p=4506240373030912"
+      }
+    ]
+  },
+  "video": {
+    "raw": "06-official-pages-scroll.webm",
+    "clean": "07-official-pages-scroll-clean.webm",
+    "trimStartSeconds": 4
+  }
+}
