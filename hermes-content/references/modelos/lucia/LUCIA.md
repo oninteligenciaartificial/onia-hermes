@@ -1,6 +1,23 @@
 # LUCÍA — archivo único
 
-> ## Estado operativo vigente — 2026-09-22
+> ## 🔴 Estado vigente — 2026-09-29: Lucía v4 se rehace DESDE CERO
+>
+> Sergio Urcullo, 2026-09-29: *«solo queremos empezar de cero pero el learning mantenelo para no
+> perderlo, solo las caras lo hacemos de nuevo para empezar con las caras ya fijadas y con
+> photoshoot donde se marquen todos los rasgos»*.
+>
+> - **No hay cara vigente** hasta que Sergio Urcullo apruebe el master v4. Todo ID de Soul o
+>   Element anterior al 2026-09-29 está **retirado** (lista en `DEPRECATIONS.md`). Los bloques de
+>   abajo que nombran `58bbd635…`, `902eeebb…` o `a1e334f3…` como vigentes son **historia**.
+> - La cara nueva nace **solo de texto**, sin ninguna imagen de la Lucía anterior: eso cierra el
+>   problema de derechos (la cara vieja venía de cuadros de video de una persona real).
+> - Se **conserva** lo aprendido: personaje, voz, reglas de prompt, rúbrica y QA de este archivo
+>   siguen valiendo para v4, salvo lo que diga una cara o un ID concreto.
+> - **Objetivo decidido por Sergio Urcullo (2026-09-29): «que vende Onia y que tenga lifestyle».**
+> - Plan, casting y siguientes pasos: [`LUCIA-V4-PERFECTION-PLAN.md`](LUCIA-V4-PERFECTION-PLAN.md).
+>   Procedencia de cada imagen v4: [`v4/PROCEDENCIA.jsonl`](v4/PROCEDENCIA.jsonl).
+
+> ## Estado operativo — 2026-09-22 (historia desde el 2026-09-29)
 >
 > Este archivo sigue siendo la biblia de **personaje, voz, estetica y limites comerciales**.
 > Los IDs, derechos, referencias y gates ejecutables viven en
@@ -18,7 +35,7 @@
 > - No gastar creditos sin costo/cap registrado y aprobacion explicita. El entrenamiento Soul del
 >   CLI no expone `cost` ni dry-run: requiere precio confirmado por otra superficie o cap aprobado.
 
-> ## 🔴 LA CARA — el único dato que hay que copiar
+> ## ⚰️ LA CARA ANTERIOR — retirada el 2026-09-29. Historia: NO copiar ningún ID de acá
 >
 > **Element canónico: `lucia-skin-v1` · `58bbd635-9b90-4bd2-b08a-1cd4915bd563`**
 > Se escribe `@lucia` en la web y autocompleta. Motor **Nano Banana Pro**, 2K.
@@ -65,7 +82,7 @@
 |---|---|
 | Handle | `@lucia.antelo.oficial` |
 | Perfil | Boliviana, 26, Santa Cruz de la Sierra |
-| **Vende** | La plataforma ONIA. Y es la vitrina viva del producto *"te creamos tu influencer IA"* |
+| **Vende** | **La plataforma ONIA, y tiene lifestyle** (Sergio Urcullo, 2026-09-29: *«que vende Onia y que tenga lifestyle»*). El lifestyle es el vehículo; Onia Platform es lo que se vende. La «vitrina del producto *te creamos tu influencer IA*» queda **para después**: es la línea influencers IA, congelada por la etapa 1 (`ONIA_ESTRATEGIA_DE_EMPRESA.md` §7 y §10) |
 | **Métrica única** | Demos agendadas con `src=lucia-*`. Seguidores y likes son ruido |
 | Etiqueta IA | **Obligatoria en la bio.** No se negocia |
 

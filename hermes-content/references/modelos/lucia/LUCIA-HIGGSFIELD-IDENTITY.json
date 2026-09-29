@@ -1,187 +1,120 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "schema_version": 1,
-  "updated_at": "2026-09-23",
+  "schema_version": 2,
+  "updated_at": "2026-09-29",
   "owner": "ONIA",
   "subject": "Lucia",
-  "status": "migration_required",
+  "status": "rebuilding_v4_from_zero",
+  "status_note": "Sergio Urcullo 2026-09-29: 'solo queremos empezar de cero pero el learning mantenelo... solo las caras lo hacemos de nuevo para empezar con las caras ya fijadas y con photoshoot donde se marquen todos los rasgos'. No existe cara vigente hasta que Sergio Urcullo apruebe el master v4.",
   "authority": {
     "character_and_voice": "LUCIA.md",
-    "visual_whitelist": "BANCO-OFICIAL.md",
+    "v4_plan": "LUCIA-V4-PERFECTION-PLAN.md",
+    "v4_provenance_ledger": "v4/PROCEDENCIA.jsonl",
+    "visual_whitelist": "BANCO-OFICIAL.md (banco de la cara RETIRADA; v4 sin banco todavia)",
     "technical_runbook": "TECNICA-HIGGSFIELD.md",
-    "global_higgsfield_policy": "../../../docs/HIGGSFIELD_VIDEO_SYSTEM.md"
+    "global_higgsfield_policy": "../../../docs/HIGGSFIELD_VIDEO_SYSTEM.md",
+    "pre_deletion_inventory": "../../../docs/historial/HIGGSFIELD_INVENTARIO_ANTES_DEL_BORRADO_20260929.md"
   },
   "rights_gate": {
-    "status": "unresolved",
-    "reason": "El repo reconoce referencias derivadas de frames de una persona real sin consentimiento documentado; no esta demostrado que todo el linaje posterior sea legalmente limpio.",
-    "required_resolution": [
-      "Documentar consentimiento y alcance de uso de todas las fuentes humanas",
-      "o reconstruir Lucia desde un canon completamente sintetico con procedencia registrada"
-    ],
-    "new_training": "blocked",
-    "public_campaign": "requires_rights_resolution_and_explicit_approval",
-    "existing_assets": "internal_draft_only_until_resolved"
+    "status": "resolved_by_rebuild",
+    "decision": "Reconstruccion completamente sintetica desde texto (Sergio Urcullo, 2026-09-29). Ninguna imagen de la Lucia anterior entra como referencia de v4.",
+    "retired_lineage": "Toda la cara anterior descendia de cuadros de video de una persona real sin consentimiento documentado (lucia-face-real-anchor ced20cc2). Queda retirada; solo historia interna.",
+    "public_campaign": "requires_v4_master_approved_and_explicit_publish_approval",
+    "old_assets": "retired_internal_history_only"
   },
   "training_rights_gate": {
-    "status": "unresolved",
-    "reason": "Un output sintetico no concede automaticamente permiso para entrenar o fine-tunear otra identidad/modelo.",
-    "policy_source": "https://higgsfield.ai/terms-of-use-agreement",
-    "required_per_reference": [
-      "source_model",
-      "source_asset_or_job_id",
-      "license_or_written_permission",
-      "training_rights_status"
+    "status": "decided_rely_on_official_guide",
+    "terms_checked_live": "2026-09-29, Terms of Use 'Last updated: July 26, 2026'",
+    "clause_5_2_iv_verbatim": "use the Service, any Outputs, or any data derived therefrom to train, fine-tune, distill, or otherwise transfer knowledge to any machine-learning model, neural network, or artificial intelligence system, whether or not such system competes with the Service, except: (a) models that you create, train, or fine-tune using the Service with your own Inputs (not Outputs of Company's AI models); or (b) as expressly authorized in writing by Company",
+    "official_guide_verbatim": "To reuse the character with a consistent face across generations, generate a batch of its portraits and train a Soul ID on 20 or more of them (help center: How do I use AI Influencer, read live 2026-09-29)",
+    "decision": "Sergio Urcullo 2026-09-29: 'entrenamos con repos y guia'. La guia oficial se toma como autorizacion escrita (5.2(iv)(b)); se archiva su texto con fecha. Pedir confirmacion escrita a Higgsfield ANTES de vender modelos a clientes (linea congelada).",
+    "residual_risk": "Suspension de cuenta si Higgsfield interpretara distinto. Mitigacion: salidas exportadas quedan nuestras (Terms 4.4) y el dataset v4 se guarda con procedencia."
+  },
+  "deletion_2026_09_29": {
+    "requested_by": "Sergio Urcullo: 'borralo nomas, no pasa nada'",
+    "scope": "9 Souls + 38 Elements + avatar Marketing Studio a1e334f3 (inventario completo en pre_deletion_inventory)",
+    "mcp": "show_characters acepta solo list/train/status (probado: 'Invalid action. Use one of: list, train, status'); show_reference_elements solo list/get/create",
+    "cli_1_1_26": "soul-id create/get/list/wait; sin delete; Elements no existen en el CLI",
+    "public_api": "docs.higgsfield.ai solo documenta generacion",
+    "only_path": "web de Higgsfield con la sesion de Sergio Urcullo",
+    "status": "pending_manual_web_deletion",
+    "rule_until_deleted": "Ningun ID anterior al 2026-09-29 se usa. Solo valen IDs con prefijo LUCIA-V4- registrados en este archivo."
+  },
+  "retired_identity_ids": {
+    "note": "Retirados 2026-09-29. Listados para que ninguna sesion los rescate de un doc viejo.",
+    "souls": [
+      "e6d8703c-ea48-4d37-9e66-afae59ebe84a",
+      "36305a9b-af24-4390-959b-885082dddd5d",
+      "6c94bbf0-bc71-4fe1-841e-f366bdb00b6e",
+      "b8f5c353-faaf-44eb-ae5a-4e0bacfd333f",
+      "a5f9ee23-8c53-46d0-afc8-e3cb5c9e2b2b",
+      "bce5feb0-f028-4d1f-b2b3-96428a013f85",
+      "aeaa74af-5243-4dc0-8101-09b25e98a7d7",
+      "1238064e-1295-4cbf-9a41-861d4106e0e8",
+      "05cebe09-5672-4d50-90b2-d92c680957f7"
     ],
-    "new_soul_training": "blocked_until_license_is_confirmed"
+    "lucia_face_elements": [
+      "58bbd635-9b90-4bd2-b08a-1cd4915bd563",
+      "902eeebb-89e9-4477-8426-c555b20f7ecc",
+      "ced20cc2-3388-4d98-92ee-b0fcd961aa62",
+      "de586dbb-0cdd-4ca2-aaac-173d11741c86",
+      "452d8375-fb67-4df7-9ae0-8f1b257aa51f",
+      "d5e323ef-4d0e-41bf-863e-ec30aede20ae",
+      "e420dc31-73f7-4d8c-9de0-73534adcae8f"
+    ],
+    "marketing_studio_avatar": "a1e334f3-5316-4132-b454-ddd9dcc06943",
+    "other_elements": "ver pre_deletion_inventory (outfits, lugares, modelo2, Mara, Sergio, productos, ZZ-TEST)"
   },
-  "identity_surfaces": {
-    "element_lock": {
-      "role": "baseline_operativo_para_rostro_y_hero",
-      "surface": "higgsfield_web_manual",
-      "primary": {
-        "name": "lucia-skin-v1",
-        "id": "58bbd635-9b90-4bd2-b08a-1cd4915bd563",
-        "status": "active_baseline",
-        "training_images_reported": 7,
-        "comparison_with_backup": "not_run"
+  "v4": {
+    "higgsfield_project": {
+      "name": "ONIA · Lucía v4 (caras desde cero)",
+      "project_id": "c6c080a7-fbe9-4314-a5b5-e5f8ec6f59ad",
+      "workspace_id": "ed5a2a8f-5a06-4087-a680-81bc592b1b4e"
+    },
+    "casting": {
+      "date": "2026-09-29",
+      "candidates": 12,
+      "engines": {
+        "C01-C07": "soul_2 (job_type text2image_soul_v2), 1536x2048, 0.12 cr c/u",
+        "C08-C09": "gpt_image_2_5 flare high 2k, 1744x2336, 2.75 cr c/u",
+        "C10-C11": "nano_banana_pro (job_type nano_banana_2), 1792x2400, 2 cr c/u",
+        "C12": "soul_cast: DESCARTADA, ignora el prompt e inventa persona propia"
       },
-      "backup": {
-        "name": "lucia-surgical-anchor",
-        "id": "902eeebb-89e9-4477-8426-c555b20f7ecc",
-        "status": "approved_backup",
-        "comparison_with_primary": "not_run"
-      },
-      "cli_portable": false
+      "cost_real_credits": 10.46,
+      "ledger": "v4/PROCEDENCIA.jsonl",
+      "master": "pending_selection_by_sergio"
     },
-    "soul_lock": {
-      "role": "candidate_for_repeatable_cli_scale",
-      "surface": "higgsfield_cli_or_web",
-      "promotion_status": "not_approved",
-      "souls": [
-        {
-          "name": "LUCIA-REAL-v2-clean",
-          "id": "36305a9b-af24-4390-959b-885082dddd5d",
-          "status": "prohibited",
-          "reasons": [
-            "identity_drift",
-            "red_skin",
-            "outfit_noncompliance",
-            "undocumented_real_person_consent"
-          ]
-        },
-        {
-          "name": "LUCIA-SINTETICA-v3",
-          "id": "e6d8703c-ea48-4d37-9e66-afae59ebe84a",
-          "status": "rejected_as_primary",
-          "training_images_reported": 6,
-          "reasons": [
-            "lost_previous_visual_comparison",
-            "eye_color_drift",
-            "dataset_below_current_web_guidance"
-          ]
-        }
-      ]
-    },
-    "marketing_studio": {
-      "name": "Lucia ONIA v4 FINAL",
-      "id": "a1e334f3-5316-4132-b454-ddd9dcc06943",
-      "status": "isolated_identity_system",
-      "portable_to_element_or_soul": false,
-      "requires_revalidation": true
-    }
-  },
-  "canonical_reference_files": [
-    {
-      "path": "canon/01-rooftop.jpg",
-      "sha256": "5cd09b4e8633091eb49fdb606328f1d7a0683ebd3b7027fea25c87d874e738bd",
-      "bytes": 558141,
-      "rights_status": "unresolved",
-      "source_model": "unknown",
-      "training_rights_status": "unresolved"
-    },
-    {
-      "path": "canon/02-rooftop.jpg",
-      "sha256": "0a539c57aa10253084eec2db41be220ec14f477ed7d8228509a00c5215c324f7",
-      "bytes": 393641,
-      "rights_status": "unresolved",
-      "source_model": "unknown",
-      "training_rights_status": "unresolved"
-    },
-    {
-      "path": "canon/03-cafe.jpg",
-      "sha256": "9747f9e9f0512773ce13d9e0d1681fce4eb2de5a8904b25cc93aa43c97ec3e85",
-      "bytes": 629852,
-      "rights_status": "unresolved",
-      "source_model": "unknown",
-      "training_rights_status": "unresolved"
-    },
-    {
-      "path": "canon/04-cafe-celular.jpg",
-      "sha256": "3b2a03f8f5aecba42a2dbaa6c475d9377ae09915e1651137c71f07fda49811a2",
-      "bytes": 1016387,
-      "rights_status": "unresolved",
-      "source_model": "unknown",
-      "training_rights_status": "unresolved"
-    },
-    {
-      "path": "canon/05-profile.jpg",
-      "sha256": "a668db0ba3962427723a46c190fecec583bd49143ecafc5dc6932b47a5cbfc81",
-      "bytes": 297744,
-      "rights_status": "unresolved",
-      "source_model": "unknown",
-      "training_rights_status": "unresolved"
-    }
-  ],
-  "dataset_status": {
-    "declared_target_count": 7,
-    "files_present": 5,
-    "complete": false,
-    "missing": "No existe un manifest previo que identifique las dos referencias restantes ni sus hashes.",
-    "web_soul_guidance": "20-80 varied photos",
-    "cli_soul_limit": "5-20 images",
-    "visual_audit_2026_09_23": {
-      "training_ready": false,
-      "summary": "Las cinco imagenes sirven como direccion visual, no como dataset: repiten escenas y genealogias, carecen de perfiles y cuerpo entero, una tiene seis dedos y muestran deriva menor de estructura, pecas, ojos y edad aparente.",
-      "master_candidate": "canon/03-cafe.jpg",
-      "excluded_until_reconciled": [
-        "canon/02-rooftop.jpg",
-        "canon/04-cafe-celular.jpg",
-        "canon/05-profile.jpg"
-      ],
-      "required_target": 20,
-      "plan": "LUCIA-V4-PERFECTION-PLAN.md"
-    }
-  },
-  "target_v4": {
-    "status": "plan_ready_no_spend",
-    "identity_origin": "fully_synthetic_rights_clear_canon",
-    "strategy": "two_lane_element_lock_and_soul_lock",
-    "video_rule": "animate_only_an_approved_still",
-    "promotion_gates": [
-      "rights_clear",
-      "training_license_clear",
-      "dataset_manifest_complete",
-      "fixed_prompt_ab_against_primary_and_backup_elements",
-      "identity_qa_pass",
-      "commercial_qa_pass",
-      "live_cost_or_explicit_training_cap_approved",
-      "sergio_final_approval"
+    "frozen_traits_brief": [
+      "mujer de 26 anos (se lee 25-28), Santa Cruz de la Sierra, mestiza, piel oliva-tostada calida",
+      "rostro ovalado, mandibula adulta definida, pomulos suavemente altos",
+      "nariz recta con punta levemente redondeada, labios medio-llenos tono rosado-marron natural",
+      "ojos marron oscuro calido almendrados",
+      "cejas oscuras, llenas, naturales, arco suave",
+      "pecas finas marron claro en el puente de la nariz y la parte alta de los pomulos",
+      "lunar plano marron chico justo debajo del rabillo externo del ojo izquierdo",
+      "pelo chocolate oscuro, raya al medio, pasa los hombros, ondas naturales suaves",
+      "argollas finas de oro chicas + cadenita finisima de oro (firma)"
+    ],
+    "next_steps": [
+      "Sergio Urcullo elige UN master del casting",
+      "photoshoot de rasgos marcados desde el master (character sheets: turnaround, expresiones, primeros planos de pecas/lunar/ojos)",
+      "dataset de 20 fotos con procedencia (LUCIA-V4-PERFECTION-PLAN.md)",
+      "entrenar Soul ID v4 (show_characters action=train, 20 imagenes) con OK especifico de costo",
+      "verificar que el Soul aparece como Element y usarlo en video (Seedance)",
+      "Elements aparte para vestuario y lugares"
     ]
   },
   "execution_policy": {
-    "coding_agents": "higgsfield_cli_with_official_skills",
-    "chat_agents": "official_mcp_optional",
-    "identity_calibration": "local_web_manual",
-    "high_volume_future": "official_api_with_separate_budget",
-    "n8n": "approval_queue_polling_ledger_notifications_only",
+    "cloud_sessions": "MCP oficial (funciona: el trafico de conectores no pasa por la red de la sesion). El entorno Default bloquea higgsfield.ai y los CDN d2ol7oe51mr4n9/d8j0ntlcm91z4.cloudfront.net hasta que Sergio Urcullo los agregue en Allowed domains.",
+    "cli": "higgsfield 1.1.26 autenticado solo en el VPS (segun carril marca-personal). En la nube el login es OAuth con callback loopback: no sirve sin navegador local.",
+    "identity_calibration": "web manual para lo que la API no expone (borrar, gestionar Elements)",
     "vps_playwright_generation": "prohibited",
     "paid_generation_requires": [
-      "live_model_schema",
-      "live_cost_quote_or_explicit_cap_when_no_quote_exists",
-      "recorded_approval",
-      "input_hash",
-      "job_reconciliation_before_retry"
+      "costo en vivo (get_cost) antes de lanzar",
+      "lote con brief, cantidad y cap aprobados por Sergio Urcullo",
+      "registro en v4/PROCEDENCIA.jsonl (job_id, modelo, seed, input_hash, costo)",
+      "entrenamiento Soul y video: aprobacion especifica"
     ],
-    "command": "Always use higgsfield; never use the ambiguous hf alias on Windows."
+    "command": "Usar higgsfield; en Windows hf es Hugging Face. En el sandbox de Higgsfield, hf tambien es Hugging Face."
   }
 }

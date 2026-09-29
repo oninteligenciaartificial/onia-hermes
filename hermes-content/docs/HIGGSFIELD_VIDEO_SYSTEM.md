@@ -7,6 +7,85 @@ strategy, approvals, publishing decisions and memory.
 > abajo que declare MCP como ruta por defecto, fije una versión vieja de la CLI o
 > trate costos/modelos/saldos históricos como actuales.
 
+## Verificado en vivo 2026-09-29 — lo que cambió y lo que se aprendió
+
+> Medido desde una sesión en la nube (Claude Code, entorno `Default`) con el MCP de Higgsfield
+> conectado. Cada punto dice cómo se verificó. Si choca con algo de más abajo, gana esto.
+
+**1. Identidad: borrón y cuenta nueva.** Sergio Urcullo decidió rehacer las caras desde cero
+(*«borralo nomás… solo las caras lo hacemos de nuevo»*). Todos los Souls y Elements anteriores
+quedan retirados. El inventario de lo que había, con qué era cada uno, está en
+`historial/HIGGSFIELD_INVENTARIO_ANTES_DEL_BORRADO_20260929.md`.
+
+**2. Borrar no existe fuera de la web.** El MCP rechaza `show_characters(action=delete)` con
+*«Invalid action. Use one of: list, train, status»*; `show_reference_elements` solo acepta
+`list/get/create`. El CLI oficial 1.1.26 (binario bajado de GitHub releases y verificado por
+SHA256) tiene `soul-id create/get/list/wait` y **no conoce los Elements**. La API pública
+(`docs.higgsfield.ai`) solo documenta generación. El borrado lo hace una persona logueada en la web.
+
+**3. Términos (leídos en vivo, «Last updated: July 26, 2026»).**
+- **5.2(iv)** prohíbe usar Outputs para entrenar cualquier modelo, *«except: (a) models that you
+  create, train, or fine-tune using the Service with your own Inputs (not Outputs of Company's AI
+  models); or (b) as expressly authorized in writing by Company»*.
+- La ayuda oficial de *AI Influencer* dice hoy lo contrario en la práctica: *«generate a batch of
+  its portraits and train a Soul ID on 20 or more of them»*.
+- **Decisión de Sergio Urcullo (2026-09-29): «entrenamos con repos y guía».** La guía oficial se
+  toma como la autorización escrita del 5.2(iv)(b) y se archiva su texto. Antes de **vender**
+  modelos a clientes se pide confirmación escrita.
+- **4.4:** las salidas son nuestras, se pueden sublicenciar a clientes y sobreviven a la baja de
+  la cuenta. **5.2(i):** prohibido revender el servicio. **1.2:** MCP, CLI y API solo para uso
+  propio o interno. Si mañana se venden modelos o publicidad, se venden las **salidas**, no el
+  acceso a Higgsfield.
+- **4.2(b) y 5.3:** para subir la cara de una persona real hace falta su consentimiento. Por eso la
+  cara anterior de Lucía (cuadros de video de una persona real, sin consentimiento) no podía seguir.
+- **5.2(xi):** prohibido presentar una salida como hecha por humanos. **5.5:** declarar IA donde la
+  ley lo pida. Coincide con la regla de Lucía: es IA y lo dice.
+
+**4. Soul ID según la guía oficial (actualizada el 1-ago-2026).** Se entrena con **20 o más fotos
+de una persona, hasta 80**. Funciona con Soul 2.0 y Soul Cinema. **Un Soul entrenado aparece solo
+como Element**, y así se usa en video (Seedance, con @ Elements). El MCP entrena con 5 a 20
+imágenes (`show_characters action=train`), así que el dataset v4 es de 20.
+
+**5. Qué funciona desde una sesión en la nube.**
+- **MCP: sí.** El tráfico de conectores no pasa por la red de la sesión.
+- **CLI: no, por dos razones.** El entorno `Default` (red «Trusted») bloquea `higgsfield.ai`,
+  `platform.higgsfield.ai` y los CDN de salida `d2ol7oe51mr4n9.cloudfront.net` y
+  `d8j0ntlcm91z4.cloudfront.net`. Además, `higgsfield auth login` usa un callback de loopback, que
+  sin navegador local no sirve. El CLI autenticado vive en el VPS.
+- **Para que la sesión pueda MIRAR lo que genera**, el entorno necesita esos dominios en
+  **Allowed domains** (red «Custom» más la lista por defecto). Sin eso, las imágenes solo se ven
+  en el widget o en la web.
+
+**6. Motores (costo cotizado con `get_cost` y confirmado en `transactions`).**
+
+| Pedido | Nombre técnico del job | Tamaño real | Créditos |
+|---|---|---|---|
+| `soul_2`, quality 2k, 3:4 | `text2image_soul_v2` | 1536×2048 | 0,12 |
+| `nano_banana_pro`, 2k, 3:4 | `nano_banana_2` | 1792×2400 | 2 |
+| `gpt_image_2_5` flare, high, 2k, 3:4 | `gpt_image_2_5` | 1744×2336 | 2,75 |
+| `soul_cast` (budget 50) | `soul_cast` | 2048×1152 | 0,12 |
+
+- `nano_banana_pro` figura como `nano_banana_2` en el job. Es el mismo pedido, no un cambio silencioso.
+- `soul_cast` **ignora el prompt**: guarda `prompt: ""` e inventa un personaje con nombre e
+  historia propios. No sirve para fijar rasgos.
+- `gpt_image_2_5` dio **429 (rate limit)** al lanzar dos a la vez. Reintentado segundos después,
+  pasó. No se cobra lo que no se envió.
+- El «2k» de Soul 2.0 es 1536×2048, no 2048 en el lado corto.
+
+**7. Superficies que expone el MCP (herramientas del conector, 2026-09-29).**
+- Generación de imagen, video, audio y 3D, con lotes y `jobs_wait`.
+- Entrenar Soul y crear Elements.
+- Presets «viral» y Marketing Studio; Virality Predictor; análisis de video.
+- Doblaje a 18 idiomas y clonación de voz.
+- Upscale de imagen y video, reframe, quitar fondo, outpaint, motion control y Shorts Studio.
+- Publicación en TikTok: la prepara el agente y la confirma la persona en el widget.
+- Webs, apps y juegos en Cloudflare Workers, escenas 3D y un marketplace de apps.
+- `sandbox_exec`: Linux con ffmpeg, ImageMagick, faster-whisper y Playwright. Ahí `hf` es
+  **Hugging Face**, no Higgsfield.
+- Workflows incluidos: `character-sheet`, `ad-multiplier`, `faceless-video`, `narrator`,
+  `subtitles`, `thumbnail-generation`, `brand-asset-creation`, `website-builder-flow` y la
+  familia `ugc-*` (saas, product, review, try-on, tutorial, unboxing, website).
+
 ## Arquitectura vigente
 
 | Superficie | Uso en ONIA | Decisión |
@@ -38,25 +117,31 @@ la cotización y obtiene aprobación antes de generar cualquier imagen o video p
 ## Jerarquía de identidad de Lucía
 
 ```text
-derechos/consentimiento resueltos
--> banco sintético coherente y aprobado
--> Soul ID candidato
--> A/B contra Elements vigentes
--> still aprobado
--> image-to-video / reference-to-video
--> QA de primer, medio y último frame
+v4 (2026-09-29, desde cero):
+casting solo-texto (varios motores, procedencia registrada)
+-> Sergio Urcullo aprueba UN master
+-> photoshoot de rasgos marcados (turnaround, expresiones, primeros planos de marcas)
+-> dataset de 20 fotos de la MISMA cara, con procedencia
+-> Soul ID v4 (aparece solo como Element -> sirve para video)
+-> Elements aparte para vestuario y lugares
+-> still aprobado -> image-to-video -> QA de primer, medio y último frame
 ```
+
+(Antes decía: derechos resueltos → banco sintético → Soul candidato → A/B contra los Elements
+vigentes. El A/B quedó sin objeto: los Elements anteriores están retirados.)
 
 - Un prompt no es identidad.
 - Una sola imagen de referencia puede servir para una toma, pero deriva al escalar.
-- Soul ID produce stills reutilizables desde CLI/web. El Element vigente de Lucía funciona como
-  ancla de alta fidelidad solo en la web y no es portable por la CLI actual.
+- Soul ID produce stills reutilizables desde CLI/web/MCP y, según la guía del 1-ago-2026,
+  aparece solo como Element para video. (El Element de Lucía que acá se llamaba «vigente»,
+  `58bbd635…`, está retirado desde el 2026-09-29.)
 - El video parte de un still aprobado. Text-to-video puro no es la ruta de Lucía.
 - El Soul sintético v3 de seis imágenes es evidencia de un entrenamiento débil,
   no una prueba de que Soul ID sea inútil. La web actual recomienda 20 o más
   imágenes; la CLI instalada admite 5–20.
-- No entrenar un nuevo Soul ni publicar a Lucía hasta cerrar el origen de derechos
-  documentado en [`LUCIA.md`](../references/modelos/lucia/LUCIA.md).
+- ~~No entrenar un nuevo Soul ni publicar a Lucía hasta cerrar el origen de derechos~~ —
+  **resuelto el 2026-09-29 por reconstrucción**: la cara v4 nace solo de texto, sin linaje de la
+  persona real. Entrenar sigue pidiendo OK específico de costo; publicar, aprobación explícita.
 
 Estado machine-readable:
 `../references/modelos/lucia/LUCIA-HIGGSFIELD-IDENTITY.json`.

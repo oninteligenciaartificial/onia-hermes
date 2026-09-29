@@ -1,5 +1,13 @@
 # Banco oficial de Lucía — qué se puede usar HOY
 
+> ## 🔴 2026-09-29: este banco es de la cara RETIRADA. Hoy no hay banco vigente.
+>
+> Sergio Urcullo decidió rehacer la cara de Lucía **desde cero** (v4, solo texto, sin referencias
+> de la cara anterior). Todo lo listado abajo pertenece a la identidad retirada: **no entra en
+> piezas nuevas ni como referencia de v4**. El banco v4 se arma después de que Sergio Urcullo
+> apruebe el master y el photoshoot de rasgos. Estado y procedencia: `LUCIA-HIGGSFIELD-IDENTITY.json`
+> y `v4/PROCEDENCIA.jsonl`.
+
 > **Este archivo manda sobre qué imagen de Lucía entra en una pieza.** Se lee ANTES de
 > escribir un brief. Si una foto no está en la lista blanca de abajo, no se usa: no importa
 > que se vea linda, que esté en el repo, ni que otra pieza vieja la haya usado.
