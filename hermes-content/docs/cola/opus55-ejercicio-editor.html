@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Opus 5.5 · Ejercicio didáctico para edición</title>
+<style>
+:root{color-scheme:dark;font-family:"Segoe UI",Tahoma,sans-serif;background:#0b1112;color:#edf4ed}
+*{box-sizing:border-box}body{margin:0;padding:24px;display:grid;justify-items:center;gap:18px}
+.controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap;max-width:1100px}
+button,select{font:inherit;padding:10px 14px;border:1px solid #637770;border-radius:7px;background:#192923;color:#f3f7f4;cursor:pointer}
+button:focus-visible,select:focus-visible{outline:3px solid #c6f294;outline-offset:3px}
+button[aria-pressed="true"]{background:#c6f294;color:#102019;border-color:#c6f294}
+#stage{width:min(1100px,95vw);aspect-ratio:16/9;position:relative;background:#12231e;border:1px solid #476156;border-radius:12px;overflow:hidden;container-type:inline-size}
+#stage.portrait{width:min(440px,92vw);aspect-ratio:9/16}
+.slide{position:absolute;inset:0;padding:5cqw;display:flex;flex-direction:column;gap:2.2cqw}
+.slide[hidden]{display:none}.eyebrow{font-size:1.35cqw;letter-spacing:.13em;text-transform:uppercase;color:#c6f294;margin:0}
+h1,h2,p{margin:0}h1{font-size:4.5cqw;line-height:1.07;max-width:85%;font-weight:700}h2{font-size:2.4cqw;line-height:1.12}
+.sub{font-size:2cqw;line-height:1.4;color:#cfdbd4;max-width:88%}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1.6cqw;margin-top:1cqw}
+.card{border:1px solid #4e6a5d;padding:2cqw;border-radius:10px;background:#1a3027;display:flex;flex-direction:column;gap:1cqw}
+.card p{font-size:1.65cqw;line-height:1.4}.value{font-size:3.4cqw;font-weight:700;color:#c6f294}.small{font-size:1.4cqw;line-height:1.4;color:#c1d2c7}
+.footer{margin-top:auto;border-top:1px solid #476156;padding-top:1.3cqw;font-size:1.2cqw;color:#c1d2c7;display:flex;justify-content:space-between;gap:10px}
+.em{color:#c6f294}.warning{color:#ffd58f}.formula{font-size:2.1cqw;line-height:1.5}.list{display:grid;gap:1.5cqw;margin-top:1cqw}.line{font-size:2.25cqw;line-height:1.25;padding-bottom:1.3cqw;border-bottom:1px solid #476156}
+.portrait .slide{padding:7cqw;gap:4cqw}.portrait .eyebrow{font-size:3cqw}.portrait h1{font-size:8cqw;max-width:100%}.portrait h2{font-size:5cqw}.portrait .sub{font-size:4.3cqw;max-width:100%}
+.portrait .cards{grid-template-columns:1fr;gap:2.5cqw;margin:0}.portrait .card{padding:3cqw;gap:1cqw}.portrait .card p{font-size:3.5cqw;line-height:1.25}.portrait .value{font-size:5.8cqw}.portrait .small{font-size:3.2cqw}
+.portrait .formula{font-size:4cqw}.portrait .footer{padding-top:3cqw;font-size:2.7cqw}.portrait .line{font-size:5cqw;padding-bottom:3cqw}.portrait .list{gap:4cqw}
+.help{max-width:900px;color:#b7c8be;font-size:14px;line-height:1.5}.help a{color:#c6f294}
+body.capture{padding:0;gap:0;background:#12231e}body.capture .controls,body.capture .help{display:none}body.capture #stage{border:0;border-radius:0;width:min(100vw,177.7778vh)}body.capture #stage.portrait{width:min(100vw,56.25vh)}
+@media(prefers-reduced-motion:no-preference){button{transition:background .15s}}
+</style>
+</head>
+<body>
+<nav class="controls" aria-label="Controles del editor">
+<label>Formato <select id="ratio"><option value="landscape">Horizontal 16:9</option><option value="portrait">Vertical 9:16</option></select></label>
+<button data-scene="0" aria-pressed="true">1 · Requisitos</button>
+<button data-scene="1" aria-pressed="false">2 · Propuestas</button>
+<button data-scene="2" aria-pressed="false">3 · Solución</button>
+<button data-scene="3" aria-pressed="false">4 · Dato pendiente</button>
+<button data-scene="4" aria-pressed="false">5 · Comparación</button>
+<button id="capture">Ocultar controles · C</button>
+</nav>
+<main id="stage" aria-label="Pantalla didáctica para captura">
+<section class="slide" data-index="0">
+<p class="eyebrow">Ejercicio · Comparar propuestas</p>
+<h1>¿Cuál cumple <span class="em">todo</span> lo que pedís?</h1>
+<p class="sub">Una web durante tres meses. Tres condiciones obligatorias.</p>
+<div class="cards">
+<div class="card"><h2>Presupuesto</h2><div class="value">Bs 1.200</div><p>Máximo total de los tres meses, incluidos extras.</p></div>
+<div class="card"><h2>Dominio</h2><div class="value">Propio</div><p>Requisito obligatorio.</p></div>
+<div class="card"><h2>Datos</h2><div class="value">Exportables</div><p>Hay que poder llevárselos.</p></div>
+</div>
+<footer class="footer"><span>Ejemplo ficticio · No es una oferta de ONIA</span><span>01 / 05</span></footer>
+</section>
+<section class="slide" data-index="1" hidden>
+<p class="eyebrow">Ejercicio · Información de entrada</p>
+<h1>Tres propuestas.<br>Leé también los extras.</h1>
+<div class="cards">
+<div class="card"><h2>A</h2><p>Instalación: Bs 300<br>Mensualidad: Bs 250<br>Dominio y exportación incluidos.</p><p class="small">Sin otros cargos.</p></div>
+<div class="card"><h2>B</h2><p>Instalación: Bs 100<br>Mensualidad: Bs 200<br>Dominio obligatorio: +Bs 120/mes.</p><p class="warning">Sin exportación. Anuncia total Bs 700.</p></div>
+<div class="card"><h2>C</h2><p>Instalación: Bs 0<br>Mensualidad: Bs 350<br>Configuración obligatoria: Bs 300.</p><p class="small">Dominio y exportación incluidos. Sin otros cargos.</p></div>
+</div>
+<footer class="footer"><span>Datos ficticios preparados para el ejercicio</span><span>02 / 05</span></footer>
+</section>
+<section class="slide" data-index="2" hidden>
+<p class="eyebrow">Solución calculada · No es una respuesta de IA</p>
+<h1>La A es la única<br>que cumple todo.</h1>
+<div class="cards">
+<div class="card"><h2>A · Cumple</h2><p class="formula">300 + 250 × 3</p><div class="value">Bs 1.050</div><p>Dentro del límite.<br>Dominio y exportación.</p></div>
+<div class="card"><h2>B · No cumple</h2><p class="formula">100 + 200 × 3<br>+ 120 × 3</p><div class="value">Bs 1.060</div><p>Omitió Bs 360.<br>No permite exportar.</p></div>
+<div class="card"><h2>C · No cumple</h2><p class="formula">350 × 3 + 300</p><div class="value">Bs 1.350</div><p>Supera el máximo<br>por Bs 150.</p></div>
+</div>
+<footer class="footer"><span>Clave de corrección · Compará con la salida real</span><span>03 / 05</span></footer>
+</section>
+<section class="slide" data-index="3" hidden>
+<p class="eyebrow">Variante · Cuando falta información</p>
+<h1>¿Y si A no confirma<br>la exportación?</h1>
+<p class="sub">El precio sigue siendo Bs 1.050. Una condición queda sin verificar.</p>
+<div class="list"><p class="line"><span class="em">A:</span> pendiente de confirmar exportación.</p><p class="line">B: no permite exportar.</p><p class="line">C: supera el presupuesto.</p></div>
+<p class="sub warning">Con estos datos, ninguna está confirmada como válida.</p>
+<footer class="footer"><span>Variante hipotética · Respuesta esperada</span><span>04 / 05</span></footer>
+</section>
+<section class="slide" data-index="4" hidden>
+<p class="eyebrow">Método · Una primera comprobación</p>
+<h1>Misma tarea.<br>Respuesta revisable.</h1>
+<div class="list"><p class="line">1. Entrada idéntica y chats nuevos.</p><p class="line">2. Guardar la primera respuesta.</p><p class="line">3. Revisar cuentas, condiciones y datos faltantes.</p><p class="line">4. Anotar tiempo y correcciones.</p></div>
+<p class="sub">Si ambos aciertan, ambos resolvieron este caso.</p>
+<footer class="footer"><span>No prueba superioridad general · Ejecución pendiente</span><span>05 / 05</span></footer>
+</section>
+</main>
+<p class="help">Material original para edición, sin llamadas de red. No imita la interfaz ni una respuesta de Claude. Flechas: cambiar escena. Tecla C: ocultar o mostrar controles. Parámetros opcionales: <code>?formato=vertical&amp;escena=3&amp;captura=1</code>. Escenas del 1 al 5. El modo captura conserva las etiquetas de procedencia.</p>
+<script>
+const params=new URLSearchParams(location.search);
+const stage=document.getElementById('stage');
+const ratio=document.getElementById('ratio');
+const buttons=[...document.querySelectorAll('[data-scene]')];
+let current=0;
+function show(index){current=Math.max(0,Math.min(4,index));document.querySelectorAll('.slide').forEach((el,i)=>el.hidden=i!==current);buttons.forEach((el,i)=>el.setAttribute('aria-pressed',String(i===current)));}
+function setRatio(value){ratio.value=value;stage.classList.toggle('portrait',value==='portrait');}
+buttons.forEach(el=>el.addEventListener('click',()=>show(Number(el.dataset.scene))));
+ratio.addEventListener('change',()=>setRatio(ratio.value));
+function toggleCapture(){document.body.classList.toggle('capture');}
+document.getElementById('capture').addEventListener('click',toggleCapture);
+document.addEventListener('keydown',event=>{if(event.target.matches('select,input,textarea'))return;if(event.key==='ArrowRight'){event.preventDefault();show(current+1);}if(event.key==='ArrowLeft'){event.preventDefault();show(current-1);}if(event.key.toLowerCase()==='c')toggleCapture();});
+setRatio(params.get('formato')==='vertical'?'portrait':'landscape');
+const scene=Number(params.get('escena')||1);show(Number.isFinite(scene)?scene-1:0);
+if(params.get('captura')==='1')toggleCapture();
+</script>
+</body>
+</html>

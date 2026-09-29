@@ -136,6 +136,42 @@ la semana siguiente: se escriben los seis drops, sale la guía el domingo, y rec
 graba el video con palabra que la promete. El improvisado descubre el tema; el planificado
 lo cobra.
 
+## El carril personal y el B-roll no rompen el tema semanal
+
+> Sergio Urcullo, 2026-09-21: además de enseñar, la cuenta necesita videos personales
+> sobre problemas reales de las redes, motivación con sustancia y espacios planificados
+> para B-roll.
+
+El tema técnico semanal organiza la investigación, los drops, la guía y YouTube. **No
+obliga a que toda la personalidad de la cuenta hable de lo mismo.** Cada día se reserva un
+Trial V2 para una pieza personal o de criterio. Esa pieza puede partir de algo vivido esa
+semana aunque no pertenezca al tutorial técnico.
+
+### Fórmula del video personal
+
+1. **Situación concreta:** qué pasó o qué problema apareció.
+2. **Tensión honesta:** qué costó, confundió o salió mal.
+3. **Criterio propio:** qué entendió Sergio Urcullo y por qué.
+4. **Acción:** qué puede hacer hoy quien lo mira.
+
+Ejemplos de territorio: medir progreso por vistas en vez de habilidades · ser joven y
+tener que demostrar con trabajo · publicar aunque una pieza falle · vender IA sin prometer
+imposibles · diferenciar disciplina de entusiasmo · construir una red antes de necesitarla.
+
+### Biblioteca de B-roll
+
+Una sesión presencial o una jornada de trabajo debe dejar **12–20 planos verticales** de
+5–12 segundos: llegada, preparación de sala, laptop, pantalla de n8n/Claude, manos,
+pizarra, conversación, reacción del público, cierre y desmontaje. Esos planos alimentan
+la semana siguiente con voz en off técnica o personal.
+
+- El B-roll muestra trabajo o relación real; no simula reuniones ni éxito.
+- Toda persona reconocible da permiso antes de usarse públicamente.
+- El audio principal se graba aparte; el plano no tiene que cargar toda la explicación.
+- Después de tres piezas de B-roll, el cuarto espacio del feed se reemplaza por carrusel.
+- El B-roll y el video personal no prometen una palabra clave salvo que el entregable ya
+  exista.
+
 ## Al que comenta: el link Y la comunidad, en ese orden
 
 La duda de Sergio Urcullo: *"¿les envío el enlace de la comunidad, pero también les envío el

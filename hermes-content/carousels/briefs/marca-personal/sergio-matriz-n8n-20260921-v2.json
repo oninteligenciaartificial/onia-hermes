@@ -1,0 +1,85 @@
+{
+  "title": "Antes de usar n8n, elegí qué automatizar",
+  "caption": "Antes de abrir n8n, dibujá cuatro cosas: entrada, regla, salida y excepción.\n\nEjemplo de arquitectura para una consulta: Webhook recibe nombre, teléfono, servicio y origen. IF comprueba los campos mínimos. La rama válida puede registrar en Google Sheets y avisar por Telegram. Para que la rama incompleta diga qué dato falta, hay que construir ese mensaje y configurar Webhook para responder con Respond to Webhook. Es un mapa de diseño, no un flujo ejecutado: configurá credenciales, mapeos, respuesta y pruebas con datos de ejemplo.\n\n¿Qué tarea repetís en tu negocio? Contala con su entrada, regla y salida.",
+  "hashtags": ["#n8n", "#automatizacion", "#negocios", "#pymes", "#bolivia"],
+  "serie": "IA PRÁCTICA",
+  "episodio": "01",
+  "slides": [
+    {
+      "number": 1, "role": "cover", "pill": "Marca personal · n8n",
+      "headline": "Antes de usar *n8n*, elegí qué automatizar",
+      "body": "La herramienta viene después del proceso.",
+      "bg": "hermes-content/references/marca-personal-sergio/fondos/desk-01.png",
+      "alt_text": "Antes de usar n8n, elegí qué automatizar"
+    },
+    {
+      "number": 2, "role": "stakes", "dense": true, "pill": "El error",
+      "headline": "Sin proceso, n8n acelera el desorden",
+      "body": "Antes de conectar aplicaciones, escribí qué entra, qué se valida, qué debe quedar hecho y qué pasa cuando falta un dato.",
+      "visual": {"type": "note", "label": "LA REGLA", "value": "Entrada → regla → salida → excepción", "detail": "Si no podés describir esos cuatro pasos, todavía no tenés un flujo para automatizar."},
+      "alt_text": "Define entrada, regla, salida y excepción antes de automatizar"
+    },
+    {
+      "number": 3, "role": "point", "dense": true, "pill": "Paso 1 · Entrada",
+      "headline": "La entrada debe ser un evento concreto",
+      "body": "Un Webhook puede recibir un formulario por POST. Para este ejemplo: nombre, teléfono, servicio y origen. Probá primero qué llega realmente al flujo.",
+      "visual": {"type": "flow", "label": "ENTRADA DE EJEMPLO", "nodes": [
+        {"name": "Webhook", "detail": "POST /demo-lead"},
+        {"name": "Payload", "detail": "name · phone · service · source"}
+      ], "note": "El evento y los campos se verifican con una ejecución de prueba."},
+      "alt_text": "Webhook de ejemplo con cuatro campos de una consulta"
+    },
+    {
+      "number": 4, "role": "point", "dense": true, "pill": "Paso 2 · Regla",
+      "headline": "IF separa los datos completos de los incompletos",
+      "body": "Condición: teléfono y servicio no están vacíos. Si se cumple, el flujo sigue. Si falta algo, prepará el mensaje con el campo faltante y respondé desde Webhook.",
+      "visual": {"type": "matrix", "label": "DOS CAMINOS", "items": [
+        {"title": "IF: phone y service", "body": "Comprobación de campos mínimos."},
+        {"title": "True → registro", "body": "La consulta puede guardarse y avisarse."},
+        {"title": "False → respuesta", "body": "Configurar Respond to Webhook y mensaje."}
+      ]},
+      "alt_text": "IF valida teléfono y servicio y separa dos resultados"
+    },
+    {
+      "number": 5, "role": "point", "dense": true, "pill": "Paso 3 · Salida",
+      "headline": "La salida debe dejar una señal verificable",
+      "body": "En la rama válida, Google Sheets / Append Row guarda los cuatro campos. Telegram / Send Message avisa al responsable. Comprobá ambos resultados con una consulta de prueba.",
+      "visual": {"type": "flow", "label": "RAMA VÁLIDA", "nodes": [
+        {"name": "Append Row", "detail": "Registro en Google Sheets"},
+        {"name": "Send Message", "detail": "Aviso por Telegram"}
+      ], "note": "Registro y aviso son dos comprobaciones distintas."},
+      "alt_text": "Registro en Google Sheets y aviso por Telegram"
+    },
+    {
+      "number": 6, "role": "save", "dense": true, "pill": "Matriz guardable",
+      "headline": "Dibujá esto antes de abrir n8n",
+      "body": "Entrada, regla, registro, aviso y respuesta de error. Esta tabla es una arquitectura de ejemplo, no un workflow importable.",
+      "visual": {"type": "table", "label": "MAPA DE DISEÑO", "left": "PIEZA", "right": "FUNCIÓN", "rows": [
+        {"left": "Webhook", "right": "recibir"},
+        {"left": "IF", "right": "validar"},
+        {"left": "Append Row", "right": "registrar"},
+        {"left": "Send Message", "right": "avisar"},
+        {"left": "Respond to Webhook", "right": "responder"}
+      ]},
+      "alt_text": "Mapa de cinco piezas para diseñar una automatización"
+    },
+    {
+      "number": 7, "role": "point", "dense": true, "pill": "IA después",
+      "headline": "Primero hacé funcionar la regla fija",
+      "body": "IF basta para comprobar campos. Un modelo puede ayudar cuando debés interpretar lenguaje ambiguo; no lo uses para decidir si un campo está vacío.",
+      "visual": {"type": "matrix", "label": "CUÁNDO SUMAR IA", "items": [
+        {"title": "Campo vacío → IF", "body": "Regla fija y comprobable."},
+        {"title": "Mensaje ambiguo → IA", "body": "Interpretación, con validación posterior."}
+      ]},
+      "alt_text": "Usar IF para reglas fijas e IA para lenguaje ambiguo"
+    },
+    {
+      "number": 8, "role": "cta", "pill": "Aplicalo hoy",
+      "headline": "Tu primer flujo puede ser pequeño y útil",
+      "body": "¿Qué tarea repetís en tu negocio? Compartila en comentarios: entrada, regla y salida.",
+      "cta": "CONTÁ TU TAREA",
+      "alt_text": "Contá qué tarea repetís para pensar su primera automatización"
+    }
+  ],
+  "job": "education"
+}

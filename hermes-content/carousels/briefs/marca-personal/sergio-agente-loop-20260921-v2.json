@@ -1,0 +1,76 @@
+{
+  "title": "Automatización, AI Agent o loop",
+  "caption": "Elegí la arquitectura según el trabajo.\n\nRegla fija: IF valida y enruta. Lenguaje ambiguo: Text Classifier o Basic LLM Chain puede clasificar sin agente; validá el resultado. AI Agent tiene sentido si debe elegir y usar una herramienta conectada. Estado que cambia: consultá la API, esperá y reintentá con un contador y un límite; configurá timeout y ruta de error para avisar a una persona. Wait solo pausa: no limita intentos por sí mismo.\n\nLos diagramas son esquemas de diseño, no workflows ejecutados ni listos para importar. ¿Qué proceso querés ordenar? Describilo en comentarios: ¿regla, herramienta o espera?",
+  "hashtags": ["#n8n", "#agentesia", "#automatizacion", "#ia", "#negocios"],
+  "serie": "IA PRÁCTICA",
+  "episodio": "02",
+  "slides": [
+    {
+      "number": 1, "role": "cover", "pill": "Arquitectura IA",
+      "headline": "Automatización, *AI Agent* o loop",
+      "body": "No son sinónimos. Elegí por el tipo de trabajo.",
+      "bg": "hermes-content/references/marca-personal-sergio/fondos/laptop-03.png",
+      "alt_text": "Automatización, AI Agent o loop según el tipo de trabajo"
+    },
+    {
+      "number": 2, "role": "point", "dense": true, "pill": "Reglas fijas",
+      "headline": "Usá IF cuando la regla se puede escribir",
+      "body": "Ejemplo de arquitectura: Webhook recibe una consulta, IF valida el teléfono, Google Sheets registra y Telegram avisa. Para implementarla, definí y probá también la rama incompleta.",
+      "visual": {"type": "flow", "label": "ESQUEMA DE AUTOMATIZACIÓN", "nodes": [
+        {"name": "Webhook", "detail": "recibir"},
+        {"name": "IF", "detail": "validar"},
+        {"name": "Append Row", "detail": "registrar"},
+        {"name": "Send Message", "detail": "avisar"}
+      ]},
+      "alt_text": "Webhook, IF, registro y aviso para una regla fija"
+    },
+    {
+      "number": 3, "role": "point", "dense": true, "pill": "Agente con herramienta",
+      "headline": "Agente solo si debe usar una herramienta",
+      "body": "Para clasificar texto basta un modelo o Text Classifier. AI Agent requiere un modelo de chat y al menos una herramienta conectada; por ejemplo, consultar datos antes de proponer una ruta.",
+      "visual": {"type": "contract", "label": "ESQUEMA · NO EJECUCIÓN REAL", "input": "mensaje libre", "output": "categoria · urgencia · requiere_humano", "permissions": "herramienta de solo lectura"},
+      "alt_text": "Esquema de agente con herramienta de lectura y salida a validar"
+    },
+    {
+      "number": 4, "role": "point", "dense": true, "pill": "Control humano",
+      "headline": "La decisión de actuar queda en el flujo",
+      "body": "Si el agente devuelve JSON válido, IF puede comprobar requiere_humano. True: avisar para revisión. False: registrar el caso. Una salida inválida necesita su propia ruta de error.",
+      "visual": {"type": "matrix", "label": "DOS RUTAS DESPUÉS DEL AGENTE", "items": [
+        {"title": "True → revisión", "body": "Telegram avisa a una persona."},
+        {"title": "False → registro", "body": "Google Sheets guarda el caso."},
+        {"title": "Error → detener", "body": "Una salida inválida no sigue sola."}
+      ]},
+      "alt_text": "Control humano y detención ante una salida inválida"
+    },
+    {
+      "number": 5, "role": "point", "dense": true, "pill": "Estado que cambia",
+      "headline": "Un loop necesita condición de parada",
+      "body": "Consultá la API con timeout y comprobá el estado. Si sigue pendiente, esperá y sumá una consulta al contador. Al llegar a tres o ante error, salí por una ruta configurada para avisar.",
+      "visual": {"type": "matrix", "label": "ESQUEMA DE REINTENTOS", "items": [
+        {"title": "HTTP Request → IF", "body": "Consultar si el estado ya cambió."},
+        {"title": "Wait → reintento", "body": "10 min; contador hasta 3 consultas."},
+        {"title": "Error / límite → humano", "body": "Configurar salida, registrar y avisar."}
+      ]},
+      "alt_text": "Un loop consulta, espera y se detiene tras tres intentos"
+    },
+    {
+      "number": 6, "role": "save", "dense": true, "pill": "Matriz guardable",
+      "headline": "Elegí con estas tres preguntas",
+      "body": "¿La regla es fija? ¿El modelo debe usar una herramienta? ¿Esperás que cambie un estado? Para solo clasificar texto, no hace falta agente.",
+      "visual": {"type": "matrix", "label": "MATRIZ DE ELECCIÓN", "items": [
+        {"title": "IF", "body": "Regla fija."},
+        {"title": "AI Agent", "body": "Elegir herramienta; validar salida."},
+        {"title": "Loop", "body": "Reconsultar con límite y salida de error."}
+      ]},
+      "alt_text": "Matriz para elegir reglas, agente o loop"
+    },
+    {
+      "number": 7, "role": "cta", "pill": "Aplicalo a tu negocio",
+      "headline": "Elegí la pieza que resuelve tu proceso",
+      "body": "¿Qué proceso querés ordenar? Describilo en comentarios: regla fija, uso de una herramienta o estado pendiente.",
+      "cta": "CONTÁ TU PROCESO",
+      "alt_text": "Contá el proceso que querés ordenar"
+    }
+  ],
+  "job": "education"
+}

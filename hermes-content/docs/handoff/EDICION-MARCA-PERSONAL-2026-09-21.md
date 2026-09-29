@@ -1,4 +1,29 @@
+> ⚠️ **HISTORIA.** El handoff vigente del carril es [`marca-personal.md`](marca-personal.md).
+
 # Handoff de edición · marca personal · 2026-09-21
+
+## Revisión de guiones y referentes · 28-sep-2026
+
+Se reescribieron los 12 guiones activos de
+[`RODAJE-MARCA-PERSONAL-2026-09-27.md`](../cola/RODAJE-MARCA-PERSONAL-2026-09-27.md):
+ejemplo, acción y comprobación antes de una llamada a la acción. Son candidatos
+editoriales; no implica aprobación, ejecución de demos o edición de los masters.
+G00 conserva captura de rescate y G07/G08 banco avanzado. Localizar los brutos
+ya indicados (incluido G06) antes de asignar nuevas tomas.
+
+Extracción de tres subagentes y fuentes adicionales en
+[`EXTRACCION-REFERENTES-GUIONES.md`](../../references/marca-personal/EXTRACCION-REFERENTES-GUIONES.md).
+Declara cobertura de fichas y base audiovisual disponible; no equivale a
+visionado íntegro actual de todos los originales. Cada adaptación distingue
+fuente estructural, receta propia y resultados sin ejecutar.
+
+Sergio amplió a los frentes ONIA, Platform, marca personal, enseñanza y comunidad.
+La propuesta está en [`ONIA_MAPA_DE_TEMAS.md`](../ONIA_MAPA_DE_TEMAS.md). Se corrigió
+la regla antigua que excluía el «cómo» público: el video educativo sí entrega una
+unidad útil completa; guía y comunidad añaden profundidad, materiales y práctica.
+Los drops/archivos sugeridos no se registran como enviados ni disponibles.
+
+Estado comunicado por Sergio al 27-sep: primer video publicado (URL pendiente); segundo master rechazado editorialmente. El estado de espera de abajo es histórico.
 
 Estado: `esperando material bruto`
 

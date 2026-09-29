@@ -1,5 +1,117 @@
 # El mapa de temas — de dónde sale lo que se graba
 
+## Mapa vigente de frentes · 28-sep-2026
+
+Pedido de Sergio: cubrir ONIA, ONIA Platform, marca personal, enseñanza de IA,
+entrada a la comunidad y contenido dentro de ella. Propuesta editorial local;
+no significa que las piezas estén grabadas, los recursos publicados o las demos
+ejecutadas. El backlog antiguo de abajo conserva su fecha y no confirma estados actuales.
+
+**Cuatro trabajos públicos:** Sergio construye confianza; las recetas enseñan;
+ONIA muestra cómo resuelve un problema de negocio; Platform demuestra el producto.
+El [plan de tres frentes](ONIA_PLAN_DE_CONTENIDO_3_FRENTES.md) ya distingue Sergio,
+`@oniahq` y Lucía. Se conservan esos roles: recetas de Sergio y educación de Lucía
+(personaje IA identificado), casos propios de ONIA narrados por Sergio y demos
+de Platform en `@oniahq`. No hace falta otra cuenta de enseñanza o agencia.
+La comunidad es el lugar de aplicación y conversación que alimenta las series.
+
+### Todos los frentes propuestos
+
+| Área | Frente / serie | Idea de guion y lo que entrega | Siguiente paso |
+|---|---|---|---|
+| Sergio | 1. Construir ONIA desde Bolivia | Una decisión real: problema → alternativas → elección → prueba disponible. Ejemplo: mostrar tres reglas que usamos antes de encargar un trabajo (G05) | Guía existente; conversación en comunidad |
+| Sergio | 2. Criterio y errores propios | Una herramienta en la misma tarea, resultado y límites. G06 propone comparar propuestas sin inventar precio o plazo; sólo se narra como prueba propia después de ejecutarla | Preguntar qué tarea comparar; guía cuando exista |
+| Sergio | 3. Identidad y humor del trabajo | Escena real o sketch rotulado, con una decisión útil al cierre. Ejemplo: «mi equipo de IA terminó, pero falta saber quién revisa» → fuente, revisión y aprobación | Seguir la serie o contar su caso; no forzar recurso |
+| Enseñar IA | 4. Empezar sin jerga | Chat, herramienta, workflow y agente en el mismo caso; G02 entrega quién decide el próximo paso | `/claude-code` para el desarrollo completo |
+| Enseñar IA | 5. Prompts y documentos que sirven | Pedido completo → salida → qué revisar. Taller sin precio confirmado (G09); notas a tareas (G11); alcance de soporte (G10) | Comunidad: aplicar al propio caso y comparar |
+| Enseñar IA | 6. Agentes y automatizaciones | Entrada → condición → acción → límite. Consulta de tres casos (G04), loop con éxito y máximo (G01), tres preguntas al bot (G12) | Comunidad: plantilla y casos de prueba cuando estén listos |
+| Enseñar IA / Lucía | 7. Contenido y medios con IA | Foto propia → instrucción visible → resultado → fallo reconocible; storyboard antes de video. Distinguir imagen generada, mockup y resultado real. Lucía explica herramientas y su creación sin fingir ser una clienta o persona real | Guía/plantilla preparada; no prometer créditos ni generación gratis |
+| ONIA | 8. Diagnóstico de un negocio | «¿Qué conviene automatizar primero?» → minutos × frecuencia → parte automatizable → mantenimiento (G13) | Si quiere hacerlo, comunidad; si busca implementación, conversación comercial con alcance |
+| ONIA | 9. Web y proceso de venta | Página propia/demo: oferta, prueba y acción de contacto; mostrar un cambio concreto. Explicar cómo el pedido llega y quién lo sigue | Consulta sobre su negocio; usar oferta vigente de webs |
+| ONIA | 10. Casos y forma de trabajar | Problema → solución delimitada → resultado comprobable → límite. Explicar preguntas de diagnóstico, alcance y entrega; caso de cliente sólo con autorización | Evaluar encaje o pedir propuesta; no enviar a comunidad por obligación |
+| Platform | 11. Un problema, una acción del producto | Agenda, cobro o seguimiento: abrir caso demo → realizar acción operativa → mostrar registro resultante. Un módulo y un rubro por pieza | Demo de Platform; catálogo vigente antes de escribir claims |
+| Platform | 12. Rutinas y puesta en marcha por rubro | «Antes de cerrar el día, revisá esto» → recorrido real de una pantalla operativa; dental/comercio/servicios según capacidades comprobadas | Demo o guía de uso para interesados/clientes |
+| Platform | 13. Dudas antes de comprar | Qué incluye, qué requiere trabajo humano, qué dato falta y cómo se empieza. Responder una pregunta con evidencia de producto/oferta | Consulta comercial o demo; precios sólo desde fuente actual |
+
+Los frentes 8–10 describen contenido de la empresa y posibles servicios; no
+amplían automáticamente el catálogo ni reabren líneas congeladas. Los frentes
+11–13 se escriben contra producto/oferta actual; el catálogo histórico no prueba
+que una función esté disponible hoy. Una demo nunca se presenta como cliente real.
+
+### Cómo llega la gente a la comunidad
+
+1. **Video:** entrega una pequeña solución completa. Una sola llamada a la acción,
+   elegida por el propósito de la pieza.
+2. **Guía web:** amplía el procedimiento, conserva instrucciones y muestra el enlace
+   de comunidad. La guía de Claude Code y el enlace de comunidad están presentes
+   en la web pública, comprobados el 28-sep; no se verificó la entrega de archivos
+   ni la actividad interna del grupo.
+3. **Comunidad:** invita a aplicar esa solución al negocio del miembro, con material
+   preparado si existe y una pregunta concreta para General.
+4. **Venta:** cuando alguien busca que ONIA lo implemente o quiere Platform, pasa a
+   una conversación comercial explícita. No depende de entrar al grupo.
+
+Ejemplos de CTA:
+
+- Guía existente: «El paso a paso de Claude Code está en mi web, link en el perfil».
+- Aplicación: «Probalo con tu negocio y contá en la comunidad qué dato te faltó;
+  entrás desde mi web». No promete contestación individual ni archivo pendiente.
+- Recurso: «En la comunidad está la plantilla y estos tres casos para practicar»
+  **sólo después de que se haya publicado ese material allí**.
+- Producto: «Si querés ver este recorrido para tu negocio, pedí una demo de ONIA».
+
+El CTA de comentario con envío de recurso requiere recurso existente y una forma
+de entrega comprobada. No se presume automatización de DM a partir de notas antiguas.
+El aprendizaje ocurre antes del CTA; no se oculta el paso decisivo para obligar a entrar.
+
+### Qué publicar en Onia Community
+
+**Announcements entrega; General aplica.** Propuesta de contenidos, no registro
+de publicaciones. El estado real sigue en `comunidad/ESTADO_COMUNIDAD.md`.
+
+| Formato | Qué contiene | Actividad en General |
+|---|---|---|
+| Receta preparada | Prompt/plantilla completa, datos ficticios, salida esperada y comprobación | Adaptar al propio negocio y compartir resultado sin datos privados |
+| Automatización explicada | Mapa de entrada/reglas/salida y errores; export sólo si preparado, revisado y sin credenciales | Traer un caso límite y decir qué debería pasar |
+| Error real de la semana | Evidencia propia, qué falló, causa conocida, cambio y resultado; sin inventar historias | Comparar fallos parecidos |
+| Caso aplicado | Una consulta autorizada o ejemplo ficticio claramente rotulado | Elegir la siguiente acción y justificarla |
+| Reto corto | Una tarea que pueda terminarse: mejorar respuesta, ordenar notas o calcular tiempo | Publicar antes/después y qué quedó pendiente |
+| Radar útil | Una novedad verificada: qué cambia, para quién sirve, límite y mini ejemplo | Decidir si la usarían; evitar lista de noticias |
+| Biblioteca/resumen | Enlaces estables, requisitos, versión y estado de cada recurso | Encontrar y reutilizar lo ya entregado |
+
+Primer ciclo sugerido con los guiones ya corregidos:
+
+| Día de la secuencia | Drop propuesto | Qué se lleva el miembro |
+|---|---|---|
+| 1 | G09: responder una consulta sin inventar precio | Prompt del taller + plantilla para su negocio + comprobación del dato faltante |
+| 2 | G11: notas a decisiones, tareas y pendientes | Ejemplo resuelto de tres notas + tabla editable |
+| 3 | G13: elegir qué automatizar | Hoja con frecuencia, minutos, fracción automatizable y mantenimiento; ejemplo 33 h 20 min → 16 h 40 min → 11 h 40 min |
+| 4 | G12: probar un bot | Tres preguntas, esperado/recibido y límite de la prueba; sin llamarlo certificación |
+| 5 | G05: encargar trabajo a la IA | Tres reglas públicas reales de ONIA + un encargo pequeño y criterios de revisión |
+| 6 | Clínica colectiva | Un caso elegido de General, anonimizado/autorizado, con diagnóstico acotado |
+| 7 | Recapitulación | Índice de lo entregado, fallos reales reportados y elección del próximo tema |
+
+Los prompts y ejemplos están en los guiones. Las tablas editables, exportaciones
+y hojas de cálculo anteriores son **por preparar**, no regalos ya disponibles.
+Propongo comenzar con tres drops completos por semana y una revisión colectiva;
+ampliar a diario sólo si existe material y capacidad para sostenerlo. Evitar
+prometer asesoría individual permanente para entrar al grupo.
+
+### Cómo se escribe cada guion
+
+Situación concreta → ejemplo/acción → resultado visible → criterio para revisarlo
+→ una llamada a la acción. En piezas personales se añade el contexto propio real;
+en piezas de producto, una acción operativa comprobada. Opinión/humor pueden
+construir cercanía sin ser tutorial, pero deben tener propósito y no fingir prueba.
+
+Referentes: se adapta el prompt visible de Marian, la especificación de Ian,
+la comparación de Tiago, la fuente/encargo de Erik y la pantalla narrada de
+Santiago. No todas esas fuentes entregan recetas completas. La cobertura y sus
+límites están en [Extracción de referentes](../references/marca-personal/EXTRACCION-REFERENTES-GUIONES.md);
+los [12 guiones revisados](cola/RODAJE-MARCA-PERSONAL-2026-09-27.md) son la cola de producción.
+
+---
+
 > 📍 **Índice del carril, con qué documento manda sobre qué:**
 > [`ONIA_CIRCUITO_DE_CONTENIDO.md`](ONIA_CIRCUITO_DE_CONTENIDO.md) — y la misma
 > estructura para consultar de un vistazo en
