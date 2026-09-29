@@ -52,7 +52,7 @@ function crear({ esc, emph, ACCOUNTS, BRAND, getFmt }) {
 
   function listaHtml(s) {
     const rows = (s.items || []).map((it, i) => `<li>${it.icon ? img(it.icon, 'li-icon') : `<span class="li-n">${i + 1}</span>`}<div><b>${emph(it.label || '')}</b>${it.text ? `<span>${emph(it.text)}</span>` : ''}</div></li>`).join('');
-    return `<div class="c-lista"><h2 class="t">${emph(s.headline || '')}</h2>${s.body ? `<p class="sub">${emph(s.body)}</p>` : ''}<ul>${rows}</ul></div>`;
+    return `<div class="c-lista${(s.items || []).length >= 4 ? ' compacta' : ''}"><h2 class="t">${emph(s.headline || '')}</h2>${s.body ? `<p class="sub">${emph(s.body)}</p>` : ''}<ul>${rows}</ul></div>`;
   }
 
   const LAYOUTS = { logos: logosHtml, analogia: analogiaHtml, ensayo: ensayoHtml, ilustrado: ilustradoHtml, lista: listaHtml };
@@ -82,7 +82,7 @@ body{background:var(--paper);color:var(--ink);font-family:'DM Sans',system-ui,sa
 .slide{position:relative;width:100%;height:100%;padding:84px 84px 96px;display:flex;flex-direction:column}
 .slide:before{content:'';position:absolute;inset:0;opacity:.35;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .42 0 0 0 0 .36 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 .slide > *{position:relative}
-.main{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center}
+.main{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:safe center;padding-bottom:40px}
 .g{color:var(--acc);font-weight:inherit;background:none;padding:0;box-shadow:inset 0 -.14em 0 var(--acc-wash)}
 .tag{align-self:flex-start;font-family:'DM Mono',monospace;font-size:21px;letter-spacing:1.5px;text-transform:uppercase;border:2px solid var(--ink);border-radius:8px;padding:8px 14px;margin-bottom:34px}
 .handle{position:absolute;left:84px;bottom:42px;font-family:'DM Mono',monospace;font-size:20px;color:var(--soft)}
@@ -126,6 +126,7 @@ body{background:var(--paper);color:var(--ink);font-family:'DM Sans',system-ui,sa
 .c-lista li div{display:flex;flex-direction:column;gap:4px}
 .c-lista b{font-size:50px;font-weight:800;letter-spacing:-.5px}
 .c-lista li span{font-size:40px;color:var(--soft)}
+.compacta ul{gap:18px;margin-top:40px}.compacta li{padding:20px 30px}.compacta b{font-size:42px}.compacta li span{font-size:34px}.compacta .li-n{width:68px;height:68px;font-size:46px}.compacta .li-icon{width:76px;height:76px}
 </style></head><body>
 <div class="slide l-${layout}">${tag}<main class="main">${render(slide)}${cta}</main><div class="handle">${esc(acc.handle)}</div>${next}</div>
 </body></html>`;
