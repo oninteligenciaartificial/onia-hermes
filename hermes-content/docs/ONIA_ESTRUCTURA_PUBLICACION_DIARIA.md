@@ -12,6 +12,9 @@
 |---|---|---|---|
 | **Feed** | 3 | pilar: **Samuel** · b-roll: **Sergio-Samuel** · video normal: **Sergio** | cuando toca carrusel, el **carrusel REEMPLAZA al b-roll** ese día |
 | **Trial** | 4 | los 3 del feed + **1 yap (Samuel)** | el yap replica un video del día con otra edición |
+
+> **29-sep-2026:** Sergio Urcullo pidió que el yap lo haga el editor (Claude) y se publique como
+> **Trial reel** de Instagram por API. Circuito: `hermes-content/deploy/vps-ops/publicar/README.md`.
 | **Trial v2** | 3-5 | **Sergio a cámara** | temas de IA, **cero o mínima edición** |
 
 **La cuenta: Feed 3 + Trial 7 (4 + los v2) = 10-13 piezas al día.**
