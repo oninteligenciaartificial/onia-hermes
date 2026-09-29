@@ -241,3 +241,20 @@ test("la vista previa no gasta turnos del parte (su ronda real queda intacta)", 
   b.imprimir("manana", { ONIA_PARTE: parte, ONIA_PARTE_RONDA: ronda });
   assert.deepEqual(readdirSync(ronda), ["t_existente"]);
 });
+
+test("la semana 2 del plan (fecha «7 de octubre») también aparece, sin la marca ✅", () => {
+  const b = banco();
+  const msg = b.imprimir("manana", { ONIA_HOY: "2026-10-07" });
+  assert.match(msg, /• A · La regla de 24 horas que rompe tu bot de WhatsApp \(Vertical\)/);
+  assert.doesNotMatch(msg, /✅ \(/);
+  assert.match(msg, /• C · .*\(YouTube horizontal\)/);
+});
+
+test("«7 de octubre» no se confunde con el 17 ni «4-oct» con el 14-oct", () => {
+  const b = banco();
+  const d7 = b.imprimir("manana", { ONIA_HOY: "2026-10-07" });
+  assert.doesNotMatch(d7, /Cortá los silencios|Subtítulos karaoke/);
+  const d4 = b.imprimir("manana", { ONIA_HOY: "2026-10-04" });
+  assert.doesNotMatch(d4, /Cortá los silencios/);
+  assert.match(d4, /Dos sesiones de Claude Code en el mismo proyecto/);
+});
