@@ -5,6 +5,7 @@ import { describe, expect, it } from "vitest";
 
 import { PRUEBA, RETENCION } from "@/lib/pricing";
 import { CONTENDIENTES, FECHA_CONSULTA, HUECO } from "@/lib/proof";
+import { PIXEL_DE_META, origenDeCampanaInit } from "@/lib/origen-de-campana";
 
 /**
  * Lo que la ley boliviana le exige a quien vende por internet, medido en la
@@ -76,6 +77,16 @@ describe("la privacidad declara a quien de verdad recibe los datos", () => {
     // últimos 200 caracteres del prospecto al derivar, agendar o enfriarse.
     expect(seccion(PRIVACIDAD_CRUDA, 5)).toMatch(/Telegram/);
     expect(seccion(PRIVACIDAD_CRUDA, 13)).toMatch(/Telegram/);
+  });
+
+  it("nombra a Meta, a quien el sitio le avisa las visitas y los toques al alta", () => {
+    // `origen-de-campana.ts` manda al píxel de Meta la vista de cada página y
+    // el toque a «Creá tu cuenta» o a WhatsApp. Si el sitio lo manda, la
+    // privacidad lo dice, con la salida que el snippet respeta (GPC).
+    expect(origenDeCampanaInit).toContain(PIXEL_DE_META);
+    const recogemos = seccion(PRIVACIDAD_CRUDA, 2);
+    expect(recogemos).toMatch(/píxel de Meta/);
+    expect(recogemos).toMatch(/Global Privacy Control/);
   });
 
   it("nombra a Cloudflare, por donde pasa todo el tráfico y el correo de datos", () => {

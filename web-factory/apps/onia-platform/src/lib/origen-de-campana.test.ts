@@ -9,8 +9,11 @@ import {
   CLAVE_DE_SESION,
   LARGO_MAXIMO,
   PARAMETROS_DE_CAMPANA,
+  PIXEL_DE_META,
+  PIXEL_DESTINO,
   origenDeCampanaInit,
 } from "./origen-de-campana";
+import { WA_URL } from "./site";
 
 /**
  * El origen de campaña con el que alguien llega a onia.com.bo viaja hasta el
@@ -31,18 +34,30 @@ import {
 
 type Enlace = { href: string };
 
+type Pedido = { url: URL; opciones: RequestInit };
+
 type Entorno = {
   guardado: Map<string, string>;
   tocar: (enlace: Enlace, tipo?: string) => void;
+  /** Lo que el snippet le pidió a la red con `fetch`. */
+  pedidos: Pedido[];
+  /** Dispara un evento sobre `window` (el `load`). */
+  disparar: (evento: string) => void;
+  /** Corre lo que el snippet dejó para cuando el navegador esté ocioso. */
+  ocioso: () => void;
 };
 
 /** DOM mínimo, como `chat-diferido.test.ts`: sólo lo que el snippet toca. */
 function correr(
   url: string,
   guardadoPrevio: Record<string, string> = {},
+  { gpc = false }: { gpc?: boolean } = {},
 ): Entorno {
   const guardado = new Map(Object.entries(guardadoPrevio));
   const oyentes = new Map<string, Array<(e: unknown) => void>>();
+  const deVentana = new Map<string, Array<() => void>>();
+  const enOcio: Array<() => void> = [];
+  const pedidos: Pedido[] = [];
   const ubicacion = new URL(url);
 
   const documento = {
@@ -55,7 +70,19 @@ function correr(
     getItem: (k: string) => guardado.get(k) ?? null,
     setItem: (k: string, v: string) => void guardado.set(k, v),
   };
-  const ventana = { addEventListener: () => {} };
+  const ventana = {
+    addEventListener: (tipo: string, fn: () => void) => {
+      deVentana.set(tipo, [...(deVentana.get(tipo) ?? []), fn]);
+    },
+    requestIdleCallback: (fn: () => void) => {
+      enOcio.push(fn);
+      return 0;
+    },
+  };
+  const fetchFalso = (destino: string, opciones: RequestInit) => {
+    pedidos.push({ url: new URL(destino), opciones });
+    return Promise.resolve();
+  };
 
   new Function(
     "window",
@@ -65,13 +92,20 @@ function correr(
     "navigator",
     "fetch",
     origenDeCampanaInit,
-  )(ventana, documento, ubicacion, almacen, {}, () => {});
+  )(ventana, documento, ubicacion, almacen, { globalPrivacyControl: gpc }, fetchFalso);
 
   return {
     guardado,
+    pedidos,
     tocar: (enlace, tipo = "click") => {
       const objetivo = { closest: () => enlace };
       for (const fn of oyentes.get(tipo) ?? []) fn({ type: tipo, target: objetivo });
+    },
+    disparar: (evento) => {
+      for (const fn of deVentana.get(evento) ?? []) fn();
+    },
+    ocioso: () => {
+      for (const fn of enOcio.splice(0)) fn();
     },
   };
 }
@@ -171,6 +205,14 @@ describe("sólo pasa lo que está en la lista blanca, y corto", () => {
     expect(destino.searchParams.get("utm_source")).toBe("ok");
   });
 
+  it("un nombre de campaña con tildes, ñ y espacios pasa", () => {
+    const v = correr("https://onia.com.bo/?utm_campaign=Campa%C3%B1a+Cl%C3%ADnica+SCZ");
+    const enlace = { href: REGISTRO_URL };
+    v.tocar(enlace);
+
+    expect(new URL(enlace.href).searchParams.get("utm_campaign")).toBe("Campaña Clínica SCZ");
+  });
+
   it("un valor más largo que el máximo se descarta", () => {
     const largo = "a".repeat(LARGO_MAXIMO + 1);
     const v = correr(`https://onia.com.bo/?src=${largo}&utm_medium=paid`);
@@ -227,6 +269,113 @@ describe("sólo pasa lo que está en la lista blanca, y corto", () => {
     const destino = new URL(enlace.href);
     expect(destino.searchParams.get("utm_source")).toBe("instagram");
     expect(destino.searchParams.has("src")).toBe(false);
+  });
+});
+
+/**
+ * El píxel de Meta avisa, sin cargar la librería de Meta.
+ *
+ * **Por qué nunca disparó.** No estaba instalado: cero `fbq` en todo el sitio
+ * (y en la app), y la CSP de la landing tampoco lo habría dejado salir
+ * (`connect-src` sin ningún origen de Meta). El píxel `1012611478191231`
+ * existía sólo del lado de Meta, con `last_fired_time` vacío.
+ *
+ * **Por qué sin `fbevents.js`.** Medido el 2026-09-29: la librería pesa
+ * 112,6 KB comprimidos (428 KB de JS a parsear) y su configuración otros
+ * 33,5 KB (134,6 KB). Son ~146 KB más por visita sobre una portada cuyo LCP
+ * en celular lento ya pasa el presupuesto (2,9 s contra 2,5 s,
+ * `ONIA_VELOCIDAD_Y_ESTABILIDAD.md` §5). El mismo aviso sale como un pedido
+ * GET de ~0 KB a `/tr`, la forma sin script que Meta documenta.
+ */
+describe("el píxel de Meta", () => {
+  const avisos = (v: Entorno) =>
+    v.pedidos.map((p) => ({
+      ev: p.url.searchParams.get("ev"),
+      que: p.url.searchParams.get("cd[content_name]"),
+    }));
+
+  it("PageView sale recién con la página cargada y el navegador ocioso", () => {
+    const v = correr(ENTRADA);
+    expect(v.pedidos).toHaveLength(0);
+
+    v.disparar("load");
+    expect(v.pedidos, "no compite con la carga: espera al ocio").toHaveLength(0);
+
+    v.ocioso();
+    expect(avisos(v)).toEqual([{ ev: "PageView", que: null }]);
+
+    const [pedido] = v.pedidos;
+    expect(pedido.url.origin + pedido.url.pathname).toBe(PIXEL_DESTINO);
+    expect(pedido.url.searchParams.get("id")).toBe(PIXEL_DE_META);
+    expect(pedido.url.searchParams.get("dl")).toBe(ENTRADA);
+    // keepalive: el aviso sobrevive a que el clic se lleve la página.
+    expect(pedido.opciones).toMatchObject({ mode: "no-cors", keepalive: true });
+  });
+
+  it("Lead al tocar el alta, y Lead al tocar WhatsApp", () => {
+    const alta = correr(ENTRADA);
+    alta.tocar({ href: registroConPlan("pro") });
+    expect(avisos(alta)).toEqual([{ ev: "Lead", que: "registro" }]);
+
+    const wa = correr(ENTRADA);
+    wa.tocar({ href: WA_URL });
+    expect(avisos(wa)).toEqual([{ ev: "Lead", que: "whatsapp" }]);
+  });
+
+  it("un Lead por página, aunque toque varias veces", () => {
+    const v = correr(ENTRADA);
+    v.tocar({ href: WA_URL });
+    v.tocar({ href: WA_URL });
+    v.tocar({ href: REGISTRO_URL });
+
+    expect(avisos(v)).toEqual([{ ev: "Lead", que: "whatsapp" }]);
+  });
+
+  it("otros enlaces no son un Lead", () => {
+    const v = correr(ENTRADA);
+    v.tocar({ href: "https://onia.com.bo/precios" });
+    v.tocar({ href: "https://app.onia.com.bo/login" });
+
+    expect(v.pedidos).toHaveLength(0);
+  });
+
+  it("con el fbclid del anuncio, manda el fbc que lo ata al clic", () => {
+    const v = correr(ENTRADA);
+    v.tocar({ href: REGISTRO_URL });
+
+    expect(v.pedidos[0].url.searchParams.get("fbc")).toMatch(/^fb\.1\.\d+\.IwAR0abc_DEF-123$/);
+  });
+
+  it("sin fbclid no inventa un fbc", () => {
+    const v = correr("https://onia.com.bo/?utm_source=google");
+    v.tocar({ href: REGISTRO_URL });
+
+    expect(v.pedidos[0].url.searchParams.has("fbc")).toBe(false);
+  });
+
+  it("fuera de onia.com.bo no avisa nada: ni local ni vistas previas ensucian el píxel", () => {
+    const v = correr("http://localhost:3000/?utm_source=facebook");
+    v.disparar("load");
+    v.ocioso();
+    v.tocar({ href: REGISTRO_URL });
+
+    expect(v.pedidos).toHaveLength(0);
+  });
+
+  it("con Global Privacy Control no avisa nada, pero el origen igual viaja al alta", () => {
+    const v = correr(ENTRADA, {}, { gpc: true });
+    v.disparar("load");
+    v.ocioso();
+    const enlace = { href: REGISTRO_URL };
+    v.tocar(enlace);
+
+    expect(v.pedidos).toHaveLength(0);
+    expect(new URL(enlace.href).searchParams.get("src")).toBe("ad-d1");
+  });
+
+  it("no descarga ningún script de Meta", () => {
+    expect(origenDeCampanaInit).not.toContain("connect.facebook.net");
+    expect(origenDeCampanaInit).not.toContain("createElement");
   });
 });
 

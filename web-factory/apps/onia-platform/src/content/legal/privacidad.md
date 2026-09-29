@@ -2,8 +2,8 @@
 title: "Política de Privacidad"
 slug: "privacidad"
 status: "vigente"
-version: "1.2"
-updatedAt: "2026-09-25"
+version: "1.3"
+updatedAt: "2026-09-29"
 ---
 
 # Política de Privacidad — Plataforma Onia
@@ -60,6 +60,19 @@ guarda: no hace falta crear una cuenta y no se pide ningún otro dato. Lo
 usamos para escribirte sobre eso y nada más; no se vende, no se cede y no
 entra en ninguna lista de publicidad de terceros. Podés pedirnos que lo
 borremos cuando quieras por los canales del §12, sin explicar por qué.
+
+2.6. **Visitas a este sitio (onia.com.bo):** cuando abrís una página del sitio,
+se lo avisamos al **píxel de Meta** (la empresa de Facebook, Instagram y
+WhatsApp), y también si tocás el botón para crear tu cuenta o el de WhatsApp.
+El aviso lleva la dirección de la página y, si llegaste desde un anuncio de
+Meta, el código de ese clic; no lleva tu nombre, tu correo ni tu teléfono. Meta
+puede relacionarlo con tu cuenta de Facebook o Instagram según sus propios
+términos. Lo usamos para medir si nuestros anuncios funcionan y para elegir a
+quién mostrárselos. Si tu navegador envía la señal **Global Privacy Control**,
+no se avisa nada. Además, para que el registro sepa de qué anuncio o enlace
+llegaste, tu navegador guarda ese dato mientras la pestaña siga abierta: no es
+una cookie y no sale de tu equipo hasta que tocás el botón para crear tu
+cuenta. Nada de esto pasa dentro de la plataforma.
 
 ## 3. Para qué los usamos
 

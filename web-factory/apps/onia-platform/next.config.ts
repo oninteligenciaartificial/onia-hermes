@@ -2,6 +2,7 @@ import type { NextConfig } from "next";
 import path from "node:path";
 
 import { CHATWOOT_BASE_URL } from "./src/lib/chat-diferido";
+import { PIXEL_DESTINO } from "./src/lib/pixel-de-meta";
 
 // Raiz del monorepo. La usan dos cosas distintas: turbopack en desarrollo y el
 // trazado de archivos del build standalone.
@@ -71,6 +72,9 @@ const CLOUDFLARE_INSIGHTS = "https://static.cloudflareinsights.com";
  *    y los adjuntos/avatares del chat salen de su origen.
  *  - `connect-src` con `https:` Y `wss:`: la conversación se mantiene viva por
  *    ActionCable; `wss:` no se hereda de `https:`.
+ *  - `connect-src` con `www.facebook.com`: el aviso del píxel de Meta, un
+ *    `fetch` GET a `/tr` (ver `lib/origen-de-campana.ts`). La librería
+ *    `fbevents.js` NO se carga, así que `script-src` no se abre a Meta.
  *  - `frame-src` con Chatwoot: el widget ES un iframe de su propio origen.
  *  - `media-src` con Chatwoot: el sonido de mensaje nuevo.
  *  - `object-src 'none'` y `base-uri 'self'`: las dos que `default-src` no
@@ -84,7 +88,7 @@ export function cspDeLaLanding(entorno = process.env.NODE_ENV): string {
     "style-src 'self' 'unsafe-inline'",
     `img-src 'self' data: blob: ${CHATWOOT_BASE_URL}`,
     "font-src 'self' data:",
-    `connect-src 'self' ${CHATWOOT_BASE_URL} ${CHATWOOT_WS}`,
+    `connect-src 'self' ${CHATWOOT_BASE_URL} ${CHATWOOT_WS} ${new URL(PIXEL_DESTINO).origin}`,
     `frame-src ${CHATWOOT_BASE_URL}`,
     `media-src 'self' ${CHATWOOT_BASE_URL}`,
     "object-src 'none'",

@@ -1,4 +1,8 @@
 import { REGISTRO_URL } from "@/app/(sitio)/nav";
+import { SITE_URL, WA_PHONE } from "@/lib/site";
+import { PIXEL_DE_META, PIXEL_DESTINO } from "./pixel-de-meta";
+
+export { PIXEL_DE_META, PIXEL_DESTINO };
 
 /**
  * El origen de campaña con el que alguien llega a onia.com.bo viaja hasta el
@@ -26,6 +30,22 @@ import { REGISTRO_URL } from "@/app/(sitio)/nav";
  * Del otro lado, hoy el producto sólo lee `src` (en `AccessRequestForm`); los
  * `utm_*` y `fbclid` llegan a la URL del registro y queda del lado del producto
  * guardarlos.
+ *
+ * **El mismo snippet avisa al píxel de Meta**, sin cargar la librería de Meta:
+ *
+ *  - `PageView` con la página ya cargada y el navegador ocioso, y `Lead` (una
+ *    vez por página) al tocar el alta o WhatsApp.
+ *  - Cada aviso es un `fetch` GET de ~0 KB a `/tr` con `keepalive`, para que
+ *    sobreviva al clic que se lleva la página. `fbevents.js` pesa 112,6 KB
+ *    comprimidos más 33,5 KB de configuración (medido el 2026-09-29) y la
+ *    portada ya pasa su presupuesto de LCP en celular lento.
+ *  - Sólo en `onia.com.bo` (el local y las vistas previas no ensucian el
+ *    píxel) y nunca si el navegador manda Global Privacy Control. Lo declara
+ *    la política de privacidad, §2.6.
+ *
+ * Lo que se pierde frente a la librería: la cookie `_fbp` y el emparejamiento
+ * avanzado. El clic del anuncio igual queda atado por el `fbc` que se arma
+ * con el `fbclid`.
  */
 
 /** Las únicas claves que se guardan y viajan. Cualquier otra se ignora. */
@@ -45,23 +65,43 @@ export const LARGO_MAXIMO = 255;
  * Letras (con tildes y ñ), dígitos y `_ . ~ : | + -` y espacio. Nada de `<`,
  * `"`, `/` ni `=`: un valor que los trae no es un nombre de campaña.
  */
-export const VALOR_VALIDO = /^[\w.~:|+ À-ſ-]+$/;
+export const VALOR_VALIDO = /^[\w.~:|+ \u00C0-\u017F-]+$/;
 
 /** Dónde queda guardado el origen durante la visita. */
 export const CLAVE_DE_SESION = "onia-origen";
 
+/** El único host donde el píxel avisa. */
+const HOST_QUE_MIDE = new URL(SITE_URL).hostname;
+
+/** Un toque a esto es un `Lead` de WhatsApp: el número de la web, con cualquier texto. */
+const WHATSAPP = `https://wa.me/${WA_PHONE}`;
+
+// ponytail: el `fbc` lleva la hora del aviso y no la de la llegada; guardarla aparte si Meta lo marca en Diagnóstico.
 export const origenDeCampanaInit = `(function(){
-var CLAVES=${JSON.stringify([...PARAMETROS_DE_CAMPANA])},MAX=${LARGO_MAXIMO},OK=${VALOR_VALIDO},K=${JSON.stringify(CLAVE_DE_SESION)},REG=${JSON.stringify(REGISTRO_URL)};
+var CLAVES=${JSON.stringify([...PARAMETROS_DE_CAMPANA])},MAX=${LARGO_MAXIMO},OK=${VALOR_VALIDO},K=${JSON.stringify(CLAVE_DE_SESION)},REG=${JSON.stringify(REGISTRO_URL)},WA=${JSON.stringify(WHATSAPP)};
+var PIXEL=${JSON.stringify(PIXEL_DE_META)},TR=${JSON.stringify(PIXEL_DESTINO)};
 function limpiar(leer){var o={},n=0;for(var i=0;i<CLAVES.length;i++){var c=CLAVES[i],v=leer(c);if(typeof v==="string"&&v.length<=MAX&&OK.test(v)){o[c]=v;n++;}}return n?o:null;}
 var q=new URLSearchParams(location.search),o=limpiar(function(c){return q.get(c)});
 try{if(o){sessionStorage.setItem(K,JSON.stringify(o));}else{var g=JSON.parse(sessionStorage.getItem(K));o=g&&limpiar(function(c){return g[c]});}}catch(e){}
+var medir=location.hostname===${JSON.stringify(HOST_QUE_MIDE)}&&!navigator.globalPrivacyControl,avisado=false;
+function avisar(ev,extra){
+if(!medir)return;
+var u=TR+"?id="+PIXEL+"&ev="+ev+"&dl="+encodeURIComponent(location.href)+"&ts="+Date.now()+(extra||"");
+if(o&&o.fbclid)u+="&fbc="+encodeURIComponent("fb.1."+Date.now()+"."+o.fbclid);
+try{fetch(u,{mode:"no-cors",keepalive:true,credentials:"include"}).catch(function(){});}catch(e){}
+}
+function lead(que){if(avisado)return;avisado=true;avisar("Lead","&cd[content_name]="+que);}
 function tocar(e){
 var a=e.target&&e.target.closest&&e.target.closest("a[href]");
-if(!a||!o||a.href.split(/[?#]/)[0]!==REG)return;
-var u=new URL(a.href);
-for(var c in o){if(!u.searchParams.has(c))u.searchParams.set(c,o[c]);}
-a.href=u.toString();
+if(!a)return;
+var base=a.href.split(/[?#]/)[0];
+if(base===REG){
+if(o){var u=new URL(a.href);for(var c in o){if(!u.searchParams.has(c))u.searchParams.set(c,o[c]);}a.href=u.toString();}
+lead("registro");
+}else if(base===WA){lead("whatsapp");}
 }
 document.addEventListener("click",tocar,true);
 document.addEventListener("auxclick",tocar,true);
+function vista(){(window.requestIdleCallback||function(f){setTimeout(f,1)})(function(){avisar("PageView")});}
+if(document.readyState==="complete"){vista();}else{window.addEventListener("load",vista);}
 })();`;
