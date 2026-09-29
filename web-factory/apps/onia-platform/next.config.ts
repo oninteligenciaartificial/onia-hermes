@@ -55,8 +55,9 @@ const CLOUDFLARE_INSIGHTS = "https://static.cloudflareinsights.com";
  *
  * Renglón por renglón, con el sujeto que lo obliga:
  *
- *  - `'unsafe-inline'` en `script-src`: `layout.tsx` cuelga dos `<script>`
- *    inline —el tema antes del primer paint y el diferido del chat— y ninguno
+ *  - `'unsafe-inline'` en `script-src`: `layout.tsx` cuelga tres `<script>`
+ *    inline —el tema antes del primer paint, el diferido del chat y el origen
+ *    de campaña (`lib/origen-de-campana.ts`)— y ninguno
  *    puede pasar a archivo sin perder justamente la propiedad de correr antes
  *    del bundle. `'unsafe-eval'` NO va en el build —nada del bundle lo pide— y
  *    SÍ en `next dev`, que evalúa cada módulo con `eval`: sin él el sitio local

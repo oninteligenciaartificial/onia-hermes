@@ -85,13 +85,14 @@ describe("la CSP de la landing", () => {
     expect(directivas.get("default-src")).toEqual(["'self'"]);
   });
 
-  it("deja correr los dos scripts inline del layout", async () => {
+  it("deja correr los scripts inline del layout", async () => {
     const directivas = await directivasDeLaCsp();
 
-    /* `layout.tsx` cuelga dos `<script dangerouslySetInnerHTML>`: el que aplica
-     * el tema antes del primer paint y el que difiere el chat. Sin
-     * `'unsafe-inline'` el sitio arranca con el tema equivocado (parpadeo
-     * claro/oscuro) y el chat NUNCA se pide: el visitante se queda sin canal. */
+    /* `layout.tsx` cuelga tres `<script dangerouslySetInnerHTML>`: el que aplica
+     * el tema antes del primer paint, el que difiere el chat y el que lleva el
+     * origen de campaña al alta. Sin `'unsafe-inline'` el sitio arranca con el
+     * tema equivocado (parpadeo claro/oscuro), el chat NUNCA se pide y ningún
+     * alta se puede atribuir a su anuncio. */
     expect(directivas.get("script-src")).toContain("'unsafe-inline'");
   });
 

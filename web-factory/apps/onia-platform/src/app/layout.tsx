@@ -5,6 +5,7 @@ import { MotionProvider } from "@/motion";
 import { SITE_URL } from "@/lib/site";
 import { ALCANCE_CON_AGENDA, ALCANCE_CON_INVENTARIO } from "@/lib/pricing";
 import { chatDiferidoInit } from "@/lib/chat-diferido";
+import { origenDeCampanaInit } from "@/lib/origen-de-campana";
 import "./globals.css";
 
 /*
@@ -132,6 +133,8 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: themeInit }} />
         <MotionProvider>{children}</MotionProvider>
         <script dangerouslySetInnerHTML={{ __html: chatDiferidoInit }} />
+        {/* El ?src= / utm_* de un anuncio viaja hasta el alta: ver @/lib/origen-de-campana. */}
+        <script dangerouslySetInnerHTML={{ __html: origenDeCampanaInit }} />
       </body>
     </html>
   );
