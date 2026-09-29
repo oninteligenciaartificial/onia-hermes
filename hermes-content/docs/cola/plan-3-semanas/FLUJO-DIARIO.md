@@ -7,10 +7,10 @@ Propuesta de Claude, 29-sep-2026, para que Sergio Urcullo la corrija. Qué graba
 
 | Grabás | Sale | Dónde |
 |---|---|---|
-| **1 vertical** (45–70 s) | **Reel principal** | Instagram `@sergiourcullo` (feed y seguidores) · Facebook por compartido automático · TikTok y YouTube Shorts cuando esté Metricool |
+| **1 vertical** (45–70 s) | **Reel principal** | Instagram `@sergiourcullo` (feed y seguidores) · Facebook por compartido automático · TikTok, YouTube Shorts y LinkedIn por Buffer (gratis) |
 | | **Yap 1** — mismo contenido, **otro gancho**: arranca por el dato más fuerte o por el resultado, 30–45 s | Instagram **Trial** (solo NO seguidores; pasa a seguidores solo si rinde) |
 | | **Yap 2** — **un solo paso** del video, ≤ 30 s, con su propio gancho | Instagram **Trial** |
-| **1 horizontal** (lun · mié · vie) | **Video largo** | YouTube (por Metricool; con API propia quedaría privado) |
+| **1 horizontal** (lun · mié · vie) | **Video largo** | YouTube: lo subís vos con el paquete listo (archivo, título, descripción con capítulos, miniatura). Buffer solo sube Shorts y la API propia lo dejaría privado hasta la auditoría |
 | | **1 clip vertical** con el mejor tramo de 45 s | reel principal del día siguiente o yap Trial |
 
 **Por qué los yaps van a Trial:** prueban ganchos distintos con gente que no te sigue, sin llenarle
@@ -31,8 +31,9 @@ el feed a tus seguidores. El que funciona, Instagram lo pasa solo (`--trial auto
 regla de 10-13 de `ONIA_ESTRUCTURA_PUBLICACION_DIARIA.md` sin grabar más de 1 hora (tope de la API:
 100 publicaciones cada 24 h).
 Carruseles: mar · jue · sáb, en el horario de B.
-Las publicaciones con hora quedan agendadas en el VPS, una por comando (sin cola que pueda
-«despertar» y publicar sola, como pasó con Postiz el 4-sep).
+Instagram se agenda en el VPS, una publicación por comando (sin cola que pueda «despertar» y publicar
+sola, como pasó con Postiz el 4-sep). TikTok, Shorts y LinkedIn entran a la cola de Buffer **solo
+después de tu «ok»**; el plan gratis admite 10 en cola por canal (unos 3 días por delante).
 
 ## Cómo se mantiene el ritmo sin quemarte
 

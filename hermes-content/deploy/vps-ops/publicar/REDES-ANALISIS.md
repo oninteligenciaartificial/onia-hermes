@@ -141,6 +141,11 @@ cuesta más del doble que Metricool Advanced y no aporta nada que haga falta ac�
 
 ## 7. Ruta recomendada por red
 
+> ⚠️ **Secciones 7 y 8 SUPERADAS el 29-sep-2026.** Sergio Urcullo pidió una opción gratis y sin
+> Metricool: TikTok (cuenta de empresa), YouTube Shorts y LinkedIn perfil van por **Buffer Free** con
+> `buffer-post.mjs`; los largos de YouTube los sube él con el paquete listo. La ruta vigente y sus
+> pasos están en [`README.md`](README.md). Esto queda como el análisis que llevó a esa decisión.
+
 | Red | Ruta | Por qué |
 |---|---|---|
 | **Instagram** | Seguir con `ig-reel.mjs`, sin cambios. | Ya funciona. El tope de 100 por día no se toca. |
