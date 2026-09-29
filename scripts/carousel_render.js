@@ -178,6 +178,8 @@ function parseArgs(argv) {
     else if (k === '--account') a.account = argv[++i];
     else if (k === '--bg') a.bg = argv[++i];
     else if (k === '--pack') a.pack = argv[++i];
+    else if (k === '--theme') a.theme = argv[++i];
+    else if (k === '--fonts') a.fonts = argv[++i];
     else if (k === '--object') a.object = argv[++i];
     else if (k === '--accent') a.accent = argv[++i];
     else if (k === '--format') a.format = argv[++i];
@@ -1278,6 +1280,8 @@ function render(args) {
   // La serie es del CARRUSEL, no de la slide: el brief es su lugar natural. La bandera
   // de linea de comando sigue funcionando y gana, para poder probar sin editar el brief.
   args.serie = args.serie || brief.serie || '';
+  args.theme = args.theme || brief.theme || '';
+  args.fonts = args.fonts || brief.fonts || '';
   args.episodio = args.episodio || brief.episodio || '';
   if (args.bg) args.bg = path.resolve(args.bg);
   if (args.object) args.object = path.resolve(args.object);

@@ -579,7 +579,7 @@ El esquema del vigía está en la comunidad.
 **Fórmula:** F4 · Así no (adjetivo) / así sí (pregunta con número) · **Pilar:** SaaS desde Bolivia · **Destino:** comentá CLIENTE (drop 17)
 **Evidencia:** `hermes-content/docs/ONIA_CLIENTE_IDEAL.md` §2 y §9 (cinco preguntas; «la pregunta 4 es la que vende») · `bot/bench-cases.mjs` (orden del embudo: los datos se piden con la demo ya reservada). NO mostrar la conversación del 25-ago ni nombres de clínicas.
 
-«Mi cliente son las pymes» no es una definición. Es un adjetivo. Así definimos el de ONIA: con preguntas que se contestan con un número, en dos minutos.
+«Mi cliente son las pymes» no es una definición. Es un adjetivo. ONIA trabaja con cinco rubros, pero salimos a vender primero a clínicas, y así definimos ese cliente: con preguntas que se contestan con un número, en dos minutos.
 
 Uno: ¿cuántos profesionales atienden? Buscamos de dos a seis.
 

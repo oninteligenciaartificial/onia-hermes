@@ -23,17 +23,26 @@ import { fileURLToPath } from 'node:url';
 // Never name the destination ("Instagram", "carousel") nor a place, and never pick objects
 // that carry print (mugs, notebooks, screens): Soul 2.0 then invents captions and labels, and
 // a long "no text, no letters" list does not stop it (both seen 29-sep). Describe positively.
-// One block per look. `foto` = cover photo (community-editorial); `acuarela` = Santiago-like
-// illustration for pack referentes; `objeto` = Bastian-like product shot on white.
+// One block per look. `foto` = cover photo; `acuarela` / `linea` / `clay` = illustration for pack
+// referentes (Santiago-like, in ONIA green + white + black); `objeto` = product shot on white.
 const GALERIA_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const STYLES = {
   foto: { dir: 'fotos', aspect: '3:4', pre: 'Editorial still-life photograph, 35mm lens, warm natural window light, ' +
     'ivory and charcoal tones with one small muted deep-green detail, shallow depth of field, real materials. ',
     post: ' Minimal composition of plain natural materials, completely unbranded, calm empty surroundings.' },
-  acuarela: { dir: 'ilustraciones', aspect: '4:3', pre: 'Hand-drawn watercolor and ink illustration on warm cream paper, loose confident pencil ' +
-    'lines, soft washes of deep green, warm orange and navy, a few doodled arrows and small sparkles around, ' +
-    'charming and simple, one clear subject centered with generous empty paper around it. ',
-    post: ' Pure drawing, completely unbranded, nothing printed or written anywhere, plain cream paper background.' },
+  // Paleta de Sergio Urcullo (29-sep): verde ONIA + blanco + negro. Sin hex en el prompt: se imprime.
+  // «on white paper» hace que Soul 2.0 FOTOGRAFÍE un papel (bordes oscuros, mesa) y firme la obra:
+  // se pide ilustración digital, a sangre, sin firma (visto 29-sep).
+  acuarela: { dir: 'ilustraciones', aspect: '4:3', pre: 'Unsigned digital illustration in a hand-drawn watercolor and black ink style, filling the frame edge to edge on a plain white background, ' +
+    'loose confident lines, washes of vivid emerald green and black only, a few doodled arrows and small sparkles, ' +
+    'charming and simple, one clear subject centered with generous white space around it. ',
+    post: ' Pure drawing, completely unbranded, nothing printed or written anywhere, clean white background.' },
+  linea: { dir: 'ilustraciones', aspect: '4:3', pre: 'Unsigned minimal digital line illustration, black ink strokes filling the frame edge to edge on a plain white background, ' +
+    'one single element filled with flat vivid emerald green, lots of white space, editorial and elegant. ',
+    post: ' Pure drawing, completely unbranded, nothing printed or written anywhere, clean white background.' },
+  clay: { dir: 'ilustraciones', aspect: '4:3', pre: 'Soft 3D clay render, rounded toy-like shapes in vivid emerald green, white and matte black, ' +
+    'on a pure white seamless background, soft studio light, gentle shadows, one clear subject centered. ',
+    post: ' Completely unbranded, nothing printed or written anywhere, clean white background.' },
   objeto: { dir: 'objetos', aspect: '16:9', pre: 'Clean commercial product photograph on a seamless pure white background, soft ' +
     'studio light, gentle realistic shadows, objects arranged in a neat horizontal row, sharp focus. ',
     post: ' Plain unbranded objects, nothing printed on them, empty white background.' },

@@ -1,6 +1,6 @@
 ---
 name: diseno-contenido-onia
-description: Invocar ANTES de hacer cualquier pieza visual de la marca personal de Sergio Urcullo o de ONIA — carrusel, portada, presentación de YouTube, miniatura, lámina, imagen para un video. Es el índice único del diseño de contenido: de dónde sale cada imagen (galería → Pexels/Unsplash → Higgsfield → logo oficial), qué pack y qué layout usar, los patrones de los referentes (Santiago Muñoz, Bastian Xu y el resto), las trampas ya pagadas y el control de calidad antes de mostrar.
+description: "Invocar ANTES de hacer cualquier pieza visual de la marca personal de Sergio Urcullo o de ONIA (carrusel, portada, presentación de YouTube, miniatura, lámina, imagen para un video). Índice único del diseño de contenido. Imágenes en orden galería, Higgsfield (Sergio dicta Pixel), logo oficial, captura real. Pack referentes con temas verde, blanco y negro, patrones de los referentes, trampas ya pagadas y control de calidad."
 ---
 
 # Diseño de contenido ONIA — el único lugar
@@ -22,17 +22,20 @@ impreso en una taza y un post de Instagram falso con caption inventado).
 
 ## 1. De dónde sale cada imagen, en este orden
 
+> ⚠️ Sergio Urcullo dicta por voz: **«Pixel» / «Hisfield» = Higgsfield.** El 29-sep lo leí como
+> Pexels y corrigió. Las imágenes se GENERAN con Higgsfield (como las de los referentes, pero
+> nuestras) y quedan en la galería para reutilizar.
+
 | # | Fuente | Para qué | Cómo |
 |---|---|---|---|
-| 1 | **Galería propia** | Lo que ya tenemos, cualquier cosa | Buscá en `hermes-content/galeria/galeria.json` (tags, prompt, consulta) antes de pedir nada nuevo |
-| 2 | **Pexels / Unsplash** (licencia libre) | Fotos reales: objetos sobre blanco, escenas | `python scripts/marca-personal/buscar-objetos.py --fuente pexels --sin-recorte --galeria --objeto nombre="consulta en inglés"` → queda en `galeria/objetos/` con autor y licencia. Llaves en `~/.env`. Aprobado por Sergio el 06-sep |
-| 3 | **Higgsfield** (generada) | Lo que no existe en stock: ilustración acuarela, metáfora visual | `node scripts/carousel_images.mjs --brief <b> --out <dir>` cotiza gratis; `--yes` genera (lote aprobado, ver §6) → queda en `galeria/ilustraciones/` o `galeria/fotos/` |
-| 4 | **Logo oficial** | Cuando se NOMBRA una marca | `hermes-content/references/brand-claude/` (Claude, Claude Code, Anthropic). Nunca recrear un logo. Otras marcas: pedir permiso para bajar su logo oficial y guardarlo ahí |
-| 5 | **Captura real** | Mostrar producto o pantalla | Captura de la pantalla real (nunca una UI inventada) |
-| ⛔ | Google / Pinterest | — | No se publica una foto ajena sin licencia. Google solo sirve para encontrar el kit de prensa OFICIAL de una marca |
+| 1 | **Galería propia** | Lo que ya tenemos | Buscá en `hermes-content/galeria/galeria.json` (tags, prompt) antes de generar |
+| 2 | **Higgsfield** (generada) | Ilustraciones y metáforas visuales: la fuente principal | `node scripts/carousel_images.mjs --brief <b> --out <dir>` cotiza gratis; `--yes` genera (lote aprobado, §6) → `galeria/ilustraciones/` o `galeria/fotos/`. Estilos: `acuarela`, `linea`, `clay`, `foto`, `objeto` |
+| 3 | **Logo oficial** | Cuando se NOMBRA una marca | Claude/Claude Code/Anthropic: `hermes-content/references/brand-claude/` · n8n, OpenAI, Meta, Google, Gemini, WhatsApp: `hermes-content/references/brand-logos/`. Nunca recrear ni generar un logo |
+| 4 | **Captura real** | Mostrar producto o pantalla | Captura de la pantalla real (layout `captura`), nunca una UI inventada |
+| 5 | Pexels / Unsplash | Solo si hace falta una FOTO REAL con licencia (no generada) | `python scripts/marca-personal/buscar-objetos.py --fuente pexels --sin-recorte --galeria --objeto nombre="consulta"` |
+| ⛔ | Google / Pinterest | — | Una foto ajena sin licencia no se publica. Google solo para el kit de prensa OFICIAL de una marca |
 
-Calidad mínima: 1.800 px en el lado largo (Pexels `large2x`, Unsplash 2048, Higgsfield 2k).
-La galería guarda JPEG ≤ 2048 px (un PNG de Higgsfield pesa ~5 MB; el JPEG ~400 KB).
+Calidad mínima: 1.800 px en el lado largo (Higgsfield 2k). La galería guarda JPEG ≤ 2048 px.
 
 ## 2. Qué pack y qué layout
 
@@ -51,8 +54,8 @@ Cada lámina elige `layout`:
 | `cierre` | los 8 referentes: «Comentá PALABRA» + qué recibís (`keyword`) | 1 línea | ninguna; solo si el recurso ya existe |
 
 Pendientes del catálogo (en `patrones/`): P-COMPARA, P-FOTO-ESCENA, P-DIAGRAMA, P-TABLA-MARCADOR.
-⚠️ Carlos Domínguez señala como rasgo de «plantilla hecha con IA» el fondo crema, la cursiva en
-títulos y las etiquetas 01/02: la paleta de papel del pack espera el OK de Sergio.
+Carlos Domínguez señala como rasgo de «plantilla IA» el fondo crema: por eso el pack pasó a
+blanco puro, verde y negro (decisión de Sergio, 29-sep).
 
 Render: `node scripts/carousel_render.js --brief <dir>/brief.json --out <dir> --account sergio --pack referentes --format feed`
 y `node scripts/carousel_contactsheet.js --dir <dir>`. Ejemplo completo y aprobado a la vista:
@@ -80,12 +83,20 @@ Qué NO copiar: sus personajes o mascotas, sus frases, su paleta exacta, sus cif
 
 ## 4. Sistema visual ONIA (pack referentes)
 
-- Papel tibio con textura (`oklch(97.4% 0.012 85)`), tinta casi negra, **un** acento: verde
-  ONIA profundo (`oklch(47% 0.11 158)`) para la palabra clave.
-- Letras: Bricolage (títulos, local en `hermes-content/brand/fonts/`), DM Sans (texto),
-  Caveat (manuscrita: subtítulos, flechas, sello), Instrument Serif (nombre bajo un logo).
-- Nada de pills, tarjetas decorativas, header ni footer repetidos: solo etiqueta `NN/TT · SERIE`,
-  el handle chico y la flecha de continuidad.
+**Paleta de Sergio Urcullo (29-sep): verde ONIA dominante + blanco + negro** (tokens de
+`hermes-content/brand/tokens.css`). Tres temas, por carrusel (`theme` en el brief) o por lámina:
+
+| Tema | Fondo | Texto | Énfasis |
+|---|---|---|---|
+| `blanco` | #FFFFFF | negro #0A0F0D | verde profundo #0B8F4F con subrayado verde eléctrico |
+| `verde` | verde eléctrico #10C26B | negro | resaltado blanco detrás del texto negro |
+| `negro` | #0A0F0D | blanco | verde eléctrico #10C26B |
+
+Combinación por defecto: portada `verde`, interiores `blanco`, cierre `negro` o `verde`.
+**El verde eléctrico nunca va como texto sobre blanco** (contraste 2,2:1): ahí va el profundo.
+
+Letras: Bricolage (títulos, local), DM Sans (texto), Caveat (flechas y sello), Instrument Serif
+(nombre bajo un logo). Nada de pills, tarjetas decorativas, header ni footer repetidos.
 
 ## 5. Control de calidad antes de mostrarle algo a Sergio
 
@@ -110,7 +121,13 @@ El CLI autenticado está en el VPS: `HF_CMD="ssh -i <llave> -o BatchMode=yes roo
 - Tazas, cuadernos y pantallas salen con letras inventadas.
 - Pedir «espacio vacío» deja un bloque gris.
 - Lo que funciona: un objeto simple sin impresión, descrito en positivo, y el bloque de estilo
-  del script (`STYLES` en `scripts/carousel_images.mjs`: `foto`, `acuarela`, `objeto`).
+  del script (`STYLES` en `scripts/carousel_images.mjs`).
+- **Estilos medidos el 29-sep con Soul 2.0:** `clay` (3D arcilla) sale limpio y en paleta; es el
+  que mejor rinde. `acuarela` queda linda pero INVENTA UNA FIRMA en una esquina (2 de 2): se
+  recorta. `linea` sale como foto de un papel con bordes oscuros. Soul es un modelo de fotos:
+  lo que se puede fotografiar (arcilla, objetos) le sale; el dibujo, no.
+- Si un `generate create` se corta por tiempo, el job sigue y COBRA: recuperarlo con
+  `higgsfield generate list` + `generate wait <id>` y `saveToGallery({url})`, nunca regenerar.
 
 ## 7. Skills de diseño que se cargan con esta
 

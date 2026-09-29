@@ -79,6 +79,9 @@ function crear({ esc, emph, ACCOUNTS, BRAND, getFmt }) {
     const FMT = getFmt();
     const acc = ACCOUNTS[account] || ACCOUNTS.onia;
     const layout = slide.layout || (idx === 0 ? 'ilustrado' : 'ensayo');
+    const theme = slide.theme || (args && args.theme) || 'blanco';
+    const fonts = (args && args.fonts) || 'referentes';
+    if (!['blanco', 'verde', 'negro'].includes(theme)) throw new Error(`pack referentes: theme desconocido «${theme}» (blanco|verde|negro)`);
     const render = LAYOUTS[layout];
     if (!render) throw new Error(`pack referentes: layout desconocido «${layout}» (${Object.keys(LAYOUTS).join('|')})`);
     const serie = slide.tag || (args && args.serie) || '';
@@ -89,41 +92,55 @@ function crear({ esc, emph, ACCOUNTS, BRAND, getFmt }) {
     const bricolage = dataUrl('hermes-content/brand/fonts/BricolageGrotesque-var-latin.woff2');
 
     return `<!doctype html><html><head><meta charset="utf-8">
-<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,600;9..40,800&family=DM+Mono:wght@500&family=Instrument+Serif&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&family=Caveat:wght@600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,600;9..40,800&family=DM+Mono:wght@500&family=Instrument+Serif&display=swap" rel="stylesheet">
 <style>
 ${tokens}
 @font-face{font-family:'Bricolage';src:url(${bricolage}) format('woff2');font-weight:200 800}
-:root{--paper:oklch(97.4% 0.012 85);--ink:oklch(21% 0.012 160);--soft:oklch(46% 0.014 160);--acc:oklch(47% 0.11 158);--acc-wash:oklch(88% 0.07 158)}
+/* Paleta de Sergio Urcullo (29-sep): verde ONIA dominante + blanco + negro. Tokens de
+   hermes-content/brand/tokens.css. El verde eléctrico (#10C26B) NO va como texto sobre blanco
+   (contraste 2,2:1): ahí el texto verde usa el profundo (#0B8F4F) y el eléctrico va de relleno. */
+.t-blanco{--paper:#FFFFFF;--ink:#0A0F0D;--soft:#4F5A55;--acc:#0B8F4F;--mark:#10C26B;--mark-ink:#0A0F0D;--card:#FFFFFF;--arrow:#0B8F4F;--blend:multiply}
+.t-verde{--paper:#10C26B;--ink:#0A0F0D;--soft:#0B3B24;--acc:#0A0F0D;--mark:#FFFFFF;--mark-ink:#0A0F0D;--card:#FFFFFF;--arrow:#0A0F0D;--blend:multiply}
+.t-negro{--paper:#0A0F0D;--ink:#FFFFFF;--soft:#9FB0A8;--acc:#10C26B;--mark:#10C26B;--mark-ink:#0A0F0D;--card:#1C2622;--arrow:#10C26B;--blend:normal}
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{width:${FMT.w}px;height:${FMT.h}px;overflow:hidden}
-body{background:var(--paper);color:var(--ink);font-family:'DM Sans',system-ui,sans-serif}
-.slide{position:relative;width:100%;height:100%;padding:84px 84px 96px;display:flex;flex-direction:column}
-.slide:before{content:'';position:absolute;inset:0;opacity:.35;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .42 0 0 0 0 .36 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+body{margin:0;font-family:'DM Sans',system-ui,sans-serif}
+.slide{position:relative;width:100%;height:100%;padding:84px 84px 96px;display:flex;flex-direction:column;background:var(--paper);color:var(--ink);font-family:'DM Sans',system-ui,sans-serif}
+.slide:before{content:'';position:absolute;inset:0;opacity:.18;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .42 0 0 0 0 .36 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 .slide > *{position:relative}
 .main{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:safe center;padding-bottom:40px}
-.g{color:var(--acc);font-weight:inherit;background:none;padding:0;box-shadow:inset 0 -.14em 0 var(--acc-wash)}
+.g{color:var(--acc);font-weight:inherit;background:none;padding:0;box-shadow:inset 0 -.16em 0 var(--mark)}
+.t-verde .g{box-shadow:inset 0 -.34em 0 var(--mark)}
+.t-negro .g{box-shadow:none}
 .tag{align-self:flex-start;font-family:'DM Mono',monospace;font-size:21px;letter-spacing:1.5px;text-transform:uppercase;border:2px solid var(--ink);border-radius:8px;padding:8px 14px;margin-bottom:34px}
 .handle{position:absolute;left:84px;bottom:42px;font-family:'DM Mono',monospace;font-size:20px;color:var(--soft)}
-.next{position:absolute;right:84px;bottom:30px;display:flex;align-items:center;gap:10px;font-family:'Caveat',cursive;font-size:40px;color:var(--acc)}
-.next svg{width:90px;height:30px;fill:none;stroke:var(--acc);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.next{position:absolute;right:84px;bottom:30px;display:flex;align-items:center;gap:10px;font-family:'Caveat',cursive;font-size:40px;color:var(--arrow)}
+.next svg{width:90px;height:30px;fill:none;stroke:var(--arrow);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
 .t{font-family:'Bricolage',sans-serif;font-weight:750;font-size:92px;line-height:.98;letter-spacing:-2.5px;text-wrap:balance}
 .sub{font-family:'Caveat',cursive;font-size:48px;color:var(--soft);margin-top:14px}
 .caption{font-size:42px;line-height:1.3;text-align:center;color:var(--ink);max-width:880px;margin:0 auto;text-wrap:balance}
 .cta-btn{align-self:flex-start;margin-top:48px;background:var(--ink);color:var(--paper);border-radius:999px;padding:22px 40px;font-weight:800;font-size:32px;letter-spacing:.5px}
-.cta-btn .g{color:var(--acc-wash);box-shadow:none}
+.cta-btn .g{color:var(--mark);box-shadow:none}
+/* Letra de la marca ONIA (decisión de Sergio, 29-sep, vía la sesión de onia-platform):
+   Instrument Sans (titulares 500-600, tracking -2 %, nunca 700) + IBM Plex Mono (etiquetas, números). */
+.f-marca,.f-marca p,.f-marca .caption,.f-marca .sub2,.f-marca .under,.f-marca .logo figcaption{font-family:'Instrument Sans',sans-serif}
+.f-marca .t,.f-marca .word,.f-marca .c-ensayo h2,.f-marca .c-analogia h2,.f-marca .c-dato .big,.f-marca .c-cierre .kw,.f-marca .c-lista b,.f-marca .cta-btn{font-family:'Instrument Sans',sans-serif;font-weight:600;letter-spacing:-.02em}
+.f-marca .c-ensayo p{font-weight:500}
+.f-marca .tag,.f-marca .handle,.f-marca .next,.f-marca .sub,.f-marca .badge,.f-marca .c-cierre .pre,.f-marca .li-n{font-family:'IBM Plex Mono',monospace}
+.f-marca .next,.f-marca .sub{font-size:26px;letter-spacing:.02em}.f-marca .badge{font-size:26px;text-transform:uppercase}.f-marca .c-cierre .pre{font-size:34px;text-transform:uppercase;letter-spacing:.1em}.f-marca .li-n{font-size:30px}
 /* logos */
 .c-logos{display:flex;flex-direction:column;align-items:center;gap:64px}
 .word{font-family:'Bricolage',sans-serif;font-weight:800;font-size:150px;letter-spacing:.2em;margin-right:-.2em;text-transform:uppercase;text-align:center;line-height:1}
 .logo-row{display:flex;gap:44px;justify-content:center;flex-wrap:wrap}
 .logo{display:flex;flex-direction:column;align-items:center;gap:14px}
-.logo-img{width:200px;height:200px;object-fit:contain;padding:36px;background:oklch(99% 0.004 85);border-radius:46px;box-shadow:0 1px 0 oklch(90% 0.01 85),0 14px 30px oklch(40% 0.02 85 / .16)}
+.logo-img{width:200px;height:200px;object-fit:contain;padding:36px;background:#FFFFFF;border-radius:46px;box-shadow:0 1px 0 rgba(10,15,13,.08),0 14px 30px oklch(40% 0.02 85 / .16)}
 .logo figcaption{font-family:'Instrument Serif',Georgia,serif;font-size:40px}
 .under{font-size:42px;color:var(--soft);text-align:center;max-width:800px}
 /* analogia */
 .c-analogia{display:flex;flex-direction:column;justify-content:center;gap:40px}
 .c-analogia section{display:flex;flex-direction:column;align-items:center;gap:22px}
 .c-analogia h2{font-weight:800;font-size:54px;letter-spacing:-1px;text-align:center;line-height:1.05}
-.c-analogia .obj{width:100%;max-height:440px;object-fit:contain;mix-blend-mode:multiply}
+.c-analogia .obj{width:100%;max-height:440px;object-fit:contain;mix-blend-mode:var(--blend)}
 /* ensayo */
 .c-ensayo{display:flex;flex-direction:column;gap:36px;max-width:920px}
 .c-ensayo h2{font-family:'Bricolage',sans-serif;font-weight:800;font-size:104px;line-height:1;letter-spacing:-3px;margin-bottom:6px}
@@ -132,32 +149,37 @@ body{background:var(--paper);color:var(--ink);font-family:'DM Sans',system-ui,sa
 .c-ilustrado{flex:1;display:flex;flex-direction:column;min-height:0}
 .c-ilustrado .t{display:flex;flex-wrap:wrap;align-items:center;column-gap:.25em}
 .title-logo{height:.8em;width:auto}
-.badge{position:absolute;right:-6px;top:-40px;width:150px;height:150px;border-radius:50%;background:var(--acc);color:var(--paper);display:flex;align-items:center;justify-content:center;font-family:'Caveat',cursive;font-size:46px;transform:rotate(12deg)}
+.badge{position:absolute;right:-6px;top:-40px;width:150px;height:150px;border-radius:50%;background:var(--ink);color:var(--paper);display:flex;align-items:center;justify-content:center;font-family:'Caveat',cursive;font-size:46px;transform:rotate(12deg)}
 .art{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;margin:10px -84px}
-.art-img{width:100%;height:100%;object-fit:cover;mix-blend-mode:multiply;-webkit-mask-image:radial-gradient(ellipse 70% 68% at 50% 50%,#000 58%,transparent 100%);mask-image:radial-gradient(ellipse 70% 68% at 50% 50%,#000 58%,transparent 100%)}
+.art-img{width:100%;height:100%;object-fit:cover;mix-blend-mode:var(--blend);-webkit-mask-image:radial-gradient(ellipse 62% 58% at 50% 50%,#000 45%,transparent 78%);mask-image:radial-gradient(ellipse 62% 58% at 50% 50%,#000 45%,transparent 78%)}
+.t-blanco .art-img{filter:brightness(1.07) contrast(1.04)}
 /* lista */
 .c-lista{display:flex;flex-direction:column}
 .c-lista ul{list-style:none;display:flex;flex-direction:column;gap:28px;margin-top:56px}
-.c-lista li{display:flex;align-items:center;gap:32px;border:3px solid var(--ink);border-radius:26px;padding:34px 36px;background:oklch(99% 0.006 85)}
+.c-lista li{display:flex;align-items:center;gap:32px;border:3px solid var(--ink);border-radius:26px;padding:34px 36px;background:var(--card);color:#0A0F0D}
+.t-negro .c-lista li{color:#FFFFFF}
+.t-negro .c-lista li span{color:var(--soft)}
+.c-lista li span{color:#4F5A55}
 .li-icon{width:96px;height:96px;object-fit:contain;flex:none}
-.li-n{flex:none;width:84px;height:84px;border-radius:50%;background:var(--acc-wash);color:var(--acc);display:flex;align-items:center;justify-content:center;font-family:'Caveat',cursive;font-size:56px}
+.li-n{flex:none;width:84px;height:84px;border-radius:50%;background:var(--mark);color:var(--mark-ink);display:flex;align-items:center;justify-content:center;font-family:'Caveat',cursive;font-size:56px}
 .c-lista li div{display:flex;flex-direction:column;gap:4px}
 .c-lista b{font-size:50px;font-weight:800;letter-spacing:-.5px}
 .c-lista li span{font-size:40px;color:var(--soft)}
 /* dato */
 .c-dato .big{font-family:'Bricolage',sans-serif;font-weight:800;font-size:300px;line-height:.85;letter-spacing:-12px;color:var(--acc);margin-bottom:28px}
+.t-blanco .c-dato .big{color:#0A0F0D;text-shadow:12px 12px 0 var(--mark)}
 .sub2{font-size:44px;line-height:1.25;color:var(--soft);margin-top:22px;max-width:900px}
 /* captura */
 .c-captura{display:flex;flex-direction:column;gap:34px}
-.shot{border:3px solid var(--ink);border-radius:24px;overflow:hidden;background:oklch(99% 0.004 85);box-shadow:0 18px 40px oklch(40% 0.02 85 / .18)}
+.shot{border:3px solid var(--ink);border-radius:24px;overflow:hidden;background:#FFFFFF;box-shadow:0 18px 40px rgba(10,15,13,.18)}
 .shot-img{display:block;width:100%;max-height:760px;object-fit:contain}
 /* cierre */
 .c-cierre{display:flex;flex-direction:column;align-items:center;text-align:center}
 .c-cierre .pre{font-family:'Caveat',cursive;font-size:72px;color:var(--soft)}
-.c-cierre .kw{font-family:'Bricolage',sans-serif;font-weight:800;font-size:170px;letter-spacing:.06em;line-height:1;background:var(--ink);color:var(--paper);padding:26px 50px 34px;border-radius:28px;margin:10px 0 18px}
+.c-cierre .kw{font-family:'Bricolage',sans-serif;font-weight:800;font-size:170px;letter-spacing:.06em;line-height:1;background:var(--mark);color:var(--mark-ink);padding:26px 50px 34px;border-radius:28px;margin:10px 0 18px}
 .compacta ul{gap:18px;margin-top:40px}.compacta li{padding:20px 30px}.compacta b{font-size:42px}.compacta li span{font-size:34px}.compacta .li-n{width:68px;height:68px;font-size:46px}.compacta .li-icon{width:76px;height:76px}
 </style></head><body>
-<div class="slide l-${layout}">${tag}<main class="main">${render(slide)}${cta}</main><div class="handle">${esc(acc.handle)}</div>${next}</div>
+<div class="slide l-${layout} t-${theme}${fonts === 'marca' ? ' f-marca' : ''}">${tag}<main class="main">${render(slide)}${cta}</main><div class="handle">${esc(acc.handle)}</div>${next}</div>
 </body></html>`;
   };
 }

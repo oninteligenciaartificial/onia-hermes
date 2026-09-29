@@ -1,0 +1,30 @@
+{
+  "title": "Opciones de estilo de imagen (portada K1)",
+  "serie": "Claude 5.5",
+  "slides": [
+    {
+      "number": 1,
+      "layout": "ilustrado",
+      "badge": "guía",
+      "logo": "hermes-content/references/brand-claude/claude-color--light.png",
+      "headline": "Opus 5.5 o *Sonnet 5.5*",
+      "subtitle": "cuál usar, y cuánto te cuesta",
+      "image_prompt": "Two hot air balloons floating side by side over soft rolling hills, one clearly large and one clearly small, both rising at the same height.",
+      "next": "te explico",
+      "alt_text": "Opus 5.5 o Sonnet 5.5: cuál usar",
+      "image_style": "linea"
+    },
+    {
+      "number": 2,
+      "layout": "ilustrado",
+      "badge": "guía",
+      "logo": "hermes-content/references/brand-claude/claude-color--light.png",
+      "headline": "Opus 5.5 o *Sonnet 5.5*",
+      "subtitle": "cuál usar, y cuánto te cuesta",
+      "image_prompt": "Two hot air balloons floating side by side over soft rolling hills, one clearly large and one clearly small, both rising at the same height.",
+      "next": "te explico",
+      "alt_text": "Opus 5.5 o Sonnet 5.5: cuál usar",
+      "image_style": "clay"
+    }
+  ]
+}

@@ -96,5 +96,57 @@
     "consulta": "hourglass isolated white background",
     "usado_en": [],
     "tags": []
+  },
+  {
+    "id": "sergio-k1v3-opciones-estilo-20260929-s02-9e5df48d",
+    "file": "hermes-content/galeria/ilustraciones/sergio-k1v3-opciones-estilo-20260929-s02-9e5df48d.jpg",
+    "fecha": "2026-09-29",
+    "tipo": "ilustraciones",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "text2image_soul_v2",
+    "prompt": "Two hot air balloons floating side by side over soft rolling hills, one clearly large and one clearly small, both rising at the same height.",
+    "estilo": "clay",
+    "costo_cr": 0.12,
+    "job": "9e5df48d-6112-4fdb-ae9d-19a1b51800b2",
+    "usado_en": [
+      "sergio-k1v3-opciones-estilo-20260929"
+    ],
+    "tags": []
+  },
+  {
+    "id": "sergio-k1v3-clay-s05-20260929-s05-643b0775",
+    "file": "hermes-content/galeria/ilustraciones/sergio-k1v3-clay-s05-20260929-s05-643b0775.jpg",
+    "fecha": "2026-09-29",
+    "tipo": "ilustraciones",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "text2image_soul_v2",
+    "prompt": "Two paper airplanes of different sizes, one emerald green and one black, both landing exactly on the center of one small round white target.",
+    "estilo": "clay",
+    "costo_cr": 0.12,
+    "job": "643b0775-68b5-4b44-a1cb-063a8df7e1d4",
+    "usado_en": [
+      "sergio-k1v3-clay-s05-20260929"
+    ],
+    "tags": []
+  },
+  {
+    "id": "sergio-k1v3-opus-o-sonnet-20260929-s01-e449334a-recorte",
+    "file": "hermes-content/galeria/ilustraciones/sergio-k1v3-opus-o-sonnet-20260929-s01-e449334a-recorte.jpg",
+    "fecha": "2026-09-29",
+    "tipo": "ilustraciones",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "text2image_soul_v2",
+    "prompt": "Two hot air balloons floating side by side over soft rolling hills, one clearly large and one clearly small, both rising at the same height.",
+    "estilo": "acuarela",
+    "costo_cr": 0.12,
+    "job": "e449334a-27b8-4459-93cc-b8b85416544c",
+    "usado_en": [
+      "sergio-k1v3-opus-o-sonnet-20260929"
+    ],
+    "tags": [],
+    "nota": "recorte que quita una firma inventada por el modelo (esquina inferior derecha)"
   }
 ]

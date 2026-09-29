@@ -106,6 +106,8 @@ test('referentes: cada layout renderiza y uno desconocido falla claro', () => {
     assert.ok(html.includes('</html>') && html.includes(`l-${layout}`), layout);
   }
   assert.throws(() => referentesHtml({ layout: 'nope' }, 0, 1, 'sergio', {}), /layout desconocido/);
+  for (const theme of ['blanco', 'verde', 'negro']) assert.ok(referentesHtml({ layout: 'ensayo', body: 'b' }, 0, 1, 'sergio', { theme }).includes(`t-${theme}`), theme);
+  assert.throws(() => referentesHtml({ layout: 'ensayo', theme: 'rosa' }, 0, 1, 'sergio', {}), /theme desconocido/);
 });
 test('community-editorial usa la cuenta elegida y CTA directo para pauta', () => {
   const html = communityEditorialHtml({

@@ -6,8 +6,8 @@
 
 - **Diseño en un solo lugar:** skill `.claude/skills/diseno-contenido-onia/` (índice: fuentes de
   imagen, packs, patrones, QA, gasto) + galería única `hermes-content/galeria/` con
-  `galeria.json`. Orden de imágenes: galería → **Pexels/Unsplash** (Sergio dijo «Pixel»; se
-  interpretó Pexels — confirmar) → Higgsfield → logo oficial. Google/Pinterest: no se publica
+  `galeria.json`. Orden de imágenes: galería → **Higgsfield** (Sergio dicta «Pixel» = Higgsfield, confirmado
+  29-sep) → logo oficial → captura real. Paleta: verde ONIA + blanco + negro (temas del pack). Google/Pinterest: no se publica
   nada sin licencia.
 - **Pack nuevo `referentes`** (`scripts/carousel_pack_referentes.js`, layouts logos · analogia ·
   ensayo · ilustrado · lista) tras la crítica «vacíos y con demasiado texto». Prototipos mirados:
@@ -22,7 +22,7 @@
   SIAT, sales-kit y la web pública (árbol `onia-hermes-v1-remoto-20260928`); esta sesión, del
   contenido de onia-hermes. Acordado 29-sep: nadie arma lugares paralelos; se avisa antes de
   tocar `.claude/skills/` o `hermes-content/references/`.
-- Gasto Higgsfield del día: 0,84 cr (bitácora al día).
+- Gasto Higgsfield del día: ver bitácora. El audio del bot NO es de este carril (Sergio: «tú no tocas eso»).
 
 ## ⏩ Estado 29-sep (mañana)
 
