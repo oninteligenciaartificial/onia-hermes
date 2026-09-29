@@ -19,3 +19,6 @@ las de siempre (precios en `onia-platform/lib/subscription-plans.ts` y `lib/pric
 | `PROPUESTA_PAQUETE_UNICO.md`, `PAQUETE_LLM_CONCLUSION.md`, `PRECIO_Y_MODELO.md` | paquete único y modelo de IA (propuestas; importes sin aprobar) |
 | `FRENTES_DE_APOYO.md` | calendario, homelab, Codex Cloud, Paperclip, ahorro de tokens |
 | `SIAT_BITACORA_FASE1.md` | bitácora de la corrida de la Fase 1 del SIAT (sin credenciales) |
+| `INVENTARIO_POR_RUBRO.md` | cada módulo, botón y clic por rubro, con nivel de evidencia; qué modelo de IA usa cada parte |
+| `ADMINISTRAR_PARA_VENDER.md` | recorrido del cliente, tablero diario de Sergio y checklist de lanzamiento |
+| `CAMPANA_META_ADS.md` | plan de campaña para aprobar (nada creado ni gastado) |
