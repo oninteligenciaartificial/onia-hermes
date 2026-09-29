@@ -76,3 +76,7 @@ hermes-content/docs/recorrido/**/*.png
 # que el que la abre la lee como presente. Cero `.md` ocultos legitimos en el
 # repo el dia que se escribio esto (`git ls-files | grep -E '(^|/)\.[^/]+\.md$'`).
 .*.md
+
+# Galeria unica de imagenes (29-sep): solo finales. Temporales de descarga y copias por carrusel, fuera.
+hermes-content/galeria/**/*.tmp
+hermes-content/carousels/out/*/assets/

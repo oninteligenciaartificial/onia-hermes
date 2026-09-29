@@ -119,11 +119,11 @@ estaban del 28-sep; 54 son nuevos o reescritos.
 | Pieza | Qué falta |
 |---|---|
 | D05-B Slides gratis | Hacer la demo en una cuenta Free. Si no sale, no se publica |
-| D04-B /skill-doctor | Recontar las skills (el «196» es del router) y mirar la pantalla real de `/skills` |
+| D04-B /skill-doctor | Contadas el 29-sep: 215 skills globales. Recontar el día de grabar y mirar la pantalla real de `/skills` |
 | D08-B n8n 2.40 | ONIA corre n8n 2.35.3: la opción nueva se muestra desde la doc, no desde nuestro n8n |
 | D09-B voz con Gemini | Grabar la prueba en AI Studio antes; ONIA no tiene voz construida |
-| D11-B audios del bot | Confirmar que el camino del audio está vivo hoy |
-| D14-B borrador 480p | Confirmar que existe en la CLI de Higgsfield; no se promete ahorro |
+| D11-B audios del bot | Los logs del bot no muestran ningún audio en 10 días: mandale un audio de prueba desde el WhatsApp de Onia antes de grabar |
+| D14-B borrador 480p | ✅ Resuelto 29-sep: existe (`--draft true`), cotizado 15 cr contra 60 en 1080p |
 | D15-B GPT Image 2.5 | Hacer la prueba de foto de producto antes de grabar |
 | D16-C costos | Recotizar con `higgsfield generate cost` el día de grabar |
 | D19-B contraste | El README de la web dice 1,7:1; recalculado sobre el fondo real da 2,2:1 (el guion usa 2,2) |

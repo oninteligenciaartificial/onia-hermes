@@ -18,13 +18,26 @@ import fs from 'node:fs';
 import path from 'node:path';
 import assert from 'node:assert';
 import { parseArgs } from 'node:util';
+import { fileURLToPath } from 'node:url';
 
 // Never name the destination ("Instagram", "carousel") nor a place, and never pick objects
 // that carry print (mugs, notebooks, screens): Soul 2.0 then invents captions and labels, and
 // a long "no text, no letters" list does not stop it (both seen 29-sep). Describe positively.
-const STYLE = 'Editorial still-life photograph, 35mm lens, warm natural window light, ' +
-  'ivory and charcoal tones with one small muted deep-green detail, shallow depth of field, real materials. ';
-const NO_TEXT = ' Minimal composition of plain natural materials, completely unbranded, calm empty surroundings.';
+// One block per look. `foto` = cover photo (community-editorial); `acuarela` = Santiago-like
+// illustration for pack referentes; `objeto` = Bastian-like product shot on white.
+const GALERIA_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const STYLES = {
+  foto: { dir: 'fotos', aspect: '3:4', pre: 'Editorial still-life photograph, 35mm lens, warm natural window light, ' +
+    'ivory and charcoal tones with one small muted deep-green detail, shallow depth of field, real materials. ',
+    post: ' Minimal composition of plain natural materials, completely unbranded, calm empty surroundings.' },
+  acuarela: { dir: 'ilustraciones', aspect: '4:3', pre: 'Hand-drawn watercolor and ink illustration on warm cream paper, loose confident pencil ' +
+    'lines, soft washes of deep green, warm orange and navy, a few doodled arrows and small sparkles around, ' +
+    'charming and simple, one clear subject centered with generous empty paper around it. ',
+    post: ' Pure drawing, completely unbranded, nothing printed or written anywhere, plain cream paper background.' },
+  objeto: { dir: 'objetos', aspect: '16:9', pre: 'Clean commercial product photograph on a seamless pure white background, soft ' +
+    'studio light, gentle realistic shadows, objects arranged in a neat horizontal row, sharp focus. ',
+    post: ' Plain unbranded objects, nothing printed on them, empty white background.' },
+};
 
 const sq = (s) => `'${String(s).replace(/'/g, `'\\''`)}'`;
 const parseCost = (out) => Number((out.match(/([\d.]+)\s*credits?/i) || [])[1]);
@@ -45,35 +58,55 @@ function main() {
   if (a.selftest) return selftest();
   const brief = JSON.parse(fs.readFileSync(a.brief, 'utf8'));
   const model = a.model || 'text2image_soul_v2';
-  const assets = path.join(a.out, 'assets');
-  fs.mkdirSync(assets, { recursive: true });
+  fs.mkdirSync(a.out, { recursive: true });
   const todo = brief.slides.filter((s) => s.image_prompt);
-  const manifest = [];
+  const slug = path.basename(a.out);
   let total = 0;
   for (const s of todo) {
-    const prompt = STYLE + s.image_prompt + NO_TEXT;
-    const params = ['--prompt', prompt, '--aspect_ratio', '3:4', '--quality', '2k'];
+    const styleName = s.image_style || brief.image_style || 'foto';
+    const st = STYLES[styleName];
+    if (!st) throw new Error(`image_style desconocido: ${styleName}`);
+    const prompt = st.pre + s.image_prompt + st.post;
+    const params = ['--prompt', prompt, '--aspect_ratio', st.aspect, '--quality', '2k'];
     const cost = parseCost(hf(['generate', 'cost', model, ...params]));
     total += cost;
-    const entry = { slide: s.number, model, prompt, cost };
+    let file = '';
     if (a.yes) {
       const res = JSON.parse(hf(['generate', 'create', model, ...params, '--wait', '--json']));
       const job = Array.isArray(res) ? res[0] : res;
       const url = job.result_url || (job.results && job.results[0] && job.results[0].url);
       if (!url) throw new Error(`slide ${s.number}: no result_url in ${JSON.stringify(job).slice(0, 300)}`);
-      const file = path.join(assets, `slide-${String(s.number).padStart(2, '0')}.png`);
-      execFileSync('curl', ['-sfL', '-o', file, url]); // images are >1 MB: never through stdout
-      s.bg = path.relative(process.cwd(), file).replace(/\\/g, '/');
-      Object.assign(entry, { job: job.id, url, file: s.bg });
+      file = saveToGallery({ url, dir: st.dir, name: `${slug}-s${String(s.number).padStart(2, '0')}-${String(job.id).slice(0, 8)}`,
+        entry: { tipo: st.dir, fuente: 'higgsfield', licencia: 'generada (plan Higgsfield)', modelo: model, prompt: s.image_prompt,
+          estilo: styleName, costo_cr: cost, job: job.id, usado_en: [slug], tags: s.tags || [] } });
+      // pack referentes reads slide.image; community-editorial reads slide.bg
+      s[s.layout ? 'image' : 'bg'] = file;
     }
-    manifest.push(entry);
-    console.log(`slide ${s.number}: ${cost} cr${entry.file ? ' -> ' + entry.file : ''}`);
+    console.log(`slide ${s.number}: ${cost} cr${file ? ' -> ' + file : ''}`);
   }
   console.log(`TOTAL ${todo.length} images, ${total.toFixed(2)} credits${a.yes ? ' (generated)' : ' (quote only, add --yes)'}`);
-  if (a.yes) {
-    fs.writeFileSync(path.join(a.out, 'brief.json'), JSON.stringify(brief, null, 2));
-    fs.writeFileSync(path.join(assets, 'manifest.json'), JSON.stringify({ date: new Date().toISOString(), total, manifest }, null, 2));
+  if (a.yes) fs.writeFileSync(path.join(a.out, 'brief.json'), JSON.stringify(brief, null, 2));
+}
+
+// Every generated image lands in the ONE reusable gallery (hermes-content/galeria), as a
+// JPEG (a 2k PNG from Higgsfield weighs ~5 MB) and with a manifest row: source, license,
+// prompt, cost. Before generating something new, search galeria.json.
+export function saveToGallery({ url, src, dir, name, entry }) {
+  const rel = `hermes-content/galeria/${dir}/${name}.jpg`;
+  const abs = path.join(GALERIA_ROOT, rel);
+  fs.mkdirSync(path.dirname(abs), { recursive: true });
+  let input = src;
+  if (url) {
+    input = abs.replace(/\.jpg$/, '.tmp');
+    execFileSync('curl', ['-sfL', '-o', input, url]); // images are >1 MB: never through stdout
   }
+  execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-i', input, '-vf', "scale='min(2048,iw)':-2", '-q:v', '3', abs]);
+  if (url) fs.rmSync(input);
+  const mf = path.join(GALERIA_ROOT, 'hermes-content/galeria/galeria.json');
+  const rows = fs.existsSync(mf) ? JSON.parse(fs.readFileSync(mf, 'utf8')) : [];
+  rows.push({ id: name, file: rel, fecha: new Date().toISOString().slice(0, 10), ...entry });
+  fs.writeFileSync(mf, `${JSON.stringify(rows, null, 2)}\n`);
+  return rel;
 }
 
 function selftest() {
@@ -83,4 +116,4 @@ function selftest() {
   console.log('selftest ok');
 }
 
-main();
+if (process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.argv[1])) main();

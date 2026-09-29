@@ -1,5 +1,9 @@
 # Skill: carruseles-onia
 
+> **29-sep-2026: el índice de diseño es la skill `.claude/skills/diseno-contenido-onia/`** (fuentes de
+> imagen, galería única, pack `referentes`, patrones de referentes). Esta página conserva el
+> detalle del pipeline y las reglas de aprobación/publicación.
+
 ## Cuando usar
 Cuando Sergio pida crear, renderizar o publicar un carrusel de Instagram para
 ONIA. Cubre desde la idea hasta el PNG final y la publicacion aprobada.

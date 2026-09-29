@@ -293,7 +293,7 @@ La guía está en mi web, en la sección de Claude Code.
 **Evidencia:** https://code.claude.com/docs/en/whats-new/2026-w36 (`/skill-doctor`, semana 31-ago a 4-sep, v2.1.252+) · https://code.claude.com/docs/en/skills («Find unused skills»; `skillOverrides` on / name-only / user-invocable-only / off; el listado usa el 1 % del contexto y, si no entra, borra descripciones de las menos usadas; `/doctor` estima su costo) · `.claude/skills/onia-router/SKILL.md` (196 skills globales + 9 plugins). Recontar con `/skill-doctor` el día de grabar: si cambió, se dice el número de pantalla.
 
 Cada skill instalada en Claude Code te cobra contexto en cada mensaje, la uses o no. Yo tengo
-ciento noventa y seis.
+doscientas quince.
 
 Desde principios de septiembre hay un comando para medirlo: barra skill guion doctor. Te muestra
 cuánto cuesta cada skill y cuántas veces se usó.

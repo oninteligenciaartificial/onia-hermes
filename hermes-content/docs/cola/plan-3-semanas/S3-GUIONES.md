@@ -34,7 +34,7 @@ Comentá CORTES y te paso el pedido completo.
 
 ### D14-B · Vertical · Borrador en 480p antes de pagar el render
 **Fórmula:** F2 Noticia → qué cambia para vos → probalo así · **Pilar:** 4 Contenido con IA · **Destino:** comunidad de WhatsApp
-**Evidencia:** https://higgsfield.ai/creator-hub/changelog (22-sep-2026, Seedance 2.5 Draft Mode; no dice cuánto ahorra) · `CLAUDE.md` «Higgsfield — superficie, identidad y gasto» · pantalla: drop D2
+**Evidencia:** https://higgsfield.ai/creator-hub/changelog (22-sep-2026, Seedance 2.5 Draft Mode; no dice cuánto ahorra) · cotizado por CLI el 29-sep: `higgsfield generate cost seedance_2_5 --draft true --resolution 480p` = 15 cr; 720p = 35; 1080p = 60 (5 s; parámetros `draft`/`draft_job_id` en `model get`). Recotizar el día de grabar · `CLAUDE.md` «Higgsfield — superficie, identidad y gasto» · pantalla: drop D2
 
 Desde el veintidós de septiembre, Higgsfield tiene modo borrador para Seedance dos coma cinco. Generás en cuatrocientos ochenta, elegís la toma que sirve, y recién esa la hacés en mil ochenta.
 
@@ -42,7 +42,7 @@ Qué cambia: antes pagabas el render final para descubrir que la toma no servía
 
 Pero la propia nota de Higgsfield trae la condición: el final repite el prompt, las referencias, la semilla, el formato y la duración del borrador. Si cambiás uno, ya no es la misma toma. Así que anotá la semilla de cada borrador que te guste.
 
-Y otra cosa: el anuncio no dice cuánto ahorra. Mirá el costo de los dos antes de apretar. Si usás la CLI, higgsfield generate cost te da el precio sin gastar nada.
+¿Cuánto ahorra? El anuncio no lo dice, así que lo coticé con la CLI, que no cobra por cotizar: cinco segundos en borrador, quince créditos. En mil ochenta, sesenta. El borrador cuesta la cuarta parte. El comando es higgsfield generate cost, y lo ves en pantalla.
 
 Cómo sabés que te salió bien: el final se parece al borrador que elegiste. Si no se parece, cambiaste algo.
 

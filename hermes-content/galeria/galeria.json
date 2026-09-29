@@ -1,0 +1,100 @@
+[
+  {
+    "id": "sergio-k1-opus-o-sonnet-20260929-s01",
+    "file": "hermes-content/galeria/fotos/sergio-k1-opus-o-sonnet-20260929-s01.jpg",
+    "fecha": "2026-09-29",
+    "tipo": "fotos",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "text2image_soul_v2",
+    "prompt": "Two smooth river stones of clearly different size resting side by side on a dark walnut table, soft morning window light from the left.",
+    "estilo": "foto",
+    "costo_cr": 0.12,
+    "job": "1a99e659-ea36-4d73-aacb-fe14a70a0b81",
+    "usado_en": [
+      "sergio-k1-opus-o-sonnet-20260929"
+    ],
+    "tags": []
+  },
+  {
+    "id": "sergio-k2-primera-skill-20260929-s01",
+    "file": "hermes-content/galeria/fotos/sergio-k2-primera-skill-20260929-s01.jpg",
+    "fecha": "2026-09-29",
+    "tipo": "fotos",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "text2image_soul_v2",
+    "prompt": "A single small green seedling sprouting from dark soil in a plain terracotta pot on a light oak table, soft side light.",
+    "estilo": "foto",
+    "costo_cr": 0.12,
+    "job": "caf95899-d2f4-4239-91bc-33576261e81a",
+    "usado_en": [
+      "sergio-k2-primera-skill-20260929"
+    ],
+    "tags": []
+  },
+  {
+    "id": "sergio-k3-claude-md-historia-20260929-s01",
+    "file": "hermes-content/galeria/fotos/sergio-k3-claude-md-historia-20260929-s01.jpg",
+    "fecha": "2026-09-29",
+    "tipo": "fotos",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "text2image_soul_v2",
+    "prompt": "A single small yellow feather resting on a dark slate surface, soft window light, fine texture detail.",
+    "estilo": "foto",
+    "costo_cr": 0.12,
+    "job": "7f12cb7a-7644-42ce-a5c6-5f131a655561",
+    "usado_en": [
+      "sergio-k3-claude-md-historia-20260929"
+    ],
+    "tags": []
+  },
+  {
+    "id": "sergio-k1v2-opus-o-sonnet-20260929-s01",
+    "file": "hermes-content/galeria/ilustraciones/sergio-k1v2-opus-o-sonnet-20260929-s01.jpg",
+    "fecha": "2026-09-29",
+    "tipo": "ilustraciones",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "text2image_soul_v2",
+    "prompt": "Two hot air balloons floating side by side over soft rolling hills, one clearly large and one clearly small, both rising at the same height.",
+    "estilo": "acuarela",
+    "costo_cr": 0.12,
+    "job": "1c17e88f-d9fc-4374-8a01-218a0a87cc29",
+    "usado_en": [
+      "sergio-k1v2-opus-o-sonnet-20260929"
+    ],
+    "tags": []
+  },
+  {
+    "id": "sergio-k1v2-opus-o-sonnet-20260929-s05",
+    "file": "hermes-content/galeria/ilustraciones/sergio-k1v2-opus-o-sonnet-20260929-s05.jpg",
+    "fecha": "2026-09-29",
+    "tipo": "ilustraciones",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "text2image_soul_v2",
+    "prompt": "Two paper airplanes of different sizes both landing exactly on the center of one small round target drawn on the paper.",
+    "estilo": "acuarela",
+    "costo_cr": 0.12,
+    "job": "8d4cb4e2-01ce-47e1-837e-b59a4ee1e391",
+    "usado_en": [
+      "sergio-k1v2-opus-o-sonnet-20260929"
+    ],
+    "tags": []
+  },
+  {
+    "id": "reloj-arena",
+    "file": "hermes-content/galeria/objetos/reloj-arena-crudo.jpg",
+    "fecha": "2026-09-29",
+    "tipo": "objetos",
+    "fuente": "pexels",
+    "licencia": "Pexels License",
+    "autor": "Aziz Hasan AY",
+    "origen": "https://www.pexels.com/photo/hourglass-on-white-background-15556380/",
+    "consulta": "hourglass isolated white background",
+    "usado_en": [],
+    "tags": []
+  }
+]
