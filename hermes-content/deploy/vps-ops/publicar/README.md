@@ -27,7 +27,10 @@ publiques, hagas el yap y los publiques a trial o donde haga falta»*.
 ```bash
 # en la PC: copiar la pieza al VPS
 scp -i ~/.ssh/onia_hermes_vps_ed25519 final.mp4 caption.txt root@187.77.16.63:/root/publicar/<pieza>/
-# en el VPS: ensayo (Instagram lo procesa, NO publica)
+# TikTok / Shorts / LinkedIn por Buffer: ver canales, ensayar y publicar
+node /root/bin/buffer-post.mjs --listar
+node /root/bin/buffer-post.mjs --canal <id> --video ... --texto caption.txt --cuando 2026-10-01T16:30:00Z [--publicar]
+# en el VPS: ensayo de Instagram (lo procesa, NO publica)
 node /root/bin/ig-reel.mjs --cuenta sergio --video /root/publicar/<pieza>/final.mp4 --caption /root/publicar/<pieza>/caption.txt
 # con el OK de Sergio sobre esa pieza
 node /root/bin/ig-reel.mjs ... --publicar                 # reel normal
@@ -67,6 +70,7 @@ Análisis con fuentes primarias (29-sep): [`REDES-ANALISIS.md`](REDES-ANALISIS.m
 |---|---|---|
 | Instagram `@sergiourcullo` / `@oniahq` (reel + trial) | ✅ API propia (`ig-reel.mjs`) | nada |
 | Facebook (perfil y Página) | compartido automático desde el Centro de cuentas de Instagram | Sergio lo activa (1 min); se verifica con el primer reel publicado por API |
-| TikTok · YouTube (Shorts y largos) · LinkedIn | **Metricool** (herramienta ya auditada) publicado por su MCP | Sergio crea la cuenta gratis y conecta sus redes; se aprueba instalar el conector; se prueba gratis y, si publica video, plan Starter (US$25/mes) |
-| Sin Metricool (gratis, manual) | TikTok en borrador (máx. 5/día, tocás publicar) · YouTube lo subís vos | app de desarrollador TikTok + tu tiempo diario |
+| TikTok · YouTube **Shorts** · LinkedIn perfil | **Buffer GRATIS** (auditado; 3 canales, 10 en cola por canal, API con 3.000 consultas/mes) con `buffer-post.mjs` | Sergio crea la cuenta gratis, conecta los 3 canales (TikTok tiene que ser **cuenta de empresa**) y deja `BUFFER_API_KEY=` en `C:\Users\PC\.env`; Claude la pasa al VPS |
+| YouTube **largos** (lun · mié · vie) | Buffer no los sube: por ahora los subís vos con el paquete listo (archivo, título, descripción con capítulos, miniatura); en paralelo se pide la **auditoría de la API de YouTube** (gratis) para que `yt-video.mjs` publique solo | 3 min por video; el formulario lo preparo yo y lo enviás vos |
+| Descartadas | Metricool (pago; Sergio pidió gratis) · Upload-Post (gratis sin TikTok ni API) · Ayrshare (sin plan gratis) · Postiz propio (mismo bloqueo: TikTok y YouTube quedan privados) | — |
 
