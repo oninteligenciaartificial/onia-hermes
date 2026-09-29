@@ -8,8 +8,8 @@
 ## Las 3 capas de "skills" en Onia (no confundir)
 
 1. **Skills de Claude Code** (`.claude/skills/`) — las que Claude Code auto-descubre e
-   invoca al trabajar en el repo. Incluyen las **propias de Onia** (abajo) + las 215
-   globales del usuario + plugins.
+   invoca al trabajar en el repo. Incluyen las **propias de Onia** (abajo) + las 91
+   globales del usuario (124 sin uso archivadas el 2026-09-29) + plugins.
 2. **Subagentes** (`.claude/agents/`) — queda 1 agente Onia: `onia-crm-prospeccion`.
    Los otros 8 se borraron el 2026-09-29 por 0 uso en 30 días
    (`historial/LIMPIEZA_SKILLS_20260929.md`).

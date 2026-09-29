@@ -53,18 +53,32 @@
 - `ugc-empresas-higgsfield`: CLAUDE.md la cita como detalle operativo.
 - Agente `onia-crm-prospeccion`: la etapa vigente es vender; la auditoría de agentes lo conservó.
 
+## Globales (`~/.claude/skills`, fuera del repo) — segunda pasada, mismo día
+Sergio Urcullo: *"borra las que no usamos"*. De 215 globales, 28 tuvieron uso en 30 días.
+De las 187 restantes:
+- **Se quedan 63:** las 14 HyperFrames (el repo depende de la copia global desde esta
+  limpieza), 48 que nombran los stacks curados (tabla de carriles del router, `onia-chatbot`,
+  `onia-web-factory`, `ONIA_SKILLS_STACK_Y_SUBAGENTES.md`, CLAUDE.md de onia-platform y el
+  global) y `design-system` (`design` y `slides` corren sus scripts).
+- **Se archivaron 124** en `~/.claude/skills-archivadas-20260929/` (no se borraron: ahí están,
+  fuera de lo que Claude y Codex cargan; `~/.agents/skills` es un enlace a la misma carpeta).
+  `~/.agents/.skill-lock.json` bajó de 88 a 38 entradas (respaldo en `_skill-lock.backup.json`)
+  para que `npx skills update` no las reinstale. `STACK-POR-DOMINIO.md` se podó igual.
+- Archivadas: `_gstack-command` · `ab-testing` · `ai-first-engineering` · `ai-seo` · `analytics` · `architecture-decision-records` · `aso` · `autonomous-loops` · `autoplan` · `benchmark` · `blueprint` · `browse` · `careful` · `caveman-commit` · `caveman-help` · `caveman-review` · `churn-prevention` · `claude-devfleet` · `click-path-audit` · `co-marketing` · `codebase-onboarding` · `codex` · `cold-email` · `community-marketing` · `competitors` · `compress` · `configure-ecc` · `context-restore` · `context-save` · `continuous-agent-loop` · `copy-editing` · `cro` · `cso` · `customer-research` · `data-scraper-agent` · `deploy-to-vercel` · `design-consultation` · `design-html` · `design-shotgun` · `devex-review` · `directory-submissions` · `document-release` · `emails` · `enhance-prompt` · `find-skills` · `free-tools` · `freeze` · `full-output-enforcement` · `gpt-taste` · `gstack-upgrade` · `guard` · `image` · `imagegen-frontend-mobile` · `ios-clean` · `ios-design-review` · `ios-fix` · `ios-qa` · `ios-sync` · `launch` · `learn` · `learned` · `marketing-council` · `marketing-ideas` · `marketing-loops` · `marketing-plan` · `marketing-psychology` · `mcp-server-patterns` · `mem-search` · `n8n-code-python` · `offers` · `open-gstack-browser` · `pair-agent` · `paywalls` · `plan-ceo-review` · `plan-design-review` · `plan-devex-review` · `plan-eng-review` · `plan-tune` · `popups` · `product-marketing` · `programmatic-seo` · `prospecting` · `public-relations` · `qa-only` · `referrals` · `remotion` · `remotion-video-creation` · `retro` · `review` · `revops` · `rules-distill` · `sales-enablement` · `schema` · `scrape` · `seo-audit` · `setup-browser-cookies` · `setup-deploy` · `setup-gbrain` · `ship` · `signup` · `site-architecture` · `skill-comply` · `skill-stocktake` · `skillify` · `sms` · `stitch-code-to-design` · `stitch-design-taste` · `stitch-extract-design-md` · `stitch-extract-static-html` · `stitch-generate-design` · `stitch-loop` · `stitch-manage-design-system` · `stitch-upload-to-stitch` · `sync-gbrain` · `unfreeze` · `vercel-cli-with-tokens` · `vercel-composition-patterns` · `vercel-optimize` · `vercel-react-best-practices` · `vercel-react-native-skills` · `vercel-react-view-transitions` · `version-bump` · `video` · `web-design-guidelines`.
+
 ## Cómo recuperar algo
 ```bash
 git checkout 9622ae6a -- <ruta>          # cualquier archivo borrado acá
 npx hyperframes skills update <nombre>   # un flujo de HyperFrames
 npx skills add heygen-com/hyperframes --skill <nombre>   # las internas de HeyGen
+mv ~/.claude/skills-archivadas-20260929/<nombre> ~/.claude/skills/   # una global archivada
 ```
 
 ## Quedó pendiente (fuera de esta limpieza)
-- **187 skills globales sin uso** en `~/.claude/skills` (de 215). Las ve toda sesión en todos
-  los proyectos. Propuesta: moverlas a `~/.claude/skills-archivadas/` (reversible). Decide Sergio Urcullo.
+- Si gstack se actualiza (`gstack-upgrade`) puede volver a crear sus sub-skills archivadas.
+- No se analizaron `~/.codex/skills` (62) ni los agentes globales de `~/.claude/agents/`.
 - El bot conserva en `/root/.hermes/skills/` las 10 docs borradas del repo (el instalador del VPS
-  solo agrega, no borra). Limpiar allá es trabajo de infra.
+  solo agrega, no borra). **Sergio Urcullo decidió dejar esa copia.**
 - `scripts/genera-propuesta.js` y `scripts/webhook-propuestas.js`: generador viejo de propuestas,
   paralelo al oficial.
 - Docs narrativos que todavía citan agentes borrados (`ONIA_SYSTEM_TASKBOARD_2026.md`,
