@@ -1,0 +1,9 @@
+{
+  "name": "yt-10-opus-sonnet",
+  "private": true,
+  "scripts": {
+    "dev": "hyperframes present .",
+    "lint": "hyperframes lint .",
+    "check": "hyperframes check . --snapshots"
+  }
+}

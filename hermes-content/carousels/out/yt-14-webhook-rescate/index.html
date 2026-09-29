@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>El mensaje que se perdía: webhook caído, rescate y firma</title>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <style>
+    :root { --paper:#f4f0e8; --ink:#1d1d1f; --muted:#716d65; --accent:#c76549; --line:#d8d1c4; --dark:#20201f; }
+    * { box-sizing:border-box; }
+    html, body { margin:0; min-height:100%; background:#171716; color:var(--ink); font-family:Inter, Arial, system-ui, sans-serif; }
+    body { overflow:auto; }
+    .scene { position:absolute; inset:0; width:1920px; height:1080px; overflow:hidden; background:var(--paper); opacity:0; visibility:hidden; pointer-events:none; }
+    .frame { position:absolute; inset:0; overflow:hidden; padding:62px 76px 54px; }
+    .grain { position:absolute; inset:0; pointer-events:none; opacity:.22; background-image:radial-gradient(rgba(29,29,31,.15) .7px, transparent .7px); background-size:8px 8px; mask-image:linear-gradient(to bottom, black, transparent 85%); }
+    .topline, .footer { position:relative; z-index:2; display:flex; justify-content:space-between; align-items:center; font-size:24px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); }
+    .topline { padding-bottom:22px; border-bottom:2px solid var(--line); }
+    .footer { position:absolute; left:76px; right:420px; bottom:31px; font-size:20px; text-transform:none; }
+    .content { position:relative; z-index:2; height:850px; display:grid; grid-template-columns:minmax(0,1.08fr) minmax(620px,.92fr); gap:68px; align-items:center; }
+    .copy { align-self:center; }
+    .eyebrow { margin:0 0 24px; color:var(--accent); font-weight:800; font-size:28px; letter-spacing:.12em; text-transform:uppercase; }
+    h1 { margin:0; max-width:1040px; font-size:78px; line-height:1.02; letter-spacing:-.045em; font-weight:760; text-wrap:balance; }
+    .body { margin:36px 0 0; max-width:900px; font-size:40px; line-height:1.28; color:#4e4a44; text-wrap:pretty; }
+    .visual { min-width:0; display:flex; align-items:center; justify-content:center; }
+    .flow { display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:18px; }
+    .flow-node { padding:24px 26px; border:3px solid var(--ink); border-radius:22px; background:#fffdf8; font-size:34px; font-weight:750; box-shadow:8px 8px 0 var(--accent); }
+    .arrow { font-size:52px; color:var(--accent); font-weight:800; }
+    .cards { width:100%; display:grid; gap:20px; }
+    .card { padding:28px 32px; border:2px solid var(--line); border-radius:24px; background:#fffdf8; }
+    .card strong { display:block; margin-bottom:10px; color:var(--accent); font-size:30px; letter-spacing:.08em; }
+    .card span { font-size:38px; line-height:1.2; }
+    .code, .terminal { width:100%; margin:0; border-radius:26px; background:var(--dark); color:#f9f5ec; box-shadow:18px 18px 0 rgba(217,119,87,.30); overflow:hidden; }
+    .code { padding:38px 42px; font:40px/1.34 ui-monospace, SFMono-Regular, Consolas, monospace; white-space:pre-wrap; }
+    .code.compact { padding:30px 34px; font-size:31px; line-height:1.28; }
+    .terminal-top { display:flex; align-items:center; gap:12px; height:62px; padding:0 26px; background:#2c2c2a; color:#aaa59d; font-size:24px; }
+    .terminal-top i { width:16px; height:16px; border-radius:50%; background:var(--accent); }
+    .terminal-top i:nth-child(2) { background:#d7b35f; }
+    .terminal-top i:nth-child(3) { background:#7fb27a; }
+    .terminal-top span { margin-left:auto; }
+    .terminal pre { margin:0; padding:30px 36px 38px; font:34px/1.5 ui-monospace, SFMono-Regular, Consolas, monospace; white-space:pre-wrap; }
+    .compare { width:100%; display:grid; grid-template-columns:1fr 1fr; gap:22px; }
+    .compare-col { min-height:430px; display:flex; flex-direction:column; gap:24px; padding:34px; border:3px solid var(--ink); border-radius:28px; background:#fffdf8; }
+    .compare-col.accent { background:var(--accent); color:#fff; border-color:var(--accent); }
+    .compare-col strong { font-size:34px; letter-spacing:.08em; }
+    .compare-col span { padding-top:22px; border-top:2px solid currentColor; font-size:32px; line-height:1.2; }
+    .checklist { width:100%; display:grid; gap:18px; }
+    .checklist div { display:grid; grid-template-columns:58px 1fr; align-items:center; gap:18px; padding:24px 28px; border:2px solid var(--line); border-radius:20px; background:#fffdf8; font-size:36px; }
+    .checklist b { display:grid; width:50px; height:50px; place-items:center; border-radius:50%; background:var(--accent); color:white; }
+    .decision { width:100%; display:grid; gap:14px; }
+    .decision div { display:flex; justify-content:space-between; align-items:center; gap:18px; padding:24px 28px; border-bottom:2px solid var(--line); font-size:32px; }
+    .decision b { padding:16px 20px; border-radius:999px; background:var(--ink); color:white; white-space:nowrap; }
+    .hub { position:relative; width:650px; height:580px; }
+    .hub-center { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); display:grid; width:210px; height:210px; place-items:center; border-radius:50%; background:var(--accent); color:white; font-size:38px; font-weight:800; text-align:center; box-shadow:0 0 0 28px rgba(217,119,87,.17); }
+    .hub-orbit { position:absolute; padding:22px 26px; border:3px solid var(--ink); border-radius:18px; background:#fffdf8; font-size:29px; font-weight:700; }
+    .orbit-1 { left:0; top:40px; } .orbit-2 { right:0; top:78px; } .orbit-3 { left:16px; bottom:52px; } .orbit-4 { right:4px; bottom:28px; }
+    .cycle { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:12px; }
+    .cycle-step { display:flex; flex-direction:column; align-items:center; gap:10px; padding:28px 24px; border:3px solid var(--ink); border-radius:50%; width:190px; height:190px; justify-content:center; background:#fffdf8; }
+    .cycle-step b { color:var(--accent); font-size:28px; } .cycle-step span { font-size:30px; font-weight:800; }
+    .cycle i { font-size:48px; color:var(--accent); font-style:normal; }
+    .bridge { width:100%; display:grid; grid-template-columns:1fr 180px 1fr; align-items:center; gap:24px; }
+    .bridge-side { min-height:250px; display:grid; place-items:center; padding:28px; border:3px solid var(--ink); border-radius:28px; background:#fffdf8; font-size:38px; font-weight:800; text-align:center; }
+    .bridge-side.small { gap:14px; }
+    .bridge-side.small span { width:100%; padding:12px; border-bottom:2px solid var(--line); font-size:30px; }
+    .bridge-center { display:grid; place-items:center; width:180px; height:180px; border-radius:50%; background:var(--accent); color:#fff; font-size:42px; font-weight:900; }
+    .stack { position:relative; width:640px; height:610px; }
+    .stack span { position:absolute; left:calc(var(--i) * 34px); right:calc((4 - var(--i)) * 34px); top:calc(var(--i) * 104px); height:112px; display:grid; place-items:center; border:3px solid var(--ink); border-radius:22px; background:#fffdf8; font-size:38px; font-weight:850; box-shadow:12px 12px 0 rgba(217,119,87,.22); }
+    .stamp { width:620px; min-height:440px; display:flex; flex-direction:column; align-items:center; justify-content:center; border:5px solid var(--accent); border-radius:40px; transform:rotate(-2deg); background:#fffdf8; box-shadow:22px 22px 0 var(--ink); text-align:center; }
+    .stamp span { font-size:36px; letter-spacing:.14em; color:var(--accent); font-weight:800; }
+    .stamp strong { margin:16px 0 28px; font:italic 86px/1 Georgia, serif; color:var(--ink); }
+    .stamp small { font-size:27px; color:var(--muted); }
+    .progress { position:absolute; left:0; bottom:0; width:100%; height:10px; background:var(--accent); transform-origin:left center; }
+    .direct-nav, .notes-panel { display:none; }
+    body.direct-mode { overflow:hidden; }
+    body.direct-mode .scene { position:fixed; inset:0; width:1920px; height:1080px; transform-origin:top left; opacity:0; visibility:hidden; pointer-events:none; }
+    body.direct-mode .scene.is-active { opacity:1; visibility:visible; pointer-events:auto; }
+    body.direct-mode .content, body.direct-mode .visual { opacity:1 !important; transform:none !important; }
+    body.direct-mode .direct-nav { position:fixed; z-index:30; right:22px; bottom:18px; display:flex; align-items:center; gap:10px; padding:10px; border-radius:999px; background:rgba(29,29,31,.92); color:white; box-shadow:0 12px 40px rgba(0,0,0,.28); }
+    .direct-nav button { border:0; border-radius:999px; padding:11px 17px; background:#f4f0e8; color:#1d1d1f; font-size:16px; font-weight:800; cursor:pointer; }
+    .direct-nav output { min-width:70px; text-align:center; font-size:15px; }
+    body.direct-mode.notes-open .notes-panel { display:block; position:fixed; z-index:29; left:22px; right:22px; bottom:86px; max-height:230px; overflow:auto; padding:20px 24px; border-radius:18px; background:rgba(29,29,31,.95); color:#f4f0e8; font-size:22px; line-height:1.45; }
+  </style>
+</head>
+<body>
+  <script type="application/hyperframes-slideshow+json">{
+  "slides": [
+    {
+      "sceneId": "slide-1",
+      "notes": "Contá el mensaje textual y el silencio. Prometé qué pasó segundo por segundo, cómo lo arreglaron para que no dependa de que el servidor nunca se caiga, y el segundo agujero: cualquiera podía hacerle decir cosas al bot."
+    },
+    {
+      "sceneId": "slide-2",
+      "notes": "Explicá la cadena: WhatsApp, Chatwoot como bandeja donde se ven las conversaciones, el webhook y el bot. Leé la línea de tiempo de los registros. El del medio cayó en el hueco: Chatwoot disparó su único aviso y no volvió a intentar."
+    },
+    {
+      "sceneId": "slide-3",
+      "notes": "Depende de quién te avisa. Primera regla: no supongas cómo reintenta tu proveedor, medilo. Después contaron cuántas veces pudo pasar: veinte reinicios, cada uno un hueco de hasta dos minutos donde un mensaje se podía perder para siempre."
+    },
+    {
+      "sceneId": "slide-4",
+      "notes": "El servidor que nunca se cae no existe; el vigía ya lo levantaba. Faltaba que caerse no costara una persona. Cerrar la conversación no cuenta como respuesta. Reinyectar de más produce un salteo, no una segunda respuesta. Las barandas son contra hablar de más, y acordate de la ventana de 24 horas. En n8n: disparador cada diez minutos que busca esas conversaciones y las manda a tu flujo principal."
+    },
+    {
+      "sceneId": "slide-5",
+      "notes": "Si copiás la llave a otro lado, algún día se desincroniza y vuelve el 401 sin que sepas por qué. El contador decía uno, pero la conversación estaba con una persona y el bot se callaba por diseño: un contador que dice éxito sin éxito es peor que no tener contador. La verificación que vale: reinyectaron un mensaje ya contestado y el webhook lo trató como duplicado."
+    },
+    {
+      "sceneId": "slide-6",
+      "notes": "Cerrado a fines de julio: el webhook no verificaba quién le hablaba. La firma se calcula con una clave compartida y lleva la hora. Si le hablás directo a Meta, viene en X-Hub-Signature-256, calculada con el secreto de tu app. En n8n, el Webhook ya trae una dirección larga y aleatoria: no la cambies por una linda. El código de partida, sin secreto, aceptaba todo: es el agujero que viene de fábrica."
+    },
+    {
+      "sceneId": "slide-7",
+      "notes": "Leé las tres en voz alta, despacio: no supongas que tu proveedor reintenta, medilo. Tu servidor se va a caer: que caerse no te cueste un cliente. Y tu webhook no le cree a nadie: firma, secreto, o nada."
+    },
+    {
+      "sceneId": "slide-8",
+      "notes": "Apagá tu webhook, mandate un mensaje desde otro teléfono, prendelo y esperá diez minutos. El checklist del webhook está en la comunidad. Nos vemos en el próximo."
+    }
+  ],
+  "slideSequences": []
+}</script>
+  <div
+        id="scene-slide-1"
+        class="scene"
+        data-composition-id="slide-1"
+        data-start="0"
+        data-duration="8"
+        data-label="El caso"
+        data-width="1920"
+        data-height="1080"
+      >
+        <section id="clip-slide-1" class="frame clip" data-start="0" data-duration="8" data-track-index="1">
+          <div class="grain" data-layout-ignore></div>
+          <div class="topline"><span>Sistemas con IA · 14</span><span>01 / 08</span></div>
+          <main id="content-1" class="content">
+            <div class="copy">
+              <p class="eyebrow">El caso</p>
+              <h1>Alguien le escribió a mi bot. Nunca recibió respuesta.</h1>
+              <p class="body">3 de septiembre, a las 00:03. Nadie se enteró. Y la misma puerta tenía un segundo agujero.</p>
+            </div>
+            <div class="visual"><div class="compare"><div class="compare-col ">
+    <strong>LO QUE ESCRIBIÓ</strong>
+    <span>00:03</span><span>«Hola, quiero información sobre el sistema»</span>
+  </div><div class="compare-col accent">
+    <strong>LO QUE RECIBIÓ</strong>
+    <span>Nada</span><span>Y nadie se enteró</span>
+  </div></div></div>
+          </main>
+          <div class="footer"><span>@sergiourcullo</span><span>ONIA · construir, probar, documentar</span></div>
+          <div id="progress-1" class="progress" data-layout-ignore></div>
+        </section>
+      </div>
+<div
+        id="scene-slide-2"
+        class="scene"
+        data-composition-id="slide-2"
+        data-start="8"
+        data-duration="8"
+        data-label="Segundo por segundo"
+        data-width="1920"
+        data-height="1080"
+      >
+        <section id="clip-slide-2" class="frame clip" data-start="8" data-duration="8" data-track-index="1">
+          <div class="grain" data-layout-ignore></div>
+          <div class="topline"><span>Sistemas con IA · 14</span><span>02 / 08</span></div>
+          <main id="content-2" class="content">
+            <div class="copy">
+              <p class="eyebrow">Segundo por segundo</p>
+              <h1>El mensaje cayó justo en el hueco.</h1>
+              <p class="body">El cliente escribe, la bandeja avisa al webhook y el bot contesta. Ese aviso se disparó una sola vez contra un puerto muerto.</p>
+            </div>
+            <div class="visual"><div class="decision"><div><span>Se reinicia el contenedor del webhook</span><b>00:03:32</b></div><div><span>Llega el mensaje: nadie escucha</span><b>+20 s</b></div><div><span>El vigía lo levanta</span><b>+9 s</b></div><div><span>Llega otro mensaje: ese sí</span><b>respondido</b></div></div></div>
+          </main>
+          <div class="footer"><span>@sergiourcullo</span><span>ONIA · construir, probar, documentar</span></div>
+          <div id="progress-2" class="progress" data-layout-ignore></div>
+        </section>
+      </div>
+<div
+        id="scene-slide-3"
+        class="scene"
+        data-composition-id="slide-3"
+        data-start="16"
+        data-duration="8"
+        data-label="El error de fondo"
+        data-width="1920"
+        data-height="1080"
+      >
+        <section id="clip-slide-3" class="frame clip" data-start="16" data-duration="8" data-track-index="1">
+          <div class="grain" data-layout-ignore></div>
+          <div class="topline"><span>Sistemas con IA · 14</span><span>03 / 08</span></div>
+          <main id="content-3" class="content">
+            <div class="copy">
+              <p class="eyebrow">El error de fondo</p>
+              <h1>Yo suponía que el aviso se reintentaba.</h1>
+              <p class="body">Meta reintenta si le hablás directo. Mi bandeja, ese día, no. Entre el 28 de agosto y el 3 de septiembre hubo veinte reinicios.</p>
+            </div>
+            <div class="visual"><div class="compare"><div class="compare-col ">
+    <strong>META DIRECTO</strong>
+    <span>Reintenta</span><span>Lo dice su documentación</span>
+  </div><div class="compare-col accent">
+    <strong>MI BANDEJA ESE DÍA</strong>
+    <span>Un solo aviso</span><span>20 huecos de hasta 2 min</span>
+  </div></div></div>
+          </main>
+          <div class="footer"><span>@sergiourcullo</span><span>ONIA · construir, probar, documentar</span></div>
+          <div id="progress-3" class="progress" data-layout-ignore></div>
+        </section>
+      </div>
+<div
+        id="scene-slide-4"
+        class="scene"
+        data-composition-id="slide-4"
+        data-start="24"
+        data-duration="8"
+        data-label="La corrección"
+        data-width="1920"
+        data-height="1080"
+      >
+        <section id="clip-slide-4" class="frame clip" data-start="24" data-duration="8" data-track-index="1">
+          <div class="grain" data-layout-ignore></div>
+          <div class="topline"><span>Sistemas con IA · 14</span><span>04 / 08</span></div>
+          <main id="content-4" class="content">
+            <div class="copy">
+              <p class="eyebrow">La corrección</p>
+              <h1>Que caerse deje de costar una persona.</h1>
+              <p class="body">Cada diez minutos busca quién escribió y no tiene respuesta. Lo reinyecta con el mismo identificador: el filtro de duplicados evita contestar dos veces.</p>
+            </div>
+            <div class="visual"><div class="decision"><div><span>Mensaje de menos de 3 min</span><b>no toca</b></div><div><span>Mensaje de más de 12 h</span><b>no toca</b></div><div><span>Conversación con una persona</span><b>calla</b></div><div><span>Sin respuesta, de 3 min a 12 h</span><b>reinyecta</b></div><div><span>Sin bandera explícita</span><b>en seco</b></div></div></div>
+          </main>
+          <div class="footer"><span>@sergiourcullo</span><span>ONIA · construir, probar, documentar</span></div>
+          <div id="progress-4" class="progress" data-layout-ignore></div>
+        </section>
+      </div>
+<div
+        id="scene-slide-5"
+        class="scene"
+        data-composition-id="slide-5"
+        data-start="32"
+        data-duration="8"
+        data-label="Lo que salió mal"
+        data-width="1920"
+        data-height="1080"
+      >
+        <section id="clip-slide-5" class="frame clip" data-start="32" data-duration="8" data-track-index="1">
+          <div class="grain" data-layout-ignore></div>
+          <div class="topline"><span>Sistemas con IA · 14</span><span>05 / 08</span></div>
+          <main id="content-5" class="content">
+            <div class="copy">
+              <p class="eyebrow">Lo que salió mal</p>
+              <h1>Primera prueba: un 401. Segunda: un contador que mentía.</h1>
+              <p class="body">El rescate entra por la misma puerta, con la misma llave, leída del mismo archivo. Y separa «mandado» de «contestado».</p>
+            </div>
+            <div class="visual"><div class="compare"><div class="compare-col ">
+    <strong>ERROR 1</strong>
+    <span>401 no autorizado</span><span>Entraba sin la llave</span>
+  </div><div class="compare-col accent">
+    <strong>ERROR 2</strong>
+    <span>«1 reinyectado»</span><span>Salvó a cero personas</span>
+  </div></div></div>
+          </main>
+          <div class="footer"><span>@sergiourcullo</span><span>ONIA · construir, probar, documentar</span></div>
+          <div id="progress-5" class="progress" data-layout-ignore></div>
+        </section>
+      </div>
+<div
+        id="scene-slide-6"
+        class="scene"
+        data-composition-id="slide-6"
+        data-start="40"
+        data-duration="8"
+        data-label="El segundo agujero"
+        data-width="1920"
+        data-height="1080"
+      >
+        <section id="clip-slide-6" class="frame clip" data-start="40" data-duration="8" data-track-index="1">
+          <div class="grain" data-layout-ignore></div>
+          <div class="topline"><span>Sistemas con IA · 14</span><span>06 / 08</span></div>
+          <main id="content-6" class="content">
+            <div class="copy">
+              <p class="eyebrow">El segundo agujero</p>
+              <h1>Cualquiera podía hacerle decir cosas a mi bot.</h1>
+              <p class="body">Dos cerraduras, y alcanza con una: firma con hora o un secreto largo en la dirección. Sin secreto configurado, no acepta nada.</p>
+            </div>
+            <div class="visual"><pre class="code compact"><code>X-Hub-Signature-256: sha256=…
+
+firma ≠ calculada  → rechaza
+aviso &gt; 5 minutos  → rechaza
+sin secreto        → 503, no abre</code></pre></div>
+          </main>
+          <div class="footer"><span>@sergiourcullo</span><span>ONIA · construir, probar, documentar</span></div>
+          <div id="progress-6" class="progress" data-layout-ignore></div>
+        </section>
+      </div>
+<div
+        id="scene-slide-7"
+        class="scene"
+        data-composition-id="slide-7"
+        data-start="48"
+        data-duration="8"
+        data-label="La regla"
+        data-width="1920"
+        data-height="1080"
+      >
+        <section id="clip-slide-7" class="frame clip" data-start="48" data-duration="8" data-track-index="1">
+          <div class="grain" data-layout-ignore></div>
+          <div class="topline"><span>Sistemas con IA · 14</span><span>07 / 08</span></div>
+          <main id="content-7" class="content">
+            <div class="copy">
+              <p class="eyebrow">La regla</p>
+              <h1>Tres reglas, cada una en una frase.</h1>
+              <p class="body">Medí cómo reintenta tu proveedor. Que caerse no te cueste un cliente. Tu webhook no le cree a nadie.</p>
+            </div>
+            <div class="visual"><div class="checklist"><div><b>✓</b><span>No supongas: medilo</span></div><div><b>✓</b><span>Caerse no cuesta un cliente</span></div><div><b>✓</b><span>Firma, secreto, o nada</span></div></div></div>
+          </main>
+          <div class="footer"><span>@sergiourcullo</span><span>ONIA · construir, probar, documentar</span></div>
+          <div id="progress-7" class="progress" data-layout-ignore></div>
+        </section>
+      </div>
+<div
+        id="scene-slide-8"
+        class="scene"
+        data-composition-id="slide-8"
+        data-start="56"
+        data-duration="8"
+        data-label="Cierre"
+        data-width="1920"
+        data-height="1080"
+      >
+        <section id="clip-slide-8" class="frame clip" data-start="56" data-duration="8" data-track-index="1">
+          <div class="grain" data-layout-ignore></div>
+          <div class="topline"><span>Sistemas con IA · 14</span><span>08 / 08</span></div>
+          <main id="content-8" class="content">
+            <div class="copy">
+              <p class="eyebrow">Cierre</p>
+              <h1>Hacé esta prueba hoy.</h1>
+              <p class="body">Si ese mensaje nunca se contesta, necesitás un rescate. El checklist, con cómo probar cada regla, está en la comunidad de WhatsApp.</p>
+            </div>
+            <div class="visual"><div class="checklist"><div><b>✓</b><span>Apagá el webhook</span></div><div><b>✓</b><span>Escribite desde otro teléfono</span></div><div><b>✓</b><span>Prendelo</span></div><div><b>✓</b><span>Esperá diez minutos</span></div></div></div>
+          </main>
+          <div class="footer"><span>@sergiourcullo</span><span>ONIA · construir, probar, documentar</span></div>
+          <div id="progress-8" class="progress" data-layout-ignore></div>
+        </section>
+      </div>
+  <aside class="notes-panel" aria-live="polite"></aside>
+  <nav class="direct-nav" aria-label="Navegación de la presentación">
+    <button type="button" data-action="prev">←</button>
+    <output>1 / 8</output>
+    <button type="button" data-action="notes">Notas</button>
+    <button type="button" data-action="next">→</button>
+  </nav>
+  <script>
+    window.__timelines = window.__timelines || {};
+
+    (function standaloneSlideshowBridge() {
+      const totalDuration = 64;
+      const sceneRanges = [{"id":"slide-1","elementId":"scene-slide-1","start":0,"duration":8,"end":8},{"id":"slide-2","elementId":"scene-slide-2","start":8,"duration":8,"end":16},{"id":"slide-3","elementId":"scene-slide-3","start":16,"duration":8,"end":24},{"id":"slide-4","elementId":"scene-slide-4","start":24,"duration":8,"end":32},{"id":"slide-5","elementId":"scene-slide-5","start":32,"duration":8,"end":40},{"id":"slide-6","elementId":"scene-slide-6","start":40,"duration":8,"end":48},{"id":"slide-7","elementId":"scene-slide-7","start":48,"duration":8,"end":56},{"id":"slide-8","elementId":"scene-slide-8","start":56,"duration":8,"end":64}];
+      const rootTimeline = gsap.timeline({ paused: true });
+      rootTimeline.from("#content-1", { opacity: 0, y: 28, duration: 0.42, ease: "power2.out" }, 0.12);
+      rootTimeline.from("#content-1 .visual", { opacity: 0, x: 28, duration: 0.5, ease: "power2.out" }, 0.3);
+      rootTimeline.fromTo("#progress-1", { scaleX: 0.04 }, { scaleX: 1, duration: 6.8, ease: "none" }, 0.6);
+      rootTimeline.to({}, { duration: Math.max(0, totalDuration - rootTimeline.duration()) });
+      window.__timelines["slide-1"] = rootTimeline;
+      let activeId = null;
+
+      function activateScene(time) {
+        const boundedTime = Math.max(0, Math.min(totalDuration - 0.001, time));
+        sceneRanges.forEach((range) => {
+          const element = document.getElementById(range.elementId);
+          if (!element) return;
+          const active = boundedTime >= range.start && boundedTime < range.end;
+          element.style.opacity = active ? "1" : "0";
+          element.style.visibility = active ? "visible" : "hidden";
+          element.style.pointerEvents = active ? "auto" : "none";
+          if (active && activeId !== range.id) {
+            activeId = range.id;
+            if (range.id === "slide-1") return;
+            const content = element.querySelector(".content");
+            const visual = element.querySelector(".visual");
+            const progress = element.querySelector(".progress");
+            if (content) gsap.from(content, { opacity: 0, y: 28, duration: 0.42, ease: "power2.out", overwrite: true });
+            if (visual) gsap.from(visual, { opacity: 0, x: 28, duration: 0.5, ease: "power2.out", overwrite: true });
+            if (progress) gsap.fromTo(progress, { scaleX: 0.04 }, { scaleX: 1, duration: 0.8, ease: "power2.out", overwrite: true });
+          }
+        });
+      }
+
+      window.__hfSetTime = activateScene;
+      rootTimeline.eventCallback("onUpdate", () => activateScene(rootTimeline.time()));
+      activateScene(0);
+
+      function postTimeline() {
+        parent.postMessage(
+          {
+            source: "hf-preview",
+            type: "timeline",
+            durationInFrames: totalDuration * 30,
+            scenes: sceneRanges.map(({ id, start, duration }) => ({ id, start, duration })),
+          },
+          "*",
+        );
+      }
+      if (document.readyState === "complete") setTimeout(postTimeline, 300);
+      else addEventListener("load", () => setTimeout(postTimeline, 300), { once: true });
+    })();
+
+    (function directDeckMode() {
+      if (window.top !== window.self) return;
+      const query = new URLSearchParams(location.search);
+      if (location.protocol !== "file:" && !query.has("slide")) return;
+      const scenes = [...document.querySelectorAll(".scene")];
+      const notes = ["Contá el mensaje textual y el silencio. Prometé qué pasó segundo por segundo, cómo lo arreglaron para que no dependa de que el servidor nunca se caiga, y el segundo agujero: cualquiera podía hacerle decir cosas al bot.","Explicá la cadena: WhatsApp, Chatwoot como bandeja donde se ven las conversaciones, el webhook y el bot. Leé la línea de tiempo de los registros. El del medio cayó en el hueco: Chatwoot disparó su único aviso y no volvió a intentar.","Depende de quién te avisa. Primera regla: no supongas cómo reintenta tu proveedor, medilo. Después contaron cuántas veces pudo pasar: veinte reinicios, cada uno un hueco de hasta dos minutos donde un mensaje se podía perder para siempre.","El servidor que nunca se cae no existe; el vigía ya lo levantaba. Faltaba que caerse no costara una persona. Cerrar la conversación no cuenta como respuesta. Reinyectar de más produce un salteo, no una segunda respuesta. Las barandas son contra hablar de más, y acordate de la ventana de 24 horas. En n8n: disparador cada diez minutos que busca esas conversaciones y las manda a tu flujo principal.","Si copiás la llave a otro lado, algún día se desincroniza y vuelve el 401 sin que sepas por qué. El contador decía uno, pero la conversación estaba con una persona y el bot se callaba por diseño: un contador que dice éxito sin éxito es peor que no tener contador. La verificación que vale: reinyectaron un mensaje ya contestado y el webhook lo trató como duplicado.","Cerrado a fines de julio: el webhook no verificaba quién le hablaba. La firma se calcula con una clave compartida y lleva la hora. Si le hablás directo a Meta, viene en X-Hub-Signature-256, calculada con el secreto de tu app. En n8n, el Webhook ya trae una dirección larga y aleatoria: no la cambies por una linda. El código de partida, sin secreto, aceptaba todo: es el agujero que viene de fábrica.","Leé las tres en voz alta, despacio: no supongas que tu proveedor reintenta, medilo. Tu servidor se va a caer: que caerse no te cueste un cliente. Y tu webhook no le cree a nadie: firma, secreto, o nada.","Apagá tu webhook, mandate un mensaje desde otro teléfono, prendelo y esperá diez minutos. El checklist del webhook está en la comunidad. Nos vemos en el próximo."];
+      const notesPanel = document.querySelector(".notes-panel");
+      const counter = document.querySelector(".direct-nav output");
+      const requestedSlide = Number(query.get("slide"));
+      let current = Number.isFinite(requestedSlide) && requestedSlide > 0 ? requestedSlide - 1 : 0;
+
+      document.body.classList.add("direct-mode");
+      function fit() {
+        const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+        const x = (innerWidth - 1920 * scale) / 2;
+        const y = (innerHeight - 1080 * scale) / 2;
+        scenes.forEach((scene) => {
+          scene.style.transform = "translate(" + x + "px, " + y + "px) scale(" + scale + ")";
+        });
+      }
+      function show(index) {
+        current = Math.max(0, Math.min(scenes.length - 1, index));
+        scenes.forEach((scene, sceneIndex) => {
+          const active = sceneIndex === current;
+          scene.classList.toggle("is-active", active);
+          scene.style.opacity = active ? "1" : "0";
+          scene.style.visibility = active ? "visible" : "hidden";
+          scene.style.pointerEvents = active ? "auto" : "none";
+        });
+        counter.value = (current + 1) + " / " + scenes.length;
+        notesPanel.textContent = notes[current];
+      }
+      function toggleNotes() { document.body.classList.toggle("notes-open"); }
+      document.querySelector('[data-action="prev"]').addEventListener("click", () => show(current - 1));
+      document.querySelector('[data-action="next"]').addEventListener("click", () => show(current + 1));
+      document.querySelector('[data-action="notes"]').addEventListener("click", toggleNotes);
+      addEventListener("keydown", (event) => {
+        if (["ArrowRight", " ", "PageDown"].includes(event.key)) { event.preventDefault(); show(current + 1); }
+        if (["ArrowLeft", "PageUp"].includes(event.key)) { event.preventDefault(); show(current - 1); }
+        if (event.key.toLowerCase() === "n") toggleNotes();
+      });
+      addEventListener("resize", fit);
+      fit();
+      show(current);
+    })();
+  </script>
+</body>
+</html>

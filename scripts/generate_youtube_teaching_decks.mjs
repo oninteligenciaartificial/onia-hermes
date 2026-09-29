@@ -1,10 +1,12 @@
+import { readFileSync } from "node:fs";
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(here, "..");
 const outRoot = path.join(repoRoot, "hermes-content", "carousels", "out");
+const brandDir = path.join(repoRoot, "hermes-content", "references", "brand-claude");
 
 const decks = [
   {
@@ -474,6 +476,21 @@ function stamp(kicker, keyword) {
   return `<div class="stamp"><span>${escapeText(kicker)}</span><strong>${escapeText(keyword)}</strong><small>Recurso práctico · @sergiourcullo</small></div>`;
 }
 
+// Official Claude/Anthropic mark from brand-claude/, embedded as a data URL (never redrawn).
+// SVGs ship with fill=currentColor: Claude marks take #D97757 (brand-claude README), Anthropic ink.
+function logo(file, label, below = "") {
+  const raw = readFileSync(path.join(brandDir, file));
+  const src = file.endsWith(".svg")
+    ? `data:image/svg+xml;base64,${Buffer.from(
+        raw.toString("utf8").replaceAll("currentColor", file.startsWith("anthropic") ? "#1d1d1f" : "#D97757"),
+      ).toString("base64")}`
+    : `data:image/png;base64,${raw.toString("base64")}`;
+  const mark = `<div style="display:flex;align-items:center;gap:18px"><img src="${src}" alt="${escapeText(label)}" style="width:72px;height:72px;object-fit:contain" /><span style="font-size:44px;font-weight:800;letter-spacing:-.02em">${escapeText(label)}</span></div>`;
+  return below
+    ? `<div style="width:100%;display:flex;flex-direction:column;align-items:center;gap:34px">${mark}${below}</div>`
+    : mark;
+}
+
 function renderDeck(deck) {
   const duration = 8;
   const manifest = {
@@ -753,8 +770,8 @@ muestra u oculta las notas.
 
 ## CTA
 
-Palabra: **${deck.keyword}**. La entrega inicial es manual; no afirmar que existe una
-automatización de comentarios hasta que esté conectada y probada.
+${deck.cta ?? `Palabra: **${deck.keyword}**. La entrega inicial es manual; no afirmar que existe una
+automatización de comentarios hasta que esté conectada y probada.`}
 `;
 }
 
@@ -767,7 +784,7 @@ function renderScript(deck) {
 
 **Guion:** ${slide.notes}
 
-**Pantalla / prueba:** ${visualInstruction(deck.slug, index)}
+**Pantalla / prueba:** ${slide.screen ?? visualInstruction(deck.slug, index)}
 `,
     )
     .join("\n");
@@ -831,10 +848,22 @@ function visualInstruction(slug, index) {
       "Cerrar con la palabra MAPA visible.",
     ],
   };
-  return maps[slug][index];
+  return maps[slug]?.[index] ?? "Lámina a pantalla completa.";
 }
 
-for (const deck of decks) {
+// --decks <file.mjs>: its default export (array, or function receiving the helpers) replaces `decks`.
+const decksFlag = process.argv.indexOf("--decks");
+let selected = decks;
+if (decksFlag !== -1) {
+  const file = process.argv[decksFlag + 1];
+  if (!file) throw new Error("--decks necesita la ruta a un archivo .mjs");
+  const { default: defs } = await import(pathToFileURL(path.resolve(file)).href);
+  selected = typeof defs === "function"
+    ? defs({ flow, cards, code, terminal, compare, checklist, decision, hub, cycle, bridge, stack, stamp, logo })
+    : defs;
+}
+
+for (const deck of selected) {
   const outDir = path.join(outRoot, deck.slug);
   await mkdir(outDir, { recursive: true });
   await writeFile(path.join(outDir, "index.html"), renderDeck(deck), "utf8");
@@ -864,4 +893,4 @@ for (const deck of decks) {
   );
 }
 
-console.log(`Generated ${decks.length} teaching decks in ${outRoot}`);
+console.log(`Generated ${selected.length} teaching decks in ${outRoot}`);
