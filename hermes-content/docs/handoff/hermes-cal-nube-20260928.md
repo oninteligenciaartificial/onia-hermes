@@ -160,3 +160,47 @@ No se atribuye a esos videos contenido deducido de otras fuentes.
 No se cambiaron VPS, n8n, cron, OAuth, servicios ni credenciales. El calendario
 personal y la creación de los dos entornos Cloud son las acciones externas
 realizadas y verificadas en este corte.
+
+## Corte Claude 28-sep 21:40 La Paz — verificado en lectura, NO desplegado
+
+**Calendarios.** El conector de esta sesión y el OAuth de n8n (`Google Calendar account`,
+workflows `uwqJDGwkkWJaFtLU` lectura y `kB10A8oLWioS8lXP` creación) son la MISMA cuenta
+empresarial `oninteligenciaartificial@gmail.com`: ve su `primary` (owner) y feriados BO
+(reader). Cero eventos del 29-sep al 5-oct; sin eventos creados desde agosto. El calendario
+personal de Sergio Urcullo (organizador de los 74 eventos del recibo privado) NO está
+compartido con esa cuenta. Consecuencia: toda lectura vía n8n hoy devuelve "vacío" y
+`agendar` escribe en el calendario empresarial, no donde viven los compromisos.
+Falta: Sergio Urcullo comparte su calendario personal con la cuenta empresarial con permiso
+"Ver solo disponibilidad"; luego n8n usa la operación Availability (freebusy) sobre ese id.
+Sin cambios de OAuth: el credencial ya tiene alcance Calendar.
+
+**Router: hoy no lo invoca nadie.** `/root/.hermes/scripts/hermes_command_center.py` es
+`c8660a38` en CRLF (sha `8626cccf…`, 5-jul). Su log `logs/command-center-events.jsonl`
+(escrito en cada `_dispatch`) no cambia desde 2026-07-05 16:35 UTC y el workflow n8n
+`vuicWsvh0hwqKhYs` no tiene ejecuciones. Publicar el parche es correcto pero no cambia
+lo que Sergio Urcullo recibe hoy.
+
+**Lo que sí llega:** `hermes-weekday-work-agenda` (08:00, gpt-5-mini) entregó a Telegram
+el 21, 22, 23, 24, 25 y 28-sep (28-sep: `message_id=6983`, 08:02:47). Su `last_status=error`
+("Interrupted by shutdown") es un falso negativo: el job terminó 08:02:11, el fence local
+expiró 08:02:43 y la entrega salió igual. La voz 08:25 (`/var/log/onia-jarvis-voz.log`)
+dice "narrado y enviado" los siete días del 22 al 28-sep. El job carga
+`operaciones-dashboard`, `video-lab-higgsfield` y `marca-personal-sergio`, NO
+`agenda-calendario`: el "09:00-11:00" de hoy lo inventa el modelo. Para cortarlo hace falta
+tocar el job (`hermes cron edit 9089322cc256 --add-skill agenda-calendario`, con backup de
+`cron/jobs.json`), que es un cambio vivo aparte del parche.
+
+**Runbook (dueño del VPS; nada de esto se ejecutó):**
+1. Fuente = blobs LF de `d3be0b4a` vía `git show`, NUNCA la copia de trabajo (CRLF mixto,
+   sha `b6e1929d…`). Esperados: router `13097b40…`, agenda-calendario `1233a669…`,
+   brief-diario `e39a631f…`.
+2. Pre-check en el VPS: router `8626cccf…`, `skills/agenda-calendario.md` `c40141a9…`,
+   `skills/brief-diario-onia.md` `1becfc7f…`. Si alguno difiere, PARAR.
+3. Backup `cp -p <f> <f>.bak-cal-20260928` de los tres; `scp` a `/tmp`; `cp` sobre el destino
+   (preserva dueño y modo).
+4. Sin reinicio: el router corre por invocación (`/usr/local/bin/hermes-command`) y las skills
+   se releen por sesión (manifest mtime/size). No tocar `hermes-gateway.service`.
+5. Verificar: sha256 = paso 1; `python3 -m py_compile`; `hermes-command telegram --message
+   "Plan Sergio hoy"` → `calendar_verified: false`, "Agenda no verificada", sin HH:MM;
+   "Puedo reunirme martes 11:45?" → sin "SI". Cada llamada agrega 1 línea al jsonl (esperado).
+6. Rollback: `cp -p <f>.bak-cal-20260928 <f>` de los tres y re-verificar los sha del paso 2.
