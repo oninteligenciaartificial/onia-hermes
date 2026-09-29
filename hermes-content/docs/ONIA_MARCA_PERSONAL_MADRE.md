@@ -7,12 +7,19 @@
 
 ## El objetivo (la escalera completa)
 
+**Entrada vigente · 28-sep:** [handoff y plan de producción](handoff/marca-sergio-guiones-20260927.md).
+Sergio pide contenido que enseñe, carruseles, comunidad y guiones; se cierra la
+investigación de navegador. Dice «no hemos posteado nada»: no dar por publicada
+ninguna pieza de este lote. Primera tanda G09/G11/G12 con prompts reproducibles
+en el rodaje canónico y tres carruseles v2 existentes. La escalera de abajo es
+historia estratégica, no autorización para lanzar curso/VSL ni prueba de demanda.
+
 **Redes (alcance) → Comunidad WhatsApp gratis (confianza + señales) → VSL → Curso
 (pago único) → Grupo VIP (recurrente, solo habla Sergio).**
 Cada nivel se lanza cuando el anterior tiene masa: comunidad 100-300 miembros antes del
 VSL; curso 20+ ventas antes del VIP. Nada se anuncia antes de existir.
 
-## Estado (actualizar al cerrar cada sesión)
+## Estado histórico (1-sep; para estado vigente usar la bóveda)
 
 | Frente | Estado 2026-09-01 |
 |---|---|
@@ -35,16 +42,25 @@ VSL; curso 20+ ventas antes del VIP. Nada se anuncia antes de existir.
 | `ONIA_MARCA_PERSONAL_PLAN_MENSUAL.md` | mes completo: ritmo semanal comunidad, 6 carruseles, 4 series de video |
 | `ONIA_MARCA_PERSONAL_SEMANA1.md` | guiones palabra por palabra de la semana 1 + calendario |
 | `ONIA_COMUNIDAD_CONTENIDO.md` | drops D0-D6, embudo a VSL, playbook de las comunidades grandes |
+| `ONIA_MARCA_PERSONAL_BOVEDA.md` | estado actual por guiones, videos, comunidad y posts; puntos de grabación y gates |
+| `ONIA_PUBLICACION_MULTICANAL.md` | seis destinos confirmados, incluido YouTube personal de Sergio; acceso seguro, aprobaciones y recuperación de Postiz sin liberar vencidos |
+| `cola/RODAJE-MARCA-PERSONAL-2026-09-27.md` | guiones palabra por palabra, G06 Opus y seis nuevos G09–G14; formato de grabación por pieza |
+| `cola/LEARNINGS-APROBADOS-MARCA-PERSONAL.md` | versión y aprendizaje aprobado por Sergio, nunca borradores por inferencia |
+| `cola/APROBACION-CARRUSELES-SERGIO-2026-09-27.md` | las tres piezas v2 exactas, captions, hashes, destino y horarios propuestos para un OK cerrado |
+| `cola/EDICION-G06-OPUS-55-2026-09-27.md` | intake, timeline, fuentes y QA para editar G06 cuando llegue el bruto exacto |
+| [`cola/AUDITORIA-GUIONES-COMUNIDAD-2026-09-28.md`](cola/AUDITORIA-GUIONES-COMUNIDAD-2026-09-28.md) | revisión G00–G14, referentes y brechas; G09/G11/G12 aplicados después en el rodaje, ninguna publicación |
+| [`cola/drops/2026-09-28-primer-ejercicio-preparado.md`](cola/drops/2026-09-28-primer-ejercicio-preparado.md) | bienvenida y ejercicio práctico de cuatro datos; preparado, no enviado |
 | `docs/cola/marca-personal.md` | la cola viva del carril (el loop trabaja de ahí) |
 | `references/ui-patterns/statement-3d-minimal/` | patrón visual aprendido (plantilla + ficha + referencia) |
 | `references/marca-personal/` | los PDFs/planes de Samuel (historia) |
 
 ## Reparto permanente
 
-- **Sergio:** graba (guiones míos), publica (drops/videos/historias), responde General,
-  aprueba todo lo que sale.
+- **Sergio:** graba, responde General y aprueba la versión y destinos de todo lo que sale;
+  completa identidad/2FA y la publicación nativa del Facebook personal cuando corresponda.
 - **La máquina (yo):** textos, guiones, carruseles, edición de video, biblioteca,
-  KPIs, radar mensual para Samuel, registro de señales para el VSL.
+  publicación/registro de piezas aprobadas donde la plataforma lo permita,
+  KPIs, radar mensual para Samuel y registro de señales para el VSL.
 - **Samuel (desde la firma):** 20 pilar + 10 B-roll + yapps, sube "lo prometido" a la
   comunidad, tema+hook semanal de historias, sheet con vistas + miembros.
 
@@ -53,6 +69,7 @@ VSL; curso 20+ ventas antes del VIP. Nada se anuncia antes de existir.
 1. La venta nunca exhibe obra; nada se anuncia antes de existir (curso incluido).
 2. Toda cifra publicada lleva fuente. No se fabrican testimonios ni números.
 3. Las señales de la comunidad se registran SIEMPRE (son el VSL).
-4. Publicar en la cuenta personal de Sergio = con su OK, nunca automatizado con bots.
+4. Publicar en una cuenta de Sergio u ONIA = OK explícito por pieza o lote cerrado. Postiz sólo programa piezas aprobadas cuando esté sano; el Facebook personal de Sergio va por vía nativa/manual.
 5. Contratos y cobros: firma Leslie; pagos por canal personal (no cuenta OniaAgency
    mientras no haya factura).
+6. Cada guion hablado para Sergio se entiende sin conocimientos técnicos: problema reconocible, ventaja concreta, prueba visible, cuándo conviene y límite honesto. Cada guion indica formato y tomas; los detalles técnicos van en visual/caption o pieza especializada.
