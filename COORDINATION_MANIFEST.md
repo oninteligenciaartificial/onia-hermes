@@ -1,5 +1,34 @@
 # Hermes Coordination Manifest
 
+## 🧵 EL HILO — sesiones vivas y qué le pasa cada una a la otra (lo mantiene la sesión de control)
+
+> Sergio Urcullo, 2026-09-29: *"habla entre sesiones para no perder el hilo"*. Las sesiones en
+> la nube no se pueden mandar mensajes entre sí (corren en máquinas distintas: medido ese día,
+> `ListAgents` no ve a ninguna). **El hilo es esta sección.** Toda sesión la lee al arrancar y
+> la EDITA cuando cambia algo que otra sesión usa. Lo que no está acá, la otra sesión no lo sabe.
+
+**Sesión de control — «Hermes y Sergio management system»** (rama `claude/hermes-jarvis`).
+Dueña de Hermes y del cerebro: qué le llega a Sergio Urcullo por Telegram, el resumen de las
+06:30, el cierre de las 22:00, su calendario, y el orden entre sesiones. Regla vigente:
+`hermes-content/docs/ONIA_CEREBRO.md` §«La regla de entrega». Estado: `handoff/hermes-jarvis.md`.
+
+| Sesión | Qué es suyo | Lo que la sesión de control LEE de ella (no cambiar sin avisar acá) |
+|---|---|---|
+| **Marca personal: comunidad y contenido** (`claude/marca-personal-contenido-ae658c`) | guiones, carruseles, comunidad, plan de 3 semanas | El resumen de las 06:30 lista «Para grabar hoy» leyendo `cola/plan-3-semanas/S*-GUIONES.md` con este formato exacto: `## <Día> <d>-<mes3>` (ej. `## Mié 30-sep`) y `### DNN-X · Formato · Título`. Si cambia el formato o el archivo, avisar acá. |
+| **Onia platform development handoff** (`claude/onia-platform-handoff-56d586`) | onia-platform, SIAT, sales-kit, web pública | El resumen cuenta prospectos por la tarea `[leads-esperando]` del tablero (`scripts/vigia_sin_respuesta.mjs`). Si el aviso de solicitudes de acceso (`lib/aviso-acceso.ts`) cambia, avisar acá: tiene que pasar por la aduana. |
+| **Infra (Codex)** — `handoff/infra-cerebro-loops.md` | VPS, n8n, loops, backups | ⚠️ Desde el 29-sep la **entrega a Sergio Urcullo** (Telegram, `onia-tg.sh`, resumen, cierre) es de la sesión de control. El resto del VPS sigue siendo de infra. |
+
+**Mensajes pendientes entre sesiones** (se borran cuando la destinataria los confirma acá):
+- **→ Marca personal (29-sep):** Hermes va a mostrarle a Sergio Urcullo los guiones del día cada
+  mañana desde tu plan; no hace falta que generes otro listado para él. El job de Hermes
+  `hermes-daily-content-video-plan` (guiones con `gpt-5-mini`) se pausa para no tener dos fuentes.
+  Y: tu contexto estaba al **88 %** el 29-sep 20:03 UTC — escribí tu handoff antes de compactar.
+- **→ Plataforma (29-sep):** nada que cambiar hoy. Si tu «plan de migración a la nube» mueve algo
+  del VPS (Chatwoot, n8n, el tablero de Hermes), anotalo acá ANTES: el resumen y los avisos leen de ahí.
+- **→ Todas:** para escribirle a Sergio Urcullo por Telegram, usá `onia-tg.sh` con
+  `ONIA_AVISO=interrumpe | resumen | sistema`. Un `curl` directo a Telegram es un bug: se salta el
+  silencio de 22:00 a 06:30 y el tope de repeticiones.
+
 ## Carril marca personal Sergio/ONIA — 2026-09-27
 
 Rama `codex/marca-sergio-guiones-20260927`, worktree aislado
