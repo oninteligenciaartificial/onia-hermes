@@ -89,6 +89,18 @@ describe("la privacidad declara a quien de verdad recibe los datos", () => {
     expect(recogemos).toMatch(/Global Privacy Control/);
   });
 
+  it("lo que va a Meta está también en «para qué» y en la tabla de proveedores, sin promesas que el píxel no cumple", () => {
+    // El `fbclid` guardado sale a Meta como `fbc` en cada aviso, y las claves
+    // de campaña viajan en la dirección de la página: «no sale de tu equipo
+    // hasta que tocás el botón» era falso. Y un §3 que no nombra la publicidad
+    // mientras dice «no hacemos minería de tus datos» contradice al §2.6.
+    expect(seccion(PRIVACIDAD_CRUDA, 2)).not.toMatch(/no sale de tu equipo/i);
+    const paraQue = seccion(PRIVACIDAD_CRUDA, 3);
+    expect(paraQue).toMatch(/anuncios del sitio p[uú]blico \(§2\.6\)/);
+    expect(paraQue).not.toMatch(/miner[ií]a de tus datos/i);
+    expect(seccion(PRIVACIDAD_CRUDA, 5)).toMatch(/\| \*\*Meta\*\* \(píxel del sitio público\)/);
+  });
+
   it("nombra a Cloudflare, por donde pasa todo el tráfico y el correo de datos", () => {
     // onia.com.bo y app.onia.com.bo resuelven a IPs de Cloudflare (proxy TLS),
     // y el MX de business@ —la vía del §12— es Cloudflare Email Routing.
