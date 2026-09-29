@@ -624,15 +624,42 @@
   background: var(--surface);
 }
 
+/* El mat MIDE lo que su panel, no un alto fijo. Hasta el 2026-09-29 era
+   `height: clamp(11rem, 19vw, 15rem)` con el panel al 100% y `overflow: hidden`:
+   medido en local, «Para aprobar» pedía 244px en 163 a 375 y 393 en 211 a 1440,
+   y «WhatsApp del negocio» 216/163 y 362/211. Las dos tarjetas cortaban una fila
+   a la mitad y escondían el remate («Nada se manda hasta que lo aprobás»), que
+   es el argumento del panel.
+
+   Dos causas, dos líneas:
+   - el alto fijo → sale; el mat crece con su contenido.
+   - el panel escala en `cqw` y este mat no era contenedor, así que el `cqw` se
+     medía contra la VENTANA: a 1440 la letra iba a 19px en una columna de
+     350px y cada fila envolvía a dos renglones. `.shape` y `.slot` ya declaran
+     `container-type` por eso mismo; acá faltaba.
+   El panel se centra y abraza su contenido: el aire que sobra en la fila de
+   escritorio queda en el mat, no adentro de la tarjeta (misma regla que
+   `.shape > .panel` en sitio.module.css). */
 .tareaArte {
-  height: clamp(11rem, 19vw, 15rem);
+  display: grid;
+  align-items: center;
   overflow: hidden;
   padding: 0.9rem;
   background: var(--bg-deep);
+  container-type: inline-size;
 }
 
-.tareaArte > * {
-  height: 100%;
+/* Escritorio: las tres tarjetas comparten filas (subgrid), así que los tres
+   mats miden lo que el panel más alto y los tres cuerpos arrancan a la misma
+   altura. Sin subgrid (navegadores de antes de 2023) cada tarjeta apila lo
+   suyo: nada se corta, sólo se desalinea. */
+@media (min-width: 901px) {
+  .tarea {
+    display: grid;
+    grid-row: span 2;
+    grid-template-rows: subgrid;
+    gap: 0;
+  }
 }
 
 .tareaCuerpo {
@@ -726,7 +753,6 @@
   .rubrosGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .tareasGrid { grid-template-columns: 1fr; }
   .tarea { display: grid; grid-template-columns: minmax(0, 0.7fr) minmax(0, 1fr); }
-  .tareaArte { height: 100%; min-height: 14rem; }
 }
 
 @media (max-width: 640px) {
@@ -736,6 +762,5 @@
   .rubroNumero { display: none; }
   .rubro strong { font-size: 1.15rem; }
   .tarea { display: flex; }
-  .tareaArte { height: 12rem; min-height: 0; }
   .precioGrid { grid-template-columns: 1fr; }
 }
