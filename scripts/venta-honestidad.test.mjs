@@ -238,7 +238,11 @@ const KIT = "hermes-content/sales-kit";
 // una reunion no se reescribe: cambiar lo que un cliente ya leyo es decision comercial.
 // El caso de abajo se pone rojo si esta exencion apunta a algo que ya no existe, asi que
 // una exencion vencida no puede tapar al material siguiente.
-const EXENTOS_HISTORICOS = ["presentacion-scz-20260801"];
+//
+// 2026-09-28: el unico exento (`presentacion-scz-20260801`) salio del kit a
+// `hermes-content/docs/historial/` (Sergio Urcullo: se archiva). Historia en su lugar ya
+// no necesita exencion; la lista queda vacia y lista para el proximo caso.
+const EXENTOS_HISTORICOS = [];
 
 /** El estado del emisor segun la fuente: "si" | "tramite" | "no". */
 function estadoSiatDeLaFuente() {

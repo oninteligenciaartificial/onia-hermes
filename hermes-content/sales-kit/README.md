@@ -23,6 +23,13 @@ equipo, y como toda foto **no es fuente de verdad**.
 | `04-OBJECIONES.md` | qué responder cuando frenan |
 | `05-CHECKLIST-CAPTURAS.md` | qué capturas hacen falta antes de mostrar |
 
+> **Archivados el 2026-09-28 (Sergio Urcullo)**: el deck de la reunión de Santa Cruz
+> del 1-ago (`presentacion-scz-20260801/`) y el muestrario inmobiliario
+> (`inmobiliario/`) se movieron a `hermes-content/docs/historial/`. Prometían de más
+> —«el chatbot responde, agenda y cotiza solo», «agentes de IA autónomos 24/7»,
+> «el agente atiende cada consulta y la persigue»— y el muestrario exhibía obra
+> («Fase 1», un rubro que no se vende). Son fotos de un día: no se reenvían.
+
 ## Reglas que siguen mandando
 
 - **Los precios se LEEN**, no se escriben acá: planes en
