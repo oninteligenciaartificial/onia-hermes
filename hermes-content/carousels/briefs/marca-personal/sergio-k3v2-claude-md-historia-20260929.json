@@ -1,0 +1,122 @@
+{
+  "title": "Un CLAUDE.md donde cada regla trae su historia (v2, pack referentes)",
+  "caption": "Mi archivo de reglas para Claude Code tiene una regla que no falla: cada regla lleva el caso real que la originó. Una regla sin su historia se desobedece; con la historia, no.\n\nY una regla tonta que funciona de alarma: Claude me tiene que llamar siempre por nombre y apellido. Si deja de hacerlo, dejó de leer sus instrucciones.\n\nGuardá la lámina 6 para armar el tuyo.",
+  "hashtags": [
+    "#claudecode",
+    "#claude",
+    "#ia",
+    "#agentesia",
+    "#productividad",
+    "#bolivia"
+  ],
+  "serie": "Claude Code",
+  "slides": [
+    {
+      "number": 1,
+      "layout": "logos",
+      "theme": "verde",
+      "headline": "Reglas",
+      "logos": [
+        {
+          "file": "hermes-content/references/brand-claude/claudecode.svg",
+          "label": "Claude Code"
+        }
+      ],
+      "body": "Cada regla de mi CLAUDE.md trae *su historia*. Por eso no se las salta.",
+      "next": "por qué",
+      "pendiente_imagen": {
+        "layout": "ilustrado",
+        "badge": "guía",
+        "logo": "hermes-content/references/brand-claude/claudecode.svg",
+        "headline": "Cada regla de mi CLAUDE.md trae *su historia*",
+        "image_prompt": "A small yellow canary perched on a thin bare branch, head turned to one side, soft morning light."
+      },
+      "alt_text": "Cada regla de mi CLAUDE.md trae su historia"
+    },
+    {
+      "number": 2,
+      "layout": "ensayo",
+      "theme": "blanco",
+      "headline": "Una regla *sin historia* se desobedece",
+      "body": "«Verificá antes de terminar» suena obvio.\n\nClaude lo lee, lo entiende y lo salta cuando está apurado.\n\nObvio no es obedecido. Con su historia, la cumple.",
+      "next": "el formato",
+      "alt_text": "Una regla sin historia se desobedece"
+    },
+    {
+      "number": 3,
+      "layout": "ensayo",
+      "theme": "blanco",
+      "headline": "Regla, y *el caso que la creó*",
+      "body": "Verificar es MIRAR.\n\nNace del día que dije «verificado» con un 200 y un grep: la pantalla estaba rota.\n\nCada regla lleva la fecha y lo que pasó. Así Claude entiende qué costaría romperla.",
+      "next": "el orden",
+      "alt_text": "Formato de regla con su historia"
+    },
+    {
+      "number": 4,
+      "layout": "lista",
+      "theme": "blanco",
+      "headline": "Ordenalo por *cuándo se necesita*",
+      "next": "el canario",
+      "alt_text": "Orden del archivo de reglas",
+      "items": [
+        {
+          "label": "Arriba",
+          "text": "lo de cada sesión"
+        },
+        {
+          "label": "Después",
+          "text": "las que más se rompen, con su caso"
+        },
+        {
+          "label": "Abajo",
+          "text": "el detalle de cada área"
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "layout": "ensayo",
+      "theme": "blanco",
+      "headline": "Una regla tonta que *te avisa*",
+      "body": "Claude me tiene que llamar siempre «Sergio Urcullo».\n\nSi un día me dice «Sergio» a secas, dejó de leer sus instrucciones: cambio de sesión.\n\nLa ves sin preguntar.",
+      "next": "armá el tuyo",
+      "alt_text": "La regla canario del nombre completo"
+    },
+    {
+      "number": 6,
+      "layout": "lista",
+      "theme": "blanco",
+      "headline": "Tres pasos para *empezar hoy*",
+      "items": [
+        {
+          "label": "El error",
+          "text": "el último que te hizo Claude"
+        },
+        {
+          "label": "La regla",
+          "text": "una frase, su fecha y su caso"
+        },
+        {
+          "label": "El canario",
+          "text": "algo que notes sin preguntar"
+        }
+      ],
+      "next": "la guía",
+      "alt_text": "Tres pasos para escribir tu CLAUDE.md"
+    },
+    {
+      "number": 7,
+      "layout": "logos",
+      "theme": "negro",
+      "headline": "Guía",
+      "logos": [
+        {
+          "file": "hermes-content/references/brand-claude/claudecode.svg",
+          "label": "Claude Code"
+        }
+      ],
+      "body": "Instalación, primera skill y cómo hacer que trabaje sin vos. En *mi web*: link en la bio.",
+      "alt_text": "Guía de Claude Code en la web"
+    }
+  ]
+}

@@ -1,0 +1,124 @@
+{
+  "title": "4 reglas de un seguimiento que no molesta (v2, pack referentes)",
+  "caption": "Un seguimiento molesta cuando llega tarde, fuera de hora o a la persona equivocada.\n\nLas cuatro reglas del bot de ONIA: 24 h de texto libre, después solo plantilla aprobada, nada de madrugada y tus números de prueba afuera.\n\nOjo: la ventana de 24 h es de la plataforma oficial de WhatsApp (la API que usan los bots). En la app de WhatsApp Business que usás a mano no existe.\n\nFuente: developers.facebook.com/docs/whatsapp/pricing",
+  "hashtags": [
+    "#whatsapp",
+    "#whatsappbusiness",
+    "#chatbot",
+    "#automatizacion",
+    "#ventas",
+    "#bolivia"
+  ],
+  "serie": "WhatsApp",
+  "slides": [
+    {
+      "number": 1,
+      "layout": "dato",
+      "theme": "verde",
+      "value": "4",
+      "headline": "reglas de un seguimiento *que no molesta*",
+      "body": "Escribile de nuevo a un cliente sin quemar tu número.",
+      "next": "regla 1",
+      "pendiente_imagen": {
+        "layout": "ilustrado",
+        "badge": "guía",
+        "logo": "hermes-content/references/brand-logos/whatsapp.svg",
+        "headline": "*4 reglas* de un seguimiento que no molesta",
+        "image_prompt": "A small brass hand bell resting quietly on a wooden table beside a folded natural linen napkin, soft early morning light."
+      },
+      "alt_text": "4 reglas de un seguimiento que no molesta"
+    },
+    {
+      "number": 2,
+      "layout": "dato",
+      "theme": "blanco",
+      "body": "Cuando tu cliente te escribe, tenés 24 h para contestar lo que quieras. Mi bot apunta el seguimiento a las 20 h: le quedan 4 de margen.",
+      "next": "regla 2",
+      "alt_text": "La ventana de 24 horas de WhatsApp",
+      "value": "24 h",
+      "headline": "Regla 1: 24 horas de *texto libre*",
+      "pendiente_imagen": {
+        "layout": "analogia",
+        "fuente": "Pexels, objeto recortado sobre blanco (gratis)",
+        "image_prompt": "glass hourglass with golden sand isolated on pure white background"
+      }
+    },
+    {
+      "number": 3,
+      "layout": "ensayo",
+      "theme": "blanco",
+      "headline": "Regla 2: después, *solo plantilla*",
+      "body": "Pasadas las 24 h, solo sale un mensaje que WhatsApp aprobó antes. Escribila y mandala a aprobar antes de programar nada.\n\nEs de la API oficial, la que usan los bots. En la app de WhatsApp Business no existe.",
+      "next": "regla 3",
+      "alt_text": "Fuera de la ventana solo se envían plantillas aprobadas"
+    },
+    {
+      "number": 4,
+      "layout": "lista",
+      "theme": "blanco",
+      "headline": "Regla 3: nada *de madrugada*",
+      "body": "uno a las 3 de la mañana sale, pero molesta",
+      "items": [
+        {
+          "label": "De día",
+          "text": "envía"
+        },
+        {
+          "label": "De madrugada",
+          "text": "espera"
+        },
+        {
+          "label": "A la mañana",
+          "text": "sale lo pendiente"
+        }
+      ],
+      "next": "regla 4",
+      "alt_text": "Los envíos esperan la franja horaria del cliente"
+    },
+    {
+      "number": 5,
+      "layout": "dato",
+      "theme": "blanco",
+      "value": "2 de 3",
+      "headline": "Regla 4: no te escribas *a vos mismo*",
+      "body": "Antes de un envío masivo, sacá tus números y los de prueba. En mi bot, de 3 contactos a escribir, 2 eran nuestros.",
+      "next": "las 4",
+      "alt_text": "Sacar tus números antes de un envío masivo"
+    },
+    {
+      "number": 6,
+      "layout": "lista",
+      "theme": "blanco",
+      "headline": "Antes de *encender*",
+      "items": [
+        {
+          "label": "Ventana",
+          "text": "24 h desde su último mensaje"
+        },
+        {
+          "label": "Plantilla",
+          "text": "aprobada antes de programar"
+        },
+        {
+          "label": "Hora",
+          "text": "franja en la hora del cliente"
+        },
+        {
+          "label": "Exclusión",
+          "text": "tus números y los de prueba, afuera"
+        }
+      ],
+      "next": "mis mensajes",
+      "alt_text": "Checklist de las 4 reglas de seguimiento"
+    },
+    {
+      "number": 7,
+      "layout": "ensayo",
+      "theme": "negro",
+      "headline": "Mis mensajes de seguimiento, en la *comunidad*",
+      "body": "Cómo escribo la plantilla y qué mando dentro de las 24 h.",
+      "cta": "Comunidad en la bio",
+      "alt_text": "Mensajes de seguimiento en la comunidad"
+    }
+  ]
+}

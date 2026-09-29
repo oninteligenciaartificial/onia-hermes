@@ -1,0 +1,99 @@
+{
+  "title": "Las 2 listas que tu bot necesita: confirmado / por confirmar (v2, pack referentes)",
+  "caption": "Probé un bot con un negocio de ejemplo: un cliente pide 200 cajas con logo para el viernes.\n\nSin reglas no prometió. Con dos listas, confirmado y por confirmar, usó el dato real («hacemos desde 50») y dijo qué faltaba confirmar.\n\nLa IA solo sabe lo que vos le das. Escribile las dos listas.\n\nPrueba del 28-sep con Sonnet 5.5, una corrida por caso. Las dos respuestas completas están en la comunidad.",
+  "hashtags": [
+    "#chatbot",
+    "#whatsapp",
+    "#ia",
+    "#atencionalcliente",
+    "#negocios",
+    "#bolivia"
+  ],
+  "serie": "Bot de WhatsApp",
+  "slides": [
+    {
+      "number": 1,
+      "layout": "dato",
+      "theme": "verde",
+      "headline": "listas que tu bot *necesita*",
+      "body": "Confirmado y por confirmar. Así no promete lo que no sabés.",
+      "next": "el problema",
+      "pendiente_imagen": {
+        "layout": "ilustrado",
+        "badge": "guía",
+        "headline": "Las *2 listas* que tu bot necesita",
+        "image_prompt": "Two plain white ceramic bowls side by side on a light oak table, one filled with dark roasted coffee beans and one empty."
+      },
+      "alt_text": "Las 2 listas que tu bot necesita",
+      "value": "2"
+    },
+    {
+      "number": 2,
+      "layout": "ensayo",
+      "theme": "blanco",
+      "headline": "Te preguntan *lo que no sabés*",
+      "body": "«Necesito 200 cajas con mi logo para este viernes, ¿me las pueden entregar?»\n\nSi tu bot dice que sí, lo prometiste vos. Y lo que promete, lo cumplís vos.",
+      "next": "la prueba",
+      "alt_text": "Un cliente pregunta algo que el negocio no confirmó"
+    },
+    {
+      "number": 3,
+      "layout": "ensayo",
+      "theme": "blanco",
+      "headline": "Sin listas, *no prometió*",
+      "body": "Negocio de ejemplo, con Sonnet 5.5. Solo le dije «sé amable y cerrá la venta».\n\n«No quiero prometerte una fecha que después no te pueda cumplir.» Pidió medidas, logo y zona.",
+      "next": "las listas",
+      "alt_text": "Respuesta del bot sin reglas"
+    },
+    {
+      "number": 4,
+      "layout": "lista",
+      "theme": "blanco",
+      "headline": "Escribilas en *su información*",
+      "items": [
+        {
+          "label": "Confirmado",
+          "text": "qué hacés, mínimos, horarios, zonas"
+        },
+        {
+          "label": "Por confirmar",
+          "text": "stock, plazo, precio"
+        },
+        {
+          "label": "La regla",
+          "text": "no confirmes lo que no está en la 1"
+        }
+      ],
+      "next": "el paso crítico",
+      "alt_text": "Plantilla de las dos listas para tu bot"
+    },
+    {
+      "number": 5,
+      "layout": "dato",
+      "theme": "blanco",
+      "value": "0",
+      "headline": "campos para escribir un precio *en el bot de ONIA*",
+      "body": "Stock, plazo y precio los confirma una persona. Lo que está por confirmar no se promete.",
+      "next": "el resultado",
+      "alt_text": "Lo que está por confirmar no se promete"
+    },
+    {
+      "number": 6,
+      "layout": "ensayo",
+      "theme": "blanco",
+      "headline": "Con las listas, *usó el dato real*",
+      "body": "«200 unidades está dentro de lo que trabajamos (hacemos desde 50).»\n\nY aclaró que el plazo lo confirma con el equipo.\n\nLa IA solo sabe lo que vos le das.",
+      "next": "las dos respuestas",
+      "alt_text": "Con las listas el bot usó el dato real"
+    },
+    {
+      "number": 7,
+      "layout": "ensayo",
+      "theme": "verde",
+      "headline": "Las dos respuestas, en la *comunidad*",
+      "body": "Completas, lado a lado, con la plantilla de las dos listas.\n\nPrueba del 28-sep con Sonnet 5.5, una corrida por caso.",
+      "cta": "Comunidad en la bio",
+      "alt_text": "Las dos respuestas completas en la comunidad"
+    }
+  ]
+}

@@ -1,0 +1,116 @@
+{
+  "title": "Recuperar vs reconstruir el prompt de una imagen (v2, pack referentes)",
+  "caption": "Sacar el prompt de una imagen son dos cosas distintas.\n\nRecuperar: el creador lo mostró (en una lámina, en el caption, en un cuadro del video) y lo leés tal cual. Reconstruir: escribís uno que da algo parecido, y lo decís.\n\nMirando, nunca sabés el modelo, la referencia, los intentos ni el seed.\n\nEl método sale de unos 58 reels analizados, varios con el prompt en pantalla.",
+  "hashtags": [
+    "#prompts",
+    "#ia",
+    "#inteligenciaartificial",
+    "#imagenesia",
+    "#contenido",
+    "#bolivia"
+  ],
+  "serie": "Contenido con IA",
+  "slides": [
+    {
+      "number": 1,
+      "layout": "dato",
+      "theme": "verde",
+      "value": "2",
+      "headline": "caminos para sacar *el prompt* de una imagen",
+      "body": "Recuperar o reconstruir. No se presentan igual: uno lo leés, el otro lo escribís vos.",
+      "next": "por qué",
+      "pendiente_imagen": {
+        "layout": "ilustrado",
+        "badge": "guía",
+        "headline": "El prompt de una imagen: *2 caminos*",
+        "image_prompt": "An old brass magnifying glass with a dark wooden handle resting on a rough grey stone."
+      },
+      "alt_text": "El prompt de una imagen: 2 caminos"
+    },
+    {
+      "number": 2,
+      "layout": "ensayo",
+      "theme": "blanco",
+      "headline": "Parecido *no es el original*",
+      "body": "Un prompt que da algo parecido no es el que usó el autor.\n\nSi lo pasás como el original, engañás sin querer.\n\nPor eso son dos caminos, y cada uno se dice distinto.",
+      "next": "camino 1",
+      "alt_text": "Un prompt parecido no es el original"
+    },
+    {
+      "number": 3,
+      "layout": "lista",
+      "theme": "blanco",
+      "headline": "Recuperar: *buscalo en pantalla*",
+      "body": "leé todo antes de escribir nada",
+      "items": [
+        {
+          "label": "Las láminas",
+          "text": "todas, no solo la 1"
+        },
+        {
+          "label": "El caption",
+          "text": "varios lo ponen ahí"
+        },
+        {
+          "label": "El video",
+          "text": "cuadro por cuadro"
+        }
+      ],
+      "next": "camino 2",
+      "alt_text": "Dónde buscar el prompt original"
+    },
+    {
+      "number": 4,
+      "layout": "ensayo",
+      "theme": "blanco",
+      "headline": "Reconstruir: *decí que es tuyo*",
+      "body": "Si no está en pantalla, escribís uno que produce algo parecido y lo aclarás:\n\n«no es el prompt original, es uno que da algo parecido».",
+      "next": "lo que no se ve",
+      "alt_text": "Una reconstrucción se presenta como tal"
+    },
+    {
+      "number": 5,
+      "layout": "lista",
+      "theme": "blanco",
+      "headline": "Lo que la imagen *no te dice*",
+      "body": "si no lo sabés, decilo en vez de inventarlo",
+      "items": [
+        {
+          "label": "El modelo",
+          "text": "si no está rotulado"
+        },
+        {
+          "label": "La referencia",
+          "text": "la imagen no la muestra"
+        },
+        {
+          "label": "Los intentos",
+          "text": "ves solo el que salió"
+        },
+        {
+          "label": "El seed",
+          "text": "no se deduce"
+        }
+      ],
+      "next": "el orden",
+      "alt_text": "Lo que no se puede recuperar mirando una imagen"
+    },
+    {
+      "number": 6,
+      "layout": "ensayo",
+      "theme": "blanco",
+      "headline": "Para reconstruir, *este orden*",
+      "body": "1 tipo de foto · 2 sujeto haciendo algo · 3 rasgos · 4 vestuario · 5 pose\n\n6 fondo como lista de objetos · 7 cámara y película · 8 negative prompt\n\nPara que parezca real: pedí textura y defectos, y prohibí lo pulido en el negative.",
+      "next": "la plantilla",
+      "alt_text": "Los 8 bloques para reconstruir un prompt"
+    },
+    {
+      "number": 7,
+      "layout": "cierre",
+      "theme": "verde",
+      "keyword": "PROMPT",
+      "body": "y te mando por mensaje la plantilla de los 8 bloques, con su negative base.",
+      "alt_text": "Comentá PROMPT para recibir la plantilla"
+    }
+  ]
+}

@@ -1,0 +1,120 @@
+{
+  "title": "5 revisiones antes de publicar tu video con IA (v2, pack referentes)",
+  "caption": "No tengo editor de video: lo edita una cadena de pasos con IA. Pero hay cinco cosas que la IA no revisa por mí.\n\nLa crítica es la 2: la transcripción se lee a ojo antes de quemar subtítulos. Una falta quemada no se parchea, se vuelve a renderizar.\n\nY un presentador hecho con IA explica y muestra, pero nunca se hace pasar por cliente.\n\nGuardá la lámina 6 para tu próximo video.",
+  "hashtags": [
+    "#edicionvideo",
+    "#ia",
+    "#contenido",
+    "#reels",
+    "#inteligenciaartificial",
+    "#bolivia"
+  ],
+  "serie": "Video con IA",
+  "slides": [
+    {
+      "number": 1,
+      "layout": "dato",
+      "theme": "verde",
+      "value": "5",
+      "headline": "revisiones antes de publicar *tu video con IA*",
+      "body": "Lo que la IA no revisa por vos: cortes, texto, caras, costo y presentador.",
+      "next": "por qué",
+      "pendiente_imagen": {
+        "layout": "ilustrado",
+        "badge": "guía",
+        "headline": "*5 revisiones* antes de publicar tu video con IA",
+        "image_prompt": "A small pair of plain brass sewing scissors resting beside a spool of natural undyed linen thread on a pale oak table."
+      },
+      "alt_text": "5 revisiones antes de publicar tu video con IA"
+    },
+    {
+      "number": 2,
+      "layout": "ensayo",
+      "theme": "blanco",
+      "headline": "La IA edita, pero *no corrige*",
+      "body": "Transcribe, corta y genera.\n\nNo corrige faltas, no pide permiso a nadie y no mira el costo. Eso lo revisás vos.\n\nLo publicado es tuyo.",
+      "next": "revisión 1",
+      "alt_text": "La IA no corrige ni pide permiso"
+    },
+    {
+      "number": 3,
+      "layout": "lista",
+      "theme": "blanco",
+      "headline": "1 · La tabla, *antes de cortar*",
+      "body": "qué queda, qué se tira y por qué",
+      "items": [
+        {
+          "label": "La frase entera",
+          "text": "tiro el silencio largo"
+        },
+        {
+          "label": "La segunda toma",
+          "text": "tiro la que repetí"
+        },
+        {
+          "label": "La idea",
+          "text": "tiro el «eh», el «o sea»"
+        }
+      ],
+      "next": "la crítica",
+      "alt_text": "Tabla de cortes revisada antes de cortar"
+    },
+    {
+      "number": 4,
+      "layout": "ensayo",
+      "theme": "blanco",
+      "headline": "2 · Leé el texto *línea por línea*",
+      "body": "Antes de quemar subtítulos, leé la transcripción a ojo.\n\nEn un reel ajeno salió «A GENERADO» sin hache y «ARANA» sin eñe.\n\nQuemado no se parchea: se vuelve a renderizar.",
+      "next": "revisión 3",
+      "alt_text": "Leer la transcripción antes de quemar subtítulos"
+    },
+    {
+      "number": 5,
+      "layout": "ensayo",
+      "theme": "blanco",
+      "headline": "3 · Difuminá a *quien no firmó*",
+      "body": "Gente en la calle, pacientes, clientes: sin permiso, su cara no sale.\n\nMi script avisa los cuadros sin cubrir, pero el difuminado se mira: no es garantía.",
+      "next": "4 y 5",
+      "alt_text": "Difuminar las caras de terceros"
+    },
+    {
+      "number": 6,
+      "layout": "lista",
+      "theme": "blanco",
+      "headline": "Antes de *publicar*",
+      "items": [
+        {
+          "label": "Cortes",
+          "text": "tabla revisada antes de cortar"
+        },
+        {
+          "label": "Texto",
+          "text": "transcripción leída a ojo"
+        },
+        {
+          "label": "Caras",
+          "text": "terceros difuminados y revisados"
+        },
+        {
+          "label": "Costo",
+          "text": "cotizado; el video, aprobado aparte"
+        },
+        {
+          "label": "Presentador IA",
+          "text": "nunca como cliente ni testimonio"
+        }
+      ],
+      "next": "mi editor",
+      "alt_text": "Checklist de 5 revisiones antes de publicar un video con IA"
+    },
+    {
+      "number": 7,
+      "layout": "ensayo",
+      "theme": "negro",
+      "headline": "Mi editor, en la *comunidad*",
+      "body": "No tengo editor de video: lo edita una cadena de pasos con IA.\n\nGrabar, transcribir, cortar, subtitular, leer y publicar. Los pasos, uno por uno.",
+      "cta": "Comunidad en la bio",
+      "alt_text": "Los pasos del editor en la comunidad"
+    }
+  ]
+}

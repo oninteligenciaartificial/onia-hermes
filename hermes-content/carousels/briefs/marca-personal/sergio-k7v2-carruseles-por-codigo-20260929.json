@@ -1,0 +1,124 @@
+{
+  "title": "Carruseles por código en 5 pasos (v2, pack referentes)",
+  "caption": "Este carrusel salió de un archivo JSON.\n\nLa IA pinta solo la foto de la portada. El texto lo pone el código, porque los modelos de imagen escriben mal: el 29-sep uno me inventó letras en unas tazas y hasta un post falso de Instagram.\n\nCinco pasos: brief, imagen sin letras, render, revisión a ojo y costo antes de generar.\n\nComentá BRIEF y te paso el de este carrusel.",
+  "hashtags": [
+    "#claudecode",
+    "#ia",
+    "#contenido",
+    "#automatizacion",
+    "#instagram",
+    "#bolivia"
+  ],
+  "serie": "Contenido con IA",
+  "slides": [
+    {
+      "number": 1,
+      "layout": "dato",
+      "theme": "verde",
+      "value": "5",
+      "headline": "pasos para hacer carruseles *por código*",
+      "body": "La IA pinta la imagen. El texto lo escribe el código: este carrusel salió de un JSON.",
+      "next": "por qué",
+      "pendiente_imagen": {
+        "layout": "ilustrado",
+        "badge": "guía",
+        "headline": "Carruseles por código en *5 pasos*",
+        "image_prompt": "A few small offcuts of pale birch wood stacked neatly beside a wood carving chisel with a worn wooden handle on a workbench."
+      },
+      "alt_text": "Carruseles por código en 5 pasos"
+    },
+    {
+      "number": 2,
+      "layout": "ensayo",
+      "theme": "blanco",
+      "headline": "La IA de imagen *escribe mal*",
+      "body": "El 29-sep pedí fotos de objetos y el modelo inventó letras en unas tazas. Y hasta un post falso de Instagram.\n\nTexto en la imagen es texto sin control.",
+      "next": "paso 1",
+      "alt_text": "Los modelos de imagen escriben mal"
+    },
+    {
+      "number": 3,
+      "layout": "lista",
+      "theme": "blanco",
+      "headline": "Paso 1: el *brief*",
+      "body": "todo el texto en un JSON, cada lámina con su rol",
+      "items": [
+        {
+          "label": "Portada"
+        },
+        {
+          "label": "El problema"
+        },
+        {
+          "label": "Una idea por lámina"
+        },
+        {
+          "label": "La que se guarda"
+        },
+        {
+          "label": "El cierre"
+        }
+      ],
+      "next": "paso 2",
+      "alt_text": "Estructura del brief en JSON"
+    },
+    {
+      "number": 4,
+      "layout": "ensayo",
+      "theme": "blanco",
+      "headline": "Paso 2: la IA pinta *solo la imagen*",
+      "body": "Objetos sin nada impreso: piedras, plantas, madera.\n\nTazas, cuadernos y pantallas no: ahí inventa letras, aunque le pidas «sin texto».",
+      "next": "paso 3",
+      "alt_text": "La IA genera solo la imagen, sin texto"
+    },
+    {
+      "number": 5,
+      "layout": "dato",
+      "theme": "blanco",
+      "value": "7",
+      "headline": "Paso 3: el código *pone el texto*",
+      "body": "Un script arma cada lámina en HTML y la fotografía con Chrome sin ventana: 7 PNG de 1080×1350. Tildes exactas, y corregir una coma es gratis.",
+      "next": "4 y 5",
+      "alt_text": "El render convierte el brief en láminas"
+    },
+    {
+      "number": 6,
+      "layout": "lista",
+      "theme": "blanco",
+      "headline": "El circuito *entero*",
+      "body": "4 y 5: revisar a ojo y cotizar",
+      "items": [
+        {
+          "label": "Brief",
+          "text": "todo el texto, en JSON"
+        },
+        {
+          "label": "Imagen",
+          "text": "solo objetos, sin letras"
+        },
+        {
+          "label": "Render",
+          "text": "HTML a PNG, por código"
+        },
+        {
+          "label": "Revisión",
+          "text": "hoja de contactos, a ojo"
+        },
+        {
+          "label": "Costo",
+          "text": "cotiza; sin tu OK no gasta"
+        }
+      ],
+      "next": "el brief",
+      "alt_text": "Los 5 pasos del circuito de carruseles"
+    },
+    {
+      "number": 7,
+      "layout": "cierre",
+      "theme": "negro",
+      "keyword": "BRIEF",
+      "body": "y te mando por mensaje el JSON de este mismo carrusel.",
+      "alt_text": "Comentá BRIEF para recibir el JSON"
+    }
+  ]
+}
