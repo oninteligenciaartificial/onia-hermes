@@ -75,6 +75,13 @@ seccion_prospectos() {
 
 # ── Decisiones y salud: se le pide al parte diario, que ya sabe rotar y filtrar ──
 PARTE_MSG=""
+# Una VISTA PREVIA no puede gastar turnos: el parte rota las decisiones con un estado en disco
+# (ONIA_PARTE_RONDA), y previsualizar el resumen le haría saltear una decisión al de verdad.
+if [ "${ONIA_JARVIS_SOLO_IMPRIMIR:-0}" = 1 ]; then
+  RONDA_REAL="${ONIA_PARTE_RONDA:-/var/lib/onia-parte-diario/ronda}"
+  mkdir -p "$TMP/ronda"; [ -d "$RONDA_REAL" ] && cp -a "$RONDA_REAL/." "$TMP/ronda/" 2>/dev/null
+  export ONIA_PARTE_RONDA="$TMP/ronda"
+fi
 if [ -x "$PARTE" ] || [ -f "$PARTE" ]; then
   printf '#!/usr/bin/env bash\nprintf "%%s" "$1"\n' > "$TMP/captura.sh"; chmod +x "$TMP/captura.sh"
   PARTE_MSG=$(ONIA_TG="$TMP/captura.sh" ONIA_TABLERO="$TABLERO" bash "$PARTE" 2>/dev/null </dev/null) || true

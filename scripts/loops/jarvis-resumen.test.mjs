@@ -230,3 +230,14 @@ test("cierre: lo que sigue esperando, con la cuenta ya corregida", () => {
   const msg = b.imprimir("noche", { ONIA_HOY: "2026-09-29" });
   assert.match(msg, /⏳ <b>Sigue esperando<\/b>\n• 3 persona\(s\) sin respuesta\.\n• 1 decisión\(es\) tuya\(s\)\./);
 });
+
+test("la vista previa no gasta turnos del parte (su ronda real queda intacta)", () => {
+  const b = banco();
+  const ronda = join(b.dir, "ronda");
+  mkdirSync(ronda);
+  writeFileSync(join(ronda, "t_existente"), "1");
+  // Un parte de mentira que, como el real, anota un turno en su ronda cada vez que corre.
+  const parte = b.escribir("parte-rota.sh", `#!/usr/bin/env bash\ntouch "$ONIA_PARTE_RONDA/t_nuevo"\n"$ONIA_TG" "$(cat ${b.dir}/parte.txt)"\n`);
+  b.imprimir("manana", { ONIA_PARTE: parte, ONIA_PARTE_RONDA: ronda });
+  assert.deepEqual(readdirSync(ronda), ["t_existente"]);
+});
