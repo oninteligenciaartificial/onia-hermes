@@ -2,7 +2,29 @@
 
 **Archivo único del carril.** Actualizado 2026-09-29 por Claude (Opus 5.5).
 
-## ⏩ Estado 29-sep (lo más nuevo, leer primero)
+## ⏩⏩ Estado 29-sep tarde (lo más nuevo)
+
+- **Diseño en un solo lugar:** skill `.claude/skills/diseno-contenido-onia/` (índice: fuentes de
+  imagen, packs, patrones, QA, gasto) + galería única `hermes-content/galeria/` con
+  `galeria.json`. Orden de imágenes: galería → **Pexels/Unsplash** (Sergio dijo «Pixel»; se
+  interpretó Pexels — confirmar) → Higgsfield → logo oficial. Google/Pinterest: no se publica
+  nada sin licencia.
+- **Pack nuevo `referentes`** (`scripts/carousel_pack_referentes.js`, layouts logos · analogia ·
+  ensayo · ilustrado · lista) tras la crítica «vacíos y con demasiado texto». Prototipos mirados:
+  `carousels/out/sergio-k1v2-*` y `sergio-k2v2-*`. K3–K9 siguen en el pack viejo: rehacerlos con
+  este (imágenes: galería/Pexels primero; acuarelas Higgsfield ≈0,12 cr c/u con lote aprobado).
+- **Presentaciones de YouTube:** 9 decks `carousels/out/yt-10…yt-18` (`scripts/decks/yt-octubre-2026.mjs`,
+  generador con `--decks`), mirados.
+- **GitHub:** `cola/plan-3-semanas/S4-GITHUB-REPOS.md` — 15 repos en tendencia con riesgo, 12
+  formatos, 10 verticales + 1 YouTube (G01–G11) SIN fecha en el calendario todavía.
+- **Patrones visuales de los 8 referentes:** `diseno-contenido-onia/patrones/REFERENTES-VISUAL.md`.
+- **Coordinación:** la sesión «Onia platform development handoff» es dueña de onia-platform,
+  SIAT, sales-kit y la web pública (árbol `onia-hermes-v1-remoto-20260928`); esta sesión, del
+  contenido de onia-hermes. Acordado 29-sep: nadie arma lugares paralelos; se avisa antes de
+  tocar `.claude/skills/` o `hermes-content/references/`.
+- Gasto Higgsfield del día: 0,84 cr (bitácora al día).
+
+## ⏩ Estado 29-sep (mañana)
 
 - **Plan de 3 semanas** (30-sep → 20-oct): [`cola/plan-3-semanas/MAPA.md`](../cola/plan-3-semanas/MAPA.md)
   — recorrido video → web → comunidad → ONIA, 3 videos/día (A tutorial · B actualidad · C YouTube
