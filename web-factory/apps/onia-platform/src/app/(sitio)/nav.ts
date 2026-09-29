@@ -1,3 +1,4 @@
+import type { PlanId } from "@/lib/pricing";
 import { APP_URL } from "@/lib/site";
 
 /**
@@ -157,6 +158,33 @@ export const REGISTRO_URL = `${APP_URL}/register`;
  * su destino: `alta.test.ts` verifica las dos mitades.
  */
 export const EMPEZAR_URL = REGISTRO_URL;
+
+/**
+ * El plan de cada tarjeta, con el nombre que le da el checkout del producto
+ * (`PLANES_ELEGIBLES` en `onia-platform/lib/checkout/plan-elegido.ts`). Es la
+ * misma equivalencia que `PLANES_EN_ORDEN` de `scripts/precios-fuente.mjs`, y
+ * `plan-llega-al-checkout.test.ts` ata las dos. `Record<PlanId, …>` a propósito:
+ * un escalón nuevo en `PLANES` no compila hasta que diga cómo se llama allá.
+ */
+const PLAN_EN_EL_CHECKOUT: Record<PlanId, "basic" | "crece" | "professional" | "clinic"> = {
+  basico: "basic",
+  crece: "crece",
+  pro: "professional",
+  full: "clinic",
+};
+
+/**
+ * El alta con el plan que el lead eligió: `/register?plan=<clave>`.
+ *
+ * Hasta el 2026-09-29 las cuatro tarjetas de `/precios` mandaban al mismo
+ * `/register` pelado, así que «Empezar con el Profesional» llegaba al checkout
+ * sin plan marcado. El producto ya guarda `?plan=` desde el registro hasta el
+ * QR; sólo faltaba que la tarjeta lo dijera. Los botones sin plan («Creá tu
+ * cuenta») siguen yendo a `EMPEZAR_URL`, sin parámetro.
+ */
+export function registroConPlan(id: PlanId): string {
+  return `${REGISTRO_URL}?plan=${PLAN_EN_EL_CHECKOUT[id]}`;
+}
 
 /** Legales: existen una sola vez en el producto. Se linkean, no se copian. */
 export const NAV_LEGAL: readonly NavItem[] = [

@@ -19,7 +19,7 @@ import {
   pctDelSalarioMinimo,
 } from "@/content/chatbot-precios";
 import { WA_URL_LANDING, SITE_URL } from "@/lib/site";
-import { EMPEZAR_URL } from "../nav";
+import { EMPEZAR_URL, registroConPlan } from "../nav";
 import { CTA_ALTA, ctaAltaPlan } from "../alta";
 import { Block, Btn, Kicker, JsonLd } from "../ui";
 import s from "../sitio.module.css";
@@ -213,7 +213,7 @@ export default function Precios() {
                   {plan.cuando}
                 </p>
                 <div className={s.planFoot}>
-                  <Btn href={EMPEZAR_URL}>{ctaAltaPlan(plan.nombre)}</Btn>
+                  <Btn href={registroConPlan(plan.id)}>{ctaAltaPlan(plan.nombre)}</Btn>
                 </div>
               </div>
             ))}
