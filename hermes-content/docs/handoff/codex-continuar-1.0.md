@@ -1,6 +1,78 @@
-# Handoff — continuar la 1.0 en Codex
+# Handoff — la 1.0 de Onia (Codex → Claude, 28/29-sep)
 
-> ## 🧭 EMPEZÁ ACÁ (Codex, 27-sep-2026) — lo demás de este archivo es historia de apoyo
+> ## 🧭 EMPEZÁ ACÁ (Claude, 29-sep-2026 madrugada) — lo de abajo es historia de apoyo
+>
+> **1. Objetivo.** Cerrar la 1.0: un cliente de los 5 rubros descubre, prueba, usa y paga Onia sin un
+> humano de Onia y sin una promesa falsa. Codex (cuota agotada al 99 %) le pasó el candidato a Claude el
+> 28-sep (traspaso: `onia-platform-v1-integracion-20260927/docs/ONIA_TRASPASO_CLAUDE_20260928.md`).
+>
+> **2. En producción y verificado (29-sep, 03:27-03:36 UTC).** Platform `release-c3b92067`
+> (BUILD `Bro1EA6eJeLv3cvDtPZRs`, rollback `onia-platform-prev-PNIhLndY-20260929-032719`): pago con el
+> **QR estático del BCP** en el checkout (`/pago/qr-bcp-onia.png` 200), **ícono verde con «on» negro**,
+> aviso de Meta **sin tramo gratis** (fuente oficial: desde el 1-oct-2026 Meta cobra cada mensaje de
+> servicio, «Volume tiers: None»). Web: «pagás con nuestro QR» (BUILD `5k0gr8iqCdGMnG_ZMnkze`).
+> **CI gratis:** GitHub Free agotó sus 2.000 min; ahora corre en **runners propios en el VPS**
+> (`onia-runner-platform` 1,5 CPU/6 GB, `onia-runner-hermes` 0,5/1,5 GB, actions/runner v2.337.0 con
+> SHA verificado, sin socket Docker, usuario no root). Parche de disponibilidad de Hermes desplegado y
+> el job de agenda de las 08:00 con la skill `agenda-calendario` (ya no inventa horarios).
+>
+> **3. Candidato 1.0 listo para aprobar (NO publicado).**
+> | Qué | Dónde |
+> |---|---|
+> | Platform integrada (15 ramas + master) | `C:/dev/proyectos/onia-platform-v1-integracion-20260927`, rama `codex/v1-integracion-20260927`, **`cef98232`**, respaldo `origin/wip/v1-integracion-20260928`, PR borrador **#90** (CI en el runner) |
+> | Hermes (web + configurador + kit + docs) | `C:/dev/proyectos/onia-hermes-v1-remoto-20260928`, rama `codex/v1-hermes-20260928`, respaldo `origin/wip/v1-hermes-20260928` |
+> | Suite nativa del candidato | **7.695 pasan / 0 fallan** (CI=true, 29-sep) · tsc 0 · eslint 0 errores |
+> Qué trae: todo lo de Codex (DG-088..099: Mi web + configurador, quote de pago inmutable, recurrentes,
+> horarios); arreglos de 3 revisiones adversariales (cookie de Mi web, cadencia y doble emisión de
+> recurrentes, cierre a medianoche, cambio de plan convertido por relación de precios mensuales, webhook
+> BCP atado al pago, referencias de pago, permisos finos en APIs de plata/config/chatbot/suscripción
+> —incluido el QR de cobro—, ventana de 24 h de WhatsApp, inbox de Onia excluido, choques entre agentes);
+> **WhatsApp saliente desde el número del cliente** (Embedded Signup + plantilla en su WABA);
+> **destrabe del aprobador único** (7 días); **Reprogramador**; **Recall de tratamientos a medias** +
+> **Plan de tratamiento** en la ficha; panel **«Lo que te dejó Onia»** + botón **«Ya lo envié»**; copy
+> honesto y nombre **«Agente conversacional de WhatsApp»**; kit de venta reescrito con gate.
+>
+> **4. Para publicar (con el «OK» de Sergio Urcullo sobre la página de revisión):**
+> (a) aplicar las 3 migraciones aditivas (`20260927050000_add_web_service_requests`,
+> `20260928010000_add_web_visual_selection`, `20260928020000_add_subscription_payment_quotes`) con
+> backup previo (skill `onia-db`); (b) **`ONIA_WHATSAPP_INBOX_ID=5` en `/opt/onia-platform/app.env`
+> ANTES del swap** (sin ella, en producción el resolver no presta ningún token de inbox: falla cerrado);
+> (c) merge del PR #90 a `master` con CI+Security verdes → `publicar.sh` → «PUBLICADO Y VERIFICADO» →
+> mirar las pantallas nuevas; (d) Hermes: push de la rama a `main` → publicador de la web → mirar
+> `/agentes`, `/chatbot`, `/precios` y que `/v1` redirija 308.
+>
+> **5. Intentos fallidos y trampas (no repetirlos).**
+> - Un veredicto sobre Meta con fuente de terceros («1.000 gratis») estuvo a punto de publicarse: la
+>   página oficial no lo dice. Precios de proveedores SOLO de la fuente oficial.
+> - El runner con 4 GB murió por memoria en `next build` (subido a 6 GB). Un checkout completo de hermes
+>   en el runner dejó 11 GB en el disco del VPS: solo `repo-pulse` corre ahí con clon parcial.
+> - Vitest en Windows: timeouts de tests que recorren el repo (`stock.test.ts` advisory lock,
+>   `backup-onia-postgres`, `rango-gitleaks`) — pasan solos; el CI de Linux es el árbitro.
+> - Los «falta mergear» de las colas viejas caducan: medir `origin/master` y la imagen que corre.
+>
+> **6. Lo que depende de Sergio Urcullo.**
+> 1. **OK sobre la página de revisión de la 1.0** (y con eso, las 3 migraciones).
+> 2. Probar «Conectar mi WhatsApp» con un número real (7 pasos en el informe de la rama wa-saliente) —
+>    confirma que Chatwoot entrega el token y que la plantilla sale aprobada.
+> 3. Compartir su calendario personal (`sergio.urcullo.m@gmail.com` → «Ver solo disponibilidad» a
+>    `oninteligenciaartificial@gmail.com`) para que Hermes vea su agenda real.
+> 4. Levantar WSL en la PC de casa (`DESKTOP-0GGGNMF`): el túnel `127.0.0.1:2222` está caído desde el
+>    28-sep 16:00 UTC (propuesta de disparador cada 10 min, sin aplicar).
+> 5. SIAT Fase 1 (80 %, VI 150/560, IX 60/160): manual por su procedimiento; pedir Fase 2 antes del 04-nov.
+> 6. Decisión de la etapa post-1.0: modelo de IA para el agente (recomendado gpt-4.1-mini → GPT-6 Sol,
+>    respaldo Sonnet 5.5, Opus 5.5 como juez; Sergio pidió revisarlo una vez más) y el paquete S/M.
+>
+> **7. Después de la 1.0 (decidido, en este orden sugerido):** IA en las respuestas del agente
+> conversacional (con evals en voseo, topes por contacto/hora y clave LiteLLM por org); plantillas de
+> Meta para los mensajes de agentes fuera de la ventana de 24 h; checkout del paquete único S/M con
+> medidores de cupos y techo de Meta en Bs; agendar dentro del chat; campañas de marketing automatizadas
+> con su pago; versiones a medida para empresas desde un archivo de configuración; agente de llamadas
+> (solo llamadas entrantes de WhatsApp, por bloques de minutos). Documentos de decisión: artifacts
+> «Onia Todo Incluido» (claude.ai/artifact/DVcDcZSXxo7SHXPPkCeKq3) y «Onia: IA y competencia»
+> (claude.ai/artifact/49tFiGrgQ5FRETKjecSY5p).
+
+
+> ## 🗂️ (historia) EMPEZÁ ACÁ de Codex, 27-sep-2026
 >
 > **1. Objetivo.** La 1.0 = un cliente de los 5 rubros **descubre, prueba, usa y paga** Onia sin un
 > humano de Onia y sin una sola promesa falsa (`cola/plataforma-v1.md` §«Definición 1.0»). La etapa
