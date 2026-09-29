@@ -155,7 +155,7 @@ export const EJES = [
   { id: "siat", label: "Factura SIAT boliviana", alcanceOnia: null },
   {
     id: "agentes",
-    label: "Agentes que trabajan solos",
+    label: "Agentes que proponen y esperan tu OK",
     alcanceOnia: ALCANCE_CON_FICHA,
   },
 ] as const;

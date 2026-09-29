@@ -206,6 +206,13 @@ export const META_VENTANA_24H = {
 } as const;
 
 /**
+ * El mismo `META_VENTANA_24H.desde`, con un nombre SIN dígitos: `lib/pricing.ts`
+ * es fuente de precio y el publicador (publicar-solo.sh) frena ante cualquier
+ * número nuevo en ella — el `24` del nombre de arriba contaría como uno.
+ */
+export const META_COBRA_RESPUESTAS_DESDE = META_VENTANA_24H.desde;
+
+/**
  * Meta: el cliente le paga a Meta DIRECTO, en su propia cuenta. Nosotros no
  * facturamos esos mensajes ni les sumamos nada encima (decisión 2026-08-21:
  * se cae el +20 %). Una sola redacción para todas las pantallas.

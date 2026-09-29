@@ -6,6 +6,7 @@ import { describe, expect, it } from "vitest";
 
 import { META_NOTA, META_VENTANA_24H } from "@/content/chatbot-precios";
 import { REQUISITOS_CHATBOT } from "@/content/requisitos";
+import { NO_INCLUYE } from "@/lib/pricing";
 
 /**
  * Una condición de un TERCERO que el sitio le cotiza al lead no se afirma sin
@@ -216,6 +217,20 @@ function afirmacionesEnElDisco(cond: (typeof CONDICIONES)[number]) {
       .map((frase) => ({ archivo: relative(SRC, archivo), frase, texto: limpio }));
   });
 }
+
+// La otra cara del mismo cambio de Meta: `/precios` («No incluye») decía que Meta
+// cobra «cada mensaje que TU negocio le manda primero». No niega un cargo, así que
+// el barrido de abajo no la veía, y desde el 1-oct es falsa: Meta cobra también
+// las respuestas. Corregido el 2026-09-28 (condición 8 de la 1.0).
+describe("lo que no incluye el precio no achica lo que cobra Meta", () => {
+  it("dice que Meta cobra también las respuestas, con la fecha de la fuente", () => {
+    const meta = NO_INCLUYE.find((x) => /whatsapp/i.test(x.que));
+    expect(meta, "falta la fila de Meta en «No incluye»").toBeDefined();
+    expect(meta!.detalle).not.toMatch(/manda primero/i);
+    expect(meta!.detalle).toMatch(/tambi[eé]n las respuestas/i);
+    expect(meta!.detalle).toContain(META_VENTANA_24H.desde);
+  });
+});
 
 describe("una condición de un tercero no se afirma sin su fecha", () => {
   for (const cond of CONDICIONES) {

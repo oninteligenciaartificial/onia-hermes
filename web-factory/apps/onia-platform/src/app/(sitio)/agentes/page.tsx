@@ -15,9 +15,9 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "es_BO",
-    title: "Trabajan de noche. No deciden solos.",
+    title: "Revisan tus datos antes de que abras. No deciden solos.",
     description:
-      "Los agentes revisan tus datos con el negocio cerrado y dejan un borrador esperando. A la mañana aprobás lo que sirve.",
+      "Cada mañana, antes de que abras, los agentes revisan tus datos y te dejan un borrador esperando. Aprobás lo que sirve.",
     url: "/agentes",
   },
 };
@@ -67,12 +67,12 @@ export default function Agentes() {
             <div>
               <Kicker>Agentes con IA</Kicker>
               <h1 className={s.display}>
-                Trabajan de noche. No <em>deciden</em> solos.
+                Revisan tus datos antes de que abras. No <em>deciden</em> solos.
               </h1>
               <p className={s.lead}>
-                Los agentes revisan tus datos mientras el negocio está cerrado y
-                dejan un borrador esperando. A la mañana ves qué proponen,
-                aprobás lo que te sirve y se manda.
+                Cada mañana los agentes te dejan escritos los mensajes que
+                proponen. Aprobás lo que te sirve y sale por tu WhatsApp, o te
+                queda listo para mandarlo con un toque.
               </p>
               <div className={s.actions}>
                 <Btn href={EMPEZAR_URL}>{CTA_ALTA}</Btn>

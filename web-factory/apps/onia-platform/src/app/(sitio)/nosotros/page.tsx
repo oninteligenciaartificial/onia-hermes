@@ -54,9 +54,9 @@ const PRINCIPIOS = [
       "Lo que está en trámite lo publicamos como en trámite, con su fecha y su resolución. Preferimos que lo leas antes de contratar y no que lo descubras en la primera semana.",
   },
   {
-    titulo: "La IA propone, vos aprobás",
+    titulo: "Los agentes proponen, vos aprobás",
     detalle:
-      "Nuestros agentes trabajan de noche, pero nada sale hacia un cliente tuyo sin tu OK. Human-in-the-loop no es un adorno: es la arquitectura.",
+      "Revisan tus datos cada mañana antes de que abras, pero nada sale hacia un cliente tuyo sin tu OK. Human-in-the-loop no es un adorno: es la arquitectura.",
   },
   {
     titulo: "Bolivia específica, no genérica",
@@ -114,8 +114,8 @@ export default function Nosotros() {
           <p className={s.lead}>
             Onia nace en Santa Cruz de la Sierra con una convicción simple: el
             dueño de un negocio boliviano merece la misma tecnología que una
-            empresa grande — con inteligencia artificial de verdad, en
-            bolivianos, y hablando su idioma. Somos OniaAgency, registrados en
+            empresa grande — agentes que le preparan el trabajo —, en
+            bolivianos y hablando su idioma. Somos OniaAgency, registrados en
             SEPREC y con NIT vigente, y el sistema ya corre en producción:
             entrás, lo usás {PRUEBA.dias} días con el plan {PRUEBA.planQueCorre}{" "}
             completo y sin dejar una tarjeta, y recién después decidís.

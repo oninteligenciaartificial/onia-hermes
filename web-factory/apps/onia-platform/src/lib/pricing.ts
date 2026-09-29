@@ -61,7 +61,12 @@
  * cobro (`gatewayEnabled: false` en los cinco planes).
  */
 
-import { CHATBOT_PLAN, CONVERSACIONES_INCLUIDAS, precioAddonChatbot } from "@/content/chatbot-precios";
+import {
+  CHATBOT_PLAN,
+  CONVERSACIONES_INCLUIDAS,
+  META_COBRA_RESPUESTAS_DESDE,
+  precioAddonChatbot,
+} from "@/content/chatbot-precios";
 
 /**
  * El mensual del chatbot para las tarjetas de plan (la cuenta "Pro + add-on
@@ -1311,8 +1316,9 @@ export const NO_INCLUYE: readonly Excluido[] = [
   },
   {
     que: "Los mensajes que WhatsApp te cobra",
-    detalle:
-      "Si contratás el chatbot, Meta cobra por cada mensaje que TU negocio le manda primero al cliente. Eso lo pagás directo a Meta, en tu propia cuenta: no lo facturamos nosotros ni le sumamos nada encima.",
+    // Decía que Meta cobra solo lo que el negocio manda PRIMERO. Desde el 1-oct
+    // Meta cobra también las respuestas (Meta, "Upcoming pricing updates").
+    detalle: `Si contratás el chatbot, los mensajes de WhatsApp te los cobra Meta directo en tu cuenta —desde el ${META_COBRA_RESPUESTAS_DESDE} también las respuestas—: no los facturamos nosotros ni les sumamos nada encima.`,
   },
   {
     que: "Pauta publicitaria",

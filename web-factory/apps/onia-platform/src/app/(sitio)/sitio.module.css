@@ -515,7 +515,7 @@
   text-overflow: ellipsis;
 }
 /* La hora dice CUÁNDO pasó, que es medio argumento: el panel de agentes sin
-   "03:12 · cerrado" muestra qué hace el sistema, no que lo hizo de noche. */
+   "07:10 · cerrado" muestra qué hace el sistema, no que lo hizo antes de abrir. */
 .panelStamp {
   flex: none;
   margin-left: auto;

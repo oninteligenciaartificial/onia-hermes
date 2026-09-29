@@ -58,7 +58,7 @@ export type PanelId =
 /**
  * Rótulo accesible de cada panel. Va en el CONTENEDOR con role="img": el panel
  * se anuncia como UNA imagen con su frase, y no como fragmentos sueltos de
- * interfaz ("03:12 · cerrado", "Aprobar", "Aprobar", "Aprobar"...).
+ * interfaz ("07:10 · cerrado", "Aprobar", "Aprobar", "Aprobar"...).
  *
  * Vive acá y no en el call site a propósito: cada panel tiene UN rótulo
  * correcto, y dejarlo en la llamada era la forma segura de publicar uno vacío
@@ -66,7 +66,7 @@ export type PanelId =
  */
 const panelLabel: Record<Exclude<PanelId, "cuenta">, string> = {
   agentes:
-    "Pendientes de aprobación a las 03:12, con el negocio cerrado: tres propuestas que los agentes dejaron escritas de madrugada, cada una con su botón de aprobar. Nada se manda hasta que el dueño aprueba.",
+    "Pendientes de aprobación a las 07:10, con el negocio todavía cerrado: tres propuestas que los agentes dejaron escritas en su corrida de la mañana, cada una con su botón de aprobar. Nada se manda hasta que el dueño aprueba.",
   chat:
     "Conversación de WhatsApp a las 23:40: alguien pregunta si atienden el sábado y ya tiene la respuesta con el horario que el negocio publicó.",
   // El de "cuenta" NO está acá: enumera los mismos módulos que dibuja, así que
@@ -190,9 +190,11 @@ function PanelCuerpo({ panel, plan }: { panel: PanelId; plan?: PlanId }) {
           {/* "Para aprobar" y no "Pendientes de aprobación": con el piso
               tipográfico nuevo el título largo pedía 155px en una cabecera de
               134px a 375, y se cortaba con ellipsis contra el sello de la hora.
-              El sello se queda —"03:12 · cerrado" ES medio argumento—, así que
-              el que cede es el título. */}
-          <Head titulo="Para aprobar" sello="03:12 · cerrado" />
+              El sello se queda —"07:10 · cerrado" ES medio argumento—, así que
+              el que cede es el título. Decía "03:12": los agentes corren UNA
+              vez por día, a las 07:00 La Paz (cron 0 11 * * *), no de
+              madrugada. Mismo largo, así que la cabecera no se mueve. */}
+          <Head titulo="Para aprobar" sello="07:10 · cerrado" />
           <ul className={s.panelRows}>
             {PENDIENTES.map((q) => (
               <Fila key={q} txt={q} pill="Aprobar" />

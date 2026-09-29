@@ -70,7 +70,7 @@ export const REQUISITOS_CHATBOT: Requisitos = {
       items: [
         "Configuramos y verificamos el número con Meta.",
         "Armamos las plantillas y las mandamos a aprobación.",
-        "Entrenamos el bot con tu información y te lo mostramos andando en un WhatsApp de prueba.",
+        "Probamos el bot con tu información real y te lo mostramos andando en un WhatsApp de prueba.",
         "Se enciende con clientes reales recién cuando vos das el OK, y después lo seguimos ajustando.",
       ],
     },
