@@ -1,4 +1,0 @@
-interface:
-  display_name: "Web Factory Intake Assets"
-  short_description: "Recolecta datos, imagenes y recursos para generar webs ONIA."
-  default_prompt: "Prepara el intake completo de Web Factory para este cliente y dime que falta antes de generar la web."

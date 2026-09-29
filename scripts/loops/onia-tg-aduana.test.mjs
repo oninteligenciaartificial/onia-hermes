@@ -46,7 +46,7 @@ exit 9
   writeFileSync(
     curl,
     `#!/usr/bin/env bash
-for a in "$@"; do case "$a" in text=*) printf '%s\\n' "\${a#text=}" >> ${envios};; esac; done
+for a in "$@"; do case "$a" in text=*) printf '%s' "\${a#text=}" | base64 -w0 >> ${envios}; echo >> ${envios};; esac; done
 echo '${respuesta}'
 `,
   );
@@ -69,7 +69,12 @@ echo '${respuesta}'
       encoding: "utf8",
     });
 
-  const enviados = () => (existsSync(envios) ? readFileSync(envios, "utf8").split("\n").filter(Boolean) : []);
+  // Un mensaje por línea, en base64: el resumen junto trae varias líneas y contarlas como
+  // mensajes daba 3 donde había 1.
+  const enviados = () =>
+    existsSync(envios)
+      ? readFileSync(envios, "utf8").split("\n").filter(Boolean).map((l) => Buffer.from(l, "base64").toString("utf8"))
+      : [];
   const cola = () => {
     const f = join(estado, "resumen.log");
     return existsSync(f) ? readFileSync(f, "utf8").split("\n").filter(Boolean) : [];
@@ -220,4 +225,102 @@ test("la línea OK del log dice QUÉ se mandó, no solo el message_id", () => {
   const b = banco();
   b.avisar("🙋 Espera tu ok: publicar el bot", { ONIA_AVISO: "interrumpe", ONIA_AVISO_EMISOR: "aprobaciones" });
   assert.match(b.log(), / OK message_id=42 .*emisor=aprobaciones titulo=🙋 Espera tu ok: publicar el bot/);
+});
+
+// ── Los bloques de su calendario (Colegio, 🔒, 🎬, «sin celular») ───────────────
+// Sergio Urcullo, 2026-09-29: durante esos bloques no suena nada; lo que llegue se le
+// manda JUNTO apenas termina. Su calendario decide cuándo se lo puede molestar.
+
+const HOY = "2026-09-30";
+function conBloques(b, filas = [[HOY, "0800", "1230", "🎒 Colegio"]]) {
+  writeFileSync(join(b.estado, "bloques-hoy.tsv"), filas.map((f) => f.join("\t")).join("\n") + "\n");
+}
+const enClase = { ONIA_AVISO: "interrumpe", ONIA_AVISO_FECHA: HOY, ONIA_AVISO_HM: "1000" };
+const soltar = (b, hm) => b.avisar("", { ONIA_AVISO_SOLTAR: "1", ONIA_AVISO_FECHA: HOY, ONIA_AVISO_HM: hm });
+
+test("en clase una interrupción NO suena: se retiene una sola vez", () => {
+  const b = banco();
+  conBloques(b);
+  b.avisar("🧲 Un prospecto espera respuesta", { ...enClase, ONIA_AVISO_CLAVE: "lead" });
+  b.avisar("🧲 Un prospecto espera respuesta", { ...enClase, ONIA_AVISO_CLAVE: "lead" });
+  assert.equal(b.enviados().length, 0);
+  const ret = readFileSync(join(b.estado, "retenidos.log"), "utf8").split("\n").filter(Boolean);
+  assert.equal(ret.length, 1);
+  assert.match(ret[0], /\t🎒 Colegio\t/);
+});
+
+test("gemelo: fuera del bloque, la misma interrupción suena", () => {
+  const b = banco();
+  conBloques(b);
+  b.avisar("🧲 Un prospecto espera respuesta", { ...enClase, ONIA_AVISO_HM: "1300" });
+  assert.equal(b.enviados().length, 1);
+});
+
+test("un bloque de OTRO día no retiene nada", () => {
+  const b = banco();
+  conBloques(b, [["2026-09-29", "0800", "1230", "🎒 Colegio"]]);
+  b.avisar("🧲 Un prospecto espera respuesta", enClase);
+  assert.equal(b.enviados().length, 1);
+});
+
+test("el resumen y el cierre (AHORA=1) no se retienen en un bloque", () => {
+  const b = banco();
+  conBloques(b);
+  b.avisar("☀️ Buen día", { ...enClase, ONIA_AVISO_AHORA: "1" });
+  assert.equal(b.enviados().length, 1);
+});
+
+test("mientras sigue el bloque, soltar no manda nada", () => {
+  const b = banco();
+  conBloques(b);
+  b.avisar("🧲 Un prospecto espera respuesta", enClase);
+  soltar(b, "1200");
+  assert.equal(b.enviados().length, 0);
+});
+
+test("al terminar el bloque sale TODO junto, en un solo mensaje, y cuenta como entregado", () => {
+  const b = banco();
+  conBloques(b);
+  b.avisar("🧲 Un prospecto espera respuesta", { ...enClase, ONIA_AVISO_CLAVE: "lead" });
+  b.avisar("🙋 Espera tu ok: publicar el bot", { ...enClase, ONIA_AVISO_CLAVE: "ok-bot" });
+  soltar(b, "1235");
+  const env = b.enviados();
+  assert.equal(env.length, 1, "un solo mensaje");
+  assert.match(env[0], /Mientras estabas en 🎒 Colegio/);
+  assert.match(env[0], /• 🧲 Un prospecto espera respuesta/);
+  assert.match(env[0], /• 🙋 Espera tu ok: publicar el bot/);
+  assert.equal(existsSync(join(b.estado, "retenidos.log")), false);
+  // Ya entregado: el mismo aviso, recién salido del bloque, no se repite.
+  b.avisar("🧲 Un prospecto espera respuesta", { ...enClase, ONIA_AVISO_CLAVE: "lead", ONIA_AVISO_HM: "1240" });
+  assert.equal(b.enviados().length, 1);
+});
+
+test("si el bloque termina de noche, lo retenido pasa al resumen de las 06:30", () => {
+  const b = banco();
+  conBloques(b, [[HOY, "2130", "2300", "📵 Desconectar"]]);
+  b.avisar("🧲 Un prospecto espera respuesta", { ...enClase, ONIA_AVISO_HM: "2140", ONIA_SILENCIO_DESDE: "2300" });
+  soltar(b, "2310");
+  assert.equal(b.enviados().length, 0);
+  assert.equal(b.cola().length, 1);
+  assert.match(b.cola()[0], /\tnoche\t/);
+});
+
+test("si se cayó y volvió durante el bloque, al salir no se le avisa una caída vieja", () => {
+  const b = banco();
+  conBloques(b);
+  b.avisar("🚨 Login caído", { ...enClase, ONIA_AVISO_CLAVE: "login" });
+  b.avisar("🟢 Login volvió", { ...enClase, ONIA_AVISO_CLAVE: "login", ONIA_AVISO_RECUPERADO: "1" });
+  soltar(b, "1235");
+  assert.equal(b.enviados().length, 0);
+  assert.equal(b.cola().length, 1, "queda como dato para el cierre");
+});
+
+test("un título con & o > no rompe el mensaje junto (HTML escapado)", () => {
+  // Un «<algo>» literal no se puede distinguir de una etiqueta HTML: el emisor que manda
+  // HTML lo escapa él. Lo que la aduana SÍ tiene que escapar es lo que queda suelto.
+  const b = banco();
+  conBloques(b);
+  b.avisar("💰 Pago de A&B > 3 cuotas", enClase);
+  soltar(b, "1235");
+  assert.match(b.enviados()[0], /A&amp;B &gt; 3 cuotas/);
 });

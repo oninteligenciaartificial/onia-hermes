@@ -1,4 +1,0 @@
-interface:
-  display_name: "Web Factory Design Research"
-  short_description: "Busca repos y patrones actuales para Web Factory."
-  default_prompt: "Investiga repos y patrones actuales de diseno antes de generar esta web."

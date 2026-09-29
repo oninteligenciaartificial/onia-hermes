@@ -36,8 +36,8 @@ afuera sin aprobación** — la autonomía termina en tu canal.
 | Qué | Cuándo | Qué lleva |
 |---|---|---|
 | ☀️ **Resumen de la mañana** | **06:30** La Paz | agenda del día · prospectos esperando · guiones para grabar hoy · decisiones (máx. 5, con `ok <id>`) · lo que pasó de noche · UNA línea de salud del sistema |
-| 🌙 **Cierre del día** | **22:00** La Paz | qué se hizo hoy, en castellano llano · qué sigue esperando · el primer compromiso de mañana |
-| 🔔 **Interrupción** | al momento, **solo** entre 06:30 y 22:00 | una de las cuatro de abajo, y nada más |
+| 🌙 **Cierre del día** | **21:30** La Paz | qué se hizo hoy, en castellano llano · sus bloques de ONIA del día, numerados, con «¿se hicieron?» · qué sigue esperando · mañana |
+| 🔔 **Interrupción** | al momento, **solo** entre 06:30 y 22:00 y **fuera de sus bloques** | una de las cuatro de abajo, y nada más |
 
 **Las cuatro interrupciones (elegidas por él):**
 1. **Un prospecto o cliente escribió y nadie contestó.**
@@ -53,6 +53,24 @@ afuera sin aprobación** — la autonomía termina en tu canal.
   o a ningún lado.
 - **De 22:00 a 06:30 no suena nada.** Lo que haya pasado de noche aparece en el resumen de
   las 06:30.
+- **Durante sus bloques tampoco** — Colegio, 🔒 de ONIA («celular fuera»), 🎬 de grabación y
+  los «sin celular». Lo que llegue se retiene y sale **junto, en un solo mensaje**, apenas
+  termina el bloque; si se cayó y volvió adentro del bloque, no se le avisa una caída vieja.
+  Elegido por él el 2026-09-29: su calendario decide cuándo se lo puede molestar.
+
+**Por qué el cierre es a las 21:30 y no a las 22:00** (corregido el 2026-09-29, el mismo día):
+a las 22:00 su calendario dice «Cierre del día — sin celular» (cuaderno, sin teléfono). Un
+cierre de Hermes a esa hora llegaba justo cuando guarda el celular. A las 21:30 es el insumo
+de su cuaderno.
+
+**El calendario es el plan, y los pendientes se reubican.** Sergio Urcullo, 2026-09-29: *"lo
+voy acomodando contigo durante los días… quiero cumplir todo eso, pero hay días que si no
+trabajo nada en ONIA o queda algún pendiente se le encuentra un espacio en la agenda"*. El
+cierre le numera los bloques de ONIA del día; lo que quedó pendiente se le propone en el
+próximo hueco que no pise sus bloques protegidos (el domingo opcional, la franja 19:00-21:30,
+o el bloque menos urgente del día siguiente) y se mueve **con su OK**. Los bloques del
+3 al 10-oct los llenó la sesión de control ese día: grabar el plan (13:00), clientes
+(15:00, lunes a jueves), Platform (viernes), clínicas con señal (sábados).
 
 **Cómo se hace cumplir — una sola aduana.** Todo aviso pasa por `onia-tg.sh`, con su
 categoría: `ONIA_AVISO=interrumpe | resumen | sistema` (por defecto `sistema`). La aduana
