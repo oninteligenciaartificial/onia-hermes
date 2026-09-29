@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import nextConfig from "../../../next.config";
-import { PAGINAS, RUTAS_DEL_SITEMAP } from "../rutas";
+import { PAGINAS, RUTAS_DEL_SITEMAP, estaProhibida } from "../rutas";
 
 /**
  * El archivo `/v1` y las dos líneas de negocio congeladas el 2026-09-05
@@ -50,6 +50,13 @@ describe("el archivo /v1 y las líneas congeladas redirigen a la portada", () =>
     for (const ruta of ["", "/precios", "/chatbot", "/agentes", "/servicios/webs", "/empezar"]) {
       expect(vaALaPortada(ruta), `${ruta || "/"} quedó redirigida`).toBe(false);
     }
+  });
+
+  it("robots.ts no las prohíbe: el buscador tiene que poder pedirlas para ver el 308", () => {
+    // Con el disallow, Google nunca pide la URL, nunca ve el 308 y la deja como
+    // «indexada aunque bloqueada por robots.txt». Salieron del disallow el
+    // 2026-09-29 por eso.
+    expect(BAJADAS.filter((raiz) => estaProhibida(raiz))).toEqual([]);
   });
 
   it("el sitemap no pide indexar ninguna", () => {
