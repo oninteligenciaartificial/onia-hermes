@@ -5,6 +5,21 @@ This file prevents duplicate work while two Codex/Hermes sessions run at the sam
 
 Use this as the source of truth before creating new files, skills, docs, or scripts.
 
+## Tandas locales de ONIA 1.0 — 2026-09-27
+
+[`tandas-v1.json`](hermes-content/docs/cola/tandas-v1.json) propone tres carriles siguientes
+(chatbot, operación y UX del dueño) con rutas y recursos exclusivos. Sólo apunta al
+backlog; no reemplaza el tablero ni reserva trabajos por sí mismo. Los tres están en
+`discovery`: la coordinación de esta tarea reportó cuatro loops activos en el nodo casa
+(`web-venta`, `onia-cola`, `chatbot-cola`, `recorrido-cliente`) cuyo alcance exacto no está
+confirmado. `siat-audit` posee en esta tanda local `hermes-content/deploy/vps-ops/backup-storage{,.test}.sh`;
+backup/restore quedan fuera del carril siguiente de operación, que cubre `lib/email.ts`
+y su prueba en Platform. Antes de pasar un carril a `ready`, el orquestador debe verificar y reservar
+manualmente sus archivos y recursos frente a esos escritores, y actualizar el manifiesto.
+El [cierre local](scripts/loops/README.md#cierre-local-de-tandas-v1) usa locks de un solo
+host; no protege contra el nodo casa, VPS, tablero ni otros hosts. Luna sólo revisa código:
+un carril sensible requiere revisión fuerte separada y ninguna salida autoriza despliegue.
+
 ## Infra retomada en Codex — 2026-09-21
 
 Sergio Urcullo trasladó el carril de Claude a la tarea Codex de ONIA Platform.

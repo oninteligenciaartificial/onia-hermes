@@ -1,175 +1,79 @@
 # Skill: agenda-calendario
 
 ## Cuando usar
-Cuando Sergio pida ver, crear, cancelar o proteger tiempo en su agenda o la de
-ONIA. Hermes interpreta la intencion desde Telegram y n8n ejecuta contra Google
-Calendar API. Cal.com es la puerta de entrada de clientes.
+Cuando Sergio pida ver, crear, cancelar o proteger tiempo en su agenda o la de ONIA.
+Google Calendar es la fuente de compromisos; una ventana fija no acredita disponibilidad.
 
-## Principio rector
-La agenda protege energia antes que productividad: gym, descanso, vida
-personal, trabajo profundo y shutdown son bloques protegidos. Ninguna reunion
-comercial los pisa sin decision explicita de Sergio.
+## Capacidad actual y limite (verificado 2026-09-28)
+- El router `scripts/hermes_command_center.py` no tiene lector de Calendar.
+  `Plan Sergio hoy` entrega prioridades sin horas y `Agenda no verificada`.
+  `Puedo reunirme <dia> <hora>?` no confirma disponibilidad ni ofrece alternativas fijas.
+- Ambas consultas preservan `action` y `telegram_reply`, con `calendar_verified=false`.
+  `ok=true` significa consulta procesada, NO calendario verificado ni horario disponible;
+  la CLI sale 0 para que el caller pueda mostrar la respuesta honesta.
+- Hermes tiene la skill Google Workspace instalada, pero en el VPS faltan sus archivos
+  OAuth. No confundir esto con ausencia total de Google en ONIA.
+- n8n conserva `ONIA - Agenda: Recordatorios` activo: el nodo Google leyo correctamente
+  el 28-sep. No se confirmo que su cuenta/calendario coincida con el `primary` de Sergio.
+  `ONIA - Agenda Create API` esta activo, pero no acredita disponibilidad ni lectura.
+- Los jobs de agenda/veredicto de `/root/.hermes/cron/jobs.json` no consultan Calendar.
+  Este parche local no cambia esos jobs ni acredita automaticamente eventos modificados
+  por Codex u otro operador. Deben volver a leerse antes de incorporarlos al plan.
+- Cal propio es la opcion primaria elegida, pero esta apagado y su dominio redirige a
+  `/empezar`. Cal hosted es fallback previsto; su funcionamiento actual no esta acreditado.
+  Estado y requisitos: [runbook Cal](../docs/ONIA_CALCOM_SELF_HOST_RUNBOOK_2026.md).
+- El bot ofrece `ONIA_BOT_SLOTS` calculados desde ventanas historicas. Son candidatos
+  estimados pendientes de confirmar, no disponibilidad Google ni reservas acreditadas.
+  El entorno del proceso puede diferir de `webhook.env`: comprobar lo servido.
 
-## Comandos
+## Regla antes de proponer horas
+Necesitas una lectura actual con calendario/cuenta identificados, fecha consultada y
+zona `America/La_Paz`. Si falta, es ambigua o falla, responder `Agenda no verificada`
+y entregar prioridades sin horas. No afirmar SI/NO sobre disponibilidad basandose
+solo en reglas horarias, en la presencia de credenciales o en un endpoint de creacion.
 
-### Plan Sergio hoy
-Agenda estricta del dia: bloques protegidos, ventanas de reunion, prioridades y
-recordatorio de que Higgsfield esta en modo manual.
+Una lectura fallida o ausente NO es agenda vacia. Una respuesta correcta sin eventos
+solo significa `Sin eventos registrados en el periodo consultado`; no garantiza dia libre.
+Conservar colegio, ejercicio, lectura, vida personal, descanso y compromisos existentes.
+Ubicar tareas solo en bloques ONIA verificados; nunca mover compromisos para hacer lugar.
 
-### Puedo reunirme <dia> <hora>?
-Validar contra ventanas permitidas. Responder si/no + alternativa mas cercana
-si es no. Nunca aprobar una hora que rompa gym, descanso, vida personal,
-trabajo profundo o shutdown.
+## Comandos del router
+- `Plan Sergio hoy`, `Agenda Sergio`, `Calendario Sergio`: prioridades sin horarios
+  hasta contar con lector verificado. No son un listado de eventos.
+- `Puedo reunirme <dia> <hora>?`, `Disponibilidad Sergio`: respuesta no verificada;
+  consultar el calendario y confirmar con Sergio antes de proponer o agendar.
+- `Modo enfoque`, `Modo gym`, `Modo novia`, `Estoy saturado`, `Cierre Sergio`:
+  proteger energia; `Estoy saturado` implica recortar, no agregar trabajo.
+- `agendar <titulo> | <fecha> <hora inicio>-<hora fin> | <descripcion>`: ruta de
+  CREACION via `_agendar` -> n8n `/webhook/agendar-create` -> Google Calendar.
+  Crear requiere instruccion explicita y confirmar exito por la respuesta real.
+  No comprueba conflictos. En AlfredHQ enviar sin `/`; la CLI directa acepta ambas formas.
+- `/agenda hoy`, `/agenda semana`, `/cancelar` y `/recordatorio` no son capacidades
+  de lectura/cancelacion implementadas en este router. No prometerlas como disponibles.
 
-### Modo enfoque / Modo gym / Modo novia / Estoy saturado / Cierre Sergio
-Comandos personales para AlfredHQ. Respuesta corta, proteger energia, no
-proponer mas trabajo. `Estoy saturado` implica: recortar, no agregar.
+## Integracion pendiente, sin activar desde esta skill
+Reutilizar primero el OAuth n8n existente: verificar cuenta/calendario y preparar
+un puente limitado de lectura. No usar el webhook de creacion como prueba de disponibilidad.
+Si se elige OAuth directo Hermes, la skill instalada `productivity/google-workspace`
+documenta `setup.py --check`, cliente OAuth, `--auth-url --services calendar`,
+`--auth-code` y `google_api.py calendar list`. Es una configuracion separada pendiente;
+no copiar tokens a docs ni ejecutar setup/refresh como parte de una inspeccion.
 
-### /agenda hoy
-Todos los eventos del dia actual desde Google Calendar.
+El flujo objetivo Cal -> solicitud -> aceptacion -> Calendar -> notificacion requiere
+adaptador y auditoria; no esta cerrado. Ver [n8n canonico](../docs/N8N_CANONICAL.md) y
+[workflows de agenda](../docs/n8n-workflows/n8n-agenda-calendario.md), cuyas tablas historicas
+no sustituyen una lectura viva de activacion y ejecuciones.
 
-### /agenda semana
-Cronograma de los proximos 7 dias.
-
-### agendar <datos>
-Crea un evento. Datos minimos: titulo, fecha (`jueves`, `15/06`, `manana`),
-hora inicio y fin. Descripcion opcional.
-Ejemplo: `agendar Reunion Epic Motion | jueves 10am-11am | Ver propuesta web`
-
-**Importante bot AlfredHQ:** enviar SIN `/` al inicio. El bot Hermes en el VPS
-rechaza slash-commands desconocidos. `agendar ...` se enruta:
-`hermes-command telegram` -> `_agendar` -> webhook n8n `agendar-create` ->
-Google Calendar. El router acepta ambas formas solo por CLI directo.
-
-### /cancelar <evento>
-Cancela o elimina evento existente. SIEMPRE con confirmacion explicita previa.
-
-### /recordatorio <evento> <tiempo>
-Agrega recordatorio a evento existente.
-Ejemplo: `/recordatorio Reunion Epic Motion 1 hora antes`
-
-## Parsing de fechas (Bolivia, UTC-4, `America/La_Paz`)
-- `hoy` -> fecha actual.
-- `manana` -> fecha actual + 1.
-- `lunes/martes/...` -> proximo dia de semana con ese nombre.
-- `15 de junio` -> fecha literal.
-- `en 2 horas` -> hora actual + 2.
-- Fecha ambigua o en el pasado -> pedir confirmacion, no adivinar.
-
-## Flujos n8n asociados
-- `ONIA - Agenda: Briefing Diario`: cron 8am -> GCal -> Telegram.
-- `ONIA - Agenda: Crear Evento`: Telegram trigger -> GCal create -> confirm.
-- `ONIA - Agenda: Recordatorios`: cron 30min -> GCal check -> Telegram alert.
-- `ONIA - Agenda: Cal.com Booking`: Cal.com webhook -> GCal create -> Telegram notify.
-
-## Formatos de salida
-
-### Evento creado
-```text
-Evento agendado:
-[Titulo]
-[Fecha] [Hora inicio] - [Hora fin]
-[Descripcion]
-Link GCal: [link]
-```
-
-### Briefing diario
-```text
-Agenda del [dia], [fecha]:
-
-[HH:MM] [Titulo evento 1]
-[HH:MM] [Titulo evento 2]
-
-Sin eventos: "Dia libre"
-```
-
-## Cal.com — booking de clientes
-
-### Identidad y cuentas
-- Modo actual: Cal.com **self-hosted** en `https://cal.onia.com.bo`.
-  URL base publica: `https://cal.onia.com.bo/onia`. NO usar `cal.onia.ai`.
-- Cuenta/identidad publica: `business@onia.com.bo`, nombre `ONIA | Agenda Comercial`.
-- Foto de perfil comercial:
-  `https://center.onia.com.bo/assets/onia/onia-logo-avatar.png`.
-- Configuracion operativa desde ONIA Center: vista `Agenda Sergio` muestra
-  tipos, links publicos, reglas y accesos directos para editar reuniones,
-  disponibilidad, calendarios y perfil.
-- ONIA Center no debe fingir escritura directa hasta que exista adaptador con
-  auditoria: por ahora abre Cal self-hosted para aplicar cambios reales.
-- Calendario Google conectado: `oninteligenciaartificial@gmail.com`.
-- Correo formal al cliente despues de aceptar: `business@onia.com.bo`.
-- Arthur NO usa la cuenta `oninteligenciaartificial@gmail.com`; se le asignan
-  reservas por Telegram/ONIA Center.
-
-### Tipos de evento
-- `consulta-inicial`: 20min, visible como `Consulta comercial - proyecto nuevo`.
-  - Para prospectos nuevos que quieren cotizar o validar si ONIA puede ayudar.
-  - Aplica a paginas web, ecommerce/landing, DentalGest, GestiOS,
-    automatizaciones, chatbots de WhatsApp, IA para publicidad/contenido y
-    sistemas internos.
-  - No es soporte, capacitacion ni auditoria tecnica profunda.
-  - Anticipo minimo 4h; hasta 14 dias adelante.
-- `demo-onia`: 45min, visible como `Demo / diagnostico - solucion ONIA`.
-  - Para leads ya calificados con un problema concreto.
-  - Aplica a demos de DentalGest o GestiOS, revision de propuesta
-    web/ecommerce, automatizaciones, chatbot WhatsApp, sistema interno,
-    contenido con IA o publicidad con IA.
-  - Define solucion, alcance y siguiente paso comercial.
-  - Anticipo minimo 8h; hasta 21 dias adelante.
-- `reunion-proyecto`: 60min, oculta en la pagina publica, usable con link
-  directo como `Reunion de proyecto - cliente activo`.
-  - Solo clientes activos, propuestas en curso o proyectos aceptados.
-  - Aplica a alcance tecnico, entregables, implementacion, capacitacion,
-    cambios, seguimiento, cierre tecnico/comercial o decisiones de proyecto.
-  - Anticipo minimo 24h; hasta 30 dias adelante.
-- `auditoria-pagada`: 60min, DESACTIVADA (ONIA no cobra asesorias en fase inicial).
-
-### Flujo de una reserva
-1. Cliente agenda -> Cal webhook -> Google Calendar -> Telegram -> ONIA Center.
-2. Toda reserva crea lead en ONIA Center como `reunion_agendada_pendiente`.
-3. Telegram permite aceptar, cancelar o reasignar.
-4. Aunque Cal registre la reserva, ONIA la trata como SOLICITUD hasta que
-   Sergio/equipo la acepte por Telegram o desde ONIA Center.
-5. El correo final de confirmacion se envia SOLO despues de aceptar por Telegram.
-6. El webhook registra el booking en Google Calendar, Telegram y Supabase
-   privado `onia_ops.*`.
-
-### Asignacion de reuniones
-- La vendedora atiende: webs, DentalGest, GestiOS, automatizaciones y asesorias
-  que Sergio no pueda tomar. Su disponibilidad se configura separada. Puede
-  agendar para Sergio, Arthur o ella. Publicamente aparece como ONIA Comercial
-  aunque use correo personal interno.
-- Sergio/Arthur toman: reuniones tecnicas, cierres de propuesta, clientes
-  activos y casos con riesgo de alcance.
-
-### Ventanas y proteccion del calendario
-- Base: lunes a sabado 14:00-20:00. Domingo cerrado.
-- Anticipo minimo 4 horas. Buffer minimo 15 minutos entre reuniones.
-- NO abrir el calendario privado a prospectos: Cal muestra solo ventanas
-  comerciales; Google Calendar bloquea las horas no disponibles.
-- Bloquear siempre: gym, vida personal, shutdown, dormir, almuerzo y trabajo
-  profundo.
-- Los horarios deben poder cambiarse rapido (en Cal o bloqueando eventos en
-  GCal) cuando Sergio, Arthur o la vendedora no puedan.
-
-### Formulario Cal (campos requeridos)
-Nombre completo; empresa o negocio; WhatsApp; correo; ciudad; servicio de
-interes; problema principal; presupuesto aproximado; web/Instagram/Facebook
-actual; quien debe tomar la reunion (Sergio, Arthur, vendedora o cualquiera);
-urgencia (esta semana, este mes, exploratorio); rol (dueno, socio, encargado,
-solo consulta); como conocio a ONIA; acepta contacto por WhatsApp.
+Las decisiones comerciales se conservan como **diseno objetivo historico** en el
+[runbook Cal](../docs/ONIA_CALCOM_SELF_HOST_RUNBOOK_2026.md): tipos `consulta-inicial`
+(20 min), `demo-onia` (45 min) y `reunion-proyecto` (60 min, oculto), anticipos,
+buffers, formulario y solicitud -> aceptacion antes del correo final. No declararlas
+implementadas por estar documentadas. Las ventanas historicas deben reconciliarse
+con el calendario actual antes de habilitar reservas.
 
 ## Reglas duras
-- Timezone siempre `America/La_Paz` (UTC-4).
-- Confirmacion explicita antes de cancelar cualquier evento.
-- No crear eventos en el pasado sin confirmacion explicita.
-- Eventos de clientes via Cal.com pasan por GCal, Telegram y ONIA Center.
-- Una reunion NO cuenta para comision ni seguimiento si no quedo lead
-  registrado en ONIA Center.
-- Notificaciones de reservas y cambios van a Arthur Y Sergio por Telegram.
-
-## Errores comunes
-- `agendar` con `/` al inicio desde AlfredHQ -> el bot lo rechaza; reenviar sin slash.
-- Evento sin hora fin -> asumir 1h y decirlo en la confirmacion.
-- Conflicto con bloque protegido -> ofrecer la siguiente ventana valida, nunca
-  agendar encima.
+- Timezone `America/La_Paz` (UTC-4); fechas y horas explicitas, sin adivinar fechas ambiguas.
+- No crear/cancelar eventos, mover compromisos ni enviar mensajes sin autorizacion aplicable.
+- No afirmar que una reunion esta confirmada sin evidencia del calendario o confirmacion humana.
+- Activar VPS, n8n, crons, OAuth o servicios necesita una accion especifica aprobada.
+- No crear otro scheduler: conservar Hermes cron y conectar la fuente de lectura cuando se apruebe.

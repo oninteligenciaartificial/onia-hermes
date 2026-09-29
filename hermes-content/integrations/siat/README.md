@@ -148,7 +148,8 @@ de dos ejes:
   como documento de AJUSTE: `tipoFacturaDocumento` 3).
 
 De ahi salen los **6 combos** de `EMISION_CASES`. Las etapas IV, VII y XI iteran
-sobre los 6; las demas, sobre los 2 puntos de venta.
+sobre los 6. VI e IX tienen matrices propias por sector, PdV, motivo y cantidad;
+el detalle actualizado esta en [el estado de homologación](../../docs/ONIA_SIAT_ESTADO_HOMOLOGACION.md#4-fase-1--el-marcador-real-del-sin) §4.
 
 Consecuencias de diseno:
 
@@ -161,8 +162,48 @@ Consecuencias de diseno:
   factura del MISMO combo; si no hay, fallan con un mensaje que dice cual falta
   en vez de anular la de otro caso (que no le suma a ningun contador del SIN).
 - `STAGE_TARGETS` es **por caso**; `STAGE_TOTALS` es lo que muestra el portal.
-  Un test verifica que `target x casos == total` en las 9 etapas: si el SIN
+  Un test verifica que `target x casos == total` en las 10 etapas: si el SIN
   cambia un volumen, se caza antes de quemar una corrida.
+
+**Lectura real del portal, 2026-09-27:** 80 % general, VI 150/560 e IX 60/160.
+El checkpoint viejo `pv0/pv1` marcaba ambas como completas porque el runner
+mandaba lotes de 2 para todas las filas, no separaba sectores/motivos ni
+comprobaba `908 VALIDADA`. Esas claves se conservan como `legacyCases` pero no
+cuentan en el informe. VI tiene 28 recepciones de 10 (14 exigen exactamente
+500 XML; 14 exigen menos de 500) y 4 validaciones de 70. IX tiene 8
+recepciones de 10 (4 exigen 1.000 XML; 4 exigen menos de 1.000) y 4
+validaciones de 20. El snapshot del 27-sep esta en `portal-fase1-20260927.json`.
+**No aplicar ese archivo sin volver a leer el portal el dia de la corrida.**
+
+Para VI/IX, el runner exige `portalReconciledAt` y bloquea el envio si falta.
+`--portal-snapshot` importa el marcador de una copia JSON, guarda un respaldo
+`<state>.pre-portal-<timestamp>` y no necesita credenciales ni hace SOAP:
+
+```bash
+node src/fase1-runner.mjs --state /ruta/checkpoint-copia.json \
+  --portal-snapshot portal-fase1-20260927.json
+node src/fase1-runner.mjs --state /ruta/checkpoint-copia.json --solo-informe
+```
+
+Antes de cualquier envio real, verificar el checkpoint activo del VPS, el
+marcador actualizado del portal y la etapa VIII (sus 690 validaciones viven en
+un checkpoint separado). No ejecutar el orquestador de todas las etapas hasta
+resolver esa fusion: podria repetir VIII. El primer caso controlado propuesto,
+**solo despues de autorizar trafico al piloto**, es un evento y un paquete de
+dos facturas del sector 1, PdV 0, motivo 2 (más renovación CUFD si venció):
+
+```bash
+node src/fase1-runner.mjs --state /ruta/checkpoint-conciliado.json --etapa VI \
+  --case recepcion-ds1-motivo2-pv0-menor500 --count 1
+```
+
+`--case` requiere `--count` positivo y `--etapa VI|IX`; evita que el primer
+ensayo recorra decenas de filas. El caso debe estar en cero antes del envio;
+despues se coteja **esa fila** en el portal. Completar todo VI/IX requeriria,
+desde la lectura del 27-sep, **330 recepciones, 270 eventos, 180 validaciones,
+110.300 XML y al menos 780 solicitudes SOAP**. Los motivos 5/6/7 necesitan un
+CAFC valido del piloto (`SIAT_PILOT_CAFC`); sin él se bloquean por caso. Su
+alcance para los PdV/sectores debe verificarse antes de usarlos.
 
 Etapa **VIII (firma digital, 690 casos)**: los mismos 6 combos en modalidad
 **electronica** (codigoModalidad 1), con el XML **firmado XMLDSig**
@@ -181,14 +222,27 @@ pero el SIN lo rechaza — el de prueba es gratis en
 a nuestro perfil.
 
 ```bash
-node src/fase1-runner.mjs --etapa gate       # humo: 1 por combo. SIEMPRE primero
-node src/fase1-runner.mjs                    # todas las etapas en orden
+node src/fase1-runner.mjs --solo-informe     # solo lectura, sin SOAP
+node src/fase1-runner.mjs --etapa gate       # humo: 1 por combo, solo si corresponde
 node src/fase1-runner.mjs --etapa IV         # una sola
 node src/fase1-runner.mjs --etapa gate-viii  # humo etapa VIII: 1 emision firmada por combo
 ```
 
 Flags: `--pace ms` (default 500) · `--state file` · `--log file` ·
-`--retry-blocked`. Requiere `/opt/onia-siat/siat-piloto.env` en el ambiente.
+`--retry-blocked`. **Para trafico al piloto siempre se exige `--etapa`: invocar
+el runner sin ella aborta antes de credenciales, checkpoint o SOAP.** El script
+historico `run-fase1-pdv1.sh` y el barrido `run-fase1-volumen.sh` quedan
+retirados: ambos abortan antes de leer credenciales. VIII vive en un checkpoint
+separado; repetir todas las fases no es una forma de completar VI/IX. Requiere
+`/opt/onia-siat/siat-piloto.env` en el ambiente.
+La conciliacion guarda los contadores iniciales del portal y archiva recibos
+anteriores. Al retomar una validacion parcial, el indice de recibos nuevos
+descuenta lo que el portal ya habia contado. `general` suma casos locales;
+`alcanceGeneral` recuerda que no es el porcentaje general oficial del SIN.
+Con `--case`, `--count` es la **meta acumulada de esa fila**, incluidas las
+operaciones ya conciliadas: si figura 5 y se busca una mas, usar `--count 6`.
+Repetir la misma meta no reenvia lo completado. En una fila de validacion no
+se multiplica la meta por los siete motivos ni por los dos tamanos de lote.
 El sector 24 (nota de credito-debito) va por `ServicioFacturacionDocumentoAjuste`,
 que **tarda 36-43 s por respuesta** (timeout propio de 120 s en
 `TIMEOUT_MS_POR_SERVICIO`) y necesita una compra-venta original del mismo PdV:

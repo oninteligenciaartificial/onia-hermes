@@ -63,7 +63,7 @@ const RUBROS: readonly {
     nombre: "Dental",
     resultado:
       "Llegás a la mañana sabiendo quién viene, a qué hora y a qué teléfono llamar si no aparece.",
-    ve: "Pacientes, tratamientos, odontograma y agenda por sillón.",
+    ve: "Pacientes, tratamientos, odontograma y agenda por profesional.",
     alt: "Recepcionista de un consultorio dental con el celular en una mano y el dedo siguiendo un renglón del cuaderno de citas abierto.",
     w: 1280,
     h: 960,
@@ -110,7 +110,7 @@ const RUBROS: readonly {
     nombre: "Servicios",
     resultado:
       "Llegás al cierre de mes con el IVA y el IT ya armados, en vez de juntando papeles.",
-    ve: "Clientes, trabajos, cotizaciones y cobros.",
+    ve: "Clientes, agenda, servicios y cobros.",
     alt: "Contadora trabajando de noche en su escritorio, con un archivador de palanca abierto, una calculadora y una lámpara encendida.",
     w: 1280,
     h: 1078,

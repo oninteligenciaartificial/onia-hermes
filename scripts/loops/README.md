@@ -1,5 +1,41 @@
 # Los loops que corren en el VPS
 
+## Cierre local de tandas v1
+
+El manifiesto [`tandas-v1.json`](../../hermes-content/docs/cola/tandas-v1.json) referencia el
+backlog y declara rutas, recursos, dueño, base y pruebas de cada carril. Validar sin
+activar nada: `node scripts/loops/tandas-v1.mjs validate` y
+`node --test scripts/loops/tandas-v1.test.mjs`. Los carriles actuales están en
+`discovery` por escritores activos del nodo casa con alcance desconocido. El orquestador
+debe comprobar la exclusividad real y reservar manualmente el carril antes de cambiarlo
+a `ready`; el validador rechaza `ready` con owners externos aún activos/desconocidos.
+
+Con un worktree **aislado** cuyo diff contenga sólo rutas del carril, la revisión se invoca
+como `node scripts/loops/tandas-v1.mjs review --lane <id> --worktree <ruta-absoluta> --base <sha-base-completo> --head <sha-head-completo> --out <json-fuera-del-worktree>`.
+Ejecuta las pruebas declaradas y usa `codex exec` local con `gpt-6-luna` por defecto,
+`read-only`, sin cargar el `config.toml` del usuario, salida JSON estricta y tiempo acotado. El resultado liga
+el hash del candidato y de la evidencia de pruebas; si cualquiera cambia durante el
+cierre, o falla una prueba/revisión/lock, no emite resultado. Los locks son **sólo del host
+local**, durante pruebas y revisión. No coordina otros hosts, no consume/actualiza el
+tablero, no ejecuta workers ni cron, y no firma publicación o despliegue. `apto` de Luna
+en un carril sensible se convierte en `escalar` hasta revisión fuerte separada.
+
+La base SHA debe pertenecer al historial del ref declarado y ser ancestro de HEAD;
+un avance de `origin/main` no cambia esa base fijada. HEAD también queda ligado al hash:
+otro commit invalida la revisión aunque sus archivos coincidan. Para revisar un subconjunto
+de la integración, el orquestador prepara un worktree candidato desde esa base fija y
+copia únicamente los archivos de la tanda; no usa el worktree compartido con cambios
+ajenos. Los binarios se revisan por separado y no entran en esta salida de Luna. El timeout
+termina el árbol de procesos (grupo en Unix, `taskkill /T /F` en Windows); si no puede
+confirmarlo, conserva los locks y requiere inspección manual antes de retirarlos.
+
+El 27-sep el CLI 0.139.0 con la cuenta ChatGPT rechazó `gpt-6-luna`; su método
+`model/list` sólo anunció `gpt-5.5`. Para esa instalación se elige explícitamente
+`--model gpt-5.5` (esfuerzo `medium`). También se admite `gpt-5.6-luna` cuando el
+runtime lo soporte. No hay fallback automático, cambio global de configuración
+ni sustitución de credenciales: la evidencia guarda el modelo efectivamente
+solicitado. El nombre disponible en la app no acredita disponibilidad en el CLI.
+
 Código de herramienta de los loops de carril mudados de Windows al VPS el 2026-09-01.
 **La lista de QUÉ loops deben existir y dónde corre cada uno vive en
 [`hermes-content/docs/cola/loops.md`](../../hermes-content/docs/cola/loops.md)** — este README
