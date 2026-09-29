@@ -127,11 +127,7 @@ Use these global Codex skills when applicable:
 
 Use these Hermes local skills for project operations:
 
-- `orquestador-creativo-ia`: visual content, AI models, image/video prompts,
-  ads, reels, TikToks, Shorts, UGC, ecommerce, campaign production and
-  identity-safe creative execution.
 - `video-lab-higgsfield`: video jobs, Higgsfield, reels, approvals.
-- `videos-virales-higgsfield`: viral short-form planning, virality checks and Higgsfield MCP usage.
 - `ugc-empresas-higgsfield`: UGC ads and company/client video briefs.
 - `audio-elevenlabs`: voiceover, TTS, dubbing, sound effects and voice safety.
 - `marca-personal-sergio`: Sergio's personal brand content.
@@ -144,11 +140,7 @@ Use these Hermes local skills for project operations:
 - `referencias-pinterest`: style/reference extraction.
 - `seguridad-credenciales`: tokens, secrets, env vars.
 - `operaciones-dashboard`: dashboard and gateway status.
-- `centro-comando-telegram`: Telegram as the main Hermes/ONIA command center,
-  general routing, n8n command center, project commands and approvals.
 - `n8n-automatizaciones-onia`: scheduling and longer automations.
-- `orquestacion-proyectos-onia`: route Onia work across DentalGest, Gestios,
-  Web Onia, client websites, Higgsfield marketing, CRM and outreach.
 - `radar-creativo-onia`: current creative research, creator references,
   workflows, prompts, trends and strategy before content production.
 - `consultoria-onia`: consulting, audits, implementations, installations,
