@@ -12,20 +12,14 @@
   "serie": "Contenido con IA",
   "slides": [
     {
+      "layout": "ilustrado",
+      "badge": "guía",
+      "headline": "El prompt de una imagen: *2 caminos*",
+      "image_prompt": "An old brass magnifying glass with a dark wooden handle resting on a rough grey stone.",
       "number": 1,
-      "layout": "dato",
       "theme": "verde",
-      "value": "2",
-      "headline": "caminos para sacar el *prompt* de una imagen",
-      "body": "Recuperar o reconstruir. No se presentan igual: uno lo leés, el otro lo escribís vos.",
-      "next": "por qué",
-      "pendiente_imagen": {
-        "layout": "ilustrado",
-        "badge": "guía",
-        "headline": "El prompt de una imagen: *2 caminos*",
-        "image_prompt": "An old brass magnifying glass with a dark wooden handle resting on a rough grey stone."
-      },
-      "alt_text": "El prompt de una imagen: 2 caminos"
+      "image_style": "acuarela",
+      "next": "por qué"
     },
     {
       "number": 2,

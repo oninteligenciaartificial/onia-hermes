@@ -12,20 +12,14 @@
   "serie": "Contenido con IA",
   "slides": [
     {
+      "layout": "ilustrado",
+      "badge": "guía",
+      "headline": "Carruseles por código en *5 pasos*",
+      "image_prompt": "A few small offcuts of pale birch wood stacked neatly beside a wood carving chisel with a worn wooden handle on a workbench.",
       "number": 1,
-      "layout": "dato",
       "theme": "verde",
-      "value": "5",
-      "headline": "pasos para hacer carruseles *por código*",
-      "body": "La IA pinta la imagen. El texto lo escribe el código: este carrusel salió de un JSON.",
-      "next": "por qué",
-      "pendiente_imagen": {
-        "layout": "ilustrado",
-        "badge": "guía",
-        "headline": "Carruseles por código en *5 pasos*",
-        "image_prompt": "A few small offcuts of pale birch wood stacked neatly beside a wood carving chisel with a worn wooden handle on a workbench."
-      },
-      "alt_text": "Carruseles por código en 5 pasos"
+      "image_style": "clay",
+      "next": "por qué"
     },
     {
       "number": 2,

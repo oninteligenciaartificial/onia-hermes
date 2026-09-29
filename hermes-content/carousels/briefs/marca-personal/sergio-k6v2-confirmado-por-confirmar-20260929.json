@@ -12,20 +12,14 @@
   "serie": "Bot de WhatsApp",
   "slides": [
     {
+      "layout": "ilustrado",
+      "badge": "guía",
+      "headline": "Las *2 listas* que tu bot necesita",
+      "image_prompt": "Two plain white ceramic bowls side by side on a light oak table, one filled with dark roasted coffee beans and one empty.",
       "number": 1,
-      "layout": "dato",
       "theme": "verde",
-      "headline": "listas que tu bot *necesita*",
-      "body": "Confirmado y por confirmar. Así no promete lo que no sabés.",
-      "next": "el problema",
-      "pendiente_imagen": {
-        "layout": "ilustrado",
-        "badge": "guía",
-        "headline": "Las *2 listas* que tu bot necesita",
-        "image_prompt": "Two plain white ceramic bowls side by side on a light oak table, one filled with dark roasted coffee beans and one empty."
-      },
-      "alt_text": "Las 2 listas que tu bot necesita",
-      "value": "2"
+      "image_style": "clay",
+      "next": "el problema"
     },
     {
       "number": 2,

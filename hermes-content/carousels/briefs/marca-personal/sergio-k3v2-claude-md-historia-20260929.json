@@ -12,26 +12,15 @@
   "serie": "Claude Code",
   "slides": [
     {
+      "layout": "ilustrado",
+      "badge": "guía",
+      "logo": "hermes-content/references/brand-claude/claudecode.svg",
+      "headline": "Cada regla de mi CLAUDE.md trae *su historia*",
+      "image_prompt": "A small yellow canary perched on a thin bare branch, head turned to one side, soft morning light.",
       "number": 1,
-      "layout": "logos",
       "theme": "verde",
-      "headline": "Reglas",
-      "logos": [
-        {
-          "file": "hermes-content/references/brand-claude/claudecode.svg",
-          "label": "Claude Code"
-        }
-      ],
-      "body": "Cada regla de mi CLAUDE.md trae *su historia*. Por eso no se las salta.",
-      "next": "por qué",
-      "pendiente_imagen": {
-        "layout": "ilustrado",
-        "badge": "guía",
-        "logo": "hermes-content/references/brand-claude/claudecode.svg",
-        "headline": "Cada regla de mi CLAUDE.md trae *su historia*",
-        "image_prompt": "A small yellow canary perched on a thin bare branch, head turned to one side, soft morning light."
-      },
-      "alt_text": "Cada regla de mi CLAUDE.md trae su historia"
+      "image_style": "acuarela",
+      "next": "por qué"
     },
     {
       "number": 2,

@@ -12,21 +12,15 @@
   "serie": "Bot de WhatsApp",
   "slides": [
     {
+      "layout": "ilustrado",
+      "badge": "guía",
+      "logo": "hermes-content/references/brand-logos/whatsapp.svg",
+      "headline": "*5 pruebas* antes de activar tu bot",
+      "image_prompt": "Five small round pebbles lined up in a neat row on smooth sand, the last one a deep green stone.",
       "number": 1,
-      "layout": "dato",
       "theme": "verde",
-      "value": "5",
-      "headline": "pruebas antes de activar *tu bot de WhatsApp*",
-      "body": "Mandale estos mensajes vos, antes que tus clientes.",
-      "next": "por qué",
-      "pendiente_imagen": {
-        "layout": "ilustrado",
-        "badge": "guía",
-        "logo": "hermes-content/references/brand-logos/whatsapp.svg",
-        "headline": "*5 pruebas* antes de activar tu bot",
-        "image_prompt": "Five small round pebbles lined up in a neat row on smooth sand, the last one a deep green stone."
-      },
-      "alt_text": "5 pruebas antes de activar tu bot de WhatsApp"
+      "image_style": "clay",
+      "next": "por qué"
     },
     {
       "number": 2,

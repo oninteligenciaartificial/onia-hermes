@@ -12,21 +12,15 @@
   "serie": "WhatsApp",
   "slides": [
     {
+      "layout": "ilustrado",
+      "badge": "guía",
+      "logo": "hermes-content/references/brand-logos/whatsapp.svg",
+      "headline": "*4 reglas* de un seguimiento que no molesta",
+      "image_prompt": "A small brass hand bell resting quietly on a wooden table beside a folded natural linen napkin, soft early morning light.",
       "number": 1,
-      "layout": "dato",
       "theme": "verde",
-      "value": "4",
-      "headline": "reglas de un seguimiento *que no molesta*",
-      "body": "Escribile de nuevo a un cliente sin quemar tu número.",
-      "next": "regla 1",
-      "pendiente_imagen": {
-        "layout": "ilustrado",
-        "badge": "guía",
-        "logo": "hermes-content/references/brand-logos/whatsapp.svg",
-        "headline": "*4 reglas* de un seguimiento que no molesta",
-        "image_prompt": "A small brass hand bell resting quietly on a wooden table beside a folded natural linen napkin, soft early morning light."
-      },
-      "alt_text": "4 reglas de un seguimiento que no molesta"
+      "image_style": "acuarela",
+      "next": "regla 1"
     },
     {
       "number": 2,

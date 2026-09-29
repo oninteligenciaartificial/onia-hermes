@@ -12,20 +12,14 @@
   "serie": "Video con IA",
   "slides": [
     {
+      "layout": "ilustrado",
+      "badge": "guía",
+      "headline": "*5 revisiones* antes de publicar tu video con IA",
+      "image_prompt": "A small pair of plain brass sewing scissors resting beside a spool of natural undyed linen thread on a pale oak table.",
       "number": 1,
-      "layout": "dato",
       "theme": "verde",
-      "value": "5",
-      "headline": "revisiones antes de publicar *tu video con IA*",
-      "body": "Lo que la IA no revisa por vos: cortes, texto, caras, costo y presentador.",
-      "next": "por qué",
-      "pendiente_imagen": {
-        "layout": "ilustrado",
-        "badge": "guía",
-        "headline": "*5 revisiones* antes de publicar tu video con IA",
-        "image_prompt": "A small pair of plain brass sewing scissors resting beside a spool of natural undyed linen thread on a pale oak table."
-      },
-      "alt_text": "5 revisiones antes de publicar tu video con IA"
+      "image_style": "clay",
+      "next": "por qué"
     },
     {
       "number": 2,
