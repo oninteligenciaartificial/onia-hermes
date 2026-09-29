@@ -232,5 +232,18 @@ PY
 done
 ls -lt /root/.hermes/logs 2>/dev/null | head -8
 
+sec "10. Llaves disponibles — SOLO nombres de variables, nunca valores"
+for envf in /root/.hermes/.env /root/.config/onia/*.env /opt/onia/*.env /opt/onia/bot/*.env /opt/onia-selfhosted/.env; do
+  [ -f "$envf" ] || continue
+  printf '# %s: ' "$envf"
+  grep -oE '^[[:space:]]*(export[[:space:]]+)?[A-Z0-9_]+=' "$envf" 2>/dev/null \
+    | sed -E 's/^[[:space:]]*(export[[:space:]]+)?//; s/=$//' \
+    | grep -E 'N8N|GOOGLE|GCAL|CAL_|CALCOM|TELEGRAM|TG_|LITELLM|OPENAI|ELEVEN|CHATWOOT|HERMES' | sort -u | tr '\n' ' '
+  echo
+done
+
+sec "11. Contenedores (nombre y estado)"
+docker ps --format '{{.Names}}\t{{.Status}}' 2>/dev/null | sort | head -60
+
 sec "fin"
 echo "diagnóstico terminado $(date -u +%FT%TZ) — no se modificó nada"
