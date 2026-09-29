@@ -1,5 +1,12 @@
 # El circuito de contenido — índice del carril
 
+> **Actualización 28-sep:** el [mapa de frentes](ONIA_MAPA_DE_TEMAS.md) organiza
+> Sergio, enseñanza de IA/Lucía, casos de ONIA, demos de Platform y aplicación
+> en comunidad. Los [guiones vigentes](cola/RODAJE-MARCA-PERSONAL-2026-09-27.md)
+> entregan un ejemplo útil antes del CTA. La regla antigua «sólo qué/por qué»
+> queda corregida: también enseñamos el cómo de una unidad pequeña completa.
+> Los estados y métricas fechados de abajo son históricos.
+
 > Sergio Urcullo, 2026-09-10: *"dame la estructura completa, comunidad, web, qué contenido
 > va a dónde y así"*.
 >
