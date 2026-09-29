@@ -60,7 +60,10 @@ function crear({ esc, emph, ACCOUNTS, BRAND, getFmt }) {
 
   // Erik Taveras / Ingeniero Binario: el número ES la lámina.
   function datoHtml(s) {
-    return `<div class="c-dato"><div class="big">${esc(s.value || '')}</div><h2 class="t">${emph(s.headline || '')}</h2>${s.body ? `<p class="sub2">${emph(s.body)}</p>` : ''}</div>`;
+    const v = String(s.value || '');
+    // 420 px para 1-3 caracteres; más largo se achica para no partir la cifra en dos líneas
+    const size = v.length <= 3 ? 420 : Math.max(170, Math.round(1300 / v.length));
+    return `<div class="c-dato"><div class="big" style="font-size:${size}px">${esc(v)}</div><h2 class="t">${emph(s.headline || '')}</h2>${s.body ? `<p class="sub2">${emph(s.body)}</p>` : ''}</div>`;
   }
 
   // Carlos Domínguez: la prueba es la pantalla real (captura, comando, prompt), no un dibujo.
@@ -166,7 +169,7 @@ body{margin:0;font-family:'DM Sans',system-ui,sans-serif}
 .c-lista b{font-size:50px;font-weight:800;letter-spacing:-.5px}
 .c-lista li span{font-size:40px;color:var(--soft)}
 /* dato */
-.c-dato .big{font-family:'Bricolage',sans-serif;font-weight:800;font-size:420px;line-height:.82;letter-spacing:-16px;color:var(--acc);margin-bottom:28px}
+.c-dato .big{font-family:'Bricolage',sans-serif;font-weight:800;font-size:420px;line-height:.82;letter-spacing:-.015em;white-space:nowrap;color:var(--acc);margin-bottom:28px}
 .t-blanco .c-dato .big{color:#0A0F0D;text-shadow:12px 12px 0 var(--mark)}
 .sub2{font-size:44px;line-height:1.25;color:var(--soft);margin-top:22px;max-width:900px}
 /* captura */
