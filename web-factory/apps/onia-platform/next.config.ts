@@ -219,6 +219,23 @@ const nextConfig: NextConfig = {
       // historiales. Ahora ES el sitio.
       { source: "/preview", destination: "/", permanent: true },
       { source: "/preview/:ruta*", destination: "/:ruta*", permanent: true },
+      // El archivo de la web anterior y las dos líneas congeladas el 2026-09-05
+      // (marketing y consultoría) salen del aire: 308 a la portada, por decisión
+      // de Sergio Urcullo del 2026-09-28. Con `noindex` seguían respondiendo 200
+      // a cualquiera con el enlace viejo, y ahí vivían promesas que el producto
+      // no cumple («agente que reprograma», «bot que califica y agenda», «el
+      // motor de IA que corre nuestros agentes»; auditoría de la condición 8,
+      // F8/F9/E15). Van a `/` y no a su gemela nueva: ninguna cubre la misma
+      // intención —dos son líneas de negocio que Onia ya no vende—, y un 308 a
+      // una página que promete otra cosa es peor que la portada. Los fuentes
+      // quedan en el disco porque los gates de copy los usan de sujeto; nadie
+      // los sirve. Lo fija `src/app/(sitio)/archivo-redirigido.test.ts`.
+      { source: "/v1", destination: "/", permanent: true },
+      { source: "/v1/:ruta*", destination: "/", permanent: true },
+      { source: "/servicios/marketing-ia", destination: "/", permanent: true },
+      { source: "/servicios/marketing-ia/:ruta*", destination: "/", permanent: true },
+      { source: "/servicios/consultoria", destination: "/", permanent: true },
+      { source: "/servicios/consultoria/:ruta*", destination: "/", permanent: true },
     ];
   },
 };

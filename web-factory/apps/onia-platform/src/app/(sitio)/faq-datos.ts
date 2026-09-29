@@ -71,11 +71,11 @@ export const FAQ = [
     a: "Nuestro emisor está registrado ante el SIN y la homologación está en trámite. Mientras tanto cada venta queda lista y facturás en el Portal Web del SIN, gratis y legal. Te avisamos apenas concluya. Está contado entero, con las resoluciones y las fechas, en la página de facturación.",
   },
   {
-    q: "¿El chatbot de WhatsApp está incluido?",
+    q: "¿El agente conversacional de WhatsApp está incluido?",
     // Depende del plan, y decir "no" a secas le cobraba Bs 390/mes al cliente de Full por algo que
     // su plan ya le da (`whatsappIncluded` en el catálogo del producto). Lo ata
     // `scripts/inclusion-chatbot.mjs`; quién lo trae NO se tipea acá.
-    a: `${nombresConChatbot()} ya ${traeOTraen()} el chatbot de WhatsApp incluido. En los demás planes va aparte, ${precioStack(CHATBOT_PLAN)}. El botón de WhatsApp de tu web sí va gratis.`,
+    a: `${nombresConChatbot()} ya ${traeOTraen()} el agente conversacional de WhatsApp incluido. En los demás planes va aparte, ${precioStack(CHATBOT_PLAN)}. El botón de WhatsApp de tu web sí va gratis.`,
   },
   {
     // El export integral NO se gatea por plan: `onia-platform`

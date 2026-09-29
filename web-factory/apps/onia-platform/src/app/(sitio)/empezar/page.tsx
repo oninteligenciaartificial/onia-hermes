@@ -109,7 +109,7 @@ export default function Empezar() {
               </h1>
               {/* Acá decía «con todos los módulos encendidos». La prueba corre
                   con PRUEBA.planQueCorre, que NO los enciende todos: el
-                  chatbot de WhatsApp y el segundo administrador los trae el
+                  agente conversacional de WhatsApp y el segundo administrador los trae el
                   plan de arriba. Se nombra el plan —la misma forma que usa
                   PRUEBA.copy— en vez de cuantificar las partes. */}
               {/* «los exportás cuando quieras» decía esta frase hasta el

@@ -588,12 +588,12 @@ const ESCALERA: readonly Plan[] = [
      * cierto sin hacer ninguna cuenta, para que el peor caso —que la derivación no encuentre
      * sujeto— sea copy honesto en vez de una cifra tipeada que envejece sola.
      */
-    resultado: "Fichas y usuarios sin tope, con el chatbot de WhatsApp incluido.",
+    resultado: "Fichas y usuarios sin tope, con el agente conversacional de WhatsApp incluido.",
     mensual: 1290,
     semanal: null,
     anual: 12900,
     incluye: [
-      `Chatbot de WhatsApp incluido: ${CONVERSACIONES_INCLUIDAS} conversaciones/mes (aparte vale Bs ${bs(CHATBOT_MENSUAL)}/mes)`,
+      `Agente conversacional de WhatsApp incluido: ${CONVERSACIONES_INCLUIDAS} conversaciones/mes (aparte vale Bs ${bs(CHATBOT_MENSUAL)}/mes)`,
       `Todo lo del ${NOMBRE_DE_PLAN.pro}`,
       /**
        * "Más de un administrador" va ACÁ, pegado a los usuarios sin tope, y no como quinta línea:
@@ -655,7 +655,7 @@ function lineaDelChatbot(plan: Plan): string[] {
   // que la vigila lee literal por literal — con el corte puesto, «acá va aparte» quedaba en un
   // pedazo sin sujeto y se acusaba solo (medido: DESALINEADO con el texto correcto).
   // prettier-ignore
-  return [`El chatbot de WhatsApp — ${nombresConChatbot(universo)} ya lo ${traeOTraen(universo)} incluido; acá va aparte, Bs ${bs(CHATBOT_MENSUAL)}/mes`];
+  return [`El agente conversacional de WhatsApp — ${nombresConChatbot(universo)} ya lo ${traeOTraen(universo)} incluido; acá va aparte, Bs ${bs(CHATBOT_MENSUAL)}/mes`];
 }
 
 function lineaDeCoadministradores(plan: Plan): string[] {
@@ -790,7 +790,7 @@ export function cuentaEnPalabras(cuenta: CuentaVsAddon): string {
       : cuenta.deMas === 0
         ? `lo mismo que ${cuenta.contra.nombre} con el add-on aparte`
         : `Bs ${bs(-cuenta.deMas)} menos ${unidad} que ${cuenta.contra.nombre} con el add-on aparte`;
-  return `Chatbot de WhatsApp incluido (${CONVERSACIONES_INCLUIDAS} conversaciones/mes): ${cola}.`;
+  return `Agente conversacional de WhatsApp incluido (${CONVERSACIONES_INCLUIDAS} conversaciones/mes): ${cola}.`;
 }
 
 /**
@@ -1161,8 +1161,13 @@ export interface AddOn {
 /** Cómo se llama el chatbot EN LA CARTA de add-ons (el nombre de producto, no el
  *  resultado que titula su tarjeta). Vive en una constante porque además es el
  *  puente con `ADDON_DE_LA_CAPACIDAD`, más abajo: dos copias del mismo nombre y
- *  el cruce se rompe en silencio el día que alguien renombre una sola. */
-export const CHATBOT_EN_LA_CARTA = "Chatbot de WhatsApp";
+ *  el cruce se rompe en silencio el día que alguien renombre una sola.
+ *
+ *  «Agente conversacional de WhatsApp» desde el 2026-09-28 (decisión de Sergio
+ *  Urcullo): se llamaba «Chatbot de WhatsApp con IA», y las respuestas salen de lo
+ *  que el negocio cargó, no de un modelo. La IA real se dice concreta donde es
+ *  real («entiende las fotos»). Lo vigila `src/app/(sitio)/nombre-del-addon.test.ts`. */
+export const CHATBOT_EN_LA_CARTA = "Agente conversacional de WhatsApp";
 
 /**
  * En qué planes se puede sumar gente pagando, y hasta cuántos — DERIVADO de `asientosExtra`.
@@ -1200,7 +1205,7 @@ export const ADDONS: readonly AddOn[] = [
     // el 12-sep, cuando `whatsappIncluded` le dio el chatbot ADENTRO a Full y Grupo. Al dueño de un
     // Completo (Bs 1.290) le cobraba Bs 390 por lo que ya paga, y al que evaluaba subir le escondía
     // el mejor argumento: subiendo Bs 400 deja de pagar 390. El plan NO se tipea —sale del catálogo.
-    copy: `Contesta al instante a cualquier hora con la información real de tu negocio, y pasa a una persona lo que necesite decisión. Viene incluido en ${nombresConChatbot()}; sobre los demás planes se suma aparte.`,
+    copy: `Contesta al instante a cualquier hora con la información real de tu negocio, entiende las fotos que te mandan y pasa a una persona lo que necesite decisión. Viene incluido en ${nombresConChatbot()}; sobre los demás planes se suma aparte.`,
     precio: precioAddonChatbot(),
     href: "/chatbot",
   },
@@ -1318,7 +1323,7 @@ export const NO_INCLUYE: readonly Excluido[] = [
     que: "Los mensajes que WhatsApp te cobra",
     // Decía que Meta cobra solo lo que el negocio manda PRIMERO. Desde el 1-oct
     // Meta cobra también las respuestas (Meta, "Upcoming pricing updates").
-    detalle: `Si contratás el chatbot, los mensajes de WhatsApp te los cobra Meta directo en tu cuenta —desde el ${META_COBRA_RESPUESTAS_DESDE} también las respuestas—: no los facturamos nosotros ni les sumamos nada encima.`,
+    detalle: `Si contratás el agente conversacional, los mensajes de WhatsApp te los cobra Meta directo en tu cuenta —desde el ${META_COBRA_RESPUESTAS_DESDE} también las respuestas—: no los facturamos nosotros ni les sumamos nada encima.`,
   },
   {
     que: "Pauta publicitaria",

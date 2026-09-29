@@ -11,18 +11,19 @@ import {
   SALARIO_MINIMO,
   pctDelSalarioMinimo,
 } from "@/content/chatbot-precios";
+import { CHATBOT_EN_LA_CARTA } from "@/lib/pricing";
 import { WA_URL_LANDING, SITE_URL } from "@/lib/site";
 import { Block, Shape, Btn, Kicker, JsonLd } from "../ui";
 import s from "../sitio.module.css";
 
 export const metadata: Metadata = {
-  title: "Chatbot de WhatsApp — precio publicado | Onia",
-  description: `Chatbot de WhatsApp que contesta 24/7 con la información real de tu negocio: hasta ${CONVERSACIONES_INCLUIDAS} conversaciones por mes, y lo que necesite decisión pasa a una persona. Bs ${fmtBs(CHATBOT_PLAN.mensual)}/mes, sin instalación. Hecho en Bolivia.`,
+  title: `${CHATBOT_EN_LA_CARTA} — precio publicado | Onia`,
+  description: `${CHATBOT_EN_LA_CARTA} que contesta 24/7 con la información real de tu negocio: hasta ${CONVERSACIONES_INCLUIDAS} conversaciones por mes, y lo que necesite decisión pasa a una persona. Bs ${fmtBs(CHATBOT_PLAN.mensual)}/mes, sin instalación. Hecho en Bolivia.`,
   alternates: { canonical: "/chatbot" },
   openGraph: {
     type: "website",
     locale: "es_BO",
-    title: "Chatbot de WhatsApp — precio publicado",
+    title: `${CHATBOT_EN_LA_CARTA} — precio publicado`,
     description: `Contesta al instante a cualquier hora con lo que vos cargaste, hasta ${CONVERSACIONES_INCLUIDAS} conversaciones por mes; el resto pasa a una persona. Bs ${fmtBs(CHATBOT_PLAN.mensual)}/mes, con los requisitos publicados.`,
     url: "/chatbot",
   },
@@ -36,14 +37,14 @@ const JSON_LD = {
       "@type": "BreadcrumbList",
       itemListElement: [
         { "@type": "ListItem", position: 1, name: "Inicio", item: `${SITE_URL}/` },
-        { "@type": "ListItem", position: 2, name: "Chatbot WhatsApp", item: `${SITE_URL}/chatbot` },
+        { "@type": "ListItem", position: 2, name: CHATBOT_EN_LA_CARTA, item: `${SITE_URL}/chatbot` },
       ],
     },
     {
       "@type": "Service",
-      name: "Chatbot de WhatsApp para negocios",
+      name: `${CHATBOT_EN_LA_CARTA} para negocios`,
       serviceType: "Atención automática por WhatsApp",
-      description: `Chatbot de WhatsApp que contesta 24/7 con la información real que el negocio publicó: hasta ${CONVERSACIONES_INCLUIDAS} conversaciones por mes, y lo que no sabe pasa a una persona. Lo que salga del alcance se cotiza a medida.`,
+      description: `${CHATBOT_EN_LA_CARTA} que contesta 24/7 con la información real que el negocio publicó: hasta ${CONVERSACIONES_INCLUIDAS} conversaciones por mes. Entiende las fotos que le mandan, y lo que no sabe pasa a una persona. Lo que salga del alcance se cotiza a medida.`,
       provider: { "@type": "Organization", name: "Onia", url: `${SITE_URL}/` },
       areaServed: { "@type": "Country", name: "Bolivia" },
       url: `${SITE_URL}/chatbot`,
@@ -94,7 +95,7 @@ export default function Chatbot() {
         <div className={s.split}>
           <Reveal>
             <div>
-              <Kicker>Chatbot de WhatsApp</Kicker>
+              <Kicker>{CHATBOT_EN_LA_CARTA}</Kicker>
               {/* Copy formal (Sergio, 12-sep): la misma promesa que la portada,
                   sin coloquialismos. */}
               <h1 className={s.display}>
@@ -107,7 +108,7 @@ export default function Chatbot() {
               </p>
               <div className={s.actions}>
                 <Btn href={WA_URL_LANDING} external>
-                  Pedir el chatbot
+                  Pedir el agente conversacional
                 </Btn>
                 <Btn href="/precios" variant="line">
                   Ver precios
@@ -210,7 +211,7 @@ export default function Chatbot() {
           </p>
           <div className={s.actions}>
             <Btn href={WA_URL_LANDING} external>
-              Pedir el chatbot
+              Pedir el agente conversacional
             </Btn>
           </div>
         </Reveal>

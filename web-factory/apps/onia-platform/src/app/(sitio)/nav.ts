@@ -34,7 +34,7 @@ export interface NavItem {
  */
 export const NAV_PRODUCTO: readonly NavItem[] = [
   { href: "/rubros", label: "Rubros" },
-  { href: "/chatbot", label: "Chatbot" },
+  { href: "/chatbot", label: "Agente conversacional" },
   { href: "/precios", label: "Precios" },
 ];
 
@@ -83,10 +83,11 @@ export const NAV_DECIDIR: readonly NavItem[] = [
  * al lado de «Precios» dice que esto es un estudio, no un sistema que se
  * contrata.
  *
- * **Las páginas no se bajaron**: `/servicios/webs`, `/servicios/marketing-ia` y
- * `/servicios/consultoria` siguen respondiendo 200, así que una URL que ya
- * circula sigue abriendo y se puede mandar en una venta. Salen del CAMINO, no
- * del sitio — igual que `/comparativa` cuando salió del header. Como ya no las
+ * **Las páginas no se bajaron** ese día: `/servicios/webs`, `/servicios/marketing-ia` y
+ * `/servicios/consultoria` siguieron respondiendo 200. Salían del CAMINO, no
+ * del sitio — igual que `/comparativa` cuando salió del header. ⚠️ Desde el
+ * 2026-09-28 marketing-ia y consultoria SÍ se bajan: 308 a la portada
+ * (`next.config.ts`, decisión de Sergio Urcullo). `/servicios/webs` sigue viva. Como ya no las
  * enlaza ninguna pantalla viva, `robots.ts` las declara fuera del índice: es la
  * salida que `alcance.test.ts` documenta para una página que deja el camino, y
  * evita que el sitio pida indexar lo que él mismo no ofrece.

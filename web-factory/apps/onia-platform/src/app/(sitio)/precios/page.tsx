@@ -269,7 +269,7 @@ export default function Precios() {
               <p className={s.body}>{CHATBOT_PLAN.resuelve}</p>
               <div className={s.actions}>
                 <a className={s.link} href="/chatbot">
-                  Ver el chatbot y sus requisitos →
+                  Ver el agente conversacional y sus requisitos →
                 </a>
               </div>
             </div>

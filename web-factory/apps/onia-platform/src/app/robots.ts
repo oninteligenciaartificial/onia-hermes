@@ -25,8 +25,9 @@ import { SITE_URL } from "@/lib/site";
  * agencia. Al salir del menú se quedaron sin UNA sola pantalla que las enlace,
  * y una página que el sitio no ofrece pero pide indexar es la contradicción que
  * `alcance.test.ts` existe para evitar; ésta es la salida que ese gate documenta.
- * **No se bajan**: siguen respondiendo 200, así que una URL que ya circula sigue
- * abriendo y se puede mandar en una venta.
+ * ⚠️ Desde el 2026-09-28 SÍ se bajan, junto con `/v1`: 308 a la portada
+ * (`next.config.ts`, decisión de Sergio Urcullo). El disallow se queda porque
+ * los fuentes siguen en el disco como sujetos de los gates de copy.
  *
  * ⚠️ `/servicios/webs` NO entra acá, y la diferencia importa: no es un enlace de
  * agencia perdido en un menú sino un ADD-ON con precio —«Web del negocio · desde

@@ -107,9 +107,9 @@ const TAREAS = [
     numero: "02",
     panel: "chat" as const,
     titulo: "Atendés la consulta.",
-    texto: "El chatbot responde por WhatsApp con la información que publicaste. Se incluye en algunos planes o se suma aparte.",
+    texto: "Tu agente conversacional responde por WhatsApp con la información que publicaste. Se incluye en algunos planes o se suma aparte.",
     href: "/chatbot",
-    link: "Ver el chatbot",
+    link: "Ver el agente conversacional",
   },
   {
     numero: "03",

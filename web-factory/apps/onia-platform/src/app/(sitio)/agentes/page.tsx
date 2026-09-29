@@ -69,10 +69,16 @@ export default function Agentes() {
               <h1 className={s.display}>
                 Revisan tus datos antes de que abras. No <em>deciden</em> solos.
               </h1>
+              {/* La bajada del titular «Agentes con IA» (Sergio Urcullo,
+                  2026-09-28): el titular se queda porque la IA es real en UNA
+                  cosa —redacta el mensaje de cada agente— y esta frase dice
+                  cuál. A quién y cuándo lo deciden reglas fijas sobre tus
+                  datos (agents-runtime.ts), no la IA. */}
               <p className={s.lead}>
-                Cada mañana los agentes te dejan escritos los mensajes que
-                proponen. Aprobás lo que te sirve y sale por tu WhatsApp, o te
-                queda listo para mandarlo con un toque.
+                La IA te escribe los mensajes; a quién y cuándo lo decide el
+                sistema con tus datos, y vos aprobás. Cada mañana te los deja
+                listos: lo que te sirve sale por tu WhatsApp, o te queda para
+                mandarlo con un toque.
               </p>
               <div className={s.actions}>
                 <Btn href={EMPEZAR_URL}>{CTA_ALTA}</Btn>

@@ -51,9 +51,9 @@ export interface Requisitos {
 }
 
 export const REQUISITOS_CHATBOT: Requisitos = {
-  titulo: "Antes de pedir el chatbot, leé esto",
+  titulo: "Antes de pedir el agente conversacional, leé esto",
   entrada:
-    "El chatbot funciona sobre WhatsApp, y WhatsApp es de Meta. Hay cosas que dependen de vos y cosas que dependen de ellos. Te las decimos todas ahora para que no haya sorpresas después.",
+    "El agente conversacional funciona sobre WhatsApp, y WhatsApp es de Meta. Hay cosas que dependen de vos y cosas que dependen de ellos. Te las decimos todas ahora para que no haya sorpresas después.",
   bloques: [
     {
       titulo: "Lo que ponés vos",

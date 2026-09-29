@@ -137,6 +137,7 @@ export const CHATBOT_STACKS: readonly ChatbotStack[] = [
       `Atiende hasta ${CONVERSACIONES_INCLUIDAS} conversaciones por mes; si se agotan, las nuevas pasan a una persona de tu equipo, y podés sumar ${RECARGA.conversaciones} más por Bs ${fmtBs(RECARGA.precio)}, que valen hasta fin de mes y no se acumulan`,
       "Responde con la información real que vos publicaste: horarios, servicios y los datos de la cita",
       "No inventa ni cotiza por su cuenta: solo dice lo que vos cargaste",
+      "Entiende las fotos que te mandan y te las pasa con la conversación",
       "Lo que no sabe se lo pasa a una persona, con la conversación completa",
       "Configuración del número y de las plantillas que Meta aprueba",
     ],

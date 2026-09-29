@@ -51,7 +51,7 @@ const SITE_TITLE = "Onia — El sistema con IA que maneja tu negocio completo";
  * ninguna captura. Vuelve cuando la homologación concluya.
  */
 const SITE_DESCRIPTION =
-  `Elegís tu rubro, te entregamos el sistema configurado y encendés módulos cuando los necesités: clientes y caja, agentes con IA que esperan tu aprobación, chatbot de WhatsApp, inventario ${ALCANCE_CON_INVENTARIO} y agenda ${ALCANCE_CON_AGENDA}. Hecho en Bolivia.`;
+  `Elegís tu rubro, te entregamos el sistema configurado y encendés módulos cuando los necesités: clientes y caja, agentes con IA que esperan tu aprobación, agente conversacional de WhatsApp, inventario ${ALCANCE_CON_INVENTARIO} y agenda ${ALCANCE_CON_AGENDA}. Hecho en Bolivia.`;
 
 export const metadata: Metadata = {
   /*
