@@ -30,6 +30,8 @@ scp -i ~/.ssh/onia_hermes_vps_ed25519 final.mp4 caption.txt root@187.77.16.63:/r
 # TikTok / Shorts / LinkedIn por Buffer: ver canales, ensayar y publicar
 node /root/bin/buffer-post.mjs --listar
 node /root/bin/buffer-post.mjs --canal <id> --video ... --texto caption.txt --cuando 2026-10-01T16:30:00Z [--publicar]
+#   YouTube pide título: --meta yt.json con {"youtube":{"title":"…","privacy":"public","madeForKids":false,"categoryId":"28"}}
+#   --borrador lo deja en Buffer sin publicar · --estado <postId> da status y link publicado · --borrar <postId> lo saca
 # en el VPS: ensayo de Instagram (lo procesa, NO publica)
 node /root/bin/ig-reel.mjs --cuenta sergio --video /root/publicar/<pieza>/final.mp4 --caption /root/publicar/<pieza>/caption.txt
 # con el OK de Sergio sobre esa pieza
@@ -50,6 +52,17 @@ node /root/bin/ig-reel.mjs ... --trial auto --publicar    # yap a Trial
   de procesar, aunque falle.
 - **Trial reels**: `trial_params.graduation_strategy` = `MANUAL` | `SS_PERFORMANCE` (doc
   `ig-user/media`, verificada 29-sep). Ensayo real el 29-sep: contenedor con trial auto → FINISHED.
+- **Buffer (activo desde el 29-sep):** cuenta `oninteligenciaartificial@gmail.com`, plan Free. Canales:
+  TikTok `6abc2906ea19ca0bde28cf75` (sergiourcullom, con `video.publish`), YouTube `6abc2995ea19ca0bde28df15`
+  y LinkedIn `6abc2a1aea19ca0bde28eda6`. Clave `onia-vps-publicador` solo en el VPS
+  (`/root/.config/onia-publicar/buffer.env`, 600), **vence el 29-sep-2027**, con permisos mínimos:
+  `account:read`, `posts:read`, `posts:write`, `insights:read`. Probado de punta a punta el 29-sep con un
+  borrador por red: el video quedó adjunto y YouTube lo reconoce como Short. Los borradores se borraron.
+- **`createPost` exige `needsApproval` (Boolean!)** aunque la guía no lo muestre: sin él, falla.
+- **Los videos NO se comprimen.** La ruta `https-onia-assets-manual` tenía el middleware `comprimir` y
+  servía el MP4 con `Content-Encoding: gzip`. Instagram lo toleraba; Buffer no («Video could not be read
+  from its URL»). Se le sacó `comprimir` solo a esa ruta el 29-sep (respaldo en
+  `/root/onia-manual-routes.bak-hermes-assets-20260929212725`). No volver a ponérselo.
 - **Por qué no Postiz:** el 27-sep estaba sin contenedores, y su motor (Temporal) guarda una cola
   vieja que el 4-sep publicó 5 posts sin OK al encenderlo. Para Instagram no hace falta.
 
@@ -70,7 +83,7 @@ Análisis con fuentes primarias (29-sep): [`REDES-ANALISIS.md`](REDES-ANALISIS.m
 |---|---|---|
 | Instagram `@sergiourcullo` / `@oniahq` (reel + trial) | ✅ API propia (`ig-reel.mjs`) | nada |
 | Facebook (perfil y Página) | compartido automático desde el Centro de cuentas de Instagram | Sergio lo activa (1 min); se verifica con el primer reel publicado por API |
-| TikTok · YouTube **Shorts** · LinkedIn perfil | **Buffer GRATIS** (auditado; 3 canales, 10 en cola por canal, API con 3.000 consultas/mes) con `buffer-post.mjs` | Sergio crea la cuenta gratis, conecta los 3 canales (TikTok tiene que ser **cuenta de empresa**) y deja `BUFFER_API_KEY=` en `C:\Users\PC\.env`; Claude la pasa al VPS |
+| TikTok · YouTube **Shorts** · LinkedIn perfil | ✅ **Buffer GRATIS** (auditado; 3 canales, 10 en cola por canal, API con 100 consultas por día) con `buffer-post.mjs` | nada: activo y probado el 29-sep (ver arriba) |
 | YouTube **largos** (lun · mié · vie) | Buffer no los sube: por ahora los subís vos con el paquete listo (archivo, título, descripción con capítulos, miniatura); en paralelo se pide la **auditoría de la API de YouTube** (gratis) para que `yt-video.mjs` publique solo | 3 min por video; el formulario lo preparo yo y lo enviás vos |
 | Descartadas | Metricool (pago; Sergio pidió gratis) · Upload-Post (gratis sin TikTok ni API) · Ayrshare (sin plan gratis) · Postiz propio (mismo bloqueo: TikTok y YouTube quedan privados) | — |
 

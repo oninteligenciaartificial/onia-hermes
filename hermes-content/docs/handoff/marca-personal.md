@@ -2,7 +2,24 @@
 
 **Archivo único del carril.** Actualizado 2026-09-29 por Claude (Opus 5.5).
 
-## ⏩⏩ Estado 29-sep tarde (lo más nuevo)
+## ⏩⏩⏩ Estado 29-sep noche: publicador (lo más nuevo)
+
+- **Circuito listo, todavía SIN publicaciones reales:** Sergio deja los brutos en
+  `C:\Users\PC\Videos\ONIA-brutos\<fecha>\` → Claude edita, arma el paquete del día → «ok» de Sergio →
+  Claude publica desde el VPS. Doc: [`deploy/vps-ops/publicar/README.md`](../../deploy/vps-ops/publicar/README.md);
+  ritmo: [`cola/plan-3-semanas/FLUJO-DIARIO.md`](../cola/plan-3-semanas/FLUJO-DIARIO.md) (3 principales + 6 yaps a Trial).
+- **Instagram** (reel + Trial) por API propia, `ig-reel.mjs`: ensayado hasta FINISHED, falta el primer
+  `--publicar` real. **TikTok, YouTube Shorts y LinkedIn** por **Buffer Free**, `buffer-post.mjs`: cuenta,
+  3 canales y clave activos (clave solo en el VPS, vence 29-sep-2027). Probado con un borrador por red
+  (video adjunto, YouTube lo toma como Short) y borrados.
+- **Arreglo de infra hecho:** la ruta Traefik `/hermes-assets` comprimía los MP4 con gzip y Buffer no los
+  podía leer. Se le sacó `comprimir` solo a esa ruta; respaldo del archivo en el VPS
+  (`/root/onia-manual-routes.bak-hermes-assets-20260929212725`). Los demás sitios siguen respondiendo igual.
+- **Depende de Sergio Urcullo:** activar el compartido automático IG → Facebook (Centro de cuentas);
+  decidir si se pide la auditoría de YouTube (para que los largos salgan solos: hace falta registrar la
+  app en Google Cloud, que es un registro, no servidores). Hasta entonces, los largos los sube él.
+
+## ⏩⏩ Estado 29-sep tarde
 
 - **Diseño en un solo lugar:** skill `.claude/skills/diseno-contenido-onia/` (índice: fuentes de
   imagen, packs, patrones, QA, gasto) + galería única `hermes-content/galeria/` con
