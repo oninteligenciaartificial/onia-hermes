@@ -23,7 +23,60 @@ Fuente de verdad del "cerebro" de Sergio Urcullo. Un tema, un archivo, sin fecha
 Regla heredada de la referencia y que ONIA ya cumple: **el Cerebro nunca actúa hacia
 afuera sin aprobación** — la autonomía termina en tu canal.
 
+## La regla de entrega — qué le llega a Sergio Urcullo, y cuándo
+
+> Sergio Urcullo, 2026-09-29: *"quiero que [Hermes] me avise cosas que tal vez no puedo ver
+> porque mi computadora está apagada… pero no cosas innecesarias. Ahora mismo me envían
+> muchísimas cosas que no me aportan nada… me manda puros errores, errores, errores.
+> Simplemente que me envíe poquitas cosas"*. Ese mismo día eligió, una por una, las cuatro
+> interrupciones y los dos horarios de abajo.
+
+**El canal es Telegram (Hermes).** Nada de panel (bajado dos veces, ver la sección siguiente).
+
+| Qué | Cuándo | Qué lleva |
+|---|---|---|
+| ☀️ **Resumen de la mañana** | **06:30** La Paz | agenda del día · prospectos esperando · guiones para grabar hoy · decisiones (máx. 5, con `ok <id>`) · lo que pasó de noche · UNA línea de salud del sistema |
+| 🌙 **Cierre del día** | **22:00** La Paz | qué se hizo hoy, en castellano llano · qué sigue esperando · el primer compromiso de mañana |
+| 🔔 **Interrupción** | al momento, **solo** entre 06:30 y 22:00 | una de las cuatro de abajo, y nada más |
+
+**Las cuatro interrupciones (elegidas por él):**
+1. **Un prospecto o cliente escribió y nadie contestó.**
+2. **Una reunión en 30 minutos, o un cambio en su agenda.**
+3. **Algo espera su OK** — plata, publicar, desplegar. De a una, con `ok`/`no`.
+4. **El producto se cayó para los clientes** — y **solo si no se arregló solo en 30 minutos**.
+
+**Todo lo demás NO le llega**:
+- **Lo que el sistema puede arreglar solo** (CI, loops, discos, Sentry, backups, n8n que
+  falla) va al tablero, como desde el 2026-09-08. A él le llega como UNA línea en el resumen:
+  «✅ sano» o «N cosas rotas que el sistema no arregló solo».
+- **Lo informativo** (radares, reportes de agentes, «publicado», «rescatado») va al resumen
+  o a ningún lado.
+- **De 22:00 a 06:30 no suena nada.** Lo que haya pasado de noche aparece en el resumen de
+  las 06:30.
+
+**Cómo se hace cumplir — una sola aduana.** Todo aviso pasa por `onia-tg.sh`, con su
+categoría: `ONIA_AVISO=interrumpe | resumen | sistema` (por defecto `sistema`). La aduana
+hace cumplir el horario de silencio, no repite el mismo aviso antes de 6 h, espera N minutos
+antes de avisar una caída (`ONIA_AVISO_ESPERA`) y, si la caída se arregla antes, no avisa
+nada. **Un emisor que le habla a Telegram por su cuenta, sin pasar por la aduana, es un bug.**
+
+**Por qué así y no de otra forma** (medido, no opinado):
+- El 2026-09-04 le llegaron **443 mensajes en un día**. El arreglo del 08-sep los volvió
+  tareas del tablero, pero dejó ~25 emisores que le hablan directo, sin pasar por el
+  enrutador (inventario del 29-sep).
+- Y cortó el canal al revés: el aviso de **5 prospectos reales esperando 23-28 días** —uno
+  de ellos una clínica evaluando un sistema, justo el cliente de la etapa vigente— se volvió
+  una tarea que nadie leía (`handoff/infra-cerebro-loops.md`). **Callar no puede ser el
+  precio de no molestar**: por eso el prospecto es la interrupción número uno.
+
 ## La superficie: Glance, no HTML propio
+
+> ⚠️ **Corregido el 2026-09-29 — esta sección ya no es vigente.** El panel (Glance y los
+> dos anteriores) se **apagó** el 17-sep por decisión de Sergio Urcullo: *"mucha
+> información innecesaria"*; el canal es **solo Telegram** (`handoff/infra-cerebro-loops.md`,
+> §2 y §5). Acá seguía escrito como decisión en curso, y el paso 1 del roadmap mandaba a
+> construirlo: una sesión nueva lo habría levantado por tercera vez. Se conserva como
+> historia; el contenedor `onia-glance` está parado y nada se borró.
 
 Decisión 2026-09-17: el visor se monta sobre **[Glance](https://github.com/glanceapp/glance)**
 (33k ⭐, AGPL-3.0, un binario <20 MB, widgets por YAML, <25 MB RAM) en vez de mantener
@@ -40,8 +93,9 @@ el móvil y el theming resueltos, y sus widgets (`custom-api`, `rss`, `monitor`,
 
 ## Roadmap con "hecho" medible
 
-1. **Superficie Glance** — hecho = Sergio la abre por el túnel y la usa una semana sin
-   pedir volver a Telegram-solo.
+1. ~~**Superficie Glance**~~ — ⚠️ descartado el 2026-09-17 (ver arriba). En su lugar:
+   **la regla de entrega** — hecho = 24 h medidas en su Telegram con solo el resumen, el
+   cierre y las cuatro interrupciones.
 2. **`goals.yaml`** (capa 1) — hecho = la agenda matutina cita el objetivo de la etapa
    en su priorización, todos los días.
 3. **Triage de entrantes** (capa 2) — hecho = cero "desconocido sin contestar" con más

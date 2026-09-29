@@ -24,14 +24,135 @@
 # Uso:
 #   onia-tg.sh "mensaje"                      -> tarea en el tablero
 #   ONIA_TG_DIRECTO=1 onia-tg.sh "mensaje"    -> Telegram, como antes
+#
+# ── LA ADUANA (2026-09-29) ───────────────────────────────────────────────────
+# Sergio Urcullo, 2026-09-29: "que me envíe poquitas cosas… me manda puros errores".
+# Ese día eligió lo que le llega (hermes-content/docs/ONIA_CEREBRO.md, «La regla de
+# entrega»): un resumen a las 06:30, un cierre a las 22:00, y en el medio SOLO cuatro
+# interrupciones. Este script pasa a ser la aduana única, con tres categorías:
+#
+#   ONIA_AVISO=sistema     (por defecto) lo de siempre: problema -> tarea, resto -> log.
+#   ONIA_AVISO=resumen     no interrumpe: se encola para el resumen/cierre del día.
+#   ONIA_AVISO=interrumpe  le llega al momento… salvo que caiga en el silencio.
+#   ONIA_TG_DIRECTO=1      = interrumpe (compatibilidad con los emisores viejos).
+#
+# Modificadores de `interrumpe`:
+#   ONIA_AVISO_CLAVE=x     clave estable (OBLIGATORIA para usar RECUPERADO).
+#   ONIA_AVISO_ESPERA=30   minutos que la condición tiene que SEGUIR para avisar: el
+#                          emisor llama en cada vuelta; si se arregla antes, no suena.
+#   ONIA_AVISO_RECUPERADO=1  la condición terminó: si se había avisado, avisa que volvió;
+#                          si nunca se avisó, se calla y limpia.
+#   ONIA_AVISO_AHORA=1     ignora el silencio (lo usan el resumen y el cierre, que son
+#                          justamente los mensajes agendados en los bordes del silencio).
+#   ONIA_AVISO_EMISOR=x    quién avisa, para el resumen.
+#
+# 🔴 El silencio y la cola del resumen están detrás de un interruptor:
+# $ONIA_AVISO_ESTADO/activo. Sin él, `interrumpe` sale como siempre. Motivo: si la aduana
+# llegara al VPS (el sincronizador la copia sola) antes que el resumen de las 06:30, lo que
+# pase de noche se encolaría para un resumen que no existe — callado por construcción.
+# El archivo lo crea el mismo paso que instala el resumen, y nadie más.
 set -uo pipefail
 
 MSG="${1:?uso: onia-tg.sh \"mensaje\"}"
 LOG="${ONIA_TG_LOG:-/var/log/onia-tg.log}"
 TABLERO="${ONIA_TABLERO:-/root/bin/onia-tablero.sh}"
+ESTADO="${ONIA_AVISO_ESTADO:-/var/lib/onia-aviso}"
+
+ahora() { date -u +%FT%TZ; }
+titulo_de() { printf '%s' "$1" | head -1 | sed 's/<[^>]*>//g; s/^[[:space:]]*//; s/[[:space:]]*$//' | cut -c1-90; }
+clave_de() { printf '%s' "$1" | sed 's/[0-9][0-9]*/N/g' | md5sum | cut -c1-6; }
+
+CATEGORIA="${ONIA_AVISO:-}"
+if [ -z "$CATEGORIA" ]; then
+  if [ "${ONIA_TG_DIRECTO:-0}" = "1" ]; then CATEGORIA=interrumpe; else CATEGORIA=sistema; fi
+fi
+case "$CATEGORIA" in
+  interrumpe|resumen|sistema) ;;
+  *) printf '%s CATEGORIA-DESCONOCIDA %s -> sistema\n' "$(ahora)" "$CATEGORIA" >> "$LOG"; CATEGORIA=sistema ;;
+esac
+POLITICA=0
+[ -f "$ESTADO/activo" ] && POLITICA=1
+
+# Hora de La Paz sin depender de tzdata: Bolivia es UTC-4 todo el año, sin horario de verano.
+hm_lapaz() { if [ -n "${ONIA_AVISO_HM:-}" ]; then printf '%s' "$ONIA_AVISO_HM"; else date -u -d '-4 hours' +%H%M; fi; }
+en_silencio() {
+  local hm desde hasta
+  hm=$((10#$(hm_lapaz))); desde=$((10#${ONIA_SILENCIO_DESDE:-2200})); hasta=$((10#${ONIA_SILENCIO_HASTA:-0630}))
+  [ "$hm" -ge "$desde" ] || [ "$hm" -lt "$hasta" ]
+}
+encolar() {  # encolar <tipo> <clave> <titulo>
+  mkdir -p "$ESTADO" 2>/dev/null
+  printf '%s\t%s\t%s\t%s\t%s\t%s\n' "$(ahora)" "${ONIA_AVISO_EMISOR:-?}" "$1" "$2" "$3" \
+    "$(printf '%s' "$MSG" | sed 's/<[^>]*>//g' | tr '\n\t' '  ' | cut -c1-300)" >> "$ESTADO/resumen.log"
+}
+edad_min() { local f="$1"; echo $(( ( $(date +%s) - $(cat "$f" 2>/dev/null || echo 0) ) / 60 )); }
+
+# ── resumen: al resumen del día, nunca al teléfono ───────────────────────────
+if [ "$CATEGORIA" = resumen ]; then
+  TITULO=$(titulo_de "$MSG"); [ -n "$TITULO" ] || TITULO="aviso sin titulo"
+  if [ "$POLITICA" = 1 ]; then
+    encolar resumen "${ONIA_AVISO_CLAVE:-$(clave_de "$TITULO")}" "$TITULO"
+    printf '%s RESUMEN %s titulo=%s\n' "$(ahora)" "${ONIA_AVISO_EMISOR:-?}" "$TITULO" >> "$LOG"
+  else
+    printf '%s INFORMATIVO (sin tarea) %s\n' "$(ahora)" "$TITULO" >> "$LOG"
+  fi
+  exit 0
+fi
+
+# ── interrumpe: al teléfono, pero con reglas ─────────────────────────────────
+if [ "$CATEGORIA" = interrumpe ]; then
+  TITULO=$(titulo_de "$MSG"); [ -n "$TITULO" ] || TITULO="aviso sin titulo"
+  CLAVE="${ONIA_AVISO_CLAVE:-$(clave_de "$TITULO")}"
+  CLAVE=$(printf '%s' "$CLAVE" | tr -c 'A-Za-z0-9._-' '_')
+  ENVIADO="$ESTADO/enviados/$CLAVE"; PENDIENTE="$ESTADO/pendientes/$CLAVE"; NOCTURNO="$ESTADO/nocturnos/$CLAVE"
+
+  if [ "${ONIA_AVISO_RECUPERADO:-0}" = "1" ]; then
+    if [ ! -f "$ENVIADO" ] && [ ! -f "$NOCTURNO" ]; then
+      # Nunca se le aviso la caida: tampoco se le avisa que volvio. Se limpia y se calla.
+      rm -f "$PENDIENTE" 2>/dev/null
+      printf '%s RECUPERADO-SIN-AVISO clave=%s titulo=%s\n' "$(ahora)" "$CLAVE" "$TITULO" >> "$LOG"
+      exit 0
+    fi
+    rm -f "$ENVIADO" "$PENDIENTE" "$NOCTURNO" 2>/dev/null
+  elif [ "${ONIA_AVISO_ESPERA:-0}" -gt 0 ] 2>/dev/null; then
+    if [ ! -f "$PENDIENTE" ]; then
+      mkdir -p "$ESTADO/pendientes" 2>/dev/null; date +%s > "$PENDIENTE"
+      printf '%s ESPERANDO clave=%s 0/%s min titulo=%s\n' "$(ahora)" "$CLAVE" "$ONIA_AVISO_ESPERA" "$TITULO" >> "$LOG"
+      exit 0
+    fi
+    LLEVA=$(edad_min "$PENDIENTE")
+    if [ "$LLEVA" -lt "$ONIA_AVISO_ESPERA" ]; then
+      printf '%s ESPERANDO clave=%s %s/%s min titulo=%s\n' "$(ahora)" "$CLAVE" "$LLEVA" "$ONIA_AVISO_ESPERA" "$TITULO" >> "$LOG"
+      exit 0
+    fi
+  fi
+
+  # El enfriamiento vale con la politica encendida, o para cualquier emisor NUEVO (el que
+  # ya declara ONIA_AVISO): sin esto, un emisor con ESPERA que sigue llamando cada 5 min
+  # con la politica apagada repetiria el aviso en cada vuelta.
+  if { [ "$POLITICA" = 1 ] || [ -n "${ONIA_AVISO:-}" ]; } && [ "${ONIA_AVISO_RECUPERADO:-0}" != "1" ]; then
+    # El mismo aviso no se repite antes de ONIA_AVISO_ENFRIAR minutos (6 h por defecto).
+    if [ -f "$ENVIADO" ] && [ "$(edad_min "$ENVIADO")" -lt "${ONIA_AVISO_ENFRIAR:-360}" ]; then
+      printf '%s REPETIDO-CALLADO clave=%s titulo=%s\n' "$(ahora)" "$CLAVE" "$TITULO" >> "$LOG"
+      exit 0
+    fi
+  fi
+  if [ "$POLITICA" = 1 ] && [ "${ONIA_AVISO_AHORA:-0}" != "1" ] && en_silencio; then
+    # De 22:00 a 06:30 no suena nada: va al resumen de la manana, UNA vez por clave.
+    if [ -f "$NOCTURNO" ]; then
+      printf '%s NOCHE-REPETIDO clave=%s titulo=%s\n' "$(ahora)" "$CLAVE" "$TITULO" >> "$LOG"
+    else
+      mkdir -p "$ESTADO/nocturnos" 2>/dev/null; date +%s > "$NOCTURNO"
+      encolar noche "$CLAVE" "$TITULO"
+      printf '%s NOCHE-AL-RESUMEN clave=%s titulo=%s\n' "$(ahora)" "$CLAVE" "$TITULO" >> "$LOG"
+    fi
+    exit 0
+  fi
+  # Sigue abajo, por el camino directo de siempre.
+fi
 
 # ── Camino por defecto: no interrumpir, dar trabajo ──────────────────────────
-if [ "${ONIA_TG_DIRECTO:-0}" != "1" ]; then
+if [ "$CATEGORIA" = sistema ]; then
   # El titulo es la primera linea sin HTML ni emojis de adorno, recortada.
   TITULO=$(printf '%s' "$MSG" | head -1 | sed 's/<[^>]*>//g; s/^[[:space:]]*//; s/[[:space:]]*$//' | cut -c1-90)
   [ -n "$TITULO" ] || TITULO="aviso sin titulo"
@@ -152,7 +273,7 @@ fi
 # Hasta el 2026-09-03 esto tiraba la respuesta (-o /dev/null): un HTML mal formado o un
 # timeout se perdia en silencio y el que llamaba creia que aviso (tarea t_2f7ac300).
 # Ahora: exit 1 si no vuelve "ok":true, y cada envio deja su linea en el log.
-set -a; . /root/.hermes/.env 2>/dev/null; set +a
+set -a; . "${ONIA_TG_ENV:-/root/.hermes/.env}" 2>/dev/null; set +a
 RESP=$(curl -s --max-time 20 \
   "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
   -d chat_id="${TELEGRAM_HOME_CHANNEL}" \
@@ -160,7 +281,15 @@ RESP=$(curl -s --max-time 20 \
   --data-urlencode text="$MSG" 2>&1)
 if printf "%s" "$RESP" | grep -q "\"ok\":true"; then
   MID=$(printf "%s" "$RESP" | grep -o "\"message_id\":[0-9]*" | head -1 | cut -d: -f2)
-  printf "%s OK message_id=%s bytes=%s\n" "$(date -u +%FT%TZ)" "${MID:-?}" "${#MSG}" >> "$LOG"
+  # El titulo va en el log desde el 2026-09-29: antes la linea OK solo tenia message_id y
+  # bytes, y medir QUE le llego a Sergio Urcullo obligaba a adivinarlo por los emisores.
+  printf "%s OK message_id=%s bytes=%s cat=%s emisor=%s titulo=%s\n" "$(date -u +%FT%TZ)" "${MID:-?}" "${#MSG}" \
+    "$CATEGORIA" "${ONIA_AVISO_EMISOR:-?}" "$(titulo_de "$MSG")" >> "$LOG"
+  # Recien con la entrega confirmada se marca como avisado: una marca antes del envio
+  # callaria el reintento de un envio que fallo.
+  if [ "$CATEGORIA" = interrumpe ] && [ "${ONIA_AVISO_RECUPERADO:-0}" != "1" ]; then
+    mkdir -p "$ESTADO/enviados" 2>/dev/null && date +%s > "$ESTADO/enviados/$CLAVE"
+  fi
   exit 0
 fi
 printf "%s FALLO bytes=%s resp=%s\n" "$(date -u +%FT%TZ)" "${#MSG}" "$(printf "%s" "$RESP" | head -c 300)" >> "$LOG"

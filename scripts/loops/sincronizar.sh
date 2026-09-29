@@ -307,6 +307,11 @@ poner "$FUENTE/extras/publicar-solo.sh"            "$DESTINO_BIN/onia-publicar-s
 # manana el cron ejecute un fosil.
 poner "$FUENTE/extras/jarvis-voz.sh"               "$DESTINO_BIN/onia-jarvis-voz.sh"
 poner "$RAIZ/scripts/cerebro/onia-cerebro-datos.py" "$DESTINO_BIN/onia-cerebro-datos.py"
+# El resumen de las 06:30 y el cierre de las 22:00 (2026-09-29, ONIA_CEREBRO.md «La regla
+# de entrega»). Entra cableado desde el primer commit: su cron lo instala
+# hermes-content/deploy/hermes-jarvis/aplicar.sh, y sin esta linea ese cron correria un
+# archivo que nadie copio.
+poner "$FUENTE/jarvis-resumen.sh"                  "$DESTINO_BIN/onia-jarvis-resumen.sh"
 
 # La marca de Onia sobre Chatwoot. Cron VIVO en el VPS (`17 * * * *`) y NADIE lo copiaba:
 # la copia que ejecutaba era la de 14 lineas que defiende 3 claves, y el arreglo del
