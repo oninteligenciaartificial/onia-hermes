@@ -1,0 +1,4 @@
+interface:
+  display_name: "Ecommerce Motion Retention"
+  short_description: "Motion rules for ecommerce landing pages"
+  default_prompt: "Improve this ecommerce landing page with purposeful motion, retention-focused layout, and safe reduced-motion behavior."

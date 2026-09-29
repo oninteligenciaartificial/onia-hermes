@@ -534,12 +534,16 @@ Canonical files:
 - `hermes-content/skills/referencias-pinterest.md`
 - `hermes-content/skills/seguridad-credenciales.md`
 - `hermes-content/skills/operaciones-dashboard.md`
+- `hermes-content/skills/orquestador-creativo-ia.md`
 - `hermes-content/skills/video-lab-higgsfield.md`
+- `hermes-content/skills/videos-virales-higgsfield.md`
 - `hermes-content/skills/ugc-empresas-higgsfield.md`
 - `hermes-content/skills/audio-elevenlabs.md`
 - `hermes-content/skills/inteligencia-reuniones-onia.md`
 - `hermes-content/skills/marca-personal-sergio.md`
 - `hermes-content/skills/historias-sergio.md`
+- `hermes-content/skills/crons-diarios-hermes.md`
+- `hermes-content/skills/orquestacion-proyectos-onia.md`
 - `hermes-content/skills/radar-creativo-onia.md`
 - `hermes-content/skills/consultoria-onia.md`
 

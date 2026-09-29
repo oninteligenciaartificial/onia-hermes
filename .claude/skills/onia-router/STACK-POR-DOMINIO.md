@@ -7,10 +7,9 @@
 > instaladas y que yo estaba usando **cero**. El índice existía; lo que faltaba era
 > granularidad en contenido/diseño y el reflejo de mirarlo antes de empezar.
 
-> 🧹 **Podado 2026-09-29:** se sacaron las skills sin uso en 30 días y sin plan que las nombre
-> (124 globales, archivadas en `~/.claude/skills-archivadas-20260929/`; lista y motivo en
-> `hermes-content/docs/historial/LIMPIEZA_SKILLS_20260929.md`). Restaurar una:
-> `mv ~/.claude/skills-archivadas-20260929/<nombre> ~/.claude/skills/`.
+> 🧹 **Podado 2026-09-29:** se sacaron las globales sin uso real en 30 días (Claude **y** Codex)
+> y sin plan que las nombre. Lista, motivo y cómo reinstalar cada una:
+> `hermes-content/docs/historial/LIMPIEZA_SKILLS_20260929.md`.
 
 **Regla de uso:** antes de escribir la primera línea de cualquier tarea, buscá el dominio acá
 y cargá las 2-3 skills de la fila. No las 10 — las que aplican.
@@ -101,7 +100,8 @@ Cada uno cierra con **"lo que sigue sin resolver"**: ahí está el trabajo pendi
 |---|---|
 | **Antes de codear cualquier UI** (regla de la casa) | `impeccable` · `ui-ux-pro-max` · `taste-design` |
 | Revisar un diseño ya hecho | `design-review` |
-| Escribir el diseño como spec | `design-md` · `design` |
+| Explorar direcciones / armar el sistema de diseño | `design-consultation` |
+| Escribir el diseño como spec | `design-md` · `design` · `design-html` |
 | Dirección estética concreta | `minimalist-ui` · `industrial-brutalist-ui` |
 | Componentes | `shadcn-ui` · `react-components` · `ui-styling` |
 | Ingeniería de diseño fina | `emil-design-eng` |
@@ -140,10 +140,11 @@ codear**, no descubrirlo a la tercera ronda. Ver la memoria *web-factory-disenos
 | Cuándo | Skills |
 |---|---|
 | **Antes de commitear algo que toca datos, auth o plata** | `security-review` |
-| Revisión de código | `code-review` · agente `code-reviewer` |
-| Testing | `qa` · `e2e-testing` |
+| Revisión de código | `code-review` · `review` · `caveman-review` · agente `code-reviewer` |
+| Testing | `qa` · `e2e-testing` · `click-path-audit` |
+| Experiencia de desarrollador (docs, CLI, onboarding) | `devex-review` |
 | Verificar antes de decir "listo" | `verification-loop` |
-| Onboarding a un repo desconocido | `investigate` |
+| Onboarding a un repo desconocido | `codebase-onboarding` · `investigate` |
 
 ⚠️ `verification-loop` es la que corresponde al loop que Sergio pide a mano.
 **Cargarla en vez de improvisar el loop.**
@@ -155,7 +156,7 @@ codear**, no descubrirlo a la tercera ronda. Ver la memoria *web-factory-disenos
 | Cuándo | Skills |
 |---|---|
 | Research a fondo con fuentes | `deep-research` · `iterative-retrieval` · `exa-search` |
-| Navegar / scrapear | navegador integrado (MCP) · Crawl4AI del VPS (`scripts/alta-por-extraccion.py`) |
+| Navegar / scrapear | `browse` · navegador integrado (MCP) · Crawl4AI del VPS (`scripts/alta-por-extraccion.py`) |
 | Buscar en memoria | `claude-mem:mem-search` (plugin) |
 | Consultar docs de librería | `documentation-lookup` |
 
@@ -166,7 +167,9 @@ codear**, no descubrirlo a la tercera ronda. Ver la memoria *web-factory-disenos
 | Cuándo | Skills |
 |---|---|
 | Planificar antes de construir | `make-plan` |
-| Agentes en paralelo / loops | `agentic-engineering` |
+| Agentes en paralelo / loops | `autonomous-loops` · `continuous-agent-loop` · `agentic-engineering` |
+| Contexto entre sesiones | `context-save` · `context-restore` |
+| Registrar decisiones de arquitectura | `architecture-decision-records` |
 | Crear o auditar skills | `skill-creator` |
 | Entregables de oficina | `docx` · `xlsx` · `pptx` · `pdf` · `make-pdf` · `slides` · `document-generate` |
 
@@ -178,7 +181,7 @@ Buscarlas en un solo directorio da falsos negativos — pasó al verificar este 
 
 | Origen | Dónde | Ejemplos |
 |---|---|---|
-| Globales del filesystem | `~/.claude/skills/` (**91**) | `impeccable` · `copywriting` · `security-review` |
+| Globales del filesystem | `~/.claude/skills/` (**106**) | `impeccable` · `copywriting` · `security-review` |
 | Del proyecto | `.claude/skills/` (**19**) | `onia-router` · `ver-videos` · `editor-videos` |
 | Plugins | `~/.claude/plugins/cache/` (**9**) | `gsap-skills` · `caveman` · `ponytail` |
 | De claude.ai | no están en disco — se listan con `ListSkills` | `docx` · `xlsx` · `pptx` · `pdf` · `skill-creator` · `abogado-del-diablo` |

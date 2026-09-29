@@ -10,13 +10,13 @@ carril, cargá su stack, respetá las reglas duras. Fuente viva del mapa complet
 `hermes-content/docs/ONIA_SKILLS_STACK_Y_SUBAGENTES.md`.
 
 > 📇 **Mapa problema → skill: [`STACK-POR-DOMINIO.md`](STACK-POR-DOMINIO.md).**
-> Hay **91 skills globales + 9 plugins** instaladas (124 globales sin uso se archivaron el
-> 2026-09-29 en `~/.claude/skills-archivadas-20260929/`). Esta tabla enruta por carril; ese
+> Hay **106 skills globales + 9 plugins** instaladas (el 2026-09-29 se sacaron las que no
+> usaban ni Claude ni Codex; ver el historial de la limpieza). Esta tabla enruta por carril; ese
 > archivo enruta por dominio (contenido/marketing · diseño/UI/UX · frontend · backend ·
 > seguridad · research · proceso), que es como aparecen las tareas en la práctica.
 > **Abrirlo antes de escribir la primera línea.**
 
-> 🧹 **Limpieza 2026-09-29:** se borraron 63 skills y agentes sin uso en 30 días
+> 🧹 **Limpieza 2026-09-29:** se borraron 52 skills y agentes del repo sin uso en 30 días
 > (`hermes-content/docs/historial/LIMPIEZA_SKILLS_20260929.md`: qué, por qué, qué lo
 > reemplaza y cómo recuperarlo). **Único subagente ONIA propio: `onia-crm-prospeccion`.**
 > Los otros 8 (los 6 retirados el 18-ago + `onia-core-guardian` + `onia-creative-radar`)
@@ -79,7 +79,7 @@ carril, cargá su stack, respetá las reglas duras. Fuente viva del mapa complet
 - **Bolivia:** todo desarrollo acomodado a Bolivia con contaduría boliviana específica y vigente;
   validar con research (fuente citada) antes de codear temas de Bolivia.
 
-## Skills del repo (19 en `.claude/skills/` + 5 en `.agents/skills/`, todas con uso en 30 días)
+## Skills del repo (19 en `.claude/skills/` + 12 en `.agents/skills/`, todas con uso en 30 días)
 - **Índice y operación:** `onia-router` (este índice) · `onia-continuidad` (arranque y rumbo de
   sesión) · `onia-infra` (VPS, Docker, n8n por SSH).
 - **Producto:** `onia-core` · `onia-chatbot` · `onia-contabilidad-bolivia`.
@@ -90,4 +90,6 @@ carril, cargá su stack, respetá las reglas duras. Fuente viva del mapa complet
   `captions-overlay` (upstream HeyGen que no está en la copia global).
 - **Codex (`.agents/skills/`):** `impeccable` · `embedded-captions` (gate de ortografía que cita
   `editor-videos`) · `media-use` (librería de SFX por defecto de `editor-videos/scripts/sfx.mjs`:
-  **no borrar**) · `higgsfield-generate` · `higgsfield-soul-id`.
+  **no borrar**) · `higgsfield-generate` · `higgsfield-soul-id` · `motion-doctrine` con
+  `cut-the-curve` `oversized-cursor` `seam-craft` `captions-overlay` · `web-factory-design-research`
+  · `web-factory-intake-assets`.

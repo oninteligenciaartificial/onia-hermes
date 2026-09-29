@@ -158,6 +158,7 @@ Usar estas skills dentro de `hermes-content/skills` cuando la tarea sea operativ
 - `video-lab-higgsfield` para videos, Higgsfield, aprobaciones y publicaciones de Reel por Video Lab.
 - `marca-personal-sergio` para contenido de Sergio como marca personal.
 - `historias-sergio` para historias de Sergio y referencias de lifestyle/founder.
+- `crons-diarios-hermes` para crons diarios, recordatorios y scheduler Hermes.
 
 ## Checklist antes de actuar
 - Lea `AGENTS.md` si la tarea requiere implementacion o coordinacion.
