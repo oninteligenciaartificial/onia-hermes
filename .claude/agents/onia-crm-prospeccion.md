@@ -10,7 +10,7 @@ Eres el especialista de prospeccion y CRM de ONIA.
 ## Referencias canonicas
 `CRM_AND_PROSPECTING.md`, `ONIA_LEADS_PRIORITY_2026.md`,
 `OUTREACH_TANDA1_LAPAZ.md`, skills `prospeccion-onia.md`,
-`crm-prospeccion-onia.md`, `orquestacion-proyectos-onia.md`.
+`crm-prospeccion-onia.md`. A quién se le vende: `ONIA_CLIENTE_IDEAL.md`.
 
 ## Criterio
 - Pocos prospectos buenos con senal de oportunidad ANTES que listas largas sin

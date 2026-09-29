@@ -7,6 +7,10 @@
 > instaladas y que yo estaba usando **cero**. El índice existía; lo que faltaba era
 > granularidad en contenido/diseño y el reflejo de mirarlo antes de empezar.
 
+> 🧹 **Podado 2026-09-29:** se sacaron las globales sin uso real en 30 días (Claude **y** Codex)
+> y sin plan que las nombre. Lista, motivo y cómo reinstalar cada una:
+> `hermes-content/docs/historial/LIMPIEZA_SKILLS_20260929.md`.
+
 **Regla de uso:** antes de escribir la primera línea de cualquier tarea, buscá el dominio acá
 y cargá las 2-3 skills de la fila. No las 10 — las que aplican.
 
@@ -33,22 +37,18 @@ que uno realmente va a hacer.
 
 | Cuándo | Skills |
 |---|---|
-| Definir el plan de contenido de una cuenta | `content-strategy` · `marketing-plan` · `social` |
-| No sé qué publicar / me quedé sin ideas | `marketing-ideas` · `marketing-loops` |
-| Decidir el ángulo con el que se ataca un mercado | `marketing-council` · `marketing-psychology` |
-| Entender al comprador antes de escribirle | `customer-research` · `prospecting` |
-| Ver qué hace la competencia | `competitor-profiling` · `competitors` |
-| Armar la oferta o el precio de la pieza | `offers` · `pricing` |
+| Definir el plan de contenido de una cuenta | `content-strategy` · `social` |
+| Ver qué hace la competencia | `competitor-profiling` |
+| Armar la oferta o el precio de la pieza | `pricing` |
 
 ### 1.2 Escribir
 
 | Cuándo | Skills |
 |---|---|
 | Copy de anuncio, caption, headline | `copywriting` · `ad-creative` |
-| Pulir un texto que ya existe | `copy-editing` · `writing-guidelines` |
+| Pulir un texto que ya existe | `writing-guidelines` |
 | Artículo, guion largo, documento | `article-writing` |
 | Recurso descargable a cambio de un dato | `lead-magnets` |
-| Correo frío / secuencia | `cold-email` · `emails` · `sms` |
 
 ### 1.2-bis 🔴 Los bancos de patrones — se abren ANTES que la skill
 
@@ -69,17 +69,16 @@ Cada uno cierra con **"lo que sigue sin resolver"**: ahí está el trabajo pendi
 | Cuándo | Skills |
 |---|---|
 | Carrusel, placa, estático | `banner-design` · `brand` · `brandkit` · `design-dna` |
-| Generar imagen para web/mobile | `imagegen-frontend-web` · `imagegen-frontend-mobile` · `image` |
-| Convertir una referencia visual en código | `image-to-code` · `stitch-code-to-design` |
-| Definir el sistema visual de una marca | `design-dna` · `stitch-manage-design-system` |
+| Generar imagen para web/mobile | `imagegen-frontend-web` |
+| Convertir una referencia visual en código | `image-to-code` |
+| Definir el sistema visual de una marca | `design-dna` |
 
 ### 1.4 Video
 
 | Cuándo | Skills |
 |---|---|
-| Video programático (React) | `remotion` · `remotion-video-creation` |
-| Video en general / edición | `video` + skills propias `editor-videos` · `ver-videos` |
-| Motor HTML→MP4 | `hyperframes*` (viven en `.agents/skills/`) |
+| Video en general / edición | skills propias `editor-videos` · `ver-videos` |
+| Motor HTML→MP4 | `hyperframes*` (copia global `~/.claude/skills`; flujo que falte: `npx hyperframes skills update <nombre>`) |
 | **Juzgar el movimiento y la continuidad entre planos** | `motion-doctrine` · `cut-the-curve` · `seam-craft` (propias) |
 | Reconstruir un componente desde fotogramas | `image-to-code` |
 
@@ -91,13 +90,7 @@ Cada uno cierra con **"lo que sigue sin resolver"**: ahí está el trabajo pendi
 
 | Cuándo | Skills |
 |---|---|
-| Pauta | `ads` · `ab-testing` |
-| SEO | `seo-audit` · `ai-seo` · `programmatic-seo` · `site-architecture` |
-| App store | `aso` |
-| Prensa, comunidad, alianzas | `public-relations` · `community-marketing` · `co-marketing` · `referrals` |
-| Medir si sirvió | `analytics` · `cro` · `click-path-audit` |
-| Retención / monetización | `churn-prevention` · `paywalls` · `popups` · `signup` |
-| Lanzamiento | `launch` · `product-marketing` · `sales-enablement` · `revops` |
+| Pauta | `ads` |
 
 ---
 
@@ -106,13 +99,12 @@ Cada uno cierra con **"lo que sigue sin resolver"**: ahí está el trabajo pendi
 | Cuándo | Skills |
 |---|---|
 | **Antes de codear cualquier UI** (regla de la casa) | `impeccable` · `ui-ux-pro-max` · `taste-design` |
-| Revisar un diseño ya hecho | `design-review` · `plan-design-review` · `gpt-taste` |
-| Explorar varias direcciones a la vez | `design-shotgun` · `design-consultation` |
-| Escribir el diseño como spec | `design-md` · `design-html` · `design` |
-| Dirección estética concreta | `minimalist-ui` · `industrial-brutalist-ui` · `web-design-guidelines` |
+| Revisar un diseño ya hecho | `design-review` |
+| Explorar direcciones / armar el sistema de diseño | `design-consultation` |
+| Escribir el diseño como spec | `design-md` · `design` · `design-html` |
+| Dirección estética concreta | `minimalist-ui` · `industrial-brutalist-ui` |
 | Componentes | `shadcn-ui` · `react-components` · `ui-styling` |
 | Ingeniería de diseño fina | `emil-design-eng` |
-| Flujo Stitch (extraer → generar → subir) | `stitch-extract-design-md` · `stitch-design-taste` · `stitch-generate-design` · `stitch-loop` · `stitch-upload-to-stitch` |
 
 ⚠️ Regla ya escrita y ya incumplida una vez: **cargar `impeccable` + galería/tokens ANTES de
 codear**, no descubrirlo a la tercera ronda. Ver la memoria *web-factory-disenos-genericos*
@@ -125,10 +117,7 @@ codear**, no descubrirlo a la tercera ronda. Ver la memoria *web-factory-disenos
 | Cuándo | Skills |
 |---|---|
 | Patrones generales | `frontend-patterns` · `react-components` |
-| Next.js | `nextjs-turbopack` · `vercel-react-best-practices` · `vercel-composition-patterns` |
-| Performance | `vercel-optimize` · `vercel-react-view-transitions` |
-| React Native | `vercel-react-native-skills` |
-| iOS | `ios-clean` · `ios-design-review` · `ios-fix` · `ios-qa` · `ios-sync` |
+| Next.js | `nextjs-turbopack` |
 | Animación | `gsap-skills` (plugin) |
 
 ---
@@ -139,10 +128,9 @@ codear**, no descubrirlo a la tercera ronda. Ver la memoria *web-factory-disenos
 |---|---|
 | Diseñar API | `api-design` · `backend-patterns` |
 | Postgres | `postgres-patterns` · `supabase` · `supabase-postgres-best-practices` |
-| Migraciones | `database-migrations` · `schema` |
-| Contenedores y deploy | `docker-patterns` · `deployment-patterns` · `deploy-to-vercel` · `vercel-cli-with-tokens` |
-| MCP propio | `mcp-server-patterns` |
-| n8n | `n8n-workflow-patterns` · `n8n-node-configuration` · `n8n-expression-syntax` · `n8n-code-javascript` · `n8n-code-python` · `n8n-validation-expert` · `n8n-mcp-tools-expert` |
+| Migraciones | `database-migrations` |
+| Contenedores y deploy | `docker-patterns` · `deployment-patterns` |
+| n8n | `n8n-workflow-patterns` · `n8n-node-configuration` · `n8n-expression-syntax` · `n8n-code-javascript` · `n8n-validation-expert` · `n8n-mcp-tools-expert` |
 | Costo de LLM en pipeline | `cost-aware-llm-pipeline` · `context-budget` |
 
 ---
@@ -151,14 +139,15 @@ codear**, no descubrirlo a la tercera ronda. Ver la memoria *web-factory-disenos
 
 | Cuándo | Skills |
 |---|---|
-| **Antes de commitear algo que toca datos, auth o plata** | `security-review` · `guard` |
-| Revisión de código | `review` · `caveman-review` · `plan-eng-review` |
-| Testing | `qa` · `qa-only` · `e2e-testing` |
-| Verificar antes de decir "listo" | `verification-loop` · `careful` |
+| **Antes de commitear algo que toca datos, auth o plata** | `security-review` |
+| Revisión de código | `code-review` · `review` · `caveman-review` · agente `code-reviewer` |
+| Testing | `qa` · `e2e-testing` · `click-path-audit` |
+| Experiencia de desarrollador (docs, CLI, onboarding) | `devex-review` |
+| Verificar antes de decir "listo" | `verification-loop` |
 | Onboarding a un repo desconocido | `codebase-onboarding` · `investigate` |
 
-⚠️ `verification-loop` y `careful` son las que corresponden al loop que Sergio pide a mano.
-**Cargarlas en vez de improvisar el loop.**
+⚠️ `verification-loop` es la que corresponde al loop que Sergio pide a mano.
+**Cargarla en vez de improvisar el loop.**
 
 ---
 
@@ -167,8 +156,8 @@ codear**, no descubrirlo a la tercera ronda. Ver la memoria *web-factory-disenos
 | Cuándo | Skills |
 |---|---|
 | Research a fondo con fuentes | `deep-research` · `iterative-retrieval` · `exa-search` |
-| Navegar / scrapear | `browse` · `scrape` · `data-scraper-agent` |
-| Buscar en memoria | `mem-search` · `learned` |
+| Navegar / scrapear | `browse` · navegador integrado (MCP) · Crawl4AI del VPS (`scripts/alta-por-extraccion.py`) |
+| Buscar en memoria | `claude-mem:mem-search` (plugin) |
 | Consultar docs de librería | `documentation-lookup` |
 
 ---
@@ -177,11 +166,11 @@ codear**, no descubrirlo a la tercera ronda. Ver la memoria *web-factory-disenos
 
 | Cuándo | Skills |
 |---|---|
-| Planificar antes de construir | `make-plan` · `autoplan` · `blueprint` |
-| Revisar un plan desde varios ángulos | `plan-ceo-review` · `plan-design-review` · `plan-devex-review` · `plan-eng-review` |
-| Agentes en paralelo / loops | `autonomous-loops` · `continuous-agent-loop` · `pair-agent` · `agentic-engineering` |
-| Contexto | `context-save` · `context-restore` · `compress` |
-| Crear o auditar skills | `skill-creator` · `skill-stocktake` · `skill-comply` · `find-skills` |
+| Planificar antes de construir | `make-plan` |
+| Agentes en paralelo / loops | `autonomous-loops` · `continuous-agent-loop` · `agentic-engineering` |
+| Contexto entre sesiones | `context-save` · `context-restore` |
+| Registrar decisiones de arquitectura | `architecture-decision-records` |
+| Crear o auditar skills | `skill-creator` |
 | Entregables de oficina | `docx` · `xlsx` · `pptx` · `pdf` · `make-pdf` · `slides` · `document-generate` |
 
 ---
@@ -192,11 +181,11 @@ Buscarlas en un solo directorio da falsos negativos — pasó al verificar este 
 
 | Origen | Dónde | Ejemplos |
 |---|---|---|
-| Globales del filesystem | `~/.claude/skills/` (**196**) | `impeccable` · `copywriting` · `security-review` |
-| Del proyecto | `.claude/skills/` (**33**) | `onia-router` · `ver-videos` · `editor-videos` |
+| Globales del filesystem | `~/.claude/skills/` (**106**) | `impeccable` · `copywriting` · `security-review` |
+| Del proyecto | `.claude/skills/` (**19**) | `onia-router` · `ver-videos` · `editor-videos` |
 | Plugins | `~/.claude/plugins/cache/` (**9**) | `gsap-skills` · `caveman` · `ponytail` |
 | De claude.ai | no están en disco — se listan con `ListSkills` | `docx` · `xlsx` · `pptx` · `pdf` · `skill-creator` · `abogado-del-diablo` |
-| HyperFrames | `.agents/skills/` | `talking-head-recut` · `embedded-captions` |
+| HyperFrames | copia global `~/.claude/skills/` (en el repo solo `.agents/skills/media-use` y `embedded-captions`) | `talking-head-recut` · `embedded-captions` |
 
 ## 9. Lo que NO es skill y se confunde
 
@@ -206,7 +195,7 @@ Buscarlas en un solo directorio da falsos negativos — pasó al verificar este 
 | Meta Ads · Biblioteca de Anuncios | MCP |
 | Supabase · Vercel · n8n · Cloudflare · Notion · Figma · Drive · Gmail · Calendar | MCP |
 | ElevenLabs | API REST desde el VPS (no hay MCP) |
-| HyperFrames | `.agents/skills/` |
+| HyperFrames | copia global `~/.claude/skills/` |
 
 ---
 
