@@ -27,14 +27,24 @@ export { PIXEL_DE_META, PIXEL_DESTINO };
  * cubre también los botones que dibuja un componente cliente (el conmutador
  * mensual/anual de `/precios`).
  *
- * Del otro lado, hoy el producto sólo lee `src` (en `AccessRequestForm`); los
- * `utm_*` y `fbclid` llegan a la URL del registro y queda del lado del producto
- * guardarlos.
+ * **Del otro lado, NADIE lo guarda todavía.** Con el alta abierta en producción
+ * el registro muestra `SignupForm`, que sólo lee `?plan=`; el único que lee
+ * `src` es `AccessRequestForm`, que con el alta abierta no se muestra, y
+ * ninguno lee `utm_*` ni `fbclid`. El origen llega a la URL del registro y ahí
+ * se pierde: hasta que el producto lo guarde, ningún alta es atribuible a su
+ * campaña (pendiente en el handoff `meta-ads-prospeccion`).
  *
  * **El mismo snippet avisa al píxel de Meta**, sin cargar la librería de Meta:
  *
- *  - `PageView` con la página ya cargada y el navegador ocioso, y `Lead` (una
- *    vez por página) al tocar el alta o WhatsApp.
+ *  - `PageView` con la página ya cargada y el navegador ocioso; `Contact` al
+ *    tocar WhatsApp y `ClicAlta` (evento propio) al tocar el alta, cada uno una
+ *    vez por página. Nunca `Lead`: un toque no es un lead, y una campaña que
+ *    optimice por él paga clics contados como leads. `Lead` y
+ *    `CompleteRegistration` quedan para el alta confirmada, en el producto.
+ *  - La dirección que viaja (`dl`) es la página sin su query, más sólo las
+ *    claves de campaña que pasaron la lista blanca. Nunca `location.href`: el
+ *    formulario de `/guia-facturacion` enviado antes de que cargue React
+ *    recarga la página con `?email=&whatsapp=`, y eso no puede ir a Meta.
  *  - Cada aviso es un `fetch` GET de ~0 KB a `/tr` con `keepalive`, para que
  *    sobreviva al clic que se lleva la página. `fbevents.js` pesa 112,6 KB
  *    comprimidos más 33,5 KB de configuración (medido el 2026-09-29) y la
@@ -46,6 +56,12 @@ export { PIXEL_DE_META, PIXEL_DESTINO };
  * Lo que se pierde frente a la librería: la cookie `_fbp` y el emparejamiento
  * avanzado. El clic del anuncio igual queda atado por el `fbc` que se arma
  * con el `fbclid`.
+ *
+ * **Sin verificar contra Meta.** El `fetch` es `no-cors`: la respuesta es
+ * opaca y el `catch` se traga cualquier error, y fuera de `onia.com.bo` no
+ * avisa nada. Que Meta acepta estos avisos se sabe recién publicado, mirando
+ * «Probar eventos» o el `last_fired_time` del píxel; hasta entonces el píxel
+ * no está vivo.
  */
 
 /** Las únicas claves que se guardan y viajan. Cualquier otra se ignora. */
@@ -73,7 +89,7 @@ export const CLAVE_DE_SESION = "onia-origen";
 /** El único host donde el píxel avisa. */
 const HOST_QUE_MIDE = new URL(SITE_URL).hostname;
 
-/** Un toque a esto es un `Lead` de WhatsApp: el número de la web, con cualquier texto. */
+/** Un toque a esto es un `Contact`: el WhatsApp de la web, con cualquier texto. */
 const WHATSAPP = `https://wa.me/${WA_PHONE}`;
 
 // ponytail: el `fbc` lleva la hora del aviso y no la de la llegada; guardarla aparte si Meta lo marca en Diagnóstico.
@@ -81,24 +97,24 @@ export const origenDeCampanaInit = `(function(){
 var CLAVES=${JSON.stringify([...PARAMETROS_DE_CAMPANA])},MAX=${LARGO_MAXIMO},OK=${VALOR_VALIDO},K=${JSON.stringify(CLAVE_DE_SESION)},REG=${JSON.stringify(REGISTRO_URL)},WA=${JSON.stringify(WHATSAPP)};
 var PIXEL=${JSON.stringify(PIXEL_DE_META)},TR=${JSON.stringify(PIXEL_DESTINO)};
 function limpiar(leer){var o={},n=0;for(var i=0;i<CLAVES.length;i++){var c=CLAVES[i],v=leer(c);if(typeof v==="string"&&v.length<=MAX&&OK.test(v)){o[c]=v;n++;}}return n?o:null;}
-var q=new URLSearchParams(location.search),o=limpiar(function(c){return q.get(c)});
+var q=new URLSearchParams(location.search),aqui=limpiar(function(c){return q.get(c)}),o=aqui;
 try{if(o){sessionStorage.setItem(K,JSON.stringify(o));}else{var g=JSON.parse(sessionStorage.getItem(K));o=g&&limpiar(function(c){return g[c]});}}catch(e){}
-var medir=location.hostname===${JSON.stringify(HOST_QUE_MIDE)}&&!navigator.globalPrivacyControl,avisado=false;
-function avisar(ev,extra){
-if(!medir)return;
-var u=TR+"?id="+PIXEL+"&ev="+ev+"&dl="+encodeURIComponent(location.href)+"&ts="+Date.now()+(extra||"");
+var medir=location.hostname===${JSON.stringify(HOST_QUE_MIDE)}&&!navigator.globalPrivacyControl,hecho={};
+var dl=location.origin+location.pathname+(aqui?"?"+new URLSearchParams(aqui):"");
+function avisar(ev){
+if(!medir||hecho[ev])return;hecho[ev]=1;
+var u=TR+"?id="+PIXEL+"&ev="+ev+"&dl="+encodeURIComponent(dl)+"&ts="+Date.now();
 if(o&&o.fbclid)u+="&fbc="+encodeURIComponent("fb.1."+Date.now()+"."+o.fbclid);
 try{fetch(u,{mode:"no-cors",keepalive:true,credentials:"include"}).catch(function(){});}catch(e){}
 }
-function lead(que){if(avisado)return;avisado=true;avisar("Lead","&cd[content_name]="+que);}
 function tocar(e){
 var a=e.target&&e.target.closest&&e.target.closest("a[href]");
 if(!a)return;
 var base=a.href.split(/[?#]/)[0];
 if(base===REG){
 if(o){var u=new URL(a.href);for(var c in o){if(!u.searchParams.has(c))u.searchParams.set(c,o[c]);}a.href=u.toString();}
-lead("registro");
-}else if(base===WA){lead("whatsapp");}
+avisar("ClicAlta");
+}else if(base===WA){avisar("Contact");}
 }
 document.addEventListener("click",tocar,true);
 document.addEventListener("auxclick",tocar,true);

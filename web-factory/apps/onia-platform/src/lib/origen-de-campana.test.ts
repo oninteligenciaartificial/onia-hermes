@@ -288,11 +288,7 @@ describe("sólo pasa lo que está en la lista blanca, y corto", () => {
  * GET de ~0 KB a `/tr`, la forma sin script que Meta documenta.
  */
 describe("el píxel de Meta", () => {
-  const avisos = (v: Entorno) =>
-    v.pedidos.map((p) => ({
-      ev: p.url.searchParams.get("ev"),
-      que: p.url.searchParams.get("cd[content_name]"),
-    }));
+  const avisos = (v: Entorno) => v.pedidos.map((p) => p.url.searchParams.get("ev"));
 
   it("PageView sale recién con la página cargada y el navegador ocioso", () => {
     const v = correr(ENTRADA);
@@ -302,7 +298,7 @@ describe("el píxel de Meta", () => {
     expect(v.pedidos, "no compite con la carga: espera al ocio").toHaveLength(0);
 
     v.ocioso();
-    expect(avisos(v)).toEqual([{ ev: "PageView", que: null }]);
+    expect(avisos(v)).toEqual(["PageView"]);
 
     const [pedido] = v.pedidos;
     expect(pedido.url.origin + pedido.url.pathname).toBe(PIXEL_DESTINO);
@@ -312,31 +308,71 @@ describe("el píxel de Meta", () => {
     expect(pedido.opciones).toMatchObject({ mode: "no-cors", keepalive: true });
   });
 
-  it("Lead al tocar el alta, y Lead al tocar WhatsApp", () => {
+  /**
+   * Un toque no es un lead. `Lead` le dice a Meta «esto es lo que busco»: si
+   * una campaña optimiza por él, Meta sale a buscar gente que hace clic, y el
+   * reporte cuenta leads que nunca se registraron. El toque a WhatsApp es el
+   * estándar `Contact`; el toque al alta es un evento propio, `ClicAlta`.
+   * `Lead` y `CompleteRegistration` quedan para el alta confirmada, del lado
+   * del producto.
+   */
+  it("WhatsApp avisa Contact y el alta avisa ClicAlta, nunca Lead", () => {
     const alta = correr(ENTRADA);
     alta.tocar({ href: registroConPlan("pro") });
-    expect(avisos(alta)).toEqual([{ ev: "Lead", que: "registro" }]);
+    expect(avisos(alta)).toEqual(["ClicAlta"]);
 
     const wa = correr(ENTRADA);
     wa.tocar({ href: WA_URL });
-    expect(avisos(wa)).toEqual([{ ev: "Lead", que: "whatsapp" }]);
+    expect(avisos(wa)).toEqual(["Contact"]);
   });
 
-  it("un Lead por página, aunque toque varias veces", () => {
+  it("cada toque avisa una vez por página, aunque se repita", () => {
     const v = correr(ENTRADA);
     v.tocar({ href: WA_URL });
     v.tocar({ href: WA_URL });
     v.tocar({ href: REGISTRO_URL });
+    v.tocar({ href: REGISTRO_URL });
 
-    expect(avisos(v)).toEqual([{ ev: "Lead", que: "whatsapp" }]);
+    expect(avisos(v)).toEqual(["Contact", "ClicAlta"]);
   });
 
-  it("otros enlaces no son un Lead", () => {
+  it("otros enlaces no avisan nada", () => {
     const v = correr(ENTRADA);
     v.tocar({ href: "https://onia.com.bo/precios" });
     v.tocar({ href: "https://app.onia.com.bo/login" });
 
     expect(v.pedidos).toHaveLength(0);
+  });
+
+  /**
+   * Lo que viaja a Meta pasa por la MISMA lista blanca que lo que viaja al
+   * alta. La dirección de la página no se manda entera: el formulario de
+   * /guia-facturacion, si se envía antes de que cargue React (celular lento),
+   * recarga la página con `?email=...&whatsapp=...`, y la privacidad promete
+   * que el aviso no lleva correo ni teléfono.
+   */
+  it("la dirección que va a Meta lleva sólo las claves de campaña", () => {
+    const v = correr(
+      "https://onia.com.bo/guia-facturacion?src=ad-d1&email=a%40b.com&whatsapp=70000000#hoja",
+    );
+    v.disparar("load");
+    v.ocioso();
+    v.tocar({ href: WA_URL });
+
+    expect(v.pedidos).toHaveLength(2);
+    for (const { url } of v.pedidos) {
+      expect(url.searchParams.get("dl")).toBe("https://onia.com.bo/guia-facturacion?src=ad-d1");
+      expect(url.toString()).not.toMatch(/email|whatsapp=|a%2540b|70000000/);
+    }
+  });
+
+  it("en una página sin campaña en la dirección, va la dirección sola", () => {
+    const portada = correr(ENTRADA);
+    const precios = correr("https://onia.com.bo/precios?email=a%40b.com", Object.fromEntries(portada.guardado));
+    precios.disparar("load");
+    precios.ocioso();
+
+    expect(precios.pedidos[0].url.searchParams.get("dl")).toBe("https://onia.com.bo/precios");
   });
 
   it("con el fbclid del anuncio, manda el fbc que lo ata al clic", () => {
