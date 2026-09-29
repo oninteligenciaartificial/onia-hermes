@@ -1,3 +1,5 @@
+> ⚠️ **HISTORIA.** El handoff vigente del carril es [`marca-personal.md`](marca-personal.md).
+
 # Handoff — marca-sergio-guiones-20260927
 
 ## VIGENTE · 28-sep · contenido que enseña, no más investigación

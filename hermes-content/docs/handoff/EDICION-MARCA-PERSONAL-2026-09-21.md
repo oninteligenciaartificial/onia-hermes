@@ -1,3 +1,5 @@
+> ⚠️ **HISTORIA.** El handoff vigente del carril es [`marca-personal.md`](marca-personal.md).
+
 # Handoff de edición · marca personal · 2026-09-21
 
 ## Revisión de guiones y referentes · 28-sep-2026

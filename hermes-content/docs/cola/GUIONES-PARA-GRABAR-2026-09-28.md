@@ -1,3 +1,5 @@
+> ⚠️ **REEMPLAZADO el 28-sep por [`GUIONES-PARA-GRABAR-2026-09-29.md`](GUIONES-PARA-GRABAR-2026-09-29.md).** Esta versión repetía el cotizador en 4 de 10 piezas y usaba ejemplos inventados. Se conserva como historia.
+
 # Guiones para grabar — 28 de septiembre de 2026
 
 ## 1. YouTube — De una lista de precios a un cotizador con IA

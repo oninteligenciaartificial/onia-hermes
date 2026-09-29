@@ -1,3 +1,5 @@
+> ⚠️ **HISTORIA.** El handoff vigente del carril es [`marca-personal.md`](marca-personal.md).
+
 # Continuar los guiones con Claude
 
 ## LEER PRIMERO — última corrección de Sergio y entrega actual

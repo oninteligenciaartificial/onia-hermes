@@ -1,3 +1,5 @@
+> ⚠️ **HISTORIA.** El handoff vigente del carril es [`marca-personal.md`](marca-personal.md).
+
 # Reinicio de guiones · 28-sep-2026
 
 ## Orden explícita de Sergio
