@@ -54,7 +54,12 @@ Láminas PNG en `hermes-content/carousels/out/<carpeta>/slide-NN.png`; caption e
 2. «Comentá PALABRA» = respondés vos por DM (2 por semana, ya marcados).
 3. Cifras que envejecen (precios, conteos): recontar el día de grabar → `MAPA.md` §5.
 
-## 5. Cuando termines de grabar
+## 5. Cómo se publica y cuántos yaps
+
+`plan-3-semanas/FLUJO-DIARIO.md` (qué sale de cada video, horarios, medición) y
+`hermes-content/deploy/vps-ops/publicar/README.md` (el publicador).
+
+## 6. Cuando termines de grabar
 
 Pasame dónde quedaron los brutos. Edito con la regla de siempre: tabla de cortes y preview
 ANTES de cortar, subtítulos leídos a ojo antes de quemarlos.

@@ -50,21 +50,23 @@ node /root/bin/ig-reel.mjs ... --trial auto --publicar    # yap a Trial
 - **Por qué no Postiz:** el 27-sep estaba sin contenedores, y su motor (Temporal) guarda una cola
   vieja que el 4-sep publicó 5 posts sin OK al encenderlo. Para Instagram no hace falta.
 
-## Lo que falta
+## Lo que falta: el resto de las redes
 
-| Destino | Estado | Qué hace falta |
+Análisis con fuentes primarias (29-sep): [`REDES-ANALISIS.md`](REDES-ANALISIS.md). Lo decisivo:
+
+- **TikTok con app propia NO sirve:** sin auditoría publica solo en PRIVADO, y la auditoría rechaza por
+  escrito las «herramientas para subir contenido a cuentas que vos manejás». El modo borrador (a tu
+  bandeja) permite 5 por día y lo terminás vos en el celular.
+- **YouTube con API propia NO sirve para publicar:** todo video subido por un proyecto no auditado
+  (creado después del 28-jul-2020) queda PRIVADO y no se puede pasar a público: hay que volver a
+  subirlo. `yt-video.mjs` y `yt-auth.mjs` quedan listos para cuando haya auditoría, pero **no se usan
+  para publicar hoy**.
+- **Instagram:** 100 publicaciones por API cada 24 h; los Trial reels no tienen tope propio documentado.
+
+| Destino | Ruta | Qué hace falta |
 |---|---|---|
-| Instagram `@sergiourcullo` (reel + trial) | ✅ listo; el paso «publicar» se estrena con el primer video aprobado | nada |
-| Instagram `@oniahq` | ✅ listo (token renovado) | nada |
-| YouTube `@sergiourcullo` | ⏳ | 10 min de Sergio: crear el cliente OAuth en Google Cloud y apretar «Permitir» una vez (ver abajo) |
-| LinkedIn / Facebook | fuera por ahora | — |
+| Instagram `@sergiourcullo` / `@oniahq` (reel + trial) | ✅ API propia (`ig-reel.mjs`) | nada |
+| Facebook (perfil y Página) | compartido automático desde el Centro de cuentas de Instagram | Sergio lo activa (1 min); se verifica con el primer reel publicado por API |
+| TikTok · YouTube (Shorts y largos) · LinkedIn | **Metricool** (herramienta ya auditada) publicado por su MCP | Sergio crea la cuenta gratis y conecta sus redes; se aprueba instalar el conector; se prueba gratis y, si publica video, plan Starter (US$25/mes) |
+| Sin Metricool (gratis, manual) | TikTok en borrador (máx. 5/día, tocás publicar) · YouTube lo subís vos | app de desarrollador TikTok + tu tiempo diario |
 
-**YouTube, paso a paso (Sergio):**
-1. En Google Cloud, crear el proyecto «ONIA publicar».
-2. Activar la *YouTube Data API v3*.
-3. Crear una pantalla de consentimiento externa.
-4. Pasar la app a **Producción**. En modo prueba, el permiso de subida vence cada 7 días.
-5. Crear un cliente OAuth tipo *App de escritorio* y guardar el JSON en tu PC.
-
-Claude hace el resto: el flujo de consentimiento, en el que vos apretás «Permitir»; guarda el
-permiso en el VPS y arma el `yt-video.mjs` equivalente.
