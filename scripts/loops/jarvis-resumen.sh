@@ -141,17 +141,27 @@ seccion_agenda() {  # seccion_agenda <fecha> <titulo>
 
 # ── Guiones del plan de 3 semanas ────────────────────────────────────────────
 guiones_del() {  # guiones_del <fecha>  -> "A · título (formato)" por línea
-  local d m
-  d=$(date -u -d "$1" +%-d); m=${MES3[$(( $(date -u -d "$1" +%-m) - 1 ))]}
+  # Acepta los DOS formatos de fecha que conviven en el plan (medido el 29-sep):
+  #   S1 y S3:  «## Mié 30-sep» / «## Miércoles 14-oct»   ->  <d>-<mes3>
+  #   S2:       «## Miércoles 7 de octubre»               ->  <d> de <mes>
+  # El resumen con un solo formato devolvía la semana 2 entera vacía, sin avisar.
+  local d m3 ml
+  d=$(date -u -d "$1" +%-d); m3=${MES3[$(( $(date -u -d "$1" +%-m) - 1 ))]}; ml=${MESES[$(( $(date -u -d "$1" +%-m) - 1 ))]}
   for f in "$REPO"/hermes-content/docs/cola/plan-3-semanas/S*-GUIONES.md; do
     [ -f "$f" ] || continue
-    awk -v fecha="${d}-${m}" '
-      /^## / { on = ($NF == fecha); next }
+    awk -v corta="${d}-${m3}" -v larga="${d} de ${ml}" '
+      function es_la_fecha(t,   i) {
+        i = index(t, corta);  if (i && (i == 1 || substr(t, i - 1, 1) !~ /[0-9]/) && substr(t, i + length(corta), 1) !~ /[a-z]/) return 1
+        i = index(t, larga);  if (i && (i == 1 || substr(t, i - 1, 1) !~ /[0-9]/)) return 1
+        return 0
+      }
+      /^## / { on = es_la_fecha(tolower($0)); next }
       on && /^### / {
         sub(/^### /, "")
         n = split($0, p, / · /)
         slot = p[1]; sub(/^D[0-9]+-/, "", slot)
-        if (n >= 3) printf "%s · %s (%s)\n", slot, p[3], p[2]; else print
+        titulo = p[3]; sub(/ *✅ *$/, "", titulo)
+        if (n >= 3) printf "%s · %s (%s)\n", slot, titulo, p[2]; else print
       }' "$f"
   done
 }
