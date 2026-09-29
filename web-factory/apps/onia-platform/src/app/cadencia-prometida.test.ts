@@ -82,8 +82,8 @@ const EXENTOS: ReadonlyArray<{ archivo: string; motivo: string }> = [];
 const CADENCIA_CONTINUA =
   /24\s*\/\s*7|las 24 horas|24 horas al d[ií]a|todo el tiempo|sin parar|a toda hora|sin descanso|de forma continua|permanentemente|todo el d[ií]a/gi;
 
-/** Quién corre una vez por día. */
-const AGENTE = /agentes?\b|\bRecall\b|\bCobrador\b/gi;
+/** Quién corre una vez por día — con los nombres de hoy (29-sep-2026) y los de rol, por si reaparecen. */
+const AGENTE = /agentes?\b|\bRecall\b|\bCobrador\b|\b(?:Vuelve a citar|Recuerda cobros|Confirma citas|Reprograma|Avisa stock bajo|Sigue cotizaciones)\b/gi;
 
 /** Quién sí contesta a cualquier hora: el webhook del chatbot. */
 const BOT = /chatbot|\bbots?\b|whatsapp|asistente|recepcionista/gi;

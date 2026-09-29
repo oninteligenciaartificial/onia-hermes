@@ -1001,7 +1001,19 @@ export const CONSTANTES_VERIFICADAS_APARTE = [
   {
     valor: "ALCANCE_CON_FICHA",
     porque:
-      "tampoco es un tope: es a que rubros llega el agente Recall, acotado por los DATOS que lee (patient + appointment) y no por la pantalla",
+      "tampoco es un tope: es a que rubros llega el agente Vuelve a citar (rol `recall`), acotado por los DATOS que lee (patient + appointment) y no por la pantalla",
+    cruzadaPor: "src/app/capacidad-acotada.test.ts",
+  },
+  {
+    valor: "ALCANCE_AGENTE_STOCK",
+    porque:
+      "tampoco es un tope: es a que rubros llega el agente Avisa stock bajo (rol `reponedor`), que lee el stock de /comercio/inventario (`llevaInventario`)",
+    cruzadaPor: "src/app/capacidad-acotada.test.ts",
+  },
+  {
+    valor: "ALCANCE_AGENTE_COTIZACIONES",
+    porque:
+      "tampoco es un tope: es a que rubros llega el agente Sigue cotizaciones (rol `seguidor`), que lee las cotizaciones de /importadora/cotizaciones",
     cruzadaPor: "src/app/capacidad-acotada.test.ts",
   },
   {

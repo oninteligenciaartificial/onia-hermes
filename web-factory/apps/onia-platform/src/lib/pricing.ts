@@ -113,7 +113,7 @@ export interface Plan {
    */
   chatbotIncluido: boolean;
   /**
-   * ¿Los agentes de IA (Recall y Cobrador) vienen adentro de este plan?
+   * ¿Los agentes de IA (Vuelve a citar, Recuerda cobros y el resto del plan) vienen adentro de este plan?
    *
    * Espejo de `agentsIncluded` (`onia-platform/lib/plan-catalogo.ts`), que es la fuente.
    */
@@ -358,8 +358,12 @@ const listar = (xs: readonly string[]) =>
  */
 export const ALCANCE_POR_DATOS = [
   {
-    /** Cómo la nombra el copy. */
-    capacidad: "Recall",
+    /**
+     * Cómo la nombra el copy. Es el rol `recall` del producto; desde el
+     * 29-sep-2026 los agentes se nombran por lo que hacen (decisión de Sergio
+     * Urcullo), así que en la venta ya no se dice «Recall».
+     */
+    capacidad: "Vuelve a citar",
     /** El predicado real del producto, en castellano. */
     porque: "lee la ficha del cliente y la agenda",
     /** Rubros del alta que sí tienen esos datos, como los nombra el copy. */
@@ -437,6 +441,26 @@ export const ALCANCE_POR_INVENTARIO = {
 
 /** Cómo se dice ese alcance en una línea de venta: por lo que el rubro HACE. */
 export const ALCANCE_CON_INVENTARIO = "si manejás stock";
+
+/**
+ * Los agentes del plan que el producto acota por los DATOS del rubro, además de
+ * Vuelve a citar (`ALCANCE_POR_DATOS`). Medido el 2026-09-29 contra
+ * `origin/wip/v1-integracion-20260928` de onia-platform
+ * (`lib/onia-core/modules/agents-por-rubro.ts`, `DATOS_QUE_LEE`):
+ *
+ *  - Confirma citas y Reprograma leen `appointments` → `tieneAgenda`: se dicen
+ *    con `ALCANCE_CON_AGENDA`, la misma condición que la agenda.
+ *  - Avisa stock bajo lee el stock de `/comercio/inventario` → `llevaInventario`,
+ *    que da true SOLO en comercio e importadora. NO es `ALCANCE_CON_INVENTARIO`:
+ *    dental y estética tienen `/inventory` (otra pantalla) y el agente no corre ahí.
+ *  - Sigue cotizaciones lee las cotizaciones → la pantalla
+ *    `/importadora/cotizaciones`, que hoy sólo declara la importadora.
+ *
+ * Recuerda cobros no se acota: corre en todos los rubros. Cada mención de un
+ * agente acotado lleva SU constante al lado; lo vigila `app/capacidad-acotada.test.ts`.
+ */
+export const ALCANCE_AGENTE_STOCK = "solo en comercio e importadoras";
+export const ALCANCE_AGENTE_COTIZACIONES = "solo en importadoras";
 
 export const USUARIO_EXTRA_ADDON = {
   nombre: "Usuario adicional",
@@ -521,8 +545,8 @@ const ESCALERA: readonly Plan[] = [
     anual: 5500,
     incluye: [
       `Todo lo del ${NOMBRE_DE_PLAN.basico}`,
-      `Agente Recall: te propone a quién hace rato que no ves (${ALCANCE_CON_FICHA})`,
-      "Agente Cobrador: te propone a quién reclamarle la deuda vencida",
+      `Agentes Vuelve a citar (${ALCANCE_CON_FICHA}) y Recuerda cobros: te proponen a quién invitar de vuelta y a quién recordarle un pago`,
+      `Agentes Confirma citas y Reprograma (${ALCANCE_CON_AGENDA}), Avisa stock bajo (${ALCANCE_AGENTE_STOCK}) y Sigue cotizaciones (${ALCANCE_AGENTE_COTIZACIONES})`,
       `Reservas online incluidas, ${ALCANCE_CON_AGENDA}: link público para que te pidan cita`,
       "Topes: 800 fichas · 3 usuarios · 400 recordatorios por email/mes",
     ],

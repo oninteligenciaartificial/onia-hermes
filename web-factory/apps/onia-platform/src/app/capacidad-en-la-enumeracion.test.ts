@@ -129,12 +129,6 @@ const EXENTOS: ReadonlyArray<{ archivo: string; fragmento: string; motivo: strin
     fragmento: "no figura agenda ni ficha del paciente",
     motivo: "mismo caso: es el veredicto sobre otros dos productos, no nuestra oferta",
   },
-  {
-    archivo: join("app", "(sitio)", "agentes", "page.tsx"),
-    fragmento: "son los rubros que guardan ficha del cliente y agenda",
-    motivo:
-      "acá «agenda» no es la capacidad ofrecida: es la EXPLICACIÓN de ALCANCE_CON_FICHA, que la misma frase ya interpola — el alcance del Recall se dice por los datos que lee",
-  },
 ];
 
 /**

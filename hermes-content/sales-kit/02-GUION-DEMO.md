@@ -3,7 +3,7 @@
 > Para Sergio Urcullo. La demo se hace con SUS números, no con los nuestros: antes de
 > arrancar conseguí los 3 datos del §0.
 > Kit de venta 1.0 · 2026-09-28. Lo que se muestra acá es lo que hace la 1.0 de
-> onia-platform (candidato `ed163e26`). El Reprogramador (§4) entra con la 1.0: hasta que
+> onia-platform (candidato `ed163e26`). El agente Reprograma (§4) entra con la 1.0: hasta que
 > esté en producción, no lo muestres en vivo ni lo prometas como disponible hoy.
 
 ---
@@ -94,8 +94,9 @@ paciente que canceló o dejó de venir y no volvió a programar.
   canceló. Onia te propone ofrecérsela a hasta tres pacientes sin cita. El primero que la
   quiere la toma en tu agenda online; los demás la ven ocupada. Vos no hacés de central
   telefónica."
-- Recorré rápido las otras propuestas: quien hace más de 6 meses no vuelve (Recall), las
-  citas de mañana sin confirmar (Confirmador), los saldos vencidos (Cobrador).
+- Recorré rápido las otras propuestas: quien hace más de 6 meses no vuelve (Vuelve a
+  citar), las citas de mañana sin confirmar (Confirma citas), los saldos vencidos
+  (Recuerda cobros).
 - "La IA escribe los mensajes con el tono de tu clínica. A quién y cuándo lo decide el
   sistema con tus datos. **Y vos aprobás cada uno.**"
 
@@ -181,8 +182,8 @@ Volvé a los datos del §0 y hacé la cuenta EN VOZ ALTA con él:
   no se usa como urgencia.
 - ❌ "Vos sos grupo X del SIAT" (depende del NIT).
 - ❌ "Detecta los tratamientos a medias". No lee el plan de tratamiento: mira quién faltó o
-  canceló en las últimas 2 semanas y no tiene otra cita (Reprogramador), y quién no vuelve
-  hace más de 6 meses (Recall). Entre medio, ningún agente lo marca.
+  canceló en las últimas 2 semanas y no tiene otra cita (Reprograma), y quién no vuelve
+  hace más de 6 meses (Vuelve a citar). Entre medio, ningún agente lo marca.
 - ❌ "Reserva el turno solo" / "manda los mensajes solo". Propone; vos aprobás; el paciente
   elige su turno.
 - ❌ "El agente conversacional agenda, cotiza o califica". Contesta lo cargado, manda el link

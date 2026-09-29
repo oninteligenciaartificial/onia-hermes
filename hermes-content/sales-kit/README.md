@@ -26,9 +26,10 @@ paciente con un tratamiento a medias que no volvió a agendar.
   El kit seguía cotizando los tres planes viejos con sus montos viejos.
 - **Facturación**: la emisión SIAT está apagada. Lo real es "cada venta queda lista para
   cargar en el portal gratuito del SIN"; el kit prometía la factura "sin re-tipear".
-- **Agentes**: se vende lo que existe: Reprogramador, Recall, Confirmador y Cobrador (en
-  comercio e importadora, Reponedor y Seguidor). Todos proponen; el dueño aprueba cada
-  mensaje; ninguno manda ni reserva solo.
+- **Agentes**: se vende lo que existe, con el nombre de lo que hace (29-sep-2026): Reprograma,
+  Vuelve a citar, Confirma citas y Recuerda cobros (en comercio e importadora, Avisa stock
+  bajo; en importadora, Sigue cotizaciones). Todos proponen; el dueño aprueba cada mensaje;
+  ninguno manda, cobra, compra ni reserva solo. Nunca decir «Cobra» ni «Repone stock».
 - **Agente conversacional de WhatsApp** (antes "chatbot con IA"): contesta lo cargado,
   entiende fotos, nunca da precios, manda el link de la agenda y pasa lo demás a una
   persona. No califica, no cotiza y no agenda solo.
@@ -37,7 +38,7 @@ paciente con un tratamiento a medias que no volvió a agendar.
 - **Pago**: mensual o anual (10 meses), con el QR del BCP desde el checkout. No existe el
   cobro trimestral que decía el kit.
 
-⚠️ **El Reprogramador entra con la 1.0.** Hasta que la 1.0 esté en producción, no se
+⚠️ **El agente Reprograma entra con la 1.0.** Hasta que la 1.0 esté en producción, no se
 muestra en vivo ni se promete como disponible hoy (las capturas 6-8 esperan al deploy).
 
 > **Archivados el 2026-09-28 (Sergio Urcullo)**: el deck de la reunión de Santa Cruz
@@ -74,7 +75,7 @@ código publicado de onia-platform y falla si el kit:
 - [ ] **Panel «Lo que te dejó Onia»**: está en construcción para la 1.0. Cuando salga
       integrado y verificado en producción, sumarlo al one-pager (§ Lo que te resuelve) y al
       guion de demo (§4, después de Pendientes). Hasta entonces no se nombra.
-- [ ] Sacar las capturas de `05-CHECKLIST-CAPTURAS.md` (las del Reprogramador, después del
+- [ ] Sacar las capturas de `05-CHECKLIST-CAPTURAS.md` (las del agente Reprograma, después del
       deploy de la 1.0).
 
 ## Lo que NO hay que volver a crear

@@ -300,12 +300,14 @@ Esto es lo que evita vender algo que después no se entrega.
   "corren todos los días sin que hagas nada" — es cierto y estaba escrito al revés.
   **Lo que sí falta**: todas las corridas dan `proposed: 0` porque no hay datos de cliente
   todavía, y el agente **`captador` nunca se enciende** (`kind_not_enabled` en todas las
-  orgs, todos los días). Recall y cobrador corren; el que trae clientes no.
+  orgs, todos los días). Vuelve a citar (rol `recall`) y Recuerda cobros (rol `cobrador`)
+  corren; el que trae clientes no. Desde el 29-sep-2026 los agentes se nombran por lo que
+  hacen: nunca «Cobra» ni «Repone stock».
 - **Modo offline.** El rubro ganadero lo promete en el nombre y no existe.
 - **Visión por computadora.** Evaluada el 2026-08-15: hay caso, **no hay producto**.
   Sin dataset propio y sin medir en obra real, cualquier precisión prometida es
   inventada. No se vende.
-- **El Reprogramador, hasta que la versión candidata llegue a producción.** Existe en la rama
+- **Reprograma (rol `reprogramador`), hasta que la versión candidata llegue a producción.** Existe en la rama
   candidata de onia-platform (`lib/onia-core/modules/agents-reprogramador.ts`), no en `master`
   ni en producción: propone reprogramar a quien faltó o canceló y ofrecer un turno liberado a
   hasta tres personas; el dueño aprueba cada mensaje y nunca reserva solo. El kit de venta ya

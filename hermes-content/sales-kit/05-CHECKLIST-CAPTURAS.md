@@ -2,7 +2,7 @@
 
 > Qué falta capturar del sistema para que el kit quede completo (respaldo de demo +
 > material de WhatsApp). Todas en UNA sesión de ~30 min, con la cuenta demo cargada.
-> Kit de venta 1.0 · 2026-09-28. Las capturas 6, 7 y 8 muestran al Reprogramador, que entra
+> Kit de venta 1.0 · 2026-09-28. Las capturas 6, 7 y 8 muestran al agente Reprograma, que entra
 > con la 1.0: se sacan cuando la 1.0 esté en producción, no antes.
 
 ---
@@ -18,8 +18,8 @@ Pendientes mañana.
 - [ ] **1 cita en «no asistió»** de los últimos días, de un paciente **sin otra cita** por
       delante (dispara la propuesta de reprogramar).
 - [ ] **1 cita cancelada para los próximos 3 días** (dispara la oferta del turno libre).
-- [ ] **1 paciente sin volver hace más de 6 meses** y sin próxima cita (Recall).
-- [ ] **Citas de mañana sin confirmar** (Confirmador).
+- [ ] **1 paciente sin volver hace más de 6 meses** y sin próxima cita (Vuelve a citar).
+- [ ] **Citas de mañana sin confirmar** (Confirma citas).
 - [ ] 1 paciente estrella completo: odontograma con tratamientos marcados, historial de 3+
       atenciones, 1 documento subido, saldo pendiente visible.
 - [ ] Agenda online activa (la cuenta tiene su link de reserva).
