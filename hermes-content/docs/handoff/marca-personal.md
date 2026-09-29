@@ -1,6 +1,29 @@
 # Handoff — carril marca personal (guiones, comunidad, edición, contenido IA)
 
-**Archivo único del carril.** Actualizado 2026-09-28 22:00 La Paz por Claude (Opus 5.5).
+**Archivo único del carril.** Actualizado 2026-09-29 por Claude (Opus 5.5).
+
+## ⏩ Estado 29-sep (lo más nuevo, leer primero)
+
+- **Plan de 3 semanas** (30-sep → 20-oct): [`cola/plan-3-semanas/MAPA.md`](../cola/plan-3-semanas/MAPA.md)
+  — recorrido video → web → comunidad → ONIA, 3 videos/día (A tutorial · B actualidad · C YouTube
+  o negocio/historia), 3 carruseles/semana, calendario día por día y lista «antes de grabar».
+  Guiones: `S1-GUIONES.md` · `S2-GUIONES.md` · `S3-GUIONES.md` (63 piezas; 56 nuevas). **Sin
+  aprobación de Sergio todavía: él dijo «primero veamos qué sabés y yo te corrijo».**
+- **Base del plan** (en `references/marca-personal/`): INVENTARIO (67 unidades reales de ONIA),
+  FORMULAS (8 fórmulas de referentes), RADAR (16 novedades con fuente primaria), SANTIAGO
+  (método de carruseles).
+- **Carruseles:** método de Santiago adaptado (Higgsfield pinta la imagen, el texto va por
+  código): `scripts/carousel_images.mjs` + skill `hermes-content/skills/carruseles-onia.md`.
+  K1–K3 renderizados con portada (`carousels/out/sergio-k1..k3-*-20260929/`). K4–K9: brief +
+  vista previa; **imagen pendiente de aprobación** (≈0,72 cr). Gasto del día: 0,60 cr (bitácora
+  en `ONIA_MARCA_PERSONAL_HIGGSFIELD_RECETAS.md`).
+- **El CLI de Higgsfield solo está logueado en el VPS**; en la PC `higgsfield account` da «Not
+  authenticated». El script corre por ssh con `HF_CMD`. Loguear la PC = OAuth en el navegador de
+  Sergio (su clic).
+- **Decisiones que esperan a Sergio:** (1) ¿1 de cada 3 videos para dueños de negocio (etapa 1 =
+  clínicas) o 100 % marca personal? (2) S-09 «agentes sin LLM» contradice cómo se vende el
+  producto. (3) ¿Láminas interiores ilustradas como Santiago (hay que agregar el tipo al pack) o
+  solo portada?
 Los otros cinco handoffs de este carril quedan como HISTORIA (ver §Historial): la próxima
 sesión, Codex o Claude, empieza ACÁ y edita ESTE archivo.
 

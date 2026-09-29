@@ -20,26 +20,23 @@ Los recursos de cada cierre están al final, en **Drops de la semana**: se publi
 **Fórmula:** F2 Noticia → qué cambia para vos → probalo así · **Pilar:** Claude Code · **Destino:** comunidad (drop 1)
 **Evidencia:** https://www.anthropic.com/claude-sonnet-5-5 (28-sep, USD 2/10, «two points below Opus 5.5 on GDPval-AA») · https://www.anthropic.com/claude-opus-5-5 (USD 4/20) · `hermes-content/docs/ONIA_MODELOS_CLAUDE_Y_CUOTA.md` (límite semanal agotado el 10-sep, un solo tanque) · `--model` / `--effort` en CLI 2.1.267. Reemplaza a «Vertical 1».
 
-Sonnet 5.5 salió el veintiocho de septiembre y cuesta la mitad que Opus 5.5: dos dólares por
-millón de tokens de entrada, contra cuatro.
+Sonnet cinco punto cinco salió el veintiocho de septiembre y cuesta la mitad que Opus: dos
+dólares por millón de tokens de entrada, contra cuatro.
 
-Anthropic dice que en trabajo de oficina queda a dos puntos de Opus. Esa es su prueba. Hacé la
-tuya hoy.
+Anthropic dice que en trabajo de oficina queda a dos puntos de Opus. Hacé tu prueba hoy.
 
 Elegí tres tareas reales de tu semana: una mecánica, una de todos los días y una difícil.
 
-Corré cada una primero con claude guion guion model sonnet. Después, desde el mismo punto de
-partida, con claude guion guion model opus. El mismo prompt, palabra por palabra, y el mismo
-esfuerzo.
+Corré cada una con claude guion guion model sonnet. Después, desde el mismo punto de partida,
+con claude guion guion model opus. Mismo prompt, palabra por palabra, y mismo esfuerzo.
 
-Por cada tarea anotá tres cosas: cuántas veces lo corregiste, cuántos minutos tardó en quedar
-bien, y si lo usarías sin tocar.
+Por cada tarea anotá: cuántas veces lo corregiste, cuántos minutos tardó en quedar bien, y si
+lo usarías sin tocar.
 
-Si Sonnet empata en dos de tres, es tu modelo de todos los días.
+Si Sonnet empata en dos de tres, usalo por defecto.
 
-¿Por qué importa? El límite de tu plan es uno solo para el chat y para Claude Code. A mí se me
-acabó la semana entera el diez de septiembre, con mis agentes usando el modelo caro para casi
-todo.
+¿Por qué importa? El chat y Claude Code comparten límite. A mí se me acabó la semana el
+diez de septiembre, con mis agentes en el modelo caro para casi todo.
 
 Tres tareas no son un benchmark: son tu caso. La planilla para anotarlo está en la comunidad.
 
@@ -64,26 +61,24 @@ Tres tareas no son un benchmark: son tu caso. La planilla para anotarlo está en
 Desde hoy, uno de octubre, cada respuesta de tu bot de WhatsApp tiene precio.
 
 Lo dice la documentación de Meta, lo que ves en pantalla. Cobra por mensaje los de servicio,
-que eran gratis desde noviembre de dos mil veinticuatro. Y los de utilidad, como una
-confirmación, cuando van dentro de la ventana de veinticuatro horas.
+gratis desde noviembre de dos mil veinticuatro, y los de utilidad dentro de la ventana de
+veinticuatro horas.
 
-Esto es para bots en la plataforma oficial. La app de WhatsApp Business que usás a mano no cambia.
+Es para bots en la plataforma oficial. La app de WhatsApp Business que usás a mano no cambia.
 
-Yo tengo un bot de ventas en WhatsApp. Esta es la cuenta que hay que hacer:
+Yo tengo un bot de ventas. La cuenta es esta:
 
-Uno. Contá cuántos mensajes mandó tu bot el mes pasado. Si contesta en tres mensajes seguidos,
-son tres.
+Uno. Contá cuántos mensajes mandó tu bot el mes pasado. Tres mensajes seguidos son tres.
 
 Dos. En la página de precios de Meta, bajá la tabla en dólares. Se cobra según el país del
-número del cliente. Bolivia está en «resto de Latinoamérica».
+cliente: Bolivia está en «resto de Latinoamérica».
 
-Tres. Multiplicá mensajes por tarifa. Si la tabla todavía no trae el precio de servicio, no lo
-inventes: anotá la fecha y volvé a mirar.
+Tres. Multiplicá mensajes por tarifa. Si todavía no figura la de servicio, no la inventes:
+anotá la fecha y volvé a mirar.
 
-Si ese número se come lo que te deja un cliente, tu bot habla de más. El ahorro más fácil:
-juntá en un mensaje lo que hoy manda en tres.
+Si ese número se come lo que te deja un cliente, tu bot habla de más: juntá mensajes.
 
-La planilla con la cuenta está en la comunidad.
+La planilla está en la comunidad.
 
 ### D02-C · Vertical · Cómo encontrar el costo escondido de un presupuesto
 **Fórmula:** F1 Resultado primero → cómo → comprobación · **Pilar:** Negocio · **Destino:** comunidad
@@ -103,21 +98,19 @@ rama principal. Así se arma bien.
 
 Necesitás un proyecto con git y un script que guarde y suba los cambios.
 
-Paso uno. Abrí punto claude, barra, settings punto json, y copiá la estructura que ves en
-pantalla: hooks, adentro Stop, una lista, y adentro un hook de tipo command con tu comando.
+Paso uno. En punto claude, barra, settings punto json, copiá la estructura que ves en pantalla:
+hooks, adentro Stop, una lista, y un hook de tipo command con tu comando.
 
-Paso dos. Entendé cuándo corre. Stop corre cuando Claude termina su turno, no cuando terminó el
-trabajo. Por eso otro día me publicó doscientas diecisiete líneas de estilos antes de que
-existiera la página que las usaba.
+Paso dos. Stop corre cuando Claude termina su turno, no cuando terminó el trabajo. Por eso otro
+día me publicó doscientas diecisiete líneas de estilos antes de que existiera la página.
 
 Paso tres, el que decide todo: la guarda. Antes de commitear, tu script corre dos comandos de
-git. Uno pregunta si hay un merge a medias. El otro lista los archivos en conflicto. Si
-cualquiera de los dos devuelve algo, el script no toca nada.
+git, los ves en pantalla. Uno pregunta si hay un merge a medias. El otro lista archivos en
+conflicto. Si cualquiera devuelve algo, no toca nada.
 
 Para comprobarlo, escribí barra hooks en Claude Code: tu Stop tiene que aparecer ahí.
 
-¿Tu automatización sabe cuándo no actuar? El JSON y la guarda, listos para copiar, están en la
-comunidad.
+¿Tu automatización sabe cuándo no actuar? El JSON y la guarda están en la comunidad.
 
 ### D03-B · Vertical · Claude Code ya lee AGENTS.md, pero no si tenés los dos
 **Fórmula:** F2 Noticia → qué cambia para vos → probalo así · **Pilar:** Claude Code · **Destino:** comentá AGENTS (drop 11)
@@ -130,18 +123,16 @@ Solo lo lee si tu proyecto no tiene CLAUDE punto md. Si tenés los dos, lee CLAU
 ignora.
 
 Es mi caso. En ONIA uso Claude Code y Codex en el mismo repositorio, y tengo los dos archivos,
-con reglas distintas. Cada uno lee solo el suyo.
+con reglas distintas. Cada uno lee solo el suyo: lo que le enseño a uno, el otro no lo sabe.
 
 La solución está en la documentación de Anthropic, lo que ves en pantalla. Las reglas
 compartidas van en AGENTS punto md. En la primera línea de CLAUDE punto md escribís arroba
 AGENTS punto md: eso lo importa entero. Y abajo ponés solo lo que es de Claude.
 
-Si trabajás en Windows, usá esa línea y no un enlace simbólico: en Windows se rompe al clonar.
+En Windows, usá esa línea y no un enlace simbólico: al clonar se rompe.
 
 Para comprobarlo, preguntale a Claude una regla que solo está en AGENTS. Si la sabe, la está
 leyendo.
-
-Un archivo para todos tus agentes, y ninguno trabajando con reglas viejas.
 
 Comentá AGENTS y te paso la plantilla.
 
@@ -240,7 +231,7 @@ CLAUDE punto md. Si no está, Claude no lo ve.
 
 Dos. Preguntale por qué existe una de tus reglas. Si te cuenta la historia, la leyó.
 
-Tres. Pedile justo lo que la regla prohíbe. Yo le pido que agregue un «muy pronto» en una
+Tres. Pedile justo lo que la regla prohíbe. Con la mía sería: agregá un «muy pronto» en una
 pantalla de venta. Lo que tiene que pasar es que se niegue y te cite la regla. Si lo hace sin
 chistar, la regla está mal escrita o está enterrada.
 
@@ -254,8 +245,8 @@ carga cuando hace falta.
 
 Segundo error: una regla mal escrita es peor que no tener regla. La de precios decía al
 principio que mandaba un solo archivo. Era falso: hay dos, uno para los planes y otro para los
-agregados. Durante días mandó a cada sesión al archivo equivocado. Cuando la corregí, dejé la
-corrección escrita adentro, con fecha. Así la próxima sesión sabe que ahí hubo un error y no
+agregados. Durante días mandó a cada sesión al archivo equivocado. Cuando mi agente la corrigió,
+dejó la corrección escrita adentro, con fecha. Así la próxima sesión sabe que ahí hubo un error y no
 vuelve a caer.
 
 Si tenés una versión reciente de Claude Code, escribí barra doctor, espacio, prompt guion audit.
@@ -267,8 +258,7 @@ pedís.
 Hacé esto hoy: acordate de la última vez que Claude te hizo algo mal dos veces. Escribí la
 regla, y arriba, en una línea, qué pasó y cuándo.
 
-La plantilla de regla con historia, con las tres de este video, está en la comunidad de
-WhatsApp. El link está en mi web.
+La plantilla de regla con historia está en la comunidad de WhatsApp. El link está en mi web.
 
 ---
 
@@ -284,8 +274,8 @@ Un subagente es otro Claude al que le delegás una tarea. Arranca limpio y te de
 resultado.
 
 El dieciocho de agosto mi agente auditó los nueve. Seis repetían reglas o skills que ya
-existían. Uno tenía adentro un estado congelado: «verificado el tres de julio». Otro pedía
-herramientas que no existen. Cada copia era una versión más, esperando desincronizarse.
+existían. Entre ellos, uno tenía un estado congelado: «verificado el tres de julio». Otro pedía
+herramientas que no existen. Copias esperando desincronizarse.
 
 La regla que quedó: un subagente se justifica en dos casos. Uno, mucho trabajo en paralelo, como
 investigar diez fuentes a la vez. Dos, una mente fresca que revisa sin el contexto del que
@@ -300,7 +290,7 @@ La guía está en mi web, en la sección de Claude Code.
 
 ### D04-B · Vertical · Cada skill que instalás te cobra contexto: medilo con /skill-doctor
 **Fórmula:** F2 Noticia → qué cambia para vos → probalo así · **Pilar:** Claude Code · **Destino:** comunidad (drop 5)
-**Evidencia:** https://code.claude.com/docs/en/whats-new/2026-w36 (`/skill-doctor`, semana 31-ago a 4-sep, v2.1.252+) · https://code.claude.com/docs/en/skills («Find unused skills»; `skillOverrides` on / name-only / user-invocable-only / off; el listado usa el 1 % del contexto y, si no entra, borra descripciones de las menos usadas; `/doctor` estima su costo) · `.claude/skills/onia-router/SKILL.md` (196 skills globales + 9 plugins).
+**Evidencia:** https://code.claude.com/docs/en/whats-new/2026-w36 (`/skill-doctor`, semana 31-ago a 4-sep, v2.1.252+) · https://code.claude.com/docs/en/skills («Find unused skills»; `skillOverrides` on / name-only / user-invocable-only / off; el listado usa el 1 % del contexto y, si no entra, borra descripciones de las menos usadas; `/doctor` estima su costo) · `.claude/skills/onia-router/SKILL.md` (196 skills globales + 9 plugins). Recontar con `/skill-doctor` el día de grabar: si cambió, se dice el número de pantalla.
 
 Cada skill instalada en Claude Code te cobra contexto en cada mensaje, la uses o no. Yo tengo
 ciento noventa y seis.
@@ -342,10 +332,7 @@ Desde ese día, en mi empresa verificar es mirar. Cuando Claude Code te diga que
 pedile esto: «No me digas que funciona por el código de respuesta. Abrí la página con un
 navegador, sacá una captura, mirala, y decime qué texto ves, cuánto pesó y cuánto tardó».
 
-Si lo querés hacer a mano, el comando es npx playwright screenshot, la dirección y el nombre del
-archivo.
-
-Salió bien cuando tenés una captura donde ves lo mismo que vería tu cliente.
+Salió bien cuando la captura muestra lo mismo que vería tu cliente.
 
 El prompt completo está en la comunidad.
 
@@ -354,31 +341,29 @@ El prompt completo está en la comunidad.
 ## Dom 4-oct
 
 ### D05-A · Vertical · Dos sesiones de Claude Code en el mismo proyecto, sin pisarse
-**Fórmula:** F7 Receta en N pasos con el paso crítico marcado · **Pilar:** Claude Code · **Destino:** comentá CARRIL (drop 12)
+**Fórmula:** F7 Receta en N pasos con el paso crítico marcado · **Pilar:** Claude Code · **Destino:** comunidad (drop 12)
 **Evidencia:** `CLAUDE.md` «Carriles» (1 carril = 1 sesión = 1 worktree = 1 rama) · memoria `git-en-worktree-usar-git-C.md` (1-sep: la terminal volvió sola al checkout principal y un `reset --hard` pensado para otro worktree movió una rama 424 commits; recuperada por reflog) · `git worktree add -b` / `list` / `git -C` probados en repo de prueba el 29-sep · `-w, --worktree [name]` en CLI 2.1.267.
 
-Si abrís dos sesiones de Claude Code en la misma carpeta, las dos tocan los mismos archivos. Y a
-mí un comando que iba para una carpeta cayó en otra, y movió una rama cuatrocientos veinticuatro
-commits.
+Dos sesiones de Claude Code en la misma carpeta tocan los mismos archivos. Y a mí un comando que
+iba para una carpeta cayó en otra, y movió una rama cuatrocientos veinticuatro commits.
 
 La solución se llama worktree: otra carpeta del mismo repositorio, con su propia rama.
 
-Uno. Desde tu proyecto: git worktree add, guion b, el nombre de la rama, y la carpeta nueva. Lo
+Uno. Desde tu proyecto: git worktree add, guion b, el nombre de la rama y la carpeta nueva. Lo
 que ves en pantalla.
 
-Dos. Abrí Claude Code en esa carpeta. O más corto: claude guion w y un nombre, que crea el
-worktree por vos.
+Dos. Abrí Claude Code en esa carpeta. O más corto: claude guion w y un nombre, que la crea por
+vos.
 
 Tres, el paso crítico. Todo comando de git, con git guion C y la ruta de la carpeta. No confíes
 en que la terminal sigue donde la dejaste.
 
-Eso fue lo mío: la terminal de mi agente volvió sola a la carpeta principal, y el comando corrió
-ahí. Se recuperó con el historial de git, pero ningún comando avisó nada.
+A mi agente la terminal le volvió sola a la carpeta principal. Se recuperó con el historial de
+git, pero nada avisó.
 
-Para comprobar, git worktree list: te muestra cada carpeta con su rama. Una sesión, una carpeta,
-una rama.
+Para comprobar: git worktree list. Cada carpeta, con su rama. Una sesión, una carpeta, una rama.
 
-Comentá CARRIL y te paso los comandos.
+Lo tenés completo en la comunidad: el link está en mi web.
 
 ### D05-B · Vertical · Presentaciones con Claude en el plan gratis, sin que te invente datos
 **Fórmula:** F2 Noticia → qué cambia para vos → probalo así · **Pilar:** Contenido con IA · **Destino:** web `/claude-code` (video 01, «Claude y Claude Code no son lo mismo»)
@@ -387,8 +372,7 @@ Comentá CARRIL y te paso los comandos.
 Desde el dieciséis de septiembre, Claude hace presentaciones, documentos y diseños dentro de
 cualquier conversación. Y está en todos los planes, también en el gratis.
 
-Lo dice la nota de versión de Anthropic, lo que ves en pantalla. No se instala nada: se pide en
-el chat.
+Lo dice la nota de versión de Anthropic, lo que ves en pantalla. Se pide en el chat.
 
 Te lo muestro en una cuenta gratis. Pego el texto de mi guía de Claude Code y le escribo esto:
 
@@ -417,54 +401,53 @@ web está el video que los compara.
 **Fórmula:** F7 Receta en N pasos con el paso crítico marcado · **Pilar:** Claude Code · **Destino:** comunidad (drop 7)
 **Evidencia:** `hermes-content/docs/handoff/README.md` (plantilla de 7 campos; compactación del 22-ago «fiel y larguísima», todo con el mismo peso) · `CLAUDE.md` «Cambio de sesión → handoff completo» (4-sep: un port de panel con cero commits al cerrar). En pantalla la plantilla, nunca un handoff real (tienen rutas del servidor y estados de pagos).
 
-Cuando cerrás una sesión de Claude Code, lo que aprendió se va con ella. La próxima arranca de
+Cuando cerrás una sesión, lo que aprendió se va con ella. La próxima arranca de
 cero.
 
-Yo probé confiar en el resumen automático. El veintidós de agosto una sesión se compactó, y el
+Probé confiar en el resumen automático. El veintidós de agosto una sesión se compactó, y el
 resumen era fiel pero larguísimo: cada error y cada idea descartada, con el mismo peso que el
-estado actual. Un resumen no elige qué importa.
+estado actual. Un resumen no elige.
 
 Ahora, al cerrar, Claude escribe un archivo con siete campos. Uno, el objetivo y si se cumplió.
-Dos, qué quedó funcionando de verdad. Tres, qué quedó a medias: rama y commit. Cuatro, los
-archivos que importan. Cinco, los intentos fallidos y por qué. Seis, qué depende de vos. Siete,
-los próximos pasos.
+Dos, qué quedó funcionando. Tres, qué quedó a medias: rama y commit. Cuatro, los archivos que
+importan. Cinco, los intentos fallidos y por qué. Seis, qué depende de vos. Siete, los próximos
+pasos.
 
-El cinco es el que nadie escribe y el que más vale: evita repetir el mismo callejón.
+El cinco es el que nadie escribe y el que más vale: evita repetir callejones.
 
-Y lo que no se commiteó se nombra con su riesgo. El cuatro de septiembre una sesión llegó al
-cierre con un trabajo entero sin un solo commit.
+Lo que no se commiteó se nombra con su riesgo: el cuatro de septiembre una sesión llegó al cierre
+con un trabajo entero sin commit.
 
-Para comprobar, abrí una sesión nueva y pasale solo ese archivo. Si sigue sin preguntarte nada,
+Para comprobar, pasale solo ese archivo a una sesión nueva. Si sigue sin preguntarte nada,
 está bien escrito.
 
 La plantilla está en la comunidad.
 
 ### D06-B · Vertical · Fable, Opus o Sonnet: cuánto te cuesta la misma tarea
-**Fórmula:** F5 Abrí la fuente: número primero → lectura → consecuencia práctica · **Pilar:** Claude Code · **Destino:** comentá TABLA (drop 13)
+**Fórmula:** F5 Abrí la fuente: número primero → lectura → consecuencia práctica · **Pilar:** Claude Code · **Destino:** comunidad (drop 13)
 **Evidencia:** https://www.anthropic.com/claude-fable-and-mythos-5-1 (USD 10/50) · https://www.anthropic.com/claude-opus-5-5 (USD 4/20; «performs at the level of Claude Fable 5.1 on most work»; GDPval-AA 1846 contra 1735) · https://www.anthropic.com/claude-sonnet-5-5 (USD 2/10) · https://code.claude.com/docs/en/costs (`/usage`, bloque Session: tokens por modelo; para suscriptores no es factura) · `ONIA_MODELOS_CLAUDE_Y_CUOTA.md` («Fable solo donde Opus no alcanza»). Cuenta del ejemplo hecha a mano, sin caché.
 
-Hoy Claude tiene tres modelos que importan, y el más caro cuesta cinco veces lo que el más
-barato.
+Claude tiene tres modelos que importan, y el más caro cuesta cinco veces lo que el más barato.
 
-Precios oficiales por millón de tokens, de entrada y de salida. Fable cinco punto uno: diez y
+Precios oficiales por millón de tokens, entrada y salida. Fable cinco punto uno: diez y
 cincuenta dólares. Opus cinco punto cinco: cuatro y veinte. Sonnet cinco punto cinco: dos y
 diez.
 
-Y el dato que cambia la cuenta: Anthropic dice que Opus rinde al nivel de Fable en la mayoría
-del trabajo. En su prueba de trabajo de oficina, Opus hasta le gana.
+El dato que cambia la cuenta: Anthropic dice que Opus rinde al nivel de Fable en la mayoría
+del trabajo. En su prueba de oficina, hasta le gana.
 
-Ahora hacé la tuya. Terminá una tarea en Claude Code y escribí barra usage. Arriba te muestra
-los tokens de entrada y de salida.
+Terminá una tarea en Claude Code y escribí barra usage: arriba ves los
+tokens de entrada y de salida.
 
 Un ejemplo, sin contar la caché: cincuenta mil de entrada y cinco mil de salida. En Sonnet son
 quince centavos de dólar. En Opus, treinta. En Fable, setenta y cinco.
 
-Si pagás la suscripción, eso no es tu factura. Pero es lo que te va a costar cuando esa tarea
-corra en una automatización que paga por uso.
+Con suscripción, no es tu factura: es lo que costará esa tarea en una automatización que paga
+por uso.
 
 Mi regla para Fable: solo cuando Opus, con esfuerzo alto, no alcanzó.
 
-Comentá TABLA y te paso la planilla con la fórmula.
+Lo tenés completo en la comunidad: el link está en mi web.
 
 ### D06-C · YouTube · Claude Code en un servidor, sin API key y con barandas
 **Fórmula:** F1 Resultado primero → cómo → comprobación → siguiente paso (horizontal) · **Pilar:** Agentes y loops · **Destino:** comunidad (drop 8)
@@ -516,7 +499,7 @@ nueva no arranca. Sin esto, un loop que tarda más de una hora se pisa a sí mis
 editando los mismos archivos. Es el peor modo de falla que hay.
 
 Baranda dos: verificar la carpeta. Antes de trabajar, el script entra a su carpeta, y si no
-puede, avisa y se detiene. Esto lo aprendí con mi primer agente en el servidor, el guardián: su
+puede, avisa y se detiene. Esto lo aprendí con mi primer Claude Code en el servidor, el guardián: su
 carpeta desapareció en un despliegue y pasó semanas «diagnosticando» desde la carpeta
 equivocada. Seguía corriendo. Su registro solo tenía la línea del error.
 
@@ -597,14 +580,13 @@ le da el mapa.
 Paso uno. Creá una skill que se llame router. En la descripción poné: «Invocar al inicio de
 cualquier trabajo en este proyecto».
 
-Paso dos. Adentro, una tabla. Una fila por tipo de trabajo, y en cada fila qué skills cargar y
-qué documento leer primero. En la mía, la fila de contenido dice: editor de videos, ver videos y
-sacar prompt.
+Paso dos. Adentro, una tabla: una fila por tipo de trabajo, con qué skills cargar y qué leer
+primero. En la mía, la fila de contenido dice: editor de videos, ver videos y sacar prompt.
 
 Paso tres, el que decide: en tu CLAUDE punto md escribí «toda sesión arranca invocando el
-router». Si no está ahí, dependés de que Claude se acuerde.
+router». Si no, dependés de que Claude se acuerde.
 
-Paso cuatro. Debajo de la tabla, las reglas que valen siempre, sea cual sea la tarea.
+Paso cuatro. Debajo de la tabla, las reglas que valen siempre.
 
 Para comprobar: abrí una sesión nueva, pedile cualquier cosa y mirá si lo primero que hace es
 invocar el router. Si no, la descripción está floja.
@@ -612,14 +594,14 @@ invocar el router. Si no, la descripción está floja.
 El esqueleto para copiar está en la comunidad.
 
 ### D07-B · Vertical · Tenía veinticuatro MCP conectados y ninguno escrito en mis archivos
-**Fórmula:** F5 Abrí la fuente: número primero → lectura → consecuencia práctica · **Pilar:** Claude Code · **Destino:** comentá MCP (drop 14)
+**Fórmula:** F5 Abrí la fuente: número primero → lectura → consecuencia práctica · **Pilar:** Claude Code · **Destino:** comunidad (drop 14)
 **Evidencia:** `hermes-content/docs/ONIA_AGENTES_MCP_AUDITORIA_ANTIPATRONES.md` (18-ago: ~24 MCP + 2 configurados sin autenticar, ~560 tools diferidas, 0 referencias `mcp__` en agents/skills/docs; Cloudflare por 6 superficies) · `claude mcp list` / `claude mcp remove` en CLI 2.1.267 · https://code.claude.com/docs/en/costs (herramientas diferidas: solo nombres en contexto; `/mcp` para desactivar; `/usage` atribuye uso por servidor MCP).
 
 Tenía veinticuatro servidores MCP conectados a Claude Code. Cuando los audité, ninguno aparecía
 nombrado en mis skills ni en mis documentos. Cero.
 
 Un MCP es una conexión que le da a Claude herramientas de otra aplicación: tu base de datos, tus
-anuncios, tu calendario.
+anuncios.
 
 La auditoría, del dieciocho de agosto, encontró más: unas quinientas sesenta herramientas
 disponibles, dos servidores que nunca se autenticaron, y el mismo servicio conectado por seis
@@ -633,12 +615,11 @@ Hacé esto. En la terminal: claude mcp list. Te muestra cada servidor y si está
 Después pedile a Claude Code que busque «mcp guion bajo guion bajo» en tu proyecto: así se
 llaman esas herramientas. El servidor que no aparece en ningún lado es candidato.
 
-Para sacarlo: claude mcp remove y el nombre. O desactivalo desde barra mcp, dentro de una
-sesión.
+Para sacarlo: claude mcp remove y el nombre. O desactivalo con barra mcp, dentro de la sesión.
 
 Comprobás con claude mcp list: ya no está.
 
-Comentá MCP y te paso los comandos.
+Lo tenés completo en la comunidad: el link está en mi web.
 
 ### D07-C · Vertical · ¿Necesitás inversión? Primero hacé esta división
 **Fórmula:** F5 Abrí la fuente: número primero → lectura → consecuencia práctica · **Pilar:** SaaS desde Bolivia · **Destino:** comunidad (drop 10)
@@ -650,16 +631,15 @@ cinco clientes, no un inversor.
 La cuenta es esta: gasto mensual dividido el precio de tu plan. Te da cuántos clientes necesitás
 para no perder plata.
 
-Hacela con tus números. Sumá todo lo que pagás por mes: servidor, herramientas, internet, lo que
-sea. Dividilo por lo que cobra tu plan más vendido. Redondeá para arriba.
+Hacela con tus números. Sumá todo lo que pagás por mes: servidor, herramientas, internet. Dividilo
+por lo que cobra tu plan más vendido. Redondeá para arriba.
 
 Si te da un número chico, tu problema no es de plata: es de clientes. Y eso se arregla vendiendo.
 
-Mirá qué pasa si contratás antes de tiempo. En mi caso, si sumo un programador, el número salta
-de cinco a unos quince clientes. Triplica la distancia.
+Mirá qué pasa si contratás antes de tiempo. Si sumo un programador, mi número salta de cinco a
+unos quince clientes. Se triplica.
 
-Y buscar inversión es trabajo de meses: reuniones, presentaciones, papeles. Si estás solo, esas
-horas salen de las horas de vender.
+Y buscar inversión es trabajo de meses. Si estás solo, esas horas salen de las horas de vender.
 
 Si te da más clientes de los que podés atender vos solo, revisá el precio o el gasto antes que
 nada.

@@ -1,0 +1,150 @@
+{
+  "title": "Recuperar vs reconstruir el prompt de una imagen",
+  "caption": "Sacar el prompt de una imagen son dos cosas distintas.\n\nRecuperar: el creador lo mostró (en una lámina, en el caption, en un cuadro del video) y lo leés tal cual. Reconstruir: escribís uno que da algo parecido, y lo decís.\n\nMirando, nunca sabés el modelo, la referencia, los intentos ni el seed.\n\nEl método sale de unos 58 reels analizados, varios con el prompt en pantalla.",
+  "hashtags": [
+    "#prompts",
+    "#ia",
+    "#inteligenciaartificial",
+    "#imagenesia",
+    "#contenido",
+    "#bolivia"
+  ],
+  "serie": "IA PRÁCTICA",
+  "episodio": "K8",
+  "job": "education",
+  "slides": [
+    {
+      "number": 1,
+      "role": "cover",
+      "pill": "Contenido con IA",
+      "headline": "El prompt de una imagen: *2 caminos*",
+      "body": "Recuperar o reconstruir. No se presentan igual.",
+      "image_prompt": "An old brass magnifying glass with a dark wooden handle resting on a rough grey stone surface, soft window light, shallow depth of field.",
+      "alt_text": "El prompt de una imagen: 2 caminos"
+    },
+    {
+      "number": 2,
+      "role": "stakes",
+      "pill": "El problema",
+      "headline": "Parecido *no es el original*",
+      "body": "Un prompt que da algo parecido no es el que usó el autor. Si lo pasás como el original, engañás sin querer.",
+      "callout": "Parecido ≠ original",
+      "alt_text": "Un prompt parecido no es el original"
+    },
+    {
+      "number": 3,
+      "role": "point",
+      "pill": "01 · Recuperar",
+      "headline": "Primero, *buscalo en pantalla*",
+      "body": "Muchos creadores muestran el prompt: en una lámina, en el caption o en un solo cuadro del video. Leé todo antes de escribir nada.",
+      "visual": {
+        "type": "flow",
+        "label": "DÓNDE MIRAR",
+        "nodes": [
+          {
+            "name": "láminas",
+            "detail": "todas, no solo la 1"
+          },
+          {
+            "name": "caption",
+            "detail": "varios lo ponen ahí"
+          },
+          {
+            "name": "video",
+            "detail": "cuadro por cuadro"
+          }
+        ]
+      },
+      "alt_text": "Dónde buscar el prompt original"
+    },
+    {
+      "number": 4,
+      "role": "point",
+      "pill": "02 · Reconstruir",
+      "headline": "Si no está, *decí que es tuyo*",
+      "body": "Escribís uno que produce algo parecido y lo aclarás: «no es el prompt original, es uno que da algo parecido».",
+      "callout": "Reconstrucción, siempre dicha",
+      "alt_text": "Una reconstrucción se presenta como tal"
+    },
+    {
+      "number": 5,
+      "role": "point",
+      "pill": "Lo que no se ve",
+      "headline": "Lo que la imagen *no te dice*",
+      "body": "Mirando no se recupera nada de esto. Si no lo sabés, decilo en vez de inventarlo.",
+      "visual": {
+        "type": "table",
+        "label": "NO SE RECUPERA",
+        "left": "QUÉ",
+        "right": "POR QUÉ",
+        "rows": [
+          {
+            "left": "el modelo",
+            "right": "si no está rotulado"
+          },
+          {
+            "left": "la referencia",
+            "right": "la imagen no la muestra"
+          },
+          {
+            "left": "los intentos",
+            "right": "ves solo el que salió"
+          },
+          {
+            "left": "el seed",
+            "right": "no se deduce"
+          }
+        ]
+      },
+      "alt_text": "Lo que no se puede recuperar mirando una imagen"
+    },
+    {
+      "number": 6,
+      "role": "save",
+      "pill": "Para reconstruir",
+      "headline": "Siempre en *este orden*",
+      "body": "Y para que parezca real: pedí textura y defectos, y prohibí lo pulido en el negative.",
+      "visual": {
+        "type": "terminal",
+        "label": "8 BLOQUES",
+        "lines": [
+          {
+            "value": "1 tipo de foto",
+            "kind": "command"
+          },
+          {
+            "value": "2 sujeto haciendo algo",
+            "kind": "command"
+          },
+          {
+            "value": "3 rasgos · 4 vestuario · 5 pose",
+            "kind": "command"
+          },
+          {
+            "value": "6 fondo como lista de objetos",
+            "kind": "command"
+          },
+          {
+            "value": "7 cámara y película",
+            "kind": "command"
+          },
+          {
+            "value": "8 negative prompt",
+            "kind": "command"
+          }
+        ]
+      },
+      "save_worthy": true,
+      "alt_text": "Los 8 bloques para reconstruir un prompt"
+    },
+    {
+      "number": 7,
+      "role": "cta",
+      "pill": "Plantilla",
+      "headline": "Comentá *PROMPT* y te la paso",
+      "body": "Te mando por mensaje la plantilla de los 8 bloques, con su negative base.",
+      "cta": "COMENTÁ PROMPT",
+      "alt_text": "Comentá PROMPT para recibir la plantilla"
+    }
+  ]
+}

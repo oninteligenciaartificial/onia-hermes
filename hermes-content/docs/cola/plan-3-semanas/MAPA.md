@@ -4,6 +4,17 @@ Propuesta de Claude, 29-sep-2026, **para que Sergio Urcullo la corrija**. Los gu
 `S1-GUIONES.md`, `S2-GUIONES.md`, `S3-GUIONES.md`; los carruseles en
 `CARRUSELES.md` (esta carpeta).
 
+**Estado 29-sep:** 63 piezas para 21 días (56 escritas hoy + 7 del 28-sep), 9 carruseles
+(K1–K3 renderizados con portada de Higgsfield; K4–K9 con brief y vista previa, imagen pendiente
+de aprobación). Cada guion pasó la vara de 7 condiciones (`BRIEF-ESCRITOR.md`) y un chequeo
+automático (largo, frases prohibidas, datos sensibles). «Comentá PALABRA» quedó en 2 piezas por
+semana; el resto cierra en la comunidad (regla del motor semanal).
+
+**Fuentes que usé** (en `hermes-content/references/marca-personal/`): `INVENTARIO-CONOCIMIENTO-ONIA.md`
+(67 cosas reales de ONIA que se pueden enseñar), `FORMULAS-REFERENTES.md` (8 fórmulas de tus 6
+referentes), `RADAR-ACTUALIDAD-2026-09-29.md` (16 novedades con fuente oficial),
+`SANTIAGO-CARRUSELES-POR-CODIGO.md` (su método, del video del 4-mar y su repo público).
+
 ## 1. Hacia dónde va todo (el recorrido)
 
 ```
@@ -103,7 +114,23 @@ Códigos: los del inventario (`references/marca-personal/INVENTARIO-CONOCIMIENTO
 **Total:** 63 videos (9 YouTube horizontales + 54 verticales) · 9 carruseles. 9 guiones ya
 estaban del 28-sep; 54 son nuevos o reescritos.
 
-## 5. Lo que queda fuera a propósito
+## 5. Antes de grabar cada pieza (lo que no se pudo probar hoy)
+
+| Pieza | Qué falta |
+|---|---|
+| D05-B Slides gratis | Hacer la demo en una cuenta Free. Si no sale, no se publica |
+| D04-B /skill-doctor | Recontar las skills (el «196» es del router) y mirar la pantalla real de `/skills` |
+| D08-B n8n 2.40 | ONIA corre n8n 2.35.3: la opción nueva se muestra desde la doc, no desde nuestro n8n |
+| D09-B voz con Gemini | Grabar la prueba en AI Studio antes; ONIA no tiene voz construida |
+| D11-B audios del bot | Confirmar que el camino del audio está vivo hoy |
+| D14-B borrador 480p | Confirmar que existe en la CLI de Higgsfield; no se promete ahorro |
+| D15-B GPT Image 2.5 | Hacer la prueba de foto de producto antes de grabar |
+| D16-C costos | Recotizar con `higgsfield generate cost` el día de grabar |
+| D19-B contraste | El README de la web dice 1,7:1; recalculado sobre el fondo real da 2,2:1 (el guion usa 2,2) |
+
+Regla general: **toda cifra que envejece se recuenta el día de grabar** (skills, precios, versiones).
+
+## 6. Lo que queda fuera a propósito
 
 - **GPT-6 (R5):** las páginas de OpenAI dieron 403; solo hay foro. No entra hasta tener fuente.
 - **S-09 agentes sin LLM:** es buena lección, pero contradice cómo se vende el producto

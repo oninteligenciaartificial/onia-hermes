@@ -1,0 +1,144 @@
+{
+  "title": "5 pruebas antes de activar tu bot de WhatsApp",
+  "caption": "Antes de activar un bot de WhatsApp, mandale vos los mensajes que le van a mandar tus clientes.\n\nLa prueba que más importa es la 3: preguntale algo que no le diste (stock, plazo, precio). Si contesta con un dato que no está en su información, lo inventó.\n\nLas otras cuatro salen del bot de ONIA, y cada una tiene hoy su prueba automática.\n\nGuardá la lámina 6 para el día que lo actives.",
+  "hashtags": [
+    "#whatsapp",
+    "#chatbot",
+    "#ia",
+    "#automatizacion",
+    "#negocios",
+    "#bolivia"
+  ],
+  "serie": "IA PRÁCTICA",
+  "episodio": "K4",
+  "job": "education",
+  "slides": [
+    {
+      "number": 1,
+      "role": "cover",
+      "pill": "Bot de WhatsApp",
+      "headline": "*5 pruebas* antes de activar tu bot",
+      "body": "Mandale estos mensajes vos, antes que tus clientes.",
+      "image_prompt": "Five smooth river pebbles lined up in a neat row on a worn oak board, the last one a deep green stone, soft side light from the left.",
+      "alt_text": "5 pruebas antes de activar tu bot de WhatsApp"
+    },
+    {
+      "number": 2,
+      "role": "stakes",
+      "pill": "El problema",
+      "headline": "Tu bot contesta *sin que lo mires*",
+      "body": "Un bot activado le habla a clientes reales, a cualquier hora. Lo que no probaste vos, lo prueba tu cliente.",
+      "callout": "Probalo vos primero",
+      "alt_text": "Un bot activado contesta sin supervisión"
+    },
+    {
+      "number": 3,
+      "role": "point",
+      "pill": "01 · Como tu cliente",
+      "headline": "Escribile *como escriben*",
+      "body": "Sin tildes, con errores, «cuanto sale?» a secas, «ya» como única respuesta. El banco de pruebas de mi bot arrancó con 62 mensajes así.",
+      "visual": {
+        "type": "terminal",
+        "label": "PRUEBA 1",
+        "lines": [
+          {
+            "value": "> cuanto sale?",
+            "kind": "command"
+          },
+          {
+            "value": "> somos 3",
+            "kind": "command"
+          },
+          {
+            "value": "> ya",
+            "kind": "command"
+          },
+          {
+            "value": "¿entendió o adivinó?",
+            "kind": "comment"
+          }
+        ]
+      },
+      "alt_text": "Mensajes de prueba escritos como un cliente real"
+    },
+    {
+      "number": 4,
+      "role": "point",
+      "pill": "02 · Dos veces",
+      "headline": "Mandá lo mismo *dos veces*",
+      "body": "Si tu servidor tarda, Chatwoot vuelve a entregar el mismo mensaje. Sin un filtro, tu cliente recibe la misma respuesta repetida.",
+      "visual": {
+        "type": "flow",
+        "label": "LO QUE TIENE QUE PASAR",
+        "nodes": [
+          {
+            "name": "llega el mensaje",
+            "detail": "contesta"
+          },
+          {
+            "name": "llega de nuevo",
+            "detail": "mismo id"
+          },
+          {
+            "name": "lo descarta",
+            "detail": "una sola respuesta"
+          }
+        ]
+      },
+      "alt_text": "El bot debe contestar una sola vez al mismo mensaje"
+    },
+    {
+      "number": 5,
+      "role": "point",
+      "pill": "03 · La prueba crítica",
+      "headline": "Preguntale lo que *no sabe*",
+      "body": "Stock, plazo, precio. Si contesta con un dato que vos no le diste, lo inventó. Y ese dato se lo prometiste vos.",
+      "callout": "Si inventa, no se activa",
+      "alt_text": "Preguntarle al bot lo que no sabe"
+    },
+    {
+      "number": 6,
+      "role": "save",
+      "pill": "04 y 05",
+      "headline": "Lo que no entiende, *a una persona*",
+      "body": "Mandale un audio y escribí «quiero hablar con una persona». En los dos casos alguien tiene que enterarse, no solo el bot.",
+      "visual": {
+        "type": "matrix",
+        "label": "LAS 5 PRUEBAS",
+        "items": [
+          {
+            "title": "como tu cliente",
+            "body": "sin tildes, «cuanto sale?», «ya»"
+          },
+          {
+            "title": "dos veces",
+            "body": "contesta una sola vez"
+          },
+          {
+            "title": "lo que no sabe",
+            "body": "stock, plazo, precio: no inventa"
+          },
+          {
+            "title": "un audio",
+            "body": "si no lo entiende, avisa a alguien"
+          },
+          {
+            "title": "«una persona»",
+            "body": "alguien se entera de verdad"
+          }
+        ]
+      },
+      "save_worthy": true,
+      "alt_text": "Checklist de las 5 pruebas antes de activar un bot"
+    },
+    {
+      "number": 7,
+      "role": "cta",
+      "pill": "Comunidad",
+      "headline": "¿Cuál falló? Contalo en la *comunidad*",
+      "body": "Hacé las cinco antes de activarlo. Link a la comunidad en mi web.",
+      "cta": "COMUNIDAD EN LA BIO",
+      "alt_text": "Contá en la comunidad qué prueba falló"
+    }
+  ]
+}
