@@ -184,7 +184,7 @@ lo que Sergio Urcullo recibe hoy.
 el 21, 22, 23, 24, 25 y 28-sep (28-sep: `message_id=6983`, 08:02:47). Su `last_status=error`
 ("Interrupted by shutdown") es un falso negativo: el job terminó 08:02:11, el fence local
 expiró 08:02:43 y la entrega salió igual. La voz 08:25 (`/var/log/onia-jarvis-voz.log`)
-dice "narrado y enviado" los siete días del 22 al 28-sep. El job carga
+dice "narrado y enviado" del 24 al 28-sep (últimas 5 líneas leídas). El job carga
 `operaciones-dashboard`, `video-lab-higgsfield` y `marca-personal-sergio`, NO
 `agenda-calendario`: el "09:00-11:00" de hoy lo inventa el modelo. Para cortarlo hace falta
 tocar el job (`hermes cron edit 9089322cc256 --add-skill agenda-calendario`, con backup de
