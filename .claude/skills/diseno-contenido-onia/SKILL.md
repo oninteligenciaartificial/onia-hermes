@@ -9,6 +9,10 @@ description: Invocar ANTES de hacer cualquier pieza visual de la marca personal 
 > hagas en un solo lugar, ordenados»*. Todo lo de diseño de contenido se entra por acá; los
 > detalles viven en los archivos que este índice nombra, y no se copian a otro lado.
 
+> **Alcance:** diseño de CONTENIDO (redes, YouTube, piezas de marca). La UI del PRODUCTO (el
+> SaaS) no vive acá: `onia-platform/DESIGN.md` + skill `onia-frontend` de ese repo (acordado
+> con la sesión de onia-platform el 29-sep).
+
 ## La regla que ordena todo
 
 **Las imágenes vienen de afuera; todo lo demás lo hace el código.** El texto, la tipografía,
