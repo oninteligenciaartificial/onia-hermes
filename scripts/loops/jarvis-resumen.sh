@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# ONIA — Jarvis: el RESUMEN de la mañana (06:30) y el CIERRE del día (22:00).
+# ONIA — Jarvis: el RESUMEN de la mañana (06:30) y el CIERRE del día (21:30).
 #
 # POR QUÉ EXISTE (2026-09-29). Sergio Urcullo: "necesitamos un cerebro que me diga
 # absolutamente lo de todos los días… que me diga cómo estuvo mi día. Literalmente como un
@@ -232,6 +232,18 @@ seccion_hoy() {
     printf '• %s cambio(s) integrados al sistema (no pude resumirlos: la IA no respondió).\n' "$n"
   fi
 }
+# Los bloques de ONIA de hoy, numerados, para que él diga cuáles quedaron pendientes.
+# Sergio Urcullo, 2026-09-29: "quiero cumplir todo eso, pero hay días que si no trabajo nada
+# en ONIA o queda algún pendiente se le encuentra un espacio en la agenda".
+seccion_bloques_hoy() {
+  local ev
+  [ -x "$AGENDA" ] || return 0
+  ev=$("$AGENDA" "$HOY" 2>/dev/null </dev/null | grep -E 'ONIA|🔒|🎬') || return 0
+  [ -n "$ev" ] || return 0
+  printf '📋 <b>Tus bloques de hoy</b> — ¿se hicieron?\n'
+  printf '%s\n' "$ev" | head -6 | esc | awk '{ printf "%d. %s\n", NR, $0 }'
+  printf '→ Contestame qué quedó pendiente (por ejemplo «2 no») y le busco otro hueco.\n'
+}
 seccion_sigue() {
   local p d
   p=$(printf '%s\n' "$LISTA" | grep -F '[leads-esperando]' | grep -vE '^✓' | grep -oE '\] [0-9]+ ' | grep -oE '[0-9]+' | head -1)
@@ -254,7 +266,7 @@ if [ "$MODO" = manana ]; then
   bloque seccion_decisiones; bloque seccion_cola noche 'Mientras dormías'
 else
   CABEZA="🌙 <b>Cierre del $(dia_largo "$HOY")</b>"
-  bloque seccion_hoy; bloque seccion_cola resumen 'Avisos del día'; bloque seccion_sigue
+  bloque seccion_hoy; bloque seccion_bloques_hoy; bloque seccion_cola resumen 'Avisos del día'; bloque seccion_sigue
   bloque seccion_agenda "$MANANA" 'Mañana'; bloque seccion_guiones "$MANANA" 'Mañana grabás'
 fi
 CUERPO+="$(linea_salud)"

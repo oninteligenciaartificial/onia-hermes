@@ -258,3 +258,19 @@ test("«7 de octubre» no se confunde con el 17 ni «4-oct» con el 14-oct", () 
   assert.doesNotMatch(d4, /Cortá los silencios/);
   assert.match(d4, /Dos sesiones de Claude Code en el mismo proyecto/);
 });
+
+test("el cierre lista los bloques de ONIA del día, numerados, y pregunta cuáles se hicieron", () => {
+  const b = banco({ repo: repoConCommits([]) });
+  const agenda = b.escribir(
+    "agenda.sh",
+    `#!/usr/bin/env bash\nprintf '08:00–12:30 🎒 Colegio\\n13:00–14:30 🎬 ONIA · Marca personal — grabar\\n15:00–16:30 🔒 ONIA · Clientes — demos\\n'\n`,
+  );
+  const msg = b.imprimir("noche", { ONIA_HOY: "2026-09-29", ONIA_AGENDA: agenda });
+  assert.match(msg, /📋 <b>Tus bloques de hoy<\/b> — ¿se hicieron\?\n1\. 13:00–14:30 🎬 ONIA · Marca personal — grabar\n2\. 15:00–16:30 🔒 ONIA · Clientes — demos\n→ Contestame/);
+  assert.doesNotMatch(msg.slice(msg.indexOf("📋"), msg.indexOf("→ Contestame")), /Colegio/);
+});
+
+test("sin lector de calendario, el cierre no inventa bloques", () => {
+  const b = banco({ repo: repoConCommits([]) });
+  assert.doesNotMatch(b.imprimir("noche", { ONIA_HOY: "2026-09-29" }), /📋/);
+});

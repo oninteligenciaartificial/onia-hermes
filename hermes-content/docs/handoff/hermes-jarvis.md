@@ -32,11 +32,19 @@ mover / cancelar probado en su calendario real. **Hoy: ninguno de los cuatro cum
   en su Telegram** hasta que `aplicar.sh` cree el interruptor e instale los crons.
 - **`aplicar.sh` / `revertir.sh`: NO existen.** Se escriben con el diagnóstico delante (crontab
   vivo, ids reales de los jobs de Hermes, workflows de n8n activos). Plan: crons 06:30 (`30 10`
-  UTC) y 22:00 (`0 2` UTC), voz a 06:33, sacar el cron del parte diario (el resumen lo llama),
+  UTC) y **21:30** (`30 1` UTC — corregido el 29-sep: a las 22:00 su calendario dice «Cierre
+  del día — sin celular»), soltar lo retenido cada 5 min (`*/5 * * * * ONIA_AVISO_SOLTAR=1
+  /root/bin/onia-tg.sh`), voz a 06:33, sacar el cron del parte diario (el resumen lo llama),
   pausar `hermes-weekday-work-agenda`, `hermes-daily-content-video-plan`, `onia-veredicto-sergio`,
   quitar `ONIA_TG_DIRECTO=1` de `vigia-loops-remotos`, apagar los monitores de n8n que solo
   mandan errores, crear el interruptor. Todo con respaldo en `/root/backups/hermes-jarvis-<fecha>/`.
-- **Calendario:** su calendario real es el PERSONAL; el conectado (oninteligenciaartificial@gmail.com,
+- **Bloques protegidos (decisión suya del 29-sep):** la aduana retiene durante Colegio / 🔒 / 🎬 /
+  «sin celular» y suelta todo junto al terminar. Lee `/var/lib/onia-aviso/bloques-hoy.tsv`
+  (`fecha<TAB>HHMM<TAB>HHMM<TAB>título`, hora La Paz), que tiene que escribir el lector del
+  calendario. **Sin ese archivo, la regla existe pero no retiene nada**: no reportarla como hecha.
+- **Calendario:** ✅ **compartido el 29-sep** (sergio.urcullo.m@gmail.com → cuenta ONIA, la sesión
+  lee y escribe). **Bloques de ONIA del 3 al 10-oct llenados** por esta sesión (16 eventos, solo
+  título y descripción, rutina original guardada adentro). Antes de eso: su calendario real es el PERSONAL; el conectado (oninteligenciaartificial@gmail.com,
   credencial n8n `a3FResZHqQ32ptyt`) no tiene eventos desde el 12-ago. Se le pidió compartir el
   personal con esa cuenta («Realizar cambios en eventos»). El lector `onia-agenda.sh` no existe:
   el resumen lo dice honestamente hasta que exista.

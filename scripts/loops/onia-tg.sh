@@ -42,9 +42,19 @@
 #                          emisor llama en cada vuelta; si se arregla antes, no suena.
 #   ONIA_AVISO_RECUPERADO=1  la condición terminó: si se había avisado, avisa que volvió;
 #                          si nunca se avisó, se calla y limpia.
-#   ONIA_AVISO_AHORA=1     ignora el silencio (lo usan el resumen y el cierre, que son
-#                          justamente los mensajes agendados en los bordes del silencio).
+#   ONIA_AVISO_AHORA=1     ignora el silencio y los bloques (lo usan el resumen y el cierre,
+#                          que son justamente los mensajes agendados por él).
 #   ONIA_AVISO_EMISOR=x    quién avisa, para el resumen.
+#
+# ── LOS BLOQUES DE SU CALENDARIO (2026-09-29) ────────────────────────────────
+# Sergio Urcullo eligió ese día: durante Colegio, los bloques 🔒 («celular fuera»), los 🎬
+# de grabación y los «sin celular» NO suena nada; lo que llegue se le manda JUNTO apenas
+# termina el bloque. Su calendario pasa a decidir cuándo se lo puede molestar.
+#   $ESTADO/bloques-hoy.tsv   fecha<TAB>HHMM<TAB>HHMM<TAB>título  (hora La Paz; lo escribe el
+#                             lector de su calendario). Sin archivo, no hay bloques.
+#   ONIA_AVISO_SOLTAR=1       (cron cada 5 min, sin mensaje) si ya no está en un bloque, manda
+#                             lo retenido en UN mensaje; si terminó en el silencio de la noche,
+#                             lo pasa al resumen de las 06:30.
 #
 # 🔴 El silencio y la cola del resumen están detrás de un interruptor:
 # $ONIA_AVISO_ESTADO/activo. Sin él, `interrumpe` sale como siempre. Motivo: si la aduana
@@ -53,7 +63,7 @@
 # El archivo lo crea el mismo paso que instala el resumen, y nadie más.
 set -uo pipefail
 
-MSG="${1:?uso: onia-tg.sh \"mensaje\"}"
+if [ "${ONIA_AVISO_SOLTAR:-0}" = "1" ]; then MSG="${1:-}"; else MSG="${1:?uso: onia-tg.sh \"mensaje\"}"; fi
 LOG="${ONIA_TG_LOG:-/var/log/onia-tg.log}"
 TABLERO="${ONIA_TABLERO:-/root/bin/onia-tablero.sh}"
 ESTADO="${ONIA_AVISO_ESTADO:-/var/lib/onia-aviso}"
@@ -86,6 +96,47 @@ encolar() {  # encolar <tipo> <clave> <titulo>
     "$(printf '%s' "$MSG" | sed 's/<[^>]*>//g' | tr '\n\t' '  ' | cut -c1-300)" >> "$ESTADO/resumen.log"
 }
 edad_min() { local f="$1"; echo $(( ( $(date +%s) - $(cat "$f" 2>/dev/null || echo 0) ) / 60 )); }
+esc() { sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g'; }
+fecha_lapaz() { if [ -n "${ONIA_AVISO_FECHA:-}" ]; then printf '%s' "$ONIA_AVISO_FECHA"; else date -u -d '-4 hours' +%F; fi; }
+# Imprime el título del bloque en curso y devuelve 0 si ahora cae adentro de uno.
+en_bloque() {
+  local f="$ESTADO/bloques-hoy.tsv"
+  [ -f "$f" ] || return 1
+  awk -F'\t' -v hoy="$(fecha_lapaz)" -v hm="$((10#$(hm_lapaz)))" \
+    '$1 == hoy && hm >= ($2 + 0) && hm < ($3 + 0) { print $4; hallado = 1; exit } END { exit !hallado }' "$f"
+}
+
+# ── soltar: lo retenido durante un bloque sale junto, cuando el bloque termina ──
+if [ "${ONIA_AVISO_SOLTAR:-0}" = "1" ]; then
+  R="$ESTADO/retenidos.log"
+  { [ "$POLITICA" = 1 ] && [ -s "$R" ]; } || exit 0
+  en_bloque >/dev/null && exit 0            # sigue ocupado: se espera al final del bloque
+  N=$(grep -c . "$R")
+  if en_silencio; then
+    # El bloque terminó adentro del silencio de la noche: va al resumen de las 06:30.
+    awk -F'\t' 'BEGIN { OFS = "\t" } { print $1, $2, "noche", $3, $5, $6 }' "$R" >> "$ESTADO/resumen.log"
+    rm -f "$R" "$ESTADO"/retenidos/* 2>/dev/null
+    printf '%s SOLTADO-AL-RESUMEN %s aviso(s)\n' "$(ahora)" "$N" >> "$LOG"
+    exit 0
+  fi
+  BLOQUE=$(head -1 "$R" | cut -f4 | esc)
+  LISTA=$(cut -f5 "$R" | head -8 | esc | sed 's/^/• /')
+  [ "$N" -gt 8 ] && LISTA="$LISTA
+… y $((N - 8)) más."
+  DIGEST="🔔 <b>Mientras estabas en ${BLOQUE}</b>
+
+$LISTA"
+  if ONIA_AVISO=interrumpe ONIA_AVISO_AHORA=1 ONIA_AVISO_CLAVE="soltar-$(date +%s)" ONIA_AVISO_EMISOR=aduana \
+       ONIA_AVISO_SOLTAR=0 bash "$0" "$DIGEST" >/dev/null; then
+    # Cada aviso retenido cuenta como entregado: su enfriamiento de 6 h arranca ahora.
+    mkdir -p "$ESTADO/enviados" 2>/dev/null
+    cut -f3 "$R" | while read -r k; do [ -n "$k" ] && date +%s > "$ESTADO/enviados/$k"; done
+    rm -f "$R" "$ESTADO"/retenidos/* 2>/dev/null
+    printf '%s SOLTADO %s aviso(s) bloque=%s\n' "$(ahora)" "$N" "$BLOQUE" >> "$LOG"
+    exit 0
+  fi
+  exit 1   # Telegram no lo aceptó: lo retenido queda, y la próxima vuelta lo reintenta.
+fi
 
 # ── resumen: al resumen del día, nunca al teléfono ───────────────────────────
 if [ "$CATEGORIA" = resumen ]; then
@@ -107,6 +158,17 @@ if [ "$CATEGORIA" = interrumpe ]; then
   ENVIADO="$ESTADO/enviados/$CLAVE"; PENDIENTE="$ESTADO/pendientes/$CLAVE"; NOCTURNO="$ESTADO/nocturnos/$CLAVE"
 
   if [ "${ONIA_AVISO_RECUPERADO:-0}" = "1" ]; then
+    if [ -f "$ESTADO/retenidos/$CLAVE" ]; then
+      # Se cayó y volvió mientras él estaba en un bloque: la caída ya no es cierta, así que
+      # sale de lo retenido (si no, al terminar el bloque le avisaría algo que ya pasó) y
+      # queda como dato del cierre del día.
+      awk -F'\t' -v k="$CLAVE" '$3 != k' "$ESTADO/retenidos.log" > "$ESTADO/retenidos.log.$$" 2>/dev/null \
+        && mv "$ESTADO/retenidos.log.$$" "$ESTADO/retenidos.log"
+      rm -f "$ESTADO/retenidos/$CLAVE" "$PENDIENTE" 2>/dev/null
+      encolar resumen "$CLAVE" "$TITULO"
+      printf '%s RECUPERADO-EN-BLOQUE clave=%s titulo=%s\n' "$(ahora)" "$CLAVE" "$TITULO" >> "$LOG"
+      exit 0
+    fi
     if [ ! -f "$ENVIADO" ] && [ ! -f "$NOCTURNO" ]; then
       # Nunca se le aviso la caida: tampoco se le avisa que volvio. Se limpia y se calla.
       rm -f "$PENDIENTE" 2>/dev/null
@@ -145,6 +207,19 @@ if [ "$CATEGORIA" = interrumpe ]; then
       mkdir -p "$ESTADO/nocturnos" 2>/dev/null; date +%s > "$NOCTURNO"
       encolar noche "$CLAVE" "$TITULO"
       printf '%s NOCHE-AL-RESUMEN clave=%s titulo=%s\n' "$(ahora)" "$CLAVE" "$TITULO" >> "$LOG"
+    fi
+    exit 0
+  fi
+  if [ "$POLITICA" = 1 ] && [ "${ONIA_AVISO_AHORA:-0}" != "1" ] && BLOQUE_ACTIVO=$(en_bloque); then
+    # En clase, en un bloque 🔒/🎬 o «sin celular»: se retiene UNA vez por clave y sale
+    # junto al terminar el bloque (ONIA_AVISO_SOLTAR, por cron).
+    if [ -f "$ESTADO/retenidos/$CLAVE" ]; then
+      printf '%s BLOQUE-REPETIDO clave=%s titulo=%s\n' "$(ahora)" "$CLAVE" "$TITULO" >> "$LOG"
+    else
+      mkdir -p "$ESTADO/retenidos" 2>/dev/null; date +%s > "$ESTADO/retenidos/$CLAVE"
+      printf '%s\t%s\t%s\t%s\t%s\t%s\n' "$(ahora)" "${ONIA_AVISO_EMISOR:-?}" "$CLAVE" "$BLOQUE_ACTIVO" "$TITULO" \
+        "$(printf '%s' "$MSG" | sed 's/<[^>]*>//g' | tr '\n\t' '  ' | cut -c1-300)" >> "$ESTADO/retenidos.log"
+      printf '%s BLOQUE-RETENIDO clave=%s bloque=%s titulo=%s\n' "$(ahora)" "$CLAVE" "$BLOQUE_ACTIVO" "$TITULO" >> "$LOG"
     fi
     exit 0
   fi
