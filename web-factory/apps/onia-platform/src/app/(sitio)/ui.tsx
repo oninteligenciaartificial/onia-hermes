@@ -82,7 +82,7 @@ const panelLabel: Record<Exclude<PanelId, "cuenta">, string> = {
   estetica:
     "Tratamientos en curso de un centro de estética: uno al día, otro de una clienta que no volvió, y el control post-tratamiento ya puesto en la agenda.",
   servicios:
-    "Cierre de mes de un estudio profesional: el IVA y el IT del mes ya armados, y el reporte del mes esperando revisión.",
+    "Cierre de mes de un estudio profesional: el IVA y el IT del mes ya armados con lo cobrado en Onia, y el reporte del mes esperando revisión.",
 };
 
 /**
@@ -354,7 +354,7 @@ function PanelCuerpo({ panel, plan }: { panel: PanelId; plan?: PlanId }) {
             <Fila txt="Reporte del mes" pill="Revisar" />
           </ul>
           <p className={s.panelFoot}>
-            Llegás al cierre con el IVA y el IT ya armados.
+            Con lo que cobrás en Onia, el IVA y el IT ya armados.
           </p>
         </>
       );

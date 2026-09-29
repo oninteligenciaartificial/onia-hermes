@@ -85,7 +85,7 @@ const RUBROS: readonly {
     nombre: "Importadora",
     resultado:
       "Sabés cuánto te costó cada lote puesto en depósito y qué cotización sigue viva.",
-    ve: "Depósito, lotes, proveedores y costos de importación.",
+    ve: "Depósito, lotes y costeo de importación con alerta de reprecio.",
     alt: "Dueño de una importadora junto al rack del depósito, con una guía impresa en la mano y una laptop cerrada apoyada sobre una caja.",
     w: 1280,
     h: 874,
@@ -98,7 +98,7 @@ const RUBROS: readonly {
     id: "estetica",
     nombre: "Estética",
     resultado:
-      "La clienta que dejó el tratamiento a medias no se pierde: el control post-tratamiento entra en la agenda como una cita más.",
+      "La clienta que dejó el tratamiento a medias no se pierde: te queda el mensaje escrito con tu link para que vuelva a reservar, y vos lo aprobás.",
     ve: "Clientas, tratamientos, agenda y recordatorios.",
     alt: "Dueña de un centro de estética junto a la camilla vacía con papel nuevo puesto, con el celular en la mano.",
     w: 1280,
@@ -109,7 +109,7 @@ const RUBROS: readonly {
     id: "servicios",
     nombre: "Servicios",
     resultado:
-      "Llegás al cierre de mes con el IVA y el IT ya armados, en vez de juntando papeles.",
+      "Con lo que cobrás en Onia, llegás al cierre de mes con el IVA y el IT ya armados, en vez de juntando papeles.",
     ve: "Clientes, agenda, servicios y cobros.",
     alt: "Contadora trabajando de noche en su escritorio, con un archivador de palanca abierto, una calculadora y una lámpara encendida.",
     w: 1280,
