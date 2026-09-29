@@ -10,13 +10,20 @@ Sergio Urcullo aprobó el 2026-09-29 un acceso controlado, con respaldo. Es este
 | `comun.sh` | Funciones comunes (`redactar`, `sec`). Va delante de cada acción. |
 | `redactar.sed` | Tapa tokens, claves, correos, teléfonos y chat ids. Se aplica en el VPS **y** en el runner. |
 | `diagnostico.sh` | **Solo lectura.** Crontab, trabajos de Hermes, n8n, log de avisos, tablero. |
-| `aplicar.sh` / `revertir.sh` | Cambios versionados con respaldo y marcha atrás. Todavía no existen. |
+| `aplicar.sh` | Enciende a Jarvis: crontab marcado, pausa 3 trabajos de Hermes, apaga 12 flujos de n8n de reportes, crea el lector del calendario, prende la aduana, **muestra el resumen y el cierre antes de mandarlos**. Respaldo + `rollback.sh`. Idempotente. |
+| `revertir.sh` | Corre el `rollback.sh` del último `aplicar` vigente: crontab por marcas, Hermes reanuda lo pausado, n8n reactiva lo apagado, aduana apagada. |
 
 ## Cómo se corre
 
 Desde GitHub → Actions → «Hermes Jarvis — acceso controlado al VPS» → Run workflow, o desde la
 sesión con `actions_run_trigger` (`workflow_id: hermes-jarvis.yml`, `ref: main`). La salida
 queda en el log del job, ya redactada.
+
+## Las marcas del crontab
+
+`aplicar` nunca reescribe el crontab a mano: `#jarvis# <línea>` es una línea original que apagó, y
+`<línea> #jarvis` una que agregó (el `sh` del cron toma `#jarvis` como comentario). `revertir` saca
+exactamente eso y respeta lo que otro haya cambiado después. **No editar a mano una línea marcada.**
 
 ## Reglas
 

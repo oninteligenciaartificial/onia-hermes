@@ -9,14 +9,14 @@
 
 **Sesión de control — «Hermes y Sergio management system»** (rama `claude/hermes-jarvis`).
 Dueña de Hermes y del cerebro: qué le llega a Sergio Urcullo por Telegram, el resumen de las
-06:30, el cierre de las 22:00, su calendario, y el orden entre sesiones. Regla vigente:
+06:30, el cierre de las 21:30, su calendario, y el orden entre sesiones. Regla vigente:
 `hermes-content/docs/ONIA_CEREBRO.md` §«La regla de entrega». Estado: `handoff/hermes-jarvis.md`.
 
 | Sesión | Qué es suyo | Lo que la sesión de control LEE de ella (no cambiar sin avisar acá) |
 |---|---|---|
 | **Marca personal: comunidad y contenido** (`claude/marca-personal-contenido-ae658c`) | guiones, carruseles, comunidad, plan de 3 semanas | El resumen de las 06:30 lista «Para grabar hoy» leyendo `cola/plan-3-semanas/S*-GUIONES.md`. Acepta la fecha del `## ` en los dos formatos que ya conviven (`Mié 30-sep` / `Miércoles 14-oct` y `Miércoles 7 de octubre`) y cada pieza como `### DNN-X · Formato · Título`. Un tercer formato o un archivo nuevo = avisar acá (medido el 29-sep: con un solo formato, la semana 2 salía vacía sin error). **Los bloques de ONIA del calendario de Sergio Urcullo del 3 al 10-oct los llenó la sesión de control con estos títulos**: si cambia el plan de esos días, avisar acá para re-llenarlos. |
 | **Onia platform development handoff** (`claude/onia-platform-handoff-56d586`) | onia-platform, SIAT, sales-kit, web pública | El resumen cuenta prospectos por la tarea `[leads-esperando]` del tablero (`scripts/vigia_sin_respuesta.mjs`). Si el aviso de solicitudes de acceso (`lib/aviso-acceso.ts`) cambia, avisar acá: tiene que pasar por la aduana. |
-| **Infra (Codex)** — `handoff/infra-cerebro-loops.md` | VPS, n8n, loops, backups | ⚠️ Desde el 29-sep la **entrega a Sergio Urcullo** (Telegram, `onia-tg.sh`, resumen, cierre) es de la sesión de control. El resto del VPS sigue siendo de infra. |
+| **Infra (Codex)** — `handoff/infra-cerebro-loops.md` | VPS, n8n, loops, backups | ⚠️ Desde el 29-sep la **entrega a Sergio Urcullo** (Telegram, `onia-tg.sh`, resumen, cierre, su calendario) es de la sesión de control. El resto del VPS sigue siendo de infra. **En el crontab, las líneas marcadas `#jarvis` son de la sesión de control**: no editarlas a mano (`revertir` las deshace por marca). Los 12 flujos de n8n que apaga `hermes-jarvis/aplicar.sh` y el flujo nuevo «ONIA - Agenda hoy (Jarvis)» también. |
 
 **Mensajes pendientes entre sesiones** (se borran cuando la destinataria los confirma acá):
 - **→ Marca personal (29-sep):** Hermes va a mostrarle a Sergio Urcullo los guiones del día cada
@@ -27,7 +27,13 @@ Dueña de Hermes y del cerebro: qué le llega a Sergio Urcullo por Telegram, el 
   del VPS (Chatwoot, n8n, el tablero de Hermes), anotalo acá ANTES: el resumen y los avisos leen de ahí.
 - **→ Todas:** para escribirle a Sergio Urcullo por Telegram, usá `onia-tg.sh` con
   `ONIA_AVISO=interrumpe | resumen | sistema`. Un `curl` directo a Telegram es un bug: se salta el
-  silencio de 22:00 a 06:30 y el tope de repeticiones.
+  silencio de 22:00 a 06:30, sus bloques del calendario y el tope de repeticiones. Si tu emisor
+  tiene que mandar foto o video por su cuenta, primero preguntale a la aduana:
+  `ONIA_AVISO_PUEDO=1 onia-tg.sh` → `0` mandá, `75` esperá a la vuelta siguiente (así quedó
+  `vigia-aprobaciones.sh`, 29-sep).
+- **→ Plataforma e Infra (29-sep):** `claude-guardia.sh` ya no le escribe directo: Sentry caído y
+  error nuevo son **tareas del tablero** (`[auto:]`, una por lugar del error) y «contenedor
+  levantado solo» va al cierre. Si un loop tuyo lee esos avisos de Telegram, ahora están en el tablero.
 
 ## Carril marca personal Sergio/ONIA — 2026-09-27
 
