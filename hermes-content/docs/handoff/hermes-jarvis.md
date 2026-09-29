@@ -17,19 +17,19 @@ mover / cancelar probado en su calendario real. **Hoy: ninguno de los cuatro cum
 
 ## 2. Qué quedó EN PRODUCCIÓN
 
-**Nada que él vea.** En `main` (commits `e978929c`, `53fdf234`): el workflow manual
+**Nada que él vea.** En `main`: el workflow manual
 `.github/workflows/hermes-jarvis.yml` y `hermes-content/deploy/hermes-jarvis/diagnostico.sh`
 (solo lectura, salida redactada dos veces). **Nunca se corrió**: espera el toque de Sergio Urcullo.
 
 ## 3. Qué quedó a medias, y dónde
 
-- **Rama `claude/hermes-jarvis`, commit `6dda75f6` — NO está en `main`:** la aduana
-  (`scripts/loops/onia-tg.sh`: `ONIA_AVISO=interrumpe|resumen|sistema`, silencio 22:00-06:30,
-  enfriamiento 6 h, `ESPERA`, `RECUPERADO`), el resumen/cierre (`scripts/loops/jarvis-resumen.sh`),
-  la voz leyendo el resumen, el cableado en `sincronizar.sh`, 32 pruebas nuevas y la regla en
-  `ONIA_CEREBRO.md`. Todo detrás del interruptor `/var/lib/onia-aviso/activo`: mergeado, no
-  cambia nada hasta que `aplicar.sh` lo cree. ⚠️ Si esta sesión muere, el commit está pusheado a
-  la rama: no se pierde, pero nadie lo va a mergear solo.
+- **En `main` desde el 29-sep (`721ba43a`), APAGADO detrás del interruptor
+  `/var/lib/onia-aviso/activo`:** la aduana (`scripts/loops/onia-tg.sh`:
+  `ONIA_AVISO=interrumpe|resumen|sistema`, silencio 22:00-06:30, enfriamiento 6 h, `ESPERA`,
+  `RECUPERADO`), el resumen/cierre (`scripts/loops/jarvis-resumen.sh`), la voz leyendo el
+  resumen, el cableado en `sincronizar.sh`, 33 pruebas nuevas y la regla en `ONIA_CEREBRO.md`.
+  El sincronizador lo copia solo a `/root/bin` (≈1-2 h después del merge), pero **no cambia nada
+  en su Telegram** hasta que `aplicar.sh` cree el interruptor e instale los crons.
 - **`aplicar.sh` / `revertir.sh`: NO existen.** Se escriben con el diagnóstico delante (crontab
   vivo, ids reales de los jobs de Hermes, workflows de n8n activos). Plan: crons 06:30 (`30 10`
   UTC) y 22:00 (`0 2` UTC), voz a 06:33, sacar el cron del parte diario (el resumen lo llama),
