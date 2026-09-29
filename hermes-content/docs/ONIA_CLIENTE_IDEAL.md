@@ -52,7 +52,7 @@ Los topes salen de `lib/plan-catalogo.ts` (pacientes · usuarios · si trae agen
 | 1 profesional solo | **Básico** | 2 usuarios, 300 pacientes, **sin agentes** |
 | 2-3 profesionales + recepción | **Crece** | 3 usuarios, 800 pacientes, **acá empiezan los agentes y la reserva pública** |
 | 4-5 profesionales + recepción | **Profesional** | 5 usuarios, 1.500 pacientes, agentes y reportes completos |
-| 6+ o varios consultorios | **Clínica** | usuarios y pacientes sin tope, **chatbot incluido** |
+| 6+ o varios consultorios | **Completo** | usuarios y pacientes sin tope, **chatbot incluido** |
 
 🔴 **El cliente ideal arranca en Crece, no en Básico.** No es una preferencia de margen: los
 **agentes recién existen desde Crece**, y los agentes son lo único que ningún competidor local
@@ -187,7 +187,7 @@ Lo que se corrigió, con su motivo:
 | "Cumple la ley boliviana" como diferenciador vivo | **Los agentes son el diferenciador; el SIAT está en trámite** | El emisor está al 24,8% ante el SIN. Un diferenciador que no está encendido no se vende |
 | "3-5 clínicas antes de mediados de octubre" | **5 clientes pagando, sin fecha heredada** | La fecha venía de un runway de julio. El objetivo lo ratificó Sergio Urcullo el 5 de septiembre |
 | El contenido "lo opera Arthur" | **No hay nadie externo operando contenido** | Arthur ya no colabora |
-| Planes Básico / Pro / Full | **Básico · Crece · Profesional · Clínica · Empresa** | La escalera C entró el 12 de septiembre. Son cinco escalones, no tres |
+| Planes Básico / Pro / Full | **Básico · Crece · Profesional · Completo · Empresa** | La escalera C entró el 12 de septiembre. Son cinco escalones, no tres |
 
 🔴 **Dos materiales quedaron desalineados y hay que arreglarlos** (anotado, no hecho acá):
 
