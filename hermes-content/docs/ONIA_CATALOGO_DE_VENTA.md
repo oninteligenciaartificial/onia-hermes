@@ -173,7 +173,7 @@ Se venden **después del primer cierre**, sobre cualquier plan. Precios: `lib/pr
 
 | Add-on | Qué hace | Estado |
 |---|---|---|
-| **Chatbot con IA (web + WhatsApp)** | asistente 24/7 que contesta al instante con lo que el dueño cargó y **deriva a un humano** con la conversación completa; NO califica ni hace seguimiento (eso es del bot de ventas de Onia, embudo DEMO) y un pedido de cita lo ESCALA a una persona — `deploy/vps-ops/bot/recepcionista.mjs`; el dueño lo edita CONVERSANDO, ve su guion en pasos, atiende desde la bandeja propia (el bot se aparta cuando contesta él), describe las FOTOS y transcribe audios cuando el respaldo de OpenAI está encendido (el primario, Speaches, no está en el VPS; sin verificar en vivo); IA incluida y atiende 500 conversaciones al mes — las que pasan ese cupo van a una persona del equipo, y se suman de a 200 con una recarga que vence con el mes (cupo y recarga salen de `pricing.ts`, los aplica `lib/chatbot/cupo.ts`) | ✅ vivo (falta solo la prueba del popup +591 para el alta self-service de WhatsApp; canal web ya self-service) |
+| **Agente conversacional de WhatsApp (web + WhatsApp)** — antes «Chatbot con IA»; el nombre nuevo sale de `NOMBRE_ADDON_WHATSAPP` (`pricing.ts` de la rama candidata) | asistente 24/7 que contesta al instante con lo que el dueño cargó y **deriva a un humano** con la conversación completa; **nunca da precios**; NO califica ni hace seguimiento (eso es del bot de ventas de Onia, embudo DEMO); a quien pide turno le manda el link de reserva del negocio y, si el negocio no tiene reserva pública, lo pasa a una persona — `deploy/vps-ops/bot/recepcionista.mjs`; el dueño lo edita CONVERSANDO, ve su guion en pasos, atiende desde la bandeja propia (el bot se aparta cuando contesta él), describe las FOTOS y transcribe audios cuando el respaldo de OpenAI está encendido (el primario, Speaches, no está en el VPS; sin verificar en vivo); IA incluida y atiende 500 conversaciones al mes — las que pasan ese cupo van a una persona del equipo, y se suman de a 200 con una recarga que vence con el mes (cupo y recarga salen de `pricing.ts`, los aplica `lib/chatbot/cupo.ts`) | ✅ vivo (falta solo la prueba del popup +591 para el alta self-service de WhatsApp; canal web ya self-service) |
 | **Chatbot a medida** | integración con el sistema del cliente o flujos propios. **Sin precio de lista**: se define el alcance y recién ahí se cotiza | por definición, a pedido |
 | Agenda pública | link de reserva sin llamadas | 🟢 |
 | Usuario extra | asiento adicional | 🟢 |
@@ -305,6 +305,11 @@ Esto es lo que evita vender algo que después no se entrega.
 - **Visión por computadora.** Evaluada el 2026-08-15: hay caso, **no hay producto**.
   Sin dataset propio y sin medir en obra real, cualquier precisión prometida es
   inventada. No se vende.
+- **El Reprogramador, hasta que la versión candidata llegue a producción.** Existe en la rama
+  candidata de onia-platform (`lib/onia-core/modules/agents-reprogramador.ts`), no en `master`
+  ni en producción: propone reprogramar a quien faltó o canceló y ofrecer un turno liberado a
+  hasta tres personas; el dueño aprueba cada mensaje y nunca reserva solo. El kit de venta ya
+  lo vende: no se muestra en vivo antes del deploy.
 - **Cualquier cifra de resultados de Onia.** Cero clientes pagando. Prohibido inventar
   testimonios, logos o porcentajes.
 

@@ -495,3 +495,114 @@ test("los sujetos salen del disco y las exenciones no estan vencidas", () => {
     );
   }
 });
+
+// ─────────────────────────────────────────────────────────────────────────────
+// PRECIOS, PLANES Y MARCA DEL KIT — atados al CODIGO de onia-platform.
+//
+// Origen (2026-09-28): el kit seguia cotizando los planes viejos (Pro y Full, con sus montos
+// de julio) dos semanas despues de la escalera C, vendia "DentalGest" —el nombre viejo del
+// pack dental— y prometia la factura "sin re-tipear" con la emision SIAT apagada. Ningun gate
+// lo veia: el de SIAT de arriba pide "incluye" en la misma linea, el de volumen mira el cupo,
+// y los cruces de precio miran el bot y el sitio, no el kit que Sergio Urcullo manda por
+// WhatsApp.
+//
+// La regla: todo "Bs <numero>" del kit es un monto que el codigo COBRA (planes en todos sus
+// ciclos, add-ons, recarga) o la tarifa de Meta que pricing.ts deriva. Un ticket de mercado
+// no va en el kit: la cuenta se hace con el del prospecto. Los montos se leen del ref
+// PUBLICADO de onia-platform (fuente-plataforma.mjs explica por que no el working tree).
+import { fuenteDePlataforma, repoPlataforma } from "../hermes-content/deploy/vps-ops/bot/fuente-plataforma.mjs";
+
+/** El numero de `hoja` dentro del bloque `export const RAIZ` (hasta el proximo export). */
+function numeroDe(fuente, raiz, hoja) {
+  const desde = fuente.indexOf(`export const ${raiz}`);
+  assert.notEqual(desde, -1, `no existe "export const ${raiz}" en onia-platform: lo renombraron`);
+  const hasta = fuente.indexOf("\nexport const ", desde + 1);
+  const m = new RegExp(String.raw`\b${hoja}\s*[:=]\s*([\d.]+)`).exec(fuente.slice(desde, hasta === -1 ? undefined : hasta));
+  assert.ok(m, `no encontre ${hoja} en ${raiz}`);
+  return Number(m[1]);
+}
+
+/** Montos que el kit puede citar y nombres de plan que existen, leidos del codigo. */
+function preciosDelCodigo() {
+  const repo = repoPlataforma();
+  const planes = fuenteDePlataforma(repo, "subscription-plans.ts");
+  const pricing = fuenteDePlataforma(repo, "pricing.ts");
+  const montos = new Set();
+  const desde = planes.indexOf("export const DEFAULT_PLAN_AMOUNTS");
+  assert.notEqual(desde, -1, "no existe DEFAULT_PLAN_AMOUNTS en subscription-plans.ts");
+  for (const [, n] of planes.slice(desde, planes.indexOf("};", desde)).matchAll(/:\s*(\d+)/g)) montos.add(Number(n));
+  for (const [raiz, hoja] of [
+    ["WHATSAPP_ADDON", "entryMonthly"],
+    ["WHATSAPP_ADDON", "annualTotal"],
+    ["RECARGA_CONVERSACIONES", "precio"],
+    ["BOOKING_ADDON_PRICE", "monthly"],
+    ["EXTRA_USER_ADDON_PRICE", "monthly"],
+  ]) montos.add(numeroDe(pricing, raiz, hoja));
+  const bsPorMensaje = numeroDe(pricing, "WHATSAPP_ADDON", "utilityUsd") * numeroDe(pricing, "TIPO_CAMBIO_REFERENCIA_BS_POR_USD", "TIPO_CAMBIO_REFERENCIA_BS_POR_USD");
+  montos.add(Math.round(bsPorMensaje * 100) / 100);
+  const desdeLabels = pricing.indexOf("export const PLAN_LABELS");
+  assert.notEqual(desdeLabels, -1, "no existe PLAN_LABELS en pricing.ts");
+  const labels = pricing.slice(desdeLabels, pricing.indexOf("} as const", desdeLabels));
+  const nombres = new Set([...labels.matchAll(/:\s*"([^"]+)"/g)].map((m) => m[1]));
+  return { montos, nombres };
+}
+
+/** "Bs 1.290" -> 1290, "Bs 0,13" -> 0.13. Los [corchetes] del guion no son montos. */
+function montosEnBs(linea) {
+  return [...linea.matchAll(/\bBs\.?\s*(\d{1,3}(?:\.\d{3})+|\d+)(?:,(\d+))?/g)].map(
+    ([, entero, dec]) => Number(`${entero.replaceAll(".", "")}${dec ? `.${dec}` : ""}`),
+  );
+}
+
+/** Los nombres propios que siguen a "plan"/"planes" ("plan Crece", "el plan **Pro**"). */
+function planesNombrados(linea) {
+  return [...linea.matchAll(/\bplan(?:es)?\s+\**([A-ZÁÉÍÓÚ][a-záéíóúñ]+)/g)].map((m) => m[1]);
+}
+
+/** Vende la marca vieja. Perdona la linea que cuenta que es vieja o la prohibe. */
+function venderMarcaVieja(linea) {
+  return /dental\s*gest/i.test(linea) && !/nombre viejo|marca vieja|no es (una )?marca|❌/i.test(linea);
+}
+
+/** Promete que la factura sale del sistema sin tipear. Perdona la regla que lo prohibe y la
+ *  prosa que cuenta el defecto ("el kit prometia..."): la copia de venta no dice "promete". */
+function prometeSinRetipeo(linea) {
+  if (/❌|prohibid|\bnunca\b|promet/i.test(linea)) return false;
+  return /re-?tipe|no\s+(tengas|vas\s+a\s+tener)\s+que\s+tipear|sin\s+tipear|factura\s+(sale|salga)\s+sola|sale\s+del\s+mismo\s+sistema/i.test(linea);
+}
+
+test("el kit cita solo precios, planes y marca que el codigo sostiene", () => {
+  const { montos, nombres } = preciosDelCodigo();
+  const siatVivo = estadoSiatDeLaFuente() === "si";
+  const ofensores = [];
+  for (const rel of materialesVivosDelKit()) {
+    leer(rel).split("\n").forEach((linea, i) => {
+      const donde = `${rel}:${i + 1}`;
+      for (const monto of montosEnBs(linea)) if (!montos.has(monto)) ofensores.push(`${donde}  Bs ${monto} no lo cobra el codigo`);
+      for (const plan of planesNombrados(linea)) if (!nombres.has(plan)) ofensores.push(`${donde}  plan "${plan}" no existe`);
+      if (venderMarcaVieja(linea)) ofensores.push(`${donde}  marca vieja DentalGest (la marca es Onia)`);
+      if (!siatVivo && prometeSinRetipeo(linea)) ofensores.push(`${donde}  promete la factura sin tipear con el emisor apagado`);
+    });
+  }
+  assert.deepEqual(
+    ofensores,
+    [],
+    `El kit se despego del producto. Precios: onia-platform lib/subscription-plans.ts y lib/pricing.ts\n` +
+      `(montos validos: ${[...montos].sort((a, b) => a - b).join(", ")}; planes: ${[...nombres].join(", ")}).\n` +
+      ofensores.join("\n"),
+  );
+});
+
+test("los detectores del kit andan en las dos direcciones", () => {
+  assert.deepEqual(montosEnBs("Profesional Bs 890/mes · anual Bs 8.900 · Meta Bs 0,13 c/u · Bs [total]"), [890, 8900, 0.13]);
+  assert.deepEqual(montosEnBs("| **Precio** | Bs 320/mes | **Bs 750/mes** | Bs 1.500/mes |"), [320, 750, 1500]);
+  assert.deepEqual(planesNombrados("cotizá el plan Crece, nunca el plan **Pro** ni el plan Full"), ["Crece", "Pro", "Full"]);
+  assert.deepEqual(planesNombrados("un plan de trabajo, el plan que te calza"), []);
+  assert.ok(venderMarcaVieja("# DentalGest — La clínica ordenada"));
+  assert.ok(!venderMarcaVieja("El kit vendía DentalGest, que era el nombre viejo del pack dental."));
+  assert.ok(prometeSinRetipeo("Factura SIAT en línea sin re-tipear: la factura sale del mismo sistema"));
+  assert.ok(prometeSinRetipeo("o hacer que la factura salga sola del mismo sistema"));
+  assert.ok(!prometeSinRetipeo("- ❌ \"Onia emite tu factura\" / \"no vas a tener que tipear\""));
+  assert.ok(!prometeSinRetipeo("Cada venta queda lista para cargar en el Portal Web gratuito del SIN."));
+  assert.ok(!prometeSinRetipeo("- **Facturación**: el kit prometía la factura \"sin re-tipear\"."));
+});
