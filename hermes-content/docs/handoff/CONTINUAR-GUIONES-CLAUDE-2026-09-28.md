@@ -10,8 +10,9 @@ pedido al cierre; no inventar un horario ni una cuota de publicaciones.
 - Rama: `codex/guiones-reinicio-20260928`.
 - Archivo de trabajo único:
   `hermes-content/docs/cola/GUIONES-REINICIO-2026-09-28.md`.
-  Tiene primero el guion de Opus 5.5, enseñanza personal, ficha técnica O55,
-  fuentes, caso de prueba y clave de corrección. Después conserva dos guiones
+  Tiene primero la Sesión 1: YouTube horizontal de 5–7 minutos y tres verticales
+  de unos 45–60 segundos, enseñanza personal, ficha técnica O55, fuentes, caso
+  de prueba y clave de corrección. Después conserva un borrador corto y dos guiones
   anteriores (cotizador HTML y corrección de SRT).
 - Leer AGENTS.md y COORDINATION_MANIFEST.md. No mezclar cambios de otras tareas,
   no usar `git add -A`, no publicar ni desplegar.
@@ -141,14 +142,16 @@ entregar el guion como explicación del anuncio, sin experiencia de prueba falsa
 
 ## 6. Próxima acción de Claude
 
-1. Leer el guion prioritario y la ficha O55 en el archivo único indicado.
+1. Leer la Sesión 1 y la ficha O55 en el archivo único indicado. Las cuatro
+   narraciones ya están escritas y revisadas; evitar redactarlas desde cero.
 2. Revalidar únicamente los datos que hayan cambiado desde28-sep. Evitar otra
    exploración masiva: ya están el tema, las fuentes y el caso de prueba.
 3. Si existe acceso autorizado sin nuevo gasto, ejecutar la prueba pequeña y
    completar la ficha; si no, mantener la limitación explícita.
-4. Pulir una sola narración breve, útil y natural sobre Opus5.5. Mostrar el
-   beneficio con un ejemplo. Los datos del fabricante van atribuidos.
-5. Entregar solo guion + enseñanza personal al final, con un enlace discreto
+4. Si la ejecución aporta evidencia nueva, ajustar únicamente las frases
+   afectadas. Las narraciones actuales funcionan como explicación del anuncio
+   y ejercicio con solución calculada, sin afirmar experiencia propia.
+5. Entregar solo los guiones del bloque de grabación + enseñanza personal al final, con un enlace discreto
    a la ficha. El editor prepara todo lo visual. No pedirle capturas ni demos
    a Sergio. Si posteriormente encarga montaje, localizar primero su A-roll.
 
@@ -223,3 +226,33 @@ Corrección para Claude:
 
 Esta ampliación se hizo localmente en el frente de contenido/documentación;
 no necesitó más subagentes ni nueva investigación web.
+
+## 10. Ampliación posterior: paquete de grabación revisado
+
+Sergio pidió seguir avanzando y revisar lo preparado. Se añadió al archivo
+canónico la Sesión 1 completa: horizontal 5–7 minutos y tres verticales de
+45–60 segundos, con enseñanza personal. Dos subagentes existentes retomaron
+trabajo acotado: fuentes oficiales y revisión de las narraciones. Se aplicaron
+sus dos correcciones al ejercicio. La prueba en Opus/Sonnet sigue pendiente.
+
+Se creó `hermes-content/docs/cola/opus55-ejercicio-editor.html`: cinco escenas
+didácticas, con selector horizontal/vertical, navegación y modo captura. Es
+material del editor, no una interfaz de Claude ni una salida del modelo.
+No contiene precios reales de ONIA ni llamadas a servicios externos.
+
+Abrir el HTML por doble clic. Para capturar, elegir formato y escena y pulsar
+C; volver a pulsar C recupera controles. Usar el marco de la escena al encuadrar.
+Conservar sus etiquetas de procedencia. El servidor local de revisión se cierra
+al terminar; no depender de que 127.0.0.1:8766 permanezca disponible.
+
+Verificación: fuentes oficiales reconsultadas, aritmética revisada, conteos de
+palabras y diez combinaciones de escena/formato comprobadas sin desbordamiento
+por geometría DOM. Tres composiciones inspeccionadas en capturas. No hay montaje
+final: requiere localizar el material que grabe Sergio. No solicitarle que
+produzca las pantallas ni los recursos, que son responsabilidad del editor.
+
+La sección 9 diagnosticaba la sesión anterior a esta ampliación. En esta pasada
+el intervalo observado entre 01:15:56 y 01:22:00 UTC fue de 6 min 4 s e incluyó
+escritura, creación de pantallas y revisión; no cubre la exploración anterior
+ni este cierre. No usarlo como duración total de la tarea ni comparación entre
+modelos. En siguientes piezas, registrar cada fase desde su inicio.

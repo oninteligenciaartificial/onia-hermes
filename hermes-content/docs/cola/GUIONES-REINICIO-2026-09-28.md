@@ -1,6 +1,214 @@
 # Guiones y fichas técnicas — 28 de septiembre
 
-## Guion prioritario: Opus 5.5, qué cambia y cómo probarlo
+## Sesión 1 — Opus 5.5: noticia, uso y criterio
+
+**Versión de rodaje:** ampliada el 28-sep local / 29-sep UTC. Reemplaza como
+entrega principal al borrador corto conservado más abajo. Una sesión de al
+menos 60 minutos: 35 horizontal, 20 vertical, 5 retomas. Distribución propuesta;
+el tiempo de rodaje no es duración final. Investigación y edición van aparte.
+
+**Estado:** narraciones preparadas para grabar una explicación y un ejercicio.
+No hay prueba ejecutada en Claude ni material de Sergio grabado. Ninguna frase
+depende de fingir esas dos cosas. El editor muestra gráficos didácticos y datos
+ficticios; la captura de una respuesta real se añadirá solo cuando exista.
+
+### YouTube horizontal — «Opus 5.5: qué cambió y cómo saber si te sirve»
+
+Duración orientativa: 5–7 minutos, según lectura y pausas sobre el ejercicio.
+Los subtítulos de sección organizan el rodaje; no se leen a cámara.
+
+#### Apertura
+
+Sale una IA nueva y enseguida aparece la pregunta: ¿me cambio?
+
+Con Opus 5.5, yo empezaría por una tarea que puedas revisar. Por ejemplo,
+comparar tres presupuestos y encontrar cuál cumple lo que necesitás. Uno
+parece barato, pero el total que anuncia está incompleto. Otro se pasa del
+límite. Y una condición que parece secundaria cambia toda la decisión.
+
+Vamos a ver qué anunció Anthropic y después te dejo el ejercicio completo,
+con las cuentas que deberían salir. Así tenés una forma concreta de evaluarlo.
+
+#### Qué cambió
+
+Anthropic presentó Opus 5.5 el 22 de septiembre. Destaca mejoras para trabajo
+complejo, programación y análisis de documentos, además de respuestas más
+claras. Son afirmaciones del fabricante; todavía no ejecutamos nuestra prueba.
+
+Hay un número que necesita contexto: aproximadamente cuarenta por ciento
+menos costo que Opus 5 en las tareas típicas que evaluaron. Hablan de uso
+facturado por tokens. Tu mensualidad no baja automáticamente ese porcentaje.
+
+También presentaron Sonnet 5.5 el 28 de septiembre. Lo orientan a tareas
+cotidianas delimitadas y mantienen Opus para trabajo más abierto y complejo.
+Ese es el punto de partida para elegir qué comparar.
+
+#### La tarea
+
+Imaginá que necesitás una web durante tres meses. Tenés un máximo de mil
+doscientos bolivianos y dos condiciones obligatorias: usar tu dominio y poder
+exportar tus datos. Los precios del ejercicio son inventados.
+
+La propuesta A cobra trescientos de instalación y doscientos cincuenta al mes.
+Incluye dominio y exportación.
+
+La B cobra cien de instalación y doscientos al mes. Anuncia setecientos en
+total. Pero hay una línea que dice que el dominio cuesta ciento veinte al
+mes adicionales. Es obligatorio. Y tampoco permite exportar los datos.
+
+La C no cobra instalación y cuesta trescientos cincuenta al mes. Incluye lo
+que pediste, pero tiene trescientos de configuración obligatoria.
+
+Ya ves por qué pedir solamente «decime cuál conviene» deja demasiado abierto.
+Tenemos que decirle al modelo qué significa cumplir en este caso.
+
+#### Qué escribir
+
+Abrí un chat nuevo en Claude. Si tenés acceso a Opus 5.5, seleccioná ese modelo
+y pegá las tres propuestas junto con tus requisitos. Después añadí esto:
+
+«Calculá el total de los primeros tres meses. Incluí los cargos iniciales y
+todos los extras obligatorios. Mostrá la fórmula y el dato de cada propuesta
+que usaste. Señalá las contradicciones y cuáles cumplen todos mis requisitos.
+Usá solo la información que te doy. Si falta un dato, indicá qué tengo que
+preguntar antes de decidir».
+
+Fijate que le estamos dando el período, el límite de dinero y las condiciones
+obligatorias. También le pedimos que deje visible el camino hasta la respuesta.
+Eso facilita la revisión, aunque no garantiza que la cuenta esté bien.
+
+#### Cómo revisar la respuesta
+
+Esta es la solución calculada del ejercicio, para que puedas comprobar la
+salida del modelo.
+
+La A suma trescientos más doscientos cincuenta por tres: mil cincuenta.
+Entra en el presupuesto y cumple las dos condiciones.
+
+La B suma cien, más seiscientos de mensualidades, más trescientos sesenta
+del dominio: mil sesenta. El anuncio decía setecientos porque omitía ese
+último cargo. Entra en el presupuesto, pero queda fuera porque no permite
+exportar los datos.
+
+La C suma mil cincuenta de mensualidades y trescientos de configuración:
+mil trescientos cincuenta. Se pasa del máximo.
+
+Con estos datos, la A es la única que cumple todo. Si el modelo eligió bien,
+todavía mirá cómo llegó: puede acertar la opción y equivocarse en una cuenta.
+Revisá los tres totales, el cargo omitido y las condiciones.
+
+#### Una segunda comprobación
+
+Ahora cambiá una sola cosa. En A, reemplazá «Incluye dominio y exportación»
+por «Incluye dominio; exportación no indicada». Abrí otro chat y repetí el
+ejercicio con esa versión.
+
+Ahí ya no tenemos una propuesta que podamos confirmar como válida con toda
+la información disponible. La A podría servir, pero falta preguntar si permite
+exportar. Una respuesta cuidadosa debería dejar esa condición pendiente.
+
+Esta variación te ayuda a mirar si el modelo reconoce lo que falta o completa
+el hueco por su cuenta. Conservá las dos versiones del ejercicio; así podés
+repetirlas después de una actualización.
+
+#### Cómo compararlo con otro modelo
+
+Si también tenés acceso a Sonnet 5.5, repetí las mismas entradas en chats nuevos.
+Mantené las herramientas y los ajustes comparables, y anotá cualquier diferencia
+que no puedas controlar. Guardá la primera respuesta antes de corregirla.
+
+Primero mirá si resuelve la tarea. Después, cuánto tardó y cuántas veces
+tuviste que intervenir. Una respuesta rápida que tenés que rehacer también
+consume tu tiempo. Si usás una API y tenés el costo registrado, añadilo.
+Si estás usando una suscripción sin costo por tarea visible, dejá ese dato
+como no disponible.
+
+Y si los dos lo hacen bien, esa es la conclusión de este ejercicio. Para
+saber cuál te conviene en tu trabajo, seguí con ejemplos de lo que realmente
+hacés: revisar propuestas, preparar documentos o construir una herramienta.
+
+#### Cierre
+
+En una agencia como ONIA, este método puede servir antes de elegir una
+herramienta o contratar un servicio: escribir las condiciones, reunir la
+información y revisar las cuentas. Acá trabajamos con un ejemplo ficticio;
+una decisión real necesita verificar las propuestas originales.
+
+Quedate con la pregunta que podés usar cada vez que salga un modelo:
+¿qué tarea quiero resolver y cómo voy a comprobar que quedó bien?
+
+Con eso, el siguiente lanzamiento ya tiene una prueba concreta esperándolo.
+
+### Vertical 1 — «Opus 5.5: qué significa ese 40%»
+
+Duración orientativa: 45–60 segundos. Tema principal para abrir la sesión.
+
+¿Opus 5.5 cuesta cuarenta por ciento menos? Hay una aclaración que importa.
+
+Anthropic reporta ese ahorro aproximado frente a Opus 5 para tareas típicas
+facturadas por tokens. Combina el precio con la cantidad de tokens que usa.
+Tu suscripción mensual no baja automáticamente cuarenta por ciento.
+
+Si lo usás para trabajar, probalo con una tarea que puedas revisar. Por ejemplo:
+tres presupuestos, un límite de dinero y dos requisitos obligatorios.
+
+Pedile el total completo, los cargos extra y qué propuesta cumple todo.
+Después revisá las cuentas contra los datos originales.
+
+Ahí empezás a saber si te sirve. Para decir cuánto te ahorra, hace falta medir
+tu propia tarea y cuánto trabajo te deja por corregir.
+
+### Vertical 2 — «Este presupuesto dice 700, pero suma 1.060»
+
+Duración orientativa: 45–60 segundos. Ejercicio independiente; no llamarlo
+resultado de Opus. Puede publicarse después del vertical de actualidad.
+
+Este presupuesto anuncia setecientos bolivianos, pero el total es mil sesenta.
+Te muestro dónde está la diferencia con un ejemplo inventado.
+
+Son cien de instalación y doscientos al mes, durante tres meses. Hasta ahí:
+setecientos. Pero el dominio cuesta ciento veinte adicionales cada mes y es
+obligatorio. Faltaban trescientos sesenta.
+
+Cuando uses IA para revisar propuestas, pegá también tus requisitos y pedile:
+«Calculá el total del período, incluí todos los cargos obligatorios y mostrá
+la fórmula con el dato de cada propuesta que usaste».
+
+Después hacé la cuenta vos. Y revisá las condiciones: en este ejemplo tampoco
+permite exportar datos. Si eso era obligatorio, la propuesta queda fuera.
+
+Guardá esta comprobación para cuando tengas que comparar servicios.
+
+### Vertical 3 — «La prueba cambia cuando falta un dato»
+
+Duración orientativa: 45–60 segundos. Enseñanza sobre evaluar respuestas.
+
+Una prueba útil para una IA: dale un problema al que le falte un dato.
+
+Por ejemplo, estás eligiendo un servicio y necesitás poder exportar tus datos.
+Una propuesta entra en tu presupuesto, pero no dice si permite exportar.
+
+Pegá el texto y preguntá: «¿Puedo confirmar que cumple mis requisitos?
+Mostrame dónde se verifica cada uno y qué falta preguntar».
+
+La respuesta esperada tiene que dejar la exportación pendiente. Que el precio
+te sirva no alcanza para confirmar la otra condición.
+
+Podés repetir el mismo ejercicio con Opus 5.5 y Sonnet 5.5. Guardá las respuestas
+y fijate si reconocen la información que falta.
+
+Esto comprueba un caso concreto. Te da una primera señal para seguir evaluando
+el modelo con tareas de tu trabajo.
+
+### Enseñanza para Sergio — después de grabar
+
+La misma investigación sostiene una explicación larga y tres piezas con una
+pregunta propia: qué significa el anuncio, cómo revisar un costo y cómo detectar
+una conclusión sin respaldo. Eso permite profundizar sin repetir el mismo reel.
+La continuidad de la próxima sesión sale de una duda real del ejercicio o de
+una tarea que construyamos. Evitar estirar esta noticia para llenar días.
+
+## Borrador corto inicial — conservado como alternativa
 
 **Pedido actual:** empezar por actualidad. Solo narración para Sergio;
 investigación, ficha, prompts, pantalla y demostración a cargo del editor.
@@ -45,6 +253,43 @@ demuestra ese caso; para comparar modelos hay que repetir tareas variadas
 bajo las mismas condiciones y contar errores, correcciones, tiempo y costo.
 
 ### Ficha técnica O55 — trazabilidad y vigencia
+
+**Ampliación de rodaje revisada:** 28-sep local / 29-sep UTC. Un subagente
+revalidó las fuentes oficiales y otro revisó las cuatro narraciones. Se corrigió
+el condicional de B (sí entra en presupuesto, falla en exportación) y la variante
+de A (quitar solo confirmación de exportación, conservar dominio). El anuncio
+de Sonnet falló al abrirse directamente; su contenido oficial se recuperó en
+búsqueda. No se repitió la revisión de los seis perfiles en esta ampliación.
+
+**Duración:** conteo aproximado, incluyendo notas breves: horizontal 886 palabras,
+verticales 125/135/131. A un supuesto de lectura de 130–155 palabras por minuto,
+horizontal 5,7–6,8 minutos y verticales alrededor de 45–60 segundos. Es estimación
+de producción, no una velocidad de Sergio medida ni un objetivo de retención.
+
+**Material didáctico ya creado:** `opus55-ejercicio-editor.html`, junto a este
+archivo. Tiene cinco escenas originales en horizontal 16:9 y vertical 9:16:
+requisitos, propuestas, solución, dato pendiente y comparación. Abre localmente,
+sin instalar ni contactar servicios. Usar flechas para avanzar y C para ocultar
+controles. Las etiquetas de ejemplo ficticio y solución calculada permanecen.
+No reemplaza la captura de una prueba real. No hay video final ni voz generada.
+
+**Revisión visual:** diez combinaciones (cinco escenas por dos formatos), sin
+elementos fuera del marco según geometría del DOM. Se revisaron capturas de
+requisitos horizontal, solución vertical y comparación vertical. Se redujo el
+espaciado vertical para que entren completas las tres propuestas. No se afirma
+haber revisado capturas de las diez combinaciones. Controles de escena, selector
+de formato y tecla C funcionaron durante la revisión.
+
+**Revisión de avisos de diseño:** se cambió Arial por Segoe UI del sistema.
+Una familia tipográfica es intencional en estas pantallas didácticas locales:
+la jerarquía usa tamaño/peso y no necesita descargar fuentes. Los contadores
+01/05 identifican diapositivas para edición; se clasifican como señalización
+funcional, no decoración editorial. No se persistieron excepciones del hook.
+
+**Continuidad preparada:** terminar esta pieza, registrar dudas que genere y
+elegir después entre construir el cotizador o corregir subtítulos, según una
+necesidad real y actualidad comprobada. Esos dos guiones siguen siendo borradores
+sin demo ejecutada. No se prometen fechas, resultados ni una serie aprobada.
 
 - **Revisión:** 28-sep-2026, completada hasta 23:37 UTC. Volver a comprobar anuncio,
   disponibilidad y precios el día de publicación. La palabra «hoy» solo sirve
