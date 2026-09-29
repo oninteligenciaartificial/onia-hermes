@@ -10,6 +10,9 @@
  *   ilustrado  Santiago Muñoz: título con énfasis de color, ilustración dominante, pie corto,
  *              flecha de continuidad manuscrita. Con `badge` sirve de portada.
  *   lista      Santiago Muñoz: título + 3–5 filas con ícono/logo, etiqueta y una línea.
+ *   dato       Erik Taveras / Ingeniero Binario: una cifra gigante + qué significa.
+ *   captura    Carlos Domínguez: captura real (pantalla, comando, prompt) como prueba.
+ *   cierre     los 8 referentes: «Comentá PALABRA» + qué recibís.
  * La imagen la pinta Higgsfield SIN letras (scripts/carousel_images.mjs); el texto va acá.
  * Los logos son los oficiales de hermes-content/references/brand-claude/ (nunca recreados).
  */
@@ -55,7 +58,22 @@ function crear({ esc, emph, ACCOUNTS, BRAND, getFmt }) {
     return `<div class="c-lista${(s.items || []).length >= 4 ? ' compacta' : ''}"><h2 class="t">${emph(s.headline || '')}</h2>${s.body ? `<p class="sub">${emph(s.body)}</p>` : ''}<ul>${rows}</ul></div>`;
   }
 
-  const LAYOUTS = { logos: logosHtml, analogia: analogiaHtml, ensayo: ensayoHtml, ilustrado: ilustradoHtml, lista: listaHtml };
+  // Erik Taveras / Ingeniero Binario: el número ES la lámina.
+  function datoHtml(s) {
+    return `<div class="c-dato"><div class="big">${esc(s.value || '')}</div><h2 class="t">${emph(s.headline || '')}</h2>${s.body ? `<p class="sub2">${emph(s.body)}</p>` : ''}</div>`;
+  }
+
+  // Carlos Domínguez: la prueba es la pantalla real (captura, comando, prompt), no un dibujo.
+  function capturaHtml(s) {
+    return `<div class="c-captura">${s.headline ? `<h2 class="t">${emph(s.headline)}</h2>` : ''}<figure class="shot">${img(s.image, 'shot-img')}</figure>${s.body ? `<p class="caption">${emph(s.body)}</p>` : ''}</div>`;
+  }
+
+  // Los 8 referentes cierran igual: una palabra para comentar y qué recibís.
+  function cierreHtml(s) {
+    return `<div class="c-cierre"><p class="pre">Comentá</p><div class="kw">${esc(s.keyword || '')}</div><p class="sub2">${emph(s.body || '')}</p></div>`;
+  }
+
+  const LAYOUTS = { logos: logosHtml, analogia: analogiaHtml, ensayo: ensayoHtml, ilustrado: ilustradoHtml, lista: listaHtml, dato: datoHtml, captura: capturaHtml, cierre: cierreHtml };
 
   return function referentesHtml(slide, idx, total, account, args) {
     const FMT = getFmt();
@@ -126,6 +144,17 @@ body{background:var(--paper);color:var(--ink);font-family:'DM Sans',system-ui,sa
 .c-lista li div{display:flex;flex-direction:column;gap:4px}
 .c-lista b{font-size:50px;font-weight:800;letter-spacing:-.5px}
 .c-lista li span{font-size:40px;color:var(--soft)}
+/* dato */
+.c-dato .big{font-family:'Bricolage',sans-serif;font-weight:800;font-size:300px;line-height:.85;letter-spacing:-12px;color:var(--acc);margin-bottom:28px}
+.sub2{font-size:44px;line-height:1.25;color:var(--soft);margin-top:22px;max-width:900px}
+/* captura */
+.c-captura{display:flex;flex-direction:column;gap:34px}
+.shot{border:3px solid var(--ink);border-radius:24px;overflow:hidden;background:oklch(99% 0.004 85);box-shadow:0 18px 40px oklch(40% 0.02 85 / .18)}
+.shot-img{display:block;width:100%;max-height:760px;object-fit:contain}
+/* cierre */
+.c-cierre{display:flex;flex-direction:column;align-items:center;text-align:center}
+.c-cierre .pre{font-family:'Caveat',cursive;font-size:72px;color:var(--soft)}
+.c-cierre .kw{font-family:'Bricolage',sans-serif;font-weight:800;font-size:170px;letter-spacing:.06em;line-height:1;background:var(--ink);color:var(--paper);padding:26px 50px 34px;border-radius:28px;margin:10px 0 18px}
 .compacta ul{gap:18px;margin-top:40px}.compacta li{padding:20px 30px}.compacta b{font-size:42px}.compacta li span{font-size:34px}.compacta .li-n{width:68px;height:68px;font-size:46px}.compacta .li-icon{width:76px;height:76px}
 </style></head><body>
 <div class="slide l-${layout}">${tag}<main class="main">${render(slide)}${cta}</main><div class="handle">${esc(acc.handle)}</div>${next}</div>

@@ -46,6 +46,13 @@ Cada lámina elige `layout`:
 | `analogia` | Bastian: frase corta + objetos que explican solos (1 o 2 bloques «no es / es») | 1 frase por bloque | foto Pexels sobre blanco |
 | `lista` | Santiago: título + 3–5 filas con ícono/logo, etiqueta y una línea | etiqueta ≤ 3 palabras, línea ≤ 8 | logos o números |
 | `ensayo` | Bastian: texto grande sobre papel, sin cajas | ≤ 60 palabras | ninguna |
+| `dato` | Erik / Ingeniero Binario: una cifra gigante + qué significa (`value`) | título ≤ 6 palabras | ninguna |
+| `captura` | Carlos: la pantalla real como prueba | título ≤ 8, pie ≤ 12 | captura real (nunca maqueta) |
+| `cierre` | los 8 referentes: «Comentá PALABRA» + qué recibís (`keyword`) | 1 línea | ninguna; solo si el recurso ya existe |
+
+Pendientes del catálogo (en `patrones/`): P-COMPARA, P-FOTO-ESCENA, P-DIAGRAMA, P-TABLA-MARCADOR.
+⚠️ Carlos Domínguez señala como rasgo de «plantilla hecha con IA» el fondo crema, la cursiva en
+títulos y las etiquetas 01/02: la paleta de papel del pack espera el OK de Sergio.
 
 Render: `node scripts/carousel_render.js --brief <dir>/brief.json --out <dir> --account sergio --pack referentes --format feed`
 y `node scripts/carousel_contactsheet.js --dir <dir>`. Ejemplo completo y aprobado a la vista:

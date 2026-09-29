@@ -239,7 +239,7 @@ Cierre con encuesta de dos botones.
 
 ## 2. Catálogo de patrones (12)
 
-Regla que no cambia (SKILL §0): la imagen viene de afuera y NUNCA lleva texto; título, cuerpo,
+Regla que no cambia (SKILL, «La regla que ordena todo»): la imagen viene de afuera y NUNCA lleva texto; título, cuerpo,
 logos, tablas, barras y diagramas los dibuja el código.
 
 Leyenda de zonas: `y` = franja vertical en % de 1350; `x` = % de 1080. «Cap» = altura de la

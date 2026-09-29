@@ -101,7 +101,7 @@ test('todo pack listado RENDERIZA (no solo figura en la lista)', () => {
   }
 });
 test('referentes: cada layout renderiza y uno desconocido falla claro', () => {
-  for (const layout of ['logos', 'analogia', 'ensayo', 'ilustrado', 'lista']) {
+  for (const layout of ['logos', 'analogia', 'ensayo', 'ilustrado', 'lista', 'dato', 'captura', 'cierre']) {
     const html = referentesHtml({ layout, headline: 'H *x*', body: 'b', items: [{ label: 'L', text: 't' }] }, 1, 3, 'sergio', {});
     assert.ok(html.includes('</html>') && html.includes(`l-${layout}`), layout);
   }
