@@ -45,6 +45,7 @@ concurrency:
 jobs:
   deploy:
     name: Build (ubuntu) + deploy (SSH) ONIA Center
+    # Queda en ubuntu-latest a proposito: buildea Next y su cabecera explica por que NO en el VPS.
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:

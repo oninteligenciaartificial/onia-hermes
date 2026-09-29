@@ -35,6 +35,8 @@ env:
 jobs:
   hygiene:
     name: Audit + auto-clean docs, deliver report
+    # Queda en ubuntu-latest a proposito: lee el arbol completo (6,2 GB en HEAD) y en el
+    # runner propio del VPS quedaria en disco (medido el 28-sep: 11 GB con el clon).
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
