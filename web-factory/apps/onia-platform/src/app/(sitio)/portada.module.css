@@ -24,7 +24,7 @@
 .heroTitulo {
   font-size: clamp(2.6rem, 1.1rem + 6.2vw, 5.6rem);
   line-height: 0.98;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
   max-width: 16ch;
   margin: 0;
   text-wrap: balance;
@@ -267,7 +267,7 @@
 
 .nocheFrase {
   font-size: clamp(1.3rem, 1rem + 1.1vw, 1.9rem);
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.02em;
   line-height: 1.15;
   margin: 0;
