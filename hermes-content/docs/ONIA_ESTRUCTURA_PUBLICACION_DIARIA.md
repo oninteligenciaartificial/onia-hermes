@@ -12,12 +12,24 @@
 |---|---|---|---|
 | **Feed** | 3 | pilar: **Samuel** · b-roll: **Sergio-Samuel** · video normal: **Sergio** | cuando toca carrusel, el **carrusel REEMPLAZA al b-roll** ese día |
 | **Trial** | 4 | los 3 del feed + **1 yap (Samuel)** | el yap replica un video del día con otra edición |
-
-> **29-sep-2026:** Sergio Urcullo pidió que el yap lo haga el editor (Claude) y se publique como
-> **Trial reel** de Instagram por API. Circuito: `hermes-content/deploy/vps-ops/publicar/README.md`.
 | **Trial v2** | 3-5 | **Sergio a cámara** | temas de IA, **cero o mínima edición** |
 
 **La cuenta: Feed 3 + Trial 7 (4 + los v2) = 10-13 piezas al día.**
+
+### 29-sep-2026 · cómo se cumplen 10-13 grabando 3 videos por día
+
+Sergio Urcullo graba ~1 hora y 3 videos por día (plan de 3 semanas); el yap y la publicación los
+hace el editor (Claude) y los **Trial** son los *Trial reels* de Instagram por API (solo NO
+seguidores; `hermes-content/deploy/vps-ops/publicar/README.md`). La regla de 10-13 sigue viva:
+
+| Carril | Piezas | De dónde salen |
+|---|---|---|
+| **Feed** | 3 | los 3 videos grabados (A tutorial · B actualidad · C negocio/historia o clip del YouTube) |
+| **Trial** | 6 | **2 yaps por video**, cada uno con OTRO gancho y otro largo (no un recorte del mismo) |
+| **Trial v2** | 1-3 | tomas extra de Sergio a cámara sin edición, si las graba; si no, el carrusel del día |
+| **Total** | **10-12** | + los largos de YouTube (lun · mié · vie) y los carruseles (mar · jue · sáb) |
+
+Si Samuel produce (pilar, b-roll, yap propio), suma encima; el piso de 10 ya no depende de él.
 
 Reglas que siguen vivas del plan del 11-sep:
 - Al feed va SIEMPRE **uno serio de IA** (el "normal"). Los trial v2 varían: Bolivia · IA · negocio.
