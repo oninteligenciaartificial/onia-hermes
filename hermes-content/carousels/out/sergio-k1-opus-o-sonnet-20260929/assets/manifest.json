@@ -1,0 +1,15 @@
+{
+  "date": "2026-09-29T05:16:45.375Z",
+  "total": 0.12,
+  "manifest": [
+    {
+      "slide": 1,
+      "model": "text2image_soul_v2",
+      "prompt": "Editorial still-life photograph, 35mm lens, warm natural window light, ivory and charcoal tones with one small muted deep-green detail, shallow depth of field, real materials. Two smooth river stones of clearly different size resting side by side on a dark walnut table, soft morning window light from the left. Minimal composition of plain natural materials, completely unbranded, calm empty surroundings.",
+      "cost": 0.12,
+      "job": "1a99e659-ea36-4d73-aacb-fe14a70a0b81",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260929_051615_1a99e659-ea36-4d73-aacb-fe14a70a0b81.png",
+      "file": "hermes-content/carousels/out/sergio-k1-opus-o-sonnet-20260929/assets/slide-01.png"
+    }
+  ]
+}

@@ -120,7 +120,10 @@ function crear({ esc, emph, roleFor, ACCOUNTS, BRAND, getFmt }) {
 
   function renderNote(visual, slide) {
     const label = visual.label || slide.pill || 'IDEA CLAVE';
-    const value = visual.value || visual.note || slide.callout || 'Una decisión concreta antes de abrir la herramienta.';
+    const value = visual.value || visual.note || slide.callout;
+    // Sin texto propio no hay tarjeta: antes se rellenaba con una frase fija que
+    // terminaba publicada en carruseles que no hablaban de eso (visto 29-sep).
+    if (!value) return '';
     return `<div class="visual visual-note-card">
       <div class="visual-label">${esc(label)}</div>
       <div class="note-mark">↗</div>

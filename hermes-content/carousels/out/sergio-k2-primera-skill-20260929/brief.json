@@ -1,0 +1,129 @@
+{
+  "title": "Tu primera skill de Claude Code en 5 pasos",
+  "caption": "Una skill es un archivo que le enseña a Claude Code a hacer algo, y lo usa solo cuando hace falta.\n\nLa trampa está en el paso 3: la descripción. Claude la lee para decidir si usar la skill. Si es vaga, nunca la va a usar.\n\nEmpezá con algo que le explicás una y otra vez. La plantilla completa está en la comunidad (link en mi web).",
+  "hashtags": [
+    "#claudecode",
+    "#claude",
+    "#skills",
+    "#ia",
+    "#programacion",
+    "#bolivia"
+  ],
+  "serie": "IA PRÁCTICA",
+  "episodio": "K2",
+  "job": "education",
+  "slides": [
+    {
+      "number": 1,
+      "role": "cover",
+      "pill": "Claude Code",
+      "headline": "Tu primera *skill* en 5 pasos",
+      "body": "Dejá de explicarle lo mismo cada sesión.",
+      "image_prompt": "A single small green seedling sprouting from dark soil in a plain terracotta pot on a light oak table, soft side light.",
+      "alt_text": "Tu primera skill de Claude Code en 5 pasos",
+      "bg": "hermes-content/carousels/out/sergio-k2-primera-skill-20260929/assets/slide-01.png"
+    },
+    {
+      "number": 2,
+      "role": "stakes",
+      "pill": "El problema",
+      "headline": "Le explicás lo mismo *cada vez*",
+      "body": "Cómo nombrar archivos, qué revisar antes de terminar, qué no tocar. Una skill lo escribe una vez y Claude lo aplica solo.",
+      "alt_text": "El problema de repetir instrucciones",
+      "callout": "Escribilo una vez"
+    },
+    {
+      "number": 3,
+      "role": "point",
+      "pill": "01 · La carpeta",
+      "headline": "Creá la ruta *exacta*",
+      "body": "Dentro de tu proyecto, una carpeta con el nombre de la skill y un archivo SKILL.md en mayúsculas.",
+      "visual": {
+        "type": "terminal",
+        "label": "RUTA",
+        "lines": [
+          {
+            "value": ".claude/skills/mi-skill/SKILL.md",
+            "kind": "command"
+          }
+        ]
+      },
+      "alt_text": "Ruta de una skill de Claude Code"
+    },
+    {
+      "number": 4,
+      "role": "point",
+      "pill": "02 · Arriba del archivo",
+      "headline": "Dos datos: *name* y *description*",
+      "body": "Van entre dos líneas de guiones, al principio del SKILL.md.",
+      "visual": {
+        "type": "terminal",
+        "label": "SKILL.md",
+        "lines": [
+          {
+            "value": "---",
+            "kind": "comment"
+          },
+          {
+            "value": "name: mi-skill",
+            "kind": "command"
+          },
+          {
+            "value": "description: Usar cuando ...",
+            "kind": "command"
+          },
+          {
+            "value": "---",
+            "kind": "comment"
+          }
+        ]
+      },
+      "alt_text": "Frontmatter con name y description"
+    },
+    {
+      "number": 5,
+      "role": "point",
+      "pill": "03 · El paso crítico",
+      "headline": "La descripción decide *si la usa*",
+      "body": "Claude la lee para saber si la skill aplica a lo que le pediste. Escribí CUÁNDO usarla, con las palabras que vos usarías al pedirlo.",
+      "callout": "Vaga = nunca se activa",
+      "alt_text": "La descripción decide cuándo se usa la skill"
+    },
+    {
+      "number": 6,
+      "role": "save",
+      "pill": "04 y 05",
+      "headline": "Escribila y *probala*",
+      "body": "Escribí los pasos como se los explicarías a alguien nuevo. Después pedile a Claude la tarea con tus palabras y mirá si la skill se activa.",
+      "visual": {
+        "type": "matrix",
+        "label": "CHECKLIST",
+        "items": [
+          {
+            "title": "ruta",
+            "body": ".claude/skills/<nombre>/SKILL.md"
+          },
+          {
+            "title": "description",
+            "body": "cuándo usarla, con tus palabras"
+          },
+          {
+            "title": "prueba",
+            "body": "pedí la tarea y mirá si la usa"
+          }
+        ]
+      },
+      "save_worthy": true,
+      "alt_text": "Checklist para crear una skill"
+    },
+    {
+      "number": 7,
+      "role": "cta",
+      "pill": "Plantilla",
+      "headline": "La plantilla está en la *comunidad*",
+      "body": "Copiala, cambiá dos líneas y tenés tu primera skill. Link en mi web.",
+      "cta": "COMUNIDAD EN LA BIO",
+      "alt_text": "Plantilla de skill en la comunidad"
+    }
+  ]
+}

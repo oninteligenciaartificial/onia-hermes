@@ -1,0 +1,15 @@
+{
+  "date": "2026-09-29T05:18:05.095Z",
+  "total": 0.12,
+  "manifest": [
+    {
+      "slide": 1,
+      "model": "text2image_soul_v2",
+      "prompt": "Editorial still-life photograph, 35mm lens, warm natural window light, ivory and charcoal tones with one small muted deep-green detail, shallow depth of field, real materials. A single small yellow feather resting on a dark slate surface, soft window light, fine texture detail. Minimal composition of plain natural materials, completely unbranded, calm empty surroundings.",
+      "cost": 0.12,
+      "job": "7f12cb7a-7644-42ce-a5c6-5f131a655561",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260929_051735_7f12cb7a-7644-42ce-a5c6-5f131a655561.png",
+      "file": "hermes-content/carousels/out/sergio-k3-claude-md-historia-20260929/assets/slide-01.png"
+    }
+  ]
+}
