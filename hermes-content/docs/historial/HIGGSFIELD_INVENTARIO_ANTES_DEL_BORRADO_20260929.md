@@ -1,3 +1,9 @@
+> ⚠️ **Corregido el mismo 2026-09-29.** Esta foto repite una afirmación FALSA de docs anteriores:
+> que la cara de Lucía venía de «cuadros de video de una persona real». Sergio Urcullo la hizo 100%
+> con IA (el video fuente es `hf_20260615_…mp4`, una salida de Higgsfield). Las fuentes de Lucía se
+> CONSERVAN; el alcance real del borrado está en `LUCIA-HIGGSFIELD-IDENTITY.json` →
+> `deletion_scope_2026_09_29`.
+
 # Inventario de Higgsfield antes del borrado total — 2026-09-29
 
 > **Foto de un día, NO fuente de verdad.** Lo vigente vive en

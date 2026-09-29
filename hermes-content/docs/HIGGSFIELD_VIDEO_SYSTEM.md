@@ -12,9 +12,10 @@ strategy, approvals, publishing decisions and memory.
 > Medido desde una sesión en la nube (Claude Code, entorno `Default`) con el MCP de Higgsfield
 > conectado. Cada punto dice cómo se verificó. Si choca con algo de más abajo, gana esto.
 
-**1. Identidad: borrón y cuenta nueva.** Sergio Urcullo decidió rehacer las caras desde cero
-(*«borralo nomás… solo las caras lo hacemos de nuevo»*). Todos los Souls y Elements anteriores
-quedan retirados. El inventario de lo que había, con qué era cada uno, está en
+**1. Identidad: se fija la cara ORIGINAL de Lucía; el resto se retira.** ⚠️ Corregido el mismo
+día: primero se decidió «caras desde cero» sobre la premisa falsa de que Lucía venía de una
+persona real. Sergio Urcullo la hizo 100% con IA y se conserva. Retirados de verdad: los que lista
+el manifest en `deletion_scope_2026_09_29`. El inventario de lo que había, con qué era cada uno, está en
 `historial/HIGGSFIELD_INVENTARIO_ANTES_DEL_BORRADO_20260929.md`.
 
 **2. Borrar no existe fuera de la web.** El MCP rechaza `show_characters(action=delete)` con
@@ -36,8 +37,9 @@ SHA256) tiene `soul-id create/get/list/wait` y **no conoce los Elements**. La AP
   la cuenta. **5.2(i):** prohibido revender el servicio. **1.2:** MCP, CLI y API solo para uso
   propio o interno. Si mañana se venden modelos o publicidad, se venden las **salidas**, no el
   acceso a Higgsfield.
-- **4.2(b) y 5.3:** para subir la cara de una persona real hace falta su consentimiento. Por eso la
-  cara anterior de Lucía (cuadros de video de una persona real, sin consentimiento) no podía seguir.
+- **4.2(b) y 5.3:** para subir la cara de una persona real hace falta su consentimiento. ~~Por eso la
+  cara anterior de Lucía no podía seguir~~ — **falso**: la cara de Lucía es 100% IA (corregido
+  2026-09-29). La regla vale para caras de personas reales, como las fotos de Sergio Urcullo.
 - **5.2(xi):** prohibido presentar una salida como hecha por humanos. **5.5:** declarar IA donde la
   ley lo pida. Coincide con la regla de Lucía: es IA y lo dice.
 
@@ -85,6 +87,23 @@ imágenes (`show_characters action=train`), así que el dataset v4 es de 20.
 - Workflows incluidos: `character-sheet`, `ad-multiplier`, `faceless-video`, `narrator`,
   `subtitles`, `thumbnail-generation`, `brand-asset-creation`, `website-builder-flow` y la
   familia `ugc-*` (saas, product, review, try-on, tutorial, unboxing, website).
+
+**8. Cómo se consigue la misma cara desde una referencia (medido 2026-09-29).**
+- **`<<<element_id>>>` en el prompt, por MCP, inyecta SOLO la primera foto del Element.** Se vio en
+  los datos del job (`reference_elements` con 1 media aunque `lucia-skin-v1` tenga 7). Para que el
+  modelo reciba todos los ángulos, se pasan las `media_ids` en `medias[]` con rol
+  `image_references`. Así el job registra las 7.
+- **Guía oficial de prompts** (skills de Higgsfield en `.agents/skills/higgsfield-generate/references/`):
+  - menos de ~200 tokens, porque los prompts largos distorsionan;
+  - con referencia, **describir lo que cambia** (escena, luz, ropa, gesto) y **no volver a
+    describir la cara**;
+  - frasear en positivo, porque casi ningún motor tiene negativo.
+- **Motor según el catálogo oficial:**
+  - cara metida en una escena compleja → **Seedream 4.5**;
+  - personaje con referencias → **Nano Banana** (Pro en los casos difíciles);
+  - Soul entrenado → **Soul 2.0** para fotos y **Soul Cinema** para cine.
+- **Soul ID:** la guía del CLI dice 5–20 fotos (punto dulce 8–12); la web dice 20–80. Se usan
+  **20**, variadas en ángulo, luz, expresión y distancia, de 1024 px o más, sin recortes de cara.
 
 ## Arquitectura vigente
 

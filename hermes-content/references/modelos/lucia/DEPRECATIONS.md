@@ -3,19 +3,26 @@
 Vigente desde 2026-09-22. Este índice evita que Codex o Claude rescaten una receta histórica como
 si fuera la política actual.
 
-> ## 🔴 2026-09-29 — TODA la identidad anterior queda retirada
+> ## 🔴 2026-09-29 — La cara de Lucía se CONSERVA; lo demás se retira
 >
-> Sergio Urcullo: *«borralo nomás… solo las caras lo hacemos de nuevo»*. **Ningún Soul ni Element
-> creado antes del 2026-09-29 se usa**, aunque un doc (de cualquier fecha) lo llame «vigente»,
-> «canónico», «ancla» o «USAR ESTE». Eso incluye `lucia-skin-v1` (`58bbd635…`), el backup
-> `902eeebb…`, el avatar de Marketing Studio `a1e334f3…`, los Souls de Mara, de Modelo 2 y los
-> **cinco Souls de Sergio Urcullo** (`1238064e…`, `05cebe09…`, `bce5feb0…`, `aeaa74af…`,
-> `a5f9ee23…`). La lista completa con qué era cada uno:
+> ⚠️ **Corregido el mismo 2026-09-29: acá decía que TODA la identidad anterior quedaba retirada,
+> incluida la cara de Lucía, porque «venía de una persona real». Era falso.** Sergio Urcullo, que
+> la creó: *«NO ES CARA REAL, LA PRIMERA LUCÍA LA HICE 100% IA»*. El video fuente
+> (`hf_20260615_…mp4`) es una salida de Higgsfield; «frame REAL» quería decir «cuadro sin
+> regenerar». **El peligro de dejarlo:** se borraba la mejor versión de Lucía y se gastaba en una
+> cara nueva que él no quiere (ya se gastaron 23 créditos así).
+>
+> **Se CONSERVAN (fuente de v4, no borrar):** `lucia-skin-v1` (`58bbd635…`, 7 ángulos),
+> `lucia-surgical-anchor` (`902eeebb…`), `lucia-face-real-anchor` (`ced20cc2…`, historia), el
+> photoshoot de 10 ángulos (`references/models/lucia-surgical-shoot-20260707/`), outfits y lugares.
+> **Se retiran:** los Souls de Lucía `36305a9b…` (piel roja) y `e6d8703c…` (derivó), Mara,
+> Modelo 2, los **cinco Souls de Sergio Urcullo** (`1238064e…`, `05cebe09…`, `bce5feb0…`,
+> `aeaa74af…`, `a5f9ee23…`), los ZZ-TEST y los productos. Alcance exacto:
+> `LUCIA-HIGGSFIELD-IDENTITY.json` → `deletion_scope_2026_09_29`. Inventario completo:
 > `hermes-content/docs/historial/HIGGSFIELD_INVENTARIO_ANTES_DEL_BORRADO_20260929.md`.
 >
-> Solo valen los IDs `LUCIA-V4-*` que registre `LUCIA-HIGGSFIELD-IDENTITY.json`. Higgsfield no
-> permite borrar por MCP ni por CLI (verificado): el borrado físico lo hace Sergio Urcullo en la
-> web. Mientras tanto, los IDs viejos pueden seguir apareciendo en el selector: **se elige por ID**.
+> Higgsfield no permite borrar por MCP ni por CLI (verificado): lo hace Sergio Urcullo en la web.
+> **Se elige por ID**, nunca por nombre.
 >
 > ⚠️ `scripts/video_lab.py` (`SERGIO_AVATAR_REFERENCE_PACK`) todavía lista el Soul
 > `1238064e…` como aprobado. Es un gate de otro carril (video-lab / marca personal): no se tocó.
@@ -23,9 +30,11 @@ si fuera la política actual.
 
 | Fuente/afirmación histórica | Estado | Reemplazo |
 |---|---|---|
-| Cualquier ID de Soul/Element anterior al 2026-09-29 | **Retirado** (borrado manual pendiente en la web) | IDs `LUCIA-V4-*` del manifest |
+| IDs de Soul/Element anteriores al 2026-09-29 **salvo las fuentes de Lucía** | **Retirado** (borrado manual pendiente en la web) | `lucia_original_sources_keep` + IDs `LUCIA-V4-*` del manifest |
 | «Pedirle a Higgsfield autorización escrita antes de entrenar» (plan v4 del 23-sep) | Superado por decisión de Sergio Urcullo (2026-09-29): se entrena siguiendo la guía oficial | `training_rights_gate` en el manifest |
 | `soul_cast` como motor de casting | Descartado: ignora el prompt e inventa un personaje propio | `soul_2` / `nano_banana_pro` / `gpt_image_2_5` con prompt de casting |
+| «La cara de Lucía viene de una persona real sin consentimiento» (manifest 22-sep, `LUCIA.md` §9) | **FALSO** — Sergio Urcullo la hizo 100% con IA; el video fuente es `hf_…mp4` de Higgsfield | `rights_gate.correction_2026_09_29` del manifest |
+| `<<<element_id>>>` como forma de pasar los 7 ángulos de `lucia-skin-v1` | Insuficiente por MCP: el job registra **solo la primera** foto del Element (medido 2026-09-29) | pasar las 7 `media_ids` explícitas en `medias` con rol `image_references` |
 | `TECNICA-HIGGSFIELD.md`: “solo navegador” | Superada por hallazgos posteriores del mismo archivo | `HIGGSFIELD_VIDEO_SYSTEM.md` + bloque vigente al inicio de la técnica |
 | `BANCO-OFICIAL.md`: “no se genera con Soul” | Válida solo para los Souls actuales | Estrategia de dos carriles en `LUCIA-HIGGSFIELD-IDENTITY.json` |
 | `LUCIA.md`: `58bbd635…` ganó el test del 13-ago | Falso: ese Element todavía no existía | Baseline vigente con A/B pendiente frente a `902eeebb…` |

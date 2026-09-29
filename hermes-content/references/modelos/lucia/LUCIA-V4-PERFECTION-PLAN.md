@@ -1,8 +1,9 @@
 # Lucía v4 — plan de perfeccionamiento de identidad
 
-Estado: **2026-09-29 — casting ejecutado (12 candidatas, 10,46 cr); esperando que Sergio Urcullo
-elija el master.** Decisión del mismo día: se rehace la cara **desde cero** y se borra toda la
-identidad anterior (ver `DEPRECATIONS.md`).
+Estado: **2026-09-29 — se fija la cara ORIGINAL de Lucía.** ⚠️ Corregido el mismo día: el plan pasó
+por «cara nueva desde cero» (castings C01–C26, 23,04 cr) por una premisa falsa (que la cara venía
+de una persona real). Sergio Urcullo la hizo 100% con IA y prefiere la original. Master = la cara
+original: photoshoot de 10 ángulos (`STACK-rasgos-10-angulos.jpg`) + `lucia-skin-v1` (7 ángulos).
 
 Fecha de auditoría original: 2026-09-23
 

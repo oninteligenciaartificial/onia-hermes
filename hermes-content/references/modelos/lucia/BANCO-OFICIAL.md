@@ -1,6 +1,12 @@
 # Banco oficial de Lucía — qué se puede usar HOY
 
-> ## 🔴 2026-09-29: este banco es de la cara RETIRADA. Hoy no hay banco vigente.
+> ## ✅ 2026-09-29 (corregido el mismo día): este banco VUELVE a ser válido
+>
+> Se había marcado «de la cara retirada» por la premisa falsa de que Lucía venía de una persona
+> real. Sergio Urcullo la hizo 100% con IA y se conserva su cara: el banco y el photoshoot de 10
+> ángulos son la fuente de v4. Texto original de la nota, como historia:
+>
+> ~~Este banco es de la cara RETIRADA. Hoy no hay banco vigente.~~
 >
 > Sergio Urcullo decidió rehacer la cara de Lucía **desde cero** (v4, solo texto, sin referencias
 > de la cara anterior). Todo lo listado abajo pertenece a la identidad retirada: **no entra en

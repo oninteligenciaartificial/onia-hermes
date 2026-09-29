@@ -1,6 +1,12 @@
 # Técnica de Higgsfield — lo que funciona, probado en la web
 
-> ## 🔴 2026-09-29: los IDs de este archivo están retirados
+> ## ✅ 2026-09-29 (corregido el mismo día): los IDs de Lucía de este archivo siguen vigentes como fuente
+>
+> La nota de abajo los daba por retirados por una premisa falsa (Lucía no viene de una persona real:
+> la hizo Sergio Urcullo 100% con IA). Retirados de verdad: solo los que lista
+> `LUCIA-HIGGSFIELD-IDENTITY.json` → `deletion_scope_2026_09_29`.
+>
+> ~~2026-09-29: los IDs de este archivo están retirados~~
 >
 > Las técnicas (prompts, motores, QA) siguen siendo aprendizaje válido; **los IDs de Soul y
 > Element que aparecen acá ya no se usan** (Lucía v4 se rehace desde cero). Lo verificado en vivo
