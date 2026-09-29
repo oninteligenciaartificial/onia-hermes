@@ -1,0 +1,83 @@
+name: Hermes Jarvis — acceso controlado al VPS
+
+# POR QUÉ EXISTE. La sesión de control de Hermes corre en la nube y no tiene llave del
+# VPS; lo que le llega a Sergio Urcullo por Telegram se decide en esa máquina. El
+# 2026-09-29 él aprobó «un acceso controlado, con respaldo». Esto es ese acceso:
+#
+#   - SOLO manual (workflow_dispatch). Nunca por horario ni por push.
+#   - Corre en el runner PROPIO del VPS (la cuota de Actions se agotó el 27-sep).
+#   - Ejecuta únicamente scripts versionados en hermes-content/deploy/hermes-jarvis/,
+#     nunca un comando que llegue en un input: el input solo elige cuál.
+#   - Toda salida se redacta dos veces (en el VPS y acá) antes de quedar en el log.
+#
+#   diagnostico → solo lee: crontab, trabajos de Hermes, n8n, log de avisos, tablero.
+#   aplicar     → respalda, aplica la config versionada, verifica y deja rollback.
+#   revertir    → corre el rollback del último aplicar.
+#
+# Misma llave y mismo patrón que repo-pulse.yml, que ya usa este runner.
+
+on:
+  workflow_dispatch:
+    inputs:
+      accion:
+        description: "diagnostico (solo lee) | aplicar | revertir"
+        required: true
+        default: diagnostico
+        type: choice
+        options: [diagnostico, aplicar, revertir]
+      horas:
+        description: "Ventana del diagnóstico, en horas"
+        required: false
+        default: "72"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: hermes-jarvis
+  cancel-in-progress: false
+
+jobs:
+  vps:
+    name: ${{ inputs.accion }} en el VPS
+    runs-on: [self-hosted, linux, onia-vps]
+    timeout-minutes: 15
+    steps:
+      - name: Checkout (solo la carpeta de hermes-jarvis)
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: hermes-content/deploy/hermes-jarvis
+          sparse-checkout-cone-mode: false
+          filter: blob:none
+
+      - name: Llave SSH del VPS
+        env:
+          KEY: ${{ secrets.ONIA_VPS_SSH_KEY }}
+        run: |
+          printf '%s\n' "$KEY" > "$RUNNER_TEMP/vps_key"
+          chmod 600 "$RUNNER_TEMP/vps_key"
+
+      - name: Ejecutar ${{ inputs.accion }}
+        env:
+          VPS: "root@187.77.16.63"
+          ACCION: ${{ inputs.accion }}
+          HORAS: ${{ inputs.horas }}
+        run: |
+          set -o pipefail
+          DIR=hermes-content/deploy/hermes-jarvis
+          case "$ACCION" in diagnostico|aplicar|revertir) ;; *) echo "acción desconocida: $ACCION"; exit 64;; esac
+          [ -f "$DIR/$ACCION.sh" ] || { echo "No existe $DIR/$ACCION.sh en este commit: nada que correr."; exit 66; }
+          case "$HORAS" in ''|*[!0-9]*) HORAS=72;; esac
+          {
+            printf 'REDACTAR_SED=%q\n' "$(cat "$DIR/redactar.sed")"
+            printf 'COMMIT=%q\nHORAS=%q\n' "$GITHUB_SHA" "$HORAS"
+            cat "$DIR/comun.sh"
+            [ "$ACCION" = diagnostico ] || { printf 'ACTIVOS_B64=%q\n' "$(tar -C "$DIR" -czf - activos 2>/dev/null | base64 -w0)"; }
+            cat "$DIR/$ACCION.sh"
+          } | ssh -i "$RUNNER_TEMP/vps_key" -o StrictHostKeyChecking=no -o BatchMode=yes \
+                -o ServerAliveInterval=30 "$VPS" 'bash -s' 2>&1 \
+            | sed -E -f "$DIR/redactar.sed"
+
+      - name: Borrar la llave
+        if: always()
+        run: rm -f "$RUNNER_TEMP/vps_key"
