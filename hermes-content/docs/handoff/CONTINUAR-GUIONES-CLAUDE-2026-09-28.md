@@ -1,5 +1,145 @@
 # Continuar los guiones con Claude
 
+## LEER PRIMERO — última corrección de Sergio y entrega actual
+
+Actualizado después de su petición final de handoff. **Esta sección prevalece
+sobre las versiones anteriores de la sesión que se conservan más abajo.**
+
+### Qué quiere realmente
+
+- Estudiar a sus referentes: cómo enseñan, qué tipos de contenido combinan,
+  cómo editan y cómo conectan redes, recursos, producto y comunidad. Elegir
+  temas parecidos y leer captions no equivale a estudiar sus videos completos.
+- Preparar y verificar contenido con sentido para Sergio/ONIA; él solo se
+  graba. El agente/editor prepara demostraciones, recursos, capturas y edición.
+- **Mínimo diez videos al día**, con al menos una hora diaria de grabación.
+  Es una meta de producción, no garantía de alcance. No hay horario fijado ni
+  automatización de agenda creada. No imponer diez variaciones de un mismo tema.
+- Archivo de entrega con **solo guiones hablados**, sin ficha, instrucciones
+  de producción ni fuentes mezcladas. Enseñanza personal fuera de ese archivo.
+- También quiere ideas no guionizadas, incluyendo **vlog POV con Meta Ray-Ban**,
+  construcción real y decisiones de ONIA. No convertir el vlog en monólogo
+  memorizado ni inventar un día de trabajo/cliente/resultado.
+- Dijo que la idea del vertical 2 y 3 va mejorando, pero todavía enseñaban
+  poco. Pidió ejemplo concreto, procedimiento y comprobación. **La nueva
+  versión aún no tiene aprobación editorial de Sergio.**
+
+### Archivos y estado exacto
+
+1. **ENTREGA SOLO HABLADO:**
+   `hermes-content/docs/cola/GUIONES-PARA-GRABAR-2026-09-28.md`.
+   Diez narraciones escritas: un YouTube sobre cotizador y nueve verticales
+   (Opus; costo completo; entrega no confirmada; cotizador; subtítulos;
+   primera automatización; escalado humano; cómo enseñar; revisión de una app).
+   Esa distribución 1+9 fue una decisión operativa, no una proporción aprobada.
+   Vertical 2 ahora calcula 100+200×3+120×3=1060; vertical 3 usa pedido de
+   200 unidades para el viernes sin stock/plazo confirmado, con prompt y
+   ejemplo de respuesta que deja la confirmación pendiente.
+2. **INVESTIGACIÓN/PRODUCCIÓN/HISTORIAL:**
+   `hermes-content/docs/cola/GUIONES-REINICIO-2026-09-28.md`.
+   Conservar fichas y fuentes; no volver a entregar como paquete principal sus
+   versiones anteriores centradas en tres variantes del mismo presupuesto.
+3. **DEMO COTIZADOR:** `hermes-content/docs/cola/cotizador-tarjetas-demo.html`.
+   Creada por Codex, NO por Opus. Sin red/dependencias. Precios ficticios:
+   unidad Bs1,20; diseño Bs30 una vez; cantidades 100/200/500. Totales sin/con
+   diseño: 120/150, 240/270, 600/630. Desglose, resumen seleccionable, copiar
+   con fallback manual. Subagente comprobó sintaxis JS, seis combinaciones y
+   copia/fallback con DOM simulado. **Falta revisión en navegador real**;
+   `file://` fue bloqueado por política del navegador del agente. Servir solo
+   la carpeta por localhost es una alternativa ya usada con el otro HTML.
+4. **VISUALES DEL EJERCICIO:** `hermes-content/docs/cola/opus55-ejercicio-editor.html`.
+   Cinco pantallas horizontales/verticales revisadas. Son solución didáctica
+   calculada, no captura de una respuesta de Claude. Se pueden reutilizar
+   para vertical 2; no confundirlas con la prueba de modelo pendiente.
+
+### Investigación adicional que sí cambió la dirección
+
+Consulta 28-sep local / 29-sep UTC. Dos agentes revisaron Erik/Ian y Tiago/Carlos;
+principal revisó Santiago/Enrique y tutorial largo. No hubo compra ni envío de DM.
+
+- **Santiago:** bio y diálogo de enlaces de
+  https://www.instagram.com/sanmunoz.ia/ verificados en navegador. Dirige a
+  https://www.forjabots.com/, https://www.horizontesia.com/ y testimonios.
+  La web de formación enlaza Skool; se leyó la página pública de oferta,
+  no el contenido privado. El hub https://link.me/sanmunoz.ia también enlaza
+  YouTube; la bio actual prioriza Forja/comunidad.
+  Tutorial reciente: https://www.youtube.com/watch?v=5REPWhjX64A,
+  publicado 26-sep, duración20:16, sobre animación con Claude/Opus.
+  **Se leyeron descripción completa, capítulos y prompts publicados, y se vio
+  fotograma de apertura; no se vio entero.** Estructura de capítulos: resultado
+  temprano → requisitos/configuración → creación → revisión → personalización.
+  Ofrece recurso descargable y ampliación en comunidad. Dos intentos de exportar
+  transcripción devolvieron no disponible; el panel visible quedó vacío.
+  No seguir repitiendo esa ruta ni afirmar transcripción analizada.
+  Ficha histórica más profunda de edición:
+  `hermes-content/references/video-intake/2026-09-17-reel-santiago-astra-davinci-estilo-edicion.md`:
+  análisis previo de video+audio completo y ocho fotogramas; se releyó, no
+  se reprodujo hoy. Enseña persona abajo y demostración arriba, zoom al dato.
+- **Enrique:** https://www.instagram.com/soyenriquerocha/ bio y enlaces
+  confirmados: https://www.tododeia.com/, libro Claude, llamadas, eventos
+  https://luma.com/soyenriquerocha y colaboraciones. Sitio y bóveda
+  https://www.tododeia.com/community leídos; ofrece guías/proyectos y conecta
+  aprendizaje con recursos/eventos/servicios. No se inspeccionó toda la bóveda
+  ni se verificó eficacia de sus tutoriales. Sus reels recientes previamente
+  observados eran captions y fotogramas, no análisis integral del montaje.
+- **Erik:** https://link.eriktaveras.com/erik enlaza recursos, formación,
+  newsletter y llamada. AutoDev público y foro accesibles. Guía completa:
+  https://comunidad.eriktaveras.com/resources/analisis-con-subagentes-claude-code/
+  asociada a https://www.instagram.com/eriktaveras/reel/Ddxz2P_uCp6/ (27-sep).
+  Enseña entradas/prompt/archivos/comprobación y pide compartir resultado en
+  foro. Otra guía: https://comunidad.eriktaveras.com/resources/n8n-claude-code-hermes-conectados/
+  y reel https://www.instagram.com/eriktaveras/reel/DdpF111p5Iz/ (23-sep).
+  Captions y fotogramas vistos; no video íntegro. Automatízate no abrió por
+  fallo técnico; no afirmar revisión de esa comunidad.
+- **Ian @ianlee.js:** identidad y enlace a https://www.getnexor.ai/es verificados
+  desde perfil; destino comercial con demo/docs, no comunidad observada.
+  https://www.instagram.com/ianlee.js/reel/DdmNXhGOnHe/ (22-sep) combina
+  construcción de una función y decisiones B2B; relato en exterior.
+  https://www.instagram.com/ianlee.js/reel/DcpMghFBI-d/ (29-ago local/30 UTC)
+  relata construir una web para conseguir una oportunidad. Captions y
+  fotogramas; no transcripciones. Aprendizaje: también hay relato de fundador
+  y conversación, no solo recetas o noticias. No copiar su experiencia a Sergio.
+- **Tiago:** bio de https://www.instagram.com/tiagolemosx/ comprobada por CUA:
+  edición con IA, enlace real https://mestres.ai/meia-pv1-bio. Corrige inferencia
+  previa sobre otro dominio como destino. Reel edición27-sep
+  https://www.instagram.com/tiagolemosx/reel/DdzhIFKRQ43/ pide EDIÇÃO; solo
+  caption/fotogramas previos. Comparativa histórica
+  https://www.instagram.com/p/Db60O6OxWU5/ usa resultados visuales progresivos;
+  ficha guardada23-ago con48fotogramas, sin audio revisado hoy.
+- **Carlos:** bio de https://www.instagram.com/carlosdominguez.dev/ enlaza
+  https://lafragua.dev/, https://carlosdominguez.com.mx/ y comunidad
+  https://www.skool.com/imperio/about con referido. **Dominio confirmado desde
+  perfil**, pese a que el sitio conserva otro handle; no mantener la sospecha
+  inicial como bloqueo. Reel28-sep15:59UTC:
+  https://www.instagram.com/carlosdominguez.dev/reel/Dd1j7n7xRyM/.
+  Caption enumera flujo de leads; fotograma usa etiqueta de episodio T1/E3,
+  cara y encabezado del proceso. CTA PROMPT. No verificamos ejecución ni DM.
+  No copiar su afirmación comercial de multiplicar ingresos.
+
+### Qué hacer ahora sin volver a empezar
+
+1. Leer los diez guiones hablados. Revisar repetición: cotizador aparece en
+   YouTube y varios verticales; el usuario acaba de pedir variedad. Mantener
+   solo reutilización que enseñe una pregunta distinta; no rellenar la cuota.
+2. Abrir el cotizador por servidor local de carpeta y probar las seis opciones,
+   cambios de selección, copia, fallback y móvil. Ajustar frases del guion
+   a lo demostrado. No afirmar que la prueba UI ya está hecha.
+3. Entregar a Sergio el archivo solo hablado, ya creado; no obligarlo a leer
+   esta investigación. Su última solicitud fue handoff, no seguir investigando.
+4. Preparar aparte ideas espontáneas Ray-Ban: objetivo real del día, decisión
+   durante trabajo y balance al cerrar. Pautas de observación, sin inventar
+   resultados. Capturar terceros solo con permiso y ocultar datos de clientes.
+5. Diseñar el siguiente paso a comunidad según recursos realmente disponibles
+   en ONIA. Hoy no se verificó un destino público listo para todos estos
+   archivos; no prometer «comentá y te envío» ni inventar comunidad activa.
+6. Continuar edición cuando llegue el A-roll/POV. No hay MP4 final, no hay
+   publicación autorizada y no se ejecutó Opus/Sonnet por falta de sesión.
+
+Aprendizaje para el agente: el problema fue elegir demasiadas variaciones de
+una prueba abstracta en lugar de estudiar enseñanza, contexto y formatos.
+Sergio preguntó si debía subir el modelo: se le respondió que el fallo de
+enfoque puede corregirse sin cambiarlo. No prometer rendimientos por volumen.
+
 Handoff pedido por Sergio el 28-sep-2026. Leer este archivo y el guion enlazado;
 no reiniciar una auditoría extensa. Incorporar el bloque diario de grabación
 pedido al cierre; no inventar un horario ni una cuota de publicaciones.

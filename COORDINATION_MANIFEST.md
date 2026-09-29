@@ -26,6 +26,13 @@ La pantalla es una ilustración del caso ficticio; no simula una salida de Claud
 Revisión visual completada: cinco escenas en ambos formatos, sin desbordamiento
 geométrico; tres composiciones vistas en captura. Servidor local 127.0.0.1:8766
 cerrado al terminar y pestaña temporal cerrada. Cuatro narraciones revisadas.
+Corrección posterior de Sergio: estudiar enseñanza, edición, mezcla de formatos
+y recorrido a comunidad; mínimo diez videos diarios y archivo solo hablado.
+Este carril posee además `hermes-content/docs/cola/GUIONES-PARA-GRABAR-2026-09-28.md`
+(fuente canónica de narraciones actuales) y `hermes-content/docs/cola/cotizador-tarjetas-demo.html`.
+El documento GUIONES-REINICIO conserva investigación, producción e historial;
+sus versiones anteriores ya no son el paquete recomendado. Erik prepara el
+cotizador; referencias_guardadas revisa identidad/recorrido de Tiago y Carlos.
 
 ## Infra retomada en Codex — 2026-09-21
 

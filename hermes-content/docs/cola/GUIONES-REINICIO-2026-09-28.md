@@ -1,5 +1,12 @@
 # Guiones y fichas técnicas — 28 de septiembre
 
+**Actualización de alcance:** el archivo de entrega actual con solo narraciones
+es `GUIONES-PARA-GRABAR-2026-09-28.md` (diez guiones; revisión de Sergio pendiente).
+Este documento queda como investigación, producción e historial. Las versiones
+de sesión que siguen no sustituyen su última petición de variedad, enseñanza
+con ejemplos y contenido espontáneo Ray-Ban. La sección inicial del handoff
+`CONTINUAR-GUIONES-CLAUDE-2026-09-28.md` registra fuentes y estado más recientes.
+
 ## Sesión 1 — Opus 5.5: noticia, uso y criterio
 
 **Versión de rodaje:** ampliada el 28-sep local / 29-sep UTC. Reemplaza como
