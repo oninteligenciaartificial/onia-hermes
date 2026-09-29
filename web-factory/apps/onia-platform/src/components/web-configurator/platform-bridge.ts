@@ -17,7 +17,7 @@ export function decodePlatformSelection(snapshot: string | null): PlatformVisual
     if (candidate.version !== 1 || typeof candidate.accent !== "string" || !/^#[0-9A-Fa-f]{6}$/.test(candidate.accent)) return null;
     const sets = { goal: WEB_GOALS, layout: WEB_LAYOUTS, direction: WEB_DIRECTIONS, palette: WEB_PALETTES, font: WEB_FONTS, stack: WEB_STACKS };
     if (Object.entries(sets).some(([key, options]) => !options.some((item) => item.id === candidate[key]))) return null;
-    return candidate as PlatformVisualSelection;
+    return value as PlatformVisualSelection;
   } catch {
     return null;
   }
