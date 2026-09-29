@@ -16,7 +16,7 @@
       "layout": "dato",
       "theme": "verde",
       "value": "2",
-      "headline": "caminos para sacar *el prompt* de una imagen",
+      "headline": "caminos para sacar el *prompt* de una imagen",
       "body": "Recuperar o reconstruir. No se presentan igual: uno lo leés, el otro lo escribís vos.",
       "next": "por qué",
       "pendiente_imagen": {
@@ -100,7 +100,7 @@
       "layout": "ensayo",
       "theme": "blanco",
       "headline": "Para reconstruir, *este orden*",
-      "body": "1 tipo de foto · 2 sujeto haciendo algo · 3 rasgos · 4 vestuario · 5 pose\n\n6 fondo como lista de objetos · 7 cámara y película · 8 negative prompt\n\nPara que parezca real: pedí textura y defectos, y prohibí lo pulido en el negative.",
+      "body": "1 tipo de foto · 2 sujeto haciendo algo · 3 rasgos · 4 vestuario · 5 pose · 6 fondo como lista de objetos · 7 cámara y película · 8 negative prompt\n\nPara que parezca real: pedí textura y defectos, y prohibí lo pulido en el negative.",
       "next": "la plantilla",
       "alt_text": "Los 8 bloques para reconstruir un prompt"
     },

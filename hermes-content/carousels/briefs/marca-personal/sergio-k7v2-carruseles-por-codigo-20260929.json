@@ -67,7 +67,7 @@
       "layout": "ensayo",
       "theme": "blanco",
       "headline": "Paso 2: la IA pinta *solo la imagen*",
-      "body": "Objetos sin nada impreso: piedras, plantas, madera.\n\nTazas, cuadernos y pantallas no: ahí inventa letras, aunque le pidas «sin texto».",
+      "body": "Objetos sin nada impreso: piedras, plantas, madera.\n\nTazas, cuadernos y pantallas no: ahí inventa letras, aunque le pidas «sin texto».",
       "next": "paso 3",
       "alt_text": "La IA genera solo la imagen, sin texto"
     },

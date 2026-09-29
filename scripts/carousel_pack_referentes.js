@@ -166,7 +166,7 @@ body{margin:0;font-family:'DM Sans',system-ui,sans-serif}
 .c-lista b{font-size:50px;font-weight:800;letter-spacing:-.5px}
 .c-lista li span{font-size:40px;color:var(--soft)}
 /* dato */
-.c-dato .big{font-family:'Bricolage',sans-serif;font-weight:800;font-size:300px;line-height:.85;letter-spacing:-12px;color:var(--acc);margin-bottom:28px}
+.c-dato .big{font-family:'Bricolage',sans-serif;font-weight:800;font-size:420px;line-height:.82;letter-spacing:-16px;color:var(--acc);margin-bottom:28px}
 .t-blanco .c-dato .big{color:#0A0F0D;text-shadow:12px 12px 0 var(--mark)}
 .sub2{font-size:44px;line-height:1.25;color:var(--soft);margin-top:22px;max-width:900px}
 /* captura */
