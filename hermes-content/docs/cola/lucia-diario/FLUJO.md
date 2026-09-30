@@ -34,6 +34,17 @@ Publicación: igual que Sergio, `ig-reel.mjs --cuenta lucia` / `ig-carrusel.mjs`
 `agendar-publicacion.sh` en el VPS, **después del «ok»**. Links a Onia con
 `?utm_source=instagram&utm_medium=organico&utm_campaign=lucia-<pieza>`.
 
+## Se lanza recién cuando esto está cerrado (Sergio Urcullo, 30-sep)
+
+1. **Identidad para imágenes decidida:** Soul v5 (entrenado con las fotos v4 aprobadas) contra
+   Seedream + ancla, mismo QA. Gana el que mida más.
+2. **Receta de b-roll aprobada:** 3–4 planos de prueba (Cinema Studio 3.0, Kling 3.0, Seedance
+   Mini y un preset viral) sobre el mismo still, mirados por Sergio Urcullo.
+3. **Tendencias entrando por Hermes** (formatos, audios, ganchos del nicho), no de memoria.
+4. Los puntos de la tabla de abajo.
+
+La mayoría de los reels son **b-roll + voz o texto**; Lucía hablando a cámara es la excepción.
+
 ## Lo que falta para encender (y de quién es)
 
 | # | Qué | Quién |
