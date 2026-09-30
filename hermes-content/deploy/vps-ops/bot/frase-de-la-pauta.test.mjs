@@ -1,0 +1,77 @@
+#!/usr/bin/env node
+// La FRASE-PREFIJO de la pauta dental: lo que precarga cada anuncio lo escucha el bot. Correr:
+//   node --test hermes-content/deploy/vps-ops/bot/frase-de-la-pauta.test.mjs
+//
+// ORIGEN (2026-09-30). La lista de encendido de la pauta (`ONIA_ADQUISICION_Y_PAUTA.md` §5.9, fila
+// 5) no deja encenderla sin «la frase-prefijo publicada en el bot y probada con dos mensajes». El
+// diseño está en §5.5 y §5.8: el conocimiento admite 10 campañas y había 9, así que va UNA sola
+// frase para todos los anuncios —«Hola, vi el anuncio de Onia» con `prefijo: true`— y cada anuncio
+// precarga su código detrás («Hola, vi el anuncio de Onia (D1). Tengo una clínica dental.»).
+//
+// Es el mismo PAR que `campanas-web.test.mjs` cuida para la web, con otro emisor: acá el texto lo
+// escribe Meta por el lead y la copia vive en el doc de la pauta. Por eso los precargados NO se
+// hardcodean: se leen del doc (`precargados-de-la-pauta.mjs`). Si Ventas cambia el texto de un
+// anuncio y el bot no lo escucha, esto se pone rojo antes de que el lead reciba el saludo genérico.
+//
+// Lo que este archivo NO prueba, y es la fila 5 entera: que la frase esté PUBLICADA (deploy del bot,
+// que en este carril es firma de Sergio Urcullo) ni que un teléfono que no sea el de Onia reciba la
+// respuesta mirándola. Esto es la mitad del repo; la otra mitad se mide en vivo.
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { test } from "node:test";
+
+import { createState, step } from "./bot-engine.mjs";
+import { checkGuardrails, normalize } from "./guardrails.mjs";
+import { precargadosDeLaPauta } from "./precargados-de-la-pauta.mjs";
+import { campanaExacta } from "./recepcionista.mjs";
+import { buildConfig } from "./simulate.mjs";
+
+const doc = JSON.parse(readFileSync(new URL("./knowledge.onia.json", import.meta.url), "utf8"));
+const PRECARGADOS = precargadosDeLaPauta();
+const CONFIG = buildConfig(
+  { slots: "jueves 2 de octubre, 14:00@2026-10-02T18:00:00Z|viernes 3 de octubre, 15:00@2026-10-03T19:00:00Z" },
+  { env: {}, envFile: "/no/existe/webhook.env" },
+);
+const T0 = Date.parse("2026-09-30T19:00:00Z");
+const en = (min) => new Date(T0 + min * 60000).toISOString();
+
+test("el doc de la pauta trae los precargados de D1 y D4 (si no, este gate no mide nada)", () => {
+  const codigos = PRECARGADOS.map((texto) => /\(([A-Z]\d+)\)/.exec(texto)?.[1]).sort();
+  assert.deepEqual(codigos, ["D1", "D4"]);
+});
+
+for (const precargado of PRECARGADOS) {
+  test(`el bot escucha el precargado «${precargado}» con la campaña de PREFIJO`, () => {
+    const campana = campanaExacta(doc, normalize(precargado));
+    assert.ok(campana, "el precargado no matchea ninguna campaña: el lead recibiría el saludo genérico");
+    assert.equal(campana.prefijo, true, "una sola frase para todos los anuncios: tiene que ser prefijo");
+  });
+}
+
+test("la respuesta de la campaña no cotiza, no titula con IA y le abre la puerta cortés al paciente", () => {
+  const campana = campanaExacta(doc, normalize(PRECARGADOS[0]));
+  assert.deepEqual(checkGuardrails(campana.respuesta), []);
+  assert.doesNotMatch(campana.respuesta, /\d/, "ni un número: un precio en texto libre es justo lo que el bot no hace");
+  assert.doesNotMatch(campana.respuesta, /\bIA\b/);
+  assert.match(campana.respuesta, /paciente/, "el precargado lo manda también el paciente: la respuesta le dice por dónde salir");
+  assert.match(campana.respuesta, /profesionales/, "hace la primera pregunta del cliente ideal (§9)");
+});
+
+test("LA PRUEBA DE DOS MENSAJES, en el motor: precargado de D1 + la respuesta de un dueño", () => {
+  const r1 = step(createState({ channel: "chatwoot", contactRef: "pauta-2msj", channelType: "Channel::Whatsapp" }), { text: PRECARGADOS[0], receivedAt: en(0) }, { config: CONFIG });
+  assert.deepEqual(r1.replies.map((r) => r.templateKey), ["M0", "R_CAMPANA"]);
+  assert.match(r1.replies[0].text, /un bot/, "D2: lo primero que lee es que habla con un bot");
+  assert.equal(r1.nextState.pieceKey, "anuncio-D1");
+  assert.equal(r1.nextState.qualification.industry, "dental");
+
+  const r2 = step(r1.nextState, { text: "somos 3 odontólogos y la recepcionista agenda", receivedAt: en(1) }, { config: CONFIG });
+  assert.equal(r2.replies.length, 1, "el SEGUNDO mensaje también se contesta (la lección del 23-ago: el primero puede ser una plantilla)");
+  assert.equal(r2.replies[0].templateKey, "M0b");
+  assert.equal(r2.replies[0].replySource, "script");
+  assert.equal(r2.nextState.qualification.teamSize, 3);
+  assert.match(r2.replies[0].text, /jueves 2 de octubre, 14:00/);
+});
+
+test("el conocimiento no pasa el tope de 10 campañas (y esta fue la última libre)", () => {
+  assert.ok(doc.campanas.length <= 10);
+});
