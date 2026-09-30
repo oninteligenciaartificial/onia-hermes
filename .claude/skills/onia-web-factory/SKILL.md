@@ -6,9 +6,8 @@ description: Invocar al construir o rediseñar cualquier superficie web en onia-
 # ONIA — Web Factory (construir webs anti-template)
 
 Aplica a carriles A (onia-center) y B (landings/sitios cliente). Objetivo: que el output
-NO salga genérico. ⚠️ El subagente `web-factory-builder` fue RETIRADO el 2026-08-18
-(cápsula congelada en `.claude/agents/_retirados/`): el trabajo lo hace la sesión con esta
-skill, no ese agente.
+NO salga genérico. ⚠️ El subagente `web-factory-builder` fue retirado el 2026-08-18 y borrado el
+2026-09-29: el trabajo lo hace la sesión con esta skill.
 
 ## Lo primero: la web de cliente NO se escribe a mano
 

@@ -161,10 +161,10 @@ que el editor de conocimiento no existía, estando en producción), `onia-router
 `onia-core` y `onia-contabilidad-bolivia` que llamaban "productos" a los packs.
 
 **Queda:**
-- 🔴 **`_retirados/` está DENTRO de `.claude/agents/`** y el harness descubre recursivamente:
-  los 6 agentes retirados **siguen apareciendo disponibles**. Moverlos fuera del árbol.
-- **`ONIA_SKILLS_STACK_Y_SUBAGENTES.md`** (doc fuente del router) está **más desactualizado
-  que el router**: dice "~137 globales" (son 196) y lista los 9 subagentes como vivos.
+- ✅ ~~**`_retirados/` está DENTRO de `.claude/agents/`**~~ — **resuelto 2026-09-29:** los 6
+  retirados se borraron (y 2 agentes más sin uso); ver `historial/LIMPIEZA_SKILLS_20260929.md`.
+- ✅ ~~**`ONIA_SKILLS_STACK_Y_SUBAGENTES.md`** desactualizado~~ — **resuelto 2026-09-29**
+  (215 globales, 1 subagente).
 - **Falta una skill de infra/VPS.** Es el carril con el conocimiento más caro y repetido
   (contenedores, Swarm, firewall del 3000, el steal de Hostinger, operar Docker por el
   socket cuando el CLI cuelga) y hoy vive solo en memorias sueltas, que no se cargan solas.

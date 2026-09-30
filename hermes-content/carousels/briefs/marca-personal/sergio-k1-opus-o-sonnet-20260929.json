@@ -1,0 +1,140 @@
+{
+  "title": "Opus 5.5 o Sonnet 5.5: cuál usar",
+  "caption": "Sonnet 5.5 salió el 28 de septiembre y cuesta la mitad que Opus 5.5 por token (USD 2/10 contra 4/20 por millón). En las pruebas de Anthropic están casi empatados, salvo en código difícil, donde Opus saca 8 puntos.\n\nLe di la misma tarea a los dos —tres presupuestos con costos escondidos— y encontraron exactamente lo mismo.\n\nMi regla: Sonnet para el trabajo de todos los días, Opus cuando equivocarse sale caro. Guardá la lámina 6.\n\nFuente: anthropic.com/claude-opus-5-5 y anthropic.com/claude-sonnet-5-5.",
+  "hashtags": [
+    "#claude",
+    "#claudecode",
+    "#anthropic",
+    "#ia",
+    "#inteligenciaartificial",
+    "#bolivia"
+  ],
+  "serie": "IA PRÁCTICA",
+  "episodio": "K1",
+  "job": "education",
+  "slides": [
+    {
+      "number": 1,
+      "role": "cover",
+      "pill": "Claude · 28-sep",
+      "headline": "Opus 5.5 o *Sonnet 5.5*: cuál usar",
+      "body": "La mitad del precio. ¿La mitad del trabajo?",
+      "image_prompt": "Two smooth river stones of clearly different size resting side by side on a dark walnut table, soft morning window light from the left.",
+      "alt_text": "Opus 5.5 o Sonnet 5.5: cuál usar"
+    },
+    {
+      "number": 2,
+      "role": "stakes",
+      "pill": "Precio publicado",
+      "headline": "Sonnet cuesta *exactamente la mitad*",
+      "body": "Por millón de tokens, según Anthropic.",
+      "visual": {
+        "type": "table",
+        "label": "USD POR MILLÓN DE TOKENS",
+        "left": "MODELO",
+        "right": "ENTRADA / SALIDA",
+        "rows": [
+          {
+            "left": "Opus 5.5",
+            "right": "$4 / $20"
+          },
+          {
+            "left": "Sonnet 5.5",
+            "right": "$2 / $10"
+          }
+        ]
+      },
+      "alt_text": "Precios de Opus 5.5 y Sonnet 5.5"
+    },
+    {
+      "number": 3,
+      "role": "point",
+      "pill": "Pruebas de Anthropic",
+      "headline": "Casi empatados en *casi todo*",
+      "body": "Trabajo de oficina, uso de computadora y editores de código: uno o dos puntos de diferencia. En la terminal gana Sonnet.",
+      "visual": {
+        "type": "table",
+        "label": "SONNET 5.5 / OPUS 5.5",
+        "left": "PRUEBA",
+        "right": "RESULTADO",
+        "rows": [
+          {
+            "left": "GDPval-AA",
+            "right": "1844 / 1846"
+          },
+          {
+            "left": "OSWorld 2.1",
+            "right": "80,1 / 81,8"
+          },
+          {
+            "left": "CursorBench 4.0",
+            "right": "55,5 / 57,8"
+          },
+          {
+            "left": "Terminal-Bench 4.0",
+            "right": "70,6 / 66,4"
+          }
+        ]
+      },
+      "alt_text": "Benchmarks de Sonnet 5.5 y Opus 5.5"
+    },
+    {
+      "number": 4,
+      "role": "point",
+      "pill": "Dónde se despega",
+      "headline": "En código difícil, Opus saca *8 puntos*",
+      "body": "FrontierCode 1.1: Opus 54,4 contra Sonnet 46,2, aun con Sonnet en esfuerzo máximo.",
+      "callout": "Ahí sí vale el doble",
+      "alt_text": "En FrontierCode Opus supera a Sonnet por 8 puntos"
+    },
+    {
+      "number": 5,
+      "role": "point",
+      "pill": "Mi prueba",
+      "headline": "Misma tarea, *mismo resultado*",
+      "body": "Tres presupuestos con dos trampas escondidas. Los dos dieron 1.050, 1.060 y 1.350, y los dos encontraron los Bs 360 que el anuncio no sumaba.",
+      "callout": "Una prueba, no un ranking",
+      "alt_text": "Opus y Sonnet resolvieron igual la misma tarea"
+    },
+    {
+      "number": 6,
+      "role": "save",
+      "pill": "Mi regla",
+      "headline": "Elegí por la tarea, *no por la fama*",
+      "body": "Sonnet: editar, scripts, contenido, pruebas. Opus: migraciones, arquitectura, el error que no entendés después de dos intentos.",
+      "visual": {
+        "type": "terminal",
+        "label": "EN CLAUDE CODE",
+        "lines": [
+          {
+            "value": "claude --model sonnet",
+            "kind": "command"
+          },
+          {
+            "value": "claude --model opus",
+            "kind": "command"
+          },
+          {
+            "value": "claude --effort high",
+            "kind": "command"
+          },
+          {
+            "value": "effort: low medium high xhigh max",
+            "kind": "comment"
+          }
+        ]
+      },
+      "save_worthy": true,
+      "alt_text": "Comandos para elegir modelo y esfuerzo en Claude Code"
+    },
+    {
+      "number": 7,
+      "role": "cta",
+      "pill": "Probalo vos",
+      "headline": "El ejercicio está en la *comunidad*",
+      "body": "Pegalo en los dos modelos y fijate si te dan lo mismo. Link a la comunidad en mi web.",
+      "cta": "COMUNIDAD EN LA BIO",
+      "alt_text": "El ejercicio completo está en la comunidad"
+    }
+  ]
+}

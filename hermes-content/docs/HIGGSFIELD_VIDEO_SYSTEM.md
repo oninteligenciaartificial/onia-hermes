@@ -7,6 +7,142 @@ strategy, approvals, publishing decisions and memory.
 > abajo que declare MCP como ruta por defecto, fije una versión vieja de la CLI o
 > trate costos/modelos/saldos históricos como actuales.
 
+## Verificado en vivo 2026-09-29 — lo que cambió y lo que se aprendió
+
+> Medido desde una sesión en la nube (Claude Code, entorno `Default`) con el MCP de Higgsfield
+> conectado. Cada punto dice cómo se verificó. Si choca con algo de más abajo, gana esto.
+
+**1. Identidad: se fija la cara ORIGINAL de Lucía; el resto se retira.** ⚠️ Corregido el mismo
+día: primero se decidió «caras desde cero» sobre la premisa falsa de que Lucía venía de una
+persona real. Sergio Urcullo la hizo 100% con IA y se conserva. Retirados de verdad: los que lista
+el manifest en `deletion_scope_2026_09_29`. El inventario de lo que había, con qué era cada uno, está en
+`historial/HIGGSFIELD_INVENTARIO_ANTES_DEL_BORRADO_20260929.md`.
+
+**2. Borrar no existe fuera de la web.** El MCP rechaza `show_characters(action=delete)` con
+*«Invalid action. Use one of: list, train, status»*; `show_reference_elements` solo acepta
+`list/get/create`. El CLI oficial 1.1.26 (binario bajado de GitHub releases y verificado por
+SHA256) tiene `soul-id create/get/list/wait` y **no conoce los Elements**. La API pública
+(`docs.higgsfield.ai`) solo documenta generación. El borrado lo hace una persona logueada en la web.
+
+**3. Términos (leídos en vivo, «Last updated: July 26, 2026»).**
+- **5.2(iv)** prohíbe usar Outputs para entrenar cualquier modelo, *«except: (a) models that you
+  create, train, or fine-tune using the Service with your own Inputs (not Outputs of Company's AI
+  models); or (b) as expressly authorized in writing by Company»*.
+- La ayuda oficial de *AI Influencer* dice hoy lo contrario en la práctica: *«generate a batch of
+  its portraits and train a Soul ID on 20 or more of them»*.
+- **Decisión de Sergio Urcullo (2026-09-29): «entrenamos con repos y guía».** La guía oficial se
+  toma como la autorización escrita del 5.2(iv)(b) y se archiva su texto. Antes de **vender**
+  modelos a clientes se pide confirmación escrita.
+- **4.4:** las salidas son nuestras, se pueden sublicenciar a clientes y sobreviven a la baja de
+  la cuenta. **5.2(i):** prohibido revender el servicio. **1.2:** MCP, CLI y API solo para uso
+  propio o interno. Si mañana se venden modelos o publicidad, se venden las **salidas**, no el
+  acceso a Higgsfield.
+- **4.2(b) y 5.3:** para subir la cara de una persona real hace falta su consentimiento. ~~Por eso la
+  cara anterior de Lucía no podía seguir~~ — **falso**: la cara de Lucía es 100% IA (corregido
+  2026-09-29). La regla vale para caras de personas reales, como las fotos de Sergio Urcullo.
+- **5.2(xi):** prohibido presentar una salida como hecha por humanos. **5.5:** declarar IA donde la
+  ley lo pida. Coincide con la regla de Lucía: es IA y lo dice.
+
+**4. Soul ID según la guía oficial (actualizada el 1-ago-2026).** Se entrena con **20 o más fotos
+de una persona, hasta 80**. Funciona con Soul 2.0 y Soul Cinema. **Un Soul entrenado aparece solo
+como Element**, y así se usa en video (Seedance, con @ Elements). El MCP entrena con 5 a 20
+imágenes (`show_characters action=train`), así que el dataset v4 es de 20.
+
+**5. Qué funciona desde una sesión en la nube.**
+- **MCP: sí.** El tráfico de conectores no pasa por la red de la sesión.
+- **CLI: no, por dos razones.** El entorno `Default` (red «Trusted») bloquea `higgsfield.ai`,
+  `platform.higgsfield.ai` y los CDN de salida `d2ol7oe51mr4n9.cloudfront.net` y
+  `d8j0ntlcm91z4.cloudfront.net`. Además, `higgsfield auth login` usa un callback de loopback, que
+  sin navegador local no sirve. El CLI autenticado vive en el VPS.
+- **Para que la sesión pueda MIRAR lo que genera**, el entorno necesita esos dominios en
+  **Allowed domains** (red «Custom» más la lista por defecto). Sin eso, las imágenes solo se ven
+  en el widget o en la web.
+
+**6. Motores (costo cotizado con `get_cost` y confirmado en `transactions`).**
+
+| Pedido | Nombre técnico del job | Tamaño real | Créditos |
+|---|---|---|---|
+| `soul_2`, quality 2k, 3:4 | `text2image_soul_v2` | 1536×2048 | 0,12 |
+| `nano_banana_pro`, 2k, 3:4 | `nano_banana_2` | 1792×2400 | 2 |
+| `nano_banana_pro`, 2k, 9:16 | `nano_banana_2` | 1536×2752 | 2 |
+| `seedream_v4_5` basic, 9:16 | `seedream_v4_5` | 1440×2560 | 1 |
+| `gpt_image_2_5` flare, high, 2k, 3:4 | `gpt_image_2_5` | 1744×2336 | 2,75 |
+| `soul_cast` (budget 50) | `soul_cast` | 2048×1152 | 0,12 |
+
+- `nano_banana_pro` figura como `nano_banana_2` en el job. Es el mismo pedido, no un cambio silencioso.
+- `soul_cast` **ignora el prompt**: guarda `prompt: ""` e inventa un personaje con nombre e
+  historia propios. No sirve para fijar rasgos.
+- `gpt_image_2_5` dio **429 (rate limit)** al lanzar dos a la vez. Reintentado segundos después,
+  pasó. No se cobra lo que no se envió.
+- El «2k» de Soul 2.0 es 1536×2048, no 2048 en el lado corto.
+
+**7. Superficies que expone el MCP (herramientas del conector, 2026-09-29).**
+- Generación de imagen, video, audio y 3D, con lotes y `jobs_wait`.
+- Entrenar Soul y crear Elements.
+- Presets «viral» y Marketing Studio; Virality Predictor; análisis de video.
+- Doblaje a 18 idiomas y clonación de voz.
+- Upscale de imagen y video, reframe, quitar fondo, outpaint, motion control y Shorts Studio.
+- Publicación en TikTok: la prepara el agente y la confirma la persona en el widget.
+- Webs, apps y juegos en Cloudflare Workers, escenas 3D y un marketplace de apps.
+- `sandbox_exec`: Linux con ffmpeg, ImageMagick, faster-whisper y Playwright. Ahí `hf` es
+  **Hugging Face**, no Higgsfield.
+- Workflows incluidos: `character-sheet`, `ad-multiplier`, `faceless-video`, `narrator`,
+  `subtitles`, `thumbnail-generation`, `brand-asset-creation`, `website-builder-flow` y la
+  familia `ugc-*` (saas, product, review, try-on, tutorial, unboxing, website).
+
+**8. Cómo se consigue la misma cara desde una referencia (medido 2026-09-29).**
+- **`<<<element_id>>>` en el prompt, por MCP, inyecta SOLO la primera foto del Element.** Se vio en
+  los datos del job (`reference_elements` con 1 media aunque `lucia-skin-v1` tenga 7). Para que el
+  modelo reciba todos los ángulos, se pasan las `media_ids` en `medias[]` con rol
+  `image_references`. Así el job registra las 7.
+- **Guía oficial de prompts** (skills de Higgsfield en `.agents/skills/higgsfield-generate/references/`):
+  - menos de ~200 tokens, porque los prompts largos distorsionan;
+  - con referencia, **describir lo que cambia** (escena, luz, ropa, gesto) y **no volver a
+    describir la cara**;
+  - frasear en positivo, porque casi ningún motor tiene negativo.
+- **Motor según el catálogo oficial:**
+  - cara metida en una escena compleja → **Seedream 4.5**;
+  - personaje con referencias → **Nano Banana** (Pro en los casos difíciles);
+  - Soul entrenado → **Soul 2.0** para fotos y **Soul Cinema** para cine.
+- **Soul ID:** la guía del CLI dice 5–20 fotos (punto dulce 8–12); la web dice 20–80. Se usan
+  **20**, variadas en ángulo, luz, expresión y distancia, de 1024 px o más, sin recortes de cara.
+
+**9. Cómo se MIDE que es la misma cara, sin poder mirarla (2026-09-29, 0 créditos).**
+- **Herramienta:** `scripts/face_identity_qa.py`. Usa ArcFace (insightface `buffalo_l`), la
+  métrica con la que InstantID, PuLID y PhotoMaker reportan preservación de identidad. Corre en
+  `sandbox_exec`, que tiene internet y llega al CDN aunque la sesión no: recibe URLs y devuelve
+  solo números. Resultado completo: `references/modelos/lucia/v4/qa/identidad-metodos-20260929.json`.
+- **Controles:**
+  - la misma imagen espejada da 0,90–0,97;
+  - caras de otras modelos IA (el casting) dan 0,22 o menos;
+  - cada fuente original contra el centroide de las otras 7 da 0,70–0,82: ese es el piso de
+    «es Lucía».
+- **Resultado:** mismo prompt, coseno contra el centroide de las 8 fuentes.
+
+  | Escena | Element + Nano Banana Pro | 7 fotos + Nano Banana Pro | 7 fotos + Seedream 4.5 |
+  |---|---|---|---|
+  | Café | 0,822 | 0,806 | **0,883** |
+  | Calle, cara chica | 0,693 | 0,683 | **0,836** |
+
+- **Lectura:**
+  - **Seedream 4.5 con las 7 `media_ids` sostiene mejor la cara** (+0,06 en café, +0,14 en calle)
+    y cuesta la mitad.
+  - En Nano Banana Pro, dar 1 foto (Element) o 7 da lo mismo.
+  - La muestra es chica (2 por motor). Se confirma puntuando cada foto del dataset.
+- **Gate del dataset:** 0,70 o más contra el centroide de las fuentes; lo que quede debajo se
+  regenera. La métrica **no ve belleza, piel ni realismo**: eso lo sigue mirando Sergio Urcullo.
+- **Hallazgo:** la fuente `R2` (`1714a347`) tiene dos personas de fondo. No entra al entrenamiento
+  del Soul, porque la guía pide «Single person per photo». Como referencia de generación sirve.
+- **Los PNG que baja Higgsfield traen su job en el metadato `hf-job-id`** (medido el 30-sep). Un
+  archivo del repo que salió de Higgsfield se vuelve a usar por job_id, para entrenar o medir, sin
+  subirlo. Así apareció el photoshoot de 10 ángulos, que se daba por no subido.
+- **El gate de 0,70 vale para caras frontales y de tres cuartos de 200 px o más.** Los perfiles bajan
+  solos: la fuente casi perfil da 0,698 y el perfil del photoshoot, 0,689. Con la cara chica, por
+  ejemplo en cuerpo entero, el número pierde confiabilidad: esos casos se miran.
+- **Entornos:** el 30-sep Sergio Urcullo creó el entorno de nube `onia-higgsfield` para trabajar
+  con Higgsfield. `Default` no cambió. El entorno se fija al crear la sesión: una sesión que ya
+  estaba corriendo no lo toma.
+
 ## Arquitectura vigente
 
 | Superficie | Uso en ONIA | Decisión |
@@ -38,28 +174,94 @@ la cotización y obtiene aprobación antes de generar cualquier imagen o video p
 ## Jerarquía de identidad de Lucía
 
 ```text
-derechos/consentimiento resueltos
--> banco sintético coherente y aprobado
--> Soul ID candidato
--> A/B contra Elements vigentes
--> still aprobado
--> image-to-video / reference-to-video
--> QA de primer, medio y último frame
+v4 (2026-09-29, desde cero):
+casting solo-texto (varios motores, procedencia registrada)
+-> Sergio Urcullo aprueba UN master
+-> photoshoot de rasgos marcados (turnaround, expresiones, primeros planos de marcas)
+-> dataset de 20 fotos de la MISMA cara, con procedencia
+-> Soul ID v4 (aparece solo como Element -> sirve para video)
+-> Elements aparte para vestuario y lugares
+-> still aprobado -> image-to-video -> QA de primer, medio y último frame
 ```
+
+(Antes decía: derechos resueltos → banco sintético → Soul candidato → A/B contra los Elements
+vigentes. El A/B quedó sin objeto: los Elements anteriores están retirados.)
 
 - Un prompt no es identidad.
 - Una sola imagen de referencia puede servir para una toma, pero deriva al escalar.
-- Soul ID produce stills reutilizables desde CLI/web. El Element vigente de Lucía funciona como
-  ancla de alta fidelidad solo en la web y no es portable por la CLI actual.
+- Soul ID produce stills reutilizables desde CLI/web/MCP y, según la guía del 1-ago-2026,
+  aparece solo como Element para video. (El Element de Lucía que acá se llamaba «vigente»,
+  `58bbd635…`, está retirado desde el 2026-09-29.)
 - El video parte de un still aprobado. Text-to-video puro no es la ruta de Lucía.
 - El Soul sintético v3 de seis imágenes es evidencia de un entrenamiento débil,
   no una prueba de que Soul ID sea inútil. La web actual recomienda 20 o más
   imágenes; la CLI instalada admite 5–20.
-- No entrenar un nuevo Soul ni publicar a Lucía hasta cerrar el origen de derechos
-  documentado en [`LUCIA.md`](../references/modelos/lucia/LUCIA.md).
+- ~~No entrenar un nuevo Soul ni publicar a Lucía hasta cerrar el origen de derechos~~ —
+  **resuelto el 2026-09-29 por reconstrucción**: la cara v4 nace solo de texto, sin linaje de la
+  persona real. Entrenar sigue pidiendo OK específico de costo; publicar, aprobación explícita.
 
 Estado machine-readable:
 `../references/modelos/lucia/LUCIA-HIGGSFIELD-IDENTITY.json`.
+
+## Soul vs referencias — lo medido (30-sep-2026)
+
+Pregunta de Sergio Urcullo: «¿no era mejor con Soul, para tenerlo entrenado y no perder consistencia?».
+La respuesta sale de medir, no de la teoría:
+
+| Método | Parecido medido (ArcFace vs centroide) | Costo | Problema |
+|---|---|---:|---|
+| Seedream 4.5 + ancla espejo | 0,81–0,88 | 1 cr | depende de mandar las 5 referencias siempre |
+| Soul `LUCIA-v4` (soul_2) | 0,72–0,83 | 0,12 cr | la envejece y oscurece: **aprendió del dataset**, que era de antes de la cláusula de detalle |
+
+- Lo que Soul promete (identidad «guardada») es cierto; el Soul v4 salió peor **por su dataset**,
+  no por ser Soul. El siguiente paso lógico es **Soul v5 entrenado con las fotos v4 ya aprobadas**
+  (look joven, espejo, publicación P1–P4, E1–E4), 15–20 imágenes ≥0,80, y A/B contra Seedream
+  con el mismo QA. Gana el que mida más; si empatan, Soul (8× más barato por imagen).
+- Límite duro de Soul: sólo sirve en `soul_2` y `soul_cinematic` (**imágenes**). Para video la
+  identidad la da el still de partida o un **Element** (sirve en Cinema Studio Video 2/3.0,
+  Seedance 2.0, Kling 3.0, Seedream, Nano Banana). Soul no reemplaza a ese paso.
+- `soul_cinematic` (Soul Cinema) es otro tipo de entrenamiento: stills con look de cine. Candidato
+  para las portadas de b-roll, no para el día a día.
+- **Medido 30-sep 19:46 UTC:** entrenar un Soul `soul_2` cuesta **25 cr exactos** (saldo antes y
+  después). `LUCIA-v5` (`cd42c065-e18c-4176-b9ad-e2de075fe362`) se entrenó con 16 fotos del look
+  vigente; el resultado del A/B va en `LUCIA-HIGGSFIELD-IDENTITY.json` → `v4.soul_v5`.
+
+## B-roll cinematográfico — recetario (30-sep-2026)
+
+No todo video de Lucía habla: la mayoría es b-roll + voz o texto. El flujo es siempre
+**still aprobado (identidad) → image-to-video (movimiento)**; el movimiento no debe cambiar la cara.
+
+| Uso | Modelo / preset | Por qué |
+|---|---|---|
+| Plano de cine con cámara y color | `cinematic_studio_3_0` (4–15 s, genre, 720p–4k) · `cinematic_studio_video_v2` (speedramp slowmo/impact, multi-shot) | la ruta «cine» de Higgsfield |
+| Movimiento físico natural, caminar, manos | `kling3_0` (start+end frame, multi-shot, sonido off más barato) | ya cotizado: pro 8 s = 16 cr |
+| Barato, rápido | `seedance_2_0_mini` 720p | 6 s = 6 cr, cara fiel en la prueba del 30-sep |
+| Efectos virales (transiciones con la cara) | presets `viral`: Orbit 360, Eyes in, High flip, Earth zoom, Bullet time, Clones, Selfception | se ejecutan con `execute_preset` sobre un still aprobado |
+| Movimientos de cámara «de producto» aplicables a escena | recetas `push-in`, `pull-back`, `crane-reveal`, `whip-pan`, `topdown-dive`, `light-sweep`, `sunrise-pass` (`get_preset_instructions`) | vocabulario de cámara probado |
+| Gráfica en movimiento sobre UI de Onia | Marketing Studio `motion` (231 plantillas: `saas_motion`, `hypermotion`, `2d_motion`) | para piezas con captura real del sistema |
+
+**Prueba medida (30-sep, misma foto P3 y mismo prompt, 6 s, sin audio):**
+
+| Modelo | Costo | Parecido 1.er frame → resto | Lectura |
+|---|---:|---|---|
+| **`kling3_0` std, `sound: off`** | 7,5 cr | 0,70 → 0,70 / 0,72 / 0,72 | **sostiene la cara** y hace el movimiento más de cine (camina → plano medio a cámara). Ganador provisorio |
+| `seedance_2_0_mini` 720p | 6 cr | 0,68 → 0,60–0,64 | estable, deriva leve; el más barato |
+| `cinematic_studio_video_v2` std | 6 cr | 0,74 → 0,53–0,60 | el que más deriva cuando queda de frente |
+| `cinematic_studio_3_0` 720p | 20 cr (4 s) · 30 cr (6 s) | sin probar | el envío lo bloqueó el control de permisos de la sesión |
+
+A 720p la cara mide ~170 px (el still, 346): eso solo baja ~0,1 el puntaje. **Se compara la
+deriva contra el primer frame de cada video, no el número absoluto.** Todo prompt que diga «walks
+along a sunlit street…» dispara la recomendación del preset «IN THE DARK»: pasar
+`declined_preset_id: "24bae836-2c4a-48e0-89b6-49fcc0b21612"`. Los presets virales no tienen
+preflight de costo.
+
+Reglas de uso:
+- Un efecto tiene que servir a la idea de la pieza (gancho, transición a la pantalla de Onia).
+  Efecto sin motivo = pieza «hecha por IA», lo que CLAUDE.md prohíbe.
+- Los costos se cotizan en vivo antes de cada lote y se aprueban por lote (regla de gasto).
+- QA de identidad en primer, medio y último frame; un efecto que deforma la cara se descarta.
+- Montaje, cortes y transiciones entre planos: skills `editor-videos`, `motion-doctrine`,
+  `cut-the-curve` (HyperFrames).
 
 ## Flujo de gasto obligatorio
 

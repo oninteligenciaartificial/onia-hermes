@@ -1,20 +1,21 @@
 # Onia — Stack de skills + reglas de subagentes
 
 > Fuente de verdad viva — **sin fecha en el nombre a propósito**: esto se EDITA, no se
-> reemplaza por una copia nueva. (Creado 2026-07-05, última revisión 2026-08-15.)
+> reemplaza por una copia nueva. (Creado 2026-07-05, última revisión 2026-09-29.)
 > Índice operativo vivo = skill **`onia-router`** (`.claude/skills/onia-router/SKILL.md`).
 > Este doc es la versión legible + la spec para los repos separados.
 
 ## Las 3 capas de "skills" en Onia (no confundir)
 
 1. **Skills de Claude Code** (`.claude/skills/`) — las que Claude Code auto-descubre e
-   invoca al trabajar en el repo. Incluyen las **propias de Onia** (abajo) + las ~137
-   globales del usuario + plugins.
-2. **Subagentes** (`.claude/agents/`) — 9 agentes Onia para delegar (onia-orchestrator,
-   onia-propuestas, onia-core-guardian, dentalgest-migrations, hermes-automation,
-   onia-integrations, onia-crm-prospeccion, onia-creative-radar, web-factory-builder).
-3. **Skills-doc de Hermes** (`hermes-content/skills/`) — 38 docs operativos que lee el
-   **bot Hermes en el VPS** (NO son skills de Claude Code). Fuente de conocimiento a la
+   invoca al trabajar en el repo. Incluyen las **propias de Onia** (abajo) + las 110
+   globales del usuario (limpiadas el 2026-09-29 por uso real) + plugins.
+2. **Subagentes** (`.claude/agents/`) — queda 1 agente Onia: `onia-crm-prospeccion`.
+   Los otros 8 se borraron el 2026-09-29 por 0 uso en 30 días
+   (`historial/LIMPIEZA_SKILLS_20260929.md`).
+3. **Skills-doc de Hermes** (`hermes-content/skills/`) — 32 docs operativos del
+   **bot Hermes** (NO son skills de Claude Code). El bot lee su propia copia en el VPS
+   (`/root/.hermes/skills/`); la del repo es la versión con historial en git. Fuente de conocimiento a la
    que apuntan las skills propias.
 
 ## Cómo se usa
@@ -49,9 +50,9 @@ respeta las reglas duras. Si existe una skill para la tarea, se usa (no reinvent
 `web-artifacts-builder`, `landing-report`, `land-and-deploy`, `imagegen-frontend-web`/`-mobile`.
 
 ### Video (carriles H, J)
-`remotion`, `remotion-video-creation` (carril J, programático), `video-editing`,
-`banner-design` (carril H) + Higgsfield MCP. Skills-doc: video-lab-higgsfield,
-carruseles-onia, videos-virales-higgsfield, ugc-empresas-higgsfield.
+`diseno-contenido-onia` (índice), `editor-videos`, `ver-videos`, `sacar-prompt`, `hyperframes`
+(copia global; Remotion está jubilado), `banner-design` (carril H) + Higgsfield. Skills-doc:
+video-lab-higgsfield, carruseles-onia, videos-virales-higgsfield, ugc-empresas-higgsfield.
 
 ### Propuestas / documentos (carril C) → skill `onia-propuestas`
 `article-writing`, `make-pdf`, `slides`, `document-generate`, `brand`/`brandkit`.
@@ -77,7 +78,7 @@ cada uno, crear su `.claude/skills/` con:
 - **`onia-platform`** (carril D) — LA plataforma que se vende, con packs por rubro.
   `onia-core` (copia adaptada al namespace del producto), stack backend/DB
   (`database-migrations`, `postgres-patterns`, `api-design`, `security-review`) +
-  frontend (`impeccable`, `frontend-design`). Subagente `dentalgest-migrations`.
+  frontend (`impeccable`, `frontend-design`) + las skills propias de `onia-platform/.claude/skills/`.
   Regla: es producto PROPIO de ONIA → se puede leer el cerebro.
   ⚠️ Antes decía "repo DentaGest", que **no existe en el disco**.
 - **Bolivian Electric** (carril F): CLIENTE — solo el stack backend, sin cerebro Onia,

@@ -52,7 +52,10 @@ const fail = (msg) => {
 const HERE = dirname(fileURLToPath(import.meta.url));
 // La librería de HyperFrames vive en .agents/skills/media-use/... — 5 niveles arriba de
 // .claude/skills/editor-videos/scripts/. Se resuelve relativo al script, no al cwd.
-const DEFAULT_LIB = resolve(HERE, "../../../../.agents/skills/media-use/audio/assets/sfx");
+// Si la copia del repo no está (limpieza de skills del 29-sep), cae a la global de ~/.claude/skills.
+const REPO_LIB = resolve(HERE, "../../../../.agents/skills/media-use/audio/assets/sfx");
+const HOME_LIB = join(process.env.USERPROFILE || process.env.HOME || "", ".claude/skills/media-use/audio/assets/sfx");
+const DEFAULT_LIB = existsSync(REPO_LIB) ? REPO_LIB : HOME_LIB;
 const LIB = resolve(flag("lib", DEFAULT_LIB));
 
 const VIDEO = flag("video");

@@ -1,0 +1,9 @@
+{
+  "name": "yt-15-recorrido-entero",
+  "private": true,
+  "scripts": {
+    "dev": "hyperframes present .",
+    "lint": "hyperframes lint .",
+    "check": "hyperframes check . --snapshots"
+  }
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Web Factory Visual Intake"
+  short_description: "Turn screenshots into reusable web briefs"
+  default_prompt: "Use $web-factory-visual-intake to extract this website reference into Web Factory context."

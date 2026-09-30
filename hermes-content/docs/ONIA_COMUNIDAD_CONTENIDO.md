@@ -17,11 +17,135 @@ agencia" 47,7K · listas de herramientas ~50K · "¿qué negocio quieren que con
 IA?" (interactivo) 18,5K · **"Claude lanzó habilidades para emprendedores" viral** —
 y nosotros tenemos skills reales corriendo: ventaja injusta.
 
+> Estos datos explican decisiones históricas, pero no se reutilizan como métricas actuales
+> sin volver a leer Insights. La estrategia sí se mantiene: identidad personal + problema
+> real + herramienta demostrada.
+
+## Audiencia e identidad — decisión 2026-09-21
+
+La audiencia prioritaria son **jóvenes y aficionados a la IA que quieren aprender a
+construir o aprender a vender soluciones**. La identidad compartida no es «seguidores de
+Onia» ni «personas que miran noticias de IA»: es **gente que usa IA para crear algo real y
+ayuda a otros a avanzar**.
+
+La comunidad actual se sigue registrando como **Onia Community** hasta que exista una
+aprobación explícita para cambiar el nombre visible. Estratégicamente, sin embargo, forma
+parte de la marca personal de Sergio Urcullo; Onia aparece como laboratorio y caso real,
+no como requisito para pertenecer.
+
+### Referentes comprobados el 2026-09-21
+
+- **Erik Taveras / AutoDev:** combina cursos prácticos, recursos listos, foro con proyectos,
+  contribución de miembros y un encuentro semanal en vivo. Lo útil para este sistema es el
+  ciclo **aprender → construir → mostrar → ayudar**, no copiar su estética de terminal.
+  Fuentes: <https://comunidad.eriktaveras.com/> y <https://link.eriktaveras.com/erik>.
+- **Enrique Rocha / tododeia:** mantiene una bóveda pública, completa y buscable; monetiza
+  profundidad empaquetada y ayuda directa, no el acceso básico al conocimiento. Lo útil es
+  convertir cada explicación en un activo acumulable, no copiar su catálogo ni su voz.
+  Fuente: <https://www.tododeia.com/>.
+
+La combinación propia queda así: **bóveda pública que construye autoridad + comunidad que
+ayuda a ejecutar + encuentros que crean relaciones + producto pago futuro que empaqueta un
+resultado repetido**.
+
+## Ritual presencial — piloto Santa Cruz
+
+**Objetivo:** que las personas aprendan una idea aplicable, conozcan colaboradores y salgan
+con un siguiente paso. No es una charla promocional de Onia ni una clase de dos horas dada
+solamente por Sergio Urcullo.
+
+### Diseño operativo
+
+- **Ciudad:** Santa Cruz de la Sierra.
+- **Ritmo:** un encuentro por semana con día y hora fijos; la sede puede rotar para mantener
+  variedad sin destruir el hábito.
+- **Sedes candidatas:** sala de reuniones de Bolivian Electric, sujeta a autorización,
+  capacidad y reglas de imagen; cafeterías con acuerdo previo; luego coworks, universidades
+  o empresas aliadas.
+- **Entrada inicial:** gratuita, con registro y cupo. La inscripción pide nombre, contacto,
+  qué quiere aprender/construir y si acepta aparecer en fotografías o video.
+- **Nombre de trabajo interno:** `IA Lab Santa Cruz`. No se publica como nombre oficial sin
+  aprobación de Sergio Urcullo.
+
+### Agenda recomendada — 120 minutos
+
+| Minutos | Bloque | Resultado |
+|---:|---|---|
+| 0–15 | llegada y conexiones guiadas | cada persona conoce al menos a otra |
+| 15–50 | exposición de Sergio o invitado | una idea con ejemplo real y sin pitch largo |
+| 50–75 | demo o construcción en vivo | la idea se convierte en algo visible |
+| 75–100 | casos e ideas de miembros | 2–3 hot seats con siguiente paso concreto |
+| 100–115 | networking libre | colaboraciones, preguntas y contactos |
+| 115–120 | cierre | reto semanal, próximo tema y consentimiento para compartir resultados |
+
+No hace falta un invitado todas las semanas. La cadencia sostenible es **dos invitados al
+mes**; los otros encuentros pueden ser build-alongs, revisión de proyectos o casos de
+miembros. Un experto entra porque puede enseñar una capacidad concreta, no sólo porque
+tiene seguidores.
+
+### El encuentro alimenta el contenido
+
+Cada edición debe producir, con permiso: 12–20 planos de B-roll · una idea del expositor ·
+una pregunta repetida · un caso de miembro · un aprendizaje personal de Sergio Urcullo ·
+el tema candidato de la siguiente semana. La comunidad deja de depender de inventar temas:
+las conversaciones presenciales se convierten en investigación y prueba.
+
+### Escala antes de monetización
+
+1. **Cuatro pilotos:** comprobar asistencia real, formato, tiempo y costo por encuentro.
+2. **Ocho encuentros:** identificar problemas repetidos y miembros que también aportan.
+3. **Primer producto pago:** taller o curso sobre un resultado repetido; no una membresía
+   genérica por «más contenido».
+4. **Membresía:** sólo si existe valor recurrente que no dependa por completo de horas de
+   Sergio Urcullo: biblioteca, expertos, proyectos, pares y rituales operables.
+
+El objetivo es crecer grande por **confianza, recurrencia y resultados de miembros**, no por
+llenar un grupo. El límite semanal de horas de Sergio Urcullo queda como decisión abierta y
+se mide durante los cuatro pilotos antes de fijar una promesa permanente.
+
+### Ratificado por Sergio Urcullo el 29-sep: semanal, con expositores, networking y temas
+
+El formato de arriba sigue vigente. Cada encuentro toma el **tema de la semana** del plan de
+contenido (`cola/plan-3-semanas/MAPA.md`), así el video, el carrusel, el drop y el encuentro
+empujan lo mismo y el encuentro produce material para la semana siguiente:
+
+| Semana | Tema del encuentro | Demo en vivo (50–75 min) | Hot seats |
+|---|---|---|---|
+| 30-sep → 6-oct | Claude Code: que trabaje para vos | escribir una skill desde cero | qué tarea repetida automatizaría cada uno |
+| 7 → 13-oct | Un bot de WhatsApp que atiende sin mentir | las cinco pruebas antes de activarlo | revisar el mensaje real de un miembro |
+| 14 → 20-oct | Contenido con IA sin editor | un video animado por código (método de Santiago Muñoz) | la próxima pieza de cada uno |
+
+**Falta que decida Sergio Urcullo (sin esto no hay primer encuentro):** día y hora fijos · sede del
+primer piloto (sala de Bolivian Electric con autorización, o cafetería con acuerdo) · fecha del
+primer encuentro · nombre visible (`IA Lab Santa Cruz` sigue siendo interno) · los dos expositores
+del mes (por capacidad concreta, no por seguidores) · el formulario de inscripción (nombre,
+contacto, qué quiere construir y permiso de imagen).
+
 ## Cadencia
 
 - 1 drop/día en la comunidad, hora fija (19:00 sugerido).
 - Cada drop: útil en <2 min, aplicable HOY, cierra con una pregunta o mini-tarea.
 - Los drops alimentan los videos (lo que más reaccione en la comunidad = próximo reel).
+
+### Activación inmediata · 22–28 de septiembre
+
+Esta semana no se abre un curso ni una membresía. Se usa la serie de sistemas con IA para
+entregar recursos, medir preguntas y preparar el primer piloto presencial.
+
+| Día | Drop | Entrega real | Señal que se registra |
+|---|---|---|---|
+| mar 22 | Workflow, modelo, agente, loop y MCP no son lo mismo | árbol de decisión `MAPA` | caso que más confunden |
+| mié 23 | Reto: dibujá una tarea repetitiva en cinco cajas | plantilla `ENTRADA → REGLA → ACCIÓN → REGISTRO → HUMANO` | tareas repetidas |
+| jue 24 | Antes de conectar una tool | checklist de permisos y aprobación | tools que quieren conectar |
+| vie 25 | Revisión de diagramas de miembros | feedback a 3 casos, sin vender | personas que ejecutaron |
+| sáb 26 | n8n sin agente para clasificar leads | mapa de nodos + prompt + schema | rubro que pide el workflow |
+| dom 27 | Audio de cierre de 5–8 minutos | errores y preguntas de la grabación | próximo tema votado |
+| lun 28 | Encuesta del piloto de Santa Cruz | dos franjas horarias + tipo de sede | intención real de asistir |
+
+El formulario o encuesta del lunes mide **día, horario, zona, tema y permiso de imagen**.
+No se anuncia sede ni fecha cerrada hasta tener autorización del lugar y un mínimo de
+personas que confirmen asistencia. La primera sesión mantiene la agenda de 120 minutos de
+este documento.
 
 ### Calendario vigente — corregido 2026-09-10 tras el reparto de piezas
 
@@ -213,10 +337,17 @@ lo que ya se grabó y escribió para afuera, más lo que afuera no se cuenta.
 > Pregunta grande de la semana: ¿qué querés que enseñe más a fondo? Respondé con una
 > palabra en General.
 
-## Estrategia de embudo: comunidad → VSL → curso (definida 2026-09-01)
+## Estrategia de embudo: comunidad → producto pago futuro
 
-La comunidad no es el fin: es el **nurture** para lanzar el curso con un VSL cuando
-exista. Arquitectura de 4 semanas:
+> **Corrección 2026-09-21:** el calendario de cuatro semanas de abajo es un marco de
+> validación histórico, no una fecha de lanzamiento activa. No se abre una producción de
+> curso ni una membresía hasta medir los cuatro pilotos presenciales, las preguntas
+> repetidas y el tiempo real de Sergio Urcullo. Un curso empaqueta un resultado; una
+> membresía crea una obligación recurrente y queda como última opción.
+
+La comunidad es el entorno donde se construyen confianza, resultados y lenguaje de la
+audiencia. Si aparece un resultado repetido y se decide empaquetarlo, puede alimentar un
+curso o taller con VSL. Marco histórico de validación en 4 semanas —sin reloj activo—:
 
 - **Semana 1-2 — valor + señales:** cada drop cierra con UNA pregunta que mide deseo
   (¿SÍ al paso a paso? ¿cuál prompt te sirvió? ¿tu tarea más repetida?). Las respuestas
@@ -247,7 +378,7 @@ Patrones que comparten las que dominan (Skool/Hormozi, Gadzhi, y los grandes en 
 | 2 | **Gamificación**: puntos, niveles, leaderboard — la participación se PREMIA | Manual: **🏆 Miembro de la semana** (mejor resultado aplicando un drop, con nombre), menciones constantes, racha de retos |
 | 3 | **Rituales fijos**: presentación obligatoria, wins del viernes, reto semanal | Mensaje fijado en General: "presentate: negocio + meta". **Miércoles reto · Viernes wins**. Ritmo sagrado 19:00 |
 | 4 | **El dueño aparece a diario al inicio** | Sergio responde 1×1 a los primeros 50; después delega parcial en miembros senior |
-| 5 | **Escalera de valor**: gratis → low-ticket → recurrente | Ya definida: comunidad → curso (VSL) → VIP mensual |
+| 5 | **Escalera de valor**: gratis → low-ticket → recurrente | comunidad gratis → taller/curso validado → recurrente sólo si no depende enteramente de Sergio Urcullo |
 | 6 | **Onboarding con quick win**: algo aplicable en los primeros 10 min | El mensaje fijado + el último drop siempre a mano (D0 regala cursos al entrar) |
 | 7 | **Challenges con fecha**: retos de 7-30 días crean picos y testimonios | Mes 2: "Reto 7 días: tu primera automatización" — cohorte con inicio y fin |
 | 8 | **Wins = máquina de testimonios** para el VSL | Los viernes de wins se archivan (capturas con permiso) → prueba social del VSL |

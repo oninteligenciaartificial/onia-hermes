@@ -1,0 +1,150 @@
+{
+  "title": "Claude Opus 5.5: el costo bajó, pero migrar sin probar puede romper tu agente",
+  "caption": "Claude Opus 5.5 salió el 22 de septiembre de 2026. El precio publicado es USD 4 por millón de tokens de entrada, USD 20 por millón de salida y USD 0,20 por millón de lecturas de caché. Eso no significa que todos tus flujos cuesten 40 % menos.\n\nEjemplo reproducible: 200.000 tokens de entrada + 50.000 de salida + 5 millones de lectura de caché cuestan USD 2,80 con Opus 5.5. El mismo patrón costaba USD 4,75 con Opus 5. La reducción de este caso es 41,1 %. Sin tanta caché, el ahorro es distinto.\n\nAntes de migrar, revisá dos cambios: el thinking ya no se desactiva como antes y el uso forzado de una herramienta con `tool_choice: any` o una herramienta específica no está soportado. Probá 20 tareas reales y medí costo por tarea exitosa.\n\nFuente: Anthropic, anuncio y guía de migración de Opus 5.5, 22-sep-2026.\n\nComentá OPUS y te envío la tabla de prueba A/B. Soy Sergio Urcullo; comparto sistemas de IA que podés comprobar, no solo noticias.",
+  "hashtags": ["#claude", "#anthropic", "#agentesia", "#inteligenciaartificial", "#automatizacion", "#bolivia"],
+  "comment_trigger": "Comentá OPUS",
+  "cta": "Comentá OPUS",
+  "serie": "IA PRÁCTICA",
+  "episodio": "04",
+  "slides": [
+    {
+      "number": 1,
+      "role": "cover",
+      "pill": "Claude · actualización",
+      "headline": "Opus 5.5 cuesta menos. Migrar mal puede romper tu agente.",
+      "body": "Precio, cálculo y dos cambios que tenés que probar.",
+      "callout": "Guardá el checklist",
+      "bg": "hermes-content/references/marca-personal-sergio/fondos/laptop-03.png",
+      "save_worthy": false,
+      "alt_text": "Claude Opus 5.5 cuesta menos pero requiere pruebas antes de migrar"
+    },
+    {
+      "number": 2,
+      "role": "stakes",
+      "pill": "Precio publicado",
+      "headline": "Entrada: $4. Salida: $20. Caché: $0,20.",
+      "body": "Valores por un millón de tokens. La lectura de caché cambia mucho el resultado cuando reutilizás contexto.",
+      "callout": "Fuente: Anthropic · 22-sep-2026",
+      "visual": {
+        "type": "table",
+        "label": "OPUS 5.5 · USD / 1M TOKENS",
+        "left": "CONCEPTO",
+        "right": "PRECIO",
+        "rows": [
+          {"left": "entrada", "right": "$4"},
+          {"left": "salida", "right": "$20"},
+          {"left": "lectura de caché", "right": "$0,20"}
+        ]
+      },
+      "save_worthy": false,
+      "alt_text": "Precios oficiales de Claude Opus 5.5"
+    },
+    {
+      "number": 3,
+      "role": "point",
+      "pill": "Cálculo reproducible",
+      "headline": "Este workload cuesta $2,80",
+      "body": "200k entrada × $4/M = $0,80. 50k salida × $20/M = $1. 5M caché × $0,20/M = $1. Total: $2,80.",
+      "callout": "No uses un porcentaje suelto",
+      "visual": {
+        "type": "contract",
+        "label": "COSTO OPUS 5.5",
+        "input": "$0,80 + $1,00",
+        "output": "+ $1,00 caché",
+        "permissions": "total = $2,80"
+      },
+      "save_worthy": true,
+      "alt_text": "Ejemplo de costo de Claude Opus 5.5 igual a 2,80 dólares"
+    },
+    {
+      "number": 4,
+      "role": "point",
+      "pill": "Comparación justa",
+      "headline": "El mismo patrón costaba $4,75 con Opus 5",
+      "body": "La diferencia de este ejemplo es $1,95: un ahorro de 41,1 %. Es un caso con mucha caché, no una promesa universal.",
+      "callout": "Tu mezcla de tokens manda",
+      "visual": {
+        "type": "table",
+        "label": "MISMA CARGA",
+        "left": "MODELO",
+        "right": "COSTO",
+        "rows": [
+          {"left": "Opus 5", "right": "$4,75"},
+          {"left": "Opus 5.5", "right": "$2,80"},
+          {"left": "diferencia", "right": "−41,1 %"}
+        ]
+      },
+      "save_worthy": false,
+      "alt_text": "Comparación de costo entre Claude Opus 5 y Opus 5.5"
+    },
+    {
+      "number": 5,
+      "role": "point",
+      "pill": "Cambio 1 · thinking",
+      "headline": "No migres copiando tu configuración anterior",
+      "body": "La guía indica que thinking ya no se puede desactivar ni usar con presupuesto fijo como antes. Migrá a thinking adaptativo y controlá el esfuerzo.",
+      "callout": "Probá calidad, tokens y latencia",
+      "visual": {
+        "type": "flow",
+        "label": "MIGRACIÓN",
+        "nodes": [
+          {"name": "config vieja", "detail": "thinking fijo"},
+          {"name": "adaptive", "detail": "esfuerzo"},
+          {"name": "A/B real", "detail": "20 tareas"}
+        ],
+        "note": "No cambies producción sin una muestra representativa."
+      },
+      "save_worthy": false,
+      "alt_text": "Claude Opus 5.5 requiere revisar la configuración de thinking"
+    },
+    {
+      "number": 6,
+      "role": "point",
+      "pill": "Cambio 2 · herramientas",
+      "headline": "El tool choice forzado puede fallar",
+      "body": "Opus 5.5 no soporta `tool_choice: any` ni forzar una herramienta específica. Usá selección automática y herramientas con esquema estricto.",
+      "callout": "Revisá cada llamada",
+      "visual": {
+        "type": "terminal",
+        "label": "ANTES DE PRODUCCIÓN",
+        "lines": [
+          {"value": "tool_choice: auto", "kind": "command"},
+          {"value": "strict tool schema", "kind": "comment"},
+          {"value": "validar tool calls", "kind": "comment"}
+        ]
+      },
+      "save_worthy": false,
+      "alt_text": "Cambio de tool choice al migrar a Claude Opus 5.5"
+    },
+    {
+      "number": 7,
+      "role": "save",
+      "pill": "Prueba A/B",
+      "headline": "Medí costo por tarea exitosa",
+      "body": "Corré 20 tareas reales con ambos modelos. Registrá éxito, tokens de entrada y salida, lectura de caché, latencia, tool calls y costo total.",
+      "callout": "Guardá esta métrica ↗",
+      "visual": {
+        "type": "matrix",
+        "label": "CONTROL DE MIGRACIÓN",
+        "items": [
+          {"title": "resultado", "body": "¿terminó bien?"},
+          {"title": "costo", "body": "tokens + caché"},
+          {"title": "operación", "body": "latencia + tools"}
+        ]
+      },
+      "save_worthy": true,
+      "alt_text": "Checklist de prueba A B para migrar a Claude Opus 5.5"
+    },
+    {
+      "number": 8,
+      "role": "cta",
+      "pill": "Recurso práctico",
+      "headline": "Te paso la tabla para probarlo",
+      "body": "Comentá *OPUS*. Soy Sergio Urcullo y comparto sistemas de IA que podés comprobar, no solo noticias.",
+      "callout": "",
+      "save_worthy": false,
+      "alt_text": "Comentá OPUS para recibir la tabla de prueba A B"
+    }
+  ],
+  "job": "education"
+}

@@ -28,11 +28,18 @@ fi
 
 HOY=$(date +%F)
 TEXTO=""
-for f in "$OUT_DIR/agenda-hoy.txt" "$OUT_DIR/video-hoy.txt"; do
-  [ -f "$f" ] || continue
-  [ "$(date -r "$f" +%F)" = "$HOY" ] || continue
-  TEXTO+="$(cat "$f")"$'\n\n'
-done
+# Desde el 2026-09-29 la voz narra EL resumen de la mañana (onia-jarvis-resumen.sh, que
+# deja brief-hoy.txt ya limpio para leer en voz alta). Los dos archivos viejos de Hermes
+# quedan de respaldo para el día que el resumen no se haya generado.
+if [ -f "$OUT_DIR/brief-hoy.txt" ] && [ "$(date -r "$OUT_DIR/brief-hoy.txt" +%F)" = "$HOY" ]; then
+  TEXTO="$(cat "$OUT_DIR/brief-hoy.txt")"
+else
+  for f in "$OUT_DIR/agenda-hoy.txt" "$OUT_DIR/video-hoy.txt"; do
+    [ -f "$f" ] || continue
+    [ "$(date -r "$f" +%F)" = "$HOY" ] || continue
+    TEXTO+="$(cat "$f")"$'\n\n'
+  done
+fi
 if [ -z "$TEXTO" ]; then
   echo "$(date -u +%FT%TZ) sin resumen de hoy, nada que narrar"
   exit 0

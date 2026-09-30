@@ -50,6 +50,9 @@ n8n-mcp-server/node_modules/
 .tmp/
 test-results/
 
+# Capturas de QA regenerables de HyperFrames; los decks HTML sí se versionan.
+hermes-content/carousels/out/yt-*/snapshots/
+
 # salida de trabajo del canario visual (las baselines si se versionan)
 .canario-out/
 
@@ -77,3 +80,7 @@ hermes-content/docs/recorrido/**/*.png
 # Worktrees de subagentes de Claude Code: son checkouts aparte, nunca contenido del repo.
 # (30-sep-2026: el autosync del Stop commiteó uno como gitlink en una rama de trabajo.)
 .claude/worktrees/
+
+# Galeria unica de imagenes (29-sep): solo finales. Temporales de descarga y copias por carrusel, fuera.
+hermes-content/galeria/**/*.tmp
+hermes-content/carousels/out/*/assets/

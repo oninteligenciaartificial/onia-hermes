@@ -1,8 +1,11 @@
 # Lucía v4 — plan de perfeccionamiento de identidad
 
-Estado: **preparado, sin generaciones ni entrenamiento ejecutados**
+Estado: **2026-09-29 — se fija la cara ORIGINAL de Lucía.** ⚠️ Corregido el mismo día: el plan pasó
+por «cara nueva desde cero» (castings C01–C26, 23,04 cr) por una premisa falsa (que la cara venía
+de una persona real). Sergio Urcullo la hizo 100% con IA y prefiere la original. Master = la cara
+original: photoshoot de 10 ángulos (`STACK-rasgos-10-angulos.jpg`) + `lucia-skin-v1` (7 ángulos).
 
-Fecha de auditoría: 2026-09-23
+Fecha de auditoría original: 2026-09-23
 
 Autoridad de IDs, derechos y gates: `LUCIA-HIGGSFIELD-IDENTITY.json`
 
@@ -38,6 +41,14 @@ procedencia/derechos y aprobar visualmente el master.
 - Playwright/VPS no debe conducir generaciones pagas ni aprobaciones humanas.
 
 ### Conflicto oficial que bloquea el origen del dataset
+
+> ✅ **Resuelto el 2026-09-29 por decisión de Sergio Urcullo: «entrenamos con repos y guía».**
+> Se releyeron en vivo los términos («Last updated: July 26, 2026»). El 5.2(iv) existe tal cual y
+> es incluso más explícito: la excepción (a) excluye con todas las letras *«Outputs of Company's AI
+> models»*. Y la guía oficial de AI Influencer sigue diciendo *«generate a batch of its portraits
+> and train a Soul ID on 20 or more of them»*. Se toma la guía como autorización escrita
+> (5.2(iv)(b)) y se archiva su texto con fecha. La confirmación formal por escrito se pide recién
+> **antes de vender modelos a clientes**. El bloque de abajo queda como historia del razonamiento.
 
 La ayuda de AI Influencer recomienda generar retratos y usarlos para entrenar un Soul ID, pero los
 Términos 5.2(iv) prohíben usar Outputs de Higgsfield para entrenar modelos, salvo autorización
@@ -82,10 +93,43 @@ Los rasgos no se reescriben en cada prompt; se aprueban una vez y se conservan e
 - pecas finas y contables sobre nariz y pómulos, sin aumentar ni borrarse;
 - pelo castaño oscuro, raya al medio, textura natural y largo fijo;
 - argollas pequeñas y cadenita fina de oro;
-- maquillaje cero o imperceptible, sin smoothing ni look de campaña.
+- maquillaje cero o imperceptible, sin smoothing ni look de campaña;
+- **marca distintiva nueva (2026-09-29):** lunar plano marrón chico justo debajo del rabillo
+  externo del ojo **izquierdo** de ella. Junto con las pecas es lo que el QA compara primero.
+
+El prompt de casting que lleva estos rasgos, tal cual se envió, está en
+`v4/prompts/casting-soul.txt` (Soul, sin negaciones) y `v4/prompts/casting-ref.txt` (motores que
+aceptan negaciones).
 
 Antes de producir las 20 imágenes, Sergio aprueba **un solo retrato master**. Si el master cambia,
 todo el dataset vuelve a cero; no se mezclan dos familias de cara.
+
+## Casting 2026-09-29 — cómo se eligió la cara
+
+- 12 candidatas, **solo texto**, mismo brief, cuatro motores: C01–C07 `soul_2`, C08–C09
+  `gpt_image_2_5` (flare, high), C10–C11 `nano_banana_pro`, C12 `soul_cast`.
+- C12 queda descartada: `soul_cast` ignora el prompt e inventa un personaje propio.
+- Formato «model agency digitals»: frontal, cabeza y hombros, pared lisa, luz de ventana, cara
+  lavada. Es el formato en el que la identidad aguanta y los rasgos se leen (§13 de `LUCIA.md`).
+- Job IDs, seeds, tamaños, costos y hash del prompt de cada una: `v4/PROCEDENCIA.jsonl`.
+- **Sergio Urcullo elige UNA.** Si el master cambia después, todo lo que salió de él vuelve a cero.
+
+## Photoshoot de rasgos marcados — lo que pidió Sergio Urcullo
+
+*«Empezar con las caras ya fijadas y con photoshoot donde se marquen todos los rasgos.»* Desde el
+master aprobado, **antes** del dataset:
+
+1. **Hoja partida** (workflow oficial `character-sheet`): cuerpo entero de pie + primer plano de
+   pecho para arriba, fondo blanco continuo, misma luz.
+2. **Turnaround**: frente, tres cuartos, perfil y espalda (largo y caída del pelo).
+3. **Hoja de expresiones**: neutral, sonrisa, sonrisa con dientes, hablando y seria.
+4. **Primeros planos de marcas**: puente de la nariz y pómulos (pecas), rabillo del ojo izquierdo
+   (lunar), ojos y cejas, argollas y cadenita.
+
+Esas láminas son **la vara del QA de ahora en adelante**: reemplazan a `STACK-rasgos-10-angulos.jpg`,
+que era de la cara retirada. De ahí salen las 20 tomas del dataset. Todas se generan
+referenciando **el master**, nunca una salida intermedia: encadenar salidas es la deriva que ya
+pagamos.
 
 ## Dataset v4 — 20 tomas obligatorias
 
@@ -189,8 +233,13 @@ Seedance 2.5 es el candidato principal para producción seria; Seedance 2.0 qued
 ## Estado de ejecución
 
 - Auditoría local: **completa**.
-- Investigación oficial: **completa al 2026-09-23**.
-- Dataset v4: **no iniciado**.
-- Soul ID v4: **no entrenado**.
-- Créditos gastados en esta revisión: **0**.
-- Próximo gate humano: aprobar el retrato master y el cap de la Fase de construcción del dataset.
+- Investigación oficial: **completa al 2026-09-23**; términos y guía **releídos en vivo el 2026-09-29**.
+- Identidad anterior: **retirada** el 2026-09-29. El borrado físico en la web queda pendiente de
+  Sergio Urcullo (Higgsfield no permite borrar por MCP ni por CLI).
+- Casting: **ejecutado** el 2026-09-29 (12 candidatas, 10,46 créditos, cap aprobado).
+- Master v4: **esperando elección de Sergio Urcullo**.
+- Photoshoot de rasgos, dataset y Soul ID v4: **no iniciados**.
+- ⚠️ La **prueba A/B de más arriba quedó sin objeto**: comparaba contra Elements que ya no existen.
+  La reemplaza una prueba de consistencia del Soul v4 en las mismas 3 escenas fijas, con la misma
+  puntuación ponderada.
+- Próximo gate humano: elegir el master. Después: OK específico del costo de entrenamiento del Soul.

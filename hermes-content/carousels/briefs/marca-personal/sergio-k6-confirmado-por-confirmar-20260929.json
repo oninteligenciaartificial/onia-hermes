@@ -1,0 +1,140 @@
+{
+  "title": "Las 2 listas que tu bot necesita: confirmado / por confirmar",
+  "caption": "Probé un bot con un negocio de ejemplo: un cliente pide 200 cajas con logo para el viernes.\n\nSin reglas no prometió. Con dos listas, confirmado y por confirmar, usó el dato real («hacemos desde 50») y dijo qué faltaba confirmar.\n\nLa IA solo sabe lo que vos le das. Escribile las dos listas.\n\nPrueba del 28-sep con Sonnet 5.5, una corrida por caso. Las dos respuestas completas están en la comunidad.",
+  "hashtags": [
+    "#chatbot",
+    "#whatsapp",
+    "#ia",
+    "#atencionalcliente",
+    "#negocios",
+    "#bolivia"
+  ],
+  "serie": "IA PRÁCTICA",
+  "episodio": "K6",
+  "job": "education",
+  "slides": [
+    {
+      "number": 1,
+      "role": "cover",
+      "pill": "Bot de WhatsApp",
+      "headline": "Las *2 listas* que tu bot necesita",
+      "body": "Confirmado y por confirmar. Así no promete lo que no sabés.",
+      "image_prompt": "Two plain white ceramic bowls side by side on a light oak table, one filled with dark roasted coffee beans and one empty, soft window light.",
+      "alt_text": "Las 2 listas que tu bot necesita"
+    },
+    {
+      "number": 2,
+      "role": "stakes",
+      "pill": "El problema",
+      "headline": "Tu cliente pregunta *lo que no sabés*",
+      "body": "«Necesito 200 cajas con mi logo para este viernes, ¿me las pueden entregar?». Si tu bot dice que sí, lo prometiste vos.",
+      "callout": "Lo que promete, lo cumplís vos",
+      "alt_text": "Un cliente pregunta algo que el negocio no confirmó"
+    },
+    {
+      "number": 3,
+      "role": "point",
+      "pill": "La prueba",
+      "headline": "Sin listas, *no prometió*",
+      "body": "Negocio de ejemplo, Cajas Kuska, con Sonnet 5.5. Solo le dije «sé amable y cerrá la venta». Pidió medidas, logo y zona.",
+      "visual": {
+        "type": "terminal",
+        "label": "SIN LISTAS",
+        "lines": [
+          {
+            "value": "> 200 cajas para el viernes?",
+            "kind": "command"
+          },
+          {
+            "value": "«no quiero prometerte una fecha",
+            "kind": "comment"
+          },
+          {
+            "value": "que después no te pueda cumplir»",
+            "kind": "comment"
+          }
+        ]
+      },
+      "alt_text": "Respuesta del bot sin reglas"
+    },
+    {
+      "number": 4,
+      "role": "point",
+      "pill": "Las dos listas",
+      "headline": "Escribilas en *su información*",
+      "body": "Confirmado: lo que sostenés hoy. Por confirmar: lo que siempre se confirma antes de prometer.",
+      "visual": {
+        "type": "terminal",
+        "label": "INFORMACIÓN DEL BOT",
+        "lines": [
+          {
+            "value": "CONFIRMADO",
+            "kind": "command"
+          },
+          {
+            "value": "cajas de cartón con tu logo",
+            "kind": ""
+          },
+          {
+            "value": "desde 50 unidades",
+            "kind": ""
+          },
+          {
+            "value": "POR CONFIRMAR",
+            "kind": "command"
+          },
+          {
+            "value": "stock · plazo · precio",
+            "kind": ""
+          }
+        ]
+      },
+      "alt_text": "Las listas confirmado y por confirmar"
+    },
+    {
+      "number": 5,
+      "role": "point",
+      "pill": "El paso crítico",
+      "headline": "Por confirmar *no se promete*",
+      "body": "Stock, plazo y precio los confirma una persona. En el bot de ONIA ni siquiera existe un campo donde escribir un precio.",
+      "callout": "El precio lo da una persona",
+      "alt_text": "Lo que está por confirmar no se promete"
+    },
+    {
+      "number": 6,
+      "role": "save",
+      "pill": "El resultado",
+      "headline": "Con las listas, *usó el dato real*",
+      "body": "«200 unidades está dentro de lo que trabajamos (hacemos desde 50)». Y aclaró que el plazo lo confirma con el equipo.",
+      "visual": {
+        "type": "matrix",
+        "label": "PLANTILLA",
+        "items": [
+          {
+            "title": "confirmado",
+            "body": "qué hacés, mínimos, horarios, zonas"
+          },
+          {
+            "title": "por confirmar",
+            "body": "stock, plazo, precio"
+          },
+          {
+            "title": "la regla",
+            "body": "no confirmes lo que no está en la lista 1"
+          }
+        ]
+      },
+      "save_worthy": true,
+      "alt_text": "Plantilla de las dos listas para tu bot"
+    },
+    {
+      "number": 7,
+      "role": "cta",
+      "pill": "Comunidad",
+      "headline": "Las dos respuestas, en la *comunidad*",
+      "body": "Completas, lado a lado, con la plantilla de las dos listas. Link en mi web.",
+      "cta": "COMUNIDAD EN LA BIO",
+      "alt_text": "Las dos respuestas completas en la comunidad"
+    }
+  ]
+}

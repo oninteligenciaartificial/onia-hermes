@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /* Tests for the carousel render engine. Run: node scripts/carousel_render.test.js */
 const assert = require('node:assert');
-const { roleFor, slideHtml, communityEditorialHtml, darkProductHtml, darkNeonHtml, editorialPhotoHtml, editorialCleanHtml, brightRetailHtml, bloqueSolidoHtml, emph, ACCOUNTS, BRANDS, PACKS, FORMATS, setFormat } = require('./carousel_render');
+const { roleFor, slideHtml, communityEditorialHtml, referentesHtml, darkProductHtml, darkNeonHtml, editorialPhotoHtml, editorialCleanHtml, brightRetailHtml, bloqueSolidoHtml, emph, ACCOUNTS, BRANDS, PACKS, FORMATS, setFormat } = require('./carousel_render');
 
 let passed = 0;
 function test(name, fn) {
@@ -73,7 +73,7 @@ test('packs list includes all packs (incl. bloque-solido)', () => {
   // Volvio a pasar el 2026-09-02, con CUATRO packs de una: el merge del carril de Lucia
   // los agrego al motor y no toco esta linea. Ver el test de abajo: esta comparacion sola
   // no alcanzaba — es un changelog, no un guard.
-  assert.deepStrictEqual(PACKS, ['community-editorial', 'dark-product', 'dark-neon', 'editorial-photo', 'editorial-clean', 'bright-retail', 'bloque-solido']);
+  assert.deepStrictEqual(PACKS, ['community-editorial', 'referentes', 'dark-product', 'dark-neon', 'editorial-photo', 'editorial-clean', 'bright-retail', 'bloque-solido']);
 });
 test('todo pack listado RENDERIZA (no solo figura en la lista)', () => {
   // El guard que faltaba. La comparacion de arriba mira el PRIMER paso —que el nombre
@@ -85,6 +85,7 @@ test('todo pack listado RENDERIZA (no solo figura en la lista)', () => {
   // asi que solo llamarlos lo destapa — importar el motor no basta.
   const RENDER = {
     'community-editorial': communityEditorialHtml,
+    referentes: referentesHtml,
     'dark-product': darkProductHtml,
     'dark-neon': darkNeonHtml,
     'editorial-photo': editorialPhotoHtml,
@@ -98,6 +99,15 @@ test('todo pack listado RENDERIZA (no solo figura en la lista)', () => {
     const html = fn({ role: 'cover', headline: 'H', body: 'b', pill: 'P' }, 0, 5, 'onia', {});
     assert.ok(html && html.includes('</html>'), `${pack} no devolvio HTML completo`);
   }
+});
+test('referentes: cada layout renderiza y uno desconocido falla claro', () => {
+  for (const layout of ['logos', 'analogia', 'ensayo', 'ilustrado', 'lista', 'dato', 'captura', 'cierre']) {
+    const html = referentesHtml({ layout, headline: 'H *x*', body: 'b', items: [{ label: 'L', text: 't' }] }, 1, 3, 'sergio', {});
+    assert.ok(html.includes('</html>') && html.includes(`l-${layout}`), layout);
+  }
+  assert.throws(() => referentesHtml({ layout: 'nope' }, 0, 1, 'sergio', {}), /layout desconocido/);
+  for (const theme of ['blanco', 'verde', 'negro']) assert.ok(referentesHtml({ layout: 'ensayo', body: 'b' }, 0, 1, 'sergio', { theme }).includes(`t-${theme}`), theme);
+  assert.throws(() => referentesHtml({ layout: 'ensayo', theme: 'rosa' }, 0, 1, 'sergio', {}), /theme desconocido/);
 });
 test('community-editorial usa la cuenta elegida y CTA directo para pauta', () => {
   const html = communityEditorialHtml({

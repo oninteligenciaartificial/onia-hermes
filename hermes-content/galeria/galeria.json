@@ -1,0 +1,255 @@
+[
+  {
+    "id": "sergio-k1-opus-o-sonnet-20260929-s01",
+    "file": "hermes-content/galeria/fotos/sergio-k1-opus-o-sonnet-20260929-s01.jpg",
+    "fecha": "2026-09-29",
+    "tipo": "fotos",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "text2image_soul_v2",
+    "prompt": "Two smooth river stones of clearly different size resting side by side on a dark walnut table, soft morning window light from the left.",
+    "estilo": "foto",
+    "costo_cr": 0.12,
+    "job": "1a99e659-ea36-4d73-aacb-fe14a70a0b81",
+    "usado_en": [
+      "sergio-k1-opus-o-sonnet-20260929"
+    ],
+    "tags": []
+  },
+  {
+    "id": "sergio-k2-primera-skill-20260929-s01",
+    "file": "hermes-content/galeria/fotos/sergio-k2-primera-skill-20260929-s01.jpg",
+    "fecha": "2026-09-29",
+    "tipo": "fotos",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "text2image_soul_v2",
+    "prompt": "A single small green seedling sprouting from dark soil in a plain terracotta pot on a light oak table, soft side light.",
+    "estilo": "foto",
+    "costo_cr": 0.12,
+    "job": "caf95899-d2f4-4239-91bc-33576261e81a",
+    "usado_en": [
+      "sergio-k2-primera-skill-20260929"
+    ],
+    "tags": []
+  },
+  {
+    "id": "sergio-k3-claude-md-historia-20260929-s01",
+    "file": "hermes-content/galeria/fotos/sergio-k3-claude-md-historia-20260929-s01.jpg",
+    "fecha": "2026-09-29",
+    "tipo": "fotos",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "text2image_soul_v2",
+    "prompt": "A single small yellow feather resting on a dark slate surface, soft window light, fine texture detail.",
+    "estilo": "foto",
+    "costo_cr": 0.12,
+    "job": "7f12cb7a-7644-42ce-a5c6-5f131a655561",
+    "usado_en": [
+      "sergio-k3-claude-md-historia-20260929"
+    ],
+    "tags": []
+  },
+  {
+    "id": "sergio-k1v2-opus-o-sonnet-20260929-s01",
+    "file": "hermes-content/galeria/ilustraciones/sergio-k1v2-opus-o-sonnet-20260929-s01.jpg",
+    "fecha": "2026-09-29",
+    "tipo": "ilustraciones",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "text2image_soul_v2",
+    "prompt": "Two hot air balloons floating side by side over soft rolling hills, one clearly large and one clearly small, both rising at the same height.",
+    "estilo": "acuarela",
+    "costo_cr": 0.12,
+    "job": "1c17e88f-d9fc-4374-8a01-218a0a87cc29",
+    "usado_en": [
+      "sergio-k1v2-opus-o-sonnet-20260929"
+    ],
+    "tags": []
+  },
+  {
+    "id": "sergio-k1v2-opus-o-sonnet-20260929-s05",
+    "file": "hermes-content/galeria/ilustraciones/sergio-k1v2-opus-o-sonnet-20260929-s05.jpg",
+    "fecha": "2026-09-29",
+    "tipo": "ilustraciones",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "text2image_soul_v2",
+    "prompt": "Two paper airplanes of different sizes both landing exactly on the center of one small round target drawn on the paper.",
+    "estilo": "acuarela",
+    "costo_cr": 0.12,
+    "job": "8d4cb4e2-01ce-47e1-837e-b59a4ee1e391",
+    "usado_en": [
+      "sergio-k1v2-opus-o-sonnet-20260929"
+    ],
+    "tags": []
+  },
+  {
+    "id": "reloj-arena",
+    "file": "hermes-content/galeria/objetos/reloj-arena-crudo.jpg",
+    "fecha": "2026-09-29",
+    "tipo": "objetos",
+    "fuente": "pexels",
+    "licencia": "Pexels License",
+    "autor": "Aziz Hasan AY",
+    "origen": "https://www.pexels.com/photo/hourglass-on-white-background-15556380/",
+    "consulta": "hourglass isolated white background",
+    "usado_en": [],
+    "tags": []
+  },
+  {
+    "id": "sergio-k1v3-opciones-estilo-20260929-s02-9e5df48d",
+    "file": "hermes-content/galeria/ilustraciones/sergio-k1v3-opciones-estilo-20260929-s02-9e5df48d.jpg",
+    "fecha": "2026-09-29",
+    "tipo": "ilustraciones",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "text2image_soul_v2",
+    "prompt": "Two hot air balloons floating side by side over soft rolling hills, one clearly large and one clearly small, both rising at the same height.",
+    "estilo": "clay",
+    "costo_cr": 0.12,
+    "job": "9e5df48d-6112-4fdb-ae9d-19a1b51800b2",
+    "usado_en": [
+      "sergio-k1v3-opciones-estilo-20260929"
+    ],
+    "tags": []
+  },
+  {
+    "id": "sergio-k1v3-clay-s05-20260929-s05-643b0775",
+    "file": "hermes-content/galeria/ilustraciones/sergio-k1v3-clay-s05-20260929-s05-643b0775.jpg",
+    "fecha": "2026-09-29",
+    "tipo": "ilustraciones",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "text2image_soul_v2",
+    "prompt": "Two paper airplanes of different sizes, one emerald green and one black, both landing exactly on the center of one small round white target.",
+    "estilo": "clay",
+    "costo_cr": 0.12,
+    "job": "643b0775-68b5-4b44-a1cb-063a8df7e1d4",
+    "usado_en": [
+      "sergio-k1v3-clay-s05-20260929"
+    ],
+    "tags": []
+  },
+  {
+    "id": "sergio-k1v3-opus-o-sonnet-20260929-s01-e449334a-recorte",
+    "file": "hermes-content/galeria/ilustraciones/sergio-k1v3-opus-o-sonnet-20260929-s01-e449334a-recorte.jpg",
+    "fecha": "2026-09-29",
+    "tipo": "ilustraciones",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "text2image_soul_v2",
+    "prompt": "Two hot air balloons floating side by side over soft rolling hills, one clearly large and one clearly small, both rising at the same height.",
+    "estilo": "acuarela",
+    "costo_cr": 0.12,
+    "job": "e449334a-27b8-4459-93cc-b8b85416544c",
+    "usado_en": [
+      "sergio-k1v3-opus-o-sonnet-20260929"
+    ],
+    "tags": [],
+    "nota": "recorte que quita una firma inventada por el modelo (esquina inferior derecha)"
+  },
+  {
+    "id": "sergio-k3v2-claude-md-historia-20260929-s01-e5a8a39f",
+    "file": "hermes-content/galeria/ilustraciones/sergio-k3v2-claude-md-historia-20260929-s01-e5a8a39f.jpg",
+    "fecha": "2026-09-29",
+    "tipo": "ilustraciones",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "text2image_soul_v2",
+    "prompt": "A small yellow canary perched on a thin bare branch, head turned to one side, soft morning light.",
+    "estilo": "acuarela",
+    "costo_cr": 0.12,
+    "job": "e5a8a39f-0967-418f-a555-67a49b1b96dc",
+    "usado_en": [
+      "sergio-k3v2-claude-md-historia-20260929"
+    ],
+    "tags": []
+  },
+  {
+    "id": "sergio-k4v2-cinco-pruebas-bot-20260929-s01-3f374e98",
+    "file": "hermes-content/galeria/ilustraciones/sergio-k4v2-cinco-pruebas-bot-20260929-s01-3f374e98.jpg",
+    "fecha": "2026-09-29",
+    "tipo": "ilustraciones",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "text2image_soul_v2",
+    "prompt": "Five small round pebbles lined up in a neat row on smooth sand, the last one a deep green stone.",
+    "estilo": "clay",
+    "costo_cr": 0.12,
+    "job": "3f374e98-8826-4155-b518-26202aa1bd0f",
+    "usado_en": [
+      "sergio-k4v2-cinco-pruebas-bot-20260929"
+    ],
+    "tags": []
+  },
+  {
+    "id": "sergio-k6v2-confirmado-por-confirmar-20260929-s01-c3bbe494",
+    "file": "hermes-content/galeria/ilustraciones/sergio-k6v2-confirmado-por-confirmar-20260929-s01-c3bbe494.jpg",
+    "fecha": "2026-09-29",
+    "tipo": "ilustraciones",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "text2image_soul_v2",
+    "prompt": "Two plain white ceramic bowls side by side on a light oak table, one filled with dark roasted coffee beans and one empty.",
+    "estilo": "clay",
+    "costo_cr": 0.12,
+    "job": "c3bbe494-1017-4518-8ea0-7100dd599d33",
+    "usado_en": [
+      "sergio-k6v2-confirmado-por-confirmar-20260929"
+    ],
+    "tags": []
+  },
+  {
+    "id": "sergio-k7v2-carruseles-por-codigo-20260929-s01-efee638c",
+    "file": "hermes-content/galeria/ilustraciones/sergio-k7v2-carruseles-por-codigo-20260929-s01-efee638c.jpg",
+    "fecha": "2026-09-29",
+    "tipo": "ilustraciones",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "text2image_soul_v2",
+    "prompt": "A few small offcuts of pale birch wood stacked neatly beside a wood carving chisel with a worn wooden handle on a workbench.",
+    "estilo": "clay",
+    "costo_cr": 0.12,
+    "job": "efee638c-adf5-491f-945f-7f5f0822bfe2",
+    "usado_en": [
+      "sergio-k7v2-carruseles-por-codigo-20260929"
+    ],
+    "tags": []
+  },
+  {
+    "id": "sergio-k9v2-checklist-video-ia-20260929-s01-b436d635",
+    "file": "hermes-content/galeria/ilustraciones/sergio-k9v2-checklist-video-ia-20260929-s01-b436d635.jpg",
+    "fecha": "2026-09-29",
+    "tipo": "ilustraciones",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "text2image_soul_v2",
+    "prompt": "A small pair of plain brass sewing scissors resting beside a spool of natural undyed linen thread on a pale oak table.",
+    "estilo": "clay",
+    "costo_cr": 0.12,
+    "job": "b436d635-6a06-42a6-954c-503355609f22",
+    "usado_en": [
+      "sergio-k9v2-checklist-video-ia-20260929"
+    ],
+    "tags": []
+  },
+  {
+    "id": "sergio-k5v2-seguimiento-que-no-molesta-20260929-s01-28d2ecd3-recorte",
+    "file": "hermes-content/galeria/ilustraciones/sergio-k5v2-seguimiento-que-no-molesta-20260929-s01-28d2ecd3-recorte.jpg",
+    "fecha": "2026-09-29",
+    "tipo": "ilustraciones",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "text2image_soul_v2",
+    "prompt": "A small brass hand bell resting quietly on a wooden table beside a folded natural linen napkin, soft early morning light.",
+    "estilo": "acuarela",
+    "costo_cr": 0.12,
+    "job": "28d2ecd3-2d08-4731-be3b-5f10dba85889",
+    "usado_en": [
+      "sergio-k5v2-seguimiento-que-no-molesta-20260929"
+    ],
+    "tags": [],
+    "nota": "recorte: texto inventado abajo y borde de papel a la izquierda"
+  }
+]

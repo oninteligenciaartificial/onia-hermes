@@ -16,6 +16,21 @@
 
 **La cuenta: Feed 3 + Trial 7 (4 + los v2) = 10-13 piezas al día.**
 
+### 29-sep-2026 · cómo se cumplen 10-13 grabando 3 videos por día
+
+Sergio Urcullo graba ~1 hora y 3 videos por día (plan de 3 semanas); el yap y la publicación los
+hace el editor (Claude) y los **Trial** son los *Trial reels* de Instagram por API (solo NO
+seguidores; `hermes-content/deploy/vps-ops/publicar/README.md`). La regla de 10-13 sigue viva:
+
+| Carril | Piezas | De dónde salen |
+|---|---|---|
+| **Feed** | 3 | los 3 videos grabados (A tutorial · B actualidad · C negocio/historia o clip del YouTube) |
+| **Trial** | 6 | **2 yaps por video**, cada uno con OTRO gancho y otro largo (no un recorte del mismo) |
+| **Trial v2** | 1-3 | tomas extra de Sergio a cámara sin edición, si las graba; si no, el carrusel del día |
+| **Total** | **10-12** | + los largos de YouTube (lun · mié · vie) y los carruseles (mar · jue · sáb) |
+
+Si Samuel produce (pilar, b-roll, yap propio), suma encima; el piso de 10 ya no depende de él.
+
 Reglas que siguen vivas del plan del 11-sep:
 - Al feed va SIEMPRE **uno serio de IA** (el "normal"). Los trial v2 varían: Bolivia · IA · negocio.
 - Los de IA hablan ESPECÍFICO: **Claude, Claude Code, skill, hook, agente, loop, subagente**.

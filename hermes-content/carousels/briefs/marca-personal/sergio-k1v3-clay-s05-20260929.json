@@ -1,0 +1,16 @@
+{
+  "title": "K1 v3 slide 5 en clay",
+  "serie": "Claude 5.5",
+  "slides": [
+    {
+      "number": 5,
+      "layout": "ilustrado",
+      "headline": "Mi prueba: *mismo resultado*",
+      "image_prompt": "Two paper airplanes of different sizes, one emerald green and one black, both landing exactly on the center of one small round white target.",
+      "body": "Tres presupuestos con trampa. Los dos encontraron los Bs 360 escondidos.",
+      "next": "mi regla",
+      "alt_text": "Opus y Sonnet resolvieron igual la misma tarea",
+      "image_style": "clay"
+    }
+  ]
+}

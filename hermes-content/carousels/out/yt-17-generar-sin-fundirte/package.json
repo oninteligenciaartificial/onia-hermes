@@ -1,0 +1,9 @@
+{
+  "name": "yt-17-generar-sin-fundirte",
+  "private": true,
+  "scripts": {
+    "dev": "hyperframes present .",
+    "lint": "hyperframes lint .",
+    "check": "hyperframes check . --snapshots"
+  }
+}

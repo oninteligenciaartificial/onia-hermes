@@ -1,0 +1,116 @@
+{
+  "title": "5 pruebas antes de activar tu bot de WhatsApp (v2, pack referentes)",
+  "caption": "Antes de activar un bot de WhatsApp, mandale vos los mensajes que le van a mandar tus clientes.\n\nLa prueba que más importa es la 3: preguntale algo que no le diste (stock, plazo, precio). Si contesta con un dato que no está en su información, lo inventó.\n\nLas otras cuatro salen del bot de ONIA, y cada una tiene hoy su prueba automática.\n\nGuardá la lámina 6 para el día que lo actives.",
+  "hashtags": [
+    "#whatsapp",
+    "#chatbot",
+    "#ia",
+    "#automatizacion",
+    "#negocios",
+    "#bolivia"
+  ],
+  "serie": "Bot de WhatsApp",
+  "slides": [
+    {
+      "layout": "ilustrado",
+      "badge": "guía",
+      "logo": "hermes-content/references/brand-logos/whatsapp.svg",
+      "headline": "*5 pruebas* antes de activar tu bot",
+      "image_prompt": "Five small round pebbles lined up in a neat row on smooth sand, the last one a deep green stone.",
+      "number": 1,
+      "theme": "verde",
+      "image_style": "clay",
+      "next": "por qué"
+    },
+    {
+      "number": 2,
+      "layout": "ensayo",
+      "theme": "blanco",
+      "headline": "Tu bot contesta *sin que lo mires*",
+      "body": "Un bot activado le habla a clientes reales, a cualquier hora.\n\nLo que no probaste vos, lo prueba tu cliente.\n\nProbalo vos primero: son cinco pruebas.",
+      "next": "prueba 1",
+      "alt_text": "Un bot activado contesta sin supervisión"
+    },
+    {
+      "number": 3,
+      "layout": "dato",
+      "theme": "blanco",
+      "value": "62",
+      "headline": "Prueba 1: escribile *como escriben*",
+      "body": "Sin tildes, con errores, «cuanto sale?» a secas, «ya» como única respuesta. El banco de pruebas de mi bot arrancó con 62 mensajes así.",
+      "next": "prueba 2",
+      "alt_text": "Mensajes de prueba escritos como un cliente real"
+    },
+    {
+      "number": 4,
+      "layout": "lista",
+      "theme": "blanco",
+      "headline": "Prueba 2: lo mismo *dos veces*",
+      "body": "si tu servidor tarda, Chatwoot lo vuelve a entregar",
+      "items": [
+        {
+          "label": "Llega el mensaje",
+          "text": "contesta"
+        },
+        {
+          "label": "Llega de nuevo",
+          "text": "mismo id: lo descarta"
+        },
+        {
+          "label": "Tu cliente",
+          "text": "recibe una sola respuesta"
+        }
+      ],
+      "next": "la crítica",
+      "alt_text": "El bot debe contestar una sola vez al mismo mensaje"
+    },
+    {
+      "number": 5,
+      "layout": "ensayo",
+      "theme": "blanco",
+      "headline": "Prueba 3: preguntale *lo que no sabe*",
+      "body": "Stock, plazo, precio.\n\nSi contesta con un dato que vos no le diste, lo inventó. Y ese dato se lo prometiste vos.\n\nSi inventa, no se activa.",
+      "next": "las 5",
+      "alt_text": "Preguntarle al bot lo que no sabe"
+    },
+    {
+      "number": 6,
+      "layout": "lista",
+      "theme": "blanco",
+      "headline": "Las *5 pruebas*",
+      "items": [
+        {
+          "label": "Como tu cliente",
+          "text": "sin tildes, «cuanto sale?», «ya»"
+        },
+        {
+          "label": "Dos veces",
+          "text": "contesta una sola vez"
+        },
+        {
+          "label": "Lo que no sabe",
+          "text": "stock, plazo, precio: no inventa"
+        },
+        {
+          "label": "Un audio",
+          "text": "si no lo entiende, avisa a alguien"
+        },
+        {
+          "label": "«Una persona»",
+          "text": "alguien se entera, no solo el bot"
+        }
+      ],
+      "next": "¿cuál falló?",
+      "alt_text": "Checklist de las 5 pruebas antes de activar un bot"
+    },
+    {
+      "number": 7,
+      "layout": "ensayo",
+      "theme": "verde",
+      "headline": "¿Cuál *falló*?",
+      "body": "Hacé las cinco antes de activarlo.\n\nLa que más importa es la 3: si contesta con un dato que no está en su información, lo inventó.\n\nContá en la comunidad cuál te falló.",
+      "cta": "Comunidad en la bio",
+      "alt_text": "Contá en la comunidad qué prueba falló"
+    }
+  ]
+}

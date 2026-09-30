@@ -1,0 +1,142 @@
+{
+  "title": "5 revisiones antes de publicar tu video con IA",
+  "caption": "No tengo editor de video: lo edita una cadena de pasos con IA. Pero hay cinco cosas que la IA no revisa por mí.\n\nLa crítica es la 2: la transcripción se lee a ojo antes de quemar subtítulos. Una falta quemada no se parchea, se vuelve a renderizar.\n\nY un presentador hecho con IA explica y muestra, pero nunca se hace pasar por cliente.\n\nGuardá la lámina 6 para tu próximo video.",
+  "hashtags": [
+    "#edicionvideo",
+    "#ia",
+    "#contenido",
+    "#reels",
+    "#inteligenciaartificial",
+    "#bolivia"
+  ],
+  "serie": "IA PRÁCTICA",
+  "episodio": "K9",
+  "job": "education",
+  "slides": [
+    {
+      "number": 1,
+      "role": "cover",
+      "pill": "Video con IA",
+      "headline": "*5 revisiones* antes de publicar tu video con IA",
+      "body": "Lo que la IA no revisa por vos.",
+      "image_prompt": "A small pair of plain brass sewing scissors resting beside a spool of natural undyed linen thread on a pale oak table, soft window light.",
+      "alt_text": "5 revisiones antes de publicar tu video con IA"
+    },
+    {
+      "number": 2,
+      "role": "stakes",
+      "pill": "El problema",
+      "headline": "La IA *no corrige*",
+      "body": "Transcribe, corta y genera. No corrige faltas, no pide permiso a nadie y no mira el costo. Eso lo revisás vos.",
+      "callout": "Lo publicado es tuyo",
+      "alt_text": "La IA no corrige ni pide permiso"
+    },
+    {
+      "number": 3,
+      "role": "point",
+      "pill": "01 · Los cortes",
+      "headline": "Mirá la tabla *antes de cortar*",
+      "body": "La lista de cortes se revisa antes de aplicarla: qué queda, qué se tira y por qué. Nunca se corta a ciegas.",
+      "visual": {
+        "type": "table",
+        "label": "TABLA DE CORTES",
+        "left": "ME QUEDO CON",
+        "right": "TIRO",
+        "rows": [
+          {
+            "left": "la frase entera",
+            "right": "el silencio largo"
+          },
+          {
+            "left": "la segunda toma",
+            "right": "la que repetí"
+          },
+          {
+            "left": "la idea",
+            "right": "el «eh», el «o sea»"
+          }
+        ]
+      },
+      "alt_text": "Tabla de cortes revisada antes de cortar"
+    },
+    {
+      "number": 4,
+      "role": "point",
+      "pill": "02 · El paso crítico",
+      "headline": "Leé el texto *línea por línea*",
+      "body": "Antes de quemar subtítulos, leé la transcripción a ojo. En un reel ajeno salió «A GENERADO» sin hache y «ARANA» sin eñe.",
+      "callout": "Quemado no se parchea",
+      "alt_text": "Leer la transcripción antes de quemar subtítulos"
+    },
+    {
+      "number": 5,
+      "role": "point",
+      "pill": "03 · Las caras",
+      "headline": "Difuminá a *quien no firmó*",
+      "body": "Gente en la calle, pacientes, clientes: sin permiso, su cara no sale. Y el difuminado se mira: no es garantía.",
+      "visual": {
+        "type": "terminal",
+        "label": "CARAS",
+        "lines": [
+          {
+            "value": "node blur-faces.mjs --video in.mp4",
+            "kind": "command"
+          },
+          {
+            "value": "avisa los cuadros sin cubrir",
+            "kind": "comment"
+          },
+          {
+            "value": "mirá el video antes de publicar",
+            "kind": "comment"
+          }
+        ]
+      },
+      "alt_text": "Difuminar las caras de terceros"
+    },
+    {
+      "number": 6,
+      "role": "save",
+      "pill": "04 y 05",
+      "headline": "Costo antes, *IA dicha*",
+      "body": "Cotizá cada generación antes de crearla; el video, con aprobación aparte. Y un presentador IA nunca se hace pasar por cliente.",
+      "visual": {
+        "type": "matrix",
+        "label": "ANTES DE PUBLICAR",
+        "items": [
+          {
+            "title": "cortes",
+            "body": "tabla revisada antes de cortar"
+          },
+          {
+            "title": "texto",
+            "body": "transcripción leída a ojo"
+          },
+          {
+            "title": "caras",
+            "body": "terceros difuminados y revisados"
+          },
+          {
+            "title": "costo",
+            "body": "cotizado antes de generar"
+          },
+          {
+            "title": "presentador IA",
+            "body": "nunca como cliente ni testimonio"
+          }
+        ]
+      },
+      "save_worthy": true,
+      "alt_text": "Checklist de 5 revisiones antes de publicar un video con IA"
+    },
+    {
+      "number": 7,
+      "role": "cta",
+      "pill": "Comunidad",
+      "headline": "Los pasos de mi editor, en la *comunidad*",
+      "body": "Grabar, transcribir, cortar, subtitular, leer y publicar. Link en mi web.",
+      "cta": "COMUNIDAD EN LA BIO",
+      "alt_text": "Los pasos del editor en la comunidad"
+    }
+  ]
+}

@@ -1,0 +1,136 @@
+{
+  "title": "Un CLAUDE.md donde cada regla trae su historia",
+  "caption": "Mi archivo de reglas para Claude Code tiene una regla que no falla: cada regla lleva el caso real que la originó. Una regla sin su historia se desobedece; con la historia, no.\n\nY una regla tonta que funciona de alarma: Claude me tiene que llamar siempre por nombre y apellido. Si deja de hacerlo, dejó de leer sus instrucciones.\n\nGuardá la lámina 6 para armar el tuyo.",
+  "hashtags": [
+    "#claudecode",
+    "#claude",
+    "#ia",
+    "#agentesia",
+    "#productividad",
+    "#bolivia"
+  ],
+  "serie": "IA PRÁCTICA",
+  "episodio": "K3",
+  "job": "education",
+  "slides": [
+    {
+      "number": 1,
+      "role": "cover",
+      "pill": "Claude Code",
+      "headline": "Cada regla de mi CLAUDE.md trae *su historia*",
+      "body": "Por qué Claude obedece unas y se salta otras.",
+      "image_prompt": "A single small yellow feather resting on a dark slate surface, soft window light, fine texture detail.",
+      "alt_text": "Cada regla de mi CLAUDE.md trae su historia"
+    },
+    {
+      "number": 2,
+      "role": "stakes",
+      "pill": "El problema",
+      "headline": "Una regla *sin historia* se desobedece",
+      "body": "«Verificá antes de terminar» suena obvio. Claude lo lee, lo entiende y lo salta cuando está apurado.",
+      "alt_text": "Una regla sin historia se desobedece",
+      "callout": "Obvio no es obedecido"
+    },
+    {
+      "number": 3,
+      "role": "point",
+      "pill": "El formato",
+      "headline": "Regla, y *el caso que la creó*",
+      "body": "Cada regla lleva la fecha y lo que pasó. Así Claude entiende qué costaría romperla.",
+      "visual": {
+        "type": "terminal",
+        "label": "CLAUDE.md",
+        "lines": [
+          {
+            "value": "## Verificar es MIRAR (REGLA)",
+            "kind": "command"
+          },
+          {
+            "value": "> Nace del día que dije «verificado»",
+            "kind": "comment"
+          },
+          {
+            "value": "> con un 200 y un grep: la pantalla estaba rota.",
+            "kind": "comment"
+          },
+          {
+            "value": "- Toda pantalla se abre y se MIRA.",
+            "kind": "command"
+          }
+        ]
+      },
+      "alt_text": "Formato de regla con su historia"
+    },
+    {
+      "number": 4,
+      "role": "point",
+      "pill": "El orden",
+      "headline": "Ordenalo por *cuándo se necesita*",
+      "body": "Arriba lo de cada sesión. Después las reglas que más se rompen. Abajo el detalle de cada área.",
+      "visual": {
+        "type": "flow",
+        "label": "ESTRUCTURA",
+        "nodes": [
+          {
+            "name": "al arrancar",
+            "detail": "cada sesión"
+          },
+          {
+            "name": "las que más se rompen",
+            "detail": "con su caso"
+          },
+          {
+            "name": "dominios",
+            "detail": "el detalle"
+          }
+        ]
+      },
+      "alt_text": "Orden del archivo de reglas"
+    },
+    {
+      "number": 5,
+      "role": "point",
+      "pill": "El canario",
+      "headline": "Una regla tonta que *te avisa*",
+      "body": "Claude me tiene que llamar siempre «Sergio Urcullo». Si un día me dice «Sergio» a secas, dejó de leer sus instrucciones: cambio de sesión.",
+      "callout": "La ves sin preguntar",
+      "alt_text": "La regla canario del nombre completo"
+    },
+    {
+      "number": 6,
+      "role": "save",
+      "pill": "Armá el tuyo",
+      "headline": "Tres pasos para *empezar hoy*",
+      "body": "Anotá el último error que te hizo Claude. Convertilo en regla con su fecha y su caso. Agregá una regla canario fácil de ver.",
+      "visual": {
+        "type": "matrix",
+        "label": "HOY",
+        "items": [
+          {
+            "title": "el error",
+            "body": "qué pasó y cuándo"
+          },
+          {
+            "title": "la regla",
+            "body": "una frase + el caso"
+          },
+          {
+            "title": "el canario",
+            "body": "algo que notes sin preguntar"
+          }
+        ]
+      },
+      "save_worthy": true,
+      "alt_text": "Tres pasos para escribir tu CLAUDE.md"
+    },
+    {
+      "number": 7,
+      "role": "cta",
+      "pill": "Guía completa",
+      "headline": "La guía de Claude Code está en *mi web*",
+      "body": "Instalación, primera skill y cómo hacer que trabaje sin vos.",
+      "cta": "LINK EN LA BIO",
+      "alt_text": "Guía de Claude Code en la web"
+    }
+  ]
+}

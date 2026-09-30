@@ -1,5 +1,9 @@
 # Skill: carruseles-onia
 
+> **29-sep-2026: el índice de diseño es la skill `.claude/skills/diseno-contenido-onia/`** (fuentes de
+> imagen, galería única, pack `referentes`, patrones de referentes). Esta página conserva el
+> detalle del pipeline y las reglas de aprobación/publicación.
+
 ## Cuando usar
 Cuando Sergio pida crear, renderizar o publicar un carrusel de Instagram para
 ONIA. Cubre desde la idea hasta el PNG final y la publicacion aprobada.
@@ -14,7 +18,8 @@ El pipeline vive en `scripts/` del repo `onia-hermes`:
 
 1. **Brief JSON** en `hermes-content/carousels/briefs/`. Se escribe a mano o lo
    redacta Hermes. `scripts/carousel_generator.py` existe pero necesita
-   Python + `OPENAI_API_KEY` y la PC de Sergio no tiene Python: NO depender de el.
+   Python + `OPENAI_API_KEY`. (Decia que la PC no tenia Python: desde sep-2026 hay
+   Python 3.12; igual el brief lo escribe Claude y no hace falta el generador.)
 2. **Render**: `node scripts/carousel_render.js` -> PNG 1080x1350 con Node +
    Edge headless. Gratis, sin APIs.
 3. **Publicacion**: `node scripts/carousel_publish.js` (publish-only) -> sube los
@@ -59,6 +64,26 @@ que se veía generada por IA y no desarrollaba un argumento de venta.
   (`community-editorial`, commit `e9b80e22`), adaptado a ONIA; no copiar su copy.
 - La pieza se rechaza si: el rubro puede reemplazarse sin cambiar el texto, el dolor
   no termina en dinero, no aparece el producto, o el CTA compite con otro CTA.
+
+## Imagen de portada con Higgsfield (metodo Santiago, adaptado — 29-sep-2026)
+Santiago Munoz (repo `santmun/carruselesdef`) hace que la IA dibuje la slide ENTERA,
+texto incluido. ONIA no: la IA pinta solo la imagen y el texto va por codigo, porque
+los modelos escriben mal. Es lo mismo que el hace en sus historias (fondo IA + Pillow).
+1. En el brief, `image_prompt` en la slide que lleve foto (hoy: la portada).
+2. Cotizar gratis: `node scripts/carousel_images.mjs --brief <b> --out <dir>`.
+   El CLI autenticado vive en el VPS: `HF_CMD="ssh -i <llave> -o BatchMode=yes root@<vps> higgsfield"`.
+3. Con el lote aprobado: mismo comando + `--yes` → `<dir>/assets/slide-NN.png`,
+   `<dir>/brief.json` con `slide.bg` puesto y `assets/manifest.json` (costo, job).
+4. MIRAR la imagen sola antes de renderizar. Si tiene letras/logos, se regenera solo esa.
+5. `node scripts/carousel_render.js --brief <dir>/brief.json --out <dir> --account sergio --pack community-editorial --format feed`
+   y `node scripts/carousel_contactsheet.js --dir <dir>`; mirar la grilla.
+**Trampas vistas el 29-sep (Soul 2.0, 0,12 cr/imagen):** nombrar «Instagram»/«carrusel»
+dibuja un post falso con caption inventado; nombrar una ciudad la imprime en una taza;
+objetos que llevan impresion (tazas, cuadernos, pantallas) salen con letras inventadas
+aunque el prompt diga «no text»; pedir «espacio vacio abajo» deja un bloque gris.
+Lo que funciona: un objeto simple sin impresion (piedras, planta, pluma), descrito en
+positivo. Y toda slide sin `visual` necesita `callout` propio (antes el pack rellenaba
+con una frase fija).
 
 ## Assets e imagenes
 - Objeto 3D on-brand reusable: `hermes-content/assets/onia/automation-node-clean-3d.png`

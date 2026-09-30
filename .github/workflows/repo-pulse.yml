@@ -21,13 +21,24 @@ concurrency:
 jobs:
   pulse:
     name: Compute + deliver repo pulse
-    runs-on: ubuntu-latest
+    # Runner PROPIO en el VPS (onia-runner-hermes, 0,5 CPU / 1,5 GB): no gasta la
+    # cuota Free de Actions, agotada el 2026-09-27. Montaje y ROLLBACK:
+    # hermes-content/deploy/vps-ops/gh-runner/instalar.sh (volver a ubuntu-latest).
+    runs-on: [self-hosted, linux, onia-vps]
     timeout-minutes: 10
     steps:
       - name: Checkout (historial completo, todas las ramas)
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          # El historial completo pesa ~11 GB (videos, capturas). En el runner del
+          # VPS el clon persiste en disco: se traen commits y arboles (lo que
+          # `git log --all` y `git show --name-only` usan), sin blobs.
+          filter: blob:none
+          # Y del arbol solo el guion: el HEAD pesa 6,2 GB y en un runner propio
+          # queda en el disco del VPS. Medido el 28-sep: sin esto, 11 GB.
+          sparse-checkout: scripts/repo-pulse.mjs
+          sparse-checkout-cone-mode: false
 
       - name: Fetch de todas las ramas remotas
         run: git fetch origin '+refs/heads/*:refs/remotes/origin/*' --prune
@@ -44,13 +55,13 @@ jobs:
         env:
           KEY: ${{ secrets.ONIA_VPS_SSH_KEY }}
         run: |
-          printf '%s\n' "$KEY" > /tmp/vps_key
-          chmod 600 /tmp/vps_key
+          printf '%s\n' "$KEY" > $RUNNER_TEMP/vps_key
+          chmod 600 $RUNNER_TEMP/vps_key
 
       - name: Subir al VPS
         env:
           VPS_HOST: "187.77.16.63"
           VPS_USER: "root"
         run: |
-          ssh -i /tmp/vps_key -o StrictHostKeyChecking=no "$VPS_USER@$VPS_HOST" "mkdir -p /opt/onia/state"
-          scp -i /tmp/vps_key -o StrictHostKeyChecking=no repo-pulse.json "$VPS_USER@$VPS_HOST:/opt/onia/state/repo-pulse-latest.json"
+          ssh -i $RUNNER_TEMP/vps_key -o StrictHostKeyChecking=no "$VPS_USER@$VPS_HOST" "mkdir -p /opt/onia/state"
+          scp -i $RUNNER_TEMP/vps_key -o StrictHostKeyChecking=no repo-pulse.json "$VPS_USER@$VPS_HOST:/opt/onia/state/repo-pulse-latest.json"

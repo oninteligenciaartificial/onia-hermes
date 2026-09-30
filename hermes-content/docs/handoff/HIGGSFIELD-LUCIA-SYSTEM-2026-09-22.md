@@ -1,3 +1,7 @@
+> ⚰️ **HISTORIA desde el 2026-09-29.** El estado vigente del carril está en
+> [`higgsfield-lucia.md`](higgsfield-lucia.md). Acá los IDs y los bloqueos son del 22-sep: la
+> identidad anterior se retiró entera y los tres «bloqueos exactos» quedaron resueltos o reemplazados.
+
 # Handoff — sistema Higgsfield y persistencia de Lucía
 
 Fecha: 2026-09-22

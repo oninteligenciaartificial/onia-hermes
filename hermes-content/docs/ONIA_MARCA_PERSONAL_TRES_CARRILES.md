@@ -1,5 +1,12 @@
 # Marca personal — los tres carriles y qué NO va en cada uno
 
+> **Corrección vigente · 28-sep-2026:** Sergio pidió que los guiones enseñen de
+> verdad. Lo público entrega una acción completa y comprobable; la web amplía
+> y la comunidad aporta material preparado y aplicación al caso del miembro.
+> El [mapa de frentes](ONIA_MAPA_DE_TEMAS.md) reúne ONIA, Platform, Sergio,
+> enseñanza de IA y comunidad. Las métricas y estados de septiembre de abajo
+> son históricos; no confirman conexiones, archivos ni publicaciones actuales.
+
 > 📍 **Índice del carril, con qué documento manda sobre qué:**
 > [`ONIA_CIRCUITO_DE_CONTENIDO.md`](ONIA_CIRCUITO_DE_CONTENIDO.md) — y la misma
 > estructura para consultar de un vistazo en
@@ -35,20 +42,71 @@ sentido.
 
 ## 1 · Marca personal — lo público
 
-**Trabajo:** que te encuentren y que comenten. Nada más.
+> **Decisión de Sergio Urcullo, 2026-09-21:** la cuenta no puede ser solamente técnica.
+> Tiene que reservar espacio diario para experiencias personales, motivación nacida de
+> problemas reales de las redes y piezas con B-roll. La audiencia prioritaria son jóvenes
+> y aficionados a la IA que quieren **aprender a construir o aprender a vender**.
 
-**Formato:** carruseles del patrón `apple-editorial` en Instagram. Cinco piezas hoy, con su
-orden en [`cola/PARA-PUBLICAR-APPLE-ORDEN.md`](cola/PARA-PUBLICAR-APPLE-ORDEN.md).
+**Trabajo:** que te encuentren, aprendan una idea útil, recuerden a Sergio Urcullo como
+persona y tengan un siguiente paso claro. Comentar es una consecuencia del valor, no el
+reemplazo del valor.
 
-**Qué SÍ va:** el qué y el porqué. La lista de herramientas, el precio, la opinión, el
-dato que sorprende.
+### Los cuatro pilares públicos
 
-**🔴 Qué NO va: el cómo.** Ni un comando, ni un paso a paso, ni una configuración. No por
-mezquindad — es que **no entra en una lámina y nadie lo lee ahí**. Un carrusel que intenta
-enseñar a instalar Docker fracasa en las dos cosas: no enseña y no engancha.
+| Pilar | Qué enseña o muestra | Regla |
+|---|---|---|
+| **IA aplicada** | Claude Code, n8n, MCP, agentes, loops, automatización y venta de soluciones | una idea concreta por pieza; nombres y ejemplos reales |
+| **Personal / criterio** | problemas de las redes, disciplina, juventud, presión, ventas, errores y decisiones | experiencia real → tensión → aprendizaje → acción; prohibidas las frases motivacionales vacías |
+| **Construyendo en público** | Onia, sistemas, pruebas, errores y resultados verificables | mostrar proceso y criterio sin fingir clientes, cifras ni éxitos |
+| **Comunidad / personas** | encuentros, expertos, conversaciones, proyectos y logros de miembros | consentimiento antes de grabar o identificar a terceros |
 
-**Cierre obligatorio:** las cinco piezas terminan pidiendo comentario. Es la bisagra con el
-carril 2.
+### Formatos y profundidad
+
+- **YouTube y la web sí enseñan el cómo completo:** pantalla, arquitectura, comandos,
+  configuración, errores y resultado.
+- **Un reel o TikTok enseña una unidad pequeña pero completa:** una decisión, una regla,
+  un error o una demostración. No puede ser un título vacío que mande a otro lado para
+  recién recibir valor.
+- **El carrusel enseña un mapa mental, comparación, checklist o proceso resumido.** El
+  paso a paso largo vive en el entregable porque meter una instalación completa en ocho
+  láminas hace ilegible la pieza.
+- **El B-roll prueba contexto:** Sergio trabajando, armando una demo, llegando a un
+  encuentro, hablando con personas, preparando una sala o mostrando una herramienta.
+  No se usa metraje genérico de lujo o productividad fingida.
+
+### Estructura diaria aprobada
+
+| Bloque | Cantidad | Composición |
+|---|---:|---|
+| **Feed** | 3 | pilar de Samuel · B-roll Sergio/Samuel · video normal de Sergio |
+| **Reemplazo de B-roll** | 1 cada 4 piezas | después de 3 B-roll, el siguiente espacio se convierte en carrusel |
+| **Trial** | 4 | los 3 videos del día reutilizados + 1 YAPS de Samuel |
+| **Trial V2** | 3–5 | Sergio a cámara, con edición mínima: 2 de valor técnico · 1 personal/criterio · 1 polémico cuando haya argumento · 1 opcional de proceso/comunidad |
+| **Total publicado** | 10–13 | no son 10–13 investigaciones: las reutilizaciones y los ángulos salen de un tema semanal |
+
+Samuel conserva el pilar y el YAPS. Este carril prepara la arquitectura, los guiones de
+Sergio Urcullo, el B-roll/carrusel, YouTube y el recurso; no reemplaza la producción de
+Samuel.
+
+### Cierres y promesas
+
+- **Todo carrusel termina invitando a comentar una palabra para obtener un resultado**,
+  pero el recurso debe existir antes de publicar.
+- El video personal puede cerrar con una pregunta honesta o una invitación a seguir; no
+  se le pega una palabra clave artificial si no corresponde.
+- El video improvisado y el B-roll no prometen descargables inexistentes. Si un ángulo
+  funciona, asciende a tema planificado y recién entonces recibe recurso.
+**Qué SÍ va:** una idea aplicada: prompt, ejemplo, cálculo, caso o criterio con
+evidencia. También decisiones propias y humor del trabajo, con propósito claro.
+
+**El cómo sí va.** Se elige una unidad pequeña que quepa y se entregue completa.
+Si el tema requiere una instalación larga, el video muestra un paso con su
+resultado y la guía desarrolla el proceso completo. No se oculta el procedimiento
+para obligar a comentar o entrar a la comunidad.
+
+**Cierre:** una llamada a la acción coherente: guía existente, aplicación en
+comunidad, conversación o demo de producto. El comentario con envío de material
+sólo se usa con recurso y entrega comprobados; no es obligatorio en cada pieza.
 
 ---
 
@@ -188,7 +246,7 @@ que no existe* está escrito para evitar.
 | 2 → 3 | La guía termina diciendo qué **no** cubre. Ahí es donde la comunidad tiene sentido |
 | 3 → 1 | Lo que se pregunta adentro es el mejor listado de temas para el próximo carrusel |
 
-**El error a evitar es siempre el mismo en los tres:** dar de más en el escalón anterior.
-Un carrusel que enseña a instalar deja sin trabajo al entregable; un entregable que regala
-los archivos deja sin sentido a la comunidad. Cada escalón entrega **completo** lo suyo y
-**nada** de lo del siguiente.
+Cada pieza entrega completo lo que promete. El video resuelve una unidad pequeña;
+la guía desarrolla el procedimiento; la comunidad aporta el trabajo preparado,
+la práctica y preguntas sobre el caso de cada miembro. Enseñar bien afuera
+construye confianza y no reemplaza ese acompañamiento.
