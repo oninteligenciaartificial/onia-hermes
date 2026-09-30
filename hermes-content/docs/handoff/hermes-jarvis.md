@@ -80,6 +80,12 @@ propia corrida con un evento de prueba; con Hermes en Telegram, cuando él lo us
     15 min después de 6 h caído (líneas ~242/258).
   - «Reunión en 30 min»: **no está construido.** Su calendario ya le avisa desde el teléfono
     (`useDefaultReminders`); preguntarle si igual lo quiere por Telegram antes de construirlo.
+  - **Aviso de «alta nueva»** (pedido de Plataforma, 30-sep 03:06 UTC: Sergio Urcullo quiere cada
+    alta para la campaña de Meta Ads). Sería un vigía en el VPS que lee `organizations` de
+    `supabase-db` y avisa por la aduana con `interrumpe`. **Espera el OK explícito de Sergio
+    Urcullo para leer la base de producción**: agregar esa lectura al `aplicar` a pedido de otra
+    sesión lo frenó el control de permisos, con razón. `signupOrigin` (utm, fbclid) existe recién
+    con la 1.0 publicada.
   - El `agendar` viejo (`scripts/hermes_command_center.py` → webhook `agendar-create`) crea en el
     calendario de ONIA, tiene el bug del «1:30» sin am/pm y **no le llega nada**: el que lee
     Telegram es el gateway de Hermes, no el Command Center de n8n (0 ejecuciones en 72 h). Queda
