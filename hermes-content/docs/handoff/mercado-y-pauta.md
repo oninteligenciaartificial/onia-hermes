@@ -1,4 +1,14 @@
-# Handoff — carril `mercado-y-pauta` (sesión «Análisis de mercado Onia Platform»)
+# Handoff — carril `mercado-y-pauta` (sesión «Ventas y pauta Onia Platform», antes «Análisis de mercado»)
+
+> **Renombrada el 30-sep, de noche, por decisión de Sergio Urcullo.** El archivo conserva su nombre para no
+> romper enlaces.
+>
+> **Es dueña de conseguir clínicas:** la lista de las primeras 10 para el contacto 1:1, el registro de
+> objeciones de cada demo, Meta Ads de punta a punta (piezas del anuncio incluidas; D1 y D4 vuelven acá) y
+> @oniahq solo como la página que pauta.
+>
+> **No es suya:** los carruseles de contenido, que son de Marca personal; el producto; el VPS; el chatbot,
+> que Sergio Urcullo dijo el 30-sep que lo arregla él.
 
 > Rama `claude/nice-lamport-5og9lv` · sesión `session_01BnctfaNRsm3ogJ46A7B5P5` · abierta el 2026-09-30.
 > Formato: los siete campos de `README.md` de esta carpeta.
@@ -33,7 +43,10 @@ autosync de esta rama). **Ninguna campaña creada, cero gasto.**
   tenga el conector de Meta Ads en la cuenta ONIA Ads, o Sergio Urcullo a mano, en PAUSA. **Se enciende con
   la 1.0 publicada y la medición probada** (plan de 14 días de la sesión principal, 30-sep): **qué falta y de
   quién es, en la lista de encendido (§5.9)**.
-- **Piezas D1 y D4: ENTREGADAS a Marca personal** (Sergio Urcullo, 30-sep: los carruseles son de Marca
+- ⚠️ **Corregido 30-sep ~19:55 UTC: D1 y D4 VUELVEN a esta sesión.** A las 14:40, Sergio Urcullo le dijo a
+  Marca personal *«aquí es solo marca personal y comunidad»* y ellos no las tomaron. A la noche confirmó que
+  esta sesión, Ventas y pauta, maneja Meta con las piezas incluidas. El párrafo de abajo es historia.
+- ~~**Piezas D1 y D4: ENTREGADAS a Marca personal**~~ (Sergio Urcullo, 30-sep: los carruseles son de Marca
   personal; Mercado no los genera). Pasaron en el prompt de arranque de su sesión de la nube
   `session_012ppFowADbJNtZ6WBMtqpuf`. A Mercado le queda qué dice y qué prueba cada pieza (§5.4 y §5.8); el
   diseño y el render son de ellos. Lo que sigue es cómo quedaron al entregarlas.
@@ -135,7 +148,7 @@ autosync de esta rama). **Ninguna campaña creada, cero gasto.**
    propuesto, esperando el OK de Sergio Urcullo*.
 4. Destrabar los 8 bloqueos de `ONIA_ADQUISICION_Y_PAUTA.md` §6 → *listo = `ads_get_ad_accounts` ve ONIA Ads con
    método de pago y página promocionable*.
-5. Creativos (**los hace Marca personal**): llegan las cuatro capturas de la 1.0 → Marca personal renderiza D1 y D4 → se le muestran a Sergio Urcullo →
+5. Creativos (**los hace esta sesión**): llegan las cuatro capturas de la 1.0 → se renderizan D1 y D4 con `scripts/carousel_cloud_setup.sh` → se le muestran a Sergio Urcullo →
    *listo = piezas miradas y aprobadas por él, sin precio en la imagen, CTA "Escribinos", código por anuncio*.
    (Briefs listos desde el 30-sep.)
 6. Crear la campaña en PAUSA con la tabla del §5.8 → *listo = ids de campaña/conjunto/anuncios anotados acá*.
