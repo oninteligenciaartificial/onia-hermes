@@ -10,7 +10,7 @@ carril, cargá su stack, respetá las reglas duras. Fuente viva del mapa complet
 `hermes-content/docs/ONIA_SKILLS_STACK_Y_SUBAGENTES.md`.
 
 > 📇 **Mapa problema → skill: [`STACK-POR-DOMINIO.md`](STACK-POR-DOMINIO.md).**
-> Hay **106 skills globales + 9 plugins** instaladas (el 2026-09-29 se sacaron las que no
+> Hay **110 skills globales + 9 plugins** instaladas (el 2026-09-29 se sacaron las que no
 > usaban ni Claude ni Codex; ver el historial de la limpieza). Esta tabla enruta por carril; ese
 > archivo enruta por dominio (contenido/marketing · diseño/UI/UX · frontend · backend ·
 > seguridad · research · proceso), que es como aparecen las tareas en la práctica.
