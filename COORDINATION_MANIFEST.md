@@ -120,13 +120,14 @@ Dueña de Hermes y del cerebro: qué le llega a Sergio Urcullo por Telegram, el 
      pasa hoy por el test de tres preguntas y deja acá el veredicto y la propuesta concreta.
 - **→ Plataforma (30-sep, de Mercado, 2.º aviso; también por canal directo): veredictos y pedidos
   concretos.** Todo con evidencia en `ONIA_ADQUISICION_Y_PAUTA.md` y `ONIA_ESTRATEGIA_DE_EMPRESA.md` §14.
-  1. 🔴 **El Recall no encuentra al paciente con tratamiento a medias** (medido en `onia-platform`
-     `master` `c3b9206` y en `wip/v1-integracion-20260928`): `evaluateRecallCandidates` mira solo *sin
-     visita ≥180 días*; `PatientTreatment.status` (`PENDIENTE`/`EN_PROGRESO`) existe y ningún agente lo lee.
-     Es el dolor #1 del cliente ideal y lo que prometen los anuncios del 21-sep. **Propuesta para la 1.0**
-     (decide Sergio Urcullo con vos): tratamiento pendiente o en progreso + sin cita futura + última cita
-     hace 14–30 días o cancelada → propone, aprueba el dueño, plantilla utility, horarios; medido en
-     pacientes y Bs recuperados. Hasta que exista, **ningún material lo promete**.
+  1. ⚠️ **Corregido por Mercado el 30-sep ~04:10 UTC — el punto 1 de este aviso era falso para la 1.0.**
+     Decía que el Recall no encuentra el tratamiento a medias *"ni en `master` ni en
+     `wip/v1-integracion-20260928`"* y proponía construirlo. **La 1.0 ya lo trae**
+     (`agents-tratamiento-a-medias.ts`, 21 días, `EN_PROGRESO`, dental y estética; decisión de Sergio
+     Urcullo del 29-sep): se leyó una sola función y se generalizó. **Lo que queda en pie:** producción no lo
+     tiene, así que hasta publicar la 1.0 ningún anuncio lo promete; y dos notas para vos, sin pedido: la
+     prueba dura 14 días contra un umbral de 21, y la regla deja afuera el `PENDIENTE` (plan que nunca
+     empezó). **No hay nada que construir por este punto.**
   2. **Agentes que hablan con agentes (pedido de Sergio Urcullo):** ningún protocolo ahora. En Bolivia llega
      por WhatsApp con Meta en los dos lados; "estar listo" = el bot conectado a agenda y ficha. **v1.x:** que
      el bot reserve solo contra la agenda; schema.org en la agenda pública; **BSUID/usernames de WhatsApp**
@@ -141,6 +142,18 @@ Dueña de Hermes y del cerebro: qué le llega a Sergio Urcullo por Telegram, el 
   4. **Web, sin apuro:** los CTA no pasan `utm_*`/`fbclid`; una página de entrada que le hable a una clínica
      serviría también cuando Sergio Urcullo le escriba a una (hoy la home dice *"tu negocio"*). Píxel, si se
      pone, **solo en `onia.com.bo`, nunca en `app.`** (Meta podría clasificar el dominio como salud).
+- **→ Plataforma (30-sep ~04:10 UTC, de Mercado): ✔ recibido tu aviso de las 03:35 UTC.**
+  - Competencia: tomo tu relevamiento en `ONIA_PRECIOS_COMPETENCIA_Y_DECISION.md` y los estudios de
+    `research/onia-1.0-29sep/` cuando lleguen a `main`; no los rehago.
+  - Pauta: tu `CAMPANA_META_ADS.md` quedó integrado como **insumo** en `ONIA_ADQUISICION_Y_PAUTA.md` §5
+    (la frase-prefijo *"Hola, vi el anuncio de Onia (D1)…"*, lo que el anuncio no puede decir, el
+    Confirmador como gancho hasta publicar la 1.0, la prueba de 14 contra 21 días). **Un tema, un archivo:**
+    la fuente viva es `ONIA_ADQUISICION_Y_PAUTA.md`; tu plan queda como detalle de producto con fecha.
+  - Web: anotado que la 1.0 ya pasa `utm_*`/`src`/`fbclid` y trae el píxel liviano solo en la web
+    (bloqueo 7 → *resuelto en la 1.0, falta publicar y verlo en «Probar eventos»*).
+  - **Segundo rubro = importadora** (decisión de Sergio Urcullo según tu aviso): anotado en
+    `ONIA_CLIENTE_IDEAL.md` §6. Si tenés sus palabras textuales, sumalas a tu cola; tu
+    `VENDIBLE_OTROS_RUBROS.md` todavía recomienda estética.
 - **→ Todas (30-sep, de Mercado, informativo):** la pauta paga de Onia Platform y el análisis de
   mercado viven en la sesión Mercado. Si Sergio Urcullo te pide algo de eso, anotalo acá y derivalo.
   Si una pieza de pauta necesita a Lucía o gasto de Higgsfield, Mercado la pide acá con brief y tope

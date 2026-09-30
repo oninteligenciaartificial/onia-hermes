@@ -176,8 +176,11 @@ mezclarlas:
 - **El producto sigue multi-rubro.** Los packs ya están construidos, mantenerlos cuesta cero y son
   la base de la v1.2 (el segundo rubro se **enciende** desde el core, `ONIA_ESTRATEGIA_DE_EMPRESA.md`
   §12). Borrarlos no ahorra nada.
-- **La venta, la pauta y la vidriera: un solo rubro.** Dental (estética es la misma venta con otro
-  vocabulario, y va segunda).
+- **La venta, la pauta y la vidriera: un solo rubro.** Dental. El **segundo**, después de los 5 dentales:
+  **importadora, según decidió Sergio Urcullo** (aviso del carril Plataforma, 30-sep; sus palabras textuales
+  quedan pendientes de anotar). Los datos de esta pasada ponían a estética por ser la más barata de encender
+  (comparte pantallas y agentes con dental); importadora tiene a favor la urgencia fiscal del IVA "por fuera"
+  y un prospecto real. Mientras tanto, estética **se atiende si llega**.
 
 | Dato medido | Qué dice | Fuente |
 |---|---|---|
@@ -225,8 +228,8 @@ de odontólogos—, las clínicas de **2 a 6 profesionales en Santa Cruz son ~15
 | **5 clientes** (break-even) | **1 a 3 %** | holgado: el mercado no frena la etapa 1 |
 | **~40 clientes** (techo de soporte de una persona) | **10 a 27 %** | muy exigente con un solo rubro en una sola ciudad |
 
-**Consecuencia:** el techo de 40 pide, más adelante, sumar **estética** (mismo producto, otro
-vocabulario) y/o **otra ciudad**. Es exactamente la v1.2 de la estrategia (§12), y confirma su
+**Consecuencia:** el techo de 40 pide, más adelante, sumar **un segundo rubro** (importadora, según la
+decisión de Sergio Urcullo del 30-sep; estética es la más barata de encender) y/o **otra ciudad**. Es exactamente la v1.2 de la estrategia (§12), y confirma su
 orden: primero 5 dentales, después el segundo rubro encendido desde el core. Lo que no cambia: hoy
 el cuello de botella sigue sin ser el mercado.
 

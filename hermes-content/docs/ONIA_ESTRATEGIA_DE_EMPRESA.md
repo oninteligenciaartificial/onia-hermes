@@ -51,8 +51,8 @@
     foso —SIAT, rubros, Bolivia— que a ellos no les conviene cruzar.
 12. **Una idea que pasa el test no es una idea urgente** (§14). El test dice si MERECE
     construirse; la etapa dice CUÁNDO. La cola vive en §14 — al 2026-09-30 con cinco entradas:
-    pasan la tarjeta de fidelidad en Wallet y **el Recall de tratamiento a medias, que además es el
-    hueco de la v1.0** (lo que prometen los anuncios y el agente todavía no hace); pasa solo como
+    pasan la tarjeta de fidelidad en Wallet y **el Recall de tratamiento a medias, que ya está en la
+    1.0 sin publicar** (producción todavía no lo tiene, y los anuncios ya lo prometen); pasa solo como
     plataforma y falla la etapa *agentes que hablan con agentes*; fallan el MCP del dueño y **un
     marketplace tipo Uber/Yango/PedidosYa**, cuyo camino realista es una red de clínicas que nace del
     SaaS.
@@ -666,11 +666,16 @@ comprobantes) tampoco suma hoy: eso ya se hace por SSH, SQL y el circuito de Tel
 clientes no baja ninguna hora de soporte. **Cuándo:** v1.x, cuando un cliente que paga lo pida o
 cuando el soporte (§9) muestre una tarea repetida que un MCP le ahorre a Sergio.
 
-### Recall de tratamiento a medias — 🟢 PASA LAS TRES, y NO es de la cola: es el hueco de la v1.0
+### Recall de tratamiento a medias — 🟢 PASA LAS TRES · YA ESTÁ EN LA 1.0 SIN PUBLICAR
 
-> Encontrado el 2026-09-30 por el carril Mercado, verificando si los anuncios prometían algo que el
-> producto no hace. **No es una idea nueva: es la distancia entre lo que pidió el mejor lead y lo que el
-> agente hace.**
+> Anotado el 2026-09-30 por el carril Mercado, verificando si los anuncios prometían algo que el producto
+> no hace. **No es una idea nueva: es el dolor #1 del mejor lead, y Sergio Urcullo lo metió en la 1.0 el
+> 29-sep.**
+>
+> ⚠️ **Corregido el mismo 30-sep.** La primera versión de esta entrada decía que ni producción ni la 1.0 lo
+> tenían y proponía construirlo (3–7 días). **Era falso para la 1.0:** se leyó una sola función del Recall
+> y se generalizó; el módulo nuevo estaba al lado. Lo marcó el carril Plataforma. La lección quedó en §9 de
+> `ONIA_ADQUISICION_Y_PAUTA.md`: para decir "ningún agente lo hace" se lista el módulo entero.
 
 | Pregunta del test | Respuesta | |
 |---|---|---|
@@ -678,21 +683,24 @@ cuando el soporte (§9) muestre una tarea repetida que un MCP le ahorre a Sergio
 | ¿Deja de tener sentido sin el núcleo? | sí: sale de la ficha, del tratamiento y de la agenda de la clínica | ✅ |
 | ¿Se entrega sin horas por cliente? | sí: se calcula solo con los datos que la clínica ya carga | ✅ |
 
-**Lo medido en el código** (`onia-platform` `master` `c3b9206` y la 1.0 sin publicar
-`wip/v1-integracion-20260928`): `evaluateRecallCandidates` propone a quien **no vuelve hace ≥180 días** y no
-tiene cita. La base **ya guarda** cada tratamiento con su estado (`PatientTreatment.status`: `PENDIENTE ·
-EN_PROGRESO · COMPLETADO · CANCELADO`), pero **ningún agente lo lee**. Al paciente que dejó una ortodoncia a
-mitad, el Recall lo encuentra a los seis meses: ya se perdió.
+**Lo leído en el código, 30-sep:**
 
-**Criterio propuesto:** tratamiento `PENDIENTE` o `EN_PROGRESO` + sin cita futura + última cita hace 14–30
-días, o cancelada / no asistida → el agente propone, el dueño aprueba, sale una plantilla utility, el
-paciente contesta, se le ofrecen horarios. **Se mide en pacientes y Bs recuperados**, que es a la vez la
-frase de venta y la demo. Estimado: 3–7 días, porque el motor, la aprobación y el envío ya existen.
+- **Producción** (`onia-platform` `master` `c3b9206`): el Recall propone solo a quien **no vuelve hace ≥180
+  días**; `PatientTreatment.status` se guarda y ningún agente lo lee. Al paciente que dejó una ortodoncia a
+  mitad, producción lo encuentra a los seis meses.
+- **1.0 sin publicar** (`wip/v1-integracion-20260928` `f533a68`): `agents-tratamiento-a-medias.ts`, dentro del
+  Recall y antes que el resto: tratamiento `EN_PROGRESO`, **21 días** sin actividad, sin cita futura, dental y
+  estética; propone y una persona aprueba en `/pending`.
 
-**Por qué va AHORA y no en la cola:** es la promesa de los anuncios (`ONIA_ADQUISICION_Y_PAUTA.md` §5.4), el
-agente gratis de Meta no la puede copiar sin la ficha, y la competencia regional ya la anuncia (Dentalink:
-*recall* y *"venta de tratamientos"*, sin verificar). **Decide el alcance de la 1.0 Sergio Urcullo con el
-carril Plataforma** (`cola/plataforma-v1.md`); acá queda la evidencia.
+**Lo que falta no es construirlo: es publicar la 1.0 y mirarlo andar.** Dos cuidados para venderlo: la prueba
+dura 14 días y el aviso aparece a los 21 (se alarga la prueba de los leads de pauta, o la demo lo muestra con
+un tratamiento sembrado); y la regla deja afuera el `PENDIENTE` (el plan que nunca empezó), que sería una
+segunda vuelta con un dato que ya existe. **Se mide en pacientes y Bs recuperados**, que es a la vez la frase
+de venta y la demo.
+
+**Por qué importa ahora:** es la promesa de los anuncios (`ONIA_ADQUISICION_Y_PAUTA.md` §5.4), el agente
+gratis de Meta no la puede copiar sin la ficha, y la competencia regional ya la anuncia (Dentalink: *recall* y
+*"venta de tratamientos"*, sin verificar). **Publicar la 1.0 lo decide Sergio Urcullo.**
 
 ### Agentes que hablan con agentes (el asistente del paciente reserva en la clínica) — 🟡 PASA SOLO COMO PLATAFORMA · FALLA LA ETAPA
 
@@ -723,7 +731,7 @@ Meta AI) hablando con **el agente de la clínica**.
 **Veredicto:**
 
 - **Ahora:** ningún protocolo. En Bolivia, "estar listo para agentes" es que **el bot de la clínica,
-  conectado a la agenda y a la ficha, conteste bien por WhatsApp**. Lo que sí va ahora es el Recall de
+  conectado a la agenda y a la ficha, conteste bien por WhatsApp**. Lo que sí va ahora es publicar el Recall de
   tratamiento a medias (arriba): justo lo que el agente de Meta no puede hacer.
 - **v1.x:** que el bot **reserve solo** contra la agenda real (hoy escala el pedido a una persona) ·
   datos estructurados (schema.org) y botón de reserva en la agenda pública (medio día) · soportar los

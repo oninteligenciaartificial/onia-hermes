@@ -24,6 +24,11 @@
 > que quedan como fotos de agosto. **Medido el 2026-09-30** (Biblioteca de Anuncios de Meta, código de
 > `onia-platform` en `master` `c3b9206` y en la 1.0 sin publicar `wip/v1-integracion-20260928`, fuentes
 > públicas). Las cuatro investigaciones completas, con cada fuente, están en `research/*_20260930.md` (§9).
+>
+> **Insumo del carril Plataforma:** `research/onia-1.0-29sep/CAMPANA_META_ADS.md` (29-sep, rama
+> `wip/v1-hermes-20260928`, llega a `main` con la 1.0) — plan de campaña verificado contra el producto, con
+> lo que el anuncio puede y no puede decir. **Esta es la fuente; aquel, el detalle de producto que la
+> alimenta.** Lo que suma quedó integrado en §5.
 
 ---
 
@@ -31,17 +36,22 @@
 
 1. **Te dicen la verdad para la venta, no para el producto.** El producto sigue multi-rubro (mantenerlo
    cuesta cero y es la base del segundo rubro); **la venta, la pauta y la vidriera van a un solo rubro:
-   dental**, con estética segunda. Los datos, en `ONIA_CLIENTE_IDEAL.md` §6.
+   dental**. El segundo rubro, después de los 5 dentales: **importadora, según decidió Sergio Urcullo**
+   (aviso de Plataforma del 30-sep; sus palabras textuales, pendientes). Los datos, en `ONIA_CLIENTE_IDEAL.md` §6.
 2. **La estrategia ya lo había decidido el 5-sep. Lo que no se enteró es la vidriera:** la home le habla a
    *"tu negocio"*, `/rubros` lista cinco, y el carrusel de pauta del 21-sep cierra con el precio del plan
    que no trae agentes (§5.4).
 3. **El hueco de mensaje existe:** en Bolivia nadie pauta *"recuperá al paciente que dejó el tratamiento a
    medias"*. El único software de clínica con pauta sostenida es extranjero (Healthatom: Dentalink +
    Medilink, en dólares) y titula con IA clínica (§2).
-4. 🔴 **Pero el producto todavía no cumple esa promesa, y hay que decirlo antes de gastar un peso.** El
-   agente Recall busca *"sin visita hace ≥180 días"*; **no mira los tratamientos pendientes**, aunque la
-   base ya los guarda con estado (verificado en código, §5.4). **La función #1 a sumar no es una tendencia:
-   es el Recall de tratamiento a medias.** Está propuesta a Plataforma (EL HILO).
+4. 🔴 **Producción todavía no cumple esa promesa; la 1.0 sin publicar, sí.** En producción el Recall busca
+   *"sin visita hace ≥180 días"*. La 1.0 (decidido por Sergio Urcullo el 29-sep) le suma una primera pasada:
+   **tratamiento en progreso sin actividad hace 21 días y sin cita** (dental y estética). **Lo que destraba
+   el mejor ángulo no es construir nada: es publicar la 1.0 y mirarla andar** (§5.4). Hasta entonces la
+   pauta usa lo que producción ya cumple.
+   ⚠️ *Corregido el mismo 30-sep:* la primera versión de este punto decía que la 1.0 tampoco lo tenía. Leí
+   una sola función (`evaluateRecallCandidates`) y generalicé; el módulo nuevo
+   (`agents-tratamiento-a-medias.ts`) estaba al lado.
 5. **La señal más barata que existe:** ~20 clínicas dentales y ~10 de estética de Santa Cruz **pagan hoy**
    pauta para conseguir pacientes, casi todas con clic a WhatsApp (§3).
 6. **Orden de canales** (§4): los que ya levantaron la mano → las clínicas con señal, una por una → eventos
@@ -72,9 +82,9 @@ exigente con un rubro y una ciudad): el techo pide sumar estética u otra ciudad
 | Rubro | Tamaño en SCZ | Competencia que pauta hoy | Veredicto para la venta |
 |---|---|---|---|
 | **Dental 2–6 profesionales** | ~150–400 [inferencia] | Healthatom (USD, IA clínica) + TuDoc (local, por SEO) | **Se persigue, solo éste, hasta 5 clientes** |
-| Estética / spa | más avisos que dental (280 contra 56), sin conteo oficial | AgendaPro, Balance, CitaPro | Segundo, **después** de los 5 dentales: fragmentado, muchas sin recepción |
+| Estética / spa | más avisos que dental (280 contra 56), sin conteo oficial | AgendaPro, Balance, CitaPro | Se atiende si llega: fragmentado, muchas sin recepción. Es el más barato de encender (comparte pantallas y agentes con dental) |
 | Comercio / ferretería | el más grande: **42.587 unidades** (SEPREC, sep-2025) | **≥12 vendedores bolivianos** en BOB | No hoy: océano rojo y precio bajo |
-| Importadora | sin conteo oficial | partners de Odoo, ERP de ticket alto | No hoy: venta larga |
+| Importadora | sin conteo oficial; 135 avisos activos de importadoras de Santa Cruz | partners de Odoo, ERP de ticket alto | **Segundo rubro, después de los 5 dentales: decisión de Sergio Urcullo** (aviso de Plataforma, 30-sep). A favor: urgencia fiscal alta (IVA "por fuera") y un prospecto real. En contra: venta larga, y el "pedido" hoy es un callejón sin salida en el producto (inventario de Plataforma) |
 | Servicios profesionales | ~10.400 [inferencia] | sin dato | No: sin canal claro |
 
 ---
@@ -162,8 +172,8 @@ tu cupo*). La lista, con la página de cada una y el cruce con los 20 prospectos
   volvieron?"*.
 
 **Qué NO se hace con esa lista:** escribir sin que Sergio Urcullo apruebe el mensaje y el canal exactos
-(regla del subagente `onia-crm-prospeccion`), ni prometer el Recall de tratamiento a medias antes de que
-exista (§5.4).
+(regla del subagente `onia-crm-prospeccion`), ni prometer el Recall de tratamiento a medias mientras la 1.0
+no esté publicada (§5.4).
 
 ---
 
@@ -196,8 +206,9 @@ documentada; el detalle, con cada fuente, en `research/ONIA_META_ADS_PLAYBOOK_20
 
 - **Objetivo Clientes potenciales · conversión en WhatsApp · meta "Maximizar el número de conversaciones".**
 - Es el canal donde vive el dueño de la clínica y el que usan todas las clínicas que pautan (§3).
-- No depende del píxel: hoy la web **no tiene píxel ni pasa `utm`/`fbclid`** a `app.onia.com.bo/register`
-  (medido en el código de `(sitio)/`). La web entra cuando eso esté (bloqueo 7).
+- No depende del píxel: en producción la web **no tiene píxel ni pasa `utm`/`fbclid`** a
+  `app.onia.com.bo/register` (medido en el código de `(sitio)/` en `main`). **La 1.0 sin publicar ya lo
+  resuelve** (bloqueo 7); la web entra como destino cuando se publique y el píxel se vea en «Probar eventos».
 - La ventana gratis de 72 h que abre un anuncio de clic a WhatsApp **sigue sin cobrar el envío** después del
   cambio de precios de Meta del 1-oct-2026.
 
@@ -251,21 +262,27 @@ noche*, *no te faltan pacientes*, *tu recepcionista está tapada*, entre otros.
 3. **Las piezas del 13-ago son solo tipografía:** no pasan *"producto visible o no sale"* (`CLAUDE.md` §5) y
    una firma `@oniaagency`. Se rehacen con UI real o no se usan.
 
-**🔴 Lo que NO se puede prometer todavía — verificado en el código, 2026-09-30:**
+**🔴 Qué se puede prometer con producción y qué recién con la 1.0 — leído en el código, 2026-09-30:**
 
-- `evaluateRecallCandidates` (`lib/onia-core/modules/agents-logic.ts`, `master` `c3b9206` y la 1.0 sin
-  publicar) propone pacientes **sin visita hace ≥ `recallAfterDays` = 180 días** y sin cita futura.
-- La base **ya guarda** el tratamiento de cada paciente con su estado (`PatientTreatment.status`:
-  `PENDIENTE · EN_PROGRESO · COMPLETADO · CANCELADO`, `prisma/schema.prisma`), pero **ningún agente lo lee**.
-- **Consecuencia:** *"¿Cuántos tratamientos quedaron a medias? ONIA te ayuda a ver quién no volvió"* promete
-  algo que el agente hoy no hace: a un paciente de ortodoncia que dejó de venir, el Recall lo encuentra a
-  los seis meses, cuando ya se perdió. **Hasta que exista el Recall de tratamiento a medias, la pauta usa
-  ángulos que el producto ya cumple** (la agenda que vive en la cabeza de la recepcionista, *8 de la noche*,
-  la silla vacía) **o la frase honesta** (*"quién no volvió en seis meses"*).
-- **Por qué es la función #1 a construir:** es el dolor #1 dicho por el mejor lead, es la promesa de los
-  anuncios, Meta no la puede copiar sin la ficha, y el dato ya está en la base. Propuesta a Plataforma en EL
-  HILO con el criterio (tratamiento pendiente o en progreso + sin cita futura + última cita hace 14–30 días o
-  cancelada) y la medida (pacientes y Bs recuperados). Detalle: estrategia §14.
+| | Producción (`onia-platform` `master` `c3b9206`) | 1.0 sin publicar (`wip/v1-integracion-20260928` `f533a68`) |
+|---|---|---|
+| Recall | `evaluateRecallCandidates`: **sin visita ≥180 días** y sin cita futura | lo mismo, **más** una primera pasada: `agents-tratamiento-a-medias.ts` |
+| Tratamiento a medias | **no existe**: `PatientTreatment.status` se guarda y ningún agente lo lee | tratamiento `EN_PROGRESO`, **21 días** sin actividad (`TRATAMIENTO_A_MEDIAS_DIAS`), sin cita futura, dental y estética; propone y una persona aprueba en `/pending`. Decidido por Sergio Urcullo el 29-sep |
+
+- **Hasta publicar la 1.0**, *"¿cuántos tratamientos quedaron a medias?"* promete algo que producción no
+  hace. La pauta usa lo que producción **sí** cumple, verificado por el carril Plataforma contra `c3b92067`
+  (`CAMPANA_META_ADS.md` §1.2): **el paciente de mañana que no confirmó** (el agente Confirmador deja cada
+  mañana el mensaje escrito; lo aprobás y lo mandás desde tu WhatsApp), los recordatorios por correo 24 h y
+  2 h antes con botón para confirmar o cancelar, y el link para que el paciente reserve solo.
+- **Con la 1.0 publicada**, el ángulo entra **diciendo el mecanismo** (*"si pasan tres semanas sin que
+  vuelva…"*), con dos cuidados: la prueba dura 14 días y el aviso aparece a los 21, así que un cliente que
+  carga datos nuevos **no lo ve dentro de la prueba** (se alarga la prueba de los leads de pauta desde
+  `/admin/plans`, o la demo lo muestra con un tratamiento sembrado de más de 21 días — hoy el seed dental no
+  lo trae); y la regla toma `EN_PROGRESO`, no `PENDIENTE` (el plan que nunca empezó): si hace falta, es una
+  segunda vuelta, el dato existe.
+- **Lo que un anuncio no dice nunca, con o sin 1.0** (lista del carril Plataforma, verificada contra el
+  producto): factura electrónica, "envío automático por WhatsApp", confirmar o marcar "no asistió" desde el
+  panel (no hay botón), paquetes de sesiones (estética), testimonios o cifras de resultados.
 
 **Presentador:** Sergio Urcullo mostrando la pantalla, o un presentador IA solo si él lo pide y **nunca
 haciéndose pasar por cliente u odontólogo**. Testimonios: prohibidos con cero clientes.
@@ -278,9 +295,16 @@ escribió el 25-ago al WhatsApp de Onia y **recibió cero mensajes**. Antes de e
 - prueba punta a punta **con dos mensajes** (el primero siempre lo contesta la plantilla de Chatwoot, lección
   del 23-ago);
 - bot con las 5 preguntas, salida cortés para pacientes, aviso a Sergio Urcullo;
-- **código por anuncio en el mensaje prellenado** (`[A1]`, `[A2]`…): **Chatwoot 4.12.1 descarta el `referral`
-  del anuncio** (`hermes-content/deploy/vps-ops/bot/chatwoot-adapter.mjs` l.129-133), así que sin código un
-  lead de la pauta entra sin origen.
+- **código por anuncio en el mensaje prellenado**: **Chatwoot 4.12.1 descarta el `referral` del anuncio**
+  (`hermes-content/deploy/vps-ops/bot/chatwoot-adapter.mjs` l.129-133), así que sin código un lead de la pauta
+  entra sin origen. **Cómo, según el carril Plataforma** (`CAMPANA_META_ADS.md` §2.2): el conocimiento del bot
+  admite 10 campañas y hay 9 usadas, así que va **una sola frase-prefijo** para todos los anuncios —
+  *"Hola, vi el anuncio de Onia"* (`prefijo: true`)— y cada anuncio precarga su código: *"Hola, vi el anuncio
+  de Onia (D1). Tengo una clínica dental."*. La respuesta del bot es fuente con firma humana: **la publica
+  Sergio Urcullo**, y se prueba desde un teléfono que no sea el de Onia, **mirando la respuesta**;
+- **método de pago en la cuenta de WhatsApp Business de Onia**: desde el 1-oct Meta cobra los mensajes de
+  servicio (`onia-platform` `c3b9206`: *"there is no free tier"*). La ventana de 72 h que abre un anuncio de
+  clic a WhatsApp sigue gratis, pero sin método de pago cargado la cuenta queda expuesta a corte.
 
 ### 5.6 Medición
 
@@ -316,7 +340,7 @@ Los supuestos del embudo están en `research/ONIA_META_ADS_PLAYBOOK_20260930.md`
 | Página | "Onia" `1140384625819526` |
 | Campaña | `ONIA · Dental SCZ · WhatsApp · prueba 1` · Clientes potenciales · presupuesto total USD 140 · fin a los 14 días · **PAUSED** |
 | Conjunto | WhatsApp · Maximizar conversaciones · Santa Cruz de la Sierra + radio, "llegar a más" apagado · 25+ · Advantage+ con sugerencias · excluir registrados |
-| Anuncios | 3–4: carrusel del 21-sep **corregido** (§5.4) · estático del 21-sep · 1–2 de los briefs de agosto rehechos con UI real. Cada uno con su código en el mensaje prellenado |
+| Anuncios | 3–4 con lo que producción cumple (§5.4): Confirmador (*el paciente de mañana que no confirmó*) · agenda que todo el equipo ve · link de reserva. El carrusel del 21-sep entra **solo con la 1.0 publicada** y corregido. Cada anuncio precarga *"Hola, vi el anuncio de Onia (D1)…"* |
 | Mensaje de bienvenida | "Para dueños/as de clínicas" + tres respuestas para tocar (§5.2) |
 
 **Quién la crea:** la sesión que tenga el conector de Meta Ads conectado a la cuenta de ONIA (bloqueo 3), o
@@ -335,10 +359,11 @@ OK.**
 | 4 | **WhatsApp de Onia conectado a la página** (lo exige el clic a WhatsApp) | sin medir | Sergio Urcullo / Plataforma |
 | 5 | **Bot listo para recibir pauta** (§5.5) y el `referral` que Chatwoot descarta | ❌ el `referral` se pierde; el resto sin probar | Plataforma |
 | 6 | **Los leads que ya llegaron solos, sin contestar** | 5 al 27-sep (`ONIA_LEADS_ESPERANDO.md`) · no re-medido hoy | Sergio Urcullo |
-| 7 | Solo para web o formulario: los CTA del sitio **no pasan `utm_*` ni `fbclid`**, **no hay píxel**, y no hay página de entrada para clínicas | ❌ medido hoy en el código | Plataforma (web pública) |
+| 7 | Solo para web o formulario: los CTA del sitio **no pasan `utm_*` ni `fbclid`**, **no hay píxel**, y no hay página de entrada para clínicas | ❌ en producción (medido hoy en `main`). ✅ **resuelto en la 1.0 sin publicar** según Plataforma (30-sep): la web guarda `utm_*`, `src` y `fbclid` y los pasa al registro, píxel liviano `1012611478191231` solo en la web, privacidad v1.3; cuenta como andando recién cuando se vea en «Probar eventos». La página de entrada para clínicas sigue sin existir | Plataforma + OK de Sergio Urcullo para publicar |
 | 8 | **OK explícito de gasto con techo** | pendiente | Sergio Urcullo |
 
-Y uno que no bloquea la pauta pero sí un ángulo: **el Recall de tratamiento a medias** (§5.4), de Plataforma.
+Y uno que no bloquea la pauta pero sí destraba el mejor ángulo y la medición por web: **publicar la 1.0**
+(trae el Recall de tratamiento a medias, el origen de cada alta y el píxel liviano). Lo decide Sergio Urcullo.
 
 **Píxel, si se pone:** solo en `onia.com.bo`, **nunca en `app.onia.com.bo`** (guarda fichas y tratamientos):
 Meta podría clasificar el dominio como "salud y bienestar" y restringir la medición. Software B2B para
@@ -353,8 +378,9 @@ clínicas **no es** categoría especial de anuncios.
 - Vender el add-on de chatbot como *"un bot que responde"*: Meta lo regala desde el 3-jun-2026 en la app
   WhatsApp Business (estrategia §14).
 - Titular con «IA». Se titula con el trabajo.
-- Prometer en un anuncio algo que el producto no hace hoy (el Recall de tratamiento a medias, un precio del
-  plan que no trae lo que se muestra).
+- Prometer en un anuncio algo que producción no hace hoy: el tratamiento a medias antes de publicar la 1.0,
+  el envío automático por WhatsApp, confirmar citas desde el panel, la factura SIAT, paquetes de sesiones, o
+  un precio del plan que no trae lo que se muestra.
 - Gastar en las cuentas NUVO o Arthur Fuentes que ve el conector.
 - Encender algo sin el OK de Sergio Urcullo. Todo se crea en PAUSA.
 
@@ -369,6 +395,10 @@ clínicas **no es** categoría especial de anuncios.
   desde esta sesión.
 - **Si Dentalink ofrece de verdad recall y "venta de tratamientos"**, y el producto de TuDoc (precio,
   odontograma, clientes reales).
+- **El agente de tratamiento a medias funcionando:** se leyó su código en la 1.0, no se lo vio andar. Se mira
+  en producción cuando se publique.
+- **La decisión de importadora como segundo rubro, con las palabras de Sergio Urcullo:** llegó por el aviso de
+  Plataforma; el propio `VENDIBLE_OTROS_RUBROS.md` de esa rama recomendaba estética.
 - **La fecha del CIO 2026.**
 - **La página de la home renderizada:** se leyó el código de `(sitio)/`, no la página servida.
 - **Benchmarks B2B de Bolivia:** no existen públicos; se fijan con la semana 1 de la prueba.
@@ -391,8 +421,10 @@ ads_get_ad_accounts
 
 ```bash
 # El criterio del Recall en el producto (clonar onia-platform en modo lectura)
-grep -n "recallAfterDays = " lib/onia-core/modules/agents-logic.ts
-grep -n "enum TreatmentStatus" -A5 prisma/schema.prisma
+grep -n "recallAfterDays = " lib/onia-core/modules/agents-logic.ts                  # producción: 180
+ls lib/onia-core/modules/ | grep tratamiento-a-medias                                # ¿llegó la 1.0?
+grep -n "TRATAMIENTO_A_MEDIAS_DIAS =" lib/onia-core/modules/agents-tratamiento-a-medias.ts   # 1.0: 21
+# Ojo: leer UNA función no alcanza para decir "ningún agente lo hace" — listar el módulo entero.
 
 # ¿El sitio propaga utm/fbclid? ¿Tiene píxel?
 grep -rn -E "utm_|fbclid|fbq\(" web-factory/apps/onia-platform/src/app/\(sitio\)/

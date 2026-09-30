@@ -1,4 +1,8 @@
 > **Foto de investigación del 2026-09-30 (carril Mercado, sesión «Análisis de mercado Onia Platform»).** No es fuente de verdad: lo vigente está en `ONIA_ADQUISICION_Y_PAUTA.md`, `ONIA_CLIENTE_IDEAL.md` y `ONIA_ESTRATEGIA_DE_EMPRESA.md` §14. Los avisos de este texto sobre "cambios sin commitear" en otros docs se refieren al árbol durante la sesión y ya quedaron resueltos en esos docs.
+>
+> ⚠️ **Corrección posterior (mismo 30-sep):** este informe dice que el Recall *"no detecta"* el tratamiento a
+> medias. Vale para **producción**. La **1.0 sin publicar** ya trae `agents-tratamiento-a-medias.ts` (21 días,
+> `EN_PROGRESO`, dental y estética), decidido por Sergio Urcullo el 29-sep. Ver `ONIA_ADQUISICION_Y_PAUTA.md` §5.4.
 
 # Informe B — Agentes que hablan con agentes: qué es real, qué hace la competencia y qué le conviene a Onia
 

@@ -34,11 +34,14 @@ autosync de esta rama). **Ninguna campaña creada, cero gasto.**
 - **Los creativos del 21-sep, sin corregir a propósito.** La lámina 8 del carrusel
   (`carousels/briefs/ads/onia-platform-dental-meta-20260921-carousel.json`, slide `cta`) dice *"Desde Bs
   320/mes"* (Básico, sin agentes) y *"CREÁ TU CUENTA"*. **No se re-renderizó** porque el ángulo entero
-  (*"¿cuántos tratamientos quedaron a medias?"*) depende de que exista el Recall de tratamiento a medias: si
-  Plataforma lo construye, se corrige solo la lámina 8 (sin precio, CTA *"Escribinos"*); si no, cambia el
-  ángulo. Además `node_modules` no está instalado en esta máquina. Se hace **cuando se vaya a encender**.
-- **Pedidos a Plataforma sin respuesta todavía** (EL HILO, 2.º aviso del 30-sep): Recall de tratamiento a
-  medias para la 1.0, BSUID, bot listo para pauta, `referral` que Chatwoot descarta, `utm` en la web.
+  (*"¿cuántos tratamientos quedaron a medias?"*) recién es verdad **con la 1.0 publicada** (el agente está en la
+  1.0, no en producción): entonces se corrige la lámina 8 (sin precio, CTA *"Escribinos"*) y se dice el
+  mecanismo (*"si pasan tres semanas…"*). Antes de eso, la pauta usa el Confirmador. Además `node_modules` no
+  está instalado en esta máquina. Se hace **cuando se vaya a encender**.
+- **Pedidos a Plataforma sin respuesta todavía** (EL HILO, 2.º aviso del 30-sep): BSUID, bot listo para pauta
+  (frase-prefijo, 5 preguntas, salida cortés), `referral` que Chatwoot descarta, página de entrada para
+  clínicas. Plataforma quedó en pausa la noche del 30-sep (su PC se apaga) y retoma el 1-oct. El punto del
+  Recall **se retiró**: ya estaba en la 1.0 (ver *Intentos fallidos*).
 
 **Archivos y cambios**
 
@@ -64,9 +67,16 @@ autosync de esta rama). **Ninguna campaña creada, cero gasto.**
 - **El cupo de búsquedas web de la sesión se agotó (200/200)** con cuatro subagentes investigando en paralelo, y
   el proxy devolvió 403/`EGRESS_BLOCKED` en casi todas las páginas: lo marcado *vía buscador* es extracto, no
   lectura. **Lección:** con varios subagentes, repartir el cupo o darle a cada uno un tope de búsquedas.
-- **Hipótesis que resultó falsa:** que los anuncios del 21-sep solo tenían mal el precio. Mirando el código, el
-  problema es mayor: **el Recall no detecta el tratamiento a medias** (solo *sin visita ≥180 días*), así que la
-  portada misma promete algo que el agente no hace.
+- **Dos hipótesis falsas encadenadas, la segunda mía:**
+  1. Que los anuncios del 21-sep solo tenían mal el precio. Mirando el código de producción, el problema era
+     mayor: producción **no** detecta el tratamiento a medias (solo *sin visita ≥180 días*).
+  2. **Que la 1.0 tampoco lo detectaba.** Lo afirmé en los docs, en EL HILO y en un aviso directo a Plataforma
+     (03:52 UTC), y propuse construirlo en 3–7 días. **Era falso:** en la 1.0 lo busqué con un `grep` sobre
+     *una* función (`evaluateRecallCandidates`, sigue en 180) y generalicé; el módulo
+     `agents-tratamiento-a-medias.ts` (21 días, decisión de Sergio Urcullo del 29-sep) estaba al lado. Lo
+     marcó el plan de Plataforma. Corregido en todos los lugares con la marca ⚠️ y con un aviso de corrección.
+     **Lección:** un `grep` sirve para descartar, nunca para confirmar una ausencia; para decir "ningún agente
+     lo hace" se lista el módulo entero (`ls lib/onia-core/modules/`).
 - **Frase que hubo que corregir en la misma sesión:** escribí que ningún competidor *ofrece* el agente que
   propone a quién recuperar. Lo medido es que ninguno lo *titula* en su pauta; la web de Dentalink anuncia
   *recall* y *"venta de tratamientos"* (sin abrir). Quedó corregido en `ONIA_CLIENTE_IDEAL.md` §2.
@@ -77,7 +87,9 @@ autosync de esta rama). **Ninguna campaña creada, cero gasto.**
 
 1. **Contestar a los que ya escribieron** (`ONIA_LEADS_ESPERANDO.md`) — es gratis y es el paso 1 del orden de
    canales. Ver la hipótesis *Clínica Dental "DS"* en `ONIA_PROSPECTOS_DENTAL_SCZ.md` §5.1.
-2. **Decidir con Plataforma si el Recall de tratamiento a medias entra en la 1.0** (evidencia en la estrategia §14).
+2. **Publicar la 1.0** cuando la veas lista: trae el Recall de tratamiento a medias, el origen de cada alta y el
+   píxel liviano, que destraban el mejor ángulo de pauta y la medición por web. Y **confirmar con tus palabras
+   que el segundo rubro es importadora** (llegó por el aviso de Plataforma; su propio doc recomendaba estética).
 3. **Para la pauta:** tarjeta en ONIA Ads · vincular la página "Onia" en Business Manager · confirmar el WhatsApp
    de Onia en la página · **reconectar el conector de Meta Ads** en `claude.ai/customize/connectors` con el
    usuario que administra ONIA Ads (y abrir sesión nueva) · saber a qué tipo de cambio le cobra el banco la
@@ -91,15 +103,16 @@ autosync de esta rama). **Ninguna campaña creada, cero gasto.**
 **Próximos pasos** (en orden; cada uno con su "listo")
 
 1. Sergio Urcullo contesta a los 5 → *listo = cinco respuestas enviadas, con capacidades verificadas en el producto*.
-2. Plataforma responde por EL HILO sobre el Recall de tratamiento a medias → *listo = decisión escrita en
-   `cola/plataforma-v1.md`*.
+2. Plataforma responde por EL HILO los pedidos del 2.º aviso (bot para pauta, BSUID, `referral`) → *listo =
+   respuesta anotada en EL HILO*.
 3. Lista de las primeras 10 clínicas para contacto 1:1 (cruce de §1 y §5 de `ONIA_PROSPECTOS_DENTAL_SCZ.md`,
    ciudad y tamaño verificados) con el subagente `onia-crm-prospeccion` → *listo = 10 filas con fuente y mensaje
    propuesto, esperando el OK de Sergio Urcullo*.
 4. Destrabar los 8 bloqueos de `ONIA_ADQUISICION_Y_PAUTA.md` §6 → *listo = `ads_get_ad_accounts` ve ONIA Ads con
    método de pago y página promocionable*.
-5. Corregir y re-renderizar los creativos según el Recall (§5.4) → *listo = piezas miradas, sin precio del
-   Básico, CTA "Escribinos", código por anuncio*.
+5. Creativos: hasta publicar la 1.0, piezas con el Confirmador; con la 1.0, corregir y re-renderizar el
+   carrusel del 21-sep (§5.4) → *listo = piezas miradas, sin precio del Básico, CTA "Escribinos", código por
+   anuncio*.
 6. Crear la campaña en PAUSA con la tabla del §5.8 → *listo = ids de campaña/conjunto/anuncios anotados acá*.
 7. Encender con el OK de Sergio Urcullo; mirar a los 7 días, decidir a los 14 → *listo = costo por
    conversación calificada medido y anotado en `ONIA_ADQUISICION_Y_PAUTA.md` §5.3 como benchmark propio*.
