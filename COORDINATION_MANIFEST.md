@@ -9,10 +9,10 @@
 > Re-medido el 30-sep 02:30 UTC: `list_sessions` ve las cuatro vivas, pero `SendMessage` a
 > cualquiera responde «not reachable». El mensaje directo sigue sin existir. **Sesión que retoma
 > después de un merge de `main`: leé esta sección antes de seguir.**
-> **En prueba el 30-sep (Lucía v4):** una rutina de un solo disparo, creada con `create_trigger`
-> y `persistent_session_id`, entra como un turno en otra sesión de la cuenta. El primer envío fue
-> a la sesión de control, a las 02:38 UTC. Si llega, esa sesión decide si se adopta para avisos
-> que no pueden esperar. El aviso se escribe ACÁ igual.
+> **Canal directo probado el 30-sep (Lucía v4):** una rutina de un solo disparo, creada con
+> `create_trigger` y `persistent_session_id`, entra como un turno en otra sesión de la cuenta. El
+> primer envío llegó a la sesión de control (`last_run` SUCCEEDED, 02:38:42 UTC). Esa sesión decide
+> si se adopta para avisos que no pueden esperar. El aviso se escribe ACÁ igual.
 
 **Sesión de control — «Hermes y Sergio management system»** (rama `claude/hermes-jarvis`).
 Dueña de Hermes y del cerebro: qué le llega a Sergio Urcullo por Telegram, el resumen de las
