@@ -63,7 +63,7 @@ Capturas: `hermes-content/carousels/briefs/assets/onia-1.0-dental-ads/candidato-
 - La sesión local la abre él una vez: `claude remote-control` **dentro de la carpeta de `onia-platform`** en la laptop, y deja la ventana abierta.
 - Va en `onia-platform` porque publicar la 1.0 es el objetivo y las skills `onia-deploy/db/...` solo se cargan dentro de ese repo. Los archivos de `onia-hermes` los lee por ruta.
 - Una sola sesión local, no dos: las sesiones en paralelo le cruzan la información.
-- Desde la nube se la encuentra con `ListAgents` y se le escribe con `SendMessage`.
+- ⚠️ **Corregido el mismo día:** una sesión `claude remote-control` en la laptop **NO aparece** en `ListAgents` de una sesión en la nube (medido: «No reachable agents»). Esa sesión la maneja Sergio Urcullo desde su app. Entonces la nube le redacta el pedido exacto y él lo pega en esa sesión. El único camino para que la nube actúe sola es el túnel.
 - Primera tarea para ella: el túnel de Cloudflare (bloque de comandos en la skill `onia-infra`, §«Desde una sesión en la NUBE»), para que la nube llegue sola al VPS.
 
 ## 7. Próximos pasos
