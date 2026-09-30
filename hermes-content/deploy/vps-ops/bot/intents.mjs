@@ -766,7 +766,11 @@ const RE_SILLONES_PALABRA = new RegExp(`\\b(${NUM_PALABRAS})\\s+${RELLENO}\\s*(?
 
 // La lista es de OFICIOS ademas de "personas": un constructor contesta "somos 25 obreros" y una
 // peluqueria "somos 3 estilistas". Quedarse en "personas" pierde la respuesta a la pregunta 2.
-const PERSONA = "personas?|emplead\\w+|trabajador\\w+|colaborador\\w+|gente|chic[ao]s|dependient\\w+|vendedor\\w+|mozos?|meser[oa]s|asistentes?|secretari\\w+|obrer[oa]s|operari\\w+|tecnic[oa]s|cociner[oa]s|estilistas?|enfermer[oa]s|choferes?";
+// Y los PROFESIONALES de una clinica (2026-09-30): "¿cuántos profesionales atienden?" es la primera
+// pregunta del cliente ideal (ONIA_CLIENTE_IDEAL.md §9) y una clinica la contesta con su oficio —
+// "hay 3 odontologos". Sin ellos, justo el rubro de la pauta caia al LLM. Se cuentan como el tamaño
+// porque es el numero con el que se elige el plan. Ver profesionales-de-la-clinica.test.mjs.
+const PERSONA = "personas?|emplead\\w+|trabajador\\w+|colaborador\\w+|gente|chic[ao]s|dependient\\w+|vendedor\\w+|mozos?|meser[oa]s|asistentes?|secretari\\w+|obrer[oa]s|operari\\w+|tecnic[oa]s|cociner[oa]s|estilistas?|enfermer[oa]s|choferes?|doctor(?:es|as?)?|odontolog[oa]s?|dentistas?|profesionales?|medic[oa]s";
 const RE_EQUIPO_NUM = new RegExp(`\\b(\\d{1,3})\\s*(?:${PERSONA})\\b`);
 // De "dos" para arriba a proposito: "hablo con UNA PERSONA?" es un pedido de handoff, no la
 // declaracion de que trabaja una sola persona. El equipo de 1 se dice "solo yo" o "somos 1".
