@@ -142,11 +142,34 @@ aplicar,revertir}.sh` · `scripts/loops/onia-tg.sh` + `onia-tg-aduana.test.mjs` 
 
 ## 7. Próximos pasos
 
-1. Tras su toque: leer el log (`get_job_logs`), MIRAR la vista previa del cierre y del resumen,
-   y confirmar en `crontab -l`/`jobs.json`/n8n que quedó lo de §3 (incluida la prueba crear →
-   mover → cancelar). Si algo falló, corregir y pedir otro toque (aplicar es idempotente).
-   Después, que él le pida algo a Hermes por Telegram («¿qué tengo mañana?», «mové lo de las 3 a
-   las 7») y mirar que primero le muestre y solo con su sí lo haga.
-2. Medir 24 h después con `diagnostico`: `onia-tg.log` + `message_id` del chat — hecho (1).
-3. Fase 2 de §3, en ese orden: sacar el aviso del «Backup diario», pasar «Vigia lead sin
-   respuesta» y los canarios por la aduana (con `ESPERA=30` y `RECUPERADO`), mover/cancelar.
+> **30-sep ~12:45 UTC — la sesión de control se muda al entorno «Onia».** Sergio Urcullo: *"No quiero
+> que sea manual, tiene que estar automatizado, acabo de colocar una cloud que tiene la llave al
+> servidor, se llama onia, coloca esta sesión en este entorno y llama entre sesiones si necesitas
+> algo"*. Una sesión no cambia de entorno: se abre la **sucesora** en «Onia»
+> (`env_01BLwXdgpqDS3sx4rg3r2uvg`) con este handoff, y la de «Default»
+> (`session_01BZJvUfEXbqT9wNLJ6n5XZP`) deja de trabajar. **Con eso el toque desaparece:** la
+> sesión de control corre `aplicar` por SSH ella misma, con el OK de Sergio de arriba.
+
+1. **Llegar al VPS.** Desde «Onia»: `ssh root@187.77.16.63 hostname`. Si falla, preguntarle a la
+   sesión principal (`session_01VGmpNv4eSMnpA3wXrypR4L`, rutina de un disparo) cómo usa la llave
+   `claude-cloud-20260930`. Nunca pedirle una llave a Sergio Urcullo por chat. Ojo: desde «Default»
+   el puerto 22 NO pasa (el proxy solo deja tráfico web cifrado; medido el 30-sep).
+2. **Avisar antes de tocar (infra = un dueño a la vez):** una línea en EL HILO y una rutina de un
+   disparo a la principal: qué toca `aplicar` (crontab `#jarvis`, 3 trabajos de Hermes, 12 flujos
+   de n8n, 2 flujos de agenda, skill y SOUL de Hermes; nada de onia-platform) y cuándo.
+3. **Correr `aplicar` por SSH**, con el MISMO armado que el workflow
+   (`.github/workflows/hermes-jarvis.yml`): `REDACTAR_SED` + `COMMIT` + `HORAS` + `comun.sh` +
+   `aplicar.sh` → `ssh root@187.77.16.63 'bash -s'` → `sed -E -f redactar.sed`. Guardar la salida
+   en el scratchpad y revisar sección por sección (0 a 8). MIRAR las vistas previas del cierre y
+   del resumen. Si algo falla: arreglar en main con pruebas y volver a correr (es idempotente).
+   Si quedó un «🧪 Prueba de Jarvis» en su calendario, borrarlo con el conector de Google Calendar.
+4. Contarle a Sergio Urcullo, corto, qué quedó y qué falló. Después, que él le pida algo a Hermes
+   por Telegram («¿qué tengo mañana?», «mové lo de las 3 a las 7»), y mirar que primero le muestre
+   el cambio y solo con su sí lo haga.
+5. **Pedirle el OK para leer producción** (altas y pagos): con eso, el embudo diario del plan de
+   venta (`handoff/sesion-madre.md`: prospectos → demos → altas → pagos) y el aviso de alta nueva.
+   Sin su «sí» explícito no se construye (el control de permisos lo frenó el 30-sep).
+6. Medir 24 h después con `diagnostico` (también por SSH): `onia-tg.log` + `message_id` del chat.
+   Eso cierra el hecho (1).
+7. Fase 2 de §3, en ese orden: sacar el aviso del «Backup diario», pasar «Vigia lead sin
+   respuesta» y los canarios por la aduana (con `ESPERA=30` y `RECUPERADO`).
