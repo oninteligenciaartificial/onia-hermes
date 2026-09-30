@@ -21,7 +21,14 @@ visualmente, listo para que una sesión con acceso al VPS lo publique.
   - Estaba encendida con autoconfirmación y sin SMS.
   - Verificado: `/auth/v1/settings` devuelve phone:false, y un signup por teléfono responde 400.
   - Rollback: el contenedor `supabase-auth2-old-20260930-204901`.
-- ⏳ Falta la verificación MIRANDO en producción (carril lanzado).
+- ✅ Mirada en producción (21:00 UTC): sin 500 ni P2022. En prod NO hay demo dental; la única demo es «Tienda La Esquina» y vence el 1-oct 23:22 La Paz.
+- ✅ Fix de la flecha doble en /register y el «volver» de la bandeja: PR #91 → `release-2610da99` (21:44 UTC), mirado en /register a 1440 px.
+- Carriles con resultado y esperando a Sergio Urcullo:
+  - verificación y bienvenida por WhatsApp en `v1/verificacion-whatsapp` (`dc17ae1f`), con interruptor apagado; necesita su OK a 5 textos, la migración, el env y el crontab;
+  - bot de ventas en `wip/bot-ventas-pauta-20260930`; necesita su OK a 2 textos;
+  - web 1.0: 3 correcciones y las decisiones A-C;
+  - plan de demos en producción: decisiones D1-D5.
+- Lead trabado: «Importadora Rojas» (Carlos Mamani Rojas). El correo de confirmación rebotó con 5.1.1 y no dejó teléfono.
 
 Lo de §3 era el camino hasta ahí.
 
