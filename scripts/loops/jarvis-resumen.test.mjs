@@ -259,15 +259,39 @@ test("«7 de octubre» no se confunde con el 17 ni «4-oct» con el 14-oct", () 
   assert.match(d4, /Dos sesiones de Claude Code en el mismo proyecto/);
 });
 
+const AGENDA_CON_IDS = `#!/usr/bin/env bash
+if [ "$1" = --ids ]; then
+  printf 'evtA\\t08:00\\t12:30\\t🎒 Colegio\\nevtB\\t13:00\\t14:30\\t🎬 ONIA · Marca personal — grabar\\nevtC\\t15:00\\t16:30\\t🔒 ONIA · Clientes — demos\\nevtD\\t--\\t--\\tONIA feriado\\n'
+else
+  printf '08:00–12:30 🎒 Colegio\\n13:00–14:30 🎬 ONIA · Marca personal — grabar\\n15:00–16:30 🔒 ONIA · Clientes — demos\\n'
+fi
+`;
+
 test("el cierre lista los bloques de ONIA del día, numerados, y pregunta cuáles se hicieron", () => {
   const b = banco({ repo: repoConCommits([]) });
-  const agenda = b.escribir(
-    "agenda.sh",
-    `#!/usr/bin/env bash\nprintf '08:00–12:30 🎒 Colegio\\n13:00–14:30 🎬 ONIA · Marca personal — grabar\\n15:00–16:30 🔒 ONIA · Clientes — demos\\n'\n`,
-  );
+  const agenda = b.escribir("agenda.sh", AGENDA_CON_IDS);
   const msg = b.imprimir("noche", { ONIA_HOY: "2026-09-29", ONIA_AGENDA: agenda });
   assert.match(msg, /📋 <b>Tus bloques de hoy<\/b> — ¿se hicieron\?\n1\. 13:00–14:30 🎬 ONIA · Marca personal — grabar\n2\. 15:00–16:30 🔒 ONIA · Clientes — demos\n→ Contestame/);
   assert.doesNotMatch(msg.slice(msg.indexOf("📋"), msg.indexOf("→ Contestame")), /Colegio/);
+});
+
+test("el «2 no» lleva a un evento: el cierre entregado deja número → id para Hermes", () => {
+  const b = banco({ repo: repoConCommits([]) });
+  const agenda = b.escribir("agenda.sh", AGENDA_CON_IDS);
+  const r = b.correr("noche", { ONIA_HOY: "2026-09-29", ONIA_AGENDA: agenda });
+  assert.equal(r.status, 0, r.stderr);
+  assert.equal(
+    readFileSync(join(b.estado, "cierre-bloques.tsv"), "utf8"),
+    "2026-09-29\t1\tevtB\t13:00\t14:30\t🎬 ONIA · Marca personal — grabar\n" +
+      "2026-09-29\t2\tevtC\t15:00\t16:30\t🔒 ONIA · Clientes — demos\n",
+  );
+});
+
+test("gemelo: una vista previa no deja números que él nunca vio", () => {
+  const b = banco({ repo: repoConCommits([]) });
+  const agenda = b.escribir("agenda.sh", AGENDA_CON_IDS);
+  b.imprimir("noche", { ONIA_HOY: "2026-09-29", ONIA_AGENDA: agenda });
+  assert.equal(existsSync(join(b.estado, "cierre-bloques.tsv")), false);
 });
 
 test("sin lector de calendario, el cierre no inventa bloques", () => {

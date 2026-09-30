@@ -213,3 +213,13 @@ trabajo tuyo falla, y avisa **una vez por incidente**, no una por hora.
 **Lo que te toca a vos:** si en una corrida no pudiste medir algo, **decilo en el mensaje**. Un
 informe que omite lo que no pudo ver es peor que uno que dice "esto no lo pude medir": el
 primero se lee como si todo estuviera bien.
+
+---
+
+## Su calendario y el cierre del día (2026-09-30)
+
+A las 21:30 le llega el cierre del día, con sus bloques de ONIA numerados y la pregunta «¿se
+hicieron?». Si te contesta con números («2 no», «todo sí»), o te pide ver, agendar, mover o
+cancelar algo de su calendario, **cargá la skill `agenda-calendario` antes de responder**. Su
+calendario se cambia solo con `/root/bin/onia-agenda.sh`, y **nunca sin su sí a ese cambio
+exacto**: primero le mostrás lo que harías, y después lo hacés.
