@@ -2,7 +2,7 @@
 
 Propuesta de Claude, 29-sep-2026, **para que Sergio Urcullo la corrija**. Los guiones están en
 `S1-GUIONES.md`, `S2-GUIONES.md`, `S3-GUIONES.md`; los carruseles en
-`CARRUSELES.md` (esta carpeta).
+`CARRUSELES-DIARIOS.md` (esta carpeta).
 
 **Estado 29-sep:** 63 piezas para 21 días (56 escritas hoy + 7 del 28-sep), 9 carruseles
 (K1–K3 renderizados con portada de Higgsfield; K4–K9 con brief y vista previa, imagen pendiente
@@ -50,7 +50,7 @@ slot C y listo.
 | **B** | Actualidad o herramienta nueva, probada | Vertical 45–70 s | aprende IA |
 | **C** | YouTube largo (lun · mié · vie) · o negocio / historia / criterio (resto) | Horizontal 6–9 min · o vertical | dueños de negocio + marca |
 
-- **Carrusel:** mar · jue · sáb (3 por semana), portada con imagen de Higgsfield y el resto por
+- **Carrusel:** uno por día desde el 29-sep (calendario en `CARRUSELES-DIARIOS.md`), portada con imagen de Higgsfield y el resto por
   código (`scripts/carousel_render.js`).
 - **Grabación:** una hora por día alcanza para 1 horizontal + 2 verticales. Grabar en lote los
   verticales de 2–3 días juntos si hace falta.

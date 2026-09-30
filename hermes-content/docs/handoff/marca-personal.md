@@ -7,11 +7,17 @@
 | # | Pedido | Estado |
 |---|---|---|
 | 1 | «Aprendé el método de sanmunoz» | Era su último carrusel: videos animados que Claude dibuja con código, sin grabarse. Ficha: `references/marca-personal/SANTIAGO-VIDEOS-ANIMADOS-POR-CODIGO.md`. El skill real llega por DM si se comenta «OPUS» (decisión de Sergio) |
-| 2 | Un carrusel por día, agendado | Publicador `ig-carrusel.mjs` listo (ensayo con 7 láminas hasta FINISHED, sin publicar). Faltan 12 carruseles para cubrir 30-sep → 20-oct: en producción; calendario en `cola/plan-3-semanas/CARRUSELES-DIARIOS.md`. Se agenda recién con el OK de Sergio sobre cada uno |
+| 2 | Un carrusel por día, agendado | Publicador `ig-carrusel.mjs` listo (ensayo con 7 láminas hasta FINISHED, sin publicar). Calendario de los 21 días en `cola/plan-3-semanas/CARRUSELES-DIARIOS.md` (16:00 La Paz). **Hechos: K1–K9 y K10** (perilla de esfuerzo, mirado). **Faltan K11–K21**: tema, guion de origen y portada de cada uno ya están en ese archivo §2; se retoman desde ahí. Arreglos pendientes: K2 re-render con tema de marca (gratis), K8 portada vacía. Lote Higgsfield opcional de 4 portadas (0,48 cr) sin generar ni aprobar. Decisiones de Sergio: opción A o B de K1, e intercambiar K1↔K10 o no. Nada agendado todavía |
 | 3 | Configurar bien todos sus perfiles | Pendiente: auditoría de solo lectura (IG, TikTok, YouTube, LinkedIn) y propuesta de cambios para su OK |
 | 4 | ¿Qué hacemos con ONIA (@oniahq)? | Pendiente: mirar sus cuentas y proponer. Pista: el método de Santiago (anuncio dental hecho con código + una pantalla real del sistema) produce contenido de ONIA sin horas de grabación |
 | 5 | Comunidad semanal (expositores, networking, temas) | Anotado en `ONIA_COMUNIDAD_CONTENIDO.md` con el tema de cada semana; faltan sus decisiones (día, sede, fecha, nombre, expositores) |
-| 6 | Compartir entre sesiones | Avisos enviados a plataforma, limpieza de skills, Hermes y Lucía v4 |
+| 6 | Compartir entre sesiones | Avisos enviados a plataforma, limpieza de skills y Lucía v4. Regla nueva de Sergio (29-sep): compartir solo lo que le sirve a cada sesión, sin avisos de más. A Hermes el SendMessage no le llega: lo de coordinación va en `COORDINATION_MANIFEST.md` §EL HILO. Hermes lee «Para grabar hoy» de `S*-GUIONES.md` (formato `## Mié 30-sep` / `### DNN-X · Formato · Título`): no cambiarlo sin anotarlo en EL HILO |
+
+**Cierre del 29-sep (Sergio pidió pausar las sesiones):**
+- Alertas del publicador por la aduana `/root/bin/onia-tg.sh` (sistema), nunca curl directo: `agendar-publicacion.sh` e `ig-refrescar.sh` ya desplegados así.
+- Checklist de grabación (método de Santiago + nuestra edición) en `ORDEN-DE-PRODUCCION.md` §1b.
+- Sin commitear no queda nada. Riesgo conocido: el auto-sync de las 23:00 subió una versión intermedia de K10 (`fad8e2ff`); la final la reemplaza en el commit siguiente.
+- Retomar por: (1) perfiles, auditoría de solo lectura con Chrome; (2) propuesta para @oniahq; (3) K11–K21; (4) respuestas de Sergio (OPUS, comunidad, K1).
 
 ## ⏩⏩⏩ Estado 29-sep noche: publicador
 

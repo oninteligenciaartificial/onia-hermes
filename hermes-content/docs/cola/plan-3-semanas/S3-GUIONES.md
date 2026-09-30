@@ -1,7 +1,7 @@
 # Semana 3 — Contenido con IA sin editor (y agentes que te avisan)
 
 Mié 14 → mar 20-oct-2026 · 21 piezas: 3 YouTube horizontales + 18 verticales. Carruseles
-K7–K9 en `CARRUSELES.md`. Solo se lee a cámara el texto bajo cada ficha; los `####` no se leen.
+K7–K9 en `CARRUSELES-DIARIOS.md`. Solo se lee a cámara el texto bajo cada ficha; los `####` no se leen.
 Lo que dice «lo ves en pantalla» sale del drop indicado en la línea de Evidencia.
 
 Antes de grabar, re-verificar: costos de Higgsfield (cotizados el 29-sep con `higgsfield generate

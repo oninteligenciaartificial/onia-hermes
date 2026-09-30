@@ -35,7 +35,7 @@ el feed a tus seguidores. El que funciona, Instagram lo pasa solo (`--trial auto
 **Cuenta del día: 3 principales + 6 yaps = 9, + carrusel o toma extra sin edición = 10-12.** Cumple la
 regla de 10-13 de `ONIA_ESTRUCTURA_PUBLICACION_DIARIA.md` sin grabar más de 1 hora (tope de la API:
 100 publicaciones cada 24 h).
-Carruseles: mar · jue · sáb, en el horario de B.
+Carruseles: uno por día a las 16:00 La Paz (calendario en `CARRUSELES-DIARIOS.md`), agendados con `ig-carrusel.mjs` recién con el OK de Sergio.
 Instagram se agenda en el VPS con `agendar-publicacion.sh`, una publicación por timer de systemd (sin
 cola que pueda «despertar» y publicar sola, como pasó con Postiz el 4-sep: si el VPS se reinicia, lo
 agendado no sale y se reagenda). TikTok, Shorts y LinkedIn entran a la cola de Buffer **solo

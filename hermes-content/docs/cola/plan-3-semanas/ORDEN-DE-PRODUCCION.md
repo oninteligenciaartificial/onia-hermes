@@ -53,7 +53,7 @@ necesitan grabarte: `references/marca-personal/SANTIAGO-VIDEOS-ANIMADOS-POR-CODI
 - Guiones del 28-sep que el calendario reutiliza: `GUIONES-PARA-GRABAR-2026-09-29.md`
 - Presentaciones de los 9 YouTube: `hermes-content/carousels/out/yt-10-*` … `yt-18-*`
 
-## 3. Carruseles listos para publicar (mar · jue · sáb)
+## 3. Carruseles (uno por día desde el 29-sep)
 
 **29-sep: Sergio Urcullo pidió UNO POR DÍA.** El calendario de los 21 días (30-sep → 20-oct) va en
 `plan-3-semanas/CARRUSELES-DIARIOS.md`; cada uno se agenda con `ig-carrusel.mjs` recién con su OK.

@@ -31,7 +31,7 @@
       "layout": "ensayo",
       "theme": "blanco",
       "headline": "Cuánto *piensa* antes de actuar",
-      "body": "Se elige al abrir Claude Code: *claude --effort* y el nivel.\n\nHay cinco: low, medium, high, xhigh y max.\n\nSi no ponés nada, viene en medium.",
+      "body": "Se elige al abrir Claude Code:\n\n*claude --effort* y el nivel.\n\nSon cinco: low, medium, high, xhigh y max. Si no ponés nada, viene en medium.",
       "next": "mi regla",
       "alt_text": "claude --effort y los cinco niveles de esfuerzo"
     },
@@ -86,7 +86,7 @@
       "layout": "ensayo",
       "theme": "negro",
       "headline": "¿Todavía no usás *Claude Code*?",
-      "body": "Está en mi web: instalarlo, tu primera skill y cómo hacer que trabaje sin vos.",
+      "body": "En mi web está la guía: instalarlo, tu primera skill y cómo hacer que trabaje sin vos.",
       "cta": "Link en la bio",
       "alt_text": "La guía de Claude Code está en la web de Sergio Urcullo"
     }
