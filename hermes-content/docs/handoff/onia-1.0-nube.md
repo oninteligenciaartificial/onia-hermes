@@ -84,7 +84,17 @@ Capturas: `hermes-content/carousels/briefs/assets/onia-1.0-dental-ads/candidato-
    - MIRAR en producción.
 
    Además: **recrear la base de la cuenta demo** con el seed nuevo, porque las bases viejas conservan «Dona Carmen».
-4. Pendientes anotados, fuera de alcance:
+4. **Pedido de Sergio Urcullo (30-sep), después de publicar y en este orden:**
+   - **(a) Prueba real del recordatorio.** Chip prepago nuevo con WhatsApp Business, conectado como CLÍNICA por «Conectar mi WhatsApp» en una org ZZ QA de producción. Su número personal hace de PACIENTE: es WhatsApp común, así que no se conecta como clínica.
+   - **(b) Verificación del WhatsApp en el alta** con plantilla de AUTENTICACIÓN de Meta («Tu código de Onia es N», botón Copiar código), enviada desde el número de ventas (inbox 5). Referencia: el alta de Doctocliq.
+   - **(c) Mensajes de activación** desde ese número, tres plantillas:
+     - bienvenida con botón «Abrir mi agenda»;
+     - día 2, solo si no cargó ninguna cita;
+     - día 11, antes de que termine la prueba.
+   - Necesitan consentimiento en el registro (política de privacidad v1.3).
+   - Meta Verified (el tilde azul) va aparte y no hace falta para empezar.
+   - Capturas para la pauta: van a **Ventas y pauta** (`session_01BnctfaNRsm3ogJ46A7B5P5`), ya no a Marca personal.
+5. Pendientes anotados, fuera de alcance:
    - `/inventory` (insumos) solo bloquea al rol DOCTOR, no usa `inventory.read/write`.
    - En la vista Citas se puede marcar «Completada» en citas futuras.
    - El seed no genera tokens de `/cita`.
