@@ -1,0 +1,25 @@
+{
+ "refs": {
+  "R1_frontal_canon": "../R1_frontal_canon.jpg",
+  "R2_34_medio": "../R2_34_medio.jpg",
+  "R3_casi_frontal": "../R3_casi_frontal.png",
+  "R4_casi_perfil": "../R4_casi_perfil.png",
+  "R5_34_izq": "../R5_34_izq.png",
+  "R6_34_der": "../R6_34_der.png",
+  "R7_frontal_2752": "../R7_frontal_2752.png",
+  "R8_anchor_902eeebb": "../R8_anchor_902eeebb.png"
+ },
+ "tests": {
+  "AB_SD_A": "AB_SD_A.png",
+  "AB_SD_B": "AB_SD_B.png",
+  "AB_SD_C": "AB_SD_C.png",
+  "AB_S4_A": "AB_S4_A.png",
+  "AB_S4_B": "AB_S4_B.png",
+  "AB_S4_C": "AB_S4_C.png"
+ },
+ "negatives": {
+  "N1_casting_C01": "https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260929_202509_daeef7ee-7ab6-4b6b-83ee-03dcaa206e4d.png",
+  "N2_casting_C13": "https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260929_205421_873edf19-e031-4112-93fc-e647995e72af.png",
+  "N3_casting_retrato": "https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260929_205421_cd3156ea-aa7e-4b5f-985c-6209cadedaa3.png"
+ }
+}
