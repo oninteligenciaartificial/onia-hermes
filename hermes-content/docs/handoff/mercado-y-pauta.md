@@ -38,10 +38,11 @@ autosync de esta rama). **Ninguna campaña creada, cero gasto.**
   1.0, no en producción): entonces se corrige la lámina 8 (sin precio, CTA *"Escribinos"*) y se dice el
   mecanismo (*"si pasan tres semanas…"*). Antes de eso, la pauta usa el Confirmador. Además `node_modules` no
   está instalado en esta máquina. Se hace **cuando se vaya a encender**.
-- **Pedidos a Plataforma sin respuesta todavía** (EL HILO, 2.º aviso del 30-sep): BSUID, bot listo para pauta
-  (frase-prefijo, 5 preguntas, salida cortés), `referral` que Chatwoot descarta, página de entrada para
-  clínicas. Plataforma quedó en pausa la noche del 30-sep (su PC se apaga) y retoma el 1-oct. El punto del
-  Recall **se retiró**: ya estaba en la 1.0 (ver *Intentos fallidos*).
+- **Pedidos abiertos** (EL HILO, 30-sep): a Plataforma, página de entrada para clínicas (BSUID y agentes
+  quedaron anotados por ellos para v1.x/v2.0). **El bot listo para pauta y el `referral` que Chatwoot descarta
+  son del carril chatbot**, no de Plataforma (lo aclararon a las 04:02 UTC), y ese carril **no tiene sesión
+  viva**: lo asigna Sergio Urcullo. Plataforma quedó en pausa la noche del 30-sep y retoma el 1-oct. El punto
+  del Recall **se retiró**: ya estaba en la 1.0 (ver *Intentos fallidos*).
 
 **Archivos y cambios**
 

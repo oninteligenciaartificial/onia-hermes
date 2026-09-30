@@ -280,9 +280,10 @@ noche*, *no te faltan pacientes*, *tu recepcionista está tapada*, entre otros.
   `/admin/plans`, o la demo lo muestra con un tratamiento sembrado de más de 21 días — hoy el seed dental no
   lo trae); y la regla toma `EN_PROGRESO`, no `PENDIENTE` (el plan que nunca empezó): si hace falta, es una
   segunda vuelta, el dato existe.
-- **Lo que un anuncio no dice nunca, con o sin 1.0** (lista del carril Plataforma, verificada contra el
-  producto): factura electrónica, "envío automático por WhatsApp", confirmar o marcar "no asistió" desde el
-  panel (no hay botón), paquetes de sesiones (estética), testimonios o cifras de resultados.
+- **Lo que un anuncio no dice** (lista del carril Plataforma, verificada contra el producto): factura
+  electrónica, "envío automático por WhatsApp", paquetes de sesiones (estética), testimonios o cifras de
+  resultados. **Confirmar o marcar "no asistió" desde la agenda** no existe en producción y **llega con la
+  1.0** (aviso de Plataforma, 30-sep 04:02 UTC): hasta publicarla, tampoco se dice.
 
 **Presentador:** Sergio Urcullo mostrando la pantalla, o un presentador IA solo si él lo pide y **nunca
 haciéndose pasar por cliente u odontólogo**. Testimonios: prohibidos con cero clientes.
@@ -357,7 +358,7 @@ OK.**
 | 2 | **Página "Onia" vinculada** a la cuenta (`promote_pages`) | ❌ al 21-sep · no re-medido hoy | Sergio Urcullo, en Business Manager |
 | 3 | **El conector de Meta Ads de las sesiones está en OTRA cuenta de Facebook** | ❌ **re-medido hoy**: ve "NUVO 1usd" y "Arthur Fuentes", no ONIA Ads | Sergio Urcullo: reconectarlo en `claude.ai/customize/connectors` con el usuario que administra ONIA Ads, y abrir una sesión nueva |
 | 4 | **WhatsApp de Onia conectado a la página** (lo exige el clic a WhatsApp) | sin medir | Sergio Urcullo / Plataforma |
-| 5 | **Bot listo para recibir pauta** (§5.5) y el `referral` que Chatwoot descarta | ❌ el `referral` se pierde; el resto sin probar | Plataforma |
+| 5 | **Bot listo para recibir pauta** (§5.5) y el `referral` que Chatwoot descarta | ❌ el `referral` se pierde; el resto sin probar | **carril chatbot** (Plataforma aclaró el 30-sep que no es suyo). Hoy **no hay sesión viva** de ese carril: Sergio Urcullo decide quién lo toma |
 | 6 | **Los leads que ya llegaron solos, sin contestar** | 5 al 27-sep (`ONIA_LEADS_ESPERANDO.md`) · no re-medido hoy | Sergio Urcullo |
 | 7 | Solo para web o formulario: los CTA del sitio **no pasan `utm_*` ni `fbclid`**, **no hay píxel**, y no hay página de entrada para clínicas | ❌ en producción (medido hoy en `main`). ✅ **resuelto en la 1.0 sin publicar** según Plataforma (30-sep): la web guarda `utm_*`, `src` y `fbclid` y los pasa al registro, píxel liviano `1012611478191231` solo en la web, privacidad v1.3; cuenta como andando recién cuando se vea en «Probar eventos». La página de entrada para clínicas sigue sin existir | Plataforma + OK de Sergio Urcullo para publicar |
 | 8 | **OK explícito de gasto con techo** | pendiente | Sergio Urcullo |
