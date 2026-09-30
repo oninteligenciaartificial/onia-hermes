@@ -176,6 +176,10 @@ aplicar,revertir}.sh` · `scripts/loops/onia-tg.sh` + `onia-tg-aduana.test.mjs` 
 
 ## 7. Próximos pasos
 
+> **30-sep 20:25 UTC — la que se abrió con el token es `session_0154pQRYB6icZn9Z3SuJp35D`** (rama
+> `claude/kind-cannon-7hkc3c`). Paso 1 medido: el token está y lee Actions (200). Paso 2 en curso: la
+> principal seguía con el CI de la 1.0; se le pidió el aviso por rutina de un disparo.
+
 > **30-sep 20:20 UTC — Sergio Urcullo guardó `GH_ACTIONS_TOKEN` en el entorno «Onia».** La sesión
 > `session_01U881mfXgTAUafw6GC9jExG` NO lo ve (medido: las variables de entorno entran al arrancar
 > el contenedor; `GH_TOKEN` y `GITHUB_TOKEN` son marcadores del proxy, no su token). Lo ve la

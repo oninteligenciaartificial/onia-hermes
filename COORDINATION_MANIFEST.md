@@ -17,8 +17,8 @@
 > `run_once_at` un par de minutos adelante. Entra como un turno en esa sesión. Solo para avisos que
 > no pueden esperar al próximo merge, marcados «informativo» si no piden nada. El detalle igual se
 > escribe acá. IDs vivos al 30-sep 12:30 UTC (medidos con `list_sessions`): control
-> **desde el 30-sep 19:23 UTC `session_01U881mfXgTAUafw6GC9jExG`, entorno «Onia»** (la vieja
-> `session_01BZJvUfEXbqT9wNLJ6n5XZP` está archivada) · Plataforma, ahora sesión principal en el entorno «Onia»,
+> **desde el 30-sep 20:17 UTC `session_0154pQRYB6icZn9Z3SuJp35D`, entorno «Onia»** (las viejas
+> `session_01U881mfXgTAUafw6GC9jExG` y `session_01BZJvUfEXbqT9wNLJ6n5XZP` están archivadas) · Plataforma, ahora sesión principal en el entorno «Onia»,
 > `session_01VGmpNv4eSMnpA3wXrypR4L` (la vieja `session_01GU5QdBaBbBd5zCzWX8yLih` está archivada) ·
 > Marca personal **en la nube desde el 30-sep 14:10 UTC: `session_012ppFowADbJNtZ6WBMtqpuf`** (la de la laptop, `session_01LV2Djb9n8BgziusUEoJRq7`, queda EN PAUSA: si Sergio Urcullo vuelve a ella con Remote Control, hace `git pull` de `claude/marca-personal-contenido-ae658c` antes de tocar nada; una sola sesión por carril) · Lucía v4 `session_01RRD6v9rmBavDoXx1rG2mEn` ·
 > Mercado `session_01BnctfaNRsm3ogJ46A7B5P5`.
@@ -39,8 +39,9 @@ orquestadores se pisan»). Lo de control en el plan: el embudo diario en el resu
 producción: **esperan el OK explícito de Sergio Urcullo** (el control de permisos frenó esa lectura
 sin su OK, 30-sep).
 
-**Sesión de control — «Control de Hermes y Sergio»** (`session_01U881mfXgTAUafw6GC9jExG`, entorno
-«Onia», rama `claude/gifted-hypatia-787jcs`; antes «Hermes y Sergio management system», `claude/hermes-jarvis`).
+**Sesión de control — «Control de sesión Sergio Urcullo»** (`session_0154pQRYB6icZn9Z3SuJp35D`, entorno
+«Onia», rama `claude/kind-cannon-7hkc3c`, desde el 30-sep 20:17 UTC; antes `session_01U881mfXgTAUafw6GC9jExG`
+`claude/gifted-hypatia-787jcs` y «Hermes y Sergio management system», `claude/hermes-jarvis`).
 Dueña de Hermes y del cerebro: qué le llega a Sergio Urcullo por Telegram, el resumen de las
 06:30, el cierre de las 21:30, su calendario, y el orden entre sesiones. Regla vigente:
 `hermes-content/docs/ONIA_CEREBRO.md` §«La regla de entrega». Estado: `handoff/hermes-jarvis.md`.
@@ -70,6 +71,10 @@ Dueña de Hermes y del cerebro: qué le llega a Sergio Urcullo por Telegram, el 
   - La principal **publica la 1.0 primero**. Control corre `aplicar` recién cuando ella avise acá
     que terminó.
   - wf-04 y wf-05 (cobranza y cumpleaños) **no** están entre los 12 flujos que apaga `aplicar`: son de la principal.
+  **20:25 UTC, relevo:** la sesión de control nueva (`session_0154pQRYB6icZn9Z3SuJp35D`) **sí ve
+  `GH_ACTIONS_TOKEN`** (lectura de prueba a la API de Actions: 200) y tiene la autorización escrita de
+  Sergio Urcullo para aplicar sin toques. **Despacha `aplicar` apenas la principal avise que terminó de
+  publicar la 1.0**: acá y por rutina de un disparo a `session_0154pQRYB6icZn9Z3SuJp35D`.
 - **→ Control / Hermes (30-sep, de Lucía v4 y Higgsfield):** Sergio Urcullo pide que **Hermes le pase
   siempre las tendencias** a este carril para Lucía: formatos de reel, audios, ganchos y efectos que
   están funcionando esta semana en influencers IA / lifestyle / software para negocios (LATAM).
