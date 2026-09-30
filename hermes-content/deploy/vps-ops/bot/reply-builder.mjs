@@ -121,8 +121,26 @@ const esServicio = (producto) => producto.tipo === "servicio";
 function productList(config) {
   return catalogo(config)
     .filter((producto) => !esServicio(producto) && MODULOS_LISTOS.has(producto.key))
-    .map((producto) => `• *${producto.nombre}*${producto.queResuelve ? ` — ${producto.queResuelve}` : ""}.`)
+    .map(lineaDeModulo)
     .join("\n");
+}
+
+function lineaDeModulo(producto) {
+  return `• *${producto.nombre}*${producto.queResuelve ? ` — ${producto.queResuelve}` : ""}.`;
+}
+
+/**
+ * El modulo DEL RUBRO que el prospecto ya dijo, o null si no hay uno armado para el.
+ *
+ * Nace de la pauta dental (2026-09-30): la clinica que llegaba por el anuncio y preguntaba "¿que
+ * hacen?" recibia los cinco modulos y cinco servicios (web, videos, influencers…). A quien ya dijo
+ * su rubro se le vende SU sistema — el catalogo entero se queda para quien todavia no lo dijo, que
+ * es a quien le sirve para elegir. Pasa por el mismo candado MODULOS_LISTOS que la lista entera.
+ */
+function moduloDelRubro(config, industry) {
+  if (!industry || !MODULOS_LISTOS.has(industry)) return null;
+  const producto = catalogo(config).find((item) => !esServicio(item) && item.key === industry);
+  return producto ? lineaDeModulo(producto) : null;
 }
 
 /**
@@ -166,7 +184,8 @@ export function varsFor(state, config, extra = {}) {
     slot_a: slotLabel(slots, "A"),
     slot_b: slotLabel(slots, "B"),
     // Un solo bloque: modulos + servicios. Ver serviceList sobre por que no son dos variables.
-    productos: `${productList(config)}${serviceList(config)}`,
+    // Con el rubro ya dicho y su modulo armado, SOLO ese modulo (ver moduloDelRubro).
+    productos: moduloDelRubro(config, q.industry) ?? `${productList(config)}${serviceList(config)}`,
     rubro: intents.industryLabel(q.industry, config) || "",
     personas: q.teamSize ?? "",
     persona_palabra: q.teamSize === 1 ? "persona" : "personas",

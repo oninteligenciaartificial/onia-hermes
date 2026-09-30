@@ -679,7 +679,9 @@ export const PRODUCTOS = Object.freeze([
   Object.freeze({ key: "estetica", nombre: "Estética y spa", queResuelve: "agenda, clientas, tratamientos y caja" }),
 
   Object.freeze({ key: "web", tipo: "servicio", nombre: "la web de tu negocio" }),
-  Object.freeze({ key: "chatbot", tipo: "servicio", nombre: "un chatbot de WhatsApp con IA" }),
+  // Sin "con IA": el chatbot que se le entrega a un cliente es el modo recepcionista, que atiende
+  // SIN LLM por decision (recepcionista.mjs, regla 4). Decir IA ahi era prometer lo que no hace.
+  Object.freeze({ key: "chatbot", tipo: "servicio", nombre: "un chatbot de WhatsApp para tu negocio" }),
   Object.freeze({ key: "videos_ia", tipo: "servicio", nombre: "videos e influencers con IA" }),
   Object.freeze({ key: "redes", tipo: "servicio", nombre: "conexión y publicación en redes" }),
   Object.freeze({ key: "automatizaciones", tipo: "servicio", nombre: "automatizaciones a medida" }),
