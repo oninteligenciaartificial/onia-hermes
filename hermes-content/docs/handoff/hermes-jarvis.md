@@ -176,6 +176,25 @@ aplicar,revertir}.sh` · `scripts/loops/onia-tg.sh` + `onia-tg-aduana.test.mjs` 
 
 ## 7. Próximos pasos
 
+> **30-sep 20:20 UTC — Sergio Urcullo guardó `GH_ACTIONS_TOKEN` en el entorno «Onia».** La sesión
+> `session_01U881mfXgTAUafw6GC9jExG` NO lo ve (medido: las variables de entorno entran al arrancar
+> el contenedor; `GH_TOKEN` y `GITHUB_TOKEN` son marcadores del proxy, no su token). Lo ve la
+> sesión que se abra después. **La que se abra con el token hace esto, en orden:**
+> 1. `[ -n "$GH_ACTIONS_TOKEN" ]` (nunca imprimir el valor).
+> 2. **Esperar a que la principal avise en EL HILO que terminó de publicar la 1.0** (orden acordado a
+>    las 20:08 UTC; si todavía no avisó, preguntarle por rutina de un disparo).
+> 3. Avisar en EL HILO y a la principal: «control corre aplicar ahora».
+> 4. Despachar: `curl -sS -o /dev/null -w '%{http_code}' -X POST -H "Authorization: Bearer
+>    $GH_ACTIONS_TOKEN" -H 'Accept: application/vnd.github+json'
+>    https://api.github.com/repos/oninteligenciaartificial/onia-hermes/actions/workflows/hermes-jarvis.yml/dispatches
+>    -d '{"ref":"main","inputs":{"accion":"aplicar","horas":"72"}}'` → **204** = despachado. Si da 401/403,
+>    mirar `recentRelayFailures` en el estado del proxy antes de concluir nada: es la primera vez que
+>    un token propio pasa por ahí.
+> 5. Leer la corrida con `list_workflow_runs` + `get_job_logs` (return_content) y verificar las
+>    secciones 0 a 8 como dice el punto 3 de abajo. Contarle a Sergio Urcullo.
+>
+> El túnel `onia-ssh` de la principal **no se usa desde control** sin su OK explícito (§5.11).
+
 > **30-sep ~12:45 UTC — la sesión de control se muda al entorno «Onia».** Sergio Urcullo: *"No quiero
 > que sea manual, tiene que estar automatizado, acabo de colocar una cloud que tiene la llave al
 > servidor, se llama onia, coloca esta sesión en este entorno y llama entre sesiones si necesitas
