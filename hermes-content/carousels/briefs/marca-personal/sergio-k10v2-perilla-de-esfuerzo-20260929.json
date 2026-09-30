@@ -1,0 +1,94 @@
+{
+  "title": "La perilla de esfuerzo de Claude Code (v2, pack referentes)",
+  "caption": "Claude Code tiene una perilla que cambia cuánto piensa antes de responderte: el esfuerzo. Se elige con claude --effort, y si no ponés nada viene en medium.\n\nMi regla: low para lo mecánico, medium para todos los días, high o xhigh cuando la primera respuesta no alcanzó, y max casi nunca.\n\nLa próxima respuesta floja, antes de cambiar de modelo, subí un nivel.\n\nNiveles: claude --help en Claude Code 2.1.267. Medium por defecto: anthropic.com/claude-sonnet-5-5.\n\nLa guía para instalar Claude Code está en mi web (link en la bio).",
+  "hashtags": [
+    "#claudecode",
+    "#claude",
+    "#anthropic",
+    "#ia",
+    "#programacion",
+    "#bolivia"
+  ],
+  "serie": "Claude Code",
+  "slides": [
+    {
+      "number": 1,
+      "layout": "logos",
+      "theme": "verde",
+      "headline": "Effort",
+      "logos": [
+        {
+          "file": "hermes-content/references/brand-claude/claudecode.svg",
+          "label": "Claude Code"
+        }
+      ],
+      "body": "La perilla que *casi nadie toca*: cuánto piensa antes de responderte.",
+      "next": "qué es",
+      "alt_text": "Effort: la perilla de Claude Code que casi nadie toca"
+    },
+    {
+      "number": 2,
+      "layout": "ensayo",
+      "theme": "blanco",
+      "headline": "Cuánto *piensa* antes de actuar",
+      "body": "Se elige al abrir Claude Code: *claude --effort* y el nivel.\n\nHay cinco: low, medium, high, xhigh y max.\n\nSi no ponés nada, viene en medium.",
+      "next": "mi regla",
+      "alt_text": "claude --effort y los cinco niveles de esfuerzo"
+    },
+    {
+      "number": 3,
+      "layout": "lista",
+      "theme": "blanco",
+      "headline": "Mi regla, *nivel por nivel*",
+      "items": [
+        {
+          "label": "low",
+          "text": "lo mecánico: renombrar, mover, cambiar un texto"
+        },
+        {
+          "label": "medium",
+          "text": "el trabajo de todos los días"
+        },
+        {
+          "label": "high o xhigh",
+          "text": "cuando la primera respuesta no alcanzó"
+        },
+        {
+          "label": "max",
+          "text": "casi nunca"
+        }
+      ],
+      "next": "el truco",
+      "alt_text": "Qué nivel de esfuerzo usar para cada tarea",
+      "body": "más esfuerzo es más tiempo y más tokens"
+    },
+    {
+      "number": 4,
+      "layout": "dato",
+      "theme": "blanco",
+      "value": "+1",
+      "headline": "Respuesta floja: *subí un nivel*",
+      "body": "Antes de cambiar de modelo, pedí lo mismo con un nivel más de esfuerzo. Y no lo subas por las dudas.",
+      "next": "la prueba",
+      "alt_text": "Ante una respuesta floja, subir un nivel de esfuerzo"
+    },
+    {
+      "number": 5,
+      "layout": "ensayo",
+      "theme": "blanco",
+      "headline": "Cómo sabés si *te sirvió*",
+      "body": "La misma tarea en medium y en high.\n\nContá cuántas veces corregiste cada una. Con /usage ves los tokens que gastó.\n\nSi high no te ahorró correcciones, volvé a medium.",
+      "next": "la guía",
+      "alt_text": "Comparar la misma tarea en medium y en high"
+    },
+    {
+      "number": 6,
+      "layout": "ensayo",
+      "theme": "negro",
+      "headline": "¿Todavía no usás *Claude Code*?",
+      "body": "Está en mi web: instalarlo, tu primera skill y cómo hacer que trabaje sin vos.",
+      "cta": "Link en la bio",
+      "alt_text": "La guía de Claude Code está en la web de Sergio Urcullo"
+    }
+  ]
+}
