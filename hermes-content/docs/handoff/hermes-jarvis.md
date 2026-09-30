@@ -126,11 +126,19 @@ aplicar,revertir}.sh` · `scripts/loops/onia-tg.sh` + `onia-tg-aduana.test.mjs` 
 9. En la simulación, una prueba mía de «choca con» esperaba choque entre 15:30–17:00 y 17:00–17:30:
    el que estaba mal era el test (fin exclusivo). Y `huecos` estiraba el último hueco hasta un evento
    de las 22:30: las dos puntas se recortan a la ventana 07:30–21:30.
+10. **Crear yo la sucesora en «Onia»** (`create_session` con la orden de correr `aplicar`), 30-sep:
+    BLOQUEADO por el control de seguridad, que no deja que una sesión abra otra con acceso al
+    servidor y la orden de cambiarlo. Sergio Urcullo pidió después «creala vos»: **no se reintentó**,
+    porque el bloqueo cubre el mismo resultado por cualquier vía (otra herramienta, otra sesión por
+    el canal entre sesiones, otro turno). La sucesora la abre él, y la autorización para tocar el VPS
+    sale de él, escrita en esa sesión. Ninguna sesión lo reintenta.
 
 ## 6. Qué depende de Sergio Urcullo
 
-- **Un toque:** GitHub → Actions → «Hermes Jarvis — acceso controlado al VPS» → Run workflow →
-  acción **`aplicar`**. Para deshacer: la misma, con **`revertir`**.
+- **Abrir la sesión sucesora en «Onia»** con el texto de §7. Es lo único manual que queda: desde
+  ahí aplica sola por SSH. Alternativa, un toque: GitHub → Actions → «Hermes Jarvis — acceso
+  controlado al VPS» → Run workflow → acción **`aplicar`**. Para deshacer: la misma, con
+  **`revertir`**.
 - Decidir: ¿quiere «reunión en 30 min» por Telegram, o le alcanza el aviso de su calendario?
 - Del carril Lucía v4: borrar en la web de Higgsfield los 9 Souls viejos que siguen «ready»
   (alcance en `deletion_scope_2026_09_29` de `LUCIA-HIGGSFIELD-IDENTITY.json`), y el OK a los 7
@@ -149,6 +157,14 @@ aplicar,revertir}.sh` · `scripts/loops/onia-tg.sh` + `onia-tg-aduana.test.mjs` 
 > (`env_01BLwXdgpqDS3sx4rg3r2uvg`) con este handoff, y la de «Default»
 > (`session_01BZJvUfEXbqT9wNLJ6n5XZP`) deja de trabajar. **Con eso el toque desaparece:** la
 > sesión de control corre `aplicar` por SSH ella misma, con el OK de Sergio de arriba.
+>
+> **La abre Sergio Urcullo, no otra sesión** (§5.10), con este texto:
+>
+> *Sos la sesión de control de Sergio Urcullo y reemplazás a session_01BZJvUfEXbqT9wNLJ6n5XZP.
+> Desde acá manejás todo: Hermes en el VPS, el repo onia-hermes y la coordinación con las demás
+> sesiones. Leé CLAUDE.md, hermes-content/docs/handoff/hermes-jarvis.md (§7 es tu plan) y
+> COORDINATION_MANIFEST.md §EL HILO, y ejecutá §7: llegar al VPS, avisar en EL HILO, correr
+> aplicar por SSH, verificar y contarme. Te autorizo a aplicar en el VPS sin pedirme toques.*
 
 1. **Llegar al VPS.** Desde «Onia»: `ssh root@187.77.16.63 hostname`. Si falla, preguntarle a la
    sesión principal (`session_01VGmpNv4eSMnpA3wXrypR4L`, rutina de un disparo) cómo usa la llave
