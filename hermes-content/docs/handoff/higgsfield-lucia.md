@@ -16,6 +16,14 @@ aprobar fotos, entrenar el Soul, probarlo y después el contenido diario, necesi
 nada sin commitear. Si esta sesión muere, no se pierde nada.
 
 1. `git branch --show-current`. Después leé este handoff y `COORDINATION_MANIFEST.md` §EL HILO.
+> **Estado 30-sep 03:50 UTC — EN VUELO:** Soul `LUCIA-v4` `c4281765-c031-40ed-b430-e5fd313ef207`
+> (soul_2, 20 fotos) lanzado 03:12 y **en cola (`queued`) sin arrancar** a las 03:48. Dataset de 20
+> completo (D03…D13 en `PROCEDENCIA.jsonl`, 0,748–0,893). Escenas fijas Seedream: 0,884/0,749/0,766.
+> Contenido viejo (L1, banco L2) ≈0,70. Audio Marcela subido: media `d0eacead-…`. Lote de video
+> cotizado, **sin OK**. Si la sesión muere: chequear el Soul con `show_characters status`; NO
+> reentrenar sin OK (otro cobro). Prompts Soul de las 3 escenas: `v4/prompts` pendiente de copiar
+> (hoy en el scratchpad: S1 primer plano, S2 café con manos, S3 cuerpo entero en oficina).
+
 > **Estado 30-sep 03:05 UTC (sesión en `onia-higgsfield`, rama `claude/lucia-v4-onia-higgsfield`):**
 > red **confirmada** (CDN 200; la raíz da 403 de S3, no del proxy). T101–T204 bajados y MIRADOS.
 > Cotizado en vivo: 7 fotos Seedream = **7 cr**. Soul: sin preflight en el MCP; la última vez
