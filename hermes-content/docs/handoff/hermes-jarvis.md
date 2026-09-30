@@ -173,3 +173,14 @@ aplicar,revertir}.sh` · `scripts/loops/onia-tg.sh` + `onia-tg-aduana.test.mjs` 
    Eso cierra el hecho (1).
 7. Fase 2 de §3, en ese orden: sacar el aviso del «Backup diario», pasar «Vigia lead sin
    respuesta» y los canarios por la aduana (con `ESPERA=30` y `RECUPERADO`).
+8. **Quién maneja qué (30-sep, pregunta de Sergio Urcullo: «¿Hermes va a manejar Claude Code, el
+   repositorio y demás?»).** Propuesta de la sesión de control, **pendiente de su OK**:
+   - **La sesión de control** (Claude Code, entorno «Onia») maneja todo: el VPS y la config de
+     Hermes, el repo, y las demás sesiones por EL HILO y las rutinas de un disparo.
+   - **Hermes** (gpt-5-mini en Telegram) es su ventanilla: entrega, calendario, preguntas. NO
+     escribe código ni toca el repo ni producción: es un modelo barato que ya inventó una agenda
+     entera (`handoff/infra-cerebro-loops.md` §5), y un error en `main` rompe el deploy del VPS y
+     de Vercel.
+   - Pedidos por Telegram: Hermes los deja como tarea en el tablero, y una rutina despierta a la
+     sesión de control cada tanto para tomarlos y ejecutarlos. Así él maneja todo desde Telegram
+     sin darle las llaves del código a un modelo débil.
