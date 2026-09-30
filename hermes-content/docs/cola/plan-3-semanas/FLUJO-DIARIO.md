@@ -13,6 +13,11 @@ Propuesta de Claude, 29-sep-2026, para que Sergio Urcullo la corrija. Qué graba
 | **1 horizontal** (lun · mié · vie) | **Video largo** | YouTube: lo subís vos con el paquete listo (archivo, título, descripción con capítulos, miniatura). Buffer solo sube Shorts y la API propia lo dejaría privado hasta la auditoría |
 | | **1 clip vertical** con el mejor tramo de 45 s | reel principal del día siguiente o yap Trial |
 
+**Links a Onia con origen (desde el 29-sep):** todo link en caption, bio o historia a `onia.com.bo` o
+`app.onia.com.bo/register` lleva `?utm_source=<red>&utm_medium=organico&utm_campaign=<pieza>` (por ejemplo
+`utm_source=instagram&utm_campaign=s2-d07`). La 1.0 guarda de dónde vino cada alta y se lo avisa a
+Sergio; sin parámetros queda «sin dato». Los links a la web personal o a la comunidad no lo necesitan.
+
 **Por qué los yaps van a Trial:** prueban ganchos distintos con gente que no te sigue, sin llenarle
 el feed a tus seguidores. El que funciona, Instagram lo pasa solo (`--trial auto`).
 **Por qué no a TikTok:** Trial es una función de Instagram; en TikTok van solo los principales.

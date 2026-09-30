@@ -20,7 +20,7 @@ referentes), `RADAR-ACTUALIDAD-2026-09-29.md` (16 novedades con fuente oficial),
 ```
   VIDEO / CARRUSEL (público)            →  WEB (guía, público)            →  COMUNIDAD (adentro)          →  ONIA
   IG @sergiourcullo · TikTok ·             sergiourcullo.vercel.app          Onia Community (WhatsApp)       llamada 1:1 (cal.com)
-  YouTube (Shorts + largo)                 /claude-code · /vps · /stack      drops diarios · archivos ·      → Onia Platform / chatbot
+  YouTube (Shorts + largo)                 /claude-code · /vps · /stack      drops diarios · archivos ·      → Onia (el sistema; bot = add-on)
   enseña UNA cosa completa                 el tema entero, por escrito       preguntas · llamada de 15 min   (quien tiene negocio)
 ```
 
@@ -68,7 +68,10 @@ largo con historias reales y negocio.
   (`/claude-code`).
 - **Semana 2 · 7 → 13-oct · «Un bot de WhatsApp que atiende sin mentir».** Guía: hay que
   escribirla (`/whatsapp-bot`) para el domingo 11. Es la semana que más le habla al dueño de
-  negocio: puente directo al chatbot de ONIA.
+  negocio. El puente es ONIA, **el sistema** (rubro dental primero, importadora segundo; comercio
+  y servicios todavía no se promocionan). El bot se nombra como add-on: «Agente conversacional de
+  WhatsApp». Nada de «la IA maneja tu negocio»: los agentes deciden por reglas y la IA solo redacta
+  cuando el dueño lo pide (29-sep, sesión de plataforma).
 - **Semana 3 · 14 → 20-oct · «Contenido con IA sin editor (y agentes que te avisan)».** Guía:
   hay que escribirla (`/contenido-ia`) para el domingo 18.
 
