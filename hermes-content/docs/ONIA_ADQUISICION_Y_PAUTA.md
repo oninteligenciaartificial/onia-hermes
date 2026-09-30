@@ -62,9 +62,9 @@
    calificada**, nunca por conversación.
 8. **Cuándo se enciende** (plan de 14 días de la sesión principal, 30-sep): **con la 1.0 publicada y la
    medición probada**; la sesión principal avisa. Por eso entran desde el día 1 los dos ángulos: el
-   Confirmador (D1) y el tratamiento a medias (D4). Mercado fija qué dice y qué prueba cada pieza; **el
-   carrusel lo diseña y lo renderiza Marca personal** (decisión de Sergio Urcullo, 30-sep). Faltan las
-   capturas de la 1.0. Qué falta y de quién es cada cosa: **la lista de encendido, §5.9**.
+   Confirmador (D1) y el tratamiento a medias (D4). **Las piezas son de la sesión Ventas y pauta** (antes
+   «Mercado»), junto con toda la campaña. Lo decidió Sergio Urcullo el 30-sep, de noche: a Marca personal
+   le dijo *«aquí es solo marca personal y comunidad»*. Faltan las capturas de la 1.0. Qué falta y de quién es cada cosa: **la lista de encendido, §5.9**.
 
 ---
 
@@ -348,9 +348,7 @@ Los supuestos del embudo están en `research/ONIA_META_ADS_PLAYBOOK_20260930.md`
 | Página | "Onia" `1140384625819526` |
 | Campaña | `ONIA · Dental SCZ · WhatsApp · prueba 1` · Clientes potenciales · presupuesto total USD 140 · fin a los 14 días · **PAUSED** |
 | Conjunto | WhatsApp · Maximizar conversaciones · Santa Cruz de la Sierra + radio, "llegar a más" apagado · 25+ · Advantage+ con sugerencias · excluir registrados |
-| Anuncios | **D1 y D4** (tabla de abajo): los dos briefs ya están escritos, **con las capturas pendientes**. **El diseño y el render son de Marca
-personal** (Sergio Urcullo, 30-sep: *"no quiero que Mercado genere carruseles, eso está a cargo de la marca
-personal"*): puede rehacer los briefs con sus formatos, siempre que cumplan lo de esta sección. D2 (video de pantalla del link de reserva) y D3 (cobros) quedan para una segunda ronda: con USD 10/día, 2–3 anuncios y no más (§5.3) |
+| Anuncios | **D1 y D4** (tabla de abajo): los dos briefs ya están escritos, **con las capturas pendientes**. **Diseño, render y subida: sesión Ventas y pauta** (Sergio Urcullo, 30-sep; ver §0 punto 8). Marca personal no las hace. |
 | Mensaje de bienvenida | "Para dueños/as de clínicas" + tres respuestas para tocar (§5.2) |
 
 | Anuncio | Brief (`hermes-content/carousels/briefs/ads/`) | Título | Texto precargado |
@@ -393,7 +391,7 @@ memoria. Estado al **30-sep, 12:30 UTC**.
 | 4 | **Página "Onia" promocionable y con el WhatsApp de ventas vinculado** | `ads_get_ad_account_pages` lista `1140384625819526`; WhatsApp en la configuración de la página | Sergio Urcullo | sin medir |
 | 5 | **Frase-prefijo publicada en el bot** y probada con dos mensajes desde un teléfono que no sea el de Onia, **mirando la respuesta** (§5.5) | la respuesta, leída | Sergio Urcullo (firma) + carril chatbot | ❌ |
 | 6 | **Quién contesta, y en cuánto tiempo** | decidido por escrito | Sergio Urcullo | ❌ (ver abajo) |
-| 7 | **Las cuatro capturas de la 1.0** en `carousels/briefs/assets/onia-1.0-dental-ads/` → D1 y D4 renderizadas → **OK de Sergio Urcullo viéndolas** | las piezas renderizadas, miradas | capturas: sesión principal · diseño y render: Marca personal · OK: Sergio Urcullo | ⏳ briefs listos |
+| 7 | **Las cuatro capturas de la 1.0** en `carousels/briefs/assets/onia-1.0-dental-ads/` → D1 y D4 renderizadas → **OK de Sergio Urcullo viéndolas** | las piezas renderizadas, miradas | capturas: sesión principal · diseño y render: Ventas y pauta · OK: Sergio Urcullo | ⏳ briefs listos |
 | 8 | **Campaña creada en PAUSA** con §5.8 | ids de campaña, conjunto y anuncios anotados en el handoff del carril | quien tenga el conector, o Sergio Urcullo | ❌ depende de 2–4 |
 | 9 | **OK explícito de gasto con techo** (USD 140, 14 días) y **tipo de cambio** al que el banco cobra la tarjeta (§5.6) | por escrito | Sergio Urcullo | ❌ |
 
@@ -405,8 +403,7 @@ por día**. Si no entran en su día, se arranca con USD 5/día: la escala de §5
 calificadas. Lo que **no** se puede es encender sin haber hecho la prueba de la fila 5: si lo primero que
 recibe un dueño de clínica es una respuesta mala, esa conversación se paga y se pierde.
 
-**Cómo se renderizan en una sesión de la nube** (lo hace Marca personal; queda anotado porque se descubrió
-acá): `eval "$(sh scripts/carousel_cloud_setup.sh)"` y después
+**Cómo se renderizan en una sesión de la nube:** `eval "$(sh scripts/carousel_cloud_setup.sh)"` y después
 `node scripts/carousel_render.js --brief <brief> --out <dir>`. Sin ese paso, la nube no encuentra el
 navegador, cae en la letra DejaVu y corta el pie de cada lámina. Con el paso, salen iguales a las de la PC
 (comparado el 30-sep contra la lámina 2 del carrusel del 21-sep renderizada en la PC).
