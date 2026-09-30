@@ -1,5 +1,53 @@
 # Handoff — la 1.0 de Onia (Codex → Claude, 28/29-sep)
 
+> ## 🧭 EMPEZÁ ACÁ (Claude, 30-sep-2026 madrugada) — cierre del día; los bloques de abajo son historia
+>
+> **1. Objetivo.** Publicar la 1.0 usable y vendible (5 rubros) con el OK de Sergio Urcullo, y seguir
+> estudiando competencia como IDEAS (no copiar). Sesión PAUSADA a pedido de Sergio: PC apagada.
+>
+> **2. En producción:** sin cambios de app (release-c3b92067). VPS: igual que el bloque de abajo + el
+> vigía de crons ahora llama onia-tg.sh con ONIA_AVISO=sistema ONIA_AVISO_EMISOR=cron-clientes.
+>
+> **3. Candidato 1.0 (NO publicado):** platform `7d85b3d4` en `origin/wip/v1-integracion-20260928`
+> (PR #90), suite completa 8.570 ok / 0 fallos. Web `codex/v1-hermes-20260928` en
+> `origin/wip/v1-hermes-20260928`. Sobre lo de la noche anterior se sumó HOY: Confirmar/No asistió en la
+> agenda; editar producto, precio y stock (permiso nuevo «Cambiar precios» = prices.write, solo dueño;
+> el empleado de comercio carga y ajusta stock); Pendientes en el menú con contador; cotizaciones de
+> importadora imprimibles, por WhatsApp (teléfono obligatorio) y «Entregar pedido»; origen del alta
+> (signupOrigin) visible en /admin; web con utm/src/fbclid al registro, ?plan= y píxel liviano (política
+> v1.3); servicios profesionales con Inicio de agenda, «Profesional» con agenda propia y cobros en la
+> ficha; crear cita pide agenda.write; editar y dar de baja clientes en los 5 rubros (en clínica la
+> historia no se borra); API de Caja con permisos. El aviso directo de «alta nueva» quedó APAGADO
+> (ONIA_AVISO_ALTA_DIRECTO): lo emite la sesión de control por su aduana (pedido enviado 30-sep 03:06).
+>
+> **4. Publicar exige (con el OK):** respaldo + **5 migraciones aditivas** en este orden:
+> 20260927050000_add_web_service_requests, 20260928010000_add_web_visual_selection,
+> 20260928020000_add_subscription_payment_quotes, 20260929173000_add_organization_signup_origin,
+> 20260929220000_add_patient_deactivated_at (las dos últimas ANTES del swap: sin ellas la app nueva no lee
+> organizations/patients) · ONIA_WHATSAPP_INBOX_ID=5 en app.env · apagar el proveedor de teléfono de
+> GoTrue · merge PR #90 · publicador · mirar · web wip→main · purgar/ver píxel en «Probar eventos» ·
+> n8n wf-04/wf-05 (cobranza/cumpleaños) con `AND p."deactivatedAt" IS NULL` si están activos.
+>
+> **5. Competencia (research/onia-1.0-29sep/):** COMPETENCIA_SENDYPRO, _MANYCHAT, _DOCTOCLIQ (por dentro,
+> solo lectura, con cuentas de Sergio) y _BOTS_WHATSAPP (web viva). Regla: ideas para evaluar, no copiar;
+> web viva, no guías. SendyPro es cuenta de «Arthur Teles» con WhatsApp real NUVO conectado: nunca abrir
+> chats/contactos. La pauta de Meta Ads ahora la arma la sesión «Análisis de mercado» (se le pasó el plan).
+>
+> **6. Intentos fallidos/trampas de hoy:** `next dev` con Turbopack rechaza node_modules por junction:
+> usar `next dev --webpack` (worktrees en E: con junction a E:/onia-wt/_checkout-deps-20260929); dos
+> agentes se cortaron por red (se retomaron); un agente se equivocó con permisos (le quitó cobros al
+> empleado) y se corrigió separando prices.write.
+>
+> **7. Depende de Sergio / próximos pasos:** (1) «OK publicar 1.0» sobre https://claude.ai/artifact/RLKFmPwBxqaat4gpU1LyCW
+> (falta sumarle las capturas de hoy); (2) decisiones chicas: /cita no debería aceptar cancelar una cita
+> que ya pasó (recomendado sí); ¿/api/v1/patients oculta dados de baja?; ¿la baja libera cupo del plan?;
+> ¿esconder la plata del Inicio de comercio a quien no tiene Caja? (recomendado sí); ¿panel de importadora
+> pide finance.read?; (3) arreglos chicos pendientes: el 409 de «no se puede dar de baja» muestra el monto
+> de deuda a quien no tiene Caja; /api/comercio/transfers y crear almacenes sin inventory.write;
+> (4) cuentas de competencia (Lety y Dapta primero; ver memoria recordar-a-sergio-cuentas-competencia);
+> (5) conector de Cloudflare, tarjeta de ONIA Ads, 3 leads sin contestar, SIAT Fase 1 (portal), leer
+> privacidad v1.3; (6) mudanza a la nube solo con su orden «mudá la sesión a la nube».
+>
 > ## 🧭 EMPEZÁ ACÁ (Claude, 29-sep-2026 noche) — la sesión se mudó a la nube; el bloque de la madrugada queda abajo como historia
 >
 > **1. Objetivo.** Igual que antes: la 1.0 de Onia usable y vendible en los 5 rubros. Hoy se sumaron tres
