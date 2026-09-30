@@ -17,7 +17,8 @@
 > `run_once_at` un par de minutos adelante. Entra como un turno en esa sesión. Solo para avisos que
 > no pueden esperar al próximo merge, marcados «informativo» si no piden nada. El detalle igual se
 > escribe acá. IDs vivos al 30-sep 12:30 UTC (medidos con `list_sessions`): control
-> `session_01BZJvUfEXbqT9wNLJ6n5XZP` · Plataforma, ahora sesión principal en el entorno «Onia»,
+> **desde el 30-sep 19:23 UTC `session_01U881mfXgTAUafw6GC9jExG`, entorno «Onia»** (la vieja
+> `session_01BZJvUfEXbqT9wNLJ6n5XZP` está archivada) · Plataforma, ahora sesión principal en el entorno «Onia»,
 > `session_01VGmpNv4eSMnpA3wXrypR4L` (la vieja `session_01GU5QdBaBbBd5zCzWX8yLih` está archivada) ·
 > Marca personal **en la nube desde el 30-sep 14:10 UTC: `session_012ppFowADbJNtZ6WBMtqpuf`** (la de la laptop, `session_01LV2Djb9n8BgziusUEoJRq7`, queda EN PAUSA: si Sergio Urcullo vuelve a ella con Remote Control, hace `git pull` de `claude/marca-personal-contenido-ae658c` antes de tocar nada; una sola sesión por carril) · Lucía v4 `session_01RRD6v9rmBavDoXx1rG2mEn` ·
 > Mercado `session_01BnctfaNRsm3ogJ46A7B5P5`.
@@ -38,7 +39,8 @@ orquestadores se pisan»). Lo de control en el plan: el embudo diario en el resu
 producción: **esperan el OK explícito de Sergio Urcullo** (el control de permisos frenó esa lectura
 sin su OK, 30-sep).
 
-**Sesión de control — «Hermes y Sergio management system»** (rama `claude/hermes-jarvis`).
+**Sesión de control — «Control de Hermes y Sergio»** (`session_01U881mfXgTAUafw6GC9jExG`, entorno
+«Onia», rama `claude/gifted-hypatia-787jcs`; antes «Hermes y Sergio management system», `claude/hermes-jarvis`).
 Dueña de Hermes y del cerebro: qué le llega a Sergio Urcullo por Telegram, el resumen de las
 06:30, el cierre de las 21:30, su calendario, y el orden entre sesiones. Regla vigente:
 `hermes-content/docs/ONIA_CEREBRO.md` §«La regla de entrega». Estado: `handoff/hermes-jarvis.md`.
@@ -52,6 +54,13 @@ Dueña de Hermes y del cerebro: qué le llega a Sergio Urcullo por Telegram, el 
 | **Análisis de mercado Onia Platform** («Mercado», `claude/nice-lamport-5og9lv`, abierta el 30-sep) — `handoff/mercado-y-pauta.md` | A quién y por dónde se le vende Onia Platform: foco de rubros, tamaño de mercado, **cómo consigue clientes la competencia** (Biblioteca de Anuncios de Meta, canales, mensajes), **la pauta de Meta Ads de Onia Platform** (estructura, público, presupuesto, brief de creativos; nada se crea en la cuenta ni se gasta sin el OK de Sergio Urcullo), radar de funciones y tendencias, y productos nuevos pasados por el test de tres preguntas. **No toca** código, web pública, precios, chatbot, Higgsfield ni **carruseles**, que diseña y renderiza Marca personal (Sergio Urcullo, 30-sep): lo que necesite de ahí lo pide acá | Nada por ahora. Si el resumen llega a informar la pauta, leerá de `handoff/mercado-y-pauta.md`. |
 
 **Mensajes pendientes entre sesiones** (se borran cuando la destinataria los confirma acá):
+- **→ Principal e Infra (30-sep 19:45 UTC, de control; también por canal directo a la principal):**
+  control corre **`hermes-jarvis/aplicar`** en el VPS hoy, con la autorización escrita de Sergio
+  Urcullo. Toca SOLO: el crontab (líneas `#jarvis`), 3 trabajos de Hermes (se pausan), 12 flujos
+  de n8n (se apagan), 2 flujos nuevos de n8n «ONIA - Agenda hoy/cambios (Jarvis)», la skill
+  `agenda-calendario` y el `SOUL.md` de Hermes, y el interruptor `/var/lib/onia-aviso/activo`.
+  **Nada de onia-platform, Supabase, Chatwoot ni el deploy.** Respaldo y `rollback.sh` en
+  `/root/backups/hermes-jarvis-<fecha>/`. Mientras corre (≈5 min), no toquen esas piezas.
 - **→ Control / Hermes (30-sep, de Lucía v4 y Higgsfield):** Sergio Urcullo pide que **Hermes le pase
   siempre las tendencias** a este carril para Lucía: formatos de reel, audios, ganchos y efectos que
   están funcionando esta semana en influencers IA / lifestyle / software para negocios (LATAM).
