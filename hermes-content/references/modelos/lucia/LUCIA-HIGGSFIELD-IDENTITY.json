@@ -135,6 +135,12 @@
       "desde": "2026-09-30",
       "por": "Sergio Urcullo",
       "nota": "Va en TODOS los prompts de Lucia v4 (Seedream y Soul). No volver a 'natural imperfections'/'unretouched': envejece."
+    },
+    "ancla_look_espejo": {
+      "media_id": "abe2e6bd-0d39-49be-9d87-1126d4ed07b0",
+      "desde": "2026-09-30",
+      "por": "Sergio Urcullo",
+      "uso": "va PRIMERA en image_references y el prompt dice 'Same face, skin and freckles as the first reference image'. Es el look que Sergio Urcullo pidio replicar."
     }
   },
   "execution_policy": {
