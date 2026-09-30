@@ -136,3 +136,10 @@ Prompt (inglés, para igualar el estilo cálido y cinematográfico de `public/fo
 > amber. Natural skin texture, subtle film grain, documentary feel. No text, no logos, no screens.
 
 Se generó desde el **VPS**: el CLI de Windows está sin sesión (`Not authenticated`).
+
+## Lote 2026-09-30 · historias de la comunidad (4 imágenes, 0,48 cr)
+
+Autorizó Sergio Urcullo en el chat: *«podés usar higgsfield o lo que necesites desde este entorno»*. Cotizado antes
+(`get_cost`: 0,12 cr c/u), tope 0,48. Modelo `text2image_soul_v2` (estilo clay, 9:16, 2k), por el **MCP de
+Higgsfield** porque en la nube el CLI no está instalado. 2 variantes de «sobres con trampa» y 2 de «comunidad en la
+mesa». Elegidas las `-b` (la `comunidad-mesa-a` salió con caras verdes raras). Archivos y jobs en `galeria.json`.

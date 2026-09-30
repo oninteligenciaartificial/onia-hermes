@@ -251,5 +251,83 @@
     ],
     "tags": [],
     "nota": "recorte: texto inventado abajo y borde de papel a la izquierda"
+  },
+  {
+    "id": "sobres-trampa-a",
+    "file": "hermes-content/galeria/ilustraciones/sobres-trampa-a.png",
+    "job": "1dd7c384-c2eb-40d3-a989-93389f1d04f5",
+    "prompt": "Three blank white paper envelopes standing in a row; the middle one tilted open with green clay coins spilling out, a black magnifying glass over the hidden coins.",
+    "usado_en": [],
+    "tags": [
+      "presupuesto",
+      "trampa",
+      "clay"
+    ],
+    "fecha": "2026-09-30",
+    "tipo": "ilustraciones",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "text2image_soul_v2",
+    "estilo": "clay",
+    "costo_cr": 0.12
+  },
+  {
+    "id": "sobres-trampa-b",
+    "file": "hermes-content/galeria/ilustraciones/sobres-trampa-b.png",
+    "job": "1e8327ab-62c7-4e1d-9884-ffc335941bf1",
+    "prompt": "Three blank white paper envelopes standing in a row; the middle one tilted open with green clay coins spilling out, a black magnifying glass over the hidden coins.",
+    "usado_en": [
+      "sergio-historias-comunidad-20261001"
+    ],
+    "tags": [
+      "presupuesto",
+      "trampa",
+      "clay"
+    ],
+    "fecha": "2026-09-30",
+    "tipo": "ilustraciones",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "text2image_soul_v2",
+    "estilo": "clay",
+    "costo_cr": 0.12
+  },
+  {
+    "id": "comunidad-mesa-a",
+    "file": "hermes-content/galeria/ilustraciones/comunidad-mesa-a.png",
+    "job": "d965e380-4ea4-4894-9401-d19ec93b4c86",
+    "prompt": "Six faceless clay figures around a round emerald green table with tiny blank laptops, a green clay light bulb in the center.",
+    "usado_en": [],
+    "tags": [
+      "comunidad",
+      "clay"
+    ],
+    "fecha": "2026-09-30",
+    "tipo": "ilustraciones",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "text2image_soul_v2",
+    "estilo": "clay",
+    "costo_cr": 0.12
+  },
+  {
+    "id": "comunidad-mesa-b",
+    "file": "hermes-content/galeria/ilustraciones/comunidad-mesa-b.png",
+    "job": "50787e6b-c4ed-4c6d-b411-556d3a71052a",
+    "prompt": "Six faceless clay figures around a round emerald green table with tiny blank laptops, a green clay light bulb in the center.",
+    "usado_en": [
+      "sergio-historias-comunidad-20261001"
+    ],
+    "tags": [
+      "comunidad",
+      "clay"
+    ],
+    "fecha": "2026-09-30",
+    "tipo": "ilustraciones",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "text2image_soul_v2",
+    "estilo": "clay",
+    "costo_cr": 0.12
   }
 ]
