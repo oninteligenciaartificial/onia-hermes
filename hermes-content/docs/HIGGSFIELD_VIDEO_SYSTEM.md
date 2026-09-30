@@ -222,6 +222,9 @@ La respuesta sale de medir, no de la teoría:
   Seedance 2.0, Kling 3.0, Seedream, Nano Banana). Soul no reemplaza a ese paso.
 - `soul_cinematic` (Soul Cinema) es otro tipo de entrenamiento: stills con look de cine. Candidato
   para las portadas de b-roll, no para el día a día.
+- **Medido 30-sep 19:46 UTC:** entrenar un Soul `soul_2` cuesta **25 cr exactos** (saldo antes y
+  después). `LUCIA-v5` (`cd42c065-e18c-4176-b9ad-e2de075fe362`) se entrenó con 16 fotos del look
+  vigente; el resultado del A/B va en `LUCIA-HIGGSFIELD-IDENTITY.json` → `v4.soul_v5`.
 
 ## B-roll cinematográfico — recetario (30-sep-2026)
 
@@ -236,6 +239,21 @@ No todo video de Lucía habla: la mayoría es b-roll + voz o texto. El flujo es 
 | Efectos virales (transiciones con la cara) | presets `viral`: Orbit 360, Eyes in, High flip, Earth zoom, Bullet time, Clones, Selfception | se ejecutan con `execute_preset` sobre un still aprobado |
 | Movimientos de cámara «de producto» aplicables a escena | recetas `push-in`, `pull-back`, `crane-reveal`, `whip-pan`, `topdown-dive`, `light-sweep`, `sunrise-pass` (`get_preset_instructions`) | vocabulario de cámara probado |
 | Gráfica en movimiento sobre UI de Onia | Marketing Studio `motion` (231 plantillas: `saas_motion`, `hypermotion`, `2d_motion`) | para piezas con captura real del sistema |
+
+**Prueba medida (30-sep, misma foto P3 y mismo prompt, 6 s, sin audio):**
+
+| Modelo | Costo | Parecido 1.er frame → resto | Lectura |
+|---|---:|---|---|
+| **`kling3_0` std, `sound: off`** | 7,5 cr | 0,70 → 0,70 / 0,72 / 0,72 | **sostiene la cara** y hace el movimiento más de cine (camina → plano medio a cámara). Ganador provisorio |
+| `seedance_2_0_mini` 720p | 6 cr | 0,68 → 0,60–0,64 | estable, deriva leve; el más barato |
+| `cinematic_studio_video_v2` std | 6 cr | 0,74 → 0,53–0,60 | el que más deriva cuando queda de frente |
+| `cinematic_studio_3_0` 720p | 20 cr (4 s) · 30 cr (6 s) | sin probar | el envío lo bloqueó el control de permisos de la sesión |
+
+A 720p la cara mide ~170 px (el still, 346): eso solo baja ~0,1 el puntaje. **Se compara la
+deriva contra el primer frame de cada video, no el número absoluto.** Todo prompt que diga «walks
+along a sunlit street…» dispara la recomendación del preset «IN THE DARK»: pasar
+`declined_preset_id: "24bae836-2c4a-48e0-89b6-49fcc0b21612"`. Los presets virales no tienen
+preflight de costo.
 
 Reglas de uso:
 - Un efecto tiene que servir a la idea de la pieza (gancho, transición a la pantalla de Onia).

@@ -16,6 +16,13 @@ aprobar fotos, entrenar el Soul, probarlo y después el contenido diario, necesi
 nada sin commitear. Si esta sesión muere, no se pierde nada.
 
 1. `git branch --show-current`. Después leé este handoff y `COORDINATION_MANIFEST.md` §EL HILO.
+> **Estado 30-sep 19:50 UTC — EN VUELO:** Soul `LUCIA-v5` `cd42c065-e18c-4176-b9ad-e2de075fe362`
+> (soul_2, 16 fotos del look vigente, **25 cr medidos**) lanzado 19:46 y en cola. Lote de prueba
+> aprobado por Sergio Urcullo con **tope 75 cr: gastados 52,98** (8 fotos V01–V08 0,777–0,858; b-roll
+> Seedance Mini / Kling 3.0 / Cinema Studio v2; Soul). Quedan del tope: 6 imágenes `soul_2` de A/B
+> (0,72 cr) cuando el Soul esté `ready`. Cinema Studio 3.0 (20 cr) **no se envió**: lo bloqueó el
+> control de permisos; decide Sergio Urcullo. Si la sesión muere: `show_characters status` del
+> v5; NO reentrenar (otro cobro de 25). Todo el detalle en `v4/PROCEDENCIA.jsonl`.
 > **Estado 30-sep 03:50 UTC — EN VUELO:** Soul `LUCIA-v4` `c4281765-c031-40ed-b430-e5fd313ef207`
 > (soul_2, 20 fotos) lanzado 03:12 y **en cola (`queued`) sin arrancar** a las 03:48. Dataset de 20
 > completo (D03…D13 en `PROCEDENCIA.jsonl`, 0,748–0,893). Escenas fijas Seedream: 0,884/0,749/0,766.
