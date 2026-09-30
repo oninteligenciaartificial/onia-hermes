@@ -131,10 +131,16 @@
       }
     },
     "prompt_clausula_belleza": {
-      "texto": "Youthful fresh skin, smooth under-eyes, no deep wrinkles or expression lines. Bright warm brown eyes with clear catchlights. Dewy glowing skin with a natural sheen on cheekbones and nose bridge, freckles clearly visible across nose and cheeks.",
-      "desde": "2026-09-30",
+      "texto": "Same level of fine detail as the first reference image: individually sharp freckles, fine pores, textured irises, crisp eyelashes and flyaway hairs. Youthful face, smooth under-eyes, no deep wrinkles. Lighting is physically consistent with this scene: highlights on skin and catchlights in the eyes come only from the light sources present, never added glow.",
+      "desde": "2026-09-30T12:40Z",
       "por": "Sergio Urcullo",
-      "nota": "Va en TODOS los prompts de Lucia v4 (Seedream y Soul). No volver a 'natural imperfections'/'unretouched': envejece."
+      "criterio": "La foto de referencia (ancla espejo) marca el NIVEL DE CALIDAD Y DETALLE, no una lista de efectos. El brillo de piel y ojos de esa foto existe porque hay una ventana; en otra escena la luz la decide la escena. Pedir 'glow/sheen/dewy' en todo contexto se ve falso.",
+      "reemplaza": "Youthful fresh skin, smooth under-eyes, no deep wrinkles or expression lines. Bright warm brown eyes with clear catchlights. Dewy glowing skin with a natural sheen on cheekbones and nose bridge, freckles clearly visible across nose and cheeks.",
+      "prohibido": [
+        "dewy glowing skin / natural sheen en cualquier escena",
+        "natural imperfections / unretouched (envejece)"
+      ],
+      "nota": "Va en todos los prompts de Lucia v4 junto con la escena; la escena define la luz."
     },
     "ancla_look_espejo": {
       "media_id": "abe2e6bd-0d39-49be-9d87-1126d4ed07b0",
