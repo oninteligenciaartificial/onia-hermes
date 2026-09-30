@@ -42,7 +42,7 @@
 congelada) · `consultoria-onia` (ingreso aceptado en la etapa 2) · `ugc-empresas-higgsfield`
 (CLAUDE.md la cita) · agente `onia-crm-prospeccion` (la etapa vigente es vender).
 
-## 2. Globales `~/.claude/skills` — 215 → 106
+## 2. Globales `~/.claude/skills` — 215 → 110
 - Se sacaron 124 a una carpeta de archivadas, que **después se borró** (`Remove-Item`).
 - La corrección de Codex mostró que 20 de esas 124 las usaba Codex. **15 se restauraron** desde
   copias locales: gstack (`browse`, `review`, `context-save`, `context-restore`,
@@ -50,14 +50,16 @@ congelada) · `consultoria-onia` (ingreso aceptado en la etapa 2) · `ugc-empres
   `continuous-agent-loop`, `codebase-onboarding`, `architecture-decision-records`,
   `click-path-audit`) y el plugin caveman (`caveman-commit`, `caveman-help`, `caveman-review`).
   `mem-search`: Codex leyó la del plugin claude-mem, que sigue instalado.
-- **Pendiente, necesita descarga y OK de Sergio Urcullo:** `community-marketing` (24 lecturas de
-  Codex), `copy-editing`, `analytics`, `competitors` (`coreyhaines31/marketingskills`).
+- **Reinstaladas con OK de Sergio Urcullo** (no había copia local): `community-marketing` (24
+  lecturas de Codex), `copy-editing`, `analytics`, `competitors`, con
+  `npx skills add coreyhaines31/marketingskills -g -a claude-code -s <nombre> -y --copy` (de a una,
+  como copia: `~/.agents/skills` ya es un enlace a `~/.claude/skills`).
 - Se quedan 63 sin uso reciente: 14 HyperFrames (el repo depende de la copia global), 48 que
   nombran los stacks curados (router, `onia-chatbot`, `onia-web-factory`, CLAUDE.md de
   onia-platform) y `design-system` (`design` y `slides` corren sus scripts).
 - `~/.agents/skills` es un enlace a `~/.claude/skills`: Claude y Codex ven la misma carpeta.
-  `~/.agents/.skill-lock.json` quedó con 38 entradas (su respaldo estaba en la carpeta borrada).
-- Fuera (109): `_gstack-command` · `ab-testing` · `ai-first-engineering` · `ai-seo` · `analytics` · `aso` · `autoplan` · `benchmark` · `blueprint` · `careful` · `churn-prevention` · `claude-devfleet` · `co-marketing` · `codex` · `cold-email` · `community-marketing` · `competitors` · `compress` · `configure-ecc` · `copy-editing` · `cro` · `cso` · `customer-research` · `data-scraper-agent` · `deploy-to-vercel` · `design-shotgun` · `directory-submissions` · `document-release` · `emails` · `enhance-prompt` · `find-skills` · `free-tools` · `freeze` · `full-output-enforcement` · `gpt-taste` · `gstack-upgrade` · `guard` · `image` · `imagegen-frontend-mobile` · `ios-clean` · `ios-design-review` · `ios-fix` · `ios-qa` · `ios-sync` · `launch` · `learn` · `learned` · `marketing-council` · `marketing-ideas` · `marketing-loops` · `marketing-plan` · `marketing-psychology` · `mcp-server-patterns` · `mem-search` · `n8n-code-python` · `offers` · `open-gstack-browser` · `pair-agent` · `paywalls` · `plan-ceo-review` · `plan-design-review` · `plan-devex-review` · `plan-eng-review` · `plan-tune` · `popups` · `product-marketing` · `programmatic-seo` · `prospecting` · `public-relations` · `qa-only` · `referrals` · `remotion` · `remotion-video-creation` · `retro` · `revops` · `rules-distill` · `sales-enablement` · `schema` · `scrape` · `seo-audit` · `setup-browser-cookies` · `setup-deploy` · `setup-gbrain` · `ship` · `signup` · `site-architecture` · `skill-comply` · `skill-stocktake` · `skillify` · `sms` · `stitch-code-to-design` · `stitch-design-taste` · `stitch-extract-design-md` · `stitch-extract-static-html` · `stitch-generate-design` · `stitch-loop` · `stitch-manage-design-system` · `stitch-upload-to-stitch` · `sync-gbrain` · `unfreeze` · `vercel-cli-with-tokens` · `vercel-composition-patterns` · `vercel-optimize` · `vercel-react-best-practices` · `vercel-react-native-skills` · `vercel-react-view-transitions` · `version-bump` · `video` · `web-design-guidelines`.
+  `~/.agents/.skill-lock.json` quedó con 42 entradas (su respaldo estaba en la carpeta borrada).
+- Fuera (105): `_gstack-command` · `ab-testing` · `ai-first-engineering` · `ai-seo` · `aso` · `autoplan` · `benchmark` · `blueprint` · `careful` · `churn-prevention` · `claude-devfleet` · `co-marketing` · `codex` · `cold-email` · `compress` · `configure-ecc` · `cro` · `cso` · `customer-research` · `data-scraper-agent` · `deploy-to-vercel` · `design-shotgun` · `directory-submissions` · `document-release` · `emails` · `enhance-prompt` · `find-skills` · `free-tools` · `freeze` · `full-output-enforcement` · `gpt-taste` · `gstack-upgrade` · `guard` · `image` · `imagegen-frontend-mobile` · `ios-clean` · `ios-design-review` · `ios-fix` · `ios-qa` · `ios-sync` · `launch` · `learn` · `learned` · `marketing-council` · `marketing-ideas` · `marketing-loops` · `marketing-plan` · `marketing-psychology` · `mcp-server-patterns` · `mem-search` · `n8n-code-python` · `offers` · `open-gstack-browser` · `pair-agent` · `paywalls` · `plan-ceo-review` · `plan-design-review` · `plan-devex-review` · `plan-eng-review` · `plan-tune` · `popups` · `product-marketing` · `programmatic-seo` · `prospecting` · `public-relations` · `qa-only` · `referrals` · `remotion` · `remotion-video-creation` · `retro` · `revops` · `rules-distill` · `sales-enablement` · `schema` · `scrape` · `seo-audit` · `setup-browser-cookies` · `setup-deploy` · `setup-gbrain` · `ship` · `signup` · `site-architecture` · `skill-comply` · `skill-stocktake` · `skillify` · `sms` · `stitch-code-to-design` · `stitch-design-taste` · `stitch-extract-design-md` · `stitch-extract-static-html` · `stitch-generate-design` · `stitch-loop` · `stitch-manage-design-system` · `stitch-upload-to-stitch` · `sync-gbrain` · `unfreeze` · `vercel-cli-with-tokens` · `vercel-composition-patterns` · `vercel-optimize` · `vercel-react-best-practices` · `vercel-react-native-skills` · `vercel-react-view-transitions` · `version-bump` · `video` · `web-design-guidelines`.
 
 ## 3. Codex `~/.codex/skills` — 61 → 38
 - 24 usadas + 14 protegidas (HyperFrames y las que rutea `CODEX_SKILL_ROUTING.md`). `.system/`
@@ -79,7 +81,6 @@ mv ~/.codex/skills-archivadas-20260929/<nombre> ~/.codex/skills/  # una de Codex
 ```
 
 ## Quedó pendiente
-- Las 4 de marketing de arriba (descarga).
 - No borrar `~/.codex/skills-archivadas-20260929/` antes de un par de semanas.
 - El bot conserva en `/root/.hermes/skills/` sus copias de las docs borradas: **Sergio Urcullo
   decidió dejarlas**.

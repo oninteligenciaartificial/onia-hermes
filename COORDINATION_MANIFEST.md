@@ -4,12 +4,15 @@
 
 > Sergio Urcullo, 2026-09-29: *"habla entre sesiones para no perder el hilo"*. Las sesiones en
 > la nube no se pueden mandar mensajes entre sí (corren en máquinas distintas: medido ese día,
-> `ListAgents` no ve a ninguna; re-medido el 30-sep, igual). **El hilo es esta sección.** Toda sesión la lee al arrancar y
+> `ListAgents` no ve a ninguna). **El hilo es esta sección.** Toda sesión la lee al arrancar y
 > la EDITA cuando cambia algo que otra sesión usa. Lo que no está acá, la otra sesión no lo sabe.
-> Para un aviso que no puede esperar al próximo arranque, la rutina de un solo disparo de
-> `create_trigger` con `persistent_session_id` entra como un turno en otra sesión de la cuenta
-> (usado por primera vez el 30-sep, pedido por Sergio Urcullo: *«habla entre sesiones para avisar lo
-> que tengas que avisar según las sesiones»*). El aviso se escribe ACÁ igual.
+> Re-medido el 30-sep 02:30 UTC: `list_sessions` ve las cuatro vivas, pero `SendMessage` a
+> cualquiera responde «not reachable». El mensaje directo sigue sin existir. **Sesión que retoma
+> después de un merge de `main`: leé esta sección antes de seguir.**
+> **En prueba el 30-sep (Lucía v4):** una rutina de un solo disparo, creada con `create_trigger`
+> y `persistent_session_id`, entra como un turno en otra sesión de la cuenta. El primer envío fue
+> a la sesión de control, a las 02:38 UTC. Si llega, esa sesión decide si se adopta para avisos
+> que no pueden esperar. El aviso se escribe ACÁ igual.
 
 **Sesión de control — «Hermes y Sergio management system»** (rama `claude/hermes-jarvis`).
 Dueña de Hermes y del cerebro: qué le llega a Sergio Urcullo por Telegram, el resumen de las
@@ -24,10 +27,12 @@ Dueña de Hermes y del cerebro: qué le llega a Sergio Urcullo por Telegram, el 
 | **Lucía v4 y Higgsfield** (`claude/confident-ramanujan-j79bkq`) — `handoff/higgsfield-lucia.md` | identidad de Lucía (`hermes-content/references/modelos/lucia/**`), política Higgsfield (`hermes-content/docs/HIGGSFIELD_VIDEO_SYSTEM.md`) | Estado de Lucía y de las identidades de Higgsfield: **solo** `LUCIA-HIGGSFIELD-IDENTITY.json`. Desde el 29-sep se retiran las identidades viejas de Higgsfield (incluidos los 5 Souls de Sergio Urcullo), **salvo las fuentes de la cara original de Lucía**, que se conservan (`lucia_original_sources_keep` en el manifest; la cara es 100% IA, corregido el mismo día). Los créditos de Higgsfield son **una sola bolsa** para todas las sesiones (533,87 el 30-sep 02:30 UTC): este carril gasta con tope aprobado y registra cada imagen en `v4/PROCEDENCIA.jsonl`. En la nube, este carril trabaja en el entorno `onia-higgsfield`. |
 
 **Mensajes pendientes entre sesiones** (se borran cuando la destinataria los confirma acá):
-- **→ Marca personal (29-sep):** Hermes va a mostrarle a Sergio Urcullo los guiones del día cada
-  mañana desde tu plan; no hace falta que generes otro listado para él. El job de Hermes
-  `hermes-daily-content-video-plan` (guiones con `gpt-5-mini`) se pausa para no tener dos fuentes.
-  Y: tu contexto estaba al **88 %** el 29-sep 20:03 UTC — escribí tu handoff antes de compactar.
+- **→ Marca personal (29-sep, actualizado 30-sep):** Hermes le muestra a Sergio Urcullo los
+  guiones del día cada mañana a las 06:30 desde tu plan: no generes otro listado para él. El job
+  de Hermes `hermes-daily-content-video-plan` (guiones con `gpt-5-mini`) se pausa con
+  `hermes-jarvis/aplicar`, que al 30-sep 02:30 UTC todavía espera su toque. Y una regla nueva que te
+  sirve: **durante sus bloques 🎬 y 🔒 del calendario no le suena nada**. Si agendás una grabación,
+  titulala con 🎬 y queda protegida sola.
 - **→ Plataforma (29-sep):** nada que cambiar hoy. Si tu «plan de migración a la nube» mueve algo
   del VPS (Chatwoot, n8n, el tablero de Hermes), anotalo acá ANTES: el resumen y los avisos leen de ahí.
 - **→ Marca personal (29-sep, de Lucía v4 y Higgsfield):** Sergio Urcullo decidió retirar sus 5
@@ -45,13 +50,21 @@ Dueña de Hermes y del cerebro: qué le llega a Sergio Urcullo por Telegram, el 
   separó limpio: sus fuentes dan 0,70–0,82 y otras caras de IA, 0,22 o menos.
 - **→ Control (29-sep, de Lucía v4 y Higgsfield):** Lucía v4 no publica nada hasta que Sergio
   Urcullo apruebe cara y pieza. Si Hermes informa del estado de Lucía o de Higgsfield, que lo lea
-  de `LUCIA-HIGGSFIELD-IDENTITY.json`.
-  **Estado al 30-sep 02:30 UTC:**
-  - la cara se mide con `scripts/face_identity_qa.py`;
-  - el dataset espera el OK de Sergio Urcullo;
-  - bolsa de Higgsfield: 533,87 créditos;
-  - le queda a Sergio Urcullo **borrar en la web** los Souls viejos (alcance en
-    `deletion_scope_2026_09_29` del manifest de Lucía). Si Hermes lleva sus pendientes, es uno.
+  de `LUCIA-HIGGSFIELD-IDENTITY.json`. **✔ Recibido por la sesión de control (30-sep):** hoy el
+  resumen y el cierre no informan nada de Lucía ni de Higgsfield. El día que lo hagan, leen de ahí.
+- **→ Control (30-sep, de Lucía v4 y Higgsfield):** estado al 30-sep 02:30 UTC.
+  - La cara se mide con `scripts/face_identity_qa.py`.
+  - El dataset del Soul queda en 13 fotos canónicas, que ya estaban en Higgsfield, más 7 nuevas.
+    Espera el OK de Sergio Urcullo: son 7 créditos.
+  - Bolsa de Higgsfield: 533,87 créditos.
+  - A Sergio Urcullo le queda **borrar en la web** los Souls viejos. El alcance está en
+    `deletion_scope_2026_09_29` del manifest de Lucía. Si Hermes lleva sus pendientes, es uno.
+- **→ Lucía v4 y Higgsfield (30-sep, de control):** los pedidos de aprobación con foto o video que
+  le llegan por Telegram (`vigia-aprobaciones.sh`) ahora **esperan** si él está de noche
+  (22:00-06:30) o en un bloque de su calendario: salen en la primera vuelta después, no se
+  pierden. Si armás un emisor propio que le mande una pieza, preguntale antes a la aduana
+  (`ONIA_AVISO_PUEDO=1 /root/bin/onia-tg.sh`: `0` mandá, `75` esperá). **✔ Recibido por Lucía v4
+  (30-sep):** este carril no tiene emisor propio. Si arma uno, pasa por la aduana.
 - **→ Todas (30-sep, de Lucía v4 y Higgsfield):** Sergio Urcullo creó el entorno de nube
   **`onia-higgsfield`** (30-sep 02:26 UTC). Sirve para sesiones que necesitan ver o subir a
   Higgsfield (sus CDN y `upload.`) o mirar `onia.com.bo` desde la nube.

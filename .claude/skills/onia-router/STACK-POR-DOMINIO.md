@@ -38,7 +38,7 @@ que uno realmente va a hacer.
 | Cuándo | Skills |
 |---|---|
 | Definir el plan de contenido de una cuenta | `content-strategy` · `social` |
-| Ver qué hace la competencia | `competitor-profiling` |
+| Ver qué hace la competencia | `competitor-profiling` · `competitors` |
 | Armar la oferta o el precio de la pieza | `pricing` |
 
 ### 1.2 Escribir
@@ -46,7 +46,7 @@ que uno realmente va a hacer.
 | Cuándo | Skills |
 |---|---|
 | Copy de anuncio, caption, headline | `copywriting` · `ad-creative` |
-| Pulir un texto que ya existe | `writing-guidelines` |
+| Pulir un texto que ya existe | `copy-editing` · `writing-guidelines` |
 | Artículo, guion largo, documento | `article-writing` |
 | Recurso descargable a cambio de un dato | `lead-magnets` |
 
@@ -91,6 +91,8 @@ Cada uno cierra con **"lo que sigue sin resolver"**: ahí está el trabajo pendi
 | Cuándo | Skills |
 |---|---|
 | Pauta | `ads` |
+| Comunidad | `community-marketing` |
+| Medir si sirvió | `analytics` |
 
 ---
 
@@ -181,7 +183,7 @@ Buscarlas en un solo directorio da falsos negativos — pasó al verificar este 
 
 | Origen | Dónde | Ejemplos |
 |---|---|---|
-| Globales del filesystem | `~/.claude/skills/` (**106**) | `impeccable` · `copywriting` · `security-review` |
+| Globales del filesystem | `~/.claude/skills/` (**110**) | `impeccable` · `copywriting` · `security-review` |
 | Del proyecto | `.claude/skills/` (**19**) | `onia-router` · `ver-videos` · `editor-videos` |
 | Plugins | `~/.claude/plugins/cache/` (**9**) | `gsap-skills` · `caveman` · `ponytail` |
 | De claude.ai | no están en disco — se listan con `ListSkills` | `docx` · `xlsx` · `pptx` · `pdf` · `skill-creator` · `abogado-del-diablo` |
