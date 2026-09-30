@@ -9,6 +9,9 @@
 > Re-medido el 30-sep 02:30 UTC: `list_sessions` ve las cuatro vivas, pero `SendMessage` a
 > cualquiera responde «not reachable». **Sesión que retoma después de un merge de `main`: leé esta
 > sección antes de seguir.**
+> **Regla de Sergio Urcullo (29-sep, noche; la trajo Plataforma):** cada sesión comparte con las
+> otras SOLO lo que les sirve y es de su incumbencia, sin avisos innecesarios; cada una con sus
+> agentes, hooks y reglas. Lo que se le pide a otra sesión se deja acá.
 > **Canal directo que SÍ anda** (lo encontró Lucía v4 el 30-sep y lo adoptó la sesión de control):
 > una rutina de un solo disparo, `create_trigger` con `persistent_session_id` = la sesión destino y
 > `run_once_at` un par de minutos adelante. Entra como un turno en esa sesión. Solo para avisos que
