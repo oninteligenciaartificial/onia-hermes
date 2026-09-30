@@ -143,9 +143,14 @@ autosync de esta rama). **Ninguna campaña creada, cero gasto.**
 1. Sergio Urcullo contesta a los 5 → *listo = cinco respuestas enviadas, con capacidades verificadas en el producto*.
 2. Plataforma responde por EL HILO los pedidos del 2.º aviso (bot para pauta, BSUID, `referral`) → *listo =
    respuesta anotada en EL HILO*.
-3. Lista de las primeras 10 clínicas para contacto 1:1 (cruce de §1 y §5 de `ONIA_PROSPECTOS_DENTAL_SCZ.md`,
-   ciudad y tamaño verificados) con el subagente `onia-crm-prospeccion` → *listo = 10 filas con fuente y mensaje
-   propuesto, esperando el OK de Sergio Urcullo*.
+3. ✅ **Lista de las primeras clínicas para contacto 1:1 (30-sep, de noche):** quedaron 8 de 10 en
+   `ONIA_PROSPECTOS_DENTAL_SCZ.md` §6. Cada una trae señal, fuente, canal público y mensaje propuesto; en §6.4 hay
+   una reserva para los 2 cupos que faltan. §7 es el registro de objeciones de las demos.
+   - Página para Sergio Urcullo, con «Copiar» y «Abrir en WhatsApp»: https://claude.ai/artifact/8sFD37TVJMcEJaHcZ2PWSV.
+   - **Nadie fue contactado**: cada envío espera su OK.
+   - Nada se re-verificó en vivo, porque el proxy bloqueó las webs, Facebook e Instagram. Por eso cada ficha trae
+     su lista «Antes de enviar».
+   - *Siguiente:* con las respuestas, llenar §7 y cargar las demos en el tablero de Control.
 4. Destrabar los 8 bloqueos de `ONIA_ADQUISICION_Y_PAUTA.md` §6 → *listo = `ads_get_ad_accounts` ve ONIA Ads con
    método de pago y página promocionable*.
 5. Creativos (**los hace esta sesión**): llegan las cuatro capturas de la 1.0 → se renderizan D1 y D4 con `scripts/carousel_cloud_setup.sh` → se le muestran a Sergio Urcullo →
