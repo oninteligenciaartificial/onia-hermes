@@ -1,11 +1,41 @@
 # Handoff — Lucía v4 y Higgsfield
 
 > Formato: [`README.md`](README.md). Se **sobrescribe**: es el estado ACTUAL del carril.
-> Rama `claude/confident-ramanujan-j79bkq` (sesión en la nube, entorno `Default`). El PR
-> oninteligenciaartificial/onia-hermes#42 quedó mergeado el 29-sep a las 22:45 UTC: el autosync
-> hizo fast-forward de `main`. Lo nuevo va en un PR aparte desde la misma rama, reiniciada sobre
-> `main`. Última escritura: **2026-09-30 ~02:40 UTC**.
+> Rama `claude/confident-ramanujan-j79bkq` (sesión en la nube, entorno `Default`). Todo está en
+> `main`: PR oninteligenciaartificial/onia-hermes#42, #43 y #44, integrados por el autosync.
+> Última escritura: **2026-09-30 ~02:50 UTC**, en el cambio de sesión.
 > Reemplaza a `HIGGSFIELD-LUCIA-SYSTEM-2026-09-22.md`, que queda como historia.
+
+## ▶ Arranque de la sesión siguiente, en el entorno `onia-higgsfield`
+
+Esta sesión corre en `Default` y no puede ver Higgsfield: el entorno se fija al crear la sesión.
+Sergio Urcullo creó `onia-higgsfield` el 30-sep 02:26 UTC para eso. Todo lo que queda, que es
+aprobar fotos, entrenar el Soul, probarlo y después el contenido diario, necesita **mirar**.
+
+**En vuelo al cerrar: nada.** No hay trabajos corriendo en Higgsfield, ni rutinas pendientes, ni
+nada sin commitear. Si esta sesión muere, no se pierde nada.
+
+1. `git branch --show-current`. Después leé este handoff y `COORDINATION_MANIFEST.md` §EL HILO.
+2. **Confirmá la red** con `curl -sS -o /dev/null -w '%{http_code}\n' https://d8j0ntlcm91z4.cloudfront.net/`.
+   - `000` significa que el entorno no tiene los dominios: avisale a Sergio Urcullo y seguí
+     midiendo en `sandbox_exec`, como se hizo acá.
+   - Cualquier otro código significa que hay red. **Mirá** T201–T204
+     (`v4/qa/manifest-metodos-20260929.json` trae las URLs) y el photoshoot.
+3. **7 fotos nuevas**, solo con el OK de Sergio Urcullo. Recomendado: Seedream 4.5, 7 créditos.
+   - Prompts: D03, D06, D07, D09, D10, D12 y D13 de `v4/prompts/dataset-vida.json`.
+   - Referencias: las 7 `media_ids` de `lucia-skin-v1` como `image_references`.
+   - Formato: 9:16, en lotes de 4 como máximo. Cotizá antes con `get_cost`.
+   - Puntuá cada foto con `face_identity_qa.py`: el gate es 0,70 en caras frontales o de tres
+     cuartos. **Además, miralas**: piel, manos, argollas y cadenita.
+   - Registrá todo en `v4/PROCEDENCIA.jsonl`.
+4. **Soul ID v4** (`soul_2`) con 20 fotos.
+   - 13 canónicas:
+     - las 6 medias de `lucia-skin-v1` sin `1714a347` (`lucia_original_sources_keep`);
+     - los job_ids 01–07 del photoshoot (`trait_photoshoot_local.higgsfield_job_ids`).
+   - Más las 7 nuevas.
+   - **Antes, OK específico de Sergio Urcullo con el costo cotizado.**
+5. **Prueba en 3 escenas fijas:** medir con 0,70 o más y mirarlas.
+6. Recién ahí, el objetivo siguiente: contenido diario (vende Onia + lifestyle).
 
 **Objetivo**
 
