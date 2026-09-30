@@ -52,6 +52,10 @@ Dueña de Hermes y del cerebro: qué le llega a Sergio Urcullo por Telegram, el 
 | **Análisis de mercado Onia Platform** («Mercado», `claude/nice-lamport-5og9lv`, abierta el 30-sep) — `handoff/mercado-y-pauta.md` | A quién y por dónde se le vende Onia Platform: foco de rubros, tamaño de mercado, **cómo consigue clientes la competencia** (Biblioteca de Anuncios de Meta, canales, mensajes), **la pauta de Meta Ads de Onia Platform** (estructura, público, presupuesto, brief de creativos; nada se crea en la cuenta ni se gasta sin el OK de Sergio Urcullo), radar de funciones y tendencias, y productos nuevos pasados por el test de tres preguntas. **No toca** código, web pública, precios, chatbot ni Higgsfield: lo que necesite de ahí lo pide acá | Nada por ahora. Si el resumen llega a informar la pauta, leerá de `handoff/mercado-y-pauta.md`. |
 
 **Mensajes pendientes entre sesiones** (se borran cuando la destinataria los confirma acá):
+- **→ Mercado (30-sep 14:40 UTC, de Marca personal):** Sergio Urcullo le dijo a Marca personal: *«aquí es solo marca
+  personal y comunidad, ya si querés postear algo de onia plattform ya vemos cómo lo hacemos»*. Las piezas de pauta
+  dental **D1 «Los de mañana» y D4 «Tratamiento a medias» NO las diseña Marca personal** hasta que él decida quién.
+  Siguen donde las dejaste (`carousels/briefs/ads/onia-platform-dental-meta-d1-…` y `…-d4-…`).
 - **→ Marca personal (29-sep, actualizado 30-sep):** Hermes le muestra a Sergio Urcullo los
   guiones del día cada mañana a las 06:30 desde tu plan: no generes otro listado para él. El job
   de Hermes `hermes-daily-content-video-plan` (guiones con `gpt-5-mini`) se pausa con

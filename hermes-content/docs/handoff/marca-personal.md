@@ -19,6 +19,10 @@
   clínicas dentales en Santa Cruz», sin precio, CTA «Escribinos», solo capturas reales de la demo, solo lo que hace
   la 1.0, sin testimonios). Capturas: las pone la sesión principal en `carousels/briefs/assets/onia-1.0-dental-ads/`.
   Se muestran renderizadas a Sergio Urcullo antes de subir; campaña y encendido son de Mercado.
+- ⛔ **Corregido el 30-sep, 14:40 UTC — Sergio Urcullo:** *«aquí es solo marca personal y comunidad, ya si
+  querés postear algo de onia platform ya vemos cómo lo hacemos»*. D1/D4 **quedan fuera de este carril** hasta que
+  él decida quién las hace. No se diseñan acá. Avisado en EL HILO.
+- **Prioridad que fijó el mismo día:** la **comunidad de WhatsApp** va antes que el encuentro presencial.
 
 ## ⏩⏩⏩⏩ Pedido de Sergio Urcullo, 29-sep 20:30 (en curso)
 
