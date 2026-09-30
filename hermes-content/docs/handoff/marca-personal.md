@@ -58,6 +58,7 @@ Una sola lista. Se toca de a uno, en este orden salvo que Sergio Urcullo diga ot
   → DM Sans y pie completos (mirado). Google Fonts responde 200 desde acá.
 - **Higgsfield desde acá:** el CLI `higgsfield` NO está instalado; el MCP de Higgsfield sí responde (saldo
   486,91 cr, plan pro, leído sin gastar). cloudfront `d8j0ntlcm91z4` responde (403 de S3 en la raíz, no bloqueo).
+- **Edición de video en la nube (30-sep):** `ffmpeg` no viene instalado; `apt-get install -y ffmpeg` funciona (6.1.1) pero se pierde cuando el contenedor se recicla. `faster-whisper` se baja por pip. Falta probar que un video subido por Sergio Urcullo llegue a la sesión.
 - **No se puede desde la nube:** brutos de `C:\Users\PC\Videos\ONIA-brutos`, auditoría de perfiles con el Chrome
   logueado, publicar desde el VPS (sin llave; infra tiene un dueño). Eso sigue en la laptop.
 - **Heredado de Mercado (decisión de Sergio Urcullo, 30-sep):** las piezas de pauta dental **D1 «Los de mañana»** y

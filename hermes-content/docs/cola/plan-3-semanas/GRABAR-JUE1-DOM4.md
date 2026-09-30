@@ -3,6 +3,99 @@
 Solo lo que se dice a cámara. Orden de cada día = orden de grabación. ~15-20 min por video con tomas repetidas → 3 videos ≈ 1 hora.
 Fuente de cada guion: `plan-3-semanas/S1-GUIONES.md` (con su evidencia) y `GUIONES-PARA-GRABAR-2026-09-29.md`. **Sin aprobar todavía por Sergio Urcullo: si una frase no te suena tuya, cambiala al grabar.**
 
+## Lo de ayer (mié 30-sep), sin grabar
+
+Los tres de ayer eran: **D01-A** tu primera skill (está el viernes), **D01-B** la prueba de Sonnet 5.5 (está el
+jueves) y este **YouTube**, que es el que faltaba en la hoja. Horizontal, ~8 min hablado → ~30-40 min de grabación.
+
+### D01-C · YouTube · Opus 5.5 o Sonnet 5.5: cuál usar y cómo cambiarlo en Claude Code
+
+Acaba de salir Sonnet 5.5. Cuesta la mitad que Opus 5.5 y, en una de las
+pruebas de Anthropic, le ganó.
+
+Así que hice lo más simple: le di exactamente la misma tarea a los dos. En este
+video te muestro qué pasó, qué dicen los números de verdad y la regla que uso
+en mi empresa para elegir cuál de los dos trabaja.
+
+Empecemos por lo que salió.
+
+Opus 5.5 salió el 22 de septiembre. Es el modelo potente: el que usás cuando la
+tarea es difícil. Sonnet 5.5 salió el 28. Es el modelo intermedio, más rápido y
+más barato.
+
+¿Cuánto más barato? Opus cobra cuatro dólares por millón de tokens de entrada y
+veinte de salida. Sonnet, dos y diez. Exactamente la mitad.
+
+Ahora, la mitad del precio no sirve de nada si hace la mitad del trabajo. Así
+que miremos las pruebas que publicó Anthropic.
+
+En trabajo de oficina, lo que ellos llaman GDPval, están prácticamente empatados:
+mil ochocientos cuarenta y cuatro contra mil ochocientos cuarenta y seis.
+
+En uso de computadora, ochenta con uno contra ochenta y uno con ocho. Casi igual.
+
+En Terminal-Bench, que mide tareas en la terminal, Sonnet saca setenta con seis
+y Opus sesenta y seis con cuatro. Ahí gana el barato.
+
+Pero en FrontierCode, que es código difícil de verdad, Opus saca cincuenta y
+cuatro y Sonnet cuarenta y seis, aun con Sonnet en esfuerzo máximo. Ocho puntos
+de diferencia.
+
+Entonces la lectura es esta: en casi todo están parejos, y Opus se despega
+cuando el problema es realmente difícil.
+
+Esos son números de Anthropic. Yo quería ver una tarea mía.
+
+Les pasé tres propuestas para una web de tres meses. Con trampa: una anuncia
+setecientos bolivianos, pero tiene un dominio obligatorio que cobra ciento
+veinte por mes y no está sumado. Otra dice «instalación cero» y después cobra
+trescientos de configuración obligatoria.
+
+Les pedí el costo real de los tres meses, la fórmula, las contradicciones y
+cuál cumple mis requisitos.
+
+Resultado: los dos dieron los mismos tres totales. Mil cincuenta, mil sesenta y
+mil trescientos cincuenta. Los dos encontraron los trescientos sesenta que
+faltaban en la primera. Los dos se dieron cuenta de que la instalación cero
+escondía trescientos. Y los dos eligieron la misma propuesta.
+
+Para esta tarea, pagar el doble no me dio nada. Y eso es justamente lo que
+quiero que te lleves: no elijas el modelo por la fama. Elegilo por tu tarea.
+
+Ahora, cómo lo cambiás en Claude Code.
+
+Cuando abrís Claude Code desde la terminal, escribís claude, espacio, guion guion
+model, y el nombre. Claude guion guion model sonnet te abre la sesión con Sonnet.
+Claude guion guion model opus, con Opus. Sonnet y opus son alias: siempre apuntan
+a la versión más nueva.
+
+Y hay una segunda perilla que casi nadie toca: el esfuerzo. Es cuánto piensa el
+modelo antes de responder. Claude guion guion effort, y elegís entre low,
+medium, high, xhigh y max. En Claude Code viene en medium.
+
+Más esfuerzo es más tiempo y más tokens. Así que no lo subas por las dudas.
+Subilo cuando la primera respuesta no alcanzó.
+
+Esta es la regla que uso en ONIA.
+
+Sonnet hace el trabajo de todos los días: editar archivos, escribir scripts,
+armar contenido, correr pruebas. Es rápido y cuesta la mitad.
+
+Opus entra cuando equivocarse sale caro: una migración de base de datos, una
+decisión de arquitectura, un error que no entiendo después de dos intentos.
+
+Y cuando no sé cuál va, hago lo que hice acá: la misma tarea a los dos, y
+comparo cuánto tuve que corregir de cada uno. Eso vale más que cualquier tabla.
+
+Si querés hacer esta prueba vos: el ejercicio de las tres propuestas, con el
+prompt completo, lo dejé en la comunidad de WhatsApp. Pegalo en los dos modelos
+y fijate si te dan lo mismo.
+
+Y si todavía no usás Claude Code, en mi web tenés la guía para instalarlo y
+armar tu primera skill. Nos vemos en el próximo.
+
+---
+
 ## Jue 1-oct
 
 ### D02-B · Vertical · Desde hoy, tu bot de WhatsApp paga por cada respuesta
