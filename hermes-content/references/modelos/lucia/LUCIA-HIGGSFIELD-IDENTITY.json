@@ -141,7 +141,15 @@
       "desde": "2026-09-30",
       "por": "Sergio Urcullo",
       "uso": "va PRIMERA en image_references y el prompt dice 'Same face, skin and freckles as the first reference image'. Es el look que Sergio Urcullo pidio replicar."
-    }
+    },
+    "soul_v4": {
+      "soul_id": "c4281765-c031-40ed-b430-e5fd313ef207",
+      "name": "LUCIA-v4",
+      "type": "soul_2",
+      "estado": "ready 2026-09-30",
+      "uso": "respaldo, no principal: 0,72-0,83 y mas envejecida que el metodo Seedream+ancla"
+    },
+    "metodo_diario": "seedream_v4_5 9:16 basic; image_references=[abe2e6bd (ancla espejo) PRIMERA, a7cfb766, d7d6d36a, df491c87, 8ce2f65c]; prompt: escena + 'Same face, skin and freckles as the first reference image' + prompt_clausula_belleza. 1 cr/imagen. Medido 0,828-0,875."
   },
   "execution_policy": {
     "cloud_sessions": "MCP oficial funciona. El entorno Default bloquea higgsfield.ai, upload.higgsfield.ai y los CDN d2ol7oe51mr4n9/d8j0ntlcm91z4.cloudfront.net: sin esos dominios la sesion no puede MIRAR salidas ni SUBIR archivos del repo.",
