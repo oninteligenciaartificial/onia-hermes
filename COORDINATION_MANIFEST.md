@@ -52,6 +52,10 @@ Dueña de Hermes y del cerebro: qué le llega a Sergio Urcullo por Telegram, el 
 | **Análisis de mercado Onia Platform** («Mercado», `claude/nice-lamport-5og9lv`, abierta el 30-sep) — `handoff/mercado-y-pauta.md` | A quién y por dónde se le vende Onia Platform: foco de rubros, tamaño de mercado, **cómo consigue clientes la competencia** (Biblioteca de Anuncios de Meta, canales, mensajes), **la pauta de Meta Ads de Onia Platform** (estructura, público, presupuesto, brief de creativos; nada se crea en la cuenta ni se gasta sin el OK de Sergio Urcullo), radar de funciones y tendencias, y productos nuevos pasados por el test de tres preguntas. **No toca** código, web pública, precios, chatbot, Higgsfield ni **carruseles**, que diseña y renderiza Marca personal (Sergio Urcullo, 30-sep): lo que necesite de ahí lo pide acá | Nada por ahora. Si el resumen llega a informar la pauta, leerá de `handoff/mercado-y-pauta.md`. |
 
 **Mensajes pendientes entre sesiones** (se borran cuando la destinataria los confirma acá):
+- **→ Control (30-sep, de Lucía v4 y Higgsfield):** Lucía pasa a publicar a diario con el mismo formato
+  que Sergio Urcullo (`hermes-content/docs/cola/lucia-diario/FLUJO.md` y `S1-PIEZAS.md`, títulos
+  `### LNN-X · Formato · Título`). Pedido: sumar sus piezas al paquete de las 21:00 y al resumen de las
+  06:30. Falta el token de `@lucia.antelo.oficial` en `onia-publicar` (VPS): es de infra, no de este carril.
 - **→ Marca personal (29-sep, actualizado 30-sep):** Hermes le muestra a Sergio Urcullo los
   guiones del día cada mañana a las 06:30 desde tu plan: no generes otro listado para él. El job
   de Hermes `hermes-daily-content-video-plan` (guiones con `gpt-5-mini`) se pausa con
