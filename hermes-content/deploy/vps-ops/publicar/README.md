@@ -37,6 +37,10 @@ node /root/bin/ig-reel.mjs --cuenta sergio --video /root/publicar/<pieza>/final.
 # con el OK de Sergio sobre esa pieza
 node /root/bin/ig-reel.mjs ... --publicar                 # reel normal
 node /root/bin/ig-reel.mjs ... --trial auto --publicar    # yap a Trial
+# Instagram a hora fija (UTC; responde con la hora de La Paz). Timer transitorio de systemd, sin cola
+# persistente: si el VPS se reinicia lo agendado NO sale (falla segura). Si falla, avisa por Telegram.
+/root/bin/agendar-publicacion.sh a-0930 "2026-09-30 16:30:00" node /root/bin/ig-reel.mjs ... --publicar
+/root/bin/agendar-publicacion.sh --lista          # · --cancelar a-0930
 ```
 
 ## Cómo funciona por dentro (y por qué)

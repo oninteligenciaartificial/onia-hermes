@@ -31,8 +31,9 @@ el feed a tus seguidores. El que funciona, Instagram lo pasa solo (`--trial auto
 regla de 10-13 de `ONIA_ESTRUCTURA_PUBLICACION_DIARIA.md` sin grabar más de 1 hora (tope de la API:
 100 publicaciones cada 24 h).
 Carruseles: mar · jue · sáb, en el horario de B.
-Instagram se agenda en el VPS, una publicación por comando (sin cola que pueda «despertar» y publicar
-sola, como pasó con Postiz el 4-sep). TikTok, Shorts y LinkedIn entran a la cola de Buffer **solo
+Instagram se agenda en el VPS con `agendar-publicacion.sh`, una publicación por timer de systemd (sin
+cola que pueda «despertar» y publicar sola, como pasó con Postiz el 4-sep: si el VPS se reinicia, lo
+agendado no sale y se reagenda). TikTok, Shorts y LinkedIn entran a la cola de Buffer **solo
 después de tu «ok»**; el plan gratis admite 10 en cola por canal (unos 3 días por delante).
 
 ## Cómo se mantiene el ritmo sin quemarte
