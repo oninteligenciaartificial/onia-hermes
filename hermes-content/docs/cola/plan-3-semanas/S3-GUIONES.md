@@ -390,7 +390,7 @@ El pedido exacto está en la comunidad de WhatsApp.
 
 ### D18-B · Vertical · Un video que sale de una página web
 **Fórmula:** F1 Resultado primero → cómo → comprobación → siguiente paso · **Pilar:** 4 Contenido con IA · **Destino:** web `sergiourcullo.vercel.app/stack`
-**Evidencia:** `scripts/hyperframes/README.md` «Motor de la casa» (A/B 2026-07-30; Apache-2.0 verificado 2026-08-21) · `.agents/skills/hyperframes-cli/SKILL.md` (Node 22+, FFmpeg; init / check / preview / render) · guía `/stack` sección HyperFrames
+**Evidencia:** `scripts/hyperframes/README.md` «Motor de la casa» (A/B 2026-07-30; Apache-2.0 verificado 2026-08-21) · `~/.claude/skills/hyperframes-cli/SKILL.md`, copia global desde el 29-sep (Node 22+, FFmpeg; init / check / preview / render) · guía `/stack` sección HyperFrames
 
 Esta tarjeta animada no la hice en un editor. Es una página web con tiempos, y sale un MP4.
 
