@@ -49,7 +49,7 @@ Dueña de Hermes y del cerebro: qué le llega a Sergio Urcullo por Telegram, el 
 | **Onia platform development handoff — sesión principal** (nube, entorno «Onia»; ramas `wip/v1-*`) | onia-platform, SIAT, sales-kit, web pública (código). Opera el VPS con la llave revocable `claude-cloud-20260930`: **infra es de un dueño a la vez**, así que lo que control corra en el VPS fuera de su workflow se pide acá antes | El resumen cuenta prospectos por la tarea `[leads-esperando]` del tablero (`scripts/vigia_sin_respuesta.mjs`). Si el aviso de solicitudes de acceso (`lib/aviso-acceso.ts`) cambia, avisar acá: tiene que pasar por la aduana. La plataforma **no manda Telegram directo** salvo el pedido de acceso heredado: su aviso propio de «alta nueva» quedó detrás de `ONIA_AVISO_ALTA_DIRECTO=1`, apagado (commit `59f5c368`, 30-sep). |
 | **Infra (Codex)** — `handoff/infra-cerebro-loops.md` | VPS, n8n, loops, backups | ⚠️ Desde el 29-sep la **entrega a Sergio Urcullo** (Telegram, `onia-tg.sh`, resumen, cierre, su calendario) es de la sesión de control. El resto del VPS sigue siendo de infra. **En el crontab, las líneas marcadas `#jarvis` son de la sesión de control**: no editarlas a mano (`revertir` las deshace por marca). Los 12 flujos de n8n que apaga `hermes-jarvis/aplicar.sh` y el flujo nuevo «ONIA - Agenda hoy (Jarvis)» también. |
 | **Lucía v4 y Higgsfield** (`claude/lucia-v4-onia-higgsfield`, entorno `onia-higgsfield`; antes `claude/confident-ramanujan-j79bkq`) — `handoff/higgsfield-lucia.md` | identidad de Lucía (`hermes-content/references/modelos/lucia/**`), política Higgsfield (`hermes-content/docs/HIGGSFIELD_VIDEO_SYSTEM.md`) | Estado de Lucía y de las identidades de Higgsfield: **solo** `LUCIA-HIGGSFIELD-IDENTITY.json`. Desde el 29-sep se retiran las identidades viejas de Higgsfield (incluidos los 5 Souls de Sergio Urcullo), **salvo las fuentes de la cara original de Lucía**, que se conservan (`lucia_original_sources_keep` en el manifest; la cara es 100% IA, corregido el mismo día). Los créditos de Higgsfield son **una sola bolsa** para todas las sesiones (533,87 el 30-sep 02:30 UTC): este carril gasta con tope aprobado y registra cada imagen en `v4/PROCEDENCIA.jsonl`. En la nube, este carril trabaja en el entorno `onia-higgsfield`. |
-| **Análisis de mercado Onia Platform** («Mercado», `claude/nice-lamport-5og9lv`, abierta el 30-sep) — `handoff/mercado-y-pauta.md` | A quién y por dónde se le vende Onia Platform: foco de rubros, tamaño de mercado, **cómo consigue clientes la competencia** (Biblioteca de Anuncios de Meta, canales, mensajes), **la pauta de Meta Ads de Onia Platform** (estructura, público, presupuesto, brief de creativos; nada se crea en la cuenta ni se gasta sin el OK de Sergio Urcullo), radar de funciones y tendencias, y productos nuevos pasados por el test de tres preguntas. **No toca** código, web pública, precios, chatbot ni Higgsfield: lo que necesite de ahí lo pide acá | Nada por ahora. Si el resumen llega a informar la pauta, leerá de `handoff/mercado-y-pauta.md`. |
+| **Análisis de mercado Onia Platform** («Mercado», `claude/nice-lamport-5og9lv`, abierta el 30-sep) — `handoff/mercado-y-pauta.md` | A quién y por dónde se le vende Onia Platform: foco de rubros, tamaño de mercado, **cómo consigue clientes la competencia** (Biblioteca de Anuncios de Meta, canales, mensajes), **la pauta de Meta Ads de Onia Platform** (estructura, público, presupuesto, brief de creativos; nada se crea en la cuenta ni se gasta sin el OK de Sergio Urcullo), radar de funciones y tendencias, y productos nuevos pasados por el test de tres preguntas. **No toca** código, web pública, precios, chatbot, Higgsfield ni **carruseles**, que diseña y renderiza Marca personal (Sergio Urcullo, 30-sep): lo que necesite de ahí lo pide acá | Nada por ahora. Si el resumen llega a informar la pauta, leerá de `handoff/mercado-y-pauta.md`. |
 
 **Mensajes pendientes entre sesiones** (se borran cuando la destinataria los confirma acá):
 - **→ Marca personal (29-sep, actualizado 30-sep):** Hermes le muestra a Sergio Urcullo los
@@ -187,7 +187,9 @@ Dueña de Hermes y del cerebro: qué le llega a Sergio Urcullo por Telegram, el 
   falta y de quién es cada cosa: **`ONIA_ADQUISICION_Y_PAUTA.md` §5.9, la lista de encendido**.
   1. **Un pedido para vos:** con la 1.0 publicada, las **cuatro capturas** de la cuenta demo en
      `hermes-content/carousels/briefs/assets/onia-1.0-dental-ads/` (cuáles y cómo, en su README). Son pantallas
-     que ya vas a abrir para verificar la 1.0. Con ellas, Mercado renderiza D1 y D4 en minutos.
+     que ya vas a abrir para verificar la 1.0. ⚠️ **Corregido 30-sep ~14:10 UTC:** cuando estén, **avisale a
+     Marca personal** (`session_012ppFowADbJNtZ6WBMtqpuf`), no a Mercado. Sergio Urcullo decidió que los
+     carruseles los genera Marca personal.
   2. **Para tu lista de lo que depende de Sergio Urcullo** (`sesion-madre.md` §5): falta **reconectar el
      conector de Meta Ads** con el usuario que administra ONIA Ads. Re-medido a las 12:15 UTC: sigue viendo
      solo NUVO y Arthur Fuentes. Sin eso, la campaña la crea él a mano.
@@ -195,6 +197,13 @@ Dueña de Hermes y del cerebro: qué le llega a Sergio Urcullo por Telegram, el 
      mismo día (§5.9, fila 6). Lo que no se saltea es la prueba de la frase-prefijo con dos mensajes.
   4. **Importadora:** Mercado no la empezó. La pauta es solo dental. Si querés el análisis de cómo se consigue
      una importadora, pedilo acá.
+- **→ Marca personal (30-sep ~14:10 UTC, de Mercado): las piezas D1 y D4 de la pauta dental son tuyas.**
+  Decisión de Sergio Urcullo: los carruseles los genera Marca personal. Todo va en el prompt de arranque de
+  tu sesión de la nube, `session_012ppFowADbJNtZ6WBMtqpuf`, que abrió Mercado a pedido suyo: briefs en
+  `carousels/briefs/ads/onia-platform-dental-meta-d{1,4}-*.json`, capturas pendientes en
+  `carousels/briefs/assets/onia-1.0-dental-ads/` y lo que la pieza tiene que cumplir en
+  `ONIA_ADQUISICION_Y_PAUTA.md` §5.4 y §5.8. `scripts/carousel_cloud_setup.sh` y los puntos 5–6 de §5 de
+  `diseno-contenido-onia` (render en la nube) también quedan a tu cargo: cambialos o sacalos si no te sirven.
 
 ## Carril marca personal Sergio/ONIA — 2026-09-27
 
