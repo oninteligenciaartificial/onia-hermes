@@ -38,7 +38,7 @@ node /root/bin/ig-reel.mjs --cuenta sergio --video /root/publicar/<pieza>/final.
 node /root/bin/ig-reel.mjs ... --publicar                 # reel normal
 node /root/bin/ig-reel.mjs ... --trial auto --publicar    # yap a Trial
 # Instagram a hora fija (UTC; responde con la hora de La Paz). Timer transitorio de systemd, sin cola
-# persistente: si el VPS se reinicia lo agendado NO sale (falla segura). Si falla, avisa por Telegram.
+# persistente: si el VPS se reinicia lo agendado NO sale (falla segura). Si falla, avisa por onia-tg.sh.
 /root/bin/agendar-publicacion.sh a-0930 "2026-09-30 16:30:00" node /root/bin/ig-reel.mjs ... --publicar
 /root/bin/agendar-publicacion.sh --lista          # · --cancelar a-0930
 ```
@@ -48,7 +48,7 @@ node /root/bin/ig-reel.mjs ... --trial auto --publicar    # yap a Trial
 - **API oficial de Instagram (Instagram Login)**, app `OnIA Social API`. Los tokens de
   `@sergiourcullo` y `@oniahq` salieron de la base de Postiz (dormido) y viven SOLO en el VPS:
   `/root/.config/onia-publicar/ig-<cuenta>.env` (600). Renovados el 29-sep (vencían el 18-oct);
-  `ig-refrescar.sh` los renueva cada lunes y avisa por Telegram solo si falla.
+  `ig-refrescar.sh` los renueva cada lunes y, solo si falla, avisa por la aduana `onia-tg.sh` (sistema).
 - **Con Instagram Login no hay subida directa** (rupload es solo para Facebook Login): la API pide
   `video_url` pública. El video se copia con nombre aleatorio a `/root/publicar/public/`, que sirve
   el contenedor `onia-assets` (nginx, solo lectura, sin listado) por la ruta que YA existía en

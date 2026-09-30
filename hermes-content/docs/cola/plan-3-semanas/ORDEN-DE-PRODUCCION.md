@@ -22,6 +22,29 @@ Una sentada de ~1 hora. Primero el YouTube horizontal, después los verticales d
 Presentaciones: abrilas en el navegador; `?slide=N` va a la lámina N y el botón «Notas»
 muestra qué decir.
 
+## 1b. Cómo grabar (método de Santiago Muñoz; lo marcado con * sale de nuestra propia edición)
+
+*Antes*
+1. Celular fijo en trípode, en vertical, plano medio corto (del pecho para arriba), siempre el mismo fondo.
+   *Nada de pared clara con sol directo: el subtítulo blanco deja de leerse.
+2. Cara centrada, con aire arriba y abajo: el formato partido la deja en la mitad de abajo, donde van los subtítulos.
+
+*Durante*
+3. Grabá de corrido. Si te trabás, hacé una pausa y repetí la frase ENTERA: el corte detecta la repetida.
+4. *La cámara va en una toma aparte y a pantalla completa, no en la burbujita de OBS. Lo que muestres de la
+   pantalla grabalo aparte y nítido: el zoom a la línea que importa lo hago yo en la edición.
+5. Quedate en la pantalla que enseña el tiempo que haga falta para leerla: no hay que cortar cada 2 s.
+6. Si podés, grabá 1–2 min de b-roll tuyo trabajando (manos, pantalla, escritorio): sirve para todos los videos.
+
+*Después*
+7. Dejá los brutos tal cual en `C:\Users\PC\Videos\ONIA-brutos\<AAAA-MM-DD>\`. *El HDR del iPhone lo corrijo yo.
+8. Antes de cortar te paso la tabla de cortes y el preview (regla de oro).
+
+Largo de YouTube, en este orden de capítulos: resultado → requisitos → creación → revisión → personalización.
+Fuentes: su reel `DdE7wYbxjPK` (ficha en `references/video-intake/2026-09-17-reel-santiago-astra-davinci-estilo-edicion.md`)
+y la skill `editor-videos`. Aparte de esto, su método nuevo es de videos animados por código, que no
+necesitan grabarte: `references/marca-personal/SANTIAGO-VIDEOS-ANIMADOS-POR-CODIGO.md`.
+
 ## 2. El calendario completo (3 semanas, 3 videos por día)
 
 - Mapa, calendario día por día y lista «antes de grabar»: `plan-3-semanas/MAPA.md`
@@ -31,6 +54,10 @@ muestra qué decir.
 - Presentaciones de los 9 YouTube: `hermes-content/carousels/out/yt-10-*` … `yt-18-*`
 
 ## 3. Carruseles listos para publicar (mar · jue · sáb)
+
+**29-sep: Sergio Urcullo pidió UNO POR DÍA.** El calendario de los 21 días (30-sep → 20-oct) va en
+`plan-3-semanas/CARRUSELES-DIARIOS.md`; cada uno se agenda con `ig-carrusel.mjs` recién con su OK.
+La tabla de abajo son los 9 que ya estaban.
 
 Láminas PNG en `hermes-content/carousels/out/<carpeta>/slide-NN.png`; caption en el brief
 (`hermes-content/carousels/briefs/marca-personal/<carpeta>.json`, campo `caption`).

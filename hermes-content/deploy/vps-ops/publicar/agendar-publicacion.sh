@@ -7,7 +7,8 @@
 #   agendar-publicacion.sh --lista               # lo que falta salir
 #   agendar-publicacion.sh --cancelar <nombre>
 # Resultado: journalctl -u pub-<nombre>; si publicó, /root/publicar/publicado.jsonl.
-# Si el comando falla, avisa por Telegram (mismo canal que ig-refrescar.sh).
+# Si el comando falla, avisa por la aduana única /root/bin/onia-tg.sh (categoría sistema: queda como
+# tarea en el tablero, no interrumpe a Sergio Urcullo). Nunca curl directo a Telegram.
 set -euo pipefail
 
 case "${1:-}" in
@@ -15,13 +16,11 @@ case "${1:-}" in
   --cancelar) systemctl stop "pub-${2:?nombre}.timer"; echo "cancelado pub-$2"; exit ;;
   --correr)
     nombre=$2; shift 2
-    [ -n "${TELEGRAM_BOT_TOKEN:-}" ] || { set -a; . /root/.hermes/.env 2>/dev/null; set +a; }
     if out=$("$@" 2>&1); then echo "$out"; exit 0; fi
     echo "$out"
-    txt=$(printf '⚠️ Publicación agendada <b>%s</b> falló:\n%s' "$nombre" \
+    txt=$(printf 'Publicación agendada %s falló: %s' "$nombre" \
       "$(tail -c 400 <<<"$out" | sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g')")
-    curl -s -o /dev/null --max-time 20 "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
-      -d chat_id="${TELEGRAM_HOME_CHANNEL}" -d parse_mode=HTML --data-urlencode text="$txt" || true
+    ONIA_AVISO=sistema ONIA_AVISO_EMISOR=publicador /root/bin/onia-tg.sh "$txt" >/dev/null 2>&1 || true
     exit 1 ;;
 esac
 
