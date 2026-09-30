@@ -73,3 +73,7 @@ hermes-content/docs/recorrido/**/*.png
 # que el que la abre la lee como presente. Cero `.md` ocultos legitimos en el
 # repo el dia que se escribio esto (`git ls-files | grep -E '(^|/)\.[^/]+\.md$'`).
 .*.md
+
+# Worktrees de subagentes de Claude Code: son checkouts aparte, nunca contenido del repo.
+# (30-sep-2026: el autosync del Stop commiteó uno como gitlink en una rama de trabajo.)
+.claude/worktrees/
