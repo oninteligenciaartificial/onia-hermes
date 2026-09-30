@@ -1,7 +1,7 @@
 # Semana 3 — Contenido con IA sin editor (y agentes que te avisan)
 
 Mié 14 → mar 20-oct-2026 · 21 piezas: 3 YouTube horizontales + 18 verticales. Carruseles
-K7–K9 en `CARRUSELES.md`. Solo se lee a cámara el texto bajo cada ficha; los `####` no se leen.
+K7–K9 en `CARRUSELES-DIARIOS.md`. Solo se lee a cámara el texto bajo cada ficha; los `####` no se leen.
 Lo que dice «lo ves en pantalla» sale del drop indicado en la línea de Evidencia.
 
 Antes de grabar, re-verificar: costos de Higgsfield (cotizados el 29-sep con `higgsfield generate
@@ -390,7 +390,7 @@ El pedido exacto está en la comunidad de WhatsApp.
 
 ### D18-B · Vertical · Un video que sale de una página web
 **Fórmula:** F1 Resultado primero → cómo → comprobación → siguiente paso · **Pilar:** 4 Contenido con IA · **Destino:** web `sergiourcullo.vercel.app/stack`
-**Evidencia:** `scripts/hyperframes/README.md` «Motor de la casa» (A/B 2026-07-30; Apache-2.0 verificado 2026-08-21) · `.agents/skills/hyperframes-cli/SKILL.md` (Node 22+, FFmpeg; init / check / preview / render) · guía `/stack` sección HyperFrames
+**Evidencia:** `scripts/hyperframes/README.md` «Motor de la casa» (A/B 2026-07-30; Apache-2.0 verificado 2026-08-21) · `~/.claude/skills/hyperframes-cli/SKILL.md`, copia global desde el 29-sep (Node 22+, FFmpeg; init / check / preview / render) · guía `/stack` sección HyperFrames
 
 Esta tarjeta animada no la hice en un editor. Es una página web con tiempos, y sale un MP4.
 

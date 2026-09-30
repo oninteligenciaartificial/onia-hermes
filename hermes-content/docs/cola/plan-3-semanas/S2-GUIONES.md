@@ -8,7 +8,7 @@ de `MAPA.md` §4. Lo que se dice a cámara es el texto sin negrita; las líneas 
   R2 MCP de WhatsApp, R9 n8n 2.40, R10 Gemini 2.5, R11 Gemini TTS, reintentos y firma de
   webhooks de Meta, OGG/Opus para notas de voz, Stripe sin Bolivia, exportación de n8n.
   El banco del bot (62/62) y el control de frases se corrieron localmente el 29-sep.
-- **Carruseles K4-K6:** van en `CARRUSELES.md`, no acá.
+- **Carruseles K4-K6:** van en `CARRUSELES-DIARIOS.md`, no acá.
 - Piezas ✅ ya escritas: no se reescriben.
 
 ---

@@ -2,7 +2,59 @@
 
 **Archivo único del carril.** Actualizado 2026-09-29 por Claude (Opus 5.5).
 
-## ⏩⏩ Estado 29-sep tarde (lo más nuevo)
+## ☁️ 30-sep 14:10 UTC — el carril pasó a la nube
+
+- **Sesión viva: `session_012ppFowADbJNtZ6WBMtqpuf`** (nube). La de la laptop
+  (`session_01LV2Djb9n8BgziusUEoJRq7`) queda en pausa: si se retoma con Remote Control, `git pull` primero.
+- Rama al día con `main` (merge `f1579668`, sin conflictos).
+- **Render de carruseles en la nube: anda.** `eval "$(sh scripts/carousel_cloud_setup.sh)"` + `carousel_render.js`
+  → DM Sans y pie completos (mirado). Google Fonts responde 200 desde acá.
+- **Higgsfield desde acá:** el CLI `higgsfield` NO está instalado; el MCP de Higgsfield sí responde (saldo
+  486,91 cr, plan pro, leído sin gastar). cloudfront `d8j0ntlcm91z4` responde (403 de S3 en la raíz, no bloqueo).
+- **No se puede desde la nube:** brutos de `C:\Users\PC\Videos\ONIA-brutos`, auditoría de perfiles con el Chrome
+  logueado, publicar desde el VPS (sin llave; infra tiene un dueño). Eso sigue en la laptop.
+- **Heredado de Mercado (decisión de Sergio Urcullo, 30-sep):** las piezas de pauta dental **D1 «Los de mañana»** y
+  **D4 «Tratamiento a medias»** son de este carril. Briefs en `carousels/briefs/ads/onia-platform-dental-meta-d1-…json`
+  y `…-d4-…json`. Requisitos fijos en `ONIA_ADQUISICION_Y_PAUTA.md` §5.2/§5.4/§5.8 (abre con «Para dueños/as de
+  clínicas dentales en Santa Cruz», sin precio, CTA «Escribinos», solo capturas reales de la demo, solo lo que hace
+  la 1.0, sin testimonios). Capturas: las pone la sesión principal en `carousels/briefs/assets/onia-1.0-dental-ads/`.
+  Se muestran renderizadas a Sergio Urcullo antes de subir; campaña y encendido son de Mercado.
+
+## ⏩⏩⏩⏩ Pedido de Sergio Urcullo, 29-sep 20:30 (en curso)
+
+| # | Pedido | Estado |
+|---|---|---|
+| 1 | «Aprendé el método de sanmunoz» | Era su último carrusel: videos animados que Claude dibuja con código, sin grabarse. Ficha: `references/marca-personal/SANTIAGO-VIDEOS-ANIMADOS-POR-CODIGO.md`. El skill real llega por DM si se comenta «OPUS» (decisión de Sergio) |
+| 2 | Un carrusel por día, agendado | Publicador `ig-carrusel.mjs` listo (ensayo con 7 láminas hasta FINISHED, sin publicar). Calendario de los 21 días en `cola/plan-3-semanas/CARRUSELES-DIARIOS.md` (16:00 La Paz). **Hechos: K1–K9 y K10** (perilla de esfuerzo, mirado). **Faltan K11–K21**: tema, guion de origen y portada de cada uno ya están en ese archivo §2; se retoman desde ahí. Arreglos pendientes: K2 re-render con tema de marca (gratis), K8 portada vacía. Lote Higgsfield opcional de 4 portadas (0,48 cr) sin generar ni aprobar. Decisiones de Sergio: opción A o B de K1, e intercambiar K1↔K10 o no. Nada agendado todavía |
+| 3 | Configurar bien todos sus perfiles | Pendiente: auditoría de solo lectura (IG, TikTok, YouTube, LinkedIn) y propuesta de cambios para su OK |
+| 4 | ¿Qué hacemos con ONIA (@oniahq)? | Pendiente: mirar sus cuentas y proponer. Pista: el método de Santiago (anuncio dental hecho con código + una pantalla real del sistema) produce contenido de ONIA sin horas de grabación |
+| 5 | Comunidad semanal (expositores, networking, temas) | Anotado en `ONIA_COMUNIDAD_CONTENIDO.md` con el tema de cada semana; faltan sus decisiones (día, sede, fecha, nombre, expositores) |
+| 6 | Compartir entre sesiones | Avisos enviados a plataforma, limpieza de skills y Lucía v4. Regla nueva de Sergio (29-sep): compartir solo lo que le sirve a cada sesión, sin avisos de más. A Hermes el SendMessage no le llega: lo de coordinación va en `COORDINATION_MANIFEST.md` §EL HILO. Hermes lee «Para grabar hoy» de `S*-GUIONES.md` (formato `## Mié 30-sep` / `### DNN-X · Formato · Título`): no cambiarlo sin anotarlo en EL HILO |
+
+**Cierre del 29-sep (Sergio pidió pausar las sesiones):**
+- Alertas del publicador por la aduana `/root/bin/onia-tg.sh` (sistema), nunca curl directo: `agendar-publicacion.sh` e `ig-refrescar.sh` ya desplegados así.
+- Checklist de grabación (método de Santiago + nuestra edición) en `ORDEN-DE-PRODUCCION.md` §1b.
+- Sin commitear no queda nada. Riesgo conocido: el auto-sync de las 23:00 subió una versión intermedia de K10 (`fad8e2ff`); la final la reemplaza en el commit siguiente.
+- Retomar por: (1) perfiles, auditoría de solo lectura con Chrome; (2) propuesta para @oniahq; (3) K11–K21; (4) respuestas de Sergio (OPUS, comunidad, K1).
+
+## ⏩⏩⏩ Estado 29-sep noche: publicador
+
+- **Circuito listo, todavía SIN publicaciones reales:** Sergio deja los brutos en
+  `C:\Users\PC\Videos\ONIA-brutos\<fecha>\` → Claude edita, arma el paquete del día → «ok» de Sergio →
+  Claude publica desde el VPS. Doc: [`deploy/vps-ops/publicar/README.md`](../../deploy/vps-ops/publicar/README.md);
+  ritmo: [`cola/plan-3-semanas/FLUJO-DIARIO.md`](../cola/plan-3-semanas/FLUJO-DIARIO.md) (3 principales + 6 yaps a Trial).
+- **Instagram** (reel + Trial) por API propia, `ig-reel.mjs`: ensayado hasta FINISHED, falta el primer
+  `--publicar` real. **TikTok, YouTube Shorts y LinkedIn** por **Buffer Free**, `buffer-post.mjs`: cuenta,
+  3 canales y clave activos (clave solo en el VPS, vence 29-sep-2027). Probado con un borrador por red
+  (video adjunto, YouTube lo toma como Short) y borrados.
+- **Arreglo de infra hecho:** la ruta Traefik `/hermes-assets` comprimía los MP4 con gzip y Buffer no los
+  podía leer. Se le sacó `comprimir` solo a esa ruta; respaldo del archivo en el VPS
+  (`/root/onia-manual-routes.bak-hermes-assets-20260929212725`). Los demás sitios siguen respondiendo igual.
+- **Depende de Sergio Urcullo:** activar el compartido automático IG → Facebook (Centro de cuentas);
+  decidir si se pide la auditoría de YouTube (para que los largos salgan solos: hace falta registrar la
+  app en Google Cloud, que es un registro, no servidores). Hasta entonces, los largos los sube él.
+
+## ⏩⏩ Estado 29-sep tarde
 
 - **Diseño en un solo lugar:** skill `.claude/skills/diseno-contenido-onia/` (índice: fuentes de
   imagen, packs, patrones, QA, gasto) + galería única `hermes-content/galeria/` con

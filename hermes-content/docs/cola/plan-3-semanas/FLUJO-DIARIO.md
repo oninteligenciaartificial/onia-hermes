@@ -13,6 +13,11 @@ Propuesta de Claude, 29-sep-2026, para que Sergio Urcullo la corrija. Qué graba
 | **1 horizontal** (lun · mié · vie) | **Video largo** | YouTube: lo subís vos con el paquete listo (archivo, título, descripción con capítulos, miniatura). Buffer solo sube Shorts y la API propia lo dejaría privado hasta la auditoría |
 | | **1 clip vertical** con el mejor tramo de 45 s | reel principal del día siguiente o yap Trial |
 
+**Links a Onia con origen (desde el 29-sep):** todo link en caption, bio o historia a `onia.com.bo` o
+`app.onia.com.bo/register` lleva `?utm_source=<red>&utm_medium=organico&utm_campaign=<pieza>` (por ejemplo
+`utm_source=instagram&utm_campaign=s2-d07`). La 1.0 guarda de dónde vino cada alta y se lo avisa a
+Sergio; sin parámetros queda «sin dato». Los links a la web personal o a la comunidad no lo necesitan.
+
 **Por qué los yaps van a Trial:** prueban ganchos distintos con gente que no te sigue, sin llenarle
 el feed a tus seguidores. El que funciona, Instagram lo pasa solo (`--trial auto`).
 **Por qué no a TikTok:** Trial es una función de Instagram; en TikTok van solo los principales.
@@ -30,9 +35,10 @@ el feed a tus seguidores. El que funciona, Instagram lo pasa solo (`--trial auto
 **Cuenta del día: 3 principales + 6 yaps = 9, + carrusel o toma extra sin edición = 10-12.** Cumple la
 regla de 10-13 de `ONIA_ESTRUCTURA_PUBLICACION_DIARIA.md` sin grabar más de 1 hora (tope de la API:
 100 publicaciones cada 24 h).
-Carruseles: mar · jue · sáb, en el horario de B.
-Instagram se agenda en el VPS, una publicación por comando (sin cola que pueda «despertar» y publicar
-sola, como pasó con Postiz el 4-sep). TikTok, Shorts y LinkedIn entran a la cola de Buffer **solo
+Carruseles: uno por día a las 16:00 La Paz (calendario en `CARRUSELES-DIARIOS.md`), agendados con `ig-carrusel.mjs` recién con el OK de Sergio.
+Instagram se agenda en el VPS con `agendar-publicacion.sh`, una publicación por timer de systemd (sin
+cola que pueda «despertar» y publicar sola, como pasó con Postiz el 4-sep: si el VPS se reinicia, lo
+agendado no sale y se reagenda). TikTok, Shorts y LinkedIn entran a la cola de Buffer **solo
 después de tu «ok»**; el plan gratis admite 10 en cola por canal (unos 3 días por delante).
 
 ## Cómo se mantiene el ritmo sin quemarte
