@@ -163,7 +163,7 @@
       "costo_cr": 25,
       "dataset": "16 fotos con el look vigente: V01-V08 (Seedream+ancla, 0,777-0,858) + ancla espejo + P1-P4 + E1, E3, E4. Detalle en v4/PROCEDENCIA.jsonl (type soul_train, LUCIA-v5).",
       "siguiente": "cuando este ready: 6 imagenes soul_2 (0,72 cr) en las escenas de la prueba del v4 (S1, S2, S3 x2) y A/B contra Seedream+ancla con face_identity_qa. Gana el que mida mas; si empatan, Soul (8x mas barato por imagen).",
-      "decide": "Sergio Urcullo, mirando las dos"
+      "decide": "Sergio Urcullo 2026-09-30: 'usaremos la nueva version del soul, si decis que no perdemos nada'. Regla: el v5 pasa a PRINCIPAL si en el A/B de v4/prompts/ab-soul-v5.json mide >= Seedream+ancla - 0,02 y se ve igual de joven al MIRARLO; si pierde, sigue Seedream+ancla y el v5 queda de respaldo. No se lo declara principal antes de medir."
     },
     "metodo_diario": "seedream_v4_5 9:16 basic; image_references=[abe2e6bd (ancla espejo) PRIMERA, a7cfb766, d7d6d36a, df491c87, 8ce2f65c]; prompt: escena + 'Same face, skin and freckles as the first reference image' + prompt_clausula_belleza. 1 cr/imagen. Medido 0,828-0,875."
   },
