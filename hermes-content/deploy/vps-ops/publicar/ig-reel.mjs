@@ -19,15 +19,15 @@ import crypto from 'node:crypto';
 import { parseArgs } from 'node:util';
 import { fileURLToPath } from 'node:url';
 
-const API = 'https://graph.instagram.com/v25.0';
+export const API = 'https://graph.instagram.com/v25.0';
 // Con Instagram Login la API NO acepta subida directa (rupload es solo para Facebook Login, doc
 // content-publishing 29-sep): pide video_url pública. Se sirve un rato desde onia.com.bo/hermes-assets
 // (ruta Traefik ya existente -> contenedor nginx `onia-assets`, solo lectura, sin listado) con nombre
 // aleatorio, y se borra apenas Instagram termina de procesarlo.
-const PUBLIC_DIR = '/root/publicar/public';
-const PUBLIC_URL = 'https://onia.com.bo/hermes-assets';
+export const PUBLIC_DIR = '/root/publicar/public';
+export const PUBLIC_URL = 'https://onia.com.bo/hermes-assets';
 const CONF = '/root/.config/onia-publicar';
-const LEDGER = '/root/publicar/publicado.jsonl';
+export const LEDGER = '/root/publicar/publicado.jsonl';
 const TRIAL = { manual: 'MANUAL', auto: 'SS_PERFORMANCE' };
 
 export function containerParams({ caption, trial, coverMs, videoUrl }) {
@@ -40,7 +40,7 @@ export function containerParams({ caption, trial, coverMs, videoUrl }) {
   return p;
 }
 
-function loadEnv(cuenta) {
+export function loadEnv(cuenta) {
   if (!/^[a-z0-9-]+$/.test(cuenta)) throw new Error('cuenta inválida');
   const env = Object.fromEntries(fs.readFileSync(path.join(CONF, `ig-${cuenta}.env`), 'utf8')
     .split('\n').filter(Boolean).map((l) => [l.slice(0, l.indexOf('=')), l.slice(l.indexOf('=') + 1)]));
@@ -48,7 +48,7 @@ function loadEnv(cuenta) {
   return env;
 }
 
-async function call(url, opts = {}) {
+export async function call(url, opts = {}) {
   const r = await fetch(url, opts);
   const j = await r.json().catch(() => ({}));
   if (!r.ok || j.error) throw new Error(`${r.status} ${JSON.stringify(j.error || j).slice(0, 300)}`);
