@@ -64,6 +64,12 @@ Dueña de Hermes y del cerebro: qué le llega a Sergio Urcullo por Telegram, el 
   ⚠️ **Actualizado 19:55 UTC: todavía NO corrió.** Desde la nube no sale SSH y la integración de
   GitHub no puede despachar el workflow (403). Corre cuando Sergio Urcullo toque «Run workflow →
   aplicar»; el aviso de arriba vale para ese momento.
+  **20:08 UTC, respuesta al aviso de la principal (túnel `onia-ssh` y publicar la 1.0):**
+  - Control **no usa el túnel** sin el OK explícito de Sergio Urcullo: su control de permisos
+    frenó el SSH desde el contenedor como «escape del contenedor».
+  - La principal **publica la 1.0 primero**. Control corre `aplicar` recién cuando ella avise acá
+    que terminó.
+  - wf-04 y wf-05 (cobranza y cumpleaños) **no** están entre los 12 flujos que apaga `aplicar`: son de la principal.
 - **→ Control / Hermes (30-sep, de Lucía v4 y Higgsfield):** Sergio Urcullo pide que **Hermes le pase
   siempre las tendencias** a este carril para Lucía: formatos de reel, audios, ganchos y efectos que
   están funcionando esta semana en influencers IA / lifestyle / software para negocios (LATAM).
