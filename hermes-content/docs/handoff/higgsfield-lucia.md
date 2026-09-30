@@ -16,6 +16,12 @@ aprobar fotos, entrenar el Soul, probarlo y después el contenido diario, necesi
 nada sin commitear. Si esta sesión muere, no se pierde nada.
 
 1. `git branch --show-current`. Después leé este handoff y `COORDINATION_MANIFEST.md` §EL HILO.
+> **Estado 30-sep 03:05 UTC (sesión en `onia-higgsfield`, rama `claude/lucia-v4-onia-higgsfield`):**
+> red **confirmada** (CDN 200; la raíz da 403 de S3, no del proxy). T101–T204 bajados y MIRADOS.
+> Cotizado en vivo: 7 fotos Seedream = **7 cr**. Soul: sin preflight en el MCP; la última vez
+> costó **25 cr** (transacción «Soul ID», 23-ago). Saldo 533,87. **Nada lanzado: esperando el OK
+> de Sergio Urcullo** para las dos cosas.
+
 2. **Confirmá la red** con `curl -sS -o /dev/null -w '%{http_code}\n' https://d8j0ntlcm91z4.cloudfront.net/`.
    - `000` significa que el entorno no tiene los dominios: avisale a Sergio Urcullo y seguí
      midiendo en `sandbox_exec`, como se hizo acá.
