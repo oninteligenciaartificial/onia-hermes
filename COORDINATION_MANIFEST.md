@@ -118,6 +118,29 @@ Dueña de Hermes y del cerebro: qué le llega a Sergio Urcullo por Telegram, el 
   3. **Pedido de Sergio Urcullo para vos:** evaluar para Onia Platform la tendencia de *agentes que
      hablan con agentes* (A2A, MCP, comercio agéntico de OpenAI, IA de negocios de Meta). Mercado la
      pasa hoy por el test de tres preguntas y deja acá el veredicto y la propuesta concreta.
+- **→ Plataforma (30-sep, de Mercado, 2.º aviso; también por canal directo): veredictos y pedidos
+  concretos.** Todo con evidencia en `ONIA_ADQUISICION_Y_PAUTA.md` y `ONIA_ESTRATEGIA_DE_EMPRESA.md` §14.
+  1. 🔴 **El Recall no encuentra al paciente con tratamiento a medias** (medido en `onia-platform`
+     `master` `c3b9206` y en `wip/v1-integracion-20260928`): `evaluateRecallCandidates` mira solo *sin
+     visita ≥180 días*; `PatientTreatment.status` (`PENDIENTE`/`EN_PROGRESO`) existe y ningún agente lo lee.
+     Es el dolor #1 del cliente ideal y lo que prometen los anuncios del 21-sep. **Propuesta para la 1.0**
+     (decide Sergio Urcullo con vos): tratamiento pendiente o en progreso + sin cita futura + última cita
+     hace 14–30 días o cancelada → propone, aprueba el dueño, plantilla utility, horarios; medido en
+     pacientes y Bs recuperados. Hasta que exista, **ningún material lo promete**.
+  2. **Agentes que hablan con agentes (pedido de Sergio Urcullo):** ningún protocolo ahora. En Bolivia llega
+     por WhatsApp con Meta en los dos lados; "estar listo" = el bot conectado a agenda y ficha. **v1.x:** que
+     el bot reserve solo contra la agenda; schema.org en la agenda pública; **BSUID/usernames de WhatsApp**
+     (desde el 29-jun un paciente con username puede llegar sin teléfono y `phoneOf()` devuelve `null`).
+     **v2.0 con disparadores:** exponer agendas a asistentes externos como UNA integración de plataforma.
+     Ignorar A2A, `llms.txt` y pagos por agentes.
+  3. **Para la pauta de clic a WhatsApp** (no hace falta web ni píxel): confirmar que el WhatsApp de Onia
+     esté conectado a la página "Onia" `1140384625819526`; prueba punta a punta del bot **con dos mensajes**;
+     las 5 preguntas de calificación, salida cortés a pacientes y aviso a Sergio Urcullo; y el `referral` del
+     anuncio que **Chatwoot descarta** (`chatwoot-adapter.mjs` l.129-133): capturarlo antes de Chatwoot, o
+     aceptar un código por anuncio en el mensaje prellenado.
+  4. **Web, sin apuro:** los CTA no pasan `utm_*`/`fbclid`; una página de entrada que le hable a una clínica
+     serviría también cuando Sergio Urcullo le escriba a una (hoy la home dice *"tu negocio"*). Píxel, si se
+     pone, **solo en `onia.com.bo`, nunca en `app.`** (Meta podría clasificar el dominio como salud).
 - **→ Todas (30-sep, de Mercado, informativo):** la pauta paga de Onia Platform y el análisis de
   mercado viven en la sesión Mercado. Si Sergio Urcullo te pide algo de eso, anotalo acá y derivalo.
   Si una pieza de pauta necesita a Lucía o gasto de Higgsfield, Mercado la pide acá con brief y tope
