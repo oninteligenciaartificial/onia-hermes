@@ -4,6 +4,21 @@
 > drop/día (texto + link, imagen simple opcional). Este archivo guarda el plan y los
 > drops listos para pegar. Datos que sostienen el plan: abajo, §Evidencia.
 
+## Estado al 30-sep-2026 (captura de Sergio Urcullo) y ritmo vigente
+
+- **~30 miembros.** Último aviso: **22-sep** (saludo, llamadas 1-a-1 `cal.com/sergiourcullo/20min`,
+  «dinámicas gratis todas las semanas» y la pregunta de qué experto quieren). Ocho días sin aviso.
+- **Prioridad de Sergio Urcullo (30-sep): primero la comunidad de WhatsApp, después el presencial.**
+- **Ritmo vigente desde el 1-oct:** avisos lun/mié/vie 19:00 atados al video del día, wins el
+  viernes y audio el domingo. Reemplaza al «1 drop/día» de §Cadencia, que con una sola persona se
+  cortó. Textos de la vuelta: `cola/drops/2026-10-01.md`.
+- **Qué es exclusivo (decisión razonada, 30-sep):** los videos de YouTube siguen PÚBLICOS. Lo
+  exclusivo es lo de §«Las seis cosas» de `ONIA_COMUNIDAD_QUE_LA_HACE_VALER.md`: llega primero
+  (el link del video 24 h antes, sin listar), el archivo o prompt completo, lo que salió mal, y
+  poder preguntar. Esconder el video mata el alcance que trae gente nueva.
+- **Presencial:** se convoca cuando la encuesta de la semana 2 dé un mínimo de confirmados
+  (propuesto: 15; falta el OK de Sergio Urcullo).
+
 ## Evidencia (2026-08-31, medida en vivo)
 
 **IG de Sergio (45 posts, 427 seg):** lo personal/humor aplasta a las listas —

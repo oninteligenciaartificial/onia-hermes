@@ -18,7 +18,7 @@ sigue valiendo para K1–K9 con las mismas fechas.
 | Fecha | Día | K# | Tema | De qué guion sale | Carpeta del render | Hora | Estado |
 |---|---|---|---|---|---|---|---|
 | 30-sep | mié | K10 | La perilla de esfuerzo de Claude Code | S1 D01-C YouTube (parte «esfuerzo») + D02-A (V4) | `sergio-k10v2-perilla-de-esfuerzo-20260929` | 16:00 | listo para aprobar |
-| 1-oct | jue | K1 | Opus 5.5 o Sonnet 5.5: cuál usar | S1 D01-C YouTube + D01-B | `sergio-k1-opcion-b-clay-20260929` o `sergio-k1-opcion-a-acuarela-20260929` | 16:00 | listo para aprobar (elegir A o B) |
+| 1-oct | jue | K1 | Opus 5.5 o Sonnet 5.5: cuál usar | S1 D01-C YouTube + D01-B | `sergio-k1-opcion-b-clay-20260929` | 16:00 | ✅ **B (arcilla) elegida por Sergio Urcullo el 30-sep.** Sale después del drop del ejercicio en la comunidad (`cola/drops/2026-10-01.md`) |
 | 2-oct | vie | K11 | El hook que commitea solo, y su guarda | S1 D03-A | — | 16:00 | pendiente |
 | 3-oct | sáb | K2 | Tu primera skill en 5 pasos | S1 D01-A (V6) | `sergio-k2v2-primera-skill-20260929` | 16:00 | listo para aprobar ⚠️ ver §3 |
 | 4-oct | dom | K12 | Dos sesiones de Claude Code sin pisarse (worktrees) | S1 D05-A | — | 16:00 | pendiente |
@@ -71,7 +71,7 @@ Todo número sale del guion y está verificado en su archivo fuente el 29-sep.
   gratis: ponerle `theme` a sus láminas (portada `verde`, cierre `negro`) y re-renderizar.
 - **K8 (17-oct):** la portada es `ilustrado` sin imagen: queda un bloque verde con el título
   arriba y más del 40 % vacío. O se genera su imagen (lote de abajo) o se pasa a `dato`/`logos`.
-- **K1 (1-oct):** falta que Sergio Urcullo elija la opción A (acuarela) o B (arcilla).
+- **K1 (1-oct):** ✅ opción B (arcilla), elegida por Sergio Urcullo el 30-sep. El intercambio K1↔K10 ya no aplica: no hay video grabado todavía, sale K1 primero.
 - **Referencias viejas:** `MAPA.md` (líneas 4-5), `S2-GUIONES.md` y `S3-GUIONES.md` citan
   `CARRUSELES.md`, que no existe; `MAPA.md` §3 y `FLUJO-DIARIO.md` dicen «carrusel mar · jue ·
   sáb». Hay que apuntarlos a este archivo.
