@@ -154,8 +154,17 @@ aplicar,revertir}.sh` · `scripts/loops/onia-tg.sh` + `onia-tg-aduana.test.mjs` 
   SSH (§5.11) ni despacho (§5.12). **Lo único que enciende a Jarvis hoy es su toque:** GitHub →
   Actions → «Hermes Jarvis — acceso controlado al VPS» → Run workflow → rama `main` → acción
   **`aplicar`**. La sesión de control lee el log y verifica sola. Para deshacer: la misma, con
-  **`revertir`**. Sin toques de verdad exige una sesión que corra en su laptop (`claude
-  remote-control`, con su llave): la principal ya se la pidió.
+  **`revertir`**.
+- **Para que no haga falta ningún toque (propuesto el 30-sep 20:00 UTC, pendiente de su OK):**
+  un token de GitHub *fine-grained*, SOLO para `onia-hermes` y SOLO con permiso **Actions: Read
+  and write**, con vencimiento de 1 año. Lo guarda él como variable **`GH_ACTIONS_TOKEN`** en el
+  entorno «Onia», nunca en el chat. Con eso la sesión de control despacha el workflow por la API
+  (`POST /repos/oninteligenciaartificial/onia-hermes/actions/workflows/hermes-jarvis.yml/dispatches`,
+  `ref=main`; `api.github.com` responde 200 desde «Onia», medido) y lee el log como hasta ahora.
+  Las variables nuevas entran en **sesiones nuevas**: si esta no la ve, la ve la siguiente.
+  **Descartado:** disparar `aplicar` con cada push a `main`. No pide nada, pero cualquier sesión
+  (y el auto-sync, ~28 commits/día) correría scripts como root en el VPS, incluso uno a medio
+  escribir. Además, es el rodeo que el control de permisos frenó el 29-sep (§5.2).
 - Decidir: ¿quiere «reunión en 30 min» por Telegram, o le alcanza el aviso de su calendario?
 - Del carril Lucía v4: borrar en la web de Higgsfield los 9 Souls viejos que siguen «ready»
   (alcance en `deletion_scope_2026_09_29` de `LUCIA-HIGGSFIELD-IDENTITY.json`), y el OK a los 7
