@@ -1,11 +1,15 @@
-# Sesión madre: orquestación de Onia
+# Sesión principal de Onia Platform y plan común de venta
 
-> Sergio Urcullo, 30-sep-2026: «vos sos como la sesión madre… armá handoff y mudamos contexto y las
-> tareas allá, de todas las sesiones». La sesión madre es **«Onia platform development handoff»**, que
-> pasa a correr en la nube, entorno **«Onia»** (`env_01BLwXdgpqDS3sx4rg3r2uvg`). Coordina el objetivo
-> común y el orden; **cada sesión hace lo suyo, con sus propios agentes, hooks y reglas**, y se entera
-> solo de lo que le sirve y es de su incumbencia (regla de Sergio del 29-sep). La entrega a Sergio
-> (Telegram, resumen 06:30, cierre 21:30, calendario) sigue siendo de la sesión de control.
+> Sergio Urcullo, 30-sep-2026: «como sesión madre me refiero a que aquí manejamos la mayoría de
+> cosas, pero tu objetivo es Onia Platform». Quedó así:
+> - **«Onia platform development handoff»** es la sesión PRINCIPAL de trabajo: acá se maneja la mayoría
+>   de lo de Onia Platform (producto, web pública, SIAT, sales-kit). Su objetivo único es la plataforma:
+>   publicar la 1.0 y empezar a venderla. Corre en la nube, entorno **«Onia»**
+>   (`env_01BLwXdgpqDS3sx4rg3r2uvg`), con acceso al VPS por la llave revocable `claude-cloud-20260930`.
+> - **La orquestación entre sesiones sigue siendo de la sesión de control** («Hermes y Sergio
+>   management system»): EL HILO, entrega a Sergio, calendario, tablero. Dos orquestadores se pisan.
+> - Cada sesión hace lo suyo con sus propios agentes, hooks y reglas, y se entera solo de lo que le
+>   sirve (regla de Sergio del 29-sep). La principal le pasa a las demás solo lo que toca la plataforma.
 
 ## 1. Objetivo común (todas las sesiones)
 
@@ -19,7 +23,7 @@ discurso.
 
 | Quién | Qué | Hecho cuando |
 |---|---|---|
-| **Madre / Plataforma** | Publicar la 1.0 (OK de Sergio dado el 30-sep, «modificable hasta que me guste»); demo dental con datos que muestren los agentes (una cita de mañana sin confirmar, un tratamiento a medias); medición probada (alta con `?utm_source=prueba` guardada con su origen, píxel visto en «Probar eventos») | 5 migraciones aplicadas con respaldo, pantallas miradas en producción, medición vista en vivo |
+| **Principal (Plataforma)** | Publicar la 1.0 (OK de Sergio dado el 30-sep, «modificable hasta que me guste»); demo dental con datos que muestren los agentes (una cita de mañana sin confirmar, un tratamiento a medias); medición probada (alta con `?utm_source=prueba` guardada con su origen, píxel visto en «Probar eventos») | 5 migraciones aplicadas con respaldo, pantallas miradas en producción, medición vista en vivo |
 | **Sergio** | Contestar los 3 pedidos de acceso sin contactar; hablar con 10 clínicas de Santa Cruz (demo); crear cuentas de competencia (Lety y Dapta primero) | 10 conversaciones con objeciones anotadas |
 | **Mercado** | Pauta chica de clic a WhatsApp, solo dental (plan en `research/onia-1.0-29sep/CAMPANA_META_ADS.md` + `ONIA_ADQUISICION_Y_PAUTA.md`), nada gastado sin el OK de Sergio | Campaña lista para encender cuando la 1.0 esté publicada |
 | **Marca personal** | Contenido que lleve al WhatsApp o a la web con `utm_*` en cada link; nada de «la IA maneja tu negocio» | Cada pieza con su código de origen |
@@ -32,7 +36,7 @@ Métricas que mandan: conversaciones calificadas → demos → pruebas activas �
 
 | Sesión | Dónde | Rama | Es dueña de | Estado / handoff |
 |---|---|---|---|---|
-| **Onia platform development handoff** (madre) | nube, entorno Onia | ramas `wip/v1-*` (platform y hermes) | onia-platform, web pública (código), SIAT, sales-kit, orquestación | `handoff/codex-continuar-1.0.md` (bloque «EMPEZÁ ACÁ 30-sep madrugada») en `origin/wip/v1-hermes-20260928` |
+| **Onia platform development handoff** (principal) | nube, entorno Onia | ramas `wip/v1-*` (platform y hermes) | onia-platform, web pública (código), SIAT, sales-kit | `handoff/codex-continuar-1.0.md` (bloque «EMPEZÁ ACÁ 30-sep madrugada») en `origin/wip/v1-hermes-20260928` |
 | **Hermes y Sergio management system** (control) `session_01BZJvUfEXbqT9wNLJ6n5XZP` | nube | `claude/hermes-jarvis` | entrega a Sergio, EL HILO, calendario, tablero | `handoff/hermes-jarvis.md` |
 | **Análisis de mercado Onia Platform** `session_01BnctfaNRsm3ogJ46A7B5P5` | nube | `claude/nice-lamport-5og9lv` | cómo consiguen clientes, pauta Meta Ads, tamaño de mercado | `handoff/mercado-y-pauta.md` |
 | **Marca personal: comunidad y contenido** `session_01LV2Djb9n8BgziusUEoJRq7` | local (laptop) | `claude/marca-personal-contenido-ae658c` | guiones, carruseles, publicador IG/Buffer | `handoff/marca-personal.md` |
