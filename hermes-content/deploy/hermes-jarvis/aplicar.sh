@@ -8,7 +8,8 @@
 # eligió qué le llega (hermes-content/docs/ONIA_CEREBRO.md, «La regla de entrega»):
 #
 #   ENTRA   06:30 resumen · 21:30 cierre · voz 06:35 (narra el resumen) · sus bloques del
-#           calendario cada 30 min · la aduana suelta lo retenido al terminar un bloque
+#           calendario cada 30 min · la aduana suelta lo retenido al terminar un bloque ·
+#           (30-sep) Hermes agenda, mueve y cancela en SU calendario, siempre con su sí
 #   SALE    parte diario 05:00 (va DENTRO del resumen) · agenda de Hermes 08:00 · plan de video
 #           08:10 · veredicto 16:00 · 12 flujos de n8n que sólo le mandaban reportes
 #   CAMBIA  el vigía de loops deja de escribirle: un loop caído es tarea del tablero
@@ -41,7 +42,9 @@ al_dia() {
   [ -x "$BIN/onia-jarvis-resumen.sh" ] && [ -x "$BIN/onia-agenda.sh" ] \
     && grep -q ONIA_AVISO_PUEDO "$BIN/onia-tg.sh" 2>/dev/null \
     && grep -q ONIA_AVISO_PUEDO "$BIN/onia-vigia-aprobaciones.sh" 2>/dev/null \
-    && grep -q '^avisar()' "$BIN/claude-guardia.sh" 2>/dev/null
+    && grep -q '^avisar()' "$BIN/claude-guardia.sh" 2>/dev/null \
+    && grep -q ONIA_AGENDA_CAMBIOS_URL "$BIN/onia-agenda.sh" 2>/dev/null \
+    && grep -q cierre-bloques "$BIN/onia-jarvis-resumen.sh" 2>/dev/null
 }
 if ! al_dia; then
   echo "todavía no: corro una vez el sincronizador de cada hora"
@@ -67,7 +70,8 @@ for d in $(ls -dt /root/backups/hermes-jarvis-*/ 2>/dev/null); do
 done
 if [ -n "$PREVIO" ]; then
   echo "hay un aplicar anterior sin revertir ($PREVIO): heredo sus listas"
-  for f in interruptor.antes hermes-pausados.txt n8n-apagados.txt n8n-agenda-id; do
+  for f in interruptor.antes hermes-pausados.txt n8n-apagados.txt n8n-agenda-id n8n-cambios-id \
+           skill-destino skill-antes.md skill-no-existia SOUL.md.antes; do
     [ -f "$PREVIO/$f" ] && cp "$PREVIO/$f" "$BK/$f"
   done
 fi
@@ -211,6 +215,10 @@ fi
 sec "5. Lector de su calendario personal"
 CONF=/root/.config/onia/agenda.env
 HOY=$(date -u -d '-4 hours' +%F)
+conf_poner() {  # conf_poner CLAVE valor — reemplaza o agrega UNA línea de $CONF (600), sin tocar las otras
+  mkdir -p "$(dirname "$CONF")"
+  ( umask 077; touch "$CONF"; { grep -v "^$1=" "$CONF"; printf '%s=%s\n' "$1" "$2"; } > "$CONF.$$" && mv -f "$CONF.$$" "$CONF" )
+}
 AGENDA_OK=0
 if [ -f "$CONF" ] && "$BIN/onia-agenda.sh" "$HOY" </dev/null >/dev/null 2>&1; then
   AGENDA_OK=1; echo "✅ ya estaba conectado"
@@ -256,8 +264,7 @@ PY
     if [ -n "$WF" ]; then
       # La ruta se guarda APENAS existe el flujo: si la activación falla, la próxima corrida
       # lo reactiva en vez de crear otro sin saber su llave.
-      mkdir -p "$(dirname "$CONF")"
-      ( umask 077; printf 'ONIA_AGENDA_URL=%s/webhook/%s\nONIA_AGENDA_WF=%s\n' "$N8N_HOST" "$SECRETO" "$WF" > "$CONF" )
+      conf_poner ONIA_AGENDA_URL "$N8N_HOST/webhook/$SECRETO"; conf_poner ONIA_AGENDA_WF "$WF"
       if [ "$(api -X POST "$N8N_HOST/api/v1/workflows/$WF/activate" | campo active)" = True ]; then
         echo "creé el flujo «ONIA - Agenda hoy (Jarvis)» ($WF); la ruta quedó en $CONF"
       else
@@ -278,6 +285,127 @@ if [ "$AGENDA_OK" = 1 ]; then
   "$BIN/onia-agenda.sh" --bloques "$HOY" </dev/null 2>&1 | redactar
   echo "--- bloques en los que no le va a sonar nada:"
   cut -f2- "$ESTADO/bloques-hoy.tsv" 2>/dev/null | redactar
+fi
+
+# ── 5b. Cambiar su calendario ───────────────────────────────────────────────────
+sec "5b. Cambios en su calendario (agendar, mover, cancelar)"
+CAMBIOS_OK=0
+if [ "$AGENDA_OK" != 1 ] || [ "$N8N_OK" != 1 ]; then
+  echo "· no lo armo: sin lector de calendario o sin la API de n8n no hay cómo verificarlo"
+else
+  WFC=$(grep -oP '(?<=^ONIA_AGENDA_CAMBIOS_WF=).*' "$CONF" 2>/dev/null)
+  [ -z "$WFC" ] && [ -f "$BK/n8n-cambios-id" ] && WFC=$(cat "$BK/n8n-cambios-id")
+  if [ -n "$WFC" ] && grep -q '^ONIA_AGENDA_CAMBIOS_URL=' "$CONF" \
+     && [ "$(api -X POST "$N8N_HOST/api/v1/workflows/$WFC/activate" | campo active)" = True ]; then
+    echo "el flujo de cambios ya existía: activo"
+  else
+    SECRETO=$(python3 -c 'import secrets; print(secrets.token_hex(20))')
+    python3 - "$SECRETO" "$CAL_PERSONAL" "$CRED_GCAL" > "$BK/n8n-cambios-nuevo.json" <<'PY'
+import json, sys, uuid
+secreto, calendario, cred = sys.argv[1:4]
+w, h, r = "Pedido de cambio", "Cambiar en su calendario", "Responder"
+eventos = "https://www.googleapis.com/calendar/v3/calendars/" + calendario.replace("@", "%40") + "/events"
+cuerpo = ("={{ JSON.stringify($json.body.op === 'crear'"
+          " ? { summary: $json.body.titulo,"
+          "     start: { dateTime: $json.body.inicio, timeZone: 'America/La_Paz' },"
+          "     end: { dateTime: $json.body.fin, timeZone: 'America/La_Paz' } }"
+          " : $json.body.op === 'mover'"
+          " ? { start: { dateTime: $json.body.inicio, timeZone: 'America/La_Paz' },"
+          "     end: { dateTime: $json.body.fin, timeZone: 'America/La_Paz' } }"
+          " : { status: 'cancelled' }) }}")
+print(json.dumps({
+    "name": "ONIA - Agenda cambios (Jarvis)",
+    "nodes": [
+        {"id": str(uuid.uuid4()), "name": w, "type": "n8n-nodes-base.webhook", "typeVersion": 2,
+         "position": [0, 0], "webhookId": str(uuid.uuid4()),
+         "parameters": {"httpMethod": "POST", "path": secreto, "responseMode": "responseNode", "options": {}}},
+        # La API de Google directo, con la MISMA credencial que el lector. Crear = POST; mover y
+        # cancelar = PATCH (cancelar es status «cancelled», que en un evento que se repite
+        # cancela solo ESA repetición y deja la serie).
+        {"id": str(uuid.uuid4()), "name": h, "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2,
+         "position": [240, 0],
+         "parameters": {
+             "method": "={{ $json.body.op === 'crear' ? 'POST' : 'PATCH' }}",
+             "url": "=" + eventos + "{{ $json.body.op === 'crear' ? '' : '/' + encodeURIComponent($json.body.id) }}",
+             "authentication": "predefinedCredentialType",
+             "nodeCredentialType": "googleCalendarOAuth2Api",
+             "sendQuery": True,
+             "queryParameters": {"parameters": [{"name": "sendUpdates", "value": "none"}]},
+             "sendBody": True, "specifyBody": "json", "jsonBody": cuerpo, "options": {}},
+         "credentials": {"googleCalendarOAuth2Api": {"id": cred, "name": "Google Calendar account"}}},
+        {"id": str(uuid.uuid4()), "name": r, "type": "n8n-nodes-base.respondToWebhook", "typeVersion": 1.1,
+         "position": [480, 0], "parameters": {"respondWith": "allIncomingItems", "options": {}}},
+    ],
+    "connections": {w: {"main": [[{"node": h, "type": "main", "index": 0}]]},
+                    h: {"main": [[{"node": r, "type": "main", "index": 0}]]}},
+    "settings": {"executionOrder": "v1", "saveDataSuccessExecution": "none"},
+}))
+PY
+    RESP=$(api -X POST -H 'Content-Type: application/json' --data-binary @"$BK/n8n-cambios-nuevo.json" "$N8N_HOST/api/v1/workflows")
+    rm -f "$BK/n8n-cambios-nuevo.json"   # lleva la ruta secreta
+    WFC=$(printf '%s' "$RESP" | campo id)
+    if [ -n "$WFC" ]; then
+      conf_poner ONIA_AGENDA_CAMBIOS_URL "$N8N_HOST/webhook/$SECRETO"; conf_poner ONIA_AGENDA_CAMBIOS_WF "$WFC"
+      if [ "$(api -X POST "$N8N_HOST/api/v1/workflows/$WFC/activate" | campo active)" = True ]; then
+        echo "creé el flujo «ONIA - Agenda cambios (Jarvis)» ($WFC)"
+      else
+        falla "creé el flujo de cambios ($WFC) pero n8n no lo activó"
+      fi
+    else
+      falla "n8n no aceptó el flujo de cambios: $(printf '%s' "$RESP" | campo message | head -c 300)"
+    fi
+  fi
+  [ -n "$WFC" ] && echo "$WFC" > "$BK/n8n-cambios-id"
+  # Verificar es MIRAR: un evento de prueba en su calendario —pasado mañana a las 03:00, dormido,
+  # sin invitados, nadie recibe nada— se crea, se mueve y se cancela, y cada paso se lee de vuelta.
+  sleep 2
+  F=$(date -u -d '+2 days -4 hours' +%F)
+  PRUEBA="🧪 Prueba de Jarvis — se borra sola"
+  if SAL=$("$BIN/onia-agenda.sh" crear "$F" 03:00 03:15 "$PRUEBA" --si </dev/null 2>&1); then
+    PID=$(printf '%s' "$SAL" | grep -oP '(?<=\(id )[^)]+')
+    if [ -n "$PID" ] && "$BIN/onia-agenda.sh" mover "$PID" "$F" 03:15 03:30 --si </dev/null >/dev/null 2>&1 \
+       && "$BIN/onia-agenda.sh" --ids "$F" </dev/null 2>/dev/null | grep -qP "^${PID}\t03:15\t03:30\t" \
+       && "$BIN/onia-agenda.sh" cancelar "$PID" --si </dev/null >/dev/null 2>&1 \
+       && ! "$BIN/onia-agenda.sh" --ids "$F" </dev/null 2>/dev/null | grep -qP "^${PID}\t"; then
+      CAMBIOS_OK=1; echo "✅ probado en su calendario: crear → mover → cancelar (la prueba ya no está)"
+    else
+      falla "la prueba de cambios quedó a medias: revisar «$PRUEBA» del $F en su calendario"
+    fi
+  else
+    falla "no pude crear el evento de prueba: $(printf '%s' "$SAL" | head -c 200)"
+  fi
+fi
+
+# ── 5c. Que Hermes lo sepa usar ────────────────────────────────────────────────
+sec "5c. Hermes: la skill de su calendario y la regla en su SOUL"
+REPO_VPS=/root/loops/onia-hermes
+NUEVA=$(git -C "$REPO_VPS" show origin/main:hermes-content/skills/agenda-calendario.md 2>/dev/null)
+if ! printf '%s' "$NUEVA" | grep -q 'onia-agenda.sh crear'; then
+  falla "no encontré la skill nueva en origin/main del VPS"
+else
+  echo "--- skills de Hermes (la forma de la carpeta):"
+  ls /root/.hermes/skills 2>/dev/null | head -40 | tr '\n' ' '; echo
+  DEST=$(find /root/.hermes/skills -maxdepth 4 \( -path '*/agenda-calendario/SKILL.md' -o -name 'agenda-calendario.md' \) 2>/dev/null | head -1)
+  [ -n "$DEST" ] || DEST=/root/.hermes/skills/agenda-calendario/SKILL.md
+  [ -f "$BK/skill-destino" ] || echo "$DEST" > "$BK/skill-destino"
+  if [ ! -f "$BK/skill-antes.md" ] && [ ! -f "$BK/skill-no-existia" ]; then
+    if [ -f "$DEST" ]; then cp -a "$DEST" "$BK/skill-antes.md"; else touch "$BK/skill-no-existia"; fi
+  fi
+  mkdir -p "$(dirname "$DEST")" && printf '%s\n' "$NUEVA" > "$DEST" \
+    && echo "✅ skill instalada: $DEST" || falla "no pude escribir la skill en $DEST"
+fi
+SOUL=/root/.hermes/SOUL.md
+if grep -q '^## Su calendario y el cierre del día' "$SOUL" 2>/dev/null; then
+  echo "· su SOUL ya tenía la regla del calendario"
+else
+  SECCION=$(git -C "$REPO_VPS" show origin/main:hermes-content/deploy/hermes-agent/SOUL.md 2>/dev/null \
+            | sed -n '/^## Su calendario y el cierre del día/,$p')
+  if [ -n "$SECCION" ] && [ -f "$SOUL" ]; then
+    [ -f "$BK/SOUL.md.antes" ] || cp -a "$SOUL" "$BK/SOUL.md.antes"
+    printf '\n---\n\n%s\n' "$SECCION" >> "$SOUL" && echo "✅ regla del calendario agregada al SOUL de Hermes"
+  else
+    falla "no pude agregar la regla al SOUL (falta la sección en main o el archivo en el VPS)"
+  fi
 fi
 
 # ── 6. El interruptor ───────────────────────────────────────────────────────────
@@ -320,6 +448,16 @@ if [ -f "$BK/n8n-agenda-id" ]; then
   curl -s --max-time 30 -X POST -H "X-N8N-API-KEY: $KEY" "$N8N_HOST/api/v1/workflows/$(cat "$BK/n8n-agenda-id")/deactivate" </dev/null >/dev/null \
     && echo "n8n: lector de calendario apagado (queda guardado)"
 fi
+if [ -f "$BK/n8n-cambios-id" ]; then
+  curl -s --max-time 30 -X POST -H "X-N8N-API-KEY: $KEY" "$N8N_HOST/api/v1/workflows/$(cat "$BK/n8n-cambios-id")/deactivate" </dev/null >/dev/null \
+    && echo "n8n: cambios de calendario apagados (queda guardado)"
+fi
+if [ -f "$BK/skill-destino" ]; then
+  D=$(cat "$BK/skill-destino")
+  if [ -f "$BK/skill-antes.md" ]; then cp -a "$BK/skill-antes.md" "$D" && echo "hermes: skill del calendario restaurada"
+  elif [ -f "$BK/skill-no-existia" ]; then rm -f "$D" && echo "hermes: skill del calendario quitada"; fi
+fi
+[ -f "$BK/SOUL.md.antes" ] && cp -a "$BK/SOUL.md.antes" /root/.hermes/SOUL.md && echo "hermes: SOUL restaurado"
 [ "$(cat "$BK/interruptor.antes" 2>/dev/null)" = si ] || { rm -f /var/lib/onia-aviso/activo && echo "aduana: interruptor apagado"; }
 touch "$BK/revertido"
 RB
@@ -334,6 +472,9 @@ if [ "$FALLAS" -eq 0 ]; then
 Te escribo a las <b>06:30</b> (tu día, lo que espera tu ok, prospectos y guiones) y a las <b>21:30</b> (el cierre). En el medio, sólo lo urgente — nunca de 22:00 a 06:30 ni en tus bloques del calendario: eso te lo junto para cuando salís.
 
 Apagué los reportes automáticos que te llegaban. Todo se puede deshacer."
+  [ "$CAMBIOS_OK" = 1 ] && AVISO="$AVISO
+
+📅 Y ya podés pedirme que agende, mueva o cancele algo de tu calendario: siempre te muestro el cambio y lo hago solo con tu sí."
   if ONIA_AVISO=interrumpe ONIA_AVISO_AHORA=1 ONIA_AVISO_CLAVE="jarvis-encendido-$HOY" ONIA_AVISO_EMISOR=jarvis \
        "$BIN/onia-tg.sh" "$AVISO" </dev/null >/dev/null 2>&1; then
     echo "✅ le avisé por Telegram"
