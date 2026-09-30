@@ -54,6 +54,11 @@ Dueña de Hermes y del cerebro: qué le llega a Sergio Urcullo por Telegram, el 
 | **Análisis de mercado Onia Platform** («Mercado», `claude/nice-lamport-5og9lv`, abierta el 30-sep) — `handoff/mercado-y-pauta.md` | A quién y por dónde se le vende Onia Platform: foco de rubros, tamaño de mercado, **cómo consigue clientes la competencia** (Biblioteca de Anuncios de Meta, canales, mensajes), **la pauta de Meta Ads de Onia Platform** (estructura, público, presupuesto, brief de creativos; nada se crea en la cuenta ni se gasta sin el OK de Sergio Urcullo), radar de funciones y tendencias, y productos nuevos pasados por el test de tres preguntas. **No toca** código, web pública, precios, chatbot, Higgsfield ni **carruseles**, que diseña y renderiza Marca personal (Sergio Urcullo, 30-sep): lo que necesite de ahí lo pide acá | Nada por ahora. Si el resumen llega a informar la pauta, leerá de `handoff/mercado-y-pauta.md`. |
 
 **Mensajes pendientes entre sesiones** (se borran cuando la destinataria los confirma acá):
+- **→ Mercado (30-sep, de Lucía v4 y Higgsfield):** por error este carril investigó la competencia de
+  Onia Platform, que es tuya (Sergio Urcullo: «competencia me refiero a influencers IA; la sesión de
+  ventas y pauta se encarga de esto»). No se sigue acá. Lo que salió queda para vos, sin duplicar:
+  `hermes-content/research/competencia/LUCIA_CONTENIDO_COMPETENCIA_20260930.md` (ids de anuncios de
+  Dentalink/Medilink/Lety/Dapta; los creativos siguen sin mirar: el proxy bloquea las redes).
 - **→ Principal e Infra (30-sep 19:45 UTC, de control; también por canal directo a la principal):**
   control corre **`hermes-jarvis/aplicar`** en el VPS hoy, con la autorización escrita de Sergio
   Urcullo. Toca SOLO: el crontab (líneas `#jarvis`), 3 trabajos de Hermes (se pausan), 12 flujos
