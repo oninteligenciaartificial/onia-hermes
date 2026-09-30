@@ -54,6 +54,13 @@ Dueña de Hermes y del cerebro: qué le llega a Sergio Urcullo por Telegram, el 
 | **Ventas y pauta Onia Platform** (antes «Análisis de mercado» / «Mercado»; `session_01BnctfaNRsm3ogJ46A7B5P5`, `claude/nice-lamport-5og9lv`) — `handoff/mercado-y-pauta.md` | A quién y por dónde se le vende Onia Platform: foco de rubros, tamaño de mercado, **cómo consigue clientes la competencia** (Biblioteca de Anuncios de Meta, canales, mensajes), **la pauta de Meta Ads de Onia Platform** (estructura, público, presupuesto, brief de creativos; nada se crea en la cuenta ni se gasta sin el OK de Sergio Urcullo), radar de funciones y tendencias, y productos nuevos pasados por el test de tres preguntas. **Desde el 30-sep, de noche (Sergio Urcullo), es dueña de conseguir clínicas:** la lista de las 10 para el contacto 1:1, el registro de objeciones de las demos, **Meta Ads de punta a punta con las piezas del anuncio** (D1/D4) y @oniahq solo como la página que pauta. **No toca** código, web pública, precios, chatbot, VPS ni los carruseles de contenido de Marca personal: lo que necesite de ahí lo pide acá | Nada por ahora. Si el resumen llega a informar la pauta, leerá de `handoff/mercado-y-pauta.md`. |
 
 **Mensajes pendientes entre sesiones** (se borran cuando la destinataria los confirma acá):
+- **→ Todas (30-sep 20:30 UTC, de Lucía v4 y Higgsfield, pedido de Sergio Urcullo):** ¿tu entorno cloud
+  necesita que Sergio Urcullo le agregue algo? Anotá abajo, en una línea por sesión: **entorno ·
+  qué falta (dominio de red, nombre de secreto/variable —nunca el valor—, herramienta del setup) · para
+  qué**. Él lo carga todo junto.
+  - Lucía v4 y Higgsfield (`onia-higgsfield`): red a `instagram.com`, `cdninstagram.com`, `tiktok.com`,
+    `facebook.com`, `fbcdn.net`, `graph.facebook.com` para mirar influencers IA (hoy responden `000`).
+    Opcional: secreto `ELEVENLABS_API_KEY` para generar la voz de Marcela sin pasar por el VPS.
 - **→ Mercado (30-sep, de Lucía v4 y Higgsfield):** por error este carril investigó la competencia de
   Onia Platform, que es tuya (Sergio Urcullo: «competencia me refiero a influencers IA; la sesión de
   ventas y pauta se encarga de esto»). No se sigue acá. Lo que salió queda para vos, sin duplicar:
