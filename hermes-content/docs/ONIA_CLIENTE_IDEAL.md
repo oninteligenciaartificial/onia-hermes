@@ -148,10 +148,27 @@ terminan en que ninguna de las dos se cierra.
 
 ---
 
-## 6. El segundo círculo — qué se atiende sin perseguirlo
+## 6. Los rubros que se salen a buscar
 
-Se venden cinco rubros (`ONIA_CATALOGO_DE_VENTA.md`). Que se puedan vender no significa
-que se salgan a buscar.
+> ⚠️ **Decisión de Sergio Urcullo, 30-sep, de noche: *«no solo somos clínica, lee el repo»*.** Esta sección
+> decía que la venta, la pauta y la vidriera iban a **un solo rubro, dental**, y que el resto «se atiende si
+> llega». **Eso quedó sin efecto.** Queda así:
+> - **Se sale a buscar en los rubros que el producto sostiene en una demo.** Cada uno tiene su propia lista y
+>   su propio mensaje; nunca va un mensaje para todos.
+> - **El orden sale de lo verificado en el código** (`research/onia-1.0-29sep/VENDIBLE_OTROS_RUBROS.md` e
+>   `INVENTARIO_POR_RUBRO.md`, 29-sep, en `wip/v1-hermes-20260928`):
+>   1. **Dental y estética.** Son las mismas pantallas y los mismos agentes. Listas en
+>      `ONIA_PROSPECTOS_DENTAL_SCZ.md` §6 y `ONIA_PROSPECTOS_OTROS_RUBROS_SCZ.md` §1.
+>   2. **Importadora**, acotada a lo que funciona: costeo de importación y alerta de reprecio por devaluación.
+>      La cotización no sale del sistema. Lista en `…OTROS_RUBROS_SCZ.md` §2.
+>   3. **Comercio y servicios profesionales.** Los candidatos quedan anotados. Se les escribe cuando
+>      Plataforma confirme que la 1.0 arregla lo que se ve en una demo: en comercio, editar el producto, el
+>      precio y el stock; en servicios, que la agenda sea de más de un profesional en los planes bajos.
+> - **Lo que sigue valiendo de abajo:** la pauta paga va de a un rubro por conjunto de anuncios, porque Meta
+>   aprende por conjunto; se empieza por dental y la prueba social se arma rubro por rubro.
+> - La tabla y la regla de abajo quedan como historia del mediodía del 30-sep.
+
+Se venden cinco rubros (`ONIA_CATALOGO_DE_VENTA.md`).
 
 | Rubro | Postura hoy | Cuándo cambia |
 |---|---|---|
@@ -162,8 +179,9 @@ que se salgan a buscar.
 | **Servicios profesionales** | 🟡 Se atiende si llega | Idem |
 | **Veterinaria · ganadería** | ⛔ No se ofrece | Tienen bloqueos abiertos en el producto |
 
-**La regla que ordena esto:** perseguir dos rubros a la vez con una sola persona es la
-versión chica de tener nueve líneas de negocio. Un rubro, hasta que pague.
+~~**La regla que ordena esto:** perseguir dos rubros a la vez con una sola persona es la
+versión chica de tener nueve líneas de negocio. Un rubro, hasta que pague.~~ *(Sin efecto desde el 30-sep, de
+noche: ver arriba.)*
 
 ### ¿Uno o siete? — la pregunta, contestada con datos (2026-09-30)
 
