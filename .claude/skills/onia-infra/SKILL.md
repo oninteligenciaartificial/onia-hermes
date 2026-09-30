@@ -35,6 +35,13 @@ description: Cargar ANTES de tocar el VPS, Docker, n8n o cualquier cosa por SSH.
   `ssh.onia.com.bo` → `ssh://localhost:22`) protegido con **Cloudflare Access + service token**;
   en la nube, `ssh -o ProxyCommand="cloudflared access ssh --hostname %h --service-token-id … --service-token-secret …"`.
   La llave SSH se sigue exigiendo; el token se revoca en Cloudflare.
+- ✅ **Funciona desde el 2026-09-30.** Túnel `onia-ssh`: `cloudflared` corre como servicio en el VPS y `ssh.onia.com.bo` apunta a `ssh://localhost:22`. Desde la nube se entra así (la llave sale del secreto del entorno):
+  ```bash
+  curl -fsSL -o /usr/local/bin/cloudflared https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 && chmod +x /usr/local/bin/cloudflared
+  mkdir -p ~/.ssh && printf '%s' "$ONIA_VPS_SSH_KEY_B64" | base64 -d > ~/.ssh/onia_vps && chmod 600 ~/.ssh/onia_vps
+  ssh -i ~/.ssh/onia_vps -o ProxyCommand="cloudflared access ssh --hostname %h" root@ssh.onia.com.bo
+  ```
+  Verificado: `hostname` = `srv1360183`. ⚠️ Todavía **sin Cloudflare Access** delante, así que la protección es solo la llave SSH (igual que el 22 abierto). Pendiente: Access + service token.
 - Cambiar el acceso de red del entorno a "Total" **puede no alcanzar**: el proxy sigue en el
   medio. Probarlo es gratis, pero no es la solucion garantizada.
 
