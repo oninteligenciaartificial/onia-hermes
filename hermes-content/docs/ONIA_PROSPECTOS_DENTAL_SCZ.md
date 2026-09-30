@@ -72,3 +72,61 @@ Canal: WhatsApp de Onia. Personalizar `[Dr./Dra. Apellido]` y `[clínica]` con e
 - **Clínica MedicalDent**: verificada… pero es de La Paz → fuera por ciudad.
 - **Directorios muertos o bloqueados**: tuguiatusalud.com.bo (DNS no resuelve), doctorbolivia.com/odontologos-santa-cruz (404), boliviayp.com por categoría (403). Se citan para que nadie pierda tiempo re-intentándolos.
 - **Facebook/Instagram directo**: muro de login; todo dato de redes viene de lo que expone el buscador + cruce con ficha independiente (por eso existe el nivel B/C).
+
+---
+
+## 5. Señal nueva (2026-09-30): las clínicas que PAGAN pauta para conseguir pacientes
+
+> Agregado por el carril Mercado. Fuente: Biblioteca de Anuncios de Meta (`ads_library_search`, país `BO`,
+> activos, búsquedas *"clínica dental Santa Cruz"* y *"clínica estética Santa Cruz"*), 2026-09-30. Se leyó el
+> **metadato** (página, fecha, título, moneda); los creativos no se abrieron. Por qué es la mejor señal que
+> tiene Onia: `ONIA_ADQUISICION_Y_PAUTA.md` §3.
+
+⚠️ **La búsqueda es por texto, no por ubicación.** Antes de escribirle a cualquiera: confirmar ciudad y
+tamaño con las preguntas 1 y 2 de `ONIA_CLIENTE_IDEAL.md` §9 (2–6 profesionales, con recepción). **Nadie se
+contacta sin que Sergio Urcullo apruebe el mensaje y el canal exactos**, y el mensaje **no promete el Recall
+de tratamiento a medias** mientras el producto no lo haga (`ONIA_ADQUISICION_Y_PAUTA.md` §5.4).
+
+### 5.1 Dentales
+
+| Clínica | page_id | Qué pauta | Cruce con §1 |
+|---|---|---|---|
+| **Clínica Dental Cortez Santa Cruz** | 111017921072549 | 6+ anuncios nuevos el 29-sep (BOB); tiene otra página para La Paz | **#9** — grande (+15 años, dos ciudades): verificar si pasa de 6 profesionales |
+| **Clínica Dental San Pedro** | 662533600624550 | clic a WhatsApp, 23-sep (BOB) | **#1** — 11 especialidades: verificar tamaño |
+| Clínica Dental ODES | 447192008650376 | rotación desde julio (USD) | — |
+| MUN Clínica Odontología Especializada | 572588712615373 | *Chatea con nosotros*, *Reserva tu cupo* (BOB) | — |
+| Clínica Dental ROCHA | 113481741822891 | *Agenda tu cita* (BOB) | — |
+| Consultorio Dental Rocha | 169289006270602 | *¡Tu nueva sonrisa comienza aquí!* (BOB) | — |
+| Stildent Santa Cruz | 110445244840996 | BOB | — |
+| Natural Smile Santa Cruz | 100193878311097 | BOB | — |
+| Clínica Dental Ezequiel – Spadental | 758264870991469 | *Recupera tu sonrisa* (BOB) | — |
+| Clínica Dental Vid | 920721404450647 | *¡Consulta GRATUITA!* (BOB) | — |
+| Clínica Dental "Sarita" | 1709119185977006 | BOB | — |
+| Odontología Integral Digital | 756968257500768 | BOB | — |
+| Sonríe a La Vida | 255332044891977 | varios (BOB) | — |
+| DÚO Consultorio Dental | 109306495537111 | USD | ¿es #17 *DuoDent*? verificar |
+| Happy Dent | 608572659242258 | ortodoncia (BOB) | — |
+| Clínica Dental KOREA | 697014900382758 | BOB | — |
+| Clínica Dental Sanident | 787098867820512 | BOB | — |
+| Clínica Dental "DS" | 625324393996576 | USD | ⚠️ **hipótesis a verificar:** el lead de la conversación 36 (`ONIA_LEADS_ESPERANDO.md` §2, 27-ago, *"Quiero información"*) dejó un correo con dominio `ds-santacruz.bo`. Si es la misma clínica, **ya levantó la mano y además paga pauta** |
+| Dr. Abner Valdivia | 1732856310310270 | *Conseguí la sonrisa que querés para vos* (BOB) | — |
+| Dra. Mishel Rodriguez | 1008202805702373 | BOB | profesional con marca propia: probablemente chico |
+
+### 5.2 Estética (segundo rubro: se atiende, no se persigue hasta los 5 dentales)
+
+Serderma – Skin Care & Repair (106801775686899, *Agenda hoy*, *Chatea con nosotros*) · Dra. Nicol Michaga
+Muriel (1210063245529622, clic a WhatsApp) · Dra. Luz Perez (1132924253239745) · Spa Norvet
+(1115743118298684) · Clínica ABC (306544962541904) · Odontología & Armonización Orofacial (922767334264415) ·
+Centro Láser de Piel (657005394167407) · Cirugía Plástica Dr Roger Zambrana (360604830480543) · Clínica
+Odontológica Beautiful (589482644245798) · Clínica Fundepi (908015955728944).
+
+### 5.3 Por dónde empezar
+
+1. **Primero los que ya escribieron** (`ONIA_LEADS_ESPERANDO.md`), y entre ellos verificar la hipótesis
+   *DS*.
+2. **Después, las dos que están en las dos listas** (Cortez y San Pedro): señal doble, pero confirmar que el
+   tamaño calce.
+3. **Después, las que pautan con clic a WhatsApp** (MUN, San Pedro, ROCHA): el paciente les entra por el
+   canal que Onia ordena.
+
+Cómo se recuenta: `ONIA_ADQUISICION_Y_PAUTA.md` §9.

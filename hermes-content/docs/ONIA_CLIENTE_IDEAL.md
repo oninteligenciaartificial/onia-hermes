@@ -13,7 +13,9 @@
 > números. Los límites por plan salen de `lib/plan-catalogo.ts`.
 >
 > **Todo lo medible de este doc se midió contra la base de producción y el código el
-> 2026-09-18.** Cada cifra lleva de dónde sale.
+> 2026-09-18.** Cada cifra lleva de dónde sale. **§2 (matiz de la IA), §6 (uno o siete rubros) y
+> §7 (tamaño del segmento) se re-midieron el 2026-09-30** contra la Biblioteca de Anuncios de Meta y
+> fuentes públicas; el detalle vive en `ONIA_ADQUISICION_Y_PAUTA.md`.
 
 ---
 
@@ -59,6 +61,17 @@ Los topes salen de `lib/plan-catalogo.ts` (pacientes · usuarios · si trae agen
 tiene. Un cliente de Básico paga por una agenda ordenada y nunca ve por qué somos distintos,
 así que ni renueva con ganas ni recomienda. **Vender Básico a quien podía pagar Crece es
 perder al cliente dos veces.**
+
+⚠️ **Matizado el 2026-09-30 (carril Mercado): «IA» ya no distingue a nadie.** TuDoc (software
+médico boliviano) y Dentalink y Medilink (Healthatom, Chile, pautando en Bolivia desde junio)
+titulan con IA, y en su **pauta** en Bolivia es **IA del trabajo clínico** (dictar la ficha, leer la
+radiografía, simular la sonrisa): ninguno **titula** con recuperar pacientes (medido en la Biblioteca de
+Anuncios). ⚠️ **Pero eso no prueba que ninguno lo OFREZCA:** la web de Dentalink anuncia un *Contact
+Center IA* con *recall* y *"venta de tratamientos"* (visto solo en el extracto del buscador; **abrir la
+página antes de afirmar nada en material de venta**). Por eso el diferenciador no es "el único que
+recupera", sino **recuperar desde el plan de tratamiento, con los datos de la clínica, en bolivianos y
+con SIAT** — y **se vende nombrando el trabajo** (*"te muestro qué pacientes dejaron el tratamiento a
+medias"*), nunca la tecnología. Evidencia: `ONIA_ADQUISICION_Y_PAUTA.md` §2.
 
 ---
 
@@ -152,6 +165,36 @@ que se salgan a buscar.
 **La regla que ordena esto:** perseguir dos rubros a la vez con una sola persona es la
 versión chica de tener nueve líneas de negocio. Un rubro, hasta que pague.
 
+### ¿Uno o siete? — la pregunta, contestada con datos (2026-09-30)
+
+> Sergio Urcullo, 2026-09-30: *"me dicen si ofreces a demasiadas personas nunca vas a vender nada…
+> revisá si es rentable colocar tantos rubros, tantas opciones"*.
+
+**Tienen razón para la VENTA, y no para el PRODUCTO.** Son dos cosas distintas y conviene no
+mezclarlas:
+
+- **El producto sigue multi-rubro.** Los packs ya están construidos, mantenerlos cuesta cero y son
+  la base de la v1.2 (el segundo rubro se **enciende** desde el core, `ONIA_ESTRATEGIA_DE_EMPRESA.md`
+  §12). Borrarlos no ahorra nada.
+- **La venta, la pauta y la vidriera: un solo rubro.** Dental (estética es la misma venta con otro
+  vocabulario, y va segunda).
+
+| Dato medido | Qué dice | Fuente |
+|---|---|---|
+| Quién llegó solo | Los 3 registros son clínicas de Santa Cruz y el lead más calificado es una clínica odontológica de 4 doctores. **Ninguna** señal con rubro identificado es de comercio, importadora o servicios | §3 de este doc |
+| Quién compite por el mismo mensaje | Comercio/facturación: **≥12 vendedores bolivianos pautando en BOB** esta semana. Dental: **ningún software boliviano pauta**; solo Healthatom (Chile, en USD) | `ONIA_ADQUISICION_Y_PAUTA.md` §2 |
+| ¿Se alcanza al comprador? | Al odontólogo boliviano ya le pautan cursos, insumos, sillones, marketing y software todos los días. Y **~20 clínicas dentales de Santa Cruz pagan hoy pauta** para conseguir pacientes | idem §2–§3 |
+| Plata de pauta | Meta aprende con ~50 resultados por semana **por conjunto de anuncios**. Con un presupuesto chico, un público junta señal; cinco públicos no juntan ninguna | idem §5 |
+| Horas de soporte | Cada rubro trae otras preguntas y otro flujo: sumar rubros en la venta baja el techo del §9 de la estrategia | `ONIA_ESTRATEGIA_DE_EMPRESA.md` §9 |
+| Prueba social | Un odontólogo le cree a otro odontólogo. Cinco clientes en cinco rubros = cero casos para mostrar en ninguno | inferencia |
+
+**Lo que está roto no es la estrategia, es la vidriera.** La decisión de vender solo dental existe
+desde el 5-sep (etapa 1). Pero al 30-sep la home de `onia.com.bo` le habla a *"tu negocio"*, `/rubros`
+lista cinco rubros y el meta-description vende *"fichas de clientes, caja y cobros… armado para tu
+rubro"* (leído del código de `web-factory/apps/onia-platform/src/app/(sitio)/`, no de la página
+renderizada). **Quien llega desde un anuncio para clínicas tiene que aterrizar en una página que le
+hable a una clínica.** La web pública es del carril Plataforma; el pedido está en EL HILO.
+
 ---
 
 ## 7. ¿Alcanza el mercado? — sí, y por mucho
@@ -169,6 +212,23 @@ soporte de una persona).
 **Conclusión:** aun descontando con dureza el dato dental por viejo, el orden de magnitud
 no deja lugar a duda. **El mercado no es el cuello de botella.** Nunca lo fue: el cuello es
 que a los cinco que ya llegaron solos todavía no les contestó nadie.
+
+⚠️ **Corregido el 2026-09-30 (carril Mercado): «alcanza, y por mucho» vale para la etapa 1, no para
+el techo.** Las filas de arriba miden el universo (todas las unidades económicas, todos los
+odontólogos), no el **segmento** del §2. Estimado con dos métodos cruzados —la estructura del SEDES
+de Santa Cruz (125 clínicas + 1.812 consultorios dentales registrados, dato de ~2018) y los conteos
+de odontólogos—, las clínicas de **2 a 6 profesionales en Santa Cruz son ~150 a 400** (punto medio
+~250) [inferencia, método en `ONIA_ADQUISICION_Y_PAUTA.md` §1].
+
+| Meta | Qué parte del segmento hay que ganar | Lectura |
+|---|---|---|
+| **5 clientes** (break-even) | **1 a 3 %** | holgado: el mercado no frena la etapa 1 |
+| **~40 clientes** (techo de soporte de una persona) | **10 a 27 %** | muy exigente con un solo rubro en una sola ciudad |
+
+**Consecuencia:** el techo de 40 pide, más adelante, sumar **estética** (mismo producto, otro
+vocabulario) y/o **otra ciudad**. Es exactamente la v1.2 de la estrategia (§12), y confirma su
+orden: primero 5 dentales, después el segundo rubro encendido desde el core. Lo que no cambia: hoy
+el cuello de botella sigue sin ser el mercado.
 
 ---
 
@@ -238,7 +298,8 @@ ahí deja de ser una hipótesis con evidencia y pasa a ser un hecho con cliente.
 
 ---
 
-Relacionado: `ONIA_CATALOGO_DE_VENTA.md` (qué se vende y en qué estado) ·
+Relacionado: `ONIA_ADQUISICION_Y_PAUTA.md` (cómo se consiguen clientes: canales, competencia, pauta) ·
+`ONIA_CATALOGO_DE_VENTA.md` (qué se vende y en qué estado) ·
 `ONIA_ESTRATEGIA_DE_EMPRESA.md` (la etapa vigente y el test de tres preguntas) ·
 `ONIA_LEADS_ESPERANDO.md` (los cinco que están esperando respuesta) ·
 `ONIA_WEB_COMO_SE_VENDE.md` (la otra venta, la que no se mezcla con ésta).
