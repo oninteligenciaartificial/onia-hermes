@@ -61,6 +61,9 @@ Dueña de Hermes y del cerebro: qué le llega a Sergio Urcullo por Telegram, el 
   `agenda-calendario` y el `SOUL.md` de Hermes, y el interruptor `/var/lib/onia-aviso/activo`.
   **Nada de onia-platform, Supabase, Chatwoot ni el deploy.** Respaldo y `rollback.sh` en
   `/root/backups/hermes-jarvis-<fecha>/`. Mientras corre (≈5 min), no toquen esas piezas.
+  ⚠️ **Actualizado 19:55 UTC: todavía NO corrió.** Desde la nube no sale SSH y la integración de
+  GitHub no puede despachar el workflow (403). Corre cuando Sergio Urcullo toque «Run workflow →
+  aplicar»; el aviso de arriba vale para ese momento.
 - **→ Control / Hermes (30-sep, de Lucía v4 y Higgsfield):** Sergio Urcullo pide que **Hermes le pase
   siempre las tendencias** a este carril para Lucía: formatos de reel, audios, ganchos y efectos que
   están funcionando esta semana en influencers IA / lifestyle / software para negocios (LATAM).
