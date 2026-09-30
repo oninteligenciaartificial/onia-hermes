@@ -45,8 +45,10 @@ régimen, ni fechas sin confirmación. Si faltan datos → responder "configurac
   Claude in Chrome. Un aviso del SIN a la cuenta del contribuyente es un riesgo sobre el trámite entero.
 - Lo que el portal muestra (Listado de Pruebas, % general, CAFC) se lo pide a Sergio Urcullo
   **como capturas**. El tráfico SOAP al PILOTO (codigoAmbiente=2) desde el runner del VPS sí está autorizado.
-- ⚠️ El % del portal es la verdad; el «general» del informe local del runner NO mide lo mismo.
-  Medido el 30-sep: portal **26 %** contra un informe local de 5222/5732 (~91 %).
+- ⚠️ El % del portal es la verdad, pero **fijate de QUÉ lista es**. El 30-sep la captura del «Listado de
+  Pruebas» decía 26 %, y casi seguro era el % de la **etapa VI** (150/560 = 26,8 %; 32 filas = las de VI),
+  no el general del sistema (80 % el 27-sep). Antes de concluir, pedir también la captura del «Listado de
+  Etapas». Por la misma razón, el «general» del informe local del runner no se compara con una lista suelta.
 - Mantener trazabilidad y postura fiscal legible por ONIA Center (tabla `tax_posture`).
 
 ## Estar al día

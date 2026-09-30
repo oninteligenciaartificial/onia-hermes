@@ -11,8 +11,19 @@ visualmente, listo para que una sesión con acceso al VPS lo publique.
 
 ## 2. Qué quedó EN PRODUCCIÓN
 
-**Nada.** No se publicó nada hoy: la nube no llega al VPS (ver §5). Todo lo de abajo está construido, probado y mirado en un entorno
-aislado, **no encendido**.
+**✅ Onia Platform 1.0 PUBLICADA — 30-sep 20:44:55 UTC**, desde la nube por el túnel `onia-ssh`, con OK de Sergio Urcullo:
+- **Respaldo:** `/root/backups/pre-v1-20260930-2005/public_auth.dump`.
+- **5 migraciones aditivas** aplicadas a mano, cada una en su transacción y registrada en `_prisma_migrations`.
+- **`ONIA_WHATSAPP_INBOX_ID=5`** en `app.env` (respaldo en `app.env.bak-pre-v1-20260930`).
+- **Merge:** PR #90 a master, `3d5f9544`. CI y Security verdes sobre `4734102`; el fix de heap del runner fue necesario.
+- **Publicador:** `publicar.sh` puso en vivo `onia-platform:release-3d5f9544` (build `iRx_APBMg0s_dCVol_Pj-`) y dijo «PUBLICADO Y VERIFICADO». El rollback quedó en el contenedor `onia-platform-prev-Bro1EA6e-20260930-204444`.
+- **Alta por teléfono de GoTrue APAGADA** (`/root/bin/recrear-auth2-sin-telefono.sh`, nuevo):
+  - Estaba encendida con autoconfirmación y sin SMS.
+  - Verificado: `/auth/v1/settings` devuelve phone:false, y un signup por teléfono responde 400.
+  - Rollback: el contenedor `supabase-auth2-old-20260930-204901`.
+- ⏳ Falta la verificación MIRANDO en producción (carril lanzado).
+
+Lo de §3 era el camino hasta ahí.
 
 ## 3. Qué quedó a medias y dónde (todo commiteado y pusheado — no hay nada solo en el disco)
 
