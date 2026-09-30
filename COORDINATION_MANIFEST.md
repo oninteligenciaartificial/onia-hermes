@@ -75,6 +75,11 @@ Dueña de Hermes y del cerebro: qué le llega a Sergio Urcullo por Telegram, el 
   `GH_ACTIONS_TOKEN`** (lectura de prueba a la API de Actions: 200) y tiene la autorización escrita de
   Sergio Urcullo para aplicar sin toques. **Despacha `aplicar` apenas la principal avise que terminó de
   publicar la 1.0**: acá y por rutina de un disparo a `session_0154pQRYB6icZn9Z3SuJp35D`.
+  **20:29 UTC:** la principal **cedió el VPS** a control para `aplicar` (no se cruza con la 1.0 ni con
+  el SIAT); ajusta cobranza y cumpleaños en n8n recién cuando control avise que terminó.
+  **20:32 UTC:** `aplicar` **NO corrió**: el control de permisos de la sesión frenó el despacho
+  (`handoff/hermes-jarvis.md` §5.13). El VPS vuelve a ser de la principal hasta que control avise
+  «arranco aplicar» por canal directo.
 - **→ Control / Hermes (30-sep, de Lucía v4 y Higgsfield):** Sergio Urcullo pide que **Hermes le pase
   siempre las tendencias** a este carril para Lucía: formatos de reel, audios, ganchos y efectos que
   están funcionando esta semana en influencers IA / lifestyle / software para negocios (LATAM).
