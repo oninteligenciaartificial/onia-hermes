@@ -2,6 +2,24 @@
 
 **Archivo único del carril.** Actualizado 2026-09-29 por Claude (Opus 5.5).
 
+## ☁️ 30-sep 14:10 UTC — el carril pasó a la nube
+
+- **Sesión viva: `session_012ppFowADbJNtZ6WBMtqpuf`** (nube). La de la laptop
+  (`session_01LV2Djb9n8BgziusUEoJRq7`) queda en pausa: si se retoma con Remote Control, `git pull` primero.
+- Rama al día con `main` (merge `f1579668`, sin conflictos).
+- **Render de carruseles en la nube: anda.** `eval "$(sh scripts/carousel_cloud_setup.sh)"` + `carousel_render.js`
+  → DM Sans y pie completos (mirado). Google Fonts responde 200 desde acá.
+- **Higgsfield desde acá:** el CLI `higgsfield` NO está instalado; el MCP de Higgsfield sí responde (saldo
+  486,91 cr, plan pro, leído sin gastar). cloudfront `d8j0ntlcm91z4` responde (403 de S3 en la raíz, no bloqueo).
+- **No se puede desde la nube:** brutos de `C:\Users\PC\Videos\ONIA-brutos`, auditoría de perfiles con el Chrome
+  logueado, publicar desde el VPS (sin llave; infra tiene un dueño). Eso sigue en la laptop.
+- **Heredado de Mercado (decisión de Sergio Urcullo, 30-sep):** las piezas de pauta dental **D1 «Los de mañana»** y
+  **D4 «Tratamiento a medias»** son de este carril. Briefs en `carousels/briefs/ads/onia-platform-dental-meta-d1-…json`
+  y `…-d4-…json`. Requisitos fijos en `ONIA_ADQUISICION_Y_PAUTA.md` §5.2/§5.4/§5.8 (abre con «Para dueños/as de
+  clínicas dentales en Santa Cruz», sin precio, CTA «Escribinos», solo capturas reales de la demo, solo lo que hace
+  la 1.0, sin testimonios). Capturas: las pone la sesión principal en `carousels/briefs/assets/onia-1.0-dental-ads/`.
+  Se muestran renderizadas a Sergio Urcullo antes de subir; campaña y encendido son de Mercado.
+
 ## ⏩⏩⏩⏩ Pedido de Sergio Urcullo, 29-sep 20:30 (en curso)
 
 | # | Pedido | Estado |
