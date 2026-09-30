@@ -11,7 +11,16 @@
 Cadena: **contenido diario → autoridad en IA → comunidad → curso**. Onia Platform es la prueba de que sabe
 construir; el presencial es el escalón de confianza.
 
-**Tensiones que Sergio Urcullo tiene que decidir (no las decide la sesión, `CLAUDE.md` §1):**
+**Respuestas de Sergio Urcullo (30-sep, 15:40 La Paz):**
+1. *«los 5 clientes se consiguen solos, claude desarrolla solo, yo solo orquesto y grabo contenido»* → su tiempo va
+   al contenido; la etapa del negocio no cambia.
+2. *«demostración, pero si es buena, escala a producto»*.
+3. Puerta del curso: **100 miembros** + encuesta con ≥ 20 «lo compraría».
+4. Onia como muestra necesita cliente real: *«es correcto, por eso aún seguimos desarrollando»*.
+- Historias: 2-3 por día (qué hace, noticias de IA, llevar a llamadas 1-a-1 o a la comunidad).
+- Bio de IG (captura 30-sep): dos links, **primero «OnIA» onia.com.bo**, segundo «Comunidad» (WhatsApp). Sin destacados.
+
+**Tensiones planteadas (historia de la respuesta de arriba):**
 1. **Etapa vigente del negocio = 5 clientes de Onia Platform con la 1.0** (`ONIA_ESTRATEGIA_DE_EMPRESA.md` §16).
    El curso es una línea nueva que compite por las mismas horas. ¿La marca personal sigue en segundo plano
    hasta los 5 clientes, o cambia la etapa?
@@ -30,8 +39,8 @@ Una sola lista. Se toca de a uno, en este orden salvo que Sergio Urcullo diga ot
 | # | Punto | Estado | Qué falta |
 |---|---|---|---|
 | 1 | **Vuelta de la comunidad de WhatsApp** (~30 miembros, callada desde el 22-sep) | Mensajes listos en `cola/drops/2026-10-01.md` | Que Sergio Urcullo diga si sostiene audio del domingo y wins del viernes; que los pegue |
-| 2 | **Atraer gente a la comunidad** | Aclarado 30-sep: el video de YouTube es público y ADEMÁS se comparte en la comunidad (primero) | Armar el embudo: CTA en cada pieza, link en la bio, palabra clave → DM, invitación de miembros |
-| 3 | **Historias de Instagram** | Sin plan | Rutina diaria corta, con sticker de link a la comunidad; plantillas 1080×1920 |
+| 2 | **Atraer gente a la comunidad** (puerta del curso: 100 miembros) | Aclarado 30-sep: el video de YouTube es público y ADEMÁS se comparte en la comunidad (primero) | Armar el embudo: CTA en cada pieza, link en la bio, palabra clave → DM, invitación de miembros |
+| 3 | **Historias de Instagram** | Sube 2-3/día. Primeras 2 plantillas hechas (`out/sergio-historias-comunidad-20261001`) | Rutina fija de 3; destacado «Comunidad» |
 | 4 | **Perfiles** (IG, TikTok, YouTube, LinkedIn: bio, link, destacados) | Sin auditar | Desde la nube: con capturas que mande Sergio Urcullo. Con Chrome logueado: laptop |
 | 5 | **Grabar** (guiones S1–S3) | Escritos, sin aprobar | Que Sergio Urcullo los revise y grabe; brutos solo en la laptop |
 | 6 | **Carruseles** K11–K21 + arreglar K2 y K8 | K1 en B (listo); K2–K10 hechos | Diseñar |
