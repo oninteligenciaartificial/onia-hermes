@@ -12,7 +12,7 @@
 - **Ritmo vigente desde el 1-oct:** avisos lun/mié/vie 19:00 atados al video del día, wins el
   viernes y audio el domingo. Reemplaza al «1 drop/día» de §Cadencia, que con una sola persona se
   cortó. Textos de la vuelta: `cola/drops/2026-10-01.md`.
-- **Qué es exclusivo (decisión razonada, 30-sep):** los videos de YouTube siguen PÚBLICOS. Lo
+- **Qué es exclusivo (aclarado por Sergio Urcullo, 30-sep: «el video de YT solo lo envío a la comunidad» = también lo comparte ahí, no lo esconde):** los videos de YouTube siguen PÚBLICOS. Lo
   exclusivo es lo de §«Las seis cosas» de `ONIA_COMUNIDAD_QUE_LA_HACE_VALER.md`: llega primero
   (el link del video 24 h antes, sin listar), el archivo o prompt completo, lo que salió mal, y
   poder preguntar. Esconder el video mata el alcance que trae gente nueva.

@@ -2,6 +2,23 @@
 
 **Archivo único del carril.** Actualizado 2026-09-29 por Claude (Opus 5.5).
 
+## 📋 LA LISTA — todos los puntos del carril (Sergio Urcullo, 30-sep: «vamos recolectando todos y los vamos tocando»)
+
+Una sola lista. Se toca de a uno, en este orden salvo que Sergio Urcullo diga otro. Estado al 30-sep.
+
+| # | Punto | Estado | Qué falta |
+|---|---|---|---|
+| 1 | **Vuelta de la comunidad de WhatsApp** (~30 miembros, callada desde el 22-sep) | Mensajes listos en `cola/drops/2026-10-01.md` | Que Sergio Urcullo diga si sostiene audio del domingo y wins del viernes; que los pegue |
+| 2 | **Atraer gente a la comunidad** | Aclarado 30-sep: el video de YouTube es público y ADEMÁS se comparte en la comunidad (primero) | Armar el embudo: CTA en cada pieza, link en la bio, palabra clave → DM, invitación de miembros |
+| 3 | **Historias de Instagram** | Sin plan | Rutina diaria corta, con sticker de link a la comunidad; plantillas 1080×1920 |
+| 4 | **Perfiles** (IG, TikTok, YouTube, LinkedIn: bio, link, destacados) | Sin auditar | Desde la nube: con capturas que mande Sergio Urcullo. Con Chrome logueado: laptop |
+| 5 | **Grabar** (guiones S1–S3) | Escritos, sin aprobar | Que Sergio Urcullo los revise y grabe; brutos solo en la laptop |
+| 6 | **Carruseles** K11–K21 + arreglar K2 y K8 | K1 en B (listo); K2–K10 hechos | Diseñar |
+| 7 | **Publicar** (primer post real) | Publicador probado, nada real | Desde el VPS: laptop o sesión con la llave |
+| 8 | **Encuentro presencial** | Después del 1 | Encuesta en la semana 2; convocar con ≥15 confirmados (falta OK) |
+| 9 | **Método de Santiago** (videos animados por código) | Ficha escrita | Sergio Urcullo comenta «OPUS» si lo quiere |
+| — | ~~@oniahq y pauta de Onia Platform~~ | Fuera del carril (30-sep) | «ya vemos cómo lo hacemos» |
+
 ## ☁️ 30-sep 14:10 UTC — el carril pasó a la nube
 
 - **Sesión viva: `session_012ppFowADbJNtZ6WBMtqpuf`** (nube). La de la laptop
