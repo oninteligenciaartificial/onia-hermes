@@ -6,59 +6,100 @@ workflow manual `hermes-jarvis.yml`, que Sergio Urcullo dispara con un toque.
 
 ## 1. Objetivo
 
-Hermes como jefe de gabinete de Sergio Urcullo por Telegram: **06:30** un resumen, **22:00** un
+Hermes como jefe de gabinete de Sergio Urcullo por Telegram: **06:30** un resumen, **21:30** un
 cierre, y en el medio **solo cuatro interrupciones** (prospecto sin respuesta · reunión en 30 min
-o cambio de agenda · algo espera su OK · producto caído para clientes >30 min). Más su calendario
-manejado desde el chat. Regla escrita: `ONIA_CEREBRO.md` §«La regla de entrega».
+o cambio de agenda · algo espera su OK · producto caído para clientes >30 min), nunca de 22:00 a
+06:30 ni durante sus bloques del calendario. Más su calendario manejado desde el chat. Regla
+escrita: `ONIA_CEREBRO.md` §«La regla de entrega».
 
 **Hecho =** (1) 24 h medidas en su Telegram sin nada fuera de eso; (2) el resumen de las 06:30
-llega con su agenda real y los guiones del día; (3) el cierre de las 22:00 llega; (4) agendar /
-mover / cancelar probado en su calendario real. **Hoy: ninguno de los cuatro cumplido.**
+llega con su agenda real y los guiones del día; (3) el cierre de las 21:30 llega; (4) agendar /
+mover / cancelar probado en su calendario real. **Al 30-sep 02:45 UTC: ninguno cumplido todavía**
+— los cuatro se encienden con el mismo `aplicar`, que espera su toque (el (4) queda probado por la
+propia corrida con un evento de prueba; con Hermes en Telegram, cuando él lo use).
 
 ## 2. Qué quedó EN PRODUCCIÓN
 
-**Nada que él vea.** En `main`: el workflow manual
-`.github/workflows/hermes-jarvis.yml` y `hermes-content/deploy/hermes-jarvis/diagnostico.sh`
-(solo lectura, salida redactada dos veces). **Nunca se corrió**: espera el toque de Sergio Urcullo.
+- **El diagnóstico corrió** (run `36632797507`, 29-sep 21:22 UTC, solo lectura). Salida completa
+  en el log del job. De ahí salen todos los ids de abajo.
+- **Código en `main`, APAGADO detrás del interruptor `/var/lib/onia-aviso/activo`** (el
+  sincronizador lo copia solo a `/root/bin`, ≈1 h después del merge, y no cambia nada hasta
+  `aplicar`): la aduana `onia-tg.sh` (categorías, silencio, bloques, soltar, y la consulta
+  `ONIA_AVISO_PUEDO`), el resumen/cierre `jarvis-resumen.sh`, el lector de calendario
+  `agenda.sh` → `/root/bin/onia-agenda.sh` (desde el 30-sep también `--ids`, `huecos`, `crear`,
+  `mover`, `cancelar`: sin `--si` solo muestra, con `--si` hace), el cierre que guarda número → id
+  en `cierre-bloques.tsv` para el «2 no», y `vigia-aprobaciones.sh` que pregunta a la aduana
+  antes de mandar.
+- ⚠️ **Una excepción que SÍ cambia apenas se sincroniza:** `claude-guardia.sh` deja de hacer curl
+  directo a Telegram. Sentry sin respuesta y error nuevo → tarea del tablero (`sistema`);
+  contenedor levantado solo → cierre del día (`resumen`, y mientras el interruptor esté apagado,
+  solo el log). Es lo que él pidió («puros errores»), pero entra antes del toque.
 
 ## 3. Qué quedó a medias, y dónde
 
-- **En `main` desde el 29-sep (`721ba43a`), APAGADO detrás del interruptor
-  `/var/lib/onia-aviso/activo`:** la aduana (`scripts/loops/onia-tg.sh`:
-  `ONIA_AVISO=interrumpe|resumen|sistema`, silencio 22:00-06:30, enfriamiento 6 h, `ESPERA`,
-  `RECUPERADO`), el resumen/cierre (`scripts/loops/jarvis-resumen.sh`), la voz leyendo el
-  resumen, el cableado en `sincronizar.sh`, 33 pruebas nuevas y la regla en `ONIA_CEREBRO.md`.
-  El sincronizador lo copia solo a `/root/bin` (≈1-2 h después del merge), pero **no cambia nada
-  en su Telegram** hasta que `aplicar.sh` cree el interruptor e instale los crons.
-- **`aplicar.sh` / `revertir.sh`: NO existen.** Se escriben con el diagnóstico delante (crontab
-  vivo, ids reales de los jobs de Hermes, workflows de n8n activos). Plan: crons 06:30 (`30 10`
-  UTC) y **21:30** (`30 1` UTC — corregido el 29-sep: a las 22:00 su calendario dice «Cierre
-  del día — sin celular»), soltar lo retenido cada 5 min (`*/5 * * * * ONIA_AVISO_SOLTAR=1
-  /root/bin/onia-tg.sh`), voz a 06:33, sacar el cron del parte diario (el resumen lo llama),
-  pausar `hermes-weekday-work-agenda`, `hermes-daily-content-video-plan`, `onia-veredicto-sergio`,
-  quitar `ONIA_TG_DIRECTO=1` de `vigia-loops-remotos`, apagar los monitores de n8n que solo
-  mandan errores, crear el interruptor. Todo con respaldo en `/root/backups/hermes-jarvis-<fecha>/`.
-- **Bloques protegidos (decisión suya del 29-sep):** la aduana retiene durante Colegio / 🔒 / 🎬 /
-  «sin celular» y suelta todo junto al terminar. Lee `/var/lib/onia-aviso/bloques-hoy.tsv`
-  (`fecha<TAB>HHMM<TAB>HHMM<TAB>título`, hora La Paz), que tiene que escribir el lector del
-  calendario. **Sin ese archivo, la regla existe pero no retiene nada**: no reportarla como hecha.
-- **Calendario:** ✅ **compartido el 29-sep** (sergio.urcullo.m@gmail.com → cuenta ONIA, la sesión
-  lee y escribe). **Bloques de ONIA del 3 al 10-oct llenados** por esta sesión (16 eventos, solo
-  título y descripción, rutina original guardada adentro). Antes de eso: su calendario real es el PERSONAL; el conectado (oninteligenciaartificial@gmail.com,
-  credencial n8n `a3FResZHqQ32ptyt`) no tiene eventos desde el 12-ago. Se le pidió compartir el
-  personal con esa cuenta («Realizar cambios en eventos»). El lector `onia-agenda.sh` no existe:
-  el resumen lo dice honestamente hasta que exista.
+- **`aplicar.sh` / `revertir.sh` escritos y probados en un VPS simulado** (aplicar dos veces = una;
+  revertir devuelve el crontab EXACTO, reanuda solo lo pausado, reactiva los 12 de n8n, apaga el
+  lector y el interruptor). **NO corrieron en el VPS real.** Lo que aplica, en orden:
+  1. Si el código de main no llegó a `/root/bin`, corre el sincronizador una vez; si igual falta,
+     sale sin tocar nada.
+  2. Respaldo en `/root/backups/hermes-jarvis-<fecha>/` (crontab, `jobs.json`, JSON de cada flujo
+     de n8n, `rollback.sh`).
+  3. Crontab con marcas: `#jarvis# ` = línea original apagada, `… #jarvis` = línea agregada.
+     Apaga el parte diario 05:00 (lo llama el resumen), mueve la voz a 06:35, los dos
+     `vigia-loops-remotos` pasan a `ONIA_AVISO=sistema`, agrega resumen `30 10`, cierre `30 1`,
+     soltar `*/5` y bloques del calendario `25,55 0-1,10-23` (UTC). 45 → 48 líneas activas.
+  4. Pausa en Hermes `9089322cc256` (agenda 08:00), `4ac955b47726` (plan de video 08:10),
+     `94f352c07554` (veredicto 16:00).
+  5. Apaga por API (llave `N8N_MANAGEMENT_API_KEY` de `/opt/onia-platform/app.env`) 12 flujos:
+     Radar IA, Radar Normativo, Web Factory QA, Web Factory VPS Radar, agentes Vendedor,
+     Contenido, Finanzas, Prospector, Entrega, CEO Mensual, Integraciones, VPS Healthcheck.
+  6. Crea «ONIA - Agenda hoy (Jarvis)» en n8n: webhook GET con ruta secreta → nodo de Google
+     Calendar copiado de «Agenda: Recordatorios» apuntando a `sergio.urcullo.m@gmail.com` →
+     responde los eventos. La ruta vive en `/root/.config/onia/agenda.env` (600). No guarda
+     ejecuciones exitosas (trae su calendario entero).
+  7. (30-sep) Crea «ONIA - Agenda cambios (Jarvis)»: webhook POST con ruta secreta → nodo HTTP a
+     la API de Google con la misma credencial (crear = POST; mover y cancelar = PATCH, cancelar es
+     `status: cancelled`). Lo **prueba en su calendario**: evento «🧪 Prueba de Jarvis» pasado
+     mañana 03:00, lo mueve, lo cancela y verifica cada paso leyendo de vuelta.
+  8. (30-sep) Instala en Hermes la skill `agenda-calendario` (sale de `origin/main` del clon del
+     VPS; respalda la vieja) y agrega a `/root/.hermes/SOUL.md` la sección «Su calendario y el
+     cierre del día» (respalda el SOUL). No reinicia el gateway.
+  9. Crea el interruptor, imprime la vista previa del cierre y del resumen, y le avisa por Telegram.
+- **Incógnitas que solo resuelve la corrida real:** que la API de n8n acepte el cuerpo de los dos
+  flujos nuevos, que el nodo de Google lea su calendario con la credencial de la cuenta ONIA, que
+  el nodo HTTP acepte `method` como expresión y `predefinedCredentialType` de Google, que
+  `hermes cron pause` deje `state=paused` en `jobs.json`, que el gateway de Hermes lea el SOUL y la
+  skill nuevos sin reiniciarse, y la forma real de `/root/.hermes/skills` (el log la imprime). Cada una falla por su lado, lo dice en
+  el log y no le avisa «encendido» si hubo alguna falla.
+- **Quedan FUERA de la aduana (fase 2), con dueño esta sesión:**
+  - n8n «Vigia lead sin respuesta» (`*/30`) — es su interrupción nº 1, pero ignora silencio y
+    bloques; «Chatbot: seguimiento» (cada hora 8-20); «Backup diario» (1 por día, hace trabajo
+    real: NO se apaga, se le saca el aviso); «Monitor de Salud n8n» (solo con fallas).
+  - Caída del producto: `claude-guardia-canario.sh`, `auth-canary.sh` y `onia-mirar-cliente.sh`
+    avisan directo, sin los 30 min de espera ni silencio. `onia-mirar-cliente.mjs` repite cada
+    15 min después de 6 h caído (líneas ~242/258).
+  - «Reunión en 30 min»: **no está construido.** Su calendario ya le avisa desde el teléfono
+    (`useDefaultReminders`); preguntarle si igual lo quiere por Telegram antes de construirlo.
+  - **Aviso de «alta nueva»** (pedido de Plataforma, 30-sep 03:06 UTC: Sergio Urcullo quiere cada
+    alta para la campaña de Meta Ads). Sería un vigía en el VPS que lee `organizations` de
+    `supabase-db` y avisa por la aduana con `interrumpe`. **Espera el OK explícito de Sergio
+    Urcullo para leer la base de producción**: agregar esa lectura al `aplicar` a pedido de otra
+    sesión lo frenó el control de permisos, con razón. `signupOrigin` (utm, fbclid) existe recién
+    con la 1.0 publicada.
+  - El `agendar` viejo (`scripts/hermes_command_center.py` → webhook `agendar-create`) crea en el
+    calendario de ONIA, tiene el bug del «1:30» sin am/pm y **no le llega nada**: el que lee
+    Telegram es el gateway de Hermes, no el Command Center de n8n (0 ejecuciones en 72 h). Queda
+    reemplazado por la skill nueva. Borrarlo o arreglarlo no vale el tiempo hoy.
 
 ## 4. Archivos
 
 `hermes-content/docs/ONIA_CEREBRO.md` (la regla) · `COORDINATION_MANIFEST.md` §«EL HILO» ·
-`.github/workflows/hermes-jarvis.yml` · `hermes-content/deploy/hermes-jarvis/` ·
-`scripts/loops/onia-tg.sh` + `onia-tg-aduana.test.mjs` · `scripts/loops/jarvis-resumen.sh` +
-`.test.mjs` · `scripts/loops/extras/jarvis-voz.sh` · `scripts/loops/sincronizar.sh`.
-Inventario de los ~30 emisores de Telegram: se hizo el 29-sep (subagente), las conclusiones
-están en la regla; los emisores directos más ruidosos: monitores de n8n (Salud cada hora,
-Healthcheck cada 2 h, Integraciones, Backup), `claude-guardia` (Sentry cada 10 min si falla la
-API), `onia-mirar-cliente.mjs` (bug: cada 15 min después de 6 h caído, líneas ~242/258).
+`.github/workflows/hermes-jarvis.yml` · `hermes-content/deploy/hermes-jarvis/{comun,diagnostico,
+aplicar,revertir}.sh` · `scripts/loops/onia-tg.sh` + `onia-tg-aduana.test.mjs` (30) ·
+`scripts/loops/jarvis-resumen.sh` + `.test.mjs` (22) · `scripts/loops/agenda.sh` + `.test.mjs` (22) ·
+`hermes-content/skills/agenda-calendario.md` · `hermes-content/deploy/hermes-agent/SOUL.md` ·
+`scripts/loops/vigia-aprobaciones.sh` · `hermes-content/deploy/vps-ops/claude-guardia.sh` ·
+`scripts/loops/extras/jarvis-voz.sh` · `scripts/loops/sincronizar.sh`.
 
 ## 5. Intentos fallidos
 
@@ -71,21 +112,75 @@ API), `onia-mirar-cliente.mjs` (bug: cada 15 min después de 6 h caído, líneas
    no es de este carril. Por eso `jarvis-resumen.sh` exporta UTF-8 (el cron también corre en POSIX).
 4. `git worktree add` de `main` en el contenedor tarda >2 min y ocupa GB (árbol de 6 GB): no usar
    para comparar; alcanza con `git show origin/main:<archivo>`.
+5. `npm test` entero se corta en `test:bot` (3 rojos que leen el repo `onia-platform`, ausente en
+   el contenedor): igual en la base. Las pruebas de este carril se corren sueltas.
+6. Un `cat` de `redactar.sed` desde la sesión lo frenó el control de permisos: no hace falta
+   leerlo, sus reglas están en el README de la carpeta.
+7. Hipótesis descartada: «el ruido viene de `onia-tg.sh`». Medido: 7 envíos directos en 72 h. El
+   ruido venía de los que NO pasan por ahí (Hermes, n8n, guardia, aprobaciones).
+8. Mensaje directo entre sesiones (30-sep): `list_sessions` ve las 4 vivas (control, Marca personal,
+   Plataforma, Lucía v4) pero `SendMessage` a cualquiera → «not reachable» y `ListAgents` no lista
+   ninguna. Lo que SÍ anda (lo encontró Lucía v4): una rutina de un disparo con
+   `persistent_session_id` entra como un turno en la otra sesión. Con eso se avisó a Marca personal
+   y a Plataforma el 30-sep 02:44 UTC. El detalle sigue en `COORDINATION_MANIFEST.md` §EL HILO.
+9. En la simulación, una prueba mía de «choca con» esperaba choque entre 15:30–17:00 y 17:00–17:30:
+   el que estaba mal era el test (fin exclusivo). Y `huecos` estiraba el último hueco hasta un evento
+   de las 22:30: las dos puntas se recortan a la ventana 07:30–21:30.
 
 ## 6. Qué depende de Sergio Urcullo
 
-- **Un toque:** GitHub → Actions → «Hermes Jarvis — acceso controlado al VPS» → Run workflow
-  (`diagnostico`).
-- **Compartir su calendario personal** con oninteligenciaartificial@gmail.com.
-- Después: OK a la lista de lo que se silencia + un toque en `aplicar`.
-- Hallazgos para decidir más adelante: `agendar` crea eventos a la 01:30 / 02:30 cuando se escribe
-  «1:30» sin am/pm (dos casos en junio) · el webhook `agendar-create` de n8n no pide clave.
+- **Un toque:** GitHub → Actions → «Hermes Jarvis — acceso controlado al VPS» → Run workflow →
+  acción **`aplicar`**. Para deshacer: la misma, con **`revertir`**.
+- Decidir: ¿quiere «reunión en 30 min» por Telegram, o le alcanza el aviso de su calendario?
+- Del carril Lucía v4: borrar en la web de Higgsfield los 9 Souls viejos que siguen «ready»
+  (alcance en `deletion_scope_2026_09_29` de `LUCIA-HIGGSFIELD-IDENTITY.json`), y el OK a los 7
+  créditos del dataset del Soul nuevo.
+- **Prospecto del 29-sep:** llamada con Nicolás Prada (cal.com, 20:20). Su tío tiene una pyme.
+  Falta el rubro y el contacto del tío para el seguimiento; no está en el tablero.
+- Pendientes suyos que el diagnóstico encontró (van en el resumen): tarjeta de Meta antes del
+  1-oct (`t_7db602a2`), renovación del VPS (`t_9c87fb69`), 7 prospectos esperando (`t_3dd7530c`).
 
 ## 7. Próximos pasos
 
-1. Leer el diagnóstico (`get_job_logs`) → escribir `aplicar.sh`/`revertir.sh` con los datos vivos.
-2. Mostrarle a Sergio Urcullo la lista exacta de lo que se silencia y un ejemplo renderizado del
-   resumen; con su OK, mergear `claude/hermes-jarvis` y pedir el toque en `aplicar`.
-   Listo = el resumen de las 06:30 del día siguiente llega, y 24 h de `onia-tg.log` lo prueban.
-3. Calendario: lector del día (n8n, con clave) + mover/cancelar con confirmación + arreglo del
-   «1:30» → probado contra su calendario real.
+> **30-sep ~12:45 UTC — la sesión de control se muda al entorno «Onia».** Sergio Urcullo: *"No quiero
+> que sea manual, tiene que estar automatizado, acabo de colocar una cloud que tiene la llave al
+> servidor, se llama onia, coloca esta sesión en este entorno y llama entre sesiones si necesitas
+> algo"*. Una sesión no cambia de entorno: se abre la **sucesora** en «Onia»
+> (`env_01BLwXdgpqDS3sx4rg3r2uvg`) con este handoff, y la de «Default»
+> (`session_01BZJvUfEXbqT9wNLJ6n5XZP`) deja de trabajar. **Con eso el toque desaparece:** la
+> sesión de control corre `aplicar` por SSH ella misma, con el OK de Sergio de arriba.
+
+1. **Llegar al VPS.** Desde «Onia»: `ssh root@187.77.16.63 hostname`. Si falla, preguntarle a la
+   sesión principal (`session_01VGmpNv4eSMnpA3wXrypR4L`, rutina de un disparo) cómo usa la llave
+   `claude-cloud-20260930`. Nunca pedirle una llave a Sergio Urcullo por chat. Ojo: desde «Default»
+   el puerto 22 NO pasa (el proxy solo deja tráfico web cifrado; medido el 30-sep).
+2. **Avisar antes de tocar (infra = un dueño a la vez):** una línea en EL HILO y una rutina de un
+   disparo a la principal: qué toca `aplicar` (crontab `#jarvis`, 3 trabajos de Hermes, 12 flujos
+   de n8n, 2 flujos de agenda, skill y SOUL de Hermes; nada de onia-platform) y cuándo.
+3. **Correr `aplicar` por SSH**, con el MISMO armado que el workflow
+   (`.github/workflows/hermes-jarvis.yml`): `REDACTAR_SED` + `COMMIT` + `HORAS` + `comun.sh` +
+   `aplicar.sh` → `ssh root@187.77.16.63 'bash -s'` → `sed -E -f redactar.sed`. Guardar la salida
+   en el scratchpad y revisar sección por sección (0 a 8). MIRAR las vistas previas del cierre y
+   del resumen. Si algo falla: arreglar en main con pruebas y volver a correr (es idempotente).
+   Si quedó un «🧪 Prueba de Jarvis» en su calendario, borrarlo con el conector de Google Calendar.
+4. Contarle a Sergio Urcullo, corto, qué quedó y qué falló. Después, que él le pida algo a Hermes
+   por Telegram («¿qué tengo mañana?», «mové lo de las 3 a las 7»), y mirar que primero le muestre
+   el cambio y solo con su sí lo haga.
+5. **Pedirle el OK para leer producción** (altas y pagos): con eso, el embudo diario del plan de
+   venta (`handoff/sesion-madre.md`: prospectos → demos → altas → pagos) y el aviso de alta nueva.
+   Sin su «sí» explícito no se construye (el control de permisos lo frenó el 30-sep).
+6. Medir 24 h después con `diagnostico` (también por SSH): `onia-tg.log` + `message_id` del chat.
+   Eso cierra el hecho (1).
+7. Fase 2 de §3, en ese orden: sacar el aviso del «Backup diario», pasar «Vigia lead sin
+   respuesta» y los canarios por la aduana (con `ESPERA=30` y `RECUPERADO`).
+8. **Quién maneja qué (30-sep, pregunta de Sergio Urcullo: «¿Hermes va a manejar Claude Code, el
+   repositorio y demás?»).** Propuesta de la sesión de control, **pendiente de su OK**:
+   - **La sesión de control** (Claude Code, entorno «Onia») maneja todo: el VPS y la config de
+     Hermes, el repo, y las demás sesiones por EL HILO y las rutinas de un disparo.
+   - **Hermes** (gpt-5-mini en Telegram) es su ventanilla: entrega, calendario, preguntas. NO
+     escribe código ni toca el repo ni producción: es un modelo barato que ya inventó una agenda
+     entera (`handoff/infra-cerebro-loops.md` §5), y un error en `main` rompe el deploy del VPS y
+     de Vercel.
+   - Pedidos por Telegram: Hermes los deja como tarea en el tablero, y una rutina despierta a la
+     sesión de control cada tanto para tomarlos y ejecutarlos. Así él maneja todo desde Telegram
+     sin darle las llaves del código a un modelo débil.

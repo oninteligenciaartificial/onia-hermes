@@ -134,6 +134,11 @@ Instrucciones de proyecto. Override sobre defaults.
   cuando `historial/` por esta misma regla NO es fuente. Un doc archivado que nadie marca
   como archivado se sigue leyendo como presente, y mandaba a vender con el perfil, los
   dolores y los planes viejos.
+- **CÓMO se consiguen clientes (canales y su orden, competencia por adquisición, pauta de
+  Meta): manda `hermes-content/docs/ONIA_ADQUISICION_Y_PAUTA.md`** (2026-09-30). Reemplaza a
+  las fotos de agosto (`ONIA_PAUTA_COMPETENCIA_20260815.md`, `ONIA_ADS_CAMPANA_1_LISTA_20260813.md`).
+  Ningún anuncio promete lo que producción no hace hoy: ese doc (§5.4) dice qué se puede
+  prometer ya y qué recién con la 1.0 publicada (el Recall de tratamiento a medias).
 - **Un tema = un archivo sin fecha.** Si cambia, se EDITA ese archivo; no se crea uno
   nuevo con la fecha de hoy.
 - **Fecha en el nombre = historia.** `hermes-content/docs/historial/` son fotos de un día

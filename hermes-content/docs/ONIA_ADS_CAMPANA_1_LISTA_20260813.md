@@ -1,5 +1,11 @@
 # Campaña 1 — creada en PAUSA, lista para encender
 
+> ⚠️ **FOTO DEL 13-AGO — ya no es lo vigente (marcado el 2026-09-30 por el carril Mercado).** La campaña de
+> abajo está **archivada** y no se reactiva. La campaña vigente está especificada en
+> `ONIA_ADQUISICION_Y_PAUTA.md` §5: **clic a WhatsApp**, no tráfico a la web. Las piezas A2 de este doc son
+> **solo tipografía** (no pasan *"producto visible o no sale"*, `CLAUDE.md` §5) y sus precios y estados están
+> vencidos.
+
 > 2026-08-13. Objetivo de la sesión: creatividades + público + campaña en pausa con tope y
 > fecha de fin. **Nada encendido. Nada gastado.**
 

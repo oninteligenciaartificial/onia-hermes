@@ -11,7 +11,7 @@
 
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { execFileSync } from "node:child_process";
+import { execFileSync, spawnSync } from "node:child_process";
 import { mkdtempSync, writeFileSync, readFileSync, chmodSync, existsSync, mkdirSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, dirname } from "node:path";
@@ -52,22 +52,22 @@ echo '${respuesta}'
   );
   chmodSync(curl, 0o755);
 
-  const avisar = (msg, env = {}) =>
-    execFileSync("bash", [SCRIPT, msg], {
-      env: {
-        ...process.env,
-        PATH: `${dir}:${process.env.PATH}`,
-        ONIA_TABLERO: tablero,
-        ONIA_TG_LOG: join(dir, "onia-tg.log"),
-        ONIA_TG_ENV: join(dir, "no-existe.env"),
-        ONIA_AVISO_ESTADO: estado,
-        TELEGRAM_BOT_TOKEN: "token-de-mentira",
-        TELEGRAM_HOME_CHANNEL: "0",
-        ONIA_AVISO_HM: "1000",
-        ...env,
-      },
-      encoding: "utf8",
-    });
+  const entorno = (env) => ({
+    ...process.env,
+    PATH: `${dir}:${process.env.PATH}`,
+    ONIA_TABLERO: tablero,
+    ONIA_TG_LOG: join(dir, "onia-tg.log"),
+    ONIA_TG_ENV: join(dir, "no-existe.env"),
+    ONIA_AVISO_ESTADO: estado,
+    TELEGRAM_BOT_TOKEN: "token-de-mentira",
+    TELEGRAM_HOME_CHANNEL: "0",
+    ONIA_AVISO_HM: "1000",
+    ...env,
+  });
+  const avisar = (msg, env = {}) => execFileSync("bash", [SCRIPT, msg], { env: entorno(env), encoding: "utf8" });
+  // La consulta devuelve un código de salida, no un mensaje: 0 = puede sonar, 75 = esperar.
+  const puedo = (env = {}) =>
+    spawnSync("bash", [SCRIPT], { env: entorno({ ONIA_AVISO_PUEDO: "1", ...env }), encoding: "utf8" }).status;
 
   // Un mensaje por línea, en base64: el resumen junto trae varias líneas y contarlas como
   // mensajes daba 3 donde había 1.
@@ -85,7 +85,7 @@ echo '${respuesta}'
     mkdirSync(join(estado, sub), { recursive: true });
     writeFileSync(join(estado, sub, clave), String(Math.floor(Date.now() / 1000) - minutos * 60));
   };
-  return { avisar, enviados, cola, log, tareasCreadas, envejecer, estado };
+  return { avisar, puedo, enviados, cola, log, tareasCreadas, envejecer, estado };
 }
 
 // ── El interruptor: sin él, nada cambia para los emisores viejos ────────────────
@@ -323,4 +323,39 @@ test("un título con & o > no rompe el mensaje junto (HTML escapado)", () => {
   b.avisar("💰 Pago de A&B > 3 cuotas", enClase);
   soltar(b, "1235");
   assert.match(b.enviados()[0], /A&amp;B &gt; 3 cuotas/);
+});
+
+// ── La consulta: para los que mandan por su cuenta (las aprobaciones con foto) ──
+// vigia-aprobaciones manda fotos y videos con curl propio: no puede pasar por la aduana,
+// pero sí PREGUNTARLE si ahora se puede. Sin esto, sus preguntas sonaban en clase y de noche.
+
+test("puedo: de día y fuera de un bloque, sí (0)", () => {
+  const b = banco();
+  conBloques(b);
+  assert.equal(b.puedo({ ONIA_AVISO_FECHA: HOY, ONIA_AVISO_HM: "1300" }), 0);
+});
+
+test("puedo: en clase, esperar (75); de noche, esperar (75)", () => {
+  const b = banco();
+  conBloques(b);
+  assert.equal(b.puedo({ ONIA_AVISO_FECHA: HOY, ONIA_AVISO_HM: "1000" }), 75);
+  assert.equal(b.puedo({ ONIA_AVISO_FECHA: HOY, ONIA_AVISO_HM: "2330" }), 75);
+  assert.equal(b.puedo({ ONIA_AVISO_FECHA: HOY, ONIA_AVISO_HM: "0500" }), 75);
+});
+
+test("puedo: con el interruptor apagado, siempre sí — nada cambia antes de encenderlo", () => {
+  const b = banco({ activa: false });
+  conBloques(b);
+  assert.equal(b.puedo({ ONIA_AVISO_FECHA: HOY, ONIA_AVISO_HM: "1000" }), 0);
+  assert.equal(b.puedo({ ONIA_AVISO_FECHA: HOY, ONIA_AVISO_HM: "2330" }), 0);
+});
+
+test("puedo: la consulta no manda, no encola y no crea tareas", () => {
+  const b = banco();
+  conBloques(b);
+  b.puedo({ ONIA_AVISO_FECHA: HOY, ONIA_AVISO_HM: "1000" });
+  b.puedo({ ONIA_AVISO_FECHA: HOY, ONIA_AVISO_HM: "1300" });
+  assert.equal(b.enviados().length, 0);
+  assert.equal(b.cola().length, 0);
+  assert.equal(b.tareasCreadas().length, 0);
 });

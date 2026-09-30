@@ -1,5 +1,19 @@
 # Técnica de Higgsfield — lo que funciona, probado en la web
 
+> ## ✅ 2026-09-29 (corregido el mismo día): los IDs de Lucía de este archivo siguen vigentes como fuente
+>
+> La nota de abajo los daba por retirados por una premisa falsa (Lucía no viene de una persona real:
+> la hizo Sergio Urcullo 100% con IA). Retirados de verdad: solo los que lista
+> `LUCIA-HIGGSFIELD-IDENTITY.json` → `deletion_scope_2026_09_29`.
+>
+> ~~2026-09-29: los IDs de este archivo están retirados~~
+>
+> Las técnicas (prompts, motores, QA) siguen siendo aprendizaje válido; **los IDs de Soul y
+> Element que aparecen acá ya no se usan** (Lucía v4 se rehace desde cero). Lo verificado en vivo
+> el 2026-09-29 —MCP sin borrado, CLI 1.1.26 sin borrado, costos por motor, `soul_cast` que ignora
+> el prompt, `nano_banana_pro` que figura como `nano_banana_2`— está en
+> `../../../docs/HIGGSFIELD_VIDEO_SYSTEM.md` §«Verificado en vivo 2026-09-29».
+
 > ## Autoridad operativa vigente — 2026-09-22
 >
 > Este archivo conserva la bitacora y los hallazgos cronologicos; **ya no decide por si solo el

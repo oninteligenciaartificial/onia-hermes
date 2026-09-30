@@ -1,0 +1,4 @@
+interface:
+  display_name: "Web Factory Commerce Storefront"
+  short_description: "Build real ecommerce storefronts"
+  default_prompt: "Use $web-factory-commerce-storefront to design and implement a sales-focused ecommerce storefront."

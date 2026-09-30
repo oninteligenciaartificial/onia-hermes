@@ -1,0 +1,28 @@
+{
+ "fecha": "2026-09-30T02:35Z",
+ "que_mide": "Identidad (coseno ArcFace) del photoshoot de 10 angulos (2026-07-08) y de los 2 anchors nuevos, contra el mismo centroide de 8 fuentes de identidad-metodos-20260929.json. 0 creditos.",
+ "hallazgo": "Cada PNG de references/models/lucia-surgical-shoot-20260707/ trae su job de Higgsfield en el chunk de texto 'hf-job-id'. Los 12 jobs estan 'completed' con URL en el CDN (jobs_wait, 30-sep). El handoff decia 'no tiene IDs en Higgsfield; subirlo requiere esa red': era falso. Se usan por job_id, sin subir nada.",
+ "job_ids": {
+  "01-front-neutral": "2ad9e7c9-97b3-41ad-9c5c-5a300852f56e",
+  "02-front-slight-smile": "59b28c55-9060-4769-b0b1-19c8c06559cf",
+  "03-front-big-smile": "bdc2b3bf-36e4-4340-b937-037bd73ed44e",
+  "04-profile-left": "88f1bf27-d239-4848-bfe8-2662ab208219",
+  "05-profile-right": "cfefbdbd-656a-42bb-8084-df6433742885",
+  "06-threequarter-left": "7b444e7d-a954-4fa6-b2b2-d3b5416328e4",
+  "07-threequarter-right": "c281b4a0-67d2-40a0-a858-59691fb29ef8",
+  "08-nose-detail": "9d7e8c62-9c99-4586-906f-d83ddaddac89",
+  "09-ear-detail": "47b8a898-55be-4100-b229-58111b0223a9",
+  "10-full-body": "f6abd4fe-f198-4081-80e9-15ba72c7af80",
+  "new-anchor-bathroom": "7f68ea56-f8d0-499d-896f-ca37cfce641f",
+  "new-anchor-street": "98260dde-081c-47ea-9b57-07799cf6a37d"
+ },
+ "nota_03": "03-front-big-smile (bdc2b3bf) ES la fuente R8 (lucia-surgical-anchor 902eeebb): ya estaba en el centroide, leave-one-out 0.726.",
+ "lectura": {
+  "pasan_gate_0_70": ["01 (0.738)", "02 (0.744)", "03 (0.726, leave-one-out)", "05 perfil der (0.703)", "06 (0.758)", "07 (0.729)"],
+  "perfil_izq_04": "0.689: al borde. ArcFace no es invariante a la pose; los perfiles bajan solos (la fuente R4, casi perfil, da 0.698). No es deriva.",
+  "caras_chicas": "10 cuerpo entero (cara de 77 px) 0.649, anchor bano (71 px) 0.639, anchor calle (168 px) 0.618: con la cara chica el embedding pierde confiabilidad. Se miran, no se descartan por el numero.",
+  "recortes_08_09": "nariz y oreja: el detector no encuentra cara (esperado). Solo sirven de vara de QA, no para entrenar.",
+  "regla_del_gate": "0.70 aplica a caras frontales y de tres cuartos de 200 px o mas. Perfiles y caras chicas: mirada visual."
+ },
+ "resultado": {"model":"insightface buffalo_l: SCRFD det_10g + ArcFace w600k_r50","refs_internal":{"pairwise_mean":0.642,"pairwise_min":0.509,"leave_one_out_min":0.698},"negatives_max":0.224,"images":{"S01_front_neutral":{"group":"tests","faces":1,"det_score":0.859,"face_px":462,"img":"896x1200","flip_self":0.963},"S02_front_slight_smile":{"group":"tests","faces":1,"det_score":0.883,"face_px":434,"img":"896x1200","flip_self":0.951},"S04_profile_left":{"group":"tests","faces":1,"det_score":0.769,"face_px":536,"img":"896x1200","flip_self":0.897},"S05_profile_right":{"group":"tests","faces":1,"det_score":0.797,"face_px":422,"img":"896x1200","flip_self":0.937},"S06_34_left":{"group":"tests","faces":1,"det_score":0.835,"face_px":472,"img":"896x1200","flip_self":0.938},"S07_34_right":{"group":"tests","faces":1,"det_score":0.898,"face_px":449,"img":"896x1200","flip_self":0.925},"S08_nose_detail":{"group":"tests","faces":0},"S09_ear_detail":{"group":"tests","faces":0},"S10_full_body":{"group":"tests","faces":1,"det_score":0.874,"face_px":77,"img":"896x1200","flip_self":0.977},"A1_new_anchor_bathroom":{"group":"tests","faces":1,"det_score":0.914,"face_px":71,"img":"768x1376","flip_self":0.968},"A2_new_anchor_street":{"group":"tests","faces":1,"det_score":0.82,"face_px":168,"img":"768x1376","flip_self":0.965},"N1_casting_C01":{"group":"negatives","faces":1,"det_score":0.807,"face_px":815,"img":"1536x2048","flip_self":0.909},"N2_casting_C13":{"group":"negatives","faces":1,"det_score":0.874,"face_px":406,"img":"1152x2048","flip_self":0.944},"N3_casting_retrato":{"group":"negatives","faces":1,"det_score":0.871,"face_px":497,"img":"1152x2048","flip_self":0.948}},"scores":{"S01_front_neutral":{"centroid":0.738,"mean_ref":0.611,"min_ref":0.485,"max_ref":0.766},"S02_front_slight_smile":{"centroid":0.744,"mean_ref":0.617,"min_ref":0.535,"max_ref":0.791},"S04_profile_left":{"centroid":0.689,"mean_ref":0.571,"min_ref":0.513,"max_ref":0.635},"S05_profile_right":{"centroid":0.703,"mean_ref":0.582,"min_ref":0.531,"max_ref":0.664},"S06_34_left":{"centroid":0.758,"mean_ref":0.628,"min_ref":0.57,"max_ref":0.716},"S07_34_right":{"centroid":0.729,"mean_ref":0.604,"min_ref":0.458,"max_ref":0.753},"S10_full_body":{"centroid":0.649,"mean_ref":0.538,"min_ref":0.457,"max_ref":0.627},"A1_new_anchor_bathroom":{"centroid":0.639,"mean_ref":0.53,"min_ref":0.425,"max_ref":0.697},"A2_new_anchor_street":{"centroid":0.618,"mean_ref":0.512,"min_ref":0.376,"max_ref":0.756},"N1_casting_C01":{"centroid":0.187,"mean_ref":0.155,"min_ref":0.099,"max_ref":0.22},"N2_casting_C13":{"centroid":0.058,"mean_ref":0.048,"min_ref":0.009,"max_ref":0.117},"N3_casting_retrato":{"centroid":0.224,"mean_ref":0.186,"min_ref":0.091,"max_ref":0.224}}}
+}

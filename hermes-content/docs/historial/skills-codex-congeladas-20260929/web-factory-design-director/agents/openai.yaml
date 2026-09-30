@@ -1,0 +1,4 @@
+interface:
+  display_name: "Web Factory Design Director"
+  short_description: "Route the right web design skills"
+  default_prompt: "Use $web-factory-design-director to choose the right design stack before building a website."

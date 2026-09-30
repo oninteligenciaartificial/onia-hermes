@@ -1,0 +1,22 @@
+{
+ "refs": {
+  "R1_frontal_canon": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/a7cfb766-5755-4d76-baba-c8e81ddf50db.jpg",
+  "R2_34_medio": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/1714a347-471d-4803-a42e-0022e15df262.jpg",
+  "R3_casi_frontal": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/d7d6d36a-1358-40b4-b1b3-d98c1ac15135.png",
+  "R4_casi_perfil": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/f7ddbf81-880e-4b91-a825-0dbaa342bf7a.png",
+  "R5_34_izq": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/0aa21e93-4429-49b3-a12c-5bfcec67239d.png",
+  "R6_34_der": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/df491c87-089a-4ace-907a-90ebe6ac82e3.png",
+  "R7_frontal_2752": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/8ce2f65c-5681-41b1-bb37-83b3576c74fd.png",
+  "R8_anchor_902eeebb": "https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260708_165146_bdc2b3bf-36e4-4340-b937-037bd73ed44e.png"
+ },
+ "tests": {
+  "SD_S1": "https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260930_031104_22052686-76d5-4eba-ba25-9cd6122aba19.png",
+  "SD_S2": "https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260930_031104_5fc0060e-a9ad-4c5d-93ed-ed000b5cec7e.png",
+  "SD_S3": "https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260930_031104_7d4c25e8-3624-472d-8c3d-e955be07882a.png"
+ },
+ "negatives": {
+  "N1_casting_C01": "https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260929_202509_daeef7ee-7ab6-4b6b-83ee-03dcaa206e4d.png",
+  "N2_casting_C13": "https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260929_205421_873edf19-e031-4112-93fc-e647995e72af.png",
+  "N3_casting_retrato": "https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260929_205421_cd3156ea-aa7e-4b5f-985c-6209cadedaa3.png"
+ }
+}

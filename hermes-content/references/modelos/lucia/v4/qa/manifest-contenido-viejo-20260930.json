@@ -1,0 +1,35 @@
+{
+ "refs": {
+  "R1_frontal_canon": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/a7cfb766-5755-4d76-baba-c8e81ddf50db.jpg",
+  "R2_34_medio": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/1714a347-471d-4803-a42e-0022e15df262.jpg",
+  "R3_casi_frontal": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/d7d6d36a-1358-40b4-b1b3-d98c1ac15135.png",
+  "R4_casi_perfil": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/f7ddbf81-880e-4b91-a825-0dbaa342bf7a.png",
+  "R5_34_izq": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/0aa21e93-4429-49b3-a12c-5bfcec67239d.png",
+  "R6_34_der": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/df491c87-089a-4ace-907a-90ebe6ac82e3.png",
+  "R7_frontal_2752": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/8ce2f65c-5681-41b1-bb37-83b3576c74fd.png",
+  "R8_anchor_902eeebb": "https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260708_165146_bdc2b3bf-36e4-4340-b937-037bd73ed44e.png"
+ },
+ "tests": {
+  "L1_t1.5": "<frames de lucia-lanzamiento-v7.mp4>/L1_t1.5.jpg",
+  "L1_t10": "<frames de lucia-lanzamiento-v7.mp4>/L1_t10.jpg",
+  "L1_t13": "<frames de lucia-lanzamiento-v7.mp4>/L1_t13.jpg",
+  "L1_t16": "<frames de lucia-lanzamiento-v7.mp4>/L1_t16.jpg",
+  "L1_t19": "<frames de lucia-lanzamiento-v7.mp4>/L1_t19.jpg",
+  "L1_t4": "<frames de lucia-lanzamiento-v7.mp4>/L1_t4.jpg",
+  "L1_t7": "<frames de lucia-lanzamiento-v7.mp4>/L1_t7.jpg",
+  "BANCO_E2-A-rooftop": "hermes-content/references/modelos/lucia/generadas-20260902/E2-A-rooftop.jpg",
+  "BANCO_E2-B-rooftop": "hermes-content/references/modelos/lucia/generadas-20260902/E2-B-rooftop.jpg",
+  "BANCO_E2-C-rooftop": "hermes-content/references/modelos/lucia/generadas-20260902/E2-C-rooftop.jpg",
+  "BANCO_E3-cafe-PUBLICAR-1080x1920": "hermes-content/references/modelos/lucia/generadas-20260902/E3-cafe-PUBLICAR-1080x1920.jpg",
+  "BANCO_E3-cafe-PUBLICAR-feed-1080x1350": "hermes-content/references/modelos/lucia/generadas-20260902/E3-cafe-PUBLICAR-feed-1080x1350.jpg",
+  "BANCO_E3-cafe": "hermes-content/references/modelos/lucia/generadas-20260902/E3-cafe.jpg",
+  "BANCO_E3-coworking-FONDO-SUAVE": "hermes-content/references/modelos/lucia/generadas-20260902/E3-coworking-FONDO-SUAVE.jpg",
+  "BANCO_E3-coworking": "hermes-content/references/modelos/lucia/generadas-20260902/E3-coworking.jpg",
+  "BANCO_E3-hotel": "hermes-content/references/modelos/lucia/generadas-20260902/E3-hotel.jpg"
+ },
+ "negatives": {
+  "N1_casting_C01": "https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260929_202509_daeef7ee-7ab6-4b6b-83ee-03dcaa206e4d.png",
+  "N2_casting_C13": "https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260929_205421_873edf19-e031-4112-93fc-e647995e72af.png",
+  "N3_casting_retrato": "https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260929_205421_cd3156ea-aa7e-4b5f-985c-6209cadedaa3.png"
+ }
+}

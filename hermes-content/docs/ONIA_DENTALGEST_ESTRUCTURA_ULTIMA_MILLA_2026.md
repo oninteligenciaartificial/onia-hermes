@@ -410,6 +410,11 @@ Lecturas clave:
 - **El piso clínico está commoditizado y hay gratis creíble** (Doctocliq, Dendoo, Dentaltap). Vender "otra agenda con odontograma" es pelear contra $0. Confirma el mandato: hay que diferenciarse fuera de las fichas.
 - **Los líderes esconden precio y cobran por profesional/sede** → caro y opaco para clínica chica boliviana; además factura en USD (riesgo cambiario, ya señalado como pain en Bolivia).
 - **Nadie de estos incluye factura fiscal válida en Bolivia** dentro del sistema dental.
+  ⚠️ **Corregido el 2026-09-30 (carril Mercado): ya no se puede afirmar.** **TuDoc** (`tudoc.com.bo`, software
+  médico **boliviano**) declara *"agenda, historias clínicas y facturación en línea SIAT en un solo sistema"* y
+  *"más de 200 clínicas"* (leído en el extracto del buscador, sin abrir la página; si tiene odontograma no se
+  verificó). La frase de arriba vale para los extranjeros de la tabla, no para todo el mercado. Detalle:
+  `research/ONIA_MERCADO_COMPETENCIA_BOLIVIA_20260930.md` §3.
 
 ---
 

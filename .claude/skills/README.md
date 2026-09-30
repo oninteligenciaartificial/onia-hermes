@@ -34,9 +34,10 @@ las fuentes de verdad (`hermes-content/skills/`, `hermes-content/docs/`, `onia-c
 generador de propuestas). Al cambiar una regla: **editar la fuente**, no duplicarla acá.
 
 ## Distinto de
-- `.agents/skills/` — skills para Codex. Quedan `impeccable`, `embedded-captions` (gate de
-  ortografía), `media-use` (librería de SFX de `editor-videos/scripts/sfx.mjs`: **no
-  borrar**), `higgsfield-generate`, `higgsfield-soul-id`.
+- `.agents/skills/` — skills para Codex (12). Entre ellas `impeccable` (lo usa el hook de
+  `.codex/hooks.json`), `embedded-captions` (gate de ortografía), `media-use` (librería de SFX de
+  `editor-videos/scripts/sfx.mjs`: **no borrar**), `motion-doctrine` y sus rutas,
+  `higgsfield-*` y `web-factory-design-research`/`-intake-assets`.
 - `.claude/agents/` — subagentes para delegar (queda `onia-crm-prospeccion`).
 - `hermes-content/skills/` — docs del bot Hermes. **El bot usa su propia copia en el VPS**
   (`/root/.hermes/skills/`); la del repo es la versión con historial en git.

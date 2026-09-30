@@ -15,10 +15,10 @@ Fuente de verdad del "cerebro" de Sergio Urcullo. Un tema, un archivo, sin fecha
 | capa | qué es | qué YA corre en ONIA | qué falta |
 |---|---|---|---|
 | **1. Identidad y objetivos** | qué importa esta semana; contra qué se prioriza TODO | `ONIA_ESTRATEGIA_DE_EMPRESA.md` (etapa vigente) + CLAUDE.md | un `goals.yaml` operativo que los agentes lean cada vuelta (hoy la etapa vive en prosa) |
-| **2. Captura** | todo lo que entra se registra en un solo lugar | loops → tablero (`onia-tablero.sh`) · avisos → tareas `[auto:]` · logs/rsync | **triage de mensajes entrantes** (WhatsApp/Chatwoot/correo — hoy "5 desconocidos sin contestar" vive como tarea suelta) · calendario real · noticias (loop `tendencias`, congelado) |
+| **2. Captura** | todo lo que entra se registra en un solo lugar | loops → tablero (`onia-tablero.sh`) · avisos → tareas `[auto:]` · logs/rsync · **su calendario personal** (`agenda.sh` → `onia-agenda.sh`, vía n8n; se enciende con `hermes-jarvis/aplicar`, pendiente de su toque al 29-sep) | **triage de mensajes entrantes** (WhatsApp/Chatwoot/correo — hoy "5 desconocidos sin contestar" vive como tarea suelta) · noticias (loop `tendencias`, congelado) |
 | **3. Memoria** | hechos atómicos + lecciones que no se repiten | `/root/.hermes/memories/MEMORY.md` (290+ hechos, dedup, inyectada a los 15 loops) + `onia-aprender.sh` | ✔ completa — es la capa más madura |
-| **4. Razonamiento programado** | agentes con horario que triagen y priorizan contra los objetivos | `weekday-work-agenda` 08:00 · `daily-content-video-plan` 08:10 · `ordenador-tablero` 2×/día · `veredicto-sergio` 16:00 (todos gpt-5-mini/nano, verdes desde 17-sep) | triage de mediodía · cierre nocturno · week-in-review de viernes (existen como jobs `hermes-*` pausados) |
-| **5. Entrega y acción** | te llega solo, y decidís desde ahí | Telegram (parte diario + veredicto) · **voz 08:25** (`onia-jarvis-voz.sh`, ElevenLabs Daniel) · circuito `ok/block` | **la superficie visual** (abajo) |
+| **4. Razonamiento programado** | agentes con horario que triagen y priorizan contra los objetivos | `ordenador-tablero` 2×/día. `weekday-work-agenda` 08:00, `daily-content-video-plan` 08:10 y `veredicto-sergio` 16:00 **se pausan con `aplicar`**: los reemplaza `jarvis-resumen.sh` (06:30 y cierre 21:30), que sale de fuentes medidas y usa IA solo para traducir los commits del día | triage de mediodía · week-in-review de viernes (existen como jobs `hermes-*` pausados) |
+| **5. Entrega y acción** | te llega solo, y decidís desde ahí | Telegram por UNA aduana (`onia-tg.sh`) · resumen 06:30 + cierre 21:30 · **voz 06:35** narrando el resumen (`onia-jarvis-voz.sh`, ElevenLabs Daniel) · circuito `ok/block` — todo se enciende con `hermes-jarvis/aplicar` (al 29-sep, pendiente de su toque; hasta ahí sigue el parte 05:00 + veredicto + voz 08:25) | los emisores que todavía no pasan por la aduana (`handoff/hermes-jarvis.md` §3). Agendar/mover/cancelar desde el chat está construido (`onia-agenda.sh` + skill `agenda-calendario`, siempre con su sí) y se enciende con el mismo `aplicar` |
 
 Regla heredada de la referencia y que ONIA ya cumple: **el Cerebro nunca actúa hacia
 afuera sin aprobación** — la autonomía termina en tu canal.
@@ -76,7 +76,11 @@ o el bloque menos urgente del día siguiente) y se mueve **con su OK**. Los bloq
 categoría: `ONIA_AVISO=interrumpe | resumen | sistema` (por defecto `sistema`). La aduana
 hace cumplir el horario de silencio, no repite el mismo aviso antes de 6 h, espera N minutos
 antes de avisar una caída (`ONIA_AVISO_ESPERA`) y, si la caída se arregla antes, no avisa
-nada. **Un emisor que le habla a Telegram por su cuenta, sin pasar por la aduana, es un bug.**
+nada. Los bloques los lee de `bloques-hoy.tsv`, que escribe cada 30 min el lector de su
+calendario (`onia-agenda.sh --bloques`). El que tiene que mandar foto o video por su cuenta
+(las aprobaciones) le PREGUNTA antes: `ONIA_AVISO_PUEDO=1` → 0 mandá, 75 esperá.
+**Un emisor que le habla a Telegram por su cuenta, sin pasar por la aduana, es un bug.** Los
+que todavía lo hacen están listados, con su plan, en `handoff/hermes-jarvis.md` §3.
 
 **Por qué así y no de otra forma** (medido, no opinado):
 - El 2026-09-04 le llegaron **443 mensajes en un día**. El arreglo del 08-sep los volvió

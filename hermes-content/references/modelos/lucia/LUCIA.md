@@ -1,6 +1,29 @@
 # LUCÍA — archivo único
 
-> ## Estado operativo vigente — 2026-09-22
+> ## 🔴 Estado vigente — 2026-09-29: Lucía v4 = la cara ORIGINAL, fijada de verdad
+>
+> ⚠️ **Corregido el mismo día.** Este bloque decía «Lucía v4 se rehace DESDE CERO» porque el repo
+> afirmaba que la cara venía de una persona real. **Era falso**: Sergio Urcullo la hizo 100% con IA
+> (*«NO ES CARA REAL, LA PRIMERA LUCÍA LA HICE 100% IA»*; el video fuente es `hf_…mp4` de
+> Higgsfield) y prefiere la cara original (*«me gusta más como era antes Lucía»*). Se conserva la
+> cara; lo de abajo queda como historia de la corrección.
+>
+> Sergio Urcullo, 2026-09-29: *«solo queremos empezar de cero pero el learning mantenelo para no
+> perderlo, solo las caras lo hacemos de nuevo para empezar con las caras ya fijadas y con
+> photoshoot donde se marquen todos los rasgos»*.
+>
+> - **No hay cara vigente** hasta que Sergio Urcullo apruebe el master v4. Todo ID de Soul o
+>   Element anterior al 2026-09-29 está **retirado** (lista en `DEPRECATIONS.md`). Los bloques de
+>   abajo que nombran `58bbd635…`, `902eeebb…` o `a1e334f3…` como vigentes son **historia**.
+> - La cara nueva nace **solo de texto**, sin ninguna imagen de la Lucía anterior: eso cierra el
+>   problema de derechos (la cara vieja venía de cuadros de video de una persona real).
+> - Se **conserva** lo aprendido: personaje, voz, reglas de prompt, rúbrica y QA de este archivo
+>   siguen valiendo para v4, salvo lo que diga una cara o un ID concreto.
+> - **Objetivo decidido por Sergio Urcullo (2026-09-29): «que vende Onia y que tenga lifestyle».**
+> - Plan, casting y siguientes pasos: [`LUCIA-V4-PERFECTION-PLAN.md`](LUCIA-V4-PERFECTION-PLAN.md).
+>   Procedencia de cada imagen v4: [`v4/PROCEDENCIA.jsonl`](v4/PROCEDENCIA.jsonl).
+
+> ## Estado operativo — 2026-09-22 (historia desde el 2026-09-29)
 >
 > Este archivo sigue siendo la biblia de **personaje, voz, estetica y limites comerciales**.
 > Los IDs, derechos, referencias y gates ejecutables viven en
@@ -18,7 +41,7 @@
 > - No gastar creditos sin costo/cap registrado y aprobacion explicita. El entrenamiento Soul del
 >   CLI no expone `cost` ni dry-run: requiere precio confirmado por otra superficie o cap aprobado.
 
-> ## 🔴 LA CARA — el único dato que hay que copiar
+> ## 🔴 LA CARA — la original, vigente como fuente de v4 (corregido 2026-09-29: se había marcado «retirada» por una premisa falsa)
 >
 > **Element canónico: `lucia-skin-v1` · `58bbd635-9b90-4bd2-b08a-1cd4915bd563`**
 > Se escribe `@lucia` en la web y autocompleta. Motor **Nano Banana Pro**, 2K.
@@ -65,7 +88,7 @@
 |---|---|
 | Handle | `@lucia.antelo.oficial` |
 | Perfil | Boliviana, 26, Santa Cruz de la Sierra |
-| **Vende** | La plataforma ONIA. Y es la vitrina viva del producto *"te creamos tu influencer IA"* |
+| **Vende** | **La plataforma ONIA, y tiene lifestyle** (Sergio Urcullo, 2026-09-29: *«que vende Onia y que tenga lifestyle»*). El lifestyle es el vehículo; Onia Platform es lo que se vende. La «vitrina del producto *te creamos tu influencer IA*» queda **para después**: es la línea influencers IA, congelada por la etapa 1 (`ONIA_ESTRATEGIA_DE_EMPRESA.md` §7 y §10) |
 | **Métrica única** | Demos agendadas con `src=lucia-*`. Seguidores y likes son ruido |
 | Etiqueta IA | **Obligatoria en la bio.** No se negocia |
 
@@ -657,7 +680,13 @@ y es mejor vara: cubre perfiles y detalles que un frame de video no tenía.
 
 Obligatoria pieza por pieza: saltearla fue lo que dejó pasar 11 avatares deformados.
 
-## 9. 🔴 Pendiente que no es técnico
+## 9. ✅ RESUELTO 2026-09-29 — no era una persona real
+
+> Sergio Urcullo: *«NO ES CARA REAL, LA PRIMERA LUCÍA LA HICE 100% IA»*. El «video» del que salieron
+> los frames es una salida de Higgsfield (`hf_20260615_…mp4`). La pregunta de abajo quedó
+> contestada; se conserva como historia de cómo nació la confusión.
+
+### (historia) Pendiente que no era técnico
 
 Toda la identidad cuelga de frames de **un video de una persona real**. En los frames de QA
 aparece sosteniendo un producto de marca. `AVATAR-CONSISTENCY-SCHEME` ya documenta que el

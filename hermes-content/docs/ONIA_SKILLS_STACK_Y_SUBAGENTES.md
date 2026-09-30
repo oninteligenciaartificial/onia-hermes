@@ -8,12 +8,12 @@
 ## Las 3 capas de "skills" en Onia (no confundir)
 
 1. **Skills de Claude Code** (`.claude/skills/`) — las que Claude Code auto-descubre e
-   invoca al trabajar en el repo. Incluyen las **propias de Onia** (abajo) + las 215
-   globales del usuario + plugins.
+   invoca al trabajar en el repo. Incluyen las **propias de Onia** (abajo) + las 110
+   globales del usuario (limpiadas el 2026-09-29 por uso real) + plugins.
 2. **Subagentes** (`.claude/agents/`) — queda 1 agente Onia: `onia-crm-prospeccion`.
    Los otros 8 se borraron el 2026-09-29 por 0 uso en 30 días
    (`historial/LIMPIEZA_SKILLS_20260929.md`).
-3. **Skills-doc de Hermes** (`hermes-content/skills/`) — 28 docs operativos del
+3. **Skills-doc de Hermes** (`hermes-content/skills/`) — 32 docs operativos del
    **bot Hermes** (NO son skills de Claude Code). El bot lee su propia copia en el VPS
    (`/root/.hermes/skills/`); la del repo es la versión con historial en git. Fuente de conocimiento a la
    que apuntan las skills propias.
@@ -52,7 +52,7 @@ respeta las reglas duras. Si existe una skill para la tarea, se usa (no reinvent
 ### Video (carriles H, J)
 `diseno-contenido-onia` (índice), `editor-videos`, `ver-videos`, `sacar-prompt`, `hyperframes`
 (copia global; Remotion está jubilado), `banner-design` (carril H) + Higgsfield. Skills-doc:
-video-lab-higgsfield, carruseles-onia, ugc-empresas-higgsfield.
+video-lab-higgsfield, carruseles-onia, videos-virales-higgsfield, ugc-empresas-higgsfield.
 
 ### Propuestas / documentos (carril C) → skill `onia-propuestas`
 `article-writing`, `make-pdf`, `slides`, `document-generate`, `brand`/`brandkit`.
