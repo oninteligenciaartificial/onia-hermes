@@ -114,7 +114,9 @@ aplicar,revertir}.sh` · `scripts/loops/onia-tg.sh` + `onia-tg-aduana.test.mjs` 
    ruido venía de los que NO pasan por ahí (Hermes, n8n, guardia, aprobaciones).
 8. Mensaje directo entre sesiones (30-sep): `list_sessions` ve las 4 vivas (control, Marca personal,
    Plataforma, Lucía v4) pero `SendMessage` a cualquiera → «not reachable» y `ListAgents` no lista
-   ninguna. El canal sigue siendo `COORDINATION_MANIFEST.md` §EL HILO.
+   ninguna. Lo que SÍ anda (lo encontró Lucía v4): una rutina de un disparo con
+   `persistent_session_id` entra como un turno en la otra sesión. Con eso se avisó a Marca personal
+   y a Plataforma el 30-sep 02:44 UTC. El detalle sigue en `COORDINATION_MANIFEST.md` §EL HILO.
 9. En la simulación, una prueba mía de «choca con» esperaba choque entre 15:30–17:00 y 17:00–17:30:
    el que estaba mal era el test (fin exclusivo). Y `huecos` estiraba el último hueco hasta un evento
    de las 22:30: las dos puntas se recortan a la ventana 07:30–21:30.
@@ -124,6 +126,9 @@ aplicar,revertir}.sh` · `scripts/loops/onia-tg.sh` + `onia-tg-aduana.test.mjs` 
 - **Un toque:** GitHub → Actions → «Hermes Jarvis — acceso controlado al VPS» → Run workflow →
   acción **`aplicar`**. Para deshacer: la misma, con **`revertir`**.
 - Decidir: ¿quiere «reunión en 30 min» por Telegram, o le alcanza el aviso de su calendario?
+- Del carril Lucía v4: borrar en la web de Higgsfield los 9 Souls viejos que siguen «ready»
+  (alcance en `deletion_scope_2026_09_29` de `LUCIA-HIGGSFIELD-IDENTITY.json`), y el OK a los 7
+  créditos del dataset del Soul nuevo.
 - **Prospecto del 29-sep:** llamada con Nicolás Prada (cal.com, 20:20). Su tío tiene una pyme.
   Falta el rubro y el contacto del tío para el seguimiento; no está en el tablero.
 - Pendientes suyos que el diagnóstico encontró (van en el resumen): tarjeta de Meta antes del
