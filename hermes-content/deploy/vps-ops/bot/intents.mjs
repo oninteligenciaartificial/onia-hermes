@@ -923,7 +923,10 @@ const RE_DOLOR_PACIENTES = /\bpacientes\b|\bclientes\b|\bno vuelven\b|\brecall\b
 // ok, gracias!" son la forma mas comun de cerrar en WhatsApp, y con una sola palabra permitida
 // caian en el handoff. Medido el 2026-09-30: al paciente que recibia la salida cortes y contestaba
 // "ok gracias", el bot le mandaba M5 ("eso lo tiene que ver Sergio") y un aviso a Sergio Urcullo.
-const CORTESIA = "gracias|muchas gracias|mil gracias|ok|oka?y|okey|okis|dale|listo|perfecto|buenisimo|barbaro|excelente|genial|de una|joya|ya|ya esta|ya va|de acuerdo|bien|ah+|a+h|oh+|👍|🙏|👌|✅";
+// ⚠️ Cada palabra tiene que matchear de UNA sola forma: el mensaje entra de afuera y la repeticion
+// `(?:sep palabra)*` con una palabra ambigua ("ah" por `ah+` Y por `a+h`) es backtracking
+// exponencial — "ah ah ah … x" colgaba el proceso. Por eso `a+h+` y no dos alternativas.
+const CORTESIA = "gracias|muchas gracias|mil gracias|ok|oka?y|okey|okis|dale|listo|perfecto|buenisimo|barbaro|excelente|genial|de una|joya|ya|ya esta|ya va|de acuerdo|bien|a+h+|o+h+|👍|🙏|👌|✅";
 const RE_CORTESIA = new RegExp(`^\\s*(?:${CORTESIA})(?:[\\s!.,]+(?:${CORTESIA}))*[\\s!.,]*$`);
 const RE_DESPEDIDA = /\bnos vemos\b|\bnos hablamos\b|\bahi nos vemos\b|\bahi estare\b|\bahi estoy\b|\bhasta (?:luego|pronto|el (?:lunes|martes|miercoles|jueves|viernes|sabado|domingo))\b|\bchau\b|\bnos vemos el\b/;
 

@@ -205,6 +205,27 @@ for (const cortesia of ["gracias", "ok gracias", "ah ok, gracias!", "listo, grac
   });
 }
 
+// El mensaje entra de afuera y la cortesía es una repetición `(?:sep palabra)*`: con una palabra que
+// matchea de dos formas ("ah" por `ah+` y por `a+h`, la primera versión de este arreglo) el
+// backtracking es exponencial — medido: 24 «ah» + "x" ya tardaban 0,8 s y cada dos palabras más
+// lo multiplican por cuatro. Un lead (o un bromista) colgaba el proceso del bot con un audio de risa
+// transcripto. Los detectores nuevos se juzgan acá sobre entradas hostiles.
+for (const [nombre, texto] of [
+  ["risa larga que no termina en cortesía", `${"ah ".repeat(2000)}x`],
+  ["cortesía repetida que no termina en cortesía", `${"ok gracias, ".repeat(800)}x`],
+  ["un pedido de turno que nunca llega al turno", `${"quiero sacarme ".repeat(800)}x`],
+  ["un abandono que nunca cierra", `empiezan ${"y ".repeat(3000)}x`],
+]) {
+  test(`sin backtracking catastrófico: ${nombre}`, () => {
+    const norm = normalize(texto);
+    const t0 = performance.now();
+    intents.isCourtesy(norm);
+    intents.isPatientSeekingCare(norm);
+    intents.mentionsAbandonedTreatment(norm);
+    assert.ok(performance.now() - t0 < 250, "un mensaje de afuera no puede colgar el motor");
+  });
+}
+
 test("la salida cortés solo existe en modo VENTA: el recepcionista de una clínica cliente atiende pacientes", () => {
   const recepcionista = { ...CONFIG, modo: "recepcionista" };
   const r = step(nuevo(), { text: "quiero sacar un turno para una limpieza", receivedAt: T0 }, { config: recepcionista });
