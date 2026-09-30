@@ -2,6 +2,7 @@
 
 > Rama `claude/nice-lamport-5og9lv` · sesión `session_01BnctfaNRsm3ogJ46A7B5P5` · abierta el 2026-09-30.
 > Formato: los siete campos de `README.md` de esta carpeta.
+> Página para Sergio Urcullo con el resumen y las cinco decisiones: https://claude.ai/artifact/NpSFgbLpND6Ruh8QMu63ts (privada).
 
 **Objetivo**
 
