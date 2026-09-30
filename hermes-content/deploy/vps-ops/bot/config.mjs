@@ -319,6 +319,17 @@ export const SCRIPT = Object.freeze({
     "Si más adelante manejás un negocio (o trabajás en uno al que le sirva), escribime DEMO y lo agendamos igual.",
   ].join("\n"),
 
+  // M1_PACIENTE — el PACIENTE que llego por la pauta dental (busca turno, el precio de un
+  // tratamiento, tiene un dolor). Salida cortes: dice que NO somos una clinica y a donde ir, sin
+  // vender nada, sin horarios y sin precios. Puede ser el PRIMER mensaje ("Busco atencion dental"
+  // es la respuesta para tocar del anuncio), por eso trae el disclosure de bot (D2) adentro.
+  // No dice "DEMO" como M1c: a un paciente no se le deja una puerta de venta abierta.
+  M1_PACIENTE: [
+    "Te escribe {{bot}} — sí, un bot. {{producto}} no es una clínica: hacemos el sistema con el que las clínicas organizan su agenda y sus pacientes, así que por acá no te puedo dar un turno ni atenderte.",
+    "",
+    "Para eso escribile directo a tu clínica o a tu dentista. ¡Gracias por escribir!",
+  ].join("\n"),
+
   // M2 — confirmacion de la reserva + LAS PREGUNTAS. Es el nuevo lugar de la calificacion: el
   // prospecto ya se comprometio, asi que contesta mucho mas que en el primer mensaje.
   // {{preguntas}} lo arma el motor con los datos que TODAVIA faltan (nunca vuelve a pedir lo que

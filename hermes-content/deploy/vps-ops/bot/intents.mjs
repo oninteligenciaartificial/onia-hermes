@@ -178,6 +178,73 @@ export function asksWhatWeDo(norm) {
 }
 
 // ---------------------------------------------------------------------------
+// EL PACIENTE QUE ENTRA POR LA PAUTA (solo modo VENTA)
+// ---------------------------------------------------------------------------
+// Un anuncio que dice "clinica dental", optimizado a conversaciones, trae PACIENTES que buscan
+// turno: es "el riesgo central" de la pauta (ONIA_ADQUISICION_Y_PAUTA.md §5.2). Antes de esto el
+// paciente entraba al embudo de venta: se creaba como lead, recibia la escalera de precios de los
+// PLANES de Onia si preguntaba por los brackets, o le costaba un aviso a Sergio Urcullo si contaba
+// que le dolia una muela. Ver paciente-de-la-pauta.test.mjs.
+//
+// DOS REGLAS, y el orden entre ellas es lo que importa:
+//   1. Lo que dice un PACIENTE es primera persona pidiendo atencion: busco/necesito un dentista,
+//      quiero sacar un turno, me duele, cuanto cuesta una limpieza, hacen blanqueamiento.
+//   2. Lo que dice un DUEÑO le gana SIEMPRE, aunque traiga palabras de paciente: el dueño habla de
+//      turnos, citas y pacientes todo el dia porque es su negocio ("quiero que mis pacientes saquen
+//      turno solos", "necesito un sistema para agendar citas"). Confundirlo cierra la puerta al
+//      unico lead que la pauta existe para traer, asi que ante la duda NO es paciente — el que se
+//      escapa sigue en el embudo y lo filtra el mensaje siguiente o un humano.
+// Solo lo consulta el modo venta: en el recepcionista de una clinica cliente, el paciente ES el
+// cliente, y recepcionista.mjs corre antes de que el router de venta llegue a preguntar esto.
+const TRATAMIENTO_DENTAL =
+  "limpiezas?|profilaxis|ortodoncia|brackets|frenillos|extraccion(?:es)?|curacion(?:es)?|calzas?|endodoncias?|tratamiento de conducto|implantes?|blanqueamientos?|carillas?|coronas?|protesis";
+const VERBOS_QUIERE = "busco|buscaba|necesito|necesitaba|quiero|queria|quisiera";
+const QUIERE = `(?:${VERBOS_QUIERE})`;
+const ARTICULO = "(?:(?:un|una|el|la|los|las|mi|mis|al|a la)\\s+)?";
+const RE_PACIENTE = new RegExp(
+  [
+    // "Busco atencion dental" es la respuesta para tocar del anuncio (§5.2), literal.
+    `^\\s*busco atencion\\s*[.!?]*$`,
+    `\\b${QUIERE}\\s+(?:(?:una|un)\\s+)?(?:atencion|atenderme|consulta)\\s+(?:dental|odontologica|medica|con (?:el|la|un|una) (?:dentista|odontolog\\w+|doctor\\w*))\\b`,
+    `\\b${QUIERE}\\s+${ARTICULO}(?:dentista|odontologo|odontologa|doctora?)\\b`,
+    // Pedir un turno/cita/ficha para uno mismo. "consulta" NO va: "quiero agendar la consulta" es la
+    // consulta comercial de Onia (una campaña publicada la usa con esas palabras).
+    `\\b(?:${VERBOS_QUIERE}|puedo|podria|como)\\s+(?:(?:sacar|saco|pedir|pido|agendar|agendo|reservar|reservo|tener|conseguir|consigo)(?:me)?\\s+)?(?:(?:un|una)\\s+)?(?:turnos?|citas?|fichas?)\\b`,
+    `\\b(?:tienen|tenes|tiene|hay)\\s+(?:turnos?|citas?|fichas?)\\s+(?:disponibles?|libres?|para|hoy|manana|esta|este)\\b`,
+    `\\bsoy (?:su |tu )?paciente\\b`,
+    // Dolor en primera persona. `dolor` suelto NO: en este embudo es el dolor DE NEGOCIO.
+    `\\bme duele\\w*\\b|\\bdolor de (?:muelas?|dientes?|encias?|mandibula)\\b|\\bmuela del juicio\\b`,
+    `\\bse me (?:rompio|partio|cayo|salio|despego) (?:un|una|el|la|mi) (?:diente|muela|calza|corona|brackets?|carilla)\\b`,
+    // Precio o disponibilidad de un TRATAMIENTO: lo pregunta el que se lo quiere hacer.
+    `\\b(?:cuanto|que precio|precios?|costos?|valor)\\b[^.?!]{0,30}\\b(?:${TRATAMIENTO_DENTAL})\\b`,
+    `\\b(?:hacen|haces|realizan|atienden|ofrecen|tienen)\\s+${ARTICULO}(?:${TRATAMIENTO_DENTAL})\\b`,
+    `\\b${QUIERE}\\s+(?:hacerme\\s+|ponerme\\s+|sacarme\\s+)?${ARTICULO}(?:${TRATAMIENTO_DENTAL})\\b`,
+    `\\b(?:hacerme|ponerme|sacarme|arreglarme)\\s+${ARTICULO}(?:${TRATAMIENTO_DENTAL}|muelas?|dientes?)\\b`,
+  ].join("|"),
+);
+// Lo que solo dice el que tiene (o trabaja en) el negocio, o el que pregunta por el SISTEMA.
+const RE_HABLA_EL_DUENO = new RegExp(
+  [
+    "\\b(?:sistema|software|plataforma|programa|aplicacion|app|demo|onia|online|en linea|automatic\\w*)\\b",
+    "\\b(?:mis|nuestros|los|sus) pacientes\\b",
+    // "la clinica" NO: es tambien como un paciente nombra la clinica a la que va.
+    "\\b(?:mi|nuestra) clinica\\b|\\b(?:mi|nuestro) consultorio\\b|\\bmi negocio\\b|\\bmis clientes\\b",
+    "\\b(?:tengo|tenemos|manejo|administro) (?:un|una) (?:clinica|consultorio)\\b",
+    "\\btrabajo en\\b|\\brecepcion\\w*\\b",
+    "\\b(?:doctores|odontologos|odontologas|dentistas|profesionales)\\b",
+  ].join("|"),
+);
+
+/**
+ * El que escribe es un PACIENTE que busca atencion (turno, precio de un tratamiento, un dolor), no
+ * una clinica. Lo que dice un dueño le gana siempre: ante la duda, `false`.
+ */
+export function isPatientSeekingCare(norm) {
+  if (RE_HABLA_EL_DUENO.test(norm)) return false;
+  return RE_PACIENTE.test(norm);
+}
+
+// ---------------------------------------------------------------------------
 // MODO RECEPCIONISTA (el bot de un CLIENTE de Onia). Solo lo consulta
 // recepcionista.mjs: el funnel de venta no pasa por aca.
 // ---------------------------------------------------------------------------
@@ -838,7 +905,13 @@ const RE_DOLOR_PACIENTES = /\bpacientes\b|\bclientes\b|\bno vuelven\b|\brecall\b
 
 // Acuse de recibo o despedida. "ya" es el "dale" boliviano por excelencia y "nos vemos el
 // jueves" es despedirse: molestar a Sergio por eso es un handoff que no aporta nada.
-const RE_CORTESIA = /^\s*(?:gracias|muchas gracias|mil gracias|ok|oka?y|okey|dale|listo|perfecto|buenisimo|barbaro|excelente|genial|de una|joya|ya|ya esta|ya va|de acuerdo|bien|👍|🙏|👌|✅)[\s!.,]*$/;
+//
+// El mensaje ENTERO tiene que ser cortesia, pero puede ser mas de una palabra: "ok gracias" y "ah
+// ok, gracias!" son la forma mas comun de cerrar en WhatsApp, y con una sola palabra permitida
+// caian en el handoff. Medido el 2026-09-30: al paciente que recibia la salida cortes y contestaba
+// "ok gracias", el bot le mandaba M5 ("eso lo tiene que ver Sergio") y un aviso a Sergio Urcullo.
+const CORTESIA = "gracias|muchas gracias|mil gracias|ok|oka?y|okey|okis|dale|listo|perfecto|buenisimo|barbaro|excelente|genial|de una|joya|ya|ya esta|ya va|de acuerdo|bien|ah+|a+h|oh+|👍|🙏|👌|✅";
+const RE_CORTESIA = new RegExp(`^\\s*(?:${CORTESIA})(?:[\\s!.,]+(?:${CORTESIA}))*[\\s!.,]*$`);
 const RE_DESPEDIDA = /\bnos vemos\b|\bnos hablamos\b|\bahi nos vemos\b|\bahi estare\b|\bahi estoy\b|\bhasta (?:luego|pronto|el (?:lunes|martes|miercoles|jueves|viernes|sabado|domingo))\b|\bchau\b|\bnos vemos el\b/;
 
 /** "gracias" / "dale" / "nos vemos el jueves": no es una consulta, no hace falta molestar a un humano. */
