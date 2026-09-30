@@ -56,7 +56,22 @@
       "path": "../../models/lucia-surgical-shoot-20260707/",
       "shots": ["01-front-neutral", "02-front-slight-smile", "03-front-big-smile", "04-profile-left", "05-profile-right", "06-threequarter-left", "07-threequarter-right", "08-nose-detail", "09-ear-detail", "10-full-body"],
       "role": "vara de QA (¿es ella?). 08 y 09 son recortes: sirven para QA, no para entrenar",
-      "higgsfield_ids": "sin registrar; subirlos requiere upload.higgsfield.ai habilitado en la red de la sesion"
+      "higgsfield_ids_correction_2026_09_30": "Decia 'sin registrar; subirlos requiere upload.higgsfield.ai'. FALSO: cada PNG trae su job en el chunk de texto 'hf-job-id' y los 12 jobs estan completed en Higgsfield (jobs_wait, 30-sep). Se usan por job_id sin subir nada",
+      "higgsfield_job_ids": {
+        "01-front-neutral": "2ad9e7c9-97b3-41ad-9c5c-5a300852f56e",
+        "02-front-slight-smile": "59b28c55-9060-4769-b0b1-19c8c06559cf",
+        "03-front-big-smile": "bdc2b3bf-36e4-4340-b937-037bd73ed44e",
+        "04-profile-left": "88f1bf27-d239-4848-bfe8-2662ab208219",
+        "05-profile-right": "cfefbdbd-656a-42bb-8084-df6433742885",
+        "06-threequarter-left": "7b444e7d-a954-4fa6-b2b2-d3b5416328e4",
+        "07-threequarter-right": "c281b4a0-67d2-40a0-a858-59691fb29ef8",
+        "08-nose-detail": "9d7e8c62-9c99-4586-906f-d83ddaddac89",
+        "09-ear-detail": "47b8a898-55be-4100-b229-58111b0223a9",
+        "10-full-body": "f6abd4fe-f198-4081-80e9-15ba72c7af80",
+        "new-anchor-bathroom": "7f68ea56-f8d0-499d-896f-ca37cfce641f",
+        "new-anchor-street": "98260dde-081c-47ea-9b57-07799cf6a37d"
+      },
+      "note_03": "03-front-big-smile (bdc2b3bf) es la misma imagen que lucia-surgical-anchor 902eeebb"
     },
     "source_frame_element": {
       "name": "lucia-face-real-anchor",
@@ -80,7 +95,7 @@
     "discarded_new_face_casting": "C01-C26 (23,04 cr). Aprendizajes en v4/PROCEDENCIA.jsonl y HIGGSFIELD_VIDEO_SYSTEM.md",
     "identity_plan": [
       "prueba de uso: 4 escenas Pinterest con Nano Banana Pro + <<<58bbd635>>> (T101-T104) y 4 con las 7 media_ids en Nano Banana Pro y Seedream 4.5 (T201-T204). HECHO y medido: ver identity_qa",
-      "dataset de 20: 6 medias de lucia-skin-v1 (sin 1714a347, que tiene personas de fondo) + frontal del photoshoot (902eeebb) + 13 fotos de vida con luz, angulo y expresion variados, cada una >= identity_qa.gate. Motor: el que elija Sergio Urcullo; por identidad gana seedream_v4_5 + 7 media_ids",
+      "dataset de 20 (recompuesto el 30-sep al aparecer los job_ids del photoshoot): 13 canonicas ya en Higgsfield = 6 medias de lucia-skin-v1 (sin 1714a347, que tiene personas de fondo) + photoshoot 01, 02, 03, 04, 05, 06, 07 por job_id; + 7 fotos de vida nuevas para variar luz y escena (dataset-vida.json D03, D06, D07, D09, D10, D12, D13; D11 de reserva), cada una >= identity_qa.gate. Motor: el que elija Sergio Urcullo; por identidad gana seedream_v4_5 + 7 media_ids (7 cr)",
       "entrenar Soul ID tipo soul_2 (el tipo cinematic tiene un bug abierto) con OK especifico de costo",
       "probar el Soul en 3 escenas fijas contra el stack y con identity_qa; verificar que aparece como Element para video",
       "argollas y cadenita: nombrarlas en cada prompt o fijarlas como Element aparte (Soul tiende a perder accesorios)"
@@ -92,7 +107,8 @@
       "baseline_sources_leave_one_out": [0.698, 0.82],
       "negatives_max": 0.224,
       "gate": 0.7,
-      "gate_rule": "una foto del dataset o del Soul pasa si da >= 0.70 (el piso de las propias fuentes); debajo se regenera",
+      "gate_rule": "una foto del dataset o del Soul pasa si da >= 0.70 (el piso de las propias fuentes); debajo se regenera. Aplica a caras frontales y de tres cuartos de 200 px o mas: los perfiles bajan solos (fuente R4 0.698, photoshoot 04 0.689) y con caras chicas el numero pierde confiabilidad; esos se miran",
+      "result_2026_09_30_photoshoot": "v4/qa/identidad-photoshoot-20260930.json: 01 0.738, 02 0.744, 05 0.703, 06 0.758, 07 0.729, 04 0.689 (perfil); 08 y 09 sin cara (recortes)",
       "blind_spot": "mide identidad; NO mide belleza, piel ni realismo. Eso lo mira Sergio Urcullo",
       "result_2026_09_29": "v4/qa/identidad-metodos-20260929.json",
       "method_ranking_2026_09_29": "seedream_v4_5 + 7 media_ids: cafe 0.883, calle 0.836 > nano_banana_pro + Element: 0.822, 0.693 ~ nano_banana_pro + 7 media_ids: 0.806, 0.683",

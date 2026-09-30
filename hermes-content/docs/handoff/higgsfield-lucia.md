@@ -4,7 +4,7 @@
 > Rama `claude/confident-ramanujan-j79bkq` (sesión en la nube, entorno `Default`). El PR
 > oninteligenciaartificial/onia-hermes#42 quedó mergeado el 29-sep a las 22:45 UTC: el autosync
 > hizo fast-forward de `main`. Lo nuevo va en un PR aparte desde la misma rama, reiniciada sobre
-> `main`. Última escritura: **2026-09-30 ~00:10 UTC**.
+> `main`. Última escritura: **2026-09-30 ~02:40 UTC**.
 > Reemplaza a `HIGGSFIELD-LUCIA-SYSTEM-2026-09-22.md`, que queda como historia.
 
 **Objetivo**
@@ -49,18 +49,26 @@ siendo la de las 21:25:51 UTC.
     menos.
   - La métrica no ve belleza ni piel: la estética la decide Sergio Urcullo mirando.
   - Detalle: `v4/qa/identidad-metodos-20260929.json` y `HIGGSFIELD_VIDEO_SYSTEM.md` §9.
-- **Dataset listo para lanzar:** `v4/prompts/dataset-vida.json`, con 13 prompts (antes
-  `dataset-12-vida.json`).
-  - Pasaron a 13 porque la fuente `R2` (`1714a347`) tiene dos personas de fondo y queda fuera del
-    Soul.
-  - Composición del entrenamiento: 6 medias de `lucia-skin-v1` + la frontal `902eeebb` + 13 nuevas
-    = 20.
-  - Con Seedream son 13 créditos; con Nano Banana Pro, 26.
-- **Red:** medido el 29-sep a las 23:49 UTC, sigue en 403 por política para `higgsfield.ai`,
-  `upload.higgsfield.ai` y los dos CDN. Mirar sigue dependiendo de eso. **Medir ya no**: la métrica
-  corre en `sandbox_exec`.
-- **Photoshoot de 10 ángulos** (`references/models/lucia-surgical-shoot-20260707/`): no tiene IDs en
-  Higgsfield. Subirlo requiere esa red.
+- **Dataset recompuesto el 30-sep: 13 fotos canónicas + 7 nuevas = 20.**
+  - Las 13 canónicas ya están en Higgsfield:
+    - 6 medias de `lucia-skin-v1`, sin `R2` (`1714a347`), que tiene dos personas de fondo;
+    - las fotos 01 a 07 del photoshoot, por job_id.
+  - Las 7 nuevas son D03, D06, D07, D09, D10, D12 y D13 de `v4/prompts/dataset-vida.json` (D11
+    queda de reserva). Aportan la luz y las escenas que el photoshoot de estudio no tiene.
+  - Cuesta **7 créditos con Seedream** (13 antes de recomponerlo) y 14 con Nano Banana Pro.
+- **⚠️ Corregido el 30-sep: el photoshoot de 10 ángulos SÍ está en Higgsfield.**
+  - Acá decía «no tiene IDs; subirlo requiere esa red». Era falso: cada PNG de
+    `references/models/lucia-surgical-shoot-20260707/` trae su job en el metadato `hf-job-id`, y los
+    12 jobs figuran `completed`.
+  - Los IDs están en el manifest (`trait_photoshoot_local.higgsfield_job_ids`) y la medición en
+    `v4/qa/identidad-photoshoot-20260930.json`.
+  - Identidad: 01 da 0,738; 02, 0,744; 05, 0,703; 06, 0,758; 07, 0,729. El 04 (perfil) da 0,689:
+    los perfiles bajan solos, no es deriva.
+- **Red:** Sergio Urcullo creó el entorno **`onia-higgsfield`** (30-sep 02:26 UTC). `Default` sigue
+  bloqueando Higgsfield; lo medí el 29-sep 23:49 UTC. Esta sesión corre en `Default`, porque el
+  entorno se fija al crear la sesión: sigue midiendo en `sandbox_exec`, pero no puede mirar. **La
+  próxima sesión del carril arranca en `onia-higgsfield`** y confirma primero la red con `curl` al
+  CDN.
 - **Borrado en la web:** pendiente. Alcance corregido: no se toca nada de Lucía (manifest →
   `deletion_scope_2026_09_29`).
 
@@ -103,24 +111,24 @@ siendo la de las 21:25:51 UTC.
 
 **Qué depende de Sergio Urcullo**
 
-1. Elegir el motor del dataset. Recomendación medida: Seedream 4.5 con las 7 fotos (13 créditos,
-   el total quedaría en ~50 de 100). Si al mirar le gusta más la estética de Nano Banana Pro, son
-   26 créditos.
-2. Agregar los dominios. Pasos: cloud «Default» → engranaje → Network access **Custom** → Allowed
-   domains `higgsfield.ai`, `*.higgsfield.ai`, `d2ol7oe51mr4n9.cloudfront.net`,
-   `d8j0ntlcm91z4.cloudfront.net`, `onia.com.bo`, `*.onia.com.bo` → «Also include default list…»
-   → Save.
+1. Elegir el motor de las 7 fotos nuevas. Recomendación medida: Seedream 4.5 con las 7 fotos de
+   referencia (7 créditos; el total quedaría en ~44 de 100). Si al mirar le gusta más la estética de
+   Nano Banana Pro, son 14 créditos.
+2. ~~Agregar los dominios~~. **Hecho el 30-sep:** creó el entorno `onia-higgsfield`. Falta
+   confirmarlo desde una sesión de ese entorno.
 3. Borrar en la web lo que no es de Lucía.
 4. Dar el OK específico del costo del entrenamiento del Soul.
 5. Aprobar toda publicación.
 
 **Próximos pasos** (cada uno con su «listo»)
 
-1. **Dataset:** los 13 prompts de `dataset-vida.json`, con las 7 `media_ids` como
-   `image_references`, de a 4.
-   - Cada foto se puntúa con `face_identity_qa.py`. Si da menos de 0,70, se regenera.
-   - Listo = 13 fotos con 0,70 o más, registradas, y Sergio Urcullo conforme con la estética.
-2. **Soul ID v4:** `show_characters action=train`, tipo `soul_2`, con las 20.
+1. **Dataset:** D03, D06, D07, D09, D10, D12 y D13 de `dataset-vida.json`, con las 7 `media_ids`
+   como `image_references`, de a 4.
+   - Cada foto se puntúa con `face_identity_qa.py`. Si da menos de 0,70 (frontal o tres cuartos),
+     se regenera.
+   - Listo = 7 fotos que pasan, registradas, y Sergio Urcullo conforme con la estética.
+2. **Soul ID v4:** `show_characters action=train`, tipo `soul_2`, con las 20: 13 canónicas por
+   media_id o job_id, más las 7 nuevas.
    - Listo = el Soul está `ready`, aparece como Element y pasa 3 escenas fijas con 0,70 o más.
 3. **Argollas y cadenita:** nombrarlas en cada prompt, o guardarlas como Element aparte si el Soul
    las pierde.

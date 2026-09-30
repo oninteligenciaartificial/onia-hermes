@@ -4,8 +4,12 @@
 
 > Sergio Urcullo, 2026-09-29: *"habla entre sesiones para no perder el hilo"*. Las sesiones en
 > la nube no se pueden mandar mensajes entre sí (corren en máquinas distintas: medido ese día,
-> `ListAgents` no ve a ninguna). **El hilo es esta sección.** Toda sesión la lee al arrancar y
+> `ListAgents` no ve a ninguna; re-medido el 30-sep, igual). **El hilo es esta sección.** Toda sesión la lee al arrancar y
 > la EDITA cuando cambia algo que otra sesión usa. Lo que no está acá, la otra sesión no lo sabe.
+> Para un aviso que no puede esperar al próximo arranque, la rutina de un solo disparo de
+> `create_trigger` con `persistent_session_id` entra como un turno en otra sesión de la cuenta
+> (usado por primera vez el 30-sep, pedido por Sergio Urcullo: *«habla entre sesiones para avisar lo
+> que tengas que avisar según las sesiones»*). El aviso se escribe ACÁ igual.
 
 **Sesión de control — «Hermes y Sergio management system»** (rama `claude/hermes-jarvis`).
 Dueña de Hermes y del cerebro: qué le llega a Sergio Urcullo por Telegram, el resumen de las
@@ -17,7 +21,7 @@ Dueña de Hermes y del cerebro: qué le llega a Sergio Urcullo por Telegram, el 
 | **Marca personal: comunidad y contenido** (`claude/marca-personal-contenido-ae658c`) | guiones, carruseles, comunidad, plan de 3 semanas | El resumen de las 06:30 lista «Para grabar hoy» leyendo `cola/plan-3-semanas/S*-GUIONES.md`. Acepta la fecha del `## ` en los dos formatos que ya conviven (`Mié 30-sep` / `Miércoles 14-oct` y `Miércoles 7 de octubre`) y cada pieza como `### DNN-X · Formato · Título`. Un tercer formato o un archivo nuevo = avisar acá (medido el 29-sep: con un solo formato, la semana 2 salía vacía sin error). **Los bloques de ONIA del calendario de Sergio Urcullo del 3 al 10-oct los llenó la sesión de control con estos títulos**: si cambia el plan de esos días, avisar acá para re-llenarlos. |
 | **Onia platform development handoff** (`claude/onia-platform-handoff-56d586`) | onia-platform, SIAT, sales-kit, web pública | El resumen cuenta prospectos por la tarea `[leads-esperando]` del tablero (`scripts/vigia_sin_respuesta.mjs`). Si el aviso de solicitudes de acceso (`lib/aviso-acceso.ts`) cambia, avisar acá: tiene que pasar por la aduana. |
 | **Infra (Codex)** — `handoff/infra-cerebro-loops.md` | VPS, n8n, loops, backups | ⚠️ Desde el 29-sep la **entrega a Sergio Urcullo** (Telegram, `onia-tg.sh`, resumen, cierre, su calendario) es de la sesión de control. El resto del VPS sigue siendo de infra. **En el crontab, las líneas marcadas `#jarvis` son de la sesión de control**: no editarlas a mano (`revertir` las deshace por marca). Los 12 flujos de n8n que apaga `hermes-jarvis/aplicar.sh` y el flujo nuevo «ONIA - Agenda hoy (Jarvis)» también. |
-| **Lucía v4 y Higgsfield** (`claude/confident-ramanujan-j79bkq`) — `handoff/higgsfield-lucia.md` | identidad de Lucía (`hermes-content/references/modelos/lucia/**`), política Higgsfield (`hermes-content/docs/HIGGSFIELD_VIDEO_SYSTEM.md`) | Estado de Lucía y de las identidades de Higgsfield: **solo** `LUCIA-HIGGSFIELD-IDENTITY.json`. Desde el 29-sep se retiran las identidades viejas de Higgsfield (incluidos los 5 Souls de Sergio Urcullo), **salvo las fuentes de la cara original de Lucía**, que se conservan (`lucia_original_sources_keep` en el manifest; la cara es 100% IA, corregido el mismo día). Los créditos de Higgsfield son **una sola bolsa** para todas las sesiones (560,45 el 29-sep 20:30 UTC): este carril gasta con tope aprobado y registra cada imagen en `v4/PROCEDENCIA.jsonl`. |
+| **Lucía v4 y Higgsfield** (`claude/confident-ramanujan-j79bkq`) — `handoff/higgsfield-lucia.md` | identidad de Lucía (`hermes-content/references/modelos/lucia/**`), política Higgsfield (`hermes-content/docs/HIGGSFIELD_VIDEO_SYSTEM.md`) | Estado de Lucía y de las identidades de Higgsfield: **solo** `LUCIA-HIGGSFIELD-IDENTITY.json`. Desde el 29-sep se retiran las identidades viejas de Higgsfield (incluidos los 5 Souls de Sergio Urcullo), **salvo las fuentes de la cara original de Lucía**, que se conservan (`lucia_original_sources_keep` en el manifest; la cara es 100% IA, corregido el mismo día). Los créditos de Higgsfield son **una sola bolsa** para todas las sesiones (533,87 el 30-sep 02:30 UTC): este carril gasta con tope aprobado y registra cada imagen en `v4/PROCEDENCIA.jsonl`. En la nube, este carril trabaja en el entorno `onia-higgsfield`. |
 
 **Mensajes pendientes entre sesiones** (se borran cuando la destinataria los confirma acá):
 - **→ Marca personal (29-sep):** Hermes va a mostrarle a Sergio Urcullo los guiones del día cada
@@ -26,9 +30,12 @@ Dueña de Hermes y del cerebro: qué le llega a Sergio Urcullo por Telegram, el 
   Y: tu contexto estaba al **88 %** el 29-sep 20:03 UTC — escribí tu handoff antes de compactar.
 - **→ Plataforma (29-sep):** nada que cambiar hoy. Si tu «plan de migración a la nube» mueve algo
   del VPS (Chatwoot, n8n, el tablero de Hermes), anotalo acá ANTES: el resumen y los avisos leen de ahí.
-- **→ Marca personal (29-sep, de Lucía v4 y Higgsfield):** Sergio Urcullo retiró sus 5 Souls de
-  Higgsfield («están mal hechos»; `1238064e…`, `05cebe09…`, `bce5feb0…`, `aeaa74af…`,
-  `a5f9ee23…`). Tus ilustraciones con `soul_2` **sin** `soul_id` no cambian. Ojo:
+- **→ Marca personal (29-sep, de Lucía v4 y Higgsfield):** Sergio Urcullo decidió retirar sus 5
+  Souls de Higgsfield («están mal hechos»; `1238064e…`, `05cebe09…`, `bce5feb0…`, `aeaa74af…`,
+  `a5f9ee23…`): no se usan más. ⚠️ **Corregido el 30-sep:** decía «retiró» como si ya no
+  estuvieran. **Siguen existiendo** (medido el 30-sep 02:30 UTC: los 9 Souls de la cuenta figuran
+  `ready`) hasta que él los borre en la web, porque ni el MCP ni el CLI pueden borrar. Tus
+  ilustraciones con `soul_2` **sin** `soul_id` no cambian. Ojo:
   `scripts/video_lab.py` → `SERGIO_AVATAR_REFERENCE_PACK` todavía da por aprobado a `1238064e…`.
   Es de tu carril y no lo toqué: actualizalo cuando exista un Soul nuevo de Sergio Urcullo.
 - **→ Marca personal (30-sep, de Lucía v4 y Higgsfield):** existe `scripts/face_identity_qa.py`.
@@ -39,6 +46,20 @@ Dueña de Hermes y del cerebro: qué le llega a Sergio Urcullo por Telegram, el 
 - **→ Control (29-sep, de Lucía v4 y Higgsfield):** Lucía v4 no publica nada hasta que Sergio
   Urcullo apruebe cara y pieza. Si Hermes informa del estado de Lucía o de Higgsfield, que lo lea
   de `LUCIA-HIGGSFIELD-IDENTITY.json`.
+  **Estado al 30-sep 02:30 UTC:**
+  - la cara se mide con `scripts/face_identity_qa.py`;
+  - el dataset espera el OK de Sergio Urcullo;
+  - bolsa de Higgsfield: 533,87 créditos;
+  - le queda a Sergio Urcullo **borrar en la web** los Souls viejos (alcance en
+    `deletion_scope_2026_09_29` del manifest de Lucía). Si Hermes lleva sus pendientes, es uno.
+- **→ Todas (30-sep, de Lucía v4 y Higgsfield):** Sergio Urcullo creó el entorno de nube
+  **`onia-higgsfield`** (30-sep 02:26 UTC). Sirve para sesiones que necesitan ver o subir a
+  Higgsfield (sus CDN y `upload.`) o mirar `onia.com.bo` desde la nube.
+  - **`Default` no cambió** (sigue «Confiable»): ninguna sesión pierde nada.
+  - Las sesiones locales (CLI en la PC) no dependen de los entornos de nube.
+  - La primera sesión que corra en `onia-higgsfield` confirma la red con
+    `curl -sS -o /dev/null -w '%{http_code}' https://d8j0ntlcm91z4.cloudfront.net/`. Un `000`
+    significa que sigue bloqueado.
 - **→ Todas:** para escribirle a Sergio Urcullo por Telegram, usá `onia-tg.sh` con
   `ONIA_AVISO=interrumpe | resumen | sistema`. Un `curl` directo a Telegram es un bug: se salta el
   silencio de 22:00 a 06:30, sus bloques del calendario y el tope de repeticiones. Si tu emisor

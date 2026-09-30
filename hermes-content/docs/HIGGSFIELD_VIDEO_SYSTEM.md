@@ -133,6 +133,15 @@ imágenes (`show_characters action=train`), así que el dataset v4 es de 20.
   regenera. La métrica **no ve belleza, piel ni realismo**: eso lo sigue mirando Sergio Urcullo.
 - **Hallazgo:** la fuente `R2` (`1714a347`) tiene dos personas de fondo. No entra al entrenamiento
   del Soul, porque la guía pide «Single person per photo». Como referencia de generación sirve.
+- **Los PNG que baja Higgsfield traen su job en el metadato `hf-job-id`** (medido el 30-sep). Un
+  archivo del repo que salió de Higgsfield se vuelve a usar por job_id, para entrenar o medir, sin
+  subirlo. Así apareció el photoshoot de 10 ángulos, que se daba por no subido.
+- **El gate de 0,70 vale para caras frontales y de tres cuartos de 200 px o más.** Los perfiles bajan
+  solos: la fuente casi perfil da 0,698 y el perfil del photoshoot, 0,689. Con la cara chica, por
+  ejemplo en cuerpo entero, el número pierde confiabilidad: esos casos se miran.
+- **Entornos:** el 30-sep Sergio Urcullo creó el entorno de nube `onia-higgsfield` para trabajar
+  con Higgsfield. `Default` no cambió. El entorno se fija al crear la sesión: una sesión que ya
+  estaba corriendo no lo toma.
 
 ## Arquitectura vigente
 
