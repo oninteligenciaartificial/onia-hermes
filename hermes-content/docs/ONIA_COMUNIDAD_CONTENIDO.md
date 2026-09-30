@@ -103,6 +103,24 @@ El objetivo es crecer grande por **confianza, recurrencia y resultados de miembr
 llenar un grupo. El límite semanal de horas de Sergio Urcullo queda como decisión abierta y
 se mide durante los cuatro pilotos antes de fijar una promesa permanente.
 
+### Ratificado por Sergio Urcullo el 29-sep: semanal, con expositores, networking y temas
+
+El formato de arriba sigue vigente. Cada encuentro toma el **tema de la semana** del plan de
+contenido (`cola/plan-3-semanas/MAPA.md`), así el video, el carrusel, el drop y el encuentro
+empujan lo mismo y el encuentro produce material para la semana siguiente:
+
+| Semana | Tema del encuentro | Demo en vivo (50–75 min) | Hot seats |
+|---|---|---|---|
+| 30-sep → 6-oct | Claude Code: que trabaje para vos | escribir una skill desde cero | qué tarea repetida automatizaría cada uno |
+| 7 → 13-oct | Un bot de WhatsApp que atiende sin mentir | las cinco pruebas antes de activarlo | revisar el mensaje real de un miembro |
+| 14 → 20-oct | Contenido con IA sin editor | un video animado por código (método de Santiago Muñoz) | la próxima pieza de cada uno |
+
+**Falta que decida Sergio Urcullo (sin esto no hay primer encuentro):** día y hora fijos · sede del
+primer piloto (sala de Bolivian Electric con autorización, o cafetería con acuerdo) · fecha del
+primer encuentro · nombre visible (`IA Lab Santa Cruz` sigue siendo interno) · los dos expositores
+del mes (por capacidad concreta, no por seguidores) · el formulario de inscripción (nombre,
+contacto, qué quiere construir y permiso de imagen).
+
 ## Cadencia
 
 - 1 drop/día en la comunidad, hora fija (19:00 sugerido).

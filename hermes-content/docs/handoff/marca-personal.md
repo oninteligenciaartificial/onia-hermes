@@ -2,7 +2,18 @@
 
 **Archivo único del carril.** Actualizado 2026-09-29 por Claude (Opus 5.5).
 
-## ⏩⏩⏩ Estado 29-sep noche: publicador (lo más nuevo)
+## ⏩⏩⏩⏩ Pedido de Sergio Urcullo, 29-sep 20:30 (en curso)
+
+| # | Pedido | Estado |
+|---|---|---|
+| 1 | «Aprendé el método de sanmunoz» | Era su último carrusel: videos animados que Claude dibuja con código, sin grabarse. Ficha: `references/marca-personal/SANTIAGO-VIDEOS-ANIMADOS-POR-CODIGO.md`. El skill real llega por DM si se comenta «OPUS» (decisión de Sergio) |
+| 2 | Un carrusel por día, agendado | Publicador `ig-carrusel.mjs` listo (ensayo con 7 láminas hasta FINISHED, sin publicar). Faltan 12 carruseles para cubrir 30-sep → 20-oct: en producción; calendario en `cola/plan-3-semanas/CARRUSELES-DIARIOS.md`. Se agenda recién con el OK de Sergio sobre cada uno |
+| 3 | Configurar bien todos sus perfiles | Pendiente: auditoría de solo lectura (IG, TikTok, YouTube, LinkedIn) y propuesta de cambios para su OK |
+| 4 | ¿Qué hacemos con ONIA (@oniahq)? | Pendiente: mirar sus cuentas y proponer. Pista: el método de Santiago (anuncio dental hecho con código + una pantalla real del sistema) produce contenido de ONIA sin horas de grabación |
+| 5 | Comunidad semanal (expositores, networking, temas) | Anotado en `ONIA_COMUNIDAD_CONTENIDO.md` con el tema de cada semana; faltan sus decisiones (día, sede, fecha, nombre, expositores) |
+| 6 | Compartir entre sesiones | Avisos enviados a plataforma, limpieza de skills, Hermes y Lucía v4 |
+
+## ⏩⏩⏩ Estado 29-sep noche: publicador
 
 - **Circuito listo, todavía SIN publicaciones reales:** Sergio deja los brutos en
   `C:\Users\PC\Videos\ONIA-brutos\<fecha>\` → Claude edita, arma el paquete del día → «ok» de Sergio →
