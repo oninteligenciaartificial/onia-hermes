@@ -42,7 +42,7 @@ Una sola lista. Se toca de a uno, en este orden salvo que Sergio Urcullo diga ot
 | 2 | **Atraer gente a la comunidad** (puerta del curso: 100 miembros) | Aclarado 30-sep: el video de YouTube es público y ADEMÁS se comparte en la comunidad (primero) | Armar el embudo: CTA en cada pieza, link en la bio, palabra clave → DM, invitación de miembros |
 | 3 | **Historias de Instagram** | Sube 2-3/día. Primeras 2 plantillas hechas (`out/sergio-historias-comunidad-20261001`) | Rutina fija de 3; destacado «Comunidad» |
 | 4 | **Perfiles** (IG, TikTok, YouTube, LinkedIn: bio, link, destacados) | Sin auditar | Desde la nube: con capturas que mande Sergio Urcullo. Con Chrome logueado: laptop |
-| 5 | **Grabar** (guiones S1–S3) | Semana jue 1 → dom 4 armada: 3 verticales/día en `plan-3-semanas/GRABAR-JUE1-DOM4.md`. Sergio Urcullo: «al menos 1 hora al día», «2-3 al día, con trial, yaps» | Grabar; definir cómo llegan los brutos a la nube |
+| 5 | **Grabar** | **Dos semanas armadas y auditadas (jue 1 → mié 14-oct): `plan-3-semanas/GUIONES-2-SEMANAS-1-14-OCT.md`** — 38 piezas (tutorial · informativo · caso por día; YouTube sáb 3, mar 6, vie 9, mar 13). Auditoría en `auditoria-20260930/`. Pedido de Sergio Urcullo: «hoy no subimos, preparamos» | Que grabe; que valide la página de Meta antes de D02-B; drops a escribir (N, R) y a corregir (drop 2, drop 14); OpenAI DevDay sin revisar (bloqueado desde la nube) |
 | 6 | **Carruseles** K11–K21 + arreglar K2 y K8 | K1 en B (listo); K2–K10 hechos | Diseñar |
 | 7 | **Publicar** (primer post real) | Publicador probado, nada real | Desde el VPS: laptop o sesión con la llave |
 | 8 | **Encuentro presencial** | Después del 1 | Encuesta en la semana 2; convocar con ≥15 confirmados (falta OK) |
