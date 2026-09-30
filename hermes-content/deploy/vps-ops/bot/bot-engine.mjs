@@ -293,6 +293,24 @@ function auditEffect(prev, next, reason) {
   };
 }
 
+/**
+ * El CODIGO del anuncio que precarga el mensaje ("…vi el anuncio de Onia (D4)…"), como origen.
+ *
+ * Existe porque Chatwoot 4.12.1 descarta el `referral` que Meta manda en un clic-a-WhatsApp (ver
+ * `attributionFrom` en chatwoot-adapter.mjs): el codigo en el texto es la UNICA atribucion que
+ * sobrevive, y sin guardarlo la metrica por anuncio de la pauta (ONIA_ADQUISICION_Y_PAUTA.md §5.6)
+ * habia que sacarla leyendo conversaciones a mano.
+ *
+ * Solo se lee de un mensaje que YA matcheo una campaña (el llamador lo garantiza) y solo entre
+ * parentesis: "(D4)". Un origen que ya trajo el canal gana — igual que `fillFromSeed` en
+ * run-turn.mjs, un dato guardado no se pisa.
+ */
+function conCodigoDelAnuncio(state, norm) {
+  if (state.pieceKey) return state;
+  const codigo = /\(\s*([a-z]{1,2}\d{1,2})\s*\)/.exec(String(norm || ""));
+  return codigo ? { ...state, pieceKey: `anuncio-${codigo[1].toUpperCase()}` } : state;
+}
+
 function summarize(state, msg, reason, config) {
   const q = state.qualification || {};
   const datos = [
@@ -304,9 +322,13 @@ function summarize(state, msg, reason, config) {
   return [
     `Conversación ${state.conversationKey} (${state.channel}).`,
     `Motivo: ${reason}.`,
+    // De qué pieza o anuncio vino: un lead de pauta se paga, y quien lo atiende tiene que saberlo.
+    state.pieceKey ? `Origen: ${state.pieceKey}.` : null,
     datos.length ? `Datos: ${datos.join(", ")}.` : "Sin calificar.",
     `Último mensaje del prospecto: "${String(msg.text || "").slice(0, 200)}"`,
-  ].join(" ");
+  ]
+    .filter(Boolean)
+    .join(" ");
 }
 
 // ---------------------------------------------------------------------------
@@ -742,7 +764,11 @@ export function step(state, incoming, options = {}) {
   // importa— es la linea que dispara `lead_upsert`. Contestar solo la campaña, como hace el
   // recepcionista, aca cambiaria un lead por un texto enlatado.
   const campana = campanaExacta(config, msg.norm);
-  if (campana) return composeWithFunnel(ctx, withData, "R_CAMPANA", "campana", { respuesta_campana: campana.respuesta });
+  if (campana) {
+    return composeWithFunnel(ctx, conCodigoDelAnuncio(withData, msg.norm), "R_CAMPANA", "campana", {
+      respuesta_campana: campana.respuesta,
+    });
+  }
 
   if (intents.isComplaint(msg.norm)) return handoffResult(ctx, withData, "queja_o_desconfianza");
 
