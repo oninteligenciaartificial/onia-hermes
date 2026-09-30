@@ -935,6 +935,15 @@ function handleHorario(ctx, base) {
     // de agosto viajo"): eso lo coordina un humano. Agendarle uno de los nuestros y decirle
     // "listo, agendado" es mandarlo a una reunion a la que nunca dijo que iba.
     if (intents.proposesOwnTime(msg.norm)) return handoffResult(ctx, base, "propone_otro_horario");
+    // El DOLOR dicho antes de que se lo pregunten ("tengo 30 pacientes con tratamiento a medias que
+    // no volvieron") es un dato como el rubro: se anota y se acusa. Sin esto caia en el LLM, cuya
+    // tarea es "reformular la pregunta pendiente sin dar datos nuevos" — o sea, el dueño contaba
+    // exactamente lo que el anuncio D4 le pregunto y recibia de vuelta "¿jueves o viernes?", con
+    // el dato tirado y un malentendido sumado al contador que deriva al segundo.
+    if (intents.mentionsAbandonedTreatment(msg.norm) && !base.qualification.painPoint) {
+      base = { ...base, qualification: { ...base.qualification, painPoint: "clientes" } };
+      ctx.found = { ...(ctx.found || {}), painPoint: "clientes" };
+    }
     // Contesto contando su negocio en vez de elegir: se le acusa recibo y se le vuelven a poner
     // los dos horarios. El dato queda guardado, asi que M2 despues no se lo vuelve a pedir.
     if (Object.keys(ctx.found || {}).length > 0) {

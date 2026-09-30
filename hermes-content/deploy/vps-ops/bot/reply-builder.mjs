@@ -195,7 +195,10 @@ export function askList(state, config) {
   const items = missingFields(state.qualification || {}, config).map(
     (field) => `¿${field.missLabel.charAt(0).toUpperCase()}${field.missLabel.slice(1)}?`,
   );
-  items.push(config.script.M2_PREGUNTA_DOLOR);
+  // El dolor ya dicho no se vuelve a pedir (el que llega por D4 suele contarlo antes de reservar).
+  // Solo se omite si queda OTRA pregunta: M2 arma "contame rápido:" y una lista vacía dejaría esa
+  // frase colgando a la vista del prospecto.
+  if (!(state.qualification?.painPoint && items.length > 0)) items.push(config.script.M2_PREGUNTA_DOLOR);
   return items.map((item, index) => `${VINETAS[index] || "•"} ${item}`).join("\n");
 }
 
@@ -211,11 +214,17 @@ export function missingFields(qualification, config) {
   });
 }
 
-/** Como se lee el dolor cuando el bot lo repite en voz alta ("anotado ... que lo que más te come"). */
+/**
+ * Como se lee el dolor cuando el bot lo repite en voz alta ("anotado ... que lo que más te come").
+ * Lleva el VERBO porque concuerda con el dolor: "es la agenda", "son los cobros". Con el verbo fijo
+ * afuera salia "lo que más tiempo te come es los clientes que no vuelven".
+ * Y quien no vuelve se nombra con el vocabulario del rubro: a una clinica se le habla de PACIENTES
+ * (CLAUDE.md: el producto tiene vocabulario por rubro), al resto de clientes.
+ */
 const DOLOR_LABEL = Object.freeze({
-  agenda: "la agenda",
-  cobros: "los cobros",
-  clientes: "los clientes que no vuelven",
+  agenda: () => "es la agenda",
+  cobros: () => "son los cobros",
+  clientes: (industry) => `son los ${["dental", "salud"].includes(industry) ? "pacientes" : "clientes"} que no vuelven`,
 });
 
 export function capturedLabels(qualification, config) {
@@ -232,7 +241,7 @@ export function capturedLabels(qualification, config) {
     labels.push(`que tenés ${qualification.chairs} ${qualification.chairs === 1 ? "sillón" : "sillones"}`);
   }
   if (DOLOR_LABEL[qualification.painPoint]) {
-    labels.push(`que lo que más tiempo te come es ${DOLOR_LABEL[qualification.painPoint]}`);
+    labels.push(`que lo que más tiempo te come ${DOLOR_LABEL[qualification.painPoint](qualification.industry)}`);
   }
   return labels;
 }

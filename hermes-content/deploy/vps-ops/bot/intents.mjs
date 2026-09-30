@@ -122,7 +122,16 @@ const RE_PRACTICA_PROPIA = new RegExp(
   ].join("|"),
 );
 
-const RE_PRODUCTO_DETALLE = /\bse conecta con\b|\bse integra con\b|\bcompatible con\b|\brayos x\b|\bradiograf\w+|\bimpresora\b|\bfirma digital\b|\bapi\b|\bexportar\b|\bmigrar (?:mis|los) datos\b|\bcelular\b|\btelefono\b|\btablet\b|\bcomputadora\b|\bandroid\b|\biphone\b|\bwindows\b|\bsin internet\b|\boffline\b|\ben la nube\b|\b(?:dan|tienen|ofrecen|brindan|incluye|incluyen) (?:soporte|capacitacion|garantia)\b/;
+// El DUEÑO hablando de SUS pacientes, en plural: "tengo 30 pacientes con tratamiento a medias",
+// "mis pacientes dejan el tratamiento". Es el dolor #1 del cliente ideal y la respuesta mas probable
+// al anuncio D4 — y la palabra "tratamiento" lo mandaba al corte clinico (M5 + handoff), justo en el
+// mensaje que la pauta paga por conseguir. Un paciente habla de SU tratamiento, no de "mis pacientes".
+// Solo afloja a los PROCEDIMIENTOS (RE_CLINICO), igual que RE_PRACTICA_PROPIA: un sintoma sigue
+// cortando siempre y lo legal no pasa por aca. Ver tratamiento-a-medias-no-es-consulta-clinica.test.mjs.
+const RE_HABLA_DE_SUS_PACIENTES =
+  /\b(?:mis|nuestros|los|sus|varios|muchos|algunos|tengo|tenemos|hay|\d+) pacientes\b|\bpacientes (?:que|con)\b/;
+
+const RE_PRODUCTO_DETALLE =/\bse conecta con\b|\bse integra con\b|\bcompatible con\b|\brayos x\b|\bradiograf\w+|\bimpresora\b|\bfirma digital\b|\bapi\b|\bexportar\b|\bmigrar (?:mis|los) datos\b|\bcelular\b|\btelefono\b|\btablet\b|\bcomputadora\b|\bandroid\b|\biphone\b|\bwindows\b|\bsin internet\b|\boffline\b|\ben la nube\b|\b(?:dan|tienen|ofrecen|brindan|incluye|incluyen) (?:soporte|capacitacion|garantia)\b/;
 
 // La MISMA pregunta, dicha como la dice la gente: SUJETO + VERBO DE CAPACIDAD.
 //
@@ -430,7 +439,7 @@ export function isClinicalOrLegal(norm) {
   // cuesta nada. Los procedimientos si pasan por el guardia ("hago endodoncia" es un prospecto).
   if (RE_SINTOMA.test(norm)) return true;
   if (!RE_CLINICO.test(norm)) return false;
-  return !practicaPropia;
+  return !(practicaPropia || RE_HABLA_DE_SUS_PACIENTES.test(norm));
 }
 
 /**
@@ -929,4 +938,17 @@ export function detectPainPoint(norm) {
   if (RE_DOLOR_PACIENTES.test(norm)) return "clientes";
   if (RE_DOLOR_AGENDA.test(norm)) return "agenda";
   return null;
+}
+
+// El dolor que vende la pauta D4 ("Sabé quién no volvió"), dicho ANTES de que se lo pregunten.
+// `detectPainPoint` es ancho a proposito porque corre despues de que M2 pregunto el dolor; antes de
+// reservar nadie lo pregunto, y ahi "¿que horarios tienen?" o "tengo muchos clientes" no son un
+// dolor. Esto es lo estrecho: gente que NO VUELVE o tratamientos que quedan sin terminar. "a medias"
+// suelto no: "si, quedo a medias" es el prospecto hablando de la conversacion (M3 usa esas palabras).
+const RE_ABANDONO =
+  /\bno (?:vuelven|volvieron|regresan|regresaron|vuelven mas|vinieron mas)\b|\b(?:dejan|dejaron|abandonan|abandonaron|cortan|cortaron)\b[^.?!]{0,25}\btratamientos?\b|\b(?:tratamiento|endodoncia|ortodoncia|implante)s?\b[^.?!]{0,15}\b(?:a medias|sin terminar|incomplet\w+|abandonad\w+)\b|\b(?:empiezan|arrancan|comienzan)\b[^.?!]{0,30}\b(?:desaparecen|no vuelven|abandonan)\b/;
+
+/** El prospecto contó, sin que se lo pregunten, que sus pacientes/clientes no vuelven. */
+export function mentionsAbandonedTreatment(norm) {
+  return RE_ABANDONO.test(norm);
 }
