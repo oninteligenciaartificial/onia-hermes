@@ -57,6 +57,15 @@ Capturas: `hermes-content/carousels/briefs/assets/onia-1.0-dental-ads/candidato-
    - Si se ponen botones Completada/No asistió en «Agenda de hoy». Hoy se enlaza a Citas.
 4. Lo que ya estaba: reconectar Meta Ads con el usuario de ONIA Ads, SIAT (Listado de Pruebas + CAFC), cuentas de competencia, leer la política de privacidad v1.3.
 
+### Regla de Sergio Urcullo (30-sep): lo que la nube no puede, lo corre una sesión LOCAL
+
+- La nube no llega ni al VPS ni a la laptop. Lo que haga falta ahí (SSH, publicar, el SIAT en Chrome) se delega a una sesión local, sin pedirle a Sergio Urcullo que pegue comandos.
+- La sesión local la abre él una vez: `claude remote-control` **dentro de la carpeta de `onia-platform`** en la laptop, y deja la ventana abierta.
+- Va en `onia-platform` porque publicar la 1.0 es el objetivo y las skills `onia-deploy/db/...` solo se cargan dentro de ese repo. Los archivos de `onia-hermes` los lee por ruta.
+- Una sola sesión local, no dos: las sesiones en paralelo le cruzan la información.
+- Desde la nube se la encuentra con `ListAgents` y se le escribe con `SendMessage`.
+- Primera tarea para ella: el túnel de Cloudflare (bloque de comandos en la skill `onia-infra`, §«Desde una sesión en la NUBE»), para que la nube llegue sola al VPS.
+
 ## 7. Próximos pasos
 
 1. **Mirar `v1/cierre-0930`** en el entorno aislado:
