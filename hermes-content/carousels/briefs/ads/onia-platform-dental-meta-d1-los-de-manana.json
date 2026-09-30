@@ -1,0 +1,126 @@
+{
+  "title": "ONIA Platform Dental — D1 Los de mañana",
+  "serie": "CLÍNICAS DENTALES",
+  "caption": "Si tu clínica tiene 2 o más doctores y la agenda vive en la cabeza de la recepcionista, esto es para vos. Onia revisa la agenda cada mañana y te deja escrito el mensaje para cada paciente de mañana que no confirmó. Vos lo aprobás y lo mandás desde tu WhatsApp.",
+  "hashtags": [],
+  "slides": [
+    {
+      "role": "cover",
+      "pill": "Clínicas dentales",
+      "headline": "SON LAS 18:00 Y TODAVÍA *LLAMAN A LOS DE MAÑANA*",
+      "body": "Para dueños/as de clínicas dentales en Santa Cruz.",
+      "bg": "web-factory/apps/onia-platform/public/contexto/dental.webp"
+    },
+    {
+      "role": "stakes",
+      "pill": "La silla vacía",
+      "headline": "CADA SILLA VACÍA DE MAÑANA ES *UNA HORA EN CERO*",
+      "body": "Contá cuántas tuviste este mes. Con tus números, no con los nuestros.",
+      "visual": {
+        "type": "table",
+        "label": "LO QUE PASA · LO QUE CUESTA",
+        "left": "PASA",
+        "right": "CUESTA",
+        "rows": [
+          {
+            "left": "Paciente que no confirmó",
+            "right": "Hora del doctor sin cobrar"
+          },
+          {
+            "left": "Llamar uno por uno",
+            "right": "La tarde de la recepción"
+          },
+          {
+            "left": "Aviso a último momento",
+            "right": "Turno que ya nadie toma"
+          }
+        ]
+      }
+    },
+    {
+      "role": "point",
+      "pill": "Dónde se corta",
+      "headline": "NADIE CONFIRMA PORQUE CONFIRMAR ES *LLAMAR UNO POR UNO*",
+      "body": "La lista de mañana vive en la memoria de la recepción.",
+      "visual": {
+        "type": "flow",
+        "label": "EL HUECO DE CADA TARDE",
+        "nodes": [
+          {
+            "name": "Agenda de mañana"
+          },
+          {
+            "name": "Lista de memoria"
+          },
+          {
+            "name": "Llamadas a las 18:00"
+          },
+          {
+            "name": "Silla vacía"
+          }
+        ],
+        "note": "El problema no es la voluntad. Es *hacerlo a mano*."
+      }
+    },
+    {
+      "role": "point",
+      "pill": "Producto real",
+      "headline": "PRIMERO: UNA AGENDA QUE *TODO EL EQUIPO VE*",
+      "body": "Sin buscar el turno en tres lugares.",
+      "visual": {
+        "type": "screenshot",
+        "label": "ONIA · CUENTA DEMO",
+        "file": "hermes-content/carousels/briefs/assets/onia-1.0-dental-ads/agenda-de-hoy.png",
+        "fit": "cover",
+        "caption": "La agenda en la cuenta demo de ONIA."
+      }
+    },
+    {
+      "role": "point",
+      "pill": "El mecanismo",
+      "headline": "CADA MAÑANA, EL MENSAJE *YA ESCRITO*",
+      "body": "Onia te deja escrito el mensaje para cada paciente de mañana que no confirmó.",
+      "visual": {
+        "type": "screenshot",
+        "label": "PENDIENTES",
+        "file": "hermes-content/carousels/briefs/assets/onia-1.0-dental-ads/pendientes-confirmador.png",
+        "caption": "La propuesta del Confirmador, lista para aprobar."
+      }
+    },
+    {
+      "role": "save",
+      "pill": "Control humano",
+      "headline": "NADA SALE *SIN TU OK*",
+      "body": "Lo aprobás y lo mandás desde tu WhatsApp, con un toque.",
+      "visual": {
+        "type": "table",
+        "label": "CONTROL HUMANO",
+        "left": "ONIA",
+        "right": "VOS",
+        "rows": [
+          {
+            "left": "Revisa la agenda de mañana",
+            "right": "Mirás la propuesta"
+          },
+          {
+            "left": "Escribe cada mensaje",
+            "right": "Lo aprobás"
+          },
+          {
+            "left": "No manda nada solo",
+            "right": "Lo mandás desde tu WhatsApp"
+          }
+        ]
+      }
+    },
+    {
+      "role": "cta",
+      "pill": "Clínicas con 2 o más profesionales",
+      "headline": "EL MENSAJE DE MAÑANA, *YA ESCRITO*",
+      "body": "Escribinos y te lo mostramos con una clínica de ejemplo.",
+      "cta": "ESCRIBINOS",
+      "bg": "web-factory/apps/onia-platform/public/contexto/dental.webp"
+    }
+  ],
+  "cta": "Escribinos"
+}

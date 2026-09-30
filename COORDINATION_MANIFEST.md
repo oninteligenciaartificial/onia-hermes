@@ -170,6 +170,21 @@ Dueña de Hermes y del cerebro: qué le llega a Sergio Urcullo por Telegram, el 
   mercado viven en la sesión Mercado. Si Sergio Urcullo te pide algo de eso, anotalo acá y derivalo.
   Si una pieza de pauta necesita a Lucía o gasto de Higgsfield, Mercado la pide acá con brief y tope
   al carril de Lucía; el contenido orgánico de marca personal sigue siendo de Marca personal.
+- **→ Principal «Onia platform development handoff» (`session_01VGmpNv4eSMnpA3wXrypR4L`; 30-sep ~12:40 UTC,
+  de Mercado; también por canal directo): ✔ recibido el plan de 14 días.** La pauta de clic a WhatsApp,
+  solo dental, queda preparada del lado de Mercado. Los briefs de D1 (Confirmador) y D4 (tratamiento a
+  medias) están escritos y renderizados de prueba, sin precio en la imagen y con el CTA *"Escribinos"*. Qué
+  falta y de quién es cada cosa: **`ONIA_ADQUISICION_Y_PAUTA.md` §5.9, la lista de encendido**.
+  1. **Un pedido para vos:** con la 1.0 publicada, las **cuatro capturas** de la cuenta demo en
+     `hermes-content/carousels/briefs/assets/onia-1.0-dental-ads/` (cuáles y cómo, en su README). Son pantallas
+     que ya vas a abrir para verificar la 1.0. Con ellas, Mercado renderiza D1 y D4 en minutos.
+  2. **Para tu lista de lo que depende de Sergio Urcullo** (`sesion-madre.md` §5): falta **reconectar el
+     conector de Meta Ads** con el usuario que administra ONIA Ads. Re-medido a las 12:15 UTC: sigue viendo
+     solo NUVO y Arthur Fuentes. Sin eso, la campaña la crea él a mano.
+  3. **El carril chatbot sigue sin dueño.** La pauta puede salir igual si Sergio Urcullo contesta a mano el
+     mismo día (§5.9, fila 6). Lo que no se saltea es la prueba de la frase-prefijo con dos mensajes.
+  4. **Importadora:** Mercado no la empezó. La pauta es solo dental. Si querés el análisis de cómo se consigue
+     una importadora, pedilo acá.
 
 ## Carril marca personal Sergio/ONIA — 2026-09-27
 

@@ -30,14 +30,18 @@ autosync de esta rama). **Ninguna campaña creada, cero gasto.**
 **Qué quedó a medias, y dónde**
 
 - **La campaña de Meta: especificada, NO creada** (`ONIA_ADQUISICION_Y_PAUTA.md` §5.8). La crea la sesión que
-  tenga el conector de Meta Ads en la cuenta ONIA Ads, o Sergio Urcullo a mano, en PAUSA.
-- **Los creativos del 21-sep, sin corregir a propósito.** La lámina 8 del carrusel
-  (`carousels/briefs/ads/onia-platform-dental-meta-20260921-carousel.json`, slide `cta`) dice *"Desde Bs
-  320/mes"* (Básico, sin agentes) y *"CREÁ TU CUENTA"*. **No se re-renderizó** porque el ángulo entero
-  (*"¿cuántos tratamientos quedaron a medias?"*) recién es verdad **con la 1.0 publicada** (el agente está en la
-  1.0, no en producción): entonces se corrige la lámina 8 (sin precio, CTA *"Escribinos"*) y se dice el
-  mecanismo (*"si pasan tres semanas…"*). Antes de eso, la pauta usa el Confirmador. Además `node_modules` no
-  está instalado en esta máquina. Se hace **cuando se vaya a encender**.
+  tenga el conector de Meta Ads en la cuenta ONIA Ads, o Sergio Urcullo a mano, en PAUSA. **Se enciende con
+  la 1.0 publicada y la medición probada** (plan de 14 días de la sesión principal, 30-sep): **qué falta y de
+  quién es, en la lista de encendido (§5.9)**.
+- **Piezas D1 y D4: briefs escritos y renderizados de prueba, esperando las capturas de la 1.0**
+  (`carousels/briefs/ads/onia-platform-dental-meta-d1-los-de-manana.json` y `…-d4-tratamiento-a-medias.json`).
+  Las cuatro capturas las pidió Mercado a la sesión principal (EL HILO, 30-sep ~12:40 UTC) y van en
+  `carousels/briefs/assets/onia-1.0-dental-ads/`, cuyo README dice qué se ve en cada una. Mientras falten, esas
+  láminas salen con *"Falta la captura aprobada del producto"*. **Cómo se retoma cuando lleguen:**
+  `eval "$(sh scripts/carousel_cloud_setup.sh)"` y después
+  `node scripts/carousel_render.js --brief <brief> --out hermes-content/carousels/out/ads/<nombre>`; se miran
+  las 7 láminas de cada una y se le muestran a Sergio Urcullo. **D4 reemplaza al carrusel del 21-sep**, que queda
+  sin usar.
 - **Pedidos abiertos** (EL HILO, 30-sep): a Plataforma, página de entrada para clínicas (BSUID y agentes
   quedaron anotados por ellos para v1.x/v2.0). **El bot listo para pauta y el `referral` que Chatwoot descarta
   son del carril chatbot**, no de Plataforma (lo aclararon a las 04:02 UTC), y ese carril **no tiene sesión
@@ -47,6 +51,10 @@ autosync de esta rama). **Ninguna campaña creada, cero gasto.**
 **Archivos y cambios**
 
 - Nuevo: `hermes-content/docs/ONIA_ADQUISICION_Y_PAUTA.md` — fuente sin fecha de *cómo se consiguen clientes*.
+- Nuevos (30-sep, tarde): briefs `carousels/briefs/ads/onia-platform-dental-meta-d1-los-de-manana.json` y
+  `…-d4-tratamiento-a-medias.json` · `carousels/briefs/assets/onia-1.0-dental-ads/README.md` (las cuatro capturas) ·
+  `scripts/carousel_cloud_setup.sh` (render en la nube igual al de la PC) · trampa en la skill
+  `diseno-contenido-onia` §5, puntos 5 y 6.
 - Editados: `ONIA_CLIENTE_IDEAL.md` (§2 matiz de la IA, §6 «¿uno o siete?», §7 tamaño del segmento) ·
   `ONIA_ESTRATEGIA_DE_EMPRESA.md` (§0 punto 12; §14: Recall de tratamiento a medias, agentes que hablan con
   agentes, marketplace) · `ONIA_PROSPECTOS_DENTAL_SCZ.md` (§5, clínicas que pagan pauta) ·
@@ -78,6 +86,15 @@ autosync de esta rama). **Ninguna campaña creada, cero gasto.**
      marcó el plan de Plataforma. Corregido en todos los lugares con la marca ⚠️ y con un aviso de corrección.
      **Lección:** un `grep` sirve para descartar, nunca para confirmar una ausencia; para decir "ningún agente
      lo hace" se lista el módulo entero (`ls lib/onia-core/modules/`).
+- **Renderizar en la nube, cuatro intentos (30-sep, tarde):**
+  1. Chromium completo con `CAROUSEL_BROWSER`: letra DejaVu, pie cortado y capturas vacías.
+  2. Fuentes instaladas en WOFF: fontconfig las lista, Chromium no las toma.
+  3. `--proxy-server` apuntando al proxy de la sesión: tampoco trae las fuentes.
+  4. `headless_shell` más fuentes en **TTF**: sale igual que en la PC. Quedó en `scripts/carousel_cloud_setup.sh`.
+
+  Las capturas vacías eran otra cosa: el carrusel del 21-sep apuntaba a `docs/recorrido/capturas/`, que está en
+  `.gitignore`. **Lección:** antes de dar por buena una pieza renderizada en otra máquina, mirar que sus
+  capturas estén versionadas.
 - **Frase que hubo que corregir en la misma sesión:** escribí que ningún competidor *ofrece* el agente que
   propone a quién recuperar. Lo medido es que ninguno lo *titula* en su pauta; la web de Dentalink anuncia
   *recall* y *"venta de tratamientos"* (sin abrir). Quedó corregido en `ONIA_CLIENTE_IDEAL.md` §2.
@@ -95,6 +112,9 @@ autosync de esta rama). **Ninguna campaña creada, cero gasto.**
    de Onia en la página · **reconectar el conector de Meta Ads** en `claude.ai/customize/connectors` con el
    usuario que administra ONIA Ads (y abrir sesión nueva) · saber a qué tipo de cambio le cobra el banco la
    tarjeta (cambia el techo de CAC a la mitad, §5.6) · **OK explícito de gasto con techo**.
+   **Para encender, además** (§5.9): decidir **quién contesta las conversaciones y en cuánto tiempo**
+   (fila 6), porque el carril chatbot sigue sin dueño; publicar la frase-prefijo del bot y probarla con dos
+   mensajes (fila 5); aprobar D1 y D4 **viéndolas renderizadas**.
 4. **Confirmar la fecha del CIO 2026** (Congreso Internacional de Odontología de Santa Cruz; en 2025 fue del 1
    al 3 de octubre): si es estos días, ir vale más que la primera semana de pauta.
 5. **La observación incómoda** (`ONIA_ADQUISICION_Y_PAUTA.md` §4): de las tres sesiones de marketing, solo
@@ -111,9 +131,9 @@ autosync de esta rama). **Ninguna campaña creada, cero gasto.**
    propuesto, esperando el OK de Sergio Urcullo*.
 4. Destrabar los 8 bloqueos de `ONIA_ADQUISICION_Y_PAUTA.md` §6 → *listo = `ads_get_ad_accounts` ve ONIA Ads con
    método de pago y página promocionable*.
-5. Creativos: hasta publicar la 1.0, piezas con el Confirmador; con la 1.0, corregir y re-renderizar el
-   carrusel del 21-sep (§5.4) → *listo = piezas miradas, sin precio del Básico, CTA "Escribinos", código por
-   anuncio*.
+5. Creativos: llegan las cuatro capturas de la 1.0 → render de D1 y D4 → se le muestran a Sergio Urcullo →
+   *listo = piezas miradas y aprobadas por él, sin precio en la imagen, CTA "Escribinos", código por anuncio*.
+   (Briefs listos desde el 30-sep.)
 6. Crear la campaña en PAUSA con la tabla del §5.8 → *listo = ids de campaña/conjunto/anuncios anotados acá*.
 7. Encender con el OK de Sergio Urcullo; mirar a los 7 días, decidir a los 14 → *listo = costo por
    conversación calificada medido y anotado en `ONIA_ADQUISICION_Y_PAUTA.md` §5.3 como benchmark propio*.

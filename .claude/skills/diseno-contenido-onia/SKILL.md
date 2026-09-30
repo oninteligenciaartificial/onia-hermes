@@ -107,6 +107,14 @@ Letras: Bricolage (títulos, local), DM Sans (texto), Caveat (flechas y sello), 
 3. Toda lámina sin imagen ni `visual` necesita texto propio (antes el pack rellenaba con una
    frase fija que se publicaba).
 4. Cifras y fechas con fuente (en el caption, no en la lámina).
+5. **La captura tiene que viajar con el brief.** `hermes-content/docs/recorrido/**/*.png` está en
+   `.gitignore`: una lámina que apunta ahí, renderizada en otra máquina, sale con «Falta la captura
+   aprobada del producto». Pasó con el carrusel de pauta del 21-sep (visto el 30-sep). Las capturas de una
+   pieza van en `hermes-content/carousels/briefs/assets/<pieza>/`, que sí está versionada.
+6. **Render en una sesión de la nube:** primero `eval "$(sh scripts/carousel_cloud_setup.sh)"`. Sin ese
+   paso, el renderer no encuentra el navegador. Con el Chromium completo, además, cae en DejaVu y corta
+   el pie de cada lámina. El script instala las fuentes de los packs **en TTF** (en WOFF, Chromium no las
+   toma) y apunta al `headless_shell`. Comparado el 30-sep: sale igual que en la PC.
 
 ## 6. Gasto (CLAUDE.md, regla de Higgsfield)
 

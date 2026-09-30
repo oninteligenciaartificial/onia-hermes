@@ -1,0 +1,126 @@
+{
+  "title": "ONIA Platform Dental — D4 Tratamiento a medias",
+  "serie": "CLÍNICAS DENTALES",
+  "caption": "Si tu clínica tiene 2 o más doctores, esto es para vos. Cuando un paciente deja un tratamiento empezado y pasan tres semanas sin que vuelva, Onia te lo marca y te deja escrito el mensaje para retomarlo. Vos lo aprobás antes de mandarlo.",
+  "hashtags": [],
+  "slides": [
+    {
+      "role": "cover",
+      "pill": "Clínicas dentales",
+      "headline": "¿CUÁNTOS EMPEZARON UNA ENDODONCIA Y *NO VOLVIERON?*",
+      "body": "Para dueños/as de clínicas dentales en Santa Cruz.",
+      "bg": "web-factory/apps/onia-platform/public/contexto/dental.webp"
+    },
+    {
+      "role": "stakes",
+      "pill": "La plata quieta",
+      "headline": "ESA PLATA ESTÁ *SENTADA EN TU AGENDA*",
+      "body": "Contalos. Multiplicá por lo que te falta cobrar de cada tratamiento.",
+      "visual": {
+        "type": "table",
+        "label": "SEGUÍ EL RASTRO",
+        "left": "QUEDA A MEDIAS",
+        "right": "QUÉ SE FRENA",
+        "rows": [
+          {
+            "left": "Tratamiento empezado",
+            "right": "Saldo por cobrar"
+          },
+          {
+            "left": "Paciente sin volver",
+            "right": "Próximo turno"
+          },
+          {
+            "left": "Seguimiento olvidado",
+            "right": "Decisión del paciente"
+          }
+        ]
+      }
+    },
+    {
+      "role": "point",
+      "pill": "Dónde se corta",
+      "headline": "NADIE LO VE PORQUE EL PACIENTE *NO CANCELÓ*",
+      "body": "Simplemente no volvió a pedir cita.",
+      "visual": {
+        "type": "flow",
+        "label": "EL HUECO OPERATIVO",
+        "nodes": [
+          {
+            "name": "Tratamiento empezado"
+          },
+          {
+            "name": "Pasan las semanas"
+          },
+          {
+            "name": "Nadie revisa a quién llamar"
+          },
+          {
+            "name": "El paciente no vuelve"
+          }
+        ],
+        "note": "No es falta de ganas. Es no tener *un sistema que lo muestre*."
+      }
+    },
+    {
+      "role": "point",
+      "pill": "Producto real",
+      "headline": "EL PLAN DE TRATAMIENTO, *EN LA FICHA*",
+      "body": "Cada paciente con su tratamiento y en qué estado quedó.",
+      "visual": {
+        "type": "screenshot",
+        "label": "ONIA · CUENTA DEMO",
+        "file": "hermes-content/carousels/briefs/assets/onia-1.0-dental-ads/ficha-plan-de-tratamiento.png",
+        "fit": "cover",
+        "caption": "Plan de tratamiento en la ficha, cuenta demo."
+      }
+    },
+    {
+      "role": "point",
+      "pill": "El mecanismo",
+      "headline": "TRES SEMANAS SIN VOLVER: *ONIA TE LO MARCA*",
+      "body": "Y te deja escrito el mensaje, con el nombre del tratamiento y tu link de reserva.",
+      "visual": {
+        "type": "screenshot",
+        "label": "PENDIENTES",
+        "file": "hermes-content/carousels/briefs/assets/onia-1.0-dental-ads/pendientes-tratamiento-a-medias.png",
+        "caption": "La propuesta, lista para aprobar."
+      }
+    },
+    {
+      "role": "save",
+      "pill": "Control humano",
+      "headline": "VOS LO APROBÁS. *NADA SALE SOLO.*",
+      "body": "Una persona revisa cada mensaje antes de mandarlo.",
+      "visual": {
+        "type": "table",
+        "label": "CONTROL HUMANO",
+        "left": "ONIA",
+        "right": "VOS",
+        "rows": [
+          {
+            "left": "Ve el tratamiento a medias",
+            "right": "Mirás la propuesta"
+          },
+          {
+            "left": "Escribe el mensaje",
+            "right": "Lo aprobás"
+          },
+          {
+            "left": "No manda nada solo",
+            "right": "Lo mandás desde tu WhatsApp"
+          }
+        ]
+      }
+    },
+    {
+      "role": "cta",
+      "pill": "Clínicas con 2 a 6 profesionales",
+      "headline": "SABÉ *QUIÉN NO VOLVIÓ*",
+      "body": "Escribinos y te lo mostramos con una clínica de ejemplo.",
+      "cta": "ESCRIBINOS",
+      "bg": "web-factory/apps/onia-platform/public/contexto/dental.webp"
+    }
+  ],
+  "cta": "Escribinos"
+}
