@@ -22,3 +22,5 @@ las de siempre (precios en `onia-platform/lib/subscription-plans.ts` y `lib/pric
 | `INVENTARIO_POR_RUBRO.md` | cada módulo, botón y clic por rubro, con nivel de evidencia; qué modelo de IA usa cada parte |
 | `ADMINISTRAR_PARA_VENDER.md` | recorrido del cliente, tablero diario de Sergio y checklist de lanzamiento |
 | `CAMPANA_META_ADS.md` | plan de campaña para aprobar (nada creado ni gastado) |
+| `COMPETENCIA_BOTS_WHATSAPP.md` | bots de WhatsApp con IA desde su web viva (SendyPro, OpenWhats, Kommo, Respond.io, Wati, ManyChat, Leadsales, Rimay, Chicha) |
+| `COMPETENCIA_SENDYPRO.md`, `COMPETENCIA_MANYCHAT.md`, `COMPETENCIA_DOCTOCLIQ.md` | recorridos POR DENTRO con cuenta de Sergio, solo lectura. Regla: son ideas para evaluar, no cosas a copiar |
