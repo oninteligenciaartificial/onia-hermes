@@ -16,9 +16,11 @@
 > una rutina de un solo disparo, `create_trigger` con `persistent_session_id` = la sesión destino y
 > `run_once_at` un par de minutos adelante. Entra como un turno en esa sesión. Solo para avisos que
 > no pueden esperar al próximo merge, marcados «informativo» si no piden nada. El detalle igual se
-> escribe acá. IDs vivos al 30-sep: control `session_01BZJvUfEXbqT9wNLJ6n5XZP` · Marca personal
-> `session_01LV2Djb9n8BgziusUEoJRq7` · Plataforma `session_01GU5QdBaBbBd5zCzWX8yLih` · Lucía v4
-> `session_01RRD6v9rmBavDoXx1rG2mEn` · Mercado `session_01BnctfaNRsm3ogJ46A7B5P5`.
+> escribe acá. IDs vivos al 30-sep 12:30 UTC (medidos con `list_sessions`): control
+> `session_01BZJvUfEXbqT9wNLJ6n5XZP` · Plataforma, ahora sesión principal en el entorno «Onia»,
+> `session_01VGmpNv4eSMnpA3wXrypR4L` (la vieja `session_01GU5QdBaBbBd5zCzWX8yLih` está archivada) ·
+> Marca personal `session_01LV2Djb9n8BgziusUEoJRq7` · Lucía v4 `session_01RRD6v9rmBavDoXx1rG2mEn` ·
+> Mercado `session_01BnctfaNRsm3ogJ46A7B5P5`.
 > ⚠️ **Corregido el 30-sep 03:20 UTC (Mercado):** acá decía Lucía v4 = `session_01KdXWrUrmcitf33fEDePwX7`.
 > Esa sesión se **archivó** a las 02:52 UTC al pasar Lucía al entorno `onia-higgsfield` (medido con
 > `list_sessions`); la viva es `session_01RRD6v9rmBavDoXx1rG2mEn`, rama `claude/lucia-v4-onia-higgsfield`.
@@ -28,6 +30,14 @@
 > primer envío llegó a la sesión de control (`last_run` SUCCEEDED, 02:38:42 UTC). Esa sesión decide
 > si se adopta para avisos que no pueden esperar. El aviso se escribe ACÁ igual.
 
+**Objetivo común (30-sep): EMPEZAR A VENDER.** Plan de 14 días (30-sep → 13-oct) y mapa de
+sesiones en `hermes-content/docs/handoff/sesion-madre.md`. La sesión principal (Plataforma) maneja
+la mayoría de Onia Platform; **la orquestación entre sesiones sigue en la de control** («dos
+orquestadores se pisan»). Lo de control en el plan: el embudo diario en el resumen de las 06:30
+(prospectos → demos → altas → pagos) y el aviso de alta nueva. Altas y pagos leen la base de
+producción: **esperan el OK explícito de Sergio Urcullo** (el control de permisos frenó esa lectura
+sin su OK, 30-sep).
+
 **Sesión de control — «Hermes y Sergio management system»** (rama `claude/hermes-jarvis`).
 Dueña de Hermes y del cerebro: qué le llega a Sergio Urcullo por Telegram, el resumen de las
 06:30, el cierre de las 21:30, su calendario, y el orden entre sesiones. Regla vigente:
@@ -36,7 +46,7 @@ Dueña de Hermes y del cerebro: qué le llega a Sergio Urcullo por Telegram, el 
 | Sesión | Qué es suyo | Lo que la sesión de control LEE de ella (no cambiar sin avisar acá) |
 |---|---|---|
 | **Marca personal: comunidad y contenido** (`claude/marca-personal-contenido-ae658c`) | guiones, carruseles, comunidad, plan de 3 semanas | El resumen de las 06:30 lista «Para grabar hoy» leyendo `cola/plan-3-semanas/S*-GUIONES.md`. Acepta la fecha del `## ` en los dos formatos que ya conviven (`Mié 30-sep` / `Miércoles 14-oct` y `Miércoles 7 de octubre`) y cada pieza como `### DNN-X · Formato · Título`. Un tercer formato o un archivo nuevo = avisar acá (medido el 29-sep: con un solo formato, la semana 2 salía vacía sin error). **Los bloques de ONIA del calendario de Sergio Urcullo del 3 al 10-oct los llenó la sesión de control con estos títulos**: si cambia el plan de esos días, avisar acá para re-llenarlos. |
-| **Onia platform development handoff** (`claude/onia-platform-handoff-56d586`) | onia-platform, SIAT, sales-kit, web pública | El resumen cuenta prospectos por la tarea `[leads-esperando]` del tablero (`scripts/vigia_sin_respuesta.mjs`). Si el aviso de solicitudes de acceso (`lib/aviso-acceso.ts`) cambia, avisar acá: tiene que pasar por la aduana. La plataforma **no manda Telegram directo** salvo el pedido de acceso heredado: su aviso propio de «alta nueva» quedó detrás de `ONIA_AVISO_ALTA_DIRECTO=1`, apagado (commit `59f5c368`, 30-sep). |
+| **Onia platform development handoff — sesión principal** (nube, entorno «Onia»; ramas `wip/v1-*`) | onia-platform, SIAT, sales-kit, web pública (código). Opera el VPS con la llave revocable `claude-cloud-20260930`: **infra es de un dueño a la vez**, así que lo que control corra en el VPS fuera de su workflow se pide acá antes | El resumen cuenta prospectos por la tarea `[leads-esperando]` del tablero (`scripts/vigia_sin_respuesta.mjs`). Si el aviso de solicitudes de acceso (`lib/aviso-acceso.ts`) cambia, avisar acá: tiene que pasar por la aduana. La plataforma **no manda Telegram directo** salvo el pedido de acceso heredado: su aviso propio de «alta nueva» quedó detrás de `ONIA_AVISO_ALTA_DIRECTO=1`, apagado (commit `59f5c368`, 30-sep). |
 | **Infra (Codex)** — `handoff/infra-cerebro-loops.md` | VPS, n8n, loops, backups | ⚠️ Desde el 29-sep la **entrega a Sergio Urcullo** (Telegram, `onia-tg.sh`, resumen, cierre, su calendario) es de la sesión de control. El resto del VPS sigue siendo de infra. **En el crontab, las líneas marcadas `#jarvis` son de la sesión de control**: no editarlas a mano (`revertir` las deshace por marca). Los 12 flujos de n8n que apaga `hermes-jarvis/aplicar.sh` y el flujo nuevo «ONIA - Agenda hoy (Jarvis)» también. |
 | **Lucía v4 y Higgsfield** (`claude/lucia-v4-onia-higgsfield`, entorno `onia-higgsfield`; antes `claude/confident-ramanujan-j79bkq`) — `handoff/higgsfield-lucia.md` | identidad de Lucía (`hermes-content/references/modelos/lucia/**`), política Higgsfield (`hermes-content/docs/HIGGSFIELD_VIDEO_SYSTEM.md`) | Estado de Lucía y de las identidades de Higgsfield: **solo** `LUCIA-HIGGSFIELD-IDENTITY.json`. Desde el 29-sep se retiran las identidades viejas de Higgsfield (incluidos los 5 Souls de Sergio Urcullo), **salvo las fuentes de la cara original de Lucía**, que se conservan (`lucia_original_sources_keep` en el manifest; la cara es 100% IA, corregido el mismo día). Los créditos de Higgsfield son **una sola bolsa** para todas las sesiones (533,87 el 30-sep 02:30 UTC): este carril gasta con tope aprobado y registra cada imagen en `v4/PROCEDENCIA.jsonl`. En la nube, este carril trabaja en el entorno `onia-higgsfield`. |
 | **Análisis de mercado Onia Platform** («Mercado», `claude/nice-lamport-5og9lv`, abierta el 30-sep) — `handoff/mercado-y-pauta.md` | A quién y por dónde se le vende Onia Platform: foco de rubros, tamaño de mercado, **cómo consigue clientes la competencia** (Biblioteca de Anuncios de Meta, canales, mensajes), **la pauta de Meta Ads de Onia Platform** (estructura, público, presupuesto, brief de creativos; nada se crea en la cuenta ni se gasta sin el OK de Sergio Urcullo), radar de funciones y tendencias, y productos nuevos pasados por el test de tres preguntas. **No toca** código, web pública, precios, chatbot ni Higgsfield: lo que necesite de ahí lo pide acá | Nada por ahora. Si el resumen llega a informar la pauta, leerá de `handoff/mercado-y-pauta.md`. |
