@@ -2,6 +2,27 @@
 
 **Archivo único del carril.** Actualizado 2026-09-29 por Claude (Opus 5.5).
 
+## 🧭 La visión del carril (Sergio Urcullo, 30-sep, textual)
+
+> *«ser un experto en ia, contenido diario · pasar a lanzar un curso luego, comunidad atrae ventas de curso ia ·
+> contenido diario · la onia plattform es nuestra muestra que sabemos trabajar · seguir lanzando apps y demás ·
+> onia community presencial»*
+
+Cadena: **contenido diario → autoridad en IA → comunidad → curso**. Onia Platform es la prueba de que sabe
+construir; el presencial es el escalón de confianza.
+
+**Tensiones que Sergio Urcullo tiene que decidir (no las decide la sesión, `CLAUDE.md` §1):**
+1. **Etapa vigente del negocio = 5 clientes de Onia Platform con la 1.0** (`ONIA_ESTRATEGIA_DE_EMPRESA.md` §16).
+   El curso es una línea nueva que compite por las mismas horas. ¿La marca personal sigue en segundo plano
+   hasta los 5 clientes, o cambia la etapa?
+2. **«Seguir lanzando apps»:** como CONTENIDO (construir en vivo y mostrar) suma; como producto que hay que
+   mantener abre líneas nuevas, lo que la regla prohíbe.
+3. **El curso se valida antes de grabarlo** (`ONIA_COMUNIDAD_CONTENIDO.md` §Embudo). Puerta propuesta, falta su
+   OK: comunidad ≥ 200 miembros + encuesta con ≥ 20 «lo compraría» sobre un temario salido de preguntas reales.
+   Con 30 miembros hoy, el trabajo es crecer, no el curso.
+4. **Onia Platform como muestra** necesita un cliente real para ser prueba: los 5 clientes y la marca se ayudan.
+   Contenido «construyendo Onia» sirve a los dos a la vez.
+
 ## 📋 LA LISTA — todos los puntos del carril (Sergio Urcullo, 30-sep: «vamos recolectando todos y los vamos tocando»)
 
 Una sola lista. Se toca de a uno, en este orden salvo que Sergio Urcullo diga otro. Estado al 30-sep.
