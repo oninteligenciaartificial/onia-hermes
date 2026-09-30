@@ -7,6 +7,12 @@ Regla principal: antes de actuar, identificar el tipo de trabajo, activar la ski
 
 Regla de orquestacion: para tareas relevantes de implementacion, leer `AGENTS.md`, planear primero y activar los frentes/agentes necesarios: arquitectura, backend, frontend, diseno, base de datos/RLS, seguridad, automatizacion, contenido, QA y operaciones.
 
+## Limpieza de skills 2026-09-29 (leer antes de buscar una skill)
+- `~/.codex/skills` quedo en 38: salieron 23 sin uso en 30 dias a `~/.codex/skills-archivadas-20260929/`. Volver una: `mv ~/.codex/skills-archivadas-20260929/<nombre> ~/.codex/skills/`.
+- HyperFrames ya no vive en `.agents/skills/` del repo (salvo `media-use` y `embedded-captions`): usar `~/.codex/skills/hyperframes*`. Un flujo que falte: `npx hyperframes skills update <nombre>`.
+- `~/.agents/skills` es un enlace a `~/.claude/skills` (110 globales, compartidas con Claude).
+- Detalle, motivo y como recuperar cada skill: `hermes-content/docs/historial/LIMPIEZA_SKILLS_20260929.md`.
+
 ## Prioridad de decision
 1. Si el usuario nombra una skill, usar esa skill.
 2. Si la tarea coincide claramente con una skill instalada, usarla.
