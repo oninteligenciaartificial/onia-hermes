@@ -54,7 +54,18 @@
     },
     "trait_photoshoot_local": {
       "path": "../../models/lucia-surgical-shoot-20260707/",
-      "shots": ["01-front-neutral", "02-front-slight-smile", "03-front-big-smile", "04-profile-left", "05-profile-right", "06-threequarter-left", "07-threequarter-right", "08-nose-detail", "09-ear-detail", "10-full-body"],
+      "shots": [
+        "01-front-neutral",
+        "02-front-slight-smile",
+        "03-front-big-smile",
+        "04-profile-left",
+        "05-profile-right",
+        "06-threequarter-left",
+        "07-threequarter-right",
+        "08-nose-detail",
+        "09-ear-detail",
+        "10-full-body"
+      ],
       "role": "vara de QA (¿es ella?). 08 y 09 son recortes: sirven para QA, no para entrenar",
       "higgsfield_ids_correction_2026_09_30": "Decia 'sin registrar; subirlos requiere upload.higgsfield.ai'. FALSO: cada PNG trae su job en el chunk de texto 'hf-job-id' y los 12 jobs estan completed en Higgsfield (jobs_wait, 30-sep). Se usan por job_id sin subir nada",
       "higgsfield_job_ids": {
@@ -104,7 +115,10 @@
       "tool": "scripts/face_identity_qa.py",
       "metric": "coseno ArcFace (insightface buffalo_l: SCRFD det_10g + ArcFace w600k_r50) contra el centroide de las 8 fuentes (7 medias de lucia-skin-v1 + 902eeebb)",
       "runs_on": "sandbox_exec de Higgsfield: tiene internet y llega al CDN aunque la sesion en la nube no. 0 creditos",
-      "baseline_sources_leave_one_out": [0.698, 0.82],
+      "baseline_sources_leave_one_out": [
+        0.698,
+        0.82
+      ],
       "negatives_max": 0.224,
       "gate": 0.7,
       "gate_rule": "una foto del dataset o del Soul pasa si da >= 0.70 (el piso de las propias fuentes); debajo se regenera. Aplica a caras frontales y de tres cuartos de 200 px o mas: los perfiles bajan solos (fuente R4 0.698, photoshoot 04 0.689) y con caras chicas el numero pierde confiabilidad; esos se miran",
@@ -115,6 +129,12 @@
       "soul_training_exclusions": {
         "1714a347-471d-4803-a42e-0022e15df262": "R2 '3/4 medio': 2 personas de fondo (caras de 46 y 28 px). La guia de Soul pide 'Single person per photo'. Como referencia de generacion sirve (la cara principal da 0.758)"
       }
+    },
+    "prompt_clausula_belleza": {
+      "texto": "Youthful fresh skin, smooth under-eyes, no deep wrinkles or expression lines. Bright warm brown eyes with clear catchlights. Dewy glowing skin with a natural sheen on cheekbones and nose bridge, freckles clearly visible across nose and cheeks.",
+      "desde": "2026-09-30",
+      "por": "Sergio Urcullo",
+      "nota": "Va en TODOS los prompts de Lucia v4 (Seedream y Soul). No volver a 'natural imperfections'/'unretouched': envejece."
     }
   },
   "execution_policy": {
