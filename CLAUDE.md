@@ -268,8 +268,13 @@ Instrucciones de proyecto. Override sobre defaults.
 
 ## ONIA Core (REGLA)
 
-- **Un rubro nuevo se ENCIENDE desde el core, no se escribe de cero.** Orden: dental
-  (vivo) → comercio → importadora → el resto.
+- **Un rubro nuevo se ENCIENDE desde el core, no se escribe de cero.** Los 5 que se ofrecen ya
+  están encendidos (dental, estética, servicios profesionales, comercio, importadora).
+- **Orden de empuje (venta, pauta y desarrollo), decidido por Sergio Urcullo el 2026-09-29:**
+  dental → **importadora** → el resto. Comercio y servicios esperan a que la factura del SIN esté
+  dentro del sistema: sin ella no compiten con los sistemas bolivianos que sí facturan.
+  ⚠️ Antes decía «dental → comercio → importadora»; era el orden de ENCENDIDO de julio y se leía
+  como prioridad.
 - Todo lo demás del core (21 capacidades, `contract.json`, los 3 adapters, el validador
   obligatorio antes de commitear, `external_gate`) → **skill `onia-core`**.
 
