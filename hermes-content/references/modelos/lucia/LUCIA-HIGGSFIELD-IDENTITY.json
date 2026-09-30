@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "schema_version": 3,
-  "updated_at": "2026-09-29",
+  "updated_at": "2026-09-30",
   "owner": "ONIA",
   "subject": "Lucia",
   "status": "fixing_original_face_v4",
@@ -79,12 +79,27 @@
     },
     "discarded_new_face_casting": "C01-C26 (23,04 cr). Aprendizajes en v4/PROCEDENCIA.jsonl y HIGGSFIELD_VIDEO_SYSTEM.md",
     "identity_plan": [
-      "prueba de uso: 4 escenas Pinterest con Nano Banana Pro + <<<58bbd635>>> (T101-T104)",
-      "dataset de 20: 7 medias de lucia-skin-v1 + frontal del photoshoot (902eeebb) + 12 fotos de vida con luz, angulo y expresion variados, aprobadas contra el stack de 10 angulos",
+      "prueba de uso: 4 escenas Pinterest con Nano Banana Pro + <<<58bbd635>>> (T101-T104) y 4 con las 7 media_ids en Nano Banana Pro y Seedream 4.5 (T201-T204). HECHO y medido: ver identity_qa",
+      "dataset de 20: 6 medias de lucia-skin-v1 (sin 1714a347, que tiene personas de fondo) + frontal del photoshoot (902eeebb) + 13 fotos de vida con luz, angulo y expresion variados, cada una >= identity_qa.gate. Motor: el que elija Sergio Urcullo; por identidad gana seedream_v4_5 + 7 media_ids",
       "entrenar Soul ID tipo soul_2 (el tipo cinematic tiene un bug abierto) con OK especifico de costo",
-      "probar el Soul en 3 escenas fijas contra el stack; verificar que aparece como Element para video",
+      "probar el Soul en 3 escenas fijas contra el stack y con identity_qa; verificar que aparece como Element para video",
       "argollas y cadenita: nombrarlas en cada prompt o fijarlas como Element aparte (Soul tiende a perder accesorios)"
-    ]
+    ],
+    "identity_qa": {
+      "tool": "scripts/face_identity_qa.py",
+      "metric": "coseno ArcFace (insightface buffalo_l: SCRFD det_10g + ArcFace w600k_r50) contra el centroide de las 8 fuentes (7 medias de lucia-skin-v1 + 902eeebb)",
+      "runs_on": "sandbox_exec de Higgsfield: tiene internet y llega al CDN aunque la sesion en la nube no. 0 creditos",
+      "baseline_sources_leave_one_out": [0.698, 0.82],
+      "negatives_max": 0.224,
+      "gate": 0.7,
+      "gate_rule": "una foto del dataset o del Soul pasa si da >= 0.70 (el piso de las propias fuentes); debajo se regenera",
+      "blind_spot": "mide identidad; NO mide belleza, piel ni realismo. Eso lo mira Sergio Urcullo",
+      "result_2026_09_29": "v4/qa/identidad-metodos-20260929.json",
+      "method_ranking_2026_09_29": "seedream_v4_5 + 7 media_ids: cafe 0.883, calle 0.836 > nano_banana_pro + Element: 0.822, 0.693 ~ nano_banana_pro + 7 media_ids: 0.806, 0.683",
+      "soul_training_exclusions": {
+        "1714a347-471d-4803-a42e-0022e15df262": "R2 '3/4 medio': 2 personas de fondo (caras de 46 y 28 px). La guia de Soul pide 'Single person per photo'. Como referencia de generacion sirve (la cara principal da 0.758)"
+      }
+    }
   },
   "execution_policy": {
     "cloud_sessions": "MCP oficial funciona. El entorno Default bloquea higgsfield.ai, upload.higgsfield.ai y los CDN d2ol7oe51mr4n9/d8j0ntlcm91z4.cloudfront.net: sin esos dominios la sesion no puede MIRAR salidas ni SUBIR archivos del repo.",

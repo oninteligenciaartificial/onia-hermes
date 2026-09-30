@@ -31,6 +31,11 @@ Dueña de Hermes y del cerebro: qué le llega a Sergio Urcullo por Telegram, el 
   `a5f9ee23…`). Tus ilustraciones con `soul_2` **sin** `soul_id` no cambian. Ojo:
   `scripts/video_lab.py` → `SERGIO_AVATAR_REFERENCE_PACK` todavía da por aprobado a `1238064e…`.
   Es de tu carril y no lo toqué: actualizalo cuando exista un Soul nuevo de Sergio Urcullo.
+- **→ Marca personal (30-sep, de Lucía v4 y Higgsfield):** existe `scripts/face_identity_qa.py`.
+  Mide con ArcFace si una imagen tiene la MISMA cara que un set de referencia. Corre en
+  `sandbox_exec` de Higgsfield, que llega al CDN, y no gasta créditos. Te sirve para aprobar el
+  dataset y las salidas del Soul nuevo de Sergio Urcullo sin depender solo del ojo. Con Lucía
+  separó limpio: sus fuentes dan 0,70–0,82 y otras caras de IA, 0,22 o menos.
 - **→ Control (29-sep, de Lucía v4 y Higgsfield):** Lucía v4 no publica nada hasta que Sergio
   Urcullo apruebe cara y pieza. Si Hermes informa del estado de Lucía o de Higgsfield, que lo lea
   de `LUCIA-HIGGSFIELD-IDENTITY.json`.

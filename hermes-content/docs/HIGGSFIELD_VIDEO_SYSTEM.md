@@ -64,6 +64,8 @@ imágenes (`show_characters action=train`), así que el dataset v4 es de 20.
 |---|---|---|---|
 | `soul_2`, quality 2k, 3:4 | `text2image_soul_v2` | 1536×2048 | 0,12 |
 | `nano_banana_pro`, 2k, 3:4 | `nano_banana_2` | 1792×2400 | 2 |
+| `nano_banana_pro`, 2k, 9:16 | `nano_banana_2` | 1536×2752 | 2 |
+| `seedream_v4_5` basic, 9:16 | `seedream_v4_5` | 1440×2560 | 1 |
 | `gpt_image_2_5` flare, high, 2k, 3:4 | `gpt_image_2_5` | 1744×2336 | 2,75 |
 | `soul_cast` (budget 50) | `soul_cast` | 2048×1152 | 0,12 |
 
@@ -104,6 +106,33 @@ imágenes (`show_characters action=train`), así que el dataset v4 es de 20.
   - Soul entrenado → **Soul 2.0** para fotos y **Soul Cinema** para cine.
 - **Soul ID:** la guía del CLI dice 5–20 fotos (punto dulce 8–12); la web dice 20–80. Se usan
   **20**, variadas en ángulo, luz, expresión y distancia, de 1024 px o más, sin recortes de cara.
+
+**9. Cómo se MIDE que es la misma cara, sin poder mirarla (2026-09-29, 0 créditos).**
+- **Herramienta:** `scripts/face_identity_qa.py`. Usa ArcFace (insightface `buffalo_l`), la
+  métrica con la que InstantID, PuLID y PhotoMaker reportan preservación de identidad. Corre en
+  `sandbox_exec`, que tiene internet y llega al CDN aunque la sesión no: recibe URLs y devuelve
+  solo números. Resultado completo: `references/modelos/lucia/v4/qa/identidad-metodos-20260929.json`.
+- **Controles:**
+  - la misma imagen espejada da 0,90–0,97;
+  - caras de otras modelos IA (el casting) dan 0,22 o menos;
+  - cada fuente original contra el centroide de las otras 7 da 0,70–0,82: ese es el piso de
+    «es Lucía».
+- **Resultado:** mismo prompt, coseno contra el centroide de las 8 fuentes.
+
+  | Escena | Element + Nano Banana Pro | 7 fotos + Nano Banana Pro | 7 fotos + Seedream 4.5 |
+  |---|---|---|---|
+  | Café | 0,822 | 0,806 | **0,883** |
+  | Calle, cara chica | 0,693 | 0,683 | **0,836** |
+
+- **Lectura:**
+  - **Seedream 4.5 con las 7 `media_ids` sostiene mejor la cara** (+0,06 en café, +0,14 en calle)
+    y cuesta la mitad.
+  - En Nano Banana Pro, dar 1 foto (Element) o 7 da lo mismo.
+  - La muestra es chica (2 por motor). Se confirma puntuando cada foto del dataset.
+- **Gate del dataset:** 0,70 o más contra el centroide de las fuentes; lo que quede debajo se
+  regenera. La métrica **no ve belleza, piel ni realismo**: eso lo sigue mirando Sergio Urcullo.
+- **Hallazgo:** la fuente `R2` (`1714a347`) tiene dos personas de fondo. No entra al entrenamiento
+  del Soul, porque la guía pide «Single person per photo». Como referencia de generación sirve.
 
 ## Arquitectura vigente
 
