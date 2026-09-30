@@ -235,13 +235,18 @@ seccion_hoy() {
 # Los bloques de ONIA de hoy, numerados, para que él diga cuáles quedaron pendientes.
 # Sergio Urcullo, 2026-09-29: "quiero cumplir todo eso, pero hay días que si no trabajo nada
 # en ONIA o queda algún pendiente se le encuentra un espacio en la agenda".
+# El número que él contesta («2 no») tiene que llevar a UN evento: número → id queda en
+# cierre-bloques.tsv (fecha, n, id, inicio, fin, título), que lee la skill agenda-calendario de
+# Hermes para proponerle otro hueco. Se escribe solo si el cierre se entregó: un número que él
+# nunca vio no puede mover nada.
 seccion_bloques_hoy() {
   local ev
   [ -x "$AGENDA" ] || return 0
-  ev=$("$AGENDA" "$HOY" 2>/dev/null </dev/null | grep -E 'ONIA|🔒|🎬') || return 0
+  ev=$("$AGENDA" --ids "$HOY" 2>/dev/null </dev/null | awk -F'\t' '$2 != "--" && $4 ~ /ONIA|🔒|🎬/' | head -6)
   [ -n "$ev" ] || return 0
+  printf '%s\n' "$ev" | awk -F'\t' -v f="$HOY" 'BEGIN { OFS = "\t" } { print f, NR, $1, $2, $3, $4 }' > "$TMP/cierre-bloques.tsv"
   printf '📋 <b>Tus bloques de hoy</b> — ¿se hicieron?\n'
-  printf '%s\n' "$ev" | head -6 | esc | awk '{ printf "%d. %s\n", NR, $0 }'
+  printf '%s\n' "$ev" | awk -F'\t' '{ printf "%d. %s–%s %s\n", NR, $2, $3, $4 }' | esc
   printf '→ Contestame qué quedó pendiente (por ejemplo «2 no») y le busco otro hueco.\n'
 }
 seccion_sigue() {
@@ -298,6 +303,7 @@ if ONIA_AVISO=interrumpe ONIA_AVISO_AHORA=1 ONIA_AVISO_CLAVE="jarvis-$MODO-$HOY"
   # Recién entregado se da la cola por leída; si Telegram falló, mañana se vuelve a ver.
   mkdir -p "$ESTADO" 2>/dev/null && date -u +%FT%TZ > "$ESTADO/leido-hasta"
   [ "$MODO" = manana ] && rm -f "$ESTADO"/nocturnos/* 2>/dev/null
+  [ "$MODO" = noche ] && [ -f "$TMP/cierre-bloques.tsv" ] && mv -f "$TMP/cierre-bloques.tsv" "$ESTADO/cierre-bloques.tsv"
   exit 0
 fi
 echo "jarvis-resumen: no se pudo entregar el $MODO" >&2

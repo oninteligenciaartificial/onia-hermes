@@ -79,6 +79,10 @@ Dueña de Hermes y del cerebro: qué le llega a Sergio Urcullo por Telegram, el 
   tiene que mandar foto o video por su cuenta, primero preguntale a la aduana:
   `ONIA_AVISO_PUEDO=1 onia-tg.sh` → `0` mandá, `75` esperá a la vuelta siguiente (así quedó
   `vigia-aprobaciones.sh`, 29-sep).
+- **→ Todas (30-sep, de control):** Hermes va a poder **agendar, mover y cancelar en el calendario
+  personal de Sergio Urcullo**, siempre con su sí (`/root/bin/onia-agenda.sh`, skill
+  `agenda-calendario`). Si tu carril le agenda algo, usá el mismo comando —sin `--si` muestra, con
+  `--si` hace— y titulá con 🔒 o 🎬 lo que tenga que protegerlo de interrupciones.
 - **→ Plataforma e Infra (29-sep):** `claude-guardia.sh` ya no le escribe directo: Sentry caído y
   error nuevo son **tareas del tablero** (`[auto:]`, una por lugar del error) y «contenedor
   levantado solo» va al cierre. Si un loop tuyo lee esos avisos de Telegram, ahora están en el tablero.
