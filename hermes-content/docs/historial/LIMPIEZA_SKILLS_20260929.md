@@ -71,6 +71,23 @@ congelada) · `consultoria-onia` (ingreso aceptado en la etapa 2) · `ugc-empres
   - 19 de terceros: `code-simplification` · `composition-patterns` · `deploy-to-vercel` · `design-system` · `frontend-ui-engineering` · `git-workflow-and-versioning` · `incremental-implementation` · `next-best-practices` · `next-cache-components` · `next-upgrade` · `performance-optimization` · `planning-and-task-breakdown` · `react-best-practices` · `security-and-hardening` · `shipping-and-launch` · `source-driven-development` · `using-agent-skills` · `vercel-optimize` · `web-design-guidelines`.
 - Se quitó el junction roto `find-skills` (apuntaba a una skill global ya borrada).
 
+## 4. Revisión de lo global que no son skills — **se deja todo** (decisión de Sergio Urcullo)
+Medido en 30 días (y agentes/comandos en todo el historial desde el 21-jul). Sin cambios.
+- **Agentes `~/.claude/agents` (43):** se usan 2 (`code-reviewer` 6, `security-reviewer` 3); 4 se
+  usaron en jul/ago (`doc-updater`, `e2e-runner`, `architect`, `database-reviewer`); 37 nunca. Los
+  que se usan de verdad son los de fábrica (`general-purpose` 180, `Explore` 6).
+- **Comandos `~/.claude/commands` (72):** 0 en 30 días; solo `code-review` alguna vez (5, 7-ago).
+- **Reglas `~/.claude/rules`:** se cargan en cada sesión `common` (15 KB), `web` (14 KB),
+  `token-eficiente` (4 KB, sus 4 perfiles a la vez), `zh` (17,6 KB, traducción de `common`) y
+  `README.md` (4,7 KB). Por lenguaje solo se activaron `typescript` y `python`.
+- **Plugins (9):** se usan `superpowers`, `caveman`, `ponytail` y `claude-mem` (memoria en 187
+  arranques, 306 sin memoria, 1.547 sesiones en segundo plano, buscador caído); sin uso
+  `understand-anything`, `gsap-skills`, `cloudflare`, `document-skills`, `frontend-design`.
+- **MCP:** Claude usa navegador, Chrome, tareas programadas, n8n, Gmail, Higgsfield, Vercel, Meta
+  Ads, computer-use, Calendar, Supabase, visualize y Notion; sin uso o caídos: Figma, Gamma, Drive,
+  Claude Docs, Meta Developer Tools, stitch, cloudflare(-docs), image-gen, postiz. Codex usa
+  node_repl y n8n; sin uso stitch, higgsfield, agentation, facebook.
+
 ## Cómo recuperar algo
 ```bash
 git checkout 9622ae6a -- <ruta>                                   # cualquier archivo del repo
@@ -88,5 +105,4 @@ mv ~/.codex/skills-archivadas-20260929/<nombre> ~/.codex/skills/  # una de Codex
 - `scripts/genera-propuesta.js` / `scripts/webhook-propuestas.js`: generador viejo de propuestas.
 - Docs narrativos que citan agentes borrados (`ONIA_SYSTEM_TASKBOARD_2026.md`,
   `ONIA_CONTENT_FACTORY_ORCHESTRATION_2026.md`, `ONIA_WEB_COMO_SE_VENDE.md`,
-  `VIDEO_FACTORY_DESIGN.md`) y `cola/plan-3-semanas/S3-GUIONES.md`, que cita
-  `.agents/skills/hyperframes-cli/SKILL.md` (hoy en la copia global).
+  `VIDEO_FACTORY_DESIGN.md`). (La cita de `S3-GUIONES.md` ya la corrigió marca personal: `be05d3d4`.)
