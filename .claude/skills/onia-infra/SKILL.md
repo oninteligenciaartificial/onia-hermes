@@ -21,6 +21,23 @@ description: Cargar ANTES de tocar el VPS, Docker, n8n o cualquier cosa por SSH.
 - 🔴 **`onia.com.bo` y `app.onia.com.bo` los sirve el VPS, NO Vercel.** Pushear a `main` **no
   publica nada**. La zona DNS real esta en **Cloudflare** (la de Vercel es un fantasma).
 
+### Desde una sesion en la NUBE, el puerto 22 no sale (no es el VPS)
+
+> Medido 2026-09-30 desde el contenedor en la nube: `/dev/tcp/187.77.16.63/22` → timeout, y
+> **tambien `github.com:22`**; en cambio `187.77.16.63:443` responde. El proxy del contenedor
+> acepta el `CONNECT …:22` (200) pero **no devuelve el banner SSH**: solo deja pasar HTTPS.
+> Una sesion anterior lo anoto como "puerto del VPS bloqueado" y mandaba a tocar el firewall
+> del VPS, que no tiene nada que ver.
+
+- **No se arregla abriendo nada en el VPS** (el 22 ya esta abierto: la laptop entra).
+- Lo que **si pasa** el proxy: HTTPS y **WebSocket** (`101 Switching Protocols` medido). Por
+  eso el camino es **SSH por WebSocket**: Cloudflare Tunnel (`cloudflared` en el VPS, hostname
+  `ssh.onia.com.bo` → `ssh://localhost:22`) protegido con **Cloudflare Access + service token**;
+  en la nube, `ssh -o ProxyCommand="cloudflared access ssh --hostname %h --service-token-id … --service-token-secret …"`.
+  La llave SSH se sigue exigiendo; el token se revoca en Cloudflare.
+- Cambiar el acceso de red del entorno a "Total" **puede no alcanzar**: el proxy sigue en el
+  medio. Probarlo es gratis, pero no es la solucion garantizada.
+
 ---
 
 ## 1. Las trampas de shell que YA nos mordieron
