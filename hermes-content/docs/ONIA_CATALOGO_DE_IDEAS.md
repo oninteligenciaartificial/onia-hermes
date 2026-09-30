@@ -8,6 +8,13 @@
 > fecha: si cambia, se EDITA este.** Contenido original del 2026-07-26; los estados de abajo son
 > de esa fecha salvo donde diga otra cosa.
 
+> 🧭 **Ideas evaluadas con el test de tres preguntas (desde el 2026-09-05): viven en
+> `ONIA_ESTRATEGIA_DE_EMPRESA.md` §14, no acá.** Al 2026-09-30: tarjeta de fidelidad en Wallet (pasa) ·
+> MCP del dueño (falla la 1) · **Recall de tratamiento a medias** (pasa, y es el hueco de la v1.0) ·
+> **agentes que hablan con agentes** (pasa solo como plataforma, falla la etapa) · **marketplace tipo
+> Uber / Yango / PedidosYa** (falla las tres; su ruta realista es una red de clínicas que nace del SaaS,
+> con gatillos medibles). Antes de reabrir cualquiera de esas, leer su entrada allá.
+
 ---
 
 ## Decisión abierta — los 3 candidatos (anotada 2026-08-23, NO perseguida)

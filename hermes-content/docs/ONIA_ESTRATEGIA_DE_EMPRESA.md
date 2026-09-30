@@ -50,8 +50,12 @@
     primera venta cobrada**. Ellos compiten donde el cliente se va en una tarde; Onia tiene un
     foso —SIAT, rubros, Bolivia— que a ellos no les conviene cruzar.
 12. **Una idea que pasa el test no es una idea urgente** (§14). El test dice si MERECE
-    construirse; la etapa dice CUÁNDO. La cola de ideas buenas vive en §14 — hoy con una
-    entrada: la tarjeta de fidelidad en Wallet, que pasa las tres.
+    construirse; la etapa dice CUÁNDO. La cola vive en §14 — al 2026-09-30 con cinco entradas:
+    pasan la tarjeta de fidelidad en Wallet y **el Recall de tratamiento a medias, que además es el
+    hueco de la v1.0** (lo que prometen los anuncios y el agente todavía no hace); pasa solo como
+    plataforma y falla la etapa *agentes que hablan con agentes*; fallan el MCP del dueño y **un
+    marketplace tipo Uber/Yango/PedidosYa**, cuyo camino realista es una red de clínicas que nace del
+    SaaS.
 
 ---
 
@@ -661,6 +665,124 @@ consentimiento explícito del negocio.
 comprobantes) tampoco suma hoy: eso ya se hace por SSH, SQL y el circuito de Telegram, y con cero
 clientes no baja ninguna hora de soporte. **Cuándo:** v1.x, cuando un cliente que paga lo pida o
 cuando el soporte (§9) muestre una tarea repetida que un MCP le ahorre a Sergio.
+
+### Recall de tratamiento a medias — 🟢 PASA LAS TRES, y NO es de la cola: es el hueco de la v1.0
+
+> Encontrado el 2026-09-30 por el carril Mercado, verificando si los anuncios prometían algo que el
+> producto no hace. **No es una idea nueva: es la distancia entre lo que pidió el mejor lead y lo que el
+> agente hace.**
+
+| Pregunta del test | Respuesta | |
+|---|---|---|
+| ¿Se le vende al MISMO cliente que ya paga? | es **el dolor #1** del cliente ideal, dicho textual por la clínica de 4 doctores (`ONIA_CLIENTE_IDEAL.md` §3-§4) | ✅ |
+| ¿Deja de tener sentido sin el núcleo? | sí: sale de la ficha, del tratamiento y de la agenda de la clínica | ✅ |
+| ¿Se entrega sin horas por cliente? | sí: se calcula solo con los datos que la clínica ya carga | ✅ |
+
+**Lo medido en el código** (`onia-platform` `master` `c3b9206` y la 1.0 sin publicar
+`wip/v1-integracion-20260928`): `evaluateRecallCandidates` propone a quien **no vuelve hace ≥180 días** y no
+tiene cita. La base **ya guarda** cada tratamiento con su estado (`PatientTreatment.status`: `PENDIENTE ·
+EN_PROGRESO · COMPLETADO · CANCELADO`), pero **ningún agente lo lee**. Al paciente que dejó una ortodoncia a
+mitad, el Recall lo encuentra a los seis meses: ya se perdió.
+
+**Criterio propuesto:** tratamiento `PENDIENTE` o `EN_PROGRESO` + sin cita futura + última cita hace 14–30
+días, o cancelada / no asistida → el agente propone, el dueño aprueba, sale una plantilla utility, el
+paciente contesta, se le ofrecen horarios. **Se mide en pacientes y Bs recuperados**, que es a la vez la
+frase de venta y la demo. Estimado: 3–7 días, porque el motor, la aprobación y el envío ya existen.
+
+**Por qué va AHORA y no en la cola:** es la promesa de los anuncios (`ONIA_ADQUISICION_Y_PAUTA.md` §5.4), el
+agente gratis de Meta no la puede copiar sin la ficha, y la competencia regional ya la anuncia (Dentalink:
+*recall* y *"venta de tratamientos"*, sin verificar). **Decide el alcance de la 1.0 Sergio Urcullo con el
+carril Plataforma** (`cola/plataforma-v1.md`); acá queda la evidencia.
+
+### Agentes que hablan con agentes (el asistente del paciente reserva en la clínica) — 🟡 PASA SOLO COMO PLATAFORMA · FALLA LA ETAPA
+
+> Sergio Urcullo, 2026-09-30: *"ahora los agentes de inteligencia artificial no hablarán entre personas,
+> hablarán con agentes… cosas que está sacando Meta, OpenAI y demás… deberíamos empezar a aplicarlas para
+> la Onia Platform"*.
+
+Distinto del MCP de arriba: acá no conecta el dueño, conecta **el asistente del paciente** (Gemini, ChatGPT,
+Meta AI) hablando con **el agente de la clínica**.
+
+| Pregunta del test | Respuesta | |
+|---|---|---|
+| ¿Se le vende al MISMO cliente que ya paga? | sí: es una capacidad de la agenda de cada clínica | ✅ |
+| ¿Deja de tener sentido sin el núcleo? | sí: sin agenda no hay qué reservar | ✅ |
+| ¿Se entrega sin horas por cliente? | **solo si es UNA integración de plataforma** para todas las clínicas, como hace Zocdoc; clínica por clínica, cada ecosistema pide su alta | ⚠️ |
+
+**Lo que pasa en el mundo al 30-sep-2026** (`research/ONIA_TENDENCIAS_AGENTES_20260930.md`, con fuentes):
+
+- **Pasa, pero en EE.UU. y por agregadores:** Zocdoc dentro de Gemini (12-ago-2026) y su red para que el
+  prestador integre una vez y quede reservable en varios asistentes (22-sep-2026); Google llamando a negocios
+  por el usuario; Alexa+ reservando con Vagaro.
+- **En Bolivia hoy no hay por dónde:** Reserve with Google no opera, ChatGPT retiró su checkout propio en
+  marzo-2026 y el registro oficial de MCP tiene **0 servidores de negocios bolivianos** (consultado ese día).
+- **Cuando llegue, va a llegar por WhatsApp, con Meta en los dos lados.** Desde el 3-jun-2026 Meta regala un
+  agente en la app WhatsApp Business que contesta y agenda; su versión por API (desde el 1-jul-2026) excluye
+  el rubro salud.
+
+**Veredicto:**
+
+- **Ahora:** ningún protocolo. En Bolivia, "estar listo para agentes" es que **el bot de la clínica,
+  conectado a la agenda y a la ficha, conteste bien por WhatsApp**. Lo que sí va ahora es el Recall de
+  tratamiento a medias (arriba): justo lo que el agente de Meta no puede hacer.
+- **v1.x:** que el bot **reserve solo** contra la agenda real (hoy escala el pedido a una persona) ·
+  datos estructurados (schema.org) y botón de reserva en la agenda pública (medio día) · soportar los
+  **usernames de WhatsApp (BSUID)**: desde el 29-jun-2026 un paciente con username puede llegar **sin
+  teléfono** en el webhook, y el bot hoy vincula al paciente por teléfono (`chatwoot-adapter.mjs`, `phoneOf`).
+- **v2.0, con disparador:** exponer las agendas a asistentes externos **como una sola integración de
+  plataforma**. Se reabre si Google habilita reservas por agentes en Bolivia o en español, si Reserve with
+  Google suma Bolivia, si ChatGPT, Gemini o Meta AI reservan en negocios de salud locales fuera de EE.UU., o
+  si un cliente que paga lo pide.
+- **Ignorar:** A2A (solo empresas grandes), `llms.txt` (Google lo ignora), pagos por agentes (AP2, ACP, UCP,
+  Visa, Mastercard: ningún banco boliviano), NLWeb, Siri, Alexa+.
+
+**La amenaza que sí trae la tendencia:** *"el bot que contesta y agenda"* se vuelve commodity — Meta lo
+regala, y desde el 1-oct-2026 cada respuesta que manda un bot por la API se le cobra al cliente
+(~USD 0,0113 en Bolivia). No alcanza al núcleo ni a los agentes que escriben primero con los datos de la
+ficha. Consecuencia de venta: **nunca vender el add-on como "un bot que responde"** — coincide con §13.4:
+*la defensa no es el chatbot, es el ERP*.
+
+### Un marketplace tipo Uber / Yango / PedidosYa — 🔴 FALLA LAS TRES
+
+> Sergio Urcullo, 2026-09-30: *"me encantaría ser dueño tal vez de un marketplace, como lo que es Uber,
+> Yango, PedidosYa… queremos ser expertos en inteligencia artificial… crear soluciones reales y
+> realistas"*.
+
+| Pregunta del test | Respuesta | |
+|---|---|---|
+| ¿Se le vende al MISMO cliente que ya paga? | no: choferes, restaurantes y consumidores son otros clientes | ❌ |
+| ¿Deja de tener sentido sin el núcleo? | no: funciona sin Onia Platform | ❌ |
+| ¿Se entrega sin horas por cliente? | no: es operación pesada en los dos lados | ❌ |
+
+**Lo que dice el mercado** (`research/ONIA_MARKETPLACE_EVALUACION_20260930.md`, con fuentes; extractos de
+buscador, sin abrir las páginas): los que están son superapps con respaldo global (Yango abrió comida en
+La Paz en sep-2026 con 206 restaurantes el primer día; PedidosYa es de Delivery Hero); desde el DS 5199
+(2024) una app de transporte necesita empresa local y registro en la ATT; los comparables tardaron ~13-14
+años en ganar plata y quemaron de cientos de millones a miles de millones de dólares; en la región los
+locales terminan vendidos a un global (NetComidas → PedidosYa), y hasta Uber Eats, Glovo e iFood se fueron de
+mercados donde no lideraban. **El repo ya lo tenía congelado** (2026-08-01, *"la anti-idea"*).
+
+**Veredicto: no, y ninguna métrica interna de Onia lo destraba.** No se congela: se descarta.
+
+**El marketplace que SÍ es realista — y el camino a él ya empezó:** una **red de clínicas de Santa Cruz que
+nace de Onia Platform** (*"vení por la herramienta, quedate por la red"*: AgendaPro, Mindbody, OpenTable,
+Toast). Tiene un orden que no se puede saltar, porque **una red necesita primero un lado, y hoy Onia tiene
+cero clientes**:
+
+| Paso | Qué | Gatillo medible | Hoy |
+|---|---|---|---|
+| 1 | "Modo de un jugador": la reserva pública y el bot de cada clínica | ya existe | solo medir qué % de pacientes nuevos reserva en línea |
+| 2 | Red B2B: derivaciones entre profesionales y con laboratorios dentales | ≥5 clientes pagando **y** ≥10 clínicas pagando en Santa Cruz con ≥3 especialidades (v1.3) | no |
+| 3 | Directorio para pacientes con reserva | ≥50 clínicas pagando y activas en Santa Cruz, ≥20 % de sus pacientes nuevos reservando en línea, **y el soporte ya fuera de Sergio Urcullo** (etapas 3→4) | no |
+
+**Humildad obligatoria:** AgendaPro, con 22.000 negocios y 11 años, mueve ~1,8 % de sus reservas por su
+marketplace; Mindbody, con 40.000, tuvo que **comprar** ClassPass para tener lado consumidor. A la escala de
+Onia, un directorio sirve para **retener** clientes, no para ganar plata, y trae un riesgo propio: ordenar
+clínicas en una lista puede enfrentar a Onia con la clínica que le paga.
+
+**La respuesta a la aspiración de fondo:** ser dueño de un marketplace no empieza por el marketplace: empieza
+por tener el lado de la oferta. **El foco en dental es exactamente el camino** — densidad de clínicas en una
+ciudad es lo único que un directorio no puede comprar.
 
 ---
 
