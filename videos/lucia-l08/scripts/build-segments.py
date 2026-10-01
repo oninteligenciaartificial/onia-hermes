@@ -7,10 +7,14 @@
 import io, json, os
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
+# Tiempos del video YA RECORTADO: se tiran los primeros 0,40 s del clip (mismo gesto con el celular,
+# arranque en caliente como Santiago/Erik). Voz a 0,10 s; remate a 8,30 s, cuando levanta la vista.
 TOMAS = [  # (alineamiento, segundo del video donde arranca la toma)
-    ("../audio/voz-cuerpo.alignment.json", 0.50),
-    ("../audio/voz-remate.alignment.json", 8.70),
+    ("../audio/voz-cuerpo.alignment.json", 0.10),
+    ("../audio/voz-remate.alignment.json", 8.30),
 ]
+# Karaoke: se apaga mientras está el panel (desde «correo» − 0,15 s) y en el remate (lo dice el sello).
+KARAOKE_HASTA = None  # se calcula: inicio de «correo» − 0,15
 
 def palabras(al, off):
     out, cur, st, en = [], "", None, None
@@ -43,3 +47,15 @@ io.open(os.path.join(AQUI, "segments.json"), "w", encoding="utf-8").write(
     json.dumps({"segments": segments, "words": words}, ensure_ascii=False, indent=1))
 for s in segments:
     print(f'{s["start"]:6.2f}-{s["end"]:6.2f}  {s["text"]}')
+
+corte = next(w["start"] for w in words if w["word"].startswith("correo")) - 0.15
+kw = [w for w in words if w["end"] <= corte]
+ks = []
+for seg in segments:
+    ws = [w for w in kw if seg["start"] <= w["start"] <= seg["end"]]
+    if ws:
+        ks.append({"start": ws[0]["start"], "end": ws[-1]["end"], "text": " ".join(w["word"] for w in ws)})
+io.open(os.path.join(AQUI, "segments-karaoke.json"), "w", encoding="utf-8").write(
+    json.dumps({"segments": ks, "words": kw}, ensure_ascii=False, indent=1))
+print(f"karaoke hasta {corte:.2f} s (panel desde ahí):", " | ".join(s["text"] for s in ks))
+print("cues:", {w["word"]: w["start"] for w in words if w["word"] in ("correo", "día", "horas", "antes.", "Vos", "dedo.")})

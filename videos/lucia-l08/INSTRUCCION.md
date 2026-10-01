@@ -1,81 +1,69 @@
-# L08 · ¿Cuántos pacientes se olvidan de su cita? — instrucción completa (método Santiago)
+# L08 · ¿Cuántos pacientes se olvidan de su cita? — instrucción completa (v2, método Santiago medido)
 
-Una instrucción por video, ejecutada ENTERA (skill `editor-videos`, § Auditoría punto 2). Guion:
-`hermes-content/docs/cola/lucia-diario/S1-GUIONES.md` § L08. Raíz del repo: `/home/user/onia-hermes` (R).
-Scripts del stack: `R/.claude/skills/editor-videos/scripts/` (ES). Carpeta de la pieza: `R/videos/lucia-l08/` (P).
+Una instrucción por video, ejecutada ENTERA. **Receta y reglas: `.claude/skills/editor-videos/SKILL.md` § «Reels de Lucía»**
+(leerla primero). Guion: `hermes-content/docs/cola/lucia-diario/S1-GUIONES.md` § L08. Por qué así:
+`hermes-content/references/video-intake/2026-10-01-santiago-erik-edicion-medida.md`.
+R = `/home/user/onia-hermes` · ES = `R/.claude/skills/editor-videos/scripts/` · P = `R/videos/lucia-l08/`.
 
 ## OBJETIVO
-Reel 9:16 de ~10,4 s que vende el recordatorio automático por correo de Onia a dueños de clínicas:
-dolor (pacientes que se olvidan) → mecanismo (correo 24 h y 2 h antes) → remate («Vos no movés un dedo.»)
-mientras Lucía levanta la vista a cámara. Se entrega con tabla de cortes + preview 360p para el OK de
-Sergio Urcullo. **Costo 0**: el clip y la voz ya están pagados.
+Reel 9:16 de ~10,2 s que vende el recordatorio automático por correo a dueños de clínicas: dolor → mecanismo (panel
+con el dato que la voz no dice: el paciente confirma o cancela desde el mismo correo) → remate «Vos no movés un dedo.»
+mientras Lucía mira a cámara. Tabla de cortes + preview 360p para el OK de Sergio Urcullo. **Costo 0.**
 
 ## MATERIAL
-- Clip: `P/raw/l08-cafe-kling-f79eb10e.mp4` — Kling 3.0, 720×1280, **24 fps**, 10,04 s, sin audio. Mira el
-  celular; entre 8,8 y 9,1 s levanta la vista a cámara (8,8 tiene motion blur).
-- Voz (Marcela, ajustes por defecto, `eleven_multilingual_v2`): `P/audio/voz-cuerpo.mp3` entra en **0,50 s**;
-  `P/audio/voz-remate.mp3` entra en **8,70 s** (dura 1,30 s → termina 10,00).
-- Transcript AUTORADO con tiempos exactos (gate de ortografía ya pasado): `P/scripts/segments.json`
-  (lo genera `P/scripts/build-segments.py` desde los alineamientos de ElevenLabs).
-- Plantillas: `ES/../assets/html/keyword-marca.html`, `tag-ia.html` (y `frase-card.html` si hiciera falta).
-- SFX: librería de HyperFrames ya bajada (`node ES/sfx.mjs --list-lib` → 19 cues «SÍ»).
+- Clip limpio `P/raw/l08-cafe-kling-f79eb10e.mp4` (Kling, 720×1280, 24 fps, 10,04 s, sin audio). **Se recorta 0,40 s al
+  inicio** (`trim=start=0.40`): mismo gesto con el celular. Después del recorte dura 9,64 s; levanta la vista a ~8,4 s.
+- Voz (Marcela, ajustes de la voz): `P/audio/voz-cuerpo.mp3` entra en **0,10 s** (termina 7,53); `P/audio/voz-remate.mp3`
+  en **8,30 s** (termina 9,60). Tiempos por palabra YA en la línea recortada: `P/scripts/segments.json` (todo) y
+  `P/scripts/segments-karaoke.json` (solo hasta 3,75 s). Cues: correo 3,896 · día 4,86 · horas 6,485 · antes. 6,764 ·
+  Vos 8,30 · dedo. 9,066.
+- Plantillas `ES/../assets/html/` (`tag-ia`, `keyword-marca`, `frase-card`) y librería SFX de HyperFrames (`sfx.mjs --list-lib`).
 
-## ESTILO (Lucía)
-- Lienzo **1080×1920 a 24 fps** (la fuente es 24: pasar a 30 duplica cuadros y tironea).
-- Acento **#10C26B** (verde Onia: Lucía va siempre en verde). Karaoke **`--style apple`**.
-- **Texto NUNCA sobre la cara.** Franja libre medida con SCRFD sobre todo el clip (coords 1080×1920):
-  mentón máx 1128 → **todo texto entre y=1168 y y=1490** (debajo de 1490 lo tapa la UI de Instagram:
-  pie, audio y botones). Nada en los 80 px de la derecha por debajo de y=1000 (botones).
-- Sin música de cama (la pone Sergio Urcullo). Voz + SFX.
+## ESTILO
+1080×1920 a 24 fps · acento #10C26B · franja libre **y=1168–1490** (mentón máx 1128) · texto nunca sobre la cara.
+Velo oscuro (degradé vertical negro, alfa 0 en y=1060 → 0,55 en y=1320 → 0,6 abajo) todo el video: el blazer es crema
+y el texto blanco no se lee sin él. Sin música.
 
-## LAYOUT y STORYBOARD (tiempos = los de `segments.json`; los pone `sync-plan.mjs`, no el ojo)
-| Cuándo (cue) | Qué | Dónde (1080×1920) |
+## LAYOUT y STORYBOARD (tiempos en la línea recortada)
+| Tiempo | Qué | Dónde |
 |---|---|---|
-| 0,25 → fin de «cita?» (2,78) | `tag-ia` «Lucía · personaje creado con IA», ancho 520 | centrado, y=1186 |
-| todo el cuerpo (0,50 → 7,93) | karaoke `--style apple --words-per-line 3 --font-size 68 --margin-v 450` | rail: texto termina en y≈1470 |
-| «día» (5,26) → «y» (6,36) | keyword «1 DÍA ANTES» (keyword-marca, ancho 900) | centrado, y=1180 |
-| «horas» (6,885) → 8,60 | keyword «2 HORAS ANTES» | centrado, y=1180 |
-| «Vos» (8,70) → fin | keyword «NO MOVÉS UN DEDO.» (2 líneas, ancho 900) **en lugar del karaoke** | centrado, y=1176 |
-| 8,60 → fin | ken `from 1.00 to 1.05`, anchor `top` (se agranda la cara mientras mira a cámara) | — |
+| 0,00 → 2,40 | `tag-ia` «Lucía · personaje creado con IA» (ancho 520) | centrado, y=1186 |
+| 0,10 → 3,75 | karaoke `segments-karaoke.json`, `--style apple --words-per-line 3 --font-size 68 --margin-v 450` | texto termina en y≈1470 |
+| 3,75 → 7,75 | **panel-diagrama** (ancho 900, alto ≤ 290, tarjeta dark con riel verde): cejilla «RECORDATORIO AUTOMÁTICO · POR CORREO» | centrado, y=1180 |
+| 4,71 (día −0,15) | fila 1 del panel: «−24 h» grande en verde + «correo al paciente» | dentro del panel |
+| 6,335 (horas −0,15) | fila 2: «−2 h» + «otro correo» | dentro del panel |
+| 6,61 (antes. −0,15) | fila 3: chips «✓ Confirmar» y «✕ Cancelar» + «desde el mismo correo» (dato de ADQUISICION §5.4 que la voz no dice) | dentro del panel |
+| 8,15 → fin | sello «NO MOVÉS UN DEDO.» (`keyword-marca`, ancho 900, rotado −4°) **sin karaoke** | centrado, y=1176 |
+| 8,15 (5 cuadros) | golpe de zoom +3 % que vuelve (sobre el b-roll, no sobre el texto) | — |
+| 8,15 → fin | ken 1,00 → 1,04, anchor `top` | — |
+| 9,64 → 10,24 | `tpad` clonando el último cuadro 0,60 s (ella mirando a cámara) | — |
 
-- El remate NO lleva karaoke: la keyword grande ES el texto. Karaoke solo con el cuerpo
-  (`segments-karaoke.json` = `segments.json` sin las palabras ≥ 8,70 s).
-- **Captura REAL del correo de recordatorio: PENDIENTE** (la pide la madre). Cuando llegue va con
-  `make-mockup --template phone --image <captura>` de «correo» (4,30) a «antes.» (7,93). Hoy NO se inventa
-  ninguna pantalla ni se dibuja un correo falso.
+- El panel es un **diagrama** (no imita la pantalla de un correo ni lleva crédito de «pantalla real»). Puede hacerse como
+  composición HyperFrames con las filas entrando escalonadas, o como 4 PNG de estado (`make-mockup --template custom`)
+  cruzados con fundido de 0,12 s. Lo que sea más robusto en la nube; probar uno y mirarlo.
+- **Captura REAL pendiente:** cuando exista la cuenta demo, la captura del correo (asunto + botones) reemplaza las filas.
 
-## SFX (plan `P/scripts/sfx-plan.json`, librería por nombre de cue, ganancias en dB)
-pop −12 @0,25 (rótulo) · notification −12 @4,30 duck (llega el correo) · pop −10 @5,26 · pop −10 @6,885 ·
-whoosh-short −10 @8,58 (arranca el ken, sin voz encima).
+## SFX (≤ 4, con causa visible, ~10 dB bajo el pico de la voz — medir con `astats`)
+pop @3,75 (entra el panel) · ping @4,91 y @6,535 (0,2 s después de cada fila) · pop @8,15 (sello). Ganancias de
+partida −12 dB; ajustar midiendo.
 
-## ORDEN (generaciones de video: 2 — el builder de una pasada + el karaoke)
-1. **Assets** (`make-mockup.mjs --template custom … --accent "#10C26B" --out P/assets/<x>.png`).
-2. **Storyboard → plan:** `P/scripts/storyboard.json` (en PALABRAS) → `node ES/sync-plan.mjs --segments
-   P/scripts/segments.json --storyboard P/scripts/storyboard.json --out P/scripts/overlay-plan.json`.
-   Leer la sección «SIN SINCRONIZAR»: tiene que estar vacía.
-3. **gen1 en UNA pasada** — `P/scripts/build.mjs`, calcado de `R/videos/tiktok-20260917/scripts/tiktok-build.mjs`
-   pero con rutas relativas a P: `scale=iw*2:ih*2` + `zoompan` (importar `zoomExpr`/`ANCHORS` de
-   `ES/zoom-punch.mjs`; ventana ken del layout) a 1080×1920 24 fps + `tpad` clonando el último cuadro 0,40 s
-   + overlays del `overlay-plan.json` con fade 0,22 s + la voz (dos tomas con `adelay`, `amix normalize=0`)
-   → `P/renders/gen1.mp4` (libx264 CRF 14 preset slow, yuv420p, aac 48 kHz).
-4. **gen2 karaoke:** `node ES/karaoke-captions.mjs --segments P/scripts/segments-karaoke.json --video
-   P/renders/gen1.mp4 --out P/renders/karaoke.mp4 --style apple --words-per-line 3 --font-size 68
-   --margin-v 450`. Mostrar su tabla de frases en el README. Ninguna frase puede partir en 2 líneas.
-5. **SFX:** `node ES/sfx.mjs --video P/renders/karaoke.mp4 --plan P/scripts/sfx-plan.json --out P/renders/sfx.mp4`.
-6. **Master:** `node ES/master.mjs --video P/renders/sfx.mp4 --out P/final/l08.mp4` (−14 LUFS / −1,5 dBTP; reporta).
-7. **Copiar** a `R/hermes-content/references/modelos/lucia/v4/feed/l08-recordatorio-sin-mover-un-dedo.mp4`
-   (pisa la versión PIL del 1-oct) y **preview** `P/renders/preview-360.mp4` (360×640, CRF 28, aac 96k).
+## ORDEN (2 generaciones)
+1. Assets (y panel). 2. `P/scripts/build.mjs`, calcado de `R/videos/tiktok-20260917/scripts/tiktok-build.mjs` con rutas
+relativas: trim 0,40 + `scale=iw*2:ih*2` + `zoompan` (importar `zoomExpr`/`ANCHORS` de `ES/zoom-punch.mjs`: golpe + ken) a
+1080×1920 24 fps + `tpad` 0,60 + velo + overlays con fade 0,15 in / 0,22 out + voz (2 tomas, `adelay`, `amix normalize=0`)
+→ `P/renders/gen1.mp4` (CRF 14 slow, bt709). 3. Karaoke `node ES/karaoke-captions.mjs --segments P/scripts/segments-karaoke.json
+--video P/renders/gen1.mp4 --out P/renders/karaoke.mp4 --style apple --words-per-line 3 --font-size 68 --margin-v 450 --crf 14
+--preset slow` (ninguna frase en 2 líneas). 4. `sfx.mjs` → `P/renders/sfx.mp4`. 5. `master.mjs` → `P/final/l08.mp4`.
+6. Copiar a `R/hermes-content/references/modelos/lucia/v4/feed/l08-recordatorio-sin-mover-un-dedo.mp4` + preview
+`P/renders/preview-360.mp4` (360×640, CRF 28).
 
-## QA (antes de devolver; todo MIRADO, no supuesto)
-- Hoja de cuadros `P/renders/qa-frames.jpg`: entrada, mitad y salida de cada elemento + 0,1 s y el último cuadro,
-  con líneas guía en y=1168 (mentón) e y=1490 (UI de IG). Leerla con la herramienta de imágenes.
-- Ortografía de TODO texto quemado, leída en los cuadros (ñ, tildes: CUÁNTOS, DÍA, MOVÉS).
-- Identidad: `python3 R/scripts/face_identity_qa.py <manifest>` con 5 cuadros del final contra las refs de
-  `/tmp/claude-0/-home-user-onia-hermes/59ef38f5-141c-5055-9631-e06d8af00fa0/scratchpad/l08/qa/refs/` (R1…R8 y N1…N3) → cada cuadro ≥ 0,70.
-- Audio: `ffmpeg -af ebur128` del final → I = −14 ± 0,5 LUFS, pico ≤ −1,5 dBTP. Transcribir el final con
-  faster-whisper `large-v3` (`language="es"`): tiene que decir el guion y el remate SIN signos de pregunta.
-- Specs: 1080×1920, 24 fps, h264 yuv420p, aac, `+faststart`, ~10,44 s.
+## QA (§12 de la receta; todo MIRADO)
+Stills de cada entrada ANTES del render completo · `P/renders/qa-frames.jpg` con guías en y=1168 y y=1490 · YuNet/SCRFD sobre
+crudo y final (misma cantidad de caras; caja del mentón + 40 px fuera de toda caja de texto) · ortografía leída en cuadros
+(CUÁNTOS, MOVÉS, −24 h) · identidad ≥ 0,70 en 5 cuadros (refs: `/tmp/claude-0/-home-user-onia-hermes/59ef38f5-141c-5055-9631-e06d8af00fa0/scratchpad/l08/qa/refs/`)
+· recorte 1:1 de la cara en el zoom máximo · −14 ± 0,5 LUFS, pico ≤ −1,5 dBTP · faster-whisper `large-v3`: el remate SIN
+signos de pregunta · specs (1080×1920, 24 fps, h264 yuv420p, aac, +faststart).
 
-## SALIDA (README de la pieza: `P/README.md`)
-Tabla de cortes (`# | Me quedo con | Tiro | Por qué`), storyboard con los tiempos reales, comandos para
-regenerar, números del QA y lo pendiente (captura real). **Sin comandos git**: commitea el orquestador.
+## SALIDA
+`P/README.md`: tabla de cortes (`# | Me quedo con | Tiro | Por qué`), storyboard con tiempos reales, comandos, números del QA,
+pendientes (captura real; CTA en pantalla cuando la bio tenga el link). **Sin comandos git.**

@@ -1,0 +1,71 @@
+{
+ "segments": [
+  {
+   "start": 0.1,
+   "end": 2.376,
+   "text": "¿Cuántos pacientes se olvidan de su cita?"
+  },
+  {
+   "start": 2.701,
+   "end": 3.746,
+   "text": "El sistema les manda"
+  }
+ ],
+ "words": [
+  {
+   "start": 0.1,
+   "end": 0.437,
+   "word": "¿Cuántos"
+  },
+  {
+   "start": 0.483,
+   "end": 1.157,
+   "word": "pacientes"
+  },
+  {
+   "start": 1.215,
+   "end": 1.307,
+   "word": "se"
+  },
+  {
+   "start": 1.342,
+   "end": 1.598,
+   "word": "olvidan"
+  },
+  {
+   "start": 1.633,
+   "end": 1.702,
+   "word": "de"
+  },
+  {
+   "start": 1.749,
+   "end": 1.876,
+   "word": "su"
+  },
+  {
+   "start": 1.923,
+   "end": 2.376,
+   "word": "cita?"
+  },
+  {
+   "start": 2.701,
+   "end": 2.84,
+   "word": "El"
+  },
+  {
+   "start": 2.886,
+   "end": 3.27,
+   "word": "sistema"
+  },
+  {
+   "start": 3.316,
+   "end": 3.455,
+   "word": "les"
+  },
+  {
+   "start": 3.525,
+   "end": 3.746,
+   "word": "manda"
+  }
+ ]
+}

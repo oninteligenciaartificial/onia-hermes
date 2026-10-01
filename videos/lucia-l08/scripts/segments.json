@@ -1,150 +1,150 @@
 {
  "segments": [
   {
-   "start": 0.5,
-   "end": 2.776,
+   "start": 0.1,
+   "end": 2.376,
    "text": "¿Cuántos pacientes se olvidan de su cita?"
   },
   {
-   "start": 3.101,
-   "end": 7.93,
+   "start": 2.701,
+   "end": 7.53,
    "text": "El sistema les manda un correo un día antes y otro dos horas antes."
   },
   {
-   "start": 8.7,
-   "end": 10.0,
+   "start": 8.3,
+   "end": 9.6,
    "text": "Vos no movés un dedo."
   }
  ],
  "words": [
   {
-   "start": 0.5,
-   "end": 0.837,
+   "start": 0.1,
+   "end": 0.437,
    "word": "¿Cuántos"
   },
   {
-   "start": 0.883,
-   "end": 1.557,
+   "start": 0.483,
+   "end": 1.157,
    "word": "pacientes"
   },
   {
-   "start": 1.615,
-   "end": 1.707,
+   "start": 1.215,
+   "end": 1.307,
    "word": "se"
   },
   {
-   "start": 1.742,
-   "end": 1.998,
+   "start": 1.342,
+   "end": 1.598,
    "word": "olvidan"
   },
   {
-   "start": 2.033,
-   "end": 2.102,
+   "start": 1.633,
+   "end": 1.702,
    "word": "de"
   },
   {
-   "start": 2.149,
-   "end": 2.276,
+   "start": 1.749,
+   "end": 1.876,
    "word": "su"
   },
   {
-   "start": 2.323,
-   "end": 2.776,
+   "start": 1.923,
+   "end": 2.376,
    "word": "cita?"
   },
   {
-   "start": 3.101,
-   "end": 3.24,
+   "start": 2.701,
+   "end": 2.84,
    "word": "El"
   },
   {
-   "start": 3.286,
-   "end": 3.67,
+   "start": 2.886,
+   "end": 3.27,
    "word": "sistema"
   },
   {
-   "start": 3.716,
-   "end": 3.855,
+   "start": 3.316,
+   "end": 3.455,
    "word": "les"
   },
   {
-   "start": 3.925,
-   "end": 4.146,
+   "start": 3.525,
+   "end": 3.746,
    "word": "manda"
   },
   {
-   "start": 4.169,
-   "end": 4.215,
+   "start": 3.769,
+   "end": 3.815,
    "word": "un"
   },
   {
-   "start": 4.296,
-   "end": 4.761,
+   "start": 3.896,
+   "end": 4.361,
    "word": "correo"
   },
   {
-   "start": 5.086,
-   "end": 5.214,
+   "start": 4.686,
+   "end": 4.814,
    "word": "un"
   },
   {
-   "start": 5.26,
-   "end": 5.446,
+   "start": 4.86,
+   "end": 5.046,
    "word": "día"
   },
   {
-   "start": 5.469,
-   "end": 5.98,
+   "start": 5.069,
+   "end": 5.58,
    "word": "antes"
   },
   {
-   "start": 6.363,
-   "end": 6.433,
+   "start": 5.963,
+   "end": 6.033,
    "word": "y"
   },
   {
-   "start": 6.479,
-   "end": 6.688,
+   "start": 6.079,
+   "end": 6.288,
    "word": "otro"
   },
   {
-   "start": 6.723,
-   "end": 6.851,
+   "start": 6.323,
+   "end": 6.451,
    "word": "dos"
   },
   {
-   "start": 6.885,
-   "end": 7.106,
+   "start": 6.485,
+   "end": 6.706,
    "word": "horas"
   },
   {
-   "start": 7.164,
-   "end": 7.93,
+   "start": 6.764,
+   "end": 7.53,
    "word": "antes."
   },
   {
-   "start": 8.7,
-   "end": 8.897,
+   "start": 8.3,
+   "end": 8.497,
    "word": "Vos"
   },
   {
-   "start": 8.967,
-   "end": 9.025,
+   "start": 8.567,
+   "end": 8.625,
    "word": "no"
   },
   {
-   "start": 9.072,
-   "end": 9.28,
+   "start": 8.672,
+   "end": 8.88,
    "word": "movés"
   },
   {
-   "start": 9.362,
-   "end": 9.42,
+   "start": 8.962,
+   "end": 9.02,
    "word": "un"
   },
   {
-   "start": 9.466,
-   "end": 10.0,
+   "start": 9.066,
+   "end": 9.6,
    "word": "dedo."
   }
  ]

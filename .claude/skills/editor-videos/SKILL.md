@@ -341,10 +341,62 @@ cabeza en blur oscuro). El karaoke le va encima con `karaoke-captions.mjs`
 (`{\blur7}` en negro translúcido, un evento por frase en la capa de abajo) — NUNCA el
 Shadow duro de ASS, que se lee como texto fantasma. El amarillo `--active-color "#FFE600"`
 queda solo para imitar 1:1 el reel de referencia.
+⚠ **Medido el 1-oct contra sus 4 últimos videos** (`video-intake/2026-10-01-santiago-erik-edicion-medida.md`): con voz,
+Santiago va **sin música de cama, sin whoosh en cada cambio** y con planos de ~5 s, no un corte cada ~2 s. La ficha del
+17-sep (Gemini) decía lo contrario; manda la medición.
 Orden: cortar → split-layout → karaoke → SFX → master. Falta solo la ecuación de logos
 ("X + Y = 💰") como pieza HyperFrames — se hace cuando un guion la pida.
 ⚠ El crudo tiene que traer la CÁMARA como toma aparte full-frame (como `clip 1 video 2.mp4`);
 la burbujita de OBS incrustada en la esquina no da resolución para la zona de cabeza.
+
+## 🎞 Reels de Lucía — b-roll generado + voz en off o texto (1-oct-2026)
+
+> Regla de Sergio Urcullo (1-oct): **todo video que sale a redes se edita con esta skill; Higgsfield solo genera el
+> clip.** El 1-oct L02/L05/L08 salieron con placas PIL y hubo que rehacerlos. Receta medida contra los últimos videos
+> de Santiago Muñoz y Erik Taveras: `hermes-content/references/video-intake/2026-10-01-santiago-erik-edicion-medida.md`.
+> Guion por pieza: `hermes-content/docs/cola/lucia-diario/S*-GUIONES.md`; instrucción completa:
+> `videos/lucia-lNN/INSTRUCCION.md` (OBJETIVO / MATERIAL / ESTILO, una por video, ejecutada entera).
+
+1. **Clip LIMPIO** (el `rawUrl` del job de Higgsfield; nunca un render con texto) a `videos/lucia-lNN/raw/`.
+   Lienzo 1080×1920 **a 24 fps** (Kling es 24: pasar a 30 duplica cuadros). Acento único **#10C26B**.
+2. **Medir la cara en TODO el clip** (SCRFD de `scripts/face_identity_qa.py` o YuNet a 2 fps): texto solo entre
+   **mentón máx + 40 px** y **y=1490** (debajo, Instagram tapa con pie, audio y botones; nada en los 80 px de la derecha
+   bajo y=1000). Medido: L02 939–1490, L05 714–1490, L08 1168–1490. Es el split de Santiago **invertido**: la cara de
+   Lucía está arriba, el panel va en la franja de abajo. Con franja < 520 px no se tapa ni se sube la cara: el panel
+   se achica (subir 240 px a Lucía le corta la coronilla).
+3. **Arranque en caliente:** primera palabra o tarjeta a ≤ 0,15 s; si el clip arranca con tiempo muerto se recorta
+   (L08: −0,40 s). Nunca se acelera.
+4. **Voz (si la pieza lleva):** Marcela con `scripts/tts-elevenlabs.mjs` **sin `--stability/--style`** (los settings
+   forzados le cambian el timbre: rechazado el 21-ago y repetido por error el 1-oct). `--timestamps` → karaoke desde el
+   guion autorado con tiempos exactos (gate de ortografía resuelto de raíz). La frase final va en toma aparte con
+   `--previous-text` y 2–3 `--seed`; se elige la que **baja** al final (medir F0 de la última palabra con
+   `librosa.pyin`: si sube, suena a pregunta — L08 «¿Vos no movés un dedo?»). Whisper siempre escribe «mueves»: no sirve
+   para juzgar el voseo, sí para ver los signos de pregunta. `--cost` lee el cupo (payg 10.000).
+5. **La prueba es pantalla REAL de Onia**, con recorte focal y crédito chico «pantalla real de Onia», en el segundo en
+   que se nombra. Sin captura, un **diagrama del mecanismo** dibujado en código (no una UI falsa) y la captura entra
+   en la versión siguiente. **Ninguna tarjeta repite lo que se oye** (Erik): aporta el dato derivado.
+6. **Karaoke** `--style apple`, ≤ 3 palabras, 68 px, en la franja libre, con velo oscuro debajo si el fondo es claro
+   (L08: blazer crema, luminancia p90 > 200). Se apaga mientras hay un panel de datos y en el remate (lo dice un sello).
+7. **Sin voz:** ≤ 6 palabras por tarjeta y ≥ 0,35 s por palabra + 0,3 s de entrada (~2,5–3 palabras/s). Si no entra
+   en el clip, se recorta texto (el resto va al pie), no se congela a la persona (no tiene antecedente).
+8. **Sellos y golpes:** una palabra fuerte por reel como sello (130 % → 100 % en 3 cuadros, rotado ~5°, verde) con
+   golpe de zoom +3 % durante 5 cuadros en ese mismo cuadro. Ken suave (≤ 1,04) solo en el remate. Nada de zoom
+   decorativo: la fuente es 720p y ×1,5 ya ablanda.
+9. **Apoyos clavados a la palabra** con `sync-plan.mjs --lead -0.15`; entrada 0,15 s, salida 0,22 s. Un evento
+   visual cada 1,5–3 s.
+10. **Audio:** con voz, −14 LUFS / −1,5 dBTP (`master.mjs`) y ≤ 1 SFX cada 2,5 s, cada uno con causa visible y
+    ~10 dB bajo el pico de la voz. Sin voz, un pop por tarjeta y pico ≤ −3 dBTP (sin `loudnorm`: subiría los pops a
+    nivel de voz). Música de cama: la pone Sergio Urcullo.
+11. **Generaciones:** gen1 en UNA pasada (escala + zoompan + overlays + audio, CRF 14 slow) → karaoke
+    `--crf 14 --preset slow` → `sfx.mjs` y `master.mjs` copian el video. Etiquetar bt709.
+12. **QA mirado antes de entregar:** stills de cada entrada; hoja de cuadros con guías en el mentón y en 1490; caras
+    con YuNet sobre crudo y final (la misma cantidad); ortografía leída en los cuadros; identidad ≥ 0,70 en 5 cuadros;
+    recorte 1:1 de la cara en el zoom máximo; specs. **Tabla de cortes + preview 360p a Sergio Urcullo** y esperar el OK.
+
+**Trampas de la nube (1-oct):** playwright 1.62 pide Chromium 1234 y la nube trae el 1194 → `resolve-playwright.mjs`
+cae a `/opt/pw-browsers/chromium`. Los SFX de HyperFrames no están versionados: `npm pack hyperframes` y copiar
+`package/dist/skills/media-use/audio/assets/sfx/*.mp3` a `.agents/skills/media-use/audio/assets/sfx/` (ignorados en git).
+Para ver referentes: `yt-dlp --impersonate chrome` baja de TikTok (Instagram 429, YouTube pide verificación).
 
 ## Quick reference
 | Necesito | Herramienta | Costo |
@@ -356,7 +408,7 @@ la burbujita de OBS incrustada en la esquina no da resolución para la zona de c
 | **Master de audio (−14 LUFS)** | `scripts/master.mjs` | gratis (local) |
 | Publicar el corte al panel para tu OK | `scripts/publish-cut-review.mjs` (DRY-RUN → SQL) | gratis |
 | Aplicar el corte (tras OK) | `scripts/render-approved.mjs` (worker LOCAL, DRY-RUN → ffmpeg + SQL) | gratis |
-| **Narración / voz** (Lucía = **Marcela**) | `scripts/tts-elevenlabs.mjs` (ElevenLabs `eleven_multilingual_v2`) | plan starter ~69k chars/mes |
+| **Narración / voz** (Lucía = **Marcela**) | `scripts/tts-elevenlabs.mjs` (ElevenLabs `eleven_multilingual_v2`; `--timestamps`, `--previous-text`, `--seed`) | payg, 10.000 caracteres (medido 1-oct; `--cost` lo lee en vivo) |
 | Subtítulos karaoke (word-level) | `scripts/karaoke-captions.mjs` (.ass + ffmpeg) | gratis (local) |
 | Mockups / tarjetas de dato / marcos | `scripts/make-mockup.mjs` (HTML+CSS → PNG alpha) | gratis (local) |
 | **Apoyo ANIMADO** (motor único: HyperFrames; `scripts/remotion/` es baseline histórico) | `scripts/hyperframes/render.mjs` | gratis (local) |

@@ -1,6 +1,6 @@
 # L05 · Lunes: cero llamadas para agendar — instrucción completa (método Santiago)
 
-Una instrucción por video, ejecutada ENTERA (skill `editor-videos`). Guion: `hermes-content/docs/cola/lucia-diario/S1-GUIONES.md`
+Una instrucción por video, ejecutada ENTERA. **Receta: `.claude/skills/editor-videos/SKILL.md` § «Reels de Lucía»** (leerla primero). Guion: `hermes-content/docs/cola/lucia-diario/S1-GUIONES.md`
 § L05. R = `/home/user/onia-hermes` · ES = `R/.claude/skills/editor-videos/scripts/` · P = `R/videos/lucia-l05/`.
 
 ## OBJETIVO
@@ -19,26 +19,28 @@ Tabla de cortes + preview 360p para el OK de Sergio Urcullo. **Costo 0**.
 - Lienzo **1080×1920 a 24 fps**. Acento **#10C26B**. Texto en primera persona del producto, sin «muy pronto» ni obra.
 - **Texto NUNCA sobre la cara.** Medido con SCRFD en todo el clip (coords 1080×1920): mentón máx 674 → franja libre
   **y=714 a y=1490** (debajo de 1490 tapa la UI de Instagram). Nada en los 80 px de la derecha por debajo de y=1000.
-- Sin voz: el lector necesita ~0,25 s por palabra. Sin música de cama (la pone Sergio Urcullo).
+- Sin voz: ≥ 0,35 s por palabra + 0,3 s de entrada. Sin música de cama (la pone Sergio Urcullo).
 
-## LAYOUT y STORYBOARD (sin voz → tiempos fijos `at`, calculados por lectura)
+## LAYOUT y STORYBOARD (sin voz: ≤ 6 palabras por tarjeta, ≥ 0,35 s por palabra + 0,3 s de entrada)
 | t (s) | Qué | Dónde |
 |---|---|---|
-| 0,15 → 2,30 | `tag-ia` «Lucía · personaje creado con IA» (ancho 520) | centrado, y=730 |
-| 0,15 → 2,30 | `frase-card` cejilla «LUNES», «¿Cuántas llamadas para agendar a alguien?» (ancho 900) | centrado, y=850 |
-| 2,30 → 3,90 | `frase-card` «Con un link de reserva:» + remate en acento «cero.» | centrado, y=850 |
-| 2,45 → 3,90 | keyword «CERO.» (ancho 600) — refuerzo del remate | centrado, y=1190 |
-| 3,90 → fin | `frase-card` «El cliente elige el horario y aparece en tu agenda.» | centrado, y=850 |
+| 0,10 → 1,95 | `tag-ia` «Lucía · personaje creado con IA» (ancho 520) | centrado, y=730 |
+| 0,10 → 1,95 | `frase-card` cejilla «LUNES» + «¿Cuántas llamadas para agendar?» (ancho 900) | centrado, y=850 |
+| 1,95 → 4,10 | `frase-card` «Con un link de reserva:» (sin remate) | centrado, y=850 |
+| 2,40 → 4,10 | sello «CERO.» (`keyword-marca`, ancho 560, rotado −5°) + golpe de zoom +3 % 5 cuadros a 2,40 | centrado, y=1170 |
+| 4,10 → 6,04 | `frase-card` «Tu cliente elige el horario.» | centrado, y=850 |
 
-Fades de 0,22 s. Entre tarjetas, la nueva entra cuando sale la anterior (sin hueco vacío).
+Fades 0,15 in / 0,22 out; la tarjeta nueva entra cuando sale la anterior. Si el texto queda apretado, se recorta texto
+(el resto va al pie), no se congela a Lucía. **Captura REAL del link de reserva: pendiente** (hoy no hay cuenta demo);
+cuando exista entra en la tarjeta 3 con crédito «pantalla real de Onia».
 
-## SFX (`P/scripts/sfx-plan.json`, sin voz → `duck:false`)
-pop −10 @0,15 · pop −10 @2,30 · impact? NO (exagera) · pop −12 @2,45 (keyword) · pop −10 @3,90.
+## SFX (`duck:false`, pico total ≤ −3 dBTP)
+pop @0,10 · pop @1,95 · pop @2,40 (sello, −8) · pop @4,10.
 
 ## ORDEN (1 generación de video)
 1. Assets con `make-mockup.mjs --template custom … --accent "#10C26B" --width 1000 --out P/assets/<x>.png`.
 2. **gen1 en UNA pasada** `P/scripts/build.mjs` (calcado de `R/videos/tiktok-20260917/scripts/tiktok-build.mjs`, rutas
-   relativas a P): `scale=1080:1920:flags=lanczos` + overlays con fade + pista de audio en silencio (para que `sfx.mjs`
+   relativas a P): `scale=iw*2:ih*2` + `zoompan` (golpe del sello; `zoomExpr` de `ES/zoom-punch.mjs`) a 1080×1920 + overlays con fade + pista de audio en silencio (para que `sfx.mjs`
    tenga dónde mezclar) → `P/renders/gen1.mp4` (libx264 CRF 14 slow, yuv420p, 24 fps, aac 48 kHz).
 3. **SFX:** `node ES/sfx.mjs --video P/renders/gen1.mp4 --plan P/scripts/sfx-plan.json --out P/renders/sfx.mp4`.
 4. **Sin master a −14:** sin voz, `loudnorm` subiría los pops a nivel de voz. Dejar los SFX a la ganancia del plan y
