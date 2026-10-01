@@ -12,11 +12,12 @@ Desarrollar y publicar Onia Platform 1.0 hasta cobrar al primer cliente. Qué sa
 
 ## 2. Qué quedó EN PRODUCCIÓN (verificado)
 
-- **Plataforma `release-64be5472`** (1-oct 20:26 UTC). Rollback: contenedor `onia-platform-prev-mHG7m6Rk-20261001-202622`.
+- **Plataforma `release-8ff1284d`** (1-oct ~21:05 UTC). `/login` y `/register` cargan sin errores (medido con Chromium).
+  - PR #97: «Completada» y «No asistió» solo en citas que ya empezaron (la API da 409); «Ver mi plan» lleva a `/checkout`; la ayuda no ofrece pantallas que el rubro o el rol no pueden abrir.
   - PR #95: Crece con 4 usuarios.
   - PR #96: `POST /api/auth/register` solo acepta los 5 rubros que se venden. Medido en vivo: `vetgest-clinical` y `onia-interna` → 400.
   - PR #92: verificación por WhatsApp en el alta, con interruptor `ONIA_VERIFICACION_WHATSAPP=plantillas` (crea/lee plantillas; NO pide WhatsApp todavía).
-- **Web onia.com.bo**: Crece con 4 usuarios (publicada 1-oct 14:20 UTC, `publicar.sh` de la landing).
+- **Web onia.com.bo**: Crece con 4 usuarios; `/privacidad` sin el error React #418 (lo causaba la ofuscación de correos de Cloudflare); título de `/rubros` en móvil arreglado. Verificado con Chromium en 1280 y 390 px.
 - **Bot de ventas** desde `c7f44ba5` (textos aprobados por Sergio Urcullo).
 - **Plantillas de WhatsApp en Meta:** 4 en revisión. `onia_codigo_verificacion` (AUTHENTICATION) **bloqueada por Meta a nivel cuenta** (code 10 / subcode 2388185). Ver §5.
 
@@ -24,9 +25,8 @@ Desarrollar y publicar Onia Platform 1.0 hasta cobrar al primer cliente. Qué sa
 
 | Qué | Dónde | Estado |
 |---|---|---|
-| 3 pendientes de pantalla (citas futuras, «Ver mi plan», ayuda que rebotaba) | onia-platform PR #97, rama `v1/pendientes-pantallas` | CI corriendo. Con CI verde: merge + `bash /opt/onia-platform/_deploy/publicar.sh` + mirar en prod |
-| Plan B de verificación inversa (`wa.me`), APAGADO | ramas `v1/verificacion-inversa` (plataforma) y `wip/bot-verificacion-inversa` (onia-hermes) | Subagente trabajando al cerrar. No se enciende si Meta habilita la plantilla |
-| Arreglos de la web v1 pedidos por la madre | rama `wip/web-v1-correcciones-20261001` (merge de main, frase de `/agentes`, `/chatbot`) + rama `fix/web-privacidad-rubros` (React #418 en `/privacidad`, título de `/rubros` en móvil) | Subagente trabajando al cerrar. `fix/web-privacidad-rubros` se mergea y publica; la v1 espera el OK de Sergio Urcullo, que se lo muestra la madre |
+| Plan B de verificación inversa (`wa.me`), APAGADO y terminado | ramas `v1/verificacion-inversa` (plataforma) y `wip/bot-verificacion-inversa` (onia-hermes), sin merge | Cómo se enciende: skill `onia-chatbot`. Solo si Meta no habilita la plantilla AUTHENTICATION |
+| Web v1 (home nueva + legales) | rama `wip/web-v1-correcciones-20261001` (`15ec950d`), al día con main | Espera el OK de Sergio Urcullo; se la muestra la madre. Con el OK: merge a main + publicar landing |
 | SIAT: runner que valida cada paquete | `/opt/onia-siat/runner-20260929/emisor-v2/` + rama `wip/siat-validar-cada-paquete` | Comandos de VI y IX en `BITACORA.md`, **sin lanzar**: esperan las capturas del portal que pide la madre |
 | Respuestas con datos de la ayuda (deuda, stock) leen tablas del pack dental | — | Anotado: revisar la fuente para comercio, importadora y servicios |
 
@@ -56,10 +56,9 @@ Desarrollar y publicar Onia Platform 1.0 hasta cobrar al primer cliente. Qué sa
 
 ## 7. Próximos pasos (en orden)
 
-1. PR #97: CI verde → merge → publicar → mirar en prod.
-2. Recibir los resultados del Plan B y de los arreglos web. Publicar `fix/web-privacidad-rubros` (landing: `bash /opt/onia-landing/_deploy/publicar.sh`, que puede frenar por «número en fuente de precio»; correrlo a mano si el cambio no es un precio).
-3. Pago de prueba de punta a punta cuando la madre avise.
-4. **Producto, según la competencia:**
+1. Esperar los mensajes de la madre: OK de la web v1, aviso del pago de prueba, capturas del SIAT, resultado de la plantilla en Meta.
+2. Pago de prueba de punta a punta cuando la madre avise.
+3. **Producto, según la competencia:**
    - **Recordatorio por WhatsApp con botones Confirmar / Cancelar / Reprogramar** (4 de 5 lo tienen). Necesita la primera conexión real de un número de cliente.
    - Después, el presupuesto por fases desde el odontograma.
-5. SIAT: con las capturas, lanzar VI (motivos 2-4) y IX con `emisor-v2`, como dice la bitácora.
+4. SIAT: con las capturas, lanzar VI (motivos 2-4) y IX con `emisor-v2`, como dice la bitácora.
