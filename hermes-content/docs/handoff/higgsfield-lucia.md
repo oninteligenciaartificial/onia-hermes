@@ -6,27 +6,30 @@
 > Última escritura: **2026-09-30 ~02:50 UTC**, en el cambio de sesión.
 > Reemplaza a `HIGGSFIELD-LUCIA-SYSTEM-2026-09-22.md`, que queda como historia.
 
-## ▶ ESTADO VIGENTE — 1-oct-2026 ~20:15 UTC (lo de abajo es historia)
+## ▶ ESTADO VIGENTE — 1-oct-2026 ~20:30 UTC (lo de abajo es historia)
 
-**Decidido y medido** (detalle en `v4/PROCEDENCIA.jsonl` y `HIGGSFIELD_VIDEO_SYSTEM.md`):
-- Fotos: **Seedream 4.5 + ancla espejo** (`LUCIA-HIGGSFIELD-IDENTITY.json` → `v4.metodo_diario`), 1 cr, parecido 0,80–0,86.
-- Respaldo barato: **Soul `LUCIA-v5`** `cd42c065-…` (0,12 cr, media 0,803; no llegó a principal). El v4 queda retirado.
-  `LUCIA-v5b` `1fd04bfa-…` sigue en cola: cobrado (25 cr), sin uso previsto.
-- B-roll: **Kling 3.0 std sin sonido** (7,5 cr / 6 s) — sostiene la cara. **Aprobado por Sergio Urcullo el 1-oct, con tope de 150 cr/mes.**
-- Hablando a cámara: MiniMax H3, máx. 1/semana. Mezcla: 70 % fotos/carruseles, 20 % b-roll, 10 % hablando.
-- Investigación de influencers IA: `hermes-content/research/competencia/LUCIA_INFLUENCERS_IA_B2B_20260930.md`
-  (lecciones: declarar IA en el primer segundo, pantalla real de Onia, nada «anti-humano»).
+**Sucesora:** «Lucía v4 (ElevenLabs)», misma entorno `onia-higgsfield`, abierta porque Sergio Urcullo cargó
+`ELEVENLABS_API_KEY` y `api.elevenlabs.io`. La sesión vieja (`session_01RRD6v9rmBavDoXx1rG2mEn`) queda quieta.
 
-**Falta para publicar (de Sergio Urcullo):** cuenta `@lucia.antelo.oficial` conectada a la app `OnIA Social API`
-y token guardado en `/root/.config/onia-publicar/` (VPS); etiqueta de IA del perfil + bio «IA creada por
-@oniahq»; OK al carrusel L01. Además la madre le plantea si Lucía sigue en la Etapa 1 (§7 de la estrategia). Opcional: red del entorno `onia-higgsfield` a
-instagram/tiktok/facebook/graph.facebook.com y secreto `ELEVENLABS_API_KEY`.
+**Decidido:** fotos = Seedream 4.5 + ancla espejo (1 cr); respaldo Soul `LUCIA-v5` `cd42c065-…` (0,12 cr);
+b-roll = Kling 3.0 std sin sonido (6 s 7,5 cr · 10 s 12,5 cr). **Aprobado por Sergio Urcullo el 1-oct: Kling y
+tope 150 cr/mes.** Receta de reels: `HIGGSFIELD_VIDEO_SYSTEM.md` § «Reels de Lucía».
 
-**Reparto:** la sesión en la nube (`onia-higgsfield`) genera con Higgsfield. Una sesión LOCAL (con el Chrome
-de Sergio Urcullo) hace lo que la nube no puede: Instagram, Meta y mirar perfiles.
+**Semana 1** (`cola/lucia-diario/S1-PIEZAS.md`):
+- L01 carrusel ✅ aprobado (`carousels/out/lucia-l01-hola-no-existo-foto/`).
+- L02 y L05 reels ✅ hechos, **esperan OK** de Sergio Urcullo (`v4/feed/l02-…mp4`, `l05-…mp4`).
+- **L08 (nuevo, pedido por Sergio Urcullo): b-roll con voz ElevenLabs.** Clip Kling 10 s YA generado y pagado
+  (`f79eb10e-a415-4768-ab62-65c8797a7880`, `v4/feed/l08-cafe-src.mp4`). **Falta:** voz de Marcela
+  (`86V9x9hrQds83qf7zaGn`, multilingüe) con el guion «¿Cuántos pacientes se olvidan de su cita? El sistema les
+  manda un correo un día antes y otro dos horas antes. Vos no movés un dedo.», montarla, placas (texto bajo
+  el mentón), QA de identidad en 5 frames y mandarlo a Sergio Urcullo.
+- L04/L07 esperan capturas reales (pedidas a la madre).
 
-**Siguiente:** semana 1 lista en `cola/lucia-diario/S1-PIEZAS.md` (PR #77, ~10 cr). Días 1-3 cuestan 0 (reusan
-fotos y el clip aprobados). Esperando: OK a L01 y la cuenta conectada.
+**Gasto de octubre: 20 / 150 cr** (L05 7,5 + L08 12,5). Saldo Higgsfield al 1-oct ~19:05: 599,64.
+`LUCIA-v5b` `1fd04bfa-…` seguía en cola: cobrado, sin uso.
+
+**Falta de la madre / PC:** conectar `@lucia.antelo.oficial` a `OnIA Social API` (token `lucia` en el VPS),
+etiqueta de IA + bio; crear TikTok de Lucía y conectarlo a Buffer; capturas reales para L04/L07.
 
 ## ▶ Arranque de la sesión siguiente, en el entorno `onia-higgsfield`
 
