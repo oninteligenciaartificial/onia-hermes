@@ -97,10 +97,32 @@
     },
     {
       "number": 6,
-      "layout": "ensayo",
+      "layout": "lista",
       "theme": "blanco",
       "headline": "Volver a *manual*",
-      "body": "En la sesión, la barra de abajo dice el modo. *Shift+Tab* lo cambia.\n\nPara que arranque siempre preguntando, en ~/.claude/settings.json, dentro de permissions:\n\n*\"defaultMode\": \"default\"*\n\nLa próxima sesión dice *⏸ manual mode on*.",
+      "body": "en la terminal",
+      "items": [
+        {
+          "label": "Ver el modo",
+          "text": "lo dice la barra de abajo"
+        },
+        {
+          "label": "Cambiarlo ya",
+          "text": "Shift+Tab, dentro de la sesión"
+        },
+        {
+          "label": "Para siempre",
+          "text": "abrí ~/.claude/settings.json"
+        },
+        {
+          "label": "En permissions",
+          "text": "\"defaultMode\": \"default\""
+        },
+        {
+          "label": "Comprobá",
+          "text": "la próxima sesión dice ⏸ manual mode on"
+        }
+      ],
       "next": "el bloque",
       "alt_text": "Cómo volver a modo manual: Shift+Tab en la sesión y defaultMode en default"
     },
