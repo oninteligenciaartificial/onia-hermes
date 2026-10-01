@@ -286,7 +286,9 @@ preflight de costo.
   el sistema lo avisa al crearla. Caso: `trig_01JsU6qu1wkj93RVfRf7Mee2`, 1-oct 20:30 UTC, disparó y abrió
   `cse_01SrFno1LzvGxPqnsFGETRgR` (run «pending»). Para una sucesora con conectores, la abre Sergio Urcullo
   desde la web en ese entorno.
-- **La nube no puede mandar mensajes a otras sesiones** (`SendMessage` falla): se contesta en el transcript.
+- **La nube SÍ puede mandarle mensajes a la madre** — corregido 1-oct ~23:40 UTC, medido: `SendMessage` falla («this
+  cloud session cannot message other sessions yet»), pero `mcp__claude-code-remote__send_message` con
+  `session_id: session_01Ap3wJimaiB2tZR7gYsYGhe` (la madre) **entrega** como turno de usuario. Antes acá decía que no se podía.
 - El control de permisos de la sesión puede frenar un gasto aunque esté dentro del tope aprobado
   (Cinema Studio 3.0, 30-sep): no se rodea, se le avisa a Sergio Urcullo.
 
