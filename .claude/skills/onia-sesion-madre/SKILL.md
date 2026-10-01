@@ -49,6 +49,20 @@ Los ids cambian si una sesión se cierra y se abre otra: **`ListAgents` primero*
 - Una sesión que se declaró «en pausa» por una regla vieja no retoma sola: el mensaje dice explícito
   «retomá, no estás en pausa» y trae tareas concretas con criterio de hecho.
 
+## La ronda (pedido de Sergio Urcullo, 1-oct)
+
+La madre lee **sola, cada 30 min**, los transcripts de todas las sesiones de la nube (`CronCreate`
+`13,43 * * * *`, vive solo mientras la madre está abierta y vence a los 7 días: al abrir una madre nueva se
+vuelve a crear). Busca pedidos para la PC, sesiones paradas y preguntas a Sergio Urcullo sin responder; lo
+que puede hacer, lo hace o lo larga en subagente; lo que es de Sergio Urcullo, lo junta en una lista.
+
+## Abrir una sesión nueva en la nube
+
+La madre no sabe los ids de entorno salvo el de «Onia» (`env_01BLwXdgpqDS3sx4rg3r2uvg`). Para abrir una
+sucesora en otro entorno, se lo pide a la sesión que ya corre ahí (rutina de un disparo con su propio
+`environment_id`, sin `persistent_session_id`). Una sesión con acceso al VPS **no** la abre otra sesión:
+el control de permisos lo bloquea (hermes-jarvis §5.10); la abre Sergio Urcullo desde la web.
+
 ## Formato del mensaje
 
 La primera línea es lo único que se ve en la vista previa: tiene que decir sola de qué se trata.
