@@ -88,6 +88,76 @@ ciertas hoy.** Contestar de memoria a este lead es exactamente la forma de quema
 
 ---
 
+## 3. Borradores de respuesta (1-oct) — esperan el OK de Sergio Urcullo
+
+> Escritos por Ventas y pauta el **2026-10-01**. **No se envió nada.** Cada uno sale solo con el OK de
+> Sergio Urcullo sobre el texto y el canal. Van de usted y piden disculpas por la demora: llevan 33 a 41
+> días sin respuesta, y fingir que no pasó el tiempo suena peor.
+
+### 3.1 Conv 35 — «F», clínica de 4 doctores (WhatsApp +59173232758)
+
+**Se envía solo con la 1.0 publicada en producción** (fila 1 de `ONIA_ADQUISICION_Y_PAUTA.md` §5.9): las
+respuestas 1 y 4 describen código de la 1.0. Verificado **leyendo el código** de `onia-platform` en
+`origin/master` (`a7f228c`, 1-oct), no en pantalla.
+
+| Pregunta | Respuesta | De dónde sale |
+|---|---|---|
+| 1. Lista de tratamiento pendiente sin próxima cita | **Sí**, a los 21 días sin venir | `agents-tratamiento-a-medias.ts`: `EN_PROGRESO`, sin cita PENDIENTE/CONFIRMADA por delante, `TRATAMIENTO_A_MEDIAS_DIAS = 21`. Solo dental y estética |
+| 2. Por períodos 15/30/60+ | **No.** Corte fijo de 21 días; la lista se ordena por días sin venir | misma función, `sort` por `diasSinVenir` |
+| 3. Alerta o reporte semanal/mensual | **No es un reporte**: es la cola de `/pending` con el mensaje ya escrito, que un humano aprueba | `/pending`; el cron `onia-agents` |
+| 4. Cancela y no reprograma: lo detecta solo | **Sí**: el Reprogramador lo propone dentro de los 14 días si no tiene otra cita | `agents-reprogramador.ts`: `CANCELADA` y `NO_ASISTIO`, `REPROGRAMAR_VENTANA_DIAS = 14` |
+| 5. Plan o módulo adicional | **En el plan, desde Crece** | `plan-catalogo.ts`: `agentsIncluded: true` desde `crece` |
+| 6. Excel/PDF | **CSV (abre en Excel), desde Básico; PDF no.** La lista de seguimiento se trabaja en pantalla, no se exporta | `csvExportEnabled` desde `basic`; `app/api/settings/export` |
+| Costo para 4 doctores | 4 doctores + 1 asistente = 5 usuarios → **Profesional, Bs 890/mes**. Si la asistente no usa el sistema, entran en **Crece, Bs 550/mes** (4 usuarios desde el 1-oct) | `subscription-plans.ts` `DEFAULT_PLAN_AMOUNTS` y `plan-catalogo.ts` en `a7f228c`. **El día del envío, re-leerlos**: la env var puede pisar el monto en producción |
+
+Mensaje propuesto:
+
+> Buen día, soy Sergio Urcullo, de Onia. El 25 de agosto nos preguntó por el seguimiento de pacientes con
+> tratamiento pendiente y nadie le respondió: le pido disculpas. Le contesto sus seis preguntas.
+>
+> 1. Sí. Todos los días Onia arma la lista de pacientes con un tratamiento en curso que llevan tres semanas
+>    sin venir y no tienen cita por delante, cada uno con su tratamiento y los días que lleva sin venir.
+> 2. No por períodos a elección: el corte es a las tres semanas, y la lista se ordena por días sin venir,
+>    así que primero aparece el que todavía está a tiempo.
+> 3. No es un reporte semanal: es una lista diaria en la pantalla de Pendientes, con el mensaje para cada
+>    paciente ya escrito. La asistente lo revisa y lo manda desde el WhatsApp de la clínica.
+> 4. Sí. Si un paciente cancela o falta y no tiene otra cita, aparece para reprogramarlo.
+> 5. Está incluido en el plan, no es un módulo aparte.
+> 6. Pacientes y citas se exportan en CSV, que se abre en Excel. En PDF, no.
+>
+> Para los 4 doctores y una asistente, cada uno con su usuario, es el plan Profesional: Bs 890 al mes.
+> Una condición: el sistema lo detecta con los tratamientos cargados en la ficha de cada paciente.
+>
+> ¿Le muestro cómo se ve en una llamada de 20 minutos, con una clínica de ejemplo?
+
+### 3.2 Pedidos de acceso (WhatsApp de cada uno)
+
+El alta está abierta desde el 29-ago: ya pueden crear la cuenta solos. Lo que se ofrece es la demo.
+
+| Para | Mensaje propuesto |
+|---|---|
+| Maximo Romano · clinica klein · dental · +591 57400703 | Hola Maximo, soy Sergio Urcullo, de Onia. En agosto pidió acceso a Onia para la clínica Klein y nadie le respondió: le pido disculpas. ¿Sigue buscando ordenar la agenda de la clínica? Le muestro cómo funciona en una llamada de 20 minutos, con una clínica de ejemplo, y si le sirve le dejo la cuenta lista. ¿Le queda bien esta semana? |
+| Leonardo Chuquimia · Clinica Leonardo · estética · +591 70077133 | Hola Leonardo, soy Sergio Urcullo, de Onia. En agosto pidió acceso a Onia para la Clínica Leonardo y nadie le respondió: le pido disculpas. ¿Sigue buscando ordenar las citas de la clínica? Le muestro cómo funciona en una llamada de 20 minutos, con un ejemplo de estética, y si le sirve le dejo la cuenta lista. ¿Le queda bien esta semana? |
+| Edwin Benavidez Ayala · consultorio dental sonrisa feliz · dental · +591 69016505 | Hola Edwin, soy Sergio Urcullo, de Onia. En agosto pidió acceso a Onia para el consultorio Sonrisa Feliz y nadie le respondió: le pido disculpas. ¿Sigue buscando ordenar la agenda del consultorio? Le muestro cómo funciona en una llamada de 20 minutos, con un ejemplo dental, y si le sirve le dejo la cuenta lista. ¿Le queda bien esta semana? |
+
+Antes de enviar: mirar en `/admin/solicitudes` (o en `organizations` por correo) si alguno **ya creó la
+cuenta** después del 29-ago. Si la creó, el mensaje cambia: se le pregunta cómo le fue, no se le ofrece
+acceso. Edwin dice «consultorio»: si atiende solo, le calza Básico, que no trae el seguimiento automático;
+en la demo no se le muestra lo que su plan no incluye.
+
+### 3.3 Escribieron al bot
+
+| Para | Canal | Mensaje propuesto |
+|---|---|---|
+| Conv 37 · «mariohassen» · +59173021804 | WhatsApp | Hola, soy Sergio Urcullo, de Onia. Nos escribió el 28 de agosto desde la web y nadie le contestó: disculpe la demora. Para decirle si le sirve, ¿qué negocio tiene y cuántas personas trabajan con usted? Con eso le digo en dos líneas qué le resolvería Onia. |
+| Conv 36 · `Saguilera@ds-santacruz.bo` | Correo · asunto: *La información que pidió de Onia* | Hola, soy Sergio Urcullo, de Onia. El 27 de agosto nos pidió información desde la web y no le respondimos a tiempo: disculpe. Onia es un sistema de gestión para negocios de Santa Cruz: agenda, fichas y cobros, y cada mañana le deja escrito el mensaje para la persona de mañana que no confirmó su cita. ¿Me cuenta qué tipo de negocio tiene? Con eso le muestro en 20 minutos lo que le sirve, con un ejemplo. |
+| Conv 34 · anónimo, «hola» | — | Sin dato de contacto: no hay a quién escribirle |
+
+Conv 36: si se confirma que es la Clínica Dental «DS» (hipótesis de `ONIA_PROSPECTOS_DENTAL_SCZ.md` §6.2),
+el correo puede nombrar la clínica. Hasta confirmarlo, no.
+
+---
+
 ## Cómo se vuelven a leer (reproducible)
 
 ```bash

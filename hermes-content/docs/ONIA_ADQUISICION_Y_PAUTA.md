@@ -381,6 +381,45 @@ Los supuestos del embudo están en `research/ONIA_META_ADS_PLAYBOOK_20260930.md`
 Sergio Urcullo en el Administrador de anuncios con esta tabla. **Se crea en PAUSA y se enciende solo con su
 OK.**
 
+#### 5.8.1 Cómo se crea en PAUSA, paso a paso (1-oct)
+
+Escrito para que la sesión que tenga el conector lo ejecute sin decidir nada. Los parámetros son los del
+conector `Meta_ads`; en el Administrador de anuncios son los mismos campos con su nombre en pantalla.
+
+> ⛔ **Trampa medida el 1-oct leyendo el conector:** `ads_create_ad` está en **modo borrador**. Los anuncios
+> quedan como DRAFT, y **`ads_activate_entity` sobre la campaña los publica en ACTIVO, gastando.** «Crear en
+> PAUSA» termina en el paso 5. `ads_activate_entity` se llama solo con la fila 9 de §5.9 en ✅.
+
+0. **Antes de nada:** `ads_get_ad_accounts` lista `1073680778314945` con `has_payment_method: true`, y
+   `ads_get_ad_account_pages` lista `1140384625819526`. Si falta uno, se para acá (filas 2–4 de §5.9).
+1. **Campaña** (`ads_create_campaign`): `ad_account_id` `1073680778314945` · `campaign_name`
+   `ONIA · Dental SCZ · WhatsApp · prueba 1` · `objective` `OUTCOME_LEADS` · `buying_type` `AUCTION` ·
+   `special_ad_categories` `[]` · `campaign_lifetime_budget` `14000` (USD 140, en centavos) ·
+   `campaign_stop_time` = inicio + 14 días. Sale en PAUSED.
+   Si `OUTCOME_LEADS` no acepta WhatsApp en esa cuenta, el respaldo es `OUTCOME_ENGAGEMENT` con el mismo
+   conjunto, y se anota en el handoff.
+2. **Conjunto** (`ads_create_ad_set`): `ad_set_name` `Dental SCZ · 25+ · WhatsApp` · `optimization_goal`
+   `CONVERSATIONS` · `destination_type` `WHATSAPP` · `billing_event` `IMPRESSIONS` · `promoted_object`
+   `{"page_id":"1140384625819526"}` · sin presupuesto propio (manda el de la campaña) · `targeting`:
+   `{"geo_locations":{"custom_locations":[{"latitude":-17.7833,"longitude":-63.1821,"radius":25,"distance_unit":"kilometer"}]},"age_min":25}`,
+   ubicaciones automáticas. Con Advantage+ la edad queda como sugerencia, que es lo que pide §5.2. Excluir
+   registrados (audiencia de clientes) solo si ya existe en la cuenta; no se crea para esto.
+3. **Imágenes:** las 14 láminas de `hermes-content/carousels/out/ads/onia-platform-dental-meta-d1-*/` y
+   `…-d4-*/` (1080×1350), **la versión que Sergio Urcullo aprobó viéndola** (fila 7). El conector sube
+   archivos solo desde su app; si desde la nube no puede, se suben a mano en el Administrador.
+4. **Dos creativos** (`ads_create_creative`), carrusel estático de 7 tarjetas cada uno: `page_id`
+   `1140384625819526` · `message` = `caption` del brief · `headline` = título de la tabla de arriba ·
+   `call_to_action_type` `WHATSAPP_MESSAGE` · tarjetas en el orden del brief · `self_ai_disclosure`: lo
+   decide Sergio Urcullo (las láminas tienen fotos de fondo; las capturas son reales).
+   **Texto precargado** (`Hola, vi el anuncio de Onia (D1)…`): si el conector no lo expone, se pone a mano en
+   el anuncio, en «Mensaje de bienvenida», antes de cualquier publicación. Sin ese texto se pierde la
+   atribución D1/D4 (§5.6).
+5. **Dos anuncios** (`ads_create_ad`) bajo el conjunto: `ONIA · D1 · Los de mañana` y
+   `ONIA · D4 · Tratamiento a medias`. Quedan en borrador.
+6. **Anotar en el handoff** del carril los ids de campaña, conjunto, creativos y anuncios, y verificar con
+   `ads_get_ad_entities` que la campaña dice PAUSED. Recién ahí la fila 8 pasa a ✅.
+7. **Encender** = `ads_activate_entity` sobre la campaña, **solo con el OK escrito de Sergio Urcullo** (fila 9).
+
 ### 5.9 Lista de encendido
 
 Se enciende cuando **todas** las filas están en ✅. Una fila vale con la comprobación de su columna, no de
@@ -389,13 +428,13 @@ memoria. Estado al **30-sep, 12:30 UTC**.
 | # | Condición | Cómo se comprueba | Dueño | Estado |
 |---|---|---|---|---|
 | 1 | **1.0 publicada y medición probada** (alta con `utm` guardada con su origen, píxel visto en «Probar eventos») | aviso de la sesión principal | sesión principal | ⏳ candidato `6088e478` |
-| 2 | **El conector ve ONIA Ads**, o Sergio Urcullo crea la campaña a mano | `ads_get_ad_accounts` lista `1073680778314945` | Sergio Urcullo | ❌ **re-medido 30-sep 12:15 UTC**: sigue viendo solo "NUVO 1usd" y "Arthur Fuentes" |
+| 2 | **El conector ve ONIA Ads**, o Sergio Urcullo crea la campaña a mano | `ads_get_ad_accounts` lista `1073680778314945` | Sergio Urcullo | ❌ **re-medido 1-oct 20:15 UTC**: sigue viendo solo "NUVO 1usd" y "Arthur Fuentes" |
 | 3 | **Método de pago** en ONIA Ads | `has_payment_method: true` en la misma llamada | Sergio Urcullo | ❌ al 21-sep |
 | 4 | **Página "Onia" promocionable y con el WhatsApp de ventas vinculado** | `ads_get_ad_account_pages` lista `1140384625819526`; WhatsApp en la configuración de la página | Sergio Urcullo | sin medir |
 | 5 | **Frase-prefijo publicada en el bot** y probada con dos mensajes desde un teléfono que no sea el de Onia, **mirando la respuesta** (§5.5) | la respuesta, leída | Sergio Urcullo (firma) + carril chatbot | ❌ |
 | 6 | **Quién contesta, y en cuánto tiempo** | decidido por escrito | Sergio Urcullo | ❌ (ver abajo) |
-| 7 | **Las cuatro capturas de la 1.0** en `carousels/briefs/assets/onia-1.0-dental-ads/` → D1 y D4 renderizadas → **OK de Sergio Urcullo viéndolas** | las piezas renderizadas, miradas | capturas: sesión principal · diseño y render: Ventas y pauta · OK: Sergio Urcullo | ⏳ briefs listos |
-| 8 | **Campaña creada en PAUSA** con §5.8 | ids de campaña, conjunto y anuncios anotados en el handoff del carril | quien tenga el conector, o Sergio Urcullo | ❌ depende de 2–4 |
+| 7 | **Las cuatro capturas de la 1.0** en `carousels/briefs/assets/onia-1.0-dental-ads/` → D1 y D4 renderizadas → **OK de Sergio Urcullo viéndolas** | las piezas renderizadas, miradas | capturas: sesión principal · diseño y render: Ventas y pauta · OK: Sergio Urcullo | ⏳ renderizadas el 1-oct con capturas **candidatas** (`out/ads/…-candidato/`); esperan el OK de Sergio Urcullo a las capturas y a las piezas |
+| 8 | **Campaña creada en PAUSA** con §5.8 | ids de campaña, conjunto y anuncios anotados en el handoff del carril | quien tenga el conector, o Sergio Urcullo | ❌ depende de 2–4 · pasos en §5.8.1 |
 | 9 | **OK explícito de gasto con techo** (USD 140, 14 días) y **tipo de cambio** al que el banco cobra la tarjeta (§5.6) | por escrito | Sergio Urcullo | ❌ |
 
 **Fila 6 si el carril chatbot sigue sin dueño.** La pauta igual se puede encender, porque la atribución no
