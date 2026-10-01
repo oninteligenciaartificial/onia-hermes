@@ -13,10 +13,17 @@
 >   de esta rama (ver §3). El «sí» de un pedido es ahora un código que le llega a él directo; la
 >   rutina va en un entorno PROPIO sin la llave SSH; aplicar escribe su marcha atrás antes de tocar
 >   nada y el rollback se puede reintentar.
+> - **1-oct ~22:00 UTC — relevo:** la sesión nueva del carril (`session_0132vedovRq1JVbeD6aVQwNT`, rama
+>   `claude/vibrant-brown-8xya0a`, que sale de la punta de este PR) verificó el commit corrector
+>   `77d5ceb` punto por punto: los 10 están, con sus pruebas. Encontró **3 huecos** y los cerró en un
+>   commit encima, en un PR en borrador hacia esta rama: (a) la primera línea de «🙋 Necesita tu ok»
+>   pasaba los 90 bytes que guarda la aduana y el link quedaba cortado; (b) un rollback reintentado
+>   reanudaba lo que ya estaba activo o ya no existía, y podía no terminar nunca; (c) un trabajo de
+>   Hermes ausente de `jobs.json` no frenaba la Fase A. Lo aprendido está en la skill.
 > - **Sigue:** §7, bloque del 1-oct.
 
 Historia: rama original `claude/hermes-jarvis` («Hermes y Sergio management system», 29-sep, desde el
-teléfono); sucesoras `session_01U881mfXgTAUafw6GC9jExG` (30-sep, archivada) y la de arriba.
+teléfono); sucesoras `session_01U881mfXgTAUafw6GC9jExG` (30-sep, archivada), la de arriba y la del relevo.
 
 ## 1. Objetivo
 
