@@ -142,13 +142,13 @@ export const CHATBOT_STACKS: readonly ChatbotStack[] = [
       "Configuración del número y de las plantillas que Meta aprueba",
     ],
     noIncluye: [
-      "Cerrar la cita: el bot toma el pedido y lo pasa a tu equipo, que confirma el horario",
+      "Cerrar la cita: el agente toma el pedido y lo pasa a tu equipo, que confirma el horario",
       "Lo que salga de este alcance (integraciones, flujos propios) se cotiza a medida",
     ],
     necesitasVos: [
       "Un número que Meta pueda verificar",
       "Tus preguntas frecuentes con tus respuestas reales",
-      "Alguien que atienda lo que el bot derive",
+      "Alguien que atienda lo que el agente derive",
     ],
     mensual: 390,
     anual: 3900,

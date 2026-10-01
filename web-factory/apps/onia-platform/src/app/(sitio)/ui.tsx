@@ -80,7 +80,7 @@ const panelLabel: Record<Exclude<PanelId, "cuenta">, string> = {
   importadora:
     "Cotizaciones de una importadora eléctrica: una aprobada, una enviada y una esperando respuesta.",
   estetica:
-    "Tratamientos en curso de un centro de estética: uno al día, otro de una clienta que no volvió, y el control post-tratamiento ya puesto en la agenda.",
+    "Tratamientos en curso de un centro de estética: dos al día y uno de una clienta que no volvió.",
   servicios:
     "Cierre de mes de un estudio profesional: el IVA y el IT del mes ya armados con lo cobrado en Onia, y el reporte del mes esperando revisión.",
 };
@@ -299,7 +299,11 @@ function PanelCuerpo({ panel, plan }: { panel: PanelId; plan?: PlanId }) {
        `recallAfterDays`: por TIEMPO SIN VOLVER. Antes decía «Paquetes en
        curso» con un contador de sesiones hechas y faltantes, y ese saldo el
        producto no lo lleva — `PatientTreatment` tiene estado, no total
-       contratado. */
+       contratado.
+       2026-10-01: la tercera fila decía «Control post-tratamiento · En agenda»
+       y se sacó por corrección de Sergio Urcullo: el Recall dispara por tiempo
+       sin volver y PROPONE a quién invitar; un control ya agendado solo no es
+       lo que se demuestra acá. Quedó otro tratamiento al día. */
     case "estetica":
       return (
         <>
@@ -307,7 +311,7 @@ function PanelCuerpo({ panel, plan }: { panel: PanelId; plan?: PlanId }) {
           <ul className={s.panelRows}>
             <Fila txt="Limpieza facial" pill="Al día" hecho />
             <Fila txt="Depilación láser" pill="No volvió" />
-            <Fila txt="Control post-tratamiento" pill="En agenda" hecho />
+            <Fila txt="Peeling químico" pill="Al día" hecho />
           </ul>
           <p className={s.panelFoot}>
             La clienta que dejó el tratamiento a medias no se pierde.

@@ -229,7 +229,7 @@ export default function Portada() {
           <h2 id="cierre" className={s.display}>{ALTA_VERBO_VOS_TITULO} y ves las pantallas de tu rubro.</h2>
           <div className={p.heroCtas}>
             <Btn href={EMPEZAR_URL}>{CTA_ALTA}</Btn>
-            <Btn href={WA_URL_LANDING} variant="line" external>Hablar con ONIA</Btn>
+            <Btn href={WA_URL_LANDING} variant="line" external>Hablar con Onia</Btn>
           </div>
         </div>
       </Block>
