@@ -1,53 +1,32 @@
-# Lucía · Semana 1 — «Hola, no existo» · piezas
+# Lucía · Semana 1 — piezas (v2, 1-oct-2026)
 
-Jue 1-oct → mié 7-oct-2026. Flujo y costos: [`FLUJO.md`](FLUJO.md). Mismo formato de títulos que
-`../plan-3-semanas/S*-GUIONES.md` (`## Día` / `### DNN-X · Formato · Título`), para que el resumen
-de las 06:30 lo pueda leer igual.
+Aprobado por Sergio Urcullo el 1-oct: Kling 3.0 para b-roll y tope de **150 cr/mes**. Flujo y reglas:
+[`FLUJO.md`](FLUJO.md). Mismo formato que `../plan-3-semanas/` (`### LNN-X · Formato · Título`).
 
-Objetivo de la semana: que el perfil deje de estar vacío, que se entienda que es IA y para quién
-habla (dueños de negocios chicos de Santa Cruz), y abrir la primera puerta a una demo.
+**El día 1 es el primer día con `@lucia.antelo.oficial` conectada.** Hora: 19:00 La Paz.
+Reglas de toda pieza (de `research/competencia/LUCIA_INFLUENCERS_IA_B2B_20260930.md`):
+el pie arranca con «Lucía es un personaje hecho con IA por @oniahq»; lo que vende muestra pantalla
+REAL de Onia y solo funciones vivas (link de reserva 🟢, recordatorios por correo 24 h / 2 h 🟡);
+nunca testimonio; nada «anti-humano».
 
----
+| Día | Pieza | Formato | Estado | Costo |
+|---|---|---|---|---:|
+| 1 | L01 · Hola, soy Lucía. No existo. (fijado) | Carrusel 5 fotos | ✅ renderizado, falta tu OK | 0 |
+| 2 | L02 · Este video no fue grabado | Reel b-roll (Kling, calle) + texto | clip ya hecho; falta edición | 0 |
+| 3 | L03 · Sábado | Foto (cocina a la mañana) | foto lista | 0 |
+| 4 | L04 · Tu agenda, sin llamadas | Carrusel con captura real del link de reserva | falta la captura | ~1 |
+| 5 | L05 · Lo que dejás de hacer a mano | Reel b-roll (Kling, coworking) + texto | por generar | 7,5 |
+| 6 | L06 · Noche de lámpara | Foto | foto lista | 0 |
+| 7 | L07 · El recordatorio que llega solo | Carrusel con captura real del correo 24 h / 2 h | falta la captura | ~1 |
 
-## Jue 1-oct
+**Total semana 1: ~10 cr.** Lucía hablando a cámara: no esta semana (la voz de Marcela sigue sin
+resolver).
 
-### L01-A · Carrusel · Hola, soy Lucía y no existo (fijado)
-**Pilar:** presentación · **CTA:** seguir · **Costo:** 5 cr (5 fotos v4 nuevas)
-Reemplaza al L2 viejo, que mide ~0,70 contra la cara v4. Lámina 1: selfie de espejo. Última: «Me
-creó @oniahq para hablarle a dueños de negocio sin humo».
+## Archivos
 
-## Vie 2-oct
-
-### L02-A · Reel hablando · Hace un año yo no existía
-**Pilar:** presentación · **CTA:** comentá una pregunta · **Costo:** 12 cr (MiniMax H3, 6 s) + voz
-Tres frases cortas a cámara con subtítulos grandes. Base: foto de la cama (`49cf8ef2`).
-
-## Sáb 3-oct
-
-### L03-A · Foto · Sábado sin pantalla (casi)
-**Pilar:** lifestyle · **CTA:** pregunta en caption · **Costo:** 0 (ya generada: calle al atardecer `b078f2ef`)
-
-## Dom 4-oct
-
-### L04-A · Carrusel · Tres cosas que la IA NO hace por tu negocio
-**Pilar:** IA sin humo · **CTA:** guardá · **Costo:** 5 cr
-Contracorriente (LUCIA.md L7): no reemplaza el criterio del dueño, no arregla un proceso que no
-existe, no trabaja gratis. Cierre: «¿Qué SÍ hace? El jueves te muestro uno real».
-
-## Lun 5-oct
-
-### L05-A · Reel b-roll + voz · Lunes: el cuello de botella sos vos
-**Pilar:** negocio · **CTA:** comentá SISTEMA · **Costo:** 6 cr (Seedance Mini mudo) + voz Marcela
-Oficina y café; la voz dice el problema. Sin promesas de funciones.
-
-## Mar 6-oct
-
-### L06-A · Foto · Martes de oficina
-**Pilar:** lifestyle · **Costo:** 0 (ya generada: coworking `a378ea3d`)
-
-## Mié 7-oct
-
-### L07-A · Carrusel · Lo que hace un sistema de gestión que un Excel no
-**Pilar:** vende Onia · **CTA:** demo con `utm_campaign=lucia-l07` · **Costo:** 2 cr + capturas REALES
-Sólo funciones que producción cumple hoy (`ONIA_ADQUISICION_Y_PAUTA.md` §5.4). Sin capturas reales
-no sale.
+- L01: brief `hermes-content/carousels/briefs/lucia/l01-hola-no-existo.json` · láminas
+  `hermes-content/carousels/out/lucia-l01-hola-no-existo-foto/` (pack `editorial-photo`, cuenta `lucia`).
+  Render: `CAROUSEL_BROWSER=<chrome> node scripts/carousel_render.js --brief <brief> --out <dir> --account lucia --pack editorial-photo`.
+- L02: clip Kling `1d2b5631-cc50-4a17-a472-cf6bb78c1098` (6 s, parecido 0,70→0,72).
+- L03 foto `ed096c60…` · L06 foto `761df099…` (ids completos en `v4/PROCEDENCIA.jsonl`, lote_publicar).
+- Fotos del feed en `hermes-content/references/modelos/lucia/v4/feed/`.

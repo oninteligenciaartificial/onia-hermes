@@ -94,6 +94,29 @@ Instrucciones de proyecto. Override sobre defaults.
 - **En el producto y la web:** cada paso o página extra se justifica o se saca. Ante dos
   soluciones, gana la de menos clics para el cliente.
 
+## Sesión MADRE local + carriles en la nube (REGLA)
+
+> Sergio Urcullo, 2026-10-01: *«madre local para que comunique a ellas, pero las de desarrollo y tareas que no
+> son de uso PC, nube; creemos la madre y que ordene a todas con sus tareas, subs y demás, mediante mensaje»*.
+> Y: *«prefiero que hable entre sesiones, así no dejamos documentos que no leen»*.
+
+- **La MADRE corre en la PC de Sergio Urcullo** y es la única que ordena. Reparte las tareas a cada sesión
+  **por mensaje** y hace ella misma lo que exige la PC: paneles con su login (Meta, Cloudflare, Hostinger),
+  capturas, mirar pantallas. Reemplaza a la vieja sesión de «Control» como orquestadora: dos orquestadores
+  se pisan.
+- **Desarrollo y todo lo que no necesita la PC, en la NUBE**, un carril por sesión (Plataforma, Ventas y pauta,
+  Marca personal, Lucía…). Siguen trabajando con la PC apagada.
+- **El canal principal es el MENSAJE, no el documento.** Lo que una sesión necesita de otra se le manda, no se
+  deja escrito esperando que lo lea. El handoff (`hermes-content/docs/handoff/<carril>.md`) queda solo para que
+  una sesión NUEVA retome si otra muere.
+- **Cómo se manda (medido el 1-oct):** solo la MADRE manda mensajes, con `SendMessage`, y le llegan al
+  instante a las sesiones de la nube. La nube **no** puede mandar (`SendMessage` falla: «this cloud session
+  cannot message other sessions yet»): contesta **en su propio transcript** y la madre lo lee desde allá.
+  **Nada de mensajes programados** (`create_trigger`) entre sesiones: tardan demasiado (Sergio Urcullo, 1-oct).
+- Detalle operativo (ids vivos, formato del mensaje, qué se avisa y qué no): **skill `onia-sesion-madre`**.
+- **El portal del SIAT no lo abre ninguna sesión, tampoco la madre.** Lo abre solo Sergio Urcullo a mano; la
+  sesión le pide capturas.
+
 ## «Cambio de sesión» → handoff completo (REGLA)
 
 > Sergio, 2026-09-04: *"cada que yo te diga cambio de sesion generes handoff para nueva sesion

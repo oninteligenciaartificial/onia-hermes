@@ -1,5 +1,10 @@
 # Handoff — carril `mercado-y-pauta` (sesión «Ventas y pauta Onia Platform», antes «Análisis de mercado»)
 
+> ⏩ **1-oct, vigente: el carril sigue en la NUBE** (`session_01BnctfaNRsm3ogJ46A7B5P5`). Rige la regla nueva
+> de `CLAUDE.md`: la madre corre local y ordena por mensaje, y esta sesión contesta en su transcript. Lo que
+> exige la PC (Facebook, Instagram o el Administrador de anuncios con el login de Sergio Urcullo) lo hace la
+> madre. El aviso anterior, «pasa a una sesión local», quedó sin efecto.
+>
 > **Renombrada el 30-sep, de noche, por decisión de Sergio Urcullo.** El archivo conserva su nombre para no
 > romper enlaces.
 >
