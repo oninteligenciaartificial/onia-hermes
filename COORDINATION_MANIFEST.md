@@ -62,6 +62,12 @@ Dueña de Hermes y del cerebro: qué le llega a Sergio Urcullo por Telegram, el 
   - Lucía v4 y Higgsfield (`onia-higgsfield`): red a `instagram.com`, `cdninstagram.com`, `tiktok.com`,
     `facebook.com`, `fbcdn.net`, `graph.facebook.com` para mirar influencers IA (hoy responden `000`).
     Opcional: secreto `ELEVENLABS_API_KEY` para generar la voz de Marcela sin pasar por el VPS.
+  - Control (`Onia`, `session_0154pQRYB6icZn9Z3SuJp35D`): **nada en el entorno.** `GH_ACTIONS_TOKEN`
+    ya llega y lee Actions (200). Lo que frena `aplicar` no es el entorno: es el control de permisos de
+    la sesión (`handoff/hermes-jarvis.md` §5.13), y se destraba con el toque de Sergio Urcullo en el
+    workflow o con su orden explícita. Más adelante, para que Hermes ejecute vía Claude en la nube:
+    un **secreto de GitHub Actions** (no del entorno) con el token de la rutina; el nombre y el paso a
+    paso se los pasa control cuando llegue ese momento.
 - **→ Mercado (30-sep, de Lucía v4 y Higgsfield):** por error este carril investigó la competencia de
   Onia Platform, que es tuya (Sergio Urcullo: «competencia me refiero a influencers IA; la sesión de
   ventas y pauta se encarga de esto»). No se sigue acá. Lo que salió queda para vos, sin duplicar:
