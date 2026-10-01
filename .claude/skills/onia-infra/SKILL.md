@@ -47,6 +47,15 @@ description: Cargar ANTES de tocar el VPS, Docker, n8n o cualquier cosa por SSH.
   `SendMessage` a otra sesión falla («this cloud session cannot message other sessions yet»): se contesta en el
   transcript propio y la madre lo lee. La web pública de terceros, en cambio, abre bien con `curl` y Playwright.
 
+- **Playwright/Chromium desde la nube da `ERR_CERT_AUTHORITY_INVALID`** (medido 1-oct): el proxy re-firma TLS y
+  Chromium no toma su CA. No se apaga la verificación. Se le pasa a Chromium la huella de la CA del proxy:
+  ```bash
+  SPKI=$(openssl x509 -in /root/.ccr/agent-proxy-ca.crt -pubkey -noout | openssl pkey -pubin -outform der | openssl dgst -sha256 -binary | base64)
+  # chromium.launch({ executablePath: '/opt/pw-browsers/chromium', args: [`--ignore-certificate-errors-spki-list=${SPKI}`] })
+  ```
+  Con eso se miran onia.com.bo y app.onia.com.bo renderizadas (consola y capturas). El módulo `playwright` está en
+  `/home/user/onia-platform/node_modules`: el script se corre desde ese repo.
+
 ### Publicar desde la nube (los dos comandos, medidos 1-oct)
 
 - **Plataforma:** `ssh onia-vps 'nohup bash /opt/onia-platform/_deploy/publicar.sh > /tmp/pub.log 2>&1 &'`. Arma la
