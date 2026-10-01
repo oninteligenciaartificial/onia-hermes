@@ -43,6 +43,12 @@ Publicación: igual que Sergio, `ig-reel.mjs --cuenta lucia` / `ig-carrusel.mjs`
 3. **Tendencias entrando por Hermes** (formatos, audios, ganchos del nicho), no de memoria.
 4. Los puntos de la tabla de abajo.
 
+Estado al 30-sep 19:50 UTC (lote de prueba, tope 75 cr aprobado por Sergio Urcullo):
+1. Soul v5 entrenando (`cd42c065…`, 25 cr); el A/B se hace cuando esté `ready`.
+2. B-roll: Kling 3.0 ganador provisorio por medición (7,5 cr / 6 s); falta el OK de Sergio Urcullo
+   mirando el comparativo. Cinema Studio 3.0 sin probar (bloqueado por permisos, 0 cr).
+3. Tendencias: pedido hecho a control (manifest); el loop `tendencias` sigue congelado.
+
 La mayoría de los reels son **b-roll + voz o texto**; Lucía hablando a cámara es la excepción.
 
 ## Lo que falta para encender (y de quién es)

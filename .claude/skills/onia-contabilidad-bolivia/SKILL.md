@@ -37,6 +37,18 @@ régimen, ni fechas sin confirmación. Si faltan datos → responder "configurac
 - No hardcodear tasas/plazos sin fuente citada (RND/DS). Parametrizar por tenant/vertical.
 - Facturación electrónica entra por `external_gate` del core (SIAT fuera del core; intake normalizado).
 - El CUF/CUFD y el XML/SOAP del SIAT dependen del Anexo oficial: no fabricar el algoritmo, verificar contra doc oficial.
+
+## 🔴 El PORTAL del SIAT (fman.impuestos.gob.bo) lo abre SOLO Sergio Urcullo, a mano (REGLA)
+> Sergio Urcullo, 30-sep-2026: «no inicies sesión del SIAT por Claude, detecta que sos un robot… me mandó
+> un aviso la otra vez».
+- Ninguna sesión inicia sesión en el portal ni lo navega con Playwright, Chrome automatizado ni
+  Claude in Chrome. Un aviso del SIN a la cuenta del contribuyente es un riesgo sobre el trámite entero.
+- Lo que el portal muestra (Listado de Pruebas, % general, CAFC) se lo pide a Sergio Urcullo
+  **como capturas**. El tráfico SOAP al PILOTO (codigoAmbiente=2) desde el runner del VPS sí está autorizado.
+- ⚠️ El % del portal es la verdad, pero **fijate de QUÉ lista es**. El 30-sep la captura del «Listado de
+  Pruebas» decía 26 %, y casi seguro era el % de la **etapa VI** (150/560 = 26,8 %; 32 filas = las de VI),
+  no el general del sistema (80 % el 27-sep). Antes de concluir, pedir también la captura del «Listado de
+  Etapas». Por la misma razón, el «general» del informe local del runner no se compara con una lista suelta.
 - Mantener trazabilidad y postura fiscal legible por ONIA Center (tabla `tax_posture`).
 
 ## Estar al día

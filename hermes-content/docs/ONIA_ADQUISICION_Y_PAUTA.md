@@ -34,10 +34,13 @@
 
 ## 0. La respuesta corta
 
-1. **Te dicen la verdad para la venta, no para el producto.** El producto sigue multi-rubro (mantenerlo
-   cuesta cero y es la base del segundo rubro); **la venta, la pauta y la vidriera van a un solo rubro:
-   dental**. El segundo rubro, después de los 5 dentales: **importadora, según decidió Sergio Urcullo**
-   (aviso de Plataforma del 30-sep; sus palabras textuales, pendientes). Los datos, en `ONIA_CLIENTE_IDEAL.md` §6.
+1. ⚠️ **Rubros — corregido el 30-sep, de noche, por Sergio Urcullo: *«no solo somos clínica»*.** Este punto
+   decía que la venta y la pauta iban a un solo rubro, dental. **Ahora se sale a buscar en los rubros que el
+   producto sostiene en una demo, cada uno con su lista y su mensaje:** dental y estética primero (el mismo
+   producto), después importadora (acotada al costeo y a la alerta de reprecio), y comercio y servicios
+   cuando la 1.0 arregle lo que falla en una demo. El orden y el detalle están en `ONIA_CLIENTE_IDEAL.md` §6.
+   **La pauta paga va de a un rubro por conjunto de anuncios, empezando por dental.** Meta aprende por
+   conjunto, y cinco públicos con presupuesto chico no juntan señal.
 2. **La estrategia ya lo había decidido el 5-sep. Lo que no se enteró es la vidriera:** la home le habla a
    *"tu negocio"*, `/rubros` lista cinco, y el carrusel de pauta del 21-sep cierra con el precio del plan
    que no trae agentes (§5.4).

@@ -47,6 +47,7 @@ import { normalize } from "./guardrails.mjs";
 import { validateKnowledge } from "./knowledge.mjs";
 import { createBotConfig } from "./config.mjs";
 import { createState, step } from "./bot-engine.mjs";
+import { precargadosDeLaPauta } from "./precargados-de-la-pauta.mjs";
 
 const WEB_SRC = fileURLToPath(new URL("../../../../web-factory/apps/onia-platform/src/", import.meta.url));
 const CONFIGURADOR_SRC = fileURLToPath(
@@ -192,7 +193,15 @@ test("ninguna campaña quedo huerfana: si la web dejo de mandar la frase, la cam
   // al mensaje que contesta, asi que con `deLaWeb.has(frase)` toda campaña de prefijo nueva nace
   // "huerfana" aunque este atendiendo al lead mas caliente de la web. Y de paso el gate se vuelve
   // mas fuerte: ahora caza tambien la campaña cuya frase derivo hasta dejar de matchear nada.
-  const vivas = [...frasesDeLaWeb(), ...[...aperturasDelConfigurador()].map(mensajeDelConfigurador)];
+  //
+  // Y los PRECARGADOS DE LA PAUTA (2026-09-30): el anuncio clic-a-WhatsApp es otro emisor, y su
+  // campaña de prefijo no la dispara ninguna página — la dispara Meta. Se leen del doc de la pauta
+  // (ver precargados-de-la-pauta.mjs y frase-de-la-pauta.test.mjs), no se declaran a mano.
+  const vivas = [
+    ...frasesDeLaWeb(),
+    ...[...aperturasDelConfigurador()].map(mensajeDelConfigurador),
+    ...precargadosDeLaPauta(),
+  ];
   const alcanzadas = new Set(
     vivas.map((viva) => campanaExacta(doc, normalize(viva))?.frase).filter(Boolean),
   );

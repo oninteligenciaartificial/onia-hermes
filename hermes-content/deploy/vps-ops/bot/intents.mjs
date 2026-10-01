@@ -122,7 +122,16 @@ const RE_PRACTICA_PROPIA = new RegExp(
   ].join("|"),
 );
 
-const RE_PRODUCTO_DETALLE = /\bse conecta con\b|\bse integra con\b|\bcompatible con\b|\brayos x\b|\bradiograf\w+|\bimpresora\b|\bfirma digital\b|\bapi\b|\bexportar\b|\bmigrar (?:mis|los) datos\b|\bcelular\b|\btelefono\b|\btablet\b|\bcomputadora\b|\bandroid\b|\biphone\b|\bwindows\b|\bsin internet\b|\boffline\b|\ben la nube\b|\b(?:dan|tienen|ofrecen|brindan|incluye|incluyen) (?:soporte|capacitacion|garantia)\b/;
+// El DUEÑO hablando de SUS pacientes, en plural: "tengo 30 pacientes con tratamiento a medias",
+// "mis pacientes dejan el tratamiento". Es el dolor #1 del cliente ideal y la respuesta mas probable
+// al anuncio D4 — y la palabra "tratamiento" lo mandaba al corte clinico (M5 + handoff), justo en el
+// mensaje que la pauta paga por conseguir. Un paciente habla de SU tratamiento, no de "mis pacientes".
+// Solo afloja a los PROCEDIMIENTOS (RE_CLINICO), igual que RE_PRACTICA_PROPIA: un sintoma sigue
+// cortando siempre y lo legal no pasa por aca. Ver tratamiento-a-medias-no-es-consulta-clinica.test.mjs.
+const RE_HABLA_DE_SUS_PACIENTES =
+  /\b(?:mis|nuestros|los|sus|varios|muchos|algunos|tengo|tenemos|hay|\d+) pacientes\b|\bpacientes (?:que|con)\b/;
+
+const RE_PRODUCTO_DETALLE =/\bse conecta con\b|\bse integra con\b|\bcompatible con\b|\brayos x\b|\bradiograf\w+|\bimpresora\b|\bfirma digital\b|\bapi\b|\bexportar\b|\bmigrar (?:mis|los) datos\b|\bcelular\b|\btelefono\b|\btablet\b|\bcomputadora\b|\bandroid\b|\biphone\b|\bwindows\b|\bsin internet\b|\boffline\b|\ben la nube\b|\b(?:dan|tienen|ofrecen|brindan|incluye|incluyen) (?:soporte|capacitacion|garantia)\b/;
 
 // La MISMA pregunta, dicha como la dice la gente: SUJETO + VERBO DE CAPACIDAD.
 //
@@ -175,6 +184,73 @@ const RE_QUE_ES_ONIA = new RegExp(
 /** Pregunto QUE vendemos. Se contesta con el catalogo, no con un humano ni con el LLM. */
 export function asksWhatWeDo(norm) {
   return RE_QUE_ES_ONIA.test(norm);
+}
+
+// ---------------------------------------------------------------------------
+// EL PACIENTE QUE ENTRA POR LA PAUTA (solo modo VENTA)
+// ---------------------------------------------------------------------------
+// Un anuncio que dice "clinica dental", optimizado a conversaciones, trae PACIENTES que buscan
+// turno: es "el riesgo central" de la pauta (ONIA_ADQUISICION_Y_PAUTA.md §5.2). Antes de esto el
+// paciente entraba al embudo de venta: se creaba como lead, recibia la escalera de precios de los
+// PLANES de Onia si preguntaba por los brackets, o le costaba un aviso a Sergio Urcullo si contaba
+// que le dolia una muela. Ver paciente-de-la-pauta.test.mjs.
+//
+// DOS REGLAS, y el orden entre ellas es lo que importa:
+//   1. Lo que dice un PACIENTE es primera persona pidiendo atencion: busco/necesito un dentista,
+//      quiero sacar un turno, me duele, cuanto cuesta una limpieza, hacen blanqueamiento.
+//   2. Lo que dice un DUEÑO le gana SIEMPRE, aunque traiga palabras de paciente: el dueño habla de
+//      turnos, citas y pacientes todo el dia porque es su negocio ("quiero que mis pacientes saquen
+//      turno solos", "necesito un sistema para agendar citas"). Confundirlo cierra la puerta al
+//      unico lead que la pauta existe para traer, asi que ante la duda NO es paciente — el que se
+//      escapa sigue en el embudo y lo filtra el mensaje siguiente o un humano.
+// Solo lo consulta el modo venta: en el recepcionista de una clinica cliente, el paciente ES el
+// cliente, y recepcionista.mjs corre antes de que el router de venta llegue a preguntar esto.
+const TRATAMIENTO_DENTAL =
+  "limpiezas?|profilaxis|ortodoncia|brackets|frenillos|extraccion(?:es)?|curacion(?:es)?|calzas?|endodoncias?|tratamiento de conducto|implantes?|blanqueamientos?|carillas?|coronas?|protesis";
+const VERBOS_QUIERE = "busco|buscaba|necesito|necesitaba|quiero|queria|quisiera";
+const QUIERE = `(?:${VERBOS_QUIERE})`;
+const ARTICULO = "(?:(?:un|una|el|la|los|las|mi|mis|al|a la)\\s+)?";
+const RE_PACIENTE = new RegExp(
+  [
+    // "Busco atencion dental" es la respuesta para tocar del anuncio (§5.2), literal.
+    `^\\s*busco atencion\\s*[.!?]*$`,
+    `\\b${QUIERE}\\s+(?:(?:una|un)\\s+)?(?:atencion|atenderme|consulta)\\s+(?:dental|odontologica|medica|con (?:el|la|un|una) (?:dentista|odontolog\\w+|doctor\\w*))\\b`,
+    `\\b${QUIERE}\\s+${ARTICULO}(?:dentista|odontologo|odontologa|doctora?)\\b`,
+    // Pedir un turno/cita/ficha para uno mismo. "consulta" NO va: "quiero agendar la consulta" es la
+    // consulta comercial de Onia (una campaña publicada la usa con esas palabras).
+    `\\b(?:${VERBOS_QUIERE}|puedo|podria|como)\\s+(?:(?:sacar|saco|pedir|pido|agendar|agendo|reservar|reservo|tener|conseguir|consigo)(?:me)?\\s+)?(?:(?:un|una)\\s+)?(?:turnos?|citas?|fichas?)\\b`,
+    `\\b(?:tienen|tenes|tiene|hay)\\s+(?:turnos?|citas?|fichas?)\\s+(?:disponibles?|libres?|para|hoy|manana|esta|este)\\b`,
+    `\\bsoy (?:su |tu )?paciente\\b`,
+    // Dolor en primera persona. `dolor` suelto NO: en este embudo es el dolor DE NEGOCIO.
+    `\\bme duele\\w*\\b|\\bdolor de (?:muelas?|dientes?|encias?|mandibula)\\b|\\bmuela del juicio\\b`,
+    `\\bse me (?:rompio|partio|cayo|salio|despego) (?:un|una|el|la|mi) (?:diente|muela|calza|corona|brackets?|carilla)\\b`,
+    // Precio o disponibilidad de un TRATAMIENTO: lo pregunta el que se lo quiere hacer.
+    `\\b(?:cuanto|que precio|precios?|costos?|valor)\\b[^.?!]{0,30}\\b(?:${TRATAMIENTO_DENTAL})\\b`,
+    `\\b(?:hacen|haces|realizan|atienden|ofrecen|tienen)\\s+${ARTICULO}(?:${TRATAMIENTO_DENTAL})\\b`,
+    `\\b${QUIERE}\\s+(?:hacerme\\s+|ponerme\\s+|sacarme\\s+)?${ARTICULO}(?:${TRATAMIENTO_DENTAL})\\b`,
+    `\\b(?:hacerme|ponerme|sacarme|arreglarme)\\s+${ARTICULO}(?:${TRATAMIENTO_DENTAL}|muelas?|dientes?)\\b`,
+  ].join("|"),
+);
+// Lo que solo dice el que tiene (o trabaja en) el negocio, o el que pregunta por el SISTEMA.
+const RE_HABLA_EL_DUENO = new RegExp(
+  [
+    "\\b(?:sistema|software|plataforma|programa|aplicacion|app|demo|onia|online|en linea|automatic\\w*)\\b",
+    "\\b(?:mis|nuestros|los|sus) pacientes\\b",
+    // "la clinica" NO: es tambien como un paciente nombra la clinica a la que va.
+    "\\b(?:mi|nuestra) clinica\\b|\\b(?:mi|nuestro) consultorio\\b|\\bmi negocio\\b|\\bmis clientes\\b",
+    "\\b(?:tengo|tenemos|manejo|administro) (?:un|una) (?:clinica|consultorio)\\b",
+    "\\btrabajo en\\b|\\brecepcion\\w*\\b",
+    "\\b(?:doctores|odontologos|odontologas|dentistas|profesionales)\\b",
+  ].join("|"),
+);
+
+/**
+ * El que escribe es un PACIENTE que busca atencion (turno, precio de un tratamiento, un dolor), no
+ * una clinica. Lo que dice un dueño le gana siempre: ante la duda, `false`.
+ */
+export function isPatientSeekingCare(norm) {
+  if (RE_HABLA_EL_DUENO.test(norm)) return false;
+  return RE_PACIENTE.test(norm);
 }
 
 // ---------------------------------------------------------------------------
@@ -363,7 +439,7 @@ export function isClinicalOrLegal(norm) {
   // cuesta nada. Los procedimientos si pasan por el guardia ("hago endodoncia" es un prospecto).
   if (RE_SINTOMA.test(norm)) return true;
   if (!RE_CLINICO.test(norm)) return false;
-  return !practicaPropia;
+  return !(practicaPropia || RE_HABLA_DE_SUS_PACIENTES.test(norm));
 }
 
 /**
@@ -690,7 +766,11 @@ const RE_SILLONES_PALABRA = new RegExp(`\\b(${NUM_PALABRAS})\\s+${RELLENO}\\s*(?
 
 // La lista es de OFICIOS ademas de "personas": un constructor contesta "somos 25 obreros" y una
 // peluqueria "somos 3 estilistas". Quedarse en "personas" pierde la respuesta a la pregunta 2.
-const PERSONA = "personas?|emplead\\w+|trabajador\\w+|colaborador\\w+|gente|chic[ao]s|dependient\\w+|vendedor\\w+|mozos?|meser[oa]s|asistentes?|secretari\\w+|obrer[oa]s|operari\\w+|tecnic[oa]s|cociner[oa]s|estilistas?|enfermer[oa]s|choferes?";
+// Y los PROFESIONALES de una clinica (2026-09-30): "¿cuántos profesionales atienden?" es la primera
+// pregunta del cliente ideal (ONIA_CLIENTE_IDEAL.md §9) y una clinica la contesta con su oficio —
+// "hay 3 odontologos". Sin ellos, justo el rubro de la pauta caia al LLM. Se cuentan como el tamaño
+// porque es el numero con el que se elige el plan. Ver profesionales-de-la-clinica.test.mjs.
+const PERSONA = "personas?|emplead\\w+|trabajador\\w+|colaborador\\w+|gente|chic[ao]s|dependient\\w+|vendedor\\w+|mozos?|meser[oa]s|asistentes?|secretari\\w+|obrer[oa]s|operari\\w+|tecnic[oa]s|cociner[oa]s|estilistas?|enfermer[oa]s|choferes?|doctor(?:es|as?)?|odontolog[oa]s?|dentistas?|profesionales?|medic[oa]s";
 const RE_EQUIPO_NUM = new RegExp(`\\b(\\d{1,3})\\s*(?:${PERSONA})\\b`);
 // De "dos" para arriba a proposito: "hablo con UNA PERSONA?" es un pedido de handoff, no la
 // declaracion de que trabaja una sola persona. El equipo de 1 se dice "solo yo" o "somos 1".
@@ -838,7 +918,16 @@ const RE_DOLOR_PACIENTES = /\bpacientes\b|\bclientes\b|\bno vuelven\b|\brecall\b
 
 // Acuse de recibo o despedida. "ya" es el "dale" boliviano por excelencia y "nos vemos el
 // jueves" es despedirse: molestar a Sergio por eso es un handoff que no aporta nada.
-const RE_CORTESIA = /^\s*(?:gracias|muchas gracias|mil gracias|ok|oka?y|okey|dale|listo|perfecto|buenisimo|barbaro|excelente|genial|de una|joya|ya|ya esta|ya va|de acuerdo|bien|👍|🙏|👌|✅)[\s!.,]*$/;
+//
+// El mensaje ENTERO tiene que ser cortesia, pero puede ser mas de una palabra: "ok gracias" y "ah
+// ok, gracias!" son la forma mas comun de cerrar en WhatsApp, y con una sola palabra permitida
+// caian en el handoff. Medido el 2026-09-30: al paciente que recibia la salida cortes y contestaba
+// "ok gracias", el bot le mandaba M5 ("eso lo tiene que ver Sergio") y un aviso a Sergio Urcullo.
+// ⚠️ Cada palabra tiene que matchear de UNA sola forma: el mensaje entra de afuera y la repeticion
+// `(?:sep palabra)*` con una palabra ambigua ("ah" por `ah+` Y por `a+h`) es backtracking
+// exponencial — "ah ah ah … x" colgaba el proceso. Por eso `a+h+` y no dos alternativas.
+const CORTESIA = "gracias|muchas gracias|mil gracias|ok|oka?y|okey|okis|dale|listo|perfecto|buenisimo|barbaro|excelente|genial|de una|joya|ya|ya esta|ya va|de acuerdo|bien|a+h+|o+h+|👍|🙏|👌|✅";
+const RE_CORTESIA = new RegExp(`^\\s*(?:${CORTESIA})(?:[\\s!.,]+(?:${CORTESIA}))*[\\s!.,]*$`);
 const RE_DESPEDIDA = /\bnos vemos\b|\bnos hablamos\b|\bahi nos vemos\b|\bahi estare\b|\bahi estoy\b|\bhasta (?:luego|pronto|el (?:lunes|martes|miercoles|jueves|viernes|sabado|domingo))\b|\bchau\b|\bnos vemos el\b/;
 
 /** "gracias" / "dale" / "nos vemos el jueves": no es una consulta, no hace falta molestar a un humano. */
@@ -856,4 +945,17 @@ export function detectPainPoint(norm) {
   if (RE_DOLOR_PACIENTES.test(norm)) return "clientes";
   if (RE_DOLOR_AGENDA.test(norm)) return "agenda";
   return null;
+}
+
+// El dolor que vende la pauta D4 ("Sabé quién no volvió"), dicho ANTES de que se lo pregunten.
+// `detectPainPoint` es ancho a proposito porque corre despues de que M2 pregunto el dolor; antes de
+// reservar nadie lo pregunto, y ahi "¿que horarios tienen?" o "tengo muchos clientes" no son un
+// dolor. Esto es lo estrecho: gente que NO VUELVE o tratamientos que quedan sin terminar. "a medias"
+// suelto no: "si, quedo a medias" es el prospecto hablando de la conversacion (M3 usa esas palabras).
+const RE_ABANDONO =
+  /\bno (?:vuelven|volvieron|regresan|regresaron|vuelven mas|vinieron mas)\b|\b(?:dejan|dejaron|abandonan|abandonaron|cortan|cortaron)\b[^.?!]{0,25}\btratamientos?\b|\b(?:tratamiento|endodoncia|ortodoncia|implante)s?\b[^.?!]{0,15}\b(?:a medias|sin terminar|incomplet\w+|abandonad\w+)\b|\b(?:empiezan|arrancan|comienzan)\b[^.?!]{0,30}\b(?:desaparecen|no vuelven|abandonan)\b/;
+
+/** El prospecto contó, sin que se lo pregunten, que sus pacientes/clientes no vuelven. */
+export function mentionsAbandonedTreatment(norm) {
+  return RE_ABANDONO.test(norm);
 }

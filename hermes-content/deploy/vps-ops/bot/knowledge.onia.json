@@ -1,7 +1,7 @@
 {
   "schema": "onia.bot.knowledge/1",
-  "version": "2026-09-25.1",
-  "updatedBy": "carril-chatbot-cola",
+  "version": "2026-09-30.1",
+  "updatedBy": "carril-chatbot",
   "campanas": [
     {
       "frase": "Hola, quiero conocer Onia",
@@ -40,6 +40,11 @@
       "frase": "Hola, vengo del configurador de webs de ONIA",
       "prefijo": true,
       "respuesta": "¡Hola! Soy el asistente automático de Onia. Me llegó tu pedido de web con todo lo que armaste: el nivel, la estructura y el diseño que elegiste. Eso lo revisa Sergio y te confirma el alcance con vos. De tu lado hacen falta los textos, las fotos y el dominio, que queda a tu nombre y se paga aparte; el cuidado mensual es opcional. ¿Te escribe por acá o preferís que te llame?"
+    },
+    {
+      "frase": "Hola, vi el anuncio de Onia",
+      "prefijo": true,
+      "respuesta": "Gracias por escribir desde el anuncio. Para que Sergio llegue a la demo con el caso de tu clínica, contame dos cosas: ¿cuántos profesionales atienden y quién agenda las citas? Y si en realidad buscás atención dental como paciente, por acá no damos turnos: escribile directo a tu clínica."
     }
   ],
   "identity": {

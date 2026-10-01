@@ -1,5 +1,7 @@
 # Prospectos dentales — Santa Cruz de la Sierra
 
+> Los prospectos de los otros rubros (estética, importadora, comercio y servicios) están en `ONIA_PROSPECTOS_OTROS_RUBROS_SCZ.md`.
+
 **Objetivo:** ruta al primer cliente pagando del pack dental de Onia Platform.
 **Actualizado 2026-09-30:** §5 (clínicas que pagan pauta), §6 (primeras 10 para contacto 1:1) y §7 (registro de objeciones de las demos).
 **Investigado:** 2026-08-16, vía búsqueda web + verificación de cada fuente (ver sección final).

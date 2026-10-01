@@ -77,6 +77,10 @@ hermes-content/docs/recorrido/**/*.png
 # repo el dia que se escribio esto (`git ls-files | grep -E '(^|/)\.[^/]+\.md$'`).
 .*.md
 
+# Worktrees de subagentes de Claude Code: son checkouts aparte, nunca contenido del repo.
+# (30-sep-2026: el autosync del Stop commiteó uno como gitlink en una rama de trabajo.)
+.claude/worktrees/
+
 # Galeria unica de imagenes (29-sep): solo finales. Temporales de descarga y copias por carrusel, fuera.
 hermes-content/galeria/**/*.tmp
 hermes-content/carousels/out/*/assets/

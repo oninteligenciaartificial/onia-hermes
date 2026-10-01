@@ -151,6 +151,13 @@ autosync de esta rama). **Ninguna campaña creada, cero gasto.**
    - Nada se re-verificó en vivo, porque el proxy bloqueó las webs, Facebook e Instagram. Por eso cada ficha trae
      su lista «Antes de enviar».
    - *Siguiente:* con las respuestas, llenar §7 y cargar las demos en el tablero de Control.
+   - **Ampliado el 30-sep, de noche** (Sergio Urcullo: *«no solo somos clínica»*):
+     - `ONIA_PROSPECTOS_OTROS_RUBROS_SCZ.md` suma 8 de estética y 5 importadoras, con mensaje.
+     - Comercio y servicios: 5 candidatos cada uno, sin mensaje hasta que la 1.0 arregle lo que falla en una
+       demo.
+     - Los 21 están en la misma página, separados por rubro.
+     - Estética e importadora salen de la Biblioteca de Anuncios, que busca por texto: ciudad y tamaño quedan
+       sin verificar.
 4. Destrabar los 8 bloqueos de `ONIA_ADQUISICION_Y_PAUTA.md` §6 → *listo = `ads_get_ad_accounts` ve ONIA Ads con
    método de pago y página promocionable*.
 5. Creativos (**los hace esta sesión**): llegan las cuatro capturas de la 1.0 → se renderizan D1 y D4 con `scripts/carousel_cloud_setup.sh` → se le muestran a Sergio Urcullo →
