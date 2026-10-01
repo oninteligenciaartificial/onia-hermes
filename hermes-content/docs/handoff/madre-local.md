@@ -1,13 +1,36 @@
-# Handoff — onia-1.0-local (sesión en la PC de Sergio Urcullo)
+# Handoff — madre-local (sesión MADRE, en la PC de Sergio Urcullo)
 
-Abierta el 1-oct por pedido de Sergio Urcullo para terminar lo que la nube no puede. La sesión de la nube
-(`session_01VGmpNv4eSMnpA3wXrypR4L`, carril `onia-1.0-nube.md`) queda **EN PAUSA**: no toca VPS, ramas ni
-infra mientras esta trabaja. Regla: CLAUDE.md §1 «Nube o PC: UNA sesión activa a la vez».
+Regla: CLAUDE.md §1 «Sesión MADRE local + carriles en la nube». La madre ordena a todas **por mensaje** y hace
+lo que exige la PC. El desarrollo sigue en la nube.
+
+## 0. Primero (en este orden)
+
+1. **Medir los canales**, sin suponer. Anotar el resultado en la fila 3 de
+   `hermes-content/docs/ONIA_CAPACIDADES_DE_LAS_SESIONES.md`.
+   - **Madre → nube:** ¿tenés `create_trigger` (MCP de Claude Code Remote)? Mandá un ping a Plataforma
+     (`session_01VGmpNv4eSMnpA3wXrypR4L`) pidiendo «PONG».
+   - **Nube → madre:** pasale tu id de sesión a Plataforma en ese ping. Plataforma te devuelve un mensaje.
+2. **Crear la skill `onia-sesion-madre`** en `.claude/skills/onia-sesion-madre/SKILL.md`. Va con:
+   - los ids vivos;
+   - cómo se manda un mensaje (local→local `SendMessage`; con la nube, rutina de un disparo);
+   - el formato del mensaje: de quién, qué pide, para cuándo, cómo contestar;
+   - la regla de qué se avisa (solo lo que le sirve a la otra sesión).
+   Sumarla al índice de `onia-router`.
+3. **Avisarle a cada sesión de la nube su tarea**, por mensaje. Sesiones vivas el 1-oct 19:00 UTC:
+
+   | Sesión | id | Su carril |
+   |---|---|---|
+   | Control (orquestador viejo) | `session_0154pQRYB6icZn9Z3SuJp35D` | Que te pase lo que tenía en vuelo (hermes-jarvis, tablero) y deje de orquestar. Archivarla lo decide Sergio Urcullo |
+   | Plataforma | `session_01VGmpNv4eSMnpA3wXrypR4L` | Desarrollo de Onia Platform, publicar y el runner del SIAT |
+   | Ventas y pauta | `session_01BnctfaNRsm3ogJ46A7B5P5` | Pauta y prospección. Espera que se reconecte el conector de Meta Ads (tarea B) |
+   | Marca personal | `session_012ppFowADbJNtZ6WBMtqpuf` | Contenido. Tiene el PR #76 abierto |
+   | Lucía v4 | `session_01RRD6v9rmBavDoXx1rG2mEn` | Espera el OK de Sergio Urcullo a Kling 3.0 y a un tope de ~150 créditos por mes |
 
 ## 1. Objetivo
 
-Destrabar lo que necesita la PC y el login de Sergio Urcullo para cobrar al primer cliente.
-**Hecho =** las tareas A-D de §7 tienen resultado anotado en §2 de este archivo, commiteado y pusheado.
+Ordenar a todas las sesiones por mensaje y destrabar lo que necesita la PC para cobrar al primer cliente.
+**Hecho =** los canales están medidos, la skill está creada, cada sesión recibió su tarea, y las tareas A-D de
+§7 tienen resultado mandado a Plataforma por mensaje.
 
 ## 2. Qué quedó EN PRODUCCIÓN (lo llena esta sesión al terminar)
 
@@ -70,5 +93,5 @@ Guardarlas en `hermes-content/integrations/siat/` o dejar dicho dónde están.
 **D. Web 1.0.** Abrir la rama `wip/web-v1-correcciones-20261001` renderizada y mostrársela a Sergio Urcullo.
 Con su OK explícito, se publica.
 
-**Al terminar:** llenar §2 con lo hecho, commitear y pushear este archivo. Después avisar a Sergio Urcullo que
-la nube puede retomar.
+**Cada resultado** se le manda a Plataforma por mensaje en el momento. Este archivo se actualiza solo al
+cerrar la madre, para que otra madre pueda retomar.
