@@ -39,6 +39,11 @@ const inputs = ["-i", RAW];
 const filtro = [
   `[0:v]scale=iw*2:ih*2:flags=lanczos,` +
     `zoompan=z='${zoomExpr(wins)}':d=1:x='(iw-iw/zoom)*${ax}':y='(ih-ih/zoom)*${ay}':s=${W}x${H}:fps=${FPS},` +
+    // El clip Kling viene SIN etiquetar (HD → bt709 por convención, así lo muestra el navegador/IG).
+    // Sin esta etiqueta, el scale final asume bt601 en la entrada y convierte 601→709 TODO el cuadro:
+    // medido el 1-oct, el verde #10C26B salía (30,219,110) y la piel corrida. Con la etiqueta, el scale
+    // final es identidad y el verde sale (16,194,107).
+    `setparams=colorspace=bt709:color_primaries=bt709:color_trc=bt709:range=tv,` +
     `format=yuv444p[base0]`,
 ];
 let base = "base0";
