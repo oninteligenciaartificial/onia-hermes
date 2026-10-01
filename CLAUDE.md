@@ -83,6 +83,17 @@ Instrucciones de proyecto. Override sobre defaults.
   **fuerte** como detector de algo peor: si fallo teniéndola delante, no es que la olvidé, es que
   dejé de leer mis propias instrucciones. Ese fallo sí vale como alarma.
 
+## Simple: sin información basura, menos pasos, menos páginas (REGLA)
+
+> Sergio Urcullo, 2026-10-01, después de un reporte largo con diagnóstico, hipótesis y fuentes:
+> *«fuera información basura, y que se vea todo simple y mientras menos pasos o páginas mejor»*.
+
+- **A Sergio Urcullo:** solo lo que cambia una decisión o le pide algo. Qué pasó (1 línea) · qué
+  necesito de él (pasos numerados, los mínimos) · qué sigue. El diagnóstico, las hipótesis
+  descartadas y las fuentes van al handoff, no al mensaje.
+- **En el producto y la web:** cada paso o página extra se justifica o se saca. Ante dos
+  soluciones, gana la de menos clics para el cliente.
+
 ## «Cambio de sesión» → handoff completo (REGLA)
 
 > Sergio, 2026-09-04: *"cada que yo te diga cambio de sesion generes handoff para nueva sesion
