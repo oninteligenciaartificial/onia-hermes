@@ -89,7 +89,8 @@ solo las suyas (§2).
 3. **Titular del QR:** muestra un nombre de persona, distinto de «OniaAgency». Puede frenar el pago.
 4. **Chip prepago** para la prueba real del WhatsApp del cliente. Con eso pasan a ✅ el agente
    conversacional y el recordatorio por WhatsApp.
-5. **Cerrar la API de alta:** `POST /api/auth/register` acepta 8 rubros, mientras la pantalla ofrece 5.
+5. ~~**Cerrar la API de alta.**~~ ✅ Hecho (PR #96, en producción desde `release-8ff1284d`). Medido en vivo el
+   1-oct: `verticalTrackId` `vetgest-clinical` y `onia-interna` → 400; acepta solo los 5 que ofrece la pantalla.
 
 ## 7. Lo que NO se puede prometer (no se nombra en la venta)
 
