@@ -1,15 +1,26 @@
-# Handoff — carril `hermes-jarvis` (sesión de control: Hermes y el cerebro de Sergio Urcullo)
+# Handoff — carril `hermes-jarvis` (Hermes, el Telegram y el calendario de Sergio Urcullo)
 
-Rama `claude/hermes-jarvis`. Sesión en la nube «Hermes y Sergio management system», abierta el
-2026-09-29 desde el teléfono. Sin llave del VPS: todo lo que toca el servidor pasa por el
-workflow manual `hermes-jarvis.yml`, que Sergio Urcullo dispara con un toque.
+> **ESTADO AL 1-oct ~21:30 UTC — leé esto primero.** Sesión `session_0154pQRYB6icZn9Z3SuJp35D`
+> (entorno «Onia»), rama `claude/kind-cannon-7hkc3c`, **PR #79** (borrador, sin conflictos con main).
+> Desde el 1-oct manda la **sesión madre** (local, PC de Sergio Urcullo): ella ordena por mensaje y las
+> sesiones de la nube contestan en su transcript (CLAUDE.md §«Sesión MADRE»). **El método del carril
+> está en la skill `onia-hermes-jarvis`; esto es el estado.**
+> - **`aplicar` NUNCA corrió** (medido por la madre el 1-oct ~20:23 UTC: 0 marcas `#jarvis`, sin
+>   interruptor, sin respaldos). Hermes todavía no es su asistente diario.
+> - **El PR #79** trae los pedidos a Claude desde Telegram y las 4 correcciones que pidió la madre
+>   (aplicar todo-o-nada, calendario, reinicio del gateway, diagnóstico de solo lectura), con pruebas.
+> - **Sigue:** §7, bloque del 1-oct.
 
-> **30-sep 19:23 UTC — la sucesora ya existe:** «Control de Hermes y Sergio»
-> (`session_01U881mfXgTAUafw6GC9jExG`, entorno «Onia», rama `claude/gifted-hypatia-787jcs`).
-> ⚠️ **Tampoco desde «Onia» se llega al VPS por SSH** (§5.11): la premisa del §7.1 era falsa. El
-> toque en el workflow sigue siendo el único camino desde la nube (§5.12).
+Historia: rama original `claude/hermes-jarvis` («Hermes y Sergio management system», 29-sep, desde el
+teléfono); sucesoras `session_01U881mfXgTAUafw6GC9jExG` (30-sep, archivada) y la de arriba.
 
 ## 1. Objetivo
+
+> **1-oct:** se suma *«que ya podamos manejar todo desde ahí»* (Sergio Urcullo): pedirle a Hermes por
+> Telegram cosas que necesitan trabajo real, que Hermes le pasa a Claude en la nube con su sí
+> (`hermes-content/docs/TELEGRAM_COMMAND_CENTER.md`). **Hecho** de esa parte = una prueba de punta a
+> punta desde su Telegram con la respuesta ✅ de vuelta (§8 de ese doc). Los cuatro «hecho» de abajo
+> siguen sin cumplirse: dependen del primer `aplicar`.
 
 Hermes como jefe de gabinete de Sergio Urcullo por Telegram: **06:30** un resumen, **21:30** un
 cierre, y en el medio **solo cuatro interrupciones** (prospecto sin respuesta · reunión en 30 min
@@ -24,6 +35,13 @@ mover / cancelar probado en su calendario real. **Al 30-sep 02:45 UTC: ninguno c
 propia corrida con un evento de prueba; con Hermes en Telegram, cuando él lo use).
 
 ## 2. Qué quedó EN PRODUCCIÓN
+
+> **Medido por la sesión madre, 1-oct ~20:23 UTC (solo lectura, 24 h):** gateway de Hermes vivo
+> (`hermes-gateway.service` desde el 18-sep, 0 reinicios, v0.21.0, `gpt-5-mini` por LiteLLM `:4000`);
+> su lista de skills (`.skills_prompt_snapshot.json`) es del 08-sep y no nombra `agenda-calendario`.
+> Último mensaje de Sergio Urcullo a Hermes: 10-sep. `aplicar` nunca corrió. `/root/bin` al día con
+> main `1c7763a6`. n8n: 96 flujos, 38 activos; los 12 que apaga `aplicar` siguen ACTIVOS. ~18
+> mensajes en 24 h a su chat (13 de n8n). **Nada del PR #79 está en producción.**
 
 - **El diagnóstico corrió** (run `36632797507`, 29-sep 21:22 UTC, solo lectura). Salida completa
   en el log del job. De ahí salen todos los ids de abajo.
@@ -41,6 +59,26 @@ propia corrida con un evento de prueba; con Hermes en Telegram, cuando él lo us
   solo el log). Es lo que él pidió («puros errores»), pero entra antes del toque.
 
 ## 3. Qué quedó a medias, y dónde
+
+> **1-oct — PR #79 (`claude/kind-cannon-7hkc3c`, commit `d04ec6fa` + este handoff), en borrador.** Todo
+> commiteado y pusheado: si muere la sesión, no se pierde nada. Trae:
+> - **Pedidos a Claude:** `scripts/loops/pedido-claude.sh` (→ `/root/bin/onia-pedido-claude.sh`),
+>   `.github/workflows/hermes-respuesta.yml` + `hermes-content/deploy/hermes-jarvis/responder.sh`, la
+>   skill `pedir-a-claude`, su regla en el SOUL (ANTES de la del calendario), la sección del cierre
+>   de las 21:30 y `aplicar` 5d, **inerte sin la llave de la rutina**.
+> - **Las 4 correcciones de la madre:** `aplicar` todo o nada (la fase A prueba los requisitos y aborta
+>   sin tocar nada; si falla el crontab, también aborta) · id del evento de prueba si queda a medias ·
+>   6b, reinicio controlado del gateway (systemd) y también en el rollback · `diagnostico` de solo
+>   lectura de verdad.
+> - **Skill `onia-hermes-jarvis`** (el método del carril), en `onia-router` y en el README de skills.
+> - Pruebas: `test:pedidos` 22, `test:jarvis-aplicar` 7 (el `aplicar.sh` real contra un VPS simulado),
+>   `test:jarvis-resumen` 24, y los gates `aduana`, `agenda`, `herramientas-*`, `docs-hygiene`,
+>   `guards-cableados` en verde.
+> - **Falta:** que la madre o Sergio Urcullo lo mergeen; crear la rutina y su llave (lo hace él, §6);
+>   y las dos corridas de `aplicar` (§7).
+> - **No empezado** (decisión de Sergio Urcullo del 30-sep, §6): embudo diario con altas y pagos
+>   (solo lectura de producción) y aviso de alta nueva. Filtro de «no es cliente» a copiar:
+>   `onia-platform/lib/platform/cuentas-que-no-son-clientes.ts`.
 
 - **`aplicar.sh` / `revertir.sh` escritos y probados en un VPS simulado** (aplicar dos veces = una;
   revertir devuelve el crontab EXACTO, reanuda solo lo pausado, reactiva los 12 de n8n, apaga el
@@ -97,6 +135,14 @@ propia corrida con un evento de prueba; con Hermes en Telegram, cuando él lo us
     reemplazado por la skill nueva. Borrarlo o arreglarlo no vale el tiempo hoy.
 
 ## 4. Archivos
+
+**1-oct (PR #79):** `scripts/loops/pedido-claude.sh` + `.test.mjs` · `scripts/loops/pedido-respuesta.test.mjs`
+· `scripts/loops/hermes-jarvis-aplicar.test.mjs` · `.github/workflows/hermes-respuesta.yml` ·
+`hermes-content/deploy/hermes-jarvis/responder.sh` · `hermes-content/skills/pedir-a-claude.md` ·
+`hermes-content/docs/TELEGRAM_COMMAND_CENTER.md` (reescrito; el viejo en `historial/…_20260929.md`) ·
+`.claude/skills/onia-hermes-jarvis/SKILL.md`. Tocados: `aplicar.sh`, `diagnostico.sh`, `README.md` de
+hermes-jarvis, `hermes-jarvis.yml`, `SOUL.md`, `jarvis-resumen.sh` + test, `sincronizar.sh`, `package.json`.
+
 
 `hermes-content/docs/ONIA_CEREBRO.md` (la regla) · `COORDINATION_MANIFEST.md` §«EL HILO» ·
 `.github/workflows/hermes-jarvis.yml` · `hermes-content/deploy/hermes-jarvis/{comun,diagnostico,
@@ -161,7 +207,29 @@ aplicar,revertir}.sh` · `scripts/loops/onia-tg.sh` + `onia-tg-aduana.test.mjs` 
     (§7, «Decisiones del 30-sep 20:28») quedaron **sin empezar**: cero archivos escritos, nada en
     vuelo. Los construye la sesión cuando Sergio Urcullo decida cómo seguir.
 
+15. **Investigar cómo aflojar el control de permisos** (un agente de documentación sobre las reglas
+    del modo automático, 1-oct): FRENADO como «Auto-Mode Bypass». No se insiste: la configuración de
+    permisos la decide Sergio Urcullo.
+16. **`git stash -u` con un `git mv` adentro** (1-oct, para correr una prueba en la base): el pop no
+    pudo restaurar el archivo nuevo en la ruta que había liberado el `mv` y dejó el stash guardado.
+    Se verificó archivo por archivo contra `stash@{0}^3`: no se perdió nada. Lección en la skill.
+17. **`diagnostico.sh` no era de solo lectura** (lo midió la madre el 1-oct): `hermes cron list` escribe
+    logs, `n8n export:workflow` inicializa la base y corre migraciones, y `onia-tablero.sh list` pasa
+    por el mismo CLI. Corregido en el PR #79.
+18. **`npm test` completo:** se corta en `test:bot` con 10 rojos, **iguales en la base** sin cambios
+    (1553 ✅ / 10 ❌). Dependen de qué versión de `onia-platform` haya clonada. No es de este carril.
+
 ## 6. Qué depende de Sergio Urcullo
+
+> **1-oct, lo que le toca a él, en orden:**
+> 1. El OK para correr `aplicar` (hoy la madre, por SSH, con la autorización de él en ESA sesión).
+> 2. Que se mergee el PR #79 (él o la madre).
+> 3. Crear la rutina y su llave en la web, y guardarla en GitHub: paso a paso en
+>    `TELEGRAM_COMMAND_CENTER.md` §4. **Nunca por chat.**
+> 4. La prueba desde su Telegram: «pedile a Claude: ¿cuántos cambios entraron hoy al sistema?» → «sí».
+>
+> Decisiones que tomó el 30-sep y ya están en el diseño: no al aviso de reunión en 30 min; sí a leer
+> altas y pagos en solo lectura y con lo mínimo; Hermes ejecuta a través de Claude en la nube.
 
 > **Decisiones de Sergio Urcullo, 30-sep 20:28 UTC** (pidió «terminemos de configurar a Hermes para
 > que sea mi asistente diario»):
@@ -204,6 +272,22 @@ aplicar,revertir}.sh` · `scripts/loops/onia-tg.sh` + `onia-tg-aduana.test.mjs` 
   1-oct (`t_7db602a2`), renovación del VPS (`t_9c87fb69`), 7 prospectos esperando (`t_3dd7530c`).
 
 ## 7. Próximos pasos
+
+> **1-oct ~21:30 UTC — el plan vigente (la madre ordena):**
+> 1. **La madre corre `aplicar`** por SSH, con el mismo armado del workflow y el OK de Sergio Urcullo,
+>    avisándole antes a Plataforma. Con main de hoy o, mejor, **con el PR #79 ya mergeado**: ahí
+>    `aplicar` es todo o nada y reinicia el gateway. La salida redactada la verifica control, sección
+>    por sección: 0, 1, 1b, 5, 5b, Fase A, 2, 3, 4, 5c, 5d, 6, 6b, 7 y 8.
+> 2. Si quedó el evento «🧪 Prueba de Jarvis» en su calendario (el log da el id), se borra con el
+>    conector de Google Calendar.
+> 3. Rutina + llave (§6.3) → segunda corrida de `aplicar` **por el workflow**, que lleva el secreto →
+>    sección 5d «configurado» → prueba de punta a punta (§6.4).
+> 4. Después: el embudo de altas y pagos (§3, no empezado) y medir 24 h con `diagnostico` (hecho 1).
+> 5. **Relevo:** la sesión nueva de este carril arranca con la skill `onia-hermes-jarvis` y este
+>    handoff. Secretos que necesita en su entorno: `GH_ACTIONS_TOKEN` (despachar y leer Actions) y,
+>    para SSH al VPS, `ONIA_VPS_SSH_KEY_B64`: el hook `nube-ssh-vps.mjs` arma `ssh onia-vps` por
+>    `ssh.onia.com.bo` (Cloudflare) y solo necesita esa. Usarlo exige la autorización directa de
+>    Sergio Urcullo en esa sesión. La llave de la rutina NO va en el entorno: va en GitHub y en el VPS.
 
 > **30-sep 20:32 UTC — estado de `session_0154pQRYB6icZn9Z3SuJp35D`** (rama `claude/kind-cannon-7hkc3c`).
 > Paso 1 ✔ (el token está y lee Actions: 200). Paso 2 ✔ distinto de lo previsto: la principal no
