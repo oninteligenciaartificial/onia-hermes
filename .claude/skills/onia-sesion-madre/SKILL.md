@@ -58,9 +58,17 @@ que puede hacer, lo hace o lo larga en subagente; lo que es de Sergio Urcullo, l
 
 ## Abrir una sesión nueva en la nube
 
-Entornos conocidos: «Onia» `env_01BLwXdgpqDS3sx4rg3r2uvg` (tiene la llave/túnel del VPS) ·
-«onia-higgsfield» `env_01V5EeE4VtMdw7PWVaMYywsk` (acceso de red completo y `ELEVENLABS_API_KEY` desde el
-1-oct).
+Entornos (decidido con Sergio Urcullo el 1-oct; el entorno se elige por lo que la sesión TOCA):
+
+| Entorno | Para qué | Carriles |
+|---|---|---|
+| «Onia» `env_01BLwXdgpqDS3sx4rg3r2uvg` | producto y servidor: tiene la llave/túnel del VPS | Plataforma, Control (Hermes) |
+| «onia-higgsfield» `env_01V5EeE4VtMdw7PWVaMYywsk` | videos y publicación de Sergio Urcullo y Lucía: red completa, `ELEVENLABS_API_KEY` | Marca personal, Lucía |
+| «Default» | ventas y pauta: red completa (Meta, IG, buscadores), sin VPS | Ventas y pauta |
+
+La llave del VPS solo vive en «Onia»: las sesiones que leen páginas de terceros todo el día no cargan root
+del servidor (riesgo de instrucciones escondidas). Publicar desde contenido = pedido a la madre o a Plataforma.
+Los conectores (Meta Ads, GitHub, Higgsfield) son de la cuenta, no del entorno.
 
 - ⚠️ **Una sesión abierta por rutina (`create_trigger` / `RemoteTrigger create`) arranca SIN conectores**
   (sin Higgsfield, sin GitHub) **y sin el repo** («No sources configured», `/home/user` vacío, GitHub 403
