@@ -162,7 +162,7 @@ sin revisión mensaje por mensaje:
   —dentro del tope mensual de tu plan— y también por WhatsApp si contrataste ese
   add-on. Vienen **activos** en las cuentas nuevas; los **pausás cuando quieras**
   desde **Configuración**, y el destinatario puede pedir que no le escribamos más.
-- **El asistente de WhatsApp** (add-on que se contrata aparte), que responde por
+- **El agente conversacional de WhatsApp** (add-on que se contrata aparte), que responde por
   su cuenta a quien escriba al número que conectaste, con la información que vos
   publicaste, y pasa el caso a una persona cuando no sabe. Qué le pasa a ese
   número mientras esté conectado: **§6.5**.
@@ -180,7 +180,7 @@ incompleta o desactualizada. Los resultados de IA son asistencia, no decisiones:
 verificalos antes de actuar, en especial montos, fechas, datos clínicos y
 cualquier contenido con efecto legal o tributario.
 
-6.5. **El número de WhatsApp que conectás.** El asistente del §6.2 atiende un
+6.5. **El número de WhatsApp que conectás.** El agente conversacional del §6.2 atiende un
 número de WhatsApp que elegís vos, y para funcionar **ese número se vincula a la
 plataforma de mensajería de Meta**. El vínculo cambia cómo funciona ese número, y
 el alcance del cambio depende de por qué camino se conecte:

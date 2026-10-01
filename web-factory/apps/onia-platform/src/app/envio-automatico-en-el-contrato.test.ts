@@ -67,11 +67,13 @@ const CANALES = [
     enElContrato: /recordatorios? de cita/i,
   },
   {
-    id: "asistente de WhatsApp",
+    id: "agente conversacional de WhatsApp",
     // El add-on se vende como un canal que contesta sin que nadie lo toque.
+    // El contrato lo nombra como la venta desde el 2026-10-01 (antes «asistente
+    // de WhatsApp»; ver `(sitio)/nombre-del-addon.test.ts`).
     seVendeEn: "content/chatbot-precios.ts",
     enLaVenta: /contesta al instante|contesta 24\/7/i,
-    enElContrato: /asistente de WhatsApp/i,
+    enElContrato: /agente conversacional de WhatsApp/i,
   },
 ] as const;
 
@@ -115,7 +117,7 @@ describe("el contrato declara los envíos automáticos que la venta ofrece", () 
     // universo y los casos de abajo pasan en verde sin haber mirado nada.
     expect(canalesOfrecidos().map((c) => c.id)).toEqual([
       "recordatorios de cita",
-      "asistente de WhatsApp",
+      "agente conversacional de WhatsApp",
     ]);
   });
 

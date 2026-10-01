@@ -124,7 +124,7 @@ y bajo sus propios compromisos de confidencialidad y seguridad:
 |---|---|---|
 | Proveedor del servidor donde Onia aloja la plataforma (hoy en Estados Unidos) | Prestar la infraestructura física donde corren la base y los agentes | El proveedor no administra ni consulta los datos: la base la opera Onia sobre ese servidor |
 | **Cloudflare** (Estados Unidos) | Red de entrega y protección por la que pasa el tráfico del sitio y de la app, y recepción del correo que llega a business@onia.com.bo | El tráfico pasa por Cloudflare camino al servidor de Onia; no almacena la base. El correo recibido se reenvía a la casilla de Onia en Google (Gmail) |
-| **OpenAI** (Estados Unidos), vía su API | Transcribir notas de voz, leer imágenes y redactar respuestas del asistente de WhatsApp (el de Onia, §13, y el que contratás como add-on), y generar borradores y sugerencias | Solo por API, modalidad que **no entrena** con los datos enviados; se envía el mínimo contexto necesario. Los pedidos salen desde el servidor de Onia |
+| **OpenAI** (Estados Unidos), vía su API | Transcribir notas de voz, leer imágenes y redactar respuestas del asistente de WhatsApp de Onia (§13) y del agente conversacional de WhatsApp que contratás como add-on, y generar borradores y sugerencias | Solo por API, modalidad que **no entrena** con los datos enviados; se envía el mínimo contexto necesario. Los pedidos salen desde el servidor de Onia |
 | WhatsApp (Meta) | Mensajería con tus clientes cuando activás ese canal | Los mensajes pasan por la infraestructura de Meta bajo sus propios términos |
 | **Meta** (píxel del sitio público) | Medir las visitas a onia.com.bo y los toques al alta o a WhatsApp, y dirigir los anuncios de Onia (§2.6) | Recibe solo lo que declara el §2.6, nunca datos de la plataforma. Meta lo trata bajo sus propios términos |
 | **Telegram** | Avisos internos a una persona de Onia: cuando alguien pide acceso o la carga inicial de sus datos en la plataforma, y cuando una conversación con el asistente de WhatsApp de Onia (§13) necesita a una persona | Llevan un resumen: en la plataforma, nombre, negocio y contacto; en el asistente, rubro, tamaño del equipo, ciudad y el último mensaje. Van a un chat privado de Onia |
@@ -142,7 +142,7 @@ cambio sea urgente por seguridad.
   pendientes. Fuera de los agentes, la plataforma sí envía sola lo que declara
   el §6.2 de los [Términos](/terminos): confirmaciones y recordatorios de cita
   (vienen activos y los pausás en Configuración) y, si lo contratás, el
-  asistente de WhatsApp.
+  agente conversacional de WhatsApp.
 - Los datos enviados a proveedores de IA (hoy, OpenAI: ver §5) se procesan bajo
   modalidades que no los usan para entrenar sus modelos.
 - Onia tampoco entrena modelos propios con datos de clientes.

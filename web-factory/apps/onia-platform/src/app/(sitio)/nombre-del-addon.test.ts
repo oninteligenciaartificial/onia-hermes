@@ -24,8 +24,11 @@ const SRC = join(fileURLToPath(import.meta.url), "..", "..", "..");
  * Fuera del barrido, cada una con su motivo:
  *  - `app/v1`, `components/landing-v1`, `app/servicios/{marketing-ia,consultoria}`:
  *    redirigidas con 308 a la portada (`archivo-redirigido.test.ts`); nadie las sirve.
- *  - `content/legal` y `app/privacidad`: describen el bot de VENTAS de la propia
- *    Onia (§13 de la política), no el add-on; cambiar un texto legal es otra decisión.
+ *  - `content/legal` y `app/privacidad`: el §13 de la política describe el bot de
+ *    VENTAS de la propia Onia («asistente automático (chatbot)»), que no es el
+ *    add-on. Donde el texto legal nombra el add-on ya dice «agente conversacional
+ *    de WhatsApp» (2026-10-01, todavía sin publicar), y lo vigila
+ *    `app/envio-automatico-en-el-contrato.test.ts`.
  */
 const FUERA = [
   "app/v1/",
