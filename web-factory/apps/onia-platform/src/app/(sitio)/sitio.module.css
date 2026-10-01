@@ -962,6 +962,15 @@
     order: 2;
   }
 }
+/* Dos columnas PARALELAS (dos listas con su título) arrancan a la misma
+   altura. El `center` del `.split` es para texto + imagen; con dos listas de
+   distinto largo centra la corta y su título baja la mitad de la diferencia.
+   En `/chatbot`, «Lo que necesitás vos» (3 renglones) quedaba 19,6px más abajo
+   que «Lo que no incluye» (2 ítems de dos renglones), medido a 1440 el
+   2026-10-01. En una columna (teléfono) no cambia nada. */
+.splitArriba {
+  align-items: start;
+}
 
 /* ══════════════════════════════════════════════════════════════════════ */
 /* HERO — "el resultado". La pieza que Sergio aprobó el 2026-09-01          */

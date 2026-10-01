@@ -161,7 +161,9 @@ export default function Chatbot() {
 
       {/* Necesitás vos / No incluye */}
       <Block surface="paperDim" labelledBy="requisitos">
-        <div className={s.split}>
+        {/* Dos listas paralelas: arrancan a la misma altura (`splitArriba`),
+            no centradas una contra la otra. */}
+        <div className={`${s.split} ${s.splitArriba}`}>
           <Reveal>
             <div>
               <h2 id="requisitos" className={s.h3}>
