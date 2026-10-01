@@ -20,7 +20,11 @@ Desarrollar y publicar Onia Platform 1.0 hasta cobrar al primer cliente. Qué sa
 
 ## 2. Qué quedó EN PRODUCCIÓN (verificado)
 
-- **Plataforma `release-8ff1284d`** (sin cambios en esta sesión hasta el merge de onia-platform#98; ver §3).
+- **Plataforma:** `release-8ff1284d` verificada al abrir la sesión. onia-platform#98 (recordatorio con botones) quedó
+  **MERGEADO** a `master` (`8f07e537`, 22:25 UTC) y `publicar.sh` quedó **lanzado** en el VPS
+  (`/tmp/pub-8f07e537.log`). **Su resultado NO lo verificó esta sesión**: el control de permisos bloqueó seguir el
+  log. Primero: `docker ps` → ¿corre `release-8f07e537`? y mirar `/login` con Chromium. Si falló, el script hace
+  rollback solo y el log dice por qué.
 - `POST /api/auth/register` rechaza los rubros que no se venden: medido en vivo hoy, `vetgest-clinical` y
   `onia-interna` → 400 (`Invalid enum value`). El catálogo §6.5 ya lo marca cerrado.
 - Producción: `ONIA_VERIFICACION_WHATSAPP=plantillas` (la verificación por WhatsApp del alta queda APAGADA por orden de
@@ -31,7 +35,7 @@ Desarrollar y publicar Onia Platform 1.0 hasta cobrar al primer cliente. Qué sa
 
 | Qué | Dónde | Estado |
 |---|---|---|
-| **Recordatorio con botones Confirmar / Cancelar / Reprogramar** | onia-platform#98 (rama `claude/sharp-shannon-sqrmig`, commits `915ae28`, `8aacaab`) + bot en onia-hermes#84 (`2f85bdd2`, `ffb65f75`) | Código y tests verdes. Falta: merge + publicar plataforma; publicar el bot (bloqueado, ver §5); prueba real con el chip prepago. NO se nombra en venta ni ayuda hasta esa prueba |
+| **Recordatorio con botones Confirmar / Cancelar / Reprogramar** | onia-platform#98 MERGEADO (`8f07e537`) + bot en onia-hermes#84 (`2f85bdd2`, `ffb65f75`) | Plataforma: publicación lanzada, resultado sin verificar (§2). Falta: publicar el bot (bloqueado, ver §5); prueba real con el chip prepago. NO se nombra en venta ni ayuda hasta esa prueba |
 | **Web v1 + 4 detalles de la madre + legales 1.3** | onia-hermes#84 (rama `claude/sharp-shannon-sqrmig` = `wip/web-v1-correcciones-20261001` + arreglos) | Borrador. Espera el OK de Sergio Urcullo a la web y a los legales 1.3 (términos pasó de 1.2 a 1.3). Mergear = publicar la web. La rama `wip/` quedó vieja: se recaptura la `claude/` |
 | Plan B de verificación inversa (`wa.me`) | ramas `v1/verificacion-inversa` (plataforma) y `wip/bot-verificacion-inversa` (hermes) | APAGADO y NO se enciende sin OK de Sergio Urcullo (orden de la madre 1-oct) |
 | SIAT: runner que valida cada paquete | `/opt/onia-siat/runner-20260929/emisor-v2/` + rama `wip/siat-validar-cada-paquete` | Comandos de VI y IX en `BITACORA.md`, sin lanzar: esperan las capturas del portal |
@@ -93,7 +97,7 @@ Desarrollar y publicar Onia Platform 1.0 hasta cobrar al primer cliente. Qué sa
 
 ## 7. Próximos pasos (en orden)
 
-1. onia-platform#98: con CI verde → mergear a `master` y publicar (`ssh onia-vps 'nohup bash /opt/onia-platform/_deploy/publicar.sh > /tmp/pub.log 2>&1 &'`), verificar «PUBLICADO Y VERIFICADO» y mirar `/login` con Chromium. Es inerte hasta que un cliente conecte su número.
+1. Verificar la publicación de `8f07e537` (§2): contenedor en `release-8f07e537`, «PUBLICADO Y VERIFICADO» en el log y `/login` mirado con Chromium. Es inerte hasta que un cliente conecte su número.
 2. Con el OK de Sergio Urcullo: mergear onia-hermes#84 (publica web + legales 1.3). Si tarda, llevar solos a `main` los commits del bot.
 3. Con la suite del bot en verde (firma de la pauta): `deploy-bot.sh --aplicar` (o `publicar.sh` del bot).
 4. Con el chip: conectar el número a una org QA → plantilla `recordatorio_cita` aprobada → cita a 24 h → tocar los 3 botones → MIRAR el estado en el panel y que el bot siga contestando después. Recién ahí ✅ en el catálogo y en la ayuda.
