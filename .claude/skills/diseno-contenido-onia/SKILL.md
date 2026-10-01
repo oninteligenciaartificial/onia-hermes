@@ -143,6 +143,16 @@ El CLI autenticado está en el VPS: `HF_CMD="ssh -i <llave> -o BatchMode=yes roo
 - Si un `generate create` se corta por tiempo, el job sigue y COBRA: recuperarlo con
   `higgsfield generate list` + `generate wait <id>` y `saveToGallery({url})`, nunca regenerar.
 
+**Higgsfield desde una sesión en la NUBE (1-oct-2026):**
+- El CLI `higgsfield` no está instalado. El MCP de Higgsfield sí anda. CLAUDE.md prefiere el CLI, así que usá el MCP solo
+  con OK explícito del lote.
+- Cotizá con `generate_image` y `get_cost: true`. `soul_2` = `text2image_soul_v2`: 0,12 cr por imagen, 9:16, 2k.
+- `count: 2` da dos variantes del mismo prompt. Elegí mirando las dos: de 2 «muñecos en una mesa», 1 salió con caras
+  verdes raras.
+- Bajá el resultado con curl desde cloudfront y registrá job, prompt y costo en `galeria.json` y en la bitácora.
+- **Sin PIL ni ffmpeg en el contenedor:** guardá el PNG tal cual. No encadenes `rm` después de una conversión que puede
+  fallar: el 1-oct se borraron los originales y hubo que bajarlos de nuevo.
+
 ## 7. Skills de diseño que se cargan con esta
 
 `impeccable` (register brand; las leyes de color/tipo/layout) · `design-dna` (sacar tokens de

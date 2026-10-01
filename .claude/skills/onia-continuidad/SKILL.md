@@ -148,6 +148,18 @@ baja una cuenta servía de algo.
 
 ---
 
+## 5. Trampas de coordinación medidas en la nube (1-oct-2026)
+
+- **Una sesión en la nube no puede mandarle mensajes a otra:** `SendMessage` falla con «auth: this cloud session cannot
+  message other sessions». Lo que la madre local pide se contesta EN EL TRANSCRIPT, porque ella lo lee desde ahí. Si
+  hace falta que la madre haga algo, el texto se le da a Sergio Urcullo para que lo pegue.
+- **`git grep` sobre todo el repo tarda más de 2 minutos** y corta el comando por timeout. El 1-oct dejó un merge a
+  medias, con `git add` sin correr. Para buscar marcadores de conflicto, usá `grep -c '^<<<<<<<'` sobre el archivo en
+  conflicto.
+- **El auto-sync (hook Stop) también corre en la nube:** el 1-oct commiteó solo (`chore: auto-sync`) los archivos que
+  un workflow todavía estaba escribiendo. Un workflow que escribe archivos tiene que dejar cada archivo completo antes
+  de que termine el turno.
+
 ## Relación con lo que ya existe
 
 | Ya existe | Para qué | Esta skill |

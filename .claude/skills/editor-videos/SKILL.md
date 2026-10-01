@@ -123,6 +123,26 @@ tabla de cortes + preview antes de aplicar · transcript como fuente de todo tex
   Circuito, comandos y reglas: `hermes-content/deploy/vps-ops/publicar/README.md`. UNA aprobación de
   Sergio por paquete del día (incluye la tabla de cortes); sin ese «ok» no se publica nada.
 
+### Editar desde una sesión en la NUBE (medido el 1-oct-2026)
+
+- **El video no llega por el chat** (las imágenes sí). Tampoco por el MCP de Drive: `download_file_content` devuelve
+  base64 dentro del contexto, y no sirve para video.
+- **Camino que funciona:** Sergio Urcullo sube el bruto a Drive, lo comparte con **«Cualquier persona con el enlace»** y
+  pega el link. Se baja con `curl -L "https://drive.usercontent.google.com/download?id=<ID>&export=download&confirm=t"`.
+  Necesita que la red del entorno deje pasar `drive.google.com` y `drive.usercontent.google.com`: el 30-sep daban 403
+  en el proxy y el 1-oct ya pasaban. Probalo con `curl -sS -o /dev/null -w '%{http_code}'` antes de prometer nada.
+- **`ffmpeg` no viene en el contenedor:** `apt-get install -y ffmpeg` (6.1.1, ~1 min). `faster-whisper` se instala por
+  pip. Las dos cosas se pierden cuando el contenedor se recicla.
+- **Publicar desde la nube** necesita el secreto `ONIA_VPS_SSH_KEY_B64` en el entorno: el hook
+  `scripts/nube-ssh-vps.mjs` arma `ssh onia-vps` por el túnel. Sin él, la nube edita pero no publica ni agenda.
+
+### Antes de grabar: el dato del guion se mira renderizado (1-oct-2026)
+
+WebFetch trajo una versión VIEJA de la página de precios de WhatsApp de Meta (decía 72 h de ventana gratis). El
+navegador mostró la vigente («Updated: Sep 28, 2026»: hasta 7 días y solo desde la app del celular). **Un precio o una
+regla de plataforma (Meta, OpenAI, Anthropic) se confirma con la página RENDERIZADA en un navegador**, con su fecha de
+actualización anotada. WebFetch y las fuentes secundarias sirven para descartar, no para grabar.
+
 ## Pipeline
 1. **Setup + NORMALIZAR el crudo** (pieza propia, PROBADA). `videos/<name>/` con `raw/ scripts/ renders/ final/`.
    `node scripts/normalize-source.mjs --video raw/IMG_xxxx.MOV --out raw/<n>.mp4`
