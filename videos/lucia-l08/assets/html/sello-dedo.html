@@ -1,0 +1,21 @@
+<!-- L08 · sello del remate. Copia de ES/assets/html/keyword-marca.html (blanca + raya de acento) con la
+     rotación de −4° puesta en un HIJO (.rot), nunca en #stage (SKILL: transform en #stage pinta a 1×).
+     Dos líneas fijas ({{TITLE}} / {{SUBTITLE}}, sin wrap): con text-wrap la caja queda al ancho máximo y la raya
+     sobresale del texto (se vio en el still del 1-oct). El padding del #stage es más grande que en keyword-marca para que las esquinas rotadas no se recorten.
+     Uso: node make-mockup.mjs --template custom --html-file assets/html/sello-dedo.html \
+            --title "NO MOVÉS UN DEDO."  (una línea: ver README) --accent "#10C26B" --width 1000 --out assets/sello-dedo.png -->
+<style>
+  #stage { padding: calc(70*var(--u)) calc(40*var(--u)) calc(84*var(--u)); text-align: center; }
+  .rot { display: inline-block; transform: rotate(-4deg); }
+  .kw { display: inline-block; position: relative;
+        font-family: var(--font-display); font-weight: 700; color: #fff;
+        font-size: calc(112*var(--u)); line-height: 1.02; letter-spacing: -0.02em;
+        text-transform: uppercase; white-space: nowrap;
+        text-shadow: 0 calc(10*var(--u)) calc(34*var(--u)) rgba(0,0,0,.65); }
+  .kw .l { display: block; }
+  .kw .l:empty { display: none; }
+  .kw .raya { position: absolute; left: 2%; right: 2%; bottom: calc(-22*var(--u));
+              height: calc(12*var(--u)); border-radius: calc(7*var(--u)); background: {{ACCENT}};
+              box-shadow: 0 calc(6*var(--u)) calc(18*var(--u)) rgba(0,0,0,.45); }
+</style>
+<span class="rot"><span class="kw"><span class="l">{{TITLE}}</span><span class="l">{{SUBTITLE}}</span><span class="raya"></span></span></span>

@@ -1,0 +1,52 @@
+<!-- L08 · panel-diagrama del recordatorio automático (editor-videos, make-mockup --template custom).
+     Es un DIAGRAMA del mecanismo, no la pantalla de un correo: sin bandeja, sin remitente, sin crédito de
+     «pantalla real». Cuando exista la cuenta demo, la captura REAL del correo reemplaza las filas.
+     {{VALUE}} = estado que se rinde, siempre con el MISMO layout (visibility, no display) para que los 4 PNG
+     calcen píxel a píxel al superponerlos:
+       base → tarjeta + cejilla (filas invisibles)   ·   r1 / r2 / r3 → SOLO esa fila, fondo transparente.
+     Uso: node make-mockup.mjs --template custom --html-file assets/html/panel-recordatorio.html \
+            --value base --accent "#10C26B" --width 1000 --out assets/panel-base.png -->
+<style>
+  #stage { padding: calc(40*var(--u)) calc(80*var(--u)) calc(130*var(--u)); } /* la sombra de .card (46u abajo + 96u de blur) entera dentro del PNG: con 30u se cortaba y dibujaba un rectángulo */
+  .panel { width: calc(1000*var(--u)); padding: calc(28*var(--u)) calc(44*var(--u)) calc(26*var(--u)) calc(62*var(--u)); }
+  .panel .eyebrow { font-size: calc(25*var(--u)); letter-spacing: .16em; color: rgba(246,248,251,.72); margin-bottom: calc(10*var(--u)); }
+  .row { display: flex; align-items: center; height: calc(74*var(--u)); gap: calc(26*var(--u)); }
+  .row + .row { border-top: 1px solid var(--hairline); }
+  .t { flex: 0 0 calc(176*var(--u)); font-family: var(--font-display); font-weight: 700; color: var(--accent);
+       font-size: calc(62*var(--u)); line-height: 1; letter-spacing: -.02em; white-space: nowrap; }
+  .t .m { margin-right: .06em; }
+  .txt { font-family: var(--font-body); font-weight: 500; color: var(--text); font-size: calc(38*var(--u));
+         letter-spacing: -.01em; white-space: nowrap; }
+  .chips { display: flex; gap: calc(12*var(--u)); flex: 0 0 auto; }
+  .chip { display: inline-flex; align-items: center; gap: calc(10*var(--u)); white-space: nowrap;
+          padding: calc(9*var(--u)) calc(20*var(--u)) calc(9*var(--u)) calc(16*var(--u)); border-radius: 999px;
+          font-family: var(--font-body); font-weight: 500; font-size: calc(30*var(--u)); color: var(--text); }
+  .chip svg { width: calc(26*var(--u)); height: calc(26*var(--u)); flex: 0 0 auto; }
+  .chip.si { background: color-mix(in oklab, var(--accent) 24%, transparent); border: 1.5px solid var(--accent); }
+  .chip.no { background: rgba(255,255,255,.08); border: 1.5px solid rgba(255,255,255,.28); }
+  .r3 .txt { font-size: calc(34*var(--u)); }
+
+  /* ---- estados (mismo layout siempre) ---- */
+  .base .row { visibility: hidden; }
+  .solo .panel { background: transparent; border-color: transparent; box-shadow: none; }
+  .solo .panel::after, .solo .rail, .solo .eyebrow { visibility: hidden; }
+  .solo .row { visibility: hidden; }
+  .solo.r1 .row.r1, .solo.r2 .row.r2, .solo.r3 .row.r3 { visibility: visible; }
+  .solo .row.r2, .solo .row.r3 { border-top-color: transparent; }
+  .solo.r2 .row.r2, .solo.r3 .row.r3 { border-top-color: var(--hairline); }
+</style>
+<div class="estado {{VALUE}}">
+  <div class="card panel">
+    <div class="rail"></div>
+    <div class="eyebrow"><i></i>Recordatorio automático · por correo</div>
+    <div class="row r1"><span class="t"><span class="m">−</span>24 h</span><span class="txt">correo al paciente</span></div>
+    <div class="row r2"><span class="t"><span class="m">−</span>2 h</span><span class="txt">otro correo</span></div>
+    <div class="row r3">
+      <span class="chips">
+        <span class="chip si"><svg viewBox="0 0 24 24" fill="none" stroke="#10C26B" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.5l5 5L19.5 7"/></svg>Confirmar</span>
+        <span class="chip no"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(246,248,251,.85)" stroke-width="3" stroke-linecap="round"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></svg>Cancelar</span>
+      </span>
+      <span class="txt">desde el mismo correo</span>
+    </div>
+  </div>
+</div>
