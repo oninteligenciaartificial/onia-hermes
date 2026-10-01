@@ -74,7 +74,9 @@ nuestros anuncios funcionan y para elegir a quién mostrárselos. Si tu navegado
 envía la señal **Global Privacy Control**, no se avisa nada. Aparte, tu
 navegador guarda de qué anuncio o enlace llegaste mientras la pestaña siga
 abierta (no es una cookie) y lo suma a la dirección del registro cuando tocás
-el botón para crear tu cuenta. Nada de esto pasa dentro de la plataforma.
+el botón para crear tu cuenta. El píxel no corre dentro de la plataforma; si
+creás tu cuenta, guardamos con ella ese origen (de qué anuncio o enlace
+llegaste) para saber qué campañas nos traen clientes.
 
 ## 3. Para qué los usamos
 
@@ -82,8 +84,8 @@ el botón para crear tu cuenta. Nada de esto pasa dentro de la plataforma.
 - Autenticar usuarios y proteger la seguridad de la plataforma.
 - Cobrar y facturar conforme a la normativa boliviana aplicable.
 - Dar soporte.
-- Medir y dirigir los anuncios del sitio público (§2.6), solo con las visitas a
-  onia.com.bo y nunca con datos de la plataforma.
+- Medir y dirigir los anuncios del sitio público (§2.6). A Meta solo le
+  avisamos las visitas a onia.com.bo, nunca datos de la plataforma.
 - Preparar borradores y sugerencias con IA **dentro de tu cuenta y bajo tu
   aprobación** (ver §6).
 - Cumplir obligaciones legales y requerimientos de autoridad competente.
