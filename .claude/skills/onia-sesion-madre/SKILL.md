@@ -58,10 +58,18 @@ que puede hacer, lo hace o lo larga en subagente; lo que es de Sergio Urcullo, l
 
 ## Abrir una sesión nueva en la nube
 
-La madre no sabe los ids de entorno salvo el de «Onia» (`env_01BLwXdgpqDS3sx4rg3r2uvg`). Para abrir una
-sucesora en otro entorno, se lo pide a la sesión que ya corre ahí (rutina de un disparo con su propio
-`environment_id`, sin `persistent_session_id`). Una sesión con acceso al VPS **no** la abre otra sesión:
-el control de permisos lo bloquea (hermes-jarvis §5.10); la abre Sergio Urcullo desde la web.
+Entornos conocidos: «Onia» `env_01BLwXdgpqDS3sx4rg3r2uvg` (tiene la llave/túnel del VPS) ·
+«onia-higgsfield» `env_01V5EeE4VtMdw7PWVaMYywsk` (acceso de red completo y `ELEVENLABS_API_KEY` desde el
+1-oct).
+
+- ⚠️ **Una sesión abierta por rutina (`create_trigger` / `RemoteTrigger create`) arranca SIN conectores**
+  (sin Higgsfield, sin GitHub): medido por Lucía el 1-oct. Sirve para trabajo de shell/API; para un carril
+  completo, la sucesora la abre **Sergio Urcullo desde la web** en el entorno elegido, con el texto de
+  arranque que deja la sesión saliente.
+- Antes del relevo, la saliente termina lo que está en vuelo, hace push, deja el handoff al día y escribe
+  «LISTO PARA RELEVO» + su texto de arranque en el transcript.
+- Una sesión con acceso al VPS **no** la abre otra sesión: el control de permisos lo bloquea
+  (hermes-jarvis §5.10).
 
 ## Formato del mensaje
 
