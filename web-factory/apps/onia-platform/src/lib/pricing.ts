@@ -1385,8 +1385,11 @@ export const CONDICIONES: readonly string[] = [
 
 /**
  * Nota fiscal — se dice ANTES de que la pregunten. La emision fiscal NO es una
- * feature de plan: depende de un flag global y del tramite de homologacion ante
- * el SIN. Con el emisor en mock, no se vende como si funcionara.
+ * feature de plan y Onia no la vende: con el emisor en mock, no se vende como
+ * si funcionara.
+ *
+ * 2026-10-01 (Sergio Urcullo): sin el estado del tramite ante el SIN. La venta
+ * no exhibe obra; dice donde se emite hoy la factura y que no depende del plan.
  */
 export const NOTA_FISCAL =
-  "Facturación fiscal, de frente: nuestro emisor está en trámite de homologación ante el SIN y todavía no emite factura con valor fiscal. No es algo que se destrabe pagando un plan más caro — no depende del plan. Mientras tanto, Onia te deja la venta cerrada y facturás en el Portal Web del SIN, que es gratuito y cumple la ley. No te cobramos por algo que todavía no anda.";
+  "Facturación fiscal: la factura con valor fiscal no sale de ningún plan de Onia. La emitís en el Portal Web del SIN, que es gratuito y cumple la ley; Onia te deja cada venta registrada con su detalle y el resumen de IVA e IT del mes.";

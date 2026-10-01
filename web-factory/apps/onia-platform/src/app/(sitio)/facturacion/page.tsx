@@ -22,11 +22,11 @@ import s from "../sitio.module.css";
  * dos el posicionamiento de la búsqueda del plazo, que es la más valiosa del
  * sitio.
  *
- * La nota fiscal honesta —emisor en trámite de homologación, y mientras tanto
- * facturás en el Portal del SIN que es gratuito— SE MANTIENE y va en su propio
- * bloque. Es la excepción explícita a "la venta nunca exhibe obra": acá no es
- * marketing, es honestidad legal tributaria. Decirlo antes de que lo descubran
- * es lo que hace creíble todo lo demás.
+ * Hasta el 2026-10-01 tenía un tercer bloque, «Dónde está Onia en este
+ * camino», con el estado del emisor propio (registrado ante el SIN, en pruebas
+ * de homologación). Sergio Urcullo decidió sacarlo: la venta nunca exhibe
+ * obra. Lo que queda dicho es lo que pasa HOY —la factura fiscal se emite en
+ * el Portal del SIN, que es gratuito— y eso vive en el bloque 2.
  */
 
 export const metadata: Metadata = {
@@ -85,9 +85,9 @@ const JSON_LD = {
   ],
 };
 
-/* Los tres bloques del argumento, en el orden de la fuente:
-   1) podés cumplir gratis · 2) qué resuelve un sistema · 3) dónde está Onia. */
-const [GRATIS, RETIPEO, DONDE_ESTA] = SIAT_BLOQUES;
+/* Los dos bloques del argumento, en el orden de la fuente:
+   1) podés cumplir gratis · 2) qué resuelve Onia. */
+const [GRATIS, RETIPEO] = SIAT_BLOQUES;
 
 export default function Facturacion() {
   return (
@@ -125,11 +125,10 @@ export default function Facturacion() {
         </Reveal>
       </Block>
 
-      {/* 2 · Qué resuelve Onia mientras el emisor sigue en homologación.
+      {/* 2 · Qué resuelve Onia, y dónde se emite la factura fiscal.
           La foto es de CONTEXTO (una contadora de noche con el
           archivador de papel), no de producto, y NO agrega ni una sola
-          afirmación fiscal: el texto sigue saliendo entero de lib/siat.ts y
-          la nota honesta del bloque 3 queda intacta. El alt describe la
+          afirmación fiscal: el texto sigue saliendo entero de lib/siat.ts. El alt describe la
           escena y no dice que sea cliente de Onia. Reglas:
           hermes-content/docs/ONIA_WEB_IMAGENES_DE_CONTEXTO.md */}
       <Block surface="ink" labelledBy="retipeo">
@@ -164,19 +163,6 @@ export default function Facturacion() {
             </div>
           </Reveal>
         </div>
-      </Block>
-
-      {/* 3 · Dónde está Onia — la nota fiscal honesta, sin maquillar */}
-      <Block surface="paper" labelledBy="donde">
-        <Reveal>
-          <Kicker>De frente</Kicker>
-          <h2 id="donde" className={s.h2}>
-            {DONDE_ESTA.titulo}
-          </h2>
-          <p className={s.body} style={{ fontSize: "1.1em", maxWidth: "50em" }}>
-            {DONDE_ESTA.texto}
-          </p>
-        </Reveal>
       </Block>
 
       {/* FAQ normativa */}

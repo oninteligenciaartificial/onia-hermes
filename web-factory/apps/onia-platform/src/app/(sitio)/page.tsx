@@ -70,7 +70,7 @@ const JSON_LD = {
       operatingSystem: "Web",
       url: `${SITE_URL}/`,
       publisher: { "@id": `${SITE_URL}/#org` },
-      // El emisor fiscal aún está en trámite: no se presenta como capacidad.
+      // La emisión fiscal no es capacidad de Onia: no se presenta como tal.
       description: `Sistema de gestión con IA para negocios en Bolivia: clientes, cobros y agentes con aprobación humana —más inventario ${ALCANCE_CON_INVENTARIO} y agenda ${ALCANCE_CON_AGENDA}—.`,
       offers: PLANES.map((item) => ({
         "@type": "Offer",
@@ -218,7 +218,7 @@ export default function Portada() {
           </div>
         </div>
         <p className={p.precioNota}>
-          La emisión de factura con valor fiscal sigue en trámite ante el SIN. <a href="/facturacion">Ver el estado de facturación</a>.
+          La factura con valor fiscal se emite en el Portal Web del SIN, que es gratuito. <a href="/facturacion">Qué exige la facturación en línea</a>.
         </p>
       </Block>
 

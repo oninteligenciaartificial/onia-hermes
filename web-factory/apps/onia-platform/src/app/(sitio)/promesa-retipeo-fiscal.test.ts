@@ -3,12 +3,11 @@ import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 
 import { CONTENDIENTES } from "@/lib/proof";
-import { SIAT_BLOQUES, SIAT_ESTADO_ONIA, SIAT_FAQ, SIAT_GUIA_CIERRE } from "@/lib/siat";
+import { SIAT_BLOQUES, SIAT_FAQ, SIAT_GUIA_CIERRE } from "@/lib/siat";
 import { PAGINAS, archivoDe } from "../rutas";
 
 const onia = CONTENDIENTES.find((c) => c.esOnia);
 const copyFiscal = [
-  SIAT_ESTADO_ONIA,
   SIAT_GUIA_CIERRE,
   ...SIAT_BLOQUES.map((b) => `${b.titulo} ${b.texto}`),
   ...SIAT_FAQ.map((f) => `${f.q} ${f.a}`),

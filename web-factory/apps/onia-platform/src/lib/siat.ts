@@ -9,8 +9,17 @@
  * dos páginas lo LEEN.
  *
  * REGLA DE LA CASA: el SIN ofrece un Portal Web gratuito y se dice primero.
- * Hasta que el emisor de Onia esté autorizado, ingresar cada factura en ese
- * portal sigue siendo un paso manual.
+ * La factura con valor fiscal se emite ahí (o en la modalidad asignada); Onia
+ * no la emite, y la venta no dice más que eso.
+ *
+ * 2026-10-01 — Sergio Urcullo decidió sacar de toda superficie de VENTA el
+ * estado del emisor propio («en trámite», «en pruebas de homologación», «falta
+ * que el SIN autorice»): la regla «la venta nunca exhibe obra» de CLAUDE.md.
+ * Lo que no está listo no se nombra; lo que SÍ se dice, en presente y sin
+ * «todavía», es dónde se emite hoy la factura fiscal (el Portal del SIN) y qué
+ * hace Onia (ordenar ventas, compras e IVA/IT). Así no se promete lo que no
+ * existe NI se exhibe la obra. Los términos (`content/legal/terminos.md`) y
+ * los docs internos siguen contando el estado entero.
  *
  * Fechas y RND verificadas contra fuentes oficiales el 2026-08-06 (PDF de la
  * RND 102500000036 + nota de prensa del SIN por la RND 102600000007).
@@ -41,9 +50,10 @@ export interface SiatBloque {
 }
 
 /**
- * El argumento, en tres pasos y en ESTE orden: primero la opción gratuita
- * (honestidad legal tributaria), después qué resuelve un sistema, y recién
- * al final dónde está Onia.
+ * El argumento, en dos pasos y en ESTE orden: primero la opción gratuita
+ * (honestidad legal tributaria), después qué resuelve Onia. El tercer bloque
+ * («Dónde está Onia en este camino»: registro ante el SIN, pruebas de
+ * homologación) se sacó el 2026-10-01 — ver la cabecera.
  */
 export const SIAT_BLOQUES: readonly SiatBloque[] = [
   {
@@ -54,41 +64,9 @@ export const SIAT_BLOQUES: readonly SiatBloque[] = [
   {
     titulo: "Lo que Onia resuelve hoy: orden en tus ventas y compras.",
     texto:
-      "Onia registra tus ventas y compras, prepara un resumen de IVA e IT y te muestra el calendario de vencimientos para que revises los números con tu contador. La factura fiscal todavía se emite aparte: mientras nuestro emisor no tenga autorización del SIN, ingresás los datos de cada factura en el Portal Web gratuito. El registro exportable de Onia es un insumo para tu contador; no es el RCV oficial del SIAT.",
-  },
-  {
-    titulo: "Dónde está Onia en este camino (dicho de frente)",
-    texto:
-      "Nuestro sistema está registrado ante el SIN como proveedor de facturación y sigue en pruebas de homologación. La emisión individual, la anulación y la reversión completaron sus casos; la emisión masiva y los paquetes de contingencia siguen en pruebas. Falta que el SIN autorice el sistema. Hasta entonces, Onia ordena tus ventas y compras, y la factura con valor fiscal la emitís ingresando sus datos en el Portal Web gratuito del SIN.",
+      "Onia registra tus ventas y compras, prepara un resumen de IVA e IT y te muestra el calendario de vencimientos para que revises los números con tu contador. La factura con valor fiscal se emite aparte: ingresás los datos de cada factura en el Portal Web gratuito del SIN. El registro exportable de Onia es un insumo para tu contador; no es el RCV oficial del SIAT.",
   },
 ] as const;
-
-/**
- * Dónde está Onia con el SIN, en UNA frase, para las páginas que lo mencionan
- * al pasar y no pueden traer el bloque entero de arriba.
- *
- * Existe porque `/nosotros` lo re-escribía a mano y se comía la mitad: decía
- * *"registrado ante el SIN con las pruebas técnicas de la Fase 1 completadas"*
- * y ahí cortaba, sin el "quedan las etapas formales" que sí está en
- * `SIAT_BLOQUES`. Bajo su h2 —"El sistema corre en producción"— eso se lee como
- * que Onia ya factura, y no factura (`lib/proof.ts`: `siat: "tramite"`).
- *
- * ⚠️ Las dos mitades van JUNTAS o no va ninguna. El logro sin la salvedad es
- * una promesa falsa; la salvedad sin el logro regala el único avance
- * verificable que tenemos. Vigilado por `(sitio)/promesa-fiscal.test.ts`, que
- * exige las dos en este texto y en toda página que afirme el registro.
- *
- * El portal SIAT, leído el 2026-09-27, marca 80 % general: emisión individual,
- * anulación y reversión cerraron sus casos; paquetes y emisión masiva siguen
- * parciales. El avance del runner local no sustituye el marcador del SIN ni su
- * autorización. Ningún copy puede convertir pruebas parciales en emisión fiscal
- * disponible o en ausencia de ingreso manual al Portal Web.
- *
- * Se escribe en minúscula y sin punto final a propósito: entra como cláusula
- * dentro de una oración más larga, no como párrafo suelto.
- */
-export const SIAT_ESTADO_ONIA =
-  "nuestro emisor de facturación está registrado ante el SIN y sigue en pruebas de homologación; falta que el SIN autorice el sistema, así que hasta que concluya el trámite emitís por el portal gratuito del SIN, ingresando allí los datos de cada factura";
 
 export interface SiatFaq {
   q: string;
@@ -102,7 +80,7 @@ export const SIAT_FAQ: readonly SiatFaq[] = [
   },
   {
     q: "¿Puedo cumplir gratis?",
-    a: "Sí. Si tenés habilitada la modalidad Portal Web en Línea, podés emitir gratis ingresando los datos de cada factura. Onia todavía no reemplaza ese paso: te ayuda a ordenar ventas, compras y cifras para revisarlas con tu contador.",
+    a: "Sí. Si tenés habilitada la modalidad Portal Web en Línea, podés emitir gratis ingresando los datos de cada factura. Onia no reemplaza ese paso: te ayuda a ordenar ventas, compras y cifras para revisarlas con tu contador.",
   },
   {
     q: "¿Qué pasa con mi facturación desde el 1 de octubre de 2026?",
@@ -112,15 +90,11 @@ export const SIAT_FAQ: readonly SiatFaq[] = [
     q: "¿Ya hubo prórrogas? ¿Puede haber otra?",
     a: "Hubo dos: la RND 102500000036 movió el plazo a marzo de 2026, y la RND 102600000007 lo movió al 30 de septiembre de 2026. Puede haber otra — nadie lo sabe. Nuestro consejo honesto: no apuestes tu facturación a que la haya.",
   },
-  {
-    q: "¿Y Onia ya puede emitir facturas en línea?",
-    a: "Todavía no emite facturas con valor fiscal. El sistema está registrado ante el SIN y sigue en pruebas de homologación: emisión individual, anulación y reversión completaron sus casos; emisión masiva y paquetes de contingencia siguen en pruebas. Mientras falta la autorización, emitís cada factura en el Portal Web del SIN con los datos que ese portal solicita.",
-  },
 ] as const;
 
 /** Las fuentes y el descargo. Nunca se publica el contenido sin esto. */
 export const SIAT_FUENTES =
-  "Fuentes: RND 102100000011 (Sistema de Facturación), RND 102500000036 y nota de prensa oficial del SIN sobre la RND 102600000007. Plazo y modalidades verificados el 27 de septiembre de 2026; estado de homologación consultado en SIAT ese día. Esto es información general, no asesoría tributaria: confirmá tu caso con tu contador o en tu Oficina Virtual.";
+  "Fuentes: RND 102100000011 (Sistema de Facturación), RND 102500000036 y nota de prensa oficial del SIN sobre la RND 102600000007. Plazo y modalidades verificados el 27 de septiembre de 2026. Esto es información general, no asesoría tributaria: confirmá tu caso con tu contador o en tu Oficina Virtual.";
 
 /* ---------------------------------------------------------------------- */
 /* LA GUÍA de una página — "cómo me habilito"                              */
@@ -258,9 +232,9 @@ export const SIAT_GUIA_FRENA: readonly string[] = [
   "Llegar al paso 6 sin los catálogos sincronizados. La prueba no valida, volvés al paso 5 y ya con la fecha encima.",
 ];
 
-/** Cierre de la guía: el portal sigue siendo manual hasta que ONIA sea autorizada. */
+/** Cierre de la guía: la factura fiscal se emite en el portal; Onia ordena el resto. */
 export const SIAT_GUIA_CIERRE =
-  "El portal del SIN es gratuito. Mientras nuestro emisor siga en homologación, cada factura fiscal se emite allí ingresando los datos requeridos. Podés usar Onia hoy para ordenar ventas, compras y cifras; la emisión fiscal integrada sigue pendiente de autorización.";
+  "El portal del SIN es gratuito, y cada factura fiscal se emite allí ingresando los datos requeridos. Onia te sirve para tener ordenadas tus ventas, tus compras y las cifras de IVA e IT del mes.";
 
 export interface SiatEnlace {
   label: string;

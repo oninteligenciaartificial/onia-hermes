@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 
 import { CONTENDIENTES } from "@/lib/proof";
-import { SIAT_BLOQUES, SIAT_ESTADO_ONIA, SIAT_FAQ } from "@/lib/siat";
+import { SIAT_BLOQUES, SIAT_FAQ } from "@/lib/siat";
 
 /**
  * Ningún texto de venta declara COMPLETA una etapa del trámite ante el SIN, ni
@@ -276,8 +276,9 @@ describe("el logro fiscal no se declara completo", () => {
   it("la fuente canónica afirma lo que CORRE, no una etapa terminada", () => {
     // El ancla del arreglo, sobre los valores exportados y no sobre el archivo:
     // así también se cazan los textos que se armen por interpolación.
+    // `SIAT_ESTADO_ONIA` salió de la lista el 2026-10-01: la constante se
+    // borró junto con el estado del trámite en la venta.
     const textos = [
-      SIAT_ESTADO_ONIA,
       ...SIAT_BLOQUES.map((b) => `${b.titulo} ${b.texto}`),
       ...SIAT_FAQ.map((f) => `${f.q} ${f.a}`),
     ];
