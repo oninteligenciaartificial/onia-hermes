@@ -52,7 +52,7 @@ Los topes salen de `lib/plan-catalogo.ts` (pacientes · usuarios · si trae agen
 | Tamaño real | Plan que le calza | Qué lo define |
 |---|---|---|
 | 1 profesional solo | **Básico** | 2 usuarios, 300 pacientes, **sin agentes** |
-| 2-3 profesionales + recepción | **Crece** | 3 usuarios, 800 pacientes, **acá empiezan los agentes y la reserva pública** |
+| 2-3 profesionales + recepción | **Crece** | 3 usuarios (4 con `a7f228c`, del 1-oct, al publicarse), 800 pacientes, **acá empiezan los agentes y la reserva pública** |
 | 4-5 profesionales + recepción | **Profesional** | 5 usuarios, 1.500 pacientes, agentes y reportes completos |
 | 6+ o varios consultorios | **Completo** | usuarios y pacientes sin tope, **chatbot incluido** |
 
