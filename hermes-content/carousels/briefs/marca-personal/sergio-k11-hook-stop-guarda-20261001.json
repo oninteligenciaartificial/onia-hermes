@@ -20,8 +20,10 @@
       "headline": "El hook que *commitea solo*",
       "subtitle": "y la guarda que le puse después de romperlo",
       "image_style": "clay",
-      "image_prompt": "A green clay boom barrier gate with its arm lowered and closed, in front of a small stack of matte black clay boxes.",
-      "body": "Corre cada vez que Claude termina de responder. Te muestro cómo armarlo sin que te pase lo mío.",
+      "image_prompt_usado": "A green clay boom barrier gate with its arm lowered and closed, in front of a small stack of matte black clay boxes.",
+      "image": "hermes-content/galeria/ilustraciones/k11-img-regen-s01-a3306a4e.jpg",
+      "image_descartada": "hermes-content/galeria/ilustraciones/k11-img-s01-7794c76c.jpg (fondo gris: sobre el verde quedaba un bloque oscuro)",
+      "body": "Corre cada vez que Claude termina. Te muestro cómo armarlo bien.",
       "next": "qué pasó",
       "alt_text": "El hook de Claude Code que commitea solo, y su guarda"
     },
@@ -68,10 +70,11 @@
       "theme": "blanco",
       "headline": "Paso 2: el turno *no es el trabajo*",
       "image_style": "clay",
-      "image_prompt": "A small emerald green clay hourglass next to a half-built matte black clay wall.",
       "body": "Stop corre cuando Claude termina su turno. Así se publicaron 217 líneas de estilos antes que su código.",
       "next": "paso 3",
-      "alt_text": "Stop corre al terminar el turno, no el trabajo: 217 líneas de estilos antes que su código"
+      "alt_text": "Stop corre al terminar el turno, no el trabajo: 217 líneas de estilos antes que su código",
+      "image": "hermes-content/galeria/ilustraciones/k11-img-s04-4d843c97.jpg",
+      "image_prompt_usado": "A small emerald green clay hourglass next to a half-built matte black clay wall."
     },
     {
       "number": 5,

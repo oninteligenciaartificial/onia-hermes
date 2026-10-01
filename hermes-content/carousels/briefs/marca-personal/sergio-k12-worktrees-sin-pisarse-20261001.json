@@ -1,6 +1,6 @@
 {
   "title": "Dos sesiones de Claude Code sin pisarse: worktrees (K12, pack referentes)",
-  "caption": "Dos sesiones de Claude Code en la misma carpeta tocan los mismos archivos. La salida se llama worktree: otra carpeta del mismo repositorio, con su propia rama.\n\n1. Desde tu proyecto: git worktree add -b <rama> <carpeta>\n2. Abrí Claude Code en esa carpeta. O más corto: claude -w <nombre>, que la crea por vos.\n3. El paso crítico: todo comando de git con git -C <ruta>. No confíes en que la terminal sigue donde la dejaste.\n\nPara comprobar: git worktree list. Cada carpeta, con su rama. Una sesión, una carpeta, una rama.\n\nPor qué el paso 3: el 1 de septiembre, a mi agente la terminal le volvió sola a la carpeta principal. Un reset pensado para otra carpeta corrió ahí y movió una rama 424 commits. Ningún comando falló. Se recuperó con el reflog de git, pero nada avisó.\n\nLos comandos, con un ejemplo armado para copiar, están en mi comunidad (link en la bio).\n\nclaude -w: claude --help en Claude Code 2.1.286 («Create a new git worktree for this session»). git worktree y git -C son comandos estándar de git.",
+  "caption": "Dos sesiones de Claude Code en la misma carpeta tocan los mismos archivos. La salida se llama worktree: otra carpeta del mismo repositorio, con su propia rama.\n\n1. Desde tu proyecto: git worktree add -b <rama> <ruta>\n2. Abrí Claude Code en esa carpeta. O más corto: claude -w <nombre>, que la crea por vos.\n3. El paso crítico: todo comando de git con git -C <ruta>. No confíes en que la terminal sigue donde la dejaste.\n\nPara comprobar: git worktree list. Cada carpeta, con su rama. Una sesión, una carpeta, una rama.\n\nPor qué el paso 3: el 1 de septiembre, a mi agente la terminal le volvió sola a la carpeta principal. Un reset pensado para otra carpeta corrió ahí y movió una rama 424 commits. Ningún comando falló. Se recuperó con el reflog de git, pero nada avisó.\n\nLos comandos, con un ejemplo armado para copiar, están en mi comunidad (link en la bio).\n\nclaude -w: claude --help en Claude Code 2.1.286 («Create a new git worktree for this session»). git worktree y git -C son comandos estándar de git.",
   "hashtags": [
     "#claudecode",
     "#claude",
@@ -68,12 +68,12 @@
         {
           "icon": "hermes-content/references/brand-logos/git-color.svg",
           "label": "Crear la carpeta",
-          "text": "git worktree add -b <rama> <carpeta>"
+          "text": "git worktree add -b <rama> <ruta>"
         },
         {
           "icon": "hermes-content/references/brand-claude/claudecode.svg",
-          "label": "Abrir Claude Code",
-          "text": "en esa carpeta, o claude -w <nombre>"
+          "label": "Abrir Claude Code ahí",
+          "text": "o directo: claude -w <nombre>"
         },
         {
           "icon": "hermes-content/references/brand-logos/git-color.svg",
@@ -93,7 +93,8 @@
       "next": "la regla",
       "alt_text": "Un tren de juguete volcado junto a la vía: el reset movió una rama 424 commits sin que nada avisara",
       "image_prompt_descartado": "A small matte black clay toy train tipped over on its side beside an emerald green clay train track.",
-      "image_prompt": "A small plain matte black clay boxcar, a simple rectangular train wagon on four round wheels, lying tipped over on its side with its wheels toward the viewer, beside a straight emerald green clay train track."
+      "image": "hermes-content/galeria/ilustraciones/sergio-k12-worktrees-sin-pisarse-20261001-s05-e44342b8.jpg",
+      "image_prompt_usado": "A small plain matte black clay boxcar, a simple rectangular train wagon on four round wheels, lying tipped over on its side with its wheels toward the viewer, beside a straight emerald green clay train track."
     },
     {
       "number": 6,
@@ -110,7 +111,7 @@
       "layout": "ensayo",
       "theme": "blanco",
       "headline": "Comprobá y *limpiá*",
-      "body": "*git worktree list*\n\nCada carpeta, con su rama. Una sesión, una carpeta, una rama.\n\nAl terminar, con la rama ya mergeada:\n\n*git worktree remove <carpeta>*",
+      "body": "*git worktree list*\n\nCada carpeta, con su rama. Una sesión, una carpeta, una rama.\n\nAl terminar, con la rama ya mergeada:\n\n*git worktree remove <ruta>*",
       "next": "los comandos",
       "alt_text": "git worktree list para comprobar y git worktree remove para limpiar"
     },
