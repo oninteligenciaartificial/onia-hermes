@@ -24,6 +24,12 @@ argument-hint: "[prompt-or-analysis-request] [--model <name>] [--image|--video <
 allowed-tools: Bash
 ---
 
+> ⛔ **Regla de ONIA (sobreescribe a esta skill oficial), Sergio Urcullo 1-oct-2026:** todo video que sale a
+> redes se edita con la skill **`editor-videos`** (método Santiago: montaje en una pasada, apoyos sincronizados
+> a la palabra, karaoke con gate de ortografía, SFX de la librería de HyperFrames, master −14 LUFS, tabla de
+> cortes + preview 360p antes de cerrar). **Higgsfield solo genera el clip.** Placas de texto con PIL o un ffmpeg
+> armado a mano NO son edición: así salieron L02/L05/L08 de Lucía el 1-oct y hubo que rehacerlos.
+
 # Higgsfield Generate
 
 Submit jobs to any Higgsfield model. Wraps the `higgsfield` CLI. Covers generic image/video/3D/audio generation, Marketing Studio (branded ads, avatars, products, hooks, settings), and, secondarily, Virality Predictor video scoring.

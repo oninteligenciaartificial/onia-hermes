@@ -13,7 +13,7 @@ Cómo se genera la cara: `LUCIA-HIGGSFIELD-IDENTITY.json` → `v4.metodo_diario`
 
 | Pieza | Qué es | Cómo se hace | Créditos |
 |---|---|---|---:|
-| **Feed** (1/día) | carrusel, foto o reel, según `S*-PIEZAS.md` | Seedream + ancla espejo (fotos) · MiniMax H3 (habla a cámara) · Seedance Mini (b-roll) | 1–12 |
+| **Feed** (1/día) | carrusel, foto o reel, según `S*-PIEZAS.md` | Fotos: Seedream + ancla espejo · b-roll: Kling 3.0 · **reels: se editan con `editor-videos` § «Reels de Lucía»** (guion en `S*-GUIONES.md`, instrucción por pieza en `videos/lucia-lNN/INSTRUCCION.md`; Higgsfield solo genera el clip) | 1–12 |
 | **Historias** (2–3/día) | recortes del mismo lote + placa de texto | `editor-videos` → `story-batch.mjs`, zona segura .20 | 0 |
 | **Yap a Trial** (solo reels) | mismo reel con otro gancho | recorte del mismo video | 0 |
 
