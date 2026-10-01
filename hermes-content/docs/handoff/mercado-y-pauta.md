@@ -185,8 +185,10 @@ autosync de esta rama). **Ninguna campaña creada, cero gasto.**
 
 - **OK al primer lote de 8**, mensaje por mensaje, en la página. Los envía él.
 - **Los 13 en espera:** abrir su Facebook desde la PC y contar profesionales y sedes, o decir que se reemplacen.
-- **Tarjeta en ONIA Ads y la página «Onia» vinculada a ONIA Ads.** El conector ya ve la cuenta, pero sin tarjeta
-  (`has_payment_method: false`, 21:00 UTC) y **sin ninguna página** (`ads_get_ad_account_pages` → `[]`, 21:15 UTC).
+- **Tarjeta en ONIA Ads**: es lo único que falta en la cuenta. Re-medido el 1-oct a las 21:40 UTC:
+  `has_payment_method: false`. La página «Onia» sí sirve: la lista de las 21:15 estaba mal leída (skill §5).
+  Instagram no está vinculado a ONIA Ads.
+- **OK a D1 y D4 viéndolas**, y **OK explícito para crear la campaña en pausa** (§5.8.1).
 
 Lista anterior (sigue vigente salvo el punto 4, que ya está hecho):
 

@@ -173,9 +173,11 @@ contestarle de memoria es la forma de quemarlo.
 - **1-oct, 21:00 UTC: el conector YA ve ONIA Ads** (`1073680778314945`, negocio «OniaAgency», `is_ads_mcp_enabled`),
   pero con **`has_payment_method: false`**. Sin la tarjeta no se crea nada, ni en pausa. También aparece la cuenta
   personal «Sergio Urcullo» (`679613631427810`, USD, con tarjeta): **no se usa para Onia** sin su decisión.
-- **1-oct, 21:15 UTC: `ads_get_ad_account_pages` de ONIA Ads devuelve `[]`.** La página «Onia» (`1140384625819526`)
-  no está vinculada a la cuenta. Sin eso no se crea ningún anuncio, aunque esté la tarjeta. Se vincula en el Business
-  «OniaAgency» (`1451773736711697`).
+- **Para saber si la página sirve, se usa `ads_get_user_pages`, no `ads_get_ad_account_pages`.** Este último solo
+  lista las páginas que la cuenta ya promocionó: en ONIA Ads, que nunca pautó, devuelve `[]`. El 1-oct a las 21:15
+  lo leí como «página sin vincular» y se lo dije a Sergio Urcullo; a las 21:40, `ads_get_user_pages` y
+  `ads_get_pages_for_business` (`1451773736711697`) listaban «Onia» (`1140384625819526`). ONIA Ads no tiene ninguna
+  cuenta de Instagram vinculada (`ads_get_ig_accounts` → `[]`).
 - Antes de esa hora, el conector `Meta_ads` veía otra cuenta de Facebook («NUVO 1usd», «Arthur Fuentes»). A las
   20:15 UTC ONIA Ads todavía no aparecía. Primero `ads_get_ad_accounts`; si no lista `1073680778314945` con
   `has_payment_method: true`, no sirve para crear. Lo destraba Sergio Urcullo reconectando el conector con
