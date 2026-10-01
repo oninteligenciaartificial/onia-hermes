@@ -77,6 +77,9 @@ Los conectores (Meta Ads, GitHub, Higgsfield) son de la cuenta, no del entorno.
   arranque que deja la sesión saliente.
 - Antes del relevo, la saliente termina lo que está en vuelo, hace push, deja el handoff al día y escribe
   «LISTO PARA RELEVO» + su texto de arranque en el transcript.
+- **El texto de arranque nombra TODAS las skills del oficio, no solo las del proveedor.** Caso 1-oct: el
+  arranque de Lucía decía «tus skills higgsfield-*» y la sesión editó los reels con PIL + ffmpeg a mano en vez
+  de `editor-videos` (método Santiago). Carril con video → `editor-videos` + `motion-doctrine` siempre.
 - Una sesión con acceso al VPS **no** la abre otra sesión: el control de permisos lo bloquea
   (hermes-jarvis §5.10).
 
