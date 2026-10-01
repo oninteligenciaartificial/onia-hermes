@@ -109,9 +109,10 @@ Instrucciones de proyecto. Override sobre defaults.
 - **El canal principal es el MENSAJE, no el documento.** Lo que una sesión necesita de otra se le manda, no se
   deja escrito esperando que lo lea. El handoff (`hermes-content/docs/handoff/<carril>.md`) queda solo para que
   una sesión NUEVA retome si otra muere.
-- **Cómo se manda:** de local a local, `SendMessage`. De y hacia la nube, una rutina de un disparo
-  (`create_trigger` con `persistent_session_id` de la destino y `run_once_at` 1-2 min adelante).
-  Cada canal se **mide** antes de confiarle algo (fila 3 de `ONIA_CAPACIDADES_DE_LAS_SESIONES.md`).
+- **Cómo se manda (medido el 1-oct):** solo la MADRE manda mensajes, con `SendMessage`, y le llegan al
+  instante a las sesiones de la nube. La nube **no** puede mandar (`SendMessage` falla: «this cloud session
+  cannot message other sessions yet»): contesta **en su propio transcript** y la madre lo lee desde allá.
+  **Nada de mensajes programados** (`create_trigger`) entre sesiones: tardan demasiado (Sergio Urcullo, 1-oct).
 - Detalle operativo (ids vivos, formato del mensaje, qué se avisa y qué no): **skill `onia-sesion-madre`**.
 - **El portal del SIAT no lo abre ninguna sesión, tampoco la madre.** Lo abre solo Sergio Urcullo a mano; la
   sesión le pide capturas.
