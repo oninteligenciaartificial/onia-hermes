@@ -1,0 +1,20 @@
+{
+  "readAt": "2026-09-27",
+  "VI": {
+    "totalCorrectos": 150,
+    "cases": {
+      "recepcion-ds1-motivo1-pv0-menor500": 10,
+      "validacion-ds1-pv1": 70,
+      "validacion-ds1-pv0": 70
+    }
+  },
+  "IX": {
+    "totalCorrectos": 60,
+    "cases": {
+      "recepcion-ds1-pv0-menor1000": 10,
+      "recepcion-ds1-pv1-menor1000": 10,
+      "validacion-ds1-pv0": 20,
+      "validacion-ds1-pv1": 20
+    }
+  }
+}
