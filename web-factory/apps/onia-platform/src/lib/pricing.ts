@@ -519,7 +519,7 @@ const ESCALERA: readonly Plan[] = [
       `Agente Recall: te propone a quién hace rato que no ves (${ALCANCE_CON_FICHA})`,
       "Agente Cobrador: te propone a quién reclamarle la deuda vencida",
       `Reservas online incluidas, ${ALCANCE_CON_AGENDA}: link público para que te pidan cita`,
-      "Topes: 800 fichas · 3 usuarios · 400 recordatorios por email/mes",
+      "Topes: 800 fichas · 4 usuarios · 400 recordatorios por email/mes",
     ],
     chatbotIncluido: false,
     agentesIncluidos: true,
