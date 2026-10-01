@@ -20,7 +20,8 @@
 >   pasaba los 90 bytes que guarda la aduana y el link quedaba cortado; (b) un rollback reintentado
 >   reanudaba lo que ya estaba activo o ya no existía, y podía no terminar nunca; (c) un trabajo de
 >   Hermes ausente de `jobs.json` no frenaba la Fase A. Lo aprendido está en la skill.
-> - **Sigue:** §7, bloque del 1-oct.
+> - **Sigue:** §7, plan de las 23:50 UTC — **lo hace la madre** (Sergio Urcullo: *«dejalo escrito y la
+>   madre lo hace»*): mergear #83 y #79, entorno + rutina + llave, una corrida de `aplicar` por el workflow.
 
 Historia: rama original `claude/hermes-jarvis` («Hermes y Sergio management system», 29-sep, desde el
 teléfono); sucesoras `session_01U881mfXgTAUafw6GC9jExG` (30-sep, archivada), la de arriba y la del relevo.
@@ -293,7 +294,41 @@ aplicar,revertir}.sh` · `scripts/loops/onia-tg.sh` + `onia-tg-aduana.test.mjs` 
 
 ## 7. Próximos pasos
 
-> **1-oct ~21:30 UTC — el plan vigente (la madre ordena):**
+> **1-oct ~23:50 UTC — EL PLAN VIGENTE: lo hace la madre.** Sergio Urcullo, en la sesión del carril:
+> *«dejalo escrito y la madre lo hace»*. Reemplaza al bloque de las 21:30 de abajo. Con la llave
+> guardada ANTES de correr `aplicar`, alcanza con UNA corrida por el workflow (enciende Jarvis y los
+> pedidos juntos).
+> 1. **Revisar y mergear.** Revisar el PR #83 (3 arreglos encima del #79). Si está bien, mergear el
+>    #83 en la rama del #79 (`claude/kind-cannon-7hkc3c`), y después el #79 a `main`.
+> 2. **Entorno propio para la rutina** (en la PC, con el login de Sergio Urcullo): en claude.ai/code,
+>    ícono de nube arriba del cuadro de mensaje → **Cloud** → **Add cloud environment**. Nombre
+>    «Pedidos de Hermes», red **Trusted**, una sola variable `GH_ACTIONS_TOKEN=` con el mismo valor
+>    que tiene el entorno «Onia» → **Create environment**. **Nunca «Onia»**: tiene la llave del VPS.
+> 3. **La rutina:** claude.ai/code/routines → **New routine**. Nombre «Pedidos de Sergio Urcullo desde
+>    Hermes»; prompt: el bloque de §5 de `TELEGRAM_COMMAND_CENTER.md`, completo; repositorios
+>    onia-hermes y onia-platform; entorno «Pedidos de Hermes»; trigger **API**; sacar todos los
+>    conectores → **Create**.
+> 4. **La llave:** en la rutina, **Edit** → «Select a trigger» → el de API (si no está, «Add another
+>    trigger» → API) → copiar la URL → **Generate token** (se ve una vez). En GitHub, onia-hermes →
+>    Settings → Secrets and variables → Actions: secreto `ONIA_RUTINA_PEDIDOS_TOKEN` = el token y
+>    variable `ONIA_RUTINA_PEDIDOS_URL` = la URL. **Ni el token ni la URL pasan por un chat ni un log.**
+> 5. **Esperar ~1 h desde el merge del #79**: el sincronizador copia `onia-pedido-claude.sh` al VPS. Si
+>    `aplicar` corre antes, Jarvis se enciende igual y los pedidos quedan para una segunda corrida.
+> 6. **Correr `aplicar` por el workflow**, no por SSH (por SSH el secreto no viaja), **entre las 06:30 y
+>    las 22:00 de La Paz** (el aviso de «encendido» suena aunque sea de noche): avisar antes que se
+>    toma el VPS (infra, un dueño a la vez), y `gh workflow run hermes-jarvis.yml --ref main -f accion=aplicar`.
+>    Si el control de permisos de la madre pide el OK de Sergio Urcullo en SU sesión, pedírselo ahí: un
+>    OK de rebote desde otra sesión no alcanza (skill `onia-hermes-jarvis`).
+> 7. **Avisarle a la sesión del carril** que corrió: ella lee el log en GitHub, verifica sección por
+>    sección (0, 1, 1b, 5, 5b, Fase A, 1c, 2, 3, 4, 5c, 5d, 6, 6b, 7, 8) y borra el «🧪 Prueba de Jarvis»
+>    si quedó en su calendario (línea de base del 1-oct: no había ninguno).
+> 8. **Prueba de Sergio Urcullo por Telegram:** «pedile a Claude: ¿cuántos cambios entraron hoy al
+>    sistema?» → le llega el texto con un código de 6 dígitos → se lo contesta a Hermes → link →
+>    respuesta ✅.
+>
+> **Si algo sale mal:** `gh workflow run hermes-jarvis.yml --ref main -f accion=revertir`.
+
+> **1-oct ~21:30 UTC — plan anterior (reemplazado por el de arriba):**
 > 1. **La madre corre `aplicar`** por SSH, con el mismo armado del workflow y el OK de Sergio Urcullo,
 >    avisándole antes a Plataforma. Con main de hoy o, mejor, **con el PR #79 ya mergeado**: ahí
 >    `aplicar` es todo o nada y reinicia el gateway. La salida redactada la verifica control, sección
