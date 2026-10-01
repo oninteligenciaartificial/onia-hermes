@@ -42,6 +42,21 @@ description: Cargar ANTES de tocar el VPS, Docker, n8n o cualquier cosa por SSH.
   ssh -i ~/.ssh/onia_vps -o ProxyCommand="cloudflared access ssh --hostname %h" root@ssh.onia.com.bo
   ```
   Verificado: `hostname` = `srv1360183`. ⚠️ Todavía **sin Cloudflare Access** delante, así que la protección es solo la llave SSH (igual que el 22 abierto). Pendiente: Access + service token.
+- **Qué más NO sale desde la nube (medido 1-oct):** YouTube bloquea la IP del contenedor (`yt-dlp` pide «no eres
+  un robot», Chromium cae en `/sorry`); los videos se ven desde la PC. Los centros de ayuda Zendesk privados dan 403.
+  `SendMessage` a otra sesión falla («this cloud session cannot message other sessions yet»): se contesta en el
+  transcript propio y la madre lo lee. La web pública de terceros, en cambio, abre bien con `curl` y Playwright.
+
+### Publicar desde la nube (los dos comandos, medidos 1-oct)
+
+- **Plataforma:** `ssh onia-vps 'nohup bash /opt/onia-platform/_deploy/publicar.sh > /tmp/pub.log 2>&1 &'`. Arma la
+  imagen de `origin/master`, hace canary, swap y verificación; termina con «PUBLICADO Y VERIFICADO» y deja un
+  contenedor `onia-platform-prev-*` para el rollback. Tarda unos 5 min.
+- **Web onia.com.bo:** `bash /opt/onia-landing/_deploy/publicar.sh` (`--dry-run` primero). El cron
+  `onia-publicar-solo` la FRENA si cambia «un número en una fuente de precio», aunque no sea un precio (pasó con el
+  tope de usuarios de Crece). Si el número que cambia está aprobado, se corre este comando a mano.
+- Los dos corren largos: lanzarlos con `nohup … &` o en background. Un `ssh` en primer plano se corta
+  («Broken pipe») y el log en el VPS sigue igual.
 - Cambiar el acceso de red del entorno a "Total" **puede no alcanzar**: el proxy sigue en el
   medio. Probarlo es gratis, pero no es la solucion garantizada.
 
