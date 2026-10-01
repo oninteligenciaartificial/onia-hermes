@@ -160,6 +160,13 @@ algo nuevo) · `qa` · `verification-loop` · `health`.
 5. **Nada de gasto sin permiso explícito** (Meta, ElevenLabs, Higgsfield). Por defecto, gratis.
 6. **Un solo motor.** Antes de escribir lógica conversacional en la plataforma, confirmar que
    no duplica lo que ya hace `bot/`. El producto tiene un relay; que siga siendo un relay.
+7. **El toque de un botón del recordatorio de cita lo contesta la PLATAFORMA, no el bot** (1-oct).
+   «Confirmar» / «Cancelar» / «Reprogramar» exactos en el inbox de una org CLIENTE → `skip` con
+   `reason: "boton_del_recordatorio"` en `runChatwootTurn`, NUNCA en el parser: el reenvío
+   `usoPlataforma` es por donde la plataforma se entera del toque. En inbox de Onia, huérfano,
+   conflicto, sin teléfono o con el producto caído, el bot contesta como siempre. Gemelo:
+   `onia-platform/lib/whatsapp/respuesta-al-recordatorio.ts` (`accionDelBoton`): cambiar los textos
+   o la normalización de un lado sin el otro es doble respuesta o silencio.
 
 ## Gates antes de mergear
 
