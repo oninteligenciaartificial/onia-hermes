@@ -1,5 +1,15 @@
 # Handoff — carril `mercado-y-pauta` (sesión «Ventas y pauta Onia Platform», antes «Análisis de mercado»)
 
+> ✅ **1-oct, de noche (`session_01JkUVtTYrjJ9xUywLXjYz5G`, entorno «Default» con red completa, rama
+> `claude/lucid-mayer-2ejv6v`): los 28 prospectos quedaron VERIFICADOS.**
+> - **8 listos para el OK de Sergio Urcullo**: Spadental, Nexo, Klynink Medic (entró de la reserva), DASHA, Corpo
+>   Belo, Jhimbo, Quevedo y KAIS.
+> - **13 en espera** y **8 salieron**.
+> - Veredicto y fuente de cada uno: `ONIA_PROSPECTOS_DENTAL_SCZ.md` §6.6 y `ONIA_PROSPECTOS_OTROS_RUBROS_SCZ.md` §1.6
+>   y §2.5.
+> - La página https://claude.ai/artifact/8sFD37TVJMcEJaHcZ2PWSV (versión 5) quedó con los 8 primero.
+> - **El conector de Meta ya ve ONIA Ads**, pero sin tarjeta.
+>
 > ⏩ **1-oct, vigente: el carril sigue en la NUBE** (`session_01BnctfaNRsm3ogJ46A7B5P5`). Rige la regla nueva
 > de `CLAUDE.md`: la madre corre local y ordena por mensaje, y esta sesión contesta en su transcript. Lo que
 > exige la PC (Facebook, Instagram o el Administrador de anuncios con el login de Sergio Urcullo) lo hace la
@@ -60,7 +70,20 @@ autosync de esta rama). **Ninguna campaña creada, cero gasto.**
 - **La campaña de Meta: especificada, NO creada.** Tabla en `ONIA_ADQUISICION_Y_PAUTA.md` §5.8; pasos exactos
   para crearla en pausa en §5.8.1; qué falta para encender en §5.9. Bloqueo principal: el conector de Meta
   no ve ONIA Ads (re-medido el 1-oct a las 20:15 UTC).
-- **Prospectos: 28, nadie contactado.**
+- **Prospectos: VERIFICADOS el 1-oct, de noche. Nadie contactado.**
+  - **8 listos:** Spadental, Nexo, Klynink Medic, DASHA, Corpo Belo, Jhimbo, Quevedo y KAIS. Cada uno tiene su
+    mensaje y una condición de tamaño o sede para la primera pregunta.
+  - **13 en espera**, porque falta la ciudad, el tamaño o el canal, y eso solo se ve dentro de Facebook:
+    - dental: San Pedro, Camacho, MUN, Jáuregui, Odontoclínica y Dentalife;
+    - estética: Afrodita, Pimentel, JP Body Sculpt, Norvet y Gelinski;
+    - importadoras: Todo Frenos y ReMel.
+  - **8 salieron:** Odontoking (28 profesionales), Cortez (multi-sede), Serderma (La Paz, multi-sede), Dermamedic
+    (Cochabamba), PUNTO SPA (La Paz), Gloss (ya usa AgendaPro), FisioBel (es una tienda) y EMTOP (red de una marca).
+  - **Reserva dental:** no cubre los cupos libres. Vid tiene 8 profesionales y Stildent no pauta. Natural Smile y
+    Rocha quedan sin dato.
+  - **Reserva de estética:** Zona Estética Spa y Derma Peel, con Santa Cruz y WhatsApp confirmados, son las
+    primeras.
+  - *Lo de abajo es el estado del 1-oct a la tarde, antes de verificar:*
   - 10 dentales: `ONIA_PROSPECTOS_DENTAL_SCZ.md` §6.1 y §6.5. Los cupos 9-10 (Spadental, MUN) salieron de la
     Biblioteca de Anuncios en vivo el 1-oct.
   - 12 de estética y 6 importadoras: `ONIA_PROSPECTOS_OTROS_RUBROS_SCZ.md`, re-leídas en vivo el 1-oct
@@ -109,6 +132,14 @@ autosync de esta rama). **Ninguna campaña creada, cero gasto.**
 
 **Intentos fallidos**
 
+- **1-oct, de noche: la red completa del entorno «Default» no alcanza para Facebook.** `facebook.com` redirige al
+  login, con `curl` y con Chromium. Abrir Instagram, `wa.me` y Maps con Chromium (con la huella de la CA del
+  proxy) **lo bloqueó el control de permisos** («Containment Escape»), y no se reintentó por otro lado. Lo que
+  funcionó: las webs propias, el directorio `beautynailhairsalons.com` por `page_id` (solo estética),
+  directorios públicos y el conector. Está en la skill, §2 y §6.
+- **1-oct, de noche: redactar antes de verificar salió caro.** 8 de 28 prospectos salieron al verificarlos, y 2
+  líneas «Vi…» estaban viejas (San Pedro y Camacho). La regla quedó en la skill §2: se verifica antes de redactar.
+
 - **El conector de Meta Ads sigue en OTRA cuenta de Facebook** (NUVO 1usd / Arthur Fuentes). Sirve para la
   Biblioteca de Anuncios (lectura pública), **no** para crear en ONIA Ads. Mirar primero `ads_get_ad_accounts`:
   si no aparece `1073680778314945`, no sirve para crear. **Nunca gastar en esas dos.**
@@ -150,7 +181,14 @@ autosync de esta rama). **Ninguna campaña creada, cero gasto.**
 - **Cada `ads_library_search` trae solo el título del enlace**, no el texto ni la imagen del anuncio, y corta en
   50 resultados. Con estado ALL no devuelve los inactivos: no se sabe cuándo dejó de pautar Cames.
 
-**Qué depende de Sergio Urcullo** (lo mínimo, en orden)
+**Qué depende de Sergio Urcullo** (lo mínimo, en orden). **Actualizado el 1-oct, de noche:**
+
+- **OK al primer lote de 8**, mensaje por mensaje, en la página. Los envía él.
+- **Los 13 en espera:** abrir su Facebook desde la PC y contar profesionales y sedes, o decir que se reemplacen.
+- **Tarjeta en ONIA Ads y la página «Onia» vinculada a ONIA Ads.** El conector ya ve la cuenta, pero sin tarjeta
+  (`has_payment_method: false`, 21:00 UTC) y **sin ninguna página** (`ads_get_ad_account_pages` → `[]`, 21:15 UTC).
+
+Lista anterior (sigue vigente salvo el punto 4, que ya está hecho):
 
 1. **Decidir la cuenta demo:** el 1-oct dijo «no se crean demos». ¿Eso incluye la cuenta para mostrar Onia en
    las demos de venta? Sin ella no se puede hacer ninguna (`sales-kit/02-GUION-DEMO.md` §0.1).
@@ -163,7 +201,17 @@ autosync de esta rama). **Ninguna campaña creada, cero gasto.**
    gasto con techo (USD 140, 14 días).
 6. Lo de siempre: quién contesta las conversaciones de la pauta (fila 6 de §5.9) y la fecha del CIO 2026.
 
-**Próximos pasos** (sucesora, en orden; cada uno con su «listo»)
+**Próximos pasos — vigentes desde el 1-oct, de noche:**
+1. Con el OK de Sergio Urcullo, enviar el lote de 8 (lo envía él). *Listo = cada envío anotado en la columna Estado
+   de su doc fuente, con la fecha.*
+2. Resolver los 13 en espera desde la PC (madre o Sergio Urcullo), o reemplazarlos con la reserva. *Listo = cada uno
+   en SIGUE o en SALE.*
+3. Llenar el registro de objeciones el mismo día de cada demo. Antes hay que destrabar la **cuenta demo**: sin ella
+   no hay demo.
+4. Meta: con la tarjeta cargada, crear la campaña con §5.8.1 hasta el paso 6.
+5. D1 y D4: esperan que Sergio Urcullo las mire.
+
+*Próximos pasos del relevo (1-oct, tarde). El 1 ya está hecho:*
 
 1. **Verificar los 28 prospectos** con la tabla de abajo → *listo = cada fila marcada sigue / sale, con el dato
    que la decide anotado en su doc fuente*.
@@ -177,7 +225,10 @@ autosync de esta rama). **Ninguna campaña creada, cero gasto.**
 5. Cuando `ads_get_ad_accounts` liste `1073680778314945`, crear la campaña con §5.8.1 **hasta el paso 6** →
    *listo = ids anotados acá*. Encender (paso 7) solo con el OK escrito de gasto.
 
-### Verificar los 28 prospectos (qué abrir y qué confirmar)
+### Verificar los 28 prospectos — ✅ HECHO el 1-oct, de noche
+
+El resultado está en §6.6 (dental), §1.6 y §2.5 (otros rubros). La tabla de abajo es historia: dice qué se pedía
+mirar.
 
 En **todos**: (a) que sea de **Santa Cruz**; (b) que tenga **2 a 6** profesionales o empleados; (c) que tenga un
 **WhatsApp** propio y activo; (d) que el anuncio siga **activo**; (e) releer la línea «Vi…» del mensaje contra lo

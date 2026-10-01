@@ -428,9 +428,9 @@ memoria. Estado al **30-sep, 12:30 UTC**.
 | # | Condición | Cómo se comprueba | Dueño | Estado |
 |---|---|---|---|---|
 | 1 | **1.0 publicada y medición probada** (alta con `utm` guardada con su origen, píxel visto en «Probar eventos») | aviso de la sesión principal | sesión principal | ⏳ **1.0 publicada** (`release-4dc829e8` la contiene, medido el 1-oct por `ONIA_CATALOGO_DE_VENTA.md`); falta ver el píxel en «Probar eventos» |
-| 2 | **El conector ve ONIA Ads**, o Sergio Urcullo crea la campaña a mano | `ads_get_ad_accounts` lista `1073680778314945` | Sergio Urcullo | ❌ **re-medido 1-oct 20:15 UTC**: sigue viendo solo "NUVO 1usd" y "Arthur Fuentes" |
-| 3 | **Método de pago** en ONIA Ads | `has_payment_method: true` en la misma llamada | Sergio Urcullo | ❌ al 21-sep |
-| 4 | **Página "Onia" promocionable y con el WhatsApp de ventas vinculado** | `ads_get_ad_account_pages` lista `1140384625819526`; WhatsApp en la configuración de la página | Sergio Urcullo | sin medir |
+| 2 | **El conector ve ONIA Ads**, o Sergio Urcullo crea la campaña a mano | `ads_get_ad_accounts` lista `1073680778314945` | Sergio Urcullo | ✅ **1-oct, 21:00 UTC:** lo lista, en el negocio «OniaAgency», con `is_ads_mcp_enabled: true`. A las 20:15 todavía no aparecía |
+| 3 | **Método de pago** en ONIA Ads | `has_payment_method: true` en la misma llamada | Sergio Urcullo | ❌ **re-medido el 1-oct, 21:00 UTC: `has_payment_method: false`** |
+| 4 | **Página "Onia" promocionable y con el WhatsApp de ventas vinculado** | `ads_get_ad_account_pages` lista `1140384625819526`; WhatsApp en la configuración de la página | Sergio Urcullo | ❌ **medido el 1-oct, 21:15 UTC:** `ads_get_ad_account_pages` de ONIA Ads devuelve **ninguna página**. Hay que vincular la página «Onia» a la cuenta, en el Business de OniaAgency |
 | 5 | **Frase-prefijo publicada en el bot** y probada con dos mensajes desde un teléfono que no sea el de Onia, **mirando la respuesta** (§5.5) | la respuesta, leída | Sergio Urcullo (firma) + carril chatbot | ❌ |
 | 6 | **Quién contesta, y en cuánto tiempo** | decidido por escrito | Sergio Urcullo | ❌ (ver abajo) |
 | 7 | **Las cuatro capturas de la 1.0** en `carousels/briefs/assets/onia-1.0-dental-ads/` → D1 y D4 renderizadas → **OK de Sergio Urcullo viéndolas** | las piezas renderizadas, miradas | capturas: sesión principal · diseño y render: Ventas y pauta · OK: Sergio Urcullo | ⏳ renderizadas el 1-oct con capturas **candidatas** (`out/ads/…-candidato/`); esperan el OK de Sergio Urcullo a las capturas y a las piezas |
@@ -458,7 +458,7 @@ navegador, cae en la letra DejaVu y corta el pie de cada lámina. Con el paso, s
 |---|---|---|---|
 | 1 | **Método de pago** en ONIA Ads | ❌ al 21-sep (handoff `meta-ads-prospeccion`) · no re-medido hoy | Sergio Urcullo / Leslie |
 | 2 | **Página "Onia" vinculada** a la cuenta (`promote_pages`) | ❌ al 21-sep · no re-medido hoy | Sergio Urcullo, en Business Manager |
-| 3 | **El conector de Meta Ads de las sesiones está en OTRA cuenta de Facebook** | ❌ **re-medido dos veces el 30-sep** (madrugada y 12:15 UTC): ve "NUVO 1usd" y "Arthur Fuentes", no ONIA Ads | Sergio Urcullo: reconectarlo en `claude.ai/customize/connectors` con el usuario que administra ONIA Ads, y abrir una sesión nueva |
+| 3 | **El conector de Meta Ads de las sesiones está en OTRA cuenta de Facebook** | ✅ **resuelto el 1-oct, 21:00 UTC:** el conector ya ve ONIA Ads. Siguen los bloqueos de la tarjeta y de la página (filas 3 y 4 de §5.9). Antes, re-medido dos veces el 30-sep, solo veía «NUVO 1usd» y «Arthur Fuentes» | Sergio Urcullo: reconectarlo en `claude.ai/customize/connectors` con el usuario que administra ONIA Ads, y abrir una sesión nueva |
 | 4 | **WhatsApp de Onia conectado a la página** (lo exige el clic a WhatsApp) | sin medir | Sergio Urcullo / Plataforma |
 | 5 | **Bot listo para recibir pauta** (§5.5) y el `referral` que Chatwoot descarta | ❌ el `referral` se pierde; el resto sin probar | **carril chatbot** (Plataforma aclaró el 30-sep que no es suyo). Hoy **no hay sesión viva** de ese carril: Sergio Urcullo decide quién lo toma |
 | 6 | **Los leads que ya llegaron solos, sin contestar** | 5 al 27-sep (`ONIA_LEADS_ESPERANDO.md`) · no re-medido hoy | Sergio Urcullo |

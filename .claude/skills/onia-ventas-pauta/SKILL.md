@@ -64,6 +64,44 @@ conseguir clientes y que el chat le llena la agenda, que es el dolor que Onia re
    precio por cliente (importadora).
 5. **Cruzar con los leads** de `ONIA_LEADS_ESPERANDO.md`: a quien ya escribió no se le escribe dos veces.
 
+**Verificar ciudad, tamaño y canal ANTES de redactar el mensaje (medido el 1-oct, de noche).** De los 28 prospectos
+del 30-sep y el 1-oct, al verificarlos **salieron 8 y quedaron 13 sin dato**. Solo 7 siguen:
+- **Estética: salieron 5 de 12.** Dos eran de La Paz y una de Cochabamba: la Biblioteca las trajo con la búsqueda
+  «estética Santa Cruz», y en Cochabamba hay una «Avenida Santa Cruz». Otra era una tienda de insumos y la quinta ya
+  usaba AgendaPro.
+- **Dental: salieron 2 de 10.** Odontoking pasó de «4 o más» doctores en agosto a 28 en su web hoy. Cortez tiene sedes
+  en La Paz y Santa Cruz.
+
+Redactar primero y verificar después costó una tarde de mensajes tirados. Las fuentes que funcionan, en orden:
+1. **La web propia.** La página de equipo cuenta los profesionales: `odontoking.com/quienes-somos`, `/staff/`. Los
+   botones `wa.me` dan el WhatsApp real: el de San Pedro no era el teléfono de la home.
+2. **Estética: el directorio `beautynailhairsalons.com`, por `page_id`.** Copia la «Información» de cada página de
+   Facebook, con publicaciones recientes.
+   - `https://www.beautynailhairsalons.com/BO/Santa-Cruz-de-la-Sierra/<page_id>/x` redirige (301) a la ciudad
+     real.
+   - Un 404 quiere decir que no está indexada.
+   - Solo cubre la categoría belleza: dentales e importadoras dan 404.
+   - Resolvió 9 de 12 de estética y 7 de la reserva. Es evidencia media: con ella se descarta; para confirmar, se
+     cruza con la web o el anuncio.
+3. **Directorios públicos:** medicoespecialista.com.bo, boliviayp, amerpages, boliviapymes y Waze/Yandex. Los
+   fragmentos del buscador sobre una red social se anotan como «fragmento» (evidencia débil).
+
+**Veredicto, con tres estados:**
+- **SIGUE:** ciudad confirmada, canal propio y nada que la descarte. El tamaño que falte se pregunta primero en la
+  conversación.
+- **SALE:** un dato verificado la descarta.
+- **EN ESPERA:** falta la ciudad o el canal, o hay un descarte probable sin confirmar. Se resuelve desde la PC, o
+  entra la reserva.
+
+**Trampas medidas:**
+- **Homónimos de otro país:** MUN en Zaragoza, Corpo Belo en Brasil (usa Reservio), Todo Frenos en Venezuela, Remel
+  de Thermo Fisher. Confirmar Bolivia y Santa Cruz antes de atribuir un dato.
+- **La moneda de la cuenta de anuncios no es la de la venta.** Jhimbo pauta en USD y vende en Bs en su web.
+- **Dos páginas no son dos sedes.** Jhimbo declara «+1 sucursal». Pero «Sucursal Santa Cruz» o «Sucursal Central»
+  en la página sí es multi-sede: así salieron Stima y MiaFarma.
+- **Buscar en la Biblioteca por el nombre del negocio** encuentra solo si el nombre está en el texto del anuncio.
+  Cero resultados no prueba que no paute.
+
 **Re-leer antes de enviar:** un prospecto cuya pauta se cortó recibe un mensaje sobre un anuncio que ya no
 existe. El 1-oct, de 13 prospectos del 30-sep: Cames ya no pautaba, y DASHA, Corpo Belo y Jhimbo habían
 cambiado de anuncios (hubo que corregir su línea «Vi…»).
@@ -132,8 +170,14 @@ contestarle de memoria es la forma de quemarlo.
 
 ## 5. La campaña de Meta
 
-- **El conector `Meta_ads` ve otra cuenta de Facebook** («NUVO 1usd», «Arthur Fuentes»). Re-medido el
-  1-oct a las 20:15 UTC: ONIA Ads no aparece. Primero `ads_get_ad_accounts`; si no lista `1073680778314945` con
+- **1-oct, 21:00 UTC: el conector YA ve ONIA Ads** (`1073680778314945`, negocio «OniaAgency», `is_ads_mcp_enabled`),
+  pero con **`has_payment_method: false`**. Sin la tarjeta no se crea nada, ni en pausa. También aparece la cuenta
+  personal «Sergio Urcullo» (`679613631427810`, USD, con tarjeta): **no se usa para Onia** sin su decisión.
+- **1-oct, 21:15 UTC: `ads_get_ad_account_pages` de ONIA Ads devuelve `[]`.** La página «Onia» (`1140384625819526`)
+  no está vinculada a la cuenta. Sin eso no se crea ningún anuncio, aunque esté la tarjeta. Se vincula en el Business
+  «OniaAgency» (`1451773736711697`).
+- Antes de esa hora, el conector `Meta_ads` veía otra cuenta de Facebook («NUVO 1usd», «Arthur Fuentes»). A las
+  20:15 UTC ONIA Ads todavía no aparecía. Primero `ads_get_ad_accounts`; si no lista `1073680778314945` con
   `has_payment_method: true`, no sirve para crear. Lo destraba Sergio Urcullo reconectando el conector con
   el usuario que administra ONIA Ads.
 - **Pasos para crearla en pausa:** `ONIA_ADQUISICION_Y_PAUTA.md` §5.8.1.
@@ -149,9 +193,10 @@ contestarle de memoria es la forma de quemarlo.
 | Qué | En la nube «Default» (30-sep y 1-oct) | Cómo se resolvió |
 |---|---|---|
 | `facebook.com`, `instagram.com`, webs de clínicas, buscadores | 403 del proxy | La Biblioteca por el conector; para mirar páginas, el entorno `onia-higgsfield` o la PC |
+| **Entorno «Default» con red completa (1-oct, noche)** | Las webs, los directorios y los buscadores abren. **`facebook.com` redirige al login** con `curl` y con Chromium. Abrir Instagram, `wa.me` o Maps con Chromium **lo bloquea el control de permisos**: no se reintenta por otro lado | Webs propias, el directorio por `page_id` (§2) y la Biblioteca por el conector. Lo que solo se ve dentro de Facebook (cuántos atienden, el texto del anuncio) se mira desde la PC |
 | VPS y base de producción | sin llave (`ONIA_VPS_SSH_KEY_B64` vacía) | lo mide la madre en la PC |
 | `SendMessage` a otra sesión | falla: la nube no puede mandar | se contesta en el propio transcript; la madre lo lee |
-| Cupo de búsquedas web | 200 por sesión; se agotó con 4 subagentes | dar a cada subagente un tope de búsquedas |
+| Cupo de búsquedas web | 200 por sesión; se agotó con 4 subagentes | Darle a cada subagente un tope. El 1-oct, de noche, 4 subagentes con 25, 30, 20 y 12 búsquedas verificaron 28 prospectos y 9 de reserva, y usaron el tope completo |
 | Fuentes de Google en el render | no bajan | `scripts/carousel_cloud_setup.sh` instala TTF locales |
 
 ## 7. Después de cada demo
