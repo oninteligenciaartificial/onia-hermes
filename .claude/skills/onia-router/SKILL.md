@@ -83,7 +83,8 @@ carril, cargá su stack, respetá las reglas duras. Fuente viva del mapa complet
 
 ## Skills del repo (19 en `.claude/skills/` + 12 en `.agents/skills/`, todas con uso en 30 días)
 - **Índice y operación:** `onia-router` (este índice) · `onia-continuidad` (arranque y rumbo de
-  sesión) · `onia-infra` (VPS, Docker, n8n por SSH).
+  sesión) · `onia-infra` (VPS, Docker, n8n por SSH) · `onia-sesion-madre` (la madre local ordena a
+  las sesiones de la nube por mensaje: ids, canales medidos, formato).
 - **Producto:** `onia-core` · `onia-chatbot` · `onia-contabilidad-bolivia`.
 - **Venta:** `onia-propuestas` (generador oficial, nunca HTML a mano) · `onia-web-factory`.
 - **Contenido y video:** `diseno-contenido-onia` (índice de diseño) · `editor-videos` ·
