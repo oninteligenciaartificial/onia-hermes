@@ -293,6 +293,24 @@ function auditEffect(prev, next, reason) {
   };
 }
 
+/**
+ * El CODIGO del anuncio que precarga el mensaje ("…vi el anuncio de Onia (D4)…"), como origen.
+ *
+ * Existe porque Chatwoot 4.12.1 descarta el `referral` que Meta manda en un clic-a-WhatsApp (ver
+ * `attributionFrom` en chatwoot-adapter.mjs): el codigo en el texto es la UNICA atribucion que
+ * sobrevive, y sin guardarlo la metrica por anuncio de la pauta (ONIA_ADQUISICION_Y_PAUTA.md §5.6)
+ * habia que sacarla leyendo conversaciones a mano.
+ *
+ * Solo se lee de un mensaje que YA matcheo una campaña (el llamador lo garantiza) y solo entre
+ * parentesis: "(D4)". Un origen que ya trajo el canal gana — igual que `fillFromSeed` en
+ * run-turn.mjs, un dato guardado no se pisa.
+ */
+function conCodigoDelAnuncio(state, norm) {
+  if (state.pieceKey) return state;
+  const codigo = /\(\s*([a-z]{1,2}\d{1,2})\s*\)/.exec(String(norm || ""));
+  return codigo ? { ...state, pieceKey: `anuncio-${codigo[1].toUpperCase()}` } : state;
+}
+
 function summarize(state, msg, reason, config) {
   const q = state.qualification || {};
   const datos = [
@@ -304,9 +322,13 @@ function summarize(state, msg, reason, config) {
   return [
     `Conversación ${state.conversationKey} (${state.channel}).`,
     `Motivo: ${reason}.`,
+    // De qué pieza o anuncio vino: un lead de pauta se paga, y quien lo atiende tiene que saberlo.
+    state.pieceKey ? `Origen: ${state.pieceKey}.` : null,
     datos.length ? `Datos: ${datos.join(", ")}.` : "Sin calificar.",
     `Último mensaje del prospecto: "${String(msg.text || "").slice(0, 200)}"`,
-  ].join(" ");
+  ]
+    .filter(Boolean)
+    .join(" ");
 }
 
 // ---------------------------------------------------------------------------
@@ -513,6 +535,48 @@ function descartadoResult(ctx, base) {
 }
 
 /**
+ * El PACIENTE que llego por la pauta (busca turno, el precio de un tratamiento, tiene un dolor):
+ * salida cortes y fuera del embudo. Es el "riesgo central" de la pauta dental
+ * (ONIA_ADQUISICION_Y_PAUTA.md §5.2) y es el primo de `descartadoResult`, con dos diferencias:
+ *
+ *   · Se evalua TAMBIEN en 'nuevo': "Busco atencion dental" es la respuesta para tocar del anuncio
+ *     y llega como primer mensaje. D2 (el bot se declara bot) no se pierde: M1_PACIENTE lo dice.
+ *     Y en 'nuevo' no nace el lead — un paciente no es un prospecto de Onia.
+ *   · NO avisa a Sergio Urcullo, salvo que hubiera una demo agendada que liberar: cada aviso por un
+ *     paciente es una hora de soporte gastada en alguien que nunca va a comprar.
+ *
+ * Si insiste, se le repite la salida SIN volver a registrar el descarte.
+ */
+function pacienteResult(ctx, base) {
+  const { config, prev, msg } = ctx;
+  const next = { ...base, botStage: "descartado" };
+  const reply = say("M1_PACIENTE", next, config);
+  if (base.botStage === "descartado") return finalize(ctx, next, [reply], [], ["paciente:ya_descartado"]);
+
+  const reason = "paciente_busca_atencion";
+  const effects = [stageEffect(prev, next, reason), auditEffect(prev, next, reason)];
+  // El lead pudo nacer con el precargado del anuncio ("Tengo una clinica dental"), que un paciente
+  // manda igual: se cierra como perdido en vez de quedar "Contactado" en el panel.
+  if (next.leadKey) {
+    effects.push({
+      type: "lead_upsert",
+      payload: { leadKey: next.leadKey, pipelineStatus: config.pipelineStatus.descartado, conversationKey: next.conversationKey },
+    });
+  }
+  if (base.botStage === "demo_agendada") {
+    effects.push({
+      type: "notify_sergio",
+      payload: {
+        kind: "descarte_tras_agendar",
+        conversationKey: next.conversationKey,
+        text: summarize(next, msg, "era un paciente buscando atención, no una clínica: liberá el horario", config),
+      },
+    });
+  }
+  return finalize(ctx, next, [reply], effects, [reason]);
+}
+
+/**
  * Respuesta off-guion (precio / SIAT / archivo / campaña): cuerpo fijo + la pregunta pendiente
  * del embudo. `vars` existe para R_CAMPANA, que es la unica plantilla de este camino cuyo texto
  * no esta en el guion: lo trae el documento publicado ({{respuesta_campana}}).
@@ -686,6 +750,13 @@ export function step(state, incoming, options = {}) {
     );
   }
 
+  // EL PACIENTE QUE ENTRA POR LA PAUTA. Va antes que la campaña, el precio y lo clinico: "cuanto
+  // cuestan los brackets" no es la pregunta de precio de Onia y "me duele una muela" no es una
+  // consulta que Sergio Urcullo pueda contestar — los dos son de alguien que busca un dentista.
+  // Se decide sobre `base` y no sobre `withData`: "limpieza" es rubro servicios para el parser, y
+  // guardarle un rubro a un paciente es inventar un dato.
+  if (intents.isPatientSeekingCare(msg.norm)) return pacienteResult(ctx, base);
+
   // FRASE DE CAMPAÑA — el que clickeo un wa.me?text= de onia.com.bo. La frase ES el mensaje
   // entero, asi que es la señal mas especifica que puede llegar: gana a los intents difusos de
   // abajo, que son por palabra suelta. Va DETRAS de la bienvenida (composeWithFunnel), no en
@@ -693,7 +764,11 @@ export function step(state, incoming, options = {}) {
   // importa— es la linea que dispara `lead_upsert`. Contestar solo la campaña, como hace el
   // recepcionista, aca cambiaria un lead por un texto enlatado.
   const campana = campanaExacta(config, msg.norm);
-  if (campana) return composeWithFunnel(ctx, withData, "R_CAMPANA", "campana", { respuesta_campana: campana.respuesta });
+  if (campana) {
+    return composeWithFunnel(ctx, conCodigoDelAnuncio(withData, msg.norm), "R_CAMPANA", "campana", {
+      respuesta_campana: campana.respuesta,
+    });
+  }
 
   if (intents.isComplaint(msg.norm)) return handoffResult(ctx, withData, "queja_o_desconfianza");
 
@@ -759,9 +834,14 @@ export function step(state, incoming, options = {}) {
     case "demo_agendada":
       return handleAgendada(ctx, withData);
     case "descartado":
-      return intents.isDemoTrigger(msg.norm, config)
-        ? welcomeResult(ctx, { ...base, botStage: "nuevo", qualification: {}, offScriptCount: 0, qualifyAsks: 0 })
-        : handoffResult(ctx, base, "escribio_tras_descarte");
+      if (intents.isDemoTrigger(msg.norm, config)) {
+        return welcomeResult(ctx, { ...base, botStage: "nuevo", qualification: {}, offScriptCount: 0, qualifyAsks: 0 });
+      }
+      // "ok gracias" despues de la salida no es una consulta: derivarlo le mandaba M5 al paciente
+      // ("eso lo tiene que ver Sergio") y un aviso a Sergio Urcullo por nada. Lo demas sigue yendo
+      // a un humano: el descarte pudo equivocarse, y ante la duda se deriva.
+      if (intents.isCourtesy(msg.norm)) return finalize(ctx, base, [], [], ["cortesia_sin_respuesta"]);
+      return handoffResult(ctx, base, "escribio_tras_descarte");
     case "demo_realizada":
       return handoffResult(ctx, base, "escribio_tras_la_demo");
     case "handoff_humano": {
@@ -881,6 +961,15 @@ function handleHorario(ctx, base) {
     // de agosto viajo"): eso lo coordina un humano. Agendarle uno de los nuestros y decirle
     // "listo, agendado" es mandarlo a una reunion a la que nunca dijo que iba.
     if (intents.proposesOwnTime(msg.norm)) return handoffResult(ctx, base, "propone_otro_horario");
+    // El DOLOR dicho antes de que se lo pregunten ("tengo 30 pacientes con tratamiento a medias que
+    // no volvieron") es un dato como el rubro: se anota y se acusa. Sin esto caia en el LLM, cuya
+    // tarea es "reformular la pregunta pendiente sin dar datos nuevos" — o sea, el dueño contaba
+    // exactamente lo que el anuncio D4 le pregunto y recibia de vuelta "¿jueves o viernes?", con
+    // el dato tirado y un malentendido sumado al contador que deriva al segundo.
+    if (intents.mentionsAbandonedTreatment(msg.norm) && !base.qualification.painPoint) {
+      base = { ...base, qualification: { ...base.qualification, painPoint: "clientes" } };
+      ctx.found = { ...(ctx.found || {}), painPoint: "clientes" };
+    }
     // Contesto contando su negocio en vez de elegir: se le acusa recibo y se le vuelven a poner
     // los dos horarios. El dato queda guardado, asi que M2 despues no se lo vuelve a pedir.
     if (Object.keys(ctx.found || {}).length > 0) {

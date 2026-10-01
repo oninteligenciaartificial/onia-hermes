@@ -891,7 +891,9 @@ test("los SERVICIOS que ya entregamos no pueden salir como 'en construcción'", 
   for (const servicio of ["web", "chatbot", "videos", "redes", "automatizaciones"]) {
     assert.ok(!enCamino.includes(servicio), `"${servicio}" quedo listado como en construcción`);
   }
-  assert.match(texto, /Y además hacemos .*chatbot de WhatsApp con IA.*videos e influencers con IA/);
+  // El chatbot ya no dice "con IA" (2026-09-30): el que se entrega atiende sin LLM
+  // (recepcionista.mjs, regla 4). Ver que-hacen-a-una-clinica.test.mjs.
+  assert.match(texto, /Y además hacemos .*chatbot de WhatsApp.*videos e influencers con IA/);
 });
 
 test("un catalogo SIN servicios no deja un 'Y además hacemos .' colgando", () => {

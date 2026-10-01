@@ -147,8 +147,37 @@ aplicar,revertir}.sh` · `scripts/loops/onia-tg.sh` + `onia-tg-aduana.test.mjs` 
 12. **Despachar el workflow desde «Onia» (30-sep 19:49 UTC):** `actions_run_trigger` → el mismo
     `403 Resource not accessible by integration` que el 29-sep. No depende del entorno: la
     integración de GitHub puede LEER Actions (runs, logs) pero no dispararlas. No reintentar.
+13. **Despachar `aplicar` con `GH_ACTIONS_TOKEN` (30-sep 20:30 UTC, `session_0154pQRYB6icZn9Z3SuJp35D`):**
+    el token anda (una lectura a la API de Actions dio 200), pero el `POST …/dispatches` lo frenó el
+    control de permisos de la sesión como *modificar recursos compartidos*. Contexto: Sergio Urcullo
+    autorizó despachar «cuando la principal avise que terminó de publicar la 1.0». La principal no
+    terminó: **cedió el VPS** a las 20:29 UTC (dijo que aplicar no se cruza con la 1.0 ni con el
+    SIAT), y eso no se leyó como la misma condición. **No se reintenta por otra vía.** Destraba:
+    su toque en el workflow, o su orden explícita sobre la situación nueva («la principal ya cedió:
+    despachá ahora»), o una regla de permiso para ese `curl` en la configuración.
+14. **Justo después, una LECTURA de `scripts/loops/sincronizar.sh` también se frenó**, como
+    *despliegue a producción*: el control leyó el trabajo que seguía (scripts que el sincronizador
+    copia solos al VPS) como la misma salida a producción. El embudo y el ejecutor en la nube
+    (§7, «Decisiones del 30-sep 20:28») quedaron **sin empezar**: cero archivos escritos, nada en
+    vuelo. Los construye la sesión cuando Sergio Urcullo decida cómo seguir.
 
 ## 6. Qué depende de Sergio Urcullo
+
+> **Decisiones de Sergio Urcullo, 30-sep 20:28 UTC** (pidió «terminemos de configurar a Hermes para
+> que sea mi asistente diario»):
+> 1. **«Reunión en 30 min» por Telegram: NO.** Le alcanza el aviso de su calendario. No se construye.
+> 2. **Leer producción (altas y pagos): SÍ, solo lectura**, *«pero no información innecesaria, si hay
+>    problemas los arregla Claude, configuremos eso para que lo haga mediante cloud»*. O sea: una
+>    línea de embudo en el resumen de las 06:30 y el aviso de alta nueva. Los problemas del sistema no
+>    le llegan a él: los toma Claude en la nube.
+> 3. **Quién ejecuta: eligió «que Hermes también ejecute»**, contra la recomendación de control (que
+>    Hermes solo fuera ventanilla). Diseño propuesto para cumplirlo sin darle el código a un modelo
+>    débil: Hermes le muestra el pedido exacto y, con su sí, **dispara una rutina de Claude Code en
+>    la nube** (disparador por API) que hace el trabajo y le devuelve el link. Los vigías del VPS
+>    mandan los problemas a esa misma rutina, no a él. Falta que él genere el token de la rutina en
+>    la web y lo guarde como secreto de GitHub (nunca por chat).
+> 4. **Cuándo correr aplicar: «hablá entre sesiones y organícense».** La principal cedió el VPS a las
+>    20:29 UTC. El despacho lo frenó el control de permisos (§5.13).
 
 - ~~Abrir la sesión sucesora en «Onia»~~ ✔ hecho (30-sep 19:23 UTC). Pero desde «Onia» tampoco hay
   SSH (§5.11) ni despacho (§5.12). **Lo único que enciende a Jarvis hoy es su toque:** GitHub →
@@ -175,6 +204,14 @@ aplicar,revertir}.sh` · `scripts/loops/onia-tg.sh` + `onia-tg-aduana.test.mjs` 
   1-oct (`t_7db602a2`), renovación del VPS (`t_9c87fb69`), 7 prospectos esperando (`t_3dd7530c`).
 
 ## 7. Próximos pasos
+
+> **30-sep 20:32 UTC — estado de `session_0154pQRYB6icZn9Z3SuJp35D`** (rama `claude/kind-cannon-7hkc3c`).
+> Paso 1 ✔ (el token está y lee Actions: 200). Paso 2 ✔ distinto de lo previsto: la principal no
+> terminó la 1.0 pero **cedió el VPS** a las 20:29 UTC. Paso 4 ✖ **frenado por el control de
+> permisos** (§5.13): `aplicar` NO corrió. Se le avisó a la principal que el VPS vuelve a ser suyo
+> hasta que control diga «arranco». **Lo que destraba:** el toque de Sergio Urcullo en el workflow, o
+> su orden explícita. Después: pasos 5 en adelante tal cual, y las decisiones de §6 (embudo y
+> ejecutor en la nube), que se construyen DESPUÉS de la primera corrida de aplicar.
 
 > **30-sep 20:20 UTC — Sergio Urcullo guardó `GH_ACTIONS_TOKEN` en el entorno «Onia».** La sesión
 > `session_01U881mfXgTAUafw6GC9jExG` NO lo ve (medido: las variables de entorno entran al arrancar
