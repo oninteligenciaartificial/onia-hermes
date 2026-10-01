@@ -1,41 +1,12 @@
 import type { ReactNode } from "react";
 import type { LegalBlock } from "@/lib/legal";
+import { renderInline } from "./inline";
 import styles from "./legal-page.module.css";
 
 /**
- * Render de los bloques legales (Server Component, sin JS al cliente).
- * Inline soportado: **negrita** y [texto](url) — lo unico que usan los
- * documentos de src/content/legal.
+ * Render de los bloques legales (Server Component, sin JS al cliente). El
+ * inline (negrita, enlaces y correos) vive en `./inline`.
  */
-
-const INLINE_RE = /\*\*(.+?)\*\*|\[([^\]]+)\]\(([^)\s]+)\)/g;
-
-function renderInline(text: string): ReactNode[] {
-  const nodes: ReactNode[] = [];
-  let last = 0;
-  let key = 0;
-  for (const match of text.matchAll(INLINE_RE)) {
-    const index = match.index ?? 0;
-    if (index > last) {
-      nodes.push(text.slice(last, index));
-    }
-    if (match[1] !== undefined) {
-      nodes.push(<strong key={`b${key}`}>{match[1]}</strong>);
-    } else {
-      nodes.push(
-        <a key={`a${key}`} href={match[3]}>
-          {match[2]}
-        </a>,
-      );
-    }
-    last = index + match[0].length;
-    key += 1;
-  }
-  if (last < text.length) {
-    nodes.push(text.slice(last));
-  }
-  return nodes;
-}
 
 function renderBlock(block: LegalBlock, index: number): ReactNode {
   switch (block.kind) {
