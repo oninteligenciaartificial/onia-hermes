@@ -72,7 +72,14 @@ Los conectores (Meta Ads, GitHub, Higgsfield) son de la cuenta, no del entorno.
 
 - ⚠️ **Una sesión abierta por rutina (`create_trigger` / `RemoteTrigger create`) arranca SIN conectores**
   (sin Higgsfield, sin GitHub) **y sin el repo** («No sources configured», `/home/user` vacío, GitHub 403
-  «usar add_repo»), y puede tocarle otro modelo: medido el 1-oct con `cse_01SrFno1LzvGxPqnsFGETRgR`. Sirve para trabajo de shell/API; para un carril
+  «usar add_repo»), y puede tocarle otro modelo: medido el 1-oct con `cse_01SrFno1LzvGxPqnsFGETRgR`.
+- ✅ **Cómo SÍ abre la madre una sesión completa** (medido 1-oct, `cse_01Pxvxvv14Zga4CtshH26xg3`):
+  `RemoteTrigger create` con `job_config.ccr.environment_id`, `job_config.ccr.session_context.sources =
+  [{git_repository:{url}}…]` (los repos del carril), `create_new_session_on_fire: true`, `run_once_at` y
+  el texto de arranque en `events[0].data.message`. Creado por la API, el trigger toma **todos los
+  conectores de la cuenta** y clona los repos. Después `action: run` para dispararlo ya y `update
+  {enabled:false}` para que no nazca una segunda copia a la hora programada. El arranque empieza con un
+  **PASO 0** que verifica repo, SSH, MCP y modelo, y se queda quieto si falta algo. Sirve para trabajo de shell/API; para un carril
   completo, la sucesora la abre **Sergio Urcullo desde la web** en el entorno elegido, con el texto de
   arranque que deja la sesión saliente.
 - Antes del relevo, la saliente termina lo que está en vuelo, hace push, deja el handoff al día y escribe
