@@ -108,14 +108,18 @@ export default function Agentes() {
               </h1>
               {/* La bajada del titular «Agentes con IA» (Sergio Urcullo,
                   2026-09-28): el titular se queda porque la IA es real en UNA
-                  cosa —redacta el mensaje de cada agente— y esta frase dice
-                  cuál. A quién y cuándo lo deciden reglas fijas sobre tus
-                  datos (agents-runtime.ts), no la IA. */}
+                  cosa y esta frase dice cuál. Corregido 2026-10-01: la IA NO
+                  escribe cada mensaje. Con AGENTS_LLM=1 redacta UNA plantilla
+                  por negocio y por agente, el dueño la aprueba una vez en
+                  /agents y el sistema la completa en cada propuesta
+                  (onia-platform lib/onia-core/modules/agents-plantilla.ts,
+                  cabecera y generarPlantilla). A quién y cuándo lo deciden
+                  reglas fijas sobre tus datos (agents-runtime.ts), no la IA. */}
               <p className={s.lead}>
-                La IA te escribe los mensajes; a quién y cuándo lo decide el
-                sistema con tus datos, y vos aprobás. Cada mañana te los deja
-                listos: lo que te sirve sale por tu WhatsApp, o te queda para
-                mandarlo con un toque.
+                La IA redacta el texto de cada agente y vos lo aprobás una vez;
+                a quién y cuándo lo decide el sistema con tus datos. Cada
+                mañana te deja los mensajes listos: lo que te sirve sale por tu
+                WhatsApp, o te queda para mandarlo con un toque.
               </p>
               <div className={s.actions}>
                 <Btn href={EMPEZAR_URL}>{CTA_ALTA}</Btn>

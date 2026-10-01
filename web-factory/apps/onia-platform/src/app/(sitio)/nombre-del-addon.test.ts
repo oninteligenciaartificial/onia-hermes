@@ -76,6 +76,8 @@ describe("la bajada honesta de «Agentes con IA»", () => {
   it("la página de agentes dice qué hace la IA y qué decide el sistema", () => {
     const pagina = readFileSync(join(SRC, "app", "(sitio)", "agentes", "page.tsx"), "utf8").replace(/\s+/g, " ");
     expect(pagina).toContain("<Kicker>Agentes con IA</Kicker>");
-    expect(pagina).toMatch(/La IA te escribe los mensajes; a quién y cuándo lo decide el sistema con tus datos, y vos aprobás\./);
+    expect(pagina).toMatch(/La IA redacta el texto de cada agente y vos lo aprobás una vez; a quién y cuándo lo decide el sistema con tus datos\./);
+    // La IA escribe UNA plantilla por agente, no cada mensaje (agents-plantilla.ts en onia-platform).
+    expect(pagina).not.toMatch(/La IA te escribe los mensajes/);
   });
 });
