@@ -24,7 +24,7 @@
 .heroTitulo {
   font-size: clamp(2.6rem, 1.1rem + 6.2vw, 5.6rem);
   line-height: 0.98;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
   max-width: 16ch;
   margin: 0;
   text-wrap: balance;
@@ -267,7 +267,7 @@
 
 .nocheFrase {
   font-size: clamp(1.3rem, 1rem + 1.1vw, 1.9rem);
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.02em;
   line-height: 1.15;
   margin: 0;
@@ -522,4 +522,245 @@
   .heroEntrada {
     animation: none;
   }
+}
+
+/* Portada corta 1.0. Los apartados completos siguen en sus rutas interiores. */
+.heroVerde {
+  padding-block: clamp(5.5rem, 8vw, 7.5rem) clamp(3rem, 5vw, 4.5rem);
+}
+
+.heroVerde .escena {
+  width: min(100%, 47rem);
+  margin-top: clamp(1.4rem, 3vw, 2.2rem);
+}
+
+.escenaNota {
+  margin: 0.55rem 0 0;
+  color: color-mix(in srgb, #eafaf1 75%, transparent);
+  font-size: 0.78rem;
+}
+
+.bloqueCorto {
+  padding-block: clamp(3.2rem, 6vw, 5rem);
+}
+
+.sectionIntro {
+  display: grid;
+  gap: 0.9rem;
+  max-width: 44rem;
+  margin-bottom: clamp(1.5rem, 3vw, 2.4rem);
+}
+
+.sectionIntro h2 {
+  max-width: 24ch;
+}
+
+.rubrosGrid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+}
+
+.rubro {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  min-height: 11.5rem;
+  padding: 1.15rem;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  color: var(--ink);
+  text-decoration: none;
+  transition: background 160ms ease;
+}
+
+.rubro:hover,
+.rubro:focus-visible {
+  background: var(--accent-soft);
+}
+
+.rubroNumero,
+.tareaNumero {
+  color: var(--accent-ink);
+  font-size: 0.73rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.rubro strong {
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.28rem;
+  font-weight: 550;
+  letter-spacing: -0.02em;
+}
+
+.rubro > span:nth-child(3) {
+  color: var(--ink-soft);
+  font-size: 0.91rem;
+  line-height: 1.4;
+}
+
+.rubroFlecha {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  color: var(--accent-ink);
+}
+
+.tareasGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.tarea {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--surface);
+}
+
+/* El mat MIDE lo que su panel, no un alto fijo. Hasta el 2026-09-29 era
+   `height: clamp(11rem, 19vw, 15rem)` con el panel al 100% y `overflow: hidden`:
+   medido en local, «Para aprobar» pedía 244px en 163 a 375 y 393 en 211 a 1440,
+   y «WhatsApp del negocio» 216/163 y 362/211. Las dos tarjetas cortaban una fila
+   a la mitad y escondían el remate («Nada se manda hasta que lo aprobás»), que
+   es el argumento del panel.
+
+   Dos causas, dos líneas:
+   - el alto fijo → sale; el mat crece con su contenido.
+   - el panel escala en `cqw` y este mat no era contenedor, así que el `cqw` se
+     medía contra la VENTANA: a 1440 la letra iba a 19px en una columna de
+     350px y cada fila envolvía a dos renglones. `.shape` y `.slot` ya declaran
+     `container-type` por eso mismo; acá faltaba.
+   El panel se centra y abraza su contenido: el aire que sobra en la fila de
+   escritorio queda en el mat, no adentro de la tarjeta (misma regla que
+   `.shape > .panel` en sitio.module.css). */
+.tareaArte {
+  display: grid;
+  align-items: center;
+  overflow: hidden;
+  padding: 0.9rem;
+  background: var(--bg-deep);
+  container-type: inline-size;
+}
+
+/* Escritorio: las tres tarjetas comparten filas (subgrid), así que los tres
+   mats miden lo que el panel más alto y los tres cuerpos arrancan a la misma
+   altura. Sin subgrid (navegadores de antes de 2023) cada tarjeta apila lo
+   suyo: nada se corta, sólo se desalinea. */
+@media (min-width: 901px) {
+  .tarea {
+    display: grid;
+    grid-row: span 2;
+    grid-template-rows: subgrid;
+    gap: 0;
+  }
+}
+
+.tareaCuerpo {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1.3rem;
+}
+
+.tareaCuerpo h3 {
+  margin: 0;
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(1.25rem, 1.4vw, 1.55rem);
+  font-weight: 550;
+  letter-spacing: -0.02em;
+}
+
+.tareaCuerpo p {
+  flex: 1;
+  margin: 0;
+  color: var(--ink-soft);
+  line-height: 1.48;
+}
+
+.precioGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(16rem, 0.7fr);
+  gap: clamp(2rem, 6vw, 6rem);
+  align-items: center;
+}
+
+.precioGrid > div:first-child {
+  display: grid;
+  justify-items: start;
+  gap: 1rem;
+}
+
+.precioDato {
+  display: grid;
+  justify-items: start;
+  gap: 0.45rem;
+  padding: clamp(1.5rem, 3vw, 2.4rem);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--surface);
+}
+
+.precioDato > span {
+  color: var(--ink-soft);
+}
+
+.precioDato strong {
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(2.8rem, 5vw, 4.4rem);
+  font-weight: 550;
+  line-height: 1;
+  letter-spacing: -0.045em;
+}
+
+.precioDato a {
+  margin-top: 0.8rem;
+}
+
+.precioNota {
+  margin: 1.5rem 0 0;
+  color: var(--ink-soft);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.precioNota a {
+  color: var(--accent-ink);
+  text-underline-offset: 0.18em;
+}
+
+.cierre {
+  padding-block: clamp(4rem, 7vw, 6rem);
+}
+
+.cierre .centro {
+  gap: 1.5rem;
+}
+
+.cierre h2 {
+  max-width: 19ch;
+}
+
+@media (max-width: 900px) {
+  .rubrosGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tareasGrid { grid-template-columns: 1fr; }
+  .tarea { display: grid; grid-template-columns: minmax(0, 0.7fr) minmax(0, 1fr); }
+}
+
+@media (max-width: 640px) {
+  .heroVerde { padding-top: 5.2rem; }
+  .rubrosGrid { grid-template-columns: 1fr; }
+  .rubro { min-height: 0; padding: 0.9rem 1rem; gap: 0.25rem; }
+  .rubroNumero { display: none; }
+  .rubro strong { font-size: 1.15rem; }
+  .tarea { display: flex; }
+  .precioGrid { grid-template-columns: 1fr; }
 }

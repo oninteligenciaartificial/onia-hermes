@@ -61,7 +61,12 @@
  * cobro (`gatewayEnabled: false` en los cinco planes).
  */
 
-import { CHATBOT_PLAN, CONVERSACIONES_INCLUIDAS, precioAddonChatbot } from "@/content/chatbot-precios";
+import {
+  CHATBOT_PLAN,
+  CONVERSACIONES_INCLUIDAS,
+  META_COBRA_RESPUESTAS_DESDE,
+  precioAddonChatbot,
+} from "@/content/chatbot-precios";
 
 /**
  * El mensual del chatbot para las tarjetas de plan (la cuenta "Pro + add-on
@@ -108,7 +113,7 @@ export interface Plan {
    */
   chatbotIncluido: boolean;
   /**
-   * ¿Los agentes de IA (Recall y Cobrador) vienen adentro de este plan?
+   * ¿Los agentes de IA (Vuelve a citar, Recuerda cobros y el resto del plan) vienen adentro de este plan?
    *
    * Espejo de `agentsIncluded` (`onia-platform/lib/plan-catalogo.ts`), que es la fuente.
    */
@@ -353,8 +358,12 @@ const listar = (xs: readonly string[]) =>
  */
 export const ALCANCE_POR_DATOS = [
   {
-    /** Cómo la nombra el copy. */
-    capacidad: "Recall",
+    /**
+     * Cómo la nombra el copy. Es el rol `recall` del producto; desde el
+     * 29-sep-2026 los agentes se nombran por lo que hacen (decisión de Sergio
+     * Urcullo), así que en la venta ya no se dice «Recall».
+     */
+    capacidad: "Vuelve a citar",
     /** El predicado real del producto, en castellano. */
     porque: "lee la ficha del cliente y la agenda",
     /** Rubros del alta que sí tienen esos datos, como los nombra el copy. */
@@ -432,6 +441,26 @@ export const ALCANCE_POR_INVENTARIO = {
 
 /** Cómo se dice ese alcance en una línea de venta: por lo que el rubro HACE. */
 export const ALCANCE_CON_INVENTARIO = "si manejás stock";
+
+/**
+ * Los agentes del plan que el producto acota por los DATOS del rubro, además de
+ * Vuelve a citar (`ALCANCE_POR_DATOS`). Medido el 2026-09-29 contra
+ * `origin/wip/v1-integracion-20260928` de onia-platform
+ * (`lib/onia-core/modules/agents-por-rubro.ts`, `DATOS_QUE_LEE`):
+ *
+ *  - Confirma citas y Reprograma leen `appointments` → `tieneAgenda`: se dicen
+ *    con `ALCANCE_CON_AGENDA`, la misma condición que la agenda.
+ *  - Avisa stock bajo lee el stock de `/comercio/inventario` → `llevaInventario`,
+ *    que da true SOLO en comercio e importadora. NO es `ALCANCE_CON_INVENTARIO`:
+ *    dental y estética tienen `/inventory` (otra pantalla) y el agente no corre ahí.
+ *  - Sigue cotizaciones lee las cotizaciones → la pantalla
+ *    `/importadora/cotizaciones`, que hoy sólo declara la importadora.
+ *
+ * Recuerda cobros no se acota: corre en todos los rubros. Cada mención de un
+ * agente acotado lleva SU constante al lado; lo vigila `app/capacidad-acotada.test.ts`.
+ */
+export const ALCANCE_AGENTE_STOCK = "solo en comercio e importadoras";
+export const ALCANCE_AGENTE_COTIZACIONES = "solo en importadoras";
 
 export const USUARIO_EXTRA_ADDON = {
   nombre: "Usuario adicional",
@@ -516,8 +545,8 @@ const ESCALERA: readonly Plan[] = [
     anual: 5500,
     incluye: [
       `Todo lo del ${NOMBRE_DE_PLAN.basico}`,
-      `Agente Recall: te propone a quién hace rato que no ves (${ALCANCE_CON_FICHA})`,
-      "Agente Cobrador: te propone a quién reclamarle la deuda vencida",
+      `Agentes Vuelve a citar (${ALCANCE_CON_FICHA}) y Recuerda cobros: te proponen a quién invitar de vuelta y a quién recordarle un pago`,
+      `Agentes Confirma citas y Reprograma (${ALCANCE_CON_AGENDA}), Avisa stock bajo (${ALCANCE_AGENTE_STOCK}) y Sigue cotizaciones (${ALCANCE_AGENTE_COTIZACIONES})`,
       `Reservas online incluidas, ${ALCANCE_CON_AGENDA}: link público para que te pidan cita`,
       "Topes: 800 fichas · 4 usuarios · 400 recordatorios por email/mes",
     ],
@@ -583,12 +612,12 @@ const ESCALERA: readonly Plan[] = [
      * cierto sin hacer ninguna cuenta, para que el peor caso —que la derivación no encuentre
      * sujeto— sea copy honesto en vez de una cifra tipeada que envejece sola.
      */
-    resultado: "Fichas y usuarios sin tope, con el chatbot de WhatsApp incluido.",
+    resultado: "Fichas y usuarios sin tope, con el agente conversacional de WhatsApp incluido.",
     mensual: 1290,
     semanal: null,
     anual: 12900,
     incluye: [
-      `Chatbot de WhatsApp incluido: ${CONVERSACIONES_INCLUIDAS} conversaciones/mes (aparte vale Bs ${bs(CHATBOT_MENSUAL)}/mes)`,
+      `Agente conversacional de WhatsApp incluido: ${CONVERSACIONES_INCLUIDAS} conversaciones/mes (aparte vale Bs ${bs(CHATBOT_MENSUAL)}/mes)`,
       `Todo lo del ${NOMBRE_DE_PLAN.pro}`,
       /**
        * "Más de un administrador" va ACÁ, pegado a los usuarios sin tope, y no como quinta línea:
@@ -650,7 +679,7 @@ function lineaDelChatbot(plan: Plan): string[] {
   // que la vigila lee literal por literal — con el corte puesto, «acá va aparte» quedaba en un
   // pedazo sin sujeto y se acusaba solo (medido: DESALINEADO con el texto correcto).
   // prettier-ignore
-  return [`El chatbot de WhatsApp — ${nombresConChatbot(universo)} ya lo ${traeOTraen(universo)} incluido; acá va aparte, Bs ${bs(CHATBOT_MENSUAL)}/mes`];
+  return [`El agente conversacional de WhatsApp — ${nombresConChatbot(universo)} ya lo ${traeOTraen(universo)} incluido; acá va aparte, Bs ${bs(CHATBOT_MENSUAL)}/mes`];
 }
 
 function lineaDeCoadministradores(plan: Plan): string[] {
@@ -785,7 +814,7 @@ export function cuentaEnPalabras(cuenta: CuentaVsAddon): string {
       : cuenta.deMas === 0
         ? `lo mismo que ${cuenta.contra.nombre} con el add-on aparte`
         : `Bs ${bs(-cuenta.deMas)} menos ${unidad} que ${cuenta.contra.nombre} con el add-on aparte`;
-  return `Chatbot de WhatsApp incluido (${CONVERSACIONES_INCLUIDAS} conversaciones/mes): ${cola}.`;
+  return `Agente conversacional de WhatsApp incluido (${CONVERSACIONES_INCLUIDAS} conversaciones/mes): ${cola}.`;
 }
 
 /**
@@ -1156,8 +1185,13 @@ export interface AddOn {
 /** Cómo se llama el chatbot EN LA CARTA de add-ons (el nombre de producto, no el
  *  resultado que titula su tarjeta). Vive en una constante porque además es el
  *  puente con `ADDON_DE_LA_CAPACIDAD`, más abajo: dos copias del mismo nombre y
- *  el cruce se rompe en silencio el día que alguien renombre una sola. */
-export const CHATBOT_EN_LA_CARTA = "Chatbot de WhatsApp";
+ *  el cruce se rompe en silencio el día que alguien renombre una sola.
+ *
+ *  «Agente conversacional de WhatsApp» desde el 2026-09-28 (decisión de Sergio
+ *  Urcullo): se llamaba «Chatbot de WhatsApp con IA», y las respuestas salen de lo
+ *  que el negocio cargó, no de un modelo. La IA real se dice concreta donde es
+ *  real («entiende las fotos»). Lo vigila `src/app/(sitio)/nombre-del-addon.test.ts`. */
+export const CHATBOT_EN_LA_CARTA = "Agente conversacional de WhatsApp";
 
 /**
  * En qué planes se puede sumar gente pagando, y hasta cuántos — DERIVADO de `asientosExtra`.
@@ -1195,7 +1229,7 @@ export const ADDONS: readonly AddOn[] = [
     // el 12-sep, cuando `whatsappIncluded` le dio el chatbot ADENTRO a Full y Grupo. Al dueño de un
     // Completo (Bs 1.290) le cobraba Bs 390 por lo que ya paga, y al que evaluaba subir le escondía
     // el mejor argumento: subiendo Bs 400 deja de pagar 390. El plan NO se tipea —sale del catálogo.
-    copy: `Contesta al instante a cualquier hora con la información real de tu negocio, y pasa a una persona lo que necesite decisión. Viene incluido en ${nombresConChatbot()}; sobre los demás planes se suma aparte.`,
+    copy: `Contesta al instante a cualquier hora con la información real de tu negocio, entiende las fotos que te mandan y pasa a una persona lo que necesite decisión. Viene incluido en ${nombresConChatbot()}; sobre los demás planes se suma aparte.`,
     precio: precioAddonChatbot(),
     href: "/chatbot",
   },
@@ -1311,8 +1345,9 @@ export const NO_INCLUYE: readonly Excluido[] = [
   },
   {
     que: "Los mensajes que WhatsApp te cobra",
-    detalle:
-      "Si contratás el chatbot, Meta cobra por cada mensaje que TU negocio le manda primero al cliente. Eso lo pagás directo a Meta, en tu propia cuenta: no lo facturamos nosotros ni le sumamos nada encima.",
+    // Decía que Meta cobra solo lo que el negocio manda PRIMERO. Desde el 1-oct
+    // Meta cobra también las respuestas (Meta, "Upcoming pricing updates").
+    detalle: `Si contratás el agente conversacional, los mensajes de WhatsApp te los cobra Meta directo en tu cuenta —desde el ${META_COBRA_RESPUESTAS_DESDE} también las respuestas—: no los facturamos nosotros ni les sumamos nada encima.`,
   },
   {
     que: "Pauta publicitaria",
@@ -1350,8 +1385,11 @@ export const CONDICIONES: readonly string[] = [
 
 /**
  * Nota fiscal — se dice ANTES de que la pregunten. La emision fiscal NO es una
- * feature de plan: depende de un flag global y del tramite de homologacion ante
- * el SIN. Con el emisor en mock, no se vende como si funcionara.
+ * feature de plan y Onia no la vende: con el emisor en mock, no se vende como
+ * si funcionara.
+ *
+ * 2026-10-01 (Sergio Urcullo): sin el estado del tramite ante el SIN. La venta
+ * no exhibe obra; dice donde se emite hoy la factura y que no depende del plan.
  */
 export const NOTA_FISCAL =
-  "Facturación fiscal, de frente: nuestro emisor está en trámite de homologación ante el SIN y todavía no emite factura con valor fiscal. No es algo que se destrabe pagando un plan más caro — no depende del plan. Mientras tanto, Onia te deja la venta cerrada y facturás en el Portal Web del SIN, que es gratuito y cumple la ley. No te cobramos por algo que todavía no anda.";
+  "Facturación fiscal: la factura con valor fiscal no sale de ningún plan de Onia. La emitís en el Portal Web del SIN, que es gratuito y cumple la ley; Onia te deja cada venta registrada con su detalle y el resumen de IVA e IT del mes.";

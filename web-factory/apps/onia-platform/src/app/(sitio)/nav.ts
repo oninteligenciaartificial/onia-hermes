@@ -1,3 +1,4 @@
+import type { PlanId } from "@/lib/pricing";
 import { APP_URL } from "@/lib/site";
 
 /**
@@ -34,7 +35,7 @@ export interface NavItem {
  */
 export const NAV_PRODUCTO: readonly NavItem[] = [
   { href: "/rubros", label: "Rubros" },
-  { href: "/chatbot", label: "Chatbot" },
+  { href: "/chatbot", label: "Agente conversacional" },
   { href: "/precios", label: "Precios" },
 ];
 
@@ -83,10 +84,11 @@ export const NAV_DECIDIR: readonly NavItem[] = [
  * al lado de «Precios» dice que esto es un estudio, no un sistema que se
  * contrata.
  *
- * **Las páginas no se bajaron**: `/servicios/webs`, `/servicios/marketing-ia` y
- * `/servicios/consultoria` siguen respondiendo 200, así que una URL que ya
- * circula sigue abriendo y se puede mandar en una venta. Salen del CAMINO, no
- * del sitio — igual que `/comparativa` cuando salió del header. Como ya no las
+ * **Las páginas no se bajaron** ese día: `/servicios/webs`, `/servicios/marketing-ia` y
+ * `/servicios/consultoria` siguieron respondiendo 200. Salían del CAMINO, no
+ * del sitio — igual que `/comparativa` cuando salió del header. ⚠️ Desde el
+ * 2026-09-28 marketing-ia y consultoria SÍ se bajan: 308 a la portada
+ * (`next.config.ts`, decisión de Sergio Urcullo). `/servicios/webs` sigue viva. Como ya no las
  * enlaza ninguna pantalla viva, `robots.ts` las declara fuera del índice: es la
  * salida que `alcance.test.ts` documenta para una página que deja el camino, y
  * evita que el sitio pida indexar lo que él mismo no ofrece.
@@ -156,6 +158,33 @@ export const REGISTRO_URL = `${APP_URL}/register`;
  * su destino: `alta.test.ts` verifica las dos mitades.
  */
 export const EMPEZAR_URL = REGISTRO_URL;
+
+/**
+ * El plan de cada tarjeta, con el nombre que le da el checkout del producto
+ * (`PLANES_ELEGIBLES` en `onia-platform/lib/checkout/plan-elegido.ts`). Es la
+ * misma equivalencia que `PLANES_EN_ORDEN` de `scripts/precios-fuente.mjs`, y
+ * `plan-llega-al-checkout.test.ts` ata las dos. `Record<PlanId, …>` a propósito:
+ * un escalón nuevo en `PLANES` no compila hasta que diga cómo se llama allá.
+ */
+const PLAN_EN_EL_CHECKOUT: Record<PlanId, "basic" | "crece" | "professional" | "clinic"> = {
+  basico: "basic",
+  crece: "crece",
+  pro: "professional",
+  full: "clinic",
+};
+
+/**
+ * El alta con el plan que el lead eligió: `/register?plan=<clave>`.
+ *
+ * Hasta el 2026-09-29 las cuatro tarjetas de `/precios` mandaban al mismo
+ * `/register` pelado, así que «Empezar con el Profesional» llegaba al checkout
+ * sin plan marcado. El producto ya guarda `?plan=` desde el registro hasta el
+ * QR; sólo faltaba que la tarjeta lo dijera. Los botones sin plan («Creá tu
+ * cuenta») siguen yendo a `EMPEZAR_URL`, sin parámetro.
+ */
+export function registroConPlan(id: PlanId): string {
+  return `${REGISTRO_URL}?plan=${PLAN_EN_EL_CHECKOUT[id]}`;
+}
 
 /** Legales: existen una sola vez en el producto. Se linkean, no se copian. */
 export const NAV_LEGAL: readonly NavItem[] = [

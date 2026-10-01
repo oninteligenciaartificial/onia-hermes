@@ -151,7 +151,7 @@ export const WEB_STACKS: readonly WebStack[] = [
     ],
     noIncluye: [
       "Tienda, carrito ni pasarela de pago",
-      "Chatbot (es otro servicio)",
+      "Agente conversacional de WhatsApp (es otro servicio)",
       "Blog y páginas separadas tipo Nosotros (se cotizan)",
       "Envío automático de los contactos a un CRM (se agrega, se cotiza aparte)",
     ],
@@ -181,7 +181,7 @@ export const WEB_STACKS: readonly WebStack[] = [
     ],
     noIncluye: [
       "Tienda ni pasarela de pago",
-      "Chatbot de WhatsApp",
+      "Agente conversacional de WhatsApp",
       "Pauta publicitaria y producción de fotos profesionales",
     ],
     necesitasVos: [

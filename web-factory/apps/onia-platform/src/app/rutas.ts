@@ -2,6 +2,8 @@ import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import nextConfig from "../../next.config";
+
 /**
  * Lo que el sitio dice de sí mismo, leído del disco — para los gates.
  *
@@ -60,9 +62,8 @@ export const RUTAS_DEL_SITEMAP: string[] = [
 ].map((m) => m[1]);
 
 /**
- * Lo que el sitio le prohíbe al rastreador, leído de `robots.ts`: hoy la demo
- * interna, el archivo de la web anterior y las dos páginas de servicios que
- * salieron del índice el 2026-09-08. La lista NO se enumera acá a propósito —
+ * Lo que el sitio le prohíbe al rastreador, leído de `robots.ts`. La lista NO
+ * se enumera acá a propósito —
  * este comentario decía «hoy `/patrones` y `/v1`» con cuatro entradas vivas, y
  * una lista copiada al lado de su fuente envejece sola. El motivo de cada una
  * vive en `robots.ts`, y que ninguna sea fantasma lo verifica
@@ -81,8 +82,29 @@ export function estaProhibida(ruta: string): boolean {
 }
 
 /**
+ * Las reglas 308 de `next.config.ts`, tal como las sirve Next.
+ *
+ * Hacen falta desde el 2026-09-29, cuando `/v1`, `/servicios/marketing-ia` y
+ * `/servicios/consultoria` salieron del `disallow` de `robots.ts` para que
+ * Google pueda seguir su 308 (con el disallow nunca lo pedía). Hasta ese día el
+ * disallow era lo que las dejaba fuera de «lo que el sitio publica»; sin él, sus
+ * `page.tsx` —que siguen en el disco como sujeto de los gates de copy— habrían
+ * entrado como páginas vivas a pesar de que nadie las sirve.
+ */
+const REDIRECCIONES = (await nextConfig.redirects!()).filter((r) => r.permanent === true);
+
+/** ¿`ruta` la atrapa una redirección permanente, exacta o con `/:ruta*`? */
+export function estaRedirigida(ruta: string): boolean {
+  return REDIRECCIONES.some(({ source }) =>
+    source.endsWith("/:ruta*")
+      ? ruta.startsWith(`${source.slice(0, -"/:ruta*".length)}/`)
+      : source === ruta,
+  );
+}
+
+/**
  * Las páginas que el sitio PUBLICA: todas las del disco menos las que su
- * propio `robots.ts` deshabilita.
+ * propio `robots.ts` deshabilita y las que `next.config.ts` redirige.
  *
  * El corte es éste y no el sitemap a propósito. Con el sitemap como fuente,
  * una página nueva que nadie agregó ahí queda FUERA del gate —falla abierta, y
@@ -90,7 +112,9 @@ export function estaProhibida(ruta: string): boolean {
  * hay que excluirla a mano para que deje de estarlo. Y tampoco es el `noindex`:
  * `/terminos` no se quiere en Google y se manda por WhatsApp igual.
  */
-export const PAGINAS_PUBLICAS: Pagina[] = PAGINAS.filter((p) => !estaProhibida(p.ruta));
+export const PAGINAS_PUBLICAS: Pagina[] = PAGINAS.filter(
+  (p) => !estaProhibida(p.ruta) && !estaRedirigida(p.ruta),
+);
 
 const EXTENSIONES = ["", ".ts", ".tsx", "/index.ts", "/index.tsx"];
 

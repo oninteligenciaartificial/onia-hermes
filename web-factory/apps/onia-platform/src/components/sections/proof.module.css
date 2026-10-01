@@ -228,16 +228,6 @@
   border: 1.5px solid var(--line);
 }
 
-/* mitad encendida: el estado "en tramite" se ve, no se explica */
-.marcaTramite .marcaSenal {
-  background: linear-gradient(90deg, var(--accent) 0 50%, transparent 50% 100%);
-  border: 1.5px solid var(--accent);
-}
-
-.marcaTramite .marcaEstado {
-  color: var(--accent-ink);
-}
-
 .fuente {
   margin-top: 1.4rem;
   font-size: max(0.78rem, var(--fs-micro-min));

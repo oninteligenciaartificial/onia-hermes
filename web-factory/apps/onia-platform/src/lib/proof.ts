@@ -111,9 +111,12 @@ const CONSULTADO = `consultado el ${FECHA_CONSULTA}`;
  * Estado de una capacidad en un producto.
  * - "si"      lo tiene y funciona
  * - "no"      no lo tiene
- * - "tramite" existe pero todavia no sirve — solo lo usamos con NOSOTROS
+ *
+ * Existía un tercero, "tramite" («existe pero todavía no sirve»), usado sólo
+ * en nuestra fila. Se quitó el 2026-10-01: la venta no exhibe obra, y un
+ * estado cuyo único uso es exhibirla no tiene por qué existir.
  */
-export type Estado = "si" | "no" | "tramite";
+export type Estado = "si" | "no";
 
 /**
  * Las tres capacidades que definen la categoria. Ni una mas: es un eje, no una
@@ -155,7 +158,7 @@ export const EJES = [
   { id: "siat", label: "Factura SIAT boliviana", alcanceOnia: null },
   {
     id: "agentes",
-    label: "Agentes que trabajan solos",
+    label: "Agentes que proponen y esperan tu OK",
     alcanceOnia: ALCANCE_CON_FICHA,
   },
 ] as const;
@@ -226,9 +229,12 @@ export const CONTENDIENTES: readonly Contendiente[] = [
     // tabla de precios seguía a la comparación; en /comparativa no hay nada
     // más abajo (auditoría 2026-09-11, A1).
     precioNota: "precio de lanzamiento, publicado en /precios",
-    estados: { gestion: "si", siat: "tramite", agentes: "si" },
+    // 2026-10-01: era `siat: "tramite"` con un veredicto que contaba el trámite
+    // de homologación. Sergio Urcullo sacó ese estado de la venta; la fila dice
+    // lo que hay HOY: Onia no emite la factura fiscal.
+    estados: { gestion: "si", siat: "no", agentes: "si" },
     veredicto:
-      "Cruza los dos lados — y la factura fiscal todavía no: nuestro emisor está en trámite de homologación ante el SIN. Preferimos que lo leas acá antes de que lo descubras vos.",
+      "La gestión del negocio y los agentes en un solo sistema, con el resumen de IVA e IT del mes. La factura con valor fiscal la emitís en el Portal Web del SIN, gratis.",
     esOnia: true,
   },
 ] as const;

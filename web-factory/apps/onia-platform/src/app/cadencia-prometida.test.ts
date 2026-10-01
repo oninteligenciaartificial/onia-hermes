@@ -82,8 +82,8 @@ const EXENTOS: ReadonlyArray<{ archivo: string; motivo: string }> = [];
 const CADENCIA_CONTINUA =
   /24\s*\/\s*7|las 24 horas|24 horas al d[ií]a|todo el tiempo|sin parar|a toda hora|sin descanso|de forma continua|permanentemente|todo el d[ií]a/gi;
 
-/** Quién corre una vez por día. */
-const AGENTE = /agentes?\b|\bRecall\b|\bCobrador\b/gi;
+/** Quién corre una vez por día — con los nombres de hoy (29-sep-2026) y los de rol, por si reaparecen. */
+const AGENTE = /agentes?\b|\bRecall\b|\bCobrador\b|\b(?:Vuelve a citar|Recuerda cobros|Confirma citas|Reprograma|Avisa stock bajo|Sigue cotizaciones)\b/gi;
 
 /** Quién sí contesta a cualquier hora: el webhook del chatbot. */
 const BOT = /chatbot|\bbots?\b|whatsapp|asistente|recepcionista/gi;
@@ -190,9 +190,22 @@ describe("la venta no promete una cadencia que el cron no entrega", () => {
       rotos,
       `Los agentes corren UNA VEZ POR DÍA (cron del VPS: 0 11 * * * run-onia-agents-cron.sh).\n` +
         `Prometer que trabajan todo el tiempo exagera 24 veces algo que se cobra.\n` +
-        `El sitio ya lo cuenta bien en /agentes («Corre cada 24 horas», «Trabajan de noche»):\n` +
+        `El sitio ya lo cuenta bien en /agentes («Corre cada 24 horas», «Revisan tus datos antes de que abras»):\n` +
         `esa es la redacción que va.\n\n${rotos.join("\n")}`,
     ).toEqual([]);
+  });
+
+  // La HORA también es cadencia. /agentes decía «Trabajan de noche», el panel
+  // dibujado «03:12 · cerrado … escritas de madrugada» y /nosotros «trabajan de
+  // noche»: el cron los despierta a las 07:00 La Paz. Corregido el 2026-09-28
+  // (condición 8 de la 1.0); /v1 y /servicios quedan afuera: están congelados.
+  it("la superficie viva no ubica la corrida de los agentes de noche", () => {
+    const vivo = path.join(SRC, "app", "(sitio)");
+    const rotos = archivosDe(vivo).flatMap((abs) => {
+      const texto = sinComentarios(fs.readFileSync(abs, "utf8"));
+      return /trabajan de noche|de madrugada|03:12/i.test(texto) ? [path.relative(SRC, abs)] : [];
+    });
+    expect(rotos).toEqual([]);
   });
 
   it("el sujeto sale del disco: si el árbol se recorta, el gate lo dice", () => {
@@ -258,7 +271,7 @@ describe("la venta no promete una cadencia que el cron no entrega", () => {
     it("NO acusa a la redacción verdadera que el sitio ya usa", () => {
       for (const bueno of [
         "Recall detecta clientes que no vuelven y redacta el mensaje. Corre cada 24 horas.",
-        "Los agentes revisan tus datos mientras el negocio está cerrado. Trabajan de noche.",
+        "Cada mañana, antes de que abras, los agentes revisan tus datos y te dejan los mensajes escritos.",
       ]) {
         expect(cadenciaSobreAgentes(bueno), bueno).toEqual([]);
       }

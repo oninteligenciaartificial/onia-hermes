@@ -2,39 +2,28 @@ import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/site";
 
 /**
- * `/v1` es el archivo de la web anterior (mismo copy, otras URLs): fuera del
- * índice o compite consigo misma. `/patrones` es la demo interna de patrones.
+ * Lo único que se le prohíbe al rastreador: `/patrones` (la demo interna de
+ * patrones de UI, sin un solo enlace entrante) y `/api/` (los endpoints que
+ * reciben formularios; no son páginas).
  *
- * ⚠️ Acá había una tercera entrada, `/v4` —la exploración de portada del
- * 2026-09-07—, descrita en PRESENTE como algo «que se mira antes de decidir si
- * reemplaza a `/`». Esa decisión ya se tomó el mismo día: Sergio Urcullo dijo
- * «reemplazá la home con la v4», la exploración PASÓ a ser la portada y su
- * ruta se borró (`2c3ce027`). El commit que la borró dice, con todas las
- * letras, que `/v4` «sale del disallow de robots» — y no salió: quedó acá un
- * día entero prohibiéndole a los buscadores una URL que devuelve 404, y
- * describiendo una decisión pendiente que ya estaba tomada. Sale el 2026-09-08
- * con la barrida de citas de `/v4` (tarea `t_8e566d50`).
+ * ⚠️ 2026-09-29: salen del disallow `/v1`, `/servicios/marketing-ia` y
+ * `/servicios/consultoria`. Desde el 2026-09-28 responden 308 a la portada
+ * (`next.config.ts`, decisión de Sergio Urcullo), y un disallow le impide a
+ * Google pedir esas URLs: nunca ve el 308, así que no traslada la señal ni las
+ * saca del índice — quedan como «indexada aunque bloqueada por robots.txt». Para
+ * que un buscador siga una redirección tiene que poder pedirla. Sus fuentes
+ * siguen en el disco como sujeto de los gates de copy, pero nadie los sirve: los
+ * gates que miran «lo que el sitio publica» ya restan también lo que
+ * `next.config.ts` redirige (`PAGINAS_PUBLICAS`, `app/rutas.ts`).
  *
- * Que el disallow sólo nombre rutas que EXISTEN lo verifica ahora
- * `ruta-citada.test.ts`: un disallow es la lista de páginas que el sitio dice
- * tener y no querer indexar, así que una entrada fantasma documenta una
- * pantalla que no está.
- * `/servicios/marketing-ia` y `/servicios/consultoria` salen del índice el
- * 2026-09-08 por decisión de Sergio Urcullo (tarea `t_30b1711d`): la navegación
- * pública es el sistema + Chatbot, porque los leads confunden la web con una
- * agencia. Al salir del menú se quedaron sin UNA sola pantalla que las enlace,
- * y una página que el sitio no ofrece pero pide indexar es la contradicción que
- * `alcance.test.ts` existe para evitar; ésta es la salida que ese gate documenta.
- * **No se bajan**: siguen respondiendo 200, así que una URL que ya circula sigue
- * abriendo y se puede mandar en una venta.
+ * Historia que sigue valiendo: acá hubo un `/v4` que ya devolvía 404 y siguió
+ * prohibido un día entero. Que el disallow sólo nombre rutas que EXISTEN lo
+ * verifica `ruta-citada.test.ts`.
  *
  * ⚠️ `/servicios/webs` NO entra acá, y la diferencia importa: no es un enlace de
  * agencia perdido en un menú sino un ADD-ON con precio —«Web del negocio · desde
  * Bs 2.000, pago único», `ADDONS` de `lib/pricing.ts`— que la portada ofrece en
- * su cuerpo. Sigue publicada y en el sitemap: desindexar lo que la home vende
- * con su precio al lado sería que el sitio se contradiga solo.
- * El resto del sitio SÍ se indexa — desde el 2026-08-21 la v3 es la web
- * publicada, no un preview.
+ * su cuerpo. Sigue publicada y en el sitemap.
  */
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -42,12 +31,7 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: [
-          "/patrones",
-          "/v1",
-          "/servicios/marketing-ia",
-          "/servicios/consultoria",
-        ],
+        disallow: ["/patrones", "/api/"],
       },
     ],
     sitemap: `${SITE_URL}/sitemap.xml`,
