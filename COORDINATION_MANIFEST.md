@@ -20,7 +20,7 @@
 > **desde el 30-sep 20:17 UTC `session_0154pQRYB6icZn9Z3SuJp35D`, entorno «Onia»** (las viejas
 > `session_01U881mfXgTAUafw6GC9jExG` y `session_01BZJvUfEXbqT9wNLJ6n5XZP` están archivadas) · Plataforma, ahora sesión principal en el entorno «Onia»,
 > `session_01VGmpNv4eSMnpA3wXrypR4L` (la vieja `session_01GU5QdBaBbBd5zCzWX8yLih` está archivada) ·
-> Marca personal **en la nube desde el 30-sep 14:10 UTC: `session_012ppFowADbJNtZ6WBMtqpuf`** (la de la laptop, `session_01LV2Djb9n8BgziusUEoJRq7`, queda EN PAUSA: si Sergio Urcullo vuelve a ella con Remote Control, hace `git pull` de `claude/marca-personal-contenido-ae658c` antes de tocar nada; una sola sesión por carril) · Lucía v4 `session_01RRD6v9rmBavDoXx1rG2mEn` ·
+> Marca personal **vuelve a la sesión LOCAL de la laptop el 1-oct ~13:00 UTC; la de la nube (`session_012ppFowADbJNtZ6WBMtqpuf`) queda en pausa** · antes: Marca personal **en la nube desde el 30-sep 14:10 UTC: `session_012ppFowADbJNtZ6WBMtqpuf`** (la de la laptop, `session_01LV2Djb9n8BgziusUEoJRq7`, queda EN PAUSA: si Sergio Urcullo vuelve a ella con Remote Control, hace `git pull` de `claude/marca-personal-contenido-ae658c` antes de tocar nada; una sola sesión por carril) · Lucía v4 `session_01RRD6v9rmBavDoXx1rG2mEn` ·
 > Mercado `session_01BnctfaNRsm3ogJ46A7B5P5`.
 > ⚠️ **Corregido el 30-sep 03:20 UTC (Mercado):** acá decía Lucía v4 = `session_01KdXWrUrmcitf33fEDePwX7`.
 > Esa sesión se **archivó** a las 02:52 UTC al pasar Lucía al entorno `onia-higgsfield` (medido con

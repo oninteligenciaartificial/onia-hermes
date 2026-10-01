@@ -2,6 +2,39 @@
 
 **Archivo único del carril.** Actualizado 2026-09-29 por Claude (Opus 5.5).
 
+## 🔁 1-oct · el carril pasa a la sesión LOCAL (laptop de Sergio Urcullo)
+
+La sesión de la nube (`session_012ppFowADbJNtZ6WBMtqpuf`) queda EN PAUSA desde ahora; una sola sesión por carril.
+La local arranca con `git pull` de `claude/marca-personal-contenido-ae658c` y lee esto primero.
+
+**Dónde quedó todo (todo en `main` vía PR #57 y #61, nada sin commitear):**
+- **Guiones de dos semanas, auditados:** `cola/plan-3-semanas/GUIONES-2-SEMANAS-1-14-OCT.md` — 38 piezas, calendario
+  jue 1 → mié 14 (tutorial · informativo · caso por día; YouTube sáb 3, mar 6, vie 9, mar 13). Auditoría con qué se
+  cambió y por qué: `cola/plan-3-semanas/auditoria-20260930/LOTE-A…D.md`. **Nada grabado todavía.**
+- **Comunidad de WhatsApp:** textos de la vuelta + reto de los presupuestos en `cola/drops/2026-10-01.md`
+  (con imágenes en `carousels/out/sergio-comunidad-reto-presupuestos-20261001/`). **No enviados.** Las fechas de ese
+  archivo (jue 1 / vie 2) se corren al día real en que Sergio Urcullo los mande.
+- **Historias de IG:** `carousels/out/sergio-historias-comunidad-20261001/` (2, con ilustraciones de Higgsfield).
+- **K1** sale en opción B (`carousels/out/sergio-k1-opcion-b-clay-20260929/`), después del reto.
+
+**Lo primero que tiene que hacer la sesión local** (lo que la nube no pudo): `cola/plan-3-semanas/PEDIDO-LAPTOP-20261001.md`.
+Lo urgente es la página de precios de WhatsApp de Meta antes de grabar D02-B. Después: OpenAI DevDay, la web
+`sergiourcullo.vercel.app`, gitdiagram, la memoria de los 424 commits y el filtro de n8n.
+
+**Pendientes del carril, en orden:**
+1. Verificaciones de la laptop (arriba) → pasar los resultados a los guiones.
+2. Escribir los drops que faltan (noticias N*, repos R*) y corregir el drop 2 (WhatsApp) y el 14 (MCP); juntarlos en
+   los avisos de lun/mié/vie (propuesta del lote C: no 17 cierres sueltos).
+3. Flujo de video: los brutos quedan en `C:\Users\PC\Videos\ONIA-brutos\<fecha>\`; la local edita con
+   `editor-videos` (tabla de cortes + preview a Sergio Urcullo ANTES de cortar) y publica desde el VPS con su OK.
+4. Bio de IG: «Comunidad» como primer link + destacado «Comunidad» (lo hace Sergio Urcullo; la local puede revisar
+   perfiles con el Chrome logueado, solo lectura).
+
+**Intentos fallidos / trampas de la nube (para no repetir):** el campo del título en el pack es `headline`, no
+`title` (sale sin título y sin aviso); en la nube no hay `ffmpeg` (se instala con apt) ni CLI de Higgsfield (se usó el
+MCP, 0,48 cr registrados); `git grep` sobre todo el repo tarda >2 min (dejó un merge a medias una vez: usar `grep`
+sobre el archivo).
+
 ## 🧭 La visión del carril (Sergio Urcullo, 30-sep, textual)
 
 > *«ser un experto en ia, contenido diario · pasar a lanzar un curso luego, comunidad atrae ventas de curso ia ·
