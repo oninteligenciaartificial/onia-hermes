@@ -5,6 +5,18 @@
 > exige la PC (Facebook, Instagram o el Administrador de anuncios con el login de Sergio Urcullo) lo hace la
 > madre. El aviso anterior, «pasa a una sesión local», quedó sin efecto.
 >
+> **1-oct, tarde — tareas de la madre, estado.** Pruebas por vencer: las mira la madre en la PC (aquí no
+> hay VPS); borradores A/B en el transcript. D1/D4 renderizadas con las capturas candidatas recortadas
+> (`3834f60a`): **esperan el OK de Sergio Urcullo a las capturas y a las piezas**. El marco de captura del pack
+> mide ~450×300 y en el celular se lee justo: si no alcanza, la salida es un layout de captura a todo ancho
+> en el renderer compartido. Cupos 9-10 dentales (Spadental, MUN) en `ONIA_PROSPECTOS_DENTAL_SCZ.md` §6.5.
+> Estética e importadora re-leídas en vivo (`c6a4caa5`): 12 y 6; Cames bajó a reserva. Pasos para crear
+> la campaña en pausa en `ONIA_ADQUISICION_Y_PAUTA.md` §5.8.1. **Trampa:** `ads_create_ad` deja
+> borradores y `ads_activate_entity` los publica en ACTIVO. Borradores para los 6 leads, verificados
+> contra el código de la 1.0, en `ONIA_LEADS_ESPERANDO.md` §3: el de 4 doctores sale **solo con la 1.0
+> publicada**. Página: https://claude.ai/artifact/8sFD37TVJMcEJaHcZ2PWSV (28 negocios). **Intento fallido:**
+> el conector de Meta sigue sin ver ONIA Ads (re-medido el 1-oct a las 20:15 UTC).
+>
 > **Renombrada el 30-sep, de noche, por decisión de Sergio Urcullo.** El archivo conserva su nombre para no
 > romper enlaces.
 >
