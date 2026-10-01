@@ -126,7 +126,10 @@ export default function Precios() {
       <Block surface="paper">
         <Reveal>
           <Kicker>Precios claros</Kicker>
-          <h1 className={s.display}>
+          {/* `displayPalabraLarga`: «implementación,» no entraba entera en un
+              teléfono de 390 y la coma quedaba cortada en el borde (ver la
+              clase en sitio.module.css). */}
+          <h1 className={`${s.display} ${s.displayPalabraLarga}`}>
             Cuatro escalones. Sin implementación, sin <em>permanencia</em>.
           </h1>
           <p className={s.lead}>

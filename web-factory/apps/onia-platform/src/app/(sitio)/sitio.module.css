@@ -210,6 +210,25 @@
   }
 }
 
+/*
+ * Titular con una palabra larga que no se puede partir. El de `/precios` lleva
+ * «implementación,»: a 3.1em (49,6px) esa palabra sola mide 7,6 veces el
+ * tamaño de la letra, unos 377px, y en un teléfono de 390 la columna útil es
+ * 351,6px (390 menos 1.2rem por lado del `.inner`). La coma quedaba cortada en
+ * el borde: el texto llegaba a x=396 (medido con Playwright el 2026-10-01).
+ *
+ * El tamaño se ata al ANCHO de la columna y no a un número fijo, para que
+ * tampoco se corte en los teléfonos de 320-375: (100vw − 2.4rem) / 7.9 deja la
+ * palabra unos 13px adentro a 390. El techo es el mismo 3.1em del `.display`,
+ * así que en un teléfono ancho no cambia nada, y desde 768 manda el `.display`
+ * de siempre: el escritorio queda igual.
+ */
+@media (max-width: 767px) {
+  .displayPalabraLarga {
+    font-size: clamp(2.2em, (100vw - 2.4rem) / 7.9, 3.1em);
+  }
+}
+
 /* palabra destacada dentro del display: color, no una 5ta fuente */
 .display em {
   font-style: normal;
