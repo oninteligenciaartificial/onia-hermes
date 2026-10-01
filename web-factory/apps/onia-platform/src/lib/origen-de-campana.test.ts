@@ -110,15 +110,30 @@ function correr(
   };
 }
 
-const ENTRADA = "https://onia.com.bo/?utm_source=facebook&utm_medium=paid&utm_campaign=onia-etapa1-dental&utm_content=d1&src=ad-d1&fbclid=IwAR0abc_DEF-123";
+const ENTRADA = "https://onia.com.bo/?utm_source=facebook&utm_medium=paid&utm_campaign=onia-etapa1-dental&utm_content=d1&utm_id=120210000000&utm_term=clinica+dental&src=ad-d1&fbclid=IwAR0abc_DEF-123";
 
 describe("el origen de campaña viaja al alta", () => {
-  it("guarda los seis parámetros al entrar", () => {
+  it("guarda los ocho parámetros al entrar", () => {
     const v = correr(ENTRADA);
     const guardado = JSON.parse(v.guardado.get(CLAVE_DE_SESION)!);
 
     expect(Object.keys(guardado).sort()).toEqual([...PARAMETROS_DE_CAMPANA].sort());
     expect(guardado.src).toBe("ad-d1");
+  });
+
+  /**
+   * La 1.0 de la app guarda `utm_id` y `utm_term` con la cuenta. Si el sitio
+   * no los pasa al registro, la app no tiene qué guardar: el id de campaña de
+   * Meta y el término de búsqueda se perdían en el primer clic.
+   */
+  it("utm_id y utm_term viajan al alta", () => {
+    const v = correr(ENTRADA);
+    const enlace = { href: REGISTRO_URL };
+    v.tocar(enlace);
+
+    const destino = new URL(enlace.href);
+    expect(destino.searchParams.get("utm_id")).toBe("120210000000");
+    expect(destino.searchParams.get("utm_term")).toBe("clinica dental");
   });
 
   it("al tocar «Creá tu cuenta» el enlace sale con el origen", () => {
@@ -195,7 +210,7 @@ describe("sólo pasa lo que está en la lista blanca, y corto", () => {
     expect(destino.searchParams.has("next")).toBe(false);
   });
 
-  it("un valor con caracteres raros se descarta", () => {
+  it("un valor con marcado (< o >) se descarta", () => {
     const v = correr("https://onia.com.bo/?src=%3Cscript%3E&utm_source=ok");
     const enlace = { href: REGISTRO_URL };
     v.tocar(enlace);
@@ -213,15 +228,61 @@ describe("sólo pasa lo que está en la lista blanca, y corto", () => {
     expect(new URL(enlace.href).searchParams.get("utm_campaign")).toBe("Campaña Clínica SCZ");
   });
 
-  it("un valor más largo que el máximo se descarta", () => {
-    const largo = "a".repeat(LARGO_MAXIMO + 1);
+  /**
+   * El defecto que este caso deja rojo: hasta el 2026-10-01 la lista blanca
+   * de caracteres no aceptaba `(`, `)`, `/` ni `%`, y una campaña con esos
+   * nombres —los que Meta Ads arma solo— se descartaba ENTERA, en silencio.
+   */
+  it("una campaña con paréntesis, barra y % llega entera", () => {
+    const nombre = "Clínicas SCZ (sep)/v2";
+    const v = correr(
+      `https://onia.com.bo/?utm_campaign=${encodeURIComponent(nombre)}&utm_content=${encodeURIComponent("50% off")}`,
+    );
+    const enlace = { href: REGISTRO_URL };
+    v.tocar(enlace);
+
+    const destino = new URL(enlace.href);
+    expect(destino.searchParams.get("utm_campaign")).toBe(nombre);
+    expect(destino.searchParams.get("utm_content")).toBe("50% off");
+  });
+
+  it("también llega entera si viene sin codificar en la dirección", () => {
+    const v = correr("https://onia.com.bo/?utm_campaign=Cl%C3%ADnicas SCZ (sep)/v2");
+    const enlace = { href: REGISTRO_URL };
+    v.tocar(enlace);
+
+    expect(new URL(enlace.href).searchParams.get("utm_campaign")).toBe("Clínicas SCZ (sep)/v2");
+  });
+
+  it("los caracteres de control se borran, el resto del valor se queda", () => {
+    const v = correr("https://onia.com.bo/?utm_campaign=%20dental%0A%0D%00sep%09%7F%20&utm_term=%0A%00");
+    const enlace = { href: REGISTRO_URL };
+    v.tocar(enlace);
+
+    const destino = new URL(enlace.href);
+    expect(destino.searchParams.get("utm_campaign")).toBe("dentalsep");
+    // Si no queda nada después de sanear, no viaja una clave vacía.
+    expect(destino.searchParams.has("utm_term")).toBe(false);
+  });
+
+  it("un valor más largo que el máximo se corta al máximo, no se pierde", () => {
+    const largo = "a".repeat(LARGO_MAXIMO + 40);
     const v = correr(`https://onia.com.bo/?src=${largo}&utm_medium=paid`);
     const enlace = { href: REGISTRO_URL };
     v.tocar(enlace);
 
     const destino = new URL(enlace.href);
-    expect(destino.searchParams.has("src")).toBe(false);
+    expect(destino.searchParams.get("src")).toBe("a".repeat(LARGO_MAXIMO));
     expect(destino.searchParams.get("utm_medium")).toBe("paid");
+  });
+
+  it("el corte no deja media pareja sustituta (un emoji partido)", () => {
+    const valor = "a".repeat(LARGO_MAXIMO - 1) + "😀";
+    const v = correr(`https://onia.com.bo/?utm_campaign=${encodeURIComponent(valor)}`);
+    const enlace = { href: REGISTRO_URL };
+    v.tocar(enlace);
+
+    expect(new URL(enlace.href).searchParams.get("utm_campaign")).toBe("a".repeat(LARGO_MAXIMO - 1));
   });
 
   it("lo guardado también se revalida: un sessionStorage adulterado no viaja", () => {

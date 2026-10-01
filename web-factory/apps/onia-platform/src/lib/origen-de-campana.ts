@@ -16,8 +16,9 @@ export { PIXEL_DE_META, PIXEL_DESTINO };
  *
  * **Cómo, y por qué así.** Un `<script>` inline de ~1 KB, sin dependencias:
  *
- *  1. Al entrar, lee de la URL SOLO las claves de `PARAMETROS_DE_CAMPANA`, con
- *     valores cortos y de caracteres conocidos, y las guarda en
+ *  1. Al entrar, lee de la URL SOLO las claves de `PARAMETROS_DE_CAMPANA`,
+ *     las SANEA (`sanear` del snippet: sin caracteres de control y con
+ *     largo tope, pero sin perder paréntesis, barras ni `%`) y las guarda en
  *     `sessionStorage` (muere con la pestaña; no es una cookie).
  *  2. Al tocar un enlace al registro, le SUMA esas claves al href (sin pisar
  *     el `?plan=` que ya pone `registroConPlan`).
@@ -27,12 +28,11 @@ export { PIXEL_DE_META, PIXEL_DESTINO };
  * cubre también los botones que dibuja un componente cliente (el conmutador
  * mensual/anual de `/precios`).
  *
- * **Del otro lado, NADIE lo guarda todavía.** Con el alta abierta en producción
- * el registro muestra `SignupForm`, que sólo lee `?plan=`; el único que lee
- * `src` es `AccessRequestForm`, que con el alta abierta no se muestra, y
- * ninguno lee `utm_*` ni `fbclid`. El origen llega a la URL del registro y ahí
- * se pierde: hasta que el producto lo guarde, ningún alta es atribuible a su
- * campaña (pendiente en el handoff `meta-ads-prospeccion`).
+ * **Del otro lado lo guarda la 1.0 de la app**, con la cuenta (`signupOrigin`),
+ * incluidos `utm_id` y `utm_term`. Por eso las dos claves están en la lista: si
+ * el sitio no las pasa, la app no tiene qué guardar. Hasta que esa versión esté
+ * en producción, el registro vigente lee sólo `?plan=` y el origen se pierde
+ * en su URL (handoff `meta-ads-prospeccion`).
  *
  * **El mismo snippet avisa al píxel de Meta**, sin cargar la librería de Meta:
  *
@@ -70,18 +70,37 @@ export const PARAMETROS_DE_CAMPANA = [
   "utm_medium",
   "utm_campaign",
   "utm_content",
+  "utm_id",
+  "utm_term",
   "src",
   "fbclid",
 ] as const;
 
-/** Largo máximo de un valor. Un `fbclid` real ronda 60-200 caracteres. */
+/**
+ * Largo máximo de un valor; lo que pasa se CORTA, no se descarta. Un `fbclid`
+ * real ronda 60-200 caracteres.
+ */
 export const LARGO_MAXIMO = 255;
 
 /**
- * Letras (con tildes y ñ), dígitos y `_ . ~ : | + -` y espacio. Nada de `<`,
- * `"`, `/` ni `=`: un valor que los trae no es un nombre de campaña.
+ * Caracteres de control (C0, DEL, C1) y los separadores de línea Unicode: no
+ * son parte de ningún nombre de campaña y se BORRAN del valor.
  */
-export const VALOR_VALIDO = /^[\w.~:|+ \u00C0-\u017F-]+$/;
+export const CONTROL = /[\u0000-\u001F\u007F-\u009F\u2028\u2029]/g;
+
+/**
+ * Lo único que hace descartar un valor entero: `<` o `>`. Eso es marcado, no
+ * un nombre de campaña. Todo lo demás pasa.
+ *
+ * **Por qué ya no es una lista blanca de caracteres.** Hasta el 2026-10-01 el
+ * valor tenía que ser letras, dígitos y `_ . ~ : | + -`: una campaña llamada
+ * «Clínicas SCZ (sep)/v2» —paréntesis y barra, nombres que Meta Ads arma
+ * solo— se descartaba ENTERA y el alta llegaba sin campaña, sin ningún error
+ * a la vista. El valor nunca se escribe en el DOM: viaja por `URLSearchParams`
+ * (que lo codifica) y por `sessionStorage`, así que no hay nada que escapar.
+ */
+export const VALOR_DESCARTADO = /[<>]/;
+
 
 /** Dónde queda guardado el origen durante la visita. */
 export const CLAVE_DE_SESION = "onia-origen";
@@ -94,9 +113,10 @@ const WHATSAPP = `https://wa.me/${WA_PHONE}`;
 
 // ponytail: el `fbc` lleva la hora del aviso y no la de la llegada; guardarla aparte si Meta lo marca en Diagnóstico.
 export const origenDeCampanaInit = `(function(){
-var CLAVES=${JSON.stringify([...PARAMETROS_DE_CAMPANA])},MAX=${LARGO_MAXIMO},OK=${VALOR_VALIDO},K=${JSON.stringify(CLAVE_DE_SESION)},REG=${JSON.stringify(REGISTRO_URL)},WA=${JSON.stringify(WHATSAPP)};
+var CLAVES=${JSON.stringify([...PARAMETROS_DE_CAMPANA])},MAX=${LARGO_MAXIMO},CTRL=${CONTROL},MARCA=${VALOR_DESCARTADO},K=${JSON.stringify(CLAVE_DE_SESION)},REG=${JSON.stringify(REGISTRO_URL)},WA=${JSON.stringify(WHATSAPP)};
 var PIXEL=${JSON.stringify(PIXEL_DE_META)},TR=${JSON.stringify(PIXEL_DESTINO)};
-function limpiar(leer){var o={},n=0;for(var i=0;i<CLAVES.length;i++){var c=CLAVES[i],v=leer(c);if(typeof v==="string"&&v.length<=MAX&&OK.test(v)){o[c]=v;n++;}}return n?o:null;}
+function sanear(v){if(typeof v!=="string")return null;v=v.replace(CTRL,"").trim();if(v.length>MAX)v=v.slice(0,MAX).replace(/[\\uD800-\\uDBFF]$/,"");return v&&!MARCA.test(v)?v:null;}
+function limpiar(leer){var o={},n=0;for(var i=0;i<CLAVES.length;i++){var c=CLAVES[i],v=sanear(leer(c));if(v!==null){o[c]=v;n++;}}return n?o:null;}
 var q=new URLSearchParams(location.search),aqui=limpiar(function(c){return q.get(c)}),o=aqui;
 try{if(o){sessionStorage.setItem(K,JSON.stringify(o));}else{var g=JSON.parse(sessionStorage.getItem(K));o=g&&limpiar(function(c){return g[c]});}}catch(e){}
 var medir=location.hostname===${JSON.stringify(HOST_QUE_MIDE)}&&!navigator.globalPrivacyControl,hecho={};
