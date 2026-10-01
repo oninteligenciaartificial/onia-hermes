@@ -23,11 +23,14 @@ visualmente, listo para que una sesión con acceso al VPS lo publique.
   - Rollback: el contenedor `supabase-auth2-old-20260930-204901`.
 - ✅ Mirada en producción (21:00 UTC): sin 500 ni P2022. En prod NO hay demo dental; la única demo es «Tienda La Esquina» y vence el 1-oct 23:22 La Paz.
 - ✅ Fix de la flecha doble en /register y el «volver» de la bandeja: PR #91 → `release-2610da99` (21:44 UTC), mirado en /register a 1440 px.
-- Carriles con resultado y esperando a Sergio Urcullo:
-  - verificación y bienvenida por WhatsApp en `v1/verificacion-whatsapp` (`dc17ae1f`), con interruptor apagado; necesita su OK a 5 textos, la migración, el env y el crontab;
-  - bot de ventas en `wip/bot-ventas-pauta-20260930`; necesita su OK a 2 textos;
-  - web 1.0: 3 correcciones y las decisiones A-C;
-  - plan de demos en producción: decisiones D1-D5.
+- **1-oct — decisiones de Sergio Urcullo (por pregunta):** textos del bot aprobados · WhatsApp OBLIGATORIO en el alta + 5 textos aprobados · **no se crean demos** («ninguno es real, terminemos el proyecto») · sacar «SIAT en trámite» de la venta.
+- ✅ **Verificación por WhatsApp publicada (PR #92 → `4dc829e8`)**, con interruptor en **`ONIA_VERIFICACION_WHATSAPP=plantillas`** (crea/lee plantillas, NO pide WhatsApp todavía):
+  - migración `20260930120000_add_onia_whatsapp_verificaciones` aplicada ~00:47 UTC, respaldo `/root/backups/pre-verif-wa-*`;
+  - `app.env` con respaldo `app.env.bak-pre-verif-20261001`; publicador «PUBLICADO Y VERIFICADO».
+  - Cron corrido a mano: 4 plantillas **en revisión** en Meta (bienvenida_agenda/panel UTILITY, primera_cita MARKETING, prueba_por_terminar UTILITY).
+  - 🔴 **`onia_codigo_verificacion` (AUTHENTICATION) NO se crea** — ver §5 y §6.
+- ✅ **Bot de ventas desplegado:** merge a main `c7f44ba5`, `/opt/onia/bot/_deploy/publicar.sh` → «el bot corre lo que hay en origin/main».
+- Web 1.0: correcciones en `wip/web-v1-correcciones-20261001` (`9029715d`, `71fea7af`, `05430b24`, `6564d6ab`; legales en `75667dad`). **Sin publicar: espera el OK de Sergio Urcullo** a la home nueva y a los legales. Comparativas en `scratchpad/web-v1/comparar2/` (se pierden con el contenedor).
 - Lead trabado: «Importadora Rojas» (Carlos Mamani Rojas). El correo de confirmación rebotó con 5.1.1 y no dejó teléfono.
 
 Lo de §3 era el camino hasta ahí.
@@ -62,10 +65,14 @@ Capturas: `hermes-content/carousels/briefs/assets/onia-1.0-dental-ads/candidato-
 - La primera tanda de capturas tenía el link de reserva en `localhost:3300`. El link se escribe en la propuesta AL SEMBRAR, con la URL del entorno de ese momento. Para rehacerlas hay que borrar las propuestas **y** las solicitudes de aprobación y volver a correr los agentes.
 - Turbopack entra en pánico con `node_modules` como symlink en los worktrees → usar `--webpack`.
 - Los tests de `.github/scripts/rango-gitleaks.test.ts` se pasan de tiempo (5 s) con 5 vitest a la vez. Solos pasan. No es un bug del producto.
+- **Plantilla de AUTENTICACIÓN de Meta (1-oct): bloqueo de CUENTA, no de contenido.** Reproducido directo desde el VPS con el token del inbox 5 (system user de la app «Onia Bot», scopes `whatsapp_business_management` + `messaging`): el POST a `/4429061034078857/message_templates` responde **code 10 / subcode 2388185** «Esta cuenta de WhatsApp Business no tiene permiso para crear una plantilla de mensaje». Igual con payload mínimo (sin TTL ni pie), y por `upsert_message_templates`. Hipótesis DESCARTADAS medidas: verificación del negocio (la WABA dice `business_verification_status: verified`, `account_review_status: APPROVED`), salud (`can_send_message: AVAILABLE` en WABA, negocio y app), payload. Los UTILITY/MARKETING sí se crean. Sin probar: método de pago en la WABA (la API pide ser BSP para leerlo) y la elegibilidad que muestre WhatsApp Manager al crearla a mano. **No usar una UTILITY con el código como atajo**: Meta prohíbe OTP fuera de AUTHENTICATION y arriesga el número de VENTAS.
 - Docker no arranca solo: hay que lanzar `dockerd &` a mano (el contenedor lo tiene instalado y somos root).
 - El contenedor se reinició 2 veces y los resultados de los subagentes no llegaron solos. Se recuperaron de `~/.claude/projects/.../subagents/agent-*.jsonl`.
 
 ## 6. Qué depende de Sergio Urcullo
+
+0. **(1-oct, bloquea encender la verificación)** En WhatsApp Manager de la cuenta «Onia» → Plantillas → Crear → **Autenticación**: intentar crearla y mandar captura de lo que diga. Revisar también **Configuración de pagos** de la WABA. Si Meta no la habilita en ~48 h, decidir el plan B: verificación **inversa** (el dueño nos manda el código por un link `wa.me`; gratis, sin plantilla, abre la ventana de 24 h; ~medio día entre bot y plataforma).
+0b. OK a la home nueva y a los legales (`75667dad`) de `wip/web-v1-correcciones-20261001` para publicarla.
 
 1. **Acceso al VPS desde la nube:** crear Cloudflare Tunnel + Access (pasos en la skill `onia-infra`) y cargar los secretos en el entorno. Si no, publicar sigue siendo desde la laptop.
 2. **Aprobar o rechazar las capturas del candidato** para la pauta. Si se aprueban, van a la carpeta de la pauta y se avisa a Marca personal (`session_012ppFowADbJNtZ6WBMtqpuf`).
