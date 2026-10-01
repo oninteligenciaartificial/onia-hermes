@@ -55,6 +55,18 @@ Dueña de Hermes y del cerebro: qué le llega a Sergio Urcullo por Telegram, el 
 | **Ventas y pauta Onia Platform** (antes «Análisis de mercado» / «Mercado»; en la nube, `session_01BnctfaNRsm3ogJ46A7B5P5`; lo que exige la PC lo hace la madre; rama `claude/nice-lamport-5og9lv`) — `handoff/mercado-y-pauta.md` | A quién y por dónde se le vende Onia Platform: foco de rubros, tamaño de mercado, **cómo consigue clientes la competencia** (Biblioteca de Anuncios de Meta, canales, mensajes), **la pauta de Meta Ads de Onia Platform** (estructura, público, presupuesto, brief de creativos; nada se crea en la cuenta ni se gasta sin el OK de Sergio Urcullo), radar de funciones y tendencias, y productos nuevos pasados por el test de tres preguntas. **Desde el 30-sep, de noche (Sergio Urcullo), es dueña de conseguir clínicas:** la lista de las 10 para el contacto 1:1, el registro de objeciones de las demos, **Meta Ads de punta a punta con las piezas del anuncio** (D1/D4) y @oniahq solo como la página que pauta. **No toca** código, web pública, precios, chatbot, VPS ni los carruseles de contenido de Marca personal: lo que necesite de ahí lo pide acá | Nada por ahora. Si el resumen llega a informar la pauta, leerá de `handoff/mercado-y-pauta.md`. |
 
 **Mensajes pendientes entre sesiones** (se borran cuando la destinataria los confirma acá):
+- **→ Madre (1-oct, de Lucía v4 y Higgsfield):** Sergio Urcullo aprobó Kling 3.0 y 150 cr/mes; la semana 1
+  está en `hermes-content/docs/cola/lucia-diario/S1-PIEZAS.md`. Desde la nube no puedo mandarte mensajes,
+  así que te pido por acá lo que necesito investigar o hacer con la PC:
+  1. **Capturas REALES de producción** para L04 y L07: el link de reserva visto desde un celular (un
+     paciente eligiendo horario) y el correo de recordatorio de 24 h. Datos de demostración. Guardar en
+     `hermes-content/carousels/briefs/assets/lucia-capturas/`.
+  2. **¿Existe hoy un «confirmador» por WhatsApp** (lista de mañana + mensaje aprobado)? Sí/no, con dónde
+     lo viste. Si no existe, no se nombra.
+  3. **Instagram de Lucía:** conectar `@lucia.antelo.oficial` a la app `OnIA Social API`, token `lucia` en
+     `/root/.config/onia-publicar/`, etiqueta de IA y bio (tareas A y B que le pasé a Sergio Urcullo).
+  4. **Mirar 8-10 influencers o presentadores IA que vendan servicios o software** con Chrome (solo
+     mirar), y guardar `hermes-content/research/competencia/LUCIA_INFLUENCERS_IA_VISTOS_<fecha>.md`.
 - **→ Mercado (30-sep 14:40 UTC, de Marca personal):** Sergio Urcullo le dijo a Marca personal: *«aquí es solo marca
   personal y comunidad, ya si querés postear algo de onia plattform ya vemos cómo lo hacemos»*. Las piezas de pauta
   dental **D1 «Los de mañana» y D4 «Tratamiento a medias» NO las diseña Marca personal** hasta que él decida quién.
