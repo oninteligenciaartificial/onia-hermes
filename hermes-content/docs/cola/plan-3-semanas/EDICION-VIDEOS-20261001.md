@@ -22,6 +22,7 @@ algo que no existe.
   - «mismo commit»
   - «dos de tres»
   - «10 de septiembre»
+  - al final: «Comentá PLANILLA» (no lo dijo al grabar: va solo en pantalla y en el caption)
 - **Pantallas:**
   - `claude --model sonnet` / `claude --model opus`;
   - la planilla de 3 filas;
@@ -31,7 +32,7 @@ algo que no existe.
 
   > Salió Sonnet 5.5 y cuesta la mitad que Opus. Antes de cambiarte, probalo con tres tareas tuyas: una mecánica, una de
   > todos los días y una difícil. Mismo prompt, mismo commit. Si Sonnet empata en dos de tres, usalo por defecto.
-  > La planilla para anotarlo está en mi comunidad de WhatsApp (link en la bio).
+  > La planilla para anotarlo está en mi comunidad de WhatsApp: comentá PLANILLA y te paso el link.
 - **Yap 1 (Trial, otro gancho):** arrancar por «Se me acabó la semana de Claude el 10 de septiembre» → la regla de dos de tres.
 - **Yap 2 (Trial, un solo paso):** «Si Sonnet empata en dos de tres, usalo por defecto» + cómo se corre la prueba, ≤ 30 s.
 
@@ -45,6 +46,7 @@ algo que no existe.
   - «push a la principal»
   - «Shift Tab»
   - «manual mode on»
+  - al final: «Comentá MANUAL» (no lo dijo al grabar: va solo en pantalla y en el caption)
 - **Pantallas:**
   - la barra de estado con el modo;
   - Shift+Tab ciclando;
@@ -57,7 +59,7 @@ algo que no existe.
 
   > Tu Claude Code probablemente ya no te pregunta casi nada: desde fines de septiembre arranca en modo auto. Bloquea
   > lo peligroso, pero deja pasar un push a tu rama principal. Si querés que vuelva a preguntarte: Shift+Tab, o
-  > defaultMode en default en tu settings. El bloque para copiar está en mi comunidad (link en la bio).
+  > defaultMode en default en tu settings. El bloque para copiar está en mi comunidad: comentá MANUAL y te paso el link.
 - **Yap 1:** arrancar por «Claude Code puede hacer push a tu rama principal sin preguntarte».
 - **Yap 2:** solo el arreglo: el bloque de settings y «manual mode on», ≤ 30 s.
 
