@@ -65,6 +65,12 @@ Instrucciones de proyecto. Override sobre defaults.
   solo se autolistan en sesiones abiertas DENTRO de ese repo.
 - Al aprender una trampa nueva: **editar la skill que corresponda**, no crear doc suelto.
   Skill pública instalada que sirva: usarla, no reinventar.
+- **Autoconocimiento: cada sesión se entrena a sí misma.** Sergio Urcullo, 2026-10-01: *«tienen que
+  aprender a hacer las cosas, que quede como autoconocimiento, sin eso investigamos y perdemos las
+  cosas»*. ANTES de investigar, leer la skill del carril. AL CERRAR cada tarea, lo aprendido (método,
+  trampa, comando, dato medido, intento fallido con su causa) va a esa skill, con el caso y la fecha,
+  **en el mismo commit**. Carril sin skill → crear UNA (`.claude/skills/<carril>/SKILL.md`) y sumarla
+  a `onia-router`. El handoff es estado; la skill es el método que sobrevive al relevo.
 - **Enrutamiento de modelos y contexto:** leer
   `hermes-content/docs/AI_MODEL_ROUTING_2026.md`. Astra decide lo ambiguo y de alto riesgo; Sol
   ejecuta el trabajo cotidiano con juicio; Luna hace tareas cerradas y verificables. No bajar
