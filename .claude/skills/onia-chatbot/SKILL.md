@@ -119,6 +119,33 @@ escribimos nosotros y es responsabilidad nuestra que no prometa nada.
 `make-plan` o `superpowers:writing-plans` · `superpowers:brainstorming` (antes de construir
 algo nuevo) · `qa` · `verification-loop` · `health`.
 
+## WhatsApp de Onia: plantillas, token y Meta (medido 1-oct-2026)
+
+- **Leer la WABA y el token del inbox 5 sin imprimirlo:** en el contenedor de Postgres de Chatwoot
+  (`docker ps | grep chatwoot-db`, base `onia-chatbot`), `channel_whatsapp.provider_config` tiene
+  `business_account_id` = `4429061034078857`, `phone_number_id` = `1283320641524523` y `api_key`. Es un token de
+  system user de la app «Onia Bot» con scopes `whatsapp_business_management` + `messaging`. Usarlo DENTRO de un
+  script en el VPS (`ssh onia-vps 'bash -s' < script.sh`). Nunca se imprime.
+- **Estado de las plantillas:** correr el cron de la plataforma
+  `/api/cron/activacion-whatsapp` (Bearer `CRON_SECRET`, desde dentro del contenedor). En modo `plantillas` crea y
+  lee las plantillas, y devuelve el estado de cada una.
+- 🔴 **La plantilla AUTHENTICATION (`onia_codigo_verificacion`) la rechaza Meta POR CUENTA:** code 10 / subcode
+  2388185. No es el texto: falla igual con payload mínimo y por `upsert_message_templates`. Ya está descartado: negocio
+  verificado, WABA `APPROVED`, salud `AVAILABLE`. Falta mirar el motivo en WhatsApp Manager y la configuración de
+  pagos. Leer la configuración de pagos por API exige ser BSP. **No mandar el código en una UTILITY**: Meta lo prohíbe
+  y arriesga el número de ventas.
+- **Plan B, verificación inversa** (construido el 1-oct, APAGADO): el dueño manda «Mi código de Onia es N» por
+  `wa.me` y el bot lo valida contra el teléfono que da Meta. Ramas sin mergear: `v1/verificacion-inversa`
+  (plataforma: `lib/whatsapp-onia/inversa.ts`, rutas `/estado` y `/desde-whatsapp`) y `wip/bot-verificacion-inversa`
+  (`bot/verificacion-inversa.mjs`, corte en `webhook-server.mjs` antes del turno: no crea lead ni pasa por el motor).
+  **Se enciende en este orden:**
+  1. Mergear y desplegar las dos ramas.
+  2. Cargar el mismo secreto `ONIA_VERIFICACION_INVERSA_SECRETO` (32 o más caracteres) en los dos env.
+  3. En el bot: `ONIA_VERIFICACION_INVERSA=encendida`, `…_INBOX_ID=5`, y reiniciarlo.
+  4. AL FINAL, en la plataforma: `ONIA_VERIFICACION_WHATSAPP=inversa`, y recrear el contenedor.
+
+  Se apaga al revés. Sin esas variables, las rutas dan 404 y el bot no cambia.
+
 ## Reglas duras del carril
 
 1. **Construido ≠ terminado.** Vale cuando está encendido en producción y verificado ahí.
