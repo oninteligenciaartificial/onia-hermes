@@ -96,9 +96,10 @@ ciertas hoy.** Contestar de memoria a este lead es exactamente la forma de quema
 
 ### 3.1 Conv 35 — «F», clínica de 4 doctores (WhatsApp +59173232758)
 
-**Se envía solo con la 1.0 publicada en producción** (fila 1 de `ONIA_ADQUISICION_Y_PAUTA.md` §5.9): las
-respuestas 1 y 4 describen código de la 1.0. Verificado **leyendo el código** de `onia-platform` en
-`origin/master` (`a7f228c`, 1-oct), no en pantalla.
+**La 1.0 está en producción:** `release-4dc829e8` la contiene (medido por `ONIA_CATALOGO_DE_VENTA.md` el
+1-oct; `3d5f954` es ancestro de `4dc829e`). Las respuestas se verificaron **leyendo el código** de `onia-platform`
+en `origin/master` (`a7f228c`, 1-oct), no en pantalla: antes de enviar, mirar en la cuenta propia que
+`/pending` muestre el tratamiento a medias.
 
 | Pregunta | Respuesta | De dónde sale |
 |---|---|---|
@@ -108,7 +109,7 @@ respuestas 1 y 4 describen código de la 1.0. Verificado **leyendo el código** 
 | 4. Cancela y no reprograma: lo detecta solo | **Sí**: el Reprogramador lo propone dentro de los 14 días si no tiene otra cita | `agents-reprogramador.ts`: `CANCELADA` y `NO_ASISTIO`, `REPROGRAMAR_VENTANA_DIAS = 14` |
 | 5. Plan o módulo adicional | **En el plan, desde Crece** | `plan-catalogo.ts`: `agentsIncluded: true` desde `crece` |
 | 6. Excel/PDF | **CSV (abre en Excel), desde Básico; PDF no.** La lista de seguimiento se trabaja en pantalla, no se exporta | `csvExportEnabled` desde `basic`; `app/api/settings/export` |
-| Costo para 4 doctores | 4 doctores + 1 asistente = 5 usuarios → **Profesional, Bs 890/mes**. Si la asistente no usa el sistema, entran en **Crece, Bs 550/mes** (4 usuarios desde el 1-oct) | `subscription-plans.ts` `DEFAULT_PLAN_AMOUNTS` y `plan-catalogo.ts` en `a7f228c`. **El día del envío, re-leerlos**: la env var puede pisar el monto en producción |
+| Costo para 4 doctores | 4 doctores + 1 asistente = 5 usuarios → **Profesional, Bs 890/mes**. Crece (Bs 550/mes) pasa a 4 usuarios con `a7f228c`, **que todavía no está en producción** (`release-4dc829e8` dice 3): no se cotiza Crece para 4 hasta que se publique | `subscription-plans.ts` `DEFAULT_PLAN_AMOUNTS` y `plan-catalogo.ts` en `a7f228c`. **El día del envío, re-leerlos**: la env var puede pisar el monto en producción |
 
 Mensaje propuesto:
 

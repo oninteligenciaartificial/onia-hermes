@@ -287,8 +287,8 @@ noche*, *no te faltan pacientes*, *tu recepcionista está tapada*, entre otros.
 - **Con la 1.0 publicada**, el ángulo entra **diciendo el mecanismo** (*"si pasan tres semanas sin que
   vuelva…"*), con dos cuidados: la prueba dura 14 días y el aviso aparece a los 21, así que un cliente que
   carga datos nuevos **no lo ve dentro de la prueba** (se alarga la prueba de los leads de pauta desde
-  `/admin/plans`, o la demo lo muestra con un tratamiento sembrado de más de 21 días — hoy el seed dental no
-  lo trae); y la regla toma `EN_PROGRESO`, no `PENDIENTE` (el plan que nunca empezó): si hace falta, es una
+  `/admin/plans`, o la demo lo muestra con un tratamiento sembrado de más de 21 días: el seed dental lo trae desde
+  `5356a6c`, pero **hoy no hay cuenta demo en producción**, ver `sales-kit/02-GUION-DEMO.md` §0); y la regla toma `EN_PROGRESO`, no `PENDIENTE` (el plan que nunca empezó): si hace falta, es una
   segunda vuelta, el dato existe.
 - **Lo que un anuncio no dice** (lista del carril Plataforma, verificada contra el producto): factura
   electrónica, "envío automático por WhatsApp", paquetes de sesiones (estética), testimonios o cifras de
@@ -427,7 +427,7 @@ memoria. Estado al **30-sep, 12:30 UTC**.
 
 | # | Condición | Cómo se comprueba | Dueño | Estado |
 |---|---|---|---|---|
-| 1 | **1.0 publicada y medición probada** (alta con `utm` guardada con su origen, píxel visto en «Probar eventos») | aviso de la sesión principal | sesión principal | ⏳ candidato `6088e478` |
+| 1 | **1.0 publicada y medición probada** (alta con `utm` guardada con su origen, píxel visto en «Probar eventos») | aviso de la sesión principal | sesión principal | ⏳ **1.0 publicada** (`release-4dc829e8` la contiene, medido el 1-oct por `ONIA_CATALOGO_DE_VENTA.md`); falta ver el píxel en «Probar eventos» |
 | 2 | **El conector ve ONIA Ads**, o Sergio Urcullo crea la campaña a mano | `ads_get_ad_accounts` lista `1073680778314945` | Sergio Urcullo | ❌ **re-medido 1-oct 20:15 UTC**: sigue viendo solo "NUVO 1usd" y "Arthur Fuentes" |
 | 3 | **Método de pago** en ONIA Ads | `has_payment_method: true` en la misma llamada | Sergio Urcullo | ❌ al 21-sep |
 | 4 | **Página "Onia" promocionable y con el WhatsApp de ventas vinculado** | `ads_get_ad_account_pages` lista `1140384625819526`; WhatsApp en la configuración de la página | Sergio Urcullo | sin medir |
