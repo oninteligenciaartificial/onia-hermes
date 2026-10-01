@@ -134,8 +134,17 @@ algo nuevo) · `qa` · `verification-loop` · `health`.
   verificado, WABA `APPROVED`, salud `AVAILABLE`. Falta mirar el motivo en WhatsApp Manager y la configuración de
   pagos. Leer la configuración de pagos por API exige ser BSP. **No mandar el código en una UTILITY**: Meta lo prohíbe
   y arriesga el número de ventas.
-- **Plan B, verificación inversa:** el dueño manda el código por `wa.me` y el bot lo valida. Ramas
-  `v1/verificacion-inversa` (plataforma) y `wip/bot-verificacion-inversa`, APAGADO hasta decidir.
+- **Plan B, verificación inversa** (construido el 1-oct, APAGADO): el dueño manda «Mi código de Onia es N» por
+  `wa.me` y el bot lo valida contra el teléfono que da Meta. Ramas sin mergear: `v1/verificacion-inversa`
+  (plataforma: `lib/whatsapp-onia/inversa.ts`, rutas `/estado` y `/desde-whatsapp`) y `wip/bot-verificacion-inversa`
+  (`bot/verificacion-inversa.mjs`, corte en `webhook-server.mjs` antes del turno: no crea lead ni pasa por el motor).
+  **Se enciende en este orden:**
+  1. Mergear y desplegar las dos ramas.
+  2. Cargar el mismo secreto `ONIA_VERIFICACION_INVERSA_SECRETO` (32 o más caracteres) en los dos env.
+  3. En el bot: `ONIA_VERIFICACION_INVERSA=encendida`, `…_INBOX_ID=5`, y reiniciarlo.
+  4. AL FINAL, en la plataforma: `ONIA_VERIFICACION_WHATSAPP=inversa`, y recrear el contenedor.
+
+  Se apaga al revés. Sin esas variables, las rutas dan 404 y el bot no cambia.
 
 ## Reglas duras del carril
 
