@@ -268,6 +268,16 @@ function templateNameOf(payload) {
   return name || null;
 }
 
+/** La marca que pone la plataforma en lo que escribe sola (ver la condicion 5 de abajo). */
+export const MARCA_ENVIO_AUTOMATICO = "onia_automatico";
+
+export function esEnvioAutomaticoDeLaPlataforma(payload) {
+  const atributos = payload?.content_attributes;
+  if (!atributos || typeof atributos !== "object") return false;
+  const marca = atributos[MARCA_ENVIO_AUTOMATICO];
+  return typeof marca === "string" && marca.trim() !== "";
+}
+
 /**
  * ¿Este mensaje SALIENTE lo escribio un humano? Entonces tomo la conversacion y el bot se calla.
  *
@@ -279,6 +289,13 @@ function templateNameOf(payload) {
  *   4. ese id NO es el del bot. Este es EL candado: sin el, la primera respuesta del propio bot lo
  *      dejaria mudo para siempre en esa conversacion.
  * Las notas privadas ya se descartaron antes: escribir una nota no es atender al prospecto.
+ *
+ *   5. NO trae la marca de envio automatico de la PLATAFORMA (`content_attributes.onia_automatico`).
+ *      La plataforma escribe sola con el token de un USUARIO de Chatwoot (medido el 1-oct: el
+ *      usuario 2, "OnIA"; el bot es el 3): la respuesta a un boton del recordatorio cumplia 1-4 y
+ *      dejaba al bot mudo con ese paciente. La marca la pone `sendAgentMessage` de
+ *      onia-platform/lib/chatwoot.ts (`MARCA_ENVIO_AUTOMATICO`); lo que escribe un humano desde la
+ *      bandeja NO la lleva y sigue silenciando, como corresponde.
  *
  * Devuelve un turno SIN texto: no hay nada que contestar, solo hay que anotar el traspaso. `author`
  * dice "human" — es uno de los tres valores que acepta `bot_messages.author` (contact | bot | human)
@@ -294,6 +311,7 @@ function takeoverTurn(payload, conversationId, type) {
   if (sender.type && String(sender.type).toLowerCase() !== "user") return null;
   const senderId = sender.id === undefined || sender.id === null ? "" : String(sender.id);
   if (!senderId || senderId === botAgentId) return null;
+  if (esEnvioAutomaticoDeLaPlataforma(payload)) return null;
 
   return {
     skip: false,

@@ -167,6 +167,9 @@ algo nuevo) · `qa` · `verification-loop` · `health`.
    conflicto, sin teléfono o con el producto caído, el bot contesta como siempre. Gemelo:
    `onia-platform/lib/whatsapp/respuesta-al-recordatorio.ts` (`accionDelBoton`): cambiar los textos
    o la normalización de un lado sin el otro es doble respuesta o silencio.
+   La RESPUESTA de la plataforma sale con su token (usuario 2 de Chatwoot; el bot es el 3) y lleva
+   `content_attributes.onia_automatico`: `takeoverTurn` no la toma como humano. Sin la marca, el bot
+   quedaba mudo con ese paciente. Gemelo: `MARCA_ENVIO_AUTOMATICO` en `onia-platform/lib/chatwoot.ts`.
 
 ## Gates antes de mergear
 
