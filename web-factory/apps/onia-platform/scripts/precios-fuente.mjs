@@ -877,8 +877,13 @@ export function limitesDelSitio(fuente) {
         conNumero: /([\d.]+)\s+recordatorios/i,
       }),
       /** El tier se cruza por quien lo NOMBRA primero; la herencia textual
-       *  ("Todo lo del Pro") no estorba porque solo importa el primero. */
-      agentes: /\bAgente\s+[A-Z]/.test(inc ?? "") || null,
+       *  ("Todo lo del Pro") no estorba porque solo importa el primero.
+       *  Singular o PLURAL: el 2026-09-30 la prosa del Pro paso de «Agente
+       *  Vuelve a citar…» a «Agentes Vuelve a citar…» y el patron en singular
+       *  dejo de verlo — el cruce quedo ciego justo en el primer plan con
+       *  agentes. La mayuscula (con tildes) despues es lo que exige que sea
+       *  el NOMBRE de un agente y no la palabra suelta en una frase. */
+      agentes: /\bAgentes?\s+[A-ZÁÉÍÓÚÑ]/.test(inc ?? "") || null,
       reservas: /Reservas\s+online\s+incluidas/i.test(inc ?? "") || null,
       /**
        * Los mismos dos hechos, leidos del BOOLEANO que el sitio declara por plan
