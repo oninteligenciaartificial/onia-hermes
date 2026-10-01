@@ -63,7 +63,8 @@ Entornos conocidos: «Onia» `env_01BLwXdgpqDS3sx4rg3r2uvg` (tiene la llave/tún
 1-oct).
 
 - ⚠️ **Una sesión abierta por rutina (`create_trigger` / `RemoteTrigger create`) arranca SIN conectores**
-  (sin Higgsfield, sin GitHub): medido por Lucía el 1-oct. Sirve para trabajo de shell/API; para un carril
+  (sin Higgsfield, sin GitHub) **y sin el repo** («No sources configured», `/home/user` vacío, GitHub 403
+  «usar add_repo»), y puede tocarle otro modelo: medido el 1-oct con `cse_01SrFno1LzvGxPqnsFGETRgR`. Sirve para trabajo de shell/API; para un carril
   completo, la sucesora la abre **Sergio Urcullo desde la web** en el entorno elegido, con el texto de
   arranque que deja la sesión saliente.
 - Antes del relevo, la saliente termina lo que está en vuelo, hace push, deja el handoff al día y escribe
