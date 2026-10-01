@@ -316,6 +316,10 @@ poner "$FUENTE/jarvis-resumen.sh"                  "$DESTINO_BIN/onia-jarvis-res
 # 🔒, 🎬, «sin celular») a la aduana. Mismo motivo que la linea de arriba: su cron lo
 # instala aplicar.sh, y el resumen lo busca en esta ruta exacta.
 poner "$FUENTE/agenda.sh"                          "$DESTINO_BIN/onia-agenda.sh"
+# Los pedidos de Sergio Urcullo a Claude en la nube, desde Hermes (2026-10-01, «manejar todo
+# desde ahí»). La skill pedir-a-claude de Hermes lo llama en esta ruta exacta, y aplicar.sh lo
+# consulta con --estado: sin esta línea la skill nombraría un comando que nadie copió.
+poner "$FUENTE/pedido-claude.sh"                   "$DESTINO_BIN/onia-pedido-claude.sh"
 
 # La marca de Onia sobre Chatwoot. Cron VIVO en el VPS (`17 * * * *`) y NADIE lo copiaba:
 # la copia que ejecutaba era la de 14 lineas que defiende 3 claves, y el arreglo del

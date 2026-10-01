@@ -62,6 +62,10 @@ jobs:
           VPS: "root@187.77.16.63"
           ACCION: ${{ inputs.accion }}
           HORAS: ${{ inputs.horas }}
+          # La llave de la rutina de pedidos a Claude (2026-10-01). Solo la usa `aplicar`, que la
+          # guarda en el VPS con 600; GitHub enmascara el secreto en el log. Vacías = no se toca.
+          RUTINA_URL: ${{ vars.ONIA_RUTINA_PEDIDOS_URL }}
+          RUTINA_TOKEN: ${{ secrets.ONIA_RUTINA_PEDIDOS_TOKEN }}
         run: |
           set -o pipefail
           DIR=hermes-content/deploy/hermes-jarvis
@@ -73,6 +77,7 @@ jobs:
             printf 'COMMIT=%q\nHORAS=%q\n' "$GITHUB_SHA" "$HORAS"
             cat "$DIR/comun.sh"
             [ "$ACCION" = diagnostico ] || { printf 'ACTIVOS_B64=%q\n' "$(tar -C "$DIR" -czf - activos 2>/dev/null | base64 -w0)"; }
+            [ "$ACCION" = aplicar ] && printf 'RUTINA_URL=%q\nRUTINA_TOKEN=%q\n' "$RUTINA_URL" "$RUTINA_TOKEN"
             cat "$DIR/$ACCION.sh"
           } | ssh -i "$RUNNER_TEMP/vps_key" -o StrictHostKeyChecking=no -o BatchMode=yes \
                 -o ServerAliveInterval=30 "$VPS" 'bash -s' 2>&1 \
