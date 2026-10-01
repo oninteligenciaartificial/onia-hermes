@@ -1,0 +1,112 @@
+{
+  "title": "Recuperar vs reconstruir el prompt de una imagen (v3, portada dato sin imagen)",
+  "caption": "Antes de adivinar el prompt de una imagen, fijate si ya está escrito.\n\nRecuperar: el prompt está en pantalla (en una lámina, en la descripción o en un cuadro del video) y lo leés tal cual. Reconstruir: no está, escribís uno que da algo parecido, y lo decís.\n\nMirando una imagen no sabés el modelo, la referencia, los intentos ni el seed. Si no lo sabés, no lo inventes.\n\nPara reconstruir uso 8 bloques, en orden fijo. Para comprobar, generá una y ponela al lado de la original.\n\nLa plantilla de los 8 bloques, con el negativo base, está en la comunidad de WhatsApp: link en la bio.\n\nEl método sale de unos 58 reels que analicé, varios con el prompt en pantalla.",
+  "hashtags": [
+    "#prompts",
+    "#ia",
+    "#inteligenciaartificial",
+    "#imagenesia",
+    "#contenido",
+    "#bolivia"
+  ],
+  "serie": "Contenido con IA",
+  "slides": [
+    {
+      "number": 1,
+      "layout": "dato",
+      "theme": "verde",
+      "value": "2",
+      "headline": "caminos para sacar el *prompt de una imagen*",
+      "body": "Uno te da el original. El otro, uno parecido.",
+      "next": "el primero",
+      "alt_text": "Dos caminos para sacar el prompt de una imagen"
+    },
+    {
+      "number": 2,
+      "layout": "lista",
+      "theme": "blanco",
+      "headline": "Paso 0, el crítico: *buscá el texto*",
+      "body": "antes de adivinar, fijate si ya está escrito",
+      "items": [
+        {
+          "label": "Las láminas",
+          "text": "todas, no solo la primera"
+        },
+        {
+          "label": "La descripción",
+          "text": "varios ponen el prompt ahí"
+        },
+        {
+          "label": "El video",
+          "text": "no un cuadro cada tantos segundos"
+        }
+      ],
+      "next": "por qué",
+      "alt_text": "Paso 0: buscar el prompt escrito en láminas, descripción y video"
+    },
+    {
+      "number": 3,
+      "layout": "dato",
+      "theme": "blanco",
+      "value": "1",
+      "headline": "cuadro de todo el reel *mostraba el prompt*",
+      "body": "Pasó en uno de los reels que analicé: mirando uno cada tantos segundos, se perdía. Si lo encontrás, eso es *recuperar*: el prompt exacto.",
+      "next": "si no está",
+      "alt_text": "En un reel el prompt apareció en un solo cuadro"
+    },
+    {
+      "number": 4,
+      "layout": "ensayo",
+      "theme": "blanco",
+      "headline": "Si no está, *reconstruís*",
+      "body": "Escribís uno que da algo parecido. Y lo decís:\n\n«Este no es el prompt original, es uno que produce algo parecido».\n\nPasarlo como original es mentirle a quien te lo pidió.",
+      "next": "lo que no ves",
+      "alt_text": "Una reconstrucción se presenta como tal"
+    },
+    {
+      "number": 5,
+      "layout": "lista",
+      "theme": "blanco",
+      "headline": "Lo que la imagen *no te dice*",
+      "body": "si no lo sabés, decilo: no lo inventes",
+      "items": [
+        {
+          "label": "El modelo",
+          "text": "si no está rotulado"
+        },
+        {
+          "label": "La referencia",
+          "text": "si usó una, no sabés cuál"
+        },
+        {
+          "label": "Los intentos",
+          "text": "ves solo el que salió"
+        },
+        {
+          "label": "El seed",
+          "text": "no se deduce"
+        }
+      ],
+      "next": "para reconstruir",
+      "alt_text": "Lo que no se puede recuperar mirando una imagen"
+    },
+    {
+      "number": 6,
+      "layout": "ensayo",
+      "theme": "blanco",
+      "headline": "Para reconstruir: *8 bloques*",
+      "body": "1 · Apertura\n\n2 · Sujeto *con acción*\n\n3 · Rasgos\n\n4 · Ropa\n\n5 · Pose\n\n6 · Fondo *como lista de objetos*\n\n7 · Técnica de cámara\n\n8 · Lo que no querés",
+      "next": "la prueba",
+      "alt_text": "Los 8 bloques, en orden fijo, para reconstruir un prompt"
+    },
+    {
+      "number": 7,
+      "layout": "ensayo",
+      "theme": "negro",
+      "headline": "Cómo sabés *que funcionó*",
+      "body": "Generá una con tu prompt y ponela al lado de la original.\n\nLa plantilla de los 8 bloques, con el negativo base, está en la comunidad.",
+      "cta": "Comunidad en la bio",
+      "alt_text": "Comprobar lado a lado; la plantilla está en la comunidad"
+    }
+  ]
+}

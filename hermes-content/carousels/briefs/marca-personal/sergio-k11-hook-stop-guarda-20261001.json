@@ -1,0 +1,122 @@
+{
+  "title": "El hook que commitea solo, y su guarda (K11, pack referentes)",
+  "caption": "Mi hook de Claude Code tomó 17 archivos con conflictos, los dio por resueltos y los subió a main. Ese hook corre solo cada vez que Claude termina de responder: commitea y sube.\n\nDos cosas que aprendí rompiéndolo.\n\nStop corre cuando Claude termina su turno, no cuando terminó el trabajo. Así se publicaron 217 líneas de estilos antes que el código que las usaba.\n\nY el script necesita una guarda: antes de commitear, dos comandos de git. Si hay un merge a medias o archivos en conflicto, no toca nada.\n\nComprobalo con /hooks y con un conflicto armado a propósito en un repo de prueba.\n\nLos dos incidentes son del 20 y el 23 de agosto (están en el CLAUDE.md de mi repo); la guarda, en scripts/git-autosync.js. Qué es Stop y qué muestra /hooks: code.claude.com/docs/en/hooks.\n\nEl JSON y la guarda, listos para copiar, están en la comunidad (link en la bio).",
+  "hashtags": [
+    "#claudecode",
+    "#claude",
+    "#git",
+    "#ia",
+    "#programacion",
+    "#bolivia"
+  ],
+  "serie": "Claude Code",
+  "slides": [
+    {
+      "number": 1,
+      "layout": "dato",
+      "theme": "verde",
+      "value": "17",
+      "headline": "archivos con conflictos, *directo a main*",
+      "body": "Mi hook de Claude Code los dio por resueltos y los subió solo. Así se arma bien.",
+      "next": "qué es",
+      "alt_text": "17 archivos con conflictos que el hook de Claude Code subió a main"
+    },
+    {
+      "number": 2,
+      "layout": "logos",
+      "theme": "blanco",
+      "headline": "Stop",
+      "logos": [
+        {
+          "file": "hermes-content/references/brand-claude/claudecode.svg",
+          "label": "Claude Code"
+        }
+      ],
+      "body": "Un hook que corre solo *cada vez que Claude termina* de responder. Yo lo uso para commitear y subir.",
+      "next": "paso 1",
+      "alt_text": "Stop: el hook de Claude Code que corre cuando Claude termina de responder"
+    },
+    {
+      "number": 3,
+      "layout": "lista",
+      "theme": "blanco",
+      "headline": "Paso 1: *dónde va*",
+      "body": "en .claude/settings.json",
+      "items": [
+        {
+          "label": "hooks",
+          "text": "la sección de los hooks"
+        },
+        {
+          "label": "Stop",
+          "text": "una lista: corre cuando Claude termina"
+        },
+        {
+          "label": "hooks",
+          "text": "adentro de Stop, otra lista"
+        },
+        {
+          "label": "type: command",
+          "text": "y command: node scripts/git-autosync.js"
+        }
+      ],
+      "next": "paso 2",
+      "alt_text": "La estructura del hook Stop en .claude/settings.json"
+    },
+    {
+      "number": 4,
+      "layout": "dato",
+      "theme": "blanco",
+      "value": "217",
+      "headline": "líneas de estilos, *antes que su código*",
+      "body": "Paso 2: Stop corre cuando Claude termina su turno, no cuando terminó el trabajo. Lo que esté a medias, se sube igual.",
+      "next": "paso 3",
+      "alt_text": "217 líneas de estilos publicadas antes que el código que las usaba"
+    },
+    {
+      "number": 5,
+      "layout": "lista",
+      "theme": "blanco",
+      "headline": "Paso 3: *la guarda*",
+      "body": "dos preguntas antes de git add",
+      "items": [
+        {
+          "label": "¿Merge a medias?",
+          "text": "git rev-parse -q --verify MERGE_HEAD"
+        },
+        {
+          "label": "¿Archivos en conflicto?",
+          "text": "git diff --name-only --diff-filter=U"
+        },
+        {
+          "label": "Si alguno devuelve algo",
+          "text": "no toca nada y avisa"
+        },
+        {
+          "label": "Si los dos vuelven vacíos",
+          "text": "recién ahí: add, commit y push"
+        }
+      ],
+      "next": "la prueba",
+      "alt_text": "Los dos comandos de git de la guarda"
+    },
+    {
+      "number": 6,
+      "layout": "ensayo",
+      "theme": "blanco",
+      "headline": "Comprobá que *frena*",
+      "body": "Escribí /hooks en Claude Code: tu Stop tiene que aparecer.\n\nDespués, en un repo de prueba, armá un conflicto a propósito y corré tu script. Tiene que avisar y no commitear.\n\nEl mío dice: *merge sin resolver — omito TODO*.",
+      "next": "el JSON",
+      "alt_text": "Cómo comprobar que la guarda frena"
+    },
+    {
+      "number": 7,
+      "layout": "ensayo",
+      "theme": "negro",
+      "headline": "Armalo *hoy*",
+      "body": "La regla que me dejó: un merge con conflictos *no se deja abierto* al terminar un turno.\n\nEl JSON del hook y los dos comandos de la guarda, listos para copiar, están en la comunidad.",
+      "cta": "Comunidad en la bio",
+      "alt_text": "El JSON y la guarda están en la comunidad"
+    }
+  ]
+}

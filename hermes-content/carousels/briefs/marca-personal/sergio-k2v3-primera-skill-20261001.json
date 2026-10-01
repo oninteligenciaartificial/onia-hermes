@@ -1,0 +1,117 @@
+{
+  "title": "Tu primera skill de Claude Code en 5 pasos (v3: blanco + verde + negro, alineado al guion D01-A)",
+  "caption": "Una skill es un archivo que le enseña a Claude Code a hacer algo, y lo usa solo cuando hace falta.\n\nLa ruta: .claude/skills/<nombre>/SKILL.md. Arriba, dos datos: name y description. La description decide: Claude la lee para saber si la skill aplica. Si es vaga, no la usa nunca.\n\nLa mía se llama continuidad: se invoca al arrancar cualquier sesión y obliga a leer lo que ya sabemos antes de decidir. Nació el 31 de agosto, el día en que mi agente planificó seis cosas y cuatro ya estaban hechas o decididas.\n\nPara comprobar la tuya, escribí /skills: tiene que aparecer.\n\nEl video para instalar Claude Code y armar tu primera skill está en mi web: sergiourcullo.vercel.app/claude-code\n\nFuente: code.claude.com/docs/en/skills",
+  "hashtags": [
+    "#claudecode",
+    "#claude",
+    "#skills",
+    "#ia",
+    "#bolivia"
+  ],
+  "serie": "Claude Code",
+  "theme": "blanco",
+  "slides": [
+    {
+      "number": 1,
+      "layout": "ilustrado",
+      "theme": "verde",
+      "badge": "guía",
+      "logo": "hermes-content/references/brand-claude/claudecode.svg",
+      "headline": "Tu primera *skill* en 5 pasos",
+      "subtitle": "dejá de explicarle lo mismo cada sesión",
+      "image": "hermes-content/galeria/fotos/sergio-k2-primera-skill-20260929-s01.jpg",
+      "next": "los pasos",
+      "alt_text": "Tu primera skill de Claude Code en 5 pasos"
+    },
+    {
+      "number": 2,
+      "layout": "lista",
+      "theme": "blanco",
+      "headline": "Los *5 pasos*",
+      "body": "un archivo que Claude usa solo cuando hace falta",
+      "items": [
+        {
+          "label": "La carpeta",
+          "text": ".claude/skills/tu-skill/"
+        },
+        {
+          "label": "El archivo",
+          "text": "SKILL.md, en mayúsculas"
+        },
+        {
+          "label": "Dos datos arriba",
+          "text": "name y description"
+        },
+        {
+          "label": "Las instrucciones",
+          "text": "como a alguien nuevo"
+        },
+        {
+          "label": "La prueba",
+          "text": "escribí /skills: tiene que aparecer"
+        }
+      ],
+      "next": "el que decide",
+      "alt_text": "Los cinco pasos para crear una skill de Claude Code"
+    },
+    {
+      "number": 3,
+      "layout": "ensayo",
+      "theme": "blanco",
+      "headline": "El paso que *decide*",
+      "body": "La description. Claude la lee para decidir si tu skill aplica a lo que le pediste.\n\nSi es vaga, *no la usa nunca*.\n\nEscribí cuándo usarla, con las palabras que usarías al pedírselo.",
+      "next": "la mía",
+      "alt_text": "La description decide si Claude usa la skill"
+    },
+    {
+      "number": 4,
+      "layout": "lista",
+      "theme": "blanco",
+      "headline": "La mía: *continuidad*",
+      "body": "una skill real, tal cual está escrita",
+      "items": [
+        {
+          "label": "name",
+          "text": "onia-continuidad"
+        },
+        {
+          "label": "description",
+          "text": "«Invocar al ARRANCAR cualquier sesión de ONIA…»"
+        },
+        {
+          "label": "abajo, lo que hace",
+          "text": "leer lo que ya sabemos antes de decidir"
+        }
+      ],
+      "next": "por qué nació",
+      "alt_text": "Ejemplo real: la skill onia-continuidad, su name, su description y lo que hace"
+    },
+    {
+      "number": 5,
+      "layout": "dato",
+      "theme": "blanco",
+      "value": "4/6",
+      "headline": "ya estaban *resueltas*",
+      "body": "En una sola sesión, mi agente planificó seis cosas. Cuatro ya estaban hechas o decididas. De ahí nació continuidad.",
+      "next": "probá la tuya",
+      "alt_text": "De seis cosas planificadas, cuatro ya estaban hechas o decididas"
+    },
+    {
+      "number": 6,
+      "layout": "ensayo",
+      "theme": "blanco",
+      "headline": "¿Cargó? *Comprobalo*",
+      "body": "Escribí /skills: tu skill tiene que aparecer.\n\nDespués pedile algo que coincida con la description, y fijate si la usa.\n\nSi no la usa, reescribí la description: ahí se decide.",
+      "alt_text": "Cómo comprobar que la skill cargó"
+    },
+    {
+      "number": 7,
+      "layout": "ensayo",
+      "theme": "negro",
+      "headline": "Armá la tuya",
+      "body": "Elegí algo que le explicás a Claude una y otra vez. Esa es tu primera skill.\n\nEl video para instalar Claude Code y armarla está en mi web.",
+      "cta": "sergiourcullo.vercel.app/claude-code",
+      "alt_text": "El video para instalar Claude Code y armar tu primera skill está en la web de Sergio Urcullo"
+    }
+  ]
+}

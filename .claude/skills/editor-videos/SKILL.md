@@ -135,6 +135,15 @@ tabla de cortes + preview antes de aplicar · transcript como fuente de todo tex
   pip. Las dos cosas se pierden cuando el contenedor se recicla.
 - **Publicar desde la nube** necesita el secreto `ONIA_VPS_SSH_KEY_B64` en el entorno: el hook
   `scripts/nube-ssh-vps.mjs` arma `ssh onia-vps` por el túnel. Sin él, la nube edita pero no publica ni agenda.
+- **Medido el 1-oct (noche), entorno «onia-higgsfield»:** el hook dejó `~/.ssh/config` y la llave, pero **el binario
+  `ssh` no venía**: `apt-get install -y openssh-client` y `ssh onia-vps hostname` respondió. `ffmpeg` ya venía instalado.
+- **Drive por MCP ya anda** (1-oct noche): `search_files` con `mimeType contains 'video/'` lista los videos, y
+  `parentId = '<id de carpeta>'` lista una carpeta. Sirve para ENCONTRAR el archivo; para bajarlo sigue siendo `curl` a
+  `drive.usercontent.google.com` (probado: 200, 8,6 MB, con un archivo compartido por enlace). Un archivo que se está
+  subiendo no aparece en la búsqueda hasta que termina.
+- **Transcribir sin Speaches:** `pip install faster-whisper` (~1 min) y el modelo `small` (int8, CPU) se baja solo de
+  HuggingFace. Con `word_timestamps=True` sale `{segments:[{start,end,text}], words:[{start,end,word}]}`, el formato
+  que comen `cut-plan.mjs` y `karaoke-captions.mjs`. Forzá `language="es"`.
 
 ### Antes de grabar: el dato del guion se mira renderizado (1-oct-2026)
 

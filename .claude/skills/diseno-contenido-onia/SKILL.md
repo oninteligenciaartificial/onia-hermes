@@ -60,6 +60,26 @@ blanco puro, verde y negro (decisión de Sergio, 29-sep).
 ⚠️ **Trampa (30-sep):** el campo del título es `headline`, no `title`. Con `title` el renderer no avisa: la
 lámina sale SIN título. `"next": ""` saca la flecha «seguí» (para historias o una lámina suelta).
 
+⚠️ **Trampas del pack medidas el 1-oct (K2v3, K11, K12, K13):**
+- **`cta` en la raíz del brief se copia a TODAS las láminas** (`sl.cta || brief.cta`): va solo en la de cierre.
+- **El énfasis `*…*` que se parte de renglón deja una barra suelta** bajo la palabra que quedó arriba (pasó en la
+  portada de K12 con «*la carpeta equivocada*»): enfatizá solo lo que entra en un renglón.
+- **`dato` con 4 caracteres o más baja la cifra de ~420 a ~216 px** y la lámina queda medio vacía: «4/6», no «4 de 6».
+- **`lista` con 2 o 3 filas escribe a 40 px** y un comando de ~36 caracteres se corta; con 4 filas o más pasa a 34 px.
+- **Chromium corta después de un guion** («claude -» / «p»): un comando no arranca con guion a mitad de renglón; ponelo
+  al principio de la frase o en su propio párrafo. Solo `ensayo` separa párrafos con `\n\n` (`dato` y `logos`, no).
+- **Un asterisco suelto se toma como énfasis**: un cron (`5 * * * *`) va en el caption o en el drop, no en la lámina.
+- **En el tema `negro`, el énfasis dentro de `cta` sale verde eléctrico sobre la pastilla blanca**: ahí el `cta` va sin
+  asteriscos.
+- **Título de `ensayo` que se parte** («8 / bloques»): un espacio duro (U+00A0) dentro del `*…*` lo mantiene junto.
+- **`dato` con un dígito angosto** («1», «2») deja vacía la derecha: alargá el título a 2-3 líneas.
+- **Sin imagen no hay K1-B.** El 1-oct, sin lote aprobado, K8, K11, K12 y K13 salieron solo con texto y se acercan a lo
+  que Sergio Urcullo rechazó («vacío y con demasiado texto»). Lo que hace vender a K1-B son sus dos imágenes de arcilla:
+  pedí el lote de portada + 1 interior ANTES de armar el carrusel, no después.
+- **El pack no tiene layout de código ni monoespaciada.** Un bloque de código real necesita una captura.
+- **Foto con fondo gris en `analogia`**: el `multiply` solo borra el blanco puro y queda un recuadro gris. Sacale el fondo
+  antes o elegí otra foto.
+
 **Historias (1080×1920):** mismo pack con `--format story`. Dejar libre el tercio de abajo: ahí va el sticker de
 link, que se pone a mano en Instagram. Ejemplo: `briefs/marca-personal/sergio-historias-comunidad-20261001.json`.
 
@@ -121,6 +141,8 @@ Letras: Bricolage (títulos, local), DM Sans (texto), Caveat (flechas y sello), 
    paso, el renderer no encuentra el navegador. Con el Chromium completo, además, cae en DejaVu y corta
    el pie de cada lámina. El script instala las fuentes de los packs **en TTF** (en WOFF, Chromium no las
    toma) y apunta al `headless_shell`. Comparado el 30-sep: sale igual que en la PC.
+   `carousel_contactsheet.js` lee `CAROUSEL_BROWSER` y pasa `--no-sandbox` desde el 1-oct; antes fallaba en la nube con
+   «No Edge/Chrome found» aunque se hubiera corrido el setup. El `eval` va en el MISMO comando que el render.
 
 ## 6. Gasto (CLAUDE.md, regla de Higgsfield)
 

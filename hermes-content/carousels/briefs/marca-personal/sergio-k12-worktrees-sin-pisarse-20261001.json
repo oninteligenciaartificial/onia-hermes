@@ -1,0 +1,104 @@
+{
+  "title": "Dos sesiones de Claude Code sin pisarse: worktrees (K12, pack referentes)",
+  "caption": "Dos sesiones de Claude Code en la misma carpeta tocan los mismos archivos. La salida se llama worktree: otra carpeta del mismo repositorio, con su propia rama.\n\n1. Desde tu proyecto: git worktree add -b <rama> <carpeta>\n2. Abrí Claude Code en esa carpeta. O más corto: claude -w <nombre>, que la crea por vos.\n3. El paso crítico: todo comando de git con git -C <ruta>. No confíes en que la terminal sigue donde la dejaste.\n\nPara comprobar: git worktree list. Cada carpeta, con su rama. Una sesión, una carpeta, una rama.\n\nPor qué el paso 3: el 1 de septiembre, a mi agente la terminal le volvió sola a la carpeta principal. Un reset pensado para otra carpeta corrió ahí y movió una rama 424 commits. Ningún comando falló. Se recuperó con el reflog de git, pero nada avisó.\n\nLos comandos, con un ejemplo armado para copiar, están en mi comunidad (link en la bio).\n\nclaude -w: claude --help en Claude Code 2.1.286 («Create a new git worktree for this session»). git worktree y git -C son comandos estándar de git.",
+  "hashtags": [
+    "#claudecode",
+    "#claude",
+    "#git",
+    "#programacion",
+    "#ia",
+    "#bolivia"
+  ],
+  "serie": "Claude Code",
+  "slides": [
+    {
+      "number": 1,
+      "layout": "dato",
+      "theme": "verde",
+      "value": "424",
+      "headline": "commits, por la *carpeta equivocada*",
+      "body": "Dos sesiones de Claude Code en el mismo proyecto, sin pisarse.",
+      "next": "te explico",
+      "alt_text": "424 commits movidos por un comando que cayó en la carpeta equivocada"
+    },
+    {
+      "number": 2,
+      "layout": "logos",
+      "theme": "blanco",
+      "headline": "Worktree",
+      "logos": [
+        {
+          "file": "hermes-content/references/brand-claude/claudecode.svg",
+          "label": "sesión 1"
+        },
+        {
+          "file": "hermes-content/references/brand-claude/claudecode.svg",
+          "label": "sesión 2"
+        }
+      ],
+      "body": "Otra carpeta del mismo repo, *con su propia rama*. Así dos sesiones no tocan los mismos archivos.",
+      "next": "3 pasos",
+      "alt_text": "Dos sesiones de Claude Code, cada una en su worktree"
+    },
+    {
+      "number": 3,
+      "layout": "lista",
+      "theme": "blanco",
+      "headline": "En *3 pasos*",
+      "body": "desde tu proyecto",
+      "items": [
+        {
+          "label": "Crear la carpeta",
+          "text": "git worktree add -b <rama> <carpeta>"
+        },
+        {
+          "label": "Abrir Claude Code",
+          "text": "en esa carpeta, o claude -w <nombre>"
+        },
+        {
+          "label": "El paso crítico",
+          "text": "todo git con git -C <ruta>"
+        }
+      ],
+      "next": "por qué",
+      "alt_text": "Los tres pasos para trabajar con worktrees"
+    },
+    {
+      "number": 4,
+      "layout": "ensayo",
+      "theme": "blanco",
+      "headline": "Por qué es *crítico*",
+      "body": "A mi agente la terminal le volvió sola a la carpeta principal.\n\nUn reset pensado para otra carpeta corrió ahí.\n\nMovió una rama 424 commits y ningún comando falló.\n\nSe recuperó con el historial de git, pero *nada avisó*.",
+      "next": "la regla",
+      "alt_text": "El caso de los 424 commits: la terminal volvió sola a la carpeta principal"
+    },
+    {
+      "number": 5,
+      "layout": "dato",
+      "theme": "blanco",
+      "value": "-C",
+      "headline": "Todo git, *con la ruta*",
+      "body": "*git -C <ruta> branch --show-current* te dice en qué rama está esa carpeta. Miralo antes de un reset, un merge o un push: no confíes en que la terminal sigue ahí.",
+      "next": "comprobá",
+      "alt_text": "git -C con la ruta de la carpeta en cada comando de git"
+    },
+    {
+      "number": 6,
+      "layout": "ensayo",
+      "theme": "blanco",
+      "headline": "Comprobá y *limpiá*",
+      "body": "*git worktree list*\n\nCada carpeta, con su rama. Una sesión, una carpeta, una rama.\n\nAl terminar, con la rama ya mergeada:\n\n*git worktree remove <carpeta>*",
+      "next": "los comandos",
+      "alt_text": "git worktree list para comprobar y git worktree remove para limpiar"
+    },
+    {
+      "number": 7,
+      "layout": "ensayo",
+      "theme": "negro",
+      "headline": "Probalo en un *repo de prueba*",
+      "body": "Los comandos, con un ejemplo armado para copiar, están en mi comunidad.",
+      "cta": "Comunidad en la bio",
+      "alt_text": "Los comandos de worktree están en la comunidad de Sergio Urcullo"
+    }
+  ]
+}
