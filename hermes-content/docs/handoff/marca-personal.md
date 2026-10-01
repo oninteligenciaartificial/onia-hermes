@@ -2,6 +2,28 @@
 
 **Archivo único del carril.** Actualizado 2026-09-29 por Claude (Opus 5.5).
 
+## ▶ Estado 1-oct ~21:40 UTC — sesión `session_01CE21mytrEXdqanCFoWxm32` (nube, entorno onia-higgsfield)
+
+- **Hecho y pusheado** (rama `claude/marca-personal-contenido-ae658c`): K2v3, K8v3, K11, K12 y K13 rehechos y mirados;
+  K2v3, K11 y K12 con imágenes de arcilla (lote aprobado, 0,84 cr, bitácora en `ONIA_MARCA_PERSONAL_HIGGSFIELD_RECETAS.md`)
+  y logos oficiales (git y Telegram nuevos en `references/brand-logos/`). Calendario 2→14 oct en `CARRUSELES-DIARIOS.md`
+  §1 (única fuente). Los 38 guiones cierran con «comentá PALABRA» (tabla al principio de `GUIONES-2-SEMANAS-1-14-OCT.md`).
+  `carousel_contactsheet.js` ya anda en la nube.
+- **Esperando a Sergio Urcullo:**
+  1. el video del 1-oct está en Drive (`Videos Onia Octubre/A0550B92-….mp4`, id `1fOVS40NXa25ZBt-b_3gJkBXfCCOcs-3q`, 78 MB)
+     pero PRIVADO: hace falta «Cualquier persona con el enlace» para bajarlo con curl. Solo subió UNO de los dos;
+  2. «sí» explícito para las 4 imágenes de K8 y K13 (0,48 cr): el modo automático de permisos frenó la generación
+     paga. No buscar otro camino;
+  3. «ok» de los carruseles y del calendario para agendarlos.
+- **Video, listo para arrancar:** ffmpeg está; `pip install faster-whisper` + modelo `small` ya bajados; script de
+  transcripción local en el scratchpad (formato que comen `cut-plan.mjs`/`karaoke-captions.mjs`, ver skill `editor-videos`).
+  El bruto se trabaja FUERA del repo (`videos/` no está en `.gitignore` y el autosync lo subiría).
+- **Publicar:** Sergio Urcullo pidió «que lo postees a mis redes». Circuito en `deploy/vps-ops/publicar/README.md`
+  (`ig-reel.mjs` + Buffer para TikTok/YouTube/LinkedIn, por `ssh onia-vps`). Se publica recién con su «ok» sobre el
+  video terminado (antes: tabla de cortes + preview).
+- **Intentos fallidos:** generar en subagentes con `--out k11-img` dejó `usado_en` mal (corregido); los subagentes no
+  heredan el OK de Sergio Urcullo para gasto.
+
 ## 🔁 RELEVO 1-oct noche — empezá ACÁ (sesión nueva en la nube con Drive)
 
 Sergio Urcullo: *«cambiemos de sesión, ya conecté Drive»*. La sesión anterior (`session_012ppFowADbJNtZ6WBMtqpuf`, nube)
