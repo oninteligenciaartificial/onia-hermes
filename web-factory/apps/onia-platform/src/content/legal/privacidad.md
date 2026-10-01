@@ -139,7 +139,7 @@ cambio sea urgente por seguridad.
 - Los agentes de IA trabajan **dentro de tu cuenta**, con el mínimo de datos
   necesario para cada tarea.
 - **Lo que redacta un agente de IA espera tu aprobación** en la cola de
-  pendientes. Fuera de los agentes, la plataforma sí envía sola lo que declara
+  pendientes. Fuera de esos agentes, la plataforma sí envía sola lo que declara
   el §6.2 de los [Términos](/terminos): confirmaciones y recordatorios de cita
   (vienen activos y los pausás en Configuración) y, si lo contratás, el
   agente conversacional de WhatsApp.

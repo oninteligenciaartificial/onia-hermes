@@ -2,8 +2,8 @@
 title: "Términos y Condiciones"
 slug: "terminos"
 status: "vigente"
-version: "1.2"
-updatedAt: "2026-09-25"
+version: "1.3"
+updatedAt: "2026-10-01"
 ---
 
 # Términos y Condiciones de Uso — Plataforma Onia
@@ -152,9 +152,11 @@ intelectual sobre el software.
 6.1. **Los agentes proponen, no envían.** Los agentes de IA de Onia operan con
 **aprobación humana previa**: lo que un agente redacta para tus pacientes,
 clientes o terceros queda en una **cola de pendientes** hasta que un usuario tuyo
-lo revise y apruebe. Ningún agente de IA envía en tu nombre sin esa aprobación.
+lo revise y apruebe. Ninguno de estos agentes envía en tu nombre sin esa aprobación;
+el único que responde solo es el agente conversacional de WhatsApp del §6.2, y
+sólo si lo contratás.
 
-6.2. **Envíos automáticos que la plataforma sí hace hoy.** Fuera de los agentes,
+6.2. **Envíos automáticos que la plataforma sí hace hoy.** Fuera de los agentes del §6.1,
 y como parte de lo que contratás, la plataforma envía con **plantilla fija** y
 sin revisión mensaje por mensaje:
 
