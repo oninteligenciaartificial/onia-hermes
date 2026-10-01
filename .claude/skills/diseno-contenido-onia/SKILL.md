@@ -162,6 +162,19 @@ El CLI autenticado está en el VPS: `HF_CMD="ssh -i <llave> -o BatchMode=yes roo
   que mejor rinde. `acuarela` queda linda pero INVENTA UNA FIRMA en una esquina (2 de 2): se
   recorta. `linea` sale como foto de un papel con bordes oscuros. Soul es un modelo de fotos:
   lo que se puede fotografiar (arcilla, objetos) le sale; el dibujo, no.
+- **Medido el 1-oct (lote K2v3/K11/K12):** «toy train» y «locomotive» salen con cara (tipo Thomas) y «tipped over» no
+  se respeta; «boxcar» sale sin cara. La arcilla a veces sale con **fondo gris claro (~210-225)**: en lámina blanca no se
+  nota, en portada VERDE queda un bloque turbio. Medí las esquinas antes de montar en verde
+  (`ffmpeg -i img -vf crop=150:150:0:0,scale=1:1 -f rawvideo -pix_fmt rgb24 - | od -An -tu1`; menos de ~235, regenerá).
+- **`--out` de `carousel_images.mjs` = nombre del carrusel** (`<scratch>/sergio-kNN-…`): el script toma de ahí el nombre
+  del archivo y el `usado_en` de `galeria.json`. Con `--out k11-img` quedó todo mal anotado.
+- **Varios agentes generando a la vez:** `flock /tmp/claude-0/galeria.lock` delante del comando (el script reescribe
+  `galeria.json` entero). Después de usar un prompt, renombralo a `image_prompt_usado`: si no, un re-run vuelve a cobrar.
+- **El modo automático de permisos puede frenar la generación paga** aunque Sergio Urcullo la haya aprobado en el chat
+  (1-oct: frenó K8 y K13, dejó pasar K2, K11 y K12). No se busca otro camino: se le pide a él un «sí» explícito o una
+  regla de permiso.
+- **`ilustrado` con título de más de una línea:** el `logo` queda solo en su renglón, arriba. **`lista` con `icon`:** el
+  ícono (96 px) deja ~706 px de texto, y un comando de ~36 caracteres se parte.
 - Si un `generate create` se corta por tiempo, el job sigue y COBRA: recuperarlo con
   `higgsfield generate list` + `generate wait <id>` y `saveToGallery({url})`, nunca regenerar.
 

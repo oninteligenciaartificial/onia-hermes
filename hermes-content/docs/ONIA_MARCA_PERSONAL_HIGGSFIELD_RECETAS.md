@@ -143,3 +143,28 @@ Autorizó Sergio Urcullo en el chat: *«podés usar higgsfield o lo que necesite
 (`get_cost`: 0,12 cr c/u), tope 0,48. Modelo `text2image_soul_v2` (estilo clay, 9:16, 2k), por el **MCP de
 Higgsfield** porque en la nube el CLI no está instalado. 2 variantes de «sobres con trampa» y 2 de «comunidad en la
 mesa». Elegidas las `-b` (la `comunidad-mesa-a` salió con caras verdes raras). Archivos y jobs en `galeria.json`.
+
+## Lote 2026-10-01 · imágenes de arcilla de los carruseles K2v3, K11 y K12 (7 imágenes, 0,84 cr)
+
+Autorizó Sergio Urcullo en el chat: *«los carruseles me gustan, tal vez más imágenes, generalas con higgsfield… y coloca
+los logos e imágenes»*. Tope declarado: 2 cr. Cotizado antes con `scripts/carousel_images.mjs` sin `--yes` (0,12 cr
+c/u) y generado por el **CLI del VPS** (`HF_CMD="ssh onia-vps higgsfield"`) con `flock` sobre `galeria.json`, porque
+cinco subagentes escribían a la vez. Modelo `text2image_soul_v2`, estilo `clay`, 4:3, 2k.
+
+| Carrusel | Lámina | Resultado | Costo |
+|---|---|---|---|
+| K2v3 | 3 · llave | aceptada | 0,12 |
+| K11 | 1 · barrera | **descartada**: fondo gris (esquinas 208-225) y valla de obra en vez de barrera | 0,12 |
+| K11 | 1 · barrera (regenerada) | aceptada | 0,12 |
+| K11 | 4 · reloj de arena + muro | aceptada | 0,12 |
+| K12 | 1 · dos vías con su tren | aceptada | 0,12 |
+| K12 | 5 · tren volcado | **descartada**: el tren salió con cara, parado | 0,12 |
+| K12 | 5 · vagón (regenerado) | aceptada a medias: sin cara, pero gris y sin volcar | 0,12 |
+
+**K8 y K13 (4 imágenes, 0,48 cr) NO se generaron:** el control de permisos del modo automático frenó la generación
+paga, en los subagentes y en la sesión principal. Cero cargo. Queda pendiente del «sí» explícito de Sergio Urcullo.
+
+**Lo aprendido:** Soul 2.0 dibuja «toy train» / «locomotive» con cara (tipo Thomas) y no respeta «tipped over»; un
+«boxcar» sale sin cara. La arcilla a veces sale con fondo gris claro (~210-225): sobre lámina blanca no se nota, sobre
+portada VERDE queda un bloque turbio. Medí las esquinas antes de montar en verde. El `--out` de `carousel_images.mjs`
+tiene que llamarse como el carrusel: el script toma de ahí el nombre del archivo y el `usado_en` de `galeria.json`.

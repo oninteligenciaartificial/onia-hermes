@@ -343,7 +343,7 @@
     "costo_cr": 0.12,
     "job": "bc401bfc-4cd9-452e-9fef-531af87a5258",
     "usado_en": [
-      "k2-img"
+      "sergio-k2v3-primera-skill-20261001"
     ],
     "tags": []
   },
@@ -392,10 +392,9 @@
     "estilo": "clay",
     "costo_cr": 0.12,
     "job": "7794c76c-c107-46b9-897b-0d17cbc4a2a6",
-    "usado_en": [
-      "k11-img"
-    ],
-    "tags": []
+    "usado_en": [],
+    "tags": [],
+    "descartada": "fondo gris (esquinas 208-225): sobre portada verde queda un bloque turbio; no usar para portada verde"
   },
   {
     "id": "k11-img-s04-4d843c97",
@@ -410,7 +409,7 @@
     "costo_cr": 0.12,
     "job": "4d843c97-4e64-4e8b-8f1e-bbf5295a7adf",
     "usado_en": [
-      "k11-img"
+      "sergio-k11-hook-stop-guarda-20261001"
     ],
     "tags": []
   },
@@ -444,7 +443,7 @@
     "costo_cr": 0.12,
     "job": "a3306a4e-c0a1-4eb0-9991-c3674c113983",
     "usado_en": [
-      "k11-img-regen"
+      "sergio-k11-hook-stop-guarda-20261001"
     ],
     "tags": []
   }
