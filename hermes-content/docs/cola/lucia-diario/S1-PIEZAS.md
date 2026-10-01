@@ -11,11 +11,11 @@ nunca testimonio; nada «anti-humano».
 
 | Día | Pieza | Formato | Estado | Costo |
 |---|---|---|---|---:|
-| 1 | L01 · Hola, soy Lucía. No existo. (fijado) | Carrusel 5 fotos | ✅ renderizado, falta tu OK | 0 |
-| 2 | L02 · Este video no fue grabado | Reel b-roll (Kling, calle) + texto | clip ya hecho; falta edición | 0 |
+| 1 | L01 · Hola, soy Lucía. No existo. (fijado) | Carrusel 5 fotos | ✅ aprobado por Sergio Urcullo 1-oct | 0 |
+| 2 | L02 · Este video no fue grabado | Reel b-roll (Kling, calle) + texto | ✅ editado (`v4/feed/l02-…mp4`) | 0 |
 | 3 | L03 · Sábado | Foto (cocina a la mañana) | foto lista | 0 |
 | 4 | L04 · Tu agenda, sin llamadas | Carrusel con captura real del link de reserva | falta la captura | ~1 |
-| 5 | L05 · Lo que dejás de hacer a mano | Reel b-roll (Kling, coworking) + texto | por generar | 7,5 |
+| 5 | L05 · Lunes: cero llamadas para agendar | Reel b-roll (Kling, coworking) + texto | ✅ hecho (`v4/feed/l05-…mp4`) | 7,5 |
 | 6 | L06 · Noche de lámpara | Foto | foto lista | 0 |
 | 7 | L07 · El recordatorio que llega solo | Carrusel con captura real del correo 24 h / 2 h | falta la captura | ~1 |
 
