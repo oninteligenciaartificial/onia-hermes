@@ -860,7 +860,7 @@ export function limitesDelSitio(fuente) {
        * Con solo `ilimitad` esos dos topes salian `null` — ilegibles, no
        * infinitos— y el cruce quedaba ciego justo en el plan caro. El `[^"]*`
        * es lo que evita el falso positivo: los planes con tope escriben su
-       * cifra DENTRO de su propia comilla ("Topes: 800 fichas · 3 usuarios"),
+       * cifra DENTRO de su propia comilla ("Topes: 800 fichas · 4 usuarios"),
        * asi que la negacion de otra linea no se les derrama.
        */
       fichas: topeEnProsa(inc, {

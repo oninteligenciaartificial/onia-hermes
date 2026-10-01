@@ -174,7 +174,7 @@ describe("el cruce lee la forma literal de PLAN_LIMITS", () => {
 export const PLAN_LIMITS: Record<PlanId, PlanLimits> = {
   free: { patients: 30, users: 1, emailsPerMonth: 0, publicBookingIncluded: false, agentsIncluded: false, reportsEnabled: false },
   basic: { patients: 300, users: 2, emailsPerMonth: 200, publicBookingIncluded: false, agentsIncluded: false, reportsEnabled: false },
-  crece: { patients: 800, users: 3, emailsPerMonth: 400, publicBookingIncluded: true, agentsIncluded: true, reportsEnabled: false },
+  crece: { patients: 800, users: 4, emailsPerMonth: 400, publicBookingIncluded: true, agentsIncluded: true, reportsEnabled: false },
   professional: { patients: 1500, users: 5, emailsPerMonth: 800, publicBookingIncluded: true, agentsIncluded: true, reportsEnabled: true },
   clinic: { patients: -1, users: -1, emailsPerMonth: -1, publicBookingIncluded: true, agentsIncluded: true, reportsEnabled: true },
 };
