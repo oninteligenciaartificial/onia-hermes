@@ -346,5 +346,22 @@
       "k2-img"
     ],
     "tags": []
+  },
+  {
+    "id": "sergio-k12-worktrees-sin-pisarse-20261001-s01-6a0a1a94",
+    "file": "hermes-content/galeria/ilustraciones/sergio-k12-worktrees-sin-pisarse-20261001-s01-6a0a1a94.jpg",
+    "fecha": "2026-10-01",
+    "tipo": "ilustraciones",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "text2image_soul_v2",
+    "prompt": "Two parallel emerald green clay train tracks side by side on a white surface, each with its own small matte black clay toy train.",
+    "estilo": "clay",
+    "costo_cr": 0.12,
+    "job": "6a0a1a94-a27e-4d35-9f90-b178c13cac0d",
+    "usado_en": [
+      "sergio-k12-worktrees-sin-pisarse-20261001"
+    ],
+    "tags": []
   }
 ]
