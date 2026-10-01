@@ -1,11 +1,9 @@
 # Handoff — carril `mercado-y-pauta` (sesión «Ventas y pauta Onia Platform», antes «Análisis de mercado»)
 
-> ⏩ **1-oct: el carril pasa a una sesión LOCAL en la PC de Sergio Urcullo.** La sesión de la nube
-> (`session_01BnctfaNRsm3ogJ46A7B5P5`) queda EN PAUSA y no empuja más a esta rama. Una sola sesión por carril: la
-> local hace `git pull` de `claude/nice-lamport-5og9lv` antes de tocar nada y anota su id en EL HILO. Desde la
-> PC se puede lo que la nube no podía: abrir Facebook, Instagram y las webs de los prospectos (el proxy de la
-> nube los bloqueaba), mirar el Administrador de anuncios con la sesión de Sergio Urcullo y renderizar con las
-> fuentes de la PC.
+> ⏩ **1-oct, vigente: el carril sigue en la NUBE** (`session_01BnctfaNRsm3ogJ46A7B5P5`). Rige la regla nueva
+> de `CLAUDE.md`: la madre corre local y ordena por mensaje, y esta sesión contesta en su transcript. Lo que
+> exige la PC (Facebook, Instagram o el Administrador de anuncios con el login de Sergio Urcullo) lo hace la
+> madre. El aviso anterior, «pasa a una sesión local», quedó sin efecto.
 >
 > **Renombrada el 30-sep, de noche, por decisión de Sergio Urcullo.** El archivo conserva su nombre para no
 > romper enlaces.
