@@ -85,13 +85,13 @@ const apoyo = (o, { s, x, y, rise = 0, fadeIn = FIN_IN, fadeOut = FIN_OUT, name 
   over(name, x, yy, `between(t,${o.start},${o.end})`);
 };
 
-// tag IA — pastilla de 520 px de ancho, borde superior visible en y=1186 (PNG @2x: pastilla x 56–1321, y 56–227)
-const sTag = +(520 / (1321 - 56)).toFixed(4);
+// tag IA — pastilla de 520 px de ancho, borde superior visible en y=1186 (PNG @2x: pastilla x 88–1353, y 56–227)
+const sTag = +(520 / (1353 - 88)).toFixed(4);
 apoyo(at("assets/tag-ia.png"), { s: sTag, x: `(${W}-w)/2`, y: Math.round(1186 - 56 * sTag), fadeIn: 0, name: "tag" });
 
-// panel-diagrama — tarjeta de 900 px (PNG @2x: tarjeta x 60–2059, y 60–701 → ×0,45 = 900 × 288), borde superior en y=1180
+// panel-diagrama — tarjeta de 900 px (PNG @2x: tarjeta x 160–2159, y 80–721 → ×0,45 = 900 × 288), borde superior en y=1180
 const sPan = 0.45;
-const yPan = Math.round(1180 - 60 * sPan);
+const yPan = Math.round(1180 - 80 * sPan);
 apoyo(at("assets/panel-base.png"), { s: sPan, x: `(${W}-w)/2`, y: yPan, rise: 24, name: "panel" });
 for (const r of ["r1", "r2", "r3"]) apoyo(at(`assets/panel-${r}.png`), { s: sPan, x: `(${W}-w)/2`, y: yPan, rise: 14, name: `fila${r}` });
 
