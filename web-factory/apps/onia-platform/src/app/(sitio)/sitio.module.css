@@ -1366,6 +1366,10 @@
   align-items: baseline;
   gap: 0.3em;
   margin-top: 0.5em;
+  /* La fila es su propio contenedor: `.planNum` se mide contra ESTE ancho
+     (ver `cqi` abajo). Es un flex de bloque estirado por la tarjeta, así que
+     su ancho nunca sale del contenido y la contención no lo achica. */
+  container-type: inline-size;
 }
 /* Va acotado a la fila de precio a propósito: `/precios` reusa `.planUnit` para
    el renglón «12.900 Bs/año · 229 Bs/sem», que mide 206px de los 216 y SÍ
@@ -1373,10 +1377,19 @@
 .planPrice .planUnit {
   white-space: nowrap;
 }
+/* El número se achica con la TARJETA, no con la ventana. Con cuatro en fila la
+   fila de precio mide 215,7px a 1440 (y ~189 a 1100), y «1.290» a 3.4em pedía
+   151,8 + 5,4 + 63,6 (`Bs / mes`) = 220,8: la unidad de «Completo» bajaba
+   sola a un segundo renglón mientras las otras tres iban al lado del número
+   (medido el 2026-10-01). 25cqi deja «1.290 Bs / mes» con ~13px de aire a 1440
+   y ~7 a 1100. El techo es el 3.4em de siempre: en teléfono (fila de 292px) y
+   en 2×2 (293px) el número no cambia. Un navegador sin `cqi` descarta la
+   segunda línea y se queda con la primera, que es el tamaño de antes. */
 .planNum {
   font-family: var(--font-display), sans-serif;
   font-weight: 400;
   font-size: 3.4em;
+  font-size: min(3.4em, 25cqi);
   letter-spacing: -0.035em;
   line-height: 0.9;
   font-variant-numeric: tabular-nums;
