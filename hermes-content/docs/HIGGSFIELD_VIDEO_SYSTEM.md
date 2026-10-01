@@ -255,6 +255,17 @@ along a sunlit street…» dispara la recomendación del preset «IN THE DARK»:
 `declined_preset_id: "24bae836-2c4a-48e0-89b6-49fcc0b21612"`. Los presets virales no tienen
 preflight de costo.
 
+**Reels de Lucía — receta que funciona (aprendido 1-oct, se mejora acá con cada pieza):**
+1. Foto aprobada del método diario → `kling3_0` std, sin sonido, 6 s, 9:16 (7,5 cr). Prompt: una acción
+   simple + «looks up at the camera» + «Keep her face exactly as in the image». Kling sostiene la cara
+   (0,75–0,82 en el clip del coworking).
+2. Texto en 3 tiempos de ~2 s: pregunta/dolor → respuesta corta (resaltada en verde) → mecanismo.
+   Placas PNG con PIL + `ffmpeg overlay` (el ffmpeg de `imageio_ffmpeg` no trae `drawtext`).
+3. **El texto nunca va sobre la cara:** ubicarlo debajo del mentón (y≈640 en 720×1280). La primera
+   versión de L05 lo tapaba.
+4. Pie fijo «Lucía es un personaje hecho con IA» en todo el video.
+5. Medir parecido en 5 frames (`face_identity_qa.py`) y MIRAR antes de mandar a Sergio Urcullo.
+
 Reglas de uso:
 - Un efecto tiene que servir a la idea de la pieza (gancho, transición a la pantalla de Onia).
   Efecto sin motivo = pieza «hecha por IA», lo que CLAUDE.md prohíbe.

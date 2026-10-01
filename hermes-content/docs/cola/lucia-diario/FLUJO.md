@@ -51,6 +51,15 @@ Estado al 30-sep 19:50 UTC (lote de prueba, tope 75 cr aprobado por Sergio Urcul
 
 La mayoría de los reels son **b-roll + voz o texto**; Lucía hablando a cámara es la excepción.
 
+## Dónde se publica (decidido 1-oct)
+
+- **Instagram (feed, reels, historias) y Facebook:** por la app propia `OnIA Social API`, igual que
+  Sergio Urcullo (`ig-reel.mjs --cuenta lucia`, `ig-carrusel.mjs`, `agendar-publicacion.sh` en el VPS).
+  Gratis y ya probado con `sergio` y `oniahq`.
+- **TikTok:** por **Buffer**, con un canal nuevo para Lucía (crear la cuenta TikTok de Lucía y conectarla
+  a Buffer es trabajo de la madre en la PC). Los reels salen 9:16 y sirven igual.
+- No hace falta un Buffer aparte para Instagram: duplicaría el canal propio.
+
 ## Lo que falta para encender (y de quién es)
 
 | # | Qué | Quién |
