@@ -1,0 +1,14 @@
+<!-- Tarjeta dark de FRASE (editor-videos): para piezas sin voz, donde el texto ES la
+     narracion. {{LABEL}} = cejilla (opcional), {{TITLE}} = la frase, {{VALUE}} = remate en
+     acento (opcional, va pegado al final). Mismo lenguaje que card-dark de los TikToks. -->
+<style>
+  #stage { padding: calc(40*var(--u)); }
+  .card { padding: calc(40*var(--u)) calc(52*var(--u)) calc(44*var(--u)) calc(62*var(--u));
+          max-width: calc(920*var(--u)); }
+  .eyebrow { margin-bottom: calc(14*var(--u)); }
+  .eyebrow:empty { display: none; }
+  .t { font-family: var(--font-display); font-weight: 700; color: var(--text);
+       font-size: calc(64*var(--u)); line-height: 1.12; letter-spacing: -0.01em; text-wrap: balance; }
+  .t b { color: {{ACCENT}}; font-weight: 700; }
+</style>
+<div class="card"><div class="rail"></div><div class="eyebrow">{{LABEL}}</div><div class="t">{{TITLE}} <b>{{VALUE}}</b></div></div>
