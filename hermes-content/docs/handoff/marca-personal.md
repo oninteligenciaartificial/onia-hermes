@@ -2,7 +2,64 @@
 
 **Archivo único del carril.** Actualizado 2026-09-29 por Claude (Opus 5.5).
 
-## 🔁 1-oct · el carril pasa a la sesión LOCAL (laptop de Sergio Urcullo)
+## 🔁 RELEVO 1-oct noche — empezá ACÁ (sesión nueva en la nube con Drive)
+
+Sergio Urcullo: *«cambiemos de sesión, ya conecté Drive»*. La sesión anterior (`session_012ppFowADbJNtZ6WBMtqpuf`, nube)
+termina acá. La sesión madre (local) orquesta y hace lo que exige la PC. La nube no le puede escribir a la madre: se le
+contesta en el transcript.
+
+**1. Objetivo del carril:** marca personal y comunidad de Sergio Urcullo (contenido diario → comunidad → curso a los
+100 miembros). Onia Platform y @oniahq NO son de este carril (los lleva la sesión de ventas y pauta).
+
+**2. En producción / publicado:** NADA todavía. Ningún video, carrusel ni mensaje de comunidad salió.
+
+**3. A medias y dónde (todo en la rama `claude/marca-personal-contenido-ae658c`, PR #76 abierto en draft):**
+- **2 videos GRABADOS, sin editar** (Sonnet 5.5 = D01-B, «lo cambié un poco»; modo auto = N03, tal cual). Están en la PC.
+  Guía de edición lista: `cola/plan-3-semanas/EDICION-VIDEOS-20261001.md`. Próximo paso: que Sergio Urcullo comparta los
+  brutos por Drive y editarlos con `editor-videos` (tabla de cortes + preview ANTES de cortar).
+- **Carruseles K2v3, K8v3, K11, K12, K13: NO HECHOS.** El workflow que los hacía se cortó a propósito por el relevo, antes
+  de escribir nada. El script está en `cola/plan-3-semanas/auditoria-20260930/workflow-drops-carruseles-20261001.js`: rehacé
+  esa fase con esos prompts. K12 ya puede usar «424 commits» (confirmado por la madre).
+- **17 drops escritos, sin enviar:** `cola/drops/2026-10-01-drops-noticias-repos.md`. Incluye drop 2 corregido, drop 14
+  corregido, EFFORT, N01–N06 y R01–R07. Pasaron una vuelta de revisor y arreglo, pero no se re-verificaron después del
+  arreglo: leelos antes de mandarlos.
+- **Vuelta de la comunidad + reto:** `cola/drops/2026-10-01.md`, sin enviar. Las fechas se corren al día real.
+- **Programar carruseles:** pedido de Sergio Urcullo («programalos para postear, subido a drive»). Falta: (a) que vea cada
+  carrusel y dé el «ok»; (b) re-alinear `CARRUSELES-DIARIOS.md` con el calendario nuevo de videos. Propuesta: vie 2 K10 ·
+  sáb 3 K1 (después del reto) · dom 4 K2 · lun 5 K6 · mar 6 K3 · mié 7 K11 · jue 8 K4 · vie 9 K9 · sáb 10 K12 · dom 11 K5 ·
+  lun 12 K13 · mar 13 K7 · mié 14 K8. Todos a las 16:00 La Paz; (c) agendarlos con `deploy/vps-ops/publicar/ig-carrusel.mjs`
+  + `agendar-publicacion.sh`. Eso exige la llave del VPS (`ONIA_VPS_SSH_KEY_B64`) o pedírselo a la madre.
+
+**4. Archivos clave:** `cola/plan-3-semanas/GUIONES-2-SEMANAS-1-14-OCT.md` (38 guiones, calendario 1–14 oct, ya con las
+verificaciones de la madre) · `cola/plan-3-semanas/VERIFICACION-LAPTOP-20261001.md` · `auditoria-20260930/LOTE-A…D.md` ·
+`EDICION-VIDEOS-20261001.md` · `cola/drops/` · `carousels/out/sergio-historias-comunidad-20261001/` y
+`sergio-comunidad-reto-presupuestos-20261001/`.
+
+**5. Intentos fallidos (no repetir):**
+- Video por el chat: no llega.
+- Drive por MCP en la sesión vieja: las búsquedas venían vacías, `root` no se encontraba y crear archivos daba «invalid
+  argument». Sergio Urcullo reconectó Drive al cerrar; probalo primero con `search_files` sobre `mimeType contains 'video/'`.
+- Bajar un video por `download_file_content` (base64 dentro del contexto) no sirve. Con un link «cualquiera con el enlace»
+  se baja por curl desde `drive.usercontent.google.com`.
+- `SendMessage` a la madre desde la nube: falla.
+- `git grep` en todo el repo: más de 2 minutos.
+- Detalle en las skills `editor-videos`, `diseno-contenido-onia` y `onia-continuidad` (commit `d64a6418`).
+
+**6. Depende de Sergio Urcullo:**
+- compartir los videos;
+- mirar y aprobar los carruseles y el calendario de programación;
+- pegar los mensajes de la comunidad (o autorizar a que se manden);
+- poner «Comunidad» como primer link de la bio de IG;
+- corregir y publicar la web `sergiourcullo.vercel.app/claude-code` (dice «3 subagentes»).
+
+**7. Próximos pasos, en orden:**
+1. Probar Drive y bajar los 2 videos.
+2. Editarlos (tabla de cortes a Sergio Urcullo primero).
+3. Rehacer K2v3, K8v3 y K11–K13, y mirarlos.
+4. Mostrarle a Sergio Urcullo todos los carruseles con el calendario de arriba y, con su «ok», agendarlos.
+5. Releer y dejar listos los 17 drops.
+
+## 🔁 1-oct (tarde) · el carril iba a pasar a la sesión LOCAL — HISTORIA, ver el relevo de arriba
 
 La sesión de la nube (`session_012ppFowADbJNtZ6WBMtqpuf`) queda EN PAUSA desde ahora; una sola sesión por carril.
 La local arranca con `git pull` de `claude/marca-personal-contenido-ae658c` y lee esto primero.
