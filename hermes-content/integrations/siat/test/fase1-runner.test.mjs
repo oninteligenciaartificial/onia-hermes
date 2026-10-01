@@ -637,13 +637,16 @@ describe("VI/IX: filas reales del portal y conciliacion del checkpoint", () => {
       };
       r.post = async (_service, envelope, meta) => {
         posts.push({ envelope, meta });
-        return { ok: true, parsed: { transaccion: true, codigoRecepcion: "REC" } };
+        return { ok: true, parsed: { transaccion: true, codigoRecepcion: "REC",
+          ...(meta.op.startsWith("validacion") ? { codigoEstado: 908 } : {}) } };
       };
       if (stage === "VI") await r.etapaVI();
       else await r.etapaIX();
       assert.deepEqual(lotes, [{ count: expected, sector: 17, pv: 1 }]);
-      assert.equal(posts.length, 1);
+      // 1 recepcion + su validacion inmediata (la fila de validacion ya esta llena).
+      assert.equal(posts.length, 2);
       assert.match(posts[0].envelope, new RegExp(`<cantidadFacturas>${expected}</cantidadFacturas>`));
+      assert.match(posts[1].meta.op, /^validacionRecepcion/);
       assert.equal(r.state.etapas[stage].cases[caseId], 10);
       assert.deepEqual(r.state.recepcionesLote[stage]["validacion-ds17-pv1"], ["REC"]);
     }
@@ -752,6 +755,99 @@ describe("VI/IX: filas reales del portal y conciliacion del checkpoint", () => {
       assert.equal(calls, 1, stage);
       assert.equal(r.state.etapas[stage].cases[r.caseFilter], 1);
     }
+  });
+});
+
+describe("VI/IX: cada paquete recibido se valida en el acto, aunque la fila de validacion este llena", () => {
+  // Por que: el 30-sep no sabiamos si el portal acredita la RECEPCION (901) o solo lo
+  // VALIDADO (908). Validar cada paquete apenas se recibe sirve en los dos casos y
+  // cuesta 1 SOAP de lectura por paquete.
+  const portal = JSON.parse(readFileSync(new URL("../portal-fase1-20260927.json", import.meta.url), "utf8"));
+  const CASOS = {
+    VI: { caseId: "recepcion-ds1-motivo3-pv0-menor500", valKey: "validacion-ds1-pv0", op: "validacionRecepcionPaqueteFactura" },
+    IX: { caseId: "recepcion-ds1-pv0-menor1000", valKey: "validacion-ds1-pv0", op: "validacionRecepcionMasivaFactura" },
+  };
+
+  // Runner con red simulada: `estados` es la cola de codigoEstado que devuelve cada validacion.
+  const armar = (stage, estados) => {
+    const { caseId, valKey } = CASOS[stage];
+    const r = Object.create(Runner.prototype);
+    r.state = applyPortalSnapshot(emptyState(), portal);
+    for (const [id, target] of Object.entries(LOTE_CASE_TARGETS[stage])) r.state.etapas[stage].cases[id] = target;
+    r.state.etapas[stage].cases[caseId] = 0;
+    r.state.etapas[stage].blockedCases = {};
+    r.state.catalogs.eventos = [{ codigoClasificador: 3, descripcion: "CORTE" }];
+    r.combo = { ...DEFAULT_COMBO };
+    r.caseFilter = caseId;
+    r.validacionEsperaMs = 0;
+    const logs = [];
+    r.log = (e) => logs.push(e);
+    r.checkpoint = () => {};
+    r.ensureCufd = async () => {};
+    r.eventWindowNow = () => ({ inicioMs: Date.now() - 120000, finMs: Date.now() - 1000 });
+    r.registrarEvento = async () => ({ ok: true, body: "<codigoRecepcionEventoSignificativo>EV</codigoRecepcionEventoSignificativo>" });
+    r.recepcionBase = (codigoEmision) => ({ codigoAmbiente: 2, codigoDocumentoSector: r.combo.codigoDocumentoSector,
+      codigoEmision, codigoModalidad: 2, codigoPuntoVenta: r.combo.codigoPuntoVenta,
+      codigoSistema: "SIS", codigoSucursal: 0, cufd: "CUFD", cuis: "CUIS", nit: "5371375010", tipoFacturaDocumento: 1 });
+    r.sinNow = () => "2026-10-01T00:00:00.000";
+    r.buildLote = (count) => ({ archivo: "TEST", hashArchivo: "HASH", cantidad: count });
+    const posts = [];
+    let n = 0;
+    r.post = async (_service, envelope, meta) => {
+      posts.push({ op: meta.op, codigo: envelope.match(/<codigoRecepcion>(.*?)<\/codigoRecepcion>/)?.[1] ?? null });
+      if (meta.op.startsWith("validacion")) {
+        return { ok: true, parsed: { transaccion: true, codigoEstado: estados.shift() ?? 908 } };
+      }
+      n += 1;
+      return { ok: true, parsed: { transaccion: true, codigoEstado: 901, codigoRecepcion: `REC-${n}` } };
+    };
+    const correr = (count) => (stage === "VI" ? r.etapaVI(count) : r.etapaIX(count));
+    return { r, posts, logs, correr, caseId, valKey };
+  };
+
+  for (const stage of ["VI", "IX"]) {
+    it(`${stage}: valida cada recepcion con su codigo aunque la fila de validacion ya este completa`, async () => {
+      const { r, posts, correr, caseId, valKey } = armar(stage, []);
+      const filaVal = r.state.etapas[stage].cases[valKey];
+      assert.equal(filaVal, LOTE_CASE_TARGETS[stage][valKey], "precondicion: fila de validacion llena");
+      await correr(2);
+      const ops = posts.map((p) => p.op);
+      assert.deepEqual(ops.filter((o) => o.startsWith("validacion")), [CASOS[stage].op, CASOS[stage].op]);
+      assert.deepEqual(posts.filter((p) => p.op.startsWith("validacion")).map((p) => p.codigo), ["REC-1", "REC-2"]);
+      // cada validacion va DESPUES de su recepcion, no todas al final
+      assert.ok(ops.indexOf(CASOS[stage].op) < ops.lastIndexOf(stage === "VI" ? "recepcionPaqueteFactura" : "recepcionMasivaFactura"));
+      assert.equal(r.state.etapas[stage].cases[caseId], 2);
+      assert.equal(r.state.etapas[stage].cases[valKey], filaVal, "la validacion inmediata no infla la fila de validacion");
+      assert.deepEqual(r.state.validacionesInmediatas[stage], { "REC-1": 908, "REC-2": 908 });
+    });
+  }
+
+  it("901 (pendiente) se reintenta hasta 908 sin reenviar el paquete", async () => {
+    const { r, posts, correr, caseId } = armar("VI", [901, 901, 908]);
+    await correr(1);
+    assert.equal(posts.filter((p) => p.op === "recepcionPaqueteFactura").length, 1);
+    assert.equal(posts.filter((p) => p.op === "validacionRecepcionPaqueteFactura").length, 3);
+    assert.equal(r.state.validacionesInmediatas.VI["REC-1"], 908);
+    assert.equal(r.state.etapas.VI.cases[caseId], 1);
+  });
+
+  it("si sigue en 901 tras los reintentos: el paquete cuenta, queda anotado pendiente y la corrida sigue", async () => {
+    const { r, posts, correr, caseId } = armar("VI", Array(20).fill(901));
+    await correr(1);
+    assert.equal(posts.filter((p) => p.op === "recepcionPaqueteFactura").length, 1);
+    assert.equal(r.state.validacionesInmediatas.VI["REC-1"], 901);
+    assert.equal(r.state.etapas.VI.cases[caseId], 1);
+    assert.equal(r.state.etapas.VI.blockedCases[caseId], undefined);
+  });
+
+  it("un rechazo (no 908 ni 901) cuenta ESE paquete pero bloquea el caso: no se manda otro igual", async () => {
+    const { r, posts, logs, correr, caseId } = armar("VI", [904]);
+    await correr(3);
+    assert.equal(posts.filter((p) => p.op === "recepcionPaqueteFactura").length, 1);
+    assert.equal(r.state.etapas.VI.cases[caseId], 1);
+    assert.equal(r.state.validacionesInmediatas.VI["REC-1"], 904);
+    assert.equal(r.state.etapas.VI.blockedCases[caseId]?.key, "validacion_rechazada");
+    assert.ok(logs.some((l) => l.blocked === "validacion_rechazada"));
   });
 });
 

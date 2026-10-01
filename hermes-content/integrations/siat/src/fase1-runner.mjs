@@ -960,6 +960,11 @@ export function parseArgs(argv) {
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
+// Validacion inmediata de cada paquete: el piloto contesto 908 a los ~29 s el 30-sep.
+// 6 intentos x 10 s cubren ~1 min antes de dejarlo anotado como 901 pendiente.
+export const VALIDACION_INMEDIATA_INTENTOS = 6;
+export const VALIDACION_INMEDIATA_ESPERA_MS = 10_000;
+
 class Runner {
   constructor({ token, nit, codigoSistema, stateFile, logFile, pace, firma = null, cafc = null, caseFilter = null }) {
     this.token = token;
@@ -1094,6 +1099,43 @@ class Runner {
     return result;
   }
 
+  /**
+   * Valida EN EL ACTO el paquete/masiva que se acaba de recibir, aunque la fila de
+   * validacion del portal ya este llena. Por que (30-sep-2026): no sabiamos si el
+   * portal acredita la recepcion (901) o solo lo validado (908); validar cada
+   * paquete sirve en los dos casos y cuesta 1 SOAP de lectura.
+   * - 908: queda anotado. 901: se reintenta (el piloto suele tardar segundos).
+   * - Sigue en 901 tras los reintentos: el paquete cuenta igual; queda anotado.
+   * - Cualquier otro estado (p.ej. 904 rechazado): se BLOQUEA el caso para no
+   *   mandar mas paquetes iguales. El que ya se recibio cuenta.
+   * No toca el contador de la fila de validacion (eso lo hace su propio loop).
+   */
+  async validarInmediata(id, caseId, codigoRecepcion, op) {
+    const espera = this.validacionEsperaMs ?? VALIDACION_INMEDIATA_ESPERA_MS;
+    let estado = null;
+    for (let intento = 1; intento <= VALIDACION_INMEDIATA_INTENTOS; intento += 1) {
+      if (intento > 1 && espera > 0) await sleep(espera);
+      const result = await this.post(this.servicio, buildRunnerEnvelope(op, {
+        ...this.recepcionBase(id === "VI" ? 2 : 3),
+        codigoRecepcion,
+      }), { etapa: id, op, case: caseId, inmediata: true, intento });
+      estado = result.ok ? result.parsed?.codigoEstado ?? null : null;
+      if (!result.ok) estado = `error:${result.error ?? result.status ?? "?"}`;
+      if (estado !== 901) break;
+    }
+    const porEtapa = (this.state.validacionesInmediatas ??= { VI: {}, IX: {} });
+    (porEtapa[id] ??= {})[codigoRecepcion] = estado;
+    if (estado !== 908 && estado !== 901) {
+      const etapa = this.state.etapas[id];
+      etapa.blockedCases[caseId] = {
+        key: "validacion_rechazada",
+        mensaje: { codigo: String(estado), descripcion: `validacion inmediata de ${codigoRecepcion} sin 908` },
+      };
+      this.log({ etapa: id, case: caseId, blocked: "validacion_rechazada", codigoRecepcion, codigoEstado: estado });
+    }
+    return estado;
+  }
+
   async validarRecepcion(id, validationKey, done, op) {
     const baseline = this.state.etapas[id]?.portalCases?.[validationKey];
     if (baseline == null && done > 0) {
@@ -1216,7 +1258,8 @@ class Runner {
     let streak = { key: null, count: 0 };
     let attempts = 0;
     const maxAttempts = target * 3;
-    while (doneOf() < target && attempts < maxAttempts) {
+    // El caso puede bloquearse DENTRO de fn (validacion inmediata rechazada): cortar ahi.
+    while (doneOf() < target && attempts < maxAttempts && !(caseId && etapa.blockedCases[caseId])) {
       attempts += 1;
       etapa.attempts += 1;
       // Un prerequisito faltante (p.ej. sin CUFD para ese punto de venta)
@@ -1830,7 +1873,12 @@ class Runner {
             codigoEvento,
             ...(cafc ? { cafc } : {}),
           }), { etapa: "VI", op: "recepcionPaqueteFactura", case: caseId });
-          return this.guardarRecepcion("VI", validationKey, result);
+          const recibido = this.guardarRecepcion("VI", validationKey, result);
+          if (recibido.ok) {
+            this.checkpoint(); // el recibo queda guardado antes de validar
+            await this.validarInmediata("VI", caseId, recibido.parsed.codigoRecepcion, "validacionRecepcionPaqueteFactura");
+          }
+          return recibido;
         }, { caseId }),
       );
     }
@@ -1929,7 +1977,12 @@ class Runner {
             hashArchivo: lote.hashArchivo,
             cantidadFacturas: lote.cantidad,
           }), { etapa: "IX", op: "recepcionMasivaFactura", case: caseId });
-          return this.guardarRecepcion("IX", validationKey, result);
+          const recibido = this.guardarRecepcion("IX", validationKey, result);
+          if (recibido.ok) {
+            this.checkpoint(); // el recibo queda guardado antes de validar
+            await this.validarInmediata("IX", caseId, recibido.parsed.codigoRecepcion, "validacionRecepcionMasivaFactura");
+          }
+          return recibido;
         }, { caseId }),
       );
     }
