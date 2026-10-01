@@ -52,7 +52,8 @@
         },
         {
           "label": "El aviso",
-          "text": "por Telegram, como mucho 1 vez cada 6 h por loop"
+          "text": "por Telegram, como mucho 1 vez cada 6 h por loop",
+          "icon": "hermes-content/references/brand-logos/telegram-color.svg"
         }
       ],
       "next": "el tope",

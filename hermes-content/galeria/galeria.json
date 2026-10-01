@@ -363,5 +363,39 @@
       "sergio-k12-worktrees-sin-pisarse-20261001"
     ],
     "tags": []
+  },
+  {
+    "id": "sergio-k12-worktrees-sin-pisarse-20261001-s05-a9889de0",
+    "file": "hermes-content/galeria/ilustraciones/sergio-k12-worktrees-sin-pisarse-20261001-s05-a9889de0.jpg",
+    "fecha": "2026-10-01",
+    "tipo": "ilustraciones",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "text2image_soul_v2",
+    "prompt": "A small matte black clay toy train tipped over on its side beside an emerald green clay train track.",
+    "estilo": "clay",
+    "costo_cr": 0.12,
+    "job": "a9889de0-93d4-40e8-97da-d6e2e23d4d90",
+    "usado_en": [
+      "sergio-k12-worktrees-sin-pisarse-20261001"
+    ],
+    "tags": []
+  },
+  {
+    "id": "k11-img-s01-7794c76c",
+    "file": "hermes-content/galeria/ilustraciones/k11-img-s01-7794c76c.jpg",
+    "fecha": "2026-10-01",
+    "tipo": "ilustraciones",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "text2image_soul_v2",
+    "prompt": "A green clay boom barrier gate with its arm lowered and closed, in front of a small stack of matte black clay boxes.",
+    "estilo": "clay",
+    "costo_cr": 0.12,
+    "job": "7794c76c-c107-46b9-897b-0d17cbc4a2a6",
+    "usado_en": [
+      "k11-img"
+    ],
+    "tags": []
   }
 ]
