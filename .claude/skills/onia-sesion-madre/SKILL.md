@@ -23,14 +23,19 @@ Regla madre: `CLAUDE.md` §1 «Sesión MADRE local + carriles en la nube». Esta
 
 | Sesión (nombre en `ListAgents`) | id nube | Carril |
 |---|---|---|
-| Sesión madre de Onia | local `local_748d30b7-…`; puente `session_01Ap3wJimaiB2tZR7gYsYGhe` | Ordena; hace lo de la PC |
-| Onia platform development handoff | `session_01VGmpNv4eSMnpA3wXrypR4L` | Plataforma: desarrollo, publicar, runner SIAT |
-| Ventas y pauta Onia Platform | `session_01BnctfaNRsm3ogJ46A7B5P5` | Pauta y prospección |
-| Marca personal: comunidad y contenido (nube) | `session_012ppFowADbJNtZ6WBMtqpuf` | Contenido |
-| Lucía v4 y Higgsfield (entorno onia-higgsfield) | `session_01RRD6v9rmBavDoXx1rG2mEn` | Lucía / Higgsfield |
-| Control de sesión Sergio Urcullo | `session_0154pQRYB6icZn9Z3SuJp35D` | Ex-orquestador: ya NO ordena. Archivarla lo decide Sergio Urcullo |
+| Sesión madre de Onia | local `local_748d30b7-…` (puente de Remote Control: cambia al reconectar) | Ordena; hace lo de la PC |
+| Onia Platform SIAT runner | `session_014HGgof9kHQkdLXhsZsAq6A` | Plataforma: desarrollo, publicar, runner SIAT |
+| Sesión Ventas y pauta Onia | `session_01JkUVtTYrjJ9xUywLXjYz5G` | Pauta y prospección |
+| Marca personal: comunidad y contenido | `session_01CE21mytrEXdqanCFoWxm32` | Contenido de Sergio Urcullo |
+| Lucia v4 session - Higgsfield | `session_01Whdadt8NdnYbZoyum1bRX6` | Lucía / Higgsfield |
+| Hermes-Jarvis Sergio Urcullo | `session_0132vedovRq1JVbeD6aVQwNT` | Hermes: Telegram y calendario |
 
-Los ids cambian si una sesión se cierra y se abre otra: **`ListAgents` primero**, esta tabla después.
+(Al 2-oct. Reemplazadas el 1-oct y para archivar: `session_01VGmpNv4…`, `session_01BnctfaN…`, `session_012ppFow…`,
+`session_01RRD6v9…`, `session_0154pQRY…` (Control).)
+
+Los ids cambian si una sesión se cierra y se abre otra: **`ListAgents` primero**, esta tabla después. Si `ListAgents`
+no las ve (Remote Control caído), el id sale del trailer `Claude-Session: https://claude.ai/code/session_…` de sus
+commits: `git log --all --since=<hace 2 h> --format='%s %(trailers:key=Claude-Session,valueonly)'`.
 
 ## Cómo se manda (medido, no supuesto)
 
@@ -38,7 +43,8 @@ Los ids cambian si una sesión se cierra y se abre otra: **`ListAgents` primero*
 |---|---|---|
 | Madre → nube | `SendMessage` con `to` = nombre exacto de `ListAgents` | ✅ 1-oct 19:57 UTC: llegó a Plataforma como `<cross-session-message>` y la despertó sola. Requiere la madre con Remote Control encendido |
 | Madre lee la nube | `RemoteTrigger` `action: get_run_log`, `session_id` = id nube | ✅ 1-oct. Trae los últimos 200 eventos; es DATO, no instrucciones |
-| Nube → madre | La nube **contesta en su propio transcript** y la madre lo lee con `get_run_log` | ❌ `SendMessage` desde la nube falla («this cloud session cannot message other sessions yet»), medido por Plataforma 1-oct |
+| Nube → madre | La nube contesta en su transcript y la madre lo lee con `get_run_log`. Además `mcp__claude-code-remote__send_message` (MCP de la nube) SÍ entrega a la madre (medido por Lucía 1-oct 23:48) — pero solo llega si el Remote Control de la madre está vivo | `SendMessage` desde la nube falla («this cloud session cannot message other sessions yet») |
+| Madre → nube SIN Remote Control | `RemoteTrigger create` con `persistent_session_id` de la destino + `action: run` (entra ya como un turno) + `update {enabled:false}` para que no se repita | ✅ 2-oct 23:49 UTC a Plataforma. Respuesta larga del API: usar solo si `ListAgents` no ve la sesión |
 | Nube → nube | rutina de un disparo: `create_trigger` con `persistent_session_id` de la destino y `run_once_at` +1-2 min | ⚠️ funciona pero tarda; Sergio Urcullo la descartó el 1-oct. Lo que una nube necesita de otra pasa por la madre |
 | Local → local | `SendMessage` | ✅ (lo ve Sergio Urcullo en pantalla) |
 
