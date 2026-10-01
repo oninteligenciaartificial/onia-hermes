@@ -21,6 +21,12 @@ La local arranca con `git pull` de `claude/marca-personal-contenido-ae658c` y le
 Lo urgente es la página de precios de WhatsApp de Meta antes de grabar D02-B. Después: OpenAI DevDay, la web
 `sergiourcullo.vercel.app`, gitdiagram, la memoria de los 424 commits y el filtro de n8n.
 
+**1-oct, verificaciones de la madre integradas** (`VERIFICACION-LAPTOP-20261001.md`): D02-B confirmado; S2-D08-C y
+su drop 4 corregidos (ventana de anuncios «hasta 7 días», no 72 h); DD-A (GPT-6.1 Sol) entra el vie 2 y N02 pasa al
+dom 4 (R04 al mié 14, G01 a reserva); 424 commits confirmado; n8n hoy 38 activos de 96 (el 44 es del 20-ago).
+**Pendiente que depende de Sergio Urcullo:** la web `sergiourcullo.vercel.app/claude-code` sigue diciendo «3 subagentes»
+(hoy queda 1): corregir la web, no el guion; publicarla es su permiso.
+
 **Pendientes del carril, en orden:**
 1. Verificaciones de la laptop (arriba) → pasar los resultados a los guiones.
 2. Escribir los drops que faltan (noticias N*, repos R*) y corregir el drop 2 (WhatsApp) y el 14 (MCP); juntarlos en

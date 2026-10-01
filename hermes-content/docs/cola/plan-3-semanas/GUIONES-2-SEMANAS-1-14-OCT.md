@@ -9,9 +9,9 @@ Pedido de Sergio Urcullo (30-sep): *«dame los guiones de 2 semanas, verificados
 | Día | Tutorial / YouTube | Informativo | Caso / negocio |
 |---|---|---|---|
 | **Jue 1-oct** | Salió Sonnet 5.5: la prueba de tres tareas para saber si te sirve | Claude Code ya no te pregunta casi nada: qué deja pasar el modo auto (noticia) | Desde el 1 de octubre, tu bot de WhatsApp paga por cada respuesta |
-| **Vie 2-oct** | La perilla de Claude Code que casi nadie toca | Sonnet 4.5 se apaga el 30 de noviembre: encontralo y migralo con un comando (noticia) | «Verificado» con un 200, y el login mostraba texto roto |
+| **Vie 2-oct** | La perilla de Claude Code que casi nadie toca | El modelo nuevo de OpenAI cuesta un quinto, y una parte sale casi gratis (noticia) | «Verificado» con un 200, y el login mostraba texto roto |
 | **Sáb 3-oct** | 🎬 YouTube: Opus 5.5 o Sonnet 5.5: cuál usar y cómo cambiarlo en Claude Code | Un agente de terminal gratis, ahora con Gemini 3.8 Flash (noticia) | — |
-| **Dom 4-oct** | Tu primera skill de Claude Code en un minuto | Un curso gratis de IA en GitHub cuya primera lección de agentes corre sin clave (repo) | La regla de 24 horas que rompe tu bot de WhatsApp |
+| **Dom 4-oct** | Tu primera skill de Claude Code en un minuto | Sonnet 4.5 se apaga el 30 de noviembre: encontralo y migralo con un comando (noticia) | La regla de 24 horas que rompe tu bot de WhatsApp |
 | **Lun 5-oct** | Claude Code ya lee AGENTS.md, pero no si tenés los dos | Una skill llamada verify y Claude Code la corre antes de cada commit (noticia) | ¿La IA le promete a tu cliente algo que no confirmaste? |
 | **Mar 6-oct** | 🎬 YouTube: Un CLAUDE.md donde cada regla trae su historia | Cambiá dos letras y mirá cómo está armado cualquier repo (repo) | — |
 | **Mié 7-oct** | El hook que commitea solo, y la guarda que le puse después de romperlo | Antes de instalar una skill, escaneala (y el detalle de «precaución») (repo) | Retiré seis de mis nueve subagentes, y seguían apareciendo |
@@ -21,11 +21,14 @@ Pedido de Sergio Urcullo (30-sep): *«dame los guiones de 2 semanas, verificados
 | **Dom 11-oct** | Presentaciones con Claude en el plan gratis, sin que te invente datos | Un video corto entero desde un tema, y el problema de la música (repo) | Negocio: los mensajes de tu bot que Meta no te cobra |
 | **Lun 12-oct** | Antes de cerrar la sesión: el handoff de siete campos | Videos por código con tu agente, y la licencia que cambia con tu tamaño (repo) | Mi agente me dijo que quedaban 2. Había 44 activos |
 | **Mar 13-oct** | 🎬 YouTube: Un bot que no inventa: datos en un solo lugar, control después de la IA y medición | Cómo leer un README en un minuto: el primer comando no siempre es del proyecto (repo) | — |
-| **Mié 14-oct** | Tenía veinticuatro MCP conectados y ninguno escrito en mis archivos | APIs de IA gratis: tres preguntas antes de meter datos de tus clientes (repo) | Negocio: definí a tu cliente con cinco preguntas, no con adjetivos |
+| **Mié 14-oct** | Tenía veinticuatro MCP conectados y ninguno escrito en mis archivos | Un curso gratis de IA en GitHub cuya primera lección de agentes corre sin clave (repo) | Negocio: definí a tu cliente con cinco preguntas, no con adjetivos |
 
 ## Antes de grabar (condiciones que salieron de la auditoría)
 
-- **Jue 1 · WhatsApp cobra por mensaje (D02-B):** abrí vos la página de precios de Meta (`developers.facebook.com/documentation/business-messaging/whatsapp/pricing`) antes de grabar. Si no dice que el mensaje de servicio se cobra a tarifa de utilidad y que hay mil gratis por mes, se cortan esas frases. Desde la nube la página está bloqueada.
+- ✅ **WhatsApp cobra por mensaje (D02-B): confirmado el 1-oct** en la página de Meta (cobro por mensaje desde el 1-oct, misma tarifa que utilidad, 1.000 gratis por mes por número). Queda igual. `VERIFICACION-LAPTOP-20261001.md` §1.
+- ✅ **Ventana de anuncios (S2-D08-C, dom 11): corregida el 1-oct** — Meta dice «hasta 7 días» (no 72 h) y solo si el cliente escribe desde la app del celular.
+- **«Quedaban 2, había 44» (D05-C, lun 12):** el 44 es el conteo del 20-ago. Hoy el filtro muestra **38** activos de 96: si aparece en pantalla, decí «hoy, contadas de nuevo, son treinta y ocho»; no presentes 38 como el número de aquel día.
+- **«424 commits» (D05-A): confirmado** en la memoria local (1-sep).
 - **Sáb 3 · YouTube Opus o Sonnet (D01-C):** da la respuesta del reto de la comunidad; por eso sale después del viernes a las 19:00.
 - **Lun 5 · AGENTS.md (D03-B):** enseña un arreglo que ONIA todavía no tiene aplicado. Decidí si lo aplicamos antes o se cuenta como receta.
 - **Vie 9 · YouTube repos (G11):** recontar estrellas e issues el día de grabar y decir la fecha.
@@ -36,10 +39,10 @@ Pedido de Sergio Urcullo (30-sep): *«dame los guiones de 2 semanas, verificados
 
 Tutoriales: D06-B (Fable, Opus o Sonnet: cuánto cuesta la misma tarea) · S1-D07-A (el router) · S1-D07-C (¿inversión? primero esta división; recalcular con el precio vigente) · D05-C/D04-C comparten lección, no juntarlas.
 Bots y negocio: S2-D10-A · S2-D10-C · S2-D11-A · S2-D11-C · S2-D12-A · S2-D13-A · S2-D13-B · y con prueba previa: S2-D07-B, S2-D08-B (+N01 al día siguiente), S2-D11-B. YouTube: D06-C, S2-D09-C, S2-D12-C.
-Repos: G02 · G03 · G05 · G06 · G07 · G08 · G09. Noticias condicionadas: N05 (si n8n 2.42 sale estable) · N07 (si aprobás el gasto en Higgsfield).
+Repos: G01 · G02 · G03 · G05 · G06 · G07 · G08 · G09. Noticias condicionadas: N05 (si n8n 2.42 sale estable) · N07 (si aprobás el gasto en Higgsfield).
 Descartadas: D02-C (arruinaba el reto: da la respuesta en la primera frase) · S2-D10-B (ONIA no usa Gemini 2.5, nada que mostrar) · S2-D09-B se baja por pisarse con el audio de D11-B.
 
-⚠️ **Falta la noticia más fuerte de la quincena:** el OpenAI DevDay del 29-sep. Desde la nube no se llega a openai.com; se revisa desde otro entorno y entra por el lugar de un repo.
+✅ **OpenAI DevDay (29-sep):** verificado por la madre el 1-oct; entra DD-A (GPT-6.1 Sol y la caché) el vie 2. La vista `/agents` de Codex queda afuera: no está en la doc oficial.
 
 ## Jue 1-oct
 
@@ -120,22 +123,20 @@ En mi empresa hay una regla: al modelo más caro se pasa solo cuando Opus, con e
 
 Comentá EFFORT y te paso mi tabla.
 
-### N02 · Vertical · Sonnet 4.5 se apaga el 30 de noviembre: encontralo y migralo con un comando
-*Noticia* · **Demuestra:** la nota del 30-sep en las release notes de la plataforma; búsqueda del ID en un proyecto; `/claude-api migrate` corriendo en Claude Code con su pregunta de alcance · **Cierre:** comunidad de WhatsApp (falta escribir: drop «Checklist de migración desde Sonnet 4.5», texto propuesto en Pendientes)
+### DD-A · Vertical · El modelo nuevo de OpenAI cuesta un quinto, y una parte sale casi gratis
+*Noticia* · **Demuestra:** la página de precios de OpenAI (gpt-6.1-sol 2 / 0,10 caché / 10 USD por millón contra Astra 10 / 1 / 50) y el campo de tokens en caché de la respuesta · **Cierre:** comunidad (falta escribir el drop: tabla Sol vs Astra y la cuenta de caché)
 
-Sonnet cuatro punto cinco se retira de la API de Claude el treinta de noviembre. Si una automatización tuya lo usa, tenés dos meses. Así lo encontrás y lo migrás.
+OpenAI sacó un modelo que, según su anuncio, se acerca a su mejor modelo por la quinta parte del precio. Y una parte sale casi gratis.
 
-Anthropic recomienda pasar a Sonnet cinco punto cinco.
+Se llama GPT seis punto uno Sol. Lo presentaron el veintinueve de septiembre, en su DevDay.
 
-Paso uno: buscalo. En tu código, buscá el texto claude guion sonnet guion cuatro guion cinco. En n8n, abrí cada nodo de Anthropic y mirá qué modelo tiene elegido.
+En la página de precios, lo que ves en pantalla: dos dólares el millón de tokens que entran y diez los que salen. El grande, Astra, cobra diez y cincuenta. Un quinto.
 
-Paso dos: si el código está en una carpeta, abrí Claude Code y escribí lo que ves en pantalla: barra claude api migrate, y el modelo nuevo. Te pregunta qué archivos tocar, y al final te deja una lista para revisar.
+Lo que casi nadie aprovecha: lo que entra desde la caché cuesta diez centavos el millón. Es lo que repetís igual al principio de cada pedido: las instrucciones de tu agente, tu lista de precios. Ponelo primero y no lo toques. La primera vez cuesta un poco más; después, veinte veces menos. Tiene que pasar de mil veinticuatro tokens.
 
-Paso tres, el crítico. Tres cosas que el cuatro punto cinco aceptaba y el cinco punto cinco rechaza con error: una temperatura cambiada, una respuesta pre-llenada, y obligarlo a usar una herramienta.
+Cómo sabés que funcionó: la respuesta de la API trae cuántos tokens salieron de caché. Si dice cero, cambiaste algo del principio.
 
-Cómo sabés que quedó: tu prueba corre sin error y la respuesta indica el modelo nuevo.
-
-La lista completa está en la comunidad de WhatsApp.
+La cuenta para tu agente está en la comunidad.
 
 ### D04-C · Vertical · «Verificado» con un 200, y el login mostraba texto roto
 *Tutorial / caso* · **Demuestra:** la captura del login con los nombres de los iconos como texto al lado de la versión sana, y el prompt literal para verificar mirando · **Cierre:** comunidad, drop 6 (escrito; falta publicarlo)
@@ -272,22 +273,22 @@ Para comprobar la tuya, escribí barra skills: tiene que aparecer. Después pedi
 
 El video para instalar Claude Code y armar tu primera skill está en mi web.
 
-### R04 · Vertical · Un curso gratis de IA en GitHub cuya primera lección de agentes corre sin clave
-*Repo* · **Demuestra:** portada en español (`i18n/es/README.md`); en la terminal, `python3 phases/14-agent-engineering/01-the-agent-loop/code/main.py` y su salida (TOY REACT LOOP: 120 + 15 % = 138.0, 5 turnos, 3 herramientas) · **Cierre:** comunidad de WhatsApp (falta escribir: drop con los tres comandos y las lecciones 14-01 a 14-05 sugeridas en orden)
+### N02 · Vertical · Sonnet 4.5 se apaga el 30 de noviembre: encontralo y migralo con un comando
+*Noticia* · **Demuestra:** la nota del 30-sep en las release notes de la plataforma; búsqueda del ID en un proyecto; `/claude-api migrate` corriendo en Claude Code con su pregunta de alcance · **Cierre:** comunidad de WhatsApp (falta escribir: drop «Checklist de migración desde Sonnet 4.5», texto propuesto en Pendientes)
 
-Hay un curso gratis de ingeniería de IA en GitHub, con más de quinientas lecciones. Y la primera lección de agentes corre sin clave.
+Sonnet cuatro punto cinco se retira de la API de Claude el treinta de noviembre. Si una automatización tuya lo usa, tenés dos meses. Así lo encontrás y lo migrás.
 
-Se llama AI Engineering from Scratch, licencia MIT, y la portada está en español. Para agentes, andá a la fase catorce, lección uno: el bucle del agente.
+Anthropic recomienda pasar a Sonnet cinco punto cinco.
 
-Clonás el repo, y corrés el archivo main punto py de esa lección con python tres. Solo usa Python, sin instalar nada.
+Paso uno: buscalo. En tu código, buscá el texto claude guion sonnet guion cuatro guion cinco. En n8n, abrí cada nodo de Anthropic y mirá qué modelo tiene elegido.
 
-Lo que ves en pantalla es un agente de juguete: piensa, usa una calculadora, guarda un dato, y repite hasta terminar. Ciento veinte más quince por ciento de impuesto: ciento treinta y ocho. Cinco vueltas, tres herramientas.
+Paso dos: si el código está en una carpeta, abrí Claude Code y escribí lo que ves en pantalla: barra claude api migrate, y el modelo nuevo. Te pregunta qué archivos tocar, y al final te deja una lista para revisar.
 
-Según la lección, ese mismo bucle es lo que hacen por dentro los agentes de hoy, Claude Code incluido: pensar, usar una herramienta, leer el resultado.
+Paso tres, el crítico. Tres cosas que el cuatro punto cinco aceptaba y el cinco punto cinco rechaza con error: una temperatura cambiada, una respuesta pre-llenada, y obligarlo a usar una herramienta.
 
-Cómo sabés que lo entendiste: cambiás la pregunta y adivinás cuántas vueltas va a dar antes de correrlo.
+Cómo sabés que quedó: tu prueba corre sin error y la respuesta indica el modelo nuevo.
 
-El orden de lecciones que te recomiendo está en la comunidad de WhatsApp.
+La lista completa está en la comunidad de WhatsApp.
 
 ### S2-D07-A · Vertical · La regla de 24 horas que rompe tu bot de WhatsApp
 *Tutorial / caso* · **Demuestra:** la plantilla de seguimiento aprobada de ONIA en pantalla y el error ciento treinta y un mil cuarenta y siete, que es cómo sabés que te pasó · **Cierre:** comunidad, drop «Mensajes de seguimiento» (falta escribir: en `PRODUCCION-GUIONES-2026-09-29.md` §Drops 6 hay solo una línea que lo describe, sin contenido)
@@ -763,15 +764,15 @@ Por qué importa: un reclamo de derechos te puede bajar el video.
 La lista de chequeo está en la comunidad de WhatsApp.
 
 ### S2-D08-C · Vertical · Negocio: los mensajes de tu bot que Meta no te cobra
-*Tutorial / caso* · **Demuestra:** la regla de las setenta y dos horas en la página de precios de Meta, y un hallazgo propio: la bandeja de ONIA descarta de qué anuncio vino cada lead · **Cierre:** comunidad, drop 4 (existe; ya trae la línea de las 72 h)
+*Tutorial / caso* · **Demuestra:** la ventana de hasta siete días en la página de precios de Meta, y un hallazgo propio: la bandeja de ONIA descarta de qué anuncio vino cada lead · **Cierre:** comunidad, drop 4 (existe; corregido el 1-oct a «hasta 7 días»)
 
-Desde el uno de octubre, cada respuesta de tu bot de WhatsApp se paga. Pero hay una puerta por donde no se paga nada durante tres días.
+Desde el uno de octubre, cada respuesta de tu bot de WhatsApp se paga. Pero hay una puerta por donde no se paga nada hasta por siete días.
 
-Está en la página de precios de Meta, la que ves en pantalla. Si alguien te escribe desde un anuncio de clic a WhatsApp, y le contestás dentro de las veinticuatro horas, durante setenta y dos horas no se te cobra ningún mensaje.
+Está en la página de precios de Meta, la que ves en pantalla. Si alguien te escribe desde un anuncio de clic a WhatsApp, y le contestás dentro de las veinticuatro horas, se abre una ventana de hasta siete días en la que no se te cobra ningún mensaje.
 
-Dos condiciones. Una: contestar rápido. Si tardás más de un día, esa ventana se pierde. Dos: es para la plataforma oficial, la de los bots.
+Tres condiciones. Una: contestar rápido. Si tardás más de un día, esa ventana se pierde. Dos: es para la plataforma oficial, la de los bots. Tres: tiene que escribirte desde la app del celular; desde la computadora no cuenta.
 
-Contá cuántos mensajes le mandás a un cliente nuevo en sus primeros tres días. Si entró por un anuncio, no los pagás. Si llegó por otro lado, sí.
+Contá cuántos mensajes le mandás a un cliente nuevo en su primera semana. Si entró por un anuncio, no los pagás. Si llegó por otro lado, sí.
 
 Un error que encontré en mi sistema: la bandeja que uso en el medio borra de qué anuncio vino cada persona. No sabés qué anuncio te trajo al cliente. Fijate que la tuya lo guarde.
 
@@ -977,24 +978,22 @@ Comprobás con barra context, antes y después: lo que ocupan las herramientas t
 
 Lo tenés completo en la comunidad: el link está en mi web.
 
-### G01 · Vertical · APIs de IA gratis: tres preguntas antes de meter datos de tus clientes
-*Repo* · **Demuestra:** las notas al pie del README (Cohere «Non-commercial use only», nota 1 de Gemini, nota 13 de Mistral, nota 5 de NVIDIA) · **Cierre:** comunidad de WhatsApp (falta publicar: drop 1, texto ya escrito en S4 §5)
+### R04 · Vertical · Un curso gratis de IA en GitHub cuya primera lección de agentes corre sin clave
+*Repo* · **Demuestra:** portada en español (`i18n/es/README.md`); en la terminal, `python3 phases/14-agent-engineering/01-the-agent-loop/code/main.py` y su salida (TOY REACT LOOP: 120 + 15 % = 138.0, 5 turnos, 3 herramientas) · **Cierre:** comunidad de WhatsApp (falta escribir: drop con los tres comandos y las lecciones 14-01 a 14-05 sugeridas en orden)
 
-Hay una lista en GitHub de APIs de inteligencia artificial gratis y sin tarjeta. Antes de conectar una a tu negocio, leé las notas al pie: ahí está lo que decide.
+Hay un curso gratis de ingeniería de IA en GitHub, con más de quinientas lecciones. Y la primera lección de agentes corre sin clave.
 
-Se llama awesome free LLM APIs. Tres preguntas.
+Se llama AI Engineering from Scratch, licencia MIT, y la portada está en español. Para agentes, andá a la fase catorce, lección uno: el bucle del agente.
 
-Uno: ¿pide tarjeta? Gemini, Mistral y Cohere, según la lista, no.
+Clonás el repo, y corrés el archivo main punto py de esa lección con python tres. Solo usa Python, sin instalar nada.
 
-Dos: ¿permite uso comercial? La clave de prueba de Cohere dice que no. Para un negocio, afuera.
+Lo que ves en pantalla es un agente de juguete: piensa, usa una calculadora, guarda un dato, y repite hasta terminar. Ciento veinte más quince por ciento de impuesto: ciento treinta y ocho. Cinco vueltas, tres herramientas.
 
-Tres: ¿usan lo que mandás para entrenar? La nota de Gemini dice que, en el plan gratis, Google puede usar tus mensajes para mejorar sus productos. La de Mistral, que entrenan con ellos salvo que lo desactives. Y los modelos gratis de NVIDIA que aparecen ahí piden no mandar datos personales.
+Según la lección, ese mismo bucle es lo que hacen por dentro los agentes de hoy, Claude Code incluido: pensar, usar una herramienta, leer el resultado.
 
-Si tu bot lee nombres, teléfonos o diagnósticos de clientes, esa nota decide.
+Cómo sabés que lo entendiste: cambiás la pregunta y adivinás cuántas vueltas va a dar antes de correrlo.
 
-Cómo sabés que elegiste bien: confirmaste las tres respuestas en la página del proveedor, no en la lista. La lista es del veintiuno de agosto, y los límites cambian.
-
-La planilla está en la comunidad de WhatsApp.
+El orden de lecciones que te recomiendo está en la comunidad de WhatsApp.
 
 ### S2-D13-C · Vertical · Negocio: definí a tu cliente con cinco preguntas, no con adjetivos
 *Tutorial / caso* · **Demuestra:** las cinco preguntas reales de ONIA y el mensaje del lead que las originó (parafraseado, sin nombre) · **Cierre:** comentá CLIENTE (drop 17, escrito)

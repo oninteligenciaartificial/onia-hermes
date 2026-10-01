@@ -639,9 +639,9 @@ Capa 3 · Prueba: 10 frases que deben bloquearse («Bs 999 por mes, oferta espec
 **4 · Cuánto cuesta tu bot desde el 1-oct (D08-C, comunidad)**
 ```
 A = mensajes que manda tu negocio por día · B = días que atendés por mes · C = A × B (mensajes al mes)
-D = tarifa de tu país en la tabla de Meta (columna utilidad: la de servicio es la misma) · E = C × D (costo al mes)
+D = tarifa de tu país en la tabla de Meta (columna utilidad: la de servicio es la misma) · E = (C − 1000) × D (costo al mes; los primeros 1.000 de servicio por mes y por número son gratis; si da negativo, es 0)
 Fuente: developers.facebook.com/documentation/business-messaging/whatsapp/pricing/non-template-messages
-Para bajar E: una respuesta en vez de tres burbujas · no te escribas a vos mismo · las conversaciones que empiezan en un anuncio de clic a WhatsApp tienen 72 h gratis (misma página).
+Para bajar E: una respuesta en vez de tres burbujas · no te escribas a vos mismo · las conversaciones que empiezan en un anuncio de clic a WhatsApp abren una ventana gratis de hasta 7 días, solo si el cliente escribe desde la app del celular (página de precios, «Free entry point windows»).
 Si contestás a mano desde la app WhatsApp Business, esto no te toca.
 ```
 
