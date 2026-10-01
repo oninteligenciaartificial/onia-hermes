@@ -142,7 +142,10 @@ export const CHATBOT_STACKS: readonly ChatbotStack[] = [
       "Configuración del número y de las plantillas que Meta aprueba",
     ],
     noIncluye: [
-      "Cerrar la cita: el agente toma el pedido y lo pasa a tu equipo, que confirma el horario",
+      // El agente NO agenda dentro del chat (onia-platform
+      // app/api/chatbot-knowledge/published/route.ts: con Reservas online manda
+      // el link `/book/<slug>`; sin ellas, deriva a una persona).
+      "Reservar dentro del chat: si tenés Reservas online, el agente le manda el link para que el cliente elija su horario; si no, pasa el pedido a tu equipo",
       "Lo que salga de este alcance (integraciones, flujos propios) se cotiza a medida",
     ],
     necesitasVos: [
@@ -194,6 +197,12 @@ export const A_MEDIDA =
  * caduca** — la condición con su fecha, verdadera antes y después del 1-oct —,
  * el mismo criterio con el que se resolvió el plazo del SIN.
  *
+ * ⚠️ **VENCIDA el 1-oct-2026.** La redacción «no te cuesta hasta el 30 de
+ * septiembre» dejó de servir: al lead que lee hoy le habla de una gratuidad que
+ * ya no existe. Desde ese día el sitio dice sólo el presente (Meta cobra también
+ * las respuestas) y `condicion-de-tercero.test.ts` impide volver a negar el
+ * cargo. Las dos fechas quedan acá como historia y para `NO_INCLUYE`.
+ *
  * Fuente primaria (Meta, verificada 2026-08-17), con el cálculo en Bs:
  * `hermes-content/docs/ONIA_FECHAS_CRITICAS_PLAN.md` §3.
  */
@@ -222,11 +231,9 @@ export const META_COBRA_RESPUESTAS_DESDE = META_VENTANA_24H.desde;
  * puede escribir sin su fecha. Ver `(sitio)/condicion-de-tercero.test.ts`.
  */
 export const META_NOTA =
-  "Los mensajes que Meta cobra los pagás vos, directo a Meta y en tu propia cuenta: " +
-  "no pasan por nuestra factura y no les sumamos nada encima. Meta fija esas tarifas y " +
-  "las cambia por su cuenta: responder dentro de las 24 horas desde que el cliente " +
-  `escribe no te cuesta hasta el ${META_VENTANA_24H.hasta}, y desde el ` +
-  `${META_VENTANA_24H.desde} Meta también cobra esas respuestas.`;
+  "Los mensajes de WhatsApp que cobra Meta —también las respuestas al cliente que te escribió— " +
+  "los pagás vos, directo a Meta y en tu propia cuenta: no pasan por nuestra factura y no les " +
+  "sumamos nada encima. Meta fija esas tarifas y las cambia por su cuenta.";
 
 export function fmtBs(v: number): string {
   return Math.round(v).toLocaleString("es-BO");

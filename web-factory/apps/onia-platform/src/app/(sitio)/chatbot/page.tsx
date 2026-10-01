@@ -102,9 +102,9 @@ export default function Chatbot() {
                 Tu WhatsApp responde las <em>24 horas</em>.
               </h1>
               <p className={s.lead}>
-                El asistente contesta al instante, también domingos y feriados,
-                con la información que tu negocio publicó. Cuando el caso
-                requiere una persona, te llega con la conversación completa.
+                El agente conversacional contesta al instante, también domingos
+                y feriados, con la información que tu negocio publicó. Cuando el
+                caso requiere una persona, te llega con la conversación completa.
               </p>
               <div className={s.actions}>
                 <Btn href={WA_URL_LANDING} external>

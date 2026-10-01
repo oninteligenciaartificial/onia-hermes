@@ -95,9 +95,6 @@ const CONDICIONES = [
   },
 ] as const;
 
-/** Cuánto texto alrededor cuenta como «al lado». Un lector lee un párrafo. */
-const AL_LADO = 340;
-
 /** Quita comentarios respetando comillas: `https://` no es un comentario. */
 function sinComentarios(fuente: string): string {
   let salida = "";
@@ -232,69 +229,49 @@ describe("lo que no incluye el precio no achica lo que cobra Meta", () => {
   });
 });
 
-describe("una condición de un tercero no se afirma sin su fecha", () => {
+/**
+ * ⚠️ **2026-10-01: la condición VENCIÓ.** Hasta el 30-sep la redacción que no
+ * caducaba era «no te cuesta hasta el 30 de septiembre de 2026». Desde hoy esa
+ * frase le habla al lead de una gratuidad que ya no existe: es una fecha vencida
+ * en la superficie de venta. La regla pasa a ser la inversa: ninguna superficie
+ * niega el cargo de la ventana de 24 h ni nombra la fecha vencida, y lo que se
+ * renderiza dice que Meta cobra también las respuestas.
+ */
+describe("una condición de un tercero que venció no se sigue afirmando", () => {
   for (const cond of CONDICIONES) {
     describe(cond.clave, () => {
       it("el dato está declarado con sus dos fechas y su fuente", () => {
-        // Anclar a la fuente con RESPALDO y no al valor que el código ya tenía:
-        // el gate del plazo fiscal se escribió mirando si el dato vencía, sin
-        // mirar si era CIERTO, y cementó la fecha equivocada durante un día.
         expect(META_VENTANA_24H.fuente.length).toBeGreaterThan(10);
         expect(META_VENTANA_24H.hasta).not.toBe(META_VENTANA_24H.desde);
-        for (const fecha of [cond.hasta, cond.desde]) {
-          expect(fecha, "la fecha se escribe como la lee una persona").toMatch(
-            /^\d{1,2} de [a-zé]+ de \d{4}$/,
-          );
-        }
       });
 
-      it("alguna superficie la afirma — si no, esta entrada sobra", () => {
-        // Una entrada de lista blanca que ningún sujeto usa no la mide nadie y
-        // queda pre-aprobada: el día que alguien escriba la frase, entra en
-        // verde. Este caso la re-mide en cada corrida.
-        expect(afirmacionesEnElDisco(cond).length).toBeGreaterThan(0);
-      });
-
-      it("cada frase que la afirma nombra hasta cuándo vale", () => {
-        const sinFecha = afirmacionesEnElDisco(cond).filter(
-          (a) => !a.frase.includes(cond.hasta),
-        );
+      it(`ninguna frase dice que ${"Meta"} no cobra la ventana de 24 h`, () => {
+        const ofensores = afirmacionesEnElDisco(cond);
         expect(
-          sinFecha.map((a) => `${a.archivo}: ${a.frase}`),
-          `Una frase que dice que ${cond.quien} no cobra y no dice hasta cuándo ` +
-            `deja de ser cierta el ${cond.desde}, sobre un sitio estático que ` +
-            `nadie vuelve a tocar. Va la redacción que no caduca: «… no te ` +
-            `cuesta hasta el ${cond.hasta}».`,
+          ofensores.map((a) => `${a.archivo}: ${a.frase}`),
+          `Desde el ${cond.desde} ${cond.quien} cobra también las respuestas: ` +
+            `prometer que no cuestan es mentirle al lead sobre su plata.`,
         ).toEqual([]);
       });
 
-      it("avisa del cambio al lado de la promesa, no en otra pantalla", () => {
-        const sinAviso = afirmacionesEnElDisco(cond).filter((a) => {
-          const i = a.texto.indexOf(a.frase);
-          const vecindad = a.texto.slice(
-            Math.max(0, i - AL_LADO),
-            i + a.frase.length + AL_LADO,
-          );
-          return !vecindad.includes(cond.desde);
-        });
-        expect(
-          sinAviso.map((a) => `${a.archivo}: ${a.frase}`),
-          `El cliente tiene que enterarse del ${cond.desde} acá y no por su ` +
-            `factura de ${cond.quien}. El aviso va PEGADO a la promesa: uno ` +
-            `que vive en otra pantalla no lo lee el que está leyendo ésta.`,
-        ).toEqual([]);
+      it("nadie interpola la fecha que ya venció", () => {
+        // `lib/siat.ts` nombra el 30-sep como HISTORIA del SIN (otro tercero,
+        // en pasado): eso no es esta condición. Lo que se persigue es que la
+        // fecha de Meta vuelva a la venta desde su constante.
+        const conFecha = fuentesDelDisco().filter((archivo) =>
+          /META_VENTANA_24H\.hasta/.test(sinComentarios(readFileSync(archivo, "utf8"))),
+        );
+        expect(conFecha.map((a) => relative(SRC, a))).toEqual([]);
       });
 
-      it("lo que se renderiza —no el fuente— lleva las dos fechas", () => {
-        // El fuente puede decir `${…}`: lo que le llega al lead es el VALOR.
-        const renderizado = [META_NOTA, ...textos(REQUISITOS_CHATBOT)].filter(
-          (t) => cond.dice.test(t) && cond.niegaElCargo.test(t),
-        );
-        expect(renderizado.length, "las dos superficies vivas").toBe(2);
+      it("lo que se renderiza dice que Meta cobra también las respuestas", () => {
+        const renderizado = [META_NOTA, ...textos(REQUISITOS_CHATBOT)];
         for (const texto of renderizado) {
-          expect(texto).toContain(cond.hasta);
-          expect(texto).toContain(cond.desde);
+          expect(cond.dice.test(texto) && cond.niegaElCargo.test(texto), texto).toBe(false);
+          expect(texto).not.toContain(cond.hasta);
         }
+        expect(META_NOTA).toMatch(/tambi[eé]n las respuestas/i);
+        expect(textos(REQUISITOS_CHATBOT).join(" ")).toMatch(/tambi[eé]n las (respuestas|cobra)/i);
       });
     });
   }

@@ -87,8 +87,8 @@ export const SIAT_FAQ: readonly SiatFaq[] = [
     a: "Desde esa fecha los grupos alcanzados solo pueden emitir por su modalidad de facturación en línea asignada (RND 102600000007). Emitir por medios anteriores deja de ser válido para esos contribuyentes.",
   },
   {
-    q: "¿Ya hubo prórrogas? ¿Puede haber otra?",
-    a: "Hubo dos: la RND 102500000036 movió el plazo a marzo de 2026, y la RND 102600000007 lo movió al 30 de septiembre de 2026. Puede haber otra — nadie lo sabe. Nuestro consejo honesto: no apuestes tu facturación a que la haya.",
+    q: "¿Hubo prórrogas?",
+    a: "Hubo dos: la RND 102500000036 movió el plazo a marzo de 2026, y la RND 102600000007 lo movió al 30 de septiembre de 2026. Ese fue el último día de transición: desde el 1 de octubre de 2026 rige para los grupos alcanzados.",
   },
 ] as const;
 
