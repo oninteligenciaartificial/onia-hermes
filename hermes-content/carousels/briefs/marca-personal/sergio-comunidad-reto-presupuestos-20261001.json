@@ -1,0 +1,48 @@
+{
+ "theme": "blanco",
+ "serie": "reto · comunidad",
+ "slides": [
+  {
+   "layout": "lista",
+   "theme": "blanco",
+   "next": "",
+   "headline": "¿Cuál *cumple*?",
+   "body": "Web 3 meses · dominio · exportar · tope Bs 1200",
+   "items": [
+    {
+     "label": "Propuesta A",
+     "text": "Bs 300 + Bs 250/mes. Incluye dominio y exportación"
+    },
+    {
+     "label": "Propuesta B",
+     "text": "Bs 100 + Bs 200/mes + dominio Bs 120/mes. Sin exportar. «Total Bs 700»"
+    },
+    {
+     "label": "Propuesta C",
+     "text": "Bs 0 + Bs 350/mes + configuración Bs 300. Incluye dominio y exportación"
+    }
+   ]
+  },
+  {
+   "layout": "lista",
+   "theme": "negro",
+   "next": "",
+   "headline": "La *respuesta*",
+   "body": "del reto del jueves",
+   "items": [
+    {
+     "label": "A · Bs 1050",
+     "text": "Cumple todo ✅"
+    },
+    {
+     "label": "B · Bs 1060",
+     "text": "Esconde Bs 360 y no exporta ❌"
+    },
+    {
+     "label": "C · Bs 1350",
+     "text": "El «gratis» vuelve como configuración ❌"
+    }
+   ]
+  }
+ ]
+}

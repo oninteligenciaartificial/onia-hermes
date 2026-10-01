@@ -2,6 +2,53 @@
 
 **Archivo único del carril.** Actualizado 2026-09-29 por Claude (Opus 5.5).
 
+## 🧭 La visión del carril (Sergio Urcullo, 30-sep, textual)
+
+> *«ser un experto en ia, contenido diario · pasar a lanzar un curso luego, comunidad atrae ventas de curso ia ·
+> contenido diario · la onia plattform es nuestra muestra que sabemos trabajar · seguir lanzando apps y demás ·
+> onia community presencial»*
+
+Cadena: **contenido diario → autoridad en IA → comunidad → curso**. Onia Platform es la prueba de que sabe
+construir; el presencial es el escalón de confianza.
+
+**Respuestas de Sergio Urcullo (30-sep, 15:40 La Paz):**
+1. *«los 5 clientes se consiguen solos, claude desarrolla solo, yo solo orquesto y grabo contenido»* → su tiempo va
+   al contenido; la etapa del negocio no cambia.
+2. *«demostración, pero si es buena, escala a producto»*.
+3. Puerta del curso: **100 miembros** + encuesta con ≥ 20 «lo compraría».
+4. Onia como muestra necesita cliente real: *«es correcto, por eso aún seguimos desarrollando»*.
+- Historias: 2-3 por día (qué hace, noticias de IA, llevar a llamadas 1-a-1 o a la comunidad).
+- Bio de IG (captura 30-sep): dos links, **primero «OnIA» onia.com.bo**, segundo «Comunidad» (WhatsApp). Sin destacados.
+
+**Tensiones planteadas (historia de la respuesta de arriba):**
+1. **Etapa vigente del negocio = 5 clientes de Onia Platform con la 1.0** (`ONIA_ESTRATEGIA_DE_EMPRESA.md` §16).
+   El curso es una línea nueva que compite por las mismas horas. ¿La marca personal sigue en segundo plano
+   hasta los 5 clientes, o cambia la etapa?
+2. **«Seguir lanzando apps»:** como CONTENIDO (construir en vivo y mostrar) suma; como producto que hay que
+   mantener abre líneas nuevas, lo que la regla prohíbe.
+3. **El curso se valida antes de grabarlo** (`ONIA_COMUNIDAD_CONTENIDO.md` §Embudo). Puerta propuesta, falta su
+   OK: comunidad ≥ 200 miembros + encuesta con ≥ 20 «lo compraría» sobre un temario salido de preguntas reales.
+   Con 30 miembros hoy, el trabajo es crecer, no el curso.
+4. **Onia Platform como muestra** necesita un cliente real para ser prueba: los 5 clientes y la marca se ayudan.
+   Contenido «construyendo Onia» sirve a los dos a la vez.
+
+## 📋 LA LISTA — todos los puntos del carril (Sergio Urcullo, 30-sep: «vamos recolectando todos y los vamos tocando»)
+
+Una sola lista. Se toca de a uno, en este orden salvo que Sergio Urcullo diga otro. Estado al 30-sep.
+
+| # | Punto | Estado | Qué falta |
+|---|---|---|---|
+| 1 | **Vuelta de la comunidad de WhatsApp** (~30 miembros, callada desde el 22-sep) | Mensajes listos en `cola/drops/2026-10-01.md` | Que Sergio Urcullo diga si sostiene audio del domingo y wins del viernes; que los pegue |
+| 2 | **Atraer gente a la comunidad** (puerta del curso: 100 miembros) | Aclarado 30-sep: el video de YouTube es público y ADEMÁS se comparte en la comunidad (primero) | Armar el embudo: CTA en cada pieza, link en la bio, palabra clave → DM, invitación de miembros |
+| 3 | **Historias de Instagram** | Sube 2-3/día. Primeras 2 plantillas hechas (`out/sergio-historias-comunidad-20261001`) | Rutina fija de 3; destacado «Comunidad» |
+| 4 | **Perfiles** (IG, TikTok, YouTube, LinkedIn: bio, link, destacados) | Sin auditar | Desde la nube: con capturas que mande Sergio Urcullo. Con Chrome logueado: laptop |
+| 5 | **Grabar** | **Dos semanas armadas y auditadas (jue 1 → mié 14-oct): `plan-3-semanas/GUIONES-2-SEMANAS-1-14-OCT.md`** — 38 piezas (tutorial · informativo · caso por día; YouTube sáb 3, mar 6, vie 9, mar 13). Auditoría en `auditoria-20260930/`. Pedido de Sergio Urcullo: «hoy no subimos, preparamos» | Que grabe; que valide la página de Meta antes de D02-B; drops a escribir (N, R) y a corregir (drop 2, drop 14); OpenAI DevDay sin revisar (bloqueado desde la nube) |
+| 6 | **Carruseles** K11–K21 + arreglar K2 y K8 | K1 en B (listo); K2–K10 hechos | Diseñar |
+| 7 | **Publicar** (primer post real) | Publicador probado, nada real | Desde el VPS: laptop o sesión con la llave |
+| 8 | **Encuentro presencial** | Después del 1 | Encuesta en la semana 2; convocar con ≥15 confirmados (falta OK) |
+| 9 | **Método de Santiago** (videos animados por código) | Ficha escrita | Sergio Urcullo comenta «OPUS» si lo quiere |
+| — | ~~@oniahq y pauta de Onia Platform~~ | Fuera del carril (30-sep) | Lo lleva la sesión de ventas y pauta (Sergio Urcullo, 30-sep) |
+
 ## ☁️ 30-sep 14:10 UTC — el carril pasó a la nube
 
 - **Sesión viva: `session_012ppFowADbJNtZ6WBMtqpuf`** (nube). La de la laptop
@@ -11,6 +58,7 @@
   → DM Sans y pie completos (mirado). Google Fonts responde 200 desde acá.
 - **Higgsfield desde acá:** el CLI `higgsfield` NO está instalado; el MCP de Higgsfield sí responde (saldo
   486,91 cr, plan pro, leído sin gastar). cloudfront `d8j0ntlcm91z4` responde (403 de S3 en la raíz, no bloqueo).
+- **Edición de video en la nube (30-sep):** `ffmpeg` no viene instalado; `apt-get install -y ffmpeg` funciona (6.1.1) pero se pierde cuando el contenedor se recicla. `faster-whisper` se baja por pip. Falta probar que un video subido por Sergio Urcullo llegue a la sesión.
 - **No se puede desde la nube:** brutos de `C:\Users\PC\Videos\ONIA-brutos`, auditoría de perfiles con el Chrome
   logueado, publicar desde el VPS (sin llave; infra tiene un dueño). Eso sigue en la laptop.
 - **Heredado de Mercado (decisión de Sergio Urcullo, 30-sep):** las piezas de pauta dental **D1 «Los de mañana»** y
@@ -19,6 +67,10 @@
   clínicas dentales en Santa Cruz», sin precio, CTA «Escribinos», solo capturas reales de la demo, solo lo que hace
   la 1.0, sin testimonios). Capturas: las pone la sesión principal en `carousels/briefs/assets/onia-1.0-dental-ads/`.
   Se muestran renderizadas a Sergio Urcullo antes de subir; campaña y encendido son de Mercado.
+- ⛔ **Corregido el 30-sep, 14:40 UTC — Sergio Urcullo:** *«aquí es solo marca personal y comunidad, ya si
+  querés postear algo de onia platform ya vemos cómo lo hacemos»*. D1/D4 **quedan fuera de este carril** hasta que
+  él decida quién las hace. No se diseñan acá. Avisado en EL HILO.
+- **Prioridad que fijó el mismo día:** la **comunidad de WhatsApp** va antes que el encuentro presencial.
 
 ## ⏩⏩⏩⏩ Pedido de Sergio Urcullo, 29-sep 20:30 (en curso)
 

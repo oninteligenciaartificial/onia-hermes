@@ -57,6 +57,12 @@ Pendientes del catálogo (en `patrones/`): P-COMPARA, P-FOTO-ESCENA, P-DIAGRAMA,
 Carlos Domínguez señala como rasgo de «plantilla IA» el fondo crema: por eso el pack pasó a
 blanco puro, verde y negro (decisión de Sergio, 29-sep).
 
+⚠️ **Trampa (30-sep):** el campo del título es `headline`, no `title`. Con `title` el renderer no avisa: la
+lámina sale SIN título. `"next": ""` saca la flecha «seguí» (para historias o una lámina suelta).
+
+**Historias (1080×1920):** mismo pack con `--format story`. Dejar libre el tercio de abajo: ahí va el sticker de
+link, que se pone a mano en Instagram. Ejemplo: `briefs/marca-personal/sergio-historias-comunidad-20261001.json`.
+
 Render: `node scripts/carousel_render.js --brief <dir>/brief.json --out <dir> --account sergio --pack referentes --format feed`
 y `node scripts/carousel_contactsheet.js --dir <dir>`. Ejemplo completo y aprobado a la vista:
 `hermes-content/carousels/briefs/marca-personal/sergio-k1v2-opus-o-sonnet-20260929.json`.
