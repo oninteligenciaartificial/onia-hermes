@@ -1,0 +1,35 @@
+{
+ "refs": {
+  "R1_frontal_canon": "../R1_frontal_canon.jpg",
+  "R2_34_medio": "../R2_34_medio.jpg",
+  "R3_casi_frontal": "../R3_casi_frontal.png",
+  "R4_casi_perfil": "../R4_casi_perfil.png",
+  "R5_34_izq": "../R5_34_izq.png",
+  "R6_34_der": "../R6_34_der.png",
+  "R7_frontal_2752": "../R7_frontal_2752.png",
+  "R8_anchor_902eeebb": "../R8_anchor_902eeebb.png"
+ },
+ "tests": {
+  "BR_seedance_0.3": "BR_seedance_0.3.jpg",
+  "BR_seedance_1.5": "BR_seedance_1.5.jpg",
+  "BR_seedance_3.0": "BR_seedance_3.0.jpg",
+  "BR_seedance_4.5": "BR_seedance_4.5.jpg",
+  "BR_seedance_5.7": "BR_seedance_5.7.jpg",
+  "BR_kling_0.3": "BR_kling_0.3.jpg",
+  "BR_kling_1.5": "BR_kling_1.5.jpg",
+  "BR_kling_3.0": "BR_kling_3.0.jpg",
+  "BR_kling_4.5": "BR_kling_4.5.jpg",
+  "BR_kling_5.7": "BR_kling_5.7.jpg",
+  "BR_csv2_0.3": "BR_csv2_0.3.jpg",
+  "BR_csv2_1.5": "BR_csv2_1.5.jpg",
+  "BR_csv2_3.0": "BR_csv2_3.0.jpg",
+  "BR_csv2_4.5": "BR_csv2_4.5.jpg",
+  "BR_csv2_5.7": "BR_csv2_5.7.jpg",
+  "P3_still": "P3.png"
+ },
+ "negatives": {
+  "N1_casting_C01": "https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260929_202509_daeef7ee-7ab6-4b6b-83ee-03dcaa206e4d.png",
+  "N2_casting_C13": "https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260929_205421_873edf19-e031-4112-93fc-e647995e72af.png",
+  "N3_casting_retrato": "https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260929_205421_cd3156ea-aa7e-4b5f-985c-6209cadedaa3.png"
+ }
+}

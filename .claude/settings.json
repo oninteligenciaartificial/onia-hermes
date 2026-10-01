@@ -1,5 +1,15 @@
 {
   "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/nube-ssh-vps.mjs"
+          }
+        ]
+      }
+    ],
     "Stop": [
       {
         "hooks": [

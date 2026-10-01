@@ -1,4 +1,14 @@
-# Handoff — carril `mercado-y-pauta` (sesión «Análisis de mercado Onia Platform»)
+# Handoff — carril `mercado-y-pauta` (sesión «Ventas y pauta Onia Platform», antes «Análisis de mercado»)
+
+> **Renombrada el 30-sep, de noche, por decisión de Sergio Urcullo.** El archivo conserva su nombre para no
+> romper enlaces.
+>
+> **Es dueña de conseguir clínicas:** la lista de las primeras 10 para el contacto 1:1, el registro de
+> objeciones de cada demo, Meta Ads de punta a punta (piezas del anuncio incluidas; D1 y D4 vuelven acá) y
+> @oniahq solo como la página que pauta.
+>
+> **No es suya:** los carruseles de contenido, que son de Marca personal; el producto; el VPS; el chatbot,
+> que Sergio Urcullo dijo el 30-sep que lo arregla él.
 
 > Rama `claude/nice-lamport-5og9lv` · sesión `session_01BnctfaNRsm3ogJ46A7B5P5` · abierta el 2026-09-30.
 > Formato: los siete campos de `README.md` de esta carpeta.
@@ -33,7 +43,14 @@ autosync de esta rama). **Ninguna campaña creada, cero gasto.**
   tenga el conector de Meta Ads en la cuenta ONIA Ads, o Sergio Urcullo a mano, en PAUSA. **Se enciende con
   la 1.0 publicada y la medición probada** (plan de 14 días de la sesión principal, 30-sep): **qué falta y de
   quién es, en la lista de encendido (§5.9)**.
-- **Piezas D1 y D4: briefs escritos y renderizados de prueba, esperando las capturas de la 1.0**
+- ⚠️ **Corregido 30-sep ~19:55 UTC: D1 y D4 VUELVEN a esta sesión.** A las 14:40, Sergio Urcullo le dijo a
+  Marca personal *«aquí es solo marca personal y comunidad»* y ellos no las tomaron. A la noche confirmó que
+  esta sesión, Ventas y pauta, maneja Meta con las piezas incluidas. El párrafo de abajo es historia.
+- ~~**Piezas D1 y D4: ENTREGADAS a Marca personal**~~ (Sergio Urcullo, 30-sep: los carruseles son de Marca
+  personal; Mercado no los genera). Pasaron en el prompt de arranque de su sesión de la nube
+  `session_012ppFowADbJNtZ6WBMtqpuf`. A Mercado le queda qué dice y qué prueba cada pieza (§5.4 y §5.8); el
+  diseño y el render son de ellos. Lo que sigue es cómo quedaron al entregarlas.
+  **Briefs escritos y renderizados de prueba, esperando las capturas de la 1.0**
   (`carousels/briefs/ads/onia-platform-dental-meta-d1-los-de-manana.json` y `…-d4-tratamiento-a-medias.json`).
   Las cuatro capturas las pidió Mercado a la sesión principal (EL HILO, 30-sep ~12:40 UTC) y van en
   `carousels/briefs/assets/onia-1.0-dental-ads/`, cuyo README dice qué se ve en cada una. Mientras falten, esas
@@ -126,12 +143,24 @@ autosync de esta rama). **Ninguna campaña creada, cero gasto.**
 1. Sergio Urcullo contesta a los 5 → *listo = cinco respuestas enviadas, con capacidades verificadas en el producto*.
 2. Plataforma responde por EL HILO los pedidos del 2.º aviso (bot para pauta, BSUID, `referral`) → *listo =
    respuesta anotada en EL HILO*.
-3. Lista de las primeras 10 clínicas para contacto 1:1 (cruce de §1 y §5 de `ONIA_PROSPECTOS_DENTAL_SCZ.md`,
-   ciudad y tamaño verificados) con el subagente `onia-crm-prospeccion` → *listo = 10 filas con fuente y mensaje
-   propuesto, esperando el OK de Sergio Urcullo*.
+3. ✅ **Lista de las primeras clínicas para contacto 1:1 (30-sep, de noche):** quedaron 8 de 10 en
+   `ONIA_PROSPECTOS_DENTAL_SCZ.md` §6. Cada una trae señal, fuente, canal público y mensaje propuesto; en §6.4 hay
+   una reserva para los 2 cupos que faltan. §7 es el registro de objeciones de las demos.
+   - Página para Sergio Urcullo, con «Copiar» y «Abrir en WhatsApp»: https://claude.ai/artifact/8sFD37TVJMcEJaHcZ2PWSV.
+   - **Nadie fue contactado**: cada envío espera su OK.
+   - Nada se re-verificó en vivo, porque el proxy bloqueó las webs, Facebook e Instagram. Por eso cada ficha trae
+     su lista «Antes de enviar».
+   - *Siguiente:* con las respuestas, llenar §7 y cargar las demos en el tablero de Control.
+   - **Ampliado el 30-sep, de noche** (Sergio Urcullo: *«no solo somos clínica»*):
+     - `ONIA_PROSPECTOS_OTROS_RUBROS_SCZ.md` suma 8 de estética y 5 importadoras, con mensaje.
+     - Comercio y servicios: 5 candidatos cada uno, sin mensaje hasta que la 1.0 arregle lo que falla en una
+       demo.
+     - Los 21 están en la misma página, separados por rubro.
+     - Estética e importadora salen de la Biblioteca de Anuncios, que busca por texto: ciudad y tamaño quedan
+       sin verificar.
 4. Destrabar los 8 bloqueos de `ONIA_ADQUISICION_Y_PAUTA.md` §6 → *listo = `ads_get_ad_accounts` ve ONIA Ads con
    método de pago y página promocionable*.
-5. Creativos: llegan las cuatro capturas de la 1.0 → render de D1 y D4 → se le muestran a Sergio Urcullo →
+5. Creativos (**los hace esta sesión**): llegan las cuatro capturas de la 1.0 → se renderizan D1 y D4 con `scripts/carousel_cloud_setup.sh` → se le muestran a Sergio Urcullo →
    *listo = piezas miradas y aprobadas por él, sin precio en la imagen, CTA "Escribinos", código por anuncio*.
    (Briefs listos desde el 30-sep.)
 6. Crear la campaña en PAUSA con la tabla del §5.8 → *listo = ids de campaña/conjunto/anuncios anotados acá*.
