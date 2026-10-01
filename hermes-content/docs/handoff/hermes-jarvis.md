@@ -9,6 +9,10 @@
 >   interruptor, sin respaldos). Hermes todavía no es su asistente diario.
 > - **El PR #79** trae los pedidos a Claude desde Telegram y las 4 correcciones que pidió la madre
 >   (aplicar todo-o-nada, calendario, reinicio del gateway, diagnóstico de solo lectura), con pruebas.
+> - **Revisión adversarial de la madre (1-oct, 10 puntos):** resueltos TODOS en el commit corrector
+>   de esta rama (ver §3). El «sí» de un pedido es ahora un código que le llega a él directo; la
+>   rutina va en un entorno PROPIO sin la llave SSH; aplicar escribe su marcha atrás antes de tocar
+>   nada y el rollback se puede reintentar.
 > - **Sigue:** §7, bloque del 1-oct.
 
 Historia: rama original `claude/hermes-jarvis` («Hermes y Sergio management system», 29-sep, desde el
@@ -74,6 +78,14 @@ propia corrida con un evento de prueba; con Hermes en Telegram, cuando él lo us
 > - Pruebas: `test:pedidos` 22, `test:jarvis-aplicar` 7 (el `aplicar.sh` real contra un VPS simulado),
 >   `test:jarvis-resumen` 24, y los gates `aduana`, `agenda`, `herramientas-*`, `docs-hygiene`,
 >   `guards-cableados` en verde.
+> - **Commit corrector tras la revisión de la madre (10 puntos):** (1) la rutina en un entorno propio
+>   «Pedidos de Hermes» solo con `GH_ACTIONS_TOKEN`; (2) el sí es un código de 6 dígitos que le llega
+>   a él directo por la aduana, de un uso, una hora, tres errores; (3) el pedido va por stdin con
+>   `<<'PEDIDO'`; (4) un envío dudoso se registra y no se reintenta, uno rechazado sí; (5) `rollback.sh`
+>   y «aplicado» al terminar la Fase A; (6) la Fase A también valida la llave, el SOUL y los 12 flujos;
+>   (7) el rollback cuenta errores y sin «revertido» se reintenta; (8) `--estado` y `--lista` no
+>   escriben; (9) respuestas con ventana de 48 h y nada después de un estado final; (10) la primera
+>   línea de la respuesta trae id y link. Pruebas: `test:pedidos` 27, `test:jarvis-aplicar` 11.
 > - **Falta:** que la madre o Sergio Urcullo lo mergeen; crear la rutina y su llave (lo hace él, §6);
 >   y las dos corridas de `aplicar` (§7).
 > - **No empezado** (decisión de Sergio Urcullo del 30-sep, §6): embudo diario con altas y pagos
@@ -224,9 +236,10 @@ aplicar,revertir}.sh` · `scripts/loops/onia-tg.sh` + `onia-tg-aduana.test.mjs` 
 > **1-oct, lo que le toca a él, en orden:**
 > 1. El OK para correr `aplicar` (hoy la madre, por SSH, con la autorización de él en ESA sesión).
 > 2. Que se mergee el PR #79 (él o la madre).
-> 3. Crear la rutina y su llave en la web, y guardarla en GitHub: paso a paso en
->    `TELEGRAM_COMMAND_CENTER.md` §4. **Nunca por chat.**
-> 4. La prueba desde su Telegram: «pedile a Claude: ¿cuántos cambios entraron hoy al sistema?» → «sí».
+> 3. Crear el entorno «Pedidos de Hermes» (solo `GH_ACTIONS_TOKEN`), la rutina y su llave en la web,
+>    y guardar la llave en GitHub: paso a paso en `TELEGRAM_COMMAND_CENTER.md` §4. **Nunca por chat.**
+> 4. La prueba desde su Telegram: «pedile a Claude: ¿cuántos cambios entraron hoy al sistema?» → le
+>    llega el texto con un código → se lo contesta a Hermes.
 >
 > Decisiones que tomó el 30-sep y ya están en el diseño: no al aviso de reunión en 30 min; sí a leer
 > altas y pagos en solo lectura y con lo mínimo; Hermes ejecuta a través de Claude en la nube.

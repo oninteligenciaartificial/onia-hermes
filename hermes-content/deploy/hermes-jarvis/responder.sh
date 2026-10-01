@@ -20,6 +20,14 @@ sec "hermes-jarvis · responder · ${PEDIDO:-?} · ${ESTADO:-?}"
 case "${ESTADO:-}" in listo|necesita-ok|no-se-pudo) ;; *) echo "❌ estado inválido"; exit 65 ;; esac
 FILA=$(awk -F'\t' -v id="$PEDIDO" '$2 == id' "$PEDIDOS_DIR/pedidos.tsv" 2>/dev/null | tail -1)
 [ -n "$FILA" ] || { echo "❌ $PEDIDO no salió de Hermes: no le escribo nada"; exit 66; }
+# Un pedido viejo o ya cerrado no vuelve a sonar (revisión de la sesión madre, 1-oct): las
+# respuestas tienen ventana de 48 h, y después de «listo» o «no-se-pudo» no se acepta nada más.
+TS=$(printf '%s' "$FILA" | cut -f1)
+[[ "$TS" =~ ^[0-9]+$ ]] && [ $(( $(date -u +%s) - TS )) -le 172800 ] \
+  || { echo "❌ $PEDIDO tiene más de 48 h: no le escribo nada"; exit 66; }
+FINAL=$(awk -F'\t' -v id="$PEDIDO" '$2 == id && ($3 == "listo" || $3 == "no-se-pudo") { print $3; exit }' \
+          "$PEDIDOS_DIR/respuestas.tsv" 2>/dev/null)
+[ -z "$FINAL" ] || { echo "❌ $PEDIDO ya se cerró («$FINAL»): no le escribo nada más"; exit 66; }
 if awk -F'\t' -v id="$PEDIDO" -v e="$ESTADO" '$2 == id && $3 == e { hay = 1 } END { exit !hay }' \
      "$PEDIDOS_DIR/respuestas.tsv" 2>/dev/null; then
   echo "· $PEDIDO ya tenía una respuesta «$ESTADO»: no la repito"; exit 0
@@ -32,15 +40,16 @@ CARRIL=$(printf '%s' "$FILA" | cut -f3)
 URL=$(printf '%s' "$FILA" | cut -f6)
 esc() { sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g'; }
 case "$ESTADO" in
-  listo)       CABEZA="✅ <b>Claude terminó tu pedido</b>" ;;
-  necesita-ok) CABEZA="🙋 <b>Claude necesita tu ok</b>" ;;
-  no-se-pudo)  CABEZA="⚠️ <b>Claude no pudo con tu pedido</b>" ;;
+  listo)       CORTO="✅ Listo";            CABEZA="<b>Claude terminó tu pedido</b>" ;;
+  necesita-ok) CORTO="🙋 Necesita tu ok";   CABEZA="<b>Claude necesita tu ok</b>" ;;
+  no-se-pudo)  CORTO="⚠️ No se pudo";       CABEZA="<b>Claude no pudo con tu pedido</b>" ;;
 esac
-MSG="$CABEZA ($CARRIL)
+# La PRIMERA línea es la que la aduana guarda cuando él está de noche o en un bloque (la corta a
+# 90 caracteres, sin HTML): tiene que alcanzar sola para saber qué pedido es y dónde verlo.
+MSG="$CORTO · $PEDIDO · $(printf '%s' "${URL:-(sin link)}" | esc)
+$CABEZA ($CARRIL)
 
-$(printf '%s' "$TEXTO" | esc)
-
-<i>Sesión: $(printf '%s' "$URL" | esc)</i>"
+$(printf '%s' "$TEXTO" | esc)"
 
 if ONIA_AVISO=interrumpe ONIA_AVISO_CLAVE="pedido-$PEDIDO-$ESTADO" ONIA_AVISO_EMISOR=claude \
      "$TG" "$MSG" </dev/null >/dev/null 2>&1; then

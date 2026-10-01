@@ -64,9 +64,13 @@ description: Invocar ANTES de tocar a Hermes (el asistente de Sergio Urcullo por
 - **Pausar un trabajo:** `hermes cron pause <id>` deja `enabled=False`, `state=paused` y `paused_at`
   en `jobs.json`. `estado_job()` de `aplicar.sh` lo lee así.
 - **Hermes NO programa.** Es un modelo barato: ya inventó una agenda entera
-  (`handoff/infra-cerebro-loops.md` §5). El trabajo real va a Claude en la nube con el sí de Sergio
-  Urcullo al texto exacto (skill `pedir-a-claude`). Hermes no publica, no gasta y no le escribe a
-  nadie.
+  (`handoff/infra-cerebro-loops.md` §5). El trabajo real va a Claude en la nube (skill
+  `pedir-a-claude`). Hermes no publica, no gasta y no le escribe a nadie.
+- **El «sí» de un pedido es un CÓDIGO que le llega a él directo por la aduana**, no por la salida
+  que lee Hermes (revisión de la madre, 1-oct: con un sí que solo pasaba por Hermes, vista previa y
+  `--si` en el mismo turno salían sin que él dijera nada). El pedido va por stdin con
+  `<<'PEDIDO'`: nada del texto pasa por la shell. La rutina corre en un entorno PROPIO, sin la llave
+  SSH del VPS (con ella, el hook `nube-ssh-vps.mjs` le arma SSH a cada sesión).
 
 ## `aplicar` es TODO O NADA (desde el 1-oct)
 
@@ -80,7 +84,9 @@ description: Invocar ANTES de tocar a Hermes (el asistente de Sergio Urcullo por
    skills.
 4. `revertir` corre el `rollback.sh` del último `aplicar` vigente. Deshace el crontab por marcas
    (`#jarvis`), reanuda lo pausado, reactiva los flujos de n8n, restaura skills y SOUL, **reinicia el
-   gateway** y apaga el interruptor.
+   gateway** y apaga el interruptor. Si algo no se pudo deshacer, NO marca «revertido» y se
+   reintenta. `rollback.sh` y la marca «aplicado» se escriben al terminar la Fase A, antes de tocar
+   nada: si aplicar se corta a mitad, `revertir` igual lo encuentra.
 
 **La calendarización se escribe con la credencial de la cuenta ONIA (`a3FResZHqQ32ptyt`) sobre
 `sergio.urcullo.m@gmail.com`.** Hasta el 1-oct esa credencial solo había LEÍDO su calendario; la

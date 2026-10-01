@@ -19,13 +19,14 @@ mandándolo `ONIA_CEREBRO.md` §«La regla de entrega»: esto lo usa, no lo camb
 **Hermes no programa: pasa el pedido.** Hermes es `gpt-5-mini`, un modelo barato que ya inventó una
 agenda entera (`handoff/infra-cerebro-loops.md` §5). Lo que necesita trabajo real se lo pasa a
 **Claude Code en la nube**, que trabaja con las reglas de la casa. Siempre después de que Sergio
-Urcullo vio el pedido exacto y dijo que sí.
+Urcullo vio el pedido exacto y lo confirmó con un **código que le llega a él directo**, no a Hermes.
 
 ```
 Sergio Urcullo (Telegram)
-  → Hermes entiende el pedido y le muestra el texto exacto   [onia-pedido-claude.sh, sin --si]
-  → «sí»
-  → Hermes dispara la rutina «Pedidos de Sergio Urcullo»     [onia-pedido-claude.sh … --si]
+  → Hermes arma el pedido con sus palabras                   [onia-pedido-claude.sh <carril>, por stdin]
+      └─ a él le llega DIRECTO (aduana) el texto y un código de 6 dígitos; Hermes no ve el código
+  → él le contesta a Hermes con el código
+  → Hermes dispara la rutina «Pedidos de Sergio Urcullo»     [onia-pedido-claude.sh <carril> --si <código>]
       └─ responde al instante con el link de la sesión
   → una sesión NUEVA de Claude Code en la nube hace el trabajo (PR en borrador, nunca merge solo)
   → al terminar despacha hermes-respuesta.yml                [GitHub Actions, runner del VPS]
@@ -73,8 +74,15 @@ nueva. Datos medidos en la documentación oficial (code.claude.com/docs/en/routi
 Lo hace `scripts/loops/pedido-claude.sh` (en el VPS, `/root/bin/onia-pedido-claude.sh`), con sus
 pruebas en `pedido-claude.test.mjs`:
 
-- **Sin vista previa no sale nada.** `--si` solo funciona si ESE mismo texto pasó sin `--si` en la
-  última hora. Es la regla de la skill, puesta donde un modelo no se la puede saltar.
+- **El sí es un código que Hermes no ve.** La vista previa le manda a Sergio Urcullo, directo por la
+  aduana, el texto y un código de 6 dígitos; `--si <código>` lo exige. Sirve una vez, para ESE texto,
+  por una hora, y con tres errores se anula. Revisión de la sesión madre (1-oct): con un «sí» que solo
+  pasaba por Hermes, vista previa y `--si` en el mismo turno salían sin que él dijera nada. Frena el
+  error de un modelo; no frena a alguien con root en el VPS.
+- **El texto no pasa por la shell:** va por la entrada estándar con un heredoc entre comillas
+  (`<<'PEDIDO'`). `$390`, comillas, backticks o `$(…)` llegan idénticos y no ejecutan nada.
+- **Si la rutina no confirma, no se reintenta a ciegas.** Sin conexión o rechazado (4xx): NO salió y el
+  mismo código sirve. Cortado, 5xx o sin link: *puede* haber salido; se registra y se anula el código.
 - Lo que recibe Claude es, palabra por palabra, lo que él vio, con un encabezado fijo:
   `PEDIDO p_xxxxxxxx · carril: … · fecha (La Paz)`.
 - El mismo pedido dos veces en una hora no sale dos veces. Pasado el tope del día, no sale ninguno más.
@@ -89,7 +97,11 @@ Lo hace Sergio Urcullo, una sola vez, en la web. **El token nunca se pega en un 
    - **Name:** `Pedidos de Sergio Urcullo desde Hermes`.
    - **Prompt:** el texto de §5, completo.
    - **Repositories:** `oninteligenciaartificial/onia-hermes` y `oninteligenciaartificial/onia-platform`.
-   - **Environment:** `Onia`, el que tiene `GH_ACTIONS_TOKEN`; sin él, la respuesta no vuelve a Telegram.
+   - **Environment:** uno **propio**, `Pedidos de Hermes`, creado para esto: red *Trusted* (la de
+     siempre) y UNA sola variable, `GH_ACTIONS_TOKEN` (sin ella la respuesta no vuelve a Telegram).
+     **NO** el entorno «Onia»: ese tiene `ONIA_VPS_SSH_KEY_B64`, y con esa llave el hook
+     `nube-ssh-vps.mjs` le arma SSH al VPS a cada sesión que abre la rutina. Se crea en la
+     configuración de entornos de claude.ai/code, copiando el valor de `GH_ACTIONS_TOKEN` de «Onia».
    - **Trigger:** **API**. Sin horario.
    - **Connectors:** sacar todos. Un pedido no necesita Gmail, ni Meta Ads, ni Higgsfield.
    - **Create**.
@@ -177,7 +189,7 @@ Hermes, su asistente, por Telegram. Cada corrida es UN pedido. Hablale siempre c
 | Qué | Por qué | Quién sí |
 |---|---|---|
 | Programar, tocar el repo o el VPS | modelo débil; un error en `main` rompe el deploy del VPS y de Vercel | Claude en la nube (PR en borrador) |
-| Mandar un pedido sin mostrarlo | el «sí» tiene que ser a un texto exacto | — (el comando lo impide: sale 66) |
+| Mandar un pedido sin su confirmación | el «sí» tiene que ser a un texto exacto, y venir de él | — (sin el código que le llegó a él, sale 66) |
 | Publicar o desplegar | superficie viva: Sergio Urcullo la ve terminada primero (CLAUDE.md §4) | él, o la madre con él |
 | Gastar plata o créditos | regla de gasto (CLAUDE.md §5) | él, con cotización previa |
 | Escribirle a un tercero | regla de propuestas y prospectos; Hermes prepara, él manda | él |
@@ -193,16 +205,19 @@ Hermes, su asistente, por Telegram. Cada corrida es UN pedido. Hablale siempre c
 | 2 | Mergear a `main` el PR de esta rama: comando, skill, regla del SOUL, workflow de respuesta, cierre | madre / Sergio Urcullo | el sincronizador copia `onia-pedido-claude.sh` (≤1 h) |
 | 3 | Crear la rutina, generar el token y guardarlo en GitHub (§4, pasos 1 a 3) | Sergio Urcullo, en la web | existen el secreto `ONIA_RUTINA_PEDIDOS_TOKEN` y la variable `ONIA_RUTINA_PEDIDOS_URL` |
 | 4 | Correr `aplicar` otra vez, **por el workflow**: instala la skill, la regla y la llave. Es idempotente | Sergio Urcullo (un toque) o la madre con `gh workflow run` | la sección 5d dice «✅ pedidos a Claude: configurado» |
-| 5 | Prueba de punta a punta: por Telegram, «pedile a Claude: ¿cuántos cambios entraron hoy al sistema?» → ve el texto → «sí» → link → respuesta ✅ | Sergio Urcullo | `diagnostico` sección 12 muestra el pedido en «listo» |
+| 5 | Prueba de punta a punta: por Telegram, «pedile a Claude: ¿cuántos cambios entraron hoy al sistema?» → le llega el texto con un código → le contesta el código a Hermes → link → respuesta ✅ | Sergio Urcullo | `diagnostico` sección 12 muestra el pedido en «listo» |
 
 Si el paso 4 se hace por SSH en vez de por el workflow, la llave sube por la alternativa de §4.4.
 
 ## 9. Riesgos y límites conocidos, sin maquillar
 
-- **La sesión del pedido tiene `GH_ACTIONS_TOKEN`**, que puede despachar `hermes-jarvis` (aplicar o
-  revertir en el VPS). Lo frena el prompt (NUNCA), no un permiso. Para cerrarlo de verdad hay dos
-  caminos: un token de Actions aparte, que solo pueda correr `hermes-respuesta`, o un entorno sin ese
-  token. Queda propuesto, no hecho.
+- **La sesión del pedido corre sola y sin pedir permiso** (así son las rutinas), con el texto que él
+  confirmó. Por eso su entorno es propio y mínimo: **sin la llave SSH del VPS** (sin
+  `ONIA_VPS_SSH_KEY_B64`, el hook no arma SSH) y sin conectores.
+- **Pero tiene `GH_ACTIONS_TOKEN`**, que puede despachar `hermes-jarvis` (aplicar o revertir en el VPS).
+  Lo frena el prompt (NUNCA), no un permiso: un token de Actions de GitHub no se puede limitar a un
+  solo workflow. Para cerrarlo de verdad: que `hermes-jarvis.yml` exija aprobación con un *environment*
+  de GitHub protegido (required reviewers = Sergio Urcullo). Queda propuesto, no hecho.
 - **No se sabe si el control de permisos frena el despacho de la respuesta** dentro de una rutina. A
   esta sesión de control la frenó el 30-sep (`handoff/hermes-jarvis.md` §5.13). Si pasa, la respuesta
   queda en la sesión, el link ya lo tiene él y el cierre de las 21:30 lo marca «sin respuesta». Se mide

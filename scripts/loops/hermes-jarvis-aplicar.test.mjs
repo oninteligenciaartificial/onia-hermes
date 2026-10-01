@@ -130,7 +130,8 @@ case "$metodo $url" in
   "POST "*/activate) echo '{"active": true}' ;;
   "POST "*/deactivate) echo '{"active": false}' ;;
   "POST "*/workflows) n=$(ls ${log}/creado-* 2>/dev/null | wc -l); touch ${log}/creado-$n; echo "{\\"id\\": \\"wfnuevo$n\\"}" ;;
-  "GET "*) echo "{\\"id\\": \\"$id\\", \\"name\\": \\"Flujo $id\\", \\"active\\": true}" ;;
+  "GET "*) [ "$id" = "\${N8N_FLUJO_FALTA:-}" ] && { echo '{"message":"Not Found"}'; exit 0; }
+          echo "{\\"id\\": \\"$id\\", \\"name\\": \\"Flujo $id\\", \\"active\\": true}" ;;
 esac
 `,
   );
@@ -138,14 +139,19 @@ esac
   ejecutable(
     hpy,
     `#!/usr/bin/env bash
-# hermes_cli.main cron pause <id>
-[ "$3" = cron ] && [ "$4" = pause ] && python3 - "$5" <<'PY'
+# hermes_cli.main cron pause|resume <id>
+[ "$3" = cron ] || exit 0
+[ "$4" = resume ] && [ "\${HERMES_RESUME_FALLA:-}" = 1 ] && exit 1
+python3 - "$4" "$5" <<'PY'
 import json, sys
 p = "${R}/.hermes/cron/jobs.json"
 d = json.load(open(p))
 for j in d["jobs"]:
-    if j["id"] == sys.argv[1]:
-        j["enabled"] = False; j["state"] = "paused"
+    if j["id"] == sys.argv[2]:
+        if sys.argv[1] == "pause":
+            j["enabled"] = False; j["state"] = "paused"
+        elif sys.argv[1] == "resume":
+            j["enabled"] = True; j["state"] = "scheduled"
 json.dump(d, open(p, "w"))
 PY
 `,
@@ -159,24 +165,26 @@ PY
       .replaceAll("/root/", R + "/")
       .replace(/HOME=\/root\b/g, `HOME=${R}`);
   ejecutable(join(bin, "onia-pedido-claude.sh"), deVps(readFileSync(pedidoReal, "utf8")).replaceAll("/var/lib/onia-pedidos", join(F, "var", "lib", "onia-pedidos")));
-  const guion = () =>
-    `REDACTAR_SED='s/a^//'\nCOMMIT=abc1234\nHORAS=72\n` +
-    deVps(readFileSync(join(DIR, "comun.sh"), "utf8")) +
-    "\n" +
-    deVps(readFileSync(join(DIR, "aplicar.sh"), "utf8"));
-  const aplicar = (env = {}) =>
+  const guion = (accion = "aplicar", cortarAntesDe = null) => {
+    let a = deVps(readFileSync(join(DIR, `${accion}.sh`), "utf8"));
+    if (cortarAntesDe) a = a.replace(cortarAntesDe, "exit 9 # la conexión se cortó acá\n" + cortarAntesDe);
+    return `REDACTAR_SED='s/a^//'\nCOMMIT=abc1234\nHORAS=72\n` + deVps(readFileSync(join(DIR, "comun.sh"), "utf8")) + "\n" + a;
+  };
+  const correrAccion = (accion, env = {}, cortarAntesDe = null) =>
     spawnSync("bash", ["-s"], {
-      input: guion(),
+      input: guion(accion, cortarAntesDe),
       env: { ...process.env, PATH: `${dobles}:${process.env.PATH}`, ...env },
       encoding: "utf8",
       timeout: 60000,
     });
+  const aplicar = (env = {}, cortarAntesDe = null) => correrAccion("aplicar", env, cortarAntesDe);
+  const revertir = (env = {}) => correrAccion("revertir", env);
   const leer = (f) => (existsSync(join(log, f)) ? readFileSync(join(log, f), "utf8") : "");
   const crontab = () => readFileSync(join(dir, "crontab"), "utf8");
   const jobs = () => JSON.parse(readFileSync(join(R, ".hermes", "cron", "jobs.json"), "utf8")).jobs;
   const respaldos = () => readdirSync(join(R, "backups")).filter((d) => d.startsWith("hermes-jarvis-")).sort();
   const interruptor = () => existsSync(join(F, "var", "lib", "onia-aviso", "activo"));
-  return { dir, R, F, log, aplicar, leer, crontab, jobs, respaldos, interruptor, crontabInicial };
+  return { dir, R, F, log, aplicar, revertir, leer, crontab, jobs, respaldos, interruptor, crontabInicial };
 }
 
 const apagados = (n8n) => n8n.split("\n").filter((l) => l.startsWith("POST") && l.endsWith("/deactivate"));
@@ -283,6 +291,55 @@ test("con la llave de la rutina: instala la skill de pedidos, su regla y la llav
   assert.equal((soul.match(/^## Pedidos a Claude/gm) || []).length, 1);
   assert.equal((soul.match(/^## Su calendario y el cierre del día/gm) || []).length, 1);
   assert.match(r.stdout, /✅ y nombra pedir-a-claude/);
-  assert.match(v.leer("telegram"), /pedímelo: te muestro el pedido/);
+  assert.match(v.leer("telegram"), /pedímelo: te llega el pedido con un código/);
+});
+
+test("si aplicar se corta a mitad (después de apagar los flujos), revertir lo encuentra y deja todo como estaba", () => {
+  const v = vps();
+  const r = v.aplicar({}, "# ── 5c. Que Hermes lo sepa usar");
+  assert.equal(r.status, 9, r.stdout);
+  assert.ok(v.jobs().every((j) => !j.enabled), "llegó a pausar");
+  writeFileSync(join(v.log, "n8n"), "");
+  const rev = v.revertir();
+  assert.equal(rev.status, 0, rev.stdout + rev.stderr);
+  assert.match(rev.stdout, /✅ revertido/);
+  assert.equal(v.crontab().trim(), v.crontabInicial.trim());
+  assert.ok(v.jobs().every((j) => j.enabled), "los trabajos de Hermes vuelven");
+  const reactivados = v.leer("n8n").split("\n").filter((l) => l.endsWith("/activate") && !/wfnuevo/.test(l));
+  assert.equal(reactivados.length, 12, "los 12 flujos vuelven");
+  assert.equal(v.interruptor(), false);
+});
+
+test("si el rollback no puede deshacer algo, NO lo marca revertido y se puede reintentar", () => {
+  const v = vps();
+  assert.equal(v.aplicar().status, 0);
+  const mal = v.revertir({ HERMES_RESUME_FALLA: "1" });
+  assert.equal(mal.status, 1, mal.stdout);
+  assert.match(mal.stdout, /NO lo marco como revertido/);
+  const bien = v.revertir();
+  assert.equal(bien.status, 0, bien.stdout);
+  assert.ok(v.jobs().every((j) => j.enabled));
+});
+
+test("llave de pedidos con URL válida y token vacío: sale 1 sin tocar nada", () => {
+  const v = vps();
+  const r = v.aplicar({ RUTINA_URL: "https://api.anthropic.com/v1/claude_code/routines/trig_01ABCdef/fire", RUTINA_TOKEN: "" });
+  assert.equal(r.status, 1, r.stdout);
+  assert.match(r.stdout, /NO APLIQUÉ NADA/);
+  assert.equal(v.crontab(), v.crontabInicial);
+  assert.equal(v.interruptor(), false);
+  assert.ok(v.jobs().every((j) => j.enabled));
+});
+
+test("si falta uno de los 12 flujos o el SOUL de Hermes, no aplica nada", () => {
+  const sinSoul = vps();
+  spawnSync("rm", ["-f", join(sinSoul.R, ".hermes", "SOUL.md")]);
+  assert.equal(sinSoul.aplicar().status, 1);
+  assert.equal(sinSoul.crontab(), sinSoul.crontabInicial);
+  const sinFlujo = vps();
+  const r = sinFlujo.aplicar({ N8N_FLUJO_FALTA: "QGXVyRSgrArxfolj" });
+  assert.equal(r.status, 1, r.stdout);
+  assert.match(r.stdout, /no encontré en n8n el flujo QGXVyRSgrArxfolj/);
+  assert.equal(sinFlujo.crontab(), sinFlujo.crontabInicial);
 });
 

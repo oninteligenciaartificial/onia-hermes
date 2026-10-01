@@ -22,13 +22,14 @@ const COMUN = readFileSync(join(DIR, "comun.sh"), "utf8");
 const RESPONDER = readFileSync(join(DIR, "responder.sh"), "utf8");
 const ID = "p_1a2b3c4d";
 
-function banco({ tgFalla = false } = {}) {
+function banco({ tgFalla = false, horasAtras = 1 } = {}) {
   const dir = mkdtempSync(join(tmpdir(), "respuesta-"));
   const estado = join(dir, "pedidos");
   mkdirSync(estado);
+  const ts = Math.floor(Date.now() / 1000) - horasAtras * 3600;
   writeFileSync(
     join(estado, "pedidos.tsv"),
-    `1790880000\t${ID}\tplataforma\tabc123\tsession_01XYZ\thttps://claude.ai/code/session_01XYZ\n`,
+    `${ts}\t${ID}\tplataforma\tabc123\tsession_01XYZ\thttps://claude.ai/code/session_01XYZ\n`,
   );
   const tg = join(dir, "tg.sh");
   writeFileSync(
@@ -60,8 +61,7 @@ test("la respuesta de un pedido de Hermes sale por la aduana, como interrupción
   assert.equal(r.status, 0, r.stdout + r.stderr);
   assert.equal(b.leer("tg-env.txt").trim(), `interrumpe|pedido-${ID}-listo|claude|`);
   const msg = b.leer("tg-msg.txt");
-  assert.match(msg, /^✅ <b>Claude terminó tu pedido<\/b> \(plataforma\)\n\nListo: el botón ya confirma\./);
-  assert.match(msg, /<i>Sesión: https:\/\/claude\.ai\/code\/session_01XYZ<\/i>$/);
+  assert.match(msg, /^✅ Listo · p_1a2b3c4d · https:\/\/claude\.ai\/code\/session_01XYZ\n<b>Claude terminó tu pedido<\/b> \(plataforma\)\n\nListo: el botón ya confirma\./);
   assert.match(b.leer("pedidos/respuestas.tsv"), new RegExp(`\\t${ID}\\tlisto\\n$`));
 });
 
@@ -69,7 +69,7 @@ test("respeta la noche y sus bloques: nunca pide ONIA_AVISO_AHORA", () => {
   const b = banco();
   b.responder(ID, "necesita-ok", "¿Lo mergeo?");
   assert.ok(b.leer("tg-env.txt").trim().endsWith("|"), "ONIA_AVISO_AHORA tiene que ir vacío");
-  assert.match(b.leer("tg-msg.txt"), /^🙋 <b>Claude necesita tu ok<\/b>/);
+  assert.match(b.leer("tg-msg.txt"), /^🙋 Necesita tu ok · p_1a2b3c4d · /);
 });
 
 test("un pedido que no salió de Hermes no le escribe nada", () => {
@@ -86,15 +86,39 @@ test("id o estado inválidos: no le escribe nada", () => {
   assert.equal(b.envios(), 0);
 });
 
-test("la misma respuesta dos veces: la segunda no suena", () => {
+test("la misma respuesta dos veces no suena dos veces, y después de cerrado no suena nada", () => {
   const b = banco();
-  b.responder(ID, "listo", "Listo.");
-  const r = b.responder(ID, "listo", "Listo otra vez.");
+  b.responder(ID, "necesita-ok", "¿Lo mergeo?");
+  const r = b.responder(ID, "necesita-ok", "¿Lo mergeo? (otra vez)");
   assert.equal(r.status, 0);
-  assert.match(r.stdout, /ya tenía una respuesta «listo»/);
+  assert.match(r.stdout, /ya tenía una respuesta «necesita-ok»/);
   assert.equal(b.envios(), 1);
-  b.responder(ID, "necesita-ok", "Ahora necesito tu ok.");
-  assert.equal(b.envios(), 2, "otro estado del mismo pedido sí suena");
+  assert.equal(b.responder(ID, "listo", "Listo.").status, 0);
+  assert.equal(b.envios(), 2, "de «necesita-ok» a «listo» sí suena");
+  for (const e of ["listo", "necesita-ok", "no-se-pudo"]) {
+    const t = b.responder(ID, e, "algo más");
+    assert.equal(t.status, 66);
+    assert.match(t.stdout, /ya se cerró/);
+  }
+  assert.equal(b.envios(), 2);
+});
+
+test("un pedido de más de 48 h no suena", () => {
+  const b = banco({ horasAtras: 49 });
+  const r = b.responder(ID, "listo", "Listo, tarde.");
+  assert.equal(r.status, 66);
+  assert.match(r.stdout, /más de 48 h/);
+  assert.equal(b.envios(), 0);
+});
+
+test("la primera línea alcanza sola (la aduana guarda 90 caracteres sin HTML cuando él no está)", () => {
+  const b = banco();
+  b.responder(ID, "no-se-pudo", "No pude: hace falta la PC.");
+  const primera = b.leer("tg-msg.txt").split("\n")[0];
+  assert.ok(Buffer.byteLength(primera) <= 90, `${Buffer.byteLength(primera)} bytes: ${primera}`);
+  assert.doesNotMatch(primera, /</);
+  assert.match(primera, /p_1a2b3c4d/);
+  assert.match(primera, /https:\/\/claude\.ai\/code\/session_01XYZ/);
 });
 
 test("el texto es texto: se escapa para Telegram y no se ejecuta", () => {

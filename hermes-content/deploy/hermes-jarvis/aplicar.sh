@@ -132,8 +132,9 @@ PY
 # ── 1b. FASE A: requisitos. Nada de lo que ve Sergio Urcullo cambia hasta pasarlos todos ──
 # Sesión madre, 1-oct: «aplicar no se detiene ante fallas: si falla el calendario igual aplica
 # crontab, pausas, apaga los 12 flujos y crea el interruptor». Ahora es TODO O NADA: primero se
-# prueba lo que hace falta (la API de n8n, leer y cambiar su calendario, las skills en main) y
-# recién con todo verde se toca el crontab. Si algo falla acá, abortar() apaga lo que ESTA corrida
+# prueba lo que hace falta (la API de n8n y los 12 flujos que apaga, leer y cambiar su calendario,
+# las skills y el SOUL en main y en el VPS, la forma de la llave de pedidos si vino) y recién con
+# todo verde se escribe la marcha atrás y se toca el crontab. Si algo falla acá, abortar() apaga lo que ESTA corrida
 # prendió y sale sin tocar crontab, Hermes, los 12 flujos, su SOUL ni el interruptor.
 sec "1b. Requisitos: la API de n8n"
 KEY=$(grep -oP '(?<=^N8N_MANAGEMENT_API_KEY=).*' /opt/onia-platform/app.env 2>/dev/null | tr -d "\"'" | head -1)
@@ -160,6 +161,8 @@ abortar() {  # abortar <motivo> — SOLO antes de tocar el crontab: deja todo co
     fi
   done
   echo "Crontab, Hermes, los 12 flujos de n8n, su SOUL y el interruptor quedaron como estaban."
+  # Si ya se había marcado (1c), se desmarca: no hay nada que revertir de esta corrida.
+  rm -f "$BK/aplicado"; [ -n "$PREVIO" ] && rm -f "$PREVIO/reemplazado"
   echo "Respaldo de esta corrida (sin aplicar): $BK"
   exit 1
 }
@@ -341,11 +344,96 @@ git -C "$REPO_VPS" show origin/main:hermes-content/skills/agenda-calendario.md 2
   || falla "no encontré la skill del calendario en origin/main del VPS"
 git -C "$REPO_VPS" show origin/main:hermes-content/deploy/hermes-agent/SOUL.md 2>/dev/null | grep -q '^## Su calendario y el cierre del día' \
   || falla "no encontré la regla del calendario en el SOUL de origin/main del VPS"
+[ -f /root/.hermes/SOUL.md ] || falla "no existe /root/.hermes/SOUL.md: no hay a quién enseñarle"
+if [ -n "${RUTINA_URL:-}${RUTINA_TOKEN:-}" ]; then
+  [[ "${RUTINA_URL:-}" =~ ^https://api\.anthropic\.com/v1/claude_code/routines/trig_[A-Za-z0-9]+/fire$ ]] && [ -n "${RUTINA_TOKEN:-}" ] \
+    || falla "la URL o el token de la rutina de pedidos llegaron, pero sin la forma esperada"
+fi
+if [ "$N8N_OK" = 1 ]; then
+  for id in $N8N_APAGAR; do
+    [ -n "$(api "$N8N_HOST/api/v1/workflows/$id" | campo id)" ] || falla "no encontré en n8n el flujo $id (de los 12 que se apagan)"
+  done
+fi
 [ "$N8N_OK" = 1 ]     || abortar "la API de n8n no responde con la llave de gestión"
 [ "$AGENDA_OK" = 1 ]  || abortar "no puedo LEER su calendario"
 [ "$CAMBIOS_OK" = 1 ] || abortar "agendar, mover y cancelar en su calendario no pasó la prueba"
 [ "$FALLAS" -eq 0 ]   || abortar "$FALLAS falla(s) en los requisitos (arriba, con ❌)"
 echo "✅ requisitos en verde: recién ahora se toca lo que le llega"
+
+# ── 1c. La marcha atrás, escrita ANTES de tocar lo que le llega ──────────────────
+# Sesión madre, 1-oct: si aplicar se corta a mitad (la conexión, un kill, el runner), revertir
+# tiene que encontrar este respaldo. Por eso rollback.sh y la marca «aplicado» van acá y no al
+# final: lee sus listas (pausados, apagados, skills) cuando corre, así que sirve con lo que haya.
+sec "1c. Marcha atrás lista antes de tocar nada"
+cat > "$BK/rollback.sh" <<RB
+#!/usr/bin/env bash
+# Deshace el aplicar de hermes-jarvis guardado en esta carpeta. Lo corre «revertir».
+export HOME=/root
+BK=$BK
+N8N_HOST=$N8N_HOST
+HPY=$HPY
+RB
+cat >> "$BK/rollback.sh" <<'RB'
+# Cuenta lo que no pudo deshacer: con algún error NO se marca «revertido», así revertir se puede
+# correr otra vez (revisión de la sesión madre, 1-oct).
+ERR=0; mal() { ERR=$((ERR + 1)); echo "❌ $*"; }
+HERMES_TOCADO=0
+crontab -l > "$BK/crontab.revertido-desde" 2>/dev/null
+if python3 "$BK/marcas.py" deshacer "$BK/crontab.revertido-desde" > "$BK/crontab.revertido" </dev/null \
+   && [ -s "$BK/crontab.revertido" ] && crontab "$BK/crontab.revertido" </dev/null; then
+  echo "crontab: marcas de jarvis deshechas"
+else
+  mal "crontab: no pude deshacer las marcas (el de antes está en $BK/crontab.antes)"
+fi
+for id in $(cat "$BK/hermes-pausados.txt" 2>/dev/null); do
+  timeout 60 $HPY -m hermes_cli.main cron resume "$id" </dev/null >/dev/null 2>&1 && echo "hermes: reanudado $id" || mal "hermes: no pude reanudar $id"
+done
+KEY=$(grep -oP '(?<=^N8N_MANAGEMENT_API_KEY=).*' /opt/onia-platform/app.env 2>/dev/null | tr -d "\"'" | head -1)
+for id in $(cat "$BK/n8n-apagados.txt" 2>/dev/null); do
+  curl -s --max-time 30 -X POST -H "X-N8N-API-KEY: $KEY" "$N8N_HOST/api/v1/workflows/$id/activate" </dev/null | grep -qE '"active": ?true' \
+    && echo "n8n: reactivado $id" || mal "n8n: no pude reactivar $id"
+done
+for f in agenda cambios; do
+  [ -f "$BK/n8n-$f-id" ] || continue
+  curl -s --max-time 30 -X POST -H "X-N8N-API-KEY: $KEY" "$N8N_HOST/api/v1/workflows/$(cat "$BK/n8n-$f-id")/deactivate" </dev/null \
+    | grep -qE '"active": ?false' && echo "n8n: flujo de $f del calendario apagado (queda guardado)" || mal "n8n: no pude apagar el flujo de $f"
+done
+for s in skill skill-pedidos; do
+  [ -f "$BK/$s-destino" ] || continue
+  D=$(cat "$BK/$s-destino")
+  if [ -f "$BK/$s-antes.md" ]; then cp -a "$BK/$s-antes.md" "$D" && { HERMES_TOCADO=1; echo "hermes: $s restaurada"; } || mal "hermes: no pude restaurar $s"
+  elif [ -f "$BK/$s-no-existia" ]; then rm -f "$D" && { HERMES_TOCADO=1; echo "hermes: $s quitada"; } || mal "hermes: no pude quitar $s"; fi
+done
+if [ -f "$BK/pedidos-env-creado" ] && [ -f /root/.config/onia/pedidos.env ]; then
+  mv -f /root/.config/onia/pedidos.env "$BK/pedidos.env.retirado" && echo "pedidos a Claude: llave retirada (queda en el respaldo)" || mal "no pude retirar la llave de pedidos"
+fi
+if [ -f "$BK/SOUL.md.antes" ]; then
+  cp -a "$BK/SOUL.md.antes" /root/.hermes/SOUL.md && { HERMES_TOCADO=1; echo "hermes: SOUL restaurado"; } || mal "hermes: no pude restaurar el SOUL"
+fi
+# Que el gateway lea el SOUL y las skills de antes (mismo reinicio controlado que aplicar 6b).
+if [ "$HERMES_TOCADO" = 1 ]; then
+  if systemctl cat hermes-gateway.service >/dev/null 2>&1; then
+    timeout 90 systemctl restart hermes-gateway.service </dev/null >/dev/null 2>&1; sleep 10
+    systemctl is-active --quiet hermes-gateway.service && echo "hermes: gateway reiniciado" || mal "hermes: el gateway no volvió (systemctl start hermes-gateway)"
+  elif [ -x /root/bin/hermes-gateway-restart.sh ]; then
+    timeout 120 /root/bin/hermes-gateway-restart.sh </dev/null >/dev/null 2>&1 && echo "hermes: gateway reiniciado" || mal "hermes: el gateway no volvió"
+  fi
+fi
+if [ "$(cat "$BK/interruptor.antes" 2>/dev/null)" != si ]; then
+  rm -f /var/lib/onia-aviso/activo && echo "aduana: interruptor apagado" || mal "aduana: no pude apagar el interruptor"
+fi
+if [ "$ERR" -eq 0 ]; then
+  touch "$BK/revertido"
+else
+  echo "❌ $ERR paso(s) no se pudieron deshacer: NO lo marco como revertido. Corré revertir otra vez."
+  exit 1
+fi
+RB
+chmod 700 "$BK/rollback.sh"
+[ -n "$PREVIO" ] && touch "$PREVIO/reemplazado"
+touch "$BK/aplicado"
+echo "✅ $BK/rollback.sh"
+
 
 # ── 2. Crontab ──────────────────────────────────────────────────────────────────
 sec "2. Crontab (hora del VPS = UTC; La Paz = UTC-4)"
@@ -582,68 +670,8 @@ ONIA_JARVIS_SOLO_IMPRIMIR=1 timeout 240 "$BIN/onia-jarvis-resumen.sh" noche </de
 sec "7b. Vista previa del RESUMEN (06:30), con los datos de ahora"
 ONIA_JARVIS_SOLO_IMPRIMIR=1 timeout 240 "$BIN/onia-jarvis-resumen.sh" manana </dev/null 2>&1 | redactar
 
-# ── 8. rollback.sh y aviso ──────────────────────────────────────────────────────
-sec "8. Marcha atrás y aviso"
-cat > "$BK/rollback.sh" <<RB
-#!/usr/bin/env bash
-# Deshace el aplicar de hermes-jarvis guardado en esta carpeta. Lo corre «revertir».
-export HOME=/root
-BK=$BK
-N8N_HOST=$N8N_HOST
-HPY=$HPY
-RB
-cat >> "$BK/rollback.sh" <<'RB'
-crontab -l > "$BK/crontab.revertido-desde" 2>/dev/null
-if python3 "$BK/marcas.py" deshacer "$BK/crontab.revertido-desde" > "$BK/crontab.revertido" </dev/null \
-   && [ -s "$BK/crontab.revertido" ] && crontab "$BK/crontab.revertido" </dev/null; then
-  echo "crontab: marcas de jarvis deshechas"
-else
-  echo "❌ crontab: no pude deshacer las marcas (el de antes está en $BK/crontab.antes)"
-fi
-for id in $(cat "$BK/hermes-pausados.txt" 2>/dev/null); do
-  timeout 60 $HPY -m hermes_cli.main cron resume "$id" </dev/null >/dev/null 2>&1 && echo "hermes: reanudado $id" || echo "❌ hermes: no pude reanudar $id"
-done
-KEY=$(grep -oP '(?<=^N8N_MANAGEMENT_API_KEY=).*' /opt/onia-platform/app.env 2>/dev/null | tr -d "\"'" | head -1)
-for id in $(cat "$BK/n8n-apagados.txt" 2>/dev/null); do
-  curl -s --max-time 30 -X POST -H "X-N8N-API-KEY: $KEY" "$N8N_HOST/api/v1/workflows/$id/activate" </dev/null | grep -qE '"active": ?true' \
-    && echo "n8n: reactivado $id" || echo "❌ n8n: no pude reactivar $id"
-done
-if [ -f "$BK/n8n-agenda-id" ]; then
-  curl -s --max-time 30 -X POST -H "X-N8N-API-KEY: $KEY" "$N8N_HOST/api/v1/workflows/$(cat "$BK/n8n-agenda-id")/deactivate" </dev/null >/dev/null \
-    && echo "n8n: lector de calendario apagado (queda guardado)"
-fi
-if [ -f "$BK/n8n-cambios-id" ]; then
-  curl -s --max-time 30 -X POST -H "X-N8N-API-KEY: $KEY" "$N8N_HOST/api/v1/workflows/$(cat "$BK/n8n-cambios-id")/deactivate" </dev/null >/dev/null \
-    && echo "n8n: cambios de calendario apagados (queda guardado)"
-fi
-if [ -f "$BK/skill-destino" ]; then
-  D=$(cat "$BK/skill-destino")
-  if [ -f "$BK/skill-antes.md" ]; then cp -a "$BK/skill-antes.md" "$D" && echo "hermes: skill del calendario restaurada"
-  elif [ -f "$BK/skill-no-existia" ]; then rm -f "$D" && echo "hermes: skill del calendario quitada"; fi
-fi
-if [ -f "$BK/skill-pedidos-destino" ]; then
-  D=$(cat "$BK/skill-pedidos-destino")
-  if [ -f "$BK/skill-pedidos-antes.md" ]; then cp -a "$BK/skill-pedidos-antes.md" "$D" && echo "hermes: skill de pedidos restaurada"
-  elif [ -f "$BK/skill-pedidos-no-existia" ]; then rm -f "$D" && echo "hermes: skill de pedidos quitada"; fi
-fi
-[ -f "$BK/pedidos-env-creado" ] && [ -f /root/.config/onia/pedidos.env ] \
-  && mv -f /root/.config/onia/pedidos.env "$BK/pedidos.env.retirado" && echo "pedidos a Claude: llave retirada (queda en el respaldo)"
-[ -f "$BK/SOUL.md.antes" ] && cp -a "$BK/SOUL.md.antes" /root/.hermes/SOUL.md && echo "hermes: SOUL restaurado"
-# Que el gateway lea el SOUL y las skills de antes (mismo reinicio controlado que aplicar 6b).
-if systemctl cat hermes-gateway.service >/dev/null 2>&1; then
-  timeout 90 systemctl restart hermes-gateway.service </dev/null >/dev/null 2>&1; sleep 10
-  systemctl is-active --quiet hermes-gateway.service && echo "hermes: gateway reiniciado" || echo "❌ hermes: el gateway no volvió (systemctl start hermes-gateway)"
-elif [ -x /root/bin/hermes-gateway-restart.sh ]; then
-  timeout 120 /root/bin/hermes-gateway-restart.sh </dev/null >/dev/null 2>&1 && echo "hermes: gateway reiniciado" || echo "❌ hermes: el gateway no volvió"
-fi
-[ "$(cat "$BK/interruptor.antes" 2>/dev/null)" = si ] || { rm -f /var/lib/onia-aviso/activo && echo "aduana: interruptor apagado"; }
-touch "$BK/revertido"
-RB
-chmod 700 "$BK/rollback.sh"
-[ -n "$PREVIO" ] && touch "$PREVIO/reemplazado"
-touch "$BK/aplicado"
-echo "✅ $BK/rollback.sh"
-
+# ── 8. Aviso ─────────────────────────────────────────────────────────────────────
+sec "8. Aviso"
 if [ "$FALLAS" -eq 0 ]; then
   AVISO="✅ <b>Jarvis encendido</b>
 
@@ -655,7 +683,7 @@ Apagué los reportes automáticos que te llegaban. Todo se puede deshacer."
 📅 Y ya podés pedirme que agende, mueva o cancele algo de tu calendario: siempre te muestro el cambio y lo hago solo con tu sí."
   [ "$PEDIDOS_OK" = 1 ] && AVISO="$AVISO
 
-🤖 Y lo que necesite trabajo de verdad (un arreglo, un documento, revisar cómo está algo) pedímelo: te muestro el pedido y, con tu sí, se lo paso a Claude. Te aviso cuando termine."
+🤖 Y lo que necesite trabajo de verdad (un arreglo, un documento, revisar cómo está algo) pedímelo: te llega el pedido con un código y, cuando me lo contestás, se lo paso a Claude. Te aviso cuando termine."
   if ONIA_AVISO=interrumpe ONIA_AVISO_AHORA=1 ONIA_AVISO_CLAVE="jarvis-encendido-$HOY" ONIA_AVISO_EMISOR=jarvis \
        "$BIN/onia-tg.sh" "$AVISO" </dev/null >/dev/null 2>&1; then
     echo "✅ le avisé por Telegram"

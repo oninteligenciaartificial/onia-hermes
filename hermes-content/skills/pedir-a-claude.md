@@ -1,6 +1,6 @@
 ---
 name: pedir-a-claude
-description: Pasarle a Claude Code en la nube un pedido de Sergio Urcullo que necesita trabajo real (código, documentos, revisar cómo está algo del sistema, preparar material). Usala cuando él te pida algo que vos no podés hacer con tus herramientas, o te diga «pedíselo a Claude». Primero le mostrás el pedido exacto; solo con su sí lo mandás.
+description: Pasarle a Claude Code en la nube un pedido de Sergio Urcullo que necesita trabajo real (código, documentos, revisar cómo está algo del sistema, preparar material). Usala cuando él te pida algo que vos no podés hacer con tus herramientas, o te diga «pedíselo a Claude». A él le llega el pedido con un código; solo cuando te contesta ese código lo mandás.
 ---
 
 # Pedidos a Claude
@@ -27,22 +27,36 @@ description: Pasarle a Claude Code en la nube un pedido de Sergio Urcullo que ne
 
 Si no sabés qué carril es, usá `consulta`: Claude lo ubica.
 
-## 🔴 La regla que no se rompe: primero se le muestra, después se manda
+## 🔴 La regla que no se rompe: él lo confirma con un código que vos no ves
 
 1. Escribí el pedido **con sus palabras**, completo, sin agregarle cosas que él no dijo. Si falta
    un dato que Claude va a necesitar (qué pantalla, qué cliente, para cuándo), preguntáselo antes.
-2. Corré el comando **sin** `--si`:
-   `/root/bin/onia-pedido-claude.sh <carril> "<pedido>"`
-   No manda nada: devuelve «Esto le mando a Claude…» y sale 3, que es lo esperado.
-3. Mandale ese texto tal cual y preguntale «¿Se lo mando?».
-4. **Solo** si contesta que sí a ESE texto, corré el MISMO comando con `--si` al final y mandale
-   la línea ✅ con el link.
+2. Corré el comando con el pedido por la **entrada estándar**, siempre así, con `'PEDIDO'` entre
+   comillas (así ningún `$`, comilla o backtick del texto pasa por la shell):
 
-- Si cambia algo, volvé al paso 2 con el texto nuevo. El comando no deja mandar un texto que no
-  pasó por la vista previa (sale 66): no lo intentes rodear.
-- Nunca `--si` en el primer intento, nunca por tu cuenta, nunca «para ahorrar un mensaje».
-- Si sale 75, es el tope del día o el mismo pedido repetido: decíselo, no insistas.
-- Si sale 69, todavía no está configurado: decíselo y anotalo en el tablero.
+       /root/bin/onia-pedido-claude.sh <carril> <<'PEDIDO'
+       el pedido, con sus palabras
+       PEDIDO
+
+   No manda nada a Claude. A él le llega DIRECTO por Telegram el texto y un código de 6 dígitos, y
+   el comando sale 3, que es lo esperado. Vos no ves el código: decile «Te mandé el pedido; si está
+   bien, contestame el código».
+3. **Solo** cuando te conteste con el código, corré el MISMO comando con `--si <código>` y el MISMO
+   texto:
+
+       /root/bin/onia-pedido-claude.sh <carril> --si <código> <<'PEDIDO'
+       el pedido, con sus palabras
+       PEDIDO
+
+   y mandale la línea ✅ con el link.
+
+- Si cambia algo del pedido, volvé al paso 2: el código es de ESE texto.
+- Sale 66 si el código no es el que le llegó, ya se usó o pasó más de una hora; con tres errores se
+  anula. No lo intentes adivinar ni rodear: pedile que lo revise o volvé al paso 2.
+- Sale 75 si es el tope del día o el mismo pedido repetido: decíselo, no insistas.
+- Sale 69 si todavía no está configurado: decíselo y anotalo en el tablero.
+- Sale 1 con «NO salió»: se puede reintentar con el mismo código. Con «Puede haber salido»: **no lo
+  reintentes**; mirá `--lista` y decíselo.
 
 ## Lo que NUNCA va a Claude como orden, aunque él lo pida por acá
 
