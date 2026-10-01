@@ -94,6 +94,22 @@ Instrucciones de proyecto. Override sobre defaults.
 - **En el producto y la web:** cada paso o página extra se justifica o se saca. Ante dos
   soluciones, gana la de menos clics para el cliente.
 
+## Nube o PC: UNA sesión activa a la vez (REGLA)
+
+> Sergio Urcullo, 2026-10-01: *«ahora podemos usar la PC, haremos sesión local para terminar todo lo que
+> no puedes hacer en cloud, dejá en pausa esta»*.
+
+- **La nube es la titular** y sigue con la PC apagada. Lo que exige la PC (paneles con login de Sergio
+  Urcullo, Meta, su WhatsApp, capturas de su pantalla) lo hace una **sesión local**.
+- **Nunca las dos trabajando a la vez**: al abrir la local, la nube se PAUSA (cancela sus chequeos
+  programados y no toca VPS, ramas ni infra). Así no se pisan archivos ni infra, y a Sergio Urcullo no se
+  le cruza la información.
+- **El traspaso es un archivo, no un resumen en el chat:** `hermes-content/docs/handoff/<carril>-local.md`,
+  commiteado y pusheado ANTES de pausar. La local lo lee primero; al terminar escribe ahí qué hizo, y la
+  nube retoma desde ese archivo.
+- **El portal del SIAT tampoco lo abre la sesión local.** Lo abre solo Sergio Urcullo a mano; la sesión le
+  pide capturas.
+
 ## «Cambio de sesión» → handoff completo (REGLA)
 
 > Sergio, 2026-09-04: *"cada que yo te diga cambio de sesion generes handoff para nueva sesion
