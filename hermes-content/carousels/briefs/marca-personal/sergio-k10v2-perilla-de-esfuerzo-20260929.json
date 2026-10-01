@@ -1,6 +1,6 @@
 {
   "title": "La perilla de esfuerzo de Claude Code (v2, pack referentes)",
-  "caption": "Claude Code tiene una perilla que cambia cuánto piensa antes de responderte: el esfuerzo. Se elige con claude --effort, y si no ponés nada viene en medium.\n\nMi regla: low para lo mecánico, medium para todos los días, high o xhigh cuando la primera respuesta no alcanzó, y max casi nunca.\n\nLa próxima respuesta floja, antes de cambiar de modelo, subí un nivel.\n\nNiveles: claude --help en Claude Code 2.1.267. Medium por defecto: anthropic.com/claude-sonnet-5-5.\n\nLa guía para instalar Claude Code está en mi web (link en la bio).",
+  "caption": "Claude Code tiene una perilla que cambia cuánto piensa antes de responderte: el esfuerzo. Se elige con claude --effort, y si no ponés nada viene en medium.\n\nMi regla: low para lo mecánico, medium para todos los días, high o xhigh cuando la primera respuesta no alcanzó, y max casi nunca.\n\nLa próxima respuesta floja, antes de cambiar de modelo, subí un nivel.\n\nNiveles: claude --help en Claude Code 2.1.267. Medium por defecto: anthropic.com/claude-sonnet-5-5.\n\n¿Todavía no usás Claude Code? La guía para instalarlo está en mi web.\n\nComentá EFFORT y te paso el link de la comunidad con mi tabla de esfuerzo.",
   "hashtags": [
     "#claudecode",
     "#claude",
@@ -78,17 +78,16 @@
       "theme": "blanco",
       "headline": "Cómo sabés si *te sirvió*",
       "body": "La misma tarea en medium y en high.\n\nContá cuántas veces corregiste cada una. Con /usage ves los tokens que gastó.\n\nSi high no te ahorró correcciones, volvé a medium.",
-      "next": "la guía",
+      "next": "mi tabla",
       "alt_text": "Comparar la misma tarea en medium y en high"
     },
     {
       "number": 6,
-      "layout": "ensayo",
+      "layout": "cierre",
       "theme": "negro",
-      "headline": "¿Todavía no usás *Claude Code*?",
-      "body": "En mi web está la guía: instalarlo, tu primera skill y cómo hacer que trabaje sin vos.",
-      "cta": "Link en la bio",
-      "alt_text": "La guía de Claude Code está en la web de Sergio Urcullo"
+      "keyword": "EFFORT",
+      "body": "y te paso el link de la comunidad con mi tabla.",
+      "alt_text": "Comentá EFFORT para recibir la tabla de esfuerzo"
     }
   ]
 }

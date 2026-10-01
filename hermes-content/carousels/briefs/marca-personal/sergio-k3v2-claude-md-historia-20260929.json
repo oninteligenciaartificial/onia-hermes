@@ -1,6 +1,6 @@
 {
   "title": "Un CLAUDE.md donde cada regla trae su historia (v2, pack referentes)",
-  "caption": "Mi archivo de reglas para Claude Code tiene una regla que no falla: cada regla lleva el caso real que la originó. Una regla sin su historia se desobedece; con la historia, no.\n\nY una regla tonta que funciona de alarma: Claude me tiene que llamar siempre por nombre y apellido. Si deja de hacerlo, dejó de leer sus instrucciones.\n\nGuardá la lámina 6 para armar el tuyo.",
+  "caption": "Mi archivo de reglas para Claude Code tiene una regla que no falla: cada regla lleva el caso real que la originó. Una regla sin su historia se desobedece; con la historia, no.\n\nY una regla tonta que funciona de alarma: Claude me tiene que llamar siempre por nombre y apellido. Si deja de hacerlo, dejó de leer sus instrucciones.\n\nGuardá la lámina 6 para armar el tuyo.\n\nComentá HISTORIA y te paso el link de la comunidad con la plantilla de regla con historia.",
   "hashtags": [
     "#claudecode",
     "#claude",
@@ -90,22 +90,16 @@
           "text": "algo que notes sin preguntar"
         }
       ],
-      "next": "la guía",
+      "next": "la plantilla",
       "alt_text": "Tres pasos para escribir tu CLAUDE.md"
     },
     {
       "number": 7,
-      "layout": "logos",
+      "layout": "cierre",
       "theme": "negro",
-      "headline": "Guía",
-      "logos": [
-        {
-          "file": "hermes-content/references/brand-claude/claudecode.svg",
-          "label": "Claude Code"
-        }
-      ],
-      "body": "Instalación, primera skill y cómo hacer que trabaje sin vos. En *mi web*: link en la bio.",
-      "alt_text": "Guía de Claude Code en la web"
+      "keyword": "HISTORIA",
+      "body": "y te paso el link de la comunidad con la plantilla.",
+      "alt_text": "Comentá HISTORIA para recibir la plantilla de regla con historia"
     }
   ]
 }

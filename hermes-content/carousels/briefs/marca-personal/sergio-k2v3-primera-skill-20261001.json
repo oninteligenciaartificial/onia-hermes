@@ -1,6 +1,6 @@
 {
   "title": "Tu primera skill de Claude Code en 5 pasos (v3: blanco + verde + negro, alineado al guion D01-A)",
-  "caption": "Una skill es un archivo que le enseña a Claude Code a hacer algo, y lo usa solo cuando hace falta.\n\nLa ruta: .claude/skills/<nombre>/SKILL.md. Arriba, dos datos: name y description. La description decide: Claude la lee para saber si la skill aplica. Si es vaga, no la usa nunca.\n\nLa mía se llama continuidad: se invoca al arrancar cualquier sesión y obliga a leer lo que ya sabemos antes de decidir. Nació el 31 de agosto, el día en que mi agente planificó seis cosas y cuatro ya estaban hechas o decididas.\n\nPara comprobar la tuya, escribí /skills: tiene que aparecer.\n\nEl video para instalar Claude Code y armar tu primera skill está en mi web: sergiourcullo.vercel.app/claude-code\n\nFuente: code.claude.com/docs/en/skills",
+  "caption": "Una skill es un archivo que le enseña a Claude Code a hacer algo, y lo usa solo cuando hace falta.\n\nLa ruta: .claude/skills/<nombre>/SKILL.md. Arriba, dos datos: name y description. La description decide: Claude la lee para saber si la skill aplica. Si es vaga, no la usa nunca.\n\nLa mía se llama continuidad: se invoca al arrancar cualquier sesión y obliga a leer lo que ya sabemos antes de decidir. Nació el 31 de agosto, el día en que mi agente planificó seis cosas y cuatro ya estaban hechas o decididas.\n\nPara comprobar la tuya, escribí /skills: tiene que aparecer.\n\n¿Por dónde empezar? Elegí algo que le explicás a Claude una y otra vez: esa es tu primera skill.\n\nFuente: code.claude.com/docs/en/skills\n\nComentá SKILL y te paso el link del video para instalar Claude Code y armar tu primera skill.",
   "hashtags": [
     "#claudecode",
     "#claude",
@@ -109,12 +109,11 @@
     },
     {
       "number": 7,
-      "layout": "ensayo",
+      "layout": "cierre",
       "theme": "negro",
-      "headline": "Armá la tuya",
-      "body": "Elegí algo que le explicás a Claude una y otra vez. Esa es tu primera skill.\n\nEl video para instalar Claude Code y armarla está en mi web.",
-      "cta": "sergiourcullo.vercel.app/claude-code",
-      "alt_text": "El video para instalar Claude Code y armar tu primera skill está en la web de Sergio Urcullo"
+      "keyword": "SKILL",
+      "body": "y te paso el link del video para armar tu primera skill.",
+      "alt_text": "Comentá SKILL para recibir el video para armar tu primera skill"
     }
   ]
 }

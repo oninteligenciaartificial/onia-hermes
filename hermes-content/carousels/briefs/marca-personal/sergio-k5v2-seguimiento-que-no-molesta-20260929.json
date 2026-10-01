@@ -1,6 +1,6 @@
 {
   "title": "4 reglas de un seguimiento que no molesta (v2, pack referentes)",
-  "caption": "Un seguimiento molesta cuando llega tarde, fuera de hora o a la persona equivocada.\n\nLas cuatro reglas del bot de ONIA: 24 h de texto libre, después solo plantilla aprobada, nada de madrugada y tus números de prueba afuera.\n\nOjo: la ventana de 24 h es de la plataforma oficial de WhatsApp (la API que usan los bots). En la app de WhatsApp Business que usás a mano no existe.\n\nFuente: developers.facebook.com/docs/whatsapp/pricing",
+  "caption": "Un seguimiento molesta cuando llega tarde, fuera de hora o a la persona equivocada.\n\nLas cuatro reglas del bot de ONIA: 24 h de texto libre, después solo plantilla aprobada, nada de madrugada y tus números de prueba afuera.\n\nOjo: la ventana de 24 h es de la plataforma oficial de WhatsApp (la API que usan los bots). En la app de WhatsApp Business que usás a mano no existe.\n\nFuente: developers.facebook.com/docs/whatsapp/pricing\n\nComentá VENTANA y te paso el link de la comunidad con mis mensajes de seguimiento: cómo escribo la plantilla y qué mando dentro de las 24 h.",
   "hashtags": [
     "#whatsapp",
     "#whatsappbusiness",
@@ -107,12 +107,11 @@
     },
     {
       "number": 7,
-      "layout": "ensayo",
+      "layout": "cierre",
       "theme": "negro",
-      "headline": "Mis mensajes de seguimiento, en la *comunidad*",
-      "body": "Cómo escribo la plantilla y qué mando dentro de las 24 h.",
-      "cta": "Comunidad en la bio",
-      "alt_text": "Mensajes de seguimiento en la comunidad"
+      "keyword": "VENTANA",
+      "body": "y te paso el link de la comunidad con mis mensajes.",
+      "alt_text": "Comentá VENTANA para recibir mis mensajes de seguimiento"
     }
   ]
 }

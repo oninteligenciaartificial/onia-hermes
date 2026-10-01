@@ -1,6 +1,6 @@
 {
   "title": "Recuperar vs reconstruir el prompt de una imagen (v3, portada dato sin imagen)",
-  "caption": "Antes de adivinar el prompt de una imagen, fijate si ya está escrito.\n\nRecuperar: el prompt está en pantalla (en una lámina, en la descripción o en un cuadro del video) y lo leés tal cual. Reconstruir: no está, escribís uno que da algo parecido, y lo decís.\n\nMirando una imagen no sabés el modelo, la referencia, los intentos ni el seed. Si no lo sabés, no lo inventes.\n\nPara reconstruir uso 8 bloques, en orden fijo. Para comprobar, generá una y ponela al lado de la original.\n\nLa plantilla de los 8 bloques, con el negativo base, está en la comunidad de WhatsApp: link en la bio.\n\nEl método sale de unos 58 reels que analicé, varios con el prompt en pantalla.",
+  "caption": "Antes de adivinar el prompt de una imagen, fijate si ya está escrito.\n\nRecuperar: el prompt está en pantalla (en una lámina, en la descripción o en un cuadro del video) y lo leés tal cual. Reconstruir: no está, escribís uno que da algo parecido, y lo decís.\n\nMirando una imagen no sabés el modelo, la referencia, los intentos ni el seed. Si no lo sabés, no lo inventes.\n\nPara reconstruir uso 8 bloques, en orden fijo. Para comprobar, generá una y ponela al lado de la original.\n\nEl método sale de unos 58 reels que analicé, varios con el prompt en pantalla.\n\nComentá PROMPT y te paso el link de la comunidad con la plantilla de los 8 bloques y el negativo base.",
   "hashtags": [
     "#prompts",
     "#ia",
@@ -96,17 +96,16 @@
       "theme": "blanco",
       "headline": "Para reconstruir: *8 bloques*",
       "body": "1 · Apertura\n\n2 · Sujeto *con acción*\n\n3 · Rasgos\n\n4 · Ropa\n\n5 · Pose\n\n6 · Fondo *como lista de objetos*\n\n7 · Técnica de cámara\n\n8 · Lo que no querés",
-      "next": "la prueba",
+      "next": "la plantilla",
       "alt_text": "Los 8 bloques, en orden fijo, para reconstruir un prompt"
     },
     {
       "number": 7,
-      "layout": "ensayo",
+      "layout": "cierre",
       "theme": "negro",
-      "headline": "Cómo sabés *que funcionó*",
-      "body": "Generá una con tu prompt y ponela al lado de la original.\n\nLa plantilla de los 8 bloques, con el negativo base, está en la comunidad.",
-      "cta": "Comunidad en la bio",
-      "alt_text": "Comprobar lado a lado; la plantilla está en la comunidad"
+      "keyword": "PROMPT",
+      "body": "y te paso el link de la comunidad con la plantilla.",
+      "alt_text": "Comentá PROMPT para recibir la plantilla de los 8 bloques"
     }
   ]
 }

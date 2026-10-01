@@ -1,6 +1,6 @@
 {
   "title": "K1 opción b-clay",
-  "caption": "Sonnet 5.5 salió el 28 de septiembre y cuesta la mitad que Opus 5.5 por token. En las pruebas de Anthropic están casi empatados, salvo en código difícil.\n\nLe di la misma tarea a los dos y encontraron exactamente lo mismo. Mi regla está en la lámina 6.\n\nFuente: anthropic.com/claude-opus-5-5 y anthropic.com/claude-sonnet-5-5.",
+  "caption": "Sonnet 5.5 salió el 28 de septiembre y cuesta la mitad que Opus 5.5 por token. En las pruebas de Anthropic están casi empatados, salvo en código difícil.\n\nLe di la misma tarea a los dos y encontraron exactamente lo mismo. Mi regla está en la lámina 6.\n\nFuente: anthropic.com/claude-opus-5-5 y anthropic.com/claude-sonnet-5-5.\n\nComentá TRAMPA y te paso el link de la comunidad con el ejercicio de las tres propuestas: pegalo en los dos y fijate si te dan lo mismo.",
   "hashtags": [
     "#claude",
     "#claudecode",
@@ -111,12 +111,11 @@
     },
     {
       "number": 7,
-      "layout": "ensayo",
-      "headline": "Probalo vos",
-      "body": "El ejercicio de las tres propuestas está en la comunidad. Pegalo en los dos y fijate si te dan lo mismo.",
-      "cta": "Comunidad en la bio",
-      "alt_text": "El ejercicio está en la comunidad",
-      "theme": "negro"
+      "layout": "cierre",
+      "theme": "negro",
+      "keyword": "TRAMPA",
+      "body": "y te paso el link de la comunidad con el ejercicio.",
+      "alt_text": "Comentá TRAMPA para recibir el ejercicio de las tres propuestas"
     }
   ],
   "fonts": "referentes"

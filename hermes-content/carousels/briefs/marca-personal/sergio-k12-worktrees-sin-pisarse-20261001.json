@@ -1,6 +1,6 @@
 {
   "title": "Dos sesiones de Claude Code sin pisarse: worktrees (K12, pack referentes)",
-  "caption": "Dos sesiones de Claude Code en la misma carpeta tocan los mismos archivos. La salida se llama worktree: otra carpeta del mismo repositorio, con su propia rama.\n\n1. Desde tu proyecto: git worktree add -b <rama> <ruta>\n2. Abrí Claude Code en esa carpeta. O más corto: claude -w <nombre>, que la crea por vos.\n3. El paso crítico: todo comando de git con git -C <ruta>. No confíes en que la terminal sigue donde la dejaste.\n\nPara comprobar: git worktree list. Cada carpeta, con su rama. Una sesión, una carpeta, una rama.\n\nPor qué el paso 3: el 1 de septiembre, a mi agente la terminal le volvió sola a la carpeta principal. Un reset pensado para otra carpeta corrió ahí y movió una rama 424 commits. Ningún comando falló. Se recuperó con el reflog de git, pero nada avisó.\n\nLos comandos, con un ejemplo armado para copiar, están en mi comunidad (link en la bio).\n\nclaude -w: claude --help en Claude Code 2.1.286 («Create a new git worktree for this session»). git worktree y git -C son comandos estándar de git.",
+  "caption": "Dos sesiones de Claude Code en la misma carpeta tocan los mismos archivos. La salida se llama worktree: otra carpeta del mismo repositorio, con su propia rama.\n\n1. Desde tu proyecto: git worktree add -b <rama> <ruta>\n2. Abrí Claude Code en esa carpeta. O más corto: claude -w <nombre>, que la crea por vos.\n3. El paso crítico: todo comando de git con git -C <ruta>. No confíes en que la terminal sigue donde la dejaste.\n\nPara comprobar: git worktree list. Cada carpeta, con su rama. Una sesión, una carpeta, una rama.\n\nPor qué el paso 3: el 1 de septiembre, a mi agente la terminal le volvió sola a la carpeta principal. Un reset pensado para otra carpeta corrió ahí y movió una rama 424 commits. Ningún comando falló. Se recuperó con el reflog de git, pero nada avisó.\n\nclaude -w: claude --help en Claude Code 2.1.286 («Create a new git worktree for this session»). git worktree y git -C son comandos estándar de git.\n\nProbalo primero en un repo de prueba. Comentá WORKTREE y te paso el link de la comunidad con los comandos y un ejemplo armado para copiar.",
   "hashtags": [
     "#claudecode",
     "#claude",
@@ -117,12 +117,11 @@
     },
     {
       "number": 8,
-      "layout": "ensayo",
+      "layout": "cierre",
       "theme": "negro",
-      "headline": "Probalo en un *repo de prueba*",
-      "body": "Los comandos, con un ejemplo armado para copiar, están en mi comunidad.",
-      "cta": "Comunidad en la bio",
-      "alt_text": "Los comandos de worktree están en la comunidad de Sergio Urcullo"
+      "keyword": "WORKTREE",
+      "body": "y te paso el link de la comunidad con los comandos.",
+      "alt_text": "Comentá WORKTREE para recibir los comandos de worktree"
     }
   ],
   "image_style": "clay"

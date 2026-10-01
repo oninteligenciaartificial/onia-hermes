@@ -1,6 +1,6 @@
 {
   "title": "5 revisiones antes de publicar tu video con IA (v2, pack referentes)",
-  "caption": "No tengo editor de video: lo edita una cadena de pasos con IA. Pero hay cinco cosas que la IA no revisa por mí.\n\nLa crítica es la 2: la transcripción se lee a ojo antes de quemar subtítulos. Una falta quemada no se parchea, se vuelve a renderizar.\n\nY un presentador hecho con IA explica y muestra, pero nunca se hace pasar por cliente.\n\nGuardá la lámina 6 para tu próximo video.",
+  "caption": "No tengo editor de video: lo edita una cadena de pasos con IA. Pero hay cinco cosas que la IA no revisa por mí.\n\nLa crítica es la 2: la transcripción se lee a ojo antes de quemar subtítulos. Una falta quemada no se parchea, se vuelve a renderizar.\n\nY un presentador hecho con IA explica y muestra, pero nunca se hace pasar por cliente.\n\nGuardá la lámina 6 para tu próximo video.\n\nComentá REVISAR y te paso el link de la comunidad con mi editor de IA, paso a paso: grabar, transcribir, cortar, subtitular, leer y publicar.",
   "hashtags": [
     "#edicionvideo",
     "#ia",
@@ -103,12 +103,11 @@
     },
     {
       "number": 7,
-      "layout": "ensayo",
+      "layout": "cierre",
       "theme": "negro",
-      "headline": "Mi editor, en la *comunidad*",
-      "body": "No tengo editor de video: lo edita una cadena de pasos con IA.\n\nGrabar, transcribir, cortar, subtitular, leer y publicar, paso a paso.",
-      "cta": "Comunidad en la bio",
-      "alt_text": "Los pasos del editor en la comunidad"
+      "keyword": "REVISAR",
+      "body": "y te paso el link de la comunidad con mi editor.",
+      "alt_text": "Comentá REVISAR para recibir los pasos del editor de video con IA"
     }
   ]
 }

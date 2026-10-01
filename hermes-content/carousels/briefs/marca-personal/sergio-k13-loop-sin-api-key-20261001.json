@@ -1,6 +1,6 @@
 {
   "title": "Claude Code en un servidor: sin API key, 3 barandas y 5 trampas (K13, pack referentes)",
-  "caption": "Tengo agentes de Claude Code que trabajan en un servidor sin que yo esté. Cada uno arranca solo, toma la siguiente tarea de su lista, la cierra, guarda el trabajo en git y se apaga. Y no uso una API key: corren con mi suscripción.\n\nLa mitad del trabajo no es el pedido: son las barandas. El candado (flock), la carpeta verificada antes de trabajar y un aviso como mucho cada 6 horas por loop. Y si corre cada hora, un tope de 50 minutos.\n\nSi todavía no dejaste tu suscripción en el servidor, Claude Code trae un comando para eso: claude setup-token. Lo que te da es una contraseña: nunca va al repositorio.\n\nAntes de ponerle el cron, corrélo a mano una vez y leé el registro entero. Un cron escrito no es un cron que anda.\n\nTodo lo de las láminas se midió en mi servidor.\n\nEl esqueleto del corredor está en la comunidad de WhatsApp (link en mi web).",
+  "caption": "Tengo agentes de Claude Code que trabajan en un servidor sin que yo esté. Cada uno arranca solo, toma la siguiente tarea de su lista, la cierra, guarda el trabajo en git y se apaga. Y no uso una API key: corren con mi suscripción.\n\nLa mitad del trabajo no es el pedido: son las barandas. El candado (flock), la carpeta verificada antes de trabajar y un aviso como mucho cada 6 horas por loop. Y si corre cada hora, un tope de 50 minutos.\n\nSi todavía no dejaste tu suscripción en el servidor, Claude Code trae un comando para eso: claude setup-token. Lo que te da es una contraseña: nunca va al repositorio.\n\nAntes de ponerle el cron, corrélo a mano una vez y leé el registro entero. Un cron escrito no es un cron que anda.\n\nTodo lo de las láminas se midió en mi servidor.\n\nComentá LOOP y te paso el link de la comunidad con el esqueleto del corredor: el candado, la carpeta verificada, la clave borrada y el pedido desde un archivo.",
   "hashtags": [
     "#claudecode",
     "#claude",
@@ -117,12 +117,11 @@
     },
     {
       "number": 8,
-      "layout": "ensayo",
+      "layout": "cierre",
       "theme": "negro",
-      "headline": "El esqueleto, *para copiar*",
-      "body": "El corredor con el candado, la carpeta verificada, la clave borrada y el pedido desde un archivo.\n\nEstá en la comunidad de WhatsApp.",
-      "cta": "Comunidad en la bio",
-      "alt_text": "El esqueleto del corredor está en la comunidad"
+      "keyword": "LOOP",
+      "body": "y te paso el link de la comunidad con el esqueleto.",
+      "alt_text": "Comentá LOOP para recibir el esqueleto del corredor"
     }
   ]
 }
