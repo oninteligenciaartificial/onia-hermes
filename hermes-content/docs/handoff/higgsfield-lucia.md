@@ -6,27 +6,27 @@
 > Última escritura: **2026-09-30 ~02:50 UTC**, en el cambio de sesión.
 > Reemplaza a `HIGGSFIELD-LUCIA-SYSTEM-2026-09-22.md`, que queda como historia.
 
-## ▶ ESTADO VIGENTE — 1-oct-2026 ~05:10 UTC (lo de abajo es historia)
+## ▶ ESTADO VIGENTE — 1-oct-2026 ~20:15 UTC (lo de abajo es historia)
 
 **Decidido y medido** (detalle en `v4/PROCEDENCIA.jsonl` y `HIGGSFIELD_VIDEO_SYSTEM.md`):
 - Fotos: **Seedream 4.5 + ancla espejo** (`LUCIA-HIGGSFIELD-IDENTITY.json` → `v4.metodo_diario`), 1 cr, parecido 0,80–0,86.
 - Respaldo barato: **Soul `LUCIA-v5`** `cd42c065-…` (0,12 cr, media 0,803; no llegó a principal). El v4 queda retirado.
   `LUCIA-v5b` `1fd04bfa-…` sigue en cola: cobrado (25 cr), sin uso previsto.
-- B-roll: **Kling 3.0 std sin sonido** (7,5 cr / 6 s) — sostiene la cara; **falta el OK de Sergio Urcullo** al comparativo.
+- B-roll: **Kling 3.0 std sin sonido** (7,5 cr / 6 s) — sostiene la cara. **Aprobado por Sergio Urcullo el 1-oct, con tope de 150 cr/mes.**
 - Hablando a cámara: MiniMax H3, máx. 1/semana. Mezcla: 70 % fotos/carruseles, 20 % b-roll, 10 % hablando.
 - Investigación de influencers IA: `hermes-content/research/competencia/LUCIA_INFLUENCERS_IA_B2B_20260930.md`
   (lecciones: declarar IA en el primer segundo, pantalla real de Onia, nada «anti-humano»).
 
 **Falta para publicar (de Sergio Urcullo):** cuenta `@lucia.antelo.oficial` conectada a la app `OnIA Social API`
 y token guardado en `/root/.config/onia-publicar/` (VPS); etiqueta de IA del perfil + bio «IA creada por
-@oniahq»; OK a Kling 3.0; OK al tope ~150 cr/mes. Opcional: red del entorno `onia-higgsfield` a
+@oniahq»; OK al carrusel L01. Además la madre le plantea si Lucía sigue en la Etapa 1 (§7 de la estrategia). Opcional: red del entorno `onia-higgsfield` a
 instagram/tiktok/facebook/graph.facebook.com y secreto `ELEVENLABS_API_KEY`.
 
 **Reparto:** la sesión en la nube (`onia-higgsfield`) genera con Higgsfield. Una sesión LOCAL (con el Chrome
 de Sergio Urcullo) hace lo que la nube no puede: Instagram, Meta y mirar perfiles.
 
-**Siguiente:** rehacer `cola/lucia-diario/S1-PIEZAS.md` con lo aprendido, generar los 3 primeros días y
-mandar el paquete a Sergio Urcullo.
+**Siguiente:** semana 1 lista en `cola/lucia-diario/S1-PIEZAS.md` (PR #77, ~10 cr). Días 1-3 cuestan 0 (reusan
+fotos y el clip aprobados). Esperando: OK a L01 y la cuenta conectada.
 
 ## ▶ Arranque de la sesión siguiente, en el entorno `onia-higgsfield`
 
