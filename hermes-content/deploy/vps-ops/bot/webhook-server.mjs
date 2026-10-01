@@ -50,6 +50,7 @@ import { handlePreviewRequest } from "./preview-route.mjs";
 import { handleEditorRequest } from "./editor-sugerir.mjs";
 import { handleBcpCobrar, handleBcpCallback } from "./bcp-qr.mjs";
 import { createChatwootClient } from "./chatwoot-adapter.mjs";
+import { manejarVerificacionInversa } from "./verificacion-inversa.mjs";
 
 export const DEFAULT_PORT = 3020;
 export const DEFAULT_MAX_BODY_BYTES = 1024 * 1024;
@@ -592,6 +593,37 @@ async function procesarWebhook(request, deps, datos) {
   // viaja en el `outcome` para que el servidor lo dispare recién con la respuesta ya escrita.
   // `rawBody` TAL CUAL: las reglas de conteo viven en la plataforma y en un solo lado.
   const usoPlataforma = esEntranteReal(payload) ? rawBody : null;
+
+  // 5c. VERIFICACION INVERSA del alta (plan B, 1-oct; ver verificacion-inversa.mjs). «Mi código de
+  // Onia es 123456» desde el WhatsApp del dueño NO es un prospecto: se verifica contra la
+  // plataforma, se contesta y se corta ACÁ — sin motor, sin lead, sin n8n, sin aviso. Apagada por
+  // defecto (ONIA_VERIFICACION_INVERSA): sin la variable devuelve null y todo sigue como hoy.
+  // Nunca tira; igual va envuelta, porque un 500 acá es la misma respuesta mandada dos veces.
+  try {
+    const opciones = deps.verificacionInversa || {};
+    const verificacion = await manejarVerificacionInversa(parsed, opciones);
+    if (verificacion) {
+      datos.verificacion = verificacion.estado;
+      return {
+        status: 200,
+        usoPlataforma,
+        body: {
+          ok: true,
+          skipped: false,
+          duplicate: false,
+          verificacion: verificacion.estado,
+          sent: verificacion.enviado ? [{ posted: true }] : [],
+        },
+      };
+    }
+  } catch (error) {
+    datos.verificacion = "error";
+    return {
+      status: 200,
+      usoPlataforma,
+      body: { ok: false, skipped: false, duplicate: false, sent: [], error: "verificacion_inversa", reason: String(error?.message || error).slice(0, 300) },
+    };
+  }
 
   // 6. El turno. Fail-open: cualquier excepción inesperada tiene que terminar en 200, no en 500.
   const runFn = typeof deps.runChatwootTurn === "function" ? deps.runChatwootTurn : runChatwootTurn;
