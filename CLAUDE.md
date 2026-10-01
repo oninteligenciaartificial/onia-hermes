@@ -83,6 +83,40 @@ Instrucciones de proyecto. Override sobre defaults.
   **fuerte** como detector de algo peor: si fallo teniéndola delante, no es que la olvidé, es que
   dejé de leer mis propias instrucciones. Ese fallo sí vale como alarma.
 
+## Simple: sin información basura, menos pasos, menos páginas (REGLA)
+
+> Sergio Urcullo, 2026-10-01, después de un reporte largo con diagnóstico, hipótesis y fuentes:
+> *«fuera información basura, y que se vea todo simple y mientras menos pasos o páginas mejor»*.
+
+- **A Sergio Urcullo:** solo lo que cambia una decisión o le pide algo. Qué pasó (1 línea) · qué
+  necesito de él (pasos numerados, los mínimos) · qué sigue. El diagnóstico, las hipótesis
+  descartadas y las fuentes van al handoff, no al mensaje.
+- **En el producto y la web:** cada paso o página extra se justifica o se saca. Ante dos
+  soluciones, gana la de menos clics para el cliente.
+
+## Sesión MADRE local + carriles en la nube (REGLA)
+
+> Sergio Urcullo, 2026-10-01: *«madre local para que comunique a ellas, pero las de desarrollo y tareas que no
+> son de uso PC, nube; creemos la madre y que ordene a todas con sus tareas, subs y demás, mediante mensaje»*.
+> Y: *«prefiero que hable entre sesiones, así no dejamos documentos que no leen»*.
+
+- **La MADRE corre en la PC de Sergio Urcullo** y es la única que ordena. Reparte las tareas a cada sesión
+  **por mensaje** y hace ella misma lo que exige la PC: paneles con su login (Meta, Cloudflare, Hostinger),
+  capturas, mirar pantallas. Reemplaza a la vieja sesión de «Control» como orquestadora: dos orquestadores
+  se pisan.
+- **Desarrollo y todo lo que no necesita la PC, en la NUBE**, un carril por sesión (Plataforma, Ventas y pauta,
+  Marca personal, Lucía…). Siguen trabajando con la PC apagada.
+- **El canal principal es el MENSAJE, no el documento.** Lo que una sesión necesita de otra se le manda, no se
+  deja escrito esperando que lo lea. El handoff (`hermes-content/docs/handoff/<carril>.md`) queda solo para que
+  una sesión NUEVA retome si otra muere.
+- **Cómo se manda (medido el 1-oct):** solo la MADRE manda mensajes, con `SendMessage`, y le llegan al
+  instante a las sesiones de la nube. La nube **no** puede mandar (`SendMessage` falla: «this cloud session
+  cannot message other sessions yet»): contesta **en su propio transcript** y la madre lo lee desde allá.
+  **Nada de mensajes programados** (`create_trigger`) entre sesiones: tardan demasiado (Sergio Urcullo, 1-oct).
+- Detalle operativo (ids vivos, formato del mensaje, qué se avisa y qué no): **skill `onia-sesion-madre`**.
+- **El portal del SIAT no lo abre ninguna sesión, tampoco la madre.** Lo abre solo Sergio Urcullo a mano; la
+  sesión le pide capturas.
+
 ## «Cambio de sesión» → handoff completo (REGLA)
 
 > Sergio, 2026-09-04: *"cada que yo te diga cambio de sesion generes handoff para nueva sesion
@@ -134,6 +168,11 @@ Instrucciones de proyecto. Override sobre defaults.
   cuando `historial/` por esta misma regla NO es fuente. Un doc archivado que nadie marca
   como archivado se sigue leyendo como presente, y mandaba a vender con el perfil, los
   dolores y los planes viejos.
+- **CÓMO se consiguen clientes (canales y su orden, competencia por adquisición, pauta de
+  Meta): manda `hermes-content/docs/ONIA_ADQUISICION_Y_PAUTA.md`** (2026-09-30). Reemplaza a
+  las fotos de agosto (`ONIA_PAUTA_COMPETENCIA_20260815.md`, `ONIA_ADS_CAMPANA_1_LISTA_20260813.md`).
+  Ningún anuncio promete lo que producción no hace hoy: ese doc (§5.4) dice qué se puede
+  prometer ya y qué recién con la 1.0 publicada (el Recall de tratamiento a medias).
 - **Un tema = un archivo sin fecha.** Si cambia, se EDITA ese archivo; no se crea uno
   nuevo con la fecha de hoy.
 - **Fecha en el nombre = historia.** `hermes-content/docs/historial/` son fotos de un día
@@ -479,8 +518,9 @@ Detalle operativo: skills `carruseles-onia` y `ugc-empresas-higgsfield`.
   históricos no autorizan gasto. Video y entrenamiento Soul siempre requieren aprobación
   específica porque su costo y riesgo de deriva son mayores.
 - Cómo se ve un video, se transcribe, se corta, se subtitula y se rinde →
-  **skills `ver-videos` y `editor-videos`** (HyperFrames vive en `.agents/skills/`:
-  revisarlo ANTES de codear video).
+  **skills `ver-videos` y `editor-videos`** (HyperFrames vive en la copia global
+  `~/.claude/skills` y `~/.codex/skills`; cada flujo se instala con
+  `npx hyperframes skills update <nombre>`: revisarlo ANTES de codear video).
 - **Sacar el PROMPT de una imagen o un video de referencia → skill `sacar-prompt`.**
   Distingue **recuperar** (está en pantalla: se lee) de **reconstruir** (se escribe uno
   parecido, y se dice que lo es). Regla de entrada: **si el video habla es UGC, si

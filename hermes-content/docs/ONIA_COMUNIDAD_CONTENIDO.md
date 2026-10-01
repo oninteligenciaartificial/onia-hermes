@@ -4,6 +4,21 @@
 > drop/día (texto + link, imagen simple opcional). Este archivo guarda el plan y los
 > drops listos para pegar. Datos que sostienen el plan: abajo, §Evidencia.
 
+## Estado al 30-sep-2026 (captura de Sergio Urcullo) y ritmo vigente
+
+- **~30 miembros.** Último aviso: **22-sep** (saludo, llamadas 1-a-1 `cal.com/sergiourcullo/20min`,
+  «dinámicas gratis todas las semanas» y la pregunta de qué experto quieren). Ocho días sin aviso.
+- **Prioridad de Sergio Urcullo (30-sep): primero la comunidad de WhatsApp, después el presencial.**
+- **Ritmo vigente desde el 1-oct:** avisos lun/mié/vie 19:00 atados al video del día. Sin audio
+  dominical ni «wins» (se sacaron el 30-sep: Sergio Urcullo no los había elegido). Reemplaza al «1 drop/día» de §Cadencia, que con una sola persona se
+  cortó. Textos de la vuelta: `cola/drops/2026-10-01.md`.
+- **Qué es exclusivo (aclarado por Sergio Urcullo, 30-sep: «el video de YT solo lo envío a la comunidad» = también lo comparte ahí, no lo esconde):** los videos de YouTube siguen PÚBLICOS. Lo
+  exclusivo es lo de §«Las seis cosas» de `ONIA_COMUNIDAD_QUE_LA_HACE_VALER.md`: llega primero
+  (el link del video 24 h antes, sin listar), el archivo o prompt completo, lo que salió mal, y
+  poder preguntar. Esconder el video mata el alcance que trae gente nueva.
+- **Presencial:** se convoca cuando la encuesta de la semana 2 dé un mínimo de confirmados
+  (propuesto: 15; falta el OK de Sergio Urcullo).
+
 ## Evidencia (2026-08-31, medida en vivo)
 
 **IG de Sergio (45 posts, 427 seg):** lo personal/humor aplasta a las listas —
@@ -102,6 +117,24 @@ las conversaciones presenciales se convierten en investigación y prueba.
 El objetivo es crecer grande por **confianza, recurrencia y resultados de miembros**, no por
 llenar un grupo. El límite semanal de horas de Sergio Urcullo queda como decisión abierta y
 se mide durante los cuatro pilotos antes de fijar una promesa permanente.
+
+### Ratificado por Sergio Urcullo el 29-sep: semanal, con expositores, networking y temas
+
+El formato de arriba sigue vigente. Cada encuentro toma el **tema de la semana** del plan de
+contenido (`cola/plan-3-semanas/MAPA.md`), así el video, el carrusel, el drop y el encuentro
+empujan lo mismo y el encuentro produce material para la semana siguiente:
+
+| Semana | Tema del encuentro | Demo en vivo (50–75 min) | Hot seats |
+|---|---|---|---|
+| 30-sep → 6-oct | Claude Code: que trabaje para vos | escribir una skill desde cero | qué tarea repetida automatizaría cada uno |
+| 7 → 13-oct | Un bot de WhatsApp que atiende sin mentir | las cinco pruebas antes de activarlo | revisar el mensaje real de un miembro |
+| 14 → 20-oct | Contenido con IA sin editor | un video animado por código (método de Santiago Muñoz) | la próxima pieza de cada uno |
+
+**Falta que decida Sergio Urcullo (sin esto no hay primer encuentro):** día y hora fijos · sede del
+primer piloto (sala de Bolivian Electric con autorización, o cafetería con acuerdo) · fecha del
+primer encuentro · nombre visible (`IA Lab Santa Cruz` sigue siendo interno) · los dos expositores
+del mes (por capacidad concreta, no por seguidores) · el formulario de inscripción (nombre,
+contacto, qué quiere construir y permiso de imagen).
 
 ## Cadencia
 

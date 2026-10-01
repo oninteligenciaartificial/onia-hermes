@@ -1,187 +1,184 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "schema_version": 1,
-  "updated_at": "2026-09-23",
+  "schema_version": 3,
+  "updated_at": "2026-09-30",
   "owner": "ONIA",
   "subject": "Lucia",
-  "status": "migration_required",
+  "status": "fixing_original_face_v4",
+  "status_note": "Lucia v4 = la cara ORIGINAL de Lucia, fijada de verdad (Soul ID + Elements). Sergio Urcullo 2026-09-29: 'me gusta mas como era antes lucia' y 'NO ES CARA REAL, LA PRIMERA LUCIA LA HICE 100% IA'. El casting de cara nueva (C01-C26) queda descartado.",
   "authority": {
     "character_and_voice": "LUCIA.md",
+    "v4_plan": "LUCIA-V4-PERFECTION-PLAN.md",
+    "v4_provenance_ledger": "v4/PROCEDENCIA.jsonl",
     "visual_whitelist": "BANCO-OFICIAL.md",
+    "trait_photoshoot": "STACK-rasgos-10-angulos.jpg (fuente: ../../models/lucia-surgical-shoot-20260707/)",
     "technical_runbook": "TECNICA-HIGGSFIELD.md",
-    "global_higgsfield_policy": "../../../docs/HIGGSFIELD_VIDEO_SYSTEM.md"
+    "global_higgsfield_policy": "../../../docs/HIGGSFIELD_VIDEO_SYSTEM.md",
+    "pre_deletion_inventory": "../../../docs/historial/HIGGSFIELD_INVENTARIO_ANTES_DEL_BORRADO_20260929.md"
   },
   "rights_gate": {
-    "status": "unresolved",
-    "reason": "El repo reconoce referencias derivadas de frames de una persona real sin consentimiento documentado; no esta demostrado que todo el linaje posterior sea legalmente limpio.",
-    "required_resolution": [
-      "Documentar consentimiento y alcance de uso de todas las fuentes humanas",
-      "o reconstruir Lucia desde un canon completamente sintetico con procedencia registrada"
-    ],
-    "new_training": "blocked",
-    "public_campaign": "requires_rights_resolution_and_explicit_approval",
-    "existing_assets": "internal_draft_only_until_resolved"
+    "status": "resolved_premise_was_false",
+    "correction_2026_09_29": "Corregido: la cara de Lucia NO viene de una persona real. Sergio Urcullo, que la creo: 'NO ES CARA REAL, LA PRIMERA LUCIA LA HICE 100% IA'. Evidencia en el repo: el video fuente se llama hf_20260615_005124_cde0c155-...mp4, el formato con que Higgsfield nombra sus propias salidas. 'frame REAL del video' (Element ced20cc2, 06-jul) queria decir 'cuadro extraido sin regenerar', no 'persona real'. La sesion del 22-sep leyo 'real' como 'persona real' y armo sobre eso el gate de derechos, el plan sintetico y el borrado total.",
+    "damage_of_the_false_premise": "Un casting de cara nueva (26 imagenes, 23,04 cr) y casi dos horas de sesion el 29-sep; el plan de borrar las referencias de Lucia.",
+    "public_campaign": "requires_explicit_publish_approval"
   },
   "training_rights_gate": {
-    "status": "unresolved",
-    "reason": "Un output sintetico no concede automaticamente permiso para entrenar o fine-tunear otra identidad/modelo.",
-    "policy_source": "https://higgsfield.ai/terms-of-use-agreement",
-    "required_per_reference": [
-      "source_model",
-      "source_asset_or_job_id",
-      "license_or_written_permission",
-      "training_rights_status"
-    ],
-    "new_soul_training": "blocked_until_license_is_confirmed"
+    "status": "decided_rely_on_official_guide",
+    "terms_checked_live": "2026-09-29, Terms of Use 'Last updated: July 26, 2026'",
+    "clause_5_2_iv_verbatim": "use the Service, any Outputs, or any data derived therefrom to train, fine-tune, distill, or otherwise transfer knowledge to any machine-learning model, neural network, or artificial intelligence system, whether or not such system competes with the Service, except: (a) models that you create, train, or fine-tune using the Service with your own Inputs (not Outputs of Company's AI models); or (b) as expressly authorized in writing by Company",
+    "official_guide_verbatim": "To reuse the character with a consistent face across generations, generate a batch of its portraits and train a Soul ID on 20 or more of them (help center: How do I use AI Influencer, read live 2026-09-29)",
+    "decision": "Sergio Urcullo 2026-09-29: 'entrenamos con repos y guia'. Aplica igual a la cara original (tambien son salidas de Higgsfield).",
+    "not_allowed": "Entrenar un modelo FUERA de Higgsfield (p. ej. un LoRA en fal) con estas imagenes: el 5.2(iv) lo prohibe y la guia no lo cubre."
   },
-  "identity_surfaces": {
-    "element_lock": {
-      "role": "baseline_operativo_para_rostro_y_hero",
-      "surface": "higgsfield_web_manual",
-      "primary": {
-        "name": "lucia-skin-v1",
-        "id": "58bbd635-9b90-4bd2-b08a-1cd4915bd563",
-        "status": "active_baseline",
-        "training_images_reported": 7,
-        "comparison_with_backup": "not_run"
-      },
-      "backup": {
-        "name": "lucia-surgical-anchor",
-        "id": "902eeebb-89e9-4477-8426-c555b20f7ecc",
-        "status": "approved_backup",
-        "comparison_with_primary": "not_run"
-      },
-      "cli_portable": false
-    },
-    "soul_lock": {
-      "role": "candidate_for_repeatable_cli_scale",
-      "surface": "higgsfield_cli_or_web",
-      "promotion_status": "not_approved",
-      "souls": [
-        {
-          "name": "LUCIA-REAL-v2-clean",
-          "id": "36305a9b-af24-4390-959b-885082dddd5d",
-          "status": "prohibited",
-          "reasons": [
-            "identity_drift",
-            "red_skin",
-            "outfit_noncompliance",
-            "undocumented_real_person_consent"
-          ]
-        },
-        {
-          "name": "LUCIA-SINTETICA-v3",
-          "id": "e6d8703c-ea48-4d37-9e66-afae59ebe84a",
-          "status": "rejected_as_primary",
-          "training_images_reported": 6,
-          "reasons": [
-            "lost_previous_visual_comparison",
-            "eye_color_drift",
-            "dataset_below_current_web_guidance"
-          ]
-        }
-      ]
-    },
-    "marketing_studio": {
-      "name": "Lucia ONIA v4 FINAL",
-      "id": "a1e334f3-5316-4132-b454-ddd9dcc06943",
-      "status": "isolated_identity_system",
-      "portable_to_element_or_soul": false,
-      "requires_revalidation": true
-    }
-  },
-  "canonical_reference_files": [
-    {
-      "path": "canon/01-rooftop.jpg",
-      "sha256": "5cd09b4e8633091eb49fdb606328f1d7a0683ebd3b7027fea25c87d874e738bd",
-      "bytes": 558141,
-      "rights_status": "unresolved",
-      "source_model": "unknown",
-      "training_rights_status": "unresolved"
-    },
-    {
-      "path": "canon/02-rooftop.jpg",
-      "sha256": "0a539c57aa10253084eec2db41be220ec14f477ed7d8228509a00c5215c324f7",
-      "bytes": 393641,
-      "rights_status": "unresolved",
-      "source_model": "unknown",
-      "training_rights_status": "unresolved"
-    },
-    {
-      "path": "canon/03-cafe.jpg",
-      "sha256": "9747f9e9f0512773ce13d9e0d1681fce4eb2de5a8904b25cc93aa43c97ec3e85",
-      "bytes": 629852,
-      "rights_status": "unresolved",
-      "source_model": "unknown",
-      "training_rights_status": "unresolved"
-    },
-    {
-      "path": "canon/04-cafe-celular.jpg",
-      "sha256": "3b2a03f8f5aecba42a2dbaa6c475d9377ae09915e1651137c71f07fda49811a2",
-      "bytes": 1016387,
-      "rights_status": "unresolved",
-      "source_model": "unknown",
-      "training_rights_status": "unresolved"
-    },
-    {
-      "path": "canon/05-profile.jpg",
-      "sha256": "a668db0ba3962427723a46c190fecec583bd49143ecafc5dc6932b47a5cbfc81",
-      "bytes": 297744,
-      "rights_status": "unresolved",
-      "source_model": "unknown",
-      "training_rights_status": "unresolved"
-    }
-  ],
-  "dataset_status": {
-    "declared_target_count": 7,
-    "files_present": 5,
-    "complete": false,
-    "missing": "No existe un manifest previo que identifique las dos referencias restantes ni sus hashes.",
-    "web_soul_guidance": "20-80 varied photos",
-    "cli_soul_limit": "5-20 images",
-    "visual_audit_2026_09_23": {
-      "training_ready": false,
-      "summary": "Las cinco imagenes sirven como direccion visual, no como dataset: repiten escenas y genealogias, carecen de perfiles y cuerpo entero, una tiene seis dedos y muestran deriva menor de estructura, pecas, ojos y edad aparente.",
-      "master_candidate": "canon/03-cafe.jpg",
-      "excluded_until_reconciled": [
-        "canon/02-rooftop.jpg",
-        "canon/04-cafe-celular.jpg",
-        "canon/05-profile.jpg"
+  "lucia_original_sources_keep": {
+    "note": "NO borrar. Son la fuente de la identidad v4.",
+    "element_multi_angle": {
+      "name": "lucia-skin-v1",
+      "id": "58bbd635-9b90-4bd2-b08a-1cd4915bd563",
+      "media_ids": [
+        "a7cfb766-5755-4d76-baba-c8e81ddf50db",
+        "1714a347-471d-4803-a42e-0022e15df262",
+        "d7d6d36a-1358-40b4-b1b3-d98c1ac15135",
+        "f7ddbf81-880e-4b91-a825-0dbaa342bf7a",
+        "0aa21e93-4429-49b3-a12c-5bfcec67239d",
+        "df491c87-089a-4ace-907a-90ebe6ac82e3",
+        "8ce2f65c-5681-41b1-bb37-83b3576c74fd"
       ],
-      "required_target": 20,
-      "plan": "LUCIA-V4-PERFECTION-PLAN.md"
+      "role": "ancla para generar (Nano Banana Pro con <<<id>>>) y parte del dataset del Soul"
+    },
+    "element_surgical_anchor": {
+      "name": "lucia-surgical-anchor",
+      "id": "902eeebb-89e9-4477-8426-c555b20f7ecc",
+      "image_job": "bdc2b3bf-36e4-4340-b937-037bd73ed44e",
+      "role": "frontal sonrisa del photoshoot de estudio del 7-jul"
+    },
+    "trait_photoshoot_local": {
+      "path": "../../models/lucia-surgical-shoot-20260707/",
+      "shots": [
+        "01-front-neutral",
+        "02-front-slight-smile",
+        "03-front-big-smile",
+        "04-profile-left",
+        "05-profile-right",
+        "06-threequarter-left",
+        "07-threequarter-right",
+        "08-nose-detail",
+        "09-ear-detail",
+        "10-full-body"
+      ],
+      "role": "vara de QA (¿es ella?). 08 y 09 son recortes: sirven para QA, no para entrenar",
+      "higgsfield_ids_correction_2026_09_30": "Decia 'sin registrar; subirlos requiere upload.higgsfield.ai'. FALSO: cada PNG trae su job en el chunk de texto 'hf-job-id' y los 12 jobs estan completed en Higgsfield (jobs_wait, 30-sep). Se usan por job_id sin subir nada",
+      "higgsfield_job_ids": {
+        "01-front-neutral": "2ad9e7c9-97b3-41ad-9c5c-5a300852f56e",
+        "02-front-slight-smile": "59b28c55-9060-4769-b0b1-19c8c06559cf",
+        "03-front-big-smile": "bdc2b3bf-36e4-4340-b937-037bd73ed44e",
+        "04-profile-left": "88f1bf27-d239-4848-bfe8-2662ab208219",
+        "05-profile-right": "cfefbdbd-656a-42bb-8084-df6433742885",
+        "06-threequarter-left": "7b444e7d-a954-4fa6-b2b2-d3b5416328e4",
+        "07-threequarter-right": "c281b4a0-67d2-40a0-a858-59691fb29ef8",
+        "08-nose-detail": "9d7e8c62-9c99-4586-906f-d83ddaddac89",
+        "09-ear-detail": "47b8a898-55be-4100-b229-58111b0223a9",
+        "10-full-body": "f6abd4fe-f198-4081-80e9-15ba72c7af80",
+        "new-anchor-bathroom": "7f68ea56-f8d0-499d-896f-ca37cfce641f",
+        "new-anchor-street": "98260dde-081c-47ea-9b57-07799cf6a37d"
+      },
+      "note_03": "03-front-big-smile (bdc2b3bf) es la misma imagen que lucia-surgical-anchor 902eeebb"
+    },
+    "source_frame_element": {
+      "name": "lucia-face-real-anchor",
+      "id": "ced20cc2-3388-4d98-92ee-b0fcd961aa62",
+      "role": "cuadro del video IA original. Sergio Urcullo lo saco del uso el 15-ago por inconsistente; se conserva como historia"
     }
   },
-  "target_v4": {
-    "status": "plan_ready_no_spend",
-    "identity_origin": "fully_synthetic_rights_clear_canon",
-    "strategy": "two_lane_element_lock_and_soul_lock",
-    "video_rule": "animate_only_an_approved_still",
-    "promotion_gates": [
-      "rights_clear",
-      "training_license_clear",
-      "dataset_manifest_complete",
-      "fixed_prompt_ab_against_primary_and_backup_elements",
-      "identity_qa_pass",
-      "commercial_qa_pass",
-      "live_cost_or_explicit_training_cap_approved",
-      "sergio_final_approval"
-    ]
+  "deletion_scope_2026_09_29": {
+    "requested_by": "Sergio Urcullo: 'borralo nomas' (antes de aclarar que Lucia es 100% IA)",
+    "delete": "Souls: LUCIA-REAL-v2-clean 36305a9b (piel roja, deriva), LUCIA-SINTETICA-v3 e6d8703c (derivo), Mara x2, Sergio x5. Elements: ZZ-TEST x2, modelo2 x3, Mara x3, Maya-Lin, Sergio x6, productos isdin/svr, LUCIA-REAL-v2-clean d5e323ef, lucia-face-element de586dbb, lucia-ancla-2026-08 452d8375 (una sola foto).",
+    "keep_until_soul_v4_is_approved": "lucia-skin-v1 58bbd635, lucia-surgical-anchor 902eeebb, lucia-face-real-anchor ced20cc2, outfits lucia-fit-*-v2 y lugares lucia-place-* (reutilizables)",
+    "how": "Solo desde la web de Higgsfield (MCP y CLI no tienen borrado; verificado)."
+  },
+  "v4": {
+    "higgsfield_project": {
+      "name": "ONIA · Lucía v4 (caras desde cero)",
+      "project_id": "c6c080a7-fbe9-4314-a5b5-e5f8ec6f59ad",
+      "workspace_id": "ed5a2a8f-5a06-4087-a680-81bc592b1b4e",
+      "note": "El nombre quedo del plan de cara nueva; el proyecto sigue siendo el de v4"
+    },
+    "discarded_new_face_casting": "C01-C26 (23,04 cr). Aprendizajes en v4/PROCEDENCIA.jsonl y HIGGSFIELD_VIDEO_SYSTEM.md",
+    "identity_plan": [
+      "prueba de uso: 4 escenas Pinterest con Nano Banana Pro + <<<58bbd635>>> (T101-T104) y 4 con las 7 media_ids en Nano Banana Pro y Seedream 4.5 (T201-T204). HECHO y medido: ver identity_qa",
+      "dataset de 20 (recompuesto el 30-sep al aparecer los job_ids del photoshoot): 13 canonicas ya en Higgsfield = 6 medias de lucia-skin-v1 (sin 1714a347, que tiene personas de fondo) + photoshoot 01, 02, 03, 04, 05, 06, 07 por job_id; + 7 fotos de vida nuevas para variar luz y escena (dataset-vida.json D03, D06, D07, D09, D10, D12, D13; D11 de reserva), cada una >= identity_qa.gate. Motor: el que elija Sergio Urcullo; por identidad gana seedream_v4_5 + 7 media_ids (7 cr)",
+      "entrenar Soul ID tipo soul_2 (el tipo cinematic tiene un bug abierto) con OK especifico de costo",
+      "probar el Soul en 3 escenas fijas contra el stack y con identity_qa; verificar que aparece como Element para video",
+      "argollas y cadenita: nombrarlas en cada prompt o fijarlas como Element aparte (Soul tiende a perder accesorios)"
+    ],
+    "identity_qa": {
+      "tool": "scripts/face_identity_qa.py",
+      "metric": "coseno ArcFace (insightface buffalo_l: SCRFD det_10g + ArcFace w600k_r50) contra el centroide de las 8 fuentes (7 medias de lucia-skin-v1 + 902eeebb)",
+      "runs_on": "sandbox_exec de Higgsfield: tiene internet y llega al CDN aunque la sesion en la nube no. 0 creditos",
+      "baseline_sources_leave_one_out": [
+        0.698,
+        0.82
+      ],
+      "negatives_max": 0.224,
+      "gate": 0.7,
+      "gate_rule": "una foto del dataset o del Soul pasa si da >= 0.70 (el piso de las propias fuentes); debajo se regenera. Aplica a caras frontales y de tres cuartos de 200 px o mas: los perfiles bajan solos (fuente R4 0.698, photoshoot 04 0.689) y con caras chicas el numero pierde confiabilidad; esos se miran",
+      "result_2026_09_30_photoshoot": "v4/qa/identidad-photoshoot-20260930.json: 01 0.738, 02 0.744, 05 0.703, 06 0.758, 07 0.729, 04 0.689 (perfil); 08 y 09 sin cara (recortes)",
+      "blind_spot": "mide identidad; NO mide belleza, piel ni realismo. Eso lo mira Sergio Urcullo",
+      "result_2026_09_29": "v4/qa/identidad-metodos-20260929.json",
+      "method_ranking_2026_09_29": "seedream_v4_5 + 7 media_ids: cafe 0.883, calle 0.836 > nano_banana_pro + Element: 0.822, 0.693 ~ nano_banana_pro + 7 media_ids: 0.806, 0.683",
+      "soul_training_exclusions": {
+        "1714a347-471d-4803-a42e-0022e15df262": "R2 '3/4 medio': 2 personas de fondo (caras de 46 y 28 px). La guia de Soul pide 'Single person per photo'. Como referencia de generacion sirve (la cara principal da 0.758)"
+      }
+    },
+    "prompt_clausula_belleza": {
+      "texto": "Same level of fine detail as the first reference image: individually sharp freckles, fine pores, textured irises, crisp eyelashes and flyaway hairs. Youthful face, smooth under-eyes, no deep wrinkles. Lighting is physically consistent with this scene: highlights on skin and catchlights in the eyes come only from the light sources present, never added glow.",
+      "desde": "2026-09-30T12:40Z",
+      "por": "Sergio Urcullo",
+      "criterio": "La foto de referencia (ancla espejo) marca el NIVEL DE CALIDAD Y DETALLE, no una lista de efectos. El brillo de piel y ojos de esa foto existe porque hay una ventana; en otra escena la luz la decide la escena. Pedir 'glow/sheen/dewy' en todo contexto se ve falso.",
+      "reemplaza": "Youthful fresh skin, smooth under-eyes, no deep wrinkles or expression lines. Bright warm brown eyes with clear catchlights. Dewy glowing skin with a natural sheen on cheekbones and nose bridge, freckles clearly visible across nose and cheeks.",
+      "prohibido": [
+        "dewy glowing skin / natural sheen en cualquier escena",
+        "natural imperfections / unretouched (envejece)"
+      ],
+      "nota": "Va en todos los prompts de Lucia v4 junto con la escena; la escena define la luz."
+    },
+    "ancla_look_espejo": {
+      "media_id": "abe2e6bd-0d39-49be-9d87-1126d4ed07b0",
+      "desde": "2026-09-30",
+      "por": "Sergio Urcullo",
+      "uso": "va PRIMERA en image_references y el prompt dice 'Same face, skin and freckles as the first reference image'. Es el look que Sergio Urcullo pidio replicar."
+    },
+    "soul_v4": {
+      "soul_id": "c4281765-c031-40ed-b430-e5fd313ef207",
+      "name": "LUCIA-v4",
+      "type": "soul_2",
+      "estado": "ready 2026-09-30",
+      "uso": "respaldo, no principal: 0,72-0,83 y mas envejecida que el metodo Seedream+ancla"
+    },
+    "soul_v5": {
+      "soul_id": "cd42c065-e18c-4176-b9ad-e2de075fe362",
+      "name": "LUCIA-v5",
+      "type": "soul_2",
+      "estado": "ready 2026-10-01 04:56 UTC",
+      "costo_cr": 25,
+      "dataset": "16 fotos con el look vigente: V01-V08 (Seedream+ancla, 0,777-0,858) + ancla espejo + P1-P4 + E1, E3, E4. Detalle en v4/PROCEDENCIA.jsonl (type soul_train, LUCIA-v5).",
+      "siguiente": "cuando este ready: 6 imagenes soul_2 (0,72 cr) en las escenas de la prueba del v4 (S1, S2, S3 x2) y A/B contra Seedream+ancla con face_identity_qa. Gana el que mida mas; si empatan, Soul (8x mas barato por imagen).",
+      "decide": "Sergio Urcullo 2026-09-30: 'usaremos la nueva version del soul, si decis que no perdemos nada'. Regla: el v5 pasa a PRINCIPAL si en el A/B de v4/prompts/ab-soul-v5.json mide >= Seedream+ancla - 0,02 y se ve igual de joven al MIRARLO; si pierde, sigue Seedream+ancla y el v5 queda de respaldo. No se lo declara principal antes de medir.",
+      "resultado_ab": "media 0,803 vs Seedream 0,838 y Soul v4 0,744: no alcanza para principal; queda como respaldo barato en lugar del v4"
+    },
+    "metodo_diario": "seedream_v4_5 9:16 basic; image_references=[abe2e6bd (ancla espejo) PRIMERA, a7cfb766, d7d6d36a, df491c87, 8ce2f65c]; prompt: escena + 'Same face, skin and freckles as the first reference image' + prompt_clausula_belleza. 1 cr/imagen. Medido 0,828-0,875."
   },
   "execution_policy": {
-    "coding_agents": "higgsfield_cli_with_official_skills",
-    "chat_agents": "official_mcp_optional",
-    "identity_calibration": "local_web_manual",
-    "high_volume_future": "official_api_with_separate_budget",
-    "n8n": "approval_queue_polling_ledger_notifications_only",
+    "cloud_sessions": "MCP oficial funciona. El entorno Default bloquea higgsfield.ai, upload.higgsfield.ai y los CDN d2ol7oe51mr4n9/d8j0ntlcm91z4.cloudfront.net: sin esos dominios la sesion no puede MIRAR salidas ni SUBIR archivos del repo.",
+    "cli": "higgsfield 1.1.26 autenticado solo en el VPS. En la nube el login es OAuth con callback loopback.",
+    "concurrency": "Plan Pro: maximo 4 trabajos a la vez.",
     "vps_playwright_generation": "prohibited",
     "paid_generation_requires": [
-      "live_model_schema",
-      "live_cost_quote_or_explicit_cap_when_no_quote_exists",
-      "recorded_approval",
-      "input_hash",
-      "job_reconciliation_before_retry"
+      "costo en vivo (get_cost) antes de lanzar",
+      "lote con brief, cantidad y cap aprobados por Sergio Urcullo",
+      "registro en v4/PROCEDENCIA.jsonl (job_id, modelo, seed, input_hash, costo)",
+      "entrenamiento Soul y video: aprobacion especifica"
     ],
-    "command": "Always use higgsfield; never use the ambiguous hf alias on Windows."
+    "command": "Usar higgsfield; en Windows y en el sandbox de Higgsfield, hf es Hugging Face."
   }
 }

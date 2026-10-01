@@ -115,6 +115,14 @@ tabla de cortes + preview antes de aplicar · transcript como fuente de todo tex
 3. **Inventario del material como artefacto** (su CSV de crudos + hallazgos.md + plan):
    nosotros improvisamos el inventario en cada sesión.
 
+## Entrada y salida (29-sep-2026)
+- **Brutos:** Sergio los deja en `C:\Users\PC\Videos\ONIA-brutos\<AAAA-MM-DD>\` (fuera del repo: el
+  autosync subiría a git cualquier video de adentro). Se copian a `videos/<pieza>/raw/` (ignorado).
+- **Publicación:** Reel normal + **yap** (otra edición del mismo video: otro gancho, otro orden, más
+  corto) como **Trial reel** en Instagram, con `hermes-content/deploy/vps-ops/publicar/ig-reel.mjs`.
+  Circuito, comandos y reglas: `hermes-content/deploy/vps-ops/publicar/README.md`. UNA aprobación de
+  Sergio por paquete del día (incluye la tabla de cortes); sin ese «ok» no se publica nada.
+
 ## Pipeline
 1. **Setup + NORMALIZAR el crudo** (pieza propia, PROBADA). `videos/<name>/` con `raw/ scripts/ renders/ final/`.
    `node scripts/normalize-source.mjs --video raw/IMG_xxxx.MOV --out raw/<n>.mp4`

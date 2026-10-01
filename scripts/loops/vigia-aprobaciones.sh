@@ -25,6 +25,16 @@
 set -uo pipefail
 
 export HOME=/root
+
+# 🔴 CUÁNDO lo decide la aduana, no este script (2026-09-29). Sergio Urcullo eligió que de
+# 22:00 a 06:30 no suene nada y que en sus bloques (colegio, 🔒, 🎬, «sin celular») tampoco.
+# Esto manda fotos y videos con curl propio, así que no puede pasar POR la aduana: le
+# PREGUNTA. «Esperá» (75) = esta vuelta no manda nada y no marca nada; la primera vuelta
+# después del bloque pregunta lo que quedó. Cualquier otra respuesta —aduana ausente o
+# rota— manda como siempre: una aduana caída no puede callar lo que espera su ok.
+ONIA_AVISO_PUEDO=1 "${ONIA_TG:-/root/bin/onia-tg.sh}" >/dev/null 2>&1
+if [ $? -eq 75 ]; then echo "$(date -u +%FT%TZ) espera: silencio o bloque de su calendario"; exit 0; fi
+
 H="/usr/local/lib/hermes-agent/venv/bin/python -m hermes_cli.main kanban --board ${ONIA_TABLERO:-onia}"
 ESTADO="/var/lib/onia-aprobaciones"
 AVISADAS="$ESTADO/avisadas"          # una linea por id ya avisado

@@ -548,7 +548,7 @@ const ESCALERA: readonly Plan[] = [
       `Agentes Vuelve a citar (${ALCANCE_CON_FICHA}) y Recuerda cobros: te proponen a quién invitar de vuelta y a quién recordarle un pago`,
       `Agentes Confirma citas y Reprograma (${ALCANCE_CON_AGENDA}), Avisa stock bajo (${ALCANCE_AGENTE_STOCK}) y Sigue cotizaciones (${ALCANCE_AGENTE_COTIZACIONES})`,
       `Reservas online incluidas, ${ALCANCE_CON_AGENDA}: link público para que te pidan cita`,
-      "Topes: 800 fichas · 3 usuarios · 400 recordatorios por email/mes",
+      "Topes: 800 fichas · 4 usuarios · 400 recordatorios por email/mes",
     ],
     chatbotIncluido: false,
     agentesIncluidos: true,

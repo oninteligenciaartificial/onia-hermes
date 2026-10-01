@@ -4,8 +4,16 @@
 # Cada 10 min: mira los issues nuevos de Sentry. Para cada uno que no vio antes:
 #   1) si es una clase de fallo de INFRA conocida y reversible, la arregla solo;
 #   2) si es un error de CODIGO, corre Claude Code headless para diagnosticarlo
-#      con los logs y el codigo fuente reales, y manda diagnostico + parche
-#      propuesto a Telegram. NO aplica parches: eso lo aprueba Sergio.
+#      con los logs y el codigo fuente reales, y deja diagnostico + parche
+#      propuesto como tarea del tablero. NO aplica parches.
+#
+# 🔴 Nada sale directo a Telegram (2026-09-29). Sergio Urcullo: «me manda puros errores».
+# Este script hacia curl propio: esquivaba el silencio de la noche, sus bloques y el
+# enfriamiento, y un Sentry que no responde repetia el mismo error cada 10 minutos. Ahora
+# todo pasa por la aduana (onia-tg.sh), con la categoria que corresponde:
+#   contenedor levantado solo -> resumen  (se arreglo: se entera en el cierre de las 21:30)
+#   Sentry no responde        -> sistema  (tarea deduplicada: la arregla el sistema)
+#   error nuevo diagnosticado -> sistema  (tarea con diagnostico, una por lugar del error)
 #
 # Estado en /root/claude-guardia/. Claves: ANTHROPIC de /root/.hermes/.env,
 # SENTRY de /opt/onia-platform/app.env.
@@ -22,9 +30,8 @@ unset ANTHROPIC_API_KEY ANTHROPIC_TOKEN
 ST=$(grep -oP '(?<=^SENTRY_AUTH_TOKEN=).*' /opt/onia-platform/app.env | tr -d '"')
 ORG=onia-agency; PROJ=onia-platform
 
-tg() {
-  curl -s -o /dev/null --max-time 20 "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
-    -d chat_id="${TELEGRAM_HOME_CHANNEL}" -d parse_mode=HTML --data-urlencode text="$1"
+avisar() {  # avisar <resumen|sistema> <mensaje>
+  ONIA_AVISO="$1" ONIA_AVISO_EMISOR=guardia "${ONIA_TG:-/root/bin/onia-tg.sh}" "$2" >/dev/null 2>&1 || true
 }
 
 # ── 0. autocuracion de infra: contenedores clave caidos se levantan solos
@@ -32,7 +39,7 @@ for c in onia-platform onia-landing onia-mail supabase-kong supabase-db; do
   EST=$(docker inspect -f '{{.State.Status}}' $c 2>/dev/null || echo ausente)
   if [ "$EST" = "exited" ] || [ "$EST" = "dead" ]; then
     docker start $c >/dev/null 2>&1
-    tg "🩹 <b>Guardia Onia</b>: el contenedor <code>$c</code> estaba <b>$EST</b> y lo levante solo."
+    avisar resumen "🩹 <b>Guardia Onia</b>: el contenedor <code>$c</code> estaba <b>$EST</b> y lo levante solo."
   fi
 done
 
@@ -47,7 +54,8 @@ ISSUES=$(curl -s --max-time 30 -H "Authorization: Bearer $ST" \
   "https://sentry.io/api/0/projects/$ORG/$PROJ/issues/?query=is:unresolved&statsPeriod=24h&limit=5")
 case "$ISSUES" in
   "["*) : ;;
-  *) tg "⚠️ <b>Guardia Onia</b>: Sentry no devolvio una lista de issues: <code>$(echo $ISSUES | head -c 150)</code>"; exit 0 ;;
+  *) avisar sistema "⚠️ <b>Guardia Onia</b>: Sentry no devolvio una lista de issues
+<code>$(echo $ISSUES | head -c 150)</code>"; exit 0 ;;
 esac
 echo "$ISSUES" | node -e '
 let d="";process.stdin.on("data",c=>d+=c);process.stdin.on("end",()=>{
@@ -94,7 +102,7 @@ No inventes: si no encontras la causa, decilo." > $OUT 2>&1
     echo "(diagnostico automatico no disponible: revisar credencial de Claude en el VPS)" > $OUT
   fi
   RESUMEN=$(head -c 900 $OUT)
-  tg "🔍 <b>Guardia Onia</b> — error nuevo diagnosticado
+  avisar sistema "🔍 <b>Guardia Onia</b> — error nuevo en <code>$(echo $CULPRIT | head -c 60)</code>
 
 <b>Donde:</b> <code>$(echo $CULPRIT | head -c 80)</code>
 <b>Error:</b> $(echo $VALOR | head -c 160)
@@ -102,5 +110,5 @@ No inventes: si no encontras la causa, decilo." > $OUT 2>&1
 $RESUMEN
 
 📄 Diagnostico completo: <code>$OUT</code>
-⚠️ El parche NO se aplico: decidis vos."
+⚠️ El parche NO se aplico."
 done

@@ -1,0 +1,38 @@
+{
+ "fecha": "2026-09-30",
+ "para": "A/B Soul LUCIA-v5 (cd42c065-e18c-4176-b9ad-e2de075fe362) vs Seedream + ancla espejo, en escenas que NO estan en el dataset de entrenamiento",
+ "aprobado": "dentro del tope de 75 cr del lote de prueba (Sergio Urcullo, 2026-09-30)",
+ "soul": {
+  "model": "soul_2",
+  "soul_id": "cd42c065-e18c-4176-b9ad-e2de075fe362",
+  "aspect_ratio": "9:16",
+  "repeticiones": 2,
+  "costo_cr_c_u": 0.12,
+  "prompts": {
+   "A_parque": "A young woman sitting on a park bench reading a paperback book in the late afternoon, dappled shade from trees, looking up at the camera with a relaxed smile. Olive green cardigan over a white top. Fine detail: individually sharp freckles across nose and cheeks, fine pores, textured brown irises, crisp eyelashes and flyaway hairs. Youthful face, smooth under-eyes, no deep wrinkles. Lighting is physically consistent with this scene: highlights on skin and catchlights in the eyes come only from the light sources present, never added glow. Small gold hoops. Candid iPhone photo, true-to-life color.",
+   "B_videollamada": "A young woman at her home office in the evening during a video call, lit by the cool glow of the monitor and a warm desk lamp, mid-sentence with a friendly expression. Monitor seen from behind, no screen visible. Black knit top. Fine detail: individually sharp freckles across nose and cheeks, fine pores, textured brown irises, crisp eyelashes and flyaway hairs. Youthful face, smooth under-eyes, no deep wrinkles. Lighting is physically consistent with this scene: highlights on skin and catchlights in the eyes come only from the light sources present, never added glow. Small gold hoops. Candid iPhone photo, true-to-life color.",
+   "C_terraza": "A young woman on a rooftop terrace at blue hour with soft city lights blurred behind her, holding a glass of water, looking at the camera. Terracotta linen shirt. Fine detail: individually sharp freckles across nose and cheeks, fine pores, textured brown irises, crisp eyelashes and flyaway hairs. Youthful face, smooth under-eyes, no deep wrinkles. Lighting is physically consistent with this scene: highlights on skin and catchlights in the eyes come only from the light sources present, never added glow. Small gold hoops. Candid iPhone photo, true-to-life color."
+  }
+ },
+ "seedream": {
+  "model": "seedream_v4_5",
+  "aspect_ratio": "9:16",
+  "quality": "basic",
+  "repeticiones": 1,
+  "costo_cr_c_u": 1,
+  "image_references": [
+   "abe2e6bd-0d39-49be-9d87-1126d4ed07b0",
+   "a7cfb766-5755-4d76-baba-c8e81ddf50db",
+   "d7d6d36a-1358-40b4-b1b3-d98c1ac15135",
+   "df491c87-089a-4ace-907a-90ebe6ac82e3",
+   "8ce2f65c-5681-41b1-bb37-83b3576c74fd"
+  ],
+  "prompts": {
+   "A_parque": "The same woman as the first reference image sitting on a park bench reading a paperback book in the late afternoon, dappled shade from trees, looking up at the camera with a relaxed smile. Olive green cardigan over a white top. Same face, skin and freckles as the first reference image. Same level of fine detail as the first reference image: individually sharp freckles, fine pores, textured irises, crisp eyelashes and flyaway hairs. Youthful face, smooth under-eyes, no deep wrinkles. Lighting is physically consistent with this scene: highlights on skin and catchlights in the eyes come only from the light sources present, never added glow. Candid iPhone photo, true-to-life color.",
+   "B_videollamada": "The same woman as the first reference image at her home office in the evening during a video call, lit by the cool glow of the monitor and a warm desk lamp, mid-sentence with a friendly expression. Monitor seen from behind, no screen visible. Black knit top. Same face, skin and freckles as the first reference image. Same level of fine detail as the first reference image: individually sharp freckles, fine pores, textured irises, crisp eyelashes and flyaway hairs. Youthful face, smooth under-eyes, no deep wrinkles. Lighting is physically consistent with this scene: highlights on skin and catchlights in the eyes come only from the light sources present, never added glow. Candid iPhone photo, true-to-life color.",
+   "C_terraza": "The same woman as the first reference image on a rooftop terrace at blue hour with soft city lights blurred behind her, holding a glass of water, looking at the camera. Terracotta linen shirt. Same face, skin and freckles as the first reference image. Same level of fine detail as the first reference image: individually sharp freckles, fine pores, textured irises, crisp eyelashes and flyaway hairs. Youthful face, smooth under-eyes, no deep wrinkles. Lighting is physically consistent with this scene: highlights on skin and catchlights in the eyes come only from the light sources present, never added glow. Candid iPhone photo, true-to-life color."
+  }
+ },
+ "medir": "scripts/face_identity_qa.py con los refs de v4/qa/manifest-dataset-v5-20260930.json; y MIRAR (edad, piel, luz)",
+ "regla": "gana el que mida mas; si empatan (±0,02), Soul por costo. Lo decide Sergio Urcullo mirando las dos."
+}

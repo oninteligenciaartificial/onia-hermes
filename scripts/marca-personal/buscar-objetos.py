@@ -75,7 +75,7 @@ def buscar_unsplash(consulta, key):
            + urllib.parse.urlencode({"query": consulta, "per_page": 5, "orientation": "squarish"}))
     for r in _get(url, {"Authorization": f"Client-ID {key}"}).get("results", []):
         return {
-            "url": r["urls"]["regular"], "fuente": "unsplash",
+            "url": r["urls"]["raw"] + "&w=2048&q=85&fm=jpg", "fuente": "unsplash",  # regular = 1080 px
             "licencia": "Unsplash License",
             "autor": (r.get("user") or {}).get("name", "desconocido"),
             "pagina": (r.get("links") or {}).get("html", ""),
@@ -88,7 +88,7 @@ def buscar_pexels(consulta, key):
            + urllib.parse.urlencode({"query": consulta, "per_page": 5}))
     for r in _get(url, {"Authorization": key}).get("photos", []):
         return {
-            "url": r["src"]["large"], "fuente": "pexels",
+            "url": r["src"]["large2x"], "fuente": "pexels",  # large = 940 px: poca calidad (29-sep)
             "licencia": "Pexels License",
             "autor": r.get("photographer", "desconocido"),
             "pagina": r.get("url", ""),
@@ -150,6 +150,20 @@ def elegir_fuente(pedida):
     return "openverse", None
 
 
+def _anotar_galeria(creditos, recortado):
+    """Una fila por imagen en galeria.json: de donde salio y con que licencia."""
+    import datetime
+    mf = REPO / "hermes-content/galeria/galeria.json"
+    filas = json.loads(mf.read_text(encoding="utf-8")) if mf.exists() else []
+    hoy = datetime.date.today().isoformat()
+    for n, c, h in creditos:
+        archivo = DEST / (f"{n}.png" if recortado else f"{n}-crudo.jpg")
+        filas.append({"id": n, "file": archivo.relative_to(REPO).as_posix(), "fecha": hoy,
+                      "tipo": "objetos", "fuente": h["fuente"], "licencia": h["licencia"],
+                      "autor": h["autor"], "origen": h["pagina"], "consulta": c, "usado_en": [], "tags": []})
+    mf.write_text(json.dumps(filas, ensure_ascii=False, indent=2) + chr(10), encoding="utf-8")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--objeto", action="append", required=True,
@@ -157,7 +171,13 @@ def main():
     ap.add_argument("--fuente", choices=["auto", "unsplash", "pexels", "openverse"], default="auto")
     ap.add_argument("--sin-recorte", action="store_true",
                     help="no quita el fondo (util para ver el original)")
+    ap.add_argument("--galeria", action="store_true",
+                    help="guarda en hermes-content/galeria/objetos y lo anota en galeria.json "
+                         "(la galeria unica de imagenes reutilizables, 29-sep)")
     a = ap.parse_args()
+    global DEST
+    if a.galeria:
+        DEST = REPO / "hermes-content/galeria/objetos"
 
     fuente, key = elegir_fuente(a.fuente)
     print(f"fuente: {fuente}" + ("" if key else "  (sin llave — pegá UNSPLASH_ACCESS_KEY o "
@@ -216,6 +236,8 @@ def main():
             for n, c, h in creditos)
         cred.write_text(previo + filas, encoding="utf-8")
         print(f"OK -> {DEST}  (créditos en CREDITOS.md)")
+        if a.galeria:
+            _anotar_galeria(creditos, recortado=not a.sin_recorte)
     print("MIRÁ los recortes al 100% antes de usarlos: rembg se come detalles finos")
     print("y eso no se ve en miniatura.")
 

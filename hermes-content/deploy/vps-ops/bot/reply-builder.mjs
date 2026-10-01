@@ -121,8 +121,26 @@ const esServicio = (producto) => producto.tipo === "servicio";
 function productList(config) {
   return catalogo(config)
     .filter((producto) => !esServicio(producto) && MODULOS_LISTOS.has(producto.key))
-    .map((producto) => `• *${producto.nombre}*${producto.queResuelve ? ` — ${producto.queResuelve}` : ""}.`)
+    .map(lineaDeModulo)
     .join("\n");
+}
+
+function lineaDeModulo(producto) {
+  return `• *${producto.nombre}*${producto.queResuelve ? ` — ${producto.queResuelve}` : ""}.`;
+}
+
+/**
+ * El modulo DEL RUBRO que el prospecto ya dijo, o null si no hay uno armado para el.
+ *
+ * Nace de la pauta dental (2026-09-30): la clinica que llegaba por el anuncio y preguntaba "¿que
+ * hacen?" recibia los cinco modulos y cinco servicios (web, videos, influencers…). A quien ya dijo
+ * su rubro se le vende SU sistema — el catalogo entero se queda para quien todavia no lo dijo, que
+ * es a quien le sirve para elegir. Pasa por el mismo candado MODULOS_LISTOS que la lista entera.
+ */
+function moduloDelRubro(config, industry) {
+  if (!industry || !MODULOS_LISTOS.has(industry)) return null;
+  const producto = catalogo(config).find((item) => !esServicio(item) && item.key === industry);
+  return producto ? lineaDeModulo(producto) : null;
 }
 
 /**
@@ -166,7 +184,8 @@ export function varsFor(state, config, extra = {}) {
     slot_a: slotLabel(slots, "A"),
     slot_b: slotLabel(slots, "B"),
     // Un solo bloque: modulos + servicios. Ver serviceList sobre por que no son dos variables.
-    productos: `${productList(config)}${serviceList(config)}`,
+    // Con el rubro ya dicho y su modulo armado, SOLO ese modulo (ver moduloDelRubro).
+    productos: moduloDelRubro(config, q.industry) ?? `${productList(config)}${serviceList(config)}`,
     rubro: intents.industryLabel(q.industry, config) || "",
     personas: q.teamSize ?? "",
     persona_palabra: q.teamSize === 1 ? "persona" : "personas",
@@ -195,7 +214,10 @@ export function askList(state, config) {
   const items = missingFields(state.qualification || {}, config).map(
     (field) => `¿${field.missLabel.charAt(0).toUpperCase()}${field.missLabel.slice(1)}?`,
   );
-  items.push(config.script.M2_PREGUNTA_DOLOR);
+  // El dolor ya dicho no se vuelve a pedir (el que llega por D4 suele contarlo antes de reservar).
+  // Solo se omite si queda OTRA pregunta: M2 arma "contame rápido:" y una lista vacía dejaría esa
+  // frase colgando a la vista del prospecto.
+  if (!(state.qualification?.painPoint && items.length > 0)) items.push(config.script.M2_PREGUNTA_DOLOR);
   return items.map((item, index) => `${VINETAS[index] || "•"} ${item}`).join("\n");
 }
 
@@ -211,11 +233,17 @@ export function missingFields(qualification, config) {
   });
 }
 
-/** Como se lee el dolor cuando el bot lo repite en voz alta ("anotado ... que lo que más te come"). */
+/**
+ * Como se lee el dolor cuando el bot lo repite en voz alta ("anotado ... que lo que más te come").
+ * Lleva el VERBO porque concuerda con el dolor: "es la agenda", "son los cobros". Con el verbo fijo
+ * afuera salia "lo que más tiempo te come es los clientes que no vuelven".
+ * Y quien no vuelve se nombra con el vocabulario del rubro: a una clinica se le habla de PACIENTES
+ * (CLAUDE.md: el producto tiene vocabulario por rubro), al resto de clientes.
+ */
 const DOLOR_LABEL = Object.freeze({
-  agenda: "la agenda",
-  cobros: "los cobros",
-  clientes: "los clientes que no vuelven",
+  agenda: () => "es la agenda",
+  cobros: () => "son los cobros",
+  clientes: (industry) => `son los ${["dental", "salud"].includes(industry) ? "pacientes" : "clientes"} que no vuelven`,
 });
 
 export function capturedLabels(qualification, config) {
@@ -232,7 +260,7 @@ export function capturedLabels(qualification, config) {
     labels.push(`que tenés ${qualification.chairs} ${qualification.chairs === 1 ? "sillón" : "sillones"}`);
   }
   if (DOLOR_LABEL[qualification.painPoint]) {
-    labels.push(`que lo que más tiempo te come es ${DOLOR_LABEL[qualification.painPoint]}`);
+    labels.push(`que lo que más tiempo te come ${DOLOR_LABEL[qualification.painPoint](qualification.industry)}`);
   }
   return labels;
 }

@@ -1,0 +1,138 @@
+{
+  "title": "4 reglas de un seguimiento que no molesta",
+  "caption": "Un seguimiento molesta cuando llega tarde, fuera de hora o a la persona equivocada.\n\nLas cuatro reglas del bot de ONIA: 24 h de texto libre, después solo plantilla aprobada, nada de madrugada y tus números de prueba afuera.\n\nOjo: la ventana de 24 h es de la plataforma oficial de WhatsApp (la API que usan los bots). En la app de WhatsApp Business que usás a mano no existe.\n\nFuente: developers.facebook.com/docs/whatsapp/pricing",
+  "hashtags": [
+    "#whatsapp",
+    "#whatsappbusiness",
+    "#chatbot",
+    "#automatizacion",
+    "#ventas",
+    "#bolivia"
+  ],
+  "serie": "IA PRÁCTICA",
+  "episodio": "K5",
+  "job": "education",
+  "slides": [
+    {
+      "number": 1,
+      "role": "cover",
+      "pill": "WhatsApp",
+      "headline": "*4 reglas* de un seguimiento que no molesta",
+      "body": "Escribile de nuevo a un cliente sin quemar tu número.",
+      "image_prompt": "A single sprig of dried lavender lying on a folded natural linen napkin on a pale oak table, soft early morning window light.",
+      "alt_text": "4 reglas de un seguimiento que no molesta"
+    },
+    {
+      "number": 2,
+      "role": "stakes",
+      "pill": "El problema",
+      "headline": "El «¿pudiste verlo?» *que no sale*",
+      "body": "Si tu cliente no contesta hace más de 24 horas, el mensaje libre de tu bot falla. Y uno a las 3 de la mañana sale, pero molesta.",
+      "callout": "Insistir mal espanta",
+      "alt_text": "El mensaje de seguimiento que no se envía"
+    },
+    {
+      "number": 3,
+      "role": "point",
+      "pill": "01 · La ventana",
+      "headline": "24 horas de *texto libre*",
+      "body": "Cuando tu cliente te escribe, tenés 24 horas para contestar lo que quieras. Mi bot apunta el seguimiento a las 20 h: le quedan 4 de margen.",
+      "visual": {
+        "type": "flow",
+        "label": "VENTANA DE 24 H",
+        "nodes": [
+          {
+            "name": "te escribe",
+            "detail": "se abre la ventana"
+          },
+          {
+            "name": "0 a 24 h",
+            "detail": "texto libre"
+          },
+          {
+            "name": "después",
+            "detail": "solo plantilla"
+          }
+        ]
+      },
+      "alt_text": "La ventana de 24 horas de WhatsApp"
+    },
+    {
+      "number": 4,
+      "role": "point",
+      "pill": "02 · El paso crítico",
+      "headline": "Fuera de la ventana, *solo plantilla*",
+      "body": "Pasadas las 24 h solo sale un mensaje que WhatsApp aprobó antes. Escribila y mandala a aprobar antes de programar nada.",
+      "callout": "Solo en la API oficial",
+      "alt_text": "Fuera de la ventana solo se envían plantillas aprobadas"
+    },
+    {
+      "number": 5,
+      "role": "point",
+      "pill": "03 · La hora",
+      "headline": "Nada *de madrugada*",
+      "body": "Todo envío automático pasa por una franja en la hora de tu cliente. Mi bot tiene un test que falla si un envío decide la hora solo.",
+      "visual": {
+        "type": "table",
+        "label": "HORA DE TU CLIENTE",
+        "left": "CUÁNDO",
+        "right": "QUÉ HACE",
+        "rows": [
+          {
+            "left": "de día",
+            "right": "envía"
+          },
+          {
+            "left": "de madrugada",
+            "right": "espera"
+          },
+          {
+            "left": "a la mañana",
+            "right": "sale lo pendiente"
+          }
+        ]
+      },
+      "alt_text": "Los envíos esperan la franja horaria del cliente"
+    },
+    {
+      "number": 6,
+      "role": "save",
+      "pill": "04 · Tus números",
+      "headline": "No te escribas *a vos mismo*",
+      "body": "Antes de un envío masivo, sacá tus números y los de prueba. En mi bot, de 3 contactos a escribir, 2 eran nuestros.",
+      "visual": {
+        "type": "matrix",
+        "label": "ANTES DE ENCENDER",
+        "items": [
+          {
+            "title": "ventana",
+            "body": "24 h desde su último mensaje"
+          },
+          {
+            "title": "plantilla",
+            "body": "aprobada antes de programar"
+          },
+          {
+            "title": "hora",
+            "body": "franja en la hora del cliente"
+          },
+          {
+            "title": "exclusión",
+            "body": "tus números y los de prueba, afuera"
+          }
+        ]
+      },
+      "save_worthy": true,
+      "alt_text": "Checklist de las 4 reglas de seguimiento"
+    },
+    {
+      "number": 7,
+      "role": "cta",
+      "pill": "Comunidad",
+      "headline": "Mis mensajes de seguimiento, en la *comunidad*",
+      "body": "Cómo escribo la plantilla y qué mando dentro de las 24 h. Link en mi web.",
+      "cta": "COMUNIDAD EN LA BIO",
+      "alt_text": "Mensajes de seguimiento en la comunidad"
+    }
+  ]
+}

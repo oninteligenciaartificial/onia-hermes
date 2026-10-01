@@ -1,5 +1,12 @@
 # D4 — Qué pauta la competencia en Bolivia (Biblioteca de Anuncios de Meta)
 
+> ⚠️ **FOTO DEL 15-AGO — ya no es lo vigente (marcado el 2026-09-30 por el carril Mercado).** Lo actual
+> sobre la pauta de la competencia está en `ONIA_ADQUISICION_Y_PAUTA.md` §2. Cambios que importan: **Softclinic
+> tiene 0 anuncios** (acá figura como *"competidor directo"*, y su identidad no está clara); **Dentalink y
+> Medilink** (Healthatom, Chile) pautan en Bolivia sin parar desde junio; **TuDoc** (boliviano, con SIAT) no
+> figuraba. La fecha del 30-sep que acá aparece como reloj de la facturación en línea ya pasó: ver §2.4 del doc
+> nuevo.
+
 > 2026-08-15. Ejecuta el prompt D4 de `references/video-intake/PROMPTS_POR_SESION.md` línea 579.
 > Herramienta: `ads_library_search` del MCP de Meta. **Gratis, público, sin dar de alta nada.**
 > Spyglass (`app.spyglass.so`) queda descartado: no hace falta pagar por esto.

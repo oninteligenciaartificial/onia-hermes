@@ -1,0 +1,77 @@
+{
+  "title": "Tu primera skill de Claude Code en 5 pasos (v2, pack referentes)",
+  "caption": "Una skill es un archivo que le enseña a Claude Code a hacer algo, y lo usa solo cuando hace falta.\n\nEl paso que decide todo es la descripción: Claude la lee para saber si usar tu skill. Si es vaga, no la usa nunca.\n\nLa plantilla está en la comunidad (link en mi web).",
+  "hashtags": [
+    "#claudecode",
+    "#claude",
+    "#skills",
+    "#ia",
+    "#bolivia"
+  ],
+  "serie": "Claude Code",
+  "slides": [
+    {
+      "number": 1,
+      "layout": "ilustrado",
+      "badge": "guía",
+      "logo": "hermes-content/references/brand-claude/claudecode.svg",
+      "headline": "Tu primera *skill* en 5 pasos",
+      "subtitle": "dejá de explicarle lo mismo cada sesión",
+      "image": "hermes-content/galeria/fotos/sergio-k2-primera-skill-20260929-s01.jpg",
+      "next": "los pasos",
+      "alt_text": "Tu primera skill de Claude Code en 5 pasos"
+    },
+    {
+      "number": 2,
+      "layout": "lista",
+      "headline": "Los *5 pasos*",
+      "items": [
+        {
+          "label": "La carpeta",
+          "text": ".claude/skills/tu-skill/"
+        },
+        {
+          "label": "El archivo",
+          "text": "SKILL.md, en mayúsculas"
+        },
+        {
+          "label": "Dos datos arriba",
+          "text": "name y description"
+        },
+        {
+          "label": "Las instrucciones",
+          "text": "como a alguien nuevo"
+        },
+        {
+          "label": "La prueba",
+          "text": "pedí la tarea con tus palabras"
+        }
+      ],
+      "next": "el que decide",
+      "alt_text": "Los cinco pasos para crear una skill"
+    },
+    {
+      "number": 3,
+      "layout": "ensayo",
+      "headline": "El paso que *decide*",
+      "body": "La descripción. Claude la lee para saber si tu skill sirve para lo que le pediste.\n\nSi es vaga, no la usa nunca. Escribí *cuándo* usarla, con las palabras que vos usarías al pedirlo.",
+      "alt_text": "La descripción decide si Claude usa la skill"
+    },
+    {
+      "number": 4,
+      "layout": "ensayo",
+      "headline": "La descripción, *de cerca*",
+      "body": "Así no: «Ayuda con documentos.»\n\nAsí sí: «Usar cuando pida revisar una propuesta comercial antes de mandarla a un cliente.»",
+      "next": "probala",
+      "alt_text": "Ejemplo de descripción vaga y descripción concreta"
+    },
+    {
+      "number": 5,
+      "layout": "ensayo",
+      "headline": "Probala hoy",
+      "body": "Elegí algo que le explicás a Claude una y otra vez. Esa es tu primera skill. La plantilla para copiar está en la comunidad.",
+      "cta": "Comunidad en la bio",
+      "alt_text": "La plantilla está en la comunidad"
+    }
+  ]
+}

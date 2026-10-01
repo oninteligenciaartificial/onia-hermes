@@ -141,7 +141,7 @@ const esc = (s) => String(s == null ? '' : s)
 // reventaba DESPUES, al renderar ("Pack no disponible"): una entrada de menu para un plato
 // que la cocina no puede hacer. Vuelven en una linea (aca + su `const` de abajo) cuando ese
 // carril cierre y sus archivos entren — el test `todo pack listado RENDERIZA` lo comprueba.
-const PACKS = ['community-editorial', 'dark-product', 'dark-neon', 'editorial-photo', 'editorial-clean', 'bright-retail', 'bloque-solido'];
+const PACKS = ['community-editorial', 'referentes', 'dark-product', 'dark-neon', 'editorial-photo', 'editorial-clean', 'bright-retail', 'bloque-solido'];
 
 // Los 3 formatos que pide Instagram. Hasta el 2026-08-15 el render estaba fijo en 4:5 y
 // no se podian hacer ni cuadrados ni historias (gap del prompt A3).
@@ -178,6 +178,8 @@ function parseArgs(argv) {
     else if (k === '--account') a.account = argv[++i];
     else if (k === '--bg') a.bg = argv[++i];
     else if (k === '--pack') a.pack = argv[++i];
+    else if (k === '--theme') a.theme = argv[++i];
+    else if (k === '--fonts') a.fonts = argv[++i];
     else if (k === '--object') a.object = argv[++i];
     else if (k === '--accent') a.accent = argv[++i];
     else if (k === '--format') a.format = argv[++i];
@@ -1171,6 +1173,7 @@ const datoIlustradoHtml = lazyPack('./carousel_pack_dato');
 const papelSubrayadoHtml = lazyPack('./carousel_pack_papel');
 const bloqueSolidoHtml = require('./carousel_pack_solido').crear(PACK_CFG);
 const communityEditorialHtml = require('./carousel_pack_editorial').crear(PACK_CFG);
+const referentesHtml = require('./carousel_pack_referentes').crear(PACK_CFG);
 
 function brightRetailHtml(slide, idx, total, account, args) {
   const role = roleFor(slide, idx, total);
@@ -1277,6 +1280,8 @@ function render(args) {
   // La serie es del CARRUSEL, no de la slide: el brief es su lugar natural. La bandera
   // de linea de comando sigue funcionando y gana, para poder probar sin editar el brief.
   args.serie = args.serie || brief.serie || '';
+  args.theme = args.theme || brief.theme || '';
+  args.fonts = args.fonts || brief.fonts || '';
   args.episodio = args.episodio || brief.episodio || '';
   if (args.bg) args.bg = path.resolve(args.bg);
   if (args.object) args.object = path.resolve(args.object);
@@ -1288,6 +1293,7 @@ function render(args) {
   slides.forEach((slide, idx) => {
     let html;
     if (args.pack === 'community-editorial') html = communityEditorialHtml(slide, idx, slides.length, args.account, args);
+    else if (args.pack === 'referentes') html = referentesHtml(slide, idx, slides.length, args.account, args);
     else if (args.pack === 'dark-product') html = darkProductHtml(slide, idx, slides.length, args.account, args);
     else if (args.pack === 'dark-neon') html = darkNeonHtml(slide, idx, slides.length, args.account, args);
     else if (args.pack === 'editorial-photo') html = editorialPhotoHtml(slide, idx, slides.length, args.account, args);
@@ -1344,7 +1350,7 @@ if (require.main === module) {
 }
 
 module.exports = {
-  slideHtml, communityEditorialHtml, darkProductHtml, darkNeonHtml, editorialPhotoHtml, editorialCleanHtml, brightRetailHtml,
+  slideHtml, communityEditorialHtml, referentesHtml, darkProductHtml, darkNeonHtml, editorialPhotoHtml, editorialCleanHtml, brightRetailHtml,
   papelSubrayadoHtml, datoIlustradoHtml, tarjetaEmpleadoHtml, bloqueSolidoHtml,
   emph, roleFor, ACCOUNTS, BRANDS, PACKS, FORMATS,
   setFormat: (name) => { if (!FORMATS[name]) throw new Error('Unknown format: ' + name); FMT = FORMATS[name]; },

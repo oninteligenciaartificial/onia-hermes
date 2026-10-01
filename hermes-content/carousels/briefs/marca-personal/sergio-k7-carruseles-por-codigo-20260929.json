@@ -1,0 +1,148 @@
+{
+  "title": "Carruseles por código en 5 pasos",
+  "caption": "Este carrusel salió de un archivo JSON.\n\nLa IA pinta solo la foto de la portada. El texto lo pone el código, porque los modelos de imagen escriben mal: el 29-sep uno me inventó letras en unas tazas y hasta un post falso de Instagram.\n\nCinco pasos: brief, imagen sin letras, render, revisión a ojo y costo antes de generar.\n\nComentá BRIEF y te paso el de este carrusel.",
+  "hashtags": [
+    "#claudecode",
+    "#ia",
+    "#contenido",
+    "#automatizacion",
+    "#instagram",
+    "#bolivia"
+  ],
+  "serie": "IA PRÁCTICA",
+  "episodio": "K7",
+  "job": "education",
+  "slides": [
+    {
+      "number": 1,
+      "role": "cover",
+      "pill": "Contenido con IA",
+      "headline": "Carruseles por código en *5 pasos*",
+      "body": "La IA pinta la imagen. El texto lo escribe el código.",
+      "image_prompt": "A few small offcuts of pale birch wood stacked neatly beside a wood carving chisel with a worn wooden handle on a dark workbench, soft side light.",
+      "alt_text": "Carruseles por código en 5 pasos"
+    },
+    {
+      "number": 2,
+      "role": "stakes",
+      "pill": "El problema",
+      "headline": "La IA de imagen *escribe mal*",
+      "body": "El 29-sep pedí fotos de objetos y el modelo inventó letras en unas tazas y hasta un post falso de Instagram.",
+      "callout": "Texto en la imagen = sin control",
+      "alt_text": "Los modelos de imagen escriben mal"
+    },
+    {
+      "number": 3,
+      "role": "point",
+      "pill": "01 · El brief",
+      "headline": "Todo el texto, *en un JSON*",
+      "body": "Cada lámina con su rol: portada, lo que está en juego, una idea por lámina, la que se guarda y el cierre.",
+      "visual": {
+        "type": "terminal",
+        "label": "brief.json",
+        "lines": [
+          {
+            "value": "\"role\": \"cover\",",
+            "kind": "command"
+          },
+          {
+            "value": "\"headline\": \"Carruseles...\",",
+            "kind": "command"
+          },
+          {
+            "value": "\"image_prompt\": \"wood...\"",
+            "kind": "command"
+          },
+          {
+            "value": "texto e imagen, separados",
+            "kind": "comment"
+          }
+        ]
+      },
+      "alt_text": "Estructura del brief en JSON"
+    },
+    {
+      "number": 4,
+      "role": "point",
+      "pill": "02 · El paso crítico",
+      "headline": "La IA pinta *solo la imagen*",
+      "body": "El prompt describe objetos sin nada impreso: piedras, plantas, madera. Tazas, cuadernos y pantallas no: ahí inventa letras, aunque le pidas «sin texto».",
+      "callout": "Nada que lleve letras",
+      "alt_text": "La IA genera solo la imagen, sin texto"
+    },
+    {
+      "number": 5,
+      "role": "point",
+      "pill": "03 · El render",
+      "headline": "El código pone *el texto*",
+      "body": "Un script arma cada lámina en HTML y la fotografía con Chrome sin ventana. Salen las tildes exactas, y corregir una coma es gratis.",
+      "visual": {
+        "type": "terminal",
+        "label": "RENDER",
+        "lines": [
+          {
+            "value": "node carousel_render.js",
+            "kind": "command"
+          },
+          {
+            "value": "  --brief brief.json",
+            "kind": "command"
+          },
+          {
+            "value": "  --format feed",
+            "kind": "command"
+          },
+          {
+            "value": "7 PNG de 1080×1350",
+            "kind": "comment"
+          }
+        ]
+      },
+      "alt_text": "Comando que renderiza las láminas"
+    },
+    {
+      "number": 6,
+      "role": "save",
+      "pill": "04 y 05",
+      "headline": "Mirá la hoja y *cotizá*",
+      "body": "Todas las láminas en una sola imagen para revisarlas a ojo. Y antes de generar la foto, el script cotiza: sin tu OK no gasta.",
+      "visual": {
+        "type": "matrix",
+        "label": "EL CIRCUITO",
+        "items": [
+          {
+            "title": "brief",
+            "body": "todo el texto, en JSON"
+          },
+          {
+            "title": "imagen",
+            "body": "solo objetos, sin letras"
+          },
+          {
+            "title": "render",
+            "body": "HTML a PNG, por código"
+          },
+          {
+            "title": "revisión",
+            "body": "hoja de contactos, a ojo"
+          },
+          {
+            "title": "costo",
+            "body": "cotizar antes de generar"
+          }
+        ]
+      },
+      "save_worthy": true,
+      "alt_text": "Los 5 pasos del circuito de carruseles"
+    },
+    {
+      "number": 7,
+      "role": "cta",
+      "pill": "El brief",
+      "headline": "Comentá *BRIEF* y te lo paso",
+      "body": "Te mando por mensaje el JSON de este mismo carrusel.",
+      "cta": "COMENTÁ BRIEF",
+      "alt_text": "Comentá BRIEF para recibir el JSON"
+    }
+  ]
+}
