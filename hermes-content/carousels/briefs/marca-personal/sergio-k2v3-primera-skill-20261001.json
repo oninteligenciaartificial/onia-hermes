@@ -56,12 +56,15 @@
     },
     {
       "number": 3,
-      "layout": "ensayo",
+      "layout": "ilustrado",
       "theme": "blanco",
-      "headline": "El paso que *decide*",
-      "body": "La description. Claude la lee para decidir si tu skill aplica a lo que le pediste.\n\nSi es vaga, *no la usa nunca*.\n\nEscribí cuándo usarla, con las palabras que usarías al pedírselo.",
+      "image_style": "clay",
+      "headline": "La description *decide*",
+      "body": "Claude la lee para decidir si usar tu skill. Si es vaga, no la usa nunca.",
       "next": "la mía",
-      "alt_text": "La description decide si Claude usa la skill"
+      "alt_text": "Una llave de arcilla verde: la description decide si Claude usa la skill",
+      "image": "hermes-content/galeria/ilustraciones/k2-img-s03-bc401bfc.jpg",
+      "image_prompt_usado": "A single large emerald green clay key lying diagonally, with a small matte black clay keyring."
     },
     {
       "number": 4,
@@ -101,7 +104,7 @@
       "layout": "ensayo",
       "theme": "blanco",
       "headline": "¿Cargó? *Comprobalo*",
-      "body": "Escribí /skills: tu skill tiene que aparecer.\n\nDespués pedile algo que coincida con la description, y fijate si la usa.\n\nSi no la usa, reescribí la description: ahí se decide.",
+      "body": "Escribí /skills: tu skill tiene que aparecer.\n\nDespués pedile algo que coincida con la description, y fijate si la usa.\n\nSi no la usa, reescribí la description: decí cuándo usarla, con las palabras que usarías al pedírselo.",
       "alt_text": "Cómo comprobar que la skill cargó"
     },
     {

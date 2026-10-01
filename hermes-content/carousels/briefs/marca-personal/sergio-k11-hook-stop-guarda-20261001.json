@@ -1,5 +1,5 @@
 {
-  "title": "El hook que commitea solo, y su guarda (K11, pack referentes)",
+  "title": "El hook que commitea solo, y su guarda (K11 v2, pack referentes, arcilla)",
   "caption": "Mi hook de Claude Code tomó 17 archivos con conflictos, los dio por resueltos y los subió a main. Ese hook corre solo cada vez que Claude termina de responder: commitea y sube.\n\nDos cosas que aprendí rompiéndolo.\n\nStop corre cuando Claude termina su turno, no cuando terminó el trabajo. Así se publicaron 217 líneas de estilos antes que el código que las usaba.\n\nY el script necesita una guarda: antes de commitear, dos comandos de git. Si hay un merge a medias o archivos en conflicto, no toca nada.\n\nComprobalo con /hooks y con un conflicto armado a propósito en un repo de prueba.\n\nLos dos incidentes son del 20 y el 23 de agosto (están en el CLAUDE.md de mi repo); la guarda, en scripts/git-autosync.js. Qué es Stop y qué muestra /hooks: code.claude.com/docs/en/hooks.\n\nEl JSON y la guarda, listos para copiar, están en la comunidad (link en la bio).",
   "hashtags": [
     "#claudecode",
@@ -13,28 +13,27 @@
   "slides": [
     {
       "number": 1,
-      "layout": "dato",
+      "layout": "ilustrado",
       "theme": "verde",
-      "value": "17",
-      "headline": "archivos con conflictos, *directo a main*",
-      "body": "Mi hook de Claude Code los dio por resueltos y los subió solo. Así se arma bien.",
-      "next": "qué es",
-      "alt_text": "17 archivos con conflictos que el hook de Claude Code subió a main"
+      "badge": "guía",
+      "logo": "hermes-content/references/brand-claude/claudecode.svg",
+      "headline": "El hook que *commitea solo*",
+      "subtitle": "y la guarda que le puse después de romperlo",
+      "image_style": "clay",
+      "image_prompt": "A green clay boom barrier gate with its arm lowered and closed, in front of a small stack of matte black clay boxes.",
+      "body": "Corre cada vez que Claude termina de responder. Te muestro cómo armarlo sin que te pase lo mío.",
+      "next": "qué pasó",
+      "alt_text": "El hook de Claude Code que commitea solo, y su guarda"
     },
     {
       "number": 2,
-      "layout": "logos",
+      "layout": "dato",
       "theme": "blanco",
-      "headline": "Stop",
-      "logos": [
-        {
-          "file": "hermes-content/references/brand-claude/claudecode.svg",
-          "label": "Claude Code"
-        }
-      ],
-      "body": "Un hook que corre solo *cada vez que Claude termina* de responder. Yo lo uso para commitear y subir.",
+      "value": "17",
+      "headline": "archivos con conflictos, *directo a main*",
+      "body": "Mi hook de Claude Code los dio por resueltos y los subió solo. Así se arma bien, en tres pasos.",
       "next": "paso 1",
-      "alt_text": "Stop: el hook de Claude Code que corre cuando Claude termina de responder"
+      "alt_text": "17 archivos con conflictos que el hook de Claude Code subió a main"
     },
     {
       "number": 3,
@@ -65,13 +64,14 @@
     },
     {
       "number": 4,
-      "layout": "dato",
+      "layout": "ilustrado",
       "theme": "blanco",
-      "value": "217",
-      "headline": "líneas de estilos, *antes que su código*",
-      "body": "Paso 2: Stop corre cuando Claude termina su turno, no cuando terminó el trabajo. Lo que esté a medias, se sube igual.",
+      "headline": "Paso 2: el turno *no es el trabajo*",
+      "image_style": "clay",
+      "image_prompt": "A small emerald green clay hourglass next to a half-built matte black clay wall.",
+      "body": "Stop corre cuando Claude termina su turno. Así se publicaron 217 líneas de estilos antes que su código.",
       "next": "paso 3",
-      "alt_text": "217 líneas de estilos publicadas antes que el código que las usaba"
+      "alt_text": "Stop corre al terminar el turno, no el trabajo: 217 líneas de estilos antes que su código"
     },
     {
       "number": 5,
@@ -82,11 +82,13 @@
       "items": [
         {
           "label": "¿Merge a medias?",
-          "text": "git rev-parse -q --verify MERGE_HEAD"
+          "text": "git rev-parse -q --verify MERGE_HEAD",
+          "icon": "hermes-content/references/brand-logos/git-color.svg"
         },
         {
           "label": "¿Archivos en conflicto?",
-          "text": "git diff --name-only --diff-filter=U"
+          "text": "git diff --name-only --diff-filter=U",
+          "icon": "hermes-content/references/brand-logos/git-color.svg"
         },
         {
           "label": "Si alguno devuelve algo",
@@ -118,5 +120,6 @@
       "cta": "Comunidad en la bio",
       "alt_text": "El JSON y la guarda están en la comunidad"
     }
-  ]
+  ],
+  "image_style": "clay"
 }

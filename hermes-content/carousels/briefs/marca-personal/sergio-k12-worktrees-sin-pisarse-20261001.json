@@ -13,16 +13,29 @@
   "slides": [
     {
       "number": 1,
-      "layout": "dato",
+      "layout": "ilustrado",
       "theme": "verde",
-      "value": "424",
-      "headline": "commits, por la *carpeta equivocada*",
-      "body": "Dos sesiones de Claude Code en el mismo proyecto, sin pisarse.",
+      "badge": "guía",
+      "logo": "hermes-content/references/brand-claude/claudecode.svg",
+      "headline": "Dos sesiones de Claude Code, *sin pisarse*",
+      "subtitle": "worktrees en 3 pasos",
+      "image_prompt": "Two parallel emerald green clay train tracks side by side on a white surface, each with its own small matte black clay toy train.",
+      "body": "Una sesión, una carpeta, una rama.",
       "next": "te explico",
-      "alt_text": "424 commits movidos por un comando que cayó en la carpeta equivocada"
+      "alt_text": "Dos sesiones de Claude Code en el mismo proyecto, sin pisarse: dos vías paralelas, cada una con su tren"
     },
     {
       "number": 2,
+      "layout": "dato",
+      "theme": "blanco",
+      "value": "424",
+      "headline": "commits, por la *carpeta equivocada*",
+      "body": "A mi agente la terminal le volvió sola a la carpeta principal, y un reset pensado para otra carpeta corrió ahí.",
+      "next": "la solución",
+      "alt_text": "424 commits movidos por un reset que corrió en la carpeta equivocada"
+    },
+    {
+      "number": 3,
       "layout": "logos",
       "theme": "blanco",
       "headline": "Worktree",
@@ -32,30 +45,37 @@
           "label": "sesión 1"
         },
         {
+          "file": "hermes-content/references/brand-logos/git-color.svg",
+          "label": "git"
+        },
+        {
           "file": "hermes-content/references/brand-claude/claudecode.svg",
           "label": "sesión 2"
         }
       ],
       "body": "Otra carpeta del mismo repo, *con su propia rama*. Así dos sesiones no tocan los mismos archivos.",
       "next": "3 pasos",
-      "alt_text": "Dos sesiones de Claude Code, cada una en su worktree"
+      "alt_text": "Dos sesiones de Claude Code sobre el mismo repositorio de git, cada una en su worktree"
     },
     {
-      "number": 3,
+      "number": 4,
       "layout": "lista",
       "theme": "blanco",
       "headline": "En *3 pasos*",
       "body": "desde tu proyecto",
       "items": [
         {
+          "icon": "hermes-content/references/brand-logos/git-color.svg",
           "label": "Crear la carpeta",
           "text": "git worktree add -b <rama> <carpeta>"
         },
         {
+          "icon": "hermes-content/references/brand-claude/claudecode.svg",
           "label": "Abrir Claude Code",
           "text": "en esa carpeta, o claude -w <nombre>"
         },
         {
+          "icon": "hermes-content/references/brand-logos/git-color.svg",
           "label": "El paso crítico",
           "text": "todo git con git -C <ruta>"
         }
@@ -64,16 +84,17 @@
       "alt_text": "Los tres pasos para trabajar con worktrees"
     },
     {
-      "number": 4,
-      "layout": "ensayo",
+      "number": 5,
+      "layout": "ilustrado",
       "theme": "blanco",
       "headline": "Por qué es *crítico*",
-      "body": "A mi agente la terminal le volvió sola a la carpeta principal.\n\nUn reset pensado para otra carpeta corrió ahí.\n\nMovió una rama 424 commits y ningún comando falló.\n\nSe recuperó con el historial de git, pero *nada avisó*.",
+      "image_prompt": "A small matte black clay toy train tipped over on its side beside an emerald green clay train track.",
+      "body": "Ningún comando falló: la rama se movió 424 commits y nada avisó. Se recuperó con el historial de git.",
       "next": "la regla",
-      "alt_text": "El caso de los 424 commits: la terminal volvió sola a la carpeta principal"
+      "alt_text": "Un tren de juguete volcado junto a la vía: el reset movió una rama 424 commits sin que nada avisara"
     },
     {
-      "number": 5,
+      "number": 6,
       "layout": "dato",
       "theme": "blanco",
       "value": "-C",
@@ -83,7 +104,7 @@
       "alt_text": "git -C con la ruta de la carpeta en cada comando de git"
     },
     {
-      "number": 6,
+      "number": 7,
       "layout": "ensayo",
       "theme": "blanco",
       "headline": "Comprobá y *limpiá*",
@@ -92,7 +113,7 @@
       "alt_text": "git worktree list para comprobar y git worktree remove para limpiar"
     },
     {
-      "number": 7,
+      "number": 8,
       "layout": "ensayo",
       "theme": "negro",
       "headline": "Probalo en un *repo de prueba*",
@@ -100,5 +121,6 @@
       "cta": "Comunidad en la bio",
       "alt_text": "Los comandos de worktree están en la comunidad de Sergio Urcullo"
     }
-  ]
+  ],
+  "image_style": "clay"
 }

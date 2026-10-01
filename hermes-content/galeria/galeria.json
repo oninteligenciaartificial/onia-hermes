@@ -329,5 +329,22 @@
     "modelo": "text2image_soul_v2",
     "estilo": "clay",
     "costo_cr": 0.12
+  },
+  {
+    "id": "k2-img-s03-bc401bfc",
+    "file": "hermes-content/galeria/ilustraciones/k2-img-s03-bc401bfc.jpg",
+    "fecha": "2026-10-01",
+    "tipo": "ilustraciones",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "text2image_soul_v2",
+    "prompt": "A single large emerald green clay key lying diagonally, with a small matte black clay keyring.",
+    "estilo": "clay",
+    "costo_cr": 0.12,
+    "job": "bc401bfc-4cd9-452e-9fef-531af87a5258",
+    "usado_en": [
+      "k2-img"
+    ],
+    "tags": []
   }
 ]
