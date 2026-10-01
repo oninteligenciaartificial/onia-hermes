@@ -143,8 +143,8 @@ Cómo se recuenta: `ONIA_ADQUISICION_Y_PAUTA.md` §9.
 > Urcullo apruebe el mensaje y el canal exactos. Cruza §1 (20 prospectos de agosto) con §5 (pauta del 30-sep)
 > y excluye a los que ya escribieron (`ONIA_LEADS_ESPERANDO.md`).
 
-**Resultado: 8 de 10.** No llegué a 10 sin meter filas flojas (ciudad o tamaño sin respaldo). Los 2 cupos que
-faltan se llenan con la reserva de §6.4 después de 5 minutos de verificación de Sergio Urcullo por clínica.
+**Resultado: 8 de 10 el 30-sep; 10 de 10 el 1-oct.** Los cupos 9 y 10 (§6.5) salieron de la reserva de §6.4 con
+pauta re-leída en vivo el 1-oct. Ciudad y tamaño siguen **sin verificar** en esos dos: se miran antes de enviar.
 
 ### Límite de esta pasada (leer antes de la tabla)
 
@@ -230,12 +230,29 @@ no tienen mensaje: esta tabla solo dice qué mirar.
 
 | Clínica | Señal (fuente, fecha) | Qué verificar |
 |---|---|---|
-| MUN Clínica Odontología Especializada (page_id `572588712615373`) | *Chatea con nosotros* y *Reserva tu cupo*, BOB (§5.1, 2026-09-30) | Ciudad, nº de profesionales, WhatsApp de la clínica |
+| ~~MUN Clínica Odontología Especializada~~ | Pasó a cupo 10 (§6.5, 1-oct) | — |
 | Clínica Dental ROCHA (`113481741822891`) y Consultorio Dental Rocha (`169289006270602`) | *Agenda tu cita* y *¡Tu nueva sonrisa comienza aquí!*, BOB (§5.1, 2026-09-30) | Si son la misma clínica; ciudad, tamaño, WhatsApp |
-| Clínica Dental Ezequiel – Spadental (`758264870991469`) · Clínica Dental Vid (`920721404450647`) | *Recupera tu sonrisa* · *¡Consulta GRATUITA!*, BOB (§5.1, 2026-09-30) | Ciudad, tamaño, canal |
+| Clínica Dental Vid (`920721404450647`) · ~~Spadental~~ (pasó a cupo 9, §6.5) | *¡Consulta GRATUITA!*, 5 anuncios activos desde ~junio, BOB (re-leído 2026-10-01) | Ciudad, tamaño, canal |
 | Stildent Santa Cruz (`110445244840996`) · Natural Smile Santa Cruz (`100193878311097`) | Pauta en BOB (§5.1, 2026-09-30); el nombre dice Santa Cruz, nada más | Todo: no hay web ni tamaño anotados |
 | Bio Odontología (§1 #15) · ASISTA (§1 #14) · Clínica Odontoline (§1 #13) | Nivel B (16-ago): citas «por acuerdo previo» y segundo número «solo WhatsApp» (Bio, +591 60009498); horario largo con sábado (ASISTA); más de una sucursal (Odontoline) | Tamaño: sin nada que indique 2 o más profesionales |
 | Neodent (§1 #18) · Dental Perfect (§1 #19) | Nivel B (16-ago): ortodoncia e implantología con CAD/CAM y cita por DM · «todas las especialidades en un solo lugar» | Dirección y zona: §1 no las anotó |
+
+
+### 6.5 Cupos 9 y 10 (1-oct)
+
+> Biblioteca de Anuncios leída en vivo el **2026-10-01** con el conector `Meta_ads` (`ads_library_search`, país
+> BO, anuncios ACTIVOS; solo lectura, pública). Se eligieron las dos de la reserva con **más de un anuncio activo
+> y pauta sostenida** (desde agosto). Rocha y Vid siguen en reserva: Rocha tiene dos páginas sin aclarar si son
+> la misma clínica; Vid pauta «consulta gratuita» (busca pacientes nuevos, no ordena los que ya tiene).
+> **Ninguna fue contactada.** Los mensajes prometen solo lo de producción hoy (el mismo límite de §6.1).
+
+| # | Clínica y zona | Señal, fuente y fecha | Tamaño estimado y de dónde sale | Canal público de la clínica | Mensaje propuesto (Sergio Urcullo lo envía) | Estado |
+|---|---|---|---|---|---|---|
+| 9 | **Clínica Dental Ezequiel – Spadental** · zona **sin verificar** | **Fuerte: pauta sostenida.** 3 anuncios activos en BOB el 2026-10-01 (page_id `758264870991469`): *Salvá tu diente a tiempo* (desde ~9-sep, anuncio `957751963254738`), *Recupera tu sonrisa* (~21-sep, `38761985366782185`), *Tu sonrisa blanca desde Bs 300* (~24-ago). Paga para atraer pacientes desde hace más de un mes | **Sin verificar.** Nombre de persona + marca: puede ser de un solo doctor. Si es 1, sale | El WhatsApp del anuncio (se ve al abrirlo). Ciudad: BOB y Bolivia; Santa Cruz **sin verificar** | Buen día, soy Sergio Urcullo, de Onia, aquí en Santa Cruz. Este mensaje es para el dueño o la dueña de la Clínica Dental Ezequiel – Spadental.<br>Vi sus anuncios de «Salvá tu diente a tiempo» y «Recupera tu sonrisa».<br>Cuando entran pacientes nuevos por los anuncios, el que ya tiene cita mañana y no confirmó suele quedar para después.<br>Onia le deja escrito cada mañana el mensaje para ese paciente; usted lo revisa y lo manda desde su propio WhatsApp.<br>¿Le muestro cómo se ve en una demo de 20 minutos? | propuesto — espera OK de Sergio Urcullo |
+| 10 | **MUN Clínica Odontología Especializada** · zona **sin verificar** | **Fuerte: pauta a chat.** 2 anuncios activos en BOB el 2026-10-01 (page_id `572588712615373`): *Chatea con nosotros* (~28-ago, anuncio `1586919549733766`) y *RESERVA TU CUPO* (~25-ago, `2606738563122424`). Las citas se arman por chat | **Sin verificar.** «Odontología especializada» sugiere más de un especialista [inferencia] | El chat del anuncio (se ve al abrirlo). Ciudad: BOB y Bolivia; Santa Cruz **sin verificar** | Buen día, soy Sergio Urcullo, de Onia, aquí en Santa Cruz. Este mensaje es para el dueño o la dueña de MUN Clínica Odontología Especializada.<br>Vi sus anuncios para que los pacientes les escriban por chat y reserven su cupo.<br>Cuando los cupos se arman por chat, el paciente de mañana que no confirmó suele quedar sin aviso hasta que la silla está vacía.<br>Onia le deja escrito cada mañana el mensaje para ese paciente; usted lo revisa y lo manda desde su propio WhatsApp.<br>¿Le muestro cómo se ve en una demo de 20 minutos? | propuesto — espera OK de Sergio Urcullo |
+
+Antes de enviar, los 4 pasos de §6.3 con dos agregados: (a) **ciudad** — que la dirección o el perfil diga
+Santa Cruz; si es de otra ciudad, sale y entra Rocha; (b) **tamaño** — si Spadental es un solo doctor, sale.
 
 ---
 
