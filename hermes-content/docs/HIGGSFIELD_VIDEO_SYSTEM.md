@@ -266,6 +266,24 @@ preflight de costo.
 4. Pie fijo «Lucía es un personaje hecho con IA» en todo el video.
 5. Medir parecido en 5 frames (`face_identity_qa.py`) y MIRAR antes de mandar a Sergio Urcullo.
 
+**Autoconocimiento del carril Lucía (1-oct-2026) — leer antes de investigar de nuevo:**
+- **Kling 3.0 std sin sonido** es el b-roll de Lucía: 6 s 7,5 cr · 10 s 12,5 cr (cotizado en vivo 1-oct).
+  Parecido medido: coworking 0,75–0,82 en 5 frames; calle 0,70→0,72 contra su primer frame.
+- **Texto nunca sobre la cara** (caso L05, 1-oct: la primera versión tapaba los ojos). Debajo del mentón.
+- **Soul:** entrenar `soul_2` cuesta 25 cr (medido con el saldo) y queda HORAS en cola (v4 ~9 h, v5 ~9 h).
+  No acelera relanzarlo: `LUCIA-v5b` se cobró y siguió en cola. El A/B en escenas fuera del dataset dio
+  Seedream+ancla 0,838 · Soul v5 0,803 · Soul v4 0,744: el método diario sigue siendo Seedream+ancla.
+- **Entorno de la nube de este carril:** `onia-higgsfield` = `env_01V5EeE4VtMdw7PWVaMYywsk`. Desde el 1-oct
+  tiene `ELEVENLABS_API_KEY` y red a `api.elevenlabs.io` (una variable nueva solo la ve una sesión NUEVA).
+  Voz de Marcela: `86V9x9hrQds83qf7zaGn` (cuenta ElevenLabs de ONIA; Higgsfield no la tiene: da «Voice not found»).
+- **Abrir una sesión sucesora por routine (`create_trigger`) la deja SIN conectores** (sin Higgsfield ni GitHub):
+  el sistema lo avisa al crearla. Caso: `trig_01JsU6qu1wkj93RVfRf7Mee2`, 1-oct 20:30 UTC, disparó y abrió
+  `cse_01SrFno1LzvGxPqnsFGETRgR` (run «pending»). Para una sucesora con conectores, la abre Sergio Urcullo
+  desde la web en ese entorno.
+- **La nube no puede mandar mensajes a otras sesiones** (`SendMessage` falla): se contesta en el transcript.
+- El control de permisos de la sesión puede frenar un gasto aunque esté dentro del tope aprobado
+  (Cinema Studio 3.0, 30-sep): no se rodea, se le avisa a Sergio Urcullo.
+
 Reglas de uso:
 - Un efecto tiene que servir a la idea de la pieza (gancho, transición a la pantalla de Onia).
   Efecto sin motivo = pieza «hecha por IA», lo que CLAUDE.md prohíbe.
