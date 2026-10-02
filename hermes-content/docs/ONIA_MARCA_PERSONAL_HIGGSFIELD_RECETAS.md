@@ -168,3 +168,25 @@ paga, en los subagentes y en la sesión principal. Cero cargo. Queda pendiente d
 «boxcar» sale sin cara. La arcilla a veces sale con fondo gris claro (~210-225): sobre lámina blanca no se nota, sobre
 portada VERDE queda un bloque turbio. Medí las esquinas antes de montar en verde. El `--out` de `carousel_images.mjs`
 tiene que llamarse como el carrusel: el script toma de ahí el nombre del archivo y el `usado_en` de `galeria.json`.
+
+## Lote 2026-10-02 · imágenes que faltaban en K8, K13, N03 y N04 (8 imágenes, 0,96 cr)
+
+Autorizó Sergio Urcullo en el chat (2-oct): *«los carruceles generale las imagenes si hacen falta»*. Cotizado antes
+(`carousel_images.mjs` sin `--yes`: 7 × 0,12 = 0,84) y generado por el CLI del VPS con `flock`. Esta vez el modo
+automático de permisos NO lo frenó (el 1-oct sí, con el OK dado en otro mensaje).
+
+| Carrusel | Lámina | Resultado |
+|---|---|---|
+| K8 | 1 · lupa + cuadro | aceptada |
+| K8 | 4 · rompecabezas | aceptada |
+| K13 | 1 · candado con cadena | aceptada; fondo gris (188) aclarado a blanco con flood fill desde las esquinas |
+| K13 | 4 · cronómetro | **descartada** (números inventados, el 3 dos veces) |
+| K13 | 4 · cronómetro, regenerado con «blank dial, no numbers» | **descartada** (igual trae números, letras en el botón y firma en el borde): la lámina queda `dato` |
+| N03 | 1 · semáforo | aceptada; fondo gris (222) aclarado |
+| N03 | 2 · binoculares | aceptada |
+| N04 | 1 · escudo con tilde | aceptada |
+
+**Lo aprendido:** Soul 2.0 no respeta «blank dial / no numbers»: un reloj o cronómetro siempre sale con números (y a
+veces mal). Para «tiempo» usá un objeto sin cara de reloj (reloj de arena ya está repetido en K11 y N02). Un fondo
+gris se arregla sin regenerar: `convert in -fuzz 14% -fill white -draw "color 0,0 floodfill"` (y las otras 3
+esquinas) `-type TrueColor`.
