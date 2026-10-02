@@ -34,6 +34,20 @@ Antes de cada uno, el recurso que promete su cierre tiene que estar publicado; s
 | mar 13-oct | K7 | Carruseles por código | `sergio-k7v2-carruseles-por-codigo-20260929` | el JSON que se manda por DM | listo para aprobar |
 | mié 14-oct | K8 | Recuperar vs reconstruir | `sergio-k8v3-recuperar-vs-reconstruir-20261001` | drop D9 de S3 (escrito «por DM»: pasarlo a comunidad) | listo para aprobar |
 
+**Palabra de cada carrusel (cierre `cierre`, 2-oct):** K10 EFFORT · K1 TRAMPA · K2 SKILL · K6 PROMESA · K3 HISTORIA ·
+K11 HOOK · K4 PRUEBAS · K9 REVISAR · K12 WORKTREE · K5 VENTANA · K13 ESQUELETO · K7 BRIEF · K8 PROMPT. Es la misma
+palabra que su video, para que el DM mande al mismo recurso.
+
+**Carruseles de noticia (2-oct, mismo día que su video, 12:00 La Paz — la noticia se vence):**
+
+| Fecha | Pieza | Carpeta | Palabra | Estado |
+|---|---|---|---|---|
+| con el video V2 | N03 modo auto | `sergio-n03-modo-auto-20261001` | COMUNIDAD (la que dijo en el video) | listo para aprobar |
+| vie 2-oct | DD-A OpenAI Sol | `sergio-dda-openai-sol-20261001` | CACHE | listo; falta escribir su drop |
+| dom 4-oct | N02 Sonnet 4.5 se apaga | `sergio-n02-sonnet45-se-apaga-20261001` | MIGRAR | listo para aprobar |
+| lun 5-oct | N04 skill verify | `sergio-n04-skill-verify-20261001` | VERIFY | listo para aprobar |
+| ~~sáb 3-oct~~ | ~~N06 Gemini CLI~~ | — | — | ⛔ premisa falsa (Antigravity CLI reemplazó el plan gratis el 18-jun); se reemplaza por un repo de la reserva |
+
 Hora: **16:00 La Paz** (20:00 UTC) todos. K14–K21 quedan para después del 14-oct (§2).
 Se agendan con `deploy/vps-ops/publicar/ig-carrusel.mjs` + `agendar-publicacion.sh`, recién con el «ok» de Sergio
 Urcullo sobre cada uno.

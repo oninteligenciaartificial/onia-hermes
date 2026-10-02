@@ -76,6 +76,22 @@ lámina sale SIN título. `"next": ""` saca la flecha «seguí» (para historias
 - **Sin imagen no hay K1-B.** El 1-oct, sin lote aprobado, K8, K11, K12 y K13 salieron solo con texto y se acercan a lo
   que Sergio Urcullo rechazó («vacío y con demasiado texto»). Lo que hace vender a K1-B son sus dos imágenes de arcilla:
   pedí el lote de portada + 1 interior ANTES de armar el carrusel, no después.
+- **`ilustrado` con `badge`:** si el primer renglón del título es largo, pasa por DEBAJO del sello sin avisar.
+  Arrancá el título con el énfasis o sacá el badge. Cada tramo y cada `*énfasis*` es un bloque: un énfasis en el
+  medio queda solo en su renglón; ponelo al final.
+- **Énfasis dentro de una fila de `lista`:** sale gris con subrayado verde (la regla `.c-lista li span` le gana).
+- **`captura` alta (más alta que ancha):** se limita a 760 px y el pie se monta sobre el @handle. Recortá la captura
+  más ancha que alta. **`cierre`:** el body no balancea renglones; espacio duro en las dos últimas palabras.
+- **Un logo como imagen de `ilustrado`:** ponelo sobre un lienzo blanco con margen; la máscara radial lo corta.
+- **Capturas reales desde la nube (2-oct):** Chromium con `--proxy-server=$HTTPS_PROXY`; si da
+  `ERR_CERT_AUTHORITY_INVALID`, la confianza en la CA del proxy se resuelve como dice `/root/.ccr/README.md` (nunca
+  apagando TLS). Cargan `platform.claude.com`, `developers.openai.com`, `geminicli.com`, `developers.googleblog.com`;
+  dan 403 por política `github.com` (web) y `openai.com/index/*`. Legible con viewport móvil de 430–560 px y escala 3;
+  ocultá los widgets flotantes («Ask Docs») antes de capturar. La captura va a `carousels/briefs/assets/<pieza>/`
+  con la fecha en el nombre y en el caption.
+- **Una noticia se re-verifica el día que se arma la pieza**, no el del guion: el 1-oct, N06 («Gemini CLI gratis»)
+  ya era falsa (reemplazado por Antigravity CLI para el plan gratis el 18-jun) aunque el README seguía diciendo gratis.
+  Manda el banner/blog oficial más nuevo, no el README.
 - **El pack no tiene layout de código ni monoespaciada.** Un bloque de código real necesita una captura.
 - **Foto con fondo gris en `analogia`**: el `multiply` solo borra el blanco puro y queda un recuadro gris. Sacale el fondo
   antes o elegí otra foto.
@@ -185,7 +201,11 @@ El CLI autenticado está en el VPS: `HF_CMD="ssh -i <llave> -o BatchMode=yes roo
 - `count: 2` da dos variantes del mismo prompt. Elegí mirando las dos: de 2 «muñecos en una mesa», 1 salió con caras
   verdes raras.
 - Bajá el resultado con curl desde cloudfront y registrá job, prompt y costo en `galeria.json` y en la bitácora.
-- **Sin PIL ni ffmpeg en el contenedor:** guardá el PNG tal cual. No encadenes `rm` después de una conversión que puede
+- **Herramientas (medido el 2-oct, entorno onia-higgsfield):** `ffmpeg` y `convert` (ImageMagick) están; PIL no.
+  ImageMagick no rasteriza SVG (falta rsvg): un logo SVG se rasteriza con Chromium. Una foto con fondo gris para
+  portada verde: `convert in -colorspace Gray -level 8%,84%,0.6 -white-threshold 93% out` la deja en blanco puro.
+  Con fondo gris, `-type TrueColor` o la salida queda en blanco y negro.
+- **Antes (1-oct) no había PIL ni ffmpeg:** guardá el PNG tal cual si falta la herramienta. No encadenes `rm` después de una conversión que puede
   fallar: el 1-oct se borraron los originales y hubo que bajarlos de nuevo.
 
 ## 7. Skills de diseño que se cargan con esta

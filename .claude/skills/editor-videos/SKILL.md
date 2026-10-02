@@ -141,6 +141,19 @@ tabla de cortes + preview antes de aplicar · transcript como fuente de todo tex
   `parentId = '<id de carpeta>'` lista una carpeta. Sirve para ENCONTRAR el archivo; para bajarlo sigue siendo `curl` a
   `drive.usercontent.google.com` (probado: 200, 8,6 MB, con un archivo compartido por enlace). Un archivo que se está
   subiendo no aparece en la búsqueda hasta que termina.
+- **Video del 1-oct (N03), lo medido:** con el micrófono de Sergio Urcullo el ruido de fondo queda en ~-25 dB y el
+  `--noise -32dB` de `cut-plan.mjs` no encontró NINGÚN silencio. Medí antes (`ffmpeg -af volumedetect`, y
+  `silencedetect` a -28/-25 dB) y usá ~-27 dB con `--min-sil 0.4`.
+- **Compará lo que DIJO contra el guion buscando sentido invertido, no solo ortografía.** Dijo «deja DE pasar» dos
+  veces donde el guion decía «deja pasar» (lo que el modo auto PERMITE): small y medium coincidieron, así que no era
+  error de Whisper.
+- **Sacar una palabra corta («de») sin oído no es confiable.** La envolvente RMS confunde sílabas, y Whisper como juez
+  es parcial: completa «deja de…» por costumbre o, si el corte se come el «pa», oye «deja de estar». Probado: el
+  modelo medium sobre el tramo AISLADO, con y sin `initial_prompt`; si con prompt oye «deja pasar» y sin prompt no
+  oye «de», el corte sirve, pero igual lo escucha Sergio Urcullo en el preview. Si la frase es solo una transición,
+  cortala ENTERA (más seguro).
+- **Drive, una vez y para siempre:** que Sergio Urcullo comparta la CARPETA «Videos Onia Octubre» con «cualquier
+  persona con el enlace». Lo que suba adentro hereda el acceso y se baja con curl sin pedirle nada por archivo.
 - **Transcribir sin Speaches:** `pip install faster-whisper` (~1 min) y el modelo `small` (int8, CPU) se baja solo de
   HuggingFace. Con `word_timestamps=True` sale `{segments:[{start,end,text}], words:[{start,end,word}]}`, el formato
   que comen `cut-plan.mjs` y `karaoke-captions.mjs`. Forzá `language="es"`.
