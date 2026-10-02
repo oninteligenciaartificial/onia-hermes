@@ -2,6 +2,27 @@
 
 **Archivo único del carril.** Actualizado 2026-09-29 por Claude (Opus 5.5).
 
+## ▶▶ Estado 2-oct ~01:10 UTC — misma sesión (`session_01CE21mytrEXdqanCFoWxm32`)
+
+- **Video modo auto (N03) TERMINADO**, sin publicar: `final/sergio-n03-modo-auto-20261001.mp4` (59,6 s, −14 LUFS,
+  52 MB) en el scratchpad de la sesión (`…/scratchpad/video-v1/`), FUERA del repo. Si la sesión muere se pierde el
+  render, pero se rehace en ~5 min: `scripts/cutplan.json` + `scripts/segments-fixed.json` + `scripts/una-pasada.cjs`
+  (todo en ese scratchpad; el bruto está en Drive, carpeta «Videos Onia Octubre», compartida por enlace). Corte
+  aprobado por Sergio Urcullo («está bien»). Se sacó la frase «Esto es lo que deja de pasar» y el «de» del segundo
+  «deja de pasar» (decía lo contrario). Palabra: COMUNIDAD (la dijo a cámara). Falta su «ok» para publicar.
+- **18 carruseles listos** (13 K + 5 noticias), revisados con rúbrica de utilidad, todos con cierre `cierre`
+  «Comentá PALABRA». Calendario uno por día 16:00 La Paz del vie 2 al lun 19 en
+  `…/hermes-content/deploy/vps-ops/publicar/agendar-carruseles-2-19-oct.sh` (y `CARRUSELES-DIARIOS.md`). **Nada agendado:** el modo automático de
+  permisos frenó la subida a Instagram («Real-World Transactions») aunque Sergio Urcullo dijo «programalos». Falta su
+  «sí» explícito o una regla de permiso. No buscar otro camino.
+- Imágenes: lote 2-oct 1,08 cr en total (K8, K13, N03, N04, K7), bitácora en `ONIA_MARCA_PERSONAL_HIGGSFIELD_RECETAS.md`.
+- N06 rehecha: «Google cambió Gemini CLI gratis por Antigravity CLI» (la vieja era falsa).
+- Comunidad: `cola/drops/AVISOS-POR-DIA.md` — qué pegar cada día, revisado. Hoy vie 2: vuelta + reto, PLANILLA +
+  COMUNIDAD + TARIFA, EFFORT + MIRAR + CACHE.
+- Guiones para grabar: `plan-3-semanas/GRABAR-2-14-OCT.md` (D02-A y DD-A corregidos hoy, N06 nuevo).
+- Pendientes de Sergio Urcullo: ok para publicar el video; «sí» para agendar; pegar los avisos; mirar la web
+  `/claude-code` (dice «3 subagentes»; DELEGAR y SKILL mandan ahí); subir el video de Sonnet 5.5 (D01-B) a Drive.
+
 ## ▶ Estado 1-oct ~21:40 UTC — sesión `session_01CE21mytrEXdqanCFoWxm32` (nube, entorno onia-higgsfield)
 
 - **Hecho y pusheado** (rama `claude/marca-personal-contenido-ae658c`): K2v3, K8v3, K11, K12 y K13 rehechos y mirados;
