@@ -129,5 +129,7 @@ Antes de publicar una frase, se abre su pantalla con sesión y se MIRA (la medic
 **NO se puede decir:** que la IA atiende o agenda por WhatsApp (el agente es un guion, a propósito, y ningún negocio
 lo tiene conectado) · que la IA escribe CADA mensaje o decide a quién escribir · «asistente con IA que responde lo que
 le preguntes» (busca en 30 fichas y sabe 4 datos de hoy) · que entiende fotos, comprobantes o notas de voz · que
-recupera pacientes con **tratamiento a medias** (hoy no existe: lo que corre es «no volvió hace 180 días») · que ya lo
+recupera pacientes con **tratamiento a medias** (el detector EXISTE en producción pero no encuentra a nadie: solo cuenta
+tratamientos marcados «En progreso», la ficha los carga «Pendiente», y hay 0 tratamientos cargados — se arregla en
+onia-platform, ver handoff Plataforma) · que ya lo
 usan clínicas (0 pagos; las 5 cuentas son internas o de prueba).

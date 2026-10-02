@@ -1,5 +1,7 @@
 # Inventario de IA de Onia — medido en producción el 2-oct-2026 (foto del día)
 
+> ⚠️ Corrección (2-oct, diseño del recall): donde dice que el tratamiento a medias «no está en nada de lo medido», es inexacto. El detector existe (`lib/onia-core/modules/agents-tratamiento-a-medias.ts`, corre en el Recall) pero no encuentra a nadie: solo cuenta EN_PROGRESO, la ficha carga PENDIENTE y producción tiene 0 `patient_treatments`.
+
 > Foto de un día, NO fuente de verdad. Lo que la venta puede decir de la IA vive en `ONIA_CATALOGO_DE_VENTA.md` §8. Medido en solo lectura contra `release-8f07e537` por 5 investigadores; cada capacidad con IA la revisaron 2 escépticos (¿llama de verdad a un LLM? ¿está encendida?).
 
 Medido el 2-oct-2026 contra producción, solo lectura: `onia-platform:release-8f07e537`, mismo árbol que HEAD `8aacaabb`.
