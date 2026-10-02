@@ -48,14 +48,17 @@ timestamp real del transcript word-level. Corolario del mismo reel, que ya cumpl
 código não") — para eso están `make-mockup.mjs` (PNG) y `scripts/remotion` / `scripts/hyperframes`
 (animados).
 
-## Estilo TikTok 17/18-sep — SÓLO si Sergio Urcullo lo pide (la base es la receta de Codex, arriba)
+## Estilo TikTok 17/18-sep — referencia, no molde (lo que se replica: Erik Taveras y Santiago Muñoz)
 
 > 2-oct-2026, dos rechazos seguidos del mismo video (N03, modo auto):
 > 1. Corte + karaoke + recuadros verdes: *«esa no sigue siendo tu manera de editar, porque no lo hacés como antes»*.
 > 2. La re-edición con este estilo 17-sep (zoom punch, tarjetas, keywords, **pop en cada tarjeta**): *«elimina ese
 >    sonido horrible cada que sale un mockup»*. El reel de Codex NO tiene SFX. Ese «pop» fue un agregado nuestro.
-> Lección: «como antes» = la receta de Codex del 14-sep, no el lote del 17-sep. Se buscó en el repo, pero la receta
-> vivía fuera de git, y la sesión eligió lo más parecido que encontró. Antes de rehacer un estilo «como antes»,
+> 3. Ese mismo día rehice N03 con la receta de Codex del 14-sep (`scripts/edit-codex.py`). Después Sergio Urcullo aclaró
+>    que el molde son los videos de **Erik Taveras (@eriktaveras) y Santiago Muñoz (@sanmunoz.ia)**: Codex y el 17-sep
+>    son referencia. El video bueno que él recuerda es «tu primera automatización» (22-sep).
+> Lección: «como antes» no se adivina. Tres ediciones del mismo video, y cada una copió lo más parecido que había en el
+> repo. Antes de rehacer un estilo «como antes»,
 > preguntá CUÁL video y pedile a la madre el archivo si no está en el repo.
 
 Si él pide este estilo, la receta está en `videos/tiktok-20260917/README.md`:

@@ -1,9 +1,10 @@
 # N03 · El modo auto de Claude Code (grabado 1-oct, editado 2-oct)
 
-## ▶ Versión vigente: receta de Codex (`scripts/edit-codex.py`, 2-oct)
+## ▶ Última versión: receta de Codex (`scripts/edit-codex.py`, 2-oct), pendiente del OK de Sergio Urcullo
 
-Es la edición que Sergio Urcullo reconoce como suya: el reel «GPT-6 Astra vs Fable 5.1» que Codex editó el 14-sep
-(`hermes-content/references/video-intake/2026-09-14-reel-astra-fable-codex/`). Se portó su `edit.py` casi línea por línea:
+⚠️ **2-oct, más tarde:** Sergio Urcullo aclaró que el molde son los videos de Erik Taveras y Santiago Muñoz. El reel de
+Codex del 14-sep (`hermes-content/references/video-intake/2026-09-14-reel-astra-fable-codex/`) es sólo referencia.
+Esta versión se le muestra igual; si no le sirve, se rehace con la ficha de montaje de esas cuentas. Se portó su `edit.py` casi línea por línea:
 - **9 paneles oscuros** arriba (720 px), uno por idea, dibujados con Pillow y con los datos del drop N03.
 - **Entrada lateral de 340 ms** alternada, con el panel anterior debajo.
 - **La cara a lo ancho** abajo (`crop=1080:1200:0:430`).
@@ -22,7 +23,7 @@ saca los paneles, para mirarlos antes del render. El render de 58 s tarda unos 2
 
 ## Historia: la versión con la receta del 17-sep (rechazada)
 
-Receta del lote del 17-sep (`videos/tiktok-20260917/README.md`). ⚠️ **No es la que Sergio Urcullo reconoce como suya:** ésa es la del reel de Codex del 14-sep (`hermes-content/references/video-intake/2026-09-14-reel-astra-fable-codex/RECETA.md`), encontrada el 2-oct después de esta edición. Este video se rehace con esa receta.
+Receta del lote del 17-sep (`videos/tiktok-20260917/README.md`). Rechazada por el pop de los mockups.
 La primera versión (corte + karaoke + recuadros verdes) la rechazó: «no lo hacés como antes».
 
 - **Bruto:** Drive, carpeta «Videos Onia Octubre» (`A0550B92-….mp4`, 67 s, HEVC 1080×1920 SDR). No se versiona.
