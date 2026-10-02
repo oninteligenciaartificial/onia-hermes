@@ -40,7 +40,7 @@
 //   ONIA_AUDIO_MAX_BYTES           default 8 MiB
 //   ONIA_AUDIO_DOWNLOAD_TIMEOUT_MS default 10000
 //   ONIA_AUDIO_STT_TIMEOUT_MS      default 45000
-//   ONIA_AUDIO_ENABLED             "false" apaga la transcripcion (vuelve al M_AUDIO_FAIL de antes)
+//   ONIA_AUDIO_ENABLED             "true" la ENCIENDE; cualquier otra cosa (o nada) = apagada (2-oct-2026)
 // Secreto (se recibe por parametro, NUNCA se loguea): el token de la API de Chatwoot.
 //
 // EL RESPALDO (2026-09-19). Speaches DEJO DE EXISTIR en la red del VPS —`wget` desde onia-center
@@ -141,9 +141,11 @@ export function getTranscribeConfig(env = process.env) {
     maxBytes: positiveNumber(env.ONIA_AUDIO_MAX_BYTES, DEFAULT_MAX_BYTES),
     downloadTimeoutMs: positiveNumber(env.ONIA_AUDIO_DOWNLOAD_TIMEOUT_MS, DEFAULT_DOWNLOAD_TIMEOUT_MS),
     sttTimeoutMs: positiveNumber(env.ONIA_AUDIO_STT_TIMEOUT_MS, DEFAULT_STT_TIMEOUT_MS),
-    // Apagable sin desplegar codigo: si Speaches se cae, se vuelve al comportamiento de antes
-    // (M_AUDIO_FAIL) en vez de hacer esperar 45 s a cada prospecto que manda un audio.
-    enabled: String(env.ONIA_AUDIO_ENABLED ?? "true").toLowerCase() !== "false",
+    // APAGADA SALVO `true` EXPLICITO (2-oct-2026, auditoria de produccion §2 accion 3). Antes
+    // arrancaba encendida si nadie decia nada, contra `speaches:8000`, que no existe en el VPS:
+    // cada nota de voz esperaba un destino muerto antes de caer al M_AUDIO_FAIL. Apagada, el bot
+    // contesta al instante y honesto (no la puede escuchar; si insiste, la escucha una persona).
+    enabled: String(env.ONIA_AUDIO_ENABLED ?? "").trim().toLowerCase() === "true",
   };
 }
 

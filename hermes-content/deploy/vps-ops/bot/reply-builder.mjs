@@ -14,7 +14,7 @@
 //
 // Spec: hermes-content/docs/ONIA_CHATBOT_PROPIO_SPEC_20260725.md (§2 guion, §3 reglas)
 
-import { DEFAULT_CONFIG, MODULOS_LISTOS, branchFor, claveDeSlot, renderTemplate, joinEs, viaDelCanal } from "./config.mjs";
+import { DEFAULT_CONFIG, MODULOS_LISTOS, agendaPropia, branchFor, claveDeSlot, renderTemplate, joinEs, viaDelCanal } from "./config.mjs";
 import * as intents from "./intents.mjs";
 
 /**
@@ -82,7 +82,9 @@ export function elegibleSlots(state, config) {
  * Cuando falla, el guion cae a la rama SIN_HORARIOS, que no es silencio: sigue el embudo
  * pidiendo el contacto y avisa a Sergio para que coordine el la hora.
  */
-function hayHorarioReal(state, config) {
+export function hayHorarioReal(state, config) {
+  // Sin agenda propia no hay horario que pedir que elija, aunque la foto vieja los tenga.
+  if (!agendaPropia(config)) return false;
   const slots = (activeSlots(state, config) || []).filter(Boolean);
   return slots.length > 0 && slots.every((slot) => !slot.pending);
 }

@@ -34,7 +34,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 import { createBotConfig, DEFAULT_CONFIG, parseSlotsSpec, slotsElegibles } from "./config.mjs";
 import { createState, step, markHumanTakeover, buildFollowUp, LLM_PENDING } from "./bot-engine.mjs";
 import { applyKnowledge, asRecepcionista, readKnowledgeFile } from "./knowledge.mjs";
-import { cierreSinReservar } from "./calcom-booking.mjs";
+import { AGENDA_ENV, agendaDelEntorno, motivoEnSeco, reservaQueNoSalio } from "./calcom-booking.mjs";
 import { instanteDeAtencion } from "./ventanas-de-atencion.mjs";
 
 /**
@@ -284,18 +284,18 @@ function valorDeEnv(texto, clave) {
   return null;
 }
 
-/** Lee UNA variable del `webhook.env` desplegado en el disco de ESTA maquina. */
-function leerDelEnvDesplegado(path, clave, deps = {}) {
+/** El texto del `webhook.env` desplegado en el disco de ESTA maquina, o null si no se puede leer. */
+function leerDelEnvDesplegado(path, deps = {}) {
   const read = deps.readFileSync || readFileSync;
   try {
-    return valorDeEnv(read(path, "utf8"), clave);
+    return String(read(path, "utf8"));
   } catch {
     return null;
   }
 }
 
 /**
- * Lo mismo, pero preguntandole al VPS. Existe porque este carril se mudo a nodo-casa (WSL) el
+ * Lo mismo (el TEXTO entero, o null), pero preguntandole al VPS. Existe porque este carril se mudo a nodo-casa (WSL) el
  * 2026-09-06 y alla `/opt/onia/bot` NO EXISTE: el escalon local devolvia null y el simulador
  * volvia a medir `M0_SIN_HORARIOS` con produccion sirviendo dos horarios. Un instrumento atado a
  * la ruta absoluta de UNA maquina deja de medir el dia que su loop se muda, y el numero que
@@ -304,7 +304,7 @@ function leerDelEnvDesplegado(path, clave, deps = {}) {
  * Solo se intenta sobre la ruta REAL de produccion: preguntarle al VPS por un archivo de prueba
  * no significa nada, y ademas mantiene hermeticos a los casos que inyectan rutas falsas.
  */
-function leerDelEnvRemoto(path, clave, deps = {}) {
+function leerDelEnvRemoto(path, deps = {}) {
   const correr = deps.spawnSync || spawnSync;
   // La llave se RESUELVE (ver `rutasDeLlaveVps`): fijarla rompio este escalon en cada mudanza de
   // maquina. Sin llave en disco no se abandona — se sale sin `-i` y ssh usa su config o su agente.
@@ -319,7 +319,7 @@ function leerDelEnvRemoto(path, clave, deps = {}) {
     return null;
   }
   if (!r || r.status !== 0 || !r.stdout) return null;
-  return valorDeEnv(r.stdout, clave);
+  return String(r.stdout);
 }
 
 /**
@@ -344,36 +344,67 @@ export function cargarSlotsPublicados(args = {}, deps = {}) {
   const envFile = deps.envFile || WEBHOOK_ENV_DESPLEGADO;
   // El cuarto escalon solo aplica a la ruta REAL: ver `leerDelEnvRemoto`.
   const esLaDesplegada = envFile === WEBHOOK_ENV_DESPLEGADO;
-  const raw =
-    String(args.slots || env.ONIA_BOT_SLOTS || "").trim() ||
-    String(leerDelEnvDesplegado(envFile, "ONIA_BOT_SLOTS", deps) || "").trim() ||
-    (esLaDesplegada ? String(leerDelEnvRemoto(envFile, "ONIA_BOT_SLOTS", deps) || "").trim() : "");
+  // El reloj se inyecta (`deps.now`): un caso escrito con su propio instante —el `receivedAt` de sus
+  // mensajes— tiene que juzgar los horarios contra ESE instante, no contra el dia en que alguien lo
+  // corre. Sin esto los horarios fijos de un test vencen solos y lo ponen rojo sin tocar el bot
+  // (paso el 2-oct con cinco archivos de la pauta). Sin `now` es el reloj de la maquina, como antes.
+  const now = Number.isFinite(deps.now) ? deps.now : Date.now();
+
+  // `--slots` a mano es "simulá como si el bot ofreciera ESTOS": se ofrecen, con la agenda que haya.
+  const aMano = String(args.slots || "").trim();
+  if (aMano) return { slots: parseSlotsSpec(aMano, { now }), elegibles: slotsElegibles(aMano, { now }), agenda: null, aviso: null };
+
+  // El webhook.env desplegado se lee UNA vez (local, o del VPS si es la ruta real) y de ahi salen
+  // las claves que eligen la rama: los horarios Y la agenda. Leer cada clave por separado eran
+  // cuatro SSH de 15 s cuando el VPS no contesta.
+  let archivo;
+  const delArchivo = (clave) => {
+    if (archivo === undefined) {
+      archivo = leerDelEnvDesplegado(envFile, deps) ?? (esLaDesplegada ? leerDelEnvRemoto(envFile, deps) : null);
+    }
+    return archivo === null ? null : valorDeEnv(archivo, clave);
+  };
+  const leer = (clave) => String(env[clave] ?? "").trim() || String(delArchivo(clave) || "").trim();
+
+  // LA AGENDA ELIGE LA RAMA ANTES QUE LOS HORARIOS (2-oct). Sin `ONIA_BOT_AGENDA=calcom` (y Cal.com
+  // configurado) produccion no ofrece horarios aunque el cron los deje en webhook.env: el prospecto
+  // recibe M0_PERSONA. Medir con horarios seria medir una rama que nadie ve — el falso verde que
+  // este archivo ya pago tres veces.
+  const agenda = agendaDelEntorno({
+    [AGENDA_ENV]: leer(AGENDA_ENV),
+    CALCOM_BASE_URL: leer("CALCOM_BASE_URL"),
+    CALCOM_BOT_EVENT_TYPE_ID: leer("CALCOM_BOT_EVENT_TYPE_ID"),
+  });
+  const raw = agenda.modo === "propia" ? leer("ONIA_BOT_SLOTS") : "";
+  const sinFuente = archivo === null && !String(env.ONIA_BOT_SLOTS || env[AGENDA_ENV] || "").trim();
+
   if (!raw) {
+    // Sin poder leer la config desplegada NO se sabe que rama sirve produccion: se dice. Leida y sin
+    // agenda propia, la rama sin horarios ES la de produccion y no hay nada que avisar.
+    if (!sinFuente && agenda.modo === "persona") return { slots: null, elegibles: null, agenda: "persona", aviso: null };
     // Se nombra TAMBIEN el intento remoto: sin eso el aviso se lee como "esta maquina no tiene el
     // archivo" y manda a arreglarlo copiando un `webhook.env` a mano, que es el lugar equivocado.
     const donde = esLaDesplegada ? `${envFile}, ni ${VPS_DEL_BOT} por ssh` : envFile;
     return {
       slots: null,
-      aviso: `⚠️ sin horarios (ni --slots, ni ONIA_BOT_SLOTS, ni ${donde}) — si produccion los tiene cargados, esta es OTRA rama del guion`,
+      elegibles: null,
+      agenda: agenda.modo === "persona" ? "persona" : null,
+      aviso: `⚠️ sin horarios (ni --slots, ni ONIA_BOT_SLOTS/${AGENDA_ENV}, ni ${donde}) — corre sin agenda propia; si produccion ofrece horarios, esta es OTRA rama del guion`,
     };
   }
   // Los `elegibles` viajan al lado del par porque el motor acepta MAS de lo que ofrece: el cron
   // publica cinco horarios y el guion nombra dos. Si el simulador cargara solo el par mediria una
   // conversacion que produccion no tiene — y este carril ya pago una vez el instrumento que no
   // mide lo que corre.
-  // El reloj se inyecta (`deps.now`): un caso escrito con su propio instante —el `receivedAt` de sus
-  // mensajes— tiene que juzgar los horarios contra ESE instante, no contra el dia en que alguien lo
-  // corre. Sin esto los horarios fijos de un test vencen solos y lo ponen rojo sin tocar el bot
-  // (paso el 2-oct con cinco archivos de la pauta). Sin `now` es el reloj de la maquina, como antes.
-  const now = Number.isFinite(deps.now) ? deps.now : Date.now();
-  return { slots: parseSlotsSpec(raw, { now }), elegibles: slotsElegibles(raw, { now }), aviso: null };
+  return { slots: parseSlotsSpec(raw, { now }), elegibles: slotsElegibles(raw, { now }), agenda: null, aviso: null };
 }
 
 export function buildConfig(args = {}, deps = {}) {
   let base = DEFAULT_CONFIG;
-  const { slots, elegibles, aviso: avisoSlots } = cargarSlotsPublicados(args, deps);
+  const { slots, elegibles, agenda, aviso: avisoSlots } = cargarSlotsPublicados(args, deps);
   if (avisoSlots) (deps.warn || console.error)(avisoSlots);
   if (slots) base = createBotConfig({ slots, slotsElegibles: elegibles || [] });
+  else if (agenda === "persona") base = createBotConfig({ agenda: { modo: "persona" } });
   if (args.sinConocimiento) return base;
 
   const { data, aviso } = cargarConocimientoPublicado(deps);
@@ -419,24 +450,22 @@ export function configParaGuion(name, config, configPelado = config) {
 }
 
 /**
- * El simulador llama a `step()` directo: NO pasa por `runTurn`, que es donde el producto le
- * pega el cierre honesto al "Listo, agendado" cuando la reserva no sale. Sin esto el simulador
+ * El simulador llama a `step()` directo: NO pasa por `runTurn`, que es donde el producto
+ * reemplaza el "Listo, agendado" por la version honesta cuando la reserva no sale. Sin esto el simulador
  * promete MAS que el bot (medido el 2026-09-12 contra los mensajes reales de Chatwoot), y es el
  * instrumento con el que este carril mide su objetivo cada vuelta.
  *
  * Se importa la MISMA decision y el MISMO texto que usa el camino vivo — nunca una copia.
  */
-function conElCierreDelProducto(replies, stageBefore, nextState) {
-  const { texto } = cierreSinReservar({
+function conElCierreDelProducto(replies, stageBefore, nextState, config) {
+  const { motivo } = motivoEnSeco({
     stageBefore,
     stageAfter: nextState.botStage,
     scheduledAt: nextState.scheduledAt,
     calendarEventId: nextState.calendarEventId,
   });
-  if (!texto) return replies;
-  const ultima = replies[replies.length - 1];
-  if (ultima && ultima.text) ultima.text += texto;
-  return replies;
+  if (motivo !== "sin_config") return { replies, nextState };
+  return reservaQueNoSalio({ replies, nextState, config, reason: "sin_config" });
 }
 
 function runScript(name, baseConfig, basePelada) {
@@ -457,12 +486,15 @@ function runScript(name, baseConfig, basePelada) {
     }
     const stageBefore = state.botStage;
     const result = step(state, { ...turn, receivedAt: clock, externalMessageId: `${name}-${events.length}` }, { config });
-    state = result.nextState;
+    // El cierre del producto puede MOVER la conversacion (la reserva que no sale la pasa a la
+    // persona): el turno siguiente tiene que correr sobre ese estado, igual que en vivo.
+    const cierre = conElCierreDelProducto(result.replies, stageBefore, result.nextState, config);
+    state = cierre.nextState;
     events.push({
       turn: describeTurn(turn),
       stageBefore,
       stageAfter: state.botStage,
-      replies: conElCierreDelProducto(result.replies, stageBefore, state),
+      replies: cierre.replies,
       notes: result.notes,
       sideEffects: result.sideEffects.map((effect) => effect.type),
     });
@@ -532,8 +564,7 @@ async function interactive(config, contactRef) {
     }
     const stageBefore = state.botStage;
     const result = step(state, { text, receivedAt: clock }, { config });
-    state = result.nextState;
-    conElCierreDelProducto(result.replies, stageBefore, state);
+    state = conElCierreDelProducto(result.replies, stageBefore, result.nextState, config).nextState;
     clock = plusMinutes(clock, 2);
     if (result.replies.length === 0) console.log("  (el bot NO responde)");
     for (const reply of result.replies) {

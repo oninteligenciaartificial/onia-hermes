@@ -283,10 +283,15 @@ export const SCRIPT = Object.freeze({
   // "HORARIO A (pendiente de definir)": el prospecto no puede elegir nada y la charla se
   // estanca repitiendo la misma frase. Aca se acusa el dato, se avanza pidiendo lo unico
   // accionable (el contacto) y la hora la coordina Sergio.
+  //
+  // VIA DERIVADA (2026-10-02). Aca preguntaba "¿A qué número o correo te escribe?" — por WhatsApp,
+  // a quien ya nos escribe desde su numero: un paso de mas en el mensaje que, sin agenda propia
+  // (`ONIA_BOT_AGENDA`, default), recibe CADA lead que cuenta su negocio. La via sale del canal,
+  // igual que en M5 (`viaDelCanal`).
   M0b_SIN_HORARIOS: [
     "Perfecto, anotado {{datos_que_si_dio}} — el resto lo vemos en la demo.",
     "",
-    "{{humano}} te coordina el horario personalmente, así que no te hago elegir nada acá. ¿A qué número o correo te escribe?",
+    "{{humano}} te coordina el horario personalmente y te escribe {{via_humano}}.",
   ].join("\n"),
 
   M0b: [
@@ -355,6 +360,31 @@ export const SCRIPT = Object.freeze({
   // M2_LINK — se APENDEA a M2 cuando la reserva en Cal.com devolvio uid. Vive en el guion (y no
   // suelto en run-turn.mjs) porque es copy que ve el prospecto: todo lo que se le dice esta aca.
   M2_LINK: "El link para entrar es este: {{link_reunion}}",
+
+  // M2_SIN_RESERVA / M2_HORARIO_TOMADO — REEMPLAZAN a M2 (no se le pegan) cuando el bot tiene
+  // agenda propia (`ONIA_BOT_AGENDA=calcom`) y la reserva NO salio. Hasta el 2-oct se le pegaba
+  // una salvedad al final de M2 y el prospecto leia «Listo, agendado» y en la linea siguiente «estoy
+  // confirmando ese horario» (auditoria 2-oct, §2 accion 3). Lo que se le dice tiene que ser lo que
+  // paso: lo eligio, NO quedo reservado y quien se lo confirma. Sin «nos vemos {{dia}}»: eso tambien
+  // es confirmarla. Las preguntas siguen: el dato le sirve a {{humano}} igual.
+  // Los usa `reservaQueNoSalio` (calcom-booking.mjs), el mismo en los tres caminos (vivo, seco y
+  // simulador).
+  M2_SIN_RESERVA: [
+    "Anoté **{{dia_hora_elegida}}**, pero todavía no quedó reservado: {{humano}} te lo confirma {{via_humano}}.",
+    "",
+    "Mientras, para que llegue con la demo armada para vos, contame rápido:",
+    "{{preguntas}}",
+    "",
+    "(Con una palabra en cada una alcanza.)",
+  ].join("\n"),
+  M2_HORARIO_TOMADO: [
+    "Uy, **{{dia_hora_elegida}}** se acaba de ocupar. {{humano}} te escribe {{via_humano}} para acomodar otro horario.",
+    "",
+    "Mientras, para que llegue con la demo armada para vos, contame rápido:",
+    "{{preguntas}}",
+    "",
+    "(Con una palabra en cada una alcanza.)",
+  ].join("\n"),
 
   // M2_PREGUNTA_DOLOR — el ultimo item de la lista de M2. Vive aca y no en el motor porque es
   // copy de cliente, como el resto del guion.
@@ -502,6 +532,29 @@ export const SCRIPT = Object.freeze({
   // ("HORARIO A (pendiente de definir)") y encima el prospecto no podia elegirlo, asi que la
   // conversacion moria en el primer mensaje — justo el mensaje que vende "un asistente que agenda
   // solo". Aca no se inventa un horario: se lo atiende igual y lo coordina un humano.
+  // M0_PERSONA — la bienvenida cuando el bot NO tiene agenda propia (`ONIA_BOT_AGENDA` distinto de
+  // `calcom`, que es el DEFAULT). Nace de la auditoria del 2-oct: con horarios del cron y sin nadie
+  // que los reservara, M0 decia «Tengo estos dos horarios» y M2 «Listo, agendado», y la demo no
+  // quedaba en ningun lado. Sin agenda no hay «agendo yo»: se ofrece la demo y el horario lo
+  // coordina la persona ({{coordina_demo}}: el link de la agenda real si el conocimiento la trae;
+  // si no, «te escribe {{humano}}»). No dice «no tengo horarios»: exhibir una carencia en la
+  // primera frase lo prohibe la regla del 2026-08-20. La pregunta del final (M0_PERSONA_PREGUNTA)
+  // va solo si no sigue la respuesta de una campaña, que ya trae las suyas.
+  M0_PERSONA: [
+    "¡Hola! Soy el asistente automático de Onia. Sí, un bot.",
+    "",
+    "{{producto}} es una plataforma por módulos para que tu negocio trabaje adentro: agenda, cobros y clientes en un solo lugar.",
+    "",
+    "Te muestro cómo quedaría en TU negocio en {{demo_duracion}} por {{demo_modalidad}}. {{coordina_demo}}",
+  ].join("\n"),
+  M0_PERSONA_PREGUNTA: "Contame mientras: ¿a qué se dedica tu negocio?",
+  COORDINA_PERSONA: "El horario lo coordinás directo con {{humano}}: te escribe {{via_humano}}.",
+  COORDINA_LINK: "Elegí el horario que te quede bien acá 👉 {{link_agenda}}",
+  // M_HORARIO_SIN_AGENDA — sin agenda propia, alguien elige un horario de una oferta VIEJA (la
+  // conversacion nacio cuando el bot todavia ofrecia horarios y sigue viva en la base). No se
+  // confirma ni se reserva: se acusa lo que eligio y lo confirma la persona.
+  M_HORARIO_SIN_AGENDA: "Anoté que te queda bien **{{slot_elegido}}**. {{humano}} te lo confirma {{via_humano}}.",
+
   M0_SIN_HORARIOS: [
     "¡Hola! Te escribe {{bot}} — sí, un bot. Es justamente lo que hacemos: sistemas que atienden solos.",
     "",
@@ -556,7 +609,7 @@ export const SCRIPT = Object.freeze({
   // salio a produccion como "¿Te reservo HORARIO A (pendiente de definir) o HORARIO B (pendiente de
   // definir)?" — y, via el LLM, como "¿horario A o horario B?". Se pide lo unico accionable sin
   // agenda (el contacto) y la hora la coordina el humano.
-  PENDING_HORARIO_SIN_HORARIOS: "{{humano}} te coordina el horario personalmente. ¿A qué número o correo te escribe?",
+  PENDING_HORARIO_SIN_HORARIOS: "{{humano}} te coordina el horario personalmente y te escribe {{via_humano}}.",
   PENDING_AGENDADA: "Igual ya quedamos para **{{dia_hora_elegida}}**.",
 
   // -------------------------------------------------------------------------
@@ -1006,6 +1059,24 @@ export function allQualificationFields(config = DEFAULT_CONFIG) {
 /** true si los 2 horarios siguen siendo el placeholder (Sergio no los definio todavia). */
 export function slotsPending(config = DEFAULT_CONFIG) {
   return (config.slots || []).some((slot) => slot && slot.pending === true);
+}
+
+/**
+ * ¿El bot tiene con que AGENDAR? `config.agenda.modo === "persona"` dice que no: no ofrece
+ * horarios propios, no confirma una eleccion y el horario lo coordina la persona.
+ *
+ * El modo lo fija el ENTORNO (`agendaDelEntorno` en calcom-booking.mjs: `ONIA_BOT_AGENDA`, con la
+ * persona por default) en los armadores de config de produccion (run-turn, followup-run,
+ * simulate). Una config sin `agenda` —la de los tests del motor, que traen sus horarios a mano—
+ * conserva lo de siempre: los horarios que trae son los que ofrece.
+ */
+export function agendaPropia(config = DEFAULT_CONFIG) {
+  return config?.agenda?.modo !== "persona";
+}
+
+/** Sin agenda propia o sin horarios de verdad: el guion no pone horarios sobre la mesa. */
+export function sinHorariosQueOfrecer(config = DEFAULT_CONFIG) {
+  return !agendaPropia(config) || slotsPending(config);
 }
 
 /**

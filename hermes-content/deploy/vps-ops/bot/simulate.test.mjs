@@ -21,8 +21,6 @@ import { dirname, join } from "node:path";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
-import { cierreDeReservaFallida } from "./calcom-booking.mjs";
-
 import { DEFAULT_CONFIG } from "./config.mjs";
 import { createState, step } from "./bot-engine.mjs";
 import { MONTOS_PERMITIDOS } from "./precios-publicos.mjs";
@@ -77,13 +75,20 @@ test("sin el documento (o roto) NO inventa: se queda con el codigo y AVISA", () 
   const avisos = [];
   const config = buildConfig({}, { ...SIN_AMBIENTE, path: "/no/existe/knowledge.onia.json", warn: (linea) => avisos.push(linea) });
 
-  assert.equal(config, DEFAULT_CONFIG, "sin documento valido tiene que degradar al guion del codigo, sin mezclar");
+  // Sin documento degrada al guion del CODIGO, sin mezclar. Lo unico que se le suma es la agenda:
+  // sin poder leer la config desplegada, el simulador corre como produccion por default — sin agenda
+  // propia (2-oct) — y lo avisa (ver el caso "sin horarios por ningun lado").
+  const { agenda, ...delCodigo } = config;
+  assert.deepEqual(delCodigo, { ...DEFAULT_CONFIG }, "sin documento valido tiene que degradar al guion del codigo, sin mezclar");
+  assert.equal(agenda?.modo, "persona");
   const delDocumento = avisos.filter((linea) => /conocimiento/i.test(linea));
   assert.equal(delDocumento.length, 1, "un instrumento que no puede medir lo dice; callarselo es el modo de falla caro");
 });
 
 test("--sin-conocimiento sirve el guion pelado del codigo, para poder comparar los dos", () => {
-  assert.equal(buildConfig({ sinConocimiento: true }, SIN_AMBIENTE), DEFAULT_CONFIG);
+  const { agenda, ...pelado } = buildConfig({ sinConocimiento: true }, { ...SIN_AMBIENTE, warn: () => {} });
+  assert.deepEqual(pelado, { ...DEFAULT_CONFIG }, "el guion pelado del codigo (con la agenda por default de produccion)");
+  assert.equal(agenda?.modo, "persona");
   assert.notEqual(buildConfig({}, SIN_AMBIENTE), DEFAULT_CONFIG, "sin la bandera manda el documento publicado");
 });
 
@@ -140,6 +145,13 @@ const ISO_A = new Date(Date.now() + 48 * 3600_000).toISOString().replace(/\.\d{3
 const ISO_B = new Date(Date.now() + 96 * 3600_000).toISOString().replace(/\.\d{3}Z$/, "Z");
 const SPEC_PROD = `sábado 5 de septiembre, 09:00@${ISO_A}|lunes 7 de septiembre, 14:00@${ISO_B}`;
 
+// Desde el 2-oct los horarios eligen la rama SOLO con agenda propia (`ONIA_BOT_AGENDA=calcom` y
+// Cal.com configurado): sin ella produccion no ofrece ninguno aunque el cron los deje en
+// webhook.env. Los casos que miden DE DONDE salen los horarios la declaran en la misma fuente
+// (entorno, archivo o VPS) que los horarios; el default sin agenda tiene su caso propio abajo.
+const AGENDA_PROPIA = { ONIA_BOT_AGENDA: "calcom", CALCOM_BASE_URL: "http://calcom:3000", CALCOM_BOT_EVENT_TYPE_ID: "5" };
+const AGENDA_PROPIA_EN_ARCHIVO = Object.entries(AGENDA_PROPIA).map(([k, v]) => `${k}=${v}`).join("\n");
+
 test("--slots con el formato REAL de produccion no filtra el ISO al guion que ve el cliente", () => {
   const config = buildConfig({ slots: SPEC_PROD });
 
@@ -154,7 +166,7 @@ test("--slots con el formato REAL de produccion no filtra el ISO al guion que ve
 });
 
 test("sin --slots toma ONIA_BOT_SLOTS del entorno, que es de donde los lee produccion", () => {
-  const env = { ONIA_BOT_SLOTS: SPEC_PROD };
+  const env = { ONIA_BOT_SLOTS: SPEC_PROD, ...AGENDA_PROPIA };
   const config = buildConfig({}, { env });
 
   assert.equal(config.slots[0].label, "sábado 5 de septiembre, 09:00");
@@ -211,7 +223,7 @@ test("sin --slots ni entorno, los horarios salen del webhook.env DESPLEGADO", (t
   const envFile = join(mkdtempSync(join(tmpdir(), "onia-slots-")), "webhook.env");
   writeFileSync(
     envFile,
-    `ONIA_BOT_MODEL=gpt-4.1-mini\nONIA_BOT_SLOTS="${SPEC_PROD}"\n`,
+    `ONIA_BOT_MODEL=gpt-4.1-mini\nONIA_BOT_SLOTS="${SPEC_PROD}"\n${AGENDA_PROPIA_EN_ARCHIVO}\n`,
   );
   t.after(() => rmSync(dirname(envFile), { recursive: true, force: true }));
 
@@ -228,7 +240,7 @@ test("sin --slots ni entorno, los horarios salen del webhook.env DESPLEGADO", (t
 
 test("el valor del webhook.env viene ENTRECOMILLADO: las comillas no se filtran al guion", (t) => {
   const envFile = join(mkdtempSync(join(tmpdir(), "onia-slots-")), "webhook.env");
-  writeFileSync(envFile, `ONIA_BOT_SLOTS="sábado 5 de septiembre, 09:00@${ISO_A}"\n`);
+  writeFileSync(envFile, `ONIA_BOT_SLOTS="sábado 5 de septiembre, 09:00@${ISO_A}"\n${AGENDA_PROPIA_EN_ARCHIVO}\n`);
   t.after(() => rmSync(dirname(envFile), { recursive: true, force: true }));
 
   const config = buildConfig({}, { env: {}, envFile });
@@ -248,9 +260,26 @@ test("el entorno le GANA al archivo: es lo que produccion resuelve ultimo", (t) 
   writeFileSync(envFile, 'ONIA_BOT_SLOTS="del archivo, 09:00@2026-09-05T13:00:00Z"\n');
   t.after(() => rmSync(dirname(envFile), { recursive: true, force: true }));
 
-  const config = buildConfig({}, { env: { ONIA_BOT_SLOTS: "del entorno, 10:00@2026-09-05T14:00:00Z" }, envFile });
+  const config = buildConfig({}, { env: { ONIA_BOT_SLOTS: "del entorno, 10:00@2026-09-05T14:00:00Z", ...AGENDA_PROPIA }, envFile, now: Date.parse("2026-09-01T00:00:00Z") });
 
   assert.equal(config.slots?.[0]?.label, "del entorno, 10:00");
+});
+
+test("webhook.env CON horarios pero SIN agenda propia: el simulador sirve la rama de produccion, sin horarios", (t) => {
+  // Es el estado de produccion despues del 2-oct: el cron sigue dejando horarios y nadie los
+  // reserva. El prospecto recibe M0_PERSONA; medir con los horarios seria medir una rama que nadie ve.
+  const envFile = join(mkdtempSync(join(tmpdir(), "onia-slots-")), "webhook.env");
+  writeFileSync(envFile, `ONIA_BOT_SLOTS="${SPEC_PROD}"\nCALCOM_BASE_URL=http://calcom:3000\nCALCOM_BOT_EVENT_TYPE_ID=5\n`);
+  t.after(() => rmSync(dirname(envFile), { recursive: true, force: true }));
+  const avisos = [];
+
+  const config = buildConfig({}, { env: {}, envFile, warn: (linea) => avisos.push(linea) });
+
+  assert.equal(config.agenda?.modo, "persona");
+  const texto = preguntar(config, "hola, quiero información");
+  assert.doesNotMatch(texto, /\*\*A\)\*\*/, "ofrece horarios que produccion ya no ofrece");
+  assert.match(texto, /te escribe/, "lo que produccion le dice: quien le coordina la demo");
+  assert.deepEqual(avisos.filter((l) => /horario/i.test(l)), [], "es LA rama de produccion: no hay nada que avisar");
 });
 
 test("el webhook.env que se lee es el DESPLEGADO, no una copia de adorno", () => {
@@ -291,7 +320,7 @@ test("sin el webhook.env local, los horarios se le piden al VPS — es donde viv
           args.some((a) => String(a).includes(WEBHOOK_ENV_DESPLEGADO)),
           "le tiene que pedir al VPS el MISMO archivo que carga produccion",
         );
-        return { status: 0, stdout: `ONIA_BOT_SLOTS="${SPEC_PROD}"\n`, stderr: "" };
+        return { status: 0, stdout: `ONIA_BOT_SLOTS="${SPEC_PROD}"\n${AGENDA_PROPIA_EN_ARCHIVO}\n`, stderr: "" };
       },
     },
   );
@@ -376,63 +405,68 @@ test("una ruta que NO es la desplegada nunca sale a la red", () => {
 // rojo tambien si alguien saca el cableado de uno de los dos llamadores de `step()`.
 // ---------------------------------------------------------------------------
 
-test("el guion feliz del simulador cierra con la MISMA salvedad que recibe el prospecto", () => {
-  const simulador = fileURLToPath(new URL("./simulate.mjs", import.meta.url));
-  // Ambiente explicito: sin Cal.com configurado, que es produccion HOY. Si alguna vez se
-  // configura, este caso sigue midiendo lo suyo en vez de volverse intermitente.
+// CAMBIO DE CONTRATO (2-oct). Aca se exigia que el simulador imprimiera «Listo, agendado» CON la
+// salvedad pegada abajo, porque eso era lo que recibia el prospecto. Eso ERA el bug (auditoria de
+// produccion del 2-oct, §2 accion 3): confirmar y desdecirse en el mismo mensaje. Lo que se sigue
+// exigiendo es lo de fondo: el simulador imprime lo MISMO que recibe el prospecto, por los dos
+// llamadores de `step()`.
+
+/** Entorno de un proceso hijo sin agenda propia ni Cal.com: produccion, hoy. */
+function entornoDeProduccionSinAgenda() {
   const env = { ...process.env };
   delete env.CALCOM_BASE_URL;
   delete env.CALCOM_BOT_EVENT_TYPE_ID;
+  delete env.ONIA_BOT_AGENDA;
   // Los horarios se DERIVAN de ahora (SPEC_PROD), no se tipean: `parseSlotsSpec` descarta todo
   // lo que caiga antes de ANTICIPACION_MINIMA_MS (24 h), asi que un ISO literal convierte este
-  // caso en una bomba de tiempo. Estaba clavado en 2026-09-14/15 y el 17-sep el guion dejo de
-  // llegar a agendar: el gate se puso rojo con el bot vivo SANO y, al vivir en la cadena
-  // `npm test`, trabo el merge de todos los carriles. El helper ya existia arriba; estos dos
-  // casos eran los unicos del archivo que no lo usaban.
+  // caso en una bomba de tiempo (paso el 17-sep y trabo el merge de todos los carriles).
   env.ONIA_BOT_SLOTS = SPEC_PROD;
+  return env;
+}
 
+test("el guion feliz, con el entorno de produccion: no ofrece horarios y nunca dice «Listo, agendado»", () => {
+  const simulador = fileURLToPath(new URL("./simulate.mjs", import.meta.url));
   const corrida = spawnSync(process.execPath, [simulador, "--script", "1-feliz"], {
     encoding: "utf8",
-    env,
+    env: entornoDeProduccionSinAgenda(),
     timeout: 60000,
   });
 
   assert.equal(corrida.status, 0, `el simulador no corrio: ${corrida.stderr}`);
-  assert.match(corrida.stdout, /Listo, agendado/, "el guion feliz tiene que llegar a agendar (si no, el caso no mide nada)");
-  // El texto se IMPORTA del modulo que lo emite: escribirlo aca seria una segunda copia, que
-  // es exactamente el defecto que este caso existe para impedir.
-  const salvedad = cierreDeReservaFallida("sin_config").trim().replace(/^_\(|\)_$/g, "");
-  assert.ok(
-    corrida.stdout.includes(salvedad),
-    "el simulador imprimio el 'Listo, agendado' sin la salvedad que el bot SI le manda al prospecto",
-  );
+  assert.doesNotMatch(corrida.stdout, /Listo, agendado/, "el simulador confirma una demo que produccion no agenda");
+  assert.doesNotMatch(corrida.stdout, /\*\*A\)\*\*/, "y ofrece horarios que produccion ya no ofrece");
+  assert.match(corrida.stdout, /M0_PERSONA/, "mide la bienvenida que recibe el prospecto");
+});
+
+test("con --slots a mano y sin Cal.com, la eleccion imprime la version HONESTA (el mismo texto que el vivo)", () => {
+  const simulador = fileURLToPath(new URL("./simulate.mjs", import.meta.url));
+  const corrida = spawnSync(process.execPath, [simulador, "--script", "1-feliz", "--slots", SPEC_PROD], {
+    encoding: "utf8",
+    env: entornoDeProduccionSinAgenda(),
+    timeout: 60000,
+  });
+
+  assert.equal(corrida.status, 0, `el simulador no corrio: ${corrida.stderr}`);
+  assert.match(corrida.stdout, /sábado 5 de septiembre, 09:00/, "el caso tiene que llegar a elegir (si no, no mide nada)");
+  assert.doesNotMatch(corrida.stdout, /Listo, agendado/, "sin Cal.com la reserva no sale: confirmarla es el bug del 2-oct");
+  assert.match(corrida.stdout, /todavía no quedó reservado/, "imprime lo que el bot vivo manda cuando la reserva no sale");
 });
 
 test("y el modo INTERACTIVO tambien — es el que usa la medicion de arranque del carril", () => {
   // Los dos llamadores de `step()` son caminos distintos: el gate de arriba cubre `--script`,
-  // pero la linea que este carril corre cada vuelta es `printf ... | node simulate.mjs`. Sin
-  // este caso, sacarle el cierre al modo interactivo pasa en verde — y justamente ahi es donde
-  // se lee el "simulador 3/3" que se reporta.
+  // pero la linea que este carril corre cada vuelta es `printf ... | node simulate.mjs`.
   const simulador = fileURLToPath(new URL("./simulate.mjs", import.meta.url));
-  const env = { ...process.env };
-  delete env.CALCOM_BASE_URL;
-  delete env.CALCOM_BOT_EVENT_TYPE_ID;
-  env.ONIA_BOT_SLOTS = SPEC_PROD; // derivado de ahora, por el mismo motivo que el caso de arriba
-
-  const corrida = spawnSync(process.execPath, [simulador], {
+  const corrida = spawnSync(process.execPath, [simulador, "--slots", SPEC_PROD], {
     encoding: "utf8",
-    env,
+    env: entornoDeProduccionSinAgenda(),
     timeout: 60000,
     input: "quiero una demo\nA\n/salir\n",
   });
 
   assert.equal(corrida.status, 0, `el simulador no corrio: ${corrida.stderr}`);
-  assert.match(corrida.stdout, /Listo, agendado/, "el camino tiene que llegar a agendar (si no, el caso no mide nada)");
-  const salvedad = cierreDeReservaFallida("sin_config").trim().replace(/^_\(|\)_$/g, "");
-  assert.ok(
-    corrida.stdout.includes(salvedad),
-    "el modo interactivo imprimio el 'Listo, agendado' sin la salvedad que el bot SI le manda al prospecto",
-  );
+  assert.match(corrida.stdout, /sábado 5 de septiembre, 09:00/, "el camino tiene que llegar a elegir (si no, el caso no mide nada)");
+  assert.doesNotMatch(corrida.stdout, /Listo, agendado/);
+  assert.match(corrida.stdout, /todavía no quedó reservado/, "el modo interactivo imprime el texto honesto que manda el bot vivo");
 });
 
 // ---------------------------------------------------------------------------------------------

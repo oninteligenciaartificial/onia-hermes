@@ -650,7 +650,24 @@ test("parseArgs: dry-run por defecto, y acepta las dos formas de cada flag", () 
   assert.equal(parseArgs(["--json"]).json, true);
 });
 
-test("parseSlotsSpec / buildConfig: los horarios entran por CLI o por env, sin inventarse", () => {
+// Desde el 2-oct los horarios solo entran con AGENDA PROPIA (`ONIA_BOT_AGENDA=calcom` y Cal.com
+// configurado): sin ella el seguimiento no ofrece horarios (agendado-solo-si-se-agendo.test.mjs).
+// Los casos que prueban COMO entran los horarios la encienden mientras corren.
+const AGENDA_PROPIA = { ONIA_BOT_AGENDA: "calcom", CALCOM_BASE_URL: "http://calcom:3000", CALCOM_BOT_EVENT_TYPE_ID: "5" };
+async function conAgendaPropia(fn) {
+  const antes = Object.fromEntries(Object.keys(AGENDA_PROPIA).map((k) => [k, process.env[k]]));
+  Object.assign(process.env, AGENDA_PROPIA);
+  try {
+    return await fn();
+  } finally {
+    for (const [k, v] of Object.entries(antes)) {
+      if (v === undefined) delete process.env[k];
+      else process.env[k] = v;
+    }
+  }
+}
+
+test("parseSlotsSpec / buildConfig: los horarios entran por CLI o por env, sin inventarse", async () => {
   assert.equal(parseSlotsSpec(""), null);
   // `now` fijo: este caso prueba el PARSEO, y sin anclarlo tenia fecha de
   // vencimiento — el 2026-07-30 ya paso, y un horario vencido ahora sale
@@ -668,7 +685,10 @@ test("parseSlotsSpec / buildConfig: los horarios entran por CLI o por env, sin i
   assert.deepEqual(sinOverrides.slots, DEFAULT_CONFIG.slots, "sin overrides, los horarios siguen siendo el placeholder");
   assert.equal(sinOverrides.dryRun, DEFAULT_CONFIG.dryRun, "y el dryRun sigue siendo el del codigo");
   assert.ok(slotsPending(sinOverrides));
-  assert.equal(buildConfig({ slots: "jueves 15:00|viernes 10:00" }).slots[0].label, "jueves 15:00");
+  await conAgendaPropia(() => {
+    assert.equal(buildConfig({ slots: "jueves 15:00|viernes 10:00" }).slots[0].label, "jueves 15:00");
+  });
+  assert.ok(slotsPending(buildConfig({ slots: "jueves 15:00|viernes 10:00" })), "sin agenda propia, ni a mano: M3 no ofrece horarios");
 });
 
 test("parseSlotsSpec: un horario que ya no da 24 h de aviso NO se ofrece, sale pendiente", () => {
@@ -771,9 +791,20 @@ test("resolveConfig: con --slots explicito NO llama a Cal.com", async () => {
     called = true;
     return { slots: [], source: "calcom", warnings: [] };
   };
-  const config = await resolveConfig({ slots: "jueves 15:00@2026-07-30T19:00:00Z|viernes 10:00" }, { getAvailableSlots });
+  const config = await conAgendaPropia(() => resolveConfig({ slots: "jueves 15:00@2026-07-30T19:00:00Z|viernes 10:00" }, { getAvailableSlots }));
   assert.equal(called, false);
   assert.equal(config.slots[0].label, "jueves 15:00");
+});
+
+test("resolveConfig: SIN agenda propia no le pregunta disponibilidad a Cal.com (no va a ofrecer nada)", async () => {
+  let called = false;
+  const getAvailableSlots = async () => {
+    called = true;
+    return { slots: [], source: "calcom", warnings: [] };
+  };
+  const config = await resolveConfig({}, { getAvailableSlots });
+  assert.equal(called, false);
+  assert.ok(slotsPending(config));
 });
 
 test("resolveConfig: sin --slots ni ONIA_BOT_SLOTS, si Cal.com responde reemplaza el placeholder", async () => {
@@ -782,13 +813,13 @@ test("resolveConfig: sin --slots ni ONIA_BOT_SLOTS, si Cal.com responde reemplaz
     { key: "B", label: "lun 27/07 16:00", startAt: "2026-07-27T20:00:00Z", pending: false },
   ];
   const getAvailableSlots = async () => ({ slots: live, source: "calcom", warnings: [] });
-  const config = await resolveConfig({}, { getAvailableSlots, nowIso: NOW });
+  const config = await conAgendaPropia(() => resolveConfig({}, { getAvailableSlots, nowIso: NOW }));
   assert.deepEqual(config.slots, live);
 });
 
 test("resolveConfig: si Cal.com no responde, cae al placeholder sin tirar", async () => {
   const getAvailableSlots = async () => ({ slots: null, source: "error", warnings: ["calcom: caido"] });
-  const config = await resolveConfig({}, { getAvailableSlots });
+  const config = await conAgendaPropia(() => resolveConfig({}, { getAvailableSlots }));
   // Lo que importa es que NO se inventen horarios, no que sea el mismo objeto en memoria.
   assert.deepEqual(config.slots, DEFAULT_CONFIG.slots, "no se fabrica un horario porque Cal.com no conteste");
   assert.ok(slotsPending(config), "queda el placeholder, que es lo que frena el envio de M3");

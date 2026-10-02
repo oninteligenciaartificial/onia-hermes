@@ -47,12 +47,13 @@ import { pathToFileURL } from "node:url";
 
 import { DEFAULT_CONFIG, createBotConfig, localHour, parseSlotsSpec, renderTemplate, slotsPending } from "./config.mjs";
 import { cuotaAgotada, withKnowledge } from "./knowledge.mjs";
-import { buildFollowUp, followUpDue } from "./bot-engine.mjs";
+import { buildFollowUp } from "./bot-engine.mjs";
 import { activeSlots, slotLabel } from "./reply-builder.mjs";
 import { createStore, stateFromRow } from "./persistence.mjs";
 import { MOTIVO_NUESTRA, cargarInboxesDePrueba, esConversacionNuestra } from "./es-nuestra.mjs";
 import { createChatwootClient, whatsappTemplate } from "./chatwoot-adapter.mjs";
 import { getAvailableSlots as getAvailableSlotsFromCalcom } from "./calcom-availability.mjs";
+import { agendaDelEntorno } from "./calcom-booking.mjs";
 import {
   construirAvisoDeColgadas,
   enviarAvisoTelegram,
@@ -103,8 +104,15 @@ export function buildConfig(args = {}) {
   if (envDry === "false") overrides.dryRun = false;
   else if (envDry === "true") overrides.dryRun = true;
 
-  const slots = parseSlotsSpec(args.slots || process.env.ONIA_BOT_SLOTS || "");
-  if (slots) overrides.slots = slots;
+  // Sin agenda propia M3 no sale: ofrece dos horarios y cierra con «la dejamos agendada», la misma
+  // promesa que el turno ya no hace (`agendaDelEntorno`, 2-oct). Sin horarios el barrido bloquea
+  // ANTES de reservar la fila, asi que el seguimiento queda para cuando haya con que agendar.
+  if (agendaDelEntorno(process.env).modo === "persona") {
+    overrides.agenda = { modo: "persona" };
+  } else {
+    const slots = parseSlotsSpec(args.slots || process.env.ONIA_BOT_SLOTS || "");
+    if (slots) overrides.slots = slots;
+  }
   return withKnowledge(Object.keys(overrides).length ? createBotConfig(overrides) : DEFAULT_CONFIG);
 }
 
@@ -117,6 +125,7 @@ export function buildConfig(args = {}) {
  */
 export async function resolveConfig(args = {}, deps = {}) {
   const config = buildConfig(args);
+  if (config.agenda?.modo === "persona") return config; // sin agenda propia no se ofrecen horarios
   const explicit = Boolean(args.slots || process.env.ONIA_BOT_SLOTS);
   if (explicit) return config; // Sergio (o el operador) ya fijó los horarios a mano: no se pisa
 

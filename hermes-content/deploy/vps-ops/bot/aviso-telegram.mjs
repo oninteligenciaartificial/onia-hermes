@@ -95,6 +95,9 @@ export const ETIQUETAS = Object.freeze({
   demo_agendada: "DEMO AGENDADA — anotala",
   descarte_tras_agendar: "se cayo una demo ya agendada — liberá el horario",
   sin_horarios: "no habia horario que ofrecerle",
+  // Sin agenda propia (`ONIA_BOT_AGENDA`, default la persona) el bot le dice al prospecto que el
+  // horario se lo coordina Sergio Urcullo: este aviso es la otra mitad de esa promesa.
+  coordinar_demo: "QUIERE LA DEMO — escribile vos para el horario",
   // Lo emite el BARRIDO (`postdemo-run.mjs`), no el motor, y por eso no tenía etiqueta: el gate
   // que vigila esta lista derivaba su universo de `bot-engine.mjs` y sólo. Ver
   // `postdemo-avisa-por-el-canal-vivo.test.mjs`, que camina la carpeta entera.

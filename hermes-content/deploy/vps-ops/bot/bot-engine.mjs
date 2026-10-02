@@ -13,22 +13,25 @@
 
 import {
   DEFAULT_CONFIG,
+  agendaPropia,
   claveDeSlot,
   renderTemplate,
   joinEs,
   isOutsideBusinessHours,
+  sinHorariosQueOfrecer,
   slotsPending,
   slotSostenible,
 } from "./config.mjs";
-import { enforceGuardrails, normalize, SAFE_REPLY } from "./guardrails.mjs";
+import { enforceGuardrails, normalize, SAFE_REPLY, SAFE_REPLY_BASE } from "./guardrails.mjs";
 import * as intents from "./intents.mjs";
-import { campanaExacta, faqNegocioVigente, recepcionistaStep } from "./recepcionista.mjs";
+import { campanaExacta, faqNegocioVigente, linkDeReserva, recepcionistaStep } from "./recepcionista.mjs";
 // COMO se escribe cada respuesta vive en reply-builder.mjs; aca queda QUE rama se toma.
 import {
   ESPERA_HORARIO_STAGES,
   activeSlots,
   capturedLabels,
   elegibleSlots,
+  hayHorarioReal,
   missingFields,
   pendingAsk,
   pendingBranch,
@@ -416,10 +419,12 @@ function finalize(ctx, next, replies, effects = [], notes = []) {
  *   guion de venta. Como objeto `{key, options}` permite colgarle botones al anuncio (R_DERIVA
  *   del recepcionista) sin duplicar los efectos de esta funcion.
  */
-function handoffResult(ctx, base, reason, leadingReplies = [], bodyKey = "M5") {
+function handoffResult(ctx, base, reason, leadingReplies = [], bodyKey = "M5", { motivo } = {}) {
   const { config, prev, msg } = ctx;
   const next = { ...base, botStage: "handoff_humano", handoffAckAt: null };
-  const summary = summarize(next, msg, reason, config);
+  // `motivo` es lo que LEE Sergio Urcullo en el aviso cuando el slug no alcanza para actuar (p. ej.
+  // QUE horario eligio). El slug sigue siendo `reason`: es el que miden las notas y el banco.
+  const summary = summarize(next, msg, motivo || reason, config);
   const effects = [
     stageEffect(prev, next, reason),
     {
@@ -453,7 +458,10 @@ function welcomeResult(ctx, base, { reason = "disparador_demo", notes = ["bienve
   // prospecto ("HORARIO A (pendiente de definir)") y ademas detectSlotChoice descarta los slots
   // `pending`, asi que el prospecto no puede elegir NADA: la conversacion muere en el primer
   // mensaje. Se lo saluda igual (el lead nace), pero el horario lo coordina un humano.
-  const sinHorarios = slotsPending(config);
+  // SIN AGENDA PROPIA TAMPOCO (2-oct): los horarios del cron no los reserva nadie, asi que
+  // ofrecerlos es prometer «agendo yo» sin con que. Ver `agendaDelEntorno` (calcom-booking.mjs).
+  const persona = !agendaPropia(config);
+  const sinHorarios = sinHorariosQueOfrecer(config);
   const next = {
     ...base,
     // SIN HORARIOS NO ES SILENCIO. Antes esto era `handoff_humano`, y `handoff_humano`
@@ -494,14 +502,41 @@ function welcomeResult(ctx, base, { reason = "disparador_demo", notes = ["bienve
   ];
   if (sinHorarios) {
     // Un humano TIENE que enterarse: el prospecto quedo esperando que Sergio le proponga hora.
-    const summary = summarize(next, msg, "sin horarios disponibles que ofrecer", config);
+    // Sin agenda propia el texto le PROMETE que le escriben: el aviso es la otra mitad del contrato.
+    const summary = summarize(next, msg, persona ? "quiere la demo y el bot no agenda: coordinale vos el horario" : "sin horarios disponibles que ofrecer", config);
+    // Dos emisiones LITERALES y no un `kind` calculado: el gate de las etiquetas
+    // (aviso-nombra-todo-lo-que-el-motor-emite.test.mjs) deriva el universo de kinds del codigo.
+    const aviso = persona
+      ? { type: "notify_sergio", payload: { kind: "coordinar_demo", conversationKey: next.conversationKey, text: summary } }
+      : { type: "notify_sergio", payload: { kind: "sin_horarios", conversationKey: next.conversationKey, text: summary } };
     effects.push(
       { type: "review_queue", payload: { ...config.handoff.reviewQueue, conversationKey: next.conversationKey, leadKey: next.leadKey, summary } },
-      { type: "notify_sergio", payload: { kind: "sin_horarios", conversationKey: next.conversationKey, text: summary } },
+      aviso,
     );
+  }
+  if (persona) {
+    const bienvenida = say("M0_PERSONA", next, config, { coordina_demo: coordinaDemo(next, config) });
+    // La pregunta va solo si no sigue la respuesta de una campaña: esa ya trae las suyas (la de la
+    // pauta pregunta profesionales y quien agenda) y dos preguntas seguidas suenan a formulario.
+    const conPregunta = after.length === 0
+      ? { ...bienvenida, text: `${bienvenida.text}\n\n${say("M0_PERSONA_PREGUNTA", next, config).text}` }
+      : bienvenida;
+    return finalize(ctx, next, [conPregunta, ...after], effects, [...notes, "agenda_de_la_persona"]);
   }
   const bienvenida = say(sinHorarios ? "M0_SIN_HORARIOS" : "M0", next, config);
   return finalize(ctx, next, [bienvenida, ...after], effects, sinHorarios ? [...notes, "sin_horarios_que_ofrecer"] : notes);
+}
+
+/**
+ * Como se coordina la demo sin agenda propia: el link de la agenda REAL si el conocimiento la trae
+ * (`orgSlug` → `linkDeReserva`, la misma agenda publica que ya usa el recepcionista), y si no, la
+ * persona escribe por la via del canal. Nunca un link inventado: sin slug limpio no hay link.
+ */
+function coordinaDemo(state, config) {
+  const link = linkDeReserva(config);
+  return link
+    ? say("COORDINA_LINK", state, config, { link_agenda: link }).text
+    : say("COORDINA_PERSONA", state, config).text;
 }
 
 /**
@@ -977,7 +1012,7 @@ function handleHorario(ctx, base) {
       // el prospecto no puede elegir NADA y la charla se estanca repitiendo la misma frase.
       // Medido el 2026-09-02: mensajes 2 y 3 salian identicos. Con slots pendientes se acusa
       // el dato y se pide el contacto, que es lo unico accionable sin agenda.
-      const reply = say(slotsPending(config) ? "M0b_SIN_HORARIOS" : "M0b", base, config, { datos_que_si_dio: joinEs(capturedLabels(base.qualification, config)) });
+      const reply = say(sinHorariosQueOfrecer(config) ? "M0b_SIN_HORARIOS" : "M0b", base, config, { datos_que_si_dio: joinEs(capturedLabels(base.qualification, config)) });
       // El dato tambien va al CRM, no solo a la conversacion. Sin esto, quien contaba su negocio en
       // vez de elegir horario y despues se callaba quedaba en el CRM como "sin definir" y sin
       // ciudad: el rubro y el tamano vivian en `bot_conversations` y nadie los veia en el panel.
@@ -1014,10 +1049,22 @@ function handleHorario(ctx, base) {
   // que evita que el proximo "A" vuelva a reservar el viejo.
   if (!slotSostenible(chosen, msg.receivedAt ? Date.parse(msg.receivedAt) : Date.now())) {
     const reOfrecido = { ...base, slotsOffered: config.slots.map((slot) => ({ ...slot })) };
-    const reply = slotsPending(config)
+    const reply = sinHorariosQueOfrecer(config)
       ? say("PENDING_HORARIO_SIN_HORARIOS", reOfrecido, config)
       : say("M0_HORARIO_CADUCO", reOfrecido, config, { slot_elegido: chosen.label });
     return finalize(ctx, reOfrecido, [reply], [], ["horario_caduco"]);
+  }
+
+  // SIN AGENDA PROPIA NO SE CONFIRMA NADA (2-oct). Solo se llega aca con una oferta VIEJA: la
+  // conversacion nacio cuando el bot todavia ofrecia horarios y la foto (`slotsOffered`) sigue en
+  // la base. Confirmarla seria el «Listo, agendado» de una demo que no reserva nadie — el bug que
+  // la auditoria del 2-oct midio en produccion. Se acusa lo que eligio y lo confirma la persona;
+  // a Sergio Urcullo le llega CON el horario, que es lo unico que necesita para cumplir. Va DESPUES
+  // del corte por caducidad: un horario que ya paso no se acusa como elegido, se re-coordina.
+  if (!agendaPropia(config)) {
+    return handoffResult(ctx, base, "horario_sin_agenda", [], { key: "M_HORARIO_SIN_AGENDA", vars: { slot_elegido: chosen.label } }, {
+      motivo: `eligió ${chosen.label} y el bot no agenda: confirmale vos el horario`,
+    });
   }
 
   const next = {
@@ -1132,6 +1179,19 @@ function handleAgendada(ctx, base) {
  * no puede filtrar lo que no tiene (spec §3.4). Su salida SIEMPRE pasa por enforceGuardrails().
  * Al 2do malentendido: handoff (dos fallos de comprension = el bot ya no aporta).
  */
+/**
+ * El texto seguro, listo para el prospecto. Con horarios de verdad sobre la mesa es SAFE_REPLY tal
+ * cual («¿Te reservo A o B?»); sin ellos —sin agenda propia, o con el placeholder— la pregunta de
+ * los horarios se cambia por la pregunta pendiente real del embudo. Antes salia «¿Te reservo
+ * HORARIO A (pendiente de definir) o HORARIO B (pendiente de definir)?» (lo vio el simulador, 2-oct).
+ */
+function textoSeguro(state, config) {
+  if (hayHorarioReal(state, config)) return renderTemplate(SAFE_REPLY, varsFor(state, config));
+  const base = renderTemplate(SAFE_REPLY_BASE, varsFor(state, config));
+  const pregunta = pendingAsk(state, config);
+  return pregunta ? `${base} ${pregunta}` : base;
+}
+
 function offScriptResult(ctx, base) {
   const { config, options, msg } = ctx;
   const count = base.offScriptCount + 1;
@@ -1152,7 +1212,7 @@ function offScriptResult(ctx, base) {
     // Prohibido pasar precios, planes, features o cifras: el prompt no recibe numeros.
     forbidden: ["precio", "planes", "features", "cifras", "casos de clientes"],
   };
-  const fallbackText = renderTemplate(SAFE_REPLY, varsFor(next, config));
+  const fallbackText = textoSeguro(next, config);
 
   if (typeof options.llm !== "function") {
     return finalize(
@@ -1186,7 +1246,7 @@ function offScriptResult(ctx, base) {
       {
         templateKey: verdict.ok ? "llm_freeform" : "safe_reply",
         replySource: verdict.ok ? "llm" : "script",
-        text: renderTemplate(verdict.text, varsFor(next, config)),
+        text: verdict.ok ? renderTemplate(verdict.text, varsFor(next, config)) : textoSeguro(next, config),
         guardrail: { ok: verdict.ok, violations: verdict.violations },
       },
     ],

@@ -15,9 +15,13 @@ import { MARCADORES_DE_OFERTA, soloPreciosPublicos } from "./precios-publicos.mj
  * Texto seguro (equivalente al SAFE_REPLY de BE). Conserva los {{ }} a proposito: la
  * sustitucion de variables ocurre DESPUES del guardrail, si no una hora puede parecer una cifra.
  */
-export const SAFE_REPLY =
+export const SAFE_REPLY_BASE =
   "Eso prefiero no contestártelo yo — soy un bot y no quiero darte un dato equivocado. " +
-  "Te lo confirma {{humano}} en la demo. ¿Te reservo {{slot_a}} o {{slot_b}}?";
+  "Te lo confirma {{humano}} en la demo.";
+// La pregunta de los horarios va APARTE (2-oct): sin horarios que ofrecer —sin agenda propia o con
+// el placeholder— el motor la reemplaza por la pregunta pendiente real (`textoSeguro` en
+// bot-engine.mjs). Pegada, salia «¿Te reservo HORARIO A (pendiente de definir) o …?».
+export const SAFE_REPLY = `${SAFE_REPLY_BASE} ¿Te reservo {{slot_a}} o {{slot_b}}?`;
 
 /**
  * Los 6 codigos de la spec. Los regex se escriben SIN tildes porque el texto llega normalizado.

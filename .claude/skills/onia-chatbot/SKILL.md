@@ -146,6 +146,47 @@ algo nuevo) · `qa` · `verification-loop` · `health`.
 
   Se apaga al revés. Sin esas variables, las rutas dan 404 y el bot no cambia.
 
+## Agenda y voz del bot de ventas: apagadas por config (2-oct-2026)
+
+La auditoría de producción del 2-oct (§2 acción 3) midió que el bot decía «Listo, agendado» y en la
+línea siguiente «estoy confirmando ese horario con Sergio». El camino exacto, leído en el código:
+M2 del guion (`config.mjs`) empieza con «Listo, agendado» y lo redacta el motor ANTES de saber si la
+reserva sale → `run-turn.mjs` 6.5 llama a `createBooking` contra `CALCOM_BASE_URL=http://calcom:3000`
+(el contenedor no existe: `reason: "error"`/`destino_caido`) → le PEGABA `cierreDeReservaFallida` al
+final. Y los horarios que ofrecía no salían de un calendario: los escribe un cron
+(`slots-rodantes.mjs`) desde las ventanas de atención.
+
+- **`ONIA_BOT_AGENDA`** (`agendaDelEntorno`, `calcom-booking.mjs`). VACÍO = **persona** (default):
+  el bot NO ofrece horarios ni confirma; saluda con `M0_PERSONA` («el horario lo coordinás directo con
+  Sergio: te escribe por acá», o el link de la agenda real si el conocimiento trae `orgSlug`) y a Sergio
+  Urcullo le llega el aviso `coordinar_demo`. Una elección sobre una oferta VIEJA (conversación que nació
+  con horarios) se deriva con `M_HORARIO_SIN_AGENDA`, nunca se confirma. `calcom` SOLO enciende con
+  `CALCOM_BASE_URL` + `CALCOM_BOT_EVENT_TYPE_ID`: tener Cal.com declarado no alcanza (era justo el estado
+  que mentía). Lo leen `run-turn.buildConfig`, `followup-run.buildConfig` y `simulate.mjs` (que lo lee de
+  la MISMA fuente que los horarios: entorno → webhook.env → VPS).
+- **Con agenda propia y la reserva que NO sale**: `reservaQueNoSalio` REEMPLAZA M2 por `M2_SIN_RESERVA`
+  (o `M2_HORARIO_TOMADO` con 409), pasa la conversación a `handoff_humano` (si quedara en
+  `demo_agendada`, M2b diría «Nos vemos …» y M9 recordaría una demo inexistente) y SIEMPRE sale el aviso
+  `reserva_sin_confirmar`. Los tres caminos (vivo, seco de `runTurn`, `simulate.mjs`) usan la misma función.
+- **El texto seguro del LLM** (`SAFE_REPLY`) terminaba en «¿Te reservo {{slot_a}} o {{slot_b}}?»: sin
+  horarios salía «HORARIO A (pendiente de definir)». Ahora `textoSeguro` (bot-engine) pone la pregunta
+  pendiente real. Lo encontró MIRAR el simulador, no un test: correr `node simulate.mjs` con el entorno
+  de producción antes de dar por hecho un cambio de guion.
+- **`ONIA_AUDIO_ENABLED`**: solo `true` la enciende (antes, vacío = encendida contra `speaches:8000`, que no
+  existe). Apagada, el motor contesta al instante `M_AUDIO_FAIL` («no lo puedo escuchar yo, ¿me lo
+  escribís?») y al segundo audio deriva a la persona. `destinos-vivos.mjs` lee el interruptor con
+  `getTranscribeConfig` del producto (no una copia de la regla).
+- ⚠️ **El código no cambia el entorno vivo.** El proceso vivo tenía `ONIA_AUDIO_ENABLED=true` (medido el
+  19-sep en `/proc`, ver `destinos-vivos.mjs`), y no se sabe si viene ESCRITO en `/opt/onia/bot/webhook.env`
+  o del default viejo del lanzador (`:-true`, ahora `:-false`). Después del deploy, mirar con
+  `grep ^ONIA_AUDIO_ENABLED /opt/onia/bot/webhook.env`: si dice `true`, borrar la línea (o `false`) y
+  reiniciar el webhook; y confirmar con `npm run destinos:vivos`. La agenda se apaga sola al desplegar
+  (`ONIA_BOT_AGENDA` no existe allá). Las líneas `CALCOM_*` pueden quedar: sin `calcom` no se usan.
+- **Para encender la agenda propia algún día** (Cal.com que exista, o la agenda de la plataforma):
+  `ONIA_BOT_AGENDA=calcom` en webhook.env (el lanzador ya la pasa) **y** cablearla en `followup-run.sh`
+  (hoy no pasa ni `ONIA_BOT_AGENDA` ni `CALCOM_*`: M3 queda bloqueado). Verificar con el simulador y una
+  reserva real antes de prometer nada.
+
 ## Reglas duras del carril
 
 1. **Construido ≠ terminado.** Vale cuando está encendido en producción y verificado ahí.
