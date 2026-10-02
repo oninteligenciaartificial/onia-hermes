@@ -361,7 +361,12 @@ export function cargarSlotsPublicados(args = {}, deps = {}) {
   // publica cinco horarios y el guion nombra dos. Si el simulador cargara solo el par mediria una
   // conversacion que produccion no tiene — y este carril ya pago una vez el instrumento que no
   // mide lo que corre.
-  return { slots: parseSlotsSpec(raw), elegibles: slotsElegibles(raw), aviso: null };
+  // El reloj se inyecta (`deps.now`): un caso escrito con su propio instante —el `receivedAt` de sus
+  // mensajes— tiene que juzgar los horarios contra ESE instante, no contra el dia en que alguien lo
+  // corre. Sin esto los horarios fijos de un test vencen solos y lo ponen rojo sin tocar el bot
+  // (paso el 2-oct con cinco archivos de la pauta). Sin `now` es el reloj de la maquina, como antes.
+  const now = Number.isFinite(deps.now) ? deps.now : Date.now();
+  return { slots: parseSlotsSpec(raw, { now }), elegibles: slotsElegibles(raw, { now }), aviso: null };
 }
 
 export function buildConfig(args = {}, deps = {}) {

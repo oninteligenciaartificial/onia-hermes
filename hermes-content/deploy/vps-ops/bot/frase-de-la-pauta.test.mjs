@@ -17,7 +17,9 @@
 // que en este carril es firma de Sergio Urcullo) ni que un teléfono que no sea el de Onia reciba la
 // respuesta mirándola. Esto es la mitad del repo; la otra mitad se mide en vivo.
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { test } from "node:test";
 
 import { createState, step } from "./bot-engine.mjs";
@@ -28,12 +30,37 @@ import { buildConfig } from "./simulate.mjs";
 
 const doc = JSON.parse(readFileSync(new URL("./knowledge.onia.json", import.meta.url), "utf8"));
 const PRECARGADOS = precargadosDeLaPauta();
+const T0 = Date.parse("2026-09-30T19:00:00Z");
+// El reloj de la config es el de la conversacion (`T0`), no el de la maquina: los horarios son
+// fijos y sin esto vencen solos (el 2-oct pusieron rojo este archivo sin que nadie tocara el bot).
 const CONFIG = buildConfig(
   { slots: "jueves 2 de octubre, 14:00@2026-10-02T18:00:00Z|viernes 3 de octubre, 15:00@2026-10-03T19:00:00Z" },
-  { env: {}, envFile: "/no/existe/webhook.env" },
+  { env: {}, envFile: "/no/existe/webhook.env", now: T0 },
 );
-const T0 = Date.parse("2026-09-30T19:00:00Z");
 const en = (min) => new Date(T0 + min * 60000).toISOString();
+
+// UNA MENCION ABREVIADA NO ES UN PRECARGADO (2026-10-02). El 30-sep el doc de la pauta sumo, en
+// los pasos de creacion del anuncio, «**Texto precargado** (`Hola, vi el anuncio de Onia (D1)…`)»:
+// una referencia al texto, cortada con «…», entre backticks. El extractor la leia como un tercer
+// precargado y el gate de abajo veia D1 dos veces — rojo, y con el el deploy del bot trabado.
+// El texto que Meta escribe por el lead nunca termina en «…»: eso es prosa del doc, no el anuncio.
+test("una mención del precargado cortada con «…» no cuenta como otro precargado", () => {
+  const dir = mkdtempSync(join(tmpdir(), "pauta-"));
+  try {
+    const doc = join(dir, "pauta.md");
+    writeFileSync(
+      doc,
+      [
+        "| D1 | `Hola, vi el anuncio de Onia (D1). Tengo una clínica dental.` |",
+        "**Texto precargado** (`Hola, vi el anuncio de Onia (D1)…`): se pone a mano.",
+        "Otra abreviada (`Hola, vi el anuncio de Onia (D4)...`).",
+      ].join("\n"),
+    );
+    assert.deepEqual(precargadosDeLaPauta(doc), ["Hola, vi el anuncio de Onia (D1). Tengo una clínica dental."]);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
 
 test("el doc de la pauta trae los precargados de D1 y D4 (si no, este gate no mide nada)", () => {
   const codigos = PRECARGADOS.map((texto) => /\(([A-Z]\d+)\)/.exec(texto)?.[1]).sort();

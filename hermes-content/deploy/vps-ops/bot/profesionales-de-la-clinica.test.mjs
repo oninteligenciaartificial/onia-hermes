@@ -36,11 +36,13 @@ for (const [frase, esperado] of CASOS) {
 }
 
 test("en la conversación: el dueño que contesta con sus odontólogos recibe el acuse, no al LLM", () => {
+  const T0 = Date.parse("2026-09-30T19:00:00Z");
+  // El reloj de la config es el de la conversacion, no el de la maquina: los horarios son fijos y
+  // sin esto vencen solos (el 2-oct pusieron rojo este caso sin que nadie tocara el bot).
   const config = buildConfig(
     { slots: "jueves 2 de octubre, 14:00@2026-10-02T18:00:00Z|viernes 3 de octubre, 15:00@2026-10-03T19:00:00Z" },
-    { env: {}, envFile: "/no/existe/webhook.env" },
+    { env: {}, envFile: "/no/existe/webhook.env", now: T0 },
   );
-  const T0 = Date.parse("2026-09-30T19:00:00Z");
   const r1 = step(createState({ channel: "chatwoot", contactRef: "prof" }), { text: "Hola, vi el anuncio de Onia (D1). Tengo una clínica dental.", receivedAt: new Date(T0).toISOString() }, { config });
   const r2 = step(r1.nextState, { text: "hay 3 odontologos y la recepcionista agenda", receivedAt: new Date(T0 + 60000).toISOString() }, { config });
   assert.equal(r2.replies[0].templateKey, "M0b");

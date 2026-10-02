@@ -25,7 +25,9 @@ import { createBotConfig } from "./config.mjs";
 import { buildConfig } from "./simulate.mjs";
 
 const T0 = "2026-09-30T19:00:00Z";
-const SIN_AMBIENTE = { env: {}, envFile: "/no/existe/webhook.env" };
+// El reloj de la config es el de la conversacion (`T0`), no el de la maquina: los horarios son
+// fijos y sin esto vencen solos (el 2-oct pusieron rojo este archivo sin que nadie tocara el bot).
+const SIN_AMBIENTE = { env: {}, envFile: "/no/existe/webhook.env", now: Date.parse(T0) };
 const HORARIOS = "jueves 2 de octubre, 14:00@2026-10-02T18:00:00Z|viernes 3 de octubre, 15:00@2026-10-03T19:00:00Z";
 const BASE = buildConfig({ slots: HORARIOS }, SIN_AMBIENTE);
 const CAMPANA_PAUTA = {

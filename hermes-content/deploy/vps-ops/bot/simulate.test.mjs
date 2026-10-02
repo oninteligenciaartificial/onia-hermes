@@ -165,6 +165,23 @@ test("sin --slots toma ONIA_BOT_SLOTS del entorno, que es de donde los lee produ
   );
 });
 
+// EL RELOJ SE INYECTA (2026-10-02). Cinco archivos de la pauta dental (codigo-del-anuncio,
+// frase-de-la-pauta, paciente-de-la-pauta, profesionales-de-la-clinica,
+// tratamiento-a-medias-no-es-consulta-clinica) escribieron sus mensajes el 30-sep con `T0` fijo y
+// horarios fijos del 2 y 3 de octubre, pero armaban la config con el reloj de la MAQUINA. El 2-oct
+// los horarios cayeron adentro de las 24 h de anticipacion, el motor paso a la rama SIN_HORARIOS y
+// diez tests se pusieron rojos sin que nadie tocara el bot — y con ellos se trabo el deploy.
+// La conversacion ya tenia su instante; faltaba que la config lo usara.
+test("buildConfig juzga los horarios con el reloj INYECTADO, no con el de la maquina", () => {
+  const horarios = "jueves 2 de octubre, 14:00@2026-10-02T18:00:00Z|viernes 3 de octubre, 15:00@2026-10-03T19:00:00Z";
+
+  const antes = buildConfig({ slots: horarios }, { ...SIN_AMBIENTE, now: Date.parse("2026-09-30T19:00:00Z") });
+  assert.deepEqual(antes.slots.map((s) => s.pending), [false, false], "el 30-sep los dos se sostienen");
+
+  const despues = buildConfig({ slots: horarios }, { ...SIN_AMBIENTE, now: Date.parse("2026-10-02T19:00:00Z") });
+  assert.ok(despues.slots.some((s) => s.pending), "el 2-oct a las 19:00 UTC el del jueves ya paso: no se ofrece");
+});
+
 test("sin horarios por ningun lado NO se lo calla: dice que esa NO es la rama de produccion", () => {
   const avisos = [];
   buildConfig({}, { ...SIN_AMBIENTE, warn: (linea) => avisos.push(linea) });

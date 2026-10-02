@@ -174,7 +174,17 @@ algo nuevo) · `qa` · `verification-loop` · `health`.
 ## Gates antes de mergear
 
 ```bash
-cd hermes-content/deploy/vps-ops/bot && node --test *.test.mjs   # 503/503
+cd hermes-content/deploy/vps-ops/bot && node --test   # el mismo gate que corre deploy-bot.sh (incluye evals/)
 ```
+El número de tests sale de la corrida, no de este archivo (2-oct-2026: 1587/1587 con `node --test`).
+
+**Trampas de la suite (2-oct-2026, 11 rojos que trabaron el deploy sin que nadie tocara el bot):**
+- **Horarios fijos en un test = test que vence solo.** `buildConfig` (de `simulate.mjs`) juzgaba los
+  horarios con el reloj de la MÁQUINA; cinco archivos de la pauta escribieron el 30-sep horarios del 2 y
+  3-oct y el 2-oct cayeron dentro de las 24 h de anticipación (rama `M0_SIN_HORARIOS`). Un test con
+  `T0` fijo pasa `now: T0` en los deps de `buildConfig`; nunca horarios absolutos con el reloj real.
+- **El extractor de precargados lee el doc de la pauta** (`precargados-de-la-pauta.mjs`). Una mención
+  abreviada entre backticks (`` `Hola, vi el anuncio de Onia (D1)…` ``) contaba como otro precargado y
+  duplicaba D1. Ahora se ignoran las que terminan en «…» o «...»; un precargado de verdad nunca termina así.
 Más: `security-review` si tocó webhook/token/dato personal · subagente `code-reviewer` ·
 verificación EN PRODUCCIÓN de lo que se encendió (no basta el test) · `main` siempre compila.
