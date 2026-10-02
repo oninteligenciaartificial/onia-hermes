@@ -44,7 +44,7 @@ const JSON_LD = {
       "@type": "Service",
       name: `${CHATBOT_EN_LA_CARTA} para negocios`,
       serviceType: "Atención automática por WhatsApp",
-      description: `${CHATBOT_EN_LA_CARTA} que contesta 24/7 con la información real que el negocio publicó: hasta ${CONVERSACIONES_INCLUIDAS} conversaciones por mes. Entiende las fotos que le mandan, y lo que no sabe pasa a una persona. Lo que salga del alcance se cotiza a medida.`,
+      description: `${CHATBOT_EN_LA_CARTA} que contesta 24/7 con la información real que el negocio publicó: hasta ${CONVERSACIONES_INCLUIDAS} conversaciones por mes; lo que no sabe pasa a una persona. Lo que salga del alcance se cotiza a medida.`,
       provider: { "@type": "Organization", name: "Onia", url: `${SITE_URL}/` },
       areaServed: { "@type": "Country", name: "Bolivia" },
       url: `${SITE_URL}/chatbot`,

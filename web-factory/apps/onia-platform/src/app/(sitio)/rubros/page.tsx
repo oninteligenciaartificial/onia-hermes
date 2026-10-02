@@ -63,7 +63,7 @@ const RUBROS: readonly {
     nombre: "Dental",
     resultado:
       "Llegás a la mañana sabiendo quién viene, a qué hora y a qué teléfono llamar si no aparece.",
-    ve: "Pacientes, tratamientos, odontograma y agenda por profesional.",
+    ve: "Pacientes, tratamientos, odontograma y agenda con el profesional de cada cita.",
     alt: "Recepcionista de un consultorio dental con el celular en una mano y el dedo siguiendo un renglón del cuaderno de citas abierto.",
     w: 1280,
     h: 960,
@@ -98,7 +98,7 @@ const RUBROS: readonly {
     id: "estetica",
     nombre: "Estética",
     resultado:
-      "La clienta que dejó el tratamiento a medias no se pierde: te queda el mensaje escrito con tu link para que vuelva a reservar, y vos lo aprobás.",
+      "La clienta que dejó el tratamiento a medias: te queda el mensaje escrito con tu link para que vuelva a reservar, y vos lo aprobás.",
     ve: "Clientas, tratamientos, agenda y recordatorios.",
     alt: "Dueña de un centro de estética junto a la camilla vacía con papel nuevo puesto, con el celular en la mano.",
     w: 1280,

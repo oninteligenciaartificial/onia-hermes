@@ -225,6 +225,26 @@ Reprocharle a un prospecto lo que tenemos roto es un bumerán. Estado 2026-08-13
   entrar): pasa igual antes y después de cualquier cambio. Para mirar una sección, `scrollTo` +
   1,5 s + captura del viewport.
 
+## Promesas de la web contra el producto — `apps/onia-platform` (barrido 2026-10-02)
+
+- **Una promesa se arregla con su gate, no solo con la frase.** El «con el control ya en la
+  agenda» de estética se corrigió el 29-sep (`3cf50229f`) sin test, y el barrido del 2-oct
+  encontró a sus hermanas vivas en otras pantallas: «entiende las fotos» (/chatbot y
+  `pricing.ts`), «Agentes con IA que cada mañana revisan tus datos» (descripción de /agentes),
+  «lo que te sirve sale por tu WhatsApp» (envío automático con 0 números conectados), «agenda
+  por profesional» (no hay vista ni filtro por profesional) y «…a medias no se pierde» (un
+  resultado). Gate: `src/app/promesa-que-el-producto-cumple.test.ts` — prohíbe la FORMA de cada
+  promesa en todo `src/` servido, con el texto partido en líneas de JSX unido antes de buscar
+  (línea por línea, «sale por tu⏎WhatsApp» pasaba de largo).
+- **Fuente para medir:** catálogo §2, §7 y §8 + `docs/research/ONIA_INVENTARIO_IA_20261002.md` §4,
+  y el código de `onia-platform` `origin/master` (no la memoria ni otra pantalla del sitio).
+- ⚠️ **El catálogo se contradice en las fotos:** §5 describe el agente de WhatsApp «entiende fotos
+  y audios»; §8 (2-oct) dice que NO se puede decir. Se aplicó lo más conservador (§8) y el gate
+  viejo `nombre-del-addon.test.ts`, que EXIGÍA «entiende las fotos», se dio vuelta. Si una
+  sesión vuelve a ver el §5, no restaura la frase sin una prueba real con un negocio conectado.
+  El gemelo del PRODUCTO la sigue diciendo al 2-oct (`onia-platform/lib/pricing.ts` líneas 102 y
+  376, exigida por `lib/pricing-honestidad.test.ts:192`): eso es del carril Plataforma.
+
 ## Ojo con los monolitos
 
 - `onia-center` (~14k líneas): NO rediseñar in situ; reconstruir en componentes chicos
