@@ -1,6 +1,6 @@
 {
   "title": "Una skill llamada verify y Claude Code la corre antes de commitear (N04, noticia, pack referentes)",
-  "caption": "Desde el 30 de septiembre, si tu proyecto tiene una skill llamada verify, a Claude Code se le indica correrla justo antes de commitear.\n\nLo dice su registro de cambios, versión 2.1.286: «when your project or user skills include one named verify, Claude is now told to run it right before committing, except for docs-only and tests-only commits».\n\nEs una indicación, no un candado. Vale cuando commitea Claude, no en un git commit que hacés vos a mano. Y no corre en commits que solo tocan documentación o solo tests.\n\nLo de las láminas, para copiar:\n1. El archivo: .claude/skills/verify/SKILL.md\n2. Arriba, name: verify y una description corta. Abajo, tus chequeos en orden. Los míos: que compile (npx tsc --noEmit, para TypeScript; si tu proyecto es otro, el comando que lo compila) y que pasen los tests. Si algo falla: no commitear, y decir qué falló y dónde.\n3. Actualizá Claude Code: claude update\n\nOjo: tu skill reemplaza al /verify que ya trae Claude Code (el que arma y corre tu app para probar que un cambio hace lo que tiene que hacer). Y si ya usaste ese /verify, puede haber guardado su receta en ese mismo archivo: abrilo antes de pisarlo.\n\nPor qué me importa: en ONIA la rama principal alimenta el deploy, y ya nos pasó que un proceso automático subió trabajo a medias.\n\nFuentes, releídas el 1-oct: code.claude.com/docs/en/changelog (2.1.286, 30-sep) y code.claude.com/docs/en/skills.\n\nLa plantilla, lista para copiar, está en la comunidad de WhatsApp: te paso el link. Comentá VERIFY.",
+  "caption": "Desde el 30 de septiembre, si tu proyecto tiene una skill llamada verify, a Claude Code se le indica correrla justo antes de commitear.\n\nLo dice su registro de cambios, versión 2.1.286: «when your project or user skills include one named verify, Claude is now told to run it right before committing, except for docs-only and tests-only commits».\n\nEs una indicación, no un candado. Vale cuando commitea Claude, no en un git commit que hacés vos a mano. Y no corre en commits que solo tocan documentación o solo tests.\n\nLo de las láminas, para copiar:\n1. El archivo: .claude/skills/verify/SKILL.md\n2. Arriba, name: verify y una description corta. Abajo, tus chequeos en orden. Los míos: que compile (npx tsc --noEmit, para TypeScript; si tu proyecto es otro, el comando que lo compila) y que pasen los tests. Si algo falla: no commitear, y decir qué falló y dónde.\n3. Actualizá Claude Code: claude update\n\nOjo: tu skill reemplaza al /verify que ya trae Claude Code (el que arma y corre tu app para probar que un cambio hace lo que tiene que hacer). Y si ya usaste ese /verify, puede haber guardado su receta en ese mismo archivo: abrilo antes de pisarlo.\n\nPara comprobar que la corre: pedile a Claude un commit que toque código, no solo un README o un test. Antes del commit tiene que aparecer la skill verify corriendo.\n\nPor qué me importa: en ONIA la rama principal alimenta el deploy, y ya nos pasó que un proceso automático subió trabajo a medias.\n\nFuentes, releídas el 1-oct: code.claude.com/docs/en/changelog (2.1.286, 30-sep) y code.claude.com/docs/en/skills.\n\nLa plantilla, lista para copiar, está en la comunidad de WhatsApp: te paso el link. Comentá VERIFY.",
   "hashtags": [
     "#claudecode",
     "#claude",
@@ -56,10 +56,12 @@
     },
     {
       "number": 3,
-      "layout": "ensayo",
+      "layout": "ilustrado",
       "theme": "blanco",
-      "headline": "Una *indicación*, no\u00a0un\u00a0candado",
-      "body": "Vale cuando commitea Claude, no cuando commiteás vos a mano.\n\nY no corre en commits que solo tocan documentación o solo tests.",
+      "headline": "Una indicación, *no\u00a0un\u00a0candado*",
+      "body": "Vale cuando commitea Claude, no a mano. Y no corre en commits de solo documentación o solo tests.",
+      "image_style": "clay",
+      "image_prompt": "A small matte black clay gate standing wide open, with a smooth emerald green clay arrow lying on the ground and pointing through the opening, on a clean white surface.",
       "next": "3 pasos",
       "alt_text": "verify es una indicación, no un candado: no corre en commits manuales ni en los de solo documentación o tests"
     },
@@ -120,10 +122,12 @@
     },
     {
       "number": 7,
-      "layout": "ensayo",
+      "layout": "ilustrado",
       "theme": "blanco",
       "headline": "Comprobá que *la\u00a0corre*",
-      "body": "Pedile a Claude un commit que toque código, no solo un README o un test.\n\nAntes del commit tiene que aparecer la skill verify corriendo.",
+      "body": "Pedile un commit que toque código, no solo un README o un test. Antes del commit tenés que verla correr.",
+      "image_style": "clay",
+      "image_prompt": "A matte black clay stethoscope resting on a clean white surface, its round emerald green chest piece pressed against a small emerald green clay gear.",
       "next": "la plantilla",
       "alt_text": "Cómo comprobar que Claude Code corre la skill verify"
     },

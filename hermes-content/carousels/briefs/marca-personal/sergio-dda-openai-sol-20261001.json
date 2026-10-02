@@ -37,13 +37,15 @@
     },
     {
       "number": 3,
-      "layout": "dato",
+      "layout": "ilustrado",
       "theme": "blanco",
-      "value": "20×",
-      "headline": "más barato lo que *se\u00a0repite*",
-      "body": "Lo que mandás igual al principio de cada pedido, como las instrucciones de tu agente o tu lista de precios, entra desde la caché: 0,10 dólares el millón, contra 2.",
+      "headline": "Lo que se repite, *20×\u00a0más\u00a0barato*",
+      "body": "Lo que mandás igual al principio de cada pedido entra desde la caché: 0,10 dólares el millón, contra\u00a02.",
+      "image_style": "clay",
+      "image_prompt": "Three small stacks of plain smooth clay blocks standing side by side in a row. Each stack has the same two emerald green blocks at the bottom, and only the top piece changes: a matte black cube on the first stack, a white ball on the second, a matte black cone on the third.",
+      "texto_movido": "Antes era layout dato con value 20×. «como las instrucciones de tu agente o tu lista de precios» ya está en el caption («las instrucciones de tu agente, tu lista de precios») y en la lámina 4 («instrucciones y precios, al principio del pedido»).",
       "next": "cómo",
-      "alt_text": "20 veces más barato: la entrada desde la caché de GPT-6.1 Sol cuesta 0,10 dólares el millón contra 2"
+      "alt_text": "Tres pilas de bloques con la misma base verde y una pieza distinta arriba: lo que se repite al principio de cada pedido sale 20 veces más barato desde la caché de GPT-6.1 Sol, 0,10 dólares el millón contra 2"
     },
     {
       "number": 4,

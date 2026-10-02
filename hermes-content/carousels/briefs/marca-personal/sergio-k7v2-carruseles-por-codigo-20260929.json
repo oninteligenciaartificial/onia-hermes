@@ -1,6 +1,6 @@
 {
   "title": "Carruseles por código en 5 pasos (v2, pack referentes)",
-  "caption": "Este carrusel salió de un archivo JSON y un navegador.\n\nLa IA pinta solo la foto de la portada. El texto lo pone el código, porque los modelos de imagen escriben mal: el 29-sep uno me inventó letras en una taza y hasta un post falso de Instagram.\n\nPara probarlo, pedile esto a Claude Code: «Por cada lámina de brief.json armá un HTML de 1080x1350 con mi fuente y mi color, y sacale captura con Chrome».\n\nLa captura, a mano (Chrome sin ventana):\nchrome --headless=new --hide-scrollbars --force-device-scale-factor=1 --window-size=1080,1350 --virtual-time-budget=10000 --screenshot=slide-01.png file:///C:/ruta/slide-1.html\n\nEl --virtual-time-budget=10000 son los 10 segundos para que carguen las fuentes.\n\nComentá BRIEF y te paso el link de la comunidad con el JSON de este carrusel.",
+  "caption": "Este carrusel salió de un archivo JSON y un navegador.\n\nLa IA pinta solo las imágenes de arcilla. El texto lo pone el código, porque los modelos de imagen escriben mal: el 29-sep uno me inventó letras en una taza y hasta un post falso de Instagram.\n\nPara la imagen: un objeto simple sin nada impreso, descrito en positivo. Tazas, cuadernos y pantallas no: ahí el modelo inventa letras.\n\nPara probarlo, pedile esto a Claude Code: «Por cada lámina de brief.json armá un HTML de 1080x1350 con mi fuente y mi color, y sacale captura con Chrome».\n\nLa captura, a mano (Chrome sin ventana):\nchrome --headless=new --hide-scrollbars --force-device-scale-factor=1 --window-size=1080,1350 --virtual-time-budget=10000 --screenshot=slide-01.png file:///C:/ruta/slide-1.html\n\nEl --virtual-time-budget=10000 son los 10 segundos para que carguen las fuentes.\n\nComentá BRIEF y te paso el link de la comunidad con el JSON de este carrusel.",
   "hashtags": [
     "#claudecode",
     "#ia",
@@ -26,12 +26,14 @@
     },
     {
       "number": 2,
-      "layout": "ensayo",
+      "layout": "ilustrado",
       "theme": "blanco",
       "headline": "La IA de imagen *escribe mal*",
-      "body": "El 29-sep pedí fotos de objetos y el modelo inventó letras en una taza. Y hasta un post falso de Instagram.\n\nTexto en la imagen es texto sin control.",
+      "body": "El 29 de septiembre el modelo inventó letras en una taza. Texto en la imagen es texto sin control.",
       "next": "paso 1",
-      "alt_text": "Los modelos de imagen escriben mal"
+      "alt_text": "Los modelos de imagen escriben mal",
+      "image_style": "clay",
+      "image_prompt": "A small plain matte black clay ink bottle lying on its side, with a wide glossy emerald green ink puddle spilling out and spreading in uneven blobs."
     },
     {
       "number": 3,
@@ -62,12 +64,14 @@
     },
     {
       "number": 4,
-      "layout": "ensayo",
+      "layout": "ilustrado",
       "theme": "blanco",
       "headline": "Paso 2: la IA pinta *solo la imagen*",
-      "body": "Objetos sin nada impreso: piedras, plantas, madera.\n\nTazas, cuadernos y pantallas no: ahí inventa letras.\n\nDescribí en positivo lo que querés ver: un objeto simple.",
+      "body": "Un objeto simple sin nada impreso: piedra, planta, madera. Tazas y pantallas no: ahí inventa letras. Describilo en positivo.",
       "next": "paso 3",
-      "alt_text": "La IA genera solo la imagen, sin texto"
+      "alt_text": "La IA genera solo la imagen, sin texto",
+      "image_style": "clay",
+      "image_prompt": "A matte black clay painter's palette with a thumb hole, holding a few round blobs of emerald green and white clay paint, with a small emerald green clay paintbrush resting across it."
     },
     {
       "number": 5,

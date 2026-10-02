@@ -87,22 +87,36 @@
       "headline": "Se instala con *un comando*",
       "image": "hermes-content/carousels/briefs/assets/sergio-n06-antigravity-cli-20261002/antigravity-download-cli-20261002.png",
       "body": "En Mac, el mismo. En Windows, con PowerShell. Se abre con agy.",
-      "next": "la trampa",
+      "next": "lo que se muda",
       "fuente": "captura de antigravity.google/download, 2-oct-2026",
       "alt_text": "Captura de la página de descarga de Antigravity CLI con el comando de instalación para Linux"
     },
     {
       "number": 6,
-      "layout": "ensayo",
+      "layout": "ilustrado",
       "theme": "blanco",
-      "headline": "La *trampa*: tus skills",
-      "body": "La primera vez, agy te pregunta qué traer de Gemini CLI.\n\nPero las skills de tu proyecto no se mudan solas: van de .gemini/skills a\u00a0.agents/skills, a\u00a0mano.\n\n*Comprobalo con /skills.*",
-      "next": "los comandos",
-      "fuente": "antigravity.google/docs/cli/gcli-migration y /docs/cli/reference, 2-oct",
-      "alt_text": "La trampa al pasar de Gemini CLI a Antigravity CLI: las skills del proyecto se mueven a mano de .gemini/skills a .agents/skills"
+      "headline": "Lo que se *muda solo*",
+      "body": "La primera vez, agy te pregunta qué traer de Gemini CLI. Y tu GEMINI.md lo sigue leyendo igual.",
+      "image_style": "clay",
+      "image_prompt": "A horseshoe magnet made of emerald green clay with matte black tips, pulling a few small emerald green clay pebbles toward it.",
+      "next": "la trampa",
+      "fuente": "antigravity.google/docs/cli/gcli-migration, 2-oct: checklist interactiva al primer agy; GEMINI.md y AGENTS.md se siguen leyendo",
+      "alt_text": "Un imán de arcilla que atrae piezas: la primera vez, Antigravity CLI encuentra tu configuración de Gemini CLI y te pregunta qué traer"
     },
     {
       "number": 7,
+      "layout": "ilustrado",
+      "theme": "blanco",
+      "headline": "Tus skills: *la trampa*",
+      "body": "Las skills de tu proyecto no se mudan solas: de .gemini/skills a .agents/skills, a mano. *Comprobalo con /skills.*",
+      "next": "los comandos",
+      "fuente": "antigravity.google/docs/cli/gcli-migration y /docs/cli/reference, 2-oct",
+      "alt_text": "Una valija de arcilla con herramientas adentro: las skills del proyecto se mudan a mano de .gemini/skills a .agents/skills",
+      "image_style": "clay",
+      "image_prompt": "An open emerald green clay suitcase with a few small matte black clay tools packed neatly inside."
+    },
+    {
+      "number": 8,
       "layout": "cierre",
       "theme": "negro",
       "keyword": "ANTIGRAVITY",

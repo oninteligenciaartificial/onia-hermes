@@ -1,6 +1,6 @@
 {
   "title": "5 pruebas antes de activar tu bot de WhatsApp (v2, pack referentes)",
-  "caption": "Antes de activar un bot de WhatsApp, mandale vos los mensajes que le van a mandar tus clientes. Lo que no probaste vos, lo prueba tu cliente.\n\nLa que más importa es la 3: preguntale algo que no le diste (stock, plazo, precio). Si contesta con un dato que no está en su información, lo inventó. Si inventa, no se activa.\n\nLa 2 no es mandar el mismo texto dos veces desde tu celular: eso son dos mensajes distintos y tiene que contestar los dos. Es el mismo aviso que vuelve a llegar, con el mismo id, como pasa cuando tu servidor tarda en responder.\n\nLas cinco salen del bot de ONIA, y cada una tiene hoy su prueba automática.\n\nGuardá la lámina 6 para el día que lo actives.\n\nComentá PRUEBAS y te paso el link de la comunidad con la lista para copiar.",
+  "caption": "Antes de activar un bot de WhatsApp, mandale vos los mensajes que le van a mandar tus clientes. Lo que no probaste vos, lo prueba tu cliente.\n\nLa que más importa es la 3: preguntale algo que no le diste (stock, plazo, precio). Si contesta con un dato que no está en su información, lo inventó. Y ese dato se lo prometiste vos. Si inventa, no se activa.\n\nLa 2 no es mandar el mismo texto dos veces desde tu celular: eso son dos mensajes distintos y tiene que contestar los dos. Es el mismo aviso que vuelve a llegar, con el mismo id, como pasa cuando tu servidor tarda en responder.\n\nLas cinco salen del bot de ONIA, y cada una tiene hoy su prueba automática.\n\nGuardá la lámina 7 para el día que lo actives.\n\nComentá PRUEBAS y te paso el link de la comunidad con la lista para copiar.",
   "hashtags": [
     "#whatsapp",
     "#chatbot",
@@ -68,15 +68,28 @@
     },
     {
       "number": 5,
-      "layout": "ensayo",
+      "layout": "ilustrado",
       "theme": "blanco",
       "headline": "Prueba 3: preguntale *lo que no sabe*",
-      "body": "Stock, plazo, precio.\n\nSi contesta con un dato que vos no le diste, lo inventó. Y ese dato se lo prometiste vos.\n\nSi inventa, no se activa.",
-      "next": "las 5",
-      "alt_text": "Preguntarle al bot lo que no sabe"
+      "body": "Stock, plazo, precio. Si contesta un dato que no le diste, lo inventó. Si inventa, no se activa.",
+      "image_prompt": "A glossy round emerald green clay crystal ball, solid green all the way through, resting on a small matte black clay pedestal, with three tiny white clay sparkles floating around it.",
+      "image_style": "clay",
+      "next": "4 y 5",
+      "alt_text": "Una bola de cristal de arcilla: si el bot contesta lo que no sabe, está adivinando"
     },
     {
       "number": 6,
+      "layout": "ilustrado",
+      "theme": "blanco",
+      "headline": "Pruebas 4 y 5: *que avise a alguien*",
+      "body": "Un audio que no entiende o un «quiero hablar con una persona»: alguien se entera, no solo el bot.",
+      "image_prompt": "A small round clay service bell like the ones on a reception counter, with a matte black base, a shiny emerald green dome and a small white push button on top, on a white surface.",
+      "image_style": "clay",
+      "next": "las 5",
+      "alt_text": "Un timbre de mostrador de arcilla: si el bot no puede, avisa a una persona"
+    },
+    {
+      "number": 7,
       "layout": "lista",
       "theme": "blanco",
       "headline": "Las *5 pruebas*",
@@ -106,7 +119,7 @@
       "alt_text": "Checklist de las 5 pruebas antes de activar un bot"
     },
     {
-      "number": 7,
+      "number": 8,
       "layout": "cierre",
       "theme": "negro",
       "keyword": "PRUEBAS",

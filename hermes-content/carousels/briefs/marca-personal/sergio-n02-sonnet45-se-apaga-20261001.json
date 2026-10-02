@@ -1,6 +1,6 @@
 {
   "title": "Sonnet 4.5 se apaga el 30 de noviembre: encontralo y migralo con un comando (N02, noticia, pack referentes)",
-  "caption": "Anthropic anunció el 30 de septiembre que Sonnet 4.5 (claude-sonnet-4-5-20250929) se retira de la API de Claude el 30 de noviembre de 2026. Después de esa fecha, los pedidos a ese modelo fallan. Recomiendan pasar a Sonnet 5.5.\n\nEl comando de la lámina 4, para copiar (en Claude Code, dentro de la carpeta del proyecto):\n/claude-api migrate this project to claude-sonnet-5-5\nAntes de tocar archivos te pregunta el alcance: toda la carpeta, una subcarpeta o una lista de archivos. Al final te deja una lista para revisar a mano.\n\nTres detalles que no entraron en las láminas:\n– Al buscar claude-sonnet-4-5, saltate node_modules, .venv y .git: si no, podés contar las listas de modelos de tus propias dependencias.\n– Si usabas budget_tokens, el reemplazo es un nivel de esfuerzo: low para chat, medium para agentes.\n– En n8n, el comando no aplica: cambiá el modelo en cada nodo de Anthropic y pasá directo a la prueba. Si da error 400, compará el mensaje con la lámina 5.\n\nFuentes, con capturas del 1 de octubre de 2026: la nota del 30 de septiembre en las release notes de la plataforma de Claude (platform.claude.com/docs/en/release-notes/overview), la página Model deprecations y la guía de migración a Sonnet 5.5 (platform.claude.com/docs/en/models/sonnet-5-5/migration-guide).\n\nEl checklist completo, con el comando para buscarlo, está en la comunidad. Comentá MIGRAR y te paso el link.",
+  "caption": "Anthropic anunció el 30 de septiembre que Sonnet 4.5 (claude-sonnet-4-5-20250929) se retira de la API de Claude el 30 de noviembre de 2026. Después de esa fecha, los pedidos a ese modelo fallan. Recomiendan pasar a Sonnet 5.5.\n\nEl comando de la lámina 4, para copiar (en Claude Code, dentro de la carpeta del proyecto):\n/claude-api migrate this project to claude-sonnet-5-5\nAntes de tocar archivos te pregunta el alcance: toda la carpeta, una subcarpeta o una lista de archivos. Al final te deja una lista para revisar a mano.\n\nTres detalles más:\n– Al buscar claude-sonnet-4-5, saltate node_modules, .venv y .git: si no, podés contar las listas de modelos de tus propias dependencias.\n– Si usabas budget_tokens, el reemplazo es un nivel de esfuerzo: low para chat, medium para agentes.\n– En n8n, el comando no aplica: cambiá el modelo en cada nodo de Anthropic y pasá directo a la prueba. Si da error 400, compará el mensaje con la lámina 5.\n\nFuentes, con capturas del 1 de octubre de 2026: la nota del 30 de septiembre en las release notes de la plataforma de Claude (platform.claude.com/docs/en/release-notes/overview), la página Model deprecations y la guía de migración a Sonnet 5.5 (platform.claude.com/docs/en/models/sonnet-5-5/migration-guide).\n\nEl checklist completo, con el comando para buscarlo, está en la comunidad. Comentá MIGRAR y te paso el link.",
   "hashtags": [
     "#claude",
     "#anthropic",
@@ -49,13 +49,16 @@
     },
     {
       "number": 3,
-      "layout": "ensayo",
+      "layout": "ilustrado",
       "theme": "blanco",
       "headline": "Paso 1: *buscalo*",
-      "body": "En tu código, buscá este texto:\n\n*claude-sonnet-4-5*\n\nEn n8n, abrí cada nodo de Anthropic y mirá qué modelo tiene elegido.\n\nAnotá cuántos aparecen.",
+      "body": "En tu código, buscá *claude-\u2060sonnet-\u20604-\u20605*. En n8n, abrí cada nodo de Anthropic y mirá su modelo. Anotá cuántos\u00a0aparecen.",
+      "image_style": "clay",
+      "image_prompt": "A horseshoe magnet made of emerald green clay with white tips, lifting a few small matte black clay balls out of a shallow pile of white clay balls.",
+      "texto_movido": "Antes era layout ensayo. Se recortó «este texto:» y «qué modelo tiene elegido» → «su modelo»; el texto a buscar (claude-sonnet-4-5) sigue en la lámina y en el caption. Espacio de unión (U+2060) después de cada guion para que Chromium no lo parta.",
       "next": "paso 2",
       "fuente": "GUIONES §N02 paso uno; drop N02 punto 1",
-      "alt_text": "Paso 1: buscar el texto claude-sonnet-4-5 en el código y revisar el modelo de cada nodo de Anthropic en n8n"
+      "alt_text": "Un imán verde que saca bolitas negras de una pila blanca. Paso 1: buscar el texto claude-sonnet-4-5 en el código y revisar el modelo de cada nodo de Anthropic en n8n"
     },
     {
       "number": 4,
@@ -103,12 +106,24 @@
       "value": "400",
       "headline": "el error que *no\u00a0tiene\u00a0que\u00a0salir*",
       "body": "Probá tu flujo: corre sin error 400 y el campo model de la respuesta dice el modelo nuevo.",
-      "next": "el checklist",
+      "next": "si usás n8n",
       "fuente": "GUIONES §N02 «Cómo sabés que quedó»; drop N02 punto 4",
       "alt_text": "400: el error que no tiene que aparecer al probar la migración"
     },
     {
       "number": 7,
+      "layout": "ilustrado",
+      "theme": "blanco",
+      "headline": "¿Usás n8n? *Cambialo a\u00a0mano*",
+      "body": "El comando no aplica: cambiá el modelo de cada nodo de Anthropic a Sonnet\u00a05.5 y hacé la misma\u00a0prueba.",
+      "image_style": "clay",
+      "image_prompt": "Three thick round clay discs lying in a straight row, linked by two short matte black clay rods; the first two discs are emerald green and the third disc is still plain white.",
+      "fuente": "caption: «En n8n, el comando no aplica: cambiá el modelo en cada nodo de Anthropic y pasá directo a la prueba» (sigue también en el caption)",
+      "next": "el checklist",
+      "alt_text": "Tres discos de arcilla unidos en fila, dos ya verdes y uno blanco: en n8n el comando no aplica, se cambia el modelo de cada nodo de Anthropic a Sonnet 5.5 y se hace la misma prueba"
+    },
+    {
+      "number": 8,
       "layout": "cierre",
       "theme": "negro",
       "keyword": "MIGRAR",

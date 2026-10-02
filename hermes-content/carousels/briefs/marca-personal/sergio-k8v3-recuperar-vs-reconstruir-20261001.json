@@ -49,13 +49,14 @@
     },
     {
       "number": 3,
-      "layout": "dato",
+      "layout": "ilustrado",
       "theme": "blanco",
-      "value": "1",
-      "headline": "cuadro de todo el reel *mostraba el prompt*",
-      "body": "Pasó en uno de los reels que analicé: mirando uno cada tantos segundos, se perdía. Si lo encontrás, eso es *recuperar*: el prompt exacto.",
+      "headline": "Un solo cuadro del reel *mostraba el prompt*",
+      "image_style": "clay",
+      "image_prompt": "A small haystack made of soft white clay strands on a round matte black clay base, with one shiny emerald green clay sewing needle poking out of the top.",
+      "body": "Pasó en un reel que analicé: mirando cada tantos segundos, se perdía. Encontrarlo es *recuperar*: el prompt exacto.",
       "next": "si no está",
-      "alt_text": "En un reel el prompt apareció en un solo cuadro"
+      "alt_text": "Una aguja verde en un pajar: un solo cuadro del reel mostraba el prompt"
     },
     {
       "number": 4,
@@ -102,11 +103,22 @@
       "theme": "blanco",
       "headline": "Para reconstruir: *8 bloques*",
       "body": "1 · Apertura\n\n2 · Sujeto *con acción*\n\n3 · Rasgos\n\n4 · Ropa\n\n5 · Pose\n\n6 · Fondo *como lista de objetos*\n\n7 · Técnica de cámara\n\n8 · Lo que no querés",
-      "next": "la plantilla",
+      "next": "para comprobar",
       "alt_text": "Los 8 bloques, en orden fijo, para reconstruir un prompt"
     },
     {
       "number": 7,
+      "layout": "ilustrado",
+      "theme": "blanco",
+      "headline": "Para comprobar: *ponelas lado a lado*",
+      "image_style": "clay",
+      "image_prompt": "Two emerald green clay pears standing side by side on a white surface, almost identical, the right one slightly rounder, each with a small matte black clay stem.",
+      "body": "Generá una con el prompt que armaste y ponela al lado de la original: así ves si se parece.",
+      "next": "la plantilla",
+      "alt_text": "Dos peras casi iguales: la reconstrucción se compara al lado de la original"
+    },
+    {
+      "number": 8,
       "layout": "cierre",
       "theme": "negro",
       "keyword": "PROMPT",

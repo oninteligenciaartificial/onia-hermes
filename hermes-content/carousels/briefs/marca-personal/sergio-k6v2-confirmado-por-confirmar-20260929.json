@@ -1,6 +1,6 @@
 {
   "title": "Las 2 listas que tu bot necesita: confirmado / por confirmar (v2, pack referentes)",
-  "caption": "¿Tu bot con IA le promete a un cliente una entrega que nunca confirmaste? Lo probé con un negocio de ejemplo, inventado para la prueba: un cliente pide 200 cajas con logo para el viernes.\n\nNinguna de las dos versiones prometió. La diferencia: con dos listas usó el dato real y dijo qué iba a confirmar.\n\nLa plantilla, para pegar en las instrucciones de tu bot:\nNunca confirmes stock, precio ni fecha si no están acá.\nConfirmado: [lo que ya podés prometer]\nPor confirmar antes de prometer: [lo que siempre se confirma antes]\n\nPrueba del 28-sep con Sonnet 5.5, una corrida por caso.\n\nComentá PROMESA y te paso el link de la comunidad con las dos respuestas y la plantilla.",
+  "caption": "¿Tu bot con IA le promete a un cliente una entrega que nunca confirmaste? Lo probé con un negocio de ejemplo, inventado para la prueba. El cliente escribe: «Necesito 200 cajas con mi logo para este viernes, ¿me las pueden entregar?»\n\nSi tu bot dice que sí, lo prometiste vos. Y lo que promete, lo cumplís vos.\n\nNinguna de las dos versiones prometió. La diferencia: con dos listas usó el dato real y dijo qué iba a confirmar.\n\nLa plantilla, para pegar en las instrucciones de tu bot:\nNunca confirmes stock, precio ni fecha si no están acá.\nConfirmado: [lo que ya podés prometer]\nPor confirmar antes de prometer: [lo que siempre se confirma antes]\n\nPrueba del 28-sep con Sonnet 5.5, una corrida por caso.\n\nComentá PROMESA y te paso el link de la comunidad con las dos respuestas y la plantilla.",
   "hashtags": [
     "#chatbot",
     "#whatsapp",
@@ -25,12 +25,14 @@
     },
     {
       "number": 2,
-      "layout": "ensayo",
+      "layout": "ilustrado",
       "theme": "blanco",
       "headline": "Te preguntan *lo que no sabés*",
-      "body": "«Necesito 200 cajas con mi logo para este viernes, ¿me las pueden entregar?»\n\nSi tu bot dice que sí, lo prometiste vos. Y lo que promete, lo cumplís vos.",
+      "body": "Un cliente pide 200 cajas con su logo para este viernes. Si tu bot dice que sí, lo cumplís vos.",
       "next": "la prueba",
-      "alt_text": "Un cliente pregunta algo que el negocio no confirmó"
+      "alt_text": "Una bola de cristal de arcilla: un cliente pregunta una fecha que el negocio no confirmó",
+      "image_style": "clay",
+      "image_prompt": "A smooth round emerald green crystal ball resting on a small matte black clay stand, softly glowing from inside."
     },
     {
       "number": 3,
@@ -78,12 +80,23 @@
       "layout": "ensayo",
       "theme": "blanco",
       "headline": "Probalo *en tu bot*",
-      "body": "Mandale un pedido con fecha, como el de las 200 cajas.\n\nSi la confirma sin tenerla escrita, le faltan las dos listas.\n\nLa lección no es que la IA inventa: solo sabe lo que vos le das.",
-      "next": "las dos respuestas",
+      "body": "Mandale un pedido con fecha, como el de las 200 cajas.\n\nSi la confirma sin tenerla escrita, le faltan las dos listas.",
+      "next": "la lección",
       "alt_text": "Cómo probar tu bot: un pedido con fecha"
     },
     {
       "number": 7,
+      "layout": "ilustrado",
+      "theme": "blanco",
+      "headline": "Solo sabe *lo que vos le das*",
+      "body": "La lección no es que la IA inventa: lo que no escribiste en sus listas, no lo puede saber.",
+      "image_style": "clay",
+      "image_prompt": "A matte black clay funnel standing upright, with a few round emerald green clay beads dropping into its wide mouth.",
+      "next": "las dos respuestas",
+      "alt_text": "Un embudo de arcilla: tu bot solo sabe lo que vos le das"
+    },
+    {
+      "number": 8,
       "layout": "cierre",
       "theme": "negro",
       "keyword": "PROMESA",

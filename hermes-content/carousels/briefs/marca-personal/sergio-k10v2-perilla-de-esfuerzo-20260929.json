@@ -1,6 +1,6 @@
 {
   "title": "La perilla de esfuerzo de Claude Code (v2, pack referentes)",
-  "caption": "Si tu Claude Code ya usa Opus 5.5 o Sonnet 5.5, arranca en esfuerzo medium: un nivel más abajo que Opus 5 y Sonnet 5, que venían en high. La perilla decide cuánto razona antes de responder.\n\nOjo antes de subirlo: la escala cambia según el modelo. En las pruebas de Anthropic, Opus 5.5 en medium iguala o supera a Opus 5 en high. Por eso, antes de dejarlo en high, probalo con una tarea tuya.\n\nSi guardaste un nivel y querés borrarlo: /effort auto.\n\nFuente: code.claude.com/docs/en/model-config (releída el 1-oct) y anthropic.com/claude-sonnet-5-5.\n\n¿Todavía no usás Claude Code? La guía para instalarlo está en mi web.\n\nComentá EFFORT y te paso el link de la comunidad con mi tabla de esfuerzo.",
+  "caption": "Si tu Claude Code ya usa Opus 5.5 o Sonnet 5.5, arranca en esfuerzo medium: un nivel más abajo que Opus 5 y Sonnet 5, que venían en high. La perilla decide cuánto razona antes de responder.\n\nOjo antes de subirlo: la escala cambia según el modelo. En las pruebas de Anthropic, Opus 5.5 en medium iguala o supera a Opus 5 en high. Por eso, antes de dejarlo en high, probalo con una tarea tuya.\n\nPrimero la perilla, después el modelo: según la doc de Anthropic, a Fable (el más caro) se pasa recién cuando Opus 5.5 con más esfuerzo no alcanza.\n\nSi guardaste un nivel y querés borrarlo: /effort auto.\n\nFuente: code.claude.com/docs/en/model-config (releída el 1-oct) y anthropic.com/claude-sonnet-5-5.\n\n¿Todavía no usás Claude Code? La guía para instalarlo está en mi web.\n\nComentá EFFORT y te paso el link de la comunidad con mi tabla de esfuerzo.",
   "hashtags": [
     "#claudecode",
     "#claude",
@@ -32,11 +32,22 @@
       "theme": "blanco",
       "headline": "Cuánto *piensa* antes de actuar",
       "body": "Escribí */effort*: ves en cuál estás y elegís entre cinco niveles: low, medium, high, xhigh y max. Enter lo guarda; la tecla s, solo para esta sesión.\n\nOpus y Sonnet 5.5 vienen en medium. Opus 5 y Sonnet 5 venían en high.",
-      "next": "mi regla",
+      "next": "no es peor",
       "alt_text": "/effort muestra el nivel y deja elegir entre los cinco; los modelos 5.5 vienen en medium"
     },
     {
       "number": 3,
+      "layout": "ilustrado",
+      "theme": "blanco",
+      "headline": "Más bajo *no es peor*",
+      "image_style": "clay",
+      "image_prompt": "A white clay balance scale standing perfectly level, with a small emerald green clay sphere on the left pan and a larger matte black clay sphere on the right pan.",
+      "body": "En las pruebas de Anthropic, Opus 5.5 en medium iguala o supera a Opus 5 en high.",
+      "next": "mi regla",
+      "alt_text": "Una balanza pareja: Opus 5.5 en medium iguala o supera a Opus 5 en high"
+    },
+    {
+      "number": 4,
       "layout": "lista",
       "theme": "blanco",
       "headline": "Mi regla, *nivel por nivel*",
@@ -63,17 +74,18 @@
       "body": "la doc avisa: max tiende a pensar de más"
     },
     {
-      "number": 4,
-      "layout": "dato",
+      "number": 5,
+      "layout": "ilustrado",
       "theme": "blanco",
-      "value": "+1",
       "headline": "Respuesta floja: *subí un nivel*",
-      "body": "Primero la perilla, después el modelo. La doc de Anthropic: a Fable, el más caro, recién cuando Opus 5.5 con más esfuerzo no alcanza.",
+      "image_style": "clay",
+      "image_prompt": "A short staircase of five wide white clay steps rising to the right, with one glossy emerald green clay ball resting on the third step and a small curved matte black clay arrow arching up from the second step to the third.",
+      "body": "Primero la perilla, después el modelo: a Fable, el más caro, recién si Opus 5.5 con más esfuerzo no alcanza.",
       "next": "la prueba",
-      "alt_text": "Ante una respuesta floja, subir un nivel de esfuerzo"
+      "alt_text": "Una bola verde sube un escalón: ante una respuesta floja, subir un nivel de esfuerzo"
     },
     {
-      "number": 5,
+      "number": 6,
       "layout": "ensayo",
       "theme": "blanco",
       "headline": "Cómo sabés si *te sirvió*",
@@ -82,7 +94,7 @@
       "alt_text": "claude --effort medium y claude --effort high con la misma tarea, para comparar"
     },
     {
-      "number": 6,
+      "number": 7,
       "layout": "cierre",
       "theme": "negro",
       "keyword": "EFFORT",

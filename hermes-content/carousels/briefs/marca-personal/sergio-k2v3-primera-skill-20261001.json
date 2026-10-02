@@ -105,10 +105,21 @@
       "theme": "blanco",
       "headline": "¿Cargó? *Comprobalo*",
       "body": "Escribí /skills: tu skill tiene que aparecer.\n\nDespués pedile algo que coincida con la description, y fijate si la usa.\n\nSi no la usa, reescribí la description: decí cuándo usarla, con las palabras que usarías al pedírselo.",
-      "alt_text": "Cómo comprobar que la skill cargó"
+      "alt_text": "Cómo comprobar que la skill cargó",
+      "next": "la primera"
     },
     {
       "number": 7,
+      "layout": "ilustrado",
+      "theme": "blanco",
+      "headline": "¿Cuál hacer primero? *La que repetís*",
+      "image_style": "clay",
+      "image_prompt": "A smooth emerald green clay ribbon twisted into one continuous Möbius loop, standing on a small round matte black clay base on a white surface.",
+      "body": "Elegí algo que le explicás a Claude una y otra vez: esa es tu primera skill.",
+      "alt_text": "Un lazo de Möbius verde: tu primera skill es lo que le explicás una y otra vez"
+    },
+    {
+      "number": 8,
       "layout": "cierre",
       "theme": "negro",
       "keyword": "SKILL",

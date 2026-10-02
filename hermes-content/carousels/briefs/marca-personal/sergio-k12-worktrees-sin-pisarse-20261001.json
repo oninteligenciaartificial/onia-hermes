@@ -108,12 +108,14 @@
     },
     {
       "number": 7,
-      "layout": "ensayo",
+      "layout": "ilustrado",
       "theme": "blanco",
       "headline": "Comprobá y *limpiá*",
-      "body": "*git worktree list*\n\nCada carpeta, con su rama. Una sesión, una carpeta, una rama.\n\nAl terminar, con la rama ya mergeada:\n\n*git worktree remove <ruta>*",
+      "body": "*git worktree list*: cada carpeta, con su rama. Al terminar, con la rama mergeada: *git worktree remove <ruta>*",
+      "image_prompt": "A small clay broom with a matte black handle and thick emerald green bristles, standing upright on a white surface next to a small matte black clay dustpan.",
+      "image_style": "clay",
       "next": "los comandos",
-      "alt_text": "git worktree list para comprobar y git worktree remove para limpiar"
+      "alt_text": "Una escoba y una pala de arcilla: git worktree list para comprobar y git worktree remove para limpiar"
     },
     {
       "number": 8,

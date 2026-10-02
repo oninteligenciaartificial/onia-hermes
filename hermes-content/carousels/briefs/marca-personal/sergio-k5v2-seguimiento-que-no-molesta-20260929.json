@@ -40,12 +40,14 @@
     },
     {
       "number": 3,
-      "layout": "ensayo",
+      "layout": "ilustrado",
       "theme": "blanco",
       "headline": "Regla 2: después, *solo plantilla*",
-      "body": "Pasadas las 24 h, solo sale un mensaje que WhatsApp aprobó antes. Escribila y mandala a aprobar antes de programar nada.\n\nEs de la API oficial, la que usan los bots. En la app de WhatsApp Business no existe.",
+      "body": "Pasadas las 24 h, solo sale una plantilla que WhatsApp aprobó antes. Mandala a aprobar antes de programar nada.",
       "next": "regla 3",
-      "alt_text": "Fuera de la ventana solo se envían plantillas aprobadas"
+      "alt_text": "Fuera de la ventana solo se envían plantillas aprobadas",
+      "image_style": "clay",
+      "image_prompt": "An emerald green clay cookie cutter shaped like a rounded speech bubble, resting on a flat sheet of smooth white clay, beside one cleanly cut smooth white clay speech bubble shape."
     },
     {
       "number": 4,
@@ -99,12 +101,23 @@
           "text": "sin respuesta, no escribe más"
         }
       ],
-      "next": "mis mensajes",
+      "next": "en resumen",
       "alt_text": "El error 131047, la plantilla que no empieza ni termina en variable y el corte a los 7 días",
       "body": "tres detalles que frenan un seguimiento"
     },
     {
       "number": 7,
+      "layout": "ilustrado",
+      "theme": "blanco",
+      "headline": "Un solo seguimiento, *a su hora*",
+      "body": "A las 20 h del último mensaje. Plantilla pasadas las 24 h. Nada de noche. Silencio a los 7 días.",
+      "image_style": "clay",
+      "image_prompt": "A plain smooth matte black clay door standing upright and closed, with one simple round emerald green clay ring knocker in its center.",
+      "next": "mis mensajes",
+      "alt_text": "Resumen: un solo seguimiento a las 20 h, plantilla después de las 24 h, nada de noche y silencio a los 7 días"
+    },
+    {
+      "number": 8,
       "layout": "cierre",
       "theme": "negro",
       "keyword": "VENTANA",

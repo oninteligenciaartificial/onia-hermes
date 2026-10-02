@@ -1,6 +1,6 @@
 {
   "title": "5 revisiones antes de publicar tu video con IA (v2, pack referentes)",
-  "caption": "No tengo editor de video: lo edita una cadena de pasos con IA. Pero hay cinco cosas que la IA no revisa por mí.\n\nLa crítica es la 2: la transcripción se lee a ojo antes de quemar subtítulos, con foco en las eñes y las tildes. Una falta quemada no se parchea, se vuelve a renderizar.\n\nLa 1 es la regla de oro de mi editor: la tabla de cortes, con una vista previa, se mira antes de cortar. Nunca se corta a ciegas.\n\nY un presentador hecho con IA explica y muestra, pero nunca se hace pasar por cliente ni por testimonio.\n\nGuardá la lámina 6 para tu próximo video.\n\nComentá REVISAR y te paso el link de la comunidad con mi editor de IA, paso a paso: grabar, transcribir, cortar, subtitular, leer y publicar.",
+  "caption": "No tengo editor de video: lo edita una cadena de pasos con IA. Pero hay cinco cosas que la IA no revisa por mí.\n\nLa crítica es la 2: la transcripción se lee a ojo antes de quemar subtítulos, con foco en las eñes y las tildes. Una falta quemada no se parchea, se vuelve a renderizar.\n\nLa 1 es la regla de oro de mi editor: la tabla de cortes, con una vista previa, se mira antes de cortar. Nunca se corta a ciegas.\n\nLa 3: mi script avisa los cuadros que quedaron sin cubrir, pero no es garantía: el difuminado se mira.\n\nY un presentador hecho con IA explica y muestra, pero nunca se hace pasar por cliente ni por testimonio.\n\nGuardá la lámina 7 para tu próximo video.\n\nComentá REVISAR y te paso el link de la comunidad con mi editor de IA, paso a paso: grabar, transcribir, cortar, subtitular, leer y publicar.",
   "hashtags": [
     "#edicionvideo",
     "#ia",
@@ -69,15 +69,28 @@
     },
     {
       "number": 5,
-      "layout": "ensayo",
+      "layout": "ilustrado",
       "theme": "blanco",
       "headline": "3 · Difuminá a *quien no firmó*",
-      "body": "Gente en la calle, pacientes, clientes: sin permiso, su cara no sale.\n\nMi script avisa los cuadros sin cubrir, pero el difuminado se mira: no es garantía.",
-      "next": "4 y 5",
-      "alt_text": "Difuminar las caras de terceros"
+      "body": "Gente en la calle, pacientes, clientes: sin permiso, su cara no sale. Y el difuminado se revisa a ojo.",
+      "image_prompt": "A small three-panel folding privacy screen made of smooth emerald green clay panels with matte black clay frames, standing half open on a white surface.",
+      "image_style": "clay",
+      "next": "revisión 4",
+      "alt_text": "Un biombo de arcilla verde: la cara de quien no dio permiso no se muestra"
     },
     {
       "number": 6,
+      "layout": "ilustrado",
+      "theme": "blanco",
+      "headline": "4 · Cotizá *antes de generar*",
+      "body": "La IA no mira el costo: lo mirás vos. Cada video se cotiza y se aprueba aparte.",
+      "image_prompt": "A small closed coin purse made of soft matte black clay with a shiny emerald green clay clasp on top, standing upright on a white surface.",
+      "image_style": "clay",
+      "next": "las 5",
+      "alt_text": "Un monedero de arcilla: cada video con IA se cotiza antes de generarlo"
+    },
+    {
+      "number": 7,
       "layout": "lista",
       "theme": "blanco",
       "headline": "Antes de *publicar*",
@@ -107,7 +120,7 @@
       "alt_text": "Checklist de 5 revisiones antes de publicar un video con IA"
     },
     {
-      "number": 7,
+      "number": 8,
       "layout": "cierre",
       "theme": "negro",
       "keyword": "REVISAR",

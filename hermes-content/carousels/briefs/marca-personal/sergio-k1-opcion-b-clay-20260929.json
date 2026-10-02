@@ -112,6 +112,18 @@
     },
     {
       "number": 7,
+      "layout": "ilustrado",
+      "theme": "blanco",
+      "headline": "Para comparar, *mismo\u00a0arranque*",
+      "body": "Mismo punto de partida, mismo prompt, mismo esfuerzo. Si Opus trabaja sobre lo que dejó Sonnet, arranca con\u00a0ventaja.",
+      "image_style": "clay",
+      "image_prompt": "A simple double ramp made of smooth emerald green clay, with two identical parallel lanes sloping gently down. At the top of each lane rests one ball, a matte black ball in one lane and a white ball in the other, exactly level with each other.",
+      "fuente": "caption, párrafo «Para comparar bien: mismo punto de partida, mismo prompt y mismo esfuerzo. Si corrés Opus sobre lo que ya dejó hecho Sonnet, Opus arranca con ventaja.» (sigue también en el caption)",
+      "next": "el ejercicio",
+      "alt_text": "Una rampa doble de arcilla verde con dos bolitas a la misma altura: para comparar Opus y Sonnet, mismo punto de partida, mismo prompt y mismo esfuerzo"
+    },
+    {
+      "number": 8,
       "layout": "cierre",
       "theme": "negro",
       "keyword": "TRAMPA",
