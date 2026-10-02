@@ -81,17 +81,17 @@
           "text": "todo git con git -C <ruta>"
         }
       ],
-      "next": "por qué",
+      "next": "si ya te pasó",
       "alt_text": "Los tres pasos para trabajar con worktrees"
     },
     {
       "number": 5,
       "layout": "ilustrado",
       "theme": "blanco",
-      "headline": "Por qué es *crítico*",
-      "body": "Ningún comando falló: la rama se movió 424 commits y nada avisó. Se recuperó con el historial de git.",
-      "next": "la regla",
-      "alt_text": "Un tren de juguete volcado junto a la vía: el reset movió una rama 424 commits sin que nada avisara",
+      "headline": "Si ya te pasó: *git reflog*",
+      "body": "git reflog <rama> muestra dónde estaba esa rama antes de moverse. Así recuperé la mía: ningún comando había fallado.",
+      "next": "para que no pase",
+      "alt_text": "Un vagón de juguete volcado junto a la vía: si una rama se movió sin aviso, git reflog muestra dónde estaba",
       "image_prompt_descartado": "A small matte black clay toy train tipped over on its side beside an emerald green clay train track.",
       "image": "hermes-content/galeria/ilustraciones/sergio-k12-worktrees-sin-pisarse-20261001-s05-e44342b8.jpg",
       "image_prompt_usado": "A small plain matte black clay boxcar, a simple rectangular train wagon on four round wheels, lying tipped over on its side with its wheels toward the viewer, beside a straight emerald green clay train track."

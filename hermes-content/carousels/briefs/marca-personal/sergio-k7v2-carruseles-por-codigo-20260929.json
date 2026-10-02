@@ -1,6 +1,6 @@
 {
   "title": "Carruseles por código en 5 pasos (v2, pack referentes)",
-  "caption": "Este carrusel salió de un archivo JSON.\n\nLa IA pinta solo la foto de la portada. El texto lo pone el código, porque los modelos de imagen escriben mal: el 29-sep uno me inventó letras en unas tazas y hasta un post falso de Instagram.\n\nCinco pasos: brief, imagen sin letras, render, revisión a ojo y costo antes de generar.\n\nComentá BRIEF y te paso el de este carrusel.",
+  "caption": "Este carrusel salió de un archivo JSON y un navegador.\n\nLa IA pinta solo la foto de la portada. El texto lo pone el código, porque los modelos de imagen escriben mal: el 29-sep uno me inventó letras en una taza y hasta un post falso de Instagram.\n\nPara probarlo, pedile esto a Claude Code: «Por cada lámina de brief.json armá un HTML de 1080x1350 con mi fuente y mi color, y sacale captura con Chrome».\n\nLa captura, a mano (Chrome sin ventana):\nchrome --headless=new --hide-scrollbars --force-device-scale-factor=1 --window-size=1080,1350 --virtual-time-budget=10000 --screenshot=slide-01.png file:///C:/ruta/slide-1.html\n\nEl --virtual-time-budget=10000 son los 10 segundos para que carguen las fuentes.\n\nComentá BRIEF y te paso el link de la comunidad con el JSON de este carrusel.",
   "hashtags": [
     "#claudecode",
     "#ia",
@@ -15,18 +15,21 @@
       "layout": "ilustrado",
       "badge": "guía",
       "headline": "Carruseles por código en *5 pasos*",
-      "image_prompt": "A few small offcuts of pale birch wood stacked neatly beside a wood carving chisel with a worn wooden handle on a workbench.",
       "number": 1,
       "theme": "verde",
       "image_style": "clay",
-      "next": "por qué"
+      "next": "por qué",
+      "image_descartada": "hermes-content/galeria/ilustraciones/sergio-k7v2-carruseles-por-codigo-20260929-s01-efee638c.jpg",
+      "image_prompt_descartado": "A few small offcuts of pale birch wood stacked neatly beside a wood carving chisel with a worn wooden handle on a workbench.",
+      "image": "hermes-content/galeria/ilustraciones/sergio-k7v2-carruseles-por-codigo-20260929-s01-305cf3dc.jpg",
+      "image_prompt_usado": "A fanned stack of plain blank rectangular clay tiles, alternating emerald green and white, next to a small matte black clay sculpting tool, nothing printed on them."
     },
     {
       "number": 2,
       "layout": "ensayo",
       "theme": "blanco",
       "headline": "La IA de imagen *escribe mal*",
-      "body": "El 29-sep pedí fotos de objetos y el modelo inventó letras en unas tazas. Y hasta un post falso de Instagram.\n\nTexto en la imagen es texto sin control.",
+      "body": "El 29-sep pedí fotos de objetos y el modelo inventó letras en una taza. Y hasta un post falso de Instagram.\n\nTexto en la imagen es texto sin control.",
       "next": "paso 1",
       "alt_text": "Los modelos de imagen escriben mal"
     },
@@ -35,22 +38,23 @@
       "layout": "lista",
       "theme": "blanco",
       "headline": "Paso 1: el *brief*",
-      "body": "todo el texto en un JSON, cada lámina con su rol",
+      "body": "un JSON: cada lámina con headline y body",
       "items": [
         {
-          "label": "Portada"
+          "label": "Portada",
+          "text": "el problema en una frase"
         },
         {
-          "label": "El problema"
+          "label": "La segunda",
+          "text": "lo que está en juego"
         },
         {
-          "label": "Una idea por lámina"
+          "label": "Las del medio",
+          "text": "una idea por lámina"
         },
         {
-          "label": "La que se guarda"
-        },
-        {
-          "label": "El cierre"
+          "label": "El cierre",
+          "text": "una sola acción"
         }
       ],
       "next": "paso 2",
@@ -61,7 +65,7 @@
       "layout": "ensayo",
       "theme": "blanco",
       "headline": "Paso 2: la IA pinta *solo la imagen*",
-      "body": "Objetos sin nada impreso: piedras, plantas, madera.\n\nTazas, cuadernos y pantallas no: ahí inventa letras, aunque le pidas «sin texto».",
+      "body": "Objetos sin nada impreso: piedras, plantas, madera.\n\nTazas, cuadernos y pantallas no: ahí inventa letras.\n\nDescribí en positivo lo que querés ver: un objeto simple.",
       "next": "paso 3",
       "alt_text": "La IA genera solo la imagen, sin texto"
     },
@@ -69,50 +73,42 @@
       "number": 5,
       "layout": "dato",
       "theme": "blanco",
-      "value": "7",
-      "headline": "Paso 3: el código *pone el texto*",
-      "body": "Un script arma cada lámina en HTML y la fotografía con Chrome sin ventana: 7 PNG de 1080×1350. Tildes exactas, y corregir una coma es gratis.",
+      "value": "10",
+      "headline": "Paso 3: las fuentes necesitan *10 segundos*",
+      "body": "Un script arma cada lámina en HTML de 1080×1350 y Chrome sin ventana le saca una captura. Con 4 segundos, una lámina salió con una letra y la siguiente con otra.",
       "next": "4 y 5",
-      "alt_text": "El render convierte el brief en láminas"
+      "alt_text": "Chrome espera 10 segundos a que carguen las fuentes antes de la captura"
     },
     {
       "number": 6,
       "layout": "lista",
       "theme": "blanco",
-      "headline": "El circuito *entero*",
-      "body": "4 y 5: revisar a ojo y cotizar",
+      "headline": "Pasos 4 y 5: *mirar y cotizar*",
+      "body": "antes de publicar y antes de gastar",
       "items": [
         {
-          "label": "Brief",
-          "text": "todo el texto, en JSON"
+          "label": "Mirar",
+          "text": "todas juntas: la misma letra en todas"
         },
         {
-          "label": "Imagen",
-          "text": "solo objetos, sin letras"
+          "label": "La imagen",
+          "text": "sola: sin letras ni logos inventados"
         },
         {
-          "label": "Render",
-          "text": "HTML a PNG, por código"
-        },
-        {
-          "label": "Revisión",
-          "text": "hoja de contactos, a ojo"
-        },
-        {
-          "label": "Costo",
-          "text": "cotiza; sin tu OK no gasta"
+          "label": "Cotizar",
+          "text": "el costo antes de generar; sin OK no gasta"
         }
       ],
       "next": "el brief",
-      "alt_text": "Los 5 pasos del circuito de carruseles"
+      "alt_text": "Pasos 4 y 5: revisar todas las láminas juntas y cotizar antes de generar"
     },
     {
       "number": 7,
       "layout": "cierre",
       "theme": "negro",
       "keyword": "BRIEF",
-      "body": "y te mando por mensaje el JSON de este mismo carrusel.",
-      "alt_text": "Comentá BRIEF para recibir el JSON"
+      "body": "y te paso el link de la comunidad con el JSON de este carrusel.",
+      "alt_text": "Comentá BRIEF para recibir el link de la comunidad con el JSON"
     }
   ]
 }

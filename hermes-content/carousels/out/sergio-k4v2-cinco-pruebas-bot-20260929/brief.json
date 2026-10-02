@@ -1,6 +1,6 @@
 {
   "title": "5 pruebas antes de activar tu bot de WhatsApp (v2, pack referentes)",
-  "caption": "Antes de activar un bot de WhatsApp, mandale vos los mensajes que le van a mandar tus clientes.\n\nLa prueba que más importa es la 3: preguntale algo que no le diste (stock, plazo, precio). Si contesta con un dato que no está en su información, lo inventó.\n\nLas otras cuatro salen del bot de ONIA, y cada una tiene hoy su prueba automática.\n\nGuardá la lámina 6 para el día que lo actives.\n\nComentá PRUEBAS y te paso el link de la comunidad para que cuentes cuál te falló.",
+  "caption": "Antes de activar un bot de WhatsApp, mandale vos los mensajes que le van a mandar tus clientes. Lo que no probaste vos, lo prueba tu cliente.\n\nLa que más importa es la 3: preguntale algo que no le diste (stock, plazo, precio). Si contesta con un dato que no está en su información, lo inventó. Si inventa, no se activa.\n\nLa 2 no es mandar el mismo texto dos veces desde tu celular: eso son dos mensajes distintos y tiene que contestar los dos. Es el mismo aviso que vuelve a llegar, con el mismo id, como pasa cuando tu servidor tarda en responder.\n\nLas cinco salen del bot de ONIA, y cada una tiene hoy su prueba automática.\n\nGuardá la lámina 6 para el día que lo actives.\n\nComentá PRUEBAS y te paso el link de la comunidad con la lista para copiar.",
   "hashtags": [
     "#whatsapp",
     "#chatbot",
@@ -15,22 +15,23 @@
       "layout": "ilustrado",
       "badge": "guía",
       "logo": "hermes-content/references/brand-logos/whatsapp.svg",
-      "headline": "*5 pruebas* antes de activar tu bot",
+      "headline": "*5 pruebas* antes de activar tu bot de WhatsApp",
       "image_prompt": "Five small round pebbles lined up in a neat row on smooth sand, the last one a deep green stone.",
       "number": 1,
       "theme": "verde",
       "image_style": "clay",
-      "next": "por qué",
-      "image": "hermes-content/galeria/ilustraciones/sergio-k4v2-cinco-pruebas-bot-20260929-s01-3f374e98.jpg"
+      "next": "la regla",
+      "image": "hermes-content/galeria/ilustraciones/sergio-k4v2-cinco-pruebas-bot-20260929-s01-3f374e98.jpg",
+      "body": "La que más importa es la 3: si\u00a0inventa un precio, no se activa."
     },
     {
       "number": 2,
       "layout": "ensayo",
       "theme": "blanco",
-      "headline": "Tu bot contesta *sin que lo mires*",
-      "body": "Un bot activado le habla a clientes reales, a cualquier hora.\n\nLo que no probaste vos, lo prueba tu cliente.\n\nProbalo vos primero: son cinco pruebas.",
+      "headline": "Si una falla, se arregla *el bot*",
+      "body": "Escribí las pruebas antes de ver qué contesta.\n\nOcho de las mías fallaron así. Una: «hablo con una persona?» lo tomó como un equipo de una persona.\n\nNunca aflojes la prueba para\u00a0que\u00a0pase.",
       "next": "prueba 1",
-      "alt_text": "Un bot activado contesta sin supervisión"
+      "alt_text": "Si una prueba falla, se arregla el bot, nunca la prueba"
     },
     {
       "number": 3,
@@ -38,7 +39,7 @@
       "theme": "blanco",
       "value": "62",
       "headline": "Prueba 1: escribile *como escriben*",
-      "body": "Sin tildes, con errores, «cuanto sale?» a secas, «ya» como única respuesta. El banco de pruebas de mi bot arrancó con 62 mensajes así.",
+      "body": "Sin tildes, con errores, «cuanto sale?» a secas, «ya» como única respuesta. El banco de pruebas de mi bot tiene 62 mensajes así.",
       "next": "prueba 2",
       "alt_text": "Mensajes de prueba escritos como un cliente real"
     },
@@ -50,16 +51,16 @@
       "body": "si tu servidor tarda, Chatwoot lo vuelve a entregar",
       "items": [
         {
-          "label": "Llega el mensaje",
-          "text": "contesta"
+          "label": "Reenviá el aviso",
+          "text": "el mismo, con el mismo id"
         },
         {
-          "label": "Llega de nuevo",
-          "text": "mismo id: lo descarta"
+          "label": "Tiene que salir",
+          "text": "una sola respuesta"
         },
         {
-          "label": "Tu cliente",
-          "text": "recibe una sola respuesta"
+          "label": "Si salen dos",
+          "text": "filtrá por id antes de contestar"
         }
       ],
       "next": "la crítica",
@@ -86,7 +87,7 @@
         },
         {
           "label": "Dos veces",
-          "text": "contesta una sola vez"
+          "text": "mismo aviso, mismo id: una respuesta"
         },
         {
           "label": "Lo que no sabe",
@@ -97,11 +98,11 @@
           "text": "si no lo entiende, avisa a alguien"
         },
         {
-          "label": "«Una persona»",
+          "label": "Pedí una persona",
           "text": "alguien se entera, no solo el bot"
         }
       ],
-      "next": "¿cuál falló?",
+      "next": "la lista",
       "alt_text": "Checklist de las 5 pruebas antes de activar un bot"
     },
     {
@@ -109,7 +110,7 @@
       "layout": "cierre",
       "theme": "negro",
       "keyword": "PRUEBAS",
-      "body": "y te paso el link de la comunidad: contá cuál te falló.",
+      "body": "y te paso el link de la comunidad con la lista para\u00a0copiar.",
       "alt_text": "Comentá PRUEBAS para recibir el link de la comunidad"
     }
   ]

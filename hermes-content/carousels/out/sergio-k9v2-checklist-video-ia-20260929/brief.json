@@ -1,6 +1,6 @@
 {
   "title": "5 revisiones antes de publicar tu video con IA (v2, pack referentes)",
-  "caption": "No tengo editor de video: lo edita una cadena de pasos con IA. Pero hay cinco cosas que la IA no revisa por mí.\n\nLa crítica es la 2: la transcripción se lee a ojo antes de quemar subtítulos. Una falta quemada no se parchea, se vuelve a renderizar.\n\nY un presentador hecho con IA explica y muestra, pero nunca se hace pasar por cliente.\n\nGuardá la lámina 6 para tu próximo video.\n\nComentá REVISAR y te paso el link de la comunidad con mi editor de IA, paso a paso: grabar, transcribir, cortar, subtitular, leer y publicar.",
+  "caption": "No tengo editor de video: lo edita una cadena de pasos con IA. Pero hay cinco cosas que la IA no revisa por mí.\n\nLa crítica es la 2: la transcripción se lee a ojo antes de quemar subtítulos, con foco en las eñes y las tildes. Una falta quemada no se parchea, se vuelve a renderizar.\n\nLa 1 también ahorra: la tabla de cortes se mira antes de cortar, no después. Cortar mal y volver a cortar cuesta otro render.\n\nY un presentador hecho con IA explica y muestra, pero nunca se hace pasar por cliente ni por testimonio.\n\nGuardá la lámina 6 para tu próximo video.\n\nComentá REVISAR y te paso el link de la comunidad con mi editor de IA, paso a paso: grabar, transcribir, cortar, subtitular, leer y publicar.",
   "hashtags": [
     "#edicionvideo",
     "#ia",
@@ -27,7 +27,7 @@
       "layout": "ensayo",
       "theme": "blanco",
       "headline": "La IA edita, pero *no corrige*",
-      "body": "Transcribe, corta y genera.\n\nNo corrige faltas, no pide permiso a nadie y no mira el costo. Eso lo revisás vos.\n\nLo publicado es tuyo.",
+      "body": "Mi cadena: grabar, transcribir, cortar, subtitular y publicar. Cada paso lo hace la IA.\n\nPero no ve sus faltas, no pide permiso y no mira el costo.\n\nEso lo revisás vos, en este\u00a0orden.",
       "next": "revisión 1",
       "alt_text": "La IA no corrige ni pide permiso"
     },
@@ -39,16 +39,20 @@
       "body": "qué queda, qué se tira y por qué",
       "items": [
         {
-          "label": "La frase entera",
-          "text": "tiro el silencio largo"
+          "label": "Queda la frase",
+          "text": "se tira el silencio largo"
         },
         {
-          "label": "La segunda toma",
-          "text": "tiro la que repetí"
+          "label": "Queda la 2.ª toma",
+          "text": "se tira la que repetí"
         },
         {
-          "label": "La idea",
-          "text": "tiro el «eh», el «o sea»"
+          "label": "Queda la idea",
+          "text": "se tiran el «eh» y el «o sea»"
+        },
+        {
+          "label": "La reviso yo",
+          "text": "recién después, se corta"
         }
       ],
       "next": "la crítica",
@@ -58,8 +62,8 @@
       "number": 4,
       "layout": "ensayo",
       "theme": "blanco",
-      "headline": "2 · Leé el texto *línea por línea*",
-      "body": "Antes de quemar subtítulos, leé la transcripción a ojo.\n\nEn un reel ajeno salió «A GENERADO» sin hache y «ARANA» sin eñe.\n\nQuemado no se parchea: se vuelve a renderizar.",
+      "headline": "2 · Leé el texto *línea\u00a0por\u00a0línea*",
+      "body": "Antes de quemar subtítulos, leé la transcripción a ojo: mirá las eñes y\u00a0las\u00a0tildes.\n\nEn un reel ajeno salió «A GENERADO» sin hache y «ARANA» sin eñe.\n\nQuemado no se parchea: se vuelve a\u00a0renderizar.",
       "next": "revisión 3",
       "alt_text": "Leer la transcripción antes de quemar subtítulos"
     },
@@ -92,11 +96,11 @@
         },
         {
           "label": "Costo",
-          "text": "cotizado; el video, aprobado aparte"
+          "text": "cotizá antes de generar; cada video, aparte"
         },
         {
           "label": "Presentador IA",
-          "text": "nunca como cliente ni testimonio"
+          "text": "explica y muestra; nunca hace de cliente"
         }
       ],
       "next": "mi editor",
@@ -107,7 +111,7 @@
       "layout": "cierre",
       "theme": "negro",
       "keyword": "REVISAR",
-      "body": "y te paso el link de la comunidad con mi editor.",
+      "body": "y te paso el link de la comunidad con mi\u00a0editor.",
       "alt_text": "Comentá REVISAR para recibir los pasos del editor de video con IA"
     }
   ]

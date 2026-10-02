@@ -212,10 +212,9 @@
     "estilo": "clay",
     "costo_cr": 0.12,
     "job": "efee638c-adf5-491f-945f-7f5f0822bfe2",
-    "usado_en": [
-      "sergio-k7v2-carruseles-por-codigo-20260929"
-    ],
-    "tags": []
+    "usado_en": [],
+    "tags": [],
+    "descartada": "muñeco con cara (la skill prohíbe mascotas y caras); reemplazada el 2-oct"
   },
   {
     "id": "sergio-k9v2-checklist-video-ia-20260929-s01-b436d635",
@@ -582,5 +581,22 @@
     "usado_en": [],
     "tags": [],
     "descartada": "números y letras inventadas en el dial y el botón (y firma en el borde en la segunda)"
+  },
+  {
+    "id": "sergio-k7v2-carruseles-por-codigo-20260929-s01-305cf3dc",
+    "file": "hermes-content/galeria/ilustraciones/sergio-k7v2-carruseles-por-codigo-20260929-s01-305cf3dc.jpg",
+    "fecha": "2026-10-02",
+    "tipo": "ilustraciones",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "text2image_soul_v2",
+    "prompt": "A fanned stack of plain blank rectangular clay tiles, alternating emerald green and white, next to a small matte black clay sculpting tool, nothing printed on them.",
+    "estilo": "clay",
+    "costo_cr": 0.12,
+    "job": "305cf3dc-a62e-4f25-bc10-ff7353d62e5c",
+    "usado_en": [
+      "sergio-k7v2-carruseles-por-codigo-20260929"
+    ],
+    "tags": []
   }
 ]

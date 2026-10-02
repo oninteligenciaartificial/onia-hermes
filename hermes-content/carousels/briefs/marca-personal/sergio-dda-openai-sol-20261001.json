@@ -1,6 +1,6 @@
 {
   "title": "El modelo nuevo de OpenAI cuesta un quinto, y una parte sale casi gratis (DD-A, noticia, pack referentes)",
-  "caption": "OpenAI presentó GPT-6.1 Sol el 29 de septiembre, en su DevDay. Según OpenAI, rinde cerca de Astra, su modelo grande, por un quinto del precio.\n\nLos números de su página de precios, por millón de tokens: Sol cobra 2 dólares lo que entra y 10 lo que sale. Astra, 10 y 50.\n\nQué cambia para vos: lo que entra desde la caché cuesta 0,10 dólares el millón, veinte veces menos que la entrada normal. Es lo que repetís igual al principio de cada pedido: las instrucciones de tu agente, tu lista de precios.\n\n1. Ponelo primero y no lo toques. Si cambia el principio, no hay caché.\n2. Tiene que pasar de 1.024 tokens.\n3. La primera vez cuesta un poco más (2,50 dólares el millón: es cuando se guarda). Después, 0,10.\n4. Dura al menos 30 minutos desde el último pedido que la usó.\n5. Mirá cached_tokens en la respuesta. Si después del primer pedido sigue en 0, cambiaste algo del principio o pasó más de media hora.\n\nFuentes, consultadas el 1-oct-2026: la tabla de precios de developers.openai.com/api/docs/pricing (precios estándar, contexto corto; captura del 1-oct-2026), la guía developers.openai.com/api/docs/guides/prompt-caching (el ejemplo de cached_tokens es el de esa guía; captura del 1-oct-2026) y el changelog oficial de Codex del 29-sep, donde aparece como gpt-6.1-sol.\n\nComentá CACHE y te mando la tabla Sol vs Astra y la cuenta de caché.",
+  "caption": "OpenAI presentó GPT-6.1 Sol el 29 de septiembre, en su DevDay. Según OpenAI, rinde cerca de Astra, su modelo grande, por un quinto del precio. En la API se llama gpt-6.1-sol.\n\nPrecios de su página, por millón de tokens, tarifa estándar y contexto corto: Sol cobra 2 dólares lo que entra y 10 lo que sale; Astra, 10 y 50. Con contexto largo, Sol sube a 4 y 15.\n\nLa caché viene prendida: no hay que activarla. Lo que repetís igual al principio de cada pedido (las instrucciones de tu agente, tu lista de precios) cuesta 0,10 cuando sale de la caché, en vez de 2. Cada token se cobra a una sola tarifa: el que se guarda cuesta 2,50 esa vez, y después, cada vez que se lee, 0,10.\n\nPara medirlo en tu agente, la respuesta trae dos campos en usage.input_tokens_details: cached_tokens (lo que salió de la caché) y cache_write_tokens (lo que se guardó). En el primer pedido cached_tokens da 0. Si después sigue en 0, cambiaste algo del principio o pasó más de media hora.\n\nFuentes, consultadas el 1-oct-2026: la tabla de precios de developers.openai.com/api/docs/pricing (captura del 1-oct-2026), la guía developers.openai.com/api/docs/guides/prompt-caching (el ejemplo de cached_tokens es el de esa guía; captura del 1-oct-2026) y el changelog oficial de Codex del 29-sep, donde aparece como gpt-6.1-sol.\n\nComentá CACHE y te mando la tabla Sol vs Astra y la cuenta de caché.",
   "hashtags": [
     "#openai",
     "#gpt",
@@ -65,8 +65,8 @@
           "text": "con menos, no se guarda"
         },
         {
-          "label": "La primera vez",
-          "text": "cuesta 2,50 el millón: es cuando se guarda"
+          "label": "Lo que se guarda",
+          "text": "cuesta 2,50 el millón esa vez"
         },
         {
           "label": "Dura 30 minutos",
@@ -83,7 +83,7 @@
       "headline": "Cómo sabés *que\u00a0funcionó*",
       "image": "hermes-content/carousels/briefs/assets/sergio-dda-openai-sol-20261001/openai-cache-usage-20261001.png",
       "image_fuente": "https://developers.openai.com/api/docs/guides/prompt-caching · «Request parameters and response usage» · Request 2 · Response usage (el Request 1 del mismo ejemplo da cached_tokens 0) · captura del 1-oct-2026",
-      "body": "Guía de OpenAI: el segundo pedido leyó 12.000 tokens de caché.",
+      "body": "Mirá cached_tokens (acá, 12.000). Si\u00a0después del primer pedido sigue en 0, cambiaste el principio o pasó media hora.",
       "next": "la cuenta",
       "alt_text": "El uso de la respuesta de la API de OpenAI en el ejemplo de su guía: cached_tokens en 12000 en el segundo pedido"
     },
@@ -92,7 +92,7 @@
       "layout": "cierre",
       "theme": "negro",
       "keyword": "CACHE",
-      "body": "Te mando la tabla Sol vs Astra y la cuenta de caché.",
+      "body": "Te mando la tabla Sol vs Astra y\u00a0la\u00a0cuenta\u00a0de\u00a0caché.",
       "alt_text": "Comentá CACHE para recibir la tabla Sol vs Astra y la cuenta de caché"
     }
   ],

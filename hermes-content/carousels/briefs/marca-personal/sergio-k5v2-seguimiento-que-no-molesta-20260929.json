@@ -1,6 +1,6 @@
 {
   "title": "4 reglas de un seguimiento que no molesta (v2, pack referentes)",
-  "caption": "Un seguimiento molesta cuando llega tarde, fuera de hora o a la persona equivocada.\n\nLas cuatro reglas del bot de ONIA: 24 h de texto libre, después solo plantilla aprobada, nada de madrugada y tus números de prueba afuera.\n\nOjo: la ventana de 24 h es de la plataforma oficial de WhatsApp (la API que usan los bots). En la app de WhatsApp Business que usás a mano no existe.\n\nFuente: developers.facebook.com/docs/whatsapp/pricing\n\nComentá VENTANA y te paso el link de la comunidad con mis mensajes de seguimiento: cómo escribo la plantilla y qué mando dentro de las 24 h.",
+  "caption": "Si tu bot de WhatsApp le escribe a un cliente que no contesta hace más de 24 horas, ese mensaje no sale.\n\nEs una regla de la plataforma oficial de Meta, la API que usan los bots: cuando el cliente te escribe se abre una ventana de 24 h; afuera, solo salen plantillas que Meta aprobó antes. En la app de WhatsApp Business que usás a mano no existe.\n\nLas cuatro reglas salen de la configuración real de mi bot de ONIA: un solo seguimiento a las 20 h del último mensaje, plantilla después de las 24 h, silencio a los 7 días y nada fuera de 8:00 a 21:00 (hora de Bolivia).\n\nAntes de programar tu seguimiento, mandá tus plantillas a aprobar.\n\nFuente de la ventana: developers.facebook.com/documentation/business-messaging/whatsapp/pricing\n\nComentá VENTANA y te paso el link de la comunidad con mis dos mensajes de seguimiento: el de dentro de las 24 h y la plantilla aprobada.",
   "hashtags": [
     "#whatsapp",
     "#whatsappbusiness",
@@ -27,7 +27,7 @@
       "number": 2,
       "layout": "dato",
       "theme": "blanco",
-      "body": "Cuando tu cliente te escribe, tenés 24 h para contestar lo que quieras. Mi bot apunta el seguimiento a las 20 h: le quedan 4 de margen.",
+      "body": "Cuando tu cliente te escribe, tenés 24 h para contestar lo que quieras. Mi bot manda un solo seguimiento, 20 h después de su último mensaje: le quedan 4 de margen.",
       "next": "regla 2",
       "alt_text": "La ventana de 24 horas de WhatsApp",
       "value": "24 h",
@@ -55,29 +55,29 @@
       "body": "uno a las 3 de la mañana sale, pero molesta",
       "items": [
         {
-          "label": "De día",
+          "label": "8:00 a 21:00",
           "text": "envía"
         },
         {
-          "label": "De madrugada",
+          "label": "21:00 a 8:00",
           "text": "espera"
         },
         {
-          "label": "A la mañana",
+          "label": "A las 8:00",
           "text": "sale lo pendiente"
         }
       ],
       "next": "regla 4",
-      "alt_text": "Los envíos esperan la franja horaria del cliente"
+      "alt_text": "De 8:00 a 21:00 envía; de noche espera y a las 8:00 sale lo pendiente"
     },
     {
       "number": 5,
       "layout": "dato",
       "theme": "blanco",
-      "value": "2 de 3",
+      "value": "2/3",
       "headline": "Regla 4: no te escribas *a vos mismo*",
-      "body": "Antes de un envío masivo, sacá tus números y los de prueba. En mi bot, de 3 contactos a escribir, 2 eran nuestros.",
-      "next": "las 4",
+      "body": "Antes de un envío masivo, sacá tus números y los de prueba. El 18-sep, de 3 contactos que mi bot iba a escribir, 2 eran nuestros.",
+      "next": "3 detalles",
       "alt_text": "Sacar tus números antes de un envío masivo"
     },
     {
@@ -87,24 +87,21 @@
       "headline": "Antes de *encender*",
       "items": [
         {
-          "label": "Ventana",
-          "text": "24 h desde su último mensaje"
+          "label": "Error 131047",
+          "text": "texto libre fuera de las 24 h: buscalo"
         },
         {
-          "label": "Plantilla",
-          "text": "aprobada antes de programar"
+          "label": "La plantilla",
+          "text": "que no empiece ni termine en variable"
         },
         {
-          "label": "Hora",
-          "text": "franja en la hora del cliente"
-        },
-        {
-          "label": "Exclusión",
-          "text": "tus números y los de prueba, afuera"
+          "label": "7 días",
+          "text": "sin respuesta, no escribe más"
         }
       ],
       "next": "mis mensajes",
-      "alt_text": "Checklist de las 4 reglas de seguimiento"
+      "alt_text": "El error 131047, la plantilla que no empieza ni termina en variable y el corte a los 7 días",
+      "body": "tres detalles que frenan un seguimiento"
     },
     {
       "number": 7,

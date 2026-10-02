@@ -1,6 +1,6 @@
 {
   "title": "Sonnet 4.5 se apaga el 30 de noviembre: encontralo y migralo con un comando (N02, noticia, pack referentes)",
-  "caption": "Sonnet 4.5 se retira de la API de Claude el 30 de noviembre de 2026. Después de esa fecha, los pedidos a ese modelo fallan. Si una automatización tuya lo usa, así lo encontrás y lo migrás.\n\nAnthropic recomienda pasar a Sonnet 5.5.\n\n1. Buscalo. En tu código, el texto claude-sonnet-4-5. En n8n, abrí cada nodo de Anthropic y mirá qué modelo tiene elegido.\n2. Migralo. En Claude Code: /claude-api migrate this project to claude-sonnet-5-5. Antes de tocar archivos te pregunta el alcance (toda la carpeta, una subcarpeta o una lista de archivos) y al final te deja una lista para revisar a mano.\n3. Si programás contra la API, Sonnet 5.5 rechaza con error 400 cuatro cosas que 4.5 aceptaba: temperature, top_p o top_k cambiados; la respuesta pre-llenada; tool_choice any o tool, y el pensamiento con budget_tokens.\n4. Probá. Tu flujo corre sin error 400 y el campo model de la respuesta dice el modelo nuevo.\n\nFuentes, con capturas del 1 de octubre de 2026: la nota del 30 de septiembre en las release notes de la plataforma de Claude (platform.claude.com/docs/en/release-notes/overview), la página Model deprecations y la guía de migración a Sonnet 5.5 (platform.claude.com/docs/en/models/sonnet-5-5/migration-guide).\n\nEl checklist completo, con el comando para buscarlo, está en la comunidad. Comentá MIGRAR y te paso el link.",
+  "caption": "Anthropic anunció el 30 de septiembre que Sonnet 4.5 (claude-sonnet-4-5-20250929) se retira de la API de Claude el 30 de noviembre de 2026. Después de esa fecha, los pedidos a ese modelo fallan. Recomiendan pasar a Sonnet 5.5.\n\nEl comando de la lámina 4, para copiar (en Claude Code, dentro de la carpeta del proyecto):\n/claude-api migrate this project to claude-sonnet-5-5\nAntes de tocar archivos te pregunta el alcance: toda la carpeta, una subcarpeta o una lista de archivos. Al final te deja una lista para revisar a mano.\n\nTres detalles que no entraron en las láminas:\n– Al buscar claude-sonnet-4-5, saltate node_modules, .venv y .git: si no, podés contar las listas de modelos de tus propias dependencias.\n– Si usabas budget_tokens, el reemplazo es un nivel de esfuerzo: low para chat, medium para agentes.\n– En n8n no hay código que migrar: cambiá el modelo en cada nodo de Anthropic, probá, y si da error 400 compará el mensaje con la lámina 5.\n\nFuentes, con capturas del 1 de octubre de 2026: la nota del 30 de septiembre en las release notes de la plataforma de Claude (platform.claude.com/docs/en/release-notes/overview), la página Model deprecations y la guía de migración a Sonnet 5.5 (platform.claude.com/docs/en/models/sonnet-5-5/migration-guide).\n\nEl checklist completo, con el comando para buscarlo, está en la comunidad. Comentá MIGRAR y te paso el link.",
   "hashtags": [
     "#claude",
     "#anthropic",
@@ -28,7 +28,7 @@
       "theme": "verde",
       "badge": "noticia",
       "logo": "hermes-content/references/brand-claude/claude.svg",
-      "headline": "*Sonnet 4.5* se apaga el 30 de noviembre",
+      "headline": "*Sonnet\u00a04.5* se apaga el 30\u00a0de\u00a0noviembre",
       "subtitle": "encontralo y migralo con un comando",
       "image": "hermes-content/carousels/briefs/assets/sergio-n02-sonnet45-se-apaga-20261001/reloj-arena-pexels-gris.jpg",
       "body": "Si una automatización tuya lo usa, tenés casi dos meses.",
@@ -101,7 +101,7 @@
       "layout": "dato",
       "theme": "blanco",
       "value": "400",
-      "headline": "el error que *no tiene que salir*",
+      "headline": "el error que *no\u00a0tiene\u00a0que\u00a0salir*",
       "body": "Probá tu flujo: corre sin error 400 y el campo model de la respuesta dice el modelo nuevo.",
       "next": "el checklist",
       "fuente": "GUIONES §N02 «Cómo sabés que quedó»; drop N02 punto 4",
@@ -112,7 +112,7 @@
       "layout": "cierre",
       "theme": "negro",
       "keyword": "MIGRAR",
-      "body": "y te paso el checklist de migración desde Sonnet 4.5.",
+      "body": "y te paso el checklist de migración desde Sonnet\u00a04.5.",
       "fuente": "GUIONES, tabla de palabras: dom 4 · N02 · MIGRAR → drop «Checklist de migración desde Sonnet 4.5»",
       "alt_text": "Comentá MIGRAR para recibir el checklist de migración desde Sonnet 4.5"
     }

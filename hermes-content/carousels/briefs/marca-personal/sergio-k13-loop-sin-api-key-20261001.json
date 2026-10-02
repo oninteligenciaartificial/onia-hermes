@@ -77,9 +77,9 @@
       "layout": "ensayo",
       "theme": "blanco",
       "headline": "Trampa 1: *la API key*",
-      "body": "Si en el servidor hay una ANTHROPIC_API_KEY, Claude Code la usa en vez de tu suscripción.\n\nLa mía estaba vencida: todo fallaba.\n\nEl corredor la borra antes de llamar a Claude:\n\n*unset ANTHROPIC_API_KEY*",
+      "body": "Si en el servidor hay una ANTHROPIC_API_KEY, Claude Code la usa en vez de tu suscripción.\n\nLa mía estaba vencida: todo fallaba.\n\nEl corredor borra las dos variables de clave antes de llamar a Claude:\n\n*unset ANTHROPIC_API_KEY ANTHROPIC_AUTH_TOKEN*",
       "next": "4 más",
-      "alt_text": "Borrar ANTHROPIC_API_KEY del entorno para que use la suscripción"
+      "alt_text": "Borrar ANTHROPIC_API_KEY y ANTHROPIC_AUTH_TOKEN del entorno para que use la suscripción"
     },
     {
       "number": 6,
@@ -98,7 +98,7 @@
         },
         {
           "label": "La hora",
-          "text": "el cron va en UTC; Bolivia está 4 h atrás"
+          "text": "el cron va en UTC: hora de Bolivia + 4 h"
         },
         {
           "label": "Editar en caliente",
@@ -112,7 +112,7 @@
       "number": 7,
       "layout": "dato",
       "theme": "blanco",
-      "value": "7 de 8",
+      "value": "7/8",
       "headline": "corridas *sin hacer nada*",
       "body": "Así estaba uno de mis loops. No alcanza con que corra: abrí 3 o 4 de sus commits y mirá qué cambió. Con ese criterio apagué 2 de 6.",
       "next": "el esqueleto",

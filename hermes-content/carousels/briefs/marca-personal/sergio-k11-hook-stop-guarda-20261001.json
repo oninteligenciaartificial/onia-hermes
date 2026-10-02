@@ -1,6 +1,6 @@
 {
   "title": "El hook que commitea solo, y su guarda (K11 v2, pack referentes, arcilla)",
-  "caption": "Mi hook de Claude Code tomó 17 archivos con conflictos, los dio por resueltos y los subió a main. Ese hook corre solo cada vez que Claude termina de responder: commitea y sube.\n\nDos cosas que aprendí rompiéndolo.\n\nStop corre cuando Claude termina su turno, no cuando terminó el trabajo. Así se publicaron 217 líneas de estilos antes que el código que las usaba.\n\nY el script necesita una guarda: antes de commitear, dos comandos de git. Si hay un merge a medias o archivos en conflicto, no toca nada.\n\nComprobalo con /hooks y con un conflicto armado a propósito en un repo de prueba.\n\nLos dos incidentes son del 20 y el 23 de agosto (están en el CLAUDE.md de mi repo); la guarda, en scripts/git-autosync.js. Qué es Stop y qué muestra /hooks: code.claude.com/docs/en/hooks.\n\nLa regla que me dejó: un merge con conflictos no se deja abierto al terminar un turno.\n\nComentá HOOK y te paso el link de la comunidad con el JSON y la guarda, listos para copiar.",
+  "caption": "Mi hook de Claude Code tomó 17 archivos con conflictos, los dio por resueltos y los subió a main. Ese hook corre solo cada vez que Claude termina de responder: commitea y sube.\n\nStop corre cuando Claude termina su turno, no cuando terminó el trabajo. Así se publicaron 217 líneas de estilos antes que el código que las usaba.\n\nLa guarda, para copiar. Va en tu script, antes de git add; si alguno de los dos imprime algo, el script sale sin tocar nada:\ngit rev-parse -q --verify MERGE_HEAD\ngit diff --name-only --diff-filter=U\nEl primero imprime un hash si hay un merge a medias; el segundo lista los archivos en conflicto.\n\nPara armar el conflicto de prueba: en una carpeta nueva, git init, dos ramas que cambian la misma línea del mismo archivo y git merge. Queda en conflicto: corré tu script y tiene que avisar sin commitear.\n\nLos dos incidentes son del 20 y el 23 de agosto (están en el CLAUDE.md de mi repo); la guarda, en scripts/git-autosync.js. Qué es Stop y qué muestra /hooks: code.claude.com/docs/en/hooks.\n\nLa regla que me dejó: un merge con conflictos no se deja abierto al terminar un turno.\n\nComentá HOOK y te paso el link de la comunidad con el JSON y la guarda, listos para copiar.",
   "hashtags": [
     "#claudecode",
     "#claude",
@@ -110,7 +110,7 @@
       "layout": "ensayo",
       "theme": "blanco",
       "headline": "Comprobá que *frena*",
-      "body": "Escribí /hooks en Claude Code: tu Stop tiene que aparecer.\n\nDespués, en un repo de prueba, armá un conflicto a propósito y corré tu script. Tiene que avisar y no commitear.\n\nEl mío dice: *merge sin resolver — omito TODO*.",
+      "body": "Escribí /hooks en Claude Code: tu Stop tiene que aparecer.\n\nDespués, en un repo de prueba, armá un conflicto a propósito y corré tu script. Tiene que avisar y no commitear.\n\nEl mío dice: *merge\u00a0sin\u00a0resolver\u00a0—\u00a0omito\u00a0TODO*.",
       "next": "el hook",
       "alt_text": "Cómo comprobar que la guarda frena"
     },
@@ -119,7 +119,7 @@
       "layout": "cierre",
       "theme": "negro",
       "keyword": "HOOK",
-      "body": "y te paso el link de la comunidad con el hook armado.",
+      "body": "y te paso el link de la comunidad con el hook\u00a0armado.",
       "alt_text": "Comentá HOOK para recibir el JSON del hook y la guarda"
     }
   ],

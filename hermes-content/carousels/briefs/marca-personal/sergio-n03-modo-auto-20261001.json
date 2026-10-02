@@ -1,6 +1,6 @@
 {
   "title": "Claude Code ya no te pregunta casi nada: qué deja pasar el modo auto (N03, noticia, pack referentes)",
-  "caption": "Claude Code ya no te pregunta casi nada. Desde fines de septiembre arranca en modo auto, en todos los planes.\n\nQué cambia para vos: un segundo modelo revisa, en vez de vos, lo que Claude quiere hacer. Leer y editar archivos de tu carpeta, en general, se aprueba solo.\n\nPor defecto bloquea: bajar y ejecutar código de internet, deploys a producción y migraciones, borrar para siempre archivos que ya existían, force push y git reset --hard.\n\nPor defecto deja pasar: trabajar con archivos de tu carpeta, instalar las dependencias declaradas en tus archivos lock y hacer push a cualquier rama del repo, incluida la principal. Si tu rama principal publica tu sitio o tu app, ese es el punto que importa.\n\nCómo lo ves: la barra de abajo dice en qué modo estás, y Shift+Tab lo cambia. Para que la terminal arranque siempre preguntando:\"defaultMode\": \"default\" dentro de \"permissions\", en ~/.claude/settings.json. Si tu proyecto tiene su propio .claude/settings.json con otro defaultMode, ese le gana. La próxima sesión dice ⏸ manual mode on.\n\nFuente: la documentación oficial de modos de permiso (code.claude.com/docs/en/permission-modes, listas resumidas) y el registro de cambios de Claude Code del 28 de septiembre. En Pro, Max y Team ya arrancaba en auto desde agosto; lo nuevo es que vale para todos los planes.\n\nComentá COMUNIDAD y te paso el paso a paso para volver a modo manual.",
+  "caption": "Claude Code ya no te pregunta casi nada: desde fines de septiembre arranca en modo auto en todos los planes (en Pro, Max y Team ya era así desde agosto). Un segundo modelo revisa, en vez de vos, lo que Claude quiere hacer.\n\nLo que importa: por defecto deja pasar el push a cualquier rama, incluida la principal. Si tu rama principal publica tu sitio o tu app, mirá en qué modo arrancás.\n\nPara que vuelva a preguntarte, en ~/.claude/settings.json:\n\"permissions\": { \"defaultMode\": \"default\" }\n\nDos detalles que no entran en las láminas: si tu proyecto tiene su propio .claude/settings.json con otro defaultMode, ese le gana al tuyo. Y en VS Code se elige Manual en el indicador de modo, abajo del cuadro de texto.\n\nFuente: code.claude.com/docs/en/permission-modes (listas resumidas) y el registro de cambios de Claude Code del 28-sep.\n\nComentá COMUNIDAD y te paso el link de la comunidad de WhatsApp con el bloque para copiar.",
   "hashtags": [
     "#claudecode",
     "#claude",
@@ -80,7 +80,7 @@
         },
         {
           "label": "Dependencias",
-          "text": "las declaradas en tus archivos lock"
+          "text": "las declaradas en tu lock o manifiesto"
         },
         {
           "label": "Push",
@@ -135,8 +135,8 @@
       "layout": "cierre",
       "theme": "negro",
       "keyword": "COMUNIDAD",
-      "body": "y te paso cómo volver a modo manual",
-      "alt_text": "Comentá COMUNIDAD y te paso cómo volver a modo manual"
+      "body": "y te paso el link de la comunidad con el bloque para copiar.",
+      "alt_text": "Comentá COMUNIDAD y te paso el link de la comunidad con el bloque para volver a modo manual"
     }
   ],
   "fuentes": {
