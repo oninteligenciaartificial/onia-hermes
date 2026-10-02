@@ -37,7 +37,7 @@ Desarrollar y publicar Onia Platform 1.0 hasta cobrar al primer cliente. Qué sa
 | **Recordatorio con botones Confirmar / Cancelar / Reprogramar** | onia-platform#98 MERGEADO (`8f07e537`) + bot en onia-hermes#84 (`2f85bdd2`, `ffb65f75`) | Plataforma: publicada y verificada (§2). Falta: publicar el bot (bloqueado, ver §5); prueba real con el chip prepago. NO se nombra en venta ni ayuda hasta esa prueba |
 | **Web v1 + 4 detalles de la madre + legales 1.3** | onia-hermes#84 (rama `claude/sharp-shannon-sqrmig` = `wip/web-v1-correcciones-20261001` + arreglos) | Borrador. Espera el OK de Sergio Urcullo a la web y a los legales 1.3 (términos pasó de 1.2 a 1.3). Mergear = publicar la web. La rama `wip/` quedó vieja: se recaptura la `claude/` |
 | Plan B de verificación inversa (`wa.me`) | ramas `v1/verificacion-inversa` (plataforma) y `wip/bot-verificacion-inversa` (hermes) | APAGADO y NO se enciende sin OK de Sergio Urcullo (orden de la madre 1-oct) |
-| SIAT: runner que valida cada paquete | `/opt/onia-siat/runner-20260929/emisor-v2/` + rama `wip/siat-validar-cada-paquete` | Comandos de VI y IX en `BITACORA.md`, sin lanzar: esperan las capturas del portal |
+| SIAT: certificación en el piloto | `/opt/onia-siat/runner-20260929/emisor-v2/` + rama `wip/siat-validar-cada-paquete`; detalle en `BITACORA.md` (2-oct) | 2-oct (conteo local): **IX 160/160**, **VI 380/560**, general 96 %, 0 rechazos. Falta SOLO VI motivos 5-7 (180): necesitan el **CAFC** del piloto. Pedido a Sergio Urcullo: CAFC + captura nueva del «Listado de Etapas» para confirmar en el portal |
 | Respuestas con datos de la ayuda (deuda, stock) leen tablas del pack dental | — | Anotado: revisar la fuente para comercio, importadora y servicios |
 
 **Cómo funciona el recordatorio con botones (para no re-investigar):**
@@ -94,7 +94,7 @@ Desarrollar y publicar Onia Platform 1.0 hasta cobrar al primer cliente. Qué sa
 - OK a la web v1 y a los legales 1.3 (onia-hermes#84).
 - Firma de la frase-prefijo de la pauta (`363dcf10`): destraba la suite del bot y con eso su publicación.
 - Chip prepago para la prueba del WhatsApp del cliente (recordatorio con botones y agente conversacional).
-- Aprobar el pago de prueba en `/admin/payments` cuando la madre avise. Capturas del SIAT (filas 4 y 6, «Listado de Etapas», CAFC).
+- Aprobar el pago de prueba en `/admin/payments` cuando la madre avise. SIAT: el **CAFC del piloto** y una captura nueva del «Listado de Etapas».
 
 ## 6b. Pendiente priorizado: lo que copiar de Doctocliq (madre, 2-oct)
 
@@ -120,5 +120,5 @@ tabla sin acción). Nada se construye sin el filtro de Etapa 1. Orden por impact
 1. Con el OK de Sergio Urcullo: mergear onia-hermes#84 (publica web + legales 1.3). Si tarda, llevar solos a `main` los commits del bot.
 2. Con la suite del bot en verde (firma de la pauta): `deploy-bot.sh --aplicar` (o `publicar.sh` del bot).
 3. Con el chip: conectar el número a una org QA → plantilla `recordatorio_cita` aprobada → cita a 24 h → tocar los 3 botones → MIRAR el estado en el panel y que el bot siga contestando después. Recién ahí ✅ en el catálogo y en la ayuda.
-4. Pago de prueba de punta a punta cuando la madre avise. SIAT VI y IX con las capturas.
+4. Pago de prueba de punta a punta cuando la madre avise. SIAT: con el CAFC, cargarlo en `siat-piloto.env` (SIAT_PILOT_CAFC) y lanzar VI motivos 5-7 con `run-case-v2.sh` (respaldo antes, como dice la bitácora).
 5. Producto, según la competencia: presupuesto por fases desde el odontograma.
