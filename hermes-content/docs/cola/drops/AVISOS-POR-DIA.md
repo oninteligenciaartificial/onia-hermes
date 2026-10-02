@@ -1,7 +1,7 @@
 # Avisos de Onia Community, día por día · vie 2 → mié 14-oct-2026
 
 **Cómo se usa:** el día indicado, pegá en *Avisos* cada texto (lo que está entre `~~~~`), en orden y **antes de la hora** (es la del primer video del día, 12:30; si subís el YouTube antes, pegá antes). La imagen o el archivo va justo después de su texto. Lo marcado ⛔ no se pega.
-**De dónde sale cada texto:** copiado tal cual de su drop de origen, nombrado en cada aviso (`drops/2026-10-01.md`, `drops/2026-10-01-drops-noticias-repos.md` y la sección «Drops» de `plan-3-semanas/S1-GUIONES.md`, `S2-GUIONES.md`, `S3-GUIONES.md` y `S4-GITHUB-REPOS.md`). **Si se corrige un drop, se corrige en el origen y acá.**
+**De dónde sale cada texto:** copiado tal cual de su drop de origen, nombrado en cada aviso (`drops/2026-10-01.md`, `drops/2026-10-01-drops-noticias-repos.md` y la sección «Drops» de `plan-3-semanas/S1-GUIONES.md`, `S2-GUIONES.md`, `S3-GUIONES.md` y `S4-GITHUB-REPOS.md`). Los marcados «sin revisor» se armaron el 1-oct solo con datos de su fuente: leelos antes. **Si se corrige un drop, se corrige en el origen y acá.**
 **Cada recurso arranca con su PALABRA en negrita:** el que llega por DM la busca en Avisos. Al final: qué mandar por DM y los huecos.
 
 ---
@@ -62,7 +62,7 @@ Contame en General: *¿qué IA usaste y cuál eligió?* Si te animás, calculalo
 La respuesta la dejo mañana sábado a las 10:00 👀
 ~~~~
 
-#### 2-2 · Recursos de los videos de ayer → PLANILLA · MANUAL · TARIFA
+#### 2-2 · Recursos de los videos de ayer → PLANILLA · COMUNIDAD (N03, modo auto) · TARIFA
 Origen: drop 1 de `S1-GUIONES.md` · `N03` y `drop-2` de `drops/2026-10-01-drops-noticias-repos.md`. Van juntos para no pasar de 3 avisos.
 
 ~~~~
@@ -79,7 +79,7 @@ Regla: si Sonnet empata en 2 de 3 → Sonnet por defecto; Opus para el tipo de t
 
 ———
 
-*MANUAL* · *Volver a modo manual en Claude Code*
+*COMUNIDAD* · *Volver a modo manual en Claude Code*
 
 Desde fines de septiembre Claude Code arranca en *modo auto*, en todos los planes: un segundo modelo revisa en vez de vos lo que Claude quiere hacer. Leer y editar archivos de tu carpeta, en general, se aprueba solo, sin esa revisión.
 
@@ -146,8 +146,8 @@ Ojo: si no cargaste un método de pago en Meta, después de los 1.000 gratis tu 
 Contá en General: *¿te dio cero o te toca pagar?*
 ~~~~
 
-#### 2-3 · Recursos de hoy → EFFORT (video D02-A y carrusel K10) · MIRAR (D04-C)
-Origen: `drop-EFFORT` de `drops/2026-10-01-drops-noticias-repos.md` (corregido 1-oct: cierre a General) · drop 6 de `S1-GUIONES.md`.
+#### 2-3 · Recursos de hoy → EFFORT (video D02-A y carrusel K10) · MIRAR (D04-C) · CACHE (DD-A y su carrusel)
+Origen: `drop-EFFORT` de `drops/2026-10-01-drops-noticias-repos.md` (corregido 1-oct: cierre a General) · drop 6 de `S1-GUIONES.md` · `CACHE` de `drops/2026-10-01-drops-noticias-repos.md` (sin revisor).
 
 ~~~~
 *EFFORT* · *Mi tabla de esfuerzo para Claude Code*
@@ -198,9 +198,37 @@ Miralas y decime: qué texto ves, si algo se ve roto, cuánto pesó la página y
 A mano: npx playwright install chromium   y después
         npx playwright screenshot --device "iPhone 11" <URL> captura.png
 ```
-~~~~
 
-⛔ **CACHE** (noticia DD-A y su carrusel): no hay drop escrito. Sin él, DD-A y su carrusel no salen hoy. Ver «Huecos».
+———
+
+*CACHE* · *GPT-6.1 Sol: la tabla y la cuenta de la caché*
+
+OpenAI lo presentó el 29-sep, en su DevDay. En la API se llama `gpt-6.1-sol`.
+
+Por millón de tokens, en USD (página de precios de OpenAI, leída el 1-oct):
+```
+              entrada  desde caché  salida
+gpt-6.1-sol   2,00     0,10         10
+Astra         10       1            50
+```
+Un quinto de Astra, en lo que entra y en lo que sale.
+
+*La cuenta para tu agente*
+```
+Costo de un pedido (USD) =
+( tokens nuevos       x 2
++ tokens desde caché  x 0,10
++ tokens de salida    x 10 ) / 1.000.000
+```
+La primera vez, lo que se guarda en la caché se cobra 2,50 en vez de 2. Después, lo que sale de la caché cuesta 0,10: veinte veces menos.
+
+*Para que funcione*
+- Lo que repetís igual en cada pedido (las instrucciones de tu agente, tu lista de precios) va al principio y no se toca.
+- Tiene que pasar de 1.024 tokens.
+- Cómo sabés que anduvo: la respuesta de la API trae cuántos tokens salieron de caché. Si dice 0, cambiaste algo del principio.
+
+Contá en General: *¿qué parte de tus pedidos se repite siempre igual?*
+~~~~
 
 ---
 
@@ -231,38 +259,7 @@ Mostrá la fórmula, citá de dónde sacaste cada número y marcá si algún
 La clave son dos pedidos: *la fórmula* y *de dónde sacó cada dato*. Así ves en segundos si la IA se equivocó.
 ~~~~
 
-#### 3-2 · ⛔ GEMINI (noticia N06 y su carrusel) — no pegar hasta cumplir la condición
-Origen: `N06` de `drops/2026-10-01-drops-noticias-repos.md`. **Condición:** (1) leé desde la laptop los términos del login con Google (Google Terms of Service y «Gemini Code Assist for individuals Privacy Notice»): si dicen que usan o leen lo que mandás, sumá esa línea antes del cierre; (2) abrí `/model` con tu cuenta: si no aparece `gemini-3.8-flash`, no hay demo con ese modelo (grabás con clave de API o se baja la pieza); (3) sin las 3 capturas, sacá la línea «Abajo van 3 capturas…». Si no se cumple, N06 y su carrusel no salen.
-
-~~~~
-*GEMINI* · *Gemini CLI en 5 minutos*
-
-El agente de terminal de Google. Abierto (licencia Apache 2.0) y gratis con tu cuenta de Google: 60 pedidos por minuto y 1.000 por día, según su página en GitHub.
-
-1. Instalalo (necesitás Node.js):
-```
-npm install -g @google/gemini-cli
-```
-2. En la terminal, entrá a la carpeta que querés revisar y abrilo:
-```
-cd nombre-de-tu-carpeta
-gemini
-```
-3. Elegí *Sign in with Google* y entrá con tu cuenta en el navegador.
-4. Escribí `/model` y elegí `gemini-3.8-flash`. Llegó en la versión 0.62.0 (29-sep), junto con `gemini-3.5-flash-lite`.
-¿No te aparece? Con cuenta de Google se habilita de a poco: seguí con el modelo que tengas elegido.
-5. Primer pedido:
-```
-resumime qué hay acá y qué falta
-```
-Lo que le pedís y lo que lee de la carpeta va a los servidores de Google: para esta primera prueba, usá una carpeta sin datos de clientes ni claves.
-
-*Cómo sabés que anduvo:* `/model` muestra el modelo elegido y la respuesta nombra archivos que existen.
-
-Abajo van 3 capturas: la instalación, `/model` y la respuesta.
-
-Contame en General: *¿qué te dijo que faltaba en tu carpeta?*
-~~~~
+N06 (Gemini CLI) no sale: ver la nota ⛔ del drop N06. Queda un lugar para un repo de la reserva: lo decide Sergio Urcullo (y su aviso entra acá).
 
 ---
 
@@ -302,7 +299,37 @@ En n8n, pasá directo al paso 4: si da error 400, compará el mensaje con esta l
 Contame en General: *¿cuántos resultados te dio la búsqueda del paso 1?*
 ~~~~
 
-⛔ **VENTANA** (S2-D07-A hoy; carrusel K5 el dom 11): falta escribir «Mensajes de seguimiento». Sin él, S2-D07-A no sale hoy. Ver «Huecos».
+#### 4-2 · VENTANA (S2-D07-A; también el carrusel K5 del dom 11)
+Origen: `VENTANA` de `drops/2026-10-01-drops-noticias-repos.md` (sin revisor; textos copiados de `bot/config.mjs`).
+
+~~~~
+*VENTANA* · *Mis mensajes de seguimiento*
+
+Vale para bots en la API oficial de Meta. En la app de WhatsApp Business, a mano, esta regla no existe.
+
+*Las reglas de mi bot*
+1. Dentro de las 24 h desde el último mensaje del cliente: texto libre. Mi bot manda un solo seguimiento, a las 20 h: le quedan 4 h de margen.
+2. Pasadas las 24 h: solo una plantilla aprobada por Meta. Texto libre ahí falla con el error 131047: buscalo en los registros de tu bot.
+3. Pasados 7 días: no escribe más.
+4. Nunca de madrugada: fuera de 8:00 a 21:00 el mensaje espera y sale a las 8:00.
+5. Tus números de prueba, afuera de la lista.
+
+*El de dentro de las 24 h* (texto libre):
+> ¡Hola de nuevo! Te escribí ayer por la demo de [producto] y quedó a medias — sé que el negocio no para.
+> Te dejo dos opciones nuevas por si te sirven: *[horario 1]* o *[horario 2]*.
+> Decime cuál te queda mejor y la dejamos agendada.
+
+*El de después* (plantilla aprobada por Meta):
+> ¡Hola de nuevo! Te escribí por la demo de Onia y quedó a medias — sé que el negocio no para.
+> Si querés retomarla, te dejo dos horarios: *{{1}}* o *{{2}}*.
+> Decime cuál te queda mejor y la dejamos agendada.
+
+Fijate que cierra con una frase fija: Meta rechaza una plantilla que termina en una variable.
+
+Antes de programar tu seguimiento, mandá tus plantillas a aprobar.
+
+Contá en General: *¿a las cuántas horas manda tu bot el seguimiento?*
+~~~~
 
 SKILL (D01-A y carrusel K2) va a la web: no lleva aviso.
 
@@ -354,7 +381,33 @@ Ojo: tu skill reemplaza al `/verify` que trae Claude Code (el que arma y corre t
 Contame en General: *¿qué chequeo le pusiste a tu verify?*
 ~~~~
 
-⛔ **PROMESA** (S2-D08-A y carrusel K6): falta el drop «Bot con dos listas» con las dos respuestas completas. Sin él, S2-D08-A y K6 no salen hoy. Ver «Huecos».
+#### 5-3 · PROMESA (S2-D08-A y carrusel K6)
+Origen: `PROMESA` de `drops/2026-10-01-drops-noticias-repos.md` (sin revisor; copiado de `PRODUCCION-GUIONES-2026-09-29.md` §Prueba 2). ⚠️ Las respuestas están recortadas (`[…]`) y el guion dice «completas»: al grabar, decí «las dos respuestas están en la comunidad», sin «completas».
+
+~~~~
+*PROMESA* · *Bot con dos listas: la prueba del 28-sep*
+
+Negocio de ejemplo (inventado para la prueba): Cajas Kuska, cajas de cartón con logo. El cliente escribe:
+«Hola! Necesito 200 cajas con mi logo para este viernes, ¿me las pueden entregar?»
+
+*1. Sin reglas* (solo «sé amable y vendedor, tratá de cerrar la venta»):
+> ¡Hola! Gracias por escribirnos a Cajas Kuska. Claro que sí, con gusto te ayudamos con tus 200 cajas con logo. Para el viernes el plazo es justo, y no quiero prometerte una fecha que después no te pueda cumplir. Por eso lo confirmo con producción apenas tenga tus datos. Pasame por favor: 1. Las medidas de la caja […] 2. Tu logo en buena calidad […] 3. A qué zona de Santa Cruz te lo entregamos. Con eso te confirmo si llegamos al viernes y te paso la cotización. Si no se pudiera, te digo la fecha más cercana […]
+
+*2. Con dos listas* («nunca confirmes stock, precio ni fecha si no están acá. Confirmado: desde 50 unidades. NO confirmado: stock, plazo, precio»):
+> ¡Hola! Gracias por escribirnos a Cajas Kuska 😊 Sí, fabricamos cajas de cartón personalizadas con tu logo, y 200 unidades está dentro de lo que trabajamos (hacemos desde 50). Todavía no puedo asegurarte la entrega para este viernes. Tengo que confirmar el plazo de producción con el equipo y te aviso apenas lo tenga. […] Con eso te confirmo precio y plazo real.
+
+Ninguna prometió. La segunda usó el dato confirmado. Sonnet 5.5, una corrida por caso.
+
+*La plantilla para tu bot*
+```
+Nunca confirmes stock, precio ni fecha si no están acá.
+Confirmado: [lo que ya podés prometer]
+Por confirmar antes de prometer: [lo que siempre se confirma antes]
+```
+*Probalo:* mandale un pedido con fecha. Si la confirma sin tenerla escrita, le faltan las dos listas.
+
+Contá en General: *¿qué va en tu lista de «por confirmar»?*
+~~~~
 
 ---
 
@@ -518,9 +571,22 @@ El primero, dentro de cada proyecto: borra su mapa (la carpeta .codegraph). El s
 *Mini-tarea:* hacele a tu agente una pregunta sobre tu código y contá en General si usó CodeGraph o abrió archivo por archivo.
 ~~~~
 
-**General → PRUEBAS** (carrusel K4: el que comenta PRUEBAS recibe el link a la comunidad para contar esto):
+#### 8-3 · PRUEBAS (carrusel K4)
+Origen: `PRUEBAS` de `drops/2026-10-01-drops-noticias-repos.md` (sin revisor; copiado del brief de K4).
+
 ~~~~
-*PRUEBAS* · ¿Cuál de las 5 pruebas del carrusel de hoy le falló a tu bot? Contalo acá.
+*PRUEBAS* · *Las 5 pruebas antes de activar tu bot*
+
+Mandale vos los mensajes que le van a mandar tus clientes:
+1. *Como tu cliente:* sin tildes, «cuanto sale?», «ya»
+2. *Dos veces:* contesta una sola vez
+3. *Lo que no sabe:* stock, plazo, precio: no inventa
+4. *Un audio:* si no lo entiende, avisa a alguien
+5. *«Una persona»:* alguien se entera, no solo el bot
+
+La que más importa es la 3: si contesta con un dato que no está en su información, lo inventó. Si inventa, no se activa.
+
+Contá en General: *¿cuál te falló?*
 ~~~~
 
 CLAVE (S2-D12-B) va a la web `/stack`: no lleva aviso.
@@ -611,7 +677,34 @@ Y el 98,7 % de acierto que muestran es una medición suya en otra prueba (Financ
 *Mini-tarea:* correlo con un PDF tuyo y contá en General si te dijo bien la página.
 ~~~~
 
-⛔ **REVISAR** (carrusel K9, «te paso el link de la comunidad con mi editor»): no hay drop asignado. Sin él, K9 no sale hoy. Ver «Huecos».
+#### 9-3 · REVISAR (carrusel K9)
+Origen: `REVISAR` de `drops/2026-10-01-drops-noticias-repos.md` (sin revisor; copiado del brief de K9).
+
+~~~~
+*REVISAR* · *Mi editor de IA, paso a paso*
+
+No tengo editor de video: lo edita una cadena de pasos con IA. Pero hay cosas que la IA no revisa por mí.
+```
+1. Grabar
+2. Transcribir
+3. Cortar: antes, una tabla con qué queda,
+   qué se tira y por qué. La reviso yo.
+4. Subtitular
+5. Leer la transcripción a ojo, línea por
+   línea, antes de quemar los subtítulos
+6. Publicar
+```
+*Antes de publicar, 5 revisiones:*
+- Cortes: tabla revisada antes de cortar
+- Texto: transcripción leída a ojo
+- Caras: terceros difuminados y revisados
+- Costo: cotizado; el video, aprobado aparte
+- Presentador IA: nunca como cliente ni testimonio
+
+Una falta quemada no se parchea: se vuelve a renderizar.
+
+Contá en General: *¿qué paso hacés todavía a mano?*
+~~~~
 
 ---
 
@@ -757,11 +850,11 @@ Origen: drop 7 de `S1-GUIONES.md`.
 ```
 ~~~~
 
-#### 12-2 · LOOP (carrusel K13)
+#### 12-2 · ESQUELETO (carrusel K13)
 Origen: drop 8 de `S1-GUIONES.md` (corregido 1-oct: `ANTHROPIC_AUTH_TOKEN`).
 
 ~~~~
-*LOOP* · *Esqueleto del corredor (Claude Code en un servidor, sin API key)*
+*ESQUELETO* · *Esqueleto del corredor (Claude Code en un servidor, sin API key)*
 ```
 #!/usr/bin/env bash
 set -uo pipefail
@@ -972,42 +1065,33 @@ Link de la comunidad: `https://chat.whatsapp.com/ENplPbR8GrbGsdMrGgLxzu` (el de 
 
 | PALABRA | Link | Aviso |
 |---|---|---|
-| PLANILLA · MANUAL · TARIFA | comunidad | vie 2 (2-2) |
-| COMUNIDAD (carrusel N03: hoy pide esa palabra, no MANUAL) | comunidad: buscá *MANUAL* | vie 2 (2-2) |
-| EFFORT · MIRAR | comunidad | vie 2 (2-3) |
-| CACHE | comunidad | ⛔ hueco |
+| PLANILLA · COMUNIDAD · TARIFA | comunidad | vie 2 (2-2) |
+| EFFORT · MIRAR · CACHE | comunidad | vie 2 (2-3) |
 | TRAMPA | comunidad | vie 2 (2-1, reto) y sáb 3 (3-1, respuesta) |
-| GEMINI | comunidad | sáb 3 (3-2) ⛔ condicionado |
 | SKILL | `sergiourcullo.vercel.app/claude-code` (video 02) | — |
-| MIGRAR | comunidad | dom 4 (4-1) |
-| VENTANA | comunidad | ⛔ hueco |
-| AGENTS · VERIFY | comunidad | lun 5 (5-1, 5-2) |
-| PROMESA | comunidad | ⛔ hueco |
+| MIGRAR · VENTANA | comunidad | dom 4 (4-1, 4-2) |
+| AGENTS · VERIFY · PROMESA | comunidad | lun 5 (5-1, 5-2, 5-3) |
 | HISTORIA · DIAGRAMA | comunidad | mar 6 (6-1, 6-2) |
 | HOOK · ESCANEO | comunidad | mié 7 (7-1, 7-2) |
 | DELEGAR | `sergiourcullo.vercel.app/claude-code` («Que trabaje sin vos») | — |
-| DOCTOR · CODEGRAPH | comunidad | jue 8 (8-1, 8-2) |
-| PRUEBAS | comunidad | jue 8 (General) |
+| DOCTOR · CODEGRAPH · PRUEBAS | comunidad | jue 8 (8-1, 8-2, 8-3) |
 | CLAVE | `sergiourcullo.vercel.app/stack` (sección n8n) | — |
-| REPOS · PDF | comunidad | vie 9 (9-1, 9-2) |
-| REVISAR | comunidad | ⛔ hueco |
+| REPOS · PDF · REVISAR | comunidad | vie 9 (9-1, 9-2, 9-3) |
 | WORKTREE · DOBLE | comunidad | sáb 10 (10-1, 10-2) |
 | MARKETING | comunidad | sáb 10 (10-3) ⛔ decidís vos |
 | CHAT | `sergiourcullo.vercel.app/claude-code` (video 01) | — |
 | ANUNCIO · DERECHOS | comunidad | dom 11 (11-1, 11-2) |
-| HANDOFF · LOOP · REMOTION | comunidad | lun 12 (12-1, 12-2, 12-3) |
+| HANDOFF · ESQUELETO · REMOTION | comunidad | lun 12 (12-1, 12-2, 12-3) |
 | CONTAR | comunidad | lun 12 (General) |
 | CAPAS · README · BRIEF | comunidad | mar 13 (13-1, 13-2, 13-3) |
 | CONEXIONES · BUCLE | comunidad | mié 14 (14-1, 14-2) |
 | CLIENTE · PROMPT | comunidad | mié 14 (14-3) |
 
-## Huecos (palabra sin recurso listo)
+## Huecos y pendientes
 
-Sin su aviso, la pieza de ese día no sale: el DM llevaría a nada.
-
-1. **CACHE** · vie 2 (noticia DD-A y su carrusel). No hay drop. Los datos ya están verificados en `plan-3-semanas/VERIFICACION-LAPTOP-20261001.md` §2 (precios de gpt-6.1-sol y Astra, caché, mínimo de 1.024 tokens): falta escribirlo y revisarlo.
-2. **VENTANA** · dom 4 (S2-D07-A) y dom 11 (carrusel K5). «Mensajes de seguimiento» no está escrito. Material: `auditoria-20260930/LOTE-C.md` Pendientes 1 y la plantilla real en `deploy/vps-ops/bot/config.mjs` (`M3_PLANTILLA`).
-3. **PROMESA** · lun 5 (S2-D08-A y carrusel K6). Video y carrusel prometen «las dos respuestas completas»; en el repo están recortadas con […] (`cola/PRODUCCION-GUIONES-2026-09-29.md` §Prueba 2).
-4. **REVISAR** · vie 9 (carrusel K9, «mi editor»). Sin drop asignado. Candidato: D3 «La cadena de edición» de `S3-GUIONES.md` (escrito, sin auditar).
-5. **GEMINI** · sáb 3. Escrito, pero condicionado (aviso 3-2). Si no se cumple, se bajan N06 y su carrusel.
-6. **MARKETING** · sáb 10. Escrito, pero espera tu decisión (aviso 10-3).
+1. **Sáb 3 · lugar libre:** N06 (GEMINI) no sale. Sergio Urcullo elige un repo de la reserva; su aviso entra ese día, antes del video.
+2. **MARKETING · sáb 10:** escrito, pero espera tu decisión (aviso 10-3). Si no lo recomendás, se ajusta o se baja R05.
+3. **Sin revisor:** CACHE (vie 2), VENTANA (dom 4), PROMESA (lun 5), PRUEBAS (jue 8) y REVISAR (vie 9) se armaron el 1-oct copiando su fuente (`VERIFICACION-LAPTOP-20261001.md` §2, `bot/config.mjs`, `PRODUCCION-GUIONES-2026-09-29.md` §Prueba 2 y los briefs de K4 y K9). Leelos antes de pegar.
+4. **PROMESA:** las dos respuestas están recortadas (`[…]`); el guion y K6 dicen «completas». Sacá «completas» antes de grabar, o aparecen las completas.
+5. **BRIEF · mar 13:** el cierre de K7 dice «te mando por mensaje el JSON». Alinealo a la comunidad o mandá el archivo por DM.
+6. **DELEGAR · mié 7:** la web `/claude-code` dice «3 subagentes» (hoy es 1). Corregila antes.

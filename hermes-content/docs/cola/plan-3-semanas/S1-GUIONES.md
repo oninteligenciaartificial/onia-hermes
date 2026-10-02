@@ -748,7 +748,7 @@ A mano: npx playwright install chromium   y después
 **Próximos pasos** — en orden, con el criterio de "listo" de cada uno.
 ```
 
-**8 · D06-C · Esqueleto del corredor** (comunidad · también lo pide el carrusel K13, «Comentá LOOP»)
+**8 · D06-C · Esqueleto del corredor** (comunidad · también lo pide el carrusel K13, «Comentá ESQUELETO», lun 12-oct)
 ⚠️ **Corregido 1-oct:** decía `unset ANTHROPIC_API_KEY ANTHROPIC_TOKEN`. `ANTHROPIC_TOKEN` no existe en la
 doc de Claude Code; la documentada, además de `ANTHROPIC_API_KEY`, es `ANTHROPIC_AUTH_TOKEN` («Custom value
 for the Authorization header», code.claude.com/docs/en/env-vars, releída el 1-oct). Con la línea vieja, una

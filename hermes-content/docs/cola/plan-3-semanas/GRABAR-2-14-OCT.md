@@ -41,9 +41,9 @@ La planilla está en la comunidad: comentá TARIFA y te paso el link.
 
 **Palabra:** EFFORT
 
-Si tu Claude Code ya usa los modelos cinco punto cinco, ahora piensa un nivel menos que antes. Y casi nadie se dio cuenta.
+Si tu Claude Code ya usa los modelos cinco punto cinco, ahora arranca un nivel más abajo que antes. Y casi nadie se dio cuenta.
 
-La perilla se llama esfuerzo: cuánto razona antes de responder. La documentación de Anthropic, lo que ves en pantalla, dice que Opus y Sonnet cinco punto cinco vienen en medium. Los anteriores venían en high.
+La perilla se llama esfuerzo: cuánto razona antes de responder. La documentación de Anthropic, lo que ves en pantalla, dice que Opus y Sonnet cinco punto cinco vienen en medium. Opus cinco y Sonnet cinco venían en high.
 
 Para ver en cuál estás, escribí barra effort. Te abre cinco niveles: low, medium, high, xhigh y max.
 
@@ -96,7 +96,7 @@ El prompt completo está en la comunidad: comentá MIRAR y te paso el link.
 
 ## Sáb 3-oct
 
-⚠️ Da la respuesta del reto de la comunidad: se publica recién después del viernes 2 a las 19:00.
+⚠️ Da la respuesta del reto de la comunidad: se publica recién después del sábado 3 a las 10:00 (la respuesta del reto sale en la comunidad ese día a esa hora).
 
 ### D01-C · YouTube · Opus 5.5 o Sonnet 5.5: cuál usar y cómo cambiarlo en Claude Code
 

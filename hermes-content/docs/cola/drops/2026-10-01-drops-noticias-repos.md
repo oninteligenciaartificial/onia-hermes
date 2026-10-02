@@ -629,3 +629,152 @@ _Estructura y trampas de la plantilla product-commercial-shotlist de awesome-see
 *Mini-tarea:* pasale la plantilla a tu chat con fotos de un producto tuyo y pegá en General el prompt que te devolvió.
 
 <sub>Fuentes: LOTE-D.md §G05 y «Pendientes del lote» (corrección de atribución). Plantilla releída el 1-oct (commit 35cdee9): github.com/LearnPrompt/awesome-seedance/blob/main/docs/templates/en/product-commercial-shotlist.md — «A polished 8 to 20 second ad», «send it to any AI chat (ChatGPT, Claude, Gemini) together with your reference images»; el bloque «Copy this» que se manda al chat incluye Structure de 5 partes Y Pitfalls (logo/slogan → «Reserve a clean end frame and composite the type afterwards» · «Mixing high-end commercial light with phone-UGC texture. Pick one» · «Liquid, smoke and powder each need their own shot» · «Under about one second per shot the model stops resolving individual actions»), por eso las trampas van dentro del bloque. README: insignias «code-MIT» y «curation-CC BY 4.0» (enlazada a https://creativecommons.org/licenses/by/4.0/); «Curation (selection, organization, statistics, template extraction, summaries written by us) is licensed under CC BY 4.0. Reuse it with attribution to awesome-seedance / goodcase.ai». La atribución trae crédito, enlace a la fuente, enlace a la licencia y aviso de cambios. Guion G05 en LOTE-D §G05 (en reserva, no en el calendario 1-14 oct). REVISIÓN DE COHERENCIA S4 §5 vs LOTE-D (1-oct): drop 1 (G01), drop 4 (G04), drop 10 (G10) y drop 11 (G11) siguen coherentes con LOTE-D y con los guiones finales; comandos de SkillSpector iguales en su README del 29-sep; el cambio de README de paperclip no toca el drop 11. Único detalle: el drop 11 dice «8. Si es skill: escanearla (drop 4)», y el drop 4 va por DM (ESCANEO), no en Avisos; R05 trae los comandos completos. Cambios de esta vuelta: trampas dentro del bloque y enlaces a la fuente y a la licencia CC BY 4.0.</sub>
+
+---
+
+# Agregados el 1-oct (noche) por el carril de avisos · SIN REVISOR
+
+Faltaban y los piden piezas del 2 al 14-oct. Armados **solo** copiando de la fuente que nombra cada uno (guion final, `VERIFICACION-LAPTOP-20261001.md`, `PRODUCCION-GUIONES-2026-09-29.md`, `bot/config.mjs` o el brief del carrusel). No pasaron por el revisor escéptico: leelos antes de pegar. Copia día por día: `AVISOS-POR-DIA.md`.
+
+## CACHE · GPT-6.1 Sol: la tabla y la cuenta de la caché  (pieza DD-A y su carrusel, vie 2)
+
+**Condición:** publicar antes del video y del carrusel DD-A. Si OpenAI cambió precios antes, se corrige con su página de precios.
+
+*GPT-6.1 Sol: la tabla y la cuenta de la caché*
+
+OpenAI lo presentó el 29-sep, en su DevDay. En la API se llama `gpt-6.1-sol`.
+
+Por millón de tokens, en USD (página de precios de OpenAI, leída el 1-oct):
+```
+              entrada  desde caché  salida
+gpt-6.1-sol   2,00     0,10         10
+Astra         10       1            50
+```
+Un quinto de Astra, en lo que entra y en lo que sale.
+
+*La cuenta para tu agente*
+```
+Costo de un pedido (USD) =
+( tokens nuevos       x 2
++ tokens desde caché  x 0,10
++ tokens de salida    x 10 ) / 1.000.000
+```
+La primera vez, lo que se guarda en la caché se cobra 2,50 en vez de 2. Después, lo que sale de la caché cuesta 0,10: veinte veces menos.
+
+*Para que funcione*
+- Lo que repetís igual en cada pedido (las instrucciones de tu agente, tu lista de precios) va al principio y no se toca.
+- Tiene que pasar de 1.024 tokens.
+- Cómo sabés que anduvo: la respuesta de la API trae cuántos tokens salieron de caché. Si dice 0, cambiaste algo del principio.
+
+Contá en General: *¿qué parte de tus pedidos se repite siempre igual?*
+
+<sub>Fuentes: Guion final GUIONES-2-SEMANAS-1-14-OCT.md §DD-A («La primera vez cuesta un poco más; después, veinte veces menos. Tiene que pasar de mil veinticuatro tokens», «la respuesta de la API trae cuántos tokens salieron de caché»). VERIFICACION-LAPTOP-20261001.md §2 (1-oct, navegador): `gpt-6.1-sol` 2 / 0,10 / 10 USD por millón; Astra 10 / 1 / 50; escritura en caché de 6.1 Sol 2,50, «no es un cargo adicional: el token se cobra a una sola de las tres tarifas»; el anuncio dice «una quinta parte de las tarifas estándar de Astra para tokens de entrada y salida»; mínimo 1.024 tokens («for GPT-5.6 and later»); «Reported cached tokens». La fórmula es la suma de esas tres tarifas, sin ejemplo inventado. No se repite lo que solo trae el carrusel (30 minutos, `cached_tokens`): no está en VERIFICACION.</sub>
+
+## PROMESA · Bot con dos listas: la prueba del 28-sep  (pieza S2-D08-A y carrusel K6, lun 5)
+
+**Condición:** las dos respuestas están **recortadas** en el registro de la prueba (`[…]`), y el guion S2-D08-A y el carrusel K6 dicen «las dos respuestas completas». Si no aparecen las completas, antes de grabar cambiar en el guion «completas» por nada («Las dos respuestas están en la comunidad»). Publicar antes del video y de K6.
+
+*Bot con dos listas: la prueba del 28-sep*
+
+Negocio de ejemplo (inventado para la prueba): Cajas Kuska, cajas de cartón con logo. El cliente escribe:
+«Hola! Necesito 200 cajas con mi logo para este viernes, ¿me las pueden entregar?»
+
+*1. Sin reglas* (solo «sé amable y vendedor, tratá de cerrar la venta»):
+> ¡Hola! Gracias por escribirnos a Cajas Kuska. Claro que sí, con gusto te ayudamos con tus 200 cajas con logo. Para el viernes el plazo es justo, y no quiero prometerte una fecha que después no te pueda cumplir. Por eso lo confirmo con producción apenas tenga tus datos. Pasame por favor: 1. Las medidas de la caja […] 2. Tu logo en buena calidad […] 3. A qué zona de Santa Cruz te lo entregamos. Con eso te confirmo si llegamos al viernes y te paso la cotización. Si no se pudiera, te digo la fecha más cercana […]
+
+*2. Con dos listas* («nunca confirmes stock, precio ni fecha si no están acá. Confirmado: desde 50 unidades. NO confirmado: stock, plazo, precio»):
+> ¡Hola! Gracias por escribirnos a Cajas Kuska 😊 Sí, fabricamos cajas de cartón personalizadas con tu logo, y 200 unidades está dentro de lo que trabajamos (hacemos desde 50). Todavía no puedo asegurarte la entrega para este viernes. Tengo que confirmar el plazo de producción con el equipo y te aviso apenas lo tenga. […] Con eso te confirmo precio y plazo real.
+
+Ninguna prometió. La segunda usó el dato confirmado. Sonnet 5.5, una corrida por caso.
+
+*La plantilla para tu bot*
+```
+Nunca confirmes stock, precio ni fecha si no están acá.
+Confirmado: [lo que ya podés prometer]
+Por confirmar antes de prometer: [lo que siempre se confirma antes]
+```
+*Probalo:* mandale un pedido con fecha. Si la confirma sin tenerla escrita, le faltan las dos listas.
+
+Contá en General: *¿qué va en tu lista de «por confirmar»?*
+
+<sub>Fuentes: PRODUCCION-GUIONES-2026-09-29.md §Prueba 2 (mensaje, regla y las dos respuestas, tal cual, con sus […]; «Negocio ficticio. Ninguna de las dos prometió; la segunda usó el dato confirmado») y §Drops 3 (plantilla «Confirmado: … / Por confirmar antes de prometer: …»). Guion final GUIONES-2-SEMANAS-1-14-OCT.md §S2-D08-A («Probalo en tu bot…»). Carrusel K6: «Prueba del 28-sep con Sonnet 5.5, una corrida por caso».</sub>
+
+## VENTANA · Mis mensajes de seguimiento  (pieza S2-D07-A, dom 4, y carrusel K5, dom 11)
+
+**Condición:** publicar antes del video del dom 4. Los textos son copia de `bot/config.mjs` (`M3` y `M3_PLANTILLA`); si se reaprueba la plantilla en Meta, se cambia acá.
+
+*Mis mensajes de seguimiento*
+
+Vale para bots en la API oficial de Meta. En la app de WhatsApp Business, a mano, esta regla no existe.
+
+*Las reglas de mi bot*
+1. Dentro de las 24 h desde el último mensaje del cliente: texto libre. Mi bot manda un solo seguimiento, a las 20 h: le quedan 4 h de margen.
+2. Pasadas las 24 h: solo una plantilla aprobada por Meta. Texto libre ahí falla con el error 131047: buscalo en los registros de tu bot.
+3. Pasados 7 días: no escribe más.
+4. Nunca de madrugada: fuera de 8:00 a 21:00 el mensaje espera y sale a las 8:00.
+5. Tus números de prueba, afuera de la lista.
+
+*El de dentro de las 24 h* (texto libre):
+> ¡Hola de nuevo! Te escribí ayer por la demo de [producto] y quedó a medias — sé que el negocio no para.
+> Te dejo dos opciones nuevas por si te sirven: *[horario 1]* o *[horario 2]*.
+> Decime cuál te queda mejor y la dejamos agendada.
+
+*El de después* (plantilla aprobada por Meta):
+> ¡Hola de nuevo! Te escribí por la demo de Onia y quedó a medias — sé que el negocio no para.
+> Si querés retomarla, te dejo dos horarios: *{{1}}* o *{{2}}*.
+> Decime cuál te queda mejor y la dejamos agendada.
+
+Fijate que cierra con una frase fija: Meta rechaza una plantilla que termina en una variable.
+
+Antes de programar tu seguimiento, mandá tus plantillas a aprobar.
+
+Contá en General: *¿a las cuántas horas manda tu bot el seguimiento?*
+
+<sub>Fuentes: hermes-content/deploy/vps-ops/bot/config.mjs (leído el 1-oct): `M3` (texto libre) y `M3_PLANTILLA` («COPIA LITERAL de la plantilla `seguimiento_demo` (es · MARKETING · APPROVED)»; Meta rechaza una plantilla que TERMINA en variable, code 100 / subcode 2388299); `followUp`: `maxSteps: 1`, `afterHours: 20` («20 h, no 22 ni 24… Con 20 quedan 4»), `windowClosesAtHours: 24`, `staleAfterDays: 7`; `HORA_SILENCIOSA_DESDE = 8`, `HORA_SILENCIOSA_HASTA = 21` («sale en el primer barrido de la mañana»). Guion final GUIONES-2-SEMANAS-1-14-OCT.md §S2-D07-A (error 131047, «Pasados siete días, no escribe más», «mandá tus plantillas a aprobar», la app a mano no tiene esta regla). Carrusel K5 (las cuatro reglas: 24 h, plantilla, madrugada, números de prueba afuera). Sin precios: el de la plantilla de marketing (~0,074 USD) es de la tarifa de julio y LOTE-C pide recontarlo.</sub>
+
+## PRUEBAS · Las 5 pruebas antes de activar tu bot  (carrusel K4, jue 8)
+
+*Las 5 pruebas antes de activar tu bot*
+
+Mandale vos los mensajes que le van a mandar tus clientes:
+1. *Como tu cliente:* sin tildes, «cuanto sale?», «ya»
+2. *Dos veces:* contesta una sola vez
+3. *Lo que no sabe:* stock, plazo, precio: no inventa
+4. *Un audio:* si no lo entiende, avisa a alguien
+5. *«Una persona»:* alguien se entera, no solo el bot
+
+La que más importa es la 3: si contesta con un dato que no está en su información, lo inventó. Si inventa, no se activa.
+
+Contá en General: *¿cuál te falló?*
+
+<sub>Fuentes: brief del carrusel K4 (`carousels/briefs/marca-personal/sergio-k4v2-cinco-pruebas-bot-20260929.json`, leído el 1-oct): lámina 6 (las cinco, tal cual), lámina 5 («Si inventa, no se activa») y caption («La prueba que más importa es la 3…»).</sub>
+
+## REVISAR · Mi editor de IA, paso a paso  (carrusel K9, vie 9)
+
+**Condición:** es la versión corta, con lo que ya dice el carrusel. Si querés los comandos de cada paso, el candidato es D3 «La cadena de edición» de `S3-GUIONES.md` (escrito, sin auditar).
+
+*Mi editor de IA, paso a paso*
+
+No tengo editor de video: lo edita una cadena de pasos con IA. Pero hay cosas que la IA no revisa por mí.
+```
+1. Grabar
+2. Transcribir
+3. Cortar: antes, una tabla con qué queda,
+   qué se tira y por qué. La reviso yo.
+4. Subtitular
+5. Leer la transcripción a ojo, línea por
+   línea, antes de quemar los subtítulos
+6. Publicar
+```
+*Antes de publicar, 5 revisiones:*
+- Cortes: tabla revisada antes de cortar
+- Texto: transcripción leída a ojo
+- Caras: terceros difuminados y revisados
+- Costo: cotizado; el video, aprobado aparte
+- Presentador IA: nunca como cliente ni testimonio
+
+Una falta quemada no se parchea: se vuelve a renderizar.
+
+Contá en General: *¿qué paso hacés todavía a mano?*
+
+<sub>Fuentes: brief del carrusel K9 (`carousels/briefs/marca-personal/sergio-k9v2-checklist-video-ia-20260929.json`, leído el 1-oct): caption («grabar, transcribir, cortar, subtitular, leer y publicar»; «No tengo editor de video: lo edita una cadena de pasos con IA»), lámina 3 («qué queda, qué se tira y por qué»), lámina 4 («leé la transcripción a ojo… Quemado no se parchea: se vuelve a renderizar») y lámina 6 (las cinco revisiones). PRODUCCION-GUIONES-2026-09-29.md §Pantallas V7 (grabar → transcribir → tabla de cortes (revisión) → subtítulos → lectura a ojo → publicar).</sub>

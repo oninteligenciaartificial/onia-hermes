@@ -36,7 +36,7 @@ Cada pieza cierra pidiendo un comentario con su palabra. El recurso no cambió: 
 | Vie 2 | DD-A | CACHE | comunidad · drop tabla Sol vs Astra y la cuenta de caché |
 | Vie 2 | D04-C | MIRAR | comunidad · drop 6 de S1 «Prompt para verificar mirando» |
 | Sáb 3 | D01-C (YouTube) | TRAMPA | comunidad · el reto de las tres propuestas (`drops/2026-10-01.md`, mensaje 2) |
-| Sáb 3 | N06 | GEMINI | comunidad · drop «Gemini CLI en 5 minutos» |
+| Sáb 3 | ~~N06~~ ⛔ no sale (premisa falsa, ver §N06) | ~~GEMINI~~ | — · lugar para un repo de la reserva, lo elige Sergio Urcullo |
 | Dom 4 | D01-A | SKILL | web `/claude-code` · video 02 «Instalarlo, y tu primera skill» |
 | Dom 4 | N02 | MIGRAR | comunidad · drop «Checklist de migración desde Sonnet 4.5» |
 | Dom 4 | S2-D07-A | VENTANA | comunidad · drop «Mensajes de seguimiento» |
@@ -77,7 +77,7 @@ En YouTube no hay DM: se contesta el comentario con el mismo link.
 - ✅ **Ventana de anuncios (S2-D08-C, dom 11): corregida el 1-oct** — Meta dice «hasta 7 días» (no 72 h) y solo si el cliente escribe desde la app del celular.
 - **«Quedaban 2, había 44» (D05-C, lun 12):** el 44 es el conteo del 20-ago. Hoy el filtro muestra **38** activos de 96: si aparece en pantalla, decí «hoy, contadas de nuevo, son treinta y ocho»; no presentes 38 como el número de aquel día.
 - **«424 commits» (D05-A): confirmado** en la memoria local (1-sep).
-- **Sáb 3 · YouTube Opus o Sonnet (D01-C):** da la respuesta del reto de la comunidad; por eso sale después del viernes a las 19:00.
+- **Sáb 3 · YouTube Opus o Sonnet (D01-C):** da la respuesta del reto de la comunidad; por eso sale después del sábado a las 10:00 (⚠️ corregido el 1-oct: decía viernes 19:00; la respuesta del reto pasó al sáb 10:00 en `drops/AVISOS-POR-DIA.md`).
 - **Lun 5 · AGENTS.md (D03-B):** enseña un arreglo que ONIA todavía no tiene aplicado. Decidí si lo aplicamos antes o se cuenta como receta.
 - **Vie 9 · YouTube repos (G11):** recontar estrellas e issues el día de grabar y decir la fecha.
 - **Mié 14 · MCP (S1-D07-B):** reescrito: medir con `/usage`, apagar con `/mcp`, comprobar con `/context`. El criterio viejo borraba servidores en uso.
@@ -157,9 +157,9 @@ La planilla está en la comunidad: comentá TARIFA y te paso el link.
 ### D02-A · Vertical · La perilla de Claude Code que casi nadie toca
 *Tutorial / caso* · **Demuestra:** `/effort` abierto en pantalla con los cinco niveles, más el dato de la doc: con los modelos cinco punto cinco el default bajó a medium · **Cierre:** comentá EFFORT → DM con el link a la comunidad, drop con la tabla (falta escribir la tabla como drop formal: ver Pendientes)
 
-Si tu Claude Code ya usa los modelos cinco punto cinco, ahora piensa un nivel menos que antes. Y casi nadie se dio cuenta.
+Si tu Claude Code ya usa los modelos cinco punto cinco, ahora arranca un nivel más abajo que antes. Y casi nadie se dio cuenta.
 
-La perilla se llama esfuerzo: cuánto razona antes de responder. La documentación de Anthropic, lo que ves en pantalla, dice que Opus y Sonnet cinco punto cinco vienen en medium. Los anteriores venían en high.
+La perilla se llama esfuerzo: cuánto razona antes de responder. La documentación de Anthropic, lo que ves en pantalla, dice que Opus y Sonnet cinco punto cinco vienen en medium. Opus cinco y Sonnet cinco venían en high.
 
 Para ver en cuál estás, escribí barra effort. Te abre cinco niveles: low, medium, high, xhigh y max.
 

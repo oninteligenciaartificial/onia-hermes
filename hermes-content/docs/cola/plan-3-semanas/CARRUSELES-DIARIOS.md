@@ -17,6 +17,7 @@ sigue valiendo para K1–K9 con las mismas fechas.
 
 Cada carrusel sale el mismo día que su video cuando lo hay (`GUIONES-2-SEMANAS-1-14-OCT.md`). **Nada agendado.**
 Antes de cada uno, el recurso que promete su cierre tiene que estar publicado; si no, el cierre miente.
+**Qué pegar en la comunidad y cuándo: `cola/drops/AVISOS-POR-DIA.md`** (fuente, 2-oct). La columna «Lo que tiene que estar antes» de abajo es del 1-oct y quedó vieja donde cambió la palabra.
 
 | Fecha | K# | Tema | Carpeta del render | Lo que tiene que estar antes | Estado |
 |---|---|---|---|---|---|
