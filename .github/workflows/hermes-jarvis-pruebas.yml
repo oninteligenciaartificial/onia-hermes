@@ -51,6 +51,10 @@ jobs:
             package.json
           sparse-checkout-cone-mode: false
           filter: blob:none
+          # El token de GitHub no queda en .git/config: las pruebas no lo necesitan (revisión de la
+          # madre, 2-oct). Las actions van por versión mayor, no por SHA: fijar el SHA exige leer el
+          # repo de cada action, fuera del alcance de las sesiones del carril.
+          persist-credentials: false
 
       - uses: actions/setup-node@v4
         with:

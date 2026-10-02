@@ -125,6 +125,11 @@ PREVIA="$ESTADO/previas/$HASH"
 
 if [ "$SI" = 0 ]; then
   cargar_conf || { echo "Los pedidos a Claude todavía no están configurados: no le mandé nada." >&2; exit 69; }
+  # Contar, mandar y anotar van bajo UN candado (revisión de la madre, 2-oct): sin él, 8 vistas
+  # previas en paralelo contaban «0 en la última hora» las 8 y le mandaban 8 códigos. El candado se
+  # suelta solo al salir.
+  exec 9>"$ESTADO/vistas.lock"
+  flock -w 60 9 || { echo "Hay otra vista previa en curso y no terminó: probá de nuevo en un momento." >&2; exit 75; }
   RECIENTES=$(awk -v desde=$((AHORA - 3600)) '$1 >= desde' "$VISTAS" 2>/dev/null | grep -c .)
   if [ "$RECIENTES" -ge "$TOPE_VISTAS" ]; then
     echo "Ya le mandé $RECIENTES códigos a Sergio Urcullo en la última hora (tope $TOPE_VISTAS): no le mando otro. Que conteste uno de esos, o probá en un rato." >&2
