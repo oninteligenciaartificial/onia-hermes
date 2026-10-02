@@ -102,6 +102,19 @@ Redactar primero y verificar después costó una tarde de mensajes tirados. Las 
 - **Buscar en la Biblioteca por el nombre del negocio** encuentra solo si el nombre está en el texto del anuncio.
   Cero resultados no prueba que no paute.
 
+**Lo que solo se ve desde la PC, en Facebook (2-oct): de 13 en espera, salieron 9.**
+- Uno era un hospital de 24 horas.
+- Un fundador se había retirado.
+- Una sola médica en un consultorio, o un solo cirujano.
+- Un spa de mascotas.
+- Una central en Cochabamba.
+- Dos sedes en la misma ciudad (MUN).
+- Páginas quietas desde hace meses.
+
+La nube resuelve la ciudad y el canal. **El tamaño real y si el negocio sigue vivo** casi siempre necesitan abrir
+su Facebook desde la PC: se le pide a la madre con la lista exacta. Al que queda listo, el mensaje le cierra la
+condición con una sola pregunta («¿cuántas profesionales atienden hoy?», «¿las importan ustedes directo?»).
+
 **Re-leer antes de enviar:** un prospecto cuya pauta se cortó recibe un mensaje sobre un anuncio que ya no
 existe. El 1-oct, de 13 prospectos del 30-sep: Cames ya no pautaba, y DASHA, Corpo Belo y Jhimbo habían
 cambiado de anuncios (hubo que corregir su línea «Vi…»).

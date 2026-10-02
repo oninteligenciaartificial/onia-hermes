@@ -5,7 +5,13 @@
 >   donde es cierto (skill §3, punto 6).
 > - Archivos: `carousels/briefs/ads/*-d1v2-*` y `*-d4v2-*`, salida en `carousels/out/ads/*v2*`, capturas en
 >   `briefs/assets/onia-1.0-dental-ads/v2-20261002/`.
-> - Los 8 mensajes 1:1 y la página de contactos (versión 6) ya dicen «sistema de gestión con IA».
+> - **Prospectos al 2-oct: 12 listos, 1 a decidir, 16 fuera.** Los 13 en espera se verificaron desde la PC (la
+>   madre, en Facebook):
+>   - entraron Odontoclínica, Pimentel, Gelinski y Todo Frenos;
+>   - **MUN** sale por tener 2 sedes en Santa Cruz, salvo que Sergio Urcullo las acepte.
+>
+>   Cada uno de los 12 tiene su mensaje «sistema de gestión con IA» y la primera pregunta. Está en la página de
+>   contactos (versión 7) y en `ONIA_PROSPECTOS_*` (§6.7, §1.7 y §2.6).
 > - **Falta:** las 22 capturas de la competencia (la madre las está sacando). Cuando lleguen, se contrastan con v2
 >   y se ajusta lo que haga falta antes de crear nada en Meta.
 >
