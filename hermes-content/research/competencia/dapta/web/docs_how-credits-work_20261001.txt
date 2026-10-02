@@ -1,0 +1,286 @@
+Billing and credits | Dapta Docs 
+ [->/] 🇺🇸 
+ Dapta Docs 
+ ⌘ 
+ Ctrl 
+ k 
+ 🇺🇸 English 
+ [->/] 🇺🇸 
+ Dapta Docs 
+ 🇺🇸 English 
+ [->/] Introduction 
+ [->/quick-setup] Quick Setup 
+ [->/news] News 
+ My Account 
+ [->/my-account/account] Account 
+ [->/my-account/how-credits-work-in-dapta] Billing and credits 
+ [->/my-account/how-credits-work-in-dapta/plans-and-pricing] Plans and Pricing 
+ [->/my-account/how-credits-work-in-dapta/billing-and-invoices] Billing, Payments and Invoices 
+ [->/my-account/how-credits-work-in-dapta/change-your-plan] Upgrade or Downgrade Your Plan 
+ [->/my-account/how-credits-work-in-dapta/cancel-your-subscription] Cancel Your Subscription 
+ [->/my-account/how-credits-work-in-dapta/refunds] Refund Policy 
+ Dapti 
+ [->/dapti/dapti] Start here 
+ [->/dapti/interface-guide] Interface Guide 
+ [->/dapti/capabilities] Capabilities 
+ [->/dapti/use-cases] Use Cases 
+ [->/dapti/privacy-and-scope] Privacy & Scope 
+ [->/dapti/tips-and-prompting] Tips & Prompting 
+ Dapta MCP 
+ [->/dapta-mcp/mcp] Start here 
+ [->/dapta-mcp/claude-connectors-directory] Connect from the Claude connectors directory 
+ [->/dapta-mcp/key-concepts] Key Concepts 
+ [->/dapta-mcp/setup] Setup & Connection 
+ [->/dapta-mcp/skills] What Claude Can Do 
+ [->/dapta-mcp/tools-reference] Tools Reference 
+ [->/dapta-mcp/safety-and-security] Safety & Security 
+ [->/dapta-mcp/privacy] Privacy & Data Handling 
+ [->/dapta-mcp/troubleshooting] Troubleshooting 
+ AI Voice Agents 
+ [->/ai-voice-agents/ai-voice-agents] Start here 
+ [->/ai-voice-agents/creating-a-voice-agent] Create your first Voice Agent 
+ [->/ai-voice-agents/how-to-set-up-your-ai-voice-agent] Configure your agent 
+ [->/ai-voice-agents/agent-actions] Agent actions 
+ [->/ai-voice-agents/phone-numbers] Phone numbers & telephony 
+ [->/ai-voice-agents/channels] Channels 
+ [->/ai-voice-agents/how-to-create-your-first-campaign-in-dapta] Sequences 
+ [->/ai-voice-agents/analyze-your-calls] Analyze & automate 
+ AI Text Agents 
+ [->/ai-text-agents/ai-text-agents] Start here 
+ [->/ai-text-agents/dapta-and-whatsapp] Dapta and WhatsApp Business 
+ [->/ai-text-agents/use-cases] What people use Text Agents for 
+ [->/ai-text-agents/create-your-first-text-agent-in-dapta] Create your first Text Agent in Dapta 
+ [->/ai-text-agents/setting-up-your-text-agent] Setting Up your Text Agent 
+ [->/ai-text-agents/channels] Channels and templates 
+ [->/ai-text-agents/inbox] Inbox 
+ [->/ai-text-agents/campaigns] Sequences 
+ [->/ai-text-agents/analytics-and-logs] Analytics, logs, and exports 
+ Dapta Forms 
+ [->/dapta-forms/forms] Start here 
+ [->/dapta-forms/key-concepts] Key Concepts 
+ [->/dapta-forms/getting-started] Getting Started 
+ [->/dapta-forms/builder] Building Forms 
+ [->/dapta-forms/logic] Logic, Scoring & Outcomes 
+ [->/dapta-forms/design] Design & Branding 
+ [->/dapta-forms/connect] Connect & Integrations 
+ [->/dapta-forms/share] Publish, Share & Embed 
+ [->/dapta-forms/results] Submissions & Analytics 
+ [->/dapta-forms/account] Workspaces, Team & Account 
+ [->/dapta-forms/respondent-experience] What respondents see 
+ [->/dapta-forms/developers] Developers 
+ [->/dapta-forms/security-and-privacy] Security & Privacy 
+ [->/dapta-forms/faq] FAQ 
+ [->/dapta-forms/troubleshooting] Troubleshooting 
+ Flow Studio 
+ [->/flow-studio/flow-studio] Start here 
+ [->/flow-studio/understanding-the-basics-of-ai-integrations] Understanding the basics of AI integrations 
+ [->/flow-studio/creating-a-new-flow-in-flow-studio] Creating a New Flow in Flow Studio 
+ [->/flow-studio/setting-up-triggers-in-flow-studio] Setting Up Triggers in Flow Studio 
+ [->/flow-studio/nodes] Nodes 
+ Integrations 
+ [->/integrations/integrations] Start here 
+ [->/integrations/meta-ads-conversions] Meta Ads Conversions 
+ [->/integrations/microsoft-outlook] Microsoft Outlook 
+ [->/integrations/microsoft-excel] Microsoft Excel 
+ [->/integrations/gmail] Gmail 
+ [->/integrations/smtp] SMTP 
+ [->/integrations/google-sheets] Google Sheets 
+ [->/integrations/hubspot-private-app-setup] HubSpot Private App Setup 
+ [->/integrations/notion] Notion 
+ [->/integrations/salesforce] Salesforce 
+ [->/integrations/slack] Slack 
+ [->/integrations/zoho] Zoho 
+ [->/integrations/webhook-set-up] Webhook Set Up 
+ [->/integrations/hubspot] Hubspot 
+ [->https://www.gitbook.com/powered-by?utm_source=content&utm_medium=trademark&utm_campaign=Cy5rSNtQmtqYCGzJlNEB&utm_content=site_Hvcjf] Powered by GitBook 
+ [->https://www.gitbook.com/powered-by?utm_source=content&utm_medium=trademark&utm_campaign=Cy5rSNtQmtqYCGzJlNEB&utm_content=site_Hvcjf] 
+ On this page 
+ For the complete documentation index, see [->https://docs.dapta.ai/llms.txt] llms.txt 
+ . This page is also available as [->https://docs.dapta.ai/my-account/how-credits-work-in-dapta.md] Markdown 
+ . 
+ Copy 
+ On this page 
+ [->/my-account] My Account 
+ Billing and credits 
+ What a Dapta credit is worth and what each call, message, phone number and Dapti answer costs. The same rates Support quotes, in one table. 
+ Credits are the single currency for everything you do in Dapta: AI calls, text messages, phone numbers, Dapti and Flow Studio. This page is the reference for what each one costs. 
+ How much does a call, a message or a phone number cost? 
+ [->#how-much-does-a-call-a-message-or-a-phone-number-cost] 
+ 1,000 credits = US$1. An answered call costs 333 credits per minute , rounded up to the whole minute. A call that reaches voicemail costs 75 , an AI text message 40 , and a US phone number about 1,380 credits per month . Calls to your registered Test Number are free. Every rate is in the table below. 
+ Price table 
+ [->#price-table] 
+ What you use 
+ Credits 
+ How it is counted 
+ Answered call (Voice Agent) 
+ 333 per minute 
+ Rounded up to the next whole minute 
+ Call that reaches voicemail 
+ 75 per call 
+ Standard carrier voicemail only; a personalized greeting counts as an answered call 
+ Call not answered or line busy 
+ 45 per call 
+ Call that fails (invalid number, declined, carrier error) 
+ 0 
+ Call to your registered Test Number 
+ 0 
+ Logged as a Test Call with its cost shown, never deducted 
+ Web call from the browser 
+ 0 on paid plans · 200 per minute on the Free plan 
+ AI text message (one answer) 
+ 40 
+ One answer = the AI reads an incoming message and replies once, whichever model the agent uses 
+ Message a person sends from the Inbox 
+ 10 
+ Audio message received 
+ 0 
+ Subject to change 
+ WhatsApp message delivery 
+ Not in credits 
+ Meta charges it to your own Meta account. See [->/ai-text-agents/channels/whatsapp-billing-and-meta-charges] WhatsApp billing 
+ US phone number bought in Dapta 
+ About 1,380 per month 
+ Carrier price × 1.2; exact price shown before you buy; first month prorated 
+ A2P 10DLC registration (US SMS) 
+ 5,400 or 55,200 one time · 18,000 vetting · 1,800 or 12,000 per month 
+ See the A2P 10DLC page 
+ Dapti answer (Free and Pro plans) 
+ 150 on average · 60 to 2,000 by complexity 
+ Real model cost × 2, charged per answer 
+ Flow Studio run 
+ 1 per run, plus AI nodes at model cost × 2 
+ 0 for an AI node that uses your own credential 
+ Voice calls 
+ [->#voice-calls] 
+ To generate an AI call, Dapta pays for a language model (such as GPT or Claude), speech-to-text and text-to-speech (such as ElevenLabs or Deepgram) and a telephony carrier. All of that is consolidated into one rate per minute. 
+ What each call outcome costs 
+ [->#what-each-call-outcome-costs] 
+ Answered call: 333 credits per minute. Billing is per minute, not per second, and every started minute counts as a whole minute: 
+ A call of 1 minute 58 seconds bills 2 minutes = 666 credits 
+ A call of 1 minute 20 seconds bills 2 minutes = 666 credits 
+ A call of 45 seconds bills 1 minute = 333 credits 
+ Voicemail: 75 credits per call. The call is still placed and the AI has to detect the voicemail. A call counts as voicemail only when the carrier answers with a standard tone or a non-personalized message. If the recipient recorded their own greeting, the call is treated as answered and bills a full minute. Enable the End call option on your agent to hang up before a second minute starts. 
+ Not answered or busy: 45 credits per call. 
+ Failed calls: 0 credits. Invalid numbers, declined calls and carrier errors are not charged. 
+ Test calls 
+ [->#test-calls] 
+ Register your own phone as a Test Number and every call to it is free. It appears in the Call Log labeled Test Call with its cost shown but not deducted from your balance. A call to any other number consumes credits, even when you are testing. Test Numbers are available on paid plans, including the trial; you can add a new one once a month, and you still need a positive balance to place the call. 
+ [->/ai-voice-agents/phone-numbers/how-to-add-a-phone-number-for-testing-in-dapta] How to add a Phone Number for Testing in Dapta 
+ Web calls 
+ [->#web-calls] 
+ A web call is a call from your browser to the agent. It is free on every paid plan. On the Free plan it costs 200 credits per minute. 
+ Phone numbers 
+ [->#phone-numbers] 
+ US numbers you buy in Dapta 
+ [->#us-numbers-you-buy-in-dapta] 
+ Go to Voice Agents → Phone Numbers → Buy Phone Number . Before you confirm, Dapta shows the monthly price in credits: the carrier's monthly price multiplied by 1.2, which is about 1,380 credits per month for a standard US local number. 
+ The first month is prorated: you pay only for the days left in your billing period. 
+ From then on, the full monthly price is deducted from your balance on the number's billing date. 
+ The calls you make and receive on the number are charged on top, at the call rates above. 
+ [->/ai-voice-agents/phone-numbers/buying-phone-numbers-through-dapta] Buying Phone Numbers through Dapta 
+ Numbers in other countries 
+ [->#numbers-in-other-countries] 
+ Numbers outside the US are set up by Customer Support . The monthly cost is quoted in credits when you request the number. Indicative prices: 
+ Country 
+ Cost USD 
+ Credits 
+ Canada 
+ $4 
+ 4,000 
+ Colombia 
+ $28 
+ 28,000 
+ Mexico 
+ $13 
+ 13,000 
+ Peru 
+ $270 
+ 270,000 
+ Argentina 
+ $16 
+ 16,000 
+ Brazil 
+ $9 
+ 9,000 
+ Chile 
+ $14 
+ 14,000 
+ Panama 
+ $16 
+ 16,000 
+ If you connect your own telephony provider instead, that provider charges you directly for the calls, at its own rate. Dapta does not stand in the middle of it, and your credits only cover what the agent does. 
+ [->/ai-voice-agents/phone-numbers/connecting-your-sip-trunk] Connecting your telephony (SIP trunk) to Dapta 
+ Text agents and WhatsApp 
+ [->#text-agents-and-whatsapp] 
+ Every AI answer costs 40 credits , whichever model the agent uses. One answer means the AI reads an incoming message and replies once, however long the reply is. A message a person sends from the Inbox costs 10 credits, and the messages your contacts send you are free. 
+ Choose the model on how well it answers, not on price. The agent's settings show which models can handle images and files. The AI can process voice notes but replies in text. 
+ WhatsApp message delivery 
+ [->#whatsapp-message-delivery] 
+ On WhatsApp, Meta charges for delivering the messages , templates and replies alike. It charges in money, to your own Meta account. Those charges do not consume Dapta credits and do not appear on your Dapta invoice. Dapta charges for the agent, Meta charges for delivery, and nothing is charged twice. 
+ For Meta's rates, the free allowances and how to set up the payment method, see [->/ai-text-agents/channels/whatsapp-billing-and-meta-charges] WhatsApp billing 
+ . 
+ Was your line connected before Dapta moved to connecting directly with Meta? Its messaging is still billed in credits. See [->/ai-text-agents/channels/legacy-line-billing] Billing on legacy lines 
+ . 
+ Dapti 
+ [->#dapti] 
+ Dapti is Dapta's co-pilot that helps you build voice and text agents using natural language. It is charged per answer , not per minute and not by the number of tools it uses internally: each answer costs the real model cost multiplied by 2, so the price depends on how complex the interaction was. 
+ Interaction type 
+ Credits (approx.) 
+ USD equivalent 
+ Very simple question (greeting, short confirmation) 
+ 60 – 100 
+ $0.06 – $0.10 
+ Normal question (one-off inquiry) 
+ 100 – 300 
+ $0.10 – $0.30 
+ Analysis or agent creation 
+ 300 – 700 
+ $0.30 – $0.70 
+ Complex operations (flows, large JSONs) 
+ 700 – 2,000 
+ $0.70 – $2.00 
+ Exceptional cases (very long sessions) 
+ 2,000+ 
+ $2.00+ 
+ An average Dapti answer costs about 150 credits ($0.15). 
+ Credits are deducted automatically as each answer is charged. 
+ Free and Pro plans pay for each Dapti answer. On Scale-Up, Prime and Enterprise Dapti is included at no additional cost. 
+ There is no message limit, only your balance: while you have credits you can use Dapti without restrictions. 
+ Flow Studio automations do not consume Dapti credits; they are charged separately as described below. 
+ Flow Studio 
+ [->#flow-studio] 
+ A flow run costs 1 credit , regardless of how many records it processes. 
+ An AI node that uses Dapta's connection adds the model's real cost multiplied by 2. The node shows this on its price meter before you run it. 
+ An AI node that uses your own credential does not use Dapta credits; the model vendor bills your own account. 
+ Plans and what happens when credits run out 
+ [->#plans-and-what-happens-when-credits-run-out] 
+ Every plan includes a monthly credit allowance: Pro 100,000, Scale Up 500,000, Prime 1,500,000, and consumption-based credits on Custom plans. Current plans and prices are always at [->https://dapta.ai/pricing] dapta.ai/pricing 
+ , and your balance is under Billing in the admin panel. 
+ When your balance reaches 0 , calls, messages and Dapti stop until credits are added. There are no overage charges. 
+ Credits belong to an active subscription. If your plan is cancelled or expires, the remaining credits are not carried over. 
+ You can buy extra credits at any time under Billing , in multiples of 1,000 credits ($1). Credits you buy do not expire while your subscription is active; they accumulate on top of your monthly allowance. 
+ With auto-recharge on, credits are added automatically when your balance drops to 20,000 ($20). 
+ When someone you refer makes their first payment, they receive bonus credits and you receive $50 . The details are on the referral page. 
+ [->/my-account/how-credits-work-in-dapta/plans-and-pricing] Plans and Pricing 
+ [->/my-account/how-credits-work-in-dapta/cancel-your-subscription] Cancel Your Subscription 
+ [->/my-account/account/referals] Referals 
+ [->/my-account/account/referals] Previous 
+ Referals 
+ [->/my-account/how-credits-work-in-dapta/plans-and-pricing] Next 
+ Plans and Pricing 
+ Last updated 3 days ago 
+ [->#how-much-does-a-call-a-message-or-a-phone-number-cost] How much does a call, a message or a phone number cost? 
+ [->#price-table] Price table 
+ [->#voice-calls] Voice calls 
+ [->#what-each-call-outcome-costs] What each call outcome costs 
+ [->#test-calls] Test calls 
+ [->#web-calls] Web calls 
+ [->#phone-numbers] Phone numbers 
+ [->#us-numbers-you-buy-in-dapta] US numbers you buy in Dapta 
+ [->#numbers-in-other-countries] Numbers in other countries 
+ [->#text-agents-and-whatsapp] Text agents and WhatsApp 
+ [->#whatsapp-message-delivery] WhatsApp message delivery 
+ [->#dapti] Dapti 
+ [->#flow-studio] Flow Studio 
+ [->#plans-and-what-happens-when-credits-run-out] Plans and what happens when credits run out 
+

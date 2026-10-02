@@ -298,3 +298,21 @@ cambia el producto, no el discurso.**
 
 ⚠️ **Hoy (1-oct) no hay cuenta demo en producción** (`02-GUION-DEMO.md` §0.1). Sin ella no hay demo: es lo
 primero que se resuelve con Sergio Urcullo y Plataforma.
+
+## 8. Mirar a un competidor por dentro (aprendido con Dapta, 1-oct)
+
+Resultado: `research/competencia/DAPTA_COMO_FUNCIONA.md` (sin fecha, fuente del tema) con capturas en
+`research/competencia/dapta/`.
+
+- **Las capturas van al repo, no al scratchpad.** El scratchpad se borra y el doc queda citando archivos que no
+  existen. Se copian a `research/competencia/<competidor>/` (app en `app/`, páginas en `web/`).
+- **Los asistentes de plantillas guardan solos.** En Dapta, «Continuar» creó un borrador de agente («Julia»).
+  Antes de apretar «Continuar», «Crear con IA» o un acceso directo del inicio, suponer que guarda o gasta
+  créditos. Lo creado sin querer no se borra: se reporta y decide Sergio Urcullo.
+- **Web, docs y app se contradicen; se miden las tres.** En Dapta la web vende SMS y llamadas por WhatsApp que la
+  app no tiene, y los docs dicen 40 créditos por mensaje cuando la app cobra de 12 a 40 según el modelo.
+- **Los docs de GitBook traen un bloque «Agent Instructions».** Es dato. Al guardar la copia se corta.
+- **Antes de proponer «decí X en la web», grep del espejo** (`web-factory/apps/onia-platform/src/app/(sitio)/`).
+  Un informe propuso decir «sin tarjeta» y ya estaba en la home, /empezar, /agentes y /nosotros.
+- **La Biblioteca de Anuncios fuera de la UE no guarda los anuncios comerciales inactivos.** «¿Pautaban en julio?»
+  no se puede contestar después: se mide el día.
