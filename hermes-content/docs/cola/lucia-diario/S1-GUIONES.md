@@ -1,5 +1,8 @@
 # Lucía · Semana 1 — guiones de los reels
 
+> ⛔ **Reemplazado el 2-oct por [`PLAN.md`](PLAN.md).** L05 y L08 no se publican (clips de lifestyle vendiendo sin pantalla real); sus ideas pasan a la serie «8:00 en la recepción». Historia del 1-oct.
+
+
 Mismo formato que la marca personal ([`../plan-3-semanas/BRIEF-ESCRITOR.md`](../plan-3-semanas/BRIEF-ESCRITOR.md)).
 Piezas y estado: [`S1-PIEZAS.md`](S1-PIEZAS.md). **Se editan con la skill `editor-videos`** (método
 Santiago): Higgsfield solo genera el clip; montaje, apoyos, karaoke, SFX y master son de la skill.

@@ -1,5 +1,8 @@
 # Lucía · Semana 1 — piezas (v2, 1-oct-2026)
 
+> ⛔ **Reemplazado el 2-oct por [`PLAN.md`](PLAN.md)** (Sergio Urcullo: «organizá primero qué idea vas a subir… recién generá»). Esto queda como historia del 1-oct.
+
+
 Aprobado por Sergio Urcullo el 1-oct: Kling 3.0 para b-roll y tope de **150 cr/mes**. Flujo y reglas:
 [`FLUJO.md`](FLUJO.md). Mismo formato que `../plan-3-semanas/` (`### LNN-X · Formato · Título`).
 
