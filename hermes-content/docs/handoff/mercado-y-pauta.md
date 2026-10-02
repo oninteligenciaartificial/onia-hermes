@@ -17,6 +17,9 @@
 >   D1 y D4 ahora habla de la plata del dueño, y la lámina 4 de D4 dice «21 días sin venir» (el umbral exacto del
 >   código). **No se cambió el diseño:** los 7 anuncios que sobreviven tienen persona; esa brecha es una pieza
 >   nueva (Sergio Urcullo con la pantalla), no un arreglo de D1/D4.
+> - ✅ **2-oct, ~01:20 UTC:** portadas de D1 y D4 → *«Para dueños y dueñas de clínicas dentales de Santa Cruz.»*
+>   (el filtro que pide §5.2). Leído el análisis de Dapta de la madre (`DAPTA_COMO_FUNCIONA.md` §6): su propuesta
+>   del bot quedó anotada en §5.2 como pendiente de Sergio Urcullo, **detrás** del filtro de pacientes.
 > - ✅ **El tratamiento a medias ya está en producción** (`release-8f07e537`, el mensaje fijo en el bundle). El doc
 >   de pauta decía que no (§0 punto 4 y §5.4): corregido.
 >

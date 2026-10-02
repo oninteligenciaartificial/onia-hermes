@@ -301,8 +301,9 @@ Sergio Urcullo. Están ordenadas por impacto sobre esfuerzo, salvo 6.5, que espe
   abre con una sola pregunta de dolor con tres botones (pacientes que faltan a la cita / pacientes que no
   volvieron / cobros pendientes) y cierra con «14 días gratis, sin tarjeta». La respuesta elige qué mostrar en
   la demo. **No reemplaza a las 5 preguntas de calificación** (§5.5): la «conversación calificada» se sigue
-  midiendo con las 5 (§5.6). «No volvieron» hoy se respalda con el Recall de producción (sin visita ≥180 días);
-  el tratamiento a medias se nombra recién con la 1.0 publicada (§5.4).
+  midiendo con las 5 (§5.6). «No volvieron» se respalda con el Recall de producción (sin visita ≥180 días) y,
+  desde el 2-oct, también con el tratamiento a medias: la 1.0 está en producción (`release-8f07e537`, §5.4 de
+  ese doc). Y la pregunta de dolor va **después** del filtro dueño / empleado / paciente de §5.2, no en su lugar.
 - **Contraste que juega a favor:** la prueba de Dapta pide tarjeta, cobra sola al día 7 y no reembolsa (docs
   `plans-and-pricing` y `refunds`); Lety también cobra la tarjeta antes (checkout de Stripe visto por Sergio
   Urcullo el 31-ago, memoria `lety-cobra-tarjeta-antes-del-trial`). La de Onia no pide tarjeta (sitio, grep

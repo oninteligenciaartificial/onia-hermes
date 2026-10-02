@@ -265,6 +265,13 @@ documentada; el detalle, con cada fuente, en `research/ONIA_META_ADS_PLAYBOOK_20
     una clínica"* · *"Busco atención dental"* → salida cortés;
   - el bot hace las **5 preguntas de calificación** (`ONIA_CLIENTE_IDEAL.md` §9) y avisa a Sergio Urcullo el
     mismo día.
+  - **Propuesta pendiente de Sergio Urcullo** (`research/competencia/DAPTA_COMO_FUNCIONA.md` §6.1): una pregunta
+    de dolor con tres botones (*faltan a la cita* / *no volvieron* / *cobros pendientes*) y cierre *«14 días
+    gratis, sin tarjeta»*. Si se adopta, va **después** de los tres botones de arriba, no en su lugar: esos
+    son el filtro contra el paciente que busca turno, que es el riesgo central. *«No volvieron»* ya se respalda
+    con el tratamiento a medias en producción (2-oct).
+  - Las dos portadas (D1 y D4) dicen *«Para dueños y dueñas de clínicas dentales de Santa Cruz.»* desde el 2-oct;
+    antes decían *«Para clínicas dentales…»*, más flojo como filtro.
 
 ### 5.3 Presupuesto, techo y duración
 
@@ -484,7 +491,8 @@ calificadas. Lo que **no** se puede es encender sin haber hecho la prueba de la 
 recibe un dueño de clínica es una respuesta mala, esa conversación se paga y se pierde.
 
 **Cómo se renderizan en una sesión de la nube:** `eval "$(sh scripts/carousel_cloud_setup.sh)"` y después
-`node scripts/carousel_render.js --brief <brief> --out <dir>`. Sin ese paso, la nube no encuentra el
+`node scripts/carousel_render.js --brief <brief> --pack referentes --account onia --format feed --out <dir>` (sin
+`--pack referentes` sale el pack rechazado, sin aviso). Sin el setup, la nube no encuentra el
 navegador, cae en la letra DejaVu y corta el pie de cada lámina. Con el paso, salen iguales a las de la PC
 (comparado el 30-sep contra la lámina 2 del carrusel del 21-sep renderizada en la PC).
 

@@ -214,10 +214,16 @@ contestarle de memoria es la forma de quemarlo.
 - Briefs vigentes: `hermes-content/carousels/briefs/ads/onia-platform-dental-meta-d1v2-los-de-manana.json` y
   `…-d4v2-tratamiento-a-medias.json`, de 7 láminas cada uno (los sin `v2` son los rechazados del 1-oct). Títulos,
   texto precargado y CTA en `ONIA_ADQUISICION_Y_PAUTA.md` §5.8.
-- ⚠️ Los dos scripts piden banderas: `carousel_render.js --brief <json> --out <dir>` (sin `--brief` contesta
-  «Missing --brief») y `carousel_contactsheet.js --dir <dir>`. Pasarles la ruta suelta no hace nada.
+- ⚠️ Los dos scripts piden banderas: `carousel_render.js --brief <json> --pack referentes --account onia --format
+  feed --out <dir>` (sin `--brief` contesta «Missing --brief») y `carousel_contactsheet.js --dir <dir>`. Pasarles
+  la ruta suelta no hace nada.
 - **Render en la nube:** `eval "$(sh scripts/carousel_cloud_setup.sh)"` y después
-  `node scripts/carousel_render.js --brief <brief> --out <dir>` + `node scripts/carousel_contactsheet.js --dir <dir>`.
+  `node scripts/carousel_render.js --brief <brief> --pack referentes --account onia --format feed --out <dir>` +
+  `node scripts/carousel_contactsheet.js --dir <dir>`.
+  ⛔ **Sin `--pack referentes` sale el pack por defecto, crema y verde oscuro: el que Sergio Urcullo rechazó.** El
+  2-oct, re-renderizando una sola línea de la portada, salieron las 7 láminas en ese pack sin ningún aviso. Se
+  notó porque `git status` marcó las 7 como cambiadas: **si cambiaste una lámina y git marca todas, el pack
+  está mal.**
   Sin el setup sale letra DejaVu, el pie cortado y sin navegador (skill `diseno-contenido-onia` §5).
 - **Las capturas viajan con el brief**, en `carousels/briefs/assets/onia-1.0-dental-ads/`. Las candidatas del
   30-sep están en `candidato-20260930/` y **no** pasan a la carpeta aprobada sin el OK de Sergio Urcullo.
