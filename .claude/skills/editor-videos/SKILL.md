@@ -13,6 +13,18 @@ description: >
 
 # Editor de Videos ONIA — edición 100% con código, sin editores humanos
 
+## ⭐⭐ ANTES DE EDITAR A SERGIO URCULLO: la receta que él reconoce como suya (2-oct-2026)
+
+El reel que Sergio Urcullo señaló como «así» es el **«GPT-6 Astra vs Fable 5.1» que editó Codex el 14-sep**.
+Receta completa, `edit.py` real y tarjetas: `hermes-content/references/video-intake/2026-09-14-reel-astra-fable-codex/RECETA.md`.
+En una línea: **un mockup oscuro por bloque hablado, arriba (720 px), cambiando justo en el corte para esconder
+el salto; cara a lo ancho abajo; banda con subtítulo en frases cortas en mayúsculas; entrada lateral de 340 ms
+alternada; sin zooms, sin karaoke, sin SFX; −14 LUFS.**
+Por qué está acá arriba: hasta el 2-oct vivía solo en `Downloads` de la PC, ninguna sesión la tenía, y el 2-oct
+salió la edición básica «corte + karaoke + recuadros» que él rechazó («no lo hacés como antes»). Lo que sigue
+abajo (karaoke, zoom-punch, SFX) es el estilo de los TikToks del 17/18-sep, emparentado; ante la duda, gana la
+receta de Codex.
+
 ## Overview
 ONIA edita video con código (método del tutorial de Santiago): grabás crudo → Claude lo deja
 finalizado. Esta skill **orquesta**, no reinventa el motor:
