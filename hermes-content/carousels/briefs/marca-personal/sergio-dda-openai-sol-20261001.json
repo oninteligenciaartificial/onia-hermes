@@ -42,7 +42,8 @@
       "headline": "Lo que se repite, *20×\u00a0más\u00a0barato*",
       "body": "Lo que mandás igual al principio de cada pedido entra desde la caché: 0,10 dólares el millón, contra\u00a02.",
       "image_style": "clay",
-      "image_prompt": "A large tall matte black clay block standing next to a very small emerald green clay cube, both plain and smooth, on a white surface.",
+      "image": "hermes-content/galeria/ilustraciones/sergio-dda-openai-sol-20261001-s03-f5d9dec8.jpg",
+      "image_prompt_usado": "A large tall matte black clay block standing next to a very small emerald green clay cube, both plain and smooth, on a white surface.",
       "texto_movido": "Antes era layout dato con value 20×. «como las instrucciones de tu agente o tu lista de precios» ya está en el caption («las instrucciones de tu agente, tu lista de precios») y en la lámina 4 («instrucciones y precios, al principio del pedido»).",
       "next": "cómo",
       "alt_text": "Un bloque negro grande al lado de un cubito verde chiquito: lo que mandás igual al principio de cada pedido sale de la caché 20 veces más barato, 0,10 dólares el millón contra 2."

@@ -632,5 +632,22 @@
       "sergio-k1-opcion-b-clay-20260929"
     ],
     "tags": []
+  },
+  {
+    "id": "sergio-dda-openai-sol-20261001-s03-f5d9dec8",
+    "file": "hermes-content/galeria/ilustraciones/sergio-dda-openai-sol-20261001-s03-f5d9dec8.jpg",
+    "fecha": "2026-10-02",
+    "tipo": "ilustraciones",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "text2image_soul_v2",
+    "prompt": "A large tall matte black clay block standing next to a very small emerald green clay cube, both plain and smooth, on a white surface.",
+    "estilo": "clay",
+    "costo_cr": 0.12,
+    "job": "f5d9dec8-48e6-4f0b-afb5-f85710e65c88",
+    "usado_en": [
+      "sergio-dda-openai-sol-20261001"
+    ],
+    "tags": []
   }
 ]
