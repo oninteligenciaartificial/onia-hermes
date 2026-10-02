@@ -1,6 +1,6 @@
 # N03 · El modo auto de Claude Code (grabado 1-oct, editado 2-oct)
 
-Receta del lote del 17-sep (`videos/tiktok-20260917/README.md`), la que Sergio Urcullo reconoce como «su» edición.
+Receta del lote del 17-sep (`videos/tiktok-20260917/README.md`). ⚠️ **No es la que Sergio Urcullo reconoce como suya:** ésa es la del reel de Codex del 14-sep (`hermes-content/references/video-intake/2026-09-14-reel-astra-fable-codex/RECETA.md`), encontrada el 2-oct después de esta edición. Este video se rehace con esa receta.
 La primera versión (corte + karaoke + recuadros verdes) la rechazó: «no lo hacés como antes».
 
 - **Bruto:** Drive, carpeta «Videos Onia Octubre» (`A0550B92-….mp4`, 67 s, HEVC 1080×1920 SDR). No se versiona.
