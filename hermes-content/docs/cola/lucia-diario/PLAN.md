@@ -1,87 +1,91 @@
-# Plan de contenido de Lucía — primero la idea, después se genera
+# Plan de contenido de Lucía — primero la idea, después se genera (v2, 2-oct)
 
-> Pedido de Sergio Urcullo (2-oct): *«organizá primero qué idea vas a subir, qué contenido vas a subir y recién generá.
-> Estás generando sin sentido»*. **Este archivo manda** sobre qué se publica y por qué. `S1-PIEZAS.md` y
-> `S1-GUIONES.md` quedan como historia del 1-oct. Cómo se edita: `editor-videos` § «Reels de Lucía». Cómo se genera:
-> `HIGGSFIELD_VIDEO_SYSTEM.md`. **No se genera ni se publica nada de acá sin el OK de Sergio Urcullo a este plan.**
+> Sergio Urcullo (2-oct): *«organizá primero qué idea vas a subir… recién generá»* y *«puede tener ropa de doctora,
+> de abogada, de todo, pero ella es una persona única, una influencer de ella; vive en Santa Cruz»*. **Este archivo
+> manda** sobre qué se publica y por qué. Quién es Lucía, su ropa por rol y sus lugares: `references/modelos/lucia/LUCIA.md`
+> § 0. Evidencia: `docs/research/LUCIA_MUNDO_INVESTIGACION_20261002.md`. Edición: `editor-videos` § «Reels de Lucía».
+> **No se genera ni se publica nada sin el OK de Sergio Urcullo a este plan y al costo de cada lote.**
 
 ## 1. Para qué existe la cuenta
+- **Métrica: demos agendadas con `src=lucia-*`.** Seguidores sirven solo si traen demos.
+- Le habla al **dueño de un negocio de Santa Cruz**, primero la clínica de 2 a 6 profesionales con recepción
+  (`ONIA_CLIENTE_IDEAL.md`).
+- **La idea central:** Lucía es UNA influencer cruceña que **«vive un día» en cada negocio**. Se pone el ambo, el blazer
+  de abogada o atiende la tienda, y muestra cómo ese negocio trabaja con Onia. Además tiene su vida en Santa Cruz.
+- Nadie hace esto: ninguna influencer IA vende software B2B con tracción, y nadie muestra la recepción a las 8 desde
+  Santa Cruz.
 
-- **Métrica única: demos agendadas con `src=lucia-*`** (`LUCIA.md` §1). Seguidores y likes son ruido.
-- **Le habla al dueño de una clínica de Santa Cruz** con 2 a 6 profesionales y recepción (`ONIA_CLIENTE_IDEAL.md`).
-- **Su hueco** (`research/competencia/LUCIA_CONTENIDO_COMPETENCIA_20260930.md` §3): nadie muestra **la recepción a
-  las 8 de la mañana**, nadie es un personaje que vuelve cada semana y nadie habla desde Santa Cruz.
+## 2. Revisión del plan v1 (qué cambié y por qué)
+1. **Lucía-presentadora de blazer → Lucía disfrazada de cada rol, siendo ella.** Lo decidiste vos. Calza con lo que
+   funciona: el rol como disfraz de la misma persona, con la firma visual fija.
+2. **Reels de 6–10 s con un plano → reels de 20–30 s con 8 a 12 planos.** Lu do Magalu usa 10–14 planos en 24–31 s.
+   Un solo plano sirve únicamente para un chiste.
+3. **Generar a pedido → serie con idea, guion y lista de planos ANTES de gastar un crédito.**
+4. **Planos de video caros → mayoría fotos.** La mayoría de los planos son fotos (1 cr) con movimiento en la
+   edición, más 1–2 clips Kling (7,5 cr) para el momento fuerte. Un reel ≈ 23 cr, no 75.
+5. **Lifestyle suelto → lifestyle en lugares reales de Santa Cruz que se reconocen.** Se evita lo que delata «no es
+   Santa Cruz» (montañas, tajibos en flor en octubre).
+6. Lo que sigue igual: pantalla REAL de Onia en lo que vende, IA declarada (con humor), nunca testimonio ni consejo
+   clínico o legal.
 
-## 2. Qué estaba mal (1-oct)
+## 3. Los formatos (cada uno con su trabajo)
 
-1. **Reels de 6–10 s con un solo plano:** no cuentan nada. Un b-roll se arma con varios planos que cuentan una historia.
-2. **Clips de lifestyle (café, calle, coworking) usados para vender:** no muestran nada de lo que se vende.
-3. **Se generó antes de tener la idea:** 20 cr gastados en clips sin una historia que los pida.
-
-## 3. La mezcla: dos tipos de pieza, cada una con su trabajo
-
-| Tipo | Trabajo | Qué se ve | % del feed |
-|---|---|---|---|
-| **Vende** | Que el dueño entienda UNA función y pida la demo | **Lucía en una clínica** (recepción, sala de espera) + **pantalla REAL de Onia** al menos el 40 % del tiempo | 60 % |
-| **Personaje** | Que vuelvan a verla: una persona, no un anuncio | Su vida en Santa Cruz, contada como mini-historia (no un plano suelto) | 40 % |
-
-### Regla de toda pieza de venta (la receta)
-- **20–35 s, 4 a 6 planos**, voz de Marcela (60–90 palabras), karaoke.
-- **Planos:** 1) gancho con Lucía en la recepción (Kling) · 2–4) la **pantalla real** haciendo la función, sin cortes
-  mágicos · 5) remate de Lucía a cámara (Kling) · CTA «Pedí tu demo».
-- Declara IA en el primer segundo. Solo funciones vivas (`ONIA_CATALOGO_DE_VENTA.md`). Nunca testimonio.
-
-### ⚠️ Decisión de Sergio Urcullo: ¿Lucía doctora?
-Pediste «Lucía siendo una doctora, mostrando cosas». **Choca con una regla vigente**: CLAUDE.md (publicidad, 21-sep)
-dice *«el presentador IA nunca se hace pasar por cliente, odontóloga ni testimonio»*, y `LUCIA.md` permite escenificar
-solo rotulado.
-- **A (recomendada): Lucía es la presentadora, dentro de la clínica.** Va de blazer y no de ambo. Está en la
-  recepción o la sala de espera y muestra el sistema. Es justo el hueco que nadie ocupa (la recepción a las 8) y no
-  finge ser profesional de la salud. «Si la vendedora es falsa, el software también»: la prueba la pone la pantalla real.
-- **B: Lucía escenifica a una profesional, rotulado** («escenificación con IA»). Es más directo, pero exige cambiar esa
-  regla. Además, una doctora falsa vendiéndole a doctores es el caso que el público castiga cuando lo descubre (Vodafone,
-  Doublespeed).
-
-## 4. Las series (personaje que vuelve)
-
-| Serie | Tipo | Idea de cada episodio | Planos (shot list) | Bloqueo |
-|---|---|---|---|---|
-| **«8:00 en la recepción»** (semanal, lunes) | Vende | Una función por episodio: quién viene hoy · el paciente que reserva solo · el recordatorio que sale solo | Lucía llega y prende la pantalla → pantalla real de la función → paciente reservando en el celular (pantalla real) → Lucía remata | **Capturas y grabación de pantalla reales: no hay cuenta demo** |
-| **«El paciente de mañana»** (carrusel) | Vende | Portada humana + 4 láminas de prueba (agenda, recordatorio, link, cita confirmada) | Foto de Lucía en recepción + 4 capturas reales | Igual |
-| **«Lucía no existe. Tu agenda sí.»** (una vez) | Vende + declaración | Revela que es IA y muestra el link de reserva funcionando | Lucía → celular con reserva real → agenda | Igual |
-| **«Un día de Lucía»** | Personaje | Mini-historia de 15–20 s: mañana, trabajo y tarde en Santa Cruz | **Con lo que YA está pagado:** café (10 s) → coworking (6 s) → calle a la hora dorada (6 s), más voz | Ninguno: **costo 0** |
-| **«Hola, soy Lucía»** (L01, aprobado) | Personaje | Presentación fijada | Carrusel ya hecho | Ninguno |
-
-## 5. Dos semanas (sale cuando esté el token de IG; 19:00 La Paz)
-
-| # | Pieza | Tipo | Estado | Créditos |
+| Formato | Tipo | Idea | Estructura | Créditos |
 |---|---|---|---|---:|
-| 1 | L01 «Hola, soy Lucía. No existo.» (fijado) | Personaje | ✅ aprobado | 0 |
-| 2 | «Un día de Lucía» (reel de 3 planos ya pagados + voz) | Personaje | se arma con el plan aprobado | 0 |
-| 3 | Foto «Sábado» (cocina) + historia corta en el pie | Personaje | foto lista | 0 |
-| 4 | «8:00 en la recepción» #1: el paciente que reserva solo | Vende | **bloqueado: falta pantalla real** | ~18 |
-| 5 | «El paciente de mañana» (carrusel) | Vende | bloqueado: capturas | ~2 |
-| 6 | Foto «Noche de lámpara» + micro-historia | Personaje | foto lista | 0 |
-| 7 | «8:00 en la recepción» #2: el recordatorio que sale solo | Vende | bloqueado: capturas | ~18 |
-| 8–14 | Mismo ritmo: 2 de venta + 1–2 de personaje por semana | — | — | ~40 |
+| **«Hoy soy ___»** (serie, 1 rubro por episodio) | Vende | «Adiviná de qué negocio soy hoy» → un día en el rol → el problema de ese negocio → **Onia resolviéndolo en pantalla real** → remate con humor IA + «Pedí tu demo» | 20–30 s · 8–12 planos: 6–8 fotos en el lugar del rol + 1–2 Kling + 2–3 tomas de pantalla real · voz de Marcela + karaoke | ~23 |
+| **«¿De qué negocio soy hoy?»** | Vende | Foto 1: Lucía con el outfit del rol. Foto 2: la revelación y la captura real | Carrusel de 2–6 fotos con audio en tendencia | ~6 |
+| **«Una persona, seis trabajos»** (glow-up) | Personaje → vende suave | Los 6 roles con la misma firma; presenta la idea de la cuenta | Carrusel de 7 fotos (6 roles + cierre) | ~7 |
+| **«Un día en Santa Cruz»** | Personaje | Mañana en el café de Equipetrol → trabajo en el coworking → atardecer en un rooftop. En el celular entra «cita confirmada» | Reel de 20 s, 8–10 planos: los 3 clips ya pagados + 5 fotos de lugares reales | ~5 |
+| **Foto fancy** | Personaje | Lucía en un lugar aesthetic real (patio de diseño, piscina del hotel de tejas, Plaza 24 de Septiembre) + micro-historia en el pie | 1 foto o carrusel de 3 | 1–3 |
+| **Chiste de 10 s** | Personaje | «¿Lucía es real? No sé. Tu agenda llena, sí.» | 1 plano + texto (el único formato de un plano) | 0–8 |
+| **«Lucía responde»** | Vende | Contesta el comentario de un dueño con una demo de 30 s | Cuando haya comentarios | ~8 |
 
-**Presupuesto:** octubre 150 cr, van 20. Un reel de venta ≈ 18 cr (2 fotos de la clínica en Seedream 2 cr + 2 planos
-Kling de 6 s 15 cr, más margen). Un carrusel 1–3 cr y el personaje 0–2 cr. Las dos semanas ≈ 80 cr: **cierra con
-margen**. El video siempre se cotiza antes de generarlo.
+**Reglas de todo:**
+- IA declarada en el primer segundo (con humor) + etiqueta de la plataforma.
+- Texto en los primeros 0–3 s.
+- Una locación y un outfit por pieza.
+- Solo funciones vivas: link de reserva y recordatorios por correo 24 h / 2 h. «Tratamiento a medias» recién con la 1.0.
+- Un solo CTA.
 
-## 6. Qué pasa con L02, L05 y L08 (editados el 1-oct)
+## 4. Dos semanas (sale cuando esté el token de IG; 19:00 La Paz)
 
-- **L05 y L08 no se publican:** son clips de lifestyle vendiendo, sin pantalla real. Sus guiones (link de reserva y
-  recordatorios) pasan a los episodios #1 y #2 de «8:00 en la recepción».
-- **Los tres clips pagados** (café, calle, coworking) pasan a «Un día de Lucía» (personaje, 0 cr).
-- **L02** («Este video no fue grabado») se suma como gancho de «Lucía no existe. Tu agenda sí.» o queda como apertura de
-  «Un día de Lucía». Lo decide Sergio Urcullo.
+| # | Pieza | Formato | Rol / lugar | ¿Se puede hacer ya? | Créditos |
+|---|---|---|---|---|---:|
+| 1 | «Hola, soy Lucía. No existo.» (fijado) | Carrusel | — | ✅ aprobado | 0 |
+| 2 | «Una persona, seis trabajos» | Glow-up | odontóloga · cosmetóloga · abogada · contadora · comerciante · importadora | ✅ (no promete funciones) | 7 |
+| 3 | «Un día en Santa Cruz» | Reel personaje | café Equipetrol → coworking → rooftop | ✅ | 5 |
+| 4 | «Hoy soy odontóloga» #1: el paciente que reserva solo | Reel venta | clínica dental en torre de Equipetrol, ambo terracota | ⛔ falta pantalla real (cuenta demo) | 23 |
+| 5 | Foto fancy: patio de diseño en Av. Busch | Foto | lifestyle | ✅ | 1 |
+| 6 | «¿De qué negocio soy hoy?»: odontóloga + recordatorio por correo | Carrusel venta | clínica | ⛔ falta captura real | 6 |
+| 7 | Chiste de 10 s | Chiste | casa en Equipetrol | ✅ (clip ya pagado) | 0 |
+| 8 | «Hoy soy dueña de tienda» #2: agenda / caja | Reel venta | tienda de galería | ⛔ captura real | 23 |
+| 9 | Foto fancy: piscina del hotel de tejas terracota | Foto | lifestyle | ✅ | 1 |
+| 10 | «Hoy soy abogada» #3 | Reel venta | estudio en piso alto | ⛔ captura real | 23 |
 
-## 7. Qué se necesita para arrancar
+**Costo:** las 10 piezas ≈ **89 cr**. Octubre va 20/150: quedan 130, así que alcanza con margen para repetir lo
+que no pase el QA. Cada lote se cotiza en vivo y se aprueba antes de generar.
 
-1. **OK de Sergio Urcullo a este plan**, con la decisión A o B de la §3.
-2. **Cuenta demo dental en producción** con un paciente ficticio, para grabar pantalla y sacar capturas. Lo pidió la
-   madre el 1-oct. Sin esto no sale ninguna pieza de venta.
-3. **Token de `@lucia.antelo.oficial` en el VPS** y la bio con link + utm (Sergio Urcullo).
-4. Recién ahí: fotos de Lucía en la clínica (Seedream, cotizado) → planos Kling (cotizado, con OK) → edición con
-  `editor-videos` → preview a Sergio Urcullo → publicar.
+## 5. Antes de producir: la prueba de ropa (~5,4 cr)
+- Se prueba que Lucía puede vestir una prenda concreta sin perder la cara: **ambo terracota en 3 escenas** de la
+  clínica.
+  - Seedream con la prenda como referencia: 3 cr.
+  - Las mismas con Soul v5: 0,36 cr.
+  - 1 con Nano Banana Pro: 2 cr.
+- Se mide la cara (≥ 0,70) y se mira la prenda contra la foto. Gana el que mejor sostenga las dos.
+- **La prenda:**
+  - **(a) recomendada para arrancar:** una foto real de un ambo terracota (de una tienda de uniformes de Santa Cruz o
+    propia, sin persona);
+  - **(b)** si no hay foto, un turnaround en maniquí generado (1 cr), como se hizo con los 5 looks del 15-ago.
+
+## 6. Qué pasa con lo hecho el 1-oct
+- **L05 y L08 no se publican:** son clips de lifestyle vendiendo, sin pantalla real. Sus ideas (link de reserva y
+  recordatorio) pasan a «Hoy soy odontóloga» #1 y al carrusel #6.
+- **Los clips pagados** (café, calle, coworking) van a «Un día en Santa Cruz» (#3) y al chiste (#7).
+- **L02** («Este video no fue grabado») sirve de gancho del chiste #7 o de apertura de #3.
+
+## 7. Qué se necesita
+1. **OK de Sergio Urcullo a este plan**, y que elija entre la prenda (a) y la (b) para la prueba de ropa.
+2. **Cuenta demo dental en producción** para las pantallas reales. Se la pedí a la madre el 1-oct. Sin esto las
+   piezas 4, 6, 8 y 10 no salen.
+3. **Token de `@lucia.antelo.oficial`** en el VPS + bio con link y utm (Sergio Urcullo).
+4. **Orden:** prueba de ropa → piezas ✅ (#2, #3, #5, #7, #9) → piezas de venta cuando esté la cuenta demo.
