@@ -83,3 +83,11 @@ que le mandás: él lee en el teléfono. Ejemplo:
 - Invitar a otras personas o mandar invitaciones: desde acá no se hace.
 - Las reservas de cal.com entran solas a su calendario (por ejemplo, «Llamada 1 a 1 con X»):
   se ven con los mismos comandos.
+
+## Rescatado de la versión del 28-sep (sigue vigente)
+
+- Una lectura fallida o ausente NO es agenda vacía. Una respuesta sin eventos solo significa
+  «sin eventos en el período consultado»; no garantiza el día libre.
+- No afirmar que una reunión está confirmada sin evidencia del calendario o confirmación humana.
+- Los horarios que ofrece el bot (`ONIA_BOT_SLOTS`) son candidatos estimados, no disponibilidad
+  del calendario ni reservas.

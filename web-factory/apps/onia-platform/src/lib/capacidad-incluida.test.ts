@@ -65,7 +65,7 @@ const VENTANA = 130;
  * ("agentes", "Recall"); todas cuentan, porque todas afirman el mismo hecho.
  */
 const COMO_SE_DICE: Record<CapacidadIncluida, RegExp> = {
-  agentes: /\bagentes?\b|\bRecall\b|\bCobrador\b/i,
+  agentes: /\bagentes?\b|\bRecall\b|\bCobrador\b|\b(?:Vuelve a citar|Recuerda cobros|Confirma citas|Reprograma|Avisa stock bajo|Sigue cotizaciones)\b/i,
   reservas: /reservas?\s+online|link\s+p[úu]blico|agenda\s+p[úu]blica/i,
   chatbot: /\bchatbot\b|\brecepcionista\b/i,
   /**

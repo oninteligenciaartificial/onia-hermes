@@ -317,8 +317,8 @@ export const WEB_FONTS: readonly WebFont[] = [
     id: "archivo",
     nombre: "Grotesca limpia",
     descripcion: "Actual y directa",
-    muestra: "Archivo",
-    css: "var(--font-archivo), Arial, sans-serif",
+    muestra: "Grotesca",
+    css: "var(--font-instrument-sans), Arial, sans-serif",
   },
   {
     id: "editorial",
@@ -332,14 +332,14 @@ export const WEB_FONTS: readonly WebFont[] = [
     nombre: "Humana",
     descripcion: "Amable y accesible",
     muestra: "Humana",
-    css: "'Trebuchet MS', var(--font-archivo), sans-serif",
+    css: "'Trebuchet MS', var(--font-instrument-sans), sans-serif",
   },
   {
     id: "tecnica",
     nombre: "Técnica",
     descripcion: "Precisa y funcional",
     muestra: "Técnica",
-    css: "var(--font-geist-mono), 'Courier New', monospace",
+    css: "var(--font-plex-mono), 'Courier New', monospace",
   },
 ] as const;
 

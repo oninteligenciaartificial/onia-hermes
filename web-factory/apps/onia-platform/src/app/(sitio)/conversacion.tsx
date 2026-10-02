@@ -44,7 +44,7 @@ const GUION = [
 
 export function ConversacionNocturna() {
   return (
-    <div className={s.waCard} role="img" aria-label="Conversación de WhatsApp respondida por Onia a las 23:47: el asistente contesta stock y horario con la información publicada, y el pedido queda registrado para que el encargado lo confirme al abrir.">
+    <div className={s.waCard} role="img" aria-label="Conversación de WhatsApp respondida por Onia a las 23:47: el agente conversacional contesta stock y horario con la información publicada, y el pedido queda registrado para que el encargado lo confirme al abrir.">
       <div className={s.waHead}>
         <span className={s.waDot} aria-hidden="true" />
         <span className={s.waQuien}>WhatsApp del negocio</span>

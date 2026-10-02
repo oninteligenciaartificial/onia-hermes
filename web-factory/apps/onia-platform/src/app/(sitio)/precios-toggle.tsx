@@ -18,7 +18,7 @@ import { PLANES, bs, resultadoSegunCiclo } from "@/lib/pricing";
 
 import { Btn } from "./ui";
 import { ctaAltaPlan } from "./alta";
-import { EMPEZAR_URL } from "./nav";
+import { registroConPlan } from "./nav";
 import s from "./sitio.module.css";
 import v from "./portada.module.css";
 
@@ -91,7 +91,7 @@ export function PreciosConCiclo() {
                 ))}
               </ul>
               <div className={s.planFoot}>
-                <Btn href={EMPEZAR_URL}>{ctaAltaPlan(plan.nombre)}</Btn>
+                <Btn href={registroConPlan(plan.id)}>{ctaAltaPlan(plan.nombre)}</Btn>
               </div>
             </div>
           );

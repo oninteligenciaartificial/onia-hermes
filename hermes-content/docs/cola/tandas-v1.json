@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "wave": "onia-1-0-siguiente",
+  "externalOwners": [
+    { "id": "web-venta", "host": "nodo-casa", "status": "active", "scope": "unknown" },
+    { "id": "onia-cola", "host": "nodo-casa", "status": "active", "scope": "unknown" },
+    { "id": "chatbot-cola", "host": "nodo-casa", "status": "active", "scope": "unknown" },
+    { "id": "recorrido-cliente", "host": "nodo-casa", "status": "active", "scope": "unknown" },
+    { "id": "siat-audit", "host": "local", "status": "active", "scope": "unknown" }
+  ],
+  "lanes": [
+    {
+      "id": "chatbot",
+      "owner": "carril-chatbot",
+      "repo": "onia-platform",
+      "baseRef": "origin/master",
+      "status": "discovery",
+      "sensitivity": "sensitive",
+      "backlogRef": "hermes-content/docs/cola/plataforma-v1.md",
+      "paths": ["lib/chatbot/**", "app/(dashboard)/inbox/**"],
+      "resources": ["platform:chatbot"],
+      "dependsOn": [],
+      "checks": [
+        { "argv": ["node", "node_modules/typescript/bin/tsc", "--noEmit"] },
+        { "argv": ["node", "node_modules/vitest/vitest.mjs", "run", "lib/chatbot", "app/(dashboard)/inbox"] }
+      ]
+    },
+    {
+      "id": "operacion",
+      "owner": "carril-operacion",
+      "repo": "onia-platform",
+      "baseRef": "origin/master",
+      "status": "discovery",
+      "sensitivity": "sensitive",
+      "backlogRef": "hermes-content/docs/cola/plataforma-v1.md",
+      "paths": ["lib/email.ts", "__tests__/lib/email.test.ts"],
+      "resources": ["platform:email"],
+      "dependsOn": [],
+      "checks": [
+        { "argv": ["node", "node_modules/typescript/bin/tsc", "--noEmit"] },
+        { "argv": ["node", "node_modules/vitest/vitest.mjs", "run", "__tests__/lib/email.test.ts"] }
+      ]
+    },
+    {
+      "id": "ux-dueno",
+      "owner": "carril-ux-dueno",
+      "repo": "onia-platform",
+      "baseRef": "origin/master",
+      "status": "discovery",
+      "sensitivity": "normal",
+      "backlogRef": "hermes-content/docs/cola/plataforma-v1.md",
+      "paths": ["app/(dashboard)/dashboard/**", "components/dashboard/**"],
+      "resources": ["platform:dashboard"],
+      "dependsOn": [],
+      "checks": [
+        { "argv": ["node", "node_modules/typescript/bin/tsc", "--noEmit"] },
+        { "argv": ["node", "node_modules/vitest/vitest.mjs", "run", "app/(dashboard)/dashboard"] }
+      ]
+    }
+  ]
+}

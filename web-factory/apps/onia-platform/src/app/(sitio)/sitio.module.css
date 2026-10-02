@@ -207,7 +207,25 @@
   .display {
     font-size: 4.6em;
     line-height: 0.86;
-    letter-spacing: -0.025em;
+  }
+}
+
+/*
+ * Titular con una palabra larga que no se puede partir. El de `/precios` lleva
+ * «implementación,»: a 3.1em (49,6px) esa palabra sola mide 7,6 veces el
+ * tamaño de la letra, unos 377px, y en un teléfono de 390 la columna útil es
+ * 351,6px (390 menos 1.2rem por lado del `.inner`). La coma quedaba cortada en
+ * el borde: el texto llegaba a x=396 (medido con Playwright el 2026-10-01).
+ *
+ * El tamaño se ata al ANCHO de la columna y no a un número fijo, para que
+ * tampoco se corte en los teléfonos de 320-375: (100vw − 2.4rem) / 7.9 deja la
+ * palabra unos 13px adentro a 390. El techo es el mismo 3.1em del `.display`,
+ * así que en un teléfono ancho no cambia nada, y desde 768 manda el `.display`
+ * de siempre: el escritorio queda igual.
+ */
+@media (max-width: 767px) {
+  .displayPalabraLarga {
+    font-size: clamp(2.2em, (100vw - 2.4rem) / 7.9, 3.1em);
   }
 }
 
@@ -515,7 +533,7 @@
   text-overflow: ellipsis;
 }
 /* La hora dice CUÁNDO pasó, que es medio argumento: el panel de agentes sin
-   "03:12 · cerrado" muestra qué hace el sistema, no que lo hizo de noche. */
+   "07:10 · cerrado" muestra qué hace el sistema, no que lo hizo antes de abrir. */
 .panelStamp {
   flex: none;
   margin-left: auto;
@@ -756,8 +774,8 @@
    negocio" perdía 48px, o sea media frase) en la home, /agentes y /chatbot.
    Bajar el piso para que entren los devolvía a 8px, que es el defecto que el
    piso vino a arreglar: entre cortar la frase y partirla en dos líneas, se
-   parte. Además vuelve el panel inmune a la métrica de la fuente: si Archivo
-   no carga y entra la de sistema, esto envuelve en vez de truncar.
+   parte. Además vuelve el panel inmune a la métrica de la fuente: si la letra
+   de marca no carga y entra la de sistema, esto envuelve en vez de truncar.
 
    ⚠️ **Esto NACIÓ dentro de `@media (max-width: 767px)` y ahí dejó la clase
    abierta justo en las vistas de escritorio.** Medido en PRODUCCIÓN el
@@ -943,6 +961,15 @@
   .splitFlip > :first-child {
     order: 2;
   }
+}
+/* Dos columnas PARALELAS (dos listas con su título) arrancan a la misma
+   altura. El `center` del `.split` es para texto + imagen; con dos listas de
+   distinto largo centra la corta y su título baja la mitad de la diferencia.
+   En `/chatbot`, «Lo que necesitás vos» (3 renglones) quedaba 19,6px más abajo
+   que «Lo que no incluye» (2 ítems de dos renglones), medido a 1440 el
+   2026-10-01. En una columna (teléfono) no cambia nada. */
+.splitArriba {
+  align-items: start;
 }
 
 /* ══════════════════════════════════════════════════════════════════════ */
@@ -1348,6 +1375,10 @@
   align-items: baseline;
   gap: 0.3em;
   margin-top: 0.5em;
+  /* La fila es su propio contenedor: `.planNum` se mide contra ESTE ancho
+     (ver `cqi` abajo). Es un flex de bloque estirado por la tarjeta, así que
+     su ancho nunca sale del contenido y la contención no lo achica. */
+  container-type: inline-size;
 }
 /* Va acotado a la fila de precio a propósito: `/precios` reusa `.planUnit` para
    el renglón «12.900 Bs/año · 229 Bs/sem», que mide 206px de los 216 y SÍ
@@ -1355,10 +1386,19 @@
 .planPrice .planUnit {
   white-space: nowrap;
 }
+/* El número se achica con la TARJETA, no con la ventana. Con cuatro en fila la
+   fila de precio mide 215,7px a 1440 (y ~189 a 1100), y «1.290» a 3.4em pedía
+   151,8 + 5,4 + 63,6 (`Bs / mes`) = 220,8: la unidad de «Completo» bajaba
+   sola a un segundo renglón mientras las otras tres iban al lado del número
+   (medido el 2026-10-01). 25cqi deja «1.290 Bs / mes» con ~13px de aire a 1440
+   y ~7 a 1100. El techo es el 3.4em de siempre: en teléfono (fila de 292px) y
+   en 2×2 (293px) el número no cambia. Un navegador sin `cqi` descarta la
+   segunda línea y se queda con la primera, que es el tamaño de antes. */
 .planNum {
   font-family: var(--font-display), sans-serif;
   font-weight: 400;
   font-size: 3.4em;
+  font-size: min(3.4em, 25cqi);
   letter-spacing: -0.035em;
   line-height: 0.9;
   font-variant-numeric: tabular-nums;

@@ -1,63 +1,65 @@
-# Scripts de WhatsApp — DentalGest
+# Scripts de WhatsApp — Onia para clínicas
 
-> Copiar, reemplazar [corchetes], pegar. Voseo, directo, sin muros de texto.
-> Regla: un mensaje = una idea + una pregunta. Nunca mandar 4 mensajes seguidos sin respuesta.
-> Kit de venta v1 · 2026-07-25
+> Para Sergio Urcullo. Copiar, reemplazar [corchetes], pegar. Voseo, directo, sin muros de
+> texto. Un mensaje = una idea + una pregunta. Nunca 4 mensajes seguidos sin respuesta.
+> Kit de venta 1.0 · 2026-09-28. Mandar cualquiera de estos es decisión tuya: el kit no
+> manda nada solo.
 
 ---
 
-## (a) Re-apertura de warm leads (llamaron antes y no cerraron)
+## (a) Re-apertura de leads tibios (hablaron antes y no cerraron)
 
-Contexto: dijeron "está muy básico" o "somos muy pequeños". El mensaje RECONOCE eso y muestra qué cambió. No hacer como si fuera el primer contacto.
+Dijeron "está muy básico" o "somos muy chicos". El mensaje RECONOCE eso y muestra qué
+cambió. No hacer como si fuera el primer contacto.
 
 ```
-Hola [Nombre], soy Sergio de ONIA — hablamos hace un tiempo por el sistema para [Clínica].
+Hola [Nombre], soy Sergio Urcullo, de Onia. Hablamos hace un tiempo por el sistema para [Clínica].
 
-En ese momento me dijiste que te quedaba corto, y tenías razón. Te escribo porque cambió bastante:
+En ese momento te quedaba corto, y tenías razón. Te escribo porque cambió bastante:
 
-1. Ahora tiene un agente que trabaja solo: cuando un paciente falta, te propone la reprogramación por WhatsApp y vos aprobás con un click. Llena el hueco, no manda recorditos.
-2. Cada venta queda cerrada con su detalle y su monto, lista para facturar en el Portal Web del SIN, que es gratis (desde el 1 de octubre de 2026 esos negocios facturan en línea).
-3. Odontograma, historial y consentimientos en la ficha del paciente.
+1. Cada mañana te deja escrito el mensaje para el paciente que faltó o canceló y no volvió a agendar. Vos lo aprobás y él elige su turno en tu agenda online.
+2. Si se libera un turno, te propone ofrecérselo a pacientes sin cita, y lo reservan ellos mismos.
+3. Cada venta queda lista para cargar en el portal gratuito del SIN.
 
-¿Te muestro en 20 min lo que cambió? La cuenta la hacemos con los números de tu clínica.
+¿Te muestro en 20 minutos lo que cambió? La cuenta la hacemos con los números de tu clínica.
 ```
 
 Variante si la objeción fue "ustedes son muy chicos":
 
 ```
-Hola [Nombre], Sergio de ONIA. Hace un tiempo hablamos por el sistema para [Clínica] y quedó ahí — con razón, estábamos arrancando.
+Hola [Nombre], Sergio Urcullo, de Onia. Hablamos hace un tiempo por el sistema para [Clínica] y quedó ahí, con razón: estábamos arrancando.
 
-Hoy el sistema tiene un agente que reprograma citas por WhatsApp solo (vos aprobás cada mensaje antes de que salga), cada venta te queda lista para facturar en el portal gratuito del SIN, y a las primeras clínicas de Santa Cruz que arranquen les regalamos la implementación completa. Chicos seguimos siendo — la diferencia es que me tenés a mí directo, no a un call center.
+Hoy Onia te avisa cada mañana a qué paciente recuperar (el que faltó, el que canceló, el que hace meses no vuelve) con el mensaje ya escrito, y nada sale sin tu OK. Tenés 14 días para probarlo gratis. Chicos seguimos siendo: la diferencia es que me tenés a mí directo.
 
-¿20 minutos esta semana para que lo veas andando? Si no te convence, quedamos como amigos.
+¿20 minutos esta semana para que lo veas andando?
 ```
 
 Variante si el lead quedó en silencio sin objeción clara:
 
 ```
-Hola [Nombre], Sergio de ONIA — hace un tiempo hablamos por el sistema para [Clínica] y quedó ahí, seguro por las mil cosas de la clínica.
+Hola [Nombre], Sergio Urcullo, de Onia. Hace un tiempo hablamos por el sistema para [Clínica] y quedó ahí, seguro por las mil cosas de la clínica.
 
-Te escribo porque desde entonces cambió bastante: ahora tiene un agente que, cuando un paciente falta, te propone reprogramarlo por WhatsApp y vos aprobás con un click — llena el hueco, no manda recorditos. Y cada venta te queda cerrada y lista para facturar en el portal gratuito del SIN.
+Te escribo por una sola cosa: los pacientes que empezaron un tratamiento y no volvieron. Onia te dice cada mañana quiénes son y te deja el mensaje listo para aprobar.
 
-¿Te muestro en 20 minutos con los números de tu clínica? Decime qué día te queda y coordino yo.
+¿Te lo muestro en 20 minutos con los números de tu clínica? Decime qué día te queda y coordino yo.
 ```
 
-## (b) Primer contacto frío a clínica
+## (b) Primer contacto frío a una clínica
 
 ```
-Hola, ¿hablo con [Clínica]? Soy Sergio de ONIA, acá en Santa Cruz.
+Hola, ¿hablo con [Clínica]? Soy Sergio Urcullo, de Onia, acá en Santa Cruz.
 
-Trabajo con clínicas dentales en una sola cosa: los pacientes que faltan sin avisar y los huecos que dejan en la agenda.
+Onia es un sistema para clínicas, y te escribo por una cosa en particular: los pacientes que empiezan un tratamiento y no vuelven a agendar.
 
-Una pregunta corta: ¿cuántos pacientes les faltaron sin avisar el mes pasado? Si la respuesta es "no sé exacto, pero varios", tengo algo que mostrarles en 20 minutos.
+Una pregunta corta: ¿cuántos tienen hoy en esa situación? Si la respuesta es "no sé exacto, pero varios", tengo algo para mostrarles en 20 minutos.
 ```
 
 Si responden con interés:
 
 ```
-Buenísimo. Es un sistema que se llama DentalGest: agenda, ficha con odontograma, cada venta lista para facturar en el portal del SIN, y un agente que cuando alguien falta le propone reprogramar por WhatsApp — ustedes aprueban cada mensaje antes de que salga.
+Buenísimo. Onia es un sistema para la clínica: agenda, ficha con odontograma, cobros, y cada mañana les deja escrito el mensaje para el paciente que faltó, canceló o hace meses no vuelve. Ustedes aprueban cada mensaje antes de que salga.
 
-¿Cuándo les queda bien una demo de 20 min: [día 1] o [día 2]? Puedo ir a la clínica o por videollamada.
+¿Cuándo les queda bien una demo de 20 minutos: [día 1] o [día 2]? Puedo ir a la clínica o por videollamada.
 ```
 
 ## (c) Seguimiento post-demo (24 horas después)
@@ -66,53 +68,59 @@ Buenísimo. Es un sistema que se llama DentalGest: agenda, ficha con odontograma
 [Nombre], gracias por el tiempo de ayer.
 
 Te dejo la cuenta que hicimos, por escrito:
-• [N] faltas al mes × Bs [ticket] = Bs [total] que se van en huecos
-• DentalGest Pro: Bs 750/mes — se paga recuperando 2 de esas citas
-• Cerrando esta semana: implementación y carga de tus pacientes GRATIS (la competencia la cobra Bs 2.274–9.096)
+• [N] pacientes con el tratamiento a medias × Bs [ticket] = Bs [total] parados
+• Onia [plan]: Bs [precio del plan]/mes. Se paga recuperando [cuántos] de esos al mes
+• 14 días de prueba gratis, sin tarjeta y sin costo de implementación
 
-¿Arrancamos el [día concreto]? Ese día cargamos tus pacientes y activamos el primer trimestre por QR.
+¿Abrimos tu cuenta el [día concreto]?
 ```
 
-## (d) Seguimiento sin respuesta (UNO solo — después, nutrición)
+## (d) Seguimiento sin respuesta (UNO solo; después, nutrición)
 
-A los 3–4 días del anterior. Es el ÚLTIMO mensaje de venta; si no responde, pasa a nutrición.
+A los 3-4 días del anterior. Es el ÚLTIMO mensaje de venta; si no responde, pasa a
+nutrición.
 
 ```
 [Nombre], último mensaje y no te persigo más 🙂
 
-Sé que la clínica no te deja tiempo ni para almorzar. Te dejo lo esencial en una línea: DentalGest te recupera las citas que hoy se pierden solas. Y desde el 1 de octubre solo se factura en línea — podés cumplir gratis tipeando en el portal del SIN, o hacer que la factura salga sola del mismo sistema donde ya está la cita y el paciente.
+Sé que la clínica no te deja ni almorzar. Lo esencial en una línea: Onia te dice cada mañana qué paciente se te está yendo y te deja el mensaje para recuperarlo. Vos solo aprobás.
 
-Si querés retomarlo, respondé DEMO y coordinamos. Si no es el momento, todo bien — te voy a mandar cada tanto algo útil del rubro, sin venderte nada.
+Si querés retomarlo, respondé DEMO y coordinamos. Si no es el momento, todo bien: cada tanto te mando algo útil del rubro, sin venderte nada.
 ```
 
-Nutrición (cada 3–4 semanas, NO es venta — mantiene la puerta abierta):
+Nutrición (cada 3-4 semanas, NO es venta: mantiene la puerta abierta):
 
 ```
-[Nombre], dato corto del rubro: [novedad útil — ej. "el SIN publicó X sobre facturación en línea" / "tip: medí tus faltas de este mes, es un número que toda clínica debería conocer"]. Sin compromiso, solo para que lo tengas. Cualquier cosa, acá estoy.
+[Nombre], dato corto del rubro: [novedad útil — ej. "tip: contá cuántos pacientes con tratamiento empezado no tienen próxima cita; es el número que más plata esconde en una clínica"]. Sin compromiso, solo para que lo tengas.
 ```
 
 ## (e) Respuesta al que escribe "DEMO" (calificación en 3 mensajes)
 
-**Mensaje 1 — nombre y tamaño:**
+Las preguntas salen de `hermes-content/docs/ONIA_CLIENTE_IDEAL.md` §9.
+
+**Mensaje 1 — tamaño:**
 
 ```
 ¡Buenísimo! Para prepararte la demo con datos que te sirvan, 2 preguntas rápidas:
 
-¿Cómo se llama tu clínica y cuántos profesionales/sillones son?
+¿Cómo se llama tu clínica, cuántos profesionales atienden y quién agenda las citas?
 ```
 
-**Mensaje 2 — situación actual (califica el plan):**
+**Mensaje 2 — situación actual:**
 
 ```
-Perfecto. ¿Y hoy cómo manejan la agenda y las fichas: cuaderno, Excel o algún sistema? ¿Y ya están facturando en línea o todavía con talonario?
+Perfecto. ¿Hoy cómo llevan la agenda y las fichas: cuaderno, Excel o algún sistema? ¿Y más o menos cuántos pacientes tienen con un tratamiento empezado que no volvieron?
 ```
 
 **Mensaje 3 — agendar con opciones cerradas:**
 
 ```
-Listo, con eso armo la demo para tu caso. Son 20 minutos y hacemos la cuenta con TUS números de citas perdidas.
+Listo, con eso armo la demo para tu caso. Son 20 minutos y hacemos la cuenta con TUS números.
 
 ¿Cuándo te queda mejor: [día 1] a las [hora] o [día 2] a las [hora]? Puede ser en tu clínica o por videollamada.
 ```
 
-> Guía de calificación: 1 sillón + cuaderno → demo enfocada en orden + SIAT (posible Básico como downsell, el Pro se cotiza primero igual). 2+ profesionales o mucho WhatsApp → demo enfocada en el agente + mencionar Full recién en la demo. Talonario y sin apuro → el gancho es timing del 1-oct, sin miedo.
+> Guía de calificación (tabla de `ONIA_CLIENTE_IDEAL.md` §2): 2-3 profesionales con
+> recepción → demo enfocada en los agentes, se cotiza Crece. 4-5 → Profesional. 6 o más, o
+> mucho WhatsApp → Completo (trae el agente conversacional). 1 profesional solo → no es el
+> cliente ideal: Básico solo si lo pide.

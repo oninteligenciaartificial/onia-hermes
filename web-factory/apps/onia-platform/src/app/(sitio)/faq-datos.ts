@@ -67,15 +67,17 @@ export const FAQ = [
     a: `Onia no es un software distinto por industria: es el mismo núcleo con módulos y vocabulario propios. Hoy la cuenta se arma sola para los ${CUANTOS_RUBROS} rubros que ves en Rubros. ¿El tuyo es otro? Escribinos por WhatsApp y lo vemos con tu caso.`,
   },
   {
-    q: "¿La factura al SIN ya funciona?",
-    a: "Nuestro emisor está registrado ante el SIN y la homologación está en trámite. Mientras tanto cada venta queda lista y facturás en el Portal Web del SIN, gratis y legal. Te avisamos apenas concluya. Está contado entero, con las resoluciones y las fechas, en la página de facturación.",
+    // 2026-10-01: sin el estado del emisor propio (Sergio Urcullo: la venta
+    // no exhibe obra). Dice dónde se emite hoy la factura y qué hace Onia.
+    q: "¿Y la factura del SIN?",
+    a: "La factura con valor fiscal la emitís en el Portal Web del SIN, que es gratuito y cumple la ley. Onia te deja cada venta registrada con su detalle y te arma el resumen de IVA e IT del mes para revisarlo con tu contador. Lo que exige la norma, con sus resoluciones y fechas, está en la página de facturación.",
   },
   {
-    q: "¿El chatbot de WhatsApp está incluido?",
+    q: "¿El agente conversacional de WhatsApp está incluido?",
     // Depende del plan, y decir "no" a secas le cobraba Bs 390/mes al cliente de Full por algo que
     // su plan ya le da (`whatsappIncluded` en el catálogo del producto). Lo ata
     // `scripts/inclusion-chatbot.mjs`; quién lo trae NO se tipea acá.
-    a: `${nombresConChatbot()} ya ${traeOTraen()} el chatbot de WhatsApp incluido. En los demás planes va aparte, ${precioStack(CHATBOT_PLAN)}. El botón de WhatsApp de tu web sí va gratis.`,
+    a: `${nombresConChatbot()} ya ${traeOTraen()} el agente conversacional de WhatsApp incluido. En los demás planes va aparte, ${precioStack(CHATBOT_PLAN)}. El botón de WhatsApp de tu web sí va gratis.`,
   },
   {
     // El export integral NO se gatea por plan: `onia-platform`

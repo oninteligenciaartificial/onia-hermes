@@ -90,97 +90,6 @@ DENTALGEST_ORG_ID = os.environ.get("DENTALGEST_ORG_ID", "").strip()
 
 TELEGRAM_REPLY_MAX = 3500
 
-SERGIO_SCHEDULE_BLOCKS = [
-    {
-        "key": "wake",
-        "days": "Lunes a viernes",
-        "start": "06:30",
-        "end": "07:00",
-        "title": "Levantarse, agua, aseo, cero telefono",
-        "meeting_policy": "blocked",
-    },
-    {
-        "key": "ceo",
-        "days": "Lunes a viernes",
-        "start": "07:00",
-        "end": "07:30",
-        "title": "Plan CEO: caja, ventas, 3 prioridades",
-        "meeting_policy": "blocked",
-    },
-    {
-        "key": "sales",
-        "days": "Lunes a viernes",
-        "start": "08:30",
-        "end": "10:30",
-        "title": "Ventas, CRM y seguimientos",
-        "meeting_policy": "emergency_only",
-    },
-    {
-        "key": "meeting_am",
-        "days": "Lunes a viernes",
-        "start": "11:30",
-        "end": "12:30",
-        "title": "Ventana reuniones 1",
-        "meeting_policy": "available",
-    },
-    {
-        "key": "delivery",
-        "days": "Lunes a viernes",
-        "start": "13:15",
-        "end": "15:15",
-        "title": "Entrega, desarrollo y operaciones",
-        "meeting_policy": "blocked",
-    },
-    {
-        "key": "meeting_pm",
-        "days": "Lunes a jueves",
-        "start": "15:30",
-        "end": "16:30",
-        "title": "Ventana reuniones 2",
-        "meeting_policy": "available",
-    },
-    {
-        "key": "gym",
-        "days": "Lunes, miercoles y viernes",
-        "start": "17:30",
-        "end": "19:00",
-        "title": "Gym protegido",
-        "meeting_policy": "blocked",
-    },
-    {
-        "key": "girlfriend",
-        "days": "Martes, jueves y sabado",
-        "start": "20:00",
-        "end": "22:30",
-        "title": "Tiempo novia / vida personal",
-        "meeting_policy": "blocked",
-    },
-    {
-        "key": "shutdown",
-        "days": "Domingo a jueves",
-        "start": "22:15",
-        "end": "23:00",
-        "title": "Apagar trabajo, preparar manana",
-        "meeting_policy": "blocked",
-    },
-]
-
-SERGIO_MEETING_WINDOWS = [
-    {
-        "days": "Lunes a viernes",
-        "start": "11:30",
-        "end": "12:30",
-        "title": "Demos, diagnosticos y reuniones pagadas",
-    },
-    {
-        "days": "Lunes a jueves",
-        "start": "15:30",
-        "end": "16:30",
-        "title": "Cierres, seguimiento y revision",
-    },
-]
-
-
 def _normalize(message: str) -> str:
     return re.sub(r"\s+", " ", message.strip())
 
@@ -444,77 +353,43 @@ def _format_video_jobs(title: str, jobs: list[dict], empty: str) -> str:
 def _sergio_plan() -> dict:
     now = _now_lapaz()
     lines = [
-        f"Plan Sergio hoy ({now.strftime('%d/%m')}):",
-        "Regla: proteger energia primero; vender y entregar antes de contenido.",
+        f"Prioridades Sergio hoy ({now.strftime('%d/%m')}):",
+        "Agenda no verificada: este router no tiene una lectura actual de Google Calendar.",
+        "No puedo confirmar eventos, horas libres ni cambios recientes del calendario.",
+        "Regla: repartir el trabajo entre Platform, clientes y marca personal.",
+        "Conserva colegio, ejercicio, lectura, vida personal y descanso; usa solo bloques ONIA verificados.",
         "",
-        "Bloques:",
+        "Prioridades sugeridas, sin asignar horarios:",
+        "1. Platform: una accion para cerrar la 1.0.",
+        "2. Clientes: una accion de entrega, ventas o seguimiento.",
+        "3. Marca personal: una accion de contenido con evidencia real.",
+        "",
+        "Siguiente: verifica el calendario actual antes de ubicar tareas o proponer una reunion.",
+        "Higgsfield: quiet/manual. Usa `Siguiente Video Lab` solo si quieres trabajar videos.",
     ]
-    for block in SERGIO_SCHEDULE_BLOCKS:
-        lines.append(
-            f"- {block['start']}-{block['end']} | {block['title']} | {block['meeting_policy']}"
-        )
-    lines.extend(
-        [
-            "",
-            "Prioridades:",
-            "1. Una accion de ventas/CRM.",
-            "2. Una accion de entrega o sistema ONIA Center.",
-            "3. Gym, novia o descanso protegido segun el dia.",
-            "",
-            "Reuniones permitidas: 11:30-12:30 y 15:30-16:30, con 15 min de buffer.",
-            "Higgsfield: quiet/manual. Usa `Siguiente Video Lab` solo si quieres trabajar videos.",
-        ]
-    )
-    return {"ok": True, "action": "sergio_plan", "telegram_reply": "\n".join(lines)}
+    return {
+        "ok": True,
+        "action": "sergio_plan",
+        "calendar_verified": False,
+        "telegram_reply": "\n".join(lines),
+    }
 
 
 def _sergio_availability(message: str) -> dict:
-    lower = message.lower()
-    time_match = re.search(r"(\d{1,2})(?::(\d{2}))?\s*(am|pm)?", lower)
-    if not time_match:
-        lines = [
-            "Disponibilidad Sergio:",
-            "- Ventana 1: lunes a viernes 11:30-12:30.",
-            "- Ventana 2: lunes a jueves 15:30-16:30.",
-            "- Bloqueado: antes de 09:30, almuerzo, entrega 13:15-15:15, gym, novia, shutdown y dormir.",
-            "",
-            "Formato util: Puedo reunirme jueves 15:30?",
-        ]
-        return {"ok": True, "action": "sergio_availability", "telegram_reply": "\n".join(lines)}
-
-    hour = int(time_match.group(1))
-    minute = int(time_match.group(2) or 0)
-    ampm = (time_match.group(3) or "").lower()
-    if ampm == "pm" and hour < 12:
-        hour += 12
-    if ampm == "am" and hour == 12:
-        hour = 0
-    minutes = hour * 60 + minute
-
-    available = (11 * 60 + 30 <= minutes < 12 * 60 + 30) or (15 * 60 + 30 <= minutes < 16 * 60 + 30)
-    blocked_reason = "fuera de ventanas permitidas"
-    if 17 * 60 + 30 <= minutes < 19 * 60:
-        blocked_reason = "choca con gym protegido"
-    elif 20 * 60 <= minutes < 22 * 60 + 30:
-        blocked_reason = "choca con tiempo novia/personal"
-    elif minutes >= 22 * 60 + 15 or minutes < 6 * 60 + 30:
-        blocked_reason = "choca con shutdown o dormir"
-    elif 13 * 60 + 15 <= minutes < 15 * 60 + 15:
-        blocked_reason = "choca con entrega/trabajo profundo"
-
-    if available:
-        reply = (
-            "Disponibilidad Sergio: SI, entra en ventana permitida.\n"
-            "Regla: deja 15 min de buffer y agenda solo si es demo, cliente, cierre o diagnostico.\n"
-            "Siguiente: agendar <titulo> | <dia> <hora>-<hora fin> | <descripcion>"
-        )
-    else:
-        reply = (
-            f"Disponibilidad Sergio: NO, {blocked_reason}.\n"
-            "Alternativas: 11:30-12:30 o 15:30-16:30.\n"
-            "Si es emergencia real, Sergio debe aprobarlo manualmente."
-        )
-    return {"ok": True, "action": "sergio_availability", "telegram_reply": reply}
+    # Fixed windows and the creation webhook cannot establish current availability.
+    # Keep this closed until a reader verifies the calendar identity, date and timezone.
+    return {
+        "ok": True,
+        "action": "sergio_availability",
+        "calendar_verified": False,
+        "warning": "calendar_unverified",
+        "telegram_reply": (
+            "Agenda no verificada: no puedo confirmar disponibilidad para esa fecha y hora.\n"
+            "Este router no tiene una lectura actual de Google Calendar; falta verificar calendario, fecha y zona horaria.\n"
+            "Conserva colegio, ejercicio, lectura, vida personal y descanso.\n"
+            "Siguiente: consulta el calendario actual y confirma con Sergio antes de proponer o agendar una reunion."
+        ),
+    }
 
 
 def _sergio_mode(mode: str) -> dict:

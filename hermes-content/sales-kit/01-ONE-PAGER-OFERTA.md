@@ -1,83 +1,110 @@
-# DentalGest — La clínica ordenada, los pacientes que vuelven
+# Onia — que ningún paciente te quede a medias
 
-> One-pager oficial de la oferta. Para imprimir o mandar por WhatsApp (versión texto plano al final).
-> Kit de venta v1 · 2026-07-25 · Fuente de números: research C7 (ONIA_DENTALGEST_FISCAL_MERCADO_PRICING_20260725.md)
-
----
-
-## Qué es
-
-**DentalGest es el sistema que opera tu clínica dental y no deja que se te escape un paciente:**
-
-- **Agenda y fichas de pacientes** con odontograma, historial y consentimientos — todo en un solo lugar, desde cualquier dispositivo.
-- **Factura SIAT en línea sin re-tipear**: cerrás la atención y la factura sale del mismo sistema. (Podés cumplir gratis tipeando cada factura en el Portal Web del SIN — nosotros hacemos que no tengas que hacerlo.)
-- **Agentes que trabajan solos**: cuando un paciente falta, el agente detecta el hueco y **te propone la reprogramación por WhatsApp — vos aprobás con un click**. No manda recorditos: llena el hueco.
-- **WhatsApp integrado**: confirmaciones y reprogramaciones por el canal que tu paciente ya usa todos los días.
-
-**El problema que resuelve:** en odontología de la región se pierde entre 10% y 30% de las citas y hasta 1 de cada 4 pacientes no termina el tratamiento (datos de Colombia y Chile; en Bolivia no hay estudio publicado). Cada hueco en tu agenda es plata que no vuelve.
+> One-pager de la oferta para clínicas (dental y estética). Para imprimir o mandar por
+> WhatsApp (versión texto plano al final).
+> Kit de venta 1.0 · 2026-09-28 · Precios leídos de `onia-platform/lib/subscription-plans.ts`
+> (planes) y `lib/pricing.ts` (add-ons). Si no coinciden, manda el código: lo cuida
+> `scripts/venta-honestidad.test.mjs`.
 
 ---
 
-## Planes (Bs/mes por clínica — precio de lanzamiento)
+## Lo que te resuelve
 
-| | Básico | ⭐ **PRO — el recomendado** | Full |
-|---|---|---|---|
-| **Precio** | Bs 320/mes | **Bs 750/mes** | Bs 1.500/mes |
-| **Para qué** | Ordenar la clínica | **Que ningún paciente se te escape** | Que la clínica opere sola |
-| Agenda + fichas con odontograma e historial | ✅ | ✅ | ✅ |
-| Panel del dueño con pendientes del día | ✅ | ✅ | ✅ |
-| **Venta lista para facturar en el portal del SIN** | ✅ | ✅ | ✅ |
-| Agente que **reprograma** citas por WhatsApp (propone, vos aprobás) | — | ✅ | ✅ |
-| Documentos y consentimientos digitales | — | ✅ | ✅ |
-| Roles (recepción no ve lo clínico) | — | ✅ | ✅ |
-| Inventario básico de insumos (stock mínimo → pendiente de reponer) | — | ✅ | ✅ |
-| Reactivación de pacientes inactivos | — | — | ✅ |
-| Aprobaciones (descuentos / anulaciones) | — | — | ✅ |
-| Multi-sillón | — | — | ✅ |
-<!-- Sucursales: NO se promete todavia. El schema no tiene branchId; se esta
-     construyendo (decision 2026-08-15). Se re-agrega cuando este vivo y verificado. -->
+**El paciente que empezó un tratamiento, faltó o canceló, y no volvió a agendar.** Nadie lo
+nota hasta que el tratamiento queda a medias y esa plata no entra.
 
-| Usuarios | 3 | 8 | 20 |
-| Soporte | correo | WhatsApp | WhatsApp directo |
+Onia ordena tu clínica y, cada mañana, te deja listo a quién escribirle:
 
-**La diferencia entre niveles en una línea:** Básico ordena → Pro cobra y no pierde pacientes → Full opera sola. Dejar la venta lista para facturar va en los tres: eso no se cobra aparte, lo que sube de nivel es la automatización.
+- **Quien faltó o canceló en las últimas dos semanas y no tiene otra cita**: el mensaje para ofrecerle reprogramar ya
+  escrito. Lo aprobás y el paciente elige su turno en tu agenda online.
+- **Un turno que se liberó para los próximos 3 días**: te propone ofrecérselo a hasta tres
+  pacientes sin cita. El que lo quiere, lo reserva él mismo.
+- **Quien hace más de 6 meses que no vuelve** y no tiene próxima cita: el mensaje para
+  recuperarlo, listo para aprobar.
+- **Las citas de mañana sin confirmar**: el recordatorio escrito, para que si alguien no
+  puede venir te enteres con un día de margen.
+- **Los saldos vencidos**: el recordatorio de pago de cada uno.
 
-> **Sobre el SIAT, de frente:** desde el **1 de octubre de 2026** solo se emite factura en modalidad en línea (plazo vigente del SIN: 30-sep-2026). Nuestro emisor está en homologación ante el SIN; hasta que esté aprobado, DentalGest te deja la venta lista y facturás por el Portal Web gratuito del SIN. Cuando la homologación salga, facturás desde el sistema sin tipear nada dos veces.
+La IA escribe los mensajes con el tono de tu clínica; a quién y cuándo lo decide el sistema
+con tus datos. **Nada sale sin tu OK**: aprobás con un toque y sale por tu WhatsApp, o te
+queda listo para mandarlo desde tu celular.
 
----
+Y el día a día, en un solo lugar:
 
-## Add-ons (opcionales)
-
-| Add-on | Precio |
-|---|---|
-| **Chatbot WhatsApp con IA** — contesta, califica y hace seguimiento 24/7, con tu aprobación (el botón de WhatsApp simple ya va gratis en todos los planes). Incluye 500 conversaciones/mes; Meta por consumo. Lo que no entre en el estándar se define y se cotiza a medida | **Bs 390/mes** o Bs 3.900/año, **sin cargo inicial** + Meta por consumo — fuente: `onia-platform/lib/pricing.ts` (`WHATSAPP_ADDON`) |
-| **Web de la clínica** — landing Bs 790 / web completa Bs 1.500 + Cuidado Web mensual | desde Bs 790 |
-| **Contador Pack** — RCV, vencimientos de NIT, radar normativo | a cotizar |
+- **Agenda por profesional** y **agenda online** para que tus pacientes reserven solos.
+- **Ficha del paciente** con odontograma, historial, recetas y documentos.
+- **Recepción agenda y cobra, pero no ve la historia clínica.**
+- **Recordatorios de cita por correo**, 24 h y 2 h antes.
+- **Cada venta queda lista para cargar en el Portal Web gratuito del SIN**, con su detalle
+  y su monto.
 
 ---
 
-## Implementación: REGALADA (el cierre)
+## Planes (Bs por mes, por clínica)
 
-La competencia cobra la implementación y migración de datos entre **Bs 2.274 y Bs 9.096** (USD 200–800). Para las clínicas que cierran en esta fase de lanzamiento, **nosotros la regalamos completa**: carga de tus pacientes, configuración, capacitación de tu equipo. El precio de lista no se toca — el regalo es la implementación.
+| | Básico | Crece | Profesional | Completo |
+|---|---|---|---|---|
+| **Mensual** | Bs 320 | **Bs 550** | **Bs 890** | Bs 1.290 |
+| **Anual (pagás 10 meses)** | Bs 3.200 | Bs 5.500 | Bs 8.900 | Bs 12.900 |
+| **Le calza a** | 1 profesional | 2-3 profesionales + recepción | 4-5 profesionales + recepción | 6 o más, o varios consultorios |
+| Usuarios | 2 | 3 | 5 | sin tope |
+| Pacientes activos | 300 | 800 | 1.500 | sin tope |
+| Agenda, fichas, odontograma, cobros | ✅ | ✅ | ✅ | ✅ |
+| Venta lista para cargar en el portal del SIN | ✅ | ✅ | ✅ | ✅ |
+| **Agentes que te preparan el seguimiento** | — | ✅ | ✅ | ✅ |
+| Agenda online | Bs 150/mes aparte | ✅ | ✅ | ✅ |
+| Cobros recurrentes y reportes completos | — | — | ✅ | ✅ |
+| Agente conversacional de WhatsApp | Bs 390/mes aparte | Bs 390/mes aparte | Bs 390/mes aparte | ✅ incluido |
+
+Usuario extra: Bs 70/mes (Básico, Crece y Profesional).
+
+**La diferencia en una línea:** Básico te ordena; desde Crece, Onia te dice cada mañana a
+quién recuperar; Completo suma el agente conversacional y saca todos los topes.
+
+¿Varias clínicas o razones sociales? Plan **Empresa**: Bs 2.900/mes, con implementación
+acompañada que se cotiza aparte.
 
 ---
 
-## La cuenta (hacela vos)
+## Agente conversacional de WhatsApp
 
-1. **Pro = dos ajustes de ortodoncia.** El ajuste mensual en Santa Cruz cuesta Bs 300–350. Si DentalGest evita que **dos** pacientes de ortodoncia falten en el mes, ya se pagó solo.
-2. **Full = media endodoncia.** Una endodoncia multirradicular vale Bs 2.100. Una sola recuperada paga el mes y te deja Bs 600 de sobra.
-3. **Un implante recuperado (Bs 3.000) paga dos meses de Full.**
+**Bs 390/mes o Bs 3.900/año, sin cargo inicial.** Incluido en Completo y Empresa.
+
+- **Contesta al instante, de día y de noche**, en tu WhatsApp y en tu web, con lo que vos
+  le cargaste: horarios, servicios y tus respuestas.
+- **Entiende las fotos** que le mandan.
+- **Nunca da precios.** A quien pide turno le manda el link de tu agenda online.
+- **Lo que no sabe te lo pasa a vos** con la conversación completa.
+- Atiende **500 conversaciones al mes**; si se agotan, las nuevas pasan a una persona de tu
+  equipo, y podés sumar 200 más por Bs 190 (valen hasta fin de mes).
+- **Los mensajes de WhatsApp los cobra Meta** directo en tu cuenta de WhatsApp Business, no
+  nosotros: cada mensaje, también las respuestas desde el 1 de octubre de 2026, unos
+  Bs 0,13 cada uno (la tarifa la fija Meta).
+
+---
+
+## La cuenta (hacela con tus números)
+
+Pensá en un paciente con un tratamiento de varias sesiones que dejó de venir. ¿Cuánto vale
+lo que le falta? **Si Onia te ayuda a recuperar uno o dos de esos por mes, el plan se
+pagó.** La cuenta la hacemos juntos en la demo, con tu ticket, no con uno inventado.
 
 ---
 
 ## Condiciones claras
 
-- **Cobro trimestral adelantado por QR** (3 meses por vez, un solo pago).
-- **Precio de lanzamiento respetado 12 meses** a quien cierre en esta fase. Después, ajuste semestral indexado al tipo de cambio oficial del BCB o al IPC del INE (el mayor) — te lo decimos de frente: en un país donde el dólar se movió 63% en un mes, nadie serio te promete precio congelado de por vida.
-- **Costos por uso de terceros van aparte**: conversaciones de WhatsApp API (Meta) sobre el cupo, dominio y hosting si tomás web (van a tu nombre, nunca en nuestro precio).
-- Tus datos son tuyos: exportables cuando quieras.
+- **14 días de prueba gratis**, sin tarjeta.
+- **No cobramos implementación ni migración**: importás tus pacientes desde un Excel o CSV
+  con un asistente que te guía columna por columna, y la cuenta llega configurada para tu
+  rubro.
+- **Pagás mensual o anual** con el QR del BCP desde el sistema: escaneás desde la app de tu
+  banco, subís el comprobante y lo verificamos. Sin tarjeta ni contratos.
+- **Tus datos son tuyos**: los exportás en CSV cuando quieras.
+- **Costos de terceros van aparte y a tu nombre**: los mensajes de WhatsApp (Meta).
 
-**Siguiente paso:** demo de 20 minutos en tu clínica o por videollamada. Traé tu número de citas perdidas del mes pasado — la cuenta la hacemos con TUS números.
+**Siguiente paso:** demo de 20 minutos en tu clínica o por videollamada. Traé un dato:
+cuántos pacientes empezaron un tratamiento y no volvieron. Si no lo sabés, ése es justo el
+problema que resuelve Onia.
 
 ---
 ---
@@ -85,24 +112,23 @@ La competencia cobra la implementación y migración de datos entre **Bs 2.274 y
 ## Versión texto plano para pegar en WhatsApp
 
 ```
-*DentalGest* — la clínica ordenada, los pacientes que vuelven 🦷
+*Onia* — que ningún paciente te quede a medias
 
-Qué hace:
-✅ Agenda + fichas con odontograma e historial
-✅ Cada venta cerrada con detalle y monto, lista para facturar en el Portal Web del SIN (en todos los planes)
-✅ Agente que REPROGRAMA por WhatsApp cuando un paciente falta (te propone, vos aprobás)
-✅ Panel del dueño: sabés qué pasa en tu clínica sin estar encima
+El paciente que faltó o canceló y no volvió a agendar es plata que no entra. Onia te avisa cada mañana a quién escribirle:
+✅ Quien faltó o canceló y no tiene otra cita: el mensaje para reprogramar, listo para aprobar
+✅ Turno que se libera: te propone ofrecérselo a pacientes sin cita, y lo reservan ellos mismos
+✅ Quien hace meses no vuelve, las citas de mañana sin confirmar y los saldos vencidos
+Nada sale sin tu OK.
 
-Planes (lanzamiento):
-• Básico Bs 320/mes — ordenar la clínica
-• *PRO Bs 750/mes — que ningún paciente se te escape* ⭐
-• Full Bs 1.500/mes — la clínica opera sola
+Además: agenda, ficha con odontograma, agenda online, y cada venta lista para cargar en el portal gratuito del SIN.
 
-La cuenta: Pro cuesta lo mismo que DOS ajustes de ortodoncia (Bs 300-350 c/u). Si evita que dos pacientes falten en el mes, ya se pagó.
+Planes:
+• Crece Bs 550/mes — 2-3 profesionales + recepción
+• Profesional Bs 890/mes — 4-5 profesionales + recepción
+• Completo Bs 1.290/mes — sin topes, con el agente conversacional de WhatsApp incluido
+(anual: pagás 10 meses)
 
-🎁 Cerrando en esta fase de lanzamiento: *implementación y migración de datos GRATIS* (la competencia la cobra Bs 2.274-9.096).
+14 días de prueba gratis. Sin costo de implementación.
 
-Dato: desde el 1 de octubre solo se factura en línea (plazo del SIN). Podés cumplir gratis tipeando en el portal del SIN — nosotros hacemos que no tengas que tipear (nuestro emisor está en homologación ante el SIN; el estado real te lo contamos de frente en la demo).
-
-¿Te muestro en 20 min con los números de TU clínica? Respondé DEMO y coordinamos.
+¿Te muestro en 20 minutos con los números de tu clínica? Respondé DEMO y coordinamos.
 ```

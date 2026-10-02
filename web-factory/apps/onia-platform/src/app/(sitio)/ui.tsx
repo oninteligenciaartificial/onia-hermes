@@ -58,7 +58,7 @@ export type PanelId =
 /**
  * Rótulo accesible de cada panel. Va en el CONTENEDOR con role="img": el panel
  * se anuncia como UNA imagen con su frase, y no como fragmentos sueltos de
- * interfaz ("03:12 · cerrado", "Aprobar", "Aprobar", "Aprobar"...).
+ * interfaz ("07:10 · cerrado", "Aprobar", "Aprobar", "Aprobar"...).
  *
  * Vive acá y no en el call site a propósito: cada panel tiene UN rótulo
  * correcto, y dejarlo en la llamada era la forma segura de publicar uno vacío
@@ -66,7 +66,7 @@ export type PanelId =
  */
 const panelLabel: Record<Exclude<PanelId, "cuenta">, string> = {
   agentes:
-    "Pendientes de aprobación a las 03:12, con el negocio cerrado: tres propuestas que los agentes dejaron escritas de madrugada, cada una con su botón de aprobar. Nada se manda hasta que el dueño aprueba.",
+    "Pendientes de aprobación a las 07:10, con el negocio todavía cerrado: tres propuestas que los agentes dejaron escritas en su corrida de la mañana, cada una con su botón de aprobar. Nada se manda hasta que el dueño aprueba.",
   chat:
     "Conversación de WhatsApp a las 23:40: alguien pregunta si atienden el sábado y ya tiene la respuesta con el horario que el negocio publicó.",
   // El de "cuenta" NO está acá: enumera los mismos módulos que dibuja, así que
@@ -80,9 +80,9 @@ const panelLabel: Record<Exclude<PanelId, "cuenta">, string> = {
   importadora:
     "Cotizaciones de una importadora eléctrica: una aprobada, una enviada y una esperando respuesta.",
   estetica:
-    "Tratamientos en curso de un centro de estética: uno al día, otro de una clienta que no volvió, y el control post-tratamiento ya puesto en la agenda.",
+    "Tratamientos en curso de un centro de estética: dos al día y uno de una clienta que no volvió.",
   servicios:
-    "Cierre de mes de un estudio profesional: el IVA y el IT del mes ya armados, y el reporte del mes esperando revisión.",
+    "Cierre de mes de un estudio profesional: el IVA y el IT del mes ya armados con lo cobrado en Onia, y el reporte del mes esperando revisión.",
 };
 
 /**
@@ -190,9 +190,11 @@ function PanelCuerpo({ panel, plan }: { panel: PanelId; plan?: PlanId }) {
           {/* "Para aprobar" y no "Pendientes de aprobación": con el piso
               tipográfico nuevo el título largo pedía 155px en una cabecera de
               134px a 375, y se cortaba con ellipsis contra el sello de la hora.
-              El sello se queda —"03:12 · cerrado" ES medio argumento—, así que
-              el que cede es el título. */}
-          <Head titulo="Para aprobar" sello="03:12 · cerrado" />
+              El sello se queda —"07:10 · cerrado" ES medio argumento—, así que
+              el que cede es el título. Decía "03:12": los agentes corren UNA
+              vez por día, a las 07:00 La Paz (cron 0 11 * * *), no de
+              madrugada. Mismo largo, así que la cabecera no se mueve. */}
+          <Head titulo="Para aprobar" sello="07:10 · cerrado" />
           <ul className={s.panelRows}>
             {PENDIENTES.map((q) => (
               <Fila key={q} txt={q} pill="Aprobar" />
@@ -297,7 +299,11 @@ function PanelCuerpo({ panel, plan }: { panel: PanelId; plan?: PlanId }) {
        `recallAfterDays`: por TIEMPO SIN VOLVER. Antes decía «Paquetes en
        curso» con un contador de sesiones hechas y faltantes, y ese saldo el
        producto no lo lleva — `PatientTreatment` tiene estado, no total
-       contratado. */
+       contratado.
+       2026-10-01: la tercera fila decía «Control post-tratamiento · En agenda»
+       y se sacó por corrección de Sergio Urcullo: el Recall dispara por tiempo
+       sin volver y PROPONE a quién invitar; un control ya agendado solo no es
+       lo que se demuestra acá. Quedó otro tratamiento al día. */
     case "estetica":
       return (
         <>
@@ -305,7 +311,7 @@ function PanelCuerpo({ panel, plan }: { panel: PanelId; plan?: PlanId }) {
           <ul className={s.panelRows}>
             <Fila txt="Limpieza facial" pill="Al día" hecho />
             <Fila txt="Depilación láser" pill="No volvió" />
-            <Fila txt="Control post-tratamiento" pill="En agenda" hecho />
+            <Fila txt="Peeling químico" pill="Al día" hecho />
           </ul>
           <p className={s.panelFoot}>
             La clienta que dejó el tratamiento a medias no se pierde.
@@ -352,7 +358,7 @@ function PanelCuerpo({ panel, plan }: { panel: PanelId; plan?: PlanId }) {
             <Fila txt="Reporte del mes" pill="Revisar" />
           </ul>
           <p className={s.panelFoot}>
-            Llegás al cierre con el IVA y el IT ya armados.
+            Con lo que cobrás en Onia, el IVA y el IT ya armados.
           </p>
         </>
       );

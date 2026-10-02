@@ -1,6 +1,194 @@
-# Handoff — continuar la 1.0 en Codex
+# Handoff — la 1.0 de Onia (Codex → Claude, 28/29-sep)
 
-> ## 🧭 EMPEZÁ ACÁ (Codex, 27-sep-2026) — lo demás de este archivo es historia de apoyo
+> ## 🧭 EMPEZÁ ACÁ (Claude, 30-sep-2026 madrugada) — cierre del día; los bloques de abajo son historia
+>
+> **1. Objetivo.** Publicar la 1.0 usable y vendible (5 rubros) con el OK de Sergio Urcullo, y seguir
+> estudiando competencia como IDEAS (no copiar). Sesión PAUSADA a pedido de Sergio: PC apagada.
+>
+> **2. En producción:** sin cambios de app (release-c3b92067). VPS: igual que el bloque de abajo + el
+> vigía de crons ahora llama onia-tg.sh con ONIA_AVISO=sistema ONIA_AVISO_EMISOR=cron-clientes.
+>
+> **3. Candidato 1.0 (NO publicado):** platform `7d85b3d4` en `origin/wip/v1-integracion-20260928`
+> (PR #90), suite completa 8.570 ok / 0 fallos. Web `codex/v1-hermes-20260928` en
+> `origin/wip/v1-hermes-20260928`. Sobre lo de la noche anterior se sumó HOY: Confirmar/No asistió en la
+> agenda; editar producto, precio y stock (permiso nuevo «Cambiar precios» = prices.write, solo dueño;
+> el empleado de comercio carga y ajusta stock); Pendientes en el menú con contador; cotizaciones de
+> importadora imprimibles, por WhatsApp (teléfono obligatorio) y «Entregar pedido»; origen del alta
+> (signupOrigin) visible en /admin; web con utm/src/fbclid al registro, ?plan= y píxel liviano (política
+> v1.3); servicios profesionales con Inicio de agenda, «Profesional» con agenda propia y cobros en la
+> ficha; crear cita pide agenda.write; editar y dar de baja clientes en los 5 rubros (en clínica la
+> historia no se borra); API de Caja con permisos. El aviso directo de «alta nueva» quedó APAGADO
+> (ONIA_AVISO_ALTA_DIRECTO): lo emite la sesión de control por su aduana (pedido enviado 30-sep 03:06).
+>
+> **4. Publicar exige (con el OK):** respaldo + **5 migraciones aditivas** en este orden:
+> 20260927050000_add_web_service_requests, 20260928010000_add_web_visual_selection,
+> 20260928020000_add_subscription_payment_quotes, 20260929173000_add_organization_signup_origin,
+> 20260929220000_add_patient_deactivated_at (las dos últimas ANTES del swap: sin ellas la app nueva no lee
+> organizations/patients) · ONIA_WHATSAPP_INBOX_ID=5 en app.env · apagar el proveedor de teléfono de
+> GoTrue · merge PR #90 · publicador · mirar · web wip→main · purgar/ver píxel en «Probar eventos» ·
+> n8n wf-04/wf-05 (cobranza/cumpleaños) con `AND p."deactivatedAt" IS NULL` si están activos.
+>
+> **5. Competencia (research/onia-1.0-29sep/):** COMPETENCIA_SENDYPRO, _MANYCHAT, _DOCTOCLIQ (por dentro,
+> solo lectura, con cuentas de Sergio) y _BOTS_WHATSAPP (web viva). Regla: ideas para evaluar, no copiar;
+> web viva, no guías. SendyPro es cuenta de «Arthur Teles» con WhatsApp real NUVO conectado: nunca abrir
+> chats/contactos. La pauta de Meta Ads ahora la arma la sesión «Análisis de mercado» (se le pasó el plan).
+>
+> **6. Intentos fallidos/trampas de hoy:** `next dev` con Turbopack rechaza node_modules por junction:
+> usar `next dev --webpack` (worktrees en E: con junction a E:/onia-wt/_checkout-deps-20260929); dos
+> agentes se cortaron por red (se retomaron); un agente se equivocó con permisos (le quitó cobros al
+> empleado) y se corrigió separando prices.write.
+>
+> **7. Depende de Sergio / próximos pasos:** (1) «OK publicar 1.0» sobre https://claude.ai/artifact/RLKFmPwBxqaat4gpU1LyCW
+> (falta sumarle las capturas de hoy); (2) decisiones chicas: /cita no debería aceptar cancelar una cita
+> que ya pasó (recomendado sí); ¿/api/v1/patients oculta dados de baja?; ¿la baja libera cupo del plan?;
+> ¿esconder la plata del Inicio de comercio a quien no tiene Caja? (recomendado sí); ¿panel de importadora
+> pide finance.read?; (3) arreglos chicos pendientes: el 409 de «no se puede dar de baja» muestra el monto
+> de deuda a quien no tiene Caja; /api/comercio/transfers y crear almacenes sin inventory.write;
+> (4) cuentas de competencia (Lety y Dapta primero; ver memoria recordar-a-sergio-cuentas-competencia);
+> (5) conector de Cloudflare, tarjeta de ONIA Ads, 3 leads sin contestar, SIAT Fase 1 (portal), leer
+> privacidad v1.3; (6) mudanza a la nube solo con su orden «mudá la sesión a la nube».
+>
+> ## 🧭 EMPEZÁ ACÁ (Claude, 29-sep-2026 noche) — la sesión se mudó a la nube; el bloque de la madrugada queda abajo como historia
+>
+> **1. Objetivo.** Igual que antes: la 1.0 de Onia usable y vendible en los 5 rubros. Hoy se sumaron tres
+> órdenes de Sergio Urcullo: (a) **rediseño visual primero** (nada vacío, poco texto, celular primero,
+> que no parezca hecho con IA); (b) **velocidad y que NO se caiga** por encima de todo; (c) **no es solo
+> dental**: 5 rubros, cada uno con sus funciones. Después: inventario de módulos, venta y Meta Ads.
+>
+> **2. En producción (sin cambios de app hoy).** Platform sigue en `release-c3b92067`. En el VPS, con OK
+> de Sergio: runners de CI con prioridad baja (`onia-runner-platform` 1 CPU/cpu-shares 256, hermes 128;
+> `/opt/onia-runner/instalar.sh` actualizado); `apt-mark hold` de docker-ce/cli/containerd/compose/buildx;
+> los 6 crons de clientes envueltos en `/root/bin/onia-cron-vigilado.sh` (línea fechada por corrida y aviso
+> por `onia-tg.sh` en modo tablero si fallan; respaldo `/root/crontab.bak-20260929-vigia`); borrados los 7
+> `/opt/onia-platform/build-*` viejos (disco 87 → 76 %). Verificado: prod conecta directo a Postgres 15.8
+> (`db:54329`, sin pooler) y `statement_timeout` por parámetro de arranque SÍ aplica (20 s).
+>
+> **3. Candidato 1.0 (NO publicado), empujado como respaldo.**
+> | Qué | Dónde |
+> |---|---|
+> | Platform | rama `codex/v1-integracion-20260927` **`a76e7bf8`** → `origin/wip/v1-integracion-20260928` (PR borrador #90) |
+> | Hermes (web + docs) | rama `codex/v1-hermes-20260928` → `origin/wip/v1-hermes-20260928` |
+> | Suite | 7.927 pasan; 5 fallan SOLO por timeout bajo carga en Windows y pasan solos (82/82). Árbitro: CI Linux del PR #90 |
+> Qué se sumó hoy: nombres honestos de agentes («Recuerda cobros», «Avisa stock bajo»); kit UI
+> (`components/ui/*`, verde de marca #027650, acento #00D26A solo acento, **tipografía Instrument Sans +
+> IBM Plex Mono** — decisión de Sergio, «la B, estilo Fanvue»); 6 carriles de rediseño (estabilidad:
+> timeouts BD/externos, `/api/health`, app noindex; velocidad: íconos 250→75 KB, caché de fuentes 1 año,
+> sesión 1 vez por request; Inicio/Agentes multi-rubro; Pendientes/Ficha/Agenda con primer dibujo del
+> servidor; checkout con QR en el 2.º pantallazo y `?plan=` persistente; barra inferior de 5 lugares +
+> agente conversacional); arreglo de revisión (un timeout de Meta/Chatwoot nunca reenvía un WhatsApp);
+> integración UI. Página de revisión: https://claude.ai/artifact/RLKFmPwBxqaat4gpU1LyCW
+>
+> **4. Documentos de hoy (todo en `hermes-content/docs/research/onia-1.0-29sep/`):** reglas UI v2, plan de
+> rediseño, vendible vs competencia (dental y otros rubros), SaaS real, paquete único, **INVENTARIO_POR_RUBRO**,
+> **ADMINISTRAR_PARA_VENDER**, **CAMPANA_META_ADS** (página: https://claude.ai/artifact/7XetamLf8eEQLWtK9x1dro).
+> Velocidad y estabilidad: `hermes-content/docs/ONIA_VELOCIDAD_Y_ESTABILIDAD.md` + `scripts/velocidad/`.
+>
+> **5. Intentos fallidos y trampas.**
+> - El `node_modules` COMPARTIDO del candidato (junction de todos los worktrees) se borró a medias a las
+>   10:41 (un agente limpiando su copia): se restauró con robocopy desde otro worktree con lockfile idéntico
+>   + `prisma generate`. **Nunca** borrar un worktree con junction de forma recursiva (`cmd /c rmdir`).
+> - `next dev` no arranca en worktrees de E: con `node_modules` en C:: los worktrees nuevos van en C:.
+> - Presupuesto de JS del panel: según el script, las rutas miden 339-349 KB o 385-431 KB gz; unificar la
+>   medición antes de usarla como gate (1.0.1).
+> - Crear cuentas de terceros está prohibido aunque Sergio lo pida: se proponen alternativas en cuentas suyas.
+>
+> **6. Lo que depende de Sergio Urcullo.** (1) «OK publicar 1.0» sobre la página de revisión (necesita la
+> laptop: VPS). (2) Decisiones de la página: Inicio de servicios profesionales, un primario por tarjeta en
+> Pendientes, asistente vs formulario del agente conversacional, 2.º rubro (se recomienda estética).
+> (3) Autorizar el conector de Cloudflare (vigía externo + copia R2 de la base, sin cuentas nuevas).
+> (4) Meta Ads: cargar método de pago en ONIA Ads `act_1073680778314945`, vincular página/IG/WhatsApp,
+> aprobar piezas y gasto. (5) Contestar los 3 leads que esperan. (6) SIAT: entrar al portal en la pestaña
+> «Claude» para leer la Fase 1 (runner en `/opt/onia-siat/runner-20260929`).
+>
+> **7. Próximos pasos, en orden.**
+> 1. Con el OK: publicar 1.0 (respaldo + 3 migraciones + `ONIA_WHATSAPP_INBOX_ID=5` + apagar proveedor de
+>    teléfono de GoTrue + merge PR #90 + publicador + mirar) y la web (`wip/v1-hermes-20260928` → main).
+> 2. Huecos que el inventario confirmó (verificado en código): agenda sin «Confirmar» ni «No asistió» (la API
+>    los acepta, la pantalla no); comercio sin editar producto ni precio (no hay PATCH en
+>    `app/api/comercio/products`); «Pendientes» fuera de todo menú; importadora: la cotización no se
+>    imprime/envía; servicios: Inicio sin agenda. Ver INVENTARIO_POR_RUBRO §4.
+> 3. Antes de pagar publicidad: recorrido con sesión sobre base DESCARTABLE (INVENTARIO §7), píxel/`?src=`
+>    en el alta, aviso de alta nueva, frase de campaña en el bot.
+> 4. 1.0.1: peso del panel, L1 fase 2 (sesión por proxy), recordatorios WhatsApp con botones, Caja comercio,
+>    factura SIAT dentro del sistema.
+> **Qué puede la sesión en la nube y qué no:** código, tests (Linux), revisiones, documentos y artifacts: sí.
+> VPS (deploy, SIAT, crons), Chrome de Sergio y la memoria local de Claude (`~/.claude/projects/...`): NO;
+> la llave del VPS no sale de la laptop (regla de Sergio). Los worktrees locales no existen en la nube:
+> trabajar sobre las ramas `wip/*` de GitHub.
+>
+> ## 🧭 EMPEZÁ ACÁ (Claude, 29-sep-2026 madrugada) — lo de abajo es historia de apoyo
+>
+> **1. Objetivo.** Cerrar la 1.0: un cliente de los 5 rubros descubre, prueba, usa y paga Onia sin un
+> humano de Onia y sin una promesa falsa. Codex (cuota agotada al 99 %) le pasó el candidato a Claude el
+> 28-sep (traspaso: `onia-platform-v1-integracion-20260927/docs/ONIA_TRASPASO_CLAUDE_20260928.md`).
+>
+> **2. En producción y verificado (29-sep, 03:27-03:36 UTC).** Platform `release-c3b92067`
+> (BUILD `Bro1EA6eJeLv3cvDtPZRs`, rollback `onia-platform-prev-PNIhLndY-20260929-032719`): pago con el
+> **QR estático del BCP** en el checkout (`/pago/qr-bcp-onia.png` 200), **ícono verde con «on» negro**,
+> aviso de Meta **sin tramo gratis** (fuente oficial: desde el 1-oct-2026 Meta cobra cada mensaje de
+> servicio, «Volume tiers: None»). Web: «pagás con nuestro QR» (BUILD `5k0gr8iqCdGMnG_ZMnkze`).
+> **CI gratis:** GitHub Free agotó sus 2.000 min; ahora corre en **runners propios en el VPS**
+> (`onia-runner-platform` 1,5 CPU/6 GB, `onia-runner-hermes` 0,5/1,5 GB, actions/runner v2.337.0 con
+> SHA verificado, sin socket Docker, usuario no root). Parche de disponibilidad de Hermes desplegado y
+> el job de agenda de las 08:00 con la skill `agenda-calendario` (ya no inventa horarios).
+>
+> **3. Candidato 1.0 listo para aprobar (NO publicado).**
+> | Qué | Dónde |
+> |---|---|
+> | Platform integrada (15 ramas + master) | `C:/dev/proyectos/onia-platform-v1-integracion-20260927`, rama `codex/v1-integracion-20260927`, **`cef98232`**, respaldo `origin/wip/v1-integracion-20260928`, PR borrador **#90** (CI en el runner) |
+> | Hermes (web + configurador + kit + docs) | `C:/dev/proyectos/onia-hermes-v1-remoto-20260928`, rama `codex/v1-hermes-20260928`, respaldo `origin/wip/v1-hermes-20260928` |
+> | Suite nativa del candidato | **7.695 pasan / 0 fallan** (CI=true, 29-sep) · tsc 0 · eslint 0 errores |
+> Qué trae: todo lo de Codex (DG-088..099: Mi web + configurador, quote de pago inmutable, recurrentes,
+> horarios); arreglos de 3 revisiones adversariales (cookie de Mi web, cadencia y doble emisión de
+> recurrentes, cierre a medianoche, cambio de plan convertido por relación de precios mensuales, webhook
+> BCP atado al pago, referencias de pago, permisos finos en APIs de plata/config/chatbot/suscripción
+> —incluido el QR de cobro—, ventana de 24 h de WhatsApp, inbox de Onia excluido, choques entre agentes);
+> **WhatsApp saliente desde el número del cliente** (Embedded Signup + plantilla en su WABA);
+> **destrabe del aprobador único** (7 días); **Reprogramador**; **Recall de tratamientos a medias** +
+> **Plan de tratamiento** en la ficha; panel **«Lo que te dejó Onia»** + botón **«Ya lo envié»**; copy
+> honesto y nombre **«Agente conversacional de WhatsApp»**; kit de venta reescrito con gate.
+>
+> **4. Para publicar (con el «OK» de Sergio Urcullo sobre la página de revisión):**
+> (a) aplicar las 3 migraciones aditivas (`20260927050000_add_web_service_requests`,
+> `20260928010000_add_web_visual_selection`, `20260928020000_add_subscription_payment_quotes`) con
+> backup previo (skill `onia-db`); (b) **`ONIA_WHATSAPP_INBOX_ID=5` en `/opt/onia-platform/app.env`
+> ANTES del swap** (sin ella, en producción el resolver no presta ningún token de inbox: falla cerrado);
+> (c) merge del PR #90 a `master` con CI+Security verdes → `publicar.sh` → «PUBLICADO Y VERIFICADO» →
+> mirar las pantallas nuevas; (d) Hermes: push de la rama a `main` → publicador de la web → mirar
+> `/agentes`, `/chatbot`, `/precios` y que `/v1` redirija 308.
+>
+> **5. Intentos fallidos y trampas (no repetirlos).**
+> - Un veredicto sobre Meta con fuente de terceros («1.000 gratis») estuvo a punto de publicarse: la
+>   página oficial no lo dice. Precios de proveedores SOLO de la fuente oficial.
+> - El runner con 4 GB murió por memoria en `next build` (subido a 6 GB). Un checkout completo de hermes
+>   en el runner dejó 11 GB en el disco del VPS: solo `repo-pulse` corre ahí con clon parcial.
+> - Vitest en Windows: timeouts de tests que recorren el repo (`stock.test.ts` advisory lock,
+>   `backup-onia-postgres`, `rango-gitleaks`) — pasan solos; el CI de Linux es el árbitro.
+> - Los «falta mergear» de las colas viejas caducan: medir `origin/master` y la imagen que corre.
+>
+> **6. Lo que depende de Sergio Urcullo.**
+> 1. **OK sobre la página de revisión de la 1.0** (y con eso, las 3 migraciones).
+> 2. Probar «Conectar mi WhatsApp» con un número real (7 pasos en el informe de la rama wa-saliente) —
+>    confirma que Chatwoot entrega el token y que la plantilla sale aprobada.
+> 3. Compartir su calendario personal (`sergio.urcullo.m@gmail.com` → «Ver solo disponibilidad» a
+>    `oninteligenciaartificial@gmail.com`) para que Hermes vea su agenda real.
+> 4. Levantar WSL en la PC de casa (`DESKTOP-0GGGNMF`): el túnel `127.0.0.1:2222` está caído desde el
+>    28-sep 16:00 UTC (propuesta de disparador cada 10 min, sin aplicar).
+> 5. SIAT Fase 1 (80 %, VI 150/560, IX 60/160): manual por su procedimiento; pedir Fase 2 antes del 04-nov.
+> 6. Decisión de la etapa post-1.0: modelo de IA para el agente (recomendado gpt-4.1-mini → GPT-6 Sol,
+>    respaldo Sonnet 5.5, Opus 5.5 como juez; Sergio pidió revisarlo una vez más) y el paquete S/M.
+>
+> **7. Después de la 1.0 (decidido, en este orden sugerido):** IA en las respuestas del agente
+> conversacional (con evals en voseo, topes por contacto/hora y clave LiteLLM por org); plantillas de
+> Meta para los mensajes de agentes fuera de la ventana de 24 h; checkout del paquete único S/M con
+> medidores de cupos y techo de Meta en Bs; agendar dentro del chat; campañas de marketing automatizadas
+> con su pago; versiones a medida para empresas desde un archivo de configuración; agente de llamadas
+> (solo llamadas entrantes de WhatsApp, por bloques de minutos). Documentos de decisión: artifacts
+> «Onia Todo Incluido» (claude.ai/artifact/DVcDcZSXxo7SHXPPkCeKq3) y «Onia: IA y competencia»
+> (claude.ai/artifact/49tFiGrgQ5FRETKjecSY5p).
+
+
+> ## 🗂️ (historia) EMPEZÁ ACÁ de Codex, 27-sep-2026
 >
 > **1. Objetivo.** La 1.0 = un cliente de los 5 rubros **descubre, prueba, usa y paga** Onia sin un
 > humano de Onia y sin una sola promesa falsa (`cola/plataforma-v1.md` §«Definición 1.0»). La etapa

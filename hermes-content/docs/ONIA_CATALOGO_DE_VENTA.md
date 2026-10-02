@@ -89,7 +89,8 @@ solo las suyas (§2).
 3. **Titular del QR:** muestra un nombre de persona, distinto de «OniaAgency». Puede frenar el pago.
 4. **Chip prepago** para la prueba real del WhatsApp del cliente. Con eso pasan a ✅ el agente
    conversacional y el recordatorio por WhatsApp.
-5. **Cerrar la API de alta:** `POST /api/auth/register` acepta 8 rubros, mientras la pantalla ofrece 5.
+5. ~~**Cerrar la API de alta.**~~ ✅ Hecho (PR #96, en producción desde `release-8ff1284d`). Medido en vivo el
+   1-oct: `verticalTrackId` `vetgest-clinical` y `onia-interna` → 400; acepta solo los 5 que ofrece la pantalla.
 
 ## 7. Lo que NO se puede prometer (no se nombra en la venta)
 
@@ -100,3 +101,35 @@ solo las suyas (§2).
 - Pago con tarjeta y QR que activa el plan solo.
 - Varias sucursales, modo offline, visión por computadora.
 - Cualquier cifra o testimonio de clientes: hoy hay cero clientes pagando.
+
+## 8. La IA: qué se puede decir y qué no (medido 2-oct)
+
+Inventario completo, con pruebas: `docs/research/ONIA_INVENTARIO_IA_20261002.md`. La IA de verdad, hoy, es UNA pieza:
+el **redactor de los agentes** (gpt-4.1-mini vía el LiteLLM propio): escribe UNA plantilla por agente cuando el dueño
+la pide, nunca ve datos de pacientes, y el dueño la aprueba una vez. Uso real: 1 prueba interna, 0 plantillas aprobadas.
+Todo lo demás (a quién escribir, la ayuda, el agente de WhatsApp) son reglas y guiones, sin LLM.
+
+**Se puede decir** (cada una con su plan):
+1. «Onia te propone con IA el texto de cada recordatorio —cobros, confirmación de citas, pacientes que no vuelven—
+   con el tono de tu negocio. Vos lo revisás y lo aprobás una sola vez.» — Crece (50 textos/mes), Profesional y la
+   prueba (150), Completo y Empresa (400). Básico no.
+2. «La IA no ve los datos de tus pacientes: escribe el modelo del mensaje y Onia le pone el nombre, el monto o la hora
+   a cada uno.» — igual que la 1.
+3. «Todas las mañanas Onia revisa tu agenda y tus cobros y te deja anotado a quién escribirle —quien hace 6 meses no
+   vuelve, quien te debe, quien tiene cita mañana— con el mensaje listo. Nada sale sin que vos lo apruebes.» — Crece en
+   adelante y la prueba (sin IA: son reglas).
+4. «Cuando un insumo baja del mínimo, Onia te deja anotada la tarea de reponerlo.» — Crece en adelante, rubros con
+   inventario.
+5. «Preguntale a Onia "¿cuánto me deben?", "¿cuánto cobré hoy?", "¿qué citas tengo hoy?" o "¿qué está bajo el
+   mínimo?" y te contesta con tus números.» — todos (lo de plata, con permiso de finanzas).
+6. «Pegá el link de tu página web y Onia te carga nombre, teléfono, dirección, horarios y servicios.» — todos (solo web
+   propia, no Facebook).
+Antes de publicar una frase, se abre su pantalla con sesión y se MIRA (la medición fue de código, base y logs).
+
+**NO se puede decir:** que la IA atiende o agenda por WhatsApp (el agente es un guion, a propósito, y ningún negocio
+lo tiene conectado) · que la IA escribe CADA mensaje o decide a quién escribir · «asistente con IA que responde lo que
+le preguntes» (busca en 30 fichas y sabe 4 datos de hoy) · que entiende fotos, comprobantes o notas de voz · que
+recupera pacientes con **tratamiento a medias** (el detector EXISTE en producción pero no encuentra a nadie: solo cuenta
+tratamientos marcados «En progreso», la ficha los carga «Pendiente», y hay 0 tratamientos cargados — se arregla en
+onia-platform, ver handoff Plataforma) · que ya lo
+usan clínicas (0 pagos; las 5 cuentas son internas o de prueba).

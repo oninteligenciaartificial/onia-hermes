@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import nextConfig, { cspDeLaLanding } from "../../next.config";
 import { CHATWOOT_BASE_URL, CHATWOOT_SDK_PATH } from "./chat-diferido";
+import { PIXEL_DESTINO } from "./pixel-de-meta";
 
 /**
  * La landing declara una CSP, y esa CSP deja vivo al widget que capta los leads.
@@ -85,13 +86,14 @@ describe("la CSP de la landing", () => {
     expect(directivas.get("default-src")).toEqual(["'self'"]);
   });
 
-  it("deja correr los dos scripts inline del layout", async () => {
+  it("deja correr los scripts inline del layout", async () => {
     const directivas = await directivasDeLaCsp();
 
-    /* `layout.tsx` cuelga dos `<script dangerouslySetInnerHTML>`: el que aplica
-     * el tema antes del primer paint y el que difiere el chat. Sin
-     * `'unsafe-inline'` el sitio arranca con el tema equivocado (parpadeo
-     * claro/oscuro) y el chat NUNCA se pide: el visitante se queda sin canal. */
+    /* `layout.tsx` cuelga tres `<script dangerouslySetInnerHTML>`: el que aplica
+     * el tema antes del primer paint, el que difiere el chat y el que lleva el
+     * origen de campaña al alta. Sin `'unsafe-inline'` el sitio arranca con el
+     * tema equivocado (parpadeo claro/oscuro), el chat NUNCA se pide y ningún
+     * alta se puede atribuir a su anuncio. */
     expect(directivas.get("script-src")).toContain("'unsafe-inline'");
   });
 
@@ -146,6 +148,20 @@ describe("la CSP de la landing", () => {
       directivas.get("script-src"),
       "la CSP bloquearía el beacon que Cloudflare inyecta en onia.com.bo",
     ).toContain("https://static.cloudflareinsights.com");
+  });
+
+  it("deja salir el aviso del píxel de Meta, y nada más de Meta", async () => {
+    const directivas = await directivasDeLaCsp();
+
+    /* El píxel `1012611478191231` nunca disparó porque no estaba instalado, y
+     * con esta CSP tampoco habría podido salir. Ahora avisa con un `fetch` GET
+     * a `/tr` (ver `origen-de-campana.ts`): alcanza con abrir `connect-src` a
+     * ese origen. La librería `fbevents.js` (connect.facebook.net) NO se carga
+     * —146 KB por visita— así que `script-src` no se abre a Meta. */
+    const origenDelPixel = new URL(PIXEL_DESTINO).origin;
+    expect(directivas.get("connect-src")).toContain(origenDelPixel);
+    expect(directivas.get("script-src")!.join(" ")).not.toMatch(/facebook/);
+    expect(directivas.get("img-src")!.join(" ")).not.toMatch(/facebook/);
   });
 
   it("deja al widget dibujarse: frame-src no puede ser 'none'", async () => {

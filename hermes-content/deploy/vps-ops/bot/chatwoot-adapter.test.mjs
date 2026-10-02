@@ -209,6 +209,31 @@ test("TRASPASO: si contesta OTRO usuario, el turno pide callar al bot", async ()
   });
 });
 
+test("SIN TRASPASO: lo que la plataforma escribe SOLA (marca onia_automatico) no silencia al bot", async () => {
+  // La respuesta a un boton del recordatorio sale con el token de la plataforma, que es el
+  // usuario 2 de Chatwoot (medido el 1-oct); el bot es el 3. Sin la marca, cumplia las cuatro
+  // condiciones del traspaso y el bot quedaba mudo con ese paciente.
+  await conIdentidadDelBot(3, () => {
+    const automatico = parseChatwootWebhook(
+      outgoingFixture({
+        sender: { id: 2, name: "OnIA", type: "user" },
+        content: "¡Listo! Tu cita quedó confirmada.",
+        content_attributes: { onia_automatico: "respuesta-al-recordatorio" },
+      }),
+    );
+    assert.equal(automatico.skip, true, "no es un humano: no hay traspaso que anotar");
+    assert.equal(automatico.turn, undefined);
+
+    // Una marca vacia o basura NO alcanza: ante la duda, sigue siendo un humano.
+    for (const attrs of [{ onia_automatico: "" }, { onia_automatico: true }, { otra: "x" }, null]) {
+      const humano = parseChatwootWebhook(
+        outgoingFixture({ sender: { id: 2, name: "OnIA", type: "user" }, content_attributes: attrs }),
+      );
+      assert.equal(humano.turn?.human_takeover, true, `content_attributes ${JSON.stringify(attrs)}`);
+    }
+  });
+});
+
 test("TRASPASO con PLANTILLA: el nombre de Meta viaja en el turno (utility y marketing no cuestan igual)", async () => {
   await conIdentidadDelBot(3, () => {
     const parsed = parseChatwootWebhook(plantillaFixture("seguimiento_demo"));

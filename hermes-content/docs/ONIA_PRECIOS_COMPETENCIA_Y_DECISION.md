@@ -324,3 +324,35 @@ Y una trampa concreta: **Bs 390 significa el chatbot en `pricing.ts` y un plan c
 
 - **facturacion-facil.com.bo** aparece primero para "facturación electrónica Bolivia" y publica $199/$599/$1.499. Su contenido es **mexicano** (CFDI, DIOT, complemento REP 2.0, addendas, Contpaq). Nada de eso existe en el régimen boliviano. **Si alguien lo cita como benchmark local, el número es falso.**
 - **yo-facturo.com/bo** rankea bien para SIAT y publica precios en **pesos argentinos**, declarando que su soporte boliviano está en lista de espera. No es competidor vivo hoy — pero llega con SEO ya posicionado, así que conviene monitorearlo.
+
+---
+
+## Relevamiento 28/29-sep-2026: cómo cobra la competencia y dónde queda Onia
+
+> Traído de `research/onia-1.0-29sep/PAQUETE_LLM_CONCLUSION.md` §4 (un tema, un archivo: pedido de la sesión de Mercado, 30-sep). Estudios por dentro del 29-sep, con cuenta de Sergio Urcullo: `research/onia-1.0-29sep/COMPETENCIA_SENDYPRO.md`, `COMPETENCIA_MANYCHAT.md`, `COMPETENCIA_DOCTOCLIQ.md` (si ya está) y el público `COMPETENCIA_BOTS_WHATSAPP.md`. Los precios de Onia NO salen de acá: se leen de `subscription-plans.ts` y `pricing.ts`.
+
+| Quién | Cómo cobra (oficial, 28-sep-2026) | IA | Meta | Gestión clínica |
+|---|---|---|---|---|
+| Kommo | USD 25-45 por usuario al mes, compromiso de 6 meses | Créditos (~150 respuestas por usuario en Pro) | A costo, en el Billing Hub de Meta | No |
+| Respond.io | USD 79-279 | Créditos desde Growth | Aparte | No |
+| Leadsales | USD 97-247 + Lead Agent desde 87 | Add-on | No lo publica | No |
+| HighLevel | USD 97 + AI Employee 50/97 + WhatsApp 10 = ~USD 204 por un negocio | Add-on | Revendible con recargo | No |
+| Botmaker | USD 149-499 por conversaciones + 99 único | Incluida | +20% en notificaciones | No |
+| Manychat | USD 14-139 por contactos | Desde Pro | Facturado por Manychat [tercero] | No |
+| Dapta | USD 99-1.499 en créditos | Incluida | No lo publica | No |
+| Lety.ai | USD 97-497, **solo agencias** | Tokens al costo; la agencia recarga | Al costo | No |
+| Dentalink / Medilink | A cotizar; Contact Center IA por demo | Sin precio | No lo publica | **Sí** |
+| AgendaPro (Julia) | USD 9-199 + WhatsApp desde 7; Julia por demo | Sin precio | Aparte | **Sí** (estética) |
+| Doctocliq (Soyla) | USD 0-49; IA como add-on sin precio | Sin precio | Por país | **Sí** |
+| **Onia** | **S ~USD 83 · M ~USD 113** (a 11,37), por negocio | Cupo en conversaciones | Aparte, con techo en Bs | **Sí** |
+
+Fuentes: kommo.com/pricing, respond.io/pricing, leadsales.io/precios, gohighlevel.com/pricing, botmaker.com/es/precios, manychat.com/pricing, dapta.ai/pricing, lety.ai/pricing, softwaredentalink.com/es/planes, agendapro.com/es/planes, doctocliq.com/planes-y-precios. Treble.ai tiene la página de precios con contraseña; en Wati los montos no se renderizaron.
+
+**Lectura** [D]:
+- Nadie mete a Meta dentro de la mensualidad. Onia, como Tech Provider, ya cobra igual que el mercado.
+- Solo la capa conversacional con IA de un generalista ya cuesta más que Onia S (Kommo con 3 usuarios USD 135, HighLevel USD 204, Botmaker USD 149), y ninguno trae gestión clínica.
+- Los verticales de clínica (Dentalink, AgendaPro) venden la IA por demo, sin precio público, y configuran ellos. Onia puede ganar mostrando el precio.
+- **El precio no es el problema; la brecha es de producto.** Todos responden con un LLM y Dentalink y AgendaPro agendan dentro del chat. Onia hoy responde con guion y manda un link.
+- **Ojo con la comparación:** tu cliente real no compara contra Kommo. Compara contra Excel + WhatsApp gratis + su recepcionista. Eso solo lo contestan entrevistas (§7, punto 8).
+
+---

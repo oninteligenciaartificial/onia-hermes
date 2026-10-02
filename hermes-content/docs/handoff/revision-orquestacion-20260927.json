@@ -1,0 +1,72 @@
+{
+  "recordedAt": "2026-09-27T23:30:45.396631+00:00",
+  "scope": "Cierre y revisión local; no scheduler ni coordinación distribuida",
+  "modelReview": {
+    "version": 1,
+    "wave": "onia-1-0-orquestacion",
+    "lane": "orquestacion",
+    "owner": "root",
+    "backlogRef": "hermes-content/docs/handoff/homelab-orquestacion-20260927.md",
+    "baseCommit": "d0757d4dba38112873b6988f7b0e37e589bef283",
+    "headCommit": "d0757d4dba38112873b6988f7b0e37e589bef283",
+    "candidateSha256": "27f4377533577b29ea51e36ffaa8990e6302741ef3ff3344deeb100d798834c3",
+    "testEvidenceSha256": "9373bf054ccc22e91e0cbdbcfd5891e455854d668896a3f50026b0c991b68a7c",
+    "files": [
+      "COORDINATION_MANIFEST.md",
+      "hermes-content/docs/cola/tandas-v1.json",
+      "scripts/loops/README.md",
+      "scripts/loops/revision-tanda.schema.json",
+      "scripts/loops/tandas-v1.mjs",
+      "scripts/loops/tandas-v1.test.mjs"
+    ],
+    "checks": [
+      {
+        "argv": [
+          "node",
+          "--test",
+          "scripts/loops/tandas-v1.test.mjs"
+        ],
+        "code": 0,
+        "outputSha256": "213814088eb1cc7b6d1e024f59adee97f4a41747f3d300904437d93d7e578d37"
+      },
+      {
+        "argv": [
+          "node",
+          "scripts/loops/tandas-v1.mjs",
+          "validate"
+        ],
+        "code": 0,
+        "outputSha256": "8e8cef20a903a34639642fee61f93b67532cc09ca338c9129e03c6d58c6feb07"
+      }
+    ],
+    "reviewerModel": "gpt-5.5",
+    "reviewerEffort": "medium",
+    "reviewerVerdict": "escalar",
+    "verdict": "escalar",
+    "strongReviewRequired": true,
+    "summary": "La tanda es sensible y ademÃ¡s toca/referencia carriles con SIAT/deploy/backup en la coordinaciÃ³n, por lo que no corresponde emitir apto sÃ³lo con esta revisiÃ³n local. No encontrÃ© un bug claro en el diff provisto que obligue a corregir antes de revisiÃ³n fuerte, pero el alcance declara explÃ­citamente que Luna no autoriza despliegue y que requiere revisiÃ³n separada.",
+    "findings": []
+  },
+  "integrationFileHashes": {
+    "COORDINATION_MANIFEST.md": "da218e2f2925da9042817b9dd4e940d59462d581ac9016c2f8bb285e77513a07",
+    "hermes-content/docs/cola/tandas-v1.json": "60e94338f1b419c1fddeb512d83913d44f68ef30cae884d2b63c497d6a21a98f",
+    "scripts/loops/README.md": "520c1c69c139be6c46d470cb680285d409dea9b6bb39c67c2f67e25d58870982",
+    "scripts/loops/revision-tanda.schema.json": "9eef10337159641ace45af78203eba8c896580d71942a35caa1cff099a25f1fe",
+    "scripts/loops/tandas-v1.mjs": "6e569da01b14a4501d2acbe5089749eeb948eb2b397018984bd1b1ed2ad6f37c",
+    "scripts/loops/tandas-v1.test.mjs": "b93362c73367aa8614f62471be3f38711f442a65543ccdaf10effb8a562ed989"
+  },
+  "integratorReview": {
+    "result": "apto-local",
+    "checks": [
+      "16/16 tests con revisor simulado, incluidas mutación, replay, bloqueo y terminación de nieto",
+      "Una revisión real gpt-5.5 medium terminó con JSON válido; sin hallazgos y escalamiento por sensibilidad",
+      "Hashes de los seis archivos coinciden entre copia revisada e integración",
+      "Elección explícita de modelo; intento Luna no admitido no produce aprobación"
+    ],
+    "limits": [
+      "No activado en cron, gateway, tablero ni nodo-casa",
+      "Locks single-host durante cierre, no reservas distribuidas durante desarrollo",
+      "No autoriza publicación, homologación ni cambios de producción"
+    ]
+  }
+}

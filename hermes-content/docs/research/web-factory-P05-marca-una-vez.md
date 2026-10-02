@@ -60,7 +60,7 @@ La regla que sale de esto, para escribir en la skill `onia-web-factory`:
 
 Los dos archivos rojos de la tabla son el bug de los cuatro precios en version color. `#10C26B` es un verde menta que no es `#089868` ni `#027650`; `#005f70` es teal y no es verde. Ambos estan vivos:
 
-- `brand/tokens.css` lo leen `hermes-content/references/piezas-ui-patterns/build.mjs`, `hermes-content/sales-kit/inmobiliario/generar-muestrario.js` y la presentacion de SCZ.
+- `brand/tokens.css` lo leen `hermes-content/references/piezas-ui-patterns/build.mjs`, `hermes-content/docs/historial/muestrario-inmobiliario-20260812/generar-muestrario.js` y la presentacion de SCZ.
 - `propuestas/assets/design-tokens.css` lo consume `propuestas/bolivian-electric-transformacion-ia-2026.html`.
 
 **Fix minimo (no es este carril, se anota como pendiente):** reemplazar los hex de esos dos archivos por los de la escala verificada y borrar de `brand/tokens.css` la linea que se autoproclama fuente. Los nombres de variable se quedan igual, asi ningun consumidor se rompe. Verificacion, una sola linea, falla si vuelve a aparecer un verde fuera de marca:

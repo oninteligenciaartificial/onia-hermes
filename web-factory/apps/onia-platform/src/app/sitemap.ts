@@ -7,7 +7,7 @@ import { SITE_URL } from "@/lib/site";
  * sin su entrada.
  *
  * Fuera quedan `/patrones` (demo interna) y todo `/v1` (archivo de la web
- * anterior, noindex). Las tres URLs de la v1 que dejaron de existir
+ * anterior: desde el 2026-09-28, 308 a la portada). Las tres URLs de la v1 que dejaron de existir
  * —/prueba-gratis, /modulos/dental y /funciones/facturacion-electronica-siat—
  * salieron del sitemap porque ahora son redirecciones 308; sus destinos
  * (/empezar, /rubros, /facturacion) sí están.
@@ -20,29 +20,38 @@ import { SITE_URL } from "@/lib/site";
  * nosotros mismos excluimos. Sale de acá y no pierde nada: sigue publicada,
  * enlazada desde el pie y compartible con su propia tarjeta.
  * Lo mide `indexar.test.ts`, que corre en `prebuild`.
+ *
+ * `lastModified` es la fecha del BUILD, no una fecha por página. El sitemap se
+ * genera estático al construir, y el publicador arma ese build desde un
+ * `git archive` de `web-factory` (`scripts/loops/extras/publicar-solo.sh`), que
+ * no trae `.git`: la fecha de cada `page.tsx` no se le puede preguntar a git
+ * ahí, y el `mtime` de lo extraído es la hora de la extracción. La fecha del
+ * build es la única que se sabe cierta: el sitio publicado cambió ese día.
+ * Sin `changefreq` ni `priority`: Google ignora los dos.
  */
+const CONSTRUIDO = new Date();
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const rutas = [
-    { path: "", priority: 1 },
-    { path: "/precios", priority: 0.9 },
-    { path: "/empezar", priority: 0.9 },
-    { path: "/rubros", priority: 0.8 },
-    { path: "/chatbot", priority: 0.8 },
-    { path: "/agentes", priority: 0.8 },
-    { path: "/facturacion", priority: 0.8 },
-    { path: "/guia-facturacion", priority: 0.8 },
-    { path: "/servicios/webs", priority: 0.8 },
-    { path: "/comparativa", priority: 0.7 },
-    { path: "/contacto", priority: 0.7 },
-    { path: "/nosotros", priority: 0.6 },
+    { path: "" },
+    { path: "/precios" },
+    { path: "/empezar" },
+    { path: "/rubros" },
+    { path: "/chatbot" },
+    { path: "/agentes" },
+    { path: "/facturacion" },
+    { path: "/guia-facturacion" },
+    { path: "/servicios/webs" },
+    { path: "/comparativa" },
+    { path: "/contacto" },
+    { path: "/nosotros" },
     // `/privacidad` sí va: es indexable a propósito —el rastreador de Meta
     // valida esa URL al publicar la app del chatbot—. `/terminos` NO, porque
     // declara `noindex`; ver el aviso de arriba.
-    { path: "/privacidad", priority: 0.3 },
+    { path: "/privacidad" },
   ];
-  return rutas.map((ruta) => ({
-    url: `${SITE_URL}${ruta.path}`,
-    changeFrequency: "weekly" as const,
-    priority: ruta.priority,
+  return rutas.map(({ path }) => ({
+    url: `${SITE_URL}${path}`,
+    lastModified: CONSTRUIDO,
   }));
 }

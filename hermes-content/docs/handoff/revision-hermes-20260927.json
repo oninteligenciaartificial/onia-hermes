@@ -1,0 +1,345 @@
+{
+  "recordedAt": "2026-09-28T00:01:23.819Z",
+  "base": "02a4eef8550503ba8676468953eab97efc0c786e",
+  "reviews": [
+    {
+      "name": "hermes-home",
+      "model": "gpt-5.5",
+      "effort": "medium",
+      "provider": "openai",
+      "exitCode": 0,
+      "snapshotSha256": "37e6485a1027c28439a74cffd55d94a29e854ca6ddd0f55a0f0ad495ae78e497",
+      "bundleSha256": "b6a2396703ac83b83c49ae3cf1f7b0835d1c9a1d902762f99e4a2c53c9d166d6",
+      "bundleBytes": 317769,
+      "outputByteSha256": "2cb7d51c0891255cdbc1701a2060e0f5dd477b3fa70e41584c52654a432a0214",
+      "outputBytes": 730,
+      "rawResult": "no_findings",
+      "priorEvidence": [
+        {
+          "path": ".tmp/homelab-20260927/web-linux-final-result.json",
+          "sha256": "64d8a241a7f66da6895cf3bbdaaf1533042fc369223e0192d5ddcc20b8bd7770",
+          "bytes": 500
+        },
+        {
+          "path": ".tmp/homelab-20260927/web-linux-final-files.json",
+          "sha256": "3de67cce6b0f5011f031fa4107a4648b9446ab0ea379e21f3b9f20f5105c5ca6",
+          "bytes": 184737
+        },
+        {
+          "path": ".tmp/homelab-20260927/web-linux-final-tests.log",
+          "sha256": "af65b1b18422127bd4d9642cfcadda8a242b15859a09a8d46c5e333035783f87",
+          "bytes": 8826
+        },
+        {
+          "path": ".tmp/homelab-20260927/web-typecheck-current.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        }
+      ],
+      "sourceChangedAfterReview": [],
+      "releaseApproved": false
+    },
+    {
+      "name": "hermes-siat-backup",
+      "model": "gpt-5.5",
+      "effort": "medium",
+      "provider": "openai",
+      "exitCode": 0,
+      "snapshotSha256": "6ffb357879e87ac3a19688b733f338fa4189cfe3957ceff623db5577d54bb3fd",
+      "bundleSha256": "6c9de27c256fa4c856ad4f647cabab2970b93172a2e8417682ee8f2e93cb9e81",
+      "bundleBytes": 249199,
+      "outputByteSha256": "865466139c91b265d65c429de5447628cb1674839af90deef344cf2a589f5fa5",
+      "outputBytes": 2507,
+      "rawResult": "findings",
+      "priorEvidence": [
+        {
+          "path": ".tmp/homelab-20260927/siat-linux-result.json",
+          "sha256": "26a82e2c34a0d9e36cb377fa65b5f74c8ece719ca250accee3577dc27286a57f",
+          "bytes": 475
+        },
+        {
+          "path": ".tmp/homelab-20260927/siat-linux-files.json",
+          "sha256": "25a450a6b461a46ba806b32042f31d5c9937f6fd0442298113da68720fef07e3",
+          "bytes": 4264
+        },
+        {
+          "path": ".tmp/homelab-20260927/storage-linux-result.json",
+          "sha256": "6d4df3d8bbb25119609f56b5112b01a883f8db516cefc21833860b5a9d0e2fae",
+          "bytes": 802
+        }
+      ],
+      "sourceChangedAfterReview": [],
+      "releaseApproved": false
+    }
+  ],
+  "adjudication": [
+    {
+      "rawPriority": "P1",
+      "file": "hermes-content/integrations/siat/src/fase1-runner.mjs",
+      "line": 1841,
+      "decision": "not_a_defect",
+      "reasoning": "El revisor supone count como operaciones adicionales. Contrato explícito README242-245 define meta acumulada. done60 + count1 debe no enviar; count61 envía una y repetir61 no reenvía. Verificado con Runner real y proveedor simulado en memoria."
+    },
+    {
+      "rawPriority": "P1",
+      "file": "hermes-content/integrations/siat/src/fase1-runner.mjs",
+      "line": 1940,
+      "decision": "not_a_defect",
+      "reasoning": "Mismo supuesto contrario al contrato: done5 + count1 no envía; count6 avanza una y repetir6 no reenvía. No bloqueo de reanudación. Verificado con Runner real sin SOAP."
+    }
+  ],
+  "contract": {
+    "path": "C:/dev/proyectos/onia-hermes-v1-integracion-20260927/hermes-content/integrations/siat/README.md",
+    "sha256": "76f7143811c582b9f404bec9ddb8f38e223a7042ccfd371166db252fbbf19a5a",
+    "relevantLines": "242-245"
+  },
+  "contractVerification": {
+    "timestamp": "2026-09-28T00:00:09.553Z",
+    "method": "Runner real: import de código congelado; estado en memoria; validarRecepcion y checkpoint sustituidos por fixtures. Sin SOAP, red, filesystem productivo ni claves.",
+    "contract": "--count es meta acumulada, no cupo adicional",
+    "evidence": [
+      "hermes-content/integrations/siat/README.md:242-245",
+      "hermes-content/docs/ONIA_SIAT_ESTADO_HOMOLOGACION.md:135",
+      "hermes-content/integrations/siat/test/fase1-runner.test.mjs:737-753"
+    ],
+    "cases": [
+      {
+        "stage": "VI",
+        "key": "validacion-ds17-pv1",
+        "initial": 60,
+        "callsAtTarget1": 0,
+        "callsAtTargetNext": 1,
+        "nextTarget": 61,
+        "callsAfterReplaySameTarget": 1,
+        "finalDone": 61
+      },
+      {
+        "stage": "IX",
+        "key": "validacion-ds17-pv1",
+        "initial": 5,
+        "callsAtTarget1": 0,
+        "callsAtTargetNext": 1,
+        "nextTarget": 6,
+        "callsAfterReplaySameTarget": 1,
+        "finalDone": 6
+      }
+    ],
+    "passed": true
+  },
+  "currentIntegrationFiles": [
+    {
+      "path": "web-factory/apps/onia-platform/src/app/(sitio)/alta.ts",
+      "sha256": "92b0b7fc147fb8b2b7e003181a8adf26aad9557a1428b5db2fcb6d57d35e3629",
+      "review": "hermes-home"
+    },
+    {
+      "path": "web-factory/apps/onia-platform/src/app/(sitio)/cierre.test.ts",
+      "sha256": "4eb78e65956e1b75358246c5ff444e3f635fae3de2bd4ffa934c3f151a6a29b7",
+      "review": "hermes-home"
+    },
+    {
+      "path": "web-factory/apps/onia-platform/src/app/(sitio)/facturacion/page.tsx",
+      "sha256": "7c825ca4c0c8a7edd171ffaf6870be8cca2d72b98f2ce6ca98b801183787c6e1",
+      "review": "hermes-home"
+    },
+    {
+      "path": "web-factory/apps/onia-platform/src/app/(sitio)/hero.test.ts",
+      "sha256": "1461d606caf975d39f7e7745e1313eb9d8468b2a3ffcecccfb895206c61a62d5",
+      "review": "hermes-home"
+    },
+    {
+      "path": "web-factory/apps/onia-platform/src/app/(sitio)/logro-fiscal-no-se-declara-completo.test.ts",
+      "sha256": "efa1648f37a09b745b4bb49a6d6dd7f077cde8505686fdb37cd43e1628ef6798",
+      "review": "hermes-home"
+    },
+    {
+      "path": "web-factory/apps/onia-platform/src/app/(sitio)/nav.ts",
+      "sha256": "4736a96bf6e1c2b2378bd42eeb4cdab00e995863a0ed644e827ee276fa43ebc1",
+      "review": "hermes-home"
+    },
+    {
+      "path": "web-factory/apps/onia-platform/src/app/(sitio)/no-decir-dos-veces-lo-mismo.test.ts",
+      "sha256": "32b3c61d0cdcd95e31f7bc9e734fcb7efd6882fcb700ef5fd6a5121de9477a08",
+      "review": "hermes-home"
+    },
+    {
+      "path": "web-factory/apps/onia-platform/src/app/(sitio)/page.tsx",
+      "sha256": "d393e337e50478bfbc5d058135fea760a4b069f824bd21b33c2b7c0f6642e7d7",
+      "review": "hermes-home"
+    },
+    {
+      "path": "web-factory/apps/onia-platform/src/app/(sitio)/portada.module.css",
+      "sha256": "239eac587fa07ce614332153cc85eedb27710aa9e8d29618d33b23966e3c35e2",
+      "review": "hermes-home"
+    },
+    {
+      "path": "web-factory/apps/onia-platform/src/app/(sitio)/promesa-fiscal.test.ts",
+      "sha256": "21db7682dfc90653e58e6f8d8cd5d5aeb6a61e621df457dffe696fe4647e7cf6",
+      "review": "hermes-home"
+    },
+    {
+      "path": "web-factory/apps/onia-platform/src/app/(sitio)/promesa-retipeo-fiscal.test.ts",
+      "sha256": "31ba06ae36ad4c7fa1f093d45d2bb00e1fcf80493d363555cd4efa317f7e126e",
+      "review": "hermes-home"
+    },
+    {
+      "path": "web-factory/apps/onia-platform/src/app/(sitio)/rubros/page.tsx",
+      "sha256": "54da76e5211addd65d5e18bd762e44eed10b3fb93cf0d16b2d67fa97d6a5896d",
+      "review": "hermes-home"
+    },
+    {
+      "path": "web-factory/apps/onia-platform/src/app/(sitio)/salario-minimo.test.ts",
+      "sha256": "12943e268d142f3ad7c06c424ac20440caba3637b2d69317472125f5038e07f1",
+      "review": "hermes-home"
+    },
+    {
+      "path": "web-factory/apps/onia-platform/src/app/(sitio)/seccion-citada-no-se-tipea.test.ts",
+      "sha256": "59ffdd95eeec56f0dee999fd12dddb378c3e4640561188086de40f44b297a330",
+      "review": "hermes-home"
+    },
+    {
+      "path": "web-factory/apps/onia-platform/src/app/(sitio)/titulo-no-empieza-en-minuscula.test.ts",
+      "sha256": "0476f16ba85dde8fc367af22722f66e4ae5f8497f17b9ac464af4cf73d6f1f30",
+      "review": "hermes-home"
+    },
+    {
+      "path": "web-factory/apps/onia-platform/src/app/(sitio)/ui.tsx",
+      "sha256": "a8d8522792f5f9bc56c8cfca4b83c8398698055afb246c496df95919df633e0a",
+      "review": "hermes-home"
+    },
+    {
+      "path": "web-factory/apps/onia-platform/src/app/capacidad-en-la-enumeracion.test.ts",
+      "sha256": "0fdc931afb6f193eaec0370bfd072051081ba378480e971842c2513a95ae7fee",
+      "review": "hermes-home"
+    },
+    {
+      "path": "web-factory/apps/onia-platform/src/app/v1/modulos/dental/page.tsx",
+      "sha256": "ef5b2e263f18a00c85db486241f063a2be70e05c12851038d312a48c34724cf2",
+      "review": "hermes-home"
+    },
+    {
+      "path": "web-factory/apps/onia-platform/src/content/rubros.ts",
+      "sha256": "f389964a3109d7a1da1edf325887f7fc853d78296b2e7320627ac9c56a171bf9",
+      "review": "hermes-home"
+    },
+    {
+      "path": "web-factory/apps/onia-platform/src/lib/pricing.ts",
+      "sha256": "7d029f4a2704d5297ac2b168afcbd74655c47cefc6df2808b836df1f61243e43",
+      "review": "hermes-home"
+    },
+    {
+      "path": "web-factory/apps/onia-platform/src/lib/siat.ts",
+      "sha256": "56ed1afc420677ccbcfdd6b3e1cbc03d3d8b57c2fa70ec7ddc700425848bb6b2",
+      "review": "hermes-home"
+    },
+    {
+      "path": "web-factory/apps/onia-platform/src/lib/site.ts",
+      "sha256": "1542a688acf1665ede889b4c57e93bd1bd7ab09e3ac31e459cae0d8052431c51",
+      "review": "hermes-home"
+    },
+    {
+      "path": "hermes-content/deploy/vps-ops/backup-storage.sh",
+      "sha256": "315bd1397d9fd5ec89c1ad946ee28153989f961952b9094c418dfeb1aa26e700",
+      "review": "hermes-siat-backup"
+    },
+    {
+      "path": "hermes-content/deploy/vps-ops/backup-storage.test.sh",
+      "sha256": "0af5cf77d0f834b043a249bb101559834ee081d38a84558fbe6a0246a5271257",
+      "review": "hermes-siat-backup"
+    },
+    {
+      "path": "hermes-content/integrations/siat/run-fase1-pdv1.sh",
+      "sha256": "15acf1d162d5bfa9239724d316b691d4dac055d927bfb15b81c21a5d7310065b",
+      "review": "hermes-siat-backup"
+    },
+    {
+      "path": "hermes-content/integrations/siat/run-fase1-volumen.sh",
+      "sha256": "6243d8a3384a67f1d77a3a0ff5760e93b1de9fae9c69cd82643160643b13ed64",
+      "review": "hermes-siat-backup"
+    },
+    {
+      "path": "hermes-content/integrations/siat/src/constants.mjs",
+      "sha256": "b151fe90e63dbb3e9402d8872dfbb37f1d034cb47a1dd1681d6d6c08fe8daf30",
+      "review": "hermes-siat-backup"
+    },
+    {
+      "path": "hermes-content/integrations/siat/src/emission.mjs",
+      "sha256": "8b709daf70f3c022bae48d19693a972416c2c03017c3f3ce29efee53482138e2",
+      "review": "hermes-siat-backup"
+    },
+    {
+      "path": "hermes-content/integrations/siat/src/fase1-runner.mjs",
+      "sha256": "52ef95092cb7c59fabdc3d833c7c91b95928db19f18aadce0a15c59ffdbf1073",
+      "review": "hermes-siat-backup"
+    },
+    {
+      "path": "hermes-content/integrations/siat/src/invoice-payload.mjs",
+      "sha256": "4ccea0c413694214fb3c45dcdd7dcfbe95b462e5e3f875f42b629f72d8cd92e8",
+      "review": "hermes-siat-backup"
+    },
+    {
+      "path": "hermes-content/integrations/siat/src/soap-client.mjs",
+      "sha256": "0d5abd649d571a6481d0a8b372400e66727f79a745a6af2c03923e51bf9031fd",
+      "review": "hermes-siat-backup"
+    },
+    {
+      "path": "hermes-content/integrations/siat/src/soap-transport.mjs",
+      "sha256": "6f76ef98bf3d04f4c5a57c6d53a97a6a18a455f511ffdeb726c18baf1af0422f",
+      "review": "hermes-siat-backup"
+    },
+    {
+      "path": "hermes-content/integrations/siat/test/fase1-runner.test.mjs",
+      "sha256": "37ea360504cb46e2be11d7df445bd9b127f7a8722d6eb8c561ca5f0ee5944c85",
+      "review": "hermes-siat-backup"
+    }
+  ],
+  "integrationHashCheck": {
+    "matched": 33,
+    "allMatch": true
+  },
+  "integratorWebQA": {
+    "path": "/tmp/onia-web-qa-completa-20260927-5q0_nb8j",
+    "candidateSha256": "ac57c5c4477c107e2e3200798dcd55b44e68a7efb60dfbea4b9c21fbca6b8dda",
+    "packageLockSha256": "2037fea2ce427896ece9d5323aac59fe26a6672685222c31edd96534438b56d1",
+    "node": "v22.22.1",
+    "network": "isolated namespace; loopback only",
+    "dependencySource": "private copy; matching lockfile",
+    "exitCode": 0,
+    "durationSeconds": 5.66,
+    "sourceFiles": 1079,
+    "normalization": "LF text copy; originals preserved",
+    "rootDirectoryNames": [
+      "docs",
+      "hermes-content",
+      "hermes-scripts",
+      "onia-core",
+      "out",
+      "output",
+      "references-inbox",
+      "scripts",
+      "supabase",
+      "tmp-assets",
+      "video-factory",
+      "videos",
+      "web-factory"
+    ],
+    "webFactoryDirectoryNames": [
+      "apps",
+      "data",
+      "design",
+      "docs",
+      "experiments",
+      "generate",
+      "harvester",
+      "packages",
+      "scripts",
+      "tests"
+    ],
+    "limitations": [
+      "No .git history copied: 3 git-history tests explicitly skip",
+      "Assets of unrelated web-factory apps omitted; all their tracked source files included"
+    ]
+  },
+  "evidenceClarification": "The minor home review cited an intermediate cropped QA package. Acceptance is based on integratorWebQA with the faithful sibling directory inventory; the intermediate package is not accepted as complete QA. Reviewed source bytes remain identical.",
+  "releaseApproved": false
+}

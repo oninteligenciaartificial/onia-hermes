@@ -2,7 +2,7 @@
  * RUNNER de la FASE 1 de homologacion SIAT (pruebas minimas, ambiente PILOTO).
  *
  * Orquesta las etapas oficiales de la modalidad COMPUTARIZADA contra el piloto.
- * Los totales son los del "Listado de Etapas" del portal (leidos 2026-08-27),
+ * Los totales son los del "Listado de Etapas" del portal (leidos 2026-09-27),
  * y CADA etapa se repite sobre su eje de casos (ver STAGE_PLAN / EMISION_CASES):
  *
  *   I    CUIS                 2   = 1 x 2 PdV        (FacturacionCodigos.cuis)
@@ -10,10 +10,10 @@
  *   III  CUFD               200   = 100 x 2 PdV      (FacturacionCodigos.cufd)
  *   IV   emision individual 750   = 125 x 6 combos   (recepcionFactura)
  *   V    eventos signif.     70   = 7 motivos x 5 x 2 PdV
- *   VI   paquetes           560   = 280 x 2 PdV      (recepcionPaquete + validacion)
+ *   VI   paquetes           560   = 28 recepciones x 10 + 4 validaciones x 70
  *   VII  anulacion          750   = 125 x 6 combos   (anulacionFactura)
  *   VIII firma digital      690   = 115 x 6 combos   (emision FIRMADA, modalidad 1)
- *   IX   emision masiva     160   = 80 x 2 PdV       (recepcionMasiva + validacion)
+ *   IX   emision masiva     160   = 8 recepciones x 10 + 4 validaciones x 20
  *   XI   reversion          750   = 125 x 6 combos   (reversionAnulacionFactura)
  * (X = masiva IEHD: no aplica a nuestro perfil.)
  *
@@ -31,7 +31,7 @@
  * eran el mismo combo. Ver el comentario de EMISION_CASES.
  *
  * Uso (VPS, con /opt/onia-siat/siat-piloto.env cargado en el ambiente):
- *   node src/fase1-runner.mjs                  # todas las etapas en orden
+ *   node src/fase1-runner.mjs --solo-informe   # sin red; sin --etapa no se envia
  *   node src/fase1-runner.mjs --etapa gate     # gate minimo antes del volumen
  *   node src/fase1-runner.mjs --etapa IV --count 5
  *   flags: --pace ms (default 500 = ~2 req/s) --state file --log file
@@ -55,7 +55,7 @@
  * Esto NO es asesoria fiscal.
  */
 import { createHash } from "node:crypto";
-import { readFileSync, writeFileSync, appendFileSync, existsSync } from "node:fs";
+import { readFileSync, writeFileSync, appendFileSync, existsSync, copyFileSync } from "node:fs";
 import { gzipSync } from "node:zlib";
 
 import { buildCuf } from "./cuf.mjs";
@@ -125,6 +125,94 @@ export const DOC_SECTOR_CASES = [
 export const EMISION_CASES = DOC_SECTOR_CASES.flatMap((ds) =>
   PUNTOS_VENTA.map((pv) => ({ codigoPuntoVenta: pv, ...ds })),
 );
+
+// Listado de Pruebas del SIN, leido el 2026-09-27. VI/IX no son un solo
+// contador por PdV: cada fila tiene sus propios campos y su propio target.
+export const LOTE_DOC_SECTORES = [1, 17];
+export const LOTE_MOTIVOS = [1, 2, 3, 4, 5, 6, 7];
+export const PAQUETE_CASES = LOTE_DOC_SECTORES.flatMap((sector) =>
+  LOTE_MOTIVOS.flatMap((motivo) => [
+    { sector, motivo, pv: 1, cantidad: 500, target: 10 },
+    { sector, motivo, pv: 0, cantidad: 2, target: 10 },
+  ]),
+);
+export const PAQUETE_VALIDACIONES = LOTE_DOC_SECTORES.flatMap((sector) =>
+  [1, 0].map((pv) => ({ sector, pv, target: 70 })),
+);
+export const MASIVA_CASES = LOTE_DOC_SECTORES.flatMap((sector) =>
+  PUNTOS_VENTA.flatMap((pv) => [
+    { sector, pv, cantidad: 1000, target: 10 },
+    { sector, pv, cantidad: 2, target: 10 },
+  ]),
+);
+export const MASIVA_VALIDACIONES = LOTE_DOC_SECTORES.flatMap((sector) =>
+  PUNTOS_VENTA.map((pv) => ({ sector, pv, target: 20 })),
+);
+
+export const paqueteCaseId = ({ sector, motivo, pv, cantidad }) =>
+  `recepcion-ds${sector}-motivo${motivo}-pv${pv}-${cantidad === 500 ? "igual500" : "menor500"}`;
+export const masivaCaseId = ({ sector, pv, cantidad }) =>
+  `recepcion-ds${sector}-pv${pv}-${cantidad === 1000 ? "igual1000" : "menor1000"}`;
+export const validacionCaseId = ({ sector, pv }) => `validacion-ds${sector}-pv${pv}`;
+
+export const LOTE_CASE_TARGETS = {
+  VI: Object.fromEntries([
+    ...PAQUETE_CASES.map((c) => [paqueteCaseId(c), c.target]),
+    ...PAQUETE_VALIDACIONES.map((c) => [validacionCaseId(c), c.target]),
+  ]),
+  IX: Object.fromEntries([
+    ...MASIVA_CASES.map((c) => [masivaCaseId(c), c.target]),
+    ...MASIVA_VALIDACIONES.map((c) => [validacionCaseId(c), c.target]),
+  ]),
+};
+
+/** Importacion explicita del marcador, nunca derivada de respuestas SOAP. */
+export function applyPortalSnapshot(state, snapshot) {
+  if (!/^\d{4}-\d{2}-\d{2}/.test(snapshot?.readAt ?? "")) {
+    throw new Error("snapshot del portal sin readAt ISO");
+  }
+  const etapas = { ...(state.etapas ?? {}) };
+  for (const id of ["VI", "IX"]) {
+    const targetByCase = LOTE_CASE_TARGETS[id];
+    const portalCases = snapshot[id]?.cases;
+    if (!portalCases || typeof portalCases !== "object") {
+      throw new Error(`snapshot del portal sin casos de ${id}`);
+    }
+    const previo = etapas[id] ?? {};
+    if (previo.portalReconciledAt) {
+      throw new Error(`${id} ya fue conciliada con el portal; no sobrescribir avance posterior`);
+    }
+    const cases = Object.fromEntries(Object.keys(targetByCase).map((key) => [key, 0]));
+    for (const [key, value] of Object.entries(portalCases)) {
+      if (!Object.hasOwn(targetByCase, key) || !Number.isInteger(value) || value < 0 || value > targetByCase[key]) {
+        throw new Error(`snapshot del portal: caso/avance invalido ${id}.${key}=${value}`);
+      }
+      cases[key] = value;
+    }
+    const sum = Object.values(cases).reduce((a, b) => a + b, 0);
+    if (sum !== snapshot[id].totalCorrectos) {
+      throw new Error(`snapshot del portal: ${id} suma ${sum}, no ${snapshot[id].totalCorrectos}`);
+    }
+    etapas[id] = {
+      ...previo,
+      legacyDone: previo.done ?? 0,
+      done: 0,
+      attempts: previo.attempts ?? 0,
+      cases,
+      portalCases: { ...cases },
+      blockedCases: {},
+      portalReconciledAt: snapshot.readAt,
+    };
+  }
+  // Los recibos anteriores no tienen correspondencia comprobada con las filas
+  // del portal. Conservarlos como evidencia, sin volver a validarlos a ciegas.
+  return {
+    ...state,
+    etapas,
+    legacyRecepcionesLote: structuredClone(state.recepcionesLote ?? { VI: {}, IX: {} }),
+    recepcionesLote: { VI: {}, IX: {} },
+  };
+}
 
 /** codigoModalidad de la modalidad ELECTRONICA EN LINEA (la de la etapa VIII). */
 export const MODALIDAD_ELECTRONICA = 1;
@@ -370,18 +458,18 @@ export const SYNC_CASES = [
 // Volumenes oficiales de fase 1, POR CASO (no totales). El total sale de
 // multiplicar por los casos que el SIN pide en cada etapa — ver STAGE_PLAN.
 //
-// Los totales estan tomados del "Listado de Etapas" del portal (2026-08-27):
-//   I 2 · II 1800 · III 200 · IV 750 · V 70 · VI 560 · VII 750 · IX 160 · XI 750
+// Totales del "Listado de Etapas" del portal (2026-09-27), incluido VIII:
+//   I 2 · II 1800 · III 200 · IV 750 · V 70 · VI 560 · VII 750 · VIII 690 · IX 160 · XI 750
 export const STAGE_TARGETS = {
   I: 1, // por PdV            -> 2
   II: 50, // por sync x PdV     -> 18 * 50 * 2 = 1800
   III: 100, // por PdV            -> 200
   IV: 125, // por combo          -> 125 * 6 = 750
   V: 5, // por motivo x PdV   -> 7 * 5 * 2 = 70
-  VI: 280, // por PdV            -> 560   [VERIFICAR el desglose en el portal]
+  VI: 10, // por fila de recepción; validación = 70 por sector/PdV
   VII: 125, // por combo          -> 750
-  VIII: 115, // por combo          -> 690   [VERIFICAR el desglose en el portal]
-  IX: 80, // por PdV            -> 160   [VERIFICAR el desglose en el portal]
+  VIII: 115, // por combo          -> 690
+  IX: 10, // por fila de recepción; validación = 20 por sector/PdV
   XI: 125, // por combo          -> 750
 };
 
@@ -390,9 +478,8 @@ export const STAGE_TARGETS = {
  * "pv" = una corrida por punto de venta; "sync-pv"/"motivo-pv" agregan su
  * propio sub-caso ademas del PdV.
  *
- * II, III y V solo confirmados como x PdV por la aritmetica (900*2=1800,
- * 100*2=200, 7*5*2=70). VI y IX quedan [VERIFICAR]: el total del portal se
- * divide limpio por 2 PdV pero no abrimos su Listado de Pruebas todavia.
+ * II, III y V confirmados por la aritmetica. VI/IX tienen matrices propias
+ * leidas fila por fila del portal el 2026-09-27.
  */
 export const STAGE_PLAN = {
   I: "pv",
@@ -400,10 +487,10 @@ export const STAGE_PLAN = {
   III: "pv",
   IV: "combo",
   V: "motivo-pv",
-  VI: "pv",
+  VI: "paquete",
   VII: "combo",
   VIII: "combo",
-  IX: "pv",
+  IX: "masiva",
   XI: "combo",
 };
 
@@ -773,6 +860,7 @@ export function emptyState() {
     cuisByPv: {}, // pv -> codigo CUIS
     cufdByPv: {}, // pv -> { codigo, codigoControl, fechaVigencia, obtenidoEn }
     ultimoEventoFin: null, // fin (timeline SIN) del ultimo evento registrado ok
+    recepcionesLote: { VI: {}, IX: {} }, // caseId de validacion -> codigos de recepcion
     numeroFactura: null,
     catalogs: {},
     invoices: [], // { numero, cuf, codigoRecepcion, estado, anulada, revertida, combo }
@@ -787,6 +875,34 @@ export function emptyState() {
  */
 export function migrateState(raw) {
   const state = { ...emptyState(), ...raw };
+  state.recepcionesLote = {
+    VI: { ...(raw?.recepcionesLote?.VI ?? {}) },
+    IX: { ...(raw?.recepcionesLote?.IX ?? {}) },
+  };
+  // El checkpoint previo decia VI/IX completos por contar respuestas SOAP bajo
+  // pv0/pv1. El portal demostro que esos numeros no representan sus 32/12 filas.
+  // Se conservan como auditoria, pero no pueden saltar ni inflar los casos nuevos.
+  state.etapas = { ...(state.etapas ?? {}) };
+  for (const id of ["VI", "IX"]) {
+    const etapa = state.etapas[id];
+    if (!etapa) continue;
+    const cases = { ...(etapa.cases ?? {}) };
+    const blockedCases = { ...(etapa.blockedCases ?? {}) };
+    const legacyCases = { ...(etapa.legacyCases ?? {}) };
+    const legacyBlockedCases = { ...(etapa.legacyBlockedCases ?? {}) };
+    for (const pv of PUNTOS_VENTA) {
+      const key = `pv${pv}`;
+      if (Object.hasOwn(cases, key)) {
+        legacyCases[key] = cases[key];
+        delete cases[key];
+      }
+      if (Object.hasOwn(blockedCases, key)) {
+        legacyBlockedCases[key] = blockedCases[key];
+        delete blockedCases[key];
+      }
+    }
+    state.etapas[id] = { ...etapa, cases, blockedCases, legacyCases, legacyBlockedCases };
+  }
   const pvLegado = String(DEFAULT_COMBO.codigoPuntoVenta);
   if (raw?.cuis && !state.cuisByPv[pvLegado]) {
     state.cuisByPv = { ...state.cuisByPv, [pvLegado]: raw.cuis };
@@ -826,16 +942,18 @@ export function hashFor(mode, xmlString, gzipBuffer) {
 }
 
 export function parseArgs(argv) {
-  const args = { etapa: null, count: null, pace: 500, state: "fase1-state.json", log: "fase1-log.ndjson", retryBlocked: false, soloInforme: false };
+  const args = { etapa: null, count: null, caseId: null, pace: 500, state: "fase1-state.json", log: "fase1-log.ndjson", retryBlocked: false, soloInforme: false, portalSnapshot: null };
   for (let i = 0; i < argv.length; i += 1) {
     const a = argv[i];
     if (a === "--etapa") args.etapa = argv[++i];
     else if (a === "--count") args.count = Number(argv[++i]);
+    else if (a === "--case") args.caseId = argv[++i];
     else if (a === "--pace") args.pace = Number(argv[++i]);
     else if (a === "--state") args.state = argv[++i];
     else if (a === "--log") args.log = argv[++i];
     else if (a === "--retry-blocked") args.retryBlocked = true;
     else if (a === "--solo-informe") args.soloInforme = true;
+    else if (a === "--portal-snapshot") args.portalSnapshot = argv[++i];
   }
   return args;
 }
@@ -843,7 +961,7 @@ export function parseArgs(argv) {
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 class Runner {
-  constructor({ token, nit, codigoSistema, stateFile, logFile, pace, firma = null }) {
+  constructor({ token, nit, codigoSistema, stateFile, logFile, pace, firma = null, cafc = null, caseFilter = null }) {
     this.token = token;
     this.nit = nit;
     this.codigoSistema = codigoSistema;
@@ -852,6 +970,8 @@ class Runner {
     this.pace = pace;
     // { privateKeyPem, certificatePem } para la etapa VIII. NUNCA se loguea.
     this.firma = firma;
+    this.cafc = cafc;
+    this.caseFilter = caseFilter;
     this.state = loadState(stateFile);
     // Combo (PdV + documento sector + tipo de factura) que se esta corriendo.
     // Las etapas lo cambian con withCombo(); todo lo demas lo LEE de aca.
@@ -945,6 +1065,67 @@ class Runner {
     }
     this.state.etapas[id].target = target;
     return this.state.etapas[id];
+  }
+
+  requirePortalReconciliation(id) {
+    const etapa = this.state.etapas[id];
+    if (!etapa?.portalReconciledAt) {
+      throw new Error(
+        `${id}: sin marcador conciliado con las filas del SIN. ` +
+          "Conciliar primero el portal actual con --portal-snapshot; no reenviar a ciegas.",
+      );
+    }
+  }
+
+  guardarRecepcion(id, validationKey, result) {
+    const codigo = result?.parsed?.codigoRecepcion;
+    if (!result?.ok || result?.parsed?.transaccion === false || !codigo) {
+      return result?.ok
+        ? { ...result, ok: false, error: "missing_receipt", parsed: {
+            ...result.parsed,
+            transaccion: false,
+            mensajes: [{ codigo: "REC", descripcion: "recepcion sin codigoRecepcion" }],
+          } }
+        : result;
+    }
+    const porEtapa = (this.state.recepcionesLote ??= { VI: {}, IX: {} });
+    (porEtapa[id] ??= {});
+    (porEtapa[id][validationKey] ??= []).push(codigo);
+    return result;
+  }
+
+  async validarRecepcion(id, validationKey, done, op) {
+    const baseline = this.state.etapas[id]?.portalCases?.[validationKey];
+    if (baseline == null && done > 0) {
+      throw new Error(`${id}.${validationKey}: falta el contador inicial del portal; revisar checkpoint antes de validar`);
+    }
+    // `done` incluye validaciones ya hechas en el portal; la cola contiene solo
+    // recepciones posteriores a la conciliacion. El indice debe ser local.
+    const index = done - (baseline ?? 0);
+    if (!Number.isInteger(index) || index < 0) {
+      throw new Error(`${id}.${validationKey}: contador menor al marcador conciliado`);
+    }
+    const codigoRecepcion = this.state.recepcionesLote?.[id]?.[validationKey]?.[index];
+    if (!codigoRecepcion) {
+      throw new TransitorioError(`${id}.${validationKey}: faltan recepciones para validar; completar primero sus casos`);
+    }
+    await this.ensureCufd();
+    const result = await this.post(this.servicio, buildRunnerEnvelope(op, {
+      ...this.recepcionBase(id === "VI" ? 2 : 3),
+      codigoRecepcion,
+    }), { etapa: id, op, case: validationKey });
+    if (result.ok && result.parsed?.transaccion !== false && result.parsed?.codigoEstado === 908) return result;
+    if (result.ok && result.parsed?.codigoEstado === 901) {
+      throw new TransitorioError(`${id}.${validationKey}: recepcion pendiente (901); reintentar validacion`);
+    }
+    if (result.ok) {
+      return { ...result, ok: false, error: "validation_not_908", parsed: {
+        ...result.parsed,
+        transaccion: false,
+        mensajes: [{ codigo: result.parsed?.codigoEstado ?? "VAL", descripcion: "validacion sin 908 VALIDADA" }],
+      } };
+    }
+    return result;
   }
 
   /**
@@ -1532,7 +1713,7 @@ class Runner {
   }
 
   /** Paquete/masiva: N facturas -> tar -> gzip -> base64 + hash del modo vigente. */
-  buildLote(count, { tipoEmision, baseIndex, fechaIso = null }) {
+  buildLote(count, { tipoEmision, baseIndex, fechaIso = null, cafc = null }) {
     const xmls = [];
     for (let i = 0; i < count; i += 1) {
       const { payload, leyenda, codigoMetodoPago } = buildTestInvoice({
@@ -1540,6 +1721,7 @@ class Runner {
         nit: this.nit,
         index: baseIndex + i,
         codigoPuntoVenta: this.combo.codigoPuntoVenta,
+        codigoDocumentoSector: this.combo.codigoDocumentoSector,
       });
       const numeroFactura = ++this.state.numeroFactura;
       const fecha17 = fechaIso ?? this.sinNow();
@@ -1581,6 +1763,7 @@ class Runner {
         leyenda,
         usuario: "onia",
         codigoDocumentoSector: this.combo.codigoDocumentoSector,
+        cafc,
       };
       const detalle = payload.items.map((item) => ({
         actividadEconomica: item.actividadEconomica,
@@ -1591,6 +1774,9 @@ class Runner {
         unidadMedida: item.unidadMedida,
         precioUnitario: item.precioUnitario,
         subTotal: item.subtotal,
+        nroQuirofanoSalaOperaciones: item.nroQuirofanoSalaOperaciones,
+        nombreApellidoMedico: item.nombreApellidoMedico,
+        nitDocumentoMedico: item.nitDocumentoMedico,
       }));
       xmls.push({ name: `${cuf}.xml`, content: buildInvoiceXml({ cabecera, detalle }) });
     }
@@ -1603,68 +1789,58 @@ class Runner {
   }
 
   async etapaVI(target = STAGE_TARGETS.VI) {
-    // El paquete va sin cafc -> el evento DEBE ser de conectividad (1-4).
-    const motivo = pickMotivoSinCafc(this.state.catalogs.eventos);
-    if (!motivo) {
-      throw new Error("sin evento de conectividad (1-4) en el catalogo para paquetes sin CAFC");
+    this.requirePortalReconciliation("VI");
+    const motivos = new Map((this.state.catalogs.eventos ?? []).map((e) => [Number(e.codigoClasificador), e]));
+    for (const caso of PAQUETE_CASES) {
+      const caseId = paqueteCaseId(caso);
+      if (this.caseFilter && this.caseFilter !== caseId) continue;
+      const validationKey = validacionCaseId(caso);
+      await this.withCombo({ codigoPuntoVenta: caso.pv, codigoDocumentoSector: caso.sector }, () =>
+        this.loop("VI", Math.min(target, caso.target), async (done) => {
+          const motivo = motivos.get(caso.motivo);
+          if (!motivo) throw new Error(`VI: falta motivo ${caso.motivo} en catalogo sincronizado`);
+          const cafc = MOTIVOS_CON_CAFC.has(String(caso.motivo)) ? this.cafc : null;
+          if (MOTIVOS_CON_CAFC.has(String(caso.motivo)) && !cafc) {
+            throw new Error(`VI.${caseId}: motivo ${caso.motivo} requiere CAFC del piloto`);
+          }
+          // SIN 984: el evento y el XML offline comparten CUFD y ventana.
+          await this.ensureCufd();
+          const win = this.eventWindowNow();
+          const evento = await this.registrarEvento(motivo, { ...win, etapa: "VI" });
+          const codigoEvento = tagText(evento.body, "codigoRecepcionEventoSignificativo");
+          if (!evento.ok || !codigoEvento) {
+            return evento.ok
+              ? { ...evento, ok: false, error: "missing_event", parsed: { transaccion: false,
+                  mensajes: [{ codigo: "EV", descripcion: "evento sin codigo de recepcion" }] } }
+              : evento;
+          }
+          const lote = this.buildLote(caso.cantidad, {
+            tipoEmision: 2,
+            baseIndex: done * caso.cantidad,
+            fechaIso: formatSinLocal(win.inicioMs + Math.floor((win.finMs - win.inicioMs) / 2)),
+            cafc,
+          });
+          this.checkpoint(); // reservar correlativos antes de enviar un lote grande
+          const result = await this.post(this.servicio, buildRunnerEnvelope("recepcionPaqueteFactura", {
+            ...this.recepcionBase(2),
+            archivo: lote.archivo,
+            fechaEnvio: this.sinNow(),
+            hashArchivo: lote.hashArchivo,
+            cantidadFacturas: lote.cantidad,
+            codigoEvento,
+            ...(cafc ? { cafc } : {}),
+          }), { etapa: "VI", op: "recepcionPaqueteFactura", case: caseId });
+          return this.guardarRecepcion("VI", validationKey, result);
+        }, { caseId }),
+      );
     }
-    for (const pv of PUNTOS_VENTA) {
-      await this.withCombo({ codigoPuntoVenta: pv }, () =>
-        this.loop(
-          "VI",
-          target,
-          async (done) => {
-            // SIN 984: evento y paquete comparten el MISMO CUFD vigente, y tanto la
-            // ventana del evento como las fechas de las facturas offline deben caer
-            // dentro de la vigencia de ese CUFD. eventWindowNow ya recorta la ventana;
-            // el lote se fecha en el punto medio (siempre dentro).
-            // El refresh va ANTES de calcular la ventana: eventWindowNow la deriva de
-            // cufdVigenteDesde, asi que con el CUFD vencido el evento nace fuera de
-            // vigencia y el SIN rechaza el par entero con "EL EVENTO SIGNIFICATIVO NO
-            // CORRESPONDE AL CUFD DEL EVENTO REGISTRADO" (medido 2026-09-08).
-            await this.ensureCufd();
-            const win = this.eventWindowNow();
-            const evento = await this.registrarEvento(motivo, { ...win, etapa: "VI" });
-            const codigoEvento =
-              tagText(evento.body, "codigoRecepcionEventoSignificativo") ?? null;
-            if (!codigoEvento) {
-              return evento; // sin evento no hay paquete: cuenta como error de la racha
-            }
-            const lote = this.buildLote(2, {
-              tipoEmision: 2,
-              baseIndex: done * 2,
-              fechaIso: formatSinLocal(
-                win.inicioMs + Math.floor((win.finMs - win.inicioMs) / 2),
-              ),
-            });
-            const envelope = buildRunnerEnvelope("recepcionPaqueteFactura", {
-              ...this.recepcionBase(2),
-              archivo: lote.archivo,
-              fechaEnvio: this.sinNow(),
-              hashArchivo: lote.hashArchivo,
-              cantidadFacturas: lote.cantidad,
-              codigoEvento,
-            });
-            const result = await this.post(this.servicio, envelope, {
-              etapa: "VI",
-              op: "recepcionPaqueteFactura",
-              pv,
-            });
-            if (result.ok && result.parsed?.codigoRecepcion) {
-              await sleep(2000);
-              const val = buildRunnerEnvelope("validacionRecepcionPaqueteFactura", {
-                ...this.recepcionBase(2),
-                codigoRecepcion: result.parsed.codigoRecepcion,
-              });
-              await this.post(this.servicio, val, {
-                etapa: "VI",
-                op: "validacionRecepcionPaqueteFactura",
-              });
-            }
-            return result;
-          },
-          { caseId: `pv${pv}` },
-        ),
+    for (const caso of PAQUETE_VALIDACIONES) {
+      const caseId = validacionCaseId(caso);
+      if (this.caseFilter && this.caseFilter !== caseId) continue;
+      await this.withCombo({ codigoPuntoVenta: caso.pv, codigoDocumentoSector: caso.sector }, () =>
+        this.loop("VI", Math.min(this.caseFilter ? target : target * LOTE_MOTIVOS.length, caso.target),
+          (done) => this.validarRecepcion("VI", caseId, done, "validacionRecepcionPaqueteFactura"),
+          { caseId }),
       );
     }
   }
@@ -1732,46 +1908,38 @@ class Runner {
   }
 
   async etapaIX(target = STAGE_TARGETS.IX) {
-    // SIN 916 (verificado en vivo 2026-08-06): la masiva exige tipo de emision
-    // 3 (MASIVA) tanto en el request como en el CUF de las facturas del lote.
-    for (const pv of PUNTOS_VENTA) {
-      await this.withCombo({ codigoPuntoVenta: pv }, () =>
-        this.loop(
-          "IX",
-          target,
-          async (done) => {
-            // El CUFD viaja DENTRO del CUF de cada factura del lote, no solo en el
-            // request: con uno vencido el SIN devuelve 123 "CUFD FUERA DE TOLERANCIA"
-            // y la etapa queda clavada (medido 2026-09-08, 20/80 desde el 6-ago).
-            await this.ensureCufd();
-            const lote = this.buildLote(2, { tipoEmision: 3, baseIndex: 1000 + done * 2 });
-            const envelope = buildRunnerEnvelope("recepcionMasivaFactura", {
-              ...this.recepcionBase(3),
-              archivo: lote.archivo,
-              fechaEnvio: this.sinNow(),
-              hashArchivo: lote.hashArchivo,
-              cantidadFacturas: lote.cantidad,
-            });
-            const result = await this.post(this.servicio, envelope, {
-              etapa: "IX",
-              op: "recepcionMasivaFactura",
-              pv,
-            });
-            if (result.ok && result.parsed?.codigoRecepcion) {
-              await sleep(2000);
-              const val = buildRunnerEnvelope("validacionRecepcionMasivaFactura", {
-                ...this.recepcionBase(3),
-                codigoRecepcion: result.parsed.codigoRecepcion,
-              });
-              await this.post(this.servicio, val, {
-                etapa: "IX",
-                op: "validacionRecepcionMasivaFactura",
-              });
-            }
-            return result;
-          },
-          { caseId: `pv${pv}` },
-        ),
+    this.requirePortalReconciliation("IX");
+    // SIN 916: emision 3 en request y CUF. El portal separa <1000 e =1000.
+    for (const caso of MASIVA_CASES) {
+      const caseId = masivaCaseId(caso);
+      if (this.caseFilter && this.caseFilter !== caseId) continue;
+      const validationKey = validacionCaseId(caso);
+      await this.withCombo({ codigoPuntoVenta: caso.pv, codigoDocumentoSector: caso.sector }, () =>
+        this.loop("IX", Math.min(target, caso.target), async (done) => {
+          await this.ensureCufd();
+          const lote = this.buildLote(caso.cantidad, {
+            tipoEmision: 3,
+            baseIndex: 1000 + done * caso.cantidad,
+          });
+          this.checkpoint(); // reservar correlativos antes de enviar un lote grande
+          const result = await this.post(this.servicio, buildRunnerEnvelope("recepcionMasivaFactura", {
+            ...this.recepcionBase(3),
+            archivo: lote.archivo,
+            fechaEnvio: this.sinNow(),
+            hashArchivo: lote.hashArchivo,
+            cantidadFacturas: lote.cantidad,
+          }), { etapa: "IX", op: "recepcionMasivaFactura", case: caseId });
+          return this.guardarRecepcion("IX", validationKey, result);
+        }, { caseId }),
+      );
+    }
+    for (const caso of MASIVA_VALIDACIONES) {
+      const caseId = validacionCaseId(caso);
+      if (this.caseFilter && this.caseFilter !== caseId) continue;
+      await this.withCombo({ codigoPuntoVenta: caso.pv, codigoDocumentoSector: caso.sector }, () =>
+        this.loop("IX", Math.min(this.caseFilter ? target : target * 2, caso.target),
+          (done) => this.validarRecepcion("IX", caseId, done, "validacionRecepcionMasivaFactura"),
+          { caseId }),
       );
     }
   }
@@ -1879,15 +2047,18 @@ class Runner {
    */
   summary() {
     const fila = (id, e) => {
+      const requiereConciliacion = ["VI", "IX"].includes(id) &&
+        Object.keys(e?.legacyCases ?? {}).length > 0 && !e?.portalReconciledAt;
       const porCasos = Object.values(e?.cases ?? {}).reduce((a, b) => a + b, 0);
-      const hechas = e ? (porCasos > 0 ? porCasos : e.done) : 0;
+      const hechas = requiereConciliacion ? null : e ? (porCasos > 0 ? porCasos : e.done) : 0;
       const total = STAGE_TOTALS[id] ?? null;
       return {
         etapa: id,
         corrio: Boolean(e),
         hechas,
         totalSin: total,
-        avance: total ? `${Math.floor((hechas / total) * 100)}%` : null,
+        avance: requiereConciliacion ? "sin conciliar" : total ? `${Math.floor((hechas / total) * 100)}%` : null,
+        ...(requiereConciliacion ? { requiereConciliacion: true } : {}),
         porCaso: e?.cases ?? {},
         attempts: e?.attempts ?? 0,
         blocked: e?.blockedCases ?? {},
@@ -1899,12 +2070,16 @@ class Runner {
       .map((id) => fila(id, this.state.etapas[id]));
     const rows = [...delSin, ...ajenas];
     // El general se mide contra el total del SIN, asi que solo suma lo que el SIN pide.
-    const hechas = delSin.reduce((a, r) => a + r.hechas, 0);
+    const requiereConciliacion = delSin.some((r) => r.requiereConciliacion);
+    const hechas = delSin.reduce((a, r) => a + (r.hechas ?? 0), 0);
     const total = Object.values(STAGE_TOTALS).reduce((a, b) => a + b, 0);
     return {
       hashMode: this.state.hashMode,
       cuisPorPv: this.state.cuisByPv,
-      general: `${hechas}/${total} (${Math.floor((hechas / total) * 100)}%)`,
+      general: requiereConciliacion
+        ? "sin conciliar con portal (VI/IX)"
+        : `${hechas}/${total} (${Math.floor((hechas / total) * 100)}%)`,
+      alcanceGeneral: "conteo local de casos; no equivale al porcentaje general ni a la autorizacion del portal SIN",
       etapas: rows,
     };
   }
@@ -1919,6 +2094,19 @@ const isMain =
 
 if (isMain) {
   const args = parseArgs(process.argv.slice(2));
+  if (args.portalSnapshot) {
+    if (!existsSync(args.state)) throw new Error(`checkpoint no existe: ${args.state}`);
+    const snapshot = JSON.parse(readFileSync(args.portalSnapshot, "utf8"));
+    const runner = new Runner({ token: "", nit: "", codigoSistema: "", stateFile: args.state, logFile: args.log, pace: 0 });
+    const reconciled = applyPortalSnapshot(runner.state, snapshot);
+    const backup = `${args.state}.pre-portal-${Date.now()}`;
+    copyFileSync(args.state, backup);
+    runner.state = reconciled;
+    runner.checkpoint();
+    console.log(`[fase1] marcador importado, respaldo ${backup}; sin trafico SOAP`);
+    console.log(JSON.stringify(runner.summary(), null, 2));
+    process.exit(0);
+  }
   // --solo-informe LEE el checkpoint y se va: no habla con el SIN, asi que no pide
   // credenciales ni firma, y no escribe (nunca llama checkpoint()). Existe para que
   // preguntar "como va la Fase 1" no cueste una corrida real contra el SIN — que es
@@ -1934,6 +2122,17 @@ if (isMain) {
     });
     console.log(JSON.stringify(soloLectura.summary(), null, 2));
     process.exit(0);
+  }
+  // Una invocacion sin --etapa no puede convertir un informe accidental en
+  // barrido I..XI: I-V ya harian SOAP antes de la guarda de VI/IX.
+  if (!args.etapa) {
+    throw new Error("para trafico al piloto se requiere --etapa explicita; sin ella use --solo-informe");
+  }
+  if (args.caseId && (!LOTE_CASE_TARGETS[args.etapa] || !Object.hasOwn(LOTE_CASE_TARGETS[args.etapa], args.caseId))) {
+    throw new Error("--case requiere --etapa VI|IX y un caseId de la matriz del portal");
+  }
+  if (args.caseId && (!Number.isInteger(args.count) || args.count < 1)) {
+    throw new Error("--case requiere --count positivo para limitar la corrida controlada");
   }
   const token = process.env.SIAT_PILOT_TOKEN;
   const nit = process.env.SIAT_NIT;
@@ -1964,8 +2163,10 @@ if (isMain) {
     logFile: args.log,
     pace: args.pace,
     firma,
+    cafc: process.env.SIAT_PILOT_CAFC ?? null,
+    caseFilter: args.caseId,
   });
-  const stages = args.etapa ? [args.etapa] : STAGE_ORDER;
+  const stages = [args.etapa];
   if (args.retryBlocked) {
     runner.clearBlocked(stages);
   }

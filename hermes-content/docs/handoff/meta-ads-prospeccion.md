@@ -49,7 +49,7 @@ Medido en vivo el 17-sep con la Graph API desde el VPS, no heredado:
 | Método de pago en `act_1073680778314945` | ❌ ausente | Sergio Urcullo / Leslie |
 | Página "Onia" `1140384625819526` vinculada a la cuenta | ❌ `promote_pages` vacío. **Es `owned_page` del business, pero eso no alcanza** | Sergio Urcullo, en Business Manager |
 | Campaña 1 `120253773124020022` | ❌ **ARCHIVED desde el 1-sep, y con cero anuncios.** No se reactiva: se recrea | código |
-| Pixel `1012611478191231` en onia.com.bo | ❌ no instalado (0 `fbq` en el HTML) y nunca disparó | código, carril web |
+| Pixel `1012611478191231` en onia.com.bo | ⚠️ **29-sep: aviso sin librería escrito en `origen-de-campana.ts`, SIN publicar y SIN verificar contra Meta** (ver §3.2). Hasta ver `PageView` en «Probar eventos» o un `last_fired_time`, sigue sin disparar | carril web, y mirarlo publicado |
 
 ✅ **Lo que SÍ está resuelto y antes era bloqueo:** el token. `META_SYSTEM_USER_TOKEN` en
 `/root/.hermes/.env` es tipo SYSTEM_USER, `is_valid: true`, `expires_at: 0` (**no vence**),
@@ -70,6 +70,28 @@ de los tres registros, **solo el primero tiene `src`**, y porque se puso a mano.
 
 **Consecuencia si se enciende la pauta así: todo lead llega con `src = NULL` y no se puede
 saber si la campaña sirvió.** Arreglarlo es condición previa a pautar, no un extra.
+
+**Estado al 29-sep (rama `codex/v1-hermes-20260928`, sin publicar): la mitad del sitio está,
+la del producto NO.** La web guarda `src`, `utm_*` y `fbclid` y los suma al enlace de
+`/register` al tocarlo (`web-factory/apps/onia-platform/src/lib/origen-de-campana.ts`). Pero
+con el alta abierta en producción el registro muestra `SignupForm`, que sólo lee `?plan=`;
+`AccessRequestForm` (el único que lee `src`) no se muestra, y nadie lee `utm_*` ni `fbclid`.
+**Sigue habiendo cero altas atribuibles: no se reporta la atribución como hecha.** Falta, en el
+carril de producto (`onia-platform`): que `SignupForm` lea esas claves con la misma lista
+blanca y las guarde (`org.discoverySource` o columna nueva, migración aditiva), y que el alta
+confirmada avise `CompleteRegistration` (ideal: por CAPI). El sitio ya NO manda `Lead` por un
+toque: manda `Contact` (WhatsApp) y `ClicAlta` (alta), para que ninguna campaña optimice por
+clics contados como leads.
+
+**Verificación pendiente del píxel, recién publicado** (el aviso es `fetch` `no-cors`: la
+respuesta es opaca y un error no se ve): abrir `https://onia.com.bo/?fbclid=prueba` y mirar en
+el Administrador de eventos, pestaña «Probar eventos», que entren `PageView` y el evento del
+clic; o leer `last_fired_time` del píxel por Graph API desde el VPS. Si no entran, probar
+`/tr/` y `noscript=1` antes de darlo por vivo.
+
+**Aparte, carril de la guía:** el formulario de `/guia-facturacion` (`CapturaGuia.tsx`) no
+tiene `method`: enviado antes de que cargue React hace GET y deja `?email=&whatsapp=` en la
+dirección (y en los logs). El píxel ya no lo reenvía a Meta, pero el form debería ir por POST.
 
 ### 3.3 Dos materiales de venta desalineados (detectados, NO tocados)
 
@@ -167,8 +189,9 @@ no volvió**, no la facturación. El perfil y el orden de dolores están en `ONI
 
 ### Paso 3 — Arreglar `?src=` en la landing (condición previa a pautar)
 
-Propagar el parámetro desde los CTA de la home hasta `app.onia.com.bo/register`. Sin esto no
-se puede medir ninguna campaña. Es del carril web.
+~~Propagar el parámetro desde los CTA de la home hasta `app.onia.com.bo/register`.~~ Hecho en
+la web el 29-sep, sin publicar. **Lo que falta es del producto**: guardarlo en el alta (§3.2).
+Sin eso no se puede medir ninguna campaña.
 
 ### Paso 4 — Recrear la campaña, en PAUSA (solo cuando 1 a 3 estén y Sergio Urcullo ponga la tarjeta)
 

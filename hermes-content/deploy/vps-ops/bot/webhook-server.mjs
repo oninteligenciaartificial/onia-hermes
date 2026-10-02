@@ -627,6 +627,20 @@ async function procesarWebhook(request, deps, datos) {
     };
   }
 
+  // 6b. UN SKIP DEL TURNO QUE NO SE REENVIÓ NO CONSUME EL DEDUP — la misma regla que el skip del
+  // paso 4, un escalón más abajo. Hoy el único skip de este paso es el toque de un botón del
+  // recordatorio en el inbox de un cliente (`boton_del_recordatorio`, lo contesta la plataforma),
+  // y el caso que muerde es una conversación NUEVA: Chatwoot manda `conversation_created` con el
+  // toque embebido y `message_created` con la MISMA `message_key`. Si el primero se quedaba con la
+  // clave, el segundo —el único que se reenvía a la plataforma— moría acá arriba como
+  // `mensaje_ya_procesado`, y la plataforma no se enteraba nunca: la cita no cambiaba y nadie le
+  // contestaba al paciente. Cuando el skip SÍ se reenvió (`message_created`), la clave queda: un
+  // reintento de Chatwoot no puede hacer que la plataforma procese el toque dos veces.
+  if (result?.skipped && !usoPlataforma) {
+    const releaseFn = typeof deps.releaseMessage === "function" ? deps.releaseMessage : releaseMessage;
+    releaseFn(dedupKey);
+  }
+
   // 7/8. La respuesta se devuelve YA; el evento de n8n viaja aparte para que el llamador lo
   // dispare después de escribirla.
   const n8nEvent = buildBotTurnEvent({
