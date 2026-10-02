@@ -27,11 +27,13 @@ tenemos, no abogada, de todo». La lista no se arma de memoria: sale de
 | Rubro (como lo nombra el alta) | Dónde lo muestra Lucía | Orden |
 |---|---|---|
 | Clínica dental | la recepción de una clínica en una torre de Equipetrol | 1.º (cliente ideal) |
-| Estética y spa | un centro de estética | 2.º |
-| Comercio / tienda | una tienda de galería | 3.º |
-| Importadora / distribuidora | un showroom o depósito | 3.º |
-| Servicios profesionales | un estudio contable o jurídico: **un solo rol** (el ejemplo de la plataforma es «Estudio Contable») | 3.º |
+| Estética y spa | un centro de estética | 3.º |
+| Comercio / tienda | una tienda de galería | 3.º (espera la factura del SIN dentro del sistema) |
+| Importadora / distribuidora | un showroom o depósito | 2.º |
+| Servicios profesionales | un estudio contable o jurídico: **un solo rol** (el ejemplo de la plataforma es «Estudio Contable») | 3.º (espera la factura del SIN dentro del sistema) |
 
+- **El orden** es el de empuje que decidió Sergio Urcullo el 29-sep (CLAUDE.md § ONIA Core): dental → importadora →
+  el resto.
 - **Fuera:** veterinaria y ganadería, que el alta no ofrece.
 - La abogada y la contadora de la v2 se juntan en un solo rol: «estudio».
 - ⚠️ `ONIA_ESTRATEGIA_DE_EMPRESA.md` §7 dice que la Etapa 1 vende solo dental y estética. Sergio Urcullo decidió
