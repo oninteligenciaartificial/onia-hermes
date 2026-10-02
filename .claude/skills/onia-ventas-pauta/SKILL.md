@@ -149,6 +149,21 @@ contestarle de memoria es la forma de quemarlo.
 
 ## 4. Piezas del anuncio (D1 y D4)
 
+> ⛔ **1-oct, de noche: Sergio Urcullo rechazó D1 y D4.** Sus palabras: *«no entiendo por qué haces los carruseles
+> así, respeta tus reglas, mira cómo los hace mi marca personal, aprende cómo los hace la competencia»*.
+> - **Qué estaba mal:** se armaron con el pack `community-editorial`, crema, el que él ya había rechazado el 29-sep,
+>   porque el `CLAUDE.md` todavía lo nombraba como piso (corregido el 2-oct). Salieron cinco láminas iguales,
+>   títulos en mayúsculas, verde de adorno y la captura en un marco de ~450×300 que no se lee.
+> - **Mi error:** las miré y se las mandé sin contrastarlas con la regla «Publicidad que no parezca hecha por IA».
+>
+> **Para rehacerlas:**
+> 1. **Pack `referentes`**, como `sergio-k6v2-*`: portada verde con un objeto de arcilla; interiores blancos con
+>    una idea cada uno (`ensayo`, `dato`, `lista`, `captura`); cierre verde con el botón.
+> 2. **La competencia mirada de verdad:** las 22 capturas que se pidieron en
+>    `research/competencia/anuncios/PEDIDO-CAPTURAS.md`. Hasta el 1-oct nadie había mirado sus creativos, solo los
+>    títulos.
+> 3. **«Sistema con IA»** (pedido del 2-oct), usando solo las frases que Plataforma confirme en el código.
+
 - Briefs: `hermes-content/carousels/briefs/ads/onia-platform-dental-meta-d1-los-de-manana.json` y
   `…-d4-tratamiento-a-medias.json`, de 7 láminas cada uno. Títulos, texto precargado y CTA en
   `ONIA_ADQUISICION_Y_PAUTA.md` §5.8.

@@ -1,5 +1,20 @@
 # Handoff — carril `mercado-y-pauta` (sesión «Ventas y pauta Onia Platform», antes «Análisis de mercado»)
 
+> 🔴 **EN VUELO, 2-oct — rehacer D1 y D4 (misma sesión).**
+> - Sergio Urcullo las rechazó: no respetan las reglas ni el estándar de la marca personal, y no se aprendió de la
+>   competencia.
+> - Por la madre pidió además que digan que Onia es **«un sistema con IA»**.
+> - **Esperando dos cosas:**
+>   1. las 22 capturas de anuncios de la competencia, que hace la madre
+>      (`research/competencia/anuncios/PEDIDO-CAPTURAS.md`);
+>   2. la lista de frases de IA verdaderas que arma Plataforma (`session_014HGgof9kHQkdLXhsZsAq6A`).
+> - **Plan:**
+>   - pack `referentes` (como `sergio-k6v2-*`);
+>   - captura del producto a todo ancho: recorte cerrado o vista móvil;
+>   - mirar las piezas contra la regla «Publicidad» del `CLAUDE.md`;
+>   - mandarle las contactsheets y los 8 mensajes reescritos «con IA» para el OK.
+> - Nada se crea en Meta: ONIA Ads sigue sin tarjeta, y la madre confirma que quedó en la cuenta personal.
+>
 > ✅ **1-oct, de noche (`session_01JkUVtTYrjJ9xUywLXjYz5G`, entorno «Default» con red completa, rama
 > `claude/lucid-mayer-2ejv6v`): los 28 prospectos quedaron VERIFICADOS.**
 > - **8 listos para el OK de Sergio Urcullo**: Spadental, Nexo, Klynink Medic (entró de la reserva), DASHA, Corpo
