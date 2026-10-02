@@ -11,6 +11,10 @@
 > de árboles y torres de vidrio). Vende Onia **mostrando cómo trabaja cada negocio**: un día se pone el ambo, otro
 > el blazer de abogada, otro atiende una tienda. **El rol es un disfraz de ella misma** (como el cosplay de Aitana
 > o Miquela vestida de Euphoria), nunca otra persona.
+> - ⚠️ **En revisión (2-oct, `PLAN.md` D1):** el manual verificado (`MANUAL-PATRONES-INFLUENCERS-IA.md`) dice que Lucía
+>   **mira, no ocupa el puesto**, y nunca aparece como profesional de salud. Recomendación: que visite cada negocio
+>   como ella. Hasta que Sergio Urcullo decida, no se produce ninguna pieza de venta con uniforme. **Los rubros son
+>   solo los 5 de `onia-platform/lib/platform/rubros-activos.ts`**; abogada y contadora pasan a un solo rol, «estudio».
 > - ✅ Escenifica, rotulado: «hoy me pongo el ambo para mostrarte cómo trabaja una clínica con Onia».
 > - ⛔ Nunca: «soy odontóloga», «mis pacientes», «mi estudio», consejo clínico o legal, testimonio. Los avatares IA
 >   de «médicas» dando consejos son el caso de fraude que el público castiga (ESET, LatAm).
@@ -23,7 +27,7 @@
 >
 > | Rol (rubro de Onia) | Ropa | Color firma del rol |
 > |---|---|---|
-> | Odontóloga / clínica dental 🟢 | ambo de dos piezas cuello V, manga corta, bolsillo de pecho, poli-spandex mate; zueco blanco | **ambo terracota** `#C4552F` (su firma hecha uniforme) |
+> | Odontóloga / clínica dental 🟢 | ambo de dos piezas cuello V, manga corta, bolsillo de pecho, poli-spandex mate; zueco blanco | **ambo terracota** `#C4552F` (su firma hecha uniforme). Prenda fija: maniquí `v4/vestuario/ambo-terracota-frente-8d138bd6.jpg` (bolsillo de pecho, pantalón cargo con cordón, puño y botamanga en terracota más oscuro) |
 > | Cosmetóloga / estética | ambo negro o túnica de esteticista, pelo recogido bajo | negro + detalle terracota |
 > | Abogada (servicios profesionales) | blazer de crepé azul marino sin forro, pantalón sastre tiro alto, blusa viscosa marfil, carpeta de cuero | marino + cartera terracota |
 > | Contadora (servicios profesionales) | blusa de algodón manga ¾, pantalón de vestir, cárdigan fino (por el aire acondicionado) | arena + cárdigan terracota |
@@ -55,6 +59,27 @@
 > not the garment») → **1 cr**. QA: cara con `face_identity_qa.py` (≥ 0,70 frontal/3/4) y prenda mirada contra la foto.
 > Video: Kling sobre el still aprobado (6 s, 7,5 cr). Sin logos de terceros sin acuerdo; nada de fotos de catálogo con
 > modelo.
+> **Maniquí propio de una prenda (medido el 2-oct):** en el prompt, **ni «sheet» ni «hex #…»**, porque Seedream los
+> escribe como texto dentro de la imagen. El color va en palabras («burnt orange terracotta, clay flower pot, not
+> pink/salmon/red»), con «no typography anywhere» y «every part the same color, no contrast trim». Después se **mide**
+> el color sobre la tela y se **mira** que las tres vistas sean la misma prenda.
+>
+> **§0-canon — 10 datos fijos (PROPUESTO el 2-oct, SIN aprobar; los aprueba Sergio Urcullo).** Si un dato nuevo
+> aparece en un pie, entra acá ese mismo día o el pie no se publica. El canon nunca la hace dueña de un negocio,
+> profesional de salud ni empleada de nadie, tampoco de Onia.
+> 1. **Qué es:** un personaje IA creado en 2026 por el equipo de Onia en Santa Cruz. Aparenta 26 y lo dice con humor:
+>    «hace un año yo no existía».
+> 2. **Nombre:** siempre «Lucía Antelo», con apellido (hay una «Lucía Libertaria» política; nunca toca política).
+> 3. **Barrio:** Equipetrol, en un depto con plantas y ventanal a torres de vidrio.
+> 4. **Qué hace:** recorre negocios de Santa Cruz y muestra cómo trabajan con Onia. Observa; no atiende, no cobra y no
+>    opina de salud, leyes ni impuestos.
+> 5. **Su límite:** no puede comer ni tomar nada. Se le antojan el cuñapé de la mañana y la salteña. Nunca dice que
+>    estuvo en un lugar o evento real.
+> 6. **Su hora:** las 8 de la mañana, cuando abren las recepciones: «es la hora en que se ve todo».
+> 7. **Lo que le molesta del humo de la IA:** que prometan «la IA lo hace todo». Ella muestra solo lo que funciona hoy.
+> 8. **Su color:** terracota, siempre en cuadro.
+> 9. **Su música:** la del carnaval cruceño. En sus piezas solo suena música con licencia.
+> 10. **Cómo habla:** voseo cruceño, frases cortas y con humor. Sin voz hasta resolver el acento (`PLAN.md` D4).
 
 > ## 🔴 Estado vigente — 2026-09-29: Lucía v4 = la cara ORIGINAL, fijada de verdad
 >
