@@ -46,7 +46,7 @@ algo que no existe.
   - «push a la principal»
   - «Shift Tab»
   - «manual mode on»
-  - al final: «Comentá MANUAL» (no lo dijo al grabar: va solo en pantalla y en el caption)
+  - al final: «Comentá COMUNIDAD» (lo dijo así a cámara; corregido el 1-oct, decía MANUAL)
 - **Pantallas:**
   - la barra de estado con el modo;
   - Shift+Tab ciclando;
@@ -59,7 +59,7 @@ algo que no existe.
 
   > Tu Claude Code probablemente ya no te pregunta casi nada: desde fines de septiembre arranca en modo auto. Bloquea
   > lo peligroso, pero deja pasar un push a tu rama principal. Si querés que vuelva a preguntarte: Shift+Tab, o
-  > defaultMode en default en tu settings. El bloque para copiar está en mi comunidad: comentá MANUAL y te paso el link.
+  > defaultMode en default en tu settings. El bloque para copiar está en mi comunidad: comentá COMUNIDAD y te paso el link.
 - **Yap 1:** arrancar por «Claude Code puede hacer push a tu rama principal sin preguntarte».
 - **Yap 2:** solo el arreglo: el bloque de settings y «manual mode on», ≤ 30 s.
 

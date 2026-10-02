@@ -1,6 +1,6 @@
 {
   "title": "Las 2 listas que tu bot necesita: confirmado / por confirmar (v2, pack referentes)",
-  "caption": "Probé un bot con un negocio de ejemplo: un cliente pide 200 cajas con logo para el viernes.\n\nSin reglas no prometió. Con dos listas, confirmado y por confirmar, usó el dato real («hacemos desde 50») y dijo qué faltaba confirmar.\n\nLa IA solo sabe lo que vos le das. Escribile las dos listas.\n\nPrueba del 28-sep con Sonnet 5.5, una corrida por caso. Las dos respuestas completas están en la comunidad.",
+  "caption": "Probé un bot con un negocio de ejemplo: un cliente pide 200 cajas con logo para el viernes.\n\nSin reglas no prometió. Con dos listas, confirmado y por confirmar, usó el dato real («hacemos desde 50») y dijo qué faltaba confirmar.\n\nLa IA solo sabe lo que vos le das. Escribile las dos listas.\n\nPrueba del 28-sep con Sonnet 5.5, una corrida por caso.\n\nComentá PROMESA y te paso el link de la comunidad con las dos respuestas completas y la plantilla de las dos listas.",
   "hashtags": [
     "#chatbot",
     "#whatsapp",
@@ -78,17 +78,16 @@
       "theme": "blanco",
       "headline": "Con las listas, *usó el dato real*",
       "body": "«200 unidades está dentro de lo que trabajamos (hacemos desde 50).»\n\nY aclaró que el plazo lo confirma con el equipo.\n\nLa IA solo sabe lo que vos le das.",
-      "next": "las dos respuestas",
+      "next": "las dos listas",
       "alt_text": "Con las listas el bot usó el dato real"
     },
     {
       "number": 7,
-      "layout": "ensayo",
-      "theme": "verde",
-      "headline": "Las dos respuestas, en la *comunidad*",
-      "body": "Completas, lado a lado, con la plantilla de las dos listas.\n\nPrueba del 28-sep con Sonnet 5.5, una corrida por caso.",
-      "cta": "Comunidad en la bio",
-      "alt_text": "Las dos respuestas completas en la comunidad"
+      "layout": "cierre",
+      "theme": "negro",
+      "keyword": "PROMESA",
+      "body": "y te paso el link de la comunidad con las dos listas.",
+      "alt_text": "Comentá PROMESA para recibir las dos listas"
     }
   ]
 }

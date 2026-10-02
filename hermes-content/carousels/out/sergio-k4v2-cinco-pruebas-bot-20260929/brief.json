@@ -1,6 +1,6 @@
 {
   "title": "5 pruebas antes de activar tu bot de WhatsApp (v2, pack referentes)",
-  "caption": "Antes de activar un bot de WhatsApp, mandale vos los mensajes que le van a mandar tus clientes.\n\nLa prueba que más importa es la 3: preguntale algo que no le diste (stock, plazo, precio). Si contesta con un dato que no está en su información, lo inventó.\n\nLas otras cuatro salen del bot de ONIA, y cada una tiene hoy su prueba automática.\n\nGuardá la lámina 6 para el día que lo actives.",
+  "caption": "Antes de activar un bot de WhatsApp, mandale vos los mensajes que le van a mandar tus clientes.\n\nLa prueba que más importa es la 3: preguntale algo que no le diste (stock, plazo, precio). Si contesta con un dato que no está en su información, lo inventó.\n\nLas otras cuatro salen del bot de ONIA, y cada una tiene hoy su prueba automática.\n\nGuardá la lámina 6 para el día que lo actives.\n\nComentá PRUEBAS y te paso el link de la comunidad para que cuentes cuál te falló.",
   "hashtags": [
     "#whatsapp",
     "#chatbot",
@@ -106,12 +106,11 @@
     },
     {
       "number": 7,
-      "layout": "ensayo",
-      "theme": "verde",
-      "headline": "¿Cuál *falló*?",
-      "body": "Hacé las cinco antes de activarlo.\n\nLa que más importa es la 3: si contesta con un dato que no está en su información, lo inventó.\n\nContá en la comunidad cuál te falló.",
-      "cta": "Comunidad en la bio",
-      "alt_text": "Contá en la comunidad qué prueba falló"
+      "layout": "cierre",
+      "theme": "negro",
+      "keyword": "PRUEBAS",
+      "body": "y te paso el link de la comunidad: contá cuál te falló.",
+      "alt_text": "Comentá PRUEBAS para recibir el link de la comunidad"
     }
   ]
 }

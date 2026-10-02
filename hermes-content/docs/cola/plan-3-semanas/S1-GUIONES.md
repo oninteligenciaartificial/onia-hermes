@@ -654,6 +654,10 @@ comunidad.
 Publicar en Onia Community (Announcements) ANTES que el video. Los de «comentá PALABRA» los manda
 Sergio Urcullo a mano por DM: la automatización comentario → DM no está probada.
 
+⚠️ **Corregido 1-oct:** desde el pedido de Sergio Urcullo del 1-oct, **todos** van a Avisos (también
+los que decían «DM»): el que comenta recibe por DM el link a la comunidad, no el texto. Copia lista
+para pegar, día por día: `cola/drops/AVISOS-POR-DIA.md`. Si corregís un drop, corregilo acá y allá.
+
 **1 · D01-B · Planilla Sonnet vs Opus** (comunidad)
 ```
 Tarea            | Modelo | Correcciones | Minutos hasta OK | ¿La usarías sin tocar?
@@ -666,6 +670,9 @@ Regla: si Sonnet empata en 2 de 3 → Sonnet por defecto; Opus para el tipo de t
 ```
 
 **2 · D02-B · La cuenta de WhatsApp desde el 1-oct** (comunidad)
+⚠️ **Corregido 1-oct: NO se publica.** Lo reemplaza `drop-2` de `cola/drops/2026-10-01-drops-noticias-repos.md`:
+Meta confirmó que el servicio se cobra a la tarifa de utility y con 1.000 gratis por mes y por número
+(`VERIFICACION-LAPTOP-20261001.md` §1); este decía «service cuando Meta la publique».
 ```
 Fuente: developers.facebook.com/documentation/business-messaging/whatsapp/pricing → rate cards → Rates (CSV), en USD
 Fila: país del número del CLIENTE (Bolivia +591 = "Rest of Latin America")
@@ -676,15 +683,23 @@ La tabla dice desde qué fecha rige: revisala cada mes. Si falta una tarifa, no 
 ```
 
 **3 · D03-A · Hook Stop + guarda** (comunidad)
+⚠️ **Corregido 1-oct:** (1) la ruta `// .claude/settings.json` iba adentro del bloque JSON: quien lo
+copiaba entero pegaba un comentario que JSON no admite. Ahora va afuera. (2) Sumada la prueba del
+conflicto que pedía LOTE-A (Pendientes) y que el guion final D03-A promete («armá un conflicto a
+propósito y corré tu script: tiene que avisar y no commitear»).
+
+En `.claude/settings.json`:
 ```json
-// .claude/settings.json
 { "hooks": { "Stop": [ { "hooks": [ { "type": "command", "command": "node scripts/git-autosync.js" } ] } ] } }
 ```
 ```bash
 # En tu script, ANTES de git add / commit. Si alguno imprime algo: salir sin tocar nada.
 git rev-parse -q --verify MERGE_HEAD     # imprime un hash si hay un merge a medias
 git diff --name-only --diff-filter=U     # lista los archivos en conflicto
-# Comprobar: /hooks dentro de Claude Code tiene que listar tu Stop.
+# Comprobar 1: /hooks dentro de Claude Code tiene que listar tu Stop.
+# Comprobar 2: en una carpeta de prueba, git init, dos ramas que cambian la misma línea
+#   del mismo archivo, git merge (queda en conflicto) y corré tu script:
+#   tiene que avisar y no commitear.
 ```
 
 **4 · D03-C · Plantilla de regla con historia** (comunidad)
@@ -698,8 +713,11 @@ Orden del archivo: al arrancar → las que más se rompen → producto → cómo
 ```
 
 **5 · D04-B · Apagar skills que no usás** (comunidad)
+⚠️ **Corregido 1-oct:** la ruta iba como comentario `//` adentro del bloque JSON (JSON no admite
+comentarios: copiado entero, rompe el archivo). Ahora va afuera. El contenido no cambió.
+
+En `.claude/settings.local.json` (o /skills → Espacio cambia el estado → Esc guarda):
 ```json
-// .claude/settings.local.json  (o /skills → Espacio cambia el estado → Esc guarda)
 { "skillOverrides": { "skill-que-nunca-uso": "off", "skill-de-vez-en-cuando": "name-only" } }
 ```
 ```
@@ -730,14 +748,18 @@ A mano: npx playwright install chromium   y después
 **Próximos pasos** — en orden, con el criterio de "listo" de cada uno.
 ```
 
-**8 · D06-C · Esqueleto del corredor** (comunidad)
+**8 · D06-C · Esqueleto del corredor** (comunidad · también lo pide el carrusel K13, «Comentá LOOP»)
+⚠️ **Corregido 1-oct:** decía `unset ANTHROPIC_API_KEY ANTHROPIC_TOKEN`. `ANTHROPIC_TOKEN` no existe en la
+doc de Claude Code; la documentada, además de `ANTHROPIC_API_KEY`, es `ANTHROPIC_AUTH_TOKEN` («Custom value
+for the Authorization header», code.claude.com/docs/en/env-vars, releída el 1-oct). Con la línea vieja, una
+`ANTHROPIC_AUTH_TOKEN` cargada no se borraba. Ojo: `scripts/loops/onia-loop.sh:264` y `deploy/vps-ops/claude-guardia.sh:29` tienen la misma línea.
 ```bash
 #!/usr/bin/env bash
 set -uo pipefail
 exec 9>/tmp/loop-NOMBRE.lock; flock -n 9 || exit 0      # la vuelta anterior sigue viva: esta no arranca
 cd /ruta/al/worktree || { echo "no pude entrar" >> loop.log; exit 2; }   # acá va tu aviso (1 cada 6 h)
 [ "$(git branch --show-current)" = "rama-esperada" ] || exit 2
-unset ANTHROPIC_API_KEY ANTHROPIC_TOKEN                  # que use la suscripción, no una clave suelta
+unset ANTHROPIC_API_KEY ANTHROPIC_AUTH_TOKEN             # que use la suscripción, no una clave suelta
 timeout 50m claude -p --allowedTools "Read,Edit,Grep,Glob,Bash" < prompt.md >> loop.log 2>&1
 # cron en UTC (Bolivia = UTC-4): 5 * * * * /ruta/loop.sh   · instalar con archivo temporal + bash -n + mv
 ```
@@ -764,7 +786,8 @@ Si el número supera los clientes que podés atender solo: revisá precio o gast
 Es una cuenta de costos, no un consejo de inversión.
 ```
 
-**11 · D03-B · AGENTS** (DM)
+**11 · D03-B · AGENTS** (comunidad · comentá AGENTS → DM con el link)
+⚠️ **Corregido 1-oct:** decía «(DM)». Pasa a Avisos de la comunidad (pedido de Sergio Urcullo del 1-oct). Texto igual.
 ```
 AGENTS.md → las reglas compartidas (Claude Code, Codex y los demás)
 CLAUDE.md → primera línea:   @AGENTS.md
@@ -773,7 +796,8 @@ Windows: usá el import, no un symlink (Git lo clona como texto plano).
 Comprobar: preguntale a Claude una regla que solo está en AGENTS.md.
 ```
 
-**12 · D05-A · CARRIL** (DM)
+**12 · D05-A · WORKTREE** (comunidad · comentá WORKTREE → DM con el link; también lo pide el carrusel K12)
+⚠️ **Corregido 1-oct:** decía «CARRIL (DM)». La palabra del video y del carrusel K12 es WORKTREE, y el recurso pasa a Avisos. Texto igual.
 ```bash
 git worktree add -b carril-web ../mi-proyecto-web     # carpeta nueva con rama nueva
 cd ../mi-proyecto-web && claude                       # o, desde el proyecto: claude -w carril-web
@@ -793,6 +817,9 @@ Fable solo cuando Opus con esfuerzo alto no alcanzó.
 ```
 
 **14 · D07-B · MCP** (DM)
+⚠️ **Corregido 1-oct: NO se publica.** Lo reemplaza `drop-14` de `cola/drops/2026-10-01-drops-noticias-repos.md`:
+este usaba `grep "mcp__"` como criterio para sacar servidores, y la medición del 29-sep lo desmiente
+(13 servidores sin ninguna mención en archivos se usaban igual; LOTE-B, Pendientes).
 ```bash
 claude mcp list                        # servidores y si están conectados
 grep -rn "mcp__" .claude/ docs/        # ¿algún archivo tuyo los nombra?

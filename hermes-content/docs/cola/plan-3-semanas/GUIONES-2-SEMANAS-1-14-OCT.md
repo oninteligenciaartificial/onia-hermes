@@ -30,7 +30,7 @@ Cada pieza cierra pidiendo un comentario con su palabra. El recurso no cambió: 
 | Día | Pieza | PALABRA | Qué recibe por DM (el link) |
 |---|---|---|---|
 | Jue 1 | D01-B (grabado: va en pantalla y caption) | PLANILLA | comunidad · drop 1 de S1 «Planilla Sonnet vs Opus» |
-| Jue 1 | N03 (grabado: va en pantalla y caption) | MANUAL | comunidad · drop «Volver a modo manual» |
+| Jue 1 | N03 (grabado: lo dijo a cámara) | COMUNIDAD | comunidad · drop «Volver a modo manual» |
 | Jue 1 | D02-B | TARIFA | comunidad · drop 2 de S1 «La cuenta de WhatsApp» |
 | Vie 2 | D02-A | EFFORT | comunidad · drop con la tabla de esfuerzo |
 | Vie 2 | DD-A | CACHE | comunidad · drop tabla Sol vs Astra y la cuenta de caché |
@@ -114,7 +114,7 @@ La regla: si Sonnet empata en dos de tres, usalo por defecto. Opus, solo para el
 La planilla para anotarlo está en la comunidad.
 
 ### N03 · Vertical · Claude Code ya no te pregunta casi nada: qué deja pasar el modo auto
-*Noticia* · **Demuestra:** la barra de estado de Claude Code con el modo; Shift+Tab ciclando modos; la lista «Blocked by default» / «Allowed by default» de la doc; el bloque de `settings.json` y la sesión nueva mostrando «manual mode on» · **Cierre:** comentá MANUAL → DM con el link a la comunidad de WhatsApp (falta escribir: drop «Volver a modo manual», texto propuesto en Pendientes). Grabado sin el pedido: el «Comentá MANUAL» va en pantalla al final y en el caption
+*Noticia* · **Demuestra:** la barra de estado de Claude Code con el modo; Shift+Tab ciclando modos; la lista «Blocked by default» / «Allowed by default» de la doc; el bloque de `settings.json` y la sesión nueva mostrando «manual mode on» · **Cierre:** comentá COMUNIDAD → DM con el link a la comunidad de WhatsApp (drop N03 «Volver a modo manual», en `cola/drops/2026-10-01-drops-noticias-repos.md`). ⚠️ Corregido el 1-oct: acá decía MANUAL; al grabar, Sergio Urcullo dijo «comentá comunidad» y manda lo que dijo
 
 Tu Claude Code probablemente ya no te pide permiso para casi nada. Desde fines de septiembre arranca en modo auto, en todos los planes. Esto es lo que deja pasar.
 
@@ -280,6 +280,9 @@ Hacé la prueba vos. El ejercicio de las tres propuestas, con el prompt completo
 Pegalo en los dos modelos. Si te salió bien, vas a ver los mismos tres totales: mil cincuenta, mil sesenta y mil trescientos cincuenta. Si alguno te da setecientos, ese modelo se comió la trampa.
 
 ### N06 · Vertical · Un agente de terminal gratis, ahora con Gemini 3.8 Flash
+
+> ⛔ **NO GRABAR — corregido el 1-oct (noche).** La premisa es falsa hoy: Google reemplazó Gemini CLI por **Antigravity CLI** para el plan gratis el 18-jun-2026 (banner de geminicli.com visto el 1-oct y blog de Google Developers del 19-may; capturas en `carousels/briefs/assets/sergio-n06-gemini-cli-20261001/`). Gratis solo queda con API key paga. El drop N06 enseña el mismo login gratis: tampoco sirve. Se reemplaza por un repo de la reserva (decide Sergio Urcullo).
+
 *Noticia* · **Demuestra:** `npm install -g @google/gemini-cli`, login con cuenta de Google, `/model` mostrando `gemini-3.8-flash`, un pedido sobre una carpeta real · **Cierre:** comentá GEMINI → DM con el link a la comunidad de WhatsApp (falta escribir: drop «Gemini CLI en 5 minutos», texto propuesto en Pendientes)
 
 Google tiene un agente de terminal gratis, y desde el veintinueve de septiembre suma Gemini tres punto ocho Flash.

@@ -1,0 +1,120 @@
+{
+  "title": "Sonnet 4.5 se apaga el 30 de noviembre: encontralo y migralo con un comando (N02, noticia, pack referentes)",
+  "caption": "Sonnet 4.5 se retira de la API de Claude el 30 de noviembre de 2026. Después de esa fecha, los pedidos a ese modelo fallan. Si una automatización tuya lo usa, así lo encontrás y lo migrás.\n\nAnthropic recomienda pasar a Sonnet 5.5.\n\n1. Buscalo. En tu código, el texto claude-sonnet-4-5. En n8n, abrí cada nodo de Anthropic y mirá qué modelo tiene elegido.\n2. Migralo. En Claude Code: /claude-api migrate this project to claude-sonnet-5-5. Antes de tocar archivos te pregunta el alcance (toda la carpeta, una subcarpeta o una lista de archivos) y al final te deja una lista para revisar a mano.\n3. Si programás contra la API, Sonnet 5.5 rechaza con error 400 cuatro cosas que 4.5 aceptaba: temperature, top_p o top_k cambiados; la respuesta pre-llenada; tool_choice any o tool, y el pensamiento con budget_tokens.\n4. Probá. Tu flujo corre sin error 400 y el campo model de la respuesta dice el modelo nuevo.\n\nFuentes, con capturas del 1 de octubre de 2026: la nota del 30 de septiembre en las release notes de la plataforma de Claude (platform.claude.com/docs/en/release-notes/overview), la página Model deprecations y la guía de migración a Sonnet 5.5 (platform.claude.com/docs/en/models/sonnet-5-5/migration-guide).\n\nEl checklist completo, con el comando para buscarlo, está en la comunidad. Comentá MIGRAR y te paso el link.",
+  "hashtags": [
+    "#claude",
+    "#anthropic",
+    "#claudecode",
+    "#ia",
+    "#automatizacion",
+    "#bolivia"
+  ],
+  "serie": "Noticia · Claude API",
+  "fuentes": {
+    "guion": "hermes-content/docs/cola/plan-3-semanas/GUIONES-2-SEMANAS-1-14-OCT.md §N02 (dom 4-oct, palabra MIGRAR)",
+    "auditoria": "hermes-content/docs/cola/plan-3-semanas/auditoria-20260930/LOTE-D.md §N02",
+    "drop": "hermes-content/docs/cola/drops/2026-10-01-drops-noticias-repos.md §N02 (Checklist: de Sonnet 4.5 a Sonnet 5.5)",
+    "releida_1_oct": [
+      "https://platform.claude.com/docs/en/release-notes/overview — September 30, 2026: «We announced the deprecation of the Claude Sonnet 4.5 model (claude-sonnet-4-5-20250929), with retirement on the Claude API scheduled for November 30, 2026. We recommend migrating to Claude Sonnet 5.5.»",
+      "https://platform.claude.com/docs/en/about-claude/model-deprecations — fila claude-sonnet-4-5-20250929: Deprecated, 30-sep-2026, retiro 30-nov-2026, reemplazo claude-sonnet-5-5; «Requests to models past the retirement date will fail.»",
+      "https://platform.claude.com/docs/en/models/sonnet-5-5/migration-guide — «In Claude Code, run /claude-api migrate… /claude-api migrate this project to claude-sonnet-5-5… It asks you to confirm the migration scope (entire working directory, a subdirectory, or a specific file list) before editing any files… then produces a checklist of items to verify manually»; sampling: «a non-default value returns a 400 error»; prefill: «Claude Sonnet 5.5 rejects a prefilled last assistant turn with a 400 error… Claude Sonnet 4.5… accept one»; budget_tokens: «Claude Sonnet 4.5 and Claude Haiku 4.5 use it for all thinking. Claude Sonnet 5.5 returns a 400 error»; «Forced tool use is not supported»."
+    ],
+    "imagen_portada": "hermes-content/galeria/objetos/reloj-arena-crudo.jpg (Pexels, Aziz Hasan AY, Pexels License, https://www.pexels.com/photo/hourglass-on-white-background-15556380/), pasada a grises, fondo a blanco puro y centrada con ImageMagick → assets/sergio-n02-sonnet45-se-apaga-20261001/reloj-arena-pexels-gris.jpg. Sin gasto."
+  },
+  "slides": [
+    {
+      "number": 1,
+      "layout": "ilustrado",
+      "theme": "verde",
+      "badge": "noticia",
+      "logo": "hermes-content/references/brand-claude/claude.svg",
+      "headline": "*Sonnet 4.5* se apaga el 30 de noviembre",
+      "subtitle": "encontralo y migralo con un comando",
+      "image": "hermes-content/carousels/briefs/assets/sergio-n02-sonnet45-se-apaga-20261001/reloj-arena-pexels-gris.jpg",
+      "body": "Si una automatización tuya lo usa, tenés casi dos meses.",
+      "next": "la nota",
+      "fuente": "release notes 30-sep + Model deprecations (retiro 30-nov-2026)",
+      "alt_text": "Un reloj de arena con toda la arena abajo: Claude Sonnet 4.5 se retira de la API el 30 de noviembre"
+    },
+    {
+      "number": 2,
+      "layout": "captura",
+      "theme": "blanco",
+      "headline": "La nota oficial de *Anthropic*",
+      "image": "hermes-content/carousels/briefs/assets/sergio-n02-sonnet45-se-apaga-20261001/release-notes-30sep-20261001.png",
+      "body": "Retiro en la API de Claude. Recomiendan pasar a Sonnet 5.5.",
+      "next": "paso 1",
+      "fuente": "captura de platform.claude.com/docs/en/release-notes/overview, 1-oct-2026",
+      "alt_text": "Captura de las release notes de la plataforma de Claude: el 30 de septiembre de 2026 anuncian el retiro de Sonnet 4.5 para el 30 de noviembre"
+    },
+    {
+      "number": 3,
+      "layout": "ensayo",
+      "theme": "blanco",
+      "headline": "Paso 1: *buscalo*",
+      "body": "En tu código, buscá este texto:\n\n*claude-sonnet-4-5*\n\nEn n8n, abrí cada nodo de Anthropic y mirá qué modelo tiene elegido.\n\nAnotá cuántos aparecen.",
+      "next": "paso 2",
+      "fuente": "GUIONES §N02 paso uno; drop N02 punto 1",
+      "alt_text": "Paso 1: buscar el texto claude-sonnet-4-5 en el código y revisar el modelo de cada nodo de Anthropic en n8n"
+    },
+    {
+      "number": 4,
+      "layout": "captura",
+      "theme": "blanco",
+      "headline": "Paso 2: *un comando*",
+      "image": "hermes-content/carousels/briefs/assets/sergio-n02-sonnet45-se-apaga-20261001/migration-guide-claude-api-migrate-20261001.png",
+      "body": "En Claude Code. Antes de tocar archivos, te pregunta el alcance.",
+      "next": "paso 3",
+      "fuente": "captura de platform.claude.com/docs/en/models/sonnet-5-5/migration-guide, 1-oct-2026",
+      "alt_text": "Captura de la guía de migración a Sonnet 5.5: el comando /claude-api migrate this project to claude-sonnet-5-5 en Claude Code"
+    },
+    {
+      "number": 5,
+      "layout": "lista",
+      "theme": "blanco",
+      "headline": "Paso 3: lo que 5.5 *rechaza*",
+      "body": "si programás contra la API: cada uno da error 400",
+      "items": [
+        {
+          "label": "Temperatura cambiada",
+          "text": "temperature, top_p o top_k: sacalos"
+        },
+        {
+          "label": "Respuesta pre-llenada",
+          "text": "para el formato, usá salidas estructuradas"
+        },
+        {
+          "label": "Herramienta obligada",
+          "text": "tool_choice any o tool: pasalo a auto"
+        },
+        {
+          "label": "Presupuesto de pensamiento",
+          "text": "sacá budget_tokens y elegí un nivel de esfuerzo"
+        }
+      ],
+      "next": "la prueba",
+      "fuente": "guía de migración a Sonnet 5.5, releída el 1-oct: sampling «a non-default value returns a 400 error. Remove them»; prefill «Output format: use structured outputs»; «Forced tool use is not supported» (auto + strict); budget_tokens «Remove the budget and set an effort level»",
+      "alt_text": "Cuatro cosas que Sonnet 4.5 aceptaba y Sonnet 5.5 rechaza con error 400"
+    },
+    {
+      "number": 6,
+      "layout": "dato",
+      "theme": "blanco",
+      "value": "400",
+      "headline": "el error que *no tiene que salir*",
+      "body": "Probá tu flujo: corre sin error 400 y el campo model de la respuesta dice el modelo nuevo.",
+      "next": "el checklist",
+      "fuente": "GUIONES §N02 «Cómo sabés que quedó»; drop N02 punto 4",
+      "alt_text": "400: el error que no tiene que aparecer al probar la migración"
+    },
+    {
+      "number": 7,
+      "layout": "cierre",
+      "theme": "negro",
+      "keyword": "MIGRAR",
+      "body": "y te paso el checklist de migración desde Sonnet 4.5.",
+      "fuente": "GUIONES, tabla de palabras: dom 4 · N02 · MIGRAR → drop «Checklist de migración desde Sonnet 4.5»",
+      "alt_text": "Comentá MIGRAR para recibir el checklist de migración desde Sonnet 4.5"
+    }
+  ]
+}

@@ -19,7 +19,8 @@
       "number": 1,
       "theme": "verde",
       "image_style": "clay",
-      "next": "el problema"
+      "next": "el problema",
+      "image": "hermes-content/galeria/ilustraciones/sergio-k6v2-confirmado-por-confirmar-20260929-s01-c3bbe494.jpg"
     },
     {
       "number": 2,
@@ -85,7 +86,7 @@
       "layout": "cierre",
       "theme": "negro",
       "keyword": "PROMESA",
-      "body": "y te paso el link de la comunidad con las dos listas.",
+      "body": "y te paso el link de la comunidad con las dos listas.",
       "alt_text": "Comentá PROMESA para recibir las dos listas"
     }
   ]

@@ -20,7 +20,8 @@
       "number": 1,
       "theme": "verde",
       "image_style": "clay",
-      "next": "por qué"
+      "next": "por qué",
+      "image": "hermes-content/galeria/ilustraciones/sergio-k4v2-cinco-pruebas-bot-20260929-s01-3f374e98.jpg"
     },
     {
       "number": 2,
@@ -108,7 +109,7 @@
       "layout": "cierre",
       "theme": "negro",
       "keyword": "PRUEBAS",
-      "body": "y te paso el link de la comunidad: contá cuál te falló.",
+      "body": "y te paso el link de la comunidad: contá cuál te falló.",
       "alt_text": "Comentá PRUEBAS para recibir el link de la comunidad"
     }
   ]

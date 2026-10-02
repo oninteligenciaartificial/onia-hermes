@@ -20,7 +20,8 @@
       "number": 1,
       "theme": "verde",
       "image_style": "acuarela",
-      "next": "por qué"
+      "next": "por qué",
+      "image": "hermes-content/galeria/ilustraciones/sergio-k3v2-claude-md-historia-20260929-s01-e5a8a39f.jpg"
     },
     {
       "number": 2,
@@ -98,7 +99,7 @@
       "layout": "cierre",
       "theme": "negro",
       "keyword": "HISTORIA",
-      "body": "y te paso el link de la comunidad con la plantilla.",
+      "body": "y te paso el link de la comunidad con la plantilla.",
       "alt_text": "Comentá HISTORIA para recibir la plantilla de regla con historia"
     }
   ]

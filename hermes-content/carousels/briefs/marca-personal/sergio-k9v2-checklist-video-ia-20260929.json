@@ -19,7 +19,8 @@
       "number": 1,
       "theme": "verde",
       "image_style": "clay",
-      "next": "por qué"
+      "next": "por qué",
+      "image": "hermes-content/galeria/ilustraciones/sergio-k9v2-checklist-video-ia-20260929-s01-b436d635.jpg"
     },
     {
       "number": 2,
@@ -106,7 +107,7 @@
       "layout": "cierre",
       "theme": "negro",
       "keyword": "REVISAR",
-      "body": "y te paso el link de la comunidad con mi editor.",
+      "body": "y te paso el link de la comunidad con mi editor.",
       "alt_text": "Comentá REVISAR para recibir los pasos del editor de video con IA"
     }
   ]

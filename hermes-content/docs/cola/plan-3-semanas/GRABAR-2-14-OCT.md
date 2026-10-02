@@ -164,6 +164,9 @@ Pegalo en los dos modelos. Si te salió bien, vas a ver los mismos tres totales:
 
 ### N06 · Vertical · Un agente de terminal gratis, ahora con Gemini 3.8 Flash
 
+> ⛔ **NO GRABAR — corregido el 1-oct (noche).** La premisa es falsa hoy: Google reemplazó Gemini CLI por **Antigravity CLI** para el plan gratis el 18-jun-2026 (banner de geminicli.com visto el 1-oct y blog de Google Developers del 19-may; capturas en `carousels/briefs/assets/sergio-n06-gemini-cli-20261001/`). Gratis solo queda con API key paga. El drop N06 enseña el mismo login gratis: tampoco sirve. Se reemplaza por un repo de la reserva (decide Sergio Urcullo).
+
+
 **En pantalla:** `npm install -g @google/gemini-cli`, login con Google, `/model` con `gemini-3.8-flash` y un pedido sobre una carpeta real.
 
 **Palabra:** GEMINI

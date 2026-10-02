@@ -23,15 +23,15 @@
       "number": 1,
       "layout": "ilustrado",
       "theme": "verde",
-      "badge": "nuevo",
       "logo": "hermes-content/references/brand-claude/claudecode.svg",
-      "headline": "Claude Code corre tu *verify* antes de commitear",
-      "subtitle": "desde el 30 de septiembre",
+      "headline": "Claude Code corre tu *verify*",
+      "subtitle": "antes de commitear, desde el 30 de septiembre",
       "image": "hermes-content/carousels/briefs/assets/sergio-n04-skill-verify-20261001/portada-sobres-lupa-recorte.jpg",
       "image_origen": "Recorte de hermes-content/galeria/ilustraciones/sobres-trampa-a.png (sin gasto): sobres y lupa, bordes difuminados sobre gris claro para que entre entera en la portada.",
       "body": "Una skill con ese nombre y Claude la corre justo antes. Te muestro cómo armarla.",
       "next": "qué cambió",
-      "alt_text": "Una lupa sobre unos sobres: Claude Code corre tu skill verify antes de commitear"
+      "alt_text": "Una lupa sobre unos sobres: Claude Code corre tu skill verify antes de commitear",
+      "badge_descartado": "nuevo: con «Claude Code corre tu» el título llega al borde derecho y el sello lo tapaba (visto el 1-oct)"
     },
     {
       "number": 2,
@@ -56,8 +56,8 @@
       "number": 3,
       "layout": "ensayo",
       "theme": "blanco",
-      "headline": "Una *indicación*, no un candado",
-      "body": "Vale cuando commitea Claude. Un git commit que hacés vos a mano no la corre.\n\nY no corre en commits que solo tocan documentación o solo tests.",
+      "headline": "Una *indicación*, no un candado",
+      "body": "Vale cuando commitea Claude, no cuando commiteás vos a mano.\n\nY no corre en commits que solo tocan documentación o solo tests.",
       "next": "3 pasos",
       "alt_text": "verify es una indicación, no un candado: no corre en commits manuales ni en los de solo documentación o tests"
     },
@@ -74,7 +74,7 @@
         },
         {
           "label": "Nombre y chequeos",
-          "text": "arriba name: verify; abajo, qué revisar"
+          "text": "arriba name: verify; abajo, tus chequeos"
         },
         {
           "label": "Actualizá",
@@ -130,7 +130,7 @@
       "layout": "cierre",
       "theme": "negro",
       "keyword": "VERIFY",
-      "body": "y te mando el link a la plantilla de verify.",
+      "body": "y te paso el link a la comunidad con la plantilla.",
       "alt_text": "Comentá VERIFY para recibir la plantilla de la skill verify"
     }
   ]

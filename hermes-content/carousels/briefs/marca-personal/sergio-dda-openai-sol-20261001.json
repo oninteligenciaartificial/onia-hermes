@@ -1,0 +1,106 @@
+{
+  "title": "El modelo nuevo de OpenAI cuesta un quinto, y una parte sale casi gratis (DD-A, noticia, pack referentes)",
+  "caption": "OpenAI presentó GPT-6.1 Sol el 29 de septiembre, en su DevDay. Según OpenAI, rinde cerca de Astra, su modelo grande, por un quinto del precio.\n\nLos números de su página de precios, por millón de tokens: Sol cobra 2 dólares lo que entra y 10 lo que sale. Astra, 10 y 50.\n\nQué cambia para vos: lo que entra desde la caché cuesta 0,10 dólares el millón, veinte veces menos que la entrada normal. Es lo que repetís igual al principio de cada pedido: las instrucciones de tu agente, tu lista de precios.\n\n1. Ponelo primero y no lo toques. Si cambia el principio, no hay caché.\n2. Tiene que pasar de 1.024 tokens.\n3. La primera vez cuesta un poco más (2,50 dólares el millón: es cuando se guarda). Después, 0,10.\n4. Dura al menos 30 minutos desde el último pedido que la usó.\n5. Mirá cached_tokens en la respuesta. Si después del primer pedido sigue en 0, cambiaste algo del principio o pasó más de media hora.\n\nFuentes, consultadas el 1-oct-2026: la tabla de precios de developers.openai.com/api/docs/pricing (precios estándar, contexto corto; captura del 1-oct-2026), la guía developers.openai.com/api/docs/guides/prompt-caching (el ejemplo de cached_tokens es el de esa guía; captura del 1-oct-2026) y el changelog oficial de Codex del 29-sep, donde aparece como gpt-6.1-sol.\n\nComentá CACHE y te mando la tabla Sol vs Astra y la cuenta de caché.",
+  "hashtags": [
+    "#openai",
+    "#gpt",
+    "#ia",
+    "#programacion",
+    "#automatizacion",
+    "#bolivia"
+  ],
+  "serie": "Noticia · OpenAI",
+  "slides": [
+    {
+      "number": 1,
+      "layout": "ilustrado",
+      "theme": "verde",
+      "badge": "noticia",
+      "headline": "El modelo nuevo de OpenAI cuesta *un\u00a0quinto*",
+      "subtitle": "y una parte sale casi gratis",
+      "image": "hermes-content/carousels/briefs/assets/sergio-dda-openai-sol-20261001/portada-logo-openai.png",
+      "image_fuente": "logo oficial hermes-content/references/brand-logos/openai.svg, rasterizado sobre blanco con Chromium (sin generar nada)",
+      "body": "Se llama GPT-6.1 Sol y salió el 29 de septiembre. Te muestro los números.",
+      "next": "los precios",
+      "alt_text": "Logo de OpenAI: el modelo nuevo, GPT-6.1 Sol, cuesta un quinto"
+    },
+    {
+      "number": 2,
+      "layout": "captura",
+      "theme": "blanco",
+      "headline": "Lo que entra y lo que sale: *un\u00a0quinto*",
+      "image": "hermes-content/carousels/briefs/assets/sergio-dda-openai-sol-20261001/openai-precios-sol-astra-20261001.png",
+      "image_fuente": "https://developers.openai.com/api/docs/pricing · Flagship models · Standard · Short context · captura del 1-oct-2026 (página entera: fuente-openai-pricing-pagina-20261001.png)",
+      "body": "Sol: 2 y 10 dólares el millón. Astra: 10 y 50.",
+      "next": "lo casi gratis",
+      "alt_text": "Tabla de precios de OpenAI: gpt-6.1-sol cobra 2 y 10 dólares por millón de tokens; gpt-6-astra, 10 y 50"
+    },
+    {
+      "number": 3,
+      "layout": "dato",
+      "theme": "blanco",
+      "value": "20×",
+      "headline": "más barato lo que *se\u00a0repite*",
+      "body": "Lo que mandás igual al principio de cada pedido, como las instrucciones de tu agente o tu lista de precios, entra desde la caché: 0,10 dólares el millón, contra 2.",
+      "next": "cómo",
+      "alt_text": "20 veces más barato: la entrada desde la caché de GPT-6.1 Sol cuesta 0,10 dólares el millón contra 2"
+    },
+    {
+      "number": 4,
+      "layout": "lista",
+      "theme": "blanco",
+      "headline": "Cómo *aprovecharla*",
+      "body": "viene prendida: no tenés que activarla",
+      "items": [
+        {
+          "label": "Lo fijo, primero",
+          "text": "instrucciones y precios, al principio del pedido"
+        },
+        {
+          "label": "Sin tocarlo",
+          "text": "si cambia el principio, no hay caché"
+        },
+        {
+          "label": "Mínimo 1.024 tokens",
+          "text": "con menos, no se guarda"
+        },
+        {
+          "label": "La primera vez",
+          "text": "cuesta 2,50 el millón: es cuando se guarda"
+        },
+        {
+          "label": "Dura 30 minutos",
+          "text": "desde el último uso; a veces más"
+        }
+      ],
+      "next": "la prueba",
+      "alt_text": "Cinco reglas para aprovechar la caché de OpenAI"
+    },
+    {
+      "number": 5,
+      "layout": "captura",
+      "theme": "blanco",
+      "headline": "Cómo sabés *que\u00a0funcionó*",
+      "image": "hermes-content/carousels/briefs/assets/sergio-dda-openai-sol-20261001/openai-cache-usage-20261001.png",
+      "image_fuente": "https://developers.openai.com/api/docs/guides/prompt-caching · «Request parameters and response usage» · Request 2 · Response usage (el Request 1 del mismo ejemplo da cached_tokens 0) · captura del 1-oct-2026",
+      "body": "Guía de OpenAI: el segundo pedido leyó 12.000 tokens de caché.",
+      "next": "la cuenta",
+      "alt_text": "El uso de la respuesta de la API de OpenAI en el ejemplo de su guía: cached_tokens en 12000 en el segundo pedido"
+    },
+    {
+      "number": 6,
+      "layout": "cierre",
+      "theme": "negro",
+      "keyword": "CACHE",
+      "body": "Te mando la tabla Sol vs Astra y la cuenta de caché.",
+      "alt_text": "Comentá CACHE para recibir la tabla Sol vs Astra y la cuenta de caché"
+    }
+  ],
+  "fuentes": {
+    "consultadas": "2026-10-01 (UTC 23:45 a 23:57)",
+    "precios": "https://developers.openai.com/api/docs/pricing — Standard, short context: gpt-6-astra 10 / 1,00 caché / 12,50 escritura / 50; gpt-6.1-sol 2 / 0,10 / 2,50 / 10 USD por millón",
+    "cache": "https://developers.openai.com/api/docs/guides/prompt-caching — «enabled by default»; «the unchanged tokens at the beginning of a prompt»; «1,024 tokens for GPT-5.6 and later»; «cache writes cost 1.25×… reads 0.05× on GPT-6.1 Sol»; «30 minutes after its most recent write or reuse»; usage.input_tokens_details.cached_tokens",
+    "lanzamiento": "https://learn.chatgpt.com/docs/changelog — 2026-09-29 «GPT-6.1 Sol in Codex and ChatGPT Work… near-Astra performance… Use gpt-6.1-sol»",
+    "anuncio": "https://openai.com/index/introducing-gpt-6-1-sol/ — «una quinta parte de las tarifas estándar de Astra»: verificado por la sesión madre (VERIFICACION-LAPTOP-20261001.md §2); desde la nube devuelve 403"
+  }
+}
