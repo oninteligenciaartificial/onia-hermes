@@ -48,6 +48,7 @@ import { runTurn as realRunTurn } from "./run-turn.mjs";
 import { createStore } from "./persistence.mjs";
 import { pickAudioAttachment, transcribeChatwootAudio } from "./audio-transcribe.mjs";
 import { describeChatwootImage } from "./vision.mjs";
+import { ensureKnowledge, esInboxDeCliente } from "./knowledge.mjs";
 
 const ENV_BASE_URL = () => process.env.CHATWOOT_BASE_URL || "https://onia-chatbot-chatwoot.hqdqgh.easypanel.host";
 const ENV_ACCOUNT_ID = () => process.env.CHATWOOT_ACCOUNT_ID || "2";
@@ -267,6 +268,16 @@ function templateNameOf(payload) {
   return name || null;
 }
 
+/** La marca que pone la plataforma en lo que escribe sola (ver la condicion 5 de abajo). */
+export const MARCA_ENVIO_AUTOMATICO = "onia_automatico";
+
+export function esEnvioAutomaticoDeLaPlataforma(payload) {
+  const atributos = payload?.content_attributes;
+  if (!atributos || typeof atributos !== "object") return false;
+  const marca = atributos[MARCA_ENVIO_AUTOMATICO];
+  return typeof marca === "string" && marca.trim() !== "";
+}
+
 /**
  * ¿Este mensaje SALIENTE lo escribio un humano? Entonces tomo la conversacion y el bot se calla.
  *
@@ -278,6 +289,13 @@ function templateNameOf(payload) {
  *   4. ese id NO es el del bot. Este es EL candado: sin el, la primera respuesta del propio bot lo
  *      dejaria mudo para siempre en esa conversacion.
  * Las notas privadas ya se descartaron antes: escribir una nota no es atender al prospecto.
+ *
+ *   5. NO trae la marca de envio automatico de la PLATAFORMA (`content_attributes.onia_automatico`).
+ *      La plataforma escribe sola con el token de un USUARIO de Chatwoot (medido el 1-oct: el
+ *      usuario 2, "OnIA"; el bot es el 3): la respuesta a un boton del recordatorio cumplia 1-4 y
+ *      dejaba al bot mudo con ese paciente. La marca la pone `sendAgentMessage` de
+ *      onia-platform/lib/chatwoot.ts (`MARCA_ENVIO_AUTOMATICO`); lo que escribe un humano desde la
+ *      bandeja NO la lleva y sigue silenciando, como corresponde.
  *
  * Devuelve un turno SIN texto: no hay nada que contestar, solo hay que anotar el traspaso. `author`
  * dice "human" — es uno de los tres valores que acepta `bot_messages.author` (contact | bot | human)
@@ -293,6 +311,7 @@ function takeoverTurn(payload, conversationId, type) {
   if (sender.type && String(sender.type).toLowerCase() !== "user") return null;
   const senderId = sender.id === undefined || sender.id === null ? "" : String(sender.id);
   if (!senderId || senderId === botAgentId) return null;
+  if (esEnvioAutomaticoDeLaPlataforma(payload)) return null;
 
   return {
     skip: false,
@@ -460,6 +479,84 @@ export function parseChatwootWebhook(payload) {
     return { skip: true, reason: `status_no_desarma:${payload?.status || "desconocido"}` };
   }
   return { skip: true, reason: `evento_no_manejado:${event || "desconocido"}` };
+}
+
+// ---------------------------------------------------------------------------
+// El toque de un boton del RECORDATORIO DE CITA (lo contesta la plataforma, no el bot)
+// ---------------------------------------------------------------------------
+//
+// El recordatorio de cita por WhatsApp sale desde el numero del NEGOCIO CLIENTE con tres botones
+// de respuesta rapida. Cuando el paciente toca uno, Chatwoot 4.12.1 entrega un `message_created`
+// entrante comun cuyo `content` es SOLO el texto del boton: sin payload, sin contexto (medido el
+// 1-oct, ver la cabecera del gemelo). La plataforma recibe ese mismo mensaje —se lo reenvia ESTE
+// motor (`uso-plataforma.mjs`), porque Chatwoot tiene un solo webhook y apunta aca—, cambia la
+// cita y le CONTESTA al paciente en la misma conversacion. Si el bot tambien contesta, el paciente
+// recibe dos respuestas, y la del bot es un LLM improvisando sobre la palabra «Cancelar».
+//
+// ⚠️ GEMELO: `onia-platform/lib/whatsapp/respuesta-al-recordatorio.ts` (`accionDelBoton` y su
+// `soloLetras`), con los textos en `lib/whatsapp/plantilla-recordatorio.ts` (`BOTONES_RECORDATORIO`).
+// Los dos lados tienen que reconocer EXACTAMENTE los mismos toques. Si uno cambia un texto o la
+// normalizacion sin el otro: o el bot contesta encima de la plataforma (doble respuesta), o el bot
+// se calla ante algo que la plataforma ya no reconoce como boton — y nadie le contesta a nadie.
+
+/** Los textos de los tres botones, ya pasados por `soloLetras`. */
+const BOTONES_DEL_RECORDATORIO = new Set(["confirmar", "cancelar", "reprogramar"]);
+
+/**
+ * La misma normalizacion que `soloLetras` de la plataforma: sin tildes, minusculas, solo a-z.
+ * El rango del primer `replace` son las marcas combinantes U+0300–U+036F escritas LITERALES, byte
+ * por byte iguales a las del gemelo (no se ven en pantalla: no "limpiarlas" al editar).
+ */
+function soloLetras(texto) {
+  return texto
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z]/g, "");
+}
+
+/**
+ * ¿Este texto es el toque de un boton del recordatorio? Tolera mayusculas, tildes, espacios y
+ * signos («CONFIRMAR!», «Confirmár»), nada mas: «no puedo confirmar todavia» es una frase, no un
+ * toque, y la contesta el bot como siempre.
+ */
+export function esBotonDelRecordatorio(contenido) {
+  if (typeof contenido !== "string") return false;
+  return BOTONES_DEL_RECORDATORIO.has(soloLetras(contenido));
+}
+
+/**
+ * ¿Le toca a la PLATAFORMA contestar este turno? Solo si se cumplen TODAS, porque callarse cuando
+ * la plataforma tampoco contesta es dejar a la persona sola:
+ *   1. es un mensaje DEL CONTACTO (`message_created`, o el primero embebido en
+ *      `conversation_created`, que comparte su `message_key`). No el click en un menu del propio
+ *      bot (`message_updated`): ese la plataforma no lo procesa.
+ *   2. el texto es EXACTAMENTE un boton (`esBotonDelRecordatorio`).
+ *   3. trae telefono. La plataforma busca la cita por el numero del paciente y sin numero contesta
+ *      "no aplica" y se calla (`numeroParaWhatsapp` -> null): el widget web de un cliente cae aca.
+ *   4. el inbox es de una org CLIENTE (`esInboxDeCliente`). En los inboxes de Onia (4 web, 5
+ *      WhatsApp de ventas) la plataforma no hace nada con esos textos; en el huerfano y en el
+ *      conflicto tampoco: en todos esos el bot sigue contestando como hoy.
+ *
+ * La resolucion inbox -> org es la MISMA que usa el turno (`ensureKnowledge`, cache por inbox):
+ * con la cache caliente no toca la red, y con la fria hace la lectura que `resolveConfig` iba a
+ * hacer igual un instante despues. Cero llamadas nuevas. Nunca tira: ante cualquier falla, el bot
+ * contesta como siempre.
+ */
+async function leTocaALaPlataforma(payload, parsed, deps = {}) {
+  const event = payload?.event;
+  if (event !== "message_created" && event !== "conversation_created") return false;
+  const turn = parsed?.turn;
+  if (!turn || turn.human_takeover || turn.kind !== "text") return false;
+  if (!esBotonDelRecordatorio(turn.text)) return false;
+  if (!turn.public_contact || !turn.inbox_id) return false;
+  try {
+    const resolver = typeof deps.ensureKnowledge === "function" ? deps.ensureKnowledge : ensureKnowledge;
+    const opciones = { inboxId: turn.inbox_id, ...(deps.knowledge || {}) };
+    return esInboxDeCliente(await resolver(opciones), opciones);
+  } catch {
+    return false;
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -735,6 +832,20 @@ export async function runChatwootTurn(payload, deps = {}) {
   const parsed = parseChatwootWebhook(payload);
   if (parsed.skip) {
     return { ok: true, skipped: true, reason: parsed.reason, duplicate: false, sent: [], warnings: [] };
+  }
+
+  // EL TOQUE DE UN BOTON DEL RECORDATORIO lo contesta la plataforma (ver `leTocaALaPlataforma`).
+  // Se corta ANTES del motor y con el MISMO `skip` que los demas, para que salga igual en el JSON
+  // y en el log (`rama=ignorado motivo=boton_del_recordatorio`). Antes del motor significa: no
+  // reclama el `message_key` en la base (el dedup durable queda intacto), no gasta LLM y no puede
+  // disparar un handoff ni un aviso a Sergio Urcullo. El cupo tampoco se mueve: el reenvio sigue
+  // saliendo, pero la plataforma no le cuenta a `registrarMensajeEntrante` un toque de boton.
+  // Va ACA y no en `parseChatwootWebhook`, a proposito: el parser es puro (sin red) y, sobre todo,
+  // un skip del parser corta el webhook ANTES de que el servidor arme el reenvio a la plataforma
+  // (`usoPlataforma`) — y ese reenvio es por donde la plataforma se ENTERA del toque. Cortado ahi,
+  // la cita no cambiaba y nadie le contestaba al paciente.
+  if (await leTocaALaPlataforma(payload, parsed, deps)) {
+    return { ok: true, skipped: true, reason: "boton_del_recordatorio", duplicate: false, sent: [], warnings: [] };
   }
 
   // LA NOTA DE VOZ, ANTES DEL MOTOR. Va acá (transporte) y no en bot-engine.mjs, que es PURO y no

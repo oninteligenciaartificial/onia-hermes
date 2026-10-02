@@ -47,7 +47,10 @@
 3. **El hueco de mensaje existe:** en Bolivia nadie pauta *"recuperá al paciente que dejó el tratamiento a
    medias"*. El único software de clínica con pauta sostenida es extranjero (Healthatom: Dentalink +
    Medilink, en dólares) y titula con IA clínica (§2).
-4. 🔴 **Producción todavía no cumple esa promesa; la 1.0 sin publicar, sí.** En producción el Recall busca
+4. ✅ **Resuelto el 2-oct: producción ya cumple esa promesa.** Corre `onia-platform:release-8f07e537`
+   (`docker ps` en el VPS), que trae `agents-tratamiento-a-medias.ts`; el mensaje fijo («Te quedó pendiente
+   tu…») está en el bundle servido y el cron de las 07:00 corrió OK el 1-oct. **D4 se puede prometer.** Lo
+   que sigue es la foto del 30-sep, cuando todavía no estaba: en producción el Recall buscaba
    *"sin visita hace ≥180 días"*. La 1.0 (decidido por Sergio Urcullo el 29-sep) le suma una primera pasada:
    **tratamiento en progreso sin actividad hace 21 días y sin cita** (dental y estética). **Lo que destraba
    el mejor ángulo no es construir nada: es publicar la 1.0 y mirarla andar** (§5.4). Hasta entonces la
@@ -67,7 +70,7 @@
    medición probada**; la sesión principal avisa. Por eso entran desde el día 1 los dos ángulos: el
    Confirmador (D1) y el tratamiento a medias (D4). **Las piezas son de la sesión Ventas y pauta** (antes
    «Mercado»), junto con toda la campaña. Lo decidió Sergio Urcullo el 30-sep, de noche: a Marca personal
-   le dijo *«aquí es solo marca personal y comunidad»*. Faltan las capturas de la 1.0. Qué falta y de quién es cada cosa: **la lista de encendido, §5.9**.
+   le dijo *«aquí es solo marca personal y comunidad»*. Las capturas de la 1.0 ya están (`carousels/briefs/assets/onia-1.0-dental-ads/v2-20261002/`, 2-oct). Qué falta y de quién es cada cosa: **la lista de encendido, §5.9**.
 
 ---
 
@@ -102,6 +105,7 @@ exigente con un rubro y una ciudad): el techo pide sumar estética u otra ciudad
 Medido con `ads_library_search` (MCP de Meta Ads, solo lectura pública), país `BO`, el 2026-09-30. Se lee
 el **metadato** (página, fecha, título, moneda); los creativos **no se miraron** porque el proxy de la
 sesión no llega a `facebook.com`. Detalle y los id de cada anuncio: `research/ONIA_BIBLIOTECA_ANUNCIOS_20260930.md`.
+**Los creativos se miraron después** (1-oct, desde la PC, 18 de 22): §2.5.
 
 ### 2.1 Quién le pauta software de clínica a Bolivia
 
@@ -163,6 +167,34 @@ de la Ley 1733** (pruebas de todos los sistemas de facturación del 1-oct al 16-
 importadoras que a clínicas, y el SIAT sigue sin usarse como argumento de urgencia** (`ONIA_CLIENTE_IDEAL.md` §4).
 
 ---
+
+### 2.5 Cómo venden sus anuncios — los creativos, mirados (1-oct)
+
+Fuente: `research/competencia/anuncios/CAPTURAS-HECHAS.md` (18 anuncios capturados desde la PC, con texto y
+cuadros de cada video). La única señal de rendimiento que da la Biblioteca es **cuánto lleva al aire**: un
+anuncio que pasa seis semanas sin cortarse es la mejor señal pública de que le rinde a quien lo paga. Siete
+anuncios de software pasan ese corte (salieron entre el 17-jul y el 17-ago; el de Ultra Pack del 21-ago vende
+plantillas de Canva y no cuenta).
+
+1. **Los siete que sobreviven tienen una persona.** Seis son videos (testimonio real, presentadora o escena
+   hecha con IA) y el único estático muestra a una mujer con el celular. **Ninguno es sólo captura de
+   pantalla.** Los que pasan de 25 s terminan mostrando el producto real.
+2. **La primera línea del texto le habla al dueño de SU plata o SU tiempo**, no a la recepción: *«Doctora, tu
+   tiempo (y tu almuerzo)…»*, *«Un paciente que te cancela… es dinero que dejas de recibir»*, *«Siempre hay un
+   paciente más»*. La función aparece en la segunda línea.
+3. **El líder no titula con IA** (vende tiempo, paz y no depender de la asistente); los que gritan «IA» son los
+   nuevos. Coincide con §7: se titula con el trabajo.
+4. **CTA de baja fricción y uno solo:** los siete mandan a cuenta gratis o a pedir demo, ninguno pone precio en
+   la pieza y **ninguno va a WhatsApp** (eso lo hacen anuncios de 9 h al aire). §5.1 se mantiene igual: la venta
+   de Onia es 1 a 1 con Sergio Urcullo y el filtro es la conversación. Es lo primero que mide la prueba (§5.7).
+5. **Nadie pauta el tratamiento a medias.** El hueco de §2.1 sigue libre también en los creativos.
+
+**Lo que se adoptó (2-oct):** la primera línea de D1 y D4 pasó a la plata del dueño (*«…el alquiler, la
+asistente y tu hora se pagan igual»*, *«…plata que tu clínica ya presupuestó y todavía no cobró»*), sin cifras
+ajenas como el «25 % de los ingresos». **Lo que no se puede copiar todavía:** el testimonio (cero clientes) y la
+prueba social numérica. **Lo que queda por hacer, y es la brecha más grande:** una pieza con persona. El
+presentador permitido es Sergio Urcullo mostrando la pantalla (§5.4); un presentador IA, sólo si él lo pide y
+con aprobación de gasto.
 
 ## 3. La señal más barata que existe: las clínicas que ya pagan pauta
 
@@ -233,6 +265,13 @@ documentada; el detalle, con cada fuente, en `research/ONIA_META_ADS_PLAYBOOK_20
     una clínica"* · *"Busco atención dental"* → salida cortés;
   - el bot hace las **5 preguntas de calificación** (`ONIA_CLIENTE_IDEAL.md` §9) y avisa a Sergio Urcullo el
     mismo día.
+  - **Propuesta pendiente de Sergio Urcullo** (`research/competencia/DAPTA_COMO_FUNCIONA.md` §6.1): una pregunta
+    de dolor con tres botones (*faltan a la cita* / *no volvieron* / *cobros pendientes*) y cierre *«14 días
+    gratis, sin tarjeta»*. Si se adopta, va **después** de los tres botones de arriba, no en su lugar: esos
+    son el filtro contra el paciente que busca turno, que es el riesgo central. *«No volvieron»* ya se respalda
+    con el tratamiento a medias en producción (2-oct).
+  - Las dos portadas (D1 y D4) dicen *«Para dueños y dueñas de clínicas dentales de Santa Cruz.»* desde el 2-oct;
+    antes decían *«Para clínicas dentales…»*, más flojo como filtro.
 
 ### 5.3 Presupuesto, techo y duración
 
@@ -272,7 +311,11 @@ noche*, *no te faltan pacientes*, *tu recepcionista está tapada*, entre otros.
 3. **Las piezas del 13-ago son solo tipografía:** no pasan *"producto visible o no sale"* (`CLAUDE.md` §5) y
    una firma `@oniaagency`. Se rehacen con UI real o no se usan.
 
-**🔴 Qué se puede prometer con producción y qué recién con la 1.0 — leído en el código, 2026-09-30:**
+**Qué se puede prometer con producción y qué recién con la 1.0 — leído en el código, 2026-09-30.** ✅ *Desde
+el 2-oct la 1.0 está en producción (`release-8f07e537`): la columna de la derecha es la de hoy, y la de la
+izquierda queda como historia. El tratamiento a medias y «Confirmar / No asistió / Completada» desde la agenda
+(`appointments/AgendaClient.tsx`) se pueden decir. El umbral exacto es **21 días sin venir** (`diasSinVenir`),
+con el tratamiento `EN_PROGRESO` y sin cita futura: no «21 días en progreso».*
 
 | | Producción (`onia-platform` `master` `c3b9206`) | 1.0 sin publicar (`wip/v1-integracion-20260928` `f533a68`) |
 |---|---|---|
@@ -351,13 +394,13 @@ Los supuestos del embudo están en `research/ONIA_META_ADS_PLAYBOOK_20260930.md`
 | Página | "Onia" `1140384625819526` |
 | Campaña | `ONIA · Dental SCZ · WhatsApp · prueba 1` · Clientes potenciales · presupuesto total USD 140 · fin a los 14 días · **PAUSED** |
 | Conjunto | WhatsApp · Maximizar conversaciones · Santa Cruz de la Sierra + radio, "llegar a más" apagado · 25+ · Advantage+ con sugerencias · excluir registrados |
-| Anuncios | **D1 y D4** (tabla de abajo): los dos briefs ya están escritos, **con las capturas pendientes**. **Diseño, render y subida: sesión Ventas y pauta** (Sergio Urcullo, 30-sep; ver §0 punto 8). Marca personal no las hace. |
+| Anuncios | **D1 y D4** (tabla de abajo): briefs v2 escritos y renderizados el 2-oct con capturas reales; esperan el OK de Sergio Urcullo. **Diseño, render y subida: sesión Ventas y pauta** (Sergio Urcullo, 30-sep; ver §0 punto 8). Marca personal no las hace. |
 | Mensaje de bienvenida | "Para dueños/as de clínicas" + tres respuestas para tocar (§5.2) |
 
 | Anuncio | Brief (`hermes-content/carousels/briefs/ads/`) | Título | Texto precargado |
 |---|---|---|---|
-| **D1 · Los de mañana** (Confirmador) | `onia-platform-dental-meta-d1-los-de-manana.json` · 7 láminas | *El mensaje de mañana, ya escrito.* | `Hola, vi el anuncio de Onia (D1). Tengo una clínica dental.` |
-| **D4 · Tratamiento a medias** | `onia-platform-dental-meta-d4-tratamiento-a-medias.json` · 7 láminas | *Sabé quién no volvió.* | `Hola, vi el anuncio de Onia (D4). Tengo una clínica dental.` |
+| **D1 · Los de mañana** (Confirmador) | `onia-platform-dental-meta-d1v2-los-de-manana.json` · 7 láminas | *La lista de mañana, con el mensaje escrito* | `Hola, vi el anuncio de Onia (D1). Tengo una clínica dental.` |
+| **D4 · Tratamiento a medias** | `onia-platform-dental-meta-d4v2-tratamiento-a-medias.json` · 7 láminas | *Los tratamientos a medias, en una lista* | `Hola, vi el anuncio de Onia (D4). Tengo una clínica dental.` |
 
 - **El texto principal** de cada anuncio es el `caption` de su brief. Si lleva precio, se lee de
   `subscription-plans.ts` **el día que se crea**. En la imagen no va ningún precio.
@@ -391,7 +434,9 @@ conector `Meta_ads`; en el Administrador de anuncios son los mismos campos con s
 > PAUSA» termina en el paso 5. `ads_activate_entity` se llama solo con la fila 9 de §5.9 en ✅.
 
 0. **Antes de nada:** `ads_get_ad_accounts` lista `1073680778314945` con `has_payment_method: true`, y
-   `ads_get_ad_account_pages` lista `1140384625819526`. Si falta uno, se para acá (filas 2–4 de §5.9).
+   `ads_get_user_pages` (o `ads_get_pages_for_business` con `1451773736711697`) lista `1140384625819526`. Si falta
+   uno, se para acá (filas 2–4 de §5.9). ⚠️ **No** se usa `ads_get_ad_account_pages`: lista solo las páginas que la
+   cuenta ya promocionó, y devuelve `[]` en una cuenta que nunca pautó (corregido el 1-oct).
 1. **Campaña** (`ads_create_campaign`): `ad_account_id` `1073680778314945` · `campaign_name`
    `ONIA · Dental SCZ · WhatsApp · prueba 1` · `objective` `OUTCOME_LEADS` · `buying_type` `AUCTION` ·
    `special_ad_categories` `[]` · `campaign_lifetime_budget` `14000` (USD 140, en centavos) ·
@@ -428,12 +473,12 @@ memoria. Estado al **30-sep, 12:30 UTC**.
 | # | Condición | Cómo se comprueba | Dueño | Estado |
 |---|---|---|---|---|
 | 1 | **1.0 publicada y medición probada** (alta con `utm` guardada con su origen, píxel visto en «Probar eventos») | aviso de la sesión principal | sesión principal | ⏳ **1.0 publicada** (`release-4dc829e8` la contiene, medido el 1-oct por `ONIA_CATALOGO_DE_VENTA.md`); falta ver el píxel en «Probar eventos» |
-| 2 | **El conector ve ONIA Ads**, o Sergio Urcullo crea la campaña a mano | `ads_get_ad_accounts` lista `1073680778314945` | Sergio Urcullo | ❌ **re-medido 1-oct 20:15 UTC**: sigue viendo solo "NUVO 1usd" y "Arthur Fuentes" |
-| 3 | **Método de pago** en ONIA Ads | `has_payment_method: true` en la misma llamada | Sergio Urcullo | ❌ al 21-sep |
-| 4 | **Página "Onia" promocionable y con el WhatsApp de ventas vinculado** | `ads_get_ad_account_pages` lista `1140384625819526`; WhatsApp en la configuración de la página | Sergio Urcullo | sin medir |
+| 2 | **El conector ve ONIA Ads**, o Sergio Urcullo crea la campaña a mano | `ads_get_ad_accounts` lista `1073680778314945` | Sergio Urcullo | ✅ **1-oct, 21:00 UTC:** lo lista, en el negocio «OniaAgency», con `is_ads_mcp_enabled: true`. A las 20:15 todavía no aparecía |
+| 3 | **Método de pago** en ONIA Ads | `has_payment_method: true` en la misma llamada | Sergio Urcullo | ❌ **re-medido el 1-oct a las 21:00 y a las 21:40 UTC: `has_payment_method: false`** |
+| 4 | **Página "Onia" promocionable y con el WhatsApp de ventas vinculado** | `ads_get_ad_account_pages` lista `1140384625819526`; WhatsApp en la configuración de la página | Sergio Urcullo | ✅ **1-oct, 21:40 UTC:** la página «Onia» está en el Business OniaAgency y el usuario del conector puede anunciar con ella (`ads_get_user_pages` y `ads_get_pages_for_business` la listan). Lo de las 21:15 («ninguna página») era una lectura equivocada: `ads_get_ad_account_pages` solo lista páginas ya promocionadas. El WhatsApp de la página no se midió. **Instagram:** ONIA Ads no tiene ninguna cuenta de IG vinculada (`ads_get_ig_accounts` → `[]`) |
 | 5 | **Frase-prefijo publicada en el bot** y probada con dos mensajes desde un teléfono que no sea el de Onia, **mirando la respuesta** (§5.5) | la respuesta, leída | Sergio Urcullo (firma) + carril chatbot | ❌ |
 | 6 | **Quién contesta, y en cuánto tiempo** | decidido por escrito | Sergio Urcullo | ❌ (ver abajo) |
-| 7 | **Las cuatro capturas de la 1.0** en `carousels/briefs/assets/onia-1.0-dental-ads/` → D1 y D4 renderizadas → **OK de Sergio Urcullo viéndolas** | las piezas renderizadas, miradas | capturas: sesión principal · diseño y render: Ventas y pauta · OK: Sergio Urcullo | ⏳ renderizadas el 1-oct con capturas **candidatas** (`out/ads/…-candidato/`); esperan el OK de Sergio Urcullo a las capturas y a las piezas |
+| 7 | **Las cuatro capturas de la 1.0** en `carousels/briefs/assets/onia-1.0-dental-ads/` → D1 y D4 renderizadas → **OK de Sergio Urcullo viéndolas** | las piezas renderizadas, miradas | capturas: sesión principal · diseño y render: Ventas y pauta · OK: Sergio Urcullo | ⏳ **v2 renderizadas el 2-oct** en el pack `referentes` con recortes legibles de la 1.0 (`out/ads/onia-platform-dental-meta-d1v2-…` y `…-d4v2-…`), contrastadas con 18 anuncios de la competencia (§2.5); esperan el OK de Sergio Urcullo |
 | 8 | **Campaña creada en PAUSA** con §5.8 | ids de campaña, conjunto y anuncios anotados en el handoff del carril | quien tenga el conector, o Sergio Urcullo | ❌ depende de 2–4 · pasos en §5.8.1 |
 | 9 | **OK explícito de gasto con techo** (USD 140, 14 días) y **tipo de cambio** al que el banco cobra la tarjeta (§5.6) | por escrito | Sergio Urcullo | ❌ |
 
@@ -446,7 +491,8 @@ calificadas. Lo que **no** se puede es encender sin haber hecho la prueba de la 
 recibe un dueño de clínica es una respuesta mala, esa conversación se paga y se pierde.
 
 **Cómo se renderizan en una sesión de la nube:** `eval "$(sh scripts/carousel_cloud_setup.sh)"` y después
-`node scripts/carousel_render.js --brief <brief> --out <dir>`. Sin ese paso, la nube no encuentra el
+`node scripts/carousel_render.js --brief <brief> --pack referentes --account onia --format feed --out <dir>` (sin
+`--pack referentes` sale el pack rechazado, sin aviso). Sin el setup, la nube no encuentra el
 navegador, cae en la letra DejaVu y corta el pie de cada lámina. Con el paso, salen iguales a las de la PC
 (comparado el 30-sep contra la lámina 2 del carrusel del 21-sep renderizada en la PC).
 
@@ -458,7 +504,7 @@ navegador, cae en la letra DejaVu y corta el pie de cada lámina. Con el paso, s
 |---|---|---|---|
 | 1 | **Método de pago** en ONIA Ads | ❌ al 21-sep (handoff `meta-ads-prospeccion`) · no re-medido hoy | Sergio Urcullo / Leslie |
 | 2 | **Página "Onia" vinculada** a la cuenta (`promote_pages`) | ❌ al 21-sep · no re-medido hoy | Sergio Urcullo, en Business Manager |
-| 3 | **El conector de Meta Ads de las sesiones está en OTRA cuenta de Facebook** | ❌ **re-medido dos veces el 30-sep** (madrugada y 12:15 UTC): ve "NUVO 1usd" y "Arthur Fuentes", no ONIA Ads | Sergio Urcullo: reconectarlo en `claude.ai/customize/connectors` con el usuario que administra ONIA Ads, y abrir una sesión nueva |
+| 3 | **El conector de Meta Ads de las sesiones está en OTRA cuenta de Facebook** | ✅ **resuelto el 1-oct, 21:00 UTC:** el conector ya ve ONIA Ads. Siguen los bloqueos de la tarjeta y de la página (filas 3 y 4 de §5.9). Antes, re-medido dos veces el 30-sep, solo veía «NUVO 1usd» y «Arthur Fuentes» | Sergio Urcullo: reconectarlo en `claude.ai/customize/connectors` con el usuario que administra ONIA Ads, y abrir una sesión nueva |
 | 4 | **WhatsApp de Onia conectado a la página** (lo exige el clic a WhatsApp) | sin medir | Sergio Urcullo / Plataforma |
 | 5 | **Bot listo para recibir pauta** (§5.5) y el `referral` que Chatwoot descarta | ❌ el `referral` se pierde; el resto sin probar | **carril chatbot** (Plataforma aclaró el 30-sep que no es suyo). Hoy **no hay sesión viva** de ese carril: Sergio Urcullo decide quién lo toma |
 | 6 | **Los leads que ya llegaron solos, sin contestar** | 5 al 27-sep (`ONIA_LEADS_ESPERANDO.md`) · no re-medido hoy | Sergio Urcullo |
@@ -491,15 +537,16 @@ clínicas **no es** categoría especial de anuncios.
 
 ## 8. Lo que no se pudo verificar
 
-- **Los creativos de la competencia:** `facebook.com` está bloqueado para la sesión; se leyó metadato.
+- ~~**Los creativos de la competencia**~~ ✅ 1-oct: capturados desde la PC (18 de 22), §2.5. Los 4 que faltan
+  (3 de Dentalink, 1 de Medilink) la Biblioteca pública no los muestra sin sesión iniciada.
 - **El estado de hoy de la cuenta ONIA Ads** (pago, página, WhatsApp): el conector está en otra cuenta y la
   sesión no tiene la llave del VPS para la Graph API.
 - **Los leads sin contestar al 30-sep** y **si ya hay alguien pagando:** sin acceso a la base de producción
   desde esta sesión.
 - **Si Dentalink ofrece de verdad recall y "venta de tratamientos"**, y el producto de TuDoc (precio,
   odontograma, clientes reales).
-- **El agente de tratamiento a medias funcionando:** se leyó su código en la 1.0, no se lo vio andar. Se mira
-  en producción cuando se publique.
+- **El agente de tratamiento a medias con un paciente real:** ✅ está en producción (2-oct, `release-8f07e537`)
+  y el cron corrió OK; falta verlo proponer un caso de un cliente de verdad (hoy no hay cliente pagando).
 - **La decisión de importadora como segundo rubro, con las palabras de Sergio Urcullo:** llegó por el aviso de
   Plataforma; el propio `VENDIBLE_OTROS_RUBROS.md` de esa rama recomendaba estética.
 - **La fecha del CIO 2026.**

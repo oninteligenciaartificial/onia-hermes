@@ -32,6 +32,7 @@ import { WebAssistant } from "./WebAssistant";
 import { WebPreviewIntake, WebRequestDetails } from "./WebIntakeForm";
 import { WebsitePreview, type WebsitePreviewContent } from "./WebsitePreview";
 import styles from "./web-configurator.module.css";
+import { decodePlatformSelection, platformRequestUrl } from "./platform-bridge";
 
 type PreviewStyle = CSSProperties & Record<`--preview-${string}`, string>;
 type CareId = "ninguno" | "basico" | "crecimiento" | "pro";
@@ -105,6 +106,8 @@ export function WebConfigurator({ especificaciones }: Props) {
   const [crmAddon, setCrmAddon] = useState(false);
   const [careId, setCareId] = useState<CareId>("ninguno");
   const [origin, setOrigin] = useState<"onia" | "sergio">("onia");
+  const [platformMode, setPlatformMode] = useState(false);
+  const [bridgeError, setBridgeError] = useState("");
   const [mobilePane, setMobilePane] = useState<"opciones" | "preview">("opciones");
 
   function showMobilePane(pane: "opciones" | "preview") {
@@ -118,6 +121,7 @@ export function WebConfigurator({ especificaciones }: Props) {
     const presetLayout = params.get("estructura");
     const presetStack = params.get("paquete");
     if (params.get("origen") === "sergio") setOrigin("sergio");
+    if (params.get("origen") === "platform") setPlatformMode(true);
 
     if (isWebDirectionId(presetDirection)) {
       setDirectionId(presetDirection);
@@ -125,6 +129,20 @@ export function WebConfigurator({ especificaciones }: Props) {
     }
     if (isWebLayoutId(presetLayout)) setLayoutId(presetLayout);
     if (isWebStackId(presetStack)) setStackId(presetStack);
+    const fragment = new URLSearchParams(window.location.hash.slice(1));
+    if (fragment.has("visual")) {
+      const selected = Array.from(fragment.keys()).length === 1 ? decodePlatformSelection(fragment.get("visual")) : null;
+      if (selected) {
+        setDirectionId(selected.direction);
+        setLayoutId(selected.layout);
+        setPaletteId(selected.palette);
+        setAccent(selected.accent);
+        setFontId(selected.font);
+        setGoalId(selected.goal);
+        setStackId(selected.stack);
+      } else setBridgeError("La selección recibida no es válida. Elegí una vista de referencia antes de continuar.");
+      window.history.replaceState(window.history.state, "", `${window.location.pathname}${window.location.search}`);
+    }
   }, []);
 
   const direction = WEB_DIRECTIONS.find((item) => item.id === directionId) ?? WEB_DIRECTIONS[0];
@@ -312,7 +330,7 @@ export function WebConfigurator({ especificaciones }: Props) {
               ))}
             </div>
 
-            <div className={styles.quoteOptions}>
+            {!platformMode && <div className={styles.quoteOptions}>
               <label className={styles.checkOption}>
                 <input type="checkbox" checked={crmAddon} onChange={(event) => setCrmAddon(event.target.checked)} />
                 <span><strong>{crm.nombre}</strong><small>{crm.descripcion}</small></span>
@@ -332,7 +350,7 @@ export function WebConfigurator({ especificaciones }: Props) {
                   })}
                 </select>
               </label>
-            </div>
+            </div>}
 
             <div className={styles.quoteSummary} aria-live="polite">
               <span>Estimado de construcción</span>
@@ -490,12 +508,17 @@ export function WebConfigurator({ especificaciones }: Props) {
       <div className={styles.order}>
         <div className={styles.orderIntro}>
           <p className="kicker">Siguiente paso</p>
-          <h3 className="h3">Mandanos esta dirección y la aterrizamos a tu negocio.</h3>
+          <h3 className="h3">{platformMode ? "Llevá tu elección a Mi web." : "Mandanos esta dirección y la aterrizamos a tu negocio."}</h3>
           <p>
-            La selección es un punto de partida, no una plantilla cerrada. En WhatsApp confirmamos contenido, alcance, plazo y el precio final si necesitás extras.
+            {platformMode ? "Esta vista es una referencia. En Mi web podrás confirmar la selección y guardar tu pedido. ONIA confirma alcance y precio antes de empezar." : "La selección es un punto de partida, no una plantilla cerrada. En WhatsApp confirmamos contenido, alcance, plazo y el precio final si necesitás extras."}
           </p>
         </div>
         <div className={styles.orderFlow}>
+          {bridgeError && <p role="alert">{bridgeError}</p>}
+          {platformMode ? <div>
+            <a className="btn btn-primary" href={platformRequestUrl({ version: 1, goal: goalId, layout: layoutId, direction: directionId, palette: paletteId, accent, font: fontId, stack: stackId })} target="_blank" rel="noopener noreferrer">Continuar en Mi web</a>
+            <p className={styles.stepHint}>Sólo viajan tus preferencias visuales. Tus datos de contacto se completan en tu cuenta. Si necesitás iniciar sesión, retomarás la selección al terminar.</p>
+          </div> : <>
           <WebRequestDetails value={intake} missing={missingIntake} onChange={updateIntake} />
           <RequisitosGate
             req={REQUISITOS_WEB}
@@ -505,6 +528,7 @@ export function WebConfigurator({ especificaciones }: Props) {
             blockedHint={`Completá estos datos antes de enviar: ${missingIntake.join(", ")}.`}
             blockedTargetId={missingPreviewBasics ? "datos-preview" : "datos-solicitud"}
           />
+          </>}
         </div>
       </div>
       </div>

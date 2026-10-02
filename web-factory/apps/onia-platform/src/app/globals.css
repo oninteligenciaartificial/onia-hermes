@@ -7,8 +7,9 @@
  * solo marca lo que esta vivo/activo/aprobado, nunca decora). Neutros con
  * sesgo verdoso imperceptible — nunca #000 puro. Rojo suave = hueco/cancelado.
  *
- * Tipografia: DOS familias — Archivo para todo (display y texto) y Geist Mono
- * solo para micro-etiquetas. Ver el bloque de tokens `--font-*` mas abajo.
+ * Tipografia: DOS familias — Instrument Sans para todo (display y texto) e IBM
+ * Plex Mono solo para micro-etiquetas, numeros y horas (decision de Sergio
+ * Urcullo, 29-sep-2026). Ver el bloque de tokens `--font-*` mas abajo.
  */
 
 :root {
@@ -73,19 +74,20 @@
   /*
    * TIPOGRAFIA — UNA variable por ROL, y las tres apuntan a DOS familias.
    *
-   * Los archivos se cargan en layout.tsx (`--font-archivo`, `--font-geist-mono`)
-   * y aca se les da el rol. Si manana cambia la familia de marca, se cambia en
-   * ESTOS tres renglones y no en los 12 lugares que declaran font-family.
+   * Los archivos se cargan en layout.tsx (`--font-instrument-sans`,
+   * `--font-plex-mono`) y aca se les da el rol. Si manana cambia la familia de
+   * marca, se cambia en ESTOS tres renglones y no en los 12 lugares que
+   * declaran font-family — asi paso el 29-sep-2026, cuando Instrument Sans +
+   * IBM Plex Mono reemplazaron a Archivo + Geist Mono.
    *
-   * Regla dura (ONIA_MARCA_SISTEMA_20260726.md §3): Archivo para todo — la
-   * jerarquia sale del tamano y del eje `wdth`, no de sumar familias — y Geist
-   * Mono SOLO en micro-etiquetas <=12px MAYUSCULA. Nunca una quinta fuente.
-   * `--font-display-cnd` (el alias "condensado") se retiro: no habia tal cosa,
-   * era Archivo a ancho normal con otro nombre.
+   * Regla dura (ONIA_MARCA_SISTEMA_20260726.md §3): una familia para todo — la
+   * jerarquia sale del tamano y del apretado, no de sumar familias ni de pesos
+   * gordos (titulares 500-600, tracking -2 %, nunca 700) — y la mono SOLO en
+   * micro-etiquetas, numeros y horas. Nunca una tercera fuente.
    */
-  --font-display: var(--font-archivo);
-  --font-sans: var(--font-archivo);
-  --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-instrument-sans);
+  --font-sans: var(--font-instrument-sans);
+  --font-mono: var(--font-plex-mono);
 
   /*
    * ESCALA — UNA sola para TODO el sitio publico.
@@ -200,9 +202,8 @@ body {
   background: var(--bg);
   color: var(--ink);
   font-family: var(--font-sans), system-ui, sans-serif;
-  /* Archivo a ancho normal, peso 450: el corte de texto del mockup aprobado.
-     El eje `wdth` se declara explicito para que ningun ancestro lo herede
-     comprimido. */
+  /* Peso 450: el corte de texto del mockup aprobado (Instrument Sans es
+     variable 400-700, asi que el 450 existe de verdad). */
   font-weight: 450;
   font-stretch: 100%;
   font-size: var(--text-body);
@@ -238,11 +239,11 @@ h3 {
 /*
  * .display — el titular GRANDE.
  *
- * Archivo a ancho NORMAL (wdth 100), peso 650. Ya NO es condensado: el
+ * Instrument Sans peso 600 y tracking -2 % (29-sep-2026: era Archivo 650; la
+ * regla de la marca es titulares 500-600, nunca 700). Ya NO es condensado: el
  * 800/76% anterior era otra cara de la marca — Sergio lo rechazo al verlo
  * ("la tipografia no es esa") y el mockup aprobado 2026-08-01 lo fijo a ancho
- * normal. Es exactamente el corte con el que la landing ya venia, subido aca
- * para que /nosotros y /modulos/dental no titulen distinto que el home.
+ * normal. Un solo corte para que ninguna pagina titule distinto que el home.
  *
  * REGLAS DE USO — sin esto se rompe:
  *  - UNO por pantalla. Si hay dos, ninguno es grande.
@@ -255,7 +256,7 @@ h3 {
 .display {
   font-family: var(--font-display), sans-serif;
   font-size: var(--text-display);
-  font-weight: 650;
+  font-weight: 600;
   font-stretch: 100%;
   letter-spacing: -0.02em;
   line-height: 1;
@@ -272,8 +273,9 @@ h3 {
  * gigante se lee como lineas separadas en vez de un bloque solido, y es la razon
  * numero uno por la que un display grande "se ve amateur" con la misma fuente.
  *
- * El tracking tambien escala: -0,02em ya lo aplicamos arriba (equivale al -2%
- * que Fanvue usa a 80px), y a tamanos chicos no se hereda.
+ * El tracking queda en -0,02em en todos los tamanos (el -2 % que Fanvue usa a
+ * 80px): la regla de la marca desde el 29-sep-2026 es tracking -2 %, y el
+ * -0,025em que se aplicaba desde 1280px la pasaba.
  */
 @media (min-width: 900px) {
   .display {
@@ -284,7 +286,6 @@ h3 {
 @media (min-width: 1280px) {
   .display {
     line-height: 0.86;
-    letter-spacing: -0.025em;
   }
 }
 

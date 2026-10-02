@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["verdict", "candidateSha256", "testEvidenceSha256", "summary", "findings"],
+  "properties": {
+    "verdict": { "type": "string", "enum": ["apto", "corregir", "escalar"] },
+    "candidateSha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "testEvidenceSha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "summary": { "type": "string", "minLength": 1, "maxLength": 1200 },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["priority", "file", "message"],
+        "properties": {
+          "priority": { "type": "string", "enum": ["P0", "P1", "P2"] },
+          "file": { "type": "string" },
+          "message": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  }
+}

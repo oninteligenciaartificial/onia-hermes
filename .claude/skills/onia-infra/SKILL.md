@@ -42,10 +42,23 @@ description: Cargar ANTES de tocar el VPS, Docker, n8n o cualquier cosa por SSH.
   ssh -i ~/.ssh/onia_vps -o ProxyCommand="cloudflared access ssh --hostname %h" root@ssh.onia.com.bo
   ```
   Verificado: `hostname` = `srv1360183`. ⚠️ Todavía **sin Cloudflare Access** delante, así que la protección es solo la llave SSH (igual que el 22 abierto). Pendiente: Access + service token.
+- ⚠️ **El hook SessionStart que arma `ssh onia-vps` solo corre si la sesión abre DENTRO de `onia-hermes`.** Una
+  sesión con los dos repos (Plataforma) abre en `/home/user`, no carga `.claude/settings.json` de `onia-hermes` y
+  `ssh onia-vps` da «Could not resolve hostname» aunque las tres variables estén cargadas (medido 1-oct). No falta
+  ninguna variable: `cd /home/user/onia-hermes && node scripts/nube-ssh-vps.mjs` y listo.
 - **Qué más NO sale desde la nube (medido 1-oct):** YouTube bloquea la IP del contenedor (`yt-dlp` pide «no eres
   un robot», Chromium cae en `/sorry`); los videos se ven desde la PC. Los centros de ayuda Zendesk privados dan 403.
   `SendMessage` a otra sesión falla («this cloud session cannot message other sessions yet»): se contesta en el
   transcript propio y la madre lo lee. La web pública de terceros, en cambio, abre bien con `curl` y Playwright.
+
+- **Playwright/Chromium desde la nube da `ERR_CERT_AUTHORITY_INVALID`** (medido 1-oct): el proxy re-firma TLS y
+  Chromium no toma su CA. No se apaga la verificación. Se le pasa a Chromium la huella de la CA del proxy:
+  ```bash
+  SPKI=$(openssl x509 -in /root/.ccr/agent-proxy-ca.crt -pubkey -noout | openssl pkey -pubin -outform der | openssl dgst -sha256 -binary | base64)
+  # chromium.launch({ executablePath: '/opt/pw-browsers/chromium', args: [`--ignore-certificate-errors-spki-list=${SPKI}`] })
+  ```
+  Con eso se miran onia.com.bo y app.onia.com.bo renderizadas (consola y capturas). El módulo `playwright` está en
+  `/home/user/onia-platform/node_modules`: el script se corre desde ese repo.
 
 ### Publicar desde la nube (los dos comandos, medidos 1-oct)
 

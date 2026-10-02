@@ -61,13 +61,13 @@ const RUBROS: readonly Rubro[] = [
     id: "importadora",
     palabra: "Importadora",
     bg: "var(--tinta)",
-    linea: "Tus cotizaciones vivas: cuál se aprobó, cuál se envió y cuál espera respuesta.",
+    linea: "Tus cotizaciones vivas: cuál se aprobó, cuál marcaste como enviada y cuál espera respuesta.",
   },
   {
     id: "estetica",
     palabra: "Estética",
     bg: "var(--verde-500)",
-    linea: "La clienta que dejó el tratamiento a medias y no volvió, con el control ya en la agenda.",
+    linea: "La clienta que dejó el tratamiento a medias: te queda el mensaje escrito con tu link para que reserve, y vos lo aprobás.",
   },
   {
     id: "servicios",

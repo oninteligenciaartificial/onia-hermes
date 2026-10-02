@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -146,9 +146,14 @@ describe("toda ruta citada del propio sitio existe", () => {
 
   it("el disallow de robots.ts sólo nombra rutas que existen", () => {
     // Vacuo-guarda: sin esto, un disallow vacío daría verde para siempre.
-    expect(RUTAS_PROHIBIDAS.length).toBeGreaterThanOrEqual(3);
+    // Bajó de 3 a 2 el 2026-09-29, cuando las raíces que redirigen 308 salieron
+    // del disallow para que el buscador pueda seguir la redirección.
+    expect(RUTAS_PROHIBIDAS.length).toBeGreaterThanOrEqual(2);
 
-    const fantasmas = RUTAS_PROHIBIDAS.filter((r) => !RUTAS_VIVAS.has(r));
+    // Una página del árbol, o un PREFIJO (termina en `/`) que es una carpeta de
+    // `app/`: `/api/` no tiene páginas, tiene los endpoints de los formularios.
+    const existe = (r: string) => RUTAS_VIVAS.has(r) || (r.endsWith("/") && existsSync(join(APP, r)));
+    const fantasmas = RUTAS_PROHIBIDAS.filter((r) => !existe(r));
     expect(
       fantasmas,
       `robots.ts le prohíbe al rastreador rutas que no existen: ${fantasmas.join(", ")}. ` +

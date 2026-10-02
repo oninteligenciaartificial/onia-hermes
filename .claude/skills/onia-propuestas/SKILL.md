@@ -38,9 +38,11 @@ Cliente nuevo = agregar objeto a `clientes.json` y correr el generador.
 ## Pricing (fuente de verdad: PRICING_RATIONALE_INTERNO.md §0)
 - **Lanzamiento vigente (fase sin portafolio):** Landing **790** / Web Pro **1.500**.
 - **Premium (objetivo con 3-5 casos):** Landing **2.000** / Web Pro **4.500**.
-- **SaaS Onia Dental ratificado:** planes **390 / 890 / 1.990** lista (320/750/1.500 lanzamiento) +
-  Grupo Clínico 3.900/2.900 + chatbot como add-on N1/N2/N3. Anual = 10x. Ver
-  `onia-core/ONIA_CATALOGO_COMERCIAL_2026.md`.
+- **SaaS Onia (planes y add-ons): NO se escriben acá.** Se LEEN del código del producto:
+  planes en `onia-platform/lib/subscription-plans.ts` (`DEFAULT_PLAN_AMOUNTS`; nombres visibles en
+  `lib/pricing.ts`, p.ej. `clinic` = «Completo») y add-ons en `onia-platform/lib/pricing.ts`
+  («Agente conversacional de WhatsApp»). Anual = 10 meses. Una cifra copiada acá vence sola: el
+  28-sep-2026 esta línea todavía decía 390/890/1.990 y 750/1.500, precios que ya no existían.
 - El margen vive en lo recurrente (Cuidado Web / Onia Comercio / videos). Cobrar automatización y resultado.
 
 ## Enviar = acción externa → requiere aprobación

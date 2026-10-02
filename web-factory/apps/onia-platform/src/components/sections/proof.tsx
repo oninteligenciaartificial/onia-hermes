@@ -17,9 +17,9 @@ import styles from "./proof.module.css";
  *  1. El mapa de la categoria con nombres y precios PUBLICOS de la competencia.
  *     El visitante puede abrir cada web y verificarlo. Ahi se ve el hueco: los
  *     que facturan no agendan, los que agendan no facturan en Bolivia.
- *  2. Nuestro propio renglon con la factura fiscal marcada EN TRAMITE. Decirlo
- *     primero es lo que hace creible todo lo demas: es un estado del producto,
- *     no una disculpa.
+ *  2. Nuestro propio renglon, con la factura fiscal marcada como lo que es hoy
+ *     (no la emite Onia: se emite en el Portal del SIN). Hasta el 2026-10-01
+ *     decia EN TRAMITE; se saco por la regla «la venta nunca exhibe obra».
  *
  * ⚠️ Aca abajo vivia un tercer bloque —"Y esto todavia no lo hace.", las tres
  * lineas de TODAVIA_NO— y se saco el 2026-09-04. No es un cambio de opinion:
@@ -29,7 +29,7 @@ import styles from "./proof.module.css";
  * del rubro se esta construyendo"— porque el arreglo se aplico solo donde el
  * defecto salto. Las dos lineas que si importan al que compra no se perdieron:
  * la fiscal vive en /facturacion y en el bloque fiscal de /precios, y el
- * veredicto de la fila de Onia, aca arriba, dice de frente lo del tramite.
+ * veredicto de la fila de Onia dice donde se emite hoy la factura fiscal.
  * Lo sostiene `app/obra-en-el-cuerpo.test.ts`.
  *
  * Forma: un ledger de filas, no una grilla de cards. Cada fila es un
@@ -47,16 +47,11 @@ function Marca({
   /** Hasta dónde llega en Onia. Sólo se pasa en nuestra fila (ver `EJES`). */
   alcance?: string | null;
 }) {
-  const texto =
-    estado === "si" ? "sí" : estado === "tramite" ? "en trámite" : "no";
+  const texto = estado === "si" ? "sí" : "no";
   return (
     <span
       className={`${styles.marca} ${
-        estado === "si"
-          ? styles.marcaSi
-          : estado === "tramite"
-            ? styles.marcaTramite
-            : styles.marcaNo
+        estado === "si" ? styles.marcaSi : styles.marcaNo
       }`}
     >
       <span className={styles.marcaSenal} aria-hidden />

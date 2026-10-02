@@ -27,12 +27,15 @@ mkdir -p "$OUT" || fallo "no puedo crear $OUT"
 F="$OUT/storage-$TS.tar.gz"
 TMP="$F.partial"
 tar -C "$SRC" -czf "$TMP" . 2>/dev/null || { rm -f "$TMP"; fallo "tar fallo"; }
-{ gzip -t "$TMP" && tar -tzf "$TMP" >/dev/null; } 2>/dev/null || { rm -f "$TMP"; fallo "copia corrupta"; }
-mv "$TMP" "$F"
-# ponytail: un comprobante subido durante el tar da un falso "no coincide"; se corrige solo al dia siguiente.
-n_src=$(find "$SRC" -type f | wc -l)
-n_tar=$(tar -tzf "$F" | grep -cv '/$')
-[ "$n_src" = "$n_tar" ] || fallo "archivos: origen $n_src, copia $n_tar ($F)"
+{ gzip -t "$TMP" && tar -tzf "$TMP" >/dev/null && tar -C "$SRC" -dzf "$TMP" >/dev/null; } 2>/dev/null \
+  || { rm -f "$TMP"; fallo "copia corrupta o el origen cambio durante el respaldo"; }
+# Una carga concurrente puede cambiar el origen tras la comparacion: esto detecta
+# divergencias observables, no crea un snapshot atomico con la base de datos.
+n_src=$(find "$SRC" -type f | wc -l) || { rm -f "$TMP"; fallo "no pude contar el origen"; }
+n_tar=$(tar -tzf "$TMP" | awk '!/\/$/ { n++ } END { print n+0 }') \
+  || { rm -f "$TMP"; fallo "no pude contar la copia"; }
+[ "$n_src" = "$n_tar" ] || { rm -f "$TMP"; fallo "archivos: origen $n_src, copia $n_tar"; }
+mv "$TMP" "$F" || { rm -f "$TMP"; fallo "no pude publicar la copia"; }
 # Solo borra copias propias (storage-*.tar.gz de este directorio), las mas viejas.
 ls -1t "$OUT"/storage-*.tar.gz 2>/dev/null | tail -n +$((KEEP + 1)) | xargs -r rm -f --
 echo "[$TS] OK $F archivos=$n_tar bytes=$(stat -c %s "$F")"

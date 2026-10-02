@@ -1,0 +1,92 @@
+{
+ "title": "ONIA — D1 v2 · Los de mañana (pack referentes, sistema con IA)",
+ "serie": "Clínicas dentales",
+ "headline_anuncio": "La lista de mañana, con el mensaje escrito",
+ "caption": "Un paciente que no confirma es una silla que puede quedar vacía. Y el alquiler, la asistente y tu hora se pagan igual.\n\nOnia es un sistema de gestión con IA para clínicas dentales. Cada mañana arma la lista de los que no confirmaron, con el mensaje de cada uno ya escrito: la IA lo redacta una vez para tu clínica y vos lo aprobás. Sale desde tu WhatsApp, cuando vos decidís.\n\nEscribinos y te lo mostramos con una clínica de ejemplo.",
+ "hashtags": [],
+ "fuentes": "IA: lib/onia-core/modules/agents-plantilla.ts (redacta una vez por negocio y agente, el dueño aprueba, nunca ve datos de pacientes) + AGENTS_LLM=1 en producción release-8f07e537 (2-oct). Capturas: candidato-20260930 (cuenta de ejemplo Clínica Dental Sonrisa Norte).",
+ "slides": [
+  {
+   "number": 1,
+   "layout": "captura",
+   "theme": "verde",
+   "headline": "Las 18:00 y todavía *llamando a los de mañana*",
+   "image": "hermes-content/carousels/briefs/assets/onia-1.0-dental-ads/v2-20261002/d1-agenda-pendiente.png",
+   "body": "Para dueños y dueñas de clínicas dentales de Santa Cruz.",
+   "next": "el problema",
+   "alt_text": "Agenda de Onia con una cita de mañana pendiente de confirmar"
+  },
+  {
+   "number": 2,
+   "layout": "ensayo",
+   "theme": "blanco",
+   "headline": "La lista de mañana *vive en la memoria*",
+   "body": "Recepción llama uno por uno, entre paciente y paciente.\n\nEl que no contesta queda para después. Y después ya es mañana, con la silla vacía.",
+   "next": "lo que cuesta",
+   "alt_text": "La confirmación de citas depende de la memoria de la recepción"
+  },
+  {
+   "number": 3,
+   "layout": "dato",
+   "theme": "blanco",
+   "value": "0",
+   "headline": "bolivianos cobra *una silla vacía*",
+   "body": "El alquiler, la asistente y la hora del doctor se pagan igual. Contá cuántas tuviste este mes.",
+   "next": "la salida",
+   "alt_text": "Una silla vacía no cobra"
+  },
+  {
+   "number": 4,
+   "layout": "captura",
+   "theme": "blanco",
+   "headline": "Cada mañana, *quién no confirmó*",
+   "image": "hermes-content/carousels/briefs/assets/onia-1.0-dental-ads/v2-20261002/d1-confirmador-estado.png",
+   "body": "Y su mensaje, ya escrito: «Hola Martín Arteaga Rojas, te escribimos de Clínica Dental Sonrisa Norte. Te recordamos tu cita de mañana a las 10:00. ¿Nos confirmás que venís?»",
+   "next": "quién lo escribe",
+   "alt_text": "Onia marca la cita de mañana sin confirmar"
+  },
+  {
+   "number": 5,
+   "layout": "lista",
+   "theme": "blanco",
+   "headline": "La IA lo escribe, *vos lo aprobás*",
+   "items": [
+    {
+     "label": "Una vez",
+     "text": "la IA redacta el mensaje de tu clínica"
+    },
+    {
+     "label": "Vos lo aprobás",
+     "text": "sin tu OK no se usa"
+    },
+    {
+     "label": "Cada mañana",
+     "text": "Onia lo arma para cada paciente"
+    }
+   ],
+   "next": "y vos",
+   "alt_text": "Cómo escribe la IA el mensaje"
+  },
+  {
+   "number": 6,
+   "layout": "captura",
+   "theme": "blanco",
+   "headline": "Nada sale *sin tu OK*",
+   "image": "hermes-content/carousels/briefs/assets/onia-1.0-dental-ads/v2-20261002/d1-confirmador-boton.png",
+   "body": "Lo mandás vos, desde tu WhatsApp. Y la IA nunca ve los datos de tus pacientes.",
+   "next": "probalo",
+   "alt_text": "Botón para enviar el mensaje desde el propio WhatsApp"
+  },
+  {
+   "number": 7,
+   "layout": "ensayo",
+   "theme": "verde",
+   "headline": "Miralo con *una clínica de ejemplo*",
+   "body": "Escribinos y en 20 minutos te mostramos la lista de mañana funcionando.",
+   "cta": "Escribinos por WhatsApp",
+   "next": "",
+   "alt_text": "Escribinos por WhatsApp"
+  }
+ ],
+ "cta_anuncio": "Escribinos"
+}

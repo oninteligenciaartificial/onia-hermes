@@ -79,6 +79,7 @@ ${tgFalla ? "exit 1" : "exit 0"}
         ONIA_REPO: repo,
         ONIA_AVISO_ESTADO: estado,
         ONIA_AGENDA: join(dir, "no-existe"),
+        ONIA_PEDIDOS: join(dir, "no-existe-pedidos"),
         ONIA_JARVIS_OUT: out,
         ONIA_HOY: "2026-09-30",
         ...env,
@@ -297,4 +298,28 @@ test("gemelo: una vista previa no deja números que él nunca vio", () => {
 test("sin lector de calendario, el cierre no inventa bloques", () => {
   const b = banco({ repo: repoConCommits([]) });
   assert.doesNotMatch(b.imprimir("noche", { ONIA_HOY: "2026-09-29" }), /📋/);
+});
+
+// ── Los pedidos a Claude (2026-10-01) ──────────────────────────────────────────
+
+test("el cierre lista los pedidos del día a Claude, con su estado en castellano", () => {
+  const b = banco();
+  const pedidos = b.escribir(
+    "pedidos.sh",
+    `#!/usr/bin/env bash
+[ "$1" = --lista ] && [ "$2" = 2026-09-30 ] || exit 9
+printf '10:05\\tp_1a2b3c4d\\tplataforma\\tlisto\\thttps://claude.ai/code/session_1\\n'
+printf '15:40\\tp_5e6f7a8b\\tventas\\tsin respuesta\\thttps://claude.ai/code/session_2\\n'
+`,
+  );
+  const msg = b.imprimir("noche", { ONIA_PEDIDOS: pedidos });
+  assert.match(msg, /🤖 <b>Tus pedidos a Claude hoy<\/b>\n• 10:05 plataforma — ✅ listo\n• 15:40 ventas — ⏳ sin respuesta todavía/);
+  assert.doesNotMatch(b.imprimir("manana", { ONIA_PEDIDOS: pedidos }), /🤖/, "el resumen de la mañana no los repite");
+});
+
+test("un día sin pedidos, o sin el comando, el cierre no inventa la sección", () => {
+  const b = banco();
+  const vacio = b.escribir("pedidos-vacio.sh", "#!/usr/bin/env bash\nexit 0\n");
+  assert.doesNotMatch(b.imprimir("noche", { ONIA_PEDIDOS: vacio }), /🤖/);
+  assert.doesNotMatch(b.imprimir("noche"), /🤖/);
 });

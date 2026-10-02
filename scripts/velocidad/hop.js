@@ -1,0 +1,2 @@
+const t=async(u,n=10)=>{const r=[];let code;for(let i=0;i<n;i++){const s=performance.now();const res=await fetch(u,{headers:{apikey:process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}});code=res.status;await res.arrayBuffer();r.push(performance.now()-s)}r.sort((a,b)=>a-b);console.log(u.replace(/\?.*/,''),'code',code,'med_ms',((r[4]+r[5])/2).toFixed(1),'p90_ms',r[8].toFixed(1))};
+(async()=>{await t('https://app.onia.com.bo/supabase/auth/v1/settings');await t('http://kong:8000/auth/v1/settings');})();

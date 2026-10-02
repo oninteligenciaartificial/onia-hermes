@@ -4,7 +4,10 @@ import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import {
+  ALCANCE_AGENTE_COTIZACIONES,
+  ALCANCE_AGENTE_STOCK,
   ALCANCE_CLINICO,
+  ALCANCE_CON_AGENDA,
   ALCANCE_CON_FICHA,
   ALCANCE_POR_DATOS,
   ALCANCE_POR_RUBRO,
@@ -76,6 +79,20 @@ const ACOTADAS = [
     constante: "ALCANCE_CON_FICHA",
     frase: ALCANCE_CON_FICHA,
   })),
+  /*
+   * Los otros agentes que el producto acota por rubro (29-sep-2026, cuando los
+   * agentes pasaron a nombrarse por lo que hacen). El porqué de cada corte vive
+   * junto a las constantes en `lib/pricing.ts`. «Recuerda cobros» no entra:
+   * corre en todos los rubros.
+   */
+  { capacidad: "Confirma citas", constante: "ALCANCE_CON_AGENDA", frase: ALCANCE_CON_AGENDA },
+  { capacidad: "Reprograma", constante: "ALCANCE_CON_AGENDA", frase: ALCANCE_CON_AGENDA },
+  { capacidad: "Avisa stock bajo", constante: "ALCANCE_AGENTE_STOCK", frase: ALCANCE_AGENTE_STOCK },
+  {
+    capacidad: "Sigue cotizaciones",
+    constante: "ALCANCE_AGENTE_COTIZACIONES",
+    frase: ALCANCE_AGENTE_COTIZACIONES,
+  },
 ];
 
 /**
@@ -84,33 +101,9 @@ const ACOTADAS = [
  * sobra es como una lista blanca queda bendiciendo lo que ya no existe.
  */
 const EXENTOS: ReadonlyArray<{ archivo: string; fragmento: string; motivo: string }> = [
-  {
-    archivo: join("components", "landing-v1", "features.tsx"),
-    fragmento: "el agente Recall redactó un recordatorio para un paciente",
-    motivo:
-      "es la descripción del DIBUJO de una cuenta clínica (habla de un paciente); la promesa al lead es el `beneficio` de esa misma tarjeta, que sí lleva el alcance",
-  },
-  {
-    archivo: join("components", "landing-v1", "features.tsx"),
-    fragmento: "Recall · P. Suárez, 6 meses sin control",
-    motivo: "fila de datos de ejemplo dentro del panel dibujado, no una afirmación sobre el plan",
-  },
-  {
-    archivo: join("components", "landing-v1", "hero.tsx"),
-    fragmento: "un recordatorio que el agente Recall ya redactó para aprobar",
-    motivo:
-      "el aria-label declara en su primera línea que el panel es «una cuenta configurada para una clínica dental»: ya dice el rubro",
-  },
-  {
-    archivo: join("components", "landing-v1", "hero.tsx"),
-    fragmento: "Recall: C. Vaca sin volver hace 6 meses",
-    motivo: "fila de datos de ejemplo del mismo panel dental",
-  },
-  {
-    archivo: join("app", "v1", "modulos", "dental", "page.tsx"),
-    fragmento: "Recall detecta quién no vuelve hace meses",
-    motivo: "la página ES del rubro dental, que sí guarda ficha del cliente y agenda",
-  },
+  // Vacío desde el 2026-09-29. Las cinco excusas que había eximían «Recall» en
+  // `landing-v1/` y `v1/modulos/dental`: el agente ya no se llama así en la
+  // venta, y esas páginas redirigen a la portada (308, `next.config.ts`).
 ];
 
 /** Quita comentarios respetando comillas: `https://` no es un comentario. */

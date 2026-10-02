@@ -184,10 +184,10 @@ Buscarlas en un solo directorio da falsos negativos — pasó al verificar este 
 | Origen | Dónde | Ejemplos |
 |---|---|---|
 | Globales del filesystem | `~/.claude/skills/` (**110**) | `impeccable` · `copywriting` · `security-review` |
-| Del proyecto | `.claude/skills/` (**19**) | `onia-router` · `ver-videos` · `editor-videos` |
+| Del proyecto | `.claude/skills/` (**42**) | `onia-router` · `ver-videos` · `editor-videos` |
 | Plugins | `~/.claude/plugins/cache/` (**9**) | `gsap-skills` · `caveman` · `ponytail` |
 | De claude.ai | no están en disco — se listan con `ListSkills` | `docx` · `xlsx` · `pptx` · `pdf` · `skill-creator` · `abogado-del-diablo` |
-| HyperFrames | copia global `~/.claude/skills/` (en el repo solo `.agents/skills/media-use` y `embedded-captions`) | `talking-head-recut` · `embedded-captions` |
+| HyperFrames | **el repo** (`.claude/skills/` y `.agents/skills/`, restaurado 2026-10-02; gana sobre la copia global) | `hyperframes` · `talking-head-recut` · `embedded-captions` |
 
 ## 9. Lo que NO es skill y se confunde
 
@@ -197,7 +197,7 @@ Buscarlas en un solo directorio da falsos negativos — pasó al verificar este 
 | Meta Ads · Biblioteca de Anuncios | MCP |
 | Supabase · Vercel · n8n · Cloudflare · Notion · Figma · Drive · Gmail · Calendar | MCP |
 | ElevenLabs | API REST desde el VPS (no hay MCP) |
-| HyperFrames | copia global `~/.claude/skills/` |
+| HyperFrames | skills del repo `.claude/skills/hyperframes*` (restaurado 2026-10-02) |
 
 ---
 

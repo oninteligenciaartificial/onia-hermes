@@ -1,0 +1,88 @@
+name: Hermes — respuesta de Claude a un pedido
+
+# POR QUÉ EXISTE (2026-10-01). Sergio Urcullo quiere «manejar todo desde» Hermes: un pedido sale
+# de Telegram a una rutina de Claude Code en la nube (scripts/loops/pedido-claude.sh). La sesión
+# en la nube no puede escribirle a Telegram, y no debe: todo aviso pasa por la aduana del VPS
+# (onia-tg.sh), que respeta la noche y sus bloques. Al terminar, la sesión despacha ESTE workflow
+# y responder.sh entrega la respuesta por la aduana.
+#
+#   - SOLO manual (workflow_dispatch), en el runner propio del VPS, como hermes-jarvis.yml.
+#   - El texto NUNCA se ejecuta: viaja en base64 y responder.sh lo manda como mensaje.
+#   - Solo responde pedidos que salieron de Hermes (el id tiene que estar en pedidos.tsv del VPS)
+#     y una sola vez por estado.
+#
+# Diseño completo: hermes-content/docs/TELEGRAM_COMMAND_CENTER.md.
+
+on:
+  workflow_dispatch:
+    inputs:
+      pedido:
+        description: "Id del pedido (p_ y 8 hex), tal cual llegó en el texto de la rutina"
+        required: true
+      estado:
+        description: "listo | necesita-ok | no-se-pudo"
+        required: true
+        type: choice
+        options: [listo, necesita-ok, no-se-pudo]
+      texto:
+        description: "La respuesta para Sergio Urcullo, en castellano llano (máx. 1500 caracteres)"
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: hermes-respuesta
+  cancel-in-progress: false
+
+jobs:
+  vps:
+    name: responder ${{ inputs.pedido }}
+    runs-on: [self-hosted, linux, onia-vps]
+    timeout-minutes: 5
+    steps:
+      - name: Checkout (solo la carpeta de hermes-jarvis)
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: hermes-content/deploy/hermes-jarvis
+          sparse-checkout-cone-mode: false
+          filter: blob:none
+
+      - name: Validar
+        env:
+          PEDIDO: ${{ inputs.pedido }}
+          TEXTO: ${{ inputs.texto }}
+        run: |
+          [[ "$PEDIDO" =~ ^p_[0-9a-f]{8}$ ]] || { echo "id de pedido inválido"; exit 65; }
+          N=$(printf '%s' "$TEXTO" | python3 -c 'import sys; print(len(sys.stdin.read().strip()))')
+          [ "$N" -ge 1 ] && [ "$N" -le 1500 ] || { echo "la respuesta tiene que tener entre 1 y 1500 caracteres (tiene $N)"; exit 65; }
+
+      - name: Llave SSH del VPS
+        env:
+          KEY: ${{ secrets.ONIA_VPS_SSH_KEY }}
+        run: |
+          printf '%s\n' "$KEY" > "$RUNNER_TEMP/vps_key"
+          chmod 600 "$RUNNER_TEMP/vps_key"
+
+      - name: Entregar por la aduana
+        env:
+          VPS: "root@187.77.16.63"
+          PEDIDO: ${{ inputs.pedido }}
+          ESTADO: ${{ inputs.estado }}
+          TEXTO: ${{ inputs.texto }}
+        run: |
+          set -o pipefail
+          DIR=hermes-content/deploy/hermes-jarvis
+          {
+            printf 'REDACTAR_SED=%q\n' "$(cat "$DIR/redactar.sed")"
+            printf 'PEDIDO=%q\nESTADO=%q\n' "$PEDIDO" "$ESTADO"
+            printf 'TEXTO_B64=%q\n' "$(printf '%s' "$TEXTO" | base64 -w0)"
+            cat "$DIR/comun.sh"
+            cat "$DIR/responder.sh"
+          } | ssh -i "$RUNNER_TEMP/vps_key" -o StrictHostKeyChecking=no -o BatchMode=yes \
+                -o ServerAliveInterval=30 "$VPS" 'bash -s' 2>&1 \
+            | sed -E -f "$DIR/redactar.sed"
+
+      - name: Borrar la llave
+        if: always()
+        run: rm -f "$RUNNER_TEMP/vps_key"

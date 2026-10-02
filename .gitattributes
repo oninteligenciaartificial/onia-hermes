@@ -20,3 +20,6 @@ scripts/** text=auto eol=lf
 # docker/curl de mentira en el PATH). Con autocrlf=true en Windows salian en CRLF y bash
 # moria en la primera linea — el test del pipeline por imagen (2026-09-24) no corria ahi.
 hermes-content/deploy/**/*.sh text=auto eol=lf
+
+# El emisor y sus wrappers también se validan/ejecutan en Linux.
+hermes-content/integrations/siat/*.sh text=auto eol=lf

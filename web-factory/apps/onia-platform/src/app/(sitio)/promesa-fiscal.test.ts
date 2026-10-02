@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 
 import { CONTENDIENTES } from "@/lib/proof";
-import { SIAT_ESTADO_ONIA } from "@/lib/siat";
+import { SIAT_BLOQUES, SIAT_FAQ, SIAT_GUIA_CIERRE } from "@/lib/siat";
 
 import { PAGINAS, archivoDe } from "../rutas";
 
@@ -125,18 +125,23 @@ describe("la promesa fiscal nunca se publica sin su salvedad", () => {
     expect(ONIA?.estados.siat).not.toBe("si");
   });
 
-  it("la fuente canónica trae la afirmación Y la salvedad juntas", () => {
-    // El ancla del ARREGLO: `/nosotros` lee de acá. Si alguien recorta la
-    // salvedad en la fuente, el defecto vuelve a las páginas que la leen y
-    // ningún caso de abajo lo vería —leen bien lo que la fuente dice mal—.
-    expect(
-      AFIRMA_FISCAL.test(SIAT_ESTADO_ONIA),
-      "SIAT_ESTADO_ONIA dejó de afirmar el logro fiscal: las páginas que lo leen quedaron sin nada que decir",
-    ).toBe(true);
-    expect(
-      TRAE_LA_SALVEDAD.test(SIAT_ESTADO_ONIA),
-      "SIAT_ESTADO_ONIA perdió la salvedad del trámite: toda página que lo lea pasó a prometer que Onia ya factura",
-    ).toBe(true);
+  it("la fuente canónica ya no afirma el registro ante el SIN", () => {
+    // Hasta el 2026-10-01 el ancla era `SIAT_ESTADO_ONIA`: afirmación +
+    // salvedad juntas. Ese día Sergio Urcullo sacó de la venta el estado del
+    // emisor (registro, pruebas, homologación): la venta no exhibe obra. La
+    // constante se borró, y con ella la afirmación. Si alguien la vuelve a
+    // escribir en la fuente, este caso pide que venga con su salvedad.
+    for (const texto of [
+      SIAT_GUIA_CIERRE,
+      ...SIAT_BLOQUES.map((b) => `${b.titulo} ${b.texto}`),
+      ...SIAT_FAQ.map((f) => `${f.q} ${f.a}`),
+    ]) {
+      if (!AFIRMA_FISCAL.test(texto)) continue;
+      expect(
+        TRAE_LA_SALVEDAD.test(texto),
+        `lib/siat.ts volvió a afirmar el logro fiscal sin salvedad: «${texto.slice(0, 120)}…»`,
+      ).toBe(true);
+    }
   });
 
   it("los patrones separan las frases REALES sanas de la que estuvo rota", () => {
@@ -152,7 +157,7 @@ describe("la promesa fiscal nunca se publica sin su salvedad", () => {
       "Nuestro emisor está registrado ante el SIN y la homologación está en trámite. " +
         "Mientras tanto cada venta queda lista y facturás en el Portal Web del SIN, gratis y legal.",
       "Nuestro emisor ya está registrado ante el SIN y en trámite de homologación; mientras " +
-        "tanto, podés emitir por el portal gratuito del SIN sin re-tipear tus números.",
+        "tanto, podés emitir por el portal gratuito del SIN ingresando los datos de cada factura.",
     ]) {
       expect(AFIRMA_FISCAL.test(sana)).toBe(true);
       expect(
@@ -164,7 +169,7 @@ describe("la promesa fiscal nunca se publica sin su salvedad", () => {
     // Y no se dispara donde no hay promesa fiscal: «SIN» suelto es común en la
     // superficie legítima y no puede bastar para acusar a una página.
     expect(
-      AFIRMA_FISCAL.test("emitís por el portal gratuito del SIN, sin re-tipear tus números"),
+      AFIRMA_FISCAL.test("emitís por el portal gratuito del SIN, ingresando los datos de cada factura"),
       "el patrón se dispara con «SIN» suelto: daría rojo sobre toda la superficie fiscal honesta",
     ).toBe(false);
   });
@@ -211,8 +216,8 @@ describe("la promesa fiscal nunca se publica sin su salvedad", () => {
         huerfanas,
         `${ruta} afirma el logro fiscal y NO dice ahí mismo que el trámite sigue ` +
           `abierto. Onia todavía no factura (CONTENDIENTES: siat="${ONIA?.estados.siat}"), ` +
-          `así que suelta se lee como que ya factura. La frase con su salvedad vive en ` +
-          `lib/siat.ts (SIAT_ESTADO_ONIA): se LEE de ahí, no se re-escribe.\n` +
+          `así que suelta se lee como que ya factura. Desde el 2026-10-01 la venta no ` +
+          `nombra el estado del emisor: sacá la afirmación.\n` +
           huerfanas.join("\n"),
       ).toEqual([]);
     },
