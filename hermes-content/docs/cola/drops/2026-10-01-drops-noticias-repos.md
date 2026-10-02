@@ -123,6 +123,8 @@ Probalo con una tarea tuya y contá en General: *¿qué tarea era y en qué nive
 
 ## N03 · Volver a modo manual en Claude Code  (pieza N03)
 
+⚠️ **1-oct (noche):** la palabra de N03 es **COMUNIDAD** (Sergio Urcullo la dijo a cámara; video, carrusel y caption la usan), no MANUAL. El recurso es este drop.
+
 **Condición:** El guion (jue 1-oct) dice «En modo auto, un segundo modelo revisa cada acción en vez de vos». Según la doc, leer y editar dentro de tu carpeta no pasa por esa revisión. Si todavía no se grabó, cambiar a «un segundo modelo revisa en vez de vos lo que Claude quiere hacer; leer y editar en tu carpeta se aprueba solo». Si ya se grabó, no hace falta regrabar: el drop lo corrige.
 
 *Volver a modo manual en Claude Code*
