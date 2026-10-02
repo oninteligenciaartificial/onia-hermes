@@ -147,11 +147,14 @@ test("con el código: dispara la rutina con el texto palabra por palabra y devue
   assert.deepEqual([fila.length, fila[2], fila[4], fila[5]], [6, "plataforma", "session_01XYZ", "https://claude.ai/code/session_01XYZ"]);
 });
 
+// Como lo corre Hermes (skill pedir-a-claude): un heredoc entre comillas, dentro de bash -c.
+const HEREDOC = "FIN_PEDIDO_ONIA_7f3c";
+const conHeredoc = (args, texto) => `${SCRIPT} ${args} <<'${HEREDOC}'\n${texto}\n${HEREDOC}\n`;
+
 test("el texto no pasa por la shell: $(…), backticks, comillas y $390 llegan idénticos y no ejecutan nada", () => {
   const b = banco();
   const raro = `Cobrale $390 a "la Dra." y 'Pérez' $(touch ${b.dir}/HACKEADO) \`touch ${b.dir}/HACKEADO2\` \\n fin`;
-  // Como lo corre Hermes: un heredoc entre comillas, dentro de bash -c.
-  const guion = (extra) => `${SCRIPT} ventas ${extra} <<'PEDIDO'\n${raro}\nPEDIDO\n`;
+  const guion = (extra) => conHeredoc(`ventas ${extra}`, raro);
   spawnSync("bash", ["-c", guion("")], { env: b.env, encoding: "utf8" });
   const r = spawnSync("bash", ["-c", guion(`--si ${b.codigo()}`)], { env: b.env, encoding: "utf8" });
   assert.equal(r.status, 0, r.stderr);
@@ -270,4 +273,79 @@ test("--lista: los pedidos del día con su estado; sin respuesta hasta que Claud
   writeFileSync(join(b.estado, "respuestas.tsv"), `${Math.floor(Date.now() / 1000)}\t${antes[1]}\tlisto\n`);
   assert.equal(b.correr(["--lista"]).stdout.trim().split("\t")[3], "listo");
   assert.equal(b.correr(["--lista", "2020-01-01"]).stdout, "");
+});
+
+// ── Revisión de la madre, 2-oct ─────────────────────────────────────────────────
+
+test("una línea que dice solo «PEDIDO» no corta el heredoc: no ejecuta nada y el texto llega completo", () => {
+  const b = banco();
+  // Con el delimitador viejo (<<'PEDIDO') esta línea cerraba el heredoc y lo que seguía se ejecutaba.
+  const texto = `Revisá esto:\nPEDIDO\ntouch ${b.dir}/HACKEADO\nfin`;
+  spawnSync("bash", ["-c", conHeredoc("ventas", texto)], { env: b.env, encoding: "utf8" });
+  const r = spawnSync("bash", ["-c", conHeredoc(`ventas --si ${b.codigo()}`, texto)], { env: b.env, encoding: "utf8" });
+  assert.equal(r.status, 0, r.stderr);
+  assert.equal(existsSync(join(b.dir, "HACKEADO")), false, "nada se ejecutó");
+  assert.ok(JSON.parse(b.leer("cuerpo.json")).text.endsWith(`«${texto}»`), "llegó entero, con la línea PEDIDO");
+  // Lo que escribe Hermes sale de su skill: tiene que usar ESE cierre, y nunca el viejo.
+  const skill = readFileSync(join(AQUI, "..", "..", "hermes-content", "skills", "pedir-a-claude.md"), "utf8");
+  assert.equal((skill.match(new RegExp(`<<'${HEREDOC}'`, "g")) || []).length, 2, "vista previa y --si");
+  assert.doesNotMatch(skill, /<<'PEDIDO'/);
+});
+
+test("el texto como argumento no se acepta (64): pasaría por la shell", () => {
+  const b = banco();
+  for (const args of [["ventas", "arreglá", "el", "botón"], ["ventas", "--si", "123456", "otra cosa"]]) {
+    const r = b.correr(args, "");
+    assert.equal(r.status, 64, r.stderr);
+    assert.match(r.stderr, /entrada estándar/);
+  }
+  assert.equal(b.leer("tg-msg"), "", "no le llegó nada a él");
+  assert.equal(b.llamadas(), 0);
+});
+
+test("la sangría de adentro llega idéntica: solo se recortan el principio y el final del texto", () => {
+  const b = banco();
+  const adentro = "Lista:\n  - uno\n      - uno.a\n\tcon tab\n  - dos";
+  b.correr(["plataforma"], `\n\n   ${adentro}   \n\n`);
+  assert.equal(b.correr(["plataforma", "--si", b.codigo()], `  ${adentro}\n`).status, 0, "el código es del mismo texto recortado");
+  assert.ok(JSON.parse(b.leer("cuerpo.json")).text.endsWith(`«${adentro}»`));
+});
+
+test("una entrada que nunca se cierra no lo cuelga, y un texto a medias no sale", () => {
+  const b = banco();
+  const r = spawnSync("bash", ["-c", `{ echo 'arreglá el botón'; sleep 5; } | ${SCRIPT} plataforma`], {
+    env: { ...b.env, ONIA_PEDIDOS_ESPERA_ENTRADA: "1" },
+    encoding: "utf8",
+  });
+  assert.equal(r.status, 65, r.stderr);
+  assert.match(r.stderr, /no pude leer el pedido completo/);
+  assert.equal(b.leer("tg-msg"), "");
+});
+
+test("un --si sin código vigente no muestra la ruta del código (en esa ruta está guardado)", () => {
+  const b = banco();
+  const r = b.correr(["plataforma", "--si", "123456"], TEXTO);
+  assert.equal(r.status, 66);
+  assert.doesNotMatch(r.stdout + r.stderr, /previas\//);
+  assert.doesNotMatch(r.stdout + r.stderr, new RegExp(b.estado.replace(/[.*+?^${}()|[\]\\/]/g, "\\$&")));
+});
+
+test("tope de vistas previas: la cuarta en una hora no le suena (75) y no le llega nada", () => {
+  const b = banco();
+  for (const n of [1, 2, 3]) assert.equal(b.correr(["consulta"], `pregunta ${n}`).status, 3);
+  const antes = b.leer("tg-msg");
+  const r = b.correr(["consulta"], "pregunta 4");
+  assert.equal(r.status, 75);
+  assert.match(r.stderr, /Ya le mandé 3 códigos a Sergio Urcullo en la última hora/);
+  assert.equal(b.leer("tg-msg"), antes, "la cuarta no le llegó");
+  // Las de hace más de una hora no cuentan.
+  writeFileSync(join(b.estado, "vistas.log"), [1, 2, 3].map(() => Math.floor(Date.now() / 1000) - 3700).join("\n") + "\n");
+  assert.equal(b.correr(["consulta"], "pregunta 4").status, 3);
+});
+
+test("un token con espacios no se usa (la llave mal cargada no rompe el encabezado)", () => {
+  const b = banco();
+  writeFileSync(join(b.dir, "pedidos.env"), `ONIA_RUTINA_URL=${URL_RUTINA}\nONIA_RUTINA_TOKEN='sk-ant mal pegado'\n`);
+  assert.equal(b.correr(["plataforma"], TEXTO).status, 69);
+  assert.equal(b.leer("tg-msg"), "");
 });

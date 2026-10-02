@@ -31,12 +31,13 @@ Si no sabés qué carril es, usá `consulta`: Claude lo ubica.
 
 1. Escribí el pedido **con sus palabras**, completo, sin agregarle cosas que él no dijo. Si falta
    un dato que Claude va a necesitar (qué pantalla, qué cliente, para cuándo), preguntáselo antes.
-2. Corré el comando con el pedido por la **entrada estándar**, siempre así, con `'PEDIDO'` entre
-   comillas (así ningún `$`, comilla o backtick del texto pasa por la shell):
+2. Corré el comando con el pedido por la **entrada estándar**, siempre así, copiando el cierre
+   `FIN_PEDIDO_ONIA_7f3c` tal cual y entre comillas (así ningún `$`, comilla, backtick ni renglón
+   del texto pasa por la shell). Nunca pongas el pedido como argumento: el comando sale 64.
 
-       /root/bin/onia-pedido-claude.sh <carril> <<'PEDIDO'
+       /root/bin/onia-pedido-claude.sh <carril> <<'FIN_PEDIDO_ONIA_7f3c'
        el pedido, con sus palabras
-       PEDIDO
+       FIN_PEDIDO_ONIA_7f3c
 
    No manda nada a Claude. A él le llega DIRECTO por Telegram el texto y un código de 6 dígitos, y
    el comando sale 3, que es lo esperado. Vos no ves el código: decile «Te mandé el pedido; si está
@@ -44,16 +45,17 @@ Si no sabés qué carril es, usá `consulta`: Claude lo ubica.
 3. **Solo** cuando te conteste con el código, corré el MISMO comando con `--si <código>` y el MISMO
    texto:
 
-       /root/bin/onia-pedido-claude.sh <carril> --si <código> <<'PEDIDO'
+       /root/bin/onia-pedido-claude.sh <carril> --si <código> <<'FIN_PEDIDO_ONIA_7f3c'
        el pedido, con sus palabras
-       PEDIDO
+       FIN_PEDIDO_ONIA_7f3c
 
    y mandale la línea ✅ con el link.
 
 - Si cambia algo del pedido, volvé al paso 2: el código es de ESE texto.
 - Sale 66 si el código no es el que le llegó, ya se usó o pasó más de una hora; con tres errores se
   anula. No lo intentes adivinar ni rodear: pedile que lo revise o volvé al paso 2.
-- Sale 75 si es el tope del día o el mismo pedido repetido: decíselo, no insistas.
+- Sale 75 si es el tope del día, el mismo pedido repetido, o ya le mandaste 3 códigos en la última
+  hora: decíselo, no insistas.
 - Sale 69 si todavía no está configurado: decíselo y anotalo en el tablero.
 - Sale 1 con «NO salió»: se puede reintentar con el mismo código. Con «Puede haber salido»: **no lo
   reintentes**; mirá `--lista` y decíselo.

@@ -116,24 +116,31 @@ exit 0
   ejecutable(
     join(dobles, "curl"),
     `#!/usr/bin/env bash
-metodo=GET; url=""; w=""; prev=""
+metodo=GET; url=""; w=""; o=""; prev=""
 for a in "$@"; do
   [ "$prev" = -X ] && metodo="$a"
   [ "$prev" = -w ] && w="$a"
+  [ "$prev" = -o ] && o="$a"
   case "$a" in http*) url="$a" ;; esac
   prev="$a"
 done
 echo "$metodo $url" >> ${log}/n8n
-if [ -n "$w" ]; then printf 200; exit 0; fi
 id=$(printf '%s' "$url" | sed -E 's#.*/workflows/([^/?]+).*#\\1#')
+code=200; cuerpo=""
 case "$metodo $url" in
-  "POST "*/activate) [ "\${N8N_ACTIVAR_FALLA:-}" = 1 ] && { echo '{"message":"n8n no responde"}'; exit 0; }
-                     echo '{"active": true}' ;;
-  "POST "*/deactivate) echo '{"active": false}' ;;
-  "POST "*/workflows) n=$(ls ${log}/creado-* 2>/dev/null | wc -l); touch ${log}/creado-$n; echo "{\\"id\\": \\"wfnuevo$n\\"}" ;;
-  "GET "*) [ "$id" = "\${N8N_FLUJO_FALTA:-}" ] && { echo '{"message":"Not Found"}'; exit 0; }
-          echo "{\\"id\\": \\"$id\\", \\"name\\": \\"Flujo $id\\", \\"active\\": true}" ;;
+  "POST "*/activate)
+    if [ "$id" = "\${N8N_FLUJO_FALTA:-}" ]; then code=404; cuerpo='{"message":"Not Found"}'
+    elif [ "\${N8N_ACTIVAR_FALLA:-}" = 1 ]; then code=500; cuerpo='{"message":"n8n no responde"}'
+    else cuerpo='{"active": true}'; fi ;;
+  "POST "*/deactivate) cuerpo='{"active": false}' ;;
+  "POST "*/workflows) n=$(ls ${log}/creado-* 2>/dev/null | wc -l); touch ${log}/creado-$n; cuerpo="{\\"id\\": \\"wfnuevo$n\\"}" ;;
+  "GET "*"?limit=1") cuerpo='{"data": []}' ;;
+  "GET "*) if [ "$id" = "\${N8N_FLUJO_FALTA:-}" ]; then code=404; cuerpo='{"message":"Not Found"}'
+          else cuerpo="{\\"id\\": \\"$id\\", \\"name\\": \\"Flujo $id\\", \\"active\\": true}"; fi ;;
 esac
+if [ -n "$o" ]; then printf '%s' "$cuerpo" > "$o"; else printf '%s\\n' "$cuerpo"; fi
+[ -n "$w" ] && printf '%s' "$code"
+exit 0
 `,
   );
   const hpy = join(dobles, "hermes-python");
@@ -156,6 +163,8 @@ for j in d["jobs"]:
             # qué hace el de verdad; el rollback no puede depender de eso).
             if os.environ.get("HERMES_RESUME_ESTRICTO") == "1" and j.get("state") != "paused":
                 raise SystemExit(1)
+            if os.environ.get("HERMES_RESUME_NO_HACE") == "1":
+                break                       # dice que sí y no hace nada
             j["enabled"] = True; j["state"] = "scheduled"
         break
 else:
@@ -394,4 +403,71 @@ test("revertir no se traba con un trabajo de Hermes que ya no existe (nada que r
   assert.match(r.stdout, /9089322cc256 ya no está en jobs\.json/);
   assert.match(r.stdout, /✅ revertido/);
   assert.ok(v.jobs().every((j) => j.enabled), "los que siguen, vuelven");
+});
+
+test("token de la rutina con espacios (solo espacios o uno adentro): no aplica nada y no crea nada", () => {
+  for (const token of ["   ", "sk-ant-oat01 mal pegado"]) {
+    const v = vps();
+    const r = v.aplicar({ RUTINA_URL: "https://api.anthropic.com/v1/claude_code/routines/trig_01ABCdef/fire", RUTINA_TOKEN: token });
+    assert.equal(r.status, 1, r.stdout);
+    assert.match(r.stdout, /NO APLIQUÉ NADA: .*antes de crear nada/);
+    assert.equal(v.crontab(), v.crontabInicial, "el crontab no se toca");
+    assert.equal(v.interruptor(), false);
+    assert.ok(v.jobs().every((j) => j.enabled), "ningún trabajo de Hermes se pausa");
+    assert.doesNotMatch(v.leer("n8n"), /^POST \S*\/workflows$/m, "no crea flujos en n8n");
+    assert.doesNotMatch(v.leer("agenda"), /^crear /m, "no hay evento de prueba en su calendario");
+  }
+});
+
+test("la llave se guarda citada: el archivo devuelve exactamente la URL y el token al leerlo", () => {
+  const v = vps();
+  const url = "https://api.anthropic.com/v1/claude_code/routines/trig_01ABCdef/fire";
+  const token = "sk-ant-oat01-abc_DEF.123";
+  assert.equal(v.aplicar({ RUTINA_URL: url, RUTINA_TOKEN: token }).status, 0);
+  const env = join(v.R, ".config", "onia", "pedidos.env");
+  const leido = spawnSync("bash", ["-c", `. '${env}'; printf '%s|%s' "$ONIA_RUTINA_URL" "$ONIA_RUTINA_TOKEN"`], { encoding: "utf8" }).stdout;
+  assert.equal(leido, `${url}|${token}`);
+});
+
+test("revertir mira de vuelta: si Hermes dice que reanudó pero el trabajo sigue en pausa, no lo da por revertido", () => {
+  const v = vps();
+  assert.equal(v.aplicar().status, 0);
+  const r = v.revertir({ HERMES_RESUME_NO_HACE: "1" });
+  assert.equal(r.status, 1, r.stdout);
+  assert.match(r.stdout, /sigue en pausa después de reanudarlo/);
+  const otra = v.revertir();
+  assert.equal(otra.status, 0, otra.stdout);
+  assert.ok(v.jobs().every((j) => j.enabled));
+});
+
+test("revertir: un flujo de n8n que ya no existe (404) no tiene nada que deshacer", () => {
+  const v = vps();
+  assert.equal(v.aplicar().status, 0);
+  const r = v.revertir({ N8N_FLUJO_FALTA: "QGXVyRSgrArxfolj" });
+  assert.equal(r.status, 0, r.stdout);
+  assert.match(r.stdout, /QGXVyRSgrArxfolj ya no existe: nada que reactivar/);
+  assert.match(r.stdout, /✅ revertido/);
+});
+
+test("si aplicar se corta justo después de pausar un trabajo de Hermes, revertir lo reanuda (se anota antes)", () => {
+  const v = vps();
+  const r = v.aplicar({}, '    despues=$(estado_job "$id")');
+  assert.equal(r.status, 9, r.stdout);
+  assert.ok(v.jobs().some((j) => !j.enabled), "quedó uno pausado");
+  const rev = v.revertir();
+  assert.equal(rev.status, 0, rev.stdout);
+  assert.ok(v.jobs().every((j) => j.enabled), "volvió");
+  assert.equal(v.crontab().trim(), v.crontabInicial.trim());
+});
+
+test("si una segunda corrida se corta entre «aplicado» y «reemplazado», revertir igual deja todo como estaba", () => {
+  const v = vps();
+  assert.equal(v.aplicar().status, 0);
+  const r = v.aplicar({}, '[ -n "$PREVIO" ] && touch "$PREVIO/reemplazado"');
+  assert.equal(r.status, 9, r.stdout);
+  const rev = v.revertir();
+  assert.equal(rev.status, 0, rev.stdout);
+  assert.equal(v.crontab().trim(), v.crontabInicial.trim());
+  assert.ok(v.jobs().every((j) => j.enabled));
+  assert.equal(v.interruptor(), false);
 });
