@@ -47,10 +47,12 @@
 3. **El hueco de mensaje existe:** en Bolivia nadie pauta *"recuperá al paciente que dejó el tratamiento a
    medias"*. El único software de clínica con pauta sostenida es extranjero (Healthatom: Dentalink +
    Medilink, en dólares) y titula con IA clínica (§2).
-4. ✅ **Resuelto el 2-oct: producción ya cumple esa promesa.** Corre `onia-platform:release-8f07e537`
-   (`docker ps` en el VPS), que trae `agents-tratamiento-a-medias.ts`; el mensaje fijo («Te quedó pendiente
-   tu…») está en el bundle servido y el cron de las 07:00 corrió OK el 1-oct. **D4 se puede prometer.** Lo
-   que sigue es la foto del 30-sep, cuando todavía no estaba: en producción el Recall buscaba
+4. 🔴 **Sigue sin poder prometerse (2-oct).** El código está en producción (`release-8f07e537`), pero
+   el detector está en producción pero **no encuentra a nadie**: cuenta solo tratamientos «En progreso», la ficha los carga «Pendiente» y hay 0 cargados (`ONIA_CATALOGO_DE_VENTA.md`, «NO se puede decir», 2-oct 01:54). **D4 queda frenado** hasta que Plataforma lo vea encontrar a alguien en la cuenta
+   demo y el catálogo lo pase a «se puede decir».
+   ⚠️ *Corregido el mismo 2-oct:* a las 00:50 escribí acá «D4 se puede prometer» porque vi el código en el
+   bundle servido y el cron OK. Eso prueba que existe, no que funciona. Lo frenó el catálogo y la revisión de
+   la madre v2. Lo que sigue es la foto del 30-sep: en producción el Recall buscaba
    *"sin visita hace ≥180 días"*. La 1.0 (decidido por Sergio Urcullo el 29-sep) le suma una primera pasada:
    **tratamiento en progreso sin actividad hace 21 días y sin cita** (dental y estética). **Lo que destraba
    el mejor ángulo no es construir nada: es publicar la 1.0 y mirarla andar** (§5.4). Hasta entonces la
@@ -314,10 +316,9 @@ noche*, *no te faltan pacientes*, *tu recepcionista está tapada*, entre otros.
 3. **Las piezas del 13-ago son solo tipografía:** no pasan *"producto visible o no sale"* (`CLAUDE.md` §5) y
    una firma `@oniaagency`. Se rehacen con UI real o no se usan.
 
-**Qué se puede prometer con producción y qué recién con la 1.0 — leído en el código, 2026-09-30.** ✅ *Desde
-el 2-oct la 1.0 está en producción (`release-8f07e537`): la columna de la derecha es la de hoy, y la de la
-izquierda queda como historia. El tratamiento a medias y «Confirmar / No asistió / Completada» desde la agenda
-(`appointments/AgendaClient.tsx`) se pueden decir. El umbral exacto es **21 días sin venir** (`diasSinVenir`),
+**Qué se puede prometer con producción y qué recién con la 1.0 — leído en el código, 2026-09-30.** *Desde
+el 2-oct la 1.0 está en producción (`release-8f07e537`), pero el tratamiento a medias **sigue sin poder decirse**:
+el detector está en producción pero **no encuentra a nadie**: cuenta solo tratamientos «En progreso», la ficha los carga «Pendiente» y hay 0 cargados (`ONIA_CATALOGO_DE_VENTA.md`, «NO se puede decir», 2-oct 01:54). Qué se puede decir manda `ONIA_CATALOGO_DE_VENTA.md`, no esta tabla. El umbral exacto es **21 días sin venir** (`diasSinVenir`),
 con el tratamiento `EN_PROGRESO` y sin cita futura: no «21 días en progreso».*
 
 | | Producción (`onia-platform` `master` `c3b9206`) | 1.0 sin publicar (`wip/v1-integracion-20260928` `f533a68`) |
@@ -397,7 +398,7 @@ Los supuestos del embudo están en `research/ONIA_META_ADS_PLAYBOOK_20260930.md`
 | Página | "Onia" `1140384625819526` |
 | Campaña | `ONIA · Dental SCZ · WhatsApp · prueba 1` · Clientes potenciales · presupuesto total USD 140 · fin a los 14 días · **PAUSED** |
 | Conjunto | WhatsApp · Maximizar conversaciones · Santa Cruz de la Sierra + radio, "llegar a más" apagado · 25+ · Advantage+ con sugerencias · excluir registrados |
-| Anuncios | **D1 y D4** (tabla de abajo): v3 renderizados el 2-oct, imagen única 4:5 (feed) y 9:16 (historias y reels), con capturas reales; esperan el OK de Sergio Urcullo. **Diseño, render y subida: sesión Ventas y pauta** (Sergio Urcullo, 30-sep; ver §0 punto 8). Marca personal no las hace. |
+| Anuncios | **D1 y D4** (tabla de abajo): v3 renderizados el 2-oct (imagen única 4:5 y 9:16) y **en pausa**: Sergio Urcullo pidió primero el estudio de la Biblioteca. **D4 frenado** por el catálogo (el detector no encuentra a nadie). **Diseño, render y subida: sesión Ventas y pauta** (Sergio Urcullo, 30-sep; ver §0 punto 8). Marca personal no las hace. |
 | Mensaje de bienvenida | "Para dueños/as de clínicas" + tres respuestas para tocar (§5.2) |
 
 | Anuncio | Brief (`hermes-content/carousels/briefs/ads/`) | Título | Texto precargado |
@@ -483,7 +484,7 @@ memoria. Estado al **30-sep, 12:30 UTC**.
 | 4 | **Página "Onia" promocionable y con el WhatsApp de ventas vinculado** | `ads_get_ad_account_pages` lista `1140384625819526`; WhatsApp en la configuración de la página | Sergio Urcullo | ✅ **1-oct, 21:40 UTC:** la página «Onia» está en el Business OniaAgency y el usuario del conector puede anunciar con ella (`ads_get_user_pages` y `ads_get_pages_for_business` la listan). Lo de las 21:15 («ninguna página») era una lectura equivocada: `ads_get_ad_account_pages` solo lista páginas ya promocionadas. El WhatsApp de la página no se midió. **Instagram:** ONIA Ads no tiene ninguna cuenta de IG vinculada (`ads_get_ig_accounts` → `[]`) |
 | 5 | **Frase-prefijo publicada en el bot** y probada con dos mensajes desde un teléfono que no sea el de Onia, **mirando la respuesta** (§5.5) | la respuesta, leída | Sergio Urcullo (firma) + carril chatbot | ❌ |
 | 6 | **Quién contesta, y en cuánto tiempo** | decidido por escrito | Sergio Urcullo | ❌ (ver abajo) |
-| 7 | **Las cuatro capturas de la 1.0** en `carousels/briefs/assets/onia-1.0-dental-ads/` → D1 y D4 renderizadas → **OK de Sergio Urcullo viéndolas** | las piezas renderizadas, miradas | capturas: sesión principal · diseño y render: Ventas y pauta · OK: Sergio Urcullo | ⏳ **v3 renderizadas el 2-oct**: imagen única de anuncio de software con la marca de la web (`out/ads/onia-platform-dental-meta-d1v3-…` y `…-d4v3-…`, hoja `out/ads/onia-platform-dental-meta-v3-hoja.png`), armadas con lo que sobrevive en la Biblioteca (§2.5); esperan el OK de Sergio Urcullo. v1 y v2 (carruseles) fueron rechazadas |
+| 7 | **Las cuatro capturas de la 1.0** en `carousels/briefs/assets/onia-1.0-dental-ads/` → D1 y D4 renderizadas → **OK de Sergio Urcullo viéndolas** | las piezas renderizadas, miradas | capturas: sesión principal · diseño y render: Ventas y pauta · OK: Sergio Urcullo | ⏸️ **v3 renderizadas el 2-oct y en pausa** (`out/ads/onia-platform-dental-meta-d1v3-…` y `…-d4v3-…`). Sergio Urcullo: *«DEJA DE ARMAR, PRIMERO MIRA LA META ADS LIBRARY Y MIRA COMPETENCIAS»*. Primero el estudio de la Biblioteca (la madre, desde la PC), después el diseño. D4 frenado por el catálogo. v1 y v2 (carruseles) fueron rechazadas |
 | 8 | **Campaña creada en PAUSA** con §5.8 | ids de campaña, conjunto y anuncios anotados en el handoff del carril | quien tenga el conector, o Sergio Urcullo | ❌ depende de 2–4 · pasos en §5.8.1 |
 | 9 | **OK explícito de gasto con techo** (USD 140, 14 días) y **tipo de cambio** al que el banco cobra la tarjeta (§5.6) | por escrito | Sergio Urcullo | ❌ |
 
@@ -548,8 +549,8 @@ clínicas **no es** categoría especial de anuncios.
   desde esta sesión.
 - **Si Dentalink ofrece de verdad recall y "venta de tratamientos"**, y el producto de TuDoc (precio,
   odontograma, clientes reales).
-- **El agente de tratamiento a medias con un paciente real:** ✅ está en producción (2-oct, `release-8f07e537`)
-  y el cron corrió OK; falta verlo proponer un caso de un cliente de verdad (hoy no hay cliente pagando).
+- **El agente de tratamiento a medias funcionando:** el código está en producción (2-oct, `release-8f07e537`),
+  pero el detector está en producción pero **no encuentra a nadie**: cuenta solo tratamientos «En progreso», la ficha los carga «Pendiente» y hay 0 cargados (`ONIA_CATALOGO_DE_VENTA.md`, «NO se puede decir», 2-oct 01:54). Falta que Plataforma lo arregle y lo vea encontrar a alguien en la cuenta demo.
 - **La decisión de importadora como segundo rubro, con las palabras de Sergio Urcullo:** llegó por el aviso de
   Plataforma; el propio `VENDIBLE_OTROS_RUBROS.md` de esa rama recomendaba estética.
 - **La fecha del CIO 2026.**

@@ -29,8 +29,16 @@
 > - ✅ **2-oct, ~01:20 UTC:** portadas de D1 y D4 → *«Para dueños y dueñas de clínicas dentales de Santa Cruz.»*
 >   (el filtro que pide §5.2). Leído el análisis de Dapta de la madre (`DAPTA_COMO_FUNCIONA.md` §6): su propuesta
 >   del bot quedó anotada en §5.2 como pendiente de Sergio Urcullo, **detrás** del filtro de pacientes.
-> - ✅ **El tratamiento a medias ya está en producción** (`release-8f07e537`, el mensaje fijo en el bundle). El doc
->   de pauta decía que no (§0 punto 4 y §5.4): corregido.
+> - ⛔ **D4 FRENADO (2-oct).** El tratamiento a medias está en producción, pero no encuentra a nadie: cuenta solo
+>   «En progreso», la ficha carga «Pendiente» y hay 0 cargados. El catálogo lo pone en «NO se puede decir». Yo había
+>   escrito «D4 se puede prometer» por ver el código en el bundle, y lo corrigió la revisión de la madre v2. D4 no se
+>   sube hasta que Plataforma lo vea funcionar en la cuenta demo.
+> - ⛔ **«La IA escribe el mensaje» tampoco se puede decir** (catálogo §8): la IA escribe UNA vez el modelo y Onia
+>   le pone los datos de cada uno. Corregido el 2-oct en los 12 mensajes (`ONIA_PROSPECTOS_*` y página de
+>   contactos). **Sigue mal en los briefs de D1 v2 (lámina 5) y v3 (primer beneficio)**, que están en pausa.
+> - ⏸️ **Sergio Urcullo, 2-oct: «DEJA DE ARMAR, PRIMERO MIRA LA META ADS LIBRARY Y MIRA COMPETENCIAS».** v3 queda
+>   en pausa y sin aprobar. Lo próximo es el estudio de la Biblioteca, hecho por la madre desde la PC (desde la
+>   nube Facebook no abre), y recién con eso se diseña.
 >
 > ~~🔴 EN VUELO, 2-oct — rehacer D1 y D4 (misma sesión).~~
 > - Sergio Urcullo las rechazó: no respetan las reglas ni el estándar de la marca personal, y no se aprendió de la

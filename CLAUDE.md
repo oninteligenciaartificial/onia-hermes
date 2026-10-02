@@ -496,14 +496,14 @@ Si no sabés dónde va, **preguntá** antes de inventar carpeta.
 - **La pauta de Onia Platform NO se hace con el estilo de la marca personal.**
   Sergio Urcullo, 2-oct: *«es diferente el contenido de la onia platform que el de mi
   cuenta personal, te dije que entres a ads library y veas qué es lo que funciona»*.
-  - El anuncio sale del formato que sobrevive en la Biblioteca de Anuncios
-    (`ONIA_ADQUISICION_Y_PAUTA.md` §2.5): titular del dolor, la pantalla real en un
-    marco de navegador con el recorte clave ampliado para que se lea en el celular,
-    tres beneficios y un solo botón. Imagen única 4:5 y 9:16; nada de carruseles.
-  - Lleva la marca de la WEB: lockup `onia | dental`, letra Archivo, hoja clara y verde
-    solo en lo que se aprieta (`web-factory/docs/ONIA_BRAND_IDENTITY_2026.md`).
-  - Se arma con `.claude/skills/onia-ventas-pauta/scripts/anuncio-render.js` (skill
-    `onia-ventas-pauta` §4).
+  - **Primero se estudia la Biblioteca, después se diseña.** Sergio Urcullo, mismo día:
+    *«DEJA DE ARMAR, PRIMERO MIRA LA META ADS LIBRARY Y MIRA COMPETENCIAS»*. El formato
+    sale de lo que sostienen los competidores (`ONIA_ADQUISICION_Y_PAUTA.md` §2.5), no de
+    un pack nuestro. Desde la nube Facebook no abre: los creativos los captura la madre.
+  - Lleva la marca de la WEB (lockup `onia | dental`, letra Archivo, verde solo en lo que
+    se aprieta: `web-factory/docs/ONIA_BRAND_IDENTITY_2026.md`), no la de la marca personal.
+  - Lo que promete sale de `ONIA_CATALOGO_DE_VENTA.md`, no del código: el 2-oct se armó D4
+    con el tratamiento a medias porque estaba en producción, y no encontraba a nadie.
   - El pack `referentes` es SOLO de la marca personal.
   ⚠️ **Corregido dos veces el 2-oct.** Acá decía `community-editorial` (rechazado el
   29-sep). Después decía `referentes` de la marca personal: así se armaron D1 y D4 v2

@@ -172,6 +172,7 @@ contestarle de memoria es la forma de quemarlo.
 | «Cada mañana» / «lo detecta sola» | ✅ | Los agentes corren a las 11:00 UTC (07:00 en Bolivia) con el cron `0 11 * * *` del VPS; el log `/var/log/onia-agents-cron.log` dice «OK» el 1-oct. El tratamiento a medias va dentro del Recall |
 | «Con tu tono» / «la editás» | ❌ | Escribe en el tono del rubro. El dueño solo puede **aprobarla**: no hay edición en `/agents` |
 | «La IA escribe el mensaje del tratamiento a medias» | ❌ | `buildTratamientoAMediasMessage` es un texto fijo |
+| «La IA escribe el mensaje» / «la IA lo redacta» (de cada paciente) | ❌ | Catálogo §8: la IA escribe UNA vez el modelo y Onia le pone los datos. Frase permitida: «la IA escribe una sola vez el modelo y Onia le pone los datos de cada uno» |
 | «Preguntá por tu negocio» es IA | ❌ | Son 30 temas escritos a mano, sin modelo (`BarraAsistente.tsx`) |
 | «La IA calcula el costo de importación» | ❌ | El costeo es cálculo; en importadoras la IA solo está en el mensaje de cobro |
 
@@ -180,7 +181,12 @@ contestarle de memoria es la forma de quemarlo.
 
 ## 4. Piezas del anuncio (D1 y D4)
 
-**Vigente: v3 del 2-oct, anuncio de software de imagen única** (`briefs/ads/*-d1v3-*` y `*-d4v3-*`, salida en
+> ⏸️ **EN PAUSA (2-oct, tarde).** Sergio Urcullo: *«DEJA DE ARMAR, PRIMERO MIRA LA META ADS LIBRARY Y MIRA
+> COMPETENCIAS»*. **Primero el estudio de la Biblioteca** (lo hace la madre desde la PC; desde la nube Facebook no
+> abre), después el diseño. v3 no está aprobada: D4 está frenado por el catálogo (§4.1) y el primer beneficio de D1
+> («La IA escribe el mensaje») viola el catálogo §8. Lo de abajo es el MÉTODO de render, no un formato aprobado.
+
+**v3 del 2-oct (sin aprobar), anuncio de software de imagen única** (`briefs/ads/*-d1v3-*` y `*-d4v3-*`, salida en
 `carousels/out/ads/…v3…/feed.png` 1080×1350 y `story.png` 1080×1920; hoja para mirarlas:
 `carousels/out/ads/onia-platform-dental-meta-v3-hoja.png`).
 
@@ -252,8 +258,11 @@ Trampas pagadas armando v3 (2-oct):
 - **Antes de prometer una función, mirar QUÉ corre en producción, no lo que dice un doc:** `ssh onia-vps 'docker ps
   --format "{{.Names}} {{.Image}}" | grep onia-platform'` da el release; el commit se lee en el clon de
   `onia-platform`, y una frase de la pantalla se busca en el bundle servido (`docker exec onia-platform grep -rl
-  "<frase>" /app/.next/server`). El 2-oct así se vio que el tratamiento a medias ya estaba en producción
-  (`release-8f07e537`) mientras `ONIA_ADQUISICION_Y_PAUTA.md` §0 y §5.4 seguían diciendo que no.
+  "<frase>" /app/.next/server`). ⛔ **Pero «está en producción» no es «se puede prometer».** El 2-oct vi
+  el código del tratamiento a medias en el bundle y escribí «D4 se puede prometer»: el detector existía y no
+  encontraba a nadie (cuenta «En progreso», la ficha carga «Pendiente», 0 cargados). **Qué se puede decir lo fija
+  `ONIA_CATALOGO_DE_VENTA.md`** («Se puede decir» / «NO se puede decir», §8 para la IA). Se lee ANTES de escribir
+  una promesa, y lo que no está ahí se pide a Plataforma que lo mire funcionando.
 - **El umbral del tratamiento a medias es «21 días sin venir»** (`diasSinVenir`), con el tratamiento en curso y
   sin cita futura. «21 días en progreso» o «21 días sin cita» son inexactos: corregido en D4 el 2-oct.
 
