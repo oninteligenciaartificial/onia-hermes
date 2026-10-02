@@ -1175,11 +1175,6 @@ function handleAgendada(ctx, base) {
 }
 
 /**
- * UNICA rama con LLM. El contexto que se le pasa NO lleva precios, planes ni features:
- * no puede filtrar lo que no tiene (spec §3.4). Su salida SIEMPRE pasa por enforceGuardrails().
- * Al 2do malentendido: handoff (dos fallos de comprension = el bot ya no aporta).
- */
-/**
  * El texto seguro, listo para el prospecto. Con horarios de verdad sobre la mesa es SAFE_REPLY tal
  * cual («¿Te reservo A o B?»); sin ellos —sin agenda propia, o con el placeholder— la pregunta de
  * los horarios se cambia por la pregunta pendiente real del embudo. Antes salia «¿Te reservo
@@ -1192,6 +1187,11 @@ function textoSeguro(state, config) {
   return pregunta ? `${base} ${pregunta}` : base;
 }
 
+/**
+ * UNICA rama con LLM. El contexto que se le pasa NO lleva precios, planes ni features:
+ * no puede filtrar lo que no tiene (spec §3.4). Su salida SIEMPRE pasa por enforceGuardrails().
+ * Al 2do malentendido: handoff (dos fallos de comprension = el bot ya no aporta).
+ */
 function offScriptResult(ctx, base) {
   const { config, options, msg } = ctx;
   const count = base.offScriptCount + 1;
