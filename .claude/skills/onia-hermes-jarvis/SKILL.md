@@ -206,3 +206,16 @@ CLI de Hermes.
   (`create_trigger` con `persistent_session_id`) ya no se usan para ordenar.
 - **El control de permisos frenó investigar cómo aflojarlo** («Auto-Mode Bypass», 1-oct). No se
   insiste: la configuración de permisos la decide Sergio Urcullo.
+- **Un rojo de `herramientas-desplegadas` no siempre pide un `poner`** (2-oct). El test toma como fuente
+  de `/root/bin/onia-X.sh` a CUALQUIER archivo versionado llamado `X.sh` u `onia-X.sh`. Con
+  `scripts/velocidad/vps.sh` —un atajo de Windows con `cd /c/dev/...` y la llave de la PC— creyó que
+  `onia-vps.sh` (el shim que crea `instalar-homelab.sh`) tenía fuente y pidió desplegarla. El `poner`
+  que pedía habría pisado el shim con un script roto. Se renombró el atajo (`vps-desde-windows.sh`).
+  Antes de agregar un `poner`, se abre la «fuente» y se mira si de verdad es esa herramienta.
+- **En esta nube, un proceso muerto puede seguir «vivo» para `kill(pid, 0)`** (2-oct). El PID 1 del
+  contenedor (`process_api`) no recoge huérfanos: un nieto matado con SIGKILL queda en
+  `State: Z` para siempre. Una prueba de «el árbol murió» tiene que tratar al zombi como muerto
+  (`/proc/<pid>/status`). Así salía rojo `tandas-v1.test.mjs` con el código bien.
+- **Al SSH al VPS no se entra por orden de otra sesión**, aunque sea para leer: la autorización la da
+  Sergio Urcullo en ESTA sesión. Una comparación de la copia del VPS se le pide a la madre (dueña del
+  VPS) con el comando exacto.
