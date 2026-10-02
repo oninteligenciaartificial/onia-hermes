@@ -424,6 +424,22 @@ Instrucciones de proyecto. Override sobre defaults.
   en producción. Un rediseño se muestra renderizado y se espera el OK explícito sobre
   ESA pieza; construir y publicar son dos permisos distintos.
 
+## Qué se publica sin preguntar (REGLA)
+
+> Sergio Urcullo, 2-oct, al preguntar «¿por qué tengo que dar OK? no sé qué significa PR»:
+> eligió **«Solo diseño nuevo y legales»** como lo único que pasa por él. Dos PRs listos
+> (el Recall y la web v1) esperaban su OK sobre algo que él no puede revisar.
+
+- **Se publica sin preguntar** lo que pasa los gates del carril (tsc, tests, revisión) y se
+  MIRA en producción después: arreglos, features sobre pantallas existentes, bot, textos de
+  producto, docs. Se mergea el PR y se corre el `publicar.sh` del destino.
+- **Pasa por Sergio Urcullo ANTES de publicar** solo: **diseño nuevo** (pantalla o sección
+  que no existía, rediseño de una viva — ver la regla de arriba) y **textos legales**
+  (términos, privacidad, contratos). Se le muestra la pieza renderizada, no el PR.
+- **No cambia** lo que ya pide aprobación por su riesgo: escribir datos de producción fuera
+  de lo autorizado, gasto pago, contactar clientes, tocar el portal del SIAT.
+- A Sergio Urcullo no se le habla de PRs: se le dice qué quedó publicado y qué necesita mirar.
+
 ## Dónde va cada cosa (REGLA)
 
 Nada suelto en la raíz.
