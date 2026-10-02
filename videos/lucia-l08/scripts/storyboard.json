@@ -1,11 +1,41 @@
 {
-  "_nota": "Storyboard EN PALABRAS de L08 (INSTRUCCION § LAYOUT). sync-plan.mjs --lead -0.15 le pone el tiempo real de cada palabra (segments.json, línea recortada 0,40 s). Cada beat va en su propia 'position' para que el anti-pisada no corte el panel cuando entran sus filas (es a propósito: las filas viven DENTRO del panel). 'hold' = hasta el cierre del panel (7,75 s, 0,22 s después de «antes.») o hasta el final.",
+  "_nota": "Storyboard EN PALABRAS de L08 (INSTRUCCION § LAYOUT). sync-plan.mjs --lead -0.15 le pone el tiempo real de cada palabra (segments.json, línea recortada 0,40 s). Cada beat va en su propia 'position' para que el anti-pisada no corte el panel cuando entran sus filas (es a propósito: las filas viven DENTRO del panel). 'hold' = hasta el cierre del panel en 8,10 s (corrección del 2-oct: antes cerraba en 7,75 y la fila 3 quedaba 0,8 s en pantalla; el fundido de salida cae en 7,88–8,10, antes del sello de 8,15) o hasta el final.",
   "beats": [
-    { "at": 0, "asset": "assets/tag-ia.png", "position": "tag", "hold": 2.4 },
-    { "cue": "correo", "asset": "assets/panel-base.png", "position": "panel", "hold": 4.004 },
-    { "cue": "día", "asset": "assets/panel-r1.png", "position": "fila1", "hold": 3.04 },
-    { "cue": "horas", "asset": "assets/panel-r2.png", "position": "fila2", "hold": 1.415 },
-    { "cue": "antes.", "asset": "assets/panel-r3.png", "position": "fila3", "hold": 1.136 },
-    { "cue": "Vos", "asset": "assets/sello-dedo.png", "position": "sello", "hold": 3.0 }
+    {
+      "at": 0,
+      "asset": "assets/tag-ia.png",
+      "position": "tag",
+      "hold": 2.4
+    },
+    {
+      "cue": "correo",
+      "asset": "assets/panel-base.png",
+      "position": "panel",
+      "hold": 4.354
+    },
+    {
+      "cue": "día",
+      "asset": "assets/panel-r1.png",
+      "position": "fila1",
+      "hold": 3.39
+    },
+    {
+      "cue": "horas",
+      "asset": "assets/panel-r2.png",
+      "position": "fila2",
+      "hold": 1.765
+    },
+    {
+      "cue": "antes.",
+      "asset": "assets/panel-r3.png",
+      "position": "fila3",
+      "hold": 1.486
+    },
+    {
+      "cue": "Vos",
+      "asset": "assets/sello-dedo.png",
+      "position": "sello",
+      "hold": 3.0
+    }
   ]
 }

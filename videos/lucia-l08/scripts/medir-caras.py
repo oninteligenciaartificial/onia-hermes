@@ -8,7 +8,7 @@ editor-videos) sobre CADA cuadro y lleva las cajas al lienzo 1080x1920. Sirve pa
 
 Uso:
   python3 medir-caras.py --video ../raw/l08-cafe-kling-f79eb10e.mp4 --skip-frames 10 --out ../renders/qa/caras-crudo.json
-  python3 medir-caras.py --video ../final/l08.mp4 --out ../renders/qa/caras-final.json
+  python3 medir-caras.py --video ../final/l08.mp4 --detect-w 720 --out ../renders/qa/caras-final.json
 """
 import argparse, json, os, sys
 import cv2
@@ -24,6 +24,7 @@ ap = argparse.ArgumentParser()
 ap.add_argument("--video", required=True)
 ap.add_argument("--skip-frames", type=int, default=0, help="cuadros que se tiran al inicio (el trim del montaje)")
 ap.add_argument("--canvas-w", type=int, default=1080)
+ap.add_argument("--detect-w", type=int, default=0, help="reescala el cuadro a este ancho ANTES de detectar (720 = mismo tamaño que el crudo: YuNet duplica cajas en caras grandes a 1080)")
 ap.add_argument("--out", required=True)
 a = ap.parse_args()
 
@@ -32,8 +33,10 @@ scrfd = SCRFD(det_path)
 cap = cv2.VideoCapture(a.video)
 fps = cap.get(cv2.CAP_PROP_FPS) or 24.0
 W = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)); H = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-k = a.canvas_w / W  # 720 -> 1080 = 1.5 ; 1080 -> 1080 = 1
-yn = cv2.FaceDetectorYN_create(YUNET, "", (W, H), 0.6, 0.3, 5000)
+DW = a.detect_w or W
+DH = int(round(H * DW / W))
+k = a.canvas_w / DW  # 720 -> 1080 = 1.5 ; 1080 -> 1080 = 1
+yn = cv2.FaceDetectorYN_create(YUNET, "", (DW, DH), 0.6, 0.3, 5000)
 
 frames, n = [], 0
 while True:
@@ -44,6 +47,8 @@ while True:
         n += 1
         continue
     i = n - a.skip_frames
+    if DW != W:
+        img = cv2.resize(img, (DW, DH), interpolation=cv2.INTER_AREA)
     faces, _ = scrfd.detect(img)
     s_boxes = [[round(float(f[0]) * k, 1), round(float(f[1]) * k, 1), round(float(f[2]) * k, 1), round(float(f[3]) * k, 1), round(float(f[4]), 3)] for f in faces]
     _, yf = yn.detect(img)

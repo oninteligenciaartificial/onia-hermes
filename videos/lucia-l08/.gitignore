@@ -1,3 +1,5 @@
 raw/
 renders/
 final/
+# derivados de la librería SFX de HyperFrames (no versionada): los regenera scripts/render.sh
+assets/sfx/

@@ -1,0 +1,26 @@
+{
+ "_nota": "pop trae 0,116 s de silencio antes del golpe (medido con librosa, umbral 10 % del pico): at = entrada visual - 0,116 (la primera se clampa a 0 → suena a 0,116 s, la instrucción pide 0,10). duck:false (sin voz). Tarjetas -10 dB, sello -8 dB (instrucción).",
+ "sfx": [
+  {
+   "asset": "pop",
+   "at": 0,
+   "gain": -10,
+   "duck": false,
+   "_entra_visual_s": 0.083
+  },
+  {
+   "asset": "pop",
+   "at": 2.051,
+   "gain": -10,
+   "duck": false,
+   "_entra_visual_s": 2.167
+  },
+  {
+   "asset": "pop",
+   "at": 3.842,
+   "gain": -8,
+   "duck": false,
+   "_entra_visual_s": 3.958
+  }
+ ]
+}

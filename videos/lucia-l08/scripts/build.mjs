@@ -1,6 +1,6 @@
 // L08 · ¿Cuántos pacientes se olvidan de su cita? — gen1 en UNA pasada (INSTRUCCION § ORDEN paso 2).
 // Calcado de videos/tiktok-20260917/scripts/tiktok-build.mjs, con rutas RELATIVAS a la pieza:
-//   trim 0,40 + tpad (último cuadro clonado) + scale ×2 + zoompan (golpe + ken, zoomExpr de zoom-punch.mjs)
+//   trim 0,40 (+ tpad opcional, hoy 0) + scale ×2 + zoompan (golpe + ken, zoomExpr de zoom-punch.mjs)
 //   a 1080×1920 24 fps + velo + overlays (tag IA, panel en 4 capas, sello) + voz (2 tomas, adelay, amix normalize=0)
 //   → renders/gen1.mp4 (libx264 CRF 14 slow, yuv420p, bt709). El karaoke va en gen2 (scripts/karaoke.mjs).
 // Los tiempos de los apoyos NO se escriben a mano: salen de scripts/sync-plan.json (sync-plan.mjs --lead -0.15
@@ -14,12 +14,19 @@ import { zoomExpr, normalizeWindows, ANCHORS } from "../../../.claude/skills/edi
 const P = join(dirname(fileURLToPath(import.meta.url)), "..");
 const p = (rel) => join(P, rel);
 const DRAFT = process.argv.includes("--draft");
+// --clean (QA): solo b-roll + zoom + velo, sin apoyos ni voz → renders/qa/clean.mp4 (CRF 10). Es la referencia para medir
+// la opacidad de cada apoyo cuadro a cuadro (final − clean) sin depender del fondo que se mueve.
+const CLEAN = process.argv.includes("--clean");
 const W = 1080, H = 1920, FPS = 24;
 
 // ---- línea de tiempo ------------------------------------------------------------------------------------
 const RAW = p("raw/l08-cafe-kling-f79eb10e.mp4");
 const TRIM = 0.40;                     // mismo gesto con el celular al arranque (arranque en caliente)
-const TPAD_FRAMES = 15;                // ~0,60 s clonando el último cuadro: ella mirando a cámara
+// tpad: 0 cuadros (corrección del 2-oct). Con 15 cuadros clonados el final se congelaba en medio de un movimiento
+// rápido (la cara avanza ~9,5 px y se corre ~16 px por cuadro hasta f230 y en f231 se frena de golpe): se veía como un
+// cuadro trabado justo en el remate, y la receta §7 dice que a la persona no se la congela. Termina en f230 = 9,625 s,
+// ~0,36 s de aire después de lo audible de «dedo.». Volver a clonar solo con el OK de Sergio Urcullo sobre el preview.
+const TPAD_FRAMES = 0;
 const rawFrames = Number(spawnSync("ffprobe", ["-v", "error", "-select_streams", "v:0", "-count_frames", "-show_entries",
   "stream=nb_read_frames", "-of", "csv=p=0", RAW], { encoding: "utf8" }).stdout.trim());
 const keptFrames = rawFrames - Math.ceil(TRIM * FPS - 1e-9);   // trim=start=0.40 se queda con t >= 0.40 → cuadro 10
@@ -54,7 +61,7 @@ const img = (file, dur) => { inputs.push("-loop", "1", "-framerate", String(FPS)
 
 const f = [];
 f.push(
-  `[0:v]trim=start=${TRIM},setpts=PTS-STARTPTS,tpad=stop_mode=clone:stop=${TPAD_FRAMES},` +
+  `[0:v]trim=start=${TRIM},setpts=PTS-STARTPTS,${TPAD_FRAMES > 0 ? `tpad=stop_mode=clone:stop=${TPAD_FRAMES},` : ""}` +
   `scale=iw*2:ih*2:flags=bicubic,` +
   `zoompan=z='${zoomExpr(zooms)}':d=1:x='(iw-iw/zoom)*${ax}':y='(ih-ih/zoom)*${ay}':s=${W}x${H}:fps=${FPS},` +
   `setsar=1,format=yuv444p[v0]`,
@@ -85,15 +92,23 @@ const apoyo = (o, { s, x, y, rise = 0, fadeIn = FIN_IN, fadeOut = FIN_OUT, name 
   over(name, x, yy, `between(t,${o.start},${o.end})`);
 };
 
+if (!CLEAN) {
 // tag IA — pastilla de 520 px de ancho, borde superior visible en y=1186 (PNG @2x: pastilla x 88–1353, y 56–227)
 const sTag = +(520 / (1353 - 88)).toFixed(4);
 apoyo(at("assets/tag-ia.png"), { s: sTag, x: `(${W}-w)/2`, y: Math.round(1186 - 56 * sTag), fadeIn: 0, name: "tag" });
 
-// panel-diagrama — tarjeta de 900 px (PNG @2x: tarjeta x 160–2159, y 80–721 → ×0,45 = 900 × 288), borde superior en y=1180
+// panel-diagrama — tarjeta de 900 px (PNG @2x: tarjeta x 160–2159, y 80–721 → ×0,45 = 900 × 288).
+// Borde superior en y=1192 (la INSTRUCCION decía 1180): en el QA del 1-oct YuNet dio la caja de la cara hasta 1151 en
+// los cuadros 135-136 (mentón+40 = 1191 > 1180). SCRFD daba 1102; igual se baja 12 px para que pasen los DOS
+// detectores. Abajo queda en 1480 (< 1490) y la subida de entrada es de 10 px para no pasar 1490 ni al entrar.
 const sPan = 0.45;
-const yPan = Math.round(1180 - 80 * sPan);
-apoyo(at("assets/panel-base.png"), { s: sPan, x: `(${W}-w)/2`, y: yPan, rise: 24, name: "panel" });
-for (const r of ["r1", "r2", "r3"]) apoyo(at(`assets/panel-${r}.png`), { s: sPan, x: `(${W}-w)/2`, y: yPan, rise: 14, name: `fila${r}` });
+// 2-oct: 1194 (2 px más abajo). Re-render con TPAD 0: YuNet dio la caja (con cuello) en 1152,7 en el cuadro 133 →
+// mentón+40 = 1192,7, 0,7 px ENCIMA del borde de la tarjeta. Abajo queda en 1482 y la subida de entrada baja a 8 px
+// para que ni el primer cuadro (alfa ~3 %) pase de 1490.
+const PANEL_TOP = 1194;
+const yPan = Math.round(PANEL_TOP - 80 * sPan);
+apoyo(at("assets/panel-base.png"), { s: sPan, x: `(${W}-w)/2`, y: yPan, rise: 8, name: "panel" });
+for (const r of ["r1", "r2", "r3"]) apoyo(at(`assets/panel-${r}.png`), { s: sPan, x: `(${W}-w)/2`, y: yPan, rise: 8, name: `fila${r}` });
 
 // sello «NO MOVÉS UN DEDO.» — texto de 900 px (PNG @2x: texto+raya x 87–2036), rotado −4° en el HTML,
 // borde del PNG en y=1176. Entra de 130 % a 100 % en 3 cuadros (un overlay por cuadro, centrado), sin fundido.
@@ -109,6 +124,8 @@ pasos.forEach((z, j) => {
   const a = (f0 + j - 0.5) / FPS, b = j < pasos.length - 1 ? (f0 + j + 0.5) / FPS : DUR + 1;
   over(`sello${j}`, `(${W}-w)/2`, `${selCy.toFixed(1)}-h/2`, `between(t,${a.toFixed(4)},${b.toFixed(4)})`);
 });
+console.log(`escalas: tag ${sTag} · panel ${sPan} (y PNG ${yPan}) · sello ${sSel} (${selW}×${selH}, centro y ${selCy.toFixed(1)}, cuadro ${f0})`);
+}
 f.push(`[${base}]format=yuv420p[vout]`);
 
 // ---- voz: dos tomas de Marcela. El remate viene 3,3 LU más fuerte que el cuerpo (−20,3 vs −23,6 LUFS, medido con
@@ -118,9 +135,9 @@ f.push(`[1:a]aformat=sample_fmts=fltp:sample_rates=48000:channel_layouts=stereo,
 f.push(`[2:a]aformat=sample_fmts=fltp:sample_rates=48000:channel_layouts=stereo,volume=${REMATE_DB}dB,adelay=8300:all=1[vb]`);
 f.push(`[va][vb]amix=inputs=2:normalize=0:duration=longest:dropout_transition=0,apad,atrim=0:${DUR.toFixed(4)}[aout]`);
 
-const OUT = p(DRAFT ? "renders/gen1-draft.mp4" : "renders/gen1.mp4");
+const OUT = p(CLEAN ? "renders/qa/clean.mp4" : DRAFT ? "renders/gen1-draft.mp4" : "renders/gen1.mp4");
 mkdirSync(dirname(OUT), { recursive: true });
-const enc = DRAFT ? ["-crf", "23", "-preset", "ultrafast"] : ["-crf", "14", "-preset", "slow"];
+const enc = CLEAN ? ["-crf", "10", "-preset", "fast"] : DRAFT ? ["-crf", "23", "-preset", "ultrafast"] : ["-crf", "14", "-preset", "slow"];
 const args = ["-y", "-hide_banner", ...inputs, "-filter_complex", f.join(";\n"), "-map", "[vout]", "-map", "[aout]",
   "-frames:v", String(NFRAMES), "-r", String(FPS),
   "-c:v", "libx264", ...enc, "-pix_fmt", "yuv420p",
@@ -130,7 +147,6 @@ const args = ["-y", "-hide_banner", ...inputs, "-filter_complex", f.join(";\n"),
 console.log(`L08 gen1${DRAFT ? " (BORRADOR)" : ""}: crudo ${rawFrames} cuadros → recorte ${keptFrames} + tpad ${TPAD_FRAMES} = ${NFRAMES} cuadros = ${DUR.toFixed(3)} s`);
 console.log("zoom:", JSON.stringify(zooms.map((w) => ({ start: +w.start.toFixed(3), end: +w.end.toFixed(3), from: w.from, to: w.to }))));
 console.log("apoyos:", plan.map((o) => `${o.asset.split("/").pop()} ${o.start}→${o.end}`).join(" · "));
-console.log(`escalas: tag ${sTag} · panel ${sPan} (y PNG ${yPan}) · sello ${sSel} (${selW}×${selH}, centro y ${selCy.toFixed(1)}, cuadro ${f0})`);
 const r = spawnSync("ffmpeg", args, { stdio: ["ignore", "inherit", "inherit"] });
 if (r.status !== 0) { console.error("ffmpeg falló:", r.status); process.exit(1); }
 console.log("OK →", OUT);
