@@ -1,0 +1,37 @@
+{
+  "_nota": "L08 · INSTRUCCION § SFX: 4 efectos con causa visible. pop = entra el panel (3,75, «correo»−0,15) · ping 0,2 s después de las filas −24 h (4,71) y −2 h (6,335) · pop = sello del remate en su cuadro (196 = 8,167 s). Los archivos son los de la librería de HyperFrames SIN el silencio inicial (render.sh: ping desde 0,31 s, pop desde 0,10 s), así «at» es el GOLPE y no el arranque del archivo (corrección del 2-oct: con ping.mp3 entero el golpe caía 323 ms tarde). Ganancias medidas con astats para que cada pico quede ~10 dB bajo el pico de la voz (README § QA). Ducking corto y suave (−3 dB, 0,3 s, solo el transitorio): los pings caen encima de «día antes» y «horas antes» —las palabras clave— y el default (−5 dB durante todo el ping) se las tapaba.",
+  "sfx": [
+    {
+      "asset": "assets/sfx/pop-l08.wav",
+      "at": 3.75,
+      "gain": -17,
+      "duck": true,
+      "duckDb": 3,
+      "duckDur": 0.3
+    },
+    {
+      "asset": "assets/sfx/ping-l08.wav",
+      "at": 4.91,
+      "gain": -15.5,
+      "duck": true,
+      "duckDb": 3,
+      "duckDur": 0.3
+    },
+    {
+      "asset": "assets/sfx/ping-l08.wav",
+      "at": 6.535,
+      "gain": -15.5,
+      "duck": true,
+      "duckDb": 3,
+      "duckDur": 0.3
+    },
+    {
+      "asset": "assets/sfx/pop-l08.wav",
+      "at": 8.167,
+      "gain": -17,
+      "duck": true,
+      "duckDb": 3,
+      "duckDur": 0.3
+    }
+  ]
+}

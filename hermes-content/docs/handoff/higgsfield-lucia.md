@@ -6,27 +6,71 @@
 > Última escritura: **2026-09-30 ~02:50 UTC**, en el cambio de sesión.
 > Reemplaza a `HIGGSFIELD-LUCIA-SYSTEM-2026-09-22.md`, que queda como historia.
 
-## ▶ ESTADO VIGENTE — 1-oct-2026 ~20:15 UTC (lo de abajo es historia)
+## ▶ ESTADO VIGENTE — 2-oct-2026 ~02:10 UTC (lo de abajo es historia)
 
-**Decidido y medido** (detalle en `v4/PROCEDENCIA.jsonl` y `HIGGSFIELD_VIDEO_SYSTEM.md`):
-- Fotos: **Seedream 4.5 + ancla espejo** (`LUCIA-HIGGSFIELD-IDENTITY.json` → `v4.metodo_diario`), 1 cr, parecido 0,80–0,86.
-- Respaldo barato: **Soul `LUCIA-v5`** `cd42c065-…` (0,12 cr, media 0,803; no llegó a principal). El v4 queda retirado.
-  `LUCIA-v5b` `1fd04bfa-…` sigue en cola: cobrado (25 cr), sin uso previsto.
-- B-roll: **Kling 3.0 std sin sonido** (7,5 cr / 6 s) — sostiene la cara. **Aprobado por Sergio Urcullo el 1-oct, con tope de 150 cr/mes.**
-- Hablando a cámara: MiniMax H3, máx. 1/semana. Mezcla: 70 % fotos/carruseles, 20 % b-roll, 10 % hablando.
-- Investigación de influencers IA: `hermes-content/research/competencia/LUCIA_INFLUENCERS_IA_B2B_20260930.md`
-  (lecciones: declarar IA en el primer segundo, pantalla real de Onia, nada «anti-humano»).
+**Sesión:** Lucía v4 en la nube, entorno `onia-higgsfield`, `session_01Whdadt8NdnYbZoyum1bRX6`, rama
+`claude/trusting-dirac-wjkua1`, PR oninteligenciaartificial/onia-hermes#82 (borrador; incluye el #78). Ve
+`ELEVENLABS_API_KEY` y, desde el reinicio del contenedor, también la llave del VPS (`ssh onia-vps`). **El relevo que
+pedía la madre ya no hace falta.**
 
-**Falta para publicar (de Sergio Urcullo):** cuenta `@lucia.antelo.oficial` conectada a la app `OnIA Social API`
-y token guardado en `/root/.config/onia-publicar/` (VPS); etiqueta de IA del perfil + bio «IA creada por
-@oniahq»; OK al carrusel L01. Además la madre le plantea si Lucía sigue en la Etapa 1 (§7 de la estrategia). Opcional: red del entorno `onia-higgsfield` a
-instagram/tiktok/facebook/graph.facebook.com y secreto `ELEVENLABS_API_KEY`.
+**Objetivo de la sesión:** L08 con voz de Marcela y la semana 1. **Hecho =** reels editados con `editor-videos`,
+verificados y en manos de Sergio Urcullo para el OK.
 
-**Reparto:** la sesión en la nube (`onia-higgsfield`) genera con Higgsfield. Una sesión LOCAL (con el Chrome
-de Sergio Urcullo) hace lo que la nube no puede: Instagram, Meta y mirar perfiles.
+**Qué quedó hecho (en el repo, no publicado):**
+- **Regla de Sergio Urcullo (1-oct): todo video que sale a redes se edita con `editor-videos`; Higgsfield solo genera el
+  clip.** Está en `higgsfield-generate` (las dos copias), en `HIGGSFIELD_VIDEO_SYSTEM.md` y en `cola/lucia-diario/FLUJO.md`.
+  La receta vive en una sola fuente: `editor-videos/SKILL.md` § «Reels de Lucía».
+- **Receta medida contra Santiago Muñoz y Erik Taveras:** sus últimos videos (TikTok, 19-sep a 1-oct), cuadro por cuadro,
+  con crítico. Ficha: `references/video-intake/2026-10-01-santiago-erik-edicion-medida.{md,json}`.
+- **L02, L05 y L08 editados** (`videos/lucia-lNN/`, final en `v4/feed/`, preview 360p mandado a Sergio Urcullo). Un
+  subagente por pieza, dos verificadores y una ronda de arreglo. Guiones: `cola/lucia-diario/S1-GUIONES.md`.
+  - L08: 10,25 s, −14,1 LUFS, identidad 0,75–0,79. Panel-diagrama (−24 h, −2 h, confirmar/cancelar); remate con
+    sello y voz que baja.
+  - L05 v3: 6,04 s, sin voz, sello «CERO.».
+  - L02: 6,04 s, sin voz, primera persona. Identidad resuelta mirando (0,694 de perfil y 0,630 en un parpadeo; los
+    cuadros frontales dan 0,712–0,727).
+- **Stack en la nube:**
+  - `resolve-playwright` cae a `/opt/pw-browsers/chromium`.
+  - `tts-elevenlabs.mjs` suma `--timestamps`, `--previous-text`, `--seed` y el cupo en vivo.
+  - Plantillas `keyword-marca`, `tag-ia` y `frase-card`, ya con la sombra sin corte.
+  - SFX de HyperFrames bajados de `npm pack hyperframes` (no van en git).
+- **Gasto:** Higgsfield octubre **20 / 150 cr** (esta sesión gastó 0). ElevenLabs: 83 caracteres (quedan 453 de 10.000,
+  tier payg).
 
-**Siguiente:** semana 1 lista en `cola/lucia-diario/S1-PIEZAS.md` (PR #77, ~10 cr). Días 1-3 cuestan 0 (reusan
-fotos y el clip aprobados). Esperando: OK a L01 y la cuenta conectada.
+**Qué quedó a medias y dónde:**
+- Los tres reels esperan el **OK de Sergio Urcullo** (tabla de cortes en cada `README.md`). Sin OK no se publica.
+- **L05 y L08 no se publican sin la captura REAL.** El correo de recordatorio (24 h y 2 h, con botones) y el link de
+  reserva + agenda. No hay cuenta demo en producción. Pedido mandado a la madre el 1-oct ~23:40.
+- L08: 1 cuadro con texto fantasma a la salida del panel (8,04 s; menor, explicado en `README.md`). Si Sergio Urcullo
+  aprueba, se arregla en `build.mjs` alineando los fades a la grilla de 1/24 y se re-renderiza (costo 0).
+- Decisión de Sergio Urcullo: ¿L02 y L05 llevan voz de Marcela (~100 caracteres) o quedan sin voz con la música que él
+  pone?
+
+**Intentos fallidos (no repetir):**
+- **Placas PIL + ffmpeg a mano (1-oct): rechazadas.** Se edita con la skill.
+- **Forzar `voice_settings` a Marcela** (stability/style): le cambia el timbre. La regla del 21-ago ya lo prohibía y se
+  pisó igual. Sin settings.
+- **El remate sonaba a pregunta** (la F0 subía en «dedo»). Se arregla con una toma aparte, `--previous-text` y varias
+  `--seed`, y se elige la que BAJA. Whisper siempre escribe «mueves»: no sirve para juzgar el voseo.
+- **Pie «hecho con IA» fijo abajo:** Instagram tapa y > 1490. Ahora es un rótulo al arranque, debajo del mentón.
+- **Gate de identidad aplicado a cualquier cuadro:** bloquea en falso con perfiles y parpadeos.
+- **Instagram y YouTube desde la nube:** 429 / verificación de bot. **TikTok anda** con
+  `yt-dlp --impersonate chrome` (+ `curl-cffi`).
+- **Los reinicios del contenedor cortan los workflows.** Se retoman con `resumeFromRunId` (el disco sobrevive).
+
+**Qué depende de Sergio Urcullo:**
+1. OK de L02, L05 y L08.
+2. Voz o no en L02/L05.
+3. Token de `@lucia.antelo.oficial` en el VPS.
+4. Bio con link + utm.
+5. Cuenta de Buffer gratis con el correo propio de Lucía, para su TikTok.
+
+**Mensajes a la madre:** desde la nube **SÍ se puede** con `mcp__claude-code-remote__send_message` y
+`session_id=session_01Ap3wJimaiB2tZR7gYsYGhe`. `SendMessage` falla.
+
+**Próximos pasos:**
+1. Con el OK: publicar L02 por `ig-reel.mjs --cuenta lucia` cuando esté el token. L05 y L08 esperan la captura.
+2. Semana 1 restante: L03 y L06 son fotos listas (pie + paquete). L04 y L07 son carruseles con captura real.
 
 ## ▶ Arranque de la sesión siguiente, en el entorno `onia-higgsfield`
 

@@ -1,0 +1,31 @@
+<!-- Copia LOCAL de .claude/skills/editor-videos/assets/html/frase-card.html para L02 (2-oct). Misma tarjeta, mismo
+     texto y misma sombra de make-mockup (--shadow: 0 46u 96u -24u .62 + 0 10u 26u .32); cambian 3 cosas, medidas:
+     1) #stage con aire para la sombra: 80u arriba · 130u a los lados · 190u abajo. La plantilla trae 40u en los
+        cuatro lados y la sombra baja ~137u: la captura la cortaba en seco (última fila con alfa 55/255 → franja gris
+        que terminaba en una línea recta en y=1162 sobre el suéter, 65 % del video).
+     2) width: max-content. Con el aire de (1) el #stage pasa los 1000 css del viewport de make-mockup y la frase
+        partía en DOS líneas (medido @2x: cuerpo de 1750×316 → 1680×458 px). max-content la deja en una línea, como antes.
+     3) La sombra va en dos <div> con filter: blur() y no con box-shadow. Capturado más grande, el box-shadow de
+        Chromium headless sale en mosaicos de 256 px con costuras: escalones de 11 niveles a +38 px debajo de la
+        tarjeta y de 8 a +24 px a la derecha (medido sobre gris 190). Con blur() el perfil es el mismo (σ = blur/2,
+        como manda la spec de box-shadow) y liso; alfa 0 en los cuatro bordes del PNG.
+     {{LABEL}} = cejilla (opcional), {{TITLE}} = la frase, {{VALUE}} = remate en acento (opcional). -->
+<style>
+  #stage { padding: calc(80*var(--u)) calc(130*var(--u)) calc(190*var(--u)); width: max-content; }
+  .wrap { position: relative; }
+  .card { box-shadow: none;
+          padding: calc(40*var(--u)) calc(52*var(--u)) calc(44*var(--u)) calc(62*var(--u));
+          max-width: calc(920*var(--u)); }
+  /* box-shadow X Y B S = rect agrandado S, corrido (X,Y) y desenfocado con σ = B/2 */
+  .sh { position: absolute; pointer-events: none; }
+  .sh1 { left: calc(24*var(--u)); right: calc(24*var(--u)); top: calc(70*var(--u)); bottom: calc(-22*var(--u));
+         border-radius: calc(10*var(--u)); background: rgba(0,0,0,.62); filter: blur(calc(48*var(--u))); }
+  .sh2 { left: 0; right: 0; top: calc(10*var(--u)); bottom: calc(-10*var(--u));
+         border-radius: calc(34*var(--u)); background: rgba(0,0,0,.32); filter: blur(calc(13*var(--u))); }
+  .eyebrow { margin-bottom: calc(14*var(--u)); }
+  .eyebrow:empty { display: none; }
+  .t { font-family: var(--font-display); font-weight: 700; color: var(--text);
+       font-size: calc(64*var(--u)); line-height: 1.12; letter-spacing: -0.01em; text-wrap: balance; }
+  .t b { color: {{ACCENT}}; font-weight: 700; }
+</style>
+<div class="wrap"><div class="sh sh1"></div><div class="sh sh2"></div><div class="card"><div class="rail"></div><div class="eyebrow">{{LABEL}}</div><div class="t">{{TITLE}} <b>{{VALUE}}</b></div></div></div>

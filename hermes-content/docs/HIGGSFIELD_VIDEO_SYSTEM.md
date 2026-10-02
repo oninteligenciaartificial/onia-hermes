@@ -3,6 +3,11 @@
 Hermes uses Higgsfield as a replaceable video generation engine. Hermes keeps
 strategy, approvals, publishing decisions and memory.
 
+> ⛔ **REGLA DURA (Sergio Urcullo, 1-oct-2026): todo video que sale a redes se edita con la skill
+> `editor-videos` (método Santiago). Higgsfield solo genera el clip.** Montaje, apoyos, karaoke, SFX, master,
+> tabla de cortes y preview son de esa skill (§ «Reels de Lucía»). Este documento cubre GENERAR: modelo,
+> prompt, costo, identidad.
+
 > **Estado vigente: 2026-09-22.** Este bloque reemplaza cualquier afirmación más
 > abajo que declare MCP como ruta por defecto, fije una versión vieja de la CLI o
 > trate costos/modelos/saldos históricos como actuales.
@@ -254,6 +259,38 @@ deriva contra el primer frame de cada video, no el número absoluto.** Todo prom
 along a sunlit street…» dispara la recomendación del preset «IN THE DARK»: pasar
 `declined_preset_id: "24bae836-2c4a-48e0-89b6-49fcc0b21612"`. Los presets virales no tienen
 preflight de costo.
+
+**Reels de Lucía — lo que toca a Higgsfield (generar). La EDICIÓN vive en `editor-videos` § «Reels de Lucía».**
+1. Foto aprobada del método diario → `kling3_0` std, sin sonido, 9:16 (6 s 7,5 cr · 10 s 12,5 cr). Prompt: una
+   acción simple + «looks up at the camera» + «Keep her face exactly as in the image». Kling sostiene la cara
+   (0,75–0,82 en el clip del coworking; 0,757–0,787 en el café de L08).
+2. El clip se pide pensando en el montaje: el momento en que mira a cámara es donde cae el remate (L08: ~8,9 s).
+3. Se baja el clip LIMPIO (sin texto) de su `rawUrl` y desde ahí edita `editor-videos`. Nunca se edita sobre un
+   render con texto quemado.
+
+**Autoconocimiento del carril Lucía (1-oct-2026) — leer antes de investigar de nuevo:**
+- **Kling 3.0 std sin sonido** es el b-roll de Lucía: 6 s 7,5 cr · 10 s 12,5 cr (cotizado en vivo 1-oct).
+  Parecido medido: coworking 0,75–0,82 en 5 frames; calle 0,70→0,72 contra su primer frame.
+- **Editar no es de este documento:** texto, zona segura de Instagram, voz, SFX y master viven en
+  `editor-videos` § «Reels de Lucía». El 1-oct se editaron L02/L05/L08 con placas PIL y hubo que rehacerlos.
+- **Publicar en TikTok desde Higgsfield (`tiktok_connect` / `tiktok_prepare_publish`) no sirve desde Claude Code:**
+  solo acepta media alojada en Higgsfield y el último paso es un formulario MCP Apps que esta interfaz no muestra.
+  El TikTok de Lucía va por Buffer (cuenta gratis aparte, con el correo propio de Lucía).
+- **Soul:** entrenar `soul_2` cuesta 25 cr (medido con el saldo) y queda HORAS en cola (v4 ~9 h, v5 ~9 h).
+  No acelera relanzarlo: `LUCIA-v5b` se cobró y siguió en cola. El A/B en escenas fuera del dataset dio
+  Seedream+ancla 0,838 · Soul v5 0,803 · Soul v4 0,744: el método diario sigue siendo Seedream+ancla.
+- **Entorno de la nube de este carril:** `onia-higgsfield` = `env_01V5EeE4VtMdw7PWVaMYywsk`. Desde el 1-oct
+  tiene `ELEVENLABS_API_KEY` y red a `api.elevenlabs.io` (una variable nueva solo la ve una sesión NUEVA).
+  Voz de Marcela: `86V9x9hrQds83qf7zaGn` (cuenta ElevenLabs de ONIA; Higgsfield no la tiene: da «Voice not found»).
+- **Abrir una sesión sucesora por routine (`create_trigger`) la deja SIN conectores** (sin Higgsfield ni GitHub):
+  el sistema lo avisa al crearla. Caso: `trig_01JsU6qu1wkj93RVfRf7Mee2`, 1-oct 20:30 UTC, disparó y abrió
+  `cse_01SrFno1LzvGxPqnsFGETRgR` (run «pending»). Para una sucesora con conectores, la abre Sergio Urcullo
+  desde la web en ese entorno.
+- **La nube SÍ puede mandarle mensajes a la madre** — corregido 1-oct ~23:40 UTC, medido: `SendMessage` falla («this
+  cloud session cannot message other sessions yet»), pero `mcp__claude-code-remote__send_message` con
+  `session_id: session_01Ap3wJimaiB2tZR7gYsYGhe` (la madre) **entrega** como turno de usuario. Antes acá decía que no se podía.
+- El control de permisos de la sesión puede frenar un gasto aunque esté dentro del tope aprobado
+  (Cinema Studio 3.0, 30-sep): no se rodea, se le avisa a Sergio Urcullo.
 
 Reglas de uso:
 - Un efecto tiene que servir a la idea de la pieza (gancho, transición a la pantalla de Onia).
