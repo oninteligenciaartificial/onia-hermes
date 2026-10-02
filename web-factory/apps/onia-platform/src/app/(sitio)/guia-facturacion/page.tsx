@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Reveal } from "@/motion";
+import { Entrada, Reveal } from "@/motion";
 import {
   SIAT_GUIA_KICKER,
   SIAT_GUIA_TITULAR,
@@ -128,7 +128,7 @@ export default function GuiaFacturacion() {
       <section className={`${g.heroBlock} ${g.noPrint}`}>
         <div className={g.heroInner}>
           <div className={g.hero}>
-            <Reveal>
+            <Entrada>
               <div>
                 <Kicker>{SIAT_GUIA_KICKER}</Kicker>
                 <h1 className={s.display} style={{ maxWidth: "14ch" }}>
@@ -138,10 +138,10 @@ export default function GuiaFacturacion() {
                   {SIAT_GUIA_BAJADA}
                 </p>
               </div>
-            </Reveal>
-            <Reveal delay={0.08}>
+            </Entrada>
+            <Entrada delay={0.08}>
               <CapturaGuia />
-            </Reveal>
+            </Entrada>
           </div>
         </div>
       </section>

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Reveal } from "@/motion";
+import { Entrada, Reveal } from "@/motion";
 import {
   CHATBOT_PLAN,
   CONVERSACIONES_INCLUIDAS,
@@ -93,7 +93,7 @@ export default function Chatbot() {
       <JsonLd data={JSON_LD} />
       <Block surface="paper">
         <div className={s.split}>
-          <Reveal>
+          <Entrada>
             <div>
               <Kicker>{CHATBOT_EN_LA_CARTA}</Kicker>
               {/* Copy formal (Sergio, 12-sep): la misma promesa que la portada,
@@ -115,8 +115,8 @@ export default function Chatbot() {
                 </Btn>
               </div>
             </div>
-          </Reveal>
-          <Reveal delay={0.08}>
+          </Entrada>
+          <Entrada delay={0.08}>
             {/* La conversacion se DIBUJA. Antes acá iba whatsapp.webp, el
                 editor real del chatbot: Sergio, 2026-09-01, textual —"no
                 coloques capturas literales del sistema, se ve mal, coloca
@@ -124,7 +124,7 @@ export default function Chatbot() {
                 que aprender a usar, muestra el resultado: el que escribió a
                 las 23:40 ya tiene su horario contestado. */}
             <Shape tone="green" panel="chat" />
-          </Reveal>
+          </Entrada>
         </div>
       </Block>
 

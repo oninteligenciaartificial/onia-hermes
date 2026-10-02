@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
 import type { Metadata } from "next";
-import { Reveal } from "@/motion";
+import { Entrada, Reveal } from "@/motion";
 import {
   SIAT_TITULAR,
   SIAT_BAJADA,
@@ -94,13 +94,13 @@ export default function Facturacion() {
     <>
       <JsonLd data={JSON_LD} />
       <Block surface="paper">
-        <Reveal>
+        <Entrada>
           <Kicker>Facturación electrónica · SIAT</Kicker>
           <h1 className={s.display} style={{ maxWidth: "20ch" }}>
             {SIAT_TITULAR}
           </h1>
           <p className={s.lead}>{SIAT_BAJADA}</p>
-        </Reveal>
+        </Entrada>
       </Block>
 
       {/* 1 · La opción gratuita, primero y en el bloque más fuerte */}

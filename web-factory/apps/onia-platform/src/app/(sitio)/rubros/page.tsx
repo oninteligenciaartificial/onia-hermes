@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Reveal } from "@/motion";
+import { Entrada, Reveal } from "@/motion";
 import { EMPEZAR_URL } from "../nav";
 import { CTA_ALTA } from "../alta";
 import { Block, Btn, Kicker } from "../ui";
@@ -121,7 +121,7 @@ export default function Rubros() {
   return (
     <>
       <Block surface="paper">
-        <Reveal>
+        <Entrada>
           <Kicker>Un solo sistema</Kicker>
           <h1 className={s.display}>
             Elegís tu rubro y la cuenta ya viene <em>armada</em>.
@@ -130,7 +130,7 @@ export default function Rubros() {
             No es un software distinto por industria: es el mismo núcleo con
             módulos y vocabulario propios de tu negocio.
           </p>
-        </Reveal>
+        </Entrada>
         <Switcher />
       </Block>
 

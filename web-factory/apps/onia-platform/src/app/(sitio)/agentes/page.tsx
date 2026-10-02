@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Reveal } from "@/motion";
+import { Entrada, Reveal } from "@/motion";
 import {
   ALCANCE_AGENTE_COTIZACIONES,
   ALCANCE_AGENTE_STOCK,
@@ -100,7 +100,7 @@ export default function Agentes() {
     <>
       <Block surface="ink">
         <div className={s.split}>
-          <Reveal>
+          <Entrada>
             <div>
               <Kicker>Agentes con IA</Kicker>
               <h1 className={s.display}>
@@ -134,10 +134,10 @@ export default function Agentes() {
                 {PRUEBA.dias} días gratis · sin tarjeta
               </p>
             </div>
-          </Reveal>
-          <Reveal delay={0.08}>
+          </Entrada>
+          <Entrada delay={0.08}>
             <Shape tone="signal" panel="agentes" />
-          </Reveal>
+          </Entrada>
         </div>
       </Block>
 

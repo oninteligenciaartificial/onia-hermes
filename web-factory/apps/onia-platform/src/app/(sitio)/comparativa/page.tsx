@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Reveal } from "@/motion";
+import { Entrada, Reveal } from "@/motion";
 import {
   CONTENDIENTES,
   EJES,
@@ -65,7 +65,7 @@ export default function Comparativa() {
   return (
     <>
       <Block surface="paper">
-        <Reveal>
+        <Entrada>
           <Kicker>Comparación</Kicker>
           <h1 className={s.display}>
             Comparalo con lo que se vende en <em>Bolivia</em>.
@@ -74,7 +74,7 @@ export default function Comparativa() {
             {HUECO} Todos los precios de abajo son públicos: abrí cualquiera de
             esas webs y comprobalo vos mismo.
           </p>
-        </Reveal>
+        </Entrada>
       </Block>
 
       <Block surface="paperDim" labelledBy="cuadro">

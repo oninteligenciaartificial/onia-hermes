@@ -200,6 +200,31 @@ Reprocharle a un prospecto lo que tenemos roto es un bumerán. Estado 2026-08-13
 1-6 y 9 están **verificados sobre el sitio servido** en `apps/onia-platform` y
 `apps/dentalgest-landing`; el resto de la lista todavía no se auditó en esas dos.
 
+## Primera pantalla sin esperar JS — `apps/onia-platform` (medido 2026-10-02)
+
+- **El hero NUNCA va en `<Reveal>`.** El Reveal de motion sale del servidor con
+  `style="opacity:0;transform:…"` y recién se ve al hidratar + bajar las features de LazyMotion:
+  /precios, /empezar y otras 11 páginas tenían el titular transparente (auditoría 2-oct: LCP
+  3,4-3,7 s en producción). Para lo que está en pantalla al abrir va **`<Entrada>`** de `@/motion`
+  (componente de servidor, CSS puro); `<Reveal>` queda para lo que entra al scrollear.
+  Gate: `src/app/titular-visible-sin-js.test.ts` renderiza con `react-dom/server` cada ruta del
+  sitemap + `/terminos` y exige el bloque del `<h1>` sin `opacity:0`/`visibility:hidden` en línea.
+- ⚠️ **Una entrada CSS que arranca en `opacity: 0` FALSEA el LCP.** Chrome descarta para siempre un
+  elemento cuyo primer paint es transparente, aunque la animación lo muestre 16 ms después: con el
+  fundido, /precios «medía» 408 ms porque el LCP pasaba a ser el botón del header, no el titular.
+  Experimento mínimo (mismo HTML, 3 variantes): desde `opacity:0` → LCP = `A`; desde `0.01` o solo
+  `transform` → LCP = `H1`. Por eso `<Entrada>` solo SUBE (24 px), no funde. Si un número de LCP
+  «mejora» mucho, mirar QUÉ elemento reporta antes de creerle.
+- Medido con build local (`next build` + `next start`), Playwright 390×844, CPU 4×, mediana de 3:
+  /precios 1.752 → 484 ms · /empezar 1.640 → 388 · /rubros 1.216 → 440 (con red «Slow 4G»:
+  2.844 → 1.100 · 2.840 → 1.032 · 2.908 → 832). El LCP pasó a ser el `H1` en las cuatro, = FCP.
+- **Renderizar páginas en vitest** necesita `oxc: { jsx: { runtime: "automatic" } }` en
+  `vitest.config.ts` (el tsconfig dice `"jsx": "preserve"` por Next y vite muere leyendo `.tsx`) y
+  `/// <reference types="vite/client" />` si el test usa `import.meta.glob`.
+- **Capturas `fullPage` de esta app dejan secciones en blanco** (los Reveal de abajo no alcanzan a
+  entrar): pasa igual antes y después de cualquier cambio. Para mirar una sección, `scrollTo` +
+  1,5 s + captura del viewport.
+
 ## Ojo con los monolitos
 
 - `onia-center` (~14k líneas): NO rediseñar in situ; reconstruir en componentes chicos
