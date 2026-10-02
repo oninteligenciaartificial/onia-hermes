@@ -1,40 +1,43 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
-import { Archivo, Geist_Mono } from "next/font/google";
+import { IBM_Plex_Mono, Instrument_Sans } from "next/font/google";
 import { MotionProvider } from "@/motion";
 import { SITE_URL } from "@/lib/site";
 import { ALCANCE_CON_AGENDA, ALCANCE_CON_INVENTARIO } from "@/lib/pricing";
 import { chatDiferidoInit } from "@/lib/chat-diferido";
+import { origenDeCampanaInit } from "@/lib/origen-de-campana";
 import "./globals.css";
 
 /*
  * DOS familias en todo el sitio, ni una mas
  * (web-factory/docs/ONIA_MARCA_SISTEMA_20260726.md §3 "Tipografia").
  *
- * Antes eran CUATRO — Archivo en la landing y en el cromo, pero Bricolage +
- * DM Sans + Spline Mono en /empezar, /nosotros, /precios, legales y servicios.
- * El resultado era el que vio Sergio: la misma web con dos caras segun la
- * seccion. Las tres se retiran; queda:
+ * 29-sep-2026: Sergio Urcullo eligio Instrument Sans + IBM Plex Mono como la
+ * letra de la marca, estilo Fanvue (la medicion vive en
+ * web-factory/data/references/design-sources/fanvue-mecanica-medida.md).
+ * Reemplazan a Archivo + Geist Mono, que quedan superadas:
  *
- *  - Archivo variable para TODO. La jerarquia sale del TAMANO y del eje `wdth`,
- *    nunca de sumar familias ni de pesos gordos (el sistema no pasa de 650).
- *    Es la misma letra con la que se cortaron los SVG del wordmark
- *    (wght 560 / wdth 96): logo y pagina son la misma tipografia.
- *  - Geist Mono solo en micro-etiquetas <=12px MAYUSCULA con tracking abierto.
+ *  - Instrument Sans variable para TODO: texto y titulares. La jerarquia sale
+ *    del TAMANO y del apretado, nunca de sumar familias ni de pesos gordos:
+ *    titulares 500-600 con tracking -2 %, nunca 700.
+ *  - IBM Plex Mono solo en micro-etiquetas, numeros y horas. No es variable:
+ *    se cargan los tres cortes que el CSS pide (400/500/600); un 700 cae al
+ *    600 en vez de sintetizarse.
  *
  * Los ROLES (display / sans / mono) viven como tokens en globals.css; aca solo
- * se cargan los archivos.
+ * se cargan los archivos. `next/font/google` los auto-hospeda en el build: el
+ * navegador nunca habla con Google (lo fija `lib/csp-de-la-landing.test.ts`).
  */
-const archivo = Archivo({
+const instrumentSans = Instrument_Sans({
   subsets: ["latin"],
-  axes: ["wdth"],
-  variable: "--font-archivo",
+  variable: "--font-instrument-sans",
   display: "swap",
 });
 
-const geistMono = Geist_Mono({
+const plexMono = IBM_Plex_Mono({
   subsets: ["latin"],
-  variable: "--font-geist-mono",
+  weight: ["400", "500", "600"],
+  variable: "--font-plex-mono",
   display: "swap",
   preload: false,
 });
@@ -51,7 +54,7 @@ const SITE_TITLE = "Onia — El sistema con IA que maneja tu negocio completo";
  * ninguna captura. Vuelve cuando la homologación concluya.
  */
 const SITE_DESCRIPTION =
-  `Elegís tu rubro, te entregamos el sistema configurado y encendés módulos cuando los necesités: clientes y caja, agentes con IA que esperan tu aprobación, chatbot de WhatsApp, inventario ${ALCANCE_CON_INVENTARIO} y agenda ${ALCANCE_CON_AGENDA}. Hecho en Bolivia.`;
+  `Elegís tu rubro, te entregamos el sistema configurado y encendés módulos cuando los necesités: clientes y caja, agentes con IA que esperan tu aprobación, agente conversacional de WhatsApp, inventario ${ALCANCE_CON_INVENTARIO} y agenda ${ALCANCE_CON_AGENDA}. Hecho en Bolivia.`;
 
 export const metadata: Metadata = {
   /*
@@ -124,12 +127,14 @@ export default function RootLayout({
     <html
       lang="es"
       suppressHydrationWarning
-      className={`${archivo.variable} ${geistMono.variable}`}
+      className={`${instrumentSans.variable} ${plexMono.variable}`}
     >
       <body>
         <script dangerouslySetInnerHTML={{ __html: themeInit }} />
         <MotionProvider>{children}</MotionProvider>
         <script dangerouslySetInnerHTML={{ __html: chatDiferidoInit }} />
+        {/* El ?src= / utm_* de un anuncio viaja hasta el alta: ver @/lib/origen-de-campana. */}
+        <script dangerouslySetInnerHTML={{ __html: origenDeCampanaInit }} />
       </body>
     </html>
   );

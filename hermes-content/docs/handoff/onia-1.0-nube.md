@@ -1,127 +1,159 @@
-# Handoff — onia-1.0-nube (sesión principal de Onia Platform, en la nube)
+# Handoff — onia-1.0-nube (carril Plataforma, en la nube)
 
-Sesión: https://claude.ai/code/session_01VGmpNv4eSMnpA3wXrypR4L · Rama de este doc: `claude/onia-platform-handoff-56d586-vjtzyj` (PR #58, borrador).
-Complementa, no reemplaza, `handoff/sesion-madre.md` (rama `claude/sesion-madre-20260930`) y el bloque «EMPEZÁ ACÁ» de `handoff/codex-continuar-1.0.md` (rama `wip/v1-hermes-20260928`).
+Sesión saliente: `session_014HGgof9kHQkdLXhsZsAq6A` (1-oct-2026, sucesora de `session_01VGmpNv4eSMnpA3wXrypR4L`).
+La sesión **madre** (local, PC de Sergio Urcullo) ordena por mensaje (CLAUDE.md §1, skill `onia-sesion-madre` en la rama
+`claude/onia-sesion-madre-77f719`). Las respuestas a la madre se escriben en el transcript propio: la nube no puede
+mandar mensajes. Historia anterior: `git log -- hermes-content/docs/handoff/onia-1.0-nube.md`.
+
+## 0. Al arrancar (medido 1-oct)
+
+- La sesión de Plataforma abre en `/home/user` con los DOS repos y **no carga** el hook SessionStart de onia-hermes:
+  `ssh onia-vps` da «Could not resolve hostname» aunque las 3 variables estén. Arreglo:
+  `cd /home/user/onia-hermes && node scripts/nube-ssh-vps.mjs` (anotado en la skill `onia-infra`).
+- `onia-platform` nace **sin `node_modules`**: `npm ci` (≈45 s) + `npx prisma generate` antes de correr tests.
+- Las ramas de trabajo son `claude/<nombre-de-la-sesión>` en los dos repos (regla del entorno: no se pushea a otra).
 
 ## 1. Objetivo
 
-Publicar la 1.0 de Onia Platform y empezar a venderla. Hoy: relanzar en la nube los 3 carriles que se cortaron al mudar la sesión
-(plata-permisos, cita-baja-api, capturas). Arreglar lo que apareció al MIRAR las capturas. Dejar todo integrado y verificado
-visualmente, listo para que una sesión con acceso al VPS lo publique.
+Desarrollar y publicar Onia Platform 1.0 hasta cobrar al primer cliente. Qué sale y qué falta:
+`hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md` (§6 «Lo que falta para cobrar»).
 
-## 2. Qué quedó EN PRODUCCIÓN
+## 2. Qué quedó EN PRODUCCIÓN (verificado)
 
-**✅ Onia Platform 1.0 PUBLICADA — 30-sep 20:44:55 UTC**, desde la nube por el túnel `onia-ssh`, con OK de Sergio Urcullo:
-- **Respaldo:** `/root/backups/pre-v1-20260930-2005/public_auth.dump`.
-- **5 migraciones aditivas** aplicadas a mano, cada una en su transacción y registrada en `_prisma_migrations`.
-- **`ONIA_WHATSAPP_INBOX_ID=5`** en `app.env` (respaldo en `app.env.bak-pre-v1-20260930`).
-- **Merge:** PR #90 a master, `3d5f9544`. CI y Security verdes sobre `4734102`; el fix de heap del runner fue necesario.
-- **Publicador:** `publicar.sh` puso en vivo `onia-platform:release-3d5f9544` (build `iRx_APBMg0s_dCVol_Pj-`) y dijo «PUBLICADO Y VERIFICADO». El rollback quedó en el contenedor `onia-platform-prev-Bro1EA6e-20260930-204444`.
-- **Alta por teléfono de GoTrue APAGADA** (`/root/bin/recrear-auth2-sin-telefono.sh`, nuevo):
-  - Estaba encendida con autoconfirmación y sin SMS.
-  - Verificado: `/auth/v1/settings` devuelve phone:false, y un signup por teléfono responde 400.
-  - Rollback: el contenedor `supabase-auth2-old-20260930-204901`.
-- ✅ Mirada en producción (21:00 UTC): sin 500 ni P2022. En prod NO hay demo dental; la única demo es «Tienda La Esquina» y vence el 1-oct 23:22 La Paz.
-- ✅ Fix de la flecha doble en /register y el «volver» de la bandeja: PR #91 → `release-2610da99` (21:44 UTC), mirado en /register a 1440 px.
-- **1-oct — decisiones de Sergio Urcullo (por pregunta):** textos del bot aprobados · WhatsApp OBLIGATORIO en el alta + 5 textos aprobados · **no se crean demos** («ninguno es real, terminemos el proyecto») · sacar «SIAT en trámite» de la venta.
-- ✅ **Verificación por WhatsApp publicada (PR #92 → `4dc829e8`)**, con interruptor en **`ONIA_VERIFICACION_WHATSAPP=plantillas`** (crea/lee plantillas, NO pide WhatsApp todavía):
-  - migración `20260930120000_add_onia_whatsapp_verificaciones` aplicada ~00:47 UTC, respaldo `/root/backups/pre-verif-wa-*`;
-  - `app.env` con respaldo `app.env.bak-pre-verif-20261001`; publicador «PUBLICADO Y VERIFICADO».
-  - Cron corrido a mano: 4 plantillas **en revisión** en Meta (bienvenida_agenda/panel UTILITY, primera_cita MARKETING, prueba_por_terminar UTILITY).
-  - 🔴 **`onia_codigo_verificacion` (AUTHENTICATION) NO se crea** — ver §5 y §6.
-- ✅ **Bot de ventas desplegado:** merge a main `c7f44ba5`, `/opt/onia/bot/_deploy/publicar.sh` → «el bot corre lo que hay en origin/main».
-- Web 1.0: correcciones en `wip/web-v1-correcciones-20261001` (`9029715d`, `71fea7af`, `05430b24`, `6564d6ab`; legales en `75667dad`). **Sin publicar: espera el OK de Sergio Urcullo** a la home nueva y a los legales. Comparativas en `scratchpad/web-v1/comparar2/` (se pierden con el contenedor).
-- Lead trabado: «Importadora Rojas» (Carlos Mamani Rojas). El correo de confirmación rebotó con 5.1.1 y no dejó teléfono.
+- **Regla nueva de Sergio Urcullo (2-oct):** lo que pasa los gates se mergea y se publica SIN preguntar; solo diseño
+  nuevo y legales pasan por él (CLAUDE.md «Qué se publica sin preguntar»). No se le habla de PRs.
+- **Plataforma `release-af2ded5c`** (onia-platform#99, Recall de tratamiento a medias), 2-oct 12:52 UTC. Log:
+  «PUBLICADO Y VERIFICADO»; contenedor de rollback `onia-platform-prev-VanPmF3l-20261002-125220`. `/login` mirado con
+  Chromium: 200, 0 errores de consola, sin íconos como texto.
+- **Web `onia.com.bo`** (onia-hermes#84, web v1 + legales 1.3), publicada 2-oct 12:58 UTC desde `main` `ae4a1fc53`
+  («PUBLICADO Y VERIFICADO»; backup `/opt/onia-landing/runtime-next.bak-deploy-20261002125830`). Mirada a 390 y 1440:
+  `/`, `/precios`, `/terminos` y `/privacidad` 200 en <2 s, «Versión 1.3» en los dos legales, 0 errores, 0 desbordes,
+  0 carteles de obra.
+- **Plataforma `release-8f07e537`** (onia-platform#98, recordatorio con botones), mergeada a `master` el 1-oct
+  22:25 UTC. **Verificada por la madre desde la PC** (aviso por rutina, 1-oct 23:49 UTC): `docker ps` →
+  `release-8f07e537` healthy; el log termina en «PUBLICADO Y VERIFICADO»; `/login` 200 y mirado con Chromium,
+  0 errores de consola, íconos como glifos. Inerte hasta que un cliente conecte su número.
+- `POST /api/auth/register` rechaza los rubros que no se venden: medido en vivo hoy, `vetgest-clinical` y
+  `onia-interna` → 400 (`Invalid enum value`). El catálogo §6.5 ya lo marca cerrado.
+- Producción: `ONIA_VERIFICACION_WHATSAPP=plantillas` (la verificación por WhatsApp del alta queda APAGADA por orden de
+  la madre hasta que Sergio Urcullo diga), `ONIA_ALTA_AUTOMATICA=abierta`.
+- Clientes con número de WhatsApp conectado: **0** (la única fila con inbox es la org interna, inbox 5 = ventas de Onia).
 
-Lo de §3 era el camino hasta ahí.
+## 3. Qué quedó a medias y dónde
 
-## 3. Qué quedó a medias y dónde (todo commiteado y pusheado — no hay nada solo en el disco)
-
-Repo `oninteligenciaartificial/onia-platform`. Base: candidato `6088e478` (`wip/v1-integracion-20260928`, PR #90).
-
-| Rama (con respaldo `wip/…`) | Commit | Qué |
+| Qué | Dónde | Estado |
 |---|---|---|
-| `v1/plata-permisos` | `435352a` | Baja con deuda sin monto para quien no tiene Caja. Inicio de comercio sin plata. Panel, costeo y reprecio de importadora piden `finance.read`. Traspasos y crear almacén piden `inventory.write`. |
-| `v1/cita-baja-api` | `4510d2f` | `/cita` rechaza citas pasadas o cerradas. Cancelar una cita pasada no avisa. `/api/v1/patients` oculta a los dados de baja salvo `?incluirBajas=1`. |
-| `v1/agenda-hoy` | `99c32bb` | Agenda de hoy: NO_ASISTIO visible, grupo «Ya pasaron» y nombre del profesional. |
-| `v1/pantallas-varias` | `1f89e16` | «Completar contacto», link de reserva visible, espacio bajo la barra, franja del plan, texto de baja por rubro y «Primeros pasos» sin retraso. |
-| `v1/seed-demo` | `5356a6c` | El seed corre en base nueva, termina solo y es idempotente. Textos propios de cada rubro, tildes y hora de La Paz. Trae 2º profesional, cita de mañana sin confirmar y tratamiento a medias. |
-| **`wip/v1-union-20260930`** | `c478b8a` | 6088e47 + los 5 de arriba. tsc 0 · vitest 8725 ok · lint 0 errores. **Verificado mirando** (A–H OK). |
-| `v1/cierre-0930` (+`wip/v1-cierre-0930`) | `4fdb6fb` | Sobre la unión. Sin `finance.read` no se ven costos ni valores de inventario (incluye API de movimientos y `/inventory`). La guía se abre si falta un paso del rubro. `/cita` sin punto doble y en vos. vitest 8756 ok. **NO mirado todavía.** |
+| **Recordatorio con botones Confirmar / Cancelar / Reprogramar** | onia-platform#98 MERGEADO (`8f07e537`) + bot en onia-hermes#84 (`2f85bdd2`, `ffb65f75`) | Plataforma: publicada y verificada (§2). Falta: publicar el bot (bloqueado, ver §5); prueba real con el chip prepago. NO se nombra en venta ni ayuda hasta esa prueba |
+| Web v1 + legales 1.3 | onia-hermes#84 MERGEADO (`eda2f34a`) | ✅ publicada y mirada (§2) |
+| Recall de tratamiento a medias + texto con IA | onia-platform#99 MERGEADO (`af2ded5c`) | ✅ publicado (§2). Falta verlo encontrar a alguien con datos: lo cubre la cuenta demo |
+| **Cuenta demo de venta** (clínica dental, datos inventados, en prod) | OK de Sergio Urcullo 2-oct. Diseño en `scratchpad/demo/` de la sesión | En curso: primero se prueba que ningún paciente inventado pueda recibir un WhatsApp/correo real (aprobar un Recall, recordatorios). Email `oninteligenciaartificial+demo@gmail.com` (NO `+qa`: las limpiezas QA borran `+qa%`) |
+| **Desarrollo en paralelo** (workflow de la sesión) | worktrees `/home/user/wt-plat-dev` (rama `dev/plataforma`) y `/home/user/wt-hermes-bot` (`dev/bot`), SIN commits al 2-oct 13:00 | Plataforma: P1 fecha retroactiva del tratamiento + lista «en curso sin próxima cita», P2 presupuesto dental por fases con link público e impresión (diseño nuevo → se le muestra a Sergio Urcullo antes de publicar), P3 lo de Doctocliq. Bot: B1 cortar el «Listo, agendado» falso y la promesa de audio, B2 los 11 tests sin cambiar el texto firmado, B3 deploy-bot en seco. Web: W1 titular sin JS / LCP, W2 barrido de promesas. **Si la sesión muere, lo no commiteado de esos worktrees se pierde** |
+| Plan B de verificación inversa (`wa.me`) | ramas `v1/verificacion-inversa` (plataforma) y `wip/bot-verificacion-inversa` (hermes) | APAGADO y NO se enciende sin OK de Sergio Urcullo (orden de la madre 1-oct) |
+| SIAT: certificación en el piloto | `/opt/onia-siat/runner-20260929/emisor-v2/` + rama `wip/siat-validar-cada-paquete`; detalle en `BITACORA.md` (2-oct) | 2-oct (conteo local): **IX 160/160**, **VI 380/560**, general 96 %, 0 rechazos. Falta SOLO VI motivos 5-7 (180): necesitan el **CAFC** del piloto. Pedido a Sergio Urcullo: CAFC + captura nueva del «Listado de Etapas» para confirmar en el portal |
+| Respuestas con datos de la ayuda (deuda, stock) leen tablas del pack dental | — | Anotado: revisar la fuente para comercio, importadora y servicios |
 
-**Para publicar, la punta es `v1/cierre-0930` (`4fdb6fb`)**, que contiene todo lo anterior. Nada se mergeó al candidato (PR #90) ni a main/master.
+**Cómo funciona el recordatorio con botones (para no re-investigar):**
+- Plantilla `recordatorio_cita` (nuevo default de `PLANTILLA_RECORDATORIO_POR_DEFECTO`), UTILITY, 3 QUICK_REPLY. La crea
+  `asegurarPlantillaRecordatorio` en la WABA **del negocio** al conectar el número. NO tiene que ver con la plantilla
+  AUTHENTICATION bloqueada de la WABA de Onia.
+- Chatwoot 4.12.1 entrega del toque **solo el texto**: payload descartado y `in_reply_to_external_id` borrado
+  (`Message#ensure_in_reply_to`, el recordatorio sale por Cloud API y no está en la conversación). La cita se resuelve
+  por inbox → org + `numeroParaWhatsapp` + `whatsapp24hSentAt|2hSentAt` en 26 h (`lib/whatsapp/respuesta-al-recordatorio.ts`).
+- El webhook de Chatwoot apunta al **bot**; el bot reenvía el entrante a `/api/webhooks/chatwoot` (`uso-plataforma.mjs`)
+  y DESPUÉS saltea los 3 textos en inboxes de clientes (`reason: boton_del_recordatorio`).
+- La respuesta de la plataforma lleva `content_attributes.onia_automatico`: el token de la plataforma es el usuario 2 de
+  Chatwoot y el bot es el 3 (`CHATWOOT_BOT_AGENT_ID=3` en `/opt/onia/bot/webhook.env`); sin la marca el bot creía que un
+  humano tomó la conversación y se callaba. Verificado con el modelo real que Chatwoot guarda la clave.
 
-Capturas: `hermes-content/carousels/briefs/assets/onia-1.0-dental-ads/candidato-20260930/` (12 PNG + README). Son del candidato, **sin aprobar**.
+### 3b. Lo que se midió el 2-oct (fuentes en `docs/research/`)
+
+- **IA en el producto** (`ONIA_INVENTARIO_IA_20261002.md` + catálogo §8): la única IA encendida es el redactor de
+  plantillas de los agentes. El detector de tratamiento a medias EXISTE pero no encontraba a nadie (lo arregla #99).
+- **Auditoría** (`ONIA_AUDITORIA_20261002.md`): bot de ventas vivo (≈3 s) pero ofrece demos sin cuenta demo y dice
+  «Listo, agendado» y se corrige (Cal.com y transcripción apuntan a servicios que no existen); respaldos solo en el
+  disco del VPS; Easypanel/n8n expuestos y contenedor QA contra la base de prod; comercio y servicios sin camino a
+  factura; web de venta con LCP 3,4-3,7 s.
+- **Dapta** (`research/competencia/DAPTA_TEARDOWN.md`): checklist antes de conectar un número (PIN de dos pasos,
+  apagar el asistente de IA de Meta, web que coincida, «Agregar método de pago»). Coexistencia en Onia NO probada con
+  +591; Meta exige suscribir `history`, `smb_app_state_sync`, `smb_message_echoes` y saltear el registro del número.
+- **Recomendación vigente a Sergio Urcullo:** NO conectar su número personal (Meta avisa a sus contactos, sincroniza
+  6 meses de chats, el bot le contestaría a todos). Prueba con chip prepago; su número hace de paciente.
 
 ## 4. Archivos
 
-- En este repo: `.claude/skills/onia-infra/SKILL.md` (sección «Desde una sesión en la NUBE, el puerto 22 no sale») y la carpeta de capturas de arriba.
-- En onia-platform, lo tocado por cada carril está en su rama (ver `git log 6088e47..4fdb6fb --stat`).
-- Entorno aislado reproducible (se pierde si muere el contenedor): `scratchpad/entorno/` de esta sesión. Contiene docker-compose con supabase/postgres 17 + gotrue v2.196 + nginx + mailpit, `block-egress.cjs`, `cap.mjs` y `run-app.sh` (`next dev --webpack -p 3300`). Los pasos están en §7.
+- Plataforma: `lib/whatsapp/respuesta-al-recordatorio.ts`, `lib/whatsapp/plantilla-recordatorio.ts`,
+  `lib/agenda/aviso-respuesta-del-paciente.ts` (aviso compartido con `/cita`), `lib/chatwoot.ts`
+  (`MARCA_ENVIO_AUTOMATICO`), `app/api/webhooks/chatwoot/route.ts`. Skill `onia-backend` actualizada.
+- Bot: `chatwoot-adapter.mjs` (`esBotonDelRecordatorio`, `takeoverTurn`), `knowledge.mjs` (`esInboxDeCliente`),
+  `webhook-server.mjs`. Skill `onia-chatbot` regla 7.
+- Web: `web-factory/apps/onia-platform/src/app/(sitio)/{precios,chatbot}/page.tsx`, `sitio.module.css`,
+  `src/content/legal/{terminos,privacidad}.md`.
+- Catálogo 1.0: `hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md`. Bitácora SIAT (VPS): `/opt/onia-siat/runner-20260929/BITACORA.md`.
 
 ## 5. Intentos fallidos e hipótesis falsas
 
-- **«El puerto 22 del VPS está bloqueado»: FALSO.** Desde la nube tampoco sale `github.com:22`. El proxy del contenedor acepta `CONNECT :22`, pero no pasa el banner SSH: solo deja salir HTTPS y WebSocket (medido: 101). No se arregla en el VPS. Camino propuesto: Cloudflare Tunnel + Access (service token) → `ssh.onia.com.bo`. No construido.
-- La primera tanda de capturas tenía el link de reserva en `localhost:3300`. El link se escribe en la propuesta AL SEMBRAR, con la URL del entorno de ese momento. Para rehacerlas hay que borrar las propuestas **y** las solicitudes de aprobación y volver a correr los agentes.
-- Turbopack entra en pánico con `node_modules` como symlink en los worktrees → usar `--webpack`.
-- Los tests de `.github/scripts/rango-gitleaks.test.ts` se pasan de tiempo (5 s) con 5 vitest a la vez. Solos pasan. No es un bug del producto.
-- **Plantilla de AUTENTICACIÓN de Meta (1-oct): bloqueo de CUENTA, no de contenido.** Reproducido directo desde el VPS con el token del inbox 5 (system user de la app «Onia Bot», scopes `whatsapp_business_management` + `messaging`): el POST a `/4429061034078857/message_templates` responde **code 10 / subcode 2388185** «Esta cuenta de WhatsApp Business no tiene permiso para crear una plantilla de mensaje». Igual con payload mínimo (sin TTL ni pie), y por `upsert_message_templates`. Hipótesis DESCARTADAS medidas: verificación del negocio (la WABA dice `business_verification_status: verified`, `account_review_status: APPROVED`), salud (`can_send_message: AVAILABLE` en WABA, negocio y app), payload. Los UTILITY/MARKETING sí se crean. Sin probar: método de pago en la WABA (la API pide ser BSP para leerlo) y la elegibilidad que muestre WhatsApp Manager al crearla a mano. **No usar una UTILITY con el código como atajo**: Meta prohíbe OTP fuera de AUTHENTICATION y arriesga el número de VENTAS.
-- Docker no arranca solo: hay que lanzar `dockerd &` a mano (el contenedor lo tiene instalado y somos root).
-- El contenedor se reinició 2 veces y los resultados de los subagentes no llegaron solos. Se recuperaron de `~/.claude/projects/.../subagents/agent-*.jsonl`.
+- **Plantilla AUTHENTICATION de Onia:** tampoco se crea desde WhatsApp Manager (madre, 1-oct): «Esta cuenta de WhatsApp
+  Business no tiene permiso para crear una plantilla de mensaje» = code 10 / subcode 2388185. Descartado el pago (Visa ···· 4028
+  predeterminada). Queda el caso de soporte a Meta (texto abajo, §6). **No** usar UTILITY con el código.
+- **«Los botones traen el id del mensaje original»:** falso con Chatwoot 4.12.1 (ver §3). No diseñar sobre `context.id`.
+- **«La plataforma recibe el webhook de Chatwoot directo»:** falso. Lo recibe el bot y lo reenvía. Un salteo en el parser
+  del bot corta también lo que le llega a la plataforma.
+- **Publicar el bot hoy:** `deploy-bot.sh` corre la suite y se niega con 11 tests rojos que ya están en `main`
+  (pauta D1/D4, `codigo-del-anuncio`, `frase-de-la-pauta`, `paciente-de-la-pauta`, `tratamiento-a-medias…`,
+  `profesionales-de-la-clinica`), del commit `363dcf10` («frase-prefijo de la pauta — REQUIERE FIRMA de Sergio Urcullo»).
+  Es del carril Ventas y pauta.
+- **Seguir el log del deploy desde la nube** (`tail` de `/tmp/pub-*.log` por SSH en un bucle): lo bloquea el control de
+  permisos como «deploy a producción». La verificación la hizo la madre desde la PC.
+- **YouTube** bloquea la IP de la nube; **SendMessage** desde la nube falla; los mensajes programados entre sesiones
+  están descartados por Sergio Urcullo.
+- Turbopack entra en pánico con `node_modules` symlinkeado en worktrees: usar `--webpack`.
 
-## 6. Qué depende de Sergio Urcullo
+## 6. Qué depende de Sergio Urcullo (lo canaliza la madre)
 
-0. **(1-oct, bloquea encender la verificación)** En WhatsApp Manager de la cuenta «Onia» → Plantillas → Crear → **Autenticación**: intentar crearla y mandar captura de lo que diga. Revisar también **Configuración de pagos** de la WABA. Si Meta no la habilita en ~48 h, decidir el plan B: verificación **inversa** (el dueño nos manda el código por un link `wa.me`; gratis, sin plantilla, abre la ventana de 24 h; ~medio día entre bot y plataforma).
-0b. OK a la home nueva y a los legales (`75667dad`) de `wip/web-v1-correcciones-20261001` para publicarla.
+- **Abrir el caso de soporte a Meta** (Business Support Home → WhatsApp Business Platform → Plantillas):
+  > Asunto: No podemos crear plantillas de categoría AUTHENTICATION (error 2388185). Negocio 1451773736711697 (verificado),
+  > WABA 4429061034078857. Al crear una plantilla AUTHENTICATION (copiar código, español, recomendación de seguridad, vence
+  > en 10 min) recibimos «Esta cuenta de WhatsApp Business no tiene permiso para crear una plantilla de mensaje» (code 10,
+  > error_subcode 2388185), igual desde WhatsApp Manager y por Graph API. En la misma WABA sí creamos UTILITY y MARKETING.
+  > Negocio verificado, WABA aprobada, calidad OK y método de pago activo. La necesitamos para el código de un solo uso del
+  > alta en app.onia.com.bo. ¿Qué restricción tiene la cuenta y cómo la habilitamos?
+- ~~OK a la web v1 y a los legales 1.3~~: dado el 2-oct, publicado.
+- **Prueba con el chip (2-oct, en curso):** conecta el chip en `app.onia.com.bo/settings/chatbot` con `sergio@onia.com.bo`
+  (org «Clínica Sergio» `cmtlyz6y9000001nw2934n3cw`) y avisa «conectado». Después: paciente con SU número personal, cita
+  a 1h30-2h30 (ventana del cron de 2 h: 90-150 min), tocar los 3 botones.
+- Firma de la frase-prefijo de la pauta (`363dcf10`): destraba la suite del bot y con eso su publicación.
+- Chip prepago para la prueba del WhatsApp del cliente (recordatorio con botones y agente conversacional).
+- Aprobar el pago de prueba en `/admin/payments` cuando la madre avise. SIAT: el **CAFC del piloto** y una captura nueva del «Listado de Etapas».
 
-1. **Acceso al VPS desde la nube:** crear Cloudflare Tunnel + Access (pasos en la skill `onia-infra`) y cargar los secretos en el entorno. Si no, publicar sigue siendo desde la laptop.
-2. **Aprobar o rechazar las capturas del candidato** para la pauta. Si se aprueban, van a la carpeta de la pauta y se avisa a Marca personal (`session_012ppFowADbJNtZ6WBMtqpuf`).
-3. Decisiones de producto chicas:
-   - Si al cancelar una cita pasada se avisa o no al profesional. Hoy no se avisa.
-   - Si la vista del DOCTOR muestra el nombre del profesional. Hoy no.
-   - Si se ponen botones Completada/No asistió en «Agenda de hoy». Hoy se enlaza a Citas.
-4. Lo que ya estaba: reconectar Meta Ads con el usuario de ONIA Ads, SIAT (Listado de Pruebas + CAFC), cuentas de competencia, leer la política de privacidad v1.3.
+## 6b. Pendiente priorizado: lo que copiar de Doctocliq (madre, 2-oct)
 
-### Regla de Sergio Urcullo (30-sep): lo que la nube no puede, lo corre una sesión LOCAL
+Fuente: `hermes-content/research/competencia/doctocliq/cuenta-de-prueba/DOCTOCLIQ_ADENTRO.md` (en `main`, `f9ea7a93`).
+Confirma la ventaja: allá el tratamiento a medias es MANUAL (lo marca una persona; «Servicios por terminar» es una
+tabla sin acción). Nada se construye sin el filtro de Etapa 1. Orden por impacto/esfuerzo:
+1. **WhatsApp de muestra al dueño al crear su PRIMERA cita** («ve el valor el día 1»), avisándole antes. Sale del
+   número de VENTAS de Onia al DUEÑO (no al paciente; DG-054 no aplica). La plantilla `onia_primera_cita` ya está en
+   revisión en Meta: medir si ya hace esto antes de construir nada.
+2. **Presupuesto con link público en PDF y «Enviar al paciente» por fase**: va junto con el presupuesto por fases
+   desde el odontograma (§7).
+3. **Etiqueta «Deuda» automática** cuando se termina un ítem sin pagar.
+4. **Bandeja con filtros listos** («No confirman la cita de mañana»): encaja con los botones del recordatorio.
+5. **Cita reprogramada visible como «Reprogramada»** al moverla.
+- **Medir:** crear una cita en Doctocliq = 6 clics + nombre, 2 campos obligatorios, sin doctor preseleccionado.
+  Medir lo nuestro con la misma vara.
+- **Lo que ellos tienen y nosotros no:** recordatorio con botones encendido de fábrica sin conectar número (con saldo
+  de 5 mensajes de regalo), cierre de caja diario por medio de pago, inventario por lote y vencimiento. Diferencia
+  nuestra: QR BCP y bolivianos (ellos son peruanos adaptados: Boleta/Factura, IGV 18 %, sin QR).
 
-- La nube no llega ni al VPS ni a la laptop. Lo que haga falta ahí (SSH, publicar, el SIAT en Chrome) se delega a una sesión local, sin pedirle a Sergio Urcullo que pegue comandos.
-- La sesión local la abre él una vez: `claude remote-control` **dentro de la carpeta de `onia-platform`** en la laptop, y deja la ventana abierta.
-- Va en `onia-platform` porque publicar la 1.0 es el objetivo y las skills `onia-deploy/db/...` solo se cargan dentro de ese repo. Los archivos de `onia-hermes` los lee por ruta.
-- Una sola sesión local, no dos: las sesiones en paralelo le cruzan la información.
-- ⚠️ **Corregido el mismo día:** una sesión `claude remote-control` en la laptop **NO aparece** en `ListAgents` de una sesión en la nube (medido: «No reachable agents»). Esa sesión la maneja Sergio Urcullo desde su app. Entonces la nube le redacta el pedido exacto y él lo pega en esa sesión. El único camino para que la nube actúe sola es el túnel.
-- Primera tarea para ella: el túnel de Cloudflare (bloque de comandos en la skill `onia-infra`, §«Desde una sesión en la NUBE»), para que la nube llegue sola al VPS.
+## 7. Próximos pasos (en orden)
 
-## 7. Próximos pasos
-
-1. **Mirar `v1/cierre-0930`** en el entorno aislado:
-   - `/comercio/inventario` con usuario Recepción, sin Bs.
-   - La guía, que se abre sola en la demo dental.
-   - `/cita`, sin punto doble.
-
-   Pasos del entorno: `dockerd &` → `docker compose up -d` → `prisma migrate deploy` → `seed-demo` → crear usuarios en GoTrue (`POST /auth/v1/admin/users`) → `run-app.sh` con `NEXT_PUBLIC_APP_URL=https://app.onia.com.bo` → `cap.mjs`.
-2. Que el integrador lleve `v1/cierre-0930` al candidato (PR #90), o mergearlo ahí si esa es la decisión.
-3. **Publicar** desde una sesión con acceso al VPS:
-   - las 5 migraciones aditivas, con respaldo (las dos últimas ANTES del swap);
-   - `ONIA_WHATSAPP_INBOX_ID=5`;
-   - apagar el proveedor de teléfono de GoTrue;
-   - merge del PR #90;
-   - publicador;
-   - MIRAR en producción.
-
-   Además: **recrear la base de la cuenta demo** con el seed nuevo, porque las bases viejas conservan «Dona Carmen».
-4. **Pedido de Sergio Urcullo (30-sep), después de publicar y en este orden:**
-   - **(a) Prueba real del recordatorio.** Chip prepago nuevo con WhatsApp Business, conectado como CLÍNICA por «Conectar mi WhatsApp» en una org ZZ QA de producción. Su número personal hace de PACIENTE: es WhatsApp común, así que no se conecta como clínica.
-   - **(b) Verificación del WhatsApp en el alta** con plantilla de AUTENTICACIÓN de Meta («Tu código de Onia es N», botón Copiar código), enviada desde el número de ventas (inbox 5). Referencia: el alta de Doctocliq.
-   - **(c) Mensajes de activación** desde ese número, tres plantillas:
-     - bienvenida con botón «Abrir mi agenda»;
-     - día 2, solo si no cargó ninguna cita;
-     - día 11, antes de que termine la prueba.
-   - Necesitan consentimiento en el registro (política de privacidad v1.3).
-   - Meta Verified (el tilde azul) va aparte y no hace falta para empezar.
-   - Capturas para la pauta: van a **Ventas y pauta** (`session_01BnctfaNRsm3ogJ46A7B5P5`), ya no a Marca personal.
-5. Pendientes anotados, fuera de alcance:
-   - `/inventory` (insumos) solo bloquea al rol DOCTOR, no usa `inventory.read/write`.
-   - En la vista Citas se puede marcar «Completada» en citas futuras.
-   - El seed no genera tokens de `/cita`.
-   - La franja de vencimiento de la cuenta demo no muestra «Ver mi plan».
-   - La ayuda enlaza a pantallas que rebotan al usuario.
+0. **Cuenta demo** (§3): seguridad de envíos probada → crear por el alta real → plan sin vencer → datos inventados
+   con 2 casos de Recall → MIRAR /agents y /pending encontrando a esos dos.
+0a. **Workflow de desarrollo** (§3): revisar cada carril, gates, mergear a las ramas `claude/sharp-shannon-sqrmig`
+   (plataforma reiniciada desde `master` `af2ded5c`, hermes desde `main` `ae4a1fc53`), PR, publicar según la regla.
+0b. **Bot de ventas:** apagar Cal.com y la transcripción (servicios inexistentes → «Listo, agendado» falso), arreglar
+   los 11 tests de pauta y publicarlo (necesita la firma de `363dcf10` o sacar ese commit del deploy).
+1. ~~Mergear onia-hermes#84~~ hecho y publicado (§2). Los commits del bot ya están en `main`; falta publicarlo.
+2. Con la suite del bot en verde (firma de la pauta): `deploy-bot.sh --aplicar` (o `publicar.sh` del bot).
+3. Con el chip: conectar el número a una org QA → plantilla `recordatorio_cita` aprobada → cita a 24 h → tocar los 3 botones → MIRAR el estado en el panel y que el bot siga contestando después. Recién ahí ✅ en el catálogo y en la ayuda.
+4. Pago de prueba de punta a punta cuando la madre avise. SIAT: con el CAFC, cargarlo en `siat-piloto.env` (SIAT_PILOT_CAFC) y lanzar VI motivos 5-7 con `run-case-v2.sh` (respaldo antes, como dice la bitácora).
+5. Producto, según la competencia: presupuesto por fases desde el odontograma.

@@ -97,9 +97,10 @@ const VOCABULARIO_DE_OFERTA = [
   "reportes",
   "contabilidad",
   "usuarios",
-  // En singular a propósito: los planes venden «Agente Recall» y «Agente
-  // Cobrador», no «agentes». Con el plural la palabra no estaba atestiguada y
-  // el ancla de abajo lo cazó en la primera corrida.
+  // En singular a propósito: es la raíz que cubre «Agente …» y «Agentes …»
+  // (desde el 2026-09-29 los planes dicen «Agentes Vuelve a citar …»). Cuando
+  // los planes decían «Agente Recall» el plural no estaba atestiguado y el
+  // ancla de abajo lo cazó en la primera corrida.
   "agente",
   "reservas",
 ] as const;

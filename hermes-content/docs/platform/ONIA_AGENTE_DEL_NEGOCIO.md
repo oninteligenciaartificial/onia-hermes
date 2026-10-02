@@ -23,7 +23,7 @@
 | # | Decisión | Estado |
 |---|---|---|
 | D1 | Los agentes usan un modelo de verdad | ✅ Sergio Urcullo, 24-sep |
-| D2 | **Plantilla por negocio**: la IA escribe UNA vez, por negocio y por agente, una plantilla con `{nombre}` `{fecha}` `{hora}` `{monto}` en el tono del rubro; el dueño la aprueba una vez; el sistema la llena. **La IA nunca ve datos de clientes ni pacientes** | ✅ 24-sep (reemplaza la redacción mensaje por mensaje de `56752b95`) |
+| D2 | **Plantilla por negocio**: la IA escribe UNA vez, por negocio y por agente, una plantilla con `{nombre}` `{hora}` `{monto}` `{dias}` `{tratamiento}` (no existe `{fecha}`) en el tono del rubro; el dueño la aprueba una vez; el sistema la llena. **La IA nunca ve datos de clientes ni pacientes** | ✅ 24-sep (reemplaza la redacción mensaje por mensaje de `56752b95`) |
 | D3 | **Primero avisos DENTRO de Onia** (web push + campana, link directo a aprobar, «Instalá Onia» en Windows/Android/iPhone); **después** WhatsApp desde un número nuevo «Onia Avisos». La decisión y el registro viven siempre en la plataforma: un solo ecosistema | ✅ 24-sep (reemplaza «WhatsApp del dueño ya»: el web push existía y estaba roto — la clave VAPID no se horneaba en el build, 0 suscripciones) |
 | D4 | **Cupo de IA por plan**; al tope vuelve el texto fijo, el cliente nunca ve «sin crédito» | ✅ 24-sep |
 | D5 | Número del canal WhatsApp | ✅ 24-sep: número nuevo dedicado («Onia Avisos»), cuando haya clientes — SIM + alta en Meta a cargo de Sergio Urcullo |

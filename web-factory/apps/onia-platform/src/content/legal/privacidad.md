@@ -2,8 +2,8 @@
 title: "Política de Privacidad"
 slug: "privacidad"
 status: "vigente"
-version: "1.2"
-updatedAt: "2026-09-25"
+version: "1.3"
+updatedAt: "2026-09-29"
 ---
 
 # Política de Privacidad — Plataforma Onia
@@ -61,12 +61,31 @@ usamos para escribirte sobre eso y nada más; no se vende, no se cede y no
 entra en ninguna lista de publicidad de terceros. Podés pedirnos que lo
 borremos cuando quieras por los canales del §12, sin explicar por qué.
 
+2.6. **Visitas a este sitio (onia.com.bo):** cuando abrís una página del sitio,
+se lo avisamos al **píxel de Meta** (la empresa de Facebook, Instagram y
+WhatsApp), y también si tocás el botón para crear tu cuenta o el de WhatsApp.
+El aviso lleva la dirección de la página y, si llegaste por un anuncio o un
+enlace de campaña, el nombre de esa campaña. Si el anuncio es de Meta, lleva
+además el código de ese clic, que se repite en cada aviso mientras la pestaña
+siga abierta. Ningún otro dato que traiga la dirección viaja, y nunca tu
+nombre, tu correo ni tu teléfono. Meta puede relacionarlo con tu cuenta de
+Facebook o Instagram según sus propios términos. Lo usamos para medir si
+nuestros anuncios funcionan y para elegir a quién mostrárselos. Si tu navegador
+envía la señal **Global Privacy Control**, no se avisa nada. Aparte, tu
+navegador guarda de qué anuncio o enlace llegaste mientras la pestaña siga
+abierta (no es una cookie) y lo suma a la dirección del registro cuando tocás
+el botón para crear tu cuenta. El píxel no corre dentro de la plataforma; si
+creás tu cuenta, guardamos con ella ese origen (de qué anuncio o enlace
+llegaste) para saber qué campañas nos traen clientes.
+
 ## 3. Para qué los usamos
 
 - Prestar, operar y mantener el servicio contratado.
 - Autenticar usuarios y proteger la seguridad de la plataforma.
 - Cobrar y facturar conforme a la normativa boliviana aplicable.
 - Dar soporte.
+- Medir y dirigir los anuncios del sitio público (§2.6). A Meta solo le
+  avisamos las visitas a onia.com.bo, nunca datos de la plataforma.
 - Preparar borradores y sugerencias con IA **dentro de tu cuenta y bajo tu
   aprobación** (ver §6).
 - Cumplir obligaciones legales y requerimientos de autoridad competente.
@@ -76,7 +95,8 @@ borremos cuando quieras por los canales del §12, sin explicar por qué.
 - **No vendemos datos.** Ni tuyos ni de tus clientes, a nadie, nunca.
 - **No entrenamos modelos de IA con tus datos** ni con los de tus clientes — ni
   modelos propios ni de terceros (ver §5 y §6).
-- No hacemos minería de tus datos para fines comerciales propios ni de terceros.
+- No hacemos minería de los datos de tu cuenta ni de los que cargás en la
+  plataforma para fines comerciales propios ni de terceros.
 - No enviamos publicidad a los clientes de tu negocio.
 
 ## 4. Dónde viven los datos
@@ -104,8 +124,9 @@ y bajo sus propios compromisos de confidencialidad y seguridad:
 |---|---|---|
 | Proveedor del servidor donde Onia aloja la plataforma (hoy en Estados Unidos) | Prestar la infraestructura física donde corren la base y los agentes | El proveedor no administra ni consulta los datos: la base la opera Onia sobre ese servidor |
 | **Cloudflare** (Estados Unidos) | Red de entrega y protección por la que pasa el tráfico del sitio y de la app, y recepción del correo que llega a business@onia.com.bo | El tráfico pasa por Cloudflare camino al servidor de Onia; no almacena la base. El correo recibido se reenvía a la casilla de Onia en Google (Gmail) |
-| **OpenAI** (Estados Unidos), vía su API | Transcribir notas de voz, leer imágenes y redactar respuestas del asistente de WhatsApp (el de Onia, §13, y el que contratás como add-on), y generar borradores y sugerencias | Solo por API, modalidad que **no entrena** con los datos enviados; se envía el mínimo contexto necesario. Los pedidos salen desde el servidor de Onia |
+| **OpenAI** (Estados Unidos), vía su API | Transcribir notas de voz, leer imágenes y redactar respuestas del asistente de WhatsApp de Onia (§13) y del agente conversacional de WhatsApp que contratás como add-on, y generar borradores y sugerencias | Solo por API, modalidad que **no entrena** con los datos enviados; se envía el mínimo contexto necesario. Los pedidos salen desde el servidor de Onia |
 | WhatsApp (Meta) | Mensajería con tus clientes cuando activás ese canal | Los mensajes pasan por la infraestructura de Meta bajo sus propios términos |
+| **Meta** (píxel del sitio público) | Medir las visitas a onia.com.bo y los toques al alta o a WhatsApp, y dirigir los anuncios de Onia (§2.6) | Recibe solo lo que declara el §2.6, nunca datos de la plataforma. Meta lo trata bajo sus propios términos |
 | **Telegram** | Avisos internos a una persona de Onia: cuando alguien pide acceso o la carga inicial de sus datos en la plataforma, y cuando una conversación con el asistente de WhatsApp de Onia (§13) necesita a una persona | Llevan un resumen: en la plataforma, nombre, negocio y contacto; en el asistente, rubro, tamaño del equipo, ciudad y el último mensaje. Van a un chat privado de Onia |
 
 Onia mantendrá esta lista actualizada y avisará ante cambios de subprocesadores
@@ -118,10 +139,10 @@ cambio sea urgente por seguridad.
 - Los agentes de IA trabajan **dentro de tu cuenta**, con el mínimo de datos
   necesario para cada tarea.
 - **Lo que redacta un agente de IA espera tu aprobación** en la cola de
-  pendientes. Fuera de los agentes, la plataforma sí envía sola lo que declara
+  pendientes. Fuera de esos agentes, la plataforma sí envía sola lo que declara
   el §6.2 de los [Términos](/terminos): confirmaciones y recordatorios de cita
   (vienen activos y los pausás en Configuración) y, si lo contratás, el
-  asistente de WhatsApp.
+  agente conversacional de WhatsApp.
 - Los datos enviados a proveedores de IA (hoy, OpenAI: ver §5) se procesan bajo
   modalidades que no los usan para entrenar sus modelos.
 - Onia tampoco entrena modelos propios con datos de clientes.

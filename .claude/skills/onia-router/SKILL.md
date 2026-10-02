@@ -16,13 +16,16 @@ carril, cargá su stack, respetá las reglas duras. Fuente viva del mapa complet
 > seguridad · research · proceso), que es como aparecen las tareas en la práctica.
 > **Abrirlo antes de escribir la primera línea.**
 
-> 🧹 **Limpieza 2026-09-29:** se borraron 52 skills y agentes del repo sin uso en 30 días
-> (`hermes-content/docs/historial/LIMPIEZA_SKILLS_20260929.md`: qué, por qué, qué lo
-> reemplaza y cómo recuperarlo). **Único subagente ONIA propio: `onia-crm-prospeccion`.**
-> Los otros 8 (los 6 retirados el 18-ago + `onia-core-guardian` + `onia-creative-radar`)
-> ya no existen: su trabajo lo hacen las skills de la tabla. **HyperFrames** ya no vive en
-> el repo: se usa la copia global (`~/.claude/skills`, `~/.codex/skills`) y cada flujo se
-> instala cuando se pide con `npx hyperframes skills update <nombre>`.
+> ♻️ **Restauración 2026-10-02 — la limpieza del 29-sep se revirtió en el repo.** Sergio
+> Urcullo: con lo borrado, sus archivos dejaron de editarse como él quiere. Volvió todo lo que
+> se borró de `.claude/skills/`, `.agents/skills/` y `hermes-content/skills/`, más los agentes
+> `onia-core-guardian` y `onia-creative-radar` (copia: commit `9622ae6a`).
+> **HyperFrames vuelve a vivir en el repo** (`hyperframes`, `-core`, `-cli`, `-animation`,
+> `-creative`, `-keyframes`, `-registry`, `media-use`, `motion-graphics`, `talking-head-recut`,
+> `embedded-captions`, `general-video`, `slideshow`, `remotion-to-hyperframes` y las plantillas
+> de video) y **esa copia es la que manda**: en Claude Code una skill del proyecto gana sobre una
+> global con el mismo nombre. **No** volvieron los 6 agentes de `_retirados/` (retirados el
+> 18-ago). Detalle: `hermes-content/docs/historial/LIMPIEZA_SKILLS_20260929.md`.
 
 ## Cómo usar
 1. **Identificá el carril** de la tarea (tabla abajo). Ante duda, ver
@@ -48,13 +51,16 @@ carril, cargá su stack, respetá las reglas duras. Fuente viva del mapa complet
 | **D** DentaGest · **E** GestiOS *(repos aparte)* | `database-migrations` `postgres-patterns` `backend-patterns` `api-design` `security-review` | — | `onia-core` |
 | **F** Bolivian Electric *(prospecto REAL desde 2026-08-24 — 10 puestos relevados, ver handoff)* | mismo stack backend | — | `onia-core` |
 | **chatbot** (motor, guion, conocimiento, voz) | **cargar `onia-chatbot`** — ese archivo nombra el stack completo del carril | — | `onia-chatbot` |
+| **hermes-jarvis** (Hermes, Telegram de Sergio Urcullo, su calendario, pedidos a Claude) | **cargar `onia-hermes-jarvis`** — método, trampas y pruebas del carril; estado en `handoff/hermes-jarvis.md` | — | `onia-hermes-jarvis` |
 | **G** infra / n8n | `n8n-workflow-patterns` `n8n-mcp-tools-expert` `n8n-node-configuration` `n8n-code-javascript` `n8n-validation-expert` `docker-patterns` `deployment-patterns` | — | — |
 | **H** contenido · **J** video-remotion | **`diseno-contenido-onia` primero** (índice de imágenes, galería, packs y patrones) · `editor-videos` `ver-videos` `sacar-prompt` `hyperframes` `banner-design` `brand` + Higgsfield MCP | — | — |
 | **I** research/estrategia | `deep-research` `exa-search` `iterative-retrieval` `office-hours` | — | — |
 | **K** yt-canal/meta-ads · **L** yt-ciencia-cuerpo | `article-writing` `deep-research` (L=salud/YMYL: fuentes obligatorias) + video stack | — | — |
 | **onia-core** | `database-migrations` `postgres-patterns` `api-design` `backend-patterns` `verification-loop` | — | `onia-core` |
+| **Ventas y pauta** (prospectos con señal, leads, demo, objeciones, Meta Ads y piezas D1/D4) | **cargar `onia-ventas-pauta` primero** (método medido, trampas y fuentes) · `diseno-contenido-onia` para las piezas | `onia-crm-prospeccion` | `onia-ventas-pauta` |
 | **comercial/CRM** | `deep-research` (prospección con señal) | `onia-crm-prospeccion` | `onia-propuestas` |
 | **fiscal / contable (propio + features ERP)** | `deep-research` (validar RND/DS vigentes) | — | `onia-contabilidad-bolivia` |
+| **competencia por dentro** (cómo funcionan los programas rivales) | Leer primero `hermes-content/research/competencia/PRODUCTO_COMPETENCIA_RESUMEN.md` (1-oct: Dentalink, Doctocliq, TuDoc, AgendaPro, Citalo). Método que funcionó: centros de ayuda públicos + capturas Playwright; YouTube y Zendesk privado NO abren desde la nube (videos desde la PC); cuentas de prueba solo desde la PC (piden código al WhatsApp de Sergio Urcullo) | — | — |
 | **extracción web** (alta por URL · prospección) | **NO instalar scrapers nuevos** (ScrapeGraphAI evaluado y descartado). Crawl4AI del VPS + LiteLLM ya resuelven: `scripts/alta-por-extraccion.py`. Doc: `hermes-content/docs/platform/ONIA_EXTRACCION_WEB_DECISION.md` | `onia-crm-prospeccion` | — |
 
 ## Reglas duras que aplican SIEMPRE (de CLAUDE.md)
@@ -79,17 +85,27 @@ carril, cargá su stack, respetá las reglas duras. Fuente viva del mapa complet
 - **Bolivia:** todo desarrollo acomodado a Bolivia con contaduría boliviana específica y vigente;
   validar con research (fuente citada) antes de codear temas de Bolivia.
 
-## Skills del repo (19 en `.claude/skills/` + 12 en `.agents/skills/`, todas con uso en 30 días)
+## Skills del repo (42 en `.claude/skills/` + 30 en `.agents/skills/`)
 - **Índice y operación:** `onia-router` (este índice) · `onia-continuidad` (arranque y rumbo de
-  sesión) · `onia-infra` (VPS, Docker, n8n por SSH).
+  sesión) · `onia-infra` (VPS, Docker, n8n por SSH) · `onia-hermes-jarvis` (Hermes por Telegram:
+  resumen, cierre, aduana, calendario, pedidos a Claude, y el workflow hermes-jarvis; 2026-10-01) ·
+  `onia-sesion-madre` (la madre local ordena a las sesiones de la nube por mensaje: ids, canales
+  medidos, formato).
 - **Producto:** `onia-core` · `onia-chatbot` · `onia-contabilidad-bolivia`.
 - **Venta:** `onia-propuestas` (generador oficial, nunca HTML a mano) · `onia-web-factory`.
 - **Contenido y video:** `diseno-contenido-onia` (índice de diseño) · `editor-videos` ·
   `ver-videos` · `sacar-prompt` · `higgsfield-generate` · `higgsfield-soul-id` ·
   `motion-doctrine` con sus rutas `cut-the-curve` `oversized-cursor` `seam-craft`
   `captions-overlay` (upstream HeyGen que no está en la copia global).
+- **HyperFrames (restaurado 2026-10-02, gana sobre la copia global):** `hyperframes` (entrada
+  obligatoria de todo video) · `hyperframes-core` · `-cli` · `-animation` · `-creative` ·
+  `-keyframes` · `-registry` · `media-use` · `motion-graphics` · `talking-head-recut` ·
+  `embedded-captions` · `general-video` · `slideshow` · `remotion-to-hyperframes` · plantillas
+  `changelog-video` `faceless-explainer` `figma` `music-to-video` `pr-to-video`
+  `product-launch-video`.
 - **Codex (`.agents/skills/`):** `impeccable` · `embedded-captions` (gate de ortografía que cita
   `editor-videos`) · `media-use` (librería de SFX por defecto de `editor-videos/scripts/sfx.mjs`:
   **no borrar**) · `higgsfield-generate` · `higgsfield-soul-id` · `motion-doctrine` con
   `cut-the-curve` `oversized-cursor` `seam-craft` `captions-overlay` · `web-factory-design-research`
-  · `web-factory-intake-assets`.
+  · `web-factory-intake-assets` · y la misma copia de HyperFrames que `.claude/skills/`
+  (restaurada 2026-10-02).

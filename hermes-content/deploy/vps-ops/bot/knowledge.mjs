@@ -701,6 +701,47 @@ export function esAjenoAOnia(state) {
   return state?.huerfano === true || state?.ajena === true;
 }
 
+/**
+ * ¿Este inbox es de UNA org CLIENTE, sin dudas? La pregunta que hace la plataforma antes de
+ * actuar sobre un mensaje de ese canal (`orgDelInbox(inboxId).resultado === "org"`), contestada
+ * con lo que este motor YA resolvio por la misma via (GET /published) y ya tiene en cache.
+ *
+ * NO es `esAjenoAOnia` y no se puede reusar: esa pregunta mete en la misma bolsa al huerfano y al
+ * conflicto porque para servir conocimiento los dos se tratan igual (neutro, nunca el guion de
+ * venta). Aca la consecuencia es otra — CALLARSE porque la plataforma contesta — y la plataforma
+ * NO contesta ni en el huerfano (`sin_org`) ni en el conflicto: callarse ahi es dejar a la persona
+ * sin nadie.
+ *
+ *   - huerfano o conflicto           -> false (la plataforma tampoco tiene dueño para el canal)
+ *   - la ULTIMA lectura fallo        -> false (`error`: la plataforma no contesto o contesto
+ *                                              roto. Es la MISMA plataforma que tendria que
+ *                                              contestarle a la persona, y una copia "db" vieja
+ *                                              no prueba que hoy este para hacerlo)
+ *   - ajena con organizationId       -> true  (cliente sin documento servible hoy: la plataforma
+ *                                              igual lo resuelve a su org, el add-on no importa)
+ *                                              SALVO que esa org sea la INTERNA de Onia: el 404
+ *                                              no la filtra como el 200, y el 4/5 sin fila del
+ *                                              panel publicada llegaria aca como "cliente".
+ *   - fila publicada (`source` "db") -> true  (la org interna de Onia NUNCA llega aca como "db":
+ *                                              `fetchOrgKnowledge` la convierte en "sin fila")
+ *   - cualquier otra cosa            -> false (inbox de Onia, fuente apagada, cache fria sin
+ *                                              respuesta: no se sabe, y ante la duda se contesta
+ *                                              como siempre)
+ *
+ * `options` es el MISMO objeto con el que se resolvio el estado: de ahi sale la org interna
+ * (`ONIA_KNOWLEDGE_URL`). Sin esa variable no hay org interna que distinguir — y entonces tampoco
+ * la distingue `fetchOrgKnowledge`, que es la otra mitad de esta guarda.
+ */
+export function esInboxDeCliente(state, options = {}) {
+  if (!state || state.huerfano === true || state.conflicto === true) return false;
+  if (state.error) return false;
+  if (state.ajena === true) {
+    const org = String(state.organizationId || "").trim();
+    return Boolean(org) && org !== orgInternaDe(options);
+  }
+  return state.source === "db";
+}
+
 /** Sin URL o sin secreto la fuente esta APAGADA y eso NO es un error: es el estado de hoy. */
 async function fetchOrgKnowledge(key, options = {}) {
   const { url, secret, timeoutMs, fetch: doFetch } = dbConfig(options);
@@ -848,6 +889,11 @@ function nextOrgCache(prev, result, organizationId, nowMs) {
     huerfano: result.huerfano === true,
     ajena: result.ajena === true,
     organizationId: result.organizationId ?? null,
+    // El 409 se guarda CON NOMBRE y no solo como "ajena sin organizationId": `esInboxDeCliente`
+    // tiene que poder decir "dos orgs lo reclaman" sin deducirlo de un hueco. Deducido, alcanza
+    // con que manana el 409 traiga a un reclamante en el cuerpo para que el conflicto se lea como
+    // "es de ese cliente" — y ahi el bot se calla esperando a una plataforma que tampoco contesta.
+    conflicto: result.conflicto === true,
     error: result.missing ? null : result.error || base.error,
   });
 }

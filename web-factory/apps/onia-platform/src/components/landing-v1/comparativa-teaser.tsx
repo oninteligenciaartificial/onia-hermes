@@ -6,7 +6,6 @@ import styles from "./landing.module.css";
 const ESTADO_TXT: Record<Estado, string> = {
   si: "lo tiene",
   no: "no lo tiene",
-  tramite: "en trámite",
 };
 
 /**
@@ -14,8 +13,7 @@ const ESTADO_TXT: Record<Estado, string> = {
  *
  * Una sola superficie de tinta con celdas de pelo (sin tarjetas): cada fila
  * un contendiente real con nombre propio, tres puntos de estado y su precio
- * publicado. El verde marca SOLO lo que funciona; lo nuestro en tramite va
- * punteado — la honestidad es la prueba, no un descargo en letra chica.
+ * publicado. El verde marca SOLO lo que funciona.
  *
  * Los datos salen ENTEROS de src/lib/proof.ts (fuente unica, con fecha de
  * consulta): aca no vive ningun numero ni ningun estado.
@@ -112,7 +110,7 @@ export function ComparativaTeaser() {
           </a>
         </Reveal>
         <p className={styles.cmpFecha}>
-          ● lo tiene · ○ no lo tiene · ◌ en trámite — precios consultados el{" "}
+          ● lo tiene · ○ no lo tiene — precios consultados el{" "}
           {FECHA_CONSULTA}
         </p>
       </div>

@@ -89,7 +89,9 @@ describe("el titular de la comparación sale de la tabla, no de la mano", () => 
 
     const onia = CONTENDIENTES.find((c) => c.esOnia);
     expect(onia, "la tabla tiene que tener nuestra fila").toBeDefined();
-    expect(onia!.estados.siat).toBe("tramite");
+    // Era "tramite" hasta el 2026-10-01; ese estado se sacó de la venta y la
+    // fila dice lo que hay hoy: Onia no emite la factura fiscal.
+    expect(onia!.estados.siat).toBe("no");
   });
 
   it("el titular NO afirma que alguien cruza los tres mientras nadie los cruce", () => {

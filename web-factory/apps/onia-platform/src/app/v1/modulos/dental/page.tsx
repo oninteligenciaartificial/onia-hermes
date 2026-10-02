@@ -57,12 +57,12 @@ const MODULOS = [
   {
     titulo: "Caja y facturación",
     detalle:
-      "Cobrás por QR y cada venta queda registrada y lista para facturar. Nuestro emisor ya está registrado ante el SIN y en trámite de homologación; mientras tanto, podés emitir por el portal gratuito del SIN sin re-tipear tus números.",
+      "Cobrás por QR y cada venta queda registrada. Nuestro emisor está registrado ante el SIN y sigue en trámite de homologación; mientras tanto, emitís cada factura fiscal en el Portal Web gratuito del SIN ingresando allí los datos que solicita.",
   },
   {
     titulo: "Contabilidad Bolivia",
     detalle:
-      "IVA 13%, IT 3%, registro de compras y ventas (RCV) y el calendario de vencimientos según tu NIT. La carpeta que tu contador te pide, armada sola.",
+      "Resumen de IVA 13% e IT 3%, registro exportable de compras y ventas para tu contador y calendario de vencimientos según tu NIT. El registro es un insumo para revisar, no el RCV oficial del SIAT.",
   },
   {
     titulo: "Inventario de insumos",

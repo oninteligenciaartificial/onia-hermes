@@ -165,6 +165,7 @@ Usar estas skills dentro de `hermes-content/skills` cuando la tarea sea operativ
 - `marca-personal-sergio` para contenido de Sergio como marca personal.
 - `historias-sergio` para historias de Sergio y referencias de lifestyle/founder.
 - `crons-diarios-hermes` para crons diarios, recordatorios y scheduler Hermes.
+- `sistema-semanal-hermes` para organizar la semana y gestionar la cadencia semanal.
 
 ## Checklist antes de actuar
 - Lea `AGENTS.md` si la tarea requiere implementacion o coordinacion.

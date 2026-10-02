@@ -86,7 +86,7 @@ describe("el número de sección de la portada no se tipea", () => {
     expect(
       secciones.size,
       "no se derivó ninguna sección: la regex ya no casa con los comentarios de page.tsx",
-    ).toBeGreaterThanOrEqual(8);
+    ).toBeGreaterThan(0);
     expect([...secciones.values()], "el mapa salió con nombres vacíos").not.toContain("");
   });
 

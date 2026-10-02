@@ -52,9 +52,21 @@ Dueña de Hermes y del cerebro: qué le llega a Sergio Urcullo por Telegram, el 
 | **Onia platform development handoff — sesión principal** (nube, entorno «Onia»; ramas `wip/v1-*`) | onia-platform, SIAT, sales-kit, web pública (código). Opera el VPS con la llave revocable `claude-cloud-20260930`: **infra es de un dueño a la vez**, así que lo que control corra en el VPS fuera de su workflow se pide acá antes | El resumen cuenta prospectos por la tarea `[leads-esperando]` del tablero (`scripts/vigia_sin_respuesta.mjs`). Si el aviso de solicitudes de acceso (`lib/aviso-acceso.ts`) cambia, avisar acá: tiene que pasar por la aduana. La plataforma **no manda Telegram directo** salvo el pedido de acceso heredado: su aviso propio de «alta nueva» quedó detrás de `ONIA_AVISO_ALTA_DIRECTO=1`, apagado (commit `59f5c368`, 30-sep). |
 | **Infra (Codex)** — `handoff/infra-cerebro-loops.md` | VPS, n8n, loops, backups | ⚠️ Desde el 29-sep la **entrega a Sergio Urcullo** (Telegram, `onia-tg.sh`, resumen, cierre, su calendario) es de la sesión de control. El resto del VPS sigue siendo de infra. **En el crontab, las líneas marcadas `#jarvis` son de la sesión de control**: no editarlas a mano (`revertir` las deshace por marca). Los 12 flujos de n8n que apaga `hermes-jarvis/aplicar.sh` y el flujo nuevo «ONIA - Agenda hoy (Jarvis)» también. |
 | **Lucía v4 y Higgsfield** (`claude/lucia-v4-onia-higgsfield`, entorno `onia-higgsfield`; antes `claude/confident-ramanujan-j79bkq`) — `handoff/higgsfield-lucia.md` | identidad de Lucía (`hermes-content/references/modelos/lucia/**`), política Higgsfield (`hermes-content/docs/HIGGSFIELD_VIDEO_SYSTEM.md`) | Estado de Lucía y de las identidades de Higgsfield: **solo** `LUCIA-HIGGSFIELD-IDENTITY.json`. Desde el 29-sep se retiran las identidades viejas de Higgsfield (incluidos los 5 Souls de Sergio Urcullo), **salvo las fuentes de la cara original de Lucía**, que se conservan (`lucia_original_sources_keep` en el manifest; la cara es 100% IA, corregido el mismo día). Los créditos de Higgsfield son **una sola bolsa** para todas las sesiones (533,87 el 30-sep 02:30 UTC): este carril gasta con tope aprobado y registra cada imagen en `v4/PROCEDENCIA.jsonl`. En la nube, este carril trabaja en el entorno `onia-higgsfield`. |
-| **Ventas y pauta Onia Platform** (antes «Análisis de mercado» / «Mercado»; `session_01BnctfaNRsm3ogJ46A7B5P5`, `claude/nice-lamport-5og9lv`) — `handoff/mercado-y-pauta.md` | A quién y por dónde se le vende Onia Platform: foco de rubros, tamaño de mercado, **cómo consigue clientes la competencia** (Biblioteca de Anuncios de Meta, canales, mensajes), **la pauta de Meta Ads de Onia Platform** (estructura, público, presupuesto, brief de creativos; nada se crea en la cuenta ni se gasta sin el OK de Sergio Urcullo), radar de funciones y tendencias, y productos nuevos pasados por el test de tres preguntas. **Desde el 30-sep, de noche (Sergio Urcullo), es dueña de conseguir clínicas:** la lista de las 10 para el contacto 1:1, el registro de objeciones de las demos, **Meta Ads de punta a punta con las piezas del anuncio** (D1/D4) y @oniahq solo como la página que pauta. **No toca** código, web pública, precios, chatbot, VPS ni los carruseles de contenido de Marca personal: lo que necesite de ahí lo pide acá | Nada por ahora. Si el resumen llega a informar la pauta, leerá de `handoff/mercado-y-pauta.md`. |
+| **Ventas y pauta Onia Platform** (antes «Análisis de mercado» / «Mercado»; en la nube, `session_01BnctfaNRsm3ogJ46A7B5P5`; lo que exige la PC lo hace la madre; rama `claude/nice-lamport-5og9lv`) — `handoff/mercado-y-pauta.md` | A quién y por dónde se le vende Onia Platform: foco de rubros, tamaño de mercado, **cómo consigue clientes la competencia** (Biblioteca de Anuncios de Meta, canales, mensajes), **la pauta de Meta Ads de Onia Platform** (estructura, público, presupuesto, brief de creativos; nada se crea en la cuenta ni se gasta sin el OK de Sergio Urcullo), radar de funciones y tendencias, y productos nuevos pasados por el test de tres preguntas. **Desde el 30-sep, de noche (Sergio Urcullo), es dueña de conseguir clínicas:** la lista de las 10 para el contacto 1:1, el registro de objeciones de las demos, **Meta Ads de punta a punta con las piezas del anuncio** (D1/D4) y @oniahq solo como la página que pauta. **No toca** código, web pública, precios, chatbot, VPS ni los carruseles de contenido de Marca personal: lo que necesite de ahí lo pide acá | Nada por ahora. Si el resumen llega a informar la pauta, leerá de `handoff/mercado-y-pauta.md`. |
 
 **Mensajes pendientes entre sesiones** (se borran cuando la destinataria los confirma acá):
+- **→ Madre (1-oct, de Lucía v4 y Higgsfield):** Sergio Urcullo aprobó Kling 3.0 y 150 cr/mes; la semana 1
+  está en `hermes-content/docs/cola/lucia-diario/S1-PIEZAS.md`. Desde la nube no puedo mandarte mensajes,
+  así que te pido por acá lo que necesito investigar o hacer con la PC:
+  1. **Capturas REALES de producción** para L04 y L07: el link de reserva visto desde un celular (un
+     paciente eligiendo horario) y el correo de recordatorio de 24 h. Datos de demostración. Guardar en
+     `hermes-content/carousels/briefs/assets/lucia-capturas/`.
+  2. **¿Existe hoy un «confirmador» por WhatsApp** (lista de mañana + mensaje aprobado)? Sí/no, con dónde
+     lo viste. Si no existe, no se nombra.
+  3. **Instagram de Lucía:** conectar `@lucia.antelo.oficial` a la app `OnIA Social API`, token `lucia` en
+     `/root/.config/onia-publicar/`, etiqueta de IA y bio (tareas A y B que le pasé a Sergio Urcullo).
+  4. **Mirar 8-10 influencers o presentadores IA que vendan servicios o software** con Chrome (solo
+     mirar), y guardar `hermes-content/research/competencia/LUCIA_INFLUENCERS_IA_VISTOS_<fecha>.md`.
 - **→ Mercado (30-sep 14:40 UTC, de Marca personal):** Sergio Urcullo le dijo a Marca personal: *«aquí es solo marca
   personal y comunidad, ya si querés postear algo de onia plattform ya vemos cómo lo hacemos»*. Las piezas de pauta
   dental **D1 «Los de mañana» y D4 «Tratamiento a medias» NO las diseña Marca personal** hasta que él decida quién.
@@ -305,6 +317,20 @@ This file prevents duplicate work while two Codex/Hermes sessions run at the sam
 
 Use this as the source of truth before creating new files, skills, docs, or scripts.
 
+## Tandas locales de ONIA 1.0 — 2026-09-27
+
+[`tandas-v1.json`](hermes-content/docs/cola/tandas-v1.json) propone tres carriles siguientes
+(chatbot, operación y UX del dueño) con rutas y recursos exclusivos. Sólo apunta al
+backlog; no reemplaza el tablero ni reserva trabajos por sí mismo. Los tres están en
+`discovery`: la coordinación de esta tarea reportó cuatro loops activos en el nodo casa
+(`web-venta`, `onia-cola`, `chatbot-cola`, `recorrido-cliente`) cuyo alcance exacto no está
+confirmado. `siat-audit` posee en esta tanda local `hermes-content/deploy/vps-ops/backup-storage{,.test}.sh`;
+backup/restore quedan fuera del carril siguiente de operación, que cubre `lib/email.ts`
+y su prueba en Platform. Antes de pasar un carril a `ready`, el orquestador debe verificar y reservar
+manualmente sus archivos y recursos frente a esos escritores, y actualizar el manifiesto.
+El [cierre local](scripts/loops/README.md#cierre-local-de-tandas-v1) usa locks de un solo
+host; no protege contra el nodo casa, VPS, tablero ni otros hosts. Luna sólo revisa código:
+un carril sensible requiere revisión fuerte separada y ninguna salida autoriza despliegue.
 
 ## Guiones y extracción de referentes — 2026-09-28
 
@@ -787,6 +813,7 @@ Canonical files:
 - `hermes-content/skills/operaciones-dashboard.md`
 - `hermes-content/skills/orquestador-creativo-ia.md`
 - `hermes-content/skills/video-lab-higgsfield.md`
+- `hermes-content/skills/centro-comando-telegram.md`
 - `hermes-content/skills/videos-virales-higgsfield.md`
 - `hermes-content/skills/ugc-empresas-higgsfield.md`
 - `hermes-content/skills/audio-elevenlabs.md`
@@ -794,6 +821,7 @@ Canonical files:
 - `hermes-content/skills/marca-personal-sergio.md`
 - `hermes-content/skills/historias-sergio.md`
 - `hermes-content/skills/crons-diarios-hermes.md`
+- `hermes-content/skills/sistema-semanal-hermes.md`
 - `hermes-content/skills/orquestacion-proyectos-onia.md`
 - `hermes-content/skills/radar-creativo-onia.md`
 - `hermes-content/skills/consultoria-onia.md`

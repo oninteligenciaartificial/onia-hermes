@@ -65,6 +65,12 @@ Instrucciones de proyecto. Override sobre defaults.
   solo se autolistan en sesiones abiertas DENTRO de ese repo.
 - Al aprender una trampa nueva: **editar la skill que corresponda**, no crear doc suelto.
   Skill pública instalada que sirva: usarla, no reinventar.
+- **Autoconocimiento: cada sesión se entrena a sí misma.** Sergio Urcullo, 2026-10-01: *«tienen que
+  aprender a hacer las cosas, que quede como autoconocimiento, sin eso investigamos y perdemos las
+  cosas»*. ANTES de investigar, leer la skill del carril. AL CERRAR cada tarea, lo aprendido (método,
+  trampa, comando, dato medido, intento fallido con su causa) va a esa skill, con el caso y la fecha,
+  **en el mismo commit**. Carril sin skill → crear UNA (`.claude/skills/<carril>/SKILL.md`) y sumarla
+  a `onia-router`. El handoff es estado; la skill es el método que sobrevive al relevo.
 - **Enrutamiento de modelos y contexto:** leer
   `hermes-content/docs/AI_MODEL_ROUTING_2026.md`. Astra decide lo ambiguo y de alto riesgo; Sol
   ejecuta el trabajo cotidiano con juicio; Luna hace tareas cerradas y verificables. No bajar
@@ -93,6 +99,29 @@ Instrucciones de proyecto. Override sobre defaults.
   descartadas y las fuentes van al handoff, no al mensaje.
 - **En el producto y la web:** cada paso o página extra se justifica o se saca. Ante dos
   soluciones, gana la de menos clics para el cliente.
+
+## Sesión MADRE local + carriles en la nube (REGLA)
+
+> Sergio Urcullo, 2026-10-01: *«madre local para que comunique a ellas, pero las de desarrollo y tareas que no
+> son de uso PC, nube; creemos la madre y que ordene a todas con sus tareas, subs y demás, mediante mensaje»*.
+> Y: *«prefiero que hable entre sesiones, así no dejamos documentos que no leen»*.
+
+- **La MADRE corre en la PC de Sergio Urcullo** y es la única que ordena. Reparte las tareas a cada sesión
+  **por mensaje** y hace ella misma lo que exige la PC: paneles con su login (Meta, Cloudflare, Hostinger),
+  capturas, mirar pantallas. Reemplaza a la vieja sesión de «Control» como orquestadora: dos orquestadores
+  se pisan.
+- **Desarrollo y todo lo que no necesita la PC, en la NUBE**, un carril por sesión (Plataforma, Ventas y pauta,
+  Marca personal, Lucía…). Siguen trabajando con la PC apagada.
+- **El canal principal es el MENSAJE, no el documento.** Lo que una sesión necesita de otra se le manda, no se
+  deja escrito esperando que lo lea. El handoff (`hermes-content/docs/handoff/<carril>.md`) queda solo para que
+  una sesión NUEVA retome si otra muere.
+- **Cómo se manda (medido el 1-oct):** solo la MADRE manda mensajes, con `SendMessage`, y le llegan al
+  instante a las sesiones de la nube. La nube **no** puede mandar (`SendMessage` falla: «this cloud session
+  cannot message other sessions yet»): contesta **en su propio transcript** y la madre lo lee desde allá.
+  **Nada de mensajes programados** (`create_trigger`) entre sesiones: tardan demasiado (Sergio Urcullo, 1-oct).
+- Detalle operativo (ids vivos, formato del mensaje, qué se avisa y qué no): **skill `onia-sesion-madre`**.
+- **El portal del SIAT no lo abre ninguna sesión, tampoco la madre.** Lo abre solo Sergio Urcullo a mano; la
+  sesión le pide capturas.
 
 ## «Cambio de sesión» → handoff completo (REGLA)
 
@@ -284,8 +313,13 @@ Instrucciones de proyecto. Override sobre defaults.
 
 ## ONIA Core (REGLA)
 
-- **Un rubro nuevo se ENCIENDE desde el core, no se escribe de cero.** Orden: dental
-  (vivo) → comercio → importadora → el resto.
+- **Un rubro nuevo se ENCIENDE desde el core, no se escribe de cero.** Los 5 que se ofrecen ya
+  están encendidos (dental, estética, servicios profesionales, comercio, importadora).
+- **Orden de empuje (venta, pauta y desarrollo), decidido por Sergio Urcullo el 2026-09-29:**
+  dental → **importadora** → el resto. Comercio y servicios esperan a que la factura del SIN esté
+  dentro del sistema: sin ella no compiten con los sistemas bolivianos que sí facturan.
+  ⚠️ Antes decía «dental → comercio → importadora»; era el orden de ENCENDIDO de julio y se leía
+  como prioridad.
 - Todo lo demás del core (21 capacidades, `contract.json`, los 3 adapters, el validador
   obligatorio antes de commitear, `external_gate`) → **skill `onia-core`**.
 
@@ -390,6 +424,22 @@ Instrucciones de proyecto. Override sobre defaults.
   en producción. Un rediseño se muestra renderizado y se espera el OK explícito sobre
   ESA pieza; construir y publicar son dos permisos distintos.
 
+## Qué se publica sin preguntar (REGLA)
+
+> Sergio Urcullo, 2-oct, al preguntar «¿por qué tengo que dar OK? no sé qué significa PR»:
+> eligió **«Solo diseño nuevo y legales»** como lo único que pasa por él. Dos PRs listos
+> (el Recall y la web v1) esperaban su OK sobre algo que él no puede revisar.
+
+- **Se publica sin preguntar** lo que pasa los gates del carril (tsc, tests, revisión) y se
+  MIRA en producción después: arreglos, features sobre pantallas existentes, bot, textos de
+  producto, docs. Se mergea el PR y se corre el `publicar.sh` del destino.
+- **Pasa por Sergio Urcullo ANTES de publicar** solo: **diseño nuevo** (pantalla o sección
+  que no existía, rediseño de una viva — ver la regla de arriba) y **textos legales**
+  (términos, privacidad, contratos). Se le muestra la pieza renderizada, no el PR.
+- **No cambia** lo que ya pide aprobación por su riesgo: escribir datos de producción fuera
+  de lo autorizado, gasto pago, contactar clientes, tocar el portal del SIAT.
+- A Sergio Urcullo no se le habla de PRs: se le dice qué quedó publicado y qué necesita mirar.
+
 ## Dónde va cada cosa (REGLA)
 
 Nada suelto en la raíz.
@@ -443,10 +493,14 @@ Si no sabés dónde va, **preguntá** antes de inventar carpeta.
   genéricos en mayúsculas y verde decorativo no cuentan como narrativa. Cada slide
   debe aportar una prueba visual distinta: interfaz real, proceso, tabla, decisión,
   objeto del trabajo o contexto humano.
-- Para ONIA, el piso editorial es el pack aprobado en la sesión de marca personal
-  (`community-editorial`, commit `e9b80e22`): portada humana/fotográfica, interiores
-  claros, jerarquía editorial, acento verde restringido y CTA diseñado. No se copia
-  el contenido; se copia el estándar de dirección.
+- Para ONIA, el piso editorial es el **pack `referentes`** de la marca personal
+  (skill `diseno-contenido-onia` §2 y §4): blanco, verde y negro, una prueba visual
+  dominante por lámina y el CTA diseñado. Ejemplo aprobado: `sergio-k6v2-*`. No se
+  copia el contenido; se copia el estándar de dirección.
+  ⚠️ **Corregido el 2-oct.** Acá decía `community-editorial` (commit `e9b80e22`), el
+  pack que Sergio Urcullo juzgó «vacío y con demasiado texto» el 29-sep. Con esta
+  línea vieja se armaron D1 y D4 en crema, con la captura en un marco chico, y él
+  las rechazó el 1-oct.
 - **Producto visible o no sale.** En pauta de software, al menos una parte central
   de la pieza debe enseñar UI real o una demostración verificable. No fabricar
   pantallas con IA ni reemplazar prueba por mockups decorativos.
@@ -490,9 +544,10 @@ Detalle operativo: skills `carruseles-onia` y `ugc-empresas-higgsfield`.
   históricos no autorizan gasto. Video y entrenamiento Soul siempre requieren aprobación
   específica porque su costo y riesgo de deriva son mayores.
 - Cómo se ve un video, se transcribe, se corta, se subtitula y se rinde →
-  **skills `ver-videos` y `editor-videos`** (HyperFrames vive en la copia global
-  `~/.claude/skills` y `~/.codex/skills`; cada flujo se instala con
-  `npx hyperframes skills update <nombre>`: revisarlo ANTES de codear video).
+  **skills `ver-videos` y `editor-videos`** (HyperFrames vive en el repo,
+  `.claude/skills/hyperframes*` y `.agents/skills/`, restaurado el 2026-10-02 porque con la
+  copia global los archivos dejaron de editarse como quiere Sergio Urcullo; la del repo gana
+  sobre la global: revisarlo ANTES de codear video).
 - **Sacar el PROMPT de una imagen o un video de referencia → skill `sacar-prompt`.**
   Distingue **recuperar** (está en pantalla: se lee) de **reconstruir** (se escribe uno
   parecido, y se dice que lo es). Regla de entrada: **si el video habla es UGC, si
