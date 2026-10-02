@@ -11,6 +11,7 @@ Sergio Urcullo aprobó el 2026-09-29 un acceso controlado, con respaldo. Es este
 | `redactar.sed` | Tapa tokens, claves, correos, teléfonos y chat ids. Se aplica en el VPS **y** en el runner. |
 | `diagnostico.sh` | **Solo lectura.** Crontab, trabajos de Hermes, n8n, log de avisos, tablero. |
 | `aplicar.sh` | Enciende a Jarvis: crontab marcado, pausa 3 trabajos de Hermes, apaga 12 flujos de n8n de reportes, crea el lector y el flujo de cambios de su calendario (y los **prueba** con un evento que crea, mueve y cancela), instala en Hermes la skill `agenda-calendario` y la regla en su SOUL, prende la aduana y **muestra el resumen y el cierre antes de mandarlos**. Respaldo + `rollback.sh`. Idempotente. |
+| `responder.sh` | (2026-10-01) Entrega por la aduana la respuesta de Claude a un pedido de Sergio Urcullo. Lo corre `.github/workflows/hermes-respuesta.yml`, que despacha la sesión del pedido al terminar. Solo responde ids que salieron de Hermes, una vez por estado. |
 | `revertir.sh` | Corre el `rollback.sh` del último `aplicar` vigente: crontab por marcas, Hermes reanuda lo pausado, n8n reactiva lo apagado y apaga los dos flujos del calendario, la skill y el SOUL de Hermes vuelven a como estaban, aduana apagada. |
 
 ## Cómo se corre
@@ -32,3 +33,18 @@ exactamente eso y respeta lo que otro haya cambiado después. **No editar a mano
   `rollback.sh`; `revertir` lo corre.
 - Infra tiene UN dueño a la vez (CLAUDE.md §4): esta carpeta toca solo lo que llega a Sergio
   Urcullo (avisos, brief, cierre, calendario). El resto del VPS sigue siendo del carril de infra.
+
+## Pedidos a Claude (2026-10-01)
+
+Hermes le pasa a una rutina de Claude Code en la nube lo que necesita trabajo real, siempre con el
+sí de Sergio Urcullo al texto exacto. Diseño, prompt de la rutina y paso a paso de la llave:
+`hermes-content/docs/TELEGRAM_COMMAND_CENTER.md`. Lo que toca acá:
+
+- `aplicar` (sección 5d) instala la skill `pedir-a-claude`, agrega la regla al SOUL de Hermes y, si
+  el workflow trae `RUTINA_URL` y `RUTINA_TOKEN` (variable `ONIA_RUTINA_PEDIDOS_URL` y secreto
+  `ONIA_RUTINA_PEDIDOS_TOKEN` del repo), los guarda en `/root/.config/onia/pedidos.env` (600). **Sin
+  llave no es una falla**: Jarvis se enciende igual y los pedidos quedan apagados.
+- `revertir` quita la skill (o restaura la anterior) y retira la llave al respaldo si la puso ese
+  `aplicar`.
+- `diagnostico` (sección 12) muestra si está configurado y los pedidos del día, sin la llave.
+
