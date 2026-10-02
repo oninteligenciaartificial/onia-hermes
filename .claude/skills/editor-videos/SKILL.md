@@ -456,7 +456,11 @@ la burbujita de OBS incrustada en la esquina no da resolución para la zona de c
    se achica (subir 240 px a Lucía le corta la coronilla).
 3. **Arranque en caliente:** primera palabra o tarjeta a ≤ 0,15 s; si el clip arranca con tiempo muerto se recorta
    (L08: −0,40 s). Nunca se acelera.
-4. **Voz (si la pieza lleva):** Marcela con `scripts/tts-elevenlabs.mjs` **sin `--stability/--style`** (los settings
+4. **Voz (si la pieza lleva):** ⚠️ **Marcela tiene acento COLOMBIANO** (medido el 2-oct con `GET /v1/voices/<id>` →
+   `labels.accent: colombian`, «Marcela - Colombian Girl», de la Voice Library). Lucía es cruceña y el público boliviano
+   critica el acento que no es de acá. Si se usa o no es la decisión D4 de `cola/lucia-diario/PLAN.md`; hasta que se
+   resuelva, los reels van sin voz. Antes de elegir CUALQUIER voz se leen sus `labels`. Marcela con
+   `scripts/tts-elevenlabs.mjs` **sin `--stability/--style`** (los settings
    forzados le cambian el timbre: rechazado el 21-ago y repetido por error el 1-oct). `--timestamps` → karaoke desde el
    guion autorado con tiempos exactos (gate de ortografía resuelto de raíz). La frase final va en toma aparte con
    `--previous-text` y 2–3 `--seed`; se elige la que **baja** al final (medir F0 de la última palabra con
