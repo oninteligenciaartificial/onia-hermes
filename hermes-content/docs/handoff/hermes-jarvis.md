@@ -327,6 +327,17 @@ aplicar,revertir}.sh` · `scripts/loops/onia-tg.sh` + `onia-tg-aduana.test.mjs` 
 >    respuesta ✅.
 >
 > **Si algo sale mal:** `gh workflow run hermes-jarvis.yml --ref main -f accion=revertir`.
+>
+> **Abierto, para la madre (2-oct, pregunta de Sergio Urcullo: «¿por qué rutinas y no n8n?»).** El
+> TRABAJO sigue en la rutina: es Claude Code en la nube, dentro del plan, sin llave del VPS. n8n no lo
+> reemplaza: solo es un caño, y para trabajar necesitaría una IA aparte, pagada por uso y corriendo
+> adentro de producción. Además, el Command Center viejo de n8n tuvo 0 ejecuciones en 72 h. Donde n8n
+> SÍ puede mejorar el diseño es en la **vuelta de la respuesta**: hoy la rutina necesita
+> `GH_ACTIONS_TOKEN`, que también puede despachar `aplicar`/`revertir` (§9 del doc). Con un webhook de
+> n8n de ruta secreta, la rutina queda sin ningún token. **Falta medir en solo lectura:** ¿el
+> contenedor de n8n puede entregarle el mensaje a la aduana del host (un volumen compartido, o un nodo
+> SSH con credencial al host)? Si se puede, la sesión del carril cambia la vuelta a n8n. Si no, queda la
+> de GitHub, ya probada. Esto no frena los pasos 1 a 8: el entorno se puede editar después.
 
 > **1-oct ~21:30 UTC — plan anterior (reemplazado por el de arriba):**
 > 1. **La madre corre `aplicar`** por SSH, con el mismo armado del workflow y el OK de Sergio Urcullo,
