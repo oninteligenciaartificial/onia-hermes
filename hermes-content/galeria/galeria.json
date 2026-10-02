@@ -446,5 +446,141 @@
       "sergio-k11-hook-stop-guarda-20261001"
     ],
     "tags": []
+  },
+  {
+    "id": "sergio-k8v3-recuperar-vs-reconstruir-20261001-s01-ae75c072",
+    "file": "hermes-content/galeria/ilustraciones/sergio-k8v3-recuperar-vs-reconstruir-20261001-s01-ae75c072.jpg",
+    "fecha": "2026-10-02",
+    "tipo": "ilustraciones",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "text2image_soul_v2",
+    "prompt": "A large emerald green clay magnifying glass with a matte black handle, lying next to a small white clay picture frame that holds a simple green clay mountain and a small sun.",
+    "estilo": "clay",
+    "costo_cr": 0.12,
+    "job": "ae75c072-c48a-4b28-be7c-41499f9055d5",
+    "usado_en": [
+      "sergio-k8v3-recuperar-vs-reconstruir-20261001"
+    ],
+    "tags": []
+  },
+  {
+    "id": "sergio-k8v3-recuperar-vs-reconstruir-20261001-s04-ba4b46ca",
+    "file": "hermes-content/galeria/ilustraciones/sergio-k8v3-recuperar-vs-reconstruir-20261001-s04-ba4b46ca.jpg",
+    "fecha": "2026-10-02",
+    "tipo": "ilustraciones",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "text2image_soul_v2",
+    "prompt": "A matte black clay jigsaw puzzle with one emerald green piece floating just above its empty spot.",
+    "estilo": "clay",
+    "costo_cr": 0.12,
+    "job": "ba4b46ca-abba-4993-9364-abffd800f927",
+    "usado_en": [
+      "sergio-k8v3-recuperar-vs-reconstruir-20261001"
+    ],
+    "tags": []
+  },
+  {
+    "id": "sergio-k13-loop-sin-api-key-20261001-s01-7bc15836",
+    "file": "hermes-content/galeria/ilustraciones/sergio-k13-loop-sin-api-key-20261001-s01-7bc15836.jpg",
+    "fecha": "2026-10-02",
+    "tipo": "ilustraciones",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "text2image_soul_v2",
+    "prompt": "A small closed padlock in green clay on a short matte black chain, resting on a white surface.",
+    "estilo": "clay",
+    "costo_cr": 0.12,
+    "job": "7bc15836-95c9-4c4b-a78f-190c864a034c",
+    "usado_en": [
+      "sergio-k13-loop-sin-api-key-20261001"
+    ],
+    "tags": [],
+    "nota": "fondo gris aclarado a blanco con flood fill de ImageMagick desde las esquinas (2-oct)"
+  },
+  {
+    "id": "sergio-k13-loop-sin-api-key-20261001-s04-2fc6795f",
+    "file": "hermes-content/galeria/ilustraciones/sergio-k13-loop-sin-api-key-20261001-s04-2fc6795f.jpg",
+    "fecha": "2026-10-02",
+    "tipo": "ilustraciones",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "text2image_soul_v2",
+    "prompt": "A matte black clay stopwatch with a single emerald green clay button on top, standing upright.",
+    "estilo": "clay",
+    "costo_cr": 0.12,
+    "job": "2fc6795f-a1af-4fa1-af87-045ac06c1ca5",
+    "usado_en": [],
+    "tags": [],
+    "descartada": "números y letras inventadas en el dial y el botón (y firma en el borde en la segunda)"
+  },
+  {
+    "id": "sergio-n03-modo-auto-20261001-s01-e661c3bd",
+    "file": "hermes-content/galeria/ilustraciones/sergio-n03-modo-auto-20261001-s01-e661c3bd.jpg",
+    "fecha": "2026-10-02",
+    "tipo": "ilustraciones",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "text2image_soul_v2",
+    "prompt": "A rounded emerald green clay traffic light with a matte black housing, only its bottom light glowing green.",
+    "estilo": "clay",
+    "costo_cr": 0.12,
+    "job": "e661c3bd-910e-443c-b57c-8a8c82b9b320",
+    "usado_en": [
+      "sergio-n03-modo-auto-20261001"
+    ],
+    "tags": [],
+    "nota": "fondo gris aclarado a blanco con flood fill de ImageMagick desde las esquinas (2-oct)"
+  },
+  {
+    "id": "sergio-n03-modo-auto-20261001-s02-21182acc",
+    "file": "hermes-content/galeria/ilustraciones/sergio-n03-modo-auto-20261001-s02-21182acc.jpg",
+    "fecha": "2026-10-02",
+    "tipo": "ilustraciones",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "text2image_soul_v2",
+    "prompt": "A pair of matte black clay binoculars resting on a small round emerald green clay base.",
+    "estilo": "clay",
+    "costo_cr": 0.12,
+    "job": "21182acc-da9c-404f-9c8e-248955eb5c85",
+    "usado_en": [
+      "sergio-n03-modo-auto-20261001"
+    ],
+    "tags": []
+  },
+  {
+    "id": "sergio-n04-skill-verify-20261001-s01-1e0f0172",
+    "file": "hermes-content/galeria/ilustraciones/sergio-n04-skill-verify-20261001-s01-1e0f0172.jpg",
+    "fecha": "2026-10-02",
+    "tipo": "ilustraciones",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "text2image_soul_v2",
+    "prompt": "An emerald green clay shield standing upright with a raised white clay checkmark on its face.",
+    "estilo": "clay",
+    "costo_cr": 0.12,
+    "job": "1e0f0172-4d9e-4acb-a04c-a34dd83bde5b",
+    "usado_en": [
+      "sergio-n04-skill-verify-20261001"
+    ],
+    "tags": []
+  },
+  {
+    "id": "sergio-k13-loop-sin-api-key-20261001-s04-98385b51",
+    "file": "hermes-content/galeria/ilustraciones/sergio-k13-loop-sin-api-key-20261001-s04-98385b51.jpg",
+    "fecha": "2026-10-02",
+    "tipo": "ilustraciones",
+    "fuente": "higgsfield",
+    "licencia": "generada (plan Higgsfield)",
+    "modelo": "text2image_soul_v2",
+    "prompt": "A matte black clay stopwatch with a completely blank plain white dial, no numbers and no marks, one emerald green clay button on top, standing upright.",
+    "estilo": "clay",
+    "costo_cr": 0.12,
+    "job": "98385b51-78c7-4760-a0ec-20b8c602b0e2",
+    "usado_en": [],
+    "tags": [],
+    "descartada": "números y letras inventadas en el dial y el botón (y firma en el borde en la segunda)"
   }
 ]

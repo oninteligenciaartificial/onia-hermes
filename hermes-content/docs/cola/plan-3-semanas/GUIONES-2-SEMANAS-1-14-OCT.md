@@ -182,7 +182,7 @@ En la página de precios, lo que ves en pantalla: dos dólares el millón de tok
 
 Lo que casi nadie aprovecha: lo que entra desde la caché cuesta diez centavos el millón. Es lo que repetís igual al principio de cada pedido: las instrucciones de tu agente, tu lista de precios. Ponelo primero y no lo toques. La primera vez cuesta un poco más; después, veinte veces menos. Tiene que pasar de mil veinticuatro tokens.
 
-Cómo sabés que funcionó: la respuesta de la API trae cuántos tokens salieron de caché. Si dice cero, cambiaste algo del principio.
+Cómo sabés que funcionó: la respuesta de la API trae cuántos tokens salieron de caché. Si después del primer pedido sigue en cero, cambiaste algo del principio o pasó más de media hora.
 
 La cuenta para tu agente está en la comunidad: comentá CACHE y te paso el link.
 

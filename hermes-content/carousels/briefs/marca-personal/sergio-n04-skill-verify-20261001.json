@@ -26,12 +26,14 @@
       "logo": "hermes-content/references/brand-claude/claudecode.svg",
       "headline": "Claude Code corre tu *verify*",
       "subtitle": "antes de commitear, desde el 30 de septiembre",
-      "image": "hermes-content/carousels/briefs/assets/sergio-n04-skill-verify-20261001/portada-sobres-lupa-recorte.jpg",
       "image_origen": "Recorte de hermes-content/galeria/ilustraciones/sobres-trampa-a.png (sin gasto): sobres y lupa, bordes difuminados sobre gris claro para que entre entera en la portada.",
       "body": "Una skill con ese nombre y Claude la corre justo antes. Te muestro cómo armarla.",
       "next": "qué cambió",
       "alt_text": "Una lupa sobre unos sobres: Claude Code corre tu skill verify antes de commitear",
-      "badge_descartado": "nuevo: con «Claude Code corre tu» el título llega al borde derecho y el sello lo tapaba (visto el 1-oct)"
+      "badge_descartado": "nuevo: con «Claude Code corre tu» el título llega al borde derecho y el sello lo tapaba (visto el 1-oct)",
+      "image_style": "clay",
+      "image": "hermes-content/galeria/ilustraciones/sergio-n04-skill-verify-20261001-s01-1e0f0172.jpg",
+      "image_prompt_usado": "An emerald green clay shield standing upright with a raised white clay checkmark on its face."
     },
     {
       "number": 2,

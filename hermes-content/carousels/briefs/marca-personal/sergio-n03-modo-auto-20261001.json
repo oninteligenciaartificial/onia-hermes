@@ -19,22 +19,26 @@
       "logo": "hermes-content/references/brand-claude/claudecode.svg",
       "headline": "Claude Code ya *no te pregunta*",
       "subtitle": "qué deja pasar el modo auto",
-      "image": "hermes-content/galeria/ilustraciones/k2-img-s03-bc401bfc.jpg",
       "image_origen": "galería (reutilizada de K2v3, sin gasto): llave de arcilla, esquinas blancas medidas 233-255",
       "body": "Desde fines de septiembre, en todos los planes.",
       "next": "qué cambió",
-      "alt_text": "Claude Code ya no te pregunta casi nada: qué deja pasar el modo auto"
+      "alt_text": "Claude Code ya no te pregunta casi nada: qué deja pasar el modo auto",
+      "image_style": "clay",
+      "image": "hermes-content/galeria/ilustraciones/sergio-n03-modo-auto-20261001-s01-e661c3bd.jpg",
+      "image_prompt_usado": "A rounded emerald green clay traffic light with a matte black housing, only its bottom light glowing green."
     },
     {
       "number": 2,
       "layout": "ilustrado",
       "theme": "blanco",
       "headline": "Ya no revisás *vos*",
-      "image": "hermes-content/galeria/ilustraciones/k11-img-s01-7794c76c.jpg",
       "image_origen": "galería (descartada como portada de K11 por el fondo gris, sin uso; sobre blanco no se nota), sin gasto",
       "body": "Un segundo modelo revisa lo que Claude quiere hacer. Leer y editar en tu carpeta, en general, se aprueba solo.",
       "next": "qué frena",
-      "alt_text": "Una barrera de arcilla verde frente a unas cajas negras: en modo auto, un segundo modelo revisa en vez de vos"
+      "alt_text": "Una barrera de arcilla verde frente a unas cajas negras: en modo auto, un segundo modelo revisa en vez de vos",
+      "image_style": "clay",
+      "image": "hermes-content/galeria/ilustraciones/sergio-n03-modo-auto-20261001-s02-21182acc.jpg",
+      "image_prompt_usado": "A pair of matte black clay binoculars resting on a small round emerald green clay base."
     },
     {
       "number": 3,

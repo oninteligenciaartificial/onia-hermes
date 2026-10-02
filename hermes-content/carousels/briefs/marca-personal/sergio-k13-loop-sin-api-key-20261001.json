@@ -13,18 +13,17 @@
   "slides": [
     {
       "number": 1,
-      "layout": "logos",
+      "layout": "ilustrado",
       "theme": "verde",
-      "headline": "Loop",
-      "logos": [
-        {
-          "file": "hermes-content/references/brand-claude/claudecode.svg",
-          "label": "Claude Code"
-        }
-      ],
-      "body": "Claude Code solo en un servidor, *sin API key*. Con 3 barandas y 5 trampas.",
+      "badge": "guía",
+      "logo": "hermes-content/references/brand-claude/claudecode.svg",
+      "headline": "*Claude Code* solo en un servidor, sin API key",
+      "subtitle": "3 barandas y 5 trampas",
+      "image_style": "clay",
       "next": "cómo se arma",
-      "alt_text": "Loop: Claude Code trabajando solo en un servidor, sin API key"
+      "alt_text": "Loop: Claude Code trabajando solo en un servidor, sin API key",
+      "image": "hermes-content/galeria/ilustraciones/sergio-k13-loop-sin-api-key-20261001-s01-7bc15836.jpg",
+      "image_prompt_usado": "A small closed padlock in green clay on a short matte black chain, resting on a white surface."
     },
     {
       "number": 2,
@@ -67,7 +66,11 @@
       "headline": "minutos de tope si corre *cada hora*",
       "body": "Regla de cordura: el tiempo máximo, siempre menor que el intervalo.",
       "next": "las trampas",
-      "alt_text": "Un loop que corre cada hora tiene un tope de 50 minutos"
+      "alt_text": "Un loop que corre cada hora tiene un tope de 50 minutos",
+      "image_prompt_descartado": [
+        "A matte black clay stopwatch with a single emerald green clay button on top, standing upright.",
+        "A matte black clay stopwatch with a completely blank plain white dial, no numbers and no marks, one emerald green clay button on top, standing upright."
+      ]
     },
     {
       "number": 5,

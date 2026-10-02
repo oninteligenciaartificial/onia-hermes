@@ -1,7 +1,7 @@
 # Avisos de Onia Community, día por día · vie 2 → mié 14-oct-2026
 
 **Cómo se usa:** el día indicado, pegá en *Avisos* cada texto (lo que está entre `~~~~`), en orden y **antes de la hora** (es la del primer video del día, 12:30; si subís el YouTube antes, pegá antes). La imagen o el archivo va justo después de su texto. Lo marcado ⛔ no se pega.
-**De dónde sale cada texto:** copiado tal cual de su drop de origen, nombrado en cada aviso (`drops/2026-10-01.md`, `drops/2026-10-01-drops-noticias-repos.md` y la sección «Drops» de `plan-3-semanas/S1-GUIONES.md`, `S2-GUIONES.md`, `S3-GUIONES.md` y `S4-GITHUB-REPOS.md`). Los marcados «sin revisor» se armaron el 1-oct solo con datos de su fuente: leelos antes. **Si se corrige un drop, se corrige en el origen y acá.**
+**De dónde sale cada texto:** copiado tal cual de su drop de origen, nombrado en cada aviso (`drops/2026-10-01.md`, `drops/2026-10-01-drops-noticias-repos.md` y la sección «Drops» de `plan-3-semanas/S1-GUIONES.md`, `S2-GUIONES.md`, `S3-GUIONES.md` y `S4-GITHUB-REPOS.md`). CACHE, VENTANA, PROMESA, PRUEBAS y REVISAR se armaron el 1-oct sin revisor y pasaron el revisor escéptico el 2-oct (lo corregido, en su origen). **Si se corrige un drop, se corrige en el origen y acá.**
 **Cada recurso arranca con su PALABRA en negrita:** el que llega por DM la busca en Avisos. Al final: qué mandar por DM y los huecos.
 
 ---
@@ -147,7 +147,7 @@ Contá en General: *¿te dio cero o te toca pagar?*
 ~~~~
 
 #### 2-3 · Recursos de hoy → EFFORT (video D02-A y carrusel K10) · MIRAR (D04-C) · CACHE (DD-A y su carrusel)
-Origen: `drop-EFFORT` de `drops/2026-10-01-drops-noticias-repos.md` (corregido 1-oct: cierre a General) · drop 6 de `S1-GUIONES.md` · `CACHE` de `drops/2026-10-01-drops-noticias-repos.md` (sin revisor).
+Origen: `drop-EFFORT` de `drops/2026-10-01-drops-noticias-repos.md` (corregido 1-oct: cierre a General) · drop 6 de `S1-GUIONES.md` · `CACHE` de `drops/2026-10-01-drops-noticias-repos.md` (revisado 2-oct: fórmula con la escritura en caché, «0» solo vale después del primer pedido, 30 minutos, contexto corto).
 
 ~~~~
 *EFFORT* · *Mi tabla de esfuerzo para Claude Code*
@@ -205,27 +205,29 @@ A mano: npx playwright install chromium   y después
 
 OpenAI lo presentó el 29-sep, en su DevDay. En la API se llama `gpt-6.1-sol`.
 
-Por millón de tokens, en USD (página de precios de OpenAI, leída el 1-oct):
+Por millón de tokens, en USD (página de precios de OpenAI, tarifa estándar y contexto corto, leída el 1-oct):
 ```
               entrada  desde caché  salida
 gpt-6.1-sol   2,00     0,10         10
-Astra         10       1            50
+gpt-6-astra   10       1            50
 ```
 Un quinto de Astra, en lo que entra y en lo que sale.
 
 *La cuenta para tu agente*
 ```
 Costo de un pedido (USD) =
-( tokens nuevos       x 2
-+ tokens desde caché  x 0,10
-+ tokens de salida    x 10 ) / 1.000.000
+( cached_tokens          x 0,10
++ cache_write_tokens     x 2,50
++ el resto de la entrada x 2
++ tokens de salida       x 10 ) / 1.000.000
 ```
-La primera vez, lo que se guarda en la caché se cobra 2,50 en vez de 2. Después, lo que sale de la caché cuesta 0,10: veinte veces menos.
+Los dos primeros vienen en la respuesta de la API, en `usage.input_tokens_details`; el resto es `input_tokens` menos esos dos. Cada token se cobra a una sola tarifa: lo que se guarda en la caché cuesta 2,50 en vez de 2 esa vez; después, cada vez que se lee, 0,10: veinte veces menos.
 
 *Para que funcione*
 - Lo que repetís igual en cada pedido (las instrucciones de tu agente, tu lista de precios) va al principio y no se toca.
 - Tiene que pasar de 1.024 tokens.
-- Cómo sabés que anduvo: la respuesta de la API trae cuántos tokens salieron de caché. Si dice 0, cambiaste algo del principio.
+- Dura al menos 30 minutos desde el último pedido que la usó.
+- Cómo sabés que anduvo: mirá `cached_tokens`. En el primer pedido da 0. Si después sigue en 0, cambiaste algo del principio o pasó más de media hora.
 
 Contá en General: *¿qué parte de tus pedidos se repite siempre igual?*
 ~~~~
@@ -300,7 +302,7 @@ Contame en General: *¿cuántos resultados te dio la búsqueda del paso 1?*
 ~~~~
 
 #### 4-2 · VENTANA (S2-D07-A; también el carrusel K5 del dom 11)
-Origen: `VENTANA` de `drops/2026-10-01-drops-noticias-repos.md` (sin revisor; textos copiados de `bot/config.mjs`).
+Origen: `VENTANA` de `drops/2026-10-01-drops-noticias-repos.md` (revisado 2-oct; textos copiados de `bot/config.mjs`; corregidos «20 h después de ese mensaje», «tus números y los de prueba» y «empieza o termina en una variable»).
 
 ~~~~
 *VENTANA* · *Mis mensajes de seguimiento*
@@ -308,11 +310,11 @@ Origen: `VENTANA` de `drops/2026-10-01-drops-noticias-repos.md` (sin revisor; te
 Vale para bots en la API oficial de Meta. En la app de WhatsApp Business, a mano, esta regla no existe.
 
 *Las reglas de mi bot*
-1. Dentro de las 24 h desde el último mensaje del cliente: texto libre. Mi bot manda un solo seguimiento, a las 20 h: le quedan 4 h de margen.
+1. Dentro de las 24 h desde el último mensaje del cliente: texto libre. Mi bot manda un solo seguimiento, 20 h después de ese mensaje: le quedan 4 h de margen.
 2. Pasadas las 24 h: solo una plantilla aprobada por Meta. Texto libre ahí falla con el error 131047: buscalo en los registros de tu bot.
 3. Pasados 7 días: no escribe más.
 4. Nunca de madrugada: fuera de 8:00 a 21:00 el mensaje espera y sale a las 8:00.
-5. Tus números de prueba, afuera de la lista.
+5. Tus números y los de prueba, afuera de la lista.
 
 *El de dentro de las 24 h* (texto libre):
 > ¡Hola de nuevo! Te escribí ayer por la demo de [producto] y quedó a medias — sé que el negocio no para.
@@ -324,7 +326,7 @@ Vale para bots en la API oficial de Meta. En la app de WhatsApp Business, a mano
 > Si querés retomarla, te dejo dos horarios: *{{1}}* o *{{2}}*.
 > Decime cuál te queda mejor y la dejamos agendada.
 
-Fijate que cierra con una frase fija: Meta rechaza una plantilla que termina en una variable.
+Fijate que cierra con una frase fija: Meta rechaza una plantilla que empieza o termina en una variable.
 
 Antes de programar tu seguimiento, mandá tus plantillas a aprobar.
 
@@ -382,7 +384,7 @@ Contame en General: *¿qué chequeo le pusiste a tu verify?*
 ~~~~
 
 #### 5-3 · PROMESA (S2-D08-A y carrusel K6)
-Origen: `PROMESA` de `drops/2026-10-01-drops-noticias-repos.md` (sin revisor; copiado de `PRODUCCION-GUIONES-2026-09-29.md` §Prueba 2). ⚠️ Las respuestas están recortadas (`[…]`) y el guion dice «completas»: al grabar, decí «las dos respuestas están en la comunidad», sin «completas».
+Origen: `PROMESA` de `drops/2026-10-01-drops-noticias-repos.md` (revisado 2-oct; copiado de `PRODUCCION-GUIONES-2026-09-29.md` §Prueba 2; agregada la línea que explica los `[…]`). ⚠️ Las respuestas están recortadas (`[…]`) y las completas no están en el repo; el guion y el caption de K6 dicen «completas»: al grabar, decí «las dos respuestas están en la comunidad», sin «completas», y sacalo también del caption de K6.
 
 ~~~~
 *PROMESA* · *Bot con dos listas: la prueba del 28-sep*
@@ -396,7 +398,7 @@ Negocio de ejemplo (inventado para la prueba): Cajas Kuska, cajas de cartón con
 *2. Con dos listas* («nunca confirmes stock, precio ni fecha si no están acá. Confirmado: desde 50 unidades. NO confirmado: stock, plazo, precio»):
 > ¡Hola! Gracias por escribirnos a Cajas Kuska 😊 Sí, fabricamos cajas de cartón personalizadas con tu logo, y 200 unidades está dentro de lo que trabajamos (hacemos desde 50). Todavía no puedo asegurarte la entrega para este viernes. Tengo que confirmar el plazo de producción con el equipo y te aviso apenas lo tenga. […] Con eso te confirmo precio y plazo real.
 
-Ninguna prometió. La segunda usó el dato confirmado. Sonnet 5.5, una corrida por caso.
+Ninguna prometió. La segunda usó el dato confirmado. Sonnet 5.5, una corrida por caso. Los […] son partes que no quedaron en mi registro.
 
 *La plantilla para tu bot*
 ```
@@ -572,17 +574,17 @@ El primero, dentro de cada proyecto: borra su mapa (la carpeta .codegraph). El s
 ~~~~
 
 #### 8-3 · PRUEBAS (carrusel K4)
-Origen: `PRUEBAS` de `drops/2026-10-01-drops-noticias-repos.md` (sin revisor; copiado del brief de K4).
+Origen: `PRUEBAS` de `drops/2026-10-01-drops-noticias-repos.md` (revisado 2-oct; copiado del brief de K4; corregidas la prueba 2, «el mismo mensaje reentregado, con el mismo id», y la 5, «Pedí hablar con una persona»).
 
 ~~~~
 *PRUEBAS* · *Las 5 pruebas antes de activar tu bot*
 
 Mandale vos los mensajes que le van a mandar tus clientes:
 1. *Como tu cliente:* sin tildes, «cuanto sale?», «ya»
-2. *Dos veces:* contesta una sola vez
+2. *Dos veces:* el mismo mensaje reentregado, con el mismo id (pasa si tu servidor tarda): contesta una sola vez
 3. *Lo que no sabe:* stock, plazo, precio: no inventa
 4. *Un audio:* si no lo entiende, avisa a alguien
-5. *«Una persona»:* alguien se entera, no solo el bot
+5. *Pedí hablar con una persona:* alguien se entera, no solo el bot
 
 La que más importa es la 3: si contesta con un dato que no está en su información, lo inventó. Si inventa, no se activa.
 
@@ -678,7 +680,7 @@ Y el 98,7 % de acierto que muestran es una medición suya en otra prueba (Financ
 ~~~~
 
 #### 9-3 · REVISAR (carrusel K9)
-Origen: `REVISAR` de `drops/2026-10-01-drops-noticias-repos.md` (sin revisor; copiado del brief de K9).
+Origen: `REVISAR` de `drops/2026-10-01-drops-noticias-repos.md` (revisado 2-oct, sin cambios; copiado del brief de K9).
 
 ~~~~
 *REVISAR* · *Mi editor de IA, paso a paso*
@@ -1091,7 +1093,7 @@ Link de la comunidad: `https://chat.whatsapp.com/ENplPbR8GrbGsdMrGgLxzu` (el de 
 
 1. **Sáb 3 · lugar libre:** N06 (GEMINI) no sale. Sergio Urcullo elige un repo de la reserva; su aviso entra ese día, antes del video.
 2. **MARKETING · sáb 10:** escrito, pero espera tu decisión (aviso 10-3). Si no lo recomendás, se ajusta o se baja R05.
-3. **Sin revisor:** CACHE (vie 2), VENTANA (dom 4), PROMESA (lun 5), PRUEBAS (jue 8) y REVISAR (vie 9) se armaron el 1-oct copiando su fuente (`VERIFICACION-LAPTOP-20261001.md` §2, `bot/config.mjs`, `PRODUCCION-GUIONES-2026-09-29.md` §Prueba 2 y los briefs de K4 y K9). Leelos antes de pegar.
-4. **PROMESA:** las dos respuestas están recortadas (`[…]`); el guion y K6 dicen «completas». Sacá «completas» antes de grabar, o aparecen las completas.
+3. **Revisados el 2-oct:** CACHE (vie 2), VENTANA (dom 4), PROMESA (lun 5), PRUEBAS (jue 8) y REVISAR (vie 9). Corregidos CACHE, VENTANA y PRUEBAS; PROMESA, una línea; REVISAR, sin cambios. Qué y por qué: la línea ⚠️ de cada uno en `drops/2026-10-01-drops-noticias-repos.md`. El texto de acá y el del origen es el mismo (comprobado con script).
+4. **PROMESA:** las dos respuestas están recortadas (`[…]`) y las completas no existen en el repo (buscadas en el árbol, en todo el historial de git y en las transcripciones). El guion y el caption de K6 dicen «completas»: sacalo de los dos antes de grabar (lun 5) y antes de publicar K6.
 5. **BRIEF · mar 13:** el cierre de K7 dice «te mando por mensaje el JSON». Alinealo a la comunidad o mandá el archivo por DM.
 6. **DELEGAR · mié 7:** la web `/claude-code` dice «3 subagentes» (hoy es 1). Corregila antes.

@@ -632,11 +632,13 @@ _Estructura y trampas de la plantilla product-commercial-shotlist de awesome-see
 
 ---
 
-# Agregados el 1-oct (noche) por el carril de avisos · SIN REVISOR
+# Agregados el 1-oct (noche) por el carril de avisos · revisados el 2-oct
 
-Faltaban y los piden piezas del 2 al 14-oct. Armados **solo** copiando de la fuente que nombra cada uno (guion final, `VERIFICACION-LAPTOP-20261001.md`, `PRODUCCION-GUIONES-2026-09-29.md`, `bot/config.mjs` o el brief del carrusel). No pasaron por el revisor escéptico: leelos antes de pegar. Copia día por día: `AVISOS-POR-DIA.md`.
+Faltaban y los piden piezas del 2 al 14-oct. Armados **solo** copiando de la fuente que nombra cada uno (guion final, `VERIFICACION-LAPTOP-20261001.md`, `PRODUCCION-GUIONES-2026-09-29.md`, `bot/config.mjs` o el brief del carrusel). **Revisor escéptico: 2-oct (madrugada)**, contra su pieza (guion y carrusel) y su fuente; cada uno lleva su línea ⚠️ con lo que se corrigió. Copia día por día: `AVISOS-POR-DIA.md` (mismo texto, comprobado con script).
 
-## CACHE · GPT-6.1 Sol: la tabla y la cuenta de la caché  (pieza DD-A y su carrusel, vie 2)
+## CACHE · GPT-6.1 Sol: la tabla y la cuenta de la caché  (pieza DD-A y su carrusel, vie 2) · revisado 2-oct
+
+⚠️ **Revisado 2-oct, corregido:** (1) la fórmula no tenía la escritura en caché, y la escritura no pasa solo «la primera vez»: cualquier pedido puede guardar tokens a 2,50 y la respuesta los reporta en `cache_write_tokens`; ahora son cuatro términos, con los campos que trae la respuesta. (2) «Si dice 0, cambiaste algo del principio» era falso para el primer pedido, que siempre da 0, y omitía el vencimiento: va como en el carrusel («si después del primer pedido sigue en 0… o pasó más de media hora»). (3) La tabla dice «tarifa estándar, contexto corto» (contexto largo cuesta el doble) y la fila de Astra usa su nombre de API, `gpt-6-astra`, como la captura del carrusel.
 
 **Condición:** publicar antes del video y del carrusel DD-A. Si OpenAI cambió precios antes, se corrige con su página de precios.
 
@@ -644,35 +646,39 @@ Faltaban y los piden piezas del 2 al 14-oct. Armados **solo** copiando de la fue
 
 OpenAI lo presentó el 29-sep, en su DevDay. En la API se llama `gpt-6.1-sol`.
 
-Por millón de tokens, en USD (página de precios de OpenAI, leída el 1-oct):
+Por millón de tokens, en USD (página de precios de OpenAI, tarifa estándar y contexto corto, leída el 1-oct):
 ```
               entrada  desde caché  salida
 gpt-6.1-sol   2,00     0,10         10
-Astra         10       1            50
+gpt-6-astra   10       1            50
 ```
 Un quinto de Astra, en lo que entra y en lo que sale.
 
 *La cuenta para tu agente*
 ```
 Costo de un pedido (USD) =
-( tokens nuevos       x 2
-+ tokens desde caché  x 0,10
-+ tokens de salida    x 10 ) / 1.000.000
+( cached_tokens          x 0,10
++ cache_write_tokens     x 2,50
++ el resto de la entrada x 2
++ tokens de salida       x 10 ) / 1.000.000
 ```
-La primera vez, lo que se guarda en la caché se cobra 2,50 en vez de 2. Después, lo que sale de la caché cuesta 0,10: veinte veces menos.
+Los dos primeros vienen en la respuesta de la API, en `usage.input_tokens_details`; el resto es `input_tokens` menos esos dos. Cada token se cobra a una sola tarifa: lo que se guarda en la caché cuesta 2,50 en vez de 2 esa vez; después, cada vez que se lee, 0,10: veinte veces menos.
 
 *Para que funcione*
 - Lo que repetís igual en cada pedido (las instrucciones de tu agente, tu lista de precios) va al principio y no se toca.
 - Tiene que pasar de 1.024 tokens.
-- Cómo sabés que anduvo: la respuesta de la API trae cuántos tokens salieron de caché. Si dice 0, cambiaste algo del principio.
+- Dura al menos 30 minutos desde el último pedido que la usó.
+- Cómo sabés que anduvo: mirá `cached_tokens`. En el primer pedido da 0. Si después sigue en 0, cambiaste algo del principio o pasó más de media hora.
 
 Contá en General: *¿qué parte de tus pedidos se repite siempre igual?*
 
-<sub>Fuentes: Guion final GUIONES-2-SEMANAS-1-14-OCT.md §DD-A («La primera vez cuesta un poco más; después, veinte veces menos. Tiene que pasar de mil veinticuatro tokens», «la respuesta de la API trae cuántos tokens salieron de caché»). VERIFICACION-LAPTOP-20261001.md §2 (1-oct, navegador): `gpt-6.1-sol` 2 / 0,10 / 10 USD por millón; Astra 10 / 1 / 50; escritura en caché de 6.1 Sol 2,50, «no es un cargo adicional: el token se cobra a una sola de las tres tarifas»; el anuncio dice «una quinta parte de las tarifas estándar de Astra para tokens de entrada y salida»; mínimo 1.024 tokens («for GPT-5.6 and later»); «Reported cached tokens». La fórmula es la suma de esas tres tarifas, sin ejemplo inventado. No se repite lo que solo trae el carrusel (30 minutos, `cached_tokens`): no está en VERIFICACION.</sub>
+<sub>Fuentes: Guion final GUIONES-2-SEMANAS-1-14-OCT.md §DD-A («La primera vez cuesta un poco más; después, veinte veces menos. Tiene que pasar de mil veinticuatro tokens», «la respuesta de la API trae cuántos tokens salieron de caché»). VERIFICACION-LAPTOP-20261001.md §2 (1-oct, navegador): `gpt-6.1-sol` 2 / 0,10 / 10 USD por millón; Astra 10 / 1 / 50; escritura en caché de 6.1 Sol 2,50, «no es un cargo adicional: el token se cobra a una sola de las tres tarifas»; el anuncio dice «una quinta parte de las tarifas estándar de Astra para tokens de entrada y salida»; mínimo 1.024 tokens («for GPT-5.6 and later»); «Reported cached tokens». Brief del carrusel `sergio-dda-openai-sol-20261001.json`, bloque `fuentes` (consultadas 1-oct, 23:45-23:57 UTC) y sus capturas en `carousels/briefs/assets/sergio-dda-openai-sol-20261001/`: la página de precios dice «Standard · Short context» (contexto largo de 6.1 Sol: 4 / 0,20 / 5 / 15), la fila es `gpt-6-astra`; la guía de caché trae «30 minutes after its most recent write or reuse» y el uso de la respuesta con `input_tokens_details.cached_tokens` y `cache_write_tokens` (ejemplo Request 2: 15000 de entrada, 12000 leídos y 3000 escritos). Releída la guía el 2-oct (revisor, desde la nube): «input tokens use the uncached-input, cached-input, or cache-write rate»; «The `cache_write_tokens` value represents tokens charged at the cache-write rate during that request»; «Track `usage.input_tokens_details.cached_tokens`, `usage.input_tokens_details.cache_write_tokens`, input-token counts, latency, and realized cost»; para GPT-5.6 y posteriores, `ttl` «30m» y «A cached prefix remains eligible for reuse for 30 minutes after its most recent write or reuse, though OpenAI may retain it longer». Por eso la fórmula lleva los cuatro términos. Sin ejemplo inventado.</sub>
 
-## PROMESA · Bot con dos listas: la prueba del 28-sep  (pieza S2-D08-A y carrusel K6, lun 5)
+## PROMESA · Bot con dos listas: la prueba del 28-sep  (pieza S2-D08-A y carrusel K6, lun 5) · revisado 2-oct, con condición abierta
 
-**Condición:** las dos respuestas están **recortadas** en el registro de la prueba (`[…]`), y el guion S2-D08-A y el carrusel K6 dicen «las dos respuestas completas». Si no aparecen las completas, antes de grabar cambiar en el guion «completas» por nada («Las dos respuestas están en la comunidad»). Publicar antes del video y de K6.
+⚠️ **Revisado 2-oct:** el texto es fiel a la fuente (mensaje, regla, las dos respuestas y la plantilla). Agregado: una línea que dice qué son los `[…]`, que en WhatsApp se leían como un hueco para completar. **Las respuestas completas NO están en el repo:** buscadas en el árbol, en todo el historial de git (el registro nació recortado en `ab68c48`, 29-sep) y en las transcripciones locales. La condición de abajo sigue abierta y ahora incluye el caption de K6.
+
+**Condición:** las dos respuestas están **recortadas** en el registro de la prueba (`[…]`), y el guion S2-D08-A («Las dos respuestas completas están en la comunidad») y el caption de K6 («con las dos respuestas completas y la plantilla») dicen «completas». Antes de grabar (lun 5) y antes de publicar K6, sacar «completas» de los dos. Si en cambio se rehace la prueba para tener las completas, es otra corrida: no se presenta como la del 28-sep. Publicar antes del video y de K6.
 
 *Bot con dos listas: la prueba del 28-sep*
 
@@ -685,7 +691,7 @@ Negocio de ejemplo (inventado para la prueba): Cajas Kuska, cajas de cartón con
 *2. Con dos listas* («nunca confirmes stock, precio ni fecha si no están acá. Confirmado: desde 50 unidades. NO confirmado: stock, plazo, precio»):
 > ¡Hola! Gracias por escribirnos a Cajas Kuska 😊 Sí, fabricamos cajas de cartón personalizadas con tu logo, y 200 unidades está dentro de lo que trabajamos (hacemos desde 50). Todavía no puedo asegurarte la entrega para este viernes. Tengo que confirmar el plazo de producción con el equipo y te aviso apenas lo tenga. […] Con eso te confirmo precio y plazo real.
 
-Ninguna prometió. La segunda usó el dato confirmado. Sonnet 5.5, una corrida por caso.
+Ninguna prometió. La segunda usó el dato confirmado. Sonnet 5.5, una corrida por caso. Los […] son partes que no quedaron en mi registro.
 
 *La plantilla para tu bot*
 ```
@@ -697,9 +703,11 @@ Por confirmar antes de prometer: [lo que siempre se confirma antes]
 
 Contá en General: *¿qué va en tu lista de «por confirmar»?*
 
-<sub>Fuentes: PRODUCCION-GUIONES-2026-09-29.md §Prueba 2 (mensaje, regla y las dos respuestas, tal cual, con sus […]; «Negocio ficticio. Ninguna de las dos prometió; la segunda usó el dato confirmado») y §Drops 3 (plantilla «Confirmado: … / Por confirmar antes de prometer: …»). Guion final GUIONES-2-SEMANAS-1-14-OCT.md §S2-D08-A («Probalo en tu bot…»). Carrusel K6: «Prueba del 28-sep con Sonnet 5.5, una corrida por caso».</sub>
+<sub>Fuentes: PRODUCCION-GUIONES-2026-09-29.md §Prueba 2 (mensaje, regla y las dos respuestas, tal cual, con sus […]; «Negocio ficticio. Ninguna de las dos prometió; la segunda usó el dato confirmado») y §Drops 3 (plantilla «Confirmado: … / Por confirmar antes de prometer: …»). Guion final GUIONES-2-SEMANAS-1-14-OCT.md §S2-D08-A («Probalo en tu bot…»). Carrusel K6: «Prueba del 28-sep con Sonnet 5.5, una corrida por caso». Revisor 2-oct: `git log --all -S` de «Las medidas de la caja» y de «confirmar el plazo de producción» → el texto entra recortado desde el primer commit de `PRODUCCION-GUIONES-2026-09-29.md` (`ab68c48`); `S2-GUIONES.md` y el brief viejo de K6 solo citan frases sueltas; no hay versión completa.</sub>
 
-## VENTANA · Mis mensajes de seguimiento  (pieza S2-D07-A, dom 4, y carrusel K5, dom 11)
+## VENTANA · Mis mensajes de seguimiento  (pieza S2-D07-A, dom 4, y carrusel K5, dom 11) · revisado 2-oct
+
+⚠️ **Revisado 2-oct, corregido:** (1) «a las 20 h» se leía como hora del reloj, pegado a la regla del 8:00 a 21:00: ahora dice «20 h después de su último mensaje» (`afterHours: 20`, contado desde el último entrante). (2) «Tus números de prueba» juntaba dos cosas: K5 dice «tus números y los de prueba», y `es-nuestra.mjs` excluye las dos. (3) La plantilla: Meta rechaza la variable al final **y al principio** (config: «las variables no pueden estar al principio ni al final»). Los dos mensajes, el 131047, las 24 h, los 7 días y la franja 8-21 coinciden con `config.mjs` y `followup-run.mjs` (envía si 8 ≤ hora < 21, hora de Bolivia).
 
 **Condición:** publicar antes del video del dom 4. Los textos son copia de `bot/config.mjs` (`M3` y `M3_PLANTILLA`); si se reaprueba la plantilla en Meta, se cambia acá.
 
@@ -708,11 +716,11 @@ Contá en General: *¿qué va en tu lista de «por confirmar»?*
 Vale para bots en la API oficial de Meta. En la app de WhatsApp Business, a mano, esta regla no existe.
 
 *Las reglas de mi bot*
-1. Dentro de las 24 h desde el último mensaje del cliente: texto libre. Mi bot manda un solo seguimiento, a las 20 h: le quedan 4 h de margen.
+1. Dentro de las 24 h desde el último mensaje del cliente: texto libre. Mi bot manda un solo seguimiento, 20 h después de ese mensaje: le quedan 4 h de margen.
 2. Pasadas las 24 h: solo una plantilla aprobada por Meta. Texto libre ahí falla con el error 131047: buscalo en los registros de tu bot.
 3. Pasados 7 días: no escribe más.
 4. Nunca de madrugada: fuera de 8:00 a 21:00 el mensaje espera y sale a las 8:00.
-5. Tus números de prueba, afuera de la lista.
+5. Tus números y los de prueba, afuera de la lista.
 
 *El de dentro de las 24 h* (texto libre):
 > ¡Hola de nuevo! Te escribí ayer por la demo de [producto] y quedó a medias — sé que el negocio no para.
@@ -724,32 +732,36 @@ Vale para bots en la API oficial de Meta. En la app de WhatsApp Business, a mano
 > Si querés retomarla, te dejo dos horarios: *{{1}}* o *{{2}}*.
 > Decime cuál te queda mejor y la dejamos agendada.
 
-Fijate que cierra con una frase fija: Meta rechaza una plantilla que termina en una variable.
+Fijate que cierra con una frase fija: Meta rechaza una plantilla que empieza o termina en una variable.
 
 Antes de programar tu seguimiento, mandá tus plantillas a aprobar.
 
 Contá en General: *¿a las cuántas horas manda tu bot el seguimiento?*
 
-<sub>Fuentes: hermes-content/deploy/vps-ops/bot/config.mjs (leído el 1-oct): `M3` (texto libre) y `M3_PLANTILLA` («COPIA LITERAL de la plantilla `seguimiento_demo` (es · MARKETING · APPROVED)»; Meta rechaza una plantilla que TERMINA en variable, code 100 / subcode 2388299); `followUp`: `maxSteps: 1`, `afterHours: 20` («20 h, no 22 ni 24… Con 20 quedan 4»), `windowClosesAtHours: 24`, `staleAfterDays: 7`; `HORA_SILENCIOSA_DESDE = 8`, `HORA_SILENCIOSA_HASTA = 21` («sale en el primer barrido de la mañana»). Guion final GUIONES-2-SEMANAS-1-14-OCT.md §S2-D07-A (error 131047, «Pasados siete días, no escribe más», «mandá tus plantillas a aprobar», la app a mano no tiene esta regla). Carrusel K5 (las cuatro reglas: 24 h, plantilla, madrugada, números de prueba afuera). Sin precios: el de la plantilla de marketing (~0,074 USD) es de la tarifa de julio y LOTE-C pide recontarlo.</sub>
+<sub>Fuentes: hermes-content/deploy/vps-ops/bot/config.mjs (leído el 1-oct, releído el 2-oct): `M3` (texto libre) y `M3_PLANTILLA` («COPIA LITERAL de la plantilla `seguimiento_demo` (es · MARKETING · APPROVED)»; Meta rechaza una plantilla que TERMINA en variable, code 100 / subcode 2388299, «las variables no pueden estar al principio ni al final»); `followup-run.mjs` `skipReason` (2-oct: `es-nuestra` primero, `maxSteps`, `afterHours`, `staleAfterDays * 24`, y `hora < desde || hora >= hasta` → espera); `followUp`: `maxSteps: 1`, `afterHours: 20` («20 h, no 22 ni 24… Con 20 quedan 4»), `windowClosesAtHours: 24`, `staleAfterDays: 7`; `HORA_SILENCIOSA_DESDE = 8`, `HORA_SILENCIOSA_HASTA = 21` («sale en el primer barrido de la mañana»). Guion final GUIONES-2-SEMANAS-1-14-OCT.md §S2-D07-A (error 131047, «Pasados siete días, no escribe más», «mandá tus plantillas a aprobar», la app a mano no tiene esta regla). Carrusel K5 (las cuatro reglas: 24 h, plantilla, madrugada, números de prueba afuera). Sin precios: el de la plantilla de marketing (~0,074 USD) es de la tarifa de julio y LOTE-C pide recontarlo.</sub>
 
-## PRUEBAS · Las 5 pruebas antes de activar tu bot  (carrusel K4, jue 8)
+## PRUEBAS · Las 5 pruebas antes de activar tu bot  (carrusel K4, jue 8) · revisado 2-oct
+
+⚠️ **Revisado 2-oct, corregido:** (1) la prueba 2 decía solo «Dos veces: contesta una sola vez», y con el «mandale vos» de arriba se leía como mandar el mismo texto dos veces desde el celular: eso son dos mensajes con id distinto y el bot debe contestar los dos. La prueba es el mismo mensaje **reentregado con el mismo id** (K4 lámina 4: «si tu servidor tarda, Chatwoot lo vuelve a entregar… mismo id: lo descarta»; guion S2-D09-A: «mandá el mismo aviso dos veces»; `message-dedup.mjs`). (2) La 5 decía ««Una persona»» sin decir qué mandar: ahora «Pedí hablar con una persona» (`intents.mjs`, `RE_PIDE_HUMANO`). Resto igual a la lámina 6 y al caption.
 
 *Las 5 pruebas antes de activar tu bot*
 
 Mandale vos los mensajes que le van a mandar tus clientes:
 1. *Como tu cliente:* sin tildes, «cuanto sale?», «ya»
-2. *Dos veces:* contesta una sola vez
+2. *Dos veces:* el mismo mensaje reentregado, con el mismo id (pasa si tu servidor tarda): contesta una sola vez
 3. *Lo que no sabe:* stock, plazo, precio: no inventa
 4. *Un audio:* si no lo entiende, avisa a alguien
-5. *«Una persona»:* alguien se entera, no solo el bot
+5. *Pedí hablar con una persona:* alguien se entera, no solo el bot
 
 La que más importa es la 3: si contesta con un dato que no está en su información, lo inventó. Si inventa, no se activa.
 
 Contá en General: *¿cuál te falló?*
 
-<sub>Fuentes: brief del carrusel K4 (`carousels/briefs/marca-personal/sergio-k4v2-cinco-pruebas-bot-20260929.json`, leído el 1-oct): lámina 6 (las cinco, tal cual), lámina 5 («Si inventa, no se activa») y caption («La prueba que más importa es la 3…»).</sub>
+<sub>Fuentes: brief del carrusel K4 (`carousels/briefs/marca-personal/sergio-k4v2-cinco-pruebas-bot-20260929.json`, leído el 1-oct): lámina 6 (las cinco, tal cual), lámina 5 («Si inventa, no se activa») y caption («La prueba que más importa es la 3…»). Revisor 2-oct: lámina 4 (prueba 2: «Llega de nuevo · mismo id: lo descarta»), guion S2-D09-A («Para probarlo, mandá el mismo aviso dos veces. Tiene que salir una sola respuesta»), `bot/message-dedup.mjs` («Chatwoot reintrega el MISMO `message_created` ante una respuesta no-2xx o un timeout») y `bot/intents.mjs` (`RE_PIDE_HUMANO`: «hablar con una persona», «quiero hablar con», «pasame con»…).</sub>
 
-## REVISAR · Mi editor de IA, paso a paso  (carrusel K9, vie 9)
+## REVISAR · Mi editor de IA, paso a paso  (carrusel K9, vie 9) · revisado 2-oct
+
+⚠️ **Revisado 2-oct: sin cambios.** Los seis pasos son los del caption de K9 y los de V7 en el mismo orden; las cinco revisiones, las de la lámina 6; la frase final, la de la lámina 4 y el caption. Coincide con el orden de D3 de `S3-GUIONES.md` (transcribir → tabla de cortes → cortar → subtítulos). Sin datos de clientes, teléfonos ni claves.
 
 **Condición:** es la versión corta, con lo que ya dice el carrusel. Si querés los comandos de cada paso, el candidato es D3 «La cadena de edición» de `S3-GUIONES.md` (escrito, sin auditar).
 
