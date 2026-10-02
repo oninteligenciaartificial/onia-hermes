@@ -190,6 +190,13 @@ El CLI autenticado está en el VPS: `HF_CMD="ssh -i <llave> -o BatchMode=yes roo
   thread on a pale oak table» con estilo clay salieron como un bicho verde con ojos, y la tijera de costado. Con clay,
   el prompt nombra objetos DE ARCILLA y sus colores («emerald green clay…, matte black clay…, on a white surface»).
   Al cambiar de estilo un brief viejo, reescribí el prompt; no lo heredes.
+- **La palabra «face» dibuja una cara**, aunque sea la cara de una moneda (visto 2-oct, DD-A): «coins with smooth blank
+  faces» sacó una moneda verde con ojos, nariz y sonrisa. Tampoco «side», «front», «head» como partes de objetos: decí
+  «plain», «smooth», «flat». Las monedas, además, suelen salir con «$» o números grabados: mejor bloques grandes y chicos.
+- **Lote con criterio (2-oct, 32 imágenes):** antes de generar, un editor y un juez adversarial pasan por cada lámina con
+  esta pregunta: «¿un lector entiende la relación título + imagen en 1 segundo, sin leer el alt?». Reescribieron 30 de 32;
+  las de antes eran decoración genérica o metáforas de todo el carrusel, no de ESA lámina. El juez además cazó repetidos
+  entre carruseles (dos balanzas, dos lupas). Workflow: `criterio → juez → reescritura → cruce`.
 - **`--out` de `carousel_images.mjs` = nombre del carrusel** (`<scratch>/sergio-kNN-…`): el script toma de ahí el nombre
   del archivo y el `usado_en` de `galeria.json`. Con `--out k11-img` quedó todo mal anotado.
 - **Varios agentes generando a la vez:** `flock /tmp/claude-0/galeria.lock` delante del comando (el script reescribe
