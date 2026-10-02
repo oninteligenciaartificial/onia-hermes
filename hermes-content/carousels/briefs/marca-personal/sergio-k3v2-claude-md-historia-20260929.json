@@ -16,7 +16,7 @@
       "badge": "guía",
       "logo": "hermes-content/references/brand-claude/claudecode.svg",
       "headline": "Cada regla de mi CLAUDE.md trae *su historia*",
-      "image_prompt": "A small yellow canary perched on a thin bare branch, head turned to one side, soft morning light.",
+      "image_prompt_usado": "A small yellow canary perched on a thin bare branch, head turned to one side, soft morning light.",
       "number": 1,
       "theme": "verde",
       "image_style": "acuarela",

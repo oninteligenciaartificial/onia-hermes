@@ -54,11 +54,11 @@
       "headline": "Paso 1: *buscalo*",
       "body": "En tu código, buscá *claude-\u2060sonnet-\u20604-\u20605*. En n8n, abrí cada nodo de Anthropic y mirá su modelo. Anotá cuántos\u00a0aparecen.",
       "image_style": "clay",
-      "image_prompt": "A horseshoe magnet made of emerald green clay with white tips, lifting a few small matte black clay balls out of a shallow pile of white clay balls.",
+      "image_prompt": "A round matte black clay sieve with a fine mesh, holding a few small shiny emerald green clay nuggets, with fine white clay sand sifted through into a small soft pile beneath it.",
       "texto_movido": "Antes era layout ensayo. Se recortó «este texto:» y «qué modelo tiene elegido» → «su modelo»; el texto a buscar (claude-sonnet-4-5) sigue en la lámina y en el caption. Espacio de unión (U+2060) después de cada guion para que Chromium no lo parta.",
       "next": "paso 2",
       "fuente": "GUIONES §N02 paso uno; drop N02 punto 1",
-      "alt_text": "Un imán verde que saca bolitas negras de una pila blanca. Paso 1: buscar el texto claude-sonnet-4-5 en el código y revisar el modelo de cada nodo de Anthropic en n8n"
+      "alt_text": "Un colador negro que deja pasar la arena y retiene unas pepitas verdes. Paso 1: buscar el texto claude-sonnet-4-5 en el código y revisar el modelo de cada nodo de Anthropic en n8n"
     },
     {
       "number": 4,

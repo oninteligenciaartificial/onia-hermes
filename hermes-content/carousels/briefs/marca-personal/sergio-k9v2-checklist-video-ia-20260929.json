@@ -15,12 +15,12 @@
       "layout": "ilustrado",
       "badge": "guía",
       "headline": "*5 revisiones* antes de publicar tu video con IA",
-      "image_prompt": "A small pair of plain brass sewing scissors resting beside a spool of natural undyed linen thread on a pale oak table.",
+      "image_prompt": "A large emerald green clay magnifying glass with a matte black clay handle, resting on a short strip of matte black clay film with small square holes along its edges, on a white surface.",
+      "alt_text": "Una lupa de arcilla sobre una tira de película: revisar el video antes de publicarlo",
       "number": 1,
       "theme": "verde",
       "image_style": "clay",
-      "next": "por qué",
-      "image": "hermes-content/galeria/ilustraciones/sergio-k9v2-checklist-video-ia-20260929-s01-b436d635.jpg"
+      "next": "por qué"
     },
     {
       "number": 2,
@@ -73,7 +73,7 @@
       "theme": "blanco",
       "headline": "3 · Difuminá a *quien no firmó*",
       "body": "Gente en la calle, pacientes, clientes: sin permiso, su cara no sale. Y el difuminado se revisa a ojo.",
-      "image_prompt": "A small three-panel folding privacy screen made of smooth emerald green clay panels with matte black clay frames, standing half open on a white surface.",
+      "image_prompt": "A small three-panel folding room divider made of smooth emerald green clay panels with matte black clay frames, standing half open on a white surface.",
       "image_style": "clay",
       "next": "revisión 4",
       "alt_text": "Un biombo de arcilla verde: la cara de quien no dio permiso no se muestra"

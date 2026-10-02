@@ -98,7 +98,7 @@
       "headline": "Lo que se *muda solo*",
       "body": "La primera vez, agy te pregunta qué traer de Gemini CLI. Y tu GEMINI.md lo sigue leyendo igual.",
       "image_style": "clay",
-      "image_prompt": "A horseshoe magnet made of emerald green clay with matte black tips, pulling a few small emerald green clay pebbles toward it.",
+      "image_prompt": "A horseshoe magnet made of emerald green clay with white tips, pulling a few small matte black clay hex nuts across a white surface toward it.",
       "next": "la trampa",
       "fuente": "antigravity.google/docs/cli/gcli-migration, 2-oct: checklist interactiva al primer agy; GEMINI.md y AGENTS.md se siguen leyendo",
       "alt_text": "Un imán de arcilla que atrae piezas: la primera vez, Antigravity CLI encuentra tu configuración de Gemini CLI y te pregunta qué traer"
@@ -111,9 +111,9 @@
       "body": "Las skills de tu proyecto no se mudan solas: de .gemini/skills a .agents/skills, a mano. *Comprobalo con /skills.*",
       "next": "los comandos",
       "fuente": "antigravity.google/docs/cli/gcli-migration y /docs/cli/reference, 2-oct",
-      "alt_text": "Una valija de arcilla con herramientas adentro: las skills del proyecto se mudan a mano de .gemini/skills a .agents/skills",
+      "alt_text": "Una carretilla de arcilla con bloques verdes: las skills del proyecto se mudan a mano de .gemini/skills a .agents/skills",
       "image_style": "clay",
-      "image_prompt": "An open emerald green clay suitcase with a few small matte black clay tools packed neatly inside."
+      "image_prompt": "A small matte black clay wheelbarrow with one round wheel, carrying a few small emerald green clay blocks, standing on a white surface."
     },
     {
       "number": 8,
