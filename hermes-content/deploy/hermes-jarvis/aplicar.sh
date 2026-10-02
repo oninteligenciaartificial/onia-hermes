@@ -211,6 +211,26 @@ fi
 for id in $HERMES_PAUSAR; do
   [ "$(estado_job "$id")" != "?" ] || falla "no encontré en /root/.hermes/cron/jobs.json el trabajo $id de Hermes (de los 3 que se pausan)"
 done
+# Los pedidos a Claude: con llave (la que llegó o la que ya está en el VPS) y el comando ya copiado,
+# lo que 5d va a necesitar se comprueba ACÁ (revisión de la madre, 2-oct). Antes fallaba recién en
+# 5d, con el crontab, las pausas y los 12 flujos ya tocados.
+PEDIDOS_ENV=/root/.config/onia/pedidos.env
+if { llave_ok || [ -s "$PEDIDOS_ENV" ]; } && [ -x "$BIN/onia-pedido-claude.sh" ]; then
+  git -C "$REPO_VPS" show origin/main:hermes-content/skills/pedir-a-claude.md 2>/dev/null | grep -q 'onia-pedido-claude.sh' \
+    || falla "no encontré la skill pedir-a-claude en origin/main del VPS"
+  grep -q '^## Pedidos a Claude' /root/.hermes/SOUL.md 2>/dev/null \
+    || git -C "$REPO_VPS" show origin/main:hermes-content/deploy/hermes-agent/SOUL.md 2>/dev/null | grep -q '^## Pedidos a Claude' \
+    || falla "no encontré la regla de los pedidos en el SOUL de origin/main del VPS"
+  # --estado con la llave que se va a usar (la que llegó va a un archivo 600 del respaldo y se borra).
+  CONF_PRUEBA=$PEDIDOS_ENV
+  if llave_ok; then
+    CONF_PRUEBA=$BK/pedidos.env.prueba
+    ( umask 077; printf 'ONIA_RUTINA_URL=%q\nONIA_RUTINA_TOKEN=%q\n' "$RUTINA_URL" "$RUTINA_TOKEN" > "$CONF_PRUEBA" )
+  fi
+  ONIA_PEDIDOS_CONF="$CONF_PRUEBA" "$BIN/onia-pedido-claude.sh" --estado </dev/null >/dev/null 2>&1 \
+    || falla "el comando de pedidos no acepta la llave de la rutina (--estado)"
+  rm -f "$BK/pedidos.env.prueba"
+fi
 [ "$N8N_OK" = 1 ]   || abortar "la API de n8n no responde con la llave de gestión"
 [ "$FALLAS" -eq 0 ] || abortar "$FALLAS falla(s) en los requisitos (arriba, con ❌), antes de crear nada"
 
@@ -449,6 +469,8 @@ done
 KEY=$(grep -oP '(?<=^N8N_MANAGEMENT_API_KEY=).*' /opt/onia-platform/app.env 2>/dev/null | tr -d "\"'" | head -1)
 # Un flujo que ya no existe en n8n (404) no tiene nada que deshacer: no es un error.
 n8n_post() {  # n8n_post <id> activate|deactivate -> imprime el código HTTP; la respuesta queda en $BK/n8n-resp.json
+  # Se borra antes: si curl no llega (000), no se lee la respuesta del flujo anterior (revisión de la madre, 2-oct).
+  rm -f "$BK/n8n-resp.json"
   curl -s --max-time 30 -o "$BK/n8n-resp.json" -w '%{http_code}' -X POST -H "X-N8N-API-KEY: $KEY" \
     "$N8N_HOST/api/v1/workflows/$1/$2" </dev/null
 }
@@ -608,7 +630,6 @@ fi
 # de la rutina. Sin llave NO es una falla: Jarvis queda encendido y los pedidos, apagados.
 sec "5d. Hermes: pedidos a Claude en la nube"
 PEDIDOS_OK=0
-PEDIDOS_ENV=/root/.config/onia/pedidos.env
 # 🔴 INERTE SIN LLAVE. Hasta que exista la llave de la rutina no se le enseña nada a Hermes: una
 # skill que nombra un comando sin configurar lo haría prometerle a Sergio Urcullo algo que no anda.
 # Así, un aplicar sin llave deja el VPS exactamente como sin esta sección.
@@ -617,7 +638,8 @@ PEDIDOS_ENV=/root/.config/onia/pedidos.env
 if llave_ok; then
   [ -f "$PEDIDOS_ENV" ] || touch "$BK/pedidos-env-creado"
   (umask 077; mkdir -p /root/.config/onia \
-    && printf 'ONIA_RUTINA_URL=%q\nONIA_RUTINA_TOKEN=%q\n' "$RUTINA_URL" "$RUTINA_TOKEN" > "$PEDIDOS_ENV") \
+    && printf 'ONIA_RUTINA_URL=%q\nONIA_RUTINA_TOKEN=%q\n' "$RUTINA_URL" "$RUTINA_TOKEN" > "$PEDIDOS_ENV" \
+    && chmod 600 "$PEDIDOS_ENV") \
     && echo "✅ llave de la rutina guardada en $PEDIDOS_ENV (600)" || falla "no pude guardar $PEDIDOS_ENV"
 elif [ -n "${RUTINA_URL:-}${RUTINA_TOKEN:-}" ]; then
   falla "la URL o el token de la rutina no tienen la forma esperada: no los guardé"
