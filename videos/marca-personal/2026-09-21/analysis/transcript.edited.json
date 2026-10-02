@@ -1,0 +1,20 @@
+{
+  "language": "es",
+  "identity": "anchor",
+  "notes": "Transcripción corregida manualmente contra el guion canónico. Los tiempos corresponden al corte base acelerado 1.1x.",
+  "captions": [
+    { "start": 0.0, "end": 2.18, "text": "Si quieres enseñar tu primera automatización," },
+    { "start": 2.35, "end": 3.91, "text": "no empieces conectando 20 aplicaciones." },
+    { "start": 4.02, "end": 6.74, "text": "En n8n, empieza con 4 pasos que puedas probar." },
+    { "start": 6.77, "end": 8.43, "text": "Primero, conecta un Webhook." },
+    { "start": 8.69, "end": 11.81, "text": "Recibe: name, phone, service y source." },
+    { "start": 11.96, "end": 15.65, "text": "Después conecta un IF: phone y service no están vacíos." },
+    { "start": 15.84, "end": 19.16, "text": "En la salida verdadera, Google Sheets usa Append Row." },
+    { "start": 19.18, "end": 23.41, "text": "Guarda el lead y Telegram avisa al responsable." },
+    { "start": 23.51, "end": 27.35, "text": "En la salida falsa, pide el campo que falta." },
+    { "start": 27.41, "end": 31.27, "text": "Ya tienes una automatización: recibe, valida, registra y avisa." },
+    { "start": 31.29, "end": 33.45, "text": "No agregues todavía un agente de IA." },
+    { "start": 33.78, "end": 35.86, "text": "Primero, haz que el flujo determinista funcione." },
+    { "start": 35.86, "end": 39.88, "text": "Comentá una tarea repetitiva y la convertimos en 4 pasos." }
+  ]
+}

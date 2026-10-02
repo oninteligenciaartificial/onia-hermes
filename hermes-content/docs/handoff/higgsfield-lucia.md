@@ -6,7 +6,69 @@
 > Última escritura: **2026-09-30 ~02:50 UTC**, en el cambio de sesión.
 > Reemplaza a `HIGGSFIELD-LUCIA-SYSTEM-2026-09-22.md`, que queda como historia.
 
-## ▶ ESTADO VIGENTE — 2-oct-2026 ~02:10 UTC (lo de abajo es historia)
+## ▶ ESTADO VIGENTE — 2-oct-2026 ~14:00 UTC (lo de abajo es historia)
+
+**Sesión:** la misma (`session_01Whdadt8NdnYbZoyum1bRX6`, rama `claude/trusting-dirac-wjkua1`). Los PR #78 y #82
+están mergeados. Este trabajo va en un PR nuevo.
+
+**Objetivo de la sesión:** que el plan de contenido de Lucía quede listo para el OK de Sergio Urcullo, verificado
+contra las influencers IA que funcionan. **Hecho =** `cola/lucia-diario/PLAN.md` v3 + decisiones D1–D5 planteadas con
+la cuenta delante + el maniquí del ambo generado.
+
+**Qué quedó hecho (en el repo, nada publicado):**
+- **`PLAN.md` v3:**
+  - **rubros:** los 5 de `onia-platform/lib/platform/rubros-activos.ts` (dental, estética y spa, comercio,
+    importadora, servicios profesionales), por decisión de Sergio Urcullo;
+  - **formatos del manual** de la madre (`references/modelos/lucia/MANUAL-PATRONES-INFLUENCERS-IA.md`): Reel ancla de
+    30–45 s con pantalla real, series «Recepción a las 8» y «Humo vs. real», fotos sueltas a Historias, puerta única
+    `/llamada?src=lucia-*`;
+  - **prueba de 2 semanas** de ≤ 12,5 cr con umbral al día 14.
+- **`LUCIA.md` § 0:**
+  - aviso de D1;
+  - prenda fija del ambo;
+  - trampa del maniquí;
+  - **§0-canon** con 10 datos, PROPUESTO y sin aprobar.
+- **Maniquí del ambo terracota:** 2 cr.
+  - 1.º descartado (`16c447ef`): escribió texto basura y el color salió salmón.
+  - 2.º elegido (`8d138bd6`): `v4/vestuario/`, con recorte de frente.
+  - Los dos en `PROCEDENCIA.jsonl`.
+- **Trampa aprendida en `higgsfield-generate`** (las dos copias): Seedream escribe como texto «sheet» y «hex #…».
+- **Voz de Marcela medida** (`GET /v1/voices`):
+  - es de la Voice Library, «Marcela - Colombian Girl», **con acento colombiano**;
+  - plan `payg` activo;
+  - 730 días de aviso si la retiran.
+- **Gasto:** Higgsfield octubre **22 / 150 cr**. ElevenLabs 9.547 / 10.000.
+
+**Qué quedó a medias y dónde:**
+- **D1–D5 esperan a Sergio Urcullo** (`PLAN.md` §7):
+  - D1: ¿uniforme o visita como ella?
+  - D2: Reel primero.
+  - D3: WhatsApp.
+  - D4: ¿voz de Marcela o reels sin voz?
+  - D5: el canon.
+- **La prueba de ropa (~5,4 cr) depende de D1.**
+- **Las piezas de venta (#5–#8) esperan la cuenta demo dental** (pedida a la madre el 1-oct).
+- **La ficha de @soy_aria_cruz** la trae la madre; cuando llegue se suma al manual.
+- **`ONIA_ESTRATEGIA_DE_EMPRESA.md` §7** dice que la Etapa 1 vende solo dental y estética. Lo tiene que actualizar
+  su dueño; se le avisó a la madre.
+
+**Intentos fallidos (no repetir):**
+- Prompt de maniquí con «turnaround sheet» y «hex #C4552F»: escribió texto en la imagen y corrió el color.
+- Leer la ayuda de ElevenLabs con WebFetch: da 403. El dato de licencia sale de la API.
+
+**Archivos:**
+- `hermes-content/docs/cola/lucia-diario/PLAN.md`
+- `hermes-content/references/modelos/lucia/LUCIA.md`
+- `.../lucia/v4/vestuario/`
+- `.../lucia/v4/PROCEDENCIA.jsonl`
+- `.claude/skills/higgsfield-generate/SKILL.md` y su espejo en `.agents/`
+
+**Próximos pasos:**
+1. Cuando Sergio Urcullo decida D1–D5, producir #2, #3 y #4 (personaje, sin bloqueo).
+2. Si D1 es «uniforme», cotizar y correr la prueba de ropa.
+3. Cuando llegue la cuenta demo, grabar las pantallas reales y producir #5–#8 con `editor-videos`.
+
+## ▶ ESTADO — 2-oct-2026 ~02:10 UTC (historia)
 
 **Sesión:** Lucía v4 en la nube, entorno `onia-higgsfield`, `session_01Whdadt8NdnYbZoyum1bRX6`, rama
 `claude/trusting-dirac-wjkua1`, PR oninteligenciaartificial/onia-hermes#82 (borrador; incluye el #78). Ve
