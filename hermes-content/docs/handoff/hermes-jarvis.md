@@ -1,5 +1,32 @@
 # Handoff — carril `hermes-jarvis` (Hermes, el Telegram y el calendario de Sergio Urcullo)
 
+> **CIERRE 2-oct ~14:00 UTC — alcance congelado por Sergio Urcullo** («no se añaden más tareas…
+> terminemos, cortamos, damos un vistazo»). Sesión `session_0132vedovRq1JVbeD6aVQwNT`. Se espera la
+> revisión de Sergio Urcullo y la madre antes de seguir.
+> - **Hecho y en main:** #88 (`ae4a1fc5`) y #91 (`d7fa0ca9`).
+> - **Hecho, con CI verde y sin conflictos, esperando la revisión de la madre v2:**
+>   - **#94** (rama `claude/vibrant-brown-8xya0a`, `11f871b0`): la vuelta de los pedidos sin token de
+>     Actions, los 5 arreglos antes de la llave y la guarda en `git-autosync.js` (el Stop de TODAS las
+>     sesiones: revisarla antes del merge);
+>   - **#96** (rama `claude/vibrant-brown-8xya0a-llave`, `77007ab6`): main vuelve a verde. El #94 ya
+>     trae el mismo commit.
+> - **Nada publicado ni verificado en producción.** `aplicar` NO se corrió: espera el «sí» de Sergio
+>   Urcullo. La rutina no está creada.
+> - **Evidencia:** CI del #94 job `110863308843` y del #96 job `110859479882`, los dos verdes. Cada
+>   prueba nueva se corrió contra el código anterior (roja) y contra el nuevo (verde).
+> - **Pendientes para después (no se hacen sin orden):**
+>   1. `GH_ACTIONS_TOKEN` sigue en el entorno «Onia»: con él, cualquier sesión despacha `aplicar`,
+>      `revertir` o el deploy. Revocarlo lo decide Sergio Urcullo.
+>   2. Medir en la prueba de punta a punta que la rutina pueda pushear `respuesta/*` y que el VPS
+>      llegue a GitHub (`--probar`).
+>   3. Un pedido de `plataforma` trabaja en el clon de `onia-platform`, con sus propios hooks: la guarda
+>      del autosync de este repo no lo cubre. Revisarlo antes del primer pedido de ese carril.
+>   4. `herramientas-desplegadas` adivina la fuente de `onia-X.sh` por el nombre del archivo: un
+>      `X.sh` cualquiera vuelve a dar un rojo falso. Conviene que lea la fuente del `poner`, no el nombre.
+>   5. En la nube, el PID 1 no recoge huérfanos: otras pruebas que miran «proceso vivo» con
+>      `kill(pid, 0)` pueden dar el mismo rojo falso que `tandas-v1`.
+>   6. `diagnostico` todavía no muestra el log del recolector de respuestas.
+
 > **ESTADO AL 1-oct ~21:30 UTC — leé esto primero.** Sesión `session_0154pQRYB6icZn9Z3SuJp35D`
 > (entorno «Onia»), rama `claude/kind-cannon-7hkc3c`, **PR #79** (borrador, sin conflictos con main).
 > Desde el 1-oct manda la **sesión madre** (local, PC de Sergio Urcullo): ella ordena por mensaje y las
