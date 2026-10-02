@@ -1,5 +1,21 @@
 # Handoff — carril `mercado-y-pauta` (sesión «Ventas y pauta Onia Platform», antes «Análisis de mercado»)
 
+> ⏹️ **CIERRE 2-oct, ~14:00 UTC: alcance congelado por Sergio Urcullo** (*«no se añaden más tareas… terminemos,
+> cortamos, damos un vistazo y definimos cómo seguir»*). La sesión espera; no abre nada nuevo.
+> - **Hecho y en la rama** `claude/lucid-mayer-2ejv6v` (`ef02a46d2`, PR #95): los 12 mensajes de prospectos y la
+>   página de contactos (v8) sin «la IA lo redacta»; D4 frenado en todos los docs (el catálogo lo prohíbe: el
+>   detector no encuentra a nadie); la regla de `CLAUDE.md` saca la pauta del producto del pack de la marca
+>   personal y pone primero el estudio de la Biblioteca; `anuncio-render.js` y D1/D4 v3 commiteados **en pausa**.
+> - **No hecho y por qué:** campaña en Meta (falta la tarjeta en ONIA Ads y el OK); D1/D4 sin aprobar (Sergio
+>   Urcullo pidió primero mirar la Biblioteca); nadie contactado (falta su OK a los 12 mensajes y la decisión de MUN).
+> - **Evidencia:** `carousels/out/ads/onia-platform-dental-meta-v3-hoja.png`; catálogo `ONIA_CATALOGO_DE_VENTA.md`
+>   («NO se puede decir»); página https://claude.ai/artifact/8sFD37TVJMcEJaHcZ2PWSV (versión 8).
+> - **Pendiente para después (no se hace ahora):** el estudio de la Biblioteca (lo hace la madre desde la PC, con el
+>   pedido del 2-oct en el transcript de esta sesión); recién con eso, el diseño. Corregir el primer beneficio de
+>   D1 v3 («La IA escribe el mensaje»). Una pieza con persona (los 7 anuncios que sobreviven la tienen).
+> - **Para mejorar:** antes de prometer algo, leer `ONIA_CATALOGO_DE_VENTA.md`, no el código; antes de diseñar
+>   pauta, el estudio de la Biblioteca, no un pack propio.
+>
 > 🟡 **2-oct, ~13:40 UTC — D1 y D4 v3 RENDERIZADAS (imagen única de anuncio de software), esperan el OK de Sergio Urcullo.**
 > - **v2 rechazada:** Sergio Urcullo, *«es diferente el contenido de la onia platform que el de mi cuenta personal,
 >   te dije que entres a ads library y veas qué es lo que funciona»*. Usé el pack de la marca personal para la
