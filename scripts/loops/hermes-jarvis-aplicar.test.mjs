@@ -14,7 +14,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { spawnSync, execFileSync } from "node:child_process";
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, chmodSync, existsSync, readdirSync, copyFileSync } from "node:fs";
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, chmodSync, existsSync, readdirSync, copyFileSync, unlinkSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -72,6 +72,8 @@ function vps({ leeCalendario = true, escribeCalendario = true } = {}) {
   ejecutable(join(bin, "onia-jarvis-resumen.sh"), "#!/usr/bin/env bash\n# cierre-bloques\necho 'vista previa del resumen'\n");
   ejecutable(join(bin, "onia-tg.sh"), `#!/usr/bin/env bash\n# ONIA_AVISO_PUEDO\nprintf '%s\\n---\\n' "$1" >> ${log}/telegram\n`);
   ejecutable(join(bin, "onia-vigia-aprobaciones.sh"), "#!/usr/bin/env bash\n# ONIA_AVISO_PUEDO\n");
+  // El recolector de respuestas de los pedidos: --probar dice si el VPS llega a GitHub.
+  ejecutable(join(bin, "onia-respuestas-pedidos.sh"), `#!/usr/bin/env bash\n[ "$1" = --probar ] || exit 0\necho "$ONIA_PEDIDOS_ESTADO" >> ${log}/respuestas-probar\n[ -z "\${RESPUESTAS_SIN_GITHUB:-}" ] || exit 1\necho "✅ llego a GitHub"\n`);
   ejecutable(join(bin, "claude-guardia.sh"), "#!/usr/bin/env bash\navisar() { :; }\n");
   ejecutable(
     join(bin, "onia-agenda.sh"),
@@ -521,6 +523,33 @@ test("con llave, si el comando de pedidos no la acepta (--estado), no aplica nad
   assert.match(r.stdout, /no acepta la llave de la rutina \(--estado\)/);
   nadaCreado(v);
   assert.equal(existsSync(join(v.R, ".config", "onia", "pedidos.env")), false, "la llave no quedó guardada");
+});
+
+test("con llave, sin el recolector de respuestas o sin llegar a GitHub, no aplica nada (la respuesta no volvería)", () => {
+  const sinRecolector = vps();
+  unlinkSync(join(sinRecolector.R, "bin", "onia-respuestas-pedidos.sh"));
+  const r = sinRecolector.aplicar(LLAVE);
+  assert.equal(r.status, 1, r.stdout);
+  assert.match(r.stdout, /todavía no copió onia-respuestas-pedidos\.sh/);
+  assert.match(r.stdout, /NO APLIQUÉ NADA: .*antes de crear nada/);
+  nadaCreado(sinRecolector);
+
+  const sinGithub = vps();
+  const r2 = sinGithub.aplicar({ ...LLAVE, RESPUESTAS_SIN_GITHUB: "1" });
+  assert.equal(r2.status, 1, r2.stdout);
+  assert.match(r2.stdout, /no llega a GitHub para recoger las respuestas/);
+  nadaCreado(sinGithub);
+  assert.match(sinGithub.leer("respuestas-probar"), /\/backups\/hermes-jarvis-[^/]+\/respuestas-prueba\n/, "la prueba no toca el estado real");
+});
+
+test("con llave: el cron del recolector entra con la marca, y revertir lo saca", () => {
+  const v = vps();
+  const r = v.aplicar(LLAVE);
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.match(v.crontab(), /^\*\/2 \* \* \* \* \[ -x \S+\/bin\/onia-respuestas-pedidos\.sh \] && \S+\/bin\/onia-respuestas-pedidos\.sh >> \/var\/log\/onia-respuestas-pedidos\.log 2>&1 #jarvis$/m);
+  assert.match(r.stdout, /la respuesta vuelve sola: onia-respuestas-pedidos\.sh/);
+  assert.equal(v.revertir().status, 0);
+  assert.doesNotMatch(v.crontab(), /onia-respuestas-pedidos/);
 });
 
 test("la llave queda en 600 aunque pedidos.env ya existiera con otros permisos", () => {

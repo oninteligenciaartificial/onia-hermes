@@ -11,7 +11,6 @@ Sergio Urcullo aprobó el 2026-09-29 un acceso controlado, con respaldo. Es este
 | `redactar.sed` | Tapa tokens, claves, correos, teléfonos y chat ids. Se aplica en el VPS **y** en el runner. |
 | `diagnostico.sh` | **Solo lectura.** Crontab, trabajos de Hermes, n8n, log de avisos, tablero. |
 | `aplicar.sh` | Enciende a Jarvis: crontab marcado, pausa 3 trabajos de Hermes, apaga 12 flujos de n8n de reportes, crea el lector y el flujo de cambios de su calendario (y los **prueba** con un evento que crea, mueve y cancela), instala en Hermes la skill `agenda-calendario` y la regla en su SOUL, prende la aduana y **muestra el resumen y el cierre antes de mandarlos**. Respaldo + `rollback.sh`. Idempotente. |
-| `responder.sh` | (2026-10-01) Entrega por la aduana la respuesta de Claude a un pedido de Sergio Urcullo. Lo corre `.github/workflows/hermes-respuesta.yml`, que despacha la sesión del pedido al terminar. Solo responde ids que salieron de Hermes, una vez por estado. |
 | `revertir.sh` | Corre el `rollback.sh` del último `aplicar` vigente: crontab por marcas, Hermes reanuda lo pausado, n8n reactiva lo apagado y apaga los dos flujos del calendario, la skill y el SOUL de Hermes vuelven a como estaban, aduana apagada. |
 
 ## Cómo se corre
@@ -47,11 +46,12 @@ sí de Sergio Urcullo al texto exacto. Diseño, prompt de la rutina y paso a pas
 - `revertir` quita la skill (o restaura la anterior) y retira la llave al respaldo si la puso ese
   `aplicar`.
 - `diagnostico` (sección 12) muestra si está configurado y los pedidos del día, sin la llave.
-- **La rutina corre en un entorno PROPIO, «Pedidos de Hermes»**, con una sola variable:
-  `GH_ACTIONS_TOKEN` (la usa para mandar la respuesta por `hermes-respuesta.yml`). **Nunca en
-  «Onia»**: ese entorno tiene la llave SSH del VPS, y el hook `nube-ssh-vps.mjs` le armaría SSH a
-  cada sesión que abre la rutina.
-- **Riesgo que queda:** ese `GH_ACTIONS_TOKEN` también puede despachar `hermes-jarvis.yml`
-  (`aplicar`/`revertir`). Lo frena el prompt de la rutina, no un permiso. Cierre propuesto en
-  `TELEGRAM_COMMAND_CENTER.md` §9.
+- **La respuesta vuelve sin ningún token de Actions** (decisión de la madre, 2-oct). La sesión del
+  pedido la deja como el mensaje de un commit sin archivos en la rama `respuesta/<id>`. El recolector
+  `scripts/loops/respuestas-pedidos.sh` (en el VPS, `/root/bin/onia-respuestas-pedidos.sh`, por cron
+  cada 2 minutos) la baja y la entrega por la aduana. `aplicar` instala ese cron y, en 1b, exige que
+  el recolector esté copiado y que el VPS llegue a GitHub (`--probar`), antes de crear nada.
+- **La rutina corre en un entorno PROPIO, «Pedidos de Hermes», SIN variables.** Nunca en «Onia»: ese
+  entorno tiene la llave SSH del VPS (el hook `nube-ssh-vps.mjs` le armaría SSH a cada sesión de la
+  rutina) y `GH_ACTIONS_TOKEN`, que despacha cualquier workflow manual, `hermes-jarvis` incluido.
 

@@ -141,6 +141,8 @@ for l in (
     "30 1 * * * /root/bin/onia-jarvis-resumen.sh noche >> /var/log/onia-jarvis-resumen.log 2>&1",
     "*/5 * * * * ONIA_AVISO_SOLTAR=1 /root/bin/onia-tg.sh >> /var/log/onia-tg-soltar.log 2>&1",
     "25,55 0-1,10-23 * * * /root/bin/onia-agenda.sh --bloques >> /var/log/onia-agenda.log 2>&1",
+    # La vuelta de los pedidos a Claude (2-oct). Sin pedidos abiertos sale al instante, sin red.
+    "*/2 * * * * [ -x /root/bin/onia-respuestas-pedidos.sh ] && /root/bin/onia-respuestas-pedidos.sh >> /var/log/onia-respuestas-pedidos.log 2>&1",
 ):
     out.append(l + MARCA)
 print("\n".join(out))
@@ -230,6 +232,14 @@ if { llave_ok || [ -s "$PEDIDOS_ENV" ]; } && [ -x "$BIN/onia-pedido-claude.sh" ]
   ONIA_PEDIDOS_CONF="$CONF_PRUEBA" "$BIN/onia-pedido-claude.sh" --estado </dev/null >/dev/null 2>&1 \
     || falla "el comando de pedidos no acepta la llave de la rutina (--estado)"
   rm -f "$BK/pedidos.env.prueba"
+  # La vuelta, sin ningún token de Actions (decisión de la madre, 2-oct): la sesión deja la respuesta
+  # en la rama respuesta/<id> y el recolector del VPS la busca. Sin él, o sin llegar a GitHub, el
+  # pedido sale y la respuesta no vuelve nunca. La prueba usa un estado aparte, dentro del respaldo.
+  if [ ! -x "$BIN/onia-respuestas-pedidos.sh" ]; then
+    falla "el sincronizador todavía no copió onia-respuestas-pedidos.sh: sin él, la respuesta de Claude no vuelve"
+  elif ! ONIA_PEDIDOS_ESTADO="$BK/respuestas-prueba" "$BIN/onia-respuestas-pedidos.sh" --probar </dev/null >/dev/null 2>&1; then
+    falla "el VPS no llega a GitHub para recoger las respuestas de los pedidos (onia-respuestas-pedidos.sh --probar)"
+  fi
 fi
 [ "$N8N_OK" = 1 ]   || abortar "la API de n8n no responde con la llave de gestión"
 [ "$FALLAS" -eq 0 ] || abortar "$FALLAS falla(s) en los requisitos (arriba, con ❌), antes de crear nada"
@@ -530,7 +540,7 @@ echo "✅ $BK/rollback.sh"
 sec "2. Crontab (hora del VPS = UTC; La Paz = UTC-4)"
 if python3 "$BK/marcas.py" aplicar "$BK/crontab.antes" > "$BK/crontab.nuevo" </dev/null; then
   A=$(grep -cvE '^[[:space:]]*(#|$)' "$BK/crontab.antes"); B=$(grep -cvE '^[[:space:]]*(#|$)' "$BK/crontab.nuevo")
-  # Nunca un crontab más flaco que el de antes: esto agrega cuatro y apaga uno.
+  # Nunca un crontab más flaco que el de antes: esto agrega cinco y apaga uno.
   if [ -s "$BK/crontab.nuevo" ] && [ "$B" -ge "$A" ] && crontab "$BK/crontab.nuevo" </dev/null; then
     echo "✅ instalado: $A → $B líneas activas"
     diff "$BK/crontab.antes" "$BK/crontab.nuevo" | grep -E '^[<>]' | redactar
@@ -686,6 +696,7 @@ if [ -s "$PEDIDOS_ENV" ] && [ -x "$BIN/onia-pedido-claude.sh" ] && [ "${RC:-1}" 
     fi
   fi
   PEDIDOS_OK=1
+  echo "✅ la respuesta vuelve sola: onia-respuestas-pedidos.sh la recoge cada 2 minutos (sin token de Actions)"
 fi
 
 # ── 6. El interruptor ───────────────────────────────────────────────────────────

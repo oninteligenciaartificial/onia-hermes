@@ -56,7 +56,7 @@ AHORA=$(date -u +%s)
 HOY=$(date -u -d "@$((AHORA - 14400))" +%F)   # Bolivia: UTC-4 todo el año
 REGISTRO="$ESTADO/pedidos.tsv"            # ts_utc id carril hash session_id url
 VISTAS="$ESTADO/vistas.log"               # ts_utc de cada código que se le mandó (para el tope por hora)
-RESPUESTAS="$ESTADO/respuestas.tsv"       # ts_utc id estado (lo escribe responder.sh)
+RESPUESTAS="$ESTADO/respuestas.tsv"       # ts_utc id estado (lo escribe respuestas-pedidos.sh)
 
 uso() { sed -n '/^# Uso/,/^# Carriles/p' "$0" | sed '$d; s/^# \{0,1\}//' >&2; exit 64; }
 esc() { sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g'; }

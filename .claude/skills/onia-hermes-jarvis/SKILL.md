@@ -18,7 +18,7 @@ description: Invocar ANTES de tocar a Hermes (el asistente de Sergio Urcullo por
 | Pedidos a Claude desde Telegram: diseño, prompt de la rutina, llave | `hermes-content/docs/TELEGRAM_COMMAND_CENTER.md` |
 | El acceso al VPS y sus tres acciones | `hermes-content/deploy/hermes-jarvis/` (+ `README.md`) |
 | La constitución de Hermes y sus skills | `hermes-content/deploy/hermes-agent/SOUL.md` · `hermes-content/skills/{agenda-calendario,pedir-a-claude}.md` |
-| Resumen y cierre · aduana · calendario · pedidos | `scripts/loops/{jarvis-resumen,onia-tg,agenda,pedido-claude}.sh` |
+| Resumen y cierre · aduana · calendario · pedidos · su vuelta | `scripts/loops/{jarvis-resumen,onia-tg,agenda,pedido-claude,respuestas-pedidos}.sh` |
 
 ## Cómo se llega al VPS desde la nube, y qué NO anda
 
@@ -155,7 +155,31 @@ CLI de Hermes.
   revisores obligatorios de un *environment* son solo para repos PÚBLICOS, y `onia-hermes` es privado,
   de cuenta personal. Y un token con *Actions: write* despacha CUALQUIER workflow manual del repo, no
   solo `hermes-jarvis`: también `deploy-onia-center.yml` con `swap=true`, que pone en producción el
-  panel. Por eso la rutina de pedidos no debería tener token de Actions (propuesta en el handoff).
+  panel. Por eso la rutina de pedidos no tiene token de Actions desde el 2-oct (abajo).
+- **La vuelta de un pedido, sin token (2-oct).** La sesión deja la respuesta como el MENSAJE de un
+  commit sin archivos: `git commit-tree "$(git mktree </dev/null)" -F archivo` + `git push origin
+  "$C:refs/heads/respuesta/<id>"`. El VPS (`respuestas-pedidos.sh`) la baja con `fetch --depth=1
+  --filter=tree:0` en un repo propio con `remote.origin.promisor=true`: transfiere SOLO el commit
+  (medido: 2 KB con 5 MB de archivos en la rama). El filtro va en la config Y en el comando: con uno
+  solo igual filtra, y sin los dos baja todo (la prueba lo distingue). Un archivo dentro del commit
+  obligaba a bajar árbol y blob a ciegas, sin poder medir el tamaño antes: por eso es el mensaje.
+- **Las sesiones de la nube FIRMAN sus commits** (`commit.gpgsign=true`, ssh, `/root/.gitconfig`), y
+  `commit-tree` también firma: el commit trae un encabezado `gpgsig` de varias líneas. El parser
+  tiene que aceptarlo; el tope de tamaño del commit es 16 KB por eso.
+- **El integrador y `ramas_varadas` enumeran SOLO `origin/claude/*`** (`onia-cola.md`,
+  `ramas_varadas.mjs:129`, `integrador_puede_mergear.mjs:224`; medido el 2-oct). Una rama que no
+  debe integrarse nunca va con otro prefijo: `pedido/<id>`, `respuesta/<id>`.
+- **El hook Stop (`git-autosync.js`) hace fast-forward de `main` desde la rama de trabajo**, y la
+  sesión de una RUTINA lo carga igual que cualquier sesión. Con `claude/pedido-<id>`, el cambio de un
+  pedido entraba a `main` sin revisar al terminar el turno. Guarda desde el 2-oct: `pedido/*` y
+  `respuesta/*` se pushean y nunca adelantan `main` (`pedido-rama.test.mjs`, con un caso de control
+  que muestra que una rama cualquiera sí lo adelanta).
+- **El rojo de main no es tuyo, pero te tiñe el CI.** El 2-oct `test:herramientas-desplegadas`
+  (`onia-vps.sh` sin `poner` en `sincronizar.sh`, de `5b3f980b`) y `test:guards-cableados`
+  (`tandas-v1.test.mjs` sin cablear) fallaban en main SOLO. Antes de culpar a tu cambio, se corre la
+  misma suite con `git checkout --detach origin/main`.
+- **Cambiar la base de un PR no vuelve a correr su CI** (`pull_request` sin el tipo `edited`). Al
+  pasar el #91 a `main` se corrió la suite a mano sobre main + el commit.
 - **En una prueba, nada de regex con `(?:\s+.*\n)*?`:** si el texto buscado no está, retrocede sin fin
   y la suite se cuelga (2-oct). Cortar el bloque con `indexOf` y buscar adentro.
 - **`npm test` entero se corta en `test:bot`** (10 rojos). Pasa lo mismo en la base sin cambios: depende
