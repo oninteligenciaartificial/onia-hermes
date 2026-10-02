@@ -54,8 +54,10 @@ carril, cargá su stack, respetá las reglas duras. Fuente viva del mapa complet
 | **I** research/estrategia | `deep-research` `exa-search` `iterative-retrieval` `office-hours` | — | — |
 | **K** yt-canal/meta-ads · **L** yt-ciencia-cuerpo | `article-writing` `deep-research` (L=salud/YMYL: fuentes obligatorias) + video stack | — | — |
 | **onia-core** | `database-migrations` `postgres-patterns` `api-design` `backend-patterns` `verification-loop` | — | `onia-core` |
+| **Ventas y pauta** (prospectos con señal, leads, demo, objeciones, Meta Ads y piezas D1/D4) | **cargar `onia-ventas-pauta` primero** (método medido, trampas y fuentes) · `diseno-contenido-onia` para las piezas | `onia-crm-prospeccion` | `onia-ventas-pauta` |
 | **comercial/CRM** | `deep-research` (prospección con señal) | `onia-crm-prospeccion` | `onia-propuestas` |
 | **fiscal / contable (propio + features ERP)** | `deep-research` (validar RND/DS vigentes) | — | `onia-contabilidad-bolivia` |
+| **competencia por dentro** (cómo funcionan los programas rivales) | Leer primero `hermes-content/research/competencia/PRODUCTO_COMPETENCIA_RESUMEN.md` (1-oct: Dentalink, Doctocliq, TuDoc, AgendaPro, Citalo). Método que funcionó: centros de ayuda públicos + capturas Playwright; YouTube y Zendesk privado NO abren desde la nube (videos desde la PC); cuentas de prueba solo desde la PC (piden código al WhatsApp de Sergio Urcullo) | — | — |
 | **extracción web** (alta por URL · prospección) | **NO instalar scrapers nuevos** (ScrapeGraphAI evaluado y descartado). Crawl4AI del VPS + LiteLLM ya resuelven: `scripts/alta-por-extraccion.py`. Doc: `hermes-content/docs/platform/ONIA_EXTRACCION_WEB_DECISION.md` | `onia-crm-prospeccion` | — |
 
 ## Reglas duras que aplican SIEMPRE (de CLAUDE.md)
@@ -83,7 +85,9 @@ carril, cargá su stack, respetá las reglas duras. Fuente viva del mapa complet
 ## Skills del repo (20 en `.claude/skills/` + 12 en `.agents/skills/`)
 - **Índice y operación:** `onia-router` (este índice) · `onia-continuidad` (arranque y rumbo de
   sesión) · `onia-infra` (VPS, Docker, n8n por SSH) · `onia-hermes-jarvis` (Hermes por Telegram:
-  resumen, cierre, aduana, calendario, pedidos a Claude, y el workflow hermes-jarvis; 2026-10-01).
+  resumen, cierre, aduana, calendario, pedidos a Claude, y el workflow hermes-jarvis; 2026-10-01) ·
+  `onia-sesion-madre` (la madre local ordena a las sesiones de la nube por mensaje: ids, canales
+  medidos, formato).
 - **Producto:** `onia-core` · `onia-chatbot` · `onia-contabilidad-bolivia`.
 - **Venta:** `onia-propuestas` (generador oficial, nunca HTML a mano) · `onia-web-factory`.
 - **Contenido y video:** `diseno-contenido-onia` (índice de diseño) · `editor-videos` ·

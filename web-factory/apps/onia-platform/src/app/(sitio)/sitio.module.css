@@ -2652,6 +2652,10 @@
 .swyApilado {
   display: grid;
   gap: 2.5rem;
+  /* Aire contra la bajada que viene arriba (1-oct): sin esto, en móvil «Dental»
+     quedaba pegado al párrafo de /rubros y de la portada. El mismo 2.5rem que
+     separa un rubro del siguiente: la palabra abre un grupo nuevo. */
+  margin-top: 2.5rem;
 }
 
 .swyPar {

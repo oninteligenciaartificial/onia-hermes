@@ -287,8 +287,8 @@ noche*, *no te faltan pacientes*, *tu recepcionista está tapada*, entre otros.
 - **Con la 1.0 publicada**, el ángulo entra **diciendo el mecanismo** (*"si pasan tres semanas sin que
   vuelva…"*), con dos cuidados: la prueba dura 14 días y el aviso aparece a los 21, así que un cliente que
   carga datos nuevos **no lo ve dentro de la prueba** (se alarga la prueba de los leads de pauta desde
-  `/admin/plans`, o la demo lo muestra con un tratamiento sembrado de más de 21 días — hoy el seed dental no
-  lo trae); y la regla toma `EN_PROGRESO`, no `PENDIENTE` (el plan que nunca empezó): si hace falta, es una
+  `/admin/plans`, o la demo lo muestra con un tratamiento sembrado de más de 21 días: el seed dental lo trae desde
+  `5356a6c`, pero **hoy no hay cuenta demo en producción**, ver `sales-kit/02-GUION-DEMO.md` §0); y la regla toma `EN_PROGRESO`, no `PENDIENTE` (el plan que nunca empezó): si hace falta, es una
   segunda vuelta, el dato existe.
 - **Lo que un anuncio no dice** (lista del carril Plataforma, verificada contra el producto): factura
   electrónica, "envío automático por WhatsApp", paquetes de sesiones (estética), testimonios o cifras de
@@ -381,6 +381,47 @@ Los supuestos del embudo están en `research/ONIA_META_ADS_PLAYBOOK_20260930.md`
 Sergio Urcullo en el Administrador de anuncios con esta tabla. **Se crea en PAUSA y se enciende solo con su
 OK.**
 
+#### 5.8.1 Cómo se crea en PAUSA, paso a paso (1-oct)
+
+Escrito para que la sesión que tenga el conector lo ejecute sin decidir nada. Los parámetros son los del
+conector `Meta_ads`; en el Administrador de anuncios son los mismos campos con su nombre en pantalla.
+
+> ⛔ **Trampa medida el 1-oct leyendo el conector:** `ads_create_ad` está en **modo borrador**. Los anuncios
+> quedan como DRAFT, y **`ads_activate_entity` sobre la campaña los publica en ACTIVO, gastando.** «Crear en
+> PAUSA» termina en el paso 5. `ads_activate_entity` se llama solo con la fila 9 de §5.9 en ✅.
+
+0. **Antes de nada:** `ads_get_ad_accounts` lista `1073680778314945` con `has_payment_method: true`, y
+   `ads_get_user_pages` (o `ads_get_pages_for_business` con `1451773736711697`) lista `1140384625819526`. Si falta
+   uno, se para acá (filas 2–4 de §5.9). ⚠️ **No** se usa `ads_get_ad_account_pages`: lista solo las páginas que la
+   cuenta ya promocionó, y devuelve `[]` en una cuenta que nunca pautó (corregido el 1-oct).
+1. **Campaña** (`ads_create_campaign`): `ad_account_id` `1073680778314945` · `campaign_name`
+   `ONIA · Dental SCZ · WhatsApp · prueba 1` · `objective` `OUTCOME_LEADS` · `buying_type` `AUCTION` ·
+   `special_ad_categories` `[]` · `campaign_lifetime_budget` `14000` (USD 140, en centavos) ·
+   `campaign_stop_time` = inicio + 14 días. Sale en PAUSED.
+   Si `OUTCOME_LEADS` no acepta WhatsApp en esa cuenta, el respaldo es `OUTCOME_ENGAGEMENT` con el mismo
+   conjunto, y se anota en el handoff.
+2. **Conjunto** (`ads_create_ad_set`): `ad_set_name` `Dental SCZ · 25+ · WhatsApp` · `optimization_goal`
+   `CONVERSATIONS` · `destination_type` `WHATSAPP` · `billing_event` `IMPRESSIONS` · `promoted_object`
+   `{"page_id":"1140384625819526"}` · sin presupuesto propio (manda el de la campaña) · `targeting`:
+   `{"geo_locations":{"custom_locations":[{"latitude":-17.7833,"longitude":-63.1821,"radius":25,"distance_unit":"kilometer"}]},"age_min":25}`,
+   ubicaciones automáticas. Con Advantage+ la edad queda como sugerencia, que es lo que pide §5.2. Excluir
+   registrados (audiencia de clientes) solo si ya existe en la cuenta; no se crea para esto.
+3. **Imágenes:** las 14 láminas de `hermes-content/carousels/out/ads/onia-platform-dental-meta-d1-*/` y
+   `…-d4-*/` (1080×1350), **la versión que Sergio Urcullo aprobó viéndola** (fila 7). El conector sube
+   archivos solo desde su app; si desde la nube no puede, se suben a mano en el Administrador.
+4. **Dos creativos** (`ads_create_creative`), carrusel estático de 7 tarjetas cada uno: `page_id`
+   `1140384625819526` · `message` = `caption` del brief · `headline` = título de la tabla de arriba ·
+   `call_to_action_type` `WHATSAPP_MESSAGE` · tarjetas en el orden del brief · `self_ai_disclosure`: lo
+   decide Sergio Urcullo (las láminas tienen fotos de fondo; las capturas son reales).
+   **Texto precargado** (`Hola, vi el anuncio de Onia (D1)…`): si el conector no lo expone, se pone a mano en
+   el anuncio, en «Mensaje de bienvenida», antes de cualquier publicación. Sin ese texto se pierde la
+   atribución D1/D4 (§5.6).
+5. **Dos anuncios** (`ads_create_ad`) bajo el conjunto: `ONIA · D1 · Los de mañana` y
+   `ONIA · D4 · Tratamiento a medias`. Quedan en borrador.
+6. **Anotar en el handoff** del carril los ids de campaña, conjunto, creativos y anuncios, y verificar con
+   `ads_get_ad_entities` que la campaña dice PAUSED. Recién ahí la fila 8 pasa a ✅.
+7. **Encender** = `ads_activate_entity` sobre la campaña, **solo con el OK escrito de Sergio Urcullo** (fila 9).
+
 ### 5.9 Lista de encendido
 
 Se enciende cuando **todas** las filas están en ✅. Una fila vale con la comprobación de su columna, no de
@@ -388,14 +429,14 @@ memoria. Estado al **30-sep, 12:30 UTC**.
 
 | # | Condición | Cómo se comprueba | Dueño | Estado |
 |---|---|---|---|---|
-| 1 | **1.0 publicada y medición probada** (alta con `utm` guardada con su origen, píxel visto en «Probar eventos») | aviso de la sesión principal | sesión principal | ⏳ candidato `6088e478` |
-| 2 | **El conector ve ONIA Ads**, o Sergio Urcullo crea la campaña a mano | `ads_get_ad_accounts` lista `1073680778314945` | Sergio Urcullo | ❌ **re-medido 30-sep 12:15 UTC**: sigue viendo solo "NUVO 1usd" y "Arthur Fuentes" |
-| 3 | **Método de pago** en ONIA Ads | `has_payment_method: true` en la misma llamada | Sergio Urcullo | ❌ al 21-sep |
-| 4 | **Página "Onia" promocionable y con el WhatsApp de ventas vinculado** | `ads_get_ad_account_pages` lista `1140384625819526`; WhatsApp en la configuración de la página | Sergio Urcullo | sin medir |
+| 1 | **1.0 publicada y medición probada** (alta con `utm` guardada con su origen, píxel visto en «Probar eventos») | aviso de la sesión principal | sesión principal | ⏳ **1.0 publicada** (`release-4dc829e8` la contiene, medido el 1-oct por `ONIA_CATALOGO_DE_VENTA.md`); falta ver el píxel en «Probar eventos» |
+| 2 | **El conector ve ONIA Ads**, o Sergio Urcullo crea la campaña a mano | `ads_get_ad_accounts` lista `1073680778314945` | Sergio Urcullo | ✅ **1-oct, 21:00 UTC:** lo lista, en el negocio «OniaAgency», con `is_ads_mcp_enabled: true`. A las 20:15 todavía no aparecía |
+| 3 | **Método de pago** en ONIA Ads | `has_payment_method: true` en la misma llamada | Sergio Urcullo | ❌ **re-medido el 1-oct a las 21:00 y a las 21:40 UTC: `has_payment_method: false`** |
+| 4 | **Página "Onia" promocionable y con el WhatsApp de ventas vinculado** | `ads_get_ad_account_pages` lista `1140384625819526`; WhatsApp en la configuración de la página | Sergio Urcullo | ✅ **1-oct, 21:40 UTC:** la página «Onia» está en el Business OniaAgency y el usuario del conector puede anunciar con ella (`ads_get_user_pages` y `ads_get_pages_for_business` la listan). Lo de las 21:15 («ninguna página») era una lectura equivocada: `ads_get_ad_account_pages` solo lista páginas ya promocionadas. El WhatsApp de la página no se midió. **Instagram:** ONIA Ads no tiene ninguna cuenta de IG vinculada (`ads_get_ig_accounts` → `[]`) |
 | 5 | **Frase-prefijo publicada en el bot** y probada con dos mensajes desde un teléfono que no sea el de Onia, **mirando la respuesta** (§5.5) | la respuesta, leída | Sergio Urcullo (firma) + carril chatbot | ❌ |
 | 6 | **Quién contesta, y en cuánto tiempo** | decidido por escrito | Sergio Urcullo | ❌ (ver abajo) |
-| 7 | **Las cuatro capturas de la 1.0** en `carousels/briefs/assets/onia-1.0-dental-ads/` → D1 y D4 renderizadas → **OK de Sergio Urcullo viéndolas** | las piezas renderizadas, miradas | capturas: sesión principal · diseño y render: Ventas y pauta · OK: Sergio Urcullo | ⏳ briefs listos |
-| 8 | **Campaña creada en PAUSA** con §5.8 | ids de campaña, conjunto y anuncios anotados en el handoff del carril | quien tenga el conector, o Sergio Urcullo | ❌ depende de 2–4 |
+| 7 | **Las cuatro capturas de la 1.0** en `carousels/briefs/assets/onia-1.0-dental-ads/` → D1 y D4 renderizadas → **OK de Sergio Urcullo viéndolas** | las piezas renderizadas, miradas | capturas: sesión principal · diseño y render: Ventas y pauta · OK: Sergio Urcullo | ⏳ renderizadas el 1-oct con capturas **candidatas** (`out/ads/…-candidato/`); esperan el OK de Sergio Urcullo a las capturas y a las piezas |
+| 8 | **Campaña creada en PAUSA** con §5.8 | ids de campaña, conjunto y anuncios anotados en el handoff del carril | quien tenga el conector, o Sergio Urcullo | ❌ depende de 2–4 · pasos en §5.8.1 |
 | 9 | **OK explícito de gasto con techo** (USD 140, 14 días) y **tipo de cambio** al que el banco cobra la tarjeta (§5.6) | por escrito | Sergio Urcullo | ❌ |
 
 **Fila 6 si el carril chatbot sigue sin dueño.** La pauta igual se puede encender, porque la atribución no
@@ -419,7 +460,7 @@ navegador, cae en la letra DejaVu y corta el pie de cada lámina. Con el paso, s
 |---|---|---|---|
 | 1 | **Método de pago** en ONIA Ads | ❌ al 21-sep (handoff `meta-ads-prospeccion`) · no re-medido hoy | Sergio Urcullo / Leslie |
 | 2 | **Página "Onia" vinculada** a la cuenta (`promote_pages`) | ❌ al 21-sep · no re-medido hoy | Sergio Urcullo, en Business Manager |
-| 3 | **El conector de Meta Ads de las sesiones está en OTRA cuenta de Facebook** | ❌ **re-medido dos veces el 30-sep** (madrugada y 12:15 UTC): ve "NUVO 1usd" y "Arthur Fuentes", no ONIA Ads | Sergio Urcullo: reconectarlo en `claude.ai/customize/connectors` con el usuario que administra ONIA Ads, y abrir una sesión nueva |
+| 3 | **El conector de Meta Ads de las sesiones está en OTRA cuenta de Facebook** | ✅ **resuelto el 1-oct, 21:00 UTC:** el conector ya ve ONIA Ads. Siguen los bloqueos de la tarjeta y de la página (filas 3 y 4 de §5.9). Antes, re-medido dos veces el 30-sep, solo veía «NUVO 1usd» y «Arthur Fuentes» | Sergio Urcullo: reconectarlo en `claude.ai/customize/connectors` con el usuario que administra ONIA Ads, y abrir una sesión nueva |
 | 4 | **WhatsApp de Onia conectado a la página** (lo exige el clic a WhatsApp) | sin medir | Sergio Urcullo / Plataforma |
 | 5 | **Bot listo para recibir pauta** (§5.5) y el `referral` que Chatwoot descarta | ❌ el `referral` se pierde; el resto sin probar | **carril chatbot** (Plataforma aclaró el 30-sep que no es suyo). Hoy **no hay sesión viva** de ese carril: Sergio Urcullo decide quién lo toma |
 | 6 | **Los leads que ya llegaron solos, sin contestar** | 5 al 27-sep (`ONIA_LEADS_ESPERANDO.md`) · no re-medido hoy | Sergio Urcullo |
