@@ -13,6 +13,7 @@ ver videos: YouTube bloquea la nube; los ids quedan anotados en cada teardown.
 | Doctocliq | **Manual y pago aparte.** Filtro «abandonaron el tratamiento» + campaña que alguien arma, en el add-on Marketing (contrato semestral o anual). |
 | AgendaPro | No (su asistente de marketing pago solo manda correos). |
 | Citalo | No. |
+| Dapta (agentes de IA, no sistema de gestión) | **No.** No tiene vertical de salud: confirma, recuerda y agenda dentro del chat, pero no ve tratamientos ni fichas por rubro (`DAPTA_TEARDOWN.md`, 2-oct). |
 | TuDoc | No. Además no se ve el producto, no tiene precio y sus botones no funcionan. |
 
 **El hueco de Onia sigue en pie:** el agente lo detecta solo todos los días y viene incluido desde Crece.
