@@ -1,10 +1,19 @@
 # Handoff — carril `mercado-y-pauta` (sesión «Ventas y pauta Onia Platform», antes «Análisis de mercado»)
 
-> 🟡 **2-oct, ~01:00 UTC — D1 y D4 v2 RENDERIZADAS, esperan el OK de Sergio Urcullo.**
-> - Pack `referentes`, la pantalla real en la portada, recortes legibles en el celular y «sistema con IA» solo
->   donde es cierto (skill §3, punto 6).
-> - Archivos: `carousels/briefs/ads/*-d1v2-*` y `*-d4v2-*`, salida en `carousels/out/ads/*v2*`, capturas en
->   `briefs/assets/onia-1.0-dental-ads/v2-20261002/`.
+> 🟡 **2-oct, ~13:40 UTC — D1 y D4 v3 RENDERIZADAS (imagen única de anuncio de software), esperan el OK de Sergio Urcullo.**
+> - **v2 rechazada:** Sergio Urcullo, *«es diferente el contenido de la onia platform que el de mi cuenta personal,
+>   te dije que entres a ads library y veas qué es lo que funciona»*. Usé el pack de la marca personal para la
+>   pauta del producto.
+> - **v3:** el formato de la Biblioteca (ninguno de los 18 anuncios capturados es un carrusel editorial) + la marca
+>   de la web (lockup `onia | dental`, Archivo, verde solo en la acción). Titular del dolor, pantalla real con el
+>   recorte clave ampliado, tres beneficios, un botón. 4:5 y 9:16 con las zonas seguras de historias.
+> - Archivos: briefs `carousels/briefs/ads/*-d1v3-*` y `*-d4v3-*`, salida `carousels/out/ads/*v3*/{feed,story}.png`,
+>   hoja `carousels/out/ads/onia-platform-dental-meta-v3-hoja.png`, renderer
+>   `.claude/skills/onia-ventas-pauta/scripts/anuncio-render.js` (método en la skill §4).
+> - Corregidos la regla de `CLAUDE.md` («Publicidad…»), `diseno-contenido-onia` y `ONIA_ADQUISICION_Y_PAUTA.md`
+>   §2.5, §5.8, §5.8.1 y §5.9: la pauta del producto ya no apunta al pack `referentes`.
+> - **Lo que falta y es la brecha más grande:** una pieza con persona (los 7 que sobreviven la tienen). Depende de
+>   Sergio Urcullo: grabarse 30 s con la pantalla, o aprobar el gasto de un presentador IA.
 > - **Prospectos al 2-oct: 12 listos, 1 a decidir, 16 fuera.** Los 13 en espera se verificaron desde la PC (la
 >   madre, en Facebook):
 >   - entraron Odontoclínica, Pimentel, Gelinski y Todo Frenos;

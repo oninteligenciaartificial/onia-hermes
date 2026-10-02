@@ -180,62 +180,57 @@ contestarle de memoria es la forma de quemarlo.
 
 ## 4. Piezas del anuncio (D1 y D4)
 
-**v2 del 2-oct, cómo se armó** (`briefs/ads/*-d1v2-*` y `*-d4v2-*`, salida en `carousels/out/ads/…v2…`):
-- **Portada con la pantalla real, no con una imagen generada.** Es producto visible desde la primera lámina, sin
-  gasto de Higgsfield y sin esperar aprobación. La arcilla queda como opción.
-- **Para que la captura se lea en el celular:** un recorte de **~320 px de ancho, renderizado a 3×**. Con eso el
-  texto de 13–15 px pasa a ~40 px en la lámina.
-  - Una tarjeta entera, de ~770 px, queda en letra de ~7 pt: no se lee, por más que se agrande.
-  - El mensaje real **se cita en el texto de la lámina** («…») en vez de mostrarlo chico, como en `sergio-k6v2`.
-- **Recortar:** `.claude/skills/onia-ventas-pauta/scripts/recortar-captura.js` (Playwright: un div con `overflow:hidden` y `deviceScaleFactor` 3). Si en el borde se
-  cuela una letra de otra línea, se tapa ese rectángulo con blanco. **Nunca se toca el texto de la pantalla.**
-- ⚠️ **`cta` al nivel del brief pone el botón en TODAS las láminas.** El CTA del anuncio va en `cta_anuncio`; el
-  botón solo en la última lámina, con `cta` dentro de esa lámina.
-- ⚠️ **Hoja de contactos en la nube:** `carousel_contactsheet.js` busca `/usr/bin/chromium`. Se apunta a un
-  envoltorio de `headless_shell` con `--no-sandbox`, porque como root sin eso no arranca.
-- **Control antes de mostrarlas:** ninguna lámina con más de un 40 % vacío. Una franja de captura sola deja la
-  lámina vacía: se junta con la cita del mensaje.
+**Vigente: v3 del 2-oct, anuncio de software de imagen única** (`briefs/ads/*-d1v3-*` y `*-d4v3-*`, salida en
+`carousels/out/ads/…v3…/feed.png` 1080×1350 y `story.png` 1080×1920; hoja para mirarlas:
+`carousels/out/ads/onia-platform-dental-meta-v3-hoja.png`).
 
-> ⛔ **1-oct, de noche: Sergio Urcullo rechazó D1 y D4.** Sus palabras: *«no entiendo por qué haces los carruseles
-> así, respeta tus reglas, mira cómo los hace mi marca personal, aprende cómo los hace la competencia»*.
-> - **Qué estaba mal:** se armaron con el pack `community-editorial`, crema, el que él ya había rechazado el 29-sep,
->   porque el `CLAUDE.md` todavía lo nombraba como piso (corregido el 2-oct). Salieron cinco láminas iguales,
->   títulos en mayúsculas, verde de adorno y la captura en un marco de ~450×300 que no se lee.
-> - **Mi error:** las miré y se las mandé sin contrastarlas con la regla «Publicidad que no parezca hecha por IA».
+```bash
+node .claude/skills/onia-ventas-pauta/scripts/anuncio-render.js --brief <brief.json> --out <dir> [--formato feed|story|todos]
+```
+
+- **Formato = lo que sobrevive en la Biblioteca** (§4.1), no el de la marca personal. De arriba abajo: lockup
+  `onia | dental`, «Para dueños de clínicas dentales», titular del dolor, una línea de mecanismo con lo que Onia
+  enciende en verde, la pantalla real en un marco de navegador (`app.onia.com.bo/pending`), tres beneficios con
+  tilde y un botón «Escribinos por WhatsApp» con la nota «Te lo mostramos con una clínica de ejemplo».
+- **Marca de la web, no del panel ni de la marca personal:** letra Archivo (la del sitio y la del logo, en
+  `scripts/fonts/`, OFL), hoja `#F4F6F4`, tinta `#12100E`, verde `#027650` solo en la acción, el énfasis y las
+  tildes. El lockup sale de `web-factory/apps/onia-platform/public/brand/v2/hires/` (nunca se redibuja).
+- **Que se lea en el celular** (la imagen se ve a ~390 px de ancho): el marco muestra la tarjeta real a ~1,2×
+  (contexto), y encima van recortes AMPLIADOS de lo que hay que leer: la línea del paciente y su motivo a ~2,1×,
+  el botón verde a ~1,9×, el link de reserva a ~1,75×. Son los mismos píxeles de la captura.
+  - La caja del recorte puede ser más ancha que el recorte (`box`): el relleno tapa el resto de la fila real
+    (botón, «Rechazar») sin dejar ver una franja verde suelta.
+  - El fondo de la caja es el de la tarjeta (`#FCFDFC`, medido con `ffmpeg … crop=1:1`). En blanco puro se ve
+    la costura.
+- **Historias 9:16:** `pad` 250 px arriba y 380 abajo. Meta tapa arriba el perfil y abajo el botón y el texto;
+  ahí no va nada.
+- **El renderer avisa** si un bloque se sale del lienzo o si dos se pisan. Antes los bloques se encogían en
+  silencio y la captura tapaba los beneficios (2-oct, primer render).
+
+Trampas pagadas armando v3 (2-oct):
+- **El largo de un recorte se mide renderizando anchos de prueba** (312 / 318 / 322 px) y mirando el borde. A
+  ojo, sobre una ampliación 2×, le erré por 14 px y «sin confirmar» salió cortado dos veces.
+- Un `<img>` de logo dentro de un flex en columna se estira a todo el ancho: `align-self:flex-start`.
+- Mirarlas al lado de la competencia, al tamaño del celular (`qc` de 390 px), mostró que la pantalla quedaba
+  chica. Se corrigió agrandando los recortes, no achicando el titular.
+
+> ⛔ **Rechazos anteriores, para no repetirlos:**
+> - **v1 (1-oct):** pack `community-editorial`, crema, cinco láminas iguales y la captura en un marco de
+>   ~450×300 que no se lee. Sergio Urcullo: *«respeta tus reglas, mira cómo los hace mi marca personal, aprende
+>   cómo los hace la competencia»*.
+> - **v2 (2-oct):** pack `referentes` de la marca personal (portada de arcilla verde, `ensayo`, `dato`, 7
+>   láminas). Sergio Urcullo: *«es diferente el contenido de la onia platform que el de mi cuenta personal, te
+>   dije que entres a ads library y veas qué es lo que funciona»*. **Mi error:** leí «mirá cómo lo hace mi marca
+>   personal» como «usá su estilo», cuando la referencia de formato era la Biblioteca. Ninguno de los 18
+>   anuncios de software capturados es un carrusel editorial.
 >
-> **Para rehacerlas:**
-> 1. **Pack `referentes`**, como `sergio-k6v2-*`: portada verde con un objeto de arcilla; interiores blancos con
->    una idea cada uno (`ensayo`, `dato`, `lista`, `captura`); cierre verde con el botón.
-> 2. **La competencia mirada de verdad:** las 22 capturas que se pidieron en
->    `research/competencia/anuncios/PEDIDO-CAPTURAS.md`. Hasta el 1-oct nadie había mirado sus creativos, solo los
->    títulos.
-> 3. **«Sistema con IA»** (pedido del 2-oct), usando solo las frases que Plataforma confirme en el código.
+> Las herramientas de carrusel (`carousel_render.js`, `recortar-captura.js`) siguen sirviendo para la marca
+> personal y para recortes sueltos; para la pauta del producto, no.
 
-- Briefs vigentes: `hermes-content/carousels/briefs/ads/onia-platform-dental-meta-d1v2-los-de-manana.json` y
-  `…-d4v2-tratamiento-a-medias.json`, de 7 láminas cada uno (los sin `v2` son los rechazados del 1-oct). Títulos,
-  texto precargado y CTA en `ONIA_ADQUISICION_Y_PAUTA.md` §5.8.
-- ⚠️ Los dos scripts piden banderas: `carousel_render.js --brief <json> --pack referentes --account onia --format
-  feed --out <dir>` (sin `--brief` contesta «Missing --brief») y `carousel_contactsheet.js --dir <dir>`. Pasarles
-  la ruta suelta no hace nada.
-- **Render en la nube:** `eval "$(sh scripts/carousel_cloud_setup.sh)"` y después
-  `node scripts/carousel_render.js --brief <brief> --pack referentes --account onia --format feed --out <dir>` +
-  `node scripts/carousel_contactsheet.js --dir <dir>`.
-  ⛔ **Sin `--pack referentes` sale el pack por defecto, crema y verde oscuro: el que Sergio Urcullo rechazó.** El
-  2-oct, re-renderizando una sola línea de la portada, salieron las 7 láminas en ese pack sin ningún aviso. Se
-  notó porque `git status` marcó las 7 como cambiadas: **si cambiaste una lámina y git marca todas, el pack
-  está mal.**
-  Sin el setup sale letra DejaVu, el pie cortado y sin navegador (skill `diseno-contenido-onia` §5).
-- **Las capturas viajan con el brief**, en `carousels/briefs/assets/onia-1.0-dental-ads/`. Las candidatas del
-  30-sep están en `candidato-20260930/` y **no** pasan a la carpeta aprobada sin el OK de Sergio Urcullo.
-- **Una captura entera de pantalla queda como una mancha** en el marco de ~450×300 del pack
-  `community-editorial`. Se recorta a la tarjeta que prueba el punto. Sin PIL ni ImageMagick: un HTML con un div
-  `overflow:hidden` y la imagen corrida en negativo, capturado con
-  `headless_shell --force-device-scale-factor=2 --window-size=W,H --screenshot`. Recortes y coordenadas:
-  `candidato-20260930/recortes/README.md`. Ni así se lee entero en el celular: la salida pendiente es un layout
-  de captura a todo ancho en el renderer compartido (avisar a Marca personal).
-- El visual `contract` del renderer trae «INPUT/OUTPUT» en inglés fijo: para «ONIA → VOS» usar `table`.
-  Las etiquetas largas se pisan con la flecha: cortas, como «PENDIENTES».
-- El campo del título es `headline`, no `title`: con `title` la lámina sale sin título y sin aviso.
+- Títulos, texto precargado y CTA de cada anuncio en `ONIA_ADQUISICION_Y_PAUTA.md` §5.8.
+- **Las capturas viajan con el brief**, en `carousels/briefs/assets/onia-1.0-dental-ads/`. Las del 30-sep están en
+  `candidato-20260930/`: sus textos están en producción (`release-8f07e537`), pero la pieza igual espera el OK de
+  Sergio Urcullo.
 - Cada pieza se le muestra **renderizada** a Sergio Urcullo antes de subirla.
 
 ### 4.1 Mirar la competencia antes de escribir (método del 2-oct)

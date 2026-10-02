@@ -39,6 +39,11 @@ Calidad mínima: 1.800 px en el lado largo (Higgsfield 2k). La galería guarda J
 
 ## 2. Qué pack y qué layout
 
+> ⛔ **La pauta de Onia Platform NO va por acá.** Sergio Urcullo, 2-oct: *«es diferente el contenido de la onia
+> platform que el de mi cuenta personal»*. Los anuncios del producto se arman con el formato de anuncio de software
+> de la Biblioteca y la marca de la web: skill `onia-ventas-pauta` §4, `anuncio-render.js`. D1 y D4 v2 salieron con
+> este pack (arcilla verde, ensayo, dato) y no sirvieron como anuncio.
+
 **Carruseles de marca personal → pack `referentes`** (`scripts/carousel_pack_referentes.js`).
 Cada lámina elige `layout`:
 
