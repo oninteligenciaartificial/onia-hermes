@@ -9,8 +9,8 @@
   {
    "id": "tag-ia",
    "file": "assets/canvas/tag-ia.png",
-   "x": 280,
-   "y": 709,
+   "x": 256,
+   "y": 685,
    "in": 2,
    "out": 47,
    "fade_in": 0.15,
@@ -25,8 +25,8 @@
   {
    "id": "card1-lunes",
    "file": "assets/canvas/card1-lunes.png",
-   "x": 90,
-   "y": 813,
+   "x": 27,
+   "y": 777,
    "in": 2,
    "out": 47,
    "fade_in": 0.15,
@@ -41,8 +41,8 @@
   {
    "id": "card2-link",
    "file": "assets/canvas/card2-link.png",
-   "x": 160,
-   "y": 814,
+   "x": 97,
+   "y": 778,
    "in": 47,
    "out": 98,
    "fade_in": 0.15,
@@ -57,16 +57,16 @@
   {
    "id": "card3-horario",
    "file": "assets/canvas/card3-horario.png",
-   "x": 128,
-   "y": 814,
+   "x": 92,
+   "y": 778,
    "in": 98,
    "out": 145,
    "fade_in": 0.15,
    "fade_out": 0.0,
    "visible_box": [
-    164,
+    192,
     850,
-    916,
+    887,
     992
    ]
   },
@@ -74,17 +74,17 @@
    "id": "sello-cero",
    "file": "assets/canvas/sello_%02d.png",
    "sequence": 4,
-   "x": 128,
-   "y": 855,
+   "x": 57,
+   "y": 784,
    "in": 58,
    "out": 98,
    "fade_in": 0,
    "fade_out": 0.22,
    "visible_box": [
     310,
-    1159,
-    767,
-    1382
+    1158,
+    768,
+    1381
    ],
    "visible_box_130": [
     241,

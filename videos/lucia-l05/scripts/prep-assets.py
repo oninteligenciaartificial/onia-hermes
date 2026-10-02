@@ -8,8 +8,11 @@ Sale:  assets/canvas/*.png (ya escalados, listos para overlay sin re-escalar en 
 
 Reglas de la instrucción (P/INSTRUCCION.md):
   · "y" = borde SUPERIOR de lo visible (la tarjeta o la pastilla), no del PNG con su margen de sombra.
-  · Tarjetas de frase: UNA sola escala para las tres (900 px = tarjeta de ancho completo), así la letra
-    mide lo mismo en las tres aunque la tarjeta corta sea más angosta.
+  · Se escala por el ANCHO VISIBLE (cuerpo opaco), nunca por el del PNG: desde el 2-oct los PNG traen
+    margen de sombra completo (antes se cortaba y quedaba un rectángulo con borde duro), y escalar por
+    el PNG achicaría la letra. Tarjetas de frase: UNA sola escala para las tres, la que deja la
+    tarjeta 1 (ancho completo) en 828 px visibles → letra de 57,6 px en las tres. Rótulo IA: pastilla
+    de 477 px. Sello: letra + raya de 455 px al 100 % (lo mismo que medían en la versión anterior).
   · Tiempos de la instrucción cuantizados al cuadro más cercano a 24 fps.
 Uso: python3 scripts/prep-assets.py   (desde P)
 """
@@ -37,6 +40,16 @@ def opaque_top(im, thr):
     return a.getbbox()
 
 
+CARD1_VIS_W = 828   # tarjeta 1 visible (= 900 de la instrucción menos la sombra) → define la escala de las 3
+TAG_VIS_W = 477     # pastilla del rótulo IA visible (520 de la instrucción con el margen viejo)
+SELLO_VIS_W = 455   # letra + raya del sello al 100 % (560 de la instrucción con el margen viejo)
+
+
+def vis_w(src, thr):
+    b = opaque_top(Image.open(os.path.join(A, src)).convert("RGBA"), thr)
+    return b[2] - b[0]
+
+
 def scaled(src, factor):
     im = Image.open(os.path.join(A, src)).convert("RGBA")
     return im.resize((round(im.width * factor), round(im.height * factor)), Image.LANCZOS), im
@@ -45,7 +58,7 @@ def scaled(src, factor):
 layout = {"canvas": [W, H], "fps": FPS, "frames": FRAMES, "overlays": []}
 
 # ---- rótulo IA: ancho 520, centrado, y=730 (borde superior de la pastilla) ----
-tag, tag2x = scaled("tag-ia.png", 520 / Image.open(os.path.join(A, "tag-ia.png")).width)
+tag, tag2x = scaled("tag-ia.png", TAG_VIS_W / vis_w("tag-ia.png", 150))
 tag.save(os.path.join(C, "tag-ia.png"))
 bb = opaque_top(tag, 150)  # fondo de la pastilla = alpha .72 (184)
 layout["overlays"].append({"id": "tag-ia", "file": "assets/canvas/tag-ia.png",
@@ -53,11 +66,12 @@ layout["overlays"].append({"id": "tag-ia", "file": "assets/canvas/tag-ia.png",
                            "in": fr(0.10), "out": fr(1.95), "fade_in": 0.15, "fade_out": 0.22,
                            "visible_box": [(W - tag.width) // 2 + bb[0], 730, (W - tag.width) // 2 + bb[2], 730 + bb[3] - bb[1]]})
 
-# ---- tarjetas de frase: escala única 900/2000, centradas, y=850 ----
-F = 900 / 2000
+# ---- tarjetas de frase: escala única (la de la tarjeta 1 a 828 visibles), centradas, y=850 ----
+F = CARD1_VIS_W / vis_w("card1-lunes.png", 240)
 cards = [("card1-lunes", fr(0.10), fr(1.95), 0.22),
          ("card2-link", fr(1.95), fr(4.10), 0.22),
          ("card3-horario", fr(4.10), FRAMES, 0.0)]  # la última se queda hasta el último cuadro (ver README)
+print(f"escala tarjetas {F:.4f} · rótulo {TAG_VIS_W / vis_w('tag-ia.png', 150):.4f}")
 for cid, a, b, fo in cards:
     im, _ = scaled(f"{cid}.png", F)
     im.save(os.path.join(C, f"{cid}.png"))
@@ -67,10 +81,11 @@ for cid, a, b, fo in cards:
                                "in": a, "out": b, "fade_in": 0.15, "fade_out": fo,
                                "visible_box": [x + bb[0], 850, x + bb[2], 850 + bb[3] - bb[1]]})
 
-# ---- sello CERO.: ancho 560, rotado -5 grados (CSS: antihorario), centrado, letra arriba en y=1170 ----
+# ---- sello CERO.: letra+raya 455 px, rotado -5 grados (CSS: antihorario), centrado, letra arriba en y=1170 ----
 src = Image.open(os.path.join(A, "sello-cero.png")).convert("RGBA")
-k = 560 / src.width
 glyph = opaque_top(src, 200)  # letra + raya (sin la sombra difusa)
+k = SELLO_VIS_W / (glyph[2] - glyph[0])
+print(f"escala sello {k:.4f}")
 cx_src = (glyph[0] + glyph[2]) / 2
 cy_src = (glyph[1] + glyph[3]) / 2
 center = (W / 2, 1170 + (cy_src - glyph[1]) * k)  # centro visual del sello en el lienzo

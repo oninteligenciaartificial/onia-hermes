@@ -2,7 +2,9 @@
      personaje generado (primera exposicion), debajo del menton: nunca sobre la cara.
      {{TITLE}} = "Lucía · personaje creado con IA"; {{ACCENT}} = punto de color. -->
 <style>
-  #stage { padding: calc(28*var(--u)); }
+  /* Medido 2-oct (L05): la sombra de la pastilla (0 14u 36u) llega ~50u abajo y ~36u a los lados; con 28u se cortaba
+     (alpha 21/255 en la última fila → borde duro en y=816). */
+  #stage { padding: calc(60*var(--u)); }
   .tag { display: inline-flex; align-items: center; gap: calc(16*var(--u));
          padding: calc(16*var(--u)) calc(30*var(--u)); border-radius: 999px;
          background: rgba(10,12,17,.72); border: 1px solid rgba(255,255,255,.14);

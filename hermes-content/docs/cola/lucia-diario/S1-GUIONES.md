@@ -35,12 +35,12 @@ trabajan solos para tu negocio. Seguime.
 `ONIA_ADQUISICION_Y_PAUTA.md` §5.4 («el link para que el paciente reserve solo», prometible hoy)
 **Plano:** `videos/lucia-l05/raw/l05-coworking-kling-07b938b2.mp4` (6 s, coworking, levanta la vista y sonríe)
 **Storyboard (sin voz):** rótulo IA + tarjeta «LUNES» · «¿Cuántas llamadas para agendar?» (0,10–1,95) → tarjeta «Con un
-link de reserva:» + sello «cero.» (1,95–4,10) → tarjeta «Tu cliente elige el horario.» (4,10–fin) · **[captura REAL del
+link de reserva:» + sello «cero.» (1,95–4,10) → tarjeta «Tu cliente elige horario.» (4,10–fin) · **[captura REAL del
 link de reserva: pendiente — hoy no hay cuenta demo en producción]**
 
 Lunes. ¿Cuántas llamadas para agendar?
 Con un link de reserva: cero.
-Tu cliente elige el horario.
+Tu cliente elige horario.
 
 **Pie:** Lucía es un personaje hecho con IA por @oniahq. Con el link de reserva de Onia, tu cliente elige el horario solo y
 la cita aparece en tu agenda. Cero llamadas para agendar. Link en la bio.

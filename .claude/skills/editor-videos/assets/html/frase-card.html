@@ -2,7 +2,13 @@
      narracion. {{LABEL}} = cejilla (opcional), {{TITLE}} = la frase, {{VALUE}} = remate en
      acento (opcional, va pegado al final). Mismo lenguaje que card-dark de los TikToks. -->
 <style>
-  #stage { padding: calc(40*var(--u)); }
+  /* Medido 2-oct (verificación de L05): la --shadow de make-mockup (0 46u 96u -24u) llega
+     ~118u por debajo de la tarjeta, ~72u a los lados y ~26u arriba; con padding 40u el PNG la cortaba
+     y quedaba una banda gris con borde duro sobre la camisa. Padding = alcance de la sombra + margen
+     (a los lados 110u y no 90u: con 90u la cola del desenfoque dejaba alpha 1/255 en la columna exterior).
+     width:max-content: con 110u por lado el stage no entra en el viewport de 1000u y el inline-block
+     angostaba la tarjeta (cambiaba el corte de línea); así la tarjeta sigue topeando en su max-width. */
+  #stage { padding: calc(80*var(--u)) calc(110*var(--u)) calc(140*var(--u)); width: max-content; }
   .card { padding: calc(40*var(--u)) calc(52*var(--u)) calc(44*var(--u)) calc(62*var(--u));
           max-width: calc(920*var(--u)); }
   .eyebrow { margin-bottom: calc(14*var(--u)); }
@@ -10,5 +16,17 @@
   .t { font-family: var(--font-display); font-weight: 700; color: var(--text);
        font-size: calc(64*var(--u)); line-height: 1.12; letter-spacing: -0.01em; text-wrap: balance; }
   .t b { color: {{ACCENT}}; font-weight: 700; }
+  /* Medido 2-oct (L05): la MISMA --shadow de make-mockup (0 46u 96u -24u .62 + 0 10u 26u .32) dibujada como capas con
+     filter:blur(σ = blur/2) en vez de box-shadow. Motivo medido el 2-oct: Chromium rasteriza el
+     box-shadow grande por tiles de 254 px y deja costuras rectas dentro de la sombra (alpha 93→86 en
+     la fila 508, 70→65 en la 509): en el video se ven como el borde de un rectángulo. El filtro se
+     aplica a la capa entera y sale continuo (scripts/check-png.py lo verifica). */
+  .wrap { position: relative; }
+  .card { box-shadow: none; }
+  .sh { position: absolute; display: block; }
+  .sh1 { left: calc(24*var(--u)); right: calc(24*var(--u)); top: calc(70*var(--u)); bottom: calc(-22*var(--u));
+         border-radius: calc(10*var(--u)); background: rgba(0,0,0,.62); filter: blur(calc(48*var(--u))); }
+  .sh2 { left: 0; right: 0; top: calc(10*var(--u)); bottom: calc(-10*var(--u));
+         border-radius: calc(34*var(--u)); background: rgba(0,0,0,.32); filter: blur(calc(13*var(--u))); }
 </style>
-<div class="card"><div class="rail"></div><div class="eyebrow">{{LABEL}}</div><div class="t">{{TITLE}} <b>{{VALUE}}</b></div></div>
+<div class="wrap"><i class="sh sh1"></i><i class="sh sh2"></i><div class="card"><div class="rail"></div><div class="eyebrow">{{LABEL}}</div><div class="t">{{TITLE}} <b>{{VALUE}}</b></div></div></div>

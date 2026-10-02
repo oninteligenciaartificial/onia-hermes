@@ -5,7 +5,8 @@
      node make-mockup.mjs --template custom --html-file assets/html/keyword-marca.html \
        --title "NO MOVÉS UN DEDO." --accent "#10C26B" --width 1000 --out assets/kw-dedo.png -->
 <style>
-  #stage { padding: calc(40*var(--u)) calc(30*var(--u)) calc(56*var(--u)); text-align: center; }
+  /* Medido 2-oct (L05): el text-shadow (0 10u 34u) pasaba 4u el padding lateral de 30u (alpha 1-2/255 en los bordes). */
+  #stage { padding: calc(40*var(--u)) calc(60*var(--u)) calc(64*var(--u)); text-align: center; }
   .kw { display: inline-block; position: relative; max-width: calc(940*var(--u));
         font-family: var(--font-display); font-weight: 700; color: #fff;
         font-size: calc(112*var(--u)); line-height: 1.02; letter-spacing: -0.02em;

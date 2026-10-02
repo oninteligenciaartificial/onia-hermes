@@ -154,6 +154,36 @@ I = [l for l in eb.splitlines() if l.strip().startswith("I:")][-1].split()[1]
 TP = [l for l in eb.splitlines() if l.strip().startswith("Peak:")][-1].split()[1]
 out["audio"] = {"lufs_integrado": float(I), "pico_dbtp": float(TP)}
 
+# ---- 7) color: el verde de la raya y la piel contra el crudo, decodificando como bt709 (lo que está etiquetado) ----
+def rgb709(path, n, w=1080, h=1920):
+    vf = f"select=eq(n\\,{n}),scale={w}:{h}:flags=lanczos:in_color_matrix=bt709:in_range=tv:out_range=pc,format=rgb24"
+    b = subprocess.run(["ffmpeg", "-v", "error", "-i", path, "-vf", vf, "-frames:v", "1", "-f", "rawvideo", "-pix_fmt", "rgb24", "-"],
+                       capture_output=True).stdout
+    return np.frombuffer(b, np.uint8).reshape(h, w, 3).astype(float)
+
+
+fa, ra = rgb709(FINAL, 72), rgb709(RAW, 72)
+px = fa[1150:1420, 240:840].reshape(-1, 3)
+green = px[(px[:, 1] > 180) & (px[:, 0] < 60) & (px[:, 2] < 140)]
+top = slice(0, 700)  # sin overlays: cara y fondo
+mse = ((fa[top] - ra[top]) ** 2).mean()
+out["color"] = {"verde_raya_rgb_mediana": [int(v) for v in np.median(green, 0)], "objetivo": [16, 194, 107],
+                "psnr_cara_vs_crudo_db": round(float(10 * np.log10(255 ** 2 / mse)), 2),
+                "desvio_medio_rgb": [round(float(v), 2) for v in (fa[top] - ra[top]).reshape(-1, 3).mean(0)]}
+
+# ---- 8) SFX: dónde suena cada golpe (10 % del pico) contra la entrada visual ----
+pcm = subprocess.run(["ffmpeg", "-v", "error", "-i", FINAL, "-f", "f32le", "-ac", "1", "-ar", "48000", "-"], capture_output=True).stdout
+y = np.abs(np.frombuffer(pcm, np.float32))
+ons, i = [], 0
+while i < len(y):
+    if y[i] > 0.1 * y.max():
+        ons.append(round(i / 48000, 3))
+        i += int(0.3 * 48000)
+    else:
+        i += 1
+out["sfx_golpes_s"] = ons
+out["entradas_visuales_s"] = sorted(round(x["in"] / FPS, 3) for x in L["overlays"] if x["id"] != "tag-ia")
+
 json.dump(out, open(os.path.join(QA, "qa.json"), "w"), ensure_ascii=False, indent=1)
 print(json.dumps({k: v for k, v in out.items() if k not in ("specs", "qa_frames")}, ensure_ascii=False, indent=1))
 v = [s for s in out["specs"]["streams"] if s["codec_name"] == "h264"][0]
