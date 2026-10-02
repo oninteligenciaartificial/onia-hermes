@@ -36,6 +36,7 @@ Desarrollar y publicar Onia Platform 1.0 hasta cobrar al primer cliente. Qué sa
 |---|---|---|
 | **Recordatorio con botones Confirmar / Cancelar / Reprogramar** | onia-platform#98 MERGEADO (`8f07e537`) + bot en onia-hermes#84 (`2f85bdd2`, `ffb65f75`) | Plataforma: publicada y verificada (§2). Falta: publicar el bot (bloqueado, ver §5); prueba real con el chip prepago. NO se nombra en venta ni ayuda hasta esa prueba |
 | **Web v1 + 4 detalles de la madre + legales 1.3** | onia-hermes#84 (rama `claude/sharp-shannon-sqrmig` = `wip/web-v1-correcciones-20261001` + arreglos) | Borrador. Espera el OK de Sergio Urcullo a la web y a los legales 1.3 (términos pasó de 1.2 a 1.3). Mergear = publicar la web. La rama `wip/` quedó vieja: se recaptura la `claude/` |
+| **Recall de tratamiento a medias + texto con IA** | onia-platform#99 (rama `claude/sharp-shannon-sqrmig`, `716ae602`…`4bba0d94`, borrador) | Código, tests (9289 ✅) y pantallas de banco mirados. Espera el OK de Sergio Urcullo a /agents y /pending (capturas enviadas). Después: merge = publica; verificación §7 del plan con org QA «ZZ QA Medias» (necesita OK: escribe datos QA en prod). Plan completo: `scratchpad` de la sesión → copiado abajo en §3b |
 | Plan B de verificación inversa (`wa.me`) | ramas `v1/verificacion-inversa` (plataforma) y `wip/bot-verificacion-inversa` (hermes) | APAGADO y NO se enciende sin OK de Sergio Urcullo (orden de la madre 1-oct) |
 | SIAT: certificación en el piloto | `/opt/onia-siat/runner-20260929/emisor-v2/` + rama `wip/siat-validar-cada-paquete`; detalle en `BITACORA.md` (2-oct) | 2-oct (conteo local): **IX 160/160**, **VI 380/560**, general 96 %, 0 rechazos. Falta SOLO VI motivos 5-7 (180): necesitan el **CAFC** del piloto. Pedido a Sergio Urcullo: CAFC + captura nueva del «Listado de Etapas» para confirmar en el portal |
 | Respuestas con datos de la ayuda (deuda, stock) leen tablas del pack dental | — | Anotado: revisar la fuente para comercio, importadora y servicios |
@@ -52,6 +53,20 @@ Desarrollar y publicar Onia Platform 1.0 hasta cobrar al primer cliente. Qué sa
 - La respuesta de la plataforma lleva `content_attributes.onia_automatico`: el token de la plataforma es el usuario 2 de
   Chatwoot y el bot es el 3 (`CHATWOOT_BOT_AGENT_ID=3` en `/opt/onia/bot/webhook.env`); sin la marca el bot creía que un
   humano tomó la conversación y se callaba. Verificado con el modelo real que Chatwoot guarda la clave.
+
+### 3b. Lo que se midió el 2-oct (fuentes en `docs/research/`)
+
+- **IA en el producto** (`ONIA_INVENTARIO_IA_20261002.md` + catálogo §8): la única IA encendida es el redactor de
+  plantillas de los agentes. El detector de tratamiento a medias EXISTE pero no encontraba a nadie (lo arregla #99).
+- **Auditoría** (`ONIA_AUDITORIA_20261002.md`): bot de ventas vivo (≈3 s) pero ofrece demos sin cuenta demo y dice
+  «Listo, agendado» y se corrige (Cal.com y transcripción apuntan a servicios que no existen); respaldos solo en el
+  disco del VPS; Easypanel/n8n expuestos y contenedor QA contra la base de prod; comercio y servicios sin camino a
+  factura; web de venta con LCP 3,4-3,7 s.
+- **Dapta** (`research/competencia/DAPTA_TEARDOWN.md`): checklist antes de conectar un número (PIN de dos pasos,
+  apagar el asistente de IA de Meta, web que coincida, «Agregar método de pago»). Coexistencia en Onia NO probada con
+  +591; Meta exige suscribir `history`, `smb_app_state_sync`, `smb_message_echoes` y saltear el registro del número.
+- **Recomendación vigente a Sergio Urcullo:** NO conectar su número personal (Meta avisa a sus contactos, sincroniza
+  6 meses de chats, el bot le contestaría a todos). Prueba con chip prepago; su número hace de paciente.
 
 ## 4. Archivos
 
@@ -117,6 +132,11 @@ tabla sin acción). Nada se construye sin el filtro de Etapa 1. Orden por impact
 
 ## 7. Próximos pasos (en orden)
 
+0. **onia-platform#99** (recall de tratamiento a medias): con el OK de Sergio Urcullo a las pantallas → mergear,
+   publicar y verificar con la org QA (§7 del plan, en la descripción del PR). Siguiente: fecha retroactiva al cargar
+   el tratamiento (sin eso, en la prueba de 14 días no se ve nada) y C5 si Sergio lo aprueba.
+0b. **Bot de ventas:** apagar Cal.com y la transcripción (servicios inexistentes → «Listo, agendado» falso), arreglar
+   los 11 tests de pauta y publicarlo (necesita la firma de `363dcf10` o sacar ese commit del deploy).
 1. Con el OK de Sergio Urcullo: mergear onia-hermes#84 (publica web + legales 1.3). Si tarda, llevar solos a `main` los commits del bot.
 2. Con la suite del bot en verde (firma de la pauta): `deploy-bot.sh --aplicar` (o `publicar.sh` del bot).
 3. Con el chip: conectar el número a una org QA → plantilla `recordatorio_cita` aprobada → cita a 24 h → tocar los 3 botones → MIRAR el estado en el panel y que el bot siga contestando después. Recién ahí ✅ en el catálogo y en la ayuda.
