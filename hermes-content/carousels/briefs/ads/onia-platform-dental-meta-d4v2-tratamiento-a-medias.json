@@ -4,7 +4,7 @@
  "headline_anuncio": "Los tratamientos a medias, en una lista",
  "caption": "¿Cuántos pacientes empezaron un tratamiento y no volvieron?\n\nOnia es un sistema de gestión con IA para clínicas dentales. Cuando un tratamiento lleva 21 días en progreso sin cita, aparece en tu lista con el mensaje listo y el link para que el paciente reserve. Vos lo aprobás y sale desde tu WhatsApp.\n\nEscribinos y te lo mostramos con una clínica de ejemplo.",
  "hashtags": [],
- "fuentes": "21 días y solo EN_PROGRESO sin cita: lib/onia-core/modules/agents-tratamiento-a-medias.ts. El mensaje de este caso es un texto fijo (no lo redacta la IA): por eso las láminas no dicen que la IA lo escribe; «sistema con IA» va solo en el caption, y es cierto por los otros agentes (agents-plantilla.ts). Capturas: candidato-20260930.",
+ "fuentes": "21 días y solo EN_PROGRESO sin cita: lib/onia-core/modules/agents-tratamiento-a-medias.ts. El mensaje de este caso es un texto fijo (no lo redacta la IA): por eso las láminas no dicen que la IA lo escribe; «sistema con IA» va solo en el caption, y es cierto por los otros agentes (agents-plantilla.ts). Capturas: candidato-20260930. «Cada mañana»: cron 0 11 * * * UTC (07:00 en Bolivia) en el VPS, OK en el log del 1-oct; el tratamiento a medias corre dentro del Recall.",
  "slides": [
   {
    "number": 1,
@@ -41,7 +41,7 @@
    "theme": "blanco",
    "value": "21",
    "headline": "días sin cita *y aparece en tu lista*",
-   "body": "Si un tratamiento sigue en progreso y no tiene cita por delante, Onia te lo marca.",
+   "body": "Si un tratamiento sigue en progreso y no tiene cita por delante, Onia lo detecta sola, cada mañana. Nadie tiene que marcarlo.",
    "next": "la lista",
    "alt_text": "A los 21 días sin cita, Onia lo marca"
   },
