@@ -10,6 +10,7 @@ enrutador por carril). Actualizado 2026-09-29: quedan solo las que tuvieron uso 
 | `onia-router` | inicio de cualquier sesión; enruta al carril y su stack |
 | `onia-continuidad` | al arrancar y cuando la sesión se hizo larga (rumbo, trabajo fantasma) |
 | `onia-infra` | antes de tocar el VPS, Docker o n8n por SSH |
+| `onia-hermes-jarvis` | antes de tocar a Hermes, su resumen y su cierre, la aduana de avisos, su calendario, los pedidos a Claude o el workflow hermes-jarvis |
 | `onia-core` | tocar/adoptar el núcleo (contract.json, adapters, schema) |
 | `onia-chatbot` | todo trabajo sobre el chatbot (motor, conocimiento, canal, voz) |
 | `onia-contabilidad-bolivia` | fiscal/contable Bolivia (SIAT, IVA/IUE, RNDs) |

@@ -33,8 +33,8 @@ done 2>/dev/null | redactar
 sec "2. Hermes — gateway y trabajos programados"
 systemctl is-active hermes-gateway.service
 systemctl show hermes-gateway.service -p ActiveEnterTimestamp -p NRestarts
-echo "--- hermes cron list:"
-timeout 60 "$HPY" -m hermes_cli.main cron list 2>&1 | head -80 | redactar
+# Sin `hermes cron list`: el CLI escribe en /root/.hermes/logs al arrancar (lo midió la sesión
+# madre el 1-oct). jobs.json dice lo mismo y se lee sin tocar nada.
 echo "--- detalle de /root/.hermes/cron/jobs.json:"
 python3 - <<'PY' | redactar
 import json
@@ -147,14 +147,34 @@ if [ -n "$N8N" ]; then
   echo "DB_TYPE: $(docker exec "$N8N" printenv DB_TYPE 2>/dev/null || echo sqlite-por-defecto)"
   MOUNT=$(docker inspect -f '{{range .Mounts}}{{if eq .Destination "/home/node/.n8n"}}{{.Source}}{{end}}{{end}}' "$N8N" 2>/dev/null)
   echo "datos: ${MOUNT:-?}"
-  timeout 120 docker exec "$N8N" n8n export:workflow --all 2>/dev/null | N8N_DB="${MOUNT:+$MOUNT/database.sqlite}" DESDE="$DESDE" python3 -c '
+  # Por la API de gestión, solo GET. Antes era `n8n export:workflow --all`, que NO es de solo
+  # lectura: inicializa la base y corre migraciones (medido por la sesión madre, 1-oct).
+  N8N_HOST=https://n8n-sergio-n8n.hqdqgh.easypanel.host
+  KEY=$(grep -oP '(?<=^N8N_MANAGEMENT_API_KEY=).*' /opt/onia-platform/app.env 2>/dev/null | tr -d "\"'" | head -1)
+  N8N_HOST="$N8N_HOST" N8N_KEY="$KEY" python3 -c '
+import json, os, urllib.request
+wfs, cursor = [], ""
+try:
+    for _ in range(20):
+        url = os.environ["N8N_HOST"] + "/api/v1/workflows?limit=250" + ("&cursor=" + cursor if cursor else "")
+        req = urllib.request.Request(url, headers={"X-N8N-API-KEY": os.environ["N8N_KEY"], "Accept": "application/json"})
+        d = json.load(urllib.request.urlopen(req, timeout=30))
+        wfs += d.get("data", [])
+        cursor = d.get("nextCursor") or ""
+        if not cursor:
+            break
+except Exception as e:
+    print("no pude leer los flujos por la API:", type(e).__name__)
+print(json.dumps(wfs))' 2>/dev/null | N8N_DB="${MOUNT:+$MOUNT/database.sqlite}" DESDE="$DESDE" python3 -c '
 import sys, json, os, sqlite3
 raw = sys.stdin.read()
 i = raw.find("[")
 try:
     wfs = json.loads(raw[i:]) if i >= 0 else []
 except Exception as e:
-    print("no pude leer el export:", e); wfs = []
+    print("no pude leer los flujos:", e); wfs = []
+if raw[:i].strip():
+    print(raw[:i].strip())
 activos = [w for w in wfs if w.get("active")]
 print("workflows: %d en total, %d activos" % (len(wfs), len(activos)))
 def trig(w):
@@ -200,17 +220,32 @@ for w in activos:
 fi
 
 sec "8. Tablero de Hermes — lo que 'espera a Sergio Urcullo'"
-T=/root/bin/onia-tablero.sh
-if LISTA=$(timeout 60 "$T" list 2>/dev/null); then
-  echo "hechas (✓): $(printf '%s\n' "$LISTA" | grep -c '^✓')"
-  echo "bloqueadas (⊘): $(printf '%s\n' "$LISTA" | grep -c '^⊘')"
-  echo "otras abiertas: $(printf '%s\n' "$LISTA" | grep -vcE '^(✓|⊘)')"
-  echo "--- bloqueadas (títulos):"
-  printf '%s\n' "$LISTA" | grep '^⊘' | cut -c1-150 | head -40 | redactar
-  echo "--- abiertas [auto:] (títulos):"
-  printf '%s\n' "$LISTA" | grep -vE '^(✓|⊘)' | grep -F '[auto:' | cut -c1-150 | head -25 | redactar
+# En SQLite de SOLO LECTURA: `onia-tablero.sh list` pasa por el CLI de Hermes, que escribe en sus
+# logs al arrancar (medido por la sesión madre, 1-oct).
+DBS=$(find /root/.hermes -maxdepth 5 -type f \( -name '*.db' -o -name '*.sqlite' \) -path '*kanban*' 2>/dev/null | head -5)
+if [ -z "$DBS" ]; then
+  echo "(no encontré la base del tablero bajo /root/.hermes: no la leo)"
 else
-  echo "(el tablero no respondió)"
+  for db in $DBS; do
+    echo "# $db"
+    python3 - "$db" <<'PY' | redactar
+import sys, sqlite3
+c = sqlite3.connect('file:%s?mode=ro' % sys.argv[1], uri=True)
+for (t,) in c.execute("select name from sqlite_master where type='table'"):
+    cols = [r[1] for r in c.execute('pragma table_info("%s")' % t)]
+    if 'status' not in cols or 'title' not in cols:
+        continue
+    print('tabla', t)
+    for st, n in c.execute('select status, count(*) from "%s" group by 1 order by 2 desc' % t):
+        print('  %-12s %s' % (st, n))
+    print('--- bloqueadas (títulos):')
+    for (ti,) in c.execute('select title from "%s" where status = \'blocked\' limit 40' % t):
+        print('  ⊘', str(ti)[:150])
+    print('--- abiertas [auto:] (títulos):')
+    for (ti,) in c.execute('select title from "%s" where status not in (\'done\', \'blocked\', \'archived\') and title like \'%%[auto:%%\' limit 25' % t):
+        print('  ·', str(ti)[:150])
+PY
+  done
 fi
 
 sec "9. Hermes — estructura de su carpeta (para saber dónde guarda conversaciones)"
@@ -244,6 +279,16 @@ done
 
 sec "11. Contenedores (nombre y estado)"
 docker ps --format '{{.Names}}\t{{.Status}}' 2>/dev/null | sort | head -60
+
+sec "12. Pedidos a Claude desde Hermes (2026-10-01) — estado, sin la llave"
+if [ -x /root/bin/onia-pedido-claude.sh ]; then
+  /root/bin/onia-pedido-claude.sh --estado </dev/null 2>&1 | redactar
+  echo "--- pedidos de hoy (hora La Paz · id · carril · estado):"
+  /root/bin/onia-pedido-claude.sh --lista </dev/null 2>/dev/null | cut -f1-4 | head -20
+  stat -c '%a %n' /root/.config/onia/pedidos.env 2>/dev/null || echo "(sin /root/.config/onia/pedidos.env)"
+else
+  echo "(el comando todavía no está en /root/bin)"
+fi
 
 sec "fin"
 echo "diagnóstico terminado $(date -u +%FT%TZ) — no se modificó nada"

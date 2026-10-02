@@ -37,6 +37,7 @@ PARTE="${ONIA_PARTE:-/root/bin/onia-parte-diario.sh}"
 REPO="${ONIA_REPO:-/root/loops/onia-hermes}"
 ESTADO="${ONIA_AVISO_ESTADO:-/var/lib/onia-aviso}"
 AGENDA="${ONIA_AGENDA:-/root/bin/onia-agenda.sh}"
+PEDIDOS="${ONIA_PEDIDOS:-/root/bin/onia-pedido-claude.sh}"
 OUT="${ONIA_JARVIS_OUT:-/root/.hermes/out}"
 LLM="${ONIA_JARVIS_LLM:-}"          # comando que traduce commits (stdin -> viñetas); vacío = LiteLLM
 MAX=5
@@ -249,6 +250,24 @@ seccion_bloques_hoy() {
   printf '%s\n' "$ev" | awk -F'\t' '{ printf "%d. %s–%s %s\n", NR, $2, $3, $4 }' | esc
   printf '→ Contestame qué quedó pendiente (por ejemplo «2 no») y le busco otro hueco.\n'
 }
+# Lo que él le pidió a Claude desde Telegram (pedido-claude.sh), con su estado. La respuesta de cada
+# uno ya le llegó por la aduana; acá queda el circuito cerrado aunque alguna se haya perdido: un
+# pedido «sin respuesta» a las 21:30 es algo que no tiene que creer terminado.
+seccion_pedidos() {
+  local filas n
+  [ -x "$PEDIDOS" ] || return 0
+  filas=$("$PEDIDOS" --lista "$HOY" 2>/dev/null </dev/null) || return 0
+  [ -n "$filas" ] || return 0
+  n=$(printf '%s\n' "$filas" | grep -c .)
+  printf '🤖 <b>Tus pedidos a Claude hoy</b>\n'
+  printf '%s\n' "$filas" | awk -F'\t' '{
+      e = $4
+      if (e == "listo") m = "✅ listo"; else if (e == "necesita-ok") m = "🙋 espera tu ok"
+      else if (e == "no-se-pudo") m = "⚠️ no se pudo"; else m = "⏳ sin respuesta todavía"
+      printf "• %s %s — %s\n", $1, $3, m }' | head -"$MAX" | esc
+  [ "$n" -gt "$MAX" ] && printf '… y %s más.\n' $((n - MAX))
+  return 0
+}
 seccion_sigue() {
   local p d
   p=$(printf '%s\n' "$LISTA" | grep -F '[leads-esperando]' | grep -vE '^✓' | grep -oE '\] [0-9]+ ' | grep -oE '[0-9]+' | head -1)
@@ -271,7 +290,7 @@ if [ "$MODO" = manana ]; then
   bloque seccion_decisiones; bloque seccion_cola noche 'Mientras dormías'
 else
   CABEZA="🌙 <b>Cierre del $(dia_largo "$HOY")</b>"
-  bloque seccion_hoy; bloque seccion_bloques_hoy; bloque seccion_cola resumen 'Avisos del día'; bloque seccion_sigue
+  bloque seccion_hoy; bloque seccion_bloques_hoy; bloque seccion_pedidos; bloque seccion_cola resumen 'Avisos del día'; bloque seccion_sigue
   bloque seccion_agenda "$MANANA" 'Mañana'; bloque seccion_guiones "$MANANA" 'Mañana grabás'
 fi
 CUERPO+="$(linea_salud)"
