@@ -2,7 +2,7 @@
  "title": "ONIA — D1 v2 · Los de mañana (pack referentes, sistema con IA)",
  "serie": "Clínicas dentales",
  "headline_anuncio": "La lista de mañana, con el mensaje escrito",
- "caption": "¿Tu recepción todavía llama uno por uno a los pacientes de mañana?\n\nOnia es un sistema de gestión con IA para clínicas dentales. Cada mañana arma la lista de los que no confirmaron, con el mensaje de cada uno ya escrito: la IA lo redacta una vez para tu clínica y vos lo aprobás. Sale desde tu WhatsApp, cuando vos decidís.\n\nEscribinos y te lo mostramos con una clínica de ejemplo.",
+ "caption": "Un paciente que no confirma es una silla que puede quedar vacía. Y el alquiler, la asistente y tu hora se pagan igual.\n\nOnia es un sistema de gestión con IA para clínicas dentales. Cada mañana arma la lista de los que no confirmaron, con el mensaje de cada uno ya escrito: la IA lo redacta una vez para tu clínica y vos lo aprobás. Sale desde tu WhatsApp, cuando vos decidís.\n\nEscribinos y te lo mostramos con una clínica de ejemplo.",
  "hashtags": [],
  "fuentes": "IA: lib/onia-core/modules/agents-plantilla.ts (redacta una vez por negocio y agente, el dueño aprueba, nunca ve datos de pacientes) + AGENTS_LLM=1 en producción release-8f07e537 (2-oct). Capturas: candidato-20260930 (cuenta de ejemplo Clínica Dental Sonrisa Norte).",
  "slides": [

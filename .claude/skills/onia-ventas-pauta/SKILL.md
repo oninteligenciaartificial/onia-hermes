@@ -151,7 +151,7 @@ contestarle de memoria es la forma de quemarlo.
 
 | Capacidad | Dato | Archivo |
 |---|---|---|
-| Tratamiento a medias | `EN_PROGRESO`, sin cita por delante, **21 días** fijos; solo dental y estética; propone, un humano aprueba en `/pending` | `lib/onia-core/modules/agents-tratamiento-a-medias.ts` |
+| Tratamiento a medias | `EN_PROGRESO`, sin cita por delante y **21 días sin venir** (`diasSinVenir`); solo dental y estética; propone, un humano aprueba en `/pending` | `lib/onia-core/modules/agents-tratamiento-a-medias.ts` |
 | Canceló o faltó y no reprogramó | `CANCELADA` y `NO_ASISTIO`, ventana de **14 días** | `lib/onia-core/modules/agents-reprogramador.ts` |
 | Agentes | desde **Crece** (`agentsIncluded`) | `lib/plan-catalogo.ts` |
 | Usuarios por plan | Básico 2 · Crece 3 en producción (4 con `a7f228c`) · Profesional 5 · Clínica sin tope | `lib/plan-catalogo.ts` |
@@ -211,9 +211,11 @@ contestarle de memoria es la forma de quemarlo.
 >    títulos.
 > 3. **«Sistema con IA»** (pedido del 2-oct), usando solo las frases que Plataforma confirme en el código.
 
-- Briefs: `hermes-content/carousels/briefs/ads/onia-platform-dental-meta-d1-los-de-manana.json` y
-  `…-d4-tratamiento-a-medias.json`, de 7 láminas cada uno. Títulos, texto precargado y CTA en
-  `ONIA_ADQUISICION_Y_PAUTA.md` §5.8.
+- Briefs vigentes: `hermes-content/carousels/briefs/ads/onia-platform-dental-meta-d1v2-los-de-manana.json` y
+  `…-d4v2-tratamiento-a-medias.json`, de 7 láminas cada uno (los sin `v2` son los rechazados del 1-oct). Títulos,
+  texto precargado y CTA en `ONIA_ADQUISICION_Y_PAUTA.md` §5.8.
+- ⚠️ Los dos scripts piden banderas: `carousel_render.js --brief <json> --out <dir>` (sin `--brief` contesta
+  «Missing --brief») y `carousel_contactsheet.js --dir <dir>`. Pasarles la ruta suelta no hace nada.
 - **Render en la nube:** `eval "$(sh scripts/carousel_cloud_setup.sh)"` y después
   `node scripts/carousel_render.js --brief <brief> --out <dir>` + `node scripts/carousel_contactsheet.js --dir <dir>`.
   Sin el setup sale letra DejaVu, el pie cortado y sin navegador (skill `diseno-contenido-onia` §5).
@@ -229,6 +231,30 @@ contestarle de memoria es la forma de quemarlo.
   Las etiquetas largas se pisan con la flecha: cortas, como «PENDIENTES».
 - El campo del título es `headline`, no `title`: con `title` la lámina sale sin título y sin aviso.
 - Cada pieza se le muestra **renderizada** a Sergio Urcullo antes de subirla.
+
+### 4.1 Mirar la competencia antes de escribir (método del 2-oct)
+
+- **Dónde están:** `hermes-content/research/competencia/anuncios/<anunciante>/` + `CAPTURAS-HECHAS.md` (18 de 22,
+  capturados por la madre desde la PC el 1-oct). La nube no abre `facebook.com`: un pedido nuevo de capturas se le
+  manda a la madre con la lista de id (`PEDIDO-CAPTURAS.md` es el formato).
+- **La única señal de rendimiento pública es la antigüedad.** `grep -o 'En circulación desde[^\n]*' */*.txt`: lo que
+  pasa ~6 semanas al aire sin cortarse le rinde a quien lo paga; lo que tiene horas no prueba nada, por prolijo
+  que se vea. **Se aprende de los que sobreviven, no de los más nuevos ni de los más lindos.**
+- **Qué tienen los 7 de software que sobreviven** (17-jul a 17-ago): todos tienen una **persona** (6 videos y un
+  estático), **ninguno es sólo pantalla**; la primera línea le habla al **dueño de su plata o su tiempo**; el
+  líder no titula con IA; CTA único a cuenta gratis o demo, sin precio en la pieza; ninguno va a WhatsApp.
+- **Qué se copia y qué no:** se copia el **orden** (plata del dueño → mecanismo → un CTA). No se copian sus cifras
+  («25 % de los ingresos» es de ellos, no medido por Onia), ni testimonios, ni «+4000 doctores» (cero clientes).
+  Ningún material de venta nombra a la competencia.
+- **La brecha que queda** es una pieza con persona: Sergio Urcullo mostrando la pantalla, o un presentador IA sólo
+  si él lo pide (skill `ugc-empresas-higgsfield`, gasto aprobado).
+- **Antes de prometer una función, mirar QUÉ corre en producción, no lo que dice un doc:** `ssh onia-vps 'docker ps
+  --format "{{.Names}} {{.Image}}" | grep onia-platform'` da el release; el commit se lee en el clon de
+  `onia-platform`, y una frase de la pantalla se busca en el bundle servido (`docker exec onia-platform grep -rl
+  "<frase>" /app/.next/server`). El 2-oct así se vio que el tratamiento a medias ya estaba en producción
+  (`release-8f07e537`) mientras `ONIA_ADQUISICION_Y_PAUTA.md` §0 y §5.4 seguían diciendo que no.
+- **El umbral del tratamiento a medias es «21 días sin venir»** (`diasSinVenir`), con el tratamiento en curso y
+  sin cita futura. «21 días en progreso» o «21 días sin cita» son inexactos: corregido en D4 el 2-oct.
 
 ## 5. La campaña de Meta
 
