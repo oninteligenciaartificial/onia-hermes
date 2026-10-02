@@ -32,9 +32,9 @@
       "headline": "Un loop son *dos archivos*",
       "body": "El corredor: un script de bash para todos. El prompt: un texto por loop, qué hace y qué tiene prohibido.",
       "next": "las barandas",
-      "alt_text": "Las dos piezas de un loop: el corredor y el prompt",
+      "alt_text": "Un mango de destornillador de arcilla negra con una punta verde puesta y otras de repuesto al lado: el mango es el corredor, igual para todos los loops; la punta es el prompt, y ponés una distinta en cada loop.",
       "image_style": "clay",
-      "image_prompt": "A chunky matte black clay screwdriver handle lying on its side, with three short interchangeable emerald green clay bits lined up neatly beside it."
+      "image_prompt": "A chunky matte black clay screwdriver handle lying flat with one emerald green clay bit fitted into its tip, and a few spare emerald green clay bits with different tips beside it, on a white surface."
     },
     {
       "number": 3,
@@ -67,13 +67,13 @@
       "headline": "50 minutos de tope si corre *cada hora*",
       "body": "Regla de cordura: el tiempo máximo, siempre menor que el intervalo.",
       "next": "las trampas",
-      "alt_text": "Un loop que corre cada hora tiene un tope de 50 minutos",
+      "alt_text": "Un disco de arcilla verde partido como una torta, con una porción negra apartada: si el loop corre cada hora, le das 50 minutos de tope y esa porción queda libre para que la vuelta siguiente no choque con la anterior.",
       "image_prompt_descartado": [
         "A matte black clay stopwatch with a single emerald green clay button on top, standing upright.",
         "A matte black clay stopwatch with a completely blank plain white dial, no numbers and no marks, one emerald green clay button on top, standing upright."
       ],
       "image_style": "clay",
-      "image_prompt": "A small emerald green clay cube resting inside a larger shallow open matte black clay box, with clear space on every side between the cube and the walls."
+      "image_prompt": "A thick round emerald green clay disc cut into wedges like a pie, with one narrow matte black clay wedge pulled slightly outward from the rest, on a white surface."
     },
     {
       "number": 5,

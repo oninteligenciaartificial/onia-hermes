@@ -30,9 +30,9 @@
       "headline": "Te preguntan *lo que no sabés*",
       "body": "Un cliente pide 200 cajas con su logo para este viernes. Si tu bot dice que sí, lo cumplís vos.",
       "next": "la prueba",
-      "alt_text": "Una bola de cristal de arcilla: un cliente pregunta una fecha que el negocio no confirmó",
+      "alt_text": "Una bola de cristal de arcilla: para prometer esa fecha, tu bot tendría que adivinar",
       "image_style": "clay",
-      "image_prompt": "A smooth round emerald green crystal ball resting on a small matte black clay stand, softly glowing from inside."
+      "image_prompt": "A smooth glossy emerald green clay crystal ball, softly glowing from inside, resting on a small round matte black clay stand with short curved legs, on a white surface."
     },
     {
       "number": 3,
@@ -91,9 +91,9 @@
       "headline": "Solo sabe *lo que vos le das*",
       "body": "La lección no es que la IA inventa: lo que no escribiste en sus listas, no lo puede saber.",
       "image_style": "clay",
-      "image_prompt": "A matte black clay funnel standing upright, with a few round emerald green clay beads dropping into its wide mouth.",
+      "image_prompt": "A matte black clay funnel sitting in the neck of a short plain white clay bottle, with a few round emerald green clay beads dropping into the funnel's wide mouth, on a white surface.",
       "next": "las dos respuestas",
-      "alt_text": "Un embudo de arcilla: tu bot solo sabe lo que vos le das"
+      "alt_text": "Un embudo de arcilla llenando una botella: tu bot solo tiene lo que vos le pusiste en sus listas"
     },
     {
       "number": 8,

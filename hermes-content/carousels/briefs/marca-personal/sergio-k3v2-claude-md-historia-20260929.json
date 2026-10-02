@@ -72,9 +72,9 @@
       "headline": "Una regla tonta que *te avisa*",
       "body": "Claude me tiene que llamar «Sergio Urcullo». Si dice «Sergio» a secas, dejó de leer sus reglas: cambio de sesión.",
       "image_style": "clay",
-      "image_prompt": "A small clay lighthouse with emerald green and white stripes and a matte black lantern room on top, its lamp glowing softly, standing on a rounded matte black clay rock.",
+      "image_prompt": "A small rounded clay lighthouse, its smooth plain tower striped in emerald green and white clay, with a matte black clay lantern top and a softly glowing lamp, standing on a rounded matte black clay rock on a white surface.",
       "next": "armá el tuyo",
-      "alt_text": "La regla canario del nombre completo"
+      "alt_text": "Un faro de arcilla sobre una roca negra: una regla chica que te avisa antes del golpe, como cuando Claude deja de llamarte por tu nombre completo y sabés que toca cambiar de sesión."
     },
     {
       "number": 6,
@@ -109,9 +109,9 @@
       "headline": "Mi error: casi *500\u00a0líneas*",
       "body": "Anthropic recomienda menos de 200. Un procedimiento de muchos pasos va en una skill, que se carga cuando hace falta.",
       "image_style": "clay",
-      "image_prompt": "A plain smooth emerald green clay suitcase, overstuffed and bulging at the sides, its lid barely closed, with a matte black clay handle, on a clean white surface.",
+      "image_prompt": "A plain emerald green clay suitcase, so overstuffed that its sides bulge out around a tight matte black clay strap cinched across its middle, with a matte black clay handle, on a white surface.",
       "next": "la plantilla",
-      "alt_text": "Mi CLAUDE.md tiene casi 500 líneas; Anthropic recomienda menos de 200 y los procedimientos van en una skill"
+      "alt_text": "Una valija de arcilla tan llena que se infla alrededor de la correa: así quedó mi CLAUDE.md con casi 500 líneas, cuando Anthropic recomienda menos de 200."
     },
     {
       "number": 8,

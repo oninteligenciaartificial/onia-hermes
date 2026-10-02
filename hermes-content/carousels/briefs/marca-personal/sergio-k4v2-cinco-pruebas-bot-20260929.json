@@ -72,10 +72,10 @@
       "theme": "blanco",
       "headline": "Prueba 3: preguntale *lo que no sabe*",
       "body": "Stock, plazo, precio. Si contesta un dato que no le diste, lo inventó. Si inventa, no se activa.",
-      "image_prompt": "An emerald green clay top hat with a matte black band, standing upright on a white surface, with a small matte black clay magic wand with white tips leaning against it and a few tiny white clay sparkles rising out of the hat.",
+      "image_prompt": "A classic matte black clay magician's top hat with an emerald green clay band, standing upright, with a matte black clay magic wand with white clay tips lying in front of it, on a white surface.",
       "image_style": "clay",
       "next": "4 y 5",
-      "alt_text": "Una galera de mago de arcilla con su varita: si el bot contesta lo que no sabe, lo saca de la galera"
+      "alt_text": "Una galera de mago de arcilla con su varita: si el bot contesta lo que no sabe, lo está sacando de la galera, lo inventó."
     },
     {
       "number": 6,
@@ -83,10 +83,10 @@
       "theme": "blanco",
       "headline": "Pruebas 4 y 5: *que avise a alguien*",
       "body": "Un audio que no entiende o un «quiero hablar con una persona»: alguien se entera, no solo el bot.",
-      "image_prompt": "A small emerald green clay megaphone with a matte black clay grip and a white clay rim, lying on its side on a white surface.",
+      "image_prompt": "A classic emerald green clay referee whistle with a round chamber and a short mouthpiece, its matte black clay cord looped loosely beside it, on a white surface.",
       "image_style": "clay",
       "next": "las 5",
-      "alt_text": "Un megáfono de arcilla: si el bot no puede, avisa a una persona"
+      "alt_text": "Un silbato de arcilla: si el bot no entiende un audio o le piden hablar con una persona, tiene que avisarle a alguien y no quedarse solo."
     },
     {
       "number": 7,

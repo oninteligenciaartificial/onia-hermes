@@ -121,9 +121,9 @@
       "headline": "Nunca dejes un *merge\u00a0abierto*",
       "body": "La regla que me dejó: un merge con conflictos se resuelve antes de que Claude termine el turno.",
       "image_style": "clay",
-      "image_prompt": "A short emerald green clay zipper, fully zipped closed, joining two smooth matte black clay strips, its smooth plain pull tab resting at the top end, on a clean white surface.",
+      "image_prompt": "A short zipper lying flat, fully closed all the way, joining one emerald green clay strip to one matte black clay strip, with white clay teeth and a smooth plain white clay pull tab, on a white surface.",
       "next": "el hook",
-      "alt_text": "La regla: un merge con conflictos se resuelve antes de que Claude termine el turno"
+      "alt_text": "Un cierre de arcilla subido hasta arriba que une una tira verde con una negra: el merge se cierra antes de que Claude termine el turno, no se deja abierto."
     },
     {
       "number": 8,

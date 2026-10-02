@@ -41,10 +41,10 @@
       "theme": "blanco",
       "headline": "Más bajo *no es peor*",
       "image_style": "clay",
-      "image_prompt": "A white clay balance scale standing perfectly level, with a small emerald green clay sphere on the left pan and a larger matte black clay sphere on the right pan.",
+      "image_prompt": "A matte black clay balance scale with its beam perfectly level, a small emerald green clay ball in the left pan and a bigger white clay ball in the right pan, on a white surface.",
       "body": "En las pruebas de Anthropic, Opus 5.5 en medium iguala o supera a Opus 5 en high.",
       "next": "mi regla",
-      "alt_text": "Una balanza pareja: Opus 5.5 en medium iguala o supera a Opus 5 en high"
+      "alt_text": "Una balanza de arcilla pareja, con una bola verde chica de un lado y una blanca más grande del otro: con menos esfuerzo, Opus 5.5 en medium rinde igual o más que Opus 5 en high."
     },
     {
       "number": 4,
@@ -79,10 +79,10 @@
       "theme": "blanco",
       "headline": "Respuesta floja: *subí un nivel*",
       "image_style": "clay",
-      "image_prompt": "A short staircase of five wide white clay steps rising to the right, with one glossy emerald green clay ball resting on the third step and a small curved matte black clay arrow arching up from the second step to the third.",
+      "image_prompt": "A large matte black clay control knob with an emerald green clay pointer, ringed by small raised matte black clay dots, and a curved emerald green clay arrow arching clockwise over its top, on a white surface.",
       "body": "Primero la perilla, después el modelo: a Fable, el más caro, recién si Opus 5.5 con más esfuerzo no alcanza.",
       "next": "la prueba",
-      "alt_text": "Una bola verde sube un escalón: ante una respuesta floja, subir un nivel de esfuerzo"
+      "alt_text": "Una perilla de arcilla negra con una flecha verde que la gira hacia arriba: si la respuesta salió floja, primero subí el esfuerzo, antes de pasarte a un modelo más caro."
     },
     {
       "number": 6,
