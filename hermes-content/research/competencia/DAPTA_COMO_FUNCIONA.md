@@ -22,17 +22,21 @@ un tercero · `[inf]` inferencia nuestra · ⚠️ contradicción entre fuentes.
    trabajo central es llamar a cada lead, calificarlo, agendarlo y pasarlo al CRM. Hoy la arma un asistente
    propio, **Dapti** `[V]`.
 2. **Cómo gana plata:** suscripción prepaga en USD por créditos. Los planes son Pro $99, Scale Up $499 y
-   Prime $1.499. **1.000 créditos = US$1 en todos los planes**: los planes caros no abaratan el crédito,
-   venden personas (sesiones 1 a 1, gerente de cuenta, grupo de WhatsApp). El minuto de llamada atendida
-   cuesta US$0,33 `[V]`.
+   Prime $1.499. **1.000 créditos = US$1 en todos los planes**: los planes caros no abaratan el crédito;
+   suman personas (sesiones 1 a 1, gerente de cuenta, grupo de WhatsApp), usuarios y espacios, y Dapti
+   incluido `[V]`. El minuto de llamada atendida cuesta US$0,33 `[V]`.
 3. **Cómo consigue clientes:** la cara del fundador (su TikTok tiene 140,9K seguidores; sus vlogs sacan
-   12K-18K vistas y los tutoriales 400-930). Además: pauta en Meta que vende un paso gratis (webinar, o demo con
-   2.000 créditos), una agencia de pauta comprada (Beezion), un tercero que vende un curso de USD 1.950 con
-   créditos de Dapta adentro, y afiliados al 30% `[V]`/`[T]`.
+   12K-18K vistas y los tutoriales 400-930). Además: pauta en Meta (9 de 38 títulos venden un webinar gratis;
+   el destino del resto no se pudo ver, §5.1), una agencia de pauta comprada (Beezion), un tercero que vende un
+   curso de USD 1.950 con créditos de Dapta adentro, y afiliados (⚠️ 30% por 12 meses en /partners, 15%
+   recurrente en /es/partners, §3.4) `[V]`/`[T]`.
 4. **Qué cambió desde julio:** el precio no. El titular pasó de categoría («plataforma todo-en-uno») a
-   resultado («Create your first AI sales agent in 2 minutes»). Se sumaron Dapti al centro, el sello SOC 2,
-   Dapta Forms, Acceso MCP, «1.000+ integraciones» (eran 300+; dentro de la app se ven 15), WhatsApp directo
-   con Meta (lo viejo quedó en pausa), una tabla pública de consumo y la compra de Beezion.
+   resultado («Create your first AI sales agent in 2 minutes»). Se sumaron el sello SOC 2, Dapta Forms,
+   «Sequences» (antes «Campaigns»), la industria Seguros, la página /for-ai-agents y el anuncio de la compra de
+   Beezion. **Dapti y «Dapta MCP» ya estaban en el menú de la captura de julio**: no son nuevos. La FAQ pasó de
+   «over 300 tools» a «1.000+» (el JSON-LD de la misma captura de julio ya decía «1000+ Integrations»; dentro
+   de la app se ven 15). WhatsApp directo con Meta y la tabla de consumo de los docs **no se pueden comparar**:
+   en julio no se miró la app ni los docs.
 5. **Para Onia:** Dapta **no compite hoy por la clínica de Santa Cruz**: no tiene plantillas dentales, no da
    números de Bolivia, cobra en USD con tarjeta y tiene 0 anuncios en Bolivia. Sirve como espejo de **cómo
    se vende**. La decisión de julio (no volverse plataforma horizontal por créditos) se sostiene, y su propia
@@ -87,7 +91,7 @@ exige plan pago.
 
 | Dónde se mide | Qué hay | Fuente |
 |---|---|---|
-| Web, julio | «over 300 tools» | captura de julio `[V]` |
+| Web, julio | «over 300 tools» en la FAQ; el JSON-LD de la misma página ya decía «1000+ Integrations» | captura de julio `[V]` |
 | Web, hoy | «1,000+ tools» | dapta.ai, /for-ai-agents/ `[D]` |
 | App, Credenciales | **15**: Google Sheets, OpenAI, Gemini, Anthropic, Notion, WordPress, HubSpot, Gmail, OneDrive, Google Calendar, Excel, Outlook, SMTP, Meta Ads, GoHighLevel | cap. 46 `[V]` |
 | App, canales de mensajería | **WhatsApp (Meta) y Dapta Widget.** No hay Instagram, Messenger, SMS ni correo como canal | cap. 20, 42 `[V]` |
@@ -96,7 +100,8 @@ exige plan pago.
 ⚠️ **Web contra app:**
 - La web vende SMS como canal de texto; la app no lo muestra.
 - La web vende «WhatsApp AI Calls»; la app dice que las conexiones nuevas de voz por WhatsApp están en pausa (cap. 50).
-- La web renombró el notetaker a «Dapta SIG»; la app sigue diciendo «AI Notetaker».
+- (sin verificar) Un informe dice que la web renombró el notetaker a «Dapta SIG». No aparece en ninguna página
+  guardada y el menú de la home del 1-oct (copia guardada y WebFetch) dice «AI Notetaker», igual que la app.
 
 ---
 
@@ -212,9 +217,10 @@ Fuentes: dapta.ai/pricing (1-oct) `[V]`; app, `/billing/plans` (cap. 23-25) `[V]
 | Antigüedad | 37 de 38 se crearon el 30-sep y el 1-oct-2026; uno el 17-sep |
 | Mensajes (título del enlace) | «Descubre cómo Dapta te ayuda a crecer» (16) · «La IA que califica y agenda leads por ti» (13) · «Webinar gratuito para equipos de ventas» (6) · «Webinar Completamente Gratis» (3) |
 | ¿Hubo anuncios en julio? | **No verificable**: fuera de la UE la biblioteca no guarda los anuncios comerciales inactivos |
-| Tercero que pauta | La página «Andres Bilbao» (cofundador de Rappi y de 30X) tiene 178 anuncios activos. Los que salen al buscar «Dapta» llevan al curso **AI Sales 2.0 de 30X**: USD 1.950, 5 semanas, empieza el 5-oct, lo dictan el CEO de Dapta y Bilbao, e incluye «más de 100K créditos gratis de Dapta» ([30x.com/programas/ai-sales](https://30x.com/programas/ai-sales)) |
+| Tercero que pauta | La página «Andres Bilbao» («Rappi & 30x Co-Founder», según 30x.com) tiene 178 anuncios activos. Los que salen al buscar «Dapta» llevan al curso **AI Sales 2.0 de 30X**: USD 1.950, 5 semanas, empieza el 5-oct, lo dictan el CEO de Dapta y Bilbao, e incluye «+100K créditos gratis de Dapta» ([30x.com/programas/ai-sales](https://30x.com/programas/ai-sales), re-leída el 1-oct) |
 
 No se pudo ver el texto, el formato ni el destino de cada anuncio: la API no trae el texto y la ficha da 403.
+Por eso **no se sabe** si los anuncios llevan a la demo con 2.000 créditos (§5.3) ni si alguno vende el plan.
 
 ### 5.2 Contenido orgánico (1-oct)
 
@@ -239,7 +245,7 @@ de 20 cuentas.
 | Registro gratis | «Get Started for Free» → app.dapta.ai/register | Igual | dapta.ai |
 | Demo con humano | Abre un Dapta Forms: **«Obtén 2.000 créditos gratis al agendar»**, con **una sola pregunta de dolor** (leads que nadie llama, leads de WhatsApp que se enfrían, soporte lento) | No medido en julio | forms.dapta.ai/jwmq4e/alec/dapta-ventas-4-3 |
 | Webinar diario «Dapta 101» | Reserva por cal.com | Ya estaba | banner de dapta.ai/es |
-| Webinar del CEO | «Aprende cómo usar IA para vender hasta un 70% más», por Zoom: **896 asistentes** | Nuevo | luma.com/6c2cbtpz |
+| Webinar del CEO | «Aprende cómo usar IA para vender hasta un 70% más», por Zoom: **896 asistentes**. Ya pasó («Past Event»; Luma no muestra la fecha) | No comparable: sin fecha no se sabe si es posterior a julio | luma.com/6c2cbtpz (re-leída el 1-oct) |
 | Banner vencido | ⚠️ Un informe lo ve oculto (webinar del 26-ago); otro lo ve visible en inglés anunciando una fecha ya pasada | - | HTML de home y /pricing |
 | Referidos | $50 por cada persona que compra un plan; el referido recibe 100K créditos | - | cap. 47, 25 |
 | Agencias que revenden | Ej.: Simbionte (Colombia) cobra la implementación aparte: US$500, 1.000 o 1.500 | - | simbionte.co/dapta-ai |
@@ -262,17 +268,18 @@ de 20 cuentas.
 | Precios Pro / Scale / Prime | $99 / $499 / $1.499 | Igual | Sin cambio `[V]` |
 | Agentes y flujos ilimitados | Sí | Sí | Sin cambio |
 | Titular | «Close Deals Faster With AI…» / «all-in-one … platform built for SMBs» | «Create your first AI sales agent in 2 minutes» | **Cambió** `[V]` |
-| Integraciones | «over 300 tools» | «1,000+ tools» (en la app, 15) | Cambió el número |
+| Integraciones | «over 300 tools» en la FAQ (el JSON-LD ya decía «1000+») | «1,000+ tools» (en la app, 15) | Cambió la cifra visible |
+| Dapti y «Dapta MCP» | Ya en el menú de la captura | Siguen | Sin cambio en la web (la app no se vio en julio) |
 | «50,000+ companies», «<3 min», «98%» | Sí | Igual | Sin cambio |
 | SOC 2 | No estaba | En el hero y en /customers | **Nuevo** |
 | Menú | Campaigns | Sequences + Dapta Forms | Renombrado + nuevo |
 | Industrias | Educación, SaaS, abogados, hogar, inmobiliaria | + Seguros | Nuevo |
 | Etiqueta del Free | «Premium support» (error) | «Self service» | Corregido |
-| Tabla de consumo pública | No figuraba | Docs con tarifas por uso | Nuevo |
-| WhatsApp | - | Conexión directa con Meta; lo viejo es «legado» y la voz por WhatsApp está en pausa | Cambio de proveedor |
-| Notetaker | «AI Notetaker» | «Dapta SIG» en la web (la app no cambió) | Renombrado a medias |
-| Casos publicados | 17 (Wayback, 15-ago) | 19 | +2 |
-| Beezion (agencia de pauta) | No existía | Comprada (cierre a fines de mayo, anuncio 29-jul) | **Nuevo** |
+| Tabla de consumo pública | No se miraron los docs | Docs con tarifas por uso | No comparable |
+| WhatsApp | No se miró la app | Conexión directa con Meta; lo viejo es «legado» y la voz por WhatsApp está en pausa | No comparable `[inf]`: el «legado» sugiere cambio de proveedor |
+| Notetaker | «AI Notetaker» | «AI Notetaker» en la home (1-oct). «Dapta SIG»: (sin verificar) | Sin cambio visible |
+| Casos publicados | 17 (Wayback, 15-ago; sin copia guardada) | 19 | +2 (sin verificar) |
+| Beezion (agencia de pauta) | No era de Dapta según lo público; la compra ya estaba cerrada (fines de mayo) pero sin anunciar | Anunciada el 29-jul (startupslatam.com) | **Nuevo para nosotros** |
 | Academia y comunidad | Enlaces presentes | Teachable vacío, Skool 404 | Rotos hoy (no se sabe si ya fallaban en julio) |
 
 ---
@@ -281,24 +288,30 @@ de 20 cuentas.
 
 **Marco:** Etapa 1, vender Onia Platform a clínicas dentales de 2-6 profesionales en Santa Cruz, sin abrir
 líneas nuevas. El sistema es la oferta y el chatbot es un add-on. Cero autobombo. Son ideas para evaluar: decide
-Sergio Urcullo. Están ordenadas por impacto sobre esfuerzo.
+Sergio Urcullo. Están ordenadas por impacto sobre esfuerzo, salvo 6.5, que espera al primer cliente pagando.
 
 ### 6.1 El anuncio vende un paso gratis, con UNA pregunta de dolor
 
-- **Qué hace Dapta:** ningún anuncio vende el plan. Venden un webinar o una demo («2.000 créditos gratis al
-  agendar») con una sola pregunta de tres opciones (§5.1, §5.3).
+- **Qué hace Dapta:** 9 de los 38 títulos de anuncio venden un webinar gratis; el destino del resto no se vio
+  (§5.1). En la web, la demo regala 2.000 créditos al agendar y abre con una sola pregunta de tres opciones
+  (§5.3). `[inf]` que esa demo sea el destino de la pauta.
 - **Cómo se vería en Onia:** el paso gratis ya existe y la web ya lo dice: «14 días de prueba con el plan
   Profesional, sin tarjeta» (home, /empezar, /agentes y /nosotros del espejo del sitio, grep del 1-oct). Falta
-  llevarlo a donde llega el lead de pauta, que es WhatsApp (`ONIA_ADQUISICION_Y_PAUTA.md` §5.1-5.5): el primer
-  mensaje del bot hace una sola pregunta con tres botones (pacientes que faltan a la cita / pacientes que no
-  volvieron / cobros pendientes) y cierra con «14 días gratis, sin tarjeta». La respuesta elige la demo y sirve
-  para medir la «conversación calificada» (§5.6). La opción «no volvieron» habla del tratamiento a medias
-  recién con la 1.0 publicada (§5.4).
+  llevarlo a donde llega el lead de pauta, que es WhatsApp (`ONIA_ADQUISICION_Y_PAUTA.md` §5.1-5.5): el bot
+  abre con una sola pregunta de dolor con tres botones (pacientes que faltan a la cita / pacientes que no
+  volvieron / cobros pendientes) y cierra con «14 días gratis, sin tarjeta». La respuesta elige qué mostrar en
+  la demo. **No reemplaza a las 5 preguntas de calificación** (§5.5): la «conversación calificada» se sigue
+  midiendo con las 5 (§5.6). «No volvieron» hoy se respalda con el Recall de producción (sin visita ≥180 días);
+  el tratamiento a medias se nombra recién con la 1.0 publicada (§5.4).
 - **Contraste que juega a favor:** la prueba de Dapta pide tarjeta, cobra sola al día 7 y no reembolsa (docs
-  `plans-and-pricing` y `refunds`); Lety también cobra la tarjeta antes. La de Onia se paga por QR al final,
-  así que no hay cobro automático. Se dice lo de Onia, sin nombrar a nadie (cero autobombo).
+  `plans-and-pricing` y `refunds`); Lety también cobra la tarjeta antes (checkout de Stripe visto por Sergio
+  Urcullo el 31-ago, memoria `lety-cobra-tarjeta-antes-del-trial`). La de Onia no pide tarjeta (sitio, grep
+  del 1-oct) y se paga por QR al final, así que no hay cobro automático (sin verificar en producción: la copia
+  local de `onia-platform` del 12-sep tiene `app/api/subscription-payment/bcp-qr`). Se dice lo de Onia, sin
+  nombrar a nadie.
 - **Qué NO copiar:** regalar créditos (Onia no vende créditos, decisión de julio). Tampoco el webinar: Dapta
-  llena 896 lugares con 140K seguidores, y a Onia le costaría horas de Sergio Urcullo sin audiencia.
+  junta 896 asistentes con una audiencia grande (140K en el TikTok del CEO) `[inf]`, y a Onia le costaría
+  horas de Sergio Urcullo sin audiencia.
 - **Esfuerzo:** bajo (guion del bot y la pieza; carril Ventas y pauta). **Impacto:** alto cuando se encienda
   la pauta.
 
@@ -327,7 +340,8 @@ Sergio Urcullo. Están ordenadas por impacto sobre esfuerzo.
 - **Antes de escribirlo:** verificar cómo se factura hoy el WhatsApp de cada clínica (si la conversación de
   Meta la paga la cuenta de la clínica). **No verificado.**
 - **Qué NO copiar:** el crédito como unidad de venta. Su propia tabla lo muestra: el crédito cuesta lo mismo en
-  todos los planes, así que la escalera vende personas, y Onia no tiene esas personas. Tampoco el «se para en
+  todos los planes, así que la escalera vende personas (más usuarios y Dapti incluido), y Onia no tiene esas
+  personas. Tampoco el «se para en
   0»: a una clínica no se le corta la confirmación de citas a mitad de mes.
 - **Esfuerzo:** bajo-medio. **Impacto:** medio.
 
@@ -336,7 +350,8 @@ Sergio Urcullo. Están ordenadas por impacto sobre esfuerzo.
 - **Qué hace Dapta:** muestra en todas las pantallas la caja «¡Conviértete en un Pro!» con la barra de
   créditos, y pone el muro de pago justo en el paso que da valor: el número de teléfono (cap. 01, 22, 23).
 - **Cómo se vería en Onia:** durante los 14 días, una línea fija en el panel con el valor de la semana (por
-  ejemplo, «12 citas confirmadas · 4 pacientes para llamar») y los días que quedan. Pasar de prueba a pago es
+  ejemplo, «12 citas confirmadas · 4 pacientes para llamar»; las cifras son ilustrativas y la línea solo puede
+  contar lo que producción ya hace, §5.4 de `ONIA_ADQUISICION_Y_PAUTA.md`) y los días que quedan. Pasar de prueba a pago es
   la conversión que decide la Etapa 1. **Primero verificar si el panel ya tiene algo así** (no verificado).
 - **Qué NO copiar:** el muro de pago dentro de la prueba (Onia promete el plan completo 14 días) ni la barra
   de consumo.
@@ -355,19 +370,23 @@ Sergio Urcullo. Están ordenadas por impacto sobre esfuerzo.
 ### 6.6 La cara del fundador rinde más que el tutorial
 
 - **Qué hace Dapta:** los vlogs del CEO sacan 12K-18K vistas y los tutoriales 400-930. El TikTok del CEO
-  tiene 8 veces los seguidores del de la empresa (§5.2).
-- **Cómo se vería en Onia:** en el carril Marca personal, priorizar el detrás de escena con la cara de Sergio
-  Urcullo por sobre el tutorial de producto. Los tutoriales quedan para clientes, para bajar horas de soporte.
-  El contenido es el último canal en el orden de `ONIA_ADQUISICION_Y_PAUTA.md` §4.
-- **Qué NO copiar:** 20 videos por día en 20 cuentas (pide un equipo, y el techo de Onia son las horas de
-  Sergio Urcullo). Tampoco el «CEO de startup de $30M»: es autobombo y la cifra no está verificada.
-- **Esfuerzo:** alto y sostenido. **Impacto:** incierto a corto plazo.
+  tiene 8 veces los seguidores del de la empresa (§5.2). `[inf]` que la diferencia sea por la cara y no por el
+  tema.
+- **Cómo se vería en Onia:** **no suma horas ni es para la Etapa 1.** Solo un criterio para el contenido que el
+  carril Marca personal ya hace: preferir el detrás de escena con la cara de Sergio Urcullo al tutorial de
+  producto. Los tutoriales quedan para clientes, para bajar horas de soporte. El contenido es el último canal
+  en `ONIA_ADQUISICION_Y_PAUTA.md` §4 y hoy no llega al dueño de clínica.
+- **Qué NO copiar:** 20 videos por día en 20 cuentas (`[T]` 30xventas; pide un equipo, y el techo de Onia son
+  las horas de Sergio Urcullo). Tampoco presentarse por la plata levantada o el tamaño de la empresa: es
+  autobombo. (sin verificar) Un informe cita un «CEO de startup de $30M»; no hay captura ni fuente de esa
+  frase.
+- **Esfuerzo:** bajo si se queda en criterio; alto si se suman horas. **Impacto en la Etapa 1:** bajo.
 
 ### 6.7 Lo que NO se copia (y la razón)
 
 | De Dapta | Por qué no |
 |---|---|
-| Plataforma horizontal con créditos como unidad de venta | Decisión de julio, reforzada: el crédito vale lo mismo en todos los planes, así que la escalera vende personas. Onia vende un sistema por rubro con plan fijo |
+| Plataforma horizontal con créditos como unidad de venta | Decisión de julio, reforzada: el crédito vale lo mismo en todos los planes, así que la escalera vende personas, usuarios y Dapti incluido. Onia vende un sistema por rubro con plan fijo |
 | «50.000+ empresas», «4.7» sin fuente, sellos | Cero clientes pagando: prohibido fabricar. Cero autobombo |
 | «Respuesta en menos de 3 min», «98% de satisfacción» | Es una promesa de equipo; Onia es una persona |
 | Enlazar una academia vacía, una comunidad caída o un webinar vencido | Viola «la venta nunca exhibe obra». Lección práctica: revisar que cada enlace de la web de Onia lleve a algo vivo |
@@ -410,6 +429,14 @@ En los docs guardados se quitó el bloque final de GitBook dirigido a agentes de
 - Rondas posteriores al pre-seed, la «Serie A» y los totales de 5,4M u 8,2M.
 - Las cifras de clientes (50k, 100k, 150k, 187k) y la nota 4.7.
 - Si la academia y la comunidad ya estaban rotas en julio.
+- El renombre del notetaker a «Dapta SIG» (no aparece en ninguna página guardada) y el «CEO de startup de $30M».
+- Los 17 casos de agosto (Wayback del 15-ago sin copia guardada).
+- Adónde llevan los anuncios de Meta (¿a la demo con 2.000 créditos?) y la fecha del webinar de Luma.
+- Que la prueba de Onia termine en pago por QR en producción (solo se vio la ruta en una copia local del 12-sep).
+
+Re-verificado por el crítico el 1-oct: la captura de julio ya tenía «Dapti AI Sales Agent», «Dapta MCP»,
+«1000+ Integrations» (JSON-LD), Skool y Teachable; no tenía SOC 2, «Sequences», «Insurance» ni /for-ai-agents.
+Luma (896, «Past Event») y 30x.com (USD 1.950, 5-oct, «+100K créditos») coinciden con lo escrito.
 
 ### 7.3 Donde los informes no coinciden
 
