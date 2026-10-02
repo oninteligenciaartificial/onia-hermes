@@ -162,7 +162,8 @@ que el editor de conocimiento no existía, estando en producción), `onia-router
 
 **Queda:**
 - ✅ ~~**`_retirados/` está DENTRO de `.claude/agents/`**~~ — **resuelto 2026-09-29:** los 6
-  retirados se borraron (y 2 agentes más sin uso); ver `historial/LIMPIEZA_SKILLS_20260929.md`.
+  retirados se borraron (los otros 2 que cayeron ese día, `onia-core-guardian` y
+  `onia-creative-radar`, se restauraron el 2026-10-02); ver `historial/LIMPIEZA_SKILLS_20260929.md`.
 - ✅ ~~**`ONIA_SKILLS_STACK_Y_SUBAGENTES.md`** desactualizado~~ — **resuelto 2026-09-29**
   (215 globales, 1 subagente).
 - **Falta una skill de infra/VPS.** Es el carril con el conocimiento más caro y repetido

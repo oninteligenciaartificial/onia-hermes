@@ -523,9 +523,10 @@ Detalle operativo: skills `carruseles-onia` y `ugc-empresas-higgsfield`.
   históricos no autorizan gasto. Video y entrenamiento Soul siempre requieren aprobación
   específica porque su costo y riesgo de deriva son mayores.
 - Cómo se ve un video, se transcribe, se corta, se subtitula y se rinde →
-  **skills `ver-videos` y `editor-videos`** (HyperFrames vive en la copia global
-  `~/.claude/skills` y `~/.codex/skills`; cada flujo se instala con
-  `npx hyperframes skills update <nombre>`: revisarlo ANTES de codear video).
+  **skills `ver-videos` y `editor-videos`** (HyperFrames vive en el repo,
+  `.claude/skills/hyperframes*` y `.agents/skills/`, restaurado el 2026-10-02 porque con la
+  copia global los archivos dejaron de editarse como quiere Sergio Urcullo; la del repo gana
+  sobre la global: revisarlo ANTES de codear video).
 - **Sacar el PROMPT de una imagen o un video de referencia → skill `sacar-prompt`.**
   Distingue **recuperar** (está en pantalla: se lee) de **reconstruir** (se escribe uno
   parecido, y se dice que lo es). Regla de entrada: **si el video habla es UGC, si
