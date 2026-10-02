@@ -10,7 +10,7 @@ Pedido de Sergio Urcullo (30-sep): *«dame los guiones de 2 semanas, verificados
 |---|---|---|---|
 | **Jue 1-oct** | Salió Sonnet 5.5: la prueba de tres tareas para saber si te sirve | Claude Code ya no te pregunta casi nada: qué deja pasar el modo auto (noticia) | Desde el 1 de octubre, tu bot de WhatsApp paga por cada respuesta |
 | **Vie 2-oct** | La perilla de Claude Code que casi nadie toca | El modelo nuevo de OpenAI cuesta un quinto, y una parte sale casi gratis (noticia) | «Verificado» con un 200, y el login mostraba texto roto |
-| **Sáb 3-oct** | 🎬 YouTube: Opus 5.5 o Sonnet 5.5: cuál usar y cómo cambiarlo en Claude Code | Un agente de terminal gratis, ahora con Gemini 3.8 Flash (noticia) | — |
+| **Sáb 3-oct** | 🎬 YouTube: Opus 5.5 o Sonnet 5.5: cuál usar y cómo cambiarlo en Claude Code | Google cambió Gemini CLI gratis por Antigravity CLI: qué cambia para vos (noticia) | — |
 | **Dom 4-oct** | Tu primera skill de Claude Code en un minuto | Sonnet 4.5 se apaga el 30 de noviembre: encontralo y migralo con un comando (noticia) | La regla de 24 horas que rompe tu bot de WhatsApp |
 | **Lun 5-oct** | Claude Code ya lee AGENTS.md, pero no si tenés los dos | Una skill llamada verify y Claude Code la corre antes de cada commit (noticia) | ¿La IA le promete a tu cliente algo que no confirmaste? |
 | **Mar 6-oct** | 🎬 YouTube: Un CLAUDE.md donde cada regla trae su historia | Cambiá dos letras y mirá cómo está armado cualquier repo (repo) | — |
@@ -36,7 +36,7 @@ Cada pieza cierra pidiendo un comentario con su palabra. El recurso no cambió: 
 | Vie 2 | DD-A | CACHE | comunidad · drop tabla Sol vs Astra y la cuenta de caché |
 | Vie 2 | D04-C | MIRAR | comunidad · drop 6 de S1 «Prompt para verificar mirando» |
 | Sáb 3 | D01-C (YouTube) | TRAMPA | comunidad · el reto de las tres propuestas (`drops/2026-10-01.md`, mensaje 2) |
-| Sáb 3 | ~~N06~~ ⛔ no sale (premisa falsa, ver §N06) | ~~GEMINI~~ | — · lugar para un repo de la reserva, lo elige Sergio Urcullo |
+| Sáb 3 | N06 (rehecha el 2-oct) | ANTIGRAVITY | comunidad · drop N06 «De Gemini CLI a Antigravity CLI» |
 | Dom 4 | D01-A | SKILL | web `/claude-code` · video 02 «Instalarlo, y tu primera skill» |
 | Dom 4 | N02 | MIGRAR | comunidad · drop «Checklist de migración desde Sonnet 4.5» |
 | Dom 4 | S2-D07-A | VENTANA | comunidad · drop «Mensajes de seguimiento» |
@@ -279,29 +279,31 @@ Hacé la prueba vos. El ejercicio de las tres propuestas, con el prompt completo
 
 Pegalo en los dos modelos. Si te salió bien, vas a ver los mismos tres totales: mil cincuenta, mil sesenta y mil trescientos cincuenta. Si alguno te da setecientos, ese modelo se comió la trampa.
 
-### N06 · Vertical · Un agente de terminal gratis, ahora con Gemini 3.8 Flash
+### N06 · Vertical · Google cambió Gemini CLI gratis por Antigravity CLI: qué cambia para vos
 
-> ⛔ **NO GRABAR — corregido el 1-oct (noche).** La premisa es falsa hoy: Google reemplazó Gemini CLI por **Antigravity CLI** para el plan gratis el 18-jun-2026 (banner de geminicli.com visto el 1-oct y blog de Google Developers del 19-may; capturas en `carousels/briefs/assets/sergio-n06-gemini-cli-20261001/`). Gratis solo queda con API key paga. El drop N06 enseña el mismo login gratis: tampoco sirve. Se reemplaza por un repo de la reserva (decide Sergio Urcullo).
+> ✅ **Rehecha el 2-oct** (Sergio Urcullo: «si es info vieja no pasa nada pero que sea contenido interesante»). Cada dato salió de una página oficial leída el 2-oct (fuentes en el drop N06 y en el brief `sergio-n06-antigravity-cli-20261002.json`). **Antes de grabar:** si en tu PC no hay skills en `.gemini/skills/`, armá una de prueba para mostrar la mudanza. Si `/model` no te muestra Gemini 3.8 Flash con tu cuenta gratis, sacá esa frase.
 
-*Noticia* · **Demuestra:** `npm install -g @google/gemini-cli`, login con cuenta de Google, `/model` mostrando `gemini-3.8-flash`, un pedido sobre una carpeta real · **Cierre:** comentá GEMINI → DM con el link a la comunidad de WhatsApp (falta escribir: drop «Gemini CLI en 5 minutos», texto propuesto en Pendientes)
+*Noticia (de junio, contada para quien no se enteró)* · **Demuestra:** el aviso de geminicli.com y el párrafo del blog de Google Developers (19-may); el comando de instalación de antigravity.google/download; `agy` abriendo con la cuenta de Google; la pregunta de qué traer de Gemini CLI; mover `.gemini/skills/` a `.agents/skills/` y `/skills` mostrándolas · **Cierre:** comentá ANTIGRAVITY → DM con el link a la comunidad de WhatsApp (drop N06 «De Gemini CLI a Antigravity CLI»)
 
-Google tiene un agente de terminal gratis, y desde el veintinueve de septiembre suma Gemini tres punto ocho Flash.
+Si usabas Gemini CLI gratis y un día dejó de contestarte, no es tu computadora: Google lo apagó.
 
-Se llama Gemini CLI. Es abierto, licencia Apache. Se instala con el comando en pantalla y lo abrís escribiendo gemini.
+Desde el dieciocho de junio, Gemini CLI dejó de responder a quien lo usaba gratis con su cuenta de Google, y a los planes Pro y Ultra. Lo reemplazó Antigravity CLI.
 
-Entrás con tu cuenta de Google. Su página en GitHub dice: sesenta pedidos por minuto y mil por día, gratis.
+La buena noticia: también es gratis, con un límite que se renueva cada semana, y trae Gemini tres punto ocho Flash.
 
-Lo nuevo: la versión cero punto sesenta y dos agrega Gemini tres punto ocho Flash y tres punto cinco Flash Lite. Escribís barra model y elegís.
+¿Y si te quedás en Gemini CLI? Sigue andando, pero con una clave de API paga.
 
-El detalle: con cuenta de Google, el modelo nuevo se habilita de a poco. Con clave de API de Gemini, ya está.
+Qué hacés hoy. Uno: instalalo con el comando que ves en pantalla y abrilo escribiendo a, ge, i griega. Entrás con tu cuenta de Google.
 
-Probalo: abrí una carpeta con tus archivos y pedile: «resumime qué hay acá y qué falta».
+Dos: la primera vez, encuentra tu configuración de Gemini CLI y te pregunta qué traer.
 
-Cómo sabés que anduvo: barra model muestra tres punto ocho Flash elegido, y la respuesta nombra archivos que existen.
+Tres, la trampa: las skills de tu proyecto no se mudan solas. Estaban en punto gemini barra skills. Ahora van en punto agents barra skills. Movelas a mano.
 
-Por qué importa: para aprender a trabajar con un agente no necesitás pagar el primer mes.
+Tu GEMINI punto md lo sigue leyendo igual.
 
-Los pasos, con capturas, están en la comunidad de WhatsApp: comentá GEMINI y te paso el link.
+Cómo sabés que quedó: escribí barra skills y tienen que aparecer.
+
+Los comandos para Mac, Linux y Windows están en la comunidad de WhatsApp: comentá ANTIGRAVITY y te paso el link.
 
 ## Dom 4-oct
 

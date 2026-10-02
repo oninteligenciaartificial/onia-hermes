@@ -162,32 +162,31 @@ Pegalo en los dos modelos. Si te salió bien, vas a ver los mismos tres totales:
 
 ⚠️ Noticia: si se venció o cambió antes de grabar, se reemplaza por un repo de la reserva.
 
-### N06 · Vertical · Un agente de terminal gratis, ahora con Gemini 3.8 Flash
+### N06 · Vertical · Google cambió Gemini CLI gratis por Antigravity CLI: qué cambia para vos
 
-> ⛔ **NO GRABAR — corregido el 1-oct (noche).** La premisa es falsa hoy: Google reemplazó Gemini CLI por **Antigravity CLI** para el plan gratis el 18-jun-2026 (banner de geminicli.com visto el 1-oct y blog de Google Developers del 19-may; capturas en `carousels/briefs/assets/sergio-n06-gemini-cli-20261001/`). Gratis solo queda con API key paga. El drop N06 enseña el mismo login gratis: tampoco sirve. Se reemplaza por un repo de la reserva (decide Sergio Urcullo).
+**En pantalla:** el aviso de geminicli.com y el párrafo del blog de Google Developers (19-may), el comando de antigravity.google/download, `agy` entrando con tu cuenta de Google, la pregunta de qué traer de Gemini CLI, mover `.gemini/skills/` a `.agents/skills/` y `/skills` mostrándolas. Si no tenés skills en `.gemini/skills/`, armá una de prueba antes.
 
+**Palabra:** ANTIGRAVITY
 
-**En pantalla:** `npm install -g @google/gemini-cli`, login con Google, `/model` con `gemini-3.8-flash` y un pedido sobre una carpeta real.
+Si usabas Gemini CLI gratis y un día dejó de contestarte, no es tu computadora: Google lo apagó.
 
-**Palabra:** GEMINI
+Desde el dieciocho de junio, Gemini CLI dejó de responder a quien lo usaba gratis con su cuenta de Google, y a los planes Pro y Ultra. Lo reemplazó Antigravity CLI.
 
-Google tiene un agente de terminal gratis, y desde el veintinueve de septiembre suma Gemini tres punto ocho Flash.
+La buena noticia: también es gratis, con un límite que se renueva cada semana, y trae Gemini tres punto ocho Flash.
 
-Se llama Gemini CLI. Es abierto, licencia Apache. Se instala con el comando en pantalla y lo abrís escribiendo gemini.
+¿Y si te quedás en Gemini CLI? Sigue andando, pero con una clave de API paga.
 
-Entrás con tu cuenta de Google. Su página en GitHub dice: sesenta pedidos por minuto y mil por día, gratis.
+Qué hacés hoy. Uno: instalalo con el comando que ves en pantalla y abrilo escribiendo a, ge, i griega. Entrás con tu cuenta de Google.
 
-Lo nuevo: la versión cero punto sesenta y dos agrega Gemini tres punto ocho Flash y tres punto cinco Flash Lite. Escribís barra model y elegís.
+Dos: la primera vez, encuentra tu configuración de Gemini CLI y te pregunta qué traer.
 
-El detalle: con cuenta de Google, el modelo nuevo se habilita de a poco. Con clave de API de Gemini, ya está.
+Tres, la trampa: las skills de tu proyecto no se mudan solas. Estaban en punto gemini barra skills. Ahora van en punto agents barra skills. Movelas a mano.
 
-Probalo: abrí una carpeta con tus archivos y pedile: «resumime qué hay acá y qué falta».
+Tu GEMINI punto md lo sigue leyendo igual.
 
-Cómo sabés que anduvo: barra model muestra tres punto ocho Flash elegido, y la respuesta nombra archivos que existen.
+Cómo sabés que quedó: escribí barra skills y tienen que aparecer.
 
-Por qué importa: para aprender a trabajar con un agente no necesitás pagar el primer mes.
-
-Los pasos, con capturas, están en la comunidad de WhatsApp: comentá GEMINI y te paso el link.
+Los comandos para Mac, Linux y Windows están en la comunidad de WhatsApp: comentá ANTIGRAVITY y te paso el link.
 
 
 ## Dom 4-oct

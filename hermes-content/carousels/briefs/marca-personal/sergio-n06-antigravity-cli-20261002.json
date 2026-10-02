@@ -1,0 +1,114 @@
+{
+  "title": "Google cambió Gemini CLI gratis por Antigravity CLI: qué cambia para vos (N06, noticia, pack referentes)",
+  "caption": "Si usabas Gemini CLI gratis y un día dejó de contestarte, no es tu computadora: Google lo apagó.\n\nDesde el 18 de junio de 2026, Gemini CLI dejó de atender a quien lo usaba gratis con su cuenta de Google (Gemini Code Assist for individuals) y a los planes Google AI Pro y Ultra. Lo reemplazó Antigravity CLI.\n\nLo que cambia para vos:\n1. Antigravity CLI también es gratis para cuentas personales, con un límite que se renueva cada semana. Trae Gemini 3.8 Flash.\n2. Se instala con un comando (Mac y Linux con curl, Windows con PowerShell) y se abre escribiendo agy. Entrás con tu cuenta de Google.\n3. La primera vez encuentra tu configuración de Gemini CLI y te pregunta qué traer.\n4. La trampa: las skills de tu proyecto no se mudan solas. Van de .gemini/skills a .agents/skills, a mano. Comprobalo con /skills.\n5. Tu GEMINI.md lo sigue leyendo igual.\n\n¿Y si te quedás en Gemini CLI? Sigue andando, pero con una clave de API paga.\n\nFuentes, releídas el 2 de octubre de 2026: el aviso de geminicli.com, el blog de Google Developers del 19 de mayo («An important update: Transitioning Gemini CLI to Antigravity CLI») y la documentación de antigravity.google (descarga, planes y migración desde Gemini CLI).\n\nLos comandos para Mac, Linux y Windows, y cómo mudar tus skills, están en la comunidad de WhatsApp: te paso el link. Comentá ANTIGRAVITY.",
+  "hashtags": [
+    "#gemini",
+    "#google",
+    "#geminicli",
+    "#antigravity",
+    "#ia",
+    "#programacion",
+    "#bolivia"
+  ],
+  "serie": "Noticia · Google",
+  "fuentes": {
+    "guion": "hermes-content/docs/cola/plan-3-semanas/GUIONES-2-SEMANAS-1-14-OCT.md §N06 (sáb 3-oct, palabra ANTIGRAVITY; rehecho el 2-oct)",
+    "drop": "hermes-content/docs/cola/drops/2026-10-01-drops-noticias-repos.md §N06 «De Gemini CLI a Antigravity CLI»",
+    "geminicli": "https://geminicli.com/ — banner, leído y capturado el 2-oct: «Unpaid tier and Google One users: Gemini CLI was replaced by Antigravity CLI on June 18th, 2026. To learn more, see our blog post.» (la misma frase sale en /plans y /docs). Captura: assets/sergio-n06-antigravity-cli-20261002/geminicli-banner-antigravity-20261002.png (viewport 430 px, escala 3).",
+    "blog_google_developers": "https://developers.googleblog.com/an-important-update-transitioning-gemini-cli-to-antigravity-cli/ — «MAY 19, 2026», leído el 2-oct: «On June 18, 2026, Gemini CLI and Gemini Code Assist IDE extensions will stop serving requests for Google AI Pro and Ultra, as well as those using it free of charge using Gemini Code Assist for individuals»; «Antigravity CLI keeps the most critical features of Gemini CLI: Agent Skills, Hooks, Subagents, and Extensions (now as Antigravity plugins)»; «Gemini CLI will remain accessible via paid Gemini and Gemini Enterprise Agent Platform API keys». Captura del párrafo: assets/sergio-n06-antigravity-cli-20261002/googleblog-18jun-gemini-cli-20261002.png.",
+    "descarga": "https://antigravity.google/download — leído y capturado el 2-oct: «Antigravity CLI v1.2.12»; macOS y Linux: curl -fsSL https://antigravity.google/cli/install.sh | bash; Windows PowerShell: irm https://antigravity.google/cli/install.ps1 | iex. Captura: assets/sergio-n06-antigravity-cli-20261002/antigravity-download-cli-20261002.png (viewport 560 px, escala 3; muestra la pestaña Linux, la de macOS dice el mismo comando).",
+    "instalacion": "https://antigravity.google/docs/cli/install/ — leído el 2-oct: instala el binario agy; «When launching agy… If no saved session is found… The CLI automatically launches your local default web browser. Sign in».",
+    "gratis": "https://antigravity.google/pricing (2-oct): «For Individuals $0/month… Agent model: access to Gemini 3.8 Flash…», «Basic weekly rate limits». https://antigravity.google/docs/plans/ (2-oct): todos los planes: «Use of Gemini models, including Gemini 3.1 Pro, Gemini 3.8 Flash» y «Access to all product features, such as scheduled tasks and the CLI»; sin Pro ni Ultra: «A meaningful quota, refreshed weekly» y «A weekly rate limit».",
+    "migracion": "https://antigravity.google/docs/cli/gcli-migration/ — leído el 2-oct: «When you execute agy for the first time in an environment containing legacy configurations, the CLI automatically detects your existing profiles. An interactive checklist prompts you to choose which assets to migrate»; workspace skills «.gemini/skills/» → «.agents/skills/» («you must manually rename or relocate the folder»); «The agent continues to parse and enforce rule constraints defined inside your active directory’s GEMINI.md and AGENTS.md files».",
+    "skills_cmd": "https://antigravity.google/docs/cli/reference/ (2-oct): «/skills — Browse loaded local and global Agent Skills».",
+    "imagen_portada": "hermes-content/galeria/ilustraciones/k11-img-s01-7794c76c.jpg (Higgsfield, lote K11 del 1-oct, sin usar), pasada a grises y fondo a blanco puro con ImageMagick (convert -colorspace Gray -level 8%,84%,0.6 -white-threshold 93%) y centrada en un lienzo blanco ancho (-extent 4400x2400) para que entre entera → assets/sergio-n06-antigravity-cli-20261002/portada-barrera-cajas-gris-ancha.jpg. Sin gasto. Esquinas medidas: 255."
+  },
+  "slides": [
+    {
+      "number": 1,
+      "layout": "ilustrado",
+      "theme": "verde",
+      "badge": "noticia",
+      "logo": "hermes-content/references/brand-logos/gemini-color.svg",
+      "headline": "*Gemini CLI* gratis se apagó",
+      "subtitle": "Google lo cambió por Antigravity CLI",
+      "image": "hermes-content/carousels/briefs/assets/sergio-n06-antigravity-cli-20261002/portada-barrera-cajas-gris-ancha.jpg",
+      "body": "Si un día dejó de contestarte, no es tu computadora.",
+      "next": "la prueba",
+      "fuente": "banner de geminicli.com y blog de Google Developers del 19-may, leídos el 2-oct",
+      "alt_text": "Una barrera cerrada y unas cajas para mudar: Google cambió Gemini CLI gratis por Antigravity CLI"
+    },
+    {
+      "number": 2,
+      "layout": "captura",
+      "theme": "blanco",
+      "headline": "Lo dice su *propia página*",
+      "image": "hermes-content/carousels/briefs/assets/sergio-n06-antigravity-cli-20261002/geminicli-banner-antigravity-20261002.png",
+      "body": "Plan gratis y Google One: reemplazado el 18 de junio.",
+      "next": "qué dejó de andar",
+      "fuente": "captura de geminicli.com, 2-oct-2026",
+      "alt_text": "Captura del aviso de geminicli.com: para el plan gratis y Google One, Gemini CLI fue reemplazado por Antigravity CLI el 18 de junio de 2026"
+    },
+    {
+      "number": 3,
+      "layout": "captura",
+      "theme": "blanco",
+      "headline": "Desde el *18 de junio*",
+      "image": "hermes-content/carousels/briefs/assets/sergio-n06-antigravity-cli-20261002/googleblog-18jun-gemini-cli-20261002.png",
+      "body": "Gratis, Pro y Ultra: no responde. Sigue con clave de API paga.",
+      "next": "el reemplazo",
+      "fuente": "captura del blog de Google Developers (19-may-2026), 2-oct; «paid… API keys» del mismo post",
+      "alt_text": "Captura del blog de Google Developers: desde el 18 de junio de 2026 Gemini CLI deja de responder a Google AI Pro, Ultra y a quien lo usaba gratis"
+    },
+    {
+      "number": 4,
+      "layout": "logos",
+      "theme": "blanco",
+      "headline": "gratis",
+      "logos": [
+        {
+          "file": "hermes-content/references/brand-logos/gemini-color.svg",
+          "label": "Gemini 3.8 Flash"
+        },
+        {
+          "file": "hermes-content/references/brand-logos/google-color.svg",
+          "label": "tu cuenta de Google"
+        }
+      ],
+      "body": "Antigravity CLI no se paga en cuentas personales: tiene un límite que se renueva *cada semana*.",
+      "next": "cómo se instala",
+      "fuente": "antigravity.google/pricing y /docs/plans, 2-oct",
+      "alt_text": "Antigravity CLI es gratis con tu cuenta de Google, trae Gemini 3.8 Flash y su límite se renueva cada semana"
+    },
+    {
+      "number": 5,
+      "layout": "captura",
+      "theme": "blanco",
+      "headline": "Se instala con *un comando*",
+      "image": "hermes-content/carousels/briefs/assets/sergio-n06-antigravity-cli-20261002/antigravity-download-cli-20261002.png",
+      "body": "En Mac, el mismo. En Windows, con PowerShell. Se abre con agy.",
+      "next": "la trampa",
+      "fuente": "captura de antigravity.google/download, 2-oct-2026",
+      "alt_text": "Captura de la página de descarga de Antigravity CLI con el comando de instalación para Linux"
+    },
+    {
+      "number": 6,
+      "layout": "ensayo",
+      "theme": "blanco",
+      "headline": "La *trampa*: tus skills",
+      "body": "La primera vez, agy te pregunta qué traer de Gemini CLI.\n\nPero las skills de tu proyecto no se mudan solas: van de .gemini/skills a\u00a0.agents/skills, a\u00a0mano.\n\n*Comprobalo con /skills.*",
+      "next": "los comandos",
+      "fuente": "antigravity.google/docs/cli/gcli-migration y /docs/cli/reference, 2-oct",
+      "alt_text": "La trampa al pasar de Gemini CLI a Antigravity CLI: las skills del proyecto se mueven a mano de .gemini/skills a .agents/skills"
+    },
+    {
+      "number": 7,
+      "layout": "cierre",
+      "theme": "negro",
+      "keyword": "ANTIGRAVITY",
+      "body": "y te paso los comandos y cómo mudar tus skills.",
+      "fuente": "GUIONES, tabla de palabras: sáb 3 · N06 · ANTIGRAVITY → drop «De Gemini CLI a Antigravity CLI»",
+      "alt_text": "Comentá ANTIGRAVITY para recibir los comandos y cómo mudar tus skills"
+    }
+  ]
+}

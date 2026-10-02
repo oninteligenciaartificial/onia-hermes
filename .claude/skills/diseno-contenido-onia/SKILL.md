@@ -82,6 +82,10 @@ lámina sale SIN título. `"next": ""` saca la flecha «seguí» (para historias
 - **Énfasis dentro de una fila de `lista`:** sale gris con subrayado verde (la regla `.c-lista li span` le gana).
 - **`captura` alta (más alta que ancha):** se limita a 760 px y el pie se monta sobre el @handle. Recortá la captura
   más ancha que alta. **`cierre`:** el body no balancea renglones; espacio duro en las dos últimas palabras.
+- **`cierre` con palabra de más de 9 letras** (ANTIGRAVITY, 2-oct): a 170 px se salía de la lámina. Desde el 2-oct el
+  pack la achica en proporción; hasta 9 letras (ESQUELETO) queda igual.
+- **Foto 4:3 en `ilustrado`:** el `object-fit: cover` la recorta arriba y abajo y no se entiende. Centrala en un lienzo
+  blanco ancho (`convert … -gravity center -extent 4400x2400`, ~1,85:1) y entra entera (N06, 2-oct).
 - **Un logo como imagen de `ilustrado`:** ponelo sobre un lienzo blanco con margen; la máscara radial lo corta.
 - **Capturas reales desde la nube (2-oct):** Chromium con `--proxy-server=$HTTPS_PROXY`; si da
   `ERR_CERT_AUTHORITY_INVALID`, la confianza en la CA del proxy se resuelve como dice `/root/.ccr/README.md` (nunca

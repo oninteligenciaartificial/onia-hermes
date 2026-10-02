@@ -47,7 +47,7 @@ palabra que su video, para que el DM mande al mismo recurso.
 | vie 2-oct | DD-A OpenAI Sol | `sergio-dda-openai-sol-20261001` | CACHE | listo; falta escribir su drop |
 | dom 4-oct | N02 Sonnet 4.5 se apaga | `sergio-n02-sonnet45-se-apaga-20261001` | MIGRAR | listo para aprobar |
 | lun 5-oct | N04 skill verify | `sergio-n04-skill-verify-20261001` | VERIFY | listo para aprobar |
-| ~~sáb 3-oct~~ | ~~N06 Gemini CLI~~ | — | — | ⛔ premisa falsa (Antigravity CLI reemplazó el plan gratis el 18-jun); se reemplaza por un repo de la reserva |
+| sáb 3-oct | N06 Gemini CLI → Antigravity CLI (rehecha 2-oct) | `sergio-n06-antigravity-cli-20261002` | ANTIGRAVITY | listo para aprobar |
 
 Hora: **16:00 La Paz** (20:00 UTC) todos. K14–K21 quedan para después del 14-oct (§2).
 Se agendan con `deploy/vps-ops/publicar/ig-carrusel.mjs` + `agendar-publicacion.sh`, recién con el «ok» de Sergio

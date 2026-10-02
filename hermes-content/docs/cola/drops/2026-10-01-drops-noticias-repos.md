@@ -200,41 +200,53 @@ Contame en General: *¿cuántos resultados te dio la búsqueda del paso 1?*
 
 <sub>Fuentes: Guion final: GUIONES-2-SEMANAS-1-14-OCT.md §N02 (dom 4-oct; promete «la lista completa»). Texto base: auditoria-20260930/LOTE-D.md §N02 y «Pendientes del lote» → N02. Retiro y recomendación: https://platform.claude.com/docs/en/release-notes/overview (30-sep). Comando y alcance: https://platform.claude.com/docs/en/models/sonnet-5-5/migration-guide. Lista del paso 3, releída el 1-oct en la skill claude-api de Claude Code 2.1.287. Tabla «Thinking & Effort», fila Sonnet 5.5: `budget_tokens` «Removed - 400», sampling «Non-default values - 400», `disabled` da 400 y `between_tools` va sin otros campos y solo con esfuerzo high o menos. shared/model-migration.md → «Claude Sonnet 5.5 Migration Checklist»: [BLOCKS] «replace `budget_tokens` with an effort level», «also replace assistant prefills», «try adaptive thinking at `low` effort first», «Replace `tool_choice` `any` / `tool` with `auto` plus `strict: true`». Misma sección: «Starting points: `medium` for agentic coding…; `low` for chat». «Common Pitfalls» (prefill): «Use structured outputs (`output_config.format`) or system prompt instructions». «Tool Use Patterns»: «Schema must have `additionalProperties: false` + `required`». Exclusión de node_modules, .venv y .git en el grep: corrección del revisor. Sin ella, la búsqueda podría contar las listas de modelos del propio SDK (riesgo probable, no confirmado: no se pudo abrir el paquete).</sub>
 
-## N06 · Gemini CLI en 5 minutos  (pieza N06)
+## N06 · De Gemini CLI a Antigravity CLI  (pieza N06 y su carrusel, sáb 3) · rehecho 2-oct
 
-> ⛔ **NO SE PUBLICA — corregido el 1-oct (noche):** el login gratis con cuenta de Google ya no anda; Gemini CLI fue reemplazado por Antigravity CLI para el plan gratis el 18-jun-2026 (ver la nota en GUIONES §N06).
+⚠️ **Rehecho el 2-oct** (pedido de Sergio Urcullo): el drop viejo, «Gemini CLI en 5 minutos», enseñaba el login gratis con cuenta de Google, que no anda desde el 18-jun-2026. Este cuenta el cambio y cómo mudarse. Cada dato sale de una página oficial leída el 2-oct (fuentes abajo).
 
-**Condición:** NO PUBLICAR hasta cumplir 1 y 2. 1) Leer los términos del login con cuenta de Google desde un entorno que no los bloquee (desde la nube están bloqueados developers.google.com y ai.google.dev): Google Terms of Service y «Gemini Code Assist for individuals Privacy Notice» (developers.google.com/gemini-code-assist/resources/privacy-notice-gemini-code-assist-individuals). Si dicen que usan lo que mandás para mejorar sus productos, o que lo leen personas, agregar esa línea de riesgo antes del cierre, con la fuente (como en G01). 2) Antes de grabar, abrir `/model` con la cuenta de Sergio Urcullo. Con login de Google, 3.8 Flash se habilita de a poco (PR 29443). Si no aparece, no hay captura ni demo con ese modelo, y quedan dos salidas. Una: grabar con clave de API (README: clave en aistudio.google.com/apikey · `export GEMINI_API_KEY="YOUR_API_KEY"` · `gemini`; gratis «1000 requests/day»). En ese caso se leen antes los «Gemini API Terms of Service - Unpaid Services» (ai.google.dev/gemini-api/terms#unpaid-services), y el drop suma esa vía con su línea de uso de datos. La otra: bajar la pieza. 3) Mandar junto al texto las 3 capturas de la grabación (instalación, `/model`, respuesta). Sin capturas, sacar la línea «Abajo van 3 capturas…» y cambiar el cierre del guion a «Los pasos están en la comunidad». 4) El guion dice «Con clave de API de Gemini, ya está», y el drop ya no enseña esa vía porque no se leyeron sus términos. Si no se grabó, cambiar a «Si no te aparece, igual podés probar el agente con el modelo que tengas». 5) Publicar antes del video del sáb 3-oct. Si el README cambió los límites o la versión, se corrige con lo que diga ese día.
+**Condición:** publicar antes del video y del carrusel del sáb 3-oct. Si Google cambió la descarga o los planes, se corrige con lo que diga ese día.
 
-*Gemini CLI en 5 minutos*
+*De Gemini CLI a Antigravity CLI*
 
-El agente de terminal de Google. Abierto (licencia Apache 2.0) y gratis con tu cuenta de Google: 60 pedidos por minuto y 1.000 por día, según su página en GitHub.
+Desde el *18 de junio de 2026*, Gemini CLI dejó de atender a quien lo usaba gratis con su cuenta de Google (Gemini Code Assist for individuals) y a los planes Google AI Pro y Ultra. Lo reemplazó *Antigravity CLI*, el agente de terminal de Google Antigravity.
 
-1. Instalalo (necesitás Node.js):
+*Lo que cambia para vos*
+- Es gratis para cuentas personales, con un límite que se renueva cada semana. Pro y Ultra tienen más.
+- Trae Gemini 3.8 Flash y Gemini 3.1 Pro.
+- Está disponible en Bolivia, para mayores de 18.
+- Conserva skills, hooks, subagentes y extensiones (ahora se llaman plugins).
+
+*1. Instalalo*
+Mac o Linux:
 ```
-npm install -g @google/gemini-cli
+curl -fsSL https://antigravity.google/cli/install.sh | bash
 ```
-2. En la terminal, entrá a la carpeta que querés revisar y abrilo:
+Windows (PowerShell):
 ```
-cd nombre-de-tu-carpeta
-gemini
+irm https://antigravity.google/cli/install.ps1 | iex
 ```
-3. Elegí *Sign in with Google* y entrá con tu cuenta en el navegador.
-4. Escribí `/model` y elegí `gemini-3.8-flash`. Llegó en la versión 0.62.0 (29-sep), junto con `gemini-3.5-flash-lite`.
-¿No te aparece? Con cuenta de Google se habilita de a poco: seguí con el modelo que tengas elegido.
-5. Primer pedido:
+*2. Abrilo* en la carpeta de tu proyecto:
 ```
-resumime qué hay acá y qué falta
+agy
 ```
-Lo que le pedís y lo que lee de la carpeta va a los servidores de Google: para esta primera prueba, usá una carpeta sin datos de clientes ni claves.
+Se abre el navegador: entrá con tu cuenta de Google.
 
-*Cómo sabés que anduvo:* `/model` muestra el modelo elegido y la respuesta nombra archivos que existen.
+*3. Si venías de Gemini CLI*
+- La primera vez encuentra tu configuración vieja y te pregunta qué traer.
+- Para convertir tus extensiones a mano: `agy plugin import gemini`
+- *La trampa:* las skills del proyecto no se mudan solas. Mové la carpeta `.gemini/skills/` a `.agents/skills/`.
+- `GEMINI.md` y `AGENTS.md` los sigue leyendo igual.
+- Servidores MCP: ya no van en `settings.json`. Van en `.agents/mcp_config.json` (los del proyecto) o en `~/.gemini/config/mcp_config.json` (los globales). Si uno remoto usaba `url` o `httpUrl`, ahora es `serverUrl`.
 
-Abajo van 3 capturas: la instalación, `/model` y la respuesta.
+*Cómo sabés que quedó:* escribí `/skills` y tienen que aparecer tus skills. Con `/usage` ves cuánto te queda de cuota.
 
-Contame en General: *¿qué te dijo que faltaba en tu carpeta?*
+*¿Y si te quedás en Gemini CLI?* Sigue andando con una clave de API paga de Gemini. Con la cuenta gratis, ya no.
 
-<sub>Fuentes: Guion final: GUIONES-2-SEMANAS-1-14-OCT.md §N06 (sáb 3-oct). Texto base: auditoria-20260930/LOTE-D.md §N06 y «Pendientes del lote» → N06. README de https://github.com/google-gemini/gemini-cli, releído el 1-oct: `npm install -g @google/gemini-cli`, «60 requests/min and 1,000 requests/day with personal Google account», «Apache 2.0». Option 1: «choose Sign in with Google and follow the browser authentication flow». Quick Examples: `cd new-project/` y `gemini`. Option 2 (clave en aistudio.google.com/apikey, `export GEMINI_API_KEY`, «1000 requests/day») queda en la condición 2. Términos: docs/resources/tos-privacy.md del mismo repo, releído el 1-oct. Con cuenta de Google rigen los Google Terms of Service y la «Gemini Code Assist for individuals Privacy Notice»; con clave gratis, los «Gemini API Terms of Service - Unpaid Services». Las páginas de Google que enlaza no se pudieron abrir desde la nube. Versión: https://github.com/google-gemini/gemini-cli/releases/tag/v0.62.0 (29-sep). Habilitación de a poco con login de Google: https://github.com/google-gemini/gemini-cli/pull/29443 (lo cita LOTE-D el 30-sep; el 1-oct no se pudo reabrir desde esta sesión). La línea «va a los servidores de Google… usá una carpeta sin datos de clientes ni claves» es una precaución sobre cómo funciona un servicio en la nube. Lo que Google hace con esos datos es la condición 1.</sub>
+Lo que le pedís y lo que lee de tu carpeta va a los servidores de Google. Según su FAQ, la recolección de datos se puede desactivar desde Settings. Para la primera prueba, usá una carpeta sin datos de clientes ni claves.
+
+Contá en General: *¿usabas Gemini CLI? ¿Qué tuviste que mover a mano?*
+
+<sub>Fuentes, todas leídas el 2-oct desde la nube: guion final GUIONES-2-SEMANAS-1-14-OCT.md §N06 (sáb 3-oct, rehecho el 2-oct). Banner de https://geminicli.com/ (sale igual en /plans y /docs): «Unpaid tier and Google One users: Gemini CLI was replaced by Antigravity CLI on June 18th, 2026». Blog de Google Developers del 19-may-2026, https://developers.googleblog.com/an-important-update-transitioning-gemini-cli-to-antigravity-cli/: «On June 18, 2026, Gemini CLI and Gemini Code Assist IDE extensions will stop serving requests for Google AI Pro and Ultra, as well as those using it free of charge using Gemini Code Assist for individuals»; «Antigravity CLI keeps the most critical features of Gemini CLI: Agent Skills, Hooks, Subagents, and Extensions (now as Antigravity plugins)»; «Gemini CLI will remain accessible via paid Gemini and Gemini Enterprise Agent Platform API keys». Gratis y modelos: https://antigravity.google/pricing («For Individuals $0/month», «Basic weekly rate limits») y https://antigravity.google/docs/plans/ (todos los planes: «Gemini 3.1 Pro, Gemini 3.8 Flash» y «Access to all product features, such as scheduled tasks and the CLI»; sin Pro ni Ultra: «A meaningful quota, refreshed weekly»; Pro y Ultra, cuota más alta). Comandos: https://antigravity.google/download (Antigravity CLI v1.2.12; macOS y Linux `curl -fsSL https://antigravity.google/cli/install.sh | bash`; Windows PowerShell `irm https://antigravity.google/cli/install.ps1 | iex`) y https://antigravity.google/docs/cli/install/ (binario `agy`; sin sesión guardada, «The CLI automatically launches your local default web browser»). Abrirlo en la carpeta del proyecto: la skill `antigravity-support` que trae Gemini CLI v0.62.0 (repo google-gemini/gemini-cli, clonado; packages/core/src/skills/builtin/antigravity-support/SKILL.md: «navigate to any project or workspace directory and run: agy»). Migración: https://antigravity.google/docs/cli/gcli-migration/ (checklist en el primer `agy`; `agy plugin import gemini`; skills de proyecto `.gemini/skills/` → `.agents/skills/`, «you must manually rename or relocate the folder»; «GEMINI.md and AGENTS.md»; MCP en `~/.gemini/config/mcp_config.json` y `.agents/mcp_config.json`; `url` o `httpUrl` → `serverUrl`). `/skills` y `/usage`: https://antigravity.google/docs/cli/reference/. Bolivia, 18 años y datos: https://antigravity.google/docs/faq/ («You can opt out of data collection at any point from the Settings panel»). Afuera a propósito: la página de precios lista «Claude Sonnet & Opus 4.6» en el plan gratis, pero /docs/plans dice que los modelos de terceros son de Ultra (contradicción, no se menciona); y /plans de geminicli.com todavía ofrece «Free… Authenticate instantly with your Google Account» debajo del banner que dice lo contrario: mandan el banner y el blog.</sub>
 
 ## N04 · Plantilla: la skill verify  (pieza N04)
 

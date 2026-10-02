@@ -234,7 +234,7 @@ Contá en General: *¿qué parte de tus pedidos se repite siempre igual?*
 
 ---
 
-### Sáb 3-oct · a las 10:00 (antes del YouTube D01-C y del carrusel K1)
+### Sáb 3-oct · a las 10:00 (antes del YouTube D01-C, del carrusel K1 y de la noticia N06)
 
 #### 3-1 · Respuesta del reto → TRAMPA
 Origen: `drops/2026-10-01.md`, mensaje 3. Después, la imagen `carousels/out/sergio-comunidad-reto-presupuestos-20261001/slide-02.png`.
@@ -261,7 +261,50 @@ Mostrá la fórmula, citá de dónde sacaste cada número y marcá si algún
 La clave son dos pedidos: *la fórmula* y *de dónde sacó cada dato*. Así ves en segundos si la IA se equivocó.
 ~~~~
 
-N06 (Gemini CLI) no sale: ver la nota ⛔ del drop N06. Queda un lugar para un repo de la reserva: lo decide Sergio Urcullo (y su aviso entra acá).
+#### 3-2 · ANTIGRAVITY (noticia N06 y su carrusel)
+Origen: `N06` de `drops/2026-10-01-drops-noticias-repos.md` (rehecho el 2-oct).
+
+~~~~
+*ANTIGRAVITY* · *De Gemini CLI a Antigravity CLI*
+
+Desde el *18 de junio de 2026*, Gemini CLI dejó de atender a quien lo usaba gratis con su cuenta de Google (Gemini Code Assist for individuals) y a los planes Google AI Pro y Ultra. Lo reemplazó *Antigravity CLI*, el agente de terminal de Google Antigravity.
+
+*Lo que cambia para vos*
+- Es gratis para cuentas personales, con un límite que se renueva cada semana. Pro y Ultra tienen más.
+- Trae Gemini 3.8 Flash y Gemini 3.1 Pro.
+- Está disponible en Bolivia, para mayores de 18.
+- Conserva skills, hooks, subagentes y extensiones (ahora se llaman plugins).
+
+*1. Instalalo*
+Mac o Linux:
+```
+curl -fsSL https://antigravity.google/cli/install.sh | bash
+```
+Windows (PowerShell):
+```
+irm https://antigravity.google/cli/install.ps1 | iex
+```
+*2. Abrilo* en la carpeta de tu proyecto:
+```
+agy
+```
+Se abre el navegador: entrá con tu cuenta de Google.
+
+*3. Si venías de Gemini CLI*
+- La primera vez encuentra tu configuración vieja y te pregunta qué traer.
+- Para convertir tus extensiones a mano: `agy plugin import gemini`
+- *La trampa:* las skills del proyecto no se mudan solas. Mové la carpeta `.gemini/skills/` a `.agents/skills/`.
+- `GEMINI.md` y `AGENTS.md` los sigue leyendo igual.
+- Servidores MCP: ya no van en `settings.json`. Van en `.agents/mcp_config.json` (los del proyecto) o en `~/.gemini/config/mcp_config.json` (los globales). Si uno remoto usaba `url` o `httpUrl`, ahora es `serverUrl`.
+
+*Cómo sabés que quedó:* escribí `/skills` y tienen que aparecer tus skills. Con `/usage` ves cuánto te queda de cuota.
+
+*¿Y si te quedás en Gemini CLI?* Sigue andando con una clave de API paga de Gemini. Con la cuenta gratis, ya no.
+
+Lo que le pedís y lo que lee de tu carpeta va a los servidores de Google. Según su FAQ, la recolección de datos se puede desactivar desde Settings. Para la primera prueba, usá una carpeta sin datos de clientes ni claves.
+
+Contá en General: *¿usabas Gemini CLI? ¿Qué tuviste que mover a mano?*
+~~~~
 
 ---
 
@@ -1070,6 +1113,7 @@ Link de la comunidad: `https://chat.whatsapp.com/ENplPbR8GrbGsdMrGgLxzu` (el de 
 | PLANILLA · COMUNIDAD · TARIFA | comunidad | vie 2 (2-2) |
 | EFFORT · MIRAR · CACHE | comunidad | vie 2 (2-3) |
 | TRAMPA | comunidad | vie 2 (2-1, reto) y sáb 3 (3-1, respuesta) |
+| ANTIGRAVITY | comunidad | sáb 3 (3-2) |
 | SKILL | `sergiourcullo.vercel.app/claude-code` (video 02) | — |
 | MIGRAR · VENTANA | comunidad | dom 4 (4-1, 4-2) |
 | AGENTS · VERIFY · PROMESA | comunidad | lun 5 (5-1, 5-2, 5-3) |
@@ -1091,7 +1135,7 @@ Link de la comunidad: `https://chat.whatsapp.com/ENplPbR8GrbGsdMrGgLxzu` (el de 
 
 ## Huecos y pendientes
 
-1. **Sáb 3 · lugar libre:** N06 (GEMINI) no sale. Sergio Urcullo elige un repo de la reserva; su aviso entra ese día, antes del video.
+1. **Sáb 3 · N06 rehecha (2-oct):** el lugar libre lo ocupa ANTIGRAVITY (aviso 3-2), «Google cambió Gemini CLI gratis por Antigravity CLI». Fuentes oficiales en el drop N06.
 2. **MARKETING · sáb 10:** escrito, pero espera tu decisión (aviso 10-3). Si no lo recomendás, se ajusta o se baja R05.
 3. **Revisados el 2-oct:** CACHE (vie 2), VENTANA (dom 4), PROMESA (lun 5), PRUEBAS (jue 8) y REVISAR (vie 9). Corregidos CACHE, VENTANA y PRUEBAS; PROMESA, una línea; REVISAR, sin cambios. Qué y por qué: la línea ⚠️ de cada uno en `drops/2026-10-01-drops-noticias-repos.md`. El texto de acá y el del origen es el mismo (comprobado con script).
 4. **PROMESA:** las dos respuestas están recortadas (`[…]`) y las completas no existen en el repo (buscadas en el árbol, en todo el historial de git y en las transcripciones). El guion y el caption de K6 dicen «completas»: sacalo de los dos antes de grabar (lun 5) y antes de publicar K6.
