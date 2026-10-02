@@ -20,6 +20,13 @@
 >   pasaba los 90 bytes que guarda la aduana y el link quedaba cortado; (b) un rollback reintentado
 >   reanudaba lo que ya estaba activo o ya no existía, y podía no terminar nunca; (c) un trabajo de
 >   Hermes ausente de `jobs.json` no frenaba la Fase A. Lo aprendido está en la skill.
+> - **2-oct ~01:00 UTC:** #83 y #79 ya están en `main` (`d39c2c92`; el único conflicto, en el índice de
+>   `onia-router`, lo resolvió la madre). Su re-revisión pidió **4 correcciones antes de `aplicar`**
+>   (heredoc imposible de escribir y texto solo por stdin; no filtrar la ruta del código; token con
+>   forma estricta y chequeos antes de crear nada; tope de 3 vistas previas por hora) y 4 que no
+>   bloquean. Están las 8 en la rama `claude/vibrant-brown-8xya0a`, con pruebas y el primer CI de PRs
+>   del repo (`hermes-jarvis-pruebas.yml`). **`aplicar` no se corre hasta que ese PR esté verde y
+>   mergeado.** La pregunta de n8n para la vuelta queda para después de encender.
 > - **Sigue:** §7, plan de las 23:50 UTC — **lo hace la madre** (Sergio Urcullo: *«dejalo escrito y la
 >   madre lo hace»*): mergear #83 y #79, entorno + rutina + llave, una corrida de `aplicar` por el workflow.
 
@@ -298,8 +305,9 @@ aplicar,revertir}.sh` · `scripts/loops/onia-tg.sh` + `onia-tg-aduana.test.mjs` 
 > *«dejalo escrito y la madre lo hace»*. Reemplaza al bloque de las 21:30 de abajo. Con la llave
 > guardada ANTES de correr `aplicar`, alcanza con UNA corrida por el workflow (enciende Jarvis y los
 > pedidos juntos).
-> 1. **Revisar y mergear.** Revisar el PR #83 (3 arreglos encima del #79). Si está bien, mergear el
->    #83 en la rama del #79 (`claude/kind-cannon-7hkc3c`), y después el #79 a `main`.
+> 1. **Revisar y mergear.** ~~#83 y #79~~ ✔ en `main` el 2-oct. Falta el PR de las 4 correcciones de
+>    la re-revisión (rama `claude/vibrant-brown-8xya0a`): con su CI verde, la madre revisa y Sergio
+>    Urcullo da el «sí» para `aplicar`.
 > 2. **Entorno propio para la rutina** (en la PC, con el login de Sergio Urcullo): en claude.ai/code,
 >    ícono de nube arriba del cuadro de mensaje → **Cloud** → **Add cloud environment**. Nombre
 >    «Pedidos de Hermes», red **Trusted**, una sola variable `GH_ACTIONS_TOKEN=` con el mismo valor

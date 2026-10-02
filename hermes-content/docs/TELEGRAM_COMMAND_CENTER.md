@@ -80,7 +80,8 @@ pruebas en `pedido-claude.test.mjs`:
   pasaba por Hermes, vista previa y `--si` en el mismo turno salían sin que él dijera nada. Frena el
   error de un modelo; no frena a alguien con root en el VPS.
 - **El texto no pasa por la shell:** va por la entrada estándar con un heredoc entre comillas
-  (`<<'PEDIDO'`). `$390`, comillas, backticks o `$(…)` llegan idénticos y no ejecutan nada.
+  (`<<'FIN_PEDIDO_ONIA_7f3c'`, un cierre que nadie escribe en un pedido). `$390`, comillas, backticks,
+  `$(…)` o un renglón que diga «PEDIDO» llegan idénticos y no ejecutan nada. Como argumento, sale 64.
 - **Si la rutina no confirma, no se reintenta a ciegas.** Sin conexión o rechazado (4xx): NO salió y el
   mismo código sirve. Cortado, 5xx o sin link: *puede* haber salido; se registra y se anula el código.
 - Lo que recibe Claude es, palabra por palabra, lo que él vio, con un encabezado fijo:
@@ -203,7 +204,7 @@ Hermes, su asistente, por Telegram. Cada corrida es UN pedido. Hablale siempre c
 |---|---|---|---|
 | 1 | Correr `aplicar` como está hoy en `main`, que enciende el resumen, el cierre, el calendario y la aduana | la madre (SSH) con el OK de Sergio Urcullo | la salida pasa de la sección 0 a la 8 sin ❌; la verifica control |
 | 2 | Mergear a `main` el PR de esta rama: comando, skill, regla del SOUL, workflow de respuesta, cierre | madre / Sergio Urcullo | el sincronizador copia `onia-pedido-claude.sh` (≤1 h) |
-| 3 | Crear la rutina, generar el token y guardarlo en GitHub (§4, pasos 1 a 3) | Sergio Urcullo, en la web | existen el secreto `ONIA_RUTINA_PEDIDOS_TOKEN` y la variable `ONIA_RUTINA_PEDIDOS_URL` |
+| 3 | Crear el entorno propio, la rutina y su token, y guardarlo en GitHub (§4, pasos 1 a 3) | Sergio Urcullo o la madre, en la web | la rutina usa el entorno «Pedidos de Hermes» (solo `GH_ACTIONS_TOKEN`, **no** «Onia»), y existen el secreto `ONIA_RUTINA_PEDIDOS_TOKEN` y la variable `ONIA_RUTINA_PEDIDOS_URL` |
 | 4 | Correr `aplicar` otra vez, **por el workflow**: instala la skill, la regla y la llave. Es idempotente | Sergio Urcullo (un toque) o la madre con `gh workflow run` | la sección 5d dice «✅ pedidos a Claude: configurado» |
 | 5 | Prueba de punta a punta: por Telegram, «pedile a Claude: ¿cuántos cambios entraron hoy al sistema?» → le llega el texto con un código → le contesta el código a Hermes → link → respuesta ✅ | Sergio Urcullo | `diagnostico` sección 12 muestra el pedido en «listo» |
 
