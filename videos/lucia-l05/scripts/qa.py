@@ -40,15 +40,36 @@ fin = list(frames(FINAL))
 raw = list(frames(RAW))
 out["frames"] = {"final": len(fin), "raw": len(raw)}
 
-# ---- 1) hoja de cuadros con guías ----
+# ---- 0) entrada del sello MEDIDA en el final (no supuesta): largo de la raya y opacidad, cuadros in-1 … in+4 ----
+# El fondo sin sello sale del MISMO grafo (build.mjs --sin sello-cero) para medir la opacidad contra él.
+import importlib.util  # noqa: E402
+
 o = {x["id"]: x for x in L["overlays"]}
+si = o["sello-cero"]["in"]
+subprocess.run(["node", os.path.join(P, "scripts/build.mjs"), "--stills", ",".join(str(si - 1 + k) for k in range(6)),
+                "--sin", "sello-cero", "--stills-dir", "renders/qa/fondo-sin-sello"], check=True, capture_output=True)
+spec = importlib.util.spec_from_file_location("medir_sello", os.path.join(P, "scripts/medir-sello.py"))
+ms = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(ms)
+sello = ms.video_mode(FINAL, [si - 1 + k for k in range(6)], os.path.join(QA, "sello-entrada.png"))
+out["sello_entrada_final"] = sello
+out["sello_png"] = ms.png_mode()
+sm = {d["cuadro"]: d for d in sello}
+
+
+def sello_lbl(f, pct):
+    d = sm[f]
+    return f"sello {pct} %\nmedido: raya {d['raya_px']} px · opacidad {round(min(d['opacidad'], 1) * 100)} %"
+
+
+# ---- 1) hoja de cuadros con guías ----
 picks = [
     (o["card1-lunes"]["in"], "0,1 s · entra rótulo + LUNES"),
     ((o["card1-lunes"]["in"] + o["card1-lunes"]["out"]) // 2, "mitad tarjeta 1"),
     (o["card1-lunes"]["out"] - 1, "sale tarjeta 1"),
     (o["card2-link"]["in"], "entra tarjeta 2"),
-    (o["sello-cero"]["in"], "entra sello 130 % + golpe"),
-    (o["sello-cero"]["in"] + 3, "sello 100 %"),
+    (si, "entra " + sello_lbl(si, 130).replace("\n", " + golpe\n", 1)),
+    (si + 3, sello_lbl(si + 3, 100)),
     ((o["card2-link"]["in"] + o["card2-link"]["out"]) // 2, "mitad tarjeta 2 + sello"),
     (o["card2-link"]["out"] - 1, "sale tarjeta 2 + sello"),
     (o["card3-horario"]["in"], "entra tarjeta 3"),
@@ -56,11 +77,12 @@ picks = [
     (L["frames"] - 1, "último cuadro"),
     (0, "cuadro 0 (antes de entrar)"),
 ]
-tw, th = 360, 640
+tw, th = 400, 711
 cols = 6
-sheet = Image.new("RGB", (cols * tw + (cols - 1) * 8, 2 * (th + 34) + 8), (16, 16, 16))
+HD = 62  # cabecera de 3 líneas: cuadro/tiempo, qué se ve y lo MEDIDO del sello
+sheet = Image.new("RGB", (cols * tw + (cols - 1) * 8, 2 * (th + HD) + 8), (16, 16, 16))
 try:
-    font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 15)
+    font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 14)
 except OSError:
     font = ImageFont.load_default()
 for i, (f, label) in enumerate(picks):
@@ -71,11 +93,14 @@ for i, (f, label) in enumerate(picks):
     for y, c in ((714, (0, 255, 255)), (1490, (255, 40, 40))):
         d.line([(0, y), (1080, y)], fill=c, width=4)
     im = im.resize((tw, th), Image.LANCZOS)
-    x0, y0 = (i % cols) * (tw + 8), (i // cols) * (th + 42)
-    sheet.paste(im, (x0, y0 + 34))
-    ImageDraw.Draw(sheet).text((x0 + 4, y0 + 8), f"f{f:03d} {f / FPS:.3f}s · {label}", fill=(255, 255, 255), font=font)
+    x0, y0 = (i % cols) * (tw + 8), (i // cols) * (th + HD + 8)
+    sheet.paste(im, (x0, y0 + HD))
+    dr = ImageDraw.Draw(sheet)
+    dr.text((x0 + 4, y0 + 4), f"f{f:03d} · {f / FPS:.3f} s", fill=(255, 230, 80), font=font)
+    for k, line in enumerate(label.split("\n")):
+        dr.text((x0 + 4, y0 + 22 + 18 * k), line, fill=(255, 255, 255) if k == 0 else (120, 255, 170), font=font)
 sheet.save(os.path.join(P, "renders/qa-frames.jpg"), quality=90)
-out["qa_frames"] = [{"frame": f, "t": round(f / FPS, 3), "que": l} for f, l in picks]
+out["qa_frames"] = [{"frame": f, "t": round(f / FPS, 3), "que": l.replace("\n", " · ")} for f, l in picks]
 
 # ---- 2) caras con YuNet: crudo vs final, cuadro por cuadro ----
 def yunet_count(imgs):

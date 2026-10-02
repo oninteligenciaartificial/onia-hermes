@@ -390,7 +390,9 @@ la burbujita de OBS incrustada en la esquina no da resolución para la zona de c
 11. **Generaciones:** gen1 en UNA pasada (escala + zoompan + overlays + audio, CRF 14 slow) → karaoke
     `--crf 14 --preset slow` → `sfx.mjs` y `master.mjs` copian el video. Etiquetar bt709.
 12. **QA mirado antes de entregar:** stills de cada entrada; hoja de cuadros con guías en el mentón y en 1490; caras
-    con YuNet sobre crudo y final (la misma cantidad); ortografía leída en los cuadros; identidad ≥ 0,70 en 5 cuadros;
+    con YuNet sobre crudo y final (la misma cantidad); ortografía leída en los cuadros; identidad ≥ 0,70 en 5 cuadros
+    **frontales o de tres cuartos** (regla del gate en `LUCIA-HIGGSFIELD-IDENTITY.json`: perfiles y parpadeos bajan solos
+    y se MIRAN; L02 dio 0,694 de perfil y 0,630 en un parpadeo con la misma cara — no es deriva);
     recorte 1:1 de la cara en el zoom máximo; specs. **Tabla de cortes + preview 360p a Sergio Urcullo** y esperar el OK.
 
 **Trampas de la nube (1-oct):** playwright 1.62 pide Chromium 1234 y la nube trae el 1194 → `resolve-playwright.mjs`

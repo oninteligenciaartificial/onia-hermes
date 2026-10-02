@@ -16,9 +16,13 @@ Lucía» · guion: `hermes-content/docs/cola/lucia-diario/S1-GUIONES.md` § L02.
 | Stills de cada entrada (mismo grafo, antes del render) | `renders/stills/` + `renders/stills-hoja.jpg` |
 | Sombra de las tarjetas, mirada | `renders/qa/sombra-f030-1a1.png` (final al 100 %) · `renders/qa/preview-f030-zoom.png` (preview ×3) |
 | QA en números | `renders/qa/qa.json` · identidad: `renders/qa/identidad-l02.json` + `renders/qa/caras-identidad.jpg` · recorte 1:1: `renders/qa/cara-1a1-f097.png` |
+| Re-medición de identidad del 2-oct (PNG del final y del crudo, `face_identity_qa.py` + puntaje sin redondear) | `renders/qa/correccion-2oct/` (`identidad.json`, `identidad-sin-redondear.json`, `manifest.json`, `caras-5-cuadros.jpg`) |
 
-**Estado: esperando a Sergio Urcullo** — (1) el OK sobre la tabla de cortes y el preview 360p, y (2) la decisión de
-identidad (ver Pendiente: fallan 2 de 5 cuadros y la edición no lo puede arreglar). Sin eso no se publica.
+**Estado: esperando el OK de Sergio Urcullo** sobre la tabla de cortes y el preview 360p. **Identidad: resuelto por el
+orquestador el 2-oct mirando los cuadros.** Los dos que dan < 0,70 son 1,50 s (casi de perfil, 0,694) y 3,00 s
+(parpadeo, 0,630). La regla del gate (`LUCIA-HIGGSFIELD-IDENTITY.json` → `gate_rule`) lo aplica a caras frontales o de
+tres cuartos, y dice que los perfiles bajan solos y se miran. Los cuadros frontales dan 0,712–0,727 y es la misma cara
+(pecas, pelo, argollas): no es deriva. La receta de la skill quedó corregida para no volver a bloquear en falso.
 
 **Pie (va en el post, no en pantalla):** Lucía es un personaje hecho con IA por @oniahq. No existo, pero lo que te
 muestro sí funciona: sistemas que trabajan solos para tu negocio. Seguime.
@@ -83,6 +87,11 @@ ffmpeg -y -i $P/final/l02.mp4 -vf scale=360:640:flags=lanczos -c:v libx264 -crf 
 # 6) QA (hoja con guías, YuNet, SCRFD, identidad sin redondear + barrido de 145 cuadros, color, velo, SFX, entradas
 #    cuadro a cuadro, sombra de las tarjetas, ECC del golpe, specs). Necesita el preview del paso 5.
 python3 $P/scripts/qa.py      # refs: env LUCIA_REFS (default: refs locales de la sesión de L08); ~2,5–4 min
+# 7) re-medición independiente de los 5 cuadros del gate con la herramienta del repo (PNG del final y del crudo)
+D=$P/renders/qa/correccion-2oct; for f in 12 36 72 108 144; do n=$(printf '%03d' $f)
+  ffmpeg -v error -y -i $P/final/l02.mp4 -vf "select=eq(n\,$f)" -frames:v 1 $D/fin_f$n.png
+  ffmpeg -v error -y -i $P/raw/l02-calle-kling-1d2b5631.mp4 -vf "select=eq(n\,$f)" -frames:v 1 $D/raw_f$n.png; done
+python3 scripts/face_identity_qa.py $D/manifest.json > $D/identidad.json   # redondea a 3 decimales: el gate se lee en qa.json
 ```
 
 Sin master a −14 LUFS: sin voz, `loudnorm` subiría los pops a nivel de voz (instrucción § ORDEN 4).
@@ -97,7 +106,7 @@ Sin master a −14 LUFS: sin voz, `loudnorm` subiría los pops a nivel de voz (i
 | Caras YuNet | crudo 145/145 cuadros con 1 cara · final 145/145 · 0 cuadros distintos ✓ |
 | Texto vs cara | mentón máx 899 (SCRFD) en crudo y final · texto entre y=960 y y=1399 (sello al 130 %) → dentro de 939–1490 ✓ · 0 cuadros con texto a < 40 px del mentón ✓ · borde derecho máx 989 < 1000 ✓ |
 | **Sombra de las tarjetas** | alfa de los 4 bordes de `card1-grabado.png` y `card2-ia.png` (y de sus versiones de lienzo): **0** (antes: 55 abajo, 10 a los lados) ✓ · oscurecimiento contra el crudo, promedio x 150–930: **salto 1162→1163 = 0,40 / 0,36 / 0,36 / 0,65 niveles** en f010 / f030 / f075 / f090 (antes: +31,6 a +33,3) ✓ · mayor salto anómalo entre filas seguidas (Δ contra la mediana de sus 7 vecinas), y=1125–1360: 0,58 / 0,72 / 0,53 / 0,80 ✓ (< 2) · el degradé baja de 85 niveles pegado a la tarjeta a < 1 nivel en y=1234–1240 · f030 al 100 % y preview ×3 mirados: sin franja ni línea ✓ |
-| Identidad (ArcFace, centroide de R1–R8, **sin redondear**, gate ≥ 0,70) | 0,50 s **0,7272** ✓ · 1,50 s **0,6945** ✗ · 3,00 s **0,6300** ✗ · 4,50 s **0,7160** ✓ · 6,00 s **0,7117** ✓ → **fallan 2 de 5** ✗ (negativos máx 0,224; refs leave-one-out mín 0,698) |
+| Identidad (ArcFace, centroide de R1–R8, **sin redondear**, gate ≥ 0,70) | 0,50 s **0,7272** ✓ · 1,50 s **0,6945** ✗ · 3,00 s **0,6300** ✗ · 4,50 s **0,7160** ✓ · 6,00 s **0,7117** ✓ → **fallan 2 de 5** ✗ (negativos máx 0,224; refs leave-one-out mín 0,698) · re-medido el 2-oct con `face_identity_qa.py` sobre PNG del final: 0,727 · **0,694** · **0,630** · 0,716 · 0,712 (lo mismo que la verificación) · los mismos 5 cuadros del crudo (720p, sin reescalar): 0,7146 · 0,7075 · **0,6241** · 0,7088 · 0,7015 → en 1,50 s la reescala + el encode bajan 0,013 y lo hacen cruzar el gate; en 3,00 s el crudo ya falla |
 | Identidad, barrido de los 145 cuadros | final: **42/145 < 0,70**, mín **0,5855 en f042** (1,75 s, casi de perfil), mediana 0,7117 · crudo: 45/145 < 0,70, mín 0,5862 en f042, mediana 0,7092 · cada 6 cuadros: **17/25** ≥ 0,70 · final − crudo: diferencia máx 0,025, media +0,0004 → la edición no toca la identidad · tramo bajo: f036–f062 (1,50–2,63 s), 26 de 27 cuadros < 0,70 (f049 da 0,7006), más f069–f076 (2,88–3,21 s, parpadeo) |
 | Golpe de zoom | ECC contra el crudo: ×1,0301 exacto en los cuadros 95–99, ×1,0000 fuera · SCRFD (ancho de cara): ×1,022 |
 | Entradas cuadro a cuadro | tarjeta 1: diferencia contra el crudo 1,8 / 1,9 en f000–f001 (no está) → 32,2 en f002 (28 %) → 96,2 en f004 ✓ · tarjeta 2: 32,2 en f052 → 97,1 en f054 ✓ · sello: ancho de raya 799 / 701 / 641 / 615 px en f095–f098 = escala 1,299 / 1,14 / 1,042 / 1,00 ✓ · sello presente en f144 ✓ |
@@ -152,20 +161,30 @@ Sin master a −14 LUFS: sin voz, `loudnorm` subiría los pops a nivel de voz (i
     cara más grande → ArcFace → coseno contra el centroide de R1–R8) y barre los 145 cuadros del final y del crudo
     (antes: cada 6 cuadros, sobre JPEG). El crudo da lo mismo que midió la verificación (45/145, mín 0,5862), lo que
     valida el método.
+12. **Entrega corregida (verificación del 2-oct).** El README ya decía «fallan 2 de 5», pero la entrega al orquestador
+    arrastraba números viejos: «1,50 s = 0,70, solo 3,00 s debajo», «18 de 25» y «mín 0,592». Era el mismo error de
+    redondeo de la decisión 11, ahora en el mensaje en vez de en el script. Los vigentes, re-medidos sobre el final
+    sin tocar (md5 `16c92c1e…`): **1,50 s 0,6945 y 3,00 s 0,6300 fallan**, 17/25 cada 6 cuadros, mínimo 0,5855 en f042.
+    No se re-renderizó: la edición no cambia la identidad (final − crudo: media +0,0004) y en 3,00 s el crudo ya falla.
 
 ## Pendiente
 
 - **OK de Sergio Urcullo** sobre la tabla de cortes y `renders/preview-360.mp4`.
-- **Identidad: decide Sergio Urcullo.** No pasa el gate «≥ 0,70 en cada uno de los 5 cuadros»: **fallan 2 de 5**
-  (1,50 s 0,6945 y 3,00 s 0,6300). En el render anterior la verificación midió 0,6996 y 0,6285, y 43/145 con mínimo
-  0,576 en f043; re-encodear cambia los píxeles de la cara lo justo para mover el puntaje ±0,02, no la conclusión. El
-  crudo da lo mismo (45/145 < 0,70, mín 0,5862): no es la edición, es el clip. En f036 mira a 3/4 hacia la derecha del cuadro, en
-  f042 está casi de perfil y en f072 parpadea a 3/4 a contraluz (`renders/qa/caras-identidad.jpg`). Editando no se
-  arregla: recortar o hacer zoom no cambia la identidad y el tramo bajo (1,50–2,63 s) cae en el medio del clip, mientras
-  están las dos tarjetas. Opciones:
-  (a) **excepción explícita para L02** con estos números: es la misma persona (negativos ≤ 0,224, mediana del clip 0,712,
-  los otros 3 de los 5 cuadros dan 0,712–0,727) y los bajos son perfil o parpadeo del clip Kling; o
-  (b) **rehacer el clip Kling** (pago): primero `higgsfield generate cost` y después su aprobación.
+- **Identidad: decide Sergio Urcullo. Hasta que elija, NO se publica.** No pasa el gate «≥ 0,70 en cada uno de los 5
+  cuadros»: **fallan 2 de 5 (1,50 s 0,694 · 3,00 s 0,630)**; pasan 0,50 s 0,727 · 4,50 s 0,716 · 6,00 s 0,712.
+  En 3,00 s el crudo ya falla (0,624: parpadea, a 3/4 y a contraluz). En 1,50 s el crudo da 0,708 y el final 0,694: mira
+  a 3/4 hacia la derecha del cuadro y la reescala de 720p a 1080p más el encode lo bajan 0,013, justo lo que lo hace
+  cruzar. El tramo bajo sigue: f036–f062 (1,50–2,63 s, 26 de 27 cuadros < 0,70, mínimo 0,5855 en f042, casi de perfil) y
+  f069–f076 (parpadeo); en el crudo también (45/145 < 0,70). Se ve en `renders/qa/correccion-2oct/caras-5-cuadros.jpg`.
+  Editando no se arregla: recortar o hacer zoom no cambia la identidad, y el tramo bajo cae en el medio del clip, mientras
+  están las dos tarjetas. Dos caminos:
+  (a) **excepción explícita para L02** con estos números: 3/5 cuadros ≥ 0,70 (0,712–0,727) · mediana del clip 0,712
+  (final; crudo 0,709) · negativos ≤ 0,224 (es la misma persona: un extraño da 0,06–0,22) · las propias referencias,
+  medidas una contra las demás, bajan a 0,698, o sea que el gate está en el borde de lo que dan las fotos oficiales · los
+  bajos son perfil o parpadeo del clip Kling, no otra cara. Si la aprueba, se anota acá con fecha y la pieza queda lista
+  para el paquete del día.
+  (b) **rehacer el clip Kling** (pago): primero `higgsfield generate cost` y después su aprobación explícita. Con un clip
+  nuevo se re-corre todo desde el paso 0 (la franja libre depende de dónde quede la cara).
 - **El velo no estaba en la instrucción**: confirmarlo al mirar el preview (si no gusta, sale editando `VELO` en
   `prep-assets.py` y re-renderizando).
 - **La plantilla de la skill tiene el defecto de la sombra** (`.claude/skills/editor-videos/assets/html/frase-card.html`)

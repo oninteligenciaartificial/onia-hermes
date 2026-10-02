@@ -10,6 +10,8 @@
 //   node videos/lucia-l05/scripts/build.mjs                 → renders/gen1.mp4
 //   node videos/lucia-l05/scripts/build.mjs --stills 2,30   → renders/stills/f002.png … (MISMO grafo, sin encode)
 //   node videos/lucia-l05/scripts/build.mjs --dry-run       → imprime el ffmpeg
+//   node videos/lucia-l05/scripts/build.mjs --stills 58,59 --sin sello-cero --stills-dir renders/qa/fondo
+//        → el fondo SIN ese overlay (para medir la opacidad del sello en el final; no toca gen1)
 import { readFileSync, mkdirSync } from "node:fs";
 import { spawnSync } from "node:child_process";
 import { dirname, resolve } from "node:path";
@@ -26,6 +28,8 @@ const RAW = `${P}/raw/l05-coworking-kling-07b938b2.mp4`;
 const argv = process.argv.slice(2);
 const flag = (n) => { const i = argv.indexOf("--" + n); return i >= 0 ? argv[i + 1] : undefined; };
 const STILLS = flag("stills");
+const SIN = (flag("sin") || "").split(",").filter(Boolean);
+const STILLS_DIR = resolve(P, flag("stills-dir") || "renders/stills");
 const DRY = argv.includes("--dry-run");
 const t = (f) => +(f / FPS).toFixed(6);
 const HALF = 0.5 / FPS; // medio cuadro: las ventanas se cierran entre cuadros, nunca sobre uno
@@ -48,10 +52,13 @@ const filtro = [
 ];
 let base = "base0";
 let idx = 1;
-for (const o of L.overlays) {
-  // El overlay arranca UN cuadro antes de su entrada con alpha 0: así el primer cuadro de la
-  // ventana ya se ve (28 %) y la entrada cae en el cuadro que dice la instrucción.
-  const s0 = Math.max(0, o.in - 1);
+for (const o of L.overlays.filter((x) => !SIN.includes(x.id))) {
+  // Con fade, el overlay arranca UN cuadro antes de su entrada con alpha 0: así el primer cuadro de
+  // la ventana ya se ve (28 %) y la entrada cae en el cuadro que dice la instrucción.
+  // La SECUENCIA (sello 130 → 114 → 104 → 100 %) arranca en su cuadro de entrada: con el cuadro
+  // previo, la imagen 0 (130 %) caía en el cuadro 57, donde el enable está apagado, y no salía nunca
+  // (medido el 2-oct en la v2: f58 mostraba el 114 %).
+  const s0 = o.sequence ? o.in : Math.max(0, o.in - 1);
   const dur = t(o.out - s0);
   if (o.sequence) {
     inputs.push("-framerate", String(FPS), "-start_number", "0", "-i", `${P}/${o.file}`);
@@ -80,10 +87,10 @@ filtro.push(
 let args;
 if (STILLS) {
   const frames = STILLS.split(",").map(Number);
-  mkdirSync(`${P}/renders/stills`, { recursive: true });
+  mkdirSync(STILLS_DIR, { recursive: true });
   filtro[filtro.length - 1] = filtro[filtro.length - 1].replace("[vout]", ",select='" + frames.map((f) => `eq(n\\,${f})`).join("+") + "'[vout]");
   args = ["-y", ...inputs, "-filter_complex", filtro.join(";"), "-map", "[vout]", "-fps_mode", "passthrough",
-    "-frame_pts", "1", `${P}/renders/stills/f%03d.png`];
+    "-frame_pts", "1", `${STILLS_DIR}/f%03d.png`];
   // -frame_pts con setpts en base de tiempo 1/24 → el número del archivo es el cuadro
 } else {
   inputs.push("-f", "lavfi", "-t", String(DUR), "-i", "anullsrc=r=48000:cl=stereo");
@@ -100,4 +107,4 @@ if (DRY) {
 mkdirSync(`${P}/renders`, { recursive: true });
 const r = spawnSync("ffmpeg", ["-hide_banner", "-loglevel", "error", ...args], { stdio: ["ignore", "inherit", "inherit"] });
 if (r.status !== 0) { console.error("ffmpeg falló:", r.status); process.exit(1); }
-console.log("OK →", STILLS ? `${P}/renders/stills/` : `${P}/renders/gen1.mp4`);
+console.log("OK →", STILLS ? `${STILLS_DIR}/` : `${P}/renders/gen1.mp4`);
