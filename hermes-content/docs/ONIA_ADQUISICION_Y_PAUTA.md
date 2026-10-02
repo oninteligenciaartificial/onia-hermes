@@ -47,10 +47,12 @@
 3. **El hueco de mensaje existe:** en Bolivia nadie pauta *"recuperá al paciente que dejó el tratamiento a
    medias"*. El único software de clínica con pauta sostenida es extranjero (Healthatom: Dentalink +
    Medilink, en dólares) y titula con IA clínica (§2).
-4. ✅ **Resuelto el 2-oct: producción ya cumple esa promesa.** Corre `onia-platform:release-8f07e537`
-   (`docker ps` en el VPS), que trae `agents-tratamiento-a-medias.ts`; el mensaje fijo («Te quedó pendiente
-   tu…») está en el bundle servido y el cron de las 07:00 corrió OK el 1-oct. **D4 se puede prometer.** Lo
-   que sigue es la foto del 30-sep, cuando todavía no estaba: en producción el Recall buscaba
+4. 🔴 **Sigue sin poder prometerse (2-oct).** El código está en producción (`release-8f07e537`), pero
+   el detector está en producción pero **no encuentra a nadie**: cuenta solo tratamientos «En progreso», la ficha los carga «Pendiente» y hay 0 cargados (`ONIA_CATALOGO_DE_VENTA.md`, «NO se puede decir», 2-oct 01:54). **D4 queda frenado** hasta que Plataforma lo vea encontrar a alguien en la cuenta
+   demo y el catálogo lo pase a «se puede decir».
+   ⚠️ *Corregido el mismo 2-oct:* a las 00:50 escribí acá «D4 se puede prometer» porque vi el código en el
+   bundle servido y el cron OK. Eso prueba que existe, no que funciona. Lo frenó el catálogo y la revisión de
+   la madre v2. Lo que sigue es la foto del 30-sep: en producción el Recall buscaba
    *"sin visita hace ≥180 días"*. La 1.0 (decidido por Sergio Urcullo el 29-sep) le suma una primera pasada:
    **tratamiento en progreso sin actividad hace 21 días y sin cita** (dental y estética). **Lo que destraba
    el mejor ángulo no es construir nada: es publicar la 1.0 y mirarla andar** (§5.4). Hasta entonces la
@@ -70,7 +72,7 @@
    medición probada**; la sesión principal avisa. Por eso entran desde el día 1 los dos ángulos: el
    Confirmador (D1) y el tratamiento a medias (D4). **Las piezas son de la sesión Ventas y pauta** (antes
    «Mercado»), junto con toda la campaña. Lo decidió Sergio Urcullo el 30-sep, de noche: a Marca personal
-   le dijo *«aquí es solo marca personal y comunidad»*. Las capturas de la 1.0 ya están (`carousels/briefs/assets/onia-1.0-dental-ads/v2-20261002/`, 2-oct). Qué falta y de quién es cada cosa: **la lista de encendido, §5.9**.
+   le dijo *«aquí es solo marca personal y comunidad»*. Las piezas v3 usan las capturas del candidato 1.0 (`carousels/briefs/assets/onia-1.0-dental-ads/candidato-20260930/`), cuyos textos están en producción (2-oct). Qué falta y de quién es cada cosa: **la lista de encendido, §5.9**.
 
 ---
 
@@ -191,7 +193,10 @@ plantillas de Canva y no cuenta).
 
 **Lo que se adoptó (2-oct):** la primera línea de D1 y D4 pasó a la plata del dueño (*«…el alquiler, la
 asistente y tu hora se pagan igual»*, *«…plata que tu clínica ya presupuestó y todavía no cobró»*), sin cifras
-ajenas como el «25 % de los ingresos». **Lo que no se puede copiar todavía:** el testimonio (cero clientes) y la
+ajenas como el «25 % de los ingresos». **Y el formato** (v3, mismo día): ninguno de los 18 es un carrusel
+editorial, así que D1 y D4 pasaron a **imagen única de anuncio de software** (titular del dolor, pantalla real
+con el recorte clave ampliado, tres beneficios, un botón), con la marca de la web y no la de la marca personal.
+Lo pidió Sergio Urcullo: *«es diferente el contenido de la onia platform que el de mi cuenta personal»*. **Lo que no se puede copiar todavía:** el testimonio (cero clientes) y la
 prueba social numérica. **Lo que queda por hacer, y es la brecha más grande:** una pieza con persona. El
 presentador permitido es Sergio Urcullo mostrando la pantalla (§5.4); un presentador IA, sólo si él lo pide y
 con aprobación de gasto.
@@ -311,10 +316,9 @@ noche*, *no te faltan pacientes*, *tu recepcionista está tapada*, entre otros.
 3. **Las piezas del 13-ago son solo tipografía:** no pasan *"producto visible o no sale"* (`CLAUDE.md` §5) y
    una firma `@oniaagency`. Se rehacen con UI real o no se usan.
 
-**Qué se puede prometer con producción y qué recién con la 1.0 — leído en el código, 2026-09-30.** ✅ *Desde
-el 2-oct la 1.0 está en producción (`release-8f07e537`): la columna de la derecha es la de hoy, y la de la
-izquierda queda como historia. El tratamiento a medias y «Confirmar / No asistió / Completada» desde la agenda
-(`appointments/AgendaClient.tsx`) se pueden decir. El umbral exacto es **21 días sin venir** (`diasSinVenir`),
+**Qué se puede prometer con producción y qué recién con la 1.0 — leído en el código, 2026-09-30.** *Desde
+el 2-oct la 1.0 está en producción (`release-8f07e537`), pero el tratamiento a medias **sigue sin poder decirse**:
+el detector está en producción pero **no encuentra a nadie**: cuenta solo tratamientos «En progreso», la ficha los carga «Pendiente» y hay 0 cargados (`ONIA_CATALOGO_DE_VENTA.md`, «NO se puede decir», 2-oct 01:54). Qué se puede decir manda `ONIA_CATALOGO_DE_VENTA.md`, no esta tabla. El umbral exacto es **21 días sin venir** (`diasSinVenir`),
 con el tratamiento `EN_PROGRESO` y sin cita futura: no «21 días en progreso».*
 
 | | Producción (`onia-platform` `master` `c3b9206`) | 1.0 sin publicar (`wip/v1-integracion-20260928` `f533a68`) |
@@ -394,13 +398,13 @@ Los supuestos del embudo están en `research/ONIA_META_ADS_PLAYBOOK_20260930.md`
 | Página | "Onia" `1140384625819526` |
 | Campaña | `ONIA · Dental SCZ · WhatsApp · prueba 1` · Clientes potenciales · presupuesto total USD 140 · fin a los 14 días · **PAUSED** |
 | Conjunto | WhatsApp · Maximizar conversaciones · Santa Cruz de la Sierra + radio, "llegar a más" apagado · 25+ · Advantage+ con sugerencias · excluir registrados |
-| Anuncios | **D1 y D4** (tabla de abajo): briefs v2 escritos y renderizados el 2-oct con capturas reales; esperan el OK de Sergio Urcullo. **Diseño, render y subida: sesión Ventas y pauta** (Sergio Urcullo, 30-sep; ver §0 punto 8). Marca personal no las hace. |
+| Anuncios | **D1 y D4** (tabla de abajo): v3 renderizados el 2-oct (imagen única 4:5 y 9:16) y **en pausa**: Sergio Urcullo pidió primero el estudio de la Biblioteca. **D4 frenado** por el catálogo (el detector no encuentra a nadie). **Diseño, render y subida: sesión Ventas y pauta** (Sergio Urcullo, 30-sep; ver §0 punto 8). Marca personal no las hace. |
 | Mensaje de bienvenida | "Para dueños/as de clínicas" + tres respuestas para tocar (§5.2) |
 
 | Anuncio | Brief (`hermes-content/carousels/briefs/ads/`) | Título | Texto precargado |
 |---|---|---|---|
-| **D1 · Los de mañana** (Confirmador) | `onia-platform-dental-meta-d1v2-los-de-manana.json` · 7 láminas | *La lista de mañana, con el mensaje escrito* | `Hola, vi el anuncio de Onia (D1). Tengo una clínica dental.` |
-| **D4 · Tratamiento a medias** | `onia-platform-dental-meta-d4v2-tratamiento-a-medias.json` · 7 láminas | *Los tratamientos a medias, en una lista* | `Hola, vi el anuncio de Onia (D4). Tengo una clínica dental.` |
+| **D1 · Los de mañana** (Confirmador) | `onia-platform-dental-meta-d1v3-los-de-manana.json` · imagen única | *La lista de mañana, con el mensaje escrito* | `Hola, vi el anuncio de Onia (D1). Tengo una clínica dental.` |
+| **D4 · Tratamiento a medias** | `onia-platform-dental-meta-d4v3-tratamiento-a-medias.json` · imagen única | *Los tratamientos a medias, en una lista* | `Hola, vi el anuncio de Onia (D4). Tengo una clínica dental.` |
 
 - **El texto principal** de cada anuncio es el `caption` de su brief. Si lleva precio, se lee de
   `subscription-plans.ts` **el día que se crea**. En la imagen no va ningún precio.
@@ -449,13 +453,15 @@ conector `Meta_ads`; en el Administrador de anuncios son los mismos campos con s
    `{"geo_locations":{"custom_locations":[{"latitude":-17.7833,"longitude":-63.1821,"radius":25,"distance_unit":"kilometer"}]},"age_min":25}`,
    ubicaciones automáticas. Con Advantage+ la edad queda como sugerencia, que es lo que pide §5.2. Excluir
    registrados (audiencia de clientes) solo si ya existe en la cuenta; no se crea para esto.
-3. **Imágenes:** las 14 láminas de `hermes-content/carousels/out/ads/onia-platform-dental-meta-d1-*/` y
-   `…-d4-*/` (1080×1350), **la versión que Sergio Urcullo aprobó viéndola** (fila 7). El conector sube
-   archivos solo desde su app; si desde la nube no puede, se suben a mano en el Administrador.
-4. **Dos creativos** (`ads_create_creative`), carrusel estático de 7 tarjetas cada uno: `page_id`
-   `1140384625819526` · `message` = `caption` del brief · `headline` = título de la tabla de arriba ·
-   `call_to_action_type` `WHATSAPP_MESSAGE` · tarjetas en el orden del brief · `self_ai_disclosure`: lo
-   decide Sergio Urcullo (las láminas tienen fotos de fondo; las capturas son reales).
+3. **Imágenes:** `feed.png` (1080×1350) y `story.png` (1080×1920) de
+   `hermes-content/carousels/out/ads/onia-platform-dental-meta-d1v3-los-de-manana/` y `…-d4v3-…/`, **la versión
+   que Sergio Urcullo aprobó viéndola** (fila 7). El conector sube archivos solo desde su app; si desde la nube
+   no puede, se suben a mano en el Administrador.
+4. **Dos creativos** (`ads_create_creative`) de **imagen única**: `page_id` `1140384625819526` · `message` =
+   `caption` del brief · `headline` = título de la tabla de arriba · `call_to_action_type` `WHATSAPP_MESSAGE` ·
+   imagen `feed.png`. La `story.png` va en «Personalizar recurso por ubicación» (historias y reels); si el
+   conector no lo expone, se carga a mano en el Administrador. `self_ai_disclosure`: no hace falta (capturas
+   reales y texto por código, sin imágenes generadas); lo confirma Sergio Urcullo.
    **Texto precargado** (`Hola, vi el anuncio de Onia (D1)…`): si el conector no lo expone, se pone a mano en
    el anuncio, en «Mensaje de bienvenida», antes de cualquier publicación. Sin ese texto se pierde la
    atribución D1/D4 (§5.6).
@@ -478,7 +484,7 @@ memoria. Estado al **30-sep, 12:30 UTC**.
 | 4 | **Página "Onia" promocionable y con el WhatsApp de ventas vinculado** | `ads_get_ad_account_pages` lista `1140384625819526`; WhatsApp en la configuración de la página | Sergio Urcullo | ✅ **1-oct, 21:40 UTC:** la página «Onia» está en el Business OniaAgency y el usuario del conector puede anunciar con ella (`ads_get_user_pages` y `ads_get_pages_for_business` la listan). Lo de las 21:15 («ninguna página») era una lectura equivocada: `ads_get_ad_account_pages` solo lista páginas ya promocionadas. El WhatsApp de la página no se midió. **Instagram:** ONIA Ads no tiene ninguna cuenta de IG vinculada (`ads_get_ig_accounts` → `[]`) |
 | 5 | **Frase-prefijo publicada en el bot** y probada con dos mensajes desde un teléfono que no sea el de Onia, **mirando la respuesta** (§5.5) | la respuesta, leída | Sergio Urcullo (firma) + carril chatbot | ❌ |
 | 6 | **Quién contesta, y en cuánto tiempo** | decidido por escrito | Sergio Urcullo | ❌ (ver abajo) |
-| 7 | **Las cuatro capturas de la 1.0** en `carousels/briefs/assets/onia-1.0-dental-ads/` → D1 y D4 renderizadas → **OK de Sergio Urcullo viéndolas** | las piezas renderizadas, miradas | capturas: sesión principal · diseño y render: Ventas y pauta · OK: Sergio Urcullo | ⏳ **v2 renderizadas el 2-oct** en el pack `referentes` con recortes legibles de la 1.0 (`out/ads/onia-platform-dental-meta-d1v2-…` y `…-d4v2-…`), contrastadas con 18 anuncios de la competencia (§2.5); esperan el OK de Sergio Urcullo |
+| 7 | **Las cuatro capturas de la 1.0** en `carousels/briefs/assets/onia-1.0-dental-ads/` → D1 y D4 renderizadas → **OK de Sergio Urcullo viéndolas** | las piezas renderizadas, miradas | capturas: sesión principal · diseño y render: Ventas y pauta · OK: Sergio Urcullo | ⏸️ **v3 renderizadas el 2-oct y en pausa** (`out/ads/onia-platform-dental-meta-d1v3-…` y `…-d4v3-…`). Sergio Urcullo: *«DEJA DE ARMAR, PRIMERO MIRA LA META ADS LIBRARY Y MIRA COMPETENCIAS»*. Primero el estudio de la Biblioteca (la madre, desde la PC), después el diseño. D4 frenado por el catálogo. v1 y v2 (carruseles) fueron rechazadas |
 | 8 | **Campaña creada en PAUSA** con §5.8 | ids de campaña, conjunto y anuncios anotados en el handoff del carril | quien tenga el conector, o Sergio Urcullo | ❌ depende de 2–4 · pasos en §5.8.1 |
 | 9 | **OK explícito de gasto con techo** (USD 140, 14 días) y **tipo de cambio** al que el banco cobra la tarjeta (§5.6) | por escrito | Sergio Urcullo | ❌ |
 
@@ -490,11 +496,9 @@ por día**. Si no entran en su día, se arranca con USD 5/día: la escala de §5
 calificadas. Lo que **no** se puede es encender sin haber hecho la prueba de la fila 5: si lo primero que
 recibe un dueño de clínica es una respuesta mala, esa conversación se paga y se pierde.
 
-**Cómo se renderizan en una sesión de la nube:** `eval "$(sh scripts/carousel_cloud_setup.sh)"` y después
-`node scripts/carousel_render.js --brief <brief> --pack referentes --account onia --format feed --out <dir>` (sin
-`--pack referentes` sale el pack rechazado, sin aviso). Sin el setup, la nube no encuentra el
-navegador, cae en la letra DejaVu y corta el pie de cada lámina. Con el paso, salen iguales a las de la PC
-(comparado el 30-sep contra la lámina 2 del carrusel del 21-sep renderizada en la PC).
+**Cómo se renderizan (nube o PC):** `node .claude/skills/onia-ventas-pauta/scripts/anuncio-render.js --brief
+<brief> --out <dir>` saca `feed.png` y `story.png`. Trae su letra (Archivo, en `scripts/fonts/`), así que no
+depende de las fuentes instaladas. Método y trampas: skill `onia-ventas-pauta` §4.
 
 ---
 
@@ -545,8 +549,8 @@ clínicas **no es** categoría especial de anuncios.
   desde esta sesión.
 - **Si Dentalink ofrece de verdad recall y "venta de tratamientos"**, y el producto de TuDoc (precio,
   odontograma, clientes reales).
-- **El agente de tratamiento a medias con un paciente real:** ✅ está en producción (2-oct, `release-8f07e537`)
-  y el cron corrió OK; falta verlo proponer un caso de un cliente de verdad (hoy no hay cliente pagando).
+- **El agente de tratamiento a medias funcionando:** el código está en producción (2-oct, `release-8f07e537`),
+  pero el detector está en producción pero **no encuentra a nadie**: cuenta solo tratamientos «En progreso», la ficha los carga «Pendiente» y hay 0 cargados (`ONIA_CATALOGO_DE_VENTA.md`, «NO se puede decir», 2-oct 01:54). Falta que Plataforma lo arregle y lo vea encontrar a alguien en la cuenta demo.
 - **La decisión de importadora como segundo rubro, con las palabras de Sergio Urcullo:** llegó por el aviso de
   Plataforma; el propio `VENDIBLE_OTROS_RUBROS.md` de esa rama recomendaba estética.
 - **La fecha del CIO 2026.**

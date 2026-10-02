@@ -1,0 +1,127 @@
+{
+  "id": "onia-platform-dental-meta-d4v3-tratamiento-a-medias",
+  "title": "ONIA — D4 v3 · Tratamiento a medias (formato de anuncio de software, marca de la web)",
+  "headline_anuncio": "Los tratamientos a medias, en una lista",
+  "cta_anuncio": "Escribinos",
+  "caption": "Un tratamiento a medias es plata que tu clínica ya presupuestó y todavía no cobró. ¿Cuántos pacientes empezaron y no volvieron?\n\nOnia es un sistema de gestión con IA para clínicas dentales. Cuando un paciente con un tratamiento en curso lleva 21 días sin venir y sin cita, aparece en tu lista con el mensaje listo y el link para que el paciente reserve. Vos lo aprobás y sale desde tu WhatsApp.\n\nEscribinos y te lo mostramos con una clínica de ejemplo.",
+  "kicker": "Para dueños de clínicas dentales",
+  "headline": "Empezó el tratamiento y no volvió.",
+  "sub": "Onia lo detecta solo y te deja el mensaje para que vuelva, *con el link para reservar*.",
+  "proof": {
+    "url": "app.onia.com.bo/pending",
+    "frame": {
+      "src": "hermes-content/carousels/briefs/assets/onia-1.0-dental-ads/candidato-20260930/pendientes-tratamiento-a-medias.png",
+      "crop": [
+        456,
+        334,
+        784,
+        220
+      ]
+    },
+    "zooms": [
+      {
+        "src": "hermes-content/carousels/briefs/assets/onia-1.0-dental-ads/candidato-20260930/pendientes-tratamiento-a-medias.png",
+        "crop": [
+          470,
+          360,
+          333,
+          50
+        ],
+        "feed": {
+          "width": 700,
+          "box": 980,
+          "pos": {
+            "left": -22,
+            "top": 40
+          }
+        },
+        "story": {
+          "width": 700,
+          "box": 980,
+          "pos": {
+            "left": -22,
+            "top": 40
+          }
+        }
+      },
+      {
+        "src": "hermes-content/carousels/briefs/assets/onia-1.0-dental-ads/candidato-20260930/pendientes-tratamiento-a-medias.png",
+        "crop": [
+          892,
+          358,
+          236,
+          54
+        ],
+        "feed": {
+          "width": 440,
+          "pos": {
+            "right": -22,
+            "bottom": 0
+          }
+        },
+        "story": {
+          "width": 440,
+          "pos": {
+            "right": -22,
+            "bottom": 0
+          }
+        }
+      },
+      {
+        "src": "hermes-content/carousels/briefs/assets/onia-1.0-dental-ads/candidato-20260930/pendientes-tratamiento-a-medias.png",
+        "crop": [
+          488,
+          496,
+          446,
+          26
+        ],
+        "feed": {
+          "width": 780,
+          "pos": {
+            "left": 30,
+            "top": 232
+          }
+        },
+        "story": {
+          "width": 780,
+          "pos": {
+            "left": 30,
+            "top": 232
+          }
+        }
+      }
+    ]
+  },
+  "checks": [
+    "Aparece solo a los 21 días sin venir",
+    "Nada sale sin tu OK",
+    "Sale desde tu WhatsApp"
+  ],
+  "cta": "Escribinos por WhatsApp",
+  "nota": "Te lo mostramos con una clínica de ejemplo.",
+  "layout": {
+    "feed": {
+      "h1": 92,
+      "proofTop": 48,
+      "overhang": 90,
+      "checksTop": 36,
+      "checksCol": true,
+      "check": 30,
+      "tick": 34
+    },
+    "story": {
+      "pad": "250px 72px 380px",
+      "logo": 48,
+      "kickerTop": 36,
+      "h1": 96,
+      "sub": 36,
+      "proofTop": 44,
+      "overhang": 90,
+      "checksTop": 44,
+      "checksCol": true,
+      "check": 32,
+      "tick": 36
+    }
+  },
+  "fuentes": "Formato y marca: igual que D1 v3. Pantalla: captura real del candidato 1.0 (candidato-20260930); en producción release-8f07e537 están «Trae link de reserva» y «Enviar yo mismo por WhatsApp» (pending-client.tsx) y el motivo «… en progreso hace N días» (agents-por-que.ts). 21 días sin venir (diasSinVenir), solo EN_PROGRESO y sin cita futura: agents-tratamiento-a-medias.ts. El mensaje de este caso es un texto fijo (no lo redacta la IA): por eso la pieza no dice que la IA lo escribe; «sistema con IA» va solo en el texto del anuncio, y es cierto por los otros agentes (agents-plantilla.ts)."
+}
