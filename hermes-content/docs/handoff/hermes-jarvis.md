@@ -50,6 +50,12 @@
 >   - se borraron `hermes-respuesta.yml` y `responder.sh`, y el entorno «Pedidos de Hermes» queda **sin
 >     variables**.
 >
+>   Encima, los **5 arreglos de la madre antes de la llave** (2-oct ~13:40): un solo candado para la
+>   vista previa y el `--si`; la clave de la aduana con el código; mensajes propios sin `flock` o sin
+>   candado; `pedidos.env` escrito en un archivo nuevo y movido, y el viejo cerrado en 600 siempre;
+>   la sección 0 de `aplicar` exige el comando con candado y el recolector.
+>   Aparte, el **#96** arregla los dos rojos de main: el falso `onia-vps.sh` y `tandas-v1` sin cablear.
+>
 >   **Falta medir en el paso 5:** que la rutina pueda pushear `respuesta/*` (la doc dice que sí, con
 >   el prompt) y que el VPS llegue a GitHub con su llave (`--probar`, en 1b de `aplicar`).
 > - **Sigue:** §7, plan de las 23:50 UTC — **lo hace la madre** (Sergio Urcullo: *«dejalo escrito y la

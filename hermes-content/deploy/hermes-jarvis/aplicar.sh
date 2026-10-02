@@ -62,7 +62,11 @@ al_dia() {
     && grep -q ONIA_AVISO_PUEDO "$BIN/onia-vigia-aprobaciones.sh" 2>/dev/null \
     && grep -q '^avisar()' "$BIN/claude-guardia.sh" 2>/dev/null \
     && grep -q ONIA_AGENDA_CAMBIOS_URL "$BIN/onia-agenda.sh" 2>/dev/null \
-    && grep -q cierre-bloques "$BIN/onia-jarvis-resumen.sh" 2>/dev/null
+    && grep -q cierre-bloques "$BIN/onia-jarvis-resumen.sh" 2>/dev/null \
+    && grep -q '^candado()' "$BIN/onia-pedido-claude.sh" 2>/dev/null \
+    && grep -q -- '--probar' "$BIN/onia-respuestas-pedidos.sh" 2>/dev/null
+  # Los pedidos: la versión con un solo candado para la vista previa y el --si, y el recolector de
+  # la vuelta. Sin esto, con la llave cargada, aplicar salía 0 con los pedidos apagados (madre, 2-oct).
 }
 if ! al_dia; then
   echo "todavía no: corro una vez el sincronizador de cada hora"
@@ -70,10 +74,11 @@ if ! al_dia; then
 fi
 if ! al_dia; then
   echo "❌ El código de main todavía no está en /root/bin. No toqué nada."
-  ls -la "$BIN/onia-jarvis-resumen.sh" "$BIN/onia-agenda.sh" "$BIN/onia-tg.sh" 2>&1 | redactar
+  ls -la "$BIN/onia-jarvis-resumen.sh" "$BIN/onia-agenda.sh" "$BIN/onia-tg.sh" \
+    "$BIN/onia-pedido-claude.sh" "$BIN/onia-respuestas-pedidos.sh" 2>&1 | redactar
   exit 1
 fi
-echo "✅ resumen, lector de calendario, aduana, vigía de aprobaciones y guardia: al día"
+echo "✅ resumen, lector de calendario, aduana, vigía de aprobaciones, guardia y pedidos: al día"
 
 # ── 1. Respaldo ─────────────────────────────────────────────────────────────────
 sec "1. Respaldo"
@@ -233,13 +238,10 @@ if { llave_ok || [ -s "$PEDIDOS_ENV" ]; } && [ -x "$BIN/onia-pedido-claude.sh" ]
     || falla "el comando de pedidos no acepta la llave de la rutina (--estado)"
   rm -f "$BK/pedidos.env.prueba"
   # La vuelta, sin ningún token de Actions (decisión de la madre, 2-oct): la sesión deja la respuesta
-  # en la rama respuesta/<id> y el recolector del VPS la busca. Sin él, o sin llegar a GitHub, el
-  # pedido sale y la respuesta no vuelve nunca. La prueba usa un estado aparte, dentro del respaldo.
-  if [ ! -x "$BIN/onia-respuestas-pedidos.sh" ]; then
-    falla "el sincronizador todavía no copió onia-respuestas-pedidos.sh: sin él, la respuesta de Claude no vuelve"
-  elif ! ONIA_PEDIDOS_ESTADO="$BK/respuestas-prueba" "$BIN/onia-respuestas-pedidos.sh" --probar </dev/null >/dev/null 2>&1; then
-    falla "el VPS no llega a GitHub para recoger las respuestas de los pedidos (onia-respuestas-pedidos.sh --probar)"
-  fi
+  # en la rama respuesta/<id> y el recolector del VPS la busca (su copia la exige la sección 0). Sin
+  # llegar a GitHub, el pedido sale y la respuesta no vuelve nunca. La prueba usa un estado aparte.
+  ONIA_PEDIDOS_ESTADO="$BK/respuestas-prueba" "$BIN/onia-respuestas-pedidos.sh" --probar </dev/null >/dev/null 2>&1 \
+    || falla "el VPS no llega a GitHub para recoger las respuestas de los pedidos (onia-respuestas-pedidos.sh --probar)"
 fi
 [ "$N8N_OK" = 1 ]   || abortar "la API de n8n no responde con la llave de gestión"
 [ "$FALLAS" -eq 0 ] || abortar "$FALLAS falla(s) en los requisitos (arriba, con ❌), antes de crear nada"
@@ -645,12 +647,20 @@ PEDIDOS_OK=0
 # Así, un aplicar sin llave deja el VPS exactamente como sin esta sección.
 # La llave la trae el workflow desde GitHub (variable ONIA_RUTINA_PEDIDOS_URL y secreto
 # ONIA_RUTINA_PEDIDOS_TOKEN -> RUTINA_URL / RUTINA_TOKEN), o ya está en el VPS. Nunca se imprime.
+# Un pedidos.env que ya estaba con otros permisos se cierra SIEMPRE, venga o no una llave nueva.
+if [ -f "$PEDIDOS_ENV" ]; then chmod 600 "$PEDIDOS_ENV" || falla "no pude dejar $PEDIDOS_ENV en 600"; fi
 if llave_ok; then
   [ -f "$PEDIDOS_ENV" ] || touch "$BK/pedidos-env-creado"
-  (umask 077; mkdir -p /root/.config/onia \
-    && printf 'ONIA_RUTINA_URL=%q\nONIA_RUTINA_TOKEN=%q\n' "$RUTINA_URL" "$RUTINA_TOKEN" > "$PEDIDOS_ENV" \
-    && chmod 600 "$PEDIDOS_ENV") \
-    && echo "✅ llave de la rutina guardada en $PEDIDOS_ENV (600)" || falla "no pude guardar $PEDIDOS_ENV"
+  # La llave va a un archivo NUEVO (umask 077: nace en 600) que después reemplaza al anterior. Escrita
+  # sobre el archivo viejo, el token quedaba con sus permisos hasta el chmod (revisión de la madre, 2-oct).
+  NUEVO_ENV="$PEDIDOS_ENV.nuevo.$$"
+  if (umask 077; mkdir -p /root/.config/onia \
+      && printf 'ONIA_RUTINA_URL=%q\nONIA_RUTINA_TOKEN=%q\n' "$RUTINA_URL" "$RUTINA_TOKEN" > "$NUEVO_ENV" \
+      && chmod 600 "$NUEVO_ENV" && mv -f "$NUEVO_ENV" "$PEDIDOS_ENV"); then
+    echo "✅ llave de la rutina guardada en $PEDIDOS_ENV (600)"
+  else
+    rm -f "$NUEVO_ENV"; falla "no pude guardar $PEDIDOS_ENV"
+  fi
 elif [ -n "${RUTINA_URL:-}${RUTINA_TOKEN:-}" ]; then
   falla "la URL o el token de la rutina no tienen la forma esperada: no los guardé"
 fi

@@ -33,14 +33,15 @@
 # root en el VPS (revisión de la sesión madre, 1-oct).
 #
 # Salidas: 0 mandado · 3 vista previa · 64 uso (o el texto como argumento) · 65 carril o texto
-# inválido · 66 sin el código correcto · 69 sin configurar · 75 tope del día, repetido o demasiadas
-# vistas previas en una hora · 1 no salió o no se sabe (lo dice).
+# inválido · 66 sin el código correcto · 69 sin configurar (o sin flock) · 75 tope del día, repetido,
+# demasiadas vistas previas en una hora u otro pedido en curso · 1 no salió o no se sabe (lo dice).
 set -uo pipefail
 export LC_ALL=C.UTF-8
 
 CONF="${ONIA_PEDIDOS_CONF:-/root/.config/onia/pedidos.env}"
 ESTADO="${ONIA_PEDIDOS_ESTADO:-/var/lib/onia-pedidos}"
 CURL="${ONIA_PEDIDOS_CURL:-curl}"
+FLOCK="${ONIA_PEDIDOS_FLOCK:-flock}"
 TG="${ONIA_TG:-/root/bin/onia-tg.sh}"
 TOPE="${ONIA_PEDIDOS_TOPE:-8}"            # pedidos por día de La Paz
 MAX_TEXTO=2000
@@ -57,6 +58,21 @@ HOY=$(date -u -d "@$((AHORA - 14400))" +%F)   # Bolivia: UTC-4 todo el año
 REGISTRO="$ESTADO/pedidos.tsv"            # ts_utc id carril hash session_id url
 VISTAS="$ESTADO/vistas.log"               # ts_utc de cada código que se le mandó (para el tope por hora)
 RESPUESTAS="$ESTADO/respuestas.tsv"       # ts_utc id estado (lo escribe respuestas-pedidos.sh)
+
+# UN candado para todo lo que cuenta, manda y anota: la vista previa (contar, mandar el código,
+# guardarlo) y el --si (leer el código, llamar a la rutina, anotar). Revisión de la madre, 2-oct: dos
+# --si en paralelo con el mismo código llamaban DOS veces a la rutina, y el tope del día y el «ya
+# salió» tenían la misma carrera. Se suelta solo al salir. La hora se vuelve a tomar adentro: la de
+# antes de esperar el candado ya no es «ahora».
+candado() {
+  command -v "$FLOCK" >/dev/null 2>&1 \
+    || { echo "Falta «flock» en esta máquina (paquete util-linux): sin candado no mando nada." >&2; exit 69; }
+  { exec 9>"$ESTADO/pedidos.lock"; } 2>/dev/null \
+    || { echo "No pude abrir el candado de los pedidos ($ESTADO/pedidos.lock): no mandé nada." >&2; exit 1; }
+  "$FLOCK" -w 60 9 || { echo "Hay otro pedido en curso y no terminó: probá de nuevo en un momento." >&2; exit 75; }
+  AHORA=$(date -u +%s)
+  HOY=$(date -u -d "@$((AHORA - 14400))" +%F)
+}
 
 uso() { sed -n '/^# Uso/,/^# Carriles/p' "$0" | sed '$d; s/^# \{0,1\}//' >&2; exit 64; }
 esc() { sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g'; }
@@ -125,11 +141,9 @@ PREVIA="$ESTADO/previas/$HASH"
 
 if [ "$SI" = 0 ]; then
   cargar_conf || { echo "Los pedidos a Claude todavía no están configurados: no le mandé nada." >&2; exit 69; }
-  # Contar, mandar y anotar van bajo UN candado (revisión de la madre, 2-oct): sin él, 8 vistas
-  # previas en paralelo contaban «0 en la última hora» las 8 y le mandaban 8 códigos. El candado se
-  # suelta solo al salir.
-  exec 9>"$ESTADO/vistas.lock"
-  flock -w 60 9 || { echo "Hay otra vista previa en curso y no terminó: probá de nuevo en un momento." >&2; exit 75; }
+  # Contar, mandar y anotar, bajo el candado: sin él, 8 vistas previas en paralelo contaban «0 en la
+  # última hora» las 8 y le mandaban 8 códigos (medido por la madre, 2-oct).
+  candado
   RECIENTES=$(awk -v desde=$((AHORA - 3600)) '$1 >= desde' "$VISTAS" 2>/dev/null | grep -c .)
   if [ "$RECIENTES" -ge "$TOPE_VISTAS" ]; then
     echo "Ya le mandé $RECIENTES códigos a Sergio Urcullo en la última hora (tope $TOPE_VISTAS): no le mando otro. Que conteste uno de esos, o probá en un rato." >&2
@@ -142,7 +156,7 @@ if [ "$SI" = 0 ]; then
 
 Si es lo que pediste, contestale a Hermes con el código <b>$CODE</b>. Si no, no contestes nada."
   # DIRECTO a él (la salida de este comando la lee Hermes, el código NO va ahí).
-  if ! ONIA_AVISO=interrumpe ONIA_AVISO_AHORA=1 ONIA_AVISO_CLAVE="pedido-codigo-$HASH-$AHORA" ONIA_AVISO_EMISOR=pedidos \
+  if ! ONIA_AVISO=interrumpe ONIA_AVISO_AHORA=1 ONIA_AVISO_CLAVE="pedido-codigo-$HASH-$CODE" ONIA_AVISO_EMISOR=pedidos \
        "$TG" "$MSG" </dev/null >/dev/null 2>&1; then
     echo "No le pude mandar el código a Sergio Urcullo: el pedido no puede salir." >&2
     exit 1
@@ -155,6 +169,8 @@ Si es lo que pediste, contestale a Hermes con el código <b>$CODE</b>. Si no, no
 fi
 
 # ── Con --si: el código que le llegó a él, para ESTE texto ─────────────────────
+# Desde acá hasta anotar en el registro, bajo el candado: un código sirve UNA vez.
+candado
 # 2>/dev/null ANTES de «<»: si no, el error de una previa inexistente imprime su ruta, y en esa ruta
 # está guardado el código (revisión de la madre, 2-oct).
 read -r VISTA GUARDADO ERRORES 2>/dev/null < "$PREVIA" || { VISTA=0; GUARDADO=""; ERRORES=0; }

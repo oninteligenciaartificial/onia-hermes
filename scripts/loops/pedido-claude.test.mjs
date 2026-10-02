@@ -14,7 +14,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { mkdtempSync, writeFileSync, readFileSync, chmodSync, existsSync, readdirSync } from "node:fs";
+import { mkdtempSync, writeFileSync, readFileSync, chmodSync, existsSync, readdirSync, mkdirSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -52,6 +52,7 @@ for a in "$@"; do
   prev="$a"
 done
 [ -n "$salida" ] && cp ${dir}/respuesta.json "$salida"
+[ -n "\${CURL_DEMORA:-}" ] && sleep "\${CURL_DEMORA}"
 printf '%s' "${curl.http}"
 exit ${curl.rc}
 `,
@@ -63,6 +64,7 @@ exit ${curl.rc}
     `#!/usr/bin/env bash
 printf '%s|%s|%s\\n' "$ONIA_AVISO" "$ONIA_AVISO_AHORA" "$ONIA_AVISO_EMISOR" > ${dir}/tg-env
 printf '%s' "$1" > ${dir}/tg-msg
+printf '%s\n' "$ONIA_AVISO_CLAVE" >> ${dir}/tg-claves
 echo x >> ${dir}/tg-envios
 [ -n "\${TG_DEMORA:-}" ] && sleep "\${TG_DEMORA}"
 ${tgFalla ? "exit 1" : "exit 0"}
@@ -365,4 +367,54 @@ test("el tope de vistas previas no se salta con pedidos en paralelo (a lo sumo 3
   assert.ok(envios <= 3, `se mandaron ${envios} códigos: ${r.stderr}`);
   assert.equal(envios, 3, "los 3 que entran en el tope sí salen");
   assert.equal(readFileSync(join(b.estado, "vistas.log"), "utf8").trim().split("\n").length, 3);
+});
+
+// Revisión de la madre, 2-oct: el --si no tenía candado. Dos --si en paralelo con el mismo código
+// leían la previa a la vez, llamaban DOS veces a la rutina y salían 0 y 0: un código servía dos veces.
+test("dos --si en paralelo con el mismo código: la rutina se llama UNA vez", () => {
+  const b = banco();
+  b.correr(["plataforma"], TEXTO);
+  const c = b.codigo();
+  const r = spawnSync(
+    "bash",
+    ["-c", `for i in 1 2; do ( printf '%s' "$T" | ${SCRIPT} plataforma --si ${c} >/dev/null 2>&1; echo "rc=$?" ) & done; wait`],
+    { env: { ...b.env, T: TEXTO, CURL_DEMORA: "0.5" }, encoding: "utf8" },
+  );
+  assert.equal(b.llamadas(), 1, `la rutina se llamó ${b.llamadas()} veces`);
+  assert.deepEqual(r.stdout.trim().split("\n").sort(), ["rc=0", "rc=66"], "uno sale, el otro ya no tiene código");
+  assert.equal(b.leer("estado/pedidos.tsv").trim().split("\n").length, 1);
+});
+
+test("la clave de la aduana lleva el código: dos vistas previas iguales no se pisan", () => {
+  const b = banco();
+  const claves = [];
+  for (let i = 0; i < 2; i++) {
+    assert.equal(b.correr(["plataforma"], TEXTO).status, 3);
+    const c = b.codigo();
+    const clave = b.leer("tg-claves").trim().split("\n")[i];
+    assert.match(clave, new RegExp(`^pedido-codigo-[0-9a-f]{12}-${c}$`), "con la hora, dos en el mismo segundo tenían la misma clave");
+    claves.push(clave);
+  }
+  assert.notEqual(claves[0], claves[1]);
+});
+
+test("sin flock lo dice con su propio mensaje y no manda nada (69)", () => {
+  const b = banco();
+  const r = b.correr(["plataforma"], TEXTO, { ONIA_PEDIDOS_FLOCK: "/no/existe/flock" });
+  assert.equal(r.status, 69, r.stderr);
+  assert.match(r.stderr, /Falta «flock»/);
+  assert.doesNotMatch(r.stderr, /otra vista previa|otro pedido en curso/);
+  assert.equal(b.leer("tg-envios"), "");
+  const s2 = b.correr(["plataforma", "--si", "123456"], TEXTO, { ONIA_PEDIDOS_FLOCK: "/no/existe/flock" });
+  assert.equal(s2.status, 69);
+  assert.equal(b.llamadas(), 0);
+});
+
+test("si no puede abrir el candado lo dice con su propio mensaje y no manda nada", () => {
+  const b = banco();
+  mkdirSync(join(b.estado, "pedidos.lock"), { recursive: true }); // un directorio: `exec 9>` falla
+  const r = b.correr(["plataforma"], TEXTO);
+  assert.equal(r.status, 1, r.stderr);
+  assert.match(r.stderr, /No pude abrir el candado de los pedidos/);
+  assert.equal(b.leer("tg-envios"), "");
 });

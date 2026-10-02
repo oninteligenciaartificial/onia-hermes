@@ -178,6 +178,21 @@ CLI de Hermes.
   (`onia-vps.sh` sin `poner` en `sincronizar.sh`, de `5b3f980b`) y `test:guards-cableados`
   (`tandas-v1.test.mjs` sin cablear) fallaban en main SOLO. Antes de culpar a tu cambio, se corre la
   misma suite con `git checkout --detach origin/main`.
+- **UN candado para todo lo que cuenta, manda y anota** (`candado()` de `pedido-claude.sh`, 2-oct). Se
+  había puesto solo en la vista previa: dos `--si` en paralelo con el mismo código llamaban DOS veces a
+  la rutina (medido por la madre: rc 0 y 0). El candado va desde que se lee el código hasta que se anota
+  en el registro, y la hora se vuelve a tomar adentro. Sin `flock`, o si `exec 9>` falla, cada caso
+  tiene su propio mensaje: «hay otra vista previa en curso» escondía la causa.
+- **La clave de la aduana tiene que ser única por aviso**: con `$HASH-$AHORA`, dos vistas previas
+  iguales en el mismo segundo compartían clave, la aduana callaba la segunda y su código quedaba
+  guardado sin entregarse. Va con `$CODE`.
+- **Un secreto se escribe en un archivo NUEVO y después se mueve** (`umask 077` + `mv -f`). Escrito
+  sobre uno viejo en 644, queda en 644 hasta el `chmod`. Y el archivo que ya estaba se cierra en 600
+  aunque no venga una llave nueva. La prueba usa un `chmod` doble que avisa si el token ya estaba
+  adentro cuando se lo llama.
+- **La sección 0 (`al_dia`) exige la versión exacta de cada herramienta**, con una marca que solo tiene
+  la versión nueva (`^candado()`, `--probar`). Sin eso, con la llave cargada y el comando viejo,
+  `aplicar` salía 0 con los pedidos apagados.
 - **Cambiar la base de un PR no vuelve a correr su CI** (`pull_request` sin el tipo `edited`). Al
   pasar el #91 a `main` se corrió la suite a mano sobre main + el commit.
 - **En una prueba, nada de regex con `(?:\s+.*\n)*?`:** si el texto buscado no está, retrocede sin fin
