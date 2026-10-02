@@ -12,14 +12,15 @@
 # API. Su URL y su token viven en /root/.config/onia/pedidos.env (600), nunca en el repo; los
 # instala hermes-content/deploy/hermes-jarvis/aplicar.sh.
 #
-# Uso (el pedido va por la ENTRADA ESTÁNDAR, con un heredoc entre comillas: así ningún caracter
-# del texto —$, `, comillas— pasa por la shell):
-#   onia-pedido-claude.sh <carril> <<'PEDIDO'          vista previa: le manda a Sergio Urcullo el
-#   …el pedido…                                         texto y un CÓDIGO directo por Telegram, y
-#   PEDIDO                                              sale 3. No manda nada a Claude.
-#   onia-pedido-claude.sh <carril> --si <código> <<'PEDIDO'   lo manda, solo con el código que él
-#   …el mismo pedido…                                         recibió y contestó
-#   PEDIDO
+# Uso (el pedido va SOLO por la ENTRADA ESTÁNDAR, con un heredoc entre comillas cuyo delimitador
+# nadie escribe en un pedido: así ningún caracter del texto —$, `, comillas, ni una línea que diga
+# «PEDIDO»— pasa por la shell. Como argumento sale 64):
+#   onia-pedido-claude.sh <carril> <<'FIN_PEDIDO_ONIA_7f3c'          vista previa: le manda a Sergio
+#   …el pedido…                                                       Urcullo el texto y un CÓDIGO
+#   FIN_PEDIDO_ONIA_7f3c                                              directo por Telegram, y sale 3.
+#   onia-pedido-claude.sh <carril> --si <código> <<'FIN_PEDIDO_ONIA_7f3c'   lo manda, solo con el
+#   …el mismo pedido…                                                       código que él recibió
+#   FIN_PEDIDO_ONIA_7f3c                                                    y contestó
 #   onia-pedido-claude.sh --lista [AAAA-MM-DD]      los pedidos del día, con su estado
 #   onia-pedido-claude.sh --estado                  ¿está configurado? (no manda nada)
 #
@@ -31,8 +32,9 @@
 # Frena el error de un modelo (mandar sin preguntar, o mandar otro texto); no frena a alguien con
 # root en el VPS (revisión de la sesión madre, 1-oct).
 #
-# Salidas: 0 mandado · 3 vista previa · 64 uso · 65 carril o texto inválido · 66 sin el código
-# correcto · 69 sin configurar · 75 tope del día o repetido · 1 no salió o no se sabe (lo dice).
+# Salidas: 0 mandado · 3 vista previa · 64 uso (o el texto como argumento) · 65 carril o texto
+# inválido · 66 sin el código correcto · 69 sin configurar · 75 tope del día, repetido o demasiadas
+# vistas previas en una hora · 1 no salió o no se sabe (lo dice).
 set -uo pipefail
 export LC_ALL=C.UTF-8
 
@@ -44,12 +46,16 @@ TOPE="${ONIA_PEDIDOS_TOPE:-8}"            # pedidos por día de La Paz
 MAX_TEXTO=2000
 VIGENCIA_PREVIA=3600                      # segundos que vale un código
 MAX_ERRORES=3
+# Cada vista previa le suena a él aunque sea de noche o esté en un bloque (es la respuesta a lo que
+# él mismo está pidiendo): con un tope, un modelo en bucle no lo despierta (revisión de la madre, 2-oct).
+TOPE_VISTAS="${ONIA_PEDIDOS_TOPE_VISTAS:-3}"   # vistas previas por hora
 CARRILES="plataforma ventas marca lucia hermes consulta"
 BETA="experimental-cc-routine-2026-04-01"
 
 AHORA=$(date -u +%s)
 HOY=$(date -u -d "@$((AHORA - 14400))" +%F)   # Bolivia: UTC-4 todo el año
 REGISTRO="$ESTADO/pedidos.tsv"            # ts_utc id carril hash session_id url
+VISTAS="$ESTADO/vistas.log"               # ts_utc de cada código que se le mandó (para el tope por hora)
 RESPUESTAS="$ESTADO/respuestas.tsv"       # ts_utc id estado (lo escribe responder.sh)
 
 uso() { sed -n '/^# Uso/,/^# Carriles/p' "$0" | sed '$d; s/^# \{0,1\}//' >&2; exit 64; }
@@ -60,7 +66,7 @@ cargar_conf() {
   # shellcheck disable=SC1090
   [ -r "$CONF" ] && . "$CONF"
   [[ "${ONIA_RUTINA_URL:-}" =~ ^https://api\.anthropic\.com/v1/claude_code/routines/trig_[A-Za-z0-9]+/fire$ ]] \
-    && [ -n "${ONIA_RUTINA_TOKEN:-}" ]
+    && [[ "${ONIA_RUTINA_TOKEN:-}" =~ ^[A-Za-z0-9._-]+$ ]]   # la misma forma que exige aplicar.sh
 }
 
 estado_de() {  # estado_de <id> -> el último estado que respondió Claude, o «sin respuesta»
@@ -87,16 +93,21 @@ esac
 mkdir -p "$ESTADO/previas" 2>/dev/null; chmod 700 "$ESTADO" 2>/dev/null
 
 CARRIL="$1"; shift
-SI=0; CODIGO=""; PARTES=(); PREV=""
-for a in "$@"; do
-  if [ "$PREV" = --si ]; then CODIGO="$a"; PREV=""; continue; fi
-  if [ "$a" = --si ]; then SI=1; PREV=--si; continue; fi
-  PARTES+=("$a"); PREV="$a"
-done
-TEXTO="${PARTES[*]:-}"
-# El pedido por la entrada estándar (heredoc entre comillas): nada del texto pasa por la shell.
-if [ -z "$TEXTO" ] && [ ! -t 0 ]; then TEXTO=$(cat); fi
-TEXTO="$(printf '%s' "$TEXTO" | sed 's/^[[:space:]]*//; s/[[:space:]]*$//')"
+SI=0; CODIGO=""
+case "${1:-}" in
+  "") ;;
+  --si) SI=1; CODIGO="${2:-}"; [ "$#" -le 2 ] || { echo "sobran argumentos: el pedido va por la entrada estándar, con el heredoc de la skill" >&2; exit 64; } ;;
+  *) echo "el pedido va por la entrada estándar (heredoc <<'FIN_PEDIDO_ONIA_7f3c' de la skill), nunca como argumento: así pasaría por la shell" >&2; exit 64 ;;
+esac
+# El pedido, SOLO por la entrada estándar. timeout: una entrada que nunca se cierra no lo cuelga, y
+# un texto cortado a medias no sale.
+TEXTO=""
+if [ ! -t 0 ]; then
+  TEXTO=$(timeout "${ONIA_PEDIDOS_ESPERA_ENTRADA:-5}" cat) || { echo "no pude leer el pedido completo de la entrada estándar: no salió" >&2; exit 65; }
+fi
+# Se recortan solo el principio y el final del texto ENTERO: la sangría de adentro llega igual.
+TEXTO="${TEXTO#"${TEXTO%%[![:space:]]*}"}"
+TEXTO="${TEXTO%"${TEXTO##*[![:space:]]}"}"
 
 if ! printf ' %s ' "$CARRILES" | grep -qF " $CARRIL "; then
   if [ "$CARRIL" = pc ] || [ "$CARRIL" = madre ]; then
@@ -114,6 +125,11 @@ PREVIA="$ESTADO/previas/$HASH"
 
 if [ "$SI" = 0 ]; then
   cargar_conf || { echo "Los pedidos a Claude todavía no están configurados: no le mandé nada." >&2; exit 69; }
+  RECIENTES=$(awk -v desde=$((AHORA - 3600)) '$1 >= desde' "$VISTAS" 2>/dev/null | grep -c .)
+  if [ "$RECIENTES" -ge "$TOPE_VISTAS" ]; then
+    echo "Ya le mandé $RECIENTES códigos a Sergio Urcullo en la última hora (tope $TOPE_VISTAS): no le mando otro. Que conteste uno de esos, o probá en un rato." >&2
+    exit 75
+  fi
   CODE=$(python3 -c 'import secrets; print("%06d" % secrets.randbelow(10**6))')
   MSG="🔐 <b>¿Le mando esto a Claude?</b> (carril $CARRIL)
 
@@ -127,12 +143,16 @@ Si es lo que pediste, contestale a Hermes con el código <b>$CODE</b>. Si no, no
     exit 1
   fi
   ( umask 077; printf '%s %s 0\n' "$AHORA" "$CODE" > "$PREVIA" )
+  # Solo la última hora: el archivo no crece.
+  { awk -v desde=$((AHORA - 3600)) '$1 >= desde' "$VISTAS" 2>/dev/null; echo "$AHORA"; } > "$VISTAS.$$" && mv -f "$VISTAS.$$" "$VISTAS"
   printf 'Le mandé a Sergio Urcullo el pedido (carril %s) y un código por Telegram.\nMandalo solo si te contesta con ese código: el mismo comando con --si <código>.\n' "$CARRIL"
   exit 3
 fi
 
 # ── Con --si: el código que le llegó a él, para ESTE texto ─────────────────────
-read -r VISTA GUARDADO ERRORES < "$PREVIA" 2>/dev/null || { VISTA=0; GUARDADO=""; ERRORES=0; }
+# 2>/dev/null ANTES de «<»: si no, el error de una previa inexistente imprime su ruta, y en esa ruta
+# está guardado el código (revisión de la madre, 2-oct).
+read -r VISTA GUARDADO ERRORES 2>/dev/null < "$PREVIA" || { VISTA=0; GUARDADO=""; ERRORES=0; }
 if [ -z "$GUARDADO" ] || [ $((AHORA - VISTA)) -gt "$VIGENCIA_PREVIA" ]; then
   rm -f "$PREVIA"
   echo "No hay un código vigente para este pedido: no salió." >&2

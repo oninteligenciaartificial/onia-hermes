@@ -2,8 +2,8 @@
 title: "Términos y Condiciones"
 slug: "terminos"
 status: "vigente"
-version: "1.2"
-updatedAt: "2026-09-25"
+version: "1.3"
+updatedAt: "2026-10-01"
 ---
 
 # Términos y Condiciones de Uso — Plataforma Onia
@@ -152,9 +152,11 @@ intelectual sobre el software.
 6.1. **Los agentes proponen, no envían.** Los agentes de IA de Onia operan con
 **aprobación humana previa**: lo que un agente redacta para tus pacientes,
 clientes o terceros queda en una **cola de pendientes** hasta que un usuario tuyo
-lo revise y apruebe. Ningún agente de IA envía en tu nombre sin esa aprobación.
+lo revise y apruebe. Ninguno de estos agentes envía en tu nombre sin esa aprobación;
+el único que responde solo es el agente conversacional de WhatsApp del §6.2, y
+sólo si lo contratás.
 
-6.2. **Envíos automáticos que la plataforma sí hace hoy.** Fuera de los agentes,
+6.2. **Envíos automáticos que la plataforma sí hace hoy.** Fuera de los agentes del §6.1,
 y como parte de lo que contratás, la plataforma envía con **plantilla fija** y
 sin revisión mensaje por mensaje:
 
@@ -162,7 +164,7 @@ sin revisión mensaje por mensaje:
   —dentro del tope mensual de tu plan— y también por WhatsApp si contrataste ese
   add-on. Vienen **activos** en las cuentas nuevas; los **pausás cuando quieras**
   desde **Configuración**, y el destinatario puede pedir que no le escribamos más.
-- **El asistente de WhatsApp** (add-on que se contrata aparte), que responde por
+- **El agente conversacional de WhatsApp** (add-on que se contrata aparte), que responde por
   su cuenta a quien escriba al número que conectaste, con la información que vos
   publicaste, y pasa el caso a una persona cuando no sabe. Qué le pasa a ese
   número mientras esté conectado: **§6.5**.
@@ -180,7 +182,7 @@ incompleta o desactualizada. Los resultados de IA son asistencia, no decisiones:
 verificalos antes de actuar, en especial montos, fechas, datos clínicos y
 cualquier contenido con efecto legal o tributario.
 
-6.5. **El número de WhatsApp que conectás.** El asistente del §6.2 atiende un
+6.5. **El número de WhatsApp que conectás.** El agente conversacional del §6.2 atiende un
 número de WhatsApp que elegís vos, y para funcionar **ese número se vincula a la
 plataforma de mensajería de Meta**. El vínculo cambia cómo funciona ese número, y
 el alcance del cambio depende de por qué camino se conecte:

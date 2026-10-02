@@ -37,7 +37,7 @@
 .bloqueTitulo {
   margin: 0;
   font-size: max(0.95rem, var(--fs-micro-min));
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .bloqueIntro {

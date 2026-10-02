@@ -30,7 +30,8 @@ import s from "../sitio.module.css";
  * ya viven donde corresponde — la fiscal en /facturacion y en el bloque
  * fiscal de /precios — y la tercera anuncia obra en curso, que
  * en una superficie de venta está prohibida. El veredicto de la fila de Onia
- * ya dice de frente lo del trámite.
+ * dice dónde se emite hoy la factura fiscal (sin estado de trámite desde el
+ * 2026-10-01).
  *
  * ⚠️ Y la `description` tardó en enterarse. Hasta el 2026-09-03 cerraba con
  * *"Y lo que Onia todavía no hace."*: prometía en el buscador el ledger que
@@ -58,7 +59,6 @@ export const metadata: Metadata = {
 const MARCA: Record<Estado, string> = {
   si: "Sí",
   no: "No",
-  tramite: "En trámite",
 };
 
 export default function Comparativa() {

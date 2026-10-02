@@ -1,5 +1,22 @@
 # Limpieza de skills y agentes — 2026-09-29
 
+> ♻️ **REVERTIDA en el repo el 2026-10-02** (rama `claude/restaurar-skills-29sep`). Sergio
+> Urcullo: *«muchos de mis archivos no editan como yo quiero ahora… recuperémosla y que editen
+> como lo hacían»*. Desde la copia (`9622ae6a`, idéntica al padre del borrado `039ad0a1`)
+> volvieron los **1.193 archivos** borrados de `.claude/skills/`, `.agents/skills/`,
+> `hermes-content/skills/` y los agentes `onia-core-guardian` y `onia-creative-radar`, más el
+> `skills-lock.json` y los textos que los nombraban. La copia de HyperFrames del repo **gana**
+> sobre la global (Claude Code carga primero las skills del proyecto:
+> code.claude.com/docs/en/skills.md#resolve-skills-that-share-a-name).
+> **No se restauró:** `.claude/agents/_retirados/` (6 agentes retirados el 18-ago; el harness
+> los volvía a ofrecer). **Fuera del repo, en la PC (lo hace la madre):**
+> - Codex: las 23 siguen en `~/.codex/skills-archivadas-20260929/` → volver a moverlas a
+>   `~/.codex/skills/` (§3).
+> - Globales `~/.claude/skills` (105, §2): **no hay copia** — la carpeta de archivadas se borró.
+>   Se reinstalan solo si se extraña una, con los comandos de «Cómo recuperar algo».
+>
+> Lo de abajo es la foto del 29-sep, sin tocar.
+
 > Foto de un día (historia, no fuente de verdad). Pedidos de Sergio Urcullo, en orden:
 > *"borra lo que son skill que no usamos… mira el último mes"* · *"borralas las que no usemos,
 > pero analiza con nuestros proyectos futuros si las usaremos"* · *"borra las que no usamos"*

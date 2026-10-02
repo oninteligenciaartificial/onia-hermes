@@ -42,6 +42,10 @@ description: Cargar ANTES de tocar el VPS, Docker, n8n o cualquier cosa por SSH.
   ssh -i ~/.ssh/onia_vps -o ProxyCommand="cloudflared access ssh --hostname %h" root@ssh.onia.com.bo
   ```
   Verificado: `hostname` = `srv1360183`. ⚠️ Todavía **sin Cloudflare Access** delante, así que la protección es solo la llave SSH (igual que el 22 abierto). Pendiente: Access + service token.
+- ⚠️ **El hook SessionStart que arma `ssh onia-vps` solo corre si la sesión abre DENTRO de `onia-hermes`.** Una
+  sesión con los dos repos (Plataforma) abre en `/home/user`, no carga `.claude/settings.json` de `onia-hermes` y
+  `ssh onia-vps` da «Could not resolve hostname» aunque las tres variables estén cargadas (medido 1-oct). No falta
+  ninguna variable: `cd /home/user/onia-hermes && node scripts/nube-ssh-vps.mjs` y listo.
 - **Qué más NO sale desde la nube (medido 1-oct):** YouTube bloquea la IP del contenedor (`yt-dlp` pide «no eres
   un robot», Chromium cae en `/sorry`); los videos se ven desde la PC. Los centros de ayuda Zendesk privados dan 403.
   `SendMessage` a otra sesión falla («this cloud session cannot message other sessions yet»): se contesta en el

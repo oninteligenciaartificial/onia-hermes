@@ -184,6 +184,36 @@ abortar() {  # abortar <motivo> — SOLO antes de tocar el crontab: deja todo co
   exit 1
 }
 
+# Lo que se puede comprobar sin crear nada va PRIMERO (revisión de la madre, 2-oct): si falla, se
+# corta acá y no quedan flujos nuevos en n8n ni un evento de prueba en su calendario.
+REPO_VPS=/root/loops/onia-hermes
+git -C "$REPO_VPS" show origin/main:hermes-content/skills/agenda-calendario.md 2>/dev/null | grep -q 'onia-agenda.sh crear' \
+  || falla "no encontré la skill del calendario en origin/main del VPS"
+git -C "$REPO_VPS" show origin/main:hermes-content/deploy/hermes-agent/SOUL.md 2>/dev/null | grep -q '^## Su calendario y el cierre del día' \
+  || falla "no encontré la regla del calendario en el SOUL de origin/main del VPS"
+[ -f /root/.hermes/SOUL.md ] || falla "no existe /root/.hermes/SOUL.md: no hay a quién enseñarle"
+# La llave de la rutina, con forma estricta: un token con espacios (mal pegado) dejaba el aplicar a
+# medias porque recién fallaba en 5d, con el crontab ya cambiado (revisión de la madre, 2-oct).
+URL_RUTINA_RE='^https://api\.anthropic\.com/v1/claude_code/routines/trig_[A-Za-z0-9]+/fire$'
+TOKEN_RUTINA_RE='^[A-Za-z0-9._-]+$'
+llave_ok() { [[ "${RUTINA_URL:-}" =~ $URL_RUTINA_RE ]] && [[ "${RUTINA_TOKEN:-}" =~ $TOKEN_RUTINA_RE ]]; }
+if [ -n "${RUTINA_URL:-}${RUTINA_TOKEN:-}" ]; then
+  llave_ok || falla "la URL o el token de la rutina de pedidos llegaron, pero sin la forma esperada"
+fi
+if [ "$N8N_OK" = 1 ]; then
+  for id in $N8N_APAGAR; do
+    [ -n "$(api "$N8N_HOST/api/v1/workflows/$id" | campo id)" ] || falla "no encontré en n8n el flujo $id (de los 12 que se apagan)"
+  done
+fi
+# Los 3 trabajos de Hermes que se pausan tienen que estar en jobs.json (verificación del 1-oct):
+# sin esto, uno que no aparecía salía «ya estaba: ?» en la sección 3, no contaba como falla, y el
+# aviso final le prometía «apagué los reportes» con ese trabajo todavía escribiéndole.
+for id in $HERMES_PAUSAR; do
+  [ "$(estado_job "$id")" != "?" ] || falla "no encontré en /root/.hermes/cron/jobs.json el trabajo $id de Hermes (de los 3 que se pausan)"
+done
+[ "$N8N_OK" = 1 ]   || abortar "la API de n8n no responde con la llave de gestión"
+[ "$FALLAS" -eq 0 ] || abortar "$FALLAS falla(s) en los requisitos (arriba, con ❌), antes de crear nada"
+
 # ── 5. Su calendario ────────────────────────────────────────────────────────────
 sec "5. Lector de su calendario personal"
 CONF=/root/.config/onia/agenda.env
@@ -356,27 +386,6 @@ fi
 
 # ── Fin de la FASE A: con algo en rojo, no se toca nada de lo que le llega ──────
 sec "Fase A: ¿todo listo para aplicar?"
-REPO_VPS=/root/loops/onia-hermes
-git -C "$REPO_VPS" show origin/main:hermes-content/skills/agenda-calendario.md 2>/dev/null | grep -q 'onia-agenda.sh crear' \
-  || falla "no encontré la skill del calendario en origin/main del VPS"
-git -C "$REPO_VPS" show origin/main:hermes-content/deploy/hermes-agent/SOUL.md 2>/dev/null | grep -q '^## Su calendario y el cierre del día' \
-  || falla "no encontré la regla del calendario en el SOUL de origin/main del VPS"
-[ -f /root/.hermes/SOUL.md ] || falla "no existe /root/.hermes/SOUL.md: no hay a quién enseñarle"
-if [ -n "${RUTINA_URL:-}${RUTINA_TOKEN:-}" ]; then
-  [[ "${RUTINA_URL:-}" =~ ^https://api\.anthropic\.com/v1/claude_code/routines/trig_[A-Za-z0-9]+/fire$ ]] && [ -n "${RUTINA_TOKEN:-}" ] \
-    || falla "la URL o el token de la rutina de pedidos llegaron, pero sin la forma esperada"
-fi
-if [ "$N8N_OK" = 1 ]; then
-  for id in $N8N_APAGAR; do
-    [ -n "$(api "$N8N_HOST/api/v1/workflows/$id" | campo id)" ] || falla "no encontré en n8n el flujo $id (de los 12 que se apagan)"
-  done
-fi
-# Los 3 trabajos de Hermes que se pausan tienen que estar en jobs.json (verificación del 1-oct):
-# sin esto, uno que no aparecía salía «ya estaba: ?» en la sección 3, no contaba como falla, y el
-# aviso final le prometía «apagué los reportes» con ese trabajo todavía escribiéndole.
-for id in $HERMES_PAUSAR; do
-  [ "$(estado_job "$id")" != "?" ] || falla "no encontré en /root/.hermes/cron/jobs.json el trabajo $id de Hermes (de los 3 que se pausan)"
-done
 [ "$N8N_OK" = 1 ]     || abortar "la API de n8n no responde con la llave de gestión"
 [ "$AGENDA_OK" = 1 ]  || abortar "no puedo LEER su calendario"
 [ "$CAMBIOS_OK" = 1 ] || abortar "agendar, mover y cancelar en su calendario no pasó la prueba"
@@ -424,7 +433,7 @@ if isinstance(jobs, dict):
     jobs = [dict(v, id=v.get("id", k)) for k, v in jobs.items() if isinstance(v, dict)]
 for j in jobs:
     if isinstance(j, dict) and j.get("id") == sys.argv[1]:
-        raise SystemExit(0 if not j.get("enabled") or j.get("state") == "paused" else 10)
+        raise SystemExit(0 if j.get("state") == "paused" else 10)   # «en pausa» = state paused
 raise SystemExit(11)
 PY
 }
@@ -432,17 +441,29 @@ for id in $(cat "$BK/hermes-pausados.txt" 2>/dev/null); do
   en_pausa "$id"; e=$?
   if [ "$e" = 10 ]; then echo "hermes: $id ya estaba activo"; continue; fi
   if [ "$e" = 11 ]; then echo "hermes: $id ya no está en jobs.json: nada que reanudar"; continue; fi
-  timeout 60 $HPY -m hermes_cli.main cron resume "$id" </dev/null >/dev/null 2>&1 && echo "hermes: reanudado $id" || mal "hermes: no pude reanudar $id"
+  timeout 60 $HPY -m hermes_cli.main cron resume "$id" </dev/null >/dev/null 2>&1
+  # Se mira de vuelta: que el comando diga «ok» no prueba que el trabajo volvió (revisión de la madre, 2-oct).
+  en_pausa "$id"; e=$?
+  [ "$e" = 10 ] && echo "hermes: reanudado $id" || mal "hermes: $id sigue en pausa después de reanudarlo"
 done
 KEY=$(grep -oP '(?<=^N8N_MANAGEMENT_API_KEY=).*' /opt/onia-platform/app.env 2>/dev/null | tr -d "\"'" | head -1)
+# Un flujo que ya no existe en n8n (404) no tiene nada que deshacer: no es un error.
+n8n_post() {  # n8n_post <id> activate|deactivate -> imprime el código HTTP; la respuesta queda en $BK/n8n-resp.json
+  curl -s --max-time 30 -o "$BK/n8n-resp.json" -w '%{http_code}' -X POST -H "X-N8N-API-KEY: $KEY" \
+    "$N8N_HOST/api/v1/workflows/$1/$2" </dev/null
+}
 for id in $(cat "$BK/n8n-apagados.txt" 2>/dev/null); do
-  curl -s --max-time 30 -X POST -H "X-N8N-API-KEY: $KEY" "$N8N_HOST/api/v1/workflows/$id/activate" </dev/null | grep -qE '"active": ?true' \
-    && echo "n8n: reactivado $id" || mal "n8n: no pude reactivar $id"
+  code=$(n8n_post "$id" activate)
+  if [ "$code" = 404 ]; then echo "n8n: $id ya no existe: nada que reactivar"
+  elif grep -qE '"active": ?true' "$BK/n8n-resp.json" 2>/dev/null; then echo "n8n: reactivado $id"
+  else mal "n8n: no pude reactivar $id (HTTP $code)"; fi
 done
 for f in agenda cambios; do
   [ -f "$BK/n8n-$f-id" ] || continue
-  curl -s --max-time 30 -X POST -H "X-N8N-API-KEY: $KEY" "$N8N_HOST/api/v1/workflows/$(cat "$BK/n8n-$f-id")/deactivate" </dev/null \
-    | grep -qE '"active": ?false' && echo "n8n: flujo de $f del calendario apagado (queda guardado)" || mal "n8n: no pude apagar el flujo de $f"
+  code=$(n8n_post "$(cat "$BK/n8n-$f-id")" deactivate)
+  if [ "$code" = 404 ]; then echo "n8n: el flujo de $f del calendario ya no existe: nada que apagar"
+  elif grep -qE '"active": ?false' "$BK/n8n-resp.json" 2>/dev/null; then echo "n8n: flujo de $f del calendario apagado (queda guardado)"
+  else mal "n8n: no pude apagar el flujo de $f (HTTP $code)"; fi
 done
 for s in skill skill-pedidos; do
   [ -f "$BK/$s-destino" ] || continue
@@ -476,8 +497,10 @@ else
 fi
 RB
 chmod 700 "$BK/rollback.sh"
-[ -n "$PREVIO" ] && touch "$PREVIO/reemplazado"
+# Primero «aplicado» y después «reemplazado» (revisión de la madre, 2-oct): si se corta entre las dos,
+# revertir igual encuentra un respaldo vigente (este, que heredó las listas del anterior).
 touch "$BK/aplicado"
+[ -n "$PREVIO" ] && touch "$PREVIO/reemplazado"
 echo "✅ $BK/rollback.sh"
 
 
@@ -502,10 +525,12 @@ sec "3. Trabajos de Hermes que le escribían por su cuenta"
 for id in $HERMES_PAUSAR; do
   antes=$(estado_job "$id")
   if [ "$antes" = activo ]; then
+    # A la lista ANTES de pausar (revisión de la madre, 2-oct): si se corta justo después de pausar,
+    # revertir igual lo reanuda. Si la pausa falla, revertir lo ve activo y no lo toca.
+    grep -qx "$id" "$BK/hermes-pausados.txt" || echo "$id" >> "$BK/hermes-pausados.txt"
     timeout 60 "$HPY" -m hermes_cli.main cron pause "$id" </dev/null >/dev/null 2>&1
     despues=$(estado_job "$id")
     if [ "$despues" = pausado ]; then
-      grep -qx "$id" "$BK/hermes-pausados.txt" || echo "$id" >> "$BK/hermes-pausados.txt"
       echo "  ⏸ pausado $id"
     else
       falla "no pude pausar $id (quedó: $despues)"
@@ -523,8 +548,10 @@ if [ "$N8N_OK" = 1 ]; then
     api "$N8N_HOST/api/v1/workflows/$id" > "$BK/n8n/$id.json"
     nombre=$(campo name < "$BK/n8n/$id.json"); activo=$(campo active < "$BK/n8n/$id.json")
     if [ "$activo" = True ]; then
+      # A la lista ANTES de apagar, por lo mismo que en la sección 3: reactivar uno que quedó
+      # prendido no cambia nada.
+      grep -qx "$id" "$BK/n8n-apagados.txt" || echo "$id" >> "$BK/n8n-apagados.txt"
       if [ "$(api -X POST "$N8N_HOST/api/v1/workflows/$id/deactivate" | campo active)" = False ]; then
-        grep -qx "$id" "$BK/n8n-apagados.txt" || echo "$id" >> "$BK/n8n-apagados.txt"
         echo "  ⏹ apagado  $nombre"
       else
         falla "no pude apagar $id ($nombre)"
@@ -587,11 +614,10 @@ PEDIDOS_ENV=/root/.config/onia/pedidos.env
 # Así, un aplicar sin llave deja el VPS exactamente como sin esta sección.
 # La llave la trae el workflow desde GitHub (variable ONIA_RUTINA_PEDIDOS_URL y secreto
 # ONIA_RUTINA_PEDIDOS_TOKEN -> RUTINA_URL / RUTINA_TOKEN), o ya está en el VPS. Nunca se imprime.
-if [[ "${RUTINA_URL:-}" =~ ^https://api\.anthropic\.com/v1/claude_code/routines/trig_[A-Za-z0-9]+/fire$ ]] \
-   && [ -n "${RUTINA_TOKEN:-}" ]; then
+if llave_ok; then
   [ -f "$PEDIDOS_ENV" ] || touch "$BK/pedidos-env-creado"
   (umask 077; mkdir -p /root/.config/onia \
-    && printf 'ONIA_RUTINA_URL=%s\nONIA_RUTINA_TOKEN=%s\n' "$RUTINA_URL" "$RUTINA_TOKEN" > "$PEDIDOS_ENV") \
+    && printf 'ONIA_RUTINA_URL=%q\nONIA_RUTINA_TOKEN=%q\n' "$RUTINA_URL" "$RUTINA_TOKEN" > "$PEDIDOS_ENV") \
     && echo "✅ llave de la rutina guardada en $PEDIDOS_ENV (600)" || falla "no pude guardar $PEDIDOS_ENV"
 elif [ -n "${RUTINA_URL:-}${RUTINA_TOKEN:-}" ]; then
   falla "la URL o el token de la rutina no tienen la forma esperada: no los guardé"

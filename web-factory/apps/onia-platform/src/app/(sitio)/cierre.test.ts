@@ -179,7 +179,7 @@ function reservaFondo(cuerpo: string): string[] {
 
 describe("la página de venta cierra en el pie, sin franja debajo", () => {
   const hojas = HOJAS.map((ruta) => ({
-    rotulo: relative(SRC, ruta),
+    rotulo: relative(SRC, ruta).replaceAll("\\", "/"),
     css: soloCodigo(readFileSync(ruta, "utf8")),
   }));
 

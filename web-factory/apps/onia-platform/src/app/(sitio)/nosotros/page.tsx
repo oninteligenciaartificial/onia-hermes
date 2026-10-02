@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { PRUEBA, RETENCION } from "@/lib/pricing";
 import { Reveal } from "@/motion";
 import { WA_URL_LANDING, SITE_URL, CORREO_CONTACTO } from "@/lib/site";
-import { SIAT_ESTADO_ONIA } from "@/lib/siat";
 import { CUANTOS_RUBROS_CAPITAL } from "@/content/rubros";
 import { EMPEZAR_URL } from "../nav";
 import { CTA_ALTA } from "../alta";
@@ -51,12 +50,12 @@ const PRINCIPIOS = [
   {
     titulo: "Honestidad primero",
     detalle:
-      "Lo que está en trámite lo publicamos como en trámite, con su fecha y su resolución. Preferimos que lo leas antes de contratar y no que lo descubras en la primera semana.",
+      "Publicamos lo que el sistema hace hoy, con su alcance y sus condiciones. Preferimos que lo leas antes de contratar y no que lo descubras en la primera semana.",
   },
   {
-    titulo: "La IA propone, vos aprobás",
+    titulo: "Los agentes proponen, vos aprobás",
     detalle:
-      "Nuestros agentes trabajan de noche, pero nada sale hacia un cliente tuyo sin tu OK. Human-in-the-loop no es un adorno: es la arquitectura.",
+      "Revisan tus datos cada mañana antes de que abras, pero nada sale hacia un cliente tuyo sin tu OK. Human-in-the-loop no es un adorno: es la arquitectura.",
   },
   {
     titulo: "Bolivia específica, no genérica",
@@ -114,8 +113,8 @@ export default function Nosotros() {
           <p className={s.lead}>
             Onia nace en Santa Cruz de la Sierra con una convicción simple: el
             dueño de un negocio boliviano merece la misma tecnología que una
-            empresa grande — con inteligencia artificial de verdad, en
-            bolivianos, y hablando su idioma. Somos OniaAgency, registrados en
+            empresa grande — agentes que le preparan el trabajo —, en
+            bolivianos y hablando su idioma. Somos OniaAgency, registrados en
             SEPREC y con NIT vigente, y el sistema ya corre en producción:
             entrás, lo usás {PRUEBA.dias} días con el plan {PRUEBA.planQueCorre}{" "}
             completo y sin dejar una tarjeta, y recién después decidís.
@@ -151,8 +150,7 @@ export default function Nosotros() {
           </h2>
           <p className={s.body} style={{ maxWidth: "48em" }}>
             {CUANTOS_RUBROS_CAPITAL} rubros disponibles — clínicas dentales,
-            comercios, importadoras, estéticas y servicios profesionales — y{" "}
-            {SIAT_ESTADO_ONIA}. Lo probás tal como está hoy: {PRUEBA.dias} días con el
+            comercios, importadoras, estéticas y servicios profesionales. Lo probás tal como está hoy: {PRUEBA.dias} días con el
             plan {PRUEBA.planQueCorre} completo, sin tarjeta y sin contrato de
             permanencia. Si no
             te sirve, no pagás nada y tus datos te los llevás en CSV, con{" "}

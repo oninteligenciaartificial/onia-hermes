@@ -41,7 +41,7 @@ const GRUPOS: readonly {
   {
     titulo: "Servicios",
     links: [
-      { href: "/chatbot", label: "Chatbot de WhatsApp" },
+      { href: "/chatbot", label: "Agente conversacional de WhatsApp" },
       { href: "/servicios/webs", label: "Webs" },
     ],
   },

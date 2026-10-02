@@ -159,13 +159,10 @@ describe("el salario mínimo tiene una sola fuente", () => {
     ).toEqual([]);
   });
 
-  it("las tres pantallas de venta siguen llevando el anclaje", () => {
-    // Un gate que sólo PROHÍBE se satisface borrando lo que vigila: sin este
-    // caso, arrancar el párrafo de la portada dejaría los cuatro de arriba en
-    // verde. El anclaje es el argumento de precio más fuerte del sitio y estuvo
-    // sin publicar desde el 2026-08-21 justamente por vivir sólo en un
-    // comentario; que desaparezca en silencio es la forma barata de perderlo.
-    const PANTALLAS = ["page.tsx", "precios/page.tsx", "chatbot/page.tsx"];
+  it("los apartados de precio mantienen el anclaje", () => {
+    // La portada corta deja la comparación extensa en los apartados interiores.
+    // Allí el porcentaje sigue derivado de la fuente única.
+    const PANTALLAS = ["precios/page.tsx", "chatbot/page.tsx"];
 
     for (const rel of PANTALLAS) {
       const abs = path.join(SRC, "app", "(sitio)", rel);

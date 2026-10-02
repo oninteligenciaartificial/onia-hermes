@@ -69,15 +69,20 @@ description: Invocar ANTES de tocar a Hermes (el asistente de Sergio Urcullo por
 - **El «sí» de un pedido es un CÓDIGO que le llega a él directo por la aduana**, no por la salida
   que lee Hermes (revisión de la madre, 1-oct: con un sí que solo pasaba por Hermes, vista previa y
   `--si` en el mismo turno salían sin que él dijera nada). El pedido va por stdin con
-  `<<'PEDIDO'`: nada del texto pasa por la shell. La rutina corre en un entorno PROPIO, sin la llave
-  SSH del VPS (con ella, el hook `nube-ssh-vps.mjs` le arma SSH a cada sesión).
+  `<<'FIN_PEDIDO_ONIA_7f3c'` (con `<<'PEDIDO'`, un renglón «PEDIDO» del texto cerraba el heredoc y lo
+  que seguía se ejecutaba; revisión de la madre, 2-oct): nada del texto pasa por la shell. Como
+  argumento sale 64. **El código frena un error del modelo** (mandar sin preguntar, o mandar otro
+  texto), **no a alguien con root en el VPS**: ese puede leer el código del disco. Tope: 3 códigos por
+  hora, porque cada uno le suena aunque sea de noche. La rutina corre en un entorno PROPIO, sin la
+  llave SSH del VPS (con ella, el hook `nube-ssh-vps.mjs` le arma SSH a cada sesión).
 
 ## `aplicar` es TODO O NADA (desde el 1-oct)
 
-1. **Fase A, requisitos:** la API de n8n y los 12 flujos que apaga, LEER su calendario y CAMBIARLO
-   (con un evento de prueba que crea, mueve y cancela), las skills y el SOUL en `origin/main` del clon
-   del VPS, el SOUL de Hermes en el VPS, los 3 trabajos de Hermes que pausa en `jobs.json`, y la forma
-   de la llave de pedidos si vino. Si algo falla, `abortar()` apaga solo lo que **esta corrida**
+1. **Fase A, requisitos, en dos tandas.** Primero lo que se comprueba sin crear nada (1b): la API de
+   n8n y los 12 flujos que apaga, las skills y el SOUL en `origin/main` del clon del VPS, el SOUL de
+   Hermes en el VPS, los 3 trabajos de Hermes que pausa en `jobs.json`, y la forma de la llave de
+   pedidos si vino (token `^[A-Za-z0-9._-]+$`). Recién con eso en verde, su calendario: LEERLO y
+   CAMBIARLO (con un evento de prueba que crea, mueve y cancela). Si algo falla, `abortar()` apaga solo lo que **esta corrida**
    prendió (`$BK/prendido-*`), y no toca crontab, Hermes, los 12 flujos de n8n, el SOUL ni el
    interruptor.
 2. **Crontab.** Si no se puede instalar, también aborta: todavía no se tocó nada más.
@@ -105,7 +110,9 @@ CLI de Hermes.
   rama y, si `main` es ancestro, la empuja a `main`. El PR #68 apareció «merged» sin que nadie lo
   mergeara. **Todo lo que dejás en tu rama llega a `main` y, ≈1 h después, al VPS** (el sincronizador
   de `/root/bin`). Por eso lo nuevo se diseña INERTE hasta encenderlo: los pedidos no instalan nada
-  sin la llave de la rutina.
+  sin la llave de la rutina. **Con una rama que sale de `main` y un PR que todavía tiene que revisar
+  la madre:** pushear a mano y soltar el turno con `git checkout --detach` (el hook no toca un HEAD
+  desacoplado). Si no, el PR llega a `main` sin revisión (2-oct).
 - **Una sección del SOUL se copia con un rango.** El `aplicar` viejo hacía `sed '/^## Su calendario/,$p'`:
   arrastraba TODO lo que viniera después. La sección de pedidos va ANTES de la del calendario, y
   cada copia termina en el próximo `---`.
@@ -126,6 +133,17 @@ CLI de Hermes.
 - **Un «?» que no cuenta como falla es una promesa falsa.** Si uno de los 3 trabajos de Hermes no
   aparecía en `jobs.json`, la sección 3 decía «ya estaba: ?» y seguía, y el aviso final le prometía
   «apagué los reportes». Desde el 1-oct la Fase A lo exige.
+- **Comprobar antes de crear.** Hasta el 2-oct, un token mal pegado o un flujo faltante recién
+  frenaba `aplicar` en la Fase A, después de crear los flujos del calendario en n8n y el evento de
+  prueba en su calendario. Ahora va primero todo lo que se puede verificar sin tocar nada.
+- **El orden de las redirecciones importa.** `read x < archivo 2>/dev/null` imprime el error del `<`,
+  con la ruta, ANTES de silenciar. Lo correcto es `read x 2>/dev/null < archivo`. Con la ruta de una
+  vista previa a la vista, Hermes sabía dónde estaba guardado el código (revisión de la madre, 2-oct).
+- **`sed 's/^[[:space:]]*//'` recorta CADA renglón, no el texto:** le borraba la sangría a un pedido.
+  Para recortar solo el principio y el final: `T="${T#"${T%%[![:space:]]*}"}"` y su espejo con `%`.
+- **CI:** `.github/workflows/hermes-jarvis-pruebas.yml` corre la suite del carril en cada PR que toca
+  sus archivos, en los runners de GitHub (nunca en el del VPS). `test:guards-cableados` se corre
+  local, porque mira todo el repo.
 - **`npm test` entero se corta en `test:bot`** (10 rojos). Pasa lo mismo en la base sin cambios: depende
   de qué versión del repo `onia-platform` haya clonada. Las pruebas del carril se corren sueltas:
   `test:pedidos`, `test:jarvis-aplicar`, `test:jarvis-resumen`, `test:aduana`, `test:agenda`,

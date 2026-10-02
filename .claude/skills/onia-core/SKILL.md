@@ -6,8 +6,8 @@ description: Invocar al tocar onia-core (contract.json, adapters, schema/base-sc
 # ONIA Core — núcleo operativo común
 
 Fuente de verdad: `onia-core/contract.json` (beta, congelado para adopción) +
-`onia-core/CHANGELOG.md` + docs `onia-core/*.md`. Toda modificación al core sigue el checklist
-de abajo (el subagente `onia-core-guardian` se borró el 2026-09-29: el validador hace el trabajo). Receta de adopción: `onia-core/ONIA_CORE_INSTALL_GUIDE_2026.md`.
+`onia-core/CHANGELOG.md` + docs `onia-core/*.md`. Guardián: subagente `onia-core-guardian`
+(toda modificación al core pasa por ahí). Receta de adopción: `onia-core/ONIA_CORE_INSTALL_GUIDE_2026.md`.
 
 ## Qué es
 Núcleo común de los SaaS ONIA. Vive SOLO en `onia-hermes` hasta aprobar adopción.
@@ -32,6 +32,7 @@ nombra el rubro ("módulo dental"), nunca el pack.
 Orden de encendido de rubros: **dental (vivo) → comercio → importadora → el resto.**
 
 ## Al agregar/editar algo del core
-1. contract.json + base-schema.sql + 3 adapters COHERENTES.
-2. `npm run validate:onia-core` y la suite de tests verdes.
-3. Si es de Bolivia (accounting/invoicing) → cruzar con `onia-contabilidad-bolivia`.
+1. Delegá en `onia-core-guardian` o seguí su checklist.
+2. contract.json + base-schema.sql + 3 adapters COHERENTES.
+3. `npm run validate:onia-core` y la suite de tests verdes.
+4. Si es de Bolivia (accounting/invoicing) → cruzar con `onia-contabilidad-bolivia`.

@@ -313,8 +313,13 @@ Instrucciones de proyecto. Override sobre defaults.
 
 ## ONIA Core (REGLA)
 
-- **Un rubro nuevo se ENCIENDE desde el core, no se escribe de cero.** Orden: dental
-  (vivo) → comercio → importadora → el resto.
+- **Un rubro nuevo se ENCIENDE desde el core, no se escribe de cero.** Los 5 que se ofrecen ya
+  están encendidos (dental, estética, servicios profesionales, comercio, importadora).
+- **Orden de empuje (venta, pauta y desarrollo), decidido por Sergio Urcullo el 2026-09-29:**
+  dental → **importadora** → el resto. Comercio y servicios esperan a que la factura del SIN esté
+  dentro del sistema: sin ella no compiten con los sistemas bolivianos que sí facturan.
+  ⚠️ Antes decía «dental → comercio → importadora»; era el orden de ENCENDIDO de julio y se leía
+  como prioridad.
 - Todo lo demás del core (21 capacidades, `contract.json`, los 3 adapters, el validador
   obligatorio antes de commitear, `external_gate`) → **skill `onia-core`**.
 
@@ -418,6 +423,22 @@ Instrucciones de proyecto. Override sobre defaults.
   v2: la rechazó entera al verla ("Nada se te escapa no vende nada") y hubo que revertir
   en producción. Un rediseño se muestra renderizado y se espera el OK explícito sobre
   ESA pieza; construir y publicar son dos permisos distintos.
+
+## Qué se publica sin preguntar (REGLA)
+
+> Sergio Urcullo, 2-oct, al preguntar «¿por qué tengo que dar OK? no sé qué significa PR»:
+> eligió **«Solo diseño nuevo y legales»** como lo único que pasa por él. Dos PRs listos
+> (el Recall y la web v1) esperaban su OK sobre algo que él no puede revisar.
+
+- **Se publica sin preguntar** lo que pasa los gates del carril (tsc, tests, revisión) y se
+  MIRA en producción después: arreglos, features sobre pantallas existentes, bot, textos de
+  producto, docs. Se mergea el PR y se corre el `publicar.sh` del destino.
+- **Pasa por Sergio Urcullo ANTES de publicar** solo: **diseño nuevo** (pantalla o sección
+  que no existía, rediseño de una viva — ver la regla de arriba) y **textos legales**
+  (términos, privacidad, contratos). Se le muestra la pieza renderizada, no el PR.
+- **No cambia** lo que ya pide aprobación por su riesgo: escribir datos de producción fuera
+  de lo autorizado, gasto pago, contactar clientes, tocar el portal del SIAT.
+- A Sergio Urcullo no se le habla de PRs: se le dice qué quedó publicado y qué necesita mirar.
 
 ## Dónde va cada cosa (REGLA)
 
@@ -531,9 +552,10 @@ Detalle operativo: skills `carruseles-onia` y `ugc-empresas-higgsfield`.
   históricos no autorizan gasto. Video y entrenamiento Soul siempre requieren aprobación
   específica porque su costo y riesgo de deriva son mayores.
 - Cómo se ve un video, se transcribe, se corta, se subtitula y se rinde →
-  **skills `ver-videos` y `editor-videos`** (HyperFrames vive en la copia global
-  `~/.claude/skills` y `~/.codex/skills`; cada flujo se instala con
-  `npx hyperframes skills update <nombre>`: revisarlo ANTES de codear video).
+  **skills `ver-videos` y `editor-videos`** (HyperFrames vive en el repo,
+  `.claude/skills/hyperframes*` y `.agents/skills/`, restaurado el 2026-10-02 porque con la
+  copia global los archivos dejaron de editarse como quiere Sergio Urcullo; la del repo gana
+  sobre la global: revisarlo ANTES de codear video).
 - **Sacar el PROMPT de una imagen o un video de referencia → skill `sacar-prompt`.**
   Distingue **recuperar** (está en pantalla: se lee) de **reconstruir** (se escribe uno
   parecido, y se dice que lo es). Regla de entrada: **si el video habla es UGC, si

@@ -1,19 +1,22 @@
 # Subagentes ONIA
 
-Actualizado: 2026-09-29 (limpieza por uso real de los últimos 30 días).
+Actualizado: 2026-10-02 (se restauraron `onia-core-guardian` y `onia-creative-radar`, borrados
+en la limpieza del 29-sep; pedido de Sergio Urcullo).
 
 Este directorio define los subagentes propios de ONIA (invocables con la tool `Agent` /
-`subagent_type`). **Queda uno solo:**
+`subagent_type`). **Son tres:**
 
-| Agente | Para qué | Por qué se quedó |
+| Agente | Para qué | Estado |
 |---|---|---|
 | `onia-crm-prospeccion` | Prospección y CRM: pocos prospectos buenos con señal de oportunidad, fuentes públicas verificables, nunca contacta sin aprobación | La etapa vigente es vender a 5 clínicas (`ONIA_ESTRATEGIA_DE_EMPRESA.md` §7) y la auditoría de agentes lo conservó por su diseño anti-listas-largas |
+| `onia-core-guardian` | Guardián del contrato de ONIA Core (`contract.json`, adapters, `base-schema.sql`): invariantes, 3 adapters en sincronía, validador verde antes de commitear | Restaurado 2026-10-02 |
+| `onia-creative-radar` | Contenido y video (carruseles, historias, guiones, UGC, Higgsfield): investiga tendencias antes de crear, nunca publica sin aprobación | Restaurado 2026-10-02 |
 
-Los otros 8 (`onia-orchestrator`, `onia-propuestas`, `dentalgest-migrations`,
-`hermes-automation`, `onia-integrations`, `web-factory-builder`, `onia-core-guardian`,
-`onia-creative-radar`) se borraron: 0 usos en 30 días y su trabajo lo hacen las skills
-(`onia-router`, `onia-propuestas`, `onia-core`, `diseno-contenido-onia`, `editor-videos`,
-`onia-web-factory`). Detalle y cómo recuperarlos:
+Los 6 retirados el 2026-08-18 (`onia-orchestrator`, `onia-propuestas`, `dentalgest-migrations`,
+`hermes-automation`, `onia-integrations`, `web-factory-builder`) **no se restauraron**: ya estaban
+retirados antes de la limpieza y, dentro de `.claude/agents/`, el harness los volvía a ofrecer
+(uno se invocó por error el 21-sep). Su trabajo lo hacen las skills (`onia-router`,
+`onia-propuestas`, `onia-web-factory`). Detalle y cómo recuperarlos:
 `hermes-content/docs/historial/LIMPIEZA_SKILLS_20260929.md`.
 
 ## Generalistas (globales, `~/.claude/agents/`)

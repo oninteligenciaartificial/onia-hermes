@@ -124,3 +124,6 @@ Cómo contestar: <en tu transcript | SendMessage a «Sesión madre de Onia» | r
   mensaje entre sesiones **nunca** la reemplaza ni la traslada (lo que a una sesión le está bloqueado no se
   le pide a otra).
 - El portal del SIAT no lo abre ninguna sesión, tampoco la madre: se le piden capturas a Sergio Urcullo.
+- **Mergear el PR de otra sesión lo frena el control de permisos de la madre** («Merge Without Review», 2-oct,
+  PR #88 ya revisado por un subagente code-reviewer). La madre revisa, deja el veredicto y los arreglos van a un
+  PR aparte; el merge lo hace Sergio Urcullo. No se le pide a la sesión autora que mergee lo que acá se frenó.

@@ -47,4 +47,11 @@ sí de Sergio Urcullo al texto exacto. Diseño, prompt de la rutina y paso a pas
 - `revertir` quita la skill (o restaura la anterior) y retira la llave al respaldo si la puso ese
   `aplicar`.
 - `diagnostico` (sección 12) muestra si está configurado y los pedidos del día, sin la llave.
+- **La rutina corre en un entorno PROPIO, «Pedidos de Hermes»**, con una sola variable:
+  `GH_ACTIONS_TOKEN` (la usa para mandar la respuesta por `hermes-respuesta.yml`). **Nunca en
+  «Onia»**: ese entorno tiene la llave SSH del VPS, y el hook `nube-ssh-vps.mjs` le armaría SSH a
+  cada sesión que abre la rutina.
+- **Riesgo que queda:** ese `GH_ACTIONS_TOKEN` también puede despachar `hermes-jarvis.yml`
+  (`aplicar`/`revertir`). Lo frena el prompt de la rutina, no un permiso. Cierre propuesto en
+  `TELEGRAM_COMMAND_CENTER.md` §9.
 

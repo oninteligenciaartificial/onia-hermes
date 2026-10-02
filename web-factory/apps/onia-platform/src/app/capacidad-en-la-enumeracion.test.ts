@@ -113,6 +113,12 @@ const ACOTADAS: ReadonlyArray<{
  */
 const EXENTOS: ReadonlyArray<{ archivo: string; fragmento: string; motivo: string }> = [
   {
+    archivo: join("app", "(sitio)", "rubros", "page.tsx"),
+    fragmento: "Clientes, agenda, servicios y cobros.",
+    motivo:
+      "es la descripción de la tarjeta Servicios, bajo su propio h3; ese rubro sí incluye agenda, no es una promesa para todos los rubros",
+  },
+  {
     archivo: join("lib", "proof.ts"),
     fragmento: "Su página oficial no menciona agenda, ficha, recordatorios, caja ni permisos",
     motivo:
@@ -122,12 +128,6 @@ const EXENTOS: ReadonlyArray<{ archivo: string; fragmento: string; motivo: strin
     archivo: join("lib", "proof.ts"),
     fragmento: "no figura agenda ni ficha del paciente",
     motivo: "mismo caso: es el veredicto sobre otros dos productos, no nuestra oferta",
-  },
-  {
-    archivo: join("app", "(sitio)", "agentes", "page.tsx"),
-    fragmento: "son los rubros que guardan ficha del cliente y agenda",
-    motivo:
-      "acá «agenda» no es la capacidad ofrecida: es la EXPLICACIÓN de ALCANCE_CON_FICHA, que la misma frase ya interpola — el alcance del Recall se dice por los datos que lee",
   },
 ];
 
