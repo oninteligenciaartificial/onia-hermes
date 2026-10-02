@@ -32,6 +32,13 @@ sustituto correcto elegido y medido: **Archivo** (Google, gratis) con el trackin
 que es exactamente el "efecto Apple" que ya estaba documentado en nuestra medición
 previa. **Lo que se copia es la mecánica de arriba, no el archivo de fuente.**
 
+> **29-sep-2026: Sergio Urcullo eligió Instrument Sans + IBM Plex Mono como la letra de
+> la marca, estilo Fanvue; Archivo queda superado.** Instrument Sans va en texto y
+> titulares (peso 500-600, tracking −2 %, nunca 700); IBM Plex Mono en micro-etiquetas,
+> números y horas. Las dos entran por `next/font/google` (auto-hospedadas) en
+> `apps/onia-platform/src/app/layout.tsx`. La medición de arriba sigue valiendo: cambia
+> la familia, no la mecánica.
+
 ## 2. Color
 
 - Fondo negro puro `rgb(0,0,0)` + **verde brillante de señal** `rgb(73,242,100)` y
@@ -66,7 +73,7 @@ toda tipografía + mockups dibujados.
 |---|---|
 | lh ≤ 1,0 en display con escala inversa | tokens: `--lh-display: .9` a partir de 64 px, `.8` a partir de 96 px |
 | tracking −2 % proporcional | `letter-spacing: -0.02em` en display, `-0.004em` en subtítulos |
-| peso 500 para titulares | Archivo 500, nunca 700 |
+| peso 500 para titulares | Archivo 500, nunca 700 — desde el 29-sep-2026, Instrument Sans 500-600 |
 | cuerpo a 75 % de opacidad | token de texto secundario sobre el fondo |
 | superficies por transparencia (15 %) | reemplaza los grises opacos de nuestras tarjetas |
 | medida de línea ≤ 900 px | contenedor de texto propio, independiente del de sección |
@@ -75,7 +82,7 @@ toda tipografía + mockups dibujados.
 
 | NO se porta | Motivo |
 |---|---|
-| AG Next / Akzidenz | fuentes de pago sin licencia → Archivo |
+| AG Next / Akzidenz | fuentes de pago sin licencia → Archivo (superado el 29-sep-2026: Instrument Sans + IBM Plex Mono) |
 | Testimonios de creadores con caras | no tenemos clientes; fabricarlos está prohibido |
 | Fondo negro total | la dirección de Onia es claro premium (decisión de Sergio) — el negro se usa como ANCLA de sección, no como base |
 

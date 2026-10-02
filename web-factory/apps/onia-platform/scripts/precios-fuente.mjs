@@ -877,8 +877,13 @@ export function limitesDelSitio(fuente) {
         conNumero: /([\d.]+)\s+recordatorios/i,
       }),
       /** El tier se cruza por quien lo NOMBRA primero; la herencia textual
-       *  ("Todo lo del Pro") no estorba porque solo importa el primero. */
-      agentes: /\bAgente\s+[A-Z]/.test(inc ?? "") || null,
+       *  ("Todo lo del Pro") no estorba porque solo importa el primero.
+       *  Singular o PLURAL: el 2026-09-30 la prosa del Pro paso de «Agente
+       *  Vuelve a citar…» a «Agentes Vuelve a citar…» y el patron en singular
+       *  dejo de verlo — el cruce quedo ciego justo en el primer plan con
+       *  agentes. La mayuscula (con tildes) despues es lo que exige que sea
+       *  el NOMBRE de un agente y no la palabra suelta en una frase. */
+      agentes: /\bAgentes?\s+[A-ZÁÉÍÓÚÑ]/.test(inc ?? "") || null,
       reservas: /Reservas\s+online\s+incluidas/i.test(inc ?? "") || null,
       /**
        * Los mismos dos hechos, leidos del BOOLEANO que el sitio declara por plan
@@ -1001,7 +1006,19 @@ export const CONSTANTES_VERIFICADAS_APARTE = [
   {
     valor: "ALCANCE_CON_FICHA",
     porque:
-      "tampoco es un tope: es a que rubros llega el agente Recall, acotado por los DATOS que lee (patient + appointment) y no por la pantalla",
+      "tampoco es un tope: es a que rubros llega el agente Vuelve a citar (rol `recall`), acotado por los DATOS que lee (patient + appointment) y no por la pantalla",
+    cruzadaPor: "src/app/capacidad-acotada.test.ts",
+  },
+  {
+    valor: "ALCANCE_AGENTE_STOCK",
+    porque:
+      "tampoco es un tope: es a que rubros llega el agente Avisa stock bajo (rol `reponedor`), que lee el stock de /comercio/inventario (`llevaInventario`)",
+    cruzadaPor: "src/app/capacidad-acotada.test.ts",
+  },
+  {
+    valor: "ALCANCE_AGENTE_COTIZACIONES",
+    porque:
+      "tampoco es un tope: es a que rubros llega el agente Sigue cotizaciones (rol `seguidor`), que lee las cotizaciones de /importadora/cotizaciones",
     cruzadaPor: "src/app/capacidad-acotada.test.ts",
   },
   {

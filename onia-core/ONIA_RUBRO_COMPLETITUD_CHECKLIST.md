@@ -129,7 +129,7 @@ Lecturas honestas:
   **Ya no es LA pieza bloqueante**: el portal por token desbloqueó el paso 3 sin tocar
   el core. Lo que este cambio compra hoy es el **paso 6 pleno** (una sesión a la que
   colgarle el contexto del cliente) y que el cliente vuelva sin pedir enlace nuevo.
-  Cuando se haga, sigue la skill `onia-core` + validador.
+  Cuando se haga, pasa por `onia-core-guardian` + validador.
 
 ## Verificado el 2026-08-31 (la pasada de corrección)
 

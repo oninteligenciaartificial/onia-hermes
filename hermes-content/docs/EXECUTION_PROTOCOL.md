@@ -144,6 +144,8 @@ Use these Hermes local skills for project operations:
 - `referencias-pinterest`: style/reference extraction.
 - `seguridad-credenciales`: tokens, secrets, env vars.
 - `operaciones-dashboard`: dashboard and gateway status.
+- `centro-comando-telegram`: Telegram as the main Hermes/ONIA command center,
+  general routing, n8n command center, project commands and approvals.
 - `n8n-automatizaciones-onia`: scheduling and longer automations.
 - `orquestacion-proyectos-onia`: route Onia work across DentalGest, Gestios,
   Web Onia, client websites, Higgsfield marketing, CRM and outreach.

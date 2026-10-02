@@ -16,13 +16,16 @@ carril, cargá su stack, respetá las reglas duras. Fuente viva del mapa complet
 > seguridad · research · proceso), que es como aparecen las tareas en la práctica.
 > **Abrirlo antes de escribir la primera línea.**
 
-> 🧹 **Limpieza 2026-09-29:** se borraron 52 skills y agentes del repo sin uso en 30 días
-> (`hermes-content/docs/historial/LIMPIEZA_SKILLS_20260929.md`: qué, por qué, qué lo
-> reemplaza y cómo recuperarlo). **Único subagente ONIA propio: `onia-crm-prospeccion`.**
-> Los otros 8 (los 6 retirados el 18-ago + `onia-core-guardian` + `onia-creative-radar`)
-> ya no existen: su trabajo lo hacen las skills de la tabla. **HyperFrames** ya no vive en
-> el repo: se usa la copia global (`~/.claude/skills`, `~/.codex/skills`) y cada flujo se
-> instala cuando se pide con `npx hyperframes skills update <nombre>`.
+> ♻️ **Restauración 2026-10-02 — la limpieza del 29-sep se revirtió en el repo.** Sergio
+> Urcullo: con lo borrado, sus archivos dejaron de editarse como él quiere. Volvió todo lo que
+> se borró de `.claude/skills/`, `.agents/skills/` y `hermes-content/skills/`, más los agentes
+> `onia-core-guardian` y `onia-creative-radar` (copia: commit `9622ae6a`).
+> **HyperFrames vuelve a vivir en el repo** (`hyperframes`, `-core`, `-cli`, `-animation`,
+> `-creative`, `-keyframes`, `-registry`, `media-use`, `motion-graphics`, `talking-head-recut`,
+> `embedded-captions`, `general-video`, `slideshow`, `remotion-to-hyperframes` y las plantillas
+> de video) y **esa copia es la que manda**: en Claude Code una skill del proyecto gana sobre una
+> global con el mismo nombre. **No** volvieron los 6 agentes de `_retirados/` (retirados el
+> 18-ago). Detalle: `hermes-content/docs/historial/LIMPIEZA_SKILLS_20260929.md`.
 
 ## Cómo usar
 1. **Identificá el carril** de la tarea (tabla abajo). Ante duda, ver
@@ -82,7 +85,7 @@ carril, cargá su stack, respetá las reglas duras. Fuente viva del mapa complet
 - **Bolivia:** todo desarrollo acomodado a Bolivia con contaduría boliviana específica y vigente;
   validar con research (fuente citada) antes de codear temas de Bolivia.
 
-## Skills del repo (20 en `.claude/skills/` + 12 en `.agents/skills/`)
+## Skills del repo (42 en `.claude/skills/` + 30 en `.agents/skills/`)
 - **Índice y operación:** `onia-router` (este índice) · `onia-continuidad` (arranque y rumbo de
   sesión) · `onia-infra` (VPS, Docker, n8n por SSH) · `onia-hermes-jarvis` (Hermes por Telegram:
   resumen, cierre, aduana, calendario, pedidos a Claude, y el workflow hermes-jarvis; 2026-10-01) ·
@@ -94,8 +97,15 @@ carril, cargá su stack, respetá las reglas duras. Fuente viva del mapa complet
   `ver-videos` · `sacar-prompt` · `higgsfield-generate` · `higgsfield-soul-id` ·
   `motion-doctrine` con sus rutas `cut-the-curve` `oversized-cursor` `seam-craft`
   `captions-overlay` (upstream HeyGen que no está en la copia global).
+- **HyperFrames (restaurado 2026-10-02, gana sobre la copia global):** `hyperframes` (entrada
+  obligatoria de todo video) · `hyperframes-core` · `-cli` · `-animation` · `-creative` ·
+  `-keyframes` · `-registry` · `media-use` · `motion-graphics` · `talking-head-recut` ·
+  `embedded-captions` · `general-video` · `slideshow` · `remotion-to-hyperframes` · plantillas
+  `changelog-video` `faceless-explainer` `figma` `music-to-video` `pr-to-video`
+  `product-launch-video`.
 - **Codex (`.agents/skills/`):** `impeccable` · `embedded-captions` (gate de ortografía que cita
   `editor-videos`) · `media-use` (librería de SFX por defecto de `editor-videos/scripts/sfx.mjs`:
   **no borrar**) · `higgsfield-generate` · `higgsfield-soul-id` · `motion-doctrine` con
   `cut-the-curve` `oversized-cursor` `seam-craft` `captions-overlay` · `web-factory-design-research`
-  · `web-factory-intake-assets`.
+  · `web-factory-intake-assets` · y la misma copia de HyperFrames que `.claude/skills/`
+  (restaurada 2026-10-02).

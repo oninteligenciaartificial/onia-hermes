@@ -1,5 +1,9 @@
 # Handoff — carril `infra-cerebro-loops`
 
+> **Medición posterior, 27-sep-2026:** nodo-casa y los cuatro loops están activos;
+> Hermes sigue en el VPS. La caída de abajo describe el 21-sep, no el estado
+> actual. Ver [evidencia y uso del homelab](homelab-orquestacion-20260927.md).
+
 ## Estado vigente — continuidad en Codex, 21-sep-2026
 
 Esta sección sustituye las afirmaciones de rama limpia/mergeada y los próximos

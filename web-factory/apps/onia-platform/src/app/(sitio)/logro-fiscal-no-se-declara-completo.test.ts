@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 
 import { CONTENDIENTES } from "@/lib/proof";
-import { SIAT_BLOQUES, SIAT_ESTADO_ONIA, SIAT_FAQ } from "@/lib/siat";
+import { SIAT_BLOQUES, SIAT_FAQ } from "@/lib/siat";
 
 /**
  * Ningún texto de venta declara COMPLETA una etapa del trámite ante el SIN, ni
@@ -21,13 +21,12 @@ import { SIAT_BLOQUES, SIAT_ESTADO_ONIA, SIAT_FAQ } from "@/lib/siat";
  *    oficial […]. Quedan las etapas formales del trámite (inspección del SIN).»
  *
  * **Quien cuenta la Fase 1 es el SIN, y su marcador dice otra cosa.** Última
- * lectura del «Listado de Etapas» del portal —2026-08-27, en
- * `hermes-content/docs/ONIA_SIAT_ESTADO_HOMOLOGACION.md` §4—: **0 % general,
- * ninguna etapa cerrada al 100 %**, 1.424 de 5.732 operaciones. Desde entonces
- * nuestro runner cerró etapas sueltas (VIII 690/690 el 13-sep), pero el
- * marcador **no se volvió a leer**: ese doc lo pide tres veces. Y lo que falta
- * no es formal — su §9 encabeza la lista con *«Autorización del sistema
- * (INICIADO → AUTORIZADO)»*, que es la decisión entera, no un sello.
+ * lectura antigua del «Listado de Etapas» —2026-08-27, en
+ * `hermes-content/docs/ONIA_SIAT_ESTADO_HOMOLOGACION.md` §4—: **0 % general**.
+ * Una lectura nueva del portal el 2026-09-27 dio 80 % general, con emisión
+ * masiva y paquetes todavía parciales. Y lo que falta no es formal: la
+ * autorización del sistema (INICIADO → AUTORIZADO), que es la decisión entera,
+ * no un sello.
  *
  * El mismo doc registra que creer «Fase 1 completa» leyendo nuestro estado
  * local **ya fue un error una vez** («no coincide con lo que decían nuestras
@@ -165,13 +164,13 @@ const FRASES_ROTAS = [
     "pruebas del SIN (Fase 1). Faltan las etapas formales de inspección.",
 ];
 
-/** Frases vivas hoy en el sitio, que tienen que salir limpias. */
+/** Frases sanas, incluidos los matices que hoy publica el sitio. */
 const FRASES_SANAS = [
-  "Nuestro sistema está registrado ante el SIN como proveedor de facturación y ya corre contra " +
-    "el ambiente de pruebas oficial: emisión individual y masiva, anulaciones, reversiones y " +
-    "operación sin internet. Falta que el SIN autorice el sistema.",
-  "Mientras la homologación concluye, Onia registra y ordena cada venta, arma tu contabilidad, " +
-    "y emitís por el portal gratuito.",
+  "Nuestro sistema está registrado ante el SIN y sigue en pruebas de homologación. " +
+    "La emisión individual, la anulación y la reversión completaron sus casos; " +
+    "la emisión masiva y los paquetes de contingencia siguen en pruebas.",
+  "Mientras falta la autorización, emitís cada factura en el Portal Web del SIN " +
+    "con los datos que ese portal solicita.",
   "Nuestro emisor está registrado ante el SIN y la homologación está en trámite. Te avisamos " +
     "apenas la homologación concluya.",
   "Reportes completos y facturas recurrentes, y contabilidad completa — vienen en Profesional.",
@@ -277,8 +276,9 @@ describe("el logro fiscal no se declara completo", () => {
   it("la fuente canónica afirma lo que CORRE, no una etapa terminada", () => {
     // El ancla del arreglo, sobre los valores exportados y no sobre el archivo:
     // así también se cazan los textos que se armen por interpolación.
+    // `SIAT_ESTADO_ONIA` salió de la lista el 2026-10-01: la constante se
+    // borró junto con el estado del trámite en la venta.
     const textos = [
-      SIAT_ESTADO_ONIA,
       ...SIAT_BLOQUES.map((b) => `${b.titulo} ${b.texto}`),
       ...SIAT_FAQ.map((f) => `${f.q} ${f.a}`),
     ];
@@ -286,7 +286,7 @@ describe("el logro fiscal no se declara completo", () => {
       expect(
         DECLARA_COMPLETA.test(texto),
         `un texto de lib/siat.ts declara terminada una etapa del trámite. El SIN es quien la ` +
-          `cuenta y su última lectura dio 0 % general (ONIA_SIAT_ESTADO_HOMOLOGACION.md §4): se ` +
+          `cuenta y la lectura del 2026-09-27 dio 80 % general, con etapas parciales: se ` +
           `afirma lo que el emisor HACE contra el ambiente de pruebas.\n«…${texto.slice(0, 140)}…»`,
       ).toBe(false);
       expect(

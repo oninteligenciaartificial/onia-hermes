@@ -146,6 +146,22 @@ nadie lo va a volver a encontrar. Dos agujeros de seguridad reales del 2026-08-3
 así — uno yendo a decidir si un componente era código muerto, otro yendo a verificar si dar de
 baja una cuenta servía de algo.
 
+### Recuperar algo borrado (medido 2026-10-02)
+- **En la nube el clon es superficial** (`git rev-parse --is-shallow-repository` → `true`, ~230
+  commits, desde el 27-sep): un hash viejo da `unknown revision` y parece que no existe.
+  Primero `git fetch --unshallow origin main`, después buscar.
+- **Encontrar el borrado:** `git log --diff-filter=D --since=<fecha> --shortstat`; restaurar
+  desde el **padre** del commit que borró: `git show --name-only --diff-filter=D --format= <c>`
+  a un archivo, filtrar lo que ya existe, y `git checkout <c>^ --pathspec-from-file=<archivo>`.
+- **Antes, comparar lo que ya se había restaurado** (`git diff --stat <c>^ -- <ruta>`): si
+  difiere, alguien lo editó después y no se pisa.
+- **Mismo nombre en dos lados:** en Claude Code gana la skill del **proyecto**
+  (`.claude/skills/`) sobre la del usuario (`~/.claude/skills/`). Por eso restaurar la copia del
+  repo basta para volver al comportamiento viejo, sin tocar la PC.
+- Caso: la limpieza del 29-sep (`2ff1c207`) se revirtió el 2-oct desde `9622ae6a` porque
+  Sergio Urcullo vio que sus archivos dejaron de editarse como quiere
+  (`historial/LIMPIEZA_SKILLS_20260929.md`).
+
 ---
 
 ## Relación con lo que ya existe

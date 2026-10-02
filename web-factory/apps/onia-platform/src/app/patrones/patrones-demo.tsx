@@ -99,7 +99,7 @@ export function PatronesDemo() {
               Tu negocio, <em>ordenado</em>
             </h2>
             <p className={styles.displayNote}>
-              Archivo variable, ancho comprimido al 76%. Uno por pantalla, máximo 4-5 palabras.
+              Instrument Sans 600, tracking −2 %. Uno por pantalla, máximo 4-5 palabras.
             </p>
           </div>
         </section>

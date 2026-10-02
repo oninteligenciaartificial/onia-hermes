@@ -57,9 +57,13 @@ const RAIZ = join(AQUI, "..", "..");
  *
  * Se busca `href=` (con `=`, no con `:`): una entrada de menú `{ href: "/empezar",
  * label: "Prueba gratis" }` nombra la PÁGINA, no promete nada del alta.
+ *
+ * `registroConPlan(…)` entra el 2026-09-29, cuando las tarjetas de plan dejaron
+ * de usar `EMPEZAR_URL`: sin él, los cuatro botones más cerca de la compra
+ * habrían salido de este guard sin que nadie lo notara.
  */
 const HREF_ALTA =
-  /href=(?:\{EMPEZAR_URL\}|\{REGISTRO_URL\}|"\/empezar"|\{`\$\{APP_URL\}\/register`\})/g;
+  /href=(?:\{EMPEZAR_URL\}|\{REGISTRO_URL\}|\{registroConPlan\([^)]*\)\}|"\/empezar"|\{`\$\{APP_URL\}\/register`\})/g;
 
 /** Ventana de código tras el `href` donde tiene que estar la etiqueta. */
 const VENTANA_ETIQUETA = 140;

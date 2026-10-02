@@ -1,6 +1,29 @@
 # Handoff — carril `mercado-y-pauta` (sesión «Ventas y pauta Onia Platform», antes «Análisis de mercado»)
 
-> 🔴 **EN VUELO, 2-oct — rehacer D1 y D4 (misma sesión).**
+> 🟡 **2-oct, ~01:00 UTC — D1 y D4 v2 RENDERIZADAS, esperan el OK de Sergio Urcullo.**
+> - Pack `referentes`, la pantalla real en la portada, recortes legibles en el celular y «sistema con IA» solo
+>   donde es cierto (skill §3, punto 6).
+> - Archivos: `carousels/briefs/ads/*-d1v2-*` y `*-d4v2-*`, salida en `carousels/out/ads/*v2*`, capturas en
+>   `briefs/assets/onia-1.0-dental-ads/v2-20261002/`.
+> - **Prospectos al 2-oct: 12 listos, 1 a decidir, 16 fuera.** Los 13 en espera se verificaron desde la PC (la
+>   madre, en Facebook):
+>   - entraron Odontoclínica, Pimentel, Gelinski y Todo Frenos;
+>   - **MUN** sale por tener 2 sedes en Santa Cruz, salvo que Sergio Urcullo las acepte.
+>
+>   Cada uno de los 12 tiene su mensaje «sistema de gestión con IA» y la primera pregunta. Está en la página de
+>   contactos (versión 7) y en `ONIA_PROSPECTOS_*` (§6.7, §1.7 y §2.6).
+> - ✅ **2-oct, ~01:00 UTC — competencia contrastada** (18 de 22 capturas en main, `00e88548`): lo aprendido está
+>   en `ONIA_ADQUISICION_Y_PAUTA.md` §2.5 y en la skill §4.1. **Cambios hechos:** la primera línea del texto de
+>   D1 y D4 ahora habla de la plata del dueño, y la lámina 4 de D4 dice «21 días sin venir» (el umbral exacto del
+>   código). **No se cambió el diseño:** los 7 anuncios que sobreviven tienen persona; esa brecha es una pieza
+>   nueva (Sergio Urcullo con la pantalla), no un arreglo de D1/D4.
+> - ✅ **2-oct, ~01:20 UTC:** portadas de D1 y D4 → *«Para dueños y dueñas de clínicas dentales de Santa Cruz.»*
+>   (el filtro que pide §5.2). Leído el análisis de Dapta de la madre (`DAPTA_COMO_FUNCIONA.md` §6): su propuesta
+>   del bot quedó anotada en §5.2 como pendiente de Sergio Urcullo, **detrás** del filtro de pacientes.
+> - ✅ **El tratamiento a medias ya está en producción** (`release-8f07e537`, el mensaje fijo en el bundle). El doc
+>   de pauta decía que no (§0 punto 4 y §5.4): corregido.
+>
+> ~~🔴 EN VUELO, 2-oct — rehacer D1 y D4 (misma sesión).~~
 > - Sergio Urcullo las rechazó: no respetan las reglas ni el estándar de la marca personal, y no se aprendió de la
 >   competencia.
 > - Por la madre pidió además que digan que Onia es **«un sistema con IA»**.
