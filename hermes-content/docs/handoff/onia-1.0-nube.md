@@ -96,6 +96,25 @@ Desarrollar y publicar Onia Platform 1.0 hasta cobrar al primer cliente. Qué sa
 - Chip prepago para la prueba del WhatsApp del cliente (recordatorio con botones y agente conversacional).
 - Aprobar el pago de prueba en `/admin/payments` cuando la madre avise. Capturas del SIAT (filas 4 y 6, «Listado de Etapas», CAFC).
 
+## 6b. Pendiente priorizado: lo que copiar de Doctocliq (madre, 2-oct)
+
+Fuente: `hermes-content/research/competencia/doctocliq/cuenta-de-prueba/DOCTOCLIQ_ADENTRO.md` (en `main`, `f9ea7a93`).
+Confirma la ventaja: allá el tratamiento a medias es MANUAL (lo marca una persona; «Servicios por terminar» es una
+tabla sin acción). Nada se construye sin el filtro de Etapa 1. Orden por impacto/esfuerzo:
+1. **WhatsApp de muestra al dueño al crear su PRIMERA cita** («ve el valor el día 1»), avisándole antes. Sale del
+   número de VENTAS de Onia al DUEÑO (no al paciente; DG-054 no aplica). La plantilla `onia_primera_cita` ya está en
+   revisión en Meta: medir si ya hace esto antes de construir nada.
+2. **Presupuesto con link público en PDF y «Enviar al paciente» por fase**: va junto con el presupuesto por fases
+   desde el odontograma (§7).
+3. **Etiqueta «Deuda» automática** cuando se termina un ítem sin pagar.
+4. **Bandeja con filtros listos** («No confirman la cita de mañana»): encaja con los botones del recordatorio.
+5. **Cita reprogramada visible como «Reprogramada»** al moverla.
+- **Medir:** crear una cita en Doctocliq = 6 clics + nombre, 2 campos obligatorios, sin doctor preseleccionado.
+  Medir lo nuestro con la misma vara.
+- **Lo que ellos tienen y nosotros no:** recordatorio con botones encendido de fábrica sin conectar número (con saldo
+  de 5 mensajes de regalo), cierre de caja diario por medio de pago, inventario por lote y vencimiento. Diferencia
+  nuestra: QR BCP y bolivianos (ellos son peruanos adaptados: Boleta/Factura, IGV 18 %, sin QR).
+
 ## 7. Próximos pasos (en orden)
 
 1. Con el OK de Sergio Urcullo: mergear onia-hermes#84 (publica web + legales 1.3). Si tarda, llevar solos a `main` los commits del bot.
