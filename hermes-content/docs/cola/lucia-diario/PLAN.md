@@ -84,6 +84,15 @@ que no pase el QA. Cada lote se cotiza en vivo y se aprueba antes de generar.
 - **L02** («Este video no fue grabado») sirve de gancho del chiste #7 o de apertura de #3.
 
 ## 7. Qué se necesita
+0. **⚠️ Decisión de Sergio Urcullo: choque con la Etapa 1.** `ONIA_ESTRATEGIA_DE_EMPRESA.md` §7 (decisión tuya del 5-sep,
+   §16) dice que la Etapa 1 vende **solo dental/estética** hasta 5 clientes. «Un día en cada negocio» empuja rubros que
+   hoy no se venden. (§10 marca «influencer IA» como otro producto: eso es venderle influencers a terceros, que sigue
+   congelado. Lucía como canal para vender Onia no choca.)
+   - **(a) recomendada:** mientras dure la Etapa 1, lo que VENDE es solo dental y estética (odontóloga, recepción de
+     clínica, cosmetóloga). Los otros roles (abogada, contadora, comerciante, importadora) quedan para **personaje**
+     (glow-up, fotos), sin vender ese rubro. Abogada, comerciante e importadora pasan a pendiente para la Etapa 2.
+   - **(b)** sigue como está (todos los rubros venden), por decisión tuya y cambiando la etapa.
+   Con (a), las piezas 8 y 10 de la §4 pasan a «Hoy soy cosmetóloga» y «Hoy soy recepcionista de clínica».
 1. **OK de Sergio Urcullo a este plan**, y que elija entre la prenda (a) y la (b) para la prueba de ropa.
 2. **Cuenta demo dental en producción** para las pantallas reales. Se la pedí a la madre el 1-oct. Sin esto las
    piezas 4, 6, 8 y 10 no salen.
