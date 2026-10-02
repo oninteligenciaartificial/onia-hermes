@@ -48,6 +48,7 @@ carril, cargá su stack, respetá las reglas duras. Fuente viva del mapa complet
 | **D** DentaGest · **E** GestiOS *(repos aparte)* | `database-migrations` `postgres-patterns` `backend-patterns` `api-design` `security-review` | — | `onia-core` |
 | **F** Bolivian Electric *(prospecto REAL desde 2026-08-24 — 10 puestos relevados, ver handoff)* | mismo stack backend | — | `onia-core` |
 | **chatbot** (motor, guion, conocimiento, voz) | **cargar `onia-chatbot`** — ese archivo nombra el stack completo del carril | — | `onia-chatbot` |
+| **hermes-jarvis** (Hermes, Telegram de Sergio Urcullo, su calendario, pedidos a Claude) | **cargar `onia-hermes-jarvis`** — método, trampas y pruebas del carril; estado en `handoff/hermes-jarvis.md` | — | `onia-hermes-jarvis` |
 | **G** infra / n8n | `n8n-workflow-patterns` `n8n-mcp-tools-expert` `n8n-node-configuration` `n8n-code-javascript` `n8n-validation-expert` `docker-patterns` `deployment-patterns` | — | — |
 | **H** contenido · **J** video-remotion | **`diseno-contenido-onia` primero** (índice de imágenes, galería, packs y patrones) · `editor-videos` `ver-videos` `sacar-prompt` `hyperframes` `banner-design` `brand` + Higgsfield MCP | — | — |
 | **I** research/estrategia | `deep-research` `exa-search` `iterative-retrieval` `office-hours` | — | — |
@@ -81,9 +82,12 @@ carril, cargá su stack, respetá las reglas duras. Fuente viva del mapa complet
 - **Bolivia:** todo desarrollo acomodado a Bolivia con contaduría boliviana específica y vigente;
   validar con research (fuente citada) antes de codear temas de Bolivia.
 
-## Skills del repo (19 en `.claude/skills/` + 12 en `.agents/skills/`, todas con uso en 30 días)
+## Skills del repo (20 en `.claude/skills/` + 12 en `.agents/skills/`)
 - **Índice y operación:** `onia-router` (este índice) · `onia-continuidad` (arranque y rumbo de
-  sesión) · `onia-infra` (VPS, Docker, n8n por SSH).
+  sesión) · `onia-infra` (VPS, Docker, n8n por SSH) · `onia-hermes-jarvis` (Hermes por Telegram:
+  resumen, cierre, aduana, calendario, pedidos a Claude, y el workflow hermes-jarvis; 2026-10-01) ·
+  `onia-sesion-madre` (la madre local ordena a las sesiones de la nube por mensaje: ids, canales
+  medidos, formato).
 - **Producto:** `onia-core` · `onia-chatbot` · `onia-contabilidad-bolivia`.
 - **Venta:** `onia-propuestas` (generador oficial, nunca HTML a mano) · `onia-web-factory`.
 - **Contenido y video:** `diseno-contenido-onia` (índice de diseño) · `editor-videos` ·

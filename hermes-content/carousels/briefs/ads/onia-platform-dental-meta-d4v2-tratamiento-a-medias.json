@@ -1,0 +1,92 @@
+{
+ "title": "ONIA — D4 v2 · Tratamiento a medias (pack referentes, sistema con IA)",
+ "serie": "Clínicas dentales",
+ "headline_anuncio": "Los tratamientos a medias, en una lista",
+ "caption": "Un tratamiento a medias es plata que tu clínica ya presupuestó y todavía no cobró. ¿Cuántos pacientes empezaron y no volvieron?\n\nOnia es un sistema de gestión con IA para clínicas dentales. Cuando un paciente con un tratamiento en curso lleva 21 días sin venir y sin cita, aparece en tu lista con el mensaje listo y el link para que el paciente reserve. Vos lo aprobás y sale desde tu WhatsApp.\n\nEscribinos y te lo mostramos con una clínica de ejemplo.",
+ "hashtags": [],
+ "fuentes": "21 días sin venir (diasSinVenir), solo EN_PROGRESO y sin cita futura: lib/onia-core/modules/agents-tratamiento-a-medias.ts. El mensaje de este caso es un texto fijo (no lo redacta la IA): por eso las láminas no dicen que la IA lo escribe; «sistema con IA» va solo en el caption, y es cierto por los otros agentes (agents-plantilla.ts). Capturas: candidato-20260930. «Cada mañana»: cron 0 11 * * * UTC (07:00 en Bolivia) en el VPS, OK en el log del 1-oct; el tratamiento a medias corre dentro del Recall.",
+ "slides": [
+  {
+   "number": 1,
+   "layout": "captura",
+   "theme": "verde",
+   "headline": "Empezó el tratamiento *y no volvió*",
+   "image": "hermes-content/carousels/briefs/assets/onia-1.0-dental-ads/v2-20261002/d4-ficha-cabecera.png",
+   "body": "Para dueños y dueñas de clínicas dentales de Santa Cruz.",
+   "next": "el problema",
+   "alt_text": "Ficha de una paciente sin próxima cita"
+  },
+  {
+   "number": 2,
+   "layout": "ensayo",
+   "theme": "blanco",
+   "headline": "Nadie lo busca *porque nadie se entera*",
+   "body": "Endodoncia, ortodoncia, implantes: el tratamiento queda abierto en la ficha.\n\nEl paciente no vuelve y la agenda no avisa.",
+   "next": "lo que cuesta",
+   "alt_text": "Los tratamientos abiertos no avisan"
+  },
+  {
+   "number": 3,
+   "layout": "captura",
+   "theme": "blanco",
+   "headline": "Pagó una parte. *Falta el resto.*",
+   "image": "hermes-content/carousels/briefs/assets/onia-1.0-dental-ads/v2-20261002/d4-ficha-plan.png",
+   "body": "1 de 3 tratamientos hechos. Lo que falta también es plata de tu clínica.",
+   "next": "cuándo aparece",
+   "alt_text": "Plan de tratamiento con una endodoncia en progreso"
+  },
+  {
+   "number": 4,
+   "layout": "dato",
+   "theme": "blanco",
+   "value": "21",
+   "headline": "días sin venir *y aparece en tu lista*",
+   "body": "Si un tratamiento sigue en progreso y no tiene cita por delante, Onia lo detecta sola, cada mañana. Nadie tiene que marcarlo.",
+   "next": "la lista",
+   "alt_text": "A los 21 días sin venir y sin cita, Onia lo marca"
+  },
+  {
+   "number": 5,
+   "layout": "captura",
+   "theme": "blanco",
+   "headline": "Aparece *en tu lista*",
+   "image": "hermes-content/carousels/briefs/assets/onia-1.0-dental-ads/v2-20261002/d4-tratamiento-estado.png",
+   "body": "Y su mensaje, con el link para reservar: «Hola Valeria Montaño Suárez, te escribimos de Clínica Dental Sonrisa Norte. Te quedó pendiente tu endodoncia. ¿Te buscamos un horario para continuar?»",
+   "next": "y vos",
+   "alt_text": "Onia marca a la paciente con la endodoncia en progreso"
+  },
+  {
+   "number": 6,
+   "layout": "lista",
+   "theme": "blanco",
+   "headline": "Vos decidís *a quién se escribe*",
+   "items": [
+    {
+     "label": "Onia lo detecta",
+     "text": "tratamiento en progreso, sin cita"
+    },
+    {
+     "label": "Te lo propone",
+     "text": "con el mensaje listo"
+    },
+    {
+     "label": "Vos lo aprobás",
+     "text": "y sale desde tu WhatsApp"
+    }
+   ],
+   "next": "probalo",
+   "alt_text": "El dueño decide a quién se escribe"
+  },
+  {
+   "number": 7,
+   "layout": "ensayo",
+   "theme": "verde",
+   "headline": "Miralo con *una clínica de ejemplo*",
+   "body": "Escribinos y en 20 minutos te mostramos la lista de tratamientos a medias.",
+   "cta": "Escribinos por WhatsApp",
+   "next": "",
+   "alt_text": "Escribinos por WhatsApp"
+  }
+ ],
+ "cta_anuncio": "Escribinos"
+}

@@ -65,6 +65,12 @@ Instrucciones de proyecto. Override sobre defaults.
   solo se autolistan en sesiones abiertas DENTRO de ese repo.
 - Al aprender una trampa nueva: **editar la skill que corresponda**, no crear doc suelto.
   Skill pública instalada que sirva: usarla, no reinventar.
+- **Autoconocimiento: cada sesión se entrena a sí misma.** Sergio Urcullo, 2026-10-01: *«tienen que
+  aprender a hacer las cosas, que quede como autoconocimiento, sin eso investigamos y perdemos las
+  cosas»*. ANTES de investigar, leer la skill del carril. AL CERRAR cada tarea, lo aprendido (método,
+  trampa, comando, dato medido, intento fallido con su causa) va a esa skill, con el caso y la fecha,
+  **en el mismo commit**. Carril sin skill → crear UNA (`.claude/skills/<carril>/SKILL.md`) y sumarla
+  a `onia-router`. El handoff es estado; la skill es el método que sobrevive al relevo.
 - **Enrutamiento de modelos y contexto:** leer
   `hermes-content/docs/AI_MODEL_ROUTING_2026.md`. Astra decide lo ambiguo y de alto riesgo; Sol
   ejecuta el trabajo cotidiano con juicio; Luna hace tareas cerradas y verificables. No bajar
@@ -471,10 +477,14 @@ Si no sabés dónde va, **preguntá** antes de inventar carpeta.
   genéricos en mayúsculas y verde decorativo no cuentan como narrativa. Cada slide
   debe aportar una prueba visual distinta: interfaz real, proceso, tabla, decisión,
   objeto del trabajo o contexto humano.
-- Para ONIA, el piso editorial es el pack aprobado en la sesión de marca personal
-  (`community-editorial`, commit `e9b80e22`): portada humana/fotográfica, interiores
-  claros, jerarquía editorial, acento verde restringido y CTA diseñado. No se copia
-  el contenido; se copia el estándar de dirección.
+- Para ONIA, el piso editorial es el **pack `referentes`** de la marca personal
+  (skill `diseno-contenido-onia` §2 y §4): blanco, verde y negro, una prueba visual
+  dominante por lámina y el CTA diseñado. Ejemplo aprobado: `sergio-k6v2-*`. No se
+  copia el contenido; se copia el estándar de dirección.
+  ⚠️ **Corregido el 2-oct.** Acá decía `community-editorial` (commit `e9b80e22`), el
+  pack que Sergio Urcullo juzgó «vacío y con demasiado texto» el 29-sep. Con esta
+  línea vieja se armaron D1 y D4 en crema, con la captura en un marco chico, y él
+  las rechazó el 1-oct.
 - **Producto visible o no sale.** En pauta de software, al menos una parte central
   de la pieza debe enseñar UI real o una demostración verificable. No fabricar
   pantallas con IA ni reemplazar prueba por mockups decorativos.

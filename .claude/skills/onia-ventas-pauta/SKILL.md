@@ -102,6 +102,19 @@ Redactar primero y verificar después costó una tarde de mensajes tirados. Las 
 - **Buscar en la Biblioteca por el nombre del negocio** encuentra solo si el nombre está en el texto del anuncio.
   Cero resultados no prueba que no paute.
 
+**Lo que solo se ve desde la PC, en Facebook (2-oct): de 13 en espera, salieron 9.**
+- Uno era un hospital de 24 horas.
+- Un fundador se había retirado.
+- Una sola médica en un consultorio, o un solo cirujano.
+- Un spa de mascotas.
+- Una central en Cochabamba.
+- Dos sedes en la misma ciudad (MUN).
+- Páginas quietas desde hace meses.
+
+La nube resuelve la ciudad y el canal. **El tamaño real y si el negocio sigue vivo** casi siempre necesitan abrir
+su Facebook desde la PC: se le pide a la madre con la lista exacta. Al que queda listo, el mensaje le cierra la
+condición con una sola pregunta («¿cuántas profesionales atienden hoy?», «¿las importan ustedes directo?»).
+
 **Re-leer antes de enviar:** un prospecto cuya pauta se cortó recibe un mensaje sobre un anuncio que ya no
 existe. El 1-oct, de 13 prospectos del 30-sep: Cames ya no pautaba, y DASHA, Corpo Belo y Jhimbo habían
 cambiado de anuncios (hubo que corregir su línea «Vi…»).
@@ -138,7 +151,7 @@ contestarle de memoria es la forma de quemarlo.
 
 | Capacidad | Dato | Archivo |
 |---|---|---|
-| Tratamiento a medias | `EN_PROGRESO`, sin cita por delante, **21 días** fijos; solo dental y estética; propone, un humano aprueba en `/pending` | `lib/onia-core/modules/agents-tratamiento-a-medias.ts` |
+| Tratamiento a medias | `EN_PROGRESO`, sin cita por delante y **21 días sin venir** (`diasSinVenir`); solo dental y estética; propone, un humano aprueba en `/pending` | `lib/onia-core/modules/agents-tratamiento-a-medias.ts` |
 | Canceló o faltó y no reprogramó | `CANCELADA` y `NO_ASISTIO`, ventana de **14 días** | `lib/onia-core/modules/agents-reprogramador.ts` |
 | Agentes | desde **Crece** (`agentsIncluded`) | `lib/plan-catalogo.ts` |
 | Usuarios por plan | Básico 2 · Crece 3 en producción (4 con `a7f228c`) · Profesional 5 · Clínica sin tope | `lib/plan-catalogo.ts` |
@@ -147,13 +160,70 @@ contestarle de memoria es la forma de quemarlo.
 
 5. El precio se lee de `DEFAULT_PLAN_AMOUNTS` el **día del envío**: una env var puede pisarlo en producción.
 
+6. **Qué se puede decir sobre la IA (medido el 2-oct en `release-8f07e537`, que es lo que corre en producción).**
+   Plataforma va a sumar la IA que redacta cada mensaje del recall: hasta que esté publicada, esto es lo vigente.
+
+| Frase | ¿Es cierta? | De dónde sale |
+|---|---|---|
+| «Sistema de gestión con IA» | ✅ | Hay IA en los agentes |
+| «La IA redacta el mensaje de confirmar, recuperar, cobrar, seguir o reprogramar» | ✅, desde **Crece**: 50 redacciones por mes en Crece, 150 en Profesional, 400 en Clínica | `agents-plantilla.ts` (`PLANTILLA_KINDS`) y `plan-catalogo.ts` (`agentsAiCallsPerMonth`). En producción `AGENTS_LLM=1`, con URL y clave cargadas |
+| «Vos lo aprobás; sin tu OK no se usa» | ✅ | Solo corre la `plantillaAprobada` |
+| «La IA nunca ve los datos de tus pacientes» | ✅ | Recibe solo el tipo de agente, el nombre del negocio y el rubro |
+| «Cada mañana» / «lo detecta sola» | ✅ | Los agentes corren a las 11:00 UTC (07:00 en Bolivia) con el cron `0 11 * * *` del VPS; el log `/var/log/onia-agents-cron.log` dice «OK» el 1-oct. El tratamiento a medias va dentro del Recall |
+| «Con tu tono» / «la editás» | ❌ | Escribe en el tono del rubro. El dueño solo puede **aprobarla**: no hay edición en `/agents` |
+| «La IA escribe el mensaje del tratamiento a medias» | ❌ | `buildTratamientoAMediasMessage` es un texto fijo |
+| «Preguntá por tu negocio» es IA | ❌ | Son 30 temas escritos a mano, sin modelo (`BarraAsistente.tsx`) |
+| «La IA calcula el costo de importación» | ❌ | El costeo es cálculo; en importadoras la IA solo está en el mensaje de cobro |
+
+   Cómo se midió la variable, sin imprimir secretos:
+   `ssh onia-vps 'docker exec onia-platform sh -c "echo AGENTS_LLM=\${AGENTS_LLM}"'`.
+
 ## 4. Piezas del anuncio (D1 y D4)
 
-- Briefs: `hermes-content/carousels/briefs/ads/onia-platform-dental-meta-d1-los-de-manana.json` y
-  `…-d4-tratamiento-a-medias.json`, de 7 láminas cada uno. Títulos, texto precargado y CTA en
-  `ONIA_ADQUISICION_Y_PAUTA.md` §5.8.
+**v2 del 2-oct, cómo se armó** (`briefs/ads/*-d1v2-*` y `*-d4v2-*`, salida en `carousels/out/ads/…v2…`):
+- **Portada con la pantalla real, no con una imagen generada.** Es producto visible desde la primera lámina, sin
+  gasto de Higgsfield y sin esperar aprobación. La arcilla queda como opción.
+- **Para que la captura se lea en el celular:** un recorte de **~320 px de ancho, renderizado a 3×**. Con eso el
+  texto de 13–15 px pasa a ~40 px en la lámina.
+  - Una tarjeta entera, de ~770 px, queda en letra de ~7 pt: no se lee, por más que se agrande.
+  - El mensaje real **se cita en el texto de la lámina** («…») en vez de mostrarlo chico, como en `sergio-k6v2`.
+- **Recortar:** `.claude/skills/onia-ventas-pauta/scripts/recortar-captura.js` (Playwright: un div con `overflow:hidden` y `deviceScaleFactor` 3). Si en el borde se
+  cuela una letra de otra línea, se tapa ese rectángulo con blanco. **Nunca se toca el texto de la pantalla.**
+- ⚠️ **`cta` al nivel del brief pone el botón en TODAS las láminas.** El CTA del anuncio va en `cta_anuncio`; el
+  botón solo en la última lámina, con `cta` dentro de esa lámina.
+- ⚠️ **Hoja de contactos en la nube:** `carousel_contactsheet.js` busca `/usr/bin/chromium`. Se apunta a un
+  envoltorio de `headless_shell` con `--no-sandbox`, porque como root sin eso no arranca.
+- **Control antes de mostrarlas:** ninguna lámina con más de un 40 % vacío. Una franja de captura sola deja la
+  lámina vacía: se junta con la cita del mensaje.
+
+> ⛔ **1-oct, de noche: Sergio Urcullo rechazó D1 y D4.** Sus palabras: *«no entiendo por qué haces los carruseles
+> así, respeta tus reglas, mira cómo los hace mi marca personal, aprende cómo los hace la competencia»*.
+> - **Qué estaba mal:** se armaron con el pack `community-editorial`, crema, el que él ya había rechazado el 29-sep,
+>   porque el `CLAUDE.md` todavía lo nombraba como piso (corregido el 2-oct). Salieron cinco láminas iguales,
+>   títulos en mayúsculas, verde de adorno y la captura en un marco de ~450×300 que no se lee.
+> - **Mi error:** las miré y se las mandé sin contrastarlas con la regla «Publicidad que no parezca hecha por IA».
+>
+> **Para rehacerlas:**
+> 1. **Pack `referentes`**, como `sergio-k6v2-*`: portada verde con un objeto de arcilla; interiores blancos con
+>    una idea cada uno (`ensayo`, `dato`, `lista`, `captura`); cierre verde con el botón.
+> 2. **La competencia mirada de verdad:** las 22 capturas que se pidieron en
+>    `research/competencia/anuncios/PEDIDO-CAPTURAS.md`. Hasta el 1-oct nadie había mirado sus creativos, solo los
+>    títulos.
+> 3. **«Sistema con IA»** (pedido del 2-oct), usando solo las frases que Plataforma confirme en el código.
+
+- Briefs vigentes: `hermes-content/carousels/briefs/ads/onia-platform-dental-meta-d1v2-los-de-manana.json` y
+  `…-d4v2-tratamiento-a-medias.json`, de 7 láminas cada uno (los sin `v2` son los rechazados del 1-oct). Títulos,
+  texto precargado y CTA en `ONIA_ADQUISICION_Y_PAUTA.md` §5.8.
+- ⚠️ Los dos scripts piden banderas: `carousel_render.js --brief <json> --pack referentes --account onia --format
+  feed --out <dir>` (sin `--brief` contesta «Missing --brief») y `carousel_contactsheet.js --dir <dir>`. Pasarles
+  la ruta suelta no hace nada.
 - **Render en la nube:** `eval "$(sh scripts/carousel_cloud_setup.sh)"` y después
-  `node scripts/carousel_render.js --brief <brief> --out <dir>` + `node scripts/carousel_contactsheet.js --dir <dir>`.
+  `node scripts/carousel_render.js --brief <brief> --pack referentes --account onia --format feed --out <dir>` +
+  `node scripts/carousel_contactsheet.js --dir <dir>`.
+  ⛔ **Sin `--pack referentes` sale el pack por defecto, crema y verde oscuro: el que Sergio Urcullo rechazó.** El
+  2-oct, re-renderizando una sola línea de la portada, salieron las 7 láminas en ese pack sin ningún aviso. Se
+  notó porque `git status` marcó las 7 como cambiadas: **si cambiaste una lámina y git marca todas, el pack
+  está mal.**
   Sin el setup sale letra DejaVu, el pie cortado y sin navegador (skill `diseno-contenido-onia` §5).
 - **Las capturas viajan con el brief**, en `carousels/briefs/assets/onia-1.0-dental-ads/`. Las candidatas del
   30-sep están en `candidato-20260930/` y **no** pasan a la carpeta aprobada sin el OK de Sergio Urcullo.
@@ -168,14 +238,40 @@ contestarle de memoria es la forma de quemarlo.
 - El campo del título es `headline`, no `title`: con `title` la lámina sale sin título y sin aviso.
 - Cada pieza se le muestra **renderizada** a Sergio Urcullo antes de subirla.
 
+### 4.1 Mirar la competencia antes de escribir (método del 2-oct)
+
+- **Dónde están:** `hermes-content/research/competencia/anuncios/<anunciante>/` + `CAPTURAS-HECHAS.md` (18 de 22,
+  capturados por la madre desde la PC el 1-oct). La nube no abre `facebook.com`: un pedido nuevo de capturas se le
+  manda a la madre con la lista de id (`PEDIDO-CAPTURAS.md` es el formato).
+- **La única señal de rendimiento pública es la antigüedad.** `grep -o 'En circulación desde[^\n]*' */*.txt`: lo que
+  pasa ~6 semanas al aire sin cortarse le rinde a quien lo paga; lo que tiene horas no prueba nada, por prolijo
+  que se vea. **Se aprende de los que sobreviven, no de los más nuevos ni de los más lindos.**
+- **Qué tienen los 7 de software que sobreviven** (17-jul a 17-ago): todos tienen una **persona** (6 videos y un
+  estático), **ninguno es sólo pantalla**; la primera línea le habla al **dueño de su plata o su tiempo**; el
+  líder no titula con IA; CTA único a cuenta gratis o demo, sin precio en la pieza; ninguno va a WhatsApp.
+- **Qué se copia y qué no:** se copia el **orden** (plata del dueño → mecanismo → un CTA). No se copian sus cifras
+  («25 % de los ingresos» es de ellos, no medido por Onia), ni testimonios, ni «+4000 doctores» (cero clientes).
+  Ningún material de venta nombra a la competencia.
+- **La brecha que queda** es una pieza con persona: Sergio Urcullo mostrando la pantalla, o un presentador IA sólo
+  si él lo pide (skill `ugc-empresas-higgsfield`, gasto aprobado).
+- **Antes de prometer una función, mirar QUÉ corre en producción, no lo que dice un doc:** `ssh onia-vps 'docker ps
+  --format "{{.Names}} {{.Image}}" | grep onia-platform'` da el release; el commit se lee en el clon de
+  `onia-platform`, y una frase de la pantalla se busca en el bundle servido (`docker exec onia-platform grep -rl
+  "<frase>" /app/.next/server`). El 2-oct así se vio que el tratamiento a medias ya estaba en producción
+  (`release-8f07e537`) mientras `ONIA_ADQUISICION_Y_PAUTA.md` §0 y §5.4 seguían diciendo que no.
+- **El umbral del tratamiento a medias es «21 días sin venir»** (`diasSinVenir`), con el tratamiento en curso y
+  sin cita futura. «21 días en progreso» o «21 días sin cita» son inexactos: corregido en D4 el 2-oct.
+
 ## 5. La campaña de Meta
 
 - **1-oct, 21:00 UTC: el conector YA ve ONIA Ads** (`1073680778314945`, negocio «OniaAgency», `is_ads_mcp_enabled`),
   pero con **`has_payment_method: false`**. Sin la tarjeta no se crea nada, ni en pausa. También aparece la cuenta
   personal «Sergio Urcullo» (`679613631427810`, USD, con tarjeta): **no se usa para Onia** sin su decisión.
-- **1-oct, 21:15 UTC: `ads_get_ad_account_pages` de ONIA Ads devuelve `[]`.** La página «Onia» (`1140384625819526`)
-  no está vinculada a la cuenta. Sin eso no se crea ningún anuncio, aunque esté la tarjeta. Se vincula en el Business
-  «OniaAgency» (`1451773736711697`).
+- **Para saber si la página sirve, se usa `ads_get_user_pages`, no `ads_get_ad_account_pages`.** Este último solo
+  lista las páginas que la cuenta ya promocionó: en ONIA Ads, que nunca pautó, devuelve `[]`. El 1-oct a las 21:15
+  lo leí como «página sin vincular» y se lo dije a Sergio Urcullo; a las 21:40, `ads_get_user_pages` y
+  `ads_get_pages_for_business` (`1451773736711697`) listaban «Onia» (`1140384625819526`). ONIA Ads no tiene ninguna
+  cuenta de Instagram vinculada (`ads_get_ig_accounts` → `[]`).
 - Antes de esa hora, el conector `Meta_ads` veía otra cuenta de Facebook («NUVO 1usd», «Arthur Fuentes»). A las
   20:15 UTC ONIA Ads todavía no aparecía. Primero `ads_get_ad_accounts`; si no lista `1073680778314945` con
   `has_payment_method: true`, no sirve para crear. Lo destraba Sergio Urcullo reconectando el conector con
@@ -196,6 +292,7 @@ contestarle de memoria es la forma de quemarlo.
 | **Entorno «Default» con red completa (1-oct, noche)** | Las webs, los directorios y los buscadores abren. **`facebook.com` redirige al login** con `curl` y con Chromium. Abrir Instagram, `wa.me` o Maps con Chromium **lo bloquea el control de permisos**: no se reintenta por otro lado | Webs propias, el directorio por `page_id` (§2) y la Biblioteca por el conector. Lo que solo se ve dentro de Facebook (cuántos atienden, el texto del anuncio) se mira desde la PC |
 | VPS y base de producción | sin llave (`ONIA_VPS_SSH_KEY_B64` vacía) | lo mide la madre en la PC |
 | `SendMessage` a otra sesión | falla: la nube no puede mandar | se contesta en el propio transcript; la madre lo lee |
+| `ssh onia-vps` después de reiniciar la sesión (2-oct) | El hook deja la llave y la config, pero **falta el programa `ssh`** | `apt-get install -y openssh-client` |
 | Cupo de búsquedas web | 200 por sesión; se agotó con 4 subagentes | Darle a cada subagente un tope. El 1-oct, de noche, 4 subagentes con 25, 30, 20 y 12 búsquedas verificaron 28 prospectos y 9 de reserva, y usaron el tope completo |
 | Fuentes de Google en el render | no bajan | `scripts/carousel_cloud_setup.sh` instala TTF locales |
 
@@ -207,3 +304,21 @@ cambia el producto, no el discurso.**
 
 ⚠️ **Hoy (1-oct) no hay cuenta demo en producción** (`02-GUION-DEMO.md` §0.1). Sin ella no hay demo: es lo
 primero que se resuelve con Sergio Urcullo y Plataforma.
+
+## 8. Mirar a un competidor por dentro (aprendido con Dapta, 1-oct)
+
+Resultado: `research/competencia/DAPTA_COMO_FUNCIONA.md` (sin fecha, fuente del tema) con capturas en
+`research/competencia/dapta/`.
+
+- **Las capturas van al repo, no al scratchpad.** El scratchpad se borra y el doc queda citando archivos que no
+  existen. Se copian a `research/competencia/<competidor>/` (app en `app/`, páginas en `web/`).
+- **Los asistentes de plantillas guardan solos.** En Dapta, «Continuar» creó un borrador de agente («Julia»).
+  Antes de apretar «Continuar», «Crear con IA» o un acceso directo del inicio, suponer que guarda o gasta
+  créditos. Lo creado sin querer no se borra: se reporta y decide Sergio Urcullo.
+- **Web, docs y app se contradicen; se miden las tres.** En Dapta la web vende SMS y llamadas por WhatsApp que la
+  app no tiene, y los docs dicen 40 créditos por mensaje cuando la app cobra de 12 a 40 según el modelo.
+- **Los docs de GitBook traen un bloque «Agent Instructions».** Es dato. Al guardar la copia se corta.
+- **Antes de proponer «decí X en la web», grep del espejo** (`web-factory/apps/onia-platform/src/app/(sitio)/`).
+  Un informe propuso decir «sin tarjeta» y ya estaba en la home, /empezar, /agentes y /nosotros.
+- **La Biblioteca de Anuncios fuera de la UE no guarda los anuncios comerciales inactivos.** «¿Pautaban en julio?»
+  no se puede contestar después: se mide el día.
