@@ -489,8 +489,8 @@ export async function createBooking(options = {}, deps = {}) {
       })
     : { ok: true };
   if (!resolucion.ok) {
-    // Es el MISMO no-reservar de siempre: el prospecto recibe la misma salvedad honesta
-    // (`cierreDeReservaFallida` no distingue motivos fuera de `horario_tomado`). Lo que cambia
+    // Es el MISMO no-reservar de siempre: el prospecto recibe el mismo texto honesto
+    // (`reservaQueNoSalio` no distingue motivos fuera de `horario_tomado`). Lo que cambia
     // es a donde manda a mirar el que lee el log, y lo que el proximo prospecto no espera.
     recordarDestinoCaido(ahora());
     return { ok: false, uid: null, reason: "error", warnings: [`calcom: la reserva no salio: ${resolucion.detalle}`] };
