@@ -1,0 +1,253 @@
+{
+ "video": "raw/v1.mp4",
+ "modo": "audio",
+ "noise": "-27dB",
+ "minSil": 0.4,
+ "pad": 0.08,
+ "origDur": 67.03,
+ "finalDur": 57.83,
+ "silences": [
+  {
+   "start": 0,
+   "end": 0.620583
+  },
+  {
+   "start": 13.2379,
+   "end": 13.9478
+  },
+  {
+   "start": 19.517,
+   "end": 20.0841
+  },
+  {
+   "start": 43.7726,
+   "end": 44.3946
+  },
+  {
+   "start": 47.4141,
+   "end": 47.8202
+  },
+  {
+   "start": 52.3172,
+   "end": 52.7212
+  },
+  {
+   "start": 61.2209,
+   "end": 62.201
+  },
+  {
+   "start": 63.6634,
+   "end": 64.1292
+  }
+ ],
+ "keep": [
+  {
+   "start": 0.54,
+   "end": 8.45
+  },
+  {
+   "start": 9.9,
+   "end": 13.32
+  },
+  {
+   "start": 13.87,
+   "end": 18.16
+  },
+  {
+   "start": 18.54,
+   "end": 19.6
+  },
+  {
+   "start": 20,
+   "end": 20.46
+  },
+  {
+   "start": 20.8,
+   "end": 26.19
+  },
+  {
+   "start": 26.335,
+   "end": 31.68
+  },
+  {
+   "start": 32.2,
+   "end": 42.1
+  },
+  {
+   "start": 44.96,
+   "end": 47.49
+  },
+  {
+   "start": 47.74,
+   "end": 52.4
+  },
+  {
+   "start": 52.64,
+   "end": 57.2
+  },
+  {
+   "start": 57.6,
+   "end": 61.3
+  },
+  {
+   "start": 62.12,
+   "end": 63.74
+  },
+  {
+   "start": 64.05,
+   "end": 67.03
+  }
+ ],
+ "ffmpeg": "ffmpeg -y -i \"raw/v1.mp4\" -vf \"select='between(t,0.54,13.32)+between(t,13.87,19.6)+between(t,20,43.85)+between(t,44.31,47.49)+between(t,47.74,52.4)+between(t,52.64,61.3)+between(t,62.12,63.74)+between(t,64.05,67.03)',setpts=N/FRAME_RATE/TB\" -af \"aselect='between(t,0.54,13.32)+between(t,13.87,19.6)+between(t,20,43.85)+between(t,44.31,47.49)+between(t,47.74,52.4)+between(t,52.64,61.3)+between(t,62.12,63.74)+between(t,64.05,67.03)',asetpts=N/SR/TB\" \"renders/cut.mp4\"",
+ "rows": [
+  {
+   "i": 0,
+   "start": 0,
+   "end": 5.04,
+   "text": "Estás o cuenta que tu cloud code probablemente ya no te pide permisos para casi nada, desde",
+   "keep": true,
+   "reason": "contenido"
+  },
+  {
+   "i": 1,
+   "start": 5.04,
+   "end": 9.6,
+   "text": "fines de septiembre arranca en modo auto, en todos los planes, esto es lo que deja de pasar,",
+   "keep": true,
+   "reason": "contenido"
+  },
+  {
+   "i": 2,
+   "start": 9.98,
+   "end": 14.76,
+   "text": "en modo automático un segundo modelo revisa cada acción en vez de voz, según la documentación",
+   "keep": true,
+   "reason": "contenido"
+  },
+  {
+   "i": 3,
+   "start": 14.76,
+   "end": 19.24,
+   "text": "por defecto, bloquea, bajar y ejecutar el código de internet, deploiza producción,",
+   "keep": true,
+   "reason": "contenido"
+  },
+  {
+   "i": 4,
+   "start": 19.98,
+   "end": 24.28,
+   "text": "force a push, borrar archivos que ya existían y los comandos de git que tienen cambio",
+   "keep": true,
+   "reason": "contenido"
+  },
+  {
+   "i": 5,
+   "start": 24.28,
+   "end": 28.66,
+   "text": "sin guardar, pero por defecto deja de pasar, editar archivos en tu carpeta, instalar",
+   "keep": true,
+   "reason": "contenido"
+  },
+  {
+   "i": 6,
+   "start": 28.66,
+   "end": 33.66,
+   "text": "dependencias y hacer push a cualquier rama del repositorio, incluida si fuera la principal,",
+   "keep": true,
+   "reason": "contenido"
+  },
+  {
+   "i": 7,
+   "start": 34.58,
+   "end": 39.22,
+   "text": "por ejemplo en mi caso eso realmente importa, la rama principal alimenta el deploy un push",
+   "keep": true,
+   "reason": "contenido"
+  },
+  {
+   "i": 8,
+   "start": 39.22,
+   "end": 44.78,
+   "text": "con trabajo media, rompe mi producción completamente, como lo puedes ver voz y voz,",
+   "keep": true,
+   "reason": "contenido"
+  },
+  {
+   "i": 9,
+   "start": 45.02,
+   "end": 49.24,
+   "text": "como lo puedes revisar en la parte de abajo te lo muestra y con shift up lo puedes cambiar",
+   "keep": true,
+   "reason": "contenido"
+  },
+  {
+   "i": 10,
+   "start": 49.24,
+   "end": 53.88,
+   "text": "al modo que vos querrás y si querés que vuelva a preguntarte, en el archivo de settings de tu",
+   "keep": true,
+   "reason": "contenido"
+  },
+  {
+   "i": 11,
+   "start": 53.88,
+   "end": 59.24,
+   "text": "carpeta punto que lado de pone default mode en default y la próxima sesión te lo muestra",
+   "keep": true,
+   "reason": "contenido"
+  },
+  {
+   "i": 12,
+   "start": 59.24,
+   "end": 65.42,
+   "text": "como manual mode on y si querés ver como lo puedes hacer, comenta comunidad y te lo",
+   "keep": true,
+   "reason": "contenido"
+  },
+  {
+   "i": 13,
+   "start": 65.42,
+   "end": 66.72,
+   "text": "ves en mi comunidad de whatsapp",
+   "keep": true,
+   "reason": "contenido"
+  }
+ ],
+ "manual": [
+  {
+   "start": 8.45,
+   "end": 9.9,
+   "motivo": "frase «Esto es lo que deja de pasar» (decía lo contrario; es solo una transición)"
+  },
+  {
+   "start": 26.19,
+   "end": 26.335,
+   "motivo": "«deja DE pasar» → «deja pasar» (decía lo contrario)"
+  },
+  {
+   "start": 42.1,
+   "end": 44.96,
+   "motivo": "«como lo puedes ver vos y vos» (repite en seguida)"
+  },
+  {
+   "start": 18.16,
+   "end": 18.54,
+   "motivo": "sonido sin palabra (respiración / eh / la «a» de «force a push»)"
+  },
+  {
+   "start": 20.46,
+   "end": 20.8,
+   "motivo": "sonido sin palabra (respiración / eh / la «a» de «force a push»)"
+  },
+  {
+   "start": 31.68,
+   "end": 32.2,
+   "motivo": "sonido sin palabra (respiración / eh / la «a» de «force a push»)"
+  },
+  {
+   "start": 57.2,
+   "end": 57.6,
+   "motivo": "sonido sin palabra (respiración / eh / la «a» de «force a push»)"
+  }
+ ]
+}

@@ -36,6 +36,19 @@ timestamp real del transcript word-level. Corolario del mismo reel, que ya cumpl
 código não") — para eso están `make-mockup.mjs` (PNG) y `scripts/remotion` / `scripts/hyperframes`
 (animados).
 
+## ⭐ LA EDICIÓN DE SERGIO URCULLO = la receta del lote del 17-sep (no una versión básica)
+
+> 2-oct-2026: entregué un video con corte + karaoke + recuadros verdes. Sergio Urcullo: *«esa no sigue siendo tu
+> manera de editar, porque no lo hacés como antes»*. Tenía razón: faltaba casi toda la receta.
+
+**Antes de editar cualquier video suyo, leé `videos/tiktok-20260917/README.md` y copiá esa receta entera:** corte
+fino (silencios + sonido sin palabra) · zoom punch por bloque · **logo oficial de Claude Code en cada mención** ·
+tarjetas dark (`card-dark.html`) con el contenido real · pantalla completa (`fullscreen.html`) para código o config ·
+keywords blancas 900 con subrayado naranja (`keyword.html`) · karaoke `--style apple` · **pop en cada apoyo y whoosh
+en la pantalla completa, con ducking** · master −14 LUFS · sin música. Plantillas y fuentes: `videos/tiktok-20260917/
+scripts/*.html` + `videos/claude-code-03/assets/fonts/`; SFX: `videos/claude-code-03/assets/sfx/`. Ejemplo completo y
+portable (Linux, una pasada): `videos/n03-modo-auto-20261001/` (`scripts/build-17sep.mjs`).
+
 ## ⭐ REGLA DE ORO (de Santiago) — nunca cortar a ciegas
 **La tabla de cortes + un preview 360p SIEMPRE se muestran a Sergio ANTES de aplicar el corte.**
 Formato de la tabla: `# | Me quedo con | Tiro | Por qué`. Se aplica el corte recién con su OK.
