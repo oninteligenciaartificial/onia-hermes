@@ -13,17 +13,23 @@ description: >
 
 # Editor de Videos ONIA — edición 100% con código, sin editores humanos
 
-## ⭐⭐ ANTES DE EDITAR A SERGIO URCULLO: la receta que él reconoce como suya (2-oct-2026)
+## ⭐⭐ ANTES DE EDITAR A SERGIO URCULLO: qué se replica y qué es solo referencia (2-oct-2026)
 
-El reel que Sergio Urcullo señaló como «así» es el **«GPT-6 Astra vs Fable 5.1» que editó Codex el 14-sep**.
-Receta completa, `edit.py` real y tarjetas: `hermes-content/references/video-intake/2026-09-14-reel-astra-fable-codex/RECETA.md`.
-En una línea: **un mockup oscuro por bloque hablado, arriba (720 px), cambiando justo en el corte para esconder
-el salto; cara a lo ancho abajo; banda con subtítulo en frases cortas en mayúsculas; entrada lateral de 340 ms
-alternada; sin zooms, sin karaoke, sin SFX; −14 LUFS.**
-Por qué está acá arriba: hasta el 2-oct vivía solo en `Downloads` de la PC, ninguna sesión la tenía, y el 2-oct
-salió la edición básica «corte + karaoke + recuadros» que él rechazó («no lo hacés como antes»). Lo que sigue
-abajo (karaoke, zoom-punch, SFX) es el estilo de los TikToks del 17/18-sep, emparentado; ante la duda, gana la
-receta de Codex.
+Sergio Urcullo, 2-oct, textual: *«lo que quiero que hagas tal cual son los videos de Eric Taveras y Santiago
+Munoz»*, y del reel de Codex: *«no me refiero a que lo hagas tal cual, me refiero a que lo tomes de referencia»*.
+- **Molde a replicar TAL CUAL:** el montaje de **@eriktaveras** y **@sanmunoz.ia**. Vive en la skill nueva
+  **`edicion-referentes`** (la arma Marca personal desde el 2-oct, por decisión de Sergio Urcullo: «a partir de
+  después de eso, con el formato de los referentes, y creamos la nueva skill de edición»). Fichas de montaje por
+  cuenta: las saca la madre desde Chrome (2-oct) y van a `hermes-content/references/marca-personal/FORMULAS-REFERENTES.md`.
+  Hasta el 2-oct de Erik no había NADA del montaje, y de Santiago un solo reel (sección «Layout tutorial
+  vertical partido», más abajo).
+- **Su video propio que salió bien:** «tu primera automatización», subido el 22-sep (guion en
+  `docs/cola/GUIONES-DIA-2026-09-21.md`). Su receta se está descifrando (2-oct).
+- **Solo referencia:** el reel «GPT-6 Astra vs Fable 5.1» que editó Codex el 14-sep, con `edit.py` y tarjetas en
+  `hermes-content/references/video-intake/2026-09-14-reel-astra-fable-codex/RECETA.md`. Lo que vale de él es el
+  movimiento de cambiar el panel justo en el corte para esconder el salto. No es el molde.
+Por qué está acá arriba: el 2-oct salió la edición básica «corte + karaoke + recuadros» y él la rechazó («no lo
+hacés como antes»).
 
 ## Overview
 ONIA edita video con código (método del tutorial de Santiago): grabás crudo → Claude lo deja
