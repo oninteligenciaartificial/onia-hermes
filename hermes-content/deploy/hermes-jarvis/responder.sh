@@ -40,13 +40,19 @@ CARRIL=$(printf '%s' "$FILA" | cut -f3)
 URL=$(printf '%s' "$FILA" | cut -f6)
 esc() { sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g'; }
 case "$ESTADO" in
-  listo)       CORTO="✅ Listo";            CABEZA="<b>Claude terminó tu pedido</b>" ;;
-  necesita-ok) CORTO="🙋 Necesita tu ok";   CABEZA="<b>Claude necesita tu ok</b>" ;;
-  no-se-pudo)  CORTO="⚠️ No se pudo";       CABEZA="<b>Claude no pudo con tu pedido</b>" ;;
+  listo)       CORTO="✅ Listo";          CABEZA="<b>Claude terminó tu pedido</b>" ;;
+  necesita-ok) CORTO="🙋 Falta tu ok";    CABEZA="<b>Claude necesita tu ok</b>" ;;
+  no-se-pudo)  CORTO="⚠️ No se pudo";     CABEZA="<b>Claude no pudo con tu pedido</b>" ;;
 esac
-# La PRIMERA línea es la que la aduana guarda cuando él está de noche o en un bloque (la corta a
-# 90 caracteres, sin HTML): tiene que alcanzar sola para saber qué pedido es y dónde verlo.
-MSG="$CORTO · $PEDIDO · $(printf '%s' "${URL:-(sin link)}" | esc)
+# La PRIMERA línea es la que la aduana guarda cuando él está de noche o en un bloque: la corta a
+# 90 BYTES sin HTML (`cut -c` de GNU cuenta bytes, no letras). Tiene que alcanzar sola para saber
+# qué pedido es y dónde verlo. Un emoji ocupa 3 a 6 bytes y el link real de una sesión, 55: con
+# «🙋 Necesita tu ok» eran 92 y el link quedaba cortado (verificación del 1-oct). Si igual no
+# entra, queda solo el emoji: el id y el link enteros valen más que la palabra.
+PRIMERA="$CORTO · $PEDIDO · $(printf '%s' "${URL:-(sin link)}" | esc)"
+[ "$(printf '%s' "$PRIMERA" | wc -c)" -le 90 ] \
+  || PRIMERA="${CORTO%% *} $PEDIDO · $(printf '%s' "${URL:-(sin link)}" | esc)"
+MSG="$PRIMERA
 $CABEZA ($CARRIL)
 
 $(printf '%s' "$TEXTO" | esc)"

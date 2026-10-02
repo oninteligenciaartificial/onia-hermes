@@ -34,6 +34,23 @@ N8N_APAGAR="QGXVyRSgrArxfolj OovRU4r0o7pvglJP GFeCZKr1zQT6CVN8 aHFLqEtzqvq6SE3e 
 FALLAS=0
 HERMES_CAMBIO=0   # 1 = Hermes tiene skill o SOUL nuevos: hay que reiniciar su gateway (6b)
 falla() { FALLAS=$((FALLAS + 1)); echo "  ❌ $*"; }
+estado_job() {  # imprime «activo» o «pausado» (o «?» si no está). Lo usan la Fase A y la sección 3.
+  python3 - "$1" <<'PY'
+import json, sys
+try:
+    d = json.load(open("/root/.hermes/cron/jobs.json"))
+except Exception:
+    print("?"); raise SystemExit
+jobs = d.get("jobs", d) if isinstance(d, dict) else d
+if isinstance(jobs, dict):
+    jobs = [dict(v, id=v.get("id", k)) for k, v in jobs.items() if isinstance(v, dict)]
+for j in jobs:
+    if isinstance(j, dict) and j.get("id") == sys.argv[1]:
+        print("activo" if j.get("enabled") and j.get("state") != "paused" else "pausado")
+        raise SystemExit
+print("?")
+PY
+}
 
 sec "hermes-jarvis · aplicar · commit ${COMMIT:0:9} · $(date -u +%FT%TZ)"
 
@@ -354,6 +371,12 @@ if [ "$N8N_OK" = 1 ]; then
     [ -n "$(api "$N8N_HOST/api/v1/workflows/$id" | campo id)" ] || falla "no encontré en n8n el flujo $id (de los 12 que se apagan)"
   done
 fi
+# Los 3 trabajos de Hermes que se pausan tienen que estar en jobs.json (verificación del 1-oct):
+# sin esto, uno que no aparecía salía «ya estaba: ?» en la sección 3, no contaba como falla, y el
+# aviso final le prometía «apagué los reportes» con ese trabajo todavía escribiéndole.
+for id in $HERMES_PAUSAR; do
+  [ "$(estado_job "$id")" != "?" ] || falla "no encontré en /root/.hermes/cron/jobs.json el trabajo $id de Hermes (de los 3 que se pausan)"
+done
 [ "$N8N_OK" = 1 ]     || abortar "la API de n8n no responde con la llave de gestión"
 [ "$AGENDA_OK" = 1 ]  || abortar "no puedo LEER su calendario"
 [ "$CAMBIOS_OK" = 1 ] || abortar "agendar, mover y cancelar en su calendario no pasó la prueba"
@@ -385,7 +408,30 @@ if python3 "$BK/marcas.py" deshacer "$BK/crontab.revertido-desde" > "$BK/crontab
 else
   mal "crontab: no pude deshacer las marcas (el de antes está en $BK/crontab.antes)"
 fi
+# Solo se reanuda lo que sigue en pausa (verificación del 1-oct): al reintentar un revertir que se
+# cortó a mitad, lo que ya volvió no se toca, y lo que ya no existe no se puede reanudar. No está
+# medido qué hace el CLI de Hermes en esos dos casos; si diera error, este rollback no llegaría
+# nunca a «revertido». Códigos: 0 en pausa (o no se sabe: se intenta) · 10 ya activo · 11 no está.
+en_pausa() {
+  python3 - "$1" <<'PY'
+import json, sys
+try:
+    d = json.load(open("/root/.hermes/cron/jobs.json"))
+except Exception:
+    raise SystemExit(0)                     # ilegible: se intenta reanudar igual
+jobs = d.get("jobs", d) if isinstance(d, dict) else d
+if isinstance(jobs, dict):
+    jobs = [dict(v, id=v.get("id", k)) for k, v in jobs.items() if isinstance(v, dict)]
+for j in jobs:
+    if isinstance(j, dict) and j.get("id") == sys.argv[1]:
+        raise SystemExit(0 if not j.get("enabled") or j.get("state") == "paused" else 10)
+raise SystemExit(11)
+PY
+}
 for id in $(cat "$BK/hermes-pausados.txt" 2>/dev/null); do
+  en_pausa "$id"; e=$?
+  if [ "$e" = 10 ]; then echo "hermes: $id ya estaba activo"; continue; fi
+  if [ "$e" = 11 ]; then echo "hermes: $id ya no está en jobs.json: nada que reanudar"; continue; fi
   timeout 60 $HPY -m hermes_cli.main cron resume "$id" </dev/null >/dev/null 2>&1 && echo "hermes: reanudado $id" || mal "hermes: no pude reanudar $id"
 done
 KEY=$(grep -oP '(?<=^N8N_MANAGEMENT_API_KEY=).*' /opt/onia-platform/app.env 2>/dev/null | tr -d "\"'" | head -1)
@@ -453,23 +499,6 @@ fi
 
 # ── 3. Hermes ───────────────────────────────────────────────────────────────────
 sec "3. Trabajos de Hermes que le escribían por su cuenta"
-estado_job() {  # imprime «activo» o «pausado» (o «?» si no está)
-  python3 - "$1" <<'PY'
-import json, sys
-try:
-    d = json.load(open("/root/.hermes/cron/jobs.json"))
-except Exception:
-    print("?"); raise SystemExit
-jobs = d.get("jobs", d) if isinstance(d, dict) else d
-if isinstance(jobs, dict):
-    jobs = [dict(v, id=v.get("id", k)) for k, v in jobs.items() if isinstance(v, dict)]
-for j in jobs:
-    if isinstance(j, dict) and j.get("id") == sys.argv[1]:
-        print("activo" if j.get("enabled") and j.get("state") != "paused" else "pausado")
-        raise SystemExit
-print("?")
-PY
-}
 for id in $HERMES_PAUSAR; do
   antes=$(estado_job "$id")
   if [ "$antes" = activo ]; then

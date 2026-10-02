@@ -21,15 +21,20 @@ const DIR = resolve(AQUI, "..", "..", "hermes-content", "deploy", "hermes-jarvis
 const COMUN = readFileSync(join(DIR, "comun.sh"), "utf8");
 const RESPONDER = readFileSync(join(DIR, "responder.sh"), "utf8");
 const ID = "p_1a2b3c4d";
+// Un link con el largo de los de verdad (session_ + 24): con uno de juguete («session_01XYZ») la
+// prueba de los 90 bytes pasaba y en producción el link de «necesita tu ok» quedaba cortado.
+const SESION = "session_01AbCdEfGhIjKlMnOpQrStUv";
+const URL_REAL = `https://claude.ai/code/${SESION}`;
+const reEsc = (s) => s.replace(/[.*+?^${}()|[\]\\/]/g, "\\$&");
 
-function banco({ tgFalla = false, horasAtras = 1 } = {}) {
+function banco({ tgFalla = false, horasAtras = 1, url = URL_REAL } = {}) {
   const dir = mkdtempSync(join(tmpdir(), "respuesta-"));
   const estado = join(dir, "pedidos");
   mkdirSync(estado);
   const ts = Math.floor(Date.now() / 1000) - horasAtras * 3600;
   writeFileSync(
     join(estado, "pedidos.tsv"),
-    `${ts}\t${ID}\tplataforma\tabc123\tsession_01XYZ\thttps://claude.ai/code/session_01XYZ\n`,
+    `${ts}\t${ID}\tplataforma\tabc123\t${SESION}\t${url}\n`,
   );
   const tg = join(dir, "tg.sh");
   writeFileSync(
@@ -61,7 +66,7 @@ test("la respuesta de un pedido de Hermes sale por la aduana, como interrupción
   assert.equal(r.status, 0, r.stdout + r.stderr);
   assert.equal(b.leer("tg-env.txt").trim(), `interrumpe|pedido-${ID}-listo|claude|`);
   const msg = b.leer("tg-msg.txt");
-  assert.match(msg, /^✅ Listo · p_1a2b3c4d · https:\/\/claude\.ai\/code\/session_01XYZ\n<b>Claude terminó tu pedido<\/b> \(plataforma\)\n\nListo: el botón ya confirma\./);
+  assert.match(msg, new RegExp(`^✅ Listo · p_1a2b3c4d · ${reEsc(URL_REAL)}\\n<b>Claude terminó tu pedido</b> \\(plataforma\\)\\n\\nListo: el botón ya confirma\\.`));
   assert.match(b.leer("pedidos/respuestas.tsv"), new RegExp(`\\t${ID}\\tlisto\\n$`));
 });
 
@@ -69,7 +74,7 @@ test("respeta la noche y sus bloques: nunca pide ONIA_AVISO_AHORA", () => {
   const b = banco();
   b.responder(ID, "necesita-ok", "¿Lo mergeo?");
   assert.ok(b.leer("tg-env.txt").trim().endsWith("|"), "ONIA_AVISO_AHORA tiene que ir vacío");
-  assert.match(b.leer("tg-msg.txt"), /^🙋 Necesita tu ok · p_1a2b3c4d · /);
+  assert.match(b.leer("tg-msg.txt"), /^🙋 Falta tu ok · p_1a2b3c4d · /);
 });
 
 test("un pedido que no salió de Hermes no le escribe nada", () => {
@@ -111,14 +116,29 @@ test("un pedido de más de 48 h no suena", () => {
   assert.equal(b.envios(), 0);
 });
 
-test("la primera línea alcanza sola (la aduana guarda 90 caracteres sin HTML cuando él no está)", () => {
-  const b = banco();
+// La aduana guarda la primera línea, sin HTML, cortada con `cut -c1-90` (onia-tg.sh, titulo_de):
+// GNU cut cuenta BYTES, y un emoji son 3 a 6. Verificación del 1-oct: «🙋 Necesita tu ok» con un
+// link real sumaba 92 bytes y lo retenido quedaba «…session_…SuJp3», sin las dos últimas letras.
+const loQueGuardaLaAduana = (linea) => Buffer.from(linea).subarray(0, 90).toString("utf8");
+
+for (const estado of ["listo", "necesita-ok", "no-se-pudo"]) {
+  test(`«${estado}»: la primera línea alcanza sola con un link real (id y link enteros en 90 bytes)`, () => {
+    const b = banco();
+    b.responder(ID, estado, "Detalle de la respuesta.");
+    const primera = b.leer("tg-msg.txt").split("\n")[0];
+    assert.ok(Buffer.byteLength(primera) <= 90, `${Buffer.byteLength(primera)} bytes: ${primera}`);
+    assert.doesNotMatch(primera, /</);
+    assert.match(loQueGuardaLaAduana(primera), new RegExp(`p_1a2b3c4d · ${reEsc(URL_REAL)}$`));
+  });
+}
+
+test("con un link más largo que los de hoy, queda solo el emoji: el id y el link no se cortan", () => {
+  const largo = `https://claude.ai/code/session_${"x".repeat(36)}`; // 67: los de hoy tienen 55
+  const b = banco({ url: largo });
   b.responder(ID, "no-se-pudo", "No pude: hace falta la PC.");
   const primera = b.leer("tg-msg.txt").split("\n")[0];
   assert.ok(Buffer.byteLength(primera) <= 90, `${Buffer.byteLength(primera)} bytes: ${primera}`);
-  assert.doesNotMatch(primera, /</);
-  assert.match(primera, /p_1a2b3c4d/);
-  assert.match(primera, /https:\/\/claude\.ai\/code\/session_01XYZ/);
+  assert.equal(primera, `⚠️ p_1a2b3c4d · ${largo}`);
 });
 
 test("el texto es texto: se escapa para Telegram y no se ejecuta", () => {

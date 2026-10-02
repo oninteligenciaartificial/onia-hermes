@@ -74,10 +74,12 @@ description: Invocar ANTES de tocar a Hermes (el asistente de Sergio Urcullo por
 
 ## `aplicar` es TODO O NADA (desde el 1-oct)
 
-1. **Fase A, requisitos:** la API de n8n, LEER su calendario y CAMBIARLO (con un evento de prueba que
-   crea, mueve y cancela), y que las skills y el SOUL estén en `origin/main` del clon del VPS. Si
-   algo falla, `abortar()` apaga solo lo que **esta corrida** prendió (`$BK/prendido-*`), y no toca
-   crontab, Hermes, los 12 flujos de n8n, el SOUL ni el interruptor.
+1. **Fase A, requisitos:** la API de n8n y los 12 flujos que apaga, LEER su calendario y CAMBIARLO
+   (con un evento de prueba que crea, mueve y cancela), las skills y el SOUL en `origin/main` del clon
+   del VPS, el SOUL de Hermes en el VPS, los 3 trabajos de Hermes que pausa en `jobs.json`, y la forma
+   de la llave de pedidos si vino. Si algo falla, `abortar()` apaga solo lo que **esta corrida**
+   prendió (`$BK/prendido-*`), y no toca crontab, Hermes, los 12 flujos de n8n, el SOUL ni el
+   interruptor.
 2. **Crontab.** Si no se puede instalar, también aborta: todavía no se tocó nada más.
 3. Después: pausas de Hermes, los 12 flujos, skills y SOUL, pedidos (inertes sin llave), interruptor
    y **6b: reinicio controlado del gateway** si cambió algo de Hermes o si su lista no nombra las
@@ -110,6 +112,20 @@ CLI de Hermes.
 - **`git stash -u` con un `git mv` en el medio:** el pop no puede restaurar un archivo nuevo en la ruta
   que dejó libre el `mv`, y deja el stash guardado. Antes de soltarlo, compará archivo por archivo con
   `git show stash@{0}^3:<ruta>`. Mejor no mezclar stash con renombres.
+- **La aduana corta en BYTES, no en letras.** `titulo_de()` de `onia-tg.sh` hace `cut -c1-90`, y el
+  `cut -c` de GNU cuenta bytes: un emoji ocupa 3 a 6. Esa primera línea es lo único que guarda de
+  noche o durante un bloque. El 1-oct, «🙋 Necesita tu ok · id · link» sumaba 92 bytes con un link de
+  sesión real (55 caracteres) y lo retenido quedaba con el link cortado. La prueba pasaba porque usaba
+  `session_01XYZ`. **Las pruebas usan datos con el largo de los de verdad**, y lo que tiene que
+  sobrevivir al corte se mide con `Buffer.byteLength`, no con `.length`.
+- **El rollback no depende de un CLI que no se midió.** Al reintentar `revertir`, lo que ya volvió no
+  se toca y lo que ya no existe no es un error: reanuda solo lo que `jobs.json` dice que sigue en
+  pausa. No está medido qué hace `hermes cron resume` con algo activo o borrado, y si da error el
+  rollback no llegaría nunca a «revertido» (verificación del 1-oct). La prueba lo cubre con un CLI
+  estricto (`HERMES_RESUME_ESTRICTO=1`).
+- **Un «?» que no cuenta como falla es una promesa falsa.** Si uno de los 3 trabajos de Hermes no
+  aparecía en `jobs.json`, la sección 3 decía «ya estaba: ?» y seguía, y el aviso final le prometía
+  «apagué los reportes». Desde el 1-oct la Fase A lo exige.
 - **`npm test` entero se corta en `test:bot`** (10 rojos). Pasa lo mismo en la base sin cambios: depende
   de qué versión del repo `onia-platform` haya clonada. Las pruebas del carril se corren sueltas:
   `test:pedidos`, `test:jarvis-aplicar`, `test:jarvis-resumen`, `test:aduana`, `test:agenda`,

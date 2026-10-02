@@ -127,7 +127,8 @@ echo "$metodo $url" >> ${log}/n8n
 if [ -n "$w" ]; then printf 200; exit 0; fi
 id=$(printf '%s' "$url" | sed -E 's#.*/workflows/([^/?]+).*#\\1#')
 case "$metodo $url" in
-  "POST "*/activate) echo '{"active": true}' ;;
+  "POST "*/activate) [ "\${N8N_ACTIVAR_FALLA:-}" = 1 ] && { echo '{"message":"n8n no responde"}'; exit 0; }
+                     echo '{"active": true}' ;;
   "POST "*/deactivate) echo '{"active": false}' ;;
   "POST "*/workflows) n=$(ls ${log}/creado-* 2>/dev/null | wc -l); touch ${log}/creado-$n; echo "{\\"id\\": \\"wfnuevo$n\\"}" ;;
   "GET "*) [ "$id" = "\${N8N_FLUJO_FALTA:-}" ] && { echo '{"message":"Not Found"}'; exit 0; }
@@ -143,7 +144,7 @@ esac
 [ "$3" = cron ] || exit 0
 [ "$4" = resume ] && [ "\${HERMES_RESUME_FALLA:-}" = 1 ] && exit 1
 python3 - "$4" "$5" <<'PY'
-import json, sys
+import json, os, sys
 p = "${R}/.hermes/cron/jobs.json"
 d = json.load(open(p))
 for j in d["jobs"]:
@@ -151,7 +152,15 @@ for j in d["jobs"]:
         if sys.argv[1] == "pause":
             j["enabled"] = False; j["state"] = "paused"
         elif sys.argv[1] == "resume":
+            # Un CLI «estricto»: reanudar algo que no está en pausa es un error (no está medido
+            # qué hace el de verdad; el rollback no puede depender de eso).
+            if os.environ.get("HERMES_RESUME_ESTRICTO") == "1" and j.get("state") != "paused":
+                raise SystemExit(1)
             j["enabled"] = True; j["state"] = "scheduled"
+        break
+else:
+    if sys.argv[1] == "resume" and os.environ.get("HERMES_RESUME_ESTRICTO") == "1":
+        raise SystemExit(1)                 # estricto: reanudar algo que no existe también es error
 json.dump(d, open(p, "w"))
 PY
 `,
@@ -343,3 +352,46 @@ test("si falta uno de los 12 flujos o el SOUL de Hermes, no aplica nada", () => 
   assert.equal(sinFlujo.crontab(), sinFlujo.crontabInicial);
 });
 
+
+test("si falta uno de los 3 trabajos de Hermes en jobs.json, no aplica nada (antes salía «ya estaba: ?» y seguía)", () => {
+  const v = vps();
+  writeFileSync(
+    join(v.R, ".hermes", "cron", "jobs.json"),
+    JSON.stringify({ jobs: IDS_HERMES.slice(1).map((id) => ({ id, enabled: true, state: "scheduled" })) }),
+  );
+  const r = v.aplicar();
+  assert.equal(r.status, 1, r.stdout);
+  assert.match(r.stdout, /no encontré en \S*jobs\.json el trabajo 9089322cc256/);
+  assert.match(r.stdout, /NO APLIQUÉ NADA/);
+  assert.equal(v.crontab(), v.crontabInicial, "el crontab no se toca");
+  assert.equal(v.interruptor(), false, "el interruptor no se prende");
+  assert.ok(v.jobs().every((j) => j.enabled), "ningún trabajo de Hermes se pausa");
+});
+
+test("revertir reintentado no tropieza con lo que ya volvió (un CLI que falla al reanudar algo activo)", () => {
+  const v = vps();
+  assert.equal(v.aplicar().status, 0);
+  // Primera vuelta: Hermes vuelve, pero n8n no reactiva los 12 flujos -> no se marca revertido.
+  const mal = v.revertir({ N8N_ACTIVAR_FALLA: "1" });
+  assert.equal(mal.status, 1, mal.stdout);
+  assert.ok(v.jobs().every((j) => j.enabled), "Hermes ya volvió en la primera vuelta");
+  // Segunda vuelta con un CLI estricto: reanudar lo que ya está activo daría error.
+  const bien = v.revertir({ HERMES_RESUME_ESTRICTO: "1" });
+  assert.equal(bien.status, 0, bien.stdout);
+  assert.match(bien.stdout, /ya estaba activo/);
+  assert.match(bien.stdout, /✅ revertido/);
+  assert.equal(v.crontab().trim(), v.crontabInicial.trim());
+  assert.equal(v.interruptor(), false);
+});
+
+test("revertir no se traba con un trabajo de Hermes que ya no existe (nada que reanudar no es un error)", () => {
+  const v = vps();
+  assert.equal(v.aplicar().status, 0);
+  const sinUno = v.jobs().filter((j) => j.id !== "9089322cc256");
+  writeFileSync(join(v.R, ".hermes", "cron", "jobs.json"), JSON.stringify({ jobs: sinUno }));
+  const r = v.revertir({ HERMES_RESUME_ESTRICTO: "1" });
+  assert.equal(r.status, 0, r.stdout);
+  assert.match(r.stdout, /9089322cc256 ya no está en jobs\.json/);
+  assert.match(r.stdout, /✅ revertido/);
+  assert.ok(v.jobs().every((j) => j.enabled), "los que siguen, vuelven");
+});
