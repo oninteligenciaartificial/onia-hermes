@@ -147,7 +147,40 @@ contestarle de memoria es la forma de quemarlo.
 
 5. El precio se lee de `DEFAULT_PLAN_AMOUNTS` el **día del envío**: una env var puede pisarlo en producción.
 
+6. **Qué se puede decir sobre la IA (medido el 2-oct en `release-8f07e537`, que es lo que corre en producción).**
+   Plataforma va a sumar la IA que redacta cada mensaje del recall: hasta que esté publicada, esto es lo vigente.
+
+| Frase | ¿Es cierta? | De dónde sale |
+|---|---|---|
+| «Sistema de gestión con IA» | ✅ | Hay IA en los agentes |
+| «La IA redacta el mensaje de confirmar, recuperar, cobrar, seguir o reprogramar» | ✅, desde **Crece**: 50 redacciones por mes en Crece, 150 en Profesional, 400 en Clínica | `agents-plantilla.ts` (`PLANTILLA_KINDS`) y `plan-catalogo.ts` (`agentsAiCallsPerMonth`). En producción `AGENTS_LLM=1`, con URL y clave cargadas |
+| «Vos lo aprobás; sin tu OK no se usa» | ✅ | Solo corre la `plantillaAprobada` |
+| «La IA nunca ve los datos de tus pacientes» | ✅ | Recibe solo el tipo de agente, el nombre del negocio y el rubro |
+| «Con tu tono» / «la editás» | ❌ | Escribe en el tono del rubro. El dueño solo puede **aprobarla**: no hay edición en `/agents` |
+| «La IA escribe el mensaje del tratamiento a medias» | ❌ | `buildTratamientoAMediasMessage` es un texto fijo |
+| «Preguntá por tu negocio» es IA | ❌ | Son 30 temas escritos a mano, sin modelo (`BarraAsistente.tsx`) |
+| «La IA calcula el costo de importación» | ❌ | El costeo es cálculo; en importadoras la IA solo está en el mensaje de cobro |
+
+   Cómo se midió la variable, sin imprimir secretos:
+   `ssh onia-vps 'docker exec onia-platform sh -c "echo AGENTS_LLM=\${AGENTS_LLM}"'`.
+
 ## 4. Piezas del anuncio (D1 y D4)
+
+**v2 del 2-oct, cómo se armó** (`briefs/ads/*-d1v2-*` y `*-d4v2-*`, salida en `carousels/out/ads/…v2…`):
+- **Portada con la pantalla real, no con una imagen generada.** Es producto visible desde la primera lámina, sin
+  gasto de Higgsfield y sin esperar aprobación. La arcilla queda como opción.
+- **Para que la captura se lea en el celular:** un recorte de **~320 px de ancho, renderizado a 3×**. Con eso el
+  texto de 13–15 px pasa a ~40 px en la lámina.
+  - Una tarjeta entera, de ~770 px, queda en letra de ~7 pt: no se lee, por más que se agrande.
+  - El mensaje real **se cita en el texto de la lámina** («…») en vez de mostrarlo chico, como en `sergio-k6v2`.
+- **Recortar:** `.claude/skills/onia-ventas-pauta/scripts/recortar-captura.js` (Playwright: un div con `overflow:hidden` y `deviceScaleFactor` 3). Si en el borde se
+  cuela una letra de otra línea, se tapa ese rectángulo con blanco. **Nunca se toca el texto de la pantalla.**
+- ⚠️ **`cta` al nivel del brief pone el botón en TODAS las láminas.** El CTA del anuncio va en `cta_anuncio`; el
+  botón solo en la última lámina, con `cta` dentro de esa lámina.
+- ⚠️ **Hoja de contactos en la nube:** `carousel_contactsheet.js` busca `/usr/bin/chromium`. Se apunta a un
+  envoltorio de `headless_shell` con `--no-sandbox`, porque como root sin eso no arranca.
+- **Control antes de mostrarlas:** ninguna lámina con más de un 40 % vacío. Una franja de captura sola deja la
+  lámina vacía: se junta con la cita del mensaje.
 
 > ⛔ **1-oct, de noche: Sergio Urcullo rechazó D1 y D4.** Sus palabras: *«no entiendo por qué haces los carruseles
 > así, respeta tus reglas, mira cómo los hace mi marca personal, aprende cómo los hace la competencia»*.
@@ -213,6 +246,7 @@ contestarle de memoria es la forma de quemarlo.
 | **Entorno «Default» con red completa (1-oct, noche)** | Las webs, los directorios y los buscadores abren. **`facebook.com` redirige al login** con `curl` y con Chromium. Abrir Instagram, `wa.me` o Maps con Chromium **lo bloquea el control de permisos**: no se reintenta por otro lado | Webs propias, el directorio por `page_id` (§2) y la Biblioteca por el conector. Lo que solo se ve dentro de Facebook (cuántos atienden, el texto del anuncio) se mira desde la PC |
 | VPS y base de producción | sin llave (`ONIA_VPS_SSH_KEY_B64` vacía) | lo mide la madre en la PC |
 | `SendMessage` a otra sesión | falla: la nube no puede mandar | se contesta en el propio transcript; la madre lo lee |
+| `ssh onia-vps` después de reiniciar la sesión (2-oct) | El hook deja la llave y la config, pero **falta el programa `ssh`** | `apt-get install -y openssh-client` |
 | Cupo de búsquedas web | 200 por sesión; se agotó con 4 subagentes | Darle a cada subagente un tope. El 1-oct, de noche, 4 subagentes con 25, 30, 20 y 12 búsquedas verificaron 28 prospectos y 9 de reserva, y usaron el tope completo |
 | Fuentes de Google en el render | no bajan | `scripts/carousel_cloud_setup.sh` instala TTF locales |
 

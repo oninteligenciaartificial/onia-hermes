@@ -1,6 +1,15 @@
 # Handoff — carril `mercado-y-pauta` (sesión «Ventas y pauta Onia Platform», antes «Análisis de mercado»)
 
-> 🔴 **EN VUELO, 2-oct — rehacer D1 y D4 (misma sesión).**
+> 🟡 **2-oct, ~01:00 UTC — D1 y D4 v2 RENDERIZADAS, esperan el OK de Sergio Urcullo.**
+> - Pack `referentes`, la pantalla real en la portada, recortes legibles en el celular y «sistema con IA» solo
+>   donde es cierto (skill §3, punto 6).
+> - Archivos: `carousels/briefs/ads/*-d1v2-*` y `*-d4v2-*`, salida en `carousels/out/ads/*v2*`, capturas en
+>   `briefs/assets/onia-1.0-dental-ads/v2-20261002/`.
+> - Los 8 mensajes 1:1 y la página de contactos (versión 6) ya dicen «sistema de gestión con IA».
+> - **Falta:** las 22 capturas de la competencia (la madre las está sacando). Cuando lleguen, se contrastan con v2
+>   y se ajusta lo que haga falta antes de crear nada en Meta.
+>
+> ~~🔴 EN VUELO, 2-oct — rehacer D1 y D4 (misma sesión).~~
 > - Sergio Urcullo las rechazó: no respetan las reglas ni el estándar de la marca personal, y no se aprendió de la
 >   competencia.
 > - Por la madre pidió además que digan que Onia es **«un sistema con IA»**.
