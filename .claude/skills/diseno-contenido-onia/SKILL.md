@@ -186,6 +186,10 @@ El CLI autenticado está en el VPS: `HF_CMD="ssh -i <llave> -o BatchMode=yes roo
   se respeta; «boxcar» sale sin cara. La arcilla a veces sale con **fondo gris claro (~210-225)**: en lámina blanca no se
   nota, en portada VERDE queda un bloque turbio. Medí las esquinas antes de montar en verde
   (`ffmpeg -i img -vf crop=150:150:0:0,scale=1:1 -f rawvideo -pix_fmt rgb24 - | od -An -tu1`; menos de ~235, regenerá).
+- **Prompt de foto + `image_style: clay` = criatura** (visto 2-oct, portada K9v2): unas «brass sewing scissors… linen
+  thread on a pale oak table» con estilo clay salieron como un bicho verde con ojos, y la tijera de costado. Con clay,
+  el prompt nombra objetos DE ARCILLA y sus colores («emerald green clay…, matte black clay…, on a white surface»).
+  Al cambiar de estilo un brief viejo, reescribí el prompt; no lo heredes.
 - **`--out` de `carousel_images.mjs` = nombre del carrusel** (`<scratch>/sergio-kNN-…`): el script toma de ahí el nombre
   del archivo y el `usado_en` de `galeria.json`. Con `--out k11-img` quedó todo mal anotado.
 - **Varios agentes generando a la vez:** `flock /tmp/claude-0/galeria.lock` delante del comando (el script reescribe

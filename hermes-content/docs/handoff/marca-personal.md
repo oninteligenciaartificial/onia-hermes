@@ -2,6 +2,31 @@
 
 **Archivo único del carril.** Actualizado 2026-09-29 por Claude (Opus 5.5).
 
+## ▶▶▶ Estado 2-oct 13:40 UTC — misma sesión (`session_01CE21mytrEXdqanCFoWxm32`)
+
+- **PR #76 al día con `main`** (merge sin conflictos, `e3091f74`), marcado listo para revisión, `mergeable_state: clean`.
+  El merge a `main` lo hace Sergio Urcullo o la madre.
+- **Lote de imágenes COTIZADO y SIN generar: 32 imágenes · 3,84 cr (tope 4 cr)**, text2image_soul_v2 clay. Son 31
+  prompts pendientes de los 18 briefs, más la portada de K9v2, que salía con una criatura con ojos: su prompt era de foto
+  (tijeras) con estilo clay. Ahora pide una lupa sobre película. Se cotizó con
+  `HF_CMD="ssh onia-vps higgsfield" node scripts/carousel_images.mjs --brief <b> --out <scratch>/<slug>` sin `--yes`.
+  **Falta su «sí, generá las 32».**
+- **Orden pactado con la madre v2 (CLAUDE.md §4: construir y publicar son dos permisos):**
+  1. Generar.
+  2. Hacer QA de cada imagen.
+  3. Renderizar los 18.
+  4. Armar UNA página privada con los 18 + calendario.
+  5. Esperar su OK sobre esa página.
+  6. Recién ahí `agendar-carruseles-2-19-oct.sh --agendar`. El de hoy (DD-A, 20:00 UTC) sale sólo si es la versión
+     que vio.
+- **Permiso para publicar (IG/Buffer): medido.** El modo Auto bloquea `--agendar` aunque el pedido esté en el chat; la
+  intención del usuario sólo levanta los `soft_deny`. Hay dos vías:
+  - **Elegida, por ser la de menos pasos:** Sergio Urcullo pasa el selector de modo de «Auto» a «Accept edits», aprueba
+    el botón y vuelve a «Auto».
+  - Una regla `permissions.allow` angosta para ese script. Tendría que ponerla él, no la sesión.
+- **Investigación de los videos de Codex:** workflow `w9xtnrhy5` en curso. Con su receta se re-edita N03; la versión
+  vigente es la v3 sin SFX.
+
 ## ▶▶ Estado 2-oct ~01:10 UTC — misma sesión (`session_01CE21mytrEXdqanCFoWxm32`)
 
 - **Video modo auto (N03) TERMINADO**, sin publicar: `final/sergio-n03-modo-auto-20261001.mp4` (59,6 s, −14 LUFS,
