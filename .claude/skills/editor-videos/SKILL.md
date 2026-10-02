@@ -23,8 +23,11 @@ Munoz»*, y del reel de Codex: *«no me refiero a que lo hagas tal cual, me refi
   cuenta: las saca la madre desde Chrome (2-oct) y van a `hermes-content/references/marca-personal/FORMULAS-REFERENTES.md`.
   Hasta el 2-oct de Erik no había NADA del montaje, y de Santiago un solo reel (sección «Layout tutorial
   vertical partido», más abajo).
-- **Su video propio que salió bien:** «tu primera automatización», subido el 22-sep (guion en
-  `docs/cola/GUIONES-DIA-2026-09-21.md`). Su receta se está descifrando (2-oct).
+- **Su video propio que salió bien:** «Tu primera automatización», subido el 22-sep. También lo editó Codex,
+  con HyperFrames: gancho a cámara completa, la cara pasa a PiP chico arriba a la derecha, 4 pantallas de nodos
+  dibujadas a pantalla completa que cambian justo en cada corte, subtítulos por frase en pastilla, 1,1×, sin
+  zooms ni SFX, CTA a cámara completa. Proyecto rescatado y receta: `videos/marca-personal/2026-09-21/RECETA.md`
+  (+ `index.html`).
 - **Solo referencia:** el reel «GPT-6 Astra vs Fable 5.1» que editó Codex el 14-sep, con `edit.py` y tarjetas en
   `hermes-content/references/video-intake/2026-09-14-reel-astra-fable-codex/RECETA.md`. Lo que vale de él es el
   movimiento de cambiar el panel justo en el corte para esconder el salto. No es el molde.

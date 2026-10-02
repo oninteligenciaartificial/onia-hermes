@@ -1,0 +1,30 @@
+{
+  "source": "raw/01-feed-3-nodos-camera.mp4",
+  "sourceDurationSeconds": 48.733,
+  "playbackSpeed": 1.1,
+  "segments": [
+    { "sourceStart": 0.0, "sourceEnd": 13.05, "outputStart": 0.0, "outputEnd": 11.864 },
+    { "sourceStart": 15.28, "sourceEnd": 23.2, "outputStart": 11.864, "outputEnd": 19.064 },
+    { "sourceStart": 24.28, "sourceEnd": 29.12, "outputStart": 19.064, "outputEnd": 23.464 },
+    { "sourceStart": 29.42, "sourceEnd": 33.72, "outputStart": 23.464, "outputEnd": 27.373 },
+    { "sourceStart": 34.1, "sourceEnd": 38.35, "outputStart": 27.373, "outputEnd": 31.236 },
+    { "sourceStart": 38.82, "sourceEnd": 43.88, "outputStart": 31.236, "outputEnd": 35.836 },
+    { "sourceStart": 44.08, "sourceEnd": 48.6, "outputStart": 35.836, "outputEnd": 39.945 }
+  ],
+  "cuts": [
+    { "sourceStart": 13.05, "sourceEnd": 15.28, "reason": "explicación redundante de los campos" },
+    { "sourceStart": 23.2, "sourceEnd": 24.28, "reason": "repetición de para guardar" },
+    { "sourceStart": 29.12, "sourceEnd": 29.42, "reason": "pausa entre ramas" },
+    { "sourceStart": 33.72, "sourceEnd": 34.1, "reason": "pausa antes del resumen" },
+    { "sourceStart": 38.35, "sourceEnd": 38.82, "reason": "pausa antes del criterio de IA" },
+    { "sourceStart": 43.88, "sourceEnd": 44.08, "reason": "pausa antes del CTA" }
+  ],
+  "output": {
+    "path": "work/base-cut.mp4",
+    "durationSeconds": 39.999,
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "audioSampleRate": 48000
+  }
+}
