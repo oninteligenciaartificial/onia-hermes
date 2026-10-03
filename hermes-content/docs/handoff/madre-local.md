@@ -43,7 +43,7 @@ clínicas pagando o destraba main/producción; revisión proporcional al riesgo;
 | PR #94 (Hermes, toca git-autosync.js) | Aprobado por Sergio Urcullo y la madre v2; quedó con conflictos tras #96 | Hermes lo actualiza; la madre lo mergea. Los 3 MEDIUM de v2 van ANTES de cargar la llave de la rutina, no ahora. |
 | PR #101 (rescate de 5f0c8aec) | Aprobado; con conflictos | La madre v2 lo actualiza; la madre lo mergea. main local ya = origin/main; respaldo `respaldo/autosync-5f0c8aec-20260930`; brutos en `C:/Users/PC/Videos/ONIA-brutos/2026-09-21/`. |
 | Lucía «Hoy soy odontóloga» (#82) | Pedido de corrección mandado | Leer su transcript. |
-| Fichas de montaje de Instagram | Se cortaron por el límite de uso (workflow `wf_56a7b9d8-f16`) | Solo **Erik y Santiago** (necesarias para la skill de Marca). Enrique y Aria quedan pendientes. Sin descargar reels salvo OK con nombre, origen y tamaño. |
+| Fichas de montaje de Instagram | ✅ HECHAS las 4 (3-oct): `references/marca-personal/FICHAS-MONTAJE-REFERENTES.md` (db4aa158), mandadas a Marca y Lucía | Sin descargar reels; si Marca pide el ritmo exacto, OK de Sergio Urcullo con nombre, origen y tamaño. |
 | Aviso a Sergio Urcullo | Rutina `trig_01JAHqefnRiS4ePS4CfWZ5Y3` → Hermes manda un Telegram a las 17:15 UTC del 3-oct: «revisá la PC» | Verificar en el transcript de Hermes que salió. |
 
 ## 4. Archivos
@@ -73,5 +73,5 @@ clínicas pagando o destraba main/producción; revisión proporcional al riesgo;
 ## 7. Próximos pasos (madre)
 
 1. Paso 0. 2. Leer los transcripts de Plataforma (CRITICAL + promesas), Hermes (#94 y Telegram) y Lucía.
-3. Mergear #94 y #101 cuando lleguen sin conflictos. 4. Fichas de Erik y Santiago desde Chrome → Marca.
+3. Mergear #94 cuando llegue sin conflictos (#101 ya mergeado, a5b4624a).
 5. Revisión de resultados con Sergio Urcullo. No abrir nada nuevo antes.
