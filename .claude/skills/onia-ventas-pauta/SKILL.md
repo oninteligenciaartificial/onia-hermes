@@ -29,6 +29,16 @@ description: "Invocar para CUALQUIER trabajo del carril Ventas y pauta de Onia: 
 
 ## 1. Reglas que no se negocian
 
+> **Reglas de la madre, 3-oct** (después del bucle de D4: se armó prometiendo el tratamiento a medias, que en
+> producción no encontraba a nadie, porque la frase no se comparó con el catálogo antes de renderizar):
+> 1. **Cada tarea arranca con 3 líneas escritas en el transcript:** META, PRUEBA DE HECHO y REGLA DE PARADA.
+> 2. **Antes de renderizar una pieza o mandar un mensaje, cada frase se compara con
+>    `hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md`.** Si no figura como vivo, no se dice. El código en producción
+>    no alcanza.
+> 3. **Tokens:** workflows de 5 agentes como máximo; nada de leer transcripts ni docs enteros (se lee la sección con
+>    `grep -n` + `sed -n`); effort bajo y modelo chico para lo mecánico. Medido el 3-oct: más del 95 % del gasto
+>    fue releer contexto.
+
 - **Nadie se contacta** sin que Sergio Urcullo apruebe el mensaje y el canal exactos. Lo envía él.
 - **En Meta no se crea ni se enciende nada** sin su OK explícito. Se crea en PAUSA, con cero gasto.
 - **Nunca** se usan para Onia las cuentas «NUVO 1usd» (`1350762290562517`) ni «Arthur Fuentes»
