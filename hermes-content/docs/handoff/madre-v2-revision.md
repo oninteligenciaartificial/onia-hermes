@@ -42,3 +42,25 @@ Etapa vigente: **Etapa 1 — 5 clínicas dentales pagando, Bs 3.750/mes** (`ONIA
 ## Próxima ronda
 
 Re-leer las 5 sesiones; cerrar o arrastrar cada hallazgo con su estado (✅ arreglado / ⏳ / ❌ ignorado).
+
+## Cierre — 3-oct (alcance congelado por Sergio Urcullo el 2-oct)
+
+Ronda automática cancelada a pedido de Sergio Urcullo. Los 4 workflows de fondo murieron el 2-oct 10:28 (La Paz)
+al reiniciarse la sesión: se usó lo que habían dejado en su journal y no se relanzaron.
+
+### Resultados por sesión
+
+| Sesión | Hecho (verificado) | A medias | Hallazgos abiertos | Qué cambiaría |
+|---|---|---|---|---|
+| Plataforma | #99 publicado (`release-af2ded5c`); web v1 + legales 1.3; platform#102 (demo solo superadmin) | cuenta demo (platform#103 abierto); mirar el detector encontrando a alguien; barrer el catálogo | 🔴 CRITICAL #98: el botón del recordatorio se acepta desde el widget web → un anónimo cancela la cita de otro y ve su nombre. HIGH #98 ×3, HIGH #99 (caso B con falsos positivos). La web promete lo que el catálogo prohíbe (/chatbot «entiende fotos», /rubros tratamiento a medias, agente de WhatsApp como disponible, recordatorios por WhatsApp en Términos, factura) | Revisión independiente antes de mergear código que va a producción: hoy se mergea sola (#93 entró con 0 checks) |
+| Ventas | D1/D4 v3 con pantalla real y marca de la web; D4 congelado; sacó «la IA escribe cada mensaje» | subir a Meta (tarjeta + conector) | — | Chequear cada frase contra el catálogo ANTES de renderizar |
+| Marca | Video N03 re-editado; 18 carruseles; lote de 32 imágenes cotizado; molde de edición = Erik Taveras y Santiago Muñoz | video sin OK; carruseles sin agendar | 3 commits fuera de main | Fijar el molde de edición antes de editar (salieron 3 versiones del mismo video) |
+| Lucía | Investigación sin gastar; plan v2 con la decisión de la Etapa 1; L02/L05/L08 editados con editor-videos | plan sin OK; prueba de ropa; capturas de IG (madre v1) | HIGH: #82 entró a main por el fast-forward del autosync, sin revisión, con «Hoy soy odontóloga» (IA como profesional de salud) y el chiste «¿Lucía es real? No sé» + «tu agenda llena» | Nada entra a main sin pasar por un PR revisado |
+| Hermes-Jarvis | #91 mergeado; #96 (main en verde) y #94 (punto 6) revisados | #96 y #94 esperan el merge de Sergio Urcullo | #94 antes de cargar la llave: respuesta no atada al pedido, tope medido después de bajar, guarda del autosync por nombre de rama (3 MEDIUM) | — (muy buen rigor: TDD + mutación) |
+| Madre v2 | Ronda 1; #96 revisado; #94 con revisión fuerte; triage de 5f0c8aec + PR #101 + main local = GitHub + brutos fuera de git (`C:/Users/PC/Videos/ONIA-brutos/2026-09-21/`); conteo y 5 más viejos de 14 competidores | capturas de anuncios (sin OK de gasto); AgendaPro, Doctoralia, Eholo; comparar el próximo video de Marca con `FORMULAS-REFERENTES.md` | — | Revisión proporcional al riesgo: usé 12-20 agentes con 3 refutadores para todo (~100 M tokens) |
+
+### Transversal
+- El fast-forward del autosync mete `claude/*` a main sin ninguna revisión (#82 y #76 entraron así).
+- La regla «se publica sin preguntar» dice «revisión», pero no define quién revisa.
+- `main` sigue en rojo hasta que se mergee #96.
+- El merge de un PR de otra sesión lo frena el control de permisos de las dos madres: queda para Sergio Urcullo.
