@@ -1,0 +1,131 @@
+{
+  "scripts": [
+    {
+      "id": "G04",
+      "title": "Valida una consulta con n8n y responde según el resultado",
+      "spoken": "Hoy armamos un endpoint de prueba que recibe una consulta y rechaza el campo vacío. Paso uno: en n8n agrega un Webhook con método POST, ruta consulta, autenticación None y respuesta Using Respond to Webhook Node. Paso dos: conecta un IF y pega la expresión que ves en pantalla; comprueba que el resultado sea booleano verdadero. Paso tres: conecta cada salida a su propio Respond to Webhook. En true devuelve JSON con ok true y código 200; en false, error campo_requerido y código 400. Paso cuatro: en el modo local de prueba envía una consulta con texto y luego otra sin consulta. Verás las dos respuestas distintas. Esto es una demo local, no una API publicada ni probada. Guárdalo para replicar el flujo.",
+      "editor_asset": {
+        "scope": "n8n local, sin credenciales ni servicios externos; configurar en pantalla, no importar ni instalar.",
+        "nodes": [
+          {
+            "name": "Webhook",
+            "fields": {
+              "HTTP Method": "POST",
+              "Path": "consulta",
+              "Authentication": "None",
+              "Respond": "Using 'Respond to Webhook' Node"
+            }
+          },
+          {
+            "name": "IF",
+            "condition_type": "Boolean",
+            "value_1_expression": "={{ typeof $json.body?.consulta === 'string' && $json.body.consulta.trim().length > 0 }}",
+            "operation": "is true"
+          },
+          {
+            "name": "Respond OK",
+            "connect_from": "IF: true",
+            "Respond With": "JSON",
+            "Response Body": {
+              "ok": true,
+              "mensaje": "Consulta recibida."
+            },
+            "Options > Response Code": 200
+          },
+          {
+            "name": "Respond Error",
+            "connect_from": "IF: false",
+            "Respond With": "JSON",
+            "Response Body": {
+              "ok": false,
+              "error": "campo_requerido",
+              "mensaje": "Envía consulta como texto no vacío."
+            },
+            "Options > Response Code": 400
+          }
+        ],
+        "request_examples": [
+          {
+            "method": "POST",
+            "content_type": "application/json",
+            "body": {
+              "consulta": "Quiero saber el estado de mi pedido"
+            }
+          },
+          {
+            "method": "POST",
+            "content_type": "application/json",
+            "body": {
+              "mensaje": "Quiero saber el estado de mi pedido"
+            }
+          }
+        ],
+        "local_test": "Usar la Test URL que muestra el nodo Webhook y activar Listen for Test Event; la URL la genera la instancia. El flujo no se publicó ni ejecutó como parte de esta tarea."
+      },
+      "expected": [
+        {
+          "request": {
+            "consulta": "Quiero saber el estado de mi pedido"
+          },
+          "http_status": 200,
+          "response": {
+            "ok": true,
+            "mensaje": "Consulta recibida."
+          }
+        },
+        {
+          "request": {
+            "mensaje": "Quiero saber el estado de mi pedido"
+          },
+          "http_status": 400,
+          "response": {
+            "ok": false,
+            "error": "campo_requerido",
+            "mensaje": "Envía consulta como texto no vacío."
+          }
+        }
+      ],
+      "source_urls": [
+        "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.webhook/",
+        "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.if/",
+        "https://github.com/n8n-io/n8n/blob/master/packages/nodes-base/nodes/RespondToWebhook/RespondToWebhook.node.ts"
+      ]
+    },
+    {
+      "id": "G13",
+      "title": "Calcula el ahorro neto mensual de una automatización",
+      "spoken": "Una automatización puede ahorrar tiempo y también exigir mantenimiento. Hagamos una estimación transparente en una hoja, con cifras ficticias. Paso uno: crea una tabla con minutos por tarea, tareas al día, días laborables, porcentaje ahorrado y horas mensuales de implementación y mantenimiento. Paso dos: pega cinco minutos, veinte tareas diarias, veinte días, cincuenta por ciento y cinco horas. Paso tres: en B8 calcula las horas mensuales actuales; en B9 descuenta el tiempo operativo de la herramienta a la parte que estimamos ahorrar. Paso cuatro: revisa el resultado: treinta y tres coma treinta y tres horas actuales y once coma sesenta y siete netas estimadas, unas once horas y cuarenta minutos. Cambia los supuestos por datos medidos antes de decidir. Guarda esta plantilla para tu próximo cálculo.",
+      "editor_asset": {
+        "scope": "Google Sheets; ejemplo numérico ficticio, sin integrar servicios ni afirmar ahorro real.",
+        "paste_table": [
+          ["Variable", "Valor"],
+          ["Minutos por tarea", 5],
+          ["Tareas por día", 20],
+          ["Días laborables al mes", 20],
+          ["Porción ahorrada", "50%"],
+          ["Implementación y mantenimiento (h/mes)", 5],
+          ["", ""],
+          ["Horas mensuales actuales", "=B2*B3*B4/60"],
+          ["Horas netas estimadas ahorradas", "=B8*B5-B6"]
+        ],
+        "cell_map": {
+          "B2": 5,
+          "B3": 20,
+          "B4": 20,
+          "B5": "50%",
+          "B6": 5,
+          "B8": "=B2*B3*B4/60",
+          "B9": "=B8*B5-B6"
+        },
+        "display_hint": "Mostrar B8 y B9 con dos decimales y rotular resultados en horas; B5 debe ser porcentaje.",
+        "assumption_note": "Valores ficticios para demostrar el cálculo. Sustituirlos por mediciones propias; la estimación no garantiza ahorro."
+      },
+      "expected": {
+        "B8_horas_actuales": 33.33,
+        "B9_horas_netas_estimadas": 11.67,
+        "B9_equivalente_aproximado": "11 h 40 min"
+      },
+      "source_urls": []
+    }
+  ]
+}
