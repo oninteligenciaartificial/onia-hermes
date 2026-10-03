@@ -57,7 +57,7 @@ Desarrollar y publicar Onia Platform 1.0 hasta cobrar al primer cliente. Qué sa
 
 | Qué | Dónde | Estado |
 |---|---|---|
-| **Carril plataforma: P1, P2, P3** | worktree `/home/user/wt-plat-dev`, rama `dev/plataforma` (11 commits rebasados sobre `master` `13b67dda`), **SIN push** | P1 «¿Cuándo fue?» y lista «A medias»; P2 presupuesto por fases con link público; P3 «Deuda», «Mañana sin confirmar», «Reprogramada». Revisión adversarial: 10 hallazgos confirmados y corregidos. tsc 0, vitest 9535 ✅. **Espera el OK de Sergio Urcullo a P2** (diseño nuevo; capturas enviadas el 3-oct). Con el OK: push a `claude/sharp-shannon-sqrmig`, PR, CI, merge, publicar, mirar. **Si la sesión muere antes del push, se pierde el worktree**: los commits viven solo ahí |
+| **Carril plataforma: P1, P2, P3** | rama `claude/sharp-shannon-sqrmig` de onia-platform, PR #108 en **borrador**, head `92adab94` (12 commits sobre `master` `13b67dda`) | P1 «¿Cuándo fue?» y lista «A medias»; P2 presupuesto por fases con link público; P3 «Deuda», «Mañana sin confirmar», «Reprogramada». Revisión adversarial: 10 hallazgos corregidos. tsc 0, vitest 9535 ✅. **CI verde (3-oct): Secret scan + Lint/Typecheck/Tests/Build; mergeable limpio.** Ya está pusheado: si la sesión muere no se pierde. **Espera el OK de Sergio Urcullo a P2** (diseño nuevo; capturas enviadas el 3-oct). Con el OK: sacar de borrador, merge, publicar, mirar |
 | Prueba del chip (WhatsApp del cliente) | org «ZZ QA Clínica Chip» | Sergio Urcullo eligió hacerla el 3-oct. Le faltan 2 pasos: confirmar el correo de `+qachip` y Otorgar `addon.whatsapp` en `/admin/organizations/cmuqzov3y000001mzmrcq0i2t/capacidades`. Después conecta en `/settings/chatbot` |
 | Catálogo: «recupera pacientes con tratamiento a medias» | `ONIA_CATALOGO_DE_VENTA.md` §8 | Se barre cuando se VEA en pantalla, en la demo, a «Vuelve a citar» encontrando a Natalia y Marcelo (corrida de agentes 07:00 La Paz). Sergio Urcullo: Otorgar `module.agents` sin fecha a la demo (vence 16-oct). Avisar a la madre v1: destraba el anuncio D4 |
 | SIAT: certificación en el piloto | `/opt/onia-siat/runner-20260929/` | 96 % (IX 160/160, VI 380/560). Falta VI motivos 5-7: necesitan el **CAFC**. Estudio y plan completos en `hermes-content/docs/ONIA_FACTURACION_ESTADO_REAL.md` (decisión: Onia factura a mano en el Portal Web hasta autorizar el 9473; clientes con Onia como proveedor). Riesgo: RND 102600000034 (anexo Ley 1733) puede obligar a rehacer pruebas antes del 16-nov |
@@ -127,6 +127,10 @@ Desarrollar y publicar Onia Platform 1.0 hasta cobrar al primer cliente. Qué sa
   con `resumeFromRunId` (lo hecho vuelve de caché). Si el script no es «legible» para el tool, copiarlo al scratchpad.
 - **`pgrep -f` / `pkill -f` con el patrón en la propia línea de comando** se encuentran a sí mismos (falso «en curso»,
   y dos veces mató la propia shell): usar PID o puerto.
+- **Claves de prueba literales en tests (3-oct, PR #108):** «Secret scan» falló por 3 `ENCRYPTION_KEY` de 64 hex en
+  tests del presupuesto. Borrarlas en un commit nuevo NO alcanza: gitleaks del CI corre también en modo git sobre cada
+  commit del PR. Se reescribió la rama (`filter-branch` → `"a".repeat(64)`) y se verificó con gitleaks v8.30.1 local (mismo
+  SHA que el CI) en los dos modos antes del push. Regla en la skill `onia-seguridad`.
 - **«El 1-oct es obligatorio para los grupos 9-12»:** dejó de ser cierto el 30-sep (RND 102600000038). La web lo
   afirmó tres días; corregido el 3-oct con un gate que lo impide volver.
 
@@ -174,9 +178,9 @@ tabla sin acción). Nada se construye sin el filtro de Etapa 1. Orden por impact
 
 ## 7. Próximos pasos (en orden)
 
-1. Con el OK de Sergio Urcullo a P2: push de `dev/plataforma` (wt-plat-dev) a `claude/sharp-shannon-sqrmig`, PR, CI,
-   merge, `publicar.sh`, y MIRAR en prod la lista «A medias», la ficha con «Deuda», «Mañana sin confirmar» y el
-   presupuesto. Sin OK a P2: sacar su commit (`8131ae99` y el fix `89892a3f`) y publicar P1+P3.
+1. Con el OK de Sergio Urcullo a P2: PR #108 (onia-platform) fuera de borrador → merge → `publicar.sh` → MIRAR en prod la
+   lista «A medias», la ficha con «Deuda», «Mañana sin confirmar» y el presupuesto. Sin OK a P2: sacar sus commits
+   (`01db1edf` feat y `c3a74c54` fix, SHAs nuevos tras reescribir la rama) y publicar P1+P3.
 2. Demo: después de la corrida de las 07:00, mirar Pendientes de la demo (captura de Sergio Urcullo o de la madre) →
    barrer la línea del catálogo §8 → avisar a la madre v1 (D4).
 3. Chip: con «conectado», verificar plantilla `recordatorio_cita` aprobada, cita de prueba, tocar los 3 botones, MIRAR el
