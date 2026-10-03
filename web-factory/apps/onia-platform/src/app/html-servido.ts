@@ -1,4 +1,3 @@
-/// <reference types="vite/client" />
 import { createElement, isValidElement, type ReactElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 
