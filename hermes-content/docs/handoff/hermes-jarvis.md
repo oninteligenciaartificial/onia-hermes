@@ -1,5 +1,38 @@
 # Handoff — carril `hermes-jarvis` (Hermes, el Telegram y el calendario de Sergio Urcullo)
 
+> **CIERRE 2-oct ~14:00 UTC — alcance congelado por Sergio Urcullo** («no se añaden más tareas…
+> terminemos, cortamos, damos un vistazo»). Sesión `session_0132vedovRq1JVbeD6aVQwNT`. Se espera la
+> revisión de Sergio Urcullo y la madre antes de seguir.
+> - **Hecho y en main:** #88 (`ae4a1fc5`) y #91 (`d7fa0ca9`).
+> - **Hecho, con CI verde y sin conflictos, esperando la revisión de la madre v2:**
+>   - **#94** (rama `claude/vibrant-brown-8xya0a`, `11f871b0`): la vuelta de los pedidos sin token de
+>     Actions, los 5 arreglos antes de la llave y la guarda en `git-autosync.js` (el Stop de TODAS las
+>     sesiones: revisarla antes del merge);
+>   - **#96** (rama `claude/vibrant-brown-8xya0a-llave`, `77007ab6`): main vuelve a verde. El #94 ya
+>     trae el mismo commit.
+> - **Nada publicado ni verificado en producción.** `aplicar` NO se corrió: espera el «sí» de Sergio
+>   Urcullo. La rutina no está creada.
+> - **Evidencia:** CI del #94 job `110863308843` y del #96 job `110859479882`, los dos verdes. Cada
+>   prueba nueva se corrió contra el código anterior (roja) y contra el nuevo (verde).
+> - **Pendientes para después (no se hacen sin orden):**
+>   1. `GH_ACTIONS_TOKEN` sigue en el entorno «Onia»: con él, cualquier sesión despacha `aplicar`,
+>      `revertir` o el deploy. Revocarlo lo decide Sergio Urcullo.
+>   2. Medir en la prueba de punta a punta que la rutina pueda pushear `respuesta/*` y que el VPS
+>      llegue a GitHub (`--probar`).
+>   3. Un pedido de `plataforma` trabaja en el clon de `onia-platform`, con sus propios hooks: la guarda
+>      del autosync de este repo no lo cubre. Revisarlo antes del primer pedido de ese carril.
+>   4. `herramientas-desplegadas` adivina la fuente de `onia-X.sh` por el nombre del archivo: un
+>      `X.sh` cualquiera vuelve a dar un rojo falso. Conviene que lea la fuente del `poner`, no el nombre.
+>   5. En la nube, el PID 1 no recoge huérfanos: otras pruebas que miran «proceso vivo» con
+>      `kill(pid, 0)` pueden dar el mismo rojo falso que `tandas-v1`.
+>   6. `diagnostico` todavía no muestra el log del recolector de respuestas.
+> - **ANTES de cargar la llave de la rutina** (los 3 MEDIUM de la revisión de la madre v2, 3-oct; Sergio
+>   Urcullo aprobó mergear el #94 sin ellos):
+>   1. la respuesta no está atada al pedido: cualquiera que pueda pushear al repo puede dejar una
+>      `respuesta/<id>` de un pedido abierto;
+>   2. el tope de 16 KB se mide después de bajar el commit, no antes;
+>   3. la guarda del autosync depende del nombre de la rama (`pedido/*`, `respuesta/*`).
+
 > **ESTADO AL 1-oct ~21:30 UTC — leé esto primero.** Sesión `session_0154pQRYB6icZn9Z3SuJp35D`
 > (entorno «Onia»), rama `claude/kind-cannon-7hkc3c`, **PR #79** (borrador, sin conflictos con main).
 > Desde el 1-oct manda la **sesión madre** (local, PC de Sergio Urcullo): ella ordena por mensaje y las
@@ -34,8 +67,33 @@
 >   existe en un repo privado de cuenta personal, y el token de Actions despacha también
 >   `deploy-onia-center.yml`. Propuesta: la rutina **sin** token de Actions; la respuesta vuelve por un
 >   archivo en la rama del pedido, que un cron del VPS recoge. Espera la decisión de la madre.
+> - **2-oct ~13:00 UTC:** el **#88 está en main** (`ae4a1fc5`). El **#91** (los arreglos 1 a 5) pasó a
+>   tener base `main`: un commit, `0dfafa9`, con el CI verde. Lo revisa y lo mergea la madre, con la
+>   autorización de Sergio Urcullo. Sobre main + `0dfafa9` pasan 7 de las 9 suites. Las otras 2 están
+>   rojas **en main solo** y son de otro carril: `herramientas-desplegadas` (`onia-vps.sh`) y
+>   `guards-cableados` (`tandas-v1.test.mjs`).
+> - **2-oct, punto 6 — la madre decidió: la vuelta SIN ningún token de Actions.** Está hecho en la rama
+>   `claude/vibrant-brown-8xya0a`, reiniciada desde el #91 + main, con su PR propio:
+>   - recolector `scripts/loops/respuestas-pedidos.sh`: la rutina deja la respuesta como el mensaje de
+>     un commit sin archivos en `respuesta/<id>`, y el VPS lo baja sin archivos y lo entrega por la
+>     aduana. Cron cada 2 min, que instala `aplicar`; 1b exige `--probar`;
+>   - el trabajo del pedido va en `pedido/<id>`: el integrador solo enumera `claude/*`;
+>   - una guarda en `git-autosync.js`: el hook Stop de la rutina hacía fast-forward de main con el
+>     cambio sin revisar;
+>   - se borraron `hermes-respuesta.yml` y `responder.sh`, y el entorno «Pedidos de Hermes» queda **sin
+>     variables**.
+>
+>   Encima, los **5 arreglos de la madre antes de la llave** (2-oct ~13:40): un solo candado para la
+>   vista previa y el `--si`; la clave de la aduana con el código; mensajes propios sin `flock` o sin
+>   candado; `pedidos.env` escrito en un archivo nuevo y movido, y el viejo cerrado en 600 siempre;
+>   la sección 0 de `aplicar` exige el comando con candado y el recolector.
+>   Aparte, el **#96** arregla los dos rojos de main: el falso `onia-vps.sh` y `tandas-v1` sin cablear.
+>
+>   **Falta medir en el paso 5:** que la rutina pueda pushear `respuesta/*` (la doc dice que sí, con
+>   el prompt) y que el VPS llegue a GitHub con su llave (`--probar`, en 1b de `aplicar`).
 > - **Sigue:** §7, plan de las 23:50 UTC — **lo hace la madre** (Sergio Urcullo: *«dejalo escrito y la
->   madre lo hace»*): mergear #83 y #79, entorno + rutina + llave, una corrida de `aplicar` por el workflow.
+>   madre lo hace»*): mergear el #91 y el PR del punto 6, entorno (sin variables) + rutina + llave, y
+>   una corrida de `aplicar` por el workflow.
 
 Historia: rama original `claude/hermes-jarvis` («Hermes y Sergio management system», 29-sep, desde el
 teléfono); sucesoras `session_01U881mfXgTAUafw6GC9jExG` (30-sep, archivada), la de arriba y la del relevo.
@@ -258,7 +316,7 @@ aplicar,revertir}.sh` · `scripts/loops/onia-tg.sh` + `onia-tg-aduana.test.mjs` 
 > **1-oct, lo que le toca a él, en orden:**
 > 1. El OK para correr `aplicar` (hoy la madre, por SSH, con la autorización de él en ESA sesión).
 > 2. Que se mergee el PR #79 (él o la madre).
-> 3. Crear el entorno «Pedidos de Hermes» (solo `GH_ACTIONS_TOKEN`), la rutina y su llave en la web,
+> 3. Crear el entorno «Pedidos de Hermes» (**sin variables**, desde el 2-oct), la rutina y su llave en la web,
 >    y guardar la llave en GitHub: paso a paso en `TELEGRAM_COMMAND_CENTER.md` §4. **Nunca por chat.**
 > 4. La prueba desde su Telegram: «pedile a Claude: ¿cuántos cambios entraron hoy al sistema?» → le
 >    llega el texto con un código → se lo contesta a Hermes.
@@ -312,13 +370,14 @@ aplicar,revertir}.sh` · `scripts/loops/onia-tg.sh` + `onia-tg-aduana.test.mjs` 
 > *«dejalo escrito y la madre lo hace»*. Reemplaza al bloque de las 21:30 de abajo. Con la llave
 > guardada ANTES de correr `aplicar`, alcanza con UNA corrida por el workflow (enciende Jarvis y los
 > pedidos juntos).
-> 1. **Revisar y mergear.** ~~#83 y #79~~ ✔ en `main` el 2-oct. Falta el PR de las 4 correcciones de
->    la re-revisión (rama `claude/vibrant-brown-8xya0a`): con su CI verde, la madre revisa y Sergio
+> 1. **Revisar y mergear.** ~~#83, #79 y #88~~ ✔ en `main` el 2-oct. Faltan el #91 (arreglos 1 a 5) y
+>    el PR del punto 6 (la vuelta sin token): con su CI verde, la madre revisa y mergea, y Sergio
 >    Urcullo da el «sí» para `aplicar`.
 > 2. **Entorno propio para la rutina** (en la PC, con el login de Sergio Urcullo): en claude.ai/code,
 >    ícono de nube arriba del cuadro de mensaje → **Cloud** → **Add cloud environment**. Nombre
->    «Pedidos de Hermes», red **Trusted**, una sola variable `GH_ACTIONS_TOKEN=` con el mismo valor
->    que tiene el entorno «Onia» → **Create environment**. **Nunca «Onia»**: tiene la llave del VPS.
+>    «Pedidos de Hermes», red **Trusted**, **sin variables** → **Create environment**. **Nunca
+>    «Onia»**: tiene la llave del VPS y `GH_ACTIONS_TOKEN`. (Hasta el 2-oct decía «una variable
+>    `GH_ACTIONS_TOKEN`»: ya no hace falta; la respuesta vuelve sin token, ver arriba.)
 > 3. **La rutina:** claude.ai/code/routines → **New routine**. Nombre «Pedidos de Sergio Urcullo desde
 >    Hermes»; prompt: el bloque de §5 de `TELEGRAM_COMMAND_CENTER.md`, completo; repositorios
 >    onia-hermes y onia-platform; entorno «Pedidos de Hermes»; trigger **API**; sacar todos los
@@ -347,12 +406,10 @@ aplicar,revertir}.sh` · `scripts/loops/onia-tg.sh` + `onia-tg-aduana.test.mjs` 
 > TRABAJO sigue en la rutina: es Claude Code en la nube, dentro del plan, sin llave del VPS. n8n no lo
 > reemplaza: solo es un caño, y para trabajar necesitaría una IA aparte, pagada por uso y corriendo
 > adentro de producción. Además, el Command Center viejo de n8n tuvo 0 ejecuciones en 72 h. Donde n8n
-> SÍ puede mejorar el diseño es en la **vuelta de la respuesta**: hoy la rutina necesita
-> `GH_ACTIONS_TOKEN`, que también puede despachar `aplicar`/`revertir` (§9 del doc). Con un webhook de
-> n8n de ruta secreta, la rutina queda sin ningún token. **Falta medir en solo lectura:** ¿el
-> contenedor de n8n puede entregarle el mensaje a la aduana del host (un volumen compartido, o un nodo
-> SSH con credencial al host)? Si se puede, la sesión del carril cambia la vuelta a n8n. Si no, queda la
-> de GitHub, ya probada. Esto no frena los pasos 1 a 8: el entorno se puede editar después.
+> SÍ podía mejorar el diseño era en la **vuelta de la respuesta**, que necesitaba `GH_ACTIONS_TOKEN`.
+> **Cerrado el 2-oct sin n8n:** la madre eligió la vuelta por GitHub sin ningún token (la sesión pushea
+> `respuesta/<id>`, el cron del VPS la recoge; ver ESTADO arriba). No suma un caño ni una credencial
+> nueva dentro de producción.
 
 > **1-oct ~21:30 UTC — plan anterior (reemplazado por el de arriba):**
 > 1. **La madre corre `aplicar`** por SSH, con el mismo armado del workflow y el OK de Sergio Urcullo,

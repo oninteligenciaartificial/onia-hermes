@@ -172,7 +172,7 @@
     "test:jarvis-resumen": "node --test scripts/loops/jarvis-resumen.test.mjs",
     "test:agenda": "node --test scripts/loops/agenda.test.mjs",
     "test:tandas-v1": "node --test scripts/loops/tandas-v1.test.mjs",
-    "test:pedidos": "node --test scripts/loops/pedido-claude.test.mjs scripts/loops/pedido-respuesta.test.mjs",
+    "test:pedidos": "node --test scripts/loops/pedido-claude.test.mjs scripts/loops/pedido-respuesta.test.mjs scripts/loops/pedido-rama.test.mjs",
     "test:jarvis-aplicar": "node --test scripts/loops/hermes-jarvis-aplicar.test.mjs",
     "test:herramientas-desplegadas": "node --test scripts/herramientas-desplegadas.test.mjs",
     "test:ramas-varadas": "node scripts/ramas_varadas.mjs --self-check",

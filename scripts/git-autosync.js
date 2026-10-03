@@ -103,7 +103,15 @@ function main() {
   // 5. Mantener main al día (sincronización entre dispositivos): si la rama
   // actual no es main y origin/main es ancestro (avance lineal, sin conflictos),
   // hacer fast-forward de main. Si no es FF, se omite (merge manual).
-  if (branch.out !== 'main') {
+  //
+  // Excepto una rama de PEDIDO (2026-10-02). Los pedidos que Sergio Urcullo le hace a
+  // Claude desde Hermes corren en una rutina de la nube que carga ESTE hook; su trabajo
+  // va en `pedido/<id>` como PR en borrador, y lo aprueba él. Sin esta guarda, el Stop
+  // de esa sesión hacía fast-forward de main con el cambio sin revisar
+  // (hermes-content/docs/TELEGRAM_COMMAND_CENTER.md, scripts/loops/pedido-rama.test.mjs).
+  const ramaDePedido = /^(pedido|respuesta)\//.test(branch.out);
+  if (ramaDePedido) console.log('[autosync] rama de pedido: se pushea, main NO se toca');
+  if (branch.out !== 'main' && !ramaDePedido) {
     tryGit('fetch origin main');
     const ff = tryGit(`merge-base --is-ancestor origin/main ${branch.out}`);
     if (!ff.ok) {

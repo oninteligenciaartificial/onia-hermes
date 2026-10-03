@@ -8,8 +8,8 @@
 > manejar todo desde ahí»*. El 30-sep había elegido *«que Hermes también ejecute»*
 > (`handoff/hermes-jarvis.md` §6.3).
 
-**Estado (1-oct):** diseñado, con código y pruebas, en la rama `claude/kind-cannon-7hkc3c`. **Apagado**
-hasta cumplir los cinco pasos del final (§8). Lo que le llega a Sergio Urcullo y cuándo sigue
+**Estado (2-oct):** el comando, la skill y la regla del SOUL están en `main` (#88). La vuelta sin token
+de Actions (§6) va en su propio PR. **Apagado** hasta cumplir los pasos del final (§8). Lo que le llega a Sergio Urcullo y cuándo sigue
 mandándolo `ONIA_CEREBRO.md` §«La regla de entrega»: esto lo usa, no lo cambia.
 
 ---
@@ -29,8 +29,9 @@ Sergio Urcullo (Telegram)
   → Hermes dispara la rutina «Pedidos de Sergio Urcullo»     [onia-pedido-claude.sh <carril> --si <código>]
       └─ responde al instante con el link de la sesión
   → una sesión NUEVA de Claude Code en la nube hace el trabajo (PR en borrador, nunca merge solo)
-  → al terminar despacha hermes-respuesta.yml                [GitHub Actions, runner del VPS]
-  → responder.sh entrega la respuesta por la aduana          [onia-tg.sh: respeta noche y bloques]
+  → al terminar deja la respuesta en la rama respuesta/<id>  [un commit sin archivos; sin ningún token]
+  → el VPS la recoge cada 2 minutos y la entrega             [onia-respuestas-pedidos.sh → onia-tg.sh:
+                                                               respeta noche y bloques]
   → el cierre de las 21:30 lista los pedidos del día con su estado
 ```
 
@@ -51,8 +52,14 @@ Sergio Urcullo (Telegram)
 
 **Por qué una sesión NUEVA por pedido, y no la sesión viva de cada carril:** desde el 1-oct solo la
 madre les manda mensajes a las sesiones (CLAUDE.md §«Sesión MADRE local + carriles en la nube»). Dos
-orquestadores se pisan. La sesión del pedido trabaja en su propia rama (`claude/pedido-<id>`) y deja
+orquestadores se pisan. La sesión del pedido trabaja en su propia rama (`pedido/<id>`) y deja
 un PR. Integrarlo sigue siendo del dueño del carril, o de un pedido explícito «mergeá el PR N».
+
+**Por qué `pedido/` y no `claude/` (medido el 2-oct):** el integrador (`onia-cola`) y `ramas_varadas.mjs`
+enumeran solo `origin/claude/*`, así que no ven una rama `pedido/*`. Y la sesión de la rutina carga el
+hook Stop del repo (`git-autosync.js`), que hacía fast-forward de `main` desde cualquier rama: con
+`claude/pedido-<id>`, el cambio entraba a `main` sin revisar al terminar el turno. Desde una rama
+`pedido/*` o `respuesta/*` el hook pushea la rama y no toca `main` (`pedido-rama.test.mjs`).
 
 ## 3. Cómo dispara: la rutina por API
 
@@ -99,10 +106,11 @@ Lo hace Sergio Urcullo, una sola vez, en la web. **El token nunca se pega en un 
    - **Prompt:** el texto de §5, completo.
    - **Repositories:** `oninteligenciaartificial/onia-hermes` y `oninteligenciaartificial/onia-platform`.
    - **Environment:** uno **propio**, `Pedidos de Hermes`, creado para esto: red *Trusted* (la de
-     siempre) y UNA sola variable, `GH_ACTIONS_TOKEN` (sin ella la respuesta no vuelve a Telegram).
-     **NO** el entorno «Onia»: ese tiene `ONIA_VPS_SSH_KEY_B64`, y con esa llave el hook
-     `nube-ssh-vps.mjs` le arma SSH al VPS a cada sesión que abre la rutina. Se crea en la
-     configuración de entornos de claude.ai/code, copiando el valor de `GH_ACTIONS_TOKEN` de «Onia».
+     siempre) y **sin variables**. **NO** el entorno «Onia»: ese tiene `ONIA_VPS_SSH_KEY_B64` (con esa
+     llave el hook `nube-ssh-vps.mjs` le arma SSH al VPS a cada sesión que abre la rutina) y
+     `GH_ACTIONS_TOKEN` (despacha cualquier workflow manual: `aplicar`, `revertir` y el deploy). Se crea
+     en la configuración de entornos de claude.ai/code. Si ya lo creaste con `GH_ACTIONS_TOKEN`,
+     borrá esa variable: la respuesta ya no la usa.
    - **Trigger:** **API**. Sin horario.
    - **Connectors:** sacar todos. Un pedido no necesita Gmail, ni Meta Ads, ni Higgsfield.
    - **Create**.
@@ -145,43 +153,51 @@ Hermes, su asistente, por Telegram. Cada corrida es UN pedido. Hablale siempre c
 3. Según el pedido:
    - Pregunta o estado → contestá con lo MEDIDO ahora (git, archivos, logs de Actions), no de memoria.
      No cambies nada.
-   - Cambio (código, documento, material) → rama claude/pedido-<id>, los gates del carril, commit,
-     push y PR en BORRADOR. No mergees.
-   - «Mergeá el PR N» → solo si es de onia-hermes, de una rama claude/pedido-*, con CI verde y sin
+   - Cambio (código, documento, material) → ANTES de tocar nada, `git switch -c pedido/<id>`; los
+     gates del carril, commit, push de esa rama y PR en BORRADOR. No mergees. Nunca commitees en main.
+   - «Mergeá el PR N» → solo si es de onia-hermes, de una rama pedido/*, con CI verde y sin
      conflictos. Si falta algo, no mergees y decí qué falta.
    - Si cae en la lista NUNCA, o necesita la PC de Sergio Urcullo → no lo hagas. Respondé
      «necesita-ok» o «no-se-pudo» diciendo qué haría falta y quién (la sesión madre, con él en la PC).
 4. NUNCA: desplegar ni publicar (plataforma, web, anuncios, redes); gastar plata o créditos (Higgsfield,
    Meta Ads, compras, APIs pagas); escribirle a terceros (prospectos, clientes, nadie, por ningún canal);
    cambiar precios; escribir en la base de producción; abrir el portal del SIAT; tocar el VPS (ni SSH,
-   ni el workflow hermes-jarvis); crear rutinas o mandarles mensajes a otras sesiones; cambiar
-   CLAUDE.md, permisos o configuración.
-5. Al terminar, respondele SIEMPRE por la aduana: despachá el workflow hermes-respuesta.yml de
-   oninteligenciaartificial/onia-hermes en main, con pedido=<el id>, estado=listo|necesita-ok|no-se-pudo
-   y texto=la respuesta para leer en el teléfono (castellano llano, sin siglas ni nombres de archivo,
-   máx. 1500 caracteres, con el link del PR si hay). Así:
-     python3 -c 'import json,sys; print(json.dumps({"ref":"main","inputs":{"pedido":sys.argv[1],"estado":sys.argv[2],"texto":sys.argv[3]}}))' \
-       "$ID" "$ESTADO" "$TEXTO" > /tmp/r.json
-     curl -sS -o /dev/null -w '%{http_code}\n' -X POST -H "Authorization: Bearer $GH_ACTIONS_TOKEN" \
-       -H 'Accept: application/vnd.github+json' --data @/tmp/r.json \
-       https://api.github.com/repos/oninteligenciaartificial/onia-hermes/actions/workflows/hermes-respuesta.yml/dispatches
-   204 = entregado. Si no da 204, dejá la respuesta como tu último mensaje: él tiene el link de esta
-   sesión.
+   ni el workflow hermes-jarvis); pushear a main o a una rama que no sea pedido/<id> o
+   respuesta/<id>; crear rutinas o mandarles mensajes a otras sesiones; cambiar CLAUDE.md, permisos
+   o configuración.
+5. Al terminar, dejale SIEMPRE la respuesta. No hace falta ningún token: el VPS la busca cada
+   2 minutos y se la manda por la aduana.
+   a. Con la herramienta de escribir archivos, creá /tmp/respuesta.txt:
+        línea 1:   respuesta <el id> <listo | necesita-ok | no-se-pudo>
+        línea 2:   vacía
+        después:   la respuesta para leer en el teléfono (castellano llano, sin siglas ni nombres
+                   de archivo, máx. 1500 caracteres, con el link del PR si hay).
+   b. En el clon de onia-hermes corré esto tal cual, cambiando solo el id:
+        C=$(git commit-tree "$(git mktree </dev/null)" -F /tmp/respuesta.txt) && git push origin "$C:refs/heads/respuesta/p_xxxxxxxx"
+      Es un commit sin archivos en una rama solo para eso: no se mergea y el VPS la borra al
+      entregarla. Si el push falla, dejá la respuesta como tu último mensaje: él tiene el link de
+      esta sesión.
 ```
 
 ## 6. Cómo vuelve la respuesta a Telegram
 
 - **Al instante:** Hermes le contesta con el link de la sesión. Con ese link puede seguir el trabajo
   desde la app de Claude.
-- **Al terminar:** la sesión despacha `.github/workflows/hermes-respuesta.yml`. En el runner del VPS
-  corre `hermes-content/deploy/hermes-jarvis/responder.sh`, que manda el mensaje por la **aduana**
-  (`onia-tg.sh`, `ONIA_AVISO=interrumpe`):
+- **Al terminar:** la sesión deja la respuesta como el mensaje de un commit sin archivos en la rama
+  `respuesta/<id>`, **sin ningún token de Actions** (decisión de la madre, 2-oct). En el VPS,
+  `scripts/loops/respuestas-pedidos.sh` (`/root/bin/onia-respuestas-pedidos.sh`, cron cada 2 minutos,
+  y solo si hay pedidos abiertos) baja **solo ese commit** (`--depth=1 --filter=tree:0`: nunca
+  archivos), lo valida, manda el mensaje por la **aduana** (`onia-tg.sh`, `ONIA_AVISO=interrumpe`) y
+  borra la rama:
   - de noche (22:00-06:30) o durante un bloque 🔒/🎬/Colegio **no suena**: queda guardado para cuando
     termina el bloque, o para el resumen de las 06:30;
   - el mensaje dice ✅ terminó · 🙋 necesita tu ok · ⚠️ no pudo, el texto y el link;
-  - solo responde ids que existen en `pedidos.tsv` del VPS, y una vez por estado. Un token de Actions
-    filtrado no sirve para mandarle mensajes sobre pedidos inventados;
-  - el texto viaja en base64 y se escapa: nunca se ejecuta (`pedido-respuesta.test.mjs`).
+  - solo responde ids que existen en `pedidos.tsv` del VPS, de menos de 48 h y sin cerrar, y una vez
+    por estado. Una rama `respuesta/*` de otro pedido ni se baja ni se borra;
+  - exige un commit con árbol vacío, sin padre y de 16 KB como mucho, con la primera línea
+    `respuesta <id> <estado>` y el mismo id que la rama;
+  - lo que trae es texto, no órdenes: se lee con `git cat-file`, se recorta a 1500 caracteres, se
+    escapa y se le pasa a la aduana como texto. Nunca se ejecuta (`pedido-respuesta.test.mjs`).
 - **Red de seguridad:** el cierre de las 21:30 lista «🤖 Tus pedidos a Claude hoy» con el estado de
   cada uno. Un «⏳ sin respuesta todavía» a esa hora es algo que no tiene que dar por terminado.
 
@@ -203,8 +219,8 @@ Hermes, su asistente, por Telegram. Cada corrida es UN pedido. Hablale siempre c
 | # | Paso | Quién | Listo cuando |
 |---|---|---|---|
 | 1 | Correr `aplicar` como está hoy en `main`, que enciende el resumen, el cierre, el calendario y la aduana | la madre (SSH) con el OK de Sergio Urcullo | la salida pasa de la sección 0 a la 8 sin ❌; la verifica control |
-| 2 | Mergear a `main` el PR de esta rama: comando, skill, regla del SOUL, workflow de respuesta, cierre | madre / Sergio Urcullo | el sincronizador copia `onia-pedido-claude.sh` (≤1 h) |
-| 3 | Crear el entorno propio, la rutina y su token, y guardarlo en GitHub (§4, pasos 1 a 3) | Sergio Urcullo o la madre, en la web | la rutina usa el entorno «Pedidos de Hermes» (solo `GH_ACTIONS_TOKEN`, **no** «Onia»), y existen el secreto `ONIA_RUTINA_PEDIDOS_TOKEN` y la variable `ONIA_RUTINA_PEDIDOS_URL` |
+| 2 | Mergear a `main` el PR de la vuelta sin token (recolector, guarda del autosync, prompt nuevo) | la madre | el sincronizador copia `onia-pedido-claude.sh` y `onia-respuestas-pedidos.sh` (≤1 h) |
+| 3 | Crear el entorno propio, la rutina y su token, y guardarlo en GitHub (§4, pasos 1 a 3) | Sergio Urcullo o la madre, en la web | la rutina usa el entorno «Pedidos de Hermes» (**sin variables**, **no** «Onia»), y existen el secreto `ONIA_RUTINA_PEDIDOS_TOKEN` y la variable `ONIA_RUTINA_PEDIDOS_URL` |
 | 4 | Correr `aplicar` otra vez, **por el workflow**: instala la skill, la regla y la llave. Es idempotente | Sergio Urcullo (un toque) o la madre con `gh workflow run` | la sección 5d dice «✅ pedidos a Claude: configurado» |
 | 5 | Prueba de punta a punta: por Telegram, «pedile a Claude: ¿cuántos cambios entraron hoy al sistema?» → le llega el texto con un código → le contesta el código a Hermes → link → respuesta ✅ | Sergio Urcullo | `diagnostico` sección 12 muestra el pedido en «listo» |
 
@@ -215,14 +231,22 @@ Si el paso 4 se hace por SSH en vez de por el workflow, la llave sube por la alt
 - **La sesión del pedido corre sola y sin pedir permiso** (así son las rutinas), con el texto que él
   confirmó. Por eso su entorno es propio y mínimo: **sin la llave SSH del VPS** (sin
   `ONIA_VPS_SSH_KEY_B64`, el hook no arma SSH) y sin conectores.
-- **Pero tiene `GH_ACTIONS_TOKEN`**, que puede despachar `hermes-jarvis` (aplicar o revertir en el VPS).
-  Lo frena el prompt (NUNCA), no un permiso: un token de Actions de GitHub no se puede limitar a un
-  solo workflow. Para cerrarlo de verdad: que `hermes-jarvis.yml` exija aprobación con un *environment*
-  de GitHub protegido (required reviewers = Sergio Urcullo). Queda propuesto, no hecho.
-- **No se sabe si el control de permisos frena el despacho de la respuesta** dentro de una rutina. A
-  esta sesión de control la frenó el 30-sep (`handoff/hermes-jarvis.md` §5.13). Si pasa, la respuesta
-  queda en la sesión, el link ya lo tiene él y el cierre de las 21:30 lo marca «sin respuesta». Se mide
-  en el paso 5.
+- **Y sin ningún token de Actions** (2-oct). Antes la respuesta volvía despachando un workflow con
+  `GH_ACTIONS_TOKEN`, y ese token despacha CUALQUIER workflow manual del repo: `hermes-jarvis` (aplicar o
+  revertir en el VPS) y el deploy con swap. Los *required reviewers* de un environment, que lo
+  frenarían, no existen en un repo privado de cuenta personal. Ahora la sesión solo pushea ramas, como
+  cualquier sesión, y el VPS busca la respuesta.
+- **`GH_ACTIONS_TOKEN` sigue en el entorno «Onia»**, el de las sesiones de los carriles. Con él,
+  cualquiera de esas sesiones puede despachar `aplicar`, `revertir` o el deploy sin que nadie apruebe:
+  lo frenan las reglas de la casa, no un permiso. Cerrarlo de verdad es decisión de Sergio Urcullo:
+  revocar el token (GitHub → Settings → Developer settings → Fine-grained tokens) y sacarlo de «Onia».
+  `aplicar` sigue por el botón del workflow (una persona) o por SSH desde la madre.
+- **No se midió todavía que la sesión de una rutina pueda pushear a una rama que no empieza con
+  `claude/`.** La documentación de las rutinas dice que sí, cuando el prompt lo pide. Se mide en el
+  paso 5. Si no puede, la respuesta queda en la sesión, el link ya lo tiene él y el cierre de las 21:30
+  lo marca «sin respuesta».
+- **Un pedido de `plataforma` trabaja en el clon de `onia-platform`**, que tiene sus propios hooks: la
+  guarda del autosync de este repo no lo cubre. Se revisa antes del primer pedido de ese carril.
 - **Un pedido de `plataforma` y la sesión principal pueden tocar los mismos archivos.** Por eso es PR en
   borrador y nunca merge solo: el conflicto aparece en el PR, no en `main`.
 - **Costo:** cada pedido es una sesión completa del plan. El tope de 8 por día se cambia con

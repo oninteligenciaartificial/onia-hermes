@@ -16,6 +16,7 @@ on:
     paths:
       - "scripts/loops/**"
       - "scripts/herramientas-*"
+      - "scripts/git-autosync.js"
       - "hermes-content/deploy/hermes-jarvis/**"
       - "hermes-content/deploy/hermes-agent/**"
       - "hermes-content/skills/agenda-calendario.md"

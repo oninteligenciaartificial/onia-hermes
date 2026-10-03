@@ -14,7 +14,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { spawnSync, execFileSync } from "node:child_process";
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, chmodSync, existsSync, readdirSync, copyFileSync } from "node:fs";
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, chmodSync, existsSync, readdirSync, copyFileSync, unlinkSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -72,6 +72,8 @@ function vps({ leeCalendario = true, escribeCalendario = true } = {}) {
   ejecutable(join(bin, "onia-jarvis-resumen.sh"), "#!/usr/bin/env bash\n# cierre-bloques\necho 'vista previa del resumen'\n");
   ejecutable(join(bin, "onia-tg.sh"), `#!/usr/bin/env bash\n# ONIA_AVISO_PUEDO\nprintf '%s\\n---\\n' "$1" >> ${log}/telegram\n`);
   ejecutable(join(bin, "onia-vigia-aprobaciones.sh"), "#!/usr/bin/env bash\n# ONIA_AVISO_PUEDO\n");
+  // El recolector de respuestas de los pedidos: --probar dice si el VPS llega a GitHub.
+  ejecutable(join(bin, "onia-respuestas-pedidos.sh"), `#!/usr/bin/env bash\n[ "$1" = --probar ] || exit 0\necho "$ONIA_PEDIDOS_ESTADO" >> ${log}/respuestas-probar\n[ -z "\${RESPUESTAS_SIN_GITHUB:-}" ] || exit 1\necho "✅ llego a GitHub"\n`);
   ejecutable(join(bin, "claude-guardia.sh"), "#!/usr/bin/env bash\navisar() { :; }\n");
   ejecutable(
     join(bin, "onia-agenda.sh"),
@@ -206,7 +208,7 @@ PY
   const jobs = () => JSON.parse(readFileSync(join(R, ".hermes", "cron", "jobs.json"), "utf8")).jobs;
   const respaldos = () => readdirSync(join(R, "backups")).filter((d) => d.startsWith("hermes-jarvis-")).sort();
   const interruptor = () => existsSync(join(F, "var", "lib", "onia-aviso", "activo"));
-  return { dir, R, F, log, aplicar, revertir, leer, crontab, jobs, respaldos, interruptor, crontabInicial };
+  return { dir, R, F, log, dobles, aplicar, revertir, leer, crontab, jobs, respaldos, interruptor, crontabInicial };
 }
 
 const apagados = (n8n) => n8n.split("\n").filter((l) => l.startsWith("POST") && l.endsWith("/deactivate"));
@@ -515,12 +517,86 @@ test("con llave, si a main le falta la skill de pedidos o su regla en el SOUL, n
 
 test("con llave, si el comando de pedidos no la acepta (--estado), no aplica nada", () => {
   const v = vps();
-  writeFileSync(join(v.R, "bin", "onia-pedido-claude.sh"), "#!/usr/bin/env bash\n[ \"$1\" = --estado ] && exit 69\nexit 0\n");
+  writeFileSync(join(v.R, "bin", "onia-pedido-claude.sh"), "#!/usr/bin/env bash\ncandado() { :; }\n[ \"$1\" = --estado ] && exit 69\nexit 0\n");
   const r = v.aplicar(LLAVE);
   assert.equal(r.status, 1, r.stdout);
   assert.match(r.stdout, /no acepta la llave de la rutina \(--estado\)/);
   nadaCreado(v);
   assert.equal(existsSync(join(v.R, ".config", "onia", "pedidos.env")), false, "la llave no quedó guardada");
+});
+
+test("sección 0: sin el recolector, o con el comando de pedidos sin su candado, no aplica nada", () => {
+  // Madre, 2-oct: con la llave cargada y el comando viejo (o sin copiar), aplicar salía 0 con los
+  // pedidos apagados. Ahora la sección 0 lo exige, como al resto de las herramientas.
+  const sinRecolector = vps();
+  unlinkSync(join(sinRecolector.R, "bin", "onia-respuestas-pedidos.sh"));
+  const r = sinRecolector.aplicar(LLAVE);
+  assert.equal(r.status, 1, r.stdout);
+  assert.match(r.stdout, /El código de main todavía no está en \S*\/root\/bin/);
+  nadaCreado(sinRecolector);
+  assert.equal(existsSync(join(sinRecolector.R, "backups")), false, "ni siquiera el respaldo");
+
+  const viejo = vps();
+  writeFileSync(join(viejo.R, "bin", "onia-pedido-claude.sh"), "#!/usr/bin/env bash\n# sin candado\nexit 0\n");
+  const r2 = viejo.aplicar();
+  assert.equal(r2.status, 1, r2.stdout);
+  assert.match(r2.stdout, /El código de main todavía no está en \S*\/root\/bin/);
+  nadaCreado(viejo);
+});
+
+test("con llave, si el VPS no llega a GitHub para recoger las respuestas, no aplica nada", () => {
+  const sinGithub = vps();
+  const r2 = sinGithub.aplicar({ ...LLAVE, RESPUESTAS_SIN_GITHUB: "1" });
+  assert.equal(r2.status, 1, r2.stdout);
+  assert.match(r2.stdout, /no llega a GitHub para recoger las respuestas/);
+  nadaCreado(sinGithub);
+  assert.match(sinGithub.leer("respuestas-probar"), /\/backups\/hermes-jarvis-[^/]+\/respuestas-prueba\n/, "la prueba no toca el estado real");
+});
+
+test("con llave: el cron del recolector entra con la marca, y revertir lo saca", () => {
+  const v = vps();
+  const r = v.aplicar(LLAVE);
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.match(v.crontab(), /^\*\/2 \* \* \* \* \[ -x \S+\/bin\/onia-respuestas-pedidos\.sh \] && \S+\/bin\/onia-respuestas-pedidos\.sh >> \/var\/log\/onia-respuestas-pedidos\.log 2>&1 #jarvis$/m);
+  assert.match(r.stdout, /la respuesta vuelve sola: onia-respuestas-pedidos\.sh/);
+  assert.equal(v.revertir().status, 0);
+  assert.doesNotMatch(v.crontab(), /onia-respuestas-pedidos/);
+});
+
+test("el token nunca queda escrito en un pedidos.env con otros permisos, ni un instante", () => {
+  // Madre, 2-oct: con un pedidos.env previo en 644, el token se escribía ANTES del chmod.
+  const v = vps();
+  const env = join(v.R, ".config", "onia", "pedidos.env");
+  mkdirSync(dirname(env), { recursive: true });
+  writeFileSync(env, "viejo\n");
+  chmodSync(env, 0o644);
+  const chmodReal = execFileSync("bash", ["-c", "command -v chmod"], { encoding: "utf8" }).trim();
+  ejecutable(
+    join(v.dobles, "chmod"),
+    `#!/usr/bin/env bash
+for a in "$@"; do
+  case "$a" in
+    */pedidos.env) grep -q '${LLAVE.RUTINA_TOKEN}' "$a" 2>/dev/null && echo "token en $a con $(stat -c %a "$a")" >> ${v.log}/chmod-tarde ;;
+  esac
+done
+exec ${chmodReal} "$@"
+`,
+  );
+  assert.equal(v.aplicar(LLAVE).status, 0);
+  assert.equal(v.leer("chmod-tarde"), "", "el token se escribió antes de cerrar el archivo");
+  assert.equal((spawnSync("stat", ["-c", "%a", env], { encoding: "utf8" }).stdout || "").trim(), "600");
+  assert.match(readFileSync(env, "utf8"), /ONIA_RUTINA_TOKEN=sk-ant-oat01-abc/);
+});
+
+test("un pedidos.env que ya estaba se cierra en 600 aunque no venga una llave nueva", () => {
+  const v = vps();
+  const env = join(v.R, ".config", "onia", "pedidos.env");
+  mkdirSync(dirname(env), { recursive: true });
+  writeFileSync(env, `ONIA_RUTINA_URL=${LLAVE.RUTINA_URL}\nONIA_RUTINA_TOKEN=${LLAVE.RUTINA_TOKEN}\n`);
+  chmodSync(env, 0o644);
+  const r = v.aplicar();
+  assert.equal(r.status, 0, r.stdout);
+  assert.equal((spawnSync("stat", ["-c", "%a", env], { encoding: "utf8" }).stdout || "").trim(), "600");
 });
 
 test("la llave queda en 600 aunque pedidos.env ya existiera con otros permisos", () => {
