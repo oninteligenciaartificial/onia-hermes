@@ -72,7 +72,8 @@
       "theme": "blanco",
       "headline": "Prueba 3: preguntale *lo que no sabe*",
       "body": "Stock, plazo, precio. Si contesta un dato que no le diste, lo inventó. Si inventa, no se activa.",
-      "image_prompt": "A classic matte black clay magician's top hat with an emerald green clay band, standing upright, with a matte black clay magic wand with white clay tips lying in front of it, on a white surface.",
+      "image": "hermes-content/galeria/ilustraciones/sergio-k4v2-cinco-pruebas-bot-20260929-s05-b45bab76.jpg",
+      "image_prompt_usado": "A classic matte black clay magician's top hat with an emerald green clay band, standing upright, with a matte black clay magic wand with white clay tips lying in front of it, on a white surface.",
       "image_style": "clay",
       "next": "4 y 5",
       "alt_text": "Una galera de mago de arcilla con su varita: si el bot contesta lo que no sabe, lo está sacando de la galera, lo inventó."
@@ -83,7 +84,8 @@
       "theme": "blanco",
       "headline": "Pruebas 4 y 5: *que avise a alguien*",
       "body": "Un audio que no entiende o un «quiero hablar con una persona»: alguien se entera, no solo el bot.",
-      "image_prompt": "A classic emerald green clay referee whistle with a round chamber and a short mouthpiece, its matte black clay cord looped loosely beside it, on a white surface.",
+      "image": "hermes-content/galeria/ilustraciones/sergio-k4v2-cinco-pruebas-bot-20260929-s06-764afdcb.jpg",
+      "image_prompt_usado": "A classic emerald green clay referee whistle with a round chamber and a short mouthpiece, its matte black clay cord looped loosely beside it, on a white surface.",
       "image_style": "clay",
       "next": "las 5",
       "alt_text": "Un silbato de arcilla: si el bot no entiende un audio o le piden hablar con una persona, tiene que avisarle a alguien y no quedarse solo."

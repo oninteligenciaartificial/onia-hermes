@@ -99,7 +99,8 @@
       "next": "cómo volver",
       "alt_text": "Una cañería de arcilla negra que se divide en dos verdes, rajada y goteando antes de la bifurcación: la rama principal alimenta los dos deploys, y si le entra trabajo a medias, se rompen los dos.",
       "image_style": "clay",
-      "image_prompt": "A matte black clay pipe splitting into two emerald green clay pipes, with a deep jagged crack across the black pipe before the split and emerald green clay water drops dripping from it, on a white surface"
+      "image": "hermes-content/galeria/ilustraciones/sergio-n03-modo-auto-20261001-s05-961a09a6.jpg",
+      "image_prompt_usado": "A matte black clay pipe splitting into two emerald green clay pipes, with a deep jagged crack across the black pipe before the split and emerald green clay water drops dripping from it, on a white surface"
     },
     {
       "number": 6,
@@ -139,7 +140,8 @@
       "headline": "Ojo: *tu proyecto manda*",
       "body": "Si tu proyecto tiene su propio .claude/settings.json con otro defaultMode, ese le gana al tuyo.",
       "image_style": "clay",
-      "image_prompt": "A tall emerald green clay chess king with a small cross on top, standing beside a much shorter matte black clay chess pawn, on a white surface",
+      "image": "hermes-content/galeria/ilustraciones/sergio-n03-modo-auto-20261001-s07-cee84b38.jpg",
+      "image_prompt_usado": "A tall emerald green clay chess king with a small cross on top, standing beside a much shorter matte black clay chess pawn, on a white surface",
       "next": "el bloque",
       "alt_text": "Un rey de ajedrez verde junto a un peón negro más chico: si tu proyecto tiene su propio defaultMode, el que manda es él y no tu configuración."
     },

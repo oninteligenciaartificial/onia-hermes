@@ -33,7 +33,8 @@
       "next": "paso 1",
       "alt_text": "Una lapicera de arcilla que gotea un manchón verde: si le pedís al modelo de imagen que escriba, el texto se le escapa y sale sin control.",
       "image_style": "clay",
-      "image_prompt": "A chunky plain matte black clay fountain pen lying flat, its pointed nib leaking a large uneven emerald green clay ink blot with a few scattered drops, on a white surface."
+      "image": "hermes-content/galeria/ilustraciones/sergio-k7v2-carruseles-por-codigo-20260929-s02-723733b4.jpg",
+      "image_prompt_usado": "A chunky plain matte black clay fountain pen lying flat, its pointed nib leaking a large uneven emerald green clay ink blot with a few scattered drops, on a white surface."
     },
     {
       "number": 3,
@@ -71,7 +72,8 @@
       "next": "paso 3",
       "alt_text": "Una paleta de pintor de arcilla con un pincel cargado de verde: a la IA usala solo para pintar la imagen. Las letras las ponés vos con código.",
       "image_style": "clay",
-      "image_prompt": "A matte black clay painter's palette with a thumb hole, holding round blobs of emerald green and white clay paint, with a white clay paintbrush with an emerald green tip resting across it, on a white surface."
+      "image": "hermes-content/galeria/ilustraciones/sergio-k7v2-carruseles-por-codigo-20260929-s04-a4074cda.jpg",
+      "image_prompt_usado": "A matte black clay painter's palette with a thumb hole, holding round blobs of emerald green and white clay paint, with a white clay paintbrush with an emerald green tip resting across it, on a white surface."
     },
     {
       "number": 5,

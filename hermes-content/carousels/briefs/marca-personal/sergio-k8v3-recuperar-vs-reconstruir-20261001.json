@@ -53,7 +53,8 @@
       "theme": "blanco",
       "headline": "Un solo cuadro del reel *mostraba el prompt*",
       "image_style": "clay",
-      "image_prompt": "A long matte black clay film strip with small round perforations along both edges, curving in a gentle wave, its square frames all plain white clay except one single emerald green clay frame, on a white surface.",
+      "image": "hermes-content/galeria/ilustraciones/sergio-k8v3-recuperar-vs-reconstruir-20261001-s03-1fd716b5.jpg",
+      "image_prompt_usado": "A long matte black clay film strip with small round perforations along both edges, curving in a gentle wave, its square frames all plain white clay except one single emerald green clay frame, on a white surface.",
       "body": "Pasó en un reel que analicé: mirando cada tantos segundos, se perdía. Encontrarlo es *recuperar*: el prompt exacto.",
       "next": "si no está",
       "alt_text": "Una tira de película de arcilla con un solo cuadro verde entre todos los blancos: el prompt estaba en un solo cuadro del reel, y si salteás cuadros te lo perdés."
@@ -112,7 +113,8 @@
       "theme": "blanco",
       "headline": "Para comprobar: *ponelas lado a lado*",
       "image_style": "clay",
-      "image_prompt": "Two emerald green clay pears standing side by side, almost identical, the right one just slightly rounder, each with a short matte black clay stem, on a white surface.",
+      "image": "hermes-content/galeria/ilustraciones/sergio-k8v3-recuperar-vs-reconstruir-20261001-s07-e6c79aae.jpg",
+      "image_prompt_usado": "Two emerald green clay pears standing side by side, almost identical, the right one just slightly rounder, each with a short matte black clay stem, on a white surface.",
       "body": "Generá una con el prompt que armaste y ponela al lado de la original: así ves si se parece.",
       "next": "la plantilla",
       "alt_text": "Dos peras de arcilla casi iguales, una al lado de la otra: generás tu versión, la ponés junto a la original y ves si se parece."

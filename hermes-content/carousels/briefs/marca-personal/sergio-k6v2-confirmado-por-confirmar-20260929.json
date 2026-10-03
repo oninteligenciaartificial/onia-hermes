@@ -32,7 +32,8 @@
       "next": "la prueba",
       "alt_text": "Una bola de cristal de arcilla: para prometer esa fecha, tu bot tendría que adivinar",
       "image_style": "clay",
-      "image_prompt": "A smooth glossy emerald green clay crystal ball, softly glowing from inside, resting on a small round matte black clay stand with short curved legs, on a white surface."
+      "image": "hermes-content/galeria/ilustraciones/sergio-k6v2-confirmado-por-confirmar-20260929-s02-39466ff6.jpg",
+      "image_prompt_usado": "A smooth glossy emerald green clay crystal ball, softly glowing from inside, resting on a small round matte black clay stand with short curved legs, on a white surface."
     },
     {
       "number": 3,
@@ -91,7 +92,8 @@
       "headline": "Solo sabe *lo que vos le das*",
       "body": "La lección no es que la IA inventa: lo que no escribiste en sus listas, no lo puede saber.",
       "image_style": "clay",
-      "image_prompt": "A matte black clay funnel sitting in the neck of a short plain white clay bottle, with a few round emerald green clay beads dropping into the funnel's wide mouth, on a white surface.",
+      "image": "hermes-content/galeria/ilustraciones/sergio-k6v2-confirmado-por-confirmar-20260929-s07-e84146f4.jpg",
+      "image_prompt_usado": "A matte black clay funnel sitting in the neck of a short plain white clay bottle, with a few round emerald green clay beads dropping into the funnel's wide mouth, on a white surface.",
       "next": "las dos respuestas",
       "alt_text": "Un embudo de arcilla llenando una botella: tu bot solo tiene lo que vos le pusiste en sus listas"
     },
