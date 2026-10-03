@@ -225,7 +225,7 @@ Los scripts usados se copiaron al lado de este informe, en `scripts/velocidad/` 
 **Acceso al VPS** (desde `C:/dev/proyectos/onia-hermes/.claude/worktrees/skills-setup-config-8d4674`):
 ```bash
 VPS_HOST=187.77.16.63 VPS_USER=root VPS_KEY_PATH="C:/Users/PC/.ssh/onia_hermes_vps_ed25519" node scripts/vps-cmd.js "<comando>"
-# atajos: scripts/vps.sh "<comando>" · scripts/vr.sh <script-local.sh> · scripts/runsql.sh <archivo.sql>
+# atajos: scripts/velocidad/vps-desde-windows.sh "<comando>" · scripts/velocidad/vr.sh <script-local.sh> · scripts/velocidad/runsql.sh <archivo.sql>
 ```
 
 **Latencia desde afuera** (10 veces por URL, en serie):

@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { promises as fs } from "node:fs";
+import { promises as fs, readFileSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -130,6 +130,15 @@ test("base SHA fija sobrevive avance del ref y HEAD distinto no se acepta", asyn
   await assert.rejects(reviewTanda({ ...data, worktree: data.repo, outPath: path.join(data.root, "different-head.json"), expectedBaseCommit: base, expectedHeadCommit: base, reviewer: goodReview }), /HEAD SHA no coincide/);
 });
 
+// Un zombi ya terminó: no consume nada, solo espera que lo recojan. `kill(pid, 0)` igual le contesta,
+// y en un contenedor cuyo PID 1 no recoge huérfanos queda así para siempre. Medido el 2-oct en la nube
+// de Claude Code (PID 1 = process_api): el nieto quedaba en «State: Z» tras el SIGKILL al grupo y esta
+// prueba salía roja con el árbol bien cerrado. Sin /proc (macOS) se mantiene el criterio de antes.
+function sigueVivo(pid) {
+  try { process.kill(pid, 0); } catch { return false; }
+  try { return !/^State:\s+Z/m.test(readFileSync(`/proc/${pid}/status`, "utf8")); } catch { return true; }
+}
+
 test("timeout mata el árbol del revisor incluido un proceso nieto", async () => {
   const root = await fs.mkdtemp(path.join(os.tmpdir(), "onia-tandas-tree-"));
   roots.push(root);
@@ -140,9 +149,7 @@ test("timeout mata el árbol del revisor incluido un proceso nieto", async () =>
   await assert.rejects(spawnBounded(process.execPath, [script], { cwd: root, timeoutMs: 1500 }), /proceso excedió tiempo/);
   assert.ok(Date.now() - started < 7500, "timeout debe terminar en tiempo acotado");
   const pid = Number(await fs.readFile(pidFile, "utf8"));
-  let alive = false;
-  try { process.kill(pid, 0); alive = true; } catch { /* proceso terminado */ }
-  assert.equal(alive, false, "el nieto no puede seguir consumiendo después del timeout");
+  assert.equal(sigueVivo(pid), false, "el nieto no puede seguir consumiendo después del timeout");
 });
 
 test("un carril sensible nunca queda apto sólo por Luna", async () => {
