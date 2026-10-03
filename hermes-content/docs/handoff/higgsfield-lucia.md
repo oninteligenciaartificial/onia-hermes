@@ -11,6 +11,41 @@
 **Sesión:** la misma (`session_01Whdadt8NdnYbZoyum1bRX6`, rama `claude/trusting-dirac-wjkua1`). Los PR #78 y #82
 están mergeados. Este trabajo va en un PR nuevo.
 
+### 🛑 CIERRE — 2-oct ~14:00 UTC (alcance congelado por Sergio Urcullo; la sesión ESPERA, no sigue sola)
+
+**Hecho y dónde:**
+- Plan v3 de Lucía + orden de rubros: commits `9fcf9487` y `be9a9ef8`, ya en `main` (PR #97 y #98, mergeados por el
+  autosync). Es un doc: no hay nada que publicar en producción.
+- Maniquí del ambo: `references/modelos/lucia/v4/vestuario/ambo-terracota-*-8d138bd6.jpg`. Se miró y se le mandó a
+  Sergio Urcullo. Costo: 2 cr.
+- Reels L02, L05 y L08 editados (del 1-oct). **Nada publicado en Instagram.**
+
+**A medias, y por qué:**
+- D1 a D5 esperan a Sergio Urcullo.
+- Las piezas de venta esperan la cuenta demo.
+- La prueba de ropa depende de D1.
+- La cuenta de IG no está conectada.
+
+**Evidencia:**
+- `PLAN.md` §7.
+- `PROCEDENCIA.jsonl` (los dos maniquíes, con el color medido).
+- Licencia de la voz Marcela leída de la API de ElevenLabs.
+- Lista de rubros sacada de `onia-platform/lib/platform/rubros-activos.ts`.
+
+**Para mejorar:**
+1. **El autosync mergea el PR en segundos.** El PR sirve como registro, no como revisión.
+2. **El plan v2 se escribió antes del manual y hubo que rehacerlo el mismo día.** Primero va la investigación, después
+   el plan.
+3. **La voz se eligió sin leer sus `labels`.** Ahora está en `editor-videos`.
+4. **Un pedido directo de Sergio Urcullo («ropa de doctora») choca con el manual verificado.** Se planteó como D1, no
+   se decidió acá.
+
+**Pendientes para después (NO se hacen ahora):**
+- Ficha de @soy_aria_cruz en el manual.
+- Corregir el «6 de 8 muertas» del benchmark del 17-ago.
+- Buscar una voz con acento cruceño.
+- El cuadro fantasma de L08.
+
 **Objetivo de la sesión:** que el plan de contenido de Lucía quede listo para el OK de Sergio Urcullo, verificado
 contra las influencers IA que funcionan. **Hecho =** `cola/lucia-diario/PLAN.md` v3 + decisiones D1–D5 planteadas con
 la cuenta delante + el maniquí del ambo generado.

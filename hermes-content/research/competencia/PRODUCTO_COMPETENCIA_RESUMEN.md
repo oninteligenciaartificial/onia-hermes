@@ -2,8 +2,9 @@
 
 Fuente única del tema. Detalle con la fuente de cada dato: `DENTALINK_TEARDOWN.md`, `DOCTOCLIQ_TEARDOWN.md`,
 `TUDOC_TEARDOWN.md`, `AGENDAPRO_CITALO_TEARDOWN.md`, todos en esta carpeta.
-Medido el 1-oct-2026 con páginas públicas, centros de ayuda y capturas. Sin cuentas propias todavía. No se pudieron
-ver videos: YouTube bloquea la nube; los ids quedan anotados en cada teardown.
+Medido el 1-oct-2026 con páginas públicas, centros de ayuda y capturas. No se pudieron ver videos: YouTube bloquea
+la nube; los ids quedan anotados en cada teardown. El 1 y el 2-oct se sumaron cuentas de prueba de Doctocliq
+(`doctocliq/cuenta-de-prueba/DOCTOCLIQ_ADENTRO.md`) y de Dapta (`DAPTA_COMO_FUNCIONA.md`).
 
 ## ¿Alguien recupera al paciente que dejó el tratamiento a medias?
 
@@ -13,23 +14,22 @@ ver videos: YouTube bloquea la nube; los ids quedan anotados en cada teardown.
 | Doctocliq | **Manual y pago aparte.** Filtro «abandonaron el tratamiento» + campaña que alguien arma, en el add-on Marketing (contrato semestral o anual). |
 | AgendaPro | No (su asistente de marketing pago solo manda correos). |
 | Citalo | No. |
-| Dapta (agentes de IA, no sistema de gestión) | **No.** No tiene vertical de salud: confirma, recuerda y agenda dentro del chat, pero no ve tratamientos ni fichas por rubro (`DAPTA_TEARDOWN.md`, 2-oct). |
+| Dapta (agentes de IA, no sistema de gestión) | **No.** No tiene vertical de salud: confirma, recuerda y agenda dentro del chat, pero no ve tratamientos ni fichas por rubro (`DAPTA_COMO_FUNCIONA.md` §4.4, 2-oct). |
 | TuDoc | No. Además no se ve el producto, no tiene precio y sus botones no funcionan. |
 
-**El hueco de Onia sigue en pie:** el agente lo detecta solo todos los días y viene incluido desde Crece.
+**El hueco de Onia sigue en pie:** el agente lo detecta solo todos los días y viene incluido desde Crece. Está
+publicado desde el 2-oct; falta verlo encontrar a alguien con datos (B16).
 
 ## Lo que tienen ellos y a Onia le falta (orden de impacto para una clínica de 2-6 profesionales)
 
-1. **Recordatorio por WhatsApp con botones** (Confirmar / Cancelar / Reprogramar), que cambia el estado de la cita.
-   Lo tienen 4 de 5. Onia hoy solo avisa por correo; el canal WhatsApp existe en el código y falta la primera
-   conexión real de un número de cliente.
-2. **Presupuesto / plan de tratamiento** armado desde el odontograma, con fases, alternativas, estados (aceptado,
-   abandonado…) y envío por WhatsApp. Es lo que vende el tratamiento y lo que alimenta el recall.
-3. **Hueco liberado que se revende:** cancelación del paciente dentro de una política y lista de espera avisada sola.
-4. **Caja completa:** abonos parciales, cuotas, pago dividido, caja por usuario con apertura y cierre, comisiones por
-   doctor.
-5. **Campañas a la base** (cumpleaños, «hay huecos esta semana», reactivación).
-6. Plan gratis para siempre (Doctocliq, Citalo), app móvil, odontograma con periodontograma y ortodoncia.
+Las 5 P0 que más pesan. La lista completa (P0, P1, P2, con evidencia y esfuerzo), lo que no se copia y lo que se
+creyó que faltaba vive en `docs/ONIA_NIVEL_REFERENTES_BRECHA.md`.
+
+1. **B06 · Recordatorio por WhatsApp con botones, de fábrica:** Doctocliq lo trae encendido; el de Onia solo sale del número propio de la clínica.
+2. **B01 · Agenda de día y semana con una columna por profesional:** Onia muestra un mes y la lista de hoy.
+3. **B14 · Presupuesto clínico con total, fases, estado y PDF o link:** Onia tiene el plan por ítem, sin documento.
+4. **B17 · Caja diaria con apertura, cierre por medio de pago y egresos:** en los rubros clínicos no existe.
+5. **B13 · Odontograma por caras:** Onia guarda un solo estado por diente.
 
 ## Lo que Onia hace mejor
 
