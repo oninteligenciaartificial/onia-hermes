@@ -8,15 +8,16 @@
 >
 > **Quién es.** Una sola persona: Lucía Antelo, 26, cruceña, **influencer de sí misma**, que declara que es IA con
 > humor. **Vive en Equipetrol** (depto luminoso en torre, con plantas; piso de porcelanato claro; ventanal a copas
-> de árboles y torres de vidrio). Vende Onia **mostrando cómo trabaja cada negocio**: un día se pone el ambo, otro
-> el blazer de abogada, otro atiende una tienda. **El rol es un disfraz de ella misma** (como el cosplay de Aitana
+> de árboles y torres de vidrio). Vende Onia **mostrando cómo trabaja cada negocio**: un día lleva el ambo en una
+> clínica, otro recorre una tienda o un showroom. **El rol es un disfraz de ella misma** (como el cosplay de Aitana
 > o Miquela vestida de Euphoria), nunca otra persona.
-> - ⚠️ **En revisión (2-oct, `PLAN.md` D1):** el manual verificado (`MANUAL-PATRONES-INFLUENCERS-IA.md`) dice que Lucía
->   **mira, no ocupa el puesto**, y nunca aparece como profesional de salud. Recomendación: que visite cada negocio
->   como ella. Hasta que Sergio Urcullo decida, no se produce ninguna pieza de venta con uniforme. **Los rubros son
->   solo los 5 de `onia-platform/lib/platform/rubros-activos.ts`**; abogada y contadora pasan a un solo rol, «estudio».
-> - ✅ Escenifica, rotulado: «hoy me pongo el ambo para mostrarte cómo trabaja una clínica con Onia».
-> - ⛔ Nunca: «soy odontóloga», «mis pacientes», «mi estudio», consejo clínico o legal, testimonio. Los avatares IA
+> - ✅ **Decidido por Sergio Urcullo (3-oct): *«que no se identifique como ello pero que tenga la ropa»*.** Lleva el
+>   ambo (u otra ropa del rubro) como VESTUARIO, y el texto la presenta siempre como «Lucía · personaje IA de Onia» que
+>   muestra cómo funciona el sistema: «te muestro cómo trabaja una clínica con Onia». **Los rubros son solo los 5 de
+>   `onia-platform/lib/platform/rubros-activos.ts`**; abogada y contadora pasan a un solo rol, «estudio».
+> - ⛔ Nunca dice ni da a entender que es del rubro: «hoy soy odontóloga», «soy doctora», «como odontóloga», «mis
+>   pacientes», «mi consultorio», «mi estudio». Tampoco consejo clínico o legal, testimonio ni resultados prometidos
+>   («agenda llena»). Los avatares IA
 >   de «médicas» dando consejos son el caso de fraude que el público castiga (ESET, LatAm).
 >
 > **Firma visual (lo que la hace la misma en todos los roles; no se negocia):** pecas contables · pelo castaño
@@ -27,7 +28,7 @@
 >
 > | Rol (rubro de Onia) | Ropa | Color firma del rol |
 > |---|---|---|
-> | Odontóloga / clínica dental 🟢 | ambo de dos piezas cuello V, manga corta, bolsillo de pecho, poli-spandex mate; zueco blanco | **ambo terracota** `#C4552F` (su firma hecha uniforme). Prenda fija: maniquí `v4/vestuario/ambo-terracota-frente-8d138bd6.jpg` (bolsillo de pecho, pantalón cargo con cordón, puño y botamanga en terracota más oscuro) |
+> | Clínica dental 🟢 (vestuario, no profesión) | ambo de dos piezas cuello V, manga corta, bolsillo de pecho, poli-spandex mate; zueco blanco | **ambo terracota** `#C4552F` (su firma hecha uniforme). Prenda fija: maniquí `v4/vestuario/ambo-terracota-frente-8d138bd6.jpg` (bolsillo de pecho, pantalón cargo con cordón, puño y botamanga en terracota más oscuro) |
 > | Cosmetóloga / estética | ambo negro o túnica de esteticista, pelo recogido bajo | negro + detalle terracota |
 > | Abogada (servicios profesionales) | blazer de crepé azul marino sin forro, pantalón sastre tiro alto, blusa viscosa marfil, carpeta de cuero | marino + cartera terracota |
 > | Contadora (servicios profesionales) | blusa de algodón manga ¾, pantalón de vestir, cárdigan fino (por el aire acondicionado) | arena + cárdigan terracota |

@@ -1,4 +1,4 @@
-> Fuente única del tema «cómo trabajan las influencers IA que funcionan y qué cambia para Lucía». Investigación con verificación adversarial de la sesión madre, 2-oct-2026 (16 agentes; los patrones que no se sostuvieron quedaron afuera). Si cambia, se EDITA este archivo. Sumar a @soy_aria_cruz (España; programa de creadores de Higgsfield; «Comentá ARIA» como embudo) cuando se estudie su cuenta desde la PC.
+> Fuente única del tema «cómo trabajan las influencers IA que funcionan y qué cambia para Lucía». Investigación con verificación adversarial de la sesión madre, 2-oct-2026 (16 agentes; los patrones que no se sostuvieron quedaron afuera). Si cambia, se EDITA este archivo. @soy_aria_cruz ya está sumada en § 2-bis (3-oct).
 
 # Manual Lucía: lo que hacen las influencers IA que funcionan (2-oct-2026)
 
@@ -68,6 +68,46 @@ Ninguna de estas reglas es universal. Son las que se repiten en varios casos san
 - En TikTok, marcar AIGC a mano. En YouTube, «alterado o sintético». Declararlo en YouTube no baja audiencia ni monetización (ayuda oficial [V]).
 - No suponer que el C2PA de Higgsfield sobrevive a la edición con ffmpeg: probablemente se pierde. La etiqueta manual es el mecanismo real.
 - Después, en un paso barato: reservar el mismo handle en TikTok, YouTube, Threads y X, y publicar una página en onia.com.bo con la lista de cuentas oficiales. Es para que no pase lo de Velvet Sundown, que tuvo un vocero impostor (Exclaim, 4-jul-2025 [T]).
+
+---
+
+## 2-bis. @soy_aria_cruz: lo que le sirve a Lucía (3-oct-2026)
+
+Ficha completa con los reels medidos: `references/marca-personal/FICHAS-MONTAJE-REFERENTES.md` § @soy_aria_cruz. Es
+la madre la que la sacó, cuadro por cuadro. Sergio Urcullo la considera de las mejores. Es UN caso: confirma o ajusta
+lo de arriba, pero no fija reglas por sí sola.
+
+**Lo que confirma:**
+- La etiqueta «Perfil generado con IA» se ve debajo del nombre, y la cuenta tiene 107K seguidores. Declarar la IA no la
+  frenó.
+- Usa una sola cara en Kling, Seedance y Genjutsu, con uniforme fijo (musculosa negra, gafas y aros). Es la firma visual
+  que no se mueve.
+- Su paleta es verde lima, negro y blanco: la misma familia de colores que Onia.
+
+**Lo que ajusta en el plan de Lucía:**
+- **Gancho = prueba visual en el primer cuadro, sin hablar a cámara.** En ninguno de los 3 reels habla al arrancar.
+  En el que muestra su app, filma con el celular el monitor con la interfaz real y se acerca hasta el macro
+  (0–3 s). Para Lucía, el Reel ancla puede abrir con la **pantalla real de Onia filmada o grabada en movimiento**, y
+  ella entra después. Sigue la regla: producto visible.
+- **Sin subtítulos, con el mensaje largo en el pie.** En pantalla solo va el titular del gancho (3 renglones, 3,3 s)
+  y, como mucho, el cierre. Calza con D4: reels sin voz, con poco texto en pantalla y el detalle en el pie.
+- **El embudo «Comentá X y te mando…» es la última línea del pie.** Medido: 283 comentarios sobre 491 likes, y
+  1.623 sobre 2.486. Es la señal de interés que el plan ya mide. **Propuesta para Lucía, la decide Sergio Urcullo
+  (D6 de `PLAN.md`):** «Comentá DEMO y te paso el link», en UNA pieza de la prueba, contra el link en la bio.
+  - Se responde **a mano** y en personaje.
+  - No se automatiza el paso del comentario al DM: Meta ya lo rechazó 2 veces (§2).
+- **El CTA va dentro de la escena, no en una placa:** una tarjeta adentro de una caja que se abre. Es una forma de
+  cerrar «Agendá tu demo» sin texto encima de la cara.
+
+**Lo que NO se copia de Aria:**
+- **Vender cursos de «creá tu influencer IA»** (su bio lleva a una comunidad paga en Skool). Es vender el personaje,
+  igual que The Clueless (§3).
+- **El programa de creadores de Higgsfield** (#HiggsfieldCreator, cashback). Convierte a Lucía en influencer de
+  herramientas de IA, no en canal de Onia: es una línea de negocio nueva.
+- **El formato «clon»** (copiar plano por plano un baile o una escena). Es su nicho de tutoriales, no le vende nada al
+  dueño de una clínica, cuesta créditos de video y, con escenas de películas, tiene riesgo de derechos de autor.
+- **El plano secuencia de un solo prompt** podría servir para «Un día en Santa Cruz», pero es video generado: necesita
+  costo y OK aparte. Queda para después.
 
 ---
 

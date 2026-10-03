@@ -74,6 +74,7 @@ La mayoría de los reels son **b-roll + voz o texto**; Lucía hablando a cámara
 
 - **Venta:** sólo lo que producción cumple hoy (`ONIA_ADQUISICION_Y_PAUTA.md` §5.4). El «paciente
   con tratamiento a medias» recién con la 1.0 publicada. Pieza que vende = captura REAL de Onia.
-- **Lucía nunca es clienta, odontóloga ni testimonio.** Escenifica, rotulado.
+- **Lucía nunca es clienta, odontóloga ni testimonio.** Puede llevar el ambo como vestuario, pero nunca dice ni da a
+  entender que es del rubro (Sergio Urcullo, 3-oct). No promete resultados («agenda llena»).
 - **Lip sync:** medido el 30-sep, MiniMax H3 gana a Seedance Mini pero ninguno sincroniza fino.
   Reels hablando: frases cortas, subtítulos grandes, y `sync_so` (~22 cr) sólo en la pieza que lo pida.

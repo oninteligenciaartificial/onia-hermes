@@ -56,6 +56,12 @@ tenemos, no abogada, de todo». La lista no se arma de memoria: sale de
   - etiqueta «Perfil generado con IA» de Instagram;
   - sobreimpreso «Lucía · personaje IA de Onia» desde el segundo 0.
 - **Gancho de 0 a 2 s:** el problema escrito o «Hace un año yo no existía». Sin logo y sin «hola, soy Lucía».
+- **Lucía puede llevar el ambo o la ropa del rubro como VESTUARIO, pero nunca dice ni da a entender que es
+  odontóloga ni profesional de salud** (D1, decidido el 3-oct). El texto siempre la presenta como «Lucía · personaje IA
+  de Onia» que muestra cómo funciona el sistema.
+  - **Prohibido en guion, pie y subtítulos:** «hoy soy odontóloga», «soy doctora», «como odontóloga», «mis
+    pacientes», «mi consultorio» y cualquier frase que la ponga en el puesto.
+  - **Sí vale:** «te muestro cómo trabaja una clínica con Onia» o «esto pasa en la recepción».
 - **Lucía OBSERVA y muestra; no ocupa el puesto.**
   - Dice «lo que veo en las recepciones», nunca «me pasó con un paciente».
   - No finge experiencias físicas. Usa su límite como gancho: «no puedo tomarme este café, pero…».
@@ -63,6 +69,8 @@ tenemos, no abogada, de todo». La lista no se arma de memoria: sale de
   con la 1.0.
 - **Cierre de venta:** «Mandáselo a quien contesta tu WhatsApp» + «Agendá tu demo».
 - Nada en vivo y nada de música sin licencia.
+- **Nunca se promete un resultado:** nada de «agenda llena», «cero ausencias» ni porcentajes. Se muestra el mecanismo
+  vivo (recordatorio, link de reserva), no lo que va a lograr. La IA se declara siempre: nunca «no sé si soy real».
 
 ## 4. Prueba de 2 semanas (manual §4, con lo que hay hoy)
 
@@ -71,7 +79,7 @@ tenemos, no abogada, de todo». La lista no se arma de memoria: sale de
 | 1 | L01 «Hola, soy Lucía. No existo.» (fijado) | Carrusel | ✅ aprobado el 1-oct | 0 |
 | 2 | L02 «Este video no fue grabado» + sobreimpreso IA | Reel personaje | ✅ editado; falta el OK | 0 |
 | 3 | «Un día en Santa Cruz» | Reel personaje | ✅ 3 clips pagados + 5 fotos de lugares reales | ~5 |
-| 4 | Chiste de 10 s | Reel personaje | ✅ clip pagado | 0 |
+| 4 | Chiste de 10 s: «¿Lucía es real? No: soy IA. Los recordatorios que te muestro, sí.» | Reel personaje | ✅ clip pagado | 0 |
 | 5 | «Humo vs. real» #1, gancho A «Hace un año yo no existía» → link de reserva | Reel venta | ⛔ falta la pantalla real | 0 |
 | 6 | «Recepción a las 8» #1 → recordatorio 24 h y 2 h | Reel venta | ⛔ falta la pantalla real | 0–7,5 |
 | 7 | «3 cosas que bajan las inasistencias» | Carrusel venta | ⛔ falta la captura real | 0 |
@@ -99,8 +107,8 @@ tenemos, no abogada, de todo». La lista no se arma de memoria: sale de
 - **El maniquí del ambo terracota está hecho** (2-oct, 2 cr):
   - `references/modelos/lucia/v4/vestuario/ambo-terracota-turnaround-8d138bd6.jpg`;
   - el recorte de frente, `ambo-terracota-frente-8d138bd6.jpg`, es la referencia de la prenda.
-- **La prueba de ropa (~5,4 cr) espera la decisión D1.** Si Lucía visita los negocios con su propia ropa, el ambo
-  no entra en piezas de venta y no hace falta gastar.
+- **D1 decidido (3-oct): el ambo SÍ, como vestuario.** La prueba de ropa (~5,4 cr) vuelve a hacer falta, pero no se
+  corre con el alcance congelado: queda para cuando Sergio Urcullo diga cómo se sigue, y con su OK al costo.
 
 ## 6. Qué pasa con lo hecho el 1-oct
 - **L05 y L08 no se publican así.** Son clips de lifestyle vendiendo, sin pantalla real. Su idea (link de reserva y
@@ -111,11 +119,12 @@ tenemos, no abogada, de todo». La lista no se arma de memoria: sale de
 
 | # | Decisión | Recomendación | Por qué |
 |---|---|---|---|
-| D1 | ¿Lucía se pone el uniforme del rubro (ambo, blazer) o visita el negocio como ella? | **Como ella, observadora**, con su firma y algo terracota. El disfraz queda, si querés, solo para un carrusel de personaje | El manual verificado lo marca como línea roja: una IA vestida de profesional de salud es el caso que el público castiga y el que ya bajaron (médicos IA). Además el dueño se reconoce en la recepción, no en la doctora. Ahorra la prueba de ropa (5,4 cr) |
+| D1 | ¿Lucía se pone el uniforme del rubro o visita el negocio como ella? | ✅ **DECIDIDO por Sergio Urcullo, 3-oct:** *«que no se identifique como ello pero que tenga la ropa»* | Lleva el ambo como vestuario; nunca dice ni da a entender que es odontóloga ni profesional de salud. Reglas en la §3 |
 | D2 | ¿«Reel primero» en vez de la mezcla 70/20/10? | **Sí** | En cuentas de menos de 50K el Reel es lo que más alcance trae. Es el mismo material y no gasta créditos de video |
 | D3 | ¿Lucía es la cara declarada del WhatsApp de Onia? | **Todavía no** | El bot trata los leads de la web como preguntas de precio y no reconoce `src`. Por ahora la puerta es `/llamada?src=` |
 | D4 | La voz de Marcela | **Reels sin voz (con texto) durante la prueba** | Medido el 2-oct: es una voz de la Voice Library («Marcela - Colombian Girl») con **acento colombiano**. Lucía es cruceña y el público boliviano critica el acento que no es de acá. La licencia está en orden: plan pago `payg` activo y 730 días de aviso si la retiran |
 | D5 | El canon de Lucía: 10 datos fijos (`LUCIA.md` § 0-canon) | OK o corregir | Es lo que hace que la sigan como una vida y no como fotos sueltas |
+| D6 | ¿Probamos «Comentá DEMO y te paso el link» en el pie de UNA pieza, contra el link en la bio? | **Sí, en la #8**, respondiendo a mano y en personaje | @soy_aria_cruz saca 283 comentarios sobre 491 likes con ese embudo (manual § 2-bis), y los comentarios son el indicador que ya medimos. No se automatiza: Meta rechazó 2 veces el paso de comentario a DM |
 
 **Pendiente de otros:**
 - **Cuenta demo dental en producción**, para las pantallas reales. Se le pidió a la madre el 1-oct. Bloquea #5 a #8.
@@ -123,7 +132,5 @@ tenemos, no abogada, de todo». La lista no se arma de memoria: sale de
   - conectar `@lucia.antelo.oficial` como cuenta profesional;
   - activar «Perfil generado con IA»;
   - cargar el token en el VPS.
-- **Madre:** la ficha de @soy_aria_cruz (programa de creadores de Higgsfield y embudo «Comentá ARIA»). Cuando llegue,
-  se suma al manual.
 
-**Orden:** Sergio Urcullo decide D1–D5 → piezas ✅ (#2, #3, #4) → piezas de venta cuando esté la cuenta demo.
+**Orden:** Sergio Urcullo decide D2–D6 → piezas ✅ (#2, #3, #4) → piezas de venta cuando esté la cuenta demo.

@@ -446,6 +446,16 @@ la burbujita de OBS incrustada en la esquina no da resolución para la zona de c
 > de Santiago Muñoz y Erik Taveras: `hermes-content/references/video-intake/2026-10-01-santiago-erik-edicion-medida.md`.
 > Guion por pieza: `hermes-content/docs/cola/lucia-diario/S*-GUIONES.md`; instrucción completa:
 > `videos/lucia-lNN/INSTRUCCION.md` (OBJETIVO / MATERIAL / ESTILO, una por video, ejecutada entera).
+>
+> ⛔ **Texto de Lucía (guion, pie, subtítulos, tarjetas). Decisión de Sergio Urcullo del 3-oct: *«que no se identifique
+> como ello pero que tenga la ropa»*.**
+> - Puede llevar el ambo como vestuario, pero **nunca dice ni da a entender que es del rubro**. Quedan fuera «hoy soy
+>   odontóloga», «soy doctora», «como odontóloga», «mis pacientes» y «mi consultorio». La presenta siempre «Lucía ·
+>   personaje IA de Onia», que muestra cómo funciona el sistema.
+> - **Tampoco promete resultados** («agenda llena», «cero ausencias», porcentajes). La IA se declara siempre: el chiste
+>   va con «No: soy IA», nunca con «no sé».
+> - **Cómo se llegó acá:** «Hoy soy odontóloga» entró a `main` el 2-oct en el plan v2 sin revisión. Antes de renderizar
+>   se hace grep del guion y del pie contra esta lista.
 
 1. **Clip LIMPIO** (el `rawUrl` del job de Higgsfield; nunca un render con texto) a `videos/lucia-lNN/raw/`.
    Lienzo 1080×1920 **a 24 fps** (Kling es 24: pasar a 30 duplica cuadros). Acento único **#10C26B**.
