@@ -1,6 +1,6 @@
 ---
 name: edicion-referentes
-description: Invocar ANTES de editar cualquier video NUEVO de Sergio Urcullo (talking head vertical de marca personal) desde el 3-oct-2026. Replica TAL CUAL el montaje de Santiago Muñoz (@sanmunoz.ia) y de Erik Taveras (@eriktaveras), medido reel por reel con evidencia (reel + segundo). Trae una receta por referente, un script por receta que edita desde bruto + cutplan + transcript + storyboard, cómo hay que grabar para que salga igual y las trampas ya pagadas. editor-videos sigue siendo el motor de corte, transcripción y regla de oro.
+description: Invocar ANTES de editar cualquier video NUEVO de Sergio Urcullo (talking head vertical de marca personal) desde el 3-oct-2026. Replica TAL CUAL el montaje de Santiago Muñoz (@sanmunoz.ia) y de Erik Taveras (@eriktaveras), y para los repos de GitHub el de @pabloinpublic, medido reel por reel con evidencia (reel + segundo). Trae una receta por referente, un script por receta que edita desde bruto + cutplan + transcript + storyboard, cómo hay que grabar para que salga igual y las trampas ya pagadas. editor-videos sigue siendo el motor de corte, transcripción y regla de oro.
 ---
 
 # Edición de referentes: Santiago Muñoz y Erik Taveras, TAL CUAL
@@ -34,6 +34,8 @@ description: Invocar ANTES de editar cualquier video NUEVO de Sergio Urcullo (ta
 - **¿Cuál de las dos?** Si el guion es una noticia con prueba (captura oficial, tabla, titular), va **Santiago**:
   pantalla partida con la prueba arriba. Si es un tutorial, un top-N o un producto con datos que se arman, va
   **Erik**: tarjetas de datos sobre el pecho, sellos y karaoke de 3 palabras. Si dudás, preguntale a Sergio Urcullo.
+- **Repos de GitHub (R01-R07, G04, G10 y los cortes verticales de G11): molde Pablo** (abajo). Lo fijó la madre el
+  3-oct con un reel que mandó Sergio Urcullo.
 - **No cambia la regla de oro de `editor-videos`:** tabla de cortes + preview 360p ANTES de cortar. Cuando el script
   aprieta pausas por encima del cutplan aprobado, escribe una tabla aparte (`--plan` en Santiago,
   `trabajo/tabla-cortes.md` en Erik) que también se muestra.
@@ -78,6 +80,41 @@ Medido en 6 reels de TikTok (22 al 30-sep) y contrastado con la ficha de IG.
 | Sonido | **−14 LUFS**, voz muy comprimida, 3,2-4,1 palabras/s, sin cama. Un brillo agudo (9-16 kHz, 0,4-0,7 s) cuando entra el CTA. |
 | Cierre | CTA en los últimos 2,4-5,5 s, tecleado letra por letra con cursor: «COMENTA <PALABRA>» + lo que recibe. |
 | Duración | 44-52 s (noticia o producto) o 105-127 s (top-N o tutorial). |
+
+## Receta Pablo (@pabloinpublic), para los repos de GitHub
+
+Fuente: `hermes-content/references/video-intake/2026-10-03-reels-genjutsu-y-fiesta-ia.md` §3 (reel `Dd66MLpuIc_`,
+20,6 s, 113 comentarios sobre 142 likes; la madre verificó 6 cuadros a mano). Es Santiago con cuatro cambios, así que se
+edita con `santiago.py` y su storyboard.
+
+| Tramo | Qué va |
+|---|---|
+| 0-3 s | **A cámara** (layout `full`), tres dolores en una frase. El texto aparece en el cuadro 1. |
+| 3-16 s | **Pantalla partida**: arriba GitHub en **modo oscuro**, con cursor y scroll; abajo la cara del busto para arriba. Una herramienta (o un paso) cada **~4 s**, con corte **seco** justo en la palabra que nombra la siguiente (`"corte": true`). |
+| cierre | **A cámara** otra vez, con «comentá N», el número dicho y escrito. |
+
+Lo que cambia contra Santiago:
+1. **Subtítulo:** sans condensada bold en MAYÚSCULAS, de 2 o 3 palabras, a la altura del pecho. Solo la palabra clave
+   va en amarillo (`#FDC82F`); el resto, blanco. No es karaoke palabra por palabra.
+2. **Nunca se parte una palabra** entre renglones: en su reel se rompe «INSTALACIÓ / N» (cuadro de 19 s). El bloque es
+   de un solo renglón; si no entra, baja el tamaño, no se corta. `Subtitulos.agrupar()` ya arma bloques por ancho sin
+   partir palabras; a una palabra sola más ancha que `sub_ancho` le falta la guarda que baja el tamaño.
+3. **Sonido:** música lo-fi bajita debajo de la voz, sin efectos. Santiago va sin música, así que hay que sumarla.
+4. **Ritmo:** cortes secos, sin fundido ni barrido entre herramientas.
+
+**Para hacer cuando llegue el primer bruto de un R:** `santiago.py --estilo pablo`. Tiene que poner el subtítulo en
+mayúsculas condensadas, la palabra clave fija en amarillo, la guarda de tamaño, la música bajo la voz y los cortes
+secos. Se prueba con `--fotos` sobre ese bruto antes del render. No se escribe antes: sin bruto no hay contra qué
+probarlo.
+
+**Lo que NO se copia:**
+- el español de España («se traga», «léete»): va voseo;
+- el micrófono en la mano: nuestra regla es solapa en la remera, por el ruido de roce;
+- el «comentá N» automático: hasta que funcione el mensaje privado, los comentarios se contestan a mano.
+
+⚠ **Largo:** su reel dura 21 s con 3 herramientas. Nuestros guiones R y G hablan de UN repo en ~60 s (170-177
+palabras, medido el 3-oct). La edición toma el layout y el ritmo; acortar a 21 s es cambiar el guion, y eso lo decide
+Sergio Urcullo.
 
 ## Los scripts
 

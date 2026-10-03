@@ -41,6 +41,11 @@ publicación: si cortás antes, quedan hechas las más urgentes.
 | **5 · Pantalla de tu PC** (~90 min) | OBS a 1920x1080, notificaciones apagadas | las demos de cada pieza | «Qué tener abierto» de cada ficha |
 
 - **Repos** (R01-R07, G04, G10, G11): el mismo día se mira que el repo siga igual (README, comandos, licencia).
+- **Repos, formato nuevo (madre, 3-oct): molde @pabloinpublic** (skill `edicion-referentes`, «Receta Pablo»). Abre a
+  cámara con tres dolores en una frase, sigue en pantalla partida (GitHub arriba, tu cara abajo) cambiando de
+  pantalla cada ~4 s, y cierra a cámara con «comentá N». Se graban igual en el bloque 1: la cabeza en la mitad de
+  abajo ya sirve para la partida. En el bloque 5, **GitHub en modo oscuro**, con el cursor visible y scroll lento.
+  G11 es YouTube horizontal: el molde vale solo para un corte vertical que salga de él.
 - **D05-C:** la historia es del 20-ago y hoy n8n tiene otro número: decí la fecha. **D05-B:** ese día se mira qué incluye el
   plan Free. **D04-B:** ese día se prueba el comando.
 - **La pantalla verde ya tiene paso de edición** (`editor-videos/scripts/fondo-verde.mjs`, probado el 3-oct con una toma
