@@ -25,6 +25,10 @@ decidido: Lucía lleva el ambo como vestuario y nunca dice ni da a entender que 
 - «Hoy soy odontóloga» vivía en el plan v2, que el v3 ya había reemplazado. En `main` no quedaba en ningún guion,
   pie ni subtítulo: se comprobó con `git grep` sobre `origin/main`.
 
+- **@soy_aria_cruz al manual:** quedó en `MANUAL-PATRONES-INFLUENCERS-IA.md` § 2-bis. Ajusta el plan en tres
+  cosas: el gancho es una prueba visual sin hablar a cámara, el mensaje largo va en el pie y el embudo «Comentá X» se
+  plantea como D6. No se copia la venta de cursos, el programa de creadores de Higgsfield ni el formato clon.
+
 **Pendientes para después:**
 - **La web también promete «agenda llena»:** `web-factory/apps/onia-platform/src/app/v1/modulos/dental/page.tsx`
   dice «La agenda llena y los impuestos al día». Es de otro carril; se le avisó a la madre.

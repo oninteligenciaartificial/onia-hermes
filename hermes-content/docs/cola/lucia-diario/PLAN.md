@@ -124,6 +124,7 @@ tenemos, no abogada, de todo». La lista no se arma de memoria: sale de
 | D3 | ¿Lucía es la cara declarada del WhatsApp de Onia? | **Todavía no** | El bot trata los leads de la web como preguntas de precio y no reconoce `src`. Por ahora la puerta es `/llamada?src=` |
 | D4 | La voz de Marcela | **Reels sin voz (con texto) durante la prueba** | Medido el 2-oct: es una voz de la Voice Library («Marcela - Colombian Girl») con **acento colombiano**. Lucía es cruceña y el público boliviano critica el acento que no es de acá. La licencia está en orden: plan pago `payg` activo y 730 días de aviso si la retiran |
 | D5 | El canon de Lucía: 10 datos fijos (`LUCIA.md` § 0-canon) | OK o corregir | Es lo que hace que la sigan como una vida y no como fotos sueltas |
+| D6 | ¿Probamos «Comentá DEMO y te paso el link» en el pie de UNA pieza, contra el link en la bio? | **Sí, en la #8**, respondiendo a mano y en personaje | @soy_aria_cruz saca 283 comentarios sobre 491 likes con ese embudo (manual § 2-bis), y los comentarios son el indicador que ya medimos. No se automatiza: Meta rechazó 2 veces el paso de comentario a DM |
 
 **Pendiente de otros:**
 - **Cuenta demo dental en producción**, para las pantallas reales. Se le pidió a la madre el 1-oct. Bloquea #5 a #8.
@@ -131,7 +132,5 @@ tenemos, no abogada, de todo». La lista no se arma de memoria: sale de
   - conectar `@lucia.antelo.oficial` como cuenta profesional;
   - activar «Perfil generado con IA»;
   - cargar el token en el VPS.
-- **Madre:** la ficha de @soy_aria_cruz (programa de creadores de Higgsfield y embudo «Comentá ARIA»). Cuando llegue,
-  se suma al manual.
 
-**Orden:** Sergio Urcullo decide D2–D5 → piezas ✅ (#2, #3, #4) → piezas de venta cuando esté la cuenta demo.
+**Orden:** Sergio Urcullo decide D2–D6 → piezas ✅ (#2, #3, #4) → piezas de venta cuando esté la cuenta demo.
