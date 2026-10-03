@@ -50,7 +50,7 @@
           "label": "git commit"
         }
       ],
-      "body": "Versión 2.1.286: si tus skills, del proyecto o de usuario, tienen una llamada verify, a Claude se le indica correrla *justo antes* de commitear.",
+      "body": "Versión 2.1.286: si entre tus skills, del proyecto o de usuario, hay una llamada verify, a Claude se le indica correrla *justo antes* de commitear.",
       "next": "la letra chica",
       "alt_text": "Claude Code corre la skill verify justo antes de un git commit"
     },

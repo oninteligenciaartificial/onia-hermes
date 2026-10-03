@@ -72,12 +72,18 @@ function crear({ esc, emph, ACCOUNTS, BRAND, getFmt }) {
   }
 
   // Los 8 referentes cierran igual: una palabra para comentar y qué recibís.
-  // A 170 px entran hasta 9 letras (ESQUELETO ya llega al borde); ANTIGRAVITY (11) se salía
-  // de la lámina (visto el 2-oct, N06). Más de 9: se achica en proporción.
+  // Contar letras no alcanza: COMUNIDAD (9 letras anchas) se salía por los dos lados y ESQUELETO quedaba a 14 px
+  // del borde (QA del 3-oct), mientras ANTIGRAVITY (11) se había salido el 2-oct. Ahora el navegador MIDE la
+  // pastilla ya con la fuente cargada y achica la letra hasta que entre con el margen de la lámina (84 px).
+  // La cuenta por letras queda sólo como primer tamaño, para que el ajuste dé pocos pasos.
   function cierreHtml(s) {
     const kw = String(s.keyword || '');
     const kwSize = [...kw].length > 9 ? ` style="font-size:${Math.round(1350 / [...kw].length)}px"` : '';
-    return `<div class="c-cierre"><p class="pre">Comentá</p><div class="kw"${kwSize}>${esc(kw)}</div><p class="sub2">${emph(s.body || '')}</p></div>`;
+    const fit = `<script>document.fonts.ready.then(function(){var k=document.querySelector('.c-cierre .kw');if(!k)return;`
+      + `var max=document.documentElement.clientWidth-2*84,f=parseFloat(getComputedStyle(k).fontSize);`
+      + `k.style.whiteSpace='nowrap';k.style.display='inline-block';`
+      + `while(k.getBoundingClientRect().width>max&&f>60){f-=3;k.style.fontSize=f+'px';}});</script>`;
+    return `<div class="c-cierre"><p class="pre">Comentá</p><div class="kw"${kwSize}>${esc(kw)}</div><p class="sub2">${emph(s.body || '')}</p></div>${fit}`;
   }
 
   const LAYOUTS = { logos: logosHtml, analogia: analogiaHtml, ensayo: ensayoHtml, ilustrado: ilustradoHtml, lista: listaHtml, dato: datoHtml, captura: capturaHtml, cierre: cierreHtml };
