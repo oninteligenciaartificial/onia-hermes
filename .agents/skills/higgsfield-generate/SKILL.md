@@ -40,6 +40,16 @@ allowed-tools: Bash
 > Higgsfield no acepta `false`, lo cambia a `on` y lo avisa solo en `adjustments`. Con `sound: "off"` (texto), 6 s
 > std 9:16 cuestan **7,5 cr**, con o sin imagen de arranque. Siempre se leen los `adjustments` de la cotización antes
 > de crear.
+>
+> ⚠️ **Trampas de Seedream medidas en el kit de Lucía (3-oct):**
+> - **Letreros inventados en los edificios.** Con «glass tower» en la ventana apareció «Equperarto» en la torre. Para
+>   el paisaje se pide «only flat city, tree canopies, low rooftops; no lettering, no signs, no logos on any building».
+> - **El mostrador a la cintura puede atravesar el cuerpo.** No se paga otra foto: se recorta por encima del
+>   mostrador, se sube el recorte (`media_upload` + `media_confirm`) y se usa como imagen de arranque de Kling.
+> - **Lotes de más de 5 fotos simultáneas devuelven 429** (`rate_limit_reached`). La foto que rebota no se cobra:
+>   se reintenta cuando terminan las otras.
+> - **En clips de Kling a 720p la cara mide unos 120 px** y el puntaje de identidad baja (0,68–0,73) aunque sea ella.
+>   Por la regla del gate, esas caras se MIRAN.
 
 # Higgsfield Generate
 
