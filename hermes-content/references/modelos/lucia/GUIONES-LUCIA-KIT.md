@@ -114,6 +114,48 @@ link en la bio.
 
 **Costo: 0 cr.**
 
+## K4 · Las reglas de la recepción (opción, formato «reglas → giro → CTA»)
+
+**De dónde sale el formato:** `references/video-intake/2026-10-03-reels-genjutsu-y-fiesta-ia.md` §2, el reel de
+@ugc.studio.ia «Nadie en esta fiesta es real» (89 s, 1.741 likes). Un personaje IA se ríe de los defectos de la IA
+(«reglas»), viene un giro y cierra con un CTA, con un subtítulo de UNA palabra por toma.
+
+**Qué cambia para Lucía:**
+- **El humor sale de que TODOS saben que es IA.** Nada de «no le digas a nadie».
+- **El giro** es la pantalla real de Onia: quien trabaja de verdad es el sistema.
+- **De la fiesta universitaria no se toma nada:** se toma la estructura y pasa a la recepción.
+- **La regla 3 convierte el límite de D1 en chiste:** ella no atiende a nadie; el ambo es vestuario.
+
+**La pieza:**
+- **Plano:** la recepción de K1.
+- **Vestuario:** ambo terracota.
+- **Duración:** 35 s, sin voz (D4). Lleva la palabra de la toma en grande y una línea corta debajo.
+
+| # | Tiempo | Imagen | Palabra · línea | Fuente | Cr |
+|---|---|---|---|---|---:|
+| 1 | 0–4 s | Foto: Lucía detrás del mostrador, saluda a cámara | **REGLAS** · «Soy IA. Acá todos lo saben. Y hay reglas.» | IA declarada | 1 |
+| 2 | 4–8 s | **Clip:** levanta la mano y cuenta los dedos, divertida | **CINCO** · «Regla 1: cinco dedos. Los cuento siempre.» | Defecto típico de la IA, dicho como chiste | 7,5 |
+| 3 | 8–11 s | Foto: una taza de café llena junto al teclado; ella la mira | **CAFÉ** · «Regla 2: el café se queda en la taza.» | Límite físico (manual §2) | 1 |
+| 4 | 11–15 s | Foto: Lucía de cuerpo entero con el ambo, mostrando la ropa | **NADIE** · «Regla 3: no atiendo a nadie. El ambo es vestuario.» | `LUCIA.md` §0 (D1) | 1 |
+| 5 | 15–19 s | Foto: Lucía señala la pantalla del mostrador (acercamiento) | **GIRO** · «¿Querés ver quién trabaja de verdad acá?» | — | 1 |
+| 6 | 19–31 s | **Pantalla real:** Pendientes del día, luego el correo de recordatorio | **ONIA** · «A las 7 revisó tu agenda y tus cobros.» → «Nada sale sin que vos lo apruebes.» → «El recordatorio por correo sale solo: 24 h y 2 h antes.» | §2 · §8, frase 3 | 0 |
+| 7 | 31–35 s | La foto 1 otra vez, con zoom | cierre: «Mandáselo a quien contesta tu WhatsApp» · «Agendá tu demo» | — | 0 |
+
+**Pie:** Lucía es un personaje hecho con IA por @oniahq: lo sabe ella, lo sabés vos y lo sabe la recepción. Quien
+trabaja de verdad es el sistema: todas las mañanas Onia revisa tu agenda y tus cobros y te deja anotado a quién
+escribirle, con el mensaje listo, y nada sale sin que vos lo apruebes. El recordatorio de cita por correo sale solo,
+24 h y 2 h antes. Desde el plan Crece y en la prueba de 14 días. Agendá tu demo: link en la bio.
+
+**Costo, cotizado con `get_cost` el 3-oct sin generar nada:**
+- **Corta: 11,5 cr.** Son 4 fotos de 1 cr y 1 clip de 7,5 cr (solo los dedos, el único chiste que necesita
+  movimiento).
+- **Completa: 26,5 cr.** Las tomas 1 y 5 también pasan a clip: 4 fotos (4 cr: la de arranque de las tomas 1 y 2, la
+  de arranque de la 5 y las tomas 3 y 4) y 3 clips (22,5 cr). En la corta, el clip 2 sale de la foto 1.
+- **Recomendación: la corta.** El original rinde por la idea, no por la cantidad de planos.
+- ⚠️ **Riesgo propio de este formato:** el clip de los dedos puede salir con 4 o 6 dedos. En el original eso ES el
+  chiste, pero acá la línea dice «los cuento siempre». Se mira cuadro por cuadro. Si los dedos fallan, se cambia el
+  texto a «a veces me sobra uno» o se rehace (7,5 cr más). No se publica con un error que contradiga el texto.
+
 ---
 
 ## Totales y lo que falta
@@ -123,9 +165,10 @@ link en la bio.
 | K1 | 8,5 |
 | K2 | 9,5 |
 | K3 | 0 |
-| **Total** | **18** |
+| **Total K1–K3** | **18** |
+| K4, opción corta (o completa) | 11,5 (26,5) |
 
-- Octubre va **22 de 150 cr**. Con las tres pasaría a 40.
+- Octubre va **22 de 150 cr**. Con K1–K3 pasaría a 40; si además va K4 corta, a 51,5.
 - **El gasto lo aprueba Sergio Urcullo** viendo esta tabla. Se cotiza de nuevo en vivo antes de crear.
 - **Bloqueo para las tres:** la cuenta demo dental en producción, para grabar las pantallas reales.
 - **Antes de renderizar:**
