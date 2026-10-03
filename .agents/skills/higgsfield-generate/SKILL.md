@@ -35,6 +35,11 @@ allowed-tools: Bash
 > Tunndaip Hex #C4522F» en la esquina, con el color corrido a salmón. Al producto o la prenda: ni «sheet» ni códigos
 > hex. El color va en palabras y se agrega «no typography anywhere». Después se mide el color en la tela y se mira
 > la imagen ENTERA antes de usarla como referencia.
+>
+> ⚠️ **Trampa de costo de Kling (medida el 3-oct con `get_cost`).** `kling3_0` con `sound: false` cotiza **10,5 cr**:
+> Higgsfield no acepta `false`, lo cambia a `on` y lo avisa solo en `adjustments`. Con `sound: "off"` (texto), 6 s
+> std 9:16 cuestan **7,5 cr**, con o sin imagen de arranque. Siempre se leen los `adjustments` de la cotización antes
+> de crear.
 
 # Higgsfield Generate
 
