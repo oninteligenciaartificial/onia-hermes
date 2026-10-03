@@ -452,8 +452,11 @@ function handoffResult(ctx, base, reason, leadingReplies = [], bodyKey = "M5", {
  * "calificado" previo a la reunion, y sin esto un prospecto que conversa pero no reserva no
  * aparecería en el panel.
  */
-function welcomeResult(ctx, base, { reason = "disparador_demo", notes = ["bienvenida"], after = [] } = {}) {
+function welcomeResult(ctx, base, { reason = "disparador_demo", notes = ["bienvenida"], after: lasQueSiguen = [] } = {}) {
   const { config, prev, msg } = ctx;
+  // Lo que sigue a la bienvenida (la respuesta de una campaña, el precio…) no se vuelve a presentar:
+  // la bienvenida YA dice «Soy el asistente automático de Onia» en su primera linea (D2).
+  const after = lasQueSiguen.map((reply) => sinSegundoSaludo(reply, config));
   // SIN HORARIOS REALES NO SE SALUDA CON HORARIOS. El placeholder de config.mjs sale tal cual al
   // prospecto ("HORARIO A (pendiente de definir)") y ademas detectSlotChoice descarta los slots
   // `pending`, asi que el prospecto no puede elegir NADA: la conversacion muere en el primer
@@ -518,13 +521,36 @@ function welcomeResult(ctx, base, { reason = "disparador_demo", notes = ["bienve
     const bienvenida = say("M0_PERSONA", next, config, { coordina_demo: coordinaDemo(next, config) });
     // La pregunta va solo si no sigue la respuesta de una campaña: esa ya trae las suyas (la de la
     // pauta pregunta profesionales y quien agenda) y dos preguntas seguidas suenan a formulario.
-    const conPregunta = after.length === 0
-      ? { ...bienvenida, text: `${bienvenida.text}\n\n${say("M0_PERSONA_PREGUNTA", next, config).text}` }
+    // Y pregunta el dato que FALTA, no siempre el rubro (auditoria del 3-oct): «tengo una clinica
+    // dental con 4 odontologos» recibia «¿a que se dedica tu negocio?» — un bot que no escucho, en el
+    // primer mensaje del cliente ideal. Con los tres datos dichos no pregunta nada.
+    const faltante = missingFields(next.qualification || {}, config)[0];
+    const conPregunta = after.length === 0 && faltante
+      ? { ...bienvenida, text: `${bienvenida.text}\n\n${say("M0_PERSONA_PREGUNTA", next, config, { dato_faltante: faltante.missLabel }).text}` }
       : bienvenida;
     return finalize(ctx, next, [conPregunta, ...after], effects, [...notes, "agenda_de_la_persona"]);
   }
   const bienvenida = say(sinHorarios ? "M0_SIN_HORARIOS" : "M0", next, config);
   return finalize(ctx, next, [bienvenida, ...after], effects, sinHorarios ? [...notes, "sin_horarios_que_ofrecer"] : notes);
+}
+
+/**
+ * La respuesta que sigue a la bienvenida, sin su propio «¡Hola! Soy el asistente automático de Onia».
+ *
+ * Las campañas de la web traen ese saludo porque el texto se escribio para leerse solo; en venta
+ * llegan SIEMPRE detras de la bienvenida (composeWithFunnel en 'nuevo'), que ya lo dice en su primera
+ * linea. El prospecto leia dos mensajes seguidos que arrancaban con la misma frase literal (auditoria
+ * del 3-oct). Se corta solo esa frase; lo demas del texto editable no se toca. El nombre sale de
+ * `identity.botName`, el mismo que usa la bienvenida.
+ */
+function sinSegundoSaludo(reply, config) {
+  const texto = String(reply?.text || "");
+  const nombre = String(config.identity?.botName || "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  if (!nombre) return reply;
+  const saludo = new RegExp(`^\\s*¡?hola!?[,.]?\\s*soy ${nombre}\\s*(?:[.,!:]|[—–-])\\s*`, "i");
+  const resto = texto.replace(saludo, "");
+  if (resto === texto || !resto.trim()) return reply;
+  return { ...reply, text: `${resto.charAt(0).toUpperCase()}${resto.slice(1)}` };
 }
 
 /**
@@ -646,6 +672,52 @@ function composeWithFunnel(ctx, base, bodyKey, reason, vars = {}) {
  * @returns {{nextState: object, replies: object[], sideEffects: object[], notes: string[], inbound: object}}
  */
 export function step(state, incoming, options = {}) {
+  const config = options.config || DEFAULT_CONFIG;
+  return conAvisoDeLaOfertaVieja(state, incoming, config, pasoDelMotor(state, incoming, options));
+}
+
+/**
+ * LA OFERTA VIEJA, EN MODO PERSONA (auditoria del 3-oct).
+ *
+ * El aviso `coordinar_demo` sale en la bienvenida: es la otra mitad del «te escribe Sergio». Una
+ * conversacion que nacio ANTES del deploy del 2-oct —cuando el bot ofrecia los horarios del cron— esta
+ * en `esperando_horario` con `slotsOffered` reales y NUNCA lo recibio. Sin agenda propia, si cuenta su
+ * negocio (M0b_SIN_HORARIOS), pregunta el precio o algo libre (PENDING_HORARIO_SIN_HORARIOS al final)
+ * o elige un horario vencido, el bot le promete «{{humano}} te coordina el horario y te escribe…» y a
+ * Sergio Urcullo no le llegaba nada: el 18-sep habia 12 conversaciones asi.
+ *
+ * El primer turno de esa conversacion que siga esperando horario emite UNA vez el par de la
+ * bienvenida (review_queue + notify_sergio `coordinar_demo`) y cierra la foto (`slotsOffered: []`),
+ * que es lo que evita que se repita. Si el turno ya avisa (elegir «A» deriva con su propio aviso) o
+ * la conversacion cambia de etapa, no se suma nada. Va como envoltorio de `step` y no en cada rama:
+ * las ramas que hacen la promesa son cuatro (acuse, precio/SIAT, LLM, horario vencido) y una quinta
+ * que aparezca mañana quedaria cubierta igual.
+ */
+function conAvisoDeLaOfertaVieja(state, incoming, config, result) {
+  if (config.modo === "recepcionista" || agendaPropia(config)) return result;
+  if (state?.botStage !== "esperando_horario" || state.humanTookOver) return result;
+  if (!(state.slotsOffered || []).some((slot) => slot && !slot.pending)) return result;
+  const msg = readIncoming(incoming);
+  if (msg.author !== "contact") return result;
+  const next = result.nextState;
+  if (next.botStage !== "esperando_horario" || result.replies.length === 0) return result;
+  if (result.sideEffects.some((effect) => effect.type === "notify_sergio")) return result;
+
+  const cerrada = { ...next, slotsOffered: [] };
+  const summary = summarize(cerrada, msg, "le habíamos ofrecido horarios que el bot ya no agenda: coordinale vos el horario", config);
+  return {
+    ...result,
+    nextState: cerrada,
+    sideEffects: [
+      ...result.sideEffects,
+      { type: "review_queue", payload: { ...config.handoff.reviewQueue, conversationKey: cerrada.conversationKey, leadKey: cerrada.leadKey, summary } },
+      { type: "notify_sergio", payload: { kind: "coordinar_demo", conversationKey: cerrada.conversationKey, text: summary } },
+    ],
+    notes: [...result.notes, "aviso:oferta_vieja"],
+  };
+}
+
+function pasoDelMotor(state, incoming, options = {}) {
   const config = options.config || DEFAULT_CONFIG;
   const msg = readIncoming(incoming);
   const prev = state;

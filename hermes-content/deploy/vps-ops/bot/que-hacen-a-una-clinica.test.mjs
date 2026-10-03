@@ -24,6 +24,7 @@ import { test } from "node:test";
 
 import { createState, step } from "./bot-engine.mjs";
 import { DEFAULT_CONFIG } from "./config.mjs";
+import { configComoProduccion } from "./config-como-produccion.mjs";
 import { buildConfig } from "./simulate.mjs";
 
 const T0 = "2026-09-30T19:00:00Z";
@@ -31,28 +32,33 @@ const T0 = "2026-09-30T19:00:00Z";
 // fijos y sin esto vencen solos (hoy pasa solo porque los asserts no miran el horario).
 const SIN_AMBIENTE = { env: {}, envFile: "/no/existe/webhook.env", now: Date.parse(T0) };
 const HORARIOS = "jueves 2 de octubre, 14:00@2026-10-02T18:00:00Z|viernes 3 de octubre, 15:00@2026-10-03T19:00:00Z";
+// CON AGENDA PROPIA (`--slots` a mano) y COMO PRODUCCION (3-oct, la persona coordina la demo): la
+// respuesta al «¿qué hacen?» no depende de la agenda, y se mide en las dos para que no diverjan.
 const CONFIG = buildConfig({ slots: HORARIOS }, SIN_AMBIENTE);
+const PRODUCCION = configComoProduccion({ horarios: HORARIOS, now: Date.parse(T0) });
 
-function turno(state, text, minuto = 0) {
+function turno(state, text, minuto = 0, config = CONFIG) {
   const receivedAt = new Date(Date.parse(T0) + minuto * 60000).toISOString();
-  return step(state, { text, receivedAt }, { config: CONFIG });
+  return step(state, { text, receivedAt }, { config });
 }
 
-function queHacenTras(primerMensaje) {
-  const r1 = turno(createState({ channel: "chatwoot", contactRef: "qh" }), primerMensaje);
-  const r2 = turno(r1.nextState, "que hacen exactamente?", 1);
+function queHacenTras(primerMensaje, config = CONFIG) {
+  const r1 = turno(createState({ channel: "chatwoot", contactRef: "qh" }), primerMensaje, 0, config);
+  const r2 = turno(r1.nextState, "que hacen exactamente?", 1, config);
   const reply = r2.replies.find((r) => r.templateKey === "M_QUE_ES_ONIA");
   assert.ok(reply, "la pregunta se contesta con el catálogo");
   return reply.text;
 }
 
-test("a la clínica dental que llega por el anuncio se le contesta con el módulo dental, sin las otras líneas", () => {
-  const texto = queHacenTras("Hola, vi el anuncio de Onia (D1). Tengo una clínica dental.");
-  assert.match(texto, /\*Dental\*/);
-  for (const ajeno of [/Comercio/, /Importadora/, /Estética/, /web de tu negocio/, /influencers/, /redes/]) {
-    assert.doesNotMatch(texto, ajeno, `a una clínica no se le ofrece ${ajeno}`);
-  }
-});
+for (const [rama, config] of [["como en producción", PRODUCCION], ["con agenda propia", CONFIG]]) {
+  test(`${rama}: a la clínica dental que llega por el anuncio se le contesta con el módulo dental, sin las otras líneas`, () => {
+    const texto = queHacenTras("Hola, vi el anuncio de Onia (D1). Tengo una clínica dental.", config);
+    assert.match(texto, /\*Dental\*/);
+    for (const ajeno of [/Comercio/, /Importadora/, /Estética/, /web de tu negocio/, /influencers/, /redes/]) {
+      assert.doesNotMatch(texto, ajeno, `a una clínica no se le ofrece ${ajeno}`);
+    }
+  });
+}
 
 test("a la ferretería se le contesta con Comercio, no con Dental", () => {
   const texto = queHacenTras("Hola, tengo una ferreteria y quiero informacion");

@@ -182,6 +182,28 @@ final. Y los horarios que ofrecía no salían de un calendario: los escribe un c
   `grep ^ONIA_AUDIO_ENABLED /opt/onia/bot/webhook.env`: si dice `true`, borrar la línea (o `false`) y
   reiniciar el webhook; y confirmar con `npm run destinos:vivos`. La agenda se apaga sola al desplegar
   (`ONIA_BOT_AGENDA` no existe allá). Las líneas `CALCOM_*` pueden quedar: sin `calcom` no se usan.
+- **Lo que el bot dice en modo persona tiene que poder cumplirse (auditoría del 3-oct):**
+  - **Los tests de la pauta medían la rama equivocada.** `buildConfig({ slots: … })` (simulate) con
+    `--slots` a mano devuelve `agenda: null` = AGENDA PROPIA: certificaban M0 con «**A)**» mientras
+    producción saluda con M0_PERSONA. Un test que mide lo que ve un lead arma la config con
+    `configComoProduccion({ horarios, now })` (`config-como-produccion.mjs`: webhook.env temporal con
+    los horarios del cron y CALCOM_* sin `ONIA_BOT_AGENDA`) y ancla `config.agenda.modo === "persona"`.
+    La variante con `--slots` se nombra «con agenda propia». Mutar `M0b_SIN_HORARIOS → M0b` pone rojos
+    solo los de producción: así se prueba que miden algo.
+  - **El texto editable de una campaña también promete.** Las campañas 6 y 7 (CTA de /contacto) decían
+    «te confirmo el horario acá mismo». Gate: `agendado-solo-si-se-agendo.test.mjs` recorre
+    `campanas[].respuesta` con `/confirmo el horario|te reservo|\bagend(o|amos)\b/`.
+  - **El saludo no sale dos veces.** Las campañas arrancan con «¡Hola! Soy el asistente automático de
+    Onia.» y en venta llegan SIEMPRE detrás de la bienvenida: `sinSegundoSaludo` (bot-engine) corta esa
+    frase de lo que sigue a la bienvenida, con el nombre de `identity.botName`. D2 queda en la primera
+    línea de la bienvenida.
+  - **La pregunta de M0_PERSONA es el dato que FALTA** (`{{dato_faltante}}` = primer `missLabel` de
+    `missingFields`), no siempre el rubro; con los tres dichos no pregunta nada.
+  - **La oferta VIEJA avisa una vez.** Una conversación nacida antes del deploy del 2-oct está en
+    `esperando_horario` con `slotsOffered` reales y nunca recibió `coordinar_demo`. `step` está envuelto
+    por `conAvisoDeLaOfertaVieja`: el primer turno que sigue esperando horario emite review_queue +
+    `coordinar_demo` y vacía `slotsOffered` (eso evita repetirlo). Si el turno ya avisa (elegir «A»
+    deriva con su aviso) no suma nada. `step` exportado = envoltorio; el cuerpo es `pasoDelMotor`.
 - **Para encender la agenda propia algún día** (Cal.com que exista, o la agenda de la plataforma):
   `ONIA_BOT_AGENDA=calcom` en webhook.env (el lanzador ya la pasa) **y** cablearla en `followup-run.sh`
   (hoy no pasa ni `ONIA_BOT_AGENDA` ni `CALCOM_*`: M3 queda bloqueado). Verificar con el simulador y una

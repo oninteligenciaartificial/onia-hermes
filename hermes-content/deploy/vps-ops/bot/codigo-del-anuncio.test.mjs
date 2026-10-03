@@ -22,6 +22,7 @@ import { test } from "node:test";
 
 import { createState, step } from "./bot-engine.mjs";
 import { createBotConfig } from "./config.mjs";
+import { configComoProduccion } from "./config-como-produccion.mjs";
 import { buildConfig } from "./simulate.mjs";
 
 const T0 = "2026-09-30T19:00:00Z";
@@ -35,17 +36,33 @@ const CAMPANA_PAUTA = {
   prefijo: true,
   respuesta: "Gracias por escribir desde el anuncio. ¿Cuántos profesionales atienden en tu clínica?",
 };
+// CON AGENDA PROPIA (`--slots` a mano): la rama que ofrece y confirma horarios.
 const CONFIG = createBotConfig({ campanas: [...(BASE.campanas || []), CAMPANA_PAUTA] }, BASE);
+// COMO PRODUCCION (3-oct): sin `ONIA_BOT_AGENDA=calcom`, la persona coordina la demo.
+const BASE_PRODUCCION = configComoProduccion({ horarios: HORARIOS, now: Date.parse(T0) });
+const PRODUCCION = createBotConfig({ campanas: [...(BASE_PRODUCCION.campanas || []), CAMPANA_PAUTA] }, BASE_PRODUCCION);
 
-function turno(state, text, minuto = 0) {
+function turno(state, text, minuto = 0, config = CONFIG) {
   const receivedAt = new Date(Date.parse(T0) + minuto * 60000).toISOString();
-  return step(state, { text, receivedAt }, { config: CONFIG });
+  return step(state, { text, receivedAt }, { config });
 }
 
 const nuevo = (extra = {}) => createState({ channel: "chatwoot", contactRef: "ad", ...extra });
 const leadDe = (r) => r.sideEffects.find((e) => e.type === "lead_upsert");
 
-test("el precargado de D4 contesta con la campaña y deja el código del anuncio como origen", () => {
+test("como en producción: el precargado de D4 contesta con la campaña, deja el código como origen y el aviso lo dice", () => {
+  assert.equal(PRODUCCION.agenda?.modo, "persona", "ancla: se mide la rama que sirve producción");
+  const r = turno(nuevo(), "Hola, vi el anuncio de Onia (D4). Tengo una clínica dental.", 0, PRODUCCION);
+  assert.deepEqual(r.replies.map((reply) => reply.templateKey), ["M0_PERSONA", "R_CAMPANA"], "D2 primero, después la respuesta de la campaña");
+  assert.equal(r.nextState.pieceKey, "anuncio-D4");
+  assert.equal(leadDe(r).payload.pieceKey, "anuncio-D4", "el lead nace con su anuncio: bot:anuncio-D4 en el CRM");
+  // Sin agenda propia no hay «B» que reservar: el aviso que lleva el origen es el de coordinar la demo.
+  const aviso = r.sideEffects.find((e) => e.type === "notify_sergio");
+  assert.equal(aviso?.payload.kind, "coordinar_demo");
+  assert.match(aviso.payload.text, /Origen: anuncio-D4/, "Sergio Urcullo sabe que el lead es pago y de qué anuncio");
+});
+
+test("con agenda propia: el precargado de D4 contesta con la campaña y deja el código del anuncio como origen", () => {
   const r = turno(nuevo(), "Hola, vi el anuncio de Onia (D4). Tengo una clínica dental.");
   assert.deepEqual(r.replies.map((reply) => reply.templateKey), ["M0", "R_CAMPANA"], "D2 primero, después la respuesta de la campaña");
   assert.equal(r.nextState.pieceKey, "anuncio-D4");
@@ -74,7 +91,7 @@ test("un origen que ya trajo el canal (referer, custom_attributes) no se pisa", 
   assert.equal(r.nextState.pieceKey, "lucia-d03-reel-siat");
 });
 
-test("el aviso a Sergio Urcullo dice de qué anuncio vino el lead", () => {
+test("con agenda propia: el aviso de la reserva a Sergio Urcullo dice de qué anuncio vino el lead", () => {
   const r1 = turno(nuevo(), "Hola, vi el anuncio de Onia (D4). Tengo una clínica dental.");
   const r2 = turno(r1.nextState, "B", 1);
   const aviso = r2.sideEffects.find((e) => e.type === "notify_sergio");
@@ -82,7 +99,7 @@ test("el aviso a Sergio Urcullo dice de qué anuncio vino el lead", () => {
   assert.match(aviso.payload.text, /Origen: anuncio-D4/);
 });
 
-test("sin origen conocido, el aviso no inventa una línea de origen", () => {
+test("con agenda propia: sin origen conocido, el aviso no inventa una línea de origen", () => {
   const r1 = turno(nuevo(), "Hola, quiero informacion sobre el sistema");
   const r2 = turno(r1.nextState, "A", 1);
   const aviso = r2.sideEffects.find((e) => e.type === "notify_sergio");

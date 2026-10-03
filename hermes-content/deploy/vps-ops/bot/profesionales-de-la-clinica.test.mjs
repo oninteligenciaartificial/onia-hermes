@@ -16,6 +16,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 
 import { createState, step } from "./bot-engine.mjs";
+import { configComoProduccion } from "./config-como-produccion.mjs";
 import { normalize } from "./guardrails.mjs";
 import * as intents from "./intents.mjs";
 import { buildConfig } from "./simulate.mjs";
@@ -35,7 +36,23 @@ for (const [frase, esperado] of CASOS) {
   });
 }
 
-test("en la conversación: el dueño que contesta con sus odontólogos recibe el acuse, no al LLM", () => {
+const HORARIOS = "jueves 2 de octubre, 14:00@2026-10-02T18:00:00Z|viernes 3 de octubre, 15:00@2026-10-03T19:00:00Z";
+
+// La rama que ven los leads (3-oct): sin `ONIA_BOT_AGENDA=calcom` el acuse es M0b_SIN_HORARIOS. La de
+// abajo, con `--slots` a mano, es la de agenda propia y seguía verde cuando producción ya no la servía.
+test("en la conversación, como en producción: el dueño que contesta con sus odontólogos recibe el acuse, no al LLM", () => {
+  const T0 = Date.parse("2026-09-30T19:00:00Z");
+  const config = configComoProduccion({ horarios: HORARIOS, now: T0 });
+  assert.equal(config.agenda?.modo, "persona", "ancla: se mide la rama que sirve producción");
+  const r1 = step(createState({ channel: "chatwoot", contactRef: "prof-prod" }), { text: "Hola, vi el anuncio de Onia (D1). Tengo una clínica dental.", receivedAt: new Date(T0).toISOString() }, { config });
+  const r2 = step(r1.nextState, { text: "hay 3 odontologos y la recepcionista agenda", receivedAt: new Date(T0 + 60000).toISOString() }, { config });
+  assert.equal(r2.replies[0].templateKey, "M0b_SIN_HORARIOS");
+  assert.equal(r2.replies[0].replySource, "script");
+  assert.equal(r2.nextState.qualification.teamSize, 3);
+  assert.equal(r2.nextState.offScriptCount, 0, "contestar la pregunta no cuenta como malentendido");
+});
+
+test("en la conversación, con agenda propia: el dueño que contesta con sus odontólogos recibe el acuse, no al LLM", () => {
   const T0 = Date.parse("2026-09-30T19:00:00Z");
   // El reloj de la config es el de la conversacion, no el de la maquina: los horarios son fijos y
   // sin esto vencen solos (el 2-oct pusieron rojo este caso sin que nadie tocara el bot).

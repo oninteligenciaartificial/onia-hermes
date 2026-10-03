@@ -32,6 +32,7 @@ import { readFileSync } from "node:fs";
 import { test } from "node:test";
 
 import { createState, step } from "./bot-engine.mjs";
+import { configComoProduccion } from "./config-como-produccion.mjs";
 import { normalize } from "./guardrails.mjs";
 import * as intents from "./intents.mjs";
 import { buildConfig } from "./simulate.mjs";
@@ -41,7 +42,10 @@ const T0 = "2026-09-30T19:00:00Z"; // martes 15:00 en La Paz: dentro del horario
 // fijos y sin esto vencen solos (el 2-oct pusieron rojo este archivo sin que nadie tocara el bot).
 const SIN_AMBIENTE = { env: {}, envFile: "/no/existe/webhook.env", now: Date.parse(T0) };
 const HORARIOS = "jueves 2 de octubre, 14:00@2026-10-02T18:00:00Z|viernes 3 de octubre, 15:00@2026-10-03T19:00:00Z";
+// CON AGENDA PROPIA (`--slots` a mano): ofrece y confirma horarios.
 const CONFIG = buildConfig({ slots: HORARIOS }, SIN_AMBIENTE);
+// COMO PRODUCCION (3-oct): sin `ONIA_BOT_AGENDA=calcom`, la bienvenida es M0_PERSONA.
+const PRODUCCION = configComoProduccion({ horarios: HORARIOS, now: Date.parse(T0) });
 
 const PRECARGADO_D1 = "Hola, vi el anuncio de Onia (D1). Tengo una clínica dental.";
 
@@ -49,9 +53,9 @@ function nuevo() {
   return createState({ channel: "chatwoot", contactRef: "pauta-1", channelType: "Channel::Whatsapp" });
 }
 
-function turno(state, text, minuto = 0) {
+function turno(state, text, minuto = 0, config = CONFIG) {
   const receivedAt = new Date(Date.parse(T0) + minuto * 60000).toISOString();
-  return step(state, { text, receivedAt }, { config: CONFIG });
+  return step(state, { text, receivedAt }, { config });
 }
 
 const tipos = (result) => result.sideEffects.map((effect) => effect.type);
@@ -133,21 +137,44 @@ test("el paciente que toca «Busco atención dental» recibe la salida cortés y
   assert.ok(!tipos(r).includes("review_queue"), "ni una fila en la cola de revisión");
 });
 
-test("el paciente que mandó el precargado del anuncio y después pide turno sale por la puerta cortés", () => {
-  // El precargado dice «Tengo una clínica dental» y un paciente lo manda igual: el primer mensaje
-  // no los distingue, el segundo sí.
-  const r1 = turno(nuevo(), PRECARGADO_D1);
-  assert.equal(r1.replies[0].templateKey, "M0");
-  // El ejecutor le pone el lead_key a la conversación (no es determinista, por eso no lo hace el motor).
-  const conLead = { ...r1.nextState, leadKey: "lead-pauta-1" };
-  const r2 = turno(conLead, "no, yo busco turno para una limpieza", 1);
-  assert.equal(r2.replies[0].templateKey, "M1_PACIENTE");
-  assert.equal(r2.nextState.botStage, "descartado");
-  const lead = r2.sideEffects.find((effect) => effect.type === "lead_upsert");
-  assert.ok(lead, "el lead que nació con el precargado se cierra, no queda colgado como 'Contactado'");
-  assert.equal(lead.payload.pipelineStatus, CONFIG.pipelineStatus.descartado);
-  assert.equal(avisos(r2).length, 0);
-});
+// Las dos bienvenidas: la de producción (la persona coordina, 3-oct) y la de agenda propia. Hasta el
+// 3-oct estos casos corrían solo con la segunda y seguían verdes midiendo una rama que nadie veía.
+const BIENVENIDAS = [
+  { rama: "como en producción", config: PRODUCCION, bienvenida: "M0_PERSONA" },
+  { rama: "con agenda propia", config: CONFIG, bienvenida: "M0" },
+];
+
+for (const { rama, config, bienvenida } of BIENVENIDAS) {
+  test(`${rama}: el paciente que mandó el precargado del anuncio y después pide turno sale por la puerta cortés`, () => {
+    // El precargado dice «Tengo una clínica dental» y un paciente lo manda igual: el primer mensaje
+    // no los distingue, el segundo sí.
+    const r1 = turno(nuevo(), PRECARGADO_D1, 0, config);
+    assert.equal(r1.replies[0].templateKey, bienvenida);
+    // El ejecutor le pone el lead_key a la conversación (no es determinista, por eso no lo hace el motor).
+    const conLead = { ...r1.nextState, leadKey: "lead-pauta-1" };
+    const r2 = turno(conLead, "no, yo busco turno para una limpieza", 1, config);
+    assert.equal(r2.replies[0].templateKey, "M1_PACIENTE");
+    assert.equal(r2.nextState.botStage, "descartado");
+    const lead = r2.sideEffects.find((effect) => effect.type === "lead_upsert");
+    assert.ok(lead, "el lead que nació con el precargado se cierra, no queda colgado como 'Contactado'");
+    assert.equal(lead.payload.pipelineStatus, config.pipelineStatus.descartado);
+    assert.equal(avisos(r2).length, 0);
+  });
+
+  test(`${rama}: el dueño que manda el precargado del anuncio sigue en el embudo de venta`, () => {
+    const r = turno(nuevo(), PRECARGADO_D1, 0, config);
+    assert.equal(r.replies[0].templateKey, bienvenida);
+    assert.equal(r.nextState.botStage, "esperando_horario");
+    assert.equal(r.nextState.qualification.industry, "dental");
+    assert.ok(tipos(r).includes("lead_upsert"));
+  });
+
+  test(`${rama}: «Trabajo en una clínica» (respuesta para tocar) sigue en el embudo, no es paciente ni buscador de trabajo`, () => {
+    const r = turno(nuevo(), "Trabajo en una clínica", 0, config);
+    assert.equal(r.replies[0].templateKey, bienvenida);
+    assert.equal(r.nextState.botStage, "esperando_horario");
+  });
+}
 
 test("al paciente que pregunta el precio de un tratamiento NO se le recitan los planes de Onia", () => {
   const r = turno(nuevo(), "cuanto cuestan los brackets?");
@@ -171,7 +198,7 @@ test("el paciente que insiste recibe la misma salida, sin volver a registrar el 
   assert.equal(r2.sideEffects.length, 0, "el descarte ya se registró en el primer turno");
 });
 
-test("si el que ya había agendado resulta ser paciente, Sergio Urcullo se entera para liberar el horario", () => {
+test("con agenda propia: si el que ya había agendado resulta ser paciente, Sergio Urcullo se entera para liberar el horario", () => {
   const r1 = turno(nuevo(), PRECARGADO_D1);
   const r2 = turno(r1.nextState, "B", 1);
   assert.equal(r2.nextState.botStage, "demo_agendada");
@@ -181,19 +208,6 @@ test("si el que ya había agendado resulta ser paciente, Sergio Urcullo se enter
   assert.equal(avisos(r3)[0].payload.kind, "descarte_tras_agendar");
 });
 
-test("el dueño que manda el precargado del anuncio sigue en el embudo de venta", () => {
-  const r = turno(nuevo(), PRECARGADO_D1);
-  assert.equal(r.replies[0].templateKey, "M0");
-  assert.equal(r.nextState.botStage, "esperando_horario");
-  assert.equal(r.nextState.qualification.industry, "dental");
-  assert.ok(tipos(r).includes("lead_upsert"));
-});
-
-test("«Trabajo en una clínica» (respuesta para tocar) sigue en el embudo, no es paciente ni buscador de trabajo", () => {
-  const r = turno(nuevo(), "Trabajo en una clínica");
-  assert.equal(r.replies[0].templateKey, "M0");
-  assert.equal(r.nextState.botStage, "esperando_horario");
-});
 
 // --- Después de la salida: el «gracias» no molesta a nadie --------------------------------------
 

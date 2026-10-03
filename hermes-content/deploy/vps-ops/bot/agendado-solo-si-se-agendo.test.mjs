@@ -28,11 +28,13 @@
 //   - Una elección sobre una foto VIEJA de horarios (conversación que nació antes del cambio) tampoco
 //     se confirma.
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import { test } from "node:test";
 
 import { createState, step } from "./bot-engine.mjs";
 import { agendaDelEntorno, KIND_RESERVA_SIN_CONFIRMAR } from "./calcom-booking.mjs";
 import { createBotConfig, slotsPending } from "./config.mjs";
+import { configComoProduccion } from "./config-como-produccion.mjs";
 import { buildConfig as buildConfigDelSeguimiento } from "./followup-run.mjs";
 import { leadKeyFor } from "./persistence.mjs";
 import { buildConfig, runTurn } from "./run-turn.mjs";
@@ -53,9 +55,9 @@ const ENV_DE_PRODUCCION = {
   ONIA_BOT_DRY_RUN: "false",
 };
 
-/** Store con memoria, el mismo molde que persistence.test.mjs. */
-function memoryStore() {
-  let saved = null;
+/** Store con memoria, el mismo molde que persistence.test.mjs. `inicial`: una conversación ya guardada. */
+function memoryStore(inicial = null) {
+  let saved = inicial;
   const seen = new Set();
   return {
     get state() {
@@ -302,4 +304,144 @@ test("persona: el texto SEGURO (LLM caído o descartado) no ofrece horarios ni m
   const texto = descartado.replies.map((r) => r.text).join("\n");
   assert.doesNotMatch(texto, /Bs 999/, "ancla: el guardrail descartó el texto del modelo");
   assert.doesNotMatch(texto, /pendiente de definir|Te reservo/);
+});
+
+// ---------------------------------------------------------------------------
+// 4. Lo que el bot dice en modo persona tiene que poder cumplirse (3-oct)
+// ---------------------------------------------------------------------------
+
+// El conocimiento publicado (`knowledge.onia.json`) y la config de producción de hoy: la persona
+// coordina la demo. El instante es el de los casos de arriba.
+const PRODUCCION = configComoProduccion({ horarios: SPEC, now: Date.parse(T0) });
+const CAMPANAS = JSON.parse(readFileSync(new URL("./knowledge.onia.json", import.meta.url), "utf8")).campanas;
+/** El mensaje que manda quien toca el link de la campaña (a la de prefijo se le suma su resto). */
+const mensajeDe = (campana) => (campana.prefijo ? `${campana.frase} (D1). Tengo una clínica dental.` : campana.frase);
+const primerTurno = (texto, config = PRODUCCION) =>
+  step(createState({ channel: "chatwoot", contactRef: "persona-3oct", channelType: "Channel::Whatsapp" }), { text: texto, receivedAt: T0 }, { config });
+
+// AUDITORÍA DEL 3-OCT. El CTA de /contacto («Agendar la demo», campañas 6 y 7) le decía al prospecto
+// «Con eso te confirmo el horario acá mismo.» — justo después de M0_PERSONA («El horario lo coordinás
+// directo con Sergio») y antes de M0b_SIN_HORARIOS («Sergio te coordina el horario personalmente»).
+// El bot nunca confirma nada en modo persona: es la misma clase de promesa falsa que el cambio del
+// 2-oct vino a sacar, ahora en el texto editable de una campaña.
+const PROMETE_AGENDAR = /confirmo el horario|te reservo|\bagend(o|amos)\b/i;
+
+test("con la agenda de la persona (producción), ninguna campaña publicada promete confirmar ni reservar el horario", () => {
+  assert.equal(PRODUCCION.agenda?.modo, "persona", "ancla: se mide la rama que sirve producción");
+  const promesas = CAMPANAS.filter((campana) => PROMETE_AGENDAR.test(campana.respuesta)).map((campana) => campana.frase);
+  assert.deepEqual(promesas, [], "estas campañas prometen una confirmación que el bot no da sin agenda propia");
+  for (const campana of CAMPANAS) {
+    const r = primerTurno(mensajeDe(campana));
+    assert.ok(r.replies.some((reply) => reply.templateKey === "R_CAMPANA"), `ancla: «${campana.frase}» contesta con su campaña`);
+    assert.doesNotMatch(r.replies.map((reply) => reply.text).join("\n"), PROMETE_AGENDAR, `«${campana.frase}»`);
+  }
+});
+
+test("el saludo no sale dos veces: la campaña que sigue a la bienvenida no se vuelve a presentar", () => {
+  // Las dos bienvenidas (M0_PERSONA y M0 con horarios): el saludo doble existía en las dos.
+  for (const config of [PRODUCCION, createBotConfig({ slots: SLOTS, agenda: { modo: "propia" } }, PRODUCCION)]) {
+    for (const campana of CAMPANAS) {
+      const r = primerTurno(mensajeDe(campana), config);
+      const texto = r.replies.map((reply) => reply.text).join("\n");
+      const saludos = texto.match(/Soy el asistente automático/g) || [];
+      assert.equal(saludos.length, 1, `«${campana.frase}» saluda ${saludos.length} veces:\n${texto}`);
+      assert.match(r.replies[0].text.split("\n")[0], /bot|asistente automático/i, "D2: el disclosure sigue en la PRIMERA línea");
+      const campanaDicha = r.replies.find((reply) => reply.templateKey === "R_CAMPANA");
+      assert.match(campanaDicha.text, /^[¿¡A-ZÁÉÍÓÚÑ]/, `la campaña sin el saludo arranca con mayúscula: «${campanaDicha.text.slice(0, 40)}»`);
+    }
+  }
+});
+
+// AUDITORÍA DEL 3-OCT. M0_PERSONA terminaba SIEMPRE en «Contame mientras: ¿a qué se dedica tu
+// negocio?», aunque el primer mensaje lo acabara de decir. El cliente ideal (dental o estética) que
+// se presenta solo leía un bot que no lo escuchó. Antes del 2-oct, M0 no pedía el rubro.
+for (const { mensaje, noPregunta, pregunta } of [
+  { mensaje: "hola, tengo una clínica dental con 4 odontólogos, quiero una demo", noPregunta: /a qué se dedica|cuántas personas/, pregunta: /¿en qué ciudad estás\?/ },
+  { mensaje: "Hola, tengo una clínica de estética, quiero una demo", noPregunta: /a qué se dedica/, pregunta: /¿cuántas personas trabajan ahí\?/ },
+  { mensaje: "tengo una ferretería en Santa Cruz", noPregunta: /a qué se dedica/, pregunta: /¿cuántas personas trabajan ahí\?/ },
+]) {
+  test(`persona: «${mensaje}» no recibe la pregunta del dato que acaba de dar, sino la del siguiente`, () => {
+    const r = primerTurno(mensaje);
+    assert.equal(r.replies[0].templateKey, "M0_PERSONA");
+    assert.doesNotMatch(r.replies[0].text, noPregunta, "le pregunta lo que acaba de decir: se lee como un bot que no escuchó");
+    assert.match(r.replies[0].text, pregunta);
+  });
+}
+
+test("persona: sin ningún dato todavía, la bienvenida sigue preguntando el rubro", () => {
+  const r = primerTurno("hola, quiero información");
+  assert.match(r.replies[0].text, /Contame mientras: ¿a qué se dedica tu negocio\?/);
+});
+
+test("persona: con los tres datos ya dichos, la bienvenida no pregunta nada", () => {
+  const r = primerTurno("hola, tengo una clínica dental en Santa Cruz, somos 4, quiero una demo");
+  assert.equal(r.nextState.qualification.city, "Santa Cruz", "ancla: los tres datos se leyeron");
+  assert.doesNotMatch(r.replies[0].text, /Contame mientras|\?$/);
+});
+
+// AUDITORÍA DEL 3-OCT. El aviso `coordinar_demo` sale en la bienvenida. Una conversación que nació
+// ANTES del deploy (cuando el bot ofrecía los horarios del cron) está en `esperando_horario`, con
+// `slotsOffered` reales, y nunca lo recibió. En modo persona, contar el negocio, preguntar el precio o
+// elegir un horario vencido le responden «Sergio te coordina el horario y te escribe…» — y a Sergio
+// Urcullo no le llegaba nada. Se le promete al lead real un contacto que nadie va a hacer.
+const conOfertaVieja = (extra = {}) => ({
+  ...createState({ channel: "chatwoot", contactRef: "oferta-vieja", channelType: "Channel::Whatsapp" }),
+  botStage: "esperando_horario",
+  slotsOffered: SLOTS.map((s) => ({ ...s })),
+  leadKey: "lead-oferta-vieja",
+  ...extra,
+});
+const avisosDe = (r) => r.sideEffects.filter((e) => e.type === "notify_sergio");
+
+for (const { caso, texto, receivedAt, plantilla } of [
+  { caso: "cuenta su negocio", texto: "tengo una clinica dental con 3 dentistas en santa cruz", receivedAt: T0, plantilla: "M0b_SIN_HORARIOS" },
+  { caso: "pregunta el precio", texto: "cuanto cuesta?", receivedAt: T0, plantilla: "M4_BODY" },
+  { caso: "elige un horario que ya venció", texto: "A", receivedAt: "2026-07-31T15:00:00Z", plantilla: "PENDING_HORARIO_SIN_HORARIOS" },
+]) {
+  test(`persona, conversación con la oferta VIEJA que ${caso}: a Sergio Urcullo le llega el aviso de coordinar, una vez`, () => {
+    const r = step(conOfertaVieja(), { text: texto, receivedAt }, { config: PERSONA });
+    assert.equal(r.replies[0].templateKey, plantilla, "ancla: la rama que el hallazgo midió");
+    assert.match(r.replies.map((x) => x.text).join("\n"), /te escribe/, "ancla: el texto le promete que le escriben");
+    const avisos = avisosDe(r);
+    assert.equal(avisos.length, 1, "la promesa «te escribe Sergio» sin aviso es un contacto que nadie va a hacer");
+    assert.equal(avisos[0].payload.kind, "coordinar_demo");
+    assert.ok(r.sideEffects.some((e) => e.type === "review_queue"), "y la tarjeta en la cola, como en la bienvenida");
+    assert.deepEqual(r.nextState.slotsOffered, [], "la oferta vieja se cierra: el aviso no se repite");
+
+    const despues = step(r.nextState, { text: "somos 5 en la clinica", receivedAt }, { config: PERSONA });
+    assert.equal(despues.replies[0].templateKey, "M0b_SIN_HORARIOS", "ancla: el turno siguiente vuelve a prometer que le escriben");
+    assert.equal(avisosDe(despues).length, 0, "una sola vez por conversación");
+  });
+}
+
+test("persona, oferta VIEJA vigente y elige «A»: el handoff ya avisa — no se le suma un segundo aviso", () => {
+  const r = step(conOfertaVieja(), { text: "A", receivedAt: T0 }, { config: PERSONA });
+  const avisos = avisosDe(r);
+  assert.equal(avisos.length, 1);
+  assert.equal(avisos[0].payload.kind, "handoff");
+});
+
+test("persona, una conversación NUEVA ya avisó en la bienvenida: el turno siguiente no repite el aviso", () => {
+  const r1 = step(createState({ channel: "chatwoot", contactRef: "nueva", channelType: "Channel::Whatsapp" }), { text: "DEMO", receivedAt: T0 }, { config: PERSONA });
+  assert.equal(avisosDe(r1)[0]?.payload.kind, "coordinar_demo");
+  const r2 = step(r1.nextState, { text: "tengo una clinica dental en santa cruz", receivedAt: T0 }, { config: PERSONA });
+  assert.equal(avisosDe(r2).length, 0);
+});
+
+test("con agenda propia la oferta vigente NO es vieja: contar el negocio no avisa (sigue eligiendo horario)", () => {
+  const r = step(conOfertaVieja(), { text: "tengo una clinica dental en santa cruz", receivedAt: T0 }, { config: createBotConfig({ slots: SLOTS }) });
+  assert.equal(r.replies[0].templateKey, "M0b");
+  assert.equal(avisosDe(r).length, 0);
+});
+
+test("el turno completo (runTurn) con el entorno de producción: el aviso de la oferta vieja llega a `notify`", async () => {
+  await conEntorno({ ...ENV_DE_PRODUCCION, ONIA_BOT_AGENDA: undefined }, async () => {
+    const vieja = conOfertaVieja({ conversationKey: "chatwoot:591700000", contactRef: "591700000" });
+    const fake = memoryStore(vieja);
+    const deps = { store: fake.store, nowIso: T0, llm: async () => "", createBooking: async () => ({ ok: false, reason: "error", warnings: [] }) };
+    const r = await runTurn(turno({ text: "tengo una clinica dental con 3 dentistas en santa cruz", message_key: "chatwoot:9" }), deps);
+    assert.match(r.send.map((x) => x.text).join("\n"), /te escribe/);
+    assert.deepEqual(r.notify.map((n) => n.kind), ["coordinar_demo"], "sin esto webhook-server no manda nada a Telegram");
+    assert.deepEqual(fake.state.slotsOffered, []);
+  });
 });

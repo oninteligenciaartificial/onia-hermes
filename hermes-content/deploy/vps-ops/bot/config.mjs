@@ -547,7 +547,8 @@ export const SCRIPT = Object.freeze({
     "",
     "Te muestro cómo quedaría en TU negocio en {{demo_duracion}} por {{demo_modalidad}}. {{coordina_demo}}",
   ].join("\n"),
-  M0_PERSONA_PREGUNTA: "Contame mientras: ¿a qué se dedica tu negocio?",
+  // {{dato_faltante}}: el PRIMER dato de calificacion que falta (`missLabel`), no siempre el rubro.
+  M0_PERSONA_PREGUNTA: "Contame mientras: ¿{{dato_faltante}}?",
   COORDINA_PERSONA: "El horario lo coordinás directo con {{humano}}: te escribe {{via_humano}}.",
   COORDINA_LINK: "Elegí el horario que te quede bien acá 👉 {{link_agenda}}",
   // M_HORARIO_SIN_AGENDA — sin agenda propia, alguien elige un horario de una oferta VIEJA (la
