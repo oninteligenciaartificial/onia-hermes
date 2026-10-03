@@ -15,16 +15,16 @@ const SITE_URL = "https://onia.com.bo";
 
 export const metadata: Metadata = {
   metadataBase: new URL(`${SITE_URL}/`),
-  title: "Facturación en línea obligatoria en Bolivia: el plazo del 1 de octubre quedó sin efecto",
+  title: "Facturación en línea obligatoria: el SIN dejó sin efecto el plazo del 1 de octubre",
   description:
-    "La RND 102600000038 del SIN abrogó la obligación de los grupos 9° al 12° de facturar en línea desde el 1 de octubre de 2026. Qué cambia, cómo saber si ya te asignaron una modalidad y la opción gratuita: el Portal Web del SIN.",
+    "La RND 102600000038 del SIN abrogó la obligación de los grupos 9° al 12° de facturar en línea desde el 1 de octubre de 2026. Qué cambia, a quién le asignará el SIN una modalidad en línea y la opción gratuita: el Portal Web del SIN.",
   alternates: { canonical: "/funciones/facturacion-electronica-siat" },
   openGraph: {
     type: "article",
     locale: "es_BO",
-    title: "Facturación en línea obligatoria: el plazo del 1 de octubre quedó sin efecto",
+    title: "Facturación en línea obligatoria: el SIN dejó sin efecto el plazo del 1 de octubre",
     description:
-      "La guía honesta: qué resolvió el SIN, a quién le asigna ahora la facturación en línea y las opciones reales — incluida la gratuita.",
+      "La guía honesta: qué resolvió el SIN, a quién le asignará la facturación en línea y las opciones reales — incluida la gratuita.",
     url: "/funciones/facturacion-electronica-siat",
   },
 };

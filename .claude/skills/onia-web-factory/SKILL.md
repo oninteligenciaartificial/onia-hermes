@@ -306,6 +306,17 @@ Reprocharle a un prospecto lo que tenemos roto es un bumerán. Estado 2026-08-13
   (con el `siat.ts` viejo: 3 rojos). Las preguntas y la historia en pasado no acusan.
 - **Fuente de la norma:** `hermes-content/docs/ONIA_FACTURACION_ESTADO_REAL.md` §2.6 y la skill
   `onia-contabilidad-bolivia`. Fecha nueva que el SIN no publicó, no se escribe.
+- **Segunda pasada (dos verificadores, mismo día) — lo que el primer arreglo dejó:**
+  - Parafrasear la norma también es fabricar: «asigna… a quien no la tiene… figura en tu Oficina
+    Virtual» no es lo que dice el Par. II (ver la skill `onia-contabilidad-bolivia`). Copiar sus límites.
+  - **La urgencia sin fecha** («en la última semana», h2 «Las tres formas de no llegar», «dejarlo para
+    cuando te asignen») no la ve un gate que busca la fecha. `INSINUA_UN_PLAZO` en el mismo test la caza en
+    lo servido de las dos páginas y en `lib/siat.ts`; probado volviendo a poner las dos frases (rojo).
+  - **Un ancla que mezcla visible y JSON-LD no prueba que se leyó el JSON-LD**: la respuesta del FAQ también
+    se pinta. El ancla mira el JSON-LD solo (`const [visible, ...jsonLd] = textosDelHtml(…)`).
+  - **El title se lee cortado** (~60 caracteres en un resultado): la corrección va antes del corte. «…en
+    Bolivia: el plazo del 1 de octubre quedó sin efecto» (87) se leía como la obligación vieja.
+  - Un botón que nombra el destino también es copy: «Qué exige la norma» → «Qué cambió en la norma».
 
 ## Worktree en disco lleno (medido 3-oct)
 

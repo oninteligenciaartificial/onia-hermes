@@ -32,18 +32,23 @@ import s from "../sitio.module.css";
  * el Portal del SIN, que es gratuito— y eso vive en el bloque 2.
  */
 
+/*
+ * El title pone «sin efecto» antes del carácter 60: decía «Facturación en línea
+ * obligatoria en Bolivia: el plazo del 1 de octubre quedó sin efecto» (87), y
+ * cortado en un resultado de búsqueda se leía como la obligación vieja.
+ */
 export const metadata: Metadata = {
   title:
-    "Facturación en línea obligatoria en Bolivia: el plazo del 1 de octubre quedó sin efecto",
+    "Facturación en línea obligatoria: el SIN dejó sin efecto el plazo del 1 de octubre",
   description:
-    "La RND 102600000038 del SIN abrogó la obligación de los grupos 9° al 12° de facturar en línea desde el 1 de octubre de 2026. Qué cambia, cómo saber si ya te asignaron una modalidad y la opción gratuita: el Portal Web del SIN.",
+    "La RND 102600000038 del SIN abrogó la obligación de los grupos 9° al 12° de facturar en línea desde el 1 de octubre de 2026. Qué cambia, a quién le asignará el SIN una modalidad en línea y la opción gratuita: el Portal Web del SIN.",
   alternates: { canonical: "/facturacion" },
   openGraph: {
     type: "article",
     locale: "es_BO",
-    title: "Facturación en línea obligatoria: el plazo del 1 de octubre quedó sin efecto",
+    title: "Facturación en línea obligatoria: el SIN dejó sin efecto el plazo del 1 de octubre",
     description:
-      "La guía honesta: qué resolvió el SIN, a quién le asigna ahora la facturación en línea y las opciones reales — incluida la gratuita.",
+      "La guía honesta: qué resolvió el SIN, a quién le asignará la facturación en línea y las opciones reales — incluida la gratuita.",
     url: "/facturacion",
   },
 };
@@ -71,7 +76,7 @@ const JSON_LD = {
     {
       "@type": "Article",
       headline:
-        "Facturación en línea obligatoria en Bolivia: el plazo del 1 de octubre quedó sin efecto",
+        "Facturación en línea obligatoria: el SIN dejó sin efecto el plazo del 1 de octubre",
       inLanguage: "es-BO",
       datePublished: "2026-08-07",
       dateModified: "2026-10-03",

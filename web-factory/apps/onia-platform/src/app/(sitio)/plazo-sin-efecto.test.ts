@@ -90,6 +90,21 @@ function afirmanElPlazoViejo(texto: string): string[] {
   );
 }
 
+/**
+ * Urgencia SIN fecha. El detector de arriba solo mira oraciones que NOMBRAN el plazo, y
+ * después del primer arreglo del 3-oct quedaron dos que lo daban por hecho sin nombrarlo:
+ * «Mirarlo hoy y no en la última semana es la diferencia entre resolverlo tranquilo y no
+ * llegar» (paso 2 de la guía) y el h2 «Las tres formas de no llegar». La RND 102600000038 no
+ * fija fecha: una página fiscal que apura inventa el plazo que la norma sacó.
+ */
+const INSINUA_UN_PLAZO =
+  /\bno\s+llegar\b|\bllegar\s+a\s+tiempo\b|[úu]ltima\s+semana|\bse\s+te\s+(pasa|vence|acaba)\b|\bquedan?\s+(solo\s+)?\d+\s+d[ií]as\b|\bcontra\s+reloj\b|\bapur[aá]te\b|\bfecha\s+l[ií]mite\b|\bya\s+es\s+tarde\b/i;
+
+/** Las oraciones que apuran hacia un plazo que no existe. */
+function insinuanUnPlazo(texto: string): string[] {
+  return oraciones(texto).filter((o) => INSINUA_UN_PLAZO.test(o));
+}
+
 /** Toda cadena de un valor cualquiera (un módulo, un JSON-LD, una `metadata`). */
 function cadenas(valor: unknown, salida: string[] = []): string[] {
   if (typeof valor === "string") salida.push(valor);
@@ -128,10 +143,16 @@ describe("ninguna superficie servida da por vigente el plazo del 1 de octubre", 
       expect(RUTAS_PUBLICADAS, `${ruta} salió de lo publicado`).toContain(ruta);
       expect(metadatas.get(ruta)?.length ?? 0, `${ruta} sin metadata legible`).toBeGreaterThan(2);
     }
-    const facturacion = textosDelHtml(htmlDe(renderizadas, "/facturacion")).join("\n");
-    expect(facturacion).toContain(siat.SIAT_TITULAR);
-    expect(facturacion, "el FAQ del JSON-LD no se leyó").toContain(siat.SIAT_FAQ[0].a);
-    expect(NOMBRA_EL_PLAZO.test(facturacion), "la página dejó de nombrar el plazo: el gate no mide nada").toBe(true);
+    const [visible, ...jsonLd] = textosDelHtml(htmlDe(renderizadas, "/facturacion"));
+    expect(visible).toContain(siat.SIAT_TITULAR);
+    // El JSON-LD se mira SOLO: la respuesta del FAQ también se pinta visible, y
+    // mezclados (así estaba hasta el 3-oct) este ancla pasaba aunque la extracción
+    // del <script> se rompiera y el gate dejara de leer lo que lee Google.
+    expect(jsonLd, "el FAQ del JSON-LD no se leyó").toContain(siat.SIAT_FAQ[0].a);
+    expect(jsonLd, "el FAQ del JSON-LD no se leyó").toContain(siat.SIAT_FAQ[0].q);
+    const [, ...jsonLdGuia] = textosDelHtml(htmlDe(renderizadas, "/guia-facturacion"));
+    expect(jsonLdGuia, "el HowTo de la guía no se leyó").toContain(siat.SIAT_GUIA_BAJADA);
+    expect(NOMBRA_EL_PLAZO.test(visible), "la página dejó de nombrar el plazo: el gate no mide nada").toBe(true);
   });
 
   it("los textos de @/lib/siat no lo afirman", () => {
@@ -152,6 +173,42 @@ describe("ninguna superficie servida da por vigente el plazo del 1 de octubre", 
       ).toEqual([]);
     });
   }
+
+  it("sin plazo, las páginas fiscales no insinúan uno (texto, JSON-LD, metadata y @/lib/siat)", () => {
+    const textos = [
+      ...cadenas(siat),
+      ...["/facturacion", "/guia-facturacion"].flatMap((ruta) => [
+        ...textosDelHtml(htmlDe(renderizadas, ruta)),
+        ...(metadatas.get(ruta) ?? []),
+      ]),
+    ];
+    expect(
+      textos.flatMap(insinuanUnPlazo),
+      "la RND 102600000038 no fija fecha: apurar al lead hacia una es fabricar el plazo",
+    ).toEqual([]);
+  });
+});
+
+describe("el detector de urgencia sin fecha anda en las dos direcciones", () => {
+  it("caza lo que quedó publicado después del primer arreglo", () => {
+    for (const vieja of [
+      "Mirarlo hoy y no en la última semana es la diferencia entre resolverlo tranquilo y no llegar.",
+      "Las tres formas de no llegar.",
+      "Dejarlo para la última semana de septiembre.",
+    ]) {
+      expect(insinuanUnPlazo(vieja), vieja).toHaveLength(1);
+    }
+  });
+
+  it("deja pasar el orden del trámite, que no apura hacia ninguna fecha", () => {
+    for (const sana of [
+      "Miralo antes de empezar, así no te frena a mitad del trámite.",
+      "Las tres cosas que traban el trámite.",
+      "Se resuelve, pero no en una tarde, y hasta que no se resuelva el trámite queda parado.",
+    ]) {
+      expect(insinuanUnPlazo(sana), sana).toEqual([]);
+    }
+  });
 });
 
 describe("el detector anda en las dos direcciones", () => {
