@@ -15,16 +15,16 @@ const SITE_URL = "https://onia.com.bo";
 
 export const metadata: Metadata = {
   metadataBase: new URL(`${SITE_URL}/`),
-  title: "Facturación en línea obligatoria en Bolivia: qué exige el SIN desde el 1 de octubre de 2026",
+  title: "Facturación en línea obligatoria en Bolivia: el plazo del 1 de octubre quedó sin efecto",
   description:
-    "Los grupos 9° al 12° de contribuyentes deben emitir por facturación en línea desde el 01-10-2026 (RND 102600000007). Qué significa, las opciones que tenés — incluido el portal gratuito del SIN — y cómo saber tu grupo.",
+    "La RND 102600000038 del SIN abrogó la obligación de los grupos 9° al 12° de facturar en línea desde el 1 de octubre de 2026. Qué cambia, cómo saber si ya te asignaron una modalidad y la opción gratuita: el Portal Web del SIN.",
   alternates: { canonical: "/funciones/facturacion-electronica-siat" },
   openGraph: {
     type: "article",
     locale: "es_BO",
-    title: "Facturación en línea obligatoria: lo que cambia el 1 de octubre de 2026",
+    title: "Facturación en línea obligatoria: el plazo del 1 de octubre quedó sin efecto",
     description:
-      "La guía honesta: qué exige el SIN, quiénes están alcanzados y las opciones reales — incluida la gratuita.",
+      "La guía honesta: qué resolvió el SIN, a quién le asigna ahora la facturación en línea y las opciones reales — incluida la gratuita.",
     url: "/funciones/facturacion-electronica-siat",
   },
 };
@@ -50,7 +50,7 @@ const JSON_LD = {
     },
     {
       "@type": "Article",
-      headline: "Facturación en línea obligatoria en Bolivia: lo que cambia el 1 de octubre de 2026",
+      headline: "Facturación en línea obligatoria en Bolivia: el plazo del 1 de octubre quedó sin efecto",
       inLanguage: "es-BO",
       datePublished: "2026-08-07",
       author: { "@type": "Organization", name: "Onia" },

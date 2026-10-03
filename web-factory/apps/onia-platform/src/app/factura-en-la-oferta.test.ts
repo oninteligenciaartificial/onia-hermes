@@ -288,9 +288,12 @@ describe("la factura fiscal no se enumera como algo que el cliente recibe", () =
 
     // La guía honesta sobre la norma: nombra la factura muchas veces y no
     // enumera capacidades nuestras. Es el falso positivo caro y no debe saltar.
+    // (Hasta el 3-oct el ejemplo decía «desde el 1 de octubre de 2026 esos
+    // negocios facturan en línea»: la RND 102600000038 lo volvió falso.)
     const guia =
-      "Desde el 1 de octubre de 2026 esos negocios facturan en línea. La " +
-      "facturación electrónica se hace en el portal del SIN, que es gratuito y cumple.";
+      "La RND 102600000038 dejó sin efecto el plazo del 1 de octubre de 2026 para " +
+      "facturar en línea. La facturación electrónica se hace en el portal del SIN, " +
+      "que es gratuito y cumple.";
     expect(
       ofertasSinSalvedad(guia),
       "el gate acusa a la guía honesta sobre la norma",

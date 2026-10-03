@@ -50,7 +50,7 @@ const GRUPOS: readonly {
     links: [
       { href: "/contacto", label: "Contacto" },
       { href: "/nosotros", label: "Nosotros" },
-      // La norma del 1 de octubre de 2026 es una GUÍA, no una función que
+      // La guía de facturación en línea del SIN es una GUÍA, no una función que
       // vendamos: el emisor fiscal está en trámite ante el SIN. Vivió en
       // "Producto" hasta el 2026-09-04, donde se leía como capacidad incluida.
       { href: "/facturacion", label: "Guía: facturar en línea" },

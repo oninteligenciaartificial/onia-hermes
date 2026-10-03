@@ -289,6 +289,38 @@ Reprocharle a un prospecto lo que tenemos roto es un bumerán. Estado 2026-08-13
   one-pager y `04-OBJECIONES.md` lo venden. No se corrige con texto (no se exhibe obra ni
   «pronto»): o se saca de menú y portada hasta la prueba con el chip, o él acepta el riesgo.
 
+## Una norma de un tercero cambia sola — `/facturacion` y `/guia-facturacion` (3-oct)
+
+- **Caso:** el 30-sep la RND 102600000038 dejó sin efecto el plazo del 1-oct de los grupos 9° a 12°, y
+  el h1 de `/facturacion` siguió diciendo «Desde el 1 de octubre de 2026, miles de negocios en Bolivia
+  facturan únicamente en línea» tres días, igual que la meta description y el JSON-LD. Ningún gate lo
+  veía: `plazo-que-vence.test.ts` pide PRESENTE y la frase estaba en presente. Lo encontró el crítico
+  leyendo el PDF del SIN.
+- **El texto fiscal vive SOLO en `src/lib/siat.ts`**; las páginas tipean nada más que su metadata. El
+  arreglo fue cambiar ese archivo y la metadata de las dos páginas (y la de `/v1/funciones/…`, que no se
+  sirve pero repetía la frase). Diseño y estructura, intactos.
+- **Gate:** `src/app/(sitio)/plazo-sin-efecto.test.ts` lee lo que se SIRVE —texto visible, JSON-LD (aparte,
+  para que la pregunta del FAQ no se pegue a su respuesta) y `metadata` de cada ruta publicada— más
+  cada texto de `lib/siat.ts`, y pone en rojo la oración que nombra el plazo viejo, habla de facturar, lo
+  afirma en presente y no dice en la misma oración que quedó sin efecto. Probado en las dos direcciones
+  (con el `siat.ts` viejo: 3 rojos). Las preguntas y la historia en pasado no acusan.
+- **Fuente de la norma:** `hermes-content/docs/ONIA_FACTURACION_ESTADO_REAL.md` §2.6 y la skill
+  `onia-contabilidad-bolivia`. Fecha nueva que el SIN no publicó, no se escribe.
+
+## Worktree en disco lleno (medido 3-oct)
+
+- El checkout entero de `onia-hermes` pesa ~6 GB y el disco de la nube quedó con 765 MB libres:
+  `git worktree add` murió con «No space left on device». Se hace **sparse**:
+  `git worktree add --no-checkout <ruta> <rama>` → `git sparse-checkout init --cone` →
+  `git sparse-checkout set web-factory/apps/onia-platform web-factory/packages web-factory/docs
+  web-factory/scripts hermes-content/sales-kit hermes-content/docs hermes-content/deploy/vps-ops/bot
+  .claude scripts docs hermes-scripts onia-core supabase video-factory out output` → `git checkout`.
+  ~120 MB, y `node_modules` por symlink al de la copia principal.
+- ⚠️ **`scripts/imports-que-viajan-al-stage.test.ts` mide los HERMANOS de `web-factory/` en el disco.**
+  Sin `web-factory/docs`, `web-factory/scripts` y los directorios raíz (`supabase`, `docs`…) da 4 rojos
+  falsos («expected [...] to not include 'scripts'», «alta-confirma-vivo.mjs» como entrada muerta). No es
+  un defecto del código: es el sparse. Con la lista de arriba, 13/13.
+
 ## Ojo con los monolitos
 
 - `onia-center` (~14k líneas): NO rediseñar in situ; reconstruir en componentes chicos

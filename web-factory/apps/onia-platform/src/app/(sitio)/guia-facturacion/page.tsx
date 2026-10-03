@@ -27,8 +27,10 @@ import g from "./guia.module.css";
  * y hoy no está en ningún lado en una sola hoja.
  *
  * El texto NO se redactó acá: sale entero de `lib/siat.ts`, que ya era la
- * fuente única del contenido fiscal. Si el SIN mueve la fecha por tercera vez
- * se corrige ese archivo y las dos páginas se enteran solas.
+ * fuente única del contenido fiscal. Si el SIN cambia la regla se corrige ese
+ * archivo y las dos páginas se enteran solas — pasó el 3-oct con la RND
+ * 102600000038, que dejó sin efecto el plazo del 1-oct: la metadata de acá
+ * abajo es lo único que hubo que tocar en esta página.
  *
  * Esto de arriba era FALSO hasta el 2026-09-17 y por eso ahora tiene un gate:
  * el Kicker del hero tenía la fecha escrita a mano y decía `Plazo · 30-09-2026`
@@ -50,14 +52,14 @@ export const metadata: Metadata = {
   title:
     "Cómo habilitarte para facturar en línea, gratis: 6 pasos en la Oficina Virtual del SIN",
   description:
-    "Guía de una página: cómo saber si te alcanza el plazo del 1 de octubre de 2026 y los 6 pasos para habilitarte en el Portal Web en Línea del SIN. El trámite es gratuito y no necesitás comprar ningún sistema.",
+    "Guía de una página: el plazo del 1 de octubre de 2026 quedó sin efecto (RND 102600000038). Cómo saber si el SIN ya te asignó la facturación en línea y los 6 pasos para habilitarte en el Portal Web en Línea del SIN. El trámite es gratuito y no necesitás comprar ningún sistema.",
   alternates: { canonical: "/guia-facturacion" },
   openGraph: {
     type: "article",
     locale: "es_BO",
     title: "Habilitate para facturar en línea, gratis, en 6 pasos",
     description:
-      "La hoja que te falta: paso 0 para saber si te toca, los 6 pasos del trámite y lo que hay que tener a mano antes de empezar.",
+      "La hoja que te falta: paso 0 para saber si ya te asignaron una modalidad, los 6 pasos del trámite y lo que hay que tener a mano antes de empezar.",
     url: "/guia-facturacion",
   },
 };
