@@ -4,7 +4,7 @@ Para Sergio Urcullo. Etiquetas: **MEDIDO** (archivo o página oficial), **DE TER
 
 ## 1. El objetivo
 
-**El viernes 30-oct-2026, los 12 puntos de abajo pasan su prueba en app.onia.com.bo. Además, una cuenta de prueba hace el cobro completo: paga, sube el comprobante, usted lo aprueba y el plan queda activo.** Los puntos 1 a 4 se cierran antes, el viernes 16-oct, porque sin ellos no se le puede cobrar a nadie. Las fechas son mi propuesta (SUPUESTO).
+**El viernes 30-oct-2026, los 15 puntos de abajo pasan su prueba en app.onia.com.bo. Además, una cuenta de prueba hace el cobro completo: paga, sube el comprobante, usted lo aprueba y el plan queda activo.** Los puntos 1 a 4 se cierran antes, el viernes 16-oct, porque sin ellos no se le puede cobrar a nadie. Las fechas son mi propuesta (SUPUESTO).
 
 Los estados de brecha se midieron antes de la versión publicada del 3-oct. Cada punto se vuelve a mirar en producción antes de marcarlo como hecho.
 
@@ -23,33 +23,45 @@ Puntos que bloquean **usar**:
 - [ ] 10. Botón «Enviar por WhatsApp» en cada cita, sin promesas falsas en la conexión. **A medias** (brecha:56, 58).
 - [ ] 11. La agenda no miente: reprogramar, feriados y aviso de reserva online. **A medias / falta** (brecha:51-53).
 - [ ] 12. Importar CSV separado por «;» y WhatsApp de soporte en `/help`. **A medias** (brecha:66-67).
+- [ ] 13. Plan pago vencido: **7 días de gracia** antes de cortar (hoy corta el mismo día) y botón «no renovar». **Falta** (`research/ONIA_PAGO_AUTOSERVICIO_AUDITORIA.md`, agregado por Sergio Urcullo el 3-oct).
+- [ ] 14. Se guarda que el cliente aceptó los términos (fecha y versión). **Falta** (misma auditoría).
+- [ ] 15. Checklist al aprobar cada pago: **factura manual en el Portal Web del SIN** hasta que la factura sea automática. Va una factura por cobro; cobrar sin factura arriesga una clausura de 6 a 48 días. **Falta** (misma auditoría).
 
 Quedan para después de la 1.0: la factura SIAT automática, el recordatorio con botones, el QR que activa el plan solo y los otros rubros.
 
-## 2. La caja: Bs 4.000
+## 2. La caja: Bs 4.000 (corregida el 3-oct con los gastos reales)
 
-| Dato | Monto | Fuente | Tipo |
-|---|---|---|---|
-| Caja de Onia | Bs 4.000 («al menos») | Sergio Urcullo | dato suyo |
-| Gasto fijo total | Bs 3.650/mes | ESTR:157,161 | MEDIDO en doc |
-| Claude Max (construir) | US$200 ≈ Bs 2.304/mes | ESTR:268 | MEDIDO en doc |
-| VPS (operar el producto) | US$40 ≈ Bs 461/mes | ESTR:264 | MEDIDO en doc |
-| Caja chica | Bs 700/mes | ESTR:161 | MEDIDO en doc |
+Sergio Urcullo, 3-oct: *«solo pago Codex 100 $, el servidor VPS y Higgsfield, nada más»*. La versión anterior de este plan
+contaba Claude Max (US$200) y estaba mal.
 
-**La caja no cubre el gasto fijo completo:** 4.000 ÷ 3.650 = 1,1 meses. Propongo este reparto (SUPUESTO):
-
-| Bloque | Cuenta | Bs |
+| Gasto fijo | US$/mes | Bs/mes (a ~11,5, SUPUESTO) |
 |---|---|---|
-| Claude Max de octubre, para terminar la 1.0 | 2.304 | 2.304 |
-| VPS por 2 meses, para que el producto no se caiga | 2 × 461 | 922 |
-| **Reserva (no se toca)** | | **3.226** |
-| **Techo para conseguir clientes** | 4.000 − 3.226, redondeado hacia abajo | **750** |
-| Sobra | | 24 |
+| Codex (ChatGPT prolite) | 100 | ~1.150 |
+| VPS (el producto) | 40 | ~461 |
+| Higgsfield | 0 este mes: el plan Pro se pagó anual (US$348) | 0 |
+| **Total** | **140** | **~1.611** |
 
-- **Meses de aire:** 1 mes con Claude incluido. Si después de la 1.0 sólo se paga el VPS, la reserva alcanza para 7 meses (3.226 ÷ 461).
-- **La caja chica de Bs 700 no entra.** Si se gasta, sale del techo de los Bs 750.
-- **Tipo de cambio:** ESTR usa unos 11,52 (2.304 ÷ 200). El que cobra el banco a la tarjeta **no está medido** (ADQ:536). Si Claude o el VPS ya se pagan con tarjeta, el extracto muestra el tipo de cambio real. Como referencia, el TCO del 29-jul era 11,89 (memoria bolivia-devaluacion), un dato viejo.
-- **Para cubrir los Bs 3.650 hacen falta** 5 clientes en Profesional (Bs 890) o 7 en Crece (Bs 550). Los precios salen de `subscription-plans.ts:39-45` (MEDIDO); la división es mía. ESTR:157 está desactualizado: calcula con Bs 750.
+**Reparto propuesto (SUPUESTO):**
+
+| Bloque | Bs |
+|---|---|
+| VPS por 3 meses: el producto no se puede caer | 1.383 |
+| Codex por 1 mes: terminar la 1.0 | 1.150 |
+| **Reserva (no se toca)** | **2.533** |
+| **Techo para conseguir clientes** (Meta 750 + auditorías, comunidad y eventos 650) | **1.400** |
+
+- **Meses de aire:** 2,5 con todo, o 8,6 solo con el VPS.
+- **Para cubrir el gasto fijo (~Bs 1.611) hacen falta:** 2 clientes en Profesional (Bs 890) o 3 en Crece (Bs 550). Precios de `subscription-plans.ts:39-45`.
+- **El tipo de cambio que cobra el banco a la tarjeta** sigue sin medirse. Se lee en el próximo extracto.
+
+### Por qué «la pauta paga unas 3 demos»
+Con Bs 750 en Meta, a lo que suelen costar las conversaciones (SUPUESTO, §3), salen unas 3 demos. Con el 25 % de cierre
+(DE TERCEROS), 5 clientes necesitan unas 20 demos. **Las otras ~17 no se compran: salen de los canales gratis.**
+Por eso, el orden de Sergio Urcullo (3-oct):
+1. **Marca personal + auditorías + llamadas 1 a 1 + comunidad** (gratis, cuestan sus horas). Embudo en `ONIA_COMUNIDAD_CONTENIDO.md`.
+2. **Lo que le falta a la 1.0** (§1).
+3. **Mirar cómo funcionan los competidores:** Lety y otros que faltan (Dapta y SendyPro ya están en
+   `research/competencia/DAPTA_COMO_FUNCIONA.md` y `REVISION-HERRAMIENTAS-CHATBOT.md`).
 
 ## 3. Campañas sin quedarse sin plata
 
@@ -82,7 +94,7 @@ Quedan para después de la 1.0: la factura SIAT automática, el recordatorio con
 - Durante la prueba no se toca la segmentación ni se sube el presupuesto más de 20%, porque eso reinicia el aprendizaje (DE TERCEROS).
 - **Seguir** quiere decir una segunda tanda igual, **pagada sólo con plata de un cliente que ya pagó**, nunca con la reserva.
 
-**Techo total que no se pasa: Bs 750**, sumando pauta, plantillas y eventos. Al llegar a ese monto se apaga todo.
+**Techo total que no se pasa: Bs 1.400** (Meta 750 + auditorías, comunidad y eventos 650). Al llegar a ese monto se apaga todo.
 
 **El embudo hasta 5 clientes:**
 
