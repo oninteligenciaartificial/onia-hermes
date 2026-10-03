@@ -14,7 +14,7 @@ Escritos por el workflow del 1-oct (escritor → revisor escéptico → arreglo)
 
 Vale para bots en la API oficial de Meta. La app de WhatsApp Business que usás a mano no cambia.
 
-Los mensajes de servicio (lo que tu bot contesta dentro de las 24 h desde que el cliente escribió) ahora se cobran por mensaje, *a la misma tarifa que utilidad*. Los *primeros 1.000 de cada mes*, por número de WhatsApp de tu negocio, siguen gratis.
+Los mensajes de servicio (lo que tu bot contesta dentro de las 24 h desde que el cliente escribió) ahora se cobran por mensaje, *a la misma tarifa que utilidad*. Los *primeros 1.000 de cada mes*, por número de WhatsApp de tu negocio, siguen gratis. Las plantillas no entran en esos 1.000: se cobran desde la primera.
 
 Llenalo con tu bot:
 ```
@@ -678,7 +678,7 @@ Los dos primeros vienen en la respuesta de la API, en `usage.input_tokens_detail
 
 *Para que funcione*
 - Lo que repetís igual en cada pedido (las instrucciones de tu agente, tu lista de precios) va al principio y no se toca.
-- Tiene que pasar de 1.024 tokens.
+- Tiene que tener al menos 1.024 tokens.
 - Dura al menos 30 minutos desde el último pedido que la usó.
 - Cómo sabés que anduvo: mirá `cached_tokens`. En el primer pedido da 0. Si después sigue en 0, cambiaste algo del principio o pasó más de media hora.
 
