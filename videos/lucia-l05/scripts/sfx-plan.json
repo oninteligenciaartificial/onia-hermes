@@ -1,0 +1,33 @@
+{
+ "_nota": "pop trae 0,116 s antes del golpe (medido con librosa): at = entrada visual - 0,116 (la primera se clampa a 0). duck:false (sin voz).",
+ "sfx": [
+  {
+   "asset": "pop",
+   "at": 0,
+   "gain": -10,
+   "duck": false,
+   "_entra_visual_s": 0.083
+  },
+  {
+   "asset": "pop",
+   "at": 1.842,
+   "gain": -10,
+   "duck": false,
+   "_entra_visual_s": 1.958
+  },
+  {
+   "asset": "pop",
+   "at": 2.301,
+   "gain": -8,
+   "duck": false,
+   "_entra_visual_s": 2.417
+  },
+  {
+   "asset": "pop",
+   "at": 3.967,
+   "gain": -10,
+   "duck": false,
+   "_entra_visual_s": 4.083
+  }
+ ]
+}

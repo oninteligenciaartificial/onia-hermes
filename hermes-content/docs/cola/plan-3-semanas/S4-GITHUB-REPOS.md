@@ -386,6 +386,9 @@ Publicar en Onia Community (Announcements) **antes** que el video. Los de «come
 G08) los manda Sergio Urcullo a mano por DM: la automatización comentario → DM no está probada.
 Todo comando sale del README del repo, leído el 29-sep; re-leer antes de publicar.
 
+⚠️ **Corregido 1-oct:** desde el pedido de Sergio Urcullo del 1-oct, todos van a Avisos (el DM lleva el
+link a la comunidad). Copia lista para pegar: `cola/drops/AVISOS-POR-DIA.md`.
+
 **1 · G01 · Planilla «API gratis para un negocio»** (comunidad)
 ```
 Lista: github.com/mnfst/awesome-free-llm-apis   (datos del 19-21 ago 2026; mirar las NOTAS AL PIE)
@@ -425,7 +428,12 @@ EN CÓDIGO (vale con cualquier modelo)            | EN EL PROMPT (vale mientras 
 Pregunta para tu bot (propio o comprado): ¿cuáles de la izquierda tiene en código?
 ```
 
-**4 · G04 · ESCANEO** (DM) — README de NVIDIA/SkillSpector
+**4 · G04 · ESCANEO** (comunidad · comentá ESCANEO → DM con el link) — README de NVIDIA/SkillSpector
+⚠️ **Corregido 1-oct:** (1) decía «(DM)»; pasa a Avisos. (2) Re-leído el README el 1-oct: con `--no-llm`
+el contenido queda en tu máquina, pero el chequeo SC4 igual le manda a OSV.dev **los nombres y
+versiones de las dependencias** («runs even with --no-llm… sends dependency coordinates (not file
+contents)»). Sumada esa línea. Ojo: el guion G04 dice «así el análisis queda en tu computadora»; es
+cierto para el contenido, no para los nombres de dependencias.
 ```
 uv tool install git+https://github.com/NVIDIA/skillspector.git
 skillspector scan https://github.com/<autor>/<skill> --no-llm
@@ -434,9 +442,12 @@ skillspector scan ./mi-skill/ --no-llm --format json --output report.json
 Puntaje: 0-20 SAFE · 21-50 CAUTION · 51-100 DO NOT INSTALL
 En scripts: SAFE y CAUTION salen con código 0 → agregá --fail-on-findings
 Sin --no-llm, el contenido escaneado va al modelo configurado.
+Con --no-llm igual consulta OSV.dev con los nombres de las dependencias (no el contenido).
 ```
 
 **5 · G05 · Plantilla de comercial de producto** (comunidad) — estructura de `product-commercial-shotlist.md` (awesome-seedance, MIT)
+⚠️ **Corregido 1-oct: NO se publica.** La atribución «MIT» es falsa para la plantilla (curaduría CC BY 4.0, LOTE-D).
+Lo reemplaza `G05` de `cola/drops/2026-10-01-drops-noticias-repos.md`.
 ```
 Pedido al chat (con fotos del producto):
 "Quiero un comercial cinematográfico. Mi producto es [producto]. Tono: [tono]. [duración], [formato 16:9 o 9:16].

@@ -13,6 +13,9 @@ const path = require('path');
 const { execFileSync } = require('child_process');
 
 const BROWSER_CANDIDATES = [
+  // En la nube, `eval "$(sh scripts/carousel_cloud_setup.sh)"` deja el headless_shell acá;
+  // sin esta línea la hoja fallaba con «No Edge/Chrome found» (1-oct-2026). Igual que el renderer.
+  process.env.CAROUSEL_BROWSER || '',
   // Chrome va primero: Edge headless puede devolver una captura de
   // ERR_FILE_NOT_FOUND aunque el HTML temporal exista (mismo criterio que el
   // renderer principal).
@@ -24,7 +27,7 @@ const BROWSER_CANDIDATES = [
 ];
 
 function findBrowser() {
-  for (const c of BROWSER_CANDIDATES) if (fs.existsSync(c)) return c;
+  for (const c of BROWSER_CANDIDATES) if (c && fs.existsSync(c)) return c;
   throw new Error('No Edge/Chrome found');
 }
 
@@ -89,6 +92,8 @@ function main(argv) {
 
   execFileSync(findBrowser(), [
     '--headless=new', '--disable-gpu', '--hide-scrollbars',
+    // Como root (VPS, nube) Chromium no arranca sin esto: mismo criterio que carousel_render.js.
+    '--no-sandbox',
     '--allow-file-access-from-files', '--force-device-scale-factor=1',
     `--window-size=${width},${height}`, '--virtual-time-budget=6000',
     `--screenshot=${out}`, `file://${htmlPath.replace(/\\/g, '/')}`,

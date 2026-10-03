@@ -1,0 +1,70 @@
+{
+ "sfx": [
+  {
+   "asset": "/home/user/onia-hermes/videos/claude-code-03/assets/sfx/pop.wav",
+   "at": 0.76,
+   "gain": 0.5,
+   "duck": true
+  },
+  {
+   "asset": "/home/user/onia-hermes/videos/claude-code-03/assets/sfx/pop.wav",
+   "at": 5.79,
+   "gain": 0.5,
+   "duck": true
+  },
+  {
+   "asset": "/home/user/onia-hermes/videos/claude-code-03/assets/sfx/pop.wav",
+   "at": 8.1,
+   "gain": 0.5,
+   "duck": true
+  },
+  {
+   "asset": "/home/user/onia-hermes/videos/claude-code-03/assets/sfx/pop.wav",
+   "at": 13.31,
+   "gain": 0.5,
+   "duck": true
+  },
+  {
+   "asset": "/home/user/onia-hermes/videos/claude-code-03/assets/sfx/pop.wav",
+   "at": 21.66,
+   "gain": 0.5,
+   "duck": true
+  },
+  {
+   "asset": "/home/user/onia-hermes/videos/claude-code-03/assets/sfx/pop.wav",
+   "at": 35.77,
+   "gain": 0.5,
+   "duck": true
+  },
+  {
+   "asset": "/home/user/onia-hermes/videos/claude-code-03/assets/sfx/pop.wav",
+   "at": 37.77,
+   "gain": 0.5,
+   "duck": true
+  },
+  {
+   "asset": "/home/user/onia-hermes/videos/claude-code-03/assets/sfx/whoosh.wav",
+   "at": 44.99,
+   "gain": 0.55,
+   "duck": true
+  },
+  {
+   "asset": "/home/user/onia-hermes/videos/claude-code-03/assets/sfx/whoosh.wav",
+   "at": 51.8,
+   "gain": 0.45,
+   "duck": true
+  },
+  {
+   "asset": "/home/user/onia-hermes/videos/claude-code-03/assets/sfx/pop.wav",
+   "at": 51.9,
+   "gain": 0.5,
+   "duck": true
+  },
+  {
+   "asset": "/home/user/onia-hermes/videos/claude-code-03/assets/sfx/pop.wav",
+   "at": 55.02,
+   "gain": 0.5,
+   "duck": true
+  }
+ ]
+}

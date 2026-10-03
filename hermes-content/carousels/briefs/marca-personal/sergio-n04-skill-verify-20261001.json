@@ -1,0 +1,143 @@
+{
+  "title": "Una skill llamada verify y Claude Code la corre antes de commitear (N04, noticia, pack referentes)",
+  "caption": "Desde el 30 de septiembre, si tu proyecto tiene una skill llamada verify, a Claude Code se le indica correrla justo antes de commitear.\n\nLo dice su registro de cambios, versión 2.1.286: «when your project or user skills include one named verify, Claude is now told to run it right before committing, except for docs-only and tests-only commits».\n\nEs una indicación, no un candado. Vale cuando commitea Claude, no en un git commit que hacés vos a mano. Y no corre en commits que solo tocan documentación o solo tests.\n\nLo de las láminas, para copiar:\n1. El archivo: .claude/skills/verify/SKILL.md\n2. Arriba, name: verify y una description corta. Abajo, tus chequeos en orden. Los míos: que compile (npx tsc --noEmit, para TypeScript; si tu proyecto es otro, el comando que lo compila) y que pasen los tests. Si algo falla: no commitear, y decir qué falló y dónde.\n3. Actualizá Claude Code: claude update\n\nOjo: tu skill reemplaza al /verify que ya trae Claude Code (el que arma y corre tu app para probar que un cambio hace lo que tiene que hacer). Y si ya usaste ese /verify, puede haber guardado su receta en ese mismo archivo: abrilo antes de pisarlo.\n\nPara comprobar que la corre: pedile a Claude un commit que toque código, no solo un README o un test. Antes del commit tiene que aparecer la skill verify corriendo.\n\nPor qué me importa: en ONIA la rama principal alimenta el deploy, y ya nos pasó que un proceso automático subió trabajo a medias.\n\nFuentes, releídas el 1-oct: code.claude.com/docs/en/changelog (2.1.286, 30-sep) y code.claude.com/docs/en/skills.\n\nLa plantilla, lista para copiar, está en la comunidad de WhatsApp: te paso el link. Comentá VERIFY.",
+  "hashtags": [
+    "#claudecode",
+    "#claude",
+    "#git",
+    "#ia",
+    "#programacion",
+    "#bolivia"
+  ],
+  "serie": "Noticia · Claude Code",
+  "fuentes": {
+    "changelog": "https://code.claude.com/docs/en/changelog — 2.1.286, «September 30, 2026»: «Improved commit guidance: when your project or user skills include one named verify, Claude is now told to run it right before committing, except for docs-only and tests-only commits». Releído con curl el 1-oct (la última versión ese día era 2.1.287, sin cambios sobre verify).",
+    "skills": "https://code.claude.com/docs/en/skills — ruta .claude/skills/<skill-name>/SKILL.md; /verify incluido: «Build and run your app to confirm a code change does what it should»; «Your skill replaces the bundled command, but not its aliases»; «/verify can also record its own recipe… writes what worked to .claude/skills/verify/SKILL.md». Releído con curl el 1-oct.",
+    "guion": "hermes-content/docs/cola/plan-3-semanas/GUIONES-2-SEMANAS-1-14-OCT.md §N04 (3 pasos, chequeos «los míos», claude update, por qué importa)",
+    "auditoria": "hermes-content/docs/cola/plan-3-semanas/auditoria-20260930/LOTE-D.md §N04 (indicación, no candado; no chocar con D03-A)",
+    "drop": "hermes-content/docs/cola/drops/2026-10-01-drops-noticias-repos.md §N04 (commits de solo docs o tests; vale cuando commitea Claude; plantilla; abrilo antes de pisarlo)",
+    "captura": "Sin captura: el 1-oct la página oficial no cargó en Chromium desde la sesión en la nube (net::ERR_CERT_AUTHORITY_INVALID: el navegador no confía en la CA del proxy). Pendiente sacarla en la PC: el ítem de verify dentro de 2.1.286 en code.claude.com/docs/en/changelog."
+  },
+  "slides": [
+    {
+      "number": 1,
+      "layout": "ilustrado",
+      "theme": "verde",
+      "logo": "hermes-content/references/brand-claude/claudecode.svg",
+      "headline": "Claude Code corre tu *verify*",
+      "subtitle": "antes de commitear, desde el 30 de septiembre",
+      "image_origen": "Recorte de hermes-content/galeria/ilustraciones/sobres-trampa-a.png (sin gasto): sobres y lupa, bordes difuminados sobre gris claro para que entre entera en la portada.",
+      "body": "Le escribís tus chequeos y Claude los corre antes de commitear código. Te muestro cómo, en 3 pasos.",
+      "next": "qué cambió",
+      "alt_text": "Una lupa sobre unos sobres: Claude Code corre tu skill verify antes de commitear",
+      "badge_descartado": "nuevo: con «Claude Code corre tu» el título llega al borde derecho y el sello lo tapaba (visto el 1-oct)",
+      "image_style": "clay",
+      "image": "hermes-content/galeria/ilustraciones/sergio-n04-skill-verify-20261001-s01-1e0f0172.jpg",
+      "image_prompt_usado": "An emerald green clay shield standing upright with a raised white clay checkmark on its face."
+    },
+    {
+      "number": 2,
+      "layout": "logos",
+      "theme": "blanco",
+      "headline": "verify",
+      "logos": [
+        {
+          "file": "hermes-content/references/brand-claude/claudecode.svg",
+          "label": "Claude Code"
+        },
+        {
+          "file": "hermes-content/references/brand-logos/git-color.svg",
+          "label": "git commit"
+        }
+      ],
+      "body": "Versión 2.1.286: si tus skills, del proyecto o de usuario, tienen una llamada verify, a Claude se le indica correrla *justo antes* de commitear.",
+      "next": "la letra chica",
+      "alt_text": "Claude Code corre la skill verify justo antes de un git commit"
+    },
+    {
+      "number": 3,
+      "layout": "ilustrado",
+      "theme": "blanco",
+      "headline": "Una indicación, *no\u00a0un\u00a0candado*",
+      "body": "Vale cuando commitea Claude, no a mano. Y no corre en commits de solo documentación o solo tests.",
+      "image_style": "clay",
+      "image_prompt": "A small matte black clay gate standing wide open, with a smooth emerald green clay arrow lying on the ground and pointing through the opening, on a clean white surface.",
+      "next": "3 pasos",
+      "alt_text": "verify es una indicación, no un candado: no corre en commits manuales ni en los de solo documentación o tests"
+    },
+    {
+      "number": 4,
+      "layout": "lista",
+      "theme": "blanco",
+      "headline": "En *3 pasos*",
+      "body": "desde tu proyecto",
+      "items": [
+        {
+          "label": "Creá el archivo",
+          "text": ".claude/skills/verify/SKILL.md"
+        },
+        {
+          "label": "Nombre y chequeos",
+          "text": "arriba name y description; abajo,\u00a0tus\u00a0chequeos"
+        },
+        {
+          "label": "Actualizá",
+          "text": "claude update"
+        }
+      ],
+      "next": "los chequeos",
+      "alt_text": "Los tres pasos para armar la skill verify"
+    },
+    {
+      "number": 5,
+      "layout": "lista",
+      "theme": "blanco",
+      "headline": "Mis *chequeos*, en orden",
+      "body": "lo que va debajo del nombre",
+      "items": [
+        {
+          "label": "Que compile",
+          "text": "npx tsc --noEmit (TypeScript)"
+        },
+        {
+          "label": "Que pasen los tests",
+          "text": "con el comando de tu proyecto"
+        },
+        {
+          "label": "Si algo falla",
+          "text": "no commitear: decir qué falló y dónde"
+        }
+      ],
+      "next": "ojo",
+      "alt_text": "Los tres chequeos de la skill verify: que compile, que pasen los tests y, si algo falla, no commitear"
+    },
+    {
+      "number": 6,
+      "layout": "ensayo",
+      "theme": "blanco",
+      "headline": "Ojo: ya existe un */verify*",
+      "body": "Claude Code trae uno que arma y corre tu app para probar un cambio. El tuyo lo reemplaza.\n\nSi ya lo usaste, puede haber guardado su receta en ese mismo archivo.\n\n*Abrilo antes de pisarlo.*",
+      "next": "la prueba",
+      "alt_text": "Tu skill verify reemplaza al /verify que trae Claude Code: abrí el archivo antes de pisarlo"
+    },
+    {
+      "number": 7,
+      "layout": "ilustrado",
+      "theme": "blanco",
+      "headline": "Comprobá que *la\u00a0corre*",
+      "body": "Pedile un commit que toque código, no solo un README o un test. Antes del commit tenés que verla correr.",
+      "image_style": "clay",
+      "image_prompt": "A matte black clay stethoscope resting on a clean white surface, its round emerald green chest piece pressed against a small emerald green clay gear.",
+      "next": "la plantilla",
+      "alt_text": "Cómo comprobar que Claude Code corre la skill verify"
+    },
+    {
+      "number": 8,
+      "layout": "cierre",
+      "theme": "negro",
+      "keyword": "VERIFY",
+      "body": "y te paso el link a la comunidad con la plantilla.",
+      "alt_text": "Comentá VERIFY para recibir la plantilla de la skill verify"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+<!-- COPIA L05 de .claude/skills/editor-videos/assets/html/keyword-marca.html (solo cambia #stage).
+     Keyword GRANDE de marca (editor-videos): blanca + raya de acento. Es la composicion mas usada
+     del vocabulario (lo importante se resalta ADEMAS del karaoke). {{TITLE}} = la palabra o frase
+     corta; {{ACCENT}} = --accent (Lucia: #10C26B, Sergio: #FF6A2B). Fragmento: make-mockup le
+     inyecta la Bricolage de marca. Uso:
+     node make-mockup.mjs --template custom --html-file assets/html/keyword-marca.html \
+       --title "NO MOVÉS UN DEDO." --accent "#10C26B" --width 1000 --out assets/kw-dedo.png -->
+<style>
+  /* L05: el text-shadow (0 10u 34u) pasaba 4u el padding lateral de 30u (alpha 1-2/255 en los bordes). */
+  #stage { padding: calc(40*var(--u)) calc(60*var(--u)) calc(64*var(--u)); text-align: center; }
+  .kw { display: inline-block; position: relative; max-width: calc(940*var(--u));
+        font-family: var(--font-display); font-weight: 700; color: #fff;
+        font-size: calc(112*var(--u)); line-height: 1.02; letter-spacing: -0.02em;
+        text-transform: uppercase; text-wrap: balance;
+        text-shadow: 0 calc(10*var(--u)) calc(34*var(--u)) rgba(0,0,0,.65); }
+  .kw .raya { position: absolute; left: 2%; right: 2%; bottom: calc(-22*var(--u));
+              height: calc(12*var(--u)); border-radius: calc(7*var(--u)); background: {{ACCENT}};
+              box-shadow: 0 calc(6*var(--u)) calc(18*var(--u)) rgba(0,0,0,.45); }
+</style>
+<span class="kw">{{TITLE}}<span class="raya"></span></span>

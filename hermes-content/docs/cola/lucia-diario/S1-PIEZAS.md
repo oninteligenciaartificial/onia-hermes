@@ -1,5 +1,8 @@
 # Lucía · Semana 1 — piezas (v2, 1-oct-2026)
 
+> ⛔ **Reemplazado el 2-oct por [`PLAN.md`](PLAN.md)** (Sergio Urcullo: «organizá primero qué idea vas a subir… recién generá»). Esto queda como historia del 1-oct.
+
+
 Aprobado por Sergio Urcullo el 1-oct: Kling 3.0 para b-roll y tope de **150 cr/mes**. Flujo y reglas:
 [`FLUJO.md`](FLUJO.md). Mismo formato que `../plan-3-semanas/` (`### LNN-X · Formato · Título`).
 
@@ -11,16 +14,17 @@ nunca testimonio; nada «anti-humano».
 
 | Día | Pieza | Formato | Estado | Costo |
 |---|---|---|---|---:|
-| 1 | L01 · Hola, soy Lucía. No existo. (fijado) | Carrusel 5 fotos | ✅ renderizado, falta tu OK | 0 |
-| 2 | L02 · Este video no fue grabado | Reel b-roll (Kling, calle) + texto | clip ya hecho; falta edición | 0 |
+| 1 | L01 · Hola, soy Lucía. No existo. (fijado) | Carrusel 5 fotos | ✅ aprobado por Sergio Urcullo 1-oct | 0 |
+| 2 | L02 · Este video no fue grabado | Reel b-roll (Kling, calle) + texto | ✅ editado con `editor-videos` (`videos/lucia-l02/`, final en `v4/feed/`); espera OK | 0 |
 | 3 | L03 · Sábado | Foto (cocina a la mañana) | foto lista | 0 |
 | 4 | L04 · Tu agenda, sin llamadas | Carrusel con captura real del link de reserva | falta la captura | ~1 |
-| 5 | L05 · Lo que dejás de hacer a mano | Reel b-roll (Kling, coworking) + texto | por generar | 7,5 |
+| 5 | L05 · Lunes: cero llamadas para agendar | Reel b-roll (Kling, coworking) + texto | ✅ editado con `editor-videos` (`videos/lucia-l05/`); espera OK + captura real del link | 7,5 |
 | 6 | L06 · Noche de lámpara | Foto | foto lista | 0 |
 | 7 | L07 · El recordatorio que llega solo | Carrusel con captura real del correo 24 h / 2 h | falta la captura | ~1 |
+| extra | L08 · ¿Cuántos pacientes se olvidan de su cita? | Reel b-roll (Kling, café) + voz de Marcela | ✅ editado con `editor-videos` (`videos/lucia-l08/`); espera OK + captura real del correo | 12,5 |
 
-**Total semana 1: ~10 cr.** Lucía hablando a cámara: no esta semana (la voz de Marcela sigue sin
-resolver).
+**Gasto de octubre: 20 / 150 cr** (L05 7,5 + L08 12,5). Guiones: [`S1-GUIONES.md`](S1-GUIONES.md). **Los reels se editan
+con la skill `editor-videos`** (regla de Sergio Urcullo, 1-oct). Voz de Marcela: resuelta (ElevenLabs desde la nube).
 
 ## Archivos
 

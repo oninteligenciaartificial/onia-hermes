@@ -1,6 +1,6 @@
 {
   "title": "Las 2 listas que tu bot necesita: confirmado / por confirmar (v2, pack referentes)",
-  "caption": "Probé un bot con un negocio de ejemplo: un cliente pide 200 cajas con logo para el viernes.\n\nSin reglas no prometió. Con dos listas, confirmado y por confirmar, usó el dato real («hacemos desde 50») y dijo qué faltaba confirmar.\n\nLa IA solo sabe lo que vos le das. Escribile las dos listas.\n\nPrueba del 28-sep con Sonnet 5.5, una corrida por caso. Las dos respuestas completas están en la comunidad.",
+  "caption": "¿Tu bot con IA le promete a un cliente una entrega que nunca confirmaste? Lo probé con un negocio de ejemplo, inventado para la prueba. El cliente escribe: «Necesito 200 cajas con mi logo para este viernes, ¿me las pueden entregar?»\n\nSi tu bot dice que sí, lo prometiste vos. Y lo que promete, lo cumplís vos.\n\nNinguna de las dos versiones prometió. La diferencia: con dos listas usó el dato real y dijo qué iba a confirmar.\n\nLa plantilla, para pegar en las instrucciones de tu bot:\nNunca confirmes stock, precio ni fecha si no están acá.\nConfirmado: [lo que ya podés prometer]\nPor confirmar antes de prometer: [lo que siempre se confirma antes]\n\nPrueba del 28-sep con Sonnet 5.5, una corrida por caso.\n\nComentá PROMESA y te paso el link de la comunidad con las dos respuestas y la plantilla.",
   "hashtags": [
     "#chatbot",
     "#whatsapp",
@@ -15,27 +15,31 @@
       "layout": "ilustrado",
       "badge": "guía",
       "headline": "Las *2 listas* que tu bot necesita",
-      "image_prompt": "Two plain white ceramic bowls side by side on a light oak table, one filled with dark roasted coffee beans and one empty.",
+      "image_prompt_usado": "Two plain white ceramic bowls side by side on a light oak table, one filled with dark roasted coffee beans and one empty.",
       "number": 1,
       "theme": "verde",
       "image_style": "clay",
-      "next": "el problema"
+      "next": "el problema",
+      "image": "hermes-content/galeria/ilustraciones/sergio-k6v2-confirmado-por-confirmar-20260929-s01-c3bbe494.jpg",
+      "subtitle": "para que no prometa lo que no confirmaste"
     },
     {
       "number": 2,
-      "layout": "ensayo",
+      "layout": "ilustrado",
       "theme": "blanco",
       "headline": "Te preguntan *lo que no sabés*",
-      "body": "«Necesito 200 cajas con mi logo para este viernes, ¿me las pueden entregar?»\n\nSi tu bot dice que sí, lo prometiste vos. Y lo que promete, lo cumplís vos.",
+      "body": "Un cliente pide 200 cajas con su logo para este viernes. Si tu bot dice que sí, lo cumplís vos.",
       "next": "la prueba",
-      "alt_text": "Un cliente pregunta algo que el negocio no confirmó"
+      "alt_text": "Una bola de cristal de arcilla: un cliente pregunta una fecha que el negocio no confirmó",
+      "image_style": "clay",
+      "image_prompt": "A smooth round emerald green crystal ball resting on a small matte black clay stand, softly glowing from inside."
     },
     {
       "number": 3,
       "layout": "ensayo",
       "theme": "blanco",
       "headline": "Sin listas, *no prometió*",
-      "body": "Negocio de ejemplo, con Sonnet 5.5. Solo le dije «sé amable y cerrá la venta».\n\n«No quiero prometerte una fecha que después no te pueda cumplir.» Pidió medidas, logo y zona.",
+      "body": "Negocio de ejemplo, con Sonnet 5.5. Solo le dije «sé amable y vendedor, tratá de cerrar la venta».\n\n«No quiero prometerte una fecha que después no te pueda cumplir.» Pidió medidas, logo y zona.",
       "next": "las listas",
       "alt_text": "Respuesta del bot sin reglas"
     },
@@ -43,7 +47,7 @@
       "number": 4,
       "layout": "lista",
       "theme": "blanco",
-      "headline": "Escribilas en *su información*",
+      "headline": "Escribilas en *sus instrucciones*",
       "items": [
         {
           "label": "Confirmado",
@@ -55,39 +59,49 @@
         },
         {
           "label": "La regla",
-          "text": "no confirmes lo que no está en la 1"
+          "text": "nunca confirmes stock, precio ni fecha si no están acá"
         }
       ],
-      "next": "el paso crítico",
+      "next": "el resultado",
       "alt_text": "Plantilla de las dos listas para tu bot"
     },
     {
       "number": 5,
       "layout": "dato",
       "theme": "blanco",
-      "value": "0",
-      "headline": "campos para escribir un precio *en el bot de ONIA*",
-      "body": "Stock, plazo y precio los confirma una persona. Lo que está por confirmar no se promete.",
-      "next": "el resultado",
-      "alt_text": "Lo que está por confirmar no se promete"
+      "value": "50",
+      "headline": "unidades mínimas: lo único *que le confirmé*",
+      "body": "Con las dos listas respondió: «200 unidades está dentro de lo que trabajamos (hacemos desde 50)». Y aclaró que el plazo lo confirma con el equipo.",
+      "next": "probalo",
+      "alt_text": "Con las dos listas, el bot usó el único dato confirmado: desde 50 unidades"
     },
     {
       "number": 6,
       "layout": "ensayo",
       "theme": "blanco",
-      "headline": "Con las listas, *usó el dato real*",
-      "body": "«200 unidades está dentro de lo que trabajamos (hacemos desde 50).»\n\nY aclaró que el plazo lo confirma con el equipo.\n\nLa IA solo sabe lo que vos le das.",
-      "next": "las dos respuestas",
-      "alt_text": "Con las listas el bot usó el dato real"
+      "headline": "Probalo *en tu bot*",
+      "body": "Mandale un pedido con fecha, como el de las 200 cajas.\n\nSi la confirma sin tenerla escrita, le faltan las dos listas.",
+      "next": "la lección",
+      "alt_text": "Cómo probar tu bot: un pedido con fecha"
     },
     {
       "number": 7,
-      "layout": "ensayo",
-      "theme": "verde",
-      "headline": "Las dos respuestas, en la *comunidad*",
-      "body": "Completas, lado a lado, con la plantilla de las dos listas.\n\nPrueba del 28-sep con Sonnet 5.5, una corrida por caso.",
-      "cta": "Comunidad en la bio",
-      "alt_text": "Las dos respuestas completas en la comunidad"
+      "layout": "ilustrado",
+      "theme": "blanco",
+      "headline": "Solo sabe *lo que vos le das*",
+      "body": "La lección no es que la IA inventa: lo que no escribiste en sus listas, no lo puede saber.",
+      "image_style": "clay",
+      "image_prompt": "A matte black clay funnel standing upright, with a few round emerald green clay beads dropping into its wide mouth.",
+      "next": "las dos respuestas",
+      "alt_text": "Un embudo de arcilla: tu bot solo sabe lo que vos le das"
+    },
+    {
+      "number": 8,
+      "layout": "cierre",
+      "theme": "negro",
+      "keyword": "PROMESA",
+      "body": "y te paso el link de la comunidad con las dos respuestas y la plantilla.",
+      "alt_text": "Comentá PROMESA para recibir las dos respuestas y la plantilla"
     }
   ]
 }

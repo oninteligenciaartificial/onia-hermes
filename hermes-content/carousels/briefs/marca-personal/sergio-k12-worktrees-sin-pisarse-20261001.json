@@ -1,0 +1,130 @@
+{
+  "title": "Dos sesiones de Claude Code sin pisarse: worktrees (K12, pack referentes)",
+  "caption": "Dos sesiones de Claude Code en la misma carpeta tocan los mismos archivos. La salida se llama worktree: otra carpeta del mismo repositorio, con su propia rama.\n\n1. Desde tu proyecto: git worktree add -b <rama> <ruta>\n2. Abrí Claude Code en esa carpeta. O más corto: claude -w <nombre>, que la crea por vos.\n3. El paso crítico: todo comando de git con git -C <ruta>. No confíes en que la terminal sigue donde la dejaste.\n\nPara comprobar: git worktree list. Cada carpeta, con su rama. Una sesión, una carpeta, una rama.\n\nPor qué el paso 3: el 1 de septiembre, a mi agente la terminal le volvió sola a la carpeta principal. Un reset pensado para otra carpeta corrió ahí y movió una rama 424 commits. Ningún comando falló. Se recuperó con el reflog de git, pero nada avisó.\n\nclaude -w: claude --help en Claude Code 2.1.286 («Create a new git worktree for this session»). git worktree y git -C son comandos estándar de git.\n\nProbalo primero en un repo de prueba. Comentá WORKTREE y te paso el link de la comunidad con los comandos y un ejemplo armado para copiar.",
+  "hashtags": [
+    "#claudecode",
+    "#claude",
+    "#git",
+    "#programacion",
+    "#ia",
+    "#bolivia"
+  ],
+  "serie": "Claude Code",
+  "slides": [
+    {
+      "number": 1,
+      "layout": "ilustrado",
+      "theme": "verde",
+      "badge": "guía",
+      "logo": "hermes-content/references/brand-claude/claudecode.svg",
+      "headline": "Dos sesiones de Claude Code, *sin pisarse*",
+      "subtitle": "worktrees en 3 pasos",
+      "body": "Una sesión, una carpeta, una rama.",
+      "next": "te explico",
+      "alt_text": "Dos sesiones de Claude Code en el mismo proyecto, sin pisarse: dos vías paralelas, cada una con su tren",
+      "image": "hermes-content/galeria/ilustraciones/sergio-k12-worktrees-sin-pisarse-20261001-s01-6a0a1a94.jpg",
+      "image_prompt_usado": "Two parallel emerald green clay train tracks side by side on a white surface, each with its own small matte black clay toy train."
+    },
+    {
+      "number": 2,
+      "layout": "dato",
+      "theme": "blanco",
+      "value": "424",
+      "headline": "commits, por la *carpeta equivocada*",
+      "body": "A mi agente la terminal le volvió sola a la carpeta principal, y un reset pensado para otra carpeta corrió ahí.",
+      "next": "la solución",
+      "alt_text": "424 commits movidos por un reset que corrió en la carpeta equivocada"
+    },
+    {
+      "number": 3,
+      "layout": "logos",
+      "theme": "blanco",
+      "headline": "Worktree",
+      "logos": [
+        {
+          "file": "hermes-content/references/brand-claude/claudecode.svg",
+          "label": "sesión 1"
+        },
+        {
+          "file": "hermes-content/references/brand-logos/git-color.svg",
+          "label": "git"
+        },
+        {
+          "file": "hermes-content/references/brand-claude/claudecode.svg",
+          "label": "sesión 2"
+        }
+      ],
+      "body": "Otra carpeta del mismo repo, *con su propia rama*. Así dos sesiones no tocan los mismos archivos.",
+      "next": "3 pasos",
+      "alt_text": "Dos sesiones de Claude Code sobre el mismo repositorio de git, cada una en su worktree"
+    },
+    {
+      "number": 4,
+      "layout": "lista",
+      "theme": "blanco",
+      "headline": "En *3 pasos*",
+      "body": "desde tu proyecto",
+      "items": [
+        {
+          "icon": "hermes-content/references/brand-logos/git-color.svg",
+          "label": "Crear la carpeta",
+          "text": "git worktree add -b <rama> <ruta>"
+        },
+        {
+          "icon": "hermes-content/references/brand-claude/claudecode.svg",
+          "label": "Abrir Claude Code ahí",
+          "text": "o directo: claude -w <nombre>"
+        },
+        {
+          "icon": "hermes-content/references/brand-logos/git-color.svg",
+          "label": "El paso crítico",
+          "text": "todo git con git -C <ruta>"
+        }
+      ],
+      "next": "si ya te pasó",
+      "alt_text": "Los tres pasos para trabajar con worktrees"
+    },
+    {
+      "number": 5,
+      "layout": "ilustrado",
+      "theme": "blanco",
+      "headline": "Si ya te pasó: *git reflog*",
+      "body": "git reflog <rama> muestra dónde estaba esa rama antes de moverse. Así recuperé la mía: ningún comando había fallado.",
+      "next": "para que no pase",
+      "alt_text": "Un vagón de juguete volcado junto a la vía: si una rama se movió sin aviso, git reflog muestra dónde estaba",
+      "image_prompt_descartado": "A small matte black clay toy train tipped over on its side beside an emerald green clay train track.",
+      "image": "hermes-content/galeria/ilustraciones/sergio-k12-worktrees-sin-pisarse-20261001-s05-e44342b8.jpg",
+      "image_prompt_usado": "A small plain matte black clay boxcar, a simple rectangular train wagon on four round wheels, lying tipped over on its side with its wheels toward the viewer, beside a straight emerald green clay train track."
+    },
+    {
+      "number": 6,
+      "layout": "dato",
+      "theme": "blanco",
+      "value": "-C",
+      "headline": "Todo git, *con la ruta*",
+      "body": "*git -C <ruta> branch --show-current* te dice en qué rama está esa carpeta. Miralo antes de un reset, un merge o un push: no confíes en que la terminal sigue ahí.",
+      "next": "comprobá",
+      "alt_text": "git -C con la ruta de la carpeta en cada comando de git"
+    },
+    {
+      "number": 7,
+      "layout": "ilustrado",
+      "theme": "blanco",
+      "headline": "Comprobá y *limpiá*",
+      "body": "*git worktree list*: cada carpeta, con su rama. Al terminar, con la rama mergeada: *git worktree remove <ruta>*",
+      "image_prompt": "A small clay broom with a matte black handle and thick emerald green bristles, standing upright on a white surface next to a small matte black clay dustpan.",
+      "image_style": "clay",
+      "next": "los comandos",
+      "alt_text": "Una escoba y una pala de arcilla: git worktree list para comprobar y git worktree remove para limpiar"
+    },
+    {
+      "number": 8,
+      "layout": "cierre",
+      "theme": "negro",
+      "keyword": "WORKTREE",
+      "body": "y te paso el link de la comunidad con los comandos.",
+      "alt_text": "Comentá WORKTREE para recibir los comandos de worktree"
+    }
+  ],
+  "image_style": "clay"
+}

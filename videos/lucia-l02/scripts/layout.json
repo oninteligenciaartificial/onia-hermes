@@ -1,0 +1,123 @@
+{
+ "canvas": [
+  1080,
+  1920
+ ],
+ "fps": 24,
+ "frames": 145,
+ "overlays": [
+  {
+   "id": "card1-grabado",
+   "file": "assets/canvas/card1-grabado.png",
+   "x": -44,
+   "y": 877,
+   "in": 2,
+   "out": 52,
+   "fade_in": 0.15,
+   "fade_out": 0.22,
+   "visible_box": [
+    90,
+    960,
+    989,
+    1121
+   ]
+  },
+  {
+   "id": "card2-ia",
+   "file": "assets/canvas/card2-ia.png",
+   "x": 94,
+   "y": 877,
+   "in": 52,
+   "out": 95,
+   "fade_in": 0.15,
+   "fade_out": 0.22,
+   "visible_box": [
+    228,
+    960,
+    853,
+    1121
+   ]
+  },
+  {
+   "id": "velo",
+   "file": "assets/canvas/velo.png",
+   "x": 0,
+   "y": 0,
+   "decor": true,
+   "in": 95,
+   "out": 145,
+   "fade_in": 0.22,
+   "fade_out": 0.0,
+   "perfil_alfa": [
+    [
+     0,
+     0.0
+    ],
+    [
+     940,
+     0.0
+    ],
+    [
+     1200,
+     0.48
+    ],
+    [
+     1490,
+     0.52
+    ],
+    [
+     1920,
+     0.55
+    ]
+   ]
+  },
+  {
+   "id": "sello-seguime",
+   "file": "assets/canvas/sello_%02d.png",
+   "sequence": 4,
+   "x": 4,
+   "y": 719,
+   "in": 95,
+   "out": 145,
+   "fade_in": 0,
+   "fade_out": 0.0,
+   "visible_box": [
+    217,
+    1149,
+    860,
+    1366
+   ],
+   "visible_box_130": [
+    120,
+    1115,
+    956,
+    1399
+   ],
+   "sello_scale": 0.71829
+  }
+ ],
+ "card_scale": 0.51429,
+ "golpe": {
+  "frame": 95,
+  "frames": 5,
+  "z": 1.03,
+  "anchor": "top"
+ },
+ "sfx": [
+  {
+   "asset": "pop",
+   "visual_frame": 2,
+   "gain": -10
+  },
+  {
+   "asset": "pop",
+   "visual_frame": 52,
+   "gain": -10
+  },
+  {
+   "asset": "pop",
+   "visual_frame": 95,
+   "gain": -8
+  }
+ ]
+}

@@ -62,10 +62,19 @@ export function resolveChromium(script) {
  * el binario descargado. Playwright ahí escupe un cartel ASCII de 20 líneas; acá se
  * responde con la única línea que hay que correr.
  */
+// Chromium ya instalado fuera de la revisión que pide el paquete. En la nube de Claude Code
+// viene en /opt/pw-browsers/chromium (revisión 1194) y playwright 1.62 busca la 1234: sin este
+// respaldo las tarjetas morían con "Executable doesn't exist" (medido 2026-10-01, carril Lucía).
+const CHROMIUM_FALLBACKS = [process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE, "/opt/pw-browsers/chromium"]
+  .filter((p) => p && existsSync(p));
+
 export async function launchChromium(script, chromium, opts) {
   try {
     return await chromium.launch(opts);
   } catch (err) {
+    if (/Executable doesn't exist/i.test(String(err?.message)) && CHROMIUM_FALLBACKS.length && !opts?.executablePath) {
+      return await chromium.launch({ ...opts, executablePath: CHROMIUM_FALLBACKS[0] });
+    }
     if (/Executable doesn't exist/i.test(String(err?.message))) {
       console.error(
         `${script}: playwright está instalado pero le falta el binario de chromium.\n` +

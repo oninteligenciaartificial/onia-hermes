@@ -1,3 +1,7 @@
+> **Aviso:** la fuente única de Dapta es `DAPTA_COMO_FUNCIONA.md` desde 2026-10-02; este archivo queda como foto de la lectura sin cuenta.
+> Lo verificado de acá ya se pasó allá con su fuente; lo marcado [sin chequear] no se pasó.
+> No se edita más: si Dapta cambia, se edita `DAPTA_COMO_FUNCIONA.md`.
+
 # Dapta: cómo lo manejan (octubre 2026)
 
 > Leído y medido el **2026-10-02** (entre las 00:10 y las 01:15 UTC), sin cuenta, porque crear una estaba prohibido. Fuentes: dapta.ai (ES y EN), docs.dapta.ai, trust.dapta.ai, Trustpilot y la App Store. Lo que se ve "por dentro" del producto sale de las capturas que Dapta publica en su propia doc. No es una sesión real.

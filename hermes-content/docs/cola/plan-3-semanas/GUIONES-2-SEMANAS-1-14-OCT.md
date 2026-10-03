@@ -9,9 +9,9 @@ Pedido de Sergio Urcullo (30-sep): *«dame los guiones de 2 semanas, verificados
 | Día | Tutorial / YouTube | Informativo | Caso / negocio |
 |---|---|---|---|
 | **Jue 1-oct** | Salió Sonnet 5.5: la prueba de tres tareas para saber si te sirve | Claude Code ya no te pregunta casi nada: qué deja pasar el modo auto (noticia) | Desde el 1 de octubre, tu bot de WhatsApp paga por cada respuesta |
-| **Vie 2-oct** | La perilla de Claude Code que casi nadie toca | Sonnet 4.5 se apaga el 30 de noviembre: encontralo y migralo con un comando (noticia) | «Verificado» con un 200, y el login mostraba texto roto |
-| **Sáb 3-oct** | 🎬 YouTube: Opus 5.5 o Sonnet 5.5: cuál usar y cómo cambiarlo en Claude Code | Un agente de terminal gratis, ahora con Gemini 3.8 Flash (noticia) | — |
-| **Dom 4-oct** | Tu primera skill de Claude Code en un minuto | Un curso gratis de IA en GitHub cuya primera lección de agentes corre sin clave (repo) | La regla de 24 horas que rompe tu bot de WhatsApp |
+| **Vie 2-oct** | La perilla de Claude Code que casi nadie toca | El modelo nuevo de OpenAI cuesta un quinto, y una parte sale casi gratis (noticia) | «Verificado» con un 200, y el login mostraba texto roto |
+| **Sáb 3-oct** | 🎬 YouTube: Opus 5.5 o Sonnet 5.5: cuál usar y cómo cambiarlo en Claude Code | Google cambió Gemini CLI gratis por Antigravity CLI: qué cambia para vos (noticia) | — |
+| **Dom 4-oct** | Tu primera skill de Claude Code en un minuto | Sonnet 4.5 se apaga el 30 de noviembre: encontralo y migralo con un comando (noticia) | La regla de 24 horas que rompe tu bot de WhatsApp |
 | **Lun 5-oct** | Claude Code ya lee AGENTS.md, pero no si tenés los dos | Una skill llamada verify y Claude Code la corre antes de cada commit (noticia) | ¿La IA le promete a tu cliente algo que no confirmaste? |
 | **Mar 6-oct** | 🎬 YouTube: Un CLAUDE.md donde cada regla trae su historia | Cambiá dos letras y mirá cómo está armado cualquier repo (repo) | — |
 | **Mié 7-oct** | El hook que commitea solo, y la guarda que le puse después de romperlo | Antes de instalar una skill, escaneala (y el detalle de «precaución») (repo) | Retiré seis de mis nueve subagentes, y seguían apareciendo |
@@ -21,12 +21,63 @@ Pedido de Sergio Urcullo (30-sep): *«dame los guiones de 2 semanas, verificados
 | **Dom 11-oct** | Presentaciones con Claude en el plan gratis, sin que te invente datos | Un video corto entero desde un tema, y el problema de la música (repo) | Negocio: los mensajes de tu bot que Meta no te cobra |
 | **Lun 12-oct** | Antes de cerrar la sesión: el handoff de siete campos | Videos por código con tu agente, y la licencia que cambia con tu tamaño (repo) | Mi agente me dijo que quedaban 2. Había 44 activos |
 | **Mar 13-oct** | 🎬 YouTube: Un bot que no inventa: datos en un solo lugar, control después de la IA y medición | Cómo leer un README en un minuto: el primer comando no siempre es del proyecto (repo) | — |
-| **Mié 14-oct** | Tenía veinticuatro MCP conectados y ninguno escrito en mis archivos | APIs de IA gratis: tres preguntas antes de meter datos de tus clientes (repo) | Negocio: definí a tu cliente con cinco preguntas, no con adjetivos |
+| **Mié 14-oct** | Tenía veinticuatro MCP conectados y ninguno escrito en mis archivos | Un curso gratis de IA en GitHub cuya primera lección de agentes corre sin clave (repo) | Negocio: definí a tu cliente con cinco preguntas, no con adjetivos |
+
+## Palabras para comentar (pedido de Sergio Urcullo, 1-oct)
+
+Cada pieza cierra pidiendo un comentario con su palabra. El recurso no cambió: el que comenta recibe por DM el link a la comunidad o a la web donde ya estaba.
+
+| Día | Pieza | PALABRA | Qué recibe por DM (el link) |
+|---|---|---|---|
+| Jue 1 | D01-B (grabado: va en pantalla y caption) | PLANILLA | comunidad · drop 1 de S1 «Planilla Sonnet vs Opus» |
+| Jue 1 | N03 (grabado: lo dijo a cámara) | COMUNIDAD | comunidad · drop «Volver a modo manual» |
+| Jue 1 | D02-B | TARIFA | comunidad · drop 2 de S1 «La cuenta de WhatsApp» |
+| Vie 2 | D02-A | EFFORT | comunidad · drop con la tabla de esfuerzo |
+| Vie 2 | DD-A | CACHE | comunidad · drop tabla Sol vs Astra y la cuenta de caché |
+| Vie 2 | D04-C | MIRAR | comunidad · drop 6 de S1 «Prompt para verificar mirando» |
+| Sáb 3 | D01-C (YouTube) | TRAMPA | comunidad · el reto de las tres propuestas (`drops/2026-10-01.md`, mensaje 2) |
+| Sáb 3 | N06 (rehecha el 2-oct) | ANTIGRAVITY | comunidad · drop N06 «De Gemini CLI a Antigravity CLI» |
+| Dom 4 | D01-A | SKILL | web `/claude-code` · video 02 «Instalarlo, y tu primera skill» |
+| Dom 4 | N02 | MIGRAR | comunidad · drop «Checklist de migración desde Sonnet 4.5» |
+| Dom 4 | S2-D07-A | VENTANA | comunidad · drop «Mensajes de seguimiento» |
+| Lun 5 | D03-B | AGENTS | comunidad · drop 11 de S1 (plantilla AGENTS.md) |
+| Lun 5 | N04 | VERIFY | comunidad · drop «Plantilla de verify» |
+| Lun 5 | S2-D08-A | PROMESA | comunidad · drop «Bot con dos listas» |
+| Mar 6 | D03-C (YouTube) | HISTORIA | comunidad · drop 4 de S1 «Plantilla de regla con historia» |
+| Mar 6 | R01 | DIAGRAMA | comunidad · drop de GitDiagram |
+| Mié 7 | D03-A | HOOK | comunidad · drop 3 de S1 «Hook Stop + guarda» |
+| Mié 7 | G04 | ESCANEO | comunidad · drop 4 de S4 (SkillSpector) |
+| Mié 7 | D04-A | DELEGAR | web `/claude-code` · sección «Que trabaje sin vos» |
+| Jue 8 | D04-B | DOCTOR | comunidad · drop 5 de S1 «Apagar skills que no usás» |
+| Jue 8 | R06 | CODEGRAPH | comunidad · drop de CodeGraph |
+| Jue 8 | S2-D12-B | CLAVE | web `sergiourcullo.vercel.app/stack` · sección n8n |
+| Vie 9 | G11 (YouTube) | REPOS | comunidad · drop 11 de S4 «Ocho chequeos + comandos» |
+| Vie 9 | R03 | PDF | comunidad · drop de PageIndex |
+| Sáb 10 | D05-A | WORKTREE | comunidad · drop 12 de S1 |
+| Sáb 10 | R05 | MARKETING | comunidad · drop de claude-skills |
+| Sáb 10 | S2-D09-A | DOBLE | comunidad · drop 5 de S2 «Dos filtros contra la respuesta doble» |
+| Dom 11 | D05-B | CHAT | web `/claude-code` · video 01 «Claude y Claude Code no son lo mismo» |
+| Dom 11 | R02 | DERECHOS | comunidad · drop «Antes de publicar un video automático» |
+| Dom 11 | S2-D08-C | ANUNCIO | comunidad · drop 4 de S2 «Cuánto cuesta tu bot desde el 1-oct» |
+| Lun 12 | D06-A | HANDOFF | comunidad · drop 7 de S1 «Plantilla de handoff de siete campos» |
+| Lun 12 | R07 | REMOTION | comunidad · drop «Remotion: ¿en qué licencia caés?» |
+| Lun 12 | D05-C | CONTAR | comunidad · sin recurso: la pregunta abierta |
+| Mar 13 | S2-D07-C (YouTube) | CAPAS | comunidad · drop 2 de S2 «Las tres capas» |
+| Mar 13 | G10 | README | comunidad · drop 10 de S4 «Cuatro chequeos de un README» |
+| Mié 14 | S1-D07-B | CONEXIONES | comunidad · drop 14 de S1 (qué MCP te sobran) |
+| Mié 14 | R04 | BUCLE | comunidad · drop de AI Engineering from Scratch |
+| Mié 14 | S2-D13-C | CLIENTE | comunidad · drop 17 de S2 «Tu cliente en cinco preguntas» |
+
+Los DM se contestan con el link; si se automatiza, la tabla es la fuente.
+En YouTube no hay DM: se contesta el comentario con el mismo link.
 
 ## Antes de grabar (condiciones que salieron de la auditoría)
 
-- **Jue 1 · WhatsApp cobra por mensaje (D02-B):** abrí vos la página de precios de Meta (`developers.facebook.com/documentation/business-messaging/whatsapp/pricing`) antes de grabar. Si no dice que el mensaje de servicio se cobra a tarifa de utilidad y que hay mil gratis por mes, se cortan esas frases. Desde la nube la página está bloqueada.
-- **Sáb 3 · YouTube Opus o Sonnet (D01-C):** da la respuesta del reto de la comunidad; por eso sale después del viernes a las 19:00.
+- ✅ **WhatsApp cobra por mensaje (D02-B): confirmado el 1-oct** en la página de Meta (cobro por mensaje desde el 1-oct, misma tarifa que utilidad, 1.000 gratis por mes por número). Queda igual. `VERIFICACION-LAPTOP-20261001.md` §1.
+- ✅ **Ventana de anuncios (S2-D08-C, dom 11): corregida el 1-oct** — Meta dice «hasta 7 días» (no 72 h) y solo si el cliente escribe desde la app del celular.
+- **«Quedaban 2, había 44» (D05-C, lun 12):** el 44 es el conteo del 20-ago. Hoy el filtro muestra **38** activos de 96: si aparece en pantalla, decí «hoy, contadas de nuevo, son treinta y ocho»; no presentes 38 como el número de aquel día.
+- **«424 commits» (D05-A): confirmado** en la memoria local (1-sep).
+- **Sáb 3 · YouTube Opus o Sonnet (D01-C):** da la respuesta del reto de la comunidad; por eso sale después del sábado a las 10:00 (⚠️ corregido el 1-oct: decía viernes 19:00; la respuesta del reto pasó al sáb 10:00 en `drops/AVISOS-POR-DIA.md`).
 - **Lun 5 · AGENTS.md (D03-B):** enseña un arreglo que ONIA todavía no tiene aplicado. Decidí si lo aplicamos antes o se cuenta como receta.
 - **Vie 9 · YouTube repos (G11):** recontar estrellas e issues el día de grabar y decir la fecha.
 - **Mié 14 · MCP (S1-D07-B):** reescrito: medir con `/usage`, apagar con `/mcp`, comprobar con `/context`. El criterio viejo borraba servidores en uso.
@@ -36,15 +87,15 @@ Pedido de Sergio Urcullo (30-sep): *«dame los guiones de 2 semanas, verificados
 
 Tutoriales: D06-B (Fable, Opus o Sonnet: cuánto cuesta la misma tarea) · S1-D07-A (el router) · S1-D07-C (¿inversión? primero esta división; recalcular con el precio vigente) · D05-C/D04-C comparten lección, no juntarlas.
 Bots y negocio: S2-D10-A · S2-D10-C · S2-D11-A · S2-D11-C · S2-D12-A · S2-D13-A · S2-D13-B · y con prueba previa: S2-D07-B, S2-D08-B (+N01 al día siguiente), S2-D11-B. YouTube: D06-C, S2-D09-C, S2-D12-C.
-Repos: G02 · G03 · G05 · G06 · G07 · G08 · G09. Noticias condicionadas: N05 (si n8n 2.42 sale estable) · N07 (si aprobás el gasto en Higgsfield).
+Repos: G01 · G02 · G03 · G05 · G06 · G07 · G08 · G09. Noticias condicionadas: N05 (si n8n 2.42 sale estable) · N07 (si aprobás el gasto en Higgsfield).
 Descartadas: D02-C (arruinaba el reto: da la respuesta en la primera frase) · S2-D10-B (ONIA no usa Gemini 2.5, nada que mostrar) · S2-D09-B se baja por pisarse con el audio de D11-B.
 
-⚠️ **Falta la noticia más fuerte de la quincena:** el OpenAI DevDay del 29-sep. Desde la nube no se llega a openai.com; se revisa desde otro entorno y entra por el lugar de un repo.
+✅ **OpenAI DevDay (29-sep):** verificado por la madre el 1-oct; entra DD-A (GPT-6.1 Sol y la caché) el vie 2. La vista `/agents` de Codex queda afuera: no está en la doc oficial.
 
 ## Jue 1-oct
 
 ### D01-B · Vertical · Salió Sonnet 5.5: la prueba de tres tareas para saber si te sirve
-*Tutorial / caso* · **Demuestra:** el método para comparar dos modelos en tres tareas propias, con planilla y la regla de decisión · **Cierre:** comunidad, drop 1 «Planilla Sonnet vs Opus» (escrito en S1 «Drops de la semana»; falta publicarlo antes del video)
+*Tutorial / caso* · **Demuestra:** el método para comparar dos modelos en tres tareas propias, con planilla y la regla de decisión · **Cierre:** comentá PLANILLA → DM con el link a la comunidad, drop 1 «Planilla Sonnet vs Opus» (escrito en S1 «Drops de la semana»; falta publicarlo antes del video). Grabado sin el pedido: el «Comentá PLANILLA» va en pantalla al final y en el caption
 
 Sonnet cinco punto cinco salió el veintiocho de septiembre y cuesta la mitad que Opus: dos dólares por millón de tokens de entrada, contra cuatro.
 
@@ -63,7 +114,7 @@ La regla: si Sonnet empata en dos de tres, usalo por defecto. Opus, solo para el
 La planilla para anotarlo está en la comunidad.
 
 ### N03 · Vertical · Claude Code ya no te pregunta casi nada: qué deja pasar el modo auto
-*Noticia* · **Demuestra:** la barra de estado de Claude Code con el modo; Shift+Tab ciclando modos; la lista «Blocked by default» / «Allowed by default» de la doc; el bloque de `settings.json` y la sesión nueva mostrando «manual mode on» · **Cierre:** comunidad de WhatsApp (falta escribir: drop «Volver a modo manual», texto propuesto en Pendientes)
+*Noticia* · **Demuestra:** la barra de estado de Claude Code con el modo; Shift+Tab ciclando modos; la lista «Blocked by default» / «Allowed by default» de la doc; el bloque de `settings.json` y la sesión nueva mostrando «manual mode on» · **Cierre:** comentá COMUNIDAD → DM con el link a la comunidad de WhatsApp (drop N03 «Volver a modo manual», en `cola/drops/2026-10-01-drops-noticias-repos.md`). ⚠️ Corregido el 1-oct: acá decía MANUAL; al grabar, Sergio Urcullo dijo «comentá comunidad» y manda lo que dijo
 
 Tu Claude Code probablemente ya no te pide permiso para casi nada. Desde fines de septiembre arranca en modo auto, en todos los planes. Esto es lo que deja pasar.
 
@@ -80,7 +131,7 @@ Si querés que vuelva a preguntarte, en el archivo settings de tu carpeta punto 
 El bloque para copiar está en la comunidad de WhatsApp.
 
 ### D02-B · Vertical · Desde el 1 de octubre, tu bot de WhatsApp paga por cada respuesta
-*Tutorial / caso* · **Demuestra:** la página de precios de Meta en pantalla y la cuenta en tres pasos con los mensajes de tu propio bot · **Cierre:** comunidad, drop 2 «La cuenta de WhatsApp» (escrito, pero **hay que corregirlo**: ver Pendientes)
+*Tutorial / caso* · **Demuestra:** la página de precios de Meta en pantalla y la cuenta en tres pasos con los mensajes de tu propio bot · **Cierre:** comentá TARIFA → DM con el link a la comunidad, drop 2 «La cuenta de WhatsApp» (escrito, pero **hay que corregirlo**: ver Pendientes)
 
 Desde el uno de octubre, las respuestas de tu bot de WhatsApp se cobran. Pero no todas.
 
@@ -98,17 +149,17 @@ Tres. En la página de precios de Meta, lo que ves en pantalla, bajá la tabla e
 
 Si te dio cero, estás dentro de lo gratis. Si no, tu bot habla de más: juntá mensajes.
 
-La planilla está en la comunidad.
+La planilla está en la comunidad: comentá TARIFA y te paso el link.
 
 
 ## Vie 2-oct
 
 ### D02-A · Vertical · La perilla de Claude Code que casi nadie toca
-*Tutorial / caso* · **Demuestra:** `/effort` abierto en pantalla con los cinco niveles, más el dato de la doc: con los modelos cinco punto cinco el default bajó a medium · **Cierre:** comentá EFFORT (falta escribir la tabla como drop formal: ver Pendientes)
+*Tutorial / caso* · **Demuestra:** `/effort` abierto en pantalla con los cinco niveles, más el dato de la doc: con los modelos cinco punto cinco el default bajó a medium · **Cierre:** comentá EFFORT → DM con el link a la comunidad, drop con la tabla (falta escribir la tabla como drop formal: ver Pendientes)
 
-Si tu Claude Code ya usa los modelos cinco punto cinco, ahora piensa un nivel menos que antes. Y casi nadie se dio cuenta.
+Si tu Claude Code ya usa los modelos cinco punto cinco, ahora arranca un nivel más abajo que antes. Y casi nadie se dio cuenta.
 
-La perilla se llama esfuerzo: cuánto razona antes de responder. La documentación de Anthropic, lo que ves en pantalla, dice que Opus y Sonnet cinco punto cinco vienen en medium. Los anteriores venían en high.
+La perilla se llama esfuerzo: cuánto razona antes de responder. La documentación de Anthropic, lo que ves en pantalla, dice que Opus y Sonnet cinco punto cinco vienen en medium. Opus cinco y Sonnet cinco venían en high.
 
 Para ver en cuál estás, escribí barra effort. Te abre cinco niveles: low, medium, high, xhigh y max.
 
@@ -120,25 +171,23 @@ En mi empresa hay una regla: al modelo más caro se pasa solo cuando Opus, con e
 
 Comentá EFFORT y te paso mi tabla.
 
-### N02 · Vertical · Sonnet 4.5 se apaga el 30 de noviembre: encontralo y migralo con un comando
-*Noticia* · **Demuestra:** la nota del 30-sep en las release notes de la plataforma; búsqueda del ID en un proyecto; `/claude-api migrate` corriendo en Claude Code con su pregunta de alcance · **Cierre:** comunidad de WhatsApp (falta escribir: drop «Checklist de migración desde Sonnet 4.5», texto propuesto en Pendientes)
+### DD-A · Vertical · El modelo nuevo de OpenAI cuesta un quinto, y una parte sale casi gratis
+*Noticia* · **Demuestra:** la página de precios de OpenAI (gpt-6.1-sol 2 / 0,10 caché / 10 USD por millón contra Astra 10 / 1 / 50) y el campo de tokens en caché de la respuesta · **Cierre:** comentá CACHE → DM con el link a la comunidad (falta escribir el drop: tabla Sol vs Astra y la cuenta de caché)
 
-Sonnet cuatro punto cinco se retira de la API de Claude el treinta de noviembre. Si una automatización tuya lo usa, tenés dos meses. Así lo encontrás y lo migrás.
+OpenAI sacó un modelo que, según su anuncio, se acerca a su mejor modelo por la quinta parte del precio. Y una parte sale casi gratis.
 
-Anthropic recomienda pasar a Sonnet cinco punto cinco.
+Se llama GPT seis punto uno Sol. Lo presentaron el veintinueve de septiembre, en su DevDay.
 
-Paso uno: buscalo. En tu código, buscá el texto claude guion sonnet guion cuatro guion cinco. En n8n, abrí cada nodo de Anthropic y mirá qué modelo tiene elegido.
+En la página de precios, lo que ves en pantalla: dos dólares el millón de tokens que entran y diez los que salen. El grande, Astra, cobra diez y cincuenta. Un quinto.
 
-Paso dos: si el código está en una carpeta, abrí Claude Code y escribí lo que ves en pantalla: barra claude api migrate, y el modelo nuevo. Te pregunta qué archivos tocar, y al final te deja una lista para revisar.
+Lo que casi nadie aprovecha: lo que entra desde la caché cuesta diez centavos el millón. Es lo que repetís igual al principio de cada pedido: las instrucciones de tu agente, tu lista de precios. Ponelo primero y no lo toques. La primera vez cuesta un poco más; después, veinte veces menos. Tiene que pasar de mil veinticuatro tokens.
 
-Paso tres, el crítico. Tres cosas que el cuatro punto cinco aceptaba y el cinco punto cinco rechaza con error: una temperatura cambiada, una respuesta pre-llenada, y obligarlo a usar una herramienta.
+Cómo sabés que funcionó: la respuesta de la API trae cuántos tokens salieron de caché. Si después del primer pedido sigue en cero, cambiaste algo del principio o pasó más de media hora.
 
-Cómo sabés que quedó: tu prueba corre sin error y la respuesta indica el modelo nuevo.
-
-La lista completa está en la comunidad de WhatsApp.
+La cuenta para tu agente está en la comunidad: comentá CACHE y te paso el link.
 
 ### D04-C · Vertical · «Verificado» con un 200, y el login mostraba texto roto
-*Tutorial / caso* · **Demuestra:** la captura del login con los nombres de los iconos como texto al lado de la versión sana, y el prompt literal para verificar mirando · **Cierre:** comunidad, drop 6 (escrito; falta publicarlo)
+*Tutorial / caso* · **Demuestra:** la captura del login con los nombres de los iconos como texto al lado de la versión sana, y el prompt literal para verificar mirando · **Cierre:** comentá MIRAR → DM con el link a la comunidad, drop 6 (escrito; falta publicarlo)
 
 Mi agente me dijo varias veces que el login de mi sistema estaba verificado. Lo abrí yo, y en vez de iconos había palabras: credit card off, verified user.
 
@@ -150,13 +199,13 @@ Desde ese día, verificar es mirar. Cuando Claude Code te diga que algo funciona
 
 Salió bien cuando en la captura ves iconos dibujados, no palabras, y la página carga en segundos, no en minutos.
 
-El prompt completo está en la comunidad.
+El prompt completo está en la comunidad: comentá MIRAR y te paso el link.
 
 
 ## Sáb 3-oct
 
 ### D01-C · YouTube · Opus 5.5 o Sonnet 5.5: cuál usar y cómo cambiarlo en Claude Code
-*Tutorial / caso* · **Demuestra:** la misma tarea con trampa corrida en los dos modelos el 28-sep, con los mismos tres totales, más los comandos `--model` / `/model` en pantalla · **Cierre:** comunidad, con el prompt de las tres propuestas (existe: `drops/2026-10-01.md`, mensaje 2; preparado, no enviado)
+*Tutorial / caso* · **Demuestra:** la misma tarea con trampa corrida en los dos modelos el 28-sep, con los mismos tres totales, más los comandos `--model` / `/model` en pantalla · **Cierre:** comentá TRAMPA → link a la comunidad, con el prompt de las tres propuestas (existe: `drops/2026-10-01.md`, mensaje 2; preparado, no enviado); en YouTube no hay DM: va como respuesta al comentario
 
 #### Resultado primero
 
@@ -226,35 +275,40 @@ El segundo error es comparar mal. Si corrés Opus sobre el trabajo que ya dejó 
 
 #### Cierre
 
-Hacé la prueba vos. El ejercicio de las tres propuestas, con el prompt completo, está en la comunidad de WhatsApp. El link está en mi web.
+Hacé la prueba vos. El ejercicio de las tres propuestas, con el prompt completo, está en la comunidad de WhatsApp. Comentá TRAMPA y te paso el link.
 
 Pegalo en los dos modelos. Si te salió bien, vas a ver los mismos tres totales: mil cincuenta, mil sesenta y mil trescientos cincuenta. Si alguno te da setecientos, ese modelo se comió la trampa.
 
-### N06 · Vertical · Un agente de terminal gratis, ahora con Gemini 3.8 Flash
-*Noticia* · **Demuestra:** `npm install -g @google/gemini-cli`, login con cuenta de Google, `/model` mostrando `gemini-3.8-flash`, un pedido sobre una carpeta real · **Cierre:** comunidad de WhatsApp (falta escribir: drop «Gemini CLI en 5 minutos», texto propuesto en Pendientes)
+### N06 · Vertical · Google cambió Gemini CLI gratis por Antigravity CLI: qué cambia para vos
 
-Google tiene un agente de terminal gratis, y desde el veintinueve de septiembre suma Gemini tres punto ocho Flash.
+> ✅ **Rehecha el 2-oct** (Sergio Urcullo: «si es info vieja no pasa nada pero que sea contenido interesante»). Cada dato salió de una página oficial leída el 2-oct (fuentes en el drop N06 y en el brief `sergio-n06-antigravity-cli-20261002.json`). **Antes de grabar:** si en tu PC no hay skills en `.gemini/skills/`, armá una de prueba para mostrar la mudanza. Si `/model` no te muestra Gemini 3.8 Flash con tu cuenta gratis, sacá esa frase.
 
-Se llama Gemini CLI. Es abierto, licencia Apache. Se instala con el comando en pantalla y lo abrís escribiendo gemini.
+*Noticia (de junio, contada para quien no se enteró)* · **Demuestra:** el aviso de geminicli.com y el párrafo del blog de Google Developers (19-may); el comando de instalación de antigravity.google/download; `agy` abriendo con la cuenta de Google; la pregunta de qué traer de Gemini CLI; mover `.gemini/skills/` a `.agents/skills/` y `/skills` mostrándolas · **Cierre:** comentá ANTIGRAVITY → DM con el link a la comunidad de WhatsApp (drop N06 «De Gemini CLI a Antigravity CLI»)
 
-Entrás con tu cuenta de Google. Su página en GitHub dice: sesenta pedidos por minuto y mil por día, gratis.
+Si usabas Gemini CLI gratis y un día dejó de contestarte, no es tu computadora: Google lo apagó.
 
-Lo nuevo: la versión cero punto sesenta y dos agrega Gemini tres punto ocho Flash y tres punto cinco Flash Lite. Escribís barra model y elegís.
+Desde el dieciocho de junio, Gemini CLI dejó de responder a quien lo usaba gratis con su cuenta de Google, y a los planes Pro y Ultra. Lo reemplazó Antigravity CLI.
 
-El detalle: con cuenta de Google, el modelo nuevo se habilita de a poco. Con clave de API de Gemini, ya está.
+La buena noticia: también es gratis, con un límite que se renueva cada semana, y trae Gemini tres punto ocho Flash.
 
-Probalo: abrí una carpeta con tus archivos y pedile: «resumime qué hay acá y qué falta».
+¿Y si te quedás en Gemini CLI? Sigue andando, pero con una clave de API paga.
 
-Cómo sabés que anduvo: barra model muestra tres punto ocho Flash elegido, y la respuesta nombra archivos que existen.
+Qué hacés hoy. Uno: instalalo con el comando que ves en pantalla y abrilo escribiendo a, ge, i griega. Entrás con tu cuenta de Google.
 
-Por qué importa: para aprender a trabajar con un agente no necesitás pagar el primer mes.
+Dos: la primera vez, encuentra tu configuración de Gemini CLI y te pregunta qué traer.
 
-Los pasos, con capturas, están en la comunidad de WhatsApp.
+Tres, la trampa: las skills de tu proyecto no se mudan solas. Estaban en punto gemini barra skills. Ahora van en punto agents barra skills. Movelas a mano.
+
+Tu GEMINI punto md lo sigue leyendo igual.
+
+Cómo sabés que quedó: escribí barra skills y tienen que aparecer.
+
+Los comandos para Mac, Linux y Windows están en la comunidad de WhatsApp: comentá ANTIGRAVITY y te paso el link.
 
 ## Dom 4-oct
 
 ### D01-A · Vertical · Tu primera skill de Claude Code en un minuto
-*Tutorial / caso* · **Demuestra:** la ruta `.claude/skills/<nombre>/SKILL.md`, el frontmatter de una skill real de ONIA y cómo comprobar con `/skills` que cargó · **Cierre:** web `/claude-code`, video 02 «Instalarlo, y tu primera skill» (existe en el código del sitio; en vivo no verificado)
+*Tutorial / caso* · **Demuestra:** la ruta `.claude/skills/<nombre>/SKILL.md`, el frontmatter de una skill real de ONIA y cómo comprobar con `/skills` que cargó · **Cierre:** comentá SKILL → DM con el link a la web `/claude-code`, video 02 «Instalarlo, y tu primera skill» (existe en el código del sitio; en vivo no verificado)
 
 Una skill es un archivo que le enseña a Claude Code a hacer algo. Y lo usa solo cuando hace falta. Armemos una.
 
@@ -270,27 +324,27 @@ La mía se llama continuidad. La descripción dice: invocar al arrancar cualquie
 
 Para comprobar la tuya, escribí barra skills: tiene que aparecer. Después pedile algo que coincida con la descripción, y fijate si la usa.
 
-El video para instalar Claude Code y armar tu primera skill está en mi web.
+El video para instalar Claude Code y armar tu primera skill está en mi web: comentá SKILL y te paso el link.
 
-### R04 · Vertical · Un curso gratis de IA en GitHub cuya primera lección de agentes corre sin clave
-*Repo* · **Demuestra:** portada en español (`i18n/es/README.md`); en la terminal, `python3 phases/14-agent-engineering/01-the-agent-loop/code/main.py` y su salida (TOY REACT LOOP: 120 + 15 % = 138.0, 5 turnos, 3 herramientas) · **Cierre:** comunidad de WhatsApp (falta escribir: drop con los tres comandos y las lecciones 14-01 a 14-05 sugeridas en orden)
+### N02 · Vertical · Sonnet 4.5 se apaga el 30 de noviembre: encontralo y migralo con un comando
+*Noticia* · **Demuestra:** la nota del 30-sep en las release notes de la plataforma; búsqueda del ID en un proyecto; `/claude-api migrate` corriendo en Claude Code con su pregunta de alcance · **Cierre:** comentá MIGRAR → DM con el link a la comunidad de WhatsApp (falta escribir: drop «Checklist de migración desde Sonnet 4.5», texto propuesto en Pendientes)
 
-Hay un curso gratis de ingeniería de IA en GitHub, con más de quinientas lecciones. Y la primera lección de agentes corre sin clave.
+Sonnet cuatro punto cinco se retira de la API de Claude el treinta de noviembre. Si una automatización tuya lo usa, tenés dos meses. Así lo encontrás y lo migrás.
 
-Se llama AI Engineering from Scratch, licencia MIT, y la portada está en español. Para agentes, andá a la fase catorce, lección uno: el bucle del agente.
+Anthropic recomienda pasar a Sonnet cinco punto cinco.
 
-Clonás el repo, y corrés el archivo main punto py de esa lección con python tres. Solo usa Python, sin instalar nada.
+Paso uno: buscalo. En tu código, buscá el texto claude guion sonnet guion cuatro guion cinco. En n8n, abrí cada nodo de Anthropic y mirá qué modelo tiene elegido.
 
-Lo que ves en pantalla es un agente de juguete: piensa, usa una calculadora, guarda un dato, y repite hasta terminar. Ciento veinte más quince por ciento de impuesto: ciento treinta y ocho. Cinco vueltas, tres herramientas.
+Paso dos: si el código está en una carpeta, abrí Claude Code y escribí lo que ves en pantalla: barra claude api migrate, y el modelo nuevo. Te pregunta qué archivos tocar, y al final te deja una lista para revisar.
 
-Según la lección, ese mismo bucle es lo que hacen por dentro los agentes de hoy, Claude Code incluido: pensar, usar una herramienta, leer el resultado.
+Paso tres, el crítico. Tres cosas que el cuatro punto cinco aceptaba y el cinco punto cinco rechaza con error: una temperatura cambiada, una respuesta pre-llenada, y obligarlo a usar una herramienta.
 
-Cómo sabés que lo entendiste: cambiás la pregunta y adivinás cuántas vueltas va a dar antes de correrlo.
+Cómo sabés que quedó: tu prueba corre sin error y la respuesta indica el modelo nuevo.
 
-El orden de lecciones que te recomiendo está en la comunidad de WhatsApp.
+La lista completa está en la comunidad de WhatsApp: comentá MIGRAR y te paso el link.
 
 ### S2-D07-A · Vertical · La regla de 24 horas que rompe tu bot de WhatsApp
-*Tutorial / caso* · **Demuestra:** la plantilla de seguimiento aprobada de ONIA en pantalla y el error ciento treinta y un mil cuarenta y siete, que es cómo sabés que te pasó · **Cierre:** comunidad, drop «Mensajes de seguimiento» (falta escribir: en `PRODUCCION-GUIONES-2026-09-29.md` §Drops 6 hay solo una línea que lo describe, sin contenido)
+*Tutorial / caso* · **Demuestra:** la plantilla de seguimiento aprobada de ONIA en pantalla y el error ciento treinta y un mil cuarenta y siete, que es cómo sabés que te pasó · **Cierre:** comentá VENTANA → DM con el link a la comunidad, drop «Mensajes de seguimiento» (falta escribir: en `PRODUCCION-GUIONES-2026-09-29.md` §Drops 6 hay solo una línea que lo describe, sin contenido)
 
 Si tu bot de WhatsApp le escribe a un cliente que no contesta hace más de veinticuatro horas, ese mensaje no sale.
 
@@ -302,13 +356,13 @@ Mi bot de ONIA, pasadas las veinticuatro horas, no intenta texto libre: manda la
 
 Antes de programar tu seguimiento, mandá tus plantillas a aprobar. En la app de WhatsApp Business, a mano, esta regla no existe.
 
-En la comunidad dejé cómo armo mis seguimientos.
+En la comunidad dejé cómo armo mis seguimientos: comentá VENTANA y te paso el link.
 
 
 ## Lun 5-oct
 
 ### D03-B · Vertical · Claude Code ya lee AGENTS.md, pero no si tenés los dos
-*Tutorial / caso* · **Demuestra:** la tabla de la doc oficial (qué lee según qué archivos tenés) y el import `@AGENTS.md` en la primera línea · **Cierre:** comentá AGENTS, drop 11 (escrito en S1; Sergio Urcullo lo manda a mano por DM)
+*Tutorial / caso* · **Demuestra:** la tabla de la doc oficial (qué lee según qué archivos tenés) y el import `@AGENTS.md` en la primera línea · **Cierre:** comentá AGENTS → DM con el link a la comunidad, drop 11 (escrito en S1 para mandarlo a mano por DM; ahora va el link: publicarlo en la comunidad antes del video)
 
 Claude Code ahora lee AGENTS punto md, el archivo de instrucciones que usa Codex. Pero hay una trampa.
 
@@ -325,7 +379,7 @@ Para comprobarlo, preguntale a Claude una regla que solo está en AGENTS. Si la 
 Comentá AGENTS y te paso la plantilla.
 
 ### N04 · Vertical · Una skill llamada verify y Claude Code la corre antes de cada commit
-*Noticia* · **Demuestra:** crear `.claude/skills/verify/SKILL.md` en vivo; pedir un commit y ver que Claude corre la skill antes · **Cierre:** comunidad de WhatsApp (falta escribir: drop «Plantilla de verify», texto propuesto en Pendientes)
+*Noticia* · **Demuestra:** crear `.claude/skills/verify/SKILL.md` en vivo; pedir un commit y ver que Claude corre la skill antes · **Cierre:** comentá VERIFY → DM con el link a la comunidad de WhatsApp (falta escribir: drop «Plantilla de verify», texto propuesto en Pendientes)
 
 Desde el treinta de septiembre, si tu proyecto tiene una skill que se llama verify, Claude Code la corre antes de cada commit.
 
@@ -341,10 +395,10 @@ Por qué importa: en ONIA la rama principal alimenta el deploy. Y ya nos pasó q
 
 Cómo sabés que anduvo: pedile un commit y fijate que antes aparezca la skill verify corriendo.
 
-La plantilla está en la comunidad de WhatsApp.
+La plantilla está en la comunidad de WhatsApp: comentá VERIFY y te paso el link.
 
 ### S2-D08-A · Vertical · ¿La IA le promete a tu cliente algo que no confirmaste?
-*Tutorial / caso* · **Demuestra:** las dos respuestas reales de la prueba del 28-sep (sin reglas / con dos listas), en pantalla estilo chat · **Cierre:** comunidad, drop «Bot con dos listas» (existe: `PRODUCCION-GUIONES-2026-09-29.md` §Drops 3 + las dos respuestas de §Prueba 2)
+*Tutorial / caso* · **Demuestra:** las dos respuestas reales de la prueba del 28-sep (sin reglas / con dos listas), en pantalla estilo chat · **Cierre:** comentá PROMESA → DM con el link a la comunidad, drop «Bot con dos listas» (existe: `PRODUCCION-GUIONES-2026-09-29.md` §Drops 3 + las dos respuestas de §Prueba 2)
 
 ¿Un bot con IA le promete a tu cliente una entrega que nunca confirmaste? Lo probé.
 
@@ -360,13 +414,13 @@ La lección no es que la IA inventa. Es que solo sabe lo que vos le das.
 
 Probalo en tu bot: mandale un pedido con fecha. Si la confirma sin tenerla escrita, le faltan dos listas: lo confirmado y lo que siempre se confirma antes.
 
-Las dos respuestas completas están en la comunidad.
+Las dos respuestas completas están en la comunidad: comentá PROMESA y te paso el link.
 
 
 ## Mar 6-oct
 
 ### D03-C · YouTube · Un CLAUDE.md donde cada regla trae su historia
-*Tutorial / caso* · **Demuestra:** tres reglas reales del CLAUDE.md de ONIA con su historia en pantalla, más tres pruebas (`/context`, preguntar el porqué, pedir lo prohibido) · **Cierre:** comunidad, drop 4 «Plantilla de regla con historia» (escrito en S1; falta publicarlo)
+*Tutorial / caso* · **Demuestra:** tres reglas reales del CLAUDE.md de ONIA con su historia en pantalla, más tres pruebas (`/context`, preguntar el porqué, pedir lo prohibido) · **Cierre:** comentá HISTORIA → link a la comunidad, drop 4 «Plantilla de regla con historia» (escrito en S1; falta publicarlo); en YouTube no hay DM: va como respuesta al comentario
 
 #### Resultado primero
 
@@ -442,10 +496,10 @@ Desde la versión dos punto uno punto doscientos ochenta y tres de Claude Code, 
 
 Hacé esto hoy: acordate de la última vez que Claude te hizo algo mal dos veces. Escribí la regla, y arriba, en una línea, qué pasó y cuándo.
 
-La plantilla de regla con historia está en la comunidad de WhatsApp. El link está en mi web.
+La plantilla de regla con historia está en la comunidad de WhatsApp. Comentá HISTORIA y te paso el link.
 
 ### R01 · Vertical · Cambiá dos letras y mirá cómo está armado cualquier repo
-*Repo* · **Demuestra:** en el navegador, `github.com/harry0703/MoneyPrinterTurbo` → `gitdiagram.com/harry0703/MoneyPrinterTurbo`; clic en un componente abre su archivo; el comando MCP en Claude Code · **Cierre:** comunidad de WhatsApp (falta escribir: drop con la URL, el comando `claude mcp add` y el aviso de repos privados)
+*Repo* · **Demuestra:** en el navegador, `github.com/harry0703/MoneyPrinterTurbo` → `gitdiagram.com/harry0703/MoneyPrinterTurbo`; clic en un componente abre su archivo; el comando MCP en Claude Code · **Cierre:** comentá DIAGRAMA → DM con el link a la comunidad de WhatsApp (falta escribir: drop con la URL, el comando `claude mcp add` y el aviso de repos privados)
 
 Cambiá dos letras en la dirección de cualquier repo de GitHub, y te dibuja cómo está armado por dentro.
 
@@ -459,12 +513,12 @@ Un cuidado: para repos privados te pide un token de GitHub. Eso es darle acceso 
 
 Cómo sabés que te sirvió: podés decir qué hace cada parte antes de abrir un solo archivo.
 
-Los comandos están en la comunidad de WhatsApp.
+Los comandos están en la comunidad de WhatsApp: comentá DIAGRAMA y te paso el link.
 
 ## Mié 7-oct
 
 ### D03-A · Vertical · El hook que commitea solo, y la guarda que le puse después de romperlo
-*Tutorial / caso* · **Demuestra:** el bloque Stop de `.claude/settings.json` y los dos comandos git de la guarda, más la prueba de que la guarda frena · **Cierre:** comunidad, drop 3 «Hook Stop + guarda» (escrito en S1; falta publicarlo)
+*Tutorial / caso* · **Demuestra:** el bloque Stop de `.claude/settings.json` y los dos comandos git de la guarda, más la prueba de que la guarda frena · **Cierre:** comentá HOOK → DM con el link a la comunidad, drop 3 «Hook Stop + guarda» (escrito en S1; falta publicarlo)
 
 Mi hook de Claude Code tomó diecisiete archivos con conflictos, los dio por resueltos y los subió a mi rama principal. Así se arma bien.
 
@@ -476,10 +530,10 @@ Paso tres, el que decide todo: la guarda. Antes de commitear, tu script corre do
 
 Para comprobarlo: barra hooks en Claude Code, y tu Stop tiene que aparecer. Después, en un repo de prueba, armá un conflicto a propósito y corré tu script: tiene que avisar y no commitear.
 
-El JSON y la guarda están en la comunidad.
+El JSON y la guarda están en la comunidad: comentá HOOK y te paso el link.
 
 ### G04 · Vertical · Antes de instalar una skill, escaneala (y el detalle de «precaución»)
-*Repo* · **Demuestra:** README: Quick Start, tabla de puntaje, «Exit codes», aviso de `--no-llm` · **Cierre:** comentá ESCANEO (existe: drop 4 escrito en S4 §5; Sergio Urcullo responde a mano por DM)
+*Repo* · **Demuestra:** README: Quick Start, tabla de puntaje, «Exit codes», aviso de `--no-llm` · **Cierre:** comentá ESCANEO → DM con el link a la comunidad, drop 4 (existe: escrito en S4 §5 para mandarlo a mano por DM; ahora va el link: publicarlo en la comunidad antes del video)
 
 Una skill para tu agente se instala con un comando y corre con tu confianza. NVIDIA publicó un escáner para revisarla antes. Tres pasos, según su README.
 
@@ -496,7 +550,7 @@ Cómo sabés que anduvo: te devuelve puntaje, severidad y qué archivos ejecutan
 Comentá ESCANEO y te paso los comandos.
 
 ### D04-A · Vertical · Retiré seis de mis nueve subagentes, y seguían apareciendo
-*Tutorial / caso* · **Demuestra:** que Claude Code lee `.claude/agents/` con subcarpetas (doc oficial) y un prompt para listar los subagentes vivos · **Cierre:** web `/claude-code`, sección «Que trabaje sin vos» (existe; ojo: dice «3 subagentes», hoy es 1)
+*Tutorial / caso* · **Demuestra:** que Claude Code lee `.claude/agents/` con subcarpetas (doc oficial) y un prompt para listar los subagentes vivos · **Cierre:** comentá DELEGAR → DM con el link a la web `/claude-code`, sección «Que trabaje sin vos» (existe; ojo: dice «3 subagentes», hoy es 1)
 
 Tenía nueve subagentes en Claude Code. Retiré seis. Y los seis seguían apareciendo.
 
@@ -510,12 +564,12 @@ Y la trampa: los moví a una carpeta de retirados, dentro de punto claude barra 
 
 Para comprobarlo, pedile a Claude: «Listame los subagentes que tenés disponibles». Si aparece uno que retiraste, sigue vivo.
 
-La guía está en mi web, en la sección de Claude Code.
+La guía está en mi web, en la sección de Claude Code: comentá DELEGAR y te paso el link.
 
 ## Jue 8-oct
 
 ### D04-B · Vertical · Cada skill que instalás te cobra contexto: medilo con /skill-doctor
-*Tutorial / caso* · **Demuestra:** la pantalla real de `/skill-doctor` y de `/skills` (Espacio cambia el estado), con `/doctor` antes y después · **Cierre:** comunidad, drop 5 (texto escrito en S1-GUIONES; falta publicarlo antes del video)
+*Tutorial / caso* · **Demuestra:** la pantalla real de `/skill-doctor` y de `/skills` (Espacio cambia el estado), con `/doctor` antes y después · **Cierre:** comentá DOCTOR → DM con el link a la comunidad, drop 5 (texto escrito en S1-GUIONES; falta publicarlo antes del video)
 
 Cada skill instalada en Claude Code te cobra contexto en cada mensaje, la uses o no. Yo tenía doscientas quince. Medí cuáles usé en el último mes y bajé a ciento diez.
 
@@ -529,10 +583,10 @@ Después escribí barra skills, marcá una y apretá espacio para cambiar su est
 
 Para comprobar, corré barra doctor antes y después: te estima cuánto pesa la lista.
 
-El bloque para pegar en tu configuración está en la comunidad.
+El bloque para pegar en tu configuración está en la comunidad: comentá DOCTOR y te paso el link.
 
 ### R06 · Vertical · Un mapa de tu código para Claude Code, y dónde te cuesta más
-*Repo* · **Demuestra:** README: pasos 1-3 (`codegraph install`, `codegraph init`), la tabla de siete repos, el párrafo «A note on context», sección «Telemetry» · **Cierre:** comunidad de WhatsApp (falta escribir: drop con los comandos, `codegraph telemetry off` y `codegraph uninstall`)
+*Repo* · **Demuestra:** README: pasos 1-3 (`codegraph install`, `codegraph init`), la tabla de siete repos, el párrafo «A note on context», sección «Telemetry» · **Cierre:** comentá CODEGRAPH → DM con el link a la comunidad de WhatsApp (falta escribir: drop con los comandos, `codegraph telemetry off` y `codegraph uninstall`)
 
 Hay una herramienta que le da a tu agente un mapa de tu código, y su propio README te dice dónde te va a costar más.
 
@@ -546,10 +600,10 @@ Dos cosas más. Manda estadísticas de uso anónimas, y se apagan con codegraph 
 
 Cómo sabés que anduvo: en tu próxima pregunta, el agente usa la herramienta de CodeGraph en vez de abrir diez archivos.
 
-Los comandos están en la comunidad de WhatsApp.
+Los comandos están en la comunidad de WhatsApp: comentá CODEGRAPH y te paso el link.
 
 ### S2-D12-B · Vertical · n8n: la clave de API no va escrita en el nodo
-*Tutorial / caso* · **Demuestra:** un export de n8n con la clave en el encabezado de un nodo HTTP (de prueba, inventada) y el `grep` que la encuentra · **Cierre:** web `sergiourcullo.vercel.app/stack` (existe en la fuente del sitio: sección n8n con el `docker run`; en vivo no verificable desde acá)
+*Tutorial / caso* · **Demuestra:** un export de n8n con la clave en el encabezado de un nodo HTTP (de prueba, inventada) y el `grep` que la encuentra · **Cierre:** comentá CLAVE → DM con el link a la web `sergiourcullo.vercel.app/stack` (existe en la fuente del sitio: sección n8n con el `docker run`; en vivo no verificable desde acá)
 
 Si pegaste una clave de API adentro de un nodo de n8n, esa clave viaja en cada exportación del workflow.
 
@@ -561,13 +615,13 @@ El orden: primero, una credencial de n8n. Si la API pide la clave en un encabeza
 
 Probalo hoy: exportá tus workflows y buscá cómo empiezan tus claves, por ejemplo «Bearer». Si aparece una, pasala a una credencial y cambiá esa clave en el proveedor.
 
-¿No tenés n8n en tu servidor? La guía está en mi web, en stack.
+¿No tenés n8n en tu servidor? La guía está en mi web, en stack: comentá CLAVE y te paso el link.
 
 
 ## Vie 9-oct
 
 ### G11 · YouTube · Cómo encontrar repos de IA que valen la pena (y cuáles no instalar)
-*Repo* · **Demuestra:** github.com/trending semanal; pestaña Issues de paperclip, hindsight y security-audit-skill; README de paperclip (Quickstart con `npx … onboard --yes`, `test-drive`, «Telemetry»); `LICENSE` de context-mode (Elastic 2.0) y sus logos con `href="#"`; README de hindsight («independently reproduced… Other scores are self-reported», «Coding agents… built automatically from git history and past sessions») · **Cierre:** comunidad de WhatsApp (falta publicar: drop 11, escrito en S4 §5)
+*Repo* · **Demuestra:** github.com/trending semanal; pestaña Issues de paperclip, hindsight y security-audit-skill; README de paperclip (Quickstart con `npx … onboard --yes`, `test-drive`, «Telemetry»); `LICENSE` de context-mode (Elastic 2.0) y sus logos con `href="#"`; README de hindsight («independently reproduced… Other scores are self-reported», «Coding agents… built automatically from git history and past sessions») · **Cierre:** comentá REPOS → link a la comunidad de WhatsApp (falta publicar: drop 11, escrito en S4 §5); en YouTube no hay DM: va como respuesta al comentario
 
 #### Resultado
 
@@ -659,10 +713,10 @@ Confiar en la marca. Esa misma semana, un repo de una empresa enorme de infraest
 
 Resumen: dónde mirar, estrellas contra actividad, la licencia abriendo el archivo, el README como contrato, y el escáner al final.
 
-La planilla con los ocho chequeos y los comandos de gh está en la comunidad de WhatsApp. Contame ahí qué repo estás por instalar.
+La planilla con los ocho chequeos y los comandos de gh está en la comunidad de WhatsApp. Comentá REPOS y te paso el link. Y contame qué repo estás por instalar.
 
 ### R03 · Vertical · Que la IA lea tu PDF largo como una persona, por secciones
-*Repo* · **Demuestra:** README «Quickstart» (`pip install -U pageindex` y las ~10 líneas de Python), gráfico de costo por página, sección FinanceBench; una corrida con un PDF propio **sin datos de clientes** (si Sergio Urcullo la hace) · **Cierre:** comunidad de WhatsApp (falta escribir: drop con el script del Quickstart comentado en español y la advertencia de datos)
+*Repo* · **Demuestra:** README «Quickstart» (`pip install -U pageindex` y las ~10 líneas de Python), gráfico de costo por página, sección FinanceBench; una corrida con un PDF propio **sin datos de clientes** (si Sergio Urcullo la hace) · **Cierre:** comentá PDF → DM con el link a la comunidad de WhatsApp (falta escribir: drop con el script del Quickstart comentado en español y la advertencia de datos)
 
 Tu negocio tiene un PDF largo: un reglamento, un catálogo, un contrato. Hay un repo que hace que la IA lo lea por secciones, como una persona, en vez de buscar pedacitos parecidos.
 
@@ -674,12 +728,12 @@ Dos cuidados. Uno: aunque diga modo local, usa tu clave de OpenAI, así que el t
 
 Cómo lo comprobás: hacele una pregunta cuya respuesta ya sepas, y pedile que te diga en qué parte del documento la encontró.
 
-El script comentado está en la comunidad de WhatsApp.
+El script comentado está en la comunidad de WhatsApp: comentá PDF y te paso el link.
 
 ## Sáb 10-oct
 
 ### D05-A · Vertical · Dos sesiones de Claude Code en el mismo proyecto, sin pisarse
-*Tutorial / caso* · **Demuestra:** `git worktree add -b`, `claude -w`, `git -C` y `git worktree list` corriendo en pantalla, en un repo de prueba · **Cierre:** comunidad, drop 12 (escrito; falta publicarlo. Ojo: en S1-GUIONES figura como «(DM)» y el carrusel K12 dice «Comentá CARRIL». Hay que elegir UN destino: acá quedó comunidad)
+*Tutorial / caso* · **Demuestra:** `git worktree add -b`, `claude -w`, `git -C` y `git worktree list` corriendo en pantalla, en un repo de prueba · **Cierre:** comentá WORKTREE → DM con el link a la comunidad, drop 12 (escrito; falta publicarlo. Ojo: en S1-GUIONES figura como «(DM)» y el carrusel K12 dice «Comentá CARRIL». Hay que elegir UN destino: acá quedó comunidad)
 
 Dos sesiones de Claude Code en la misma carpeta tocan los mismos archivos. Y a mí un comando que iba para una carpeta cayó en otra, y movió una rama cuatrocientos veinticuatro commits.
 
@@ -695,10 +749,10 @@ A mi agente la terminal le volvió sola a la carpeta principal. Se recuperó con
 
 Para comprobar: git worktree list. Cada carpeta, con su rama. Una sesión, una carpeta, una rama.
 
-Los comandos están en la comunidad: el link está en mi web.
+Los comandos están en la comunidad: comentá WORKTREE y te paso el link.
 
 ### R05 · Vertical · Casi cuatrocientas skills gratis para Claude Code: instalá un solo paquete
-*Repo* · **Demuestra:** README «Quick Install» (`/plugin marketplace add alirezarezvani/claude-skills` y `/plugin install marketing-skills@claude-code-skills`); carpeta `marketing-skill/skills/` (48 skills: `page-cro`, `cold-email`, `local-seo-manager`…); las cifras distintas del README; `STORE.md` · **Cierre:** comunidad de WhatsApp (falta escribir: drop con los dos comandos, cómo escanear el paquete con SkillSpector y las cinco skills de marketing más útiles para un negocio chico)
+*Repo* · **Demuestra:** README «Quick Install» (`/plugin marketplace add alirezarezvani/claude-skills` y `/plugin install marketing-skills@claude-code-skills`); carpeta `marketing-skill/skills/` (48 skills: `page-cro`, `cold-email`, `local-seo-manager`…); las cifras distintas del README; `STORE.md` · **Cierre:** comentá MARKETING → DM con el link a la comunidad de WhatsApp (falta escribir: drop con los dos comandos, cómo escanear el paquete con SkillSpector y las cinco skills de marketing más útiles para un negocio chico)
 
 Hay un repo con casi cuatrocientas skills gratis para Claude Code, y cuarenta y ocho son de marketing. No instales las cuatrocientas.
 
@@ -710,10 +764,10 @@ Tres cuidados. Uno: ese paquete trae más de sesenta scripts de Python. Una skil
 
 Cómo sabés que quedó instalado: escribís barra skills y aparece page cro.
 
-El chequeo completo está en la comunidad de WhatsApp.
+El chequeo completo está en la comunidad de WhatsApp: comentá MARKETING y te paso el link.
 
 ### S2-D09-A · Vertical · Por qué tu bot contesta dos veces lo mismo
-*Tutorial / caso* · **Demuestra:** el mismo aviso mandado dos veces y una sola respuesta · **Cierre:** comunidad, drop 5 (existe)
+*Tutorial / caso* · **Demuestra:** el mismo aviso mandado dos veces y una sola respuesta · **Cierre:** comentá DOBLE → DM con el link a la comunidad, drop 5 (existe)
 
 Si tu bot a veces contesta dos veces lo mismo, no es la IA. Es el aviso, que le llegó dos veces.
 
@@ -725,13 +779,13 @@ Un detalle: si el turno falla antes de contestar, se suelta el identificador. Si
 
 Para probarlo, mandá el mismo aviso dos veces. Tiene que salir una sola respuesta.
 
-La receta de los dos filtros está en la comunidad.
+La receta de los dos filtros está en la comunidad: comentá DOBLE y te paso el link.
 
 
 ## Dom 11-oct
 
 ### D05-B · Vertical · Presentaciones con Claude en el plan gratis, sin que te invente datos
-*Tutorial / caso* · **Demuestra:** una presentación armada en vivo en una cuenta Free, con el prompt anti-invento y las marcas FALTA · **Cierre:** web `/claude-code`, video 01 «Claude y Claude Code no son lo mismo» (existe: embed `kAsAhGe6zyA` en el código del sitio)
+*Tutorial / caso* · **Demuestra:** una presentación armada en vivo en una cuenta Free, con el prompt anti-invento y las marcas FALTA · **Cierre:** comentá CHAT → DM con el link a la web `/claude-code`, video 01 «Claude y Claude Code no son lo mismo» (existe: embed `kAsAhGe6zyA` en el código del sitio)
 
 Desde el dieciséis de septiembre, Claude hace presentaciones, documentos y diseños dentro de cualquier conversación. Y está en todos los planes, también en el gratis.
 
@@ -745,10 +799,10 @@ Esa última frase es la importante. Sin ella, la IA rellena con cifras que suena
 
 Para saber si te salió: cada número de las láminas tiene que estar en tu texto. El que no está, es invento. Después completá vos cada FALTA.
 
-Ojo: esto es Claude, el chat. Si no sabés si te alcanza el chat o necesitás Claude Code, en mi web está el video que los compara.
+Ojo: esto es Claude, el chat. Si no sabés si te alcanza el chat o necesitás Claude Code, comentá CHAT y te paso el video que los compara.
 
 ### R02 · Vertical · Un video corto entero desde un tema, y el problema de la música
-*Repo* · **Demuestra:** README en inglés (`README-en.md`): «Docker Deployment», puerto 8501, lista de proveedores de voz (Edge TTS), sección «Background Music» con el aviso de YouTube; bloque de sponsors · **Cierre:** comunidad de WhatsApp (falta escribir: drop «Antes de publicar un video automático»: música propia o con licencia, condiciones de Pexels/Pixabay, voz, revisión humana)
+*Repo* · **Demuestra:** README en inglés (`README-en.md`): «Docker Deployment», puerto 8501, lista de proveedores de voz (Edge TTS), sección «Background Music» con el aviso de YouTube; bloque de sponsors · **Cierre:** comentá DERECHOS → DM con el link a la comunidad de WhatsApp (falta escribir: drop «Antes de publicar un video automático»: música propia o con licencia, condiciones de Pexels/Pixabay, voz, revisión humana)
 
 Hay un repo que te arma un video corto entero a partir de un tema: guion, voz, imágenes de stock, subtítulos y música. Antes de usarlo para tu negocio, mirá la música.
 
@@ -760,28 +814,28 @@ Cómo sabés que sirve: el video dice algo de tu negocio que no podría decir cu
 
 Por qué importa: un reclamo de derechos te puede bajar el video.
 
-La lista de chequeo está en la comunidad de WhatsApp.
+La lista de chequeo está en la comunidad de WhatsApp: comentá DERECHOS y te paso el link.
 
 ### S2-D08-C · Vertical · Negocio: los mensajes de tu bot que Meta no te cobra
-*Tutorial / caso* · **Demuestra:** la regla de las setenta y dos horas en la página de precios de Meta, y un hallazgo propio: la bandeja de ONIA descarta de qué anuncio vino cada lead · **Cierre:** comunidad, drop 4 (existe; ya trae la línea de las 72 h)
+*Tutorial / caso* · **Demuestra:** la ventana de hasta siete días en la página de precios de Meta, y un hallazgo propio: la bandeja de ONIA descarta de qué anuncio vino cada lead · **Cierre:** comentá ANUNCIO → DM con el link a la comunidad, drop 4 (existe; corregido el 1-oct a «hasta 7 días»)
 
-Desde el uno de octubre, cada respuesta de tu bot de WhatsApp se paga. Pero hay una puerta por donde no se paga nada durante tres días.
+Desde el uno de octubre, cada respuesta de tu bot de WhatsApp se paga. Pero hay una puerta por donde no se paga nada hasta por siete días.
 
-Está en la página de precios de Meta, la que ves en pantalla. Si alguien te escribe desde un anuncio de clic a WhatsApp, y le contestás dentro de las veinticuatro horas, durante setenta y dos horas no se te cobra ningún mensaje.
+Está en la página de precios de Meta, la que ves en pantalla. Si alguien te escribe desde un anuncio de clic a WhatsApp, y le contestás dentro de las veinticuatro horas, se abre una ventana de hasta siete días en la que no se te cobra ningún mensaje.
 
-Dos condiciones. Una: contestar rápido. Si tardás más de un día, esa ventana se pierde. Dos: es para la plataforma oficial, la de los bots.
+Tres condiciones. Una: contestar rápido. Si tardás más de un día, esa ventana se pierde. Dos: es para la plataforma oficial, la de los bots. Tres: tiene que escribirte desde la app del celular; desde la computadora no cuenta.
 
-Contá cuántos mensajes le mandás a un cliente nuevo en sus primeros tres días. Si entró por un anuncio, no los pagás. Si llegó por otro lado, sí.
+Contá cuántos mensajes le mandás a un cliente nuevo en su primera semana. Si entró por un anuncio, no los pagás. Si llegó por otro lado, sí.
 
 Un error que encontré en mi sistema: la bandeja que uso en el medio borra de qué anuncio vino cada persona. No sabés qué anuncio te trajo al cliente. Fijate que la tuya lo guarde.
 
-La planilla para hacer tu cuenta está en la comunidad.
+La planilla para hacer tu cuenta está en la comunidad: comentá ANUNCIO y te paso el link.
 
 
 ## Lun 12-oct
 
 ### D06-A · Vertical · Antes de cerrar la sesión: el handoff de siete campos
-*Tutorial / caso* · **Demuestra:** la plantilla de siete campos en pantalla y la prueba de pasársela a una sesión nueva · **Cierre:** comunidad, drop 7 (escrito; falta publicarlo)
+*Tutorial / caso* · **Demuestra:** la plantilla de siete campos en pantalla y la prueba de pasársela a una sesión nueva · **Cierre:** comentá HANDOFF → DM con el link a la comunidad, drop 7 (escrito; falta publicarlo)
 
 Cuando cerrás una sesión, lo que aprendió se va con ella. La próxima arranca de
 cero.
@@ -803,10 +857,10 @@ con un trabajo entero sin commit.
 Para comprobar, pasale solo ese archivo a una sesión nueva. Si sigue sin preguntarte nada,
 está bien escrito.
 
-La plantilla está en la comunidad.
+La plantilla está en la comunidad: comentá HANDOFF y te paso el link.
 
 ### R07 · Vertical · Videos por código con tu agente, y la licencia que cambia con tu tamaño
-*Repo* · **Demuestra:** README («Video tools for the agent era», `npx create-video@latest`, «Agent Skills»); la etiqueta «Other» en GitHub y el `LICENSE.md` abierto (Free License: elegibilidad; Company License) · **Cierre:** comunidad de WhatsApp (falta escribir: drop «Remotion: ¿en qué licencia caés?» con las cuatro condiciones de la Free License y el enlace a la FAQ oficial)
+*Repo* · **Demuestra:** README («Video tools for the agent era», `npx create-video@latest`, «Agent Skills»); la etiqueta «Other» en GitHub y el `LICENSE.md` abierto (Free License: elegibilidad; Company License) · **Cierre:** comentá REMOTION → DM con el link a la comunidad de WhatsApp (falta escribir: drop «Remotion: ¿en qué licencia caés?» con las cuatro condiciones de la Free License y el enlace a la FAQ oficial)
 
 Podés hacer videos escribiendo código, y tu agente también. Pero antes de usar Remotion en tu empresa, contá cuántos son.
 
@@ -820,10 +874,10 @@ Cómo sabés que estás bien: sabés en qué grupo de la licencia caés, y lo an
 
 Por qué importa: si tu negocio crece, lo que era gratis puede pasar a ser una cuenta por pagar.
 
-El resumen de la licencia está en la comunidad de WhatsApp.
+El resumen de la licencia está en la comunidad de WhatsApp: comentá REMOTION y te paso el link.
 
 ### D05-C · Vertical · Mi agente me dijo que quedaban 2. Había 44 activos
-*Tutorial / caso* · **Demuestra:** la lista de workflows de n8n filtrada por activos (el número en pantalla) y un prompt literal para exigir el dato de hoy · **Cierre:** comunidad, con pregunta abierta (existe; no promete ningún recurso)
+*Tutorial / caso* · **Demuestra:** la lista de workflows de n8n filtrada por activos (el número en pantalla) y un prompt literal para exigir el dato de hoy · **Cierre:** comentá CONTAR → DM con el link a la comunidad, con pregunta abierta (existe; no promete ningún recurso)
 
 Mi agente me dijo que de ciento treinta y seis automatizaciones en mi servidor quedaban dos vivas. Estuve a un paso de borrar el resto.
 
@@ -839,13 +893,13 @@ Y si usás n8n, abrí la lista de workflows, filtrá por activos y mirá el núm
 
 La decisión que no se puede deshacer la verificás vos, con el dato de hoy.
 
-Contame en la comunidad si te pasó algo parecido.
+¿Te pasó algo parecido? Comentá CONTAR y te paso el link a la comunidad.
 
 
 ## Mar 13-oct
 
 ### S2-D07-C · YouTube · Un bot que no inventa: datos en un solo lugar, control después de la IA y medición
-*Tutorial / caso* · **Demuestra:** el control de ONIA corrido en pantalla con cinco frases (cuatro bloqueadas, una pasa) y la plantilla If de n8n · **Cierre:** comunidad, drop 2 (existe)
+*Tutorial / caso* · **Demuestra:** el control de ONIA corrido en pantalla con cinco frases (cuatro bloqueadas, una pasa) y la plantilla If de n8n · **Cierre:** comentá CAPAS → link a la comunidad, drop 2 (existe); en YouTube no hay DM: va como respuesta al comentario
 
 #### Resultado
 
@@ -933,10 +987,10 @@ El prompt ayuda, y lo sigo usando. Pero lo que no se puede equivocar va en un co
 
 Hacé esto hoy: escribí diez frases que tu bot nunca debería mandar y diez que sí. Pasalas por tu control. Si una prohibida pasa, o una buena se bloquea sin motivo, ya sabés qué arreglar.
 
-En la comunidad de WhatsApp dejé las tres capas en una hoja: la plantilla de datos, el patrón de precios y las frases de prueba. Nos vemos en el próximo.
+En la comunidad de WhatsApp dejé las tres capas en una hoja: la plantilla de datos, el patrón de precios y las frases de prueba. Comentá CAPAS y te paso el link. Nos vemos en el próximo.
 
 ### G10 · Vertical · Cómo leer un README en un minuto: el primer comando no siempre es del proyecto
-*Repo* · **Demuestra:** README: bloque «Sponsored by Bright Data» con su `npx … --yes` arriba de todo; «Quick Installation»; `--chats --tunnel` («Secure remote access via Cloudflare Tunnel»); «Attribution» · **Cierre:** comunidad de WhatsApp (falta publicar: drop 10, escrito en S4 §5)
+*Repo* · **Demuestra:** README: bloque «Sponsored by Bright Data» con su `npx … --yes` arriba de todo; «Quick Installation»; `--chats --tunnel` («Secure remote access via Cloudflare Tunnel»); «Attribution» · **Cierre:** comentá README → DM con el link a la comunidad de WhatsApp (falta publicar: drop 10, escrito en S4 §5)
 
 Antes de copiar el primer comando de un repo, fijate de quién es. Ejemplo: claude code templates, un catálogo muy usado de agentes y conexiones para Claude Code.
 
@@ -952,12 +1006,12 @@ Por qué importa: el comando que pegás decide qué corre en tu máquina.
 
 Cómo sabés que lo leíste bien: podés decir qué instala, qué pide y de quién es cada parte.
 
-Los cuatro chequeos están en la comunidad de WhatsApp.
+Los cuatro chequeos están en la comunidad de WhatsApp: comentá README y te paso el link.
 
 ## Mié 14-oct
 
 ### S1-D07-B · Vertical · Tenía veinticuatro MCP conectados y ninguno escrito en mis archivos
-*Tutorial / caso* · **Demuestra:** `/usage` con la atribución por servidor MCP y `/context` antes y después de desactivar uno · **Cierre:** comunidad, drop 14 (escrito, pero HAY QUE CORREGIRLO antes de publicar: ver Pendientes. En S1-GUIONES figura como «(DM)»)
+*Tutorial / caso* · **Demuestra:** `/usage` con la atribución por servidor MCP y `/context` antes y después de desactivar uno · **Cierre:** comentá CONEXIONES → DM con el link a la comunidad, drop 14 (escrito, pero HAY QUE CORREGIRLO antes de publicar: ver Pendientes. En S1-GUIONES figura como «(DM)»)
 
 Tenía veinticuatro servidores MCP conectados a Claude Code. Cuando los audité, ninguno aparecía nombrado en mis skills ni en mis documentos. Cero.
 
@@ -975,29 +1029,27 @@ Para apagarlo: barra mcp, y desactivalo. Si lo agregaste vos por terminal, claud
 
 Comprobás con barra context, antes y después: lo que ocupan las herramientas tiene que bajar.
 
-Lo tenés completo en la comunidad: el link está en mi web.
+Lo tenés completo en la comunidad: comentá CONEXIONES y te paso el link.
 
-### G01 · Vertical · APIs de IA gratis: tres preguntas antes de meter datos de tus clientes
-*Repo* · **Demuestra:** las notas al pie del README (Cohere «Non-commercial use only», nota 1 de Gemini, nota 13 de Mistral, nota 5 de NVIDIA) · **Cierre:** comunidad de WhatsApp (falta publicar: drop 1, texto ya escrito en S4 §5)
+### R04 · Vertical · Un curso gratis de IA en GitHub cuya primera lección de agentes corre sin clave
+*Repo* · **Demuestra:** portada en español (`i18n/es/README.md`); en la terminal, `python3 phases/14-agent-engineering/01-the-agent-loop/code/main.py` y su salida (TOY REACT LOOP: 120 + 15 % = 138.0, 5 turnos, 3 herramientas) · **Cierre:** comentá BUCLE → DM con el link a la comunidad de WhatsApp (falta escribir: drop con los tres comandos y las lecciones 14-01 a 14-05 sugeridas en orden)
 
-Hay una lista en GitHub de APIs de inteligencia artificial gratis y sin tarjeta. Antes de conectar una a tu negocio, leé las notas al pie: ahí está lo que decide.
+Hay un curso gratis de ingeniería de IA en GitHub, con más de quinientas lecciones. Y la primera lección de agentes corre sin clave.
 
-Se llama awesome free LLM APIs. Tres preguntas.
+Se llama AI Engineering from Scratch, licencia MIT, y la portada está en español. Para agentes, andá a la fase catorce, lección uno: el bucle del agente.
 
-Uno: ¿pide tarjeta? Gemini, Mistral y Cohere, según la lista, no.
+Clonás el repo, y corrés el archivo main punto py de esa lección con python tres. Solo usa Python, sin instalar nada.
 
-Dos: ¿permite uso comercial? La clave de prueba de Cohere dice que no. Para un negocio, afuera.
+Lo que ves en pantalla es un agente de juguete: piensa, usa una calculadora, guarda un dato, y repite hasta terminar. Ciento veinte más quince por ciento de impuesto: ciento treinta y ocho. Cinco vueltas, tres herramientas.
 
-Tres: ¿usan lo que mandás para entrenar? La nota de Gemini dice que, en el plan gratis, Google puede usar tus mensajes para mejorar sus productos. La de Mistral, que entrenan con ellos salvo que lo desactives. Y los modelos gratis de NVIDIA que aparecen ahí piden no mandar datos personales.
+Según la lección, ese mismo bucle es lo que hacen por dentro los agentes de hoy, Claude Code incluido: pensar, usar una herramienta, leer el resultado.
 
-Si tu bot lee nombres, teléfonos o diagnósticos de clientes, esa nota decide.
+Cómo sabés que lo entendiste: cambiás la pregunta y adivinás cuántas vueltas va a dar antes de correrlo.
 
-Cómo sabés que elegiste bien: confirmaste las tres respuestas en la página del proveedor, no en la lista. La lista es del veintiuno de agosto, y los límites cambian.
-
-La planilla está en la comunidad de WhatsApp.
+El orden de lecciones que te recomiendo está en la comunidad de WhatsApp: comentá BUCLE y te paso el link.
 
 ### S2-D13-C · Vertical · Negocio: definí a tu cliente con cinco preguntas, no con adjetivos
-*Tutorial / caso* · **Demuestra:** las cinco preguntas reales de ONIA y el mensaje del lead que las originó (parafraseado, sin nombre) · **Cierre:** comentá CLIENTE (drop 17, escrito)
+*Tutorial / caso* · **Demuestra:** las cinco preguntas reales de ONIA y el mensaje del lead que las originó (parafraseado, sin nombre) · **Cierre:** comentá CLIENTE → DM con el link a la comunidad, drop 17 (escrito en S2 para mandarlo por DM; ahora va el link: publicarlo en la comunidad antes del video)
 
 «Mi cliente son las pymes» no es una definición. Es un adjetivo. En ONIA salimos a vender primero a clínicas, y así definimos ese cliente: con preguntas que se contestan con un número, en dos minutos.
 

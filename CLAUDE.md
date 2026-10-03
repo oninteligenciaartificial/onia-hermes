@@ -493,14 +493,22 @@ Si no sabés dónde va, **preguntá** antes de inventar carpeta.
   genéricos en mayúsculas y verde decorativo no cuentan como narrativa. Cada slide
   debe aportar una prueba visual distinta: interfaz real, proceso, tabla, decisión,
   objeto del trabajo o contexto humano.
-- Para ONIA, el piso editorial es el **pack `referentes`** de la marca personal
-  (skill `diseno-contenido-onia` §2 y §4): blanco, verde y negro, una prueba visual
-  dominante por lámina y el CTA diseñado. Ejemplo aprobado: `sergio-k6v2-*`. No se
-  copia el contenido; se copia el estándar de dirección.
-  ⚠️ **Corregido el 2-oct.** Acá decía `community-editorial` (commit `e9b80e22`), el
-  pack que Sergio Urcullo juzgó «vacío y con demasiado texto» el 29-sep. Con esta
-  línea vieja se armaron D1 y D4 en crema, con la captura en un marco chico, y él
-  las rechazó el 1-oct.
+- **La pauta de Onia Platform NO se hace con el estilo de la marca personal.**
+  Sergio Urcullo, 2-oct: *«es diferente el contenido de la onia platform que el de mi
+  cuenta personal, te dije que entres a ads library y veas qué es lo que funciona»*.
+  - **Primero se estudia la Biblioteca, después se diseña.** Sergio Urcullo, mismo día:
+    *«DEJA DE ARMAR, PRIMERO MIRA LA META ADS LIBRARY Y MIRA COMPETENCIAS»*. El formato
+    sale de lo que sostienen los competidores (`ONIA_ADQUISICION_Y_PAUTA.md` §2.5), no de
+    un pack nuestro. Desde la nube Facebook no abre: los creativos los captura la madre.
+  - Lleva la marca de la WEB (lockup `onia | dental`, letra Archivo, verde solo en lo que
+    se aprieta: `web-factory/docs/ONIA_BRAND_IDENTITY_2026.md`), no la de la marca personal.
+  - Lo que promete sale de `ONIA_CATALOGO_DE_VENTA.md`, no del código: el 2-oct se armó D4
+    con el tratamiento a medias porque estaba en producción, y no encontraba a nadie.
+  - El pack `referentes` es SOLO de la marca personal.
+  ⚠️ **Corregido dos veces el 2-oct.** Acá decía `community-editorial` (rechazado el
+  29-sep). Después decía `referentes` de la marca personal: así se armaron D1 y D4 v2
+  con portada de arcilla verde y láminas de ensayo, y él aclaró que la pauta del
+  producto es otra cosa.
 - **Producto visible o no sale.** En pauta de software, al menos una parte central
   de la pieza debe enseñar UI real o una demostración verificable. No fabricar
   pantallas con IA ni reemplazar prueba por mockups decorativos.
