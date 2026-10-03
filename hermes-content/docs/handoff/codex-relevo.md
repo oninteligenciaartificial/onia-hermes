@@ -24,6 +24,7 @@ Se trabaja en ramas `codex/*` con PR: nada directo a main.
   (receta Santiago).
 
 ### T2 · Auditoría: cobro automático y autoservicio (pedido de Sergio Urcullo, 3-oct)
+- ✅ **HECHA por la madre v2 el 3-oct** (`hermes-content/docs/research/ONIA_PAGO_AUTOSERVICIO_AUDITORIA.md`, PR #115). Codex NO la hace.
 - **META:** documento `hermes-content/docs/research/ONIA_PAGO_AUTOSERVICIO_AUDITORIA.md` con:
   - (a) cómo cobran y dan de alta sin humanos los mejores SaaS y ERP (Alegra, Siigo, Holded, Odoo, Bind, y
     AgendaPro/Doctocliq/Dentalink para clínicas): prueba, checkout, cobro recurrente, reintentos, factura y baja;
