@@ -75,7 +75,30 @@ No van para Lucía las piezas técnicas de Claude Code, git o n8n (S2-D12-B incl
 
 # Fichas de aprendizaje (las 7 primeras)
 
+## Para grabar hoy, de la más rápida a la más lenta
+
+| Orden | Ficha | Formato | Tiempo de grabación |
+|---|---|---|---|
+| 1 | 4 · D06-A handoff | a cámara + tarjeta de lista | ~10 min |
+| 2 | 5 · D04-C verificar mirando | pantalla verde con las capturas detrás | ~15 min (+5 para la captura rota) |
+| 3 | 7 · D02-A esfuerzo | pantalla verde con la doc detrás + corte de `/effort` | ~15 min |
+| 4 | 1 · D01-A primera skill | pantalla partida → pantalla real → cámara (el formato de @by.shlabu) | ~20 min |
+| 5 | 3 · D05-A worktrees | pantalla partida con la terminal | ~20 min |
+| 6 | 2 · D03-A hook | pantalla partida + la prueba del conflicto | ~25 min |
+| 7 | 6 · N06 Antigravity | pantalla verde con el aviso + pantalla real | ~30 min |
+
+**Referencia de formato:** los dos reels que mandó Sergio Urcullo el 3-oct
+(`hermes-content/references/video-intake/2026-10-03-reels-genjutsu-y-fiesta-ia.md`):
+- **@by.shlabu** es el molde de los tutoriales: el resultado en pantalla partida en los primeros 3 s, después 13 s de
+  pantalla real con el cómo, y al final la palabra para comentar.
+- **@ugc.studio.ia**, el sketch de un personaje IA, es para Lucía, no para estas fichas.
+
+⚠️ **El «comentá PALABRA» necesita el mensaje directo automático armado antes de publicar.** Hoy da 0 leads
+(`ig-comentario-dm-vivo`). Grabá igual; antes de publicar, se confirma que el DM le llega a quien comenta.
+
 ## 1 · D01-A · Tu primera skill de Claude Code en un minuto
+
+**Formato:** pantalla partida al empezar (arriba `/skills` con tu skill listada, abajo vos), después tu pantalla real del cómo y vuelta a cámara para el cierre. Es el formato del reel de @by.shlabu · **Grabación:** ~20 min.
 
 **Palabra:** SKILL · **Molde:** Erik (las tarjetas arman la ruta y el archivo de a un pedazo) · **Largo:** ~60 s · **Verificado
 el 3-oct:**
@@ -124,6 +147,8 @@ solo. Y aprende la parte que casi nadie sabe: si la descripción es vaga, la ski
   `name` y `description` entre las dos líneas de `---`.
 
 ## 2 · D03-A · El hook que commitea solo, y la guarda que le puse después de romperlo
+
+**Formato:** pantalla partida (arriba el JSON y la guarda, abajo vos), con la prueba del conflicto en tu pantalla real · **Grabación:** ~25 min: armar el conflicto de prueba lleva 10.
 
 **Palabra:** HOOK · **Molde:** Erik (tarjetas con los tres pasos y el JSON) · **Largo:** ~60 s · **Verificado el 3-oct:**
 - code.claude.com/docs/en/hooks: «The Stop event fires when Claude finishes responding»; «The `/hooks` command opens a
@@ -177,6 +202,8 @@ un merge a medias. Con dos comandos de git se evita.
 
 ## 3 · D05-A · Dos sesiones de Claude Code en el mismo proyecto, sin pisarse
 
+**Formato:** pantalla partida (arriba la terminal con los comandos, abajo vos), con un corte a pantalla completa para `git worktree list` · **Grabación:** ~20 min.
+
 **Palabra:** WORKTREE · **Molde:** Erik (tarjeta con los tres pasos) · **Largo:** ~60 s · **Verificado el 3-oct:**
 - code.claude.com/docs/en/worktrees: «Pass `--worktree` or `-w` with a name to create an isolated worktree and start Claude
   in it».
@@ -221,6 +248,8 @@ nadie avisa: la terminal puede volver sola a la carpeta principal, y un comando 
   moverse.
 
 ## 4 · D06-A · Antes de cerrar la sesión: el handoff de siete campos
+
+**Formato:** a cámara, con una tarjeta de lista (los siete campos se arman de a uno). La pantalla real es opcional: sólo la sesión nueva respondiendo · **Grabación:** ~10 min, la más rápida.
 
 **Palabra:** HANDOFF · **Molde:** Erik (la tarjeta de siete campos se arma de a uno) · **Largo:** ~60 s · **Verificado el 3-oct**
 con `hermes-content/docs/handoff/README.md` (los siete campos, y la compactación del 22-ago en «Por qué esto y no confiar
@@ -273,6 +302,8 @@ no repite los errores de la anterior.
 
 ## 5 · D04-C · «Verificado» con un 200, y el login mostraba texto roto
 
+**Formato:** pantalla verde: vos adelante y, detrás, la captura rota y la sana del login · **Grabación:** ~15 min, más 5 para reproducir la captura rota.
+
 **Palabra:** MIRAR · **Molde:** Santiago (la prueba, las dos capturas, arriba) · **Largo:** ~65 s · **Verificado el 3-oct** con
 CLAUDE.md, regla «Verificar es MIRAR»: los nombres de iconos («credit_card_off», «verified_user») y la fuente de 3,9 MB
 que tardaba 117 s.
@@ -318,6 +349,8 @@ miran la pantalla. Esta pieza le da un prompt para que el agente verifique como 
   cargando sólo los que usás.
 
 ## 6 · N06 · Google cambió Gemini CLI gratis por Antigravity CLI: qué cambia para vos
+
+**Formato:** pantalla verde con el aviso de Google detrás, y después tu pantalla real instalando `agy` y moviendo las skills · **Grabación:** ~30 min, la más larga: instala Antigravity y entra con Google.
 
 **Palabra:** ANTIGRAVITY · **Molde:** Santiago (la prueba arriba: el aviso de Google y la página de migración) · **Largo:** ~60 s
 · **Grabar esta semana** (noticia del 2-oct) · **Verificado el 3-oct** en vivo:
@@ -371,6 +404,8 @@ pasa, sus skills no se mudan solas: si no las mueve a mano, Antigravity no las v
 - *«¿Qué modelos trae gratis?»* Gemini 3.8 Flash y otros (3.7 y 3.6 Flash, 3.1 Pro), con el tope semanal del plan gratis.
 
 ## 7 · D02-A · La perilla de Claude Code que casi nadie toca
+
+**Formato:** pantalla verde con la doc de Claude Code detrás, más un corte corto de tu pantalla con `/effort` · **Grabación:** ~15 min.
 
 **Palabra:** EFFORT · **Molde:** Santiago (la doc oficial arriba, con la línea marcada) · **Largo:** ~60 s · **Grabar esta semana** ·
 **Verificado el 3-oct:**
