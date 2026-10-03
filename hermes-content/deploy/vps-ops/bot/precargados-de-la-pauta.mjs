@@ -26,7 +26,12 @@ export function precargadosDeLaPauta(docPath = DOC_PAUTA) {
     throw new Error(`no pude leer el doc de la pauta (${docPath}): ${error?.code || error?.message}. Sin él, este cruce no mide nada.`);
   }
   const precargados = new Set();
-  for (const m of texto.matchAll(/`(Hola, vi el anuncio de Onia \([^`]*)`/g)) precargados.add(m[1]);
+  for (const m of texto.matchAll(/`(Hola, vi el anuncio de Onia \([^`]*)`/g)) {
+    // Una MENCION abreviada («…» o «...») es prosa del doc que cita el texto, no el texto que Meta
+    // escribe por el lead: contarla duplicaba D1 y ponia rojo el gate (2026-10-02, §5.9 paso 4).
+    if (/(?:…|\.\.\.)\s*$/.test(m[1])) continue;
+    precargados.add(m[1]);
+  }
   if (precargados.size === 0) {
     throw new Error(
       `${docPath} ya no trae ningún precargado «Hola, vi el anuncio de Onia (…)» entre backticks: ` +

@@ -25,13 +25,14 @@ Onia ordena tu clínica y, cada mañana, te deja listo a quién escribirle:
   puede venir te enteres con un día de margen.
 - **Los saldos vencidos**: el recordatorio de pago de cada uno.
 
-La IA escribe los mensajes con el tono de tu clínica; a quién y cuándo lo decide el sistema
-con tus datos. **Nada sale sin tu OK**: aprobás con un toque y sale por tu WhatsApp, o te
-queda listo para mandarlo desde tu celular.
+La IA redacta el texto de cada agente y vos lo aprobás una vez; a quién y cuándo lo decide el
+sistema con tus datos. **Nada sale sin tu OK**: aprobás lo que te sirve y lo mandás por tu
+WhatsApp con un toque.
 
 Y el día a día, en un solo lugar:
 
-- **Agenda por profesional** y **agenda online** para que tus pacientes reserven solos.
+- **Agenda** con el profesional de cada cita, y **agenda online** para que tus pacientes
+  reserven solos.
 - **Ficha del paciente** con odontograma, historial, recetas y documentos.
 - **Recepción agenda y cobra, pero no ve la historia clínica.**
 - **Recordatorios de cita por correo**, 24 h y 2 h antes.
@@ -72,7 +73,6 @@ acompañada que se cotiza aparte.
 
 - **Contesta al instante, de día y de noche**, en tu WhatsApp y en tu web, con lo que vos
   le cargaste: horarios, servicios y tus respuestas.
-- **Entiende las fotos** que le mandan.
 - **Nunca da precios.** A quien pide turno le manda el link de tu agenda online.
 - **Lo que no sabe te lo pasa a vos** con la conversación completa.
 - Atiende **500 conversaciones al mes**; si se agotan, las nuevas pasan a una persona de tu

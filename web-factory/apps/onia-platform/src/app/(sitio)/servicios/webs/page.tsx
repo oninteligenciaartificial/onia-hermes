@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Reveal } from "@/motion";
+import { Entrada, Reveal } from "@/motion";
 import { WEB_STACKS } from "@/content/webs";
 import { SITE_URL } from "@/lib/site";
 import { EMPEZAR_URL } from "../../nav";
@@ -83,7 +83,7 @@ export default function Webs() {
     <>
       <JsonLd data={JSON_LD} />
       <Block surface="paper">
-        <Reveal>
+        <Entrada>
           <Kicker>Servicios · Webs</Kicker>
           <h1 className={s.display}>
             Ves tu web antes de dejar <em>un solo dato</em>.
@@ -96,7 +96,7 @@ export default function Webs() {
             el contenido, casi nunca por el diseño. El precio está publicado y el
             dominio y el hosting van siempre a tu nombre.
           </p>
-        </Reveal>
+        </Entrada>
       </Block>
 
       {/* `Reveal` SOLO sobre el titular. Envolviendo también al configurador

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Reveal } from "@/motion";
+import { Entrada, Reveal } from "@/motion";
 import {
   AGENDA_DEMO_URL,
   AGENDA_CONSULTA_URL,
@@ -81,7 +81,7 @@ export default function Contacto() {
   return (
     <>
       <Block surface="paper">
-        <Reveal>
+        <Entrada>
           <Kicker>Hablemos</Kicker>
           <h1 className={s.display}>
             Elegí el horario y <em>hablamos</em>.
@@ -91,7 +91,7 @@ export default function Contacto() {
             hora por WhatsApp, y del otro lado hay alguien que conoce el
             sistema.
           </p>
-        </Reveal>
+        </Entrada>
       </Block>
 
       {/* Las dos citas */}

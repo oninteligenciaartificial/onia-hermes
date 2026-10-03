@@ -21,19 +21,25 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 
 import { createState, step } from "./bot-engine.mjs";
+import { configComoProduccion } from "./config-como-produccion.mjs";
 import { normalize } from "./guardrails.mjs";
 import * as intents from "./intents.mjs";
 import { buildConfig } from "./simulate.mjs";
 
 const T0 = "2026-09-30T19:00:00Z";
-const SIN_AMBIENTE = { env: {}, envFile: "/no/existe/webhook.env" };
+// El reloj de la config es el de la conversacion (`T0`), no el de la maquina: los horarios son
+// fijos y sin esto vencen solos (el 2-oct pusieron rojo este archivo sin que nadie tocara el bot).
+const SIN_AMBIENTE = { env: {}, envFile: "/no/existe/webhook.env", now: Date.parse(T0) };
 const HORARIOS = "jueves 2 de octubre, 14:00@2026-10-02T18:00:00Z|viernes 3 de octubre, 15:00@2026-10-03T19:00:00Z";
+// CON AGENDA PROPIA (`--slots` a mano): ofrece y confirma horarios.
 const CONFIG = buildConfig({ slots: HORARIOS }, SIN_AMBIENTE);
+// COMO PRODUCCION (3-oct): sin `ONIA_BOT_AGENDA=calcom`, la persona coordina la demo.
+const PRODUCCION = configComoProduccion({ horarios: HORARIOS, now: Date.parse(T0) });
 const PRECARGADO_D4 = "Hola, vi el anuncio de Onia (D4). Tengo una clínica dental.";
 
-function turno(state, text, minuto = 0) {
+function turno(state, text, minuto = 0, config = CONFIG) {
   const receivedAt = new Date(Date.parse(T0) + minuto * 60000).toISOString();
-  return step(state, { text, receivedAt }, { config: CONFIG });
+  return step(state, { text, receivedAt }, { config });
 }
 
 const DUENO_CUENTA_SU_DOLOR = [
@@ -64,7 +70,27 @@ for (const frase of SIGUE_SIENDO_CLINICO) {
   });
 }
 
-test("el dueño que llega por D4 y cuenta el dolor sigue en el embudo, con el dolor anotado", () => {
+// La rama que ven los leads (3-oct). La de abajo, con agenda propia, seguía verde cuando producción
+// ya saludaba con M0_PERSONA y acusaba con M0b_SIN_HORARIOS.
+test("como en producción: el dueño que llega por D4 y cuenta el dolor sigue en el embudo, con el dolor anotado", () => {
+  assert.equal(PRODUCCION.agenda?.modo, "persona", "ancla: se mide la rama que sirve producción");
+  const r1 = turno(createState({ channel: "chatwoot", contactRef: "d4-prod", channelType: "Channel::Whatsapp" }), PRECARGADO_D4, 0, PRODUCCION);
+  assert.equal(r1.nextState.botStage, "esperando_horario");
+  const r2 = turno(r1.nextState, "tengo como 30 pacientes con tratamiento a medias que no volvieron", 1, PRODUCCION);
+
+  assert.equal(r2.nextState.botStage, "esperando_horario", "no se deriva: es el lead que la pauta paga por traer");
+  assert.equal(r2.sideEffects.filter((e) => e.type === "notify_sergio").length, 0, "el aviso de coordinar ya salió en la bienvenida");
+  assert.equal(r2.replies.length, 1);
+  assert.equal(r2.replies[0].templateKey, "M0b_SIN_HORARIOS", "se acusa el dato; el horario lo coordina la persona");
+  assert.equal(r2.replies[0].replySource, "script", "el dolor dicho no se le manda al LLM a reformular");
+  assert.equal(r2.nextState.qualification.painPoint, "clientes");
+  assert.match(r2.replies[0].text, /pacientes que no vuelven/, "a una clínica se le habla de pacientes, no de clientes");
+  assert.doesNotMatch(r2.replies[0].text, /\*\*A\)\*\*|jueves 2 de octubre/, "no ofrece horarios que nadie reserva");
+  const lead = r2.sideEffects.find((e) => e.type === "lead_upsert");
+  assert.equal(lead?.payload.qualification.painPoint, "clientes", "el dolor viaja al CRM");
+});
+
+test("con agenda propia: el dueño que llega por D4 y cuenta el dolor sigue en el embudo, con el dolor anotado", () => {
   const r1 = turno(createState({ channel: "chatwoot", contactRef: "d4" }), PRECARGADO_D4);
   assert.equal(r1.nextState.botStage, "esperando_horario");
   const r2 = turno(r1.nextState, "tengo como 30 pacientes con tratamiento a medias que no volvieron", 1);
@@ -86,7 +112,7 @@ test("el dueño que llega por D4 y cuenta el dolor sigue en el embudo, con el do
   assert.equal(lead.payload.qualification.painPoint, "clientes");
 });
 
-test("con el dolor ya dicho, M2 no se lo vuelve a preguntar al reservar", () => {
+test("con agenda propia: con el dolor ya dicho, M2 no se lo vuelve a preguntar al reservar", () => {
   const r1 = turno(createState({ channel: "chatwoot", contactRef: "d4m2" }), PRECARGADO_D4);
   const r2 = turno(r1.nextState, "mis pacientes dejan el tratamiento y no vuelven", 1);
   const r3 = turno(r2.nextState, "B", 2);
@@ -95,7 +121,7 @@ test("con el dolor ya dicho, M2 no se lo vuelve a preguntar al reservar", () => 
   assert.match(r3.replies[0].text, /ciudad/, "lo que falta sí se pregunta");
 });
 
-test("si lo único que queda es el dolor, M2 igual tiene algo que preguntar (nunca una lista vacía)", () => {
+test("con agenda propia: si lo único que queda es el dolor, M2 igual tiene algo que preguntar (nunca una lista vacía)", () => {
   const r1 = turno(createState({ channel: "chatwoot", contactRef: "d4m2b" }), "Hola, vi el anuncio de Onia (D4). Tengo una clínica dental en Santa Cruz, somos 4.");
   const r2 = turno(r1.nextState, "A", 1);
   assert.equal(r2.replies[0].templateKey, "M2");

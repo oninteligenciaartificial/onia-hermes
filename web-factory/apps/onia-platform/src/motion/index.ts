@@ -11,6 +11,7 @@
  */
 
 export { MotionProvider } from "./motion-provider";
+export { Entrada } from "./entrada";
 export { Reveal } from "./reveal";
 export { SplitTextReveal } from "./split-text";
 export {

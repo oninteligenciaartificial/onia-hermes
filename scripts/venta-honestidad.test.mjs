@@ -606,3 +606,141 @@ test("los detectores del kit andan en las dos direcciones", () => {
   assert.ok(!prometeSinRetipeo("Cada venta queda lista para cargar en el Portal Web gratuito del SIN."));
   assert.ok(!prometeSinRetipeo("- **Facturación**: el kit prometía la factura \"sin re-tipear\"."));
 });
+
+// ─────────────────────────────────────────────────────────────────────────────
+// LAS PROMESAS QUE EL PRODUCTO NO CUMPLE — las mismas formas que vigilan el sitio.
+//
+// Origen (2026-10-03, revision del barrido del 2-oct): el commit 02ad96e68 saco del SITIO cuatro
+// promesas que el catalogo §7/§8 prohibe —«La IA escribe los mensajes», «sale por tu WhatsApp»,
+// «Agenda por profesional» y «Entiende las fotos»— y el ONE-PAGER que Sergio Urcullo le manda a las
+// clinicas las seguia diciendo las cuatro (lineas 28-29, 34 y 75). El gate del sitio
+// (promesa-que-el-producto-cumple.test.ts) mira solo `src/` de la web, y este archivo no miraba
+// capacidades: miraba montos, planes, marca y SIAT. Es otra vez "una promesa que cambia se barre en
+// TODA la superficie": se barrio la que se estaba tocando y no la hermana.
+//
+// UNA sola lista de formas para las dos superficies: vive en
+// web-factory/apps/onia-platform/scripts/promesa-que-el-producto-cumple.mjs (en web-factory porque el
+// stage del publicador de la landing solo lleva ese arbol; la raiz importa de alla, al reves no se
+// puede). Si el producto empieza a cumplir una, se afloja ALLA y se afloja en las dos.
+//
+// Como lee el Markdown: une las lineas de cada parrafo (una promesa partida en dos renglones sigue
+// siendo una promesa), saca el resaltado (`**`, `_`, `` ` ``) que parte la frase igual que un <em>, y
+// PERDONA lo que la prohibe: una seccion cuyo titulo dice que eso no se dice/promete/nombra (§0.3 del
+// guion), una linea con ❌ o que dice «no prometer / no decir», y la prosa que narra lo que el kit
+// viejo prometia. Un barrido que no distingue eso obliga a borrar la regla que ensena a no cometerlo.
+import {
+  PROMESAS as PROMESAS_DEL_PRODUCTO,
+  promesasEn,
+} from "../web-factory/apps/onia-platform/scripts/promesa-que-el-producto-cumple.mjs";
+
+const SECCION_QUE_LO_PROHIBE = /no se (dice|promete|nombra)|no (prometer|decir|nombrar)|prohibid|❌/i;
+// "promet" entero, como `prometeSinRetipeo` de arriba: la copia de venta no dice "promete"; la prosa
+// que describe el kit o lo que el kit viejo prometia, si.
+const RENGLON_QUE_LO_PROHIBE =
+  /❌|prohibid|promet|no se (dice|promete|nombra)|\bno (decir|digas|nombrar)\b|nunca (decir|digas)\b/i;
+/** Donde empieza otra unidad de lectura: un item de lista, una fila de tabla o un renglon con vineta. */
+const EMPIEZA_UNIDAD = /^\s*([-*+]\s|\d+[.)]\s|\||[✅•])/;
+
+/** Un renglon de Markdown como texto leido: sin resaltado (`**`, `_`, `` ` ``), sin `>` y con los espacios unidos. */
+const renglonLeido = (cruda) =>
+  cruda
+    .replace(/^\s*>\s?/, "")
+    .replace(/\*\*|__|`/g, "")
+    .replace(/(^|\s)[*_]+|[*_]+(?=\s|[.,;:]|$)/g, "$1")
+    .replace(/\s+/g, " ")
+    .trim();
+
+/**
+ * Cada promesa del texto Markdown, con el numero de linea donde empieza la frase. Se lee por
+ * UNIDAD —un parrafo, un item de lista con sus renglones de continuacion, una fila de tabla—, y
+ * una unidad que en cualquiera de sus renglones dice que eso no se promete se perdona entera.
+ */
+function promesasDelMarkdown(md) {
+  const hallazgos = [];
+  let seccionQueProhibe = false;
+  let unidad = []; // [{ linea, desde }]
+  let texto = "";
+  let perdonada = false;
+  const cerrar = () => {
+    if (!perdonada && !seccionQueProhibe) {
+      for (const p of promesasEn(texto)) {
+        const linea = unidad.filter((r) => r.desde <= p.indice).at(-1).linea;
+        hallazgos.push({ linea, que: p.que, fragmento: p.fragmento });
+      }
+    }
+    unidad = [];
+    texto = "";
+    perdonada = false;
+  };
+  md.split("\n").forEach((cruda, i) => {
+    if (/^\s*#{1,6}\s/.test(cruda)) {
+      cerrar();
+      seccionQueProhibe = SECCION_QUE_LO_PROHIBE.test(cruda);
+      return;
+    }
+    const leido = renglonLeido(cruda);
+    if (leido === "" || /^\s*```/.test(cruda)) return cerrar();
+    if (EMPIEZA_UNIDAD.test(cruda)) cerrar();
+    if (RENGLON_QUE_LO_PROHIBE.test(cruda)) perdonada = true;
+    if (texto) texto += " ";
+    unidad.push({ linea: i + 1, desde: texto.length });
+    texto += leido;
+  });
+  cerrar();
+  return hallazgos;
+}
+
+test("el kit de venta no promete lo que el producto no hace hoy (mismas formas que el sitio)", () => {
+  const ofensores = [];
+  for (const rel of materialesVivosDelKit()) {
+    for (const h of promesasDelMarkdown(leer(rel))) ofensores.push(`${rel}:${h.linea}  ${h.que} «…${h.fragmento.trim()}…»`);
+  }
+  assert.deepEqual(
+    ofensores,
+    [],
+    "El kit promete lo que el producto no cumple (catalogo §7 y §8). El texto que si se puede decir es el\n" +
+      "de la web: «La IA redacta el texto de cada agente y vos lo aprobas una vez», «aprobas y lo mandas por\n" +
+      "tu WhatsApp con un toque», «agenda con el profesional de cada cita».\n" +
+      ofensores.join("\n"),
+  );
+});
+
+test("el detector de promesas del kit anda en las dos direcciones", () => {
+  assert.ok(PROMESAS_DEL_PRODUCTO.length >= 6, "la lista de formas vino vacia: el gate firmaria verde sin mirar");
+  // Las cuatro del one-pager del 28-sep, tal como estaban (partidas en renglones y con negrita).
+  const onePagerViejo = [
+    "La IA escribe los mensajes con el tono de tu clinica; a quien y cuando lo decide el sistema",
+    "con tus datos. **Nada sale sin tu OK**: aprobas con un toque y sale por tu WhatsApp, o te",
+    "queda listo para mandarlo desde tu celular.",
+    "",
+    "- **Agenda por profesional** y **agenda online** para que tus pacientes reserven solos.",
+    "",
+    "- **Entiende las fotos** que le mandan.",
+    "- y sale **por tu WhatsApp** con un toque.",
+  ].join("\n");
+  assert.deepEqual(
+    promesasDelMarkdown(onePagerViejo).map((h) => h.linea),
+    [1, 2, 5, 7, 8],
+  );
+  // Lo que lo prohibe no es una promesa.
+  const reglas = [
+    "### 0.3 Lo que no se dice en ningun rubro",
+    "",
+    "- **Que algo se manda solo por WhatsApp**, ni que «la IA agenda».",
+    "",
+    "## Ventas",
+    "",
+    "- ❌ «entiende las fotos que te mandan»",
+    "- No prometer que la IA escribe cada mensaje.",
+    "- Prometian de mas: «el chatbot entiende las fotos y agenda solo».",
+    "- Agenda con el profesional de cada cita, y agenda online para que tus pacientes reserven solos.",
+    "- promete lo que el producto no hace: que la IA escribe cada mensaje, que algo",
+    "  sale solo por WhatsApp o «agenda por profesional».",
+  ].join("\n");
+  assert.deepEqual(promesasDelMarkdown(reglas), []);
+  // La continuacion de un item cuenta como el item, y se reporta el renglon donde empieza la frase.
+  const continuacion = ["- **Recordatorios**: el mensaje queda listo, aprobás con un toque y sale", "  por tu WhatsApp."].join("\n");
+  assert.deepEqual(promesasDelMarkdown(continuacion).map((h) => h.linea), [1]);
+  const enFence = ["```", "✅ Agenda por profesional", "✅ Agenda online", "```"].join("\n");
+  assert.deepEqual(promesasDelMarkdown(enFence).map((h) => h.linea), [2]);
+});

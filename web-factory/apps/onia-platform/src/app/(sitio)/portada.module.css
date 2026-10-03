@@ -499,30 +499,11 @@
   color: color-mix(in srgb, #eafaf1 82%, transparent);
 }
 
-/* Entrada del hero SIN JS. El <Reveal> de motion arranca en opacity 0 y el
-   titular esperaba la hidratación (788 ms de render delay medidos sobre el
-   LCP). Misma curva y distancia que el sistema de motion (riseDistance 24,
-   spring gentle aproximado), pero pintada por el navegador con el HTML. */
-.heroEntrada {
-  animation: heroAparece 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
-@keyframes heroAparece {
-  from {
-    opacity: 0;
-    transform: translateY(24px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .heroEntrada {
-    animation: none;
-  }
-}
+/* La entrada del hero SIN JS vivía acá (`heroEntrada`, 29-sep: el <Reveal> de
+   motion dejaba el titular en opacity 0 hasta hidratar, 788 ms de render delay
+   sobre el LCP). Desde el 2-oct es `<Entrada>` de `@/motion`, la misma para
+   todas las páginas: el arreglo había quedado local a la portada y otras once
+   páginas siguieron con el titular transparente. */
 
 /* Portada corta 1.0. Los apartados completos siguen en sus rutas interiores. */
 .heroVerde {

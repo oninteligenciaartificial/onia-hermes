@@ -328,7 +328,10 @@ test("telefono y atribucion que llegan RECIEN en el 2do webhook se guardan igual
 
 test("camino feliz por runTurn: ofrece, agenda, califica, crea el lead y avisa a Sergio", async () => {
   const fake = memoryStore();
-  const deps = { store: fake.store, config: CONFIG, nowIso: T0, llm: async () => "" };
+  // Con Cal.com configurado: en seco la reserva PUEDE salir, asi que la conversacion queda agendada.
+  // Sin config (2-oct) el seco aplica el desenlace honesto del vivo y la pasa a la persona.
+  const env = { CALCOM_BASE_URL: "https://cal.test/api", CALCOM_BOT_EVENT_TYPE_ID: "7" };
+  const deps = { store: fake.store, config: CONFIG, nowIso: T0, llm: async () => "", env };
 
   const uno = await runTurn(turn(), deps);
   const dos = await runTurn(turn({ text: "A", message_key: "telegram:2" }), deps);
@@ -384,7 +387,8 @@ test("si la reserva NO sale, no se manda un link inventado: solo el aviso honest
   const agendada = await runTurn(turn({ text: "A", message_key: "telegram:2" }), deps);
 
   assert.ok(!/cal\.test\/booking/.test(agendada.send[0].text), "sin reserva no hay link");
-  assert.match(agendada.send[0].text, /se me ocupó ese horario/);
+  assert.doesNotMatch(agendada.send[0].text, /Listo, agendado/, "ni la confirmacion de algo que no se reservo (2-oct)");
+  assert.match(agendada.send[0].text, /se acaba de ocupar/);
   assert.equal(fake.state.calendarEventId, null);
 });
 
@@ -404,14 +408,10 @@ test("si la reserva NO sale, no se manda un link inventado: solo el aviso honest
 // Y el test hermano de arriba se llama "solo el aviso honesto" afirmando la misma garantia que
 // tampoco comprobaba: miraba el texto del prospecto y nada mas.
 //
-// CUAL es el caso, y cual NO. Correr sin calendario es una decision TOMADA y vigente (opcion
-// (c), tablero `t_b18ca430`): ahi el fallo es el camino normal, el aviso `demo_agendada` es
-// justo lo que Sergio Urcullo necesita ("anotala") y un aviso extra por cada demo seria ruido.
-// El caso que SI queda descubierto es `horario_tomado` (409): ahi el bot le promete al
-// prospecto que "Sergio te escribe AHORA para acomodarlo" y el unico aviso que sale le dice
-// que anote un horario que esta OCUPADO — o sea lo manda a una reunion que choca. Es la
-// direccion simetrica ya conocida (aviso del EVENTO sin aviso del DESENLACE) en el unico punto
-// donde el desenlace CONTRADICE al evento.
+// CUAL es el caso. Este caso nacio con el 409 (`horario_tomado`): el bot le prometia al
+// prospecto que "Sergio te escribe AHORA para acomodarlo" y el unico aviso que salia le decia
+// que anotara un horario OCUPADO. Desde el 2-oct el aviso sale con CUALQUIER fallo de reserva
+// (ver el caso de abajo): correr sin calendario ya no pasa por aca, es el modo `persona`.
 test("si la reserva NO sale, el aviso a Sergio Urcullo DESDICE al 'DEMO AGENDADA' del mismo turno", async () => {
   const fake = memoryStore();
   const enVivo = createBotConfig({ slots: CONFIG.slots, dryRun: false });
@@ -447,11 +447,14 @@ test("si la reserva NO sale, el aviso a Sergio Urcullo DESDICE al 'DEMO AGENDADA
   assert.equal(correccion.conversationKey, fake.state.conversationKey, "y a quien hay que escribirle");
 });
 
-// La direccion simetrica, y la que evita que la cura se vuelva ruido: el fallo ESPERADO —correr
-// sin calendario, que es la opcion (c) ya decidida— NO agrega un aviso. Sin este caso, cualquiera
-// "mejora" el de arriba sacandole la condicion y le mete a Sergio Urcullo una linea extra por
-// cada demo, en el canal que pidio limpio.
-test("el fallo ESPERADO (sin calendario, decision vigente) no le agrega ruido al aviso", async () => {
+// CAMBIO DE CONTRATO (2-oct). Aca se fijaba lo contrario: que el fallo "esperado" —correr sin
+// calendario, la opcion (c) del tablero `t_b18ca430`— NO agregara aviso, porque el
+// "DEMO AGENDADA — anotala" del motor ya alcanzaba. Esa opcion hoy es el modo `persona`
+// (`agendaDelEntorno`, el default): sin agenda propia el bot ni ofrece horarios ni confirma, y el
+// aviso que sale es `coordinar_demo`. Con agenda propia ENCENDIDA a proposito, que la reserva no
+// salga es una excepcion, y al prospecto se le acaba de decir que se lo confirma Sergio Urcullo:
+// el aviso que desdice tiene que salir siempre (ver agendado-solo-si-se-agendo.test.mjs).
+test("con agenda propia, CUALQUIER fallo de reserva desdice al 'DEMO AGENDADA' (no solo el 409)", async () => {
   const fake = memoryStore();
   const enVivo = createBotConfig({ slots: CONFIG.slots, dryRun: false });
   const deps = {
@@ -468,13 +471,12 @@ test("el fallo ESPERADO (sin calendario, decision vigente) no le agrega ruido al
   const agendada = await runTurn(turn({ text: "A", message_key: "telegram:2" }), deps);
 
   const kinds = agendada.notify.map((n) => n.kind);
-  assert.ok(kinds.includes("demo_agendada"), "el aviso del motor sigue saliendo: es el que Sergio Urcullo usa");
-  assert.ok(
-    !kinds.includes(KIND_RESERVA_SIN_CONFIRMAR),
-    "no hace falta desdecir nada: sin calendario, anotar a mano ES el flujo acordado",
-  );
-  // Y el prospecto sigue leyendo la salvedad honesta.
-  assert.match(agendada.send[0].text, /Estoy confirmando ese horario con Sergio/);
+  assert.ok(kinds.includes("demo_agendada"), "ancla: el motor avisa que se eligio");
+  assert.ok(kinds.includes(KIND_RESERVA_SIN_CONFIRMAR), "y el desenlace lo desdice: no esta en ningun calendario");
+  assert.ok(kinds.lastIndexOf(KIND_RESERVA_SIN_CONFIRMAR) > kinds.indexOf("demo_agendada"), "la correccion se lee ultima");
+  // Y el prospecto lee lo que paso, no una confirmacion con su desmentida abajo.
+  assert.doesNotMatch(agendada.send[0].text, /Listo, agendado/);
+  assert.match(agendada.send[0].text, /todavía no quedó reservado/);
 });
 
 // ---------------------------------------------------------------------------
@@ -502,7 +504,7 @@ test("el fallo ESPERADO (sin calendario, decision vigente) no le agrega ruido al
 // rama que HOY no se ejecuta en produccion; la que si se ejecuta es la de mas abajo.
 // ---------------------------------------------------------------------------
 
-test("en seco y sin Cal.com configurado, el texto es el MISMO que recibe el prospecto (con la salvedad)", async () => {
+test("en seco y sin Cal.com configurado, el texto es el MISMO que recibe el prospecto (el honesto)", async () => {
   const sinCalcom = {}; // el env de produccion HOY: ni CALCOM_BASE_URL ni EVENT_TYPE_ID
 
   // Camino VIVO: `createBooking` de verdad (no un doble), que sin config contesta sin_config
@@ -536,9 +538,11 @@ test("en seco y sin Cal.com configurado, el texto es el MISMO que recibe el pros
   const agendadaSeco = await runTurn(turn({ text: "A", message_key: "telegram:2" }), depsSeco);
 
   assert.equal(llamoAfuera, false, "el modo seco sigue sin hacer I/O: se deriva, no se reserva");
-  assert.equal(agendadaVivo.stageAfter, "demo_agendada");
-  assert.equal(agendadaSeco.stageAfter, "demo_agendada");
-  assert.match(agendadaVivo.send[0].text, /Estoy confirmando ese horario con Sergio/, "el prospecto real lee la salvedad");
+  // Sin reserva la conversacion pasa a la persona (2-oct): en los DOS caminos.
+  assert.equal(agendadaVivo.stageAfter, "handoff_humano");
+  assert.equal(agendadaSeco.stageAfter, "handoff_humano");
+  assert.doesNotMatch(agendadaVivo.send[0].text, /Listo, agendado/, "el prospecto real no lee una confirmacion falsa");
+  assert.match(agendadaVivo.send[0].text, /todavía no quedó reservado/, "lee lo que paso");
   assert.equal(
     agendadaSeco.send[0].text,
     agendadaVivo.send[0].text,
@@ -566,8 +570,8 @@ test("en seco CON Cal.com configurado no se inventa el desenlace: se dice que el
   const agendada = await runTurn(turn({ text: "A", message_key: "telegram:2" }), deps);
 
   assert.equal(llamoAfuera, false, "con config o sin ella, el seco NO reserva");
-  assert.ok(!/Estoy confirmando ese horario con Sergio/.test(agendada.send[0].text),
-    "con Cal.com configurado la reserva PUEDE salir bien: agregar la salvedad seria el error simetrico");
+  assert.ok(!/todavía no quedó reservado/.test(agendada.send[0].text),
+    "con Cal.com configurado la reserva PUEDE salir bien: desdecirla seria el error simetrico");
   assert.ok(!/booking\//.test(agendada.send[0].text), "y tampoco se fabrica un link de una reserva que no se hizo");
   assert.ok(
     (agendada.warnings || []).some((w) => /dry run/.test(w) && /depende de la reserva/.test(w)),
@@ -1110,4 +1114,105 @@ test("un turno REAL le pasa a saveConversation el estado leido (la baranda de la
     "saveConversation NO recibio el estado LEIDO: escribe la fila entera y pisa los candados del escritor concurrente",
   );
   assert.equal(recibidos[0].leido.humanTookOver, false, "el estado leido tiene que ser el de la BASE, no el del turno");
+});
+
+// ---------------------------------------------------------------------------
+// LA RESERVA QUE NO SALIO DEJA EL LEAD COMO ESTA DE VERDAD (auditoria del 3-oct)
+//
+// `store.applySideEffects` corre ANTES de la reserva (run-turn 6 → 6.5) y persiste el `lead_upsert`
+// del motor con `pipelineStatus: demo_agendada` («Reunion»). Si despues `createBooking` falla,
+// `reservaQueNoSalio` cambiaba el texto y la etapa, y nada corregia la fila: el panel del CRM seguia
+// mostrando una reunion que no existe, el unico audit decia `→ demo_agendada` y no se creaba la
+// tarjeta de la cola que si crea cualquier otro handoff. Solo con agenda propia
+// (`ONIA_BOT_AGENDA=calcom`), que hoy esta apagada.
+//
+// Se mira la FILA: `applySideEffects` es el de verdad (createStore) contra un PostgREST de mentira
+// con memoria para leads, review_queue y audit_logs. El resto del store es el juguete de siempre.
+// ---------------------------------------------------------------------------
+
+function postgrestDeLeads() {
+  const leads = new Map();
+  const reviews = [];
+  const audits = [];
+  const fetchImpl = async (url, init = {}) => {
+    const u = new URL(String(url));
+    const tabla = u.pathname.split("/").pop();
+    const metodo = init.method || "GET";
+    const body = init.body ? JSON.parse(init.body) : null;
+    const filas = (rows) => ({ ok: true, status: 200, text: async () => JSON.stringify(rows) });
+    if (tabla === "leads") {
+      const clave = String(u.searchParams.get("lead_key") || "").replace(/^eq\./, "");
+      if (metodo === "GET") return filas(leads.has(clave) ? [leads.get(clave)] : []);
+      if (metodo === "POST") {
+        leads.set(body.lead_key, body);
+        return filas([body]);
+      }
+      if (metodo === "PATCH") {
+        const fila = { ...leads.get(clave), ...body };
+        leads.set(clave, fila);
+        return filas([fila]);
+      }
+    }
+    if (tabla === "review_queue") {
+      reviews.push(body);
+      return filas([body]);
+    }
+    if (tabla === "audit_logs") {
+      audits.push(body);
+      return filas([body]);
+    }
+    return filas([]);
+  };
+  const real = createStore({ url: "https://sb.test", key: "service-role-fake", fetch: fetchImpl });
+  return { leads, reviews, audits, applySideEffects: real.applySideEffects };
+}
+
+for (const reason of ["error", "horario_tomado"]) {
+  test(`reserva que no salio (${reason}): la fila del lead NO queda en «Reunion», y la cola y el audit dicen que paso a la persona`, async () => {
+    const pg = postgrestDeLeads();
+    const fake = memoryStore();
+    fake.store.applySideEffects = pg.applySideEffects;
+    const deps = {
+      store: fake.store,
+      config: createBotConfig({ dryRun: false }, CONFIG),
+      nowIso: T0,
+      llm: async () => "",
+      createBooking: async () => ({ ok: false, uid: null, reason, warnings: [] }),
+    };
+
+    await runTurn(turn({ text: "DEMO" }), deps);
+    const eligio = await runTurn(turn({ text: "A", message_key: "telegram:2" }), deps);
+
+    assert.equal(fake.state.botStage, "handoff_humano", "ancla: la reserva no salio y la conversacion paso a la persona");
+    const [fila] = [...pg.leads.values()];
+    assert.ok(fila, "ancla: el lead existe");
+    assert.notEqual(fila.pipeline_status, "Reunion", "el panel muestra una reunion que no existe");
+    assert.equal(fila.pipeline_status, CONFIG.pipelineStatus.calificado);
+    assert.equal(fila.raw.botStage, "handoff_humano");
+
+    const alHumano = pg.audits.filter((a) => a.raw?.detail?.to === "handoff_humano");
+    assert.equal(alHumano.length, 1, "el audit tiene que registrar el paso a la persona, no solo el «→ demo_agendada»");
+    assert.equal(new Set(pg.audits.map((a) => a.audit_key)).size, pg.audits.length, "las claves no chocan: con on_conflict la segunda se perdería");
+    assert.equal(pg.reviews.length, 1, "la tarjeta de la cola, como en cualquier otro handoff");
+    assert.ok(eligio.reviewKeys.length >= 1, "y el turno la reporta");
+  });
+}
+
+test("con la reserva HECHA el lead sí queda en «Reunion» (el camino feliz no se toca)", async () => {
+  const pg = postgrestDeLeads();
+  const fake = memoryStore();
+  fake.store.applySideEffects = pg.applySideEffects;
+  const deps = {
+    store: fake.store,
+    config: createBotConfig({ dryRun: false }, CONFIG),
+    nowIso: T0,
+    llm: async () => "",
+    env: {},
+    createBooking: async () => ({ ok: true, uid: "uid-1", reason: "reservado", warnings: [] }),
+  };
+  await runTurn(turn({ text: "DEMO" }), deps);
+  await runTurn(turn({ text: "A", message_key: "telegram:2" }), deps);
+  const [fila] = [...pg.leads.values()];
+  assert.equal(fila.pipeline_status, "Reunion");
+  assert.equal(pg.reviews.length, 0);
 });

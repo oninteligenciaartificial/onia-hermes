@@ -31,8 +31,9 @@ paciente con un tratamiento a medias que no volvió a agendar.
   bajo; en importadora, Sigue cotizaciones). Todos proponen; el dueño aprueba cada mensaje;
   ninguno manda, cobra, compra ni reserva solo. Nunca decir «Cobra» ni «Repone stock».
 - **Agente conversacional de WhatsApp** (antes "chatbot con IA"): contesta lo cargado,
-  entiende fotos, nunca da precios, manda el link de la agenda y pasa lo demás a una
-  persona. No califica, no cotiza y no agenda solo.
+  nunca da precios, manda el link de la agenda y pasa lo demás a una persona. No califica,
+  no cotiza y no agenda solo. Lo de las fotos se sacó el 3-oct: el catálogo §8 no deja
+  decirlo (en duda, ningún negocio en ese modo).
 - **Implementación**: no se regala un servicio de carga de datos que nadie puede hacer. Lo
   real: no se cobra implementación, el dueño importa sus pacientes con el asistente de CSV.
 - **Pago**: mensual o anual (10 meses), con el QR del BCP desde el checkout. No existe el
@@ -68,7 +69,11 @@ código publicado de onia-platform y falla si el kit:
 - nombra un plan que no existe (los viejos Pro y Full);
 - vende la marca vieja DentalGest;
 - promete la factura "sin re-tipear" o que "sale sola" mientras el emisor no emita;
-- promete emitir la factura SIAT.
+- promete emitir la factura SIAT;
+- promete lo que el producto no hace hoy, con las MISMAS formas que vigilan la web
+  (`web-factory/apps/onia-platform/scripts/promesa-que-el-producto-cumple.mjs`): que la IA
+  escribe cada mensaje, que algo sale solo por WhatsApp, «agenda por profesional», que
+  entiende fotos, que el sistema agenda solo, o un resultado («recupera pacientes»).
 
 ## TODO interno
 

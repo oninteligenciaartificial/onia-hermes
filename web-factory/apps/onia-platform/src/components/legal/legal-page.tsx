@@ -1,6 +1,6 @@
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
-import { Reveal } from "@/motion";
+import { Entrada } from "@/motion";
 import { formatLegalDate, type LegalDoc } from "@/lib/legal";
 import { LegalArticle } from "./legal-article";
 import styles from "./legal-page.module.css";
@@ -8,8 +8,9 @@ import styles from "./legal-page.module.css";
 /**
  * Pagina legal completa: hero sobrio + aviso de borrador + TOC + articulo.
  * El TOC se renderiza dos veces (aside sticky en desktop, <details> en
- * mobile); CSS decide cual se ve. Motion: un solo Reveal en el hero — el
- * texto legal no se anima.
+ * mobile); CSS decide cual se ve. Motion: una sola <Entrada> en el hero (CSS,
+ * sin esperar JS: con el <Reveal> de motion el titular salia transparente del
+ * servidor hasta hidratar) — el texto legal no se anima.
  */
 
 function Toc({ doc }: { doc: LegalDoc }) {
@@ -33,7 +34,7 @@ export function LegalPage({ doc }: { doc: LegalDoc }) {
       <SiteHeader />
       <main id="contenido" className={styles.main}>
         <div className="container">
-          <Reveal>
+          <Entrada>
             <header className={styles.hero}>
               <p className="kicker">Legal</p>
               <h1 className={styles.title}>{doc.meta.title}</h1>
@@ -56,7 +57,7 @@ export function LegalPage({ doc }: { doc: LegalDoc }) {
                 </div>
               )}
             </header>
-          </Reveal>
+          </Entrada>
 
           <div className={styles.layout}>
             <aside className={styles.tocDesktop} aria-label="Contenido">

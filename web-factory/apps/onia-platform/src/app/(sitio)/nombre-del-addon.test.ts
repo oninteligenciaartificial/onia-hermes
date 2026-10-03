@@ -12,9 +12,16 @@ import { NAV_PRODUCTO } from "./nav";
  * El add-on se llama «Agente conversacional de WhatsApp» (Sergio Urcullo,
  * 2026-09-28). Se llamaba «Chatbot de WhatsApp con IA», y las respuestas del bot
  * del cliente salen de lo que el negocio cargó, no de un modelo
- * (`bot/recepcionista.mjs`: "SIN LLM"). La IA real se dice donde es real y
- * concreta: entiende las fotos. Los audios NO se prometen: el respaldo de
+ * (`bot/recepcionista.mjs`: "SIN LLM"). Los audios NO se prometen: el respaldo de
  * transcripción depende de una variable de entorno que nadie verificó en vivo.
+ *
+ * Las fotos TAMPOCO, desde el 2-oct. Hasta ese día este gate EXIGÍA «entiende las
+ * fotos» como «la IA donde es real»; el inventario medido en producción ese día
+ * (`hermes-content/docs/research/ONIA_INVENTARIO_IA_20261002.md` §4) la dejó en
+ * duda —solo corre en modo recepcionista, 0 negocios en ese modo, probada una vez
+ * en QA en agosto— y el catálogo §8 la puso en «NO se puede decir». Vuelve el
+ * día que un negocio real la use y se mire. Lo barre en toda la web
+ * `app/promesa-que-el-producto-cumple.test.ts`.
  *
  * El producto tiene su gemelo en `lib/pricing-honestidad.test.ts`.
  */
@@ -49,11 +56,11 @@ describe("el add-on se llama «Agente conversacional de WhatsApp»", () => {
     expect(NAV_PRODUCTO.find((n) => n.href === "/chatbot")?.label).toBe("Agente conversacional");
   });
 
-  it("la IA se nombra donde es real: fotos sí, audios no", () => {
+  it("no promete IA que está en duda: ni fotos ni audios (catálogo §8, 2-oct)", () => {
     const addon = ADDONS.find((a) => a.nombre === CHATBOT_EN_LA_CARTA)!;
-    expect(addon.copy).toMatch(/entiende las fotos/);
-    expect(CHATBOT_PLAN.incluye.join(" ")).toMatch(/Entiende las fotos/);
-    expect(`${addon.copy} ${CHATBOT_PLAN.incluye.join(" ")}`).not.toMatch(/audio/i);
+    const copy = `${addon.copy} ${CHATBOT_PLAN.incluye.join(" ")}`;
+    expect(copy).not.toMatch(/fotos?|im[aá]genes|comprobantes/i);
+    expect(copy).not.toMatch(/audio|notas? de voz/i);
   });
 
   it("ninguna superficie servida vuelve al nombre viejo", () => {

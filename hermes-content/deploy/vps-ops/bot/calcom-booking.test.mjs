@@ -12,7 +12,6 @@ import {
   botAttendeeEmail,
   buildBookingNotes,
   buildBookingPayload,
-  cierreDeReservaFallida,
   createBooking,
   getBookingConfig,
   meetingLink,
@@ -362,12 +361,12 @@ test("DESTINO CAIDO: la segunda demo no vuelve a pagar el timeout del destino mu
   assert.equal(segunda.ok, false, "no reservar sigue siendo no reservar: el prospecto NO puede leer 'agendado' pelado");
   assert.equal(segunda.reason, "destino_caido", "el motivo se NOMBRA: un 'error' generico manda a buscar un fallo de red que no paso");
   assert.ok(tardo < 20, `la segunda tardo ${tardo}ms: tiene que ser inmediata, no esperar el tope`);
-  // El prospecto recibe la MISMA salvedad honesta que con cualquier otro fallo: lo que cambia
-  // es lo que NO se gasta, no lo que se le promete.
-  assert.equal(cierreDeReservaFallida("destino_caido"), cierreDeReservaFallida("error"));
-  // Y Sergio Urcullo no recibe un aviso extra: correr sin calendario es la opcion (c), ya
-  // decidida el 2026-09-03, asi que el aviso del motor alcanza y uno por demo seria ruido.
-  assert.equal(avisoDeReservaFallida({ conversationKey: "chatwoot:49", reason: "destino_caido" }), null);
+  // Para el prospecto y para Sergio Urcullo es un fallo como cualquier otro: lo que cambia es lo
+  // que NO se gasta, no lo que se dice. Desde el 2-oct el aviso que desdice sale con todo fallo
+  // (con agenda propia, no reservar es la excepcion; sin ella el bot ni ofrece horarios).
+  const aviso = avisoDeReservaFallida({ conversationKey: "chatwoot:49", reason: "destino_caido", scheduledLabel: "jueves 15:00" });
+  assert.match(aviso.text, /jueves 15:00/);
+  assert.match(aviso.text, /NO salió/);
 });
 
 test("DESTINO CAIDO: un 409 NO lo abre — el destino contesto, la proxima demo tiene que intentar", async () => {

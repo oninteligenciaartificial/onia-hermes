@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Reveal } from "@/motion";
+import { Entrada, Reveal } from "@/motion";
 import { EMPEZAR_URL } from "../nav";
 import { CTA_ALTA } from "../alta";
 import { Block, Btn, Kicker } from "../ui";
@@ -63,7 +63,7 @@ const RUBROS: readonly {
     nombre: "Dental",
     resultado:
       "Llegás a la mañana sabiendo quién viene, a qué hora y a qué teléfono llamar si no aparece.",
-    ve: "Pacientes, tratamientos, odontograma y agenda por profesional.",
+    ve: "Pacientes, tratamientos, odontograma y agenda con el profesional de cada cita.",
     alt: "Recepcionista de un consultorio dental con el celular en una mano y el dedo siguiendo un renglón del cuaderno de citas abierto.",
     w: 1280,
     h: 960,
@@ -98,7 +98,7 @@ const RUBROS: readonly {
     id: "estetica",
     nombre: "Estética",
     resultado:
-      "La clienta que dejó el tratamiento a medias no se pierde: te queda el mensaje escrito con tu link para que vuelva a reservar, y vos lo aprobás.",
+      "La clienta que dejó el tratamiento a medias: te queda el mensaje escrito con tu link para que vuelva a reservar, y vos lo aprobás.",
     ve: "Clientas, tratamientos, agenda y recordatorios.",
     alt: "Dueña de un centro de estética junto a la camilla vacía con papel nuevo puesto, con el celular en la mano.",
     w: 1280,
@@ -121,7 +121,7 @@ export default function Rubros() {
   return (
     <>
       <Block surface="paper">
-        <Reveal>
+        <Entrada>
           <Kicker>Un solo sistema</Kicker>
           <h1 className={s.display}>
             Elegís tu rubro y la cuenta ya viene <em>armada</em>.
@@ -130,7 +130,7 @@ export default function Rubros() {
             No es un software distinto por industria: es el mismo núcleo con
             módulos y vocabulario propios de tu negocio.
           </p>
-        </Reveal>
+        </Entrada>
         <Switcher />
       </Block>
 
