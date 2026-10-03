@@ -213,6 +213,27 @@ body{font-family:'DM Sans',Inter,system-ui,sans-serif;background:#f7f5ef;color:#
 .interior-main > div{min-width:0}
 .interior-main > div:last-child{min-width:0;width:100%}
 .interior .headline{font-size:72px;max-width:500px}
+.interior.dense .interior-main{grid-template-columns:1fr;gap:28px;align-content:center;align-items:stretch;padding:30px 0 42px}
+.interior.dense .headline{font-size:78px;max-width:920px}
+.interior.dense .body{font-size:38px;max-width:920px;margin-top:16px}
+.interior.dense .visual{min-height:430px;padding:32px}
+.interior.dense .visual-label{font-size:20px;margin-bottom:18px}
+.interior.dense .visual-note{font-size:31px}
+.interior.dense .flow-node{grid-template-columns:68px 1fr;min-height:75px}
+.interior.dense .node-index{font-size:23px}
+.interior.dense .node-name{font-size:36px}
+.interior.dense .node-detail{font-size:28px}
+.interior.dense .matrix-number{font-size:27px}
+.interior.dense .matrix-item strong{font-size:37px}
+.interior.dense .matrix-item p{font-size:29px}
+.interior.dense .visual-table .table-head{font-size:21px}
+.interior.dense .table-row{font-size:31px;min-height:76px}
+.interior.dense .terminal-body{font-size:29px}
+.interior.dense .contract-row span{font-size:21px}
+.interior.dense .contract-row b{font-size:34px}
+.interior.dense .visual-note-card strong{font-size:76px}
+.interior.dense .visual-note-card p{font-size:31px}
+.interior.dense.save .visual{min-height:520px}
 .interior .headline .g{color:#0b8a52;background:linear-gradient(transparent 66%,#b8f0d3 66%);font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-weight:400}
 .visual{border-radius:28px;background:#fff;border:1px solid rgba(16,19,18,.12);box-shadow:0 18px 45px rgba(21,36,30,.13);padding:30px;min-height:370px;display:flex;flex-direction:column;justify-content:center}
 .visual-label{font-family:'DM Mono',monospace;font-size:16px;letter-spacing:2px;color:#526159;margin-bottom:23px}
@@ -238,7 +259,7 @@ body{font-family:'DM Sans',Inter,system-ui,sans-serif;background:#f7f5ef;color:#
 .save .interior-main{grid-template-columns:38% 62%}.save .headline{font-size:68px}.save .visual{min-height:460px}
 .cta{background:#0e1713;color:#f7f5ef;padding-top:80px}.cta .interior-top{color:#dce8e1}.cta .top-kicker{color:#13c978}.cta .interior-main{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;max-width:900px}.cta .headline{font-size:90px;max-width:900px}.cta .headline .g{color:#13c978;background:none}.cta .body{color:#c3d0c8;max-width:700px}.cta-line{display:inline-flex;align-items:center;gap:18px;margin-top:38px;border-radius:999px;background:#13c978;color:#0e1713;padding:18px 28px;font-size:28px}.cta-line span{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:32px}.cta-line b{font-family:'DM Mono',monospace;font-size:23px;letter-spacing:1px}.cta-line.cta-direct span{font-family:'DM Sans',sans-serif;font-style:normal;font-weight:800}.cta-line.cta-direct b{font-size:22px}.cta .footer{color:#c3d0c8}.cta .visual{display:none}
 </style></head><body>
-<div class="slide ${role === 'cover' ? 'cover' : role === 'cta' ? 'cta' : `interior ${role}`}${hasPhoto ? ' has-photo' : ''}">
+<div class="slide ${role === 'cover' ? 'cover' : role === 'cta' ? 'cta' : `interior ${role}${slide.dense ? ' dense' : ''}`}${hasPhoto ? ' has-photo' : ''}">
   ${role === 'cover' || role === 'cta' ? photo : paper}
   ${role === 'cover' ? `${coverBrand}<div class="cover-content"><div class="kicker">${esc(kicker)}</div>${headline}${body}</div>${footer}` : `${interiorBrand}<div class="interior-main">${role === 'cta' ? `<div>${headline}${body}${cta}</div>` : `<div>${headline}${body}</div>${visual}`}</div>${footer}`}
 </div></body></html>`;
