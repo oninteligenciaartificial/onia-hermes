@@ -127,3 +127,21 @@ Cómo contestar: <en tu transcript | SendMessage a «Sesión madre de Onia» | r
 - **Mergear el PR de otra sesión lo frena el control de permisos de la madre** («Merge Without Review», 2-oct,
   PR #88 ya revisado por un subagente code-reviewer). La madre revisa, deja el veredicto y los arreglos van a un
   PR aparte; el merge lo hace Sergio Urcullo. No se le pide a la sesión autora que mergee lo que acá se frenó.
+
+## Tokens: dónde se van (medido el 3-oct sobre los transcripts locales)
+
+- **Más del 95 % de lo gastado es RELEER contexto, no escribir.** Cada vuelta de un agente vuelve a leer todo lo
+  que tiene cargado. Madre v2: ~425 M en total, de los que solo ~0,5 M fueron texto escrito. Madre v1: ~1.840 M,
+  de los que ~777 M fueron su propia conversación, abierta varios días.
+- La cuenta es **vueltas × tamaño del contexto**. Un agente que lee diffs, docs o transcripts enteros llega a
+  200-500 k y con 50 vueltas gasta 10-16 M. La revisión de PRs de la v2, con 3 lentes por PR (65 agentes),
+  costó 207 M; el `hermes#76` se revisó 4 veces. La búsqueda de anuncios de la competencia (25 agentes) costó 95 M.
+- El observador de claude-mem es despreciable: ~1,5 M desde el 1-oct.
+- **Cómo se baja:**
+  1. La madre se cierra y se abre una nueva cuando la conversación se hace larga (el handoff está para eso). Es
+     el ahorro más grande.
+  2. Workflows de 5 agentes como máximo, una lente por PR, revisión fuerte solo para producción, plata, el VPS o
+     git-autosync.js.
+  3. Los agentes reciben el diff y el archivo que importa, nunca un transcript ni un doc entero.
+  4. Effort low y modelo chico para la lectura mecánica.
+  Script de medición: suma `usage` por `message.id` en `~/.claude/projects/<carpeta>/**/*.jsonl`.

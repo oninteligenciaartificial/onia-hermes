@@ -203,6 +203,51 @@ prueba social numérica. **Lo que queda por hacer, y es la brecha más grande:**
 presentador permitido es Sergio Urcullo mostrando la pantalla (§5.4); un presentador IA, sólo si él lo pide y
 con aprobación de gasto.
 
+### 2.6 Los que más días sostienen un anuncio activo (3-oct)
+
+Cuenta los días al aire hasta el 3-oct. El que más días sostiene es la mejor señal pública de que le rinde. Fuentes:
+`research/competencia/anuncios/CAPTURAS-HECHAS.md`, ronda 1 (capturas del 1-oct) y ronda 2 (conteo y los anuncios
+más viejos, 2-oct, madre v2), más las capturas de `agendaendia/` y `dtdental/`. **«s/c» = sin captura:** el conector
+solo da titular y fecha, y desde la nube Facebook no abre.
+
+| Anunciante (activos) | Más viejo activo · días | Formato | Gancho (titular o primera línea) | Destino |
+|---|---|---|---|---|
+| Dentalink (81) | 15-nov-2025 · **322** | catálogo dinámico (`{{product.name}}`) · s/c | — (el más nuevo: «¡Suma IA a tu clínica dental hoy!», 20-jul, 75 d) | web («Get Offer») |
+| Reservo (31) | 18-mar · **199** | s/c | «Más que agenda: gestiona toda tu consulta» · «Gestiona tu consulta con respaldo legal» | s/c |
+| Dt.Dental (24) | 30-jun · **95** | video | la norma colombiana (Resolución 1888: «el plazo ya venció») y «lecciones rápidas» | «Más información» |
+| Calu (15) | 1-jul · **94** | s/c | «Conocé Calu en 2 minutos» · «Probá Calu Gratis» | prueba gratis |
+| CitaPro (13) | 17-jul · **78** | video de 62 s con presentadora; 3 versiones del mismo concepto | «Cabinas llenas, agenda bajo control» · «No es X, no es Y, es Z» | demo |
+| Doctocliq (19) | 17-jul · **78** (ronda 1) | video con persona: médico real o escena IA; termina en la pantalla | la plata que se pierde («un sillón vacío te cuesta dinero»), tiempo y paz | web «Crea tu cuenta GRATIS» |
+| CitaPro, imagen | 6-ago · **58** | imagen: mujer con el celular y burbujas de WhatsApp | «Muchos mensajes, poco orden» | demo |
+| Medilink (41) | 6-sep · 27 | s/c | «Software médico integral ¡Demo gratis!» | demo |
+| Agenda en Día (4) | 21-sep · 12 | imagen: laptop y celular con la pantalla, precio | «Imaginá terminar el día sabiendo cuánto facturó tu clínica, qué pacientes deben regresar…» | web |
+| Clinera (20) | 30-sep · 3 | s/c | «Tres pacientes no llegaron hoy. Tres horas de box vacío que igual pagaste.» | s/c |
+
+**Qué se copia** (cada frase igual pasa por `ONIA_CATALOGO_DE_VENTA.md` antes de usarse):
+- **Un concepto y varias versiones.** CitaPro sostiene tres versiones del mismo anuncio, y Dentalink y Medilink pautan
+  decenas a la vez. Para Onia: 2-3 versiones de UN ángulo, no piezas sueltas.
+- **La consulta entera, no solo la agenda.** Es el gancho de los dos que más duran (Dentalink y Reservo) y de Agenda
+  en Día. Coincide con la regla de que la oferta es el sistema.
+- **El dolor en plata y en concreto:** «tres horas de box vacío que igual pagaste» (Clinera) o «un sillón vacío te
+  cuesta dinero» (Doctocliq).
+- **Una persona y, al final, la pantalla** (los videos de Doctocliq y CitaPro). Para Onia: Sergio Urcullo con la
+  pantalla, o un presentador IA solo si él lo pide.
+- **Destino de baja fricción:** prueba gratis (Calu, Doctocliq) o demo (CitaPro, Medilink).
+
+**Qué no se copia:**
+- **La urgencia por una norma** (Dt.Dental con la 1888 de Colombia, Huli con las NOM de México). Acá sería el SIAT, y
+  está prohibido (§7).
+- **Titular con «IA»** (Dentalink, CitaPro): §7, y el catálogo §8 limita qué se puede decir de la IA.
+- **Un mismo anuncio para cualquier rubro** (Agenda en Día usa el mismo texto para clínica, estética y PetShop): rompe
+  «si se puede cambiar el rubro y el copy sigue igual, se rechaza».
+- **Precio en la imagen** (Agenda en Día): §5.4.
+- **Testimonios y «+4000 doctores»:** hay cero clientes.
+
+**Lo que falta, y desde la nube no se puede:** las capturas de los que más duran (las 3 de Dentalink de noviembre, las
+4 de Reservo de marzo, Calu y Clinera) y la búsqueda de AgendaPro y Doctoralia. El conector busca por palabra en todos
+los rubros (50 resultados, los más nuevos primero) y sin el id de la página no los encuentra. Lo hace la madre desde la
+PC: por cada anuncio, el creativo, el texto, el botón y «N anuncios usan esta creatividad».
+
 ## 3. La señal más barata que existe: las clínicas que ya pagan pauta
 
 La misma Biblioteca muestra a **~20 clínicas dentales y ~10 de estética** de Santa Cruz que **hoy** pagan
