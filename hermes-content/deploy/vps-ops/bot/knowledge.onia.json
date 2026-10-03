@@ -1,6 +1,6 @@
 {
   "schema": "onia.bot.knowledge/1",
-  "version": "2026-09-30.1",
+  "version": "2026-10-03.1",
   "updatedBy": "carril-chatbot",
   "campanas": [
     {
@@ -67,7 +67,7 @@
     {
       "id": "siat",
       "title": "Facturación en línea / SIAT",
-      "body": "Sobre facturación en línea te contesto sólo lo que es público: desde el 1 de octubre de 2026 los grupos 9.º al 12.º de contribuyentes emiten con facturación en línea (RND 102600000007), y el Servicio de Impuestos tiene un portal gratuito para hacerlo. Lo que hace {{producto}} es que los datos ya estén cargados para no tipear dos veces. Si te alcanza a vos, según tu NIT y tu volumen, lo ve {{humano}} en la demo.",
+      "body": "Sobre facturación en línea te contesto sólo lo que es público: la RND 102600000038 dejó sin efecto el plazo del 1 de octubre de 2026 de los grupos 9.º al 12.º de contribuyentes. Esa norma dice que el SIN asignará periódicamente una modalidad en línea, sin fecha fija, a los contribuyentes del IVA que no habían implementado ninguna, y el Servicio de Impuestos tiene un portal gratuito para facturar. {{producto}} te ordena ventas y compras; la factura fiscal se emite aparte, en ese portal. Cómo te aplica a vos, según tu NIT, lo ve {{humano}} en la demo.",
       "status": "publicado",
       "vigenteHasta": "2027-09-30",
       "tags": [
