@@ -668,7 +668,7 @@ async function conAgendaPropia(fn) {
 }
 
 test("parseSlotsSpec / buildConfig: los horarios entran por CLI o por env, sin inventarse", async () => {
-  assert.equal(parseSlotsSpec(""), null);
+  assert.equal(parseSlotsSpec("", { now: Date.parse(T0) }), null);
   // `now` fijo: este caso prueba el PARSEO, y sin anclarlo tenia fecha de
   // vencimiento — el 2026-07-30 ya paso, y un horario vencido ahora sale
   // `pending` (ver el test de anticipacion, abajo).

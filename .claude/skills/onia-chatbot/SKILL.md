@@ -224,6 +224,15 @@ El número de tests sale de la corrida, no de este archivo (2-oct-2026: 1587/158
   horarios con el reloj de la MÁQUINA; cinco archivos de la pauta escribieron el 30-sep horarios del 2 y
   3-oct y el 2-oct cayeron dentro de las 24 h de anticipación (rama `M0_SIN_HORARIOS`). Un test con
   `T0` fijo pasa `now: T0` en los deps de `buildConfig`; nunca horarios absolutos con el reloj real.
+- **No es solo `buildConfig`: es toda función con `= Date.now()` por defecto** (3-oct-2026, la suite se
+  puso roja SOLA otra vez, 1604/1607). `entrega-viva.test.mjs` usa `T0 = 2026-09-19T12:00Z` y llamaba a
+  `juzgarEntregas` sin `ahoraMs`; a los 14 días exactos (`DIAS_PARA_DESUSO`) la regla de «desuso»
+  absolvió el canal y tres «rojo» dieron «ok». El arreglo del 2-oct barrió una función y anotó la trampa;
+  leer a mano no alcanzó. Ahora lo mira `test-con-fecha-fija-pasa-el-reloj.test.mjs`: en un archivo con
+  `const T0` literal, cada llamada a `juzgarEntregas`, `buildConfig` (de simulate), `parseSlotsSpec` o
+  `slotsElegibles` lleva el reloj a la vista (en la llamada o en la constante que recibe). Para listar las
+  funciones con reloj de la máquina: `grep -n "= Date.now()" *.mjs | grep -v test`. Para probar que un
+  archivo no vence: `node --import <archivo que fija Date.now en 2027> --test <archivo>`.
 - **El extractor de precargados lee el doc de la pauta** (`precargados-de-la-pauta.mjs`). Una mención
   abreviada entre backticks (`` `Hola, vi el anuncio de Onia (D1)…` ``) contaba como otro precargado y
   duplicaba D1. Ahora se ignoran las que terminan en «…» o «...»; un precargado de verdad nunca termina así.

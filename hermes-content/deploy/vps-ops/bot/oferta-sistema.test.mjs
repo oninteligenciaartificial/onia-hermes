@@ -37,13 +37,16 @@ const T0 = "2026-07-27T14:05:00Z"; // lunes 10:05 en La Paz: dentro de horario
 // cargados— `buildConfig({})` devuelve M0 y este archivo medía dos veces la MISMA hermana,
 // dejando sin cubrir justo la variante que motivó el test. Lo cazó el `assert.equal(key, ...)`
 // de abajo: un test que además verifica QUÉ rama midió es lo que evita ese verde falso.
-const SIN_AMBIENTE = { env: {}, envFile: "/no/existe/webhook.env" };
+// El reloj es el del caso (`T0`): los horarios de acá no traen fecha, pero un archivo con instante
+// propio lo pasa siempre (test-con-fecha-fija-pasa-el-reloj.test.mjs).
+const SIN_AMBIENTE = { env: {}, envFile: "/no/existe/webhook.env", now: Date.parse(T0) };
 
 // Agenda propia ENCENDIDA y sin horarios cargados: la unica forma de pedir M0_SIN_HORARIOS desde el
 // 2-oct. Sin `ONIA_BOT_AGENDA=calcom` el bot no ofrece horarios y saluda con M0_PERSONA.
 const CON_AGENDA_SIN_HORARIOS = {
   env: { ONIA_BOT_AGENDA: "calcom", CALCOM_BASE_URL: "http://calcom:3000", CALCOM_BOT_EVENT_TYPE_ID: "5" },
   envFile: "/no/existe/webhook.env",
+  now: Date.parse(T0),
   warn: () => {},
 };
 
