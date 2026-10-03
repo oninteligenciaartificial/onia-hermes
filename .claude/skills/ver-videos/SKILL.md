@@ -254,3 +254,14 @@ Lo que se probó y NO sirve, para no repetirlo:
 
 Usa un perfil **aparte** (`.hermes/ig-session/profile-dm`): el de `fetch-video.mjs` está logueado
 con otra cuenta y pisarlo dejaría el intake sin sesión.
+
+## Contenido que manda Sergio Urcullo: mensaje, tema y EDICIÓN (regla del 3-oct)
+
+No alcanza con resumen y timeline. Cada video se analiza en tres partes:
+- **mensaje**: qué dice y a quién;
+- **tema**: por qué rinde;
+- **edición**: cortes por cada 10 s; subtítulos (tipo, posición, animación); transiciones, zooms, b-roll, sonido y
+  música; los primeros 3 s cuadro por cuadro.
+
+A Gemini se le hace una segunda pasada con un prompt solo de edición, y `text-frames.mjs` lee el texto en pantalla. La
+ficha va a `hermes-content/references/video-intake/`.

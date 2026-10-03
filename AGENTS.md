@@ -241,3 +241,30 @@ Al terminar, reportar:
 - que agentes/frentes se usaron;
 - como se valido;
 - que queda pendiente o que aprobacion falta.
+
+## Skills de ONIA para Codex (fuente unica: `.claude/skills/`)
+
+Las skills propias de ONIA viven en `.claude/skills/<nombre>/SKILL.md` y NO se copian a `.agents/skills/`: dos copias
+se desincronizan. Antes de cada tarea, Codex lee la que corresponde:
+
+| Skill | Cuando |
+|---|---|
+| `onia-router` / `onia-continuidad` | al empezar: rutea la tarea y dice que ya sabemos |
+| `onia-sesion-madre` | coordinar sesiones; tokens: donde se van y como bajarlos |
+| `onia-ventas-pauta` / `onia-chatbot` | prospeccion, pauta de Meta / bot, Chatwoot, WhatsApp |
+| `onia-core` / `onia-infra` / `onia-hermes-jarvis` | core y rubros / VPS, Docker, n8n / Hermes por Telegram |
+| `onia-contabilidad-bolivia` | SIAT, impuestos y leyes fiscales de Bolivia |
+| `onia-propuestas` / `onia-web-factory` | propuestas comerciales / webs |
+| `ver-videos` | ver o transcribir videos (Gemini nativo; `fetch-video.mjs` para IG y TikTok) |
+| `editor-videos` + `edicion-referentes` | editar con el molde de Erik Taveras y Santiago Munoz |
+| `diseno-contenido-onia` / `sacar-prompt` | piezas visuales / sacar el prompt de una referencia |
+
+Del producto, en `onia-platform/.claude/skills/`: `onia-frontend`, `onia-backend`, `onia-db`, `onia-seguridad`,
+`onia-deploy` y `onia-verificacion`.
+
+Reglas de Sergio Urcullo vigentes desde el 3-oct:
+- Onia les habla de **usted** a clientes y prospectos.
+- Cada tarea arranca con META, PRUEBA DE HECHO y REGLA DE PARADA escritas.
+- Nada llega a main sin revision.
+- Effort medio, sesiones cortas, sin releer documentos enteros.
+- La cola de tareas de Codex esta en `hermes-content/docs/handoff/codex-relevo.md`.
