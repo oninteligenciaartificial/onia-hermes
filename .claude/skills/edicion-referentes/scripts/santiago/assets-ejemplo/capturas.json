@@ -1,0 +1,121 @@
+{
+ "doc-arriba": {
+  "url": "https://code.claude.com/docs/en/permission-modes",
+  "w": 1120,
+  "h": 1520,
+  "frases": {
+   "a second model, the classifier, reviews actions instead of you": [
+    40,
+    954,
+    974,
+    96
+   ],
+   "auto mode is the built-in starting permission mode": [
+    40,
+    1162,
+    1006,
+    96
+   ]
+  }
+ },
+ "changelog-auto": {
+  "url": "https://code.claude.com/docs/en/changelog",
+  "w": 1120,
+  "h": 240,
+  "frases": {
+   "on every plan and provider": [
+    632,
+    76,
+    356,
+    36
+   ]
+  }
+ },
+ "doc-bloquea": {
+  "url": "https://code.claude.com/docs/en/permission-modes",
+  "w": 1120,
+  "h": 1120,
+  "frases": {
+   "Downloading and executing code": [
+    104,
+    132,
+    494,
+    40
+   ],
+   "Production deploys and migrations": [
+    104,
+    276,
+    520,
+    40
+   ],
+   "Irreversibly destroying files that existed before the session": [
+    104,
+    564,
+    874,
+    40
+   ],
+   "Force push": [
+    104,
+    636,
+    164,
+    40
+   ]
+  }
+ },
+ "doc-deja": {
+  "url": "https://code.claude.com/docs/en/permission-modes",
+  "w": 1120,
+  "h": 840,
+  "frases": {
+   "Local file operations in your working directory": [
+    104,
+    132,
+    678,
+    40
+   ],
+   "Installing dependencies declared in your lock files or manifests": [
+    104,
+    204,
+    932,
+    40
+   ],
+   "Pushing to any branch of the repository": [
+    104,
+    420,
+    590,
+    40
+   ],
+   "including the default branch": [
+    104,
+    476,
+    424,
+    40
+   ]
+  }
+ },
+ "doc-settings": {
+  "url": "https://code.claude.com/docs/en/permission-modes",
+  "w": 1120,
+  "h": 840,
+  "frases": {
+   "~/.claude/settings.json": [
+    56,
+    154,
+    368,
+    32
+   ],
+   "\"defaultMode\": \"default\"": [
+    138,
+    370,
+    384,
+    32
+   ],
+   "manual mode on": [
+    582,
+    614,
+    224,
+    32
+   ]
+  }
+ }
+}

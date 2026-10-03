@@ -1,0 +1,839 @@
+{
+ "referente": "erik",
+ "medido": "2026-10-03",
+ "fuentes": [
+  "6 reels de TikTok bajados con yt-dlp (ids en evidencia)",
+  "hermes-content/references/marca-personal/FICHAS-MONTAJE-REFERENTES.md (Instagram, la madre, 3-oct)"
+ ],
+ "receta": {
+  "resumen": "Erik edita como una «ficha técnica en vivo»: talking head sobre trípode en estudio oscuro (contraluz LED azul, micrófono de brazo), voz pegada a 3,2-4,1 palabras/s y −14 LUFS (en 3 de 5 reels). Encima van tarjetas de papel claro con esquineros verdes y rótulos en mono, que se arman pieza por pieza 0,05-0,1 s después de la palabra (medido cuadro a cuadro en DevDay). El karaoke va de a 3 palabras en condensada mayúscula, con la activa en menta #36D19E y un 6-11 % más grande. Va al 74 % en subagentes y EVOX2; DevDay lo pone al 60 % o al 76 %. Entre planos solo hay corte seco, 3-5 cada 10 s. El movimiento está en los elementos (despliegue desde una línea, sello estampado, tecleo de una letra por cuadro) y en punch-ins de 1,12-1,15×, medidos sobre el fondo y no sobre la cara. Los 5 reels muestran una prueba real antes de los 2,5 s (FUENTE: @handle en 2 de 5). Los 5 cierran con un CTA en pantalla, el mismo brillo agudo de 0,4-0,7 s y sin placa final. Base: 5 reels con persona de TikTok @erik.py (22 al 30-sep) más la ficha de IG del 3-oct (solo portadas). El sistema vigente se ve en subagentes, DevDay y EVOX2. Dots es la variante con tarjetas oscuras y activa cian. Opus 5.5 es un A/B de dos paneles a media anchura: su geometría no cuenta.",
+  "parametros": [
+   {
+    "parametro": "Formato y duración",
+    "regla": "Exportá en 1080×1920 a 30 fps. Según su guía del 4-ago, que no se puede verificar en las descargas: H.264 a ~6 Mbps (CRF 18), nunca H.265, AAC 256k a 48 kHz, bt709 y +faststart. Duración observada: 44-52 s para un producto o una noticia y 105-127 s para un top-N o un tutorial. Hay un solo reel de cada tipo, así que es lo que hace, no una ley.",
+    "rango": "1080×1920 · 30 fps · 43,9 / 47,0 / 51,5 / 105,3 / 126,6 s. En IG sus más vistos duran 67-154 s (1,4 M a 154,4 s; 484 mil a 67,4 s; ficha del 3-oct). Las descargas de TikTok vienen recomprimidas en HEVC con AAC/MP3 a 44,1 kHz, así que el export no se mide.",
+    "evidencia": [
+     {
+      "reel": "7688503963435437325 (Opus 5.5 vs 5)",
+      "seg": 0,
+      "detalle": "ffprobe: 1080x1920, 30/1, 47,02 s"
+     },
+     {
+      "reel": "7690076393782234381 (subagentes)",
+      "seg": 126.6,
+      "detalle": "Termina a los 126,6 s: formato largo de tutorial"
+     },
+     {
+      "reel": "7691461865548860686 (EVOX2)",
+      "seg": 43.9,
+      "detalle": "Termina a los 43,9 s: formato corto de producto"
+     }
+    ],
+    "constancia": "5/5 en 1080×1920 a 30 fps · duración por tipo: n=1 por tipo",
+    "confianza": "alta"
+   },
+   {
+    "parametro": "Gancho 0-3 s",
+    "regla": "Arrancá hablando en el cuadro 0, con el subtítulo ya puesto y un gráfico en pantalla entre 0,0 y 0,3 s (sello, tarjeta índice o lámina de fuente). La prueba (clip oficial con FUENTE, captura o el objeto) entra antes de los 2,5 s: por corte seco, abriendo directamente en ella o como overlay. Volver a cámara con punch-in es opcional (lo hace solo subagentes). La primera frase promete un resultado o un dato de adentro («en este video…», «lo acaba de anunciar», «adivinen lo que…»).",
+    "rango": "Voz por encima de −40 dBFS entre 0,00 y 0,04 s (Opus: ruido de sala hasta 0,18 s) · primer gráfico entre 0,0 y 0,3 s · prueba antes de 2,5 s en 5/5 · primer corte entre 0,9 y 1,53 s en 3/4 medibles (Dots no corta hasta 4,73 s) · 0-2 cortes en 0-3 s. IG: solo hay portadas (objeto en la mano con precio). La ficha dice que no está verificado que el reel arranque así.",
+    "evidencia": [
+     {
+      "reel": "7690076393782234381 (subagentes)",
+      "seg": 0,
+      "detalle": "Voz a 0,04 s; la tarjeta «EN ESTE VÍDEO · 3 PIEZAS» ya se despliega como franja fina"
+     },
+     {
+      "reel": "7690076393782234381 (subagentes)",
+      "seg": 0.9,
+      "detalle": "Corte seco a la lámina «CLAUDE CODE · UN AGENTE ABRE SESIONES» con FUENTE: @CLAUDEAI"
+     },
+     {
+      "reel": "7690076393782234381 (subagentes)",
+      "seg": 2.43,
+      "detalle": "Vuelve a cámara con punch-in de 1,14× (medido sobre el fondo)"
+     },
+     {
+      "reel": "7691157672229424397 (DevDay)",
+      "seg": 0,
+      "detalle": "Cuadro 0: lámina con el clip «1 day.» y el subtítulo «HOY OPENAI LANZÓ». El audio suena a −8/−19 dBFS desde el primer cuadro (lo de «arranca en silencio, −120 LUFS» era un artefacto del medidor)"
+     },
+     {
+      "reel": "7691157672229424397 (DevDay)",
+      "seg": 0.93,
+      "detalle": "Corte a cámara SIN zoom (escala 1,000 contra el fondo)"
+     },
+     {
+      "reel": "7691461865548860686 (EVOX2)",
+      "seg": 1.53,
+      "detalle": "Sticker «LLEGÓ» a los 0,23 s y corte seco al logo de la caja a los 1,53 s"
+     },
+     {
+      "reel": "7691049048752639246 (Dots)",
+      "seg": 2.43,
+      "detalle": "La captura de Slack entra como overlay, sin corte; el primer jump cut es a los 4,73 s"
+     }
+    ],
+    "constancia": "5/5 con voz en el cuadro 0 y gráfico antes de 0,3 s · 5/5 con prueba antes de 2,5 s · 3/4 medibles con corte antes de 1,6 s · 1/5 con punch-in al volver",
+    "confianza": "alta"
+   },
+   {
+    "parametro": "Layout y zonas",
+    "regla": "Usá 3 layouts y pasá de uno a otro solo por corte seco. (T) Cámara a pantalla completa: es la base. (S) Pantalla partida para las demos: tu pantalla arriba, de 0 a 840 px (0-43,75 %), y abajo la MISMA toma recortada, sin zoom (la cabeza mide el 32 % del alto en T y en S). (G) Lámina de fuente sobre papel claro cuadriculado: gafete de marca en 13-20 %, captura de 1080×606 en 22-53 % y el subtítulo debajo (DevDay lo pone en 56-64 %; subagentes lo deja en 74 %). Los overlays arrancan en x = 56-80 px. Nada va sobre la cara, y la franja de ~77 a 100 % queda libre.",
+    "rango": "T: 23-79 % del reel · S: 72 % del tutorial (27,9-118,9 s) · G: en tramos de 1,5-3 s, o hasta ~7 s encadenando láminas (DevDay 39,1-46,2) · costura en y ≈ 840 · captura en y 421-1027 · franja inferior libre: 21-24 % (el @eriktaveras de DevDay está al 77 %). En la portada de IG (Muse) la franja libre es del 15 %: se sigue lo medido.",
+    "evidencia": [
+     {
+      "reel": "7690076393782234381 (subagentes)",
+      "seg": 30,
+      "detalle": "S: terminal en 0-44 %, cámara abajo y «LUEGO LO HAREMOS» centrado al 43,5 %"
+     },
+     {
+      "reel": "7690076393782234381 (subagentes)",
+      "seg": 41.5,
+      "detalle": "S: tarjeta en y 15-37 %, sobre la terminal"
+     },
+     {
+      "reel": "7691157672229424397 (DevDay)",
+      "seg": 7,
+      "detalle": "G: rótulo al 11 %, gafete en 16-20 %, captura de Devin en 22-53 % y subtítulo de 2 líneas en 58-63 %"
+     },
+     {
+      "reel": "7690076393782234381 (subagentes)",
+      "seg": 1,
+      "detalle": "G con el subtítulo al 74 %, no en 56-64 %, y la tarjeta índice debajo de la captura"
+     }
+    ],
+    "constancia": "T: 5/5 · G: 2/5 (subagentes, DevDay; la posición del subtítulo en G difiere entre los dos) · S: 1/5 (subagentes, y el reel del 4-ago del intake)",
+    "confianza": "media"
+   },
+   {
+    "parametro": "Encuadre de cabeza y set",
+    "regla": "Grabá sentado, en plano medio, con trípode fijo. La cabeza (de la coronilla al mentón) ocupa el 29-32 % del alto, los ojos quedan en y 29-31 % y el centro de la cara en x 0,60-0,62. El pecho queda libre de 50 a 75 % para las tarjetas. Set oscuro, contraluz LED frío arriba a la derecha, luz cálida en la cara y micrófono de brazo entrando por la izquierda. El único reencuadre digital es el punch-in (más el recorte del layout S).",
+    "rango": "Cabeza: 29-32 % del alto · ojos: 29-31 % (Dots: 37 %) · centro de la cara: x 0,60-0,62 (Dots: 0,45) · escala del fondo 1,000 fuera de los zooms (SIFT en DevDay)",
+    "evidencia": [
+     {
+      "reel": "7690076393782234381 (subagentes)",
+      "seg": 3,
+      "detalle": "Cabeza en 15-47 %, ojos al 31 %, cara en x ≈ 0,61; micrófono a la izquierda en 40-50 %"
+     },
+     {
+      "reel": "7691157672229424397 (DevDay)",
+      "seg": 16,
+      "detalle": "Cabeza en 15-47 %, ojos al 31 %, cara en x ≈ 0,62, LED arriba a la derecha y monitor a la izquierda"
+     },
+     {
+      "reel": "7691461865548860686 (EVOX2)",
+      "seg": 20,
+      "detalle": "Gorra-mentón en 17-46 %, ojos al 31 %, cara en x ≈ 0,6"
+     },
+     {
+      "reel": "7691049048752639246 (Dots)",
+      "seg": 0.5,
+      "detalle": "Variante: ojos al 37 %, cara en x ≈ 0,45, pared beige y cortinas"
+     }
+    ],
+    "constancia": "3/4 medibles con este encuadre y set oscuro con LED (Dots: set claro y cara a la izquierda) · Opus 5.5 no se puede medir: es un A/B de dos paneles selfie a media anchura",
+    "confianza": "media"
+   },
+   {
+    "parametro": "Ritmo de cortes",
+    "regla": "Cortá 3-5 veces cada 10 s: jump cuts en el borde de cada frase para sacar pausas y repeticiones, más los cortes de layout o de inserto. El plano medio dura 2-3,3 s. Ningún tramo de cámara pasa de 8 s sin un corte, un zoom o una tarjeta. Cortá con auto-editor a margen de 0,2 s (su guía): la mayoría de los huecos queda por debajo de 0,25 s y ninguno pasa de ~0,6 s. No aceleres el clip.",
+    "rango": "Recontado a ojo en pares de cuadros: EVOX2 ≈ 13-19 cortes en 43,9 s, o sea 3,0-4,3 cada 10 s (la receta decía 5,0) · DevDay ≈ 22-24 cortes en 0-52 s (4,2-4,6) · Dots ≈ 15-22 en 51,5 s (3-4,3) · Opus no cuenta (dos paneles editados por separado). Hueco más largo entre palabras (Whisper): 0,22 s en Dots, 0,36 en DevDay, 0,40 en EVOX2, 0,48 en subagentes y 0,56 en Opus. La receta decía 0,25-0,36: falso. Ningún hueco de ≥0,2 s baja de −40 dBFS.",
+    "evidencia": [
+     {
+      "reel": "7691461865548860686 (EVOX2)",
+      "seg": 9.53,
+      "detalle": "Jump cut con el mismo encuadre: la caja cambia de posición entre dos cuadros"
+     },
+     {
+      "reel": "7691049048752639246 (Dots)",
+      "seg": 4.733,
+      "detalle": "Jump cut: la mano salta de la mesa a levantada"
+     },
+     {
+      "reel": "7690076393782234381 (subagentes)",
+      "seg": 4.1,
+      "detalle": "Jump cut que además deshace el punch-in"
+     },
+     {
+      "reel": "7691157672229424397 (DevDay)",
+      "seg": 24.867,
+      "detalle": "Jump cut: la mano aparece de golpe, con el mismo encuadre"
+     }
+    ],
+    "constancia": "4/4 medibles dentro de 3-5 cada 10 s, con margen de ±1 (los jump cuts sobre trípode se cuentan a ojo)",
+    "confianza": "media"
+   },
+   {
+    "parametro": "Transiciones entre planos",
+    "regla": "Entre planos, usá SOLO corte seco de 1 cuadro: cero fundidos, barridos, zoom-through o flashes. El salto se esconde con lo que entra en ese mismo cuadro (zoom, tarjeta, cambio de layout o bloque nuevo de subtítulo). El fundido de salida de una tarjeta puede cruzar el corte.",
+    "rango": "0 transiciones de plano en todos los cortes vistos · cada cambio ocurre entre dos cuadros consecutivos",
+    "evidencia": [
+     {
+      "reel": "7691157672229424397 (DevDay)",
+      "seg": 6.3,
+      "detalle": "Corte seco de cámara a la captura de Devin"
+     },
+     {
+      "reel": "7691461865548860686 (EVOX2)",
+      "seg": 10.7,
+      "detalle": "Corte seco al b-roll con la ficha de arriba a la izquierda todavía en pantalla"
+     },
+     {
+      "reel": "7688503963435437325 (Opus 5.5 vs 5)",
+      "seg": 20.57,
+      "detalle": "Corte seco de la terminal a la tarjeta Lecoo (en el panel izquierdo)"
+     },
+     {
+      "reel": "7690076393782234381 (subagentes)",
+      "seg": 27.93,
+      "detalle": "Corte seco de T a S: el subtítulo salta del 74 % al 43 %"
+     }
+    ],
+    "constancia": "5/5 (el glitch RGB de Dots a 1,5 s es sobre un overlay, no entre planos; DevDay tiene un flash de 2 cuadros a 44,5 s)",
+    "confianza": "alta"
+   },
+   {
+    "parametro": "Zoom (punch-in)",
+    "regla": "Hacé un punch-in digital a 1,12-1,15×, centrado en la cara y el pecho, con rampa ease-out de 0,3-0,5 s. Ponelo en la primera palabra de una sección, en una pregunta, en un sello o en el CTA. Alterná entre 1,00 y ~1,12 sin acumular, y volvé por corte. Ninguno en pantalla partida ni en capturas.",
+    "rango": "Medido sobre el fondo con SIFT, no sobre la cara (la cara exagera porque él se inclina): DevDay da 1,118-1,120 en 3 zooms (4,3→5,0, 16→20,5 y 103,0→103,7). Subagentes da 1,13-1,15 (gancho 1,14, DEPENDE 1,13, CTA 1,15). La receta decía +30 % en DEPENDE y +17 % en el CTA: falso. Frecuencia no recontada (la receta: 16 en 105 s en DevDay). Variante Dots: pulsos de +5 % (no remedidos).",
+    "evidencia": [
+     {
+      "reel": "7691157672229424397 (DevDay)",
+      "seg": 4.4,
+      "detalle": "Escala del fondo 1,120 entre 4,3 y 5,0 s, cuando entra la tarjeta Nº5"
+     },
+     {
+      "reel": "7691157672229424397 (DevDay)",
+      "seg": 103.1,
+      "detalle": "Escala 1,119 entre 103,0 y 103,7 s, en «Déjame», con la tarjeta CTA"
+     },
+     {
+      "reel": "7690076393782234381 (subagentes)",
+      "seg": 23.95,
+      "detalle": "Escala 1,13 entre 23,8 y 24,6 s, con el golpe del sticker DEPENDE (no +30 %)"
+     },
+     {
+      "reel": "7690076393782234381 (subagentes)",
+      "seg": 124.17,
+      "detalle": "Escala 1,15 entre 124,0 y 124,8 s, en el CTA"
+     }
+    ],
+    "constancia": "2/5 con punch-in sostenido medido (DevDay, subagentes) · Dots con pulsos (sin remedir) · EVOX2 sin zoom · Opus no medible",
+    "confianza": "media"
+   },
+   {
+    "parametro": "Subtítulos: bloque y karaoke",
+    "regla": "Armá bloques de 3 palabras (2-4) en MAYÚSCULAS, cortados mecánicamente aunque crucen la puntuación («LLEGAR. USTEDES CONOCEN»). Van en 1 línea, o en 2 (2+1) si no entran. El bloque entra seco en 1 cuadro. La palabra activa cambia de color y crece un 6-11 % en ~0,1 s. El texto va corregido, no literal: «SUBAGENTES EN CLAUDE» donde Whisper oye «su agente sin clauco». Apagalo con un fundido de ~0,3 s mientras haya una tarjeta de datos o una comparativa en pantalla. Con los diagramas que se arman, dejalo debajo.",
+    "rango": "3 palabras por bloque (2-4; moda 3) · 1,1-1,4 bloques/s · activa ×1,06-1,11 · apagado con tarjeta: 5 s (DevDay 16,5-21,5), 6,6 s (Dots 20,47-27,07) y 13,5 s (reel del 4-ago)",
+    "evidencia": [
+     {
+      "reel": "7690076393782234381 (subagentes)",
+      "seg": 3,
+      "detalle": "«DE USARLOS O»: USARLOS en verde y más alta (63 → 70 px)"
+     },
+     {
+      "reel": "7691461865548860686 (EVOX2)",
+      "seg": 0.2,
+      "detalle": "«ADIVINEN LO QUE» con ADIVINEN en verde, ya en pantalla"
+     },
+     {
+      "reel": "7691157672229424397 (DevDay)",
+      "seg": 24.5,
+      "detalle": "El bloque «HERRAMIENTAS. NÚMERO 4,» se funde antes de la tarjeta Nº4"
+     },
+     {
+      "reel": "7691157672229424397 (DevDay)",
+      "seg": 18,
+      "detalle": "Sin subtítulo durante la tarjeta «LO QUE CAMBIA» (16,5-21,5 s)"
+     },
+     {
+      "reel": "7691049048752639246 (Dots)",
+      "seg": 21,
+      "detalle": "Sin subtítulo durante la tarjeta «EL HEARTBEAT»"
+     }
+    ],
+    "constancia": "5/5 con karaoke palabra por palabra y entrada seca · 3/5 con bloques de 3 y pop (Dots y Opus: 4 palabras en 2-3 líneas)",
+    "confianza": "alta"
+   },
+   {
+    "parametro": "Subtítulos: letra y color",
+    "regla": "Grotesca condensada heavy en MAYÚSCULAS (tipo Bebas Neue, Anton u Oswald Bold), de 57-63 px de alto de glifo (3-3,3 % del alto), blanco hueso, sin caja y con sombra suave. La palabra activa va en verde claro (en Sergio Urcullo, el verde eléctrico ONIA #10C26B). Sobre fondo claro: tinta negra con la activa en verde profundo (ONIA #0B8F4F), o letra blanca con contorno negro de ~3 px.",
+    "rango": "Glifo blanco: 57-63 px · activa: 62-70 px · bajo tarjeta (DevDay): 49/55 px · blanco medido #F0F0EC · activa medida #36D19E (RGB 54,209,158; igual en 3 reels) · sobre crema: tinta #0F1017 con activa #007052",
+    "evidencia": [
+     {
+      "reel": "7690076393782234381 (subagentes)",
+      "seg": 3,
+      "detalle": "Glifo blanco de 63 px y activa de 70 px, en #36D19E"
+     },
+     {
+      "reel": "7691157672229424397 (DevDay)",
+      "seg": 16,
+      "detalle": "«DISPONIBLE. YA NO»: blanco de 63 px y activa de 67 px"
+     },
+     {
+      "reel": "7691157672229424397 (DevDay)",
+      "seg": 0,
+      "detalle": "Sobre crema: tinta oscura con HOY y OPENAI en verde"
+     },
+     {
+      "reel": "7690076393782234381 (subagentes)",
+      "seg": 1.5,
+      "detalle": "Sobre lámina clara: blanco con contorno negro"
+     }
+    ],
+    "constancia": "3/5 (subagentes, DevDay, EVOX2) · variantes: Dots con grotesca ancha y activa cian; Opus con activa violeta",
+    "confianza": "alta"
+   },
+   {
+    "parametro": "Subtítulos: posición",
+    "regla": "A cámara completa, centrá el bloque en y ≈ 1427 px (74 %), como subagentes y EVOX2. Variante DevDay: ~60 % (y ≈ 1155) sin tarjeta y 76 % (y ≈ 1459, más chico) justo debajo de la tarjeta. En pantalla partida, sobre la costura (43-44 %). Ancho de 44-63 % del cuadro. Nunca sobre la cara, y no más abajo del ~80 %.",
+    "rango": "74,3 % (subagentes y EVOX2, medido) · DevDay: 60,2 % sin tarjeta y 76 % bajo la tarjeta · 43,5 % en la costura · Dots: 62-66 % · ancho 44-63 % (DevDay: 676 px)",
+    "evidencia": [
+     {
+      "reel": "7691461865548860686 (EVOX2)",
+      "seg": 20,
+      "detalle": "«GB DE MEMORIA» con el centro en y 1427 (74 %)"
+     },
+     {
+      "reel": "7690076393782234381 (subagentes)",
+      "seg": 30,
+      "detalle": "En S, «LUEGO LO HAREMOS» al 43,5 %, sobre la costura"
+     },
+     {
+      "reel": "7691157672229424397 (DevDay)",
+      "seg": 31.5,
+      "detalle": "Tarjeta de flujo en 51-75 % y subtítulo al 76 %, de 49 px"
+     },
+     {
+      "reel": "7691157672229424397 (DevDay)",
+      "seg": 16,
+      "detalle": "Sin tarjeta, el subtítulo va al 60 %, no al 74 %"
+     }
+    ],
+    "constancia": "2/5 fijo al 74 % (subagentes, EVOX2) · DevDay 60/76 % · Dots 62-66 % · Opus no medible (panel a media anchura)",
+    "confianza": "media"
+   },
+   {
+    "parametro": "Ritmo de elementos gráficos",
+    "regla": "Meté un evento gráfico nuevo cada 1,3-2 s (sin contar los subtítulos) y una tarjeta nueva cada 4-6 s. Cada tarjeta dura 2,5-7,5 s (las Nº de un top-N, 1,5-2,5 s) y se arma en 3-6 piezas (flecha, ícono, check, contador). Cada pieza entra 0,05-0,1 s después de la palabra que la nombra; si la pieza no tiene palabra propia, entra en el golpe de la frase. El contenedor aparece como mucho 0,4 s antes de su primera pieza. Ninguna tarjeta repite lo que se oye: aporta un contraste, una consecuencia o un dato derivado.",
+    "rango": "0,5-0,77 eventos/s según la receta (no recontado) · sincronía medida cuadro a cuadro en DevDay: +0,05 a +0,09 s · tarjetas en pantalla en ~74 % del tiempo de cámara de DevDay (0-39 s) y en la mayor parte del tramo T de subagentes",
+    "evidencia": [
+     {
+      "reel": "7691157672229424397 (DevDay)",
+      "seg": 10.2,
+      "detalle": "Notion entra a 10,20 («Notion» 10,12), Hermes a 10,83 (10,76), Devin a 11,43 (11,38) y «+13 más» a 11,93 («muchas» 11,84)"
+     },
+     {
+      "reel": "7690076393782234381 (subagentes)",
+      "seg": 9,
+      "detalle": "«EL PRINCIPAL REPARTE»: tu tarea a ≈9,0 s (en «la gente principal»), agente padre a ≈10,5 (en «clauco» 10,36) y contexto propio ×3 entre 12,0 y 14,0 (en «una tarea específica»)"
+     },
+     {
+      "reel": "7691461865548860686 (EVOX2)",
+      "seg": 28.4,
+      "detalle": "La ficha «CABEN AQUÍ» suma Qwen y el contador pasa a 1 en «Qwen 3.8» (28,38)"
+     }
+    ],
+    "constancia": "5/5 con tarjetas que se arman pieza por pieza · sincronía fina medida en 1/5 (DevDay)",
+    "confianza": "alta"
+   },
+   {
+    "parametro": "Tarjetas de datos: diseño y posición",
+    "regla": "Tarjeta ancha de ~820 px (76 % del ancho), anclada en x ≈ 72 px, de 17-24 % de alto y entre el 51 y el 75 % del alto: debajo de la barbilla, sobre el pecho. En pantalla partida va sobre la pantalla (15-37 %). Para un dato único o un logo, una ficha chica arriba a la izquierda (x 56-334 px con los corchetes, y 14-29 %). Diseño: fondo de papel claro #F1F1EC, borde de tinta fino, esquineros verdes, rótulo en mono arriba, número o titular en condensada, nota chica en sans y la fuente en mono al pie. Variante para el Nº de un top-N: tarjeta oscura #0D1115.",
+    "rango": "Ancho: 76 % (grande) o 21-26 % (ficha) · alto: 17-24 % · y: 51-75 % (grande) o 14-29 % (ficha) · fondo medido #F1F1EC; Nº #0D1115. En la portada de IG (Muse) la tarjeta va en 55-78 %, a ~2/3 del ancho: se sigue lo medido en los cuadros.",
+    "evidencia": [
+     {
+      "reel": "7690076393782234381 (subagentes)",
+      "seg": 3,
+      "detalle": "Tarjeta índice en y 52-69 % y x 7-83 %, de fondo #F1F1EC"
+     },
+     {
+      "reel": "7691157672229424397 (DevDay)",
+      "seg": 31.5,
+      "detalle": "Tarjeta de flujo en y 51-75 % y x 7-83 %, con esquineros menta"
+     },
+     {
+      "reel": "7691461865548860686 (EVOX2)",
+      "seg": 20,
+      "detalle": "Ficha MEMORIA 128 GB en x 6-27 % (5-29 % con corchetes) e y 15,5-29 %"
+     },
+     {
+      "reel": "7691049048752639246 (Dots)",
+      "seg": 10.5,
+      "detalle": "Variante: tarjeta oscura «QUÉ ES DOTS» en la banda de arriba (10-26 %)"
+     }
+    ],
+    "constancia": "Ancho de 76 %: 4/4 medibles · bajo la barbilla: 2/5 (subagentes, DevDay) más la portada de IG · arriba: 2/5 (EVOX2 con ficha, Dots con banda)",
+    "confianza": "media"
+   },
+   {
+    "parametro": "Entrada y salida de overlays",
+    "regla": "La tarjeta entra desplegándose en 0,13-0,2 s (4-6 cuadros) desde una línea, de arriba hacia abajo, y los esquineros encajan después. Cada pieza interna entra en 0,1-0,13 s y los rótulos con un fundido de 0,1 s. Sale con un fundido «fantasma» de 0,25-0,3 s que puede cruzar el corte siguiente.",
+    "rango": "Despliegue: 0,13-0,2 s (la ficha CTA de EVOX2 se abre en 4 cuadros, entre 40,67 y 40,77 s) · pieza interna: 0,1-0,13 s · salida: 0,25-0,3 s",
+    "evidencia": [
+     {
+      "reel": "7690076393782234381 (subagentes)",
+      "seg": 0,
+      "detalle": "La tarjeta índice aparece como franja fina en el cuadro 0 y a los 0,5 s está completa"
+     },
+     {
+      "reel": "7690076393782234381 (subagentes)",
+      "seg": 16,
+      "detalle": "«EL PRINCIPAL REPARTE» sale semitransparente"
+     },
+     {
+      "reel": "7691461865548860686 (EVOX2)",
+      "seg": 40.7,
+      "detalle": "Ficha CTA: línea → tarjeta en 4 cuadros, corchetes después"
+     },
+     {
+      "reel": "7691157672229424397 (DevDay)",
+      "seg": 29,
+      "detalle": "«04 MCP EVENTS · CÓMO SE DISPARA» aparece como línea y se despliega hacia abajo"
+     }
+    ],
+    "constancia": "3/5 con despliegue desde una línea verificado (subagentes, DevDay, EVOX2) · Opus usa un pop · Dots sin verificar · salida en fundido vista en 4/5",
+    "confianza": "alta"
+   },
+   {
+    "parametro": "Sellos estampados",
+    "regla": "Estampá 1-4 sellos por video con un veredicto o un estado (llegó, depende, confidencial, no disponible). Van rotados entre −4 y −8°, entran grandes (140-250 %) y desenfocados, y asientan al 100 % en 3-7 cuadros con un rebote leve. Color: kraft o crema con texto marrón, o el color del veredicto (rojo, verde).",
+    "rango": "Rotación: −4 a −8° · escala de entrada: 140-250 % → 100 % · asentado en 0,1-0,25 s · tamaño: 21-82 % del ancho · DevDay usa 2 (75 y 95,5 s)",
+    "evidencia": [
+     {
+      "reel": "7690076393782234381 (subagentes)",
+      "seg": 24.5,
+      "detalle": "«DEPENDE / ESTADO: SIN DECIDIR» crema, en y 56-69 % y a ≈−5°"
+     },
+     {
+      "reel": "7691157672229424397 (DevDay)",
+      "seg": 75.5,
+      "detalle": "Sello kraft «*DEPENDE DE LAS HERRAMIENTAS» sobre la tarjeta 8×"
+     },
+     {
+      "reel": "7691157672229424397 (DevDay)",
+      "seg": 95.5,
+      "detalle": "Segundo sello kraft: «NO EN LA UE · NI UK NI SUIZA»"
+     },
+     {
+      "reel": "7691049048752639246 (Dots)",
+      "seg": 0.5,
+      "detalle": "«CONFIDENCIAL» rojo, en y 13-24 % y a ≈−8°, ya asentado"
+     },
+     {
+      "reel": "7691461865548860686 (EVOX2)",
+      "seg": 0.5,
+      "detalle": "Sticker kraft «LLEGÓ» arriba a la izquierda, asentado"
+     }
+    ],
+    "constancia": "5/5",
+    "confianza": "alta"
+   },
+   {
+    "parametro": "Contadores y barras",
+    "regla": "Cada número que decís entra en pantalla en la palabra que lo nombra, como un contador o una barra que sube en 0,4-1,5 s con ease-out. El número va en condensada: el tuyo en verde y el de comparación en negro. La fuente y la fecha van en mono al pie de la tarjeta. Un dato que no dijiste ni mediste no va.",
+    "rango": "Grilla de 9 a 25 entre 1,0 y 2,0 s (DevDay) · 0× → 8× en ≈1,5 s (DevDay, 71-72,5 s) · 37 → 48 y 109 → 128 en ≈0,5 s (EVOX2) · barra de 0:38 → 1:01 y de 1:12 → 1:48 entre 101 y 102 s (subagentes)",
+    "evidencia": [
+     {
+      "reel": "7691157672229424397 (DevDay)",
+      "seg": 1,
+      "detalle": "La grilla se llena de 01 a 25 al decir «25 novedades»"
+     },
+     {
+      "reel": "7691461865548860686 (EVOX2)",
+      "seg": 34.5,
+      "detalle": "Barras de memoria: MacBook Pro llega a 48 y EVO-X2 a 128"
+     },
+     {
+      "reel": "7690076393782234381 (subagentes)",
+      "seg": 102,
+      "detalle": "Barra negra de 1:01 contra la verde de 1:48, más «+77 % de tiempo»"
+     },
+     {
+      "reel": "7691157672229424397 (DevDay)",
+      "seg": 61.5,
+      "detalle": "Barras DeepSWE con «FUENTE: OPENAI, 29 SEP 2026» en mono al pie"
+     }
+    ],
+    "constancia": "3/5 (subagentes, DevDay, EVOX2)",
+    "confianza": "media"
+   },
+   {
+    "parametro": "Capítulos",
+    "regla": "En los videos de más de 60 s, marcá cada sección del guion con un rótulo «0N + ✳ o logo + TÍTULO» arriba a la izquierda (x ≈ 72 px, y 10-13 %). Entra con un fundido de ~0,1 s y queda fijo hasta ~0,5 s antes de la sección siguiente. Nada de barra de progreso.",
+    "rango": "y 10-13 % · DevDay (top-5): un rótulo cada ≈ 20 s (05 a 6,5 s, 04 a 26,5 s, 03 a 39 s) · subagentes: 01 a 28,3 s, 02 a ~58 s, 03 a ~96 s y 04 a ~107 s (cada 10-38 s; la receta decía 15-25 s)",
+    "evidencia": [
+     {
+      "reel": "7690076393782234381 (subagentes)",
+      "seg": 28.5,
+      "detalle": "Entra «01 ✳ UN SOLO AGENTE»"
+     },
+     {
+      "reel": "7690076393782234381 (subagentes)",
+      "seg": 97,
+      "detalle": "«03 ✳ LO QUE CUESTA» reemplaza a «02 ✳ CON SUBAGENTES»"
+     },
+     {
+      "reel": "7691157672229424397 (DevDay)",
+      "seg": 24.5,
+      "detalle": "«05 SIGN IN WITH CHATGPT» se funde antes de la tarjeta Nº4"
+     }
+    ],
+    "constancia": "2/5 (subagentes, DevDay; también los reels del 4-ago y 23-sep del intake) · no aparece en los de menos de 55 s",
+    "confianza": "media"
+   },
+   {
+    "parametro": "Pruebas y fuentes",
+    "regla": "Mostrá una prueba real antes de los 2,5 s y después cada 10-20 s. Puede ser un clip oficial o una captura en lámina G de 1,5-3 s con el chip «FUENTE: @handle» (píldora negra con mono blanca, arriba a la derecha de la captura, que entra unos cuadros después del corte), tu propia pantalla en pantalla partida o b-roll físico. Marcá la línea clave con un contorno verde redondeado y una pastilla verde con el dato en mono. Al enumerar objetos, meté flashes de b-roll de 0,5-0,7 s.",
+    "rango": "Prueba entre 0,0 y 2,5 s en 5/5 · chip FUENTE: @handle en 2/5 · pantalla propia el 72 % del tutorial · b-roll físico el ~21 % de EVOX2 · flashes de 0,5-0,6 s (Opus 0,5-2,0 s; DevDay 42,5-44,5 s)",
+    "evidencia": [
+     {
+      "reel": "7691157672229424397 (DevDay)",
+      "seg": 7,
+      "detalle": "UI de Devin con «FUENTE: @COGNITION» arriba a la derecha"
+     },
+     {
+      "reel": "7690076393782234381 (subagentes)",
+      "seg": 75,
+      "detalle": "Pastilla verde «ESTE SOLO: 75.9K TOKENS» sobre la línea de la terminal"
+     },
+     {
+      "reel": "7691049048752639246 (Dots)",
+      "seg": 3,
+      "detalle": "Captura de su Slack con la píldora «mi Slack»"
+     },
+     {
+      "reel": "7691461865548860686 (EVOX2)",
+      "seg": 13.9,
+      "detalle": "B-roll macro de las etiquetas AMD Radeon / Ryzen AI"
+     },
+     {
+      "reel": "7688503963435437325 (Opus 5.5 vs 5)",
+      "seg": 1.5,
+      "detalle": "Flashes de QNAP, silla y rack en el panel izquierdo"
+     }
+    ],
+    "constancia": "5/5 con prueba real antes de 2,5 s · FUENTE: @handle en 2/5 (subagentes, DevDay) · Dots acredita con «mi Slack» y «@OpenAI on X» · EVOX2 muestra hardware propio sin fuente",
+    "confianza": "alta"
+   },
+   {
+    "parametro": "Voz y loudness",
+    "regla": "Masterizá la voz a −14 LUFS integrados (±0,5), con LRA de 2-3,5 LU y pico máximo de −1,5 dBTP (regla ONIA; el de Erik no se puede medir). Muy comprimida y pareja. Hablá a 3,2-4,1 palabras/s. Los −20 LUFS de Dots y EVOX2 son la excepción, no el molde.",
+    "rango": "−14,2 / −14,3 / −14,6 LUFS (DevDay, Opus, subagentes) · Dots −20,3 y EVOX2 −20,2 · LRA 2,2-3,4 · palabras/s: Opus 3,21, EVOX2 3,35, DevDay 3,73, Dots 3,88 y subagentes 4,11 (la receta decía 3,4-4,1). True peak de las descargas: de −6,8 a +1,5 dBTP, recomprimido por TikTok, no sirve como molde.",
+    "evidencia": [
+     {
+      "reel": "7690076393782234381 (subagentes)",
+      "seg": 57.5,
+      "detalle": "Micro-hueco a −44 dBFS (50 ms); el reel integra −14,6 LUFS con LRA de 2,2"
+     },
+     {
+      "reel": "7691157672229424397 (DevDay)",
+      "seg": 0,
+      "detalle": "Voz desde el primer cuadro; el reel integra −14,2 LUFS con LRA de 2,7"
+     },
+     {
+      "reel": "7688503963435437325 (Opus 5.5 vs 5)",
+      "seg": 10.85,
+      "detalle": "Pausa a −32/−34 dBFS (ruido de sala); el reel integra −14,3 LUFS con LRA de 3,4"
+     },
+     {
+      "reel": "7691461865548860686 (EVOX2)",
+      "seg": 4.6,
+      "detalle": "La excepción: hueco a −59 dBFS en un master de −20,2 LUFS"
+     }
+    ],
+    "constancia": "3/5 a −14 LUFS · 5/5 con LRA de 3,4 LU o menos",
+    "confianza": "alta"
+   },
+   {
+    "parametro": "Música",
+    "regla": "No pongas cama musical. Si la ponés, que sea casi inaudible: unos −43/−46 dBFS en los huecos, ≈ 30 dB por debajo de la voz, y sin intro musical. Para comprobar si hay cama, buscá contenido tonal en los huecos y en el canal lateral (L−R); el umbral de −40 dBFS no sirve (DevDay, con cama, baja a −45 en los huecos; Opus, sin cama, se queda en −32 por el ruido de sala).",
+    "rango": "Sin cama continua: subagentes (los huecos caen a −42/−48 dBFS en mono y a −55/−65 en lateral; hay algo tonal en el lateral mientras habla, sin identificar), EVOX2 (lateral ≈ −60) y Opus (lateral pegado a la voz, correlación 0,74) · con cama: DevDay y Dots, con lateral a −45/−47 dBFS en los huecos, sin correlación con la voz y con notas de 294-882 Hz",
+    "evidencia": [
+     {
+      "reel": "7691157672229424397 (DevDay)",
+      "seg": 57.5,
+      "detalle": "Hueco: central −46,9 y lateral −45,8 dBFS. La cama sigue sonando con la voz callada"
+     },
+     {
+      "reel": "7691049048752639246 (Dots)",
+      "seg": 16,
+      "detalle": "El lateral tiene picos tonales en 294, 466, 588, 698 y 884 Hz entre 16 y 38 s"
+     },
+     {
+      "reel": "7690076393782234381 (subagentes)",
+      "seg": 57.5,
+      "detalle": "Hueco: central −43,9 y lateral −65 dBFS. No hay cama continua"
+     },
+     {
+      "reel": "7691461865548860686 (EVOX2)",
+      "seg": 43.8,
+      "detalle": "Cola en −53/−63 dBFS con lateral de −67: sin música de salida"
+     }
+    ],
+    "constancia": "3/5 sin cama (subagentes, EVOX2, Opus) · 2/5 con cama de ≈ −45 dBFS (DevDay, Dots)",
+    "confianza": "media"
+   },
+   {
+    "parametro": "Efectos de sonido (SFX)",
+    "regla": "Uno es obligatorio: un brillo agudo de 0,4-0,7 s, con la energía concentrada en 9-16 kHz, en el cuadro en que entra el CTA. Es el pico de agudos del reel y, en 4 de 5, el momento más fuerte en loudness momentáneo. Usá el mismo brillo en 0-2 revelaciones clave. Opcionales: un whoosh estéreo en un cambio de sección y un golpe en el sello o el glitch. Ninguno sin causa visual.",
+    "rango": "CTA: Opus 41,48 s (0,6 s), subagentes 124,24 (0,36-0,5), Dots 48,88 (0,6), DevDay 103,0 (0,64) y EVOX2 41,04 (0,52). Espectro en el CTA: el 9-16 kHz queda a 2-5 dB del total, contra 23-55 dB en la voz. Momentáneo máximo: Opus −7,9 LUFS a 41,7 s y subagentes −9,2 a 124,5 s. Revelaciones con el mismo brillo: Dots 8,44 s (Dots en el iPhone) y DevDay 19,92 s («TU PLAN PLUS O PRO») y 78,5 s (Nº1). Otros medidos: golpe estéreo del sello de Dots (+18-22 dB de agudos en el lateral a 0,1-0,3 s), glitch de Dots a 1,5 s y whoosh estéreo en DevDay a 55,3-55,6 s (+7-11 dB en el lateral). La densidad total no se recontó.",
+    "evidencia": [
+     {
+      "reel": "7688503963435437325 (Opus 5.5 vs 5)",
+      "seg": 41.5,
+      "detalle": "Brillo de 0,6 s cuando entra la tarjeta CTA: momentáneo de −7,9 LUFS, el más fuerte del reel"
+     },
+     {
+      "reel": "7690076393782234381 (subagentes)",
+      "seg": 124.24,
+      "detalle": "Brillo durante el tecleo de la caja CTA: momentáneo de −9,2 LUFS, el más fuerte del reel"
+     },
+     {
+      "reel": "7691461865548860686 (EVOX2)",
+      "seg": 41.04,
+      "detalle": "El mismo brillo de 0,52 s cuando se teclea «COMENTA EV_»: es el más fuerte del reel (la receta decía que EVOX2 no tenía SFX: falso)"
+     },
+     {
+      "reel": "7691049048752639246 (Dots)",
+      "seg": 0.13,
+      "detalle": "Golpe estéreo cuando cae el sello CONFIDENCIAL"
+     },
+     {
+      "reel": "7691157672229424397 (DevDay)",
+      "seg": 103,
+      "detalle": "Brillo de 0,64 s cuando entra la tarjeta CTA"
+     }
+    ],
+    "constancia": "5/5 con el brillo en el CTA · 2/5 con SFX en revelaciones o secciones (Dots, DevDay)",
+    "confianza": "alta"
+   },
+   {
+    "parametro": "Cierre y CTA",
+    "regla": "Cerrá en los últimos 2,4-5,5 s con un CTA en pantalla: una caja o tarjeta en 56-69 % del alto, o una ficha o banda arriba. Va tecleado a ~1 letra por cuadro, con cursor «_». Con recurso, «COMENTA <PALABRA>» más lo que se recibe. Sin recurso, una pregunta para comentar. Entra con el brillo agudo; el punch-in de 1,12-1,15× y la firma en mono debajo son opcionales. Decirlo también en voz es opcional (2/5). Cortá cuando termina el último sonido, sin placa final ni fundido.",
+    "rango": "CTA en los últimos 2,4-5,5 s · caja de 895 px en y 56-63 % (subagentes) y tarjeta en 56-69 % (DevDay); ficha arriba a la izquierda (EVOX2) y banda arriba (Dots, Opus) · tecleo: EVOX2 ≈ 18 caracteres/s, DevDay ≈ 23 (17 caracteres en 0,73 s) y subagentes ≈ 36 (23 en ~0,63 s); la receta decía 16-30 · último sonido sobre −40 dBFS entre 0,02 y 0,15 s antes del final · IG: palabra clave en el caption de 3/3 reels con respuesta automática (ficha); en TikTok solo en el caption de EVOX2",
+    "evidencia": [
+     {
+      "reel": "7690076393782234381 (subagentes)",
+      "seg": 124.3,
+      "detalle": "Caja verde con «COMENTA», luego «ANÁLISIS CON SUBAGENTES_» letra a letra hasta 124,93; zoom de 1,15 y firma «[T] ERIK TAVERAS» al 66 %"
+     },
+     {
+      "reel": "7691157672229424397 (DevDay)",
+      "seg": 103.2,
+      "detalle": "«LA CARRERA DE LA IA / QUIÉN VA GANANDO?_», tecleado entre 103,18 y 103,92; también lo dice en voz («Déjame aquí en los comentarios»)"
+     },
+     {
+      "reel": "7691461865548860686 (EVOX2)",
+      "seg": 41,
+      "detalle": "Ficha «SERIE · COMENTA / EVOX2 / TE MANDO EL ENLACE»; la voz dice «así que atentos», no la palabra clave"
+     },
+     {
+      "reel": "7691049048752639246 (Dots)",
+      "seg": 49.4,
+      "detalle": "Tarjeta de arriba «¿QUÉ APP LE CONECTARÍAS?», con las letras cayendo; corte seco a los 51,5 s"
+     },
+     {
+      "reel": "7688503963435437325 (Opus 5.5 vs 5)",
+      "seg": 41.5,
+      "detalle": "«¿Y TÚ QUÉ LE DELEGARÍAS?» en la parte de arriba de cada panel durante los últimos 5,5 s"
+     }
+    ],
+    "constancia": "5/5 con CTA en pantalla y sin placa final · 5/5 con brillo · tecleado 3/5 (en Dots y Opus las letras caen) · palabra clave en pantalla 2/5, pregunta 3/5 · dicho en voz 2/5 · zoom en el CTA 2/5 · en 56-69 % 2/5",
+    "confianza": "alta"
+   },
+   {
+    "parametro": "Tipografía y paleta",
+    "regla": "Usá 2 familias. Una grotesca condensada heavy en mayúsculas (tipo Bebas Neue, Anton u Oswald) para subtítulos, titulares y números. Una mono en mayúsculas con tracking amplio (tipo JetBrains Mono o IBM Plex Mono) para rótulos, fuentes, pastillas y firma. Paleta disciplinada: papel claro y tinta negra, UN verde oscuro para los datos, UN verde claro para la palabra activa y los esquineros, y un solo color de excepción (kraft o crema) para los sellos. En Sergio Urcullo, con los tokens ONIA.",
+    "rango": "Erik, medido: papel #F1F1EC (también #EDEDEA y #EFEFEA), Nº #0D1115, menta #36D19E; según la receta, sin remedir: verde de datos #007052-#067254 y kraft #F2E2B2 con texto #504010. ONIA: #FFFFFF, #0A0F0D, verde profundo #0B8F4F y verde eléctrico #10C26B (el eléctrico nunca como texto sobre blanco).",
+    "evidencia": [
+     {
+      "reel": "7690076393782234381 (subagentes)",
+      "seg": 3,
+      "detalle": "Tarjeta #F1F1EC con «EN ESTE VÍDEO» en mono y «3 PIEZAS» en verde"
+     },
+     {
+      "reel": "7691157672229424397 (DevDay)",
+      "seg": 4.6,
+      "detalle": "Tarjeta Nº5 #0D1115, con «Nº» en menta, número en condensada blanca y «TOP 5 · OPENAI» en mono"
+     },
+     {
+      "reel": "7691157672229424397 (DevDay)",
+      "seg": 75.6,
+      "detalle": "Sello kraft con la condensada en marrón, sobre una tarjeta #EFEFEA"
+     }
+    ],
+    "constancia": "3/5 (subagentes, DevDay, EVOX2), el mismo sistema que su IG al 2-oct (portada de Muse y carrusel del 30-sep, según la ficha) · Dots y Opus usan oscuro con cian, dorado o violeta",
+    "confianza": "alta"
+   }
+  ],
+  "plantilla_de_bloques": "VIDEO LARGO (105-127 s: tutorial o top-N; sale de subagentes y DevDay):\n1) GANCHO, 0-3 s. Voz en el cuadro 0, con el subtítulo y un gráfico (sello, tarjeta índice o lámina de fuente) ya en pantalla entre 0,0 y 0,3 s. La prueba (lámina con FUENTE, clip oficial u objeto) entra antes de 2,5 s, por corte seco (~0,9 s) o abriendo directamente en ella. Vuelta a cámara, con punch-in de 1,12-1,15× opcional.\n2) PROMESA / ÍNDICE, 0-8 s. Tarjeta «EN ESTE VIDEO · N PIEZAS» que se llena 01/02/03 a medida que las nombra, o una grilla que cuenta (25 → 5).\n3) CONTEXTO, 8-28 s. El «¿qué es X?», con 2-3 tarjetas-diagrama que se arman pieza por pieza al ritmo de la frase. Un zoom por idea. Un sello de veredicto donde la respuesta es «depende» (subagentes al 19 %; DevDay al 71 % y otro al 91 %).\n4) CUERPO / PRUEBA, 28-95 s. 3-5 capítulos con rótulo «0N ✳ TÍTULO» (cada ≈ 20 s en un top-N; en un tutorial siguen al guion). Demo en pantalla partida (pantalla en 0-43,75 %, cara abajo) o láminas de fuente de 1,5-3 s cada 10-20 s. Pastillas verdes sobre la línea clave y contadores al decir cada número. En el top-N, cada sección abre con la tarjeta oscura «Nº N» (1,5-2,5 s) y un zoom.\n5) RESULTADO, 80-95 % del video. Tarjeta con el resultado medido (barras o contador, «+77 %») o el resumen «LAS N DE HOY» marcado ícono por ícono. El subtítulo se apaga mientras está la tarjeta de datos.\n6) CTA, últimos 2,4-5,5 s. Brillo agudo de 0,4-0,7 s y tarjeta CTA tecleada a ~1 letra por cuadro («COMENTA <PALABRA>» o la pregunta). Opcionales: zoom de 1,12-1,15×, firma en mono y decirlo en voz. Corte seco cuando termina el último sonido, sin placa final.\n\nVIDEO CORTO (44-52 s: producto o noticia; sale de EVOX2 y Dots):\n1) 0-3 s: sello («LLEGÓ» / «CONFIDENCIAL») entre 0,0 y 0,3 s, y la prueba antes de 2,5 s (corte al objeto a 1,5 s, o captura como overlay).\n2) 3-40 s: 5-7 fichas de dato (una cada ~5,5 s) con contadores al decir cada número, 2-4 b-roll o capturas de 1,5-3 s y 1-2 sellos más. Un corte cada 2,3-3,3 s.\n3) Últimos 2,7-3,2 s: ficha o tarjeta CTA tecleada, con brillo, y corte seco.\n\nEn los dos formatos: corte cada 2-3,3 s, un evento gráfico cada 1,3-2 s, voz a −14 LUFS, y sin música o con una cama casi inaudible (≈ −45 dBFS en los huecos).",
+  "lo_que_no_se_copia": "1) La firma «[T] ERIK TAVERAS» y la marca de agua «@eriktaveras» (en DevDay va al 77 % del alto). En Sergio Urcullo van «[S] SERGIO URCULLO» y su propio handle, en el mismo lugar y con la misma mono.\n2) La paleta exacta de Erik (crema #F1F1EC, menta #36D19E, verde de datos, kraft). El skill diseno-contenido-onia lo dice: «Qué NO copiar: sus personajes o mascotas, sus frases, su paleta exacta, sus cifras». Se copia la estructura (papel, tinta, un verde de datos, un verde de acento y un color de excepción) con los tokens ONIA #FFFFFF, #0A0F0D, #0B8F4F y #10C26B.\n3) Sus frases y rótulos: «EN ESTE VÍDEO · 3 PIEZAS», «DEPENDE / ESTADO: SIN DECIDIR», «LLEGÓ», «CONFIDENCIAL → YA SE PUEDE CONTAR», «¿Y TÚ QUÉ LE DELEGARÍAS?», «QUIÉN VA GANANDO?», «Comenta X y con gusto te lo envío», «Adivinen lo que…». Se copia el mecanismo, no el texto.\n4) Sus cifras, experimentos y fuentes (1:01 contra 1:48, 75.9K tokens, 25 → 5, 128 GB, +77 %, 8×). Ningún dato va en pantalla si Sergio Urcullo no lo dijo o no lo midió.\n5) Su set y sus temas: la gorra, el LED azul, el rack del homelab, GMKtec, el DevDay. Sergio Urcullo usa su propio espacio con el mismo principio: fondo oscuro, contraluz frío, luz cálida en la cara y micrófono visible.\n6) Logos de terceros sueltos. Solo van dentro de un gafete con «FUENTE: @handle».\n7) Sus errores y excepciones: los masters a −20 LUFS (Dots y EVOX2), el glitch RGB del gancho de Dots, el flash de 2 cuadros de DevDay a los 44,5 s, el crudo de celular sin edición (SLM, −29,1 LUFS) y el estilo de agosto (blanco y dorado), que ya abandonó.\n8) La palabra clave con DM automático, mientras Sergio Urcullo no decida activar ManyChat o SendyPro y el recurso no exista. A Erik lo critican por «clickbait» cuando entrega algo trivial (ficha de IG).\n9) El meta-formato A/B «Opus 5.5 vs Opus 5». Es contenido, no edición, y además son dos paneles a media anchura con un título encima: su geometría (subtítulo al 63 %, ritmo de cortes, encuadre selfie) no se usa como medida.\nAviso de método: las mediciones salen de los espejos de TikTok (@erik.py), recomprimidos en HEVC con audio a 44,1 kHz, y no se verificó que sean idénticos a los de IG. La ficha de IG del 3-oct solo vio portadas: no vale para el gancho, los cortes, los subtítulos ni el audio. Contra lo medido difiere en tres puntos, y se sigue lo medido: la tarjeta va en 55-78 % en IG y en 51-75 % en los cuadros; la franja libre es del 15 % contra 21-24 %; la palabra clave va en el caption de 3/3 reels de IG y en pantalla en 2/5. Además, su guía del 4-ago dice que si el CTA se dice en voz no va tarjeta de cierre, pero en subagentes y DevDay hace las dos cosas. Se sigue lo medido. Cómo se midió: pares de cuadros a 30 fps para los cortes, YuNet y SIFT sobre el fondo para el zoom, píxeles para posiciones y colores, Whisper para palabras/s y espectro con canal lateral (L−R) para música y SFX. El conteo de jump cuts tiene ±1 por cada 10 s."
+ },
+ "qa_prueba": {
+  "desvios": [
+   {
+    "parametro": "Encuadre de cabeza y set",
+    "esperado": "Sentado, en plano medio, con trípode fijo (escala del fondo 1,000). Cabeza en el 29-32 % del alto, ojos en y 29-31 %, cara en x 0,60-0,62. Set oscuro con LED frío arriba a la derecha y micrófono de brazo entrando por la izquierda. El pecho queda libre para las tarjetas.",
+    "visto": "Selfie de pie, con el teléfono en la mano, en un cuarto claro de día. La cabeza va de 34 a 68 % a los 3,0 s y de 29 a 75 % a los 20,0 s: ocupa el 33-46 % del alto. Los ojos quedan en y 50-54 % y la cara en x 0,40-0,48. El fondo se mueve dentro de un mismo plano: la escala va de 0,82 a 1,04 entre 17,2 y 22,5 s y deriva ~60 px por segundo entre 2,5 y 3,5 s, así que no hay trípode. En el 100 % de los planos de cámara se ven el micrófono lavalier en la mano y los auriculares, y la mano tapa el pecho, que es justo donde Erik pone las tarjetas.",
+    "seg_prueba": 20,
+    "reel_ref": "7690076393782234381 (subagentes)",
+    "seg_ref": 3,
+    "gravedad": "alta",
+    "arreglo": "No se arregla en edición: hay que regrabar. Trípode fijo, sentado, cámara a ~1,2 m. Ojos en y≈580 px (30 %), nariz en x≈660 px (0,61) y cabeza de ~600 px de alto (31 %). Micrófono en brazo entrando por la izquierda o lavalier en la ropa (nunca en la mano), sin auriculares. Fondo oscuro, un LED frío arriba a la derecha y luz cálida en la cara."
+   },
+   {
+    "parametro": "Tarjetas de datos: diseño y posición",
+    "esperado": "Tarjeta grande en y 51-75 %, debajo de la barbilla y sobre el pecho. Solo en pantalla partida va arriba (15-37 %).",
+    "visto": "Ancho de 815 px anclado en x 75, alto del 19,5 % y fondo #F1F1EA: eso coincide. Pero las 5 tarjetas a cámara completa van ARRIBA de la cabeza, en y 8,0-27,4 % (CÓMO ARRANCA 4,2 s, QUIÉN APRUEBA 8,0, BLOQUEA 14,1, DEJA PASAR 22,5 y MI CASO 32,6). Con los ojos al 50 %, no queda pecho libre.",
+    "seg_prueba": 20,
+    "reel_ref": "7691157672229424397 (DevDay)",
+    "seg_ref": 31.5,
+    "gravedad": "alta",
+    "arreglo": "Con el encuadre nuevo (ojos al 30 %), bajar la tarjeta a y 980-1440 px (51-75 %), x 72-892. Arriba (15-37 %) solo en pantalla partida. No se puede corregir sin regrabar: si se baja con este material, la tarjeta tapa la boca."
+   },
+   {
+    "parametro": "Ritmo de cortes (huecos de audio)",
+    "esperado": "El hueco más largo entre palabras es de 0,22-0,56 s y ningún hueco de 0,2 s o más baja de −40 dBFS. Corte con auto-editor a margen de 0,2 s.",
+    "visto": "Entre «principal.» y «Por» hay una pausa de ~1,0 s (29,30 → 30,36 s, sobre la lámina G). Adentro hay 0,1 s de SILENCIO DIGITAL (de −125 a −180 dBFS, entre 29,78 y 29,88 s): es un empalme sin room tone y se oye como un corte de audio.",
+    "seg_prueba": 29.78,
+    "reel_ref": "7690076393782234381 (subagentes)",
+    "seg_ref": 57.5,
+    "gravedad": "alta",
+    "arreglo": "Dejar la pausa en ≤0,25 s (auto-editor con margen de 0,2 s), cruzar el audio en 10-20 ms y rellenar con room tone de la misma toma: nunca dejar ceros. La lámina G de 27,9-30,4 s queda en ~1,8 s."
+   },
+   {
+    "parametro": "Layout y zonas",
+    "esperado": "En pantalla partida, abajo va la MISMA toma recortada y sin zoom: la cabeza mide igual que en T (~32 %). La costura queda en y≈840.",
+    "visto": "La costura está en y≈835 (43,5 %) y el subtítulo va sobre ella: eso coincide. Pero el panel de abajo está escalado ~1,3×: la cabeza va de 47 a 93 % del alto (46 %), contra 34-37 % en los planos T. Se ve un primerísimo plano, no la toma de cámara.",
+    "seg_prueba": 41.5,
+    "reel_ref": "7690076393782234381 (subagentes)",
+    "seg_ref": 41.5,
+    "gravedad": "media",
+    "arreglo": "Abajo, poner la toma de cámara a escala 1,00 y recortarla solamente (crop 1080×1080 desde la toma original, con la cara en x 0,61). No escalar para llenar."
+   },
+   {
+    "parametro": "Pruebas y fuentes",
+    "esperado": "En las demos de pantalla partida, arriba va tu propia pantalla grabada (terminal real con actividad) y la línea clave se marca con un contorno y una pastilla verdes.",
+    "visto": "La terminal de 37,8-45,0 s («Claude Code v2.1.283 ~/mi-proyecto», teclas SHIFT+TAB) y el editor de settings.json de 45,0-49,5 s son recreaciones en HTML: el mismo componente está en hermes-content/carousels/out/yt-02-instalar/deck.html. Son estáticas y no muestran la sesión real. Las láminas G con «FUENTE: CODE.CLAUDE.COM» sí son capturas reales y están bien (0,87 / 11,33 / 27,9 / 49,53 s).",
+    "seg_prueba": 39,
+    "reel_ref": "7690076393782234381 (subagentes)",
+    "seg_ref": 75,
+    "gravedad": "media",
+    "arreglo": "Grabar la pantalla real: Claude Code abierto, pulsar Shift+Tab y que se vea cambiar «⏵⏵ auto mode on» → «manual»; después abrir ~/.claude/settings.json en el editor y escribir \"defaultMode\": \"default\". Encima, el contorno y la pastilla verdes, como en subagentes a los 75 s."
+   },
+   {
+    "parametro": "Ritmo de cortes",
+    "esperado": "3-5 cortes cada 10 s. El plano medio dura 2-3,3 s, con jump cut en el borde de cada frase.",
+    "visto": "Hay 19 cortes en 57,6 s (3,3 cada 10 s, en el piso), mal repartidos: entre 20 y 30 s solo hay 2 (22,53 y 27,9). Cuatro planos de cámara duran 5,2-5,5 s (2,47-7,93, 17,17-22,53, 22,53-27,9 y 32,57-37,8) y los dos planos de cámara de la pantalla partida, 4,6 s (40,33-44,97 y 44,97-49,53).",
+    "seg_prueba": 25,
+    "reel_ref": "7691461865548860686 (EVOX2)",
+    "seg_ref": 9.53,
+    "gravedad": "media",
+    "arreglo": "Meter un jump cut en los bordes de frase de esos planos: ~5,16 («septiembre|arranca»), ~19,0 («existían|y los comandos»), ~24,5 («carpeta,|instalar»), ~25,7 («y|hacer push»), ~34,5 («deploy,|un push») y, en la pantalla partida, ~42,9 y ~47,4. La meta es 4-4,5 cortes cada 10 s, sin planos de más de 3,3 s."
+   },
+   {
+    "parametro": "Formato y duración",
+    "esperado": "Una noticia o un producto dura 44-52 s.",
+    "visto": "Dura 57,64 s, 5,6 s por encima del máximo. Resolución, cuadros y audio coinciden: 1080×1920, 30 fps, H.264 CRF 18, AAC 256k a 48 kHz.",
+    "seg_prueba": 57.64,
+    "reel_ref": "7688503963435437325 (Opus 5.5 vs 5)",
+    "seg_ref": 47.02,
+    "gravedad": "media",
+    "arreglo": "Recortar 6-10 s: la pausa de 1 s en 29,3; los huecos de 0,4-0,48 s en 16,4, 17,3, 21,2 y 42,9; y la frase redundante «como lo puedes revisar en la parte de abajo te lo muestra» (37,9-40,2 s), que la pantalla ya muestra."
+   },
+   {
+    "parametro": "Ritmo de elementos gráficos",
+    "esperado": "Cada pieza entra 0,05-0,09 s DESPUÉS de la palabra que la nombra (medido cuadro a cuadro en DevDay).",
+    "visto": "Las piezas entran entre −0,56 y +0,32 s respecto a su palabra. «Deploy» entra a 33,50 y la palabra «deploy» suena a ~34,06 (−0,56). EDITAR ARCHIVOS entra a 22,93 y «editar» empieza a 23,14 (−0,21). FORCE PUSH entra a 17,07 y «force» a 16,80 (+0,27). INSTALAR DEPENDENCIAS entra a 24,80 e «instalar» a 24,48 (+0,32).",
+    "seg_prueba": 33.5,
+    "reel_ref": "7691157672229424397 (DevDay)",
+    "seg_ref": 10.2,
+    "gravedad": "media",
+    "arreglo": "Anclar cada pieza al inicio real de su palabra (marcas por palabra de Whisper verificadas con el RMS) más 2 cuadros (+0,067 s). No usar tiempos fijos por tarjeta."
+   },
+   {
+    "parametro": "Ritmo de elementos gráficos",
+    "esperado": "Ninguna tarjeta repite lo que se oye: aporta un contraste, una consecuencia o un dato derivado. Mientras hay una tarjeta de datos, el subtítulo se apaga con un fundido de 0,3 s. La tarjeta dura 2,5-7,5 s.",
+    "visto": "POR DEFECTO · BLOQUEA (14,1-21,9 s) y DEJA PASAR (22,5-27,9 s) son listas con las MISMAS palabras que se dicen, y el subtítulo dice lo mismo al mismo tiempo («DEPLOYS A PRODUCCIÓN», «FORCE PUSH, BORRAR»): se lee dos veces. BLOQUEA dura 7,8 s.",
+    "seg_prueba": 17.5,
+    "reel_ref": "7691157672229424397 (DevDay)",
+    "seg_ref": 16.5,
+    "gravedad": "media",
+    "arreglo": "Convertirla en contraste: BLOQUEA y DEJA PASAR en una sola tarjeta de dos columnas, con el comando real como dato (curl | bash, git push --force, git reset --hard). Mientras está, apagar el subtítulo con un fundido de 0,3 s. No pasar de 7,5 s."
+   },
+   {
+    "parametro": "Subtítulos: posición",
+    "esperado": "Centro del bloque en y≈1427 (74 %). Nunca más abajo del ~80 %; la franja de 77-100 % queda libre.",
+    "visto": "Los bloques de 1 línea van bien (centro en 74,1-74,3 %). Pero en 15,6-19,3 s, 22,5-23,8 s y 54,5-57,6 s el bloque baja a 78 % y la segunda línea llega a 81,5-83,7 % (por ejemplo «COMUNIDAD DE / WHATSAPP.» en y 1464-1607). Baja para no tapar la cara, que está demasiado abajo.",
+    "seg_prueba": 55,
+    "reel_ref": "7691461865548860686 (EVOX2)",
+    "seg_ref": 20,
+    "gravedad": "media",
+    "arreglo": "Fijar el centro del bloque en y 1427. Si van 2 líneas, que crezca hacia arriba (líneas centradas en ~72 % y ~76,5 %) y que ningún glifo pase de y 1536 (80 %). Con el encuadre nuevo la cara ya no choca."
+   },
+   {
+    "parametro": "Subtítulos: letra y color",
+    "esperado": "Para Sergio Urcullo, la palabra activa en el verde eléctrico ONIA #10C26B. Sobre papel, tinta negra con la activa en verde profundo ONIA #0B8F4F.",
+    "visto": "Tamaño y blanco coinciden: glifo blanco de 60 px, activa de 62-66 px, blanco #EEEEEA. Pero la activa está en #39CD9E (RGB 57,205,158), que es la menta de Erik (#36D19E). Sobre la lámina, la activa está en #0A7457 (la de Erik es #007052), no #0B8F4F. Además, la activa aparece grande en 1 cuadro (3,567 y 3,867 s) en vez de crecer en ~0,1 s.",
+    "seg_prueba": 3,
+    "reel_ref": "7690076393782234381 (subagentes)",
+    "seg_ref": 3,
+    "gravedad": "media",
+    "arreglo": "Cambiar el token: activa a #10C26B sobre cámara y a #0B8F4F sobre papel. Animar la escala de la activa de 1,00 a 1,08 en 3 cuadros con ease-out."
+   },
+   {
+    "parametro": "Tipografía y paleta",
+    "esperado": "Paleta con los tokens ONIA: #FFFFFF, #0A0F0D, verde profundo #0B8F4F para los datos y verde eléctrico #10C26B para la activa y los esquineros (nunca como texto sobre blanco).",
+    "visto": "El papel (#F1F1EA) y la tinta (#0E0F15) coinciden con Erik, pero los verdes de las tarjetas, los esquineros, los rótulos («BLOQUEA», «DEJA PASAR») y las pastillas son los de Erik (menta y verde de datos ≈#007052), no los de ONIA. La WhatsApp verde del CTA agrega un tercer verde.",
+    "seg_prueba": 20,
+    "reel_ref": "7691157672229424397 (DevDay)",
+    "seg_ref": 4.6,
+    "gravedad": "media",
+    "arreglo": "Reemplazar menta por #10C26B (esquineros y acentos sobre oscuro) y el verde de datos por #0B8F4F (rótulos, pastillas, caja CTA). El ícono de WhatsApp, en monocromo blanco sobre la caja."
+   },
+   {
+    "parametro": "Zoom (punch-in)",
+    "esperado": "Punch-in de 1,12-1,15× con rampa ease-out de 0,3-0,5 s, y vuelta por corte.",
+    "visto": "Escala y lugar coinciden: hay 2 punch-ins de 1,14-1,145×, en «auto» y en el sello, y los dos vuelven por corte (7,93 y 37,8). Pero la rampa es corta: 5,867 → 6,067 s (0,2 s, 6 cuadros) y 35,93 → 36,17 s (0,23 s).",
+    "seg_prueba": 5.87,
+    "reel_ref": "7691157672229424397 (DevDay)",
+    "seg_ref": 4.4,
+    "gravedad": "baja",
+    "arreglo": "Alargar la rampa a 0,35-0,45 s (11-13 cuadros) con ease-out (power2.out) y dejar el destino en 1,13×."
+   },
+   {
+    "parametro": "Ritmo de elementos gráficos",
+    "esperado": "Un evento gráfico nuevo cada 1,3-2 s, sin contar los subtítulos.",
+    "visto": "Hay dos tramos sin ningún evento: 30,4-32,6 s (2,2 s, «por ejemplo en mi caso eso realmente importa») y 52,33-54,87 s (2,5 s, justo antes del CTA).",
+    "seg_prueba": 31,
+    "reel_ref": "7691157672229424397 (DevDay)",
+    "seg_ref": 10.2,
+    "gravedad": "baja",
+    "arreglo": "En 30,4 s, adelantar el contenedor de MI CASO o poner una ficha chica arriba a la izquierda («MI CASO · MAIN = PRODUCCIÓN»). En ~53,3 s, una pastilla «MANUAL MODE ON» que anticipe el CTA."
+   },
+   {
+    "parametro": "Formato y duración",
+    "esperado": "H.264 a ~6 Mbps (CRF 18), según su guía.",
+    "visto": "El CRF 18 da 3,7 Mbps de promedio. TikTok va a recomprimir sobre una base más pobre.",
+    "seg_prueba": 0,
+    "reel_ref": "7688503963435437325 (Opus 5.5 vs 5)",
+    "seg_ref": 0,
+    "gravedad": "baja",
+    "arreglo": "Exportar con -crf 16 -maxrate 8M -bufsize 12M, o -b:v 6M en 2 pasadas, manteniendo yuv420p, bt709 y +faststart."
+   }
+  ],
+  "parecido_0a10": 6,
+  "veredicto": "Sergio Urcullo: el video tiene la edición de Erik, pero no su imagen. Le pongo 6/10 y no lo daría por «tal cual».\n\nLo que coincide:\n- Formato 1080×1920 a 30 fps.\n- Gancho: voz desde el cuadro 0, sello en 0,0 s y prueba a los 0,87 s.\n- Láminas G casi idénticas a DevDay: gafete en 13-19 %, captura en 21-53 % y chip «FUENTE».\n- Sellos a −5°, que asientan en 3-5 cuadros.\n- Subtítulos de 3 palabras, de 60/62-66 px, centrados al 74 % y corregidos.\n- Cortes secos de 1 cuadro.\n- CTA tecleado a 30 letras/s, con brillo de 0,6 s a los 54,85 s (el momento más fuerte, −9,6 LUFS).\n- Sin música; −14,1 LUFS, LRA 2,1 y 3,5 palabras/s.\n\nLo que no, y se ve de un vistazo:\n1. El material: selfie en mano con micrófono y auriculares, cara al centro y ojos al 50 % en vez de trípode, plano medio, ojos al 30 % y cara en x 0,61. Esto se arregla regrabando, no editando.\n2. Por eso las tarjetas van arriba de la cabeza (8-27 %) y no sobre el pecho (51-75 %), y el subtítulo baja hasta el 82-84 %.\n3. En la pantalla partida, la cámara de abajo está ampliada ~1,3× y la terminal de arriba es una recreación, no la pantalla real.\n4. Hay una pausa de 1 s con 0,1 s de silencio digital a los 29,8 s.\n5. Hay cuatro planos de 5,2-5,5 s y 57,6 s de duración en vez de 44-52.\n6. Las piezas entran entre −0,56 y +0,32 s respecto a su palabra, contra +0,05/+0,09 en Erik.\n7. Se copiaron los verdes de Erik en lugar de los tokens ONIA.\n\nOrden de arreglo: regrabar con el encuadre de Erik; después reubicar tarjetas y subtítulos, arreglar el audio de 29,8 s, sumar cortes y sincronizar las piezas. Con eso debería llegar a 8-9.\n\nLos cuadros y medidas están en /tmp/claude-0/-home-user-onia-hermes/981fdf0a-9c86-5cd3-a526-5f18111f4f5a/scratchpad/qa-erik/: transcripción en tx.json; comparaciones lado a lado en l_t3.png, l_t20.png, l_s.png y l_combo.png; geometría en g1-g6.png; cuadro a cuadro en cardin_*.png, sello_*.png, cta.png y subin.png."
+ },
+ "script": {
+  "script": "/home/user/onia-hermes/.claude/skills/edicion-referentes/scripts/erik/erik_edit.py (al lado: storyboard-n03.json v2, README.md actualizado, capturar.mjs, capturas-n03.json y assets-ejemplo/ sin cambios). Copia de la v1 (script, storyboard, README, MP4 y hojas) en /tmp/claude-0/-home-user-onia-hermes/981fdf0a-9c86-5cd3-a526-5f18111f4f5a/scratchpad/referentes/prueba-erik/v1-backup/. No hay nada commiteado: todo sigue sin seguimiento en .claude/skills/edicion-referentes/, en la rama claude/marca-personal-contenido-ae658c.",
+  "uso": "Una vez por máquina, el alineador local (gratis, unos 40 MB): `pip install --no-deps vosk cffi && mkdir -p ~/.cache/vosk && cd ~/.cache/vosk && curl -sSLO https://alphacephei.com/vosk/models/vosk-model-small-es-0.42.zip && python3 -c \"import zipfile; zipfile.ZipFile('vosk-model-small-es-0.42.zip').extractall('.')\"`. Sin él, el script usa los tiempos del transcript y lo avisa.\nDespués: `cd /home/user/onia-hermes/.claude/skills/edicion-referentes/scripts/erik`\n1) `node capturar.mjs capturas-n03.json assets-ejemplo`\n2) Cuadros sueltos e informe (unos 30 s): `python3 erik_edit.py --bruto <raw/bruto.mp4> --cutplan <cutplan.json> --transcript <segments-cut.json> --storyboard <storyboard.json> --salida <out.mp4> --cuadros 1.5,12,40`\n3) Render completo (unos 3 min para 53 s): `python3 erik_edit.py --bruto <raw/bruto.mp4> --cutplan <cutplan.json> --transcript <segments-cut.json> --storyboard <storyboard.json> --salida <out.mp4> --hojas <carpeta-sheets> [--trabajo DIR] [--sin-apretar] [--sin-vosk] [--sin-recorte-cola] > informe.txt`\nLa prueba se hizo así: `S=/tmp/claude-0/-home-user-onia-hermes/981fdf0a-9c86-5cd3-a526-5f18111f4f5a/scratchpad; python3 erik_edit.py --bruto $S/video-v1/raw/bruto.mp4 --cutplan $S/video-v1/scripts/cutplan.json --transcript $S/video-v1/scripts/segments-cut.json --storyboard storyboard-n03.json --salida $S/referentes/prueba-erik/prueba-erik.mp4 --trabajo $S/referentes/prueba-erik/trabajo --hojas $S/referentes/prueba-erik/sheets`",
+  "entradas": "- bruto: el MP4 original.\n- cutplan aprobado: `{\"keep\":[{start,end}]}` en segundos del bruto. No se toca: el script escribe aparte un corte DERIVADO, `trabajo/cutplan-erik.json`, con su tabla `trabajo/tabla-cortes.md`. Ahí van los huecos apretados y las frases quitadas, y Sergio Urcullo tiene que verlo antes de publicar.\n- transcript corregido en tiempo de salida: `{\"words\":[{word,start,end}]}`. El texto se quema tal cual. Solo se corrigen los TIEMPOS: Vosk más la envolvente RMS y la banda de 3-8 kHz.\n- storyboard JSON con estas claves:\n  - `paleta`: \"onia\" por defecto; \"erik\" queda para medir contra el referente.\n  - `assets`, `firma`, `subtitulos`.\n  - `corte`: `{hueco_max: 0.25, quitar: [{desde, hasta, por_que}]}`.\n  - `eventos`: sello, lamina, tarjeta, zoom, pantalla, cta, sfx y corte_ritmo.\n- Disparadores: `{palabra, n, fin, desfase}`, `{corte: k}` o `{t}`. `{corte: k}` es el límite k del cutplan APROBADO, llevado al tiempo nuevo. Cada pieza se ancla a la palabra que la NOMBRA y entra 2 cuadros (+0,067 s) después de su inicio real.\n- Tarjeta `lista` con `\"mono\": true`: cada fila muestra el comando real. Lleva `rotulo_der_color` y `apaga_subtitulos`, que viene en true por defecto.\n- `pantalla.tipo`: `grabacion` es la pantalla REAL grabada, con `archivo`, `inicio`, `sincro:[{en,seg}]`, `recorte`, `encuadre` y `piezas:[{rect,en,hasta,pastilla}]` para el contorno verde y la pastilla. Se probó con un clip sintético. `terminal` y `codigo` quedan como mockups dibujados cuando no hay grabación.\n- Salidas en `--trabajo`: `cutplan-erik.json`, `tabla-cortes.md`, `informe.txt` (si se redirige la salida), `vosk.json` y `caras.json`.",
+  "video_prueba": "/tmp/claude-0/-home-user-onia-hermes/981fdf0a-9c86-5cd3-a526-5f18111f4f5a/scratchpad/referentes/prueba-erik/prueba-erik.mp4 (misma ruta, re-renderizado): 1080x1920, 30 fps, H.264 CRF 18, AAC 256k a 48 kHz, 53,14 s, −14,0 LUFS, −2,3 dBTP. Junto a él: tabla de cortes en .../prueba-erik/trabajo/tabla-cortes.md, corte derivado en .../trabajo/cutplan-erik.json e informe de QA en .../trabajo/informe.txt.",
+  "hoja_prueba": "/tmp/claude-0/-home-user-onia-hermes/981fdf0a-9c86-5cd3-a526-5f18111f4f5a/scratchpad/referentes/prueba-erik/sheets/sheet-01.jpg … sheet-06.jpg (2 fps, 5x4, con el segundo impreso, 0-53 s). Las miré todas. El cambio de BLOQUEA a DEJA PASAR (21,0 s) y el de CÓMO ARRANCA a QUIÉN APRUEBA (7,6 s) quedaron limpios. El sello ya no tapa el nodo rojo «Producción · caída» (35-36 s). La caja CTA verde lleva el ícono de WhatsApp en blanco (50,5-52,5 s). Ningún subtítulo baja del 80 %.",
+  "parametros_cumplidos": "Todo se midió sobre el MP4 o lo sacó el informe del script.\n\n- **Ritmo de cortes (huecos de audio):**\n  - La pausa «principal.|Por» medía 0,86 s y quedó en 0,25.\n  - También se apretaron 21,2 (0,50 s), 42,9 (0,54 s) y otros 6 huecos.\n  - El silencio real más largo es de 0,33 s.\n  - Cada empalme lleva un cruce de igual potencia de 15 ms, nunca a cero.\n  - El hueco digital de 0,107 s, que venía del gate del teléfono y no de un empalme, se rellena con room tone de la misma toma a −38/−44 dBFS. En esta versión lo quitó el recorte.\n  - El audio final no tiene huecos digitales. El nivel mínimo dentro de una pausa de ≥0,2 s es −27 dBFS (piso −40).\n  - Ningún empalme hace clic: el salto máximo en cada empalme queda en ≤1,23× el p99,9 de la propia toma.\n- **Ritmo de cortes:**\n  - Antes había 3,3 cortes cada 10 s y mal repartidos. Ahora hay 26 que se ven en 53,1 s, o sea 4,9 cada 10 s: 6/6/5/4/4 por tramo de 10 s.\n  - El plano de cámara más largo dura 3,25 s (antes 5,5).\n  - Hay 5 jump cuts en bordes de frase: 9,87, 19,43, 24,07, 31,43 y 33,33. En T reencuadran 1,00 ↔ 1,08.\n  - Los planos de la pantalla partida duran 2,46, 1,68, 2,90 y 1,52 s.\n- **Ritmo de elementos gráficos:**\n  - Todas las piezas entran +0,067 s después del inicio real de la palabra que las nombran.\n  - Contra las referencias del QA, pasadas al tiempo nuevo: force 16,46 (=16,79 viejo), editar 22,55 (=23,13) y deploy 32,89 (=34,08). Todas dentro de ±0,03 s.\n  - «Deploy» ahora se ancla a «deploy» y no a «alimenta». «Producción» se ancla a «producción», n=2.\n- **Tarjetas:**\n  - BLOQUEA muestra `curl … | bash`, `vercel --prod`, `git push --force`, `rm -rf` y `git reset --hard`.\n  - DEJA PASAR muestra `Update(src/app.ts)`, `npm ci` y `git push origin main`. Ya no repiten lo que se oye.\n  - Mientras hay una tarjeta, el subtítulo se apaga con un fundido de 0,3 s.\n  - Duran 3,4 / 3,6 / 7,47 / 6,2 / 5,3 s, todas ≤ 7,5.\n- **Subtítulos, posición:** bloque fijo con centro en y 1427. Con 2 líneas, los centros van en 72 % y 76,5 %. Los glifos quedan entre y 1350 y 1501 (78,2 %, tope 80 %). Ya no bajan para esquivar la cara.\n- **Subtítulos, color:** la activa sale en (16,193,106) ≈ #10C26B sobre cámara y en (11,141,79) ≈ #0B8F4F sobre papel. Crece de 1,00 a 1,08 en 3 cuadros con ease-out: el ancho medido pasa de 224 a 234, 240 y 243 px.\n- **Paleta ONIA:** papel #FFFFFF y tinta #0A0F0D. #0B8F4F va en rótulos, pastillas, nodos y caja CTA. #10C26B va solo en la activa, los esquineros y los acentos sobre oscuro, nunca como texto sobre blanco. WhatsApp va monocromo blanco dentro de la caja.\n- **Layout S:** abajo va la misma toma a escala 1,00, solo recortada a 1080x1080. YuNet sobre el MP4 mide la cara en 626-645 px en S y en 607-641 px en T. El «1,3×» del QA no se reproduce: el recorte nunca escaló, y la diferencia del QA era cabeza más cuello.\n- **Duración:** baja de 57,64 a 53,14 s (−4,5 s): la pausa de 0,86 s, otros 8 huecos y la frase «¿Cómo lo puedes revisar? En la parte de abajo te lo muestra. Y» (2,65 s). Con ella se va el tramo de 0,2 s que quedaba entre dos cortes.\n- **Piso:**\n  - Los cambios de apoyo caen en límites del cutplan: el informe dice «cortes del cutplan aprobado sin cambio de apoyo: ninguno». La última lámina ahora termina en el corte 12.\n  - Las tarjetas se dibujan con código y llevan el dato real del drop N03 y de la doc.\n  - Los textos en pantalla van en voseo: COMENTÁ, CÓMO SABÉS QUE QUEDÓ, TU CARPETA.",
+  "desvios_conocidos": "1. **Encuadre y set (alta):** no se arregla editando; hay que regrabar.\n   - Trípode, sentado, ojos en y≈580, nariz en x≈660, cabeza de unos 600 px.\n   - Micrófono en brazo o lavalier en la ropa, sin auriculares. Set oscuro con LED frío.\n   - Mientras tanto quedan tres cosas: la cara en x 0,42-0,47, el subtítulo fijo al 74 % rozando la barbilla y el labio de abajo en los planos T, y el micrófono en la mano. Ese micrófono deja unos 159 roces y chasquidos en zonas quietas del bruto. Uno queda a 20,96 s; ya estaba en la v1 y no es un empalme.\n2. **Tarjetas en el pecho (alta):** dependen del punto 1. Siguen en la banda de arriba (y 150-530, 8-28 %). El script las baja solo a 51-75 % cuando la barbilla queda arriba del 50 %.\n3. **Pruebas y fuentes (media):**\n   - La terminal y el settings.json siguen siendo mockups dibujados, el piso de Sergio Urcullo, porque no hay grabación de pantalla.\n   - El script ya acepta `pantalla.tipo=\"grabacion\"` con contorno y pastilla verdes.\n   - Falta que Sergio Urcullo grabe Claude Code real: Shift+Tab cambiando «⏵⏵ auto mode on» a «⏸ manual mode on», y ~/.claude/settings.json escribiendo `\"defaultMode\": \"default\"`.\n4. **Duración (media):** quedan 53,14 s, 1,1 s sobre el máximo de 52. Lo que sobra es contenido.\n   - Propuesta, no aplicada: sacar «Según la documentación,» (unos 0,9 s), porque la lámina ya dice FUENTE. Es una línea en `corte.quitar` y la decide Sergio Urcullo.\n5. **BLOQUEA / DEJA PASAR:** quedaron como dos tarjetas de comandos que se relevan en el mismo lugar, no como una de dos columnas.\n   - Lo que se dice dura unos 13,7 s, y una sola tarjeta pasaría de 7,5 s. BLOQUEA ya dura 7,47 s, al borde.\n6. **Ritmo:** 4,9 cortes cada 10 s, dentro del rango 3-5 de la receta pero arriba de la meta de 4-4,5. Los tramos 0-10 y 10-20 s tienen 6 cada uno. Queda un plano de 0,46 s a los 16,35 s, que viene del cutplan aprobado («force push»).\n7. **Referencia del QA para «instalar»:** puso la palabra en 24,48 s (tiempo viejo), pero ahí cae la explosión de la /t/ de «carpeta». La banda alta pone «in-» en 24,63 y la /s/ en 24,70. La pieza entra a 24,66+0,067 s (tiempo viejo).\n8. **Regla de oro:** Sergio Urcullo todavía no vio el corte derivado (huecos apretados y frase quitada). Está en trabajo/tabla-cortes.md y se le muestra antes de publicar. Este MP4 es la prueba para comparar recetas, no para publicar.\n9. **Paleta:** el pedido original decía replicar el color del referente, y el QA pidió los tokens ONIA porque la paleta es marca («salvo marcas»). Quedó \"onia\" por defecto, y \"erik\" sigue en el script.\n10. **Dependencias y estado:** Vosk está instalado solo en este contenedor (pip --no-deps y el modelo en ~/.cache/vosk), no en el repo. Nada está commiteado.",
+  "aprendido": "- **Whisper erra el inicio de las palabras.** Incluso medium falla en ±0,1-0,3 s, y el transcript remapeado hasta 0,56 s. Vosk small-es (Kaldi, local, 40 MB, unos 6 s para 58 s de audio) acierta dentro de ~0,03 s en force, editar y deploy.\n  - El paquete `srt` no compila en el contenedor: se instala con `pip install --no-deps vosk` y se pone un stub en `sys.modules['srt']`.\n- **Vosk parte o junta palabras:** «.claude» lo oye como «punto clave», «arranca en» como «arranquen» y «con trabajo» como «contrabajo».\n  - Hace falta una alineación con fusiones 1:2 y 2:1.\n  - Las palabras que empiezan con punto se pronuncian «punto …».\n- **El micrófono de Sergio Urcullo no deja medir la pausa con un umbral pegado al piso.** La pausa tiene ruido de −42/−30 dB y soplidos agudos, así que la de 0,86 s se partía y no se apretaba nada.\n  - Lo que funciona: voz = P75 − 8 dB.\n  - Fricativa = banda de 3-8 kHz sobre el piso + 13,5 dB Y banda ancha sobre el piso + 2 dB. Así una respiración cuenta como pausa.\n- **La /f/ de «force» empieza 0,08 s antes que la vocal y casi no tiene RMS.** Al apretar un hueco hay que dejar 0,12 s antes de la palabra (y 0,13 s después).\n- **El teléfono corta a cero unos 0,1 s en algunas pausas** (bruto 13,35 / 19,60 / 34,13 / 43,95 / 61,60). Es el gate del teléfono, no un empalme: se rellena con room tone de la misma toma. Lo que el QA leyó como «empalme sin room tone» era esto.\n- **Un hueco apretado es un jump cut.** Al lado de otro corte deja un plano-flash: un recorte de menos de 0,25 s a menos de 0,9 s de otro corte no se hace.\n- **Un cambio de layout y un corte del cutplan «en el mismo cuadro» difieren en milisegundos.** Sin fundirlos salen planos de 0 s y el conteo de cortes se infla. Además, los cortes que quedan dentro de una lámina no se ven y no cuentan.\n- **Una lámina que termina en una palabra 0,8 s antes de un corte deja un plano-flash:** hay que terminarla en el corte.\n- **Cuando una tarjeta releva a otra en el mismo lugar, la vieja no deja fantasma.** Si lo deja, asoma debajo de la nueva, que todavía está abriéndose.\n- **Un sello encima de la tarjeta tapa la etiqueta del nodo.** Va debajo de la tarjeta (y≈575).\n- **La regla de 7,5 s choca con una tarjeta de dos columnas** cuando lo que se dice dura 13 s. Se resuelve con dos tarjetas de comandos que se relevan.\n- **Las referencias del QA medidas por RMS pueden caer en una consonante de la palabra anterior:** el 24,48 de «instalar» era la /t/ de «carpeta». Se verifica con la banda alta antes de mover un ancla.\n- **El tamaño de la cara en pantalla partida se mide con YuNet sobre el MP4, no a ojo:** el «1,3×» del QA era cabeza más cuello.\n- **Sacar una frase arrastra el nexo que la sigue.** Si no se va con ella («Y»), queda un tramo de 0,2 s entre dos cortes.\n- **Un 'despues_de' en segundos se rompe cuando el tiempo se mueve** (al apretar huecos): hay que anclar con `n`."
+ }
+}

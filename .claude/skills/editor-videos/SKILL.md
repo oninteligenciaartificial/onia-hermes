@@ -18,7 +18,7 @@ description: >
 Sergio Urcullo, 2-oct, textual: *«lo que quiero que hagas tal cual son los videos de Eric Taveras y Santiago
 Munoz»*, y del reel de Codex: *«no me refiero a que lo hagas tal cual, me refiero a que lo tomes de referencia»*.
 - **Molde a replicar TAL CUAL:** el montaje de **@eriktaveras** y **@sanmunoz.ia**. Vive en la skill nueva
-  **`edicion-referentes`** (la arma Marca personal desde el 2-oct, por decisión de Sergio Urcullo: «a partir de
+  **`edicion-referentes`** (lista desde el 3-oct: dos recetas medidas, un script por receta y una prueba sobre N03; la arma Marca personal desde el 2-oct, por decisión de Sergio Urcullo: «a partir de
   después de eso, con el formato de los referentes, y creamos la nueva skill de edición»). Fichas de montaje por
   cuenta (3-oct, reel por reel): `hermes-content/references/marca-personal/FICHAS-MONTAJE-REFERENTES.md`.
   Hasta el 2-oct de Erik no había NADA del montaje, y de Santiago un solo reel (sección «Layout tutorial

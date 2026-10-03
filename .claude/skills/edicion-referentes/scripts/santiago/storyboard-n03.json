@@ -1,0 +1,204 @@
+{
+ "titulo": "N03 · El modo auto de Claude Code (prueba de la receta Santiago Muñoz)",
+ "nota": "Cada escena dice su layout y la PALABRA que la dispara; 'corte': true la pega al límite del cutplan más cercano (≤0,45 s antes). Textos en pantalla en voseo. Datos: drop N03 + code.claude.com/docs/en/permission-modes + changelog 2.1.284 (28 sep 2026).",
+ "assets": "assets-ejemplo",
+ "camara": {},
+
+ "capturas": [
+  {"id": "doc-arriba", "url": "https://code.claude.com/docs/en/permission-modes", "ancho_css": 560, "esquema": "dark",
+   "ancla": null, "alto_css": 760, "fijos": "abajo",
+   "frases": ["a second model, the classifier, reviews actions instead of you", "auto mode is the built-in starting permission mode"]},
+  {"id": "changelog-auto", "url": "https://code.claude.com/docs/en/changelog", "ancho_css": 560, "esquema": "dark",
+   "ancla": "Changed interactive terminal and VS Code sessions to start in auto mode", "margen": 14, "alto_css": 120, "fijos": "ocultar",
+   "frases": ["on every plan and provider"]},
+  {"id": "doc-bloquea", "url": "https://code.claude.com/docs/en/permission-modes", "ancho_css": 560, "esquema": "dark",
+   "ancla": "Blocked by default", "alto_css": 560, "fijos": "ocultar",
+   "frases": ["Downloading and executing code", "Production deploys and migrations", "Irreversibly destroying files that existed before the session", "Force push"]},
+  {"id": "doc-deja", "url": "https://code.claude.com/docs/en/permission-modes", "ancho_css": 560, "esquema": "dark",
+   "ancla": "Allowed by default", "alto_css": 420, "fijos": "ocultar",
+   "frases": ["Local file operations in your working directory", "Installing dependencies declared in your lock files or manifests", "Pushing to any branch of the repository", "including the default branch"]},
+  {"id": "doc-settings", "url": "https://code.claude.com/docs/en/permission-modes", "ancho_css": 560, "esquema": "dark",
+   "ancla": "This example makes every terminal session", "alto_css": 420, "fijos": "ocultar",
+   "frases": ["~/.claude/settings.json", "\"defaultMode\": \"default\"", "manual mode on"]}
+ ],
+ "logos_svg": [{"id": "logo-whatsapp", "svg": "hermes-content/references/brand-logos/whatsapp.svg", "alto": 240}],
+
+ "zooms": [
+  {"tipo": "golpe", "en": "permiso"},
+  {"tipo": "punch", "escala": 1.12, "en": {"frase": "incluida", "corte": true}, "hasta": {"frase": "por ejemplo", "corte": true}},
+  {"tipo": "golpe", "en": "rompe"}
+ ],
+
+ "escenas": [
+  {"id": "gancho-doc", "layout": "split", "fondo": "oscuro", "desde": {"t": 0},
+   "etiqueta": ["CLAUDE CODE", "DOCUMENTACIÓN OFICIAL"],
+   "elementos": [
+    {"tipo": "captura", "src": "doc-arriba", "recorte": [0, 0, 1120, 640], "ancho": 984, "pos": [48, 104], "anim": "corte"},
+    {"tipo": "logo", "src": "logo-claude-code.png", "ancho": 470, "pos": ["centro", 752], "en": {"frase": "claude code", "offset": -0.1}},
+    {"tipo": "sello", "texto": "SIN PERMISO", "tam": 50, "rot": -8, "pos": [600, 360], "en": "permiso"}
+   ]},
+
+  {"id": "changelog", "layout": "split", "fondo": "oscuro", "desde": "desde fines",
+   "etiqueta": ["CLAUDE CODE", "CHANGELOG · v2.1.284 · 28 SEP 2026"],
+   "elementos": [
+    {"tipo": "captura", "src": "changelog-auto", "recorte": [40, 22, 1040, 150], "ancho": 984, "pos": [48, 300],
+     "url": "code.claude.com/docs/en/changelog",
+     "marcas": [{"frase": "on every plan and provider", "en": "todos los planes"}]},
+    {"tipo": "texto", "texto": "Arranca en *modo auto*", "tam": 88, "pos": [48, 110], "en": "arranca"},
+    {"tipo": "pildora", "texto": "en todos los planes", "icono": "check", "pos": [48, 560], "en": "todos los planes"}
+   ]},
+
+  {"id": "como-funciona", "layout": "split", "fondo": "papel", "desde": {"frase": "en modo automático", "corte": true},
+   "etiqueta": ["MODO AUTO", "CÓMO FUNCIONA"],
+   "elementos": [
+    {"tipo": "texto", "texto": "Un *segundo modelo*\nrevisa cada acción", "tam": 76, "pos": [48, 108]},
+    {"tipo": "caja", "titulo": "Claude", "sub": "quiere actuar", "ancho": 270, "alto": 160, "pos": [48, 380]},
+    {"tipo": "flecha", "largo": 64, "pos": [330, 440], "en": "segundo modelo"},
+    {"tipo": "caja", "titulo": "Clasificador", "sub": "segundo modelo", "estilo": "verde", "ancho": 330, "alto": 160, "pos": [406, 380], "en": "segundo modelo"},
+    {"tipo": "flecha", "largo": 64, "pos": [748, 440], "en": "revisa"},
+    {"tipo": "pildoras", "items": [["pasa", "check"], ["frena", "cruz"]], "estilo": "claro", "pos": [824, 392], "en": "revisa"},
+    {"tipo": "pildora", "texto": "en vez de vos", "estilo": "papel-oscuro", "tam": 34, "pos": [406, 580], "en": {"frase": "vez de vos", "offset": -0.2}},
+    {"tipo": "credito", "texto": "«a second model, the classifier, reviews actions instead of you» · code.claude.com/docs/en/permission-modes", "pos": [48, 790]}
+   ]},
+
+  {"id": "doc-bloquea", "layout": "lamina", "fondo": "oscuro", "entrada": "barrido",
+   "desde": {"frase": "según", "corte": true, "offset": -0.3},
+   "etiqueta": ["DOCUMENTACIÓN OFICIAL", "PERMISSION MODES"],
+   "elementos": [
+    {"tipo": "captura", "src": "doc-bloquea", "recorte": [0, 0, 1120, 700], "ancho": 1000, "pos": ["centro", 180], "anim": "corte"},
+    {"tipo": "texto", "texto": "Por defecto,", "tam": 120, "pos": [48, 920], "en": "por defecto"},
+    {"tipo": "sello", "texto": "BLOQUEA", "tam": 66, "rot": -8, "pos": [56, 1090], "en": "bloquea"},
+    {"tipo": "credito", "texto": "Fuente: code.claude.com/docs/en/permission-modes", "pos": [48, 1330]}
+   ]},
+
+  {"id": "lista-bloquea", "layout": "lamina", "fondo": "papel", "desde": "bajar",
+   "etiqueta": ["MODO AUTO", "POR DEFECTO, BLOQUEA"],
+   "elementos": [
+    {"tipo": "texto", "texto": "Bloquea", "tam": 120, "pos": [40, 200], "anim": "corte"},
+    {"tipo": "texto", "texto": "por defecto,\nen modo auto", "fuente": "bold", "tam": 52, "color": "gris_papel", "pos": [48, 380], "anim": "corte"},
+    {"tipo": "fila", "texto": "Bajar y ejecutar código", "sub": "de internet · curl | bash", "alto": 120, "pos": [48, 740], "en": "bajar"},
+    {"tipo": "credito", "texto": "Fuente: code.claude.com/docs/en/permission-modes · lista resumida", "pos": [48, 1410]}
+   ]},
+
+  {"id": "lista-bloquea-2", "layout": "pip", "fondo": "papel", "desde": {"frase": "deploys", "corte": true},
+   "nota": "persona reducida (Animaciones a 5,0 s): corta el tramo sin cara a ≤7 s y suma el cuarto layout; título y primera fila quedan en el mismo lugar que en la lámina anterior para que el fundido solo traiga la ventana",
+   "etiqueta": ["MODO AUTO", "POR DEFECTO, BLOQUEA"],
+   "elementos": [
+    {"tipo": "texto", "texto": "Bloquea", "tam": 120, "pos": [40, 200], "anim": "corte"},
+    {"tipo": "texto", "texto": "por defecto,\nen modo auto", "fuente": "bold", "tam": 52, "color": "gris_papel", "pos": [48, 380], "anim": "corte"},
+    {"tipo": "fila", "texto": "Bajar y ejecutar código", "sub": "de internet · curl | bash", "alto": 120, "pos": [48, 740], "anim": "corte"},
+    {"tipo": "fila", "texto": "Deploys a producción", "sub": "y migraciones", "alto": 120, "pos": [48, 872], "en": "deploys"},
+    {"tipo": "fila", "texto": "Force push", "sub": "reescribe la historia del repo", "alto": 120, "pos": [48, 1004], "en": "force"},
+    {"tipo": "fila", "texto": "Borrar lo que ya existía", "sub": "archivos de antes de la sesión", "alto": 120, "pos": [48, 1136], "en": "borrar"},
+    {"tipo": "fila", "texto": "Tirar cambios sin guardar", "sub": "git reset --hard · git clean -fd", "alto": 120, "pos": [48, 1268], "en": "comandos"},
+    {"tipo": "credito", "texto": "Fuente: code.claude.com/docs/en/permission-modes · lista resumida", "pos": [48, 1410]}
+   ]},
+
+  {"id": "pero-deja", "layout": "lamina", "fondo": "oscuro", "desde": "pero",
+   "elementos": [
+    {"tipo": "texto", "texto": "PERO, POR DEFECTO", "fuente": "mono", "tam": 34, "color": "gris", "pos": ["centro", 640], "anim": "corte"},
+    {"tipo": "texto", "texto": "*Deja pasar*", "tam": 170, "pos": ["centro", 700], "anim": "pop"}
+   ]},
+
+  {"id": "doc-deja", "layout": "split", "fondo": "oscuro", "desde": {"frase": "pasar", "corte": true},
+   "etiqueta": ["DEJA PASAR", "DOCUMENTACIÓN OFICIAL"],
+   "elementos": [
+    {"tipo": "captura", "src": "doc-deja", "recorte": [0, 0, 1120, 530], "ancho": 984, "pos": [48, 104], "anim": "corte",
+     "marcas": [
+      {"frase": "Local file operations in your working directory", "en": "editar"},
+      {"frase": "Installing dependencies declared in your lock files or manifests", "en": "instalar"},
+      {"frase": "Pushing to any branch of the repository", "en": "hacer push"}
+     ]},
+    {"tipo": "pildora", "texto": "editar archivos", "icono": "check", "pos": [48, 662], "en": "editar"},
+    {"tipo": "pildora", "texto": "instalar dependencias", "icono": "check", "pos": [404, 662], "en": "instalar"},
+    {"tipo": "pildora", "texto": "push a cualquier rama", "icono": "check", "pos": [48, 752], "en": "hacer push"}
+   ]},
+
+  {"id": "incluida-principal", "layout": "split", "fondo": "oscuro", "desde": {"frase": "incluida", "corte": true},
+   "etiqueta": ["DEJA PASAR", "ALLOWED BY DEFAULT"],
+   "elementos": [
+    {"tipo": "texto", "texto": "Push a cualquier rama…", "tam": 72, "pos": [48, 110], "anim": "corte"},
+    {"tipo": "captura", "src": "doc-deja", "recorte": [66, 458, 472, 76], "marco": false, "ancho": 984, "pos": [48, 260], "anim": "fundido",
+     "marcas": [{"frase": "including the default branch", "en": "incluida", "pad": 10}]},
+    {"tipo": "sello", "texto": "LA PRINCIPAL", "tam": 50, "rot": -8, "pos": [640, 470], "en": "principal"},
+    {"tipo": "credito", "texto": "code.claude.com/docs/en/permission-modes · Allowed by default", "pos": [48, 820]}
+   ]},
+
+  {"id": "mi-caso", "layout": "full", "desde": {"frase": "por ejemplo", "corte": true},
+   "elementos": [
+    {"tipo": "texto", "texto": "En mi caso,", "tam": 92, "alinear": "centro", "pos": ["centro", 170], "en": "en mi caso"},
+    {"tipo": "texto", "texto": "*eso importa*", "tam": 92, "alinear": "centro", "pos": ["centro", 285], "en": "eso realmente"}
+   ]},
+
+  {"id": "cadena-deploy", "layout": "split", "fondo": "papel", "desde": "la rama principal",
+   "etiqueta": ["MI CASO", "POR QUÉ IMPORTA"],
+   "elementos": [
+    {"tipo": "texto", "texto": "La rama principal\n*alimenta el deploy*", "tam": 74, "pos": [48, 106], "anim": "corte"},
+    {"tipo": "caja", "titulo": "rama principal", "sub": "main", "ancho": 270, "alto": 160, "pos": [48, 370], "en": "la rama principal"},
+    {"tipo": "flecha", "largo": 56, "pos": [326, 430], "en": "alimenta"},
+    {"tipo": "caja", "titulo": "deploy", "sub": "automático", "ancho": 270, "alto": 160, "pos": [398, 370], "en": {"frase": "deploy", "offset": -0.3}},
+    {"tipo": "flecha", "largo": 56, "pos": [676, 430], "en": {"frase": "deploy", "offset": 0.1}},
+    {"tipo": "caja", "titulo": "producción", "sub": "en vivo", "estilo": "verde", "ancho": 270, "alto": 160, "pos": [748, 370], "en": {"frase": "deploy", "offset": 0.1}},
+    {"tipo": "pildora", "texto": "push con trabajo a medias", "estilo": "papel-oscuro", "tam": 34, "pos": [48, 590], "en": "un push"},
+    {"tipo": "sello", "texto": "ROMPE", "tam": 50, "rot": -8, "pos": [700, 600], "en": "rompe"}
+   ]},
+
+  {"id": "como-revisar", "layout": "split", "fondo": "oscuro", "desde": {"frase": "cómo lo puedes revisar", "corte": true},
+   "etiqueta": ["EN LA SESIÓN", "CLIP OFICIAL · CODE.CLAUDE.COM"],
+   "elementos": [
+    {"tipo": "texto", "texto": "¿Cómo lo *revisás*?", "tam": 84, "pos": [48, 108], "en": "cómo lo puedes revisar"},
+    {"tipo": "clip", "src": "clip-modos-oficial.mp4", "recorte": [0, 40, 900, 210], "ancho": 984, "pos": [48, 270], "t_clip": 0.6,
+     "url": "code.claude.com/docs/en/permission-modes", "anim": "fundido",
+     "marcas": [{"caja": [78, 130, 334, 52], "en": {"frase": "abajo", "offset": -0.3}}]}
+   ]},
+
+  {"id": "shift-tab", "layout": "split", "fondo": "oscuro", "desde": {"frase": "y con", "corte": true},
+   "etiqueta": ["EN LA SESIÓN", "CLIP OFICIAL · CODE.CLAUDE.COM"],
+   "elementos": [
+    {"tipo": "teclas", "teclas": ["Shift", "Tab"], "tam": 72, "pos": ["centro", 104], "en": {"frase": "shift+tab", "offset": -0.2}},
+    {"tipo": "clip", "src": "clip-modos-oficial.mp4", "recorte": [0, 40, 900, 210], "ancho": 984, "pos": [48, 300], "t_clip": 0.8,
+     "play": "shift+tab", "zoom_lento": [1.0, 1.08], "url": "code.claude.com/docs/en/permission-modes", "anim": "corte"}
+   ]},
+
+  {"id": "pregunta", "layout": "split", "fondo": "papel", "desde": "y si querés que vuelva",
+   "etiqueta": ["MODO MANUAL", "CÓMO VOLVER"],
+   "elementos": [
+    {"tipo": "texto", "texto": "¿Querés que vuelva", "tam": 92, "alinear": "centro", "pos": ["centro", 300], "anim": "corte"},
+    {"tipo": "texto", "texto": "*a preguntarte?*", "tam": 92, "alinear": "centro", "pos": ["centro", 412], "en": "a preguntarte"}
+   ]},
+
+  {"id": "settings", "layout": "split", "fondo": "oscuro", "desde": {"frase": "en el archivo", "corte": true},
+   "etiqueta": ["MODO MANUAL", "DOCUMENTACIÓN OFICIAL"],
+   "elementos": [
+    {"tipo": "captura", "src": "doc-settings", "recorte": [0, 0, 1120, 500], "ancho": 984, "pos": [48, 104],
+     "marcas": [
+      {"frase": "~/.claude/settings.json", "en": "settings"},
+      {"frase": "\"defaultMode\": \"default\"", "en": "default mode"}
+     ]},
+    {"tipo": "texto", "texto": "~/.claude/settings.json", "fuente": "mono", "tam": 46, "color": "verde", "pos": [48, 640], "en": "claude#2"}
+   ]},
+
+  {"id": "manual-on", "layout": "split", "fondo": "oscuro", "desde": {"frase": "y la próxima", "corte": true},
+   "etiqueta": ["MODO MANUAL", "PRÓXIMA SESIÓN"],
+   "elementos": [
+    {"tipo": "captura", "src": "doc-settings", "recorte": [0, 596, 1120, 64], "marco": false, "ancho": 984, "pos": [48, 112], "anim": "corte"},
+    {"tipo": "clip", "src": "clip-modos-oficial.mp4", "recorte": [0, 40, 900, 210], "ancho": 984, "pos": [48, 210], "t_clip": 2.1,
+     "url": "code.claude.com/docs/en/permission-modes", "anim": "fundido",
+     "marcas": [{"caja": [76, 130, 356, 52], "en": "manual mode on"}]},
+    {"tipo": "pildora", "texto": "manual mode on", "icono": "pausa", "estilo": "verde", "tam": 46, "pos": ["centro", 610], "en": "manual mode on"}
+   ]},
+
+  {"id": "cta-cara", "layout": "full", "desde": {"frase": "y si querés ver", "corte": true}, "elementos": []},
+
+  {"id": "cta", "layout": "split", "fondo": "oscuro", "desde": {"frase": "comentá", "corte": true},
+   "elementos": [
+    {"tipo": "tarjeta", "ancho": 860, "alto": 430, "pos": ["centro", 110], "anim": "corte",
+     "lineas": [
+      {"texto": "Comentá", "tam": 84, "color": "blanco", "aire": 0},
+      {"texto": "COMUNIDAD", "tam": 124, "color": "verde", "aire": 24},
+      {"texto": "y te lo dejo en mi comunidad de WhatsApp", "fuente": "semibold", "tam": 34, "color": "blanco"}
+     ]},
+    {"tipo": "logo", "src": "logo-whatsapp.png", "alto": 120, "pos": ["centro", 600], "en": {"frase": "whatsapp", "offset": -0.4}}
+   ]}
+ ]
+}

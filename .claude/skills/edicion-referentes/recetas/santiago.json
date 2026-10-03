@@ -1,0 +1,686 @@
+{
+ "referente": "santiago",
+ "medido": "2026-10-03",
+ "fuentes": [
+  "6 reels de TikTok bajados con yt-dlp (ids en evidencia)",
+  "hermes-content/references/marca-personal/FICHAS-MONTAJE-REFERENTES.md (Instagram, la madre, 3-oct)"
+ ],
+ "receta": {
+  "resumen": "Talking head con cámara fija, montado sobre pantalla partida: arriba va la prueba, abajo la cara y el subtítulo se apoya en la costura (42-53 % del alto). La alterna con cara completa, con la persona recortada y con láminas sin cara. Entre layouts nunca reescala la cámara: la traslada 270-600 px. Corta en la pausa entre frases y mete la prueba o el logo junto con la frase que lo nombra. El zoom lo usa solo como acento: un golpe de +3 % o un punch-in de ×1,10-1,22, de 1 a 3 por video. Va solo con voz, a −13 LUFS, sin música ni whoosh, y con pausas de 0,6 s como máximo. Empieza hablando en el cuadro 0 con la prueba ya en pantalla y cierra con una sola acción, una tarjeta y 'Bye'. En Instagram sus picos (147-251 mil vistas) son otra variante: sin cara, con música de la biblioteca de IG y una palabra clave para comentar. Verificado en 4 reels con persona (Forja, Animaciones, Jev y Sonnet) con hojas de cuadros, template matching del fondo, transcripts y medición de audio.",
+  "parametros": [
+   {
+    "parametro": "layout",
+    "regla": "Montá el video sobre pantalla partida: panel de prueba arriba (del 0 al 46-50 % del alto), cámara abajo y subtítulo apoyado en la costura. Alternala con cara completa, con la persona reducida (recorte sobre fondo, PiP o ventana dentro de una UI) y con lámina sin cara. Cambiá de layout cada 5-13 s. En formato noticia dejá el split casi todo el video y cambiá solo la escena del panel.",
+    "rango": "Costura entre el 45,8 y el 50 % del alto (y 880-960 px). Reparto medido: Jev, 27 % cara completa, 44 % split y 29 % lámina sin cara (por color, cada 3 cuadros); Sonnet, ≈97 % split (cara completa solo de 13,5 a 16,1 s). Cambios de layout: de 0,75 a 2,1 por 10 s (Jev, 2,1 medido). En Sonnet entra una escena de panel nueva cada ≈5 s. Variante Forja, cuando la prueba es una app vertical: split invertido, con la cara de 0 a ≈47 %, el subtítulo en la costura y el mockup del teléfono de ≈50 a 100 %.",
+    "evidencia": [
+     {
+      "reel": "7690703830215937300 (Sonnet 5.5)",
+      "seg": 0.5,
+      "detalle": "Split con la captura de anthropic.com arriba y la cara abajo; costura en y≈880 (45,8 %)"
+     },
+     {
+      "reel": "7688159309712182548 (Jev)",
+      "seg": 8.5,
+      "detalle": "Panel beige de 0 a ≈48,6 % y persona abajo; píldora del subtítulo sobre la costura (47-51 %)"
+     },
+     {
+      "reel": "7687051875404811540 (Animaciones)",
+      "seg": 22.5,
+      "detalle": "Partida 40/10/50: UI 'Claude Design' arriba, banda negra con el subtítulo y cara en la mitad de abajo"
+     },
+     {
+      "reel": "7688159309712182548 (Jev)",
+      "seg": 29.5,
+      "detalle": "Lámina 'Clasificar.' a pantalla completa, sin cara"
+     },
+     {
+      "reel": "7685954926702234900 (Forja)",
+      "seg": 20,
+      "detalle": "Split invertido: cara arriba, 'CONVERSACIONES' en la costura y mockup 'Bandeja' abajo"
+     },
+     {
+      "reel": "7685954926702234900 (Forja)",
+      "seg": 51,
+      "detalle": "Persona recortada sobre negro, con el panel de leads a la derecha y la notificación 'Forja Inbox' arriba"
+     }
+    ],
+    "constancia": "4/4 de los reels con persona usan split con el subtítulo en la costura; 3/4 con el panel arriba (Forja lo invierte). La ficha de IG coincide: cuenta 9 portadas partidas, entre ellas la del reel fijado de 1,3 M.",
+    "confianza": "alta"
+   },
+   {
+    "parametro": "encuadre_cabeza",
+    "regla": "Grabá con cámara fija en plano medio corto. En cara completa, la cabeza (del pelo al mentón) ocupa el 25-44 % del alto y los ojos quedan entre el 34 y el 47 %. Para pasar al split NO reescales la cámara: trasladala entera 270-600 px hasta que la cabeza quede pegada a la costura, aunque se corte la frente.",
+    "rango": "Cabeza: 25-44 % del alto. Ojos: 34-47 % en cara completa y 62-71 % en el split con el panel arriba. Escala de la cámara entre layouts: 1,00 ±0,02, medida con template matching del fondo en 4/4. Traslaciones medidas: Sonnet, 318 px en 0,33 s (13,53-13,87); Forja, 274 px hacia arriba (split invertido); Jev, ≈310 px; Animaciones, 282 px con el panel chico y 600 px en el split. Reencuadre lateral en un jump cut: ≤70 px (Sonnet, 72,0). Micrófono de mano bajo el mentón en 3/4 (Forja usa uno de solapa). Fuera de los punch-ins (ver zooms), la cabeza cambia de tamaño porque él se inclina hacia la cámara.",
+    "evidencia": [
+     {
+      "reel": "7685954926702234900 (Forja)",
+      "seg": 0,
+      "detalle": "Cara completa: cabeza del 19 al 50 % del alto y ojos al ≈34 %, con micrófono de solapa"
+     },
+     {
+      "reel": "7690703830215937300 (Sonnet 5.5)",
+      "seg": 14.5,
+      "detalle": "Cara completa: cabeza del ≈24 al 67 % y ojos al ≈47 %"
+     },
+     {
+      "reel": "7690703830215937300 (Sonnet 5.5)",
+      "seg": 13.7,
+      "detalle": "Para pasar a cara completa, la cámara sube 318 px en 0,33 s; el póster del fondo sigue a escala 1,00-1,02"
+     },
+     {
+      "reel": "7688159309712182548 (Jev)",
+      "seg": 7.71,
+      "detalle": "Primer cuadro del split: los anteojos miden lo mismo que en 7,64 (sin reescalar) y los ojos bajan del 46 al 62 %"
+     },
+     {
+      "reel": "7687051875404811540 (Animaciones)",
+      "seg": 1,
+      "detalle": "El póster del fondo queda a escala 1,00 y baja 600 px. La cara crece porque se inclina, no por zoom"
+     }
+    ],
+    "constancia": "4/4 con cámara fija y cabeza de 25-44 %. 4/4 trasladan sin reescalar al cambiar de layout. Se cierra el choque de Animaciones: el ×1,4 del 3-oct era la inclinación hacia la cámara, porque el póster del fondo da escala 1,00.",
+    "confianza": "alta"
+   },
+   {
+    "parametro": "cortes",
+    "regla": "Cambiá algo del cuadro (corte de cámara, cambio de layout o escena nueva del panel) cada 3-5 s. Cortá la cámara en seco dentro de la pausa entre frases, entre 0,4 s antes y 0,2 s después de la primera palabra de la frase nueva (lo típico es 0,1 s antes). Escondé el jump cut bajo un cambio de panel o de layout, o tapalo con un punch-in. No metas B-roll ajeno.",
+    "rango": "≈2-3 cambios visuales por 10 s (Sonnet: 17 planos en 82,7 s, uno cada 4,9 s). Jump cuts de cámara: en Sonnet, 4 en 83 s (15,93 · 25,57 · 60,87 · 72,0), o sea 0,5 por 10 s; en Forja, ≈2 por 10 s y a la vista. Desfase entre corte y frase, medido en 13 cortes: de −0,39 a +0,21 s, con mediana de −0,09 s. Los cambios de layout pueden caer a mitad de frase (Forja: 17,13 · 42,17 · 54,73).",
+    "evidencia": [
+     {
+      "reel": "7690703830215937300 (Sonnet 5.5)",
+      "seg": 72,
+      "detalle": "Jump cut a otra toma reencuadrada, en el mismo cuadro del barrido hacia DevDay ('Igual' arranca a 71,82)"
+     },
+     {
+      "reel": "7690703830215937300 (Sonnet 5.5)",
+      "seg": 25.57,
+      "detalle": "Jump cut dentro de la pausa 25,50-25,96, 0,39 s antes de 'En'"
+     },
+     {
+      "reel": "7687051875404811540 (Animaciones)",
+      "seg": 33.1,
+      "detalle": "Jump cut en la pausa 32,86-33,20, 0,1 s antes de 'Ahora', tapado con un punch-in de ×1,13"
+     },
+     {
+      "reel": "7688159309712182548 (Jev)",
+      "seg": 7.67,
+      "detalle": "Corte seco de cara completa a split, 0,09 s antes de 'Esto'"
+     },
+     {
+      "reel": "7685954926702234900 (Forja)",
+      "seg": 4.43,
+      "detalle": "Jump cut a una toma con él más lejos de la cámara (la escala del fondo no cambia), 0,11 s antes de 'Si'"
+     }
+    ],
+    "constancia": "4/4 cortan la cámara en la pausa entre frases. Sonnet esconde 3 de sus 4 jump cuts bajo un cambio de panel, Animaciones tapa el suyo con un punch-in y Forja los deja a la vista. En Sonnet hay 4 jump cuts, como midió el 1-oct, y no 10: de los 6 de más que contó el 3-oct, 3 son golpes de zoom (7,10 · 33,20 · 49,47) y los otros caen donde la mano pasa frente a la cara (22,9-23,2 y 28,5-28,9). Se cae la regla anterior de 'cortá 0-0,1 s antes': era demasiado estrecha.",
+    "confianza": "media"
+   },
+   {
+    "parametro": "voz_y_pausas",
+    "regla": "Recortá los silencios hasta que ninguna pausa pase de 0,6 s y el habla quede en 2,65-3,2 palabras por segundo. Dejá como mucho UNA pausa de ≈1 s, y solo cuando un gráfico necesite asentarse.",
+    "rango": "De 2,64 a 3,18 palabras/s (Forja 3,18 · Animaciones 3,07 · Jev 2,88 · Sonnet 2,65). Pausa máxima: 0,48-0,60 s. Por video, 16-33 pausas de 0,18-0,5 s (según los tiempos de palabra de Whisper). Excepción: Sonnet, de 35,00 a 35,96 s (0,96 s), con la corona y un 'ding'.",
+    "evidencia": [
+     {
+      "reel": "7685954926702234900 (Forja)",
+      "seg": 91.28,
+      "detalle": "Pausa más larga del video, 0,50 s ('pendientes,' → 'tickets'); 377 palabras en 118,7 s"
+     },
+     {
+      "reel": "7687051875404811540 (Animaciones)",
+      "seg": 50.5,
+      "detalle": "Pausa más larga, 0,48 s; 3,07 palabras/s"
+     },
+     {
+      "reel": "7688159309712182548 (Jev)",
+      "seg": 35.42,
+      "detalle": "Pausa más larga, 0,60 s ('cosas.' → 'Santi'); 2,88 palabras/s"
+     },
+     {
+      "reel": "7690703830215937300 (Sonnet 5.5)",
+      "seg": 35,
+      "detalle": "Única pausa de ≈1 s (35,00-35,96), que deja asentarse la barra de Opus y la corona"
+     }
+    ],
+    "constancia": "4/4",
+    "confianza": "alta"
+   },
+   {
+    "parametro": "ritmo_elementos",
+    "regla": "Meté ≈6-9 elementos gráficos nuevos cada 10 s, sin contar los subtítulos. Cada uno entra con la frase que lo nombra: entre 0,5 s antes y 0,45 s después del sustantivo. Armá los grupos por partes, con 0,2-0,5 s entre pieza y pieza. En la demo, poné una pantalla nueva por cada función que nombrás (cada 0,5-1 s).",
+    "rango": "0,6-0,9 elementos por segundo (medición del 3-oct, no recontada; la del 1-oct dio 0,57-1,12). Desfase medido entre elemento y palabra: de −0,55 a +0,45 s. Jev se adelanta 0,3-0,55 s y entra con el arranque de la frase; Sonnet y Forja caen 0-0,45 s después. Escalonado entre piezas: de 0,2 s (las tarjetas de Animaciones) a 0,5 s (los logos de Jev). Demo de Forja: 7 pantallas en 5 s (30,0-35,0). Hueco máximo sin elemento nuevo mientras corre el subtítulo: 2,7-4,6 s (1-oct).",
+    "evidencia": [
+     {
+      "reel": "7685954926702234900 (Forja)",
+      "seg": 8.5,
+      "detalle": "El ícono de Claude aparece entre 8,03 y 8,5 s; la palabra 'Cloud' está a 8,28"
+     },
+     {
+      "reel": "7688159309712182548 (Jev)",
+      "seg": 13,
+      "detalle": "ChatGPT entra a 13,0, Claude a 13,5 y Gemini a 14,5; las palabras están a 13,30, 14,04 y 14,76, así que los logos se adelantan 0,3-0,55 s"
+     },
+     {
+      "reel": "7687051875404811540 (Animaciones)",
+      "seg": 10.5,
+      "detalle": "Tres tarjetas de vistas escalonadas entre 10,5 y 11,0"
+     },
+     {
+      "reel": "7690703830215937300 (Sonnet 5.5)",
+      "seg": 33,
+      "detalle": "La barra de Sonnet pasa de 47 a 70,6 % entre 33,0 y 33,5 ('70' a 32,98); Opus entra a 34,0 ('Opus' a 33,84) y la corona a 35,0"
+     },
+     {
+      "reel": "7685954926702234900 (Forja)",
+      "seg": 30,
+      "detalle": "Una pantalla del mockup por función: Disponibilidad 30,0 · Cómo habla 30,5 · Preguntas frecuentes 31,0 · Ofertas 32,5 · Ubicación 33,5 · Formas de pago 34,5 · Lo que no debe decir 35,0"
+     }
+    ],
+    "constancia": "4/4 con los elementos sincronizados a la frase que los nombra. La densidad por segundo no se recontó en esta verificación. Se sacan 'la densidad baja en la segunda mitad' y el dato de los reels sin persona: no se verificaron y no aplican a un talking head.",
+    "confianza": "media"
+   },
+   {
+    "parametro": "subtitulos",
+    "regla": "Subtitulá sin caja: texto blanco con contorno negro y sombra, y UNA palabra en color. Hay dos maneras medidas: (a) karaoke, con la palabra que se está diciendo en color (Sonnet en amarillo, Animaciones en lima); (b) palabra clave fija en amarillo (Forja). Los bloques son de 1-3 palabras en una línea (Sonnet, Forja) o de 3-5 en dos líneas (Animaciones). En el split, el bloque va sobre la costura (42-53 % del alto); en cara completa, al 64-77 %.",
+    "rango": "Sonnet: sans Black en minúsculas normales, con mayúscula de ≈45-47 px. Una línea de 1-3 palabras que se arma palabra por palabra: cada una aparece translúcida durante 1 cuadro (33 ms) y en el cuadro siguiente ya está amarilla, #FDC82F-#FEC830 medido (el 1-oct dio #F9CA36). El bloque se cambia por corte seco. Animaciones: MAYÚSCULAS condensadas tipo Bebas o Anton; el bloque entero de 3-5 palabras en 2 líneas aparece de una vez y el lima #DBFE36-#EAFF37 salta de palabra en palabra. Forja: MAYÚSCULAS condensadas que se suman de a una, con la palabra clave fija en amarillo #FEEA01; en el gancho llega a 7 palabras en 3 líneas. Variante Jev: frase de 2-6 palabras en una píldora oscura, sin color, al 47-51 % en el split y al ≈81 % en cara completa. Primer subtítulo entre 0,0 y 0,3 s.",
+    "evidencia": [
+     {
+      "reel": "7690703830215937300 (Sonnet 5.5)",
+      "seg": 0.133,
+      "detalle": "'Anthropic' aparece translúcida en el cuadro 4 (0,133 s); en el cuadro 5 ya está amarilla, en su lugar de la línea"
+     },
+     {
+      "reel": "7690703830215937300 (Sonnet 5.5)",
+      "seg": 30.9,
+      "detalle": "'que Opus' con 'Opus' en #FDC82F y contorno negro, en y≈49-53 %"
+     },
+     {
+      "reel": "7687051875404811540 (Animaciones)",
+      "seg": 0.1,
+      "detalle": "'SI QUIERES OBTENER' aparece entero a 0,1 s con 'SI' en lima; a 0,6 el lima ya está en 'OBTENER'. El bloque va al 64-70 %"
+     },
+     {
+      "reel": "7685954926702234900 (Forja)",
+      "seg": 0.3,
+      "detalle": "'YA' aparece a 0,3 s y la línea se arma palabra a palabra hasta 'YA PUEDES VER / TUS AGENTES / EN TU TELÉFONO', con 'TUS AGENTES' en amarillo"
+     },
+     {
+      "reel": "7688159309712182548 (Jev)",
+      "seg": 8.5,
+      "detalle": "Píldora 'Esto que ven aquí es Jev,' sobre la costura (47-51 %)"
+     }
+    ],
+    "constancia": "Bloque en la costura del split: 4/4. Una palabra en color: 3/4 (Jev no). Karaoke: 2/4 (Sonnet en amarillo, Animaciones en lima); palabra clave fija: 1/4 (Forja). Minúsculas: 1/4 (Sonnet); MAYÚSCULAS condensadas: 2/4 (Forja, Animaciones). Se eligen las minúsculas con karaoke amarillo porque es lo que usa el reel más nuevo (Sonnet, 28-sep); es una elección, no la mayoría. La ficha de IG no mide esto en sus reels: repite el dato del 1-oct ('1-3 palabras, activa #F9CA36') y en las portadas ve los dos estilos. Se corrige 'fundido de 2-3 cuadros': en Sonnet es 1 cuadro.",
+    "confianza": "media"
+   },
+   {
+    "parametro": "overlays_logos",
+    "regla": "Poné el logo o ícono de cada herramienta cuando la nombrás, entre 0,5 s antes y 0,3 s después, a 14-35 % del ancho. Que entre con pop de escala o con fundido y que salga por corte o con desenfoque y fundido. Sumá 1-4 sellos rotados (−5 a −10°) por video, cada uno sobre la palabra de impacto.",
+    "rango": "Íconos de 150-380 px (14-35 % del ancho): en Forja, ≈18 % en las esquinas; en Jev, 23-35 % en fila. Sellos de 27-30 % del ancho, rotados de −5 a −10°, que caen de 120-130 % a 100 % en 3-4 cuadros. Sellos por video: Sonnet 3 (ACABA DE SALIR 1,3 · LA MITAD 49,47 · MAÑANA 72,53), Forja 3 o más (GRATIS 3,9 · CONTESTADO 14,5 · MI PERFIL 116,9), Animaciones 1 (insignia de ChatGPT a 33,5), Jev 0.",
+    "evidencia": [
+     {
+      "reel": "7685954926702234900 (Forja)",
+      "seg": 3.9,
+      "detalle": "Sticker amarillo 'GRATIS', rotado, sobre 'gratis' (3,86-4,42)"
+     },
+     {
+      "reel": "7685954926702234900 (Forja)",
+      "seg": 68.5,
+      "detalle": "Íconos de WhatsApp, Instagram, Facebook y Messenger en las esquinas (≈18 % del ancho); 'sociales' está a 68,38"
+     },
+     {
+      "reel": "7688159309712182548 (Jev)",
+      "seg": 14.5,
+      "detalle": "Fila ChatGPT + Claude + Gemini; a 15,0 salen con desenfoque y fundido"
+     },
+     {
+      "reel": "7687051875404811540 (Animaciones)",
+      "seg": 33.5,
+      "detalle": "Insignia negra 'ChatGPT' de ≈30 % del ancho, rotada ≈−8°; 'ChatGPT' está a 33,64"
+     },
+     {
+      "reel": "7690703830215937300 (Sonnet 5.5)",
+      "seg": 49.47,
+      "detalle": "Sello 'LA MITAD' rotado sobre 'mitad' (49,02-49,66), en el mismo cuadro que un golpe de zoom de +3 %"
+     }
+    ],
+    "constancia": "Logo de la marca al nombrarla: 3/4 (Sonnet usa píldoras con el nombre, sin logo). Sello rotado: 3/4 (Jev no). Se corrige 'un overlay de acento cada 5,5-7,5 s': los sellos rotados son 1-4 por video, no uno cada ≈6 s.",
+    "confianza": "alta"
+   },
+   {
+    "parametro": "pruebas_capturas",
+    "regla": "Mostrá la prueba real en el momento en que la nombrás. Puede ser una captura oficial en una tarjeta de 83-95 % del ancho (marco de navegador con URL, titular de prensa o tabla oficial) o una grabación propia, siempre con el crédito de la fuente debajo, en letra chica gris. Marcala solo con un contorno de color, una píldora ✓, un sello o un círculo de resalte.",
+    "rango": "5-8 pruebas por video. Tarjetas de 83-95 % del ancho: en Sonnet, la captura ocupa el 83 % y el titular el 88 %; en Jev, 'Introducing…' ocupa el ≈91 %. Grabaciones propias inclinadas en 3D o con un acercar o alejar lento de 10-20 % en 2-4 s (Jev, de 59,6 a 61,6 s: ×0,81). Crédito chico, de 22-26 px. Círculo de resalte de ≈400 px (37 % del ancho). En Sonnet hay prueba con fuente en pantalla durante ≈65 % del tiempo: el '37-47 %' anterior no se sostiene en ese reel.",
+    "evidencia": [
+     {
+      "reel": "7690703830215937300 (Sonnet 5.5)",
+      "seg": 0.5,
+      "detalle": "Captura de anthropic.com/claude-sonnet-5-5 en marco de navegador con URL (≈83 % del ancho)"
+     },
+     {
+      "reel": "7690703830215937300 (Sonnet 5.5)",
+      "seg": 44.6,
+      "detalle": "Tabla oficial con la columna de Sonnet contorneada en naranja y las píldoras '✓ edición de video' (42,0) y '✓ otras tareas' (44,0)"
+     },
+     {
+      "reel": "7690703830215937300 (Sonnet 5.5)",
+      "seg": 34.5,
+      "detalle": "'Fuente: Anthropic · 28 sep 2026' en mono chica, debajo de las barras"
+     },
+     {
+      "reel": "7688159309712182548 (Jev)",
+      "seg": 16.5,
+      "detalle": "Demo de Doom con el crédito 'Demo de TypeSafe · estado del juego en texto'"
+     },
+     {
+      "reel": "7688159309712182548 (Jev)",
+      "seg": 86,
+      "detalle": "Collage de titulares (The Register, Xataka, InfoWorld) y tuits"
+     },
+     {
+      "reel": "7685954926702234900 (Forja)",
+      "seg": 59,
+      "detalle": "Círculo luminoso de ≈37 % del ancho alrededor de las 3 conversaciones de 'Pendientes'"
+     }
+    ],
+    "constancia": "4/4 con la prueba en pantalla cuando se la nombra. Fuente externa citada: 2/4 (Jev, Sonnet). Forja y Animaciones prueban con su propio producto, igual que las grabaciones de Jev ('Radar · Horizontes IA / demostración propia').",
+    "confianza": "media"
+   },
+   {
+    "parametro": "transiciones",
+    "regla": "Por defecto, cortá en seco. Cambiá la escena del panel con un fundido corto (0,13-0,27 s). Para abrir o cerrar el split, mové la cámara o el panel en 0,24-0,4 s: la cámara sube y tapa el panel, o el panel sube desde abajo. Usá barrido o cortina de 0,25-0,4 s solo para cambiar de capítulo. Ninguna transición pasa de 0,5 s; sin whip, glitch, zoom-through ni whoosh.",
+    "rango": "Sonnet: barridos con línea fina a 46,2 y 72,0 y el cambio a Benchmarks (25,85-26,1); la cámara sube 318 px en 0,33 s (13,53-13,87) y baja en 0,27 s (16,07-16,33). Forja: el panel negro sube para abrir el split invertido (17,0-17,2) y hay un 'destello' gris de 0,1-0,2 s en los cambios de bloque (15,33 · 54,5). Jev: cortina beige (27,5-28,0). Fundido a negro final de ≤0,45 s, solo en Forja.",
+    "evidencia": [
+     {
+      "reel": "7690703830215937300 (Sonnet 5.5)",
+      "seg": 46.2,
+      "detalle": "Barrido con línea vertical amarilla, en silencio (mínimo de −46,8 dBFS)"
+     },
+     {
+      "reel": "7690703830215937300 (Sonnet 5.5)",
+      "seg": 13.7,
+      "detalle": "La cámara sube 318 px en 0,33 s y tapa el panel, con escala de 1,00-1,02"
+     },
+     {
+      "reel": "7688159309712182548 (Jev)",
+      "seg": 27.5,
+      "detalle": "Cortina beige que tapa la cámara antes de la lámina 'Clasificar.'"
+     },
+     {
+      "reel": "7685954926702234900 (Forja)",
+      "seg": 17,
+      "detalle": "Panel negro que sube desde abajo para abrir el split invertido"
+     },
+     {
+      "reel": "7685954926702234900 (Forja)",
+      "seg": 54.5,
+      "detalle": "Destello: lavado gris sobre el plano en el cambio de bloque"
+     },
+     {
+      "reel": "7687051875404811540 (Animaciones)",
+      "seg": 39.5,
+      "detalle": "Paso de la UI oscura al fondo crema con PiP"
+     }
+    ],
+    "constancia": "4/4 cortan en seco por defecto y tienen al menos un barrido, una cortina o un movimiento de cámara o panel. Destello: 1/4 (Forja). Se saca el '0,8-1,7 transiciones no secas por 10 s': no se recontó.",
+    "confianza": "media"
+   },
+   {
+    "parametro": "zooms",
+    "regla": "No le pongas zoom lento ni Ken Burns a la cámara: queda a escala 1,00 todo el video. El zoom se usa solo como acento, 1-3 veces por video y de dos formas: (a) un golpe de +3 % que vuelve en ≈0,13 s, en el cuadro exacto de una cifra o un sello; (b) un punch-in de ×1,10-1,22, hecho en 0-0,4 s y sostenido hasta el próximo corte, sobre la frase de giro o de énfasis. En los gráficos, las entradas van de 120-130 % a 100 % y las grabaciones de pantalla acercan o alejan lento, 10-20 %.",
+    "rango": "Medido cuadro a cuadro con template matching del fondo (póster o alero). Sonnet: 3 golpes de +2-3 % (7,10 '+30%' · 33,20 '70' · 49,47 'LA MITAD'), y cada uno vuelve a 1,00 en ≈0,13 s. Jev: ×1,10 en 0,4 s (6,47-6,87, '¿No me crees?'), sostenido hasta el corte de 7,67. Animaciones: ×1,13 en el jump cut de 33,1 ('Ahora, ChatGPT…'), sostenido hasta 35,5. Forja: ×1,22 en 0,2 s (111,90-112,10, 'anuncios más grandes'), que vuelve a 1,00 con el corte del CTA (113,97). En el resto del video, base de 1,00 ±0,01.",
+    "evidencia": [
+     {
+      "reel": "7690703830215937300 (Sonnet 5.5)",
+      "seg": 7.1,
+      "detalle": "El póster del fondo está a escala 1,03 a 7,10 y vuelve a 1,00 a 7,23: golpe sobre '+30%'. No es un jump cut, como leyó el 3-oct"
+     },
+     {
+      "reel": "7687051875404811540 (Animaciones)",
+      "seg": 33.1,
+      "detalle": "El póster pasa a ×1,13 entre 32,8 y 33,3 (score 0,96) y sigue así a 33,6. Hay punch-in, contra la lectura 'sin escala' del 3-oct"
+     },
+     {
+      "reel": "7688159309712182548 (Jev)",
+      "seg": 6.67,
+      "detalle": "El alero pasa de ×1,00 a ×1,10 entre 6,47 y 6,87 y se mantiene hasta el corte"
+     },
+     {
+      "reel": "7685954926702234900 (Forja)",
+      "seg": 112,
+      "detalle": "El póster pasa de ×1,00 a ×1,22 entre 111,87 y 112,10: es un punch-in, no un 'paneo de 70 px sin escala'"
+     },
+     {
+      "reel": "7690703830215937300 (Sonnet 5.5)",
+      "seg": 58,
+      "detalle": "Sin zoom lento: el póster sigue a escala 1,00"
+     },
+     {
+      "reel": "7688159309712182548 (Jev)",
+      "seg": 60.2,
+      "detalle": "La grabación propia se aleja ×0,81 entre 59,6 y 61,6"
+     }
+    ],
+    "constancia": "4/4 sin zoom lento sobre la cámara. 4/4 con al menos un acento de escala en la cámara (antes figuraba como 2/4 y en disputa). Quedan descartadas las dos lecturas del 3-oct que lo negaban.",
+    "confianza": "alta"
+   },
+   {
+    "parametro": "sonido",
+    "regla": "Dejá solo la voz, comprimida a −13 ±0,5 LUFS integrados, con LRA de 2,3-3,4 LU y true peak de −1 dBTP o menos. Sin música de cama y sin whoosh en las transiciones. Como mucho, 4-5 'ding' agudos por video (≈3,3 kHz) al asentarse un sello, una pastilla o un check.",
+    "rango": "De −12,8 a −13,4 LUFS (Animaciones, −13,3 en la medición de hoy; el −16,4 no se reproduce). LRA de 2,3 a 3,4 LU. Piso en las pausas de −41 a −55 dBFS, sin cama. True peak medido: −0,2 (Forja), +0,4 (Sonnet), +0,5 (Jev) y +0,7 dBTP (Animaciones); eso no se copia. 'Ding' solo en Sonnet: picos tonales de 3,3 kHz a ≈25,1 · 35,75 · 50,2 · 60,55 · 64,45 (el 1-oct midió unos 10 dB por debajo de la voz).",
+    "evidencia": [
+     {
+      "reel": "7685954926702234900 (Forja)",
+      "seg": 15.3,
+      "detalle": "El destello pasa en silencio: −41,3 dBFS de mediana entre 15,20 y 15,46"
+     },
+     {
+      "reel": "7690703830215937300 (Sonnet 5.5)",
+      "seg": 46.2,
+      "detalle": "El barrido con línea pasa en silencio (mínimo de −46,8 dBFS): no hay whoosh"
+     },
+     {
+      "reel": "7688159309712182548 (Jev)",
+      "seg": 18.3,
+      "detalle": "Pausa con mínimo de −48 dBFS: no hay cama musical"
+     },
+     {
+      "reel": "7687051875404811540 (Animaciones)",
+      "seg": 33,
+      "detalle": "Pausa 32,86-33,20 con mínimo de −55,4 dBFS"
+     },
+     {
+      "reel": "7690703830215937300 (Sonnet 5.5)",
+      "seg": 25.1,
+      "detalle": "Tono de ≈3,3 kHz al asentarse la pastilla 'Sonnet 5.5 · ya casi'"
+     }
+    ],
+    "constancia": "4/4 sin música ni whoosh en los archivos de TikTok (medido); 'ding' en 1/4. Choca con IG: según la ficha, sus 4 reels más vistos de los últimos 60 días llevan una canción con licencia de la biblioteca de IG, y uno de ellos tiene cara (Ddwi3ArI91Y, 66 mil, con AURA). La regla sigue a los 4 archivos medidos; la música de IG se elige al subir y no se pudo medir su nivel.",
+    "confianza": "alta"
+   },
+   {
+    "parametro": "gancho",
+    "regla": "Arrancá hablando en el cuadro 0 con la prueba o el resultado ya en pantalla. El primer subtítulo sale a 0,3 s como máximo y la prueba a 0,9 s como máximo. La primera frase (11-17 palabras, 3,5-6 s) es la promesa; si tenés una cifra o un 'gratis', va ahí. Un objeto físico contra el lente o cruzando el cuadro en el primer segundo es opcional.",
+    "rango": "Primera palabra a 0,00 s (4/4). Subtítulo entre 0,0 y 0,3 s (Jev 0,0 · Animaciones ≤0,1 · Sonnet 0,133 · Forja 0,3). Prueba entre 0,0 y 0,9 s (0,0-0,1 s en 3/4). Primera frase: Animaciones, 11 palabras en 3,5 s · Forja, 13 en 4,4 s · Sonnet, 13 en 4,9 s · Jev, 17 en 5,8 s. Cifra o 'gratis' dentro de la primera frase: 2/4 (Forja, 'gratis' a 3,86; Jev, '190 veces'); Sonnet da la cifra a los 7 s y Animaciones promete sin cifra. Sello entre 1,3 y 3,9 s: 2/4 (Sonnet, Forja). Primer cambio de layout entre 0,9 y 7,7 s.",
+    "evidencia": [
+     {
+      "reel": "7685954926702234900 (Forja)",
+      "seg": 0,
+      "detalle": "Ya está hablando, con la tarjeta 'Forja Inbox' de App Store sobre la cabeza desde el cuadro 0"
+     },
+     {
+      "reel": "7685954926702234900 (Forja)",
+      "seg": 0.4,
+      "detalle": "El frasco cruza el cuadro mientras entra 'YA PUEDES'"
+     },
+     {
+      "reel": "7688159309712182548 (Jev)",
+      "seg": 0,
+      "detalle": "Teléfono pegado al lente con '193.6x Faster, 444.6x Cheaper'; la cara aparece hacia 1,0 s"
+     },
+     {
+      "reel": "7690703830215937300 (Sonnet 5.5)",
+      "seg": 0.1,
+      "detalle": "Captura oficial y badge ÚLTIMA HORA a 0,1 s; sello ACABA DE SALIR a 1,3"
+     },
+     {
+      "reel": "7687051875404811540 (Animaciones)",
+      "seg": 0.9,
+      "detalle": "Corte al split con el resultado ('CREA TU ESTILO' armándose)"
+     }
+    ],
+    "constancia": "4/4 con la primera palabra a 0,00 s y la prueba a 0,9 s como máximo. Objeto físico: 2/4 (Forja, Jev). Cifra o 'gratis' en la primera frase: 2/4. El re-gancho pasó a la plantilla: a cara completa es 1/4 (Sonnet). La pregunta de Jev a 6,6 s es su puente, no un re-gancho.",
+    "confianza": "alta"
+   },
+   {
+    "parametro": "cierre",
+    "regla": "Cerrá con UNA sola acción dicha a cámara en 4-5 s, más una tarjeta de 50-85 % del ancho que queda 2,5-3,7 s hasta el final. Antes, poné un remate de 3-10 s: una metaprueba, un adelanto de lo próximo, prueba social o una frase de resumen. Despedite corto ('Bye') y terminá el video 0,3-0,65 s después de la última palabra, sin placa final ni logo.",
+    "rango": "CTA hablado de 4,0-4,7 s (7,8 s en Jev). Tarjetas: en Forja, 'MI PERFIL' ocupa ≈50 % del ancho, al 64-72 % del alto en cara completa; en Animaciones, 'Tutorial completo / Enlace en mi perfil' ocupa ≈78 %, al 57-70 %; en Sonnet (perfil con '+ Seguir', ≈74 %) y en Jev (búsqueda de YouTube, ≈85 %) van en el panel de arriba del split. Remates: Forja 3 s (frase de resumen con punch-in), Animaciones 3,2 s (metaprueba), Sonnet 6,5 s (adelanto de DevDay), Jev ≈10 s (collage de prensa). Cola: 0,31 s (Animaciones), 0,43 (Sonnet), 0,46 (Jev) y 0,65 s (Forja, con fundido a negro).",
+    "evidencia": [
+     {
+      "reel": "7685954926702234900 (Forja)",
+      "seg": 117,
+      "detalle": "Caja amarilla 'MI PERFIL' bajo 'EL ENLACE ESTÁ EN', al 64-72 % del alto; fundido a negro hacia 119"
+     },
+     {
+      "reel": "7687051875404811540 (Animaciones)",
+      "seg": 63.5,
+      "detalle": "Tarjeta oscura 'Tutorial completo / Enlace en mi perfil / Paso a paso' (≈78 % del ancho, al 57-70 %)"
+     },
+     {
+      "reel": "7687051875404811540 (Animaciones)",
+      "seg": 57.5,
+      "detalle": "Metaprueba antes del CTA: pastilla 'reel.mp4 · Video terminado ✓'"
+     },
+     {
+      "reel": "7690703830215937300 (Sonnet 5.5)",
+      "seg": 72.53,
+      "detalle": "Adelanto: sello MAÑANA sobre la página de DevDay"
+     },
+     {
+      "reel": "7690703830215937300 (Sonnet 5.5)",
+      "seg": 80,
+      "detalle": "Un cursor hace clic en '+ Seguir' y pasa a 'Siguiendo ✓'"
+     },
+     {
+      "reel": "7688159309712182548 (Jev)",
+      "seg": 100.5,
+      "detalle": "Tarjeta del canal después de buscar 'Santiago Munoz'; 'Bye, chao' termina a 102,58 y el video a 103,04"
+     }
+    ],
+    "constancia": "4/4 con una sola acción, tarjeta y sin placa final. Enlace en el perfil: 2/4; YouTube: 1/4; seguir: 1/4. Según la ficha, en IG los picos piden UNA palabra clave para comentar, dentro del video en 3 de 4.",
+    "confianza": "alta"
+   },
+   {
+    "parametro": "tipografia_color",
+    "regla": "Usá DOS familias por video: una sans muy gruesa (Black, o condensada en MAYÚSCULAS) para titulares, cifras y subtítulos, y otra de acento. La de acento es una mono espaciada en MAYÚSCULAS para etiquetas, fechas y fuentes (3/4) o una serif con punto final para títulos editoriales (Jev). Alterná fondos casi negros con papel crema y usá un solo color de acento, además del color del subtítulo.",
+    "rango": "Negro #0A0A04-#0F110E. Crema o papel #E0DEDA-#F4F0E4 (en Jev, #EFE6D4). Blanco #FFFFFF. Acento de marca: en él, naranja #E89848-#F88228. Titulares de panel en Black con tracking negativo; serif para los títulos de Jev; etiquetas mono chicas, de 22-26 px.",
+    "evidencia": [
+     {
+      "reel": "7685954926702234900 (Forja)",
+      "seg": 14.5,
+      "detalle": "Título condensado 'TU AGENTE CONTESTA SOLO' con 'CONTESTA' en amarillo y etiqueta mono 'AGENTE · HORIZONTES IA'"
+     },
+     {
+      "reel": "7690703830215937300 (Sonnet 5.5)",
+      "seg": 22,
+      "detalle": "Papel claro con cuadrícula, 'Nivel top, a precio barato' en Black y etiqueta mono 'LO QUE LES DECÍA'"
+     },
+     {
+      "reel": "7687051875404811540 (Animaciones)",
+      "seg": 22.5,
+      "detalle": "'DISEÑO' en display condensada sobre negro y 'EL DISEÑO TOMA FORMA' en mono"
+     },
+     {
+      "reel": "7688159309712182548 (Jev)",
+      "seg": 26,
+      "detalle": "'Decide.' en serif, con punto final, sobre beige"
+     },
+     {
+      "reel": "7685954926702234900 (Forja)",
+      "seg": 9.5,
+      "detalle": "Fondo casi negro con halo naranja alrededor del ícono"
+     }
+    ],
+    "constancia": "Fondo casi negro: 4/4. Mono para etiquetas: 3/4 (Jev no). Papel crema: 3/4 (Forja no). Serif propia: 1/4 (Jev); en Sonnet, la serif de 'Claude Sonnet 5.5' es de la captura de Anthropic, no suya. Ningún reel junta las tres familias, así que la regla de 'tres familias' no se sostiene.",
+    "confianza": "media"
+   },
+   {
+    "parametro": "duracion",
+    "regla": "Hacé los talking heads de 65-120 s y dejá 4-8 s para el CTA.",
+    "rango": "66,1-119,3 s con persona (mediana ≈93 s). En IG, según la ficha, los picos de los últimos 60 días van de 32 a 118,5 s.",
+    "evidencia": [
+     {
+      "reel": "7687051875404811540 (Animaciones)",
+      "seg": 66.13,
+      "detalle": "Último cuadro, 0,31 s después de 'Bye'"
+     },
+     {
+      "reel": "7690703830215937300 (Sonnet 5.5)",
+      "seg": 82.69,
+      "detalle": "Último cuadro; la última palabra termina a 82,26"
+     },
+     {
+      "reel": "7688159309712182548 (Jev)",
+      "seg": 103.04,
+      "detalle": "Corte seco después de 'chao' (102,58)"
+     },
+     {
+      "reel": "7685954926702234900 (Forja)",
+      "seg": 119.33,
+      "detalle": "Termina el fundido a negro con la tarjeta del CTA"
+     }
+    ],
+    "constancia": "4/4",
+    "confianza": "alta"
+   }
+  ],
+  "plantilla_de_bloques": "Secuencia típica de un talking head de 65-120 s. Los porcentajes son de la duración total.\n1) GANCHO, 0,0-4,5 s (0-6 %), en cara completa o en split. Primera palabra a 0,00 s, subtítulo a ≤0,3 s y prueba o resultado a ≤0,9 s. La primera frase, de 11-17 palabras, es la promesa, con la cifra o el 'gratis' si los hay (2/4). Sello o sticker entre 1,3 y 3,9 s (2/4). Objeto al lente o cruzando el cuadro en el primer segundo (2/4).\n2) PUENTE, 3,5-7,7 s (3/4). Una frase como 'Si no saben qué es…', 'Te explico cómo funciona' o '¿No me crees? Déjate enseñar' (en Jev, con punch-in de ×1,10). El primer cambio de layout cae entre 0,9 y 7,7 s.\n3) QUÉ ES, ≈7-16 s. Split o motion graphic: el logo entra con la frase que lo nombra, junto con un titular o la ficha oficial. Una escena de panel cada 3,5-5 s.\n4) AUTO-PREGUNTA, opcional (2/4). 'Y ahora, Santi, ¿por qué me debe interesar esto?': Sonnet la hace a 13,7 s, a cara completa durante 2,6 s, con el titular '¿Y por qué / te importa?' arriba y el subtítulo al ≈75 %. 'Santi, ¿cómo es esto?': Jev la hace a 18,4 y a 36,0 s, dentro del split. A cara completa es solo 1/4.\n5) DESARROLLO Y PRUEBA, desde ≈16 s hasta el 75-85 %. Son 3-5 capítulos de 10-20 s, cada uno abierto con un barrido, una cortina o un cambio de panel. Hay una pantalla o un ítem por función nombrada (0,5-1 s cada uno en el pico), contadores, sellos y 1-2 acentos de zoom. Respiros a cara completa o con la persona recortada o en PiP en 3/4. Sonnet, en formato noticia, se queda en split.\n6) REMATE, del 75 al 92 %, 3-10 s. Una metaprueba ('todo este video fue editado por ellos'), un adelanto de lo próximo (sello 'MAÑANA'), prueba social (collage de prensa) o una frase de resumen con punch-in.\n7) CTA, últimos 4-8 s. Una sola acción dicha a cámara (4,0-4,7 s), una tarjeta de 2,5-3,7 s y 'Bye'. El video termina 0,3-0,65 s después, sin placa final.\nMedidos (verificados en las hojas):\n- Sonnet, 82,7 s: gancho 0-6,9 · titulares 7,0-13,5 · auto-pregunta a cara completa 13,5-16,1 · gráfico 16,1-25,85 · benchmarks 25,85-46,2 · precios 46,2-60,9 · casos 60,9-72,0 · adelanto 72,0-78,3 · CTA 78,3-82,7.\n- Forja, 119,3 s: gancho 0-4,4 · motion graphic 'qué es' 5,5-15,3 · anuncio a cámara 15,3-17,1 · demo en split invertido 17,1-42,2 · persona recortada con panel de leads ≈50-54,7 · celular al lente 54,7-58,5 · split 58,5-66,0 · cara 66-78 · split invertido y recortes 78-111 · remate con punch-in de ×1,22 110,6-113,5 · CTA 113,8-119,3.\n- Jev, 103 s: gancho 0-6,4 · puente 6,4-7,6 · qué es 7,7-13,0 · logos 13,0-15,4 · desarrollo con láminas y grabaciones propias 15,5-84,7 (auto-preguntas a 18,4 y 36,0) · prueba social (collage y demo) 84,75-94,9 · CTA 94,9-103.\n- Animaciones, 66,1 s: gancho 0-3,5 · puente 3,6-6,9 · prueba social 10,5-16,0 · desarrollo 16-56,5 (punch-in de ×1,13 a 33,1) · metaprueba 56,5-61,1 · CTA 61,4-66,1.",
+  "lo_que_no_se_copia": "1) Su color de marca. El naranja de Claude y Forja (#F88228, #D97854, #E89848, halo #301800) en halos, stickers, tarjetas, subrayados, barras y barridos pasa al verde ONIA #10C26B sobre negro #0A0F0D y blanco (pack referentes de diseno-contenido-onia).\nEl amarillo y el contorno negro del subtítulo son técnica, no marca, pero chocan con una decisión ya tomada: el 17-sep, Sergio Urcullo eligió la palabra activa en VERDE de marca, estilo apple y sin bordeado negro (skill editor-videos, `--style apple`). Si se cambia a amarillo con contorno, lo decide Sergio Urcullo; no lo cambia esta receta.\n2) Sus productos y marcas: Forja, Forja Inbox, la mascota, Horizontes IA, 'Santi · Horizontes IA', su tarjeta de canal y la búsqueda de 'Santiago Munoz'.\n3) Sus firmas personales: 'Bye, chao', las auto-preguntas con su nombre ('Y ahora, Santi…', 'Santi, ¿cómo es esto?'), su cuarto con el póster '…NIGHT HERE / WAITING FOR YOU' y el contrapicado con cielo. El recurso de la auto-pregunta se puede usar, pero con la voz y el nombre de Sergio Urcullo. El micrófono de mano es equipo y se puede usar.\n4) Las interfaces simuladas y las métricas recreadas: mockups de app, el editor falso, las tarjetas de vistas de Instagram, el perfil con un cursor que hace clic y los logs armados. En ONIA la prueba es la pantalla real de Onia o un diagrama del mecanismo dibujado en código, nunca una UI fabricada (CLAUDE.md, «Producto visible o no sale»).\n5) El autobombo: tarjetas con sus 1,3 M de vistas, '+500 casos de éxito' y 'uno de los anuncios más grandes que he hecho'.\n6) El clip de audio: él entrega con un true peak de −0,2 a +0,7 dBTP (3 de 4 por encima de 0). Acá se entrega a −1 dBTP o menos.\n7) La palabra clave para comentar con respuesta automática por DM: solo cuando funcione el comentario→DM de Sergio Urcullo. Según la ficha y la memoria del proyecto, hoy no está probado (2 rechazos de Meta, 0 leads).\n8) La música con licencia de IG: no se incrusta en el archivo; si se usa, se elige al subir.\n9) El contenido (noticias de Anthropic y OpenAI, Jev, sus casos) y el material de sus reels sin cara (b-roll de stock, actor generado por IA en blanco y negro), que no aplica a un talking head."
+ },
+ "qa_prueba": {
+  "desvios": [
+   {
+    "parametro": "encuadre_cabeza",
+    "esperado": "En cara completa, ojos al 34-47 % del alto. Con el mismo detector Haar: Sonnet 49,2 % (13,9-16,0 s), Animaciones 38 %, Forja 33 %. Paso de split a cara: traslación de 318-600 px y escala 1,00 (Sonnet: 67,1 → 49,2 % = 344 px).",
+    "visto": "Ojos al 53,8 % (30,75-32,75 s) y al 56,1 % (53,5-54,8 s). La cabeza queda en la mitad de abajo, con 35-40 % de pared y ventana vacías arriba. Traslación medida: solo 280 px (68,4 → 53,8 %) y 294 px (71,4 → 56,1 %). La escala está bien: ancho de cara 54 % en los dos layouts, igual que Sonnet.",
+    "seg_prueba": 31.5,
+    "reel_ref": "7690703830215937300 (Sonnet 5.5)",
+    "seg_ref": 14.5,
+    "gravedad": "alta",
+    "arreglo": "En los dos tramos de cara completa (30,40-32,72 y 53,22-54,84), subir la cámara ≈380-400 px en vez de 280, hasta que los ojos queden al 46-47 %. Si al bruto le falta margen abajo, aplicar UNA escala base de 1,06-1,08 a la cámara en TODO el video (entre layouts sigue en 1,00) o regrabar con los ojos al ≈42 % del cuadro bruto."
+   },
+   {
+    "parametro": "sonido",
+    "esperado": "Solo voz, con el piso de las pausas entre −41 y −55 dBFS y sin cama. Percentil 1 del RMS en ventanas de 50 ms: Sonnet −47,8, Forja −42,3, Animaciones −50,9, Jev −47,9 dBFS.",
+    "visto": "Piso constante de −28,5 a −31 dBFS en todas las pausas (p1 −30,1 dBFS): ruido de sala de 100-1000 Hz que se oye entre frases. Ejemplo: 29,65-29,90 s a −30,4 dBFS. Integrado −13,2 LUFS, LRA 2,4 y true peak −1,5 dBTP están OK; no hay dings, lo que está permitido.",
+    "seg_prueba": 29.8,
+    "reel_ref": "7685954926702234900 (Forja)",
+    "seg_ref": 15.3,
+    "gravedad": "alta",
+    "arreglo": "Quitar el ruido al bruto ANTES de comprimir (afftdn nr=15:nf=-45 o arnndn), y después un expansor o gate (umbral −38 dBFS, 1:4, release 80 ms) hasta que las pausas queden ≤ −42 dBFS. Recién ahí renormalizar a −13 LUFS con true peak ≤ −1."
+   },
+   {
+    "parametro": "encuadre_cabeza (split tras el corte de 37,80)",
+    "esperado": "En el split, ojos al 62-71 % (Sonnet 67,1 %; la prueba da 66,8-68,4 % hasta 37,8 s). Reencuadre en un jump cut: ≤70 px.",
+    "visto": "La toma que entra en el corte de 37,80 viene corrida +46 px en x y +83 px en y, con la cara 8 % más chica (ancho 615 → 566 px). Ojos al 72,5 % de 38,0 a 53,2 s y al 71,2 % de 55,0 al final: fuera de rango y distinto de la primera mitad.",
+    "seg_prueba": 40,
+    "reel_ref": "7690703830215937300 (Sonnet 5.5)",
+    "seg_ref": 30.9,
+    "gravedad": "media",
+    "arreglo": "Desde 37,80 hasta 53,22, y en el split del CTA (54,84-57,83), mover la cámara −90 px en y y −45 px en x, para que los ojos vuelvan al 67-68 % y la cara no salte en el corte."
+   },
+   {
+    "parametro": "voz_y_pausas",
+    "esperado": "2,65-3,2 palabras/s (la más rápida es Forja, con 3,16) y 16-33 pausas de 0,18-0,5 s.",
+    "visto": "3,46 palabras/s (200 palabras de Whisper medium en 57,83 s). El render.log ya decía 3,43 y lo dejó pasar. Ventanas de 10 s a 3,6-3,7 palabras/s en 0-10 s y 30-50 s. Pausas: 15 de 0,18-0,5 s y 2 de 0,51-0,56 s; la máxima, 0,56 s, está OK.",
+    "seg_prueba": 5,
+    "reel_ref": "7685954926702234900 (Forja)",
+    "seg_ref": 91.28,
+    "gravedad": "media",
+    "arreglo": "Reabrir ≈25 uniones de frase a 0,30-0,45 s (sobre todo en 0-10 s y 37-50 s), para sumar ≈6,5 s de aire y bajar a ≈3,1 palabras/s, sin que ninguna pausa pase de 0,6 s."
+   },
+   {
+    "parametro": "duracion",
+    "esperado": "65-120 s con persona (la más corta de las referencias: Animaciones, 66,13 s).",
+    "visto": "57,83 s: 7,2 s por debajo del mínimo.",
+    "seg_prueba": 57.83,
+    "reel_ref": "7687051875404811540 (Animaciones)",
+    "seg_ref": 66.13,
+    "gravedad": "media",
+    "arreglo": "El aire de voz_y_pausas (+6,5 s) más el remate de cierre (+3-5 s) dejan el video en ≈67-70 s, sin regrabar el cuerpo."
+   },
+   {
+    "parametro": "cierre",
+    "esperado": "Remate de 3-10 s antes del CTA (Forja: frase de resumen con punch-in, 111,9-113,97; Animaciones: metaprueba de 3,2 s), despedida corta ('Bye') y cola de 0,3-0,65 s.",
+    "visto": "De 'manual mode on.' (52,98) salta directo a 'Y si quieres ver cómo lo puedes hacer…' (53,28): no hay remate ni despedida. El resto está OK: CTA hablado de 4,24 s, tarjeta 'Comentá COMUNIDAD' de 79,5 % del ancho que dura 2,8 s y cola de 0,31 s.",
+    "seg_prueba": 53,
+    "reel_ref": "7685954926702234900 (Forja)",
+    "seg_ref": 112,
+    "gravedad": "media",
+    "arreglo": "Grabar e insertar entre 52,98 y 53,28 una frase de resumen de 3-4 s (por ejemplo: 'Auto para el día a día; manual si tu main hace deploy'), con punch-in ×1,15 sostenido hasta el corte del CTA. Cerrar con 'Chau' y 0,4 s de cola."
+   },
+   {
+    "parametro": "overlays_logos (sellos)",
+    "esperado": "Sellos de 27-30 % del ancho: Sonnet 'ACABA DE SALIR' ≈32 % a 2,0 s y 'LA MITAD' ≈27 %; Forja 'GRATIS' ≈19 %. Texto de 1-3 palabras cortas.",
+    "visto": "Hay 4 sellos y la sincronía y la animación están OK (121 → 100 % en 3 cuadros, −8°), pero son demasiado grandes: 'YA NO PIDE PERMISO' 53 % (2,80), 'BLOQUEA' 35 % (13,37), 'INCLUIDA LA PRINCIPAL' 59 % (29,10) y 'ROMPE PRODUCCIÓN' 54 % (35,90) del ancho. Tapan la captura de prueba.",
+    "seg_prueba": 30,
+    "reel_ref": "7690703830215937300 (Sonnet 5.5)",
+    "seg_ref": 2,
+    "gravedad": "media",
+    "arreglo": "Lado largo de cada sello ≤320 px (≈30 %) y texto de 1-2 palabras: 'SIN PERMISO', 'BLOQUEA', 'LA PRINCIPAL' y 'ROMPE'. Mantener la caída en 3 cuadros, −8° y el golpe de +2 %."
+   },
+   {
+    "parametro": "cortes",
+    "esperado": "Jump cut escondido bajo un cambio de panel o de layout, o tapado con un punch-in (en Sonnet, el de 72,0 cae en el barrido hacia DevDay).",
+    "visto": "Jump cut a la vista a 29,767 dentro del split: el panel de arriba no cambia, el bloque 'la principal' sigue en pantalla y la cara salta +49 px. El render.log dice 'a la vista: ninguno', y es falso. El tiempo sí está bien: cae en la pausa, 0,29 s antes de 'Por'. Además, la lámina 'lista-bloquea' dura 7,6 s (14,02-21,66) sin escena, layout ni corte nuevos, contra la regla de 3-5 s.",
+    "seg_prueba": 29.767,
+    "reel_ref": "7690703830215937300 (Sonnet 5.5)",
+    "seg_ref": 72,
+    "gravedad": "media",
+    "arreglo": "Usar ese mismo cuadro (29,767) para devolver el punch-in de ×1,125 a 1,00 en seco, así el salto se lee como punch-out; o adelantar la subida de cámara de 30,38 para que arranque en 29,77. Partir 'lista-bloquea' en dos escenas a ≈17,9 s."
+   },
+   {
+    "parametro": "layout",
+    "esperado": "Alternar split, cara completa, persona reducida (recorte, PiP o ventana dentro de una UI, como Animaciones a 5,0) y lámina sin cara. El tramo sin cara más largo de las referencias es ≈10 s (Forja, 5,3-15,3); en Sonnet ≤1,25 s y en Animaciones 3,25 s.",
+    "visto": "No aparece nunca la persona reducida. Reparto: 73 % split, 7 % cara y 20 % lámina. Hay 11,5 s seguidos sin cara (11,03-22,53). Los cambios de layout, 1,04 por 10 s, sí están OK.",
+    "seg_prueba": 16,
+    "reel_ref": "7687051875404811540 (Animaciones)",
+    "seg_ref": 5,
+    "gravedad": "media",
+    "arreglo": "Meter la persona reducida (ventana de 35-40 % del ancho con la toma de cámara) en la lámina 'lista-bloquea' de 14,0-21,7 o en 'settings' de 45,0-49,5. Eso corta el tramo sin cara a ≤7 s y agrega el cuarto layout."
+   },
+   {
+    "parametro": "zooms",
+    "esperado": "Punch-in de ×1,10-1,22 sostenido hasta el próximo corte, que vuelve a 1,00 con ese corte (Forja: 111,90 → 113,97). En las subidas y bajadas, la cámara solo se traslada, a escala 1,00.",
+    "visto": "El punch-in de ×1,125 a 27,90 (en 0,13 s, sobre 'incluida… la principal') está OK, pero sigue después del corte de 29,767 y se deshace como zoom-out animado (×0,917) entre 30,40 y 30,63, mezclado con la subida de cámara. Los golpes de +2,2 % (2,80) y +2,5 % (35,90), que vuelven en 0,10 s, están OK.",
+    "seg_prueba": 30.5,
+    "reel_ref": "7685954926702234900 (Forja)",
+    "seg_ref": 112,
+    "gravedad": "baja",
+    "arreglo": "Volver a 1,00 en seco a 29,767 (el mismo arreglo de cortes) y hacer la subida de 30,40-30,63 solo con traslación."
+   },
+   {
+    "parametro": "overlays_logos (íconos)",
+    "esperado": "Logo de cada herramienta cuando se la nombra, entre 0,5 s antes y 0,3 s después, de 150-380 px (14-35 % del ancho). Forja: ≈18 % en las esquinas a 68,5.",
+    "visto": "La mascota de Claude Code mide 76 px (7 %) y está desde el cuadro 0, aunque 'Claude Code' suena a 0,88 s: entra 0,88 s antes. El ícono de WhatsApp mide 120 px (11 %) y entra a 56,93 para 'WhatsApp' a 57,26: el tiempo está bien y el tamaño se queda corto. 'git' (19,90) no tiene logo.",
+    "seg_prueba": 1,
+    "reel_ref": "7685954926702234900 (Forja)",
+    "seg_ref": 68.5,
+    "gravedad": "baja",
+    "arreglo": "Íconos de 160-250 px con pop de escala: Claude Code entrando entre 0,6 y 0,9 s, logo de git entre 19,6 y 19,9, y WhatsApp a ≈180 px."
+   },
+   {
+    "parametro": "transiciones",
+    "esperado": "Abrir o cerrar el split moviendo la cámara o el panel en 0,24-0,4 s (cortina de Jev: 27,5-28,0). Barrido de 0,25-0,4 s. Bajada de Sonnet: 0,27 s.",
+    "visto": "Se vuelve de la lámina al split con un corte seco a 22,53. El barrido de 11,07-11,27 dura 0,20 s y la bajada de 32,73-32,93 también 0,20 s. Los fundidos de 0,13 s y las subidas de 0,23-0,27 s están OK.",
+    "seg_prueba": 22.53,
+    "reel_ref": "7688159309712182548 (Jev)",
+    "seg_ref": 27.5,
+    "gravedad": "baja",
+    "arreglo": "A 22,53, que el panel suba desde abajo en 0,3 s (o usar una cortina). Llevar el barrido a 0,3 s y las bajadas (32,73 y 54,84) a 0,27 s."
+   },
+   {
+    "parametro": "subtitulos",
+    "esperado": "En el split, el bloque va sobre la costura (42-53 %; en Sonnet, centrado al 51-52 %). Pasa al 64-77 % solo cuando ya hay cara completa.",
+    "visto": "Entre 30,33 y 30,43 el bloque 'Por' ya está al 77 %, sobre la boca, con el split todavía en pantalla. Todo lo demás está OK: karaoke en #FDC72D (Sonnet, #FDC82F), 1 cuadro translúcido, mayúscula de 45 px igual que Sonnet, bloques de 1-3 palabras, primer subtítulo a 0,10 s y costura al 46,9 %.",
+    "seg_prueba": 30.37,
+    "reel_ref": "7690703830215937300 (Sonnet 5.5)",
+    "seg_ref": 13.7,
+    "gravedad": "baja",
+    "arreglo": "Pasar el bloque a la posición de cara completa al terminar la subida de cámara (30,63), no antes. Hacer lo mismo en la subida de 53,22."
+   }
+  ],
+  "parecido_0a10": 6.5,
+  "veredicto": "No está TAL CUAL como pidió Sergio Urcullo; nota 6,5/10. Lo que está bien no hace falta tocarlo: el split con la costura al 46,9 % y los ojos al 67 % hasta 37,8 s, el karaoke en #FDC72D con 1 cuadro translúcido (igual que Sonnet), el primer subtítulo a 0,10 s con la prueba en pantalla desde el cuadro 0, los sellos que caen de 121 a 100 % en 3 cuadros a −8°, los golpes de +2 % que vuelven en 0,10 s, el punch-in de ×1,125, los cortes dentro de la pausa (entre 0,05 y 0,29 s antes de la frase), −13,2 LUFS con LRA 2,4 y true peak −1,5, la paleta (#090E0D / #EEE9E2), las 8 pruebas con su fuente y el CTA (4,24 s, tarjeta de 79,5 % durante 2,8 s, cola de 0,31 s). Desvíos graves: (1) en cara completa los ojos quedan al 54-56 % (Sonnet 49 %, Forja 33 %), con media pantalla de pared encima, porque la cámara se traslada solo 280 px; (2) el piso de ruido en las pausas está en −30 dBFS, contra −42 a −51 en las cuatro referencias. Desvíos medios: 3,46 palabras/s y 57,8 s de duración (receta: 2,65-3,2 y ≥65 s); no hay remate ni 'Bye' antes del CTA; los sellos ocupan 35-59 % del ancho (receta 27-30 %); hay un jump cut a la vista a 29,767, que el render.log no detectó; nunca aparece la persona reducida y hay 11,5 s seguidos sin cara; desde 37,8 s el split queda con los ojos al 72,5 %. Las cifras del render.log (pausas de 0,82 s, 'a la vista: ninguno') no coinciden con lo medido, así que no se pueden usar como QA. Comparaciones lado a lado a resolución completa: /tmp/claude-0/-home-user-onia-hermes/981fdf0a-9c86-5cd3-a526-5f18111f4f5a/scratchpad/qa-santiago/fr/p-full.png (cara completa), p-split.png, p-sellos.png, p-cierre.png, cmp-29.png (jump cut y sello), s-sube.png y s-barrido.png (transiciones). Mediciones en la misma carpeta: words.json (Whisper medium), face_*.json (ojos y cara cada 0,25 s, de la prueba y de las 4 referencias), sc_T.json (escala cuadro a cuadro), d2_test.json (cortes)."
+ },
+ "script": {
+  "script": "/home/user/onia-hermes/.claude/skills/edicion-referentes/scripts/santiago/santiago.py (lo acompañan storyboard-n03.json y README.md, los dos actualizados; capturar.mjs y assets-ejemplo/ siguen igual). No hay nada commiteado: la carpeta edicion-referentes/ sigue sin seguimiento en git y la commitea el orquestador.",
+  "uso": "S=/tmp/claude-0/-home-user-onia-hermes/981fdf0a-9c86-5cd3-a526-5f18111f4f5a/scratchpad; cd /home/user/onia-hermes/.claude/skills/edicion-referentes/scripts/santiago && python3 santiago.py --bruto $S/video-v1/raw/bruto.mp4 --cutplan $S/video-v1/scripts/cutplan.json --transcript $S/video-v1/scripts/segments-cut.json --storyboard storyboard-n03.json --out $S/referentes/prueba-santiago/prueba-santiago.mp4   [--plan: no renderiza; imprime la línea de tiempo, el aire que mete en cada unión y el control contra la receta · --fotos 0.5,12,30: PNG de esos segundos · --solo-hoja: rehace la hoja · --sin-aire: deja el ritmo del corte tal cual]. Para 65 s tarda unos 2 min, más 30 s la primera vez, que analiza el bruto y lo guarda en work/.",
+  "entradas": "Las mismas que antes: bruto.mp4, cutplan.json ({\"keep\":[{start,end}]} en segundos del bruto), transcript en tiempo de salida ({\"words\":[{word,start,end}]}) y storyboard JSON. Cambios en el storyboard:\n- Hay un layout nuevo, \"pip\" (persona reducida): la lámina lleva la toma en una ventana del 40 % del ancho.\n- \"camara\" queda opcional y sirve para pisar valores de la receta (ojos_split, ojos_full, escala_base…). split_dy y ancla ya no existen: el encuadre se mide solo.\n- Un sello acepta \"lado\" (por defecto 320 px) y se achica solo hasta caber.\n- \"corte\": true ahora también encuentra los saltos internos del bruto y cualquier corte dentro de la pausa anterior a la palabra.\n- Una fila acepta \"alto\".\nLo que se genera en work/: bruto-analisis.json y bruto-voz.npy (caché), transcript-salida.json (las palabras en el tiempo nuevo, ya con el aire), voz-corte/limpia/master.wav y render.log.",
+  "video_prueba": "/tmp/claude-0/-home-user-onia-hermes/981fdf0a-9c86-5cd3-a526-5f18111f4f5a/scratchpad/referentes/prueba-santiago/prueba-santiago.mp4 (1080x1920, 30 fps, 65,23 s; queda en la misma ruta que el anterior y lo reemplaza)",
+  "hoja_prueba": "/tmp/claude-0/-home-user-onia-hermes/981fdf0a-9c86-5cd3-a526-5f18111f4f5a/scratchpad/referentes/prueba-santiago/sheets/sheet-01.jpg … sheet-07.jpg: 2 fps exactos (un cuadro de cada 15), con el segundo impreso, en grillas de 5x4. Las miré todas.",
+  "parametros_cumplidos": "Valores medidos sobre el render final.\n\n1. Encuadre de la cabeza (Haar, el mismo detector del QA):\n   - Cara completa: ojos al 47,2 % en mi-caso (35-37 s) y al 45,8 % en el CTA (60,4-61,8 s). Antes estaban al 53,8 y 56,1 %.\n   - Paso de split a cara: 404-413 px a escala 1,00. Antes eran 280-294 px.\n   - Split: ojos al 66,6-67,9 % en todo el video, también después del corte de toma, que ahora cae a 42,50 (antes 37,80).\n   - Salto de la cara en los cortes: 10-59 px, todos por debajo de 70. En el corte de toma es de 21 px; antes era +46/+83 px con la cara un 8 % más chica.\n   - Cómo se logró: el script detecta los 5 saltos internos del bruto (13,33 · 19,60 · 34,10 · 43,93 · 61,57) y normaliza cada toma con Haar, con escala base 1,08. La última toma sube a 1,18 para poder llevar los ojos al 46 %.\n\n2. Sonido:\n   - Piso de las pausas: p1 = −53,1 dBFS en la escala del QA (antes −30,1; los referentes van de −41 a −55).\n   - Integrado −13,1 LUFS, LRA 2,8 y true peak −1,6 dBTP.\n   - Sin cama ni dings.\n   - Ninguna ventana de voz fuerte (más de −24 dBFS) quedó atenuada más de 3 dB.\n\n3. Voz y pausas:\n   - 3,02 palabras/s: 197 palabras en 65,22 s, con el método del QA (palabras ÷ duración). Con las 200 palabras de Whisper medium da 3,07.\n   - Se metieron +7,68 s de aire en 30 uniones: 12 sobre el silencio real que el corte había sacado y 18 estiradas.\n   - Pausas reales medidas con la energía de la voz: 23 de 0,18-0,5 s y 6 de 0,5-0,56 s; ninguna pasa de 0,6.\n   - La pausa de 'principal.', que medía 0,82 s, se recortó 0,29 s en el salto interno.\n\n4. Duración: 65,22 s, dentro del rango de 65-120 s (antes 57,83).\n\n5. Sellos:\n   - Textos nuevos: 'SIN PERMISO', 'BLOQUEA', 'LA PRINCIPAL' y 'ROMPE'.\n   - Lado largo de 313-315 px (29 %) en los tres primeros y 248 px (23 %) en ROMPE.\n   - Se mantienen la caída en 3 cuadros, la rotación de −8° y los golpes de zoom.\n\n6. Cortes:\n   - El salto de 29,767 (ahora 34,36) quedó tapado: ese mismo cuadro devuelve el punch-in ×1,12 en seco y arranca la subida de la cámara hacia mi-caso.\n   - El control ahora conoce los saltos internos y los finales de punch. Da 'a la vista: ninguno', y esta vez es cierto.\n   - 'lista-bloquea' quedó partida en dos escenas: lámina de 16,36 a 18,29 y persona reducida de 18,29 a 24,83, con cambio en el corte de 'deploys'.\n\n7. Layout:\n   - Reparto: split 70 %, cara completa 8 %, persona reducida 10 % y lámina 12 %.\n   - El tramo sin cara más largo es de 6,2 s (antes 11,5).\n   - 1,23 cambios de layout cada 10 s.\n   - La transición de lámina a ventana deja el título y la primera fila quietos y solo trae la ventana con un fundido.\n\nOtros:\n- El subtítulo acompaña a la cámara cuando sube o baja; antes flotaba sobre la cara a mitad del movimiento.\n- El panel de 'como-funciona' ya no queda vacío 0,5 s.\n- Algo cambia en pantalla cada 3,3 s de media (máximo 5,7).\n- 7,2 elementos cada 10 s y 3 acentos de zoom.\n- Gancho a 0,08 s, prueba en pantalla en el segundo 0 y cola de 0,33 s.",
+  "desvios_conocidos": "1. Cierre. Sigue saltando de 'manual mode on.' al CTA, sin remate de 3-4 s ni 'Chau'. Hace falta que Sergio Urcullo grabe una toma de unos 4 s, por ejemplo «Auto para el día a día; manual si tu main hace deploy. Chau». Eso no se puede armar recortando palabras de otras frases. La duración ya pasa el mínimo sin esa toma: 65,22 s.\n\n2. El aire cambia el cutplan aprobado. En 12 cortes los bordes se corren sobre silencio real, sin agregar contenido, y en 18 uniones se estira el silencio. Por la regla de oro, Sergio Urcullo debería ver la tabla de aire (sale con --plan) antes de que esto vaya a un video para publicar. Si no lo aprueba, --sin-aire deja el ritmo original.\n\n3. El aire con la cara a la vista. Siete uniones caen en split o en cara completa ('pide', 'nada?', 'rama', 'caso,', 'importa.', 'revisar?', 'COMUNIDAD'). Ahí el video se ve en cámara lenta 4-10 cuadros: medido en 'nada?', se lee como un parpadeo lento, sin congelado duro. Pero conviene mirarlo en el teléfono.\n\n4. Pausas según Whisper. Re-midiendo las palabras con Whisper pueden aparecer gaps de 0,7-0,98 s (en 4,32, 19,31 y 42,03). Son falsos: Whisper corre los finales de palabra hasta 0,4 s. La voz real no tiene ninguna pausa de más de 0,56 s, medida por energía en el bruto y en el audio final.\n\n5. Escala base 1,08. La cara ocupa el 59-60 % del ancho en las tomas 1-5 y el 62-63 % en la última (×1,18), contra el 54 % de Sonnet. Es lo que costó subir los ojos al 46-47 % sin regrabar. En cara completa quedan hasta 40 px abajo rellenados en espejo; en el CTA (61 s) asoma un trozo de mano reflejado en la esquina inferior derecha, debajo de donde va la interfaz de la app.\n\n6. Dos cortes quedan dentro de la ventana reducida (19,54 es un salto de toma y 20,19 un corte del cutplan). Con la ventana al 40 % del ancho, el salto se ve de unos 10 px.\n\n7. Piso de ONIA aplicado. Los textos en pantalla nuevos ('por defecto, en modo auto', 'reescribe la historia del repo', los sellos) están en un solo registro, sin tú; el resto del storyboard ya estaba en voseo. El acento sigue en verde ONIA, igual que antes; no se tocó.",
+  "aprendido": "Esto quedó en el README de santiago/, sección «Trampas ya pagadas»; falta pasarlo a la SKILL.md de edicion-referentes cuando exista.\n\n1. El bruto puede venir ya editado. Este traía 5 tomas pegadas. Hay que detectar los saltos con picos aislados de diferencia entre cuadros (más de 5 veces la mediana y más de 2,5 veces sus vecinos) y tratarlos como cortes, tanto para pegar los cambios de escena como para el control y para normalizar el encuadre de cada toma. Antes el control decía «a la vista: ninguno» y no era cierto.\n\n2. Los finales de palabra de Whisper se corren hasta 0,4 s. Ejemplo: 'completamente.' termina en 37,31 según Whisper y la voz sonora sigue hasta 37,75. Las pausas se miden con la energía del bruto, tomando la corrida de silencio entera que toca la unión. Además, dos palabras de duración 0 comparten una misma pausa: si se cuentan dos veces se mete doble aire (0,66 s en vez de 0,48).\n\n3. Dónde meter aire, de más barato a más caro: lámina sin cara, después el corte del cutplan (se corre el borde sobre el silencio que el corte había sacado, con video real), después la ventana reducida, y al final la cara visible, solo si ya había al menos 0,05 s de silencio. Para que los cortes sigan pegados a los cambios de escena, la búsqueda del corte tiene que mirar toda la pausa anterior a la palabra, no solo 0,45 s.\n\n4. Ruido de esta sala. afftdn nr=15:nf=-45 baja el piso apenas 2 dB, porque el ruido es de 50-800 Hz y no es estacionario. Un expansor por nivel tampoco sirve: después de normalizar, la sala queda a −27 dBFS y una sílaba suave a −25. Lo que sí funcionó: puerta espectral en numpy (perfil tomado de los percentiles 3-15, −15 dB) y una puerta llaveada por la máscara de habla del bruto (−14 dB, abre 50 ms antes de la voz). Resultado: p1 −53 dBFS y 0 % de voz atenuada.\n\n5. El tono de sala para rellenar el aire se elige por el MÁXIMO de la ventana (piso + 3 dB como tope), no por el promedio. Con el promedio entró la cola de una palabra y sonaba un golpe a −19 dBFS en medio de la pausa nueva.\n\n6. La escala del QA para el piso de las pausas es RMS − 3 dB: el mismo archivo da −27,1 en la mía y −30,1 en la suya. El script ya la imprime en la escala del QA.\n\n7. Encuadre: con los ojos del bruto al 52-58 %, llegar al 46-47 % en cara completa sin hueco abajo pide escala 1,10-1,18. El cambio de escala entre tomas se esconde poniéndolo en el corte de toma, que acá coincide con el arranque de la subida de la cámara.\n\n8. Un objetivo de parámetros que necesita una toma nueva (el remate y la despedida) no se puede cerrar en el script: se reporta como desvío y se le pide la grabación a Sergio Urcullo."
+ }
+}

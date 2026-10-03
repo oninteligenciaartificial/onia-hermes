@@ -1,0 +1,251 @@
+{
+  "titulo": "N03 · Claude Code arranca en modo auto (Sergio Urcullo, 1-oct-2026)",
+  "nota": "Cada 'en' / 'desde' / 'hasta' es una PALABRA del transcript ({palabra, n, fin, desfase}) o un límite del cutplan APROBADO ({corte: k}, 1 = el primero, llevado al tiempo nuevo después de apretar huecos). Cada pieza se ancla a la palabra que la NOMBRA y entra 2 cuadros después de su inicio real (Vosk + RMS). Ningún tiempo a mano salvo el sello del cuadro 0. Textos en pantalla en voseo; datos del drop N03 y de code.claude.com/docs/en/permission-modes (capturada el 3-oct). Las tarjetas muestran el DATO (el comando), no la frase que se oye.",
+  "paleta": "onia",
+  "assets": [
+    "assets-ejemplo"
+  ],
+  "firma": {
+    "inicial": "S",
+    "nombre": "SERGIO URCULLO",
+    "handle": "@sergiourcullo"
+  },
+  "corte": {
+    "hueco_max": 0.25,
+    "quitar": [
+      {
+        "desde": {"palabra": "¿Cómo"},
+        "hasta": {"palabra": "Y", "n": 4},
+        "por_que": "QA 3-oct: «¿Cómo lo puedes revisar? En la parte de abajo te lo muestra» lo muestra la pantalla; el «Y» se va con ella para que no quede un tramo de 0,2 s entre dos cortes"
+      }
+    ]
+  },
+  "subtitulos": {
+    "palabras_por_bloque": 3
+  },
+  "eventos": [
+    {
+      "tipo": "sello",
+      "en": {"t": 0},
+      "hasta": {"palabra": "Claude"},
+      "texto": "SIN PREGUNTAR",
+      "sub": "ESTADO: MODO AUTO",
+      "color": "kraft",
+      "centro": [400, 330],
+      "rot": -6,
+      "cap": 84
+    },
+    {
+      "tipo": "lamina",
+      "desde": {"palabra": "Claude"},
+      "hasta": {"palabra": "pide"},
+      "gafete": {"logo": "logo-claudecode.png", "titulo": "CLAUDE CODE", "sub": "MODOS DE PERMISO"},
+      "captura": "cap-modos",
+      "fuente": "FUENTE: CODE.CLAUDE.COM",
+      "marca": {"en": {"palabra": "probablemente"}, "pastilla": "v2.1.283+ ARRANCA EN AUTO"}
+    },
+    {
+      "tipo": "tarjeta",
+      "rotulo": "CÓMO ARRANCA",
+      "rotulo_der": "CLAUDE CODE",
+      "hasta": {"corte": 1},
+      "contenido": {
+        "tipo": "flujo",
+        "nodos": [
+          {"icono": "pausa", "texto": "Manual", "nota": "antes", "en": {"palabra": "Desde"}},
+          {"icono": "logo:logo-claudecode.png", "texto": "v2.1.283", "nota": "o posterior", "en": {"palabra": "septiembre"}},
+          {"icono": "auto", "estilo": "verde", "texto": "Auto", "nota": "por defecto", "en": {"palabra": "auto"}}
+        ],
+        "pastilla": {"texto": "TODOS LOS PLANES", "en": {"palabra": "todos"}}
+      }
+    },
+    {
+      "tipo": "zoom",
+      "en": {"palabra": "modo auto"},
+      "escala": 1.13
+    },
+    {
+      "tipo": "tarjeta",
+      "rotulo": "QUIÉN APRUEBA",
+      "rotulo_der": "MODO AUTO",
+      "desde": {"corte": 1},
+      "hasta": {"corte": 2},
+      "contenido": {
+        "tipo": "flujo",
+        "nodos": [
+          {"icono": "logo:logo-claudecode.png", "texto": "Claude", "nota": "quiere actuar", "en": {"palabra": "modo automático"}},
+          {"icono": "escudo", "estilo": "verde", "texto": "Clasificador", "nota": "otro modelo", "en": {"palabra": "segundo"}},
+          {"doble": [["PASA", "datos", "check"], ["FRENA", "rojo", "cruz"]], "en": {"palabra": "revisa"}}
+        ],
+        "pie": {"texto": "LEER Y EDITAR EN TU CARPETA: NO PASA POR EL CLASIFICADOR", "en": {"palabra": "acción"}}
+      }
+    },
+    {
+      "tipo": "lamina",
+      "desde": {"corte": 2},
+      "hasta": {"palabra": "Bajar"},
+      "gafete": {"logo": "logo-claudecode.png", "titulo": "CLAUDE CODE", "sub": "QUÉ FRENA POR DEFECTO"},
+      "captura": "cap-bloquea",
+      "fuente": "FUENTE: CODE.CLAUDE.COM",
+      "marca": {"en": {"palabra": "bloquea"}, "pastilla": "LO FRENA EL CLASIFICADOR"}
+    },
+    {
+      "tipo": "tarjeta",
+      "rotulo": "POR DEFECTO",
+      "rotulo_der": "BLOQUEA",
+      "rotulo_der_color": "rojo",
+      "desde": {"palabra": "Bajar"},
+      "hasta": {"palabra": "Pero"},
+      "contenido": {
+        "tipo": "lista",
+        "mono": true,
+        "alto_fila": 52,
+        "filas": [
+          {"marca": "x", "texto": "curl … | bash", "en": {"palabra": "Bajar"}},
+          {"marca": "x", "texto": "vercel --prod", "en": {"palabra": "Deploys"}},
+          {"marca": "x", "texto": "git push --force", "en": {"palabra": "force"}},
+          {"marca": "x", "texto": "rm -rf", "en": {"palabra": "borrar"}},
+          {"marca": "x", "texto": "git reset --hard", "en": {"palabra": "comandos"}}
+        ]
+      }
+    },
+    {
+      "tipo": "zoom",
+      "en": {"corte": 3},
+      "escala": 1.12
+    },
+    {
+      "tipo": "zoom",
+      "en": {"corte": 5},
+      "escala": 1.12
+    },
+    {
+      "tipo": "tarjeta",
+      "rotulo": "POR DEFECTO",
+      "rotulo_der": "DEJA PASAR",
+      "desde": {"palabra": "Pero"},
+      "hasta": {"corte": 7},
+      "contenido": {
+        "tipo": "lista",
+        "mono": true,
+        "alto_fila": 52,
+        "filas": [
+          {"marca": "ok", "texto": "Update(src/app.ts)", "en": {"palabra": "Editar"}},
+          {"marca": "ok", "texto": "npm ci", "en": {"palabra": "instalar"}},
+          {"marca": "ok", "texto": "git push origin main", "en": {"palabra": "push", "n": 2}}
+        ]
+      }
+    },
+    {
+      "tipo": "lamina",
+      "desde": {"corte": 7},
+      "hasta": {"palabra": "Por ejemplo"},
+      "gafete": {"logo": "logo-claudecode.png", "titulo": "CLAUDE CODE", "sub": "QUÉ DEJA PASAR"},
+      "captura": "cap-permite",
+      "fuente": "FUENTE: CODE.CLAUDE.COM",
+      "marca": {"en": {"palabra": "Incluida"}, "pastilla": "INCLUIDA LA RAMA PRINCIPAL"}
+    },
+    {
+      "tipo": "sfx",
+      "sonido": "brillo",
+      "en": {"palabra": "Incluida", "desfase": 0.067}
+    },
+    {
+      "tipo": "zoom",
+      "en": {"palabra": "Por ejemplo"},
+      "hasta": {"palabra": "rama principal", "desfase": -0.26},
+      "escala": 1.12,
+      "nota": "punch-in a la vuelta de la lámina (subagentes 2,43 s); vuelve a 1,00 en seco en el siguiente corte"
+    },
+    {
+      "tipo": "tarjeta",
+      "rotulo": "MI CASO",
+      "rotulo_der": "RAMA PRINCIPAL",
+      "hasta": {"corte": 8},
+      "contenido": {
+        "tipo": "flujo",
+        "nodos": [
+          {"icono": "rama", "texto": "main", "nota": "rama principal", "en": {"palabra": "rama principal"}},
+          {"icono": "servidor", "texto": "Deploy", "nota": "automático", "en": {"palabra": "deploy"}},
+          {"icono": "alerta", "estilo": "rojo", "texto": "Producción", "nota": "caída", "en": {"palabra": "producción", "n": 2}}
+        ],
+        "pastilla": {"texto": "PUSH A MEDIAS", "fondo": "tinta", "sobre_nodo": 0, "en": {"palabra": "push con"}}
+      }
+    },
+    {
+      "tipo": "sello",
+      "en": {"palabra": "rompe"},
+      "hasta": {"corte": 8},
+      "texto": "PRODUCCIÓN ROTA",
+      "sub": "ESTADO: CAÍDA",
+      "color": "rojo",
+      "centro": [610, 575],
+      "rot": -5,
+      "cap": 60
+    },
+    {
+      "tipo": "zoom",
+      "en": {"palabra": "rompe"},
+      "escala": 1.12
+    },
+    {
+      "tipo": "pantalla",
+      "desde": {"corte": 8},
+      "hasta": {"corte": 10},
+      "pantalla": {
+        "tipo": "terminal",
+        "version": "v2.1.283",
+        "carpeta": "~/mi-proyecto",
+        "estado": {"texto": "auto mode on", "icono": "auto", "color": "ambar", "resto": "(shift+tab to cycle)"},
+        "piezas": [
+          {"tipo": "marca_estado", "en": {"corte": 8, "desfase": 0.1}, "hasta": {"palabra": "cambiar"}, "pastilla": "MODO ACTUAL: AUTO"},
+          {"tipo": "teclas", "teclas": ["SHIFT", "TAB"], "en": {"palabra": "Shift+Tab"}, "nota": "CICLA ENTRE LOS MODOS"},
+          {"tipo": "cambia_estado", "en": {"palabra": "cambiar"}, "estado": {"texto": "manual mode on", "icono": "pausa", "color": "terminal_txt"}}
+        ]
+      }
+    },
+    {
+      "tipo": "pantalla",
+      "desde": {"corte": 10},
+      "hasta": {"corte": 11},
+      "pantalla": {
+        "tipo": "codigo",
+        "cabecera": false,
+        "archivo": "~/.claude/settings.json",
+        "lineas": [
+          {"texto": "{"},
+          {"texto": "  \"permissions\": {"},
+          {"texto": "    \"defaultMode\": \"default\"", "tecleo": {"palabra": "poné"}, "color": "menta"},
+          {"texto": "  }"},
+          {"texto": "}"}
+        ],
+        "piezas": [
+          {"tipo": "pastilla", "texto": "~ = TU CARPETA DE USUARIO", "en": {"palabra": "claude", "n": 2}, "xy": [60, 640]}
+        ]
+      }
+    },
+    {
+      "tipo": "lamina",
+      "desde": {"corte": 11},
+      "hasta": {"corte": 12},
+      "gafete": {"logo": "logo-claudecode.png", "titulo": "CLAUDE CODE", "sub": "CÓMO SABÉS QUE QUEDÓ"},
+      "captura": "cap-manual",
+      "fuente": "FUENTE: CODE.CLAUDE.COM",
+      "marca": {"en": {"palabra": "próxima"}, "pastilla": "PRÓXIMA SESIÓN: MANUAL"}
+    },
+    {
+      "tipo": "zoom",
+      "en": {"corte": 12},
+      "escala": 1.12
+    },
+    {
+      "tipo": "cta",
+      "desde": {"corte": 13},
+      "rotulo": "COMENTÁ",
+      "palabra": "COMUNIDAD",
+      "recibe": "EL PASO A PASO, EN MI COMUNIDAD DE WHATSAPP",
+      "recibe_en": {"palabra": "dejo"},
+      "logo": "logo-whatsapp.png"
+    }
+  ]
+}

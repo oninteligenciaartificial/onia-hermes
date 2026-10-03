@@ -1,0 +1,69 @@
+{
+  "url": "https://code.claude.com/docs/en/permission-modes",
+  "ancho_css": 720,
+  "alto_salida": 606,
+  "tema": "light",
+  "ocultar": [
+    "#navbar",
+    ".sticky.bottom-0"
+  ],
+  "capturas": [
+    {
+      "nombre": "cap-modos",
+      "ancla": {
+        "selector": "h1",
+        "texto": "Choose a permission mode"
+      },
+      "margen_sup": 30,
+      "marca": {
+        "texto": "auto mode is the built-in starting permission mode"
+      }
+    },
+    {
+      "nombre": "cap-bloquea",
+      "ancla": {
+        "selector": "strong",
+        "texto": "Blocked by default"
+      },
+      "margen_sup": 24,
+      "marca": {
+        "texto": "Blocked by default"
+      }
+    },
+    {
+      "nombre": "cap-permite",
+      "ancla": {
+        "selector": "strong",
+        "texto": "Allowed by default"
+      },
+      "margen_sup": 16,
+      "marca": {
+        "texto": "Pushing to any branch of the repository you’re working in, including the default branch"
+      }
+    },
+    {
+      "nombre": "cap-manual",
+      "ancla": {
+        "selector": "pre",
+        "texto": "\"defaultMode\": \"default\""
+      },
+      "margen_sup": 120,
+      "marca": {
+        "texto": "⏸ manual mode on"
+      }
+    }
+  ],
+  "logos": [
+    {
+      "nombre": "logo-claudecode",
+      "svg": "../../../../../hermes-content/references/brand-claude/claudecode.svg",
+      "color": "#D97757",
+      "alto": 240
+    },
+    {
+      "nombre": "logo-whatsapp",
+      "svg": "../../../../../hermes-content/references/brand-logos/whatsapp.svg",
+      "alto": 240
+    }
+  ]
+}
