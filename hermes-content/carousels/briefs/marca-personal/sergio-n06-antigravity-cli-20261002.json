@@ -98,10 +98,11 @@
       "headline": "Lo que se *muda solo*",
       "body": "La primera vez, agy te pregunta qué traer de Gemini CLI. Y tu GEMINI.md lo sigue leyendo igual.",
       "image_style": "clay",
-      "image_prompt": "A horseshoe magnet made of emerald green clay with white tips, pulling a few small matte black clay hex nuts across a white surface toward it.",
+      "image": "hermes-content/galeria/ilustraciones/sergio-n06-antigravity-cli-20261002-s06-695261db.jpg",
+      "image_prompt_usado": "A short, simple matte black clay conveyor belt looped around round white clay rollers on short legs, carrying a few small emerald green clay blocks along its top, on a white surface.",
       "next": "la trampa",
       "fuente": "antigravity.google/docs/cli/gcli-migration, 2-oct: checklist interactiva al primer agy; GEMINI.md y AGENTS.md se siguen leyendo",
-      "alt_text": "Un imán de arcilla que atrae piezas: la primera vez, Antigravity CLI encuentra tu configuración de Gemini CLI y te pregunta qué traer"
+      "alt_text": "Una cinta transportadora de arcilla que lleva bloques verdes sin que nadie la empuje: la primera vez, agy encuentra tu configuración de Gemini CLI, te pregunta qué traer y sigue leyendo tu GEMINI.md."
     },
     {
       "number": 7,
@@ -113,7 +114,8 @@
       "fuente": "antigravity.google/docs/cli/gcli-migration y /docs/cli/reference, 2-oct",
       "alt_text": "Una carretilla de arcilla con bloques verdes: las skills del proyecto se mudan a mano de .gemini/skills a .agents/skills",
       "image_style": "clay",
-      "image_prompt": "A small matte black clay wheelbarrow with one round wheel, carrying a few small emerald green clay blocks, standing on a white surface."
+      "image": "hermes-content/galeria/ilustraciones/sergio-n06-antigravity-cli-20261002-s07-32f8dddf.jpg",
+      "image_prompt_usado": "A small matte black clay wheelbarrow with one round wheel, carrying a few small emerald green clay blocks, standing on a white surface."
     },
     {
       "number": 8,

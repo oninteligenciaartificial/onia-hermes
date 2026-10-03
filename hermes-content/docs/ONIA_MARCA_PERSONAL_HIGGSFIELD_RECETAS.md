@@ -190,3 +190,28 @@ automático de permisos NO lo frenó (el 1-oct sí, con el OK dado en otro mensa
 veces mal). Para «tiempo» usá un objeto sin cara de reloj (reloj de arena ya está repetido en K11 y N02). Un fondo
 gris se arregla sin regenerar: `convert in -fuzz 14% -fill white -draw "color 0,0 floodfill"` (y las otras 3
 esquinas) `-type TrueColor`.
+
+## Lote 2026-10-02 · 32 imágenes «con criterio» para los 18 carruseles (33 trabajos, 3,96 cr)
+
+Autorizó Sergio Urcullo en el chat (2-oct): *«Si genera mas 32 pero con criterio y que tengan sentido de lo que
+hablas»*, con tope de 4 cr. Cotizado antes con `carousel_images.mjs` sin `--yes` (32 × 0,12 = 3,84) y generado por
+el CLI del VPS con `flock`, de 14:14 a 14:33 UTC. Medido en `higgsfield generate list`: 33 trabajos
+`text2image_soul_v2` = **3,96 cr**. El saldo bajó de 576,72 a 571,76, o sea 4,96. El crédito de diferencia salió de
+dos `seedream_v4_5` de otra sesión (2-oct, 13:33 y 13:35 UTC, terracota, «front view, side view»), que no son de
+este lote.
+
+**Antes de generar:** un workflow de editor, juez adversarial, reescritura y cruce de repetidos revisó cada prompt
+contra su lámina. Reescribió 30 de los 32 y cambió 3 por repetidos entre carruseles (dos balanzas, dos lupas).
+
+| Resultado | Láminas |
+|---|---|
+| Aceptadas | 27 |
+| Descartada y regenerada dentro del tope | DD-A 3: «coins with smooth blank faces» sacó una moneda con cara sonriente. Se rehízo como bloque grande + cubito |
+| Arreglada sin regenerar | K7 4: el mango del pincel traía letras inventadas («pardYjon wrnal»); se pintaron con el color del mango (ImageMagick, trazo de 50 px) |
+| Fallidas, sin presupuesto para rehacer | K9 5 (biombo con un muñeco con ojos), K5 3 (globo de diálogo que parece cara), N02 3 (el detector de metales no se reconoce), N02 7 (la palanca de cambios salió como dos hongos) |
+
+**Lo aprendido:**
+- La palabra «face» dibuja una cara, también en una moneda.
+- Un objeto con forma de globo de diálogo o un biombo invitan a Soul a ponerle ojos.
+- Objetos mecánicos poco icónicos (detector de metales, palanca de cambios) no se reconocen en arcilla. Mejor
+  objetos de un solo golpe de vista: linterna, llave inglesa, candado.

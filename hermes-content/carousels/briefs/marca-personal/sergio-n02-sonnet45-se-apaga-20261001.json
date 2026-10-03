@@ -54,11 +54,12 @@
       "headline": "Paso 1: *buscalo*",
       "body": "En tu código, buscá *claude-\u2060sonnet-\u20604-\u20605*. En n8n, abrí cada nodo de Anthropic y mirá su modelo. Anotá cuántos\u00a0aparecen.",
       "image_style": "clay",
-      "image_prompt": "A round matte black clay sieve with a fine mesh, holding a few small shiny emerald green clay nuggets, with fine white clay sand sifted through into a small soft pile beneath it.",
+      "image": "hermes-content/galeria/ilustraciones/sergio-n02-sonnet45-se-apaga-20261001-s03-99e49c4b.jpg",
+      "image_prompt_usado": "A long matte black clay metal detector lying with its flat round emerald green clay search coil beside a small mound of white clay sand, where an emerald green clay pebble sits half buried, on a white surface.",
       "texto_movido": "Antes era layout ensayo. Se recortó «este texto:» y «qué modelo tiene elegido» → «su modelo»; el texto a buscar (claude-sonnet-4-5) sigue en la lámina y en el caption. Espacio de unión (U+2060) después de cada guion para que Chromium no lo parta.",
       "next": "paso 2",
       "fuente": "GUIONES §N02 paso uno; drop N02 punto 1",
-      "alt_text": "Un colador negro que deja pasar la arena y retiene unas pepitas verdes. Paso 1: buscar el texto claude-sonnet-4-5 en el código y revisar el modelo de cada nodo de Anthropic en n8n"
+      "alt_text": "Un detector de metales de arcilla al lado de un montoncito de arena con una piedrita verde medio enterrada: paso 1, buscá claude-sonnet-4-5 en tu código, abrí cada nodo de Anthropic en n8n para mirar su modelo y anotá cuántas veces aparece."
     },
     {
       "number": 4,
@@ -83,7 +84,7 @@
           "text": "temperature, top_p o top_k: sacalos"
         },
         {
-          "label": "Respuesta pre-llenada",
+          "label": "Respuesta prellenada",
           "text": "para el formato, usá salidas estructuradas"
         },
         {
@@ -117,10 +118,11 @@
       "headline": "¿Usás n8n? *Cambialo a\u00a0mano*",
       "body": "El comando no aplica: cambiá el modelo de cada nodo de Anthropic a Sonnet\u00a05.5 y hacé la misma\u00a0prueba.",
       "image_style": "clay",
-      "image_prompt": "Three thick round clay discs lying in a straight row, linked by two short matte black clay rods; the first two discs are emerald green and the third disc is still plain white.",
+      "image": "hermes-content/galeria/ilustraciones/sergio-n02-sonnet45-se-apaga-20261001-s07-005fd9f8.jpg",
+      "image_prompt_usado": "A manual car gear stick in matte black clay with a plain round emerald green clay knob, standing slightly tilted in an H-shaped slot cut into a small square white clay base, on a white surface.",
       "fuente": "caption: «En n8n, el comando no aplica: cambiá el modelo en cada nodo de Anthropic y pasá directo a la prueba» (sigue también en el caption)",
       "next": "el checklist",
-      "alt_text": "Tres discos de arcilla unidos en fila, dos ya verdes y uno blanco: en n8n el comando no aplica, se cambia el modelo de cada nodo de Anthropic a Sonnet 5.5 y se hace la misma prueba"
+      "alt_text": "Una palanca de cambios manual de arcilla, con la perilla verde en su ranura en H: en n8n el comando no sirve y el cambio es a mano; cambiá a Sonnet 5.5 el modelo de cada nodo de Anthropic y hacé la misma prueba."
     },
     {
       "number": 8,

@@ -2,6 +2,84 @@
 
 **Archivo único del carril.** Actualizado 2026-09-29 por Claude (Opus 5.5).
 
+## ⏹ CIERRE 3-oct ~18:45 UTC — alcance congelado por Sergio Urcullo; esperando revisión (`session_01CE21mytrEXdqanCFoWxm32`)
+
+**Objetivo de la tanda** (asignado por la madre, alcance congelado el 2-oct):
+1. N03 al estilo Fable/Astra.
+2. La skill `edicion-referentes` con un video de prueba por referente.
+3. Los 18 carruseles mostrados a Sergio Urcullo.
+
+**Qué quedó hecho y dónde (nada publicado):**
+- **N03 «modo auto», versión Codex:** `videos/n03-modo-auto-20261001/scripts/edit-codex.py`, 57,8 s, −14,5 LUFS. El render
+  está en el scratchpad (`video-v1/final/sergio-n03-modo-auto-codex.mp4`) y se rehace en ~2 min con
+  `N03_DIR=<dir> python3 edit-codex.py`. Visto en hojas y transiciones.
+- **Los 18 carruseles, renderizados y revisados** (3 agentes de QA, uno por cada 6, más DD-A mirado por mí). Página para
+  Sergio Urcullo: **https://claude.ai/artifact/FzA8mtJhv81wwADHhYfGgK** (video + calendario + los 18, con las 10 láminas
+  a rehacer marcadas en naranja).
+- **Calendario corrido un día:** `hermes-content/deploy/vps-ops/publicar/agendar-carruseles-3-20-oct.sh`, del 3 al 20 de
+  octubre a las 20:00 UTC. El 2-oct no salió nada.
+- **Lote de 32 imágenes:** 33 trabajos, 3,96 cr, verificados en `higgsfield generate list`. Bitácora en
+  `ONIA_MARCA_PERSONAL_HIGGSFIELD_RECETAS.md`. Arreglado sin gastar:
+  - fondos grises a blanco con `scripts/blanquear-fondo.py`;
+  - letras inventadas en el pincel de K7 (lámina 4);
+  - la palabra del cierre, que ahora el pack mide en el navegador;
+  - tres textos.
+- **Skill `edicion-referentes`** (`2176a489`):
+  - `SKILL.md` + `recetas/{santiago,erik}.json` (cada regla con su rango y su evidencia de reel + segundo);
+  - `scripts/santiago/santiago.py` y `scripts/erik/erik_edit.py`;
+  - sumada a `onia-router` y nombrada arriba de `editor-videos`.
+- **Pruebas de edición** (mismo bruto de N03, para comparar): **https://claude.ai/artifact/LiNJv5mCdcH5HXsrXmzPTR**. QA
+  antes del arreglo: Santiago 6,5/10 y Erik 6/10. Lo que falta no se arregla editando; ver «cómo grabar» en la skill.
+- PR [#100](https://github.com/oninteligenciaartificial/onia-hermes/pull/100), en borrador. El [#76](https://github.com/oninteligenciaartificial/onia-hermes/pull/76) ya está mergeado.
+
+**Qué quedó a medias y por qué:**
+1. **10 imágenes que no sirven**, sin presupuesto (el tope de 4 cr se usó):
+   - K13 lámina 2: el destornillador parece otra cosa;
+   - K5 lámina 7: el gotero parece un masajeador;
+   - K9 lámina 5 y K12 lámina 7: tienen cara;
+   - K5 lámina 3: el globo parece cara;
+   - N02 láminas 3 y 7: no se reconocen;
+   - K1 lámina 7: parece una rana;
+   - K10 lámina 5: la perilla no se entiende;
+   - K9 lámina 6: el monedero parece una piedra.
+   Esperan el «sí, rehacé las 10» (1,20 cr, tope 1,50). Los prompts nuevos están pensados (dos hojas con clip, sobre,
+   vidrio esmerilado, molde de galletas, linterna, llave inglesa, escalerita, línea de largada, check + pala, monedero
+   de frente) pero **no están escritos en los briefs**: hay que pasarlos con `aplicar-lote.py prompts`.
+2. **Agendar** espera dos cosas de Sergio Urcullo: su «ok, agendá» sobre la página y que pase el modo de «Auto» a
+   «Accept edits». En modo Auto, publicar queda bloqueado aunque lo pida por chat. DD-A (3-oct) sale sólo si llega
+   antes de las 20:00 UTC.
+3. **N03:** publicarlo espera su OK sobre la pieza.
+
+**Intentos fallidos (no repetir):**
+- «coins with smooth blank faces» dibujó una moneda con cara.
+- Biombo y globo de diálogo salen con ojos.
+- Detector de metales y palanca de cambios no se reconocen en arcilla.
+- El cierre contaba letras: COMUNIDAD tiene 9 y se salía igual.
+- El flood fill con `-fuzz` no limpia la viñeta gris.
+- El workflow de referentes del 2-oct murió por límite de sesión (reinicio a las 17:30 UTC) y se reanudó con
+  `resumeFromRunId`.
+- La investigación propia de «cómo editó Codex» se cortó porque la madre rescató el `edit.py` real.
+
+**Qué depende de Sergio Urcullo:**
+1. Mirar la página del pack y responder «ok, agendá».
+2. Aprobar las 10 imágenes (1,20 cr) o decir «van sin imagen».
+3. Cambiar el modo para agendar.
+4. Aprobar la publicación de N03.
+5. Grabar los próximos videos con trípode, micrófono de solapa y una toma de cierre.
+
+**Pendientes para después (vistos en la QA, fuera del alcance congelado, NO se hicieron):**
+- **Imágenes viejas de lotes anteriores** (medio):
+  - K1 lámina 4: los tres aviones dicen lo contrario de «mismo resultado»;
+  - portadas: K3v2 (canario sin relación), K11 (no se lee «hook»), K2v3 (foto oscura), N06 (borde recortado),
+    K5v2 (bloque turbio) y K7v2 (verde sobre verde);
+  - K12 lámina 5: el vagón no dice nada.
+- **Texto y layout:**
+  - K6v2 lámina 6 queda media vacía;
+  - N02 lámina 4 tiene una captura en inglés densa y espacios rotos en las capturas;
+  - K13 lámina 5: el comando se parte en dos renglones;
+  - los cierres quedan ~60 % vacíos, sin pregunta arriba;
+  - el énfasis partido deja barras sueltas (K10 lámina 6, K6 lámina 3).
+
 ## ▶▶▶ Estado 2-oct 13:40 UTC — misma sesión (`session_01CE21mytrEXdqanCFoWxm32`)
 
 - **PR #76 al día con `main`** (merge sin conflictos, `e3091f74`), marcado listo para revisión, `mergeable_state: clean`.

@@ -53,7 +53,7 @@ carril, cargá su stack, respetá las reglas duras. Fuente viva del mapa complet
 | **chatbot** (motor, guion, conocimiento, voz) | **cargar `onia-chatbot`** — ese archivo nombra el stack completo del carril | — | `onia-chatbot` |
 | **hermes-jarvis** (Hermes, Telegram de Sergio Urcullo, su calendario, pedidos a Claude) | **cargar `onia-hermes-jarvis`** — método, trampas y pruebas del carril; estado en `handoff/hermes-jarvis.md` | — | `onia-hermes-jarvis` |
 | **G** infra / n8n | `n8n-workflow-patterns` `n8n-mcp-tools-expert` `n8n-node-configuration` `n8n-code-javascript` `n8n-validation-expert` `docker-patterns` `deployment-patterns` | — | — |
-| **H** contenido · **J** video-remotion | **`diseno-contenido-onia` primero** (índice de imágenes, galería, packs y patrones) · `editor-videos` `ver-videos` `sacar-prompt` `hyperframes` `banner-design` `brand` + Higgsfield MCP | — | — |
+| **H** contenido · **J** video-remotion | **`diseno-contenido-onia` primero** (índice de imágenes, galería, packs y patrones) · **`edicion-referentes` para todo video nuevo de Sergio Urcullo** (Santiago Muñoz / Erik Taveras TAL CUAL, desde el 3-oct) · `editor-videos` `ver-videos` `sacar-prompt` `hyperframes` `banner-design` `brand` + Higgsfield MCP | — | — |
 | **I** research/estrategia | `deep-research` `exa-search` `iterative-retrieval` `office-hours` | — | — |
 | **K** yt-canal/meta-ads · **L** yt-ciencia-cuerpo | `article-writing` `deep-research` (L=salud/YMYL: fuentes obligatorias) + video stack | — | — |
 | **onia-core** | `database-migrations` `postgres-patterns` `api-design` `backend-patterns` `verification-loop` | — | `onia-core` |
@@ -93,7 +93,7 @@ carril, cargá su stack, respetá las reglas duras. Fuente viva del mapa complet
   medidos, formato).
 - **Producto:** `onia-core` · `onia-chatbot` · `onia-contabilidad-bolivia`.
 - **Venta:** `onia-propuestas` (generador oficial, nunca HTML a mano) · `onia-web-factory`.
-- **Contenido y video:** `diseno-contenido-onia` (índice de diseño) · `editor-videos` ·
+- **Contenido y video:** `diseno-contenido-onia` (índice de diseño) · `edicion-referentes` (el molde de edición de los videos de Sergio Urcullo: recetas medidas de Santiago Muñoz y Erik Taveras + scripts) · `editor-videos` ·
   `ver-videos` · `sacar-prompt` · `higgsfield-generate` · `higgsfield-soul-id` ·
   `motion-doctrine` con sus rutas `cut-the-curve` `oversized-cursor` `seam-craft`
   `captions-overlay` (upstream HeyGen que no está en la copia global).

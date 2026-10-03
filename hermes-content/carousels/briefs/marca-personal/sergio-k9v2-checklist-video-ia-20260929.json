@@ -15,8 +15,9 @@
       "layout": "ilustrado",
       "badge": "guía",
       "headline": "*5 revisiones* antes de publicar tu video con IA",
-      "image_prompt": "A large emerald green clay magnifying glass with a matte black clay handle, resting on a short strip of matte black clay film with small square holes along its edges, on a white surface.",
-      "alt_text": "Una lupa de arcilla sobre una tira de película: revisar el video antes de publicarlo",
+      "image": "hermes-content/galeria/ilustraciones/sergio-k9v2-checklist-video-ia-20260929-s01-301f34e8.jpg",
+      "image_prompt_usado": "A pair of folded emerald green clay reading glasses lying beside a flat matte black clay film reel wound with white clay film, a short loose end trailing out, on a white surface.",
+      "alt_text": "Unos anteojos de arcilla junto a una bobina de película: antes de publicar un video editado con IA, lo revisás vos, con tus ojos, en 5 revisiones.",
       "number": 1,
       "theme": "verde",
       "image_style": "clay",
@@ -73,10 +74,11 @@
       "theme": "blanco",
       "headline": "3 · Difuminá a *quien no firmó*",
       "body": "Gente en la calle, pacientes, clientes: sin permiso, su cara no sale. Y el difuminado se revisa a ojo.",
-      "image_prompt": "A small three-panel folding room divider made of smooth emerald green clay panels with matte black clay frames, standing half open on a white surface.",
+      "image": "hermes-content/galeria/ilustraciones/sergio-k9v2-checklist-video-ia-20260929-s05-3057304b.jpg",
+      "image_prompt_usado": "A tall folding room divider of smooth emerald green clay panels in matte black clay frames, standing in a zigzag on a white surface.",
       "image_style": "clay",
       "next": "revisión 4",
-      "alt_text": "Un biombo de arcilla verde: la cara de quien no dio permiso no se muestra"
+      "alt_text": "Un biombo de arcilla verde: si alguien no firmó el permiso, su cara no se muestra en tu video."
     },
     {
       "number": 6,
@@ -84,16 +86,17 @@
       "theme": "blanco",
       "headline": "4 · Cotizá *antes de generar*",
       "body": "La IA no mira el costo: lo mirás vos. Cada video se cotiza y se aprueba aparte.",
-      "image_prompt": "A small closed coin purse made of soft matte black clay with a shiny emerald green clay clasp on top, standing upright on a white surface.",
+      "image": "hermes-content/galeria/ilustraciones/sergio-k9v2-checklist-video-ia-20260929-s06-36cfd880.jpg",
+      "image_prompt_usado": "A small closed coin purse made of soft matte black clay with a shiny emerald green clay clasp on top, standing upright on a white surface.",
       "image_style": "clay",
       "next": "las 5",
-      "alt_text": "Un monedero de arcilla: cada video con IA se cotiza antes de generarlo"
+      "alt_text": "Un monedero cerrado de arcilla: antes de generar un video con IA, lo cotizás y lo aprobás vos."
     },
     {
       "number": 7,
       "layout": "lista",
       "theme": "blanco",
-      "headline": "Antes de *publicar*",
+      "headline": "Las 5, antes de *publicar*",
       "items": [
         {
           "label": "Cortes",

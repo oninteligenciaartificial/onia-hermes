@@ -31,9 +31,10 @@
       "headline": "La IA de imagen *escribe mal*",
       "body": "El 29 de septiembre el modelo inventó letras en una taza. Texto en la imagen es texto sin control.",
       "next": "paso 1",
-      "alt_text": "Los modelos de imagen escriben mal",
+      "alt_text": "Una lapicera de arcilla que gotea un manchón verde: si le pedís al modelo de imagen que escriba, el texto se le escapa y sale sin control.",
       "image_style": "clay",
-      "image_prompt": "A small plain matte black clay ink bottle lying on its side, with a wide glossy emerald green ink puddle spilling out and spreading in uneven blobs."
+      "image": "hermes-content/galeria/ilustraciones/sergio-k7v2-carruseles-por-codigo-20260929-s02-723733b4.jpg",
+      "image_prompt_usado": "A chunky plain matte black clay fountain pen lying flat, its pointed nib leaking a large uneven emerald green clay ink blot with a few scattered drops, on a white surface."
     },
     {
       "number": 3,
@@ -69,9 +70,10 @@
       "headline": "Paso 2: la IA pinta *solo la imagen*",
       "body": "Un objeto simple sin nada impreso: piedra, planta, madera. Tazas y pantallas no: ahí inventa letras. Describilo en positivo.",
       "next": "paso 3",
-      "alt_text": "La IA genera solo la imagen, sin texto",
+      "alt_text": "Una paleta de pintor de arcilla con un pincel cargado de verde: a la IA usala solo para pintar la imagen. Las letras las ponés vos con código.",
       "image_style": "clay",
-      "image_prompt": "A matte black clay painter's palette with a thumb hole, holding a few round blobs of emerald green and white clay paint, with a small emerald green clay paintbrush resting across it."
+      "image": "hermes-content/galeria/ilustraciones/sergio-k7v2-carruseles-por-codigo-20260929-s04-a4074cda.jpg",
+      "image_prompt_usado": "A matte black clay painter's palette with a thumb hole, holding round blobs of emerald green and white clay paint, with a white clay paintbrush with an emerald green tip resting across it, on a white surface."
     },
     {
       "number": 5,

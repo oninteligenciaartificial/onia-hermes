@@ -87,8 +87,11 @@ lámina sale SIN título. `"next": ""` saca la flecha «seguí» (para historias
 - **Énfasis dentro de una fila de `lista`:** sale gris con subrayado verde (la regla `.c-lista li span` le gana).
 - **`captura` alta (más alta que ancha):** se limita a 760 px y el pie se monta sobre el @handle. Recortá la captura
   más ancha que alta. **`cierre`:** el body no balancea renglones; espacio duro en las dos últimas palabras.
-- **`cierre` con palabra de más de 9 letras** (ANTIGRAVITY, 2-oct): a 170 px se salía de la lámina. Desde el 2-oct el
-  pack la achica en proporción; hasta 9 letras (ESQUELETO) queda igual.
+- **La palabra del `cierre` se MIDE, no se cuentan letras** (corregido el 3-oct). La regla del 2-oct («hasta 9 letras
+  queda igual») era falsa: COMUNIDAD tiene 9 letras pero anchas y su pastilla se salía por los dos lados, y ESQUELETO
+  quedaba a 14 px del borde. Ahora un script de la lámina espera `document.fonts.ready`, mide la pastilla y baja la
+  letra de a 3 px hasta que entra con 84 px de margen. Funciona porque el render usa `--virtual-time-budget`. Para
+  verificarlo, mirá que los píxeles x=3 y x=1076 a la altura de la pastilla sean del fondo.
 - **Foto 4:3 en `ilustrado`:** el `object-fit: cover` la recorta arriba y abajo y no se entiende. Centrala en un lienzo
   blanco ancho (`convert … -gravity center -extent 4400x2400`, ~1,85:1) y entra entera (N06, 2-oct).
 - **Un logo como imagen de `ilustrado`:** ponelo sobre un lienzo blanco con margen; la máscara radial lo corta.
@@ -191,10 +194,23 @@ El CLI autenticado está en el VPS: `HF_CMD="ssh -i <llave> -o BatchMode=yes roo
   se respeta; «boxcar» sale sin cara. La arcilla a veces sale con **fondo gris claro (~210-225)**: en lámina blanca no se
   nota, en portada VERDE queda un bloque turbio. Medí las esquinas antes de montar en verde
   (`ffmpeg -i img -vf crop=150:150:0:0,scale=1:1 -f rawvideo -pix_fmt rgb24 - | od -An -tu1`; menos de ~235, regenerá).
+- **Fondo gris → blanco sin regenerar: `python3 scripts/blanquear-fondo.py in.jpg out.jpg`** (3-oct; necesita numpy y
+  scipy, que se instalan con `pip install numpy scipy`). Medido el 3-oct: 31 de 32 imágenes del lote venían con el
+  fondo entre 160 y 215 de luz, con viñeta, y en la lámina quedaba un óvalo turbio (la galera «en niebla», el faro
+  sobre un óvalo). El flood fill con `-fuzz` no alcanza porque la viñeta se escapa del rango. El script se queda con
+  lo poco saturado y claro que está CONECTADO al borde, cortado por los contornos (Sobel), así no borra los objetos
+  blancos que tocan el fondo, como la franja de un faro o un frasco. Guardá el original antes (en el scratchpad).
 - **Prompt de foto + `image_style: clay` = criatura** (visto 2-oct, portada K9v2): unas «brass sewing scissors… linen
   thread on a pale oak table» con estilo clay salieron como un bicho verde con ojos, y la tijera de costado. Con clay,
   el prompt nombra objetos DE ARCILLA y sus colores («emerald green clay…, matte black clay…, on a white surface»).
   Al cambiar de estilo un brief viejo, reescribí el prompt; no lo heredes.
+- **La palabra «face» dibuja una cara**, aunque sea la cara de una moneda (visto 2-oct, DD-A): «coins with smooth blank
+  faces» sacó una moneda verde con ojos, nariz y sonrisa. Tampoco «side», «front», «head» como partes de objetos: decí
+  «plain», «smooth», «flat». Las monedas, además, suelen salir con «$» o números grabados: mejor bloques grandes y chicos.
+- **Lote con criterio (2-oct, 32 imágenes):** antes de generar, un editor y un juez adversarial pasan por cada lámina con
+  esta pregunta: «¿un lector entiende la relación título + imagen en 1 segundo, sin leer el alt?». Reescribieron 30 de 32;
+  las de antes eran decoración genérica o metáforas de todo el carrusel, no de ESA lámina. El juez además cazó repetidos
+  entre carruseles (dos balanzas, dos lupas). Workflow: `criterio → juez → reescritura → cruce`.
 - **`--out` de `carousel_images.mjs` = nombre del carrusel** (`<scratch>/sergio-kNN-…`): el script toma de ahí el nombre
   del archivo y el `usado_en` de `galeria.json`. Con `--out k11-img` quedó todo mal anotado.
 - **Varios agentes generando a la vez:** `flock /tmp/claude-0/galeria.lock` delante del comando (el script reescribe

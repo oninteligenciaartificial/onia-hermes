@@ -45,9 +45,10 @@
       "headline": "Regla 2: después, *solo plantilla*",
       "body": "Pasadas las 24 h, solo sale una plantilla que WhatsApp aprobó antes. Mandala a aprobar antes de programar nada.",
       "next": "regla 3",
-      "alt_text": "Fuera de la ventana solo se envían plantillas aprobadas",
+      "alt_text": "Un molde de galletas de arcilla con forma de globo de mensaje, al lado de un mensaje recortado con esa misma forma: pasadas las 24 h, solo sale lo que cabe en una plantilla que WhatsApp aprobó antes.",
       "image_style": "clay",
-      "image_prompt": "An emerald green clay cookie cutter shaped like a rounded speech bubble, resting on a flat sheet of smooth white clay, beside one cleanly cut smooth white clay speech bubble shape."
+      "image": "hermes-content/galeria/ilustraciones/sergio-k5v2-seguimiento-que-no-molesta-20260929-s03-20e9957d.jpg",
+      "image_prompt_usado": "An emerald green clay cookie cutter shaped like a rounded speech bubble, resting on a small rolled-out sheet of matte black clay, beside one cleanly cut matte black clay speech bubble, on a white surface."
     },
     {
       "number": 4,
@@ -112,9 +113,10 @@
       "headline": "Un solo seguimiento, *a su hora*",
       "body": "A las 20 h del último mensaje. Plantilla pasadas las 24 h. Nada de noche. Silencio a los 7 días.",
       "image_style": "clay",
-      "image_prompt": "A plain smooth matte black clay door standing upright and closed, with one simple round emerald green clay ring knocker in its center.",
+      "image": "hermes-content/galeria/ilustraciones/sergio-k5v2-seguimiento-que-no-molesta-20260929-s07-9dcc35b5.jpg",
+      "image_prompt_usado": "A medicine dropper with a matte black clay bulb and a thick matte black clay tube tapering to a narrow tip, lying beside a small white clay spoon that holds one glossy emerald green clay drop, on a white surface.",
       "next": "mis mensajes",
-      "alt_text": "Resumen: un solo seguimiento a las 20 h, plantilla después de las 24 h, nada de noche y silencio a los 7 días"
+      "alt_text": "Un gotero negro de arcilla junto a una cuchara blanca con una sola gota verde: el seguimiento se da como un remedio, una dosis y a su hora. A las 20 h, plantilla pasadas las 24 h, nada de noche y silencio a los 7 días."
     },
     {
       "number": 8,

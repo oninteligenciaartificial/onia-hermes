@@ -1,0 +1,62 @@
+{
+  "url": "https://code.claude.com/docs/en/permission-modes",
+  "fecha": "2026-10-03T17:30:48.321Z",
+  "capturas": {
+    "cap-modos": {
+      "archivo": "cap-modos.png",
+      "ancho": 1080,
+      "alto": 606,
+      "marca": [
+        424,
+        490,
+        988,
+        520
+      ],
+      "scroll": 0
+    },
+    "cap-bloquea": {
+      "archivo": "cap-bloquea.png",
+      "ancho": 1080,
+      "alto": 606,
+      "marca": [
+        30,
+        36,
+        245,
+        66
+      ],
+      "scroll": 13461
+    },
+    "cap-permite": {
+      "archivo": "cap-permite.png",
+      "ancho": 1080,
+      "alto": 606,
+      "marca": [
+        78,
+        312,
+        1043,
+        342
+      ],
+      "scroll": 17901
+    },
+    "cap-manual": {
+      "archivo": "cap-manual.png",
+      "ancho": 1080,
+      "alto": 606,
+      "marca": [
+        418,
+        441,
+        619,
+        465
+      ],
+      "scroll": 5317
+    }
+  },
+  "logos": {
+    "logo-claudecode": {
+      "archivo": "logo-claudecode.png"
+    },
+    "logo-whatsapp": {
+      "archivo": "logo-whatsapp.png"
+    }
+  }
+}

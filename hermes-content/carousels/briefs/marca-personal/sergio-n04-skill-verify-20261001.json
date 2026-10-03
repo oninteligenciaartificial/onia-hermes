@@ -50,7 +50,7 @@
           "label": "git commit"
         }
       ],
-      "body": "Versión 2.1.286: si tus skills, del proyecto o de usuario, tienen una llamada verify, a Claude se le indica correrla *justo antes* de commitear.",
+      "body": "Versión 2.1.286: si entre tus skills, del proyecto o de usuario, hay una llamada verify, a Claude se le indica correrla *justo antes* de commitear.",
       "next": "la letra chica",
       "alt_text": "Claude Code corre la skill verify justo antes de un git commit"
     },
@@ -61,9 +61,10 @@
       "headline": "Una indicación, *no\u00a0un\u00a0candado*",
       "body": "Vale cuando commitea Claude, no a mano. Y no corre en commits de solo documentación o solo tests.",
       "image_style": "clay",
-      "image_prompt": "A small matte black clay gate standing wide open, with a smooth emerald green clay arrow lying on the ground and pointing through the opening, on a clean white surface.",
+      "image": "hermes-content/galeria/ilustraciones/sergio-n04-skill-verify-20261001-s03-8d117f68.jpg",
+      "image_prompt_usado": "A thick emerald green clay arrow lying flat and pointing to the right, beside a matte black clay padlock standing upright with its shackle swung wide open, unlocked, on a white surface.",
       "next": "3 pasos",
-      "alt_text": "verify es una indicación, no un candado: no corre en commits manuales ni en los de solo documentación o tests"
+      "alt_text": "Una flecha verde y un candado negro abierto, de arcilla: verify le marca el camino a Claude, pero no cierra nada. No corre si commiteás a mano ni en commits de solo documentación o solo tests."
     },
     {
       "number": 4,
@@ -127,9 +128,10 @@
       "headline": "Comprobá que *la\u00a0corre*",
       "body": "Pedile un commit que toque código, no solo un README o un test. Antes del commit tenés que verla correr.",
       "image_style": "clay",
-      "image_prompt": "A matte black clay stethoscope resting on a clean white surface, its round emerald green chest piece pressed against a small emerald green clay gear.",
+      "image": "hermes-content/galeria/ilustraciones/sergio-n04-skill-verify-20261001-s07-62a07f21.jpg",
+      "image_prompt_usado": "A matte black clay stethoscope coiled loosely in a ring, its round emerald green clay chest piece resting at the center of the loop, on a white surface.",
       "next": "la plantilla",
-      "alt_text": "Cómo comprobar que Claude Code corre la skill verify"
+      "alt_text": "Un estetoscopio de arcilla: hacé el chequeo. Pedile a Claude un commit que toque código y fijate que verify aparezca corriendo antes del commit."
     },
     {
       "number": 8,
