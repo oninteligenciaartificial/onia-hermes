@@ -11,6 +11,22 @@ description: Invocar ANTES de editar cualquier video NUEVO de Sergio Urcullo (ta
 > El reel de Codex del 14-sep (`references/video-intake/2026-09-14-reel-astra-fable-codex/`) y «Tu primera
 > automatización» (`videos/marca-personal/2026-09-21/`) son REFERENCIA de lo que a él le gustó, no el molde.
 
+## Reglas de trabajo (la madre, 3-oct-2026, después de revisar los resultados)
+
+> Falló el arnés, no la edición: del mismo video (N03) salieron 3 versiones porque no había molde fijado antes de
+> editar. Medido ese día: más del 95 % del gasto de tokens fue releer contexto.
+
+1. **Cada tarea arranca con 3 líneas escritas en el transcript:** META (qué queda hecho), PRUEBA DE HECHO (qué se
+   mira para darlo por hecho) y REGLA DE PARADA (cuándo se deja de trabajar y se espera).
+2. **Antes de editar, se elige el molde** (Santiago o Erik, de esta skill) y se escribe cuál es. El video terminado
+   se compara contra `hermes-content/references/marca-personal/FICHAS-MONTAJE-REFERENTES.md`. Sale **una versión, no
+   tres**: si el molde no sirve, se le pregunta a Sergio Urcullo antes de rehacer.
+3. **Tokens:**
+   - workflows de 5 agentes como máximo;
+   - no leer transcripts ni documentos enteros: se busca la sección con `grep`/`sed -n`;
+   - effort bajo y modelo chico para lo mecánico (renders, conteos, hojas de control);
+   - el modelo grande queda para el criterio y la QA.
+
 ## Cuándo y qué
 
 - **Todo video nuevo de Sergio Urcullo** se edita con UNA de las dos recetas. N03 (modo auto) quedó al estilo Codex
