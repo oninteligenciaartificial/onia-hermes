@@ -8,7 +8,7 @@ Cada pieza termina pidiendo comentar su PALABRA (en YouTube se contesta el comen
 
 ## Jue 1-oct
 
-### D02-B · Vertical · Desde el 1 de octubre, tu bot de WhatsApp paga por cada respuesta
+### D02-B · Vertical · Desde el 1 de octubre, las respuestas de tu bot de WhatsApp se cobran (no todas)
 
 **En pantalla:** página de precios de Meta (tabla en dólares) + la cuenta en tres pasos con los mensajes de tu bot.
 
@@ -22,9 +22,9 @@ Lo que cambia: los mensajes de servicio, los que tu bot contesta dentro de las v
 
 Hacé la cuenta así.
 
-Uno. Contá cuántos mensajes mandó tu bot el mes pasado. Tres mensajes seguidos son tres.
+Uno. Contá cuántos mensajes de texto libre mandó tu bot el mes pasado, dentro de las veinticuatro horas. Tres mensajes seguidos son tres.
 
-Dos. Restale mil.
+Dos. Restale mil. Las plantillas no entran en esos mil: se cobran desde la primera.
 
 Tres. En la página de precios de Meta, lo que ves en pantalla, bajá la tabla en dólares y buscá la tarifa de utilidad del país de tu cliente. Bolivia está en «resto de Latinoamérica». Multiplicá.
 
@@ -69,9 +69,9 @@ Se llama GPT seis punto uno Sol. Lo presentaron el veintinueve de septiembre, en
 
 En la página de precios, lo que ves en pantalla: dos dólares el millón de tokens que entran y diez los que salen. El grande, Astra, cobra diez y cincuenta. Un quinto.
 
-Lo que casi nadie aprovecha: lo que entra desde la caché cuesta diez centavos el millón. Es lo que repetís igual al principio de cada pedido: las instrucciones de tu agente, tu lista de precios. Ponelo primero y no lo toques. La primera vez cuesta un poco más; después, veinte veces menos. Tiene que pasar de mil veinticuatro tokens.
+Lo que casi nadie aprovecha: lo que entra desde la caché cuesta diez centavos el millón. Es lo que repetís igual al principio de cada pedido: las instrucciones de tu agente, tu lista de precios. Ponelo primero y no lo toques. La primera vez cuesta un poco más; después, veinte veces menos. Tiene que tener al menos mil veinticuatro tokens.
 
-Cómo sabés que funcionó: la respuesta de la API trae cuántos tokens salieron de caché. Si después del primer pedido sigue en cero, cambiaste algo del principio o pasó más de media hora.
+Cómo sabés que funcionó: la respuesta de la API trae cuántos tokens salieron de caché. Si en el segundo pedido sigue en cero, cambiaste algo del principio o pasó más de media hora.
 
 La cuenta para tu agente está en la comunidad: comentá CACHE y te paso el link.
 
@@ -108,9 +108,9 @@ Sonnet cinco punto cinco salió el veintiocho de septiembre. Cuesta la mitad que
 
 Así que hice lo más simple: le di exactamente la misma tarea a los dos. En este video te muestro qué pasó, qué dicen los números de verdad y la regla que uso en mi empresa para elegir cuál de los dos trabaja.
 
-Opus cinco punto cinco salió el veintidós de septiembre. Es el modelo potente, el que usás cuando la tarea es difícil. Sonnet cinco punto cinco salió seis días después. Es el intermedio: más rápido y más barato.
+Opus cinco punto cinco salió el veintidós de septiembre. Es el potente de todos los días, el que usás cuando la tarea es difícil. Arriba hay uno más: Fable cinco punto uno, que salió el primero de septiembre. Sonnet cinco punto cinco salió seis días después. Es el intermedio: más rápido y más barato.
 
-¿Cuánto más barato? Opus cobra cuatro dólares por millón de tokens de entrada y veinte de salida. Sonnet, dos y diez. Exactamente la mitad.
+¿Cuánto más barato? Opus cobra cuatro dólares por millón de tokens de entrada y veinte de salida. Sonnet, dos y diez. Exactamente la mitad. Fable cinco punto uno cobra diez y cincuenta: dos veces y media lo que cobra Opus.
 
 Ahora, la mitad del precio no sirve de nada si hace la mitad del trabajo. Así que miremos las pruebas que publicó Anthropic. Las ves en pantalla.
 
@@ -124,7 +124,7 @@ Pero en FrontierCode, que es código difícil de verdad, Opus saca cincuenta y c
 
 La lectura es esta: en casi todo están parejos, y Opus se despega cuando el problema es realmente difícil.
 
-Si usás Claude con suscripción, el chat y Claude Code gastan del mismo límite semanal. Cada tarea que mandás al modelo caro sin necesidad es una tarea menos antes de que se te corte la semana. Y si pagás por uso, en una automatización o en un bot, es directamente el doble de plata.
+Si usás Claude con suscripción, el chat y Claude Code gastan del mismo límite semanal. Cada tarea que mandás al modelo caro sin necesidad es una tarea menos antes de que se te corte la semana. Y Fable, según tu plan, se cobra aparte, de los créditos de uso. Y si pagás por uso, en una automatización o en un bot, es directamente el doble de plata.
 
 Esos son números de Anthropic. Yo quería ver una tarea mía.
 
@@ -136,9 +136,9 @@ Resultado: los dos dieron los mismos tres totales. Mil cincuenta, mil sesenta y 
 
 Para esta tarea, pagar el doble no me dio nada. No elijas el modelo por la fama. Elegilo por tu tarea.
 
-Cuando abrís Claude Code desde la terminal, escribís claude, espacio, guion guion model, y el nombre. Claude guion guion model sonnet te abre la sesión con Sonnet. Claude guion guion model opus, con Opus.
+Cuando abrís Claude Code desde la terminal, escribís claude, espacio, guion guion model, y el nombre. Claude guion guion model sonnet te abre la sesión con Sonnet. Claude guion guion model opus, con Opus. Y model fable, con Fable.
 
-Sonnet y opus son alias: siempre apuntan a la versión más nueva. Así que cuando salga la próxima, no tenés que cambiar nada.
+Sonnet, opus y fable son alias: si usás Claude Code con tu cuenta de Anthropic, siempre apuntan a la versión más nueva. Así que cuando salga la próxima, no tenés que cambiar nada.
 
 Si ya estás adentro de una sesión, escribí barra model y elegí el otro. Lo que ves en pantalla. Para comprobar con cuál estás trabajando, preguntale directamente: «¿qué modelo sos?». Claude Code le pasa ese dato en cada sesión, así que te responde el nombre exacto.
 
@@ -150,9 +150,9 @@ Sonnet mide, revisa y redacta: contar cosas, leer pantallas, armar contenido, pu
 
 Opus escribe código y decide: los agentes que tocan el producto o suben cambios a la rama principal, una migración de base de datos, una decisión de arquitectura, un error que no entiendo después de dos intentos. Ahí equivocarse sale más caro que el modelo.
 
-Y el modelo más caro de todos, Fable, entra solo cuando Opus, con el esfuerzo alto, no alcanzó.
+Y Fable cinco punto uno, que cuesta cinco veces lo que Sonnet, entra solo cuando Opus, con el esfuerzo alto, no alcanzó.
 
-El error más común es elegir una vez y no volver a mirar. En un mes salieron Opus y Sonnet cinco punto cinco, y lo que era cierto con los anteriores dejó de serlo: hoy el barato le gana al caro en tareas de terminal.
+El error más común es elegir una vez y no volver a mirar. En un mes salieron Fable cinco punto uno, Opus y Sonnet cinco punto cinco, y lo que era cierto con los anteriores dejó de serlo: hoy el barato le gana al caro en tareas de terminal.
 
 El segundo error es comparar mal. Si corrés Opus sobre el trabajo que ya dejó hecho Sonnet, Opus arranca con ventaja. Cada prueba, desde el mismo punto de partida, con el mismo prompt y el mismo esfuerzo. Cuando no sé cuál va, hago lo que hice acá: la misma tarea a los dos, y comparo cuánto tuve que corregir de cada uno. Eso vale más que cualquier tabla.
 
@@ -229,7 +229,7 @@ Paso uno: buscalo. En tu código, buscá el texto claude guion sonnet guion cuat
 
 Paso dos: si el código está en una carpeta, abrí Claude Code y escribí lo que ves en pantalla: barra claude api migrate, y el modelo nuevo. Te pregunta qué archivos tocar, y al final te deja una lista para revisar.
 
-Paso tres, el crítico. Tres cosas que el cuatro punto cinco aceptaba y el cinco punto cinco rechaza con error: una temperatura cambiada, una respuesta pre-llenada, y obligarlo a usar una herramienta.
+Paso tres, el crítico. Hay cinco ajustes que el cuatro punto cinco aceptaba y el cinco punto cinco rechaza con error. Los tres más comunes: una temperatura cambiada, una respuesta pre-llenada, y obligarlo a usar una herramienta. Los otros dos son del modo de pensamiento, y están en la lista.
 
 Cómo sabés que quedó: tu prueba corre sin error y la respuesta indica el modelo nuevo.
 
@@ -266,7 +266,7 @@ En la comunidad dejé cómo armo mis seguimientos: comentá VENTANA y te paso el
 
 Claude Code ahora lee AGENTS punto md, el archivo de instrucciones que usa Codex. Pero hay una trampa.
 
-Solo lo lee si tu proyecto no tiene CLAUDE punto md. Si tenés los dos, lee CLAUDE y el otro lo ignora.
+Solo lo lee si tu proyecto no tiene CLAUDE punto md. Si tenés los dos, por defecto lee CLAUDE y el otro lo ignora.
 
 Es mi caso. En ONIA uso Claude Code y Codex en el mismo repositorio, y tengo los dos archivos, con reglas distintas. Cada uno lee solo el suyo: lo que le enseño a uno, el otro no lo sabe.
 
@@ -282,7 +282,7 @@ Comentá AGENTS y te paso la plantilla.
 
 ### N04 · Vertical · Una skill llamada verify y Claude Code la corre antes de cada commit
 
-**En pantalla:** crear `.claude/skills/verify/SKILL.md` en vivo + pedir un commit y ver que verify corre antes.
+**En pantalla:** crear `.claude/skills/verify/SKILL.md` en vivo, cerrar y abrir Claude Code, cambiar una línea de código y pedir un commit: verify corre antes (con un cambio solo de docs no corre).
 
 **Palabra:** VERIFY
 
@@ -294,11 +294,11 @@ Paso uno: en tu proyecto creá la carpeta punto claude, adentro skills, adentro 
 
 Paso dos: arriba, el nombre verify y una descripción corta. Abajo, tus chequeos en orden. Los míos: que compile, con npx tsc guion guion no emit, y que pasen los tests. Si algo falla, no commitear y decir qué falló.
 
-Paso tres: actualizá con claude update.
+Paso tres: actualizá con claude update. Y cerrá Claude Code y abrilo de nuevo: la indicación se carga al arrancar la sesión.
 
 Por qué importa: en ONIA la rama principal alimenta el deploy. Y ya nos pasó que un proceso automático subió trabajo a medias.
 
-Cómo sabés que anduvo: pedile un commit y fijate que antes aparezca la skill verify corriendo.
+Cómo sabés que anduvo: cambiá algo de código, pedile un commit y fijate que antes aparezca la skill verify corriendo. Si el cambio es solo de documentación o de tests, no la corre.
 
 La plantilla está en la comunidad de WhatsApp: comentá VERIFY y te paso el link.
 
@@ -596,7 +596,7 @@ Lo bueno: licencia MIT, y el README te ofrece un modo de prueba, test drive, que
 
 Lo que hay que mirar: el comando principal de instalación termina en guion guion yes, así que acepta todo sin preguntarte. Y el día que lo revisé, cambiaron el README: la forma de instalar que yo había anotado la tarde anterior ya no estaba. Por eso te digo que lo leas el día que instalás.
 
-Además, la telemetría viene activada, y el README nombra la variable que la apaga. Y los issues: unos dos mil seiscientos abiertos. Mi lectura: probalo en una máquina aparte. Todavía no le pondría encima el centro de un negocio.
+Además, la telemetría viene activada, y el README nombra la variable que la apaga. Y los issues: más de dos mil seiscientos abiertos. Mi lectura: probalo en una máquina aparte. Todavía no le pondría encima el centro de un negocio.
 
 El segundo, Context Mode: una extensión para que tu agente no se llene la memoria de trabajo con resultados enormes. Promete noventa y ocho por ciento menos de contexto; ese número es del autor.
 
@@ -742,9 +742,9 @@ La lista de chequeo está en la comunidad de WhatsApp: comentá DERECHOS y te pa
 
 **Palabra:** ANUNCIO
 
-Desde el uno de octubre, cada respuesta de tu bot de WhatsApp se paga. Pero hay una puerta por donde no se paga nada hasta por siete días.
+Desde el uno de octubre, las respuestas de tu bot de WhatsApp se pagan, después de las primeras mil del mes. Pero hay una puerta por donde no se paga nada hasta por siete días.
 
-Está en la página de precios de Meta, la que ves en pantalla. Si alguien te escribe desde un anuncio de clic a WhatsApp, y le contestás dentro de las veinticuatro horas, se abre una ventana de hasta siete días en la que no se te cobra ningún mensaje.
+Está en la página de precios de Meta, la que ves en pantalla. Si alguien te escribe desde un anuncio de clic a WhatsApp, y le contestás dentro de las veinticuatro horas, se abre una ventana de hasta siete días desde tu respuesta en la que no se te cobra ningún mensaje.
 
 Tres condiciones. Una: contestar rápido. Si tardás más de un día, esa ventana se pierde. Dos: es para la plataforma oficial, la de los bots. Tres: tiene que escribirte desde la app del celular; desde la computadora no cuenta.
 
