@@ -146,5 +146,18 @@ antes de que lleguen a Sergio Urcullo.
 
 Guía de formatos (a cámara Erik/Rocha, pantalla verde, pantalla partida, demo, top, b-roll, YouTube horizontal), con
 sus fuentes, y el orden de grabación POR ESCENA, no por fecha: `hermes-content/docs/cola/plan-3-semanas/PLAN-GRABACION-3-OCT.md`.
-Hueco medido: el pipeline no tiene escrito el paso de recorte del fondo verde (chromakey de ffmpeg). Hasta que exista,
-el bloque verde se encuadra para que sirva también como pantalla partida.
+**Pantalla verde: el paso ya existe** (3-oct): `editor-videos/scripts/fondo-verde.mjs`, con su trampa en la skill
+`editor-videos` (chromakey mide solo el color, no el brillo: con la tela en sombra se comía la camiseta). Se calibra con
+la primera toma real (`--chequeo`); si la tela no queda limpia en 1 hora, pantalla partida (Santiago) y se avisa. Por
+eso el bloque verde se sigue encuadrando con la cabeza en la mitad de abajo.
+
+**Antes de grabar, las piezas REVISAR se vuelven a mirar contra su fuente, el mismo día** (3-oct, 10 piezas, 2
+agentes en paralelo). Ningún dato se había dado vuelta; lo que fallaba era lo INCOMPLETO, y eso es lo que se busca:
+- **el modelo nuevo que falta** (D01-C comparaba Opus y Sonnet 5.5 sin nombrar a Fable 5.1, que es más alto);
+- **la excepción que contradice a otra pieza** (S2-D08-C decía «cada respuesta se paga» y D02-B «los primeros mil,
+  gratis»);
+- **la condición que rompe la demo** (N04: la skill `verify` se carga al arrancar la sesión y no corre en commits solo
+  de docs; crearla en vivo y pedir el commit no la hubiera mostrado). Una demo de una función nueva se prueba una vez
+  antes de grabar, en las mismas condiciones.
+- La página «linda» de la empresa puede estar vieja (business.whatsapp.com seguía diciendo 72 horas y servicio
+  gratis): en pantalla va la doc de desarrolladores, con su fecha de actualización.
