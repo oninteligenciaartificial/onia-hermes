@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { PRUEBA, RETENCION } from "@/lib/pricing";
-import { Reveal } from "@/motion";
+import { Entrada, Reveal } from "@/motion";
 import { WA_URL_LANDING, SITE_URL, CORREO_CONTACTO } from "@/lib/site";
 import { CUANTOS_RUBROS_CAPITAL } from "@/content/rubros";
 import { EMPEZAR_URL } from "../nav";
@@ -104,7 +104,7 @@ export default function Nosotros() {
     <>
       <JsonLd data={JSON_LD} />
       <Block surface="paper">
-        <Reveal>
+        <Entrada>
           <Kicker>Nosotros</Kicker>
           <h1 className={s.display}>
             Una empresa <em>boliviana</em> construyendo el sistema que Bolivia
@@ -119,7 +119,7 @@ export default function Nosotros() {
             entrás, lo usás {PRUEBA.dias} días con el plan {PRUEBA.planQueCorre}{" "}
             completo y sin dejar una tarjeta, y recién después decidís.
           </p>
-        </Reveal>
+        </Entrada>
       </Block>
 
       {/* Cuatro principios: fila de datos, no tarjetas — con cuatro, la grilla

@@ -26,9 +26,21 @@ import { defineConfig } from "vitest/config";
  *
  * Sólo declara el alias: todo lo demás queda en los defaults de vitest, para
  * no cambiar en silencio qué archivos corren.
+ *
+ * **Y el JSX (2026-10-02).** `tsconfig.json` dice `"jsx": "preserve"` —es lo
+ * que Next pide: el JSX lo compila SWC en el build—, y vite lo respeta: deja
+ * el JSX sin tocar y su análisis de imports muere al leer cualquier `.tsx`.
+ * Eso dejaba sin gate posible a lo que el navegador recibe del servidor: el
+ * `<h1>` de /precios salía con `opacity:0` en línea (LCP 3,4-3,7 s) y ningún
+ * test podía renderizar la página para verlo. Con `runtime: "automatic"` vite
+ * compila el JSX como lo hace Next, y `titular-visible-sin-js.test.ts`
+ * renderiza cada página con `react-dom/server`. No cambia qué archivos corren.
  */
 export default defineConfig({
   resolve: {
     alias: { "@": resolve(dirname(fileURLToPath(import.meta.url)), "src") },
+  },
+  oxc: {
+    jsx: { runtime: "automatic" },
   },
 });

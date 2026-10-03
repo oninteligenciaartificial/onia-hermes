@@ -3,7 +3,7 @@
 > Para Sergio Urcullo, que es el único que vende. Un guion por rubro, con lo que la 1.0 hace hoy.
 > **Leído en el código** de `onia-platform`, `origin/master` `a7f228c` (1-oct). Cada pantalla que se muestra
 > lleva su prueba en la tabla de su rubro. **Lo que no está en el código no está en el guion.**
-> Reemplaza al guion dental de julio (DentalGest, planes y precios viejos, factura): quedó en el historial de git.
+> Reemplaza al guion dental de julio (con la marca vieja DentalGest, planes y precios viejos, factura): quedó en el historial de git.
 > Un tema, un archivo: esto se EDITA.
 
 §0 vale para todos · §1 Dental y estética · §2 Importadora · §3 Comercio y servicios · §4 Después de la demo.

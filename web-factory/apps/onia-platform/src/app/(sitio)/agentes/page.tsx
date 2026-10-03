@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Reveal } from "@/motion";
+import { Entrada, Reveal } from "@/motion";
 import {
   ALCANCE_AGENTE_COTIZACIONES,
   ALCANCE_AGENTE_STOCK,
@@ -17,7 +17,12 @@ const PLAN_CON_AGENTES = primerPlanCon("agentes");
 
 export const metadata: Metadata = {
   title: "Agentes con IA que proponen y esperan tu aprobación | Onia",
-  description: `Agentes con IA que cada mañana revisan tus datos según tu rubro —quién no volvió, qué pago venció, qué cita falta confirmar, qué stock quedó bajo— y te dejan la propuesta en Pendientes. Nada sale sin tu OK. Desde el plan ${PLAN_CON_AGENTES}.`,
+  // «Agentes con IA que cada mañana revisan tus datos» decía hasta el 2-oct: a quién y
+  // cuándo lo deciden reglas fijas, la IA solo propone el texto (catálogo §8). Y hasta el
+  // 3-oct «La IA te propone el texto y vos lo aprobás», pegado a la propuesta de cada
+  // mañana, se leía como que redacta cada mensaje: es UNA plantilla por agente, aprobada
+  // una vez — la misma frase del hero. Lo vigila `app/promesa-que-el-producto-cumple.test.ts`.
+  description: `Agentes que cada mañana revisan tus datos según tu rubro —quién no volvió, qué pago venció, qué cita falta confirmar, qué stock quedó bajo— y te dejan la propuesta en Pendientes. La IA te propone el texto de cada agente y lo aprobás una vez. Nada sale sin tu OK. Desde el plan ${PLAN_CON_AGENTES}.`,
   alternates: { canonical: "/agentes" },
   openGraph: {
     type: "website",
@@ -100,7 +105,7 @@ export default function Agentes() {
     <>
       <Block surface="ink">
         <div className={s.split}>
-          <Reveal>
+          <Entrada>
             <div>
               <Kicker>Agentes con IA</Kicker>
               <h1 className={s.display}>
@@ -114,12 +119,16 @@ export default function Agentes() {
                   /agents y el sistema la completa en cada propuesta
                   (onia-platform lib/onia-core/modules/agents-plantilla.ts,
                   cabecera y generarPlantilla). A quién y cuándo lo deciden
-                  reglas fijas sobre tus datos (agents-runtime.ts), no la IA. */}
+                  reglas fijas sobre tus datos (agents-runtime.ts), no la IA.
+                  Corregido 2026-10-02: decía «lo que te sirve sale por tu
+                  WhatsApp», y el envío solo necesita un número conectado (hoy
+                  0, catálogo §7); el link para mandarlo con un toque existe
+                  siempre. */}
               <p className={s.lead}>
                 La IA redacta el texto de cada agente y vos lo aprobás una vez;
                 a quién y cuándo lo decide el sistema con tus datos. Cada
-                mañana te deja los mensajes listos: lo que te sirve sale por tu
-                WhatsApp, o te queda para mandarlo con un toque.
+                mañana te deja los mensajes listos: aprobás lo que te sirve y
+                lo mandás por tu WhatsApp con un toque.
               </p>
               <div className={s.actions}>
                 <Btn href={EMPEZAR_URL}>{CTA_ALTA}</Btn>
@@ -134,10 +143,10 @@ export default function Agentes() {
                 {PRUEBA.dias} días gratis · sin tarjeta
               </p>
             </div>
-          </Reveal>
-          <Reveal delay={0.08}>
+          </Entrada>
+          <Entrada delay={0.08}>
             <Shape tone="signal" panel="agentes" />
-          </Reveal>
+          </Entrada>
         </div>
       </Block>
 

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { RUBROS_VIVOS } from "@/content/rubros";
+import { Entrada } from "@/motion";
 import {
   PLANES,
   PRUEBA,
@@ -131,7 +132,7 @@ export default function Portada() {
       <Block surface="green" className={p.heroVerde}>
         <span className={`${p.halo} ${p.haloA}`} aria-hidden="true" />
         <span className={`${p.halo} ${p.haloB}`} aria-hidden="true" />
-        <div className={p.heroEntrada}>
+        <Entrada>
           <div className={p.centro}>
             <Kicker>Un solo sistema para tu negocio</Kicker>
             <h1 className={p.heroTitulo}>
@@ -156,7 +157,7 @@ export default function Portada() {
               <p className={p.escenaNota}>Vista ilustrativa del plan de entrada.</p>
             </div>
           </div>
-        </div>
+        </Entrada>
       </Block>
 
       {/* 2 · RUBROS: cinco opciones que salen de la fuente del alta. */}

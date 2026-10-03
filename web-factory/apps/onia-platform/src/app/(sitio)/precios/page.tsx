@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Reveal } from "@/motion";
+import { Entrada, Reveal } from "@/motion";
 import {
   PLANES,
   GRUPO,
@@ -124,7 +124,7 @@ export default function Precios() {
     <>
       <JsonLd data={JSON_LD} />
       <Block surface="paper">
-        <Reveal>
+        <Entrada>
           <Kicker>Precios claros</Kicker>
           {/* `displayPalabraLarga`: «implementación,» no entraba entera en un
               teléfono de 390 y la coma quedaba cortada en el borde (ver la
@@ -135,7 +135,7 @@ export default function Precios() {
           <p className={s.lead}>
             {PRUEBA.copy}
           </p>
-        </Reveal>
+        </Entrada>
       </Block>
 
       {/* Planes */}

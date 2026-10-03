@@ -36,7 +36,8 @@
     "chat-diferido:vivo": "node scripts/chat-diferido-vivo.mjs",
     "precio-tras-el-clic:vivo": "node scripts/precio-tras-el-clic.mjs",
     "vineta-pegada:viva": "node scripts/vineta-pegada-a-su-texto.mjs",
-    "tarjeta-social:viva": "node scripts/tarjeta-social-viva.mjs"
+    "tarjeta-social:viva": "node scripts/tarjeta-social-viva.mjs",
+    "promesas:revisar": "node scripts/promesa-que-el-producto-cumple.mjs"
   },
   "dependencies": {
     "motion": "^12.23.26",

@@ -1,0 +1,35 @@
+/* Entrada de la primera pantalla, SIN JavaScript.
+ *
+ * La pinta el navegador con el HTML: no espera a que React hidrate ni a que
+ * LazyMotion baje sus features. Misma distancia que el sistema de motion
+ * (`riseDistance`, 24 px) y la misma curva/duración que la portada usaba desde
+ * el 29-sep (`heroEntrada`), así el titular entra igual en todas las páginas.
+ *
+ * ⚠️ SOLO transform, sin fundido desde opacity 0 (medido el 2026-10-02 con
+ * Chromium): un elemento cuyo PRIMER paint es `opacity: 0` queda fuera del LCP
+ * para siempre, aunque la animación lo muestre 16 ms después. Con el fundido,
+ * /precios «medía» 408 ms porque Chrome tomaba como LCP el botón del header y
+ * nunca el titular: el número mejoraba mintiendo. Sin fundido el titular es
+ * legible desde el primer paint y el LCP mide lo que el visitante ve. Lo vigila
+ * `app/titular-visible-sin-js.test.ts`.
+ *
+ * Con prefers-reduced-motion no hay animación: quieto desde el primer paint. */
+
+.entrada {
+  animation: entradaSube 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes entradaSube {
+  from {
+    transform: translateY(24px);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .entrada {
+    animation: none;
+  }
+}

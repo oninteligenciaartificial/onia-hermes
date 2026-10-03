@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Reveal } from "@/motion";
+import { Entrada, Reveal } from "@/motion";
 import { PRUEBA, RETENCION, ALCANCE_CON_AGENDA, ALCANCE_CON_INVENTARIO } from "@/lib/pricing";
 import { WA_URL_LANDING, SITE_URL } from "@/lib/site";
 import { MEDIO_DE_PAGO } from "@/content/medio-de-pago";
@@ -101,7 +101,7 @@ export default function Empezar() {
       <JsonLd data={JSON_LD} />
       <Block surface="paper">
         <div className={s.split}>
-          <Reveal>
+          <Entrada>
             <div>
               <Kicker>Empezá</Kicker>
               <h1 className={s.display}>
@@ -137,8 +137,8 @@ export default function Empezar() {
                 Sin tarjeta · sin implementación · tus datos se exportan en CSV
               </p>
             </div>
-          </Reveal>
-          <Reveal delay={0.08}>
+          </Entrada>
+          <Entrada delay={0.08}>
             {/* "Tu cuenta", dibujada. Antes acá iba panel.webp, el panel real
                 de una ferretería con sus montos del día: Sergio, 2026-09-01,
                 textual —"no coloques capturas literales del sistema, se ve
@@ -150,7 +150,7 @@ export default function Empezar() {
                 plan Profesional"). En la portada, donde el precio a la vista es el
                 de entrada, dibuja ese. */}
             <Shape tone="green" panel="cuenta" plan={PRUEBA.planQueCorreId} />
-          </Reveal>
+          </Entrada>
         </div>
       </Block>
 
