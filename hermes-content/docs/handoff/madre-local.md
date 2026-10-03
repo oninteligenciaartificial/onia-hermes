@@ -75,3 +75,4 @@ clínicas pagando o destraba main/producción; revisión proporcional al riesgo;
 1. Paso 0. 2. Leer los transcripts de Plataforma (CRITICAL + promesas), Hermes (#94 y Telegram) y Lucía.
 3. Mergear #94 cuando llegue sin conflictos (#101 ya mergeado, a5b4624a).
 5. Revisión de resultados con Sergio Urcullo. No abrir nada nuevo antes.
+6. Anotado por Sergio Urcullo para mirar (3-oct): TikTok https://vt.tiktok.com/ZSbm3Scje/ — verlo DESPUÉS de la revisión de resultados (alcance congelado), con `ver-videos` o desde Chrome.
