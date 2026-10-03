@@ -16,16 +16,21 @@ import {
 
 const T0 = Date.parse("2026-09-19T12:00:00Z");
 const min = (n) => T0 + n * 60_000;
+// El reloj del caso, no el de la maquina. Sin esto `juzgarEntregas` mira `Date.now()`, y el
+// 3-oct a las 12:00Z (T0 + DIAS_PARA_DESUSO) tres casos que esperaban «rojo» empezaron a dar «ok»
+// por la regla de desuso: la suite se puso roja sola y trabo el gate de deploy-bot.sh. Lo cuida
+// test-con-fecha-fija-pasa-el-reloj.test.mjs.
+const AHORA = min(60);
 // El fallo real del inbox 3: 1-ago, siete semanas quieto.
 const VIEJO = Date.parse("2026-08-01T06:31:00Z");
 
 test("tri-estado: sin poder preguntar NO es verde", () => {
-  assert.equal(juzgarEntregas({ salientes: null }).veredicto, "no-medido");
-  assert.equal(juzgarEntregas({}).veredicto, "no-medido");
+  assert.equal(juzgarEntregas({ salientes: null, ahoraMs: AHORA }).veredicto, "no-medido");
+  assert.equal(juzgarEntregas({ ahoraMs: AHORA }).veredicto, "no-medido");
 });
 
 test("tri-estado: cero filas tampoco es verde — o el bot nunca contesto, o la consulta esta mal", () => {
-  const r = juzgarEntregas({ salientes: [] });
+  const r = juzgarEntregas({ salientes: [], ahoraMs: AHORA });
   assert.equal(r.veredicto, "no-medido");
   assert.match(r.motivo, /No medir NO es estar bien/);
 });
@@ -35,6 +40,7 @@ test("la ultima respuesta a un LEAD quedo failed -> rojo, y lo dice en la lectur
     salientes: [
       { id: 1, conv: 58, inbox: 5, estado: ESTADO.FAILED, creadoMs: min(0), error: "131026: undeliverable", nuestra: false },
     ],
+    ahoraMs: AHORA,
   });
   assert.equal(r.veredicto, "rojo");
   assert.equal(r.sinLlegar.length, 1);
@@ -50,6 +56,7 @@ test("una causa GLOBAL con entrega posterior en el mismo inbox queda curada, no 
       { id: 31, conv: 11, inbox: 5, estado: ESTADO.FAILED, creadoMs: min(0), error: "131042: Business eligibility payment issue", nuestra: true },
       { id: 1321, conv: 58, inbox: 5, estado: ESTADO.DELIVERED, creadoMs: min(10), error: "", nuestra: false },
     ],
+    ahoraMs: AHORA,
   });
   assert.equal(r.veredicto, "ok");
   assert.equal(r.curados.length, 1);
@@ -61,6 +68,7 @@ test("la misma causa global SIN entrega posterior sigue roja — es el 1-oct", (
       { id: 31, conv: 11, inbox: 5, estado: ESTADO.FAILED, creadoMs: min(10), error: "131042: Business eligibility payment issue", nuestra: true },
       { id: 30, conv: 11, inbox: 5, estado: ESTADO.READ, creadoMs: min(0), error: "", nuestra: true },
     ],
+    ahoraMs: AHORA,
   });
   assert.equal(r.veredicto, "rojo", "una entrega ANTERIOR no cura nada: el canal se rompio despues");
 });
@@ -71,6 +79,7 @@ test("un fallo POR SUJETO no lo cura que otro haya recibido despues", () => {
       { id: 1, conv: 58, inbox: 5, estado: ESTADO.FAILED, creadoMs: min(0), error: "131026: Message undeliverable", nuestra: false },
       { id: 2, conv: 11, inbox: 5, estado: ESTADO.READ, creadoMs: min(10), error: "", nuestra: true },
     ],
+    ahoraMs: AHORA,
   });
   assert.equal(r.veredicto, "rojo");
   assert.equal(r.sinLlegar[0].conv, 58);
@@ -106,6 +115,7 @@ test("`nuestra` etiqueta y NO silencia: la fila propia sigue contando como rojo"
     salientes: [
       { id: 1, conv: 11, inbox: 5, estado: ESTADO.FAILED, creadoMs: min(0), error: "131026", nuestra: true },
     ],
+    ahoraMs: AHORA,
   });
   assert.equal(r.veredicto, "rojo", "callar un fallo porque parece nuestro esconde que el canal esta muerto");
 });
@@ -116,6 +126,7 @@ test("los LEADS salen primero en el informe", () => {
       { id: 1, conv: 11, inbox: 5, estado: ESTADO.FAILED, creadoMs: min(0), error: "131026", nuestra: true },
       { id: 2, conv: 58, inbox: 5, estado: ESTADO.FAILED, creadoMs: min(0), error: "131026", nuestra: false },
     ],
+    ahoraMs: AHORA,
   });
   assert.equal(r.sinLlegar[0].conv, 58);
 });
@@ -126,6 +137,7 @@ test("la cura de una causa global NO se derrama a otro inbox", () => {
       { id: 1, conv: 11, inbox: 5, estado: ESTADO.FAILED, creadoMs: min(0), error: "131042 payment", nuestra: true },
       { id: 2, conv: 40, inbox: 4, estado: ESTADO.READ, creadoMs: min(10), error: "", nuestra: false },
     ],
+    ahoraMs: AHORA,
   });
   assert.equal(r.veredicto, "rojo", "el widget web entregando no prueba nada sobre el canal de WhatsApp");
 });
@@ -170,6 +182,7 @@ test("el 1-oct NO cae en 'desuso': el canal sigue intentando y nada entrega -> r
       { id: 1, conv: 58, inbox: 5, estado: ESTADO.FAILED, creadoMs: min(0), error: "131042 payment", nuestra: false },
       { id: 2, conv: 60, inbox: 5, estado: ESTADO.FAILED, creadoMs: min(10), error: "131042 payment", nuestra: false },
     ],
+    ahoraMs: AHORA,
   });
   assert.equal(r.veredicto, "rojo");
   assert.equal(r.sinLlegar.length, 2);
@@ -180,6 +193,7 @@ test("un fallo POR SUJETO sin nada posterior sigue rojo: 'desuso' solo absuelve 
     salientes: [
       { id: 1, conv: 58, inbox: 5, estado: ESTADO.FAILED, creadoMs: min(0), error: "131026 undeliverable", nuestra: false },
     ],
+    ahoraMs: AHORA,
   });
   assert.equal(r.veredicto, "rojo");
 });
@@ -190,6 +204,7 @@ test("el caso verde de hoy: todo entregado", () => {
       { id: 1321, conv: 58, inbox: 5, estado: ESTADO.DELIVERED, creadoMs: min(0), error: "", nuestra: false },
       { id: 900, conv: 40, inbox: 4, estado: ESTADO.READ, creadoMs: min(1), error: "", nuestra: false },
     ],
+    ahoraMs: AHORA,
   });
   assert.equal(r.veredicto, "ok");
   assert.equal(r.mirados, 2);

@@ -146,6 +146,76 @@ algo nuevo) · `qa` · `verification-loop` · `health`.
 
   Se apaga al revés. Sin esas variables, las rutas dan 404 y el bot no cambia.
 
+## Agenda y voz del bot de ventas: apagadas por config (2-oct-2026)
+
+La auditoría de producción del 2-oct (§2 acción 3) midió que el bot decía «Listo, agendado» y en la
+línea siguiente «estoy confirmando ese horario con Sergio». El camino exacto, leído en el código:
+M2 del guion (`config.mjs`) empieza con «Listo, agendado» y lo redacta el motor ANTES de saber si la
+reserva sale → `run-turn.mjs` 6.5 llama a `createBooking` contra `CALCOM_BASE_URL=http://calcom:3000`
+(el contenedor no existe: `reason: "error"`/`destino_caido`) → le PEGABA `cierreDeReservaFallida` al
+final. Y los horarios que ofrecía no salían de un calendario: los escribe un cron
+(`slots-rodantes.mjs`) desde las ventanas de atención.
+
+- **`ONIA_BOT_AGENDA`** (`agendaDelEntorno`, `calcom-booking.mjs`). VACÍO = **persona** (default):
+  el bot NO ofrece horarios ni confirma; saluda con `M0_PERSONA` («el horario lo coordinás directo con
+  Sergio: te escribe por acá», o el link de la agenda real si el conocimiento trae `orgSlug`) y a Sergio
+  Urcullo le llega el aviso `coordinar_demo`. Una elección sobre una oferta VIEJA (conversación que nació
+  con horarios) se deriva con `M_HORARIO_SIN_AGENDA`, nunca se confirma. `calcom` SOLO enciende con
+  `CALCOM_BASE_URL` + `CALCOM_BOT_EVENT_TYPE_ID`: tener Cal.com declarado no alcanza (era justo el estado
+  que mentía). Lo leen `run-turn.buildConfig`, `followup-run.buildConfig` y `simulate.mjs` (que lo lee de
+  la MISMA fuente que los horarios: entorno → webhook.env → VPS).
+- **Con agenda propia y la reserva que NO sale**: `reservaQueNoSalio` REEMPLAZA M2 por `M2_SIN_RESERVA`
+  (o `M2_HORARIO_TOMADO` con 409), pasa la conversación a `handoff_humano` (si quedara en
+  `demo_agendada`, M2b diría «Nos vemos …» y M9 recordaría una demo inexistente) y SIEMPRE sale el aviso
+  `reserva_sin_confirmar`. Los tres caminos (vivo, seco de `runTurn`, `simulate.mjs`) usan la misma función.
+  (3-oct) `M2_SIN_RESERVA`/`M2_HORARIO_TOMADO` ya NO piden los datos: `handoff_humano` no los lee y el
+  prospecto recibía M5_ACUSE con la calificación tirada. Y `reservaQueNoSalio` devuelve `efectos` que el
+  ejecutor aplica: el paso 6 de `runTurn` ya había escrito «Reunion» en el lead y el audit
+  `→ demo_agendada` ANTES de reservar; la corrección pone el lead en «calificado», la tarjeta de la cola y
+  el audit `→ handoff_humano`. ⚠️ Las claves de cola y audit son `<conversación>-<seq>` con on_conflict
+  ignore: un segundo efecto en el MISMO turno con el mismo seq se pierde en silencio (por eso el seq
+  `N-reserva`). Se mira la FILA con `postgrestDeLeads` de persistence.test (applySideEffects real).
+- **El texto seguro del LLM** (`SAFE_REPLY`) terminaba en «¿Te reservo {{slot_a}} o {{slot_b}}?»: sin
+  horarios salía «HORARIO A (pendiente de definir)». Ahora `textoSeguro` (bot-engine) pone la pregunta
+  pendiente real. Lo encontró MIRAR el simulador, no un test: correr `node simulate.mjs` con el entorno
+  de producción antes de dar por hecho un cambio de guion.
+- **`ONIA_AUDIO_ENABLED`**: solo `true` la enciende (antes, vacío = encendida contra `speaches:8000`, que no
+  existe). Apagada, el motor contesta al instante `M_AUDIO_FAIL` («no lo puedo escuchar yo, ¿me lo
+  escribís?») y al segundo audio deriva a la persona. `destinos-vivos.mjs` lee el interruptor con
+  `getTranscribeConfig` del producto (no una copia de la regla).
+- ⚠️ **El código no cambia el entorno vivo.** El proceso vivo tenía `ONIA_AUDIO_ENABLED=true` (medido el
+  19-sep en `/proc`, ver `destinos-vivos.mjs`), y no se sabe si viene ESCRITO en `/opt/onia/bot/webhook.env`
+  o del default viejo del lanzador (`:-true`, ahora `:-false`). Después del deploy, mirar con
+  `grep ^ONIA_AUDIO_ENABLED /opt/onia/bot/webhook.env`: si dice `true`, borrar la línea (o `false`) y
+  reiniciar el webhook; y confirmar con `npm run destinos:vivos`. La agenda se apaga sola al desplegar
+  (`ONIA_BOT_AGENDA` no existe allá). Las líneas `CALCOM_*` pueden quedar: sin `calcom` no se usan.
+- **Lo que el bot dice en modo persona tiene que poder cumplirse (auditoría del 3-oct):**
+  - **Los tests de la pauta medían la rama equivocada.** `buildConfig({ slots: … })` (simulate) con
+    `--slots` a mano devuelve `agenda: null` = AGENDA PROPIA: certificaban M0 con «**A)**» mientras
+    producción saluda con M0_PERSONA. Un test que mide lo que ve un lead arma la config con
+    `configComoProduccion({ horarios, now })` (`config-como-produccion.mjs`: webhook.env temporal con
+    los horarios del cron y CALCOM_* sin `ONIA_BOT_AGENDA`) y ancla `config.agenda.modo === "persona"`.
+    La variante con `--slots` se nombra «con agenda propia». Mutar `M0b_SIN_HORARIOS → M0b` pone rojos
+    solo los de producción: así se prueba que miden algo.
+  - **El texto editable de una campaña también promete.** Las campañas 6 y 7 (CTA de /contacto) decían
+    «te confirmo el horario acá mismo». Gate: `agendado-solo-si-se-agendo.test.mjs` recorre
+    `campanas[].respuesta` con `/confirmo el horario|te reservo|\bagend(o|amos)\b/`.
+  - **El saludo no sale dos veces.** Las campañas arrancan con «¡Hola! Soy el asistente automático de
+    Onia.» y en venta llegan SIEMPRE detrás de la bienvenida: `sinSegundoSaludo` (bot-engine) corta esa
+    frase de lo que sigue a la bienvenida, con el nombre de `identity.botName`. D2 queda en la primera
+    línea de la bienvenida.
+  - **La pregunta de M0_PERSONA es el dato que FALTA** (`{{dato_faltante}}` = primer `missLabel` de
+    `missingFields`), no siempre el rubro; con los tres dichos no pregunta nada.
+  - **La oferta VIEJA avisa una vez.** Una conversación nacida antes del deploy del 2-oct está en
+    `esperando_horario` con `slotsOffered` reales y nunca recibió `coordinar_demo`. `step` está envuelto
+    por `conAvisoDeLaOfertaVieja`: el primer turno que sigue esperando horario emite review_queue +
+    `coordinar_demo` y vacía `slotsOffered` (eso evita repetirlo). Si el turno ya avisa (elegir «A»
+    deriva con su aviso) no suma nada. `step` exportado = envoltorio; el cuerpo es `pasoDelMotor`.
+- **Para encender la agenda propia algún día** (Cal.com que exista, o la agenda de la plataforma):
+  `ONIA_BOT_AGENDA=calcom` en webhook.env (el lanzador ya la pasa) **y** cablearla en `followup-run.sh`
+  (hoy no pasa ni `ONIA_BOT_AGENDA` ni `CALCOM_*`: M3 queda bloqueado). Verificar con el simulador y una
+  reserva real antes de prometer nada.
+
 ## Reglas duras del carril
 
 1. **Construido ≠ terminado.** Vale cuando está encendido en producción y verificado ahí.
@@ -174,7 +244,36 @@ algo nuevo) · `qa` · `verification-loop` · `health`.
 ## Gates antes de mergear
 
 ```bash
-cd hermes-content/deploy/vps-ops/bot && node --test *.test.mjs   # 503/503
+cd hermes-content/deploy/vps-ops/bot && node --test   # el mismo gate que corre deploy-bot.sh (incluye evals/)
 ```
+El número de tests sale de la corrida, no de este archivo (2-oct-2026: 1587/1587 con `node --test`).
+
+**Trampas de la suite (2-oct-2026, 11 rojos que trabaron el deploy sin que nadie tocara el bot):**
+- **Horarios fijos en un test = test que vence solo.** `buildConfig` (de `simulate.mjs`) juzgaba los
+  horarios con el reloj de la MÁQUINA; cinco archivos de la pauta escribieron el 30-sep horarios del 2 y
+  3-oct y el 2-oct cayeron dentro de las 24 h de anticipación (rama `M0_SIN_HORARIOS`). Un test con
+  `T0` fijo pasa `now: T0` en los deps de `buildConfig`; nunca horarios absolutos con el reloj real.
+- **No es solo `buildConfig`: es toda función con `= Date.now()` por defecto** (3-oct-2026, la suite se
+  puso roja SOLA otra vez, 1604/1607). `entrega-viva.test.mjs` usa `T0 = 2026-09-19T12:00Z` y llamaba a
+  `juzgarEntregas` sin `ahoraMs`; a los 14 días exactos (`DIAS_PARA_DESUSO`) la regla de «desuso»
+  absolvió el canal y tres «rojo» dieron «ok». El arreglo del 2-oct barrió una función y anotó la trampa;
+  leer a mano no alcanzó. Ahora lo mira `test-con-fecha-fija-pasa-el-reloj.test.mjs`: en un archivo con
+  `const T0` literal, cada llamada a `juzgarEntregas`, `buildConfig` (de simulate), `parseSlotsSpec` o
+  `slotsElegibles` lleva el reloj a la vista (en la llamada o en la constante que recibe). Para listar las
+  funciones con reloj de la máquina: `grep -n "= Date.now()" *.mjs | grep -v test`. Para probar que un
+  archivo no vence: `node --import <archivo que fija Date.now en 2027> --test <archivo>`.
+- **Un test que corre `simulate.mjs` en un proceso hijo NO puede depender del webhook.env vivo** (3-oct).
+  `simulate.test` borraba `ONIA_BOT_AGENDA` del entorno del hijo; para saber la agenda el simulador iba a
+  `/opt/onia/bot/webhook.env` y, fuera del VPS, lo pedía por ssh DOS veces (30 s). En el VPS, que es donde
+  corre el gate de `deploy-bot.sh`, leía el archivo REAL: encender la agenda allá ponía rojo el test y
+  trababa el deploy. Ahora el hijo recibe `ONIA_SIM_WEBHOOK_ENV=<temporal con lo que produccion tiene>` y
+  un `ssh` testigo en el PATH que registra si alguien sale a la red. Y si el entorno ya dice
+  `ONIA_BOT_AGENDA` distinto de `calcom`, `cargarSlotsPublicados` no lee ni CALCOM_* ni el archivo.
+  Para MIRAR la rama de producción sin el VPS:
+  `ONIA_SIM_WEBHOOK_ENV=/tmp/webhook.env node simulate.mjs` (con `ONIA_BOT_SLOTS` y `CALCOM_*`, sin
+  `ONIA_BOT_AGENDA`).
+- **El extractor de precargados lee el doc de la pauta** (`precargados-de-la-pauta.mjs`). Una mención
+  abreviada entre backticks (`` `Hola, vi el anuncio de Onia (D1)…` ``) contaba como otro precargado y
+  duplicaba D1. Ahora se ignoran las que terminan en «…» o «...»; un precargado de verdad nunca termina así.
 Más: `security-review` si tocó webhook/token/dato personal · subagente `code-reviewer` ·
 verificación EN PRODUCCIÓN de lo que se encendió (no basta el test) · `main` siempre compila.

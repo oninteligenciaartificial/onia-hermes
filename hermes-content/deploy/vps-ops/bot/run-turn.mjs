@@ -60,12 +60,13 @@ import { createState, step, markHumanTakeover,
 import { createStore } from "./persistence.mjs";
 import { getAvailableSlots as getAvailableSlotsFromCalcom } from "./calcom-availability.mjs";
 import {
+  agendaDelEntorno,
   createBooking,
   buildBookingNotes,
   meetingLink,
   avisoDeReservaFallida,
-  cierreDeReservaFallida,
-  cierreSinReservar,
+  motivoEnSeco,
+  reservaQueNoSalio,
 } from "./calcom-booking.mjs";
 
 // ---------------------------------------------------------------------------
@@ -119,8 +120,15 @@ export function buildConfig(input) {
   else if (envDry === "false") overrides.dryRun = false;
   else if (envDry === "true") overrides.dryRun = true;
 
+  // SIN AGENDA PROPIA NO SE CARGAN HORARIOS (2-oct). Los de ONIA_BOT_SLOTS los escribe un cron
+  // desde las ventanas de atencion, no un calendario: ofrecerlos sin `ONIA_BOT_AGENDA=calcom` (y
+  // Cal.com de verdad) es prometer «agendo yo» sin con que — el «Listo, agendado» que la auditoria
+  // del 2-oct midio en produccion. El motor lee `agenda.modo` y deriva a la persona.
+  const agenda = agendaDelEntorno(process.env);
   const delTurno = Array.isArray(input.slots) && input.slots.length ? input.slots : null;
-  if (delTurno) {
+  if (agenda.modo === "persona") {
+    overrides.agenda = { modo: "persona" };
+  } else if (delTurno) {
     // Tampoco esta rama parsea por su cuenta. Tenia la MISMA copia que la de abajo —`slice(0, 2)`
     // y `pending: false` fijo— y sin `slotsElegibles`: los candidatos 3 a 5 que trajera un turno
     // volvian a ser inalcanzables y un horario ya caducado se ofrecia como vivo. Hoy nadie la
@@ -179,6 +187,9 @@ export async function resolveConfig(input, deps = {}) {
   const config = buildConfig(input);
   // Modo recepcionista (org cliente): no hay demo de Onia que agendar — Cal.com no se consulta.
   if (config.modo === "recepcionista") return config;
+  // Sin agenda propia tampoco: preguntarle disponibilidad a un Cal.com que no va a reservar es
+  // gastar el tope de red del turno para ofrecer algo que el bot no puede cumplir.
+  if (config.agenda?.modo === "persona") return config;
   const explicitSlots = Array.isArray(input.slots) && input.slots.length > 0;
   const envSlots = Boolean(String(process.env.ONIA_BOT_SLOTS || "").trim());
   if (explicitSlots || envSlots) return config; // horario ya fijado a mano: no se pisa
@@ -509,8 +520,20 @@ export async function runTurn(input, deps = {}) {
 
   // 6. Efectos de base. El lead se crea ACA y su clave vuelve a la conversacion.
   let nextState = result.nextState;
-  const applied = await store.applySideEffects(result.sideEffects, nextState, nextState.outboundSeq);
+  let applied = await store.applySideEffects(result.sideEffects, nextState, nextState.outboundSeq);
   if (applied.leadKey) nextState = { ...nextState, leadKey: applied.leadKey };
+  // Lo que `reservaQueNoSalio` devuelve para corregir lo que el paso 6 ya escribio («Reunion» en el
+  // lead, audit `→ demo_agendada`). Las claves de cola y audit son `<conversacion>-<seq>` con
+  // on_conflict ignore: con el MISMO seq la correccion se perderia en silencio, por eso el sufijo.
+  const corregirTrasReserva = async (efectos) => {
+    const corregido = await store.applySideEffects(efectos, nextState, `${nextState.outboundSeq}-reserva`);
+    applied = {
+      ...applied,
+      reviewKeys: [...(applied.reviewKeys || []), ...(corregido.reviewKeys || [])],
+      auditKeys: [...(applied.auditKeys || []), ...(corregido.auditKeys || [])],
+      failed: [...(applied.failed || []), ...(corregido.failed || [])],
+    };
+  };
 
   // 6.5. LA RESERVA DE VERDAD. Hasta hoy el bot decia "Listo, agendado" y no reservaba nada:
   // `calendar_event_id` quedaba en null, dos prospectos podian quedarse con el mismo horario y
@@ -525,12 +548,10 @@ export async function runTurn(input, deps = {}) {
       // del modo seco es que no salga NADA del sistema.
       //
       // Pero "no reservar" NO autoriza a mostrar un texto mas optimista que el que recibe el
-      // prospecto, y hasta el 2026-09-12 eso era exactamente lo que pasaba: el simulador
-      // imprimia "Listo, agendado" pelado mientras los mensajes reales (convs 11 y 49 de
-      // Chatwoot) llevaban la salvedad. `sin_config` se DERIVA del entorno sin tocar la red,
-      // asi que cuando el desenlace se puede saber sin I/O, se aplica el MISMO cierre que en
-      // vivo; cuando no se puede saber, se dice — no se inventa.
-      const cierre = cierreSinReservar({
+      // prospecto (el simulador imprimia "Listo, agendado" pelado, 2026-09-12). `sin_config` se
+      // DERIVA del entorno sin tocar la red: ahi el desenlace se sabe y se aplica el MISMO que en
+      // vivo (`reservaQueNoSalio`); con Cal.com configurado no se puede saber, y se dice.
+      const { motivo } = motivoEnSeco({
         stageBefore,
         stageAfter: nextState.botStage,
         scheduledAt: nextState.scheduledAt,
@@ -538,11 +559,12 @@ export async function runTurn(input, deps = {}) {
         env: deps.env || process.env,
         duracionMinutos: config.demo?.duracionMinutos,
       });
-      if (cierre.texto) {
-        const ultima = replies[replies.length - 1];
-        if (ultima && ultima.text) ultima.text += cierre.texto;
+      if (motivo === "sin_config") {
+        const noSalio = reservaQueNoSalio({ replies, nextState, config, reason: "sin_config" });
+        nextState = noSalio.nextState;
+        await corregirTrasReserva(noSalio.efectos);
         bookingWarnings.push(
-          "calcom: no se reservo (dry run) — sin CALCOM_BASE_URL tampoco saldria en vivo: el texto lleva la misma salvedad",
+          "calcom: no se reservo (dry run) — sin CALCOM_BASE_URL tampoco saldria en vivo: el texto es el mismo que el honesto del vivo",
         );
       } else {
         bookingWarnings.push(
@@ -575,28 +597,22 @@ export async function runTurn(input, deps = {}) {
           ultima.text += `\n\n${renderTemplate(config.script.M2_LINK, { link_reunion: link })}`;
         }
       } else {
-        // No se puede desdecir el "Listo, agendado" que el motor ya redacto, asi que se le agrega
-        // una linea honesta al prospecto Y se avisa: sin esto el prospecto se presenta a una
-        // reunion que no existe.
-        //
-        // El aviso es la mitad que faltaba, y era la cara: este comentario decia "y se deja el
-        // aviso" desde que se escribio, pero lo unico que salia de aca era un `warnings[]`, que
-        // no es un efecto y no lo lee nadie (`construirAviso` se arma de `notify`). Mientras
-        // tanto el motor YA emitio `demo_agendada` en este mismo turno, asi que el unico mensaje
-        // que le llegaba a Sergio Urcullo decia "DEMO AGENDADA — anotala" de una demo que no
-        // quedo en ningun calendario. Va DESPUES para que la correccion se lea ultima.
-        const ultima = replies[replies.length - 1];
-        if (ultima && ultima.text) ultima.text += cierreDeReservaFallida(booking.reason);
+        // La reserva NO salio: el «Listo, agendado» que el motor ya redacto se REEMPLAZA por la
+        // version honesta y la conversacion pasa a la persona (`reservaQueNoSalio`). Hasta el 2-oct
+        // se le PEGABA una salvedad al final y el prospecto leia la confirmacion y su desmentida en
+        // el mismo mensaje (auditoria de produccion del 2-oct, §2 accion 3).
+        const noSalio = reservaQueNoSalio({ replies, nextState, config, reason: booking.reason });
+        nextState = noSalio.nextState;
+        await corregirTrasReserva(noSalio.efectos);
         bookingWarnings.push(`calcom: la demo NO quedo reservada (${booking.reason})`);
-        // `null` cuando el fallo es el ESPERADO (correr sin calendario es la opcion (c), ya
-        // decidida): ahi el aviso del motor alcanza y uno extra seria ruido por cada demo.
-        const desdice = avisoDeReservaFallida({
+        // Y el aviso que DESDICE al "DEMO AGENDADA — anotala" que el motor emitio en este mismo
+        // turno: va DESPUES para que la correccion se lea ultima.
+        bookingNotify.push(avisoDeReservaFallida({
           conversationKey: nextState.conversationKey,
           reason: booking.reason,
           scheduledLabel: nextState.scheduledLabel,
           scheduledAt: nextState.scheduledAt,
-        });
-        if (desdice) bookingNotify.push(desdice);
+        }));
       }
     }
   }

@@ -29,6 +29,7 @@
 import { lookup as dnsLookup } from "node:dns/promises";
 
 import { DEFAULT_CONFIG } from "./config.mjs";
+import { say } from "./reply-builder.mjs";
 
 /**
  * Duracion de la demo. NO es un numero suelto: sale del MISMO bloque del que el guion saca lo que
@@ -57,6 +58,42 @@ export function getBookingConfig(env = process.env, fallbackMinutes = DEFAULT_DU
     durationMinutes: Number.isFinite(rawDuration) && rawDuration > 0 ? rawDuration : fallback,
     timeZone: String(env.CALCOM_TIMEZONE || DEFAULT_TIME_ZONE),
   };
+}
+
+/** La variable que ENCIENDE la agenda propia del bot. Sin ella, el bot no agenda. */
+export const AGENDA_ENV = "ONIA_BOT_AGENDA";
+
+/**
+ * ¿Con que agenda trabaja el bot? `propia` = ofrece horarios y los reserva en Cal.com; `persona`
+ * = no ofrece «agendo yo»: la demo la coordina la persona (o el link de la agenda real, si el
+ * conocimiento la trae).
+ *
+ * EL DEFAULT ES LA PERSONA, y es la mitad que importa (auditoria de produccion del 2-oct, §2
+ * accion 3). El proceso vivo declara `CALCOM_BASE_URL=http://calcom:3000` y
+ * `CALCOM_BOT_EVENT_TYPE_ID=5`, pero el contenedor `calcom` no existe; y los horarios que ofrecia
+ * no salian de ningun calendario sino de un cron (`slots-rodantes.mjs`). Resultado: «Listo,
+ * agendado» y en la linea siguiente «estoy confirmando ese horario». Tener Cal.com DECLARADO no
+ * alcanza para encender nada: hay que pedirlo (`ONIA_BOT_AGENDA=calcom`) Y tener con que.
+ *
+ * Por eso tampoco se mira si Cal.com contesta: eso es por reserva (`createBooking`, con su tope y
+ * su memoria de destino caido). Esto decide si el bot PROMETE agendar, y una promesa no se enciende
+ * sola porque un destino volvio a contestar.
+ *
+ * @returns {{modo: "propia"|"persona", motivo: string}}
+ */
+export function agendaDelEntorno(env = process.env) {
+  const pedido = String(env?.[AGENDA_ENV] ?? "").trim().toLowerCase();
+  if (pedido !== "calcom") {
+    return {
+      modo: "persona",
+      motivo: pedido ? `${AGENDA_ENV}=${pedido} no es un agendador que el bot sepa usar` : `${AGENDA_ENV} sin definir (default: la persona)`,
+    };
+  }
+  const config = getBookingConfig(env || {});
+  if (!config.baseUrl || !config.eventTypeId) {
+    return { modo: "persona", motivo: `${AGENDA_ENV}=calcom sin CALCOM_BASE_URL o CALCOM_BOT_EVENT_TYPE_ID: no hay con que reservar` };
+  }
+  return { modo: "propia", motivo: "calcom" };
 }
 
 /**
@@ -140,18 +177,73 @@ export function buildBookingNotes(qualification = {}) {
 }
 
 /**
- * El cierre honesto que se le pega al "Listo, agendado" que el motor ya redacto, cuando la
- * reserva NO salio. `horario_tomado` (409) es el caso de carrera: alguien gano el horario entre
- * que se ofrecio y que el prospecto contesto.
+ * La reserva NO salio: el M2 que el motor ya redacto («Listo, agendado: …») se REEMPLAZA por la
+ * version honesta, y la conversacion pasa a la persona.
  *
- * Vive aca, y no en quien lo usa, porque lo pegan TRES caminos distintos (el vivo, el seco de
- * `runTurn` y `simulate.mjs`). Tener dos copias del texto es literalmente como nacio el bug que
- * lo trajo: el simulador no agregaba nada y prometia mas que el producto.
+ * POR QUE REEMPLAZAR Y NO PEGAR. Hasta el 2-oct aca vivia `cierreDeReservaFallida`, una linea que
+ * se le PEGABA al final de M2: el prospecto leia «Listo, agendado» y abajo «estoy confirmando ese
+ * horario con Sergio» (auditoria de produccion del 2-oct, §2 accion 3). Confirmar y desdecirse en
+ * el mismo mensaje sigue siendo confirmar. El motor es puro y no puede saber si la reserva va a
+ * salir; quien lo sabe es este paso, y por eso es el que elige el texto.
+ *
+ * POR QUE PASA A LA PERSONA. Si la conversacion quedara en `demo_agendada`, el acuse siguiente (M2b)
+ * le diria «Nos vemos jueves 15:00», el recordatorio M9 le recordaria una demo que no existe y el
+ * cierre le preguntaria como le fue. Lo que se le prometio es que se la confirma una persona: la
+ * conversacion es de ella.
+ *
+ * Lo usan los TRES caminos que cierran una eleccion sin reservar —el vivo y el seco de `runTurn`, y
+ * `simulate.mjs`, que llama a `step()` directo— para que ninguno prometa mas que otro (asi nacio el
+ * bug del simulador el 2026-09-12).
+ *
+ * Lo que vino DESPUES de M2 en el mismo mensaje (la coletilla M7 de fuera de horario) se conserva.
+ *
+ * LOS EFECTOS QUE CORRIGEN (`efectos`, 3-oct). El motor ya emitio, y el ejecutor ya aplico ANTES de
+ * reservar, el `lead_upsert` con `pipelineStatus: demo_agendada` («Reunion») y el audit
+ * `→ demo_agendada`. Sin corregirlos el panel del CRM mostraba una reunion que no existe. Vuelven los
+ * de cualquier handoff: el lead a «calificado», la tarjeta de la cola y el audit `→ handoff_humano`.
+ * El aviso a Sergio Urcullo NO va aca: es `avisoDeReservaFallida`, que el ejecutor pone despues.
+ *
+ * @returns {{replies: object[], nextState: object, plantilla: string, efectos: object[]}}
  */
-export function cierreDeReservaFallida(reason) {
-  return reason === "horario_tomado"
-    ? "\n\n_(Ojo: justo se me ocupó ese horario. Sergio te escribe ahora para acomodarlo.)_"
-    : "\n\n_(Estoy confirmando ese horario con Sergio; si hubiera un cruce te aviso enseguida.)_";
+export function reservaQueNoSalio({ replies, nextState, config, reason } = {}) {
+  const plantilla = reason === "horario_tomado" ? "M2_HORARIO_TOMADO" : "M2_SIN_RESERVA";
+  const confirmada = say("M2", nextState, config).text;
+  const honesta = say(plantilla, nextState, config).text;
+  for (const reply of replies || []) {
+    if (reply?.templateKey !== "M2") continue;
+    const texto = String(reply.text || "");
+    const resto = texto.startsWith(confirmada) ? texto.slice(confirmada.length) : "";
+    reply.text = honesta + resto;
+    reply.templateKey = plantilla;
+    // La fila del saliente dice en que etapa quedo la conversacion: que no diga `demo_agendada`.
+    if ("stageAfter" in reply) reply.stageAfter = "handoff_humano";
+  }
+  const derivada = { ...nextState, botStage: "handoff_humano", handoffAckAt: null };
+  const motivo = `eligió ${nextState.scheduledLabel || "un horario"} y la reserva no salió (${reason || "sin motivo"}): confirmale vos el horario`;
+  const efectos = [
+    {
+      type: "lead_upsert",
+      payload: {
+        conversationKey: derivada.conversationKey,
+        leadKey: derivada.leadKey,
+        pipelineStatus: config.pipelineStatus.calificado,
+        qualification: derivada.qualification,
+      },
+    },
+    {
+      type: "review_queue",
+      payload: { ...config.handoff.reviewQueue, conversationKey: derivada.conversationKey, leadKey: derivada.leadKey, summary: motivo },
+    },
+    {
+      type: "audit_log",
+      payload: {
+        action: "bot_stage_change",
+        conversationKey: derivada.conversationKey,
+        detail: { from: nextState.botStage, to: "handoff_humano", reason: `reserva_no_salio:${reason || "sin_motivo"}` },
+      },
+    },
+  ];
+  return { replies, nextState: derivada, plantilla, efectos };
 }
 
 /**
@@ -163,76 +255,47 @@ export function cierreDeReservaFallida(reason) {
 export const KIND_RESERVA_SIN_CONFIRMAR = "reserva_sin_confirmar";
 
 /**
- * El aviso del DESENLACE de una reserva que no salio — SOLO cuando el desenlace contradice al
- * aviso que el motor ya mando.
+ * El aviso del DESENLACE de una reserva que no salio: desdice al «DEMO AGENDADA — anotala» que el
+ * motor ya emitio en el mismo turno.
  *
- * QUE NO ES. No es "avisar cada reserva fallida". Correr sin calendario es una decision TOMADA
- * y vigente (opcion (c), tablero `t_b18ca430`, 2026-09-03: Telegram ya, Cal.com cuando moleste
- * anotar a mano). En ese flujo degradado el fallo es el camino NORMAL: el prospecto elige, la
- * fila queda en la base, Sergio Urcullo recibe "DEMO AGENDADA — anotala" y confirma por
- * WhatsApp. Un aviso extra por cada demo seria ruido sobre un canal que ya se pidio limpio, y
- * encima le discutiria una decision que el ya tomo.
- *
- * QUE SI ES. `cierreDeReservaFallida` tiene DOS textos y solo uno promete una accion humana
- * INMEDIATA y excepcional: con `horario_tomado` (409, carrera real) el bot le dice al prospecto
- * "Sergio te escribe ahora para acomodarlo". Ahi el unico aviso que sale dice "DEMO AGENDADA —
- * anotala", que es lo CONTRARIO de lo que pasa: ese horario NO quedo libre para el, y anotarlo
- * manda a Sergio Urcullo a una reunion que choca. Una instruccion que el bot le da al usuario es
- * un contrato: el otro lado tiene que existir.
+ * SALE SIEMPRE que la reserva falla (cambio del 2-oct). Antes salia solo con `horario_tomado`,
+ * porque correr sin calendario era la opcion (c) del tablero `t_b18ca430` y ahi el fallo era el
+ * camino normal. Esa opcion hoy es el modo `persona` (`agendaDelEntorno`, el default): sin agenda
+ * el bot ni ofrece horarios. Con agenda propia ENCENDIDA a proposito, que la reserva no salga es
+ * una excepcion — y al prospecto se le acaba de decir que se lo confirma Sergio Urcullo
+ * (`reservaQueNoSalio`). Una instruccion que el bot le da al usuario es un contrato: el otro lado
+ * tiene que existir.
  *
  * El horario viaja en el texto porque es lo unico accionable.
  *
- * @returns {{kind: string, reason: string, conversationKey: string|null, text: string}|null}
- *          `null` cuando el fallo es el esperado y el aviso del motor ya alcanza.
+ * @returns {{kind: string, reason: string, conversationKey: string|null, text: string}}
  */
 export function avisoDeReservaFallida({ conversationKey, reason, scheduledLabel, scheduledAt } = {}) {
-  if (reason !== "horario_tomado") return null;
   const cuando = String(scheduledLabel || scheduledAt || "").trim();
-  return {
-    kind: KIND_RESERVA_SIN_CONFIRMAR,
-    reason: String(reason),
-    conversationKey: conversationKey || null,
-    text: cuando
-      ? `Pidió ${cuando} y ese horario YA ESTABA TOMADO: no lo anotes, choca. Le dijimos que vos le escribís ahora para acomodarlo.`
-      : `El horario que pidió YA ESTABA TOMADO: no lo anotes, choca. Le dijimos que vos le escribís ahora para acomodarlo.`,
-  };
+  const motivo = String(reason || "sin_motivo");
+  const pidio = cuando ? `Pidió ${cuando}` : "El horario que pidió";
+  const text = motivo === "horario_tomado"
+    ? `${pidio} y ese horario YA ESTABA TOMADO: no lo anotes, choca. Le dijimos que vos le escribís para acomodar otro.`
+    : `${pidio} y la reserva NO salió (${motivo}): no está en ningún calendario. Le dijimos que vos se lo confirmás.`;
+  return { kind: KIND_RESERVA_SIN_CONFIRMAR, reason: motivo, conversationKey: conversationKey || null, text };
 }
 
 /**
- * QUE le agrega al texto un camino que NO reserva, y por que.
- *
- * La comparten los dos consumidores del modo seco, que son caminos distintos del mismo
- * producto: `runTurn` con `dryRun`, y `simulate.mjs`, que ni siquiera pasa por `runTurn` (llama
- * a `step()` directo). Si cada uno decide por su cuenta cuando va el cierre, divergen — que es
- * exactamente lo que se midio el 2026-09-12: el simulador imprimia "Listo, agendado" pelado
- * mientras los dos mensajes que el bot MANDO de verdad (convs 11 y 49 de Chatwoot) llevaban la
- * salvedad. El instrumento con el que el carril mide "simulador 3/3" cada vuelta era ciego a la
- * regresion que mas le importa.
+ * QUE pasa con una eleccion en un camino que NO reserva (el modo seco de `runTurn` y
+ * `simulate.mjs`), y por que.
  *
  * Tri-estado a proposito: `sin_config` se DERIVA del entorno sin tocar la red, asi que ahi el
- * desenlace se sabe con certeza; con Cal.com configurado NO se sabe, y eso se reporta como
- * ignorancia en vez de inventar un final.
+ * desenlace se sabe con certeza (la reserva no saldria: `reservaQueNoSalio`); con Cal.com
+ * configurado NO se sabe, y eso se reporta como ignorancia en vez de inventar un final.
  *
- * OJO con la premisa: aca decia "y hoy es el 100% del trafico: no hay Cal.com en el VPS", y
- * medido el 2026-09-18 es al reves. El proceso vivo SI declara `CALCOM_BASE_URL=http://calcom:3000`
- * y `CALCOM_BOT_EVENT_TYPE_ID=5` (leido de `/proc/<pid>/environ` dentro de `onia-center`), asi que
- * en produccion `sin_config` es el 0% y esta rama no se toca nunca. Lo que no existe es el
- * DESTINO: `docker ps` no lista un contenedor `calcom` ni parado, y desde `onia-center` el
- * hostname ni resuelve (`wget: bad address 'calcom:3000'`). O sea que el 100% real cae en
- * `reason: "error"` despues de agotar `BOOKING_TIMEOUT_MS` — 5 s de espera DENTRO del turno de un
- * prospecto, no una derivacion gratis. Un comentario que afirma el estado del VPS es una
- * hipotesis con fecha: se vuelve a medir antes de apoyarse en el.
- *
- * @returns {{texto: string, motivo: "sin_config"|"depende_de_la_reserva"|null}}
+ * @returns {{motivo: "sin_config"|"depende_de_la_reserva"|null}}
  */
-export function cierreSinReservar({ stageBefore, stageAfter, scheduledAt, calendarEventId, env, duracionMinutos } = {}) {
+export function motivoEnSeco({ stageBefore, stageAfter, scheduledAt, calendarEventId, env, duracionMinutos } = {}) {
   const recienAgendada = stageBefore !== "demo_agendada" && stageAfter === "demo_agendada";
-  if (!recienAgendada || !scheduledAt || calendarEventId) return { texto: "", motivo: null };
+  if (!recienAgendada || !scheduledAt || calendarEventId) return { motivo: null };
   const config = getBookingConfig(env || process.env, duracionMinutos);
-  if (!config.baseUrl || !config.eventTypeId) {
-    return { texto: cierreDeReservaFallida("sin_config"), motivo: "sin_config" };
-  }
-  return { texto: "", motivo: "depende_de_la_reserva" };
+  if (!config.baseUrl || !config.eventTypeId) return { motivo: "sin_config" };
+  return { motivo: "depende_de_la_reserva" };
 }
 
 /**
@@ -453,8 +516,8 @@ export async function createBooking(options = {}, deps = {}) {
       })
     : { ok: true };
   if (!resolucion.ok) {
-    // Es el MISMO no-reservar de siempre: el prospecto recibe la misma salvedad honesta
-    // (`cierreDeReservaFallida` no distingue motivos fuera de `horario_tomado`). Lo que cambia
+    // Es el MISMO no-reservar de siempre: el prospecto recibe el mismo texto honesto
+    // (`reservaQueNoSalio` no distingue motivos fuera de `horario_tomado`). Lo que cambia
     // es a donde manda a mirar el que lee el log, y lo que el proximo prospecto no espera.
     recordarDestinoCaido(ahora());
     return { ok: false, uid: null, reason: "error", warnings: [`calcom: la reserva no salio: ${resolucion.detalle}`] };

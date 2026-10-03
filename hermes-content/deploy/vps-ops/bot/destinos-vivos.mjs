@@ -40,7 +40,7 @@ import { readdirSync, readFileSync } from "node:fs";
 import { basename, dirname, join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
-import { getFallbackConfig } from "./audio-transcribe.mjs";
+import { getFallbackConfig, getTranscribeConfig } from "./audio-transcribe.mjs";
 
 const AQUI = dirname(fileURLToPath(import.meta.url));
 const ESTE = basename(fileURLToPath(import.meta.url));
@@ -57,7 +57,10 @@ export const CAPACIDADES = [
     env: "ONIA_AUDIO_STT_BASE_URL",
     defecto: "http://speaches:8000/v1",
     capacidad: "el prospecto manda una NOTA DE VOZ y el bot la entiende",
-    interruptor: { env: "ONIA_AUDIO_ENABLED", apagadoSi: "false" },
+    // El interruptor se lee con la funcion DEL PRODUCTO, no con una regla copiada: el 2-oct el
+    // default paso de encendida a APAGADA (solo `true` la enciende) y una copia de la regla vieja
+    // habria medido "encendida contra un destino muerto" sobre un bot que ni lo intenta.
+    interruptor: { env: "ONIA_AUDIO_ENABLED", encendida: (env) => getTranscribeConfig(env).enabled },
     probe: "/models",
     caida: "cae a M_AUDIO_FAIL: le pide al prospecto que reescriba lo que acaba de decir",
     // El respaldo NO sale de una env: `audio-transcribe.mjs` lo resuelve de un mapa congelado
@@ -527,9 +530,7 @@ function medir() {
   const medidas = [];
   const avisosDeRespaldo = [];
   for (const cap of CAPACIDADES) {
-    const encendida = cap.interruptor
-      ? String(proceso.env[cap.interruptor.env] ?? "").trim().toLowerCase() !== cap.interruptor.apagadoSi
-      : true;
+    const encendida = cap.interruptor ? cap.interruptor.encendida(proceso.env) : true;
     const vivo = cap.respaldo ? respaldoDesplegado(cap) : true;
     if (cap.respaldo && vivo !== true) {
       avisosDeRespaldo.push(

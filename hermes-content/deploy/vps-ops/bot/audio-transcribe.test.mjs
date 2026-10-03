@@ -8,6 +8,7 @@
 
 import test from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 
 import {
   DEFAULT_LANGUAGE,
@@ -55,6 +56,10 @@ function fetchMock(responses) {
 
 const audioBytes = () => new Uint8Array([0x4f, 0x67, 0x67, 0x53, 1, 2, 3, 4, 5, 6, 7, 8]);
 
+// Desde el 2-oct la transcripcion arranca APAGADA (ver "DEFAULT SEGURO"). Los casos que prueban el
+// camino de transcribir la encienden de forma explicita, como tendria que hacerlo el operador.
+const ENCENDIDA = Object.freeze({ ONIA_AUDIO_ENABLED: "true" });
+
 // ---------------------------------------------------------------------------
 // Config — la regla del modelo es la que mas caro sale romper
 // ---------------------------------------------------------------------------
@@ -65,7 +70,7 @@ test("getTranscribeConfig: el default es el modelo MULTILINGÜE, nunca un distil
   assert.equal(c.model, "Systran/faster-whisper-small");
   assert.ok(!/distil/i.test(c.model), "los faster-distil-* son English-only: TRADUCEN el español");
   assert.equal(c.language, DEFAULT_LANGUAGE, "el idioma se fuerza: el autodetect falla en notas cortas");
-  assert.equal(c.enabled, true);
+  assert.equal(c.enabled, false, "apagada salvo `true` explicito (ver DEFAULT SEGURO)");
 });
 
 test("REGRESION REAL: el contenedor ya trae un modelo DISTIL en esa misma variable, y se ignora", () => {
@@ -90,6 +95,41 @@ test("getTranscribeConfig: valores basura caen al default en vez de romper el tu
   assert.equal(c.maxBytes, DEFAULT_MAX_BYTES);
   assert.equal(c.sttTimeoutMs, DEFAULT_STT_TIMEOUT_MS);
   assert.equal(c.baseUrl, "http://speaches:8000/v1", "la barra final se saca");
+});
+
+// DEFAULT SEGURO (2-oct, auditoria de produccion §2 accion 3). La transcripcion arrancaba ENCENDIDA
+// si nadie decia nada, apuntando a `http://speaches:8000/v1`: un contenedor que no existe en el VPS
+// (`getent hosts speaches` no resuelve). Cada nota de voz esperaba ese destino antes de caer al
+// M_AUDIO_FAIL. Sin transcriptor de verdad, lo honesto es contestar enseguida que el bot no la puede
+// escuchar y que, si insiste, la escucha una persona — sin esperar ni pagar nada.
+test("DEFAULT SEGURO: sin ONIA_AUDIO_ENABLED=true la transcripcion esta APAGADA", () => {
+  assert.equal(getTranscribeConfig({}).enabled, false, "sin decirlo, no se le pregunta a un destino que no existe");
+  assert.equal(getTranscribeConfig({ ONIA_AUDIO_ENABLED: "TRUE" }).enabled, true);
+  assert.equal(getTranscribeConfig({ ONIA_AUDIO_ENABLED: "sí" }).enabled, false, "un valor que no conocemos no enciende nada");
+});
+
+test("APAGADA, no baja el adjunto ni le pregunta a nadie: el motor contesta honesto al toque", async () => {
+  let salioALaRed = false;
+  const testigo = async () => {
+    salioALaRed = true;
+    throw new Error("no deberia salir a la red");
+  };
+  const r = await transcribeChatwootAudio(
+    { attachments: [{ file_type: "audio", data_url: BLOB, extension: "oga" }], token: "tok", chatwootBaseUrl: CHATWOOT },
+    { fetch: testigo, env: {} },
+  );
+  assert.equal(r.ok, false);
+  assert.equal(r.reason, "transcripcion_apagada");
+  assert.equal(salioALaRed, false);
+});
+
+test("los lanzadores y el ejemplo de webhook.env no encienden la transcripcion por default", () => {
+  for (const archivo of ["chatwoot-adapter.sh", "webhook-server.sh"]) {
+    const texto = readFileSync(new URL(`./${archivo}`, import.meta.url), "utf8");
+    assert.doesNotMatch(texto, /ONIA_AUDIO_ENABLED:-true/, `${archivo} la enciende si la variable falta`);
+  }
+  const ejemplo = readFileSync(new URL("./webhook.env.example", import.meta.url), "utf8");
+  assert.match(ejemplo, /^ONIA_AUDIO_ENABLED=false$/m, "el ejemplo es lo que copia el que instala: tiene que arrancar apagada");
 });
 
 test("getTranscribeConfig: se puede APAGAR sin desplegar codigo (Speaches caido)", () => {
@@ -291,7 +331,7 @@ test("transcribeChatwootAudio: baja el adjunto y devuelve el texto en español",
   ]);
   const r = await transcribeChatwootAudio(
     { attachments: [{ file_type: "audio", data_url: BLOB, extension: "oga" }], token: "tok", chatwootBaseUrl: CHATWOOT },
-    { fetch: f, env: {} },
+    { fetch: f, env: ENCENDIDA },
   );
 
   assert.equal(r.ok, true);
@@ -302,7 +342,7 @@ test("transcribeChatwootAudio: baja el adjunto y devuelve el texto en español",
 
 test("transcribeChatwootAudio: sin adjunto de audio no llama a nadie", async () => {
   const f = fetchMock([]);
-  const r = await transcribeChatwootAudio({ attachments: [{ file_type: "image", data_url: BLOB }] }, { fetch: f, env: {} });
+  const r = await transcribeChatwootAudio({ attachments: [{ file_type: "image", data_url: BLOB }] }, { fetch: f, env: ENCENDIDA });
   assert.equal(r.ok, false);
   assert.equal(r.reason, "sin_adjunto_de_audio");
   assert.equal(f.llamadas.length, 0);
@@ -312,7 +352,7 @@ test("transcribeChatwootAudio: file_size gigante se descarta ANTES de bajar nada
   const f = fetchMock([]);
   const r = await transcribeChatwootAudio(
     { attachments: [{ file_type: "audio", data_url: BLOB, file_size: 99_000_000 }], chatwootBaseUrl: CHATWOOT },
-    { fetch: f, env: {} },
+    { fetch: f, env: ENCENDIDA },
   );
   assert.equal(r.reason, "audio_demasiado_grande");
   assert.equal(f.llamadas.length, 0, "el metadato ya alcanza: bajar 99 MB para despues tirarlos es absurdo");
@@ -332,7 +372,7 @@ test("transcribeChatwootAudio: si falla la descarga NO se llama a Speaches", asy
   const f = fetchMock([res({ ok: false, status: 500 })]);
   const r = await transcribeChatwootAudio(
     { attachments: [{ file_type: "audio", data_url: BLOB }], chatwootBaseUrl: CHATWOOT },
-    { fetch: f, env: {} },
+    { fetch: f, env: ENCENDIDA },
   );
   assert.equal(r.ok, false);
   assert.equal(r.reason, "descarga_fallida");
@@ -349,7 +389,7 @@ test("CONTRATO, camino COMPLETO: descarga OK + nombre con `%` roto -> transcribe
   ]);
   const r = await transcribeChatwootAudio(
     { attachments: [{ file_type: "audio", data_url: "https://pub.host/rails/x/100%off.mp3" }], chatwootBaseUrl: CHATWOOT },
-    { fetch: f, env: {} },
+    { fetch: f, env: ENCENDIDA },
   );
 
   assert.equal(r.ok, true);
@@ -367,7 +407,7 @@ test("CONTRATO: pase lo que pase devuelve {ok,text,reason,warnings} y NUNCA tira
   ];
   for (const caso of casos) {
     // eslint-disable-next-line no-await-in-loop -- son cinco casos, la claridad vale mas
-    const r = await transcribeChatwootAudio(caso, { fetch: fetchMock([new Error("boom")]), env: {} });
+    const r = await transcribeChatwootAudio(caso, { fetch: fetchMock([new Error("boom")]), env: ENCENDIDA });
     assert.equal(typeof r.ok, "boolean");
     assert.equal(typeof r.text, "string");
     assert.equal(typeof r.reason, "string");
@@ -432,6 +472,7 @@ test("EL CASO DE PRODUCCION: Speaches no resuelve y el prospecto IGUAL es entend
     {
       fetch: f,
       env: {
+        ...ENCENDIDA,
         ONIA_AUDIO_STT_FALLBACK_PROVIDER: "openai",
         ONIA_AUDIO_STT_FALLBACK_MODEL: "gpt-4o-mini-transcribe",
         OPENAI_ONIA_CENTER_API_KEY: "sk-de-onia",
@@ -470,7 +511,7 @@ test("SIN respaldo declarado el comportamiento es el de hoy: una sola llamada y 
   ]);
   const r = await transcribeChatwootAudio(
     { attachments: [{ file_type: "audio", data_url: BLOB }], chatwootBaseUrl: CHATWOOT },
-    { fetch: f, env: {} },
+    { fetch: f, env: ENCENDIDA },
   );
   assert.equal(r.ok, false);
   assert.equal(r.reason, "stt_fallido");
@@ -488,6 +529,7 @@ test("SILENCIO no se reintenta: el primario ya contesto, gastar el respaldo no c
     {
       fetch: f,
       env: {
+        ...ENCENDIDA,
         ONIA_AUDIO_STT_FALLBACK_PROVIDER: "openai",
         OPENAI_ONIA_CENTER_API_KEY: "sk-de-onia",
       },
@@ -508,6 +550,7 @@ test("si TAMBIEN falla el respaldo, el contrato se respeta y los dos motivos se 
     {
       fetch: f,
       env: {
+        ...ENCENDIDA,
         ONIA_AUDIO_STT_FALLBACK_PROVIDER: "openai",
         OPENAI_ONIA_CENTER_API_KEY: "sk-vencida",
       },

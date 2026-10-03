@@ -37,13 +37,27 @@ const T0 = "2026-07-27T14:05:00Z"; // lunes 10:05 en La Paz: dentro de horario
 // cargados— `buildConfig({})` devuelve M0 y este archivo medía dos veces la MISMA hermana,
 // dejando sin cubrir justo la variante que motivó el test. Lo cazó el `assert.equal(key, ...)`
 // de abajo: un test que además verifica QUÉ rama midió es lo que evita ese verde falso.
-const SIN_AMBIENTE = { env: {}, envFile: "/no/existe/webhook.env" };
+// El reloj es el del caso (`T0`): los horarios de acá no traen fecha, pero un archivo con instante
+// propio lo pasa siempre (test-con-fecha-fija-pasa-el-reloj.test.mjs).
+const SIN_AMBIENTE = { env: {}, envFile: "/no/existe/webhook.env", now: Date.parse(T0) };
+
+// Agenda propia ENCENDIDA y sin horarios cargados: la unica forma de pedir M0_SIN_HORARIOS desde el
+// 2-oct. Sin `ONIA_BOT_AGENDA=calcom` el bot no ofrece horarios y saluda con M0_PERSONA.
+const CON_AGENDA_SIN_HORARIOS = {
+  env: { ONIA_BOT_AGENDA: "calcom", CALCOM_BASE_URL: "http://calcom:3000", CALCOM_BOT_EVENT_TYPE_ID: "5" },
+  envFile: "/no/existe/webhook.env",
+  now: Date.parse(T0),
+  warn: () => {},
+};
 
 /** El saludo tal como sale al cliente, con el conocimiento publicado aplicado. */
-function saludar({ conHorarios }) {
-  const config = conHorarios
-    ? buildConfig({ slots: "viernes 4 de septiembre, 14:00|sábado 5 de septiembre, 09:00" }, SIN_AMBIENTE)
-    : buildConfig({}, SIN_AMBIENTE);
+function saludar({ rama }) {
+  const config =
+    rama === "M0"
+      ? buildConfig({ slots: "viernes 4 de septiembre, 14:00|sábado 5 de septiembre, 09:00" }, SIN_AMBIENTE)
+      : rama === "M0_SIN_HORARIOS"
+        ? buildConfig({}, CON_AGENDA_SIN_HORARIOS)
+        : buildConfig({}, { ...SIN_AMBIENTE, warn: () => {} });
   const result = step(
     createState({ channel: "sim", contactRef: "desconocido" }),
     { text: "Hola, quiero informacion sobre el sistema", receivedAt: T0 },
@@ -57,9 +71,13 @@ function saludar({ conHorarios }) {
 
 // Las dos ramas de bot-engine.mjs:388. La de "sin horarios" es la que ya estaba bien: va en la
 // lista para que no se rompa al revés el día que alguien reescriba la otra.
+// Desde el 2-oct son TRES hermanas: sin agenda propia (`ONIA_BOT_AGENDA`, el default de
+// produccion) el bot saluda con M0_PERSONA — la que hoy ve casi todo el mundo. Las tres van en la
+// lista por la misma razon de siempre: corregir una y dejar la hermana es como nacio el bug.
 const BIENVENIDAS = [
-  { nombre: "con horarios que ofrecer (M0 — la que ve casi todo el mundo)", conHorarios: true },
-  { nombre: "sin horarios que ofrecer (M0_SIN_HORARIOS)", conHorarios: false },
+  { nombre: "con horarios que ofrecer (M0)", rama: "M0" },
+  { nombre: "sin horarios que ofrecer (M0_SIN_HORARIOS)", rama: "M0_SIN_HORARIOS" },
+  { nombre: "sin agenda propia (M0_PERSONA — el default de produccion)", rama: "M0_PERSONA" },
 ];
 
 // Lo que el sistema HACE. Se piden DOS de estas y no la palabra "sistema" suelta: si alcanzara con
@@ -70,10 +88,10 @@ const LO_QUE_HACE_EL_SISTEMA = /plataforma|módulos|modulos|agenda|cobros|client
 // como el objeto vendido. NO alcanza con prohibir la palabra "bot": el disclosure de D2 la exige.
 const VENDE_EL_BOT = /(vendemos|ofrecemos|te ofrezco|lo que hacemos)[^.\n]{0,80}(asistente|bot|chatbot)[^.\n]{0,60}(atiende|responde|contesta|califica|agenda)/i;
 
-for (const { nombre, conHorarios } of BIENVENIDAS) {
+for (const { nombre, rama } of BIENVENIDAS) {
   test(`la bienvenida ${nombre} presenta el sistema, no el chatbot`, () => {
-    const { key, texto } = saludar({ conHorarios });
-    assert.equal(key, conHorarios ? "M0" : "M0_SIN_HORARIOS", "se midio la rama que se creia");
+    const { key, texto } = saludar({ rama });
+    assert.equal(key, rama, "se midio la rama que se creia");
 
     const nombra = [...new Set((texto.match(LO_QUE_HACE_EL_SISTEMA) || []).map((w) => w.toLowerCase()))];
     assert.ok(
@@ -91,7 +109,7 @@ for (const { nombre, conHorarios } of BIENVENIDAS) {
   // declara al bot. Si eso pasa, este test se cae en vez de dejar pasar un bot que se hace pasar
   // por humano.
   test(`la bienvenida ${nombre} sigue declarandose bot en la primera linea (D2)`, () => {
-    const { texto } = saludar({ conHorarios });
+    const { texto } = saludar({ rama });
     const primeraLinea = texto.split("\n")[0];
     assert.match(
       primeraLinea,

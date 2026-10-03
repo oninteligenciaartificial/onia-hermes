@@ -29,6 +29,23 @@ test.afterEach(() => {
   resetOrgKnowledgeCache();
 });
 
+// ESTE ARCHIVO PRUEBA LA MAQUINARIA DE HORARIOS, y desde el 2-oct los horarios solo se cargan con
+// AGENDA PROPIA (`ONIA_BOT_AGENDA=calcom` y Cal.com configurado): sin ella el turno no ofrece
+// ninguno y el bot deriva a la persona. Ese default —el de produccion— lo fija
+// `agendado-solo-si-se-agendo.test.mjs`; aca se enciende la agenda para todo el archivo, que corre
+// en su propio proceso (node --test aisla cada archivo), y se restaura al final.
+const AGENDA_PROPIA = { ONIA_BOT_AGENDA: "calcom", CALCOM_BASE_URL: "http://calcom:3000", CALCOM_BOT_EVENT_TYPE_ID: "5" };
+const ENTORNO_PREVIO = Object.fromEntries(Object.keys(AGENDA_PROPIA).map((k) => [k, process.env[k]]));
+test.before(() => {
+  Object.assign(process.env, AGENDA_PROPIA);
+});
+test.after(() => {
+  for (const [k, v] of Object.entries(ENTORNO_PREVIO)) {
+    if (v === undefined) delete process.env[k];
+    else process.env[k] = v;
+  }
+});
+
 const T0 = "2026-07-27T14:05:00Z";
 
 const LIVE_SLOTS = [
