@@ -1,0 +1,104 @@
+{
+  "id": "onia-platform-dental-meta-d1v3-los-de-manana",
+  "title": "ONIA — D1 v3 · Los de mañana (formato de anuncio de software, marca de la web)",
+  "headline_anuncio": "La lista de mañana, con el mensaje escrito",
+  "cta_anuncio": "Escribinos",
+  "caption": "Un paciente que no confirma es una silla que puede quedar vacía. Y el alquiler, la asistente y tu hora se pagan igual.\n\nOnia es un sistema de gestión con IA para clínicas dentales. Cada mañana arma la lista de los que no confirmaron, con el mensaje de cada uno ya escrito: la IA lo redacta una vez para tu clínica y vos lo aprobás. Sale desde tu WhatsApp, cuando vos decidís.\n\nEscribinos y te lo mostramos con una clínica de ejemplo.",
+  "kicker": "Para dueños de clínicas dentales",
+  "headline": "Un paciente que no confirma es un sillón vacío.",
+  "sub": "Cada mañana, Onia te deja la lista de quién no confirmó *con el mensaje ya escrito*.",
+  "proof": {
+    "url": "app.onia.com.bo/pending",
+    "frame": {
+      "src": "hermes-content/carousels/briefs/assets/onia-1.0-dental-ads/candidato-20260930/pendientes-confirmador.png",
+      "crop": [
+        456,
+        436,
+        784,
+        192
+      ]
+    },
+    "zooms": [
+      {
+        "src": "hermes-content/carousels/briefs/assets/onia-1.0-dental-ads/candidato-20260930/pendientes-confirmador.png",
+        "crop": [
+          470,
+          458,
+          322,
+          54
+        ],
+        "feed": {
+          "width": 680,
+          "box": 980,
+          "pos": {
+            "left": -22,
+            "top": 36
+          }
+        },
+        "story": {
+          "width": 680,
+          "box": 980,
+          "pos": {
+            "left": -22,
+            "top": 36
+          }
+        }
+      },
+      {
+        "src": "hermes-content/carousels/briefs/assets/onia-1.0-dental-ads/candidato-20260930/pendientes-confirmador.png",
+        "crop": [
+          892,
+          460,
+          236,
+          56
+        ],
+        "feed": {
+          "width": 440,
+          "pos": {
+            "right": -22,
+            "bottom": 0
+          }
+        },
+        "story": {
+          "width": 440,
+          "pos": {
+            "right": -22,
+            "bottom": 0
+          }
+        }
+      }
+    ]
+  },
+  "checks": [
+    "La IA escribe el mensaje",
+    "Nada sale sin tu OK",
+    "Sale desde tu WhatsApp"
+  ],
+  "cta": "Escribinos por WhatsApp",
+  "nota": "Te lo mostramos con una clínica de ejemplo.",
+  "layout": {
+    "feed": {
+      "h1": 88,
+      "proofTop": 48,
+      "overhang": 90,
+      "checksTop": 36,
+      "checksCol": true,
+      "check": 30,
+      "tick": 34
+    },
+    "story": {
+      "pad": "250px 72px 380px",
+      "logo": 48,
+      "kickerTop": 36,
+      "h1": 104,
+      "sub": 38,
+      "proofTop": 56,
+      "overhang": 90,
+      "checksTop": 56,
+      "checksCol": true,
+      "check": 32,
+      "tick": 36
+    }
+  },
+  "fuentes": "Formato: lo que corre en la Biblioteca de Anuncios (ONIA_ADQUISICION_Y_PAUTA.md §2.5). Marca: la de la web (lockup onia | dental de web-factory/apps/onia-platform/public/brand/v2/hires, letra Archivo, verde #027650 solo en lo que se aprieta). Pantalla: captura real del candidato 1.0 (candidato-20260930), cuyos textos están en producción release-8f07e537: «Enviar yo mismo por WhatsApp» (pending-client.tsx), «Cita de mañana a las HH:MM sin confirmar» (agents-por-que.ts). IA: agents-plantilla.ts (redacta una vez por negocio y agente; el dueño aprueba). «Cada mañana»: cron 07:00 Bolivia."
+}

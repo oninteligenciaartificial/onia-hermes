@@ -1,0 +1,162 @@
+{
+  "title": "Claude Code ya no te pregunta casi nada: qué deja pasar el modo auto (N03, noticia, pack referentes)",
+  "caption": "Claude Code ya no te pregunta casi nada: desde fines de septiembre arranca en modo auto en todos los planes (en Pro, Max y Team ya era así desde agosto). Un segundo modelo revisa, en vez de vos, lo que Claude quiere hacer.\n\nLo que importa: por defecto deja pasar el push a cualquier rama, incluida la principal. En mi empresa, la rama principal alimenta dos deploys: el del servidor y el de la web. Si la tuya publica tu sitio o tu app, mirá en qué modo arrancás.\n\nPara que vuelva a preguntarte, en ~/.claude/settings.json:\n\"permissions\": { \"defaultMode\": \"default\" }\n\nUn detalle que no entra en las láminas: en VS Code se elige Manual en el indicador de modo, abajo del cuadro de texto.\n\nFuente: code.claude.com/docs/en/permission-modes (listas resumidas) y el registro de cambios de Claude Code del 28-sep.\n\nComentá COMUNIDAD y te paso el link de la comunidad de WhatsApp con el bloque para copiar.",
+  "hashtags": [
+    "#claudecode",
+    "#claude",
+    "#ia",
+    "#noticiasia",
+    "#programacion",
+    "#bolivia"
+  ],
+  "serie": "Noticia · Claude Code",
+  "slides": [
+    {
+      "number": 1,
+      "layout": "ilustrado",
+      "theme": "verde",
+      "badge": "noticia",
+      "logo": "hermes-content/references/brand-claude/claudecode.svg",
+      "headline": "Claude Code ya *no te pregunta*",
+      "subtitle": "qué deja pasar el modo auto",
+      "image_origen": "galería (reutilizada de K2v3, sin gasto): llave de arcilla, esquinas blancas medidas 233-255",
+      "body": "Desde fines de septiembre, en todos los planes.",
+      "next": "qué cambió",
+      "alt_text": "Claude Code ya no te pregunta casi nada: qué deja pasar el modo auto",
+      "image_style": "clay",
+      "image": "hermes-content/galeria/ilustraciones/sergio-n03-modo-auto-20261001-s01-e661c3bd.jpg",
+      "image_prompt_usado": "A rounded emerald green clay traffic light with a matte black housing, only its bottom light glowing green."
+    },
+    {
+      "number": 2,
+      "layout": "ilustrado",
+      "theme": "blanco",
+      "headline": "Ya no revisás *vos*",
+      "image_origen": "galería (descartada como portada de K11 por el fondo gris, sin uso; sobre blanco no se nota), sin gasto",
+      "body": "Un segundo modelo revisa lo que Claude quiere hacer. Leer y editar en tu carpeta, en general, se aprueba solo.",
+      "next": "qué frena",
+      "alt_text": "Una barrera de arcilla verde frente a unas cajas negras: en modo auto, un segundo modelo revisa en vez de vos",
+      "image_style": "clay",
+      "image": "hermes-content/galeria/ilustraciones/sergio-n03-modo-auto-20261001-s02-21182acc.jpg",
+      "image_prompt_usado": "A pair of matte black clay binoculars resting on a small round emerald green clay base."
+    },
+    {
+      "number": 3,
+      "layout": "lista",
+      "theme": "blanco",
+      "headline": "Por defecto *bloquea*",
+      "body": "documentación oficial, resumida",
+      "items": [
+        {
+          "label": "Código de internet",
+          "text": "bajarlo y ejecutarlo, tipo curl | bash"
+        },
+        {
+          "label": "Deploys",
+          "text": "a producción, y migraciones"
+        },
+        {
+          "label": "Borrar para siempre",
+          "text": "archivos que existían antes de la sesión"
+        },
+        {
+          "label": "Tirar cambios",
+          "text": "force push, git reset --hard y parecidos"
+        }
+      ],
+      "next": "qué deja pasar",
+      "alt_text": "Lo que el modo auto bloquea por defecto"
+    },
+    {
+      "number": 4,
+      "layout": "lista",
+      "theme": "blanco",
+      "headline": "Por defecto *deja pasar*",
+      "body": "misma documentación, resumida",
+      "items": [
+        {
+          "label": "Tus archivos",
+          "text": "trabajar dentro de tu carpeta"
+        },
+        {
+          "label": "Dependencias",
+          "text": "las declaradas en tu lock o manifiesto"
+        },
+        {
+          "label": "Push",
+          "text": "a cualquier rama, *incluida la principal*"
+        }
+      ],
+      "next": "por qué importa",
+      "alt_text": "Lo que el modo auto deja pasar por defecto, incluido el push a la rama principal"
+    },
+    {
+      "number": 5,
+      "layout": "ilustrado",
+      "theme": "blanco",
+      "headline": "Por qué *importa*",
+      "body": "En mi empresa, la principal alimenta dos deploys: servidor y web. Un push con trabajo a medias *rompe los dos*.",
+      "next": "cómo volver",
+      "alt_text": "Una cañería de arcilla que se divide en dos, con una grieta antes de la bifurcación: un push con trabajo a medias a la rama principal rompe los dos deploys",
+      "image_style": "clay",
+      "image_prompt": "A single matte black clay water pipe that forks into two emerald green clay pipes, with one thin visible crack across the single pipe just before the fork."
+    },
+    {
+      "number": 6,
+      "layout": "lista",
+      "theme": "blanco",
+      "headline": "Volver a *manual*",
+      "body": "en la terminal",
+      "items": [
+        {
+          "label": "Ver el modo",
+          "text": "lo dice la barra de abajo"
+        },
+        {
+          "label": "Cambiarlo ya",
+          "text": "Shift+Tab, dentro de la sesión"
+        },
+        {
+          "label": "Para siempre",
+          "text": "abrí ~/.claude/settings.json"
+        },
+        {
+          "label": "En permissions",
+          "text": "\"defaultMode\": \"default\""
+        },
+        {
+          "label": "Comprobá",
+          "text": "la próxima sesión dice ⏸ manual mode on"
+        }
+      ],
+      "next": "un detalle",
+      "alt_text": "Cómo volver a modo manual: Shift+Tab en la sesión y defaultMode en default"
+    },
+    {
+      "number": 7,
+      "layout": "ilustrado",
+      "theme": "blanco",
+      "headline": "Ojo: *tu proyecto manda*",
+      "body": "Si tu proyecto tiene su propio .claude/settings.json con otro defaultMode, ese le gana al tuyo.",
+      "image_style": "clay",
+      "image_prompt": "A tall emerald green clay chess king standing next to a small matte black clay chess pawn.",
+      "next": "el bloque",
+      "alt_text": "Un rey de ajedrez verde junto a un peón negro: la configuración de tu proyecto le gana a la tuya"
+    },
+    {
+      "number": 8,
+      "layout": "cierre",
+      "theme": "negro",
+      "keyword": "COMUNIDAD",
+      "body": "y te paso el link de la comunidad con el bloque para copiar.",
+      "alt_text": "Comentá COMUNIDAD y te paso el link de la comunidad con el bloque para volver a modo manual"
+    }
+  ],
+  "fuentes": {
+    "guion": "hermes-content/docs/cola/plan-3-semanas/GUIONES-2-SEMANAS-1-14-OCT.md §N03",
+    "verificacion": "hermes-content/docs/cola/plan-3-semanas/auditoria-20260930/LOTE-D.md §N03 (permission-modes + changelog 2.1.284, 28-sep; Pro/Max/Team desde el 14-ago)",
+    "drop": "hermes-content/docs/cola/drops/2026-10-01-drops-noticias-repos.md §N03 (releído contra la doc oficial el 1-oct: el clasificador revisa en vez de vos; leer/editar en tu carpeta se aprueba solo salvo rutas protegidas; listas Bloquea / Deja pasar; Shift+Tab; defaultMode default en ~/.claude/settings.json; ⏸ manual mode on; el proyecto le gana a ~)",
+    "ejemplo_onia": "CLAUDE.md §«main siempre compila» (main alimenta el deploy del VPS y el de Vercel)",
+    "captura": "ninguna: el 1-oct-2026 la página code.claude.com/docs/en/permission-modes no cargó en el Chromium de la sesión en la nube (ERR_CERT_AUTHORITY_INVALID por el proxy de salida)"
+  }
+}

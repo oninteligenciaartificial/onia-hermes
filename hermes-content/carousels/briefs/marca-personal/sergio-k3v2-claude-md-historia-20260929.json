@@ -1,6 +1,6 @@
 {
   "title": "Un CLAUDE.md donde cada regla trae su historia (v2, pack referentes)",
-  "caption": "Mi archivo de reglas para Claude Code tiene una regla que no falla: cada regla lleva el caso real que la originó. Una regla sin su historia se desobedece; con la historia, no.\n\nY una regla tonta que funciona de alarma: Claude me tiene que llamar siempre por nombre y apellido. Si deja de hacerlo, dejó de leer sus instrucciones.\n\nGuardá la lámina 6 para armar el tuyo.",
+  "caption": "Mi archivo de reglas para Claude Code, el CLAUDE.md, tiene una regla arriba de todo: cada regla lleva el caso real que la originó. Una regla sin su historia se desobedece; con la historia, no.\n\nY una regla canario: Claude me tiene que llamar siempre «Sergio Urcullo». Si un día me dice «Sergio» a secas, dejó de leer sus instrucciones y toca cambiar de sesión. La ves sin preguntar.\n\nSi todavía no tenés uno: abrí Claude Code en la carpeta de tu proyecto y escribí /init. Te arma un borrador leyendo tu código. Después, sumale la historia a cada regla.\n\nUn error mío, para que no lo copies: mi archivo tiene casi 500 líneas, y la documentación de Anthropic recomienda menos de 200. Lo que es un procedimiento de muchos pasos va en una skill, que se carga solo cuando hace falta.\n\nDesde la versión 2.1.283, /doctor prompt-audit revisa tus archivos y te marca reglas viejas o que se contradicen. No cambia nada hasta que se lo pedís.\n\nGuardá la lámina 6 para armar el tuyo.\n\nFuente: code.claude.com/docs/en/memory.\n\nComentá HISTORIA y te paso el link de la comunidad con la plantilla de regla con historia.",
   "hashtags": [
     "#claudecode",
     "#claude",
@@ -16,18 +16,20 @@
       "badge": "guía",
       "logo": "hermes-content/references/brand-claude/claudecode.svg",
       "headline": "Cada regla de mi CLAUDE.md trae *su historia*",
-      "image_prompt": "A small yellow canary perched on a thin bare branch, head turned to one side, soft morning light.",
+      "image_prompt_usado": "A small yellow canary perched on a thin bare branch, head turned to one side, soft morning light.",
       "number": 1,
       "theme": "verde",
       "image_style": "acuarela",
-      "next": "por qué"
+      "next": "por qué",
+      "image": "hermes-content/galeria/ilustraciones/sergio-k3v2-claude-md-historia-20260929-s01-e5a8a39f.jpg",
+      "subtitle": "por qué Claude se salta tus reglas, y cómo evitarlo"
     },
     {
       "number": 2,
       "layout": "ensayo",
       "theme": "blanco",
       "headline": "Una regla *sin historia* se desobedece",
-      "body": "«Verificá antes de terminar» suena obvio.\n\nClaude lo lee, lo entiende y lo salta cuando está apurado.\n\nObvio no es obedecido. Con su historia, la cumple.",
+      "body": "«No inventes precios»: Claude lo lee.\n\nPero en una sesión larga, una orden seca pesa lo mismo que cualquier otra línea.\n\nCon el daño que evita, entiende qué protege, y la aplica a casos que no previste.",
       "next": "el formato",
       "alt_text": "Una regla sin historia se desobedece"
     },
@@ -36,7 +38,7 @@
       "layout": "ensayo",
       "theme": "blanco",
       "headline": "Regla, y *el caso que la creó*",
-      "body": "Verificar es MIRAR.\n\nNace del día que dije «verificado» con un 200 y un grep: la pantalla estaba rota.\n\nCada regla lleva la fecha y lo que pasó. Así Claude entiende qué costaría romperla.",
+      "body": "Tres partes: el título, una línea con quién, cuándo y qué pasó, y la instrucción.\n\n«Verificar es MIRAR». 15-ago: mi agente dijo «verificado» con un 200 y un grep. El login mostraba texto roto.\n\nAsí Claude entiende qué costaría romperla.",
       "next": "el orden",
       "alt_text": "Formato de regla con su historia"
     },
@@ -60,14 +62,17 @@
           "label": "Abajo",
           "text": "el detalle de cada área"
         }
-      ]
+      ],
+      "body": "menos de 200 líneas: lo que se lee primero pesa más"
     },
     {
       "number": 5,
-      "layout": "ensayo",
+      "layout": "ilustrado",
       "theme": "blanco",
       "headline": "Una regla tonta que *te avisa*",
-      "body": "Claude me tiene que llamar siempre «Sergio Urcullo».\n\nSi un día me dice «Sergio» a secas, dejó de leer sus instrucciones: cambio de sesión.\n\nLa ves sin preguntar.",
+      "body": "Claude me tiene que llamar «Sergio Urcullo». Si dice «Sergio» a secas, dejó de leer sus reglas: cambio de sesión.",
+      "image_style": "clay",
+      "image_prompt": "A small clay lighthouse with emerald green and white stripes and a matte black lantern room on top, its lamp glowing softly, standing on a rounded matte black clay rock.",
       "next": "armá el tuyo",
       "alt_text": "La regla canario del nombre completo"
     },
@@ -75,37 +80,46 @@
       "number": 6,
       "layout": "lista",
       "theme": "blanco",
-      "headline": "Tres pasos para *empezar hoy*",
+      "headline": "Cuatro pasos para *empezar hoy*",
       "items": [
         {
           "label": "El error",
-          "text": "el último que te hizo Claude"
+          "text": "lo último que Claude te hizo mal dos veces"
         },
         {
           "label": "La regla",
-          "text": "una frase, su fecha y su caso"
+          "text": "arriba, una línea: qué pasó y cuándo"
         },
         {
-          "label": "El canario",
-          "text": "algo que notes sin preguntar"
+          "label": "¿La ve?",
+          "text": "/context: tiene que listar tu CLAUDE.md"
+        },
+        {
+          "label": "¿La cumple?",
+          "text": "pedile lo prohibido: se tiene que negar"
         }
       ],
-      "next": "la guía",
-      "alt_text": "Tres pasos para escribir tu CLAUDE.md"
+      "next": "mi error",
+      "alt_text": "Cuatro pasos para escribir tu CLAUDE.md con historia y comprobar que Claude lo lee"
     },
     {
       "number": 7,
-      "layout": "logos",
+      "layout": "ilustrado",
+      "theme": "blanco",
+      "headline": "Mi error: casi *500\u00a0líneas*",
+      "body": "Anthropic recomienda menos de 200. Un procedimiento de muchos pasos va en una skill, que se carga cuando hace falta.",
+      "image_style": "clay",
+      "image_prompt": "A plain smooth emerald green clay suitcase, overstuffed and bulging at the sides, its lid barely closed, with a matte black clay handle, on a clean white surface.",
+      "next": "la plantilla",
+      "alt_text": "Mi CLAUDE.md tiene casi 500 líneas; Anthropic recomienda menos de 200 y los procedimientos van en una skill"
+    },
+    {
+      "number": 8,
+      "layout": "cierre",
       "theme": "negro",
-      "headline": "Guía",
-      "logos": [
-        {
-          "file": "hermes-content/references/brand-claude/claudecode.svg",
-          "label": "Claude Code"
-        }
-      ],
-      "body": "Instalación, primera skill y cómo hacer que trabaje sin vos. En *mi web*: link en la bio.",
-      "alt_text": "Guía de Claude Code en la web"
+      "keyword": "HISTORIA",
+      "body": "y te paso el link de la comunidad con la\u00a0plantilla.",
+      "alt_text": "Comentá HISTORIA para recibir la plantilla de regla con historia"
     }
   ]
 }

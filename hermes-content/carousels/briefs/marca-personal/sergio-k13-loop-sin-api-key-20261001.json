@@ -1,0 +1,133 @@
+{
+  "title": "Claude Code en un servidor: sin API key, 3 barandas y 5 trampas (K13, pack referentes)",
+  "caption": "Tengo agentes de Claude Code que trabajan en un servidor sin que yo esté. Cada uno arranca solo, toma la siguiente tarea de su lista, la cierra, guarda el trabajo en git y se apaga. Y no uso una API key: corren con mi suscripción.\n\nUn loop son dos archivos: el corredor, un solo script de bash para todos (candado, registro, tope y aviso), y el prompt de cada loop, con lo que hace y lo que tiene prohibido. Sumar un loop es un archivo más y una línea de cron.\n\nLa mitad del trabajo no es el pedido: son las barandas. El candado (flock), la carpeta verificada antes de trabajar y un aviso como mucho cada 6 horas por loop. Y si corre cada hora, un tope de 50 minutos.\n\nSi todavía no dejaste tu suscripción en el servidor, Claude Code trae un comando para eso: claude setup-token. Lo que te da es una contraseña: nunca va al repositorio.\n\nAntes de ponerle el cron, corrélo a mano una vez y leé el registro entero. Un cron escrito no es un cron que anda.\n\nTodo lo de las láminas se midió en mi servidor.\n\nComentá ESQUELETO y te paso el link de la comunidad con el esqueleto del corredor: el candado, la carpeta verificada, la clave borrada y el pedido desde un archivo.",
+  "hashtags": [
+    "#claudecode",
+    "#claude",
+    "#anthropic",
+    "#ia",
+    "#automatizacion",
+    "#bolivia"
+  ],
+  "serie": "Claude Code",
+  "slides": [
+    {
+      "number": 1,
+      "layout": "ilustrado",
+      "theme": "verde",
+      "badge": "guía",
+      "logo": "hermes-content/references/brand-claude/claudecode.svg",
+      "headline": "*Claude Code* solo en un servidor, sin API key",
+      "subtitle": "3 barandas y 5 trampas",
+      "image_style": "clay",
+      "next": "cómo se arma",
+      "alt_text": "Loop: Claude Code trabajando solo en un servidor, sin API key",
+      "image": "hermes-content/galeria/ilustraciones/sergio-k13-loop-sin-api-key-20261001-s01-7bc15836.jpg",
+      "image_prompt_usado": "A small closed padlock in green clay on a short matte black chain, resting on a white surface."
+    },
+    {
+      "number": 2,
+      "layout": "ilustrado",
+      "theme": "blanco",
+      "headline": "Un loop son *dos archivos*",
+      "body": "El corredor: un script de bash para todos. El prompt: un texto por loop, qué hace y qué tiene prohibido.",
+      "next": "las barandas",
+      "alt_text": "Las dos piezas de un loop: el corredor y el prompt",
+      "image_style": "clay",
+      "image_prompt": "A chunky matte black clay screwdriver handle lying on its side, with three short interchangeable emerald green clay bits lined up neatly beside it."
+    },
+    {
+      "number": 3,
+      "layout": "lista",
+      "theme": "blanco",
+      "headline": "Las 3 *barandas*",
+      "body": "las que casi nadie pone",
+      "items": [
+        {
+          "label": "El candado",
+          "text": "flock: si la vuelta anterior sigue, la nueva no arranca"
+        },
+        {
+          "label": "La carpeta",
+          "text": "si el cd falla, avisa y se detiene"
+        },
+        {
+          "label": "El aviso",
+          "text": "por Telegram, como mucho 1 vez cada 6 h por loop",
+          "icon": "hermes-content/references/brand-logos/telegram-color.svg"
+        }
+      ],
+      "next": "el tope",
+      "alt_text": "Las tres barandas: candado, carpeta verificada y aviso"
+    },
+    {
+      "number": 4,
+      "layout": "ilustrado",
+      "theme": "blanco",
+      "headline": "50 minutos de tope si corre *cada hora*",
+      "body": "Regla de cordura: el tiempo máximo, siempre menor que el intervalo.",
+      "next": "las trampas",
+      "alt_text": "Un loop que corre cada hora tiene un tope de 50 minutos",
+      "image_prompt_descartado": [
+        "A matte black clay stopwatch with a single emerald green clay button on top, standing upright.",
+        "A matte black clay stopwatch with a completely blank plain white dial, no numbers and no marks, one emerald green clay button on top, standing upright."
+      ],
+      "image_style": "clay",
+      "image_prompt": "A small emerald green clay cube resting inside a larger shallow open matte black clay box, with clear space on every side between the cube and the walls."
+    },
+    {
+      "number": 5,
+      "layout": "ensayo",
+      "theme": "blanco",
+      "headline": "Trampa 1: *la API key*",
+      "body": "Si en el servidor hay una ANTHROPIC_API_KEY, Claude Code la usa en vez de tu suscripción.\n\nLa mía estaba vencida: todo fallaba.\n\nEl corredor borra las dos variables de clave antes de llamar a Claude:\n\n*unset ANTHROPIC_API_KEY ANTHROPIC_AUTH_TOKEN*",
+      "next": "4 más",
+      "alt_text": "Borrar ANTHROPIC_API_KEY y ANTHROPIC_AUTH_TOKEN del entorno para que use la suscripción"
+    },
+    {
+      "number": 6,
+      "layout": "lista",
+      "theme": "blanco",
+      "headline": "4 trampas *más*",
+      "body": "las cuatro me costaron vueltas perdidas",
+      "items": [
+        {
+          "label": "--allowedTools",
+          "text": "las herramientas en una sola cadena, con comas"
+        },
+        {
+          "label": "La entrada",
+          "text": "el pedido, siempre desde un archivo: < prompt.md"
+        },
+        {
+          "label": "La hora",
+          "text": "el cron va en UTC: hora de Bolivia + 4 h"
+        },
+        {
+          "label": "Editar en caliente",
+          "text": "versión nueva en un temporal, bash -n y recién mv"
+        }
+      ],
+      "next": "la prueba",
+      "alt_text": "Cuatro trampas: allowedTools, la entrada, la hora y editar en caliente"
+    },
+    {
+      "number": 7,
+      "layout": "dato",
+      "theme": "blanco",
+      "value": "7/8",
+      "headline": "corridas *sin hacer nada*",
+      "body": "Así estaba uno de mis loops. No alcanza con que corra: abrí 3 o 4 de sus commits y mirá qué cambió. Con ese criterio apagué 2 de 6.",
+      "next": "el esqueleto",
+      "alt_text": "Un loop tuvo 7 de 8 corridas sin hacer nada: la prueba es abrir sus commits"
+    },
+    {
+      "number": 8,
+      "layout": "cierre",
+      "theme": "negro",
+      "keyword": "ESQUELETO",
+      "body": "y te paso el link de la comunidad con el esqueleto.",
+      "alt_text": "Comentá ESQUELETO para recibir el esqueleto del corredor"
+    }
+  ]
+}

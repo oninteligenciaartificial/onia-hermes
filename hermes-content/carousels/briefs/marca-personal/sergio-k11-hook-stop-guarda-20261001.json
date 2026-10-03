@@ -1,0 +1,138 @@
+{
+  "title": "El hook que commitea solo, y su guarda (K11 v2, pack referentes, arcilla)",
+  "caption": "Mi hook de Claude Code tomó 17 archivos con conflictos, los dio por resueltos y los subió a main. Ese hook corre solo cada vez que Claude termina de responder: commitea y sube.\n\nStop corre cuando Claude termina su turno, no cuando terminó el trabajo. Así se publicaron 217 líneas de estilos antes que el código que las usaba.\n\nLa guarda, para copiar. Va en tu script, antes de git add; si alguno de los dos imprime algo, el script sale sin tocar nada:\ngit rev-parse -q --verify MERGE_HEAD\ngit diff --name-only --diff-filter=U\nEl primero imprime un hash si hay un merge a medias; el segundo lista los archivos en conflicto.\n\nPara armar el conflicto de prueba: en una carpeta nueva, git init, dos ramas que cambian la misma línea del mismo archivo y git merge. Queda en conflicto: corré tu script y tiene que avisar sin commitear.\n\nLos dos incidentes son del 20 y el 23 de agosto (están en el CLAUDE.md de mi repo); la guarda, en scripts/git-autosync.js. Qué es Stop y qué muestra /hooks: code.claude.com/docs/en/hooks.\n\nLa regla que me dejó: un merge con conflictos no se deja abierto al terminar un turno.\n\nComentá HOOK y te paso el link de la comunidad con el JSON y la guarda, listos para copiar.",
+  "hashtags": [
+    "#claudecode",
+    "#claude",
+    "#git",
+    "#ia",
+    "#programacion",
+    "#bolivia"
+  ],
+  "serie": "Claude Code",
+  "slides": [
+    {
+      "number": 1,
+      "layout": "ilustrado",
+      "theme": "verde",
+      "badge": "guía",
+      "logo": "hermes-content/references/brand-claude/claudecode.svg",
+      "headline": "El hook que *commitea solo*",
+      "subtitle": "y la guarda que le puse después de romperlo",
+      "image_style": "clay",
+      "image_prompt_usado": "A green clay boom barrier gate with its arm lowered and closed, in front of a small stack of matte black clay boxes.",
+      "image": "hermes-content/galeria/ilustraciones/k11-img-regen-s01-a3306a4e.jpg",
+      "image_descartada": "hermes-content/galeria/ilustraciones/k11-img-s01-7794c76c.jpg (fondo gris: sobre el verde quedaba un bloque oscuro)",
+      "body": "Corre cada vez que Claude termina. Te muestro cómo armarlo bien.",
+      "next": "qué pasó",
+      "alt_text": "El hook de Claude Code que commitea solo, y su guarda"
+    },
+    {
+      "number": 2,
+      "layout": "dato",
+      "theme": "blanco",
+      "value": "17",
+      "headline": "archivos con conflictos, *directo a main*",
+      "body": "Mi hook de Claude Code los dio por resueltos y los subió solo. Así se arma bien, en tres pasos.",
+      "next": "paso 1",
+      "alt_text": "17 archivos con conflictos que el hook de Claude Code subió a main"
+    },
+    {
+      "number": 3,
+      "layout": "lista",
+      "theme": "blanco",
+      "headline": "Paso 1: *dónde va*",
+      "body": "en .claude/settings.json",
+      "items": [
+        {
+          "label": "hooks",
+          "text": "la sección de los hooks"
+        },
+        {
+          "label": "Stop",
+          "text": "una lista: corre cuando Claude termina"
+        },
+        {
+          "label": "hooks",
+          "text": "adentro de Stop, otra lista"
+        },
+        {
+          "label": "type: command",
+          "text": "y command: node scripts/git-autosync.js"
+        }
+      ],
+      "next": "paso 2",
+      "alt_text": "La estructura del hook Stop en .claude/settings.json"
+    },
+    {
+      "number": 4,
+      "layout": "ilustrado",
+      "theme": "blanco",
+      "headline": "Paso 2: el turno *no es el trabajo*",
+      "image_style": "clay",
+      "body": "Stop corre cuando Claude termina su turno. Así se publicaron 217 líneas de estilos antes que su código.",
+      "next": "paso 3",
+      "alt_text": "Stop corre al terminar el turno, no el trabajo: 217 líneas de estilos antes que su código",
+      "image": "hermes-content/galeria/ilustraciones/k11-img-s04-4d843c97.jpg",
+      "image_prompt_usado": "A small emerald green clay hourglass next to a half-built matte black clay wall."
+    },
+    {
+      "number": 5,
+      "layout": "lista",
+      "theme": "blanco",
+      "headline": "Paso 3: *la guarda*",
+      "body": "dos preguntas antes de git add",
+      "items": [
+        {
+          "label": "¿Merge a medias?",
+          "text": "git rev-parse -q --verify MERGE_HEAD",
+          "icon": "hermes-content/references/brand-logos/git-color.svg"
+        },
+        {
+          "label": "¿Archivos en conflicto?",
+          "text": "git diff --name-only --diff-filter=U",
+          "icon": "hermes-content/references/brand-logos/git-color.svg"
+        },
+        {
+          "label": "Si alguno devuelve algo",
+          "text": "no toca nada y avisa"
+        },
+        {
+          "label": "Si los dos vuelven vacíos",
+          "text": "recién ahí: add, commit y push"
+        }
+      ],
+      "next": "la prueba",
+      "alt_text": "Los dos comandos de git de la guarda"
+    },
+    {
+      "number": 6,
+      "layout": "ensayo",
+      "theme": "blanco",
+      "headline": "Comprobá que *frena*",
+      "body": "Escribí /hooks en Claude Code: tu Stop tiene que aparecer.\n\nDespués, en un repo de prueba, armá un conflicto a propósito y corré tu script. Tiene que avisar y no commitear.\n\nEl mío dice: *merge\u00a0sin\u00a0resolver\u00a0—\u00a0omito\u00a0TODO*.",
+      "next": "la regla",
+      "alt_text": "Cómo comprobar que la guarda frena"
+    },
+    {
+      "number": 7,
+      "layout": "ilustrado",
+      "theme": "blanco",
+      "headline": "Nunca dejes un *merge\u00a0abierto*",
+      "body": "La regla que me dejó: un merge con conflictos se resuelve antes de que Claude termine el turno.",
+      "image_style": "clay",
+      "image_prompt": "A short emerald green clay zipper, fully zipped closed, joining two smooth matte black clay strips, its smooth plain pull tab resting at the top end, on a clean white surface.",
+      "next": "el hook",
+      "alt_text": "La regla: un merge con conflictos se resuelve antes de que Claude termine el turno"
+    },
+    {
+      "number": 8,
+      "layout": "cierre",
+      "theme": "negro",
+      "keyword": "HOOK",
+      "body": "y te paso el link de la comunidad con el hook\u00a0armado.",
+      "alt_text": "Comentá HOOK para recibir el JSON del hook y la guarda"
+    }
+  ],
+  "image_style": "clay"
+}

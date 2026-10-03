@@ -1,6 +1,6 @@
 {
   "title": "La perilla de esfuerzo de Claude Code (v2, pack referentes)",
-  "caption": "Claude Code tiene una perilla que cambia cuánto piensa antes de responderte: el esfuerzo. Se elige con claude --effort, y si no ponés nada viene en medium.\n\nMi regla: low para lo mecánico, medium para todos los días, high o xhigh cuando la primera respuesta no alcanzó, y max casi nunca.\n\nLa próxima respuesta floja, antes de cambiar de modelo, subí un nivel.\n\nNiveles: claude --help en Claude Code 2.1.267. Medium por defecto: anthropic.com/claude-sonnet-5-5.\n\nLa guía para instalar Claude Code está en mi web (link en la bio).",
+  "caption": "Si tu Claude Code ya usa Opus 5.5 o Sonnet 5.5, arranca en esfuerzo medium: un nivel más abajo que Opus 5 y Sonnet 5, que venían en high. La perilla decide cuánto razona antes de responder.\n\nOjo antes de subirlo: la escala cambia según el modelo. En las pruebas de Anthropic, Opus 5.5 en medium iguala o supera a Opus 5 en high. Por eso, antes de dejarlo en high, probalo con una tarea tuya.\n\nPrimero la perilla, después el modelo: según la doc de Anthropic, a Fable (el más caro) se pasa recién cuando Opus 5.5 con más esfuerzo no alcanza.\n\nSi guardaste un nivel y querés borrarlo: /effort auto.\n\nFuente: code.claude.com/docs/en/model-config (releída el 1-oct) y anthropic.com/claude-sonnet-5-5.\n\n¿Todavía no usás Claude Code? La guía para instalarlo está en mi web.\n\nComentá EFFORT y te paso el link de la comunidad con mi tabla de esfuerzo.",
   "hashtags": [
     "#claudecode",
     "#claude",
@@ -22,28 +22,39 @@
           "label": "Claude Code"
         }
       ],
-      "body": "La perilla que *casi nadie toca*: cuánto piensa antes de responderte.",
+      "body": "Con los modelos 5.5, Claude Code arranca *en medium*: un nivel más abajo que antes.",
       "next": "qué es",
-      "alt_text": "Effort: la perilla de Claude Code que casi nadie toca"
+      "alt_text": "Effort: con los modelos 5.5, Claude Code arranca un nivel más abajo que antes"
     },
     {
       "number": 2,
       "layout": "ensayo",
       "theme": "blanco",
       "headline": "Cuánto *piensa* antes de actuar",
-      "body": "Se elige al abrir Claude Code:\n\n*claude --effort* y el nivel.\n\nSon cinco: low, medium, high, xhigh y max. Si no ponés nada, viene en medium.",
-      "next": "mi regla",
-      "alt_text": "claude --effort y los cinco niveles de esfuerzo"
+      "body": "Escribí */effort*: ves en cuál estás y elegís entre cinco niveles: low, medium, high, xhigh y max. Enter lo guarda; la tecla s, solo para esta sesión.\n\nOpus y Sonnet 5.5 vienen en medium. Opus 5 y Sonnet 5 venían en high.",
+      "next": "no es peor",
+      "alt_text": "/effort muestra el nivel y deja elegir entre los cinco; los modelos 5.5 vienen en medium"
     },
     {
       "number": 3,
+      "layout": "ilustrado",
+      "theme": "blanco",
+      "headline": "Más bajo *no es peor*",
+      "image_style": "clay",
+      "image_prompt": "A white clay balance scale standing perfectly level, with a small emerald green clay sphere on the left pan and a larger matte black clay sphere on the right pan.",
+      "body": "En las pruebas de Anthropic, Opus 5.5 en medium iguala o supera a Opus 5 en high.",
+      "next": "mi regla",
+      "alt_text": "Una balanza pareja: Opus 5.5 en medium iguala o supera a Opus 5 en high"
+    },
+    {
+      "number": 4,
       "layout": "lista",
       "theme": "blanco",
       "headline": "Mi regla, *nivel por nivel*",
       "items": [
         {
           "label": "low",
-          "text": "lo mecánico: renombrar, mover, cambiar un texto"
+          "text": "lo mecánico: renombrar, mover archivos"
         },
         {
           "label": "medium",
@@ -60,35 +71,35 @@
       ],
       "next": "el truco",
       "alt_text": "Qué nivel de esfuerzo usar para cada tarea",
-      "body": "más esfuerzo es más tiempo y más tokens"
-    },
-    {
-      "number": 4,
-      "layout": "dato",
-      "theme": "blanco",
-      "value": "+1",
-      "headline": "Respuesta floja: *subí un nivel*",
-      "body": "Antes de cambiar de modelo, pedí lo mismo con un nivel más de esfuerzo. Y no lo subas por las dudas.",
-      "next": "la prueba",
-      "alt_text": "Ante una respuesta floja, subir un nivel de esfuerzo"
+      "body": "la doc avisa: max tiende a pensar de más"
     },
     {
       "number": 5,
-      "layout": "ensayo",
+      "layout": "ilustrado",
       "theme": "blanco",
-      "headline": "Cómo sabés si *te sirvió*",
-      "body": "La misma tarea en medium y en high.\n\nContá cuántas veces corregiste cada una. Con /usage ves los tokens que gastó.\n\nSi high no te ahorró correcciones, volvé a medium.",
-      "next": "la guía",
-      "alt_text": "Comparar la misma tarea en medium y en high"
+      "headline": "Respuesta floja: *subí un nivel*",
+      "image_style": "clay",
+      "image_prompt": "A short staircase of five wide white clay steps rising to the right, with one glossy emerald green clay ball resting on the third step and a small curved matte black clay arrow arching up from the second step to the third.",
+      "body": "Primero la perilla, después el modelo: a Fable, el más caro, recién si Opus 5.5 con más esfuerzo no alcanza.",
+      "next": "la prueba",
+      "alt_text": "Una bola verde sube un escalón: ante una respuesta floja, subir un nivel de esfuerzo"
     },
     {
       "number": 6,
       "layout": "ensayo",
+      "theme": "blanco",
+      "headline": "Cómo sabés si *te sirvió*",
+      "body": "Abrí una sesión con cada línea y dales la misma tarea:\n\n*claude --effort medium*\n\n*claude --effort high*\n\nSi en high la corregís menos, esa tarea va en high. Así probás sin dejar high guardado.",
+      "next": "mi tabla",
+      "alt_text": "claude --effort medium y claude --effort high con la misma tarea, para comparar"
+    },
+    {
+      "number": 7,
+      "layout": "cierre",
       "theme": "negro",
-      "headline": "¿Todavía no usás *Claude Code*?",
-      "body": "En mi web está la guía: instalarlo, tu primera skill y cómo hacer que trabaje sin vos.",
-      "cta": "Link en la bio",
-      "alt_text": "La guía de Claude Code está en la web de Sergio Urcullo"
+      "keyword": "EFFORT",
+      "body": "y te paso el link de la comunidad con mi tabla.",
+      "alt_text": "Comentá EFFORT para recibir la tabla de esfuerzo"
     }
   ]
 }

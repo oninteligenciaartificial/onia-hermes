@@ -57,22 +57,12 @@ necesitan grabarte: `references/marca-personal/SANTIAGO-VIDEOS-ANIMADOS-POR-CODI
 
 **29-sep: Sergio Urcullo pidió UNO POR DÍA.** El calendario de los 21 días (30-sep → 20-oct) va en
 `plan-3-semanas/CARRUSELES-DIARIOS.md`; cada uno se agenda con `ig-carrusel.mjs` recién con su OK.
-La tabla de abajo son los 9 que ya estaban.
+⚠️ **Corregido el 1-oct:** acá había una tabla con los 9 primeros, con fechas y carpetas viejas (`k2v2`, `k8v2`,
+«sáb 3-oct»). Era una segunda fuente del mismo calendario y ya decía otra cosa. **Fecha, carpeta y estado de cada
+carrusel: solo en `CARRUSELES-DIARIOS.md`.**
 
 Láminas PNG en `hermes-content/carousels/out/<carpeta>/slide-NN.png`; caption en el brief
 (`hermes-content/carousels/briefs/marca-personal/<carpeta>.json`, campo `caption`).
-
-| Día | Carrusel | Carpeta |
-|---|---|---|
-| jue 1-oct | Opus o Sonnet | `sergio-k1-opcion-b-clay-20260929` (o `…-opcion-a-acuarela-…`) |
-| sáb 3-oct | Tu primera skill | `sergio-k2v2-primera-skill-20260929` |
-| mar 6-oct | CLAUDE.md con historia | `sergio-k3v2-claude-md-historia-20260929` |
-| jue 8-oct | 5 pruebas antes de activar tu bot | `sergio-k4v2-cinco-pruebas-bot-20260929` |
-| sáb 10-oct | Seguimiento que no molesta | `sergio-k5v2-seguimiento-que-no-molesta-20260929` |
-| mar 13-oct | Confirmado / por confirmar | `sergio-k6v2-confirmado-por-confirmar-20260929` |
-| jue 15-oct | Carruseles por código | `sergio-k7v2-carruseles-por-codigo-20260929` |
-| sáb 17-oct | Recuperar vs reconstruir un prompt | `sergio-k8v2-recuperar-vs-reconstruir-20260929` |
-| mar 20-oct | Checklist antes de publicar | `sergio-k9v2-checklist-video-ia-20260929` |
 
 ## 4. Antes de publicar cada video
 

@@ -1,3 +1,5 @@
+⚠️ Reemplazado el 1-oct por GRABAR-2-14-OCT.md (calendario nuevo y cierres con "comentá"). Esto es historia.
+
 # Para grabar · jueves 1 → domingo 4 de octubre
 
 Solo lo que se dice a cámara. Orden de cada día = orden de grabación. ~15-20 min por video con tomas repetidas → 3 videos ≈ 1 hora.

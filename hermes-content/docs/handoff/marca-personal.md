@@ -2,6 +2,170 @@
 
 **Archivo único del carril.** Actualizado 2026-09-29 por Claude (Opus 5.5).
 
+## ▶▶▶ Estado 2-oct 13:40 UTC — misma sesión (`session_01CE21mytrEXdqanCFoWxm32`)
+
+- **PR #76 al día con `main`** (merge sin conflictos, `e3091f74`), marcado listo para revisión, `mergeable_state: clean`.
+  El merge a `main` lo hace Sergio Urcullo o la madre.
+- **Lote de imágenes COTIZADO y SIN generar: 32 imágenes · 3,84 cr (tope 4 cr)**, text2image_soul_v2 clay. Son 31
+  prompts pendientes de los 18 briefs, más la portada de K9v2, que salía con una criatura con ojos: su prompt era de foto
+  (tijeras) con estilo clay. Ahora pide una lupa sobre película. Se cotizó con
+  `HF_CMD="ssh onia-vps higgsfield" node scripts/carousel_images.mjs --brief <b> --out <scratch>/<slug>` sin `--yes`.
+  **Falta su «sí, generá las 32».**
+- **Orden pactado con la madre v2 (CLAUDE.md §4: construir y publicar son dos permisos):**
+  1. Generar.
+  2. Hacer QA de cada imagen.
+  3. Renderizar los 18.
+  4. Armar UNA página privada con los 18 + calendario.
+  5. Esperar su OK sobre esa página.
+  6. Recién ahí `agendar-carruseles-2-19-oct.sh --agendar`. El de hoy (DD-A, 20:00 UTC) sale sólo si es la versión
+     que vio.
+- **Permiso para publicar (IG/Buffer): medido.** El modo Auto bloquea `--agendar` aunque el pedido esté en el chat; la
+  intención del usuario sólo levanta los `soft_deny`. Hay dos vías:
+  - **Elegida, por ser la de menos pasos:** Sergio Urcullo pasa el selector de modo de «Auto» a «Accept edits», aprueba
+    el botón y vuelve a «Auto».
+  - Una regla `permissions.allow` angosta para ese script. Tendría que ponerla él, no la sesión.
+- **Investigación de los videos de Codex:** workflow `w9xtnrhy5` en curso. Con su receta se re-edita N03; la versión
+  vigente es la v3 sin SFX.
+
+## ▶▶ Estado 2-oct ~01:10 UTC — misma sesión (`session_01CE21mytrEXdqanCFoWxm32`)
+
+- **Video modo auto (N03) TERMINADO**, sin publicar: `final/sergio-n03-modo-auto-20261001.mp4` (59,6 s, −14 LUFS,
+  52 MB) en el scratchpad de la sesión (`…/scratchpad/video-v1/`), FUERA del repo. Si la sesión muere se pierde el
+  render, pero se rehace en ~5 min: `scripts/cutplan.json` + `scripts/segments-fixed.json` + `scripts/una-pasada.cjs`
+  (todo en ese scratchpad; el bruto está en Drive, carpeta «Videos Onia Octubre», compartida por enlace). Corte
+  aprobado por Sergio Urcullo («está bien»). Se sacó la frase «Esto es lo que deja de pasar» y el «de» del segundo
+  «deja de pasar» (decía lo contrario). Palabra: COMUNIDAD (la dijo a cámara). Falta su «ok» para publicar.
+- **18 carruseles listos** (13 K + 5 noticias), revisados con rúbrica de utilidad, todos con cierre `cierre`
+  «Comentá PALABRA». Calendario uno por día 16:00 La Paz del vie 2 al lun 19 en
+  `…/hermes-content/deploy/vps-ops/publicar/agendar-carruseles-2-19-oct.sh` (y `CARRUSELES-DIARIOS.md`). **Nada agendado:** el modo automático de
+  permisos frenó la subida a Instagram («Real-World Transactions») aunque Sergio Urcullo dijo «programalos». Falta su
+  «sí» explícito o una regla de permiso. No buscar otro camino.
+- Imágenes: lote 2-oct 1,08 cr en total (K8, K13, N03, N04, K7), bitácora en `ONIA_MARCA_PERSONAL_HIGGSFIELD_RECETAS.md`.
+- N06 rehecha: «Google cambió Gemini CLI gratis por Antigravity CLI» (la vieja era falsa).
+- Comunidad: `cola/drops/AVISOS-POR-DIA.md` — qué pegar cada día, revisado. Hoy vie 2: vuelta + reto, PLANILLA +
+  COMUNIDAD + TARIFA, EFFORT + MIRAR + CACHE.
+- Guiones para grabar: `plan-3-semanas/GRABAR-2-14-OCT.md` (D02-A y DD-A corregidos hoy, N06 nuevo).
+- Pendientes de Sergio Urcullo: ok para publicar el video; «sí» para agendar; pegar los avisos; mirar la web
+  `/claude-code` (dice «3 subagentes»; DELEGAR y SKILL mandan ahí); subir el video de Sonnet 5.5 (D01-B) a Drive.
+
+## ▶ Estado 1-oct ~21:40 UTC — sesión `session_01CE21mytrEXdqanCFoWxm32` (nube, entorno onia-higgsfield)
+
+- **Hecho y pusheado** (rama `claude/marca-personal-contenido-ae658c`): K2v3, K8v3, K11, K12 y K13 rehechos y mirados;
+  K2v3, K11 y K12 con imágenes de arcilla (lote aprobado, 0,84 cr, bitácora en `ONIA_MARCA_PERSONAL_HIGGSFIELD_RECETAS.md`)
+  y logos oficiales (git y Telegram nuevos en `references/brand-logos/`). Calendario 2→14 oct en `CARRUSELES-DIARIOS.md`
+  §1 (única fuente). Los 38 guiones cierran con «comentá PALABRA» (tabla al principio de `GUIONES-2-SEMANAS-1-14-OCT.md`).
+  `carousel_contactsheet.js` ya anda en la nube.
+- **Esperando a Sergio Urcullo:**
+  1. el video del 1-oct está en Drive (`Videos Onia Octubre/A0550B92-….mp4`, id `1fOVS40NXa25ZBt-b_3gJkBXfCCOcs-3q`, 78 MB)
+     pero PRIVADO: hace falta «Cualquier persona con el enlace» para bajarlo con curl. Solo subió UNO de los dos;
+  2. «sí» explícito para las 4 imágenes de K8 y K13 (0,48 cr): el modo automático de permisos frenó la generación
+     paga. No buscar otro camino;
+  3. «ok» de los carruseles y del calendario para agendarlos.
+- **Video, listo para arrancar:** ffmpeg está; `pip install faster-whisper` + modelo `small` ya bajados; script de
+  transcripción local en el scratchpad (formato que comen `cut-plan.mjs`/`karaoke-captions.mjs`, ver skill `editor-videos`).
+  El bruto se trabaja FUERA del repo (`videos/` no está en `.gitignore` y el autosync lo subiría).
+- **Publicar:** Sergio Urcullo pidió «que lo postees a mis redes». Circuito en `deploy/vps-ops/publicar/README.md`
+  (`ig-reel.mjs` + Buffer para TikTok/YouTube/LinkedIn, por `ssh onia-vps`). Se publica recién con su «ok» sobre el
+  video terminado (antes: tabla de cortes + preview).
+- **Intentos fallidos:** generar en subagentes con `--out k11-img` dejó `usado_en` mal (corregido); los subagentes no
+  heredan el OK de Sergio Urcullo para gasto.
+
+## 🔁 RELEVO 1-oct noche — empezá ACÁ (sesión nueva en la nube con Drive)
+
+Sergio Urcullo: *«cambiemos de sesión, ya conecté Drive»*. La sesión anterior (`session_012ppFowADbJNtZ6WBMtqpuf`, nube)
+termina acá. La sesión madre (local) orquesta y hace lo que exige la PC. La nube no le puede escribir a la madre: se le
+contesta en el transcript.
+
+**1. Objetivo del carril:** marca personal y comunidad de Sergio Urcullo (contenido diario → comunidad → curso a los
+100 miembros). Onia Platform y @oniahq NO son de este carril (los lleva la sesión de ventas y pauta).
+
+**2. En producción / publicado:** NADA todavía. Ningún video, carrusel ni mensaje de comunidad salió.
+
+**3. A medias y dónde (todo en la rama `claude/marca-personal-contenido-ae658c`, PR #76 abierto en draft):**
+- **2 videos GRABADOS, sin editar** (Sonnet 5.5 = D01-B, «lo cambié un poco»; modo auto = N03, tal cual). Están en la PC.
+  Guía de edición lista: `cola/plan-3-semanas/EDICION-VIDEOS-20261001.md`. Próximo paso: que Sergio Urcullo comparta los
+  brutos por Drive y editarlos con `editor-videos` (tabla de cortes + preview ANTES de cortar).
+- **Carruseles K2v3, K8v3, K11, K12, K13: NO HECHOS.** El workflow que los hacía se cortó a propósito por el relevo, antes
+  de escribir nada. El script está en `cola/plan-3-semanas/auditoria-20260930/workflow-drops-carruseles-20261001.js`: rehacé
+  esa fase con esos prompts. K12 ya puede usar «424 commits» (confirmado por la madre).
+- **17 drops escritos, sin enviar:** `cola/drops/2026-10-01-drops-noticias-repos.md`. Incluye drop 2 corregido, drop 14
+  corregido, EFFORT, N01–N06 y R01–R07. Pasaron una vuelta de revisor y arreglo, pero no se re-verificaron después del
+  arreglo: leelos antes de mandarlos.
+- **Vuelta de la comunidad + reto:** `cola/drops/2026-10-01.md`, sin enviar. Las fechas se corren al día real.
+- **Programar carruseles:** pedido de Sergio Urcullo («programalos para postear, subido a drive»). Falta: (a) que vea cada
+  carrusel y dé el «ok»; (b) re-alinear `CARRUSELES-DIARIOS.md` con el calendario nuevo de videos. Propuesta: vie 2 K10 ·
+  sáb 3 K1 (después del reto) · dom 4 K2 · lun 5 K6 · mar 6 K3 · mié 7 K11 · jue 8 K4 · vie 9 K9 · sáb 10 K12 · dom 11 K5 ·
+  lun 12 K13 · mar 13 K7 · mié 14 K8. Todos a las 16:00 La Paz; (c) agendarlos con `deploy/vps-ops/publicar/ig-carrusel.mjs`
+  + `agendar-publicacion.sh`. Eso exige la llave del VPS (`ONIA_VPS_SSH_KEY_B64`) o pedírselo a la madre.
+
+**4. Archivos clave:** `cola/plan-3-semanas/GUIONES-2-SEMANAS-1-14-OCT.md` (38 guiones, calendario 1–14 oct, ya con las
+verificaciones de la madre) · `cola/plan-3-semanas/VERIFICACION-LAPTOP-20261001.md` · `auditoria-20260930/LOTE-A…D.md` ·
+`EDICION-VIDEOS-20261001.md` · `cola/drops/` · `carousels/out/sergio-historias-comunidad-20261001/` y
+`sergio-comunidad-reto-presupuestos-20261001/`.
+
+**5. Intentos fallidos (no repetir):**
+- Video por el chat: no llega.
+- Drive por MCP en la sesión vieja: las búsquedas venían vacías, `root` no se encontraba y crear archivos daba «invalid
+  argument». Sergio Urcullo reconectó Drive al cerrar; probalo primero con `search_files` sobre `mimeType contains 'video/'`.
+- Bajar un video por `download_file_content` (base64 dentro del contexto) no sirve. Con un link «cualquiera con el enlace»
+  se baja por curl desde `drive.usercontent.google.com`.
+- `SendMessage` a la madre desde la nube: falla.
+- `git grep` en todo el repo: más de 2 minutos.
+- Detalle en las skills `editor-videos`, `diseno-contenido-onia` y `onia-continuidad` (commit `d64a6418`).
+
+**6. Depende de Sergio Urcullo:**
+- compartir los videos;
+- mirar y aprobar los carruseles y el calendario de programación;
+- pegar los mensajes de la comunidad (o autorizar a que se manden);
+- poner «Comunidad» como primer link de la bio de IG;
+- corregir y publicar la web `sergiourcullo.vercel.app/claude-code` (dice «3 subagentes»).
+
+**7. Próximos pasos, en orden:**
+1. Probar Drive y bajar los 2 videos.
+2. Editarlos (tabla de cortes a Sergio Urcullo primero).
+3. Rehacer K2v3, K8v3 y K11–K13, y mirarlos.
+4. Mostrarle a Sergio Urcullo todos los carruseles con el calendario de arriba y, con su «ok», agendarlos.
+5. Releer y dejar listos los 17 drops.
+
+## 🔁 1-oct (tarde) · el carril iba a pasar a la sesión LOCAL — HISTORIA, ver el relevo de arriba
+
+La sesión de la nube (`session_012ppFowADbJNtZ6WBMtqpuf`) queda EN PAUSA desde ahora; una sola sesión por carril.
+La local arranca con `git pull` de `claude/marca-personal-contenido-ae658c` y lee esto primero.
+
+**Dónde quedó todo (todo en `main` vía PR #57 y #61, nada sin commitear):**
+- **Guiones de dos semanas, auditados:** `cola/plan-3-semanas/GUIONES-2-SEMANAS-1-14-OCT.md` — 38 piezas, calendario
+  jue 1 → mié 14 (tutorial · informativo · caso por día; YouTube sáb 3, mar 6, vie 9, mar 13). Auditoría con qué se
+  cambió y por qué: `cola/plan-3-semanas/auditoria-20260930/LOTE-A…D.md`. **Nada grabado todavía.**
+- **Comunidad de WhatsApp:** textos de la vuelta + reto de los presupuestos en `cola/drops/2026-10-01.md`
+  (con imágenes en `carousels/out/sergio-comunidad-reto-presupuestos-20261001/`). **No enviados.** Las fechas de ese
+  archivo (jue 1 / vie 2) se corren al día real en que Sergio Urcullo los mande.
+- **Historias de IG:** `carousels/out/sergio-historias-comunidad-20261001/` (2, con ilustraciones de Higgsfield).
+- **K1** sale en opción B (`carousels/out/sergio-k1-opcion-b-clay-20260929/`), después del reto.
+
+**Lo primero que tiene que hacer la sesión local** (lo que la nube no pudo): `cola/plan-3-semanas/PEDIDO-LAPTOP-20261001.md`.
+Lo urgente es la página de precios de WhatsApp de Meta antes de grabar D02-B. Después: OpenAI DevDay, la web
+`sergiourcullo.vercel.app`, gitdiagram, la memoria de los 424 commits y el filtro de n8n.
+
+**1-oct, verificaciones de la madre integradas** (`VERIFICACION-LAPTOP-20261001.md`): D02-B confirmado; S2-D08-C y
+su drop 4 corregidos (ventana de anuncios «hasta 7 días», no 72 h); DD-A (GPT-6.1 Sol) entra el vie 2 y N02 pasa al
+dom 4 (R04 al mié 14, G01 a reserva); 424 commits confirmado; n8n hoy 38 activos de 96 (el 44 es del 20-ago).
+**Pendiente que depende de Sergio Urcullo:** la web `sergiourcullo.vercel.app/claude-code` sigue diciendo «3 subagentes»
+(hoy queda 1): corregir la web, no el guion; publicarla es su permiso.
+
+**Pendientes del carril, en orden:**
+1. Verificaciones de la laptop (arriba) → pasar los resultados a los guiones.
+2. Escribir los drops que faltan (noticias N*, repos R*) y corregir el drop 2 (WhatsApp) y el 14 (MCP); juntarlos en
+   los avisos de lun/mié/vie (propuesta del lote C: no 17 cierres sueltos).
+3. Flujo de video: los brutos quedan en `C:\Users\PC\Videos\ONIA-brutos\<fecha>\`; la local edita con
+   `editor-videos` (tabla de cortes + preview a Sergio Urcullo ANTES de cortar) y publica desde el VPS con su OK.
+4. Bio de IG: «Comunidad» como primer link + destacado «Comunidad» (lo hace Sergio Urcullo; la local puede revisar
+   perfiles con el Chrome logueado, solo lectura).
+
+**Intentos fallidos / trampas de la nube (para no repetir):** el campo del título en el pack es `headline`, no
+`title` (sale sin título y sin aviso); en la nube no hay `ffmpeg` (se instala con apt) ni CLI de Higgsfield (se usó el
+MCP, 0,48 cr registrados); `git grep` sobre todo el repo tarda >2 min (dejó un merge a medias una vez: usar `grep`
+sobre el archivo).
+
 ## 🧭 La visión del carril (Sergio Urcullo, 30-sep, textual)
 
 > *«ser un experto en ia, contenido diario · pasar a lanzar un curso luego, comunidad atrae ventas de curso ia ·

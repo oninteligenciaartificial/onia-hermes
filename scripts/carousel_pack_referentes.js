@@ -72,8 +72,12 @@ function crear({ esc, emph, ACCOUNTS, BRAND, getFmt }) {
   }
 
   // Los 8 referentes cierran igual: una palabra para comentar y qué recibís.
+  // A 170 px entran hasta 9 letras (ESQUELETO ya llega al borde); ANTIGRAVITY (11) se salía
+  // de la lámina (visto el 2-oct, N06). Más de 9: se achica en proporción.
   function cierreHtml(s) {
-    return `<div class="c-cierre"><p class="pre">Comentá</p><div class="kw">${esc(s.keyword || '')}</div><p class="sub2">${emph(s.body || '')}</p></div>`;
+    const kw = String(s.keyword || '');
+    const kwSize = [...kw].length > 9 ? ` style="font-size:${Math.round(1350 / [...kw].length)}px"` : '';
+    return `<div class="c-cierre"><p class="pre">Comentá</p><div class="kw"${kwSize}>${esc(kw)}</div><p class="sub2">${emph(s.body || '')}</p></div>`;
   }
 
   const LAYOUTS = { logos: logosHtml, analogia: analogiaHtml, ensayo: ensayoHtml, ilustrado: ilustradoHtml, lista: listaHtml, dato: datoHtml, captura: capturaHtml, cierre: cierreHtml };

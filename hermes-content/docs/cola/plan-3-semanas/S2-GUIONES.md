@@ -607,6 +607,11 @@ Cada recurso se publica en la comunidad (Announcements) o se tiene listo para el
 el video. Los de las piezas ✅ (seguimiento y dos listas) ya están en
 `PRODUCCION-GUIONES-2026-09-29.md` §Drops 3 y 6.
 
+⚠️ **Corregido 1-oct:** desde el pedido de Sergio Urcullo del 1-oct, **todos** van a Avisos (el DM lleva
+el link a la comunidad, no el texto). Y «seguimiento» y «dos listas» **no están escritos**: en
+`PRODUCCION-GUIONES-2026-09-29.md` §Drops 3 y 6 hay una línea que los describe, nada para pegar.
+Copia lista para pegar, día por día: `cola/drops/AVISOS-POR-DIA.md`.
+
 **1 · Alta de WhatsApp con Claude Code (D07-B, comunidad)**
 ```
 1. Terminal: claude mcp add --transport http whatsapp_business_tools https://mcp.facebook.com/whatsapp_business_tools
@@ -617,10 +622,13 @@ el video. Los de las piezas ✅ (seguimiento y dos listas) ya están en
 ```
 
 **2 · Las tres capas (D07-C, comunidad)**
+⚠️ **Corregido 1-oct:** el video dice que «cuesta poco» también se bloquea, y este patrón no lo bloqueaba
+(LOTE-C, Pendientes 2). Sumada la variante con `|\bcuesta\b`, marcada como opcional.
 ```
 Capa 1 · Datos: una fila por dato (horario, dirección, formas de pago, preguntas frecuentes). El bot lee de ahí y de ningún otro lado.
 Capa 2 · Control después de la IA (n8n: nodo If → «matches regex» sobre el texto en minúscula y sin tildes):
   precio:  (\d+([.,]\d+)?\s*(bs|bolivianos?|usd|dolares?)\b)|\b(bs|usd)\.?\s*\d
+  (opcional, como en el video: sumale |\bcuesta\b y también frena «cuesta poco», aunque no tenga número)
   promesa: \bgarantiz\w+|\bsin falla\w*
   persona: \bsoy (una persona|humano)\b|\bte llamo (ahora|en un rato)\b
   Si coincide → texto seguro: «Eso prefiero no contestártelo yo: soy un bot y no quiero darte un dato equivocado. Te lo confirma una persona.»
@@ -637,11 +645,13 @@ Capa 3 · Prueba: 10 frases que deben bloquearse («Bs 999 por mes, oferta espec
 ```
 
 **4 · Cuánto cuesta tu bot desde el 1-oct (D08-C, comunidad)**
+⚠️ **Corregido 1-oct (noche):** a la ventana gratis le faltaba la primera condición que dice el guion final
+S2-D08-C: contestar dentro de las 24 h (fuente: `docs/research/ONIA_META_ADS_PLAYBOOK_20260930.md` l.180).
 ```
 A = mensajes que manda tu negocio por día · B = días que atendés por mes · C = A × B (mensajes al mes)
-D = tarifa de tu país en la tabla de Meta (columna utilidad: la de servicio es la misma) · E = C × D (costo al mes)
+D = tarifa de tu país en la tabla de Meta (columna utilidad: la de servicio es la misma) · E = (C − 1000) × D (costo al mes; los primeros 1.000 de servicio por mes y por número son gratis; si da negativo, es 0)
 Fuente: developers.facebook.com/documentation/business-messaging/whatsapp/pricing/non-template-messages
-Para bajar E: una respuesta en vez de tres burbujas · no te escribas a vos mismo · las conversaciones que empiezan en un anuncio de clic a WhatsApp tienen 72 h gratis (misma página).
+Para bajar E: una respuesta en vez de tres burbujas · no te escribas a vos mismo · las conversaciones que empiezan en un anuncio de clic a WhatsApp abren una ventana gratis de hasta 7 días, si le contestás dentro de las 24 h y solo si el cliente escribe desde la app del celular (página de precios, «Free entry point windows»).
 Si contestás a mano desde la app WhatsApp Business, esto no te toca.
 ```
 
@@ -752,7 +762,8 @@ si actual != anterior → avisar(actual)  # uno al ponerse rojo, uno al recupera
 guardar_archivo("estado", actual)       # solo si el aviso salió
 ```
 
-**17 · Tu cliente en cinco preguntas (D13-C, comentá CLIENTE)**
+**17 · Tu cliente en cinco preguntas (D13-C, comunidad · comentá CLIENTE → DM con el link)**
+⚠️ **Corregido 1-oct:** era para mandarlo por DM; pasa a Avisos de la comunidad (pedido de Sergio Urcullo del 1-oct). Texto igual.
 ```
 1. ¿Cuántos [personas / sucursales / profesionales] tienen? → buscás de __ a __.
 2. ¿Quién hace hoy [la tarea que resolvés]? → señal buena: __.

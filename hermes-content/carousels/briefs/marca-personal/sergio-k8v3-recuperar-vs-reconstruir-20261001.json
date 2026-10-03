@@ -1,0 +1,129 @@
+{
+  "title": "Recuperar vs reconstruir el prompt de una imagen (v3, portada dato sin imagen)",
+  "caption": "Antes de adivinar el prompt de una imagen, fijate si ya está escrito.\n\nRecuperar: el prompt está en pantalla (en una lámina, en la descripción o en un cuadro del video) y lo leés tal cual. Reconstruir: no está, escribís uno que da algo parecido, y lo decís. Pasarlo como original es mentirle a quien te lo pidió.\n\nMirando una imagen no sabés el modelo, la referencia, los intentos ni el seed. Si no lo sabés, no lo inventes.\n\nPara reconstruir uso 8 bloques, en orden fijo. Para comprobar, generá una y ponela al lado de la original.\n\nEl método sale de unos 58 reels que analicé, varios con el prompt en pantalla.\n\nComentá PROMPT y te paso el link de la comunidad con la plantilla de los 8 bloques y el negativo base.",
+  "hashtags": [
+    "#prompts",
+    "#ia",
+    "#inteligenciaartificial",
+    "#imagenesia",
+    "#contenido",
+    "#bolivia"
+  ],
+  "serie": "Contenido con IA",
+  "slides": [
+    {
+      "number": 1,
+      "layout": "ilustrado",
+      "theme": "verde",
+      "badge": "guía",
+      "headline": "Sacá el prompt de una imagen: *2 caminos*",
+      "subtitle": "uno te da el original; el otro, uno parecido",
+      "image_style": "clay",
+      "next": "el primero",
+      "alt_text": "Dos caminos para sacar el prompt de una imagen",
+      "image": "hermes-content/galeria/ilustraciones/sergio-k8v3-recuperar-vs-reconstruir-20261001-s01-ae75c072.jpg",
+      "image_prompt_usado": "A large emerald green clay magnifying glass with a matte black handle, lying next to a small white clay picture frame that holds a simple green clay mountain and a small sun."
+    },
+    {
+      "number": 2,
+      "layout": "lista",
+      "theme": "blanco",
+      "headline": "Paso 0, el crítico: *buscá el texto*",
+      "body": "antes de adivinar, fijate si ya está escrito",
+      "items": [
+        {
+          "label": "Las láminas",
+          "text": "todas, no solo la primera"
+        },
+        {
+          "label": "La descripción",
+          "text": "varios ponen el prompt ahí"
+        },
+        {
+          "label": "El video",
+          "text": "los cuadros con texto, no uno cada tanto"
+        }
+      ],
+      "next": "por qué",
+      "alt_text": "Paso 0: buscar el prompt escrito en láminas, descripción y video"
+    },
+    {
+      "number": 3,
+      "layout": "ilustrado",
+      "theme": "blanco",
+      "headline": "Un solo cuadro del reel *mostraba el prompt*",
+      "image_style": "clay",
+      "image_prompt": "A small haystack made of soft white clay strands on a round matte black clay base, with one shiny emerald green clay sewing needle poking out of the top.",
+      "body": "Pasó en un reel que analicé: mirando cada tantos segundos, se perdía. Encontrarlo es *recuperar*: el prompt exacto.",
+      "next": "si no está",
+      "alt_text": "Una aguja verde en un pajar: un solo cuadro del reel mostraba el prompt"
+    },
+    {
+      "number": 4,
+      "layout": "ilustrado",
+      "theme": "blanco",
+      "headline": "Si no está: reconstruís *y lo decís*",
+      "image_style": "clay",
+      "body": "«Este no es el prompt original, es uno que produce algo parecido».",
+      "next": "lo que no ves",
+      "alt_text": "Una reconstrucción se presenta como tal",
+      "image": "hermes-content/galeria/ilustraciones/sergio-k8v3-recuperar-vs-reconstruir-20261001-s04-ba4b46ca.jpg",
+      "image_prompt_usado": "A matte black clay jigsaw puzzle with one emerald green piece floating just above its empty spot."
+    },
+    {
+      "number": 5,
+      "layout": "lista",
+      "theme": "blanco",
+      "headline": "Lo que la imagen *no te dice*",
+      "body": "si no lo sabés, decilo: no lo inventes",
+      "items": [
+        {
+          "label": "El modelo",
+          "text": "si no está rotulado"
+        },
+        {
+          "label": "La referencia",
+          "text": "si usó una, no sabés cuál"
+        },
+        {
+          "label": "Los intentos",
+          "text": "ves solo el que salió"
+        },
+        {
+          "label": "El seed",
+          "text": "no se deduce"
+        }
+      ],
+      "next": "para reconstruir",
+      "alt_text": "Lo que no se puede recuperar mirando una imagen"
+    },
+    {
+      "number": 6,
+      "layout": "ensayo",
+      "theme": "blanco",
+      "headline": "Para reconstruir: *8 bloques*",
+      "body": "1 · Apertura\n\n2 · Sujeto *con acción*\n\n3 · Rasgos\n\n4 · Ropa\n\n5 · Pose\n\n6 · Fondo *como lista de objetos*\n\n7 · Técnica de cámara\n\n8 · Lo que no querés",
+      "next": "para comprobar",
+      "alt_text": "Los 8 bloques, en orden fijo, para reconstruir un prompt"
+    },
+    {
+      "number": 7,
+      "layout": "ilustrado",
+      "theme": "blanco",
+      "headline": "Para comprobar: *ponelas lado a lado*",
+      "image_style": "clay",
+      "image_prompt": "Two emerald green clay pears standing side by side on a white surface, almost identical, the right one slightly rounder, each with a small matte black clay stem.",
+      "body": "Generá una con el prompt que armaste y ponela al lado de la original: así ves si se parece.",
+      "next": "la plantilla",
+      "alt_text": "Dos peras casi iguales: la reconstrucción se compara al lado de la original"
+    },
+    {
+      "number": 8,
+      "layout": "cierre",
+      "theme": "negro",
+      "keyword": "PROMPT",
+      "body": "y te paso el link de la comunidad con la plantilla.",
+      "alt_text": "Comentá PROMPT para recibir la plantilla de los 8 bloques"
+    }
+  ]
+}

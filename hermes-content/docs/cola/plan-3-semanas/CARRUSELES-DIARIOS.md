@@ -10,39 +10,48 @@ sigue valiendo para K1–K9 con las mismas fechas.
   `hermes-content/carousels/out/<carpeta>/_contactsheet.png`.
 - **Render:** `node scripts/carousel_render.js --brief <brief> --out hermes-content/carousels/out/<carpeta> --account sergio --pack referentes --format feed`
   y `node scripts/carousel_contactsheet.js --dir hermes-content/carousels/out/<carpeta>`.
-- **Estado al 29-sep, 23:00:** 10 listos para aprobar, 11 pendientes. Se pausó por pedido de
-  Sergio Urcullo; los 11 pendientes tienen tema y guion asignados abajo (§2).
+- **Estado al 1-oct, noche:** 13 listos para aprobar (K1–K13; K2 y K8 en v3), 8 pendientes (K14–K21). Al 29-sep se pausó por pedido de
+  Sergio Urcullo; los pendientes tienen tema y guion asignados abajo (§2).
 
-## 1. Calendario
+## 1. Calendario (re-alineado con los videos el 1-oct — falta el «ok» de Sergio Urcullo)
 
-| Fecha | Día | K# | Tema | De qué guion sale | Carpeta del render | Hora | Estado |
-|---|---|---|---|---|---|---|---|
-| 30-sep | mié | K10 | La perilla de esfuerzo de Claude Code | S1 D01-C YouTube (parte «esfuerzo») + D02-A (V4) | `sergio-k10v2-perilla-de-esfuerzo-20260929` | 16:00 | listo para aprobar |
-| 1-oct | jue | K1 | Opus 5.5 o Sonnet 5.5: cuál usar | S1 D01-C YouTube + D01-B | `sergio-k1-opcion-b-clay-20260929` | 16:00 | ✅ **B (arcilla) elegida por Sergio Urcullo el 30-sep.** Sale después del drop del ejercicio en la comunidad (`cola/drops/2026-10-01.md`) |
-| 2-oct | vie | K11 | El hook que commitea solo, y su guarda | S1 D03-A | — | 16:00 | pendiente |
-| 3-oct | sáb | K2 | Tu primera skill en 5 pasos | S1 D01-A (V6) | `sergio-k2v2-primera-skill-20260929` | 16:00 | listo para aprobar ⚠️ ver §3 |
-| 4-oct | dom | K12 | Dos sesiones de Claude Code sin pisarse (worktrees) | S1 D05-A | — | 16:00 | pendiente |
-| 5-oct | lun | K13 | Claude Code en un servidor: 3 barandas y 5 trampas | S1 D06-C YouTube | — | 16:00 | pendiente |
-| 6-oct | mar | K3 | Un CLAUDE.md donde cada regla trae su historia | S1 D03-C YouTube | `sergio-k3v2-claude-md-historia-20260929` | 16:00 | listo para aprobar |
-| 7-oct | mié | K14 | Un bot que no inventa: 3 capas | S2 D07-C YouTube | — | 16:00 | pendiente |
-| 8-oct | jue | K4 | 5 pruebas antes de activar tu bot | S2 D09-A, D12-A, D11-B | `sergio-k4v2-cinco-pruebas-bot-20260929` | 16:00 | listo para aprobar |
-| 9-oct | vie | K15 | El mensaje que se perdía: rescate y firma del webhook | S2 D09-C YouTube | — | 16:00 | pendiente |
-| 10-oct | sáb | K5 | 4 reglas de un seguimiento que no molesta | S2 D07-A (V8), D10-A, D11-A | `sergio-k5v2-seguimiento-que-no-molesta-20260929` | 16:00 | listo para aprobar |
-| 11-oct | dom | K16 | Cobrar software desde Bolivia sin Stripe | S2 D11-C | — | 16:00 | pendiente |
-| 12-oct | lun | K17 | Probá el recorrido entero: del botón de la web al bot | S2 D12-C YouTube | — | 16:00 | pendiente |
-| 13-oct | mar | K6 | Las 2 listas: confirmado / por confirmar | S2 D08-A (V3) | `sergio-k6v2-confirmado-por-confirmar-20260929` | 16:00 | listo para aprobar |
-| 14-oct | mié | K18 | Tres arreglos medidos de un video editado por código | S3 D14-C YouTube | — | 16:00 | pendiente |
-| 15-oct | jue | K7 | Carruseles por código en 5 pasos | S3 D16-A | `sergio-k7v2-carruseles-por-codigo-20260929` | 16:00 | listo para aprobar |
-| 16-oct | vie | K19 | Generar con IA sin fundirte: el costo antes de crear | S3 D16-C YouTube | — | 16:00 | pendiente |
-| 17-oct | sáb | K8 | Recuperar vs reconstruir el prompt de una imagen | S3 D17-B | `sergio-k8v2-recuperar-vs-reconstruir-20260929` | 16:00 | listo para aprobar ⚠️ ver §3 |
-| 18-oct | dom | K20 | Que la IA «vea» tu video y te diga cuánto vio | S3 D18-A | — | 16:00 | pendiente |
-| 19-oct | lun | K21 | De 443 avisos por día a un solo parte | S3 D19-C YouTube | — | 16:00 | pendiente |
-| 20-oct | mar | K9 | 5 revisiones antes de publicar tu video con IA | S3 D14-A, D15-A, D17-A + V7 | `sergio-k9v2-checklist-video-ia-20260929` | 16:00 | listo para aprobar |
+Cada carrusel sale el mismo día que su video cuando lo hay (`GUIONES-2-SEMANAS-1-14-OCT.md`). **Nada agendado.**
+Antes de cada uno, el recurso que promete su cierre tiene que estar publicado; si no, el cierre miente.
+**Qué pegar en la comunidad y cuándo: `cola/drops/AVISOS-POR-DIA.md`** (fuente, 2-oct). La columna «Lo que tiene que estar antes» de abajo es del 1-oct y quedó vieja donde cambió la palabra.
 
-Por qué K10 es el del 30-sep: los tres videos de ese día (skill, Sonnet 5.5, YouTube Opus o
-Sonnet) ya los cubren K1 y K2. El YouTube del día tiene una segunda parte, el esfuerzo, que
-ningún carrusel cubre. Si Sergio Urcullo prefiere que cada carrusel salga el mismo día que su
-video, se intercambian K1 (→ 30-sep) y K10 (→ 1-oct, el día del vertical de esfuerzo).
+| Fecha | K# | Tema | Carpeta del render | Lo que tiene que estar antes | Estado |
+|---|---|---|---|---|---|
+| vie 2-oct | K10 | La perilla de esfuerzo | `sergio-k10v2-perilla-de-esfuerzo-20260929` | la web (existe) | listo para aprobar |
+| sáb 3-oct | K1 | Opus 5.5 o Sonnet 5.5 | `sergio-k1-opcion-b-clay-20260929` | el reto en la comunidad (`cola/drops/2026-10-01.md`) | ✅ B elegida 30-sep |
+| dom 4-oct | K2 | Tu primera skill en 5 pasos | `sergio-k2v3-primera-skill-20261001` | la web `/claude-code` (responde 200; falta mirarla renderizada) | listo para aprobar |
+| lun 5-oct | K6 | Las 2 listas | `sergio-k6v2-confirmado-por-confirmar-20260929` | la plantilla de las dos listas | listo para aprobar |
+| mar 6-oct | K3 | CLAUDE.md con historia | `sergio-k3v2-claude-md-historia-20260929` | la web (existe) | listo para aprobar |
+| mié 7-oct | K11 | El hook que commitea solo | `sergio-k11-hook-stop-guarda-20261001` | drop 3 de S1 (escrito, sin publicar; sumarle la prueba del conflicto, LOTE-A) | listo para aprobar |
+| jue 8-oct | K4 | 5 pruebas antes de activar tu bot | `sergio-k4v2-cinco-pruebas-bot-20260929` | su drop en la comunidad | listo para aprobar |
+| vie 9-oct | K9 | 5 revisiones antes de publicar | `sergio-k9v2-checklist-video-ia-20260929` | su drop en la comunidad | listo para aprobar |
+| sáb 10-oct | K12 | Dos sesiones sin pisarse | `sergio-k12-worktrees-sin-pisarse-20261001` | drop 12 de S1 (escrito «por DM»: pasarlo a comunidad) | listo para aprobar |
+| dom 11-oct | K5 | Seguimiento que no molesta | `sergio-k5v2-seguimiento-que-no-molesta-20260929` | su drop en la comunidad | listo para aprobar |
+| lun 12-oct | K13 | Loop sin API key, con barandas | `sergio-k13-loop-sin-api-key-20261001` | drop 8 de S1 (escrito, sin publicar) | listo para aprobar |
+| mar 13-oct | K7 | Carruseles por código | `sergio-k7v2-carruseles-por-codigo-20260929` | el JSON que se manda por DM | listo para aprobar |
+| mié 14-oct | K8 | Recuperar vs reconstruir | `sergio-k8v3-recuperar-vs-reconstruir-20261001` | drop D9 de S3 (escrito «por DM»: pasarlo a comunidad) | listo para aprobar |
+
+**Palabra de cada carrusel (cierre `cierre`, 2-oct):** K10 EFFORT · K1 TRAMPA · K2 SKILL · K6 PROMESA · K3 HISTORIA ·
+K11 HOOK · K4 PRUEBAS · K9 REVISAR · K12 WORKTREE · K5 VENTANA · K13 ESQUELETO · K7 BRIEF · K8 PROMPT. Es la misma
+palabra que su video, para que el DM mande al mismo recurso.
+
+**Carruseles de noticia (2-oct, mismo día que su video, 12:00 La Paz — la noticia se vence):**
+
+| Fecha | Pieza | Carpeta | Palabra | Estado |
+|---|---|---|---|---|
+| con el video V2 | N03 modo auto | `sergio-n03-modo-auto-20261001` | COMUNIDAD (la que dijo en el video) | listo para aprobar |
+| vie 2-oct | DD-A OpenAI Sol | `sergio-dda-openai-sol-20261001` | CACHE | listo; falta escribir su drop |
+| dom 4-oct | N02 Sonnet 4.5 se apaga | `sergio-n02-sonnet45-se-apaga-20261001` | MIGRAR | listo para aprobar |
+| lun 5-oct | N04 skill verify | `sergio-n04-skill-verify-20261001` | VERIFY | listo para aprobar |
+| sáb 3-oct | N06 Gemini CLI → Antigravity CLI (rehecha 2-oct) | `sergio-n06-antigravity-cli-20261002` | ANTIGRAVITY | listo para aprobar |
+
+Hora: **16:00 La Paz** (20:00 UTC) todos. K14–K21 quedan para después del 14-oct (§2).
+Se agendan con `deploy/vps-ops/publicar/ig-carrusel.mjs` + `agendar-publicacion.sh`, recién con el «ok» de Sergio
+Urcullo sobre cada uno.
 
 ## 2. Los 11 pendientes: qué enseña cada uno
 
@@ -52,9 +61,9 @@ Todo número sale del guion y está verificado en su archivo fuente el 29-sep.
 
 | K# | Portada (gancho) | Lo que enseña | Cierre | Cuidado |
 |---|---|---|---|---|
-| K11 | `dato` «17»: archivos con conflictos que el hook subió a main | `.claude/settings.json` → hooks → Stop → command; Stop corre al terminar el turno, no el trabajo (217 líneas de CSS antes de la página); la guarda: `git rev-parse -q --verify MERGE_HEAD` y `git diff --name-only --diff-filter=U`; comprobar con `/hooks` | comunidad (drop 3 de S1) | nada |
-| K12 | `dato` «424»: commits que se movió una rama | `git worktree add -b <rama> <carpeta>` · `claude -w <nombre>` · paso crítico: todo git con `git -C <ruta>` · comprobar con `git worktree list` | `cierre` «Comentá CARRIL» (drop 12 de S1, por DM) | es el único «comentá» nuevo de la semana 1 |
-| K13 | `logos` o `dato`: loop de Claude Code sin API key | las dos piezas (corredor + prompt); barandas: flock, `cd` verificado, aviso cada 6 h, tope 50 min < 1 h; trampas: `unset ANTHROPIC_API_KEY`, `--allowedTools` en una cadena, pedido desde archivo (`< prompt.md`), cron en UTC, editar con temporal + `bash -n` + `mv`; la prueba: leer 3-4 commits (apagué 2 de 6) | comunidad (drop 8 de S1) | no decir cuántos loops hay activos hoy |
+| K11 ✅ 1-oct | `dato` «17»: archivos con conflictos que el hook subió a main | `.claude/settings.json` → hooks → Stop → command; Stop corre al terminar el turno, no el trabajo (217 líneas de estilos antes que el código que las usaba — corregido por LOTE-A; decía «antes de la página»); la guarda: `git rev-parse -q --verify MERGE_HEAD` y `git diff --name-only --diff-filter=U`; comprobar con `/hooks` | comunidad (drop 3 de S1) | nada |
+| K12 ✅ 1-oct | `dato` «424»: commits que se movió una rama (confirmado por la madre, `VERIFICACION-LAPTOP-20261001.md` §5) | `git worktree add -b <rama> <carpeta>` · `claude -w <nombre>` · paso crítico: todo git con `git -C <ruta>` · comprobar con `git worktree list` | comunidad (drop 12 de S1; LOTE-B unificó a comunidad, ya no «Comentá CARRIL») | nada |
+| K13 ✅ 1-oct | `logos` o `dato`: loop de Claude Code sin API key | las dos piezas (corredor + prompt); barandas: flock, `cd` verificado, aviso cada 6 h, tope 50 min < 1 h; trampas: `unset ANTHROPIC_API_KEY`, `--allowedTools` en una cadena, pedido desde archivo (`< prompt.md`), cron en UTC, editar con temporal + `bash -n` + `mv`; la prueba: leer 3-4 commits (apagué 2 de 6) | comunidad (drop 8 de S1) | no decir cuántos loops hay activos hoy |
 | K14 | `dato` «3»: capas de un bot que no inventa | 1 cada dato en un solo lugar (horario doble hasta el 13-sep); 2 control después de la IA (normaliza, patrones, descarta entera, texto seguro; el patrón al revés dejaba pasar «Bs 999 por mes»); 3 medir (banco + control como juez); en n8n: nodo If después de la IA | comunidad (drop 2 de S2) | 62/62 ya está en K4: no repetirlo como gancho |
 | K15 | `dato` «20»: segundos entre el reinicio y el mensaje que nadie contestó | la línea de tiempo del 3-sep; rescate cada 10 min (último mensaje del cliente, entre 3 min y 12 h, mismo id; el filtro de duplicados evita la doble respuesta); firma o secreto, sin secreto rechaza todo; las 3 reglas; la prueba de apagar el webhook | comunidad (drop 7 de S2) | nada |
 | K16 | `ensayo` verde: cobrar software desde Bolivia sin Stripe | QR bancario + comprobante; pago pendiente hasta que una persona aprueba; aviso por cada pago nuevo (monto y espera) y recordatorio de los de más de 24 h; nunca aprobación automática | comunidad (drop 12 de S2) | sin banco, cuenta ni comprobantes; no nombrar la API del banco (en trámite) |
@@ -66,11 +75,12 @@ Todo número sale del guion y está verificado en su archivo fuente el 29-sep.
 
 ## 3. Problemas encontrados en los que ya están
 
-- **K2 (3-oct):** se renderizó a las 07:43 del 29-sep, antes del cambio a blanco + verde + negro:
-  sale con el **fondo crema** que Carlos Domínguez marca como rasgo de plantilla IA. Arreglo
-  gratis: ponerle `theme` a sus láminas (portada `verde`, cierre `negro`) y re-renderizar.
-- **K8 (17-oct):** la portada es `ilustrado` sin imagen: queda un bloque verde con el título
-  arriba y más del 40 % vacío. O se genera su imagen (lote de abajo) o se pasa a `dato`/`logos`.
+- ✅ **K2 → `k2v3` (1-oct):** fondo crema arreglado con `theme` por lámina; el ejemplo pasó a la skill de continuidad
+  (LOTE-A) y el cierre manda a la web, como el guion D01-A.
+- ✅ **K8 → `k8v3` (1-oct):** portada `dato` «2» en vez del `ilustrado` vacío; se corrigieron «decí que es tuyo» (la
+  regla es decir que NO es el original) y «cuadro por cuadro» (el guion dice no mirar a intervalo fijo).
+- ⚠️ **K8, K11, K12 y K13 no llevan imagen** (no había lote aprobado). K1-B, el elegido, vende por sus dos imágenes de
+  arcilla. Propuesta a Sergio Urcullo el 1-oct: lote de portada + 1 interior para esos cuatro (8 × 0,12 cr).
 - **K1 (1-oct):** ✅ opción B (arcilla), elegida por Sergio Urcullo el 30-sep. El intercambio K1↔K10 ya no aplica: no hay video grabado todavía, sale K1 primero.
 - **Referencias viejas:** `MAPA.md` (líneas 4-5), `S2-GUIONES.md` y `S3-GUIONES.md` citan
   `CARRUSELES.md`, que no existe; `MAPA.md` §3 y `FLUJO-DIARIO.md` dicen «carrusel mar · jue ·

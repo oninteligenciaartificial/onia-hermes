@@ -57,6 +57,33 @@ timestamp real del transcript word-level. Corolario del mismo reel, que ya cumpl
 código não") — para eso están `make-mockup.mjs` (PNG) y `scripts/remotion` / `scripts/hyperframes`
 (animados).
 
+## Estilo TikTok 17/18-sep — referencia, no molde (lo que se replica: Erik Taveras y Santiago Muñoz)
+
+> 2-oct-2026, dos rechazos seguidos del mismo video (N03, modo auto):
+> 1. Corte + karaoke + recuadros verdes: *«esa no sigue siendo tu manera de editar, porque no lo hacés como antes»*.
+> 2. La re-edición con este estilo 17-sep (zoom punch, tarjetas, keywords, **pop en cada tarjeta**): *«elimina ese
+>    sonido horrible cada que sale un mockup»*. El reel de Codex NO tiene SFX. Ese «pop» fue un agregado nuestro.
+> 3. Ese mismo día rehice N03 con la receta de Codex del 14-sep (`scripts/edit-codex.py`). Después Sergio Urcullo aclaró
+>    que el molde son los videos de **Erik Taveras (@eriktaveras) y Santiago Muñoz (@sanmunoz.ia)**: Codex y el 17-sep
+>    son referencia. El video bueno que él recuerda es «tu primera automatización» (22-sep).
+> Lección: «como antes» no se adivina. Tres ediciones del mismo video, y cada una copió lo más parecido que había en el
+> repo. Antes de rehacer un estilo «como antes»,
+> preguntá CUÁL video y pedile a la madre el archivo si no está en el repo.
+
+Si él pide este estilo, la receta está en `videos/tiktok-20260917/README.md`:
+- corte fino (silencios + sonido sin palabra);
+- zoom punch por bloque;
+- logo oficial de Claude Code en cada mención;
+- tarjetas dark (`card-dark.html`);
+- pantalla completa (`fullscreen.html`);
+- keywords blancas 900 con subrayado naranja (`keyword.html`);
+- karaoke `--style apple`;
+- −14 LUFS.
+SFX sólo si los pide.
+
+Plantillas y fuentes: `videos/tiktok-20260917/scripts/*.html` + `videos/claude-code-03/assets/fonts/`. Ejemplo portable
+(Linux, una pasada, sin SFX desde la v3): `videos/n03-modo-auto-20261001/` (`scripts/build-17sep.mjs`).
+
 ## ⭐ REGLA DE ORO (de Santiago) — nunca cortar a ciegas
 **La tabla de cortes + un preview 360p SIEMPRE se muestran a Sergio ANTES de aplicar el corte.**
 Formato de la tabla: `# | Me quedo con | Tiro | Por qué`. Se aplica el corte recién con su OK.
@@ -143,6 +170,48 @@ tabla de cortes + preview antes de aplicar · transcript como fuente de todo tex
   corto) como **Trial reel** en Instagram, con `hermes-content/deploy/vps-ops/publicar/ig-reel.mjs`.
   Circuito, comandos y reglas: `hermes-content/deploy/vps-ops/publicar/README.md`. UNA aprobación de
   Sergio por paquete del día (incluye la tabla de cortes); sin ese «ok» no se publica nada.
+
+### Editar desde una sesión en la NUBE (medido el 1-oct-2026)
+
+- **El video no llega por el chat** (las imágenes sí). Tampoco por el MCP de Drive: `download_file_content` devuelve
+  base64 dentro del contexto, y no sirve para video.
+- **Camino que funciona:** Sergio Urcullo sube el bruto a Drive, lo comparte con **«Cualquier persona con el enlace»** y
+  pega el link. Se baja con `curl -L "https://drive.usercontent.google.com/download?id=<ID>&export=download&confirm=t"`.
+  Necesita que la red del entorno deje pasar `drive.google.com` y `drive.usercontent.google.com`: el 30-sep daban 403
+  en el proxy y el 1-oct ya pasaban. Probalo con `curl -sS -o /dev/null -w '%{http_code}'` antes de prometer nada.
+- **`ffmpeg` no viene en el contenedor:** `apt-get install -y ffmpeg` (6.1.1, ~1 min). `faster-whisper` se instala por
+  pip. Las dos cosas se pierden cuando el contenedor se recicla.
+- **Publicar desde la nube** necesita el secreto `ONIA_VPS_SSH_KEY_B64` en el entorno: el hook
+  `scripts/nube-ssh-vps.mjs` arma `ssh onia-vps` por el túnel. Sin él, la nube edita pero no publica ni agenda.
+- **Medido el 1-oct (noche), entorno «onia-higgsfield»:** el hook dejó `~/.ssh/config` y la llave, pero **el binario
+  `ssh` no venía**: `apt-get install -y openssh-client` y `ssh onia-vps hostname` respondió. `ffmpeg` ya venía instalado.
+- **Drive por MCP ya anda** (1-oct noche): `search_files` con `mimeType contains 'video/'` lista los videos, y
+  `parentId = '<id de carpeta>'` lista una carpeta. Sirve para ENCONTRAR el archivo; para bajarlo sigue siendo `curl` a
+  `drive.usercontent.google.com` (probado: 200, 8,6 MB, con un archivo compartido por enlace). Un archivo que se está
+  subiendo no aparece en la búsqueda hasta que termina.
+- **Video del 1-oct (N03), lo medido:** con el micrófono de Sergio Urcullo el ruido de fondo queda en ~-25 dB y el
+  `--noise -32dB` de `cut-plan.mjs` no encontró NINGÚN silencio. Medí antes (`ffmpeg -af volumedetect`, y
+  `silencedetect` a -28/-25 dB) y usá ~-27 dB con `--min-sil 0.4`.
+- **Compará lo que DIJO contra el guion buscando sentido invertido, no solo ortografía.** Dijo «deja DE pasar» dos
+  veces donde el guion decía «deja pasar» (lo que el modo auto PERMITE): small y medium coincidieron, así que no era
+  error de Whisper.
+- **Sacar una palabra corta («de») sin oído no es confiable.** La envolvente RMS confunde sílabas, y Whisper como juez
+  es parcial: completa «deja de…» por costumbre o, si el corte se come el «pa», oye «deja de estar». Probado: el
+  modelo medium sobre el tramo AISLADO, con y sin `initial_prompt`; si con prompt oye «deja pasar» y sin prompt no
+  oye «de», el corte sirve, pero igual lo escucha Sergio Urcullo en el preview. Si la frase es solo una transición,
+  cortala ENTERA (más seguro).
+- **Drive, una vez y para siempre:** que Sergio Urcullo comparta la CARPETA «Videos Onia Octubre» con «cualquier
+  persona con el enlace». Lo que suba adentro hereda el acceso y se baja con curl sin pedirle nada por archivo.
+- **Transcribir sin Speaches:** `pip install faster-whisper` (~1 min) y el modelo `small` (int8, CPU) se baja solo de
+  HuggingFace. Con `word_timestamps=True` sale `{segments:[{start,end,text}], words:[{start,end,word}]}`, el formato
+  que comen `cut-plan.mjs` y `karaoke-captions.mjs`. Forzá `language="es"`.
+
+### Antes de grabar: el dato del guion se mira renderizado (1-oct-2026)
+
+WebFetch trajo una versión VIEJA de la página de precios de WhatsApp de Meta (decía 72 h de ventana gratis). El
+navegador mostró la vigente («Updated: Sep 28, 2026»: hasta 7 días y solo desde la app del celular). **Un precio o una
+regla de plataforma (Meta, OpenAI, Anthropic) se confirma con la página RENDERIZADA en un navegador**, con su fecha de
+actualización anotada. WebFetch y las fuentes secundarias sirven para descartar, no para grabar.
 
 ## Pipeline
 1. **Setup + NORMALIZAR el crudo** (pieza propia, PROBADA). `videos/<name>/` con `raw/ scripts/ renders/ final/`.
@@ -387,7 +456,11 @@ la burbujita de OBS incrustada en la esquina no da resolución para la zona de c
    se achica (subir 240 px a Lucía le corta la coronilla).
 3. **Arranque en caliente:** primera palabra o tarjeta a ≤ 0,15 s; si el clip arranca con tiempo muerto se recorta
    (L08: −0,40 s). Nunca se acelera.
-4. **Voz (si la pieza lleva):** Marcela con `scripts/tts-elevenlabs.mjs` **sin `--stability/--style`** (los settings
+4. **Voz (si la pieza lleva):** ⚠️ **Marcela tiene acento COLOMBIANO** (medido el 2-oct con `GET /v1/voices/<id>` →
+   `labels.accent: colombian`, «Marcela - Colombian Girl», de la Voice Library). Lucía es cruceña y el público boliviano
+   critica el acento que no es de acá. Si se usa o no es la decisión D4 de `cola/lucia-diario/PLAN.md`; hasta que se
+   resuelva, los reels van sin voz. Antes de elegir CUALQUIER voz se leen sus `labels`. Marcela con
+   `scripts/tts-elevenlabs.mjs` **sin `--stability/--style`** (los settings
    forzados le cambian el timbre: rechazado el 21-ago y repetido por error el 1-oct). `--timestamps` → karaoke desde el
    guion autorado con tiempos exactos (gate de ortografía resuelto de raíz). La frase final va en toma aparte con
    `--previous-text` y 2–3 `--seed`; se elige la que **baja** al final (medir F0 de la última palabra con

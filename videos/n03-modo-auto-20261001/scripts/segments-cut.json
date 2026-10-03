@@ -1,0 +1,1095 @@
+{
+ "ok": true,
+ "remapped_from": "scripts/segments-fixed.json",
+ "n_segments": 20,
+ "n_words": 197,
+ "segments": [
+  {
+   "start": 0,
+   "end": 4.12,
+   "text": "¿Te has dado cuenta que tu cloud code probablemente ya no te pide permiso para casi nada?"
+  },
+  {
+   "start": 4.46,
+   "end": 7.88,
+   "text": "Desde fines de septiembre arranca en modo auto, en todos los planes."
+  },
+  {
+   "start": 8.15,
+   "end": 11.33,
+   "text": "En modo automático, un segundo modelo revisa cada acción en vez de vos."
+  },
+  {
+   "start": 11.52,
+   "end": 13.96,
+   "text": "Según la documentación, por defecto, bloquea."
+  },
+  {
+   "start": 14.02,
+   "end": 15.58,
+   "text": "Bajar y ejecutar código de internet."
+  },
+  {
+   "start": 15.66,
+   "end": 19.08,
+   "text": "Deployza a producción, force a push, borrar archivos que ya existían"
+  },
+  {
+   "start": 19.08,
+   "end": 21.48,
+   "text": "y los comandos de git que tienen cambios sin guardar."
+  },
+  {
+   "start": 21.66,
+   "end": 22.835,
+   "text": "Pero, por defecto, deja de pasar."
+  },
+  {
+   "start": 22.835,
+   "end": 27.835,
+   "text": "Editar archivos en tu carpeta, instalar dependencias y hacer push a cualquier rama del repositorio."
+  },
+  {
+   "start": 27.915,
+   "end": 29.555,
+   "text": "Incluida si fuera la principal."
+  },
+  {
+   "start": 30.375,
+   "end": 32.455,
+   "text": "Por ejemplo, en mi caso, eso realmente importa."
+  },
+  {
+   "start": 32.715,
+   "end": 34.455,
+   "text": "La rama principal alimenta el deploy."
+  },
+  {
+   "start": 34.595,
+   "end": 37.315,
+   "text": "Un push con trabajo a medias rompe mi producción completamente."
+  },
+  {
+   "start": 37.775,
+   "end": 38.955,
+   "text": "Y vos, ¿cómo lo puedes revisar?"
+  },
+  {
+   "start": 38.995,
+   "end": 40.305,
+   "text": "En la parte de abajo te lo muestra."
+  },
+  {
+   "start": 40.425,
+   "end": 43.305,
+   "text": "Y con shift up lo puedes cambiar al modo que vos querrás."
+  },
+  {
+   "start": 43.425,
+   "end": 44.965,
+   "text": "Y si quieres que vuelva a preguntarte."
+  },
+  {
+   "start": 44.965,
+   "end": 49.485,
+   "text": "En el archivo de settings de tu carpeta .cloud, poné default mode en default."
+  },
+  {
+   "start": 49.565,
+   "end": 53.065,
+   "text": "Y la próxima sesión te lo muestra como manual mode on."
+  },
+  {
+   "start": 53.285,
+   "end": 57.495,
+   "text": "Y si querés ver cómo lo puedes hacer, comenta a comunidad y te lo dejo en mi comunidad de WhatsApp."
+  }
+ ],
+ "words": [
+  {
+   "start": 0.08,
+   "end": 0.14,
+   "word": "¿Te"
+  },
+  {
+   "start": 0.14,
+   "end": 0.24,
+   "word": "has"
+  },
+  {
+   "start": 0.24,
+   "end": 0.34,
+   "word": "dado"
+  },
+  {
+   "start": 0.34,
+   "end": 0.56,
+   "word": "cuenta"
+  },
+  {
+   "start": 0.56,
+   "end": 0.68,
+   "word": "que"
+  },
+  {
+   "start": 0.68,
+   "end": 0.86,
+   "word": "tu"
+  },
+  {
+   "start": 0.86,
+   "end": 1.1,
+   "word": "Claude"
+  },
+  {
+   "start": 1.1,
+   "end": 1.24,
+   "word": "Code"
+  },
+  {
+   "start": 1.24,
+   "end": 2.02,
+   "word": "probablemente"
+  },
+  {
+   "start": 2.02,
+   "end": 2.14,
+   "word": "ya"
+  },
+  {
+   "start": 2.14,
+   "end": 2.26,
+   "word": "no"
+  },
+  {
+   "start": 2.26,
+   "end": 2.44,
+   "word": "te"
+  },
+  {
+   "start": 2.44,
+   "end": 2.78,
+   "word": "pide"
+  },
+  {
+   "start": 2.78,
+   "end": 3.26,
+   "word": "permiso"
+  },
+  {
+   "start": 3.26,
+   "end": 3.56,
+   "word": "para"
+  },
+  {
+   "start": 3.56,
+   "end": 3.84,
+   "word": "casi"
+  },
+  {
+   "start": 3.84,
+   "end": 4.12,
+   "word": "nada?"
+  },
+  {
+   "start": 4.46,
+   "end": 4.66,
+   "word": "Desde"
+  },
+  {
+   "start": 4.66,
+   "end": 4.8,
+   "word": "fines"
+  },
+  {
+   "start": 4.8,
+   "end": 4.96,
+   "word": "de"
+  },
+  {
+   "start": 4.96,
+   "end": 5.28,
+   "word": "septiembre"
+  },
+  {
+   "start": 5.28,
+   "end": 5.68,
+   "word": "arranca"
+  },
+  {
+   "start": 5.68,
+   "end": 5.84,
+   "word": "en"
+  },
+  {
+   "start": 5.84,
+   "end": 5.98,
+   "word": "modo"
+  },
+  {
+   "start": 5.98,
+   "end": 6.34,
+   "word": "auto,"
+  },
+  {
+   "start": 6.8,
+   "end": 6.9,
+   "word": "en"
+  },
+  {
+   "start": 6.9,
+   "end": 7.28,
+   "word": "todos"
+  },
+  {
+   "start": 7.28,
+   "end": 7.7,
+   "word": "los"
+  },
+  {
+   "start": 7.7,
+   "end": 7.88,
+   "word": "planes."
+  },
+  {
+   "start": 8.15,
+   "end": 8.15,
+   "word": "En"
+  },
+  {
+   "start": 8.15,
+   "end": 8.39,
+   "word": "modo"
+  },
+  {
+   "start": 8.39,
+   "end": 8.93,
+   "word": "automático,"
+  },
+  {
+   "start": 9.13,
+   "end": 9.15,
+   "word": "un"
+  },
+  {
+   "start": 9.15,
+   "end": 9.47,
+   "word": "segundo"
+  },
+  {
+   "start": 9.47,
+   "end": 9.75,
+   "word": "modelo"
+  },
+  {
+   "start": 9.75,
+   "end": 10.09,
+   "word": "revisa"
+  },
+  {
+   "start": 10.09,
+   "end": 10.29,
+   "word": "cada"
+  },
+  {
+   "start": 10.29,
+   "end": 10.63,
+   "word": "acción"
+  },
+  {
+   "start": 10.63,
+   "end": 10.85,
+   "word": "en"
+  },
+  {
+   "start": 10.85,
+   "end": 10.93,
+   "word": "vez"
+  },
+  {
+   "start": 10.93,
+   "end": 11.09,
+   "word": "de"
+  },
+  {
+   "start": 11.09,
+   "end": 11.33,
+   "word": "vos."
+  },
+  {
+   "start": 11.52,
+   "end": 11.66,
+   "word": "Según"
+  },
+  {
+   "start": 11.66,
+   "end": 11.84,
+   "word": "la"
+  },
+  {
+   "start": 11.84,
+   "end": 12.3,
+   "word": "documentación,"
+  },
+  {
+   "start": 12.52,
+   "end": 12.52,
+   "word": "por"
+  },
+  {
+   "start": 12.52,
+   "end": 13.3,
+   "word": "defecto,"
+  },
+  {
+   "start": 13.36,
+   "end": 13.96,
+   "word": "bloquea."
+  },
+  {
+   "start": 14.02,
+   "end": 14.3,
+   "word": "Bajar"
+  },
+  {
+   "start": 14.3,
+   "end": 14.36,
+   "word": "y"
+  },
+  {
+   "start": 14.36,
+   "end": 14.78,
+   "word": "ejecutar"
+  },
+  {
+   "start": 14.78,
+   "end": 15.02,
+   "word": "código"
+  },
+  {
+   "start": 15.02,
+   "end": 15.22,
+   "word": "de"
+  },
+  {
+   "start": 15.22,
+   "end": 15.58,
+   "word": "internet."
+  },
+  {
+   "start": 15.66,
+   "end": 16,
+   "word": "Deploys"
+  },
+  {
+   "start": 16,
+   "end": 16.18,
+   "word": "a"
+  },
+  {
+   "start": 16.18,
+   "end": 16.64,
+   "word": "producción,"
+  },
+  {
+   "start": 16.96,
+   "end": 17.12,
+   "word": "force"
+  },
+  {
+   "start": 17.16,
+   "end": 17.48,
+   "word": "push,"
+  },
+  {
+   "start": 17.76,
+   "end": 18.06,
+   "word": "borrar"
+  },
+  {
+   "start": 18.06,
+   "end": 18.38,
+   "word": "archivos"
+  },
+  {
+   "start": 18.38,
+   "end": 18.52,
+   "word": "que"
+  },
+  {
+   "start": 18.52,
+   "end": 18.7,
+   "word": "ya"
+  },
+  {
+   "start": 18.7,
+   "end": 19.08,
+   "word": "existían"
+  },
+  {
+   "start": 19.08,
+   "end": 19.22,
+   "word": "y"
+  },
+  {
+   "start": 19.22,
+   "end": 19.44,
+   "word": "los"
+  },
+  {
+   "start": 19.44,
+   "end": 19.74,
+   "word": "comandos"
+  },
+  {
+   "start": 19.74,
+   "end": 19.88,
+   "word": "de"
+  },
+  {
+   "start": 19.88,
+   "end": 19.98,
+   "word": "git"
+  },
+  {
+   "start": 19.98,
+   "end": 20.16,
+   "word": "que"
+  },
+  {
+   "start": 20.16,
+   "end": 20.36,
+   "word": "tienen"
+  },
+  {
+   "start": 20.36,
+   "end": 20.72,
+   "word": "cambios"
+  },
+  {
+   "start": 20.72,
+   "end": 20.9,
+   "word": "sin"
+  },
+  {
+   "start": 20.9,
+   "end": 21.48,
+   "word": "guardar."
+  },
+  {
+   "start": 21.66,
+   "end": 21.88,
+   "word": "Pero,"
+  },
+  {
+   "start": 21.96,
+   "end": 22.08,
+   "word": "por"
+  },
+  {
+   "start": 22.08,
+   "end": 22.34,
+   "word": "defecto,"
+  },
+  {
+   "start": 22.4,
+   "end": 22.5,
+   "word": "deja"
+  },
+  {
+   "start": 22.555,
+   "end": 22.835,
+   "word": "pasar."
+  },
+  {
+   "start": 22.835,
+   "end": 23.575,
+   "word": "Editar"
+  },
+  {
+   "start": 23.575,
+   "end": 23.935,
+   "word": "archivos"
+  },
+  {
+   "start": 23.935,
+   "end": 24.015,
+   "word": "en"
+  },
+  {
+   "start": 24.015,
+   "end": 24.175,
+   "word": "tu"
+  },
+  {
+   "start": 24.175,
+   "end": 24.635,
+   "word": "carpeta,"
+  },
+  {
+   "start": 24.715,
+   "end": 24.975,
+   "word": "instalar"
+  },
+  {
+   "start": 24.975,
+   "end": 25.595,
+   "word": "dependencias"
+  },
+  {
+   "start": 25.595,
+   "end": 25.735,
+   "word": "y"
+  },
+  {
+   "start": 25.735,
+   "end": 25.955,
+   "word": "hacer"
+  },
+  {
+   "start": 25.955,
+   "end": 26.155,
+   "word": "push"
+  },
+  {
+   "start": 26.155,
+   "end": 26.375,
+   "word": "a"
+  },
+  {
+   "start": 26.375,
+   "end": 26.715,
+   "word": "cualquier"
+  },
+  {
+   "start": 26.715,
+   "end": 27.255,
+   "word": "rama"
+  },
+  {
+   "start": 27.255,
+   "end": 27.475,
+   "word": "del"
+  },
+  {
+   "start": 27.475,
+   "end": 27.835,
+   "word": "repositorio."
+  },
+  {
+   "start": 27.915,
+   "end": 28.355,
+   "word": "Incluida"
+  },
+  {
+   "start": 28.355,
+   "end": 28.555,
+   "word": "si"
+  },
+  {
+   "start": 28.555,
+   "end": 28.795,
+   "word": "fuera"
+  },
+  {
+   "start": 28.795,
+   "end": 29.095,
+   "word": "la"
+  },
+  {
+   "start": 29.095,
+   "end": 29.555,
+   "word": "principal."
+  },
+  {
+   "start": 30.375,
+   "end": 30.515,
+   "word": "Por"
+  },
+  {
+   "start": 30.515,
+   "end": 30.695,
+   "word": "ejemplo,"
+  },
+  {
+   "start": 30.755,
+   "end": 30.795,
+   "word": "en"
+  },
+  {
+   "start": 30.795,
+   "end": 30.935,
+   "word": "mi"
+  },
+  {
+   "start": 30.935,
+   "end": 31.335,
+   "word": "caso,"
+  },
+  {
+   "start": 31.535,
+   "end": 31.675,
+   "word": "eso"
+  },
+  {
+   "start": 31.675,
+   "end": 32.015,
+   "word": "realmente"
+  },
+  {
+   "start": 32.015,
+   "end": 32.455,
+   "word": "importa."
+  },
+  {
+   "start": 32.715,
+   "end": 32.815,
+   "word": "La"
+  },
+  {
+   "start": 32.815,
+   "end": 33.055,
+   "word": "rama"
+  },
+  {
+   "start": 33.055,
+   "end": 33.395,
+   "word": "principal"
+  },
+  {
+   "start": 33.395,
+   "end": 33.955,
+   "word": "alimenta"
+  },
+  {
+   "start": 33.955,
+   "end": 34.155,
+   "word": "el"
+  },
+  {
+   "start": 34.155,
+   "end": 34.455,
+   "word": "deploy."
+  },
+  {
+   "start": 34.595,
+   "end": 34.795,
+   "word": "Un"
+  },
+  {
+   "start": 34.795,
+   "end": 34.955,
+   "word": "push"
+  },
+  {
+   "start": 34.955,
+   "end": 35.155,
+   "word": "con"
+  },
+  {
+   "start": 35.155,
+   "end": 35.435,
+   "word": "trabajo"
+  },
+  {
+   "start": 35.435,
+   "end": 35.615,
+   "word": "a"
+  },
+  {
+   "start": 35.615,
+   "end": 35.875,
+   "word": "medias"
+  },
+  {
+   "start": 35.875,
+   "end": 36.375,
+   "word": "rompe"
+  },
+  {
+   "start": 36.375,
+   "end": 36.635,
+   "word": "mi"
+  },
+  {
+   "start": 36.635,
+   "end": 37.055,
+   "word": "producción"
+  },
+  {
+   "start": 37.055,
+   "end": 37.315,
+   "word": "completamente."
+  },
+  {
+   "start": 37.955,
+   "end": 38.135,
+   "word": "¿Cómo"
+  },
+  {
+   "start": 38.135,
+   "end": 38.355,
+   "word": "lo"
+  },
+  {
+   "start": 38.355,
+   "end": 38.455,
+   "word": "puedes"
+  },
+  {
+   "start": 38.455,
+   "end": 38.955,
+   "word": "revisar?"
+  },
+  {
+   "start": 38.995,
+   "end": 39.135,
+   "word": "En"
+  },
+  {
+   "start": 39.135,
+   "end": 39.275,
+   "word": "la"
+  },
+  {
+   "start": 39.275,
+   "end": 39.455,
+   "word": "parte"
+  },
+  {
+   "start": 39.455,
+   "end": 39.615,
+   "word": "de"
+  },
+  {
+   "start": 39.615,
+   "end": 39.675,
+   "word": "abajo"
+  },
+  {
+   "start": 39.675,
+   "end": 39.835,
+   "word": "te"
+  },
+  {
+   "start": 39.835,
+   "end": 39.975,
+   "word": "lo"
+  },
+  {
+   "start": 39.975,
+   "end": 40.305,
+   "word": "muestra."
+  },
+  {
+   "start": 40.425,
+   "end": 40.565,
+   "word": "Y"
+  },
+  {
+   "start": 40.565,
+   "end": 40.745,
+   "word": "con"
+  },
+  {
+   "start": 40.745,
+   "end": 41.065,
+   "word": "Shift+Tab"
+  },
+  {
+   "start": 41.245,
+   "end": 41.505,
+   "word": "lo"
+  },
+  {
+   "start": 41.505,
+   "end": 41.625,
+   "word": "puedes"
+  },
+  {
+   "start": 41.625,
+   "end": 41.905,
+   "word": "cambiar"
+  },
+  {
+   "start": 41.905,
+   "end": 42.085,
+   "word": "al"
+  },
+  {
+   "start": 42.085,
+   "end": 42.285,
+   "word": "modo"
+  },
+  {
+   "start": 42.285,
+   "end": 42.465,
+   "word": "que"
+  },
+  {
+   "start": 42.465,
+   "end": 42.645,
+   "word": "vos"
+  },
+  {
+   "start": 42.645,
+   "end": 43.305,
+   "word": "querrás."
+  },
+  {
+   "start": 43.425,
+   "end": 43.545,
+   "word": "Y"
+  },
+  {
+   "start": 43.545,
+   "end": 43.665,
+   "word": "si"
+  },
+  {
+   "start": 43.665,
+   "end": 43.885,
+   "word": "querés"
+  },
+  {
+   "start": 43.885,
+   "end": 44.085,
+   "word": "que"
+  },
+  {
+   "start": 44.085,
+   "end": 44.345,
+   "word": "vuelva"
+  },
+  {
+   "start": 44.345,
+   "end": 44.565,
+   "word": "a"
+  },
+  {
+   "start": 44.565,
+   "end": 44.965,
+   "word": "preguntarte."
+  },
+  {
+   "start": 45.045,
+   "end": 45.205,
+   "word": "En"
+  },
+  {
+   "start": 45.205,
+   "end": 45.365,
+   "word": "el"
+  },
+  {
+   "start": 45.365,
+   "end": 45.645,
+   "word": "archivo"
+  },
+  {
+   "start": 45.645,
+   "end": 45.805,
+   "word": "de"
+  },
+  {
+   "start": 45.805,
+   "end": 46.025,
+   "word": "settings"
+  },
+  {
+   "start": 46.025,
+   "end": 46.165,
+   "word": "de"
+  },
+  {
+   "start": 46.165,
+   "end": 46.305,
+   "word": "tu"
+  },
+  {
+   "start": 46.305,
+   "end": 46.805,
+   "word": "carpeta"
+  },
+  {
+   "start": 46.805,
+   "end": 47.385,
+   "word": ".claude,"
+  },
+  {
+   "start": 47.545,
+   "end": 48.205,
+   "word": "poné"
+  },
+  {
+   "start": 48.205,
+   "end": 48.505,
+   "word": "default"
+  },
+  {
+   "start": 48.505,
+   "end": 48.805,
+   "word": "mode"
+  },
+  {
+   "start": 48.805,
+   "end": 49.125,
+   "word": "en"
+  },
+  {
+   "start": 49.125,
+   "end": 49.485,
+   "word": "default."
+  },
+  {
+   "start": 49.565,
+   "end": 49.685,
+   "word": "Y"
+  },
+  {
+   "start": 49.685,
+   "end": 49.785,
+   "word": "la"
+  },
+  {
+   "start": 49.785,
+   "end": 50.045,
+   "word": "próxima"
+  },
+  {
+   "start": 50.045,
+   "end": 50.665,
+   "word": "sesión"
+  },
+  {
+   "start": 50.665,
+   "end": 50.825,
+   "word": "te"
+  },
+  {
+   "start": 50.825,
+   "end": 50.945,
+   "word": "lo"
+  },
+  {
+   "start": 50.945,
+   "end": 51.365,
+   "word": "muestra"
+  },
+  {
+   "start": 51.365,
+   "end": 51.945,
+   "word": "como"
+  },
+  {
+   "start": 51.945,
+   "end": 52.325,
+   "word": "manual"
+  },
+  {
+   "start": 52.325,
+   "end": 52.645,
+   "word": "mode"
+  },
+  {
+   "start": 52.645,
+   "end": 53.065,
+   "word": "on."
+  },
+  {
+   "start": 53.285,
+   "end": 53.445,
+   "word": "Y"
+  },
+  {
+   "start": 53.445,
+   "end": 53.525,
+   "word": "si"
+  },
+  {
+   "start": 53.525,
+   "end": 53.745,
+   "word": "querés"
+  },
+  {
+   "start": 53.745,
+   "end": 53.925,
+   "word": "ver"
+  },
+  {
+   "start": 53.925,
+   "end": 54.125,
+   "word": "cómo"
+  },
+  {
+   "start": 54.125,
+   "end": 54.325,
+   "word": "lo"
+  },
+  {
+   "start": 54.325,
+   "end": 54.465,
+   "word": "puedes"
+  },
+  {
+   "start": 54.465,
+   "end": 54.845,
+   "word": "hacer,"
+  },
+  {
+   "start": 55.115,
+   "end": 55.255,
+   "word": "comentá"
+  },
+  {
+   "start": 55.435,
+   "end": 55.775,
+   "word": "COMUNIDAD"
+  },
+  {
+   "start": 55.775,
+   "end": 56.115,
+   "word": "y"
+  },
+  {
+   "start": 56.115,
+   "end": 56.215,
+   "word": "te"
+  },
+  {
+   "start": 56.215,
+   "end": 56.295,
+   "word": "lo"
+  },
+  {
+   "start": 56.295,
+   "end": 56.435,
+   "word": "dejo"
+  },
+  {
+   "start": 56.435,
+   "end": 56.495,
+   "word": "en"
+  },
+  {
+   "start": 56.495,
+   "end": 56.635,
+   "word": "mi"
+  },
+  {
+   "start": 56.635,
+   "end": 57.035,
+   "word": "comunidad"
+  },
+  {
+   "start": 57.035,
+   "end": 57.255,
+   "word": "de"
+  },
+  {
+   "start": 57.255,
+   "end": 57.495,
+   "word": "WhatsApp."
+  }
+ ]
+}
