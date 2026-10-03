@@ -167,7 +167,7 @@ const PIECES = [
   },
   {
     day: 7,
-    titulo: "Yo no existo. Tu agenda llena, sí.",
+    titulo: "Yo no existo: soy IA. Los recordatorios que te muestro, sí.", // 3-oct: nada de «agenda llena» (Sergio Urcullo)
     formato: "reel 20-30s Lucía en cámara",
     rawLabel: "reel Lucía en cámara · P4+P2 · Tanda B",
     pilar: "P4+P2",

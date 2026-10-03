@@ -11,6 +11,28 @@
 **Sesión:** la misma (`session_01Whdadt8NdnYbZoyum1bRX6`, rama `claude/trusting-dirac-wjkua1`). Los PR #78 y #82
 están mergeados. Este trabajo va en un PR nuevo.
 
+### 🛑 CIERRE 2 — 3-oct (corrección pedida por la madre; después ESPERA)
+
+**Decisión de Sergio Urcullo (3-oct):** *«que no se identifique como ello pero que tenga la ropa»*. Con eso D1 queda
+decidido: Lucía lleva el ambo como vestuario y nunca dice ni da a entender que es odontóloga.
+
+**Hecho:**
+- La regla quedó escrita en `PLAN.md` (§3, la fila #4 y la D1), `LUCIA.md` §0, `FLUJO.md` y la skill `editor-videos`
+  § Reels de Lucía.
+- El chiste pasa a «¿Lucía es real? No: soy IA. Los recordatorios que te muestro, sí.» y ya no promete «agenda llena».
+- «Yo no existo. Tu agenda llena, sí.» se cambió en `editor-videos/scripts/seed-campaign.mjs` y quedó marcado en el
+  doc de julio, que ya estaba SUPERADO.
+- «Hoy soy odontóloga» vivía en el plan v2, que el v3 ya había reemplazado. En `main` no quedaba en ningún guion,
+  pie ni subtítulo: se comprobó con `git grep` sobre `origin/main`.
+
+**Pendientes para después:**
+- **La web también promete «agenda llena»:** `web-factory/apps/onia-platform/src/app/v1/modulos/dental/page.tsx`
+  dice «La agenda llena y los impuestos al día». Es de otro carril; se le avisó a la madre.
+- **El carril Lucía no tiene skill propia.** CLAUDE.md pide crear una; hoy sus reglas viven en `editor-videos` y en
+  `LUCIA.md`.
+- **La prueba de ropa (~5,4 cr) vuelve a hacer falta** con D1 decidido. Necesita el OK de Sergio Urcullo al costo y
+  que se levante el congelamiento.
+
 ### 🛑 CIERRE — 2-oct ~14:00 UTC (alcance congelado por Sergio Urcullo; la sesión ESPERA, no sigue sola)
 
 **Hecho y dónde:**
