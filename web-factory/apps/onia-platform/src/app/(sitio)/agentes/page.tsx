@@ -18,9 +18,11 @@ const PLAN_CON_AGENTES = primerPlanCon("agentes");
 export const metadata: Metadata = {
   title: "Agentes con IA que proponen y esperan tu aprobación | Onia",
   // «Agentes con IA que cada mañana revisan tus datos» decía hasta el 2-oct: a quién y
-  // cuándo lo deciden reglas fijas, la IA solo propone el texto (catálogo §8). Lo vigila
-  // `app/promesa-que-el-producto-cumple.test.ts`.
-  description: `Agentes que cada mañana revisan tus datos según tu rubro —quién no volvió, qué pago venció, qué cita falta confirmar, qué stock quedó bajo— y te dejan la propuesta en Pendientes. La IA te propone el texto y vos lo aprobás. Nada sale sin tu OK. Desde el plan ${PLAN_CON_AGENTES}.`,
+  // cuándo lo deciden reglas fijas, la IA solo propone el texto (catálogo §8). Y hasta el
+  // 3-oct «La IA te propone el texto y vos lo aprobás», pegado a la propuesta de cada
+  // mañana, se leía como que redacta cada mensaje: es UNA plantilla por agente, aprobada
+  // una vez — la misma frase del hero. Lo vigila `app/promesa-que-el-producto-cumple.test.ts`.
+  description: `Agentes que cada mañana revisan tus datos según tu rubro —quién no volvió, qué pago venció, qué cita falta confirmar, qué stock quedó bajo— y te dejan la propuesta en Pendientes. La IA te propone el texto de cada agente y lo aprobás una vez. Nada sale sin tu OK. Desde el plan ${PLAN_CON_AGENTES}.`,
   alternates: { canonical: "/agentes" },
   openGraph: {
     type: "website",

@@ -1,13 +1,16 @@
-/// <reference types="vite/client" />
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { createElement, isValidElement, type ReactElement } from "react";
-import { renderToStaticMarkup } from "react-dom/server";
-import { describe, expect, it } from "vitest";
+import { beforeAll, describe, expect, it } from "vitest";
 
-import sitemap from "./sitemap";
+import {
+  htmlDe,
+  PAGINA_DE_RUTA,
+  renderizarPublicadas,
+  RUTAS_PUBLICADAS,
+  TIEMPO_PARA_RENDERIZAR,
+} from "./html-servido";
 
 /**
  * El titular de cada página pública se pinta con el HTML del servidor, sin
@@ -33,39 +36,12 @@ import sitemap from "./sitemap";
  * `visibility:hidden` en línea. La animación de entrada puede existir, pero en
  * CSS (`<Entrada>` de `@/motion`), que el navegador corre con el HTML y que
  * `prefers-reduced-motion` apaga.
+ *
+ * Las páginas se descubren solas y se renderizan una vez para todo el archivo
+ * (`html-servido.ts`, que comparte con `promesa-que-el-producto-cumple.test.ts`):
+ * una página nueva que entre al sitemap queda vigilada sin tocar este archivo, y
+ * el import en frío va en el `beforeAll`, no contra el timeout de cada `it()`.
  */
-
-type Pagina = () => ReactElement | Promise<ReactElement>;
-
-/**
- * Las páginas se descubren solas: cada `page.tsx` de `app/` se mapea a su ruta
- * (los grupos `(sitio)` no cuentan en la URL), y se miden TODAS las que el
- * sitemap publica más `/terminos` (publicada, fuera del sitemap por `noindex`).
- * Una página nueva que entre al sitemap queda vigilada sin tocar este archivo.
- */
-const MODULOS = import.meta.glob<{ default: Pagina }>("./**/page.tsx");
-
-const rutaDe = (archivo: string) =>
-  "/" +
-  archivo
-    .replace(/^\.\//, "")
-    .replace(/\/?page\.tsx$/, "")
-    .split("/")
-    .filter((tramo) => tramo && !/^\(.*\)$/.test(tramo))
-    .join("/");
-
-const PAGINA_DE_RUTA = new Map(Object.entries(MODULOS).map(([archivo, cargar]) => [rutaDe(archivo), cargar]));
-
-const RUTAS_PUBLICADAS = [
-  ...sitemap().map(({ url }) => new URL(url).pathname.replace(/\/$/, "") || "/"),
-  "/terminos",
-];
-
-async function htmlDelServidor(Pagina: Pagina): Promise<string> {
-  const salida = await Pagina();
-  const raiz = isValidElement(salida) ? salida : createElement(Pagina as () => ReactElement);
-  return renderToStaticMarkup(raiz);
-}
 
 type Nodo = { tag: string; atributos: string; inicio: number };
 
@@ -134,17 +110,19 @@ function estilosQueEsconden(fragmento: string): string[] {
 }
 
 describe("el titular sale visible del servidor, sin esperar JavaScript", () => {
+  let renderizadas: Map<string, string | Error>;
+  beforeAll(async () => {
+    renderizadas = await renderizarPublicadas();
+  }, TIEMPO_PARA_RENDERIZAR);
+
   it("cada ruta publicada tiene su page.tsx (si no, el gate no la estaría midiendo)", () => {
     expect(RUTAS_PUBLICADAS.length).toBeGreaterThanOrEqual(14);
     expect(RUTAS_PUBLICADAS.filter((ruta) => !PAGINA_DE_RUTA.has(ruta))).toEqual([]);
   });
 
   for (const ruta of RUTAS_PUBLICADAS) {
-    it(`${ruta}: el bloque del <h1> no trae nada escondido en línea`, async () => {
-      const cargar = PAGINA_DE_RUTA.get(ruta);
-      if (!cargar) throw new Error(`No hay page.tsx para ${ruta}`);
-      const html = await htmlDelServidor((await cargar()).default);
-      const bloque = bloqueDelTitular(html);
+    it(`${ruta}: el bloque del <h1> no trae nada escondido en línea`, () => {
+      const bloque = bloqueDelTitular(htmlDe(renderizadas, ruta));
       expect(bloque).toMatch(/<h1\b/);
       expect(estilosQueEsconden(bloque)).toEqual([]);
     });

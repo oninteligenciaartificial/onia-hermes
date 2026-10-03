@@ -538,8 +538,11 @@ const ESCALERA: readonly Plan[] = [
     paso: "02",
     nombre: NOMBRE_DE_PLAN.crece,
     salto: "Recuperar",
+    // «Los agentes te devuelven clientes que se estaban yendo» decía hasta el 3-oct: un resultado,
+    // en la página a la que el bot manda a cada lead. Lo que el producto hace es el mecanismo
+    // (catálogo §8, frase 3): lo vigila `app/promesa-que-el-producto-cumple.test.ts`.
     resultado:
-      "Los agentes te devuelven clientes que se estaban yendo: proponen a quién contactar y vos aprobás.",
+      "Cada mañana los agentes te dejan anotado a quién escribirle, con el mensaje listo; vos aprobás.",
     mensual: 550,
     semanal: 145,
     anual: 5500,
@@ -1189,8 +1192,10 @@ export interface AddOn {
  *
  *  «Agente conversacional de WhatsApp» desde el 2026-09-28 (decisión de Sergio
  *  Urcullo): se llamaba «Chatbot de WhatsApp con IA», y las respuestas salen de lo
- *  que el negocio cargó, no de un modelo. La IA real se dice concreta donde es
- *  real («entiende las fotos»). Lo vigila `src/app/(sitio)/nombre-del-addon.test.ts`. */
+ *  que el negocio cargó, no de un modelo. Ni fotos, ni audios, ni comprobantes desde
+ *  el 2-oct: el catálogo §8 los prohíbe (en duda, 0 negocios en modo recepcionista).
+ *  Que no vuelvan lo vigilan `src/app/(sitio)/nombre-del-addon.test.ts` y
+ *  `src/app/promesa-que-el-producto-cumple.test.ts`. */
 export const CHATBOT_EN_LA_CARTA = "Agente conversacional de WhatsApp";
 
 /**

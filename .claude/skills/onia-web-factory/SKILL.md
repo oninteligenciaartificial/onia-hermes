@@ -221,11 +221,16 @@ Reprocharle a un prospecto lo que tenemos roto es un bumerán. Estado 2026-08-13
 - **Renderizar páginas en vitest** necesita `oxc: { jsx: { runtime: "automatic" } }` en
   `vitest.config.ts` (el tsconfig dice `"jsx": "preserve"` por Next y vite muere leyendo `.tsx`) y
   `/// <reference types="vite/client" />` si el test usa `import.meta.glob`.
+- **El render de las páginas va en un `beforeAll(…, 60_000)`, nunca dentro del `it()`** (3-oct).
+  Importar una página en frío transforma toda su cadena de módulos y eso cuenta contra los 5 s por
+  defecto de vitest: con la CPU estrangulada (`taskset -c 0`, 6 workers) «/» se cayó 2 de 2 veces con
+  «Test timed out in 5000ms», y `prebuild` corre esta suite antes de `next build` en el VPS. Helper
+  único: `src/app/html-servido.ts` (`renderizarPublicadas`), que comparten los dos gates que renderizan.
 - **Capturas `fullPage` de esta app dejan secciones en blanco** (los Reveal de abajo no alcanzan a
   entrar): pasa igual antes y después de cualquier cambio. Para mirar una sección, `scrollTo` +
   1,5 s + captura del viewport.
 
-## Promesas de la web contra el producto — `apps/onia-platform` (barrido 2026-10-02)
+## Promesas de la web contra el producto — `apps/onia-platform` (barrido 2-oct, revisado 3-oct)
 
 - **Una promesa se arregla con su gate, no solo con la frase.** El «con el control ya en la
   agenda» de estética se corrigió el 29-sep (`3cf50229f`) sin test, y el barrido del 2-oct
@@ -233,17 +238,50 @@ Reprocharle a un prospecto lo que tenemos roto es un bumerán. Estado 2026-08-13
   `pricing.ts`), «Agentes con IA que cada mañana revisan tus datos» (descripción de /agentes),
   «lo que te sirve sale por tu WhatsApp» (envío automático con 0 números conectados), «agenda
   por profesional» (no hay vista ni filtro por profesional) y «…a medias no se pierde» (un
-  resultado). Gate: `src/app/promesa-que-el-producto-cumple.test.ts` — prohíbe la FORMA de cada
-  promesa en todo `src/` servido, con el texto partido en líneas de JSX unido antes de buscar
-  (línea por línea, «sale por tu⏎WhatsApp» pasaba de largo).
-- **Fuente para medir:** catálogo §2, §7 y §8 + `docs/research/ONIA_INVENTARIO_IA_20261002.md` §4,
+  resultado). El 3-oct salieron dos más que el gate no veía: «Los agentes te devuelven clientes
+  que se estaban yendo» (tarjeta del Crece en /precios, la página a la que el bot manda a cada
+  lead) y «La IA te propone el texto y vos lo aprobás» (descripción de /agentes: se lee como que
+  redacta cada mensaje; va «el texto de cada agente… lo aprobás una vez»).
+- **Las formas viven en UN lugar para las dos superficies:**
+  `scripts/promesa-que-el-producto-cumple.mjs`. Lo usan `src/app/promesa-que-el-producto-cumple.test.ts`
+  (el sitio) y `scripts/venta-honestidad.test.mjs` de la raíz (el kit de venta). ⚠️ El barrido del
+  2-oct quedó solo en la web y el one-pager que Sergio Urcullo manda a las clínicas siguió diciendo
+  las cuatro promesas: una lista por superficie se afloja en una y no en la otra. La raíz importa de
+  `web-factory/`; al revés no (el stage del publicador solo lleva `web-factory/`). Para un borrador
+  suelto (copy nuevo, un anuncio, un mensaje): `npm run promesas:revisar -- <archivo>` (sale 1 si promete).
+- **El gate lee lo que se LEE, no el código, en tres pasadas:** (1) la fuente de `src/` sin
+  comentarios, sin etiquetas y sin `{" "}`; (2) el HTML que el servidor manda de cada ruta publicada
+  (`src/app/html-servido.ts`, con el JSON-LD incluido); (3) los comentarios: uno que nombra una promesa
+  prohibida tiene que contar que se sacó («decía hasta…», «§8», «Sin «…» desde…»).
+- ⚠️ **Trampas medidas el 3-oct, cada una pasaba en verde:** `agenda <em>por profesional</em>`,
+  `sale por tu{" "}<strong>WhatsApp</strong>` (prettier mete `{" "}` al cortar junto a un elemento);
+  el voseo con tilde («Recuperás», «Recuperá»: la «á» rompe el prefijo `recupera` y en JS no es letra
+  para `\b`) y el plural («recuperan»). Y al revés: la forma «el sistema agenda solo» prohibía en todo
+  el sitio «se agendan solos desde tu link» o «entra en la agenda como una cita más», que son
+  CIERTAS (el link de reserva hace `tx.appointment.create`, incluido desde Crece). Lo que hace falsa
+  la frase es el SUJETO (el agente, la IA, el sistema, Onia), y la forma ahora lo exige.
+- **Fuente para medir:** catálogo §2, §5, §7 y §8 + `docs/research/ONIA_INVENTARIO_IA_20261002.md` §4,
   y el código de `onia-platform` `origin/master` (no la memoria ni otra pantalla del sitio).
 - ⚠️ **El catálogo se contradice en las fotos:** §5 describe el agente de WhatsApp «entiende fotos
   y audios»; §8 (2-oct) dice que NO se puede decir. Se aplicó lo más conservador (§8) y el gate
   viejo `nombre-del-addon.test.ts`, que EXIGÍA «entiende las fotos», se dio vuelta. Si una
   sesión vuelve a ver el §5, no restaura la frase sin una prueba real con un negocio conectado.
-  El gemelo del PRODUCTO la sigue diciendo al 2-oct (`onia-platform/lib/pricing.ts` líneas 102 y
-  376, exigida por `lib/pricing-honestidad.test.ts:192`): eso es del carril Plataforma.
+- **Fuera de este carril, todavía la dicen (3-oct)** — para que nadie dé el barrido por cerrado:
+  - **Plataforma** (onia-platform `origin/master` `8de7f025`): `lib/pricing.ts:102` y `:376`, y
+    **`lib/ayuda/faq.ts:314`** (la Ayuda dentro de la app: `app/(dashboard)/help`). Las exige el
+    gemelo `lib/pricing-honestidad.test.ts:193-194`, que hay que dar vuelta en el mismo commit; los
+    comentarios `lib/pricing.ts:81` y `app/layout.tsx:66` mandan a decirla. Comando:
+    `git -C onia-platform grep -nE "entiende (las )?fotos" origin/master -- ':!docs/**'`.
+  - **Marca personal:** `scripts/marca-personal/generar-carrusel-atender.py:104` y
+    `generar-carrusel-chatbot.py:94` dibujan «Entiende fotos y audios».
+- ⏸ **Decisión pendiente de Sergio Urcullo, NO verificado:** /chatbot vende como disponible el
+  agente conversacional, que el catálogo §5 tiene en ⏸ («después de la prueba real»: nunca se
+  conectó el WhatsApp de un cliente). JSON-LD con «contesta 24/7» y `availability: InStock`
+  (`chatbot/page.tsx:47-57`), hero «Tu WhatsApp responde las 24 horas» y botón «Pedir el agente
+  conversacional» (:102-111, :216), portada (`(sitio)/page.tsx:111`), menú (`nav.ts:38`) y pie
+  (`site-footer.tsx:44`). El kit se contradice igual: el guion §0.3 dice que no se ofrece, y el
+  one-pager y `04-OBJECIONES.md` lo venden. No se corrige con texto (no se exhibe obra ni
+  «pronto»): o se saca de menú y portada hasta la prueba con el chip, o él acepta el riesgo.
 
 ## Ojo con los monolitos
 

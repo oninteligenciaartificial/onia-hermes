@@ -175,6 +175,19 @@ contestarle de memoria es la forma de quemarlo.
 | «Preguntá por tu negocio» es IA | ❌ | Son 30 temas escritos a mano, sin modelo (`BarraAsistente.tsx`) |
 | «La IA calcula el costo de importación» | ❌ | El costeo es cálculo; en importadoras la IA solo está en el mensaje de cobro |
 
+   **El kit tiene gate para esto (3-oct).** `scripts/venta-honestidad.test.mjs` corre sobre
+   `hermes-content/sales-kit/*.md` las MISMAS formas que vigilan la web
+   (`web-factory/apps/onia-platform/scripts/promesa-que-el-producto-cumple.mjs`): la IA que escribe cada
+   mensaje, «sale por tu WhatsApp», «agenda por profesional», «entiende las fotos», el sistema que agenda
+   solo y el resultado («recupera / te devuelve pacientes»). Nace de que el barrido del 2-oct limpió la web
+   y el one-pager siguió diciendo las cuatro primeras. Un renglón que las nombra para prohibirlas
+   (sección «Lo que no se dice», ❌, «promete…») no cuenta. Si una frase nueva choca, el texto que sí se
+   dice es el de la web: «La IA redacta el texto de cada agente y vos lo aprobás una vez». Un borrador
+   suelto (mensaje a un lead, texto de un anuncio) no pasa por ningún gate: guardalo en un archivo y corré
+   `npm --prefix web-factory/apps/onia-platform run promesas:revisar -- <archivo>` (sale 1 si promete).
+   ⚠️ «Con el tono de tu negocio»: el catálogo §8 lo deja decir y esta tabla dice ❌ (escribe en el tono
+   del rubro). Hasta que se resuelva, el one-pager no lo dice.
+
    Cómo se midió la variable, sin imprimir secretos:
    `ssh onia-vps 'docker exec onia-platform sh -c "echo AGENTS_LLM=\${AGENTS_LLM}"'`.
 
