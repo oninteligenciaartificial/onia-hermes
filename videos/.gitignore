@@ -1,10 +1,11 @@
 # Salidas de video: se REGENERAN con los scripts y los cutplan.json que sí están
 # versionados. Un solo proyecto son ~130 MB de mp4 + ~900 PNG de secuencia; misma
 # razón que .hermes/video-lab/overlay/ — artefactos reconstruibles no van al repo.
-*/renders/
-*/final/
-*/raw/
-*/scripts/*.wav
+**/renders/
+**/final/
+**/raw/
+**/work/
+**/scripts/*.wav
 # El pad de musica se SINTETIZA (scripts/pad-musica.sh): 148 MB que GitHub rechaza
 # (>100 MB) — dejarlo entrar deja la rama entera IMPUSHEABLE, como paso el 10-sep.
-*/assets/pad.wav
+**/assets/pad.wav
