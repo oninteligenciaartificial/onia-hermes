@@ -76,3 +76,14 @@ clínicas pagando o destraba main/producción; revisión proporcional al riesgo;
 3. Mergear #94 cuando llegue sin conflictos (#101 ya mergeado, a5b4624a).
 5. Revisión de resultados con Sergio Urcullo. No abrir nada nuevo antes.
 6. Anotado por Sergio Urcullo para mirar (3-oct): TikTok https://vt.tiktok.com/ZSbm3Scje/ — verlo DESPUÉS de la revisión de resultados (alcance congelado), con `ver-videos` o desde Chrome.
+
+## 8. Estado 3-oct ~19:40 UTC (después del reinicio)
+
+- Cerrado: CRITICAL del recordatorio (platform #106, `release-13b67dda`, sin rastro de uso); promesas de la web
+  barridas; Lucía sin «odontóloga» (`ed9446d7`); skill `edicion-referentes` + 18 carruseles (#100, `9ea8e309`);
+  #94 Hermes (`639cf6c0`, apagado hasta `aplicar`; los 3 MEDIUM antes de cargar la llave); handoff y capturas de la
+  madre v2 en main (`0b280acc`). El aviso por Telegram de las 17:15 UTC disparó (`run_once_fired`).
+- La ronda de 30 min NO se recreó: todas las sesiones están quietas esperando y gastaba tokens sin novedad.
+- Suite del bot en Windows: 16 rojas por nombres de archivo con «:» (`colgada-chatwoot:46-…`), no aplica en el VPS.
+- Revisión de resultados entregada a Sergio Urcullo en el chat; esperando sus decisiones (firma de la respuesta de
+  la pauta, tarjeta de ONIA Ads, chip, OK de Marca y Lucía, qué se descongela).
