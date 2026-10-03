@@ -173,6 +173,20 @@ test("horario tomado (409): tampoco «Listo, agendado» — se le dice que se oc
   assert.match(texto, /se acaba de ocupar/);
 });
 
+// AUDITORÍA DEL 3-OCT. M2_SIN_RESERVA y M2_HORARIO_TOMADO terminaban en «Mientras, contame rápido:
+// 1️⃣ rubro 2️⃣ personas 3️⃣ ciudad 4️⃣ dolor». La conversación ya está en `handoff_humano`, que no lee
+// datos: el prospecto contestaba y recibía M5_ACUSE («no te lo contesto yo para no inventarte nada»),
+// con la calificación tirada y sin lead_upsert. No se le pide lo que el bot no va a leer.
+for (const reason of ["error", "horario_tomado"]) {
+  test(`reserva que no salió (${reason}): el texto honesto no pide datos que el bot después no lee`, async () => {
+    const { fake, agendada } = await elegirConReserva({ ok: false, uid: null, reason, warnings: [] });
+    const texto = agendada.send.map((r) => r.text).join("\n");
+    assert.equal(fake.state.botStage, "handoff_humano", "ancla: la conversación pasó a la persona");
+    assert.doesNotMatch(texto, /contame rápido|1️⃣|¿A qué se dedica|¿Cuántas personas|¿En qué ciudad/i);
+    assert.match(texto, /te (lo confirma|escribe)/, "lo que sí se le dice: quién sigue");
+  });
+}
+
 test("con la reserva HECHA sí se confirma, y con el link (el camino feliz no se rompe)", async () => {
   const { fake, agendada } = await elegirConReserva({ ok: true, uid: "uid-abc", reason: "reservado", warnings: [] });
   assert.match(agendada.send[0].text, /Listo, agendado: \*\*jueves 15:00\*\*/);

@@ -366,25 +366,16 @@ export const SCRIPT = Object.freeze({
   // una salvedad al final de M2 y el prospecto leia «Listo, agendado» y en la linea siguiente «estoy
   // confirmando ese horario» (auditoria 2-oct, §2 accion 3). Lo que se le dice tiene que ser lo que
   // paso: lo eligio, NO quedo reservado y quien se lo confirma. Sin «nos vemos {{dia}}»: eso tambien
-  // es confirmarla. Las preguntas siguen: el dato le sirve a {{humano}} igual.
+  // es confirmarla.
+  // SIN PREGUNTAS (3-oct). Aca seguian «contame rápido: 1️⃣ rubro 2️⃣ personas 3️⃣ ciudad 4️⃣ dolor»,
+  // pero la conversacion pasa a `handoff_humano`, que no lee datos: el prospecto contestaba y recibia
+  // M5_ACUSE («no te lo contesto yo»), con la calificacion tirada. No se pide lo que el bot no va a
+  // leer; lo que falte lo pregunta {{humano}} al confirmarle.
   // Los usa `reservaQueNoSalio` (calcom-booking.mjs), el mismo en los tres caminos (vivo, seco y
   // simulador).
-  M2_SIN_RESERVA: [
-    "Anoté **{{dia_hora_elegida}}**, pero todavía no quedó reservado: {{humano}} te lo confirma {{via_humano}}.",
-    "",
-    "Mientras, para que llegue con la demo armada para vos, contame rápido:",
-    "{{preguntas}}",
-    "",
-    "(Con una palabra en cada una alcanza.)",
-  ].join("\n"),
-  M2_HORARIO_TOMADO: [
+  M2_SIN_RESERVA: "Anoté **{{dia_hora_elegida}}**, pero todavía no quedó reservado: {{humano}} te lo confirma {{via_humano}}.",
+  M2_HORARIO_TOMADO:
     "Uy, **{{dia_hora_elegida}}** se acaba de ocupar. {{humano}} te escribe {{via_humano}} para acomodar otro horario.",
-    "",
-    "Mientras, para que llegue con la demo armada para vos, contame rápido:",
-    "{{preguntas}}",
-    "",
-    "(Con una palabra en cada una alcanza.)",
-  ].join("\n"),
 
   // M2_PREGUNTA_DOLOR — el ultimo item de la lista de M2. Vive aca y no en el motor porque es
   // copy de cliente, como el resto del guion.

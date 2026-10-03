@@ -1115,3 +1115,104 @@ test("un turno REAL le pasa a saveConversation el estado leido (la baranda de la
   );
   assert.equal(recibidos[0].leido.humanTookOver, false, "el estado leido tiene que ser el de la BASE, no el del turno");
 });
+
+// ---------------------------------------------------------------------------
+// LA RESERVA QUE NO SALIO DEJA EL LEAD COMO ESTA DE VERDAD (auditoria del 3-oct)
+//
+// `store.applySideEffects` corre ANTES de la reserva (run-turn 6 → 6.5) y persiste el `lead_upsert`
+// del motor con `pipelineStatus: demo_agendada` («Reunion»). Si despues `createBooking` falla,
+// `reservaQueNoSalio` cambiaba el texto y la etapa, y nada corregia la fila: el panel del CRM seguia
+// mostrando una reunion que no existe, el unico audit decia `→ demo_agendada` y no se creaba la
+// tarjeta de la cola que si crea cualquier otro handoff. Solo con agenda propia
+// (`ONIA_BOT_AGENDA=calcom`), que hoy esta apagada.
+//
+// Se mira la FILA: `applySideEffects` es el de verdad (createStore) contra un PostgREST de mentira
+// con memoria para leads, review_queue y audit_logs. El resto del store es el juguete de siempre.
+// ---------------------------------------------------------------------------
+
+function postgrestDeLeads() {
+  const leads = new Map();
+  const reviews = [];
+  const audits = [];
+  const fetchImpl = async (url, init = {}) => {
+    const u = new URL(String(url));
+    const tabla = u.pathname.split("/").pop();
+    const metodo = init.method || "GET";
+    const body = init.body ? JSON.parse(init.body) : null;
+    const filas = (rows) => ({ ok: true, status: 200, text: async () => JSON.stringify(rows) });
+    if (tabla === "leads") {
+      const clave = String(u.searchParams.get("lead_key") || "").replace(/^eq\./, "");
+      if (metodo === "GET") return filas(leads.has(clave) ? [leads.get(clave)] : []);
+      if (metodo === "POST") {
+        leads.set(body.lead_key, body);
+        return filas([body]);
+      }
+      if (metodo === "PATCH") {
+        const fila = { ...leads.get(clave), ...body };
+        leads.set(clave, fila);
+        return filas([fila]);
+      }
+    }
+    if (tabla === "review_queue") {
+      reviews.push(body);
+      return filas([body]);
+    }
+    if (tabla === "audit_logs") {
+      audits.push(body);
+      return filas([body]);
+    }
+    return filas([]);
+  };
+  const real = createStore({ url: "https://sb.test", key: "service-role-fake", fetch: fetchImpl });
+  return { leads, reviews, audits, applySideEffects: real.applySideEffects };
+}
+
+for (const reason of ["error", "horario_tomado"]) {
+  test(`reserva que no salio (${reason}): la fila del lead NO queda en «Reunion», y la cola y el audit dicen que paso a la persona`, async () => {
+    const pg = postgrestDeLeads();
+    const fake = memoryStore();
+    fake.store.applySideEffects = pg.applySideEffects;
+    const deps = {
+      store: fake.store,
+      config: createBotConfig({ dryRun: false }, CONFIG),
+      nowIso: T0,
+      llm: async () => "",
+      createBooking: async () => ({ ok: false, uid: null, reason, warnings: [] }),
+    };
+
+    await runTurn(turn({ text: "DEMO" }), deps);
+    const eligio = await runTurn(turn({ text: "A", message_key: "telegram:2" }), deps);
+
+    assert.equal(fake.state.botStage, "handoff_humano", "ancla: la reserva no salio y la conversacion paso a la persona");
+    const [fila] = [...pg.leads.values()];
+    assert.ok(fila, "ancla: el lead existe");
+    assert.notEqual(fila.pipeline_status, "Reunion", "el panel muestra una reunion que no existe");
+    assert.equal(fila.pipeline_status, CONFIG.pipelineStatus.calificado);
+    assert.equal(fila.raw.botStage, "handoff_humano");
+
+    const alHumano = pg.audits.filter((a) => a.raw?.detail?.to === "handoff_humano");
+    assert.equal(alHumano.length, 1, "el audit tiene que registrar el paso a la persona, no solo el «→ demo_agendada»");
+    assert.equal(new Set(pg.audits.map((a) => a.audit_key)).size, pg.audits.length, "las claves no chocan: con on_conflict la segunda se perdería");
+    assert.equal(pg.reviews.length, 1, "la tarjeta de la cola, como en cualquier otro handoff");
+    assert.ok(eligio.reviewKeys.length >= 1, "y el turno la reporta");
+  });
+}
+
+test("con la reserva HECHA el lead sí queda en «Reunion» (el camino feliz no se toca)", async () => {
+  const pg = postgrestDeLeads();
+  const fake = memoryStore();
+  fake.store.applySideEffects = pg.applySideEffects;
+  const deps = {
+    store: fake.store,
+    config: createBotConfig({ dryRun: false }, CONFIG),
+    nowIso: T0,
+    llm: async () => "",
+    env: {},
+    createBooking: async () => ({ ok: true, uid: "uid-1", reason: "reservado", warnings: [] }),
+  };
+  await runTurn(turn({ text: "DEMO" }), deps);
+  await runTurn(turn({ text: "A", message_key: "telegram:2" }), deps);
+  const [fila] = [...pg.leads.values()];
+  assert.equal(fila.pipeline_status, "Reunion");
+  assert.equal(pg.reviews.length, 0);
+});

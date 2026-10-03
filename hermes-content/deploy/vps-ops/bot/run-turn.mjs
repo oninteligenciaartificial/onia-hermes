@@ -520,8 +520,20 @@ export async function runTurn(input, deps = {}) {
 
   // 6. Efectos de base. El lead se crea ACA y su clave vuelve a la conversacion.
   let nextState = result.nextState;
-  const applied = await store.applySideEffects(result.sideEffects, nextState, nextState.outboundSeq);
+  let applied = await store.applySideEffects(result.sideEffects, nextState, nextState.outboundSeq);
   if (applied.leadKey) nextState = { ...nextState, leadKey: applied.leadKey };
+  // Lo que `reservaQueNoSalio` devuelve para corregir lo que el paso 6 ya escribio («Reunion» en el
+  // lead, audit `→ demo_agendada`). Las claves de cola y audit son `<conversacion>-<seq>` con
+  // on_conflict ignore: con el MISMO seq la correccion se perderia en silencio, por eso el sufijo.
+  const corregirTrasReserva = async (efectos) => {
+    const corregido = await store.applySideEffects(efectos, nextState, `${nextState.outboundSeq}-reserva`);
+    applied = {
+      ...applied,
+      reviewKeys: [...(applied.reviewKeys || []), ...(corregido.reviewKeys || [])],
+      auditKeys: [...(applied.auditKeys || []), ...(corregido.auditKeys || [])],
+      failed: [...(applied.failed || []), ...(corregido.failed || [])],
+    };
+  };
 
   // 6.5. LA RESERVA DE VERDAD. Hasta hoy el bot decia "Listo, agendado" y no reservaba nada:
   // `calendar_event_id` quedaba en null, dos prospectos podian quedarse con el mismo horario y
@@ -548,7 +560,9 @@ export async function runTurn(input, deps = {}) {
         duracionMinutos: config.demo?.duracionMinutos,
       });
       if (motivo === "sin_config") {
-        nextState = reservaQueNoSalio({ replies, nextState, config, reason: "sin_config" }).nextState;
+        const noSalio = reservaQueNoSalio({ replies, nextState, config, reason: "sin_config" });
+        nextState = noSalio.nextState;
+        await corregirTrasReserva(noSalio.efectos);
         bookingWarnings.push(
           "calcom: no se reservo (dry run) — sin CALCOM_BASE_URL tampoco saldria en vivo: el texto es el mismo que el honesto del vivo",
         );
@@ -587,7 +601,9 @@ export async function runTurn(input, deps = {}) {
         // version honesta y la conversacion pasa a la persona (`reservaQueNoSalio`). Hasta el 2-oct
         // se le PEGABA una salvedad al final y el prospecto leia la confirmacion y su desmentida en
         // el mismo mensaje (auditoria de produccion del 2-oct, §2 accion 3).
-        nextState = reservaQueNoSalio({ replies, nextState, config, reason: booking.reason }).nextState;
+        const noSalio = reservaQueNoSalio({ replies, nextState, config, reason: booking.reason });
+        nextState = noSalio.nextState;
+        await corregirTrasReserva(noSalio.efectos);
         bookingWarnings.push(`calcom: la demo NO quedo reservada (${booking.reason})`);
         // Y el aviso que DESDICE al "DEMO AGENDADA — anotala" que el motor emitio en este mismo
         // turno: va DESPUES para que la correccion se lea ultima.

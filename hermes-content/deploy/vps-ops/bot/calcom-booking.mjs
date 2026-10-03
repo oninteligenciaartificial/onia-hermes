@@ -197,7 +197,13 @@ export function buildBookingNotes(qualification = {}) {
  *
  * Lo que vino DESPUES de M2 en el mismo mensaje (la coletilla M7 de fuera de horario) se conserva.
  *
- * @returns {{replies: object[], nextState: object, plantilla: string}}
+ * LOS EFECTOS QUE CORRIGEN (`efectos`, 3-oct). El motor ya emitio, y el ejecutor ya aplico ANTES de
+ * reservar, el `lead_upsert` con `pipelineStatus: demo_agendada` («Reunion») y el audit
+ * `→ demo_agendada`. Sin corregirlos el panel del CRM mostraba una reunion que no existe. Vuelven los
+ * de cualquier handoff: el lead a «calificado», la tarjeta de la cola y el audit `→ handoff_humano`.
+ * El aviso a Sergio Urcullo NO va aca: es `avisoDeReservaFallida`, que el ejecutor pone despues.
+ *
+ * @returns {{replies: object[], nextState: object, plantilla: string, efectos: object[]}}
  */
 export function reservaQueNoSalio({ replies, nextState, config, reason } = {}) {
   const plantilla = reason === "horario_tomado" ? "M2_HORARIO_TOMADO" : "M2_SIN_RESERVA";
@@ -212,11 +218,32 @@ export function reservaQueNoSalio({ replies, nextState, config, reason } = {}) {
     // La fila del saliente dice en que etapa quedo la conversacion: que no diga `demo_agendada`.
     if ("stageAfter" in reply) reply.stageAfter = "handoff_humano";
   }
-  return {
-    replies,
-    nextState: { ...nextState, botStage: "handoff_humano", handoffAckAt: null },
-    plantilla,
-  };
+  const derivada = { ...nextState, botStage: "handoff_humano", handoffAckAt: null };
+  const motivo = `eligió ${nextState.scheduledLabel || "un horario"} y la reserva no salió (${reason || "sin motivo"}): confirmale vos el horario`;
+  const efectos = [
+    {
+      type: "lead_upsert",
+      payload: {
+        conversationKey: derivada.conversationKey,
+        leadKey: derivada.leadKey,
+        pipelineStatus: config.pipelineStatus.calificado,
+        qualification: derivada.qualification,
+      },
+    },
+    {
+      type: "review_queue",
+      payload: { ...config.handoff.reviewQueue, conversationKey: derivada.conversationKey, leadKey: derivada.leadKey, summary: motivo },
+    },
+    {
+      type: "audit_log",
+      payload: {
+        action: "bot_stage_change",
+        conversationKey: derivada.conversationKey,
+        detail: { from: nextState.botStage, to: "handoff_humano", reason: `reserva_no_salio:${reason || "sin_motivo"}` },
+      },
+    },
+  ];
+  return { replies, nextState: derivada, plantilla, efectos };
 }
 
 /**

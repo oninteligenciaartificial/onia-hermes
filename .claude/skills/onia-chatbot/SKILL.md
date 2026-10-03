@@ -168,6 +168,13 @@ final. Y los horarios que ofrecía no salían de un calendario: los escribe un c
   (o `M2_HORARIO_TOMADO` con 409), pasa la conversación a `handoff_humano` (si quedara en
   `demo_agendada`, M2b diría «Nos vemos …» y M9 recordaría una demo inexistente) y SIEMPRE sale el aviso
   `reserva_sin_confirmar`. Los tres caminos (vivo, seco de `runTurn`, `simulate.mjs`) usan la misma función.
+  (3-oct) `M2_SIN_RESERVA`/`M2_HORARIO_TOMADO` ya NO piden los datos: `handoff_humano` no los lee y el
+  prospecto recibía M5_ACUSE con la calificación tirada. Y `reservaQueNoSalio` devuelve `efectos` que el
+  ejecutor aplica: el paso 6 de `runTurn` ya había escrito «Reunion» en el lead y el audit
+  `→ demo_agendada` ANTES de reservar; la corrección pone el lead en «calificado», la tarjeta de la cola y
+  el audit `→ handoff_humano`. ⚠️ Las claves de cola y audit son `<conversación>-<seq>` con on_conflict
+  ignore: un segundo efecto en el MISMO turno con el mismo seq se pierde en silencio (por eso el seq
+  `N-reserva`). Se mira la FILA con `postgrestDeLeads` de persistence.test (applySideEffects real).
 - **El texto seguro del LLM** (`SAFE_REPLY`) terminaba en «¿Te reservo {{slot_a}} o {{slot_b}}?»: sin
   horarios salía «HORARIO A (pendiente de definir)». Ahora `textoSeguro` (bot-engine) pone la pregunta
   pendiente real. Lo encontró MIRAR el simulador, no un test: correr `node simulate.mjs` con el entorno
