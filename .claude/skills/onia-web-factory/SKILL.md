@@ -163,6 +163,12 @@ librería sin tocar. Copy hardcodeado del template en el HTML final = defecto, n
 - `pnpm test` + `pnpm e2e` (los E2E incluyen axe WCAG 2.2 AA y presupuesto de Core Web Vitals).
 - No filtrar WIP parcial: si un archivo nuevo importa otro nuevo, van los dos o ninguno.
 - `code-review` antes de mergear.
+- ⚠️ **`tsc` verde en tu máquina NO es `tsc` verde en el VPS** (`apps/onia-platform`, 3-oct): el
+  `prebuild` del VPS corre `tsc --noEmit` con pnpm, que NO expone dependencias transitivas. Un
+  `/// <reference types="vite/client" />` en `src/app/html-servido.ts` (vite llega por vitest)
+  compiló acá con node_modules plano y en el VPS dio TS2688: «ERR: el build falló, no publico», y la
+  web quedó en la versión anterior. Ningún archivo de `src/` referencia tipos de un paquete que no
+  esté en `package.json`; el tipo de `import.meta.glob` vive en `src/import-meta-glob.d.ts`.
 
 ## Checklist de pre-entrega — indexabilidad (17 ítems)
 
