@@ -233,6 +233,16 @@ El número de tests sale de la corrida, no de este archivo (2-oct-2026: 1587/158
   `slotsElegibles` lleva el reloj a la vista (en la llamada o en la constante que recibe). Para listar las
   funciones con reloj de la máquina: `grep -n "= Date.now()" *.mjs | grep -v test`. Para probar que un
   archivo no vence: `node --import <archivo que fija Date.now en 2027> --test <archivo>`.
+- **Un test que corre `simulate.mjs` en un proceso hijo NO puede depender del webhook.env vivo** (3-oct).
+  `simulate.test` borraba `ONIA_BOT_AGENDA` del entorno del hijo; para saber la agenda el simulador iba a
+  `/opt/onia/bot/webhook.env` y, fuera del VPS, lo pedía por ssh DOS veces (30 s). En el VPS, que es donde
+  corre el gate de `deploy-bot.sh`, leía el archivo REAL: encender la agenda allá ponía rojo el test y
+  trababa el deploy. Ahora el hijo recibe `ONIA_SIM_WEBHOOK_ENV=<temporal con lo que produccion tiene>` y
+  un `ssh` testigo en el PATH que registra si alguien sale a la red. Y si el entorno ya dice
+  `ONIA_BOT_AGENDA` distinto de `calcom`, `cargarSlotsPublicados` no lee ni CALCOM_* ni el archivo.
+  Para MIRAR la rama de producción sin el VPS:
+  `ONIA_SIM_WEBHOOK_ENV=/tmp/webhook.env node simulate.mjs` (con `ONIA_BOT_SLOTS` y `CALCOM_*`, sin
+  `ONIA_BOT_AGENDA`).
 - **El extractor de precargados lee el doc de la pauta** (`precargados-de-la-pauta.mjs`). Una mención
   abreviada entre backticks (`` `Hola, vi el anuncio de Onia (D1)…` ``) contaba como otro precargado y
   duplicaba D1. Ahora se ignoran las que terminan en «…» o «...»; un precargado de verdad nunca termina así.

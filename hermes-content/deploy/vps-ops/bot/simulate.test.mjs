@@ -15,7 +15,7 @@
 
 import assert from "node:assert/strict";
 import test from "node:test";
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { spawnSync } from "node:child_process";
@@ -387,6 +387,52 @@ test("una ruta que NO es la desplegada nunca sale a la red", () => {
   assert.equal(salioALaRed, false, "salio a la red por una ruta que produccion no usa");
 });
 
+test("con la agenda YA dicha en el entorno (y no es calcom), no se lee el webhook.env ni se sale al VPS", () => {
+  // Cal.com solo decide algo con `ONIA_BOT_AGENDA=calcom`. Ir a buscar CALCOM_* al archivo (o al VPS
+  // por ssh, 15 s de timeout por intento) para una agenda que ya se sabe que es de la persona era el
+  // costo que pagaba cada corrida del simulador con el entorno armado a mano.
+  const lecturas = [];
+  const config = buildConfig(
+    { sinConocimiento: true },
+    {
+      env: { ONIA_BOT_AGENDA: "persona" },
+      readFileSync: (ruta) => {
+        lecturas.push(String(ruta));
+        throw Object.assign(new Error("ENOENT"), { code: "ENOENT" });
+      },
+      spawnSync: (cmd) => {
+        lecturas.push(String(cmd));
+        return { status: 255, stdout: "", stderr: "" };
+      },
+      warn: () => {},
+    },
+  );
+
+  assert.equal(config.agenda?.modo, "persona");
+  assert.deepEqual(lecturas, [], "fue a buscar el webhook.env para una agenda que el entorno ya decia");
+});
+
+test("ONIA_SIM_WEBHOOK_ENV fija el archivo desde afuera: un proceso hijo no sale al VPS", (t) => {
+  const envFile = join(mkdtempSync(join(tmpdir(), "onia-slots-")), "webhook.env");
+  writeFileSync(envFile, `ONIA_BOT_SLOTS="${SPEC_PROD}"\n${AGENDA_PROPIA_EN_ARCHIVO}\n`);
+  t.after(() => rmSync(dirname(envFile), { recursive: true, force: true }));
+  let salioALaRed = false;
+
+  const config = buildConfig(
+    {},
+    {
+      env: { ONIA_SIM_WEBHOOK_ENV: envFile },
+      spawnSync: () => {
+        salioALaRed = true;
+        return { status: 255, stdout: "", stderr: "" };
+      },
+    },
+  );
+
+  assert.equal(salioALaRed, false);
+  assert.equal(config.slots?.[0]?.label, "sábado 5 de septiembre, 09:00", "no leyo el archivo que se le indico");
+});
+
 // ---------------------------------------------------------------------------
 // EL SIMULADOR NO PUEDE PROMETER MAS QUE EL BOT
 //
@@ -411,38 +457,63 @@ test("una ruta que NO es la desplegada nunca sale a la red", () => {
 // exigiendo es lo de fondo: el simulador imprime lo MISMO que recibe el prospecto, por los dos
 // llamadores de `step()`.
 
-/** Entorno de un proceso hijo sin agenda propia ni Cal.com: produccion, hoy. */
-function entornoDeProduccionSinAgenda() {
+/**
+ * Entorno de un proceso hijo con la config de PRODUCCION de hoy, sin salir a la red.
+ *
+ * HERMETICO (3-oct). Antes ponia `ONIA_BOT_SLOTS` en el entorno y borraba `ONIA_BOT_AGENDA`: el
+ * simulador, para saber la agenda, iba a buscar `/opt/onia/bot/webhook.env` y, fuera del VPS, lo
+ * pedia por `ssh root@<vps> cat …` — DOS veces (config y configPelado), 30 s de este test. Y en el
+ * VPS, que es donde corre el gate de deploy-bot.sh, leia el webhook.env VIVO: el dia que se
+ * encendiera la agenda (`ONIA_BOT_AGENDA=calcom` alla) este caso pasaba a ofrecer horarios, se
+ * ponia rojo y trababa el deploy. El webhook.env de produccion se escribe ACA, en un temporal, con
+ * lo que produccion tiene hoy (horarios del cron, Cal.com declarado, SIN `ONIA_BOT_AGENDA`), y el
+ * simulador lo lee por `ONIA_SIM_WEBHOOK_ENV`. Un `ssh` testigo en el PATH registra si alguien
+ * sale igual a la red.
+ */
+function entornoDeProduccionSinAgenda(t) {
+  const dir = mkdtempSync(join(tmpdir(), "onia-sim-prod-"));
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  const envFile = join(dir, "webhook.env");
+  // Los horarios se DERIVAN de ahora (SPEC_PROD), no se tipean: `parseSlotsSpec` descarta todo
+  // lo que caiga antes de ANTICIPACION_MINIMA_MS (24 h), asi que un ISO literal convierte este
+  // caso en una bomba de tiempo (paso el 17-sep y trabo el merge de todos los carriles).
+  writeFileSync(envFile, `ONIA_BOT_SLOTS="${SPEC_PROD}"\nCALCOM_BASE_URL=http://calcom:3000\nCALCOM_BOT_EVENT_TYPE_ID=5\n`);
+  const sshLog = join(dir, "ssh-llamadas.log");
+  const ssh = join(dir, "ssh");
+  writeFileSync(ssh, '#!/bin/sh\necho "$@" >> "$ONIA_TEST_SSH_LOG"\nexit 255\n', { mode: 0o755 });
+
   const env = { ...process.env };
   delete env.CALCOM_BASE_URL;
   delete env.CALCOM_BOT_EVENT_TYPE_ID;
   delete env.ONIA_BOT_AGENDA;
-  // Los horarios se DERIVAN de ahora (SPEC_PROD), no se tipean: `parseSlotsSpec` descarta todo
-  // lo que caiga antes de ANTICIPACION_MINIMA_MS (24 h), asi que un ISO literal convierte este
-  // caso en una bomba de tiempo (paso el 17-sep y trabo el merge de todos los carriles).
-  env.ONIA_BOT_SLOTS = SPEC_PROD;
-  return env;
+  delete env.ONIA_BOT_SLOTS;
+  env.ONIA_SIM_WEBHOOK_ENV = envFile;
+  env.ONIA_TEST_SSH_LOG = sshLog;
+  env.PATH = `${dir}:${env.PATH || ""}`;
+  return { env, salioALaRed: () => (existsSync(sshLog) ? readFileSync(sshLog, "utf8") : "") };
 }
 
-test("el guion feliz, con el entorno de produccion: no ofrece horarios y nunca dice «Listo, agendado»", () => {
+test("el guion feliz, con el entorno de produccion: no ofrece horarios y nunca dice «Listo, agendado»", (t) => {
   const simulador = fileURLToPath(new URL("./simulate.mjs", import.meta.url));
+  const produccion = entornoDeProduccionSinAgenda(t);
   const corrida = spawnSync(process.execPath, [simulador, "--script", "1-feliz"], {
     encoding: "utf8",
-    env: entornoDeProduccionSinAgenda(),
+    env: produccion.env,
     timeout: 60000,
   });
 
   assert.equal(corrida.status, 0, `el simulador no corrio: ${corrida.stderr}`);
+  assert.equal(produccion.salioALaRed(), "", "el test salio a la red (ssh al VPS): depende del webhook.env vivo y tarda 30 s");
   assert.doesNotMatch(corrida.stdout, /Listo, agendado/, "el simulador confirma una demo que produccion no agenda");
   assert.doesNotMatch(corrida.stdout, /\*\*A\)\*\*/, "y ofrece horarios que produccion ya no ofrece");
   assert.match(corrida.stdout, /M0_PERSONA/, "mide la bienvenida que recibe el prospecto");
 });
 
-test("con --slots a mano y sin Cal.com, la eleccion imprime la version HONESTA (el mismo texto que el vivo)", () => {
+test("con --slots a mano y sin Cal.com, la eleccion imprime la version HONESTA (el mismo texto que el vivo)", (t) => {
   const simulador = fileURLToPath(new URL("./simulate.mjs", import.meta.url));
   const corrida = spawnSync(process.execPath, [simulador, "--script", "1-feliz", "--slots", SPEC_PROD], {
     encoding: "utf8",
-    env: entornoDeProduccionSinAgenda(),
+    env: entornoDeProduccionSinAgenda(t).env,
     timeout: 60000,
   });
 
@@ -452,13 +523,13 @@ test("con --slots a mano y sin Cal.com, la eleccion imprime la version HONESTA (
   assert.match(corrida.stdout, /todavía no quedó reservado/, "imprime lo que el bot vivo manda cuando la reserva no sale");
 });
 
-test("y el modo INTERACTIVO tambien — es el que usa la medicion de arranque del carril", () => {
+test("y el modo INTERACTIVO tambien — es el que usa la medicion de arranque del carril", (t) => {
   // Los dos llamadores de `step()` son caminos distintos: el gate de arriba cubre `--script`,
   // pero la linea que este carril corre cada vuelta es `printf ... | node simulate.mjs`.
   const simulador = fileURLToPath(new URL("./simulate.mjs", import.meta.url));
   const corrida = spawnSync(process.execPath, [simulador, "--slots", SPEC_PROD], {
     encoding: "utf8",
-    env: entornoDeProduccionSinAgenda(),
+    env: entornoDeProduccionSinAgenda(t).env,
     timeout: 60000,
     input: "quiero una demo\nA\n/salir\n",
   });

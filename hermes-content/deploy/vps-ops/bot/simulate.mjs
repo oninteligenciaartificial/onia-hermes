@@ -9,6 +9,7 @@
 //   node simulate.mjs --all --slots "jueves 15:00@2026-07-30T19:00:00Z|viernes 10:00@..."  horarios a mano
 //   node simulate.mjs --all --json                 salida maquina (para diffs / CI)
 //   node simulate.mjs --sin-conocimiento           el guion PELADO del codigo (sin el documento)
+//   ONIA_SIM_WEBHOOK_ENV=/ruta/webhook.env node simulate.mjs ...   lee ESE webhook.env y no sale al VPS
 //
 // POR DEFECTO corre con `knowledge.onia.json`, el documento publicado que produccion carga para
 // los inboxes de venta (4 web, 5 WhatsApp): lo que ves aca es lo que oye un lead. Sin eso el
@@ -341,7 +342,10 @@ function leerDelEnvRemoto(path, deps = {}) {
  */
 export function cargarSlotsPublicados(args = {}, deps = {}) {
   const env = deps.env || process.env;
-  const envFile = deps.envFile || WEBHOOK_ENV_DESPLEGADO;
+  // `ONIA_SIM_WEBHOOK_ENV` fija el archivo desde AFUERA del proceso (3-oct): los tests que corren el
+  // simulador en un hijo no tienen `deps`, y sin esto el hijo iba a buscar el webhook.env VIVO —por
+  // ssh fuera del VPS (30 s), del disco en el VPS— y el resultado del gate dependia de produccion.
+  const envFile = deps.envFile || String(env.ONIA_SIM_WEBHOOK_ENV || "").trim() || WEBHOOK_ENV_DESPLEGADO;
   // El cuarto escalon solo aplica a la ruta REAL: ver `leerDelEnvRemoto`.
   const esLaDesplegada = envFile === WEBHOOK_ENV_DESPLEGADO;
   // El reloj se inyecta (`deps.now`): un caso escrito con su propio instante —el `receivedAt` de sus
@@ -370,11 +374,14 @@ export function cargarSlotsPublicados(args = {}, deps = {}) {
   // configurado) produccion no ofrece horarios aunque el cron los deje en webhook.env: el prospecto
   // recibe M0_PERSONA. Medir con horarios seria medir una rama que nadie ve — el falso verde que
   // este archivo ya pago tres veces.
-  const agenda = agendaDelEntorno({
-    [AGENDA_ENV]: leer(AGENDA_ENV),
-    CALCOM_BASE_URL: leer("CALCOM_BASE_URL"),
-    CALCOM_BOT_EVENT_TYPE_ID: leer("CALCOM_BOT_EVENT_TYPE_ID"),
-  });
+  // Corto circuito: si el entorno YA dice la agenda y no es `calcom`, Cal.com no decide nada y no se
+  // va a buscar el archivo (ni el VPS) para leer dos claves que no se usan.
+  const agendaPedida = leer(AGENDA_ENV);
+  const agenda = agendaDelEntorno(
+    agendaPedida.toLowerCase() === "calcom"
+      ? { [AGENDA_ENV]: agendaPedida, CALCOM_BASE_URL: leer("CALCOM_BASE_URL"), CALCOM_BOT_EVENT_TYPE_ID: leer("CALCOM_BOT_EVENT_TYPE_ID") }
+      : { [AGENDA_ENV]: agendaPedida },
+  );
   const raw = agenda.modo === "propia" ? leer("ONIA_BOT_SLOTS") : "";
   const sinFuente = archivo === null && !String(env.ONIA_BOT_SLOTS || env[AGENDA_ENV] || "").trim();
 
