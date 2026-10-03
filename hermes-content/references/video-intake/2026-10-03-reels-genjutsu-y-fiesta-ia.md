@@ -41,3 +41,33 @@ Giro final y CTA de servicio. Es el que más rindió de los dos (10× los likes)
   - Nunca se presenta como profesional de salud.
   - Costo: un sketch de 89 s con muchos planos es caro en Higgsfield. Se cotiza con `generate cost` antes de nada.
 - **No copiar:** la estética «fiesta universitaria / vaso rojo» no tiene nada que ver con dueños de clínica. Se toma la estructura (reglas → giro → CTA), no el mundo.
+
+## 3. @pabloinpublic — «Tu Claude Code es listo, pero se traga basura, va ciego y relee tu código»
+`https://www.instagram.com/reel/Dd66MLpuIc_/` · **20,6 s** · 30-sep · 142 likes · **113 comentarios** (el «comentá 11» funciona: 0,8 comentarios por like).
+Analizado con la regla del 3-oct: mensaje, tema y edición. Gemini lo miró entero con un prompt de edición y la madre
+revisó 6 cuadros a mano (0,5 / 2 / 5 / 10 / 15 / 19 s).
+
+**Mensaje (literal).** «Tu Claude Code es listo, pero se traga basura, va ciego y relee tu código.» → «Defuddle: web
+sucia dentro, Markdown limpio fuera.» → «Agent-Reach: 86.000 estrellas. Lee X, Reddit, YouTube, sin pagar APIs.» →
+«Codebase-Memory: indexa y recuerda tu código. Léete el script antes.» → «Las otras 11 con su instalación: comenta "11"
+y te las paso.» Le habla a quien usa Claude Code y pierde tokens y contexto.
+
+**Tema.** Tres repos de GitHub que arreglan tres dolores con nombre: basura, ceguera y relectura. Es exactamente
+nuestra serie R (R01-R07) y el «Top» del plan de grabación.
+
+**Edición (verificada en los cuadros):**
+- **Gancho, 0-3 s:** a cámara, plano medio, manos abiertas. El texto arranca en el cuadro 1 («TU **CLAUDE** CODE»). Hay un zoom chico en «es listo».
+- **Layout:** 0-3 s a cámara → **3-16 s pantalla partida**, arriba GitHub en modo oscuro con cursor y scroll, abajo la cara del busto para arriba → 16-21 s otra vez a cámara para el CTA.
+- **Ritmo:** cada herramienta dura ~4 s y cada corte cae justo al nombrar la siguiente. 4 cambios de layout en 21 s. Cortes secos, sin transiciones.
+- **Subtítulos:** sans condensada bold, MAYÚSCULAS, 2-3 palabras, a la altura del pecho. La palabra clave va en **amarillo**, el resto en blanco («**WEB** SUCIA DENTRO», «**86.000** ESTRELLAS»).
+- **Sonido:** micrófono de solapa **en la mano** como objeto de escena; música lo-fi bajita y sin efectos.
+- **Cierre:** «comenta 11», con el número dicho y escrito.
+
+**Qué copiar:** el molde completo para los R y los G. Gancho de 3 dolores en 3 s → una herramienta cada 4 s en
+pantalla partida → «comentá N» por el resto. Una frase telegráfica por herramienta («web sucia dentro, Markdown limpio
+fuera»). 21 s en total.
+
+**Qué NO copiar:**
+- el corte de línea roto del subtítulo («INSTALACIÓ / N»: el cuadro de 19 s lo muestra);
+- el español de España («se traga», «léete»): nosotros, voseo en la marca personal;
+- el «comentá N» antes de que funcione el envío del mensaje privado. Hoy se contestan a mano.

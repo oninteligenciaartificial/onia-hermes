@@ -62,3 +62,9 @@ Se trabaja en ramas `codex/*` con PR: nada directo a main.
 - ¿La web y los anuncios pasan a usted?
 - Plan de campañas con Bs 4.000 y objetivo de la 1.0 (lo arma la madre).
 - OK a los costos de Higgsfield antes de generar.
+
+### T5 · Competidores: cómo funcionan por dentro (último en el orden de Sergio Urcullo, 3-oct)
+- Ya están: Dapta (`research/competencia/DAPTA_COMO_FUNCIONA.md`) y SendyPro + ManyChat (`REVISION-HERRAMIENTAS-CHATBOT.md`).
+- **Faltan:** Lety (lety.ai) y los que nombran `ONIA_NIVEL_REFERENTES_BRECHA.md` y `ONIA_ADQUISICION_Y_PAUTA.md` §2.6 sin ficha propia.
+- **META:** una ficha por competidor (alta, prueba, precio, cobro, onboarding, qué copiar y qué no), con la misma estructura que Dapta.
+- **PRUEBA:** fichas en `research/competencia/`, con fuentes. **PARADA:** solo web pública o cuentas de prueba que cree Sergio Urcullo. Nada pago y nada de crear cuentas.
