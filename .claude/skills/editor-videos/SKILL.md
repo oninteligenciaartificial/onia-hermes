@@ -465,8 +465,11 @@ la burbujita de OBS incrustada en la esquina no da resolución para la zona de c
 > 2. **Nada entra a `main` sin revisión: se trabaja en una rama y con un PR.** Antes, cada guion se compara con
 >    `LUCIA.md` §0: IA declarada, nunca profesional de salud, sin promesas de resultado.
 >    - ⚠️ El hook Stop (`scripts/git-autosync.js`) empuja la rama a `main` si `origin/main` es su ancestro.
->    - Para que el PR espere la revisión: pushear la rama, abrir el PR y dejar la rama LOCAL en `origin/main` con
->      `git reset --keep origin/main`. Así el autosync no tiene nada que empujar.
+>    - Para que el PR espere la revisión: pushear la rama, abrir el PR y **estacionar el checkout en `main`**
+>      (`git checkout -B main origin/main`). Así el autosync y el hook de «commits sin pushear» no tienen nada que
+>      empujar.
+>    - Medido el 3-oct: con `git reset --keep origin/main` sobre la rama del PR, esa rama queda adelante y atrás de su
+>      remoto, y el hook Stop pide un push que GitHub rechaza.
 >    - Así entró «Hoy soy odontóloga» (#82) el 2-oct.
 > 3. **Tokens:**
 >    - workflows de 5 agentes como máximo;
