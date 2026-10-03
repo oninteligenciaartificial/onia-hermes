@@ -1,5 +1,16 @@
 # Handoff — carril `mercado-y-pauta` (sesión «Ventas y pauta Onia Platform», antes «Análisis de mercado»)
 
+> ✅ **3-oct — el bot de ventas pasa a USTED** (pedido de la madre; regla de Sergio Urcullo: *«no se usa vos»*).
+> - **En el repo, NO desplegado:** guion (`config.mjs`), `SAFE_REPLY`, etiquetas del motor, prompt del LLM y las 10
+>   respuestas + 2 FAQ de `knowledge.onia.json`, solo texto. Gate nuevo `bot/de-usted.test.mjs`; suite del bot
+>   1642/1642 en Linux. El deploy al VPS es del carril chatbot o de la madre (`publicar.sh`), no de este carril.
+> - **Quedan de vos, a propósito:** las plantillas de Meta `seguimiento_demo` y `recordatorio_demo` (hace falta una
+>   plantilla nueva aprobada) y el recepcionista `R_*`/`M0R`/`M6R`, que es el bot de los clientes. Las dos cosas
+>   las decide Sergio Urcullo. Web y anuncios: pendiente de su respuesta a la madre.
+> - **Sin firma, sin publicar:** la respuesta nueva a la pauta («¡Gracias por escribir desde el anuncio! Para
+>   mostrarle Onia…»). El texto está en la skill `onia-ventas-pauta` §1.
+> - Dapta: el agente de llamadas fue solo para mirar la interfaz. No es un canal (skill §8).
+
 > ⏹️ **CIERRE 2-oct, ~14:00 UTC: alcance congelado por Sergio Urcullo** (*«no se añaden más tareas… terminemos,
 > cortamos, damos un vistazo y definimos cómo seguir»*). La sesión espera; no abre nada nuevo.
 > - **Hecho y en la rama** `claude/lucid-mayer-2ejv6v` (`ef02a46d2`, PR #95): los 12 mensajes de prospectos y la

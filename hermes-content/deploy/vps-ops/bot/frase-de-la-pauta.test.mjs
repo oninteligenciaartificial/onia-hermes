@@ -106,11 +106,11 @@ test("LA PRUEBA DE DOS MENSAJES, como en producción (la persona coordina): prec
   assert.equal(r2.replies[0].templateKey, "M0b_SIN_HORARIOS");
   assert.equal(r2.replies[0].replySource, "script");
   assert.equal(r2.nextState.qualification.teamSize, 3);
-  assert.match(r2.replies[0].text, /te escribe desde este mismo número/);
+  assert.match(r2.replies[0].text, /le escribe desde este mismo número/);
 
   const todo = [...r1.replies, ...r2.replies].map((r) => r.text).join("\n");
   assert.doesNotMatch(todo, /\*\*A\)\*\*|jueves 2 de octubre/, "no ofrece horarios que nadie reserva");
-  assert.doesNotMatch(todo, /Listo, agendado|te confirmo el horario|te reservo/i, "no promete una confirmación que no va a dar");
+  assert.doesNotMatch(todo, /Listo, agendado|te confirmo el horario|le confirmo el horario|te reservo|le reservo/i, "no promete una confirmación que no va a dar");
 });
 
 test("LA PRUEBA DE DOS MENSAJES, con agenda propia (ONIA_BOT_AGENDA=calcom): precargado de D1 + la respuesta de un dueño", () => {

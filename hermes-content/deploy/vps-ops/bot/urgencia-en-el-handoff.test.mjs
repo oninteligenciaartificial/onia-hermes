@@ -117,12 +117,12 @@ test("un mensaje común en el handoff sigue siendo acuse y después silencio", (
 
 test("todo mensaje del guion que le pida una palabra al prospecto tiene que ser escuchado", () => {
   // Sujeto derivado del disco: cualquier texto del guion con la forma
-  // `decime "X" y lo marco` / `decí "X"`. Hoy son M5 y M8_SOPORTE (la hermana de soporte,
+  // `decime "X" y lo marco` / `decí "X"` o, en usted (3-oct), `dígame "X"`. Hoy son M5 y M8_SOPORTE (la hermana de soporte,
   // que es justo la que se olvida al arreglar sólo la que motivó el arreglo).
   const pedidos = [];
   for (const [clave, valor] of Object.entries(SCRIPT)) {
     if (typeof valor !== "string") continue;
-    for (const m of valor.matchAll(/dec(?:ime|í|i)\s+"([^"]+)"/gi)) pedidos.push({ clave, palabra: m[1] });
+    for (const m of valor.matchAll(/(?:dec(?:ime|í|i)|d[ií]game|diga)\s+"([^"]+)"/gi)) pedidos.push({ clave, palabra: m[1] });
   }
   assert.ok(pedidos.length >= 2, `el detector no encontró los pedidos del guion (halló ${pedidos.length})`);
 

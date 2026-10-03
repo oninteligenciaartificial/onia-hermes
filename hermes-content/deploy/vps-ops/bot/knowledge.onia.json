@@ -1,50 +1,50 @@
 {
   "schema": "onia.bot.knowledge/1",
-  "version": "2026-10-03.1",
+  "version": "2026-10-03.2",
   "updatedBy": "carril-chatbot",
   "campanas": [
     {
       "frase": "Hola, quiero conocer Onia",
-      "respuesta": "¡Hola! Soy el asistente automático de Onia. Onia es una plataforma por módulos: tu negocio trabaja adentro (agenda, clientes, ventas, cobros) y hay agentes que contestan por WhatsApp, como te estoy contestando yo. Contame de qué es tu negocio y te digo qué parte te sirve; si querés verlo con tus datos, te coordino una demo con Sergio."
+      "respuesta": "¡Hola! Soy el asistente automático de Onia. Onia es una plataforma por módulos: su negocio trabaja adentro (agenda, clientes, ventas, cobros) y hay agentes que contestan por WhatsApp, como le estoy contestando yo. Cuénteme de qué es su negocio y le digo qué parte le sirve; si quiere verlo con sus datos, le coordino una demo con Sergio."
     },
     {
       "frase": "Hola, vengo de la web de Onia. Quiero saber si me sirve para mi negocio.",
-      "respuesta": "¡Hola! Soy el asistente automático de Onia. Para decirte si te sirve necesito dos cosas: de qué es tu negocio y cuánta gente trabaja con vos. Con eso te digo qué módulo te toca y qué resuelve, sin vueltas. Y si preferís verlo funcionando con tus datos, te coordino una demo con Sergio."
+      "respuesta": "¡Hola! Soy el asistente automático de Onia. Para decirle si le sirve necesito dos cosas: de qué es su negocio y cuánta gente trabaja con usted. Con eso le digo qué módulo le toca y qué resuelve, sin vueltas. Y si prefiere verlo funcionando con sus datos, le coordino una demo con Sergio."
     },
     {
       "frase": "Hola, vengo de la web de Onia. Quiero consultoría/capacitación en IA para mi empresa.",
-      "respuesta": "¡Hola! Soy el asistente automático de Onia. La consultoría y las capacitaciones en IA las da Sergio, no un bot: se arman sobre lo que tu empresa ya hace hoy. Contame el rubro, cuánta gente son y qué proceso te está costando más tiempo — con eso te coordino la reunión y él llega con el diagnóstico empezado."
+      "respuesta": "¡Hola! Soy el asistente automático de Onia. La consultoría y las capacitaciones en IA las da Sergio, no un bot: se arman sobre lo que su empresa ya hace hoy. Cuénteme el rubro, cuánta gente son y qué proceso le está costando más tiempo — con eso le coordino la reunión y él llega con el diagnóstico empezado."
     },
     {
       "frase": "Hola, vengo de la web de Onia. Quiero una propuesta de marketing con IA para mi negocio.",
-      "respuesta": "¡Hola! Soy el asistente automático de Onia. Para la propuesta de marketing con IA — contenido, videos e influencers con IA, y la publicación en redes — necesito saber de qué es tu negocio, en qué redes estás hoy y qué querés lograr: más consultas, más ventas o que más gente te conozca. Me lo pasás y Sergio te la arma con eso adentro."
+      "respuesta": "¡Hola! Soy el asistente automático de Onia. Para la propuesta de marketing con IA — contenido, videos e influencers con IA, y la publicación en redes — necesito saber de qué es su negocio, en qué redes está hoy y qué quiere lograr: más consultas, más ventas o que más gente lo conozca. Me lo pasa y Sergio le arma la propuesta con eso adentro."
     },
     {
       "frase": "Hola, mi rubro no está en la lista de Onia. Mi negocio es: ",
       "prefijo": true,
-      "respuesta": "¡Hola! Soy el asistente automático de Onia. Que tu rubro no esté en la lista no lo deja afuera: el motor es el mismo y los módulos —agenda, clientes, ventas, cobros— se arman con vos sobre lo que ya corre. Contame qué hacés y cuánta gente trabaja con vos, y con eso Sergio te muestra en la demo qué parte te sirve."
+      "respuesta": "¡Hola! Soy el asistente automático de Onia. Que su rubro no esté en la lista no lo deja afuera: el motor es el mismo y los módulos —agenda, clientes, ventas, cobros— se arman con usted sobre lo que ya corre. Cuénteme qué hace y cuánta gente trabaja con usted, y con eso Sergio le muestra en la demo qué parte le sirve."
     },
     {
       "frase": "Hola, vengo de la página del chatbot de Onia. Tengo una consulta antes de elegir el stack.",
-      "respuesta": "¡Hola! Soy el asistente automático de Onia — de hecho, soy el mismo tipo de asistente que estarías contratando. Preguntá tranquilo: si es algo que sé, te lo contesto acá mismo; si es una decisión técnica de tu caso, te la responde Sergio y te coordino la charla. ¿Qué querés saber antes de elegir?"
+      "respuesta": "¡Hola! Soy el asistente automático de Onia — de hecho, soy el mismo tipo de asistente que estaría contratando. Pregunte con confianza: si es algo que sé, se lo contesto acá mismo; si es una decisión técnica de su caso, se la responde Sergio y le coordino la charla. ¿Qué quiere saber antes de elegir?"
     },
     {
       "frase": "Hola, vengo de la web de Onia. Quiero agendar la consulta comercial de 30 minutos.",
-      "respuesta": "¡Hola! Soy el asistente automático de Onia. La consulta la da Sergio y sirve para una cosa concreta: decirte qué módulo te toca y qué resuelve en tu negocio, sin vueltas. Para que rinda, contame de qué es tu negocio y cuánta gente trabaja con vos: con eso Sergio llega con tu caso preparado."
+      "respuesta": "¡Hola! Soy el asistente automático de Onia. La consulta la da Sergio y sirve para una cosa concreta: decirle qué módulo le toca y qué resuelve en su negocio, sin vueltas. Para que rinda, cuénteme de qué es su negocio y cuánta gente trabaja con usted: con eso Sergio llega con su caso preparado."
     },
     {
       "frase": "Hola, vengo de la web de Onia. Quiero agendar la demo de 30 minutos con mi caso.",
-      "respuesta": "¡Hola! Soy el asistente automático de Onia. La demo la hace Sergio sobre TU caso: se ve el sistema funcionando con tus datos, no una presentación. Contame de qué es tu negocio y qué proceso te está costando más tiempo hoy — agenda, clientes, ventas o cobros — así llega preparado."
+      "respuesta": "¡Hola! Soy el asistente automático de Onia. La demo la hace Sergio sobre SU caso: se ve el sistema funcionando con sus datos, no una presentación. Cuénteme de qué es su negocio y qué proceso le está costando más tiempo hoy — agenda, clientes, ventas o cobros — así llega preparado."
     },
     {
       "frase": "Hola, vengo del configurador de webs de ONIA",
       "prefijo": true,
-      "respuesta": "¡Hola! Soy el asistente automático de Onia. Me llegó tu pedido de web con todo lo que armaste: el nivel, la estructura y el diseño que elegiste. Eso lo revisa Sergio y te confirma el alcance con vos. De tu lado hacen falta los textos, las fotos y el dominio, que queda a tu nombre y se paga aparte; el cuidado mensual es opcional. ¿Te escribe por acá o preferís que te llame?"
+      "respuesta": "¡Hola! Soy el asistente automático de Onia. Me llegó su pedido de web con todo lo que armó: el nivel, la estructura y el diseño que eligió. Eso lo revisa Sergio y le confirma el alcance con usted. De su lado hacen falta los textos, las fotos y el dominio, que queda a su nombre y se paga aparte; el cuidado mensual es opcional. ¿Le escribe por acá o prefiere que lo llame?"
     },
     {
       "frase": "Hola, vi el anuncio de Onia",
       "prefijo": true,
-      "respuesta": "Gracias por escribir desde el anuncio. Para que Sergio llegue a la demo con el caso de tu clínica, contame dos cosas: ¿cuántos profesionales atienden y quién agenda las citas? Y si en realidad buscás atención dental como paciente, por acá no damos turnos: escribile directo a tu clínica."
+      "respuesta": "Gracias por escribir desde el anuncio. Para que Sergio llegue a la demo con el caso de su clínica, cuénteme dos cosas: ¿cuántos profesionales atienden y quién agenda las citas? Y si en realidad busca atención dental como paciente, por acá no damos turnos: escríbale directo a su clínica."
     }
   ],
   "identity": {
@@ -56,7 +56,7 @@
     {
       "id": "precios",
       "title": "Planes y precios",
-      "body": "Te los paso derecho, son públicos: el sistema arranca en Bs 320 al mes con el plan Básico, Bs 550 el Crece, Bs 890 el Profesional y Bs 1.290 el Completo, que ya trae el chatbot de WhatsApp adentro. En el Básico, el Crece y el Profesional el chatbot va aparte, Bs 390 al mes.\n\nCuál te sirve depende de cuántos son y de qué módulos actives, así que la lista completa y al día está en onia.com.bo/precios. Si querés, {{humano}} te lo muestra funcionando con TUS números en una demo.",
+      "body": "Se los paso derecho, son públicos: el sistema arranca en Bs 320 al mes con el plan Básico, Bs 550 el Crece, Bs 890 el Profesional y Bs 1.290 el Completo, que ya trae el chatbot de WhatsApp adentro. En el Básico, el Crece y el Profesional el chatbot va aparte, Bs 390 al mes.\n\nCuál le sirve depende de cuántos son y de qué módulos active, así que la lista completa y al día está en onia.com.bo/precios. Si quiere, {{humano}} se lo muestra funcionando con SUS números en una demo.",
       "status": "publicado",
       "tags": [
         "precio",
@@ -67,7 +67,7 @@
     {
       "id": "siat",
       "title": "Facturación en línea / SIAT",
-      "body": "Sobre facturación en línea te contesto sólo lo que es público: la RND 102600000038 dejó sin efecto el plazo del 1 de octubre de 2026 de los grupos 9.º al 12.º de contribuyentes. Esa norma dice que el SIN asignará periódicamente una modalidad en línea, sin fecha fija, a los contribuyentes del IVA que no habían implementado ninguna, y el Servicio de Impuestos tiene un portal gratuito para facturar. {{producto}} te ordena ventas y compras; la factura fiscal se emite aparte, en ese portal. Cómo te aplica a vos, según tu NIT, lo ve {{humano}} en la demo.",
+      "body": "Sobre facturación en línea le contesto sólo lo que es público: la RND 102600000038 dejó sin efecto el plazo del 1 de octubre de 2026 de los grupos 9.º al 12.º de contribuyentes. Esa norma dice que el SIN asignará periódicamente una modalidad en línea, sin fecha fija, a los contribuyentes del IVA que no habían implementado ninguna, y el Servicio de Impuestos tiene un portal gratuito para facturar. {{producto}} le ordena ventas y compras; la factura fiscal se emite aparte, en ese portal. Cómo le aplica a usted, según su NIT, lo ve {{humano}} en la demo.",
       "status": "publicado",
       "vigenteHasta": "2027-09-30",
       "tags": [

@@ -1229,7 +1229,7 @@ test("VOZ: la transcripcion entra como `transcript` y el guion sigue normal (cal
   assert.equal(result.voice.chars, 4);
   assert.equal(posted.length, 1, "un audio entendido tiene que disparar el guion, no una disculpa");
   assert.ok(!/No me llegó bien el audio/.test(posted[0]), `el bot volvio a pedir texto: ${posted[0]}`);
-  assert.match(posted[0], /¿Cuál te va mejor\?/, "el audio 'DEMO' tiene que disparar M0, igual que el texto");
+  assert.match(posted[0], /¿Cuál le va mejor\?/, "el audio 'DEMO' tiene que disparar M0, igual que el texto");
   assert.equal(fake.state.botStage, "esperando_horario", "el audio hizo avanzar el embudo igual que un texto");
 });
 

@@ -270,7 +270,7 @@ test("re-preguntar un dato que el prospecto ya contesto se marca aunque la rama 
   const observed = fakeTurn({
     notes: ["repregunta:1"],
     qualification: { chairs: 2 },
-    replies: [{ templateKey: "M1a", text: "Me falta sólo cuántos sillones tenés — ¿me lo pasás?" }],
+    replies: [{ templateKey: "M1a", text: "Me falta sólo cuántos sillones tiene — ¿me lo pasa?" }],
   });
   assert.deepEqual(kindsOf(bench, observed), ["repregunta_lo_dicho"]);
 });

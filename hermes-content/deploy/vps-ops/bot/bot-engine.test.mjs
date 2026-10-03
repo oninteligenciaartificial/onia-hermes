@@ -81,9 +81,9 @@ test("el primer mensaje ofrece los 2 horarios, agenda el elegido y RECIEN AHI pr
   assert.deepEqual(keysOf(turns[1]), ["M2"]);
   assert.equal(turns[1].nextState.botStage, "demo_agendada");
   assert.equal(turns[1].nextState.scheduledAt, "2026-07-30T19:00:00Z");
-  assert.match(textOf(turns[1]), /A qué se dedica tu negocio/, "las 3 preguntas viajan a DESPUES de la reserva");
+  assert.match(textOf(turns[1]), /A qué se dedica su negocio/, "las 3 preguntas viajan a DESPUES de la reserva");
   assert.match(textOf(turns[1]), /Cuántas personas trabajan ahí/);
-  assert.match(textOf(turns[1]), /En qué ciudad estás/);
+  assert.match(textOf(turns[1]), /En qué ciudad está/);
   assert.deepEqual(effectsOf(turns[1]).sort(), ["audit_log", "calendar_event", "lead_upsert", "notify_sergio", "stage_change"]);
   assert.equal(turns[1].sideEffects.find((e) => e.type === "lead_upsert").payload.pipelineStatus, "Reunion");
 
@@ -108,7 +108,7 @@ test("los datos que llegan ANTES de reservar no se vuelven a pedir en M2", () =>
     !/a qué se dedica|cuántas personas|en qué ciudad/i.test(textOf(turns[1])),
     "no se le re-pregunta lo que acaba de contestar",
   );
-  assert.match(textOf(turns[1]), /más tiempo te come/, "pero el dolor se sigue pidiendo");
+  assert.match(textOf(turns[1]), /más tiempo le come/, "pero el dolor se sigue pidiendo");
 });
 
 test("con la demo ya reservada re-pregunta como maximo 2 veces y despues deja de insistir", () => {
@@ -342,7 +342,7 @@ test("fuera de horario se APENDEA el aviso, no reemplaza la respuesta", () => {
   const state = createState({ channel: "sim", contactRef: "nocturno" });
   const result = step(state, { text: "DEMO", receivedAt: "2026-07-28T03:30:00Z" }, { config: CONFIG });
   assert.deepEqual(keysOf(result), ["M0"]);
-  assert.match(result.replies[0].text, /¿Cuál te va mejor\?/);
+  assert.match(result.replies[0].text, /¿Cuál le va mejor\?/);
   assert.match(result.replies[0].text, /fuera de horario de atención/);
   assert.ok(result.notes.includes("fuera_de_horario"));
 });
@@ -1032,7 +1032,7 @@ test("PREGUNTA DE PRODUCTO en la rama de horarios: no se la traga la oferta de s
     `motivo esperado; salio ${JSON.stringify(turns[1].notes)}`,
   );
   assert.ok(
-    !/te reserve|que dia te queda mejor|elegi/i.test(textOf(turns[1])),
+    !/te reserve|le reserve|que dia te queda mejor|que dia le queda mejor|elegi|elija/i.test(textOf(turns[1])),
     "y sobre todo: NO le vuelve a ofrecer los horarios como si no hubiera preguntado nada",
   );
 });

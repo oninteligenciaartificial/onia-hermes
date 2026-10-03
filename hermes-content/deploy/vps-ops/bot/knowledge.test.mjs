@@ -497,7 +497,7 @@ test("identidad: el nombre del humano y del producto salen del archivo", () => {
   const config = applyKnowledge(DEFAULT_CONFIG, valido({ identity: { humanName: "Leslie", productName: "Onia" } }));
   const result = step(createState({ channel: "sim", contactRef: "t" }), { text: "cuanto sale?", receivedAt: T0 }, { config });
   const texto = result.replies.map((reply) => reply.text).join("\n");
-  assert.match(texto, /el número exacto te lo pasa Leslie en la demo/, "M4_BODY: el precio lo da un humano, y el humano sale del archivo");
+  assert.match(texto, /el número exacto se lo pasa Leslie en la demo/, "M4_BODY: el precio lo da un humano, y el humano sale del archivo");
 });
 
 test("FAQ del SIAT: reemplaza el cuerpo de M_SIAT_BODY, y vencida NO se sirve", () => {
@@ -611,7 +611,7 @@ test("sin horarios reales el bot NO inventa ni muestra el placeholder: saluda y 
   assert.ok(!/pendiente de definir/i.test(texto), "el placeholder NUNCA puede llegarle al prospecto");
   assert.ok(!texto.includes("{{"), "ninguna variable sin resolver");
   assert.match(texto, /coordina uno personalmente/, "se le dice la verdad: el horario lo pone un humano");
-  assert.match(texto, /a qué se dedica tu negocio/, "y no se pierde la calificacion");
+  assert.match(texto, /a qué se dedica su negocio/, "y no se pierde la calificacion");
 
   // ESTA LINEA EXIGIA `handoff_humano` Y ERA EL BLINDAJE DEL BUG. Verificaba que el mensaje fuera
   // correcto y nunca que la conversacion pudiera seguir. Derivar a un humano es correcto —los dos
@@ -1391,7 +1391,7 @@ test("panel: publicar NO puede APAGAR una respuesta que el archivo ya daba", asy
     assert.match(texto, /Bs 320/, "el panel no trajo FAQ `precios`: la del archivo se conserva y el bot SIGUE cotizando");
     assert.doesNotMatch(
       texto,
-      /no te quiero tirar una cifra/i,
+      /no (te|le) quiero tirar una cifra/i,
       "volver al M4_BODY por defecto es la regresion: el bot de venta dejaria de dar el precio",
     );
   });

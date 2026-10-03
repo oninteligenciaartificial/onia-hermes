@@ -16,12 +16,12 @@ import { MARCADORES_DE_OFERTA, soloPreciosPublicos } from "./precios-publicos.mj
  * sustitucion de variables ocurre DESPUES del guardrail, si no una hora puede parecer una cifra.
  */
 export const SAFE_REPLY_BASE =
-  "Eso prefiero no contestártelo yo — soy un bot y no quiero darte un dato equivocado. " +
-  "Te lo confirma {{humano}} en la demo.";
+  "Eso prefiero no contestárselo yo — soy un bot y no quiero darle un dato equivocado. " +
+  "Se lo confirma {{humano}} en la demo.";
 // La pregunta de los horarios va APARTE (2-oct): sin horarios que ofrecer —sin agenda propia o con
 // el placeholder— el motor la reemplaza por la pregunta pendiente real (`textoSeguro` en
 // bot-engine.mjs). Pegada, salia «¿Te reservo HORARIO A (pendiente de definir) o …?».
-export const SAFE_REPLY = `${SAFE_REPLY_BASE} ¿Te reservo {{slot_a}} o {{slot_b}}?`;
+export const SAFE_REPLY = `${SAFE_REPLY_BASE} ¿Le reservo {{slot_a}} o {{slot_b}}?`;
 
 /**
  * Los 6 codigos de la spec. Los regex se escriben SIN tildes porque el texto llega normalizado.
@@ -113,7 +113,7 @@ export const GUARDRAIL_RULES = Object.freeze([
     patterns: Object.freeze([
       /\bsoy (sergio|lucia|humano|una persona)\b/,
       /\bte llamo (ahora|en un rato)\b/,
-      /\bestoy revisando tu\b/,
+      /\bestoy revisando (tu|su)\b/,
     ]),
   }),
   Object.freeze({
@@ -128,7 +128,7 @@ export const GUARDRAIL_RULES = Object.freeze([
     code: "consejo_profesional",
     reason: "N5 — consejo profesional (clínico, legal o fiscal): eso va a handoff, no lo contesta el bot",
     patterns: Object.freeze([
-      /\b(te recomiendo|deberias)\b[^.]{0,25}\b(declarar|facturar|tratamiento|diagnostic)/,
+      /\b(te recomiendo|le recomiendo|deberias)\b[^.]{0,25}\b(declarar|facturar|tratamiento|diagnostic)/,
     ]),
   }),
 ]);

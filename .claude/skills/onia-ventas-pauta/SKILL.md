@@ -39,6 +39,27 @@ description: "Invocar para CUALQUIER trabajo del carril Ventas y pauta de Onia: 
 >    `grep -n` + `sed -n`); effort bajo y modelo chico para lo mecánico. Medido el 3-oct: más del 95 % del gasto
 >    fue releer contexto.
 
+> **De USTED, nunca vos ni tú** (Sergio Urcullo por la madre, 3-oct: *«no se usa vos, es muy informal, usted»*).
+> - **Alcance:** el bot de venta, las respuestas a la pauta, las plantillas de WhatsApp, los mensajes 1:1 y los
+>   agentes de voz. **Fuera:** la marca personal. **Web y anuncios:** pendiente, la madre se lo preguntó a Sergio
+>   Urcullo; hasta que conteste no se tocan (los briefs D1 y D4 v3 siguen en voseo y están congelados igual).
+> - **El bot ya está de usted** (3-oct; gate `bot/de-usted.test.mjs`). Lo que quedó afuera y por qué está en la skill
+>   `onia-chatbot`, sección «El bot de ventas habla de usted». Dos cosas dependen de Sergio Urcullo:
+>   1. **Plantillas de Meta** (`seguimiento_demo`, `recordatorio_demo`): siguen en voseo porque el bot manda la
+>      copia literal de lo aprobado. Pasan a usted solo con una plantilla nueva aprobada en Meta.
+>   2. **El recepcionista** (el bot que cada cliente pone delante de sus clientes): sigue de vos. Pendiente de
+>      decidir si también va de usted o si lo elige cada negocio.
+> - **Respuesta nueva a la pauta: SIN FIRMA, no se publica** (madre, 3-oct). La campaña del anuncio entró al repo
+>   con `363dcf10` (30-sep, «REQUIERE FIRMA»); el barrido del 3-oct solo pasó ESE texto a usted, sin cambiar qué
+>   dice. La versión nueva que espera firma es esta:
+>   > ¡Gracias por escribir desde el anuncio! Para mostrarle Onia con el caso de su clínica, y no una demo genérica,
+>   > cuéntenos: • ¿Cuántos profesionales atienden? • ¿Quién agenda las citas hoy? Con eso Sergio le escribe para
+>   > coordinar la demo. Y si usted es paciente y busca un turno, por acá no damos citas: escríbale directo a su
+>   > clínica.
+>
+>   Al firmarla: reemplaza `respuesta` de la campaña del anuncio en `knowledge.onia.json`, corre la suite del bot y
+>   se publica con el deploy del bot (no lo hace este carril).
+
 - **Nadie se contacta** sin que Sergio Urcullo apruebe el mensaje y el canal exactos. Lo envía él.
 - **En Meta no se crea ni se enciende nada** sin su OK explícito. Se crea en PAUSA, con cero gasto.
 - **Nunca** se usan para Onia las cuentas «NUVO 1usd» (`1350762290562517`) ni «Arthur Fuentes»
@@ -336,6 +357,9 @@ primero que se resuelve con Sergio Urcullo y Plataforma.
 
 Resultado: `research/competencia/DAPTA_COMO_FUNCIONA.md` (sin fecha, fuente del tema) con capturas en
 `research/competencia/dapta/`.
+
+- ⛔ **El agente de llamadas de Dapta NO es un canal** (madre, 3-oct). Sergio Urcullo lo armó solo para ver la
+  interfaz y sacar ideas. No se usa con leads, no se le cargan prospectos y no entra en ningún plan de contacto.
 
 - **Las capturas van al repo, no al scratchpad.** El scratchpad se borra y el doc queda citando archivos que no
   existen. Se copian a `research/competencia/<competidor>/` (app en `app/`, páginas en `web/`).

@@ -44,12 +44,15 @@ import * as intents from "./intents.mjs";
  * seguido de la palabra entre comillas. Se busca sobre el DATO ya importado
  * (no sobre el fuente), asi que las comillas llegan sin escapar.
  *
+ * Reconoce el voseo y el usted («decime» / «dígame», «escribime» / «escríbame»): desde el 3-oct
+ * Onia le habla de usted al prospecto, y sin eso el universo quedaba vacio.
+ *
  * El verbo se pide explicito a proposito: una comilla suelta en un texto
  * ("el plan \"Completo\"") no es una instruccion, y acusarla convertiria el
  * gate en ruido — que es como se apaga un gate sin que nadie lo apague.
  */
 const RE_INSTRUCCION =
-  /\b(?:dec[iíl]\w*|escrib[iíe]\w*|respond[eé]\w*|contest[aá]\w*|mand[aá]\w*|pon[eé]\w*|tipe[aá]\w*)\s+"([^"]{1,40})"/gi;
+  /\b(?:dec[iíl]\w*|d[ií]g[ae]\w*|escr[ií]b\w*|respond[aeé]\w*|contest[aáe]\w*|mand[aáe]\w*|pon[eég]\w*|tipe[aáe]\w*)\s+"([^"]{1,40})"/gi;
 
 /** Aplana SCRIPT a pares [clave, texto]: los valores pueden ser string o lista. */
 function textosDelGuion(script = SCRIPT) {
