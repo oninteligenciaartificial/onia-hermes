@@ -5,7 +5,7 @@ Fuente de los guiones: `hermes-content/docs/cola/plan-3-semanas/GRABAR-2-14-OCT.
 
 ## 0. Lo que tenés que saber antes de arrancar
 
-- **Pantalla verde:** ninguno de nuestros referentes la usa, y el editor no tiene escrito el paso que recorta el fondo. Con tela verde se resuelve con el filtro chromakey de ffmpeg. Sin tela no hay un camino probado. Por eso el bloque verde se encuadra para que la misma toma sirva también como pantalla partida (receta Santiago, que sí está probada) si el recorte sale mal.
+- **Pantalla verde:** ninguno de nuestros referentes la usa. Desde el 3-oct el paso que recorta el fondo está escrito y probado con una toma de prueba (`editor-videos/scripts/fondo-verde.mjs`); la tela real se calibra con la primera toma. Sin tela no hay un camino probado. Por eso el bloque verde se encuadra para que la misma toma sirva también como pantalla partida (receta Santiago, que sí está probada) si el recorte sale mal.
 - **Capturas de páginas públicas** (README, precios, documentación): no las grabás vos, se sacan aparte. Vos grabás solo tu cara y las demos de tu PC.
 - **La PALABRA del final:** cada pieza cierra con la suya. Hasta que funcione el paso de comentario a mensaje privado (hoy tiene 0 contactos), los comentarios se contestan a mano.
 - **Tiempo total:** unas 8 h 45 min de grabación, sin contar descansos. Si no te alcanza el día, el bloque 4 (los 4 YouTube, unas 2 h 30 min) pasa a mañana.
@@ -148,7 +148,7 @@ Dentro de cada bloque, las piezas van en el orden en que se publican: si cortás
 - Qué es: vos recortado delante de la captura.
 - Cuándo: noticia o comentario.
 - Cómo se graba: con tela verde, o con el efecto de TikTok/CapCut sin tela.
-- Cómo se edita: hoy no hay paso escrito en el pipeline; con tela se hace con chromakey de ffmpeg. El «+31 %» que se lee por ahí es de un blog y no se usa.
+- Cómo se edita: con tela, `editor-videos/scripts/fondo-verde.mjs` (chromakey de ffmpeg, probado el 3-oct con una toma de prueba). El «+31 %» que se lee por ahí es de un blog y no se usa.
 
 **Reacción a noticia**
 - Qué es: el titular más tu postura en una frase.

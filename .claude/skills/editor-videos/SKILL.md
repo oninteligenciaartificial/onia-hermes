@@ -439,6 +439,42 @@ Orden: cortar → split-layout → karaoke → SFX → master. Falta solo la ecu
 ⚠ El crudo tiene que traer la CÁMARA como toma aparte full-frame (como `clip 1 video 2.mp4`);
 la burbujita de OBS incrustada en la esquina no da resolución para la zona de cabeza.
 
+## 🟩 Pantalla verde: vos recortado delante de la captura (3-oct-2026)
+
+Pedido de la madre el 3-oct para el Bloque 1 de `PLAN-GRABACION-3-OCT.md` (16 piezas «Verde»). Pieza:
+**`scripts/fondo-verde.mjs`** (chromakey + despill de ffmpeg, sin dependencias).
+
+```bash
+# 1) MIRAR primero: lámina original | recorte sobre magenta | final, en el segundo 2
+node scripts/fondo-verde.mjs --toma toma.mp4 --fondo captura.png --crop 0:0:1440:1800 --chequeo chk.png --t 2
+# 2) Recién con la lámina limpia, el video (el audio se copia)
+node scripts/fondo-verde.mjs --toma toma.mp4 --fondo captura.png --crop 0:0:1440:1800 --out verde.mp4
+```
+
+- **Nada se adivina: color y umbral se miden en el borde del cuadro**, que es tela (franja de arriba y los
+  costados; solo los píxeles donde manda el verde, así la persona que toca un costado no cuenta).
+- ⚠ **La trampa que costó la primera prueba: chromakey compara solo el color (U,V), no el brillo.** Con la
+  tela en sombra el verde medido (`0x167F03`) queda tan cerca del gris que la camiseta blanca salió
+  **medio transparente**: el fondo llegaba hasta 0,19 de distancia y la persona empezaba en 0,15. El
+  arreglo es usar **el mismo tono llevado a brillo pleno** (`0x25FF04`): el fondo queda debajo de 0,22 y la
+  persona arriba de 0,34. El script lo hace solo e informa `similitud`, `suavizado` y `hueco` en el JSON.
+- **`hueco` < 0,04 = aviso**: luz despareja o tela arrugada. Se mira la lámina; si la ropa sale
+  transparente, se mejora la luz o se va a la pantalla partida.
+- **`hsvkey` se probó y se descartó**: se come la ropa clara.
+- **`--mate x:y:w:h`** (máscara de basura): conserva solo ese rectángulo de la toma. Para cuando la cámara
+  ve más allá de la tela (bordes oscuros, el soporte). Con el encuadre del plan (cabeza en la mitad de
+  abajo) un `--mate 0:280:1080:1640` limpia las esquinas de arriba sin tocar la cabeza.
+- **`--fit ancho`** (default): la captura a lo ancho arriba y lo que sobra en la tinta de marca.
+  `--crop` es el zoom focal de siempre (la línea que importa, no la página entera).
+- **Probado el 3-oct** con 5 s de verde digital (CC BY 3.0, «We Made a Bunch of Green Screen Footage!»,
+  Cold Ones, en Wikimedia Commons) y la misma toma degradada a propósito (viñeta, -15 % de saturación,
+  degradé vertical, ruido): **las dos salen sin agujeros ni borde verde en las trenzas**, mirado a 1:1 y en
+  4 cuadros a lo largo del clip. 11 s de render por 5 s de toma. La tela real se calibra con la primera
+  toma de Sergio Urcullo: lámina `--chequeo` antes de renderizar nada.
+- **Si con la tela real no queda limpio en 1 hora → pantalla partida** (`split-layout.mjs`, receta
+  Santiago) y se avisa. Por eso el plan encuadra la cabeza en la mitad de abajo: la misma toma sirve.
+- Orden: cortar (con la regla de oro) → fondo-verde → karaoke → master.
+
 ## 🎞 Reels de Lucía — b-roll generado + voz en off o texto (1-oct-2026)
 
 > Regla de Sergio Urcullo (1-oct): **todo video que sale a redes se edita con esta skill; Higgsfield solo genera el
@@ -521,6 +557,7 @@ Para ver referentes: `yt-dlp --impersonate chrome` baja de TikTok (Instagram 429
 | **Timing de los apoyos por PALABRA** | `scripts/sync-plan.mjs` (storyboard en palabras → plan) | gratis (local) |
 | **Zooms (punch-in por bloque / ken animado)** | `scripts/zoom-punch.mjs` | gratis (local) |
 | Montar overlays con timing y fade | `scripts/overlay-visuals.mjs` | gratis (local) |
+| **Pantalla verde (recorte + captura detrás)** | `scripts/fondo-verde.mjs` (`--chequeo` antes de renderizar) | gratis (local) |
 | **Efectos de sonido + ducking** | `scripts/sfx.mjs` | gratis (local) |
 | **Censurar / difuminar caras** | `scripts/blur-faces.mjs` (+ `blur-faces-detect.py`, OpenCV/YuNet) | gratis (local) |
 | **Transiciones entre bloques o clips** | `scripts/transitions.mjs` (xfade + acrossfade) | gratis (local) |
