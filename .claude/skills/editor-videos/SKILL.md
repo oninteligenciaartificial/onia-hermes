@@ -456,6 +456,22 @@ la burbujita de OBS incrustada en la esquina no da resolución para la zona de c
 >   va con «No: soy IA», nunca con «no sé».
 > - **Cómo se llegó acá:** «Hoy soy odontóloga» entró a `main` el 2-oct en el plan v2 sin revisión. Antes de renderizar
 >   se hace grep del guion y del pie contra esta lista.
+>
+> 📋 **Cómo trabaja el carril Lucía (reglas de la madre, 3-oct).**
+> 1. **Cada tarea arranca con tres cosas escritas en el transcript:**
+>    - **META**: qué se hace;
+>    - **PRUEBA DE HECHO**: qué se mira para darla por terminada;
+>    - **REGLA DE PARADA**: cuándo se frena.
+> 2. **Nada entra a `main` sin revisión: se trabaja en una rama y con un PR.** Antes, cada guion se compara con
+>    `LUCIA.md` §0: IA declarada, nunca profesional de salud, sin promesas de resultado.
+>    - ⚠️ El hook Stop (`scripts/git-autosync.js`) empuja la rama a `main` si `origin/main` es su ancestro.
+>    - Para que el PR espere la revisión: pushear la rama, abrir el PR y dejar la rama LOCAL en `origin/main` con
+>      `git reset --keep origin/main`. Así el autosync no tiene nada que empujar.
+>    - Así entró «Hoy soy odontóloga» (#82) el 2-oct.
+> 3. **Tokens:**
+>    - workflows de 5 agentes como máximo;
+>    - nada de leer transcripts ni documentos enteros: se lee la sección que hace falta;
+>    - effort bajo y modelo chico para lo mecánico.
 
 1. **Clip LIMPIO** (el `rawUrl` del job de Higgsfield; nunca un render con texto) a `videos/lucia-lNN/raw/`.
    Lienzo 1080×1920 **a 24 fps** (Kling es 24: pasar a 30 duplica cuadros). Acento único **#10C26B**.
