@@ -141,3 +141,10 @@ antes de que lleguen a Sergio Urcullo.
 - `editor-videos`: corte, transcripción, regla de oro, ortografía y master. Este skill se monta encima.
 - `diseno-contenido-onia`: logos oficiales, capturas y paleta ONIA.
 - Mediciones previas: `hermes-content/references/video-intake/2026-10-01-santiago-erik-edicion-medida.md`.
+
+## Formatos y orden de grabación (3-oct)
+
+Guía de formatos (a cámara Erik/Rocha, pantalla verde, pantalla partida, demo, top, b-roll, YouTube horizontal), con
+sus fuentes, y el orden de grabación POR ESCENA, no por fecha: `hermes-content/docs/cola/plan-3-semanas/PLAN-GRABACION-3-OCT.md`.
+Hueco medido: el pipeline no tiene escrito el paso de recorte del fondo verde (chromakey de ffmpeg). Hasta que exista,
+el bloque verde se encuadra para que sirva también como pantalla partida.
