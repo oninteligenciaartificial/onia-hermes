@@ -178,7 +178,9 @@ Urcullo, que Leslie lo autorice.
   grupos** (102400000004, 005, 012 y 025) y «deja sin efecto los plazos de incorporación» de los grupos
   9-12; según su considerando, para que la Ley 1733 (IVA sobre el neto y separado) se aplique de forma
   «automatizada, uniforme y verificable». Su Par. II: el SIN **asignará
-  periódicamente** una modalidad en línea a quien a esa fecha todavía no haya implementado ninguna.
+  periódicamente** una modalidad en línea a los **sujetos pasivos del IVA** que a esa fecha todavía
+  no hayan implementado ninguna. No dice cómo se comunica la asignación, y abroga solo esas cuatro
+  RND: los grupos 1° a 8° no cambian. *(Precisado en la segunda pasada del 3-oct.)*
   - Para Onia no cambia nada: ya tiene el Portal Web, que es una modalidad en línea.
   - **Cambia la web:** `onia.com.bo/facturacion` y `/guia-facturacion` siguen diciendo, hoy en
     producción, que desde el 1-oct los grupos 9-12 emiten solo en línea. Ya no es así (§9).
@@ -223,7 +225,8 @@ servicio (Art. 20 b).
   un certificado vencido corta la facturación ese día (Art. 21 a, Art. 52 V).
 - **La electrónica, solo para el cliente que ya la tenga o al que el SIN se la asigne.** *(Corregido por
   el crítico:)* acá decía «RND 102600000007»; esas asignaciones de los grupos 9-12 quedaron abrogadas el
-  30-sep, y ahora el SIN asigna modalidad «periódicamente» a quien no tenga ninguna (RND 102600000038,
+  30-sep, y ahora el SIN «asignará periódicamente» una modalidad a los sujetos pasivos del IVA que no
+  tengan ninguna (RND 102600000038,
   Par. II). Por eso el 9473 conserva las dos modalidades: la etapa VIII, la de firma, ya está 690/690.
 
 ### 3.3 Qué pasa con cada cliente (después de la autorización)
@@ -528,10 +531,21 @@ intermedio, sin apagar la verificación. Lo detalla la tarea B de la investigaci
   también `sales-kit/01-ONE-PAGER-OFERTA.md`, `sales-kit/04-OBJECIONES.md`,
   `ONIA_FECHAS_CRITICAS_PLAN.md`, `ONIA_LEAD_MAGNET_GUIA_UNA_PAGINA_PRD.md`, la landing de
   `dentalgest-landing` (`siat.tsx`) y los guiones de `cola/plan-3-semanas/` que citan el 1-oct.
+  → **Corregido el 3-oct en la rama `dev/rnd38` (sin publicar):** `lib/siat.ts`, la metadata de las dos
+  páginas, sus tests y un gate nuevo (`(sitio)/plazo-sin-efecto.test.ts`); `04-OBJECIONES.md` §7, las
+  fechas críticas, el PRD del magnet y otros docs con la obligación como vigente. No hacía falta en
+  `01-ONE-PAGER` ni en los guiones (su «1-oct» es el de Meta). `dentalgest-landing` no se tocó: no está
+  publicada (`dentalgest.app` → Vercel `DEPLOYMENT_NOT_FOUND`, 3-oct). **Segunda pasada (misma rama,
+  3-oct):** el bot de ventas (`deploy/vps-ops/bot/knowledge.onia.json`, FAQ `siat`, y los dos tests que
+  EXIGÍAN la frase vieja), el generador de propuestas (la línea `siat.grupo` ya no se imprime) y su skill;
+  la web precisa el Par. II (asignará, solo IVA, corte al 30-sep, sin decir cómo se comunica) y saca la
+  urgencia sin fecha («la última semana», «las formas de no llegar»), con un gate nuevo para esa clase.
+  **El bot sigue diciéndolo en producción hasta que se despliegue** (`deploy-bot.sh`).
 - **Términos v1.3, §1.2** *(crítico)*: «toda… emisión ante el SIN la hacés vos… con tus propias
   credenciales» choca con el modelo 1 (Onia guarda el token delegado). Va en la cláusula E5. Texto legal:
   pasa por Sergio Urcullo.
-- **Skill `onia-contabilidad-bolivia`:**
+- **Skill `onia-contabilidad-bolivia`:** → hecho el 3-oct en `dev/rnd38` (RND 38, 34, 28, la regla del
+  cobro y las dos trampas).
   - Corregir «facturación en línea obligatoria 30-sep-2026»: aplica solo a los NIT de los grupos 9-12,
     y el de Onia no figura. *(Crítico:)* y desde el 30-sep ni eso: la RND 102600000038 abrogó las
     designaciones. Sumar también la RND 102600000028 (homologación con el RNC hasta el 30-oct-2026) y la

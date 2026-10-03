@@ -93,9 +93,14 @@ Lo que falta de verdad, en orden:
 (La etapa VIII —firma digital— es solo de la modalidad Electrónica; la
 Computarizada elegida no la necesita.)
 
-**La fecha que manda:** RND 102600000007 — el último tramo del padrón queda
-obligado a facturar en línea el **30-sep-2026**. Cada semana que falta, miles de
-NITs buscan sistema autorizado. El carril B no es solo cumplimiento: es el pitch.
+**La fecha que mandaba ya no corre** ⚠️ *(corregido el 2026-10-03)*. Decía: «RND 102600000007 — el
+último tramo del padrón queda obligado a facturar en línea el 30-sep-2026». Ese mismo 30-sep la
+**RND 102600000038** abrogó las designaciones de los grupos 9° a 12° y dejó sin efecto sus plazos;
+el SIN asignará periódicamente una modalidad en línea a los contribuyentes del IVA que al 30-sep no
+habían implementado ninguna, sin fecha. El
+reloj que importa ahora para el carril B es otro: la **RND 102600000034** (pruebas y autorización
+con el anexo de la Ley 1733, del 1-oct al 16-nov-2026) y el vencimiento del trámite 9473
+(`ONIA_FACTURACION_ESTADO_REAL.md` §2.6).
 
 ## Y después (cómo se conecta con nuestro sistema)
 

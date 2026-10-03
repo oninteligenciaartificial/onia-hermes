@@ -72,7 +72,7 @@ compatible con dejar la cola de v1.0 por la mitad.
 
 ## 1. El filtro que ordena todo (no cambió)
 
-- **Runway ≈11 semanas** (~mediados de octubre) y muere el mismo día que la ventana SIAT (1-oct).
+- **Runway ≈11 semanas** (~mediados de octubre). *(Decía «muere el mismo día que la ventana SIAT (1-oct)»: esa ventana quedó sin efecto, RND 102600000038, 30-sep-2026.)*
 - **0 clientes pagando** → el cuello de botella es DEMANDA, no oferta. Hay demasiada oferta construida.
 - **Regla habitación #1:** no se construye la habitación #2 (2º vertical, LatAm, cursos, media) hasta que la #1 (DentalGest) tenga inquilino pagando.
 - **Devaluación**: ingresos en Bs, costos en USD (+63%) → toda idea nueva se evalúa contra "¿acerca un pago en las próximas semanas?".

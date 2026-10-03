@@ -74,60 +74,87 @@ test("la guarda REALMENTE detecta una fecha metida en un default", () => {
 // Por eso el sujeto de esta guarda es el DOCUMENTO PUBLICADO (`knowledge.onia.json`, el que
 // produccion carga), no el default: el default ya estaba sano y el defecto vivia en la variante
 // hermana, que es como nacen estos bugs en este carril.
+//
+// EL TERCER BUG (2026-10-03): la fecha canonica dejo de ser verdad SOLA. El 30-sep-2026 la RND
+// 102600000038 abrogo las RND que designaban a los grupos 9° al 12° y dejo sin efecto el plazo del
+// 1-oct. Este caso EXIGIA que el bot dijera «desde el 1 de octubre de 2026 los grupos 9.º al 12.º
+// emiten con facturacion en linea (RND 102600000007)»: corregir el conocimiento lo ponia en rojo.
+// Un gate que fija como canonica la afirmacion de un TERCERO cementa el dato el dia que el tercero
+// lo cambia. Lo que se exige ahora es lo que la norma vigente sostiene, y que la vieja no vuelva.
+// Texto de la norma: hermes-content/docs/ONIA_FACTURACION_ESTADO_REAL.md §2.6.
 // ---------------------------------------------------------------------------
 
-// La fecha canonica y su respaldo. Si la norma cambia se edita ACA, y el caso de abajo obliga a
-// que el documento publicado la siga.
-const PLAZO_SIAT = "1 de octubre de 2026"; // RND 102600000007, grupos 9° al 12°
-const RE_PLAZO_CANONICO = /\b1\.º? de octubre de 2026\b|\b1 de octubre de 2026\b|\b0?1-10-2026\b/i;
-// Cualquier OTRA forma de nombrar el arranque del plazo es una fecha que contradice a la canonica.
+// La norma vigente y su respaldo. Si el SIN vuelve a cambiarla se edita ACA, y el caso de abajo
+// obliga a que el documento publicado la siga.
+const NORMA_VIGENTE = "RND 102600000038"; // 30-sep-2026: dejo sin efecto el plazo del 1-oct
+const RE_NORMA_VIGENTE = /102600000038/;
+const RE_SIN_EFECTO = /sin efecto|abrog/i;
+// La obligacion vieja dicha como vigente: nombra el plazo o la RND 7 y lo afirma en presente.
+const RE_PLAZO_VIEJO = /\b0?1(\.º)? de octubre\b|\b0?1-10-2026\b|102600000007|grupos? 9/i;
+const RE_LO_AFIRMA = /\bemiten\b|\bfacturan\b|\bdeben\b|\brige\b|\bobligad[oa]s?\b|\bobligatori[oa]\b|[uú]nicamente|\bsolo pueden\b/i;
+// El 30-sep tampoco se nombra: suelto se leia como el arranque del plazo, y hoy es ademas el dia de
+// la RND que lo dejo sin efecto. En una respuesta de chat no hay lugar para el matiz.
 const RE_PLAZO_EQUIVOCADO = /\b30 de septiembre\b|\b30-09-2026\b|\b29 de septiembre\b/i;
+
+/** Las oraciones que dan por vigente el plazo viejo sin decir que quedo sin efecto. */
+const afirmanElPlazoViejo = (texto) =>
+  texto
+    .split(/(?<=[.?!;])\s+/)
+    .filter((o) => RE_PLAZO_VIEJO.test(o) && RE_LO_AFIRMA.test(o) && !RE_SIN_EFECTO.test(o));
 
 const faqSiatDe = (know) => (know.faq ?? []).find((f) => f.id === "siat");
 
-test("el documento PUBLICADO nombra el plazo fiscal con la fecha canonica", () => {
+test("el documento PUBLICADO cuenta la norma vigente y no da por vivo el plazo viejo", () => {
   const know = JSON.parse(readFileSync(new URL("./knowledge.onia.json", import.meta.url), "utf8"));
   const faq = faqSiatDe(know);
   assert.ok(faq, "la FAQ `siat` tiene que existir en el documento publicado");
-  assert.match(
-    faq.body,
-    RE_PLAZO_CANONICO,
-    `el plazo es el ${PLAZO_SIAT} (RND 102600000007). El bot decia otra cosa: ${faq.body}`,
+  assert.match(faq.body, RE_NORMA_VIGENTE, `la norma vigente es la ${NORMA_VIGENTE}: ${faq.body}`);
+  assert.match(faq.body, RE_SIN_EFECTO, `tiene que decir que el plazo del 1-oct quedo sin efecto: ${faq.body}`);
+  assert.deepEqual(
+    afirmanElPlazoViejo(faq.body),
+    [],
+    `la ${NORMA_VIGENTE} dejo sin efecto el plazo del 1-oct de los grupos 9° al 12°: ${faq.body}`,
   );
   assert.doesNotMatch(
     faq.body,
     RE_PLAZO_EQUIVOCADO,
-    `una fecha distinta a la canonica le dice al cliente que esta en falta cuando no lo esta: ${faq.body}`,
+    `el 30 de septiembre suelto se lee como el arranque de un plazo: ${faq.body}`,
   );
 });
 
-test("la guarda REALMENTE detecta la fecha equivocada (si no, pasaria por no mirar nada)", () => {
+test("la guarda REALMENTE detecta el plazo viejo (si no, pasaria por no mirar nada)", () => {
+  const servido =
+    "desde el 1 de octubre de 2026 los grupos 9.º al 12.º de contribuyentes emiten con facturación en línea (RND 102600000007)";
+  assert.equal(afirmanElPlazoViejo(servido).length, 1, "la guarda tiene que ver lo que el bot servia hasta el 3-oct");
   const viejo = "desde el 30 de septiembre es obligatoria y el SIN tiene un portal gratuito";
-  assert.match(viejo, RE_PLAZO_EQUIVOCADO, "la guarda tiene que ver la fecha que el bot servia");
-  assert.doesNotMatch(viejo, RE_PLAZO_CANONICO, "y no puede confundirla con la canonica");
+  assert.match(viejo, RE_PLAZO_EQUIVOCADO, "y la fecha del 30-sep que servia antes del 6-sep");
+  const sano = "la RND 102600000038 dejó sin efecto el plazo del 1 de octubre de 2026 de los grupos 9.º al 12.º.";
+  assert.deepEqual(afirmanElPlazoViejo(sano), [], "decir que quedo sin efecto no es afirmarlo");
 });
 
-test("la FAQ vigente SI puede tener la fecha: es la que vence", () => {
+test("la FAQ vigente SI puede tener el dato con fecha: es la que vence", () => {
   const know = JSON.parse(readFileSync(new URL("./knowledge.onia.json", import.meta.url), "utf8"));
-  const hoy = asRecepcionista(applyKnowledge(DEFAULT_CONFIG, know, { nowIso: "2026-09-05T14:00:00Z" }), know);
+  const hoy = asRecepcionista(applyKnowledge(DEFAULT_CONFIG, know, { nowIso: "2026-10-03T14:00:00Z" }), know);
   assert.match(
     hoy.script.M_SIAT_BODY,
-    RE_PLAZO_CANONICO,
+    RE_NORMA_VIGENTE,
     "mientras la FAQ esta vigente el prospecto tiene que recibir el dato concreto, y correcto",
   );
+  assert.deepEqual(afirmanElPlazoViejo(hoy.script.M_SIAT_BODY), []);
 });
 
 test("el plazo se dice en PRESENTE sobre la norma, no en futuro que caduque", () => {
   // Nace del barrido de web-venta del 2026-09-06: un texto en futuro sobre una fecha ("solo
   // PODRAN facturar", "si no migras ANTES DEL...") es cierto hoy y falso el mes que viene, y
   // ningun instrumento lo ve porque mira el sitio de HOY. La redaccion durable enuncia la norma
-  // en presente conservando la fecha, asi que es verdadera antes y despues.
+  // en presente conservando la fecha, asi que es verdadera antes y despues. El futuro de la RND
+  // 102600000038 («asignara periodicamente») va citado: «esa norma DICE que…» sigue siendo cierto.
   const know = JSON.parse(readFileSync(new URL("./knowledge.onia.json", import.meta.url), "utf8"));
   const faq = faqSiatDe(know);
   assert.doesNotMatch(
     faq.body,
     /\b(ser[aá]|sera|pasar[aá]|podr[aá]n?|deber[aá]n?|entrar[aá]|deja(?:r[aá]n?) de)\b/i,
-    `el plazo escrito en futuro se vuelve falso solo el ${PLAZO_SIAT}: ${faq.body}`,
+    `un plazo escrito en futuro se vuelve falso solo el dia que pasa: ${faq.body}`,
   );
 });
 

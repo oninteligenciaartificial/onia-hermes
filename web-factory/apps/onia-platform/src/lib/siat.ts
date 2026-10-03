@@ -21,28 +21,60 @@
  * existe NI se exhibe la obra. Los términos (`content/legal/terminos.md`) y
  * los docs internos siguen contando el estado entero.
  *
- * Fechas y RND verificadas contra fuentes oficiales el 2026-08-06 (PDF de la
- * RND 102500000036 + nota de prensa del SIN por la RND 102600000007).
+ * Fechas y RND verificadas el 2026-10-03 contra el texto de las RND
+ * 102500000036 (11-sep-2025: transición hasta el 31-mar-2026), 102600000007
+ * (23-mar-2026: hasta el 30-sep-2026) y 102600000038 (30-sep-2026), en los
+ * PDF del SIN. Cada una que la página afirma está en `SIAT_FUENTES`.
  * Si una cifra o una fecha cambia, se cambia ACÁ y no en las páginas.
+ *
+ * ⚠️ 2026-10-03 — LA OBLIGACIÓN DEL 1-OCT YA NO RIGE. Este archivo decía, en
+ * presente y en las dos páginas, que desde el 1 de octubre de 2026 los grupos
+ * 9° al 12° emitían «únicamente» en línea (RND 102600000007). El 30 de
+ * septiembre de 2026 la RND 102600000038 abrogó las cuatro RND que designaban
+ * a esos grupos (102400000004, 005, 012 y 025) y, según su considerando, dejó
+ * «sin efecto los plazos de incorporación»; su Par. II dice que el SIN
+ * «asignará periódicamente» una modalidad en línea a los sujetos pasivos del
+ * IVA que todavía no implementaron ninguna. Motivo declarado: aplicar la Ley
+ * 1733 (IVA sobre el precio neto, expuesto aparte en la factura). Texto leído
+ * en el PDF del SIN el 3-oct; fuente interna:
+ * `hermes-content/docs/ONIA_FACTURACION_ESTADO_REAL.md` §2.6.
+ * La página siguió afirmando la obligación tres días después de que dejó de
+ * existir: el gate `(sitio)/plazo-sin-efecto.test.ts` lo pone en rojo ahora.
+ * La norma no fija fecha nueva, y acá NO se inventa una.
+ *
+ * Segunda pasada del 3-oct (dos verificadores contra el PDF): la primera
+ * versión decía que el SIN «asigna» la modalidad «a quien todavía no la
+ * tiene» y que «si ya te la asignaron, figura en tu Oficina Virtual». La
+ * norma dice otra cosa y menos: el SIN **asignará** (futuro), solo a los
+ * **sujetos pasivos del IVA**, solo a los que al publicarse la RND (30-sep)
+ * no habían **implementado** ninguna modalidad en línea, y no dice cómo se
+ * comunica la asignación. Tampoco libera a los grupos anteriores al 9°: abroga
+ * solo cuatro RND. Y quedaba urgencia sin fecha («en la última semana», «las
+ * formas de no llegar»), que el gate de fechas no ve porque no nombra el
+ * plazo: un plazo que no existe no se insinúa.
  */
 
 /**
  * Titular de la página normativa.
  *
- * En PRESENTE a propósito, y no es preferencia de estilo: el sitio se sirve
- * estático y el HTML se queda quieto hasta el próximo deploy, que es manual.
- * Decía *«solo podrán facturar en línea»* —futuro— así que el 1 de octubre se
- * convertía solo en una promesa vencida, publicada tal cual, en la página que
- * existe para captar justo esa búsqueda. Enunciada como norma («desde tal
- * fecha, facturan así») es verdadera antes y después.
- * Vigilado por `(sitio)/plazo-que-vence.test.ts`.
+ * En PASADO y en presente a propósito, y no es preferencia de estilo: el sitio
+ * se sirve estático y el HTML se queda quieto hasta el próximo deploy, que es
+ * manual. Decía *«solo podrán facturar en línea»* —futuro— y después *«desde el
+ * 1 de octubre… facturan únicamente en línea»*, que la RND 102600000038 volvió
+ * falso el 30-sep. Un hecho ya ocurrido («dejó sin efecto») no caduca.
+ * Lo sigue buscando el que oyó del plazo: por eso el titular nombra la fecha.
+ * Vigilado por `(sitio)/plazo-que-vence.test.ts` y `(sitio)/plazo-sin-efecto.test.ts`.
  */
 export const SIAT_TITULAR =
-  "Desde el 1 de octubre de 2026, miles de negocios en Bolivia facturan únicamente en línea.";
+  "El SIN dejó sin efecto el plazo del 1 de octubre para facturar en línea.";
 
-/** La bajada: qué dice la norma, con su número de RND. */
+/**
+ * La bajada: qué pasó, con su número de RND, y qué sigue. Sin fechas inventadas.
+ * El Par. II se cuenta como lo dice la norma: en futuro, con su límite (IVA) y su
+ * corte (lo implementado al 30-sep). Nada de cómo se avisa: la RND no lo dice.
+ */
 export const SIAT_BAJADA =
-  "La RND 102600000007 del SIN fijó el 30 de septiembre de 2026 como último día de transición para los grupos 9° al 12° de contribuyentes. Desde el 1 de octubre, los alcanzados emiten únicamente por su modalidad de facturación en línea asignada. Confirmá tu grupo y modalidad con tu NIT en el SIN.";
+  "La RND 102600000038, del 30 de septiembre de 2026, abrogó las resoluciones que obligaban a los grupos 9° al 12° de contribuyentes a facturar en línea desde el 1 de octubre de 2026. En su lugar, dice que el SIN asignará periódicamente una modalidad en línea a los contribuyentes del IVA que al 30 de septiembre no habían implementado ninguna, y no fija cuándo.";
 
 export interface SiatBloque {
   titulo: string;
@@ -73,28 +105,39 @@ export interface SiatFaq {
   a: string;
 }
 
+/**
+ * Las preguntas que trae el que buscó el plazo. La primera es la suya, tal
+ * cual la escribe: «¿sigo obligado desde el 1 de octubre?». Hasta el 3-oct
+ * esta lista respondía «¿cómo sé si estoy en los grupos 9° al 12°?» y «desde
+ * esa fecha los grupos alcanzados solo pueden emitir en línea», las dos
+ * falsas desde la RND 102600000038 (ver la cabecera).
+ */
 export const SIAT_FAQ: readonly SiatFaq[] = [
   {
-    q: "¿Cómo sé si mi negocio está en los grupos 9° al 12°?",
-    a: "El SIN asignó los grupos por NIT en resoluciones de 2024 (RND 102400000004, 05, 12 y 25). Entrá a tu Oficina Virtual (siat.impuestos.gob.bo) con tu NIT o preguntale a tu contador: ahí figura tu modalidad asignada. No adivines por el rubro — depende del NIT.",
+    q: "¿Sigo obligado a facturar en línea desde el 1 de octubre de 2026?",
+    a: "Por esa fecha, no. La RND 102600000038, del 30 de septiembre de 2026, abrogó las resoluciones que designaban a los grupos 9° al 12° (RND 102400000004, 05, 12 y 25) y dejó sin efecto sus plazos de incorporación, incluido el del 1 de octubre que había fijado la RND 102600000007. Abroga solo esas cuatro: si tu NIT estaba en uno de los grupos 1° al 8°, esta norma no lo cambia. Y si ya facturás en línea, no dice que puedas volver a la modalidad de antes: consultalo con tu contador antes de cambiar nada.",
+  },
+  {
+    q: "¿Y ahora cuándo me toca?",
+    a: "La norma no fija una fecha. Dice que el SIN asignará periódicamente una modalidad de facturación en línea a los contribuyentes del IVA que al 30 de septiembre de 2026 no habían implementado ninguna (RND 102600000038, parágrafo II), y no dice cómo se comunica esa asignación. Para saber qué modalidad tenés hoy, fijate en tu Oficina Virtual (siat.impuestos.gob.bo) o preguntale a tu contador.",
   },
   {
     q: "¿Puedo cumplir gratis?",
     a: "Sí. Si tenés habilitada la modalidad Portal Web en Línea, podés emitir gratis ingresando los datos de cada factura. Onia no reemplaza ese paso: te ayuda a ordenar ventas, compras y cifras para revisarlas con tu contador.",
   },
   {
-    q: "¿Qué pasa con mi facturación desde el 1 de octubre de 2026?",
-    a: "Desde esa fecha los grupos alcanzados solo pueden emitir por su modalidad de facturación en línea asignada (RND 102600000007). Emitir por medios anteriores deja de ser válido para esos contribuyentes.",
-  },
-  {
-    q: "¿Hubo prórrogas?",
-    a: "Hubo dos: la RND 102500000036 movió el plazo a marzo de 2026, y la RND 102600000007 lo movió al 30 de septiembre de 2026. Ese fue el último día de transición: desde el 1 de octubre de 2026 rige para los grupos alcanzados.",
+    q: "¿Por qué cambió?",
+    a: "Lo dice la misma RND 102600000038: para que el cambio del IVA de la Ley 1733, del 27 de mayo de 2026 (calcularlo sobre el precio neto y mostrarlo aparte en la factura), se aplique de forma automatizada, uniforme y verificable. Ese cambio no rige hasta el primer día del mes siguiente a la publicación de su decreto reglamentario. Antes el plazo ya se había movido dos veces: la RND 102500000036 lo llevó al 31 de marzo de 2026 y la RND 102600000007, al 30 de septiembre de 2026.",
   },
 ] as const;
 
-/** Las fuentes y el descargo. Nunca se publica el contenido sin esto. */
+/**
+ * Las fuentes y el descargo. Nunca se publica el contenido sin esto.
+ * Cada norma que la página afirma está acá: hasta el 3-oct la FAQ citaba las
+ * prórrogas de las RND 102500000036 y 102600000007 y esta línea no las nombraba.
+ */
 export const SIAT_FUENTES =
-  "Fuentes: RND 102100000011 (Sistema de Facturación), RND 102500000036 y nota de prensa oficial del SIN sobre la RND 102600000007. Plazo y modalidades verificados el 27 de septiembre de 2026. Esto es información general, no asesoría tributaria: confirmá tu caso con tu contador o en tu Oficina Virtual.";
+  "Fuentes: RND 102600000038 del SIN (30 de septiembre de 2026), RND 102600000007 (23 de marzo de 2026), RND 102500000036 (11 de septiembre de 2025), RND 102100000011 (Sistema de Facturación) y Ley 1733 (27 de mayo de 2026). Verificado contra el texto de cada norma el 3 de octubre de 2026. Esto es información general, no asesoría tributaria: confirmá tu caso con tu contador o en tu Oficina Virtual.";
 
 /* ---------------------------------------------------------------------- */
 /* LA GUÍA de una página — "cómo me habilito"                              */
@@ -104,13 +147,13 @@ export const SIAT_FUENTES =
  * El lead magnet (`/guia-facturacion`).
  *
  * Vive ACÁ y no en la página por la misma razón que todo lo de arriba: es
- * texto FISCAL. Si el SIN mueve la fecha por tercera vez (ya van dos: RND
- * 102500000036 y 102600000007), se corrige este archivo y las DOS páginas se
- * enteran solas. Un segundo lugar con los mismos pasos es cómo nacen dos
+ * texto FISCAL. Si el SIN cambia la regla otra vez (ya van tres: RND
+ * 102500000036, 102600000007 y la abrogación de la 102600000038), se corrige
+ * este archivo y las DOS páginas se enteran solas. Un segundo lugar con los mismos pasos es cómo nacen dos
  * versiones de la misma ley.
  *
  * División de intenciones, deliberada y vigilada:
- *   /facturacion      → QUÉ EXIGE la norma (y ya está publicada y gratis).
+ *   /facturacion      → QUÉ DICE la norma (y ya está publicada y gratis).
  *   /guia-facturacion → CÓMO ME HABILITO, paso por paso. Es la pregunta que
  *                       aparece DESPUÉS de leer la otra.
  *
@@ -129,14 +172,16 @@ export const SIAT_FUENTES =
  */
 
 /**
- * El plazo en formato corto, para rótulos donde no entra la oración entera.
+ * El plazo VIEJO en formato corto, para rótulos donde no entra la oración entera.
  *
- * Es el 1 de octubre, no el 30 de septiembre. Los DOS son ciertos —la RND
- * 102600000007 fija el 30-09 como último día de transición y el 01-10 como
- * primer día de obligación— pero sueltos significan cosas opuestas: un rótulo
- * de una línea se lee como LA fecha límite, y todo el resto del sitio (y
- * `CLAUDE.md`, que lo prohíbe por nombre) titula el 1 de octubre. El matiz
- * completo tiene su lugar y es `SIAT_BAJADA`, que lo explica entero.
+ * Desde el 3-oct se nombra solo para decir que quedó SIN EFECTO (RND
+ * 102600000038, ver la cabecera): es la fecha que trae en la cabeza el que
+ * llega a la guía, y el rótulo le contesta en una línea.
+ *
+ * Es el 1 de octubre, no el 30 de septiembre. La RND 102600000007 fijaba el
+ * 30-09 como último día de transición y el 01-10 como primer día de
+ * obligación; sueltos significaban cosas opuestas, y el 30-09 es además el día
+ * de la RND que los dejó sin efecto. El matiz completo vive en `SIAT_BAJADA`.
  *
  * Existe porque `/guia-facturacion` tipeaba «Plazo · 30-09-2026» en su Kicker
  * mientras su propia bajada, dos líneas abajo, decía «el 1 de octubre»: la
@@ -148,7 +193,7 @@ export const SIAT_FUENTES =
 export const SIAT_PLAZO_CORTO = "01-10-2026";
 
 /** Rótulo del plazo. La fecha sale de arriba: acá no se tipea ninguna. */
-export const SIAT_GUIA_KICKER = `Plazo · ${SIAT_PLAZO_CORTO}`;
+export const SIAT_GUIA_KICKER = `Plazo ${SIAT_PLAZO_CORTO} · sin efecto`;
 
 /** Titular de la guía. La promesa entera cabe acá. */
 export const SIAT_GUIA_TITULAR =
@@ -156,16 +201,22 @@ export const SIAT_GUIA_TITULAR =
 
 /** La bajada: qué te llevás y qué NO te vamos a vender para dártelo. */
 export const SIAT_GUIA_BAJADA =
-  "Una hoja: cómo saber si te toca el 1 de octubre y qué hacer, paso por paso, en la Oficina Virtual del SIN. El trámite es gratuito y no necesitás comprar ningún sistema para cumplir.";
+  "El SIN dejó sin efecto el plazo del 1 de octubre de 2026 (RND 102600000038) y no fijó otro. Una hoja: cómo saber qué modalidad tenés y cómo habilitarte, paso por paso, en la Oficina Virtual. El trámite es gratuito y no necesitás comprar ningún sistema para cumplir.";
 
 /**
  * Paso 0 — el que casi nadie hace y ordena todo lo demás.
- * El grupo lo fija el NIT, no el rubro: es el error más caro de la guía.
+ * La modalidad es por contribuyente, no por rubro: es el error más caro de la guía.
+ * Hasta el 3-oct hablaba de «tu grupo» de 2024; esos grupos quedaron abrogados
+ * por la RND 102600000038 (ver la cabecera). Y hasta la segunda pasada del
+ * 3-oct decía «ahí figura si ya te asignaron una»: la RND no dice cómo se
+ * comunica la asignación, y a un ex grupo 9° al 12° eso le hacía leer que
+ * seguía obligado. Lo que se mira es la modalidad que figura en el padrón hoy
+ * (así la vimos con nuestro NIT: `ONIA_SIAT_HABILITAR_FACTURACION_CHECKLIST_2026.md`).
  */
 export const SIAT_GUIA_PASO_0: SiatBloque = {
-  titulo: "Paso 0 — averiguá si te toca a vos.",
+  titulo: "Paso 0 — averiguá qué modalidad tenés hoy.",
   texto:
-    "El grupo lo fija tu NIT, no tu rubro. El SIN los asignó por resolución en 2024 (RND 102400000004, 05, 12 y 25). Entrá a siat.impuestos.gob.bo con tu NIT, o preguntale a tu contador: ahí figura la modalidad que te asignaron. No lo deduzcas de lo que hace el negocio de al lado — dos comercios de la misma calle pueden estar en grupos distintos, y el que se equivoca se entera tarde.",
+    "Las designaciones de los grupos de 2024 quedaron abrogadas (RND 102600000038). La misma norma dice que el SIN asignará periódicamente una modalidad en línea a los contribuyentes del IVA que al 30 de septiembre de 2026 no habían implementado ninguna, y no dice cómo se comunica esa asignación. Entrá a siat.impuestos.gob.bo con tu NIT, o preguntale a tu contador, y fijate qué modalidad de facturación figura en tu padrón. No lo deduzcas de lo que hace el negocio de al lado — dos comercios de la misma calle pueden estar en situaciones distintas, y el que se equivoca se entera tarde.",
 };
 
 export interface SiatPaso {
@@ -189,7 +240,7 @@ export const SIAT_GUIA_PASOS: readonly SiatPaso[] = [
   {
     titulo: "Revisá que no tengas marcas de riesgo tributario",
     detalle:
-      "Es un requisito formal (Art. 19.d). Si hay una observación activa se resuelve primero, y mientras esté ahí el trámite no avanza. Mirarlo hoy y no en la última semana es la diferencia entre resolverlo tranquilo y no llegar.",
+      "Es un requisito formal (Art. 19.d). Si hay una observación activa se resuelve primero, y mientras esté ahí el trámite no avanza. Miralo antes de empezar, así no te frena a mitad del trámite.",
   },
   {
     titulo: "Solicitá la autorización de la modalidad",
@@ -209,7 +260,7 @@ export const SIAT_GUIA_PASOS: readonly SiatPaso[] = [
   {
     titulo: "Emití una factura de prueba y verificá tres cosas",
     detalle:
-      "Que valide, que llegue el PDF y que el XML quede registrado en el SIN. Las tres. Una emisión que «no dio error» pero no aparece registrada no te sirve el 1 de octubre.",
+      "Que valide, que llegue el PDF y que el XML quede registrado en el SIN. Las tres. Una emisión que «no dio error» pero no aparece registrada no te sirve el día que tengas que facturar de verdad.",
   },
 ] as const;
 
@@ -225,11 +276,14 @@ export const SIAT_GUIA_A_MANO: readonly string[] = [
 /**
  * Lo que frena. Se deriva de los pasos de arriba, no de estadísticas: no
  * tenemos una muestra de negocios habilitados y no se inventa una.
+ * El primero decía «Dejarlo para cuando el SIN te asigne la modalidad», bajo
+ * el título «Las tres formas de no llegar»: juntos insinuaban un plazo corto
+ * después de la asignación, y la RND 102600000038 no dice nada de eso.
  */
 export const SIAT_GUIA_FRENA: readonly string[] = [
-  "Dejarlo para la última semana antes de tu plazo. No es un formulario: son seis pasos y cada uno depende del anterior.",
+  "Saltarte pasos o cambiarles el orden. No es un formulario: son seis pasos y cada uno depende del anterior.",
   "Descubrir una marca de riesgo recién en el paso 3. Se resuelve, pero no en una tarde, y hasta que no se resuelva el trámite queda parado.",
-  "Llegar al paso 6 sin los catálogos sincronizados. La prueba no valida, volvés al paso 5 y ya con la fecha encima.",
+  "Llegar al paso 6 sin los catálogos sincronizados. La prueba no valida y volvés al paso 5 con ventas esperando su factura.",
 ];
 
 /** Cierre de la guía: la factura fiscal se emite en el portal; Onia ordena el resto. */

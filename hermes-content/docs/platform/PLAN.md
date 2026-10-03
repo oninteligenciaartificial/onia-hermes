@@ -162,7 +162,7 @@ centralizado · y cuánto cuesta cada camino por cliente y por mes.
 | # | Qué | Traba |
 |---|---|---|
 | 1 | **DNS**: `app.onia.com.bo` y `onia.com.bo` → `187.77.16.63` | Que alguien pueda entrar |
-| 2 | **NIT + homologación SIAT** | Facturación real. **Caduca 1-oct-2026** |
+| 2 | **NIT + homologación SIAT** | Facturación real. *(Decía «caduca 1-oct-2026»: ese plazo quedó sin efecto, RND 102600000038, 30-sep-2026)* |
 | 3 | **Número de WhatsApp Business** en Meta | El chatbot |
 | 4 | **Cuál chatbot sobrevive** (lo está revisando) | Que no nazca un tercero |
 | 5 | **Ticket promedio por cita** en Santa Cruz | El argumento de venta en plata |

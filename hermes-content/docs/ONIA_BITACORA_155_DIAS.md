@@ -109,8 +109,8 @@ Leyenda: ⬜ pendiente · 🟡 en progreso · ✅ cumplido · ❌ caído (con mo
 
 | Reloj | Fecha | Por qué importa |
 |---|---|---|
-| ⏰ **SIAT** | **30-sep-2026** | Sin homologación no hay producto vendible. Es la ventana del país entero |
-| 💸 **Runway** | **~mediados de octubre** | Cae casi el mismo día que el SIAT. Ese choque es el pico de la serie |
+| ⏰ **SIAT** | ~~**30-sep-2026**~~ | ⚠️ *Corregido el 3-oct:* ese plazo (grupos 9° a 12°, nunca «el país entero») quedó sin efecto el mismo 30-sep (RND 102600000038). Ya no es un reloj de la serie |
+| 💸 **Runway** | **~mediados de octubre** | *(Decía «cae casi el mismo día que el SIAT»: ese reloj ya no corre)* |
 | 🎬 **Serie** | **31-dic-2026** | Día 155 de 155 |
 
 ---

@@ -295,7 +295,8 @@ sin publicar) · pipeline intake→web a escala con clientes reales.
   cotizado. El consumo de Meta lo paga el cliente en su cuenta (por eso el abono cierra a
   este precio — ver `ONIA_FECHAS_CRITICAS_PLAN.md`). Checkpoint 1-sep para la tarifa exacta.
 - Promesa SIAT RETIRADA de la bio hasta que el NIT (S2) destrabe — al volver, es el
-  argumento del 30-sep (RND 102600000007, grupos 9-12 por NIT, verificable).
+  argumento del 30-sep (RND 102600000007, grupos 9-12 por NIT, verificable). ⚠️ *Ya no existe:
+  la RND 102600000038, 30-sep-2026, dejó sin efecto ese plazo (corregido el 3-oct).*
 - Pendiente: hero nuevo (queued de sesión anterior) · portar los precios nuevos del
   catálogo de venta a la landing cuando Sergio ratifique la lista.
 

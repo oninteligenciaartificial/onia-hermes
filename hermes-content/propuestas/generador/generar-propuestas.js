@@ -161,30 +161,21 @@ function renderPortada(p, nombre) {
 }
 
 // Bloque opcional: "El costo de esperar" — qué le cuesta al cliente NO hacer nada.
-// REGLA DURA: solo con datos REALES del cliente (sus horas, sus ventas, su grupo
-// SIAT). Sin datos cargados la sección NO se imprime: nada de cifras de ejemplo,
+// REGLA DURA: solo con datos REALES del cliente (sus horas, sus ventas, su plata
+// parada). Sin datos cargados la sección NO se imprime: nada de cifras de ejemplo,
 // rangos genéricos ni placeholders. Ver skill propuestas-comerciales-onia §13.
 //
-// Fecha fiscal VERIFICADA (no tocar sin fuente): la RND 102600000007 (25-mar-2026)
-// amplió el plazo de facturación en línea al 30-sep-2026; desde el 1-oct-2026 los
-// grupos 9°-12° emiten SOLO por su modalidad en línea asignada. Fuente: nota de
-// prensa del SIN "El SIN amplía hasta el 30 de septiembre el plazo para la
-// implementación de la facturación en línea" (impuestos.gob.bo).
-// El grupo depende del NIT, NO del rubro → la línea solo se imprime si el cliente
-// confirmó SU grupo en su Oficina Virtual. Y siempre se dice la verdad completa:
-// el Portal Web del SIN cumple gratis (regla: nunca "por ley tenés que comprarnos").
-const SIAT_FECHA = '1 de octubre de 2026';
-
+// La línea fiscal (`siat.grupo`) se SACÓ el 2026-10-03 y `siat` se ignora. Imprimía
+// «tu NIT está en el grupo X, así que desde el 1 de octubre de 2026 solo podés emitir
+// por la modalidad en línea asignada (RND 102600000007)». El 30-sep-2026 la RND
+// 102600000038 abrogó las designaciones de los grupos 9° al 12° y dejó sin efecto
+// ese plazo, y no fija otro: ya no hay grupo ni fecha que poner en un «costo de
+// esperar». Una urgencia fiscal en una propuesta sin norma que la sostenga es
+// fabricar. Fuente: hermes-content/docs/ONIA_FACTURACION_ESTADO_REAL.md §2.6.
 function renderCostoEsperar(ce) {
   if (!ce) return '';
   const items = (ce.items || []).filter((it) => it && it.concepto && it.costo);
-  const siat = ce.siat && ce.siat.grupo
-    ? `<p style="margin-top:12px;"><b>Facturación en línea:</b> tu NIT está en el grupo ${esc(ce.siat.grupo)},
-       así que desde el ${SIAT_FECHA} solo podés emitir por la modalidad en línea
-       asignada (RND 102600000007). El Portal Web del SIN cumple gratis tipeando
-       factura por factura: lo que te ahorramos es tipear dos veces, no la obligación.</p>`
-    : '';
-  if (!items.length && !siat) return '';
+  if (!items.length) return '';
   const filas = items.map((it) => `
     <tr><td><b>${esc(it.concepto)}</b>${it.dato ? `<br><span class="lim">${esc(it.dato)}</span>` : ''}</td>
     <td class="num">${esc(it.costo)}</td></tr>`).join('');
@@ -198,7 +189,7 @@ function renderCostoEsperar(ce) {
   const nota = ce.nota ? `<p style="margin-top:10px;">${ce.nota}</p>` : '';
   return `
   <h2>El costo de esperar</h2>
-  <div class="card">${intro}${tabla}${siat}${nota}</div>`;
+  <div class="card">${intro}${tabla}${nota}</div>`;
 }
 
 // Bloque opcional: requisitos a cargo del cliente (cobros online en Bolivia).

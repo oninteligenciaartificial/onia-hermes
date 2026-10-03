@@ -21,7 +21,8 @@ import { describe, expect, it } from "vitest";
  *
  * Lo que este gate NO hace, y es a propósito: no prohíbe la palabra «SIAT» en
  * el sitio. `/facturacion` y `/guia-facturacion` son guías HONESTAS sobre la
- * norma del 1 de octubre de 2026 — explican que el Portal Web del SIN es
+ * facturación en línea (desde el 3-oct: el plazo del 1 de octubre de 2026 que
+ * la RND 102600000038 dejó sin efecto) — explican que el Portal Web del SIN es
  * gratuito y que Onia todavía no emite. Un gate que prohibiera el literal
  * obligaría a borrarlas, que es exactamente al revés de lo que hay que hacer:
  * el problema nunca fue nombrar la norma, fue venderla como función nuestra.

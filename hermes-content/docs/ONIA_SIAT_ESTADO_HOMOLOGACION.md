@@ -509,10 +509,10 @@ ni se consultan.
 
 | Fecha | Qué es |
 |---|---|
-| **01/10/2026** | Deadline comercial (grupos 9°-12° solo facturan en línea) |
+| ~~**01/10/2026**~~ | ~~Deadline comercial (grupos 9°-12° solo facturan en línea)~~ ⚠️ **Sin efecto** desde el 30-sep-2026: la RND 102600000038 abrogó esas designaciones (corregido el 2026-10-03; `ONIA_FACTURACION_ESTADO_REAL.md` §2.6) |
 | **04/11/2026** | Límite de pruebas del sistema 9473 |
 
-La autorización llega **después** del rush. Lo que se vende para el 1-oct es lo que la
+La autorización llega **después** del rush. Lo que se vende (antes «para el 1-oct») es lo que la
 landing debe explicar: los datos quedan organizados en ONIA, pero la emisión
 en el Portal Web del SIN sigue siendo manual. La promesa histórica de evitar
 el re-tipeo era incorrecta. El portal gratuito **no depende de nuestra autorización**.
