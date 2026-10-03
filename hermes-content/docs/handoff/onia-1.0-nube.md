@@ -20,37 +20,48 @@ Desarrollar y publicar Onia Platform 1.0 hasta cobrar al primer cliente. Qué sa
 
 ## 2. Qué quedó EN PRODUCCIÓN (verificado)
 
-- **Regla nueva de Sergio Urcullo (2-oct):** lo que pasa los gates se mergea y se publica SIN preguntar; solo diseño
+- **Regla de Sergio Urcullo (2-oct):** lo que pasa los gates se mergea y se publica SIN preguntar; solo diseño
   nuevo y legales pasan por él (CLAUDE.md «Qué se publica sin preguntar»). No se le habla de PRs.
-- **Plataforma `release-af2ded5c`** (onia-platform#99, Recall de tratamiento a medias), 2-oct 12:52 UTC. Log:
-  «PUBLICADO Y VERIFICADO»; contenedor de rollback `onia-platform-prev-VanPmF3l-20261002-125220`. `/login` mirado con
-  Chromium: 200, 0 errores de consola, sin íconos como texto.
-- **Web `onia.com.bo`** (onia-hermes#84, web v1 + legales 1.3), publicada 2-oct 12:58 UTC desde `main` `ae4a1fc53`
-  («PUBLICADO Y VERIFICADO»; backup `/opt/onia-landing/runtime-next.bak-deploy-20261002125830`). Mirada a 390 y 1440:
-  `/`, `/precios`, `/terminos` y `/privacidad` 200 en <2 s, «Versión 1.3» en los dos legales, 0 errores, 0 desbordes,
-  0 carteles de obra.
-- **Plataforma `release-8f07e537`** (onia-platform#98, recordatorio con botones), mergeada a `master` el 1-oct
-  22:25 UTC. **Verificada por la madre desde la PC** (aviso por rutina, 1-oct 23:49 UTC): `docker ps` →
-  `release-8f07e537` healthy; el log termina en «PUBLICADO Y VERIFICADO»; `/login` 200 y mirado con Chromium,
-  0 errores de consola, íconos como glifos. Inerte hasta que un cliente conecte su número.
-- `POST /api/auth/register` rechaza los rubros que no se venden: medido en vivo hoy, `vetgest-clinical` y
-  `onia-interna` → 400 (`Invalid enum value`). El catálogo §6.5 ya lo marca cerrado.
-- Producción: `ONIA_VERIFICACION_WHATSAPP=plantillas` (la verificación por WhatsApp del alta queda APAGADA por orden de
-  la madre hasta que Sergio Urcullo diga), `ONIA_ALTA_AUTOMATICA=abierta`.
-- Clientes con número de WhatsApp conectado: **0** (la única fila con inbox es la org interna, inbox 5 = ventas de Onia).
+- **Alcance congelado (madre, 2-oct):** solo se termina lo asignado; lo nuevo va a pendientes. Excepciones con OK de
+  Sergio Urcullo del 3-oct: el arreglo de seguridad del botón, el barrido de promesas de la web y el estudio del SIAT.
+- **Plataforma en `release-13b67dda`** (3-oct 16:21 UTC, «PUBLICADO Y VERIFICADO», rollback
+  `onia-platform-prev-u40ks7ma-20261003-162118`). Lleva, en orden:
+  - #99 Recall de tratamiento a medias (2-oct).
+  - #102 `POST /api/onia-core/demo` solo SUPERADMIN (cualquier dueño creaba orgs Profesional eternas).
+  - #106 **CRITICAL** (madre v2): el botón del recordatorio solo vale desde el inbox de WhatsApp de la org; antes un
+    anónimo del widget web cancelaba la cita de otro paciente. Rastro de uso: ninguno (solo la org interna tiene
+    inboxes; 0 citas con recordatorio por WhatsApp; 0 avisos de confirmar/cancelar desde el 1-oct). Bundle vivo sin la
+    respuesta vieja («No encontramos una cita próxima» ausente).
+  - #107 tablero interno «La operación» con números exactos: solo clientes (hoy 0 de 5 pagando, Bs 0; antes decía
+    Bs 390 del chatbot regalado de la org interna). Regla única `motivoDeCuentaDeLaCasa`
+    (`lib/platform/cuentas-que-no-son-clientes.ts`), también en `/admin/metricas`. Sergio Urcullo aprobó las capturas.
+    **Falta MIRARLO en prod con su sesión de superadmin** (la nube no tiene esa cuenta).
+- **Web `onia.com.bo`:** 3-oct, `main` `baf02e9df` + RND 38 (`f3282e8d1`, publicándose al escribir esto): titular
+  desde el HTML del servidor (sin esperar JS), promesas alineadas con el catálogo (fuera «entiende fotos», «el
+  tratamiento a medias no se pierde», «agenda por profesional», «te devuelven clientes»), y `/facturacion` +
+  `/guia-facturacion` dicen que la RND 102600000038 (30-sep) dejó sin efecto el plazo del 1-oct. Mirada en vivo a 390 y
+  1440 (antes de la RND 38): 0 de las promesas, 0 errores, 0 desbordes, `/precios` sin JS con el h1 visible.
+- **Bot de ventas:** publicado 3-oct desde `e630e103c` (37 archivos, responde) y otra vez con la RND 38 (`f3282e8d1`).
+  Ya no confirma demos que no agendó (agenda y voz apagadas por config con default seguro); suite 1639/1639.
+- **Cuenta demo de venta «Clínica Demo Onia»** (`cmur09d75000601mz12vg59qn`, `oninteligenciaartificial+demo@gmail.com`):
+  sembrada el 2-oct con OK explícito de Sergio Urcullo (backup antes: `/root/backups/pre-demo-20261002-1345/`). 25
+  pacientes, 50 citas, 28 cobros, 2 tratamientos a medias (Natalia Terceros, Marcelo Vargas). 0 canales de envío,
+  pacientes sin correo, teléfonos de ficción `+44 7700 900xxx`. Scripts y método: `onia-platform/scripts/demo-venta/` +
+  skill `onia-db`.
+- **Cuenta QA del chip «ZZ QA Clínica Chip»** (`cmuqzov3y000001mzmrcq0i2t`, `oninteligenciaartificial+qachip@gmail.com`),
+  creada por el alta real el 2-oct. La clave se dio por chat a pedido de Sergio Urcullo: tratarla como expuesta (se le
+  pidió cambiarla en /profile).
+- Producción: `ONIA_VERIFICACION_WHATSAPP=plantillas`, `ONIA_ALTA_AUTOMATICA=abierta`, `ONIA_REGISTRO_CONFIRMA_CORREO=si`.
 
 ## 3. Qué quedó a medias y dónde
 
 | Qué | Dónde | Estado |
 |---|---|---|
-| **Recordatorio con botones Confirmar / Cancelar / Reprogramar** | onia-platform#98 MERGEADO (`8f07e537`) + bot en onia-hermes#84 (`2f85bdd2`, `ffb65f75`) | Plataforma: publicada y verificada (§2). Falta: publicar el bot (bloqueado, ver §5); prueba real con el chip prepago. NO se nombra en venta ni ayuda hasta esa prueba |
-| Web v1 + legales 1.3 | onia-hermes#84 MERGEADO (`eda2f34a`) | ✅ publicada y mirada (§2) |
-| Recall de tratamiento a medias + texto con IA | onia-platform#99 MERGEADO (`af2ded5c`) | ✅ publicado (§2). Falta verlo encontrar a alguien con datos: lo cubre la cuenta demo |
-| **Cuenta demo de venta** (clínica dental, datos inventados, en prod) | OK de Sergio Urcullo 2-oct. Diseño en `scratchpad/demo/` de la sesión | En curso: primero se prueba que ningún paciente inventado pueda recibir un WhatsApp/correo real (aprobar un Recall, recordatorios). Email `oninteligenciaartificial+demo@gmail.com` (NO `+qa`: las limpiezas QA borran `+qa%`) |
-| **Desarrollo en paralelo** (workflow de la sesión) | worktrees `/home/user/wt-plat-dev` (rama `dev/plataforma`) y `/home/user/wt-hermes-bot` (`dev/bot`), SIN commits al 2-oct 13:00 | Plataforma: P1 fecha retroactiva del tratamiento + lista «en curso sin próxima cita», P2 presupuesto dental por fases con link público e impresión (diseño nuevo → se le muestra a Sergio Urcullo antes de publicar), P3 lo de Doctocliq. Bot: B1 cortar el «Listo, agendado» falso y la promesa de audio, B2 los 11 tests sin cambiar el texto firmado, B3 deploy-bot en seco. Web: W1 titular sin JS / LCP, W2 barrido de promesas. **Si la sesión muere, lo no commiteado de esos worktrees se pierde** |
-| Plan B de verificación inversa (`wa.me`) | ramas `v1/verificacion-inversa` (plataforma) y `wip/bot-verificacion-inversa` (hermes) | APAGADO y NO se enciende sin OK de Sergio Urcullo (orden de la madre 1-oct) |
-| SIAT: certificación en el piloto | `/opt/onia-siat/runner-20260929/emisor-v2/` + rama `wip/siat-validar-cada-paquete`; detalle en `BITACORA.md` (2-oct) | 2-oct (conteo local): **IX 160/160**, **VI 380/560**, general 96 %, 0 rechazos. Falta SOLO VI motivos 5-7 (180): necesitan el **CAFC** del piloto. Pedido a Sergio Urcullo: CAFC + captura nueva del «Listado de Etapas» para confirmar en el portal |
-| Respuestas con datos de la ayuda (deuda, stock) leen tablas del pack dental | — | Anotado: revisar la fuente para comercio, importadora y servicios |
+| **Carril plataforma: P1, P2, P3** | worktree `/home/user/wt-plat-dev`, rama `dev/plataforma` (11 commits rebasados sobre `master` `13b67dda`), **SIN push** | P1 «¿Cuándo fue?» y lista «A medias»; P2 presupuesto por fases con link público; P3 «Deuda», «Mañana sin confirmar», «Reprogramada». Revisión adversarial: 10 hallazgos confirmados y corregidos. tsc 0, vitest 9535 ✅. **Espera el OK de Sergio Urcullo a P2** (diseño nuevo; capturas enviadas el 3-oct). Con el OK: push a `claude/sharp-shannon-sqrmig`, PR, CI, merge, publicar, mirar. **Si la sesión muere antes del push, se pierde el worktree**: los commits viven solo ahí |
+| Prueba del chip (WhatsApp del cliente) | org «ZZ QA Clínica Chip» | Sergio Urcullo eligió hacerla el 3-oct. Le faltan 2 pasos: confirmar el correo de `+qachip` y Otorgar `addon.whatsapp` en `/admin/organizations/cmuqzov3y000001mzmrcq0i2t/capacidades`. Después conecta en `/settings/chatbot` |
+| Catálogo: «recupera pacientes con tratamiento a medias» | `ONIA_CATALOGO_DE_VENTA.md` §8 | Se barre cuando se VEA en pantalla, en la demo, a «Vuelve a citar» encontrando a Natalia y Marcelo (corrida de agentes 07:00 La Paz). Sergio Urcullo: Otorgar `module.agents` sin fecha a la demo (vence 16-oct). Avisar a la madre v1: destraba el anuncio D4 |
+| SIAT: certificación en el piloto | `/opt/onia-siat/runner-20260929/` | 96 % (IX 160/160, VI 380/560). Falta VI motivos 5-7: necesitan el **CAFC**. Estudio y plan completos en `hermes-content/docs/ONIA_FACTURACION_ESTADO_REAL.md` (decisión: Onia factura a mano en el Portal Web hasta autorizar el 9473; clientes con Onia como proveedor). Riesgo: RND 102600000034 (anexo Ley 1733) puede obligar a rehacer pruebas antes del 16-nov |
+| Plan B de verificación inversa (`wa.me`) | ramas `v1/verificacion-inversa` y `wip/bot-verificacion-inversa` | APAGADO; no se enciende sin OK de Sergio Urcullo |
 
 **Cómo funciona el recordatorio con botones (para no re-investigar):**
 - Plantilla `recordatorio_cita` (nuevo default de `PLANTILLA_RECORDATORIO_POR_DEFECTO`), UTILITY, 3 QUICK_REPLY. La crea
@@ -107,6 +118,17 @@ Desarrollar y publicar Onia Platform 1.0 hasta cobrar al primer cliente. Qué sa
 - **YouTube** bloquea la IP de la nube; **SendMessage** desde la nube falla; los mensajes programados entre sesiones
   están descartados por Sergio Urcullo.
 - Turbopack entra en pánico con `node_modules` symlinkeado en worktrees: usar `--webpack`.
+- **Escribir en la base de prod desde la nube** (confirmar el correo de una QA, otorgar un add-on): el control de permisos
+  lo bloquea («Remote Shell Writes»), aun de a una fila. La demo se sembró con la autorización EXPLÍCITA de Sergio
+  Urcullo en el chat; lo demás lo hace él desde la UI de superadmin. El conector de Gmail dio «Precondition check failed».
+- **«`tsc` verde acá = verde en el VPS»:** falso. El 3-oct el build de la web murió en el VPS por un
+  `/// <reference types="vite/client" />` (pnpm no expone vite); se arregló con `src/import-meta-glob.d.ts`.
+- **Workflows largos cortados por el límite de uso** (2-oct 17:30 UTC): la verificación quedó a medias; se retomó el 3-oct
+  con `resumeFromRunId` (lo hecho vuelve de caché). Si el script no es «legible» para el tool, copiarlo al scratchpad.
+- **`pgrep -f` / `pkill -f` con el patrón en la propia línea de comando** se encuentran a sí mismos (falso «en curso»,
+  y dos veces mató la propia shell): usar PID o puerto.
+- **«El 1-oct es obligatorio para los grupos 9-12»:** dejó de ser cierto el 30-sep (RND 102600000038). La web lo
+  afirmó tres días; corregido el 3-oct con un gate que lo impide volver.
 
 ## 6. Qué depende de Sergio Urcullo (lo canaliza la madre)
 
@@ -118,11 +140,17 @@ Desarrollar y publicar Onia Platform 1.0 hasta cobrar al primer cliente. Qué sa
   > Negocio verificado, WABA aprobada, calidad OK y método de pago activo. La necesitamos para el código de un solo uso del
   > alta en app.onia.com.bo. ¿Qué restricción tiene la cuenta y cómo la habilitamos?
 - ~~OK a la web v1 y a los legales 1.3~~: dado el 2-oct, publicado.
-- **Prueba con el chip (2-oct, en curso):** conecta el chip en `app.onia.com.bo/settings/chatbot` con `sergio@onia.com.bo`
-  (org «Clínica Sergio» `cmtlyz6y9000001nw2934n3cw`) y avisa «conectado». Después: paciente con SU número personal, cita
-  a 1h30-2h30 (ventana del cron de 2 h: 90-150 min), tocar los 3 botones.
-- Firma de la frase-prefijo de la pauta (`363dcf10`): destraba la suite del bot y con eso su publicación.
-- Chip prepago para la prueba del WhatsApp del cliente (recordatorio con botones y agente conversacional).
+- **OK al presupuesto por fases (P2)**: capturas enviadas el 3-oct. Destraba la publicación de P1, P2 y P3 (§3).
+- **Prueba con el chip (3-oct):** en la org «ZZ QA Clínica Chip»: (1) confirmar el correo de `+qachip` en el Gmail de
+  Onia, (2) Otorgar `addon.whatsapp` en `/admin/organizations/cmuqzov3y000001mzmrcq0i2t/capacidades`, (3) conectar el
+  chip en `/settings/chatbot`, (4) avisar «conectado». Después: paciente con SU número personal, cita a 1h30-2h30, tocar
+  los 3 botones. Si sale bien, el agente de WhatsApp queda como está en la web (decisión del 3-oct).
+- **Demo:** confirmar el correo de `+demo`, «Recuperar acceso» para elegir su clave, Otorgar `module.agents` sin fecha
+  (`/admin/organizations/cmur09d75000601mz12vg59qn/capacidades`), y después de las 07:00 una captura de Pendientes.
+- **Tablero interno:** abrir `app.onia.com.bo/dashboard` como superadmin y mandar captura (la nube no puede entrar).
+- **SIAT:** (1) el CAFC del piloto con captura, (2) llamar al 800 10 3444: ¿el 9473 se autoriza con el formato actual o
+  con el de la Ley 1733?, ¿la prórroga de 60 días se suma al 04-nov o corre desde que se pide?, (3) decidir si la
+  factura va incluida en los planes (recomendado) o como add-on.
 - Aprobar el pago de prueba en `/admin/payments` cuando la madre avise. SIAT: el **CAFC del piloto** y una captura nueva del «Listado de Etapas».
 
 ## 6b. Pendiente priorizado: lo que copiar de Doctocliq (madre, 2-oct)
@@ -146,14 +174,16 @@ tabla sin acción). Nada se construye sin el filtro de Etapa 1. Orden por impact
 
 ## 7. Próximos pasos (en orden)
 
-0. **Cuenta demo** (§3): seguridad de envíos probada → crear por el alta real → plan sin vencer → datos inventados
-   con 2 casos de Recall → MIRAR /agents y /pending encontrando a esos dos.
-0a. **Workflow de desarrollo** (§3): revisar cada carril, gates, mergear a las ramas `claude/sharp-shannon-sqrmig`
-   (plataforma reiniciada desde `master` `af2ded5c`, hermes desde `main` `ae4a1fc53`), PR, publicar según la regla.
-0b. **Bot de ventas:** apagar Cal.com y la transcripción (servicios inexistentes → «Listo, agendado» falso), arreglar
-   los 11 tests de pauta y publicarlo (necesita la firma de `363dcf10` o sacar ese commit del deploy).
-1. ~~Mergear onia-hermes#84~~ hecho y publicado (§2). Los commits del bot ya están en `main`; falta publicarlo.
-2. Con la suite del bot en verde (firma de la pauta): `deploy-bot.sh --aplicar` (o `publicar.sh` del bot).
-3. Con el chip: conectar el número a una org QA → plantilla `recordatorio_cita` aprobada → cita a 24 h → tocar los 3 botones → MIRAR el estado en el panel y que el bot siga contestando después. Recién ahí ✅ en el catálogo y en la ayuda.
-4. Pago de prueba de punta a punta cuando la madre avise. SIAT: con el CAFC, cargarlo en `siat-piloto.env` (SIAT_PILOT_CAFC) y lanzar VI motivos 5-7 con `run-case-v2.sh` (respaldo antes, como dice la bitácora).
-5. Producto, según la competencia: presupuesto por fases desde el odontograma.
+1. Con el OK de Sergio Urcullo a P2: push de `dev/plataforma` (wt-plat-dev) a `claude/sharp-shannon-sqrmig`, PR, CI,
+   merge, `publicar.sh`, y MIRAR en prod la lista «A medias», la ficha con «Deuda», «Mañana sin confirmar» y el
+   presupuesto. Sin OK a P2: sacar su commit (`8131ae99` y el fix `89892a3f`) y publicar P1+P3.
+2. Demo: después de la corrida de las 07:00, mirar Pendientes de la demo (captura de Sergio Urcullo o de la madre) →
+   barrer la línea del catálogo §8 → avisar a la madre v1 (D4).
+3. Chip: con «conectado», verificar plantilla `recordatorio_cita` aprobada, cita de prueba, tocar los 3 botones, MIRAR el
+   estado en el panel; recién ahí ✅ en el catálogo.
+4. SIAT: con el CAFC, cargarlo en `siat-piloto.env` (SIAT_PILOT_CAFC), backup y lanzar VI motivos 5-7 con
+   `run-case-v2.sh`; pedir captura nueva del «Listado de Etapas». Plan de producto: `ONIA_FACTURACION_ESTADO_REAL.md` §5.
+5. Pendientes para después (alcance congelado, NO hacer sin orden): reintento del reenvío del bot a la plataforma
+   (punto 4 de la madre v2), Recall caso B con presupuesto no aceptado (punto 5: necesita el dato «aceptado»), «Pide
+   atención» de `/admin/metricas` mirado en prod, Términos §1.2 «con tus propias credenciales» vs token delegado (legal),
+   slugs `demo-` para las demos, «Importadora Rojas» ¿es de la casa?
