@@ -1,7 +1,8 @@
 # ONIA — Estado legal en Bolivia
 
 > **Fuente de verdad (sin fecha en el nombre): se EDITA este archivo cuando algo cambie.**
-> Última verificación contra fuentes externas y contra producción: **2026-08-18**.
+> Última verificación contra fuentes externas y contra producción: **2026-08-18** (la fila
+> fiscal de §1.4, re-verificada el **2026-10-03** contra la RND 102600000038).
 > Regla heredada de `onia-contabilidad-bolivia`: toda obligación con su norma citada;
 > sin fuente oficial = **"sin verificar"**, y así se dice.
 >
@@ -29,9 +30,11 @@
    un Gmail personal como canal de derechos sobre datos de salud.
 5. **La portabilidad que promete el contrato no existe en el producto**: lo único
    exportable es un CSV de facturas. No hay export de pacientes ni de historias clínicas.
-6. Fiscal: sin novedad que nos cambie el plan. **RND 102600000007** sigue mandando
-   (30-sep-2026), y apareció la **RND 102600000026** (TCO del BCB en facturas en moneda
-   extranjera), que toca a clientes que facturan en dólares.
+6. Fiscal: sin novedad que nos cambie el plan. ⚠️ *(Corregido el 2026-10-03: acá decía que la
+   **RND 102600000007** «sigue mandando (30-sep-2026)». El 30-sep la **RND 102600000038** abrogó
+   las designaciones de los grupos 9° a 12° y dejó sin efecto ese plazo; ver §1.4.)* Apareció la
+   **RND 102600000026** (TCO del BCB en facturas en moneda extranjera), que toca a clientes que
+   facturan en dólares.
 
 ---
 
@@ -104,7 +107,7 @@ consumidor, y (d) **causa penal personal** por el CP art. 302. Ninguna requiere 
 
 | Qué | Norma | Estado 2026-08-18 |
 |---|---|---|
-| Facturación en línea, grupos 9° a 12° | **RND 102600000007** (25-mar-2026) | **Sin novedad posterior que lo cambie.** Vence **30-sep-2026**; desde el 1-oct esos NITs emiten solo por modalidad en línea. Los grupos son **listas nominales de NITs** (RND 102400000004/05/12/25): **prohibido venderlo como obligación universal** |
+| Facturación en línea, grupos 9° a 12° | ~~RND 102600000007~~ → **RND 102600000038** (30-sep-2026) | ⚠️ **Sin efecto desde el 30-sep-2026** *(corregido el 2026-10-03; decía «sin novedad posterior», vencía el 30-sep y desde el 1-oct esos NITs emitían solo en línea)*. La RND 102600000038 abrogó las RND que designaban a los grupos (102400000004/05/12/25) y dejó sin efecto sus plazos; el SIN asignará periódicamente una modalidad en línea a quien no tenga ninguna, sin fecha. **Prohibido decirle a nadie que está obligado «desde el 1-oct»**. Detalle: `ONIA_FACTURACION_ESTADO_REAL.md` §2.6 |
 | **Novedad relevante** | **RND 102600000026** (jul-2026) | Modifica el parágrafo IX del art. 25 de la RND 102100000011: toda factura en **moneda extranjera** debe registrar el **Tipo de Cambio Oficial del BCB** vigente a la fecha. Nace del régimen cambiario flexible (RM 245 de 26-jun-2026). **Impacta a clientes que facturan en USD** — y a cualquier módulo nuestro que calcule tipo de cambio |
 | Otra de 2026 | RND 102600000006 (20-mar-2026) | Facturación en línea para traslado interno de mercancías. Relevante para el pack importadora/comercio |
 | **Conservación de registros** | **Ley 2492 art. 70 num. 8** + art. 59 mod. **Ley 812** | Conservar libros, comprobantes y *"medios de almacenamiento, datos e información computarizada"* mientras el tributo no prescriba: **8 años**. **Código de Comercio art. 52**: mínimo 5 años |
@@ -297,7 +300,8 @@ una afirmación más que corregir).
 
 **Fiscal:**
 [SIN — índice RND 2026](https://www.impuestos.gob.bo/index.php/rnd-2026/) ·
-[SIN — ampliación al 30-sep-2026 (RND 102600000007)](https://www.impuestos.gob.bo/index.php/nota_prensa/el-sin-amplia-hasta-el-30-de-septiembre-el-plazo-para-la-implementacion-de-la-facturacion-en-linea/) ·
+[SIN — RND 102600000038, abroga las designaciones de los grupos 9° a 12° (PDF)](https://www.impuestos.gob.bo/wp-content/uploads/2026/09/RND-102600000038-Abrogacio%CC%81n.pdf) ·
+[SIN — ampliación al 30-sep-2026 (RND 102600000007, sin efecto desde el 30-sep)](https://www.impuestos.gob.bo/index.php/nota_prensa/el-sin-amplia-hasta-el-30-de-septiembre-el-plazo-para-la-implementacion-de-la-facturacion-en-linea/) ·
 [RND 102600000026 (PDF)](https://www.impuestos.gob.bo/wp-content/uploads/2026/07/RND102600000026.pdf) ·
 [SIN — facturas en moneda extranjera con TCO del BCB](https://www.impuestos.gob.bo/index.php/nota_prensa/se-establece-que-facturas-en-moneda-extranjera-deben-registrar-el-tipo-de-cambio-oficial-vigente-del-bcb/)
 

@@ -26,12 +26,18 @@ import { PAGINAS, archivoDe } from "../rutas";
  *   · Los cruces de precios atan CIFRAS contra su fuente; una fecha no es un
  *     monto y no es sujeto de ninguno.
  *
- * Las dos fechas son ciertas y significan cosas opuestas: la RND 102600000007
- * fija el **30-09-2026** como último día de transición y el **01-10-2026**
- * como primer día de obligación. Sueltas, un rótulo de una línea se lee como
- * LA fecha límite — y `CLAUDE.md` prohíbe el 30 de septiembre por nombre,
- * justo porque ya se corrigió en otras superficies por este mismo motivo. El
- * matiz completo tiene un solo lugar donde cabe y es `SIAT_BAJADA`.
+ * Las dos fechas significaban cosas opuestas: la RND 102600000007 fijaba el
+ * **30-09-2026** como último día de transición y el **01-10-2026** como primer
+ * día de obligación. Sueltas, un rótulo de una línea se lee como LA fecha
+ * límite — y `CLAUDE.md` prohíbe el 30 de septiembre por nombre, justo porque
+ * ya se corrigió en otras superficies por este mismo motivo. El matiz completo
+ * tiene un solo lugar donde cabe y es `SIAT_BAJADA`.
+ *
+ * ⚠️ 2026-10-03: el 30-09-2026 es además el día de la RND 102600000038, que dejó
+ * sin efecto ese plazo. La regla de este archivo vale igual —y más—: cuando la
+ * norma cambió, el Kicker se corrigió solo porque sale de `lib/siat.ts`
+ * (`Plazo 01-10-2026 · sin efecto`), y la única corrección a mano en las páginas
+ * fue su metadata.
  *
  * El sujeto es la CLASE, no el Kicker: toda `page.tsx` del disco. Una página
  * fiscal nueva nace cubierta, y el universo se camina con `readdirSync`

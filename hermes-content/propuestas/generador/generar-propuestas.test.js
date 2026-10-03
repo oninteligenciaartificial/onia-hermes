@@ -163,18 +163,22 @@ test('buildHtml: "El costo de esperar" solo con datos reales del cliente', () =>
   assert.ok(html.includes('DATO-X') && html.includes('COSTO-X') && html.includes('TOTAL-X'));
 });
 
-test('buildHtml: la línea SIAT exige el grupo confirmado del cliente', () => {
-  const sinGrupo = { ...base, costoDeEsperar: {
-    items: [{ concepto: 'c', costo: 'x' }], siat: {},
+// Hasta el 2026-10-03 este caso EXIGÍA que, con `siat.grupo`, la propuesta dijera «desde el 1 de
+// octubre de 2026 solo podés emitir por la modalidad en línea asignada (RND 102600000007)». El
+// 30-sep la RND 102600000038 abrogó las designaciones de los grupos 9° al 12° y dejó sin efecto ese
+// plazo: el caso se da vuelta y vigila que ninguna propuesta lo vuelva a afirmar.
+test('buildHtml: ninguna propuesta afirma el plazo fiscal que quedó sin efecto', () => {
+  const conGrupo = { ...base, costoDeEsperar: {
+    items: [{ concepto: 'c', costo: 'x' }], siat: { grupo: '10°' },
   } };
-  const h1 = buildHtml(sinGrupo);
-  assert.ok(h1.includes('El costo de esperar'));
-  assert.ok(!h1.includes('1 de octubre de 2026'), 'no debe citar la fecha sin grupo confirmado');
-  const conGrupo = { ...base, costoDeEsperar: { siat: { grupo: '10°' } } };
-  const h2 = buildHtml(conGrupo);
-  assert.ok(h2.includes('1 de octubre de 2026'));
-  assert.ok(h2.includes('RND 102600000007'));
-  assert.ok(h2.includes('Portal Web del SIN cumple gratis'), 'debe decir la verdad completa');
+  const h1 = buildHtml(conGrupo);
+  assert.ok(h1.includes('El costo de esperar'), 'los números del cliente se siguen imprimiendo');
+  for (const vieja of ['1 de octubre de 2026', 'RND 102600000007', 'grupo 10°', 'Facturación en línea:']) {
+    assert.ok(!h1.includes(vieja), `la RND 102600000038 dejó sin efecto el plazo: «${vieja}» no va`);
+  }
+  // Sin números del cliente, el grupo SIAT solo ya no abre la sección.
+  const soloGrupo = { ...base, costoDeEsperar: { siat: { grupo: '10°' } } };
+  assert.ok(!buildHtml(soloGrupo).includes('El costo de esperar'));
 });
 
 test('parseArgs: slug sin --track no se pierde', () => {

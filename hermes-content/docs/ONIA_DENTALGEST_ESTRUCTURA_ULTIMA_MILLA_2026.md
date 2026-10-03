@@ -1,6 +1,12 @@
 # ONIA - DentalGest: Estructura de la Ultima Milla (que anadir, en que capa, por que vende) - 2026
 
 Fecha: 2026-07-22. Estado: ESTRUCTURA / plan (ANTES de codear). Owner: ONIA.
+
+> ⚠️ **Corregido el 2026-10-03 — el gatillo SIAT de este plan ya no existe.** Todo lo que acá dice
+> «facturación en línea obligatoria al 30-sep-2026 (grupos 9-12)» como motivo de compra quedó sin
+> efecto el mismo 30-sep: la **RND 102600000038** abrogó las designaciones de esos grupos y el SIN
+> asignará periódicamente una modalidad en línea, sin fecha. No se usa como urgencia en ninguna
+> venta. Estado vigente: `ONIA_FACTURACION_ESTADO_REAL.md` §2.6.
 Desarrollado con subagentes (gap audit del repo real + foso diferenciador + baseline de competencia).
 
 Sergio pidio, antes de picar codigo: (1) que se ANADE a DentalGest, (2) que le DEVUELVE al CORE (reusable para otros SaaS), (3) pensar toda funcion desde "esto nos diferencia de lo gratis y hace que el comprador PAGUE". Este doc responde las 3. Detalle completo en las secciones de investigacion (abajo).

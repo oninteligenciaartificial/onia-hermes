@@ -27,8 +27,10 @@ import g from "./guia.module.css";
  * y hoy no está en ningún lado en una sola hoja.
  *
  * El texto NO se redactó acá: sale entero de `lib/siat.ts`, que ya era la
- * fuente única del contenido fiscal. Si el SIN mueve la fecha por tercera vez
- * se corrige ese archivo y las dos páginas se enteran solas.
+ * fuente única del contenido fiscal. Si el SIN cambia la regla se corrige ese
+ * archivo y las dos páginas se enteran solas — pasó el 3-oct con la RND
+ * 102600000038, que dejó sin efecto el plazo del 1-oct: la metadata de acá
+ * abajo es lo único que hubo que tocar en esta página.
  *
  * Esto de arriba era FALSO hasta el 2026-09-17 y por eso ahora tiene un gate:
  * el Kicker del hero tenía la fecha escrita a mano y decía `Plazo · 30-09-2026`
@@ -50,14 +52,14 @@ export const metadata: Metadata = {
   title:
     "Cómo habilitarte para facturar en línea, gratis: 6 pasos en la Oficina Virtual del SIN",
   description:
-    "Guía de una página: cómo saber si te alcanza el plazo del 1 de octubre de 2026 y los 6 pasos para habilitarte en el Portal Web en Línea del SIN. El trámite es gratuito y no necesitás comprar ningún sistema.",
+    "Guía de una página: el plazo del 1 de octubre de 2026 quedó sin efecto (RND 102600000038). Cómo saber qué modalidad de facturación tenés y los 6 pasos para habilitarte en el Portal Web en Línea del SIN. El trámite es gratuito y no necesitás comprar ningún sistema.",
   alternates: { canonical: "/guia-facturacion" },
   openGraph: {
     type: "article",
     locale: "es_BO",
     title: "Habilitate para facturar en línea, gratis, en 6 pasos",
     description:
-      "La hoja que te falta: paso 0 para saber si te toca, los 6 pasos del trámite y lo que hay que tener a mano antes de empezar.",
+      "La hoja que te falta: paso 0 para saber qué modalidad tenés, los 6 pasos del trámite y lo que hay que tener a mano antes de empezar.",
     url: "/guia-facturacion",
   },
 };
@@ -226,6 +228,9 @@ export default function GuiaFacturacion() {
       {/* ------------------------------------------------------------------
           5 · Lo que frena. Sale de los pasos de arriba, no de estadísticas:
           no tenemos una muestra de negocios habilitados y no se inventa una.
+          El título decía «Las tres formas de no llegar»: sin plazo (RND
+          102600000038) no hay a dónde llegar, y una urgencia sin norma que
+          la respalde es fabricada.
       ------------------------------------------------------------------- */}
       <Block surface="ink" labelledBy="frena">
         <Reveal>
@@ -233,7 +238,7 @@ export default function GuiaFacturacion() {
             <Kicker>Lo que te frena</Kicker>
           </div>
           <h2 id="frena" className={s.h2} style={{ maxWidth: "22ch" }}>
-            Las tres formas de no llegar.
+            Las tres cosas que traban el trámite.
           </h2>
           <ul className={g.frena}>
             {SIAT_GUIA_FRENA.map((item, i) => (
@@ -263,7 +268,7 @@ export default function GuiaFacturacion() {
           </p>
 
           <div className={`${s.actions} ${g.noPrint}`}>
-            <Btn href="/facturacion">Qué exige la norma, en detalle</Btn>
+            <Btn href="/facturacion">Qué cambió en la norma, en detalle</Btn>
             <Btn href={WA_URL_LANDING} variant="line" external>
               Preguntanos tu caso por WhatsApp
             </Btn>

@@ -85,23 +85,25 @@ Cliente nuevo = agregar un objeto a `clientes.json` y correr el generador.
     números de ejemplo, rangos genéricos, promedios del rubro ni placeholders — un
     costo de esperar inventado es fabricar, y con el comprador B2B formal es lo que
     nos saca de la mesa. El generador ya lo fuerza: sin `items` válidos (cada uno
-    con `concepto` + `costo`) y sin `siat.grupo`, el bloque no se renderiza.
+    con `concepto` + `costo`), el bloque no se renderiza.
     - Preguntar los números en la reunión y citarlos como del cliente
       (`dato: "6 h/semana de tu recepcionista, dato que nos diste"`). Si un número
       no le cierra, se corrige y se rehace la cuenta: es **su** cuenta.
-    - **Línea fiscal (`siat.grupo`):** solo si el cliente confirmó SU grupo en la
-      Oficina Virtual — el grupo depende del NIT, no del rubro. Sin grupo
-      confirmado, la línea no se imprime y no se cita la fecha.
-      Fecha verificada: **RND 102600000007 (25-mar-2026)** amplió el plazo al
-      **30-sep-2026**; desde el **1-oct-2026** los grupos **9°–12°** emiten solo por
-      su modalidad en línea asignada
-      ([nota de prensa SIN](https://www.impuestos.gob.bo/index.php/nota_prensa/el-sin-amplia-hasta-el-30-de-septiembre-el-plazo-para-la-implementacion-de-la-facturacion-en-linea/)).
-      La fecha vive en el generador (`SIAT_FECHA`), no en `clientes.json`: se
-      actualiza en UN lugar y con RND citada. Antes de tocarla, cargar la skill
+    - ⛔ **Sin línea fiscal ni plazo del SIN (corregido 2026-10-03).** Acá se mandaba a
+      imprimir, con `siat.grupo`, que desde el 1-oct-2026 los grupos 9°–12° emitían
+      solo en línea (RND 102600000007; decía «25-mar», es del **23-mar-2026**). El
+      **30-sep-2026 la RND 102600000038** abrogó esas designaciones, dejó sin efecto el
+      plazo y no fija otro: el SIN «asignará periódicamente» una modalidad en línea a
+      los contribuyentes del IVA que no tengan ninguna. El generador ya no imprime la
+      línea (`siat` se ignora) y su test vigila que ninguna propuesta la afirme. Una
+      urgencia fiscal sin norma que la sostenga es fabricar. Fuente:
+      `hermes-content/docs/ONIA_FACTURACION_ESTADO_REAL.md` §2.6 y la skill
       `onia-contabilidad-bolivia`.
     - **Nunca "por ley tenés que comprarnos".** Siempre la verdad completa: el
-      Portal Web del SIN cumple gratis; lo que vendemos es no tipear dos veces.
-      Es timing, no miedo (ver memoria `siat-pitch-portal-gratis`).
+      Portal Web del SIN cumple gratis y la factura fiscal se emite ahí, ingresando
+      los datos de cada factura; lo que vendemos es el orden de ventas, compras e
+      IVA/IT (así lo dice `/facturacion`, y su gate prohíbe «sin retipear»). No es
+      miedo (ver memoria `siat-pitch-portal-gratis`).
 
 ## Secciones v3 del generador (usar cuando suman, no por default)
 
@@ -117,8 +119,9 @@ social +34%, CTA claro convierte lectura en respuesta):
   fundador (Bolivian Electric).
 - `comparativa` — tabla vs. statu quo (ej. TR4 vs ONIA) ANTES del pricing.
 - `costoDeEsperar` — `{ intro?, items[{concepto, dato?, costo}], total?, totalLabel?,
-  siat?{grupo}, nota? }`. Va justo antes de los paquetes (ancla el precio contra lo
-  que ya pierde). Solo números del cliente — ver regla 13.
+  nota? }`. Va justo antes de los paquetes (ancla el precio contra lo que ya pierde).
+  Solo números del cliente — ver regla 13. (`siat?{grupo}` se ignora desde el
+  2026-10-03: el plazo que imprimía quedó sin efecto.)
 - `proximosPasos[]` + `ctaWhatsapp` — 3 pasos + botón wa.me prefilleado.
 - `portada` + `resumenEjecutivo` — solo propuestas enterprise/formales.
 - `moneda` — header de precios en USD o mixto.

@@ -90,12 +90,11 @@ imágenes +72% cierre, prueba social +34%, CTA claro):
 | `ctaWhatsapp` | botón final: `url` (wa.me con texto prefilleado), `texto` |
 
 **`costoDeEsperar` — sin datos reales del cliente NO se imprime.** Sin `items`
-válidos (`concepto` + `costo`) y sin `siat.grupo`, el bloque no se renderiza:
-prohibido poner números de ejemplo, rangos genéricos o promedios del rubro como si
-fueran del cliente. La línea fiscal exige el grupo SIAT que el cliente confirmó en
-su Oficina Virtual (depende del NIT, no del rubro); la fecha vive en el generador
-(`SIAT_FECHA`, RND 102600000007) y siempre se aclara que el Portal Web del SIN
-cumple gratis. Detalle: regla 13 de la skill `propuestas-comerciales-onia`.
+válidos (`concepto` + `costo`) el bloque no se renderiza: prohibido poner números de
+ejemplo, rangos genéricos o promedios del rubro como si fueran del cliente. Ya no
+lleva línea fiscal: `siat.grupo` se ignora desde el 2026-10-03, porque el plazo que
+imprimía (1-oct-2026, RND 102600000007) quedó sin efecto por la RND 102600000038.
+Detalle: regla 13 de la skill `propuestas-comerciales-onia`.
 
 Imágenes: viven en `../assets/`. Ambientación editorial (Higgsfield/IA) o fotos
 reales — NUNCA screenshots falsos de producto (regla: no fabricar). Cuando haya

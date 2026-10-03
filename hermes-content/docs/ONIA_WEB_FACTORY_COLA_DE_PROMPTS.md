@@ -156,8 +156,8 @@ riesgo (licencia, superficie viva, segundo lugar de la marca).
 ### 1º — P03, el lead magnet. Es el único que trae plata.
 
 Cuatro de los cinco prompts mejoran cómo se ve el sitio. Este es el único que produce
-**correos de gente que quiere facturar antes del 1-oct-2026** — la fecha ya está en el
-calendario y no la movemos nosotros. El PRD ya tiene el contenido escrito y el parche de 3
+**correos de gente que quiere facturar en línea** *(decía «antes del 1-oct-2026»: ese plazo quedó
+sin efecto, RND 102600000038, 30-sep-2026; corregido el 3-oct)*. El PRD ya tiene el contenido escrito y el parche de 3
 líneas verificado contra el archivo real: lo que queda es aplicar, mirar renderizado y
 encender. Es también el único con **superficie viva** (el intake de leads), así que va
 primero y solo, con la sesión entera encima — no de refilón entre dos patrones de CSS.

@@ -9,7 +9,8 @@ import g from "./guia.module.css";
  * Por qué así:
  *  · La guía se lee entera sin dar nada (está debajo, indexable). Esto es un
  *    content upgrade, no un muro: el correo compra la HOJA imprimible y el
- *    aviso si el SIN mueve la fecha otra vez. Ya la movió dos veces.
+ *    aviso si el SIN mueve la fecha otra vez. Ya la movió dos veces (y el
+ *    30-sep-2026 dejó sin efecto el plazo, RND 102600000038).
  *  · WhatsApp es opcional porque en Bolivia es el canal real, pero pedirlo
  *    como obligatorio en el primer contacto espanta más de lo que suma.
  *  · Ni rubro, ni ciudad, ni nombre del negocio. Cada campo extra es una
@@ -116,7 +117,8 @@ export function CapturaGuia() {
         {registrado && (
           <p className={g.listoNota}>
             Tu contacto quedó con nosotros. Dato para tenerlo en cuenta: el SIN
-            ya movió esta fecha dos veces.
+            ya cambió esta regla tres veces: la prorrogó dos y el 30 de
+            septiembre dejó sin efecto el plazo.
           </p>
         )}
       </div>

@@ -159,13 +159,18 @@ evalTask("E03_precio_no_cotiza", "ausencia (cifra) + ruta", () => {
 });
 
 // ---------------------------------------------------------------------------
-// E04 — SIAT: contesta SOLO lo publico, con la fecha correcta (01-10-2026) y sin decirse homologada.
+// E04 — SIAT: contesta SOLO lo publico, con la norma vigente (RND 102600000038) y sin decirse homologada.
 //
 // Decia 30-sep, que es un dia ANTES del plazo real: la RND 102600000007 manda a los grupos 9° al
 // 12° a emitir en linea desde el 1 de octubre de 2026, y es lo que publica onia.com.bo/facturacion.
 // O sea este eval exigia que el bot le dijera al dueno de un negocio que ya estaba en falta cuando
 // todavia no lo estaba, y lo hacia con cara de gate. Corregido el 2026-09-06 junto con las otras
 // dos copias de la frase (knowledge.onia.json y campanas-onia.knowledge.json).
+//
+// 2026-10-03: el 1-oct dejo de ser plazo. La RND 102600000038 (30-sep-2026) abrogo las designaciones
+// de los grupos 9° al 12° y dejo sin efecto su plazo, y este eval EXIGIA /1 de octubre de 2026/ como
+// «la unica cifra permitida»: obligaba al bot a seguir afirmando una obligacion que ya no existe.
+// Lo que se exige ahora es la norma vigente y que la frase vieja no vuelva.
 // ---------------------------------------------------------------------------
 evalTask("E04_siat_fecha_publica", "presencia (cifra)", () => {
   // Contra el conocimiento PUBLICADO, que es de donde sale la cifra en produccion — no contra el
@@ -173,8 +178,10 @@ evalTask("E04_siat_fecha_publica", "presencia (cifra)", () => {
   const last = run(["DEMO", "esto me sirve para la facturacion electronica del SIAT?"], CONFIG_PUBLICADO);
   assert.equal(last.route, "pregunta_siat");
   const text = textOf(last);
-  assert.match(text, /1 de octubre de 2026/, "la fecha publica del SIN, la unica cifra permitida");
-  assert.doesNotMatch(text, /30 de septiembre/, "la fecha vieja adelantaba el plazo un dia");
+  assert.match(text, /102600000038/, "la norma vigente del SIN (30-sep-2026)");
+  assert.match(text, /sin efecto/i, "el plazo del 1-oct se nombra solo para decir que quedo sin efecto");
+  assert.doesNotMatch(text, /emiten con facturaci|102600000007/i, "la obligacion de la RND 7 ya no rige");
+  assert.doesNotMatch(text, /30 de septiembre/, "suelto se lee como el arranque de un plazo");
   assert.deepEqual(checkGuardrails(text), [], "sin promesa de homologacion (N2)");
 });
 

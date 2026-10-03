@@ -22,8 +22,12 @@ import { PAGINAS, archivoDe } from "../rutas";
  * después se SIRVE durante una ventana se gasta sola»*—: el valor se congela
  * en el build y el mecanismo da la sensación de estar cubierto sin cubrir
  * nada. La única redacción que sobrevive a un deploy que no ocurre es la que
- * **no caduca**: enunciar la norma en presente («desde el 1 de octubre de
- * 2026, esos negocios facturan en línea»), que es verdad antes y después.
+ * **no caduca**: la norma enunciada en presente, o un hecho ya ocurrido en
+ * pasado. ⚠️ El ejemplo que estaba acá («desde el 1 de octubre de 2026, esos
+ * negocios facturan en línea») dejó de ser verdad el 30-sep: la RND
+ * 102600000038 abrogó esa obligación. Ese caso lo vigila otro gate,
+ * `plazo-sin-efecto.test.ts`: éste mira el TIEMPO VERBAL y aquél, si la norma
+ * que se cita sigue viva. Son preguntas distintas y hacen falta las dos.
  *
  * El defecto que lo trajo, medido el 2026-09-06 sobre el árbol — a 24 días del
  * plazo, en las tres rutas fiscales, las tres con 200 en producción:
@@ -51,8 +55,10 @@ import { PAGINAS, archivoDe } from "../rutas";
  */
 
 /**
- * El plazo, escrito como lo escribe la gente. Si el SIN mueve la fecha por
- * tercera vez (ya van dos), acá se agrega la nueva y el gate sigue midiendo.
+ * El plazo, escrito como lo escribe la gente. Desde el 3-oct las dos fechas
+ * se nombran como historia (el plazo que la RND 102600000038 dejó sin efecto, y
+ * el día de esa RND): una oración que las ponga en futuro sigue siendo el
+ * defecto. Si el SIN fija una fecha nueva, acá se agrega y el gate sigue midiendo.
  */
 const PLAZO =
   /(1|1º|1°|01)\s*(de\s*)?(octubre|oct)[a-z]*\s*(de\s*)?2026|01-10-2026|2026-10-01|30\s*(de\s*)?septiembre\s*(de\s*)?2026|[úu]ltima semana de septiembre/i;
@@ -135,17 +141,28 @@ describe("el gate puede fallar", () => {
     expect(hablaEnFuturoDelPlazo("Dejarlo para la última semana de septiembre.")).toHaveLength(1);
   });
 
-  it("deja pasar la que enuncia la norma en presente, que es la que no caduca", () => {
+  it("deja pasar la que cuenta la norma en presente o en pasado, que es la que no caduca", () => {
+    // Hasta el 3-oct los dos ejemplos de acá eran la redacción de la RND
+    // 102600000007 («desde el 1 de octubre… emiten únicamente…»). Dejó de ser
+    // verdad el 30-sep: los ejemplos sanos son ahora los de la RND 102600000038.
     expect(
       hablaEnFuturoDelPlazo(
-        "Desde el 1 de octubre de 2026, esos negocios emiten únicamente por su modalidad de facturación en línea asignada.",
+        "La RND 102600000038, del 30 de septiembre de 2026, abrogó las resoluciones que obligaban a los grupos 9° al 12° a facturar en línea desde el 1 de octubre de 2026.",
       ),
     ).toEqual([]);
     expect(
-      hablaEnFuturoDelPlazo(
-        "La RND 102600000007 fijó el 30 de septiembre de 2026 como último día de transición.",
-      ),
+      hablaEnFuturoDelPlazo("¿Sigo obligado a facturar en línea desde el 1 de octubre de 2026?"),
     ).toEqual([]);
+  });
+
+  it("caza el futuro también sobre la norma nueva", () => {
+    // La RND 102600000038 dice que el SIN «asignará periódicamente» la
+    // modalidad. Copiado con una fecha al lado, el futuro vuelve a caducar.
+    expect(
+      hablaEnFuturoDelPlazo(
+        "Desde el 1 de octubre de 2026 el SIN asignará la modalidad, y vas a tener que facturar en línea.",
+      ),
+    ).toHaveLength(1);
   });
 
   it("no confunde un futuro que NO habla del plazo", () => {

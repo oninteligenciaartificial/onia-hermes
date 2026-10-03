@@ -60,7 +60,7 @@ a servicios de software). Elegir mal = pagar de más o incumplir. CONFIRMAR con 
 ### Palanca 5 — Timing y formalidad
 - Registrar ingresos/gastos en el período correcto.
 - **Bancarizar pagos ≥ Bs 50.000** (si no, se pierde crédito/deducibilidad).
-- Facturación en línea SIAT (obligatoria grupos finales 30-sep-2026): Onia emite factura por sus
+- Facturación en línea SIAT *(decía «obligatoria grupos finales 30-sep-2026»: ese plazo quedó sin efecto, RND 102600000038, 30-sep-2026; corregido el 3-oct)*: Onia emite factura por sus
   ventas → genera débito, pero da formalidad y permite al cliente su crédito (argumento de venta).
 
 ## 3. Disciplina de documentación (lo que guardamos SIEMPRE)
@@ -110,8 +110,10 @@ presenta ante el SIN.
 **Falta 1 dato:** el **NIT + último dígito** (para fijar las fechas de vencimiento del calendario SIN).
 
 **Acciones prioritarias (dado el estado):**
-1. **Completar la emisión SIAT** (trámite) — obligatorio para todos antes del 30-sep-2026 y necesario
-   para facturar formalmente a clientes. [acción de Sergio]
+1. **Completar la emisión SIAT** (trámite) — necesario para facturar formalmente a clientes desde un
+   sistema propio. [acción de Sergio] ⚠️ *Corregido el 3-oct: decía «obligatorio para todos antes del
+   30-sep-2026». Nunca fue para todos (solo grupos 9° a 12°, por NIT) y ese plazo quedó sin efecto
+   (RND 102600000038, 30-sep-2026). Onia ya cumple facturando por el Portal Web del SIN.*
 2. **Capturar crédito fiscal en las COMPRAS desde YA**, aunque todavía no se emita: cada gasto con
    factura al NIT de Onia acumula **saldo a favor de IVA** para cuando arranquen las ventas. Cuesta
    cero y es la palanca #1.
