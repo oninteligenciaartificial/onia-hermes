@@ -26,6 +26,12 @@
 >   5. En la nube, el PID 1 no recoge huérfanos: otras pruebas que miran «proceso vivo» con
 >      `kill(pid, 0)` pueden dar el mismo rojo falso que `tandas-v1`.
 >   6. `diagnostico` todavía no muestra el log del recolector de respuestas.
+> - **ANTES de cargar la llave de la rutina** (los 3 MEDIUM de la revisión de la madre v2, 3-oct; Sergio
+>   Urcullo aprobó mergear el #94 sin ellos):
+>   1. la respuesta no está atada al pedido: cualquiera que pueda pushear al repo puede dejar una
+>      `respuesta/<id>` de un pedido abierto;
+>   2. el tope de 16 KB se mide después de bajar el commit, no antes;
+>   3. la guarda del autosync depende del nombre de la rama (`pedido/*`, `respuesta/*`).
 
 > **ESTADO AL 1-oct ~21:30 UTC — leé esto primero.** Sesión `session_0154pQRYB6icZn9Z3SuJp35D`
 > (entorno «Onia»), rama `claude/kind-cannon-7hkc3c`, **PR #79** (borrador, sin conflictos con main).
