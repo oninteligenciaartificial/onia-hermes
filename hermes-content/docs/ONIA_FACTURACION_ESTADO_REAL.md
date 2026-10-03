@@ -528,10 +528,18 @@ intermedio, sin apagar la verificación. Lo detalla la tarea B de la investigaci
   también `sales-kit/01-ONE-PAGER-OFERTA.md`, `sales-kit/04-OBJECIONES.md`,
   `ONIA_FECHAS_CRITICAS_PLAN.md`, `ONIA_LEAD_MAGNET_GUIA_UNA_PAGINA_PRD.md`, la landing de
   `dentalgest-landing` (`siat.tsx`) y los guiones de `cola/plan-3-semanas/` que citan el 1-oct.
+  → **Corregido el 3-oct en la rama `dev/rnd38` (sin publicar):** `lib/siat.ts`, la metadata de las dos
+  páginas, sus tests y un gate nuevo (`(sitio)/plazo-sin-efecto.test.ts`); `04-OBJECIONES.md` §7, las
+  fechas críticas, el PRD del magnet y otros docs con la obligación como vigente. No hacía falta en
+  `01-ONE-PAGER` ni en los guiones (su «1-oct» es el de Meta). `dentalgest-landing` no se tocó: no está
+  publicada (`dentalgest.app` → Vercel `DEPLOYMENT_NOT_FOUND`, 3-oct). **Quedan fuera de ese barrido,
+  y siguen diciéndolo:** el bot de ventas (`deploy/vps-ops/bot/knowledge.onia.json:70`, vivo) y el
+  generador de propuestas (`propuestas/generador/generar-propuestas.js:168-186`, dormido sin `siat.grupo`).
 - **Términos v1.3, §1.2** *(crítico)*: «toda… emisión ante el SIN la hacés vos… con tus propias
   credenciales» choca con el modelo 1 (Onia guarda el token delegado). Va en la cláusula E5. Texto legal:
   pasa por Sergio Urcullo.
-- **Skill `onia-contabilidad-bolivia`:**
+- **Skill `onia-contabilidad-bolivia`:** → hecho el 3-oct en `dev/rnd38` (RND 38, 34, 28, la regla del
+  cobro y las dos trampas).
   - Corregir «facturación en línea obligatoria 30-sep-2026»: aplica solo a los NIT de los grupos 9-12,
     y el de Onia no figura. *(Crítico:)* y desde el 30-sep ni eso: la RND 102600000038 abrogó las
     designaciones. Sumar también la RND 102600000028 (homologación con el RNC hasta el 30-oct-2026) y la

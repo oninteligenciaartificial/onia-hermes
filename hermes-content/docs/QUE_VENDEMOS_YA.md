@@ -278,9 +278,10 @@ llenar la lista.**
 - **Dónde se vende:** una página en el sitio propio, cobro por QR/transferencia y entrega
   del PDF por correo a mano. **Cero infraestructura nueva y cero mantenimiento**: si el
   SIN cambia una pantalla, se edita el PDF.
-- **Por qué alguien pagaría:** el plazo de la facturación en línea es el **30-sep-2026** —
-  faltan 26 días — y el trámite es un laberinto de pantallas donde el que se equivoca
-  pierde una semana.
+- **Por qué alguien pagaría:** ~~el plazo de la facturación en línea es el **30-sep-2026** —
+  faltan 26 días —~~ ⚠️ *(corregido el 3-oct: ese plazo quedó sin efecto, RND 102600000038, 30-sep-2026; el SIN
+  asigna la modalidad en línea periódicamente, sin fecha)* el trámite es un laberinto de pantallas
+  donde el que se equivoca pierde una semana.
 - 🔴 **La objeción honesta, dicha acá y no descubierta en tres semanas:** un infoproducto
   sin audiencia no se vende solo. Hoy no tenemos lista de correos ni tráfico medido. Su
   valor más grande **no es la caja: es que califica** — el que paga Bs 149 por esto tiene

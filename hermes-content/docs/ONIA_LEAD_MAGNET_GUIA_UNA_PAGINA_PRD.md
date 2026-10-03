@@ -2,8 +2,8 @@
 
 **Estado:** ejecutar
 **Por qué:** el contenido ya está escrito en el repo, la página hermana (`/facturacion`) y el
-pipeline de leads ya viven en producción, y el plazo del 1-oct-2026 pone la urgencia sin
-inventar nada.
+pipeline de leads ya viven en producción, y la búsqueda de «facturación en línea obligatoria»
+sigue viva aunque el plazo del 1-oct-2026 quedó sin efecto (ver ⚠️ abajo).
 
 > **Origen.** P03 salió de un reel de @ianlee.js cuyo magnet era una guía **sobre PRDs**. Ese
 > TEMA no se copia — un ferretero boliviano no descarga una guía de PRDs; se copia la MECÁNICA
@@ -21,17 +21,25 @@ Por qué esta y no otra:
 |---|---|
 | Guía de PRDs (el tema del original) | Mercado equivocado. Nuestro comprador es dueño de negocio, no fundador técnico |
 | "10 tips para tu clínica" / por rubro | Sin fecha límite no hay urgencia, y parte la audiencia en tres |
-| "Qué exige el SIN el 1-oct" | Ya está publicado y gratis en `/facturacion`. Un magnet que repite una página pública no vale un correo |
+| "Qué exige el SIN" (era «el 1-oct»; ese plazo quedó sin efecto el 30-sep) | Ya está publicado y gratis en `/facturacion`. Un magnet que repite una página pública no vale un correo |
 | **Cómo habilitarte, paso a paso** | ✅ Es la pregunta que aparece DESPUÉS de leer `/facturacion`, no está en ningún lado en una sola hoja, aplica a los 5 rubros vendibles (todos tienen NIT), y la hicimos con nuestro propio NIT — no se fabrica nada |
 
-El gancho es la fecha: **RND 102600000007** fija el 30-sep-2026 como último día de transición
-para los grupos 9° al 12°. Desde el 1-oct esos NITs emiten solo en línea.
+El gancho ya **no** es la fecha. ⚠️ **Corregido el 2026-10-03:** acá decía que la **RND
+102600000007** fijaba el 30-sep-2026 como último día de transición y que desde el 1-oct los grupos
+9° al 12° emitían solo en línea. El **30-sep-2026 la RND 102600000038 abrogó** las RND que
+designaban a esos grupos (102400000004, 005, 012 y 025) y dejó sin efecto sus plazos de
+incorporación; el SIN asignará periódicamente una modalidad en línea a los contribuyentes del IVA
+que todavía no tengan ninguna (Par. II, sin fecha). Motivo declarado: aplicar la Ley 1733 (IVA
+sobre el precio neto, separado en la factura). Texto leído en el PDF del SIN; detalle en
+`ONIA_FACTURACION_ESTADO_REAL.md` §2.6. El gancho que queda es el que la norma sí sostiene:
+**«¿ya me asignaron la facturación en línea?»** y cómo habilitarse gratis en el Portal Web.
 
 ## 2. Promesa y a quién
 
-- **Promesa:** "En una hoja: si te toca el 1 de octubre, y los 6 pasos para habilitarte gratis
-  en la Oficina Virtual. Sin comprar nada."
-- **A quién:** dueño de negocio boliviano de 1 a 5 personas, con NIT activo, que ya escuchó del
+- **Promesa:** "En una hoja: cómo saber si el SIN ya te asignó la facturación en línea, y los 6
+  pasos para habilitarte gratis en la Oficina Virtual. Sin comprar nada." *(Decía «si te toca el 1
+  de octubre»: ese plazo quedó sin efecto el 30-sep, RND 102600000038.)*
+- **A quién:** dueño de negocio boliviano de 1 a 5 personas, con NIT activo, que escuchó del
   plazo y no sabe qué hacer el lunes. Dental/estética, comercio-ferretería, importadora.
 - **Por qué deja el correo:** le ahorra la tarde de averiguar en qué grupo está y qué botón
   tocar. Que la opción gratuita sea lo PRIMERO que decimos es lo que lo hace creíble.
@@ -126,7 +134,7 @@ en el repo), así que no hay tasa de conversión sin construir algo. Lo que sí 
 | Correos capturados / semana | Leads en Onia Center con `source` que empieza en `guia-siat` | ≥ 10 la primera semana |
 | Qué canal trae | Comparar los cuatro valores de `src` entre sí | Saber cuál sostener antes de gastar en ads |
 | Conversación abierta | Leads del magnet a los que Sergio les escribió | ≥ 50% contactados en 48 h |
-| Fin de vida | Después del 1-oct-2026 la promesa caduca | Revisar el 15-oct: reescribir o bajar |
+| Fin de vida | ~~Después del 1-oct-2026 la promesa caduca~~ Reescrita el 3-oct: el plazo quedó sin efecto (RND 102600000038) y la promesa pasó a «¿ya te asignaron la modalidad?», que no caduca con una fecha | Revisar el 15-oct si la búsqueda del plazo sigue trayendo correos |
 
 Sin denominador de visitas no hay "% de descarga". Si eso empieza a decidir plata (ads), recién
 ahí se instala un contador — no antes.
@@ -137,9 +145,11 @@ ahí se instala un contador — no antes.
   automatizado. El reel no lo dice y no se abrió el DM.
 - **Canibalización SEO** con `/facturacion`: mitigación arriba, y se vigila el ranking del
   término del plazo, que es el más valioso del sitio.
-- **Riesgo de fecha:** hubo dos prórrogas (RND 102500000036 y 102600000007). Si aparece una
-  tercera se corrige `lib/siat.ts` y las dos páginas se enteran solas — ese es el motivo de que
-  el texto viva en un solo archivo.
+- **Riesgo de fecha:** hubo dos prórrogas (RND 102500000036 y 102600000007) y después la
+  abrogación (RND 102600000038, 30-sep-2026). Cada cambio se corrige en `lib/siat.ts` y las dos
+  páginas se enteran solas — ese es el motivo de que el texto viva en un solo archivo. El gate
+  `(sitio)/plazo-sin-efecto.test.ts` pone en rojo cualquier superficie servida que vuelva a
+  afirmar la obligación del 1-oct como vigente.
 - **No colisiona** con el otro magnet anotado (ítem 3.9 del catálogo de ideas, "auditor de webs
   gratis"): otra pieza, otro público.
 
