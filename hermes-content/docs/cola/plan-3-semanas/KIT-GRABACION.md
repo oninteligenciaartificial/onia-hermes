@@ -219,3 +219,202 @@ nadie avisa: la terminal puede volver sola a la carpeta principal, y un comando 
   de trabajo, y las dependencias si las instalás de nuevo.
 - *«¿Cómo recuperaste la rama movida?»* Con el historial de git (`git reflog`), que guarda dónde estaba cada rama antes de
   moverse.
+
+## 4 · D06-A · Antes de cerrar la sesión: el handoff de siete campos
+
+**Palabra:** HANDOFF · **Molde:** Erik (la tarjeta de siete campos se arma de a uno) · **Largo:** ~60 s · **Verificado el 3-oct**
+con `hermes-content/docs/handoff/README.md` (los siete campos, y la compactación del 22-ago en «Por qué esto y no confiar
+en la compactación») y con CLAUDE.md (el trabajo sin commit del 4-sep).
+
+**(a) Qué es, como a un amigo.** Un handoff es una nota que la sesión de Claude Code escribe antes de cerrarse, con siete
+campos fijos. La sesión siguiente la lee y arranca donde quedó la otra, sin preguntarte nada. Es lo mismo que dejarle el
+parte al que entra al turno siguiente.
+
+**(b) Por qué le importa a quien mira.** Cada sesión nueva de Claude Code arranca de cero, y el resumen automático no
+sirve de puente: guarda todo con el mismo peso, el estado de hoy y cada idea descartada. Con la nota, la sesión siguiente
+no repite los errores de la anterior.
+
+**(c) Qué tener abierto antes de grabar**
+1. Un archivo de ejemplo `handoff-ejemplo.md` con los siete títulos y un renglón inventado en cada uno, para no mostrar
+   datos reales. Los siete:
+   - Objetivo;
+   - Qué quedó en producción;
+   - Qué quedó a medias, y dónde;
+   - Archivos y cambios;
+   - Intentos fallidos;
+   - Qué depende de vos;
+   - Próximos pasos.
+2. Una terminal en esa carpeta para la prueba: `claude`, y el mensaje *«Leé solo handoff-ejemplo.md y decime qué hacés
+   ahora»*.
+
+**(d) Guion por tomas** (cada toma a cámara; entre corchetes, lo que va en pantalla)
+- **T1, gancho:** «Cuando cerrás una sesión, lo que aprendió se va con ella. La próxima arranca de cero.»
+- **T2:** «Probé confiar en el resumen automático. El veintidós de agosto una sesión se compactó, y el resumen era fiel pero
+  larguísimo: cada error y cada idea descartada, con el mismo peso que el estado actual. Un resumen no elige.»
+- **T3:** «Ahora, al cerrar, Claude escribe un archivo con siete campos.» [tarjeta vacía con 7 renglones]
+- **T4:** «Uno, el objetivo y si se cumplió. Dos, qué quedó funcionando. Tres, qué quedó a medias: rama y commit. Cuatro, los
+  archivos que importan. Cinco, los intentos fallidos y por qué. Seis, qué depende de vos. Siete, los próximos pasos.»
+  [cada campo entra cuando lo nombrás]
+- **T5:** «El cinco es el que nadie escribe y el que más vale: evita repetir callejones.» [sello sobre el campo 5]
+- **T6:** «Lo que no se commiteó se nombra con su riesgo: el cuatro de septiembre una sesión llegó al cierre con un trabajo
+  entero sin commit.»
+- **T7:** «Para comprobar, pasale solo ese archivo a una sesión nueva. Si sigue sin preguntarte nada, está bien escrito.»
+  [grabación de pantalla: la sesión nueva respondiendo]
+- **T8, cierre:** «La plantilla está en la comunidad: comentá HANDOFF y te paso el link.» Después, la toma aparte de
+  despedida (~4 s).
+
+**(e) Lo que te pueden preguntar**
+- *«¿No alcanza con /compact?»* No. Compactar resume la conversación, pero no elige qué importa. El handoff lo escribís
+  pensando en quien sigue: qué está vivo, qué está a medias y qué no hay que volver a probar.
+- *«¿Dónde lo guardo?»* En el repo, un archivo por tema o proyecto, y commiteado. Si no está en git, la sesión nueva no lo
+  ve.
+- *«¿Se lo pido yo o lo hace solo?»* Lo podés pedir con un prompt fijo al cerrar («escribí el handoff con los siete
+  campos») o dejarlo como regla en tu CLAUDE.md.
+
+## 5 · D04-C · «Verificado» con un 200, y el login mostraba texto roto
+
+**Palabra:** MIRAR · **Molde:** Santiago (la prueba, las dos capturas, arriba) · **Largo:** ~65 s · **Verificado el 3-oct** con
+CLAUDE.md, regla «Verificar es MIRAR»: los nombres de iconos («credit_card_off», «verified_user») y la fuente de 3,9 MB
+que tardaba 117 s.
+
+**(a) Qué es, como a un amigo.** Un «200» es la respuesta del servidor que dice «la página contestó». No dice que se
+vea bien. Mi agente daba el login por verificado con eso y buscando texto en el código, y la página mostraba palabras
+donde iban los iconos.
+
+**(b) Por qué le importa a quien mira.** Si usás un agente para programar, te va a decir «funciona» con pruebas que no
+miran la pantalla. Esta pieza le da un prompt para que el agente verifique como lo haría una persona: abriendo la página.
+
+**(c) Qué tener abierto antes de grabar**
+1. **La captura sana:** `web-factory/apps/onia-platform/UsersPCAppDataLocalTemplogin-prod.png` (login con los iconos
+   bien).
+2. **La rota NO está guardada.** Hay que reproducirla y ponerle «reproducción» en pantalla:
+   - abrí `app.onia.com.bo/login` en Chrome;
+   - DevTools → Network → clic derecho en la fuente de iconos → «Block request URL» → recargá;
+   - se ven los nombres en vez de los iconos. Sacá la captura.
+3. El prompt, en un archivo de texto grande para que se lea en pantalla:
+   *«No me digas que funciona por el código de respuesta. Abrí la página con un navegador, sacá una captura, mirala, y
+   decime qué texto ves, cuánto pesó y cuánto tardó.»*
+
+**(d) Guion por tomas**
+- **T1, gancho:** «Mi agente me dijo varias veces que el login de mi sistema estaba verificado. Lo abrí yo, y en vez de
+  iconos había palabras: credit card off, verified user.» [arriba, la captura rota]
+- **T2:** «¿Cómo lo había verificado? Con un código doscientos, que solo dice "la página respondió", y buscando texto en el
+  código. Nunca la abrió.» [sello «200 ≠ se ve bien»]
+- **T3:** «La causa: la fuente de los iconos pesaba tres coma nueve megas y tardaba ciento diecisiete segundos. Mientras no
+  carga, ves el nombre del icono. Y ese nombre está en el código siempre, se vea bien o no. Buscar texto no lo distingue.»
+  [contador 3,9 MB · 117 s]
+- **T4:** «Desde ese día, verificar es mirar. Cuando Claude Code te diga que algo funciona, pedile esto:» [el prompt]
+- **T5:** lee el prompt entero a cámara.
+- **T6:** «Salió bien cuando en la captura ves iconos dibujados, no palabras, y la página carga en segundos, no en minutos.»
+  [captura sana al lado de la rota]
+- **T7, cierre:** «El prompt completo está en la comunidad: comentá MIRAR y te paso el link.» Más la toma de despedida.
+
+**(e) Lo que te pueden preguntar**
+- *«¿Qué es un 200?»* El código con que el servidor dice «te contesté». Puede venir con la página rota, vacía o a medio
+  cargar.
+- *«¿Cómo saca la captura el agente?»* Con un navegador sin ventana (Playwright o Chromium headless). Claude Code lo
+  puede instalar y usar si se lo pedís.
+- *«¿Por qué tardaba tanto la fuente?»* Porque se bajaba entera, con miles de iconos, para usar unos pocos. Se arregla
+  cargando sólo los que usás.
+
+## 6 · N06 · Google cambió Gemini CLI gratis por Antigravity CLI: qué cambia para vos
+
+**Palabra:** ANTIGRAVITY · **Molde:** Santiago (la prueba arriba: el aviso de Google y la página de migración) · **Largo:** ~60 s
+· **Grabar esta semana** (noticia del 2-oct) · **Verificado el 3-oct** en vivo:
+- geminicli.com (aviso);
+- developers.googleblog.com, «An important update: transitioning Gemini CLI to Antigravity CLI», del 19-may-2026;
+- antigravity.google/pricing, /docs/plans/, /docs/models/, /download (CLI v1.2.14), /docs/cli/install/,
+  /docs/cli/gcli-migration/ y /docs/cli/reference/.
+
+**(a) Qué es, como a un amigo.** Gemini CLI era el asistente de Google para la terminal, gratis con tu cuenta. El 18 de
+junio Google lo apagó para los usuarios gratis y los de los planes Pro y Ultra, y lo reemplazó por Antigravity CLI, que
+también es gratis, con un tope que se renueva cada semana.
+
+**(b) Por qué le importa a quien mira.** Si usaba Gemini CLI gratis y dejó de contestarle, no es su computadora. Y si se
+pasa, sus skills no se mudan solas: si no las mueve a mano, Antigravity no las ve.
+
+**(c) Qué tener abierto antes de grabar**
+1. **geminicli.com**, con el aviso de arriba: *«Unpaid tier and Google One users: Gemini CLI was replaced by Antigravity CLI
+   on June 18th, 2026.»*
+2. **La entrada del blog de Google Developers del 19-may**, en la línea «Starting today, Antigravity CLI is available to
+   everyone».
+3. **antigravity.google/download** y el comando de instalación:
+   - Mac o Linux: `curl -fsSL https://antigravity.google/cli/install.sh | bash`
+   - Windows (PowerShell): `irm https://antigravity.google/cli/install.ps1 | iex`
+4. **Una terminal** con `agy`. Se abre el navegador para entrar con tu cuenta personal de Google (@gmail.com).
+5. **La lista de qué traer de Gemini CLI**: la primera vez, `agy` detecta tu configuración vieja y te deja elegir.
+6. **Un proyecto con una skill en `.gemini/skills/`.** Si no tenés ninguna, armá una de prueba antes. Movela con
+   `mv .gemini/skills .agents/skills` y mostrá `/skills` dentro de `agy` con la skill listada.
+
+**(d) Guion por tomas**
+- **T1, gancho:** «Si usabas Gemini CLI gratis y un día dejó de contestarte, no es tu computadora: Google lo apagó.»
+  [arriba, el aviso de geminicli.com]
+- **T2:** «Desde el dieciocho de junio, Gemini CLI dejó de responder a quien lo usaba gratis con su cuenta de Google, y a los
+  planes Pro y Ultra. Lo reemplazó Antigravity CLI.» [el blog del 19-may]
+- **T3:** «La buena noticia: también es gratis, con un límite que se renueva cada semana, y trae Gemini tres punto ocho
+  Flash.» [la página de precios: «$0/month · weekly rate limits»]
+- **T4:** «¿Y si te quedás en Gemini CLI? Sigue andando, pero con una clave de API paga.»
+- **T5:** «Qué hacés hoy. Uno: instalalo con el comando que ves en pantalla y abrilo escribiendo a, ge, i griega. Entrás con
+  tu cuenta de Google.» [el comando + `agy`]
+- **T6:** «Dos: la primera vez, encuentra tu configuración de Gemini CLI y te pregunta qué traer.» [la lista de migración]
+- **T7:** «Tres, la trampa: las skills de tu proyecto no se mudan solas. Estaban en punto gemini barra skills. Ahora van en
+  punto agents barra skills. Movelas a mano.» [`.gemini/skills/` → `.agents/skills/`, con sello «a mano»]
+- **T8:** «Tu GEMINI punto md lo sigue leyendo igual. Cómo sabés que quedó: escribí barra skills y tienen que aparecer.»
+  [`/skills` con la skill]
+- **T9, cierre:** «Los comandos para Mac, Linux y Windows están en la comunidad de WhatsApp: comentá ANTIGRAVITY y te paso
+  el link.» Más la toma de despedida.
+
+**(e) Lo que te pueden preguntar**
+- *«¿Funciona con mi cuenta del trabajo?»* Google dice que hoy anda con cuentas personales en los países habilitados. Si
+  tu cuenta de Workspace da problemas, probá con una @gmail.com.
+- *«¿Y mis skills globales?»* También cambian de lugar: de `~/.gemini/skills/` a `~/.gemini/antigravity-cli/skills/`.
+- *«¿Qué modelos trae gratis?»* Gemini 3.8 Flash y otros (3.7 y 3.6 Flash, 3.1 Pro), con el tope semanal del plan gratis.
+
+## 7 · D02-A · La perilla de Claude Code que casi nadie toca
+
+**Palabra:** EFFORT · **Molde:** Santiago (la doc oficial arriba, con la línea marcada) · **Largo:** ~60 s · **Grabar esta semana** ·
+**Verificado el 3-oct:**
+- code.claude.com/docs/en/model-config, «Adjust effort level»: Opus 5.5 y Sonnet 5.5 aceptan `low`, `medium`, `high`, `xhigh`
+  y `max`. La línea: «The model's default effort: `high` on every model that supports effort, except that Opus 5.5 and
+  Sonnet 5.5 default to `medium`».
+- La tabla de niveles de esa misma página: «`max` may show diminishing returns and is prone to overthinking».
+- Los modelos de hoy: Fable 5.1, Opus 5.5, Sonnet 5.5 y Haiku 4.5. Claude Code arranca por defecto en Opus 5.5 en los planes
+  Pro, Max, Team y Enterprise.
+
+**(a) Qué es, como a un amigo.** El esfuerzo es cuánto piensa Claude antes de contestar. Tiene cinco niveles, de low a max.
+Con los modelos 5.5, Claude Code arranca en medium; antes arrancaba en high.
+
+**(b) Por qué le importa a quien mira.** Si siente que Claude Code «se puso más vago», puede ser la perilla, no el modelo. Y
+subirla es más barato que pasarse al modelo más caro.
+
+**(c) Qué tener abierto antes de grabar**
+1. La página code.claude.com/docs/en/model-config, sección **Adjust effort level**, con la línea del default marcada.
+2. Una terminal con `claude` y `/effort`, mostrando los cinco niveles.
+3. Tu tabla en una tarjeta:
+   - **low:** lo mecánico (renombrar, mover);
+   - **medium:** el día a día;
+   - **high / xhigh:** cuando la primera respuesta no alcanzó;
+   - **max:** casi nunca.
+
+**(d) Guion por tomas**
+- **T1, gancho:** «Si tu Claude Code ya usa los modelos cinco punto cinco, ahora arranca un nivel más abajo que antes. Y casi
+  nadie se dio cuenta.»
+- **T2:** «La perilla se llama esfuerzo: cuánto razona antes de responder. La documentación de Anthropic, lo que ves en
+  pantalla, dice que Opus y Sonnet cinco punto cinco vienen en medium. Opus cinco y Sonnet cinco venían en high.» [arriba, la
+  línea de la doc]
+- **T3:** «Para ver en cuál estás, escribí barra effort. Te abre cinco niveles: low, medium, high, xhigh y max.»
+  [grabación de pantalla de `/effort`]
+- **T4:** «Mi tabla. Low, para lo mecánico: renombrar, mover archivos. Medium, para el día a día. High o xhigh, cuando la
+  primera respuesta no alcanzó. Max, casi nunca: la documentación dice que tiende a pensar de más.» [la tabla se arma]
+- **T5:** «En mi empresa hay una regla: al modelo más caro se pasa solo cuando Opus, con esfuerzo alto, no alcanzó. Primero la
+  perilla, después el modelo.»
+- **T6:** «¿Cómo sabés si te conviene? Misma tarea, en medium y en high. Si en high la corregís menos, esa tarea va en
+  high.»
+- **T7, cierre:** «Comentá EFFORT y te paso mi tabla.» Más la toma de despedida.
+
+**(e) Lo que te pueden preguntar**
+- *«¿Cuál es el modelo más caro?»* Hoy, Fable 5.1. Por arriba de Opus 5.5.
+- *«¿Y en la API pasa lo mismo?»* No del todo. En la API sólo Opus 5.5 arranca en medium; Sonnet 5.5 sigue en high. El
+  default de Sonnet 5.5 en medium es de Claude Code.
+- *«¿Se puede dejar fijo?»* Sí: `/effort` en la sesión, al abrir con `claude --effort high`, o la variable
+  `CLAUDE_CODE_EFFORT_LEVEL`.
