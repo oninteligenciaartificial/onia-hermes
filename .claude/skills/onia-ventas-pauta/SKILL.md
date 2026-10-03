@@ -332,6 +332,20 @@ Trampas pagadas armando v3 (2-oct):
 - Presupuesto en centavos de USD: USD 140 = `14000`, como presupuesto total de la campaña con fecha de fin.
   Meta rechaza un **límite** de gasto menor a USD 100.
 
+### 5.1 Seguimiento por WhatsApp y remarketing (medido 3-oct; playbook `sales-kit/SEGUIMIENTO-LEADS.md`)
+
+- **Una plantilla no lleva audio.** Encabezados válidos: texto, imagen, video, documento, ubicación (docs de
+  Meta). El audio de Sergio Urcullo va como VIDEO (voz sobre una captura fija, MP4 H.264 + AAC, ≤16 MB) o, con la
+  ventana de 24 h abierta, como nota de voz suelta.
+- **Las plantillas a leads salen desde la bandeja de Chatwoot con el usuario de Sergio Urcullo.** Así el bot se
+  calla (traspaso de `chatwoot-adapter.mjs`). Si salen por envío automático, el botón que toca el lead le llega al
+  bot y contesta con su guion.
+- **Público personalizado con un puñado de teléfonos: no.** Meta recomienda al menos 1.000 personas y exige base
+  legal para subir la lista. Para menos de 100 leads, el remarketing es la secuencia de plantillas (≈ USD 0,074
+  cada una, `usage-run.mjs`).
+- **Un borrador viejo puede quedar en contra del catálogo.** El de «F» del 1-oct contestaba «sí» al tratamiento a
+  medias, y el catálogo lo prohibió el 2-oct. Antes de mandar un borrador guardado, se lo compara de nuevo.
+
 ## 6. Qué bloquea la nube (y qué no)
 
 | Qué | En la nube «Default» (30-sep y 1-oct) | Cómo se resolvió |
