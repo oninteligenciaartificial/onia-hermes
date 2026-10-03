@@ -147,3 +147,5 @@ Sumados por palabra clave («software dental», «software para clínicas», «a
 - Los que más tiempo sostienen anuncios activos son Dentalink (desde nov-2025, catálogo dinámico `{{product.name}}`), Reservo (desde mar-2026) y Calu (desde jul-2026). Los tres hablan de la consulta entera, no solo de la agenda.
 - El dolor que más se repite en los titulares es la cita perdida o la inasistencia: Doctocliq, Medizona, AgendaClinica, Clinera, Fluker, Calu.
 - Los que más volumen tienen son Huli (~140, contenido educativo de normas y calculadoras), Dentalink (81) y Medilink (41-69): pautan muchas variantes a la vez.
+
+**Capturas que alcanzaron a salir antes del corte (2-oct):** `agendaendia/` (4 anuncios), `dtdental/` (5) y `eholohealth/`, con el formato de la ronda 1 (`<id>.png`, `.txt`, `-2/-3/-4`). Todavía no tienen fila en la tabla.

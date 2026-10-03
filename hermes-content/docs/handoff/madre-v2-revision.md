@@ -74,7 +74,7 @@ al reiniciarse la sesión: se usó lo que habían dejado en su journal y no se r
 - CRITICAL #98, las promesas de la web y Lucía («que no se identifique como odontóloga pero que tenga la ropa») los
   pasó la madre v1 a Plataforma y a Lucía.
 - **Pendiente de la madre v2 para cuando se retome:**
-  1. Capturas de anuncios: tienen el OK de Sergio Urcullo del 3-oct. Faltan además AgendaPro, Doctoralia y Eholo. Hacerlas
+  1. Capturas de anuncios: la madre v1 dijo que Sergio Urcullo las aprobó el 3-oct; confirmarlo con él antes de gastar. Faltan además AgendaPro, Doctoralia y Eholo. Hacerlas
      chicas, un anunciante por vez, y no en un workflow grande.
   2. Comparar el próximo video de Marca contra `hermes-content/references/marca-personal/FORMULAS-REFERENTES.md`
      (campos «Edición»; molde Erik Taveras y Santiago Muñoz).
