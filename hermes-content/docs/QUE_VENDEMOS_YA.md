@@ -280,7 +280,7 @@ llenar la lista.**
   SIN cambia una pantalla, se edita el PDF.
 - **Por qué alguien pagaría:** ~~el plazo de la facturación en línea es el **30-sep-2026** —
   faltan 26 días —~~ ⚠️ *(corregido el 3-oct: ese plazo quedó sin efecto, RND 102600000038, 30-sep-2026; el SIN
-  asigna la modalidad en línea periódicamente, sin fecha)* el trámite es un laberinto de pantallas
+  asignará periódicamente una modalidad en línea a los contribuyentes del IVA sin ninguna, sin fecha)* el trámite es un laberinto de pantallas
   donde el que se equivoca pierde una semana.
 - 🔴 **La objeción honesta, dicha acá y no descubierta en tres semanas:** un infoproducto
   sin audiencia no se vende solo. Hoy no tenemos lista de correos ni tráfico medido. Su

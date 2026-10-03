@@ -29,14 +29,16 @@ El gancho ya **no** es la fecha. ⚠️ **Corregido el 2026-10-03:** acá decía
 9° al 12° emitían solo en línea. El **30-sep-2026 la RND 102600000038 abrogó** las RND que
 designaban a esos grupos (102400000004, 005, 012 y 025) y dejó sin efecto sus plazos de
 incorporación; el SIN asignará periódicamente una modalidad en línea a los contribuyentes del IVA
-que todavía no tengan ninguna (Par. II, sin fecha). Motivo declarado: aplicar la Ley 1733 (IVA
+que al 30-sep no habían implementado ninguna (Par. II, sin fecha y sin decir cómo lo comunica). Motivo declarado: aplicar la Ley 1733 (IVA
 sobre el precio neto, separado en la factura). Texto leído en el PDF del SIN; detalle en
 `ONIA_FACTURACION_ESTADO_REAL.md` §2.6. El gancho que queda es el que la norma sí sostiene:
-**«¿ya me asignaron la facturación en línea?»** y cómo habilitarse gratis en el Portal Web.
+**«¿qué modalidad tengo hoy?»** y cómo habilitarse gratis en el Portal Web. *(Hasta la segunda
+pasada del 3-oct decía «¿ya me asignaron…?» y que la asignación «figura en la Oficina Virtual»: la
+RND no dice cómo se comunica, y a un ex grupo 9°-12° le hacía leer que seguía obligado.)*
 
 ## 2. Promesa y a quién
 
-- **Promesa:** "En una hoja: cómo saber si el SIN ya te asignó la facturación en línea, y los 6
+- **Promesa:** "En una hoja: cómo saber qué modalidad de facturación tenés, y los 6
   pasos para habilitarte gratis en la Oficina Virtual. Sin comprar nada." *(Decía «si te toca el 1
   de octubre»: ese plazo quedó sin efecto el 30-sep, RND 102600000038.)*
 - **A quién:** dueño de negocio boliviano de 1 a 5 personas, con NIT activo, que escuchó del
@@ -55,7 +57,7 @@ Lo nuevo (bloques 3 a 6) se agrega a ESE archivo, no a un segundo lugar.
    y cumple al 100%. Va primero, siempre.
 3. **Paso 0 — ¿te toca a vos?** El grupo lo fija tu **NIT**, no tu rubro (RND 2024:
    102400000004, 05, 12 y 25). Entrá a `siat.impuestos.gob.bo` con tu NIT o preguntale a tu
-   contador: ahí figura tu modalidad asignada. No adivines.
+   contador: ahí figura la modalidad de tu padrón. No adivines.
 4. **Los 6 pasos en la Oficina Virtual** (recorte del checklist interno, sin lo nuestro):
    1. Entrar a la Oficina Virtual (impuestos.gob.bo → "SIAT en Línea") con las credenciales
       del NIT.

@@ -164,8 +164,8 @@ volvió"* no lo paga nadie.
 
 ⚠️ *Corregido el 2026-10-03:* acá decía que desde el **1-oct-2026** los grupos 9° a 12° facturaban solo en
 línea (RND 102600000007; ~27.000 NIT). **Ya no:** la **RND 102600000038 (30-sep-2026)** abrogó las designaciones
-de esos grupos y dejó sin efecto el plazo; el SIN asignará periódicamente una modalidad en línea a quien no
-tenga ninguna, sin fecha. Ningún anuncio dice «obligatorio desde el 1-oct». Lo grande que viene es el **IVA "por fuera"
+de esos grupos y dejó sin efecto el plazo; el SIN asignará periódicamente una modalidad en línea a los
+contribuyentes del IVA que no habían implementado ninguna, sin fecha. Ningún anuncio dice «obligatorio desde el 1-oct». Lo grande que viene es el **IVA "por fuera"
 de la Ley 1733** (pruebas de todos los sistemas de facturación del 1-oct al 16-nov-2026, RND
 102600000034; rige el mes siguiente a su decreto reglamentario, pendiente). **Le pega más a comercio e
 importadoras que a clínicas, y el SIAT sigue sin usarse como argumento de urgencia** (`ONIA_CLIENTE_IDEAL.md` §4).

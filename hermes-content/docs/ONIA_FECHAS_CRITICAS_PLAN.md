@@ -38,12 +38,15 @@ transición el 30-sep y que desde el 1-oct los grupos 9° a 12° emitían solo e
   uniforme y verificable». Esa parte de la ley rige desde el primer día del mes siguiente a la
   publicación de su decreto reglamentario.
 - **Lo que quedó sin efecto:** la **RND 102600000007** (23-mar-2026) llevaba la transición de
-  esos grupos al 30-sep-2026; antes la RND 102500000036 la había llevado a marzo de 2026. Eran
+  esos grupos al 30-sep-2026; antes la RND 102500000036 la había llevado al 31-mar-2026 (las dos
+  leídas en el PDF del SIN el 3-oct). Eran
   listas nominales de NITs (solo el 12° grupo tenía 19.268); con las designaciones abrogadas, ya
-  no hay a quién aplicarles ese plazo.
-- **¿Alcanza a clínicas y comercios chicos?** Hoy nadie queda obligado «el 1-oct». El que no
-  tenga ninguna modalidad en línea la recibe cuando el SIN se la asigne, y la ve en su Oficina
-  Virtual. **Sin verificar:** con qué criterio y a qué ritmo asigna; no se afirma ninguno.
+  no hay a quién aplicarles ese plazo. Los grupos 1° a 8° no se tocan: la RND abroga solo esas cuatro.
+- **¿Alcanza a clínicas y comercios chicos?** Hoy nadie queda obligado «el 1-oct». Si paga IVA y al
+  30-sep no había implementado ninguna modalidad en línea, el SIN se la **asignará** (Par. II, en
+  futuro). **La norma no dice cómo se comunica** la asignación: no se afirma que «la ve en su Oficina
+  Virtual» (eso decía esta línea hasta la segunda pasada del 3-oct). **Sin verificar:** con qué
+  criterio y a qué ritmo asigna; no se afirma ninguno.
 - **Consecuencia comercial:** el pitch sigue siendo el ya decidido (`siat-pitch-portal-gratis`):
   se vende el orden, no el miedo, y nunca «estás obligado por ley a comprarme». El Portal Web del
   SIN sigue siendo gratis.

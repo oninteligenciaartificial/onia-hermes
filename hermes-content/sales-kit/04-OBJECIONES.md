@@ -80,14 +80,15 @@ Detrás: historia clínica = dato sensible. Concreto, sin certificaciones invent
 ## 7. "¿Emite factura electrónica?" / "El SIAT no me corre todavía"
 
 Detrás: puede ser cierto. Desde el 30-sep no hay plazo por grupo: la RND 102600000038 dejó sin
-efecto el del 1 de octubre, y el SIN asigna la modalidad en línea a quien todavía no tiene ninguna,
-sin fecha. NUNCA miedo, NUNCA "por ley tenés que comprarme". El SIAT no es el argumento de venta.
+efecto el del 1 de octubre y dice que el SIN **asignará** periódicamente una modalidad en línea, sin
+fecha, a los contribuyentes **del IVA** que a esa fecha no habían implementado ninguna. No dice cómo
+lo comunica. NUNCA miedo, NUNCA "por ley tenés que comprarme". El SIAT no es el argumento de venta.
 
 > "Te lo digo de frente: **Onia no emite la factura electrónica.** Te deja cada venta con
 > su detalle y su monto, lista para cargarla en el Portal Web del SIN, que es gratis y
 > cumple. Nuestro emisor está en trámite ante el SIN; cuando esté aprobado te lo cuento, hoy
-> no te lo vendo. El plazo del 1 de octubre quedó sin efecto; si el SIN ya te asignó la facturación
-> en línea, lo ves en tu Oficina Virtual o te lo dice tu contador. Lo que te vendo es otra cosa: que
+> no te lo vendo. El plazo del 1 de octubre quedó sin efecto y la norma no fija otro. Qué modalidad
+> tenés hoy lo ves en tu Oficina Virtual o te lo dice tu contador. Lo que te vendo es otra cosa: que
 > no se te vayan los pacientes."
 
 ## 8. "¿El chatbot me va a contestar mal a los pacientes?"
