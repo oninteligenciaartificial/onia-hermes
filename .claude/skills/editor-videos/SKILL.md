@@ -20,7 +20,7 @@ Munoz»*, y del reel de Codex: *«no me refiero a que lo hagas tal cual, me refi
 - **Molde a replicar TAL CUAL:** el montaje de **@eriktaveras** y **@sanmunoz.ia**. Vive en la skill nueva
   **`edicion-referentes`** (la arma Marca personal desde el 2-oct, por decisión de Sergio Urcullo: «a partir de
   después de eso, con el formato de los referentes, y creamos la nueva skill de edición»). Fichas de montaje por
-  cuenta: las saca la madre desde Chrome (2-oct) y van a `hermes-content/references/marca-personal/FORMULAS-REFERENTES.md`.
+  cuenta (3-oct, reel por reel): `hermes-content/references/marca-personal/FICHAS-MONTAJE-REFERENTES.md`.
   Hasta el 2-oct de Erik no había NADA del montaje, y de Santiago un solo reel (sección «Layout tutorial
   vertical partido», más abajo).
 - **Su video propio que salió bien:** «Tu primera automatización», subido el 22-sep. También lo editó Codex,
