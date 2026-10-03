@@ -64,3 +64,20 @@ al reiniciarse la sesión: se usó lo que habían dejado en su journal y no se r
 - La regla «se publica sin preguntar» dice «revisión», pero no define quién revisa.
 - `main` sigue en rojo hasta que se mergee #96.
 - El merge de un PR de otra sesión lo frena el control de permisos de las dos madres: queda para Sergio Urcullo.
+
+### Estado al reiniciar la PC (3-oct)
+- Sergio Urcullo aprobó los 4 puntos. **#96 mergeado** (`19681b6b`): main vuelve a verde.
+- **#101 (rescate de 5f0c8aec)** actualizado contra main (`cf6dfa17`, MERGEABLE/CLEAN). El único conflicto era la cadena `test` de
+  package.json, y quedaron las dos: tandas-v1 y acceso-local. En verde en Windows: guards-cableados,
+  herramientas-desplegadas y acceso-local. Lo mergea la madre v1.
+- **#94** lo actualiza Hermes contra main. Antes de cargar la llave de la rutina hay que cerrar los 3 MEDIUM (arriba).
+- CRITICAL #98, las promesas de la web y Lucía («que no se identifique como odontóloga pero que tenga la ropa») los
+  pasó la madre v1 a Plataforma y a Lucía.
+- **Pendiente de la madre v2 para cuando se retome:**
+  1. Capturas de anuncios: tienen el OK de Sergio Urcullo del 3-oct. Faltan además AgendaPro, Doctoralia y Eholo. Hacerlas
+     chicas, un anunciante por vez, y no en un workflow grande.
+  2. Comparar el próximo video de Marca contra `hermes-content/references/marca-personal/FORMULAS-REFERENTES.md`
+     (campos «Edición»; molde Erik Taveras y Santiago Muñoz).
+  3. Verificar que Plataforma cerró el CRITICAL de #98 (prueba + publicado + mirado).
+- Para retomar: `ListAgents`; esta tabla; la skill `onia-sesion-madre`. Revisión proporcional al riesgo (lo fuerte solo
+  para root en el VPS, producción, plata o git-autosync.js) y workflows de hasta 5 agentes.
