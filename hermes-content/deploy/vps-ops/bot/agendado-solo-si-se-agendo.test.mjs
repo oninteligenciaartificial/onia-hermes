@@ -151,7 +151,7 @@ test("REPRODUCE EL BUG: la reserva no salió (Cal.com no existe) y el prospecto 
   assert.doesNotMatch(texto, /nos vemos/i, "«nos vemos el jueves» también es confirmarla");
   assert.match(texto, /jueves 15:00/, "se le repite lo que eligió: no se pierde el dato");
   assert.match(texto, /todavía no quedó reservad/i, "se le dice la verdad: no está reservada");
-  assert.match(texto, /te lo confirma/, "y quién se la confirma");
+  assert.match(texto, /se lo confirma/, "y quién se la confirma");
   assert.equal(fake.state.calendarEventId, null);
   // La conversación pasa a la persona: si quedara en `demo_agendada`, el acuse siguiente (M2b) le
   // diría «Nos vemos jueves 15:00» y el recordatorio M9 le recordaría una demo que no existe.
@@ -182,8 +182,8 @@ for (const reason of ["error", "horario_tomado"]) {
     const { fake, agendada } = await elegirConReserva({ ok: false, uid: null, reason, warnings: [] });
     const texto = agendada.send.map((r) => r.text).join("\n");
     assert.equal(fake.state.botStage, "handoff_humano", "ancla: la conversación pasó a la persona");
-    assert.doesNotMatch(texto, /contame rápido|1️⃣|¿A qué se dedica|¿Cuántas personas|¿En qué ciudad/i);
-    assert.match(texto, /te (lo confirma|escribe)/, "lo que sí se le dice: quién sigue");
+    assert.doesNotMatch(texto, /contame rápido|cuénteme rápido|1️⃣|¿A qué se dedica|¿Cuántas personas|¿En qué ciudad/i);
+    assert.match(texto, /se lo confirma|le escribe/, "lo que sí se le dice: quién sigue");
   });
 }
 
@@ -277,7 +277,7 @@ test("persona: una conversación que nació CON horarios y elige «A» no recibe
 
   assert.doesNotMatch(texto, /Listo, agendado/);
   assert.match(texto, /jueves 15:00/, "se le acusa lo que eligió");
-  assert.match(texto, /te lo confirma/);
+  assert.match(texto, /se lo confirma/);
   assert.notEqual(r.nextState.botStage, "demo_agendada");
   assert.ok(!r.sideEffects.some((e) => e.type === "calendar_event"), "no se pide un evento de calendario");
   const aviso = r.sideEffects.find((e) => e.type === "notify_sergio");
@@ -311,13 +311,13 @@ test("persona: el texto SEGURO (LLM caído o descartado) no ofrece horarios ni m
   const sinModelo = step(enEspera, pregunta, { config: PERSONA });
   const pendiente = sinModelo.replies.find((r) => r.pending);
   assert.ok(pendiente, "ancla: la pregunta va a la rama del LLM");
-  assert.doesNotMatch(pendiente.fallbackText, /pendiente de definir|Te reservo/);
-  assert.match(pendiente.fallbackText, /te escribe desde este mismo número/);
+  assert.doesNotMatch(pendiente.fallbackText, /pendiente de definir|Te reservo|Le reservo/);
+  assert.match(pendiente.fallbackText, /le escribe desde este mismo número/);
 
   const descartado = step(enEspera, pregunta, { config: PERSONA, llm: () => "Sale Bs 999 por mes, oferta especial" });
   const texto = descartado.replies.map((r) => r.text).join("\n");
   assert.doesNotMatch(texto, /Bs 999/, "ancla: el guardrail descartó el texto del modelo");
-  assert.doesNotMatch(texto, /pendiente de definir|Te reservo/);
+  assert.doesNotMatch(texto, /pendiente de definir|Te reservo|Le reservo/);
 });
 
 // ---------------------------------------------------------------------------
@@ -338,7 +338,7 @@ const primerTurno = (texto, config = PRODUCCION) =>
 // directo con Sergio») y antes de M0b_SIN_HORARIOS («Sergio te coordina el horario personalmente»).
 // El bot nunca confirma nada en modo persona: es la misma clase de promesa falsa que el cambio del
 // 2-oct vino a sacar, ahora en el texto editable de una campaña.
-const PROMETE_AGENDAR = /confirmo el horario|te reservo|\bagend(o|amos)\b/i;
+const PROMETE_AGENDAR = /confirmo el horario|te reservo|le reservo|\bagend(o|amos)\b/i;
 
 test("con la agenda de la persona (producción), ninguna campaña publicada promete confirmar ni reservar el horario", () => {
   assert.equal(PRODUCCION.agenda?.modo, "persona", "ancla: se mide la rama que sirve producción");
@@ -370,7 +370,7 @@ test("el saludo no sale dos veces: la campaña que sigue a la bienvenida no se v
 // negocio?», aunque el primer mensaje lo acabara de decir. El cliente ideal (dental o estética) que
 // se presenta solo leía un bot que no lo escuchó. Antes del 2-oct, M0 no pedía el rubro.
 for (const { mensaje, noPregunta, pregunta } of [
-  { mensaje: "hola, tengo una clínica dental con 4 odontólogos, quiero una demo", noPregunta: /a qué se dedica|cuántas personas/, pregunta: /¿en qué ciudad estás\?/ },
+  { mensaje: "hola, tengo una clínica dental con 4 odontólogos, quiero una demo", noPregunta: /a qué se dedica|cuántas personas/, pregunta: /¿en qué ciudad está\?/ },
   { mensaje: "Hola, tengo una clínica de estética, quiero una demo", noPregunta: /a qué se dedica/, pregunta: /¿cuántas personas trabajan ahí\?/ },
   { mensaje: "tengo una ferretería en Santa Cruz", noPregunta: /a qué se dedica/, pregunta: /¿cuántas personas trabajan ahí\?/ },
 ]) {
@@ -384,13 +384,13 @@ for (const { mensaje, noPregunta, pregunta } of [
 
 test("persona: sin ningún dato todavía, la bienvenida sigue preguntando el rubro", () => {
   const r = primerTurno("hola, quiero información");
-  assert.match(r.replies[0].text, /Contame mientras: ¿a qué se dedica tu negocio\?/);
+  assert.match(r.replies[0].text, /Cuénteme mientras: ¿a qué se dedica su negocio\?/);
 });
 
 test("persona: con los tres datos ya dichos, la bienvenida no pregunta nada", () => {
   const r = primerTurno("hola, tengo una clínica dental en Santa Cruz, somos 4, quiero una demo");
   assert.equal(r.nextState.qualification.city, "Santa Cruz", "ancla: los tres datos se leyeron");
-  assert.doesNotMatch(r.replies[0].text, /Contame mientras|\?$/);
+  assert.doesNotMatch(r.replies[0].text, /Contame mientras|Cuénteme mientras|\?$/);
 });
 
 // AUDITORÍA DEL 3-OCT. El aviso `coordinar_demo` sale en la bienvenida. Una conversación que nació
@@ -415,7 +415,7 @@ for (const { caso, texto, receivedAt, plantilla } of [
   test(`persona, conversación con la oferta VIEJA que ${caso}: a Sergio Urcullo le llega el aviso de coordinar, una vez`, () => {
     const r = step(conOfertaVieja(), { text: texto, receivedAt }, { config: PERSONA });
     assert.equal(r.replies[0].templateKey, plantilla, "ancla: la rama que el hallazgo midió");
-    assert.match(r.replies.map((x) => x.text).join("\n"), /te escribe/, "ancla: el texto le promete que le escriben");
+    assert.match(r.replies.map((x) => x.text).join("\n"), /le escribe/, "ancla: el texto le promete que le escriben");
     const avisos = avisosDe(r);
     assert.equal(avisos.length, 1, "la promesa «te escribe Sergio» sin aviso es un contacto que nadie va a hacer");
     assert.equal(avisos[0].payload.kind, "coordinar_demo");
@@ -454,7 +454,7 @@ test("el turno completo (runTurn) con el entorno de producción: el aviso de la 
     const fake = memoryStore(vieja);
     const deps = { store: fake.store, nowIso: T0, llm: async () => "", createBooking: async () => ({ ok: false, reason: "error", warnings: [] }) };
     const r = await runTurn(turno({ text: "tengo una clinica dental con 3 dentistas en santa cruz", message_key: "chatwoot:9" }), deps);
-    assert.match(r.send.map((x) => x.text).join("\n"), /te escribe/);
+    assert.match(r.send.map((x) => x.text).join("\n"), /le escribe/);
     assert.deepEqual(r.notify.map((n) => n.kind), ["coordinar_demo"], "sin esto webhook-server no manda nada a Telegram");
     assert.deepEqual(fake.state.slotsOffered, []);
   });

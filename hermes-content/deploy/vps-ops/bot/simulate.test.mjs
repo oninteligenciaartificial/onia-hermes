@@ -60,7 +60,7 @@ test("a la pregunta de precio contesta con los montos PUBLICOS, no con 'te lo pa
   assert.match(texto, /\b390\b/, "falta el chatbot de WhatsApp (pricing.ts)");
   assert.doesNotMatch(
     texto,
-    /el número exacto te lo pasa/,
+    /el número exacto (te|se) lo pasa/,
     "sigue sirviendo el guion sin precio: el simulador no cargo el documento publicado",
   );
 
@@ -278,7 +278,7 @@ test("webhook.env CON horarios pero SIN agenda propia: el simulador sirve la ram
   assert.equal(config.agenda?.modo, "persona");
   const texto = preguntar(config, "hola, quiero información");
   assert.doesNotMatch(texto, /\*\*A\)\*\*/, "ofrece horarios que produccion ya no ofrece");
-  assert.match(texto, /te escribe/, "lo que produccion le dice: quien le coordina la demo");
+  assert.match(texto, /le escribe/, "lo que produccion le dice: quien le coordina la demo");
   assert.deepEqual(avisos.filter((l) => /horario/i.test(l)), [], "es LA rama de produccion: no hay nada que avisar");
 });
 

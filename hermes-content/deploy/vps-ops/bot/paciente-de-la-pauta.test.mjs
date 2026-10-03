@@ -129,7 +129,7 @@ test("el paciente que toca «Busco atención dental» recibe la salida cortés y
   assert.match(texto, /un bot/);
   // Dice qué NO somos y a dónde ir, sin vender nada.
   assert.match(texto, /no es una clínica/);
-  assert.match(texto, /escribile directo/);
+  assert.match(texto, /escríbale directo/);
   assert.doesNotMatch(texto, /Bs|horario|demo|\*\*A\)\*\*/i, "a un paciente no se le ofrecen demos, horarios ni precios");
   assert.equal(r.nextState.botStage, "descartado");
   assert.ok(!tipos(r).includes("lead_upsert"), "un paciente no es un lead: no se crea");

@@ -216,6 +216,32 @@ final. Y los horarios que ofrecía no salían de un calendario: los escribe un c
   (hoy no pasa ni `ONIA_BOT_AGENDA` ni `CALCOM_*`: M3 queda bloqueado). Verificar con el simulador y una
   reserva real antes de prometer nada.
 
+## El bot de ventas habla de usted (3-oct-2026)
+
+Sergio Urcullo, por la madre: *«no se usa vos, es muy informal, usted»*. Gate: `bot/de-usted.test.mjs` (recorre
+guion, `missLabel`, productos, `SAFE_REPLY` y los dos knowledge; falla con el texto exacto).
+
+- **Dónde vive el texto que lee el prospecto:** `config.mjs` (`SCRIPT`: M*, COORDINA_*, PENDING_*; los `missLabel`
+  de `qualification.fields` y de cada rama; `PRODUCTOS[].nombre`), `reply-builder.mjs` (las etiquetas «que se
+  dedica a…», «que tiene N sillones»), `guardrails.mjs` (`SAFE_REPLY_BASE`), `run-turn.mjs` (el prompt del LLM pide
+  «de usted» en la primera línea) y `knowledge.onia.json` (`campanas[].respuesta`, `faq[].body`).
+  `knowledge.example.json` es espejo de los defaults: si no se cambia junto, falla el test de identidad.
+- **No se tocan, cada uno por su motivo:** `M3_PLANTILLA` y `M9_PLANTILLA` (copia literal de las plantillas
+  aprobadas en Meta: cambian solo con una plantilla nueva aprobada); el recepcionista `R_*`, `M0R` y `M6R` (bot del
+  cliente, decisión pendiente de Sergio Urcullo); los avisos internos a Sergio (aviso-telegram, resúmenes,
+  calcom-booking); fixtures con textos históricos reales (puerta-del-alta, prueba-vs-plan-vivo, precios-vivos);
+  lo que escribe el prospecto (`triggers`, `optOut`, `frase`, intents).
+- 🔴 **Trampa: los detectores de los tests leían instrucciones en voseo.** `RE_INSTRUCCION`
+  (palabra-que-el-bot-promete) y el de urgencia-en-el-handoff buscaban «decí "X"», «escribí "X"». Pasado el guion a
+  usted («escriba "X"», «dígame "X"»), los gates se quedaban SIN CASOS y pasaban verdes en silencio. Se extendieron
+  a las formas de usted. Lo mismo con las reglas del guardrail: `estoy revisando (tu|su)`, `(te|le) recomiendo`.
+- **Trampa del detector de voseo:** `\b` de JS es ASCII, así que parte «contestárselo» en «contestá» + «rselo». Usar
+  `(?<!\p{L})…(?!\p{L})` con flag `u`. Y no listar «escribí»/«elegí»: también son primera persona («Le escribí ayer»).
+- **Al cambiar un texto del bot, los tests que lo citan se actualizan conservando la intención:** las aserciones
+  positivas pasan a la forma nueva y las negativas SUMAN la forma de usted (no la reemplazan). Los fixtures de
+  `bench.test.mjs` que imitan la salida real tienen que copiar el `missLabel` nuevo; los que traen una config
+  inventada, no. Medido: 23 tests rotos por el barrido, todos de expectativa, ninguno de lógica.
+
 ## Reglas duras del carril
 
 1. **Construido ≠ terminado.** Vale cuando está encendido en producción y verificado ahí.

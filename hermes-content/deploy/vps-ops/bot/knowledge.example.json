@@ -11,7 +11,7 @@
     {
       "id": "siat",
       "title": "Facturación en línea / SIAT",
-      "body": "Sobre facturación en línea te contesto sólo lo que es público: el SIN tiene un portal gratis. Lo que hace {{producto}} es que los datos ya estén cargados para que no tipees dos veces. Desde cuándo te aplica a vos según tu NIT lo ve {{humano}} en la demo.",
+      "body": "Sobre facturación en línea le contesto sólo lo que es público: el SIN tiene un portal gratis. Lo que hace {{producto}} es que los datos ya estén cargados para que no tipee dos veces. Desde cuándo le aplica a usted según su NIT lo ve {{humano}} en la demo.",
       "status": "publicado",
       "vigenteHasta": "2026-09-30",
       "tags": [
@@ -43,12 +43,12 @@
     {
       "key": "web",
       "tipo": "servicio",
-      "nombre": "la web de tu negocio"
+      "nombre": "la web de su negocio"
     },
     {
       "key": "chatbot",
       "tipo": "servicio",
-      "nombre": "un chatbot de WhatsApp para tu negocio"
+      "nombre": "un chatbot de WhatsApp para su negocio"
     },
     {
       "key": "videos_ia",

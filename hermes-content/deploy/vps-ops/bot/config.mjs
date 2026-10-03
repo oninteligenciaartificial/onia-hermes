@@ -264,14 +264,14 @@ export const SCRIPT = Object.freeze({
   M0: [
     "¡Hola! Soy el asistente automático de Onia. Sí, un bot.",
     "",
-    "{{producto}} es una plataforma por módulos para que tu negocio trabaje adentro: agenda, cobros y clientes en un solo lugar.",
+    "{{producto}} es una plataforma por módulos para que su negocio trabaje adentro: agenda, cobros y clientes en un solo lugar.",
     "",
-    "Te muestro cómo quedaría en TU negocio en {{demo_duracion}} por {{demo_modalidad}}. Tengo estos dos horarios:",
+    "Le muestro cómo quedaría en SU negocio en {{demo_duracion}} por {{demo_modalidad}}. Tengo estos dos horarios:",
     "",
     "**A)** {{slot_a}}",
     "**B)** {{slot_b}}",
     "",
-    '¿Cuál te va mejor? (o escribime "otro" y lo coordinamos)',
+    '¿Cuál le va mejor? (o escríbame "otro" y lo coordinamos)',
   ].join("\n"),
 
   // M0b — el prospecto contesto con datos de su negocio en vez de elegir horario. Se le acusa
@@ -291,24 +291,24 @@ export const SCRIPT = Object.freeze({
   M0b_SIN_HORARIOS: [
     "Perfecto, anotado {{datos_que_si_dio}} — el resto lo vemos en la demo.",
     "",
-    "{{humano}} te coordina el horario personalmente y te escribe {{via_humano}}.",
+    "{{humano}} le coordina el horario personalmente y le escribe {{via_humano}}.",
   ].join("\n"),
 
   M0b: [
     "Perfecto, anotado {{datos_que_si_dio}} — el resto lo vemos en la demo.",
     "",
-    "¿Cuál te va mejor? **A)** {{slot_a}} · **B)** {{slot_b}}",
+    "¿Cuál le va mejor? **A)** {{slot_a}} · **B)** {{slot_b}}",
   ].join("\n"),
 
   // M1a — falta algun dato DESPUES de agendar. Maximo 2 re-preguntas; a la tercera se deja de
   // insistir (la demo ya esta reservada: un campo del CRM no vale molestar a quien ya dijo que si).
-  M1a: "Perfecto, anotado {{datos_que_si_dio}}. Me falta sólo {{dato_faltante}} — ¿me lo pasás?",
+  M1a: "Perfecto, anotado {{datos_que_si_dio}}. Me falta sólo {{dato_faltante}} — ¿me lo pasa?",
 
   // M1_RAMA_DENTAL — pregunta EXTRA de rama, no del guion general. Solo la ve el rubro que la
   // necesita. Tiene que decir el `missLabel` del campo de rama con esas mismas palabras (el banco
   // lee de ahi que dato se esta pidiendo).
   M1_RAMA_DENTAL: [
-    "Perfecto, eso me sirve. Una sola cosa más para que {{humano}} llegue con la demo armada: ¿cuántos sillones tenés? (1, 2, 3 o más)",
+    "Perfecto, eso me sirve. Una sola cosa más para que {{humano}} llegue con la demo armada: ¿cuántos sillones tiene? (1, 2, 3 o más)",
   ].join("\n"),
 
   // M1c — descalificado suave. YA NO se descarta por rubro ni por tamaño (Onia es una plataforma
@@ -319,9 +319,9 @@ export const SCRIPT = Object.freeze({
   // no hay ninguna razon para cobrarlas antes de ofrecer la reunion. El descarte se evalua igual
   // en cualquier punto del embudo — tambien despues de reservar, cuando llegan los datos de M2.
   M1c: [
-    "Gracias por contarme. {{producto}} es el sistema que usa un negocio para trabajar, así que por acá no te voy a poder ayudar — no es una bolsa de trabajo ni un lugar para ofrecernos servicios.",
+    "Gracias por contarme. {{producto}} es el sistema que usa un negocio para trabajar, así que por acá no le voy a poder ayudar — no es una bolsa de trabajo ni un lugar para ofrecernos servicios.",
     "",
-    "Si más adelante manejás un negocio (o trabajás en uno al que le sirva), escribime DEMO y lo agendamos igual.",
+    "Si más adelante maneja un negocio (o trabaja en uno al que le sirva), escríbame DEMO y lo agendamos igual.",
   ].join("\n"),
 
   // M1_PACIENTE — el PACIENTE que llego por la pauta dental (busca turno, el precio de un
@@ -330,9 +330,9 @@ export const SCRIPT = Object.freeze({
   // es la respuesta para tocar del anuncio), por eso trae el disclosure de bot (D2) adentro.
   // No dice "DEMO" como M1c: a un paciente no se le deja una puerta de venta abierta.
   M1_PACIENTE: [
-    "Te escribe {{bot}} — sí, un bot. {{producto}} no es una clínica: hacemos el sistema con el que las clínicas organizan su agenda y sus pacientes, así que por acá no te puedo dar un turno ni atenderte.",
+    "Le escribe {{bot}} — sí, un bot. {{producto}} no es una clínica: hacemos el sistema con el que las clínicas organizan su agenda y sus pacientes, así que por acá no le puedo dar un turno ni atenderle.",
     "",
-    "Para eso escribile directo a tu clínica o a tu dentista. ¡Gracias por escribir!",
+    "Para eso escríbale directo a su clínica o a su dentista. ¡Gracias por escribir!",
   ].join("\n"),
 
   // M2 — confirmacion de la reserva + LAS PREGUNTAS. Es el nuevo lugar de la calificacion: el
@@ -351,7 +351,7 @@ export const SCRIPT = Object.freeze({
   M2: [
     "Listo, agendado: **{{dia_hora_elegida}}**.",
     "",
-    "Para que {{humano}} llegue con la demo armada para vos, contame rápido:",
+    "Para que {{humano}} llegue con la demo armada para usted, cuénteme rápido:",
     "{{preguntas}}",
     "",
     "(Con una palabra en cada una alcanza. Si no, igual nos vemos {{dia}}.)",
@@ -373,14 +373,14 @@ export const SCRIPT = Object.freeze({
   // leer; lo que falte lo pregunta {{humano}} al confirmarle.
   // Los usa `reservaQueNoSalio` (calcom-booking.mjs), el mismo en los tres caminos (vivo, seco y
   // simulador).
-  M2_SIN_RESERVA: "Anoté **{{dia_hora_elegida}}**, pero todavía no quedó reservado: {{humano}} te lo confirma {{via_humano}}.",
+  M2_SIN_RESERVA: "Anoté **{{dia_hora_elegida}}**, pero todavía no quedó reservado: {{humano}} se lo confirma {{via_humano}}.",
   M2_HORARIO_TOMADO:
-    "Uy, **{{dia_hora_elegida}}** se acaba de ocupar. {{humano}} te escribe {{via_humano}} para acomodar otro horario.",
+    "Uy, **{{dia_hora_elegida}}** se acaba de ocupar. {{humano}} le escribe {{via_humano}} para acomodar otro horario.",
 
   // M2_PREGUNTA_DOLOR — el ultimo item de la lista de M2. Vive aca y no en el motor porque es
   // copy de cliente, como el resto del guion.
   M2_PREGUNTA_DOLOR:
-    "¿Qué es lo que más tiempo te come hoy: la **agenda**, los **cobros** o los **clientes que no vuelven**?",
+    "¿Qué es lo que más tiempo le come hoy: la **agenda**, los **cobros** o los **clientes que no vuelven**?",
 
   // M2b — acuse de lo que el prospecto contesto despues de agendar (datos y/o dolor). Sin esto el
   // bot queda mudo ante la respuesta que el propio M2 pide. Sigue siendo texto fijo y sin cifras.
@@ -388,10 +388,10 @@ export const SCRIPT = Object.freeze({
 
   // M3 — follow-up unico a las 22 h (dentro de la ventana de servicio de 24 h de Meta).
   M3: [
-    "¡Hola de nuevo! Te escribí ayer por la demo de {{producto}} y quedó a medias — sé que el negocio no para.",
+    "¡Hola de nuevo! Le escribí ayer por la demo de {{producto}} y quedó a medias — sé que el negocio no para.",
     "",
-    "Te dejo dos opciones nuevas por si te sirven: **{{slot_a}}** o **{{slot_b}}**.",
-    "Decime cuál te queda mejor y la dejamos agendada.",
+    "Le dejo dos opciones nuevas por si le sirven: **{{slot_a}}** o **{{slot_b}}**.",
+    "Dígame cuál le queda mejor y la dejamos agendada.",
   ].join("\n"),
 
   // M3_PLANTILLA — el MISMO follow-up, pero cuando la ventana de 24 h de Meta ya se cerro.
@@ -422,11 +422,11 @@ export const SCRIPT = Object.freeze({
   // No dice "hoy" a proposito: la antelacion es config (`reminder.leadHours`) y una copy que se
   // vuelve mentira al mover un numero es exactamente el error que este archivo viene arrastrando.
   M9_RECORDATORIO: [
-    "¡Hola! Te recuerdo tu demo de {{producto}}: **{{dia_hora_elegida}}**.",
+    "¡Hola! Le recuerdo su demo de {{producto}}: **{{dia_hora_elegida}}**.",
     "",
     "Entrás desde acá: {{link_reunion}}",
     "",
-    "Si se te complicó, decime y la movemos — sin problema.",
+    "Si se le complicó, dígame y la movemos — sin problema.",
   ].join("\n"),
 
   // M9_PLANTILLA — el MISMO recordatorio, pero cuando la ventana de 24 h de Meta ya se cerro (el
@@ -446,9 +446,9 @@ export const SCRIPT = Object.freeze({
   // M4 — el prospecto trae el precio. El cuerpo NUNCA cotiza; el cierre lo pone el motor segun
   // el estado (spec §2.3 + regla de oro §2.1: el estado no avanza sin dato capturado).
   M4_BODY: [
-    "Buena pregunta, y te la contesto derecho: **el número exacto te lo pasa {{humano}} en la demo**, porque depende del tamaño de tu equipo y de qué módulos necesitás activar. No te quiero tirar una cifra que después no sea la tuya.",
+    "Buena pregunta, y se la contesto derecho: **el número exacto se lo pasa {{humano}} en la demo**, porque depende del tamaño de su equipo y de qué módulos necesita activar. No le quiero tirar una cifra que después no sea la suya.",
     "",
-    "Lo que sí te adelanto: en la demo se hace la cuenta con TUS números — cuánto te cuesta hoy el trabajo que se hace a mano contra lo que cuesta el sistema. Si no cierra, te lo decimos ahí mismo.",
+    "Lo que sí le adelanto: en la demo se hace la cuenta con SUS números — cuánto le cuesta hoy el trabajo que se hace a mano contra lo que cuesta el sistema. Si no cierra, se lo decimos ahí mismo.",
   ].join("\n"),
 
   // M5 — handoff a humano. La via ({{via_humano}}) se DERIVA del canal: ver `viaDelCanal`.
@@ -457,9 +457,9 @@ export const SCRIPT = Object.freeze({
   // 11 conversaciones, CERO con número). Justo en el mensaje que recibe el que pidió hablar
   // con una persona.
   M5: [
-    "Eso lo tiene que ver {{humano}}, no yo — soy un bot y no quiero inventarte una respuesta.",
+    "Eso lo tiene que ver {{humano}}, no yo — soy un bot y no quiero inventarle una respuesta.",
     "",
-    "Ya le pasé tu consulta con todo lo que me contaste. Te escribe {{via_humano}}, en horario de oficina ({{horario_frase}}). Si es urgente, decime \"urgente\" y lo marco.",
+    "Ya le pasé su consulta con todo lo que me contó. Le escribe {{via_humano}}, en horario de oficina ({{horario_frase}}). Si es urgente, dígame \"urgente\" y lo marco.",
   ].join("\n"),
 
   // M5_ACUSE — el mensaje que llega DESPUES de haber derivado, mientras el humano todavia no
@@ -467,9 +467,9 @@ export const SCRIPT = Object.freeze({
   // llego. Nace de medir, el 2026-09-03, que tras cada M5 el mensaje siguiente del prospecto se
   // comia un silencio total — la persona ve "entregado" y nunca una respuesta.
   M5_ACUSE: [
-    "Te leo, y esto también se lo paso a {{humano}} — sigo siendo el bot, así que no te lo contesto yo para no inventarte nada.",
+    "Lo leo, y esto también se lo paso a {{humano}} — sigo siendo el bot, así que no se lo contesto yo para no inventarle nada.",
     "",
-    "Ya está todo en su bandeja. Te responde desde acá mismo en horario de oficina ({{horario_frase}}).",
+    "Ya está todo en su bandeja. Le responde desde acá mismo en horario de oficina ({{horario_frase}}).",
   ].join("\n"),
 
   // M5_URGENTE — la respuesta a la palabra que M5 y M8_SOPORTE le PIDIERON al prospecto, y a
@@ -479,7 +479,7 @@ export const SCRIPT = Object.freeze({
   M5_URGENTE: [
     "Listo, lo marqué como urgente y {{humano}} ya lo tiene arriba de todo.",
     "",
-    "Te escribe {{via_humano}}. Si es fuera de horario de oficina ({{horario_frase}}), es lo primero que ve al abrir.",
+    "Le escribe {{via_humano}}. Si es fuera de horario de oficina ({{horario_frase}}), es lo primero que ve al abrir.",
   ].join("\n"),
 
   // M8_SOPORTE — SEGUNDO CAMINO: el que escribe YA es cliente (o dice que ya tiene el sistema, o
@@ -487,19 +487,19 @@ export const SCRIPT = Object.freeze({
   // pide ayuda es el peor error posible del bot: le dice "comprame" a quien ya compro. Este texto
   // reemplaza a M5 en ese handoff, y el bot igual se presenta como bot (D2).
   M8_SOPORTE: [
-    "Pará — si ya estás usando {{producto}}, esto no es una demo de venta: es soporte. Y el soporte no te lo puedo dar yo, que soy un bot.",
+    "Un momento: si ya está usando {{producto}}, esto no es una demo de venta: es soporte. Y el soporte no se lo puedo dar yo, que soy un bot.",
     "",
-    "Le paso tu mensaje a {{humano}} tal cual me lo contaste. Te responde {{via_humano}} en horario de oficina ({{horario_frase}}) y, si hace falta, te coordina una llamada corta para dejarlo funcionando. Si te está frenando el trabajo ahora mismo, decime \"urgente\" y lo marco.",
+    "Le paso su mensaje a {{humano}} tal cual me lo contó. Le responde {{via_humano}} en horario de oficina ({{horario_frase}}) y, si hace falta, le coordina una llamada corta para dejarlo funcionando. Si le está frenando el trabajo ahora mismo, dígame \"urgente\" y lo marco.",
   ].join("\n"),
 
   // M6 — opt-out.
-  M6: "Listo, no te escribo más. Si algún día querés verlo, escribí DEMO y arrancamos de nuevo. ¡Éxitos con el negocio!",
+  M6: "Listo, no le escribo más. Si algún día quiere verlo, escriba DEMO y arrancamos de nuevo. ¡Éxitos con el negocio!",
 
   // M7 — fuera de horario. Se APENDEA a la respuesta que corresponda, no la reemplaza.
   // "te confirma en la mañana" era falso: entre semana Sergio Urcullo atiende 14-17 y 20-22, no
   // por la mañana. Al que escribe un lunes a las 9:30 se le prometia una respuesta que no iba a
   // llegar. Ahora la ventana se DICE, derivada de la misma fuente que decide si es "fuera".
-  M7: "_(Estoy respondiendo automático fuera de horario de atención. {{humano}} te confirma apenas vuelva: {{horario_frase}}.)_",
+  M7: "_(Estoy respondiendo automático fuera de horario de atención. {{humano}} le confirma apenas vuelva: {{horario_frase}}.)_",
 
   // SIAT / fiscal — respuesta fija segura (spec §2.3). Solo lo que es publico, cero promesa.
   //
@@ -515,7 +515,7 @@ export const SCRIPT = Object.freeze({
   // se deriva al humano, que es de quien era la respuesta desde el principio.
   // Lo cuida `fecha-que-caduca.test.mjs` sobre el guion ENTERO, no sobre esta clave.
   M_SIAT_BODY:
-    "Sobre facturación en línea te contesto sólo lo que es público: el SIN tiene un portal gratis. Lo que hace {{producto}} es que los datos ya estén cargados para que no tipees dos veces. Desde cuándo te aplica a vos según tu NIT lo ve {{humano}} en la demo.",
+    "Sobre facturación en línea le contesto sólo lo que es público: el SIN tiene un portal gratis. Lo que hace {{producto}} es que los datos ya estén cargados para que no tipee dos veces. Desde cuándo le aplica a usted según su NIT lo ve {{humano}} en la demo.",
 
   // M0 SIN HORARIOS — la bienvenida cuando no hay disponibilidad real que ofrecer.
   // No es un caso raro: alcanza con que Cal.com no conteste O con que la agenda no tenga hueco en
@@ -534,27 +534,27 @@ export const SCRIPT = Object.freeze({
   M0_PERSONA: [
     "¡Hola! Soy el asistente automático de Onia. Sí, un bot.",
     "",
-    "{{producto}} es una plataforma por módulos para que tu negocio trabaje adentro: agenda, cobros y clientes en un solo lugar.",
+    "{{producto}} es una plataforma por módulos para que su negocio trabaje adentro: agenda, cobros y clientes en un solo lugar.",
     "",
-    "Te muestro cómo quedaría en TU negocio en {{demo_duracion}} por {{demo_modalidad}}. {{coordina_demo}}",
+    "Le muestro cómo quedaría en SU negocio en {{demo_duracion}} por {{demo_modalidad}}. {{coordina_demo}}",
   ].join("\n"),
   // {{dato_faltante}}: el PRIMER dato de calificacion que falta (`missLabel`), no siempre el rubro.
-  M0_PERSONA_PREGUNTA: "Contame mientras: ¿{{dato_faltante}}?",
-  COORDINA_PERSONA: "El horario lo coordinás directo con {{humano}}: te escribe {{via_humano}}.",
-  COORDINA_LINK: "Elegí el horario que te quede bien acá 👉 {{link_agenda}}",
+  M0_PERSONA_PREGUNTA: "Cuénteme mientras: ¿{{dato_faltante}}?",
+  COORDINA_PERSONA: "El horario lo coordina directo con {{humano}}: le escribe {{via_humano}}.",
+  COORDINA_LINK: "Elija el horario que le quede bien acá 👉 {{link_agenda}}",
   // M_HORARIO_SIN_AGENDA — sin agenda propia, alguien elige un horario de una oferta VIEJA (la
   // conversacion nacio cuando el bot todavia ofrecia horarios y sigue viva en la base). No se
   // confirma ni se reserva: se acusa lo que eligio y lo confirma la persona.
-  M_HORARIO_SIN_AGENDA: "Anoté que te queda bien **{{slot_elegido}}**. {{humano}} te lo confirma {{via_humano}}.",
+  M_HORARIO_SIN_AGENDA: "Anoté que le queda bien **{{slot_elegido}}**. {{humano}} se lo confirma {{via_humano}}.",
 
   M0_SIN_HORARIOS: [
-    "¡Hola! Te escribe {{bot}} — sí, un bot. Es justamente lo que hacemos: sistemas que atienden solos.",
+    "¡Hola! Le escribe {{bot}} — sí, un bot. Es justamente lo que hacemos: sistemas que atienden solos.",
     "",
     "{{producto}} es una plataforma por módulos para que un negocio trabaje adentro: agenda, cobros, clientes.",
     "",
-    "Justo ahora no tengo horarios libres para ofrecerte, así que {{humano}} te coordina uno personalmente — te escribe {{via_humano}}.",
+    "Justo ahora no tengo horarios libres para ofrecerle, así que {{humano}} le coordina uno personalmente — le escribe {{via_humano}}.",
     "",
-    "Contame mientras: ¿a qué se dedica tu negocio?",
+    "Cuénteme mientras: ¿a qué se dedica su negocio?",
   ].join("\n"),
 
   // "¿Que hacen?" / "¿que es Onia?". El marco es fijo; la LISTA sale de `config.productos`, que
@@ -562,11 +562,11 @@ export const SCRIPT = Object.freeze({
   // tarde un deploy en existir para el bot. Lo que NO se edita es cual esta listo (ver
   // MODULOS_LISTOS): eso es una promesa comercial, no un dato.
   M_QUE_ES_ONIA: [
-    "{{producto}} es una plataforma por módulos: tu negocio trabaja adentro (agenda, cobros, clientes) y hay agentes que contestan por WhatsApp.",
+    "{{producto}} es una plataforma por módulos: su negocio trabaja adentro (agenda, cobros, clientes) y hay agentes que contestan por WhatsApp.",
     "",
     "{{productos}}",
     "",
-    "Cuál te sirve a vos lo ve {{humano}} en la demo, con tus números.",
+    "Cuál le sirve a usted lo ve {{humano}} en la demo, con sus números.",
   ].join("\n"),
 
   // Audio que no se pudo transcribir (spec §2.3).
@@ -574,34 +574,34 @@ export const SCRIPT = Object.freeze({
   // (`npm run destinos:vivos`). Decirle "no me llego bien" le echa la culpa a su conexion y lo
   // invita a reintentar el mismo audio, que va a fallar igual. Se dice la verdad y se pide texto
   // UNA vez; si insiste con audio, offScriptCount lo lleva a un humano, que si lo puede escuchar.
-  M_AUDIO_FAIL: "Recibí tu audio, pero no lo puedo escuchar yo. ¿Me lo escribís?",
+  M_AUDIO_FAIL: "Recibí su audio, pero no lo puedo escuchar yo. ¿Me lo escribe?",
 
   // Imagen / documento (spec §2.3): se reconoce y se pasa a humano.
-  M_ATTACH_BODY: "Recibí tu archivo. Lo mira {{humano}}, no lo puedo leer bien yo.",
+  M_ATTACH_BODY: "Recibí su archivo. Lo mira {{humano}}, no lo puedo leer bien yo.",
 
   // Cierres de embudo — AGREGADOS: son la linea con la que una respuesta fuera de guion
   // (precio / SIAT / archivo) vuelve al embudo sin saltear la calificacion.
-  PENDING_CALIFICACION: "Volviendo a lo nuestro: me falta {{dato_faltante}} — ¿me lo pasás?",
-  PENDING_HORARIO: "¿Te reservo **{{slot_a}}** o **{{slot_b}}**?",
+  PENDING_CALIFICACION: "Volviendo a lo nuestro: me falta {{dato_faltante}} — ¿me lo pasa?",
+  PENDING_HORARIO: "¿Le reservo **{{slot_a}}** o **{{slot_b}}**?",
   // Eligio un horario que ya no se puede sostener (paso, o dejo de dar el dia de aviso que le
   // prometimos en ese mismo mensaje). No se le confirma, y tampoco se le asigna en silencio
   // uno de los nuevos: el "A" de hoy no es el "A" que el vio. Se le dice y elige de nuevo.
   M0_HORARIO_CADUCO: [
-    "Uy, **{{slot_elegido}}** ya no lo tengo disponible — pasó el tiempo desde que te lo ofrecí y no quiero confirmarte algo que no puedo sostener.",
+    "Uy, **{{slot_elegido}}** ya no lo tengo disponible — pasó el tiempo desde que se lo ofrecí y no quiero confirmarle algo que no puedo sostener.",
     "",
     "Estos son los horarios que tengo ahora:",
     "",
     "**A)** {{slot_a}}",
     "**B)** {{slot_b}}",
     "",
-    "¿Cuál te sirve? (o escribime \"otro\" y lo coordinamos)",
+    "¿Cuál le sirve? (o escríbame \"otro\" y lo coordinamos)",
   ].join("\n"),
   // PENDING_HORARIO_SIN_HORARIOS — la misma re-pregunta cuando `slots` sigue en "pendiente de
   // definir". PENDING_HORARIO pide elegir entre {{slot_a}} y {{slot_b}}, y sin horarios reales eso
   // salio a produccion como "¿Te reservo HORARIO A (pendiente de definir) o HORARIO B (pendiente de
   // definir)?" — y, via el LLM, como "¿horario A o horario B?". Se pide lo unico accionable sin
   // agenda (el contacto) y la hora la coordina el humano.
-  PENDING_HORARIO_SIN_HORARIOS: "{{humano}} te coordina el horario personalmente y te escribe {{via_humano}}.",
+  PENDING_HORARIO_SIN_HORARIOS: "{{humano}} le coordina el horario personalmente y le escribe {{via_humano}}.",
   PENDING_AGENDADA: "Igual ya quedamos para **{{dia_hora_elegida}}**.",
 
   // -------------------------------------------------------------------------
@@ -723,10 +723,10 @@ export const PRODUCTOS = Object.freeze([
   Object.freeze({ key: "proveedores", nombre: "Importadora", queResuelve: "importaciones, costos y precios de una distribuidora" }),
   Object.freeze({ key: "estetica", nombre: "Estética y spa", queResuelve: "agenda, clientas, tratamientos y caja" }),
 
-  Object.freeze({ key: "web", tipo: "servicio", nombre: "la web de tu negocio" }),
+  Object.freeze({ key: "web", tipo: "servicio", nombre: "la web de su negocio" }),
   // Sin "con IA": el chatbot que se le entrega a un cliente es el modo recepcionista, que atiende
   // SIN LLM por decision (recepcionista.mjs, regla 4). Decir IA ahi era prometer lo que no hace.
-  Object.freeze({ key: "chatbot", tipo: "servicio", nombre: "un chatbot de WhatsApp para tu negocio" }),
+  Object.freeze({ key: "chatbot", tipo: "servicio", nombre: "un chatbot de WhatsApp para su negocio" }),
   Object.freeze({ key: "videos_ia", tipo: "servicio", nombre: "videos e influencers con IA" }),
   Object.freeze({ key: "redes", tipo: "servicio", nombre: "conexión y publicación en redes" }),
   Object.freeze({ key: "automatizaciones", tipo: "servicio", nombre: "automatizaciones a medida" }),
@@ -816,9 +816,9 @@ export const DEFAULT_CONFIG = Object.freeze({
     // (M2 lo arma con `{{preguntas}}`), y el banco lee de ahi que se esta preguntando. Si cambia
     // uno, cambia el guion.
     fields: Object.freeze([
-      Object.freeze({ key: "industry", missLabel: "a qué se dedica tu negocio" }),
+      Object.freeze({ key: "industry", missLabel: "a qué se dedica su negocio" }),
       Object.freeze({ key: "teamSize", missLabel: "cuántas personas trabajan ahí" }),
-      Object.freeze({ key: "city", missLabel: "en qué ciudad estás" }),
+      Object.freeze({ key: "city", missLabel: "en qué ciudad está" }),
     ]),
     // RAMIFICACION POR RUBRO. Un rubro puede pedir UN dato extra despues de los 3 universales.
     // Hoy solo odontologia: el sillon es su unidad de capacidad y Sergio llega a la demo sabiendo
@@ -828,7 +828,7 @@ export const DEFAULT_CONFIG = Object.freeze({
       dental: Object.freeze({
         key: "dental",
         askKey: "M1_RAMA_DENTAL",
-        field: Object.freeze({ key: "chairs", missLabel: "cuántos sillones tenés" }),
+        field: Object.freeze({ key: "chairs", missLabel: "cuántos sillones tiene" }),
         // Se nombra el modulo SOLO donde existe de verdad. Nombrar un modulo que no esta armado
         // es prometer una feature (N2) con otro disfraz.
         moduleNote: " El módulo dental ya está armado justo para eso.",

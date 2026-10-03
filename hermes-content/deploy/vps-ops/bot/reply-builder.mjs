@@ -252,17 +252,17 @@ export function capturedLabels(qualification, config) {
   const labels = [];
   if (qualification.industry) {
     const label = intents.industryLabel(qualification.industry, config);
-    labels.push(label ? `que te dedicás a ${label}` : "a qué te dedicás");
+    labels.push(label ? `que se dedica a ${label}` : "a qué se dedica");
   }
   if (qualification.teamSize) {
-    labels.push(qualification.teamSize === 1 ? "que trabajás por tu cuenta" : `que son ${qualification.teamSize} personas`);
+    labels.push(qualification.teamSize === 1 ? "que trabaja por su cuenta" : `que son ${qualification.teamSize} personas`);
   }
-  if (qualification.city) labels.push(`que estás en ${qualification.city}`);
+  if (qualification.city) labels.push(`que está en ${qualification.city}`);
   if (qualification.chairs) {
-    labels.push(`que tenés ${qualification.chairs} ${qualification.chairs === 1 ? "sillón" : "sillones"}`);
+    labels.push(`que tiene ${qualification.chairs} ${qualification.chairs === 1 ? "sillón" : "sillones"}`);
   }
   if (DOLOR_LABEL[qualification.painPoint]) {
-    labels.push(`que lo que más tiempo te come ${DOLOR_LABEL[qualification.painPoint](qualification.industry)}`);
+    labels.push(`que lo que más tiempo le come ${DOLOR_LABEL[qualification.painPoint](qualification.industry)}`);
   }
   return labels;
 }
