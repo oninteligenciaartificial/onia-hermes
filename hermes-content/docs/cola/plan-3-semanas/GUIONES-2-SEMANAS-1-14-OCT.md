@@ -320,7 +320,7 @@ Esa descripción es lo más importante: Claude la lee para decidir si la skill a
 
 Abajo, las instrucciones, como se las explicarías a alguien nuevo.
 
-La mía se llama continuidad. La descripción dice: invocar al arrancar cualquier sesión. Obliga a leer lo que ya sabemos antes de decidir. Nació el día en que mi agente planificó seis cosas, y cuatro ya estaban hechas.
+La mía se llama continuidad. La descripción dice: invocar al arrancar cualquier sesión. Obliga a leer lo que ya sabemos antes de decidir. Nació el día en que mi agente planificó seis cosas, y cuatro ya estaban hechas o decididas.
 
 Para comprobar la tuya, escribí barra skills: tiene que aparecer. Después pedile algo que coincida con la descripción, y fijate si la usa.
 
