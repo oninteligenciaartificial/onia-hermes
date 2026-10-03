@@ -39,6 +39,11 @@ Calidad mínima: 1.800 px en el lado largo (Higgsfield 2k). La galería guarda J
 
 ## 2. Qué pack y qué layout
 
+> ⛔ **La pauta de Onia Platform NO va por acá.** Sergio Urcullo, 2-oct: *«es diferente el contenido de la onia
+> platform que el de mi cuenta personal»*. Los anuncios del producto se arman con el formato de anuncio de software
+> de la Biblioteca y la marca de la web: skill `onia-ventas-pauta` §4, `anuncio-render.js`. D1 y D4 v2 salieron con
+> este pack (arcilla verde, ensayo, dato) y no sirvieron como anuncio.
+
 **Carruseles de marca personal → pack `referentes`** (`scripts/carousel_pack_referentes.js`).
 Cada lámina elige `layout`:
 
@@ -59,6 +64,46 @@ blanco puro, verde y negro (decisión de Sergio, 29-sep).
 
 ⚠️ **Trampa (30-sep):** el campo del título es `headline`, no `title`. Con `title` el renderer no avisa: la
 lámina sale SIN título. `"next": ""` saca la flecha «seguí» (para historias o una lámina suelta).
+
+⚠️ **Trampas del pack medidas el 1-oct (K2v3, K11, K12, K13):**
+- **`cta` en la raíz del brief se copia a TODAS las láminas** (`sl.cta || brief.cta`): va solo en la de cierre.
+- **El énfasis `*…*` que se parte de renglón deja una barra suelta** bajo la palabra que quedó arriba (pasó en la
+  portada de K12 con «*la carpeta equivocada*»): enfatizá solo lo que entra en un renglón.
+- **`dato` con 4 caracteres o más baja la cifra de ~420 a ~216 px** y la lámina queda medio vacía: «4/6», no «4 de 6».
+- **`lista` con 2 o 3 filas escribe a 40 px** y un comando de ~36 caracteres se corta; con 4 filas o más pasa a 34 px.
+- **Chromium corta después de un guion** («claude -» / «p»): un comando no arranca con guion a mitad de renglón; ponelo
+  al principio de la frase o en su propio párrafo. Solo `ensayo` separa párrafos con `\n\n` (`dato` y `logos`, no).
+- **Un asterisco suelto se toma como énfasis**: un cron (`5 * * * *`) va en el caption o en el drop, no en la lámina.
+- **En el tema `negro`, el énfasis dentro de `cta` sale verde eléctrico sobre la pastilla blanca**: ahí el `cta` va sin
+  asteriscos.
+- **Título de `ensayo` que se parte** («8 / bloques»): un espacio duro (U+00A0) dentro del `*…*` lo mantiene junto.
+- **`dato` con un dígito angosto** («1», «2») deja vacía la derecha: alargá el título a 2-3 líneas.
+- **Sin imagen no hay K1-B.** El 1-oct, sin lote aprobado, K8, K11, K12 y K13 salieron solo con texto y se acercan a lo
+  que Sergio Urcullo rechazó («vacío y con demasiado texto»). Lo que hace vender a K1-B son sus dos imágenes de arcilla:
+  pedí el lote de portada + 1 interior ANTES de armar el carrusel, no después.
+- **`ilustrado` con `badge`:** si el primer renglón del título es largo, pasa por DEBAJO del sello sin avisar.
+  Arrancá el título con el énfasis o sacá el badge. Cada tramo y cada `*énfasis*` es un bloque: un énfasis en el
+  medio queda solo en su renglón; ponelo al final.
+- **Énfasis dentro de una fila de `lista`:** sale gris con subrayado verde (la regla `.c-lista li span` le gana).
+- **`captura` alta (más alta que ancha):** se limita a 760 px y el pie se monta sobre el @handle. Recortá la captura
+  más ancha que alta. **`cierre`:** el body no balancea renglones; espacio duro en las dos últimas palabras.
+- **`cierre` con palabra de más de 9 letras** (ANTIGRAVITY, 2-oct): a 170 px se salía de la lámina. Desde el 2-oct el
+  pack la achica en proporción; hasta 9 letras (ESQUELETO) queda igual.
+- **Foto 4:3 en `ilustrado`:** el `object-fit: cover` la recorta arriba y abajo y no se entiende. Centrala en un lienzo
+  blanco ancho (`convert … -gravity center -extent 4400x2400`, ~1,85:1) y entra entera (N06, 2-oct).
+- **Un logo como imagen de `ilustrado`:** ponelo sobre un lienzo blanco con margen; la máscara radial lo corta.
+- **Capturas reales desde la nube (2-oct):** Chromium con `--proxy-server=$HTTPS_PROXY`; si da
+  `ERR_CERT_AUTHORITY_INVALID`, la confianza en la CA del proxy se resuelve como dice `/root/.ccr/README.md` (nunca
+  apagando TLS). Cargan `platform.claude.com`, `developers.openai.com`, `geminicli.com`, `developers.googleblog.com`;
+  dan 403 por política `github.com` (web) y `openai.com/index/*`. Legible con viewport móvil de 430–560 px y escala 3;
+  ocultá los widgets flotantes («Ask Docs») antes de capturar. La captura va a `carousels/briefs/assets/<pieza>/`
+  con la fecha en el nombre y en el caption.
+- **Una noticia se re-verifica el día que se arma la pieza**, no el del guion: el 1-oct, N06 («Gemini CLI gratis»)
+  ya era falsa (reemplazado por Antigravity CLI para el plan gratis el 18-jun) aunque el README seguía diciendo gratis.
+  Manda el banner/blog oficial más nuevo, no el README.
+- **El pack no tiene layout de código ni monoespaciada.** Un bloque de código real necesita una captura.
+- **Foto con fondo gris en `analogia`**: el `multiply` solo borra el blanco puro y queda un recuadro gris. Sacale el fondo
+  antes o elegí otra foto.
 
 **Historias (1080×1920):** mismo pack con `--format story`. Dejar libre el tercio de abajo: ahí va el sticker de
 link, que se pone a mano en Instagram. Ejemplo: `briefs/marca-personal/sergio-historias-comunidad-20261001.json`.
@@ -121,6 +166,8 @@ Letras: Bricolage (títulos, local), DM Sans (texto), Caveat (flechas y sello), 
    paso, el renderer no encuentra el navegador. Con el Chromium completo, además, cae en DejaVu y corta
    el pie de cada lámina. El script instala las fuentes de los packs **en TTF** (en WOFF, Chromium no las
    toma) y apunta al `headless_shell`. Comparado el 30-sep: sale igual que en la PC.
+   `carousel_contactsheet.js` lee `CAROUSEL_BROWSER` y pasa `--no-sandbox` desde el 1-oct; antes fallaba en la nube con
+   «No Edge/Chrome found» aunque se hubiera corrido el setup. El `eval` va en el MISMO comando que el render.
 
 ## 6. Gasto (CLAUDE.md, regla de Higgsfield)
 
@@ -140,8 +187,39 @@ El CLI autenticado está en el VPS: `HF_CMD="ssh -i <llave> -o BatchMode=yes roo
   que mejor rinde. `acuarela` queda linda pero INVENTA UNA FIRMA en una esquina (2 de 2): se
   recorta. `linea` sale como foto de un papel con bordes oscuros. Soul es un modelo de fotos:
   lo que se puede fotografiar (arcilla, objetos) le sale; el dibujo, no.
+- **Medido el 1-oct (lote K2v3/K11/K12):** «toy train» y «locomotive» salen con cara (tipo Thomas) y «tipped over» no
+  se respeta; «boxcar» sale sin cara. La arcilla a veces sale con **fondo gris claro (~210-225)**: en lámina blanca no se
+  nota, en portada VERDE queda un bloque turbio. Medí las esquinas antes de montar en verde
+  (`ffmpeg -i img -vf crop=150:150:0:0,scale=1:1 -f rawvideo -pix_fmt rgb24 - | od -An -tu1`; menos de ~235, regenerá).
+- **Prompt de foto + `image_style: clay` = criatura** (visto 2-oct, portada K9v2): unas «brass sewing scissors… linen
+  thread on a pale oak table» con estilo clay salieron como un bicho verde con ojos, y la tijera de costado. Con clay,
+  el prompt nombra objetos DE ARCILLA y sus colores («emerald green clay…, matte black clay…, on a white surface»).
+  Al cambiar de estilo un brief viejo, reescribí el prompt; no lo heredes.
+- **`--out` de `carousel_images.mjs` = nombre del carrusel** (`<scratch>/sergio-kNN-…`): el script toma de ahí el nombre
+  del archivo y el `usado_en` de `galeria.json`. Con `--out k11-img` quedó todo mal anotado.
+- **Varios agentes generando a la vez:** `flock /tmp/claude-0/galeria.lock` delante del comando (el script reescribe
+  `galeria.json` entero). Después de usar un prompt, renombralo a `image_prompt_usado`: si no, un re-run vuelve a cobrar.
+- **El modo automático de permisos puede frenar la generación paga** aunque Sergio Urcullo la haya aprobado en el chat
+  (1-oct: frenó K8 y K13, dejó pasar K2, K11 y K12). No se busca otro camino: se le pide a él un «sí» explícito o una
+  regla de permiso.
+- **`ilustrado` con título de más de una línea:** el `logo` queda solo en su renglón, arriba. **`lista` con `icon`:** el
+  ícono (96 px) deja ~706 px de texto, y un comando de ~36 caracteres se parte.
 - Si un `generate create` se corta por tiempo, el job sigue y COBRA: recuperarlo con
   `higgsfield generate list` + `generate wait <id>` y `saveToGallery({url})`, nunca regenerar.
+
+**Higgsfield desde una sesión en la NUBE (1-oct-2026):**
+- El CLI `higgsfield` no está instalado. El MCP de Higgsfield sí anda. CLAUDE.md prefiere el CLI, así que usá el MCP solo
+  con OK explícito del lote.
+- Cotizá con `generate_image` y `get_cost: true`. `soul_2` = `text2image_soul_v2`: 0,12 cr por imagen, 9:16, 2k.
+- `count: 2` da dos variantes del mismo prompt. Elegí mirando las dos: de 2 «muñecos en una mesa», 1 salió con caras
+  verdes raras.
+- Bajá el resultado con curl desde cloudfront y registrá job, prompt y costo en `galeria.json` y en la bitácora.
+- **Herramientas (medido el 2-oct, entorno onia-higgsfield):** `ffmpeg` y `convert` (ImageMagick) están; PIL no.
+  ImageMagick no rasteriza SVG (falta rsvg): un logo SVG se rasteriza con Chromium. Una foto con fondo gris para
+  portada verde: `convert in -colorspace Gray -level 8%,84%,0.6 -white-threshold 93% out` la deja en blanco puro.
+  Con fondo gris, `-type TrueColor` o la salida queda en blanco y negro.
+- **Antes (1-oct) no había PIL ni ffmpeg:** guardá el PNG tal cual si falta la herramienta. No encadenes `rm` después de una conversión que puede
+  fallar: el 1-oct se borraron los originales y hubo que bajarlos de nuevo.
 
 ## 7. Skills de diseño que se cargan con esta
 

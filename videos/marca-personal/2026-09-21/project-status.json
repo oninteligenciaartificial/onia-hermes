@@ -1,0 +1,9 @@
+{
+  "piece": "01-feed-3-nodos",
+  "status": "rendered",
+  "requiredInput": "raw/01-feed-3-nodos-camera.mp4",
+  "optionalInputs": [],
+  "targetOutput": "renders/01-feed-3-nodos-v1.mp4",
+  "renderAllowed": false,
+  "blockedReason": "Render final ya existe; no se sobrescribe sin una nueva versión."
+}

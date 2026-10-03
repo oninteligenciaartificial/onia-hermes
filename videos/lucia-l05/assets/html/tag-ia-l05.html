@@ -1,0 +1,18 @@
+<!-- COPIA L05 de .claude/skills/editor-videos/assets/html/tag-ia.html (solo cambia #stage).
+     Rotulo chico de declaracion de IA (editor-videos). Va al ARRANQUE de cada pieza de un
+     personaje generado (primera exposicion), debajo del menton: nunca sobre la cara.
+     {{TITLE}} = "Lucía · personaje creado con IA"; {{ACCENT}} = punto de color. -->
+<style>
+  /* L05: la sombra de la pastilla (0 14u 36u) llega ~50u abajo y ~36u a los lados; con 28u se cortaba
+     (alpha 21/255 en la última fila → borde duro en y=816). */
+  #stage { padding: calc(60*var(--u)); }
+  .tag { display: inline-flex; align-items: center; gap: calc(16*var(--u));
+         padding: calc(16*var(--u)) calc(30*var(--u)); border-radius: 999px;
+         background: rgba(10,12,17,.72); border: 1px solid rgba(255,255,255,.14);
+         box-shadow: 0 calc(14*var(--u)) calc(36*var(--u)) rgba(0,0,0,.38);
+         font-family: var(--font-body); font-weight: 500; color: #F6F8FB;
+         font-size: calc(40*var(--u)); letter-spacing: .01em; white-space: nowrap; }
+  .tag i { width: calc(16*var(--u)); height: calc(16*var(--u)); border-radius: 999px;
+           background: {{ACCENT}}; box-shadow: 0 0 calc(18*var(--u)) {{ACCENT}}; }
+</style>
+<span class="tag"><i></i>{{TITLE}}</span>

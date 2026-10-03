@@ -1,6 +1,6 @@
 {
   "title": "5 revisiones antes de publicar tu video con IA (v2, pack referentes)",
-  "caption": "No tengo editor de video: lo edita una cadena de pasos con IA. Pero hay cinco cosas que la IA no revisa por mí.\n\nLa crítica es la 2: la transcripción se lee a ojo antes de quemar subtítulos. Una falta quemada no se parchea, se vuelve a renderizar.\n\nY un presentador hecho con IA explica y muestra, pero nunca se hace pasar por cliente.\n\nGuardá la lámina 6 para tu próximo video.",
+  "caption": "No tengo editor de video: lo edita una cadena de pasos con IA. Pero hay cinco cosas que la IA no revisa por mí.\n\nLa crítica es la 2: la transcripción se lee a ojo antes de quemar subtítulos, con foco en las eñes y las tildes. Una falta quemada no se parchea, se vuelve a renderizar.\n\nLa 1 es la regla de oro de mi editor: la tabla de cortes, con una vista previa, se mira antes de cortar. Nunca se corta a ciegas.\n\nLa 3: mi script avisa los cuadros que quedaron sin cubrir, pero no es garantía: el difuminado se mira.\n\nY un presentador hecho con IA explica y muestra, pero nunca se hace pasar por cliente ni por testimonio.\n\nGuardá la lámina 7 para tu próximo video.\n\nComentá REVISAR y te paso el link de la comunidad con mi editor de IA, paso a paso: grabar, transcribir, cortar, subtitular, leer y publicar.",
   "hashtags": [
     "#edicionvideo",
     "#ia",
@@ -15,7 +15,8 @@
       "layout": "ilustrado",
       "badge": "guía",
       "headline": "*5 revisiones* antes de publicar tu video con IA",
-      "image_prompt": "A small pair of plain brass sewing scissors resting beside a spool of natural undyed linen thread on a pale oak table.",
+      "image_prompt": "A large emerald green clay magnifying glass with a matte black clay handle, resting on a short strip of matte black clay film with small square holes along its edges, on a white surface.",
+      "alt_text": "Una lupa de arcilla sobre una tira de película: revisar el video antes de publicarlo",
       "number": 1,
       "theme": "verde",
       "image_style": "clay",
@@ -26,7 +27,7 @@
       "layout": "ensayo",
       "theme": "blanco",
       "headline": "La IA edita, pero *no corrige*",
-      "body": "Transcribe, corta y genera.\n\nNo corrige faltas, no pide permiso a nadie y no mira el costo. Eso lo revisás vos.\n\nLo publicado es tuyo.",
+      "body": "Mi cadena: grabar, transcribir, cortar, subtitular y publicar. Cada paso lo hace la IA.\n\nPero no ve sus faltas, no pide permiso y no mira el costo.\n\nEso lo revisás vos, en este\u00a0orden.",
       "next": "revisión 1",
       "alt_text": "La IA no corrige ni pide permiso"
     },
@@ -38,16 +39,20 @@
       "body": "qué queda, qué se tira y por qué",
       "items": [
         {
-          "label": "La frase entera",
-          "text": "tiro el silencio largo"
+          "label": "Queda la frase",
+          "text": "se tira el silencio largo"
         },
         {
-          "label": "La segunda toma",
-          "text": "tiro la que repetí"
+          "label": "Queda la 2.ª toma",
+          "text": "se tira la que repetí"
         },
         {
-          "label": "La idea",
-          "text": "tiro el «eh», el «o sea»"
+          "label": "Queda la idea",
+          "text": "se tiran el «eh» y el «o sea»"
+        },
+        {
+          "label": "La reviso yo",
+          "text": "recién después, se corta"
         }
       ],
       "next": "la crítica",
@@ -57,22 +62,35 @@
       "number": 4,
       "layout": "ensayo",
       "theme": "blanco",
-      "headline": "2 · Leé el texto *línea por línea*",
-      "body": "Antes de quemar subtítulos, leé la transcripción a ojo.\n\nEn un reel ajeno salió «A GENERADO» sin hache y «ARANA» sin eñe.\n\nQuemado no se parchea: se vuelve a renderizar.",
+      "headline": "2 · Leé el texto *línea\u00a0por\u00a0línea*",
+      "body": "Antes de quemar subtítulos, leé la transcripción a ojo: mirá las eñes y\u00a0las\u00a0tildes.\n\nEn un reel ajeno salió «A GENERADO» sin hache y «ARANA» sin eñe.\n\nQuemado no se parchea: se vuelve a\u00a0renderizar.",
       "next": "revisión 3",
       "alt_text": "Leer la transcripción antes de quemar subtítulos"
     },
     {
       "number": 5,
-      "layout": "ensayo",
+      "layout": "ilustrado",
       "theme": "blanco",
       "headline": "3 · Difuminá a *quien no firmó*",
-      "body": "Gente en la calle, pacientes, clientes: sin permiso, su cara no sale.\n\nMi script avisa los cuadros sin cubrir, pero el difuminado se mira: no es garantía.",
-      "next": "4 y 5",
-      "alt_text": "Difuminar las caras de terceros"
+      "body": "Gente en la calle, pacientes, clientes: sin permiso, su cara no sale. Y el difuminado se revisa a ojo.",
+      "image_prompt": "A small three-panel folding room divider made of smooth emerald green clay panels with matte black clay frames, standing half open on a white surface.",
+      "image_style": "clay",
+      "next": "revisión 4",
+      "alt_text": "Un biombo de arcilla verde: la cara de quien no dio permiso no se muestra"
     },
     {
       "number": 6,
+      "layout": "ilustrado",
+      "theme": "blanco",
+      "headline": "4 · Cotizá *antes de generar*",
+      "body": "La IA no mira el costo: lo mirás vos. Cada video se cotiza y se aprueba aparte.",
+      "image_prompt": "A small closed coin purse made of soft matte black clay with a shiny emerald green clay clasp on top, standing upright on a white surface.",
+      "image_style": "clay",
+      "next": "las 5",
+      "alt_text": "Un monedero de arcilla: cada video con IA se cotiza antes de generarlo"
+    },
+    {
+      "number": 7,
       "layout": "lista",
       "theme": "blanco",
       "headline": "Antes de *publicar*",
@@ -91,24 +109,23 @@
         },
         {
           "label": "Costo",
-          "text": "cotizado; el video, aprobado aparte"
+          "text": "cotizá antes de generar; cada video, aparte"
         },
         {
           "label": "Presentador IA",
-          "text": "nunca como cliente ni testimonio"
+          "text": "explica y muestra; nunca hace de cliente"
         }
       ],
       "next": "mi editor",
       "alt_text": "Checklist de 5 revisiones antes de publicar un video con IA"
     },
     {
-      "number": 7,
-      "layout": "ensayo",
+      "number": 8,
+      "layout": "cierre",
       "theme": "negro",
-      "headline": "Mi editor, en la *comunidad*",
-      "body": "No tengo editor de video: lo edita una cadena de pasos con IA.\n\nGrabar, transcribir, cortar, subtitular, leer y publicar, paso a paso.",
-      "cta": "Comunidad en la bio",
-      "alt_text": "Los pasos del editor en la comunidad"
+      "keyword": "REVISAR",
+      "body": "y te paso el link de la comunidad con mi\u00a0editor.",
+      "alt_text": "Comentá REVISAR para recibir los pasos del editor de video con IA"
     }
   ]
 }

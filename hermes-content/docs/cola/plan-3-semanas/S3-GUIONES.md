@@ -685,7 +685,8 @@ Requisito: python -m pip install opencv-python
 Para algo sensible: box o pixelate. Mirá el render entero antes de publicar: no es garantía de anonimato.
 ```
 
-**D9 · PROMPT** (D17-B, por DM)
+**D9 · PROMPT** (D17-B, comunidad · comentá PROMPT → DM con el link; también lo pide el carrusel K8 el mié 14-oct)
+⚠️ **Corregido 1-oct:** decía «por DM». Pasa a Avisos de la comunidad (pedido de Sergio Urcullo del 1-oct) y sale el mié 14-oct, antes que K8. Texto igual.
 ```
 Paso 0: ¿está el prompt en pantalla? Todas las láminas, la descripción, y en video los cuadros donde aparece texto.
 Si no está, reconstruís y lo decís: "no es el prompt original, es uno que da algo parecido".

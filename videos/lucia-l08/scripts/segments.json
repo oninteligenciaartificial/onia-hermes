@@ -1,0 +1,151 @@
+{
+ "segments": [
+  {
+   "start": 0.1,
+   "end": 2.376,
+   "text": "¿Cuántos pacientes se olvidan de su cita?"
+  },
+  {
+   "start": 2.701,
+   "end": 7.53,
+   "text": "El sistema les manda un correo un día antes y otro dos horas antes."
+  },
+  {
+   "start": 8.3,
+   "end": 9.6,
+   "text": "Vos no movés un dedo."
+  }
+ ],
+ "words": [
+  {
+   "start": 0.1,
+   "end": 0.437,
+   "word": "¿Cuántos"
+  },
+  {
+   "start": 0.483,
+   "end": 1.157,
+   "word": "pacientes"
+  },
+  {
+   "start": 1.215,
+   "end": 1.307,
+   "word": "se"
+  },
+  {
+   "start": 1.342,
+   "end": 1.598,
+   "word": "olvidan"
+  },
+  {
+   "start": 1.633,
+   "end": 1.702,
+   "word": "de"
+  },
+  {
+   "start": 1.749,
+   "end": 1.876,
+   "word": "su"
+  },
+  {
+   "start": 1.923,
+   "end": 2.376,
+   "word": "cita?"
+  },
+  {
+   "start": 2.701,
+   "end": 2.84,
+   "word": "El"
+  },
+  {
+   "start": 2.886,
+   "end": 3.27,
+   "word": "sistema"
+  },
+  {
+   "start": 3.316,
+   "end": 3.455,
+   "word": "les"
+  },
+  {
+   "start": 3.525,
+   "end": 3.746,
+   "word": "manda"
+  },
+  {
+   "start": 3.769,
+   "end": 3.815,
+   "word": "un"
+  },
+  {
+   "start": 3.896,
+   "end": 4.361,
+   "word": "correo"
+  },
+  {
+   "start": 4.686,
+   "end": 4.814,
+   "word": "un"
+  },
+  {
+   "start": 4.86,
+   "end": 5.046,
+   "word": "día"
+  },
+  {
+   "start": 5.069,
+   "end": 5.58,
+   "word": "antes"
+  },
+  {
+   "start": 5.963,
+   "end": 6.033,
+   "word": "y"
+  },
+  {
+   "start": 6.079,
+   "end": 6.288,
+   "word": "otro"
+  },
+  {
+   "start": 6.323,
+   "end": 6.451,
+   "word": "dos"
+  },
+  {
+   "start": 6.485,
+   "end": 6.706,
+   "word": "horas"
+  },
+  {
+   "start": 6.764,
+   "end": 7.53,
+   "word": "antes."
+  },
+  {
+   "start": 8.3,
+   "end": 8.497,
+   "word": "Vos"
+  },
+  {
+   "start": 8.567,
+   "end": 8.625,
+   "word": "no"
+  },
+  {
+   "start": 8.672,
+   "end": 8.88,
+   "word": "movés"
+  },
+  {
+   "start": 8.962,
+   "end": 9.02,
+   "word": "un"
+  },
+  {
+   "start": 9.066,
+   "end": 9.6,
+   "word": "dedo."
+  }
+ ]
+}

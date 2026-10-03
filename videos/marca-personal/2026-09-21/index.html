@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <style>
+      @font-face { font-family: "Segoe UI Variable Text"; src: local("Segoe UI Variable Text"); font-weight: 100 900; }
+      @font-face { font-family: "Bahnschrift"; src: local("Bahnschrift"); font-weight: 100 900; }
+      @font-face { font-family: "Spline Sans Mono"; src: url("./assets/fonts/SplineSansMono-var-latin.woff2") format("woff2"); font-weight: 100 900; }
+      :root {
+        --ink: #0a1116;
+        --ink-2: #101b22;
+        --paper: #f6f3eb;
+        --muted: #a9b4bb;
+        --green: #2ce58d;
+        --amber: #ffc857;
+        --red: #ff716f;
+        --line: rgba(246, 243, 235, 0.15);
+      }
+      * { box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; margin: 0; overflow: hidden; background: var(--ink); font-family: "Segoe UI Variable Text", Bahnschrift, sans-serif; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--ink); color: var(--paper); }
+      #video-wrap { position: absolute; inset: 0; z-index: 1; overflow: hidden; border: 0 solid rgba(246, 243, 235, 0.7); border-radius: 0; background: #111; box-shadow: none; transform-origin: 0 0; }
+      #video-wrap video { width: 100%; height: 100%; object-fit: cover; object-position: center; }
+      .shade { position: absolute; inset: 0; z-index: 3; pointer-events: none; background: linear-gradient(180deg, rgba(7,12,15,.78) 0%, rgba(7,12,15,.12) 23%, transparent 48%), linear-gradient(0deg, rgba(7,12,15,.46) 0%, transparent 30%); }
+      .eyebrow { display: inline-flex; align-items: center; min-height: 44px; gap: 12px; color: var(--green); font: 760 24px/1 "Spline Sans Mono", monospace; letter-spacing: .1em; text-transform: uppercase; }
+      .eyebrow::before { width: 30px; height: 8px; content: ""; border-radius: 999px; background: currentColor; }
+      #hook, #cta { position: absolute; z-index: 4; left: 68px; right: 68px; pointer-events: none; }
+      #hook { top: 72px; }
+      #hook h1 { width: 760px; margin: 18px 0 20px; font: 850 92px/.92 Bahnschrift, sans-serif; letter-spacing: -.045em; text-wrap: balance; }
+      .hook-chip { display: inline-flex; align-items: center; padding: 14px 20px; border: 1px solid rgba(246,243,235,.3); border-radius: 999px; background: rgba(7,12,15,.72); color: var(--paper); font: 650 28px/1 "Spline Sans Mono", monospace; backdrop-filter: blur(12px); }
+      .hook-chip b { margin-right: 10px; color: var(--green); }
+
+      .screen { position: absolute; inset: 0; z-index: 2; overflow: hidden; padding: 76px 70px 438px; background: radial-gradient(circle at 18% 8%, rgba(44,229,141,.12), transparent 28%), linear-gradient(rgba(246,243,235,.025) 1px, transparent 1px), linear-gradient(90deg, rgba(246,243,235,.025) 1px, transparent 1px), var(--ink); background-size: auto, 56px 56px, 56px 56px, auto; opacity: 0; visibility: hidden; }
+      .screen::after { position: absolute; right: 0; bottom: 0; left: 0; height: 470px; content: ""; pointer-events: none; background: linear-gradient(0deg, var(--ink) 18%, rgba(10,17,22,.9) 58%, transparent); }
+      .screen-head { position: relative; z-index: 1; width: 680px; }
+      .screen h2 { margin: 14px 0 10px; font: 830 72px/.98 Bahnschrift, sans-serif; letter-spacing: -.04em; }
+      .screen-deck { max-width: 640px; color: var(--muted); font-size: 29px; line-height: 1.25; }
+
+      .flow { position: relative; z-index: 1; display: grid; width: 660px; margin-top: 56px; gap: 18px; }
+      .node { position: relative; display: grid; grid-template-columns: 14px 1fr auto; min-height: 132px; overflow: hidden; border: 1px solid var(--line); border-radius: 24px; background: rgba(16,27,34,.94); box-shadow: 0 22px 54px rgba(0,0,0,.24); }
+      .node .bar { background: #52616b; }
+      .node.active { border-color: rgba(44,229,141,.66); background: linear-gradient(90deg, rgba(44,229,141,.1), rgba(16,27,34,.96) 34%); }
+      .node.active .bar { background: var(--green); }
+      .node-copy { align-self: center; padding: 22px 24px; }
+      .node-copy small { display: block; margin-bottom: 7px; color: var(--muted); font: 650 16px/1.2 "Spline Sans Mono", monospace; letter-spacing: .08em; text-transform: uppercase; }
+      .node-copy strong { display: block; font-size: 40px; line-height: 1.03; }
+      .node-copy span { display: block; margin-top: 9px; color: #c4ccd1; font-size: 20px; }
+      .node-tag { align-self: center; margin-right: 24px; padding: 10px 14px; border: 1px solid rgba(246,243,235,.2); border-radius: 999px; color: #dce2e5; font: 700 17px/1 "Spline Sans Mono", monospace; }
+      .connector { width: 2px; height: 18px; margin: -18px 0 -18px 44px; background: linear-gradient(var(--green), rgba(44,229,141,.15)); }
+
+      .conditions { position: relative; z-index: 1; display: grid; width: 660px; margin-top: 72px; gap: 22px; }
+      .condition { display: grid; grid-template-columns: 68px 1fr auto; align-items: center; min-height: 118px; padding: 20px 26px; border: 1px solid var(--line); border-radius: 24px; background: rgba(16,27,34,.94); }
+      .condition-icon { color: var(--green); font: 800 44px/1 Bahnschrift, sans-serif; }
+      .condition code { color: var(--paper); font: 680 31px/1.2 "Spline Sans Mono", monospace; }
+      .condition em { padding: 9px 12px; border-radius: 10px; background: rgba(44,229,141,.12); color: var(--green); font: normal 730 17px/1 "Spline Sans Mono", monospace; }
+      .branch-mini { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 16px; }
+      .branch-mini div { padding: 18px 20px; border-radius: 18px; font: 700 23px/1.2 "Spline Sans Mono", monospace; }
+      .branch-mini .yes { border: 1px solid rgba(44,229,141,.42); background: rgba(44,229,141,.09); color: var(--green); }
+      .branch-mini .no { border: 1px solid rgba(255,113,111,.38); background: rgba(255,113,111,.08); color: var(--red); }
+
+      .routes { position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 1fr; width: 660px; margin-top: 60px; gap: 18px; }
+      .route { min-height: 690px; padding: 26px; border: 1px solid var(--line); border-radius: 28px; background: rgba(16,27,34,.92); }
+      .route.yes { border-color: rgba(44,229,141,.42); }
+      .route.no { border-color: rgba(255,113,111,.34); }
+      .route-kicker { display: inline-flex; padding: 9px 12px; border-radius: 999px; font: 760 17px/1 "Spline Sans Mono", monospace; }
+      .yes .route-kicker { background: rgba(44,229,141,.12); color: var(--green); }
+      .no .route-kicker { background: rgba(255,113,111,.11); color: var(--red); }
+      .route h3 { margin: 22px 0 20px; font: 780 34px/1.02 Bahnschrift, sans-serif; letter-spacing: -.02em; }
+      .route-step { margin-top: 18px; padding: 20px; border: 1px solid var(--line); border-radius: 18px; background: rgba(246,243,235,.035); }
+      .route-step small { display: block; margin-bottom: 7px; color: var(--muted); font: 650 16px/1 "Spline Sans Mono", monospace; text-transform: uppercase; }
+      .route-step strong { font-size: 24px; line-height: 1.12; }
+      .route-arrow { margin: 10px 0 -4px 22px; color: var(--green); font: 800 28px/1 "Spline Sans Mono", monospace; }
+
+      .summary-grid { position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 1fr; width: 660px; margin-top: 64px; gap: 18px; }
+      .summary-step { min-height: 214px; padding: 24px; border: 1px solid var(--line); border-radius: 24px; background: rgba(16,27,34,.94); }
+      .summary-step b { display: block; color: var(--green); font: 780 20px/1 "Spline Sans Mono", monospace; }
+      .summary-step strong { display: block; margin-top: 20px; font: 800 39px/1 Bahnschrift, sans-serif; }
+      .summary-step span { display: block; margin-top: 10px; color: var(--muted); font-size: 21px; line-height: 1.2; }
+      .deterministic { position: relative; z-index: 1; display: inline-flex; margin-top: 26px; padding: 15px 18px; border: 1px solid rgba(255,200,87,.35); border-radius: 999px; background: rgba(255,200,87,.09); color: var(--amber); font: 710 20px/1 "Spline Sans Mono", monospace; }
+
+      .caption { position: absolute; z-index: 7; top: 1368px; left: 72px; width: 936px; min-height: 174px; display: flex; align-items: center; justify-content: center; padding: 22px 32px; visibility: hidden; opacity: 0; }
+      .caption-pill { max-width: 920px; padding: 18px 26px 20px; border: 1px solid rgba(246,243,235,.18); border-radius: 24px; background: linear-gradient(180deg, rgba(7,12,15,.86), rgba(7,12,15,.72)); box-shadow: 0 14px 34px rgba(0,0,0,.28); color: #fff; font: 640 62px/1.07 Bahnschrift, sans-serif; letter-spacing: -.025em; text-align: center; text-wrap: balance; backdrop-filter: blur(12px); }
+      .caption-pill em { color: var(--green); font-style: normal; font-weight: 820; }
+      #caption-01, #caption-02 { top: 430px; }
+      #caption-13 { top: 500px; }
+
+      #cta { top: 74px; opacity: 0; visibility: hidden; }
+      #cta h2 { width: 760px; margin: 16px 0 0; font: 850 82px/.94 Bahnschrift, sans-serif; letter-spacing: -.045em; text-wrap: balance; }
+      #cta .cta-accent { color: var(--green); }
+      .pip-label { position: absolute; z-index: 5; top: 532px; right: 53px; width: 286px; padding: 9px 12px; border-radius: 999px; background: rgba(10,17,22,.9); color: var(--paper); font: 700 15px/1 "Spline Sans Mono", monospace; letter-spacing: .08em; text-align: center; text-transform: uppercase; opacity: 0; visibility: hidden; }
+    </style>
+  </head>
+  <body>
+    <main id="root" data-composition-id="main" data-start="0" data-duration="40" data-fps="30" data-width="1080" data-height="1920">
+      <div id="video-wrap">
+        <video id="source-video" src="./work/base-cut.mp4" muted playsinline preload="auto" data-start="0" data-duration="40" data-track-index="1"></video>
+      </div>
+      <div class="shade" id="shade"></div>
+
+      <section id="hook">
+        <div class="eyebrow">n8n · guía práctica</div>
+        <h1>Tu primera automatización</h1>
+        <div class="hook-chip"><b>4 pasos</b> antes de conectar 20 apps</div>
+      </section>
+
+      <section class="screen clip" id="screen-entry" data-start="3.8" data-duration="8.1" data-track-index="2">
+        <div class="screen-head"><div class="eyebrow">Entrada</div><h2>Empieza con un Webhook</h2><p class="screen-deck">Una entrada clara. Cuatro campos ficticios. Nada de complejidad todavía.</p></div>
+        <div class="flow">
+          <article class="node active"><div class="bar"></div><div class="node-copy"><small>trigger</small><strong>Webhook</strong><span>name · phone · service · source</span></div><div class="node-tag">POST</div></article>
+          <div class="connector"></div>
+          <article class="node"><div class="bar"></div><div class="node-copy"><small>logic</small><strong>IF</strong><span>valida phone + service</span></div><div class="node-tag">2 reglas</div></article>
+          <div class="connector"></div>
+          <article class="node"><div class="bar"></div><div class="node-copy"><small>true</small><strong>Google Sheets</strong><span>Append Row</span></div><div class="node-tag">guardar</div></article>
+          <div class="connector"></div>
+          <article class="node"><div class="bar"></div><div class="node-copy"><small>true</small><strong>Telegram</strong><span>Send Message</span></div><div class="node-tag">avisar</div></article>
+        </div>
+      </section>
+
+      <section class="screen clip" id="screen-validation" data-start="11.9" data-duration="7.2" data-track-index="2">
+        <div class="screen-head"><div class="eyebrow">Validación</div><h2>Comprueba lo mínimo</h2><p class="screen-deck">El flujo decide antes de registrar. Así evitas leads incompletos.</p></div>
+        <div class="conditions">
+          <article class="condition"><div class="condition-icon">✓</div><code>phone</code><em>is not empty</em></article>
+          <article class="condition"><div class="condition-icon">✓</div><code>service</code><em>is not empty</em></article>
+          <div class="branch-mini"><div class="yes">TRUE → registrar</div><div class="no">FALSE → pedir dato</div></div>
+        </div>
+      </section>
+
+      <section class="screen clip" id="screen-routing" data-start="19.1" data-duration="8.3" data-track-index="2">
+        <div class="screen-head"><div class="eyebrow">Registro + aviso</div><h2>Dos ramas, una intención</h2><p class="screen-deck">La ruta correcta guarda y avisa. La otra recupera el dato que falta.</p></div>
+        <div class="routes">
+          <article class="route yes"><div class="route-kicker">TRUE</div><h3>Lead completo</h3><div class="route-step"><small>Google Sheets</small><strong>Append Row</strong></div><div class="route-arrow">↓</div><div class="route-step"><small>Telegram</small><strong>Send Message</strong></div></article>
+          <article class="route no"><div class="route-kicker">FALSE</div><h3>Falta un campo</h3><div class="route-step"><small>respuesta</small><strong>Pedir phone o service</strong></div><div class="route-arrow" style="color:var(--red)">↺</div><div class="route-step"><small>regla</small><strong>No guardar incompletos</strong></div></article>
+        </div>
+      </section>
+
+      <section class="screen clip" id="screen-summary" data-start="27.4" data-duration="8.5" data-track-index="2">
+        <div class="screen-head"><div class="eyebrow">Sistema mínimo</div><h2>Primero, hazlo determinista</h2><p class="screen-deck">Cuando esto funciona de punta a punta, recién entonces evalúas sumar IA.</p></div>
+        <div class="summary-grid">
+          <article class="summary-step"><b>01</b><strong>Entrada</strong><span>Webhook recibe el lead.</span></article>
+          <article class="summary-step"><b>02</b><strong>Validación</strong><span>IF comprueba los campos.</span></article>
+          <article class="summary-step"><b>03</b><strong>Registro</strong><span>Sheets guarda la fila.</span></article>
+          <article class="summary-step"><b>04</b><strong>Aviso</strong><span>Telegram alerta al responsable.</span></article>
+        </div>
+        <div class="deterministic">SIN AI AGENT · TODAVÍA</div>
+      </section>
+
+      <div class="pip-label" id="pip-label">explicación en cámara</div>
+      <section id="cta"><div class="eyebrow">Tu caso puede ser el próximo</div><h2>Comentá una tarea <span class="cta-accent">repetitiva</span></h2></section>
+
+      <div class="caption clip" id="caption-01" data-start="0" data-duration="2.18" data-track-index="7"><div class="caption-pill">Si quieres enseñar tu primera<br /><em>automatización</em>,</div></div>
+      <div class="caption clip" id="caption-02" data-start="2.35" data-duration="1.56" data-track-index="7"><div class="caption-pill">no empieces conectando<br /><em>20 aplicaciones</em>.</div></div>
+      <div class="caption clip" id="caption-03" data-start="4.02" data-duration="2.72" data-track-index="7"><div class="caption-pill">En n8n, empieza con<br /><em>4 pasos</em> que puedas probar.</div></div>
+      <div class="caption clip" id="caption-04" data-start="6.77" data-duration="1.66" data-track-index="7"><div class="caption-pill">Primero, conecta<br />un <em>Webhook</em>.</div></div>
+      <div class="caption clip" id="caption-05" data-start="8.69" data-duration="3.12" data-track-index="7"><div class="caption-pill">Recibe: name, phone,<br />service y source.</div></div>
+      <div class="caption clip" id="caption-06" data-start="11.96" data-duration="3.69" data-track-index="7"><div class="caption-pill">Después conecta un <em>IF</em>:<br />phone y service no están vacíos.</div></div>
+      <div class="caption clip" id="caption-07" data-start="15.84" data-duration="3.32" data-track-index="7"><div class="caption-pill">En la salida verdadera,<br /><em>Google Sheets</em> usa Append Row.</div></div>
+      <div class="caption clip" id="caption-08" data-start="19.18" data-duration="4.23" data-track-index="7"><div class="caption-pill">Guarda el lead y <em>Telegram</em><br />avisa al responsable.</div></div>
+      <div class="caption clip" id="caption-09" data-start="23.51" data-duration="3.84" data-track-index="7"><div class="caption-pill">En la salida falsa, pide<br /><em>el campo que falta</em>.</div></div>
+      <div class="caption clip" id="caption-10" data-start="27.41" data-duration="3.86" data-track-index="7"><div class="caption-pill">Ya tienes una automatización:<br /><em>recibe, valida, registra y avisa</em>.</div></div>
+      <div class="caption clip" id="caption-11" data-start="31.29" data-duration="2.16" data-track-index="7"><div class="caption-pill">No agregues todavía<br />un <em>agente de IA</em>.</div></div>
+      <div class="caption clip" id="caption-12" data-start="33.78" data-duration="2.08" data-track-index="7"><div class="caption-pill">Primero, haz que el flujo<br /><em>determinista funcione</em>.</div></div>
+      <div class="caption clip" id="caption-13" data-start="35.86" data-duration="4.02" data-track-index="7"><div class="caption-pill">Comentá una tarea repetitiva<br />y la convertimos en <em>4 pasos</em>.</div></div>
+
+      <script src="./assets/vendor/gsap.min.js"></script>
+      <script>
+        (function () {
+          const tl = window.gsap.timeline({ paused: true });
+          tl.fromTo("#hook .eyebrow", { opacity: 0, y: -14 }, { opacity: 1, y: 0, duration: .35, ease: "power2.out" }, .08);
+          tl.fromTo("#hook h1", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: .48, ease: "power3.out" }, .18);
+          tl.fromTo("#hook .hook-chip", { opacity: 0, y: 22 }, { opacity: 1, y: 0, duration: .42, ease: "power2.out" }, .52);
+          tl.to("#hook", { opacity: 0, y: -18, duration: .28, ease: "power2.in" }, 3.48);
+          tl.set("#video-wrap", { zIndex: 3 }, 3.56);
+          tl.to("#video-wrap", { x: 758, y: 66, scale: .25, borderWidth: 12, borderRadius: 104, boxShadow: "0 60px 160px rgba(0,0,0,.46)", duration: .52, ease: "power3.inOut" }, 3.56);
+          tl.fromTo("#pip-label", { opacity: 0, y: 8, visibility: "hidden" }, { opacity: 1, y: 0, visibility: "visible", duration: .3 }, 4.05);
+          tl.to("#shade", { opacity: 0, duration: .22 }, 3.62);
+          const screens = [
+            { id: "#screen-entry", start: 3.8, end: 11.9, children: ".node" },
+            { id: "#screen-validation", start: 11.9, end: 19.1, children: ".condition, .branch-mini" },
+            { id: "#screen-routing", start: 19.1, end: 27.4, children: ".route" },
+            { id: "#screen-summary", start: 27.4, end: 35.9, children: ".summary-step, .deterministic" }
+          ];
+          screens.forEach((screen) => {
+            tl.set(screen.id, { visibility: "visible" }, screen.start);
+            tl.fromTo(screen.id, { opacity: 0, clipPath: "inset(100% 0 0 0)" }, { opacity: 1, clipPath: "inset(0% 0 0 0)", duration: .42, ease: "power3.out" }, screen.start);
+            tl.fromTo(`${screen.id} .screen-head`, { opacity: 0, x: -24 }, { opacity: 1, x: 0, duration: .38, ease: "power2.out" }, screen.start + .18);
+            tl.fromTo(`${screen.id} ${screen.children}`, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: .34, stagger: .09, ease: "power2.out" }, screen.start + .34);
+            tl.to(screen.id, { opacity: 0, x: -28, duration: .28, ease: "power2.in" }, screen.end - .28);
+            tl.set(screen.id, { visibility: "hidden" }, screen.end);
+          });
+          tl.to("#pip-label", { opacity: 0, y: -8, duration: .22 }, 35.5);
+          tl.to("#video-wrap", { x: 0, y: 0, scale: 1, borderWidth: 0, borderRadius: 0, boxShadow: "none", duration: .58, ease: "power3.inOut" }, 35.48);
+          tl.set("#video-wrap", { zIndex: 1 }, 36.08);
+          tl.to("#shade", { opacity: 1, duration: .32 }, 35.72);
+          tl.set("#cta", { visibility: "visible" }, 35.9);
+          tl.fromTo("#cta", { opacity: 0, y: -16 }, { opacity: 1, y: 0, duration: .42, ease: "power2.out" }, 35.9);
+          document.querySelectorAll(".caption").forEach((caption) => {
+            const start = Number(caption.dataset.start);
+            const duration = Number(caption.dataset.duration);
+            const end = start + duration;
+            tl.set(caption, { visibility: "visible" }, start);
+            tl.fromTo(caption, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: .2, ease: "power2.out" }, start);
+            tl.to(caption, { opacity: 0, y: -8, duration: .16, ease: "power2.in" }, Math.max(start + .5, end - .16));
+            tl.set(caption, { visibility: "hidden" }, end);
+          });
+          window.__timelines = window.__timelines || {};
+          window.__timelines.main = tl;
+          tl.seek(0);
+        })();
+      </script>
+    </main>
+  </body>
+</html>

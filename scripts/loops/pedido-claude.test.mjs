@@ -63,6 +63,8 @@ exit ${curl.rc}
     `#!/usr/bin/env bash
 printf '%s|%s|%s\\n' "$ONIA_AVISO" "$ONIA_AVISO_AHORA" "$ONIA_AVISO_EMISOR" > ${dir}/tg-env
 printf '%s' "$1" > ${dir}/tg-msg
+echo x >> ${dir}/tg-envios
+[ -n "\${TG_DEMORA:-}" ] && sleep "\${TG_DEMORA}"
 ${tgFalla ? "exit 1" : "exit 0"}
 `,
   );
@@ -348,4 +350,19 @@ test("un token con espacios no se usa (la llave mal cargada no rompe el encabeza
   writeFileSync(join(b.dir, "pedidos.env"), `ONIA_RUTINA_URL=${URL_RUTINA}\nONIA_RUTINA_TOKEN='sk-ant mal pegado'\n`);
   assert.equal(b.correr(["plataforma"], TEXTO).status, 69);
   assert.equal(b.leer("tg-msg"), "");
+});
+
+test("el tope de vistas previas no se salta con pedidos en paralelo (a lo sumo 3 códigos)", () => {
+  const b = banco();
+  // 8 vistas previas a la vez, con un Telegram lento: sin un candado, todas cuentan «0 en la última
+  // hora» antes de que ninguna anote la suya (medido por la madre el 2-oct: 8 códigos mandados).
+  const r = spawnSync(
+    "bash",
+    ["-c", `for i in 1 2 3 4 5 6 7 8; do printf 'pedido %s' "$i" | ${SCRIPT} consulta & done; wait`],
+    { env: { ...b.env, TG_DEMORA: "0.3" }, encoding: "utf8" },
+  );
+  const envios = b.leer("tg-envios").split("\n").filter(Boolean).length;
+  assert.ok(envios <= 3, `se mandaron ${envios} códigos: ${r.stderr}`);
+  assert.equal(envios, 3, "los 3 que entran en el tope sí salen");
+  assert.equal(readFileSync(join(b.estado, "vistas.log"), "utf8").trim().split("\n").length, 3);
 });

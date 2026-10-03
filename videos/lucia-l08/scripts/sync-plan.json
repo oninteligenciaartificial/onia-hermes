@@ -1,0 +1,54 @@
+{
+  "source": "scripts/segments.json",
+  "storyboard": "scripts/storyboard.json",
+  "video": null,
+  "overlays": [
+    {
+      "asset": "assets/tag-ia.png",
+      "start": 0,
+      "end": 2.4,
+      "position": "tag",
+      "fade": 0.15
+    },
+    {
+      "asset": "assets/panel-base.png",
+      "start": 3.746,
+      "end": 8.1,
+      "position": "panel",
+      "fade": 0.15,
+      "cue": "correo"
+    },
+    {
+      "asset": "assets/panel-r1.png",
+      "start": 4.71,
+      "end": 8.1,
+      "position": "fila1",
+      "fade": 0.15,
+      "cue": "día"
+    },
+    {
+      "asset": "assets/panel-r2.png",
+      "start": 6.335,
+      "end": 8.1,
+      "position": "fila2",
+      "fade": 0.15,
+      "cue": "horas"
+    },
+    {
+      "asset": "assets/panel-r3.png",
+      "start": 6.614,
+      "end": 8.1,
+      "position": "fila3",
+      "fade": 0.15,
+      "cue": "antes."
+    },
+    {
+      "asset": "assets/sello-dedo.png",
+      "start": 8.15,
+      "end": 9.625,
+      "position": "sello",
+      "fade": 0.15,
+      "cue": "Vos"
+    }
+  ]
+}

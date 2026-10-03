@@ -13,7 +13,7 @@ Cómo se genera la cara: `LUCIA-HIGGSFIELD-IDENTITY.json` → `v4.metodo_diario`
 
 | Pieza | Qué es | Cómo se hace | Créditos |
 |---|---|---|---:|
-| **Feed** (1/día) | carrusel, foto o reel, según `S*-PIEZAS.md` | Seedream + ancla espejo (fotos) · MiniMax H3 (habla a cámara) · Seedance Mini (b-roll) | 1–12 |
+| **Feed** (1/día) | carrusel, foto o reel, según `S*-PIEZAS.md` | Fotos: Seedream + ancla espejo · b-roll: Kling 3.0 · **reels: se editan con `editor-videos` § «Reels de Lucía»** (guion en `S*-GUIONES.md`, instrucción por pieza en `videos/lucia-lNN/INSTRUCCION.md`; Higgsfield solo genera el clip) | 1–12 |
 | **Historias** (2–3/día) | recortes del mismo lote + placa de texto | `editor-videos` → `story-batch.mjs`, zona segura .20 | 0 |
 | **Yap a Trial** (solo reels) | mismo reel con otro gancho | recorte del mismo video | 0 |
 
@@ -50,6 +50,15 @@ Estado al 30-sep 19:50 UTC (lote de prueba, tope 75 cr aprobado por Sergio Urcul
 3. Tendencias: pedido hecho a control (manifest); el loop `tendencias` sigue congelado.
 
 La mayoría de los reels son **b-roll + voz o texto**; Lucía hablando a cámara es la excepción.
+
+## Dónde se publica (decidido 1-oct)
+
+- **Instagram (feed, reels, historias) y Facebook:** por la app propia `OnIA Social API`, igual que
+  Sergio Urcullo (`ig-reel.mjs --cuenta lucia`, `ig-carrusel.mjs`, `agendar-publicacion.sh` en el VPS).
+  Gratis y ya probado con `sergio` y `oniahq`.
+- **TikTok:** por **Buffer**, con un canal nuevo para Lucía (crear la cuenta TikTok de Lucía y conectarla
+  a Buffer es trabajo de la madre en la PC). Los reels salen 9:16 y sirven igual.
+- No hace falta un Buffer aparte para Instagram: duplicaría el canal propio.
 
 ## Lo que falta para encender (y de quién es)
 

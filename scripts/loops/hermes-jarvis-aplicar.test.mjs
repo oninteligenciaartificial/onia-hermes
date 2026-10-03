@@ -126,6 +126,10 @@ for a in "$@"; do
 done
 echo "$metodo $url" >> ${log}/n8n
 id=$(printf '%s' "$url" | sed -E 's#.*/workflows/([^/?]+).*#\\1#')
+# Sin red para ESE flujo: curl no escribe nada, imprime 000 y sale 7.
+if [ "$metodo" = POST ] && [ -n "\${N8N_SIN_RED_ID:-}" ] && [ "$id" = "\${N8N_SIN_RED_ID}" ]; then
+  [ -n "$w" ] && printf 000; exit 7
+fi
 code=200; cuerpo=""
 case "$metodo $url" in
   "POST "*/activate)
@@ -470,4 +474,81 @@ test("si una segunda corrida se corta entre «aplicado» y «reemplazado», reve
   assert.equal(v.crontab().trim(), v.crontabInicial.trim());
   assert.ok(v.jobs().every((j) => j.enabled));
   assert.equal(v.interruptor(), false);
+});
+
+// ── Revisión de la madre, 2-oct (antes de cargar la llave) ──────────────────────
+const LLAVE = { RUTINA_URL: "https://api.anthropic.com/v1/claude_code/routines/trig_01ABCdef/fire", RUTINA_TOKEN: "sk-ant-oat01-abc" };
+function cambiarMain(v, cambio) {
+  const repo = join(v.R, "loops", "onia-hermes");
+  const g = (...a) => execFileSync("git", ["-C", repo, ...a], { stdio: "pipe" });
+  cambio(repo, g);
+  g("-c", "user.email=t@t", "-c", "user.name=t", "commit", "-qam", "cambio");
+  g("update-ref", "refs/remotes/origin/main", "HEAD");
+}
+const nadaCreado = (v) => {
+  assert.equal(v.crontab(), v.crontabInicial, "el crontab no se toca");
+  assert.equal(v.interruptor(), false);
+  assert.ok(v.jobs().every((j) => j.enabled), "ningún trabajo de Hermes se pausa");
+  assert.doesNotMatch(v.leer("n8n"), /^POST \S*\/workflows$/m, "no crea flujos en n8n");
+  assert.doesNotMatch(v.leer("agenda"), /^crear /m, "no hay evento de prueba en su calendario");
+};
+
+test("con llave, si a main le falta la skill de pedidos o su regla en el SOUL, no aplica nada (antes fallaba en 5d)", () => {
+  const sinSkill = vps();
+  cambiarMain(sinSkill, (repo, g) => g("rm", "-q", "hermes-content/skills/pedir-a-claude.md"));
+  const r = sinSkill.aplicar(LLAVE);
+  assert.equal(r.status, 1, r.stdout);
+  assert.match(r.stdout, /no encontré la skill pedir-a-claude en origin\/main/);
+  assert.match(r.stdout, /NO APLIQUÉ NADA: .*antes de crear nada/);
+  nadaCreado(sinSkill);
+
+  const sinRegla = vps();
+  cambiarMain(sinRegla, (repo) => {
+    const f = join(repo, "hermes-content/deploy/hermes-agent/SOUL.md");
+    writeFileSync(f, readFileSync(f, "utf8").replace(/^## Pedidos a Claude/m, "## Otra cosa"));
+  });
+  const r2 = sinRegla.aplicar(LLAVE);
+  assert.equal(r2.status, 1, r2.stdout);
+  assert.match(r2.stdout, /no encontré la regla de los pedidos/);
+  nadaCreado(sinRegla);
+});
+
+test("con llave, si el comando de pedidos no la acepta (--estado), no aplica nada", () => {
+  const v = vps();
+  writeFileSync(join(v.R, "bin", "onia-pedido-claude.sh"), "#!/usr/bin/env bash\n[ \"$1\" = --estado ] && exit 69\nexit 0\n");
+  const r = v.aplicar(LLAVE);
+  assert.equal(r.status, 1, r.stdout);
+  assert.match(r.stdout, /no acepta la llave de la rutina \(--estado\)/);
+  nadaCreado(v);
+  assert.equal(existsSync(join(v.R, ".config", "onia", "pedidos.env")), false, "la llave no quedó guardada");
+});
+
+test("la llave queda en 600 aunque pedidos.env ya existiera con otros permisos", () => {
+  const v = vps();
+  const env = join(v.R, ".config", "onia", "pedidos.env");
+  mkdirSync(dirname(env), { recursive: true });
+  writeFileSync(env, "viejo\n");
+  chmodSync(env, 0o644);
+  assert.equal(v.aplicar(LLAVE).status, 0);
+  assert.equal((spawnSync("stat", ["-c", "%a", env], { encoding: "utf8" }).stdout || "").trim(), "600");
+});
+
+test("revertir: si n8n no contesta (000) para un flujo, no lee la respuesta del anterior como «reactivado»", () => {
+  const v = vps();
+  assert.equal(v.aplicar().status, 0);
+  const segundo = "OovRU4r0o7pvglJP"; // el anterior (QGXV…) sí se reactiva y deja su respuesta
+  const r = v.revertir({ N8N_SIN_RED_ID: segundo });
+  assert.equal(r.status, 1, r.stdout);
+  assert.match(r.stdout, new RegExp(`no pude reactivar ${segundo} \\(HTTP 000\\)`));
+  assert.doesNotMatch(r.stdout, new RegExp(`reactivado ${segundo}`));
+});
+
+test("el CI no deja la credencial de GitHub en el checkout", () => {
+  const wf = readFileSync(join(RAIZ, ".github", "workflows", "hermes-jarvis-pruebas.yml"), "utf8");
+  const i = wf.indexOf("uses: actions/checkout@");
+  assert.ok(i >= 0, "hay un checkout");
+  const resto = wf.slice(i);
+  const paso = resto.slice(0, (resto.indexOf("\n      - ", 1) + 1 || resto.length + 1) - 1);
+  assert.match(paso, /^\s+persist-credentials: false$/m);
+  assert.doesNotMatch(wf, /runs-on:.*self-hosted/, "nunca en el runner del VPS");
 });

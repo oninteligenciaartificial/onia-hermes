@@ -13,6 +13,27 @@ description: >
 
 # Editor de Videos ONIA — edición 100% con código, sin editores humanos
 
+## ⭐⭐ ANTES DE EDITAR A SERGIO URCULLO: qué se replica y qué es solo referencia (2-oct-2026)
+
+Sergio Urcullo, 2-oct, textual: *«lo que quiero que hagas tal cual son los videos de Eric Taveras y Santiago
+Munoz»*, y del reel de Codex: *«no me refiero a que lo hagas tal cual, me refiero a que lo tomes de referencia»*.
+- **Molde a replicar TAL CUAL:** el montaje de **@eriktaveras** y **@sanmunoz.ia**. Vive en la skill nueva
+  **`edicion-referentes`** (la arma Marca personal desde el 2-oct, por decisión de Sergio Urcullo: «a partir de
+  después de eso, con el formato de los referentes, y creamos la nueva skill de edición»). Fichas de montaje por
+  cuenta: las saca la madre desde Chrome (2-oct) y van a `hermes-content/references/marca-personal/FORMULAS-REFERENTES.md`.
+  Hasta el 2-oct de Erik no había NADA del montaje, y de Santiago un solo reel (sección «Layout tutorial
+  vertical partido», más abajo).
+- **Su video propio que salió bien:** «Tu primera automatización», subido el 22-sep. También lo editó Codex,
+  con HyperFrames: gancho a cámara completa, la cara pasa a PiP chico arriba a la derecha, 4 pantallas de nodos
+  dibujadas a pantalla completa que cambian justo en cada corte, subtítulos por frase en pastilla, 1,1×, sin
+  zooms ni SFX, CTA a cámara completa. Proyecto rescatado y receta: `videos/marca-personal/2026-09-21/RECETA.md`
+  (+ `index.html`).
+- **Solo referencia:** el reel «GPT-6 Astra vs Fable 5.1» que editó Codex el 14-sep, con `edit.py` y tarjetas en
+  `hermes-content/references/video-intake/2026-09-14-reel-astra-fable-codex/RECETA.md`. Lo que vale de él es el
+  movimiento de cambiar el panel justo en el corte para esconder el salto. No es el molde.
+Por qué está acá arriba: el 2-oct salió la edición básica «corte + karaoke + recuadros» y él la rechazó («no lo
+hacés como antes»).
+
 ## Overview
 ONIA edita video con código (método del tutorial de Santiago): grabás crudo → Claude lo deja
 finalizado. Esta skill **orquesta**, no reinventa el motor:
@@ -35,6 +56,33 @@ timestamp real del transcript word-level. Corolario del mismo reel, que ya cumpl
 **la tipografía y los marcos se dibujan en código, no se generan con IA** ("IA erra letra,
 código não") — para eso están `make-mockup.mjs` (PNG) y `scripts/remotion` / `scripts/hyperframes`
 (animados).
+
+## Estilo TikTok 17/18-sep — referencia, no molde (lo que se replica: Erik Taveras y Santiago Muñoz)
+
+> 2-oct-2026, dos rechazos seguidos del mismo video (N03, modo auto):
+> 1. Corte + karaoke + recuadros verdes: *«esa no sigue siendo tu manera de editar, porque no lo hacés como antes»*.
+> 2. La re-edición con este estilo 17-sep (zoom punch, tarjetas, keywords, **pop en cada tarjeta**): *«elimina ese
+>    sonido horrible cada que sale un mockup»*. El reel de Codex NO tiene SFX. Ese «pop» fue un agregado nuestro.
+> 3. Ese mismo día rehice N03 con la receta de Codex del 14-sep (`scripts/edit-codex.py`). Después Sergio Urcullo aclaró
+>    que el molde son los videos de **Erik Taveras (@eriktaveras) y Santiago Muñoz (@sanmunoz.ia)**: Codex y el 17-sep
+>    son referencia. El video bueno que él recuerda es «tu primera automatización» (22-sep).
+> Lección: «como antes» no se adivina. Tres ediciones del mismo video, y cada una copió lo más parecido que había en el
+> repo. Antes de rehacer un estilo «como antes»,
+> preguntá CUÁL video y pedile a la madre el archivo si no está en el repo.
+
+Si él pide este estilo, la receta está en `videos/tiktok-20260917/README.md`:
+- corte fino (silencios + sonido sin palabra);
+- zoom punch por bloque;
+- logo oficial de Claude Code en cada mención;
+- tarjetas dark (`card-dark.html`);
+- pantalla completa (`fullscreen.html`);
+- keywords blancas 900 con subrayado naranja (`keyword.html`);
+- karaoke `--style apple`;
+- −14 LUFS.
+SFX sólo si los pide.
+
+Plantillas y fuentes: `videos/tiktok-20260917/scripts/*.html` + `videos/claude-code-03/assets/fonts/`. Ejemplo portable
+(Linux, una pasada, sin SFX desde la v3): `videos/n03-modo-auto-20261001/` (`scripts/build-17sep.mjs`).
 
 ## ⭐ REGLA DE ORO (de Santiago) — nunca cortar a ciegas
 **La tabla de cortes + un preview 360p SIEMPRE se muestran a Sergio ANTES de aplicar el corte.**
@@ -122,6 +170,48 @@ tabla de cortes + preview antes de aplicar · transcript como fuente de todo tex
   corto) como **Trial reel** en Instagram, con `hermes-content/deploy/vps-ops/publicar/ig-reel.mjs`.
   Circuito, comandos y reglas: `hermes-content/deploy/vps-ops/publicar/README.md`. UNA aprobación de
   Sergio por paquete del día (incluye la tabla de cortes); sin ese «ok» no se publica nada.
+
+### Editar desde una sesión en la NUBE (medido el 1-oct-2026)
+
+- **El video no llega por el chat** (las imágenes sí). Tampoco por el MCP de Drive: `download_file_content` devuelve
+  base64 dentro del contexto, y no sirve para video.
+- **Camino que funciona:** Sergio Urcullo sube el bruto a Drive, lo comparte con **«Cualquier persona con el enlace»** y
+  pega el link. Se baja con `curl -L "https://drive.usercontent.google.com/download?id=<ID>&export=download&confirm=t"`.
+  Necesita que la red del entorno deje pasar `drive.google.com` y `drive.usercontent.google.com`: el 30-sep daban 403
+  en el proxy y el 1-oct ya pasaban. Probalo con `curl -sS -o /dev/null -w '%{http_code}'` antes de prometer nada.
+- **`ffmpeg` no viene en el contenedor:** `apt-get install -y ffmpeg` (6.1.1, ~1 min). `faster-whisper` se instala por
+  pip. Las dos cosas se pierden cuando el contenedor se recicla.
+- **Publicar desde la nube** necesita el secreto `ONIA_VPS_SSH_KEY_B64` en el entorno: el hook
+  `scripts/nube-ssh-vps.mjs` arma `ssh onia-vps` por el túnel. Sin él, la nube edita pero no publica ni agenda.
+- **Medido el 1-oct (noche), entorno «onia-higgsfield»:** el hook dejó `~/.ssh/config` y la llave, pero **el binario
+  `ssh` no venía**: `apt-get install -y openssh-client` y `ssh onia-vps hostname` respondió. `ffmpeg` ya venía instalado.
+- **Drive por MCP ya anda** (1-oct noche): `search_files` con `mimeType contains 'video/'` lista los videos, y
+  `parentId = '<id de carpeta>'` lista una carpeta. Sirve para ENCONTRAR el archivo; para bajarlo sigue siendo `curl` a
+  `drive.usercontent.google.com` (probado: 200, 8,6 MB, con un archivo compartido por enlace). Un archivo que se está
+  subiendo no aparece en la búsqueda hasta que termina.
+- **Video del 1-oct (N03), lo medido:** con el micrófono de Sergio Urcullo el ruido de fondo queda en ~-25 dB y el
+  `--noise -32dB` de `cut-plan.mjs` no encontró NINGÚN silencio. Medí antes (`ffmpeg -af volumedetect`, y
+  `silencedetect` a -28/-25 dB) y usá ~-27 dB con `--min-sil 0.4`.
+- **Compará lo que DIJO contra el guion buscando sentido invertido, no solo ortografía.** Dijo «deja DE pasar» dos
+  veces donde el guion decía «deja pasar» (lo que el modo auto PERMITE): small y medium coincidieron, así que no era
+  error de Whisper.
+- **Sacar una palabra corta («de») sin oído no es confiable.** La envolvente RMS confunde sílabas, y Whisper como juez
+  es parcial: completa «deja de…» por costumbre o, si el corte se come el «pa», oye «deja de estar». Probado: el
+  modelo medium sobre el tramo AISLADO, con y sin `initial_prompt`; si con prompt oye «deja pasar» y sin prompt no
+  oye «de», el corte sirve, pero igual lo escucha Sergio Urcullo en el preview. Si la frase es solo una transición,
+  cortala ENTERA (más seguro).
+- **Drive, una vez y para siempre:** que Sergio Urcullo comparta la CARPETA «Videos Onia Octubre» con «cualquier
+  persona con el enlace». Lo que suba adentro hereda el acceso y se baja con curl sin pedirle nada por archivo.
+- **Transcribir sin Speaches:** `pip install faster-whisper` (~1 min) y el modelo `small` (int8, CPU) se baja solo de
+  HuggingFace. Con `word_timestamps=True` sale `{segments:[{start,end,text}], words:[{start,end,word}]}`, el formato
+  que comen `cut-plan.mjs` y `karaoke-captions.mjs`. Forzá `language="es"`.
+
+### Antes de grabar: el dato del guion se mira renderizado (1-oct-2026)
+
+WebFetch trajo una versión VIEJA de la página de precios de WhatsApp de Meta (decía 72 h de ventana gratis). El
+navegador mostró la vigente («Updated: Sep 28, 2026»: hasta 7 días y solo desde la app del celular). **Un precio o una
+regla de plataforma (Meta, OpenAI, Anthropic) se confirma con la página RENDERIZADA en un navegador**, con su fecha de
+actualización anotada. WebFetch y las fuentes secundarias sirven para descartar, no para grabar.
 
 ## Pipeline
 1. **Setup + NORMALIZAR el crudo** (pieza propia, PROBADA). `videos/<name>/` con `raw/ scripts/ renders/ final/`.
@@ -341,10 +431,68 @@ cabeza en blur oscuro). El karaoke le va encima con `karaoke-captions.mjs`
 (`{\blur7}` en negro translúcido, un evento por frase en la capa de abajo) — NUNCA el
 Shadow duro de ASS, que se lee como texto fantasma. El amarillo `--active-color "#FFE600"`
 queda solo para imitar 1:1 el reel de referencia.
+⚠ **Medido el 1-oct contra sus 4 últimos videos** (`video-intake/2026-10-01-santiago-erik-edicion-medida.md`): con voz,
+Santiago va **sin música de cama, sin whoosh en cada cambio** y con planos de ~5 s, no un corte cada ~2 s. La ficha del
+17-sep (Gemini) decía lo contrario; manda la medición.
 Orden: cortar → split-layout → karaoke → SFX → master. Falta solo la ecuación de logos
 ("X + Y = 💰") como pieza HyperFrames — se hace cuando un guion la pida.
 ⚠ El crudo tiene que traer la CÁMARA como toma aparte full-frame (como `clip 1 video 2.mp4`);
 la burbujita de OBS incrustada en la esquina no da resolución para la zona de cabeza.
+
+## 🎞 Reels de Lucía — b-roll generado + voz en off o texto (1-oct-2026)
+
+> Regla de Sergio Urcullo (1-oct): **todo video que sale a redes se edita con esta skill; Higgsfield solo genera el
+> clip.** El 1-oct L02/L05/L08 salieron con placas PIL y hubo que rehacerlos. Receta medida contra los últimos videos
+> de Santiago Muñoz y Erik Taveras: `hermes-content/references/video-intake/2026-10-01-santiago-erik-edicion-medida.md`.
+> Guion por pieza: `hermes-content/docs/cola/lucia-diario/S*-GUIONES.md`; instrucción completa:
+> `videos/lucia-lNN/INSTRUCCION.md` (OBJETIVO / MATERIAL / ESTILO, una por video, ejecutada entera).
+
+1. **Clip LIMPIO** (el `rawUrl` del job de Higgsfield; nunca un render con texto) a `videos/lucia-lNN/raw/`.
+   Lienzo 1080×1920 **a 24 fps** (Kling es 24: pasar a 30 duplica cuadros). Acento único **#10C26B**.
+2. **Medir la cara en TODO el clip** (SCRFD de `scripts/face_identity_qa.py` o YuNet a 2 fps): texto solo entre
+   **mentón máx + 40 px** y **y=1490** (debajo, Instagram tapa con pie, audio y botones; nada en los 80 px de la derecha
+   bajo y=1000). Medido: L02 939–1490, L05 714–1490, L08 1168–1490. Es el split de Santiago **invertido**: la cara de
+   Lucía está arriba, el panel va en la franja de abajo. Con franja < 520 px no se tapa ni se sube la cara: el panel
+   se achica (subir 240 px a Lucía le corta la coronilla).
+3. **Arranque en caliente:** primera palabra o tarjeta a ≤ 0,15 s; si el clip arranca con tiempo muerto se recorta
+   (L08: −0,40 s). Nunca se acelera.
+4. **Voz (si la pieza lleva):** ⚠️ **Marcela tiene acento COLOMBIANO** (medido el 2-oct con `GET /v1/voices/<id>` →
+   `labels.accent: colombian`, «Marcela - Colombian Girl», de la Voice Library). Lucía es cruceña y el público boliviano
+   critica el acento que no es de acá. Si se usa o no es la decisión D4 de `cola/lucia-diario/PLAN.md`; hasta que se
+   resuelva, los reels van sin voz. Antes de elegir CUALQUIER voz se leen sus `labels`. Marcela con
+   `scripts/tts-elevenlabs.mjs` **sin `--stability/--style`** (los settings
+   forzados le cambian el timbre: rechazado el 21-ago y repetido por error el 1-oct). `--timestamps` → karaoke desde el
+   guion autorado con tiempos exactos (gate de ortografía resuelto de raíz). La frase final va en toma aparte con
+   `--previous-text` y 2–3 `--seed`; se elige la que **baja** al final (medir F0 de la última palabra con
+   `librosa.pyin`: si sube, suena a pregunta — L08 «¿Vos no movés un dedo?»). Whisper siempre escribe «mueves»: no sirve
+   para juzgar el voseo, sí para ver los signos de pregunta. `--cost` lee el cupo (payg 10.000).
+5. **La prueba es pantalla REAL de Onia**, con recorte focal y crédito chico «pantalla real de Onia», en el segundo en
+   que se nombra. Sin captura, un **diagrama del mecanismo** dibujado en código (no una UI falsa) y la captura entra
+   en la versión siguiente. **Ninguna tarjeta repite lo que se oye** (Erik): aporta el dato derivado.
+6. **Karaoke** `--style apple`, ≤ 3 palabras, 68 px, en la franja libre, con velo oscuro debajo si el fondo es claro
+   (L08: blazer crema, luminancia p90 > 200). Se apaga mientras hay un panel de datos y en el remate (lo dice un sello).
+7. **Sin voz:** ≤ 6 palabras por tarjeta y ≥ 0,35 s por palabra + 0,3 s de entrada (~2,5–3 palabras/s). Si no entra
+   en el clip, se recorta texto (el resto va al pie), no se congela a la persona (no tiene antecedente).
+8. **Sellos y golpes:** una palabra fuerte por reel como sello (130 % → 100 % en 3 cuadros, rotado ~5°, verde) con
+   golpe de zoom +3 % durante 5 cuadros en ese mismo cuadro. Ken suave (≤ 1,04) solo en el remate. Nada de zoom
+   decorativo: la fuente es 720p y ×1,5 ya ablanda.
+9. **Apoyos clavados a la palabra** con `sync-plan.mjs --lead -0.15`; entrada 0,15 s, salida 0,22 s. Un evento
+   visual cada 1,5–3 s.
+10. **Audio:** con voz, −14 LUFS / −1,5 dBTP (`master.mjs`) y ≤ 1 SFX cada 2,5 s, cada uno con causa visible y
+    ~10 dB bajo el pico de la voz. Sin voz, un pop por tarjeta y pico ≤ −3 dBTP (sin `loudnorm`: subiría los pops a
+    nivel de voz). Música de cama: la pone Sergio Urcullo.
+11. **Generaciones:** gen1 en UNA pasada (escala + zoompan + overlays + audio, CRF 14 slow) → karaoke
+    `--crf 14 --preset slow` → `sfx.mjs` y `master.mjs` copian el video. Etiquetar bt709.
+12. **QA mirado antes de entregar:** stills de cada entrada; hoja de cuadros con guías en el mentón y en 1490; caras
+    con YuNet sobre crudo y final (la misma cantidad); ortografía leída en los cuadros; identidad ≥ 0,70 en 5 cuadros
+    **frontales o de tres cuartos** (regla del gate en `LUCIA-HIGGSFIELD-IDENTITY.json`: perfiles y parpadeos bajan solos
+    y se MIRAN; L02 dio 0,694 de perfil y 0,630 en un parpadeo con la misma cara — no es deriva);
+    recorte 1:1 de la cara en el zoom máximo; specs. **Tabla de cortes + preview 360p a Sergio Urcullo** y esperar el OK.
+
+**Trampas de la nube (1-oct):** playwright 1.62 pide Chromium 1234 y la nube trae el 1194 → `resolve-playwright.mjs`
+cae a `/opt/pw-browsers/chromium`. Los SFX de HyperFrames no están versionados: `npm pack hyperframes` y copiar
+`package/dist/skills/media-use/audio/assets/sfx/*.mp3` a `.agents/skills/media-use/audio/assets/sfx/` (ignorados en git).
+Para ver referentes: `yt-dlp --impersonate chrome` baja de TikTok (Instagram 429, YouTube pide verificación).
 
 ## Quick reference
 | Necesito | Herramienta | Costo |
@@ -356,7 +504,7 @@ la burbujita de OBS incrustada en la esquina no da resolución para la zona de c
 | **Master de audio (−14 LUFS)** | `scripts/master.mjs` | gratis (local) |
 | Publicar el corte al panel para tu OK | `scripts/publish-cut-review.mjs` (DRY-RUN → SQL) | gratis |
 | Aplicar el corte (tras OK) | `scripts/render-approved.mjs` (worker LOCAL, DRY-RUN → ffmpeg + SQL) | gratis |
-| **Narración / voz** (Lucía = **Marcela**) | `scripts/tts-elevenlabs.mjs` (ElevenLabs `eleven_multilingual_v2`) | plan starter ~69k chars/mes |
+| **Narración / voz** (Lucía = **Marcela**) | `scripts/tts-elevenlabs.mjs` (ElevenLabs `eleven_multilingual_v2`; `--timestamps`, `--previous-text`, `--seed`) | payg, 10.000 caracteres (medido 1-oct; `--cost` lo lee en vivo) |
 | Subtítulos karaoke (word-level) | `scripts/karaoke-captions.mjs` (.ass + ffmpeg) | gratis (local) |
 | Mockups / tarjetas de dato / marcos | `scripts/make-mockup.mjs` (HTML+CSS → PNG alpha) | gratis (local) |
 | **Apoyo ANIMADO** (motor único: HyperFrames; `scripts/remotion/` es baseline histórico) | `scripts/hyperframes/render.mjs` | gratis (local) |

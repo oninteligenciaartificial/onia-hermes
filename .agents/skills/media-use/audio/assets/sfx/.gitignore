@@ -1,0 +1,3 @@
+# Binarios de Pixabay: no se versionan (ver .claude/skills/editor-videos/assets/sfx/README.md).
+# Se bajan con `npm pack hyperframes` y se copian desde package/dist/skills/media-use/audio/assets/sfx/.
+*.mp3

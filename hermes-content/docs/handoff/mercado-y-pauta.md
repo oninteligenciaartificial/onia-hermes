@@ -1,10 +1,35 @@
 # Handoff — carril `mercado-y-pauta` (sesión «Ventas y pauta Onia Platform», antes «Análisis de mercado»)
 
-> 🟡 **2-oct, ~01:00 UTC — D1 y D4 v2 RENDERIZADAS, esperan el OK de Sergio Urcullo.**
-> - Pack `referentes`, la pantalla real en la portada, recortes legibles en el celular y «sistema con IA» solo
->   donde es cierto (skill §3, punto 6).
-> - Archivos: `carousels/briefs/ads/*-d1v2-*` y `*-d4v2-*`, salida en `carousels/out/ads/*v2*`, capturas en
->   `briefs/assets/onia-1.0-dental-ads/v2-20261002/`.
+> ⏹️ **CIERRE 2-oct, ~14:00 UTC: alcance congelado por Sergio Urcullo** (*«no se añaden más tareas… terminemos,
+> cortamos, damos un vistazo y definimos cómo seguir»*). La sesión espera; no abre nada nuevo.
+> - **Hecho y en la rama** `claude/lucid-mayer-2ejv6v` (`ef02a46d2`, PR #95): los 12 mensajes de prospectos y la
+>   página de contactos (v8) sin «la IA lo redacta»; D4 frenado en todos los docs (el catálogo lo prohíbe: el
+>   detector no encuentra a nadie); la regla de `CLAUDE.md` saca la pauta del producto del pack de la marca
+>   personal y pone primero el estudio de la Biblioteca; `anuncio-render.js` y D1/D4 v3 commiteados **en pausa**.
+> - **No hecho y por qué:** campaña en Meta (falta la tarjeta en ONIA Ads y el OK); D1/D4 sin aprobar (Sergio
+>   Urcullo pidió primero mirar la Biblioteca); nadie contactado (falta su OK a los 12 mensajes y la decisión de MUN).
+> - **Evidencia:** `carousels/out/ads/onia-platform-dental-meta-v3-hoja.png`; catálogo `ONIA_CATALOGO_DE_VENTA.md`
+>   («NO se puede decir»); página https://claude.ai/artifact/8sFD37TVJMcEJaHcZ2PWSV (versión 8).
+> - **Pendiente para después (no se hace ahora):** el estudio de la Biblioteca (lo hace la madre desde la PC, con el
+>   pedido del 2-oct en el transcript de esta sesión); recién con eso, el diseño. Corregir el primer beneficio de
+>   D1 v3 («La IA escribe el mensaje»). Una pieza con persona (los 7 anuncios que sobreviven la tienen).
+> - **Para mejorar:** antes de prometer algo, leer `ONIA_CATALOGO_DE_VENTA.md`, no el código; antes de diseñar
+>   pauta, el estudio de la Biblioteca, no un pack propio.
+>
+> 🟡 **2-oct, ~13:40 UTC — D1 y D4 v3 RENDERIZADAS (imagen única de anuncio de software), esperan el OK de Sergio Urcullo.**
+> - **v2 rechazada:** Sergio Urcullo, *«es diferente el contenido de la onia platform que el de mi cuenta personal,
+>   te dije que entres a ads library y veas qué es lo que funciona»*. Usé el pack de la marca personal para la
+>   pauta del producto.
+> - **v3:** el formato de la Biblioteca (ninguno de los 18 anuncios capturados es un carrusel editorial) + la marca
+>   de la web (lockup `onia | dental`, Archivo, verde solo en la acción). Titular del dolor, pantalla real con el
+>   recorte clave ampliado, tres beneficios, un botón. 4:5 y 9:16 con las zonas seguras de historias.
+> - Archivos: briefs `carousels/briefs/ads/*-d1v3-*` y `*-d4v3-*`, salida `carousels/out/ads/*v3*/{feed,story}.png`,
+>   hoja `carousels/out/ads/onia-platform-dental-meta-v3-hoja.png`, renderer
+>   `.claude/skills/onia-ventas-pauta/scripts/anuncio-render.js` (método en la skill §4).
+> - Corregidos la regla de `CLAUDE.md` («Publicidad…»), `diseno-contenido-onia` y `ONIA_ADQUISICION_Y_PAUTA.md`
+>   §2.5, §5.8, §5.8.1 y §5.9: la pauta del producto ya no apunta al pack `referentes`.
+> - **Lo que falta y es la brecha más grande:** una pieza con persona (los 7 que sobreviven la tienen). Depende de
+>   Sergio Urcullo: grabarse 30 s con la pantalla, o aprobar el gasto de un presentador IA.
 > - **Prospectos al 2-oct: 12 listos, 1 a decidir, 16 fuera.** Los 13 en espera se verificaron desde la PC (la
 >   madre, en Facebook):
 >   - entraron Odontoclínica, Pimentel, Gelinski y Todo Frenos;
@@ -20,8 +45,16 @@
 > - ✅ **2-oct, ~01:20 UTC:** portadas de D1 y D4 → *«Para dueños y dueñas de clínicas dentales de Santa Cruz.»*
 >   (el filtro que pide §5.2). Leído el análisis de Dapta de la madre (`DAPTA_COMO_FUNCIONA.md` §6): su propuesta
 >   del bot quedó anotada en §5.2 como pendiente de Sergio Urcullo, **detrás** del filtro de pacientes.
-> - ✅ **El tratamiento a medias ya está en producción** (`release-8f07e537`, el mensaje fijo en el bundle). El doc
->   de pauta decía que no (§0 punto 4 y §5.4): corregido.
+> - ⛔ **D4 FRENADO (2-oct).** El tratamiento a medias está en producción, pero no encuentra a nadie: cuenta solo
+>   «En progreso», la ficha carga «Pendiente» y hay 0 cargados. El catálogo lo pone en «NO se puede decir». Yo había
+>   escrito «D4 se puede prometer» por ver el código en el bundle, y lo corrigió la revisión de la madre v2. D4 no se
+>   sube hasta que Plataforma lo vea funcionar en la cuenta demo.
+> - ⛔ **«La IA escribe el mensaje» tampoco se puede decir** (catálogo §8): la IA escribe UNA vez el modelo y Onia
+>   le pone los datos de cada uno. Corregido el 2-oct en los 12 mensajes (`ONIA_PROSPECTOS_*` y página de
+>   contactos). **Sigue mal en los briefs de D1 v2 (lámina 5) y v3 (primer beneficio)**, que están en pausa.
+> - ⏸️ **Sergio Urcullo, 2-oct: «DEJA DE ARMAR, PRIMERO MIRA LA META ADS LIBRARY Y MIRA COMPETENCIAS».** v3 queda
+>   en pausa y sin aprobar. Lo próximo es el estudio de la Biblioteca, hecho por la madre desde la PC (desde la
+>   nube Facebook no abre), y recién con eso se diseña.
 >
 > ~~🔴 EN VUELO, 2-oct — rehacer D1 y D4 (misma sesión).~~
 > - Sergio Urcullo las rechazó: no respetan las reglas ni el estándar de la marca personal, y no se aprendió de la

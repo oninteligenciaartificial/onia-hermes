@@ -27,6 +27,13 @@
 >   bloquean. Están las 8 en la rama `claude/vibrant-brown-8xya0a`, con pruebas y el primer CI de PRs
 >   del repo (`hermes-jarvis-pruebas.yml`). **`aplicar` no se corre hasta que ese PR esté verde y
 >   mergeado.** La pregunta de n8n para la vuelta queda para después de encender.
+> - **2-oct ~01:40 UTC:** la madre aprobó el #88 (lo mergea Sergio Urcullo) y pidió 6 arreglos más
+>   antes de cargar la llave. Del 1 al 5 están hechos en la rama local `hermes-llave-local` (tope de
+>   vistas previas con `flock`; lo que 5d necesita se comprueba en 1b; `chmod 600`; sin respuesta vieja
+>   de n8n; `persist-credentials: false`). **El 6 no se puede como se pidió:** «required reviewers» no
+>   existe en un repo privado de cuenta personal, y el token de Actions despacha también
+>   `deploy-onia-center.yml`. Propuesta: la rutina **sin** token de Actions; la respuesta vuelve por un
+>   archivo en la rama del pedido, que un cron del VPS recoge. Espera la decisión de la madre.
 > - **Sigue:** §7, plan de las 23:50 UTC — **lo hace la madre** (Sergio Urcullo: *«dejalo escrito y la
 >   madre lo hace»*): mergear #83 y #79, entorno + rutina + llave, una corrida de `aplicar` por el workflow.
 

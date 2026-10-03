@@ -81,7 +81,8 @@ description: Invocar ANTES de tocar a Hermes (el asistente de Sergio Urcullo por
 1. **Fase A, requisitos, en dos tandas.** Primero lo que se comprueba sin crear nada (1b): la API de
    n8n y los 12 flujos que apaga, las skills y el SOUL en `origin/main` del clon del VPS, el SOUL de
    Hermes en el VPS, los 3 trabajos de Hermes que pausa en `jobs.json`, y la forma de la llave de
-   pedidos si vino (token `^[A-Za-z0-9._-]+$`). Recién con eso en verde, su calendario: LEERLO y
+   pedidos si vino (token `^[A-Za-z0-9._-]+$`). Con llave, también lo que 5d va a necesitar: la skill
+   `pedir-a-claude` y la regla «## Pedidos a Claude» en `origin/main`, y que `--estado` la acepte. Recién con eso en verde, su calendario: LEERLO y
    CAMBIARLO (con un evento de prueba que crea, mueve y cancela). Si algo falla, `abortar()` apaga solo lo que **esta corrida**
    prendió (`$BK/prendido-*`), y no toca crontab, Hermes, los 12 flujos de n8n, el SOUL ni el
    interruptor.
@@ -144,6 +145,19 @@ CLI de Hermes.
 - **CI:** `.github/workflows/hermes-jarvis-pruebas.yml` corre la suite del carril en cada PR que toca
   sus archivos, en los runners de GitHub (nunca en el del VPS). `test:guards-cableados` se corre
   local, porque mira todo el repo.
+- **Un tope que se cuenta y se anota por separado se salta en paralelo.** Medido por la madre el 2-oct:
+  8 vistas previas a la vez contaron «0 en la última hora» las 8 y le mandaron 8 códigos. Contar,
+  mandar y anotar van bajo `flock` (`exec 9>…lock; flock -w 60 9`). La prueba lo repite con 8 en
+  paralelo y un Telegram lento.
+- **Un 000 no es una respuesta.** Si `curl -o archivo` no llega, el archivo queda con lo del llamado
+  anterior: se borra antes de cada llamado (`n8n_post`, 2-oct).
+- **«Required reviewers» NO existe en este repo.** GitHub (docs, 2-oct): en Free, Pro y Team, los
+  revisores obligatorios de un *environment* son solo para repos PÚBLICOS, y `onia-hermes` es privado,
+  de cuenta personal. Y un token con *Actions: write* despacha CUALQUIER workflow manual del repo, no
+  solo `hermes-jarvis`: también `deploy-onia-center.yml` con `swap=true`, que pone en producción el
+  panel. Por eso la rutina de pedidos no debería tener token de Actions (propuesta en el handoff).
+- **En una prueba, nada de regex con `(?:\s+.*\n)*?`:** si el texto buscado no está, retrocede sin fin
+  y la suite se cuelga (2-oct). Cortar el bloque con `indexOf` y buscar adentro.
 - **`npm test` entero se corta en `test:bot`** (10 rojos). Pasa lo mismo en la base sin cambios: depende
   de qué versión del repo `onia-platform` haya clonada. Las pruebas del carril se corren sueltas:
   `test:pedidos`, `test:jarvis-aplicar`, `test:jarvis-resumen`, `test:aduana`, `test:agenda`,

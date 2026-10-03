@@ -6,27 +6,168 @@
 > Última escritura: **2026-09-30 ~02:50 UTC**, en el cambio de sesión.
 > Reemplaza a `HIGGSFIELD-LUCIA-SYSTEM-2026-09-22.md`, que queda como historia.
 
-## ▶ ESTADO VIGENTE — 1-oct-2026 ~20:15 UTC (lo de abajo es historia)
+## ▶ ESTADO VIGENTE — 2-oct-2026 ~14:00 UTC (lo de abajo es historia)
 
-**Decidido y medido** (detalle en `v4/PROCEDENCIA.jsonl` y `HIGGSFIELD_VIDEO_SYSTEM.md`):
-- Fotos: **Seedream 4.5 + ancla espejo** (`LUCIA-HIGGSFIELD-IDENTITY.json` → `v4.metodo_diario`), 1 cr, parecido 0,80–0,86.
-- Respaldo barato: **Soul `LUCIA-v5`** `cd42c065-…` (0,12 cr, media 0,803; no llegó a principal). El v4 queda retirado.
-  `LUCIA-v5b` `1fd04bfa-…` sigue en cola: cobrado (25 cr), sin uso previsto.
-- B-roll: **Kling 3.0 std sin sonido** (7,5 cr / 6 s) — sostiene la cara. **Aprobado por Sergio Urcullo el 1-oct, con tope de 150 cr/mes.**
-- Hablando a cámara: MiniMax H3, máx. 1/semana. Mezcla: 70 % fotos/carruseles, 20 % b-roll, 10 % hablando.
-- Investigación de influencers IA: `hermes-content/research/competencia/LUCIA_INFLUENCERS_IA_B2B_20260930.md`
-  (lecciones: declarar IA en el primer segundo, pantalla real de Onia, nada «anti-humano»).
+**Sesión:** la misma (`session_01Whdadt8NdnYbZoyum1bRX6`, rama `claude/trusting-dirac-wjkua1`). Los PR #78 y #82
+están mergeados. Este trabajo va en un PR nuevo.
 
-**Falta para publicar (de Sergio Urcullo):** cuenta `@lucia.antelo.oficial` conectada a la app `OnIA Social API`
-y token guardado en `/root/.config/onia-publicar/` (VPS); etiqueta de IA del perfil + bio «IA creada por
-@oniahq»; OK al carrusel L01. Además la madre le plantea si Lucía sigue en la Etapa 1 (§7 de la estrategia). Opcional: red del entorno `onia-higgsfield` a
-instagram/tiktok/facebook/graph.facebook.com y secreto `ELEVENLABS_API_KEY`.
+### 🛑 CIERRE — 2-oct ~14:00 UTC (alcance congelado por Sergio Urcullo; la sesión ESPERA, no sigue sola)
 
-**Reparto:** la sesión en la nube (`onia-higgsfield`) genera con Higgsfield. Una sesión LOCAL (con el Chrome
-de Sergio Urcullo) hace lo que la nube no puede: Instagram, Meta y mirar perfiles.
+**Hecho y dónde:**
+- Plan v3 de Lucía + orden de rubros: commits `9fcf9487` y `be9a9ef8`, ya en `main` (PR #97 y #98, mergeados por el
+  autosync). Es un doc: no hay nada que publicar en producción.
+- Maniquí del ambo: `references/modelos/lucia/v4/vestuario/ambo-terracota-*-8d138bd6.jpg`. Se miró y se le mandó a
+  Sergio Urcullo. Costo: 2 cr.
+- Reels L02, L05 y L08 editados (del 1-oct). **Nada publicado en Instagram.**
 
-**Siguiente:** semana 1 lista en `cola/lucia-diario/S1-PIEZAS.md` (PR #77, ~10 cr). Días 1-3 cuestan 0 (reusan
-fotos y el clip aprobados). Esperando: OK a L01 y la cuenta conectada.
+**A medias, y por qué:**
+- D1 a D5 esperan a Sergio Urcullo.
+- Las piezas de venta esperan la cuenta demo.
+- La prueba de ropa depende de D1.
+- La cuenta de IG no está conectada.
+
+**Evidencia:**
+- `PLAN.md` §7.
+- `PROCEDENCIA.jsonl` (los dos maniquíes, con el color medido).
+- Licencia de la voz Marcela leída de la API de ElevenLabs.
+- Lista de rubros sacada de `onia-platform/lib/platform/rubros-activos.ts`.
+
+**Para mejorar:**
+1. **El autosync mergea el PR en segundos.** El PR sirve como registro, no como revisión.
+2. **El plan v2 se escribió antes del manual y hubo que rehacerlo el mismo día.** Primero va la investigación, después
+   el plan.
+3. **La voz se eligió sin leer sus `labels`.** Ahora está en `editor-videos`.
+4. **Un pedido directo de Sergio Urcullo («ropa de doctora») choca con el manual verificado.** Se planteó como D1, no
+   se decidió acá.
+
+**Pendientes para después (NO se hacen ahora):**
+- Ficha de @soy_aria_cruz en el manual.
+- Corregir el «6 de 8 muertas» del benchmark del 17-ago.
+- Buscar una voz con acento cruceño.
+- El cuadro fantasma de L08.
+
+**Objetivo de la sesión:** que el plan de contenido de Lucía quede listo para el OK de Sergio Urcullo, verificado
+contra las influencers IA que funcionan. **Hecho =** `cola/lucia-diario/PLAN.md` v3 + decisiones D1–D5 planteadas con
+la cuenta delante + el maniquí del ambo generado.
+
+**Qué quedó hecho (en el repo, nada publicado):**
+- **`PLAN.md` v3:**
+  - **rubros:** los 5 de `onia-platform/lib/platform/rubros-activos.ts` (dental, estética y spa, comercio,
+    importadora, servicios profesionales), por decisión de Sergio Urcullo;
+  - **formatos del manual** de la madre (`references/modelos/lucia/MANUAL-PATRONES-INFLUENCERS-IA.md`): Reel ancla de
+    30–45 s con pantalla real, series «Recepción a las 8» y «Humo vs. real», fotos sueltas a Historias, puerta única
+    `/llamada?src=lucia-*`;
+  - **prueba de 2 semanas** de ≤ 12,5 cr con umbral al día 14.
+- **`LUCIA.md` § 0:**
+  - aviso de D1;
+  - prenda fija del ambo;
+  - trampa del maniquí;
+  - **§0-canon** con 10 datos, PROPUESTO y sin aprobar.
+- **Maniquí del ambo terracota:** 2 cr.
+  - 1.º descartado (`16c447ef`): escribió texto basura y el color salió salmón.
+  - 2.º elegido (`8d138bd6`): `v4/vestuario/`, con recorte de frente.
+  - Los dos en `PROCEDENCIA.jsonl`.
+- **Trampa aprendida en `higgsfield-generate`** (las dos copias): Seedream escribe como texto «sheet» y «hex #…».
+- **Voz de Marcela medida** (`GET /v1/voices`):
+  - es de la Voice Library, «Marcela - Colombian Girl», **con acento colombiano**;
+  - plan `payg` activo;
+  - 730 días de aviso si la retiran.
+- **Gasto:** Higgsfield octubre **22 / 150 cr**. ElevenLabs 9.547 / 10.000.
+
+**Qué quedó a medias y dónde:**
+- **D1–D5 esperan a Sergio Urcullo** (`PLAN.md` §7):
+  - D1: ¿uniforme o visita como ella?
+  - D2: Reel primero.
+  - D3: WhatsApp.
+  - D4: ¿voz de Marcela o reels sin voz?
+  - D5: el canon.
+- **La prueba de ropa (~5,4 cr) depende de D1.**
+- **Las piezas de venta (#5–#8) esperan la cuenta demo dental** (pedida a la madre el 1-oct).
+- **La ficha de @soy_aria_cruz** la trae la madre; cuando llegue se suma al manual.
+- **`ONIA_ESTRATEGIA_DE_EMPRESA.md` §7** dice que la Etapa 1 vende solo dental y estética. Lo tiene que actualizar
+  su dueño; se le avisó a la madre.
+
+**Intentos fallidos (no repetir):**
+- Prompt de maniquí con «turnaround sheet» y «hex #C4552F»: escribió texto en la imagen y corrió el color.
+- Leer la ayuda de ElevenLabs con WebFetch: da 403. El dato de licencia sale de la API.
+
+**Archivos:**
+- `hermes-content/docs/cola/lucia-diario/PLAN.md`
+- `hermes-content/references/modelos/lucia/LUCIA.md`
+- `.../lucia/v4/vestuario/`
+- `.../lucia/v4/PROCEDENCIA.jsonl`
+- `.claude/skills/higgsfield-generate/SKILL.md` y su espejo en `.agents/`
+
+**Próximos pasos:**
+1. Cuando Sergio Urcullo decida D1–D5, producir #2, #3 y #4 (personaje, sin bloqueo).
+2. Si D1 es «uniforme», cotizar y correr la prueba de ropa.
+3. Cuando llegue la cuenta demo, grabar las pantallas reales y producir #5–#8 con `editor-videos`.
+
+## ▶ ESTADO — 2-oct-2026 ~02:10 UTC (historia)
+
+**Sesión:** Lucía v4 en la nube, entorno `onia-higgsfield`, `session_01Whdadt8NdnYbZoyum1bRX6`, rama
+`claude/trusting-dirac-wjkua1`, PR oninteligenciaartificial/onia-hermes#82 (borrador; incluye el #78). Ve
+`ELEVENLABS_API_KEY` y, desde el reinicio del contenedor, también la llave del VPS (`ssh onia-vps`). **El relevo que
+pedía la madre ya no hace falta.**
+
+**Objetivo de la sesión:** L08 con voz de Marcela y la semana 1. **Hecho =** reels editados con `editor-videos`,
+verificados y en manos de Sergio Urcullo para el OK.
+
+**Qué quedó hecho (en el repo, no publicado):**
+- **Regla de Sergio Urcullo (1-oct): todo video que sale a redes se edita con `editor-videos`; Higgsfield solo genera el
+  clip.** Está en `higgsfield-generate` (las dos copias), en `HIGGSFIELD_VIDEO_SYSTEM.md` y en `cola/lucia-diario/FLUJO.md`.
+  La receta vive en una sola fuente: `editor-videos/SKILL.md` § «Reels de Lucía».
+- **Receta medida contra Santiago Muñoz y Erik Taveras:** sus últimos videos (TikTok, 19-sep a 1-oct), cuadro por cuadro,
+  con crítico. Ficha: `references/video-intake/2026-10-01-santiago-erik-edicion-medida.{md,json}`.
+- **L02, L05 y L08 editados** (`videos/lucia-lNN/`, final en `v4/feed/`, preview 360p mandado a Sergio Urcullo). Un
+  subagente por pieza, dos verificadores y una ronda de arreglo. Guiones: `cola/lucia-diario/S1-GUIONES.md`.
+  - L08: 10,25 s, −14,1 LUFS, identidad 0,75–0,79. Panel-diagrama (−24 h, −2 h, confirmar/cancelar); remate con
+    sello y voz que baja.
+  - L05 v3: 6,04 s, sin voz, sello «CERO.».
+  - L02: 6,04 s, sin voz, primera persona. Identidad resuelta mirando (0,694 de perfil y 0,630 en un parpadeo; los
+    cuadros frontales dan 0,712–0,727).
+- **Stack en la nube:**
+  - `resolve-playwright` cae a `/opt/pw-browsers/chromium`.
+  - `tts-elevenlabs.mjs` suma `--timestamps`, `--previous-text`, `--seed` y el cupo en vivo.
+  - Plantillas `keyword-marca`, `tag-ia` y `frase-card`, ya con la sombra sin corte.
+  - SFX de HyperFrames bajados de `npm pack hyperframes` (no van en git).
+- **Gasto:** Higgsfield octubre **20 / 150 cr** (esta sesión gastó 0). ElevenLabs: 83 caracteres (quedan 453 de 10.000,
+  tier payg).
+
+**Qué quedó a medias y dónde:**
+- Los tres reels esperan el **OK de Sergio Urcullo** (tabla de cortes en cada `README.md`). Sin OK no se publica.
+- **L05 y L08 no se publican sin la captura REAL.** El correo de recordatorio (24 h y 2 h, con botones) y el link de
+  reserva + agenda. No hay cuenta demo en producción. Pedido mandado a la madre el 1-oct ~23:40.
+- L08: 1 cuadro con texto fantasma a la salida del panel (8,04 s; menor, explicado en `README.md`). Si Sergio Urcullo
+  aprueba, se arregla en `build.mjs` alineando los fades a la grilla de 1/24 y se re-renderiza (costo 0).
+- Decisión de Sergio Urcullo: ¿L02 y L05 llevan voz de Marcela (~100 caracteres) o quedan sin voz con la música que él
+  pone?
+
+**Intentos fallidos (no repetir):**
+- **Placas PIL + ffmpeg a mano (1-oct): rechazadas.** Se edita con la skill.
+- **Forzar `voice_settings` a Marcela** (stability/style): le cambia el timbre. La regla del 21-ago ya lo prohibía y se
+  pisó igual. Sin settings.
+- **El remate sonaba a pregunta** (la F0 subía en «dedo»). Se arregla con una toma aparte, `--previous-text` y varias
+  `--seed`, y se elige la que BAJA. Whisper siempre escribe «mueves»: no sirve para juzgar el voseo.
+- **Pie «hecho con IA» fijo abajo:** Instagram tapa y > 1490. Ahora es un rótulo al arranque, debajo del mentón.
+- **Gate de identidad aplicado a cualquier cuadro:** bloquea en falso con perfiles y parpadeos.
+- **Instagram y YouTube desde la nube:** 429 / verificación de bot. **TikTok anda** con
+  `yt-dlp --impersonate chrome` (+ `curl-cffi`).
+- **Los reinicios del contenedor cortan los workflows.** Se retoman con `resumeFromRunId` (el disco sobrevive).
+
+**Qué depende de Sergio Urcullo:**
+1. OK de L02, L05 y L08.
+2. Voz o no en L02/L05.
+3. Token de `@lucia.antelo.oficial` en el VPS.
+4. Bio con link + utm.
+5. Cuenta de Buffer gratis con el correo propio de Lucía, para su TikTok.
+
+**Mensajes a la madre:** desde la nube **SÍ se puede** con `mcp__claude-code-remote__send_message` y
+`session_id=session_01Ap3wJimaiB2tZR7gYsYGhe`. `SendMessage` falla.
+
+**Próximos pasos:**
+1. Con el OK: publicar L02 por `ig-reel.mjs --cuenta lucia` cuando esté el token. L05 y L08 esperan la captura.
+2. Semana 1 restante: L03 y L06 son fotos listas (pie + paquete). L04 y L07 son carruseles con captura real.
 
 ## ▶ Arranque de la sesión siguiente, en el entorno `onia-higgsfield`
 
