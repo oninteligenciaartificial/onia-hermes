@@ -307,6 +307,14 @@ Trampas pagadas armando v3 (2-oct):
   encontraba a nadie (cuenta «En progreso», la ficha carga «Pendiente», 0 cargados). **Qué se puede decir lo fija
   `ONIA_CATALOGO_DE_VENTA.md`** («Se puede decir» / «NO se puede decir», §8 para la IA). Se lee ANTES de escribir
   una promesa, y lo que no está ahí se pide a Plataforma que lo mire funcionando.
+- **Mapa de toda la competencia (SaaS, ERP y bots):** `hermes-content/research/competencia/MAPA_COMPETENCIA.md` +
+  sus fichas (madre, 3-oct). Leer «Lo que cambia decisiones» antes de elegir el ángulo de una pieza. De ahí:
+  - **«Qué pacientes tienen que volver» ya es el gancho de Agenda en Día y Eholo.** El de D4 es otro: el
+    tratamiento EMPEZADO y presupuestado que no se cobró. D4 sigue congelado por el catálogo (§8) hasta que el
+    detector encuentre pacientes en producción; al descongelarlo se mantiene ese ángulo y no se pasa al de «recall».
+  - D1 (cita sin confirmar) no choca con ese gancho.
+  - **Comercio e importadora: sin pauta hasta tener la factura del SIN.** Mi Factura Bolivia (Bs 320) y Control
+    Facilito (Bs 772) ya la traen en el plan.
 - **El umbral del tratamiento a medias es «21 días sin venir»** (`diasSinVenir`), con el tratamiento en curso y
   sin cita futura. «21 días en progreso» o «21 días sin cita» son inexactos: corregido en D4 el 2-oct.
 
