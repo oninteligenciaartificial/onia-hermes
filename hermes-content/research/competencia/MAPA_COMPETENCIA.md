@@ -43,6 +43,11 @@
 | Kommo | CRM con IA multirrubro | Bs 240-540 por usuario, mínimo 6 meses; Meta aparte | 14 días sin tarjeta | Tarjeta o PayPal; 4 reintentos | El cliente conecta su WhatsApp solo (coexistencia) | `KOMMO_FICHA.md` |
 | Leadsales | Equipos de venta de pymes, MX | USD 97-247 + agente IA USD 87-793 | 14 días (solo Básico) | Stripe; 5 días de gracia | Primer mes del agente gratis; saldo de Meta incluido | `LEADSALES_FICHA.md` |
 | Wati | WhatsApp API con IA | USD 45-239 anual (59-299 mensual) | 7 días sin tarjeta | Tarjeta o PayPal; pausa y borra a los 90 días | Explica claro qué cobra Meta | `WATI_FICHA.md` |
+| HuliPractice (Huli) | Médicos y clínicas, Costa Rica/MX, 8 países | MXN 590/mes + IVA; con IA MXN 991; clínica a cotización | Sin prueba; reembolso en 30 días | Solo tarjeta, cobro mensual automático | Factura MX + recordatorio WhatsApp vivos; bot desde MXN 240 por 30 conversaciones + MXN 8 c/u | `HULI_FICHA.md` |
+| Reservo | Centros médicos, Chile (9 países, no Bolivia) | Desde CLP 30.000 + IVA (blog); /precios solo «Cotiza» | Sin prueba (demo con ejecutivo) | sin dato | Abono al reservar (Webpay, Mercado Pago, Fintoc) + WhatsApp desde el número de la clínica | `RESERVO_FICHA.md` |
+| Clinera | Clínicas con agentes IA, EC/CL/MX/PE | USD 279/mes (223 anual) + implementación USD 450, 6 meses mínimo | Sin prueba (demo o llamada) | Stripe, Mercado Pago, WebPay | Agentes que agendan por WhatsApp y llaman por teléfono | `CLINERA_FICHA.md` |
+| Calu | Consultorios médicos y odontológicos, Argentina | 23/mes por agenda (moneda no visible, prob. USD); ARS 40.192 + IVA; −20 % anual; Bolivia no visible | 7 días; 1.ª pantalla sin tarjeta | Mercado Pago (seña) | Recordatorio WhatsApp con cupo + seña automática | `CALU_FICHA.md` |
+| Fluker AI | Clínicas y estética, Colombia | no visible (/precios da 404) | no visible (demo por WhatsApp) | no visible | Re-escribe a quien preguntó precio y no reservó | `FLUKER_FICHA.md` |
 
 Volumen de pauta activa en Meta (2-oct, `anuncios/CAPTURAS-HECHAS.md` §Ronda 2): Huli ~140 · Dentalink 81 · Medilink 41-69 ·
 Reservo 31 · Dt.Dental 24 · Clinera 20 · Doctocliq 19 · Calu, Fluker y Calendico 15 · CitaPro 13 · NativeCode 10 ·
@@ -62,9 +67,13 @@ Agenda en Día 4 · Medizona 2.
 | 8 | Revisar el precio del agente: Meta cobra las respuestas en 24 h desde el 1-oct; incluir y explicar un saldo de Meta | Wati, Leadsales | **Nuevo** (`pricing.ts`, decide Sergio Urcullo) |
 | 9 | El contador del cliente entra gratis (es un canal de referidos) | Alegra | **Nuevo** (campaña 2 del plan) |
 | 10 | Anual que cobra 11 meses, a la vista en la tabla de precios | Mi Factura Bolivia, AgendaPro y Doctocliq (2 meses gratis) | **Nuevo** (checkout, punto 1) |
+| 11 | Seña opcional con QR al reservar, con plazo de cancelación que fija el dueño: baja el ausentismo y cobra solo | Reservo (abono), Calu (seña Mercado Pago) | **Nuevo** (después de la 1.0, junto a «el QR que activa el plan solo») |
+| 12 | Agente que propone re-escribirle a quien preguntó por WhatsApp y no reservó; el dueño lo aprueba en «Pendientes» | Fluker AI | **Nuevo** (módulo agents, punto 9) |
+| 13 | Bot como add-on con mínimo bajo + precio por conversación extra (cubre el costo de Meta que crece con el uso) | HuliPractice (MXN 240 por 30 + MXN 8 c/u) | Refuerza la **idea 8** (`pricing.ts`, decide Sergio Urcullo) |
 
 **Qué NO copiar (se repite en las fichas):** cobrar con tarjeta antes de la prueba (Lety, Eholo); vender solo con
 vendedor y sin precio (Dentalink, Dt.Dental, Doctoralia); borrar datos al no pagar (Wati, Dentalink); mínimos de 6 meses
 por adelantado (Kommo).
 
-**Pendiente:** Huli, Reservo, Clinera, Calu y Fluker solo tienen conteo de anuncios; no tienen ficha.
+**Pendiente:** Huli, Reservo, Clinera, Calu y Fluker ya tienen ficha (4-oct). Sin ficha quedan Calendico, CitaPro,
+NativeCode y Medizona (solo conteo de anuncios).
