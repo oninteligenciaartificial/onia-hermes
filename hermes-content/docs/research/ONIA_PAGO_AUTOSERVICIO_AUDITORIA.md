@@ -54,8 +54,8 @@ al pagar · una factura por cobro, descargable · en vez de cancelar, bajar a so
 **Bloquea:** solo la factura por cobro. **Riesgo bajo:** ASFI, retracto, datos (con los mínimos de arriba).
 **No confirmado:** si la autoridad aplica la Ley 453 a un SaaS B2B · si hay que registrar el contrato de adhesión ·
 si el art. 56 del DS 1793 vale en general · el vencimiento del Form. 530 · si en 2026 hay ley de datos o IVA a servicios
-digitales. ⚠️ `ONIA_OPTIMIZACION_FISCAL_PROPIA_2026.md` §7 cita el DS 4732 como IVA digital y es falso: ese decreto trata
-la venta de inmuebles a futuro.
+digitales (verificado el 4-oct: no hay IVA a servicios digitales; el PL 164/2020-2021 nunca se promulgó). La cita
+falsa del DS 4732 en `ONIA_OPTIMIZACION_FISCAL_PROPIA_2026.md` §7 se corrigió el 4-oct.
 
 ## (c) El flujo real hoy (onia-platform, `origin/master` @13b67dda)
 

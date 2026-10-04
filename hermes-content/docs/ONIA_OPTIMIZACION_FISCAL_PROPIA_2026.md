@@ -137,11 +137,14 @@ Son las facturas que más gasta Onia. Respuesta a "¿se pueden presentar?":
   la retención, el SIN puede observar/rechazar el gasto.
 - **Conviene formalizarlo:** pagás 12.5% de retención para deducir al 25%. Con utilidad, el neto
   es a favor (~12.5 puntos) frente a no presentarlos.
-- **Novedad — servicios digitales (DS 4732 + resoluciones SIN):** Bolivia ya grava el consumo de
-  servicios digitales del exterior (software, plataformas, streaming) con IVA/IT. Claude,
-  ElevenLabs y Higgsfield caen exactamente ahí; puede que ya te apliquen IVA/IT en el pago y/o que
-  el proveedor deba registrarse ante el SIN. La **interacción entre este régimen y la retención
-  IUE-BE es el punto más fino → validar con contador matriculado.**
+- **Servicios digitales del exterior: hoy NO pagan IVA ni IT (verificado 2026-10-04).** El IVA grava
+  solo los servicios prestados en Bolivia (Ley 843 Art. 1 b, texto ordenado del SIN al 31/08/2026).
+  El proyecto de 2021 para cobrar IVA a Netflix, Meta y Google (PL 164/2020-2021) se suspendió en
+  Diputados y nunca se promulgó (aclaración del Gobierno, El Deber, 11-ene-2023). A Claude, ElevenLabs
+  y Higgsfield solo les aplica el **IUE-BE del 12,5 %** (Ley 843 Arts. 44 b y 51). Si sale una ley
+  nueva, la capta el Radar Normativo y se corrige este punto.
+  ⚠️ Corregido el 2026-10-04: este punto citaba el «DS 4732» como IVA a servicios digitales. Ese
+  decreto trata las cláusulas abusivas en la venta de inmuebles a futuro (lexivox.org/norms/BO-DS-N4732.html).
 - **Práctica por proveedor:** cargar razón social + NIT de Onia en el billing de cada herramienta
   (Anthropic/Stripe, ElevenLabs, Higgsfield lo permiten) y guardar invoice + comprobante. El
   sistema trackea cada pago al exterior con su retención.
@@ -149,7 +152,7 @@ Son las facturas que más gasta Onia. Respuesta a "¿se pueden presentar?":
 ## Fuentes
 - Internas: `onia-core/ONIA_FISCAL_CONTABILIDAD_STRATEGY_2026.md`,
   `hermes-content/skills/impuestos-bolivia-operaciones.md`, `references/impuestos-bolivia.template.json`.
-- Legal: Ley 843, DS 21530, DS 24051 (IUE-BE), DS 4732 (servicios digitales), RNDs del SIN (Radar Normativo).
+- Legal: Ley 843, DS 21530, DS 24051 (IUE-BE), PL 164/2020-2021 (IVA a servicios digitales, nunca promulgado), RNDs del SIN (Radar Normativo).
 - Investigación 2026-07-10: impuestos.com.bo (IUE-BE), boliviaimpuestos.com (gastos deducibles / IUE-BE),
   emba.com.bo (ampliación IVA servicios digitales), ppolegal.com (tributación no domiciliados).
 - **Validación final: contador matriculado** (esto no es asesoría definitiva).
