@@ -1,6 +1,6 @@
 # Reels que mandó Sergio Urcullo para Lucía (4-oct-2026)
 
-> Los tres llegaron con un «anotalo». Los bajé y los miré desde la nube con `yt-dlp --impersonate chrome`: cuadros a
+> Los cuatro llegaron con un «anotalo». Los bajé y los miré desde la nube con `yt-dlp --impersonate chrome`: cuadros a
 > 1 por segundo, la transcripción con faster-whisper y el pie. Los videos no se versionan: son de terceros.
 >
 > **Lo más importante del día está en §2: hay otro avatar IA llamado «Lucía»** que se vende escondiendo que es IA.
@@ -124,6 +124,55 @@ asistente hace cosas. **Las pantallas reales recién al final**, como prueba.
 - **El humor:** vive de pelearse con OpenAI y de chistes en inglés. A Onia no le sirve: cero autobombo y nada sobre la
   competencia.
 
+## 4. @ramiro.cubria — «Comentá CLASE» (3-oct)
+
+- **Enlace:** `https://www.instagram.com/reel/DeBIEJlzmpQ/`
+- **Cuenta:** Ramiro Cubria, coach de marketing argentino.
+- **Formato:** 82 s, **horizontal 1916×1078**, en español con voseo.
+- **Medido el 4-oct:** 1.626 likes y 299 comentarios.
+- **Pie:** solo «Comentá CLASE ⤵️».
+
+| Tramo | Imagen | Voz |
+|---|---|---|
+| 0–12 s | **Sketch de pelea en la calle, en primera persona desde una moto**: un tipo se baja del auto y le grita a cámara | «¡Subís un montón de contenido y no agendás una llamada de venta!» |
+| 12–27 s | Una chica en moto («Tranquilo, yo te explico»), un perfil de Instagram con globos rosas y una piña que explota en un polígono de tiro | «Un Instagram que agenda menos de cinco llamadas de venta por día no debería ser considerado un Instagram… no es porque subas poco, es porque subís sin estrategia» |
+| 27–35 s | Logo de Instagram tornasolado y un sticker de cerebro | «Publicar todos los días lo primero que se te ocurre es improvisar con disciplina» |
+| 35–67 s | **La misma chica jugando ajedrez frente a un auto en llamas**, con una palabra grande por ángulo: «problema», «solución», «producto» | **Los cuatro ángulos:** problema · solución · producto (casos de éxito) · mentalidad (romper objeciones), más contenido de descubrimiento |
+| 67–82 s | La misma escena | «Mi cliente Fidel… cierra más de 100.000 dólares por mes… Comentá CLASE y te mando una clase gratuita de 30 minutos» |
+
+**Patrón:**
+- Gancho de conflicto con energía alta en los primeros 3 s.
+- **Una metáfora visual por idea**: ajedrez = estrategia, auto en llamas = el problema, piña que explota.
+- Texto cinético rosa y blanco, palabra por palabra.
+- Las escenas de la chica parecen generadas, con la misma cara en todos los planos.
+- Cierre con imán de leads (una clase gratis) y «Comentá X».
+
+### Para Lucía
+
+**Sirve:**
+1. **Los cuatro ángulos sirven para auditar el plan** (`PLAN.md` §3):
+   - **problema:** «Recepción a las 8»;
+   - **solución:** K1 y K2, con la pantalla real;
+   - **mentalidad:** «Humo vs. real», que rompe la creencia de que «la IA lo hace todo»;
+   - **descubrimiento:** las piezas de personaje («Un día en Santa Cruz», K4);
+   - ⚠️ **producto, en su versión de «casos de éxito», hoy NO se puede llenar.** Hay 0 clientes pagando, y no se
+     fabrican testimonios ni cifras. Ese ángulo queda vacío hasta el primer cliente real, y se dice así.
+2. **Su métrica es la nuestra:** «un Instagram que no agenda llamadas no es un Instagram». Es lo mismo que la métrica
+   del plan (demos con `src=lucia-*`).
+3. **El imán de leads detrás del «Comentá X»** (una clase gratis de 30 min). Para D6, el equivalente honesto es
+   «Comentá DEMO y te paso el link para agendar», sin inventar un regalo que no existe. Es la cuarta evidencia del
+   embudo de comentarios.
+4. **El gancho de conflicto en 0–3 s** con el dolor del dueño dicho en voz alta («¡tu recepción no confirma ni una
+   cita!»), pero **sin insultos**.
+
+**No sirve:**
+- **Los insultos** («pelotudo»). Un dueño de clínica es un público formal y la marca no puede sonar así.
+- **El caso de ingreso** («más de 100.000 dólares por mes»). Es justo el tipo de cifra y testimonio que no se fabrica
+  ni se promete.
+- **El formato horizontal** y los 82 s. El plan va con Reels verticales de 30–45 s.
+- **El auto en llamas, la piña y las escenas caras.** Cada metáfora es una escena generada. Si alguna vez se usa, va
+  UNA por pieza y con su costo delante.
+
 ## Qué cambia en el plan de Lucía (resumen)
 
 | Mecanismo | De dónde | Dónde entra |
@@ -132,3 +181,5 @@ asistente hace cosas. **Las pantallas reales recién al final**, como prueba.
 | La pantalla real de Onia compuesta en un panel que sostiene Lucía | §2 | K1 a K4, cuando haya cuenta demo (se compone en la edición) |
 | Caja de comentario animada con «Comentá DEMO» | §1 y §2 | D6, si Sergio Urcullo la aprueba |
 | Siempre «Lucía Antelo», con apellido, y la IA declarada desde el segundo 0 | §2 (la otra Lucía) | Ya es regla; se refuerza |
+| Los cuatro ángulos para auditar el plan; «producto / casos» queda vacío hasta el primer cliente real | §4 | `PLAN.md` §3, en la próxima revisión del plan |
+| Gancho de conflicto en 0–3 s con el dolor del dueño, sin insultos | §4 | «Recepción a las 8» |
