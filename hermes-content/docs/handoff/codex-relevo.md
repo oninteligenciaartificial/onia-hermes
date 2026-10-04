@@ -64,6 +64,7 @@ Se trabaja en ramas `codex/*` con PR: nada directo a main.
 - OK a los costos de Higgsfield antes de generar.
 
 ### T5 · Competidores: cómo funcionan por dentro (último en el orden de Sergio Urcullo, 3-oct)
+- ✅ **HECHA por la madre v2 el 3-oct** (`research/competencia/MAPA_COMPETENCIA.md` + 16 fichas, PR #121). A Codex le quedan solo Huli, Reservo, Clinera, Calu y Fluker, que hoy tienen solo el conteo de anuncios.
 - Ya están: Dapta (`research/competencia/DAPTA_COMO_FUNCIONA.md`) y SendyPro + ManyChat (`REVISION-HERRAMIENTAS-CHATBOT.md`).
 - **Faltan:** Lety (lety.ai) y los que nombran `ONIA_NIVEL_REFERENTES_BRECHA.md` y `ONIA_ADQUISICION_Y_PAUTA.md` §2.6 sin ficha propia.
 - **META:** una ficha por competidor (alta, prueba, precio, cobro, onboarding, qué copiar y qué no), con la misma estructura que Dapta.
