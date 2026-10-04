@@ -52,6 +52,9 @@ Medido 2026-08-09: TikTok 5,4 MB en **3,9 s**; reel de IG 15 s / 1,9 MB (h264+aa
 audio) en **1,7 s**. Ambos sin abrir el navegador.
 
 - **TikTok / YouTube:** `yt-dlp` directo, cero cookies, cero navegador.
+- **Instagram desde la NUBE (medido el 4-oct-2026):** un reel PÚBLICO bajó con `yt-dlp` pelado, sin cookies ni
+  sesión (`DeDZx1BopXS`, 12 s, con audio y `--write-info-json`: caption, likes, comentarios y 15 comentarios).
+  Probarlo primero; si falla, recién ahí la sesión de abajo, que solo existe en la PC de Sergio Urcullo.
 - **Instagram:** exige sesion. Usa un **perfil de Chromium propio de Playwright**
   (`.hermes/ig-session/profile`, gitignoreado) — NO el Chrome del usuario. Las cookies
   se leen por CDP (`context.cookies()`), asi que el cifrado en disco no estorba.
@@ -215,7 +218,10 @@ usá `text-frames.mjs` (arriba), que muestrea por densidad y no por reloj.
 | OpenAI Whisper API | ~$0.006/min | verbose_json | si el key local está vigente (hoy suele estar vencido → rotar) |
 | AssemblyAI | pago (needs OK) | word, mejor en silencios | solo con permiso de Sergio ([[gasto-plataformas-validar-primero]]) |
 
-Speaches gratis alcanza para casi todo. `scripts/transcribe.sh` usa ese camino (base64 → SSH → docker exec en onia-center → Speaches). Detalle de infra: [[onia-hermes-stack-y-radar]].
+Speaches gratis alcanza para casi todo.
+⚠ **Desde una sesión en la nube** (4-oct-2026): `transcribe.sh` va por defecto a `root@187.77.16.63` con su clave, y
+desde la nube eso se cuelga (más de 120 s, JSON vacío). Correrlo con `ONIA_VPS_HOST=onia-vps`, que pasa por el túnel.
+Un JSON con `text` vacío es respuesta válida: el audio no tiene voz (así se confirmó que ese reel es solo música). `scripts/transcribe.sh` usa ese camino (base64 → SSH → docker exec en onia-center → Speaches). Detalle de infra: [[onia-hermes-stack-y-radar]].
 
 ## Common mistakes
 - **Afirmar que "viste" el video con 1-2 cuadros.** Muestreá una tanda repartida y decí la cobertura.
