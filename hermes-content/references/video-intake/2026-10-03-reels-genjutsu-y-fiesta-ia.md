@@ -16,6 +16,20 @@ Mirados el 3-oct con `ver-videos`: bajados con `fetch-video.mjs` y vistos nativo
 **Patrón:** resultado imposible primero (antes/después en pantalla partida) → cómo se hace, en 13 s de pantalla
 real → **palabra clave en comentarios** a cambio del prompt. 58 comentarios sobre 164 likes: el «comentá AI» funciona.
 
+**Edición (verificada en los cuadros):**
+- **Cuadros revisados:** 0,5 / 2 / 5 / 12 / 24 / 36 s.
+- **Primeros 3 s:** abre directo con prueba visual, no con introducción. Cuadro 0,5 s: logo fijo «Higgsfield GENJUTSU» arriba, mitad superior «AI Edit» y mitad inferior «Original». A los 2 s ya cambió el estilo del panel superior, manteniendo la misma acción del original. En los primeros 3 s el gancho es comparar el resultado imposible contra la fuente real, sin subtítulos de voz.
+- **Ritmo:** 0-20 s sostiene una misma toma base con cambios de estilo cada 2-4 s arriba; equivale a 4-5 cambios visuales por cada 10 s. 20-33 s acelera a tutorial de pantalla con 6-7 cortes por cada 10 s. 34-38 s baja el ritmo y vuelve a cara para el CTA.
+- **Layout:** 0-19 s pantalla partida vertical: arriba resultado IA, abajo original, separados por una banda negra. El branding ocupa una franja negra superior grande. 20-33 s screencast oscuro de ChatGPT/Higgsfield, con zooms a plugin, prompt y biblioteca de estilos. 34-38 s talking head full-screen en selfie cercano.
+- **Subtítulos:** durante la demo casi no hay subtítulo hablado: solo etiquetas fijas «AI Edit» y «Original» en sans bold blanca, abajo a la izquierda de cada panel. En la parte tutorial aparecen placas con texto rojo sobre fondo crema («then it will», «analyze the motion», «and generate the video for you»). En el cierre usa subtítulo sans extra-bold centro-bajo, amarillo con sombra/trazo oscuro; palabras cortas sincronizadas con la frase del CTA («link & prompt I used»).
+- **Transiciones y overlays:** cortes secos. No hay transiciones decorativas: el movimiento viene del cambio de estilo, del scroll/click en la UI y de zooms cortos en pantalla. Overlays principales: logo, etiquetas de comparación, cursor/interfaz y placas tipográficas.
+- **Sonido:** voz de creadora al inicio y cierre, voz masculina en off para la parte técnica. Música electro/lo-fi baja; clicks/whooshes suaves en la zona de UI. El audio no compite con la explicación.
+- **Cierre:** vuelve al rostro en plano cercano y pide comentar una palabra clave: «AI». El valor prometido es concreto: link + prompt.
+
+**Qué copiar:** para Sergio Urcullo, usar el molde «resultado antes que explicación»: arriba/abajo o izquierda/derecha con Claude Code ejecutando y el resultado funcionando. Abrir en los primeros 3 s con «mirá lo que armé con Claude Code» y recién después mostrar prompt, comando o repo. CTA con voseo: «Comentá CLAUDE y te mando el prompt / plantilla», solo si el envío por DM está listo.
+
+**Qué NO copiar:** no dejar 20 s sin subtítulos si el tema es código; en marca personal técnica la gente necesita leer el punto desde el segundo cero. No copiar el cambio de locutor: mejor una sola voz de Sergio para autoridad. No copiar el selfie casual/contrapicado ni la estética de aeropuerto; reemplazar por escritorio, terminal, navegador y prueba real.
+
 ## 2. @ugc.studio.ia — «Nadie en esta fiesta es real.»
 `https://www.instagram.com/reel/Dd_2QCqqZBH/` · 89 s · 2-oct · **1.741 likes · 123 comentarios** · en español.
 
@@ -29,6 +43,20 @@ real → **palabra clave en comentarios** a cambio del prompt. 58 comentarios so
 **Patrón:** sketch narrativo en primera persona, cámara en mano y subtítulo de UNA palabra por toma
 («BIENVENIDOS», «REGLAS», «CINCO», «REALES»). Humor que **se ríe de los defectos de la IA en vez de esconderlos**.
 Giro final y CTA de servicio. Es el que más rindió de los dos (10× los likes).
+
+**Edición (verificada en los cuadros):**
+- **Cuadros revisados:** 0,5 / 3 / 10 / 37 / 63 / 85 s.
+- **Primeros 3 s:** 0,5 s abre en plano medio de cocina, cámara en mano, vaso rojo visible y fiesta realista de fondo; aparece «BIENVENIDOS» enorme en blanco sobre el pecho. A los 3 s la protagonista se señala a sí misma, el subtítulo cambia a una sola palabra («SOY»/palabra corta) con motion blur/pop. No hay montaje complejo: la retención sale de actuación, fondo vivo y subtítulo golpeado.
+- **Ritmo:** 0-10 s tiene 1 corte fuerte y varios cambios de escala por movimiento de cámara; 10-40 s mantiene 1-2 cortes por cada 10 s, apoyado en acciones cómicas (mano, vaso, choque, resbalón). 40-60 s baja a seguimiento continuo para suspenso. 60-89 s sube a 3-4 cortes por cada 10 s con revelación del cuarto, robots, cabeza desmontable y huida.
+- **Layout:** 9:16 nativo, cámara en mano tipo POV/persona que acompaña. Cocina cálida y saturada al inicio, pasillo más oscuro en el medio, galpón frío con luces azules al final. El rostro y las manos quedan siempre en el centro seguro; cuando hay revelación, la composición se vuelve más simétrica.
+- **Subtítulos:** tipografía sans condensada extra-bold, MAYÚSCULAS, blanco puro con sombra suave. 1 palabra por golpe, máximo 2; posición centro-baja/pecho, sin caja. Animación tipo pop/escala con leve blur al entrar. Palabras verificadas en cuadros: «BIENVENIDOS» a 0,5 s y «CONGELADOR» a 37 s; Gemini detectó también «REGLAS», «CINCO», «REALES», «MARCA» y «POR TI».
+- **Transiciones y overlays:** casi todo son cortes secos escondidos en movimiento: giro de cuerpo, paneo, choque, apertura de puerta. No usa gráficos explicativos ni stickers; el único overlay constante es el subtítulo. Los VFX son parte de la historia: dedos/mano, no fusión, cuarto de robots, cuello luminoso y cabeza en el piso.
+- **Sonido:** voz limpia por encima de ambiente de fiesta; parece doblaje o voz muy procesada, porque el ruido de fondo no ensucia la frase. Foley de fiesta al inicio, tensión/suspenso al pasar al pasillo, zumbidos mecánicos y golpe/portazo en la huida. La música queda debajo de la actuación.
+- **Cierre:** el CTA entra mientras ocurre el VFX más fuerte, no como frase separada: «si querés cosas así para tu marca...». Termina con reacción de miedo y salida brusca, dejando recuerdo visual antes que venta explícita.
+
+**Qué copiar:** para Sergio Urcullo, copiar la lógica de sketch técnico: una regla por escena sobre IA/Claude Code («regla uno: no le des contexto sucio», «regla dos: no releas todo el repo»), subtítulo de una palabra por golpe y cierre con demostración fuerte. Usar voseo: «si querés que te pase el flujo, comentá CLAUDE».
+
+**Qué NO copiar:** no copiar fiesta, vaso rojo ni humor adolescente: no conversa con programadores, founders o clientes B2B. No copiar VFX de cabeza/robots si no aporta al aprendizaje; cambiarlo por terminal, errores reales, PR, logs, diagrama o pantalla de agente trabajando. No sobreactuar: Sergio debe sonar filoso, claro y de taller real, no personaje de sketch exagerado.
 
 ## Qué tomar
 
