@@ -81,3 +81,15 @@ al reiniciarse la sesión: se usó lo que habían dejado en su journal y no se r
   3. Verificar que Plataforma cerró el CRITICAL de #98 (prueba + publicado + mirado).
 - Para retomar: `ListAgents`; esta tabla; la skill `onia-sesion-madre`. Revisión proporcional al riesgo (lo fuerte solo
   para root en el VPS, producción, plata o git-autosync.js) y workflows de hasta 5 agentes.
+
+### 3-4 oct: tareas que delegó la madre v1 (hechas)
+- Análisis independiente antes de descongelar (enviado por mensaje). El cuello son los 7 leads sin contestar.
+- Auditoría de cobro y autoservicio → `docs/research/ONIA_PAGO_AUTOSERVICIO_AUDITORIA.md` (#115), sumada a la 1.0 como puntos 13-15.
+- Competencia: 16 fichas `*_FICHA.md` + `research/competencia/MAPA_COMPETENCIA.md` (#121).
+- Error fiscal: el DS 4732 no es IVA digital; hoy no hay IVA a servicios del exterior (#123).
+- Costo del agente de WhatsApp → `docs/research/ONIA_COSTO_CHATBOT_META_2026.md` (#124, corregido en #125): Meta le cobra al
+  cliente, con 1.000 mensajes de servicio gratis por número y por mes, y 7 días gratis desde un anuncio. Bs 390 se mantiene.
+  El panel y `pricing.ts` siguen diciendo «sin tramo gratis»: lo corrige Plataforma.
+- onia-platform#109 (Codex, punto 12): aprobado; la madre v1 aplicó los 2 LOW.
+- **Pendiente:** revisar el punto 8 de Codex (caja diaria, `codex/punto-8-caja-diaria`, con migración aditiva), con
+  2 lentes: corrección + datos/seguridad multi-organización. Espera el aviso de la madre v1.
