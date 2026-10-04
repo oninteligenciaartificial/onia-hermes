@@ -69,3 +69,10 @@ Se trabaja en ramas `codex/*` con PR: nada directo a main.
 - **Faltan:** Lety (lety.ai) y los que nombran `ONIA_NIVEL_REFERENTES_BRECHA.md` y `ONIA_ADQUISICION_Y_PAUTA.md` §2.6 sin ficha propia.
 - **META:** una ficha por competidor (alta, prueba, precio, cobro, onboarding, qué copiar y qué no), con la misma estructura que Dapta.
 - **PRUEBA:** fichas en `research/competencia/`, con fuentes. **PARADA:** solo web pública o cuentas de prueba que cree Sergio Urcullo. Nada pago y nada de crear cuentas.
+
+## Estado al 4-oct ~00:30 UTC (madre)
+- **Cómo se lanza** (medido): CLI 0.139 viejo. Los gpt-6-* fallan, así que se usa **`-m gpt-5.5`**, en un worktree aislado por tarea, sin commit. La madre revisa, commitea y abre el PR. Detalle en la memoria `codex-cuenta-y-reparto`.
+- ✅ T3 análisis de edición de los reels 1-2 → main (`daf57276`).
+- ✅ Punto 12 de la 1.0 (CSV con «;» + WhatsApp de soporte en /help) → onia-platform#109 (draft), esperando la revisión de la madre v2. Lo publica Plataforma después del B22.
+- ⏳ Punto 8 de la 1.0 (caja diaria clínica, B17) → worktree `C:/dev/proyectos/onia-platform-codex-caja`, rama `codex/punto-8-caja-diaria`. Pantalla nueva: necesita el OK de Sergio Urcullo antes de publicar.
+- T1 (edición de lo que grabe Sergio Urcullo) espera los brutos. T4 (usted en el bot): el grep de voseo da 0, no hace falta.
