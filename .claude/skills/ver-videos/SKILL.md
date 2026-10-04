@@ -57,6 +57,10 @@ audio) en **1,7 s**. Ambos sin abrir el navegador.
   se leen por CDP (`context.cookies()`), asi que el cifrado en disco no estorba.
   Login manual **una vez** (`--login`, ventana headed); despues headless ~1 s y jar
   reusado 12 h. `--sleep-requests 2` para no gatillar rate limit de IG.
+- **Instagram desde la NUBE (sesión de Claude sin login), medido el 4-oct-2026:** con un reel público,
+  `yt-dlp --impersonate chrome -o reel.%(ext)s --write-info-json <url>` bajó el video 1080×1920 con audio, el pie y
+  los likes y comentarios, sin cookies. El 1-oct la misma ruta había dado 429. Funciona a veces: se prueba UNA vez
+  y, si da 429, se le pide a la madre que lo mire desde Chrome.
 
 **Por que NO usar `--cookies-from-browser` (medido en la maquina de Sergio, 2026-08-09):**
 
