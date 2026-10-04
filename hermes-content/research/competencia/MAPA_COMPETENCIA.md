@@ -14,8 +14,8 @@
 2. **Nadie del rubro dental resuelve «el paciente que dejó el tratamiento a medias»** sin que alguien lo arme a mano
    (`PRODUCTO_COMPETENCIA_RESUMEN.md`). Agenda en Día y Eholo ya lo usan como gancho en sus anuncios.
 3. **Desde el 1-oct Meta cobra también las respuestas del bot dentro de las 24 h** (fuente oficial de Meta). Se lo
-   cobra AL CLIENTE en su cuenta, no a Onia; si hay 1.000 gratis por mes está en conflicto entre dos páginas
-   oficiales. Cuentas y recomendación: `docs/research/ONIA_COSTO_CHATBOT_META_2026.md`.
+   cobra AL CLIENTE en su cuenta, no a Onia, y los primeros 1.000 mensajes del mes por número son gratis. Lo que llega
+   por un anuncio de clic a WhatsApp es gratis durante 7 días. Cuentas: `docs/research/ONIA_COSTO_CHATBOT_META_2026.md`.
 
 ## La tabla (viejos y nuevos)
 
