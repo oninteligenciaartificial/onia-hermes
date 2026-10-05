@@ -1,89 +1,88 @@
 # Handoff — madre-local (sesión MADRE, en la PC de Sergio Urcullo)
 
-Regla: CLAUDE.md §1 «Sesión MADRE local + carriles en la nube». Método (ids, canales medidos, entornos, cómo abrir
-sesiones, ronda): **skill `onia-sesion-madre`**. Este archivo es el ESTADO al **3-oct ~15:20 UTC**, justo antes de que
-Sergio Urcullo actualice Claude y reinicie la PC.
+Regla: CLAUDE.md §1. Método (ids, canales, cómo se delega a Codex, tokens): **skill `onia-sesion-madre`**.
+Este archivo es el ESTADO al **5-oct, 20:40 UTC**, cuando Sergio Urcullo pidió «cambio de sesión madre».
+La madre saliente (`cfdce1bb…`, rama `claude/onia-sesion-madre-77f719`, worktree `infra-loops-revision-3fc7b1`) llevaba
+días abierta y su conversación costó ~777 M de tokens. **La madre nueva arranca de cero y lee solo esto.**
 
-## 0. Al abrir una madre nueva (en este orden)
+## 0. Al abrir (en este orden)
+1. Remote Control encendido; Chrome con la extensión Claude (`list_connected_browsers` ≠ []).
+2. `ListAgents`. Cada sesión deja en su transcript un **«RESUMEN PARA LA MADRE NUEVA»** (pedido el 5-oct): leer SOLO ese
+   evento con `RemoteTrigger get_run_log` (es lo último de cada transcript). La madre v2 (local
+   `local_4cf12f8b-cd4b-4c1a-8900-f37da63ae707`) contesta por SendMessage.
+3. No recrear la ronda de 30 min salvo que Sergio Urcullo la pida: gasta tokens sin novedad.
 
-1. **Remote Control encendido** (sin él `ListAgents` sale vacío). **Chrome con la extensión Claude conectada**
-   (`list_connected_browsers` ≠ `[]`).
-2. **Recrear la ronda:** `CronCreate` `13,43 * * * *` con el prompt de la skill.
-3. `ListAgents` y leer los transcripts SOLO de lo nuevo. **Alcance CONGELADO** (abajo): no repartir tareas nuevas.
-4. Hay una **madre v2 «revisión»** (local, `local_4cf12f8b…`): revisa PRs y arma la tabla de resultados. Su estado:
-   `handoff/madre-v2-revision.md` (rama `claude/sesion-madre-v2-revision-696bb0`).
+## 1. Objetivo vigente (decidido por Sergio Urcullo, 3/4-oct)
+**La 1.0 lista para cobrarle a las primeras 5 clínicas dentales**: `hermes-content/docs/ONIA_PLAN_1.0_Y_CAJA.md`
+(15 puntos; los 1-4 para el **16-oct**, todo para el **30-oct**). Orden del negocio de Sergio Urcullo:
+1) marca personal + auditorías + llamadas 1 a 1 + comunidad (gratis); 2) la 1.0; 3) competencia (ya cubierta).
+Caja de **Bs 4.000**. Gasto fijo de ~Bs 1.611/mes (Codex USD 100, VPS USD 40, Higgsfield anual ya pagado).
+Techo para conseguir clientes: **Bs 1.400** (Meta 750). Solo dental hasta tener la factura del SIAT.
 
-## 1. Objetivo vigente
+## 2. Qué quedó en producción / en main
+- **onia-platform master** (verificar el deploy: el handoff de Plataforma decía `release-13b67dda` del 3-oct):
+  - #108 (tratamiento a medias en la prueba de 14 días, agenda y cobros, textos a pacientes de **usted**, seguridad B22
+    del canal de citas);
+  - #109 (punto 12, de Codex: CSV con «;» + WhatsApp de soporte en /help);
+  - #111 (punto 2: la factura llega después de verificar el pago y el titular del QR se explica).
+  Mergeados del 4 al 5-oct. **Confirmar con Plataforma que están PUBLICADOS y mirados en prod.**
+- **Docs en onia-hermes main:**
+  - el plan de la 1.0 y la caja;
+  - la auditoría de cobro y autoservicio (`research/ONIA_PAGO_AUTOSERVICIO_AUDITORIA.md`);
+  - el costo del chatbot (`research/ONIA_COSTO_CHATBOT_META_2026.md`: Bs 390 = ~99 % de margen; Meta le cobra a la
+    clínica, con 1.000 mensajes de servicio gratis por número y por mes, verificado en la página renderizada);
+  - el mapa de 28 competidores (`research/competencia/MAPA_COMPETENCIA.md` + fichas);
+  - el plan de grabación por escena (`docs/cola/plan-3-semanas/PLAN-GRABACION-3-OCT.md`) y el KIT-GRABACION;
+  - fichas de montaje y video-intake de los reels (mensaje + tema + edición);
+  - el playbook de seguimiento de leads (`sales-kit/SEGUIMIENTO-LEADS.md`);
+  - el kit de Lucía (7 fotos + 3 clips, 30,5 cr aprobados por Sergio Urcullo el 3-oct, #118);
+  - las capturas del presupuesto por fases (`docs/cola/capturas-presupuesto-fases/`, #116);
+  - la corrección fiscal: hoy NO hay IVA a servicios digitales del exterior, solo IUE-BE 12,5 % (#123).
 
-**Cerrar lo ya asignado y hacer la revisión de resultados con Sergio Urcullo.** Sergio Urcullo, 2-oct: *«no se añaden
-más tareas después de las que ya hay; terminemos de hacerlas, cortamos, damos un vistazo y definimos cómo seguir»*.
-Las 6 sesiones lo saben y están quietas esperando. Tokens solo en lo **necesario** (3-oct): lo que acerca a las 5
-clínicas pagando o destraba main/producción; revisión proporcional al riesgo; nada de releer docs enteros.
-
-## 2. Qué quedó EN MAIN / producción (2 y 3-oct)
-
-- `ONIA_NIVEL_REFERENTES_BRECHA.md`: lo que le falta a Onia frente a la competencia, verificado contra master
-  (23 P0, 23 P1, 30 P2). `DAPTA_COMO_FUNCIONA.md` es la fuente única de Dapta (recorrida y probada con créditos
-  gratis). `research/competencia/REVISION-HERRAMIENTAS-CHATBOT.md`: Dapta, SendyPro y ManyChat por dentro.
-- Videos: el bueno es **«Tu primera automatización» (22-sep, editado por Codex)**, rescatado con su receta en
-  `videos/marca-personal/2026-09-21/RECETA.md`; el reel Astra/Fable (Codex, 14-sep) como referencia en
-  `references/video-intake/2026-09-14-reel-astra-fable-codex/`. **Molde a replicar tal cual: Erik Taveras y
-  Santiago Muñoz** → skill nueva `edicion-referentes` (la arma Marca, PR #100). editor-videos arranca con esto.
-- Lucía: `references/modelos/lucia/MANUAL-PATRONES-INFLUENCERS-IA.md`. Decisiones: solo los rubros que vende Onia;
-  «que no se identifique como odontóloga pero que tenga la ropa».
-- PRs mergeados por la madre: #88, #91 (Hermes), #96 (main vuelve a verde, 19681b6b).
-- Memoria: `codex-cuenta-y-reparto.md` (Codex = suscripción prolite con tope semanal; solo tareas cerradas).
-
-## 3. Qué quedó a medias y dónde
-
+## 3. A medias y dónde
 | Frente | Estado exacto | Cómo se retoma |
 |---|---|---|
-| **CRITICAL platform#98** | El botón de respuesta al recordatorio se acepta desde el widget web: un anónimo confirma/cancela citas ajenas y ve el nombre. Sergio Urcullo dijo arreglarlo ya. | Pedido a Plataforma el 3-oct 15:17 UTC; leer su transcript y mirar el arreglo en producción. |
-| Promesas de la web | /chatbot «entiende fotos», /rubros tratamiento a medias, agente WhatsApp, recordatorios WhatsApp en Términos, factura | Plataforma verifica: si no es real, se corrige el TEXTO. Términos = legal → se le muestra a Sergio Urcullo antes. |
-| PR #94 (Hermes, toca git-autosync.js) | Aprobado por Sergio Urcullo y la madre v2; quedó con conflictos tras #96 | Hermes lo actualiza; la madre lo mergea. Los 3 MEDIUM de v2 van ANTES de cargar la llave de la rutina, no ahora. |
-| PR #101 (rescate de 5f0c8aec) | Aprobado; con conflictos | La madre v2 lo actualiza; la madre lo mergea. main local ya = origin/main; respaldo `respaldo/autosync-5f0c8aec-20260930`; brutos en `C:/Users/PC/Videos/ONIA-brutos/2026-09-21/`. |
-| Lucía «Hoy soy odontóloga» (#82) | Pedido de corrección mandado | Leer su transcript. |
-| Fichas de montaje de Instagram | ✅ HECHAS las 4 (3-oct): `references/marca-personal/FICHAS-MONTAJE-REFERENTES.md` (db4aa158), mandadas a Marca y Lucía | Sin descargar reels; si Marca pide el ritmo exacto, OK de Sergio Urcullo con nombre, origen y tamaño. |
-| Aviso a Sergio Urcullo | Rutina `trig_01JAHqefnRiS4ePS4CfWZ5Y3` → Hermes manda un Telegram a las 17:15 UTC del 3-oct: «revisá la PC» | Verificar en el transcript de Hermes que salió. |
+| **Caja diaria (punto 8, Codex)** | onia-platform#110 (draft), rama `codex/punto-8-caja-diaria`, head `83f93948`. APROBADA por la madre v2 en 2 vueltas (9 hallazgos arreglados + 2 LOW; 21 tests verdes). Migración `20261004190000_add_daily_cash` **APLICAR ANTES DEL SWAP**. | Plataforma saca capturas (pedido) → la madre se las muestra a Sergio Urcullo → con su OK lo publica Plataforma. Worktree de Codex: `C:/dev/proyectos/onia-platform-codex-caja` (borrar al mergear). |
+| **Presupuesto por fases (P2)** | Separado de #108 y sin publicar. Capturas en main (`docs/cola/capturas-presupuesto-fases/`, 12 PNG). | Mostrárselas a Sergio Urcullo (ya se le mandaron 2 el 5-oct) → con su OK lo publica Plataforma. |
+| **SQL de permisos del B22 en prod** | `prisma/migrations/20261003230000_revoke_anon_onia_sends/migration.sql`: solo REVOKE, sin datos. **Falta el OK de Sergio Urcullo** para correrlo. | Pedírselo de nuevo; con su OK textual se lo pasás a Plataforma. |
+| **Plantillas A y B para los 6 leads de agosto** | Texto aprobado («está bueno»). Desde la nube el control de permisos frenó crearlas porque la orden vino de la madre. El seguimiento ya está (`sales-kit/SEGUIMIENTO-LEADS.md`). | Sergio Urcullo las crea en WhatsApp Manager o se lo pide directo a Plataforma en esa sesión. Después: «salen». |
+| **Meta / pauta** | ONIA Ads sigue SIN tarjeta: a Sergio Urcullo le falta el «control total» de la cuenta publicitaria («Unable to update permissions»). El número del bot **+591 75414930** hay que vincularlo a la página «Onia» («Conectar otro número»; no borrar su celular 78491375). | Configuración de la empresa → Usuarios → Personas → él → control total de ONIA Ads → Métodos de pago → Visa 4028. Verificar con `ads_get_ad_accounts` (`has_payment_method`). La pauta va desde el 16-oct, con reglas de corte (plan §3). |
+| **Firma de la respuesta del bot a la pauta** | Versión de USTED en el chat del 3-oct; el commit `363dcf10` está en main sin publicar. | Pedir «firmo»; Ventas actualiza el knowledge y lo publica. |
+| **Grabación** | Sergio Urcullo grababa el 3/4-oct con PLAN-GRABACION. | Cuando mande los brutos: T1 de Codex (`docs/handoff/codex-relevo.md`) o Marca → tabla de cortes + preview 360p ANTES de cortar. |
+| **Hermes** | #94 en main y apagado. Propuesta: que el autosync deje de hacer fast-forward de main (variable para el integrador). Toca CLAUDE.md. | Sí o no de Sergio Urcullo. Si es sí, los 3 MEDIUM + el cambio del autosync, con revisión fuerte. |
+| **Codex** | CLI `0.139` viejo: `gpt-6-*` falla y se usa `-m gpt-5.5`. | Preguntar si se actualiza el CLI (`npm i -g @openai/codex`, pide OK). Cola: `docs/handoff/codex-relevo.md`. |
 
-## 4. Archivos
-
-`.claude/skills/onia-sesion-madre/SKILL.md` · `.claude/skills/editor-videos/SKILL.md` (cabecera) · los de §2 · este handoff.
+## 4. Archivos de la madre
+`.claude/skills/onia-sesion-madre/SKILL.md` (tokens y delegación a Codex) · `.claude/skills/ver-videos/SKILL.md` (regla
+mensaje/tema/edición) · `AGENTS.md` (skills para Codex) · `docs/handoff/codex-relevo.md` · este archivo.
 
 ## 5. Intentos fallidos (y su causa)
+- **Aviso por Telegram programado vía Hermes (3-oct):** no salió. La nube no entra al VPS si la orden viene de otra
+  sesión. Los avisos los manda la madre desde la PC.
+- **`codex exec` sin `-m`:** falla (`gpt-6-luna` del config no está soportado; los gpt-6 piden un CLI más nuevo).
+- **Codex no puede commitear:** el `.git` del worktree queda fuera del sandbox. Commitea la madre.
+- **La madre subió un test rojo (`5c58175c`):** el `grep` de la salida no cortaba la cadena. Ahora hay un gate en el comando.
+- **Plantillas y skills editadas «a pedido de otra sesión»:** el control de permisos de la nube las frena
+  (Self-Modification, «transacción real»). Lo que es de Sergio Urcullo lo pide él en la sesión destino.
+- **«1.000 mensajes gratis» de Meta:** primero se leyó en la ayuda de Wati, después WebFetch trajo una versión vieja que
+  decía «sin tramo». La verdad salió de la página **renderizada en Chrome**.
+- **Tokens:** la v2 gastó ~425 M y esta madre ~1.840 M, el 95 % releyendo contexto. Madres cortas y workflows de 5
+  agentes como máximo.
 
-- **Mergear PRs de otra sesión:** el control de permisos frenó a la madre la primera vez (#88) y siempre a la v2
-  («Unrequested Commit in a Connected App»). Con la orden explícita de Sergio Urcullo a la madre, pasó.
-  **No se mergea lo que a la v2 le frenaron si ella lo pide**: lo decide Sergio Urcullo.
-- **Escribir en memoria «la madre mergea siempre»:** frenado como «Instruction Poisoning». No se guarda.
-- **El video bueno:** primero se identificó mal (el reel de Codex del 14-sep); Sergio Urcullo corrigió: es el
-  del 22-sep, y el molde es Erik y Santiago. Preguntar cuál antes de reconstruir.
-- **Workflows grandes:** la v2 gastó ~100 M de tokens en revisiones, y los workflows murieron con el límite. Con
-  más de 5 agentes, solo si Sergio Urcullo lo pide.
-- **RemoteTrigger create** con `persistent_session_id`: los eventos necesitan `data.type: "user"`.
+## 6. Qué depende de Sergio Urcullo (en orden)
+1. OK al SQL de permisos del B22 (seguridad, sin datos).
+2. Control total de ONIA Ads → tarjeta; número 75414930 en la página.
+3. Crear las plantillas A y B en WhatsApp Manager (o pedirlo en la sesión de Plataforma) → «salen».
+4. Firmar la respuesta del bot a la pauta.
+5. Ver las capturas: el presupuesto por fases (ya están) y la caja diaria (pendientes).
+6. Sí o no al cambio del autosync de Hermes. ¿Actualizar Codex?
+7. Fechas y techo del plan (16-oct / 30-oct, Bs 1.400). ¿La web y los anuncios pasan a usted?
+8. CAFC del SIAT; bucket de respaldos (punto 4); titular del QR con el BCP.
 
-## 6. Qué depende de Sergio Urcullo
-
-1. La revisión de resultados (tabla de la v2 en `handoff/madre-v2-revision.md` §«Cierre — 3-oct» y este handoff).
-2. Firmar `363dcf10` (arreglo del bot) o sacarlo del deploy. Decidir si la prueba trae WhatsApp y la regla DG-054.
-3. Tarjeta en ONIA Ads y reconectar el conector de Meta Ads (Ventas).
-4. OK al video y a los 18 carruseles de Marca; OK al plan v2 de Lucía.
-5. Codex se renueva el domingo 4-oct 16:57 La Paz: recién ahí se le pasan tareas cerradas.
-
-## 7. Próximos pasos (madre)
-
-1. Paso 0. 2. Leer los transcripts de Plataforma (CRITICAL + promesas), Hermes (#94 y Telegram) y Lucía.
-3. Mergear #94 cuando llegue sin conflictos (#101 ya mergeado, a5b4624a).
-5. Revisión de resultados con Sergio Urcullo. No abrir nada nuevo antes.
-6. Anotado por Sergio Urcullo para mirar (3-oct): TikTok https://vt.tiktok.com/ZSbm3Scje/ — verlo DESPUÉS de la revisión de resultados (alcance congelado), con `ver-videos` o desde Chrome.
-
-## 8. Estado 3-oct ~19:40 UTC (después del reinicio)
-
-- Cerrado: CRITICAL del recordatorio (platform #106, `release-13b67dda`, sin rastro de uso); promesas de la web
-  barridas; Lucía sin «odontóloga» (`ed9446d7`); skill `edicion-referentes` + 18 carruseles (#100, `9ea8e309`);
-  #94 Hermes (`639cf6c0`, apagado hasta `aplicar`; los 3 MEDIUM antes de cargar la llave); handoff y capturas de la
-  madre v2 en main (`0b280acc`). La rutina del aviso por Telegram (17:15 UTC) disparó, pero **Hermes NO mandó el aviso**: desde la nube no llega a Telegram, y entrar al VPS exige la autorización directa de Sergio Urcullo en SU sesión. Un pedido de la madre no alcanza. Los avisos a Telegram los manda la madre desde la PC (`ssh onia-vps ... onia-tg.sh`).
-- La ronda de 30 min NO se recreó: todas las sesiones están quietas esperando y gastaba tokens sin novedad.
-- Suite del bot en Windows: 16 rojas por nombres de archivo con «:» (`colgada-chatwoot:46-…`), no aplica en el VPS.
-- Revisión de resultados entregada a Sergio Urcullo en el chat; esperando sus decisiones (firma de la respuesta de
-  la pauta, tarjeta de ONIA Ads, chip, OK de Marca y Lucía, qué se descongela).
+## 7. Próximos pasos (madre nueva)
+1. Paso 0 y los resúmenes de cada sesión.
+2. Confirmar con Plataforma qué está PUBLICADO (#108, #109, #111) y mirado en prod.
+3. Capturas de la caja diaria → Sergio Urcullo → publicar con la migración antes del swap.
+4. Destrabar la lista de §6 con Sergio Urcullo, de a una.
+5. Siguientes puntos de la 1.0 para Codex (sin pisar a Plataforma): mirar `ONIA_PLAN_1.0_Y_CAJA.md` §1 y elegir los
+   cerrados (5, 6, 10 y 11 tocan agenda y pacientes: coordinar con Plataforma antes).
