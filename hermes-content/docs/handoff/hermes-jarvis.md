@@ -15,10 +15,11 @@
 >   (cierra el pendiente 3 de abajo).
 > - **Sigue, en orden:**
 >   1. Revisión fuerte (2 revisores independientes) → arreglar lo que encuentren → CI verde del #138.
->   2. **La madre pone `ONIA_AUTOSYNC_MAIN=1` en su PC, FUERA del repo** (`C:\Users\PC\.claude\settings.json`
->      → `"env"`, o variable de usuario de Windows) y mergea el #138. Sin la variable no se pierde nada:
->      su rama se pushea y, si estaba en `main`, va a `claude/autosync-<máquina>`. Se verifica en el log
->      del Stop («main al día (fast-forward)»).
+>   2. **La madre pone `ONIA_AUTOSYNC_MAIN=1` en el `.claude/settings.local.json` de SU carpeta de
+>      onia-hermes** (`{"env": {"ONIA_AUTOSYNC_MAIN": "1"}}`; git lo ignora) y mergea el #138. No en la
+>      config de usuario ni en una variable de Windows: alcanzaría a cualquier sesión de la PC. Sin la
+>      variable no se pierde nada: su rama se pushea y, si estaba en `main`, va a
+>      `claude/autosync-<id de la sesión>`. Se verifica en el log del Stop («main al día (fast-forward)»).
 >   3. Recién después, con el «sí» de Sergio Urcullo: entorno «Pedidos de Hermes» sin variables, la
 >      rutina con el prompt NUEVO de §5 (el viejo, con `commit-tree`, ya no se entrega), la llave y
 >      `aplicar` por el workflow (§7 de abajo).

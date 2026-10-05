@@ -90,7 +90,7 @@ hermes-content/docs/recorrido/**/*.png
 # Configuración PERSONAL de Claude Code de cada máquina (5-oct-2026). Desde ese día el autosync solo
 # mueve main con ONIA_AUTOSYNC_MAIN=1, que es de la madre en la PC de Sergio Urcullo. Si ese permiso
 # viviera en un settings.local.json versionado, el autosync lo subiría y TODAS las sesiones lo tendrían.
-.claude/settings.local.json
+**/.claude/settings.local.json
 
 # Galeria unica de imagenes (29-sep): solo finales. Temporales de descarga y copias por carrusel, fuera.
 hermes-content/galeria/**/*.tmp

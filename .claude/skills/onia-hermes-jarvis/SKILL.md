@@ -122,8 +122,18 @@ CLI de Hermes.
   trailer `Claude-Session` de cada commit.
 - **El permiso de mover `main` no puede vivir en el repo.** `.claude/settings.local.json` no estaba en
   `.gitignore` (5-oct): si la madre lo hubiera puesto ahí, el `add -A` del autosync lo subía y todas las
-  sesiones tenían el permiso. Ahora está ignorado y `pedido-rama.test.mjs` lo verifica. En la PC va en
-  `~/.claude/settings.json` (`"env"`) o como variable de usuario de Windows.
+  sesiones tenían el permiso. Ahora `**/.claude/settings.local.json` está ignorado y `pedido-rama.test.mjs`
+  lo verifica. La madre lo pone en el `settings.local.json` de SU carpeta: la config de usuario o una
+  variable de Windows alcanzarían a cualquier sesión de la PC (revisión del 5-oct).
+- **El autosync arma los comandos de git SIN shell** (`execFileSync('git', args)`, 5-oct). Antes eran
+  cadenas para `execSync`, y una rama `x$(touch${IFS}/ruta)` —nombre válido para git— ejecutaba el
+  comando en la máquina de quien la abriera (la madre, al revisar la rama de otra sesión). Y la rama se
+  lee con `symbolic-ref` (ref completa): con un tag `main`, `--abbrev-ref` decía `heads/main` y el push
+  igual movía `refs/heads/main`.
+- **Lo rescatado sale de `main`** (5-oct): el autosync pushea a `claude/autosync-<id>`, deja la sesión
+  parada en esa rama y vuelve el `main` local a `origin/main`. Si quedaba en el `main` local, la primera
+  corrida CON permiso en ese clon lo publicaba sin PR. Una rama de rescate reescrita (rebase, amend) no
+  se fuerza: va a `claude/autosync-<id>-<sha>`.
 - **Una sección del SOUL se copia con un rango.** El `aplicar` viejo hacía `sed '/^## Su calendario/,$p'`:
   arrastraba TODO lo que viniera después. La sección de pedidos va ANTES de la del calendario, y
   cada copia termina en el próximo `---`.
@@ -185,7 +195,7 @@ CLI de Hermes.
   rama (`pedido/*`, `respuesta/*`): el tercer MEDIUM de la madre v2. Desde el 5-oct la rutina no tiene
   permiso (su entorno no tiene variables) y no mueve `main` con ningún nombre; el de la rama queda como
   segunda llave. Una sesión parada EN `main` sin permiso tampoco lo pushea: sus commits van a
-  `claude/autosync-<sesión>` (`pedido-rama.test.mjs`, 14 casos).
+  `claude/autosync-<sesión>` (`pedido-rama.test.mjs`, 20 casos).
 - **La respuesta de un pedido va FIRMADA** (5-oct, primer MEDIUM de la madre v2). `pedido-claude.sh` le
   da a cada pedido un sello de 32 hex que viaja solo en el disparo («Sello: …») y queda en
   `/var/lib/onia-pedidos/sellos/<id>` (600). La sesión responde con `scripts/loops/responder-pedido.sh

@@ -18,7 +18,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { mkdtempSync, writeFileSync, readFileSync } from "node:fs";
+import { mkdtempSync, writeFileSync, readFileSync, existsSync, mkdirSync, chmodSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -63,11 +63,12 @@ function sesion(rama, { env: extra = {}, sinCommitear = false, sinCambio = false
     git(clon, "add", ".");
     git(clon, "commit", "-qm", "feat: el cambio");
   }
-  const correr = () => spawnSync("node", [AUTOSYNC], { cwd: clon, env, encoding: "utf8" });
+  const correr = (mas = {}) => spawnSync("node", [AUTOSYNC], { cwd: clon, env: { ...env, ...mas }, encoding: "utf8" });
   const r = correr();
   const remota = (ref) =>
     spawnSync("git", ["rev-parse", "--verify", "-q", `refs/heads/${ref}`], { cwd: origin, env, encoding: "utf8" }).stdout.trim();
-  return { r, base, clon, git, correr, remota, cabeza: () => git(clon, "rev-parse", "HEAD"), mainRemoto: () => remota("main") };
+  return { r, base, dir, clon, git, correr, remota, cabeza: () => git(clon, "rev-parse", "HEAD"), mainRemoto: () => remota("main"),
+    ramaLocal: () => git(clon, "symbolic-ref", "--short", "HEAD") };
 }
 
 const RESCATE = `claude/autosync-${SESION}`;
@@ -158,4 +159,76 @@ test("el permiso de mover main no está en la configuración versionada", () => 
   assert.doesNotMatch(compartida, /ONIA_AUTOSYNC_MAIN|ONIA_LOOP_ID/);
   const r = spawnSync("git", ["check-ignore", "-q", ".claude/settings.local.json"], { cwd: RAIZ, encoding: "utf8" });
   assert.equal(r.status, 0, "settings.local.json (la config de cada máquina) tiene que estar en .gitignore");
+});
+
+// ── Revisión fuerte del 5-oct (dos revisores independientes) ──────────────────────────────────────
+
+test("lo rescatado sale de main: una corrida CON permiso después, en el mismo clon, no lo publica", () => {
+  const s = sesion("main", { sinCommitear: true });
+  assert.equal(s.remota(RESCATE), s.cabeza());
+  assert.equal(s.ramaLocal(), RESCATE, "la sesión quedó parada en su rama de rescate");
+  assert.equal(s.git(s.clon, "rev-parse", "refs/heads/main"), s.base, "el main local volvió a origin/main");
+  // Lo que no puede pasar es que el commit viaje SOLO, desde el main local, en la primera corrida con
+  // permiso en ese clon (antes del arreglo seguía en el main local y se publicaba sin PR).
+  const s2 = sesion("main", { sinCommitear: true });
+  s2.git(s2.clon, "switch", "-q", "main");
+  const r2 = s2.correr({ ONIA_AUTOSYNC_MAIN: "1" });
+  assert.equal(r2.status, 0, r2.stdout + r2.stderr);
+  assert.equal(s2.mainRemoto(), s2.base, "el main local no tenía el commit rescatado: no hay nada que publicar");
+});
+
+test("si la sesión reescribe su rama de rescate (rebase o amend), no se fuerza ni se pierde: va a otra rama", () => {
+  const s = sesion("main", { sinCommitear: true });
+  const primero = s.cabeza();
+  writeFileSync(join(s.clon, "cambio.md"), "reescrito\n");
+  s.git(s.clon, "commit", "-qa", "--amend", "-m", "feat: el cambio, reescrito");
+  const r = s.correr();
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  const sha = s.git(s.clon, "rev-parse", "--short=8", "HEAD");
+  assert.equal(s.remota(`${RESCATE}-${sha}`), s.cabeza(), "el trabajo reescrito quedó en el remoto");
+  assert.equal(s.remota(RESCATE), primero, "la rama de antes no se forzó");
+  assert.equal(s.mainRemoto(), s.base);
+});
+
+test("un nombre de rama con $(…) es dato: no se ejecuta", () => {
+  const rama = "claude/x$(touch${IFS}PWNED)";
+  const s = sesion(rama);
+  assert.equal(s.r.status, 0, s.r.stdout + s.r.stderr);
+  assert.equal(existsSync(join(s.clon, "PWNED")), false);
+  assert.equal(existsSync(join(s.dir, "PWNED")), false);
+  assert.equal(s.remota(rama), s.cabeza(), "la rama se pusheó con su nombre tal cual");
+  assert.equal(s.mainRemoto(), s.base);
+});
+
+test("con un tag llamado `main`, parada en main sin permiso, main del remoto no se mueve", () => {
+  const dir = sesion("main", { sinCambio: true });
+  dir.git(dir.clon, "tag", "main");
+  writeFileSync(join(dir.clon, "cambio.md"), "con un tag ambiguo\n");
+  const r = dir.correr();
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.equal(dir.mainRemoto(), dir.base);
+  assert.equal(dir.remota(RESCATE), dir.cabeza());
+});
+
+test("CON permiso y parada en main, si la app no compila, main no se pushea: va a la rama de rescate", () => {
+  const s = sesion("main", { env: { ONIA_AUTOSYNC_MAIN: "1" }, sinCambio: true });
+  // Un npx que siempre falla: así no se descarga nada y tsc «no compila».
+  const bin = join(s.dir, "bin");
+  mkdirSync(bin);
+  writeFileSync(join(bin, "npx"), "#!/usr/bin/env bash\necho 'error TS2307: Cannot find module' ; exit 2\n");
+  chmodSync(join(bin, "npx"), 0o755);
+  mkdirSync(join(s.clon, "web-factory", "apps", "site"), { recursive: true });
+  writeFileSync(join(s.clon, "web-factory", "apps", "site", "pagina.ts"), "import x from './no-existe';\n");
+  const r = s.correr({ ONIA_AUTOSYNC_MAIN: "1", PATH: `${bin}:${process.env.PATH}` });
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.match(r.stdout, /main BLOQUEADO: apps\/site no compila/);
+  assert.equal(s.mainRemoto(), s.base);
+  assert.equal(s.remota(RESCATE), s.cabeza(), "el trabajo no se perdió");
+});
+
+test("ningún settings.local.json está versionado, en ninguna carpeta", () => {
+  const r = spawnSync("git", ["ls-files", "--", "*settings.local.json"], { cwd: RAIZ, encoding: "utf8" });
+  assert.equal(r.stdout.trim(), "");
+  const sub = spawnSync("git", ["check-ignore", "-q", "web-factory/apps/onia-platform/.claude/settings.local.json"], { cwd: RAIZ, encoding: "utf8" });
+  assert.equal(sub.status, 0, "también en las subcarpetas con su propio .claude/");
 });

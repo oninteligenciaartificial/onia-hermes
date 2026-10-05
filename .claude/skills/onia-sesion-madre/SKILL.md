@@ -149,12 +149,14 @@ Cómo contestar: <en tu transcript | SendMessage a «Sesión madre de Onia» | r
 ## El permiso de mover `main` (5-oct)
 
 - Desde el 5-oct el hook Stop solo mueve `main` con permiso (Sergio Urcullo: «sí, la madre sigue directo»).
-  La madre lo tiene con **`ONIA_AUTOSYNC_MAIN=1` FUERA del repo**: en `C:\Users\PC\.claude\settings.json`
-  (`"env": {"ONIA_AUTOSYNC_MAIN": "1"}`) o como variable de usuario de Windows. Nunca en
-  `.claude/settings.json` ni en un `settings.local.json` versionado: se lo daría a todas las sesiones.
+  La madre lo tiene con **`ONIA_AUTOSYNC_MAIN=1` en el `.claude/settings.local.json` de SU carpeta de
+  onia-hermes** (`{"env": {"ONIA_AUTOSYNC_MAIN": "1"}}`), que git ignora desde el 5-oct. Así vale solo para las
+  sesiones abiertas en esa carpeta. Nunca en `.claude/settings.json` (se lo daría a todas las sesiones, también
+  a las de la nube), ni en `C:\Users\PC\.claude\settings.json` o una variable de Windows (alcanzaría a
+  cualquier sesión de la PC; revisión del 5-oct).
 - Se verifica en el log del Stop: con permiso dice «main al día (fast-forward)»; sin permiso, «main no se toca».
 - Sin el permiso no se pierde nada: la rama se pushea igual, y si la madre estaba EN `main`, sus commits quedan
-  en `claude/autosync-<máquina>`.
+  en `claude/autosync-<id de la sesión>` y la sesión queda parada en esa rama.
 - Las sesiones de la nube no lo tienen: su trabajo llega a `main` por PR, que revisa la madre (v2) y mergea la
   madre o Sergio Urcullo.
 
