@@ -23,7 +23,8 @@ description: "Invocar para CUALQUIER trabajo del carril Ventas y pauta de Onia: 
 | Cómo se consiguen clientes, la campaña, la lista de encendido | `hermes-content/docs/ONIA_ADQUISICION_Y_PAUTA.md` (§5.8, §5.8.1, §5.9) |
 | Prospectos dentales y registro de objeciones | `hermes-content/docs/ONIA_PROSPECTOS_DENTAL_SCZ.md` (§6, §7) |
 | Prospectos de estética, importadora, comercio y servicios | `hermes-content/docs/ONIA_PROSPECTOS_OTROS_RUBROS_SCZ.md` |
-| Leads que ya escribieron y sus borradores | `hermes-content/docs/ONIA_LEADS_ESPERANDO.md` §3 |
+| Leads que ya escribieron: quiénes son | `hermes-content/docs/ONIA_LEADS_ESPERANDO.md` (§3.1: las preguntas de «F» contra el catálogo) |
+| Qué se les manda (plantillas A/B, respuestas, días 3-7-14) | `hermes-content/sales-kit/SEGUIMIENTO-LEADS.md` |
 | Guion de demo de 20 minutos por rubro | `hermes-content/sales-kit/02-GUION-DEMO.md` |
 | Precios | `onia-platform/lib/subscription-plans.ts` (`DEFAULT_PLAN_AMOUNTS`); límites en `lib/plan-catalogo.ts` |
 
@@ -353,6 +354,13 @@ Trampas pagadas armando v3 (2-oct):
   cada una, `usage-run.mjs`).
 - **Un borrador viejo puede quedar en contra del catálogo.** El de «F» del 1-oct contestaba «sí» al tratamiento a
   medias, y el catálogo lo prohibió el 2-oct. Antes de mandar un borrador guardado, se lo compara de nuevo.
+- **Un playbook nuevo no borra el borrador viejo: hay que sacarlo (5-oct).** El playbook del 3-oct reemplazó los
+  mensajes del 1-oct, pero `ONIA_LEADS_ESPERANDO.md` §3 los siguió mostrando como «esperan el OK» dos días más. Al
+  reemplazar un texto, el viejo se borra en el mismo commit; queda en el historial de git. Antes de reescribir un
+  borrador, buscar si otro doc ya lo reemplazó: `grep -rn '<nombre del lead>' hermes-content/sales-kit/`.
+- **El gate del kit lee cualquier «Bs N» como precio al cliente (5-oct).** El costo interno «≈ Bs 17» del playbook
+  dejó en rojo `npm run test:venta-honestidad` en `main`. Un costo propio va en USD, que es lo que cobra Meta; el
+  cambio del banco sigue sin medir. Después de tocar `sales-kit/`, correr ese test.
 
 ## 6. Qué bloquea la nube (y qué no)
 
