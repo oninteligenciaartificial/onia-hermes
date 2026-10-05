@@ -7,6 +7,29 @@ marca el plan de cada una. No construye, no publica, no mergea.
 **Cómo revisa:** `ListAgents` → `RemoteTrigger get_run_log` de cada sesión de la nube → `git` de su rama y PR →
 verificación propia de lo que afirma (se corre, se mira). Ids y canales: skill `onia-sesion-madre`.
 
+## ▶ VIGENTE — 5-oct: tareas que la madre (nube) le delega a la madre v2
+
+**Rol nuevo (Sergio Urcullo, 5-oct):** respaldo de la madre, segunda revisión y **brazo local**. La madre ahora corre
+en la NUBE (`session_01BZwYEL4eSUkdPWL36ibLkd`) y no puede escribirle ni leer a una sesión local (medido: skill
+`onia-sesion-madre`, «Cómo se manda»). La v2 le contesta con `send_message` (MCP `claude-code-remote`) a ese id.
+
+En orden:
+1. **Preparar Codex en la PC.** `codex --version`; si sigue en 0.139, pedirle el OK a Sergio Urcullo para
+   `npm i -g @openai/codex`. Hasta entonces, `-m gpt-5.5`. Un **clone completo por tarea** (no worktree: con worktree
+   el `.git` queda fuera del sandbox y Codex no puede commitear):
+   `git clone https://github.com/oninteligenciaartificial/onia-platform C:/dev/proyectos/onia-platform-codex-<id>` y
+   `node_modules` por junction desde `C:/dev/proyectos/onia-platform`.
+2. **Lanzar la cola** de `codex-relevo.md` (un archivo por tarea en `codex-tareas/`), de a una:
+   `codex exec -m gpt-5.5 --full-auto -C <clone> - < <archivo de la tarea>`. Después: mirar el diff, correr vos
+   misma `npx vitest run <tests de la tarea>`, commit si Codex no lo hizo (gate: si un test falla, no se commitea),
+   push de la rama `codex/*` y PR en borrador en onia-platform. Avisarle el número de PR a la madre (nube).
+3. **Segunda revisión** de los PRs de Codex y Plataforma: 1 lente; 2 lentes solo si toca producción, plata, el VPS o
+   `git-autosync.js`. Veredicto por mensaje con severidad y `archivo:línea`. El merge lo hace Plataforma o Sergio
+   Urcullo (a la v2 se lo frena el control de permisos).
+4. **Lo que exige la PC** cuando lo pida la madre: capturas con el Chrome logueado (Meta, Biblioteca de Anuncios),
+   videos de IG/TikTok que la nube no puede bajar.
+5. **Si la madre (nube) se queda sin tokens:** tomar la orquestación con `madre-local.md` + este archivo.
+
 ## Ronda 1 — 2-oct ~13:20 UTC (main = `84fd0c9e`)
 
 Etapa vigente: **Etapa 1 — 5 clínicas dentales pagando, Bs 3.750/mes** (`ONIA_ESTRATEGIA_DE_EMPRESA.md` §7).
