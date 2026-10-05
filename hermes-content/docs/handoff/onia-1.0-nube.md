@@ -144,13 +144,17 @@ Desarrollar y publicar Onia Platform 1.0 hasta cobrar al primer cliente. Qué sa
   > Negocio verificado, WABA aprobada, calidad OK y método de pago activo. La necesitamos para el código de un solo uso del
   > alta en app.onia.com.bo. ¿Qué restricción tiene la cuenta y cómo la habilitamos?
 - ~~OK a la web v1 y a los legales 1.3~~: dado el 2-oct, publicado.
-- **OK al presupuesto por fases (P2)**: capturas enviadas el 3-oct. Destraba la publicación de P1, P2 y P3 (§3).
+- **OK al presupuesto por fases (P2)**: las capturas no le llegaron; quedaron en `hermes-content/docs/cola/capturas-presupuesto-fases/` (3-oct). Destraba la publicación de P1, P2 y P3 (§3).
 - **Prueba con el chip (3-oct):** en la org «ZZ QA Clínica Chip»: (1) confirmar el correo de `+qachip` en el Gmail de
   Onia, (2) Otorgar `addon.whatsapp` en `/admin/organizations/cmuqzov3y000001mzmrcq0i2t/capacidades`, (3) conectar el
   chip en `/settings/chatbot`, (4) avisar «conectado». Después: paciente con SU número personal, cita a 1h30-2h30, tocar
   los 3 botones. Si sale bien, el agente de WhatsApp queda como está en la web (decisión del 3-oct).
 - **Demo:** confirmar el correo de `+demo`, «Recuperar acceso» para elegir su clave, Otorgar `module.agents` sin fecha
   (`/admin/organizations/cmur09d75000601mz12vg59qn/capacidades`), y después de las 07:00 una captura de Pendientes.
+- **Plantillas A y B para los leads de agosto** (`seguimiento_pedido_acceso`, `seguimiento_consulta_whatsapp`, MARKETING,
+  texto aprobado el 3-oct): crearlas desde la nube lo frenó el control de permisos («transacción real») porque la orden llegó
+  por la madre. Las crea Sergio Urcullo en WhatsApp Manager o lo pide él en la sesión. NO se mandan hasta que Ventas arme
+  el seguimiento.
 - **Tablero interno:** abrir `app.onia.com.bo/dashboard` como superadmin y mandar captura (la nube no puede entrar).
 - **SIAT:** (1) el CAFC del piloto con captura, (2) llamar al 800 10 3444: ¿el 9473 se autoriza con el formato actual o
   con el de la Ley 1733?, ¿la prórroga de 60 días se suma al 04-nov o corre desde que se pide?, (3) decidir si la
@@ -181,6 +185,12 @@ tabla sin acción). Nada se construye sin el filtro de Etapa 1. Orden por impact
 1. Con el OK de Sergio Urcullo a P2: PR #108 (onia-platform) fuera de borrador → merge → `publicar.sh` → MIRAR en prod la
    lista «A medias», la ficha con «Deuda», «Mañana sin confirmar» y el presupuesto. Sin OK a P2: sacar sus commits
    (`01db1edf` feat y `c3a74c54` fix, SHAs nuevos tras reescribir la rama) y publicar P1+P3.
+1b. **Después de P1-P3 (no antes):** puntos 13 y 14 de `ONIA_PLAN_1.0_Y_CAJA.md` (`fc4dbffb`): 7 días de gracia antes de
+   cortar un plan vencido + botón «no renovar», y guardar la aceptación de los términos con fecha y versión. Base:
+   `research/ONIA_PAGO_AUTOSERVICIO_AUDITORIA.md`. Orden de la madre del 3-oct.
+1c. **Textos a pacientes de USTED** (OK de Sergio Urcullo, 3-oct, por la madre): `recordatorio_cita`, agentes, respuestas
+   a los botones y correos al paciente. Tiene que salir ANTES de la prueba del chip: la plantilla se crea en la WABA del
+   negocio al conectar y, una vez aprobada, cambiarla la manda a revisión de Meta.
 2. Demo: después de la corrida de las 07:00, mirar Pendientes de la demo (captura de Sergio Urcullo o de la madre) →
    barrer la línea del catálogo §8 → avisar a la madre v1 (D4).
 3. Chip: con «conectado», verificar plantilla `recordatorio_cita` aprobada, cita de prueba, tocar los 3 botones, MIRAR el
