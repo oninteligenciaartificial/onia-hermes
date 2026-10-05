@@ -33,8 +33,9 @@ Lo de abajo (§0-§7) sigue valiendo; esto es lo nuevo.
    de la 1.0 y lo que alcance), con el estado medido de los 15 puntos y la lista completa de pendientes de Sergio Urcullo
    con el cómo. **Si a las 22:30 UTC no está en `main`, se perdió:** se rehace desde §7 de `onia-1.0-nube.md` y
    `research/ONIA_PAGO_AUTOSERVICIO_AUDITORIA.md`.
-2. Análisis del TikTok `https://vt.tiktok.com/ZSbm3Scje/` (mandado el 3-oct, nunca analizado) →
-   `references/video-intake/2026-10-05-tiktok-ZSbm3Scje.md` (mensaje, tema, edición).
+2. ✅ Hecho: el TikTok `https://vt.tiktok.com/ZSbm3Scje/` (mandado el 3-oct, nunca analizado) está en
+   `references/video-intake/2026-10-05-tiktok-ZSbm3Scje.md`. Qué tomar: la serie «Día N/7» con el cierre «Mañana» y las
+   tarjetas que se arman con el dato.
 
 **Sesiones al 21:10 UTC** (ids en la skill `onia-sesion-madre`):
 - **Plataforma:** trabajando (prueba del chip + punto 1).
