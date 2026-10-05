@@ -19,6 +19,96 @@
 - **Presencial:** se convoca cuando la encuesta de la semana 2 dé un mínimo de confirmados
   (propuesto: 15; falta el OK de Sergio Urcullo).
 
+## Auditoría gratis y llamada 1 a 1: el paso que convierte (propuesta 5-oct, falta el OK de Sergio Urcullo)
+
+> Orden del negocio de Sergio Urcullo, 3-oct: *«marca personal + auditorías + llamadas 1 a 1 + comunidad»* va primero
+> (`ONIA_PLAN_1.0_Y_CAJA.md` §2). Hasta el 5-oct la auditoría no estaba definida en ningún lado. Lo que existía era la
+> agenda `cal.com/sergiourcullo/20min`, con el título «Llamada 1 a 1» (mirado el 5-oct).
+
+**Recomendación (opción A): una auditoría para dueños de clínicas dentales de Santa Cruz, no una auditoría de IA para
+cualquiera.**
+
+**Por qué:**
+1. Para 5 clientes hacen falta unas 20 demos, y Meta paga unas 3 (plan §2). Las otras 17 salen de canales gratis. Cada
+   llamada tiene que ser con alguien a quien Onia le puede vender hoy.
+2. La audiencia de la marca personal son jóvenes aficionados a la IA (§Audiencia), y comercio y servicios esperan la
+   factura del SIN. Una «auditoría de IA» abierta llenaría la agenda de gente que hoy no puede comprar, y lo escaso son
+   las horas de Sergio Urcullo.
+3. La pregunta que vende es la 4 del cliente ideal: *«¿cuántos pacientes tienen un tratamiento empezado y no
+   volvieron?»* (`ONIA_CLIENTE_IDEAL.md` §9). La auditoría convierte esa pregunta en el centro de la llamada.
+
+**La opción B, descartada:** una auditoría de IA para cualquier negocio. Atrae más gente desde la marca personal, pero
+casi nadie de esa gente puede comprar Onia hoy.
+
+### Qué es
+- **20 minutos por videollamada, gratis**, con el dueño o la dueña de la clínica.
+- **Con qué se va:**
+  - el número de pacientes con tratamiento a medias, o la certeza de que no lo sabe;
+  - cuánto representa eso con sus aranceles;
+  - tres acciones que puede hacer mañana, use o no un sistema.
+- **No se promete:** que Onia recupera a esos pacientes. El detector existe, pero hoy no encuentra a nadie (catálogo,
+  «NO se puede decir»). Con la 1.0 publicada y mirada, eso cambia.
+
+### Guion de los 20 minutos
+1. **0-3 min:** su clínica en una frase: cuántos profesionales, quién agenda y cómo.
+2. **3-10 min:** las preguntas 3, 4 y 5 del cliente ideal, en ese orden. La 4 se cuenta juntos: el tratamiento más
+   común, cuántos lo empezaron en los últimos 3 meses y cuántos tienen la próxima cita.
+3. **10-15 min:** la cuenta en voz alta: pacientes sin volver × lo que les falta pagar del tratamiento.
+4. **15-18 min:** las tres acciones, ninguna atada a Onia:
+   - la lista de tratamientos abiertos, sacada del cuaderno o del Excel;
+   - un mensaje de WhatsApp para los que no volvieron (el texto de abajo);
+   - la próxima cita se agenda antes de que el paciente se levante del sillón.
+5. **18-20 min:** el siguiente paso.
+   - **Si tiene de 2 a 6 profesionales y recepción:** se le ofrece ver Onia en pantalla con una clínica de ejemplo,
+     mostrando solo lo que está vivo según `ONIA_CATALOGO_DE_VENTA.md`.
+   - **Si no califica:** se queda con las tres acciones y nada más.
+
+**El mensaje que se le pasa a la clínica** (de la clínica al paciente, de usted; el texto es el recurso, así que existe
+antes de ofrecerlo):
+> Hola {nombre}, le escribimos de {clínica}. Su tratamiento de {tratamiento} quedó a mitad y queremos que lo termine
+> bien. ¿Le reservo un horario esta semana? Tenemos {día y hora} o {día y hora}.
+
+### Texto para cal.com (de usted; lo crea Sergio Urcullo o la madre con Chrome, en ~2 min)
+- **Evento nuevo**, al lado de «Llamada 1 a 1»:
+  - título «Auditoría gratis de su clínica»;
+  - enlace `cal.com/sergiourcullo/auditoria`;
+  - 20 minutos, Google Meet.
+- **Descripción:** «Para dueños de clínicas dentales de Santa Cruz. En 20 minutos vemos juntos cuántos pacientes con
+  un tratamiento empezado no volvieron a agendar y cuánto representa eso. Se va con tres acciones concretas para
+  recuperarlos, use o no un sistema.»
+- **Dos preguntas al reservar** (obligatorias, de opción):
+  1. «¿Cuántos profesionales atienden en su clínica?»: 1 · 2 a 3 · 4 a 6 · más de 6.
+  2. «¿Cómo llevan hoy la agenda?»: cuaderno · Excel · WhatsApp · otro sistema.
+  Así se sabe antes de la llamada si califica. La pregunta 4 NO va en el formulario: es la que vende y se hace en vivo.
+
+### Dónde va el enlace (cada canal, su texto)
+- **Mensajes 1 a 1 a clínicas** (Ventas y pauta: los 7 leads, los 20 prospectos y las respuestas a la pauta). Reemplaza
+  a «una llamada de 20 minutos con una clínica de ejemplo» de `sales-kit/SEGUIMIENTO-LEADS.md`. Lo decide esa sesión
+  con Sergio Urcullo; acá queda el texto:
+  > Le ofrezco una auditoría gratis de 20 minutos: vemos juntos cuántos pacientes con un tratamiento empezado no
+  > volvieron y cuánto representa. Si le sirve, elija el horario acá: cal.com/sergiourcullo/auditoria
+- **Grupo de la comunidad (voseo):** la comunidad no es el cliente, pero conoce clientes. Va como pedido de referido, una
+  vez, en un aviso de lun, mié o vie:
+  > ¿Conocés a alguien con una clínica dental en Santa Cruz? Le hago una auditoría gratis de 20 minutos: vemos cuántos
+  > pacientes dejaron un tratamiento a medias y cuánto le cuesta. Pasale este link: cal.com/sergiourcullo/auditoria
+- **Comentario o mensaje directo de un dueño de clínica** en su contenido: el mismo texto de los mensajes 1 a 1.
+- **La bio de Instagram no cambia:** sigue con OnIA primero y Comunidad después. Su audiencia no es de clínicas, y un
+  link más es un paso más.
+
+### La llamada 1 a 1 de la comunidad
+- Sigue igual, en `cal.com/sergiourcullo/20min` («Llamada 1 a 1»), para los miembros: dudas de IA, proyectos y
+  orientación.
+- **Cupo propuesto: 2 por semana** (límite de reservas por semana en cal.com). Así no se come las horas de las
+  auditorías. Falta el OK de Sergio Urcullo.
+
+### Cómo se mide
+- Una fila por llamada en el registro de leads de Ventas y pauta (`sales-kit/SEGUIMIENTO-LEADS.md`), con:
+  - el canal de donde vino;
+  - si calificó;
+  - el número de la pregunta 4;
+  - si pasó a ver Onia.
+- Cada 10 auditorías se mira cuántas pasaron a ver Onia. El plan supone un 25 % de cierre después de esa demo.
+
 ## Evidencia (2026-08-31, medida en vivo)
 
 **IG de Sergio (45 posts, 427 seg):** lo personal/humor aplasta a las listas —

@@ -6,7 +6,52 @@
 > Última escritura: **2026-09-30 ~02:50 UTC**, en el cambio de sesión.
 > Reemplaza a `HIGGSFIELD-LUCIA-SYSTEM-2026-09-22.md`, que queda como historia.
 
-## ▶ ESTADO VIGENTE — 2-oct-2026 ~14:00 UTC (lo de abajo es historia)
+## ▶ ESTADO VIGENTE — 5-oct-2026 (cambio de sesión madre; lo de abajo es historia)
+
+**Sesión:** `session_01Whdadt8NdnYbZoyum1bRX6`, rama `claude/trusting-dirac-wjkua1`. Todo lo de abajo está en `main`; el
+último PR mergeado es el #118.
+
+**En `main` y verificado (nada publicado en Instagram):**
+- **Plan v3** (`cola/lucia-diario/PLAN.md`):
+  - los 5 rubros del alta, empujados en el orden dental → importadora → el resto;
+  - **D1 decidido** (3-oct): ambo sí, como vestuario; nunca se identifica como odontóloga.
+- **Kit sobre los guiones de Sergio Urcullo** (`references/modelos/lucia/GUIONES-LUCIA-KIT.md`):
+  - K1 · Humo vs. real;
+  - K2 · Recepción a las 8;
+  - K3 · Sin programador, con el clip ya pagado (0 cr);
+  - K4 · Las reglas de la recepción, en versión corta.
+- **Material generado con su OK** (3-oct): 7 fotos y 3 clips en `references/modelos/lucia/v4/kit/`.
+  - Cara entre 0,81 y 0,85; el ambo igual al maniquí; 5 dedos en el clip de K4.
+  - Para revisar: `kit-fotos-hoja.jpg` y `kit-clips-preview.mp4`. El detalle está en `v4/PROCEDENCIA.jsonl` (fila
+    `kit_lucia_generacion`).
+- **Reels de referencia:** `video-intake/2026-10-04-reels-para-lucia.md` (@barbuprimeia, @mindshft.ai, @imagineartofficial
+  y @ramiro.cubria) y `MANUAL-PATRONES-INFLUENCERS-IA.md` § 2-bis (@soy_aria_cruz).
+- **Gasto en Higgsfield, octubre: 52,5 de 150 cr.**
+
+**Listo para publicar: NINGÚN reel terminado todavía.**
+- K1, K2 y K4 tienen todo lo generado, pero la mitad de cada pieza es la **pantalla REAL de Onia**, y no hay cuenta
+  demo. Pedida a la madre el 1-oct.
+- K3 también depende de esas pantallas.
+- L02 («Este video no fue grabado») está editado y espera el OK de Sergio Urcullo.
+
+**Espera de Sergio Urcullo:**
+- **D2:** Reel primero.
+- **D3:** WhatsApp, todavía no.
+- **D4:** la voz de Marcela tiene acento colombiano; la recomendación es sin voz.
+- **D5:** el canon de 10 datos.
+- **D6:** «Comentá DEMO». Hay cuatro reels con evidencia de que funciona.
+- Mirar la hoja de fotos y los clips del kit.
+- Conectar `@lucia.antelo.oficial` y activar «Perfil generado con IA».
+
+**Riesgos:**
+- **@mindshft.ai vende otro avatar IA llamado «Lucía»** que esconde que es IA. La cara es otra (0,07–0,10), así que la
+  colisión es solo de nombre. Siempre «Lucía Antelo», y está pendiente reservar el handle en las demás redes.
+- **Los dedos en Kling:** se miran cuadro por cuadro.
+- **El folleto con letra** en K4 · 4: se recorta al editar.
+- **El hook Stop** (`git-autosync.js`) empuja a `main` sin revisión. Hay que estacionar el checkout en `main` mientras
+  un PR espera.
+
+## ▶ ESTADO — 2-oct-2026 ~14:00 UTC (historia)
 
 **Sesión:** la misma (`session_01Whdadt8NdnYbZoyum1bRX6`, rama `claude/trusting-dirac-wjkua1`). Los PR #78 y #82
 están mergeados. Este trabajo va en un PR nuevo.
