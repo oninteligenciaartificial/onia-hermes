@@ -158,6 +158,28 @@ escribirle, con el mensaje listo, y nada sale sin que vos lo apruebes. El record
 
 ---
 
+## ✅ Material generado (3-oct, con el OK de Sergio Urcullo)
+
+Todo está en `references/modelos/lucia/v4/kit/` y el detalle (jobs, puntajes, veredictos) en `v4/PROCEDENCIA.jsonl`, fila
+`kit_lucia_generacion`. Para revisar de un vistazo: `kit-fotos-hoja.jpg` y `kit-clips-preview.mp4`.
+
+| Toma | Archivo | Identidad | Notas |
+|---|---|---:|---|
+| K1 · 1 | `k1-1-recepcion-celular-4afffb96.jpg` | 0,808 | Es además la prueba de ropa: el ambo coincide con el maniquí |
+| K1 · clip | `k1-clip-mira-camara-e470ef4f.mp4` | 0,68–0,79 | Las caras son chicas (~118 px) y se miraron: es ella |
+| K2 · 1 | `k2-1-cafe-mostrador-3e05cfd0.jpg` | 0,829 | — |
+| K2 · 2 | `k2-2-agenda-papel-1422fa94.jpg` | — | Sin persona; la letra de la agenda no se lee |
+| K2 · clip | `k2-clip-deja-cafe-83130c4a.mp4` | 0,70–0,79 | Deja el café sin tomarlo |
+| K4 · 1 | `k4-1-saluda-eddca486-recorte.jpg` | 0,81 | Recortada por encima del mostrador. La primera versión se descartó por un letrero inventado en una torre |
+| K4 · clip | `k4-clip-cuenta-dedos-338b751f.mp4` | 0,73–0,81 | 5 dedos en los 9 cuadros revisados del conteo |
+| K4 · 3 | `k4-3-cafe-teclado-186c82f0.jpg` | 0,841 | — |
+| K4 · 4 | `k4-4-cuerpo-entero-cb86ea10.jpg` | 0,851 | Hay un folleto chico con letra en el borde izquierdo: se recorta al editar |
+| K4 · 5 | `k4-5-senala-342c0ab5.jpg` | 0,835 | El monitor no muestra pantalla |
+
+- **Gasto:** 30,5 cr (29,5 aprobados más 1 por rehacer K4 · 1). Octubre va **52,5 de 150 cr**.
+- **Lo que falta para armar los reels:** las pantallas REALES de Onia, que salen de la cuenta demo. Se editan con
+  `editor-videos`.
+
 ## Totales y lo que falta
 
 | Pieza | Créditos |

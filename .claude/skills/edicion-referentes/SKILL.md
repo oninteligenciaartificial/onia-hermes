@@ -1,6 +1,6 @@
 ---
 name: edicion-referentes
-description: Invocar ANTES de editar cualquier video NUEVO de Sergio Urcullo (talking head vertical de marca personal) desde el 3-oct-2026. Replica TAL CUAL el montaje de Santiago Muñoz (@sanmunoz.ia) y de Erik Taveras (@eriktaveras), y para los repos de GitHub el de @pabloinpublic, medido reel por reel con evidencia (reel + segundo). Trae una receta por referente, un script por receta que edita desde bruto + cutplan + transcript + storyboard, cómo hay que grabar para que salga igual y las trampas ya pagadas. editor-videos sigue siendo el motor de corte, transcripción y regla de oro.
+description: Invocar ANTES de editar cualquier video NUEVO de Sergio Urcullo (talking head vertical de marca personal) desde el 3-oct-2026. Replica TAL CUAL el montaje de Santiago Muñoz (@sanmunoz.ia) y de Erik Taveras (@eriktaveras), para los repos de GitHub el de @pabloinpublic y, sin cara, el boceto → animación de @theaigeekk, medido reel por reel con evidencia (reel + segundo). Trae una receta por referente, un script por receta que edita desde bruto + cutplan + transcript + storyboard, cómo hay que grabar para que salga igual y las trampas ya pagadas. editor-videos sigue siendo el motor de corte, transcripción y regla de oro.
 ---
 
 # Edición de referentes: Santiago Muñoz y Erik Taveras, TAL CUAL
@@ -36,6 +36,7 @@ description: Invocar ANTES de editar cualquier video NUEVO de Sergio Urcullo (ta
   **Erik**: tarjetas de datos sobre el pecho, sellos y karaoke de 3 palabras. Si dudás, preguntale a Sergio Urcullo.
 - **Repos de GitHub (R01-R07, G04, G10 y los cortes verticales de G11): molde Pablo** (abajo). Lo fijó la madre el
   3-oct con un reel que mandó Sergio Urcullo.
+- **Sin cara ni voz, «dibujé esto → así quedó»: molde Boceto** (abajo). Reel que mandó Sergio Urcullo el 4-oct.
 - **No cambia la regla de oro de `editor-videos`:** tabla de cortes + preview 360p ANTES de cortar. Cuando el script
   aprieta pausas por encima del cutplan aprobado, escribe una tabla aparte (`--plan` en Santiago,
   `trabajo/tabla-cortes.md` en Erik) que también se muestra.
@@ -115,6 +116,37 @@ probarlo.
 ⚠ **Largo:** su reel dura 21 s con 3 herramientas. Nuestros guiones R y G hablan de UN repo en ~60 s (170-177
 palabras, medido el 3-oct). La edición toma el layout y el ritmo; acortar a 21 s es cambiar el guion, y eso lo decide
 Sergio Urcullo.
+
+## Molde Boceto (@theaigeekk), sin cara: el boceto a mano y al lado lo que salió
+
+Fuente: `hermes-content/references/video-intake/2026-10-04-reel-theaigeekk-dibujo-a-animacion.md` (reel `DeDZx1BopXS`,
+12 s, 1.791 comentarios sobre 1.492 likes; mirado en 12 cuadros a 1 fps, los primeros 3 s a 4 fps, cortes por
+detección de escena y audio medido). No es un talking head: se arma con **HyperFrames** (skill `hyperframes`), no con
+`santiago.py`.
+
+| Qué | Cómo |
+|---|---|
+| Lienzo | 1080x1920 negro. |
+| Izquierda (≈30 % del ancho) | Etiqueta «Boceto» y la FOTO del dibujo a mano de esa escena. Cambia junto con la derecha. |
+| Derecha (≈55 % del ancho) | La animación de esa escena, a la misma altura, con una etiqueta fija arriba (la herramienta que la hizo). |
+| Abajo, fijo desde el cuadro 0 | «Comentá PALABRA», con la palabra en el color de acento. |
+| Ritmo | Una escena nueva cada 1,5-2 s. Las transiciones van DENTRO de la animación (zoom-through, anillo, barrido). Un solo corte seco, el cambio de fondo, cerca del final. |
+| Primeros 3 s | Movimiento en el cuadro 0 (nada de cuadro vacío). Título escrito a los 0,5 s y elementos entrando al segundo 1. |
+| Sonido | Solo música pareja (−14 LUFS), sin voz. |
+| Largo | 12 s. |
+
+**Cómo se hace de verdad:**
+1. Sergio Urcullo dibuja 4 a 6 escenas en papel y les saca foto.
+2. Claude Code arma la composición de HyperFrames con esas escenas, y se renderiza local, gratis.
+3. El video monta las dos cosas lado a lado. La etiqueta de arriba dice la herramienta REAL («Claude Code»), no
+   «Opus 5.5 en Higgsfield».
+
+**No se copia:**
+- el «mató a los editores», que es mensaje de marca del programa de creadores de Higgsfield;
+- un boceto inventado después de la animación: el dibujo tiene que ser el de antes.
+
+**Estado (4-oct):** sin prueba todavía. La primera se hace con un boceto real de Sergio Urcullo, y es una pieza nueva:
+la aprueban él o la madre.
 
 ## Los scripts
 

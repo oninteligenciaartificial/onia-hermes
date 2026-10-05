@@ -86,7 +86,7 @@ tenemos, no abogada, de todo». La lista no se arma de memoria: sale de
 | 8 | #5 con gancho B, «¿Cuántas citas se te caen por no confirmar?» | Reel venta | ⛔ igual que #5 | 0 |
 
 - **Costo de las 2 semanas: ≤ 12,5 cr.**
-- **Octubre va 22 de 150 cr** (20 + 2 del maniquí).
+- **Octubre va 52,5 de 150 cr** (20 + 2 del maniquí + 30,5 del kit, el 3-oct).
 - Para 4 por semana faltan las pantallas reales: sin cuenta demo solo salen las piezas de personaje.
 
 **Qué se mide a las 48 h de cada pieza:**

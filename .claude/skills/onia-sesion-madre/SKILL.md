@@ -145,3 +145,15 @@ Cómo contestar: <en tu transcript | SendMessage a «Sesión madre de Onia» | r
   3. Los agentes reciben el diff y el archivo que importa, nunca un transcript ni un doc entero.
   4. Effort low y modelo chico para la lectura mecánica.
   Script de medición: suma `usage` por `message.id` en `~/.claude/projects/<carpeta>/**/*.jsonl`.
+
+## Delegar código a Codex (medido el 4-oct)
+
+- `codex exec -m gpt-5.5` (el CLI 0.139 no corre gpt-6-*), en un worktree aislado por tarea; en onia-platform, con
+  `node_modules` por junction. El sandbox no deja a Codex commitear: el `.git` del worktree queda fuera de la raíz
+  escribible. La madre revisa el diff, commitea y abre el PR, y la madre v2 revisa con 1 o 2 lentes según el riesgo.
+- El `tsc` local falla con el cliente de Prisma compartido: el CI del PR es el gate de tipos.
+- **La madre commitea SOLO con los tests en verde, con un gate en el mismo comando**
+  (`echo "$out" | grep -q failed && exit 1`). El 4-oct se subió `5c58175c` con un test rojo porque el `grep` de la
+  salida no cortaba la cadena; se arregló en `83f93948`.
+- Los arreglos de una revisión vuelven al mismo worktree de Codex, en otra corrida con la lista de hallazgos, y
+  después vuelve a revisar la madre v2. Así salieron los 9 puntos del #110 en 2 vueltas.
