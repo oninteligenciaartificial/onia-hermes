@@ -14,7 +14,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { mkdtempSync, writeFileSync, readFileSync, chmodSync, existsSync, readdirSync, mkdirSync } from "node:fs";
+import { mkdtempSync, writeFileSync, readFileSync, chmodSync, existsSync, readdirSync, mkdirSync, statSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -187,6 +187,7 @@ test("sin conexión (curl 6/7) o rechazado (4xx): NO salió, no registra, y el m
     assert.doesNotMatch(r.stdout + r.stderr, /NO-SE-IMPRIME/);
     assert.equal(existsSync(join(b.estado, "pedidos.tsv")), false);
     assert.equal(readdirSync(join(b.estado, "previas")).length, 1, "el código sigue vigente");
+    assert.deepEqual(readdirSync(join(b.estado, "sellos")), [], "el reintento lleva otro id y otro sello: este se borra");
   }
 });
 
@@ -201,6 +202,7 @@ test("ambiguo (se cortó, 5xx o 2xx sin link): se registra, se anula el código 
     assert.deepEqual([fila[2], fila[4], fila[5]], ["plataforma", "", ""]);
     assert.equal(readdirSync(join(b.estado, "previas")).length, 0);
     assert.match(b.correr(["--lista"]).stdout, /\(sin confirmar\)/);
+    assert.deepEqual(readdirSync(join(b.estado, "sellos")), [fila[1]], "pudo haber salido: su respuesta tiene que poder firmarse");
   }
 });
 
@@ -417,4 +419,40 @@ test("si no puede abrir el candado lo dice con su propio mensaje y no manda nada
   assert.equal(r.status, 1, r.stderr);
   assert.match(r.stderr, /No pude abrir el candado de los pedidos/);
   assert.equal(b.leer("tg-envios"), "");
+});
+
+// Primer MEDIUM de la revisión de la madre v2 (3-oct): la respuesta no estaba atada al pedido. Cada
+// pedido lleva ahora un sello que viaja SOLO en el disparo y queda en el VPS; con él la sesión firma su
+// respuesta (responder-pedido.sh) y respuestas-pedidos.sh entrega solo la que trae la firma buena.
+test("cada pedido lleva un sello propio: va en el disparo, queda en el VPS en 600, y Hermes no lo ve", () => {
+  const b = banco();
+  b.correr(["plataforma"], TEXTO);
+  const r = b.correr(["plataforma", "--si", b.codigo()], TEXTO);
+  assert.equal(r.status, 0, r.stderr);
+  const texto = JSON.parse(b.leer("cuerpo.json")).text;
+  const [, id, sello] = texto.match(/^PEDIDO (p_[0-9a-f]{8}) · [^\n]*\nSello: ([0-9a-f]{32}) \(solo para firmar tu respuesta con scripts\/loops\/responder-pedido\.sh;/);
+  const f = join(b.estado, "sellos", id);
+  assert.equal(readFileSync(f, "utf8"), `${sello}\n`);
+  assert.equal(statSync(f).mode & 0o777, 0o600);
+  assert.equal(statSync(join(b.estado, "sellos")).mode & 0o777, 0o700);
+  assert.deepEqual(readdirSync(join(b.estado, "sellos")), [id], "sin restos del archivo temporal");
+  assert.doesNotMatch(r.stdout + r.stderr, new RegExp(sello), "lo que lee Hermes no trae el sello");
+  assert.match(texto, /\n«Arreglá el botón «Confirmar» de la agenda»$/, "el texto de él sigue intacto al final");
+  // Otro pedido, otro sello.
+  b.correr(["ventas"], "Otra cosa");
+  b.correr(["ventas", "--si", b.codigo()], "Otra cosa");
+  const otro = JSON.parse(b.leer("cuerpo.json")).text.match(/\nSello: ([0-9a-f]{32}) /)[1];
+  assert.notEqual(otro, sello);
+});
+
+test("si no puede guardar el sello, el pedido no sale y el código sigue sirviendo", () => {
+  const b = banco();
+  b.correr(["plataforma"], TEXTO);
+  writeFileSync(join(b.estado, "sellos"), "no soy una carpeta");
+  const c = b.codigo();
+  const r = b.correr(["plataforma", "--si", c], TEXTO);
+  assert.equal(r.status, 1);
+  assert.match(r.stderr, /No pude guardar el sello del pedido: no salió/);
+  assert.equal(b.llamadas(), 0, "sin sello no se llama a la rutina");
+  assert.equal(readdirSync(join(b.estado, "previas")).length, 1, "el código sigue vigente");
 });

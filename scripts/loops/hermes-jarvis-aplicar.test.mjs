@@ -73,7 +73,7 @@ function vps({ leeCalendario = true, escribeCalendario = true } = {}) {
   ejecutable(join(bin, "onia-tg.sh"), `#!/usr/bin/env bash\n# ONIA_AVISO_PUEDO\nprintf '%s\\n---\\n' "$1" >> ${log}/telegram\n`);
   ejecutable(join(bin, "onia-vigia-aprobaciones.sh"), "#!/usr/bin/env bash\n# ONIA_AVISO_PUEDO\n");
   // El recolector de respuestas de los pedidos: --probar dice si el VPS llega a GitHub.
-  ejecutable(join(bin, "onia-respuestas-pedidos.sh"), `#!/usr/bin/env bash\n[ "$1" = --probar ] || exit 0\necho "$ONIA_PEDIDOS_ESTADO" >> ${log}/respuestas-probar\n[ -z "\${RESPUESTAS_SIN_GITHUB:-}" ] || exit 1\necho "✅ llego a GitHub"\n`);
+  ejecutable(join(bin, "onia-respuestas-pedidos.sh"), `#!/usr/bin/env bash\nbajar() { :; }\n[ "$1" = --probar ] || exit 0\necho "$ONIA_PEDIDOS_ESTADO" >> ${log}/respuestas-probar\n[ -z "\${RESPUESTAS_SIN_GITHUB:-}" ] || exit 1\necho "✅ llego a GitHub"\n`);
   ejecutable(join(bin, "claude-guardia.sh"), "#!/usr/bin/env bash\navisar() { :; }\n");
   ejecutable(
     join(bin, "onia-agenda.sh"),
@@ -517,7 +517,7 @@ test("con llave, si a main le falta la skill de pedidos o su regla en el SOUL, n
 
 test("con llave, si el comando de pedidos no la acepta (--estado), no aplica nada", () => {
   const v = vps();
-  writeFileSync(join(v.R, "bin", "onia-pedido-claude.sh"), "#!/usr/bin/env bash\ncandado() { :; }\n[ \"$1\" = --estado ] && exit 69\nexit 0\n");
+  writeFileSync(join(v.R, "bin", "onia-pedido-claude.sh"), "#!/usr/bin/env bash\ncandado() { :; }\nSELLOS=x\n[ \"$1\" = --estado ] && exit 69\nexit 0\n");
   const r = v.aplicar(LLAVE);
   assert.equal(r.status, 1, r.stdout);
   assert.match(r.stdout, /no acepta la llave de la rutina \(--estado\)/);
@@ -542,6 +542,20 @@ test("sección 0: sin el recolector, o con el comando de pedidos sin su candado,
   assert.equal(r2.status, 1, r2.stdout);
   assert.match(r2.stdout, /El código de main todavía no está en \S*\/root\/bin/);
   nadaCreado(viejo);
+
+  // 5-oct, los MEDIUM de la madre v2: el comando sin sello o el recolector sin tope tampoco sirven.
+  const sinSello = vps();
+  writeFileSync(join(sinSello.R, "bin", "onia-pedido-claude.sh"), "#!/usr/bin/env bash\ncandado() { :; }\nexit 0\n");
+  const r3 = sinSello.aplicar(LLAVE);
+  assert.equal(r3.status, 1, r3.stdout);
+  assert.match(r3.stdout, /El código de main todavía no está en \S*\/root\/bin/);
+  nadaCreado(sinSello);
+  const sinTope = vps();
+  writeFileSync(join(sinTope.R, "bin", "onia-respuestas-pedidos.sh"), "#!/usr/bin/env bash\n# --probar, sin tope\nexit 0\n");
+  const r4 = sinTope.aplicar(LLAVE);
+  assert.equal(r4.status, 1, r4.stdout);
+  assert.match(r4.stdout, /El código de main todavía no está en \S*\/root\/bin/);
+  nadaCreado(sinTope);
 });
 
 test("con llave, si el VPS no llega a GitHub para recoger las respuestas, no aplica nada", () => {

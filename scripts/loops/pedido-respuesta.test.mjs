@@ -7,21 +7,26 @@
 //   - solo se responden pedidos que salieron de Hermes, una vez por estado, y por la aduana;
 //   - lo que llega es texto: escapado para el HTML de Telegram, nunca ejecutado, con tope;
 //   - el VPS baja SOLO el commit, nunca archivos, y rechaza un commit con archivos o con historia;
-//   - cada commit se mira una vez, y la rama se borra al entregarla.
-// Contra un origin local (file://) con los filtros activados, como GitHub.
+//   - cada commit se mira una vez, y la rama se borra al entregarla;
+//   - (5-oct, los MEDIUM de la madre v2) solo se entrega la respuesta FIRMADA con el sello de ese
+//     pedido, y una respuesta enorme se corta mientras baja, no después.
+// Contra un origin local (file://) con los filtros activados, como GitHub. La sesión responde con el
+// script real que le pide el prompt de la rutina (responder-pedido.sh).
 //
 // Se corre con: node --test scripts/loops/pedido-respuesta.test.mjs
 
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { mkdtempSync, writeFileSync, readFileSync, chmodSync, existsSync, mkdirSync } from "node:fs";
+import { mkdtempSync, writeFileSync, readFileSync, chmodSync, existsSync, mkdirSync, utimesSync, readdirSync, statSync } from "node:fs";
+import { createHmac, randomBytes } from "node:crypto";
 import { tmpdir } from "node:os";
 import { join, dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const AQUI = dirname(fileURLToPath(import.meta.url));
 const SCRIPT = resolve(AQUI, "respuestas-pedidos.sh");
+const RESPONDER = resolve(AQUI, "responder-pedido.sh");
 const ID = "p_1a2b3c4d";
 // Un link con el largo de los de verdad (session_ + 24): con uno de juguete («session_01XYZ») la
 // prueba de los 90 bytes pasaba y en producción el link de «necesita tu ok» quedaba cortado.
@@ -29,6 +34,20 @@ const SESION = "session_01AbCdEfGhIjKlMnOpQrStUv";
 const URL_REAL = `https://claude.ai/code/${SESION}`;
 const VACIO = "4b825dc642cb6eb9a060e54bf8d69288fbee4904";
 const reEsc = (s) => s.replace(/[.*+?^${}()|[\]\\/]/g, "\\$&");
+
+// La firma de una respuesta, igual que responder-pedido.sh y respuestas-pedidos.sh: HMAC-SHA256 con el
+// sello (32 hex) de "respuesta <id> <estado>\n" + el texto sin los espacios ASCII de las puntas.
+const ASCII_ESPACIO = new Set([0x20, 0x09, 0x0a, 0x0d, 0x0b, 0x0c]);
+function recortar(buf) {
+  let a = 0, z = buf.length;
+  while (a < z && ASCII_ESPACIO.has(buf[a])) a++;
+  while (z > a && ASCII_ESPACIO.has(buf[z - 1])) z--;
+  return buf.subarray(a, z);
+}
+const firmar = (sello, id, est, texto) =>
+  createHmac("sha256", Buffer.from(sello, "hex"))
+    .update(Buffer.concat([Buffer.from(`respuesta ${id} ${est}\n`), recortar(Buffer.from(texto))]))
+    .digest("hex");
 
 function banco({ tgFalla = false, horasAtras = 1, url = URL_REAL, ids = [ID] } = {}) {
   const dir = mkdtempSync(join(tmpdir(), "respuesta-"));
@@ -53,6 +72,13 @@ function banco({ tgFalla = false, horasAtras = 1, url = URL_REAL, ids = [ID] } =
 
   const estado = join(dir, "pedidos");
   mkdirSync(estado);
+  // El sello de cada pedido, como lo deja pedido-claude.sh al mandarlo.
+  mkdirSync(join(estado, "sellos"), { mode: 0o700 });
+  const sellos = {};
+  for (const i of ids) {
+    sellos[i] = randomBytes(16).toString("hex");
+    writeFileSync(join(estado, "sellos", i), `${sellos[i]}\n`, { mode: 0o600 });
+  }
   const ts = Math.floor(Date.now() / 1000) - horasAtras * 3600;
   writeFileSync(
     join(estado, "pedidos.tsv"),
@@ -72,10 +98,17 @@ exit 0
   chmodSync(tg, 0o755);
   if (tgFalla) writeFileSync(join(dir, "tg-falla"), "");
 
-  // Lo que hace la sesión del pedido, tal cual lo pide el prompt de la rutina (TELEGRAM_COMMAND_CENTER.md §5).
-  const responder = (id, est, texto, { rama = id, primera = `respuesta ${id} ${est}` } = {}) => {
+  // Lo que hace la sesión del pedido, tal cual lo pide el prompt de la rutina (TELEGRAM_COMMAND_CENTER.md
+  // §5): el texto en un archivo y responder-pedido.sh con el id, el estado y el sello del pedido.
+  const responder = (id, est, texto, { sello = sellos[id] } = {}) => {
+    const r = spawnSync("bash", [RESPONDER, id, est, sello], { cwd: nube, env, input: texto, encoding: "utf8" });
+    if (r.status !== 0) throw new Error(`responder-pedido.sh ${r.status}: ${r.stdout}${r.stderr}`);
+    return git(origin, ["rev-parse", `refs/heads/respuesta/${id}`]);
+  };
+  // Lo que podría hacer otro, a mano: cualquier primera línea, cualquier rama, cualquier sello.
+  const responderCrudo = (id, est, texto, { rama = id, sello = sellos[id] ?? "0".repeat(32), primera } = {}) => {
     const f = join(dir, "respuesta.txt");
-    writeFileSync(f, `${primera}\n\n${texto}\n`);
+    writeFileSync(f, `${primera ?? `respuesta ${id} ${est} ${firmar(sello, id, est, texto)}`}\n\n${texto}\n`);
     const arbol = git(nube, ["mktree"], "");
     const c = git(nube, ["commit-tree", arbol, "-F", f]);
     git(nube, ["push", "-q", "-f", "origin", `${c}:refs/heads/respuesta/${rama}`]);
@@ -93,7 +126,7 @@ exit 0
   const ramas = () => git(origin, ["for-each-ref", "--format=%(refname)", "refs/heads/respuesta/"]);
   const leer = (f) => (existsSync(join(dir, f)) ? readFileSync(join(dir, f), "utf8") : "");
   const objetos = () => git(join(estado, "respuestas.git"), ["cat-file", "--batch-all-objects", "--batch-check"]);
-  return { dir, estado, nube, git, responder, empujarCommit, commitCrudo, correr, ramas, leer, objetos,
+  return { dir, estado, nube, git, env, sellos, responder, responderCrudo, empujarCommit, commitCrudo, correr, ramas, leer, objetos,
     envios: () => Number(leer("envios") || 0) };
 }
 
@@ -145,7 +178,7 @@ test("la firma de la sesión (gpgsig) no estorba", () => {
   const b = banco();
   const firma = "gpgsig -----BEGIN SSH SIGNATURE-----\n U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTk\n -----END SSH SIGNATURE-----";
   const c = b.commitCrudo(
-    `tree ${VACIO}\nauthor Claude <noreply@anthropic.com> 1790946558 +0000\ncommitter Claude <noreply@anthropic.com> 1790946558 +0000\n${firma}\n\nrespuesta ${ID} listo\n\nFirmado y entregado.\n`,
+    `tree ${VACIO}\nauthor Claude <noreply@anthropic.com> 1790946558 +0000\ncommitter Claude <noreply@anthropic.com> 1790946558 +0000\n${firma}\n\nrespuesta ${ID} listo ${firmar(b.sellos[ID], ID, "listo", "Firmado y entregado.")}\n\nFirmado y entregado.\n`,
   );
   b.empujarCommit(ID, c);
   const r = b.correr();
@@ -155,7 +188,7 @@ test("la firma de la sesión (gpgsig) no estorba", () => {
 
 test("un pedido que no salió de Hermes no le escribe nada, y su rama no se toca", () => {
   const b = banco();
-  b.responder("p_ffffffff", "listo", "hola");
+  b.responderCrudo("p_ffffffff", "listo", "hola");
   b.responder(ID, "necesita-ok", "¿Sigo?"); // hay un pedido abierto: el script sí consulta
   const r = b.correr();
   assert.equal(r.status, 0, r.stdout + r.stderr);
@@ -166,15 +199,15 @@ test("un pedido que no salió de Hermes no le escribe nada, y su rama no se toca
 
 test("ramas con otra forma, o un id distinto adentro del mensaje: no le escribe nada", () => {
   const b = banco();
-  b.responder(ID, "listo", "x", { rama: "otra-cosa" });
-  b.responder(ID, "listo", "x", { rama: "p_1A2B3C4D" });
+  b.responderCrudo(ID, "listo", "x", { rama: "otra-cosa" });
+  b.responderCrudo(ID, "listo", "x", { rama: "p_1A2B3C4D" });
   assert.equal(b.correr().status, 0);
   assert.equal(b.envios(), 0);
-  b.responder(ID, "listo", "x", { primera: "respuesta p_00000000 listo" });
+  b.responderCrudo(ID, "listo", "x", { primera: `respuesta p_00000000 listo ${firmar(b.sellos[ID], "p_00000000", "listo", "x")}` });
   assert.match(b.correr().stdout, /el id del mensaje no es el de la rama/);
-  b.responder(ID, "listo", "x", { primera: `respuesta ${ID} cualquiera` });
+  b.responderCrudo(ID, "listo", "x", { primera: `respuesta ${ID} cualquiera ${firmar(b.sellos[ID], ID, "cualquiera", "x")}` });
   assert.match(b.correr().stdout, /la primera línea no es/);
-  b.responder(ID, "listo", "   ");
+  b.responderCrudo(ID, "listo", "   ");
   assert.match(b.correr().stdout, /respuesta vacía/);
   assert.equal(b.envios(), 0);
 });
@@ -278,7 +311,7 @@ test("una respuesta larguísima se corta en 1500 caracteres sin romper un acento
 
 test("un commit de más de 16 KB no se entrega", () => {
   const b = banco();
-  b.responder(ID, "listo", "x".repeat(20000));
+  b.responderCrudo(ID, "listo", "x".repeat(20000)); // se comprime: baja entero y lo frena el tope de 16 KB
   assert.match(b.correr().stdout, /pesa más de 16384 bytes/);
   assert.equal(b.envios(), 0);
 });
@@ -293,4 +326,133 @@ test("si la aduana no la acepta, no la da por respondida y la reintenta en la vu
   spawnSync("rm", ["-f", join(b.dir, "tg-falla")]);
   assert.match(b.correr().stdout, /✅ p_1a2b3c4d: respuesta «listo» entregada/);
   assert.equal(b.ramas(), "");
+});
+
+// ── Primer MEDIUM de la madre v2 (3-oct): la respuesta tiene que estar ATADA al pedido ─────────────
+// Antes, cualquiera que pudiera pushear al repo dejaba la respuesta de un pedido abierto y le llegaba a
+// Sergio Urcullo como si fuera de Claude.
+
+test("una respuesta firmada con otro sello no se entrega: es de alguien que no tiene el del pedido", () => {
+  const b = banco();
+  b.responderCrudo(ID, "necesita-ok", "Entrá a este link y poné tu clave", { sello: randomBytes(16).toString("hex") });
+  const r = b.correr();
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.match(r.stdout, /forma inválida \(la firma no es la del sello de este pedido\)/);
+  assert.equal(b.envios(), 0);
+  assert.equal(b.ramas(), "", "la falsa se limpia");
+  assert.equal(b.correr().stdout, "", "y no se vuelve a mirar");
+  // La de verdad, que llega después, sí se entrega.
+  b.responder(ID, "listo", "Listo de verdad.");
+  assert.match(b.correr().stdout, /✅ p_1a2b3c4d: respuesta «listo» entregada/);
+});
+
+test("la firma cubre el estado y el texto: cambiar cualquiera de los dos la invalida", () => {
+  const b = banco();
+  const buena = firmar(b.sellos[ID], ID, "listo", "Texto A");
+  b.responderCrudo(ID, "listo", "Texto B", { primera: `respuesta ${ID} listo ${buena}` });
+  assert.match(b.correr().stdout, /la firma no es la del sello/);
+  b.responderCrudo(ID, "necesita-ok", "Texto A", { primera: `respuesta ${ID} necesita-ok ${buena}` });
+  assert.match(b.correr().stdout, /la firma no es la del sello/);
+  assert.equal(b.envios(), 0);
+});
+
+test("la forma vieja, sin firma, ya no se entrega", () => {
+  const b = banco();
+  b.responderCrudo(ID, "listo", "Hola", { primera: `respuesta ${ID} listo` });
+  assert.match(b.correr().stdout, /la primera línea no es «respuesta <id> <estado> <firma>»/);
+  assert.equal(b.envios(), 0);
+});
+
+test("sin el sello del pedido en el VPS, nada se entrega (ni con una firma que parezca buena)", () => {
+  const b = banco();
+  b.responder(ID, "listo", "Listo.");
+  spawnSync("rm", ["-f", join(b.estado, "sellos", ID)]);
+  assert.match(b.correr().stdout, /este pedido no tiene sello en el VPS/);
+  assert.equal(b.envios(), 0);
+});
+
+test("el sello vive mientras el pedido está abierto: sigue tras «necesita-ok» y se borra al cerrarse", () => {
+  const b = banco();
+  b.responder(ID, "necesita-ok", "¿Lo mergeo?");
+  b.correr();
+  assert.ok(existsSync(join(b.estado, "sellos", ID)), "con «necesita-ok» el pedido sigue abierto");
+  b.responder(ID, "listo", "Mergeado.");
+  b.correr();
+  assert.equal(b.envios(), 2);
+  assert.equal(existsSync(join(b.estado, "sellos", ID)), false, "cerrado: el sello no sirve más");
+});
+
+test("los sellos de más de 48 h se borran solos, aunque no haya pedidos abiertos", () => {
+  const b = banco({ horasAtras: 49 });
+  const viejo = (Date.now() - 49 * 3600 * 1000) / 1000;
+  utimesSync(join(b.estado, "sellos", ID), viejo, viejo);
+  writeFileSync(join(b.estado, "sellos", "p_0000000b"), "f".repeat(32) + "\n"); // uno de hoy queda
+  const r = b.correr([], { ONIA_PEDIDOS_REPO_URL: "file:///no/existe" });
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.deepEqual(readdirSync(join(b.estado, "sellos")), ["p_0000000b"]);
+});
+
+test("responder-pedido.sh rechaza lo mal armado sin pushear nada", () => {
+  const b = banco();
+  const correr = (args, input = "Hola") =>
+    spawnSync("bash", [RESPONDER, ...args], { cwd: b.nube, env: b.env, input, encoding: "utf8" });
+  const sello = b.sellos[ID];
+  assert.equal(correr(["p_XYZ", "listo", sello]).status, 64);
+  assert.equal(correr([ID, "terminado", sello]).status, 64);
+  assert.equal(correr([ID, "listo", "corto"]).status, 64);
+  assert.equal(correr([ID, "listo"]).status, 64);
+  assert.equal(correr([ID, "listo", sello], "   \n ").status, 65);
+  assert.equal(correr([ID, "listo", sello], "x".repeat(12001)).status, 65);
+  assert.equal(b.ramas(), "", "nada llegó al repo");
+});
+
+test("el sello nunca entra al repo: el commit de la respuesta lleva la firma, no el sello", () => {
+  const b = banco();
+  const c = b.responder(ID, "listo", "Listo.");
+  const commit = b.git(b.nube, ["cat-file", "-p", c]);
+  assert.doesNotMatch(commit, new RegExp(b.sellos[ID]));
+  assert.match(commit, new RegExp(`^respuesta ${ID} listo [0-9a-f]{64}$`, "m"));
+});
+
+// ── Segundo MEDIUM de la madre v2 (3-oct): el tope se medía DESPUÉS de bajar el commit entero ──────
+test("una respuesta enorme se corta MIENTRAS baja: el VPS no se la traga entera", () => {
+  const b = banco({ ids: [ID, "p_0000000a"] });
+  b.responderCrudo(ID, "listo", randomBytes(1536 * 1024).toString("hex")); // 3 MB que no se comprimen
+  const r = b.correr();
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.match(r.stdout, /❌ p_1a2b3c4d: la respuesta pasa de 64 KB; corté la descarga y no la entrego/);
+  assert.equal(b.envios(), 0);
+  const repo = join(b.estado, "respuestas.git");
+  const pesado = spawnSync("du", ["-sk", repo], { encoding: "utf8" }).stdout.split("\t")[0];
+  assert.ok(Number(pesado) < 512, `el repo del VPS pesa ${pesado} KB (bajarla entera serían 3.072)`);
+  assert.deepEqual(readdirSync(join(repo, "objects", "pack")).filter((f) => f.startsWith("tmp_pack_")), [], "sin restos a medias");
+  assert.equal(b.ramas(), "", "se limpia");
+  assert.equal(b.correr().stdout, "", "y no se reintenta en cada vuelta");
+  // Una normal, después, sigue llegando.
+  b.responder("p_0000000a", "listo", "Esta sí.");
+  assert.match(b.correr().stdout, /✅ p_0000000a: respuesta «listo» entregada/);
+});
+
+test("una falla de red no es el tope: se reintenta en la vuelta siguiente", () => {
+  const b = banco();
+  b.responder(ID, "listo", "Listo.");
+  // El listado llega, pero la descarga no: un git que falla solo en fetch.
+  const falso = join(b.dir, "bin");
+  mkdirSync(falso);
+  const gitReal = spawnSync("bash", ["-c", "command -v git"], { encoding: "utf8" }).stdout.trim();
+  writeFileSync(join(falso, "git"), `#!/usr/bin/env bash\nfor a in "$@"; do [ "$a" = fetch ] && exit 128; done\nexec ${gitReal} "$@"\n`);
+  chmodSync(join(falso, "git"), 0o755);
+  const r = b.correr([], { PATH: `${falso}:${process.env.PATH}` });
+  assert.match(r.stdout, /no pude bajar la respuesta \(reintento en la próxima vuelta\)/);
+  assert.equal(b.envios(), 0);
+  assert.match(b.correr().stdout, /✅ p_1a2b3c4d: respuesta «listo» entregada/, "sin la falla, llega");
+});
+
+test("el prompt de la rutina manda a firmar con responder-pedido.sh y avisa del sello", () => {
+  const doc = readFileSync(resolve(AQUI, "..", "..", "hermes-content", "docs", "TELEGRAM_COMMAND_CENTER.md"), "utf8");
+  const ini = doc.indexOf("## 5. El prompt de la rutina");
+  const prompt = doc.slice(ini, doc.indexOf("## 6.", ini));
+  assert.match(prompt, /bash scripts\/loops\/responder-pedido\.sh p_xxxxxxxx listo <sello> < \/tmp\/respuesta\.txt/);
+  assert.match(prompt, /una línea «Sello:» con 32\s+caracteres hexadecimales/);
+  assert.doesNotMatch(prompt, /commit-tree/, "la forma vieja, sin firma, ya no se entrega");
 });

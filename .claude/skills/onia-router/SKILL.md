@@ -75,7 +75,9 @@ carril, cargá su stack, respetá las reglas duras. Fuente viva del mapa complet
   Verificar `git branch --show-current` y rutas del worktree antes de gatear/commitear.
 - **`main` SIEMPRE compila.** Si el avance toca `web-factory/apps/site/**`, `tsc --noEmit` verde
   antes de FF de `main`. Nunca filtrar WIP parcial (import a archivo nuevo → van los dos o ninguno).
-- **Auto-sync activado** (hook Stop `scripts/git-autosync.js`): commitear al terminar; respeta `.gitignore`.
+- **Auto-sync activado** (hook Stop `scripts/git-autosync.js`): commitear y pushear la rama al terminar;
+  respeta `.gitignore`. **`main` solo por PR revisado** desde el 5-oct: el hook mueve `main` únicamente en la
+  madre (`ONIA_AUTOSYNC_MAIN=1`) y el integrador (`ONIA_LOOP_ID=onia-cola`).
 - **Autonomía máxima:** MCP → CLI/API → skill → script → recién ahí preguntar.
 - **Gasto de plataformas externas — imagen y video NO son el mismo permiso** (corregido 2026-08-23):
   **VIDEO generado** (Higgsfield, ElevenLabs, fal.ai) = permiso explícito caso por caso, cotizado

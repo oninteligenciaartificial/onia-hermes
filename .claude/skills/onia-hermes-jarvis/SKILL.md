@@ -107,13 +107,23 @@ CLI de Hermes.
 
 ## Trampas ya pagadas
 
-- **El hook Stop hace avanzar `main` solo** (`scripts/git-autosync.js`): al terminar el turno pushea la
-  rama y, si `main` es ancestro, la empuja a `main`. El PR #68 apareció «merged» sin que nadie lo
-  mergeara. **Todo lo que dejás en tu rama llega a `main` y, ≈1 h después, al VPS** (el sincronizador
-  de `/root/bin`). Por eso lo nuevo se diseña INERTE hasta encenderlo: los pedidos no instalan nada
-  sin la llave de la rutina. **Con una rama que sale de `main` y un PR que todavía tiene que revisar
-  la madre:** pushear a mano y soltar el turno con `git checkout --detach` (el hook no toca un HEAD
-  desacoplado). Si no, el PR llega a `main` sin revisión (2-oct).
+- **El hook Stop hacía avanzar `main` solo** (`scripts/git-autosync.js`, hasta el 5-oct): pusheaba la
+  rama y, si `main` era ancestro, la empujaba a `main`. El PR #68 apareció «merged» sin que nadie lo
+  mergeara. **Desde el 5-oct solo lo hace con permiso** (la madre con `ONIA_AUTOSYNC_MAIN=1`, el
+  integrador con `ONIA_LOOP_ID=onia-cola`; Sergio Urcullo eligió «sí, la madre sigue directo»). Lo que
+  llega a `main` llega igual, ≈1 h después, al VPS (el sincronizador de `/root/bin`): lo nuevo se diseña
+  INERTE hasta encenderlo. **Mientras el cambio del 5-oct no esté en `main`,** con una rama que sale de
+  `main` y un PR sin revisar: pushear a mano y soltar el turno con `git checkout --detach`. Con el hook
+  nuevo en tu árbol ya no hace falta, pero no cuesta nada.
+- **Las sesiones de la NUBE sí pueden pushear a `main`** (medido el 5-oct): 23 de los 48 avances directos
+  de `main` del 28-sep al 5-oct traen el `Claude-Session` de dos sesiones de la nube (Lucía,
+  `session_01Whdadt…`, y Marca personal, `session_01CE21my…`; `environment_kind: anthropic_cloud`). El
+  proxy de git no lo frena. Contarlo: `git log --first-parent --no-merges --since=… origin/main` y el
+  trailer `Claude-Session` de cada commit.
+- **El permiso de mover `main` no puede vivir en el repo.** `.claude/settings.local.json` no estaba en
+  `.gitignore` (5-oct): si la madre lo hubiera puesto ahí, el `add -A` del autosync lo subía y todas las
+  sesiones tenían el permiso. Ahora está ignorado y `pedido-rama.test.mjs` lo verifica. En la PC va en
+  `~/.claude/settings.json` (`"env"`) o como variable de usuario de Windows.
 - **Una sección del SOUL se copia con un rango.** El `aplicar` viejo hacía `sed '/^## Su calendario/,$p'`:
   arrastraba TODO lo que viniera después. La sección de pedidos va ANTES de la del calendario, y
   cada copia termina en el próximo `---`.
@@ -169,11 +179,30 @@ CLI de Hermes.
 - **El integrador y `ramas_varadas` enumeran SOLO `origin/claude/*`** (`onia-cola.md`,
   `ramas_varadas.mjs:129`, `integrador_puede_mergear.mjs:224`; medido el 2-oct). Una rama que no
   debe integrarse nunca va con otro prefijo: `pedido/<id>`, `respuesta/<id>`.
-- **El hook Stop (`git-autosync.js`) hace fast-forward de `main` desde la rama de trabajo**, y la
+- **El hook Stop (`git-autosync.js`) hacía fast-forward de `main` desde la rama de trabajo**, y la
   sesión de una RUTINA lo carga igual que cualquier sesión. Con `claude/pedido-<id>`, el cambio de un
-  pedido entraba a `main` sin revisar al terminar el turno. Guarda desde el 2-oct: `pedido/*` y
-  `respuesta/*` se pushean y nunca adelantan `main` (`pedido-rama.test.mjs`, con un caso de control
-  que muestra que una rama cualquiera sí lo adelanta).
+  pedido entraba a `main` sin revisar al terminar el turno. La guarda del 2-oct miraba el NOMBRE de la
+  rama (`pedido/*`, `respuesta/*`): el tercer MEDIUM de la madre v2. Desde el 5-oct la rutina no tiene
+  permiso (su entorno no tiene variables) y no mueve `main` con ningún nombre; el de la rama queda como
+  segunda llave. Una sesión parada EN `main` sin permiso tampoco lo pushea: sus commits van a
+  `claude/autosync-<sesión>` (`pedido-rama.test.mjs`, 14 casos).
+- **La respuesta de un pedido va FIRMADA** (5-oct, primer MEDIUM de la madre v2). `pedido-claude.sh` le
+  da a cada pedido un sello de 32 hex que viaja solo en el disparo («Sello: …») y queda en
+  `/var/lib/onia-pedidos/sellos/<id>` (600). La sesión responde con `scripts/loops/responder-pedido.sh
+  <id> <estado> <sello> < respuesta.txt`, que firma HMAC-SHA256(sello, "respuesta <id> <estado>\n" +
+  texto sin espacios ASCII en las puntas). El recolector rechaza otra firma, la forma vieja sin firma y
+  un pedido sin sello. Límite: quien lea la sesión de la rutina ve el sello. El sello se borra al
+  cerrarse el pedido o a las 48 h.
+- **Un tope de descarga se pone MIENTRAS baja, no después** (5-oct, segundo MEDIUM). `cat-file -s` mide
+  lo que ya bajó. Lo que funciona (medido en este contenedor): `( ulimit -f 64 && exec timeout 60 git -c
+  transfer.unpackLimit=1 fetch … )`. Con `unpackLimit=1` git guarda el paquete en `tmp_pack_*` mientras
+  lo recibe, y el kernel lo corta en 64 KB (3 MB al azar y 200 MB comprimibles se cortaron ahí; git
+  sale 128 con «died of signal 25»). Medido también: con `--filter` git ya usa `index-pack` aunque no
+  se le pida (el paquete es *promisor*); `unpackLimit=1` lo asegura si eso cambia, porque con
+  `unpack-objects` no se escribe nada hasta tener el objeto entero. Para distinguir el tope de una
+  falla de red queda un `tmp_pack_*` de 64 KB; se borra siempre.
+- **`onia-platform` no tiene hook Stop** (medido el 5-oct: su `.claude/settings.json` solo trae
+  permisos). Un pedido de `plataforma` no tiene autosync que le mueva `master`.
 - **El rojo de main no es tuyo, pero te tiñe el CI.** El 2-oct `test:herramientas-desplegadas`
   (`onia-vps.sh` sin `poner` en `sincronizar.sh`, de `5b3f980b`) y `test:guards-cableados`
   (`tandas-v1.test.mjs` sin cablear) fallaban en main SOLO. Antes de culpar a tu cambio, se corre la

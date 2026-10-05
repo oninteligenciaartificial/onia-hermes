@@ -146,6 +146,18 @@ Cómo contestar: <en tu transcript | SendMessage a «Sesión madre de Onia» | r
   4. Effort low y modelo chico para la lectura mecánica.
   Script de medición: suma `usage` por `message.id` en `~/.claude/projects/<carpeta>/**/*.jsonl`.
 
+## El permiso de mover `main` (5-oct)
+
+- Desde el 5-oct el hook Stop solo mueve `main` con permiso (Sergio Urcullo: «sí, la madre sigue directo»).
+  La madre lo tiene con **`ONIA_AUTOSYNC_MAIN=1` FUERA del repo**: en `C:\Users\PC\.claude\settings.json`
+  (`"env": {"ONIA_AUTOSYNC_MAIN": "1"}`) o como variable de usuario de Windows. Nunca en
+  `.claude/settings.json` ni en un `settings.local.json` versionado: se lo daría a todas las sesiones.
+- Se verifica en el log del Stop: con permiso dice «main al día (fast-forward)»; sin permiso, «main no se toca».
+- Sin el permiso no se pierde nada: la rama se pushea igual, y si la madre estaba EN `main`, sus commits quedan
+  en `claude/autosync-<máquina>`.
+- Las sesiones de la nube no lo tienen: su trabajo llega a `main` por PR, que revisa la madre (v2) y mergea la
+  madre o Sergio Urcullo.
+
 ## Delegar código a Codex (medido el 4-oct)
 
 - `codex exec -m gpt-5.5` (el CLI 0.139 no corre gpt-6-*), en un worktree aislado por tarea; en onia-platform, con
