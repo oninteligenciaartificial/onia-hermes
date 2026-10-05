@@ -43,6 +43,12 @@ node /root/bin/ig-reel.mjs ... --trial auto --publicar    # yap a Trial
 /root/bin/agendar-publicacion.sh --lista          # · --cancelar a-0930
 ```
 
+**Carruseles en LinkedIn y TikTok (5-oct):** `buffer-post.mjs --imagenes <dir>` manda las `slide-NN` de la carpeta como
+carrusel. Las pasa a JPEG porque TikTok no toma PNG. YouTube no toma imágenes. El 5-oct se probó como borrador en las dos
+redes y Buffer lo aceptó; esos borradores ya se borraron. `agendar-carruseles.sh --agendar-buffer` agenda LinkedIn a
+las 20:01 y TikTok a las 20:02. El post se crea en Buffer recién a esa hora y se publica en el momento. Así no gasta la
+cola de 10 posts por canal del plan gratis, y el archivo público no vence antes de tiempo con la limpieza de 48 h.
+
 **Carruseles de @sergiourcullo (desde la nube o la PC, con `ssh onia-vps`):** `agendar-carruseles.sh --ensayo <slug>`
 sube uno y lo deja listo en Instagram SIN publicar; `--agendar` sube y agenda todo el calendario `CAL` del script (uno
 por día, 20:00 UTC = 16:00 La Paz). El calendario se edita en el script, que no lleva fechas en el nombre. Volver a

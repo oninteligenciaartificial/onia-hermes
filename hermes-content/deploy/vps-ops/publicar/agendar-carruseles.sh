@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
 # Sube cada carrusel al VPS y lo agenda en Instagram (@sergiourcullo) a las 16:00 La Paz (20:00 UTC).
-# Uso: agendar-carruseles.sh [--ensayo <slug>] | [--agendar]   (re-correr --agendar con un timer ya creado falla en
-# ese día: cancelalo antes con agendar-publicacion.sh --cancelar car-AAAAMMDD)
+# Uso: agendar-carruseles.sh [--ensayo <slug>] | [--agendar] | [--agendar-buffer]
+#   --agendar         Instagram, 20:00 UTC (re-correrlo con un timer ya creado falla en ese día: cancelalo antes con
+#                     agendar-publicacion.sh --cancelar car-AAAAMMDD)
+#   --agendar-buffer  el mismo carrusel en LinkedIn (20:01) y TikTok (20:02) por Buffer. Usa las láminas que --agendar
+#                     ya subió. El post se crea en Buffer RECIÉN a esa hora («publicar ya»), así no gasta la cola de
+#                     10 del plan gratis ni choca con la limpieza de 48 h de /root/publicar/public (pedido de Sergio
+#                     Urcullo, 5-oct: «alistamos buffer para postear a todas las redes»).
 # Pedido de Sergio Urcullo (2-oct): «programalos para uno al día».
 set -euo pipefail
 REPO=/home/user/onia-hermes
@@ -27,6 +32,8 @@ CAL=(
 # sergio-n02-sonnet45-se-apaga-20261001 (l3, l7) · sergio-k9v2-checklist-video-ia-20260929 (l5, l6) ·
 # sergio-k12-worktrees-sin-pisarse-20261001 (l7) · sergio-k5v2-seguimiento-que-no-molesta-20260929 (l3, l7) ·
 # sergio-k13-loop-sin-api-key-20261001 (l2) · sergio-k10v2-perilla-de-esfuerzo-20260929 (l5)
+BUFFER_LINKEDIN=6abc2a1aea19ca0bde28eda6   # Sergio Urcullo Mercado (buffer-post.mjs --listar, 5-oct)
+BUFFER_TIKTOK=6abc2906ea19ca0bde28cf75     # sergiourcullom
 subir() { # slug -> /root/publicar/car-<slug>/ con slide-NN.png + caption.txt
   local slug=$1 n tmp
   n=$(node -e "console.log(require('$B/$slug.json').slides.length)")
@@ -51,5 +58,15 @@ case "${1:-}" in
       ssh -o BatchMode=yes onia-vps "/root/bin/agendar-publicacion.sh $nombre '$dia 20:00:00' node /root/bin/ig-carrusel.mjs --cuenta sergio --dir /root/publicar/car-$slug --caption /root/publicar/car-$slug/caption.txt --publicar"
     done
     ssh -o BatchMode=yes onia-vps "/root/bin/agendar-publicacion.sh --lista" ;;
-  *) echo "uso: $0 --ensayo <slug> | --agendar"; exit 1 ;;
+  --agendar-buffer)
+    for row in "${CAL[@]}"; do
+      set -- $row; dia=$1 slug=$2 d=/root/publicar/car-$2
+      ssh -o BatchMode=yes onia-vps "test -f $d/caption.txt" || { echo "falta $d: corré --agendar primero"; exit 1; }
+      for red in "li $BUFFER_LINKEDIN 20:01:00" "tt $BUFFER_TIKTOK 20:02:00"; do
+        set -- $red
+        ssh -o BatchMode=yes onia-vps "/root/bin/agendar-publicacion.sh car-$1-${dia//-/} '$dia $3' node /root/bin/buffer-post.mjs --canal $2 --imagenes $d --texto $d/caption.txt --publicar"
+      done
+    done
+    ssh -o BatchMode=yes onia-vps "/root/bin/agendar-publicacion.sh --lista" ;;
+  *) echo "uso: $0 --ensayo <slug> | --agendar | --agendar-buffer"; exit 1 ;;
 esac

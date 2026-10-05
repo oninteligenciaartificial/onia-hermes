@@ -15,6 +15,15 @@ genera `gen_page.py` en el scratchpad de esta sesión. Si se pierde, los datos s
   - Script sin fecha en el nombre: `deploy/vps-ops/publicar/agendar-carruseles.sh` (antes `-3-20-oct`).
   - Orden: DD-A, N04, K3v2, N03, K11, N06, K4v2, K8v3, K7v2, K2v3 y K6v2.
   - ⚠ Si el VPS se reinicia, los timers se pierden y no sale nada: re-agendar con el script.
+- **También en LinkedIn y TikTok (pedido de Sergio Urcullo el 5-oct: «alistamos buffer para postear a todas las
+  redes»):** 22 timers más, `pub-car-li-*` a las 20:01 y `pub-car-tt-*` a las 20:02 (33 en total).
+  - Salen con `buffer-post.mjs --imagenes`, que es nuevo; el original quedó en el VPS en `/root/bin/buffer-post.mjs.bak-20261005`.
+  - Probado como borrador en las dos redes, aceptado y borrado. La publicación real todavía no se probó.
+  - Hay un control programado para el 6-oct a las 20:10 UTC (`trig_017LEVgojRbj4QJmpa2UbE3V`) que mira si salieron las tres.
+- **Grabaciones de pantalla:** las hace Claude al editar; Sergio Urcullo graba solo la cámara (lo pidió el 5-oct). Desde
+  la nube el navegador no abre páginas (`ERR_CERT_AUTHORITY_INVALID`) y el modo «Auto» frenó la importación del
+  certificado. Hace falta su OK en esta sesión o una sesión en la PC con Chrome. Las demos de terminal se arman acá.
+- **Guiones:** la página tiene los 32 (bloques 1 y 2 del plan). Primero van 6; R05 espera su decisión sobre MARKETING.
 - **En espera (7):** K1, N02, K9, K12, K5, K13 y K10, por las 10 láminas que no se entienden. Falta que él elija:
   - «rehacé las 10» (1,20 cr; los prompts nuevos están en el CIERRE 3-oct);
   - o «van sin esas láminas».
