@@ -20,6 +20,17 @@ Desarrollar y publicar Onia Platform 1.0 hasta cobrar al primer cliente. Qué sa
 
 ## 2. Qué quedó EN PRODUCCIÓN (verificado)
 
+- **5-oct, release `97fe3061` (prod hoy):**
+  - punto 2 de la 1.0 (#111): checkout «factura por correo después de verificar el pago» + aclaración del titular del QR;
+  - punto 12 (#109, Codex): CSV con «;» y BOM + WhatsApp de soporte en `/help`.
+  - Verificado en el bundle; las pantallas piden login (se miran con la QA `+qapago`).
+- **4-oct, release `ed40eaaa` (#108):**
+  - P1 (tratamiento a medias en la prueba), P3 (Deuda, Mañana sin confirmar, Reprogramada) y textos a pacientes de USTED;
+  - B22: el canal de citas lleva solo `{id}` y la agenda le pide la cita a la API; GET/PATCH de la cita con `select`
+    cerrado; la reserva pública no muestra el motivo de otras citas.
+  - Verificado: bundle `payload:{id}`, usted 3 / voseo viejo 0, login a 390 y 1440 renderizado.
+  - Las 2 tablas abiertas a anon siguen en 200 hasta correr el SQL (§6).
+
 - **Regla de Sergio Urcullo (2-oct):** lo que pasa los gates se mergea y se publica SIN preguntar; solo diseño
   nuevo y legales pasan por él (CLAUDE.md «Qué se publica sin preguntar»). No se le habla de PRs.
 - **Alcance congelado (madre, 2-oct):** solo se termina lo asignado; lo nuevo va a pendientes. Excepciones con OK de
@@ -57,38 +68,12 @@ Desarrollar y publicar Onia Platform 1.0 hasta cobrar al primer cliente. Qué sa
 
 | Qué | Dónde | Estado |
 |---|---|---|
-| **Carril plataforma: P1, P2, P3** | rama `claude/sharp-shannon-sqrmig` de onia-platform, PR #108 en **borrador**, head `92adab94` (12 commits sobre `master` `13b67dda`) | P1 «¿Cuándo fue?» y lista «A medias»; P2 presupuesto por fases con link público; P3 «Deuda», «Mañana sin confirmar», «Reprogramada». Revisión adversarial: 10 hallazgos corregidos. tsc 0, vitest 9535 ✅. **CI verde (3-oct): Secret scan + Lint/Typecheck/Tests/Build; mergeable limpio.** Ya está pusheado: si la sesión muere no se pierde. **Espera el OK de Sergio Urcullo a P2** (diseño nuevo; capturas enviadas el 3-oct). Con el OK: sacar de borrador, merge, publicar, mirar |
-| Prueba del chip (WhatsApp del cliente) | org «ZZ QA Clínica Chip» | Sergio Urcullo eligió hacerla el 3-oct. Le faltan 2 pasos: confirmar el correo de `+qachip` y Otorgar `addon.whatsapp` en `/admin/organizations/cmuqzov3y000001mzmrcq0i2t/capacidades`. Después conecta en `/settings/chatbot` |
-| Catálogo: «recupera pacientes con tratamiento a medias» | `ONIA_CATALOGO_DE_VENTA.md` §8 | Se barre cuando se VEA en pantalla, en la demo, a «Vuelve a citar» encontrando a Natalia y Marcelo (corrida de agentes 07:00 La Paz). Sergio Urcullo: Otorgar `module.agents` sin fecha a la demo (vence 16-oct). Avisar a la madre v1: destraba el anuncio D4 |
-| SIAT: certificación en el piloto | `/opt/onia-siat/runner-20260929/` | 96 % (IX 160/160, VI 380/560). Falta VI motivos 5-7: necesitan el **CAFC**. Estudio y plan completos en `hermes-content/docs/ONIA_FACTURACION_ESTADO_REAL.md` (decisión: Onia factura a mano en el Portal Web hasta autorizar el 9473; clientes con Onia como proveedor). Riesgo: RND 102600000034 (anexo Ley 1733) puede obligar a rehacer pruebas antes del 16-nov |
-| Plan B de verificación inversa (`wa.me`) | ramas `v1/verificacion-inversa` y `wip/bot-verificacion-inversa` | APAGADO; no se enciende sin OK de Sergio Urcullo |
-
-**Cómo funciona el recordatorio con botones (para no re-investigar):**
-- Plantilla `recordatorio_cita` (nuevo default de `PLANTILLA_RECORDATORIO_POR_DEFECTO`), UTILITY, 3 QUICK_REPLY. La crea
-  `asegurarPlantillaRecordatorio` en la WABA **del negocio** al conectar el número. NO tiene que ver con la plantilla
-  AUTHENTICATION bloqueada de la WABA de Onia.
-- Chatwoot 4.12.1 entrega del toque **solo el texto**: payload descartado y `in_reply_to_external_id` borrado
-  (`Message#ensure_in_reply_to`, el recordatorio sale por Cloud API y no está en la conversación). La cita se resuelve
-  por inbox → org + `numeroParaWhatsapp` + `whatsapp24hSentAt|2hSentAt` en 26 h (`lib/whatsapp/respuesta-al-recordatorio.ts`).
-- El webhook de Chatwoot apunta al **bot**; el bot reenvía el entrante a `/api/webhooks/chatwoot` (`uso-plataforma.mjs`)
-  y DESPUÉS saltea los 3 textos en inboxes de clientes (`reason: boton_del_recordatorio`).
-- La respuesta de la plataforma lleva `content_attributes.onia_automatico`: el token de la plataforma es el usuario 2 de
-  Chatwoot y el bot es el 3 (`CHATWOOT_BOT_AGENT_ID=3` en `/opt/onia/bot/webhook.env`); sin la marca el bot creía que un
-  humano tomó la conversación y se callaba. Verificado con el modelo real que Chatwoot guarda la clave.
-
-### 3b. Lo que se midió el 2-oct (fuentes en `docs/research/`)
-
-- **IA en el producto** (`ONIA_INVENTARIO_IA_20261002.md` + catálogo §8): la única IA encendida es el redactor de
-  plantillas de los agentes. El detector de tratamiento a medias EXISTE pero no encontraba a nadie (lo arregla #99).
-- **Auditoría** (`ONIA_AUDITORIA_20261002.md`): bot de ventas vivo (≈3 s) pero ofrece demos sin cuenta demo y dice
-  «Listo, agendado» y se corrige (Cal.com y transcripción apuntan a servicios que no existen); respaldos solo en el
-  disco del VPS; Easypanel/n8n expuestos y contenedor QA contra la base de prod; comercio y servicios sin camino a
-  factura; web de venta con LCP 3,4-3,7 s.
-- **Dapta** (`research/competencia/DAPTA_TEARDOWN.md`): checklist antes de conectar un número (PIN de dos pasos,
-  apagar el asistente de IA de Meta, web que coincida, «Agregar método de pago»). Coexistencia en Onia NO probada con
-  +591; Meta exige suscribir `history`, `smb_app_state_sync`, `smb_message_echoes` y saltear el registro del número.
-- **Recomendación vigente a Sergio Urcullo:** NO conectar su número personal (Meta avisa a sus contactos, sincroniza
-  6 meses de chats, el bot le contestaría a todos). Prueba con chip prepago; su número hace de paciente.
+| SQL del B22 (REVOKE + default privileges) | `prisma/migrations/20261003230000_revoke_anon_onia_sends/migration.sql` | Mergeado, NO aplicado. Solo con el OK textual de Sergio Urcullo. Después: GET anon a `/rest/v1/onia_whatsapp_sends` → 401 y 0 grants |
+| P2 presupuesto por fases | `hermes-content/docs/cola/capturas-presupuesto-fases/presupuesto-por-fases-p2.patch` (aplica limpio sobre `ed40eaaa`) + capturas | Espera el OK de Sergio Urcullo (diseño nuevo). Con OK: `git apply`, PR, CI, publicar |
+| Punto 1: cobro de punta a punta | QA «ZZ QA Pago» (`oninteligenciaartificial+qapago@gmail.com`, dental), creada por `/register` el 5-oct; clave solo en el scratchpad de la sesión | Falta confirmar su correo (Gmail de Onia). Después: checkout Básico con comprobante «PRUEBA», Sergio aprueba en `/admin/payments` SIN facturar, verificar plan activo. Si la sesión muere, la clave se pierde: «Recuperar acceso» |
+| Plantillas A/B de los leads de agosto | texto aprobado en el transcript del 3-oct | NO creadas (el control de permisos lo frenó desde la nube). Las crea Sergio Urcullo en WhatsApp Manager o lo pide él en la sesión. No se mandan hasta que Ventas arme el seguimiento |
+| Caja diaria (#110, Codex) | rama `codex/punto-8-caja-diaria` | Aprobada por la madre v2. Faltan las capturas: sin abrir; abierta con 4 cobros y 1 egreso; cerrada con descuadre; como dueño y como recepción. Van a `hermes-content/docs/cola/capturas-caja-diaria/`. No se publica sin OK; la migración `20261004190000` va ANTES del swap |
+| Prueba del chip, demo, SIAT | orgs «ZZ QA Clínica Chip» y «Clínica Demo Onia»; `/opt/onia-siat/runner-20260929/` | Sin cambios (§6) |
 
 ## 4. Archivos
 
@@ -131,35 +116,33 @@ Desarrollar y publicar Onia Platform 1.0 hasta cobrar al primer cliente. Qué sa
   tests del presupuesto. Borrarlas en un commit nuevo NO alcanza: gitleaks del CI corre también en modo git sobre cada
   commit del PR. Se reescribió la rama (`filter-branch` → `"a".repeat(64)`) y se verificó con gitleaks v8.30.1 local (mismo
   SHA que el CI) en los dos modos antes del push. Regla en la skill `onia-seguridad`.
+- **Lo que el control de permisos frena desde la nube (3-5 oct):**
+  - crear plantillas en Meta («transacción real»);
+  - commitear una skill a pedido de otra sesión («Self-Modification»);
+  - mergear en onia-hermes;
+  - escribir en la base de prod.
+
+  Sí pasa: mergear y publicar onia-platform, y leer prod en solo lectura. El conector de Gmail da «Precondition check failed».
+- **`publicar.sh` se niega con «hay otro build corriendo»:** el runner del CI vive en el VPS. Esperar 3 chequeos sin
+  procesos `_work/onia|npm ci|next build|docker build|vitest` y recién ahí publicar.
+- **CI rojo en `next/font` (`loader.js:122`, 3-oct):** respuesta pasajera de Google Fonts. Si se repite, servir las
+  fuentes con `next/font/local`.
+- **En el bundle las tildes van escapadas** (`\xe9`, `\xed`): un `grep` del texto con tilde da 0 aunque esté publicado.
 - **«El 1-oct es obligatorio para los grupos 9-12»:** dejó de ser cierto el 30-sep (RND 102600000038). La web lo
   afirmó tres días; corregido el 3-oct con un gate que lo impide volver.
 
 ## 6. Qué depende de Sergio Urcullo (lo canaliza la madre)
 
-- **Abrir el caso de soporte a Meta** (Business Support Home → WhatsApp Business Platform → Plantillas):
-  > Asunto: No podemos crear plantillas de categoría AUTHENTICATION (error 2388185). Negocio 1451773736711697 (verificado),
-  > WABA 4429061034078857. Al crear una plantilla AUTHENTICATION (copiar código, español, recomendación de seguridad, vence
-  > en 10 min) recibimos «Esta cuenta de WhatsApp Business no tiene permiso para crear una plantilla de mensaje» (code 10,
-  > error_subcode 2388185), igual desde WhatsApp Manager y por Graph API. En la misma WABA sí creamos UTILITY y MARKETING.
-  > Negocio verificado, WABA aprobada, calidad OK y método de pago activo. La necesitamos para el código de un solo uso del
-  > alta en app.onia.com.bo. ¿Qué restricción tiene la cuenta y cómo la habilitamos?
-- ~~OK a la web v1 y a los legales 1.3~~: dado el 2-oct, publicado.
-- **OK al presupuesto por fases (P2)**: las capturas no le llegaron; quedaron en `hermes-content/docs/cola/capturas-presupuesto-fases/` (3-oct). Destraba la publicación de P1, P2 y P3 (§3).
-- **Prueba con el chip (3-oct):** en la org «ZZ QA Clínica Chip»: (1) confirmar el correo de `+qachip` en el Gmail de
-  Onia, (2) Otorgar `addon.whatsapp` en `/admin/organizations/cmuqzov3y000001mzmrcq0i2t/capacidades`, (3) conectar el
-  chip en `/settings/chatbot`, (4) avisar «conectado». Después: paciente con SU número personal, cita a 1h30-2h30, tocar
-  los 3 botones. Si sale bien, el agente de WhatsApp queda como está en la web (decisión del 3-oct).
-- **Demo:** confirmar el correo de `+demo`, «Recuperar acceso» para elegir su clave, Otorgar `module.agents` sin fecha
-  (`/admin/organizations/cmur09d75000601mz12vg59qn/capacidades`), y después de las 07:00 una captura de Pendientes.
-- **Plantillas A y B para los leads de agosto** (`seguimiento_pedido_acceso`, `seguimiento_consulta_whatsapp`, MARKETING,
-  texto aprobado el 3-oct): crearlas desde la nube lo frenó el control de permisos («transacción real») porque la orden llegó
-  por la madre. Las crea Sergio Urcullo en WhatsApp Manager o lo pide él en la sesión. NO se mandan hasta que Ventas arme
-  el seguimiento.
-- **Tablero interno:** abrir `app.onia.com.bo/dashboard` como superadmin y mandar captura (la nube no puede entrar).
-- **SIAT:** (1) el CAFC del piloto con captura, (2) llamar al 800 10 3444: ¿el 9473 se autoriza con el formato actual o
-  con el de la Ley 1733?, ¿la prórroga de 60 días se suma al 04-nov o corre desde que se pide?, (3) decidir si la
-  factura va incluida en los planes (recomendado) o como add-on.
-- Aprobar el pago de prueba en `/admin/payments` cuando la madre avise. SIAT: el **CAFC del piloto** y una captura nueva del «Listado de Etapas».
+- OK textual para correr el SQL del B22 en prod (solo permisos).
+- OK al presupuesto por fases (P2), viendo las capturas de `docs/cola/capturas-presupuesto-fases/`.
+- OK a la caja diaria (#110) cuando estén sus capturas.
+- Confirmar el correo de `+qapago` en el Gmail de Onia (la nube no puede: el conector de Gmail da «Precondition check failed»).
+- Aprobar en `/admin/payments` el pago de PRUEBA de «ZZ QA Pago», sin emitir factura.
+- Confirmar que OniaAgency puede facturar en el Portal Web del SIN: el checkout promete factura por correo tras verificar.
+- Crear las plantillas A/B en WhatsApp Manager (o pedirlo en la sesión).
+- Mirar con su sesión las pantallas nuevas: «A medias» en Pacientes, «Deuda» en la ficha y «Mañana sin confirmar» en la Agenda.
+- Decidir si «clientes» incluye a los DUEÑOS: la app y los correos al dueño siguen de vos (pacientes ya van de usted).
+- Sin cambios: chip, demo, CAFC y el caso de soporte a Meta.
 
 ## 6b. Pendiente priorizado: lo que copiar de Doctocliq (madre, 2-oct)
 
@@ -182,22 +165,19 @@ tabla sin acción). Nada se construye sin el filtro de Etapa 1. Orden por impact
 
 ## 7. Próximos pasos (en orden)
 
-1. Con el OK de Sergio Urcullo a P2: PR #108 (onia-platform) fuera de borrador → merge → `publicar.sh` → MIRAR en prod la
-   lista «A medias», la ficha con «Deuda», «Mañana sin confirmar» y el presupuesto. Sin OK a P2: sacar sus commits
-   (`01db1edf` feat y `c3a74c54` fix, SHAs nuevos tras reescribir la rama) y publicar P1+P3.
-1b. **Después de P1-P3 (no antes):** puntos 13 y 14 de `ONIA_PLAN_1.0_Y_CAJA.md` (`fc4dbffb`): 7 días de gracia antes de
-   cortar un plan vencido + botón «no renovar», y guardar la aceptación de los términos con fecha y versión. Base:
-   `research/ONIA_PAGO_AUTOSERVICIO_AUDITORIA.md`. Orden de la madre del 3-oct.
-1c. **Textos a pacientes de USTED** (OK de Sergio Urcullo, 3-oct, por la madre): `recordatorio_cita`, agentes, respuestas
-   a los botones y correos al paciente. Tiene que salir ANTES de la prueba del chip: la plantilla se crea en la WABA del
-   negocio al conectar y, una vez aprobada, cambiarla la manda a revisión de Meta.
-2. Demo: después de la corrida de las 07:00, mirar Pendientes de la demo (captura de Sergio Urcullo o de la madre) →
-   barrer la línea del catálogo §8 → avisar a la madre v1 (D4).
-3. Chip: con «conectado», verificar plantilla `recordatorio_cita` aprobada, cita de prueba, tocar los 3 botones, MIRAR el
-   estado en el panel; recién ahí ✅ en el catálogo.
-4. SIAT: con el CAFC, cargarlo en `siat-piloto.env` (SIAT_PILOT_CAFC), backup y lanzar VI motivos 5-7 con
-   `run-case-v2.sh`; pedir captura nueva del «Listado de Etapas». Plan de producto: `ONIA_FACTURACION_ESTADO_REAL.md` §5.
-5. Pendientes para después (alcance congelado, NO hacer sin orden): reintento del reenvío del bot a la plataforma
-   (punto 4 de la madre v2), Recall caso B con presupuesto no aceptado (punto 5: necesita el dato «aceptado»), «Pide
-   atención» de `/admin/metricas` mirado en prod, Términos §1.2 «con tus propias credenciales» vs token delegado (legal),
-   slugs `demo-` para las demos, «Importadora Rojas» ¿es de la casa?
+1. Punto 1 con la QA `+qapago` cuando se confirme su correo. Con esa sesión, MIRAR `/checkout`, `/help` y
+   `/patients/import` con un CSV «;» (cierra la verificación visual de los puntos 2 y 12).
+2. Arreglos de Meta (madre, 4-oct):
+   - `lib/chatbot/meta-cobra-el-servicio.ts`: 1.000 mensajes de servicio gratis por número y por mes, se cobra desde el
+     1.001; mantener «cargue el método de pago igual»; de USTED.
+   - `lib/pricing.ts`: `utilityBob = 0.113` contra USD 0,0113 × tipo de cambio (~0,128): corregir o explicar.
+   - `/precios`: una línea de que el WhatsApp de la clínica lo factura Meta directo.
+   - Fuente: `research/ONIA_COSTO_CHATBOT_META_2026.md`.
+3. Capturas de la caja diaria (#110) con CI verde, con datos de prueba.
+4. SQL del B22 con el OK textual.
+5. Puntos 5 a 15 de `ONIA_PLAN_1.0_Y_CAJA.md`, de a uno (sin el 8 ni el 12, que son de Codex; el 13 y el 14 después de P1-P3).
+6. Sin orden:
+   - `/book` en usted (unos 35 textos de vos);
+   - canales privados de Realtime (infra, con OK);
+   - verificar el teléfono en la reserva pública;
+   - borrar las QA, con el OK de Sergio Urcullo.
