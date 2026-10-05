@@ -829,6 +829,10 @@ Evidencia: `prueba-motor-20260813/` (la prueba que fijó el método) ·
 
 # §9. RECETA B-ROLL — cómo se hicieron los 4 videos que le encantaron a Sergio (21-ago)
 
+> ⛔ **HISTORIA desde el 29-sep (corregido el 5-oct): NO seguir esta receta.** El método vigente es Seedream 4.5 con el
+> ancla + Kling 3.0 std con `sound: "off"` (7,5 cr por 6 s). El Element `58bbd635` y Veo Lite «a 1 cr/s» ya no valen:
+> hoy Veo Lite cuesta 1,5 cr/s. Recetas y costos medidos: skill **`lucia`** §2-§3.
+>
 > Sergio: "me encantó el resultado, haz lo mismo pero más barato y aprende cómo los hiciste."
 > Esta sección ES ese aprendizaje. Para B-roll de Lucía, seguir esto al pie.
 

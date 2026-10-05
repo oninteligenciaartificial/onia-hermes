@@ -32,9 +32,12 @@ lo que Onia hace hoy y se puede decir (§2 y §8).
 - **Ambo = vestuario.** Ninguna frase la pone en el puesto: nada de «soy», «mis pacientes» ni «mi consultorio».
 - **Sin promesas de resultado:** nada de «agenda llena», porcentajes ni «cero ausencias».
 - **Pantalla REAL de Onia** en el centro de cada pieza.
-  - ⛔ Hoy no hay cuenta demo: las tomas de pantalla son el bloqueo.
+  - ⛔ Las tomas de pantalla son el bloqueo. *Corregido el 5-oct:* la cuenta demo «Clínica Demo Onia» SÍ existe desde
+    el 2-oct, pero está a medias: sus pacientes no tienen correo y le falta `module.agents` (`PLAN.md` v4 §5).
   - Antes de publicar se abre cada pantalla con sesión y se MIRA (catálogo §8).
-- **Un solo cierre:** «Mandáselo a quien contesta tu WhatsApp» y «Agendá tu demo» → `onia.com.bo/llamada?src=lucia-kN`.
+- **Un solo cierre:** «Mandáselo a quien contesta tu WhatsApp» y «Escribinos: link en la bio». *Corregido el 5-oct:*
+  `onia.com.bo/llamada` da 404 y Onia ya no tiene Cal.com; la puerta es el WhatsApp de Onia con «vengo de Lucía»
+  (`PLAN.md` v4 §2). Donde los pies de abajo dicen «Agendá tu demo: link en la bio», el link de la bio es esa puerta.
 
 **Costos medidos el 3-oct con `get_cost`, sin generar:**
 
@@ -190,9 +193,11 @@ Todo está en `references/modelos/lucia/v4/kit/` y el detalle (jobs, puntajes, v
 | **Total K1–K3** | **18** |
 | K4, opción corta (o completa) | 11,5 (26,5) |
 
-- Octubre va **22 de 150 cr**. Con K1–K3 pasaría a 40; si además va K4 corta, a 51,5.
+- *(Cotización del 3-oct, antes de generar; hoy octubre va 52,5 de 150 cr.)* Octubre iba **22 de 150 cr**. Con K1–K3
+  pasaba a 40; si además iba K4 corta, a 51,5.
 - **El gasto lo aprueba Sergio Urcullo** viendo esta tabla. Se cotiza de nuevo en vivo antes de crear.
-- **Bloqueo para las tres:** la cuenta demo dental en producción, para grabar las pantallas reales.
+- **Bloqueo para las tres:** las pantallas reales de la cuenta demo (existe; le falta el correo confirmado y
+  `module.agents`, y K1/K2 piden escribir en producción con OK).
 - **Antes de renderizar:**
   - `grep` del guion y del pie contra las frases prohibidas de `editor-videos` § Reels de Lucía;
   - comparar con `LUCIA.md` §0;

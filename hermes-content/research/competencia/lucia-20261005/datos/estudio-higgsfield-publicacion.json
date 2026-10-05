@@ -1,0 +1,753 @@
+{
+ "0": {
+  "resumen": "Voz de Lucía (D4) y lipsync, medido el 5-oct sin gastar nada (Higgsfield 541,26 cr antes y después; ElevenLabs 9.547 caracteres antes y después).\n1. No hay voz cruceña ni boliviana lista. En ElevenLabs no existe el acento boliviano ni el locale es-BO (devuelve 400). Higgsfield no etiqueta el acento de sus voces y solo clona desde un audio grabado.\n2. Lo que más cambia: la cuenta de ElevenLabs parece estar en el plan GRATIS con PAYG (10.000 caracteres, 3 voces, sin clonación, elegible para la promo Starter). En el plan gratis, ElevenLabs no da licencia comercial. PLAN.md dice «la licencia está en orden» y eso no se sostiene. Hasta resolverlo no se publica ningún audio de ElevenLabs.\n3. Quedan 453 caracteres hasta el 13-oct. Alcanzan para una prueba A/B interna, no para producir.\n4. Recomendación para la prueba de 2 semanas: seguir sin voz (0 cr). En paralelo, Sergio Urcullo escucha las 22 muestras gratis que dejé (unos 10 min) y elige 2 o 3.\n5. Lipsync, cuando haya voz: seedance_2_0_mini 720p con nuestro audio, 10 cr por 10 s. sync_so subió a 36 cr por 10 s; queda solo para una pieza estrella.\n6. Herramienta nueva: voice_change cambia la voz de un clip y conserva los tiempos por 1 cr cada 10 s, pero solo a voces de Higgsfield.\nEvidencia en /tmp/claude-0/-home-user-onia-hermes/62db117f-72ad-5efb-b90b-9753e7a9129f/scratchpad/higgsfield/voz/.",
+  "hallazgos": [
+   {
+    "dato": "En la biblioteca de ElevenLabs no hay ninguna voz femenina con acento boliviano. La API lista 17 acentos de español sin Bolivia ni Paraguay. locale=es-BO devuelve HTTP 400. Las búsquedas «bolivia/boliviana/cruceña/camba/santa cruz» no traen ninguna voz femenina boliviana: solo «Cristian Mamani» (hombre, en inglés).",
+    "marca": "M",
+    "evidencia": "GET /v1/voices/accents?language=es → accents_es.json; GET /v1/shared-voices con accent y search → shared/*.json",
+    "uso_para_lucia": "No existe una voz cruceña lista para comprar. Lo más cercano se elige de oído entre las peruanas y las «latin american»."
+   },
+   {
+    "dato": "Mejores candidatas por etiqueta (mujer joven, español). Peruanas: Gaby 5vkxOzoz40FrElmLP4P7 (conversational, 24.822 clones, aviso 730 d, sin moderación en vivo), Daniela VywzfvxxNk4yFAaoMm4Q (conversational, 730 d) y Karla saqk76H0L3GCnuHtLDw6 (aviso de solo 90 d). Chilenas: Catalina 6Gr4AVmTax1pMJO0lHRK y Camila oJIuRMopN0sojGjwD6rQ (365 d). Latin american: Norah kcQkGnn0HAT2JRDQ4Ljp (86.150 clones). Ya están en la cuenta: Jhenny 2Lb1en5ujrODDIqmp7F3, Daniela ajOR9IDAaubDK5qtLUqQ y Sandra rEVYTKPqwSMhytFPayIb. Todas tienen rate 1.0, sin recargo.",
+    "marca": "M",
+    "evidencia": "shared/candidatas_femeninas.json (192 voces) y ESCUCHAR.tsv",
+    "uso_para_lucia": "Es la lista corta para que Sergio Urcullo elija oyendo. Las de aviso corto (Karla 90 d) o sin aviso (Nathalia) pueden desaparecer y conviene evitarlas."
+   },
+   {
+    "dato": "Las muestras (preview_url) de ElevenLabs y Higgsfield se bajan sin costo: 18 de ElevenLabs y 9 de Higgsfield guardadas. El cupo siguió en 9.547 después de bajarlas.",
+    "marca": "M",
+    "evidencia": "previews_elevenlabs/*.mp3, previews_higgsfield/*; GET /v1/user/subscription antes y después",
+    "uso_para_lucia": "El primer filtro de acento cuesta 0. Cada muestra dice un texto distinto: sirve para descartar acentos, no para comparar la misma frase."
+   },
+   {
+    "dato": "La cuenta de ElevenLabs tiene tier «payg», con 10.000 caracteres, voice_limit 3, IVC false, professional_voice_limit 0 e is_eligible_for_starter_promo true. Según la doc de ElevenLabs, activar PAYG solo cambia el nombre de «Free» a «Pay As You Go» y el plan sigue siendo el mismo. La página de publicación dice que el plan gratis no incluye licencia comercial y exige la atribución «elevenlabs.io».",
+    "marca": "I",
+    "evidencia": "[M] sub.json; [D] docs_el/overview_administration_pay-as-you-go.md (FAQ «Is PAYG a separate plan?»), docs_el/can-i-publish.md; [M] docs_el/pricing-extracto-2026-10-05.txt: Free 10k créditos, Starter con «Commercial License» + clonación instantánea",
+    "uso_para_lucia": "Ningún reel de Lucía con voz de ElevenLabs se publica mientras la cuenta siga en Free. Si Sergio Urcullo confirma en elevenlabs.io/app/subscription que dice Free, hace falta Starter."
+   },
+   {
+    "dato": "Precio de Starter en ElevenLabs hoy: US$6/mes, con el primer mes a US$1 hasta el 18-oct. Trae licencia comercial, 30.000 créditos y clonación instantánea.",
+    "marca": "M",
+    "evidencia": "https://elevenlabs.io/pricing → docs_el/pricing-extracto-2026-10-05.txt",
+    "uso_para_lucia": "Resolver la licencia cuesta US$1 este mes si se decide antes del 18-oct."
+   },
+   {
+    "dato": "Quedan 453 caracteres de ElevenLabs hasta el 13-oct 01:17 UTC. Multiplicador por modelo: v4, v3 y multilingual_v2 = 1,0; v4_turbo, flash_v2_5, turbo_v2_5 y v3_conversational = 0,5. Existe eleven_v4.",
+    "marca": "M",
+    "evidencia": "sub.json, models.json (GET /v1/models)",
+    "uso_para_lucia": "No alcanza para producir. Sí alcanza para un A/B interno de 3 voces con una frase de 104 caracteres."
+   },
+   {
+    "dato": "Voice Design de ElevenLabs (POST /v1/text-to-voice/design, eleven_ttv_v3) diseña una voz desde una descripción. Cobra los caracteres del texto de muestra (entre 100 y 1000) una vez, y devuelve 3 opciones. Es experimental. Guardar una voz ocupa un espacio: hay 2 de 3 usados.",
+    "marca": "D",
+    "evidencia": "doc_d9ba43.txt, doc_ae2312.txt (FAQ «How much does Voice Design cost?»); espacios [M] sub.json",
+    "uso_para_lucia": "Se puede probar «joven cruceña» por 104 caracteres. Antecedente: la voz diseñada Lucia-ONIA fue descartada por Sergio Urcullo el 15-ago."
+   },
+   {
+    "dato": "Voice Remix cambia el acento de una voz, pero solo en voces propias o de biblioteca con aviso infinito. Marcela tiene aviso de 730 días: no se puede remezclar. Lucia-ONIA (wrXs6GqcC7X03dDKMoeT, Voice Design propia) sí se puede.",
+    "marca": "D",
+    "evidencia": "docs_el/overview_capabilities_voice-remixing.md; notice_period [M] voices.json",
+    "uso_para_lucia": "No hay atajo para «Marcela con acento cruceño»."
+   },
+   {
+    "dato": "Eleven v4: una clonación instantánea que habla en el mismo idioma que su grabación conserva el acento original «exactamente».",
+    "marca": "D",
+    "evidencia": "docs_el/overview_capabilities_text-to-speech_eleven-v4.md, líneas 36-46 y 193-197",
+    "uso_para_lucia": "El único camino a un acento cruceño real es clonar a una cruceña real, con su consentimiento escrito. Necesita Starter."
+   },
+   {
+    "dato": "Higgsfield: list_voices devuelve 1 voz propia (Lucia-voz 8de5db95, descartada) y unas 114 voces de catálogo, sin etiqueta de idioma ni acento. qwen_audio_tts no tiene español entre sus idiomas. Audio con voz: seed_audio, elevenlabs_v4, elevenlabs_v4_turbo, qwen_audio_tts y text2speech_v2 (motores elevenlabs, minimax, seed_speech, vibe_voice y cozy_voice, siempre con voces de Higgsfield).",
+    "marca": "M",
+    "evidencia": "list_voices (2 páginas) y models_explore list type audio, 5-oct",
+    "uso_para_lucia": "En Higgsfield no se filtra por acento: hay que escuchar. Marcela no existe allí."
+   },
+   {
+    "dato": "create_voice de Higgsfield abre un widget para grabar o subir audio y clonarlo. No diseña voces por descripción. create_voice_from_confirmed_audio pide de 10 s a 3 min de habla clara y cobra un «voice-clone credit cost» sin cifra. No lo llamé.",
+    "marca": "D",
+    "evidencia": "Descripción de las herramientas MCP create_voice y create_voice_from_confirmed_audio",
+    "uso_para_lucia": "No se puede pedir «acento cruceño» por texto. Solo se clona a una persona, y eso exige su consentimiento (términos de Higgsfield §4.2(b), según research/INFLUENCERS_IA_REFERENTES_Y_LIPSYNC_20260930.md:240)."
+   },
+   {
+    "dato": "TTS dentro de Higgsfield: text2speech_v2 con los motores elevenlabs o minimax cotiza 0,6 cr por 153 caracteres.",
+    "marca": "M",
+    "evidencia": "generate_audio get_cost:true, use_unlim:false, preset Elena",
+    "uso_para_lucia": "Es una vía barata con la licencia del plan pro de Higgsfield, si alguna de sus voces suena bien a un oído cruceño."
+   },
+   {
+    "dato": "En el catálogo MCP de Higgsfield no hay modelos «speak», «avatar» ni «talking head». Con NUESTRO audio funcionan sync_so (video + audio), minimax_h3/_max, seedance_2_0/_mini/_2_5, wan2_6/2_7/3_0/3_0_prime, grok_video_v15, cinematic_studio_video_3_5/4_0 y ad_multiplier. Además voice_change cambia la voz «manteniendo los tiempos», solo hacia voces de Higgsfield.",
+    "marca": "M",
+    "evidencia": "hf_models_video.json (54 modelos), descripción de voice_change",
+    "uso_para_lucia": "Para que Lucía hable a cámara con nuestra voz, lo barato es Seedance mini con el audio como referencia."
+   },
+   {
+    "dato": "Lipsync del 30-sep. MiniMax H3: la cara deriva (labios hinchados, un ojo raro) y devuelve una pista de audio propia (correlación 0,3 con Marcela). Seedance 2.0 mini: cara estable y boca natural, sale muda y se le monta el mp3; Sergio Urcullo todavía no confirmó de oído la sincronía.",
+    "marca": "D",
+    "evidencia": "hermes-content/references/modelos/lucia/v4/PROCEDENCIA.jsonl:76",
+    "uso_para_lucia": "La mejor opción por evidencia y precio es Seedance 2.0 mini. Falta solo el veredicto de oído."
+   },
+   {
+    "dato": "Mejor opción hoy para 8-12 s de Lucía hablando a cámara con nuestro audio: seedance_2_0_mini 720p, 9:16, start_image = foto aprobada, audio_references = nuestro mp3, generate_audio false. Cuesta 1 cr/s (10 s = 10 cr); después se monta el mp3. Respaldo con sincronía fina garantizada: kling3_0 std con habla propia (17,5 cr) + sync_so remap (36 cr por 10 s) = 53,5 cr.",
+    "marca": "I",
+    "evidencia": "Precios [M] de get_cost hoy; calidad [D] PROCEDENCIA.jsonl:76 y LEEME de prueba-lipsync-20260815",
+    "uso_para_lucia": "Un reel hablado cuesta unos 10-12 cr más la voz, y entra en el techo de 150 cr/mes (quedan 97,5). La vía con sync_so se lleva un tercio del mes en una sola pieza."
+   }
+  ],
+  "costos_medidos": [
+   {
+    "que": "TTS en Higgsfield, motor ElevenLabs",
+    "modelo_y_parametros": "text2speech_v2, variant elevenlabs, preset Elena ca83ca7f, 153 caracteres",
+    "creditos": "0,6",
+    "como_se_midio": "generate_audio con get_cost:true y use_unlim:false"
+   },
+   {
+    "que": "TTS en Higgsfield, motor MiniMax",
+    "modelo_y_parametros": "text2speech_v2, variant minimax, preset Elena, 153 caracteres",
+    "creditos": "0,6",
+    "como_se_midio": "generate_audio con get_cost:true y use_unlim:false"
+   },
+   {
+    "que": "TTS seed_audio",
+    "modelo_y_parametros": "seed_audio, preset Elena, 153 caracteres",
+    "creditos": "sin medir (el repo dice 2,4 cr por unas 50 palabras, ago)",
+    "como_se_midio": "La cotización la bloqueó el clasificador de permisos de la sesión; no se reintentó"
+   },
+   {
+    "que": "TTS elevenlabs_v4 dentro de Higgsfield",
+    "modelo_y_parametros": "elevenlabs_v4",
+    "creditos": "sin medir",
+    "como_se_midio": "No se cotizó para no repetir el pedido que bloqueó el clasificador"
+   },
+   {
+    "que": "Lipsync con nuestro audio (barato)",
+    "modelo_y_parametros": "seedance_2_0_mini, 720p, 9:16, 10 s, generate_audio false (con true cotiza igual)",
+    "creditos": "10",
+    "como_se_midio": "generate_video get_cost:true, sin medias"
+   },
+   {
+    "que": "Lipsync MiniMax H3",
+    "modelo_y_parametros": "minimax_h3, 2K, 9:16, 5 s / 10 s",
+    "creditos": "10 / 20",
+    "como_se_midio": "generate_video get_cost:true, sin medias"
+   },
+   {
+    "que": "MiniMax H3 Max",
+    "modelo_y_parametros": "minimax_h3_max, 768p, 9:16, 10 s",
+    "creditos": "25",
+    "como_se_midio": "generate_video get_cost:true"
+   },
+   {
+    "que": "Seedance 2.0 fast",
+    "modelo_y_parametros": "seedance_2_0, mode fast, 720p, 10 s, sin audio",
+    "creditos": "25",
+    "como_se_midio": "generate_video get_cost:true"
+   },
+   {
+    "que": "Seedance 2.5 con referencia de audio",
+    "modelo_y_parametros": "seedance_2_5, omni_reference, 720p, 10 s, sin audio",
+    "creditos": "70",
+    "como_se_midio": "generate_video get_cost:true"
+   },
+   {
+    "que": "Wan 3.0",
+    "modelo_y_parametros": "wan3_0, 720p, 9:16, 10 s, sin audio",
+    "creditos": "17,5",
+    "como_se_midio": "generate_video get_cost:true"
+   },
+   {
+    "que": "Grok Video 1.5",
+    "modelo_y_parametros": "grok_video_v15, 720p, 10 s",
+    "creditos": "45",
+    "como_se_midio": "generate_video get_cost:true"
+   },
+   {
+    "que": "Cinema Studio 3.5",
+    "modelo_y_parametros": "cinematic_studio_video_3_5, 720p, 10 s, sin audio",
+    "creditos": "50",
+    "como_se_midio": "generate_video get_cost:true"
+   },
+   {
+    "que": "Kling hablando por su cuenta",
+    "modelo_y_parametros": "kling3_0, std, 9:16, 10 s, sound on",
+    "creditos": "17,5",
+    "como_se_midio": "generate_video get_cost:true"
+   },
+   {
+    "que": "Gemini Omni Flash 1.1 hablando por su cuenta",
+    "modelo_y_parametros": "gemini_omni_flash_1_1, 720p, 9:16, 10 s",
+    "creditos": "30",
+    "como_se_midio": "generate_video get_cost:true"
+   },
+   {
+    "que": "Lipsync sync_so",
+    "modelo_y_parametros": "sync_so, duration 5 / 10 (el cotizador rechaza sync_mode y prompt)",
+    "creditos": "18 / 36 (3,6 cr/s)",
+    "como_se_midio": "generate_video get_cost:true solo con duration"
+   },
+   {
+    "que": "Cambio de voz con los tiempos intactos",
+    "modelo_y_parametros": "voice_change, duration 10 / 15 (el cotizador rechaza voice_id y voice_type)",
+    "creditos": "1 / 2",
+    "como_se_midio": "generate_video get_cost:true solo con duration"
+   },
+   {
+    "que": "Muestras de voces (ElevenLabs y Higgsfield)",
+    "modelo_y_parametros": "descarga de preview_url (27 archivos)",
+    "creditos": "0 cr y 0 caracteres",
+    "como_se_midio": "Saldo de Higgsfield 541,26 y character_count de ElevenLabs 9.547, antes y después"
+   },
+   {
+    "que": "Voice Design de ElevenLabs",
+    "modelo_y_parametros": "POST /v1/text-to-voice/design, eleven_ttv_v3, texto de 100-1000 caracteres",
+    "creditos": "caracteres del texto de muestra, 3 opciones por llamada (sin medir)",
+    "como_se_midio": "Doc oficial, doc_ae2312.txt; no se llamó"
+   }
+  ],
+  "trampas": [
+   "hermes-content/docs/cola/lucia-diario/PLAN.md:125 dice «La licencia está en orden: plan pago `payg` activo». No se sostiene. «tier: payg» en la API no es un plan pago: es Free con PAYG (10.000 caracteres, 3 voces, IVC false, elegible para la promo Starter). El plan gratis de ElevenLabs no tiene licencia comercial (docs_el/can-i-publish.md). Lo repite hermes-content/docs/handoff/higgsfield-lucia.md:144.",
+   "hermes-content/docs/cola/lucia-diario/FLUJO.md:79 dice «MiniMax H3 gana a Seedance Mini». La propia prueba (v4/PROCEDENCIA.jsonl:76) dice lo contrario: H3 deriva la cara y re-sintetiza el audio (correlación 0,3); Seedance mini tiene cara estable y boca natural, falta el veredicto de oído.",
+   "hermes-content/docs/cola/lucia-diario/FLUJO.md:80 «sync_so (~22 cr)» sale de una cuenta para 6 s. Cotizado hoy: 3,6 cr/s, 18 cr por 5 s y 36 cr por 10 s.",
+   "hermes-content/references/modelos/lucia/prueba-lipsync-20260815/LEEME.md:67 dice que sync_so «no se puede pre-cotizar». Hoy sí se puede: get_cost con solo `duration`, sin `sync_mode` ni prompt. Con sync_mode da 422.",
+   "voice_change tampoco cotiza si se le pasan voice_id o voice_type (422 extra_forbidden). Se cotiza solo con `duration`: 1 cr por 10 s.",
+   "hermes-content/references/modelos/lucia/LUCIA.md:572 dice que seedance_2_0/_mini está «sin probar para lipsync». Se probó el 30-sep (PROCEDENCIA.jsonl:76).",
+   "LUCIA.md:540 dice que sync_so «no se puede evitar si la voz tiene que ser Marcela». Seedance mini con audio_references y el mp3 montado encima lo evitaría [I], pendiente del oído de Sergio Urcullo.",
+   "Los precios cambiaron desde agosto. LEEME.md:147 dice seedance_2_0_mini 720p a 2,5 cr/s: hoy cuesta 1 cr/s. minimax_h3 2K pasó de 4 cr/s a 2 cr/s.",
+   "minimax_h3_max (768p) cuesta MÁS que minimax_h3 (2K): 25 contra 20 cr por 10 s. El «max» no es la versión barata.",
+   "Al cotizar generate_audio, el clasificador de permisos de la sesión bloqueó la cotización de seed_audio («Real-World Transactions») y dejó pasar las de text2speech_v2. Una cotización de audio puede necesitar el permiso explícito de Sergio Urcullo en el chat.",
+   "Las voces de Higgsfield (list_voices) no traen idioma ni acento. No se puede filtrar por «latino» ni «andino»: hay que escucharlas.",
+   "Voice Remix de ElevenLabs no puede tocar a Marcela (aviso de 730 días, no infinito). «Marcela con acento cruceño» no existe como atajo.",
+   "Las voces «latin american» de la biblioteca vienen con locale es-AR aunque sean colombianas o mexicanas (Nathalia, Andrea paisa, Cristina mexicana). Se elige por la descripción y el oído, no por el locale."
+  ],
+  "decisiones_para_sergio": [
+   "D4 para la prueba de 2 semanas: seguir SIN voz. Recomendado. Costo 0 cr y 0 riesgo de acento o de licencia.",
+   "Licencia de ElevenLabs: mirar en elevenlabs.io/app/subscription si dice Free. Si se va a publicar cualquier voz de ElevenLabs, pasar a Starter: US$6/mes, US$1 el primer mes si se activa antes del 18-oct. Trae licencia comercial, 30.000 caracteres y clonación. Recomendado solo cuando haya una voz elegida. Alternativa sin ElevenLabs: el TTS de Higgsfield (0,6 cr por frase de unos 150 caracteres, con la licencia del plan pro).",
+   "Escuchar las muestras gratis (unos 10 min) en /tmp/claude-0/-home-user-onia-hermes/62db117f-72ad-5efb-b90b-9753e7a9129f/scratchpad/higgsfield/voz/ESCUCHAR.tsv y elegir 2 o 3 que no suenen «de afuera». Mi lista corta: Gaby peruana, Daniela peruana, Norah latina y Jhenny (ya en la cuenta). Costo 0.",
+   "Prueba A/B mínima para elegir oyendo la MISMA frase: «Soy Lucía, personaje IA de Onia. Mirá: tu paciente reserva solo y le llega el recordatorio un día antes.» (104 caracteres). 3 voces × 104 = 312 caracteres, más opcionalmente 1 Voice Design «joven cruceña» con el mismo texto (104 caracteres, 3 opciones): 416 de los 453 que quedan hasta el 13-oct. 0 cr de Higgsfield. Es interno, no se publica. Necesita su OK.",
+   "Voz cruceña de verdad (la única que resuelve el acento del todo): una cruceña graba de 1 a 3 min con consentimiento escrito y se clona en ElevenLabs (Starter) o en Higgsfield (create_voice, costo sin medir). Hay que decidir si quiere la voz de una persona real detrás de un personaje IA, con contrato. El costo del talento no está medido.",
+   "Lipsync, solo cuando haya voz aprobada: 1 clip de prueba de 8-10 s con seedance_2_0_mini 720p (8-10 cr) desde una foto aprobada y la voz elegida, para que juzgue de oído si la boca cae con las sílabas. sync_so (+36 cr por 10 s) queda solo para una pieza estrella."
+  ],
+  "huecos": [
+   "Las cotizaciones de seed_audio y elevenlabs_v4 dentro de Higgsfield quedaron sin medir: el clasificador bloqueó la de seed_audio.",
+   "Las cotizaciones de video se hicieron sin medias. No medí si cargar audio_references o una imagen cambia el precio.",
+   "El costo de clonar una voz en Higgsfield (create_voice_from_confirmed_audio) no está publicado ni se puede cotizar sin crearla.",
+   "El idioma y el acento de las voces de Higgsfield no están verificados: no traen etiqueta y no hay Whisper instalado para transcribirlas. Hay que escucharlas.",
+   "Las muestras de ElevenLabs dicen un texto distinto cada una. No se transcribieron, así que no confirmé que todas estén en español.",
+   "Nadie probó todavía si Voice Design de ElevenLabs logra un acento boliviano o cruceño creíble.",
+   "La sincronía de Seedance 2.0 mini con nuestro mp3 sigue sin el veredicto de oído de Sergio Urcullo desde el 30-sep.",
+   "No sé si la cuenta de ElevenLabs estuvo alguna vez en un plan pago cuando se generaron audios anteriores, como el de L08. Lo confirma Sergio Urcullo en el panel de suscripción.",
+   "El uso comercial de Higgsfield (§4.4) y el consentimiento de voz (§4.2(b)) vienen del research del 30-sep; hoy no releí los términos.",
+   "No medí cómo suena el habla propia de Kling o Gemini con el prompt «acento de Santa Cruz, Bolivia» (para pasarla después por voice_change): costaría video pago."
+  ]
+ },
+ "1": {
+  "resumen": "El método no cambia. Kling 3.0 std con sound \"off\" sigue siendo el clip de Lucía: 1,25 cr/s (3 s = 3,75 · 6 s = 7,5 · 10 s = 12,5). Es lo más barato que sostiene la cara. Seedance 2.5 cuesta 5,6 veces más (42 cr por 6 s) y Cinema Studio 3.0 cuesta 4 veces más (30 cr por 6 s).\nNinguna herramienta de Higgsfield mete la pantalla real de Onia dentro del video. Su propio flujo de UGC para sitios web la pega encima con ffmpeg. La pantalla se monta gratis con editor-videos, y conviene copiar las medidas de tarjeta de ese flujo.\nMarketing Studio no sirve para Lucía. Cuesta de 42 a 105 cr por clip, inventa guion y voz, y en v2 rechaza la foto de Lucía como personaje.\nPara el anuncio con persona hay una ruta de voz barata, sin probar: Kling Turbo dice el guion en español (9 cr por 6 s) y voice_change lo pasa a la voz \"Lucia-voz\", que ya está en la cuenta (1 cr cada 10 s).\nNo conviene usar reframe (5 cr/s) ni Shorts Studio (90 cr por 30 s). El upscale de ByteDance sí vale la prueba: ~0,1 cr por clip.\nVirality Predictor no da cotización y solo mira 15 s. video_analysis no pone puntaje; sirve para desarmar los anuncios de la competencia.\nLo urgente para Sergio Urcullo: los créditos que sobran se borran en cada renovación. El 1-oct se perdieron 387,57 cr. Hoy hay 541,26 y el techo es 150 por mes.\nGasto de este estudio: 0 cr. El saldo era 541,26 antes y después.",
+  "hallazgos": [
+   {
+    "dato": "Kling 3.0 std con sound \"off\" cobra 1,25 cr/s: 3 s = 3,75 · 6 s = 7,5 · 10 s = 12,5 · 15 s = 18,75. Con sound \"on\", 6 s = 10,5. Kling pro con sound off cobra 1,5 cr/s: 6 s = 9 · 8 s = 12 · 10 s = 15. El modo 4k cobra 36 por 6 s. Duración de 3 a 15 s; formatos 16:9, 9:16 y 1:1.",
+    "marca": "M",
+    "evidencia": "generate_video con get_cost:true y start_image abe2e6bd, 5-oct. models_explore get kling3_0. Todo en scratchpad/higgsfield/video/cotizaciones_20261005.json",
+    "uso_para_lucia": "Sigue siendo el clip de todos los formatos. Para el remate de 2–3 s alcanza un clip de 3 s (3,75 cr); no hace falta pagar 6 s."
+   },
+   {
+    "dato": "Seedance 2.5 cuesta 7 cr/s a 720p: 6 s = 42 y 10 s = 70. A 480p o en modo draft, 6 s = 18. A 1080p, 15 s = 180. Apagar el audio NO baja el precio. Es el modelo por defecto de la skill oficial.",
+    "marca": "M",
+    "evidencia": "get_cost con mode omni_reference y start_image, con audio true y con audio false, 5-oct",
+    "uso_para_lucia": "No usarlo para el b-roll del día a día. Si alguna vez hace falta un plano de más de 15 s o una edición de video, ahí sí entra."
+   },
+   {
+    "dato": "Seedance 2.0 std a 720p: 6 s = 27 y 10 s = 45; en modo fast, 6 s = 15. Seedance 2.0 Mini: 720p 6 s = 6 (con o sin audio), 10 s = 10, 4 s = 4; 480p 6 s = 3.",
+    "marca": "M",
+    "evidencia": "get_cost, 5-oct",
+    "uso_para_lucia": "Mini a 720p es el respaldo barato para «Un día en Santa Cruz». El 30-sep midió una deriva leve de la cara (0,68 → 0,60-0,64)."
+   },
+   {
+    "dato": "Cinema Studio Video 3.0 cuesta 5 cr/s a 720p: 4 s = 20 · 6 s = 30 · 10 s = 50. A 480p, 6 s = 21. generate_audio viene en false y el audio no cambia el precio. Acepta Elements y las imágenes image, start_image y end_image. Duración de 4 a 15 s.",
+    "marca": "M",
+    "evidencia": "get_cost y models_explore get cinematic_studio_3_0, 5-oct. La prueba de calidad del 30-sep nunca se corrió.",
+    "uso_para_lucia": "Cuesta 4 veces más que Kling. Solo sirve para una portada «cine», no para el día a día."
+   },
+   {
+    "dato": "Hay modelos nuevos en el catálogo: Cinema Studio 3.5 (30 cr por 6 s; por defecto pide el prompt en chino, prompt_language \"zh\", y dura 15 s), Cinema Studio 4.0 (42 cr por 6 s; audio prendido por defecto), Wan 3.0 (10,5 por 6 s), MiniMax H3/H3 Max, Gemini Omni Flash 1.1 (24 por 8 s), Kling 3.0 Turbo (9 por 6 s), Veo 3.1 Lite (9 por 6 s; 12 por 8 s), Grok Video 1.5 (27 por 6 s), Hailuo (6 por 6 s) y Happy Horse (15 por 6 s).",
+    "marca": "M",
+    "evidencia": "models_explore list type video input image (guardado en models_list_video_image_20261005.json) y get_cost de cada uno",
+    "uso_para_lucia": "Ninguno mejora el precio de Kling std para una cara fija. Hailuo, a 6 cr, es el único igual de barato, y su cara nunca se midió."
+   },
+   {
+    "dato": "El parámetro exacto para apagar el audio cambia según el modelo. kling3_0 y cinematic_studio_video_v2 usan sound:\"off\" (texto); solo en Kling eso baja el precio. Seedance 2.5, 2.0 y Mini, Cinema Studio 3.0, 3.5 y 4.0, Veo 3.1 Lite y Wan 3.0 usan generate_audio:false (booleano), que no cambia el precio. Kling 3.0 Turbo, Grok 1.5, Gemini Omni y Hailuo no tienen parámetro de audio.",
+    "marca": "M",
+    "evidencia": "Esquemas de models_explore y pares de get_cost con y sin audio, 5-oct",
+    "uso_para_lucia": "En Kling siempre va sound:\"off\". En los demás, generate_audio:false solo evita el audio que no queremos; no ahorra créditos."
+   },
+   {
+    "dato": "Los Elements de identidad funcionan en video solo con Cinema Studio Video 2, Cinema Studio 3.0, Seedance 2.0 y Kling 3.0. Kling además exige una start_image. Poner <<<cbbf514b LUCIA-v5>>> en el prompt de Kling no cambia el precio (7,5 cr). Los Elements LUCIA-v5 (cbbf514b) y LUCIA-v5b (0384630a) están vivos.",
+    "marca": "M",
+    "evidencia": "Descripción de show_reference_elements, más show_reference_elements list y get_cost con el placeholder, 5-oct",
+    "uso_para_lucia": "Es una palanca gratis para el próximo clip pago: foto aprobada como start_image más <<<cbbf514b>>> en el prompt. Puede ayudar a sostener la cara cuando gesticula. No está probado."
+   },
+   {
+    "dato": "Marketing Studio (v1, mode ugc): 15 s a 720p = 75 cr; 12 s a 480p = 42. Marketing Studio v2 ugc_v2: 15 s a 720p = 105; a 480p = 45. El rol character_photo da «Unknown media role». Escribe su propio guion y genera su propia voz. Hay 986 presets UGC, pensados para producto físico (unboxing, try-on, testimonio).",
+    "marca": "M",
+    "evidencia": "get_cost marketing_studio_video y marketing_studio_v2_video, más show_marketing_studio_v2 category ugc, 5-oct",
+    "uso_para_lucia": "No sirve. Cuesta de 6 a 14 veces un clip de Kling, no garantiza la cara de Lucía y su guion puede prometer resultados o armar testimonios, cosas que están prohibidas."
+   },
+   {
+    "dato": "Marketing Studio saas_motion: 15 s = 90,5 cr y 10 s = 60,8. Tiene 42 presets y recibe una imagen (product_media_id), que el modelo vuelve a dibujar. En total hay 231 plantillas de motion.",
+    "marca": "M",
+    "evidencia": "get_cost, más get_presets marketing_studio con query saas y la ficha del preset Simple, 5-oct",
+    "uso_para_lucia": "No usarlo con capturas de Onia: re-dibuja la interfaz, y eso contradice «pantalla REAL» y la regla de no mostrar pantallas inventadas. La animación de la pantalla real se hace gratis con HyperFrames."
+   },
+   {
+    "dato": "El flujo oficial ugc-video de Higgsfield, en su formato website (presentadora más sitio), prohíbe generar o re-estilizar la interfaz. La pantalla se pega como tarjetas con ffmpeg: 0,78 del ancho por hasta 0,60 del alto, centradas y subidas un 4 %, 1,2 a 1,5 s cada una, con 0,3 a 0,5 s de cara limpia entre tarjetas. No van en el gancho ni en el cierre, y el 15 % de abajo queda libre para los subtítulos. La presentadora se hace con Seedance 2.5 a 1080p, con audio y acento estadounidense por defecto.",
+    "marca": "D",
+    "evidencia": "get_workflow_instructions ugc-video, y get_workflow_bundle_file de references/formats/website.md y references/screen-broll-and-composite.md, 5-oct",
+    "uso_para_lucia": "Copiar esa geometría en editor-videos para las piezas de venta: Lucía en cuadro y la pantalla real encima, a ritmo de palabra. Cuesta 0 cr."
+   },
+   {
+    "dato": "El modo presentador del flujo narration toma un video existente (por ejemplo, una grabación de pantalla) y una foto, y pone a la persona recortada en una esquina. Lleva tres pasos: fondo verde con gpt_image_2 (1 cr), un bloque de gemini_omni de 10 s (30 cr) y voice_change (1 cr). Son unos 32 cr cada 10 s, unos 94 cr por 30 s.",
+    "marca": "M",
+    "evidencia": "Los pasos salen de get_workflow_bundle_file narration/references/presenter-mode.md [D]. Los costos son get_cost de gemini_omni, voice_change y gpt_image_2 [M].",
+    "uso_para_lucia": "Es una opción para el anuncio de Meta con persona: Lucía en la esquina hablando sobre la grabación real. Es cara y necesita resolver D4, la voz."
+   },
+   {
+    "dato": "voice_change cuesta 1 cr cada 10 s. sync_so cuesta 3,6 cr/s (6 s = 21,6; 10 s = 36). La cuenta ya tiene la voz element \"Lucia-voz\" (8de5db95), además de presets con nombre hispano (Marisol, Ines, Elena).",
+    "marca": "M",
+    "evidencia": "get_cost con duration, list_voices y transactions (sync_so cobró 18,15 en agosto y 28,8 el 21 y 22-ago), 5-oct",
+    "uso_para_lucia": "Ruta de habla barata: kling3_0_turbo dice el guion en español (9 cr) y voice_change lo pasa a Lucia-voz (~1 cr). Son ~10 cr por 6 s, contra ~29 con ElevenLabs más sync_so. Nadie escuchó todavía el acento."
+   },
+   {
+    "dato": "Kling 3.0 Motion Control: 10 s en std = 17 cr. Copia los gestos de un video guía a una foto.",
+    "marca": "M",
+    "evidencia": "get_cost kling3_0_motion_control, 5-oct",
+    "uso_para_lucia": "Sergio Urcullo graba 10 s gesticulando con el celular y Lucía repite exactamente esos gestos. Da control sobre «mira a cámara y gesticula». No está probado."
+   },
+   {
+    "dato": "virality_predictor no tiene cotización sin cobro. En la cuenta nunca se usó: transactions, del 11-ago al 5-oct, no muestra ningún cargo. Su página dice que acepta clips de hasta 15 s, verticales u horizontales. Devuelve puntaje, segundo pico del gancho y retención.",
+    "marca": "D",
+    "evidencia": "Esquema de la herramienta (sin get_cost), páginas de transactions y higgsfield.ai/apps/virality-predictor (texto guardado en vp.txt)",
+    "uso_para_lucia": "Sirve, como mucho, para comparar dos ganchos (los primeros 15 s), no un reel entero de 30 a 45 s. Su costo está sin medir."
+   },
+   {
+    "dato": "video_analysis devuelve el video escena por escena (visual, audio, rótulo y tipo de plano), sin puntaje. Acepta un video subido o un link de YouTube. En la cuenta hay 5 análisis viejos, y transactions no muestra ningún cargo junto a los del 19-ago 02:46 y 21-ago 00:33.",
+    "marca": "I",
+    "evidencia": "video_analysis_jobs más transactions (cursor 300 y 400), 5-oct",
+    "uso_para_lucia": "No sirve para elegir entre dos versiones. Sí sirve para desarmar, escena por escena, los anuncios de CitaPro y Doctocliq que capture la madre."
+   },
+   {
+    "dato": "reframe cobra 5 cr/s: 6 s = 30, 30 s a 720p = 140 y 45 s a 1080p = 412. outpaint_image de una foto cuesta 2 cr.",
+    "marca": "M",
+    "evidencia": "reframe y outpaint_image con get_cost, 5-oct",
+    "uso_para_lucia": "No usarlo nunca: Kling ya sale en 9:16. Si una foto es 3:4, se amplía la foto con outpaint antes de animar (2 cr) o se recorta con ffmpeg."
+   },
+   {
+    "dato": "bytedance_video_upscale a 1080p cuesta ~0,1 cr por un clip de 6 s; a 2k, 0,2; en modo pro a 30 fps, 1. video_upscale cuesta 2. topaz_video no da cotización. La herramienta upscale_video no tiene preflight.",
+    "marca": "M",
+    "evidencia": "get_cost con el clip K1 e470ef4f, 5-oct",
+    "uso_para_lucia": "Es casi gratis subir los 720p de Kling a 1080 para Instagram. Hay que mirar si la cara de ~120 px gana nitidez sin deformarse."
+   },
+   {
+    "dato": "Shorts Studio cuesta 90 cr por 30 s y re-estiliza un video fuente. Ads Studio solo hace imágenes estáticas y ni siquiera cotiza sin crear antes una marca con ads_studio_create_brand.",
+    "marca": "M",
+    "evidencia": "shorts_studio_create con get_cost y ads_studio_quote (BAD_REQUEST), 5-oct",
+    "uso_para_lucia": "Ninguno de los dos sirve para Lucía."
+   },
+   {
+    "dato": "Los créditos que sobran se borran en cada renovación del plan. El 11-sep hubo «Subscription Credits Reset» de −1851,9 y +600. El 1-oct, −387,57 y +600. El plan es pro, con 600 cr. Hoy hay 541,26.",
+    "marca": "M",
+    "evidencia": "transactions cursor 0 y 200, 5-oct",
+    "uso_para_lucia": "Con un techo de 150 cr por mes, unos 390 cr se pierden en la próxima renovación. Las pruebas chicas no son gasto nuevo en plata."
+   },
+   {
+    "dato": "models_explore recommend ordena por coincidencia de palabras y etiquetas (match_reason \"tags+40\"), no por calidad. Para «persona que mira a cámara y gesticula» puso primero Grok Video 1.5, a 27 cr.",
+    "marca": "M",
+    "evidencia": "models_explore recommend, 5-oct",
+    "uso_para_lucia": "No elegir modelo por esa lista. Se elige por la tabla medida de cara (ArcFace) y por costo."
+   },
+   {
+    "dato": "Publicar en TikTok desde Higgsfield exige el formulario-widget de MCP Apps: «Clients without MCP Apps cannot publish».",
+    "marca": "D",
+    "evidencia": "ugc-video website.md, fase 8",
+    "uso_para_lucia": "Confirma que TikTok sigue por Buffer."
+   },
+   {
+    "dato": "Receta del Reel ancla de 30–45 s: Lucía 2–5 s con una foto del banco o un clip ya pagado (0 cr). Si falta, kling3_0 std, sound \"off\", 3 s (3,75 cr). Después, la grabación de la pantalla real con tarjetas a la medida del flujo ugc-video, y el cierre. Se edita con editor-videos. Total: 0 a 3,75 cr.",
+    "marca": "I",
+    "evidencia": "Sale de las cotizaciones de arriba y de PLAN.md §3",
+    "uso_para_lucia": "Es la pieza del día a día."
+   },
+   {
+    "dato": "Receta de «Recepción a las 8» y «Humo vs. real»: una foto con seedream_v4_5 y el ancla (1 cr) más kling3_0 std, sound \"off\", 6 s, 9:16 (7,5 cr) = 8,5 cr. Si alcanza con el remate, un clip de 3 s: 4,75 cr. K1 y K2 ya están pagados.",
+    "marca": "I",
+    "evidencia": "Cotizaciones de arriba y GUIONES-LUCIA-KIT.md",
+    "uso_para_lucia": "Lo que bloquea es la pantalla real (falta la cuenta demo), no los créditos."
+   },
+   {
+    "dato": "Receta del chiste de 10 s: el clip ya pagado (0 cr), o kling std off de 6 s (7,5) más 4 s de foto con zoom. Los 10 s enteros cuestan 12,5. Receta de «Un día en Santa Cruz»: primero los clips pagados; cada clip nuevo, kling std off de 6 s a 7,5, o Seedance 2.0 Mini a 720p por 6 cr. Historias: fotos (1 cr) o recortes de clips pagados.",
+    "marca": "I",
+    "evidencia": "Cotizaciones de arriba",
+    "uso_para_lucia": "Las 2 semanas de prueba de PLAN.md caben holgadas en ≤ 12,5 cr."
+   },
+   {
+    "dato": "Receta del anuncio de Meta con persona. Sin voz (D4 vigente): 2 clips de Lucía, kling std off de 6 s (15 cr), que mira a cámara y hace un gesto, más la pantalla real y el texto; termina en la pantalla. Con voz, si Sergio Urcullo destraba D4: kling3_0_turbo con guion en español más voice_change a Lucia-voz, ~10 cr por cada 6 s hablados.",
+    "marca": "I",
+    "evidencia": "Cotizaciones de arriba y ONIA_ADQUISICION_Y_PAUTA.md §2.6 (los anuncios que más duran tienen una persona y terminan en la pantalla)",
+    "uso_para_lucia": "Es la pieza nueva posible. La versión sin voz se puede hacer ya con lo que hay."
+   }
+  ],
+  "costos_medidos": [
+   {
+    "que": "Clip de b-roll, el elegido",
+    "modelo_y_parametros": "kling3_0 std, sound:\"off\", 9:16, start_image; 3 s / 6 s / 10 s / 15 s",
+    "creditos": "3,75 / 7,5 / 12,5 / 18,75",
+    "como_se_midio": "generate_video con get_cost:true por MCP, 5-oct. El saldo fue 541,26 antes y después."
+   },
+   {
+    "que": "Clip Kling con sonido",
+    "modelo_y_parametros": "kling3_0 std, sound:\"on\", 6 s",
+    "creditos": "10,5",
+    "como_se_midio": "get_cost, 5-oct"
+   },
+   {
+    "que": "Clip Kling pro",
+    "modelo_y_parametros": "kling3_0 pro, sound:\"off\"; 6 s / 8 s / 10 s (8 s con sound:\"on\" = 16)",
+    "creditos": "9 / 12 / 15",
+    "como_se_midio": "get_cost, 5-oct"
+   },
+   {
+    "que": "Clip Kling 4k",
+    "modelo_y_parametros": "kling3_0 mode 4k, sound off, 6 s",
+    "creditos": "36",
+    "como_se_midio": "get_cost, 5-oct"
+   },
+   {
+    "que": "Kling con Element de identidad",
+    "modelo_y_parametros": "kling3_0 std off 6 s, con <<<cbbf514b>>> en el prompt y start_image",
+    "creditos": "7,5",
+    "como_se_midio": "get_cost, 5-oct"
+   },
+   {
+    "que": "Kling Turbo (habla nativa)",
+    "modelo_y_parametros": "kling3_0_turbo 720p; 6 s / 10 s; sin parámetro de audio",
+    "creditos": "9 / 15",
+    "como_se_midio": "get_cost, 5-oct"
+   },
+   {
+    "que": "Seedance 2.5",
+    "modelo_y_parametros": "omni_reference, start_image, 9:16. 720p 6 s / 10 s; 480p 6 s; draft 6 s; 720p 15 s; 1080p 15 s. Audio on y off cuestan igual.",
+    "creditos": "42 / 70 / 18 / 18 / 105 / 180",
+    "como_se_midio": "get_cost, 5-oct"
+   },
+   {
+    "que": "Seedance 2.0",
+    "modelo_y_parametros": "std 720p: 6 s / 10 s; fast 720p 6 s; generate_audio false",
+    "creditos": "27 / 45 / 15",
+    "como_se_midio": "get_cost, 5-oct"
+   },
+   {
+    "que": "Seedance 2.0 Mini",
+    "modelo_y_parametros": "720p: 4 s / 6 s / 10 s; 480p 6 s; generate_audio false (con audio true también da 6)",
+    "creditos": "4 / 6 / 10 / 3",
+    "como_se_midio": "get_cost, 5-oct"
+   },
+   {
+    "que": "Cinema Studio Video 3.0 (nunca generado)",
+    "modelo_y_parametros": "cinematic_studio_3_0, 9:16, generate_audio false. 720p: 4 s / 6 s / 10 s; 480p 6 s. Con audio true, 6 s también da 30.",
+    "creditos": "20 / 30 / 50 / 21",
+    "como_se_midio": "get_cost, 5-oct (adjustment: genre=auto)"
+   },
+   {
+    "que": "Cinema Studio 3.5 y 4.0",
+    "modelo_y_parametros": "3.5: 720p 6 s / 10 s, prompt_language en. 4.0: omni_reference 720p 6 s / 10 s.",
+    "creditos": "30 / 50 · 42 / 70",
+    "como_se_midio": "get_cost, 5-oct"
+   },
+   {
+    "que": "Cinema Studio Video v2",
+    "modelo_y_parametros": "std 6 s sound off / pro 10 s sound off",
+    "creditos": "6 / 15",
+    "como_se_midio": "get_cost, 5-oct"
+   },
+   {
+    "que": "Otros image-to-video",
+    "modelo_y_parametros": "veo3_1_lite 6 s (con o sin audio) / 8 s; grok_video_v15 720p 6 s; wan3_0 720p 6 s / 10 s; minimax_hailuo 768 6 s / 10 s; gemini_omni_flash_1_1 8 s; gemini_omni 10 s; happy_horse 6 s",
+    "creditos": "9 / 12; 27; 10,5 / 17,5; 6 / 11; 24; 30; 15",
+    "como_se_midio": "get_cost, 5-oct"
+   },
+   {
+    "que": "Marketing Studio UGC",
+    "modelo_y_parametros": "marketing_studio_video mode ugc: 15 s 720p / 12 s 480p. marketing_studio_v2_video ugc_v2: 15 s 720p / 15 s 480p.",
+    "creditos": "75 / 42 · 105 / 45",
+    "como_se_midio": "get_cost, 5-oct. El rol character_photo dio error."
+   },
+   {
+    "que": "Marketing Studio SaaS motion",
+    "modelo_y_parametros": "marketing_studio_v2_video type saas_motion, brand_url onia.com.bo; 15 s / 10 s",
+    "creditos": "90,5 / 60,8",
+    "como_se_midio": "get_cost, 5-oct"
+   },
+   {
+    "que": "Ads Studio",
+    "modelo_y_parametros": "ads_studio_quote con prompt solo, 9:16 y 3:4",
+    "creditos": "sin medir: el servidor pide crear una marca antes de cotizar",
+    "como_se_midio": "ads_studio_quote, 5-oct (BAD_REQUEST)"
+   },
+   {
+    "que": "Shorts Studio",
+    "modelo_y_parametros": "shorts_studio_create con get_cost, 30 s",
+    "creditos": "90",
+    "como_se_midio": "get_cost, 5-oct"
+   },
+   {
+    "que": "Reframe de video",
+    "modelo_y_parametros": "6 s 720p / 30 s 720p / 45 s 1080p",
+    "creditos": "30 / 140 / 412",
+    "como_se_midio": "reframe con get_cost, 5-oct"
+   },
+   {
+    "que": "Outpaint de foto",
+    "modelo_y_parametros": "outpaint_image del ancla a 9:16",
+    "creditos": "2",
+    "como_se_midio": "get_cost, 5-oct"
+   },
+   {
+    "que": "Upscale de video",
+    "modelo_y_parametros": "bytedance_video_upscale sobre el clip K1 de 6 s: 1080p aigc 24 fps; 2k; 1080p pro 30 fps. video_upscale: mismo clip.",
+    "creditos": "0,1–0,12 / 0,2 / 1 · 2",
+    "como_se_midio": "get_cost, 5-oct. topaz_video: «does not support cost estimation»."
+   },
+   {
+    "que": "Motion Control",
+    "modelo_y_parametros": "kling3_0_motion_control std 10 s",
+    "creditos": "17",
+    "como_se_midio": "get_cost, 5-oct"
+   },
+   {
+    "que": "Cambio de voz y lipsync",
+    "modelo_y_parametros": "voice_change 10 s; sync_so 6 s / 10 s",
+    "creditos": "1; 21,6 / 36",
+    "como_se_midio": "get_cost con duration, 5-oct. transactions de agosto: sync_so 18,15 y 28,8."
+   },
+   {
+    "que": "Fondo verde para el modo presentador",
+    "modelo_y_parametros": "gpt_image_2 1k medium 9:16, con el ancla",
+    "creditos": "1",
+    "como_se_midio": "generate_image get_cost, 5-oct"
+   },
+   {
+    "que": "Virality Predictor",
+    "modelo_y_parametros": "virality_predictor create",
+    "creditos": "sin medir (la herramienta no tiene get_cost; no se llamó)",
+    "como_se_midio": "Lectura del esquema y de transactions: ningún uso desde el 11-ago"
+   },
+   {
+    "que": "Análisis de video",
+    "modelo_y_parametros": "video_analysis_create",
+    "creditos": "probablemente 0, sin confirmar",
+    "como_se_midio": "transactions no muestra cargo junto a los análisis del 19-ago y 21-ago; no se llamó create"
+   }
+  ],
+  "trampas": [
+   "/home/user/onia-hermes/.claude/skills/higgsfield-generate/SKILL.md:6, :99 y :125 ponen Seedance 2.5 como video por defecto. Para Lucía cuesta 42 cr por 6 s contra 7,5 de Kling std off, medido el 5-oct. Falta una línea ONIA arriba que lo pise.",
+   "/home/user/onia-hermes/.claude/skills/higgsfield-generate/SKILL.md:128 y references/model-catalog.md:164 dan Cinema Studio Video 3.0 como «modern default». El catálogo ya tiene cinematic_studio_video_3_5 y cinematic_studio_video_4_0.",
+   "TRAMPA NUEVA: cinematic_studio_video_3_5 trae por defecto prompt_language \"zh\" y 15 s, y cinematic_studio_video_4_0 trae el audio prendido. Hay que pasar prompt_language \"en\" y la duración a mano.",
+   "/home/user/onia-hermes/.claude/skills/higgsfield-generate/references/model-catalog.md:208 dice que Kling tiene los modos pro/std. Hoy además tiene \"4k\", a 36 cr por 6 s.",
+   "/home/user/onia-hermes/.claude/skills/higgsfield-generate/references/model-catalog.md:214 y SKILL.md:269 dicen que Marketing Studio video sale a 480p/720p. El esquema actual acepta también 1080p.",
+   "/home/user/onia-hermes/hermes-content/docs/HIGGSFIELD_VIDEO_SYSTEM.md:242 dice «pro 8 s = 16 cr». Ese precio es con sound on; con sound \"off\" son 12.",
+   "/home/user/onia-hermes/hermes-content/docs/HIGGSFIELD_VIDEO_SYSTEM.md:246 recomienda Marketing Studio motion «para piezas con captura real del sistema». saas_motion recibe la captura como imagen y la re-dibuja, y el propio flujo ugc-video de Higgsfield prohíbe generar o re-estilizar interfaces. Choca con «Pantalla REAL» y con «No fake dashboards» (:815).",
+   "/home/user/onia-hermes/hermes-content/docs/HIGGSFIELD_VIDEO_SYSTEM.md:94-96 habla de una «familia ugc-*». Hoy es un solo flujo, ugc-video, con 6 formatos, y aparecieron ads-studio, narration (con modo presentador), video-editing y video-montage.",
+   "/home/user/onia-hermes/hermes-content/references/modelos/lucia/LUCIA.md:829-876 (§9 «seguir esto al pie») manda nano_banana_2 con el Element 58bbd635, que está retirado según HIGGSFIELD_VIDEO_SYSTEM.md:198, y veo3_1_lite a «1 cr/segundo». Hoy Veo Lite cobra 1,5 cr/s (6 s = 9, 8 s = 12) y el método decidido es Seedream con el ancla más Kling. Una sesión nueva que lea §9 hace la receta vieja.",
+   "/home/user/onia-hermes/hermes-content/references/modelos/lucia/LUCIA.md:871-872 da Seedance 2.0 Mini a 480p sin audio por 5 cr y a 720p con audio por 12,5. Hoy, 6 s a 480p cuestan 3 y 6 s a 720p cuestan 6, con o sin audio.",
+   "/home/user/onia-hermes/hermes-content/references/modelos/lucia/LUCIA.md:875 da «grok 1.5 12,5 cr». Hoy grok_video_v15 a 720p cuesta 27 cr por 6 s.",
+   "/home/user/onia-hermes/hermes-content/references/modelos/lucia/LUCIA.md:540 da sync_so como «18,15 cr» fijos. Cobra 3,6 cr/s: 6 s = 21,6 y 10 s = 36, y transactions muestra cargos de 18,15 y de 28,8.",
+   "TRAMPA NUEVA: en Seedance (2.5, 2.0 y Mini), Cinema Studio y Veo Lite, generate_audio:false NO baja el precio. Solo Kling con sound:\"off\" lo baja.",
+   "TRAMPA NUEVA: models_explore action recommend ordena por coincidencia de etiquetas (match_reason \"tags+40\"), no por calidad. Para «persona que mira a cámara» propuso primero Grok 1.5, a 27 cr.",
+   "TRAMPA NUEVA: marketing_studio_v2_video declara el rol character_photo, pero get_cost responde «Unknown media role: character_photo».",
+   "TRAMPA NUEVA: reframe cobra 5 cr/s (30 s = 140; 45 s a 1080p = 412). Para cambiar el formato se usa ffmpeg u outpaint de la foto (2 cr) antes de animar.",
+   "TRAMPA NUEVA: Ads Studio no cotiza sin una marca creada. Para saber el precio hay que escribir (ads_studio_create_brand).",
+   "TRAMPA NUEVA: los créditos del plan se borran al renovar. Hubo «Subscription Credits Reset» de −1851,9 el 11-sep y de −387,57 el 1-oct. El techo de 150 por mes deja que se venzan unos 390 cr por mes.",
+   "TRAMPA NUEVA: toda cotización de Kling o Seedance con un prompt que suene a escena dispara primero la recomendación del preset «IN THE DARK» y no devuelve precio. Hay que pasar declined_preset_id 24bae836-2c4a-48e0-89b6-49fcc0b21612 también en get_cost."
+  ],
+  "decisiones_para_sergio": [
+   "Créditos que vencen: hoy hay 541,26 cr y lo que sobra se borra en la próxima renovación (el 1-oct se borraron 387,57). Recomendación: aprobar un lote de pruebas de ~45 cr dentro del techo (octubre pasaría de 52,5 a ~97,5 de 150), o revisar si el plan pro de 600 cr por mes es el correcto para usar 150. Costo en plata: 0 extra.",
+   "Prueba de Kling pro contra std, con upscale: la misma foto aprobada en un clip std off de 6 s (7,5), uno pro off de 6 s (9) y upscale de ByteDance del std a 1080p (~0,1). Son ~17 cr, y la prueba se juzga mirando la cara. Recomendación: SÍ, porque es barata y define la calidad de todos los clips.",
+   "Cinema Studio 3.0 (nunca probado): un clip de 4 s a 720p desde la foto P3 del 30-sep, para completar la tabla A/B, cuesta 20 cr. Recomendación: solo si querés una portada «cine» para «Un día en Santa Cruz». No cambia el día a día, porque cuesta 4 veces lo de Kling.",
+   "Marketing Studio: recomendación NO. Inventa guion y voz, no toma la cara de Lucía como personaje y la pantalla igual se monta aparte. Si querés verlo, la prueba mínima es la v1 en modo ugc, 12 s a 480p con la foto de Lucía: 42 cr.",
+   "Voz del anuncio con persona (D4): probar kling3_0_turbo con un guion de 6 s en español más voice_change a la voz «Lucia-voz» que ya está en la cuenta. Son ~10 cr, y escuchás vos el acento antes de seguir. La alternativa cara es la presentadora en una esquina sobre la grabación de pantalla, ~32 cr cada 10 s. Si D4 sigue en «sin voz», el anuncio se arma igual con 2 clips de Kling sin sonido (15 cr).",
+   "Opcional: Motion Control. Grabás 10 s gesticulando con el celular y Lucía repite tus gestos exactos: 17 cr. Recomendación: después de la prueba de voz, solo si los gestos de Kling se ven robóticos.",
+   "Virality Predictor: no tiene cotización. Medir su costo exige una corrida real, mirando el saldo antes y después, con el gancho de 15 s de un reel ya editado. Recomendación: no por ahora. Primero hay que publicar; las métricas reales de 48 h valen más que un puntaje simulado."
+  ],
+  "huecos": [
+   "No se generó nada. La calidad de cara y de gesto de Kling pro, Cinema Studio 3.0, 3.5 y 4.0, Seedance 2.5 y Hailuo con Lucía está sin medir; solo hay precios.",
+   "Costo por corrida de virality_predictor y de topaz_video: sin medir, porque no tienen cotización sin cobro.",
+   "Que video_analysis sea gratis sale de transactions (no hay cargo en la hora de los análisis de agosto). No está confirmado con el saldo antes y después.",
+   "No se sabe si Kling pro sale a 1080p ni qué resolución exacta da el modo std con start_image 9:16. Las medidas de la doc vieja son de la versión de agosto.",
+   "No se escuchó el acento de las voces «Lucia-voz» (8de5db95), Marisol, Ines ni Elena. list_voices tiene más páginas (has_more true, más de 122 voces).",
+   "Fecha exacta de la próxima renovación y si hay un plan más barato: no consultado, porque show_plans_and_credits es un widget de venta.",
+   "Avatar propio de Marketing Studio v1 con la cara de Lucía (avatar_ids): requiere crear el avatar, que es una escritura, y no se probó.",
+   "Si la ruta kling3_0_turbo más voice_change mantiene sincronizada la boca: voice_change conserva los tiempos del audio original según su descripción, pero no se probó.",
+   "Si el upscale de ByteDance mejora o empeora el puntaje de identidad de las caras de ~120 px de Kling: sin probar.",
+   "Evidencia de este trabajo: /tmp/claude-0/-home-user-onia-hermes/62db117f-72ad-5efb-b90b-9753e7a9129f/scratchpad/higgsfield/video/cotizaciones_20261005.json, models_list_video_image_20261005.json y vp.txt (la página de Virality Predictor)."
+  ]
+ },
+ "2": {
+  "resumen": "1. Instagram está más cerca de lo que dice el repo. La cuenta @lucia.antelo.oficial ya es profesional (Creador). El 20-ago autorizó la app «OnIA Social API» por Postiz. Su token estaba sano hasta el 13-18 de octubre [D]. No hace falta que Sergio Urcullo vuelva a iniciar sesión: alcanza con que la madre o la sesión de infra copie ese token de la base de Postiz, lo renueve por 60 días y cree ig-lucia.env. Hay que hacerlo antes del 13-oct.\n2. La app OnIA Social API está en modo Live [M]. No hace falta ningún rol de tester.\n3. La etiqueta «Información de IA» por pieza SÍ se puede poner por API desde el 22-jun-2026, con el parámetro is_ai_generated=true en el contenedor [M]. ig-reel.mjs e ig-carrusel.mjs no lo mandan. Hay que agregarlo antes de la primera publicación. Es un cambio chico.\n4. Según el repo, Sergio Urcullo activó la etiqueta de perfil «Creador de IA» el 31-ago [D]. Nadie la miró: la madre la confirma mirando.\n5. TikTok por Higgsfield publica en público y con etiqueta IA. Pero el video tiene que estar alojado en Higgsfield, cada pieza pide un clic humano en un formulario que Claude Code no muestra, y no se puede agendar [M]. Buffer, en cambio, publica solo y agendado, y su API acepta isAiGenerated [M doc]. Gana Buffer, con una cuenta gratis aparte, porque los 3 canales del plan actual están ocupados.\n6. La puerta de venta está rota: onia.com.bo/llamada da 404 [M]. sergiourcullo.vercel.app/llamada sí redirige a cal.com y conserva la query [M]. Cal.com guarda utm_source, utm_medium y utm_campaign, pero no src [D]. Hay que medir con utm_campaign=lucia-<pieza>.\n7. Esta nube no tiene ssh. Todo lo que pasa en el VPS lo hace la madre desde la PC o la sesión de infra.\n8. Gasto de este estudio: 0 cr. El saldo sigue en 541,26 [M].",
+  "hallazgos": [
+   {
+    "dato": "La app «OnIA Social API» (2160241918102061) está en modo Live (app_status live_mode, is_live true). Su correo de contacto figura sin verificar. Sus redirect URIs de Facebook Login son solo las de Postiz.",
+    "marca": "M",
+    "evidencia": "mcp__Meta_Developer_Tools__devtools_app basic_settings y advanced_settings, 5-oct. Copia en scratchpad/higgsfield/publicacion/evidencia-5oct.txt",
+    "uso_para_lucia": "Lucía no necesita rol de tester ni App Review: Standard Access en una app Live alcanza para su propia cuenta."
+   },
+   {
+    "dato": "@lucia.antelo.oficial (IG id 28357585133845376) es cuenta Creador. El 20-ago quedó conectada por Instagram Login (instagram-standalone) a la misma app, a través de Postiz (integración cmt1sv4eh001alq9cl3y6q7es). El 4-sep su token estaba sano y vencía entre el 13 y el 18-oct-2026.",
+    "marca": "D",
+    "evidencia": "hermes-content/contenido/LUCIA.md:14; hermes-content/docs/ONIA_AUTOMATIZACION_MENSAJES_20260818.md:945; hermes-content/docs/handoff/claude-git-status-935f47.md:177-179",
+    "uso_para_lucia": "El token de 60 días ya existe. Una sesión con acceso al VPS lo lee de la base de Postiz (igual que se hizo con sergio y oniahq el 29-sep), lo renueva con refresh_access_token y escribe /root/.config/onia-publicar/ig-lucia.env. Desde ese momento ig-refrescar.sh lo renueva solo cada lunes, porque recorre todos los ig-*.env. Hay que hacerlo antes del 13-oct; después del vencimiento ya no se puede renovar."
+   },
+   {
+    "dato": "Meta agregó el 22-jun-2026 la autodeclaración de IA en Content Publishing. Se pone is_ai_generated=true al crear el contenedor y la pieza sale con «AI info». En carruseles va solo en el contenedor del carrusel. Funciona con Instagram Login y con Facebook Login. Se lee con GET /{media}?fields=is_ai_generated.",
+    "marca": "M",
+    "evidencia": "devtools_discovery search_docs, changelog de Instagram Platform del 22-jun-2026 y guía Content Publishing. Texto guardado en scratchpad/higgsfield/publicacion/meta-docs-busqueda-ia.txt",
+    "uso_para_lucia": "Cada pieza de Lucía puede salir etiquetada como IA por API, sin tocar el celular. Hay que sumar el parámetro en containerParams (ig-reel.mjs) y en carouselParams (ig-carrusel.mjs), y verificarlo después de publicar."
+   },
+   {
+    "dato": "Sergio Urcullo activó «Creador de IA» en el perfil de Lucía el 31-ago. Lo informó él; ninguna sesión lo miró.",
+    "marca": "D",
+    "evidencia": "commit 73068c58a; hermes-content/docs/MODELO_DE_CONTENIDO_DOS_CUENTAS.md:57",
+    "uso_para_lucia": "Se le pide a la madre que lo mire en el perfil desde la PC. Sergio Urcullo solo interviene si está apagado."
+   },
+   {
+    "dato": "El TikTok de Higgsfield exige un video alojado en Higgsfield («TikTok requires a verified source domain»). La publicación la manda una persona desde un widget de MCP Apps («Do not call tiktok_publish yourself. Clients without MCP Apps cannot publish»), y tiktok_publish no está entre las herramientas. Tiene DIRECT_POST (perfil) y UPLOAD_TO_DRAFT (borradores), PUBLIC_TO_EVERYONE en las opciones de privacidad y el prefill is_aigc. Para conectar la cuenta: un link que vence en ~10 min, iniciar sesión en TikTok y «Autorizar» (unos 3 clics más el login). Hoy hay 0 cuentas conectadas.",
+    "marca": "M",
+    "evidencia": "Esquemas cargados con ToolSearch de tiktok_prepare_publish, tiktok_connect y tiktok_music_trending. Llamada de solo lectura tiktok_accounts → {\"accounts\":[]}",
+    "uso_para_lucia": "Un mp4 nuestro sirve si antes se sube a Higgsfield (media_upload). Aun así, cada pieza cuesta un clic humano en el widget y no se puede agendar. No sirve para «postear normalmente»: queda como ruta de emergencia."
+   },
+   {
+    "dato": "La API de Buffer acepta TikTokPostMetadataInput { isAiGenerated: Boolean, title: String (solo para posts de FOTO) }. El toggle de IA de Buffer también existe para Instagram (posts, reels, carruseles, historias), YouTube Shorts y X.",
+    "marca": "M",
+    "evidencia": "WebFetch a developers.buffer.com/types/TikTokPostMetadataInput.html y a support.buffer.com/en-us/articles/flagging-posts-as-ai-generated-in-buffer-V7jAnzYJ5n, 5-oct",
+    "uso_para_lucia": "buffer-post.mjs ya pasa --meta a input.metadata, así que no hay que tocar código: --meta con {\"tiktok\":{\"isAiGenerated\":true}}. El TikTok de Lucía sale solo, agendado, en público y con la etiqueta AIGC."
+   },
+   {
+    "dato": "El Buffer actual (plan Free, 3 canales) está lleno: TikTok sergiourcullom, YouTube y LinkedIn. buffer-post.mjs lee una sola clave fija.",
+    "marca": "D",
+    "evidencia": "hermes-content/deploy/vps-ops/publicar/README.md:59-61; buffer-post.mjs:26 (const CONF='/root/.config/onia-publicar/buffer.env')",
+    "uso_para_lucia": "Para el TikTok de Lucía hace falta una cuenta Buffer gratis aparte, con el correo de Lucía, y que el script acepte otra clave (por ejemplo --clave lucia → buffer-lucia.env). Antes conviene probar si una segunda organización en el mismo login de Buffer trae su propio plan Free [I]: ahí no habría código nuevo ni login de Google."
+   },
+   {
+    "dato": "onia.com.bo/llamada?src=… responde HTTP 404. sergiourcullo.vercel.app/llamada?src=…&utm_source=… responde 307 a cal.com/sergiourcullo/20min y conserva la query completa.",
+    "marca": "M",
+    "evidencia": "curl -D -, 5-oct (scratchpad/higgsfield/publicacion/embudo-curl-2114.txt). En web-factory/apps/onia-platform/src/app no existe la ruta /llamada; el redirect vive en hermes-content/sitio-sergiourcullo/vercel.json",
+    "uso_para_lucia": "La puerta que piden PLAN.md y el kit no existe. Hoy funciona la de sergiourcullo.vercel.app/llamada. Lo correcto es un redirect /llamada en onia.com.bo hacia cal.com: lo puede hacer la sesión de web."
+   },
+   {
+    "dato": "Cal.com guarda solos utm_source, utm_medium y utm_campaign en el detalle de la reserva. src no lo guarda, salvo que exista una pregunta oculta con ese identificador.",
+    "marca": "D",
+    "evidencia": "cal.com/help/bookings/utm-tracking (búsqueda web del 5-oct)",
+    "uso_para_lucia": "Cada link de Lucía tiene que llevar utm_source=instagram|tiktok, utm_medium=bio|historia|dm y utm_campaign=lucia-<pieza>. Con src solo, la métrica «demos con src=lucia-*» no se puede leer en cal.com."
+   },
+   {
+    "dato": "onia.com.bo en vivo sirve el snippet «onia-origen». Guarda utm_*, src y fbclid y los suma al link de app.onia.com.bo/register.",
+    "marca": "M",
+    "evidencia": "curl de la home (scratchpad/higgsfield/publicacion/onia-home.html); código en web-factory/apps/onia-platform/src/lib/origen-de-campana.ts:68-77 y src/app/layout.tsx:137",
+    "uso_para_lucia": "Si la pieza manda al alta y no a la demo, el origen llega hasta el registro. Que la app lo guarde (signupOrigin) depende de que la 1.0 esté publicada, y eso no lo verifiqué."
+   },
+   {
+    "dato": "Los selftests de ig-reel.mjs, ig-carrusel.mjs y buffer-post.mjs pasan en local, sin red. buffer-post.mjs no tiene --help. Esta nube no tiene /usr/bin/ssh.",
+    "marca": "M",
+    "evidencia": "scratchpad/higgsfield/publicacion/selftests-20261005T2113Z.txt",
+    "uso_para_lucia": "La lógica de armado (reel, trial, carrusel y post de Buffer) está sana. Publicar requiere el VPS, y el VPS solo lo alcanzan la madre o la sesión de infra."
+   },
+   {
+    "dato": "L02, L05 y L08 (v4/feed) cumplen los límites de Reels: 1080x1920, h264 a 24 fps, aac a 48 kHz, 6-10 s, 8-13 MB, moov al frente.",
+    "marca": "M",
+    "evidencia": "ffprobe, scratchpad/higgsfield/publicacion/preflight-reels-feed.txt",
+    "uso_para_lucia": "No hay que recomprimir nada: el archivo que sale de editor-videos se publica tal cual."
+   },
+   {
+    "dato": "Con Instagram Login no hay música por API: la Audio API del 1-jun-2026 es solo para apps con Facebook Login.",
+    "marca": "M",
+    "evidencia": "changelog en meta-docs-busqueda-ia.txt",
+    "uso_para_lucia": "Las piezas cuyo gancho es un audio en tendencia se publican a mano. Las de texto o voz van por API."
+   },
+   {
+    "dato": "Los links en el pie de Instagram no se pueden tocar. Además, la Content Publishing API no pone stickers de link en las historias.",
+    "marca": "I",
+    "evidencia": "Comportamiento conocido de Instagram; no lo medí hoy",
+    "uso_para_lucia": "La medición por pieza solo sale por: el link de la bio (uno solo), los stickers de link puestos a mano en la app, o el «Comentá DEMO» respondido a mano (D6). Los utm en el pie que pide FLUJO.md:35 no se miden."
+   }
+  ],
+  "costos_medidos": [
+   {
+    "que": "Este estudio (lecturas, cotizaciones y esquemas)",
+    "modelo_y_parametros": "Higgsfield MCP: balance, tiktok_accounts; ToolSearch (sin llamar) de tiktok_*, media_upload",
+    "creditos": "0 cr (saldo 541,26 antes y después)",
+    "como_se_midio": "mcp__higgsfield__balance → {\"credits\":541.26,\"subscription_plan_type\":\"pro\"}"
+   },
+   {
+    "que": "Publicar en Instagram (reel, trial o carrusel) por la app propia",
+    "modelo_y_parametros": "Graph API v25.0, Instagram Login, contenedor + media_publish; tope de 100 publicaciones cada 24 h",
+    "creditos": "0 cr / US$0",
+    "como_se_midio": "[D] README.md del publicador y REDES-ANALISIS.md §3; app Live medida con devtools_app"
+   },
+   {
+    "que": "TikTok por Buffer, cuenta gratis aparte",
+    "modelo_y_parametros": "Buffer Free: 3 canales, 10 en cola por canal, 100 requests de API por día por clave; metadata tiktok.isAiGenerated",
+    "creditos": "US$0",
+    "como_se_midio": "[D] README.md:59-61 y REDES-ANALISIS.md §6 (precios del 29-sep); campo isAiGenerated [M] en developers.buffer.com"
+   },
+   {
+    "que": "TikTok por Buffer pago, en la cuenta actual",
+    "modelo_y_parametros": "Buffer Essentials, US$6 por canal por mes (US$5 pagando el año)",
+    "creditos": "≈US$24/mes con 4 canales (cuenta mía)",
+    "como_se_midio": "[D] REDES-ANALISIS.md §6; la multiplicación por 4 canales es [I], sin medir en buffer.com/pricing"
+   },
+   {
+    "que": "TikTok por el MCP de Higgsfield",
+    "modelo_y_parametros": "tiktok_connect + tiktok_prepare_publish + widget",
+    "creditos": "sin medir",
+    "como_se_midio": "No tiene cotización sin cobrar y no se llamó. Además pide subir el mp4 a Higgsfield (media_upload), cuyo costo tampoco medí."
+   }
+  ],
+  "trampas": [
+   "hermes-content/docs/cola/lucia-diario/PLAN.md:15-16, hermes-content/references/modelos/lucia/GUIONES-LUCIA-KIT.md:37 y hermes-content/references/modelos/lucia/MANUAL-PATRONES-INFLUENCERS-IA.md:56,152-153 mandan a «onia.com.bo/llamada?src=…». Medido el 5-oct: da 404. La que funciona es sergiourcullo.vercel.app/llamada (307 a cal.com, conserva la query), definida en hermes-content/sitio-sergiourcullo/vercel.json.",
+   "hermes-content/docs/cola/lucia-diario/FLUJO.md:67 («Es un login de Instagram, una vez»), PLAN.md:131-134 y handoff/higgsfield-lucia.md:44,232 dan por pendiente conectar la cuenta y activar la etiqueta. Según el repo ya está hecho: es Creador y está conectada a la app desde el 20-ago (contenido/LUCIA.md:14). Su token vivía en Postiz hasta el 13-18-oct (handoff/claude-git-status-935f47.md:179). La etiqueta de IA está activa desde el 31-ago (commit 73068c58a). Riesgo: pedirle a Sergio Urcullo pasos que ya hizo.",
+   "hermes-content/deploy/vps-ops/publicar/ig-reel.mjs:33-41 (containerParams) e ig-carrusel.mjs:144-147 (carouselParams) no mandan is_ai_generated. Desde el 22-jun-2026 Meta lo acepta también con Instagram Login. Así como están, publican sin la etiqueta IA por pieza.",
+   "hermes-content/docs/historial/ONIA_INFLUENCERS_MULTICUENTA_CURSOS_20260725.md:292,317,423 dice que en Instagram no existe un campo para declarar IA. Es falso desde el 22-jun-2026 (is_ai_generated).",
+   "hermes-content/deploy/vps-ops/publicar/buffer-post.mjs:14 pone {\"tiktok\":{\"title\":\"…\"}} como metadata de TikTok. Según la doc de Buffer, title es solo para posts de FOTO; para video el campo que importa es isAiGenerated.",
+   "hermes-content/deploy/vps-ops/publicar/buffer-post.mjs:26 tiene una sola clave fija (buffer.env), y el plan Free ya tiene ocupados sus 3 canales (README.md:59-61). Lucía no entra en ese Buffer sin cambiar algo.",
+   "hermes-content/docs/cola/lucia-diario/PLAN.md:14 dice «La métrica son las demos agendadas con src=lucia-*». Cal.com no guarda src, solo utm_source, utm_medium y utm_campaign: hay que medir con utm_campaign.",
+   "hermes-content/docs/cola/lucia-diario/FLUJO.md:35 pone los links con utm en el pie. En Instagram el pie no tiene links tocables [I], así que esa atribución no existe.",
+   "hermes-content/deploy/vps-ops/publicar/ig-reel.mjs:34 solo arma REELS e ig-carrusel.mjs:145 exige de 2 a 10 láminas. No hay script para historias (FLUJO.md:17 pide 2-3 por día) ni para una foto suelta (L03 y L06).",
+   "En el VPS, Postiz está sin contenedores desde el 27-sep (docs/ONIA_PUBLICACION_MULTICANAL.md:93). Para leer el token de Lucía hay que levantar SOLO postiz-postgres. Si se levanta Temporal o el orchestrator vuelve a pasar lo del 4-sep: se publicaron 5 posts vencidos sin OK (handoff/claude-git-status-935f47.md:199-205).",
+   "La nube de este carril no tiene /usr/bin/ssh. El scp y los node /root/bin/… del README.md del publicador los corre la madre o la sesión de infra, no esta sesión."
+  ],
+  "decisiones_para_sergio": [
+   "Ruta de TikTok. Recomendación: Buffer gratis, en una cuenta aparte con el correo de Lucía. Cuesta US$0; publica solo, agendado, en público y con etiqueta IA (isAiGenerated). Alternativas: (a) Buffer Essentials en la cuenta actual, ≈US$24/mes con 4 canales (cuenta mía, sin medir); (b) Higgsfield, US$0 pero con un clic tuyo por pieza en el widget y sin agenda; (c) sacar LinkedIn del Buffer actual para hacerle lugar.",
+   "Agenda de las demos de Lucía. Recomendación: usar tu cal.com/sergiourcullo/20min a través de un /llamada nuevo en onia.com.bo. Cuesta 0 y lo publica la sesión de web. Mientras tanto ya sirve sergiourcullo.vercel.app/llamada con utm_campaign=lucia-<pieza>, pero muestra tu dominio personal en la bio de Lucía."
+  ],
+  "huecos": [
+   "No medí el token de Lucía en la base de Postiz porque no hay ssh. El dato del vencimiento (13-18 oct) es del 4-sep.",
+   "No sé cómo se leyó la base de Postiz el 29-sep con Postiz «sin contenedores»: el método no está escrito en el repo.",
+   "No confirmé a qué tipo de id corresponde IG_USER_ID en ig-oniahq.env (el id de /me 2794… o el 17841…). Para Lucía hay que usar el mismo tipo y verificarlo con /me.",
+   "No probé is_ai_generated en vivo. El ensayo sin --publicar lo valida sin riesgo: si Meta rechaza el parámetro, falla al crear el contenedor.",
+   "No corrí buffer-post.mjs --campos contra el esquema vivo de Buffer: falta confirmar el nombre exacto del input isAiGenerated.",
+   "No probé si Buffer deja crear una segunda organización con su propio plan Free bajo el mismo login y la misma clave de API.",
+   "No sé si Buffer publica en una cuenta PERSONAL de TikTok: su tabla de precios nombra solo cuentas business.",
+   "La cuenta de TikTok de Lucía no existe y nadie verificó que el usuario lucia.antelo.oficial esté libre en TikTok.",
+   "No verifiqué si Instagram le agrega sus propios utm al link de la bio y si pisa los nuestros. Se mira en la primera reserva.",
+   "No sé si la 1.0 de la app ya guarda signupOrigin en producción.",
+   "No probé si la app de escritorio de la madre muestra widgets de MCP Apps; de eso depende la ruta Higgsfield.",
+   "No hay script para historias ni para una foto suelta por API.",
+   "No sé si el VPS tiene un clon del repo para hacer git pull de las piezas, o si siempre tiene que hacer scp la madre."
+  ],
+  "pasos_de_sergio": [
+   "Elegir la ruta de TikTok: «Buffer gratis con el correo de Lucía» (recomendada) — por mensaje a la madre.",
+   "Crear el TikTok de Lucía con su correo, usuario lucia.antelo.oficial, y pasarlo a cuenta de empresa — app TikTok en el celular.",
+   "Autorizar ese TikTok en Buffer: la madre deja abierta la pantalla, vos entrás como Lucía (y con su Google si Buffer lo pide) y tocás «Autorizar» — navegador de la PC.",
+   "Responder «ok» al paquete de la primera pieza — Telegram o mensaje de la madre.",
+   "Solo si el VPS avisa que venció el token de Instagram de Lucía: developers.facebook.com → OnIA Social API → Instagram → Generar token → Agregar cuenta → entrar como Lucía → Permitir — PC.",
+   "Solo si la madre ve apagada la etiqueta de IA del perfil: Instagram de Lucía → Editar perfil → etiqueta de IA → activar — celular."
+  ],
+  "circuito": "Todo lo del VPS lo corre la madre (ssh desde la PC) o la sesión de infra. Esta nube no tiene ssh.\n\nA. Una sola vez, antes del 13-oct: el token de Instagram de Lucía, sin login de Sergio Urcullo.\n  docker ps -a --filter name=postiz-postgres --format '{{.Names}} {{.Status}}'\n  # Si está parado: docker start postiz-postgres. SOLO la base: nunca postiz, temporal ni orchestrator (4-sep).\n  TOK=$(docker exec postiz-postgres psql -U postiz-user -d postiz-db-local -t -A -c \"SELECT token FROM \\\"Integration\\\" WHERE id='cmt1sv4eh001alq9cl3y6q7es' AND \\\"deletedAt\\\" IS NULL;\" | tr -d '[:space:]')\n  curl -s \"https://graph.instagram.com/v25.0/me?fields=id,user_id,username,account_type&access_token=$TOK\"   # tiene que decir lucia.antelo.oficial\n  umask 077; printf 'IG_USER_ID=%s\\nIG_TOKEN=%s\\n' <mismo tipo de id que ig-oniahq.env> \"$TOK\" > /root/.config/onia-publicar/ig-lucia.env\n  /root/bin/ig-refrescar.sh   # renueva todos los ig-*.env (Lucía incluida) por 60 días; después el cron del lunes lo mantiene\n  Si Meta dice que el token venció: paso 5 de Sergio Urcullo.\n\nB. Una sola vez: la etiqueta IA por pieza. Lo hace una sesión en el repo y la madre copia los archivos a /root/bin.\n  ig-reel.mjs: containerParams({..., ia}) agrega p.is_ai_generated='true'. ig-carrusel.mjs: solo en el contenedor del carrusel, no en los hijos. Flag --ia, encendido siempre con --cuenta lucia. Después de publicar se lee fields=permalink,is_ai_generated.\n  TikTok: /root/publicar/lucia-tiktok-meta.json = {\"tiktok\":{\"isAiGenerated\":true}}. Para confirmar el campo en el esquema vivo: node /root/bin/buffer-post.mjs --campos.\n  Buffer de Lucía: la clave nueva va en /root/.config/onia-publicar/buffer-lucia.env, y buffer-post.mjs necesita --clave lucia (hoy lee una sola clave fija, línea 26). Los ids de canal salen de node /root/bin/buffer-post.mjs --listar.\n\nC. Cada pieza.\n  1. Final: editor-videos → final.mp4 (9:16) + caption.txt. El pie arranca con «Lucía es un personaje hecho con IA por @oniahq». No dice que sea odontóloga. Si la pieza vende, lleva la pantalla real de Onia.\n  2. Paquete de las 21:00 → «ok» de Sergio Urcullo sobre esa pieza.\n  3. Pasar la pieza al VPS (madre): scp -i ~/.ssh/onia_hermes_vps_ed25519 final.mp4 caption.txt root@187.77.16.63:/root/publicar/lucia-<pieza>/\n  4. Ensayo de Instagram, que NO publica: node /root/bin/ig-reel.mjs --cuenta lucia --video /root/publicar/lucia-<pieza>/final.mp4 --caption /root/publicar/lucia-<pieza>/caption.txt --ia   → «FINISHED». Un carrusel es lo mismo con ig-carrusel.mjs --dir.\n  5. Agendar Instagram (19:00 La Paz = 23:00 UTC): /root/bin/agendar-publicacion.sh lucia-<pieza> \"AAAA-MM-DD 23:00:00\" node /root/bin/ig-reel.mjs --cuenta lucia --video … --caption … --ia --publicar   (para un yap a Trial: --trial auto).\n  6. TikTok: node /root/bin/buffer-post.mjs --clave lucia --canal <id-tiktok-lucia> --video /root/publicar/lucia-<pieza>/final.mp4 --texto caption-tiktok.txt --meta /root/publicar/lucia-tiktok-meta.json --cuando AAAA-MM-DDT23:00:00Z --publicar   (la primera vez, antes, --borrador y --borrar <id>).\n  7. Registro: ig-reel y buffer-post escriben en /root/publicar/publicado.jsonl (cuenta, media o post, permalink). Para Buffer: node /root/bin/buffer-post.mjs --estado <postId> da el link publicado. Si falla, agendar-publicacion.sh avisa por onia-tg.sh.\n  8. Verificar mirando: la madre abre el permalink en la PC (la nube recibe 429 de Instagram) y confirma que aparece «Información de IA».\n  9. Link: en la bio va sergiourcullo.vercel.app/llamada?utm_source=instagram&utm_medium=bio&utm_campaign=lucia, hasta que exista onia.com.bo/llamada. Por pieza, utm_campaign=lucia-<pieza> en los stickers de historia y en las respuestas a «DEMO». La reserva muestra los utm en cal.com."
+ }
+}

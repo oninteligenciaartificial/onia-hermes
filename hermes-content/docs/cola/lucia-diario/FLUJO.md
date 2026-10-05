@@ -1,5 +1,9 @@
 # Lucía a diario — el mismo formato que Sergio Urcullo, sin cámara
 
+> ⚠️ **5-oct: el circuito de publicación vigente está en la skill `lucia` §6 y en `PLAN.md` v4 §7.** Lo de abajo sobre
+> el token («un login de Instagram, una vez») ya no es así: la cuenta está conectada desde el 20-ago y su token vive en
+> Postiz. La puerta `onia.com.bo/?utm_…` tampoco: la puerta es el WhatsApp de Onia con «vengo de Lucía».
+
 Propuesta del carril Lucía v4 (30-sep-2026), para que Sergio Urcullo la corrija. Copia el
 esqueleto de `../plan-3-semanas/FLUJO-DIARIO.md`, con una diferencia: **Lucía no graba; genero
 todo yo**. Lo único que pone Sergio Urcullo es el «ok» sobre el paquete.
@@ -76,5 +80,7 @@ La mayoría de los reels son **b-roll + voz o texto**; Lucía hablando a cámara
   con tratamiento a medias» recién con la 1.0 publicada. Pieza que vende = captura REAL de Onia.
 - **Lucía nunca es clienta, odontóloga ni testimonio.** Puede llevar el ambo como vestuario, pero nunca dice ni da a
   entender que es del rubro (Sergio Urcullo, 3-oct). No promete resultados («agenda llena»).
-- **Lip sync:** medido el 30-sep, MiniMax H3 gana a Seedance Mini pero ninguno sincroniza fino.
-  Reels hablando: frases cortas, subtítulos grandes, y `sync_so` (~22 cr) sólo en la pieza que lo pida.
+- **Lip sync** (corregido el 5-oct): la prueba del 30-sep (`v4/PROCEDENCIA.jsonl`) dice lo contrario de lo que decía
+  acá. MiniMax H3 deriva la cara y re-sintetiza el audio; Seedance 2.0 Mini sostiene la cara y la boca natural, y le
+  falta el veredicto de oído de Sergio Urcullo. Cuando haya voz: Seedance Mini con nuestro audio (10 cr por 10 s).
+  `sync_so` cobra 3,6 cr/s (36 por 10 s) y queda solo para una pieza estrella. Hoy los reels van sin voz (PLAN.md D4).

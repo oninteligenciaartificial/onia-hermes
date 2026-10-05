@@ -30,6 +30,10 @@ allowed-tools: Bash
 > cortes + preview 360p antes de cerrar). **Higgsfield solo genera el clip.** Placas de texto con PIL o un ffmpeg
 > armado a mano NO son edición: así salieron L02/L05/L08 de Lucía el 1-oct y hubo que rehacerlos.
 >
+> ⛔ **Default de video de ONIA (medido el 5-oct con `get_cost`):** para Lucía el clip NO es Seedance 2.5 (42 cr por
+> 6 s): es `kling3_0` std con `sound: "off"` (7,5 cr por 6 s). Marketing Studio no se usa: inventa guion y voz y
+> re-dibuja la interfaz. Recetas, costos y trampas: skill **`lucia`**.
+>
 > ⚠️ **Trampa de ONIA (medida el 2-oct, maniquí del ambo de Lucía):** Seedream 4.5 **escribe como texto dentro de la
 > imagen** las palabras del prompt que suenan a rótulo. Con «turnaround sheet» y «hex #C4552F» salió «Prodography
 > Tunndaip Hex #C4522F» en la esquina, con el color corrido a salmón. Al producto o la prenda: ni «sheet» ni códigos

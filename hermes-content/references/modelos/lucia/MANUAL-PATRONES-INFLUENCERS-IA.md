@@ -54,6 +54,8 @@ Ninguna de estas reglas es universal. Son las que se repiten en varios casos san
 
 **Cómo convierte**
 - Una sola orden en la bio y en todas las piezas: «Agendá tu demo», apuntando a `onia.com.bo/llamada?src=lucia-<pieza>`.
+  ⚠️ *Corregido el 5-oct:* esa ruta da 404 y Onia ya no tiene Cal.com. La puerta vigente es el WhatsApp de Onia con
+  «vengo de Lucía» (`docs/cola/lucia-diario/PLAN.md` v4 §2).
 - El modelo de Lu, con WhatsApp como puerta, es la meta. Pero según la memoria del repo, hoy el bot trata los leads de la web como preguntas de precio. Hasta que el bot reconozca el `src` y pase la demo a un humano, la puerta del test es `/llamada`. Que Lucía sea la cara declarada del WhatsApp de Onia lo decide Sergio Urcullo.
 - Indicador previo a la demo: comentarios y DMs que preguntan cómo funciona. Se responden a mano en las primeras horas, en personaje, diciendo que es IA. No se automatiza el paso de comentario a DM: Meta ya lo rechazó 2 veces y dio 0 leads.
 

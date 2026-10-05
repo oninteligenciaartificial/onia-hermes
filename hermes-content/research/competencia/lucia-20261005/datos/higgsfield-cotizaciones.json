@@ -1,0 +1,431 @@
+{
+ "fecha": "2026-10-05",
+ "metodo": "MCP higgsfield generate_video/generate_image con params.get_cost=true (no crea job). start_image = abe2e6bd-0d39-49be-9d87-1126d4ed07b0 (ancla espejo), 9:16, declined_preset_id IN THE DARK. Saldo antes y despues: 541.26 (balance).",
+ "video_i2v": [
+  {
+   "modelo": "kling3_0",
+   "params": "std, sound:'off', 3 s",
+   "cr": 3.75
+  },
+  {
+   "modelo": "kling3_0",
+   "params": "std, sound:'off', 6 s",
+   "cr": 7.5
+  },
+  {
+   "modelo": "kling3_0",
+   "params": "std, sound:'off', 10 s",
+   "cr": 12.5
+  },
+  {
+   "modelo": "kling3_0",
+   "params": "std, sound:'off', 15 s",
+   "cr": 18.75
+  },
+  {
+   "modelo": "kling3_0",
+   "params": "std, sound:'on', 6 s",
+   "cr": 10.5
+  },
+  {
+   "modelo": "kling3_0",
+   "params": "pro, sound:'off', 6 s",
+   "cr": 9
+  },
+  {
+   "modelo": "kling3_0",
+   "params": "pro, sound:'off', 8 s",
+   "cr": 12
+  },
+  {
+   "modelo": "kling3_0",
+   "params": "pro, sound:'on', 8 s",
+   "cr": 16
+  },
+  {
+   "modelo": "kling3_0",
+   "params": "pro, sound:'off', 10 s",
+   "cr": 15
+  },
+  {
+   "modelo": "kling3_0",
+   "params": "4k, sound:'off', 6 s",
+   "cr": 36
+  },
+  {
+   "modelo": "kling3_0",
+   "params": "std, sound:'off', 6 s, con <<<cbbf514b LUCIA-v5>>> en el prompt",
+   "cr": 7.5
+  },
+  {
+   "modelo": "kling3_0_turbo",
+   "params": "720p 6 s (sin parametro de audio)",
+   "cr": 9
+  },
+  {
+   "modelo": "kling3_0_turbo",
+   "params": "720p 10 s",
+   "cr": 15
+  },
+  {
+   "modelo": "seedance_2_5",
+   "params": "omni_reference, start_image, 720p, 6 s, generate_audio false",
+   "cr": 42
+  },
+  {
+   "modelo": "seedance_2_5",
+   "params": "idem, generate_audio true",
+   "cr": 42
+  },
+  {
+   "modelo": "seedance_2_5",
+   "params": "720p 10 s, audio false",
+   "cr": 70
+  },
+  {
+   "modelo": "seedance_2_5",
+   "params": "480p 6 s, audio false",
+   "cr": 18
+  },
+  {
+   "modelo": "seedance_2_5",
+   "params": "draft:true (480p) 6 s",
+   "cr": 18
+  },
+  {
+   "modelo": "seedance_2_5",
+   "params": "omni_reference image_references, 720p 15 s, audio true",
+   "cr": 105
+  },
+  {
+   "modelo": "seedance_2_5",
+   "params": "omni_reference image_references, 1080p 15 s, audio true",
+   "cr": 180
+  },
+  {
+   "modelo": "seedance_2_0",
+   "params": "std 720p 6 s, audio false",
+   "cr": 27
+  },
+  {
+   "modelo": "seedance_2_0",
+   "params": "std 720p 6 s, audio true",
+   "cr": 27
+  },
+  {
+   "modelo": "seedance_2_0",
+   "params": "std 720p 10 s, audio false",
+   "cr": 45
+  },
+  {
+   "modelo": "seedance_2_0",
+   "params": "fast 720p 6 s, audio false",
+   "cr": 15
+  },
+  {
+   "modelo": "seedance_2_0_mini",
+   "params": "720p 4 s, audio false",
+   "cr": 4
+  },
+  {
+   "modelo": "seedance_2_0_mini",
+   "params": "720p 6 s, audio false",
+   "cr": 6
+  },
+  {
+   "modelo": "seedance_2_0_mini",
+   "params": "720p 6 s, audio true",
+   "cr": 6
+  },
+  {
+   "modelo": "seedance_2_0_mini",
+   "params": "720p 10 s, audio false",
+   "cr": 10
+  },
+  {
+   "modelo": "seedance_2_0_mini",
+   "params": "480p 6 s, audio false",
+   "cr": 3
+  },
+  {
+   "modelo": "cinematic_studio_3_0",
+   "params": "720p 4 s, generate_audio false",
+   "cr": 20
+  },
+  {
+   "modelo": "cinematic_studio_3_0",
+   "params": "720p 6 s, generate_audio false",
+   "cr": 30
+  },
+  {
+   "modelo": "cinematic_studio_3_0",
+   "params": "720p 6 s, generate_audio true",
+   "cr": 30
+  },
+  {
+   "modelo": "cinematic_studio_3_0",
+   "params": "720p 10 s, generate_audio false",
+   "cr": 50
+  },
+  {
+   "modelo": "cinematic_studio_3_0",
+   "params": "480p 6 s, generate_audio false",
+   "cr": 21
+  },
+  {
+   "modelo": "cinematic_studio_3_0",
+   "params": "720p 6 s con <<<LUCIA-v5>>>",
+   "cr": 30
+  },
+  {
+   "modelo": "cinematic_studio_video_3_5",
+   "params": "720p 6 s, audio false, prompt_language en",
+   "cr": 30
+  },
+  {
+   "modelo": "cinematic_studio_video_3_5",
+   "params": "720p 10 s",
+   "cr": 50
+  },
+  {
+   "modelo": "cinematic_studio_video_4_0",
+   "params": "omni_reference 720p 6 s, audio false",
+   "cr": 42
+  },
+  {
+   "modelo": "cinematic_studio_video_4_0",
+   "params": "720p 10 s",
+   "cr": 70
+  },
+  {
+   "modelo": "cinematic_studio_video_v2",
+   "params": "std 6 s sound off",
+   "cr": 6
+  },
+  {
+   "modelo": "cinematic_studio_video_v2",
+   "params": "pro 10 s sound off",
+   "cr": 15
+  },
+  {
+   "modelo": "veo3_1_lite",
+   "params": "6 s, generate_audio false",
+   "cr": 9
+  },
+  {
+   "modelo": "veo3_1_lite",
+   "params": "6 s, generate_audio true",
+   "cr": 9
+  },
+  {
+   "modelo": "veo3_1_lite",
+   "params": "8 s, audio false",
+   "cr": 12
+  },
+  {
+   "modelo": "grok_video_v15",
+   "params": "720p 6 s",
+   "cr": 27
+  },
+  {
+   "modelo": "wan3_0",
+   "params": "720p 6 s, audio false",
+   "cr": 10.5
+  },
+  {
+   "modelo": "wan3_0",
+   "params": "720p 10 s, audio false",
+   "cr": 17.5
+  },
+  {
+   "modelo": "minimax_hailuo",
+   "params": "768, 6 s",
+   "cr": 6
+  },
+  {
+   "modelo": "minimax_hailuo",
+   "params": "768, 10 s",
+   "cr": 11
+  },
+  {
+   "modelo": "gemini_omni_flash_1_1",
+   "params": "image-to-video 720p 8 s",
+   "cr": 24
+  },
+  {
+   "modelo": "gemini_omni",
+   "params": "image_references 720p 10 s",
+   "cr": 30
+  },
+  {
+   "modelo": "happy_horse_video",
+   "params": "720p 6 s",
+   "cr": 15
+  }
+ ],
+ "marketing_y_ads": [
+  {
+   "modelo": "marketing_studio_video (v1)",
+   "params": "mode ugc, 15 s, 720p, audio, medias image=ancla",
+   "cr": 75
+  },
+  {
+   "modelo": "marketing_studio_video (v1)",
+   "params": "mode ugc, 12 s, 480p",
+   "cr": 42
+  },
+  {
+   "modelo": "marketing_studio_v2_video",
+   "params": "type ugc_v2, 15 s, 720p",
+   "cr": 105
+  },
+  {
+   "modelo": "marketing_studio_v2_video",
+   "params": "type ugc_v2, 15 s, 480p",
+   "cr": 45
+  },
+  {
+   "modelo": "marketing_studio_v2_video",
+   "params": "type saas_motion, brand_url onia.com.bo, 15 s",
+   "cr": 90.5
+  },
+  {
+   "modelo": "marketing_studio_v2_video",
+   "params": "type saas_motion, 10 s",
+   "cr": 60.8
+  },
+  {
+   "modelo": "marketing_studio_v2_video",
+   "params": "role character_photo",
+   "cr": "ERROR: Unknown media role: character_photo (en ugc_v2 y ugc)"
+  },
+  {
+   "modelo": "ads_studio_quote",
+   "params": "prompt solo",
+   "cr": "ERROR: necesita una marca creada (ads_studio_create_brand) antes de cotizar"
+  },
+  {
+   "modelo": "shorts_studio_create",
+   "params": "get_cost, 30 s",
+   "cr": 90
+  }
+ ],
+ "edicion_y_voz": [
+  {
+   "modelo": "reframe",
+   "params": "6 s 720p",
+   "cr": 30
+  },
+  {
+   "modelo": "reframe",
+   "params": "30 s 720p",
+   "cr": 140
+  },
+  {
+   "modelo": "reframe",
+   "params": "45 s 1080p",
+   "cr": 412
+  },
+  {
+   "modelo": "outpaint_image",
+   "params": "ancla a 9:16",
+   "cr": 2
+  },
+  {
+   "modelo": "bytedance_video_upscale",
+   "params": "clip K1 e470ef4f (6 s), 1080p aigc 24fps",
+   "cr": "0.1 (0.12 pasando duration 6)"
+  },
+  {
+   "modelo": "bytedance_video_upscale",
+   "params": "2k aigc 24fps",
+   "cr": 0.2
+  },
+  {
+   "modelo": "bytedance_video_upscale",
+   "params": "1080p pro 30fps",
+   "cr": 1
+  },
+  {
+   "modelo": "video_upscale",
+   "params": "clip K1",
+   "cr": 2
+  },
+  {
+   "modelo": "topaz_video",
+   "params": "-",
+   "cr": "sin cotizacion: 'does not support alpha v2 cost estimation'"
+  },
+  {
+   "modelo": "upscale_video (tool)",
+   "params": "-",
+   "cr": "la herramienta no tiene preflight; no se llamo"
+  },
+  {
+   "modelo": "kling3_0_motion_control",
+   "params": "std 10 s",
+   "cr": 17
+  },
+  {
+   "modelo": "voice_change",
+   "params": "duration 10",
+   "cr": 1
+  },
+  {
+   "modelo": "sync_so",
+   "params": "duration 6",
+   "cr": 21.6
+  },
+  {
+   "modelo": "sync_so",
+   "params": "duration 10",
+   "cr": 36
+  },
+  {
+   "modelo": "gpt_image_2",
+   "params": "1k medium 9:16 (fondo verde del modo presentador)",
+   "cr": 1
+  }
+ ],
+ "sin_cotizacion_posible": [
+  "virality_predictor (sin get_cost)",
+  "video_analysis_create (sin get_cost; en transactions no hay cargo junto a los analisis del 19-ago 02:46 y 21-ago 00:33)",
+  "upscale_video tool",
+  "motion_control tool",
+  "execute_preset (viral)"
+ ],
+ "transactions": {
+  "reset_credito": [
+   "2026-09-11 'Subscription Credits Reset' -1851.9 y +600",
+   "2026-10-01 'Subscription Credits Reset' -387.57 y +600"
+  ],
+  "sync_so_historico": "18.15 (15 y 18-ago) y 28.8 (21 y 22-ago)",
+  "virality_predictor": "ningun cargo entre 11-ago y 5-oct"
+ },
+ "voces_higgsfield_relevantes": {
+  "Lucia-voz": {
+   "voice_id": "8de5db95-e898-46a6-bb68-26d02f311686",
+   "voice_type": "element",
+   "nota": "clon seed_audio del preset Isabella (LUCIA.md); sirve para voice_change a 1 cr/10 s; acento sin escuchar"
+  },
+  "presets_con_nombre_hispano": {
+   "Marisol": "75e72cd5-011b-4130-a474-e8b1ab341f04",
+   "Ines": "023ebf5e-1970-40d8-825c-a5ef6a1dd4ff",
+   "Elena": "ca83ca7f-c186-493d-bd69-0d765fa861b2"
+  },
+  "fuente": "list_voices 5-oct (primeras 100 de 122+)"
+ },
+ "elements_lucia_vivos": {
+  "LUCIA-v5": "cbbf514b-5283-4c0e-892d-a0e5101157ed",
+  "LUCIA-v5b": "0384630a-9765-4cd7-84fe-517eed052489",
+  "nota": "show_reference_elements list 5-oct; lucia-skin-v1 58bbd635 sigue listado aunque esta retirado por decision"
+ },
+ "presets": {
+  "marketing_studio_motion_total": 231,
+  "saas_motion_total": 42,
+  "saas_motion_input_schema": "product_media_id (imagen, requerido) + prompt + brand_url",
+  "viral_effects_total": 87,
+  "ugc_v2_talking_head_presets": 986
+ },
+ "virality_predictor_web": "higgsfield.ai/apps/virality-predictor: 'Any format, vertical or horizontal, up to 15 seconds'; schema.org Offer price 0 USD (acceso a la app, no costo por corrida medido)"
+}
