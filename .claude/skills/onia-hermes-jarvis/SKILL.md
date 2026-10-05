@@ -201,8 +201,10 @@ CLI de Hermes.
   `/var/lib/onia-pedidos/sellos/<id>` (600). La sesión responde con `scripts/loops/responder-pedido.sh
   <id> <estado> <sello> < respuesta.txt`, que firma HMAC-SHA256(sello, "respuesta <id> <estado>\n" +
   texto sin espacios ASCII en las puntas). El recolector rechaza otra firma, la forma vieja sin firma y
-  un pedido sin sello. Límite: quien lea la sesión de la rutina ve el sello. El sello se borra al
-  cerrarse el pedido o a las 48 h.
+  un pedido sin sello. Límites: quien lea la sesión de la rutina ve el sello; y quien pueda pushear a
+  `main` cambia el verificador (el sincronizador lo copia a `/root/bin` como root) — eso solo lo cierra
+  proteger `main` en GitHub, decisión de Sergio Urcullo. El sello se borra al cerrarse el pedido o a las
+  48 h, y no firma texto que no sea UTF-8 válido (git lo reescribiría y la firma no cerraría).
 - **Un tope de descarga se pone MIENTRAS baja, no después** (5-oct, segundo MEDIUM). `cat-file -s` mide
   lo que ya bajó. Lo que funciona (medido en este contenedor): `( ulimit -f 64 && exec timeout 60 git -c
   transfer.unpackLimit=1 fetch … )`. Con `unpackLimit=1` git guarda el paquete en `tmp_pack_*` mientras
@@ -211,6 +213,11 @@ CLI de Hermes.
   se le pida (el paquete es *promisor*); `unpackLimit=1` lo asegura si eso cambia, porque con
   `unpack-objects` no se escribe nada hasta tener el objeto entero. Para distinguir el tope de una
   falla de red queda un `tmp_pack_*` de 64 KB; se borra siempre.
+- **Un `ulimit` en un repo que dura alcanza al gc** (revisión fuerte del 5-oct, medido por el revisor):
+  con `unpackLimit=1` cada fetch deja un paquete, a los ~51 git lanza `gc --auto`, el gc hereda el tope,
+  muere y deja un `tmp_pack_*` de 64 KB que hacía pasar una falla de red por «demasiado grande». Y el
+  `shallow` crecía 41 bytes por respuesta hasta que el fetch chocaba con el tope y dejaba `shallow.lock`.
+  Arreglo: el repo del recolector se arma DE CERO en cada vuelta, con `gc.auto=0`.
 - **`onia-platform` no tiene hook Stop** (medido el 5-oct: su `.claude/settings.json` solo trae
   permisos). Un pedido de `plataforma` no tiene autosync que le mueva `master`.
 - **El rojo de main no es tuyo, pero te tiñe el CI.** El 2-oct `test:herramientas-desplegadas`

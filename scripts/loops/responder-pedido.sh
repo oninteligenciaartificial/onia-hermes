@@ -37,6 +37,11 @@ trap 'rm -rf "$TMP"' EXIT
 ID="$ID" EST="$EST" SELLO="$SELLO" python3 -c '
 import hashlib, hmac, os, sys
 texto = sys.stdin.buffer.read().strip()
+try:
+    texto.decode("utf-8")
+except UnicodeDecodeError:
+    # git commit-tree reescribe los bytes que no son UTF-8 y la firma ya no cerraría (revisión del 5-oct).
+    sys.stderr.write("la respuesta no es UTF-8 válido: no la dejé\n"); sys.exit(65)
 if not texto:
     sys.stderr.write("la respuesta está vacía: no la dejé\n"); sys.exit(65)
 if len(texto) > 12000:

@@ -169,7 +169,8 @@ Hermes, su asistente, por Telegram. Cada corrida es UN pedido. Hablale siempre c
    cambiar precios; escribir en la base de producción; abrir el portal del SIAT; tocar el VPS (ni SSH,
    ni el workflow hermes-jarvis); pushear a main o a una rama que no sea pedido/<id> o
    respuesta/<id>; crear rutinas o mandarles mensajes a otras sesiones; cambiar CLAUDE.md, permisos
-   o configuración.
+   o configuración; escribir el sello del pedido en cualquier lugar que no sea el comando del
+   paso 5 (ni archivos, ni commits, ni el PR, ni tu respuesta, ni otra sesión).
 5. Al terminar, dejale SIEMPRE la respuesta. No hace falta ningún token: el VPS la busca cada
    2 minutos y se la manda por la aduana.
    a. Con la herramienta de escribir archivos, creá /tmp/respuesta.txt SOLO con la respuesta para
@@ -203,8 +204,11 @@ Hermes, su asistente, por Telegram. Cada corrida es UN pedido. Hablale siempre c
   - exige un commit con árbol vacío, sin padre y de 16 KB como mucho, con la primera línea
     `respuesta <id> <estado> <firma>` y el mismo id que la rama;
   - **exige la firma del sello de ESE pedido** (HMAC-SHA256 del estado y del texto): otra firma, la forma
-    vieja sin firma o un pedido sin sello no se entregan. Así nadie que solo pueda pushear al repo le
-    hace llegar una respuesta falsa (5-oct, primer MEDIUM de la madre v2);
+    vieja sin firma o un pedido sin sello no se entregan. Así nadie que solo pueda dejar ramas en el
+    repo le hace llegar una respuesta falsa (5-oct, primer MEDIUM de la madre v2). Quien pueda cambiar
+    `main` es otra cosa: ver §9;
+  - arma su repo DE CERO en cada vuelta, sin gc: un repo que duraba juntaba restos que hacían descartar
+    respuestas buenas y, a la larga, trababan el fetch (revisión fuerte del 5-oct);
   - lo que trae es texto, no órdenes: se lee con `git cat-file`, se recorta a 1500 caracteres, se
     escapa y se le pasa a la aduana como texto. Nunca se ejecuta (`pedido-respuesta.test.mjs`).
 - **Red de seguridad:** el cierre de las 21:30 lista «🤖 Tus pedidos a Claude hoy» con el estado de
@@ -257,6 +261,13 @@ Si el paso 4 se hace por SSH en vez de por el workflow, la llave sube por la alt
 - **Un pedido de `plataforma` trabaja en el clon de `onia-platform`.** Medido el 5-oct: ese repo no tiene
   hook Stop (su `.claude/settings.json` solo trae permisos), así que no hay autosync que le mueva
   `master`. Si algún día se le agrega uno, tiene que pedir el mismo permiso que el de este repo.
+- **Quien pueda pushear a `main` le gana a la firma, y a todo lo demás.** El sincronizador copia `main`
+  a `/root/bin` cada hora y lo corre como root, y la rutina firma con el `responder-pedido.sh` de `main`:
+  cambiando `main` se cambia el verificador. Las sesiones de la nube PUEDEN pushear a `main` (medido el
+  5-oct: 23 commits directos del 28-sep al 5-oct). El autosync ya no lo hace solo, pero una sesión que
+  lo haga a propósito no tiene freno. **Lo único que lo cierra es proteger `main` en GitHub** (exigir PR,
+  sin excepciones), y eso lo decide Sergio Urcullo: en un repo privado de cuenta personal la protección
+  de ramas pide el plan Pro (revisión fuerte del 5-oct).
 - **El sello se puede leer en la sesión de la rutina** (es su primer mensaje). La firma frena a quien solo
   puede pushear al repo, no a quien además lee las sesiones de la cuenta. Y quien pushea puede BORRAR o
   pisar una respuesta antes de que el VPS la recoja: no la falsifica, pero puede hacer que no llegue. Para

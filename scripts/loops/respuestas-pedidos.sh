@@ -49,7 +49,7 @@ ESTADO="${ONIA_PEDIDOS_ESTADO:-/var/lib/onia-pedidos}"
 REPO_URL="${ONIA_PEDIDOS_REPO_URL:-git@github.com:oninteligenciaartificial/onia-hermes.git}"
 TG="${ONIA_TG:-/root/bin/onia-tg.sh}"
 BORRAR="${ONIA_RESPUESTAS_BORRAR:-1}"     # 0 = no borra la rama al entregarla
-GITDIR="$ESTADO/respuestas.git"           # repo vacío y propio: nunca el clon del integrador
+GITDIR="$ESTADO/respuestas.git"           # repo vacío y propio, NUEVO en cada vuelta (ver preparar)
 REGISTRO="$ESTADO/pedidos.tsv"            # ts_utc id carril hash session_id url (pedido-claude.sh)
 RESPUESTAS="$ESTADO/respuestas.tsv"       # ts_utc id estado (lo escribe este script)
 MIRADAS="$ESTADO/respuestas-miradas.tsv"  # ts_utc sha id resultado: cada commit se mira una vez
@@ -75,7 +75,9 @@ G() { timeout 60 git -C "$GITDIR" "$@"; }
 # tope (no se reintenta) · 1 otra falla (red, GitHub: se reintenta en la vuelta siguiente).
 bajar() {
   local id=$1 rc
+  rm -f "$GITDIR"/objects/pack/tmp_pack_* 2>/dev/null
   ( ulimit -f "$TOPE_BAJADA_KB" && exec timeout 60 git -C "$GITDIR" -c transfer.unpackLimit=1 \
+      -c gc.auto=0 -c maintenance.auto=false \
       fetch -q --no-tags --no-write-fetch-head --depth=1 --filter=tree:0 origin \
       "+refs/heads/respuesta/$id:refs/respuestas/$id" ) </dev/null >/dev/null 2>&1
   rc=$?
@@ -96,13 +98,20 @@ mkdir -p "$ESTADO" && chmod 700 "$ESTADO" 2>/dev/null
 exec 9>"$ESTADO/respuestas.lock"
 flock -n 9 || exit 0                      # otra vuelta en curso: esta no hace falta
 
+# El repo se arma DE CERO en cada vuelta (revisión fuerte del 5-oct). Uno que duraba juntaba estado:
+# el gc automático de git heredaba el `ulimit -f`, moría y dejaba un `tmp_pack_*` de 64 KB que hacía
+# pasar una falla de red por «demasiado grande» (y se descartaba la respuesta buena); y el `shallow`
+# crecía una línea por respuesta hasta que el fetch mismo chocaba con el tope y dejaba `shallow.lock`,
+# trabando todo. Lo que importa entre vueltas vive en los .tsv, no acá.
 preparar() {
-  [ -d "$GITDIR" ] || git init -q --bare "$GITDIR" || return 1
-  git -C "$GITDIR" remote get-url origin >/dev/null 2>&1 || git -C "$GITDIR" remote add origin "$REPO_URL" || return 1
-  git -C "$GITDIR" remote set-url origin "$REPO_URL" || return 1
-  git -C "$GITDIR" config --unset-all remote.origin.fetch 2>/dev/null
+  case "$GITDIR" in */respuestas.git) rm -rf -- "$GITDIR" ;; *) return 1 ;; esac
+  git init -q --bare "$GITDIR" &&
+    git -C "$GITDIR" remote add origin "$REPO_URL" &&
+    git -C "$GITDIR" config --unset-all remote.origin.fetch 2>/dev/null
   git -C "$GITDIR" config remote.origin.promisor true &&
-    git -C "$GITDIR" config remote.origin.partialclonefilter tree:0
+    git -C "$GITDIR" config remote.origin.partialclonefilter tree:0 &&
+    git -C "$GITDIR" config gc.auto 0 &&
+    git -C "$GITDIR" config maintenance.auto false
 }
 
 abiertos() {  # ids de los pedidos de las últimas 48 h que todavía no tienen respuesta final

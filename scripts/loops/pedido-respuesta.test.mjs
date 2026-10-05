@@ -456,3 +456,45 @@ test("el prompt de la rutina manda a firmar con responder-pedido.sh y avisa del 
   assert.match(prompt, /una línea «Sello:» con 32\s+caracteres hexadecimales/);
   assert.doesNotMatch(prompt, /commit-tree/, "la forma vieja, sin firma, ya no se entrega");
 });
+
+// ── Revisión fuerte del 5-oct (segundo revisor) ───────────────────────────────────────────────────
+// El repo del VPS se arma DE CERO en cada vuelta. Con uno que duraba, el gc automático de git heredaba
+// el `ulimit -f`, moría y dejaba un `tmp_pack_*` de 64 KB que hacía pasar una falla de red por «pasa de
+// 64 KB» (y la respuesta buena se descartaba); y el `shallow` crecía con cada respuesta hasta que el
+// fetch mismo chocaba con el tope y dejaba `shallow.lock`, trabando todo para siempre.
+test("un resto de 64 KB de una vuelta anterior no hace pasar una falla de red por «demasiado grande»", () => {
+  const b = banco();
+  b.responder(ID, "listo", "Listo.");
+  const pack = join(b.estado, "respuestas.git", "objects", "pack");
+  mkdirSync(pack, { recursive: true });
+  writeFileSync(join(pack, "tmp_pack_viejo"), Buffer.alloc(65536, 1));
+  const falso = join(b.dir, "bin");
+  mkdirSync(falso);
+  const gitReal = spawnSync("bash", ["-c", "command -v git"], { encoding: "utf8" }).stdout.trim();
+  writeFileSync(join(falso, "git"), `#!/usr/bin/env bash\nfor a in "$@"; do [ "$a" = fetch ] && exit 128; done\nexec ${gitReal} "$@"\n`);
+  chmodSync(join(falso, "git"), 0o755);
+  const r = b.correr([], { PATH: `${falso}:${process.env.PATH}` });
+  assert.doesNotMatch(r.stdout, /pasa de 64 KB/);
+  assert.match(r.stdout, /no pude bajar la respuesta \(reintento en la próxima vuelta\)/);
+  assert.match(b.correr().stdout, /✅ p_1a2b3c4d: respuesta «listo» entregada/, "la buena llega en la vuelta siguiente");
+});
+
+test("cada vuelta arranca con el repo vacío: no se acumulan refs, shallow ni gc", () => {
+  const b = banco({ ids: [ID, "p_0000000a"] });
+  b.responder(ID, "necesita-ok", "¿Sigo?");
+  b.correr();
+  b.responder("p_0000000a", "listo", "Hecho.");
+  b.correr();
+  const repo = join(b.estado, "respuestas.git");
+  assert.equal(b.git(repo, ["for-each-ref", "--format=%(refname)", "refs/respuestas/"]), "refs/respuestas/p_0000000a");
+  assert.equal(readFileSync(join(repo, "shallow"), "utf8").trim().split("\n").length, 1);
+  assert.equal(b.git(repo, ["config", "gc.auto"]), "0");
+});
+
+test("responder-pedido.sh no firma un texto que no es UTF-8 válido (git lo reescribiría y la firma no cerraría)", () => {
+  const b = banco();
+  const r = spawnSync("bash", [RESPONDER, ID, "listo", b.sellos[ID]], { cwd: b.nube, env: b.env, input: Buffer.from([0x48, 0x6f, 0x6c, 0xe1, 0x0a]) });
+  assert.equal(r.status, 65, String(r.stderr));
+  assert.match(String(r.stderr), /no es UTF-8 válido/);
+  assert.equal(b.ramas(), "");
+});
