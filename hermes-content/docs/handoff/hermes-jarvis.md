@@ -1,6 +1,32 @@
 # Handoff — carril `hermes-jarvis` (Hermes, el Telegram y el calendario de Sergio Urcullo)
 
-> **ESTADO 5-oct (cambio de sesión madre).** #88, #91, #96 y #94 están en `main`. En el VPS **nada de
+> **ESTADO 5-oct ~21:30 UTC — sesión `session_01SQ7cvuDX5w5jDHk5VdhAEo`, rama
+> `claude/adoring-ramanujan-7sjzwv`, PR #138 (borrador).** Sergio Urcullo contestó en ESTA sesión:
+> **«Sí, la madre sigue directo»** (autosync) y **«Sí, arreglalos»** (los 3 MEDIUM).
+> - **Hecho, en el PR #138, NO en main:** el autosync no mueve `main` sin permiso
+>   (`ONIA_AUTOSYNC_MAIN=1` la madre, `ONIA_LOOP_ID=onia-cola` el integrador; en `main` sin permiso →
+>   `claude/autosync-<sesión>`); la respuesta firmada con un sello por pedido (`responder-pedido.sh`);
+>   el tope de 64 KB mientras baja; `aplicar` sección 0 exige esas versiones; `settings.local.json`
+>   ignorado; CLAUDE.md, skills y el prompt de la rutina (§5 de `TELEGRAM_COMMAND_CENTER.md`) al día.
+>   Pruebas en verde y rojas contra el código viejo y con mutaciones (detalle en el PR).
+> - **En el VPS: nada.** `aplicar` nunca corrió, no hay rutina ni llave.
+> - **Medido hoy:** desde el 28-sep, 48 de 78 avances de `main` entraron por el fast-forward del autosync;
+>   23 desde sesiones de la NUBE (el proxy no frena el push a `main`). `onia-platform` no tiene hook Stop
+>   (cierra el pendiente 3 de abajo).
+> - **Sigue, en orden:**
+>   1. Revisión fuerte (2 revisores independientes) → arreglar lo que encuentren → CI verde del #138.
+>   2. **La madre pone `ONIA_AUTOSYNC_MAIN=1` en su PC, FUERA del repo** (`C:\Users\PC\.claude\settings.json`
+>      → `"env"`, o variable de usuario de Windows) y mergea el #138. Sin la variable no se pierde nada:
+>      su rama se pushea y, si estaba en `main`, va a `claude/autosync-<máquina>`. Se verifica en el log
+>      del Stop («main al día (fast-forward)»).
+>   3. Recién después, con el «sí» de Sergio Urcullo: entorno «Pedidos de Hermes» sin variables, la
+>      rutina con el prompt NUEVO de §5 (el viejo, con `commit-tree`, ya no se entrega), la llave y
+>      `aplicar` por el workflow (§7 de abajo).
+> - **Intento fallido de esta sesión:** escribí en la skill que sin `transfer.unpackLimit=1` el tope
+>   llegaba tarde. Medido: con `--filter` git ya usa `index-pack` (paquete promisor); se corrigió antes
+>   del commit. La opción queda como seguro.
+
+> **ESTADO 5-oct (cambio de sesión madre) — las dos preguntas ya están contestadas (arriba).** #88, #91, #96 y #94 están en `main`. En el VPS **nada de
 > este carril está encendido**: `aplicar` nunca corrió (lo último medido es del 2-oct; desde la nube no
 > se puede volver a medir sin la autorización de Sergio Urcullo), la rutina no existe y no hay llave.
 > **Espera de Sergio Urcullo, en este orden:**
@@ -36,15 +62,15 @@
 >      `revertir` o el deploy. Revocarlo lo decide Sergio Urcullo.
 >   2. Medir en la prueba de punta a punta que la rutina pueda pushear `respuesta/*` y que el VPS
 >      llegue a GitHub (`--probar`).
->   3. Un pedido de `plataforma` trabaja en el clon de `onia-platform`, con sus propios hooks: la guarda
->      del autosync de este repo no lo cubre. Revisarlo antes del primer pedido de ese carril.
+>   3. ~~Un pedido de `plataforma` trabaja en el clon de `onia-platform`, con sus propios hooks~~ —
+>      medido el 5-oct: `onia-platform` no tiene hook Stop. Cerrado.
 >   4. `herramientas-desplegadas` adivina la fuente de `onia-X.sh` por el nombre del archivo: un
 >      `X.sh` cualquiera vuelve a dar un rojo falso. Conviene que lea la fuente del `poner`, no el nombre.
 >   5. En la nube, el PID 1 no recoge huérfanos: otras pruebas que miran «proceso vivo» con
 >      `kill(pid, 0)` pueden dar el mismo rojo falso que `tandas-v1`.
 >   6. `diagnostico` todavía no muestra el log del recolector de respuestas.
 > - **ANTES de cargar la llave de la rutina** (los 3 MEDIUM de la revisión de la madre v2, 3-oct; Sergio
->   Urcullo aprobó mergear el #94 sin ellos):
+>   Urcullo aprobó mergear el #94 sin ellos) — **los tres, hechos en el PR #138 (5-oct):**
 >   1. la respuesta no está atada al pedido: cualquiera que pueda pushear al repo puede dejar una
 >      `respuesta/<id>` de un pedido abierto;
 >   2. el tope de 16 KB se mide después de bajar el commit, no antes;
