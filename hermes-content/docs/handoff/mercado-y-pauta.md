@@ -1,5 +1,27 @@
 # Handoff — carril `mercado-y-pauta` (sesión «Ventas y pauta Onia Platform», antes «Análisis de mercado»)
 
+> ⏹️ **CIERRE 5-oct (cambio de sesión madre). Nada en vuelo ni sin commitear; todo en `main`.**
+> - **Hecho:**
+>   - competencia en la Biblioteca (`ONIA_ADQUISICION_Y_PAUTA.md` §2.5-2.6);
+>   - el bot de venta de usted (PR #114, sin desplegar);
+>   - playbook `sales-kit/SEGUIMIENTO-LEADS.md` (PR #117);
+>   - el mapa de competencia apuntado en la skill §4.1 (PR #122).
+> - **D1/D4:** v3 en pausa, sin aprobar. D4 sigue congelado por el catálogo §8 (el detector no encuentra a nadie);
+>   su ángulo es «tratamiento empezado y presupuestado», no «pacientes que tienen que volver».
+> - **Medido 5-oct:** ONIA Ads (`act_1073680778314945`) sigue con `has_payment_method: false`. Sin tarjeta no se
+>   crea nada en Meta, ni en pausa.
+> - **Depende de Sergio Urcullo:**
+>   - la tarjeta y el control total de ONIA Ads;
+>   - el número 75414930 vinculado a la página «Onia»;
+>   - la firma de la respuesta a la pauta;
+>   - aprobar las plantillas A/B y las 4 del seguimiento, el audio del día 7 y la imagen;
+>   - el OK a los 12 mensajes y la decisión sobre MUN.
+> - **Riesgos:**
+>   - El borrador del 1-oct a «F» (`ONIA_LEADS_ESPERANDO.md` §3.1) promete el tratamiento a medias: no se manda.
+>   - Las plantillas a leads salen de Chatwoot con el usuario de Sergio Urcullo; si no, el bot les contesta.
+>   - El bot de usted no está desplegado.
+>   - D1 v3 todavía dice «La IA escribe el mensaje».
+
 > ✅ **3-oct — el bot de ventas pasa a USTED** (pedido de la madre; regla de Sergio Urcullo: *«no se usa vos»*).
 > - **En el repo, NO desplegado:** guion (`config.mjs`), `SAFE_REPLY`, etiquetas del motor, prompt del LLM y las 10
 >   respuestas + 2 FAQ de `knowledge.onia.json`, solo texto. Gate nuevo `bot/de-usted.test.mjs`; suite del bot
