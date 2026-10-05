@@ -5,6 +5,63 @@ Este archivo es el ESTADO al **5-oct, 20:40 UTC**, cuando Sergio Urcullo pidió 
 La madre saliente (`cfdce1bb…`, rama `claude/onia-sesion-madre-77f719`, worktree `infra-loops-revision-3fc7b1`) llevaba
 días abierta y su conversación costó ~777 M de tokens. **La madre nueva arranca de cero y lee solo esto.**
 
+## ▶ VIGENTE — 5-oct ~21:15 UTC: la madre estuvo en la NUBE y vuelve a la PC
+
+Sergio Urcullo abrió la madre en la nube por error (`session_01BZwYEL4eSUkdPWL36ibLkd`, entorno «onia-higgsfield») y pidió
+volverla local. **Desde la nube se ordena bien a las sesiones de la nube, pero no se llega a las locales ni al Chrome.**
+Lo de abajo (§0-§7) sigue valiendo; esto es lo nuevo.
+
+**Hecho en la madre de la nube (todo en `main`):**
+- Leídos los 5 «RESUMEN PARA LA MADRE NUEVA» (Plataforma, Ventas, Marca, Lucía, Hermes). Confirmado: #108, #109 y #111
+  están en producción (release `97fe3061`, bundles mirados por Plataforma).
+- Mergeados los handoffs #128, #129, #130, #131, #133 y #137 (skill madre con los ids nuevos + tareas de la madre v2).
+- Plataforma: tarea de la **prueba del chip** (solo lectura en prod: `listoParaConectar`, `addon.whatsapp`, correo
+  `+qachip`; verificar plantilla `recordatorio_cita` e inbox después de «conectado»).
+- **Hallazgo:** `onia-platform/lib/chatbot/embedded-signup.ts:142` manda `featureType: ""` (alta estándar: el número
+  pasa a la API), pero `CanalWhatsappCard.tsx` promete coexistencia («sigue siendo tuyo en tu app»). Pasado a Plataforma:
+  si la promesa es falsa, se corrige el texto.
+- Guía del chip dada a Sergio Urcullo: chip SIN WhatsApp instalado → Otorgar `addon.whatsapp` en
+  `/admin/organizations/cmuqzov3y000001mzmrcq0i2t/capacidades` → entrar con `+qachip` → Configuración → Chatbot →
+  Conectar → portafolio nuevo y nombre visible **«Onia Pruebas»** (lo eligió él; no el portafolio «Onia») → SMS → «conectado»
+  → 3 citas a 1 h 30-2 h 30 con su número personal como paciente, un botón distinto en cada recordatorio.
+- Lucía pidió VPS: recomendación a Sergio Urcullo, **no** (la llave vive solo en «Onia»). El `ls` de
+  `/root/.config/onia-publicar/` que pidió lo frenó el control de permisos («Production Reads»): no se reenvía a otra sesión.
+- Competencia: **no abrir sesiones** (mapa de 28 + fichas; faltan clientes, no estudio).
+
+**En vuelo (lo termina la madre de la nube, que sigue abierta solo para eso, y lo sube a `main`):**
+1. Cola de Codex nueva y verificada: `docs/handoff/codex-relevo.md` + `docs/handoff/codex-tareas/*.md` (puntos 13, 14 y 15
+   de la 1.0 y lo que alcance), con el estado medido de los 15 puntos y la lista completa de pendientes de Sergio Urcullo
+   con el cómo. **Si a las 22:30 UTC no está en `main`, se perdió:** se rehace desde §7 de `onia-1.0-nube.md` y
+   `research/ONIA_PAGO_AUTOSERVICIO_AUDITORIA.md`.
+2. ✅ Hecho: el TikTok `https://vt.tiktok.com/ZSbm3Scje/` (mandado el 3-oct, nunca analizado) está en
+   `references/video-intake/2026-10-05-tiktok-ZSbm3Scje.md`. Qué tomar: la serie «Día N/7» con el cierre «Mañana» y las
+   tarjetas que se arman con el dato.
+
+**Sesiones al 21:10 UTC** (ids en la skill `onia-sesion-madre`):
+- **Plataforma:** trabajando (prueba del chip + punto 1).
+- **Ventas:** en pausa, sin tarea. Propuesta: 10 clínicas dentales de Santa Cruz con señal + el mensaje 1:1 de cada una
+  para que lo mande Sergio Urcullo (sin enviar nada).
+- **Marca:** carruseles agendados para el martes 6, 16:00. Espera 3 decisiones de Sergio Urcullo: rehacer las 10 láminas o
+  publicar los 7 carruseles sin ellas; agendar N03 («modo auto») el viernes 9; subir los 6 guiones a Drive.
+- **Lucía:** bloqueada (cuenta demo para las pantallas reales; pide VPS).
+- **Hermes:** abrió el PR #138 con 2 revisores. Verificar qué es: su handoff dice que nada avanza sin el sí de Sergio Urcullo.
+- **Madre v2 nueva:** `session_01CYBTxzz2ti5WAStSfSAruE` (local, «Madre v2 de Onia: revisión de PRs»), esperando tarea.
+  Sus tareas están en `madre-v2-revision.md` § «VIGENTE — 5-oct». Desde la PC se le escribe con `SendMessage`.
+
+**Intentos fallidos desde la nube (no repetir):**
+- `list_events` / `send_message` a una sesión local: `elevated_session_untrusted_device`; a una local cerrada: `session_inactive`.
+- Conector de Gmail: «Precondition check failed» (no se puede confirmar el correo de las QA desde la nube).
+- `ssh onia-vps` de solo lectura: frenado por «Production Reads».
+- `git grep` sobre todo `hermes-content` tarda más de 120 s (repo pesado): acotar rutas.
+
+**Primeros pasos de la madre local:**
+1. Paso 0 (Remote Control, Chrome, `ListAgents`).
+2. Mandarle a la madre v2 su tarea por `SendMessage`.
+3. Darle tarea a Ventas (la de arriba).
+4. Leer en el transcript de Plataforma cómo salió la prueba del chip.
+5. Revisar el PR #138 de Hermes.
+6. Cuando la cola de Codex esté en `main`, archivar la madre de la nube (`session_01BZwYEL4eSUkdPWL36ibLkd`).
+
 ## 0. Al abrir (en este orden)
 1. Remote Control encendido; Chrome con la extensión Claude (`list_connected_browsers` ≠ []).
 2. `ListAgents`. Cada sesión deja en su transcript un **«RESUMEN PARA LA MADRE NUEVA»** (pedido el 5-oct): leer SOLO ese
