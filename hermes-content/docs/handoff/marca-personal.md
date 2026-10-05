@@ -2,6 +2,52 @@
 
 **Archivo único del carril.** Actualizado 2026-09-29 por Claude (Opus 5.5).
 
+## ⏹ CIERRE 5-oct — cambio de sesión madre (`session_01CE21mytrEXdqanCFoWxm32`)
+
+**Objetivo de la tanda (madre, 3-oct):**
+1. Alinear el kit al plan de grabación por bloques.
+2. Re-verificar las piezas REVISAR.
+3. Sumar el paso de pantalla verde.
+4. Editar los brutos con tabla de cortes ANTES de cortar.
+
+**En `main` (todo mergeado, nada publicado):**
+- `KIT-GRABACION.md` ordenado por los 5 bloques de `PLAN-GRABACION-3-OCT.md`, con el verde primero. Las 10 piezas REVISAR
+  quedaron verificadas el 3-oct con su fuente; GUIONES, GRABAR y los drops, corregidos: Fable 5.1 en D01-C, los 1.000
+  mensajes gratis de Meta, la caché de OpenAI, la demo de N04 y los 5 ajustes de N02 (PR #113).
+- `editor-videos/scripts/fondo-verde.mjs`: chromakey probado con una toma de prueba (PR #113).
+- Moldes en `edicion-referentes`: Santiago, Erik, **Pablo** para los repos (PR #119) y **Boceto** (PR #126). Ficha del
+  reel de @theaigeekk en `video-intake` (PR #120).
+
+**Estado del embudo** (contestado a la madre el 3-oct, comprobado en vivo):
+- existen el grupo «Onia Community», la agenda `cal.com/sergiourcullo/20min` y la web;
+- la «auditoría gratis» no está definida en ningún lado;
+- la acción más chica: renombrar ese evento de cal.com a auditoría con 2 preguntas y poner el link en la bio, en el
+  grupo y en las respuestas a los comentarios.
+
+**A medias, y dónde:**
+- **N03 (modo auto, versión Codex):** listo para publicar.
+  - Archivo en el VPS: `/root/publicar/n03-modo-auto/{final.mp4,caption.txt}`.
+  - Copia en el scratchpad de esta sesión: se pierde si la sesión muere, pero se rehace con `edit-codex.py`.
+  - El 4-oct se le mandó a Sergio Urcullo como archivo para descargar.
+  - Desde esta sesión en modo «Auto», el clasificador bloqueó hasta el ensayo de `ig-reel.mjs`.
+- **Molde Boceto:** sin probar. Espera las fotos de 4 a 6 bocetos de Sergio Urcullo.
+- **`santiago.py --estilo pablo`:** se escribe con el primer bruto de un R.
+- **Brutos:** en Drive («Videos Onia Octubre») sigue solo el de N03 del 1-oct. No llegó nada grabado el 3-oct, así que
+  no hay tabla de cortes pendiente.
+
+**Intentos fallidos:**
+- `ig-reel.mjs` (ensayo, sin publicar) lo frenó el clasificador del modo Auto: «Unrequested Commit in a Connected App».
+- `transcribe.sh` desde la nube se cuelga con la IP directa: va con `ONIA_VPS_HOST=onia-vps`.
+- Un `git checkout origin/main --` dejó HEAD suelto: se arregla con `git checkout -B <rama> origin/main`.
+
+**Lo que depende de Sergio Urcullo:**
+1. N03: lo sube él o pasa la sesión a «Accept edits» y dice «publicalo», con dónde y cuándo.
+2. Los brutos del bloque 1 (verde) y del bloque 2.
+3. Los 18 carruseles: «ok, agendá». Las fechas del script (3 a 20-oct) ya se corrieron: hay que reprogramarlas.
+4. Las 10 láminas: «rehacé las 10» (1,20 cr) o «van sin imagen».
+5. Si se prueba el molde Boceto, con sus dibujos.
+6. Si los guiones R y G (~60 s) se acortan al largo del molde Pablo (21 s).
+
 ## ⏹ CIERRE 3-oct ~18:45 UTC — alcance congelado por Sergio Urcullo; esperando revisión (`session_01CE21mytrEXdqanCFoWxm32`)
 
 **Objetivo de la tanda** (asignado por la madre, alcance congelado el 2-oct):
