@@ -2,6 +2,18 @@
 
 **Archivo único del carril.** Actualizado 2026-09-29 por Claude (Opus 5.5).
 
+## ▶ 5-oct noche — sesión nueva (`session_01WPecmppa9uZEc4fJDjSmaS`, rama `claude/gifted-clarke-y4vvtj`)
+
+- **Brutos:** Drive revisado; sigue solo el de N03, del 1-oct. No hay corte pendiente.
+- **Auditoría gratis: definida como propuesta** en `ONIA_COMUNIDAD_CONTENIDO.md` §«Auditoría gratis y llamada 1 a 1».
+  Incluye:
+  - opción A recomendada: para dueños de clínicas dentales de Santa Cruz, no una auditoría de IA abierta;
+  - guion de 20 min y el mensaje para los pacientes;
+  - textos para cal.com (`/auditoria`), los mensajes 1 a 1 y el pedido de referido en el grupo;
+  - cupo de 2 por semana para la «Llamada 1 a 1» de la comunidad.
+- **Falta el OK de Sergio Urcullo (A o B).** Después: crear el evento en cal.com (lo hace él o la madre con Chrome) y
+  mirarlo renderizado. Los mensajes 1 a 1 los cambia Ventas y pauta.
+
 ## ⏹ CIERRE 5-oct — cambio de sesión madre (`session_01CE21mytrEXdqanCFoWxm32`)
 
 **Objetivo de la tanda (madre, 3-oct):**
