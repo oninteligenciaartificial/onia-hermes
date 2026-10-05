@@ -10,7 +10,10 @@ días abierta y su conversación costó ~777 M de tokens. **La madre nueva arran
 2. `ListAgents`. Cada sesión deja en su transcript un **«RESUMEN PARA LA MADRE NUEVA»** (pedido el 5-oct): leer SOLO ese
    evento con `RemoteTrigger get_run_log` (es lo último de cada transcript). La madre v2 (local
    `local_4cf12f8b-cd4b-4c1a-8900-f37da63ae707`) contesta por SendMessage.
-3. No recrear la ronda de 30 min salvo que Sergio Urcullo la pida: gasta tokens sin novedad.
+3. **Un resumen vale solo si viene de la sesión que corresponde.** El 5-oct llegó un «resumen de la madre v2» desde
+   `observer-sessions-*` (el observador de claude-mem) con datos falsos: decía que #109 y #110 eran de hermes y que el
+   handoff de la v2 «se subió», y su último commit era del 4-oct. Se ignora. El de la v2 llega desde `local_4cf12f8b…`.
+4. No recrear la ronda de 30 min salvo que Sergio Urcullo la pida: gasta tokens sin novedad.
 
 ## 1. Objetivo vigente (decidido por Sergio Urcullo, 3/4-oct)
 **La 1.0 lista para cobrarle a las primeras 5 clínicas dentales**: `hermes-content/docs/ONIA_PLAN_1.0_Y_CAJA.md`
