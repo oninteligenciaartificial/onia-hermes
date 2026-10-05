@@ -28,11 +28,10 @@ Lo de abajo (§0-§7) sigue valiendo; esto es lo nuevo.
   `/root/.config/onia-publicar/` que pidió lo frenó el control de permisos («Production Reads»): no se reenvía a otra sesión.
 - Competencia: **no abrir sesiones** (mapa de 28 + fichas; faltan clientes, no estudio).
 
-**En vuelo (lo termina la madre de la nube, que sigue abierta solo para eso, y lo sube a `main`):**
-1. Cola de Codex nueva y verificada: `docs/handoff/codex-relevo.md` + `docs/handoff/codex-tareas/*.md` (puntos 13, 14 y 15
-   de la 1.0 y lo que alcance), con el estado medido de los 15 puntos y la lista completa de pendientes de Sergio Urcullo
-   con el cómo. **Si a las 22:30 UTC no está en `main`, se perdió:** se rehace desde §7 de `onia-1.0-nube.md` y
-   `research/ONIA_PAGO_AUTOSERVICIO_AUDITORIA.md`.
+**Lo que estaba en vuelo (ya en `main`; la madre de la nube se puede archivar):**
+1. ✅ Hecho (onia-hermes#141): cola de Codex en `docs/handoff/codex-relevo.md` + 5 prompts en `docs/handoff/codex-tareas/`
+   (C15, C13, C14, C11a, C11b), con el estado medido de los 15 puntos; la lista completa de pendientes de Sergio Urcullo
+   está en §6b. Plataforma ya sabe qué archivos no toca. Falta que la madre v2 la lance (su handoff, tarea 2).
 2. ✅ Hecho: el TikTok `https://vt.tiktok.com/ZSbm3Scje/` (mandado el 3-oct, nunca analizado) está en
    `references/video-intake/2026-10-05-tiktok-ZSbm3Scje.md`. Qué tomar: la serie «Día N/7» con el cierre «Mañana» y las
    tarjetas que se arman con el dato.
