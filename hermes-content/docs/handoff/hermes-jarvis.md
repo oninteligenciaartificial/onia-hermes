@@ -23,8 +23,11 @@
 >   3. Recién después, con el «sí» de Sergio Urcullo: entorno «Pedidos de Hermes» sin variables, la
 >      rutina con el prompt NUEVO de §5 (el viejo, con `commit-tree`, ya no se entrega), la llave y
 >      `aplicar` por el workflow (§7 de abajo).
-> - **Revisión fuerte (2 revisores independientes, 5-oct):** todo lo que encontraron está arreglado y
->   con prueba (`565cd90f` y el commit siguiente). Queda UN límite que no es de código: **quien pueda
+> - **Revisión fuerte (2 revisores independientes + una tercera pasada sobre los arreglos, 5-oct):** todo
+>   lo que encontraron está arreglado y con prueba que da rojo contra la versión anterior (`565cd90f`,
+>   `78c88199`, `e4d0ba2e`). La tercera pasada encontró que un `tsc` que yo había agregado en `main` con
+>   permiso sacaba al integrador de `main` (y `onia-loop.sh` aborta si no está ahí): se sacó; el hook ya
+>   nunca mueve de rama a quien tiene permiso. Queda UN límite que no es de código: **quien pueda
 >   pushear a `main` le gana a la firma y a todo** (el sincronizador corre `main` como root en el VPS). Lo
 >   cierra solo proteger `main` en GitHub; decide Sergio Urcullo (en repo privado de cuenta personal pide
 >   el plan Pro). Anotado en `TELEGRAM_COMMAND_CENTER.md` §9.
