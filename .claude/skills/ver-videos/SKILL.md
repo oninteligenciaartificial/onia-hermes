@@ -225,6 +225,13 @@ usá `text-frames.mjs` (arriba), que muestrea por densidad y no por reloj.
 Speaches gratis alcanza para casi todo.
 ⚠ **Desde una sesión en la nube** (4-oct-2026): `transcribe.sh` va por defecto a `root@187.77.16.63` con su clave, y
 desde la nube eso se cuelga (más de 120 s, JSON vacío). Correrlo con `ONIA_VPS_HOST=onia-vps`, que pasa por el túnel.
+⚠ **En una nube SIN `ssh` ni `yt-dlp`** (entorno «onia-higgsfield», 5-oct-2026, TikTok de @kevinarce98): `transcribe.sh`
+falla con «scp al VPS falló». Camino que funcionó, todo dentro del contenedor y sin VPS:
+`pip install "yt-dlp[default,curl-cffi]" faster-whisper` → bajar con `fetch-video.mjs` → transcribir con `faster-whisper`
+y el mismo modelo del VPS (`Systran/faster-whisper-small`) → corregir con los subtítulos del video las palabras que
+oyó mal. Sin clave de Gemini, la edición se mira por cuadros: 1 por segundo, los primeros 3 s cuadro por cuadro y las
+transiciones más lentas. La música y los efectos se deducen del nivel y del espectrograma en las pausas: decirlo así en
+la ficha, porque el audio no se escuchó.
 Un JSON con `text` vacío es respuesta válida: el audio no tiene voz (así se confirmó que ese reel es solo música). `scripts/transcribe.sh` usa ese camino (base64 → SSH → docker exec en onia-center → Speaches). Detalle de infra: [[onia-hermes-stack-y-radar]].
 
 ## Common mistakes
