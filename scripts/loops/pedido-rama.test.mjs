@@ -188,6 +188,13 @@ test("si la sesión reescribe su rama de rescate (rebase o amend), no se fuerza 
   assert.equal(s.remota(`${RESCATE}-${sha}`), s.cabeza(), "el trabajo reescrito quedó en el remoto");
   assert.equal(s.remota(RESCATE), primero, "la rama de antes no se forzó");
   assert.equal(s.mainRemoto(), s.base);
+  // La vuelta siguiente sigue en esa rama nueva: no crea otra por turno.
+  assert.equal(s.ramaLocal(), `${RESCATE}-${sha}`);
+  writeFileSync(join(s.clon, "otro.md"), "más\n");
+  assert.equal(s.correr().status, 0);
+  assert.equal(s.remota(`${RESCATE}-${sha}`), s.cabeza());
+  const ramas = s.git(join(s.clon, "..", "origin.git"), "for-each-ref", "--format=%(refname)", "refs/heads/claude/");
+  assert.equal(ramas.split("\n").length, 2, ramas);
 });
 
 test("un nombre de rama con $(…) es dato: no se ejecuta", () => {
@@ -210,20 +217,49 @@ test("con un tag llamado `main`, parada en main sin permiso, main del remoto no 
   assert.equal(dir.remota(RESCATE), dir.cabeza());
 });
 
-test("CON permiso y parada en main, si la app no compila, main no se pushea: va a la rama de rescate", () => {
-  const s = sesion("main", { env: { ONIA_AUTOSYNC_MAIN: "1" }, sinCambio: true });
-  // Un npx que siempre falla: así no se descarga nada y tsc «no compila».
+// Tercera pasada de revisión (5-oct): el hook NUNCA mueve el checkout de quien tiene permiso. El
+// integrador corre en /root/loops/onia-hermes parado en main y aborta si no lo está (onia-loop.sh):
+// sacarlo de main lo frenaba para siempre. El tsc de la app no se le exige en main: tiene sus gates.
+test("con permiso y parada en main, el hook nunca la saca de main (el integrador aborta si no está ahí)", () => {
+  const s = sesion("main", { env: { ONIA_LOOP_ID: "onia-cola" }, sinCambio: true });
   const bin = join(s.dir, "bin");
   mkdirSync(bin);
-  writeFileSync(join(bin, "npx"), "#!/usr/bin/env bash\necho 'error TS2307: Cannot find module' ; exit 2\n");
+  writeFileSync(join(bin, "npx"), "#!/usr/bin/env bash\necho 'error TS2307' ; exit 2\n");
   chmodSync(join(bin, "npx"), 0o755);
   mkdirSync(join(s.clon, "web-factory", "apps", "site"), { recursive: true });
-  writeFileSync(join(s.clon, "web-factory", "apps", "site", "pagina.ts"), "import x from './no-existe';\n");
-  const r = s.correr({ ONIA_AUTOSYNC_MAIN: "1", PATH: `${bin}:${process.env.PATH}` });
+  writeFileSync(join(s.clon, "web-factory", "apps", "site", "pagina.ts"), "export const x = 1;\n");
+  const r = s.correr({ ONIA_LOOP_ID: "onia-cola", PATH: `${bin}:${process.env.PATH}` });
   assert.equal(r.status, 0, r.stdout + r.stderr);
-  assert.match(r.stdout, /main BLOQUEADO: apps\/site no compila/);
+  assert.equal(s.ramaLocal(), "main");
+  assert.equal(s.mainRemoto(), s.cabeza(), "como antes de este cambio: el integrador publica main");
+  assert.equal(s.remota(RESCATE), "");
+});
+
+test("una rama de rescate local con commits que HEAD no tiene no se pisa: se usa otra con el sha", () => {
+  const s = sesion("main", { sinCommitear: true }); // A quedó en origin/<rescate>; la sesión, parada ahí
+  const A = s.cabeza();
+  writeFileSync(join(s.clon, "d.md"), "D, sin pushear\n");
+  s.git(s.clon, "add", ".");
+  s.git(s.clon, "commit", "-qm", "D");
+  const D = s.cabeza();
+  // En el mismo turno: vuelve a main, trae A por un merge (como un PR mergeado) y commitea E.
+  s.git(s.clon, "switch", "-q", "main");
+  s.git(s.clon, "merge", "-q", "--no-ff", A, "-m", "merge del PR de rescate");
+  writeFileSync(join(s.clon, "e.md"), "E\n");
+  s.git(s.clon, "add", ".");
+  s.git(s.clon, "commit", "-qm", "E");
+  const r = s.correr();
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.equal(s.git(s.clon, "rev-parse", `refs/heads/${RESCATE}`), D, "D sigue en su rama local");
+  const sha = s.git(s.clon, "rev-parse", "--short=8", "HEAD");
+  assert.equal(s.remota(`${RESCATE}-${sha}`), s.cabeza(), "E quedó en el remoto con otro nombre");
+  assert.equal(s.ramaLocal(), `${RESCATE}-${sha}`);
   assert.equal(s.mainRemoto(), s.base);
-  assert.equal(s.remota(RESCATE), s.cabeza(), "el trabajo no se perdió");
+});
+
+test("la rama de rescate queda con upstream: el `git push` de la sesión funciona sin argumentos", () => {
+  const s = sesion("main", { sinCommitear: true });
+  assert.equal(s.git(s.clon, "rev-parse", "--abbrev-ref", "@{u}"), `origin/${RESCATE}`);
 });
 
 test("ningún settings.local.json está versionado, en ninguna carpeta", () => {

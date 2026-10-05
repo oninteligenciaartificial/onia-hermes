@@ -131,9 +131,15 @@ CLI de Hermes.
   lee con `symbolic-ref` (ref completa): con un tag `main`, `--abbrev-ref` decía `heads/main` y el push
   igual movía `refs/heads/main`.
 - **Lo rescatado sale de `main`** (5-oct): el autosync pushea a `claude/autosync-<id>`, deja la sesión
-  parada en esa rama y vuelve el `main` local a `origin/main`. Si quedaba en el `main` local, la primera
-  corrida CON permiso en ese clon lo publicaba sin PR. Una rama de rescate reescrita (rebase, amend) no
-  se fuerza: va a `claude/autosync-<id>-<sha>`.
+  parada en esa rama (con upstream) y vuelve el `main` local a `origin/main`. Si quedaba en el `main`
+  local, la primera corrida CON permiso en ese clon lo publicaba sin PR. Una rama de rescate reescrita
+  (rebase, amend), o una local con commits que HEAD no tiene, no se fuerza ni se pisa: va a
+  `claude/autosync-<id>-<sha>` y la sesión sigue ahí.
+- **A quien TIENE permiso el hook nunca lo mueve de rama** (tercera pasada de revisión, 5-oct). Una
+  versión intermedia exigía `tsc` también en `main` con permiso y, si fallaba, rescataba: el integrador
+  quedaba fuera de `main`, y `onia-loop.sh` aborta si no está ahí, así que dejaba de integrar para
+  siempre. Hueco conocido, como antes del 5-oct: con permiso y parado en `main`, se pushea sin `tsc` de
+  `apps/site` (el integrador tiene sus gates; la madre, la regla «main siempre compila»).
 - **Una sección del SOUL se copia con un rango.** El `aplicar` viejo hacía `sed '/^## Su calendario/,$p'`:
   arrastraba TODO lo que viniera después. La sección de pedidos va ANTES de la del calendario, y
   cada copia termina en el próximo `---`.
@@ -195,7 +201,7 @@ CLI de Hermes.
   rama (`pedido/*`, `respuesta/*`): el tercer MEDIUM de la madre v2. Desde el 5-oct la rutina no tiene
   permiso (su entorno no tiene variables) y no mueve `main` con ningún nombre; el de la rama queda como
   segunda llave. Una sesión parada EN `main` sin permiso tampoco lo pushea: sus commits van a
-  `claude/autosync-<sesión>` (`pedido-rama.test.mjs`, 20 casos).
+  `claude/autosync-<sesión>` (`pedido-rama.test.mjs`, 22 casos).
 - **La respuesta de un pedido va FIRMADA** (5-oct, primer MEDIUM de la madre v2). `pedido-claude.sh` le
   da a cada pedido un sello de 32 hex que viaja solo en el disparo («Sello: …») y queda en
   `/var/lib/onia-pedidos/sellos/<id>` (600). La sesión responde con `scripts/loops/responder-pedido.sh

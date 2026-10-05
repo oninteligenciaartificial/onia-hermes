@@ -95,32 +95,52 @@ function compilaParaMain(desde) {
   return check.ok;
 }
 
-// Saca de main los commits que no pueden publicarse ahí, sin perder ninguno: los pushea a la rama de
-// rescate, deja la sesión parada en esa rama (mismo commit, árbol intacto) y vuelve el main local a
-// origin/main. Revisión del 5-oct: si quedaban en el main local, la primera corrida CON permiso en ese
-// clon los publicaba sin PR. Si el push se rechaza (la sesión hizo rebase o amend), no se fuerza:
-// van a una rama con el commit en el nombre.
-function rescatar(motivo) {
+function nombreConSha() {
+  const sha = tryGit(['rev-parse', '--short=8', 'HEAD']);
+  return `${ramaDeRescate()}-${sha.ok ? sha.out : Date.now()}`;
+}
+
+// ¿Se puede apuntar la rama local `nombre` a HEAD sin dejar commits huérfanos? Sí si no existe o si
+// HEAD ya los contiene (revisión del 5-oct: `checkout -B` pisaba una rama con commits sin pushear).
+function sinPerder(nombre) {
+  return !tryGit(['rev-parse', '-q', '--verify', `refs/heads/${nombre}`]).ok ||
+    tryGit(['merge-base', '--is-ancestor', `refs/heads/${nombre}`, 'HEAD']).ok;
+}
+
+// Pushea HEAD a la rama `destino` y deja la sesión parada en ella (mismo commit, árbol intacto), con
+// upstream. Si el push se rechaza (la sesión hizo rebase o amend) o pisaría commits locales, no se
+// fuerza: usa `<rescate>-<sha>`. Devuelve { ok, destino, movida, out }.
+function llevarA(destino) {
+  if (!sinPerder(destino)) destino = nombreConSha();
+  let push = tryGit(['push', 'origin', `HEAD:refs/heads/${destino}`]);
+  if (!push.ok && destino !== nombreConSha() && sinPerder(nombreConSha())) {
+    destino = nombreConSha();
+    push = tryGit(['push', 'origin', `HEAD:refs/heads/${destino}`]);
+  }
+  if (!push.ok) return { ok: false, destino, out: push.out };
+  const movida = tryGit(['checkout', '-q', '-B', destino]).ok;
+  if (movida) tryGit(['branch', '-q', `--set-upstream-to=refs/remotes/origin/${destino}`]);
+  return { ok: true, destino, movida };
+}
+
+// Saca de main los commits de una sesión SIN permiso, sin perder ninguno: van a su rama de rescate, la
+// sesión queda parada ahí y el main local vuelve a origin/main. Revisión del 5-oct: si quedaban en el
+// main local, la primera corrida CON permiso en ese clon los publicaba sin PR. Solo para sesiones sin
+// permiso: el integrador aborta si no está parado en main (onia-loop.sh), nunca se lo mueve.
+function rescatar() {
   const nuevos = tryGit(['rev-list', '--count', `${MAIN_REMOTA}..HEAD`]);
   if (nuevos.ok && nuevos.out === '0') {
     console.log('[autosync] en main, nada nuevo; main no se toca');
     return;
   }
-  let destino = ramaDeRescate();
-  let push = tryGit(['push', 'origin', `HEAD:refs/heads/${destino}`]);
-  if (!push.ok) {
-    const sha = tryGit(['rev-parse', '--short=8', 'HEAD']);
-    destino = `${destino}-${sha.ok ? sha.out : Date.now()}`;
-    push = tryGit(['push', 'origin', `HEAD:refs/heads/${destino}`]);
-  }
-  if (!push.ok) {
-    console.log(`[autosync] push a ${destino} falló (main NO se tocó; los commits siguen en este clon): ` + push.out.slice(0, 300));
+  const r = llevarA(ramaDeRescate());
+  if (!r.ok) {
+    console.log(`[autosync] push a ${r.destino} falló (main NO se tocó; los commits siguen en este clon): ` + r.out.slice(0, 300));
     return;
   }
-  const mover = tryGit(['checkout', '-q', '-B', destino]);
-  if (mover.ok && tryGit(['rev-parse', '-q', '--verify', MAIN_REMOTA]).ok) tryGit(['branch', '-f', 'main', MAIN_REMOTA]);
-  console.log(`[autosync] main solo avanza por PR revisado (${motivo}): tus commits quedaron en origin/${destino}` +
-    (mover.ok ? ' y la sesión sigue en esa rama (abrí un PR desde ahí)' : ' (abrí un PR desde ahí)'));
+  if (r.movida && tryGit(['rev-parse', '-q', '--verify', MAIN_REMOTA]).ok) tryGit(['branch', '-f', 'main', MAIN_REMOTA]);
+  console.log(`[autosync] main solo avanza por PR revisado: tus commits quedaron en origin/${r.destino}` +
+    (r.movida ? ' y la sesión sigue en esa rama (abrí un PR desde ahí)' : ' (abrí un PR desde ahí)'));
 }
 
 function main() {
@@ -170,23 +190,21 @@ function main() {
 
   const permiso = puedeMoverMain();
 
-  // 4a. Parada EN main: sin permiso, o con permiso pero con la app sin compilar, main no se pushea.
-  if (rama === 'main') {
-    if (!permiso) return rescatar('sin permiso para mover main');
-    if (!compilaParaMain('HEAD')) return rescatar('apps/site no compila');
-  }
+  // 4a. Parada EN main y sin permiso: main no se pushea; lo nuevo va a la rama de rescate. Con permiso
+  // (madre, integrador) se pushea main como siempre, sin tsc: es como era antes del 5-oct, y el
+  // integrador tiene sus propios gates (hueco conocido, anotado en la skill onia-hermes-jarvis).
+  if (rama === 'main' && !permiso) return rescatar();
 
   // 4b. ¿Hay commits locales sin pushear? Push, con refs completos.
   const ahead = tryGit(['rev-list', '--count', `refs/remotes/origin/${rama}..${local}`]);
   const needsPush = !ahead.ok || ahead.out === '' || Number(ahead.out) > 0;
   if (needsPush) {
-    let push = tryGit(['push', '-u', 'origin', `${local}:${local}`]);
-    // Una rama de rescate reescrita (rebase o amend) no se fuerza: va a otra con el commit en el nombre.
+    const push = tryGit(['push', '-u', 'origin', `${local}:${local}`]);
+    // Una rama de rescate reescrita (rebase o amend) no se fuerza: la sesión pasa a otra con el commit en
+    // el nombre y sigue ahí (si no, cada vuelta crearía una rama nueva).
     if (!push.ok && rama.startsWith('claude/autosync-')) {
-      const sha = tryGit(['rev-parse', '--short=8', 'HEAD']);
-      const otra = `${rama}-${sha.ok ? sha.out : Date.now()}`;
-      push = tryGit(['push', 'origin', `${local}:refs/heads/${otra}`]);
-      console.log(push.ok ? `[autosync] ${rama} fue reescrita: push -> origin/${otra}` : '[autosync] push falló: ' + push.out.slice(0, 300));
+      const r = llevarA(nombreConSha());
+      console.log(r.ok ? `[autosync] ${rama} fue reescrita: push -> origin/${r.destino}` : '[autosync] push falló: ' + r.out.slice(0, 300));
     } else {
       console.log(push.ok ? `[autosync] push -> origin/${rama}` : '[autosync] push falló: ' + push.out.slice(0, 300));
     }
