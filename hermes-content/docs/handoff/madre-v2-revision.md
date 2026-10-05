@@ -93,3 +93,25 @@ al reiniciarse la sesión: se usó lo que habían dejado en su journal y no se r
 - onia-platform#109 (Codex, punto 12): aprobado; la madre v1 aplicó los 2 LOW.
 - **Pendiente:** revisar el punto 8 de Codex (caja diaria, `codex/punto-8-caja-diaria`, con migración aditiva), con
   2 lentes: corrección + datos/seguridad multi-organización. Espera el aviso de la madre v1.
+
+### Cierre por cambio de sesión madre (5-oct)
+- **Revisado y aprobado:**
+  - onia-platform#109 (Codex, punto 12: import CSV con «;» y WhatsApp de soporte): 15/15 tests; la v1 aplicó los 2 LOW.
+  - onia-platform#110 (Codex, punto 8: caja diaria) en dos vueltas. La 1.ª encontró 3 HIGH: el descuadre lo veía
+    recepción, reabrir pisaba el fondo y faltaba el orden de deploy. La 2.ª (`07549215`): los 9 puntos verificados en
+    el código y 18/18 tests. El LOW 7 (`date` por zona horaria) queda aceptado como deuda. Se mergea con CI verde y
+    Sergio Urcullo tiene que VER la pantalla antes de publicar.
+- **Pendiente para la madre que siga:**
+  1. Capturas de los anuncios de la competencia: falta el OK de gasto de Sergio Urcullo; se hacen de a un anunciante.
+  2. Comparar el próximo video de Marca contra `hermes-content/references/marca-personal/FORMULAS-REFERENTES.md`.
+  3. Plataforma tiene que corregir el aviso del panel (`lib/chatbot/meta-cobra-el-servicio.ts`) y el bloque `meta` de
+     `pricing.ts`: hoy dicen «sin tramo gratis» y Meta da 1.000 por número y por mes (ver `ONIA_COSTO_CHATBOT_META_2026.md`).
+  4. 2 LOW del #110 para una pasada siguiente: `correctOpeningFund` sin `closedAt: null`, y la carrera egreso/cierre
+     sin `FOR UPDATE`.
+- **Intentos fallidos y su causa:**
+  - 4 workflows grandes murieron con el reinicio de la sesión del 2-oct (se rescató lo que estaba en el journal);
+  - el merge de #96 lo frenó el control de permisos (lo mergeó Sergio Urcullo);
+  - una lectura de `CLAUDE.md` y un `git branch -r --contains` también los frenó el clasificador (no se rodearon);
+  - el costo de Meta lo di primero con «1.000 gratis» copiado de Wati, y después «sin tramo gratis» por `pricing.ts`.
+    La verdad salió de mirar la página renderizada (la v1, en Chrome).
+- Método aprendido → skill `onia-sesion-madre` § «La madre v2».

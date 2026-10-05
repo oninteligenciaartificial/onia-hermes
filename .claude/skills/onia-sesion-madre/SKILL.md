@@ -157,3 +157,26 @@ Cómo contestar: <en tu transcript | SendMessage a «Sesión madre de Onia» | r
   salida no cortaba la cadena; se arregló en `83f93948`.
 - Los arreglos de una revisión vuelven al mismo worktree de Codex, en otra corrida con la lista de hallazgos, y
   después vuelve a revisar la madre v2. Así salieron los 9 puntos del #110 en 2 vueltas.
+
+## La madre v2: la que revisa (medido del 2 al 5 de octubre)
+
+- **Para qué existe:** revisar el trabajo de las sesiones y de Codex, y cubrir a la v1 si se cae. No ordena, no
+  construye, no publica. Lo que revisa se lo devuelve a la v1 por mensaje, con severidad y `archivo:línea`.
+- **La revisión es proporcional al riesgo** (Sergio Urcullo, 3-oct, después de ~425 M de tokens):
+  - FUERTE, con 2 lentes y verificando cada HIGH en el código, solo para lo que corre como root en el VPS, toca
+    producción o plata, o toca `git-autosync.js`;
+  - un revisor y una pasada para código normal;
+  - un vistazo para docs y contenido.
+  - Sin workflows de más de 5 agentes. Sin leer transcripts enteros: diff, tests y el archivo que importa.
+- **Correr los tests uno mismo** en la worktree de Codex (`npx vitest run <archivos>`): no alcanza con creerle a
+  quien los escribió.
+- **Los workflows de fondo mueren si se reinicia la sesión** y no avisan: el 2-oct se cortaron 4 a la vez. Lo
+  terminado queda en `subagents/workflows/<run>/journal.jsonl`; se rescata de ahí, sin relanzar.
+- **Mergear el PR de otra sesión lo frena el control de permisos** («Unrequested Commit in a Connected App»). Se
+  revisa, se deja el veredicto y lo mergea otro (Sergio Urcullo, Plataforma o la v1). No se rodea.
+- **El `main` LOCAL de la PC puede traer commits sin publicar** (el 30-sep, `5f0c8aec`: 213 archivos) y toda
+  worktree nueva nace encima. Antes de escribir: `git merge-base --is-ancestor HEAD origin/main`; si da no, mover
+  la rama a `origin/main`.
+- **Dos páginas oficiales pueden contradecirse** (Meta, 4-oct: «sin tramo gratis» contra «1.000 gratis»). Se muestran
+  las dos y se resuelve MIRANDO la página renderizada con Chrome. WebFetch trae versiones viejas.
+- Estado y pendientes: `hermes-content/docs/handoff/madre-v2-revision.md`.
