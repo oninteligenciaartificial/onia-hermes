@@ -133,8 +133,13 @@
         "maxWords": 6,
         "secondsPerWord": 0.35,
         "entrySeconds": 0.3,
-        "cardCount": null,
+        "cardCount": 11,
         "privacyHold": false
+      },
+      "cutlist": "hermes-content/references/modelos/lucia/v4/kit/k4-borrador-cutlist.json",
+      "preview": null,
+      "review": {
+        "status": "pending"
       }
     }
   ],
