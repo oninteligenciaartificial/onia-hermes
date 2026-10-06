@@ -14,6 +14,9 @@ Sin backfill inferido ni confianza en email/slug/track. Conserva QA interna genu
 Marcado de cuentas existentes y activación en producción siguen pendientes de autorización de Sergio.
 V2 Astra encontró además P2 C13: retroactividad aplicada tras baja efectiva que no disfrutó gracia.
 Autor C13 corrige pasando `planCanceledAt` al cálculo y añade regresión; conserva PR #113.
+Arreglo C13 entregado en `7d97f2f34bf655edf03fc406ad4b05f8b0fb2c39`: seis archivos delta; protege también
+renovación de addons para no introducir gracia nueva. Autor reporta 133/133 pruebas focales y lint/diff limpios.
+V2 Astra recibió revisión focal del nuevo SHA; CI y aprobación todavía pendientes.
 Ambas tareas esperan una revisión focal de sus arreglos. No abrir siguiente tanda el 5-oct: terminar correcciones
 y revisiones de C13/C15; próxima asignación el 6-oct solo tras verificar cuota y tareas cerradas.
 
