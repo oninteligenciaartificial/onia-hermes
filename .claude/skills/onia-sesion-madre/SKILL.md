@@ -29,6 +29,10 @@ sus ids, RemoteTrigger y rondas de 30 min no se trasladan automáticamente a Cod
   alternativo ni bucles vacíos. Silencio sin cambio accionable. Reserva semanal20%: consumo >=80% detiene nuevas
   asignaciones, sin comprar créditos ni resetear límites. El destino todo cloud requiere prueba real antes del traslado.
 
+Regla ratificada por Sergio6-oct: una referencia encargada (empresa, producto o reel) debe cerrar en mecanismo observado → adaptación ONIA → artefacto/prueba → decisión de aplicar, descartar o bloquear con causa. Un dossier o una comparación solos no completan la aplicación. Reutilizar evidencia vigente, no abrir búsquedas repetidas para aparentar avance.
+
+Lucía avanza autónomamente entre tareas reversibles del flujo existente (guion, activos disponibles, montaje, QA y paquete de revisión). Si falta una captura o acceso, lo escala a madre y continúa el siguiente paso independiente; no pide a Sergio edición ni espera otro prompt para trabajo ya autorizado. Generación pagada, publicación, login humano y producción mantienen sus permisos concretos. Todo-cloud requiere ejecución remota comprobada; un selector local no acredita autonomía cloud.
+
 Una entrega de revisión cita SHA exacto y pruebas propias. Código financiero, permisos y autosync: dos lentes;
 documentación o edición trivial: una pasada proporcional. Plataforma la revisa Astra; la v2 Sol revisa Hermes #138.
 

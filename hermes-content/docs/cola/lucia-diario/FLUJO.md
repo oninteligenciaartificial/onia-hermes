@@ -21,6 +21,22 @@ Semana tipo (S1): 3 carruseles (5 cr c/u) + 2 fotos (1 cr) + 1 reel hablando (12
 b-roll (6 cr) ≈ **35 cr/semana ≈ 150 cr/mes**. La bolsa de Higgsfield es una sola para todos los
 carriles: este es el techo que pido aprobar.
 
+## Continuidad autónoma vigente —6-oct
+
+La madre ejecuta el preflight al retomar; Lucía toma el siguiente paso reversible sin pedir un permiso por borrador. El selector no genera, renderiza, publica ni gasta: sus resultados guían al carril y no sustituyen la ejecución. La automatización de madre sigue siendo local hasta comprobar cloud.
+
+Desde la raíz del repositorio:
+
+```powershell
+node .claude/skills/editor-videos/scripts/lucia-preflight.mjs --repo . --state hermes-content/references/modelos/lucia/v4/kit/estado-montaje.json --out "$env:TEMP/lucia-preflight.json"
+```
+
+Estado canónico en `hermes-content/references/modelos/lucia/v4/kit/estado-montaje.json`; activos reutilizados, contratos por pieza, capturas requieren fuente/aprobación registrada. El preview K1 y cutlist/hoja de revisión quedaron versionados en esa misma carpeta; son BORRADOR, sin audio y con CAPTURA PENDIENTE. Revisión de madre por muestra de12fotogramas, no QA exhaustiva de video ni aprobación de identidad. Se ata al SHA256 del video: un cambio invalida la revisión.
+
+Verificado: K1 revisado → siguiente tarea independiente preparar cutlist K2. K2/K4 carecen de cutlist; K3 además carece del raw registrado. P1/P2, CORREO, EXTRACCION/CONFIGURACION siguen a cargo de madre/producto. Si falta una entrada, registrar bloqueo y continuar otra acción local segura; no fabricar UI ni pasarle la edición a Sergio. Master bloqueado por alcance de este selector; publicación y generación pagada conservan permisos separados.
+
+`listo_para_preview` significa borrador con entradas válidas, nunca listo para publicar. Metadatos no validan claims, watermark ni identidad. El JSON registra la evidencia declarada; no consulta cuentas. Actualizarlo al entregar cutlists/activos y conservar un único dueño por pieza.
+
 ## Un día normal
 
 | Hora (La Paz) | Qué pasa |

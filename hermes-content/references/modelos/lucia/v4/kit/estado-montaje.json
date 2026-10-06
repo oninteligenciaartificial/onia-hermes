@@ -1,0 +1,138 @@
+{
+  "captures": {
+    "P1": {
+      "path": null,
+      "approved": false,
+      "evidence": null,
+      "required": "Producto entrega captura real vigente de propuesta IA/modelo/revisión/aprobación con datos ficticios y evidencia de versión."
+    },
+    "P2": {
+      "path": null,
+      "approved": false,
+      "evidence": null,
+      "required": "Producto entrega Pendientes real con mensaje, nombre/hora ficticios y acción humana de envío; revisar semántica."
+    },
+    "CORREO": {
+      "path": null,
+      "approved": false,
+      "evidence": null,
+      "required": "Producto entrega correo real de demo 24 h/2 h y valida funcionamiento vigente."
+    },
+    "EXTRACCION": {
+      "path": null,
+      "approved": false,
+      "evidence": null,
+      "required": "Producto entrega pantalla real de extracción web y campos cargados; no fabricar la UI."
+    },
+    "CONFIGURACION": {
+      "path": null,
+      "approved": false,
+      "evidence": null,
+      "required": "Producto confirma edición real de horarios; si no existe, quitar esa toma del K3 canónico."
+    }
+  },
+  "pieces": [
+    {
+      "id": "K1",
+      "duration": 34,
+      "assets": [
+        "hermes-content/references/modelos/lucia/v4/kit/k1-1-recepcion-celular-4afffb96.jpg",
+        "hermes-content/references/modelos/lucia/v4/kit/k1-clip-mira-camara-e470ef4f.mp4"
+      ],
+      "captures": [
+        "P1",
+        "P2"
+      ],
+      "preview": "hermes-content/references/modelos/lucia/v4/kit/k1-borrador-360p.mp4",
+      "cutlist": "hermes-content/references/modelos/lucia/v4/kit/k1-borrador-cutlist.json",
+      "contract": {
+        "fps": 24,
+        "previewWidth": 360,
+        "previewHeight": 640,
+        "maxWords": 6,
+        "secondsPerWord": 0.35,
+        "entrySeconds": 0.3,
+        "cardCount": 11,
+        "privacyHold": true
+      },
+      "review": {
+        "status": "reviewed",
+        "evidence": "Madre6-oct vio contactsheet K1 de12frames; revisión de borrador registrada sin aprobar identidad/master.",
+        "sha256": "b912ab06c8cf9468bdca47477d180396ead625a968b5628cd9dcf00f7c7814a5"
+      }
+    },
+    {
+      "id": "K2",
+      "duration": 36,
+      "assets": [
+        "hermes-content/references/modelos/lucia/v4/kit/k2-1-cafe-mostrador-3e05cfd0.jpg",
+        "hermes-content/references/modelos/lucia/v4/kit/k2-2-agenda-papel-1422fa94.jpg",
+        "hermes-content/references/modelos/lucia/v4/kit/k2-clip-deja-cafe-83130c4a.mp4"
+      ],
+      "captures": [
+        "P2",
+        "CORREO"
+      ],
+      "contract": {
+        "fps": 24,
+        "previewWidth": 360,
+        "previewHeight": 640,
+        "maxWords": 6,
+        "secondsPerWord": 0.35,
+        "entrySeconds": 0.3,
+        "cardCount": null,
+        "privacyHold": false
+      }
+    },
+    {
+      "id": "K3",
+      "duration": 31,
+      "assets": [
+        "videos/lucia-l05/raw/l05-coworking-kling-07b938b2.mp4"
+      ],
+      "captures": [
+        "EXTRACCION",
+        "CONFIGURACION"
+      ],
+      "contract": {
+        "fps": 24,
+        "previewWidth": 360,
+        "previewHeight": 640,
+        "maxWords": 6,
+        "secondsPerWord": 0.35,
+        "entrySeconds": 0.3,
+        "cardCount": null,
+        "privacyHold": false
+      }
+    },
+    {
+      "id": "K4",
+      "duration": 35,
+      "assets": [
+        "hermes-content/references/modelos/lucia/v4/kit/k4-1-saluda-eddca486-recorte.jpg",
+        "hermes-content/references/modelos/lucia/v4/kit/k4-clip-cuenta-dedos-338b751f.mp4",
+        "hermes-content/references/modelos/lucia/v4/kit/k4-3-cafe-teclado-186c82f0.jpg",
+        "hermes-content/references/modelos/lucia/v4/kit/k4-4-cuerpo-entero-cb86ea10.jpg",
+        "hermes-content/references/modelos/lucia/v4/kit/k4-5-senala-342c0ab5.jpg"
+      ],
+      "captures": [
+        "P2",
+        "CORREO"
+      ],
+      "contract": {
+        "fps": 24,
+        "previewWidth": 360,
+        "previewHeight": 640,
+        "maxWords": 6,
+        "secondsPerWord": 0.35,
+        "entrySeconds": 0.3,
+        "cardCount": null,
+        "privacyHold": false
+      }
+    }
+  ],
+  "operationalScope": {
+    "localReversible": true,
+    "evidence": "Sergio6-oct, transmitido por madre en este chat: autonomía para tareas locales reversibles sin gasto; no permiso adicional por preview. Generación paga, master y publicación separados."
+  }
+}

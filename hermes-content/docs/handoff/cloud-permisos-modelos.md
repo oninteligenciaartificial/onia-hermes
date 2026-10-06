@@ -91,3 +91,7 @@ Prueba de habilitación cloud (pendiente, no ejecutada):
 6. Guardar ficha y evidencia no secreta canónica. Ante bloqueo, mandar a madre causa exacta(red/login/herramienta/proveedor/modelo/costo) y seguir otro trabajo seguro. No pasar a Sergio edición/descarga que madre pueda completar con acceso disponible.
 
 No se creó entorno, instaló herramienta, movió secretos ni ejecutó inferencia cloud en este cambio. Fallback actual: laptop disponible. Todo-cloud sólo se anuncia logrado cuando la prueba termina verificable.
+
+## Revalidación6-oct tras pedido de autonomía
+
+Madre comprobó nuevamente CLI0.139: `cloud list --limit 3 --json` devuelve tasks vacío; `cloud exec --help` sin selector explícito de modelo, sólo overridegenérico. Navegador disponibleIAB/MCPApps, sinChrome; abrirCodexcloud redirige al login. No se creó tarea ni se trasladaron chats/cloudsecretos. Pregunta concreta enviada aSergio: si Codexcloudabre en su navegadorhabitual, para distinguir falloIAB de cuenta. Regla: bloqueo técnico sigue pendiente, sin asumir imposibilidaduniversal ni volver a pedirclaves.
