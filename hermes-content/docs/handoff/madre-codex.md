@@ -12,7 +12,10 @@ Autor confirmó además onboarding y registro controlables. Decisión técnica l
 con default false, solo SUPERADMIN y audit; API/UI admin mínima, pruebas focales, migración aditiva NO aplicada.
 Sin backfill inferido ni confianza en email/slug/track. Conserva QA interna genuina; no crea excepción para clientes.
 Marcado de cuentas existentes y activación en producción siguen pendientes de autorización de Sergio.
-V2 Astra revisa C13 mientras se corrige C15; luego una revisión focal del arreglo. No iniciar tercera implementación.
+V2 Astra encontró además P2 C13: retroactividad aplicada tras baja efectiva que no disfrutó gracia.
+Autor C13 corrige pasando `planCanceledAt` al cálculo y añade regresión; conserva PR #113.
+Ambas tareas esperan una revisión focal de sus arreglos. No abrir siguiente tanda el 5-oct: terminar correcciones
+y revisiones de C13/C15; próxima asignación el 6-oct solo tras verificar cuota y tareas cerradas.
 
 **META:** llevar ONIA a las primeras cinco clínicas que pagan; continuar los cinco carriles sin doble dueño.
 **PRUEBA DE HECHO:** cada ítem termina ejecutado y validado, con runbook verificable, o bloqueado por dato/permiso
