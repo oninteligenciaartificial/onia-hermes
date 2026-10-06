@@ -66,3 +66,15 @@ Madre comprobó en browser sobre dcb5cb22 (antes de correcciones exclusivamente 
 Después, al abrir «Descartar borrador y recargar» y coincidir una actualización del banco, el diálogo quedó bloqueado: getJsDialog no devolvió handle y tab11 falló por timeout de Emulation.setFocusEmulationEnabled. Se leyeron instrucciones de troubleshooting y se probaron cancelación/close documentados; sin éxito. Tab13 y alias127.0.0.1 cargan el escenario de lectura con texto actualizado, sin error de consola y botón36 no deshabilitado, pero clic no modifica selección. No se cambió código por este bloqueo del navegador. No certificar readonly interactivo, error500, ausente, orientación visual, teclado ni responsive dental. Tests cubren esos contratos; no equivalen a QA browser ni a validación clínica externa. No borrar sesiones ni reiniciar servicios para intentar ocultar el problema.
 
 UI restante pendiente de navegador operativo. Tipografía fallback en todos los bancos; no fidelidad de fuentes. Migración no aplicada, persistencia PostgreSQL/concurrencia real no probadas. No merge/deploy.
+
+## Continuación goal — QA dental recuperada, 6-oct
+
+El bloqueo IAB anterior dejó de reproducirse después de cerrar las pestañas temporales al terminar el turno; no se cambió producto, servicio ni seguridad. Nueva pestaña14 en banco3135, runtime4cb9495c verificado en manifiesto4/4.
+
+- Sólo lectura: pieza36 abre, Mesial se selecciona con Return, campos de condición y notas deshabilitados, cero botones Guardar. Las cinco caras siguen explorables.
+- Móvil efectivo390px (DOM), página384px: sin desborde global. Cinco botones de cara100.65–100.67px de ancho ×58px alto; arco con desplazamiento propio. Evidencia c6b2-readonly-mobile.png (captura parcial del detalle; medidas DOM son prueba del viewport).
+- AUSENTE: pieza36 conserva Mesial Restaurado y su nota multilineal; condiciones/notas/Guardar esta cara deshabilitados. c6b2-ausente.png.
+- Error500 simulado al guardar Mesial: texto ingresado se conserva, muestra fallo y Cambios sin guardar, no Guardado. c6b2-error500.png. Después se restauró exactamente la nota ficticia inicial, dirty=false, antes de navegar.
+- Orientación: se seleccionaron11/21/31/41; Mesial columnas3/1/1/3 respectivamente, Distal inverso; Vestibular fila1 superiores/fila3 inferiores; central Incisal en las cuatro anteriores. Se observó Oclusal en36. Desktop efectivo1440px/página1434px. c6b2-orientacion-desktop.png. Esto verifica el contrato de orientación, no certificación clínica externa.
+
+Overrides restaurados. Madre realizó estas interacciones; no agentes adicionales ni suites repetidas. Fixture intercepta APIs: no pacientes reales, SQL, migración o producción. Persisten límites: fidelidad tipográfica (fallback), PostgreSQL/concurrencia real, QA autenticada e integración. No se realizó en esta pasada el recorrido completo de recarga tras409 ni toda navegación SPA. El goal sigue incompleto.
