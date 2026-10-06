@@ -4,30 +4,22 @@ Estado: relevo autorizado por Sergio, 5-oct-2026; base Hermes `672d78e8`, desarr
 Producción Platform `97fe3061` es el release reportado por handoff, sin comprobación nueva propia.
 Este archivo es el estado Codex; `madre-local.md` conserva el relevo Claude. No reconstruir transcripts completos.
 
-**Actualización de cierre de turno:** coordinación en PR Hermes #143 (draft), commit inicial `69038fd4`.
-Cuota compartida: última consulta 16% usada / 84% restante. C13 #113 tiene CI pendiente de revisión, no aprobado todavía.
-C15 `b662d24e` NO aprobado: revisión Astra reprodujo exención fiscal inducida por email mutable del cliente
-(`demo-cliente@example.com` → cuenta de la casa). Devuelto a autor C15 para corrección mínima y regresión;
-Autor confirmó además onboarding y registro controlables. Decisión técnica local: `Organization.cuentaDeLaCasaVerificada`
-con default false, solo SUPERADMIN y audit; API/UI admin mínima, pruebas focales, migración aditiva NO aplicada.
-Sin backfill inferido ni confianza en email/slug/track. Conserva QA interna genuina; no crea excepción para clientes.
-Marcado de cuentas existentes y activación en producción siguen pendientes de autorización de Sergio.
-V2 Astra encontró además P2 C13: retroactividad aplicada tras baja efectiva que no disfrutó gracia.
-Autor C13 corrige pasando `planCanceledAt` al cálculo y añade regresión; conserva PR #113.
-Arreglo C13 entregado en `7d97f2f34bf655edf03fc406ad4b05f8b0fb2c39`: seis archivos delta; protege también
-renovación de addons para no introducir gracia nueva. Autor reporta 133/133 pruebas focales y lint/diff limpios.
-V2 Astra recibió revisión focal del nuevo SHA; CI y aprobación todavía pendientes.
-Re-review C13 sobre ese SHA favorable: P2 cerrado; pruebas independientes 78/78 y regresión 1/1.
-Secret scan SUCCESS; tipos/tests/build todavía IN_PROGRESS. No autoriza merge ni deploy.
-C15 entregó arreglo `cef79f23ad0164d26c829e89e8705b3864cd2f31` sobre `b662d24e`, worktree 1752 limpio,
-sin push. Marca verificada default false, administración SUPERADMIN con audit y bloqueo en tres rutas cliente;
-autor reporta 160 pruebas focales, 12 admin tras ajustar assert y lint limpio. V2 recibió re-review focal C15.
-Re-review C15 favorable en `cef79f23`: P2 cerrado, revisor 160/160 pruebas y tres reproducciones aprobadas.
-Madre verificó rama/árbol limpio, subió la rama y abrió draft Platform #114; CI/tipos/build y QA visual pendientes.
-Único solape confirmado C13/C15: `app/api/admin/subscription-payments/route.test.ts`; preservar ambos cambios.
-Audit usa best-effort existente; no se probó persistencia/grants/RLS en BD real. No se aplicó migración ni marcó cuentas.
-Ambas tareas esperan una revisión focal de sus arreglos. No abrir siguiente tanda el 5-oct: terminar correcciones
-y revisiones de C13/C15; próxima asignación el 6-oct solo tras verificar cuota y tareas cerradas.
+**Estado vigente 6-oct-2026:** seis órdenes enviadas mediante `send_message_to_thread` y seis chats confirmados activos mediante `wait_threads`. La cola anterior de CI estaba desactualizada; se corrigió el seguimiento, no hay pausa general por fecha.
+Cuota compartida: última consulta 18% usada / 82% restante; no atribuible exclusivamente a este frente.
+
+| Dueño | Trabajo despachado | Cierre esperado |
+|---|---|---|
+| Platform C13 · Astra | PR #113: corregir cuatro fallos CI run37410842871 (gracia en plan-expiry/tratamientos y select del callback). Revisión anterior favorable sobre7d97f2f3, CI falló después. | Autor subió2f2b0743,88tests/lint reportados PASS; CI y revisión del delta pendientes. |
+| Platform C15 · Astra | PR #114: corregir TS2322 Payment en fixture addon-chatbot. Autor ya subió54c6ada8, lint y19tests reportados PASS. | CI nueva y revisión independiente del delta. |
+| Marca · Sol | Reconciliar AVISOS desde6oct y claims DD-A/N04/N06; seis brutos de cámara identificados. Reel entregado con análisis visual; audio pendiente HTTP503. | Propuesta exacta temporal y persistencia canónica por madre. |
+| Ventas · Sol | Verificar cinco leads concretos con fuentes públicas actuales. | Cinco fichas, prioridad y actualización canónica preparada. |
+| Lucía · Sol | Cutlist K1 con assets existentes, usted y tiempos legibles. | Montaje reproducible y faltantes de pantalla real explícitos. |
+| Hermes · Sol | Reconciliar tres docs de runtime/deploy con fuentes y fechas. | Patch documental; sin afirmar salud actual ni tocar servicios. |
+| V2 · Astra | Revisar nuevos SHA de113/114 una PR a la vez; detenerse si no cambió head. | Revisión independiente del delta sin repetir suite anterior. |
+
+Cuatro carriles documentales entregan propuestas en `C:/Users/PC/.codex/tmp/`; no editan el checkout compartido. Madre aplica cambios a los canónicos bajo su lease y PR143. Estos artefactos no son publicaciones terminadas.
+C13/C15 ya cerraron sus P2 anteriores por revisión independiente: renovación tras baja efectiva y exención fiscal por email mutable. C15 usa marca verificada default false, sólo SUPERADMIN; migración NO aplicada. Único solape de ambas ramas: `app/api/admin/subscription-payments/route.test.ts`.
+Siguiente desarrollo tras cerrar ambas correcciones: C11a o Caja#110 según dependencia; C14 espera prueba de pago/decisión legal, C11b espera C11a. Sin merge/deploy/migraciones/publicación autorizados.
 
 **META:** llevar ONIA a las primeras cinco clínicas que pagan; continuar los cinco carriles sin doble dueño.
 **PRUEBA DE HECHO:** cada ítem termina ejecutado y validado, con runbook verificable, o bloqueado por dato/permiso
@@ -44,12 +36,12 @@ Sergio autorizó mensajes a estos chats Codex. Leer/esperar sus resultados no re
 |---|---|---|
 | Madre | `01a10f44-2bb7-73c0-8769-8bbe5000b32f` | Sol 6.1 medium solicitado y continuación con model_switch recibida |
 | V2 | `01a10f47-3d92-7bb1-b9f4-6979e258a6dc` | #138 Sol entregada; ahora override Astra medium revisión C15; después Sol para coordinación |
-| Marca | `01a10f47-f110-7131-b14f-9de1d3241406` | Sol 6.1; inventario entregado, en espera |
-| Ventas | `01a10f48-047d-79b2-9bb6-f7addd70c4c7` | Sol 6.1; inventario entregado, en espera |
-| Lucía | `01a10f48-8d90-7103-8c17-612244fd5dd5` | Sol 6.1; inventario entregado, en espera |
-| Hermes | `01a10f48-99eb-7d43-927f-83c4eebc8d1c` | Sol 6.1; inventario entregado, en espera; no duplicar #138 |
-| Platform C13 | `01a10f46-c910-79a3-9670-7e990fcb1257` | Astra medium; draft #113, espera revisión independiente; `codex/punto-13-gracia-y-no-renovar` |
-| Platform C15 | `01a10f4a-5dd1-76c3-844e-45b1c360adad` | Astra medium corrige P2; `codex/punto-15-factura-al-aprobar` |
+| Marca | `01a10f47-f110-7131-b14f-9de1d3241406` | Sol 6.1; tarea acotada despachada 6-oct |
+| Ventas | `01a10f48-047d-79b2-9bb6-f7addd70c4c7` | Sol 6.1; tarea acotada despachada 6-oct |
+| Lucía | `01a10f48-8d90-7103-8c17-612244fd5dd5` | Sol 6.1; tarea acotada despachada 6-oct |
+| Hermes | `01a10f48-99eb-7d43-927f-83c4eebc8d1c` | Sol 6.1; tarea acotada despachada 6-oct; no duplicar #138 |
+| Platform C13 | `01a10f46-c910-79a3-9670-7e990fcb1257` | Astra medium; draft #113, corrige CI; `codex/punto-13-gracia-y-no-renovar` |
+| Platform C15 | `01a10f4a-5dd1-76c3-844e-45b1c360adad` | Astra medium corrige CI; `codex/punto-15-factura-al-aprobar` |
 
 Lease documental madre: `COORDINATION_MANIFEST.md`, `AI_MODEL_ROUTING_2026.md`, skill `onia-sesion-madre` y este archivo,
 en rama `codex/madre-orquestacion-20261005`, worktree `C:/Users/PC/.codex/worktrees/madre-codex/onia-hermes`.
@@ -58,7 +50,7 @@ La carpeta raíz Platform `claude/f2-f3-panel` es histórica y sucia: no desarro
 
 ## Cola finita y revisión
 
-Máximo **dos tareas de implementación y una revisión** simultáneas. No iniciar trabajo por mantener chats ocupados.
+Máximo **dos implementaciones de código y una revisión técnica** simultáneas. Los demás carriles pueden preparar entregas documentales cerradas, sin nuevos subagentes ni investigación abierta. No iniciar trabajo por mantener chats ocupados.
 Una tarea por turno, contrato cerrado; cada resultado pasa a revisión sobre SHA exacto. Tras dos intentos del mismo
 fallo, registrar evidencia, causa y alternativa segura o dato necesario; no insistir con llamadas idénticas. Un bloqueo
 técnico no obliga a parar los demás frentes. La madre toma el siguiente ítem seguro y cierra el resto con dueño.
@@ -66,15 +58,8 @@ técnico no obliga a parar los demás frentes. La madre toma el siguiente ítem 
 1. V2 entregó #138 sobre `d479d3aa`: sin bloqueantes nuevos; CI run `37376490476`; autosync22/22 Windows
    (primera pasada21: fixture sin `.git`; dos casos repetidos tras corregir fixture), sintaxis4Bash PASS.
    No pruebas Node Linux locales, ni merge. Conservar este límite de la revisión.
-2. C13 hecho en rama: [draft #113](https://github.com/oninteligenciaartificial/onia-platform/pull/113), SHA
-   `9f09b067e745e7df0e80087853500baf189902cb`, base `5102535c`, worktree `C:/Users/PC/.codex/worktrees/1de2/onia-platform`
-   limpio. Autor reporta suite3646 PASS/1omitida y foco64 PASS, CI pendiente. Revisión propia cruzada Astra no
-   reemplaza independiente: v2 revisa DESPUÉS de C15, sin paralelo. No migración; legal/gracia semanal pendientes.
-3. C15 terminado por autor, EN REVISIÓN por v2 Astra medium sobre commit exacto
-   `b662d24ed349bd3f09b703e124e9742ef8eef57b`; worktree `C:/Users/PC/.codex/worktrees/1752/onia-platform` limpio.
-   Autor reporta1137tests/54archivos PASS y lint6TS/TSX PASS; sin push, CI ni QA visual. No convertirlos en verificación
-   independiente. Con migración: ningún merge hasta confirmar capacidad facturar SIN. Ambos hechos en rama, NOprod.
-   Sin nuevos subagentes; #110 sigue en cola.
+2. C13 PR113: revisión previa favorable sobre7d97f2f3; CI run37410842871 falló cuatro tests. Autor subió2f2b0743 (sólo fixtures;88tests reportados PASS); CI y revisión pendientes.
+3. C15 PR114: revisión previa favorable sobrecef79f23; CI run37411140925 falló TS2322. Autor subió54c6ada8; v2 revisó delta54c6ada8 favorable; pendiente CI. Migración y capacidad fiscal real siguen pendientes.
 4. C14 después de prueba de pago y aprobación casilla legal. C11a siguiente tanda; C11b recién con C11a mergeado.
 
 Plataforma se revisa con Astra; finanzas, permisos y autosync con dos lentes independientes. Docs triviales: una
@@ -108,7 +93,7 @@ Claude6oct16:10 no verificable con tools actuales: no duplicar/reagendar. Próxi
 Sergio solo hace cámara; editor prepara pantallas. Seis guiones canónicos en `cola/plan-3-semanas/GRABAR-2-14-OCT.md`:
 DD-A/CACHE, N04/VERIFY, N06/ANTIGRAVITY, D03-A/HOOK, D01-A/SKILL, S2-D08-A/PROMESA. Sus seis brutos faltan;
 no sustituir por21sep. Revalidar los tres claims señalados en el reporte antes de pedir grabación. Próxima tarea documental:
-actualizar canónicamente `AVISOS-POR-DIA.md` con fechas6oct; no se edita en este relevo. La calificación “SSH autorizado”
+actualizar canónicamente `AVISOS-POR-DIA.md` con fechas6oct; propuesta solicitada al carril 6-oct. La calificación “SSH autorizado”
 del reporte Marca no amplía permiso: ese turno tenía restricción sinSSH y no se toma como autorización.
 
 - Platform: confirmación correo QA de pago y aprobación comprobante PRUEBA; OK textual SQL B22; R2 bucket/token;
@@ -141,7 +126,7 @@ Comunicación Codex: `send_message_to_thread`; espera compacta `wait_threads` co
 `read_thread`. No asumir que herramientas Claude miden chats Codex. Navegador autenticado: serializado por madre.
 Heartbeat **`madre-onia-continuidad` ACTIVE cada seis horas LOCAL**, creado con herramientas del app. Silencio sin
 cambio accionable; solo novedades relevantes. Reserva20% semanal: consumo >=80% no inicia nuevos trabajos, sin
-créditos/reset. Consumo cuenta10% frente3% inicial, no atribuible exclusivamente al agente. Compactar reportes y cerrar;
+créditos/reset. Consumo cuenta18% frente3% inicial, no atribuible exclusivamente al agente. Compactar reportes y cerrar;
 no rondas vacías30min ni cron como sustituto. El heartbeat aún no ejecuta trabajo cloud verificado.
 
 ## Cierre de este relevo documental

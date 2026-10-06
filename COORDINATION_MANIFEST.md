@@ -5,16 +5,16 @@
 **Prevalece este bloque sobre los mapas Claude históricos de abajo.** Sergio autorizó relevar los cinco carriles,
 organizar las sesiones y continuar trabajo. Estado, ids locales, leases y gates: [`madre-codex.md`](hermes-content/docs/handoff/madre-codex.md).
 Una sola madre: `01a10f44-2bb7-73c0-8769-8bbe5000b32f`; la v2 revisa, no orquesta. Platform: Astra para programación
-y revisión; otros carriles: Sol 6.1, effort medium. C15 revisión Astra y C13 draft #113 espera revisión: ids en el handoff.
+y revisión; otros carriles: Sol 6.1, effort medium. C13/C15 corrigen CI; otros cuatro carriles tienen tareas documentales activas. IDs y evidencia en el handoff.
 
 - **Lease de coordinación:** madre, rama `codex/madre-orquestacion-20261005`, worktree `C:/Users/PC/.codex/worktrees/madre-codex/onia-hermes`.
 - **Lease documental de este relevo:** este manifest, `AI_MODEL_ROUTING_2026.md`, skill `onia-sesion-madre` y `handoff/madre-codex.md`.
-- **Revisión v2:** #138 sin bloqueantes nuevos sobre `d479d3aa`, CI `37376490476`, 22/22 autosync Windows y sintaxis de cuatro Bash; sin merge ni pruebas Node Linux locales. Otros carriles entregaron inventario y esperan.
-- **Cola Platform:** C15 EN REVISIÓN v2 Astra medium sobre `b662d24ed349bd3f09b703e124e9742ef8eef57b`; después C13 draft #113 `9f09b067e745e7df0e80087853500baf189902cb`, CI pendiente. Una revisión a la vez, sin nuevos subagentes; hecho en rama, NO producción. Base desarrollo `5102535c`; producción `97fe3061` solo reportada por handoff.
+- **Revisión v2:** #138 sin bloqueantes nuevos sobre `d479d3aa`, CI `37376490476`, 22/22 autosync Windows y sintaxis de cuatro Bash; sin merge ni pruebas Node Linux locales. Otros carriles activos 6-oct: avisos, cinco leads, cutlistK1 y reconciliación de docs.
+- **Cola Platform 6-oct:** C13 #113 CI FAILURE cuatro tests, autor corrige; C15 #114 TS2322 corregido en54c6ada8, espera CI. V2 revisa sólo nuevo delta. Sin merge/deploy. Después C11a/Caja#110; C14 tiene gates y C11b depende de C11a.
 - **No ejecutar autosync heredado:** incluso `codex/*` puede adelantar `main` si se invoca; #138 sigue pendiente de revisión/merge.
   Merge a `master` Platform publica por cron: migraciones, producción, gasto, publicaciones y terceros conservan sus permisos.
 - **Destino solicitado: todo cloud**, con fallback local hasta verificar ejecución/modelo cloud. Login IAB falló; CLI 0.139 y entornos enumerados no demuestran cloud listo.
-- **Heartbeat `madre-onia-continuidad` ACTIVE:** cada seis horas, LOCAL, notifica solo cambios relevantes. Reserva semanal20%: con consumo >=80% no inicia trabajo nuevo; no compra créditos ni reinicia límites. Consumo cuenta10% frente3% inicial, sin atribución exclusiva a esta tarea.
+- **Heartbeat `madre-onia-continuidad` ACTIVE:** cada seis horas, LOCAL, notifica solo cambios relevantes. Reserva semanal20%: con consumo >=80% no inicia trabajo nuevo; no compra créditos ni reinicia límites. Consumo cuenta18% frente3% inicial, sin atribución exclusiva a esta tarea.
 
 META: continuidad verificable sin doble dueño. PRUEBA DE HECHO: cada tarea cierra con SHA, paths, pruebas y revisión.
 REGLA DE PARADA: sin tarea accionable o ante gate sensible, registrar el bloqueo y seguir otro ítem seguro; no rondas vacías.
