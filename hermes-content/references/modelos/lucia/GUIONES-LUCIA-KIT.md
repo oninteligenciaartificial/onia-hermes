@@ -115,6 +115,16 @@ El pie es PROPUESTA, no texto aprobado para publicación. Validar la privacidad,
 Costo nuevo: 0 créditos. Cuenta/etiqueta IA, D2–D6 y permisos de publicación conservan su estado; esta propuesta no los decide. Alcance ejecutado: planificación/copy/QA de consistencia sin agentes adicionales.
 
 
+### QA de assets K1 — medición6-oct, propuesta de encuadre
+
+- A1 confirmado1440×2560. A2 confirmado720×1280,24fps,145cuadros,6,041667s, sin audio. La procedencia6s era redondeada.
+- Remate28–34s: usar cuadros0–143 (144cuadros=6s); excluir144, corteinterno72. No acelerar/congelar/upscale1.5×.
+- QA visual del carril:12cuadrosmuestreados completos yrecortes rostro/manos, másA1. No deformación gruesa evidente en muestra; dedos ocluidos. No inspección exhaustiva ni aprobación biométrica.
+- Propuesta conservadora: A2nativo720×1280 en lienzo1080×1920,x180/y80; A1reducida igual. Paneltarjetasx84/y1100,912×340,finaly1440,margenderecho84. Probar continuidad/estética en preview antes de adoptar ese encuadre.
+- Fit calculado con BricolageBold68px/816px útiles: las11tarjetas caben, máximolínea596px. El renderer debe medir de nuevo; fit noaprueba identidad/legibilidadfinal.
+- Evidencia reproducible temporal: `C:/Users/PC/.codex/tmp/lucia-k1-a2-contactsheet.jpg`, `lucia-k1-a2-cara-manos.jpg`, `lucia-k1-a1-preview.jpg`, `lucia-k1-caption-layout.jpg`, `lucia-k1-caption-widths.json`. Regenerar con ffmpeg existente al preparar preview; caja verde es guía, nunca master.
+- P1/P2,validaciónprivacidad,plan/CTA y aprobaciónpreview siguen pendientes; nada publicado ni renderizado como master.
+
 ## K2 · Recepción a las 8 — «A las 7, Onia ya revisó tu agenda»
 
 - **Plano:** la misma recepción a las 7:55, con luz de mañana de costado.

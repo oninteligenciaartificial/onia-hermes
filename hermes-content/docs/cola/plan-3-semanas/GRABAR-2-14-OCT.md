@@ -1,8 +1,12 @@
-# Para grabar · jueves 1 → miércoles 14 de octubre
+# Para grabar · bloque vigente desde el 6 de octubre
 
-Solo lo que se dice a cámara: las 36 piezas que faltan (D01-B y N03 ya están grabados). Orden de cada día = orden de grabación: primero el YouTube, después los verticales.
+## Bloque vigente desde el 6-oct-2026
+
+Para grabar: DD-A/CACHE → N04/VERIFY → N06/ANTIGRAVITY → D03-A/HOOK → D01-A/SKILL → S2-D08-A/PROMESA. Sergio sólo cámara; editor prepara pantallas. Los seis siguen sin bruto actual localizado. Este orden no asigna fechas de publicación a reels. Calendario de carruseles y avisos vigente: `../drops/AVISOS-POR-DIA.md`. Las fechas 1–14 oct que aparecen debajo son el índice histórico del plan, no una agenda activa. Ninguna indicación de pantalla verde, instalación o grabación de pantalla de ese plan histórico obliga a Sergio en este bloque.
+
+Índice de textos de cámara del plan original. Para la tarea actual se graban sólo las seis piezas del bloque vigente; N03 no se repite.
 Se GENERÓ de `GUIONES-2-SEMANAS-1-14-OCT.md` y no se edita acá: si una frase cambia, se cambia allá.
-Cada día lleva ~1 h: 3 verticales × ~20 min con tomas, o el YouTube (~6-8 min hablado, ~35 min con tomas) + 1 vertical. El jueves 1 queda solo D02-B (~20 min).
+Las duraciones y el reparto por días del plan original quedan como histórico; no constituyen la instrucción diaria actual.
 Cada pieza termina pidiendo comentar su PALABRA (en YouTube se contesta el comentario con el link).
 
 
@@ -57,23 +61,21 @@ Comentá EFFORT y te paso mi tabla.
 
 ⚠️ Noticia: si se venció o cambió antes de grabar, se reemplaza por un repo de la reserva.
 
-### DD-A · Vertical · El modelo nuevo de OpenAI cuesta un quinto, y una parte sale casi gratis
+### DD-A · Vertical · GPT-6.1 Sol: precio y caché en contexto corto
 
-**En pantalla:** precios de OpenAI (Sol 2 / 0,10 caché / 10 USD contra Astra 10 / 1 / 50) + el campo de tokens en caché de la respuesta.
+**En pantalla:** Editor: precios oficiales en modalidad estándar/contexto corto y campos de usage; si se muestran valores propios, deben provenir de una respuesta real sanitizada. No presentar una tabla como demo ejecutada.
 
 **Palabra:** CACHE
 
-OpenAI sacó un modelo que, según su anuncio, se acerca a su mejor modelo por la quinta parte del precio. Y una parte sale casi gratis.
+**Producción:** Sergio sólo cámara 9:16, trípode y solapa, sin tela verde. Pantallas a cargo del editor.
 
-Se llama GPT seis punto uno Sol. Lo presentaron el veintinueve de septiembre, en su DevDay.
+Si usás la API de OpenAI, mirá la tarifa antes de elegir modelo. En modalidad estándar y contexto corto, Sol cobra dos dólares por millón de tokens de entrada y diez de salida; Astra, diez y cincuenta. La entrada normal y la salida de Sol cuestan un quinto.
 
-En la página de precios, lo que ves en pantalla: dos dólares el millón de tokens que entran y diez los que salen. El grande, Astra, cobra diez y cincuenta. Un quinto.
+Cuando repetís el mismo prefijo, una lectura desde caché de Sol cuesta diez centavos por millón. Guardarlo cuesta más la primera vez. Poné lo estable primero y comprobá los campos de uso. Si la lectura sigue en cero, revisá también el enrutamiento.
 
-Lo que casi nadie aprovecha: lo que entra desde la caché cuesta diez centavos el millón. Es lo que repetís igual al principio de cada pedido: las instrucciones de tu agente, tu lista de precios. Ponelo primero y no lo toques. La primera vez cuesta un poco más; después, veinte veces menos. Tiene que tener al menos mil veinticuatro tokens.
+Comentá CACHE y te paso la cuenta de la comunidad.
 
-Cómo sabés que funcionó: la respuesta de la API trae cuántos tokens salieron de caché. Si en el segundo pedido sigue en cero, cambiaste algo del principio o pasó más de media hora.
-
-La cuenta para tu agente está en la comunidad: comentá CACHE y te paso el link.
+**Validación editorial 6-oct:** [Precios](https://developers.openai.com/api/docs/pricing) y [caché](https://developers.openai.com/api/docs/guides/prompt-caching), revisados 6-oct: estándar/contexto corto; prefijo mínimo 1.024 tokens visibles; retención mínima 30 min desde escritura/reuso. El enrutamiento también puede producir misses. Sin claim de calidad ni fecha de lanzamiento.
 
 ### D04-C · Vertical · «Verificado» con un 200, y el login mostraba texto roto
 
@@ -162,32 +164,21 @@ Pegalo en los dos modelos. Si te salió bien, vas a ver los mismos tres totales:
 
 ⚠️ Noticia: si se venció o cambió antes de grabar, se reemplaza por un repo de la reserva.
 
-### N06 · Vertical · Google cambió Gemini CLI gratis por Antigravity CLI: qué cambia para vos
+### N06 · Vertical · De Gemini CLI a Antigravity CLI: conservá tus skills
 
-**En pantalla:** el aviso de geminicli.com y el párrafo del blog de Google Developers (19-may), el comando de antigravity.google/download, `agy` entrando con tu cuenta de Google, la pregunta de qué traer de Gemini CLI, mover `.gemini/skills/` a `.agents/skills/` y `/skills` mostrándolas. Si no tenés skills en `.gemini/skills/`, armá una de prueba antes.
+**En pantalla:** Editor: documentación oficial de migración, tabla .gemini/skills/ → .agents/skills/ y reglas GEMINI.md/AGENTS.md. Demo sólo con runtime ya disponible y autorizado; no instalar ni iniciar sesión para este patch.
 
 **Palabra:** ANTIGRAVITY
 
-Si usabas Gemini CLI gratis y un día dejó de contestarte, no es tu computadora: Google lo apagó.
+**Producción:** Sergio sólo cámara 9:16, trípode y solapa, sin tela verde. Pantallas a cargo del editor.
 
-Desde el dieciocho de junio, Gemini CLI dejó de responder a quien lo usaba gratis con su cuenta de Google, y a los planes Pro y Ultra. Lo reemplazó Antigravity CLI.
+Si pasás de Gemini CLI a Antigravity CLI, revisá tus skills antes de seguir.
 
-La buena noticia: también es gratis, con un límite que se renueva cada semana, y trae Gemini tres punto ocho Flash.
+Google documenta que agy encuentra tu configuración anterior y ofrece importarla. Pero las skills de tu proyecto cambian de punto gemini barra skills a punto agents barra skills. Reubicá las tuyas sin pisar las que ya tenés. GEMINI punto md y AGENTS punto md siguen como reglas.
 
-¿Y si te quedás en Gemini CLI? Sigue andando, pero con una clave de API paga.
+Comentá ANTIGRAVITY y te paso la guía con la documentación oficial.
 
-Qué hacés hoy. Uno: instalalo con el comando que ves en pantalla y abrilo escribiendo a, ge, i griega. Entrás con tu cuenta de Google.
-
-Dos: la primera vez, encuentra tu configuración de Gemini CLI y te pregunta qué traer.
-
-Tres, la trampa: las skills de tu proyecto no se mudan solas. Estaban en punto gemini barra skills. Ahora van en punto agents barra skills. Movelas a mano.
-
-Tu GEMINI punto md lo sigue leyendo igual.
-
-Cómo sabés que quedó: escribí barra skills y tienen que aparecer.
-
-Los comandos para Mac, Linux y Windows están en la comunidad de WhatsApp: comentá ANTIGRAVITY y te paso el link.
-
+**Validación editorial 6-oct:** [Migración](https://antigravity.google/docs/cli/gcli-migration/), revisada 6-oct: onboarding y rutas confirmados. [Anuncio](https://developers.googleblog.com/an-important-update-transitioning-gemini-cli-to-antigravity-cli/) y [planes Gemini CLI](https://geminicli.com/plans/) se contradicen sobre acceso individual: no afirmar apagado universal. No se verificó una cuenta de usuario.
 
 ## Dom 4-oct
 
@@ -280,27 +271,23 @@ Comentá AGENTS y te paso la plantilla.
 
 ⚠️ Noticia: si se venció o cambió antes de grabar, se reemplaza por un repo de la reserva.
 
-### N04 · Vertical · Una skill llamada verify y Claude Code la corre antes de cada commit
+### N04 · Vertical · La skill verify antes del commit: cuándo se indica y qué no garantiza
 
-**En pantalla:** crear `.claude/skills/verify/SKILL.md` en vivo, cerrar y abrir Claude Code, cambiar una línea de código y pedir un commit: verify corre antes (con un cambio solo de docs no corre).
+**En pantalla:** Editor: versión 2.1.286+, skill propia disponible al inicio, invocación habilitada e includeGitInstructions activo. Demo con cambio de código en repo aislado, no sólo docs/tests; resultado sin verificar hasta ejecutar.
 
 **Palabra:** VERIFY
 
-Desde el treinta de septiembre, si tu proyecto tiene una skill que se llama verify, Claude Code la corre antes de cada commit.
+**Producción:** Sergio sólo cámara 9:16, trípode y solapa, sin tela verde. Pantallas a cargo del editor.
 
-Lo dice el registro de cambios de Claude Code de ese día: con una skill llamada verify, a Claude se le indica correrla justo antes de commitear. Es una indicación, no un candado.
+Antes de pedir un commit, dale a Claude Code una skill propia llamada verify con los chequeos de tu proyecto.
 
-Paso uno: en tu proyecto creá la carpeta punto claude, adentro skills, adentro verify, y un archivo SKILL punto md.
+Desde la versión dos punto uno punto doscientos ochenta y seis, recibe la indicación de correrla antes de commitear. Es una indicación, no un candado de Git.
 
-Paso dos: arriba, el nombre verify y una descripción corta. Abajo, tus chequeos en orden. Los míos: que compile, con npx tsc guion guion no emit, y que pasen los tests. Si algo falla, no commitear y decir qué falló.
+Debe estar disponible cuando arrancás la sesión, permitir invocación y tener activas las instrucciones de Git. Las de plugins y la que viene empaquetada no cuentan. Reiniciá tras crearla; probá con un cambio de código, porque documentación o tests solos se exceptúan.
 
-Paso tres: actualizá con claude update. Y cerrá Claude Code y abrilo de nuevo: la indicación se carga al arrancar la sesión.
+Comentá VERIFY y te paso la plantilla.
 
-Por qué importa: en ONIA la rama principal alimenta el deploy. Y ya nos pasó que un proceso automático subió trabajo a medias.
-
-Cómo sabés que anduvo: cambiá algo de código, pedile un commit y fijate que antes aparezca la skill verify corriendo. Si el cambio es solo de documentación o de tests, no la corre.
-
-La plantilla está en la comunidad de WhatsApp: comentá VERIFY y te paso el link.
+**Validación editorial 6-oct:** [Skills](https://code.claude.com/docs/en/skills), sección Run your checks before each commit, revisada 6-oct: indicación desde v2.1.286, no candado de Git. Las skills empaquetadas/plugins no cuentan; docs/tests solos se exceptúan.
 
 ### S2-D08-A · Vertical · ¿La IA le promete a tu cliente algo que no confirmaste?
 

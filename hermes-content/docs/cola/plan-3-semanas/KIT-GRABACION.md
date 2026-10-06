@@ -1,6 +1,6 @@
-# Kit de grabación · desde el sábado 3 de octubre
+# Kit de grabación · bloque vigente desde el 6-oct-2026
 
-Para Sergio Urcullo, que empieza a grabar hoy. Cada ficha enseña el tema antes de grabarlo:
+Para el bloque de seis cámaras vigente desde el 6-oct. Cada ficha enseña el tema antes de grabarlo:
 - qué es, en 3 líneas;
 - por qué le importa a quien mira;
 - qué tener abierto;
@@ -8,7 +8,11 @@ Para Sergio Urcullo, que empieza a grabar hoy. Cada ficha enseña el tema antes 
 - qué te pueden preguntar.
 
 Los guiones salen de `GUIONES-2-SEMANAS-1-14-OCT.md`. Si una frase cambia acá, se cambia también allá.
-Los datos de las fichas se verificaron el 3-oct con su fuente.
+Registro original de fuentes: 3-oct. DD-A, N04 y N06 usan la corrección editorial del 6-oct documentada en sus fichas; no se revalidó el resto en esta pasada.
+
+## Bloque vigente desde el 6-oct
+
+DD-A → N04 → N06 → D03-A → D01-A → S2-D08-A. Seis cámaras, sin verde; pantallas del editor. Las fechas y formatos del plan del 3-oct que se conservan abajo son históricos para ese plan, no instrucciones diarias actuales. Las fichas A/B/2 usan el texto corregido; la página externa todavía no está actualizada por este patch.
 
 ## Antes de cualquier toma (sirve para todas)
 
@@ -18,19 +22,14 @@ Los datos de las fichas se verificaron el 3-oct con su fuente.
 3. **Una idea por toma.** Decí la toma entera; si te trabás, pausa de 2 segundos y repetí la frase completa. Los cortes caen en
    esas pausas.
 4. **Toma de cierre aparte**, de unos 4 segundos: el remate y la despedida. Sin ella, el video termina en seco.
-5. **La pantalla se graba aparte** (grabación de pantalla de la PC), siguiendo la lista «Qué tener abierto» de cada ficha. Va
-   arriba o en tarjetas en la edición.
+5. **Las pantallas las prepara el editor.** Sergio graba sólo cámara; las demos se ejecutan en un entorno de prueba autorizado y su resultado se revisa antes del master.
 6. Al terminar: el bruto a Drive, carpeta «Videos Onia Octubre».
 
-**Formato de cada pieza:** lo fija `PLAN-GRABACION-3-OCT.md` y cada ficha lo repite. **Verde:** vos recortado delante
-de la captura; si el recorte falla, pantalla partida con la prueba arriba (Santiago). **Erik:** tu cara a lo ancho y tarjetas
-que se arman con cada paso. **Rocha:** cabeza parlante con tres capas de texto. **Demo:** tu pantalla, grabada aparte en el
-bloque 5.
+**Formato vigente de las seis piezas:** cámara vertical sin verde; el editor elige el montaje y prepara pantallas según prueba y guion. Los formatos del plan del 3-oct quedan sólo en el apartado histórico.
 
-## Orden: por bloques, como el plan
+## Orden histórico por bloques del plan del 3-oct (fuera del bloque vigente)
 
-Manda `PLAN-GRABACION-3-OCT.md`. La escena se arma una sola vez por bloque. Dentro de cada bloque van en orden de
-publicación: si cortás antes, quedan hechas las más urgentes.
+Esta tabla documenta el plan anterior. Para la tarea actual manda el bloque de seis cámaras de arriba: sin verde, sin B-roll obligatorio y con pantallas a cargo del editor.
 
 | Bloque | Escena | Piezas, en orden | Fichas acá |
 |---|---|---|---|
@@ -54,7 +53,7 @@ publicación: si cortás antes, quedan hechas las más urgentes.
 - **Lucía:** en este plan las piezas de negocio (S2-D07-A, S2-D08-A, S2-D09-A, S2-D08-C, S2-D13-C) las grabás vos. Si la
   madre se las pasa a Lucía, salen de tus bloques.
 
-## Verificado hoy, 3-oct: las piezas marcadas REVISAR
+## Registro de verificación: 3-oct, con correcciones vigentes del 6-oct
 
 D02-A y N06 están en sus fichas (1 y 2). El resto:
 
@@ -63,12 +62,7 @@ D02-A y N06 están en sus fichas (1 y 2). El resto:
   (resto de Latinoamérica, Bolivia incluida: USD 0,0113); los primeros 1.000 por número y por mes, gratis.
   **Al guion se sumó:** esos 1.000 son solo de servicio; las plantillas se cobran desde la primera.
   En pantalla, esa página: business.whatsapp.com sigue diciendo que el servicio es gratis y está vieja.
-- **DD-A · CACHE (bloque 1). Sigue.** developers.openai.com/api/docs/pricing: GPT-6.1 Sol 2 / 0,10 / 10 y GPT-6 Astra
-  10 / 1 / 50 (USD por millón: entrada / caché / salida). Salió el 29-sep (changelog). Guía de prompt caching: escribir
-  cuesta 1,25 veces la entrada y leer, el 5 %; mínimo 1.024 tokens; dura al menos 30 min; el dato está en
-  `usage.input_tokens_details.cached_tokens`. **Cambió en el guion:** «al menos mil veinticuatro tokens», y «si en el
-  segundo pedido sigue en cero» (el primero siempre da cero). openai.com/api/pricing no abre desde la nube: en pantalla,
-  la de developers.openai.com.
+- **DD-A · CACHE · CORREGIDO 6-oct.** [Precios](https://developers.openai.com/api/docs/pricing) y [caché](https://developers.openai.com/api/docs/guides/prompt-caching), revisados 6-oct: estándar/contexto corto; prefijo mínimo 1.024 tokens visibles; retención mínima 30 min desde escritura/reuso. El enrutamiento también puede producir misses. Sin claim de calidad ni fecha de lanzamiento. Editor: precios oficiales en modalidad estándar/contexto corto y campos de usage; si se muestran valores propios, deben provenir de una respuesta real sanitizada. No presentar una tabla como demo ejecutada.
 - **N02 · MIGRAR (bloque 1). Sigue.** platform.claude.com/docs/en/about-claude/model-deprecations:
   `claude-sonnet-4-5-20250929`, «Deprecated», se retira el 30-nov-2026; lo anuncian las release notes del 30-sep.
   `/claude-api migrate` existe (code.claude.com/docs/en/skills) y pregunta qué archivos tocar antes de editar.
@@ -85,12 +79,7 @@ D02-A y N06 están en sus fichas (1 y 2). El resto:
   (decía «cada respuesta se paga» y contradecía a D02-B) y «hasta siete días desde tu respuesta». Si preguntan: los
   mensajes del agente de IA de Meta se cobran igual dentro de esa ventana. business.whatsapp.com sigue diciendo 72 horas:
   no es la fuente.
-- **N04 · VERIFY (bloque 2). Sigue, con un riesgo para la demo.** Changelog de Claude Code 2.1.286 (30-sep) y
-  code.claude.com/docs/en/skills, «Run your checks before each commit»: con una skill `verify` (o `simplify`) del
-  proyecto o personal, Claude la corre antes de cada commit, salvo cambios solo de docs o de tests; las de plugins y las
-  que trae Claude Code no cuentan. **Cambió en el guion:** la indicación se carga al arrancar la sesión, así que después
-  de crear la skill hay que cerrar y abrir Claude Code. Y el commit de prueba tiene que cambiar código: si solo agrega el
-  SKILL.md, es un cambio de docs y no la corre. Probalo una vez antes de grabar.
+- **N04 · VERIFY · CORREGIDO 6-oct.** [Skills](https://code.claude.com/docs/en/skills), sección Run your checks before each commit, revisada 6-oct: indicación desde v2.1.286, no candado de Git. Las skills empaquetadas/plugins no cuentan; docs/tests solos se exceptúan. Editor: versión 2.1.286+, skill propia disponible al inicio, invocación habilitada e includeGitInstructions activo. Demo con cambio de código en repo aislado, no sólo docs/tests; resultado sin verificar hasta ejecutar.
 - **D01-C · TRAMPA (bloque 4). Cambió: le faltaba Fable 5.1.** platform.claude.com/docs/en/about-claude/pricing:
   Fable 5.1 10 / 50, Opus 5.5 4 / 20, Sonnet 5.5 2 / 10 (USD por millón, entrada / salida). Salieron el 1-sep, el
   22-sep y el 28-sep. code.claude.com/docs/en/model-config: `/model fable` o `claude --model fable`; los alias apuntan a
@@ -113,6 +102,37 @@ D02-A y N06 están en sus fichas (1 y 2). El resto:
 
 ⚠️ **El «comentá PALABRA» necesita el mensaje directo automático armado antes de publicar.** Hoy da 0 leads
 (`ig-comentario-dm-vivo`). Grabá igual; antes de publicar, se confirma que el DM le llega a quien comenta.
+
+## A · DD-A · GPT-6.1 Sol: precio y caché en contexto corto
+
+**Producción vigente:** cámara vertical sin verde; Sergio sólo voz/cámara, editor hace pantallas.
+
+**Palabra:** CACHE · **Fuente y límite:** [Precios](https://developers.openai.com/api/docs/pricing) y [caché](https://developers.openai.com/api/docs/guides/prompt-caching), revisados 6-oct: estándar/contexto corto; prefijo mínimo 1.024 tokens visibles; retención mínima 30 min desde escritura/reuso. El enrutamiento también puede producir misses. Sin claim de calidad ni fecha de lanzamiento.
+
+**Qué demuestra:** Editor: precios oficiales en modalidad estándar/contexto corto y campos de usage; si se muestran valores propios, deben provenir de una respuesta real sanitizada. No presentar una tabla como demo ejecutada.
+
+**Guion por tomas (mismo texto de GUIONES/GRABAR)**
+- **T1:** «Si usás la API de OpenAI, mirá la tarifa antes de elegir modelo. En modalidad estándar y contexto corto, Sol cobra dos dólares por millón de tokens de entrada y diez de salida; Astra, diez y cincuenta. La entrada normal y la salida de Sol cuestan un quinto.»
+- **T2:** «Cuando repetís el mismo prefijo, una lectura desde caché de Sol cuesta diez centavos por millón. Guardarlo cuesta más la primera vez. Poné lo estable primero y comprobá los campos de uso. Si la lectura sigue en cero, revisá también el enrutamiento.»
+- **T3:** «Comentá CACHE y te paso la cuenta de la comunidad.»
+
+**Antes del master:** recurso accesible y pantallas/demos verificadas; tabla de cortes y preview360p para aprobación. No hacer instalaciones ni login para este patch.
+
+## B · N04 · La skill verify antes del commit: cuándo se indica y qué no garantiza
+
+**Producción vigente:** cámara vertical sin verde; Sergio sólo voz/cámara, editor hace pantallas.
+
+**Palabra:** VERIFY · **Fuente y límite:** [Skills](https://code.claude.com/docs/en/skills), sección Run your checks before each commit, revisada 6-oct: indicación desde v2.1.286, no candado de Git. Las skills empaquetadas/plugins no cuentan; docs/tests solos se exceptúan.
+
+**Qué demuestra:** Editor: versión 2.1.286+, skill propia disponible al inicio, invocación habilitada e includeGitInstructions activo. Demo con cambio de código en repo aislado, no sólo docs/tests; resultado sin verificar hasta ejecutar.
+
+**Guion por tomas (mismo texto de GUIONES/GRABAR)**
+- **T1:** «Antes de pedir un commit, dale a Claude Code una skill propia llamada verify con los chequeos de tu proyecto.»
+- **T2:** «Desde la versión dos punto uno punto doscientos ochenta y seis, recibe la indicación de correrla antes de commitear. Es una indicación, no un candado de Git.»
+- **T3:** «Debe estar disponible cuando arrancás la sesión, permitir invocación y tener activas las instrucciones de Git. Las de plugins y la que viene empaquetada no cuentan. Reiniciá tras crearla; probá con un cambio de código, porque documentación o tests solos se exceptúan.»
+- **T4:** «Comentá VERIFY y te paso la plantilla.»
+
+**Antes del master:** recurso accesible y pantallas/demos verificadas; tabla de cortes y preview360p para aprobación. No hacer instalaciones ni login para este patch.
 
 ## 1 · D02-A · La perilla de Claude Code que casi nadie toca
 
@@ -165,60 +185,20 @@ subirla es más barato que pasarse al modelo más caro.
 - *«¿Se puede dejar fijo?»* Sí: `/effort` en la sesión, al abrir con `claude --effort high`, o la variable
   `CLAUDE_CODE_EFFORT_LEVEL`.
 
-## 2 · N06 · Google cambió Gemini CLI gratis por Antigravity CLI: qué cambia para vos
+## 2 · N06 · De Gemini CLI a Antigravity CLI: conservá tus skills
 
-**Formato (bloque 1):** pantalla verde con el aviso de Google detrás, más la demo de `agy` instalando y moviendo las skills (bloque 5) · **Grabación:** ~30 min, la más larga: instala Antigravity y entra con Google.
+**Producción vigente:** cámara vertical sin verde; Sergio sólo voz/cámara, editor hace pantallas.
 
-**Palabra:** ANTIGRAVITY · **Molde:** Verde (detrás, el aviso de Google y la página de migración; si el recorte falla, Santiago) · **Largo:** ~60 s
-· **Grabar esta semana** (noticia del 2-oct) · **Verificado el 3-oct** en vivo:
-- geminicli.com (aviso);
-- developers.googleblog.com, «An important update: transitioning Gemini CLI to Antigravity CLI», del 19-may-2026;
-- antigravity.google/pricing, /docs/plans/, /docs/models/, /download (CLI v1.2.14), /docs/cli/install/,
-  /docs/cli/gcli-migration/ y /docs/cli/reference/.
+**Palabra:** ANTIGRAVITY · **Fuente y límite:** [Migración](https://antigravity.google/docs/cli/gcli-migration/), revisada 6-oct: onboarding y rutas confirmados. [Anuncio](https://developers.googleblog.com/an-important-update-transitioning-gemini-cli-to-antigravity-cli/) y [planes Gemini CLI](https://geminicli.com/plans/) se contradicen sobre acceso individual: no afirmar apagado universal. No se verificó una cuenta de usuario.
 
-**(a) Qué es, como a un amigo.** Gemini CLI era el asistente de Google para la terminal, gratis con tu cuenta. El 18 de
-junio Google lo apagó para los usuarios gratis y los de los planes Pro y Ultra, y lo reemplazó por Antigravity CLI, que
-también es gratis, con un tope que se renueva cada semana.
+**Qué demuestra:** Editor: documentación oficial de migración, tabla .gemini/skills/ → .agents/skills/ y reglas GEMINI.md/AGENTS.md. Demo sólo con runtime ya disponible y autorizado; no instalar ni iniciar sesión para este patch.
 
-**(b) Por qué le importa a quien mira.** Si usaba Gemini CLI gratis y dejó de contestarle, no es su computadora. Y si se
-pasa, sus skills no se mudan solas: si no las mueve a mano, Antigravity no las ve.
+**Guion por tomas (mismo texto de GUIONES/GRABAR)**
+- **T1:** «Si pasás de Gemini CLI a Antigravity CLI, revisá tus skills antes de seguir.»
+- **T2:** «Google documenta que agy encuentra tu configuración anterior y ofrece importarla. Pero las skills de tu proyecto cambian de punto gemini barra skills a punto agents barra skills. Reubicá las tuyas sin pisar las que ya tenés. GEMINI punto md y AGENTS punto md siguen como reglas.»
+- **T3:** «Comentá ANTIGRAVITY y te paso la guía con la documentación oficial.»
 
-**(c) Qué tener abierto antes de grabar**
-1. **geminicli.com**, con el aviso de arriba: *«Unpaid tier and Google One users: Gemini CLI was replaced by Antigravity CLI
-   on June 18th, 2026.»*
-2. **La entrada del blog de Google Developers del 19-may**, en la línea «Starting today, Antigravity CLI is available to
-   everyone».
-3. **antigravity.google/download** y el comando de instalación:
-   - Mac o Linux: `curl -fsSL https://antigravity.google/cli/install.sh | bash`
-   - Windows (PowerShell): `irm https://antigravity.google/cli/install.ps1 | iex`
-4. **Una terminal** con `agy`. Se abre el navegador para entrar con tu cuenta personal de Google (@gmail.com).
-5. **La lista de qué traer de Gemini CLI**: la primera vez, `agy` detecta tu configuración vieja y te deja elegir.
-6. **Un proyecto con una skill en `.gemini/skills/`.** Si no tenés ninguna, armá una de prueba antes. Movela con
-   `mv .gemini/skills .agents/skills` y mostrá `/skills` dentro de `agy` con la skill listada.
-
-**(d) Guion por tomas**
-- **T1, gancho:** «Si usabas Gemini CLI gratis y un día dejó de contestarte, no es tu computadora: Google lo apagó.»
-  [arriba, el aviso de geminicli.com]
-- **T2:** «Desde el dieciocho de junio, Gemini CLI dejó de responder a quien lo usaba gratis con su cuenta de Google, y a los
-  planes Pro y Ultra. Lo reemplazó Antigravity CLI.» [el blog del 19-may]
-- **T3:** «La buena noticia: también es gratis, con un límite que se renueva cada semana, y trae Gemini tres punto ocho
-  Flash.» [la página de precios: «$0/month · weekly rate limits»]
-- **T4:** «¿Y si te quedás en Gemini CLI? Sigue andando, pero con una clave de API paga.»
-- **T5:** «Qué hacés hoy. Uno: instalalo con el comando que ves en pantalla y abrilo escribiendo a, ge, i griega. Entrás con
-  tu cuenta de Google.» [el comando + `agy`]
-- **T6:** «Dos: la primera vez, encuentra tu configuración de Gemini CLI y te pregunta qué traer.» [la lista de migración]
-- **T7:** «Tres, la trampa: las skills de tu proyecto no se mudan solas. Estaban en punto gemini barra skills. Ahora van en
-  punto agents barra skills. Movelas a mano.» [`.gemini/skills/` → `.agents/skills/`, con sello «a mano»]
-- **T8:** «Tu GEMINI punto md lo sigue leyendo igual. Cómo sabés que quedó: escribí barra skills y tienen que aparecer.»
-  [`/skills` con la skill]
-- **T9, cierre:** «Los comandos para Mac, Linux y Windows están en la comunidad de WhatsApp: comentá ANTIGRAVITY y te paso
-  el link.» Más la toma de despedida.
-
-**(e) Lo que te pueden preguntar**
-- *«¿Funciona con mi cuenta del trabajo?»* Google dice que hoy anda con cuentas personales en los países habilitados. Si
-  tu cuenta de Workspace da problemas, probá con una @gmail.com.
-- *«¿Y mis skills globales?»* También cambian de lugar: de `~/.gemini/skills/` a `~/.gemini/antigravity-cli/skills/`.
-- *«¿Qué modelos trae gratis?»* Gemini 3.8 Flash y otros (3.7 y 3.6 Flash, 3.1 Pro), con el tope semanal del plan gratis.
+**Antes del master:** recurso accesible y pantallas/demos verificadas; tabla de cortes y preview360p para aprobación. No hacer instalaciones ni login para este patch.
 
 ## 3 · D04-C · «Verificado» con un 200, y el login mostraba texto roto
 

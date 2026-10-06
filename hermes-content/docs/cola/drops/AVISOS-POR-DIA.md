@@ -23,7 +23,7 @@ Antes12:30.
 ~~~~
 Volví 👋
 
-Desde hoy, lo que en mis videos y carruseles digo que «está en la comunidad» queda acá, en Avisos: el prompt completo, el archivo, o lo que me salió mal probándolo. Entero, y antes que el video.
+Acá en Avisos comparto los recursos de mis videos y carruseles. En cada uno aclaro si es una plantilla, un archivo completo, un ejemplo parcial o un registro de una prueba. HOOK es un ejemplo de dos comprobaciones de Git: no es mi script completo de autosync ni un sistema listo para instalar. Antes de ofrecer un recurso en un video, compruebo que esté disponible acá.
 
 Para conocerlos, preséntense en General con tres cosas:
 1. Tu nombre
@@ -144,45 +144,21 @@ Orden del archivo: al arrancar → las que más se rompen → producto → cómo
 Antes12:30.
 
 ~~~~
-*COMUNIDAD* · *Volver a modo manual en Claude Code*
+*COMUNIDAD* · *Comprobá el modo de permisos de tu sesión*
 
-Desde fines de septiembre Claude Code arranca en *modo auto*, en todos los planes: un segundo modelo revisa en vez de vos lo que Claude quiere hacer. Leer y editar archivos de tu carpeta, en general, se aprueba solo, sin esa revisión.
+En Claude Code 2.1.283 o posterior, el modo inicial incorporado es auto para terminal interactiva y VS Code. Puede cambiar por configuración, políticas de la organización o disponibilidad. El administrador puede deshabilitar auto; un ajuste previo también puede mantener otro modo.
 
-*Por defecto BLOQUEA* (documentación oficial, resumida):
-- Bajar y ejecutar código de internet (tipo `curl | bash`)
-- Deploys a producción y migraciones
-- Borrar para siempre archivos que ya existían antes de la sesión
-- Force push, y `git reset --hard` y parecidos, que tiran cambios sin guardar
+Esto no describe sin más las ejecuciones con `claude -p` ni el Agent SDK: tienen condiciones propias. Habitualmente parten en Manual cuando obtienen los feature flags; sin ellos, la documentación contempla auto desde 2.1.285, salvo restricciones aplicables. Tampoco uses esa regla para inferir el modo de Desktop o la web.
 
-*Por defecto DEJA PASAR:*
-- Trabajar con archivos dentro de tu carpeta
-- Instalar las dependencias declaradas en tus archivos lock o manifiestos
-- Hacer push a cualquier rama del repo, *incluida la principal*
-
-Si tu rama principal publica tu sitio o tu app, ese último punto es el que importa.
-
-*En la sesión:* la barra de abajo dice en qué modo estás. *Shift+Tab* lo cambia.
-
-*Para que arranque siempre preguntando (terminal):*
-1. Abrí `~/.claude/settings.json` (`~` es la carpeta de tu usuario). Si no existe, crealo con esto:
+Para una sesión nueva de terminal que te pida revisar acciones, podés usar:
 ```
-{
-  "permissions": {
-    "defaultMode": "default"
-  }
-}
+claude --permission-mode default
 ```
-Si ya tiene contenido, no lo pises. Si tiene `"permissions"`, sumá adentro `"defaultMode": "default"`. Si no lo tiene, pegá el bloque `"permissions": {...}` de arriba dentro de las llaves de afuera, separado del resto con una coma.
-2. Si tu proyecto tiene su propio `.claude/settings.json` (o `.claude/settings.local.json`) con otro `defaultMode`, ese le gana al tuyo: cambialo a `"default"` ahí también.
-3. Si Claude Code te pregunta si querés pasar a modo auto, decí que no.
+Para las siguientes sesiones de terminal, podés definir `permissions.defaultMode` como `default` en tu configuración de usuario, conservando sus otros ajustes. Las políticas administradas pueden tener prioridad.
 
-*Cómo sabés que quedó:* la próxima sesión que abras en la terminal dice `⏸ manual mode on`.
+Mirá el indicador real de tu sesión. Auto usa un clasificador; no significa que toda acción esté aprobada por vos ni que un push vaya a ser seguro para tu despliegue.
 
-*En VS Code:* elegí *Manual* en el indicador de modo, abajo del cuadro de texto. Las conversaciones nuevas arrancan en el último modo que elegiste ahí.
-
-Contame en General: *¿en qué modo te arrancó hoy Claude Code?*
-
-———
+Fuente y casos por superficie: https://code.claude.com/docs/en/permission-modes#which-mode-a-session-starts-in
 ~~~~
 
 ### Sáb 10-oct · K11 · HOOK
@@ -190,21 +166,24 @@ Contame en General: *¿en qué modo te arrancó hoy Claude Code?*
 Antes12:30.
 
 ~~~~
-*HOOK* · *Hook Stop + guarda*
+*HOOK* · *Ejemplo de dos comprobaciones antes de guardar cambios*
 
-En `.claude/settings.json`:
+Esto es un ejemplo parcial de las guardas que uso. No es el script completo de autosync ni una configuración de hook lista para pegar.
+
+Dentro de un repositorio Git, estas dos consultas sólo leen su estado:
 ```
-{ "hooks": { "Stop": [ { "hooks": [ { "type": "command", "command": "node scripts/git-autosync.js" } ] } ] } }
+git rev-parse -q --verify MERGE_HEAD
+git diff --name-only --diff-filter=U
 ```
-```
-# En tu script, ANTES de git add / commit. Si alguno imprime algo: salir sin tocar nada.
-git rev-parse -q --verify MERGE_HEAD     # imprime un hash si hay un merge a medias
-git diff --name-only --diff-filter=U     # lista los archivos en conflicto
-# Comprobar 1: /hooks dentro de Claude Code tiene que listar tu Stop.
-# Comprobar 2: en una carpeta de prueba, git init, dos ramas que cambian la misma línea
-#   del mismo archivo, git merge (queda en conflicto) y corré tu script:
-#   tiene que avisar y no commitear.
-```
+- Si la primera imprime un hash, hay un merge a medias.
+- Si la segunda lista archivos, hay conflictos sin resolver.
+- Si aparece cualquiera de esas señales, un proceso que guarda cambios debería detenerse antes de agregar archivos o hacer commit.
+
+Que ambas salgan vacías no demuestra que el trabajo esté correcto: todavía faltan los chequeos del proyecto y la revisión. Un hook Stop corre al terminar una respuesta, no equivale a una revisión antes de publicar.
+
+No conectes estos comandos solos a un proceso que haga commits o push. El script completo requiere su propia implementación, pruebas y permisos; no está incluido en este mensaje.
+
+Contá en General: ¿qué señal debería detener tu automatización antes de guardar cambios?
 ~~~~
 
 ### Dom 11-oct · N06 · ANTIGRAVITY

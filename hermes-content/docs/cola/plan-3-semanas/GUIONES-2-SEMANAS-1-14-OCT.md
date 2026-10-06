@@ -1,18 +1,22 @@
-# Guiones de dos semanas · jueves 1 → miércoles 14 de octubre de 2026
+# Guiones canónicos · bloque vigente desde el 6-oct-2026 e índice histórico
+
+## Bloque vigente desde el 6-oct-2026
+
+Para grabar: DD-A/CACHE → N04/VERIFY → N06/ANTIGRAVITY → D03-A/HOOK → D01-A/SKILL → S2-D08-A/PROMESA. Sergio sólo cámara; editor prepara pantallas. Los seis siguen sin bruto actual localizado. Este orden no asigna fechas de publicación a reels. Calendario de carruseles y avisos vigente: `../drops/AVISOS-POR-DIA.md`. Las fechas 1–14 oct que aparecen debajo son el índice histórico del plan, no una agenda activa. Ninguna indicación de pantalla verde, instalación o grabación de pantalla de ese plan histórico obliga a Sergio en este bloque.
 
 Pedido de Sergio Urcullo (30-sep): *«dame los guiones de 2 semanas, verificados con nuestra regla, que dé valor, que no esté vacío, que demuestre algo»*, con informativos, repos top y noticias. Cada pieza pasó por la vara de 7 del `BRIEF-ESCRITOR.md`, por fecha, evidencia y cierre. Auditoría completa (qué se cambió y por qué): `auditoria-20260930/LOTE-A…D.md`.
 
-**Ritmo:** días normales = 3 verticales (tutorial · informativo · caso o negocio), ~1 hora de grabación. Días de YouTube (sáb 3, mar 6, vie 9, mar 13) = el largo + 1 vertical. Cada vertical da además 2 yaps a Trial (edición mía).
+**Ritmo histórico, no instrucción vigente:** días normales = 3 verticales (tutorial · informativo · caso o negocio), ~1 hora de grabación. Días de YouTube (sáb 3, mar 6, vie 9, mar 13) = el largo + 1 vertical. Cada vertical da además 2 yaps a Trial (edición mía).
 
-## Calendario
+## Calendario histórico del plan 1–14 oct
 
 | Día | Tutorial / YouTube | Informativo | Caso / negocio |
 |---|---|---|---|
 | **Jue 1-oct** | Salió Sonnet 5.5: la prueba de tres tareas para saber si te sirve | Claude Code ya no te pregunta casi nada: qué deja pasar el modo auto (noticia) | Desde el 1 de octubre, tu bot de WhatsApp paga por cada respuesta |
-| **Vie 2-oct** | La perilla de Claude Code que casi nadie toca | El modelo nuevo de OpenAI cuesta un quinto, y una parte sale casi gratis (noticia) | «Verificado» con un 200, y el login mostraba texto roto |
-| **Sáb 3-oct** | 🎬 YouTube: Opus 5.5 o Sonnet 5.5: cuál usar y cómo cambiarlo en Claude Code | Google cambió Gemini CLI gratis por Antigravity CLI: qué cambia para vos (noticia) | — |
+| **Vie 2-oct** | La perilla de Claude Code que casi nadie toca | GPT-6.1 Sol: precio y caché en contexto corto (noticia) | «Verificado» con un 200, y el login mostraba texto roto |
+| **Sáb 3-oct** | 🎬 YouTube: Opus 5.5 o Sonnet 5.5: cuál usar y cómo cambiarlo en Claude Code | De Gemini CLI a Antigravity CLI: conservá tus skills (noticia) | — |
 | **Dom 4-oct** | Tu primera skill de Claude Code en un minuto | Sonnet 4.5 se apaga el 30 de noviembre: encontralo y migralo con un comando (noticia) | La regla de 24 horas que rompe tu bot de WhatsApp |
-| **Lun 5-oct** | Claude Code ya lee AGENTS.md, pero no si tenés los dos | Una skill llamada verify y Claude Code la corre antes de cada commit (noticia) | ¿La IA le promete a tu cliente algo que no confirmaste? |
+| **Lun 5-oct** | Claude Code ya lee AGENTS.md, pero no si tenés los dos | La skill verify antes del commit: cuándo se indica y qué no garantiza (noticia) | ¿La IA le promete a tu cliente algo que no confirmaste? |
 | **Mar 6-oct** | 🎬 YouTube: Un CLAUDE.md donde cada regla trae su historia | Cambiá dos letras y mirá cómo está armado cualquier repo (repo) | — |
 | **Mié 7-oct** | El hook que commitea solo, y la guarda que le puse después de romperlo | Antes de instalar una skill, escaneala (y el detalle de «precaución») (repo) | Retiré seis de mis nueve subagentes, y seguían apareciendo |
 | **Jue 8-oct** | Cada skill que instalás te cobra contexto: medilo con /skill-doctor | Un mapa de tu código para Claude Code, y dónde te cuesta más (repo) | n8n: la clave de API no va escrita en el nodo |
@@ -23,7 +27,7 @@ Pedido de Sergio Urcullo (30-sep): *«dame los guiones de 2 semanas, verificados
 | **Mar 13-oct** | 🎬 YouTube: Un bot que no inventa: datos en un solo lugar, control después de la IA y medición | Cómo leer un README en un minuto: el primer comando no siempre es del proyecto (repo) | — |
 | **Mié 14-oct** | Tenía veinticuatro MCP conectados y ninguno escrito en mis archivos | Un curso gratis de IA en GitHub cuya primera lección de agentes corre sin clave (repo) | Negocio: definí a tu cliente con cinco preguntas, no con adjetivos |
 
-## Palabras para comentar (pedido de Sergio Urcullo, 1-oct)
+## Palabras del plan original (fechas históricas, no agenda vigente)
 
 Cada pieza cierra pidiendo un comentario con su palabra. El recurso no cambió: el que comenta recibe por DM el link a la comunidad o a la web donde ya estaba.
 
@@ -90,7 +94,7 @@ Bots y negocio: S2-D10-A · S2-D10-C · S2-D11-A · S2-D11-C · S2-D12-A · S2-D
 Repos: G01 · G02 · G03 · G05 · G06 · G07 · G08 · G09. Noticias condicionadas: N05 (si n8n 2.42 sale estable) · N07 (si aprobás el gasto en Higgsfield).
 Descartadas: D02-C (arruinaba el reto: da la respuesta en la primera frase) · S2-D10-B (ONIA no usa Gemini 2.5, nada que mostrar) · S2-D09-B se baja por pisarse con el audio de D11-B.
 
-✅ **OpenAI DevDay (29-sep):** verificado por la madre el 1-oct; entra DD-A (GPT-6.1 Sol y la caché) el vie 2. La vista `/agents` de Codex queda afuera: no está en la doc oficial.
+La selección anterior de noticias queda como histórico. DD-A, N04 y N06 usan las correcciones editoriales del 6-oct en sus secciones; sus fechas originales no indican una nueva publicación.
 
 ## Jue 1-oct
 
@@ -171,20 +175,18 @@ En mi empresa hay una regla: al modelo más caro se pasa solo cuando Opus, con e
 
 Comentá EFFORT y te paso mi tabla.
 
-### DD-A · Vertical · El modelo nuevo de OpenAI cuesta un quinto, y una parte sale casi gratis
-*Noticia* · **Demuestra:** la página de precios de OpenAI (gpt-6.1-sol 2 / 0,10 caché / 10 USD por millón contra Astra 10 / 1 / 50) y el campo de tokens en caché de la respuesta · **Cierre:** comentá CACHE → DM con el link a la comunidad (falta escribir el drop: tabla Sol vs Astra y la cuenta de caché)
+### DD-A · Vertical · GPT-6.1 Sol: precio y caché en contexto corto
+*Tutorial vigente 6-oct* · **Demuestra:** Editor: precios oficiales en modalidad estándar/contexto corto y campos de usage; si se muestran valores propios, deben provenir de una respuesta real sanitizada. No presentar una tabla como demo ejecutada. · **Cierre:** comentá CACHE → respuesta manual con link a la comunidad; comprobar recurso publicado antes de prometerlo.
 
-OpenAI sacó un modelo que, según su anuncio, se acerca a su mejor modelo por la quinta parte del precio. Y una parte sale casi gratis.
+**Producción:** Sergio sólo cámara 9:16, trípode y solapa, sin tela verde. Pantallas a cargo del editor.
 
-Se llama GPT seis punto uno Sol. Lo presentaron el veintinueve de septiembre, en su DevDay.
+Si usás la API de OpenAI, mirá la tarifa antes de elegir modelo. En modalidad estándar y contexto corto, Sol cobra dos dólares por millón de tokens de entrada y diez de salida; Astra, diez y cincuenta. La entrada normal y la salida de Sol cuestan un quinto.
 
-En la página de precios, lo que ves en pantalla: dos dólares el millón de tokens que entran y diez los que salen. El grande, Astra, cobra diez y cincuenta. Un quinto.
+Cuando repetís el mismo prefijo, una lectura desde caché de Sol cuesta diez centavos por millón. Guardarlo cuesta más la primera vez. Poné lo estable primero y comprobá los campos de uso. Si la lectura sigue en cero, revisá también el enrutamiento.
 
-Lo que casi nadie aprovecha: lo que entra desde la caché cuesta diez centavos el millón. Es lo que repetís igual al principio de cada pedido: las instrucciones de tu agente, tu lista de precios. Ponelo primero y no lo toques. La primera vez cuesta un poco más; después, veinte veces menos. Tiene que tener al menos mil veinticuatro tokens.
+Comentá CACHE y te paso la cuenta de la comunidad.
 
-Cómo sabés que funcionó: la respuesta de la API trae cuántos tokens salieron de caché. Si en el segundo pedido sigue en cero, cambiaste algo del principio o pasó más de media hora.
-
-La cuenta para tu agente está en la comunidad: comentá CACHE y te paso el link.
+**Validación editorial 6-oct:** [Precios](https://developers.openai.com/api/docs/pricing) y [caché](https://developers.openai.com/api/docs/guides/prompt-caching), revisados 6-oct: estándar/contexto corto; prefijo mínimo 1.024 tokens visibles; retención mínima 30 min desde escritura/reuso. El enrutamiento también puede producir misses. Sin claim de calidad ni fecha de lanzamiento.
 
 ### D04-C · Vertical · «Verificado» con un 200, y el login mostraba texto roto
 *Tutorial / caso* · **Demuestra:** la captura del login con los nombres de los iconos como texto al lado de la versión sana, y el prompt literal para verificar mirando · **Cierre:** comentá MIRAR → DM con el link a la comunidad, drop 6 (escrito; falta publicarlo)
@@ -279,31 +281,18 @@ Hacé la prueba vos. El ejercicio de las tres propuestas, con el prompt completo
 
 Pegalo en los dos modelos. Si te salió bien, vas a ver los mismos tres totales: mil cincuenta, mil sesenta y mil trescientos cincuenta. Si alguno te da setecientos, ese modelo se comió la trampa.
 
-### N06 · Vertical · Google cambió Gemini CLI gratis por Antigravity CLI: qué cambia para vos
+### N06 · Vertical · De Gemini CLI a Antigravity CLI: conservá tus skills
+*Tutorial vigente 6-oct* · **Demuestra:** Editor: documentación oficial de migración, tabla .gemini/skills/ → .agents/skills/ y reglas GEMINI.md/AGENTS.md. Demo sólo con runtime ya disponible y autorizado; no instalar ni iniciar sesión para este patch. · **Cierre:** comentá ANTIGRAVITY → respuesta manual con link a la comunidad; comprobar recurso publicado antes de prometerlo.
 
-> ✅ **Rehecha el 2-oct** (Sergio Urcullo: «si es info vieja no pasa nada pero que sea contenido interesante»). Cada dato salió de una página oficial leída el 2-oct (fuentes en el drop N06 y en el brief `sergio-n06-antigravity-cli-20261002.json`). **Antes de grabar:** si en tu PC no hay skills en `.gemini/skills/`, armá una de prueba para mostrar la mudanza. Si `/model` no te muestra Gemini 3.8 Flash con tu cuenta gratis, sacá esa frase.
+**Producción:** Sergio sólo cámara 9:16, trípode y solapa, sin tela verde. Pantallas a cargo del editor.
 
-*Noticia (de junio, contada para quien no se enteró)* · **Demuestra:** el aviso de geminicli.com y el párrafo del blog de Google Developers (19-may); el comando de instalación de antigravity.google/download; `agy` abriendo con la cuenta de Google; la pregunta de qué traer de Gemini CLI; mover `.gemini/skills/` a `.agents/skills/` y `/skills` mostrándolas · **Cierre:** comentá ANTIGRAVITY → DM con el link a la comunidad de WhatsApp (drop N06 «De Gemini CLI a Antigravity CLI»)
+Si pasás de Gemini CLI a Antigravity CLI, revisá tus skills antes de seguir.
 
-Si usabas Gemini CLI gratis y un día dejó de contestarte, no es tu computadora: Google lo apagó.
+Google documenta que agy encuentra tu configuración anterior y ofrece importarla. Pero las skills de tu proyecto cambian de punto gemini barra skills a punto agents barra skills. Reubicá las tuyas sin pisar las que ya tenés. GEMINI punto md y AGENTS punto md siguen como reglas.
 
-Desde el dieciocho de junio, Gemini CLI dejó de responder a quien lo usaba gratis con su cuenta de Google, y a los planes Pro y Ultra. Lo reemplazó Antigravity CLI.
+Comentá ANTIGRAVITY y te paso la guía con la documentación oficial.
 
-La buena noticia: también es gratis, con un límite que se renueva cada semana, y trae Gemini tres punto ocho Flash.
-
-¿Y si te quedás en Gemini CLI? Sigue andando, pero con una clave de API paga.
-
-Qué hacés hoy. Uno: instalalo con el comando que ves en pantalla y abrilo escribiendo a, ge, i griega. Entrás con tu cuenta de Google.
-
-Dos: la primera vez, encuentra tu configuración de Gemini CLI y te pregunta qué traer.
-
-Tres, la trampa: las skills de tu proyecto no se mudan solas. Estaban en punto gemini barra skills. Ahora van en punto agents barra skills. Movelas a mano.
-
-Tu GEMINI punto md lo sigue leyendo igual.
-
-Cómo sabés que quedó: escribí barra skills y tienen que aparecer.
-
-Los comandos para Mac, Linux y Windows están en la comunidad de WhatsApp: comentá ANTIGRAVITY y te paso el link.
+**Validación editorial 6-oct:** [Migración](https://antigravity.google/docs/cli/gcli-migration/), revisada 6-oct: onboarding y rutas confirmados. [Anuncio](https://developers.googleblog.com/an-important-update-transitioning-gemini-cli-to-antigravity-cli/) y [planes Gemini CLI](https://geminicli.com/plans/) se contradicen sobre acceso individual: no afirmar apagado universal. No se verificó una cuenta de usuario.
 
 ## Dom 4-oct
 
@@ -378,24 +367,20 @@ Para comprobarlo, preguntale a Claude una regla que solo está en AGENTS. Si la 
 
 Comentá AGENTS y te paso la plantilla.
 
-### N04 · Vertical · Una skill llamada verify y Claude Code la corre antes de cada commit
-*Noticia* · **Demuestra:** crear `.claude/skills/verify/SKILL.md` en vivo; cerrar y abrir Claude Code (la indicación se carga al arrancar); cambiar una línea de código y pedir un commit: Claude corre la skill antes (con un cambio solo de docs no corre) · **Cierre:** comentá VERIFY → DM con el link a la comunidad de WhatsApp (falta escribir: drop «Plantilla de verify», texto propuesto en Pendientes)
+### N04 · Vertical · La skill verify antes del commit: cuándo se indica y qué no garantiza
+*Tutorial vigente 6-oct* · **Demuestra:** Editor: versión 2.1.286+, skill propia disponible al inicio, invocación habilitada e includeGitInstructions activo. Demo con cambio de código en repo aislado, no sólo docs/tests; resultado sin verificar hasta ejecutar. · **Cierre:** comentá VERIFY → respuesta manual con link a la comunidad; comprobar recurso publicado antes de prometerlo.
 
-Desde el treinta de septiembre, si tu proyecto tiene una skill que se llama verify, Claude Code la corre antes de cada commit.
+**Producción:** Sergio sólo cámara 9:16, trípode y solapa, sin tela verde. Pantallas a cargo del editor.
 
-Lo dice el registro de cambios de Claude Code de ese día: con una skill llamada verify, a Claude se le indica correrla justo antes de commitear. Es una indicación, no un candado.
+Antes de pedir un commit, dale a Claude Code una skill propia llamada verify con los chequeos de tu proyecto.
 
-Paso uno: en tu proyecto creá la carpeta punto claude, adentro skills, adentro verify, y un archivo SKILL punto md.
+Desde la versión dos punto uno punto doscientos ochenta y seis, recibe la indicación de correrla antes de commitear. Es una indicación, no un candado de Git.
 
-Paso dos: arriba, el nombre verify y una descripción corta. Abajo, tus chequeos en orden. Los míos: que compile, con npx tsc guion guion no emit, y que pasen los tests. Si algo falla, no commitear y decir qué falló.
+Debe estar disponible cuando arrancás la sesión, permitir invocación y tener activas las instrucciones de Git. Las de plugins y la que viene empaquetada no cuentan. Reiniciá tras crearla; probá con un cambio de código, porque documentación o tests solos se exceptúan.
 
-Paso tres: actualizá con claude update. Y cerrá Claude Code y abrilo de nuevo: la indicación se carga al arrancar la sesión.
+Comentá VERIFY y te paso la plantilla.
 
-Por qué importa: en ONIA la rama principal alimenta el deploy. Y ya nos pasó que un proceso automático subió trabajo a medias.
-
-Cómo sabés que anduvo: cambiá algo de código, pedile un commit y fijate que antes aparezca la skill verify corriendo. Si el cambio es solo de documentación o de tests, no la corre.
-
-La plantilla está en la comunidad de WhatsApp: comentá VERIFY y te paso el link.
+**Validación editorial 6-oct:** [Skills](https://code.claude.com/docs/en/skills), sección Run your checks before each commit, revisada 6-oct: indicación desde v2.1.286, no candado de Git. Las skills empaquetadas/plugins no cuentan; docs/tests solos se exceptúan.
 
 ### S2-D08-A · Vertical · ¿La IA le promete a tu cliente algo que no confirmaste?
 *Tutorial / caso* · **Demuestra:** las dos respuestas reales de la prueba del 28-sep (sin reglas / con dos listas), en pantalla estilo chat · **Cierre:** comentá PROMESA → DM con el link a la comunidad, drop «Bot con dos listas» (existe: `PRODUCCION-GUIONES-2026-09-29.md` §Drops 3 + las dos respuestas de §Prueba 2)
