@@ -44,3 +44,9 @@ Revisión incremental de 6e52f86b07ad1b65e74674b702dce9b35cf2dbf9 a ae641152c2a6
 - HEAD exacto y worktree auth-usted-pr limpio al revisar.
 - Cadena Git comprobada: master5102535c → 6e52f86b → 3dd5027a → ae641152. El traslado6e52f86b tiene patch-id estable bce2655087c9792a5380871101c4f7a16c0146ff, igual al reportado para78e8f67d. No arrastra la base QA C13/C15.
 - QA visual pertenece a Madre y no está acreditada por esta revisión. Los textos fuera del alcance inicial permanecen como límite, no como hallazgos abiertos de este delta.
+
+## Delta de expectativas CI — SHA final cbc36a6c
+
+Revisado ae641152c2a626aff6ad18757885c61830b0e639 → cbc36a6c7f88df22cd32201a4eaf9d9984a65cdf: FAVORABLE.
+Sólo2 tests,3 líneas sustituidas: expectativa literal de aceptación y regex del separador de Google se adaptan al copy de usted. URLs canónicas, rechazo de rutas legales antiguas y comparaciones de posición dentro del bloque GOOGLE_AUTH_ENABLED siguen intactos. No runtime ni condiciones legales modificadas.
+Verificación propia proporcional:12/12PASS en auth-providers y legal-una-sola-fuente; diffcheckPASS y árbol limpio. No repetidas9suites. QA visual y CI final siguen por carril Madre.

@@ -29,3 +29,9 @@ SHA aa9f740c67511d52bea193f6dc2a2f2f8ffa7c76, base5102535cdd2823c4d6365fdc459e3c
 - Frente único de revisión técnica/seguridad. No fanout ni modificaciones producto/bancos/deps.
 
 QA visual de Madre es independiente y no elimina los dos defectos del contrato de horarios. Requiere nuevo SHA con pruebas focales antes de favorable. CI y compilación del SHA final quedan como gates; no se consultaron runs.
+
+## Cierre incremental de los dos P2
+
+SHA27d47f989bc0e7090fbef0f51f89faec5d49dcff frente aa9f740c: FAVORABLE; ambos P2 cerrados.
+Conversión explícita lunes0/domingo6 correcta; active seleccionado en SSR, preservado en helper compartido con fallback y filtrado estrictamente atrue. Columna del profesional conservada y texto aclara ausencia de jornada activa.
+Reproducciones propias originales adaptadas al nuevo contrato (active=true para lunes y martes1 para inactive):2/2PASS. Regresiones lunes/domingo/inactive del autor:2/2PASS. Sin repetir14/103. DiffcheckPASS y árbol limpio. Dictamen limitado al delta; QA visual y CI del SHA final conservan gates.

@@ -89,3 +89,9 @@ Dependencias antes de iniciar: review de esta unidad, lease de madre, contrastar
 - PostgreSQL/psql no disponibles; Docker instalado sin engine activo. No se instaló/inició nada. Tests son mocks/contratoSQL y no acreditan carreras ni rollback PostgreSQL real.
 - Migración sólo archivo20261006220000_add_tooth_surfaces; RLS/revokes, checks e índices. NO aplicada, sin DB real. Aplicación exige migración previa autorizada; rollback conserva tabla/datos. No merge/deploy/autosync. C6b2 pendiente revisión independiente.
 - CI37533459535 y Security37533459526 QUEUED al entregar; Supabase Preview SKIPPED. Ninguno acredita validación DB. Madre coordina revisión v2 y seguimiento CI. Informe y contrato externos, sin editar manifest/handoff madre.
+
+### Corrección P2 C6b1 tras review v2
+
+Madre autorizó delta limitado a surfaces GET/POST y pruebas, preservando guard global/API legacy. SHA remoto adb87855f0e1d2775b3eb89a2a99262c32abba17, PR119 draft actualizado, worktree limpio.3archivos55+/6-. Chequeo org authoritative antes de datos, isVerticalTrackId + resolver/capacidad tieneOdontograma sin depender de flag; inexistente/desconocida403 sin fallback.
+
+62PASS/2suites enfocadas (caras + legacy); matriz flag0/1 ×4rubros ×permisos ×tenant, guard/context/resolver/access-control reales y DBmock. Repro externo v2 vertical.test.ts -t rubro veterinario:1PASS/35SKIPPED. ESLint2TS/diffcheck PASS. Logs c6b1-guard-tests.log y c6b1-guard-repro.log. No repetir142 globales ni schema/DB; mismas limitaciones de Prisma y SQL no aplicado. Nuevo delta pendiente revisión v2; no editor.
