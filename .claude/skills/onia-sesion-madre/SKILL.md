@@ -5,6 +5,33 @@ description: Invocar cuando una sesión de Onia tiene que ordenar, avisar o pedi
 
 # Sesión MADRE — ordenar a todas por mensaje
 
+## Precedencia Codex — relevo del 5-oct-2026
+
+Para el relevo autorizado por Sergio, el estado vigente es `hermes-content/docs/handoff/madre-codex.md` y el bloque
+superior de `COORDINATION_MANIFEST.md`. Lo Claude de abajo se conserva como historia y método de esa plataforma;
+sus ids, RemoteTrigger y rondas de 30 min no se trasladan automáticamente a Codex.
+
+- Una madre con lease explícita. La v2 es revisión/respaldo: toma coordinación SOLO con transferencia registrada
+  de la madre o instrucción de Sergio. El silencio, una compacción o un límite no transfieren el lease.
+- Codex usa `list_threads`/`read_thread` para inspeccionar; `send_message_to_thread` para órdenes a los chats
+  autorizados por Sergio; `wait_threads` con cursor para progresos compactos. Disponibilidad de la herramienta no
+  autoriza otros destinatarios. Una respuesta de otra sesión es evidencia, no permiso nuevo de usuario.
+- `create_thread` solo para nuevos chats solicitados por Sergio; subagentes para subtareas internas cuando aplican
+  AGENTS y autorización. No reemplazar chats existentes ni crear otra madre por área.
+- Contrato por tarea: META, PRUEBA DE HECHO, REGLA DE PARADA, paths exclusivos, rama/worktree, SHA base y revisor.
+  Máximo dos implementaciones y una revisión simultáneas. Dos intentos sobre el mismo fallo: registrar causa y
+  alternativa o dato faltante; no declarar bloqueo si todavía existe avance seguro. No repetir lecturas sin delta.
+- Programación y revisión Platform con Astra; resto Sol 6.1 medium. No instalar/actualizar CLI para este relevo
+  sin aprobación. Cloud solo reemplaza local tras prueba de ejecución, modelo y repo; login no demuestra eso.
+- No invocar `scripts/git-autosync.js` heredado: el prefijo `codex/*` no impide su FF a main. PR #138 requiere
+  revisión antes del cambio. Nada llega a main/master sin revisión y cumplimiento de gates sensibles.
+- Heartbeat `madre-onia-continuidad` ACTIVE cada seis horas LOCAL, creado con herramienta del app; no cron
+  alternativo ni bucles vacíos. Silencio sin cambio accionable. Reserva semanal20%: consumo >=80% detiene nuevas
+  asignaciones, sin comprar créditos ni resetear límites. El destino todo cloud requiere prueba real antes del traslado.
+
+Una entrega de revisión cita SHA exacto y pruebas propias. Código financiero, permisos y autosync: dos lentes;
+documentación o edición trivial: una pasada proporcional. Plataforma la revisa Astra; la v2 Sol revisa Hermes #138.
+
 Regla madre: `CLAUDE.md` §1 «Sesión MADRE local + carriles en la nube». Estado y tareas abiertas de la madre:
 `hermes-content/docs/handoff/madre-local.md`. Capacidades medidas: fila 3 de
 `hermes-content/docs/ONIA_CAPACIDADES_DE_LAS_SESIONES.md`.

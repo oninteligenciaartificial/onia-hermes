@@ -1,5 +1,24 @@
 # Hermes Coordination Manifest
 
+## Coordinación vigente — relevo Codex, 5-oct-2026
+
+**Prevalece este bloque sobre los mapas Claude históricos de abajo.** Sergio autorizó relevar los cinco carriles,
+organizar las sesiones y continuar trabajo. Estado, ids locales, leases y gates: [`madre-codex.md`](hermes-content/docs/handoff/madre-codex.md).
+Una sola madre: `01a10f44-2bb7-73c0-8769-8bbe5000b32f`; la v2 revisa, no orquesta. Platform: Astra para programación
+y revisión; otros carriles: Sol 6.1, effort medium. C15 revisión Astra y C13 draft #113 espera revisión: ids en el handoff.
+
+- **Lease de coordinación:** madre, rama `codex/madre-orquestacion-20261005`, worktree `C:/Users/PC/.codex/worktrees/madre-codex/onia-hermes`.
+- **Lease documental de este relevo:** este manifest, `AI_MODEL_ROUTING_2026.md`, skill `onia-sesion-madre` y `handoff/madre-codex.md`.
+- **Revisión v2:** #138 sin bloqueantes nuevos sobre `d479d3aa`, CI `37376490476`, 22/22 autosync Windows y sintaxis de cuatro Bash; sin merge ni pruebas Node Linux locales. Otros carriles entregaron inventario y esperan.
+- **Cola Platform:** C15 EN REVISIÓN v2 Astra medium sobre `b662d24ed349bd3f09b703e124e9742ef8eef57b`; después C13 draft #113 `9f09b067e745e7df0e80087853500baf189902cb`, CI pendiente. Una revisión a la vez, sin nuevos subagentes; hecho en rama, NO producción. Base desarrollo `5102535c`; producción `97fe3061` solo reportada por handoff.
+- **No ejecutar autosync heredado:** incluso `codex/*` puede adelantar `main` si se invoca; #138 sigue pendiente de revisión/merge.
+  Merge a `master` Platform publica por cron: migraciones, producción, gasto, publicaciones y terceros conservan sus permisos.
+- **Destino solicitado: todo cloud**, con fallback local hasta verificar ejecución/modelo cloud. Login IAB falló; CLI 0.139 y entornos enumerados no demuestran cloud listo.
+- **Heartbeat `madre-onia-continuidad` ACTIVE:** cada seis horas, LOCAL, notifica solo cambios relevantes. Reserva semanal20%: con consumo >=80% no inicia trabajo nuevo; no compra créditos ni reinicia límites. Consumo cuenta10% frente3% inicial, sin atribución exclusiva a esta tarea.
+
+META: continuidad verificable sin doble dueño. PRUEBA DE HECHO: cada tarea cierra con SHA, paths, pruebas y revisión.
+REGLA DE PARADA: sin tarea accionable o ante gate sensible, registrar el bloqueo y seguir otro ítem seguro; no rondas vacías.
+
 ## 🧵 EL HILO — sesiones vivas y qué le pasa cada una a la otra (lo mantiene la sesión de control)
 
 > Sergio Urcullo, 2026-09-29: *"habla entre sesiones para no perder el hilo"*. Las sesiones en

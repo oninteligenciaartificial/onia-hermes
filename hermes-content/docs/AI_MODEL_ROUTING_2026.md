@@ -1,29 +1,31 @@
 # Enrutamiento de modelos para ONIA/Hermes
 
-Estado: vigente desde 2026-09-22. Aplica a Codex, subagentes y automatizaciones que permitan
+Estado: actualizado por instrucción de Sergio del 2026-10-05. Aplica a Codex, subagentes y automatizaciones que permitan
 elegir modelo. La disponibilidad puede variar por producto y cuenta.
 
 ## Decisión
 
 | Trabajo | Modelo y esfuerzo inicial | Motivo |
 |---|---|---|
-| Arquitectura ambigua, decisiones de negocio, investigación multi-fuente, campaña final, revisión legal/comercial o cambios end-to-end | `gpt-6-astra` · `medium` | El costo de una mala decisión supera el ahorro de tokens |
-| Código cotidiano, investigación acotada, documentación con juicio, QA integral | `gpt-6-sol` · `medium` | Balance de calidad, costo y velocidad |
-| `rg`, inventarios, extracción, normalización JSON, cambios mecánicos, checks repetibles | `gpt-6-luna` · `low` | Alcance cerrado y verificable |
+| Toda programación de Onia Platform y sus revisiones | `gpt-6-astra` · `medium` | Instrucción de Sergio: continuidad y riesgo del producto |
+| Madre, v2, Hermes, ventas, marca personal, Lucía, investigación y otros trabajos | `gpt-6.1-sol` · `medium` | Instrucción de Sergio: calidad con tiempo y consumo controlados |
 
-Subir esfuerzo solo si la primera pasada deja una duda material. Bajar a Luna cuando la tarea ya
-esta especificada y su salida puede verificarse de forma determinista. No usar un modelo barato
-para inventar estrategia, claims, oferta, identidad visual o veredictos finales.
+La distribución anterior de Astra/Sol/Luna (22-sep) queda superada para este relevo. No cambiar de modelo por
+costumbre ni usar la receta histórica CLI `gpt-5.5` como límite de Codex Desktop. Subir effort solo ante duda material.
+`send_message_to_thread` a la madre aceptó `model:gpt-6.1-sol`, `thinking:medium` para próximas continuaciones.
+No demuestra cambio del modelo ya ejecutándose en el turno actual.
+Solo C15 revisión y C13 draft pendiente de revisión ocupan la tanda Platform Astra medium; no nuevos subagentes. La v2 pasa
+temporalmente de Sol (#138) a Astra para revisión C15 y vuelve a Sol para coordinación futura. Reserva20%
+del límite semanal: al alcanzar80% de consumo no iniciar trabajo nuevo. El consumo observado de cuenta subió
+de3% a10%; no puede atribuirse exclusivamente a esta tarea. No comprar créditos ni resetear límites.
 
 ## Regla de escalamiento
 
 1. Definir el resultado y su prueba antes de delegar.
-2. Usar el modelo mas liviano que pueda cumplir el contrato con evidencia.
-3. Escalar a Sol cuando haga falta juicio o coordinar varios archivos.
-4. Escalar a Astra cuando haya ambiguedad, riesgo comercial, identidad, muchas herramientas o una
-   entrega final dificil de revertir.
-5. Comparar modelos con el mismo input y conservar el mas liviano que pase el umbral de calidad;
-   no decidir por impresion general.
+2. Respetar la asignación de la tabla: Platform Astra; resto Sol 6.1.
+3. Antes de subir esfuerzo, acotar fuentes y formular la duda que impide cerrar.
+4. Un cambio de esta distribución requiere instrucción de Sergio; no bajar calidad para ocultar consumo.
+5. Comparar calidad con prueba concreta; ahorrar contexto y rondas vacías primero.
 
 ## Presupuesto de contexto
 
@@ -38,9 +40,7 @@ para inventar estrategia, claims, oferta, identidad visual o veredictos finales.
 
 ## Aplicación a Higgsfield y Lucía
 
-- Astra: arquitectura de identidad, procedencia/derechos, rubrica y veredicto del A/B.
-- Sol: preparar briefs, prompts, runbooks, wrapper CLI y revisar el lote.
-- Luna: hashes, manifests, inventario de assets, polling, ledger y validaciones mecanicas.
+- Sol 6.1 medium: identidad, procedencia/derechos, briefs, revisión, hashes, inventario y ledger de Lucía.
 - Higgsfield hace la generacion. El LLM no debe regenerar prompts largos ni volver a leer toda la
   historia para cada job; consume el manifest compacto y el brief aprobado.
 
@@ -49,7 +49,8 @@ para inventar estrategia, claims, oferta, identidad visual o veredictos finales.
 - https://developers.openai.com/api/docs/guides/model-selection
 - https://developers.openai.com/api/docs/guides/latest-model
 
-La guia oficial describe Astra para problemas ambiguos y entregables exigentes, Sol como conductor
-cotidiano con juicio y Luna para tareas acotadas, triage y automatizaciones frecuentes. Tambien
-recomienda evaluar con inputs representativos y mantener la opcion mas liviana que alcance el
-umbral de calidad.
+Verificado 5-oct-2026 en [Model selection](https://developers.openai.com/api/docs/guides/model-selection):
+GPT-6.1 Sol medium se recomienda para trabajo técnico complejo y entregables coordinados que se revisarán.
+Esto respalda el balance elegido para la madre; Astra Platform es la preferencia expresa de Sergio.
+La disponibilidad y límites dependen del producto/cuenta. Los precios API **no** permiten calcular cuotas ni
+porcentajes de consumo de la suscripción ChatGPT/Codex; leer límites reales con `get_usage_limits` si hace falta.
